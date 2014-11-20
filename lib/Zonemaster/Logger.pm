@@ -66,7 +66,7 @@ sub _check_filter {
                 # Still here, so all rules matched
                 $entry->_set_level( $rule->{set} );
             }
-        }
+        } ## end if ( $config->{ $entry...})
     } ## end if ( $config )
 } ## end sub _check_filter
 
@@ -75,40 +75,39 @@ sub start_time_now {
 }
 
 sub clear_history {
-    my ($self) = @_;
+    my ( $self ) = @_;
 
     my $r = $self->entries;
-    splice @$r,0,scalar(@$r);
+    splice @$r, 0, scalar( @$r );
 
     return;
 }
 
 sub json {
-    my ($self, $min_level) = @_;
-    my $json = JSON::XS->new->allow_blessed->convert_blessed->canonical;
+    my ( $self, $min_level ) = @_;
+    my $json    = JSON::XS->new->allow_blessed->convert_blessed->canonical;
     my %numeric = Zonemaster::Logger::Entry->levels();
 
-    my @msg = @{$self->entries};
+    my @msg = @{ $self->entries };
 
-    if ($min_level and defined $numeric{uc($min_level)} ) {
-        @msg = grep {$_->numeric_level >= $numeric{uc($min_level)}} @msg;
+    if ( $min_level and defined $numeric{ uc( $min_level ) } ) {
+        @msg = grep { $_->numeric_level >= $numeric{ uc( $min_level ) } } @msg;
     }
 
     my @out;
-    foreach my $m (@msg) {
+    foreach my $m ( @msg ) {
         my %r;
         $r{timestamp} = $m->timestamp;
-        $r{module} = $m->module;
-        $r{tag} = $m->tag;
-        $r{level} = $m->level;
-        $r{args} = $m->args if $m->args;
+        $r{module}    = $m->module;
+        $r{tag}       = $m->tag;
+        $r{level}     = $m->level;
+        $r{args}      = $m->args if $m->args;
 
         push @out, \%r;
     }
 
-    return $json->encode(\@out);
-}
-
+    return $json->encode( \@out );
+} ## end sub json
 
 no Moose;
 __PACKAGE__->meta->make_immutable;

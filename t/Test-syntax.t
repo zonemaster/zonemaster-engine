@@ -26,14 +26,14 @@ sub zone_gives {
     my ( $test, $zone, $gives ) = @_;
 
     my @res = Zonemaster->test_method( q{Syntax}, $test, $zone );
-    ok( ( grep { $_->tag eq $gives } @res ), $zone->name->string." gives $gives" );
+    ok( ( grep { $_->tag eq $gives } @res ), $zone->name->string . " gives $gives" );
 }
 
 sub zone_gives_not {
     my ( $test, $zone, $gives ) = @_;
 
     my @res = Zonemaster->test_method( q{Syntax}, $test, $zone );
-    ok( !( grep { $_->tag eq $gives } @res ), $zone->name->string." does not give $gives" );
+    ok( !( grep { $_->tag eq $gives } @res ), $zone->name->string . " does not give $gives" );
 }
 
 my $datafile = q{t/Test-syntax.data};
@@ -64,12 +64,12 @@ name_gives_not( q{syntax02}, $dn_ok, q{TERMINAL_HYPHEN} );
 
 my $dn_idn_ok = Zonemaster::DNSName->new( q{www.xn--nic.se} );
 $dn_ko = Zonemaster::DNSName->new( q{www.ni--c.se} );
-name_gives( q{syntax03}, $dn_ko,         q{DISCOURAGED_DOUBLE_DASH} );
+name_gives( q{syntax03}, $dn_ko, q{DISCOURAGED_DOUBLE_DASH} );
 name_gives_not( q{syntax03}, $dn_ko,     q{NO_DOUBLE_DASH} );
 name_gives_not( q{syntax03}, $dn_ok,     q{DISCOURAGED_DOUBLE_DASH} );
 name_gives_not( q{syntax03}, $dn_idn_ok, q{DISCOURAGED_DOUBLE_DASH} );
-name_gives( q{syntax03}, $dn_ok,         q{NO_DOUBLE_DASH} );
-name_gives( q{syntax03}, $dn_idn_ok,     q{NO_DOUBLE_DASH} );
+name_gives( q{syntax03}, $dn_ok,     q{NO_DOUBLE_DASH} );
+name_gives( q{syntax03}, $dn_idn_ok, q{NO_DOUBLE_DASH} );
 
 my $ns_double_dash = Zonemaster::DNSName->new( q{ns1.ns--nic.fr} );
 name_gives( q{syntax04}, $ns_double_dash, q{NAMESERVER_DISCOURAGED_DOUBLE_DASH} );

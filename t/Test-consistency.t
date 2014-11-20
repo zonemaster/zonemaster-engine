@@ -38,7 +38,6 @@ ok( $res{ONE_SOA_SERIAL},             q{One SOA serial} );
 ok( $res{ONE_SOA_RNAME},              q{One SOA rname} );
 ok( $res{ONE_SOA_TIME_PARAMETER_SET}, q{One SOA time parameters set} );
 
-
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Nameserver->save( $datafile );
 }

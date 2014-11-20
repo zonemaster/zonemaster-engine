@@ -12,8 +12,8 @@ sub zone_gives {
 
     Zonemaster->logger->clear_history();
     my @res = Zonemaster->test_method( $checking_module, $test, $zone );
-    foreach my $gives (@{$gives_ref}) {
-        ok( ( grep { $_->tag eq $gives } @res ), $zone->name->string." gives $gives" );
+    foreach my $gives ( @{$gives_ref} ) {
+        ok( ( grep { $_->tag eq $gives } @res ), $zone->name->string . " gives $gives" );
     }
     return scalar( @res );
 }
@@ -23,8 +23,8 @@ sub zone_gives_not {
 
     Zonemaster->logger->clear_history();
     my @res = Zonemaster->test_method( $checking_module, $test, $zone );
-    foreach my $gives (@{$gives_ref}) {
-        ok( !( grep { $_->tag eq $gives } @res ), $zone->name->string." does not give $gives" );
+    foreach my $gives ( @{$gives_ref} ) {
+        ok( !( grep { $_->tag eq $gives } @res ), $zone->name->string . " does not give $gives" );
     }
     return scalar( @res );
 }
@@ -48,18 +48,18 @@ foreach my $msg ( @res ) {
 }
 
 my $zone2 = Zonemaster->zone( 'seb.se' );
-is (zone_gives( 'dnssec01', $zone2, [q{NO_DS}] ), 1, 'Only one message' );
+is( zone_gives( 'dnssec01', $zone2, [q{NO_DS}] ), 1, 'Only one message' );
 
 zone_gives( 'dnssec02', $zone, [qw{DS_MATCHES_DNSKEY COMMON_KEYTAGS DS_MATCH_FOUND DS_FOUND}] );
 
-is (zone_gives( 'dnssec02', $zone2, [q{NO_DS}] ), 1, 'Only one message' );
+is( zone_gives( 'dnssec02', $zone2, [q{NO_DS}] ), 1, 'Only one message' );
 
 my $zone3 = Zonemaster->zone( 'com' );
-is (zone_gives( 'dnssec03', $zone3, [q{ITERATIONS_OK}] ), 1, 'Only one message' );
+is( zone_gives( 'dnssec03', $zone3, [q{ITERATIONS_OK}] ), 1, 'Only one message' );
 
 @res = Zonemaster->test_method( 'DNSSEC', 'dnssec04', $zone );
 %tag = map { $_->tag => 1 } @res;
-ok( ($tag{DURATION_OK} || $tag{REMAINING_SHORT} || $tag{RRSIG_EXPIRED}), 'DURATION_OK (sort of)' );
+ok( ( $tag{DURATION_OK} || $tag{REMAINING_SHORT} || $tag{RRSIG_EXPIRED} ), 'DURATION_OK (sort of)' );
 
 zone_gives( 'dnssec05', $zone, [q{ALGORITHM_OK}] );
 
@@ -120,7 +120,8 @@ zone_gives_not( 'dnssec05', $zone, [qw{ALGORITHM_RESERVED ALGORITHM_UNASSIGNED A
 
 $zone = Zonemaster->zone( 'dnssec05-algorithm-reserved.zut-root.rd.nic.fr' );
 zone_gives( 'dnssec05', $zone, [q{ALGORITHM_RESERVED}] );
-zone_gives_not( 'dnssec05', $zone, [qw{ALGORITHM_DEPRECATED ALGORITHM_UNASSIGNED ALGORITHM_PRIVATE ALGORITHM_UNKNOWN}] );
+zone_gives_not( 'dnssec05', $zone,
+    [qw{ALGORITHM_DEPRECATED ALGORITHM_UNASSIGNED ALGORITHM_PRIVATE ALGORITHM_UNKNOWN}] );
 
 $zone = Zonemaster->zone( 'dnssec05-algorithm-unassigned.zut-root.rd.nic.fr' );
 zone_gives( 'dnssec05', $zone, [q{ALGORITHM_UNASSIGNED}] );
@@ -128,7 +129,8 @@ zone_gives_not( 'dnssec05', $zone, [qw{ALGORITHM_DEPRECATED ALGORITHM_RESERVED A
 
 $zone = Zonemaster->zone( 'dnssec05-algorithm-private.zut-root.rd.nic.fr' );
 zone_gives( 'dnssec05', $zone, [q{ALGORITHM_PRIVATE}] );
-zone_gives_not( 'dnssec05', $zone, [qw{ALGORITHM_DEPRECATED ALGORITHM_RESERVED ALGORITHM_UNASSIGNED ALGORITHM_UNKNOWN}] );
+zone_gives_not( 'dnssec05', $zone,
+    [qw{ALGORITHM_DEPRECATED ALGORITHM_RESERVED ALGORITHM_UNASSIGNED ALGORITHM_UNKNOWN}] );
 
 # dnssec06
 $zone = Zonemaster->zone( 'dnssec06-extra-processing-broken-1.zut-root.rd.nic.fr' );
@@ -180,13 +182,13 @@ TODO: {
     # dnssec07 (need complete analyze with broken zone)
     ok( $tag{ADDITIONAL_DNSKEY_SKIPPED}, q{ADDITIONAL_DNSKEY_SKIPPED} );
     # dnssec10
-    ok( $tag{INVALID_NAME_RCODE}, q{INVALID_NAME_RCODE} );
-    ok( $tag{NSEC_COVERS_NOT}, q{NSEC_COVERS_NOT} );
-    ok( $tag{NSEC_SIG_VERIFY_ERROR}, q{NSEC_SIG_VERIFY_ERROR} );
-    ok( $tag{NSEC_NOT_SIGNED}, q{NSEC_NOT_SIGNED} );
-    ok( $tag{NSEC3_COVERS_NOT}, q{NSEC3_COVERS_NOT} );
+    ok( $tag{INVALID_NAME_RCODE},     q{INVALID_NAME_RCODE} );
+    ok( $tag{NSEC_COVERS_NOT},        q{NSEC_COVERS_NOT} );
+    ok( $tag{NSEC_SIG_VERIFY_ERROR},  q{NSEC_SIG_VERIFY_ERROR} );
+    ok( $tag{NSEC_NOT_SIGNED},        q{NSEC_NOT_SIGNED} );
+    ok( $tag{NSEC3_COVERS_NOT},       q{NSEC3_COVERS_NOT} );
     ok( $tag{NSEC3_SIG_VERIFY_ERROR}, q{NSEC3_SIG_VERIFY_ERROR} );
-    ok( $tag{NSEC3_NOT_SIGNED}, q{NSEC3_NOT_SIGNED} );
+    ok( $tag{NSEC3_NOT_SIGNED},       q{NSEC3_NOT_SIGNED} );
 }
 
 if ( $ENV{ZONEMASTER_RECORD} ) {

@@ -19,7 +19,7 @@ our %recurse_cache;
 
 sub recurse {
     my ( $self, $name, $type, $class ) = @_;
-    $name = name($name);
+    $name = name( $name );
     $type  //= 'A';
     $class //= 'IN';
 
@@ -39,7 +39,7 @@ sub recurse {
 
 sub parent {
     my ( $self, $name ) = @_;
-    $name = name($name);
+    $name = name( $name );
 
     my ( $p, $state ) =
       $self->_recurse( $name, 'SOA', 'IN',
@@ -63,7 +63,7 @@ sub parent {
 
 sub _recurse {
     my ( $self, $name, $type, $class, $state ) = @_;
-    $name = '' . name($name);
+    $name = '' . name( $name );
 
     if ( $state->{in_progress}{$name}{$type} ) {
         return;
@@ -97,11 +97,11 @@ sub _recurse {
         # So it's not an error, not an empty response and not an answer
 
         if ( $p->is_redirect ) {
-            my $zname = name(lc(( $p->get_records( 'ns' ) )[0]->name));
+            my $zname = name( lc( ( $p->get_records( 'ns' ) )[0]->name ) );
 
-            next if $zname eq '.'; # Redirect to root is never right.
+            next if $zname eq '.';          # Redirect to root is never right.
 
-            next if $state->{seen}{$zname};    # We followed this redirect before
+            next if $state->{seen}{$zname}; # We followed this redirect before
 
             $state->{seen}{$zname} = 1;
             my $common = name( $zname )->common( name( $state->{qname} ) );
@@ -112,45 +112,45 @@ sub _recurse {
             $state->{common} = $common;
             $state->{ns} = $self->get_ns_from( $p, $state );    # Follow redirect
             $state->{count} += 1;
-            return (undef, $state) if $state->{count} > 20;    # Loop protection
+            return ( undef, $state ) if $state->{count} > 20;    # Loop protection
             unshift @{ $state->{trace} }, $zname;
 
             next;
-        }
+        } ## end if ( $p->is_redirect )
     } ## end while ( my $ns = pop @{ $state...})
     return ( $state->{candidate}, $state ) if $state->{candidate};
 
-    return (undef, $state);
+    return ( undef, $state );
 } ## end sub _recurse
 
 sub _do_query {
     my ( $self, $ns, $name, $type, $opts, $state ) = @_;
 
-    if ( ref( $ns ) and $ns->can('query') ) {
+    if ( ref( $ns ) and $ns->can( 'query' ) ) {
         my $p = $ns->query( $name, $type, $opts );
 
         if ( $p ) {
             for my $rr ( grep { $_->type eq 'A' or $_->type eq 'AAAA' } $p->answer, $p->additional ) {
-                $state->{glue}{ lc(name( $rr->name )) }{ $rr->address } = 1;
+                $state->{glue}{ lc( name( $rr->name ) ) }{ $rr->address } = 1;
             }
         }
         return $p;
     }
-    elsif ( my $href = $state->{glue}{ lc(name( $ns )) }) {
-        foreach my $addr (keys %$href) {
-            my $realns = ns($ns, $addr);
-            my $p = $self->_do_query($realns, $name, $type, $opts, $state);
-            if ($p) {
+    elsif ( my $href = $state->{glue}{ lc( name( $ns ) ) } ) {
+        foreach my $addr ( keys %$href ) {
+            my $realns = ns( $ns, $addr );
+            my $p = $self->_do_query( $realns, $name, $type, $opts, $state );
+            if ( $p ) {
                 return $p;
             }
         }
     }
     else {
-        $state->{glue}{ lc(name( $ns )) } = {};
+        $state->{glue}{ lc( name( $ns ) ) } = {};
         my @addr = $self->get_addresses_for( $ns, $state );
         if ( @addr > 0 ) {
             foreach my $addr ( @addr ) {
-                $state->{glue}{ lc(name( $ns )) }{$addr->short} = 1;
+                $state->{glue}{ lc( name( $ns ) ) }{ $addr->short } = 1;
                 my $new = ns( $ns, $addr->short );
                 my $p = $new->query( $name, $type, $opts );
                 return $p if $p;
@@ -166,13 +166,14 @@ sub get_ns_from {
     my ( $self, $p, $state ) = @_;
     my ( @new, @extra );
 
-    my @names = sort map { name( lc($_->nsdname) ) } $p->get_records( 'ns' );
+    my @names = sort map { name( lc( $_->nsdname ) ) } $p->get_records( 'ns' );
 
-    $state->{glue}{ lc(name( $_->name )) }{ $_->address } = 1 for ( $p->get_records( 'a' ), $p->get_records( 'aaaa' ) );
+    $state->{glue}{ lc( name( $_->name ) ) }{ $_->address } = 1
+      for ( $p->get_records( 'a' ), $p->get_records( 'aaaa' ) );
 
     foreach my $name ( @names ) {
-        if ( exists $state->{glue}{ lc(name( $name )) } ) {
-            for my $addr (keys %{ $state->{glue}{ lc(name( $name )) } }) {
+        if ( exists $state->{glue}{ lc( name( $name ) ) } ) {
+            for my $addr ( keys %{ $state->{glue}{ lc( name( $name ) ) } } ) {
                 push @new, ns( $name, $addr );
             }
         }
@@ -205,7 +206,7 @@ sub get_addresses_for {
     );
 
     # Name does not exist, just stop
-    if ($pa and $pa->no_such_name) {
+    if ( $pa and $pa->no_such_name ) {
         return;
     }
 

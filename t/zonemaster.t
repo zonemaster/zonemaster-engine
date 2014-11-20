@@ -32,16 +32,16 @@ ok( exists( $methods{Basic} ), 'all_methods' );
 my @tags = Zonemaster->all_tags;
 ok( ( grep { /BASIC:HAS_NAMESERVERS/ } @tags ), 'all_tags' );
 
-my $disabled = 0;
+my $disabled           = 0;
 my $dependency_version = 0;
-my $global_version = 0;
+my $global_version     = 0;
 %module = ();
-%end = ();
+%end    = ();
 Zonemaster->logger->callback(
     sub {
         my ( $e ) = shift;
 
-        if ( $e->tag eq 'POLICY_DISABLED' and $e->args->{name} eq 'Example') {
+        if ( $e->tag eq 'POLICY_DISABLED' and $e->args->{name} eq 'Example' ) {
             $disabled = 1;
         }
 
@@ -50,7 +50,7 @@ Zonemaster->logger->callback(
         }
 
         if ( $e->tag eq 'MODULE_END' ) {
-            $end{ $e->args->{module}} = 1;
+            $end{ $e->args->{module} } = 1;
         }
 
         if ( $e->tag eq 'GLOBAL_VERSION' ) {
@@ -65,8 +65,8 @@ Zonemaster->logger->callback(
 );
 my @results = Zonemaster->test_zone( 'nic.se' );
 
-ok( $global_version, "Global version: $global_version");
-ok( $dependency_version, 'At least one dependency version logged');
+ok( $global_version,     "Global version: $global_version" );
+ok( $dependency_version, 'At least one dependency version logged' );
 
 ok( $module{'Zonemaster::Test::Address'},      'Zonemaster::Test::Address did run.' );
 ok( $module{'Zonemaster::Test::Basic'},        'Zonemaster::Test::Basic did run.' );
@@ -123,21 +123,21 @@ isa_ok( exception { Zonemaster->test_module( 'SyNtAx', 'nic.se' ) }, 'Zonemaster
 isa_ok( exception { Zonemaster->test_method( 'Syntax', 'syntax01', 'nic.se' ) }, 'Zonemaster::Exception' );
 Zonemaster->logger->clear_callback;
 
-Zonemaster->config->ipv4_ok(0);
-Zonemaster->config->ipv6_ok(0);
-my ($msg) = Zonemaster->test_zone('nic.se');
-ok(!!$msg, 'Got a message.');
-is($msg->tag, 'NO_NETWORK', 'It is the right message.');
+Zonemaster->config->ipv4_ok( 0 );
+Zonemaster->config->ipv6_ok( 0 );
+my ( $msg ) = Zonemaster->test_zone( 'nic.se' );
+ok( !!$msg, 'Got a message.' );
+is( $msg->tag, 'NO_NETWORK', 'It is the right message.' );
 
-($msg) = Zonemaster->test_module('Basic', 'nic.se');
-ok(!!$msg, 'Got a message.');
-is($msg->tag, 'NO_NETWORK', 'It is the right message.');
+( $msg ) = Zonemaster->test_module( 'Basic', 'nic.se' );
+ok( !!$msg, 'Got a message.' );
+is( $msg->tag, 'NO_NETWORK', 'It is the right message.' );
 
-($msg) = Zonemaster->test_method('Basic', 'basic01', 'nic.se');
-ok(!!$msg, 'Got a message.');
-is($msg->tag, 'NO_NETWORK', 'It is the right message.');
-Zonemaster->config->ipv4_ok(1);
-Zonemaster->config->ipv6_ok(1);
+( $msg ) = Zonemaster->test_method( 'Basic', 'basic01', 'nic.se' );
+ok( !!$msg, 'Got a message.' );
+is( $msg->tag, 'NO_NETWORK', 'It is the right message.' );
+Zonemaster->config->ipv4_ok( 1 );
+Zonemaster->config->ipv6_ok( 1 );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Nameserver->save( $datafile );

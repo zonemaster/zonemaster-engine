@@ -24,14 +24,14 @@ sub zone_gives {
     my ( $test, $zone, $gives ) = @_;
 
     my @res = Zonemaster->test_method( q{Basic}, $test, $zone );
-    ok( ( grep { $_->tag eq $gives } @res ), $zone->name->string." gives $gives" );
+    ok( ( grep { $_->tag eq $gives } @res ), $zone->name->string . " gives $gives" );
 }
 
 sub zone_gives_not {
     my ( $test, $zone, $gives ) = @_;
 
     my @res = Zonemaster->test_method( q{Basic}, $test, $zone );
-    ok( !( grep { $_->tag eq $gives } @res ), $zone->name->string." does not give $gives" );
+    ok( !( grep { $_->tag eq $gives } @res ), $zone->name->string . " does not give $gives" );
 }
 
 my $datafile = q{t/Test-basic.data};
@@ -49,7 +49,7 @@ my $ns_ok_long = Zonemaster::DNSName->new(
 q{ns23456789012345678901234567890123456789012345678901234567890.dom123456789012345678901234567890123456789012345678901234567890.dom123456789012345678901234567890123456789012345678901234567890.tld123456789012345678901234567890123456789012345678901234567890}
 );
 name_gives( q{basic00}, $ns_too_long, q{DOMAIN_NAME_TOO_LONG} );
-name_gives_not( q{basic00}, $ns_ok, q{DOMAIN_NAME_TOO_LONG} );
+name_gives_not( q{basic00}, $ns_ok,      q{DOMAIN_NAME_TOO_LONG} );
 name_gives_not( q{basic00}, $ns_ok_long, q{DOMAIN_NAME_TOO_LONG} );
 
 my $ns_label_too_long =
@@ -67,7 +67,7 @@ zone_gives( q{basic02}, $zone, q{NS_FAILED} );
 zone_gives( q{basic02}, $zone, q{NS_NO_RESPONSE} );
 
 %res = map { $_->tag => 1 } Zonemaster->test_module( q{basic}, q{aff.tf} );
-ok( $res{HAS_NAMESERVERS}, q{HAS_NAMESERVERS} );
+ok( $res{HAS_NAMESERVERS},              q{HAS_NAMESERVERS} );
 ok( $res{HAS_NAMESERVER_NO_WWW_A_TEST}, q{HAS_NAMESERVER_NO_WWW_A_TEST} );
 
 $zone = Zonemaster->zone( q{svtbarn.se} );
@@ -98,7 +98,7 @@ zone_gives_not( q{basic03}, $zone, q{IPV4_DISABLED} );
 zone_gives_not( q{basic03}, $zone, q{IPV6_ENABLED} );
 
 %res = map { $_->tag => 1 } Zonemaster->test_module( q{basic}, q{melbourneit.com.au} );
-ok( $res{NO_GLUE}, q{NO_GLUE} );
+ok( $res{NO_GLUE},                           q{NO_GLUE} );
 ok( $res{NO_GLUE_PREVENTS_NAMESERVER_TESTS}, q{NO_GLUE_PREVENTS_NAMESERVER_TESTS} );
 
 %res = map { $_->tag => 1 } Zonemaster->test_module( q{basic}, q{maxan.se} );
@@ -111,7 +111,7 @@ TODO: {
     local $TODO = "Need to find domain name with that error";
 
     ok( $res{NO_PARENT_RESPONSE}, q{NO_PARENT_RESPONSE} );
-};
+}
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Nameserver->save( $datafile );

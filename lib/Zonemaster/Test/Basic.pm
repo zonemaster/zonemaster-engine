@@ -24,7 +24,15 @@ sub all {
 
     push @results, $class->basic00( $zone );
 
-    if ( none { $_->tag eq q{DOMAIN_NAME_LABEL_TOO_LONG} or $_->tag eq q{DOMAIN_NAME_ZERO_LENGTH_LABEL} or $_->tag eq q{DOMAIN_NAME_TOO_LONG} } @results ) {
+    if (
+        none {
+            $_->tag eq q{DOMAIN_NAME_LABEL_TOO_LONG}
+              or $_->tag eq q{DOMAIN_NAME_ZERO_LENGTH_LABEL}
+              or $_->tag eq q{DOMAIN_NAME_TOO_LONG}
+        }
+        @results
+      )
+    {
         push @results, $class->basic01( $zone );
 
         # Perform BASIC2 if BASIC1 passed
@@ -33,9 +41,7 @@ sub all {
         }
         else {
             push @results,
-              info(
-                NO_GLUE_PREVENTS_NAMESERVER_TESTS => { } 
-              );
+              info( NO_GLUE_PREVENTS_NAMESERVER_TESTS => {} );
         }
 
         # Perform BASIC3 if BASIC2 failed
@@ -47,13 +53,13 @@ sub all {
               info(
                 HAS_NAMESERVER_NO_WWW_A_TEST => {
                     name => $zone->name,
-                } 
+                }
               );
         }
-    }
+    } ## end if ( none {  $_->tag eq...})
 
     return @results;
-}
+} ## end sub all
 
 sub can_continue {
     my ( $class, @results ) = @_;
@@ -120,17 +126,17 @@ sub metadata {
 
 sub translation {
     return {
-        "DOMAIN_NAME_LABEL_TOO_LONG"        => "Domain name ({name}) has a label ({label}) too long ({length}/{max}).",
-        "DOMAIN_NAME_ZERO_LENGTH_LABEL"     => "Domain name ({name}) has a zero length label.",
-        "DOMAIN_NAME_TOO_LONG"              => "Domain name is too long ({length}/{max}).",
-        'NO_PARENT'                         => 'No parent domain could be found for the tested domain.',
-        'NO_GLUE'                           => 'Nameservers for "{parent}" provided no NS records for tested zone. RCODE given was {rcode}.',
-        'HAS_A_RECORDS'                     => 'Nameserver {source} returned A record(s) for {name}.',
-        'NO_A_RECORDS'                      => 'Nameserver {source} did not return A record(s) for {name}.',
-        'NO_DOMAIN'                         => 'Nameserver for zone {parent} responded with NXDOMAIN to query for glue.',
-        'HAS_NAMESERVERS'                   => 'Nameserver {source} listed these servers as glue: {ns}.',
-        'PARENT_REPLIES'                    => 'Nameserver for zone {parent} replies when trying to fetch glue.',
-        'NO_PARENT_RESPONSE'                => 'No response from nameserver for zone {parent} when trying to fetch glue.',
+        "DOMAIN_NAME_LABEL_TOO_LONG"    => "Domain name ({name}) has a label ({label}) too long ({length}/{max}).",
+        "DOMAIN_NAME_ZERO_LENGTH_LABEL" => "Domain name ({name}) has a zero length label.",
+        "DOMAIN_NAME_TOO_LONG"          => "Domain name is too long ({length}/{max}).",
+        'NO_PARENT'                     => 'No parent domain could be found for the tested domain.',
+        'NO_GLUE' => 'Nameservers for "{parent}" provided no NS records for tested zone. RCODE given was {rcode}.',
+        'HAS_A_RECORDS'      => 'Nameserver {source} returned A record(s) for {name}.',
+        'NO_A_RECORDS'       => 'Nameserver {source} did not return A record(s) for {name}.',
+        'NO_DOMAIN'          => 'Nameserver for zone {parent} responded with NXDOMAIN to query for glue.',
+        'HAS_NAMESERVERS'    => 'Nameserver {source} listed these servers as glue: {ns}.',
+        'PARENT_REPLIES'     => 'Nameserver for zone {parent} replies when trying to fetch glue.',
+        'NO_PARENT_RESPONSE' => 'No response from nameserver for zone {parent} when trying to fetch glue.',
         'NO_GLUE_PREVENTS_NAMESERVER_TESTS' => 'No NS records for tested zone from parent. NS tests aborted.',
         'NS_FAILED'                         => 'Nameserver {source} did not return NS records. RCODE was {rcode}.',
         'NS_NO_RESPONSE'                    => 'Nameserver {source} did not respond to NS query.',
@@ -142,7 +148,7 @@ sub translation {
         'IPV6_DISABLED'                     => 'IPv6 is disabled, not sending "{type}" query to {ns}.',
         'IPV6_ENABLED'                      => 'IPv6 is enabled, can send "{type}" query to {ns}.',
     };
-}
+} ## end sub translation
 
 sub version {
     return "$Zonemaster::Test::Basic::VERSION";
@@ -154,7 +160,7 @@ sub version {
 
 sub basic00 {
     my ( $class, $zone ) = @_;
-    my $name = name($zone);
+    my $name = name( $zone );
     my @results;
 
     foreach my $local_label ( @{ $name->labels } ) {
@@ -166,34 +172,34 @@ sub basic00 {
                     label  => $local_label,
                     length => length( $local_label ),
                     max    => $LABEL_MAX_LENGTH,
-                  }
+                }
               );
         }
         elsif ( length $local_label == 0 ) {
             push @results,
               info(
                 q{DOMAIN_NAME_ZERO_LENGTH_LABEL} => {
-                    name   => "$name",
-                  }
+                    name => "$name",
+                }
               );
         }
-    }
+    } ## end foreach my $local_label ( @...)
 
     my $fqdn = $name->fqdn;
     if ( length( $fqdn ) > $FQDN_MAX_LENGTH ) {
         push @results,
           info(
             q{DOMAIN_NAME_TOO_LONG} => {
-                name => $fqdn,
+                name   => $fqdn,
                 length => length( $fqdn ),
                 max    => $FQDN_MAX_LENGTH,
-              }
+            }
           );
     }
 
     return @results;
 
-}
+} ## end sub basic00
 
 sub basic01 {
     my ( $class, $zone ) = @_;
@@ -201,8 +207,8 @@ sub basic01 {
 
     my $parent = $zone->parent;
 
-    if (not $parent) {
-        return info( NO_PARENT => { zone => $zone->name->string });
+    if ( not $parent ) {
+        return info( NO_PARENT => { zone => $zone->name->string } );
     }
 
     my $p = $parent->query_one( $zone->name, q{NS} );
@@ -261,8 +267,8 @@ sub basic02 {
     my ( $class, $zone ) = @_;
     my @results;
 
-    foreach my $ns ( @{ Zonemaster::TestMethods->method4($zone) } ) {
-        if (not Zonemaster->config->ipv4_ok and $ns->address->version == $IP_VERSION_4) {
+    foreach my $ns ( @{ Zonemaster::TestMethods->method4( $zone ) } ) {
+        if ( not Zonemaster->config->ipv4_ok and $ns->address->version == $IP_VERSION_4 ) {
             push @results,
               info(
                 IPV4_DISABLED => {
@@ -272,7 +278,7 @@ sub basic02 {
               );
             next;
         }
-        elsif (Zonemaster->config->ipv4_ok and $ns->address->version == $IP_VERSION_4)  {
+        elsif ( Zonemaster->config->ipv4_ok and $ns->address->version == $IP_VERSION_4 ) {
             push @results,
               info(
                 IPV4_ENABLED => {
@@ -282,7 +288,7 @@ sub basic02 {
               );
         }
 
-        if (not Zonemaster->config->ipv6_ok and $ns->address->version == $IP_VERSION_6) {
+        if ( not Zonemaster->config->ipv6_ok and $ns->address->version == $IP_VERSION_6 ) {
             push @results,
               info(
                 IPV6_DISABLED => {
@@ -292,7 +298,7 @@ sub basic02 {
               );
             next;
         }
-        elsif (Zonemaster->config->ipv6_ok and $ns->address->version == $IP_VERSION_6) {
+        elsif ( Zonemaster->config->ipv6_ok and $ns->address->version == $IP_VERSION_6 ) {
             push @results,
               info(
                 IPV6_ENABLED => {
@@ -331,7 +337,7 @@ sub basic02 {
                 }
               );
         }
-    } ## end foreach my $ns ( @{ $zone->...})
+    } ## end foreach my $ns ( @{ Zonemaster::TestMethods...})
 
     return @results;
 } ## end sub basic02
@@ -340,10 +346,10 @@ sub basic03 {
     my ( $class, $zone ) = @_;
     my @results;
 
-    my $name = q{www.} . $zone->name;
+    my $name        = q{www.} . $zone->name;
     my $response_nb = 0;
-    foreach my $ns ( @{ Zonemaster::TestMethods->method4($zone) } ) {
-        if (not Zonemaster->config->ipv4_ok and $ns->address->version == $IP_VERSION_4) {
+    foreach my $ns ( @{ Zonemaster::TestMethods->method4( $zone ) } ) {
+        if ( not Zonemaster->config->ipv4_ok and $ns->address->version == $IP_VERSION_4 ) {
             push @results,
               info(
                 IPV4_DISABLED => {
@@ -363,7 +369,7 @@ sub basic03 {
               );
         }
 
-        if (not Zonemaster->config->ipv6_ok and $ns->address->version == $IP_VERSION_6) {
+        if ( not Zonemaster->config->ipv6_ok and $ns->address->version == $IP_VERSION_6 ) {
             push @results,
               info(
                 IPV6_DISABLED => {
@@ -373,7 +379,7 @@ sub basic03 {
               );
             next;
         }
-        elsif (Zonemaster->config->ipv6_ok and $ns->address->version == $IP_VERSION_6) {
+        elsif ( Zonemaster->config->ipv6_ok and $ns->address->version == $IP_VERSION_6 ) {
             push @results,
               info(
                 IPV6_ENABLED => {
@@ -404,13 +410,11 @@ sub basic03 {
                 }
               );
         }
-    }
+    } ## end foreach my $ns ( @{ Zonemaster::TestMethods...})
 
-    if (scalar( @{ Zonemaster::TestMethods->method4($zone) } ) and not $response_nb) {
+    if ( scalar( @{ Zonemaster::TestMethods->method4( $zone ) } ) and not $response_nb ) {
         push @results,
-          info(
-            A_QUERY_NO_RESPONSES => { }
-          );
+          info( A_QUERY_NO_RESPONSES => {} );
     }
 
     return @results;

@@ -13,8 +13,8 @@ our @roots;
 sub get_with_prefix {
     my ( $class, $ip ) = @_;
 
-    if (not @roots) {
-        @roots = map {Zonemaster->zone($_)} @{Zonemaster->config->asnroots};
+    if ( not @roots ) {
+        @roots = map { Zonemaster->zone( $_ ) } @{ Zonemaster->config->asnroots };
     }
 
     if ( not ref( $ip ) or not $ip->isa( 'Net::IP::XS' ) ) {
@@ -24,9 +24,9 @@ sub get_with_prefix {
     my $reverse = $ip->reverse_ip;
     foreach my $zone ( @roots ) {
         my $domain = $zone->name->string;
-        my $pair = {
+        my $pair   = {
             'in-addr.arpa.' => "origin.$domain",
-            'ip6.arpa.' => "origin6.$domain",
+            'ip6.arpa.'     => "origin6.$domain",
         };
         foreach my $root ( keys %$pair ) {
             if ( $reverse =~ s/$root/$pair->{$root}/i ) {
@@ -39,21 +39,21 @@ sub get_with_prefix {
                 my $str = $rr->txtdata;
                 $str =~ s/"([^"]+)"/$1/;
                 my @fields = split( / \| ?/, $str );
-                my @asns = split(/\s+/, $fields[0]);
+                my @asns   = split( /\s+/,   $fields[0] );
 
                 return \@asns, Net::IP::XS->new( $fields[1] );
             }
-        } ## end foreach my $root ( keys %$pair)
-    } ## end foreach my $pair ( @roots )
+        }
+    } ## end foreach my $zone ( @roots )
     return;
-} ## end sub get
+} ## end sub get_with_prefix
 
 sub get {
     my ( $class, $ip ) = @_;
 
-    my ( $asnref, $prefix ) = $class->get_with_prefix($ip);
+    my ( $asnref, $prefix ) = $class->get_with_prefix( $ip );
 
-    if ($asnref) {
+    if ( $asnref ) {
         return @$asnref;
     }
     else {

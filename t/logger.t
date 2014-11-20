@@ -16,7 +16,7 @@ $log->add( 'TAG', { seventeen => 17 } );
 
 # Make sure all our policy comes from our config file.
 $Zonemaster::Config::policy = {};
-Zonemaster->config->load_policy_file('t/policy.json');
+Zonemaster->config->load_policy_file( 't/policy.json' );
 
 my $e = $log->entries->[-1];
 isa_ok( $e, 'Zonemaster::Logger::Entry' );
@@ -34,7 +34,7 @@ like( "$entry", qr/SYSTEM:TEST an=argument/, 'stringification overload' );
 is( $entry->level, 'DEBUG', 'right level' );
 my $example = Zonemaster::Logger::Entry->new( { module => 'BASIC', tag => 'NS_FAILED' } );
 is( $example->level,         'ERROR', 'expected level' );
-is( $example->numeric_level, 4,         'expected numeric level' );
+is( $example->numeric_level, 4,       'expected numeric level' );
 
 my $canary = 0;
 $log->callback(

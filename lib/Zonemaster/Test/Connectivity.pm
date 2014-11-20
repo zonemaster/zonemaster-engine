@@ -13,7 +13,6 @@ use Carp;
 
 use List::MoreUtils qw[uniq];
 
-
 ###
 ### Entry Points
 ###
@@ -55,17 +54,17 @@ sub metadata {
         ],
         connectivity03 => [
             qw(
-                NAMESERVERS_IPV4_NO_AS
-                NAMESERVERS_IPV4_WITH_MULTIPLE_AS
-                NAMESERVERS_IPV4_WITH_UNIQ_AS
-                NAMESERVERS_IPV6_NO_AS
-                NAMESERVERS_IPV6_WITH_MULTIPLE_AS
-                NAMESERVERS_IPV6_WITH_UNIQ_AS
-                NAMESERVERS_NO_AS
-                NAMESERVERS_WITH_MULTIPLE_AS
-                NAMESERVERS_WITH_UNIQ_AS
-                IPV4_ASN
-                IPV6_ASN
+              NAMESERVERS_IPV4_NO_AS
+              NAMESERVERS_IPV4_WITH_MULTIPLE_AS
+              NAMESERVERS_IPV4_WITH_UNIQ_AS
+              NAMESERVERS_IPV6_NO_AS
+              NAMESERVERS_IPV6_WITH_MULTIPLE_AS
+              NAMESERVERS_IPV6_WITH_UNIQ_AS
+              NAMESERVERS_NO_AS
+              NAMESERVERS_WITH_MULTIPLE_AS
+              NAMESERVERS_WITH_UNIQ_AS
+              IPV4_ASN
+              IPV6_ASN
               )
         ],
     };
@@ -91,7 +90,7 @@ sub translation {
         'IPV4_ASN'                          => 'Name servers have IPv4 addresses in the following ASs: {asn}.',
         'IPV6_ASN'                          => 'Name servers have IPv6 addresses in the following ASs: {asn}.',
     };
-}
+} ## end sub translation
 
 sub version {
     return "$Zonemaster::Test::Connectivity::VERSION";
@@ -230,51 +229,49 @@ sub connectivity03 {
 
     my %ips = ( 4 => {}, 6 => {} );
 
-    foreach
-      my $ns ( @{ Zonemaster::TestMethods->method4( $zone ) }, @{ Zonemaster::TestMethods->method5( $zone ) } )
-    {
+    foreach my $ns ( @{ Zonemaster::TestMethods->method4( $zone ) }, @{ Zonemaster::TestMethods->method5( $zone ) } ) {
         my $addr = $ns->address;
-        $ips{$addr->version}{$addr->ip} = $addr;
+        $ips{ $addr->version }{ $addr->ip } = $addr;
     }
 
-    my @v4ips = values %{$ips{4}};
-    my @v6ips = values %{$ips{6}};
+    my @v4ips = values %{ $ips{4} };
+    my @v6ips = values %{ $ips{6} };
 
-    my @v4asns   = uniq grep {$_} map {Zonemaster::ASNLookup->get($_)} @v4ips;
-    my @v6asns   = uniq grep {$_} map {Zonemaster::ASNLookup->get($_)} @v6ips;
-    my @all_asns = uniq(@v4asns, @v6asns);
+    my @v4asns = uniq grep { $_ } map { Zonemaster::ASNLookup->get( $_ ) } @v4ips;
+    my @v6asns = uniq grep { $_ } map { Zonemaster::ASNLookup->get( $_ ) } @v6ips;
+    my @all_asns = uniq( @v4asns, @v6asns );
 
-    push @results, info( IPV4_ASN => { asn => join(',', @v4asns) } );
-    push @results, info( IPV6_ASN => { asn => join(',', @v6asns) } );
+    push @results, info( IPV4_ASN => { asn => join( ',', @v4asns ) } );
+    push @results, info( IPV6_ASN => { asn => join( ',', @v6asns ) } );
 
-    if (@v4asns == 1) {
+    if ( @v4asns == 1 ) {
         push @results, info( NAMESERVERS_IPV4_WITH_UNIQ_AS => { asn => $v4asns[0] } );
     }
     elsif ( @v4asns > 1 ) {
-        push @results, info( NAMESERVERS_IPV4_WITH_MULTIPLE_AS => { asn => join(';', @v4asns) } );
+        push @results, info( NAMESERVERS_IPV4_WITH_MULTIPLE_AS => { asn => join( ';', @v4asns ) } );
     }
     else {
-        push @results, info( NAMESERVERS_IPV4_NO_AS => { } );
+        push @results, info( NAMESERVERS_IPV4_NO_AS => {} );
     }
 
-    if (@v6asns == 1) {
+    if ( @v6asns == 1 ) {
         push @results, info( NAMESERVERS_IPV6_WITH_UNIQ_AS => { asn => $v6asns[0] } );
     }
     elsif ( @v6asns > 1 ) {
-        push @results, info( NAMESERVERS_IPV6_WITH_MULTIPLE_AS => { asn => join(';', @v6asns) } );
+        push @results, info( NAMESERVERS_IPV6_WITH_MULTIPLE_AS => { asn => join( ';', @v6asns ) } );
     }
     else {
-        push @results, info( NAMESERVERS_IPV6_NO_AS => { } );
+        push @results, info( NAMESERVERS_IPV6_NO_AS => {} );
     }
 
-    if (@all_asns == 1) {
+    if ( @all_asns == 1 ) {
         push @results, info( NAMESERVERS_WITH_UNIQ_AS => { asn => $all_asns[0] } );
     }
     elsif ( @all_asns > 1 ) {
-        push @results, info( NAMESERVERS_WITH_MULTIPLE_AS => { asn => join(';', @all_asns) } );
+        push @results, info( NAMESERVERS_WITH_MULTIPLE_AS => { asn => join( ';', @all_asns ) } );
     }
     else {
-        push @results, info( NAMESERVERS_NO_AS => { } ); # Shouldn't pass Basic
+        push @results, info( NAMESERVERS_NO_AS => {} );    # Shouldn't pass Basic
     }
 
     return @results;

@@ -10,8 +10,8 @@ use File::Spec;
 
 use Zonemaster;
 
-has 'cfiles' => ( is => 'ro', isa => 'ArrayRef', default => sub {[]});
-has 'pfiles' => ( is => 'ro', isa => 'ArrayRef', default => sub {[]});
+has 'cfiles' => ( is => 'ro', isa => 'ArrayRef', default => sub { [] } );
+has 'pfiles' => ( is => 'ro', isa => 'ArrayRef', default => sub { [] } );
 
 my $merger = Hash::Merge->new;
 $merger->specify_behavior(
@@ -42,23 +42,23 @@ our $policy = {};
 sub BUILD {
     my ( $self ) = @_;
 
-    foreach my $dir (_config_directory_list()) {
-        my $cfile = File::Spec->catfile($dir, 'config.json');
+    foreach my $dir ( _config_directory_list() ) {
+        my $cfile = File::Spec->catfile( $dir, 'config.json' );
         my $new = eval { decode_json read_file $cfile };
-        if ($new) {
+        if ( $new ) {
             $config = $merger->merge( $config, $new );
-            push @{$self->cfiles}, $cfile;
+            push @{ $self->cfiles }, $cfile;
         }
 
-        my $pfile = File::Spec->catfile($dir, 'policy.json');
+        my $pfile = File::Spec->catfile( $dir, 'policy.json' );
         $new = eval { decode_json read_file $pfile };
-        if ($new) {
+        if ( $new ) {
             $policy = $merger->merge( $policy, $new );
-            push @{$self->pfiles}, $pfile;
+            push @{ $self->pfiles }, $pfile;
         }
 
     }
-}
+} ## end sub BUILD
 
 sub get {
     my ( $class ) = @_;
@@ -69,7 +69,7 @@ sub get {
 sub policy {
     my ( $class ) = @_;
 
-    if (not $policy) {
+    if ( not $policy ) {
         _load_base_policy();
     }
 
@@ -83,8 +83,8 @@ sub _config_directory_list {
     push @dirlist, '/etc/zonemaster';
     push @dirlist, '/usr/local/etc/zonemaster';
 
-    my $dir = (getpwuid($>))[7];
-    if ($dir) {
+    my $dir = ( getpwuid( $> ) )[7];
+    if ( $dir ) {
         push @dirlist, $dir . '/.zonemaster';
     }
 
@@ -95,18 +95,18 @@ sub _load_base_config {
     my $internal = decode_json( join( '', <DATA> ) );
     # my $filename = dist_file( 'Zonemaster', 'config.json' );
     # my $default = eval { decode_json read_file $filename };
-    # 
+    #
     # $internal = $merger->merge( $internal, $default ) if $default;
 
     $config = $internal;
 }
 
 sub load_module_policy {
-    my ($class, $mod) = @_;
+    my ( $class, $mod ) = @_;
 
     my $m = 'Zonemaster::Test::' . $mod;
-    if ($m->can('policy') and $m->policy) {
-        $policy = $merger->merge($policy, {$mod => $m->policy});
+    if ( $m->can( 'policy' ) and $m->policy ) {
+        $policy = $merger->merge( $policy, { $mod => $m->policy } );
     }
 
     return;
@@ -123,14 +123,15 @@ sub load_config_file {
 sub load_policy_file {
     my ( $self, $filename ) = @_;
 
-    if (not -r $filename) {
-        foreach my $dir (_config_directory_list()) {
-            my $name = File::Spec->catfile($dir, $filename);
-            if (-r $name) {
+    if ( not -r $filename ) {
+        foreach my $dir ( _config_directory_list() ) {
+            my $name = File::Spec->catfile( $dir, $filename );
+            if ( -r $name ) {
                 $filename = $name;
                 last;
-            } else {
-                if (-r $name . '.json') {
+            }
+            else {
+                if ( -r $name . '.json' ) {
                     $filename = $name . '.json';
                     last;
                 }
@@ -139,18 +140,18 @@ sub load_policy_file {
     }
 
     my $new = decode_json read_file $filename;
-    if ($new) {
+    if ( $new ) {
         $policy = $merger->merge( $policy, $new );
-        push @{$self->pfiles}, $filename if (ref($self) and $self->isa(__PACKAGE__));
+        push @{ $self->pfiles }, $filename if ( ref( $self ) and $self->isa( __PACKAGE__ ) );
     }
 
     return !!$new;
-}
+} ## end sub load_policy_file
 
 sub no_network {
     my ( $class, $value ) = @_;
 
-    if (defined($value)) {
+    if ( defined( $value ) ) {
         $class->get->{no_network} = $value;
     }
 
@@ -160,7 +161,7 @@ sub no_network {
 sub ipv4_ok {
     my ( $class, $value ) = @_;
 
-    if ( defined($value) ) {
+    if ( defined( $value ) ) {
         $class->get->{net}{ipv4} = $value;
     }
 
@@ -170,7 +171,7 @@ sub ipv4_ok {
 sub ipv6_ok {
     my ( $class, $value ) = @_;
 
-    if ( defined($value) ) {
+    if ( defined( $value ) ) {
         $class->get->{net}{ipv6} = $value;
     }
 

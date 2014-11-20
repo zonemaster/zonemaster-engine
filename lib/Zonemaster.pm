@@ -20,10 +20,10 @@ sub logger {
 }
 
 sub config {
-    if (not defined $config) {
+    if ( not defined $config ) {
         $config = Zonemaster::Config->new;
     }
-    
+
     return $config;
 }
 
@@ -61,11 +61,11 @@ sub all_tags {
     my ( $class ) = @_;
     my @res;
 
-    foreach my $module ( 'Basic', sort {$a cmp $b} Zonemaster::Test->modules ) {
+    foreach my $module ( 'Basic', sort { $a cmp $b } Zonemaster::Test->modules ) {
         my $full = "Zonemaster::Test::$module";
         my $ref  = $full->metadata;
         foreach my $list ( values %$ref ) {
-            push @res, map { uc( $module ) . ':' . $_ } sort {$a cmp $b} @$list;
+            push @res, map { uc( $module ) . ':' . $_ } sort { $a cmp $b } @$list;
         }
     }
 
@@ -79,7 +79,7 @@ sub all_methods {
     foreach my $module ( 'Basic', Zonemaster::Test->modules ) {
         my $full = "Zonemaster::Test::$module";
         my $ref  = $full->metadata;
-        foreach my $method ( sort {$a cmp $b} keys %$ref ) {
+        foreach my $method ( sort { $a cmp $b } keys %$ref ) {
             push @{ $res{$module} }, $method;
         }
     }
@@ -109,8 +109,8 @@ sub add_fake_delegation {
 sub add_fake_ds {
     my ( $class, $domain, $aref ) = @_;
 
-    my $parent = $class->zone( scalar($recursor->parent( $domain )) );
-    if (not $parent) {
+    my $parent = $class->zone( scalar( $recursor->parent( $domain ) ) );
+    if ( not $parent ) {
         die "Failed to find parent for $domain";
     }
 
@@ -136,7 +136,7 @@ sub preload_cache {
 sub asn_lookup {
     my ( undef, $ip ) = @_;
 
-    return Zonemaster::ASNLookup->get($ip);
+    return Zonemaster::ASNLookup->get( $ip );
 }
 
 sub modules {

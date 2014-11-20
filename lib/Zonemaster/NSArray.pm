@@ -8,13 +8,13 @@ use Zonemaster::Nameserver;
 
 use Moose;
 
-has 'names' => ( is => 'ro', isa => 'ArrayRef', required => 1);
-has 'ary' => ( is => 'ro', isa => 'ArrayRef', default => sub { [] });
+has 'names' => ( is => 'ro', isa => 'ArrayRef', required => 1 );
+has 'ary' => ( is => 'ro', isa => 'ArrayRef', default => sub { [] } );
 
 sub TIEARRAY {
     my ( $class, @names ) = @_;
 
-    return $class->new({ names => [sort {$a cmp $b} @names] });
+    return $class->new( { names => [ sort { $a cmp $b } @names ] } );
 }
 
 sub STORE {
@@ -32,34 +32,35 @@ sub STORESIZE {
 sub FETCH {
     my ( $self, $index ) = @_;
 
-    if (exists $self->ary->[$index]) {
+    if ( exists $self->ary->[$index] ) {
         return $self->ary->[$index];
     }
-    elsif (scalar(@{$self->names}) == 0) {
+    elsif ( scalar( @{ $self->names } ) == 0 ) {
         return;
     }
     else {
-        $self->_load_name(shift @{$self->names});
-        return $self->FETCH($index);
+        $self->_load_name( shift @{ $self->names } );
+        return $self->FETCH( $index );
     }
 }
 
 sub FETCHSIZE {
     my ( $self ) = @_;
 
-    while (my $name = shift @{$self->names}) {
-        $self->_load_name($name)
+    while ( my $name = shift @{ $self->names } ) {
+        $self->_load_name( $name );
     }
 
-    return scalar(@{$self->ary});
+    return scalar( @{ $self->ary } );
 }
 
 sub EXISTS {
     my ( $self, $index ) = @_;
 
-    if ($self->FETCH($index)) {
+    if ( $self->FETCH( $index ) ) {
         return 1;
-    } else {
+    }
+    else {
         return;
     }
 }
@@ -114,11 +115,11 @@ sub UNTIE {
 
 sub _load_name {
     my ( $self, $name ) = @_;
-    my @addrs = Zonemaster::Recursor->get_addresses_for($name);
-    foreach my $addr (sort {$a->ip cmp $b->ip} @addrs) {
-        my $ns = Zonemaster::Nameserver->new({ name => $name, address => $addr });
-        if ( not grep {"$ns" eq "$_"} @{$self->ary}) {
-            push @{$self->ary}, $ns;
+    my @addrs = Zonemaster::Recursor->get_addresses_for( $name );
+    foreach my $addr ( sort { $a->ip cmp $b->ip } @addrs ) {
+        my $ns = Zonemaster::Nameserver->new( { name => $name, address => $addr } );
+        if ( not grep { "$ns" eq "$_" } @{ $self->ary } ) {
+            push @{ $self->ary }, $ns;
         }
     }
 
