@@ -59,7 +59,8 @@ Zonemaster->add_fake_delegation(
         'ns3.nic.se' => [ '212.247.8.152',  '2a00:801:f0:211::152' ]
     }
 );
-ok(!!(grep {$_->tag eq 'FAKE_DELEGATION_TO_SELF'} @{Zonemaster->logger->entries}), 'Refused adding circular fake delegation.');
+ok( !!( grep { $_->tag eq 'FAKE_DELEGATION_TO_SELF' } @{ Zonemaster->logger->entries } ),
+    'Refused adding circular fake delegation.' );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Nameserver->save( $datafile );

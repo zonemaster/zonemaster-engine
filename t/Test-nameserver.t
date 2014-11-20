@@ -12,8 +12,8 @@ sub zone_gives {
 
     Zonemaster->logger->clear_history();
     my @res = Zonemaster->test_method( $checking_module, $test, $zone );
-    foreach my $gives (@{$gives_ref}) {
-        ok( ( grep { $_->tag eq $gives } @res ), $zone->name->string." gives $gives" );
+    foreach my $gives ( @{$gives_ref} ) {
+        ok( ( grep { $_->tag eq $gives } @res ), $zone->name->string . " gives $gives" );
     }
     return scalar( @res );
 }
@@ -23,8 +23,8 @@ sub zone_gives_not {
 
     Zonemaster->logger->clear_history();
     my @res = Zonemaster->test_method( $checking_module, $test, $zone );
-    foreach my $gives (@{$gives_ref}) {
-        ok( !( grep { $_->tag eq $gives } @res ), $zone->name->string." does not give $gives" );
+    foreach my $gives ( @{$gives_ref} ) {
+        ok( !( grep { $_->tag eq $gives } @res ), $zone->name->string . " does not give $gives" );
     }
     return scalar( @res );
 }
@@ -70,16 +70,16 @@ $zone = Zonemaster->zone( 'nameserver06-no-resolution.zut-root.rd.nic.fr' );
 zone_gives( 'nameserver06', $zone, [q{NO_RESOLUTION}] );
 
 $zone = Zonemaster->zone( 'scanjack.se' );
-zone_gives( 'nameserver02', $zone, ['EDNS0_BAD_QUERY']);
+zone_gives( 'nameserver02', $zone, ['EDNS0_BAD_QUERY'] );
 
 $zone = Zonemaster->zone( 'dyad.se' );
-zone_gives( 'nameserver02', $zone, ['EDNS0_SUPPORT']);
+zone_gives( 'nameserver02', $zone, ['EDNS0_SUPPORT'] );
 
 $zone = Zonemaster->zone( 'traxia.se' );
-zone_gives( 'nameserver05', $zone, ['QUERY_DROPPED']);
+zone_gives( 'nameserver05', $zone, ['QUERY_DROPPED'] );
 
 $zone = Zonemaster->zone( 'escargot.se' );
-zone_gives( 'nameserver05', $zone, ['ANSWER_BAD_RCODE']);
+zone_gives( 'nameserver05', $zone, ['ANSWER_BAD_RCODE'] );
 
 $zone = Zonemaster->zone( 'nameserver06-can-be-resolved.zut-root.rd.nic.fr' );
 zone_gives( 'nameserver06', $zone, [q{CAN_BE_RESOLVED}] );
@@ -90,8 +90,8 @@ TODO: {
     # zone_gives( 'nameserver02', $zone, ['EDNS0_BAD_ANSWER']);
 
     # nameserver03 does not work with saved data ???
-#    $zone = Zonemaster->zone( 'nameserver03-axfr-available.zut-root.rd.nic.fr' );
-#    zone_gives( 'nameserver03', $zone, [q{AXFR_AVAILABLE}] );
+    #    $zone = Zonemaster->zone( 'nameserver03-axfr-available.zut-root.rd.nic.fr' );
+    #    zone_gives( 'nameserver03', $zone, [q{AXFR_AVAILABLE}] );
 
     # nameserver04
     ok( $tag{DIFFERENT_SOURCE_IP}, q{DIFFERENT_SOURCE_IP} );

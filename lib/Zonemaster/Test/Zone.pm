@@ -459,7 +459,7 @@ sub zone07 {
                         }
                       );
                 }
-            }
+            } ## end if ( $p_mname )
         } ## end foreach my $address_type ( ...)
         if ( not $addresses_nb ) {
             push @results,

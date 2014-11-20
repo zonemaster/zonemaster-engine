@@ -41,7 +41,7 @@ our %EXPORT_TAGS = (
     soa  => [
         qw($SOA_DEFAULT_TTL_MAXIMUM_VALUE $SOA_DEFAULT_TTL_MINIMUM_VALUE $SOA_EXPIRE_MINIMUM_VALUE $SOA_REFRESH_MINIMUM_VALUE $SOA_RETRY_MINIMUM_VALUE $DURATION_12_HOURS_IN_SECONDS $DURATION_180_DAYS_IN_SECONDS $MAX_SERIAL_VARIATION)
     ],
-    misc => [qw($UDP_PAYLOAD_LIMIT $MINIMUM_NUMBER_OF_NAMESERVERS)],
+    misc      => [qw($UDP_PAYLOAD_LIMIT $MINIMUM_NUMBER_OF_NAMESERVERS)],
     addresses => [qw(@IPV4_SPECIAL_ADDRESSES @IPV6_SPECIAL_ADDRESSES)],
 );
 
@@ -109,10 +109,10 @@ Readonly::Array our @IPV6_SPECIAL_ADDRESSES => (
     { ip => Net::IP::XS->new( q{2002::/16} ),     name => q{6to4},                       reference => q{RFC 3056} },
     { ip => Net::IP::XS->new( q{fc00::/7} ),      name => q{Unique-Local},               reference => q{RFC 4193} },
     { ip => Net::IP::XS->new( q{fe80::/10} ),     name => q{Linked-Scoped Unicast},      reference => q{RFC 4291} },
-    { ip => Net::IP::XS->new( q{::/96} ),     name => q{Deprecated (IPv4-compatible Address)}, reference => q{RFC 4291} },
-    { ip => Net::IP::XS->new( q{5f00::/8} ),  name => q{unallocated (ex 6bone)},               reference => q{RFC 3701} },
-    { ip => Net::IP::XS->new( q{3ffe::/16} ), name => q{unallocated (ex 6bone)},               reference => q{RFC 3701} },
-    { ip => Net::IP::XS->new( q{ff00::/8} ),  name => q{IPv6 multicast addresses},             reference => q{RFC 4291} },
+    { ip => Net::IP::XS->new( q{::/96} ), name => q{Deprecated (IPv4-compatible Address)}, reference => q{RFC 4291} },
+    { ip => Net::IP::XS->new( q{5f00::/8} ),  name => q{unallocated (ex 6bone)},   reference => q{RFC 3701} },
+    { ip => Net::IP::XS->new( q{3ffe::/16} ), name => q{unallocated (ex 6bone)},   reference => q{RFC 3701} },
+    { ip => Net::IP::XS->new( q{ff00::/8} ),  name => q{IPv6 multicast addresses}, reference => q{RFC 4291} },
 );
 
 1;

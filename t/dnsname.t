@@ -11,12 +11,12 @@ my $root = Zonemaster::DNSName->new( '' );
 is_deeply( $root->labels, [] );
 is_deeply( Zonemaster::DNSName->new( '.' )->labels, [] );
 
-is( $name->string, 'www.iis.se', 'Default, no final dot' );
-is( $name->fqdn, 'www.iis.se.', 'With final dot' );
+is( $name->string, 'www.iis.se',  'Default, no final dot' );
+is( $name->fqdn,   'www.iis.se.', 'With final dot' );
 ok( 'www.iis.se' eq $name,  'Equal without dot' );
 ok( 'www.iis.se.' eq $name, 'Equal with dot' );
 
-is($root->fqdn, '.', 'Root fqdn OK.');
+is( $root->fqdn, '.', 'Root fqdn OK.' );
 ok( '.' eq $root, 'Root equal with dot' );
 ok( $root eq '.', 'Root equal with dot, other way around' );
 
@@ -42,11 +42,11 @@ is( $ex, 'example.org',            "Prepend does not change original: $ex" );
 $pr = $root->prepend( 'xx-example' );
 is( $pr, 'xx-example', "Prepend to root works: $pr" );
 
-is($name, Zonemaster::DNSName->new($name), 'Roundtrip creation works');
+is( $name, Zonemaster::DNSName->new( $name ), 'Roundtrip creation works' );
 
-my $zone = Zonemaster->zone('nic.se');
-my $zname = Zonemaster::DNSName->new($zone);
-isa_ok($zname, 'Zonemaster::DNSName');
-ok($zname eq 'nic.se');
+my $zone  = Zonemaster->zone( 'nic.se' );
+my $zname = Zonemaster::DNSName->new( $zone );
+isa_ok( $zname, 'Zonemaster::DNSName' );
+ok( $zname eq 'nic.se' );
 
 done_testing;

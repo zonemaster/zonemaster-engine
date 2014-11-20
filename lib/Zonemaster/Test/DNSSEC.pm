@@ -89,14 +89,12 @@ Readonly::Hash our %algo_properties => (
         description => q{ECDSA Curve P-384 with SHA-384},
         mnemonic    => q{ECDSAP384SHA384},
     },
-    (map { $_ => {
-               status      => $ALGO_STATUS_UNASSIGNED,
-               description => q{Unassigned},
-           } } (15..122) ),
-    (map { $_ => {
-               status      => $ALGO_STATUS_RESERVED,
-               description => q{Reserved},
-           } } (123..251) ),
+    (
+        map { $_ => { status => $ALGO_STATUS_UNASSIGNED, description => q{Unassigned}, } } ( 15 .. 122 )
+    ),
+    (
+        map { $_ => { status => $ALGO_STATUS_RESERVED, description => q{Reserved}, } } ( 123 .. 251 )
+    ),
     252 => {
         status      => $ALGO_STATUS_RESERVED,
         description => q{Reserved for Indirect Keys},
@@ -118,7 +116,6 @@ Readonly::Hash our %algo_properties => (
     },
 );
 
-
 ###
 ### Entry points
 ###
@@ -139,9 +136,7 @@ sub all {
         }
         else {
             push @results,
-              info(
-                ADDITIONAL_DNSKEY_SKIPPED => { }
-              );
+              info( ADDITIONAL_DNSKEY_SKIPPED => {} );
         }
         push @results, $class->dnssec08( $zone );
         push @results, $class->dnssec09( $zone );
@@ -150,7 +145,7 @@ sub all {
     }
 
     return @results;
-}
+} ## end sub all
 
 ###
 ### Metadata Exposure
@@ -258,9 +253,9 @@ sub metadata {
         ],
         dnssec11 => [
             qw(
-                DELEGATION_NOT_SIGNED
-                DELEGATION_SIGNED
-            ),
+              DELEGATION_NOT_SIGNED
+              DELEGATION_SIGNED
+              ),
         ],
     };
 } ## end sub metadata
@@ -268,11 +263,16 @@ sub metadata {
 sub translation {
     return {
         "ADDITIONAL_DNSKEY_SKIPPED" => "No DNSKEYs found. Additional tests skipped.",
-        "ALGORITHM_DEPRECATED"    => "The DNSKEY with tag {keytag} uses deprecated algorithm number {algorithm}/({description}).",
-        "ALGORITHM_OK"            => "The DNSKEY with tag {keytag} uses algorithm number {algorithm}/({description}), which is OK.",
-        "ALGORITHM_RESERVED"      => "The DNSKEY with tag {keytag} uses reserved algorithm number {algorithm}/({description}).",
-        "ALGORITHM_UNASSIGNED"    => "The DNSKEY with tag {keytag} uses unassigned algorithm number {algorithm}/({description}).",
-        "ALGORITHM_PRIVATE"       => "The DNSKEY with tag {keytag} uses private algorithm number {algorithm}/({description}).",
+        "ALGORITHM_DEPRECATED" =>
+          "The DNSKEY with tag {keytag} uses deprecated algorithm number {algorithm}/({description}).",
+        "ALGORITHM_OK" =>
+          "The DNSKEY with tag {keytag} uses algorithm number {algorithm}/({description}), which is OK.",
+        "ALGORITHM_RESERVED" =>
+          "The DNSKEY with tag {keytag} uses reserved algorithm number {algorithm}/({description}).",
+        "ALGORITHM_UNASSIGNED" =>
+          "The DNSKEY with tag {keytag} uses unassigned algorithm number {algorithm}/({description}).",
+        "ALGORITHM_PRIVATE" =>
+          "The DNSKEY with tag {keytag} uses private algorithm number {algorithm}/({description}).",
         "ALGORITHM_UNKNOWN"       => "The DNSKEY with tag {keytag} uses unknown algorithm number {algorithm}.",
         "COMMON_KEYTAGS"          => "There are both DS and DNSKEY records with key tags {keytags}.",
         "DNSKEY_AND_DS"           => "{parent} sent a DS record, and {child} a DNSKEY record.",
@@ -289,11 +289,16 @@ sub translation {
         "DS_MATCHES_DNSKEY"        => "DS record with keytag {keytag} matches the DNSKEY with the same tag.",
         "DS_MATCH_FOUND"           => "At least one DS record with a matching DNSKEY record was found.",
         "DS_MATCH_NOT_FOUND"       => "No DS record with a matching DNSKEY record was found.",
-        "DURATION_LONG" => "RRSIG with keytag {tag} and covering type(s) {types} has a duration of {duration} seconds, which is too long.",
-        "DURATION_OK" => "RRSIG with keytag {tag} and covering type(s) {types} has a duration of {duration} seconds, which is just fine.",
-        "RRSIG_EXPIRED" => "RRSIG with keytag {tag} and covering type(s) {types} has already expired (expiration is: {expiration}).",
-        "REMAINING_SHORT" => "RRSIG with keytag {tag} and covering type(s) {types} has a remaining validity of {duration} seconds, which is too short.",
-        "REMAINING_LONG" => "RRSIG with keytag {tag} and covering type(s) {types} has a remaining validity of {duration} seconds, which is too long.",
+        "DURATION_LONG" =>
+"RRSIG with keytag {tag} and covering type(s) {types} has a duration of {duration} seconds, which is too long.",
+        "DURATION_OK" =>
+"RRSIG with keytag {tag} and covering type(s) {types} has a duration of {duration} seconds, which is just fine.",
+        "RRSIG_EXPIRED" =>
+          "RRSIG with keytag {tag} and covering type(s) {types} has already expired (expiration is: {expiration}).",
+        "REMAINING_SHORT" =>
+"RRSIG with keytag {tag} and covering type(s) {types} has a remaining validity of {duration} seconds, which is too short.",
+        "REMAINING_LONG" =>
+"RRSIG with keytag {tag} and covering type(s) {types} has a remaining validity of {duration} seconds, which is too long.",
         "EXTRA_PROCESSING_BROKEN" => "Server at {server} sent {keys} DNSKEY records, and {sigs} RRSIG records.",
         "EXTRA_PROCESSING_OK"     => "Server at {server} sent {keys} DNSKEY records and {sigs} RRSIG records.",
         "HAS_NSEC"                => "The zone has NSEC records.",
@@ -327,7 +332,7 @@ sub translation {
         "TOO_MANY_ITERATIONS" =>
           "The number of NSEC3 iterations is {count}, which is too high for key length {keylength}.",
         "DELEGATION_NOT_SIGNED" => "Delegation from parent to child is not properly signed {reason}.",
-        "DELEGATION_SIGNED" => "Delegation from parent to child is properly signed.",
+        "DELEGATION_SIGNED"     => "Delegation from parent to child is properly signed.",
     };
 } ## end sub translation
 
@@ -435,13 +440,13 @@ sub dnssec01 {
                 push @results,
                   info(
                     DS_DIGTYPE_NOT_OK => {
-                        keytag => $ds->keytag,
+                        keytag  => $ds->keytag,
                         digtype => $ds->digtype
                     }
                   );
             }
-        }
-    }
+        } ## end foreach my $ds ( @ds )
+    } ## end else [ if ( @ds == 0 ) ]
 
     return @results;
 } ## end sub dnssec01
@@ -478,9 +483,7 @@ sub dnssec02 {
 
         if ( scalar( keys %dnskey ) == 0 ) {
             push @results,
-              info(
-                NO_DNSKEY => { }
-              );
+              info( NO_DNSKEY => {} );
             return @results;
         }
 
@@ -515,17 +518,13 @@ sub dnssec02 {
             }
             if ( $found ) {
                 push @results,
-                  info(
-                    DS_MATCH_FOUND => { }
-                  );
+                  info( DS_MATCH_FOUND => {} );
             }
             else {
                 push @results,
-                  info(
-                    DS_MATCH_NOT_FOUND => { }
-                  );
+                  info( DS_MATCH_NOT_FOUND => {} );
             }
-        }
+        } ## end if ( @common )
         else {
             push @results,
               info(
@@ -559,7 +558,7 @@ sub dnssec03 {
         push @results,
           info(
             NO_NSEC3PARAM => {
-                server => ($param_p ? $param_p->answerfrom : '<no response>'),
+                server => ( $param_p ? $param_p->answerfrom : '<no response>' ),
             }
           );
     }
@@ -585,7 +584,7 @@ sub dnssec03 {
                         }
                       );
                 }
-            }
+            } ## end if ( $iter > 100 )
             else {
                 push @results,
                   info(
@@ -594,8 +593,8 @@ sub dnssec03 {
                     }
                   );
             }
-        }
-    }
+        } ## end foreach my $n3p ( @nsec3params)
+    } ## end else [ if ( @nsec3params == 0)]
 
     return @results;
 } ## end sub dnssec03
@@ -619,8 +618,8 @@ sub dnssec04 {
     my @soa_sigs = $soa_p->get_records( 'RRSIG', 'answer' );
 
     foreach my $sig ( @key_sigs, @soa_sigs ) {
-        my $duration = $sig->expiration - $sig->inception;
-        my $remaining = $sig->expiration - int($key_p->timestamp);
+        my $duration  = $sig->expiration - $sig->inception;
+        my $remaining = $sig->expiration - int( $key_p->timestamp );
         if ( $remaining < 0 ) {    # already expired
             push @results,
               info(
@@ -671,7 +670,7 @@ sub dnssec04 {
                 }
               );
         }
-    }
+    } ## end foreach my $sig ( @key_sigs...)
 
     return @results;
 } ## end sub dnssec04
@@ -782,7 +781,7 @@ sub dnssec06 {
                 }
               );
         }
-    }
+    } ## end foreach my $key_p ( @{$key_aref...})
 
     return @results;
 } ## end sub dnssec06
@@ -817,7 +816,7 @@ sub dnssec07 {
         push @results,
           info(
             DNSKEY_AND_DS => {
-                child => $key_p->answerfrom,
+                child  => $key_p->answerfrom,
                 parent => $ds_p->answerfrom,
             }
           );
@@ -889,7 +888,7 @@ sub dnssec08 {
                 }
               );
         }
-    }
+    } ## end foreach my $sig ( @sigs )
 
     if ( $ok ) {
         push @results,
@@ -901,9 +900,7 @@ sub dnssec08 {
     }
     else {
         push @results,
-          info(
-            DNSKEY_NOT_SIGNED => {}
-          );
+          info( DNSKEY_NOT_SIGNED => {} );
     }
 
     return @results;
@@ -957,10 +954,10 @@ sub dnssec09 {
                 SOA_SIGNATURE_NOT_OK => {
                     signature => $sig->keytag,
                     error     => $msg,
-                 }
-               );
+                }
+              );
         }
-    }
+    } ## end foreach my $sig ( @sigs )
 
     if ( $ok ) {
         push @results,
@@ -972,9 +969,7 @@ sub dnssec09 {
     }
     else {
         push @results,
-          info(
-            SOA_NOT_SIGNED => { }
-          );
+          info( SOA_NOT_SIGNED => {} );
     }
 
     return @results;
@@ -1022,7 +1017,7 @@ sub dnssec10 {
                     my $msg = q{};
                     if (
                         $sig->verify_time(
-                            [ grep { name($_->name) eq name($sig->name) } @nsec ],
+                            [ grep { name( $_->name ) eq name( $sig->name ) } @nsec ],
                             \@dnskeys, $test_p->timestamp, $msg
                         )
                       )
@@ -1041,15 +1036,11 @@ sub dnssec10 {
 
                     if ( $ok ) {
                         push @results,
-                          info(
-                            NSEC_SIGNED => {}
-                          );
+                          info( NSEC_SIGNED => {} );
                     }
                     else {
                         push @results,
-                          info(
-                            NSEC_NOT_SIGNED => {}
-                        );
+                          info( NSEC_NOT_SIGNED => {} );
                     }
                 } ## end foreach my $sig ( @sigs )
             } ## end if ( $nsec->covers( $name...))
@@ -1087,7 +1078,7 @@ sub dnssec10 {
                     my $msg = q{};
                     if (
                         $sig->verify_time(
-                            [ grep { name($_->name) eq name($sig->name) } @nsec3 ],
+                            [ grep { name( $_->name ) eq name( $sig->name ) } @nsec3 ],
                             \@dnskeys, $test_p->timestamp, $msg
                         )
                       )
@@ -1105,15 +1096,11 @@ sub dnssec10 {
                     }
                     if ( $ok ) {
                         push @results,
-                          info(
-                            NSEC3_SIGNED => {}
-                          );
+                          info( NSEC3_SIGNED => {} );
                     }
                     else {
                         push @results,
-                          info(
-                            NSE3C_NOT_SIGNED => {}
-                          );
+                          info( NSE3C_NOT_SIGNED => {} );
                     }
                 } ## end foreach my $sig ( @sigs )
             } ## end if ( $nsec3->covers( $name...))
@@ -1139,7 +1126,6 @@ sub dnssec10 {
     return @results;
 } ## end sub dnssec10
 
-
 ### The error reporting in dnssec11 is deliberately simple, since the point of
 ### the test case is to give a pass/fail test for the delegation step from the
 ### parent as a whole.
@@ -1148,13 +1134,13 @@ sub dnssec11 {
     my @results;
 
     my $ds_p = $zone->parent->query_auth( $zone->name->string, 'DS' );
-    if (not $ds_p) {
-        return info( DELEGATION_NOT_SIGNED => { keytag => 'none', reason => 'no_ds_packet' } )
+    if ( not $ds_p ) {
+        return info( DELEGATION_NOT_SIGNED => { keytag => 'none', reason => 'no_ds_packet' } );
     }
 
     my $dnskey_p = $zone->query_auth( $zone->name->string, 'DNSKEY', { dnssec => 1 } );
-    if (not $dnskey_p) {
-        return info( DELEGATION_NOT_SIGNED => { keytag => 'none', reason => 'no_dnskey_packet' } )
+    if ( not $dnskey_p ) {
+        return info( DELEGATION_NOT_SIGNED => { keytag => 'none', reason => 'no_dnskey_packet' } );
     }
 
     my %ds = map { $_->keytag => $_ } $ds_p->get_records_for_name( 'DS', $zone->name->string );

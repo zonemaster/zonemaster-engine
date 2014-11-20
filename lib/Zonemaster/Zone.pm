@@ -38,7 +38,7 @@ sub _build_parent {
 sub _build_glue_names {
     my ( $self ) = @_;
 
-    if (not $self->parent) {
+    if ( not $self->parent ) {
         return [];
     }
 
@@ -46,14 +46,15 @@ sub _build_glue_names {
 
     return [] if not defined $p;
 
-    return [ uniq sort map {Zonemaster::DNSName->new(lc($_->nsdname))} $p->get_records_for_name('ns', $self->name->string)];
+    return [ uniq sort map { Zonemaster::DNSName->new( lc( $_->nsdname ) ) }
+          $p->get_records_for_name( 'ns', $self->name->string ) ];
 }
 
 sub _build_glue {
     my ( $self ) = @_;
 
     my $aref = [];
-    tie @$aref, 'Zonemaster::NSArray', @{$self->glue_names};
+    tie @$aref, 'Zonemaster::NSArray', @{ $self->glue_names };
 
     return $aref;
 }
@@ -63,21 +64,22 @@ sub _build_ns_names {
 
     if ( $self->name eq '.' ) {
         my %u;
-        $u{$_} = $_ for map {$_->name} @{$self->ns};
-        return [sort values %u];
+        $u{$_} = $_ for map { $_->name } @{ $self->ns };
+        return [ sort values %u ];
     }
 
     my $p;
     my $i = 0;
-    while (my $s = $self->glue->[$i] ) {
+    while ( my $s = $self->glue->[$i] ) {
         $p = $s->query( $self->name, 'NS' );
         last if defined( $p );
         $i += 1;
     }
     return [] if not defined $p;
 
-    return [ uniq sort map {Zonemaster::DNSName->new(lc($_->nsdname))} $p->get_records_for_name('ns', $self->name->string)];
-}
+    return [ uniq sort map { Zonemaster::DNSName->new( lc( $_->nsdname ) ) }
+          $p->get_records_for_name( 'ns', $self->name->string ) ];
+} ## end sub _build_ns_names
 
 sub _build_ns {
     my ( $self ) = @_;
@@ -87,7 +89,7 @@ sub _build_ns {
     }
 
     my $aref = [];
-    tie @$aref, 'Zonemaster::NSArray', @{$self->ns_names};
+    tie @$aref, 'Zonemaster::NSArray', @{ $self->ns_names };
 
     return $aref;
 }
@@ -95,7 +97,7 @@ sub _build_ns {
 sub _build_glue_addresses {
     my ( $self ) = @_;
 
-    if (not $self->parent) {
+    if ( not $self->parent ) {
         return [];
     }
 
@@ -114,14 +116,14 @@ sub query_one {
 
     # Return response from the first server that gives one
     my $i = 0;
-    while( my $ns = $self->ns->[$i] ) {
-        if (not Zonemaster->config->ipv4_ok and $ns->address->version == 4) {
-            Zonemaster->logger->add( SKIP_IPV4_DISABLED => { ns => "$ns"} );
+    while ( my $ns = $self->ns->[$i] ) {
+        if ( not Zonemaster->config->ipv4_ok and $ns->address->version == 4 ) {
+            Zonemaster->logger->add( SKIP_IPV4_DISABLED => { ns => "$ns" } );
             next;
         }
 
-        if (not Zonemaster->config->ipv6_ok and $ns->address->version == 6) {
-            Zonemaster->logger->add( SKIP_IPV6_DISABLED => { ns => "$ns"} );
+        if ( not Zonemaster->config->ipv6_ok and $ns->address->version == 6 ) {
+            Zonemaster->logger->add( SKIP_IPV6_DISABLED => { ns => "$ns" } );
             next;
         }
 
@@ -133,23 +135,23 @@ sub query_one {
     }
 
     return;
-}
+} ## end sub query_one
 
 sub query_all {
     my ( $self, $name, $type, $flags ) = @_;
 
     my @servers = @{ $self->ns };
 
-    if (not Zonemaster->config->ipv4_ok) {
+    if ( not Zonemaster->config->ipv4_ok ) {
         my @nope = grep { $_->address->version == 4 } @servers;
         @servers = grep { $_->address->version != 4 } @servers;
-        Zonemaster->logger->add( SKIP_IPV4_DISABLED => { ns => (join ';', map {"$_"} @nope) } );
+        Zonemaster->logger->add( SKIP_IPV4_DISABLED => { ns => ( join ';', map { "$_" } @nope ) } );
     }
 
-    if (not Zonemaster->config->ipv6_ok) {
+    if ( not Zonemaster->config->ipv6_ok ) {
         my @nope = grep { $_->address->version == 6 } @servers;
         @servers = grep { $_->address->version != 6 } @servers;
-        Zonemaster->logger->add( SKIP_IPV6_DISABLED => { ns => (join ';', map {"$_"} @nope) } );
+        Zonemaster->logger->add( SKIP_IPV6_DISABLED => { ns => ( join ';', map { "$_" } @nope ) } );
     }
 
     return [ map { $_->query( $name, $type, $flags ) } @servers ];
@@ -161,19 +163,19 @@ sub query_auth {
     # Return response from the first server that replies with AA set
     my $i = 0;
     while ( my $ns = $self->ns->[$i] ) {
-        if (not Zonemaster->config->ipv4_ok and $ns->address->version == 4) {
-            Zonemaster->logger->add( SKIP_IPV4_DISABLED => { ns => "$ns"} );
+        if ( not Zonemaster->config->ipv4_ok and $ns->address->version == 4 ) {
+            Zonemaster->logger->add( SKIP_IPV4_DISABLED => { ns => "$ns" } );
             next;
         }
 
-        if (not Zonemaster->config->ipv6_ok and $ns->address->version == 6) {
-            Zonemaster->logger->add( SKIP_IPV6_DISABLED => { ns => "$ns"} );
+        if ( not Zonemaster->config->ipv6_ok and $ns->address->version == 6 ) {
+            Zonemaster->logger->add( SKIP_IPV6_DISABLED => { ns => "$ns" } );
             next;
         }
 
         my $p = $ns->query( $name, $type, $flags );
-        if ($p and $p->aa) {
-            return $p
+        if ( $p and $p->aa ) {
+            return $p;
         }
     }
     continue {
@@ -181,7 +183,7 @@ sub query_auth {
     }
 
     return;
-}
+} ## end sub query_auth
 
 sub query_persistent {
     my ( $self, $name, $type, $flags ) = @_;
@@ -189,19 +191,19 @@ sub query_persistent {
     # Return response from the first server that has a record like the one asked for
     my $i = 0;
     while ( my $ns = $self->ns->[$i] ) {
-        if (not Zonemaster->config->ipv4_ok and $ns->address->version == 4) {
-            Zonemaster->logger->add( SKIP_IPV4_DISABLED => { ns => "$ns"} );
+        if ( not Zonemaster->config->ipv4_ok and $ns->address->version == 4 ) {
+            Zonemaster->logger->add( SKIP_IPV4_DISABLED => { ns => "$ns" } );
             next;
         }
 
-        if (not Zonemaster->config->ipv6_ok and $ns->address->version == 6) {
-            Zonemaster->logger->add( SKIP_IPV6_DISABLED => { ns => "$ns"} );
+        if ( not Zonemaster->config->ipv6_ok and $ns->address->version == 6 ) {
+            Zonemaster->logger->add( SKIP_IPV6_DISABLED => { ns => "$ns" } );
             next;
         }
 
         my $p = $ns->query( $name, $type, $flags );
-        if ($p and scalar($p->get_records_for_name($type, $name)) > 0) {
-            return $p
+        if ( $p and scalar( $p->get_records_for_name( $type, $name ) ) > 0 ) {
+            return $p;
         }
     }
     continue {
@@ -209,7 +211,7 @@ sub query_persistent {
     }
 
     return;
-}
+} ## end sub query_persistent
 
 sub is_in_zone {
     my ( $self, $name ) = @_;
@@ -223,7 +225,7 @@ sub is_in_zone {
     }
 
     my $p = $self->query_auth( "$name", 'SOA' );
-    if (not $p) {
+    if ( not $p ) {
         return;
     }
 
@@ -233,11 +235,11 @@ sub is_in_zone {
 
     my ( $soa ) = $p->get_records( 'SOA' );
 
-    if (not $soa) {
+    if ( not $soa ) {
         return 0;    # Auth server is broken, call it a "no".
     }
 
-    if ( Zonemaster::DNSName->new($soa->name) eq $self->name ) {
+    if ( Zonemaster::DNSName->new( $soa->name ) eq $self->name ) {
         return 1;
     }
     else {

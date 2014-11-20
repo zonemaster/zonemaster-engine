@@ -27,7 +27,7 @@ use overload
 subtype 'Zonemaster::Net::IP::XS', as 'Object', where { $_->isa( 'Net::IP::XS' ) };
 coerce 'Zonemaster::Net::IP::XS', from 'Str', via { Net::IP::XS->new( $_ ) };
 
-has 'name'    => ( is => 'ro', isa => 'Zonemaster::DNSName', coerce => 1, required => 0 );
+has 'name'    => ( is => 'ro', isa => 'Zonemaster::DNSName',     coerce => 1, required => 0 );
 has 'address' => ( is => 'ro', isa => 'Zonemaster::Net::IP::XS', coerce => 1, required => 1 );
 
 has 'dns'   => ( is => 'ro', isa => 'Net::LDNS',                     lazy_build => 1 );
@@ -125,7 +125,7 @@ sub query {
         $p->aa( 0 );
         $p->do( $dnssec );
         $p->rd( $recurse );
-        foreach my $rr ( @{ $self->fake_ds->{lc($name)} } ) {
+        foreach my $rr ( @{ $self->fake_ds->{ lc( $name ) } } ) {
             $p->unique_push( 'answer', $rr );
         }
         my $res = Zonemaster::Packet->new( { packet => $p } );
@@ -138,11 +138,11 @@ sub query {
         if ( $name =~ m/(\.|^)\Q$fname\E$/i ) {
             my $p = Net::LDNS::Packet->new( $name, $type, $class );
 
-            if (lc($name) eq lc($fname) and $type eq 'NS') {
+            if ( lc( $name ) eq lc( $fname ) and $type eq 'NS' ) {
                 my $name = $self->fake_delegations->{$fname}{authority};
                 my $addr = $self->fake_delegations->{$fname}{additional};
-                $p->unique_push('answer', $_) for @$name;
-                $p->unique_push('additional', $_) for @$addr;
+                $p->unique_push( 'answer',     $_ ) for @$name;
+                $p->unique_push( 'additional', $_ ) for @$addr;
             }
             else {
                 while ( my ( $section, $aref ) = each %{ $self->fake_delegations->{$fname} } ) {
@@ -153,7 +153,7 @@ sub query {
             $p->aa( 0 );
             $p->do( $dnssec );
             $p->rd( $recurse );
-            $p->answerfrom($self->address->ip);
+            $p->answerfrom( $self->address->ip );
             Zonemaster->logger->add(
                 'FAKE_DELEGATION',
                 {
@@ -168,7 +168,7 @@ sub query {
             Zonemaster->logger->add( FAKED_RETURN => { packet => $res->string } );
             return $res;
         } ## end if ( $name =~ m/(\.|^)\Q$fname\E$/i)
-    } ## end foreach my $fname ( keys %{...})
+    } ## end foreach my $fname ( sort keys...)
 
     if ( not exists( $self->cache->data->{"\U$name"}{"\U$type"}{"\U$class"}{$dnssec}{$usevc}{$recurse}{$edns_size} ) ) {
         $self->cache->data->{"\U$name"}{"\U$type"}{"\U$class"}{$dnssec}{$usevc}{$recurse}{$edns_size} =
@@ -185,12 +185,13 @@ sub add_fake_delegation {
     my ( $self, $domain, $href ) = @_;
     my %delegation;
 
-    $domain = ''.Zonemaster::DNSName->new($domain);
+    $domain = '' . Zonemaster::DNSName->new( $domain );
     foreach my $name ( keys %$href ) {
         push @{ $delegation{authority} }, Net::LDNS::RR->new( sprintf( '%s IN NS %s', $domain, $name ) );
         foreach my $ip ( @{ $href->{$name} } ) {
-            if (Net::IP::XS->new($ip)->ip eq $self->address->ip) {
-                Zonemaster->logger->add( FAKE_DELEGATION_TO_SELF => { ns => "$self", domain => $domain, data => $href } );
+            if ( Net::IP::XS->new( $ip )->ip eq $self->address->ip ) {
+                Zonemaster->logger->add(
+                    FAKE_DELEGATION_TO_SELF => { ns => "$self", domain => $domain, data => $href } );
                 return;
             }
 
@@ -449,7 +450,7 @@ sub axfr {
     }
 
     return $self->dns->axfr( $domain, $callback, $class );
-}
+} ## end sub axfr
 
 sub empty_cache {
     %object_cache = ();
@@ -458,7 +459,7 @@ sub empty_cache {
 }
 
 no Moose;
-__PACKAGE__->meta->make_immutable(inline_constructor => 0);
+__PACKAGE__->meta->make_immutable( inline_constructor => 0 );
 
 1;
 

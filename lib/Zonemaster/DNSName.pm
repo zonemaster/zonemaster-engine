@@ -22,10 +22,10 @@ around BUILDARGS => sub {
         my @labels = split( /\./, $name );
         return $class->$orig( labels => \@labels );
     }
-    elsif (ref($_[0]) and ref($_[0]) eq __PACKAGE__) {
+    elsif ( ref( $_[0] ) and ref( $_[0] ) eq __PACKAGE__ ) {
         return $_[0];
     }
-    elsif (ref($_[0]) and ref($_[0]) eq 'Zonemaster::Zone') {
+    elsif ( ref( $_[0] ) and ref( $_[0] ) eq 'Zonemaster::Zone' ) {
         return $_[0]->name;
     }
     else {
@@ -45,7 +45,7 @@ sub string {
 sub fqdn {
     my ( $self ) = @_;
 
-    return join( '.', @{$self->labels}) . '.';
+    return join( '.', @{ $self->labels } ) . '.';
 }
 
 sub str_cmp {

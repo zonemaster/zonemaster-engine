@@ -16,34 +16,34 @@ use Scalar::Util qw[blessed];
 my @all_test_modules;
 
 @all_test_modules =
-  sort {$a cmp $b}
+  sort { $a cmp $b }
   map { my $f = $_; $f =~ s|^Zonemaster::Test::||; $f }
   grep { $_ ne 'Zonemaster::Test::Basic' } useall( 'Zonemaster::Test' );
 
 sub _log_versions {
-    info( GLOBAL_VERSION     => { version => Zonemaster->VERSION });
+    info( GLOBAL_VERSION => { version => Zonemaster->VERSION } );
 
-    info( DEPENDENCY_VERSION => { name => 'Net::LDNS',            version => $Net::LDNS::VERSION } );
-    info( DEPENDENCY_VERSION => { name => 'IO::Socket::INET6',    version => $IO::Socket::INET6::VERSION } );
-    info( DEPENDENCY_VERSION => { name => 'Moose',                version => $Moose::VERSION } );
-    info( DEPENDENCY_VERSION => { name => 'Module::Find',         version => $Module::Find::VERSION } );
-    info( DEPENDENCY_VERSION => { name => 'JSON',                 version => $JSON::VERSION } );
-    info( DEPENDENCY_VERSION => { name => 'File::ShareDir',       version => $File::ShareDir::VERSION } );
-    info( DEPENDENCY_VERSION => { name => 'File::Slurp',          version => $File::Slurp::VERSION } );
-    info( DEPENDENCY_VERSION => { name => 'Net::IP::XS',              version => $Net::IP::XS::VERSION } );
-    info( DEPENDENCY_VERSION => { name => 'List::MoreUtils',      version => $List::MoreUtils::VERSION } );
+    info( DEPENDENCY_VERSION => { name => 'Net::LDNS',             version => $Net::LDNS::VERSION } );
+    info( DEPENDENCY_VERSION => { name => 'IO::Socket::INET6',     version => $IO::Socket::INET6::VERSION } );
+    info( DEPENDENCY_VERSION => { name => 'Moose',                 version => $Moose::VERSION } );
+    info( DEPENDENCY_VERSION => { name => 'Module::Find',          version => $Module::Find::VERSION } );
+    info( DEPENDENCY_VERSION => { name => 'JSON',                  version => $JSON::VERSION } );
+    info( DEPENDENCY_VERSION => { name => 'File::ShareDir',        version => $File::ShareDir::VERSION } );
+    info( DEPENDENCY_VERSION => { name => 'File::Slurp',           version => $File::Slurp::VERSION } );
+    info( DEPENDENCY_VERSION => { name => 'Net::IP::XS',           version => $Net::IP::XS::VERSION } );
+    info( DEPENDENCY_VERSION => { name => 'List::MoreUtils',       version => $List::MoreUtils::VERSION } );
     info( DEPENDENCY_VERSION => { name => 'Mail::RFC822::Address', version => $Mail::RFC822::Address::VERSION } );
-    info( DEPENDENCY_VERSION => { name => 'Scalar::Util',         version => $Scalar::Util::VERSION } );
-    info( DEPENDENCY_VERSION => { name => 'Hash::Merge',          version => $Hash::Merge::VERSION } );
-    info( DEPENDENCY_VERSION => { name => 'Readonly',             version => $Readonly::VERSION } );
+    info( DEPENDENCY_VERSION => { name => 'Scalar::Util',          version => $Scalar::Util::VERSION } );
+    info( DEPENDENCY_VERSION => { name => 'Hash::Merge',           version => $Hash::Merge::VERSION } );
+    info( DEPENDENCY_VERSION => { name => 'Readonly',              version => $Readonly::VERSION } );
 
-    foreach my $file (@{Zonemaster->config->cfiles}) {
+    foreach my $file ( @{ Zonemaster->config->cfiles } ) {
         info( CONFIG_FILE => { name => $file } );
     }
-    foreach my $file (@{Zonemaster->config->pfiles}) {
+    foreach my $file ( @{ Zonemaster->config->pfiles } ) {
         info( POLICY_FILE => { name => $file } );
     }
-}
+} ## end sub _log_versions
 
 sub modules {
     return @all_test_modules;
@@ -62,20 +62,20 @@ sub run_all_for {
     );
     _log_versions();
 
-    if (not (Zonemaster->config->ipv4_ok or Zonemaster->config->ipv6_ok)) {
-        return info( NO_NETWORK => {});
+    if ( not( Zonemaster->config->ipv4_ok or Zonemaster->config->ipv6_ok ) ) {
+        return info( NO_NETWORK => {} );
     }
 
     @results = Zonemaster::Test::Basic->all( $zone );
-    info( MODULE_END => { module => 'Zonemaster::Test::Basic' });
+    info( MODULE_END => { module => 'Zonemaster::Test::Basic' } );
 
     if ( Zonemaster::Test::Basic->can_continue( @results ) ) {
         ## no critic (Modules::RequireExplicitInclusion)
         foreach my $mod ( __PACKAGE__->modules ) {
-            Zonemaster->config->load_module_policy($mod);
+            Zonemaster->config->load_module_policy( $mod );
 
-            if (not _policy_allowed($mod)) {
-                push @results, info( POLICY_DISABLED => {name => $mod} );
+            if ( not _policy_allowed( $mod ) ) {
+                push @results, info( POLICY_DISABLED => { name => $mod } );
                 next;
             }
 
@@ -91,13 +91,13 @@ sub run_all_for {
                     push @res, info( MODULE_ERROR => { module => $module, msg => "$err" } );
                 }
             }
-            info( MODULE_END => { module => $module });
+            info( MODULE_END => { module => $module } );
 
             push @results, @res;
-        }
-    }
+        } ## end foreach my $mod ( __PACKAGE__...)
+    } ## end if ( Zonemaster::Test::Basic...)
     else {
-        push @results, info( CANNOT_CONTINUE => { zone => $zone->name->string });
+        push @results, info( CANNOT_CONTINUE => { zone => $zone->name->string } );
     }
 
     return @results;
@@ -111,12 +111,12 @@ sub run_module {
 
     Zonemaster->start_time_now();
     _log_versions();
-    if (not (Zonemaster->config->ipv4_ok or Zonemaster->config->ipv6_ok)) {
-        return info( NO_NETWORK => {});
+    if ( not( Zonemaster->config->ipv4_ok or Zonemaster->config->ipv6_ok ) ) {
+        return info( NO_NETWORK => {} );
     }
 
     if ( $module ) {
-        Zonemaster->config->load_module_policy($module);
+        Zonemaster->config->load_module_policy( $module );
         my $m = "Zonemaster::Test::$module";
         info( MODULE_VERSION => { module => $m, version => $m->version } );
         my @res = eval { $m->all( $zone ) };
@@ -129,7 +129,7 @@ sub run_module {
                 push @res, info( MODULE_ERROR => { module => $module, msg => "$err" } );
             }
         }
-        info( MODULE_END => { module => $module });
+        info( MODULE_END => { module => $module } );
         return @res;
     }
     else {
@@ -147,12 +147,12 @@ sub run_one {
 
     Zonemaster->start_time_now();
     _log_versions();
-    if (not (Zonemaster->config->ipv4_ok or Zonemaster->config->ipv6_ok)) {
-        return info( NO_NETWORK => {});
+    if ( not( Zonemaster->config->ipv4_ok or Zonemaster->config->ipv6_ok ) ) {
+        return info( NO_NETWORK => {} );
     }
 
     if ( $module ) {
-        Zonemaster->config->load_module_policy($module);
+        Zonemaster->config->load_module_policy( $module );
         my $m = "Zonemaster::Test::$module";
         if ( $m->metadata->{$test} ) {
             info( MODULE_CALL => { module => $module, method => $test, version => $m->version } );
@@ -166,7 +166,7 @@ sub run_one {
                     push @res, info( MODULE_ERROR => { module => $module, msg => "$err" } );
                 }
             }
-            info( MODULE_CALL_END => { module => $module, method => $test });
+            info( MODULE_CALL_END => { module => $module, method => $test } );
             return @res;
         }
         else {
@@ -174,7 +174,7 @@ sub run_one {
         }
     } ## end if ( $module )
     else {
-        info( UNKNOWN_MODULE => { module => $requested, method => $test, known => join( ':', sort $class->modules) } );
+        info( UNKNOWN_MODULE => { module => $requested, method => $test, known => join( ':', sort $class->modules ) } );
     }
 
     return;

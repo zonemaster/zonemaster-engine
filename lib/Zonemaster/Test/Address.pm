@@ -131,8 +131,7 @@ sub address01 {
     } ## end foreach my $local_ns ( @{ Zonemaster::TestMethods...})
 
     if ( scalar keys %ips and not scalar @results ) {
-        push @results,
-          info( NO_IP_PRIVATE_NETWORK => {} );
+        push @results, info( NO_IP_PRIVATE_NETWORK => {} );
     }
 
     return @results;
@@ -176,8 +175,7 @@ sub address02 {
     } ## end foreach my $local_ns ( @{ Zonemaster::TestMethods...})
 
     if ( scalar keys %ips and not scalar @results ) {
-        push @results,
-          info( NAMESERVERS_IP_WITH_REVERSE => {} );
+        push @results, info( NAMESERVERS_IP_WITH_REVERSE => {} );
     }
 
     return @results;
@@ -235,8 +233,7 @@ sub address03 {
     } ## end foreach my $local_ns ( @{ Zonemaster::TestMethods...})
 
     if ( scalar keys %ips and not scalar @results ) {
-        push @results,
-          info( NAMESERVER_IP_PTR_MATCH => {} );
+        push @results, info( NAMESERVER_IP_PTR_MATCH => {} );
     }
 
     return @results;

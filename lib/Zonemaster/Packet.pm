@@ -39,7 +39,7 @@ sub no_such_record {
 
     if ( $self->type eq 'nodata' ) {
         my ( $q ) = $self->question;
-        Zonemaster::Util::info( NO_SUCH_RECORD => { name => Zonemaster::Util::name($q->name), type => $q->type } );
+        Zonemaster::Util::info( NO_SUCH_RECORD => { name => Zonemaster::Util::name( $q->name ), type => $q->type } );
 
         return 1;
     }
@@ -53,7 +53,7 @@ sub no_such_name {
 
     if ( $self->type eq 'nxdomain' ) {
         my ( $q ) = $self->question;
-        info( NO_SUCH_NAME => { name => name($q->name), type => $q->type } );
+        info( NO_SUCH_NAME => { name => name( $q->name ), type => $q->type } );
 
         return 1;
     }
@@ -68,14 +68,20 @@ sub is_redirect {
     if ( $self->type eq 'referral' ) {
         my ( $q ) = $self->question;
         my ( $a ) = $self->authority;
-        Zonemaster::Util::info( IS_REDIRECT => { name => Zonemaster::Util::name($q->name), type => $q->type, to => Zonemaster::Util::name($a->name) } );
+        Zonemaster::Util::info(
+            IS_REDIRECT => {
+                name => Zonemaster::Util::name( $q->name ),
+                type => $q->type,
+                to   => Zonemaster::Util::name( $a->name )
+            }
+        );
 
         return 1;
     }
     else {
         return;
     }
-}
+} ## end sub is_redirect
 
 sub get_records {
     my ( $self, $type, @section ) = @_;
@@ -106,20 +112,20 @@ sub get_records {
 sub get_records_for_name {
     my ( $self, $type, $name ) = @_;
 
-    return grep { name($_->name) eq name($name) } $self->get_records( $type );
+    return grep { name( $_->name ) eq name( $name ) } $self->get_records( $type );
 }
 
 sub has_rrs_of_type_for_name {
     my ( $self, $type, $name ) = @_;
 
-    return ( grep { name($_->name) eq name($name) } $self->get_records( $type ) ) > 0;
+    return ( grep { name( $_->name ) eq name( $name ) } $self->get_records( $type ) ) > 0;
 }
 
 sub answerfrom {
     my ( $self, @args ) = @_;
 
-    if (@args) {
-        $self->packet->answerfrom(@args);
+    if ( @args ) {
+        $self->packet->answerfrom( @args );
     }
 
     my $from = $self->packet->answerfrom // '<unknown>';

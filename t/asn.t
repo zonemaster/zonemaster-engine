@@ -10,7 +10,7 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster->config->no_network( 1 );
 }
 
-Zonemaster->config->get->{asnroots} =  [ "asnlookup.zonemaster.net", "asnlookup.iis.se", "asn.cymru,com"];
+Zonemaster->config->get->{asnroots} = [ "asnlookup.zonemaster.net", "asnlookup.iis.se", "asn.cymru,com" ];
 
 my ( $asn1, $prefix1 ) = Zonemaster::ASNLookup->get_with_prefix( '8.8.8.8' );
 is $asn1->[0], 15169, '8.8.8.8 is in 15169';
@@ -21,7 +21,7 @@ is $asn2->[0], 1257, '91.226.36.46 is in 1257';
 is $prefix2->prefix, '91.226.36.0/24', '91.226.36.46 is in 91.226.36.0/24';
 
 my @asn3 = Zonemaster::ASNLookup->get( '2001:503:ba3e::2:30' );
-is( scalar(@asn3), 1, 'Only one result');
+is( scalar( @asn3 ), 1, 'Only one result' );
 ok @asn3[0] >= 36000, '2001:503:ba3e::2:30 is in ' . $asn3[0];
 
 my ( $asn4, $prefix4 ) = Zonemaster::ASNLookup->get_with_prefix( '192.168.0.1' );
