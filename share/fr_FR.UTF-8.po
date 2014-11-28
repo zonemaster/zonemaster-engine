@@ -3,8 +3,8 @@ msgstr ""
 "Language: fr\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Project-Id-Version: 0.0.4\n"
-"PO-Revision-Date: 2014-09-15 10:09+0200\n"
+"Project-Id-Version: 0.0.5\n"
+"PO-Revision-Date: 2014-11-28 15:09+0200\n"
 "Last-Translator: vincent.levigneron@afnic.fr\n"
 "Language-Team: Zonemaster Team\n"
 "MIME-Version: 1.0\n"
@@ -173,6 +173,16 @@ msgstr "Le serveur de noms {ns}/{address} n'est pas accessible via TCP sur le po
 msgid  "Nameserver {ns}/{address} not accessible over UDP on port 53."
 msgstr "Le serveur de noms {ns}/{address} n'est pas accessible via UDP sur le port 53."
 
+#: CONNECTIVITY:IPV4_ASN
+msgid  "Name servers have IPv4 addresses in the following ASs: {asn}."
+msgstr "Les serveurs de noms ont des adresses IPv4 dans les AS suivants: {asn}."
+
+#: CONNECTIVITY:IPV6_ASN
+msgid  "Name servers have IPv6 addresses in the following ASs: {asn}."
+msgstr "Les serveurs de noms ont des adresses IPv6 dans les AS suivants: {asn}."
+
+#: CONSISTENCY:IPV4_DISABLED
+#: CONSISTENCY:IPV6_DISABLED
 #: CONSISTENCY:MULTIPLE_NS_SET
 msgid  "Saw {count} NS set."
 msgstr "Plusieurs ensembles de serveurs de noms ({count}) ont été trouvés dans les différents SOA."
@@ -246,12 +256,12 @@ msgid  "All the IP addresses used by the nameservers are unique"
 msgstr "Toutes les adresses IP utilisées par les serveurs de noms sont uniques."
 
 #: DELEGATION:ENOUGH_NS
-msgid  "Child lists enough nameservers ({count})."
-msgstr "Les serveurs de noms de la zone retournent suffisamment de serveurs autoritaires ({count})."
+msgid  "Child lists enough nameservers ({ns}). Lower limit set to {minimum}."
+msgstr "Les serveurs de noms de la zone retournent suffisamment de serveurs autoritaires ({ns}). La limite inférieure étant fixée à {minimum}."
 
 #: DELEGATION:ENOUGH_NS_GLUE
-msgid  "Parent lists enough nameservers ({count})."
-msgstr "Les serveurs de noms de la zone parente retournent suffisamment de serveurs autoritaires ({count})."
+msgid  "Parent lists enough nameservers ({glue}). Lower limit set to {minimum}."
+msgstr "Les serveurs de noms de la zone parente retournent suffisamment de serveurs autoritaires ({glue}). La limite inférieure étant fixée à {minimum}."
 
 #: DELEGATION:ENOUGH_NS_TOTAL
 msgid  "Parent and child list enough nameservers ({ns}). Lower limit set to {minimum}."
@@ -274,12 +284,13 @@ msgid  "All of the nameserver names are listed both at parent and child."
 msgstr "Tous les serveurs de noms de la zone font partie de la liste des serveurs de noms retournés par les serveurs de noms de la zone parente ainsi que par les serveurs de noms de la zone elle-même."
 
 #: DELEGATION:NOT_ENOUGH_NS
-msgid  "Child does not list enough nameservers ({count})."
-msgstr "Les serveurs de noms de la zone ne retournent pas assez de serveurs autoritaires ({count})."
+msgid  "Child does not list enough nameservers ({ns}). Lower limit set to {minimum}."
+msgstr "Les serveurs de noms de la zone ne retournent pas assez de serveurs autoritaires ({ns}). La limite inférieure étant fixée à {minimum}."
+
 
 #: DELEGATION:NOT_ENOUGH_NS_GLUE
-msgid  "Parent does not list enough nameservers ({count})."
-msgstr "Les serveurs de noms de la zone parente ne retournent pas assez de serveurs autoritaires ({count})."
+msgid  "Parent does not list enough nameservers ({glue}). Lower limit set to {minimum}."
+msgstr "Les serveurs de noms de la zone parente ne retournent pas assez de serveurs autoritaires ({glue}). La limite inférieure étant fixée à {minimum}."
 
 #: DELEGATION:NOT_ENOUGH_NS_TOTAL
 msgid  "Parent and child do not list enough nameservers ({ns}). Lower limit set to {minimum}."
@@ -541,6 +552,14 @@ msgstr "Au moins une signature (RRSIG) correcte signe correctement l'enregistrem
 msgid  "The number of NSEC3 iterations is {count}, which is too high for key length {keylength}."
 msgstr "Le nombre d'itérations pour \"NSEC3\" est de {count}, ce qui est trop élevé pour une clé de cette taille {keylength}."
 
+#: DNSSEC:DELEGATION_NOT_SIGNED
+msgid  "Delegation from parent to child is not properly signed {reason}."
+msgstr "L'enregistrement DS dans la zone parente n'est pas correctement signé: {reason}."
+
+#: DNSSEC:DELEGATION_SIGNED
+msgid  "Delegation from parent to child is properly signed."
+msgstr "L'enregistrement DS dans la zone parente est correctement signé."
+
 #: EXAMPLE:EXAMPLE_TAG
 msgid  "This is an example tag."
 msgstr "Ceci est un tag d'exemple."
@@ -662,7 +681,7 @@ msgid  "Nameserver ({name}) syntax is valid."
 msgstr "La syntaxe du nom du serveur de noms ({name}) est valide."
 
 #: SYNTAX:NON_ALLOWED_CHARS
-msgid  "Found illegal characters in the domain name ({name})"
+msgid  "Found illegal characters in the domain name ({name})."
 msgstr "Des caractèrs interdits ont été trouvés dans le nom de domaine ({name})."
 
 #: SYNTAX:NO_DOUBLE_DASH
@@ -717,6 +736,10 @@ msgstr "La configuration a été lue depuis le fichier {name}."
 msgid  "Using prerequisite module {name} version {version}."
 msgstr "Utilisation du module prérequis {name} version {version}."
 
+#: SYSTEM:GLOBAL_VERSION
+msgid  "Using version {version} of the Zonemaster engine."
+msgstr "Utilisation de la version {version} du moteur Zonemaster."
+
 #: SYSTEM:LOGGER_CALLBACK_ERROR
 msgid  "Logger callback died with error: {exception}"
 msgstr "L'appel au système de log (Callback) s'est terminé avec l'erreur suivante: {exception}"
@@ -733,8 +756,12 @@ msgstr "Erreur fatale dans le module {module}: {msg}"
 msgid  "Using module {module} version {version}."
 msgstr "Utilisation du module {module} version {version}."
 
-#:SYSTEM:NO_NETWORK
-msgid "Both IPv4 and IPv6 are disabled."
+#: SYSTEM:MODULE_END
+msgid  "Module {module} finished running."
+msgstr "Exécution du module {module} terminée."
+
+#: SYSTEM:NO_NETWORK
+msgid  "Both IPv4 and IPv6 are disabled."
 msgstr "IPv6 et IPv4 sont désactivés."
 
 #: SYSTEM:POLICY_DISABLED
@@ -794,8 +821,8 @@ msgid  "SOA 'mname' nameserver {ns}/{address} is not authoritative for '{zone}' 
 msgstr "Le serveur maître défini dans le SOA, 'mname' {ns}/{address}, ne fait pas autorité pour la zone '{zone}'."
 
 #: ZONE:MNAME_NOT_IN_GLUE
-msgid  "SOA 'mname' nameserver is not listed in \"parent\" NS records for tested zone."
-msgstr "Le serveur maître défini dans le SOA, 'mname' ({mname}), ne fait pas partie des enregistrements de type \"NS\" listés par la zone parente."
+msgid  "SOA 'mname' nameserver ({mname}) is not listed in \"parent\" NS records for tested zone ({ns})."
+msgstr "Le serveur maître défini dans le SOA, 'mname' ({mname}), ne fait pas partie des enregistrements de type \"NS\" listés par la zone parente ({ns})."
 
 #: ZONE:MNAME_NO_RESPONSE
 msgid  "SOA 'mname' nameserver {ns}/{address} does not respond."
