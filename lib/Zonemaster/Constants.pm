@@ -1,4 +1,4 @@
-package Zonemaster::Constants v0.1.0;
+package Zonemaster::Constants v1.0.0;
 
 use strict;
 use warnings;

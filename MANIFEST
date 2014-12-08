@@ -83,6 +83,8 @@ t/Test-consistency.data
 t/Test-consistency.t
 t/Test-delegation.data
 t/Test-delegation.t
+t/Test-dnssec-more.data
+t/Test-dnssec-more.t
 t/Test-dnssec.data
 t/Test-dnssec.t
 t/Test-nameserver.data
