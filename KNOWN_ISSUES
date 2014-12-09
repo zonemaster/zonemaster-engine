@@ -1,0 +1,21 @@
+As of the 1.0.0 release, we have two known issues. Both are related to the
+underlying ldns library, and should be automatically fixed with the ldns
+release following the currently latest 1.6.17.
+
+1. Test Delegation/delegation03 is unreliable.
+    
+    This test checks that the smallest possible valid referral packet for a
+    domain fits in a non-EDNS0 512-octet UDP packet. It does this by assembling
+    the information that must be included, adding it to a packet and then
+    checking the size of the resulting packet. Since ldns 1.6.17 and earlier
+    does not do name compression in outgoing packets, this test will quite
+    often report that packets are too big when in reality they are not.
+
+2. Test Nameserver/nameserver03 can hang.
+    
+    When doing zone transfers, ldns only applies a timeout to the initial TCP
+    connection establishment. If a name server sets up the connection
+    correctly, but then neither completes the transfer nor drops the
+    connection, ldns will wait forever for the transfer to finish. We have
+    unfortunately seen this behavior on a small number of servers in the wild.
+
