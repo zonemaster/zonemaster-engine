@@ -1,4 +1,4 @@
-package Zonemaster::Translator v0.1.0;
+package Zonemaster::Translator v1.0.0;
 
 use 5.14.2;
 use strict;

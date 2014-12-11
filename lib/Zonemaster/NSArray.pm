@@ -1,4 +1,4 @@
-package Zonemaster::NSArray v0.1.0;
+package Zonemaster::NSArray v1.0.0;
 
 use 5.14.2;
 use warnings;
