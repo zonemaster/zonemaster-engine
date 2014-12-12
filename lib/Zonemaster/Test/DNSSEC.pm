@@ -572,9 +572,9 @@ sub dnssec03 {
                         count => $iter,
                     }
                   );
-                if (   ( $min_len >= 4096 and $iter > 2500 )
-                    or ( $min_len >= 2048 and $iter > 500 )
-                    or ( $min_len >= 1024 and $iter > 150 ) )
+                if (   (                     $min_len >= 4096 and $iter > 2500 )
+                    or ( $min_len < 4096 and $min_len >= 2048 and $iter > 500  )
+                    or ( $min_len < 2048 and $min_len >= 1024 and $iter > 150  ) )
                 {
                     push @results,
                       info(
