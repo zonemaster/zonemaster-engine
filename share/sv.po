@@ -154,11 +154,11 @@ msgid  "Saw SOA time parameter set (REFRESH={refresh},RETRY={retry},EXPIRE={expi
 msgstr "Såg dessa SOA-tidsparametrar (REFRESH={refresh},RETRY={retry},EXPIRE={expire},MINIMUM={minimum}) på följande namnservrar : {servers}."
 
 #: DELEGATION:ENOUGH_NS
-msgid  "Child lists enough nameservers ({count})."
+msgid  "Child lists enough nameservers ({ns}). Lower limit set to {minimum}."
 msgstr "Barnsidan listar tillräckligt många namnservrar ({count})."
 
 #: DELEGATION:ENOUGH_NS_GLUE
-msgid  "Parent lists enough nameservers ({count})."
+msgid  "Parent lists enough nameservers ({glue}). Lower limit set to {minimum}."
 msgstr "Föräldrasidan listar tillräckligt många namnservrar ({count})."
 
 #: DELEGATION:EXTRA_NAME_CHILD
@@ -178,11 +178,11 @@ msgid  "All of the nameserver names are listed both at parent and child."
 msgstr "Alla namnserver-namn listas både på föräldra- och barn-sidan."
 
 #: DELEGATION:NOT_ENOUGH_NS
-msgid  "Child does not list enough nameservers ({count})."
+msgid  "Child does not list enough nameservers ({ns}). Lower limit set to {minimum}."
 msgstr "Barn-sidan listar inte tillräckligt många namnservrar ({count})."
 
 #: DELEGATION:NOT_ENOUGH_NS_GLUE
-msgid  "Parent does not list enough nameservers ({count})."
+msgid  "Parent does not list enough nameservers ({glue}). Lower limit set to {minimum}."
 msgstr "Föräldrasidan listar inte tillräckligt många namnservrar ({count})."
 
 #: DELEGATION:NS_RR_IS_CNAME
@@ -425,6 +425,10 @@ msgstr "Namnservern {ns}/{address} tillåter zonöverföringar med AXFR."
 msgid  "AXFR not available on nameserver {ns}/{address}."
 msgstr "AXFR är inte tillgängligt på namnservern {ns}/{address}."
 
+#: NAMESERVER:CAN_BE_RESOLVED
+msgid  "All nameservers succeeded to resolve to an IP address."
+msgstr "Alla namnservrar kunde slås upp till minst en IP-adress."
+
 #: NAMESERVER:EDNS0_BAD_ANSWER
 msgid  "Nameserver {ns}/{address} does not support EDNS0 (OPT not set in reply)."
 msgstr "Namnservern {ns}/{address} stöder inte EDNS0 (ingen OPT i svaret)."
@@ -482,7 +486,7 @@ msgid  "Found illegal characters in the domain name ({name})."
 msgstr "Otillåtna tecken i domännamnet {name}."
 
 #: SYNTAX:ONLY_ALLOWED_CHARS
-msgid  "No illegal chatacters in the domain name ({name})."
+msgid  "No illegal characters in the domain name ({name})."
 msgstr "Endast tillåtna tecken i namnet {name}."
 
 #: SYNTAX:RNAME_MISUSED_AT_SIGN
@@ -581,6 +585,10 @@ msgstr "Värdet för SOA 'expire' ({expire}) är lägre än värdet för SOA 're
 msgid  "SOA 'expire' value ({expire}) is less than the recommended one ({required_expire})."
 msgstr "Värdet för SOA 'expire' ({expire}) är lägre än rekommenderat ({required_expire})."
 
+#: ZONE:MNAME_IS_AUTHORITATIVE
+msgid  "SOA 'mname' nameserver ({mname}) is authoritative for '{zone}' zone."
+msgstr "'mname'-nameservern ({mname}) är auktoritativ för zonen '{zone}'."
+
 #: ZONE:MNAME_IS_CNAME
 msgid  "SOA 'mname' value ({mname}) refers to a NS which is an alias (CNAME)."
 msgstr "SOA 'mname' ({mname}) refererar till ett NS-namn som är ett alias (CNAME)."
@@ -590,7 +598,7 @@ msgid  "SOA 'mname' nameserver {ns}/{address} is not authoritative for '{zone}' 
 msgstr "Namnservern angiven som SOA 'mname' ({ns}/{address}) är inte auktoritativ för zonen '{zone}'."
 
 #: ZONE:MNAME_NOT_IN_GLUE
-msgid  "SOA 'mname' nameserver is not listed in \"parent\" NS records for tested zone."
+msgid  "SOA 'mname' nameserver ({mname}) is not listed in \"parent\" NS records for tested zone ({ns})."
 msgstr "Namnservern angiven som SOA 'mname' finns inte med bland de NS-poster som listas i föräldrazonen."
 
 #: ZONE:MNAME_NO_RESPONSE
@@ -600,6 +608,10 @@ msgstr "Namnservern angiven som SOA 'mname' ({ns}/{address}) svarar inte."
 #: ZONE:MNAME_RECORD_DOES_NOT_EXIST
 msgid  "SOA 'mname' field does not exist"
 msgstr "'MNAME'-fältet i SOA-posten är tomt."
+
+#: ZONE:MX_RECORD_EXISTS
+msgid  "Target ({info}) found to deliver e-mail for the domain name."
+msgstr "Adressen ({info}) är angiven som mål för mail-leverans till domänen."
 
 #: ZONE:MX_RECORD_IS_CNAME
 msgid  "MX record for the domain is pointing to a CNAME."
@@ -845,3 +857,39 @@ msgstr "Inga felanvända @-tecken hittades if ROA RNAME."
 msgid  "The SOA RNAME field ({rname}) is compliant with RFC2822."
 msgstr "Adressen i SOA RNAME är giltig enligt RFC822."
 
+
+#: BASIC:DOMAIN_NAME_ZERO_LENGTH_LABEL
+msgid  "Domain name ({name}) has a zero length label."
+msgstr "Domännamnet ({name}) har en label med längd noll."
+
+#: BASIC:NO_PARENT
+msgid  "No parent domain could be found for the tested domain."
+msgstr "Ingen föräldradomän kunde hittas för den testade domänen."
+
+#: NAMESERVER:CAN_NOT_BE_RESOLVED
+msgid  "The following nameservers failed to resolve to an IP address : {names}."
+msgstr "Följande namnservernamn kunde inte slås upp till IP-adresser : {names}."
+
+#: NAMESERVER:NO_RESOLUTION
+msgid  "No nameservers succeeded to resolve to an IP address."
+msgstr "Ingen namnserver kunde slås upp till en IP-adress."
+
+#: NAMESERVER:SAME_SOURCE_IP
+msgid  "All nameservers reply with same IP used to query them."
+msgstr "Alla namnservrar skickade svar från samma IP-adress som frågan ställdes till."
+
+#: ZONE:MX_RECORD_IS_NOT_CNAME
+msgid  "MX record for the domain is not pointing to a CNAME."
+msgstr "MX-post för domänen pekar inte ut ett CNAME."
+
+#: ZONE:REFRESH_HIGHER_THAN_RETRY
+msgid  "SOA 'refresh' value ({refresh}) is higher than the SOA 'retry' value ({retry})."
+msgstr "'refresh'-värdet i SOA-posten ({refresh}) är högre än SOA-postens 'retry'-värde ({retry})."
+
+#: ZONE:REFRESH_MINIMUM_VALUE_OK
+msgid  "SOA 'refresh' value ({refresh}) is higher than the minimum recommended value ({required_refresh})."
+msgstr "SOA-postens 'refresh'-värde ({refresh}) är högre än det lägsta rekommenderade värdet ({required_refresh})."
+
+#: ZONE:RETRY_MINIMUM_VALUE_OK
+msgid  "SOA 'retry' value ({retry}) is more than the minimum recommended value ({required_retry})."
+msgstr "'retry'-värdet i SOA-posten ({retry}) är högre än det lägsta rekommenderade värdet ({required_retry})."
