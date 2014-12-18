@@ -122,7 +122,7 @@ sub query {
     # Fake a DS answer
     if ( $type eq 'DS' and $class eq 'IN' and $self->fake_ds->{ lc( $name ) } ) {
         my $p = Net::LDNS::Packet->new( $name, $type, $class );
-        $p->aa( 0 );
+        $p->aa( 1 );
         $p->do( $dnssec );
         $p->rd( $recurse );
         foreach my $rr ( @{ $self->fake_ds->{ lc( $name ) } } ) {
