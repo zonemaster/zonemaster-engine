@@ -49,6 +49,10 @@ my $tld = Zonemaster->zone( 'abogado' );
 ok( ( none { $_->tag eq 'INVALID_NAME_FOUND' } @res ), 'NSEC3 test works for domain with wildcard.' );
 ok( ( any { $_->tag eq 'NSEC3_COVERS' } @res ), 'NSEC3 test works for domain with wildcard.' );
 
+my $bobo = Zonemaster->zone( 'bobo.nl' );
+my @res = Zonemaster->test_method('Address', 'address03', $bobo);
+ok( ( none { $_->tag eq 'NO_RESPONSE_PTR_QUERY' } @res ), 'Recursor can deal with CNAMEs when recursing.' );
+
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Nameserver->save( $datafile );
 }
