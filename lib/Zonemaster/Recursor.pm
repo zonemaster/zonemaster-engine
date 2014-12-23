@@ -222,15 +222,21 @@ sub get_addresses_for {
     );
 
     my @rrs;
-    push @rrs, $pa->get_records( 'a' )       if $pa;
-    push @rrs, $paaaa->get_records( 'aaaa' ) if $paaaa;
+    my %cname;
+    if ($pa) {
+        push @rrs, $pa->get_records( 'a' );
+        $cname{$_->cname} = 1 for $pa->get_records_for_name('CNAME', $name);
+    }
+    if ($paaaa) {
+        push @rrs, $paaaa->get_records( 'aaaa' );
+        $cname{$_->cname} = 1 for $paaaa->get_records_for_name('CNAME', $name);
+    }
 
-    foreach my $rr (
-        sort { $a->address cmp $b->address }
-        grep { name( $_->name ) eq $name } @rrs
-      )
+    foreach my $rr ( sort { $a->address cmp $b->address } @rrs )
     {
-        push @res, Net::IP::XS->new( $rr->address );
+        if (name($rr->name) eq $name or $cname{$rr->name}) {
+            push @res, Net::IP::XS->new( $rr->address );
+        }
     }
 
     return @res;

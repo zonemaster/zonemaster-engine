@@ -150,9 +150,6 @@ ok( $res{NAMESERVER_IP_PTR_MATCH}, q{All reverse DNS entry matches name server n
 %res = map { $_->tag => 1 } Zonemaster->test_module( q{address}, q{address01.zut-root.rd.nic.fr} );
 ok( $res{NAMESERVER_IP_PRIVATE_NETWORK}, q{Nameserver address in non routable public addressing space} );
 
-%res = map { $_->tag => 1 } Zonemaster->test_module( q{address}, q{molndal.se} );
-ok( $res{NO_RESPONSE_PTR_QUERY}, q{No response from nameserver(s) on PTR query} );
-
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Nameserver->save( $datafile );
 }
