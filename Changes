@@ -1,5 +1,13 @@
 Revision history for Perl module Zonemaster.
 
+v1.0.1 2014-12-30
+ - Raise version numbers for changed modules.
+ - Change level of open AXFR message to NOTICE.
+ - CNAME was not handled correctly when looking up addresses for names.
+ - Faked DS response packets should have AA set.
+ - Add and/or adjust Swedish translations to match en.po.
+ - Fix NSEC3PARAM issue reported by Jakob Schlyter.
+
 v1.0.0 2014-12-11 Public beta release.
 
 v0.1.0 2014-11-17 Alpha test release.
@@ -9,5 +17,4 @@ v0.0.8 2014-11-04 Developer release.
 v0.0.7 2014-10-30 Developer release.
 
 v0.0.2 2014-05-25 Initial developer release.
-
 

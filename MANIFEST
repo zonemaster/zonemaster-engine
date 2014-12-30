@@ -14,6 +14,7 @@ inc/Module/Install/Scripts.pm
 inc/Module/Install/Share.pm
 inc/Module/Install/Win32.pm
 inc/Module/Install/WriteAll.pm
+KNOWN_ISSUES
 lib/Zonemaster.pm
 lib/Zonemaster/ASNLookup.pm
 lib/Zonemaster/Config.pm
