@@ -148,7 +148,15 @@ sub address02 {
         next if $ips{ $local_ns->address->short };
 
         my $reverse_ip_query = $local_ns->address->reverse_ip;
+
         my $p = Zonemaster::Recursor->recurse( $reverse_ip_query, q{PTR} );
+
+        # In case of Classless IN-ADDR.ARPA delegation, query returns
+        # CNAME records. A PTR query is done on the CNAME.
+        if ($p->rcode eq q{NOERROR} and $p->get_records( q{CNAME}, q{answer} ) ) {
+            my ( $cname ) = $p->get_records( q{CNAME}, q{answer} );
+            $p = Zonemaster::Recursor->recurse( $cname->cname, q{PTR} );
+        }
 
         if ( $p ) {
             if ( $p->rcode ne q{NOERROR} or not $p->get_records( q{PTR}, q{answer} ) ) {
@@ -184,6 +192,7 @@ sub address02 {
 sub address03 {
     my ( $class, $zone ) = @_;
     my @results;
+    my $ptr_query;
 
     my %ips;
 
@@ -192,11 +201,20 @@ sub address03 {
         next if $ips{ $local_ns->address->short };
 
         my $reverse_ip_query = $local_ns->address->reverse_ip;
+        $ptr_query = $reverse_ip_query;
 
-        my $p = Zonemaster::Recursor->recurse( $reverse_ip_query, q{PTR} );
+        my $p = Zonemaster::Recursor->recurse( $ptr_query, q{PTR} );
+
+        # In case of Classless IN-ADDR.ARPA delegation, query returns
+        # CNAME records. A PTR query is done on the CNAME.
+        if ($p->rcode eq q{NOERROR} and $p->get_records( q{CNAME}, q{answer} ) ) {
+            my ( $cname ) = $p->get_records( q{CNAME}, q{answer} );
+            $ptr_query = $cname->cname;
+            $p = Zonemaster::Recursor->recurse( $ptr_query, q{PTR} );
+        }
 
         if ( $p ) {
-            my @ptr = $p->get_records_for_name( q{PTR}, $reverse_ip_query );
+            my @ptr = $p->get_records_for_name( q{PTR}, $ptr_query );
             if ( $p->rcode eq q{NOERROR} and scalar @ptr ) {
                 if ( none { name( $_->ptrdname ) eq $local_ns->name->string . q{.} } @ptr ) {
                     push @results,
