@@ -53,12 +53,6 @@ my $bobo = Zonemaster->zone( 'bobo.nl' );
 my @res = Zonemaster->test_method('Address', 'address03', $bobo);
 ok( ( none { $_->tag eq 'NO_RESPONSE_PTR_QUERY' } @res ), 'Recursor can deal with CNAMEs when recursing.' );
 
-my $torsasse =  Zonemaster->zone( q{torsas.se} );
-@res = Zonemaster->test_method( q{Address}, q{address02}, $torsasse );
-ok( ( none { $_->tag eq 'NAMESERVER_IP_WITHOUT_REVERSE' } @res ), 'Classless in-addr.arpa properly handled when querying PTR.' );
-@res = Zonemaster->test_method( q{Address}, q{address03}, $torsasse );
-ok( ( none { $_->tag eq 'NAMESERVER_IP_WITHOUT_REVERSE' } @res ), 'Classless in-addr.arpa properly handled when querying PTR.' );
-
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Nameserver->save( $datafile );
 }

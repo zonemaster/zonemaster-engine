@@ -150,6 +150,12 @@ ok( $res{NAMESERVER_IP_PTR_MATCH}, q{All reverse DNS entry matches name server n
 %res = map { $_->tag => 1 } Zonemaster->test_module( q{address}, q{address01.zut-root.rd.nic.fr} );
 ok( $res{NAMESERVER_IP_PRIVATE_NETWORK}, q{Nameserver address in non routable public addressing space} );
 
+my $torsasse =  Zonemaster->zone( q{torsas.se} );
+my @res = Zonemaster->test_method( q{Address}, q{address02}, $torsasse );
+ok( !( grep { $_->tag eq 'NAMESERVER_IP_WITHOUT_REVERSE' } @res ), 'Classless in-addr.arpa properly handled when querying PTR.' );
+@res = Zonemaster->test_method( q{Address}, q{address03}, $torsasse );
+ok( !( grep { $_->tag eq 'NAMESERVER_IP_WITHOUT_REVERSE' } @res ), 'Classless in-addr.arpa properly handled when querying PTR.' );
+
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Nameserver->save( $datafile );
 }
