@@ -3,8 +3,8 @@ msgstr ""
 "Language: fr\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Project-Id-Version: 0.0.6\n"
-"PO-Revision-Date: 2015-02-03 23:39+0200\n"
+"Project-Id-Version: 0.0.7\n"
+"PO-Revision-Date: 2015-02-03 23:49+0200\n"
 "Last-Translator: vincent.levigneron@afnic.fr\n"
 "Language-Team: Zonemaster Team\n"
 "MIME-Version: 1.0\n"
@@ -257,23 +257,23 @@ msgstr "Toutes les adresses IP utilisées par les serveurs de noms sont uniques.
 
 #: DELEGATION:ENOUGH_NS
 msgid  "Child lists enough nameservers ({ns}). Lower limit set to {minimum}."
-msgstr "Les serveurs de noms de la zone retournent suffisamment de serveurs autoritaires ({ns}). La limite inférieure étant fixée à {minimum}."
+msgstr "Les serveurs de noms de la zone retournent suffisamment de serveurs faisant autorité ({ns}). La limite inférieure étant fixée à {minimum}."
 
 #: DELEGATION:ENOUGH_NS_GLUE
 msgid  "Parent lists enough nameservers ({glue}). Lower limit set to {minimum}."
-msgstr "Les serveurs de noms de la zone parente retournent suffisamment de serveurs autoritaires ({glue}). La limite inférieure étant fixée à {minimum}."
+msgstr "Les serveurs de noms de la zone parente retournent suffisamment de serveurs faisant autorité ({glue}). La limite inférieure étant fixée à {minimum}."
 
 #: DELEGATION:ENOUGH_NS_TOTAL
 msgid  "Parent and child list enough nameservers ({ns}). Lower limit set to {minimum}."
-msgstr "Les serveurs de noms de la zone parente et les serveurs de noms de la zone retournent suffisamment de serveurs autoritaires ({{ns}). La limite inférieure étant fixée à {minimum}."
+msgstr "Les serveurs de noms de la zone parente et les serveurs de noms de la zone retournent suffisamment de serveurs faisant autorité ({{ns}). La limite inférieure étant fixée à {minimum}."
 
 #: DELEGATION:EXTRA_NAME_CHILD
 msgid  "Child has nameserver(s) not listed at parent ({extra})."
-msgstr "Les serveurs de noms de la zone retournent des serveurs autoritaires ({extra}) qui ne le sont pas par les serveurs de noms de la zone parente."
+msgstr "Les serveurs de noms de la zone retournent des serveurs faisant autorité ({extra}) qui ne le sont pas par les serveurs de noms de la zone parente."
 
 #: DELEGATION:EXTRA_NAME_PARENT
 msgid  "Parent has nameserver(s) not listed at the child ({extra})."
-msgstr "Les serveurs de noms de la zone parente retournent des serveurs autoritaires ({extra}) qui ne le sont pas par les serveurs de noms de la zone."
+msgstr "Les serveurs de noms de la zone parente retournent des serveurs faisant autorité ({extra}) qui ne le sont pas par les serveurs de noms de la zone."
 
 #: DELEGATION:IS_NOT_AUTHORITATIVE
 msgid  "Nameserver {ns} response is not authoritative on {proto} port 53."
@@ -285,16 +285,16 @@ msgstr "Tous les serveurs de noms de la zone font partie de la liste des serveur
 
 #: DELEGATION:NOT_ENOUGH_NS
 msgid  "Child does not list enough nameservers ({ns}). Lower limit set to {minimum}."
-msgstr "Les serveurs de noms de la zone ne retournent pas assez de serveurs autoritaires ({ns}). La limite inférieure étant fixée à {minimum}."
+msgstr "Les serveurs de noms de la zone ne retournent pas assez de serveurs faisant autorité ({ns}). La limite inférieure étant fixée à {minimum}."
 
 
 #: DELEGATION:NOT_ENOUGH_NS_GLUE
 msgid  "Parent does not list enough nameservers ({glue}). Lower limit set to {minimum}."
-msgstr "Les serveurs de noms de la zone parente ne retournent pas assez de serveurs autoritaires ({glue}). La limite inférieure étant fixée à {minimum}."
+msgstr "Les serveurs de noms de la zone parente ne retournent pas assez de serveurs faisant autorité ({glue}). La limite inférieure étant fixée à {minimum}."
 
 #: DELEGATION:NOT_ENOUGH_NS_TOTAL
 msgid  "Parent and child do not list enough nameservers ({ns}). Lower limit set to {minimum}."
-msgstr "Les serveurs de noms de la zone parente et les serveurs de noms de la zone ne retournent pas suffisamment de serveurs autoritaires ({{ns}). La limite inférieure étant fixée à {minimum}."
+msgstr "Les serveurs de noms de la zone parente et les serveurs de noms de la zone ne retournent pas suffisamment de serveurs faisant autorité ({{ns}). La limite inférieure étant fixée à {minimum}."
 
 #: DELEGATION:NS_RR_IS_CNAME
 msgid  "Nameserver {ns} {address_type} RR point to CNAME."
