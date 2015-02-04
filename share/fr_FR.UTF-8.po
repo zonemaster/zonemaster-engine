@@ -3,8 +3,8 @@ msgstr ""
 "Language: fr\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Project-Id-Version: 0.0.5\n"
-"PO-Revision-Date: 2014-11-28 15:09+0200\n"
+"Project-Id-Version: 0.0.7\n"
+"PO-Revision-Date: 2015-02-03 23:49+0200\n"
 "Last-Translator: vincent.levigneron@afnic.fr\n"
 "Language-Team: Zonemaster Team\n"
 "MIME-Version: 1.0\n"
@@ -257,23 +257,23 @@ msgstr "Toutes les adresses IP utilisées par les serveurs de noms sont uniques.
 
 #: DELEGATION:ENOUGH_NS
 msgid  "Child lists enough nameservers ({ns}). Lower limit set to {minimum}."
-msgstr "Les serveurs de noms de la zone retournent suffisamment de serveurs autoritaires ({ns}). La limite inférieure étant fixée à {minimum}."
+msgstr "Les serveurs de noms de la zone retournent suffisamment de serveurs faisant autorité ({ns}). La limite inférieure étant fixée à {minimum}."
 
 #: DELEGATION:ENOUGH_NS_GLUE
 msgid  "Parent lists enough nameservers ({glue}). Lower limit set to {minimum}."
-msgstr "Les serveurs de noms de la zone parente retournent suffisamment de serveurs autoritaires ({glue}). La limite inférieure étant fixée à {minimum}."
+msgstr "Les serveurs de noms de la zone parente retournent suffisamment de serveurs faisant autorité ({glue}). La limite inférieure étant fixée à {minimum}."
 
 #: DELEGATION:ENOUGH_NS_TOTAL
 msgid  "Parent and child list enough nameservers ({ns}). Lower limit set to {minimum}."
-msgstr "Les serveurs de noms de la zone parente et les serveurs de noms de la zone retournent suffisamment de serveurs autoritaires ({{ns}). La limite inférieure étant fixée à {minimum}."
+msgstr "Les serveurs de noms de la zone parente et les serveurs de noms de la zone retournent suffisamment de serveurs faisant autorité ({{ns}). La limite inférieure étant fixée à {minimum}."
 
 #: DELEGATION:EXTRA_NAME_CHILD
 msgid  "Child has nameserver(s) not listed at parent ({extra})."
-msgstr "Les serveurs de noms de la zone retournent des serveurs autoritaires ({extra}) qui ne le sont pas par les serveurs de noms de la zone parente."
+msgstr "Les serveurs de noms de la zone retournent des serveurs faisant autorité ({extra}) qui ne le sont pas par les serveurs de noms de la zone parente."
 
 #: DELEGATION:EXTRA_NAME_PARENT
 msgid  "Parent has nameserver(s) not listed at the child ({extra})."
-msgstr "Les serveurs de noms de la zone parente retournent des serveurs autoritaires ({extra}) qui ne le sont pas par les serveurs de noms de la zone."
+msgstr "Les serveurs de noms de la zone parente retournent des serveurs faisant autorité ({extra}) qui ne le sont pas par les serveurs de noms de la zone."
 
 #: DELEGATION:IS_NOT_AUTHORITATIVE
 msgid  "Nameserver {ns} response is not authoritative on {proto} port 53."
@@ -285,16 +285,16 @@ msgstr "Tous les serveurs de noms de la zone font partie de la liste des serveur
 
 #: DELEGATION:NOT_ENOUGH_NS
 msgid  "Child does not list enough nameservers ({ns}). Lower limit set to {minimum}."
-msgstr "Les serveurs de noms de la zone ne retournent pas assez de serveurs autoritaires ({ns}). La limite inférieure étant fixée à {minimum}."
+msgstr "Les serveurs de noms de la zone ne retournent pas assez de serveurs faisant autorité ({ns}). La limite inférieure étant fixée à {minimum}."
 
 
 #: DELEGATION:NOT_ENOUGH_NS_GLUE
 msgid  "Parent does not list enough nameservers ({glue}). Lower limit set to {minimum}."
-msgstr "Les serveurs de noms de la zone parente ne retournent pas assez de serveurs autoritaires ({glue}). La limite inférieure étant fixée à {minimum}."
+msgstr "Les serveurs de noms de la zone parente ne retournent pas assez de serveurs faisant autorité ({glue}). La limite inférieure étant fixée à {minimum}."
 
 #: DELEGATION:NOT_ENOUGH_NS_TOTAL
 msgid  "Parent and child do not list enough nameservers ({ns}). Lower limit set to {minimum}."
-msgstr "Les serveurs de noms de la zone parente et les serveurs de noms de la zone ne retournent pas suffisamment de serveurs autoritaires ({{ns}). La limite inférieure étant fixée à {minimum}."
+msgstr "Les serveurs de noms de la zone parente et les serveurs de noms de la zone ne retournent pas suffisamment de serveurs faisant autorité ({{ns}). La limite inférieure étant fixée à {minimum}."
 
 #: DELEGATION:NS_RR_IS_CNAME
 msgid  "Nameserver {ns} {address_type} RR point to CNAME."
@@ -418,23 +418,23 @@ msgstr "Aucun enregistrement de type \"DS\" avec un enregistrement de type \"DNS
 
 #: DNSSEC:DURATION_LONG
 msgid  "RRSIG with keytag {tag} and covering type(s) {types} has a duration of {duration} seconds, which is too long."
-msgstr "La signature (RRSIG) avec la clé de tag {tag} et couvrant les enregistrements de types \"{types}\" a une durée de {duration} seconds, ce qui est trop long."
+msgstr "La signature (RRSIG) avec la clé de tag {tag} et couvrant les enregistrements de type(s) \"{types}\" a une durée de {duration} secondes, ce qui est trop long."
 
 #: DNSSEC:DURATION_OK
 msgid  "RRSIG with keytag {tag} and covering type(s) {types} has a duration of {duration} seconds, which is just fine."
-msgstr "La signature (RRSIG) avec la clé de tag {tag} et couvrant les enregistrements de types \"{types}\" a une durée de {duration} seconds, ce qui est raisonnable."
+msgstr "La signature (RRSIG) avec la clé de tag {tag} et couvrant les enregistrements de type(s) \"{types}\" a une durée de {duration} secondes, ce qui est raisonnable."
 
 #: DNSSEC:RRSIG_EXPIRED
 msgid  "RRSIG with keytag {tag} and covering type(s) {types} has already expired (expiration is: {expiration})."
-msgstr "La signature (RRSIG) avec la clé de tag {tag} et couvrant les enregistrements de types \"{types}\" a expirée (date d'expiration: {expiration})."
+msgstr "La signature (RRSIG) avec la clé de tag {tag} et couvrant les enregistrements de type(s) \"{types}\" a expiré (date d'expiration: {expiration})."
 
 #: DNSSEC:REMAINING_SHORT
 msgid  "RRSIG with keytag {tag} and covering type(s) {types} has a remaining validity of {duration} seconds, which is too short."
-msgstr "La signature (RRSIG) avec la clé de tag {tag} et couvrant les enregistrements de types \"{types}\" a une durée de validitée restante de {duration} secondes, ce qui est trop court."
+msgstr "La signature (RRSIG) avec la clé de tag {tag} et couvrant les enregistrements de type(s) \"{types}\" a une durée de validitée restante de {duration} secondes, ce qui est trop court."
 
 #: DNSSEC:REMAINING_LONG
 msgid  "RRSIG with keytag {tag} and covering type(s) {types} has a remaining validity of {duration} seconds, which is too long."
-msgstr "La signature (RRSIG) avec la clé de tag {tag} et couvrant les enregistrements de types \"{types}\" a une durée de validitée restante de {duration} secondes, ce qui est trop long."
+msgstr "La signature (RRSIG) avec la clé de tag {tag} et couvrant les enregistrements de type(s) \"{types}\" a une durée de validitée restante de {duration} secondes, ce qui est trop long."
 
 #: DNSSEC:EXTRA_PROCESSING_BROKEN
 msgid  "Server at {server} sent {keys} DNSKEY records, and {sigs} RRSIG records."
