@@ -1147,6 +1147,8 @@ sub dnssec11 {
     my %dnskey = map { $_->keytag => $_ } $dnskey_p->get_records_for_name( 'DNSKEY', $zone->name->string );
     my %rrsig  = map { $_->keytag => $_ } $dnskey_p->get_records_for_name( 'RRSIG',  $zone->name->string );
 
+    my $pass = 0;
+    my @fail;
     if ( scalar( keys %ds ) > 0 ) {
         foreach my $tag ( keys %ds ) {
             my $ds  = $ds{$tag};
@@ -1160,28 +1162,33 @@ sub dnssec11 {
                         my $ok =
                           $sig->verify_time( [ values %dnskey ], [ values %dnskey ], $dnskey_p->timestamp, $msg );
                         if ( $ok ) {
-                            return info( DELEGATION_SIGNED => { keytag => $tag } );
+                            $pass = $tag;
                         }
                         else {
-                            push @results,
-                              info( DELEGATION_NOT_SIGNED => { keytag => $tag, reason => "signature: $msg" } );
+                            push @fail, "signature: $msg" ;
                         }
                     }
                     else {
-                        push @results, info( DELEGATION_NOT_SIGNED => { keytag => $tag, reason => 'no_signature' } );
+                        push @fail, 'no_signature';
                     }
                 }
                 else {
-                    push @results, info( DELEGATION_NOT_SIGNED => { keytag => $tag, reason => 'dnskey_no_match' } );
+                    push @fail, 'dnskey_no_match';
                 }
             } ## end if ( $key )
             else {
-                push @results, info( DELEGATION_NOT_SIGNED => { keytag => $tag, reason => 'no_dnskey' } );
+                push @fail, 'no_dnskey';
             }
         } ## end foreach my $tag ( keys %ds )
     } ## end if ( scalar( keys %ds ...))
     else {
-        push @results, info( DELEGATION_NOT_SIGNED => { keytag => 'none', reason => 'no_ds' } );
+        push @fail, 'no_ds';
+    }
+
+    if ($pass) {
+        push @results, info( DELEGATION_SIGNED => { keytag => $pass } )
+    } else {
+        push @results, info( DELEGATION_NOT_SIGNED => { keytag => 'info', reason => join(';', @fail) } )
     }
 
     return @results;

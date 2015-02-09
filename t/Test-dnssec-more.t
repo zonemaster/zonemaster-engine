@@ -59,6 +59,10 @@ zone_gives( 'dnssec11', $zone, ['DELEGATION_NOT_SIGNED'] );
 $zone = Zonemaster->zone( 'rsa4096.nxdomain.se' );
 zone_gives_not( 'dnssec03', $zone, ['TOO_MANY_ITERATIONS'] );
 
+$zone = Zonemaster->zone( 'daemonic.se' );
+zone_gives( 'dnssec11', $zone, ['DELEGATION_SIGNED']);
+zone_gives_not( 'dnssec11', $zone, ['DELEGATION_NOT_SIGNED']);
+
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Nameserver->save( $datafile );
 }
