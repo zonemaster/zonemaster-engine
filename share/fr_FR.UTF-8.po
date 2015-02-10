@@ -3,8 +3,8 @@ msgstr ""
 "Language: fr\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Project-Id-Version: 0.0.7\n"
-"PO-Revision-Date: 2015-02-03 23:49+0200\n"
+"Project-Id-Version: 0.0.8\n"
+"PO-Revision-Date: 2015-02-09 18:14+0200\n"
 "Last-Translator: vincent.levigneron@afnic.fr\n"
 "Language-Team: Zonemaster Team\n"
 "MIME-Version: 1.0\n"
@@ -806,7 +806,7 @@ msgstr "Aucune adresse IP trouvée pour le serveur maître défini dans le SOA, 
 
 #: ZONE:MNAME_IS_AUTHORITATIVE
 msgid  "SOA 'mname' nameserver ({mname}) is authoritative for '{zone}' zone."
-msgstr "Le serveur maître défini dans le SOA, 'mname' {ns}}, fait autorité pour la zone '{zone}'."
+msgstr "Le serveur maître défini dans le SOA, 'mname' ({mname}), fait autorité pour la zone '{zone}'."
 
 #: ZONE:MNAME_IS_CNAME
 msgid  "SOA 'mname' value ({mname}) refers to a NS which is an alias (CNAME)."
