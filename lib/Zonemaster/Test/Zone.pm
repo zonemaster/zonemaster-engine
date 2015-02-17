@@ -21,22 +21,22 @@ sub all {
     my ( $class, $zone ) = @_;
     my @results;
 
-    push @results, $class->zone01( $zone );
+    push @results, $class->zone01( $zone ) if Zonemaster->config->should_run('zone01');
     if ( none { $_->tag eq q{NO_RESPONSE_SOA_QUERY} } @results ) {
 
-        push @results, $class->zone02( $zone );
-        push @results, $class->zone03( $zone );
-        push @results, $class->zone04( $zone );
-        push @results, $class->zone05( $zone );
-        push @results, $class->zone06( $zone );
+        push @results, $class->zone02( $zone ) if Zonemaster->config->should_run('zone02');
+        push @results, $class->zone03( $zone ) if Zonemaster->config->should_run('zone03');
+        push @results, $class->zone04( $zone ) if Zonemaster->config->should_run('zone04');
+        push @results, $class->zone05( $zone ) if Zonemaster->config->should_run('zone05');
+        push @results, $class->zone06( $zone ) if Zonemaster->config->should_run('zone06');
         if ( none { $_->tag eq q{MNAME_RECORD_DOES_NOT_EXIST} } @results ) {
-            push @results, $class->zone07( $zone );
+            push @results, $class->zone07( $zone ) if Zonemaster->config->should_run('zone07');
         }
     }
     if ( none { $_->tag eq q{MNAME_RECORD_DOES_NOT_EXIST} } @results ) {
-        push @results, $class->zone08( $zone );
+        push @results, $class->zone08( $zone ) if Zonemaster->config->should_run('zone08');
         if ( none { $_->tag eq q{NO_RESPONSE_MX_QUERY} } @results ) {
-            push @results, $class->zone09( $zone );
+            push @results, $class->zone09( $zone ) if Zonemaster->config->should_run('zone09');
         }
     }
 
