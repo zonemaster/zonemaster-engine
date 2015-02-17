@@ -46,7 +46,7 @@ sub all {
 
         # Perform BASIC3 if BASIC2 failed
         if ( none { $_->tag eq q{HAS_NAMESERVERS} } @results ) {
-            push @results, $class->basic03( $zone );
+            push @results, $class->basic03( $zone ) if Zonemaster->config->should_run('basic03');
         }
         else {
             push @results,
