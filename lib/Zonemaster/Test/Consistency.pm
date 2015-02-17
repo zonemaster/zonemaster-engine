@@ -19,10 +19,10 @@ sub all {
     my ( $class, $zone ) = @_;
     my @results;
 
-    push @results, $class->consistency01( $zone );
-    push @results, $class->consistency02( $zone );
-    push @results, $class->consistency03( $zone );
-    push @results, $class->consistency04( $zone );
+    push @results, $class->consistency01( $zone ) if Zonemaster->config->should_run('consistency01');
+    push @results, $class->consistency02( $zone ) if Zonemaster->config->should_run('consistency02');
+    push @results, $class->consistency03( $zone ) if Zonemaster->config->should_run('consistency03');
+    push @results, $class->consistency04( $zone ) if Zonemaster->config->should_run('consistency04');
 
     return @results;
 }
