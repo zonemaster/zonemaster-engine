@@ -20,11 +20,11 @@ sub all {
     my ( $class, $zone ) = @_;
     my @results;
 
-    push @results, $class->address01( $zone );
-    push @results, $class->address02( $zone );
+    push @results, $class->address01( $zone ) if Zonemaster->config->should_run('address01');
+    push @results, $class->address02( $zone ) if Zonemaster->config->should_run('address02');
     # Perform ADDRESS03 if ADDRESS02 passed
     if ( any { $_->tag eq q{NAMESERVERS_IP_WITH_REVERSE} } @results ) {
-        push @results, $class->address03( $zone );
+        push @results, $class->address03( $zone ) if Zonemaster->config->should_run('address03');
     }
 
     return @results;
