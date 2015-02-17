@@ -200,5 +200,8 @@
       "SOA_DEFAULT_TTL_MAXIMUM_VALUE_OK" : "INFO",
       "SOA_DEFAULT_TTL_MAXIMUM_VALUE_HIGHER" : "NOTICE",
       "SOA_DEFAULT_TTL_MAXIMUM_VALUE_LOWER" : "NOTICE"
-   }
+   },
+    "__testcases__": {
+        "basic01": true
+    }
 }

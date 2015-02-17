@@ -20,4 +20,13 @@ is( Zonemaster->config->resolver_defaults->{retry}, 4711, 'loading config works'
 Zonemaster::Config->load_policy_file( 't/policy.json' );
 is( Zonemaster::Config->policy->{'EXAMPLE'}{'EXAMPLE_TAG'}, 'WARNING', 'loading policy works' );
 
+my $conf = Zonemaster::Config->new;
+isa_ok($conf, 'Zonemaster::Config');
+isa_ok($conf->testcases, 'HASH');
+ok($conf->testcases->{basic01}, 'Data for basic01 in place');
+ok($conf->should_run(basic01), 'basic01 should run');
+
+is($conf->testcases->{basic02}, undef, 'Data for basic02 does not exist');
+ok($conf->should_run(basic02), 'basic02 should run');
+
 done_testing;

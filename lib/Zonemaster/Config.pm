@@ -10,8 +10,9 @@ use File::Spec;
 
 use Zonemaster;
 
-has 'cfiles' => ( is => 'ro', isa => 'ArrayRef', default => sub { [] } );
-has 'pfiles' => ( is => 'ro', isa => 'ArrayRef', default => sub { [] } );
+has 'cfiles'    => ( is => 'ro', isa => 'ArrayRef', default => sub { [] } );
+has 'pfiles'    => ( is => 'ro', isa => 'ArrayRef', default => sub { [] } );
+has 'testcases' => ( is => 'ro', isa => 'HashRef',  default => sub { {} } );
 
 my $merger = Hash::Merge->new;
 $merger->specify_behavior(
@@ -53,6 +54,11 @@ sub BUILD {
         my $pfile = File::Spec->catfile( $dir, 'policy.json' );
         $new = eval { decode_json read_file $pfile };
         if ( $new ) {
+            my $tc = $new->{__testcases__};
+            delete $new->{__testcases__};
+            foreach my $case (keys %$tc) {
+                $self->testcases->{$case} = $tc->{$case};
+            }
             $policy = $merger->merge( $policy, $new );
             push @{ $self->pfiles }, $pfile;
         }
@@ -194,6 +200,20 @@ sub asnroots {
     my ( $class ) = @_;
 
     return $class->get->{asnroots};
+}
+
+sub should_run {
+    my ( $self, $name ) = @_;
+
+    if (not defined $self->testcases->{$name}) {
+        return 1; # Default to runnings test
+    }
+    elsif ($self->testcases->{$name}) {
+        return 1;
+    }
+    else {
+        return;
+    }
 }
 
 no Moose;
