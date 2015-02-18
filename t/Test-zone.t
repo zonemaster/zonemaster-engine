@@ -16,6 +16,9 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
 my %res;
 my $zone;
 
+use Data::Dumper;
+print Data::Dumper::Dumper(%res);
+
 %res = map { $_->tag => 1 } Zonemaster->test_module( q{Zone}, q{afnic.fr} );
 ok( $res{MX_RECORD_EXISTS},            q{Target found to deliver e-mail for the domain name} );
 ok( $res{RETRY_MINIMUM_VALUE_LOWER},   q{SOA 'Retry' vakue is too low} );
@@ -35,8 +38,14 @@ ok( $res{MNAME_RECORD_DOES_NOT_EXIST}, q{SOA 'mname' field does not exist} );
 
 %res = map { $_->tag => 1 } Zonemaster->test_module( q{Zone}, q{add.tf} );
 ok( $res{SOA_DEFAULT_TTL_MAXIMUM_VALUE_LOWER}, q{SOA 'minimum' value is too low} );
-ok( $res{MX_RECORD_IS_CNAME},                  q{MX record is CNAME} );
-ok( $res{NO_MX_RECORD},                        q{No MX records} );
+
+$zone = Zonemaster->zone( q{zone05.zut-root.rd.nic.fr} );
+%res = map { $_->tag => 1 } Zonemaster->test_method( q{Zone}, q{zone09}, $zone );
+ok( $res{NO_MX_RECORD}, q{No MX records} );
+
+#$zone = Zonemaster->zone( q{zone06.zut-root.rd.nic.fr} );
+#%res = map { $_->tag => 1 } Zonemaster->test_method( q{Zone}, q{zone08}, $zone );
+#ok( $res{MX_RECORD_IS_CNAME}, q{MX record is CNAME} );
 
 %res = map { $_->tag => 1 } Zonemaster->test_module( q{Zone}, q{zone02.zut-root.rd.nic.fr} );
 ok( $res{MNAME_NOT_AUTHORITATIVE},    q{SOA 'mname' nameserver is not authoritative for zone} );
@@ -62,6 +71,13 @@ ok( $res{NO_RESPONSE_SOA_QUERY}, q{No response from nameserver(s) on SOA queries
 
 %res = map { $_->tag => 1 } Zonemaster->test_method( q{Zone}, q{zone08}, $zone );
 ok( $res{NO_RESPONSE_MX_QUERY}, q{No response from nameserver(s) on MX queries} );
+
+Zonemaster->config->ipv4_ok( 1 );
+Zonemaster->config->ipv6_ok( 0 );
+
+$zone = Zonemaster->zone( q{trasigdnssec.se} );
+%res = map { $_->tag => 1 } Zonemaster->test_method( q{Zone}, q{zone01}, $zone );
+ok( !$res{MNAME_NO_RESPONSE}, q{SOA 'mname' found with IPv4 only} );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Nameserver->save( $datafile );

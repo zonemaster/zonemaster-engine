@@ -55,7 +55,8 @@ sub metadata {
             qw(
               MNAME_RECORD_DOES_NOT_EXIST
               MNAME_NOT_AUTHORITATIVE
-              MNAME_NO_RESPONSE MNAME_NOT_IN_GLUE
+              MNAME_NO_RESPONSE
+              MNAME_NOT_IN_GLUE
               MNAME_IS_AUTHORITATIVE
               NO_RESPONSE_SOA_QUERY
               )
@@ -185,7 +186,13 @@ sub zone01 {
         }
         else {
             foreach my $ip_address ( Zonemaster::Recursor->get_addresses_for( $soa_mname ) ) {
+
                 my $ns = Zonemaster::Nameserver->new( { name => $soa_mname, address => $ip_address->short } );
+
+                if ( _is_ip_version_disabled($ns) ) {
+                    next;
+                }
+
                 my $p_soa = $ns->query( $zone->name, q{SOA} );
                 if ( $p_soa and $p_soa->rcode eq q{NOERROR} ) {
                     if ( not $p_soa->aa ) {
@@ -544,13 +551,7 @@ sub _retrieve_record_from_zone {
     # Return response from the first authoritative server that gives one
     foreach my $ns ( @{ Zonemaster::TestMethods->method5( $zone ) } ) {
 
-        if ( not Zonemaster->config->ipv4_ok and $ns->address->version == $IP_VERSION_4 ) {
-            Zonemaster->logger->add( SKIP_IPV4_DISABLED => { ns => "$ns" } );
-            next;
-        }
-
-        if ( not Zonemaster->config->ipv6_ok and $ns->address->version == $IP_VERSION_6 ) {
-            Zonemaster->logger->add( SKIP_IPV6_DISABLED => { ns => "$ns" } );
+        if ( _is_ip_version_disabled($ns) ) {
             next;
         }
 
@@ -563,6 +564,22 @@ sub _retrieve_record_from_zone {
 
     return;
 } ## end sub _retrieve_record_from_zone
+
+sub _is_ip_version_disabled {
+    my $ns = shift;
+
+    if ( not Zonemaster->config->ipv4_ok and $ns->address->version == $IP_VERSION_4 ) {
+        Zonemaster->logger->add( SKIP_IPV4_DISABLED => { ns => "$ns" } );
+        return 1;
+    }
+
+    if ( not Zonemaster->config->ipv6_ok and $ns->address->version == $IP_VERSION_6 ) {
+        Zonemaster->logger->add( SKIP_IPV6_DISABLED => { ns => "$ns" } );
+        return 1;
+    }
+
+    return;
+}
 
 1;
 
