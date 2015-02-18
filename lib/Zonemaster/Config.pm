@@ -10,8 +10,9 @@ use File::Spec;
 
 use Zonemaster;
 
-has 'cfiles' => ( is => 'ro', isa => 'ArrayRef', default => sub { [] } );
-has 'pfiles' => ( is => 'ro', isa => 'ArrayRef', default => sub { [] } );
+has 'cfiles'    => ( is => 'ro', isa => 'ArrayRef', default => sub { [] } );
+has 'pfiles'    => ( is => 'ro', isa => 'ArrayRef', default => sub { [] } );
+has 'testcases' => ( is => 'ro', isa => 'HashRef',  default => sub { {} } );
 
 my $merger = Hash::Merge->new;
 $merger->specify_behavior(
@@ -53,6 +54,11 @@ sub BUILD {
         my $pfile = File::Spec->catfile( $dir, 'policy.json' );
         $new = eval { decode_json read_file $pfile };
         if ( $new ) {
+            my $tc = $new->{__testcases__};
+            delete $new->{__testcases__};
+            foreach my $case (keys %$tc) {
+                $self->testcases->{$case} = $tc->{$case};
+            }
             $policy = $merger->merge( $policy, $new );
             push @{ $self->pfiles }, $pfile;
         }
@@ -141,6 +147,11 @@ sub load_policy_file {
 
     my $new = decode_json read_file $filename;
     if ( $new ) {
+        my $tc = $new->{__testcases__};
+        delete $new->{__testcases__};
+        foreach my $case (keys %$tc) {
+            $self->testcases->{$case} = $tc->{$case};
+        }
         $policy = $merger->merge( $policy, $new );
         push @{ $self->pfiles }, $filename if ( ref( $self ) and $self->isa( __PACKAGE__ ) );
     }
@@ -194,6 +205,20 @@ sub asnroots {
     my ( $class ) = @_;
 
     return $class->get->{asnroots};
+}
+
+sub should_run {
+    my ( $self, $name ) = @_;
+
+    if (not defined $self->testcases->{$name}) {
+        return 1; # Default to runnings test
+    }
+    elsif ($self->testcases->{$name}) {
+        return 1;
+    }
+    else {
+        return;
+    }
 }
 
 no Moose;
@@ -295,7 +320,7 @@ This is intended to change.
 
 =item policy()
 
-Returns a reference to the current policy data. The format of that data is yet to be decided on.
+Returns a reference to the current policy data. The format of that data is described further down in this document.
 
 =item load_policy_file($filename)
 
@@ -416,6 +441,14 @@ A complete entry might could look like this:
        }
 
 This would set the level to C<INFO> for any C<SYSTEM:FILTER_THIS> messages that had a C<count> attribute set to 1 and a C<type> attribute set to either C<this> or C<or>.
+
+=head1 POLICY DATA
+
+Like the configuration data, policy data is stored in JSON format. Structurally, it's a bit less complex. All the keys on the top level, with one exception, are names of test implementation modules (without the C<Zonemaster::Test::> prefix). Each of those keys hold another hash, where the keys are the tags that the module in question can emit and the values are the the severity levels that should apply to the tags. Any tags that are not found in the policy data will default to level C<DEBUG>.
+
+The one exception is a top-level key C<__testcases__>. The value of that must be a hash where the keys are names of test cases from the test specifications, and the corresponding values are booleans specifying if the test case in question should be executed or not. Any missing test cases are treated as if they had the value C<true> set. The test cases C<basic00>, C<basic01> and C<basic02> will be executed even if their values are set to C<false>, since part of their function is to verify that the given name can be tested at all. The values here only apply when test modules are asked to run all their tests. A test case that is set to C<false> here will still run if asked for specifically.
+
+The easiest way to create a modified policy is to copy the default one and change the relevant values.
 
 =cut
 

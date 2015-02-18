@@ -21,9 +21,9 @@ sub all {
     my ( $class, $zone ) = @_;
     my @results;
 
-    push @results, $class->connectivity01( $zone );
-    push @results, $class->connectivity02( $zone );
-    push @results, $class->connectivity03( $zone );
+    push @results, $class->connectivity01( $zone ) if Zonemaster->config->should_run('connectivity01');
+    push @results, $class->connectivity02( $zone ) if Zonemaster->config->should_run('connectivity02');
+    push @results, $class->connectivity03( $zone ) if Zonemaster->config->should_run('connectivity03');
 
     return @results;
 }

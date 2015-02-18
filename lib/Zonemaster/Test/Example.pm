@@ -19,7 +19,7 @@ sub all {
     my ( $class, $zone ) = @_;
     my @results;
 
-    push @results, $class->placeholder;
+    push @results, $class->placeholder if Zonemaster->config->should_run('placeholder');
 
     return @results;
 }

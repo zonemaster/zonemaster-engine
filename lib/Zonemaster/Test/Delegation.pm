@@ -24,13 +24,13 @@ sub all {
     my ( $class, $zone ) = @_;
     my @results;
 
-    push @results, $class->delegation01( $zone );
-    push @results, $class->delegation02( $zone );
-    push @results, $class->delegation03( $zone );
-    push @results, $class->delegation04( $zone );
-    push @results, $class->delegation05( $zone );
-    push @results, $class->delegation06( $zone );
-    push @results, $class->delegation07( $zone );
+    push @results, $class->delegation01( $zone ) if Zonemaster->config->should_run('delegation01');
+    push @results, $class->delegation02( $zone ) if Zonemaster->config->should_run('delegation02');
+    push @results, $class->delegation03( $zone ) if Zonemaster->config->should_run('delegation03');
+    push @results, $class->delegation04( $zone ) if Zonemaster->config->should_run('delegation04');
+    push @results, $class->delegation05( $zone ) if Zonemaster->config->should_run('delegation05');
+    push @results, $class->delegation06( $zone ) if Zonemaster->config->should_run('delegation06');
+    push @results, $class->delegation07( $zone ) if Zonemaster->config->should_run('delegation07');
 
     return @results;
 }

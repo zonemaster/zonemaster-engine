@@ -19,12 +19,12 @@ sub all {
     my ( $class, $zone ) = @_;
     my @results;
 
-    push @results, $class->nameserver01( $zone );
-    push @results, $class->nameserver02( $zone );
-    push @results, $class->nameserver03( $zone );
-    push @results, $class->nameserver04( $zone );
-    push @results, $class->nameserver05( $zone );
-    push @results, $class->nameserver06( $zone );
+    push @results, $class->nameserver01( $zone ) if Zonemaster->config->should_run('nameserver01');
+    push @results, $class->nameserver02( $zone ) if Zonemaster->config->should_run('nameserver02');
+    push @results, $class->nameserver03( $zone ) if Zonemaster->config->should_run('nameserver03');
+    push @results, $class->nameserver04( $zone ) if Zonemaster->config->should_run('nameserver04');
+    push @results, $class->nameserver05( $zone ) if Zonemaster->config->should_run('nameserver05');
+    push @results, $class->nameserver06( $zone ) if Zonemaster->config->should_run('nameserver06');
 
     return @results;
 }
