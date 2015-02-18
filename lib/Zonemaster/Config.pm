@@ -347,6 +347,11 @@ form (without the initial C<Zonemaster::Test::>) and correctly capitalized.
 
 Internal method only mentioned here to please L<Pod::Coverage>.
 
+=item should_run($name)
+
+Given a test case name, it returns true if that test case should be included in
+a test run according to the currently active policy or false if not.
+
 =back
 
 =head1 CONFIGURATION DATA
