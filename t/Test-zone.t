@@ -16,9 +16,6 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
 my %res;
 my $zone;
 
-use Data::Dumper;
-print Data::Dumper::Dumper(%res);
-
 %res = map { $_->tag => 1 } Zonemaster->test_module( q{Zone}, q{afnic.fr} );
 ok( $res{MX_RECORD_EXISTS},            q{Target found to deliver e-mail for the domain name} );
 ok( $res{RETRY_MINIMUM_VALUE_LOWER},   q{SOA 'Retry' vakue is too low} );
