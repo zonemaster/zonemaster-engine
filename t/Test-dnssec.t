@@ -76,10 +76,6 @@ zone_gives( 'dnssec10', $zone, [qw{HAS_NSEC NSEC_SIGNED NSEC_COVERS}] );
 
 zone_gives( 'dnssec10', $zone3, [qw{HAS_NSEC3 NSEC3_SIGNED NSEC3_COVERS}] );
 
-@res = Zonemaster->test_module( 'DNSSEC', 'loopia.se' );
-%tag = map { $_->tag => 1 } @res;
-ok( $tag{NO_DS}, 'NO_DS' );
-
 # dnssec01
 $zone = Zonemaster->zone( 'dnssec01-ds-digtype-not-ok.zut-root.rd.nic.fr' );
 zone_gives( 'dnssec01', $zone, [q{DS_DIGTYPE_NOT_OK}] );
