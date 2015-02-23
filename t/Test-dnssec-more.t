@@ -40,6 +40,10 @@ my $zone;
 my @res;
 my %tag;
 
+@res = Zonemaster->test_module( 'DNSSEC', 'loopia.se' );
+%tag = map { $_->tag => 1 } @res;
+ok( $tag{NO_DS}, 'NO_DS' );
+
 #dnssec11
 $zone = Zonemaster->zone( 'nic.se' );
 zone_gives( 'dnssec11', $zone, ['DELEGATION_SIGNED'] );
