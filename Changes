@@ -1,5 +1,13 @@
 Revision history for Perl module Zonemaster.
 
+v1.0.2 2015-02-24
+ - Run most DNSSEC tests even when there is no DS.
+ - Raise Net::LDNS requirement to v0.71. Closes #17. Closes #18.
+ - Document policy data.
+ - Make it so the policy can decide which test cases should be run by default.
+ - Make sure dnssec11 emits one and only one message.
+ - [BugFix] Classless in-addr.arpa #14
+
 v1.0.1 2014-12-30
  - Raise version numbers for changed modules.
  - Change level of open AXFR message to NOTICE.
