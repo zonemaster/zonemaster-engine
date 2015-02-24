@@ -1,4 +1,4 @@
-package Zonemaster::Test::Example v1.0.0;
+package Zonemaster::Test::Example v1.0.1;
 
 ###
 ### This test module is meant to serve as an example when writing proper ones.

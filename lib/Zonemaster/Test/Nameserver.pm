@@ -1,4 +1,4 @@
-package Zonemaster::Test::Nameserver v1.0.0;
+package Zonemaster::Test::Nameserver v1.0.1;
 
 use 5.14.2;
 use strict;
