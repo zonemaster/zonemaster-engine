@@ -879,6 +879,9 @@ sub dnssec08 {
             $ok = $sig->keytag;
         }
         else {
+            if ($sig->algorithm == 12 and $msg =~ /Unknown cryptographic algorithm/) {
+                $msg = 'no GOST support';
+            }
             push @results,
               info(
                 DNSKEY_SIGNATURE_NOT_OK => {
@@ -949,6 +952,9 @@ sub dnssec09 {
             $ok = $sig->keytag;
         }
         else {
+            if ($sig->algorithm == 12 and $msg =~ /Unknown cryptographic algorithm/) {
+                $msg = 'no GOST support';
+            }
             push @results,
               info(
                 SOA_SIGNATURE_NOT_OK => {
@@ -1025,6 +1031,9 @@ sub dnssec10 {
                         $ok = 1;
                     }
                     else {
+                        if ($sig->algorithm == 12 and $msg =~ /Unknown cryptographic algorithm/) {
+                            $msg = 'no GOST support';
+                        }
                         push @results,
                           info(
                             NSEC_SIG_VERIFY_ERROR => {
@@ -1086,6 +1095,9 @@ sub dnssec10 {
                         $ok = 1;
                     }
                     else {
+                        if ($sig->algorithm == 12 and $msg =~ /Unknown cryptographic algorithm/) {
+                            $msg = 'no GOST support';
+                        }
                         push @results,
                           info(
                             NSEC3_SIG_VERIFY_ERROR => {
@@ -1165,6 +1177,9 @@ sub dnssec11 {
                             $pass = $tag;
                         }
                         else {
+                            if ($sig->algorithm == 12 and $msg =~ /Unknown cryptographic algorithm/) {
+                                $msg = 'no GOST support';
+                            }
                             push @fail, "signature: $msg" ;
                         }
                     }
