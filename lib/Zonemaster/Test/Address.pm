@@ -151,14 +151,14 @@ sub address02 {
 
         my $p = Zonemaster::Recursor->recurse( $reverse_ip_query, q{PTR} );
 
-        # In case of Classless IN-ADDR.ARPA delegation, query returns
-        # CNAME records. A PTR query is done on the CNAME.
-        if ($p->rcode eq q{NOERROR} and $p->get_records( q{CNAME}, q{answer} ) ) {
-            my ( $cname ) = $p->get_records( q{CNAME}, q{answer} );
-            $p = Zonemaster::Recursor->recurse( $cname->cname, q{PTR} );
-        }
-
         if ( $p ) {
+            # In case of Classless IN-ADDR.ARPA delegation, query returns
+            # CNAME records. A PTR query is done on the CNAME.
+            if ($p->rcode eq q{NOERROR} and $p->get_records( q{CNAME}, q{answer} ) ) {
+                my ( $cname ) = $p->get_records( q{CNAME}, q{answer} );
+                $p = Zonemaster::Recursor->recurse( $cname->cname, q{PTR} );
+            }
+
             if ( $p->rcode ne q{NOERROR} or not $p->get_records( q{PTR}, q{answer} ) ) {
                 push @results,
                   info(
