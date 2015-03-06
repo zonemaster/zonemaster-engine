@@ -36,6 +36,7 @@ is_parent( 'foo.bar.baz.example.org',                                           
 is_parent( 'xx--doesnotexist.se',                                                      'se' );
 is_parent( 'xx--doesnotexist.com',                                                     'com' );
 is_parent( 'pewc.eu',                                                                  'eu' );
+is_parent( 'melbourneit.com.au',                                                       'com.au' );
 
 sub is_parent {
     my ( $name, $pname ) = @_;
