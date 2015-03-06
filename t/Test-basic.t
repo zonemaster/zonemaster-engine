@@ -97,9 +97,12 @@ zone_gives( q{basic03}, $zone, q{IPV6_DISABLED} );
 zone_gives_not( q{basic03}, $zone, q{IPV4_DISABLED} );
 zone_gives_not( q{basic03}, $zone, q{IPV6_ENABLED} );
 
-%res = map { $_->tag => 1 } Zonemaster->test_module( q{basic}, q{melbourneit.com.au} );
-ok( $res{NO_GLUE},                           q{NO_GLUE} );
-ok( $res{NO_GLUE_PREVENTS_NAMESERVER_TESTS}, q{NO_GLUE_PREVENTS_NAMESERVER_TESTS} );
+SKIP: {
+    skip "Zone does not actually have tested problem", 2;
+    %res = map { $_->tag => 1 } Zonemaster->test_module( q{basic}, q{melbourneit.com.au} );
+    ok( $res{NO_GLUE},                           q{NO_GLUE} );
+    ok( $res{NO_GLUE_PREVENTS_NAMESERVER_TESTS}, q{NO_GLUE_PREVENTS_NAMESERVER_TESTS} );
+}
 
 %res = map { $_->tag => 1 } Zonemaster->test_module( q{basic}, q{maxan.se} );
 ok( $res{HAS_A_RECORDS}, q{HAS_A_RECORDS} );

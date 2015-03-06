@@ -50,6 +50,7 @@ sub fqdn {
 
 sub str_cmp {
     my ( $self, $other ) = @_;
+    $other //= ''; # Treat undefined value as root
 
     $other =~ s/(.+)\.$/$1/;
 
@@ -181,6 +182,6 @@ Returns a new L<Zonemaster::DNSName> object, representing the called one with th
 
 Helper method for JSON encoding.
 
-=over
+=back
 
 =cut

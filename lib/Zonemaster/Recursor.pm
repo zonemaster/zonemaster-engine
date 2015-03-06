@@ -46,11 +46,34 @@ sub parent {
         { ns => [ root_servers() ], count => 0, common => 0, seen => {}, glue => {} } );
 
     my $pname;
-    if ( name( $state->{trace}[0] ) eq name( $name ) ) {
-        $pname = name( $state->{trace}[1] );
+    if ( name( $state->{trace}[0][0] ) eq name( $name ) ) {
+        $pname = name( $state->{trace}[1][0] );
     }
     else {
-        $pname = name( $state->{trace}[0] );
+        $pname = name( $state->{trace}[0][0] );
+    }
+
+    # Extra check that parent really is parent.
+    if ($name->next_higher ne $pname) {
+        my $source_ns = $state->{trace}[0][1];
+        my $source_ip = $state->{trace}[0][2];
+
+        # No $source_ns means we're looking at root taken from priming
+        if ($source_ns) {
+            my $pp;
+            if ($source_ns->can('query')) {
+                $pp = $source_ns->query($name->next_higher->string, 'SOA');
+            } else {
+                my $n = ns($source_ns, $source_ip);
+                $pp = $n->query($name->next_higher->string, 'SOA');
+            }
+            if ($pp) {
+                my ($rr) = $pp->get_records('SOA', 'answer');
+                if ($rr) {
+                    $pname = name($rr->owner);
+                }
+            }
+        }
     }
 
     if ( wantarray() ) {
@@ -113,7 +136,7 @@ sub _recurse {
             $state->{ns} = $self->get_ns_from( $p, $state );    # Follow redirect
             $state->{count} += 1;
             return ( undef, $state ) if $state->{count} > 20;    # Loop protection
-            unshift @{ $state->{trace} }, $zname;
+            unshift @{ $state->{trace} }, [$zname, $ns, $p->answerfrom];
 
             next;
         } ## end if ( $p->is_redirect )
