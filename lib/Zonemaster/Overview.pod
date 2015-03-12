@@ -46,5 +46,270 @@ If you do write your own test module, I would very much appreciate feedback on w
 
 =head2 For developers of the Zonemaster Test Framework
 
+Random recommendations and advice. May be replaced with more coherent developer documentation in the future.
+
+=over
+
+=item
+
+Stability, predictability and reliability are more important than performance.
+
+=item
+
+Don't forget that starting with Perl version 5.18, the order in which you get the keys out of a hash will be different every time the script is run. Get used to always writing C<sort keys %hash>.
+
+=item
+
+If two (or more) test implementation modules implement the same (or very similar) thing, it should probably be extracted into the framework.
+
+=item
+
+The unit tests run against pre-recorded data, unless the environment variable C<ZONEMASTER_RECORD> is set to a (perl-)true value. In that case, it runs against the live DNS world and records all results for future use. Unfortunately this sometime means that some tests fail, when we were relying on seeing certain problems in certain domains, and those no longer look the same.
+
+=item
+
+The translation strings returned from a test module are used as keys in the GNU gettext system, so if you change anything in them don't forget to also change the translation C<.po> files in F<share>.
+
+=item
+
+Adding a new message tag is more work than it first looks, since it needs to be added to the test module metadata, the default policy and the translation system in order to be fully functional.
+
+=back
+
 =head1 REFERENCES
 
+=over
+
+=item L<https://github.com/dotse/zonemaster>
+
+Main repository, holding among other things our test specifications.
+
+=back
+
+=head2 List of all RFCs referred to in the test specifications
+
+=over
+
+=item
+
+L<RFC0822 "STANDARD FOR THE FORMAT OF ARPA INTERNET TEXT MESSAGES"|http://www.rfc-editor.org/info/rfc822>
+
+=item
+
+L<RFC0919 "Broadcasting Internet Datagrams"|http://www.rfc-editor.org/info/rfc919>
+
+=item
+
+L<RFC0952 "DoD Internet host table specification"|http://www.rfc-editor.org/info/rfc952>
+
+=item
+
+L<RFC1033 "Domain Administrators Operations Guide"|http://www.rfc-editor.org/info/rfc1033>
+
+=item
+
+L<RFC1034 "Domain names - concepts and facilities"|http://www.rfc-editor.org/info/rfc1034>
+
+=item
+
+L<RFC1035 "Domain names - implementation and specification"|http://www.rfc-editor.org/info/rfc1035>
+
+=item
+
+L<RFC1112 "Host extensions for IP multicasting"|http://www.rfc-editor.org/info/rfc1112>
+
+=item
+
+L<RFC1122 "Requirements for Internet Hosts - Communication Layers"|http://www.rfc-editor.org/info/rfc1122>
+
+=item
+
+L<RFC1123 "Requirements for Internet Hosts - Application and Support"|http://www.rfc-editor.org/info/rfc1123>
+
+=item
+
+L<RFC1912 "Common DNS Operational and Configuration Errors"|http://www.rfc-editor.org/info/rfc1912>
+
+=item
+
+L<RFC1918 "Address Allocation for Private Internets"|http://www.rfc-editor.org/info/rfc1918>
+
+=item
+
+L<RFC1930 "Guidelines for creation, selection, and registration of an Autonomous System (AS)"|http://www.rfc-editor.org/info/rfc1930>
+
+=item
+
+L<RFC1982 "Serial Number Arithmetic"|http://www.rfc-editor.org/info/rfc1982>
+
+=item
+
+L<RFC1996 "A Mechanism for Prompt Notification of Zone Changes (DNS NOTIFY)"|http://www.rfc-editor.org/info/rfc1996>
+
+=item
+
+L<RFC2142 "Mailbox Names for Common Services, Roles and Functions"|http://www.rfc-editor.org/info/rfc2142>
+
+=item
+
+L<RFC2181 "Clarifications to the DNS Specification"|http://www.rfc-editor.org/info/rfc2181>
+
+=item
+
+L<RFC2182 "Selection and Operation of Secondary DNS Servers"|http://www.rfc-editor.org/info/rfc2182>
+
+=item
+
+L<RFC2308 "Negative Caching of DNS Queries (DNS NCACHE)"|http://www.rfc-editor.org/info/rfc2308>
+
+=item
+
+L<RFC2544 "Benchmarking Methodology for Network Interconnect Devices"|http://www.rfc-editor.org/info/rfc2544>
+
+=item
+
+L<RFC2671 "Extension Mechanisms for DNS (EDNS0)"|http://www.rfc-editor.org/info/rfc2671>
+
+=item
+
+L<RFC2822 "Internet Message Format"|http://www.rfc-editor.org/info/rfc2822>
+
+=item
+
+L<RFC2870 "Root Name Server Operational Requirements"|http://www.rfc-editor.org/info/rfc2870>
+
+=item
+
+L<RFC2928 "Initial IPv6 Sub-TLA ID Assignments"|http://www.rfc-editor.org/info/rfc2928>
+
+=item
+
+L<RFC3056 "Connection of IPv6 Domains via IPv4 Clouds"|http://www.rfc-editor.org/info/rfc3056>
+
+=item
+
+L<RFC3068 "An Anycast Prefix for 6to4 Relay Routers"|http://www.rfc-editor.org/info/rfc3068>
+
+=item
+
+L<RFC3658 "Delegation Signer (DS) Resource Record (RR)"|http://www.rfc-editor.org/info/rfc3658>
+
+=item
+
+L<RFC3696 "Application Techniques for Checking and Transformation of Names"|http://www.rfc-editor.org/info/rfc3696>
+
+=item
+
+L<RFC3701 "6bone (IPv6 Testing Address Allocation) Phaseout"|http://www.rfc-editor.org/info/rfc3701>
+
+=item
+
+L<RFC3849 "IPv6 Address Prefix Reserved for Documentation"|http://www.rfc-editor.org/info/rfc3849>
+
+=item
+
+L<RFC3927 "Dynamic Configuration of IPv4 Link-Local Addresses"|http://www.rfc-editor.org/info/rfc3927>
+
+=item
+
+L<RFC4034 "Resource Records for the DNS Security Extensions"|http://www.rfc-editor.org/info/rfc4034>
+
+=item
+
+L<RFC4035 "Protocol Modifications for the DNS Security Extensions"|http://www.rfc-editor.org/info/rfc4035>
+
+=item
+
+L<RFC4074 "Common Misbehavior Against DNS Queries for IPv6 Addresses"|http://www.rfc-editor.org/info/rfc4074>
+
+=item
+
+L<RFC4193 "Unique Local IPv6 Unicast Addresses"|http://www.rfc-editor.org/info/rfc4193>
+
+=item
+
+L<RFC4291 "IP Version 6 Addressing Architecture"|http://www.rfc-editor.org/info/rfc4291>
+
+=item
+
+L<RFC4343 "Domain Name System (DNS) Case Insensitivity Clarification"|http://www.rfc-editor.org/info/rfc4343>
+
+=item
+
+L<RFC4380 "Teredo: Tunneling IPv6 over UDP through Network Address Translations (NATs)"|http://www.rfc-editor.org/info/rfc4380>
+
+=item
+
+L<RFC4843 "An IPv6 Prefix for Overlay Routable Cryptographic Hash Identifiers (ORCHID)"|http://www.rfc-editor.org/info/rfc4843>
+
+=item
+
+L<RFC5155 "DNS Security (DNSSEC) Hashed Authenticated Denial of Existence"|http://www.rfc-editor.org/info/rfc5155>
+
+=item
+
+L<RFC5156 "Special-Use IPv6 Addresses"|http://www.rfc-editor.org/info/rfc5156>
+
+=item
+
+L<RFC5180 "IPv6 Benchmarking Methodology for Network Interconnect Devices"|http://www.rfc-editor.org/info/rfc5180>
+
+=item
+
+L<RFC5321 "Simple Mail Transfer Protocol"|http://www.rfc-editor.org/info/rfc5321>
+
+=item
+
+L<RFC5358 "Preventing Use of Recursive Nameservers in Reflector Attacks"|http://www.rfc-editor.org/info/rfc5358>
+
+=item
+
+L<RFC5737 "IPv4 Address Blocks Reserved for Documentation"|http://www.rfc-editor.org/info/rfc5737>
+
+=item
+
+L<RFC5771 "IANA Guidelines for IPv4 Multicast Address Assignments"|http://www.rfc-editor.org/info/rfc5771>
+
+=item
+
+L<RFC5892 "The Unicode Code Points and Internationalized Domain Names for Applications (IDNA)"|http://www.rfc-editor.org/info/rfc5892>
+
+=item
+
+L<RFC5936 "DNS Zone Transfer Protocol (AXFR)"|http://www.rfc-editor.org/info/rfc5936>
+
+=item
+
+L<RFC6052 "IPv6 Addressing of IPv4/IPv6 Translators"|http://www.rfc-editor.org/info/rfc6052>
+
+=item
+
+L<RFC6333 "Dual-Stack Lite Broadband Deployments Following IPv4 Exhaustion"|http://www.rfc-editor.org/info/rfc6333>
+
+=item
+
+L<RFC6598 "IANA-Reserved IPv4 Prefix for Shared Address Space"|http://www.rfc-editor.org/info/rfc6598>
+
+=item
+
+L<RFC6666 "A Discard Prefix for IPv6"|http://www.rfc-editor.org/info/rfc6666>
+
+=item
+
+L<RFC6781 "DNSSEC Operational Practices, Version 2"|http://www.rfc-editor.org/info/rfc6781>
+
+=item
+
+L<RFC6890 "Special-Purpose IP Address Registries"|http://www.rfc-editor.org/info/rfc6890>
+
+=item
+
+L<RFC6891 "Extension Mechanisms for DNS (EDNS(0))"|http://www.rfc-editor.org/info/rfc6891>
+
+=item
+
+L<RFC7050 "Discovery of the IPv6 Prefix Used for IPv6 Address Synthesis"|http://www.rfc-editor.org/info/rfc7050>
+
+=back
+
+=cut
