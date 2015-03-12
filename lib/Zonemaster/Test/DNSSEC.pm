@@ -371,8 +371,8 @@ sub policy {
         "NO_COMMON_KEYTAGS"            => "ERROR",
         "NO_DNSKEY"                    => "WARNING",
         "NO_DS"                        => "NOTICE",
-        "NO_KEYS_OR_NO_SIGS"           => "ERROR",
-        "NO_KEYS_OR_NO_SIGS_OR_NO_SOA" => "ERROR",
+        "NO_KEYS_OR_NO_SIGS"           => "DEBUG",
+        "NO_KEYS_OR_NO_SIGS_OR_NO_SOA" => "DEBUG",
         "NO_NSEC3PARAM"                => "DEBUG",
         "NSEC3_SIG_VERIFY_ERROR"       => "ERROR",
         "NSEC3_COVERS"                 => "DEBUG",
@@ -392,7 +392,7 @@ sub policy {
         "SOA_SIGNATURE_OK"             => "DEBUG",
         "SOA_SIGNED"                   => "DEBUG",
         "TOO_MANY_ITERATIONS"          => "WARNING",
-        "DELEGATION_NOT_SIGNED"        => "ERROR",
+        "DELEGATION_NOT_SIGNED"        => "NOTICE",
         "DELEGATION_SIGNED"            => "INFO",
     };
 } ## end sub policy
