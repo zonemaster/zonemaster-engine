@@ -16,6 +16,8 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster->config->no_network( 1 );
 }
 
+is( exception { Zonemaster->reset(); }, undef, 'No crash on instant reset.');
+
 isa_ok( Zonemaster->logger, 'Zonemaster::Logger' );
 isa_ok( Zonemaster->config, 'Zonemaster::Config' );
 
