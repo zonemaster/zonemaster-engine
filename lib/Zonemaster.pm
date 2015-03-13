@@ -150,7 +150,7 @@ sub start_time_now {
 sub reset {
     Zonemaster::Logger->start_time_now();
     Zonemaster::Nameserver->empty_cache();
-    $logger->clear_history();
+    $logger->clear_history() if defined $logger;
     Zonemaster::Recursor->clear_cache();
 
     return;
