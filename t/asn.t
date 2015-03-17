@@ -22,7 +22,7 @@ is $prefix2->prefix, '91.226.36.0/24', '91.226.36.46 is in 91.226.36.0/24';
 
 my @asn3 = Zonemaster::ASNLookup->get( '2001:503:ba3e::2:30' );
 is( scalar( @asn3 ), 1, 'Only one result' );
-ok @asn3[0] >= 36000, '2001:503:ba3e::2:30 is in ' . $asn3[0];
+ok $asn3[0] >= 36000, '2001:503:ba3e::2:30 is in ' . $asn3[0];
 
 my ( $asn4, $prefix4 ) = Zonemaster::ASNLookup->get_with_prefix( '192.168.0.1' );
 ok( !$asn4, 'RFC1918 address is in no AS' );
