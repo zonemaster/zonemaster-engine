@@ -25,6 +25,12 @@ around 'new' => sub {
     return $object_cache{ $obj->address->ip };
 };
 
+sub empty_cache {
+    %object_cache = ();
+
+    return;
+}
+
 no Moose;
 __PACKAGE__->meta->make_immutable( inline_constructor => 0 );
 
@@ -49,6 +55,16 @@ A L<Net::IP::XS> object holding the nameserver's address.
 =item data
 
 A reference to a hash holding the cache of sent queries. Not meant for external use.
+
+=back
+
+=head1 CLASS METHODS
+
+=over
+
+=item empty_cache()
+
+Clear the cache.
 
 =back
 
