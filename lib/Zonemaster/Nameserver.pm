@@ -455,6 +455,8 @@ sub axfr {
 sub empty_cache {
     %object_cache = ();
 
+    Zonemaster::Nameserver::Cache::empty_cache();
+
     return;
 }
 

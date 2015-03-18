@@ -9,14 +9,14 @@ BEGIN {
     use_ok( 'Zonemaster::Exception' );
 }
 
+is( exception { Zonemaster->reset(); }, undef, 'No crash on instant reset.');
+
 my $datafile = q{t/zonemaster.data};
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die q{Stored data file missing} if not -r $datafile;
     Zonemaster::Nameserver->restore( $datafile );
     Zonemaster->config->no_network( 1 );
 }
-
-is( exception { Zonemaster->reset(); }, undef, 'No crash on instant reset.');
 
 isa_ok( Zonemaster->logger, 'Zonemaster::Logger' );
 isa_ok( Zonemaster->config, 'Zonemaster::Config' );
@@ -150,5 +150,6 @@ ok( scalar( keys( %Zonemaster::Nameserver::object_cache ) ) > 0, 'There are thin
 Zonemaster->reset;
 ok( @{ Zonemaster->logger->entries } == 0,                        'There are no log entries' );
 ok( scalar( keys( %Zonemaster::Nameserver::object_cache ) ) == 0, 'The object cache is empty' );
+ok( scalar( keys( %Zonemaster::Nameserver::Cache::object_cache ) ) == 0, 'The packet cache is empty' );
 
 done_testing;
