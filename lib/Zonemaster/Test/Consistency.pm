@@ -468,7 +468,7 @@ sub consistency04 {
             next;
         }
 
-        my ( @ns ) = sort map { $_->nsdname } $p->get_records_for_name( q{NS}, $zone->name );
+        my ( @ns ) = sort map { lc($_->nsdname) } $p->get_records_for_name( q{NS}, $zone->name );
 
         if ( not scalar( @ns ) ) {
             push @results,
