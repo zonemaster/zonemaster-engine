@@ -12,6 +12,7 @@ use IO::Socket::INET6;    # Lazy-loads, so make sure it's here for the version l
 
 use Module::Find qw[useall];
 use Scalar::Util qw[blessed];
+use POSIX qw[strftime];
 
 my @all_test_modules;
 
@@ -54,6 +55,8 @@ sub run_all_for {
     my @results;
 
     Zonemaster->start_time_now();
+    push @results, info( START_TIME => { time_t => time(), string => strftime("%F %T %z", (localtime())) } );
+    push @results, info( TEST_TARGET => { zone => $zone, module => 'all' } );
     info(
         MODULE_VERSION => {
             module  => 'Zonemaster::Test::Basic',
@@ -66,7 +69,7 @@ sub run_all_for {
         return info( NO_NETWORK => {} );
     }
 
-    @results = Zonemaster::Test::Basic->all( $zone );
+    push @results, Zonemaster::Test::Basic->all( $zone );
     info( MODULE_END => { module => 'Zonemaster::Test::Basic' } );
 
     if ( Zonemaster::Test::Basic->can_continue( @results ) ) {
@@ -105,11 +108,13 @@ sub run_all_for {
 
 sub run_module {
     my ( $class, $requested, $zone ) = @_;
-
+    my @res;
     my ( $module ) = grep { lc( $requested ) eq lc( $_ ) } $class->modules;
     $module = 'Basic' if ( not $module and lc( $requested ) eq 'basic' );
 
     Zonemaster->start_time_now();
+    push @res, info( START_TIME => { time_t => time(), string => strftime("%F %T %z", (localtime())) } );
+    push @res, info( TEST_TARGET => { zone => $zone, module => $requested } );
     _log_versions();
     if ( not( Zonemaster->config->ipv4_ok or Zonemaster->config->ipv6_ok ) ) {
         return info( NO_NETWORK => {} );
@@ -119,7 +124,7 @@ sub run_module {
         Zonemaster->config->load_module_policy( $module );
         my $m = "Zonemaster::Test::$module";
         info( MODULE_VERSION => { module => $m, version => $m->version } );
-        my @res = eval { $m->all( $zone ) };
+        push @res, eval { $m->all( $zone ) };
         if ( $@ ) {
             my $err = $@;
             if ( blessed $err and $err->isa( 'Zonemaster::Exception' ) ) {
@@ -141,11 +146,13 @@ sub run_module {
 
 sub run_one {
     my ( $class, $requested, $test, @arguments ) = @_;
-
+    my @res;
     my ( $module ) = grep { lc( $requested ) eq lc( $_ ) } $class->modules;
     $module = 'Basic' if ( not $module and lc( $requested ) eq 'basic' );
 
     Zonemaster->start_time_now();
+    push @res, info( START_TIME => { time_t => time(), string => strftime("%F %T %z", (localtime())) } );
+    push @res, info( TEST_ARGS => { module => $requested, method => $test, args => join(';', map {"$_"} @arguments ) } );
     _log_versions();
     if ( not( Zonemaster->config->ipv4_ok or Zonemaster->config->ipv6_ok ) ) {
         return info( NO_NETWORK => {} );
@@ -156,7 +163,7 @@ sub run_one {
         my $m = "Zonemaster::Test::$module";
         if ( $m->metadata->{$test} ) {
             info( MODULE_CALL => { module => $module, method => $test, version => $m->version } );
-            my @res = eval { $m->$test( @arguments ) };
+            push @res, eval { $m->$test( @arguments ) };
             if ( $@ ) {
                 my $err = $@;
                 if ( blessed $err and $err->isa( 'Zonemaster::Exception' ) ) {
