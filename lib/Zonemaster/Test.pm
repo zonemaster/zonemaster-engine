@@ -115,7 +115,7 @@ sub run_module {
 
     Zonemaster->start_time_now();
     push @res, info( START_TIME => { time_t => time(), string => strftime("%F %T %z", (localtime())) } );
-    push @res, info( TEST_TARGET => { zone => $zone, module => $requested } );
+    push @res, info( TEST_TARGET => { zone => $zone->name->string, module => $requested } );
     _log_versions();
     if ( not( Zonemaster->config->ipv4_ok or Zonemaster->config->ipv6_ok ) ) {
         return info( NO_NETWORK => {} );
