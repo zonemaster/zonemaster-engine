@@ -56,7 +56,8 @@ sub run_all_for {
 
     Zonemaster->start_time_now();
     push @results, info( START_TIME => { time_t => time(), string => strftime("%F %T %z", (localtime())) } );
-    push @results, info( TEST_TARGET => { zone => $zone, module => 'all' } );
+    push @results, info( TEST_TARGET => { zone => $zone->name->string, module => 'all' } );
+
     info(
         MODULE_VERSION => {
             module  => 'Zonemaster::Test::Basic',
