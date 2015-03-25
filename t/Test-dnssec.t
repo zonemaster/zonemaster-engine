@@ -42,20 +42,20 @@ my %tag;
 
 $zone = Zonemaster->zone( 'nic.se' );
 
-@res = Zonemaster->test_method( 'DNSSEC', 'dnssec01', $zone );
+@res = grep {$_->tag ne 'START_TIME' and $_->tag ne 'TEST_ARGS' } Zonemaster->test_method( 'DNSSEC', 'dnssec01', $zone );
 foreach my $msg ( @res ) {
     is( $msg->tag, 'DS_DIGTYPE_OK', 'DS_DIGTYPE_OK' );
 }
 
 my $zone2 = Zonemaster->zone( 'seb.se' );
-is( zone_gives( 'dnssec01', $zone2, [q{NO_DS}] ), 1, 'Only one message' );
+is( zone_gives( 'dnssec01', $zone2, [q{NO_DS}] ), 3, 'Only one (useful) message' );
 
 zone_gives( 'dnssec02', $zone, [qw{DS_MATCHES_DNSKEY COMMON_KEYTAGS DS_MATCH_FOUND DS_FOUND}] );
 
-is( zone_gives( 'dnssec02', $zone2, [q{NO_DS}] ), 1, 'Only one message' );
+is( zone_gives( 'dnssec02', $zone2, [q{NO_DS}] ), 3, 'Only one (useful) message' );
 
 my $zone3 = Zonemaster->zone( 'com' );
-is( zone_gives( 'dnssec03', $zone3, [q{ITERATIONS_OK}] ), 1, 'Only one message' );
+is( zone_gives( 'dnssec03', $zone3, [q{ITERATIONS_OK}] ), 3, 'Only one (useful) message' );
 
 @res = Zonemaster->test_method( 'DNSSEC', 'dnssec04', $zone );
 %tag = map { $_->tag => 1 } @res;

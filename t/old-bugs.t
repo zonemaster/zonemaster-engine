@@ -14,10 +14,10 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
 }
 
 my @res = Zonemaster->test_method( q{basic}, q{basic01}, Zonemaster->zone( q{001.tf} ) );
-is( $res[0]->tag, q{PARENT_REPLIES}, 'Running single tests in Basic works.' );
+is( $res[2]->tag, q{PARENT_REPLIES}, 'Running single tests in Basic works.' );
 
 @res = Zonemaster->test_method( 'Syntax', 'syntax03', 'XN--MGBERP4A5D4AR' );
-is( $res[0]->tag, q{NO_DOUBLE_DASH}, 'No complaint for XN--MGBERP4A5D4AR' );
+is( $res[2]->tag, q{NO_DOUBLE_DASH}, 'No complaint for XN--MGBERP4A5D4AR' );
 
 my $zft_zone = Zonemaster->zone( 'zft.rd.nic.fr' );
 is( scalar( @{ $zft_zone->ns } ), 2, 'Two nameservers for zft.rd.nic.fr.' );
@@ -25,10 +25,7 @@ is( scalar( @{ $zft_zone->ns } ), 2, 'Two nameservers for zft.rd.nic.fr.' );
 my $root = Zonemaster->zone( '.' );
 my @msg = Zonemaster->test_method( 'Delegation', 'delegation03', $root );
 
-LDNS: {
-    local $TODO = 'Waiting for new version of ldns';
-    ok( any { $_->tag eq 'REFERRAL_SIZE_OK' } @msg );
-}
+ok( any { $_->tag eq 'REFERRAL_SIZE_OK' } @msg );
 ok( none { $_->tag eq 'MODULE_ERROR' } @msg );
 
 my $azn = Zonemaster->zone( 'asnlookup.zonemaster.net' );
