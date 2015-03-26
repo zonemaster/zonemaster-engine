@@ -313,8 +313,10 @@ Internal method. Takes a packet and a recursion state and returns a list of ns o
 
 =item get_addresses_for($name[, $state])
 
-Takes a name and returns a (possibly empty) list of IP addresses for that name. When used internally by the recursor it's passed a recursion state
-as its second argument.
+Takes a name and returns a (possibly empty) list of IP addresses for
+that name (in the form of L<Net::IP::XS> objects). When used
+internally by the recursor it's passed a recursion state as its second
+argument.
 
 =item clear_cache()
 

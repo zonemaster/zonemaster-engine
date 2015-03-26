@@ -58,6 +58,9 @@ Zonemaster::TestMethods - Methods common to Test Specification used in test modu
 
 =head1 METHODS
 
+For details on what these methods implement, see the test
+specification documents.
+
 =over
 
 =item method1($zone)

@@ -116,7 +116,8 @@ Zonemaster::Util - utility functions for other Zonemaster modules
 
 =item info($tag, $href)
 
-Creates and returns a L<Zonemaster::Logger::Entry> object. The object is also added to the global logger object's list of entries.
+Creates and returns a L<Zonemaster::Logger::Entry> object. The object
+is also added to the global logger object's list of entries.
 
 =item ns($name, $address)
 
@@ -126,14 +127,19 @@ Creates and returns a nameserver object with the given name and address.
 
 Returns a reference to the global policy hash.
 
-=item name($string)
+=item name($string_name_or_zone)
 
-Creates and returns a L<Zonemaster::DNSName> object for the given string.
+Creates and returns a L<Zonemaster::DNSName> object for the given argument.
 
 =item pod_extract_for($testname)
 
-Will attempt to extract the POD documentation for the test methods in the test module for which the name is given. If it can, it returns a reference to a hash where the keys are the test method names and the values the documentation strings.
+Will attempt to extract the POD documentation for the test methods in
+the test module for which the name is given. If it can, it returns a
+reference to a hash where the keys are the test method names and the
+values the documentation strings.
 
-This method blindly assumes that the structure of the POD is exactly like that in the Example and Basic test modules. If it's not, the results are undefined.
+This method blindly assumes that the structure of the POD is exactly
+like that in the Example and Basic test modules. If it's not, the
+results are undefined.
 
 =back

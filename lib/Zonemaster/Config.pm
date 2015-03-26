@@ -315,8 +315,7 @@ Returns a reference to the list of ASN lookup domains.
 
 =item get()
 
-Returns a reference to a hash with configuration values. As of this writing, this is simply seeded from static values hardcoded into the module.
-This is intended to change.
+Returns a reference to a hash with configuration values.
 
 =item policy()
 
@@ -331,7 +330,7 @@ when the same keys exist in both places.
 If the given name does not lead directly to a readable file, each of the usual
 directories will be checked if the name is there. If the plain name isn't, the
 suffix C<.json> will be appended and another try will be done. For example, a
-file F<$HOME/.zonemaster/Example.json> will be loaded by calling this method
+file F<$HOME/.zonemaster/Example.json> may be loaded by calling this method
 with the string C<"Example">.
 
 =item load_config_file($filename)

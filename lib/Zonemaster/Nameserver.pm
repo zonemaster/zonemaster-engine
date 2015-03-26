@@ -474,6 +474,19 @@ Zonemaster::Nameserver - object representing a DNS nameserver
     my $ns = Zonemaster::Nameserver->new({ name => 'ns.nic.se', address => '212.247.7.228' });
     my $p = $ns->query('www.iis.se', 'AAAA');
 
+=head1 DESCRIPTION
+
+This is a very central object in the L<Zonemaster> framework. All DNS
+communications with the outside world pass through here, so we can do
+things like synthezising and recording traffic. All the objects are
+also unique per name/IP pair, and creating a new one with an already
+existing pair will return the existing object instead of creating a
+new one. Queries and their responses are cached by IP address, so that
+a specific query will only be sent once to each address (even if there
+are multiple objects for that address with different names).
+
+Class methods on this class allows saving and loading cache contents.
+
 =head1 ATTRIBUTES
 
 =over
@@ -488,7 +501,7 @@ A L<Net::IP::XS> object holding the nameserver's address.
 
 =item dns
 
-The L<Net::LDNS::Resolver> object used to actually send and recieve DNS queries.
+The L<Net::LDNS> object used to actually send and recieve DNS queries.
 
 =item cache
 
@@ -500,7 +513,30 @@ A reference to a list with elapsed time values for the queries made through this
 
 =back
 
-=head1 METHODS
+=head1 CLASS METHODS
+
+=over
+
+=item save($filename)
+
+Save the entire object cache to the given filename, using the
+byte-order-independent Storable format.
+
+=item restore($filename)
+
+Replace the entire object cache with the contents of the named file.
+
+=item all_known_nameservers()
+
+Class method that returns a list of all nameserver objects in the global cache.
+
+=item empty_cache()
+
+Remove all cached nameserver objects and queries.
+
+=back
+
+=head1 INSTANCE METHODS
 
 =over
 
@@ -562,14 +598,6 @@ Returns a string representation of the object. Normally this is just the name an
 
 Used for overloading comparison operators.
 
-=item save($filename)
-
-Save the entire object cache to the given filename, using the byte-order-independent Storable format.
-
-=item restore($filename)
-
-Replace the entire object cache with the contents of the named file.
-
 =item sum_time()
 
 Returns the total time spent sending queries and waiting for responses.
@@ -594,10 +622,6 @@ Returns the median query time.
 
 Returns the standard deviation for the whole set of query times.
 
-=item all_known_nameservers()
-
-Class method that returns a list of all nameserver objects in the global cache.
-
 =item add_fake_delegation($domain,$data)
 
 Adds fake delegation information to this specific nameserver object. Takes the
@@ -618,10 +642,6 @@ function will be called once for each received RR, with that RR as its only
 argument. To continue getting more RRs, the callback must return a true value.
 If it returns a true value, the AXFR will be aborted. See L<Net::LDNS::axfr>
 for more details.
-
-=item empty_cache()
-
-Remove all entries from the object cache.
 
 =back
 
