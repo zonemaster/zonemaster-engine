@@ -69,8 +69,8 @@ Zonemaster::ASNLookup - do lookups of ASNs for IP addresses
 
 =head1 SYNOPSIS
 
-   my ($asn, $prefix) = Zonemaster::ASNLookup->get( '8.8.4.4' );
-   my $other_asn = Zonemaster::ASNLookup->get( '192.168.0.1' );
+   my ($asnref, $prefix) = Zonemaster::ASNLookup->get_with_prefix( '8.8.4.4' );
+   my $asnref = Zonemaster::ASNLookup->get( '192.168.0.1' );
 
 =head1 FUNCTION
 

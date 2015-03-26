@@ -126,13 +126,17 @@ Zonemaster::Logger::Entry - module for single log entries
 
 There should never be a need to create a log entry object in isolation. They should always be associated with and created via a logger object.
 
-=head1 CLASS METHOD
+=head1 CLASS METHODS
 
 =over
 
 =item levels
 
 Returns a hash where the keys are log levels as strings and the corresponding values their numeric value.
+
+=item start_time_now()
+
+Set the logger's start time to the current time.
 
 =back
 
@@ -176,16 +180,6 @@ Simple method to generate a string representation of the log entry. Overloaded t
 =item numeric_level
 
 Returns the log level of the entry in numeric form.
-
-=back
-
-=head1 CLASS METHOD
-
-=over
-
-=item start_time_now()
-
-Set the logger's start time to the current time.
 
 =back
 

@@ -112,7 +112,7 @@ Zonemaster::Translator - translation support for Zonemaster
 
 =head1 SYNOPSIS
 
-    my $trans = Zonemaster::Translator->new({ lang => 'tech' });
+    my $trans = Zonemaster::Translator->new({ locale => 'sv_SE.UTF-8' });
     say $trans->to_string($entry);
 
 =head1 ATTRIBUTES
@@ -121,7 +121,10 @@ Zonemaster::Translator - translation support for Zonemaster
 
 =item locale
 
-The locale that should be used to find translation data.
+The locale that should be used to find translation data. If not
+explicitly provided, defaults to (in order) the contents of the
+environment variable LANG, LC_ALL, LC_MESSAGES or, if none of them are
+set, to C<en_US.UTF-8>.
 
 =item data
 

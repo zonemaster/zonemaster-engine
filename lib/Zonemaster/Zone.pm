@@ -261,6 +261,16 @@ Zonemaster::Zone - Object representing a DNS zone
     my $zone = Zonemaster::Zone->new({ name => 'nic.se' });
     my $packet = $zone->parent->query_one($zone->name, 'NS');
 
+
+=head1 DESCRIPTION
+
+Objects of this class represent zones in DNS. As far as possible, test
+implementations should access information about zones via these
+objects. Doing so will provide lazy-loading of the information,
+well-defined methods in which the information is fetched, logging and
+the ability to do things like testing zones that have not yet been
+delegated.
+
 =head1 ATTRIBUTES
 
 =over
@@ -271,20 +281,26 @@ A L<Zonemaster::DNSName> object representing the name of the zone.
 
 =item parent
 
-A L<Zonemaster::Zone> object for this domain's parent domain.
+A L<Zonemaster::Zone> object for this domain's parent domain. As a
+special case, the root zone is considered to be its own parent (so
+look for that if you recurse up the tree).
 
 =item ns_names
 
-A reference to an array of L<Zonemaster::DNSName> objects, holding the names of
-the nameservers for the domain, as returned by the first responding nameserver
-in the glue list.
+A reference to an array of L<Zonemaster::DNSName> objects, holding the
+names of the nameservers for the domain, as returned by the first
+responding nameserver in the glue list.
 
 =item ns
 
-A reference to an array of L<Zonemaster::Nameserver> objects for the domain,
-built by taking the list returned from L<ns_names()> and looking up addresses
-for the names. One element will be added to this list for each unique name/IP
-pair. Names for which no addresses could be found will not be in this list.
+A reference to an array of L<Zonemaster::Nameserver> objects for the
+domain, built by taking the list returned from L<ns_names()> and
+looking up addresses for the names. One element will be added to this
+list for each unique name/IP pair. Names for which no addresses could
+be found will not be in this list. The list is lazy-loading, so take
+care to only look at as many entries as you really need. There are
+zones with more than 20 nameserver, and looking up the addresses of
+them all can take som considerable time.
 
 =item glue_names
 
@@ -294,10 +310,12 @@ parent zone.
 
 =item glue
 
-A reference to an array of L<Zonemaster::Nameserver> objects for the domain,
-built by taking the list returned from L<glue_names()> and looking up addresses
-for the names. One element will be added to this list for each unique name/IP
-pair. Names for which no addresses could be found will not be in this list.
+A reference to an array of L<Zonemaster::Nameserver> objects for the
+domain, built by taking the list returned from L<glue_names()> and
+looking up addresses for the names. One element will be added to this
+list for each unique name/IP pair. Names for which no addresses could
+be found will not be in this list. The list is lazy-loading, so take
+care to only look at as many entries as you really need.
 
 =item glue_addresses
 
@@ -309,7 +327,7 @@ parent domain.
 
 =head1 METHODS
 
-=over 
+=over
 
 =item query_one($name[, $type[, $flags]])
 

@@ -203,27 +203,71 @@ Zonemaster::Test - module to find, load and execute all test modules
 =head1 SYNOPSIS
 
     my @results = Zonemaster::Test->run_all_for($zone);
+    my @results = Zonemaster::Test->run_module('DNSSEC', $zone);
 
-=head1 METHODS
+
+=head1 TEST MODULES
+
+Test modules are defined as modules with names starting with
+"Zonemaster::Test::". They are expected to provide at least four
+class methods, and optionally a fifth one.
+
+=over
+
+=item all($zone)
+
+C<all> will be given a zone object as its only argument, and is
+epected to return a list of L<Zonemaster::Logger::Entry> objects. This
+is the entry point used by the C<run_all_for> and C<run_module>
+methods.
+
+=item version()
+
+This must return the version of the test module.
+
+=item metadata()
+
+This must return a reference to a hash where the keys are the names of
+callable methods implementing tests, and the values are references to
+arrays with the tags of the messages the test methods can generate.
+
+=item translation()
+
+This must return a reference to a hash where the keys are all the
+message tags the test module can produce, and the corresponing keys
+are the english translations of those messages. The translation
+strings will be used as keys to look up translations into other
+languages, so think twice before editing them.
+
+=item policy()
+
+Optionally, a test module can implement this method, which if
+implemented should return a reference to a hash where the keys are all
+the message tags the module can produce and the correspondning values
+are their recommended default log levels.
+
+=back
+
+=head1 CLASS METHODS
 
 =over
 
 =item modules()
 
-Returns a list with the names of all available test modules except L<Zonemaster::Test::Basic> (since that one is a bit special).
+Returns a list with the names of all available test modules except
+L<Zonemaster::Test::Basic> (since that one is a bit special).
 
 =item run_all_for($zone)
 
-Runs all (default) tests in all test modules found, and returns a list of the log entry objects they returned.
+Runs all (default) tests in all test modules found, and returns a list
+of the log entry objects they returned.
 
-The order in which the test modules found will be executed is not defined, except that L<Zonemaster::Test::Basic> is always executed first. If the
-Basic tests fail to indicate a very basic level of function (it must have a parent domain, and it must have at least one nameserver) for the zone,
-no further tests will be executed.
-
-Test modules are defined as modules with names starting with "Zonemaster::Test::". They are expected to provide at least to class methods, C<all> and
-C<version>. C<all> will be given a zone object as its only argument, and is epected to return a list of L<Zonemaster::Logger::Entry> objects.
-C<version> is called without arguments, and is expected to return a single value indicating the version of the test module. A log entry with this
-version will be included in the global log entry list, but not in the list returned from C<run_all_for>.
+The order in which the test modules found will be executed is not
+defined, except that L<Zonemaster::Test::Basic> is always executed
+first. If the Basic tests fail to indicate a very basic level of
+function (it must have a parent domain, and it must have at least one
+functional nameserver) for the zone, no further tests will be
+executed.
 
 =item run_module($module, $zone)
 
@@ -231,9 +275,13 @@ Runs all default tests in the named module for the given zone.
 
 =item run_one($module, $method, @arguments)
 
-Run one particular test method in one particular module. The requested module must be in the list of active loaded modules (that is, not the Basic
-module and not a module disabled by the current policy), and the method must be listed in the metadata the module exports. If those requirements
-are fulfilled, the method will be called with the provided arguments.
+Run one particular test method in one particular module. The requested
+module must be in the list of active loaded modules (that is, not a
+module disabled by the current policy), and the method must be listed
+in the metadata the module exports. If those requirements are
+fulfilled, the method will be called with the provided arguments. No
+attempt is made to check that the provided arguments make sense for
+the particular method called. That is left entirely to the user.
 
 =back
 
