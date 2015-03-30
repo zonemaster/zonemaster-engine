@@ -118,6 +118,10 @@ isa_ok( $dsrr, 'Net::LDNS::RR::DS' );
 is( $dsrr->keytag,    16696,      'Expected keytag' );
 is( $dsrr->hexdigest, 'deadbeef', 'Expected digest data' );
 
+Zonemaster->config->resolver_source('127.0.0.1');
+my $ns_test = new_ok( 'Zonemaster::Nameserver' => [ { name => 'ns.nic.se', address => '212.247.7.228' } ] );
+is($ns_test->dns->source, '127.0.0.1', 'Source address set.');
+
 Zonemaster->config->no_network( 0 );
 my $fail_ns = Zonemaster::Nameserver->new( { name => 'fail', address => '127.0.0.17' } );
 my $fail_p = $fail_ns->_query( 'example.org', 'A', {} );

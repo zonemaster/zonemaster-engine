@@ -74,6 +74,10 @@ sub _build_dns {
         $res->$flag( $defaults{$flag} );
     }
 
+    if ( Zonemaster->config->resolver_source ) {
+        $res->source(Zonemaster->config->resolver_source);
+    }
+
     return $res;
 }
 
