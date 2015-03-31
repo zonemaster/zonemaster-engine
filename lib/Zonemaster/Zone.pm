@@ -72,7 +72,7 @@ sub _build_ns_names {
     my $i = 0;
     while ( my $s = $self->glue->[$i] ) {
         $p = $s->query( $self->name, 'NS' );
-        last if defined( $p );
+        last if ( defined( $p ) and ( $p->type eq 'answer' ) and ( $p->rcode eq 'NOERROR' ) );
         $i += 1;
     }
     return [] if not defined $p;
