@@ -32,4 +32,8 @@ ok($conf->should_run(basic02), 'basic02 should run');
 ok(defined($conf->testcases->{placeholder}), 'Data for placeholder in place');
 ok(!$conf->should_run('placeholder'), 'placeholder should not run');
 
+ok(!defined(Zonemaster->config->resolver_source), 'No source set.');
+Zonemaster->config->resolver_source('192.0.2.2');
+is(Zonemaster->config->resolver_source, '192.0.2.2', 'Source correctly set.');
+
 done_testing;
