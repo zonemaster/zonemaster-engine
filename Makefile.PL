@@ -9,7 +9,7 @@ bugtracker 'https://github.com/dotse/zonemaster-engine/issues';
 
 all_from 'lib/Zonemaster.pm';
 
-requires 'Net::LDNS'             => 0.71;
+requires 'Net::LDNS'             => 0.75;
 requires 'IO::Socket::INET6'     => 2.69;
 requires 'Moose'                 => 2.0401;
 requires 'Module::Find'          => 0.10;

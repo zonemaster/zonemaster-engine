@@ -34,6 +34,8 @@ has 'dns'   => ( is => 'ro', isa => 'Net::LDNS',                     lazy_build 
 has 'cache' => ( is => 'ro', isa => 'Zonemaster::Nameserver::Cache', lazy_build => 1 );
 has 'times' => ( is => 'ro', isa => 'ArrayRef',                      default    => sub { [] } );
 
+has 'source_address' => ( is => 'ro', isa => 'Maybe[Str]', lazy => 1, default => sub {return Zonemaster->config->resolver_source} );
+
 has 'fake_delegations' => ( is => 'ro', isa => 'HashRef', default => sub { {} } );
 has 'fake_ds'          => ( is => 'ro', isa => 'HashRef', default => sub { {} } );
 
@@ -72,6 +74,10 @@ sub _build_dns {
     my %defaults = %{ Zonemaster->config->resolver_defaults };
     foreach my $flag ( keys %defaults ) {
         $res->$flag( $defaults{$flag} );
+    }
+
+    if ( $self->source_address ) {
+        $res->source($self->source_address);
     }
 
     return $res;

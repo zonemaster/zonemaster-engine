@@ -195,6 +195,16 @@ sub resolver_defaults {
     return $class->get->{resolver}{defaults};
 }
 
+sub resolver_source {
+    my ($class, $sourceaddr) = @_;
+
+    if (defined($sourceaddr)) {
+        $class->get->{resolver}{source} = $sourceaddr;
+    }
+
+    return $class->get->{resolver}{source};
+}
+
 sub logfilter {
     my ( $class ) = @_;
 
@@ -298,6 +308,12 @@ Returns the value of the C<ipv6> flag. If given a defined value, sets the value 
 =item resolver_defaults()
 
 Returns a reference to the resolver_defaults hash.
+
+=item resolver_source([$addr])
+
+Returns the source address all resolver objects should use when sending
+queries, if one is set. If given an argument, sets the source address to the
+argument.
 
 =item logfilter()
 
