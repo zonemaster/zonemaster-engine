@@ -27,7 +27,7 @@ ok( $res{NAMESERVERS_IPV6_WITH_UNIQ_AS}, q{Nameservers IPv6 with Uniq AS} );
 ok( $res{NAMESERVERS_WITH_UNIQ_AS},      q{Nameservers with Uniq AS} );
 ok( !$res{NAMESERVERS_WITH_MULTIPLE_AS}, q{Nameservers with Uniq AS (double check)} );
 
-%res = map { $_->tag => 1 } Zonemaster->test_module( q{connectivity}, q{manley.se} );
+%res = map { $_->tag => 1 } Zonemaster->test_module( q{connectivity}, q{iphones.se} );
 ok( $res{NAMESERVER_NO_UDP_53}, q{Nameserver UDP port 53 unreachabale} );
 ok( $res{NAMESERVER_NO_TCP_53}, q{Nameserver TCP port 53 unreachabale} );
 

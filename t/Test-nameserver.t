@@ -69,13 +69,13 @@ zone_gives( 'nameserver06', $zone, [q{CAN_NOT_BE_RESOLVED}] );
 $zone = Zonemaster->zone( 'nameserver06-no-resolution.zut-root.rd.nic.fr' );
 zone_gives( 'nameserver06', $zone, [q{NO_RESOLUTION}] );
 
-$zone = Zonemaster->zone( 'scanjack.se' );
+$zone = Zonemaster->zone( 'pricelessstockolm.se' );
 zone_gives( 'nameserver02', $zone, ['EDNS0_BAD_QUERY'] );
 
 $zone = Zonemaster->zone( 'dyad.se' );
 zone_gives( 'nameserver02', $zone, ['EDNS0_SUPPORT'] );
 
-$zone = Zonemaster->zone( 'traxia.se' );
+$zone = Zonemaster->zone( 'uddevallafiber.se' );
 zone_gives( 'nameserver05', $zone, ['QUERY_DROPPED'] );
 
 $zone = Zonemaster->zone( 'escargot.se' );

@@ -18,11 +18,7 @@ ok( $res{ENOUGH_NS},       q{ENOUGH_NS} );
 ok( $res{ENOUGH_NS_GLUE},  q{ENOUGH_NS_GLUE} );
 ok( $res{ENOUGH_NS_TOTAL}, q{ENOUGH_NS_TOTAL} );
 ok( $res{NAMES_MATCH},     q{NAMES_MATCH} );
-
-LDNS: {
-    local $TODO = 'Waiting for next release of the ldns C library.';
-    ok( $res{REFERRAL_SIZE_OK}, q{REFERRAL_SIZE_OK} );
-}
+ok( $res{REFERRAL_SIZE_OK}, q{REFERRAL_SIZE_OK} );
 
 %res = map { $_->tag => 1 } Zonemaster->test_module( q{delegation}, q{crystone.se} );
 ok( $res{SAME_IP_ADDRESS},      q{SAME_IP_ADDRESS} );
@@ -39,7 +35,7 @@ ok( $res{NOT_ENOUGH_NS_TOTAL}, q{NOT_ENOUGH_NS_TOTAL} );
 ok( $res{NOT_ENOUGH_NS},       q{NOT_ENOUGH_NS} );
 ok( $res{NOT_ENOUGH_NS_GLUE},  q{NOT_ENOUGH_NS_GLUE} );
 
-%res = map { $_->tag => 1 } Zonemaster->test_module( q{delegation}, q{flen.se} );
+%res = map { $_->tag => 1 } Zonemaster->test_module( q{delegation}, q{woli.se} );
 ok( $res{SOA_NOT_EXISTS}, q{SOA_NOT_EXISTS} );
 
 %res = map { $_->tag => 1 } Zonemaster->test_module( q{delegation}, q{elsine.se} );
