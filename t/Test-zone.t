@@ -40,9 +40,9 @@ $zone = Zonemaster->zone( q{zone05.zut-root.rd.nic.fr} );
 %res = map { $_->tag => 1 } Zonemaster->test_method( q{Zone}, q{zone09}, $zone );
 ok( $res{NO_MX_RECORD}, q{No MX records} );
 
-#$zone = Zonemaster->zone( q{zone06.zut-root.rd.nic.fr} );
-#%res = map { $_->tag => 1 } Zonemaster->test_method( q{Zone}, q{zone08}, $zone );
-#ok( $res{MX_RECORD_IS_CNAME}, q{MX record is CNAME} );
+$zone = Zonemaster->zone( q{see2meet.se} );
+%res = map { $_->tag => 1 } Zonemaster->test_method( q{Zone}, q{zone08}, $zone );
+ok( $res{MX_RECORD_IS_CNAME}, q{MX record is CNAME} );
 
 %res = map { $_->tag => 1 } Zonemaster->test_module( q{Zone}, q{zone02.zut-root.rd.nic.fr} );
 ok( $res{MNAME_NOT_AUTHORITATIVE},    q{SOA 'mname' nameserver is not authoritative for zone} );
@@ -62,12 +62,11 @@ ok( $res{MNAME_IS_AUTHORITATIVE},               q{SOA 'mname' nameserver is auth
 %res = map { $_->tag => 1 } Zonemaster->test_module( q{Zone}, q{zone04.zut-root.rd.nic.fr} );
 ok( $res{MNAME_HAS_NO_ADDRESS}, q{No IP address found for SOA 'mname' nameserver} );
 
-# FIXME: Need to find domain with this problem
-# $zone = Zonemaster->zone( 'flen.se' );
+# $zone = Zonemaster->zone( 'alcatel.se' );
 # %res = map { $_->tag => 1 } Zonemaster->test_method( q{Zone}, q{zone07}, $zone );
 # ok( $res{NO_RESPONSE_SOA_QUERY}, q{No response from nameserver(s) on SOA queries} );
 
-# FIXME: Need to find domain with this problem
+# $zone = Zonemaster->zone( 'stromstadsoptiska.se' );
 # %res = map { $_->tag => 1 } Zonemaster->test_method( q{Zone}, q{zone08}, $zone );
 # ok( $res{NO_RESPONSE_MX_QUERY}, q{No response from nameserver(s) on MX queries} );
 
