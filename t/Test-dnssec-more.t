@@ -67,6 +67,16 @@ $zone = Zonemaster->zone( 'daemonic.se' );
 zone_gives( 'dnssec11', $zone, ['DELEGATION_SIGNED']);
 zone_gives_not( 'dnssec11', $zone, ['DELEGATION_NOT_SIGNED']);
 
+# dnssec10
+$zone = Zonemaster->zone( 'wwwyahoo.se' );
+zone_gives( 'dnssec10', $zone, ['INVALID_NAME_RCODE']);
+
+$zone = Zonemaster->zone( 'denki.se' );
+zone_gives( 'dnssec10', $zone, ['NSEC3_COVERS_NOT']);
+
+$zone = Zonemaster->zone( 'retailacademicsconsulting.se' );
+zone_gives( 'dnssec10', $zone, ['NSEC3_SIG_VERIFY_ERROR']);
+
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Nameserver->save( $datafile );
 }
