@@ -109,6 +109,10 @@ msgstr "No parent domain could be found for the tested domain."
 msgid  "No response from nameserver for zone {parent} when trying to fetch glue."
 msgstr "No response from nameserver for zone {parent} when trying to fetch glue."
 
+#: BASIC:NOT_A_DOMAIN
+msgid  "{name} is not a domain."
+msgstr "{name} is not a domain."
+
 #: BASIC:NS_FAILED
 msgid  "Nameserver {source} did not return NS records. RCODE was {rcode}."
 msgstr "Nameserver {source} did not return NS records. RCODE was {rcode}."

@@ -45,6 +45,10 @@ msgstr "Namnservrarna för {parent} gav inga NS-poster för den testade zonen. D
 msgid  "No response from nameserver for zone {parent} when trying to fetch glue."
 msgstr "Namnservern för zonen {parent} gav inget svar vid försök att hämta glue."
 
+#: BASIC:NOT_A_DOMAIN
+msgid  "{name} is not a domain."
+msgstr "{name} är inte en domän."
+
 #: BASIC:NS_FAILED
 msgid  "Nameserver {source} did not return NS records. RCODE was {rcode}."
 msgstr "Namnservern {source} svarade inte med några NS-poster. RCODE var {rcode}."
