@@ -84,10 +84,11 @@ zone_gives( 'nameserver05', $zone, ['ANSWER_BAD_RCODE'] );
 $zone = Zonemaster->zone( 'nameserver06-can-be-resolved.zut-root.rd.nic.fr' );
 zone_gives( 'nameserver06', $zone, [q{CAN_BE_RESOLVED}] );
 
+$zone = Zonemaster->zone( 'perennaguiden.se' );
+zone_gives( 'nameserver02', $zone, ['EDNS0_BAD_ANSWER']);
+
 TODO: {
     local $TODO = "Need to find/create zones with that error";
-
-    # zone_gives( 'nameserver02', $zone, ['EDNS0_BAD_ANSWER']);
 
     # nameserver03 does not work with saved data ???
     #    $zone = Zonemaster->zone( 'nameserver03-axfr-available.zut-root.rd.nic.fr' );
