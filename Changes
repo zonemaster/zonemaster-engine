@@ -1,10 +1,28 @@
 Revision history for Perl module Zonemaster.
 
+v1.0.3 2015-04-07
+ - Add message stating clearly that a name is not a domain.
+ - Check more thoroughly that answers are answers when building zone NS
+   list.
+ - Source address settable by nameserver object with a global default.
+ - Documentation updates.
+ - Log information on how and when a test was started.
+ - Fix capitalization bug in consistency04.
+ - Cache was not properly cleared.
+ - Fix for crash bug.
+ - Updated DNSSEC policy
+ - Refer to overview page from Zonemaster page.
+ - Fix missed corner case in parent-finding algorithm.
+ - CNAME handling accidentally left outside check for packet existence.
+ - Clearer message when failling signature checks because GOST support is
+   not present.
+
 v1.0.2 2015-02-24
  - Run most DNSSEC tests even when there is no DS.
  - Raise Net::LDNS requirement to v0.71. Closes #17. Closes #18.
  - Document policy data.
- - Make it so the policy can decide which test cases should be run by default.
+ - Make it so the policy can decide which test cases should be run by
+   default.
  - Make sure dnssec11 emits one and only one message.
  - [BugFix] Classless in-addr.arpa #14
 
