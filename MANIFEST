@@ -26,6 +26,7 @@ lib/Zonemaster/Logger/Entry.pm
 lib/Zonemaster/Nameserver.pm
 lib/Zonemaster/Nameserver/Cache.pm
 lib/Zonemaster/NSArray.pm
+lib/Zonemaster/Overview.pod
 lib/Zonemaster/Packet.pm
 lib/Zonemaster/Recursor.pm
 lib/Zonemaster/Test.pm
