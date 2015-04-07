@@ -96,6 +96,7 @@ sub metadata {
               NO_DOMAIN
               PARENT_REPLIES
               NO_PARENT_RESPONSE
+              NOT_A_DOMAIN
               )
         ],
         basic02 => [
@@ -147,6 +148,7 @@ sub translation {
         'IPV4_ENABLED'                      => 'IPv4 is enabled, can send "{type}" query to {ns}.',
         'IPV6_DISABLED'                     => 'IPv6 is disabled, not sending "{type}" query to {ns}.',
         'IPV6_ENABLED'                      => 'IPv6 is enabled, can send "{type}" query to {ns}.',
+        'NOT_A_DOMAIN'                      => '{name} is not a domain.',
     };
 } ## end sub translation
 
@@ -257,6 +259,9 @@ sub basic01 {
                     rcode  => $p->rcode,
                 }
               );
+              if ($p->aa and (grep {$_->type eq 'SOA'} $p->authority)) {
+                  push @results, info( NOT_A_DOMAIN => { name => $zone->name->string } );
+              }
         }
     } ## end else [ if ( $p->rcode eq q{NXDOMAIN})]
 
