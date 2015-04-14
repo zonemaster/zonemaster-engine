@@ -24,7 +24,7 @@
       "NO_DOMAIN" : "CRITICAL",
       "NO_GLUE" : "CRITICAL",
       "NO_GLUE_PREVENTS_NAMESERVER_TESTS" : "INFO",
-      "NOT_A_DOMAIN" : "CRITICAL",
+      "NOT_A_ZONE" : "CRITICAL",
       "NS_FAILED" : "ERROR",
       "NS_NO_RESPONSE" : "NOTICE",
       "NO_PARENT_RESPONSE" : "ERROR",
