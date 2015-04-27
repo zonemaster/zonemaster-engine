@@ -4,293 +4,293 @@
 
 * AS number
 
-An Autonomous Space number for an IP address.
+    An Autonomous Space number for an IP address.
 
 * Address record type (A or AAAA)
 
-Used to tell the difference between IPv4 and IPv6.
+    Used to tell the difference between IPv4 and IPv6.
 
 * Count of different SOA RNAMEs.
 
-Total number of different SOA RNAME fields seen.
+    Total number of different SOA RNAME fields seen.
 
 * Count of different SOA serial numbers
 
-Total number of different SOA serial numbers seen.
+    Total number of different SOA serial numbers seen.
 
 * Count of different sets of NS name/IP seen.
 
-Total number of different sets of nameserver information seen.
+    Total number of different sets of nameserver information seen.
 
 * Count of different time parameter sets seen
 
-Total number of different sets of SOA time parameters seen.
+    Total number of different sets of SOA time parameters seen.
 
 * Count of domain names
 
-A count of domain names.
+    A count of domain names.
 
 * Count of nameservers
 
-A count of nameservers.
+    A count of nameservers.
 
 * DNS packet size
 
-The size in octets of a DNS packets.
+    The size in octets of a DNS packets.
 
 * DNSKEY algorithm name
 
-The name of a DNSKEY algorithm.
+    The name of a DNSKEY algorithm.
 
 * DNSKEY algorithm number
 
-The numeric value for a DNSKEY algorithm.
+    The numeric value for a DNSKEY algorithm.
 
 * DNSKEY key length
 
-The key length for a DNSKEY. The interpretation of this value various
-quite a bit with the algorithm. Be careful when using it for
-algorithms that aren't RSA-based.
+    The key length for a DNSKEY. The interpretation of this value various
+    quite a bit with the algorithm. Be careful when using it for
+    algorithms that aren't RSA-based.
 
 * DNSSEC delegation verification failure reason
 
-A somewhat human-readable reason why the delegation step between the
-tested zone and its parent is not secure.
+    A somewhat human-readable reason why the delegation step between the
+    tested zone and its parent is not secure.
 
 * DS digest type
 
-The digest type used in a DS record.
+    The digest type used in a DS record.
 
 * DS/DNSKEY/RRSIG keytag
 
-A keytag for a DS, DNSKEY or RRSIG record.
+    A keytag for a DS, DNSKEY or RRSIG record.
 
 * Domain name
 
-A domain name.
+    A domain name.
 
 * Domain name label
 
-A single label from a domain name.
+    A single label from a domain name.
 
 * Domain name label length
 
-The length of a domain name label.
+    The length of a domain name label.
 
 * Duration in seconds
 
-An integer number of seconds.
+    An integer number of seconds.
 
 * FQDN
 
-A fully qualified domain name (with terminating dot).
+    A fully qualified domain name (with terminating dot).
 
 * FQDN length
 
-The length of an FQDN.
+    The length of an FQDN.
 
 * IP address
 
-An IPv4 or IPv6 address.
+    An IPv4 or IPv6 address.
 
 * IP address or nothing
 
-An IPv4 or IPv6 address, or no value.
+    An IPv4 or IPv6 address, or no value.
 
 * IP range
 
-An IP range.
+    An IP range.
 
 * IP reserved range description
 
-A brief description what an IP range is reserved for.
+    A brief description what an IP range is reserved for.
 
 * Largest SOA serial number seen
 
-The numerically largest SOA serial value seen.
+    The numerically largest SOA serial value seen.
 
 * List of AS numbers
 
-A list of Autonomous Space numbers.
+    A list of Autonomous Space numbers.
 
 * List of DNSKEY keytags
 
-A list of keytags from DNSKEY records.
+    A list of keytags from DNSKEY records.
 
 * List of DS keytags
 
-A list of keytags from DS records.
+    A list of keytags from DS records.
 
 * List of DS/DNSKEY/RRSIG keytags
 
-A list of keytags from DS, DNSKEY or RRSIG records.
+    A list of keytags from DS, DNSKEY or RRSIG records.
 
 * List of IP addresses
 
-A list of IP addresses.
+    A list of IP addresses.
 
 * List of MX domain names
 
-A list of domain names from MX records.
+    A list of domain names from MX records.
 
 * List of RR types
 
-A list of RR types, typically from an NSEC or NSEC3 record.
+    A list of RR types, typically from an NSEC or NSEC3 record.
 
 * List of SOA RNAMEs
 
-A list of RNAME values from SOA records.
+    A list of RNAME values from SOA records.
 
 * List of SOA serial numbers
 
-A list of serial number values from SOA records.
+    A list of serial number values from SOA records.
 
 * List of domain names
 
-A list of domain names.
+    A list of domain names.
 
 * List of nameserver name/IP pairs.
 
-A list of nameservers, specified as name/address pairs.
+    A list of nameservers, specified as name/address pairs.
 
 * List of nameserver names
 
-A list of nameserver names.
+    A list of nameserver names.
 
 * NS names from child
 
-A list of nameserver names taken from a zone's child servers.
+    A list of nameserver names taken from a zone's child servers.
 
 * NS names from parent
 
-A list of nameserver names taken from a zone's parent servers.
+    A list of nameserver names taken from a zone's parent servers.
 
 * NSEC3 iteration count
 
-An iteration count from an NSEC3PARAM record.
+    An iteration count from an NSEC3PARAM record.
 
 * Nameserver IP
 
-The IP address of a name server.
+    The IP address of a name server.
 
 * Nameserver name
 
-The domain name of a name server.
+    The domain name of a name server.
 
 * Nameserver name/IP pair
 
-The name and IP address of a name server, separated by a "/"
-character.
+    The name and IP address of a name server, separated by a "/"
+    character.
 
 * Number of DNSKEY RRs in packet
 
-The number of DNSKEY records found in a packet.
+    The number of DNSKEY records found in a packet.
 
 * Number of RRSIG RRs in packet
 
-The number of RRSIG records found in a packet.
+    The number of RRSIG records found in a packet.
 
 * Number of SOA RRs in packet
 
-The number of SOA records found in a packet.
+    The number of SOA records found in a packet.
 
 * PTR query name
 
-The domain name generated from an IP address for a reverse name
-lookup.
+    The domain name generated from an IP address for a reverse name
+    lookup.
 
 * Parent zone name
 
-The name of a tested zone's parent zone.
+    The name of a tested zone's parent zone.
 
 * Protocol (UDP or TCP)
 
-The protocol used for a query.
+    The protocol used for a query.
 
 * RCODE
 
-An RCODE from a DNS packet.
+    An RCODE from a DNS packet.
 
 * RFC reference
 
-A reference to an RFC.
+    A reference to an RFC.
 
 * RR type
 
-The type of RR the message pertains to.
+    The type of RR the message pertains to.
 
 * RRSIG Expiration date
 
-The time when a signature expires.
+    The time when a signature expires.
 
 * RRSIG validation error message
 
-The human-readable reason why the cryptographic validation of a
-signature failed.
+    The human-readable reason why the cryptographic validation of a
+    signature failed.
 
 * SOA MNAME
 
-The MNAME value from a SOA record.
+    The MNAME value from a SOA record.
 
 * SOA RNAME
 
-The RNAME value from a SOA record.
+    The RNAME value from a SOA record.
 
 * SOA expire
 
-The expire value from a SOA record.
+    The expire value from a SOA record.
 
 * SOA expire minimum value
 
-The lowest value considered OK for the SOA expire field.
+    The lowest value considered OK for the SOA expire field.
 
 * SOA minimum
 
-The minimum value from a SOA record.
+    The minimum value from a SOA record.
 
 * SOA minimum maximum value
 
-The highest value considered OK for the SOA minimum field.
+    The highest value considered OK for the SOA minimum field.
 
 * SOA minimum minimum value
 
-The lowest value considered OK for the SOA minimum field.
+    The lowest value considered OK for the SOA minimum field.
 
 * SOA refresh
 
-The refresh value from a SOA record.
+    The refresh value from a SOA record.
 
 * SOA refresh minimum value
 
-The lowest value considered OK for the SOA refresh field.
+    The lowest value considered OK for the SOA refresh field.
 
 * SOA retry
 
-The retry value from a SOA record.
+    The retry value from a SOA record.
 
 * SOA retry minimum value
 
-The lowest value considered OK for the SOA retry field.
+    The lowest value considered OK for the SOA retry field.
 
 * SOA serial number
 
-The serial number value from a SOA record.
+    The serial number value from a SOA record.
 
 * Smallest SOA serial number seen
 
-The smallest value seen in a SOA serial field in the tested zone.
+    The smallest value seen in a SOA serial field in the tested zone.
 
 * TLD
 
-The name of a top-level domain.
+    The name of a top-level domain.
 
 * time_t value when RRSIG validation was attempted
 
-The time when an RRSIG validation was attempted, in Unix time_t format.
+    The time when an RRSIG validation was attempted, in Unix time_t format.
 
 * Zone name
 
-The domain name of the zone being tested.
+    The domain name of the zone being tested.
 
 ## List by test module
 
