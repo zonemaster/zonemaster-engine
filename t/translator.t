@@ -14,7 +14,7 @@ my $entry = Zonemaster::Logger::Entry->new(
     {
         module => 'BASIC',
         tag    => 'NO_GLUE',
-        args   => { parent => 'se', rcode => 'SERVFAIL' }
+        args   => { pname => 'se', rcode => 'SERVFAIL' }
     }
 );
 
