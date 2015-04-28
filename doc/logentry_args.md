@@ -19,12 +19,12 @@
 || DNSSEC delegation verification failure reason| A somewhat human-readable reason why the delegation step between the tested zone and its parent is not secure.|
 || DS digest type| The digest type used in a DS record.|
 || DS/DNSKEY/RRSIG keytag| A keytag for a DS, DNSKEY or RRSIG record.|
-|| Domain name| A domain name.|
-|| Domain name label| A single label from a domain name.|
-|| Domain name label length| The length of a domain name label.|
+| dname | Domain name| A domain name.|
+| dlabel | Domain name label| A single label from a domain name.|
+| dlength | Domain name label length| The length of a domain name label.|
 || Duration in seconds| An integer number of seconds.|
-|| FQDN| A fully qualified domain name (with terminating dot).|
-|| FQDN length| The length of an FQDN.|
+| fqdn | FQDN| A fully qualified domain name (with terminating dot).|
+| fqdnlength | FQDN length| The length of an FQDN.|
 || IP address| An IPv4 or IPv6 address.|
 || IP address or nothing| An IPv4 or IPv6 address, or no value.|
 || IP range| An IP range.|
@@ -41,22 +41,22 @@
 || List of SOA serial numbers| A list of serial number values from SOA records.|
 || List of domain names| A list of domain names.|
 || List of nameserver name/IP pairs.| A list of nameservers, specified as name/address pairs.|
-|| List of nameserver names| A list of nameserver names.|
+| nsnlist | List of nameserver names| A list of nameserver names.|
 || NS names from child| A list of nameserver names taken from a zone's child servers.|
 || NS names from parent| A list of nameserver names taken from a zone's parent servers.|
 || NSEC3 iteration count| An iteration count from an NSEC3PARAM record.|
-|| Nameserver IP| The IP address of a name server.|
-|| Nameserver name| The domain name of a name server.|
-|| Nameserver name/IP pair| The name and IP address of a name server, separated by a "/" character.|
+| nsip | Nameserver IP| The IP address of a name server.|
+| nsname | Nameserver name| The domain name of a name server.|
+| ns | Nameserver name/IP pair| The name and IP address of a name server, separated by a "/" character.|
 || Number of DNSKEY RRs in packet| The number of DNSKEY records found in a packet.|
 || Number of RRSIG RRs in packet| The number of RRSIG records found in a packet.|
 || Number of SOA RRs in packet| The number of SOA records found in a packet.|
 || PTR query name| The domain name generated from an IP address for a reverse name lookup.|
-|| Parent zone name| The name of a tested zone's parent zone.|
+| pname | Parent zone name| The name of a tested zone's parent zone.|
 || Protocol (UDP or TCP)| The protocol used for a query.|
-|| RCODE| An RCODE from a DNS packet.|
+| rcode | RCODE| An RCODE from a DNS packet.|
 || RFC reference| A reference to an RFC.|
-|| RR type| The type of RR the message pertains to.|
+| rrtype | RR type| The type of RR the message pertains to.|
 || RRSIG Expiration date| The time when a signature expires.|
 || RRSIG validation error message| The human-readable reason why the cryptographic validation of a signature failed.|
 || SOA MNAME| The MNAME value from a SOA record.|
@@ -74,7 +74,7 @@
 || Smallest SOA serial number seen| The smallest value seen in a SOA serial field in the tested zone.|
 || TLD| The name of a top-level domain.|
 || `time_t` value when RRSIG validation was attempted| The time when an RRSIG validation was attempted, in Unix `time_t` format.|
-|| Zone name| The domain name of the zone being tested.|
+| zname | Zone name| The domain name of the zone being tested.|
 ## List by test module
 
 ### Basic

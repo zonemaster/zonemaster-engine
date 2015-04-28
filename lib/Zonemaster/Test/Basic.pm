@@ -52,7 +52,7 @@ sub all {
             push @results,
               info(
                 HAS_NAMESERVER_NO_WWW_A_TEST => {
-                    name => $zone->name,
+                    zname => $zone->name,
                 }
               );
         }
@@ -127,28 +127,28 @@ sub metadata {
 
 sub translation {
     return {
-        "DOMAIN_NAME_LABEL_TOO_LONG"    => "Domain name ({name}) has a label ({label}) too long ({length}/{max}).",
-        "DOMAIN_NAME_ZERO_LENGTH_LABEL" => "Domain name ({name}) has a zero length label.",
-        "DOMAIN_NAME_TOO_LONG"          => "Domain name is too long ({length}/{max}).",
+        "DOMAIN_NAME_LABEL_TOO_LONG"    => "Domain name ({dname}) has a label ({dlabel}) too long ({dlength}/{max}).",
+        "DOMAIN_NAME_ZERO_LENGTH_LABEL" => "Domain name ({dname}) has a zero length label.",
+        "DOMAIN_NAME_TOO_LONG"          => "Domain name is too long ({fqdnlength}/{max}).",
         'NO_PARENT'                     => 'No parent domain could be found for the tested domain.',
-        'NO_GLUE' => 'Nameservers for "{parent}" provided no NS records for tested zone. RCODE given was {rcode}.',
-        'HAS_A_RECORDS'      => 'Nameserver {source} returned A record(s) for {name}.',
-        'NO_A_RECORDS'       => 'Nameserver {source} did not return A record(s) for {name}.',
-        'NO_DOMAIN'          => 'Nameserver for zone {parent} responded with NXDOMAIN to query for glue.',
-        'HAS_NAMESERVERS'    => 'Nameserver {source} listed these servers as glue: {ns}.',
-        'PARENT_REPLIES'     => 'Nameserver for zone {parent} replies when trying to fetch glue.',
-        'NO_PARENT_RESPONSE' => 'No response from nameserver for zone {parent} when trying to fetch glue.',
+        'NO_GLUE' => 'Nameservers for "{pname}" provided no NS records for tested zone. RCODE given was {rcode}.',
+        'HAS_A_RECORDS'      => 'Nameserver {ns} returned A record(s) for {dname}.',
+        'NO_A_RECORDS'       => 'Nameserver {ns} did not return A record(s) for {dname}.',
+        'NO_DOMAIN'          => 'Nameserver for zone {pname} responded with NXDOMAIN to query for glue.',
+        'HAS_NAMESERVERS'    => 'Nameserver {ns} listed these servers as glue: {nsnlist}.',
+        'PARENT_REPLIES'     => 'Nameserver for zone {pname} replies when trying to fetch glue.',
+        'NO_PARENT_RESPONSE' => 'No response from nameserver for zone {pname} when trying to fetch glue.',
         'NO_GLUE_PREVENTS_NAMESERVER_TESTS' => 'No NS records for tested zone from parent. NS tests aborted.',
-        'NS_FAILED'                         => 'Nameserver {source} did not return NS records. RCODE was {rcode}.',
-        'NS_NO_RESPONSE'                    => 'Nameserver {source} did not respond to NS query.',
+        'NS_FAILED'                         => 'Nameserver {ns} did not return NS records. RCODE was {rcode}.',
+        'NS_NO_RESPONSE'                    => 'Nameserver {ns} did not respond to NS query.',
         'A_QUERY_NO_RESPONSES'              => 'Nameservers did not respond to A query.',
-        'HAS_NAMESERVER_NO_WWW_A_TEST'      => 'Functional nameserver found. "A" query for www.{name} test aborted.',
-        'HAS_GLUE'                          => 'Nameserver for zone {parent} listed these nameservers as glue: {ns}.',
-        'IPV4_DISABLED'                     => 'IPv4 is disabled, not sending "{type}" query to {ns}.',
-        'IPV4_ENABLED'                      => 'IPv4 is enabled, can send "{type}" query to {ns}.',
-        'IPV6_DISABLED'                     => 'IPv6 is disabled, not sending "{type}" query to {ns}.',
-        'IPV6_ENABLED'                      => 'IPv6 is enabled, can send "{type}" query to {ns}.',
-        'NOT_A_ZONE'                        => '{name} is not a zone.',
+        'HAS_NAMESERVER_NO_WWW_A_TEST'      => 'Functional nameserver found. "A" query for www.{zname} test aborted.',
+        'HAS_GLUE'                          => 'Nameserver for zone {pname} listed these nameservers as glue: {nsnlist}.',
+        'IPV4_DISABLED'                     => 'IPv4 is disabled, not sending "{rrtype}" query to {ns}.',
+        'IPV4_ENABLED'                      => 'IPv4 is enabled, can send "{rrtype}" query to {ns}.',
+        'IPV6_DISABLED'                     => 'IPv6 is disabled, not sending "{rrtype}" query to {ns}.',
+        'IPV6_ENABLED'                      => 'IPv6 is enabled, can send "{rrtype}" query to {ns}.',
+        'NOT_A_ZONE'                        => '{zname} is not a zone.',
     };
 } ## end sub translation
 
@@ -170,9 +170,9 @@ sub basic00 {
             push @results,
               info(
                 q{DOMAIN_NAME_LABEL_TOO_LONG} => {
-                    name   => "$name",
-                    label  => $local_label,
-                    length => length( $local_label ),
+                    dname   => "$name",
+                    dlabel  => $local_label,
+                    dlength => length( $local_label ),
                     max    => $LABEL_MAX_LENGTH,
                 }
               );
@@ -181,7 +181,7 @@ sub basic00 {
             push @results,
               info(
                 q{DOMAIN_NAME_ZERO_LENGTH_LABEL} => {
-                    name => "$name",
+                    dname => "$name",
                 }
               );
         }
@@ -192,8 +192,8 @@ sub basic00 {
         push @results,
           info(
             q{DOMAIN_NAME_TOO_LONG} => {
-                name   => $fqdn,
-                length => length( $fqdn ),
+                fqdn   => $fqdn,
+                fqdnlength => length( $fqdn ),
                 max    => $FQDN_MAX_LENGTH,
             }
           );
@@ -219,7 +219,7 @@ sub basic01 {
         push @results,
           info(
             PARENT_REPLIES => {
-                parent => $parent->name->string,
+                pname => $parent->name->string,
             }
           );
     }
@@ -227,7 +227,7 @@ sub basic01 {
         push @results,
           info(
             NO_PARENT_RESPONSE => {
-                parent => $parent->name->string,
+                pname => $parent->name->string,
             }
           );
         return @results;
@@ -237,7 +237,7 @@ sub basic01 {
         push @results,
           info(
             NO_DOMAIN => {
-                parent => $parent->name->string,
+                pname => $parent->name->string,
             }
           );
     }
@@ -246,8 +246,8 @@ sub basic01 {
             push @results,
               info(
                 HAS_GLUE => {
-                    parent => $parent->name->string,
-                    ns     => join( q{,}, sort map { $_->nsdname } $p->get_records_for_name( q{NS}, $zone->name ) ),
+                    pname   => $parent->name->string,
+                    nsnlist => join( q{,}, sort map { $_->nsdname } $p->get_records_for_name( q{NS}, $zone->name ) ),
                 }
               );
         }
@@ -255,12 +255,12 @@ sub basic01 {
             push @results,
               info(
                 NO_GLUE => {
-                    parent => $parent->name->string,
+                    pname => $parent->name->string,
                     rcode  => $p->rcode,
                 }
               );
               if ($p->aa and (grep {$_->type eq 'SOA'} $p->authority)) {
-                  push @results, info( NOT_A_ZONE => { name => $zone->name->string } );
+                  push @results, info( NOT_A_ZONE => { zname => $zone->name->string } );
               }
         }
     } ## end else [ if ( $p->rcode eq q{NXDOMAIN})]
@@ -278,7 +278,7 @@ sub basic02 {
               info(
                 IPV4_DISABLED => {
                     ns   => "$ns",
-                    type => q{NS},
+                    rrtype => q{NS},
                 }
               );
             next;
@@ -288,7 +288,7 @@ sub basic02 {
               info(
                 IPV4_ENABLED => {
                     ns   => "$ns",
-                    type => q{NS},
+                    rrtype => q{NS},
                 }
               );
         }
@@ -298,7 +298,7 @@ sub basic02 {
               info(
                 IPV6_DISABLED => {
                     ns   => "$ns",
-                    type => q{NS},
+                    rrtype => q{NS},
                 }
               );
             next;
@@ -308,7 +308,7 @@ sub basic02 {
               info(
                 IPV6_ENABLED => {
                     ns   => "$ns",
-                    type => q{NS},
+                    rrtype => q{NS},
                 }
               );
         }
@@ -319,8 +319,8 @@ sub basic02 {
                 push @results,
                   info(
                     HAS_NAMESERVERS => {
-                        ns     => join( q{,}, sort map { $_->nsdname } $p->get_records_for_name( q{NS}, $zone->name ) ),
-                        source => $ns->string,
+                        nsnlist     => join( q{,}, sort map { $_->nsdname } $p->get_records_for_name( q{NS}, $zone->name ) ),
+                        ns => $ns->string,
                     }
                   );
             }
@@ -328,7 +328,7 @@ sub basic02 {
                 push @results,
                   info(
                     NS_FAILED => {
-                        source => $ns->string,
+                        ns => $ns->string,
                         rcode  => $p->rcode,
                     }
                   );
@@ -338,7 +338,7 @@ sub basic02 {
             push @results,
               info(
                 NS_NO_RESPONSE => {
-                    source => $ns->string,
+                    ns => $ns->string,
                 }
               );
         }
@@ -359,7 +359,7 @@ sub basic03 {
               info(
                 IPV4_DISABLED => {
                     ns   => "$ns",
-                    type => q{A},
+                    rrtype => q{A},
                 }
               );
             next;
@@ -369,7 +369,7 @@ sub basic03 {
               info(
                 IPV4_ENABLED => {
                     ns   => "$ns",
-                    type => q{NS},
+                    rrtype => q{NS},
                 }
               );
         }
@@ -379,7 +379,7 @@ sub basic03 {
               info(
                 IPV6_DISABLED => {
                     ns   => "$ns",
-                    type => q{A},
+                    rrtype => q{A},
                 }
               );
             next;
@@ -389,7 +389,7 @@ sub basic03 {
               info(
                 IPV6_ENABLED => {
                     ns   => "$ns",
-                    type => q{NS},
+                    rrtype => q{NS},
                 }
               );
         }
@@ -401,8 +401,8 @@ sub basic03 {
             push @results,
               info(
                 HAS_A_RECORDS => {
-                    source => $ns->string,
-                    name   => $name,
+                    ns => $ns->string,
+                    dname   => $name,
                 }
               );
         }
@@ -410,8 +410,8 @@ sub basic03 {
             push @results,
               info(
                 NO_A_RECORDS => {
-                    source => $ns->string,
-                    name   => $name,
+                    ns => $ns->string,
+                    dname   => $name,
                 }
               );
         }
