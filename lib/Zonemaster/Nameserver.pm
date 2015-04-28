@@ -19,6 +19,7 @@ use MIME::Base64;
 use Module::Find qw[useall];
 use Carp;
 use List::Util qw[max min sum];
+use POSIX ();
 
 use overload
   '""'  => \&string,
@@ -319,6 +320,7 @@ sub compare {
 sub save {
     my ( $class, $filename ) = @_;
 
+    my $old = POSIX::setlocale(POSIX::LC_ALL,'C');
     my $json = JSON::XS->new->allow_blessed->convert_blessed;
     open my $fh, '>', $filename or die "Cache save failed: $!";
     foreach my $name ( keys %object_cache ) {
@@ -331,6 +333,7 @@ sub save {
 
     Zonemaster->logger->add( SAVED_NS_CACHE => { file => $filename } );
 
+    POSIX::setlocale(POSIX::LC_ALL, $old);
     return;
 }
 
