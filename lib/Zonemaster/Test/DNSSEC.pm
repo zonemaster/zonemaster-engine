@@ -553,6 +553,16 @@ sub dnssec03 {
     my @dnskey;
     @dnskey = $dk_p->get_records( 'DNSKEY', 'answer' ) if $dk_p;
     my $min_len = min map { $_->keysize } @dnskey;
+    # Do rounding as per RFC5155 section 10.3
+    if ($min_len > 2048) {
+        $min_len = 4096
+    }
+    elsif ($min_len > 1024) {
+        $min_len = 2048
+    }
+    else {
+        $min_len = 1024
+    }
 
     if ( @nsec3params == 0 ) {
         push @results,
