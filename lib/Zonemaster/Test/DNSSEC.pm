@@ -1031,7 +1031,10 @@ sub dnssec10 {
                 my $ok = 0;
                 foreach my $sig ( @sigs ) {
                     my $msg = q{};
-                    if (
+                    if (@dnskeys == 0) {
+                        push @results, info( NSEC_SIG_VERIFY_ERROR => { error => 'DNSKEY missing', sig => $sig->keytag } );
+                    }
+                    elsif (
                         $sig->verify_time(
                             [ grep { name( $_->name ) eq name( $sig->name ) } @nsec ],
                             \@dnskeys, $test_p->timestamp, $msg
