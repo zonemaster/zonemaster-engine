@@ -409,7 +409,9 @@ sub median_time {
 
     my @t = sort { $a <=> $b } @{ $self->times };
     my $c = scalar( @t );
-    if ( $c % 2 == 0 ) {
+    if ( $c == 0 ) {
+        return 0;
+    } elsif ( $c % 2 == 0 ) {
         return ( $t[ $c / 2 ] + $t[ ( $c / 2 ) - 1 ] ) / 2;
     }
     else {
