@@ -1,11 +1,10 @@
-As of the 1.0.2 release, we have the following known issues. They are all
-considered of low importance, and while we intend to fix them we currently make
-no promises about when.
+We currently have the following known issues. They are all considered of low
+importance, and while we intend to fix them we make no promises about when.
 
 * When testing a zone using GOST-family algorithms in DNSSEC and having an
   underlying OpenSSL library without GOST support, the Zonemaster DNSSEC test
   results may be misleading or unpredictable. The Net::LDNS module will warn at
   build time if OpenSSL lacks GOST support.
   
-* Zonemaster is not threadsafe. This is mainly a problem in Net::LDNS, and will
-  hopefully be fixed relatively soon.
+* Testing alternative root zones is not possible. Testing the usual root zone
+  is possible, but not all results make sense.
