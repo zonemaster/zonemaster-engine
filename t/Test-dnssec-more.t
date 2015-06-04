@@ -77,6 +77,9 @@ zone_gives( 'dnssec10', $zone, ['NSEC3_COVERS_NOT']);
 $zone = Zonemaster->zone( 'retailacademicsconsulting.se' );
 zone_gives( 'dnssec10', $zone, ['NSEC3_SIG_VERIFY_ERROR']);
 
+$zone = Zonemaster->zone( 'y.nu' );
+zone_gives_not( 'dnssec03', $zone, ['TOO_MANY_ITERATIONS'] );
+
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Nameserver->save( $datafile );
 }
