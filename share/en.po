@@ -11,7 +11,7 @@ msgstr ""
 
 #: ADDRESS:NAMESERVERS_IP_WITH_REVERSE
 msgid  "Reverse DNS entry exist for all Nameserver IP addresses."
-msgstr "Reverse DNS entry exist for all Nameserver IP addresses."
+msgstr "Reverse DNS entry exists for each Nameserver IP address."
 
 #: ADDRESS:NAMESERVER_IP_PRIVATE_NETWORK
 msgid  "Nameserver {ns} has an IP address ({address}) with prefix {prefix} referenced in {reference} as a '{name}'."
@@ -19,7 +19,7 @@ msgstr "Nameserver {ns} has an IP address ({address}) with prefix {prefix} refer
 
 #: ADDRESS:NAMESERVER_IP_PTR_MATCH
 msgid  "All reverse DNS entry matches name server name."
-msgstr "All reverse DNS entry matches name server name."
+msgstr "Every reverse DNS entry matches name server name."
 
 #: ADDRESS:NAMESERVER_IP_PTR_MISMATCH
 msgid  "Nameserver {ns} has an IP address ({address}) with mismatched PTR result ({names})."
@@ -43,7 +43,7 @@ msgstr "Nameservers did not respond to A query."
 
 #: BASIC:DOMAIN_NAME_LABEL_TOO_LONG
 msgid  "Domain name ({dname}) has a label ({dlabel}) too long ({dlength}/{max})."
-msgstr "Domain name ({dname}) has a label ({dlabel}) too long ({dlength}/{max})."
+msgstr "Label ({dlabel}) in domain name ({dname}) is too long ({dlength}/{max})."
 
 #: BASIC:DOMAIN_NAME_TOO_LONG
 msgid  "Domain name is too long ({fqdnlength}/{max})."
@@ -51,11 +51,11 @@ msgstr "Domain name is too long ({fqdnlength}/{max})."
 
 #: BASIC:DOMAIN_NAME_ZERO_LENGTH_LABEL
 msgid  "Domain name ({dname}) has a zero length label."
-msgstr "Domain name ({dname}) has a zero length label."
+msgstr "Domain name ({dname}) has a zero-length label."
 
 #: BASIC:HAS_A_RECORDS
 msgid  "Nameserver {ns} returned A record(s) for {dname}."
-msgstr "Nameserver {ns} returned A record(s) for {dname}."
+msgstr "Nameserver {ns} returned \"A\" record(s) for {dname}."
 
 #: BASIC:HAS_GLUE
 msgid  "Nameserver for zone {pname} listed these nameservers as glue: {nsnlist}."
@@ -67,7 +67,7 @@ msgstr "Nameserver {ns} listed these servers as glue: {nsnlist}."
 
 #: BASIC:HAS_NAMESERVER_NO_WWW_A_TEST
 msgid  "Functional nameserver found. \"A\" query for www.{zname} test aborted."
-msgstr "Functional nameserver found. \"A\" query for www.{zname} test aborted."
+msgstr "Functional nameserver found. \"A\" query for www.{zname} test skipped."
 
 #: BASIC:IPV4_DISABLED
 msgid  "IPv4 is disabled, not sending \"{rrtype}\" query to {ns}."
@@ -87,7 +87,7 @@ msgstr "IPv6 is enabled, can send \"{rrtype}\" query to {ns}."
 
 #: BASIC:NO_A_RECORDS
 msgid  "Nameserver {ns} did not return A record(s) for {dname}."
-msgstr "Nameserver {ns} did not return A record(s) for {dname}."
+msgstr "Nameserver {ns} did not return \"A\" record(s) for {dname}."
 
 #: BASIC:NO_DOMAIN
 msgid  "Nameserver for zone {pname} responded with NXDOMAIN to query for glue."
@@ -99,11 +99,11 @@ msgstr "Nameservers for \"{pname}\" provided no NS records for tested zone. RCOD
 
 #: BASIC:NO_GLUE_PREVENTS_NAMESERVER_TESTS
 msgid  "No NS records for tested zone from parent. NS tests aborted."
-msgstr "No NS records for tested zone from parent. NS tests aborted."
+msgstr "No NS records for tested zone from parent. NS tests skipped."
 
 #: BASIC:NO_PARENT
 msgid  "No parent domain could be found for the tested domain."
-msgstr "No parent domain could be found for the tested domain."
+msgstr "No parent domain could be found for the domain under test."
 
 #: BASIC:NO_PARENT_RESPONSE
 msgid  "No response from nameserver for zone {pname} when trying to fetch glue."
@@ -137,7 +137,7 @@ msgstr "Authoritative IPv4 nameservers are in more than one AS."
 
 #: CONNECTIVITY:NAMESERVERS_IPV4_WITH_UNIQ_AS
 msgid  "All nameservers IPv4 addresses are in the same AS ({asn})."
-msgstr "All nameservers IPv4 addresses are in the same AS ({asn})."
+msgstr "All nameservers have IPv4 addresses in the same AS ({asn})."
 
 #: CONNECTIVITY:NAMESERVERS_IPV6_NO_AS
 msgid  "No IPv6 nameserver address is in an AS."
@@ -149,7 +149,7 @@ msgstr "Authoritative IPv6 nameservers are in more than one AS."
 
 #: CONNECTIVITY:NAMESERVERS_IPV6_WITH_UNIQ_AS
 msgid  "All nameservers IPv6 addresses are in the same AS ({asn})."
-msgstr "All nameservers IPv6 addresses are in the same AS ({asn})."
+msgstr "All nameservers have IPv6 addresses in the same AS ({asn})."
 
 #: CONNECTIVITY:NAMESERVERS_NO_AS
 msgid  "No nameserver address is in an AS."
@@ -191,19 +191,19 @@ msgstr "Name servers have IPv6 addresses in the following ASs: {asn}."
 #: CONSISTENCY:IPV6_DISABLED
 #: CONSISTENCY:MULTIPLE_NS_SET
 msgid  "Saw {count} NS set."
-msgstr "Saw {count} NS set."
+msgstr "Found {count} NS set(s)."
 
 #: CONSISTENCY:MULTIPLE_SOA_RNAMES
 msgid  "Saw {count} SOA rname."
-msgstr "Saw {count} SOA rname."
+msgstr "Found {count} SOA rname(s)."
 
 #: CONSISTENCY:MULTIPLE_SOA_SERIALS
 msgid  "Saw {count} SOA serial numbers."
-msgstr "Saw {count} SOA serial numbers."
+msgstr "Found {count} SOA serial number(s)."
 
 #: CONSISTENCY:MULTIPLE_SOA_TIME_PARAMETER_SET
 msgid  "Saw {count} SOA time parameter set."
-msgstr "Saw {count} SOA time parameter set."
+msgstr "Found {count} SOA time parameter set(s)."
 
 #: CONSISTENCY:NO_RESPONSE
 msgid  "Nameserver {ns}/{address} did not respond."
@@ -223,15 +223,15 @@ msgstr "Saw NS set ({nsset}) on following nameserver set : {servers}."
 
 #: CONSISTENCY:ONE_NS_SET
 msgid  "A unique NS set was seen ({nsset})."
-msgstr "A unique NS set was seen ({nsset})."
+msgstr "A single NS set was found ({nsset})."
 
 #: CONSISTENCY:ONE_SOA_RNAME
 msgid  "A single SOA rname value was seen ({rname})"
-msgstr "A single SOA rname value was seen ({rname})"
+msgstr "A single SOA rname value was found ({rname})"
 
 #: CONSISTENCY:ONE_SOA_SERIAL
 msgid  "A single SOA serial number was seen ({serial})."
-msgstr "A single SOA serial number was seen ({serial})."
+msgstr "A single SOA serial number was found ({serial})."
 
 #: CONSISTENCY:ONE_SOA_TIME_PARAMETER_SET
 msgid  "A single SOA time parameter set was seen (REFRESH={refresh},RETRY={retry},EXPIRE={expire},MINIMUM={minimum})."
@@ -239,11 +239,11 @@ msgstr "A single SOA time parameter set was seen (REFRESH={refresh},RETRY={retry
 
 #: CONSISTENCY:SOA_RNAME
 msgid  "Saw SOA rname {rname} on following nameserver set : {servers}."
-msgstr "Saw SOA rname {rname} on following nameserver set : {servers}."
+msgstr "Found SOA rname {rname} on following nameserver set : {servers}."
 
 #: CONSISTENCY:SOA_SERIAL
 msgid  "Saw SOA serial number {serial} on following nameserver set : {servers}."
-msgstr "Saw SOA serial number {serial} on following nameserver set : {servers}."
+msgstr "Found SOA serial number {serial} on following nameserver set : {servers}."
 
 #: CONSISTENCY:SOA_SERIAL_VARIATION
 msgid  "Difference between the smaller serial ({serial_min}) and the bigger one ({serial_max}) is greater than the maximum allowed ({max_variation})."
@@ -251,7 +251,7 @@ msgstr "Difference between the smaller serial ({serial_min}) and the bigger one 
 
 #: CONSISTENCY:SOA_TIME_PARAMETER_SET
 msgid  "Saw SOA time parameter set (REFRESH={refresh},RETRY={retry},EXPIRE={expire},MINIMUM={minimum}) on following nameserver set : {servers}."
-msgstr "Saw SOA time parameter set (REFRESH={refresh},RETRY={retry},EXPIRE={expire},MINIMUM={minimum}) on following nameserver set : {servers}."
+msgstr "Found SOA time parameter set (REFRESH={refresh},RETRY={retry},EXPIRE={expire},MINIMUM={minimum}) on following nameserver set : {servers}."
 
 #: DELEGATION:ARE_AUTHORITATIVE
 msgid  "All the nameservers are authoritative."
@@ -309,7 +309,7 @@ msgstr "Nameserver {ns} {address_type} RR point to CNAME."
 
 #: DELEGATION:NS_RR_NO_CNAME
 msgid  "No nameserver point to CNAME alias."
-msgstr "No nameserver point to CNAME alias."
+msgstr "No nameserver points to CNAME alias."
 
 #: DELEGATION:REFERRAL_SIZE_LARGE
 msgid  "The smallest possible legal referral packet is larger than 512 octets (it is {size})."
@@ -329,7 +329,7 @@ msgstr "All the nameservers have SOA record."
 
 #: DELEGATION:SOA_NOT_EXISTS
 msgid  "A SOA query NOERROR response from {ns} was received empty."
-msgstr "A SOA query NOERROR response from {ns} was received empty."
+msgstr "Empty NOERROR response to SOA query was received from {ns}."
 
 #: DELEGATION:TOTAL_NAME_MISMATCH
 msgid  "None of the nameservers listed at the parent are listed at the child."
@@ -345,7 +345,7 @@ msgstr "The DNSKEY with tag {keytag} uses deprecated algorithm number {algorithm
 
 #: DNSSEC:ALGORITHM_OK
 msgid  "The DNSKEY with tag {keytag} uses algorithm number {algorithm}/({description}), which is OK."
-msgstr "The DNSKEY with tag {keytag} uses algorithm number {algorithm}/({description}), which is OK."
+msgstr "The DNSKEY with tag {keytag} uses algorithm number {algorithm}/({description}) [OK]."
 
 #: DNSSEC:ALGORITHM_PRIVATE
 msgid  "The DNSKEY with tag {keytag} uses private algorithm number {algorithm}/({description})."
@@ -381,7 +381,7 @@ msgstr "The apex DNSKEY RRset was not correctly signed."
 
 #: DNSSEC:DNSKEY_SIGNATURE_NOT_OK
 msgid  "Signature for DNSKEY with tag {signature} failed to verify with error '{error}'."
-msgstr "Signature for DNSKEY with tag {signature} failed to verify with error '{error}'."
+msgstr "Signature verification for DNSKEY with tag {signature} failed with error '{error}'."
 
 #: DNSSEC:DNSKEY_SIGNATURE_OK
 msgid  "A signature for DNSKEY with tag {signature} was correctly signed."
@@ -615,7 +615,7 @@ msgstr "The following nameservers support EDNS0 : {names}."
 #: NAMESERVER:IPV6_DISABLED
 #: NAMESERVER:IS_A_RECURSOR
 msgid  "Nameserver {ns}/{address} answered with a RCODE NXDOMAIN to SOA query on {dname}."
-msgstr "Nameserver {ns}/{address} answered with a RCODE NXDOMAIN to SOA query on {dname}."
+msgstr "Nameserver {ns}/{address} answered with RCODE NXDOMAIN to SOA query on {dname}."
 
 #: NAMESERVER:NO_RECURSOR
 msgid  "None of the following nameservers is a recursor : {names}."
@@ -623,7 +623,7 @@ msgstr "None of the following nameservers is a recursor : {names}."
 
 #: NAMESERVER:NO_RESOLUTION
 msgid  "No nameservers succeeded to resolve to an IP address."
-msgstr "No nameservers succeeded to resolve to an IP address."
+msgstr "No nameserver was successfully resolved to an IP address."
 
 #: NAMESERVER:QUERY_DROPPED
 msgid  "Nameserver {ns}/{address} dropped AAAA query."
@@ -639,7 +639,7 @@ msgstr "Domain name ({name}) has a label ({label}) with a double hyphen ('--') i
 
 #: SYNTAX:INITIAL_HYPHEN
 msgid  "Domain name ({name}) has a label ({label}) starting with an hyphen ('-')."
-msgstr "Domain name ({name}) has a label ({label}) starting with an hyphen ('-')."
+msgstr "Domain name ({name}) has a label ({label}) starting with a hyphen ('-')."
 
 #: SYNTAX:MNAME_DISCOURAGED_DOUBLE_DASH
 msgid  "SOA MNAME ({name}) has a label ({label}) with a double hyphen ('--') in position 3 and 4 (with a prefix which is not 'xn--')."
@@ -699,7 +699,7 @@ msgstr "Domain name ({name}) has no label with a double hyphen ('--') in positio
 
 #: SYNTAX:NO_ENDING_HYPHENS
 msgid  "Both ends of all labels of the domain name ({name}) have no hyphens."
-msgstr "Both ends of all labels of the domain name ({name}) have no hyphens."
+msgstr "Neither end of any label in the domain name ({name}) has a hyphen."
 
 #: SYNTAX:NO_RESPONSE_MX_QUERY
 msgid  "No response from nameserver(s) on MX queries."
@@ -715,7 +715,7 @@ msgstr "No illegal characters in the domain name ({name})."
 
 #: SYNTAX:RNAME_MISUSED_AT_SIGN
 msgid  "There must be no misused '@' character in the SOA RNAME field ({rname})."
-msgstr "There must be no misused '@' character in the SOA RNAME field ({rname})."
+msgstr "Misused '@' character found in SOA RNAME field ({rname})."
 
 #: SYNTAX:RNAME_NO_AT_SIGN
 msgid  "There is no misused '@' character in the SOA RNAME field ({rname})."
@@ -723,7 +723,7 @@ msgstr "There is no misused '@' character in the SOA RNAME field ({rname})."
 
 #: SYNTAX:RNAME_RFC822_INVALID
 msgid  "There must be no illegal characters in the SOA RNAME field ({rname})."
-msgstr "There must be no illegal characters in the SOA RNAME field ({rname})."
+msgstr "Illegal character(s) found in SOA RNAME field ({rname})."
 
 #: SYNTAX:RNAME_RFC822_VALID
 msgid  "The SOA RNAME field ({rname}) is compliant with RFC2822."
@@ -731,7 +731,7 @@ msgstr "The SOA RNAME field ({rname}) is compliant with RFC2822."
 
 #: SYNTAX:TERMINAL_HYPHEN
 msgid  "Domain name ({name}) has a label ({label}) ending with an hyphen ('-')."
-msgstr "Domain name ({name}) has a label ({label}) ending with an hyphen ('-')."
+msgstr "Domain name ({name}) has a label ({label}) ending with a hyphen ('-')."
 
 #: SYSTEM:ADDED_FAKE_DELEGATION
 msgid  "Added a fake delegation for domain {domain} to name server {ns}."
@@ -811,11 +811,11 @@ msgstr "Request to run {method} in unknown module {module}. Known modules: {know
 
 #: ZONE:EXPIRE_LOWER_THAN_REFRESH
 msgid  "SOA 'expire' value ({expire}) is lower than the SOA 'refresh' value ({refresh})."
-msgstr "SOA 'expire' value ({expire}) is lower than the SOA 'refresh' value ({refresh})."
+msgstr "SOA 'expire' value ({expire}) is less than the SOA 'refresh' value ({refresh})."
 
 #: ZONE:EXPIRE_MINIMUM_VALUE_LOWER
 msgid  "SOA 'expire' value ({expire}) is less than the recommended one ({required_expire})."
-msgstr "SOA 'expire' value ({expire}) is less than the recommended one ({required_expire})."
+msgstr "SOA 'expire' value ({expire}) is less than the recommended minimum ({required_expire})."
 
 #: ZONE:EXPIRE_MINIMUM_VALUE_OK
 msgid  "SOA 'expire' value ({expire}) is higher than the minimum recommended value ({required_expire}) and lower than 'refresh' value."
@@ -873,7 +873,7 @@ msgstr "No target (MX, A or AAAA record) to deliver e-mail for the domain name."
 #: ZONE:NO_RESPONSE_SOA_QUERY
 #: ZONE:REFRESH_HIGHER_THAN_RETRY
 msgid  "SOA 'refresh' value ({refresh}) is higher than the SOA 'retry' value ({retry})."
-msgstr "SOA 'refresh' value ({refresh}) is higher than the SOA 'retry' value ({retry})."
+msgstr "SOA 'refresh' value ({refresh}) is greater than the SOA 'retry' value ({retry})."
 
 #: ZONE:REFRESH_LOWER_THAN_RETRY
 msgid  "SOA 'refresh' value ({refresh}) is lower than the SOA 'retry' value ({retry})."
@@ -881,29 +881,29 @@ msgstr "SOA 'refresh' value ({refresh}) is lower than the SOA 'retry' value ({re
 
 #: ZONE:REFRESH_MINIMUM_VALUE_LOWER
 msgid  "SOA 'refresh' value ({refresh}) is less than the recommended one ({required_refresh})."
-msgstr "SOA 'refresh' value ({refresh}) is less than the recommended one ({required_refresh})."
+msgstr "SOA 'refresh' value ({refresh}) is less than the recommended minimum ({required_refresh})."
 
 #: ZONE:REFRESH_MINIMUM_VALUE_OK
 msgid  "SOA 'refresh' value ({refresh}) is higher than the minimum recommended value ({required_refresh})."
-msgstr "SOA 'refresh' value ({refresh}) is higher than the minimum recommended value ({required_refresh})."
+msgstr "SOA 'refresh' value ({refresh}) is greater than the minimum recommended value ({required_refresh})."
 
 #: ZONE:RETRY_MINIMUM_VALUE_LOWER
 msgid  "SOA 'retry' value ({retry}) is less than the recommended one ({required_retry})."
-msgstr "SOA 'retry' value ({retry}) is less than the recommended one ({required_retry})."
+msgstr "SOA 'retry' value ({retry}) is less than the recommended minimum ({required_retry})."
 
 #: ZONE:RETRY_MINIMUM_VALUE_OK
 msgid  "SOA 'retry' value ({retry}) is more than the minimum recommended value ({required_retry})."
-msgstr "SOA 'retry' value ({retry}) is more than the minimum recommended value ({required_retry})."
+msgstr "SOA 'retry' value ({retry}) is greater than the minimum recommended value ({required_retry})."
 
 #: ZONE:SOA_DEFAULT_TTL_MAXIMUM_VALUE_HIGHER
 msgid  "SOA 'minimum' value ({minimum}) is higher than the recommended one ({highest_minimum})."
-msgstr "SOA 'minimum' value ({minimum}) is higher than the recommended one ({highest_minimum})."
+msgstr "SOA 'minimum' value ({minimum}) is greater than the recommended one ({highest_minimum})."
 
 #: ZONE:SOA_DEFAULT_TTL_MAXIMUM_VALUE_LOWER
 msgid  "SOA 'minimum' value ({minimum}) is less than the recommended one ({lowest_minimum})."
-msgstr "SOA 'minimum' value ({minimum}) is less than the recommended one ({lowest_minimum})."
+msgstr "SOA 'minimum' value ({minimum}) is less than the recommended minimum ({lowest_minimum})."
 
 #: ZONE:SOA_DEFAULT_TTL_MAXIMUM_VALUE_OK
 msgid  "SOA 'minimum' value ({minimum}) is between the recommended ones ({lowest_minimum}/{highest_minimum})."
-msgstr "SOA 'minimum' value ({minimum}) is between the recommended ones ({lowest_minimum}/{highest_minimum})."
+msgstr "SOA 'minimum' value ({minimum}) is within the recommended ones ({lowest_minimum}/{highest_minimum})."
 
