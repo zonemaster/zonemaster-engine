@@ -109,8 +109,11 @@
       "IS_A_RECURSOR" : "ERROR",
       "NO_RECURSOR" : "INFO",
       "NO_RESOLUTION" : "ERROR",
+      "NO_UPWARD_REFERRAL" : "INFO",
       "QUERY_DROPPED" : "NOTICE",
-      "SAME_SOURCE_IP" : "INFO"
+      "SAME_SOURCE_IP" : "INFO",
+      "UPWARD_REFERRAL" : "WARNING",
+      "UPWARD_REFERRAL_IRRELEVANT" : "INFO"
    },
    "SYNTAX" : {
       "DISCOURAGED_DOUBLE_DASH" : "WARNING",
@@ -242,6 +245,7 @@
         "nameserver04": true,
         "nameserver05": true,
         "nameserver06": true,
+        "nameserver07": true,
         "syntax01": true,
         "syntax02": true,
         "syntax03": true,
