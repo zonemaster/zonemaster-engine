@@ -321,6 +321,10 @@ msgstr "Svaret på en fråga om namnet {name}, som inte får existera, hade RCOD
 msgid  "The number of NSEC3 iterations is {count}, which is OK."
 msgstr "Antalet NSEC3-iterationer är {count}, vilket är lagom."
 
+#: DNSSEC:KEY_DETAILS
+msgid  "Key with keytag {keytag} details : Size = {keysize}, Flags ({sep}, {rfc5011})."
+msgstr "Key with keytag {keytag} details : Size = {keysize}, Flags ({sep}, {rfc5011})."
+
 #: DNSSEC:MANY_ITERATIONS
 msgid  "The number of NSEC3 iterations is {count}, which is on the high side."
 msgstr "Antalet NSEC3-iterationer är {count}, vilket är högt."

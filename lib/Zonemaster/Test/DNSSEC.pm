@@ -201,6 +201,7 @@ sub metadata {
               ALGORITHM_PRIVATE
               ALGORITHM_OK
               ALGORITHM_UNKNOWN
+              KEY_DETAILS
               )
         ],
         dnssec06 => [
@@ -308,6 +309,7 @@ sub translation {
         "HAS_NSEC3"               => "The zone has NSEC3 records.",
         "INVALID_NAME_RCODE" => "When asked for the name {name}, which must not exist, the response had RCODE {rcode}.",
         "ITERATIONS_OK"      => "The number of NSEC3 iterations is {count}, which is OK.",
+        "KEY_DETAILS"        => "Key with keytag {keytag} details : Size = {keysize}, Flags ({sep}, {rfc5011}).",
         "MANY_ITERATIONS"    => "The number of NSEC3 iterations is {count}, which is on the high side.",
         "NEITHER_DNSKEY_NOR_DS" => "There are neither DS nor DNSKEY records for the zone.",
         "NO_COMMON_KEYTAGS"     => "No DS record had a DNSKEY with a matching keytag.",
@@ -369,6 +371,7 @@ sub policy {
         "HAS_NSEC3"                    => "INFO",
         "INVALID_NAME_RCODE"           => "NOTICE",
         "ITERATIONS_OK"                => "DEBUG",
+        "KEY_DETAILS"                  => "DEBUG",
         "MANY_ITERATIONS"              => "NOTICE",
         "NEITHER_DNSKEY_NOR_DS"        => "DEBUG",
         "NO_COMMON_KEYTAGS"            => "ERROR",
@@ -758,6 +761,17 @@ sub dnssec05 {
                     description => $algo_properties{$algo}{description},
                 }
               );
+            if ( $key->flags & 256 ) { # This is a Key
+                push @results,
+                  info(
+                    KEY_DETAILS => {
+                        keytag  => $key->keytag,
+                        keysize => $key->keysize,
+                        sep     => $key->flags & 1 ? q{SEP bit set} : q{SEP bit *not* set},
+                        rfc5011 => $key->flags & 128 ? q{RFC 5011 revocation bit set} : q{RFC 5011 revocation bit *not* set},
+                    }
+                );
+            }
         }
         else {
             push @results,
