@@ -612,6 +612,18 @@ msgstr "Le serveur de noms {ns}/{address} ne répond pas aux requêtes portant s
 msgid  "All nameservers reply with same IP used to query them."
 msgstr "Tous les serveurs de noms répondent avec la même adresse IP que celle utilisée lors de leur requêtage."
 
+#: NAMESERVER:UPWARD_REFERRAL_IRRELEVANT
+msgid  "Upward referral tests skipped for root zone."
+msgstr "Upward referral tests skipped for root zone."
+
+#: NAMESERVER:UPWARD_REFERRAL
+msgid  "Nameserver {ns}/{address} returns an upward referral."
+msgstr "Nameserver {ns}/{address} returns an upward referral."
+
+#: NAMESERVER:NO_UPWARD_REFERRAL
+msgid  "None of the following nameservers returns an upward referral : {names}."
+msgstr "None of the following nameservers returns an upward referral : {names}."
+
 #: NAMESERVER:CAN_NOT_BE_RESOLVED
 msgid  "The following nameservers failed to resolve to an IP address : {names}."
 msgstr "Aucune adresse IP n'a pu être trouvée pour les serveurs de noms suivants : {names}."
