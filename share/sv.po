@@ -446,8 +446,8 @@ msgid  "Nameserver {ns}/{address} does not support EDNS0 (replies with FORMERR).
 msgstr "Namnservern {ns}/{address} stöder inte EDNS0 (svar med FORMERR)."
 
 #: NAMESERVER:IS_A_RECURSOR
-msgid  "Nameserver {ns}/{address} answered with a RCODE NXDOMAIN to SOA query on {dname}."
-msgstr "Namnservern {ns}/{address} svarade med RCODE NXDOMAIN på en SOA-fråga om {dname}."
+msgid  "Nameserver {ns}/{address} is a recursor."
+msgstr "Namnservern {ns}/{address} är en rekurserande resolver."
 
 #: NAMESERVER:QUERY_DROPPED
 msgid  "Nameserver {ns}/{address} dropped AAAA query."
@@ -456,6 +456,18 @@ msgstr "Namnservern {ns}/{address} tappade en AAAA-fråga."
 #: NAMESERVER:SAME_SOURCE_IP
 msgid  "Nameserver {ns}/{address} replies on a SOA query with a different source address ({source})."
 msgstr "Namnservern {ns}/{address} svarade på en SOA-fråga från en annan käll-adress ({source})."
+
+#: NAMESERVER:UPWARD_REFERRAL_IRRELEVANT
+msgid  "Upward referral tests skipped for root zone."
+msgstr "Upward referral tests skipped for root zone."
+
+#: NAMESERVER:UPWARD_REFERRAL
+msgid  "Nameserver {ns}/{address} returns an upward referral."
+msgstr "Nameserver {ns}/{address} returns an upward referral."
+
+#: NAMESERVER:NO_UPWARD_REFERRAL
+msgid  "None of the following nameservers returns an upward referral : {names}."
+msgstr "None of the following nameservers returns an upward referral : {names}."
 
 #: SYNTAX:DISCOURAGED_DOUBLE_DASH
 msgid  "Domain name ({name}) has a label ({label}) with a double hyphen ('--') in position 3 and 4 (with a prefix which is not 'xn--')."

@@ -25,6 +25,7 @@ sub all {
     push @results, $class->nameserver04( $zone ) if Zonemaster->config->should_run('nameserver04');
     push @results, $class->nameserver05( $zone ) if Zonemaster->config->should_run('nameserver05');
     push @results, $class->nameserver06( $zone ) if Zonemaster->config->should_run('nameserver06');
+    push @results, $class->nameserver07( $zone ) if Zonemaster->config->should_run('nameserver07');
 
     return @results;
 }
@@ -77,29 +78,38 @@ sub metadata {
               NO_RESOLUTION
               )
         ],
+        nameserver07 => [
+            qw(
+              UPWARD_REFERRAL_IRRELEVANT
+              UPWARD_REFERRAL
+              NO_UPWARD_REFERRAL
+              )
+        ],
     };
 } ## end sub metadata
 
 sub translation {
     return {
-        'AAAA_WELL_PROCESSED' => 'The following nameservers answer AAAA queries without problems : {names}.',
-        'EDNS0_BAD_QUERY'     => 'Nameserver {ns}/{address} does not support EDNS0 (replies with FORMERR).',
-        'DIFFERENT_SOURCE_IP' =>
-          'Nameserver {ns}/{address} replies on a SOA query with a different source address ({source}).',
-        'SAME_SOURCE_IP'      => 'All nameservers reply with same IP used to query them.',
-        'AXFR_AVAILABLE'      => 'Nameserver {ns}/{address} allow zone transfer using AXFR.',
-        'AXFR_FAILURE'        => 'AXFR not available on nameserver {ns}/{address}.',
-        'QUERY_DROPPED'       => 'Nameserver {ns}/{address} dropped AAAA query.',
-        'IS_A_RECURSOR'       => 'Nameserver {ns}/{address} answered with a RCODE NXDOMAIN to SOA query on {dname}.',
-        'NO_RECURSOR'         => 'None of the following nameservers is a recursor : {names}.',
-        'ANSWER_BAD_RCODE'    => 'Nameserver {ns}/{address} answered AAAA query with an unexpected rcode ({rcode}).',
-        'EDNS0_BAD_ANSWER'    => 'Nameserver {ns}/{address} does not support EDNS0 (OPT not set in reply).',
-        'EDNS0_SUPPORT'       => 'The following nameservers support EDNS0 : {names}.',
-        'CAN_NOT_BE_RESOLVED' => 'The following nameservers failed to resolve to an IP address : {names}.',
-        'CAN_BE_RESOLVED'     => 'All nameservers succeeded to resolve to an IP address.',
-        'NO_RESOLUTION'       => 'No nameservers succeeded to resolve to an IP address.',
-        'IPV4_DISABLED'       => 'IPv4 is disabled, not sending "{type}" query to {ns}.',
-        'IPV6_DISABLED'       => 'IPv6 is disabled, not sending "{type}" query to {ns}.',
+        'AAAA_WELL_PROCESSED'        => 'The following nameservers answer AAAA queries without problems : {names}.',
+        'EDNS0_BAD_QUERY'            => 'Nameserver {ns}/{address} does not support EDNS0 (replies with FORMERR).',
+        'DIFFERENT_SOURCE_IP'        => 'Nameserver {ns}/{address} replies on a SOA query with a different source address ({source}).',
+        'SAME_SOURCE_IP'             => 'All nameservers reply with same IP used to query them.',
+        'AXFR_AVAILABLE'             => 'Nameserver {ns}/{address} allow zone transfer using AXFR.',
+        'AXFR_FAILURE'               => 'AXFR not available on nameserver {ns}/{address}.',
+        'QUERY_DROPPED'              => 'Nameserver {ns}/{address} dropped AAAA query.',
+        'IS_A_RECURSOR'              => 'Nameserver {ns}/{address} is a recursor.',
+        'NO_RECURSOR'                => 'None of the following nameservers is a recursor : {names}.',
+        'ANSWER_BAD_RCODE'           => 'Nameserver {ns}/{address} answered AAAA query with an unexpected rcode ({rcode}).',
+        'EDNS0_BAD_ANSWER'           => 'Nameserver {ns}/{address} does not support EDNS0 (OPT not set in reply).',
+        'EDNS0_SUPPORT'              => 'The following nameservers support EDNS0 : {names}.',
+        'CAN_NOT_BE_RESOLVED'        => 'The following nameservers failed to resolve to an IP address : {names}.',
+        'CAN_BE_RESOLVED'            => 'All nameservers succeeded to resolve to an IP address.',
+        'NO_RESOLUTION'              => 'No nameservers succeeded to resolve to an IP address.',
+        'IPV4_DISABLED'              => 'IPv4 is disabled, not sending "{type}" query to {ns}.',
+        'IPV6_DISABLED'              => 'IPv6 is disabled, not sending "{type}" query to {ns}.',
+        'UPWARD_REFERRAL_IRRELEVANT' => 'Upward referral tests skipped for root zone.',
+        'UPWARD_REFERRAL'            => 'Nameserver {ns}/{address} returns an upward referral.',
+        'NO_UPWARD_REFERRAL'         => 'None of the following nameservers returns an upward referral : {names}.',
     };
 } ## end sub translation
 
@@ -414,6 +424,60 @@ sub nameserver06 {
     return @results;
 } ## end sub nameserver06
 
+sub nameserver07 {
+    my ( $class, $zone ) = @_;
+    my @results;
+    my %nsnames_and_ip;
+    my %nsnames;
+
+    if ( $zone->name eq q{.} ) {
+        push @results,
+          info(
+            UPWARD_REFERRAL_IRRELEVANT => {
+            }
+          );
+    }
+    else {
+        foreach
+          my $local_ns ( @{ Zonemaster::TestMethods->method4( $zone ) }, @{ Zonemaster::TestMethods->method5( $zone ) } )
+        {
+            next if ( not Zonemaster->config->ipv6_ok and $local_ns->address->version == $IP_VERSION_6 );
+
+            next if ( not Zonemaster->config->ipv4_ok and $local_ns->address->version == $IP_VERSION_4 );
+
+            next if $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short };
+
+            my $p = $local_ns->query( q{.}, q{NS} );
+
+            my @ns = $p->get_records( q{NS}, q{authority} );
+
+            if ( @ns ) {
+                push @results,
+                  info(
+                    UPWARD_REFERRAL => {
+                        ns      => $local_ns->name->string,
+                        address => $local_ns->address->short,
+                    }
+                  );
+            }
+
+            $nsnames{ $local_ns->name }++;
+            $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short }++;
+        } ## end foreach my $local_ns ( @{ Zonemaster::TestMethods...})
+
+        if ( scalar keys %nsnames_and_ip and not scalar @results ) {
+            push @results,
+              info(
+                NO_UPWARD_REFERRAL => {
+                    names => join( q{,}, sort keys %nsnames ),
+                }
+              );
+        }
+    }
+
+    return @results;
+} ## end sub nameserver07
+
 1;
 
 =head1 NAME
@@ -474,6 +538,10 @@ Verify behaviour against AAAA queries.
 =item nameserver06($zone)
 
 Verify that each nameserver can be resolved to an IP address.
+
+=item nameserver07($zone)
+
+Check whether authoritative name servers return an upward referral.
 
 =back
 

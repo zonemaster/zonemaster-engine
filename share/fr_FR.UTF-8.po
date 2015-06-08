@@ -601,7 +601,7 @@ msgid  "The following nameservers support EDNS0 : {names}."
 msgstr "Les serveurs de noms suivants supportent EDNS0 : {names}."
 
 #: NAMESERVER:IS_A_RECURSOR
-msgid  "Nameserver {ns}/{address} answered with a RCODE NXDOMAIN to SOA query on {dname}."
+msgid  "Nameserver {ns}/{address} is a recursor."
 msgstr "Le serveur de noms {ns}/{address} retourne le code NXDOMAIN lors d'une requête de type \"SOA\" sur le nom de domaine {dname}. Il est récursif."
 
 #: NAMESERVER:NO_RECURSOR
@@ -615,6 +615,18 @@ msgstr "Le serveur de noms {ns}/{address} ne répond pas aux requêtes portant s
 #: NAMESERVER:SAME_SOURCE_IP
 msgid  "All nameservers reply with same IP used to query them."
 msgstr "Tous les serveurs de noms répondent avec la même adresse IP que celle utilisée lors de leur requêtage."
+
+#: NAMESERVER:UPWARD_REFERRAL_IRRELEVANT
+msgid  "Upward referral tests skipped for root zone."
+msgstr "Upward referral tests skipped for root zone."
+
+#: NAMESERVER:UPWARD_REFERRAL
+msgid  "Nameserver {ns}/{address} returns an upward referral."
+msgstr "Nameserver {ns}/{address} returns an upward referral."
+
+#: NAMESERVER:NO_UPWARD_REFERRAL
+msgid  "None of the following nameservers returns an upward referral : {names}."
+msgstr "None of the following nameservers returns an upward referral : {names}."
 
 #: NAMESERVER:CAN_NOT_BE_RESOLVED
 msgid  "The following nameservers failed to resolve to an IP address : {names}."

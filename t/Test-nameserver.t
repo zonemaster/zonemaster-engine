@@ -96,6 +96,11 @@ TODO: {
 
     # nameserver04
     ok( $tag{DIFFERENT_SOURCE_IP}, q{DIFFERENT_SOURCE_IP} );
+
+    # nameserver07
+    ok( $tag{UPWARD_REFERRAL_IRRELEVANT}, q{UPWARD_REFERRAL_IRRELEVANT} );
+    ok( $tag{UPWARD_REFERRAL}, q{UPWARD_REFERRAL} );
+    ok( $tag{NO_UPWARD_REFERRAL}, q{NO_UPWARD_REFERRAL} );
 }
 
 if ( $ENV{ZONEMASTER_RECORD} ) {

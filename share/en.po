@@ -618,8 +618,8 @@ msgstr "The following nameservers support EDNS0 : {names}."
 #: NAMESERVER:IPV4_DISABLED
 #: NAMESERVER:IPV6_DISABLED
 #: NAMESERVER:IS_A_RECURSOR
-msgid  "Nameserver {ns}/{address} answered with a RCODE NXDOMAIN to SOA query on {dname}."
-msgstr "Nameserver {ns}/{address} answered with RCODE NXDOMAIN to SOA query on {dname}."
+msgid  "Nameserver {ns}/{address} is a recursor."
+msgstr "Nameserver {ns}/{address} is a recursor."
 
 #: NAMESERVER:NO_RECURSOR
 msgid  "None of the following nameservers is a recursor : {names}."
@@ -636,6 +636,18 @@ msgstr "Nameserver {ns}/{address} dropped AAAA query."
 #: NAMESERVER:SAME_SOURCE_IP
 msgid  "All nameservers reply with same IP used to query them."
 msgstr "All nameservers reply with same IP used to query them."
+
+#: NAMESERVER:UPWARD_REFERRAL_IRRELEVANT
+msgid  "Upward referral tests skipped for root zone."
+msgstr "Upward referral tests skipped for root zone."
+
+#: NAMESERVER:UPWARD_REFERRAL
+msgid  "Nameserver {ns}/{address} returns an upward referral."
+msgstr "Nameserver {ns}/{address} returns an upward referral."
+
+#: NAMESERVER:NO_UPWARD_REFERRAL
+msgid  "None of the following nameservers returns an upward referral : {names}."
+msgstr "None of the following nameservers returns an upward referral : {names}."
 
 #: SYNTAX:DISCOURAGED_DOUBLE_DASH
 msgid  "Domain name ({name}) has a label ({label}) with a double hyphen ('--') in position 3 and 4 (with a prefix which is not 'xn--')."
