@@ -424,6 +424,10 @@ msgstr "La signature (RRSIG) avec la clé de tag {tag} et couvrant les enregistr
 msgid  "RRSIG with keytag {tag} and covering type(s) {types} has a duration of {duration} seconds, which is just fine."
 msgstr "La signature (RRSIG) avec la clé de tag {tag} et couvrant les enregistrements de type(s) \"{types}\" a une durée de {duration} secondes, ce qui est raisonnable."
 
+#: DNSSEC:RRSIG_EXPIRATION
+msgid  "RRSIG with keytag {tag} and covering type(s) {types} expires at : {date}."
+msgstr "La signature (RRSIG) avec la clé de tag {tag} et couvrant les enregistrements de type(s) \"{types}\" expire à la date suivante : {date}."
+
 #: DNSSEC:RRSIG_EXPIRED
 msgid  "RRSIG with keytag {tag} and covering type(s) {types} has already expired (expiration is: {expiration})."
 msgstr "La signature (RRSIG) avec la clé de tag {tag} et couvrant les enregistrements de type(s) \"{types}\" a expiré (date d'expiration: {expiration})."

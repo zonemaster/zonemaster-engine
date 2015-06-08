@@ -535,6 +535,10 @@ msgstr "RRSIG with keytag {tag} and covering type(s) {types} has a remaining val
 msgid  "RRSIG with keytag {tag} and covering type(s) {types} has a remaining validity of {duration} seconds, which is too short."
 msgstr "RRSIG with keytag {tag} and covering type(s) {types} has a remaining validity of {duration} seconds, which is too short."
 
+#: DNSSEC:RRSIG_EXPIRATION
+msgid  "RRSIG with keytag {tag} and covering type(s) {types} expires at : {date}."
+msgstr "RRSIG with keytag {tag} and covering type(s) {types} expires at : {date}."
+
 #: DNSSEC:RRSIG_EXPIRED
 msgid  "RRSIG with keytag {tag} and covering type(s) {types} has already expired (expiration is: {expiration})."
 msgstr "RRSIG with keytag {tag} and covering type(s) {types} has already expired (expiration is: {expiration})."

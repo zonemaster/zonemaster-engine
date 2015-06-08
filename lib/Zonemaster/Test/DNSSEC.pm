@@ -185,6 +185,7 @@ sub metadata {
         ],
         dnssec04 => [
             qw(
+              RRSIG_EXPIRATION
               RRSIG_EXPIRED
               REMAINING_SHORT
               REMAINING_LONG
@@ -293,6 +294,8 @@ sub translation {
 "RRSIG with keytag {tag} and covering type(s) {types} has a duration of {duration} seconds, which is too long.",
         "DURATION_OK" =>
 "RRSIG with keytag {tag} and covering type(s) {types} has a duration of {duration} seconds, which is just fine.",
+        "RRSIG_EXPIRATION" =>
+          "RRSIG with keytag {tag} and covering type(s) {types} expires at : {date}.",
         "RRSIG_EXPIRED" =>
           "RRSIG with keytag {tag} and covering type(s) {types} has already expired (expiration is: {expiration}).",
         "REMAINING_SHORT" =>
@@ -386,6 +389,7 @@ sub policy {
         "NSEC_SIG_VERIFY_ERROR"        => "ERROR",
         "REMAINING_LONG"               => "WARNING",
         "REMAINING_SHORT"              => "WARNING",
+        "RRSIG_EXPIRATION"             => "INFO",
         "RRSIG_EXPIRED"                => "ERROR",
         "SOA_NOT_SIGNED"               => "ERROR",
         "SOA_SIGNATURE_NOT_OK"         => "ERROR",
@@ -630,6 +634,14 @@ sub dnssec04 {
     foreach my $sig ( @key_sigs, @soa_sigs ) {
         my $duration  = $sig->expiration - $sig->inception;
         my $remaining = $sig->expiration - int( $key_p->timestamp );
+        push @results,
+          info(
+            RRSIG_EXPIRATION => {
+                date  => scalar( gmtime($sig->expiration) ),
+                tag   => $sig->keytag,
+                types => $sig->typecovered,
+            }
+          );
         if ( $remaining < 0 ) {    # already expired
             push @results,
               info(
