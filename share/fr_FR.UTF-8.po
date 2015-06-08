@@ -597,7 +597,7 @@ msgid  "The following nameservers support EDNS0 : {names}."
 msgstr "Les serveurs de noms suivants supportent EDNS0 : {names}."
 
 #: NAMESERVER:IS_A_RECURSOR
-msgid  "Nameserver {ns}/{address} answered with a RCODE NXDOMAIN to SOA query on {dname}."
+msgid  "Nameserver {ns}/{address} is a recursor."
 msgstr "Le serveur de noms {ns}/{address} retourne le code NXDOMAIN lors d'une requête de type \"SOA\" sur le nom de domaine {dname}. Il est récursif."
 
 #: NAMESERVER:NO_RECURSOR
