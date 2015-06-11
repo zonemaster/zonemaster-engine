@@ -185,6 +185,7 @@ sub metadata {
         ],
         dnssec04 => [
             qw(
+              RRSIG_EXPIRATION
               RRSIG_EXPIRED
               REMAINING_SHORT
               REMAINING_LONG
@@ -200,6 +201,7 @@ sub metadata {
               ALGORITHM_PRIVATE
               ALGORITHM_OK
               ALGORITHM_UNKNOWN
+              KEY_DETAILS
               )
         ],
         dnssec06 => [
@@ -293,6 +295,8 @@ sub translation {
 "RRSIG with keytag {tag} and covering type(s) {types} has a duration of {duration} seconds, which is too long.",
         "DURATION_OK" =>
 "RRSIG with keytag {tag} and covering type(s) {types} has a duration of {duration} seconds, which is just fine.",
+        "RRSIG_EXPIRATION" =>
+          "RRSIG with keytag {tag} and covering type(s) {types} expires at : {date}.",
         "RRSIG_EXPIRED" =>
           "RRSIG with keytag {tag} and covering type(s) {types} has already expired (expiration is: {expiration}).",
         "REMAINING_SHORT" =>
@@ -305,6 +309,7 @@ sub translation {
         "HAS_NSEC3"               => "The zone has NSEC3 records.",
         "INVALID_NAME_RCODE" => "When asked for the name {name}, which must not exist, the response had RCODE {rcode}.",
         "ITERATIONS_OK"      => "The number of NSEC3 iterations is {count}, which is OK.",
+        "KEY_DETAILS"        => "Key with keytag {keytag} details : Size = {keysize}, Flags ({sep}, {rfc5011}).",
         "MANY_ITERATIONS"    => "The number of NSEC3 iterations is {count}, which is on the high side.",
         "NEITHER_DNSKEY_NOR_DS" => "There are neither DS nor DNSKEY records for the zone.",
         "NO_COMMON_KEYTAGS"     => "No DS record had a DNSKEY with a matching keytag.",
@@ -366,6 +371,7 @@ sub policy {
         "HAS_NSEC3"                    => "INFO",
         "INVALID_NAME_RCODE"           => "NOTICE",
         "ITERATIONS_OK"                => "DEBUG",
+        "KEY_DETAILS"                  => "DEBUG",
         "MANY_ITERATIONS"              => "NOTICE",
         "NEITHER_DNSKEY_NOR_DS"        => "DEBUG",
         "NO_COMMON_KEYTAGS"            => "ERROR",
@@ -386,6 +392,7 @@ sub policy {
         "NSEC_SIG_VERIFY_ERROR"        => "ERROR",
         "REMAINING_LONG"               => "WARNING",
         "REMAINING_SHORT"              => "WARNING",
+        "RRSIG_EXPIRATION"             => "INFO",
         "RRSIG_EXPIRED"                => "ERROR",
         "SOA_NOT_SIGNED"               => "ERROR",
         "SOA_SIGNATURE_NOT_OK"         => "ERROR",
@@ -630,6 +637,14 @@ sub dnssec04 {
     foreach my $sig ( @key_sigs, @soa_sigs ) {
         my $duration  = $sig->expiration - $sig->inception;
         my $remaining = $sig->expiration - int( $key_p->timestamp );
+        push @results,
+          info(
+            RRSIG_EXPIRATION => {
+                date  => scalar( gmtime($sig->expiration) ),
+                tag   => $sig->keytag,
+                types => $sig->typecovered,
+            }
+          );
         if ( $remaining < 0 ) {    # already expired
             push @results,
               info(
@@ -746,6 +761,17 @@ sub dnssec05 {
                     description => $algo_properties{$algo}{description},
                 }
               );
+            if ( $key->flags & 256 ) { # This is a Key
+                push @results,
+                  info(
+                    KEY_DETAILS => {
+                        keytag  => $key->keytag,
+                        keysize => $key->keysize,
+                        sep     => $key->flags & 1 ? q{SEP bit set} : q{SEP bit *not* set},
+                        rfc5011 => $key->flags & 128 ? q{RFC 5011 revocation bit set} : q{RFC 5011 revocation bit *not* set},
+                    }
+                );
+            }
         }
         else {
             push @results,

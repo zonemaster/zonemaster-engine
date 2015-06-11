@@ -281,6 +281,10 @@ msgstr "RRSIG-posten med keytag {tag} och täckande typerna {types} har en livsl
 msgid  "RRSIG with keytag {tag} and covering type(s) {types} has a duration of {duration} seconds, which is just fine."
 msgstr "RRSIG-posten med keytag {tag} och täckande typerna {types} har en livslängd på {duration} sekunder, vilket är lagom."
 
+#: DNSSEC:RRSIG_EXPIRATION
+msgid  "RRSIG with keytag {tag} and covering type(s) {types} expires at : {date}."
+msgstr "RRSIG with keytag {tag} and covering type(s) {types} expires at : {date}."
+
 #: DNSSEC:RRSIG_EXPIRED
 msgid  "RRSIG with keytag {tag} and covering type(s) {types} has already expired (expiration is: {expiration})."
 msgstr "RRSIG-posten med {tag} och täckande typerna {types} har redan gått ut (utgångstiden är: {expiration})."
@@ -316,6 +320,10 @@ msgstr "Svaret på en fråga om namnet {name}, som inte får existera, hade RCOD
 #: DNSSEC:ITERATIONS_OK
 msgid  "The number of NSEC3 iterations is {count}, which is OK."
 msgstr "Antalet NSEC3-iterationer är {count}, vilket är lagom."
+
+#: DNSSEC:KEY_DETAILS
+msgid  "Key with keytag {keytag} details : Size = {keysize}, Flags ({sep}, {rfc5011})."
+msgstr "Key with keytag {keytag} details : Size = {keysize}, Flags ({sep}, {rfc5011})."
 
 #: DNSSEC:MANY_ITERATIONS
 msgid  "The number of NSEC3 iterations is {count}, which is on the high side."
