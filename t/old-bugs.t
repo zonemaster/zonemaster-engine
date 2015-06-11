@@ -25,7 +25,6 @@ is( scalar( @{ $zft_zone->ns } ), 2, 'Two nameservers for zft.rd.nic.fr.' );
 my $root = Zonemaster->zone( '.' );
 my @msg = Zonemaster->test_method( 'Delegation', 'delegation03', $root );
 
-foreach my $msg (@msg) { print $msg, "\n"; }
 ok( any { $_->tag eq 'REFERRAL_SIZE_OK' } @msg );
 ok( none { $_->tag eq 'MODULE_ERROR' } @msg );
 
