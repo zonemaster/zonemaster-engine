@@ -41,13 +41,17 @@ my @res;
 my %tag;
 
 # nameserver01
-$zone = Zonemaster->zone( 'dyad.se' );
+$zone = Zonemaster->zone( 'fr' );
 zone_gives( 'nameserver01', $zone, [q{NO_RECURSOR}] );
 zone_gives_not( 'nameserver01', $zone, [q{IS_A_RECURSOR}] );
 
-$zone = Zonemaster->zone( 'vasa.se' );
+$zone = Zonemaster->zone( '.' );
 zone_gives_not( 'nameserver01', $zone, [q{NO_RECURSOR}] );
 zone_gives( 'nameserver01', $zone, [q{IS_A_RECURSOR}] );
+
+# nameserver02
+$zone = Zonemaster->zone( 'perennaguiden.se' );
+zone_gives( 'nameserver02', $zone, ['EDNS0_BAD_ANSWER']);
 
 # nameserver03
 $zone = Zonemaster->zone( 'nameserver03-axfr-failure.zut-root.rd.nic.fr' );
@@ -78,14 +82,14 @@ zone_gives( 'nameserver02', $zone, ['EDNS0_SUPPORT'] );
 $zone = Zonemaster->zone( 'uddevallafiber.se' );
 zone_gives( 'nameserver05', $zone, ['QUERY_DROPPED'] );
 
-$zone = Zonemaster->zone( 'escargot.se' );
-zone_gives( 'nameserver05', $zone, ['ANSWER_BAD_RCODE'] );
+SKIP: {
+    skip "Zone does not actually have tested problem", 1,
+    $zone = Zonemaster->zone( 'escargot.se' );
+    zone_gives( 'nameserver05', $zone, ['ANSWER_BAD_RCODE'] );
+}
 
 $zone = Zonemaster->zone( 'nameserver06-can-be-resolved.zut-root.rd.nic.fr' );
 zone_gives( 'nameserver06', $zone, [q{CAN_BE_RESOLVED}] );
-
-$zone = Zonemaster->zone( 'perennaguiden.se' );
-zone_gives( 'nameserver02', $zone, ['EDNS0_BAD_ANSWER']);
 
 TODO: {
     local $TODO = "Need to find/create zones with that error";

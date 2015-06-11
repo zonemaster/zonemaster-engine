@@ -33,16 +33,19 @@ $zone = Zonemaster->zone( q{zone01.zut-root.rd.nic.fr} );
 %res = map { $_->tag => 1 } Zonemaster->test_method( q{Zone}, q{zone01}, $zone );
 ok( $res{MNAME_RECORD_DOES_NOT_EXIST}, q{SOA 'mname' field does not exist} );
 
-%res = map { $_->tag => 1 } Zonemaster->test_module( q{Zone}, q{add.tf} );
+%res = map { $_->tag => 1 } Zonemaster->test_module( q{Zone}, q{zone07.zut-root.rd.nic.fr} );
 ok( $res{SOA_DEFAULT_TTL_MAXIMUM_VALUE_LOWER}, q{SOA 'minimum' value is too low} );
 
 $zone = Zonemaster->zone( q{zone05.zut-root.rd.nic.fr} );
 %res = map { $_->tag => 1 } Zonemaster->test_method( q{Zone}, q{zone09}, $zone );
 ok( $res{NO_MX_RECORD}, q{No MX records} );
 
-$zone = Zonemaster->zone( q{see2meet.se} );
-%res = map { $_->tag => 1 } Zonemaster->test_method( q{Zone}, q{zone08}, $zone );
-ok( $res{MX_RECORD_IS_CNAME}, q{MX record is CNAME} );
+SKIP: {
+    skip "Zone does not actually have tested problem", 1,
+    $zone = Zonemaster->zone( q{see2meet.se} );
+    %res = map { $_->tag => 1 } Zonemaster->test_method( q{Zone}, q{zone08}, $zone );
+    ok( $res{MX_RECORD_IS_CNAME}, q{MX record is CNAME} );
+}
 
 %res = map { $_->tag => 1 } Zonemaster->test_module( q{Zone}, q{zone02.zut-root.rd.nic.fr} );
 ok( $res{MNAME_NOT_AUTHORITATIVE},    q{SOA 'mname' nameserver is not authoritative for zone} );

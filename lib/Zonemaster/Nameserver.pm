@@ -55,7 +55,7 @@ around 'new' => sub {
     my $self = shift;
 
     my $obj  = $self->$orig( @_ );
-    my $name = uc( '' . $obj->name );
+    my $name = lc( '' . $obj->name ) ;
     $name = '$$$NONAME' unless $name;
 
     if ( not exists $object_cache{$name}{ $obj->address->ip } ) {
@@ -177,12 +177,12 @@ sub query {
         } ## end if ( $name =~ m/(\.|^)\Q$fname\E$/i)
     } ## end foreach my $fname ( sort keys...)
 
-    if ( not exists( $self->cache->data->{"\U$name"}{"\U$type"}{"\U$class"}{$dnssec}{$usevc}{$recurse}{$edns_size} ) ) {
-        $self->cache->data->{"\U$name"}{"\U$type"}{"\U$class"}{$dnssec}{$usevc}{$recurse}{$edns_size} =
+    if ( not exists( $self->cache->data->{"$name"}{"\U$type"}{"\U$class"}{$dnssec}{$usevc}{$recurse}{$edns_size} ) ) {
+        $self->cache->data->{"$name"}{"\U$type"}{"\U$class"}{$dnssec}{$usevc}{$recurse}{$edns_size} =
           $self->_query( $name, $type, $href );
     }
 
-    my $p = $self->cache->data->{"\U$name"}{"\U$type"}{"\U$class"}{$dnssec}{$usevc}{$recurse}{$edns_size};
+    my $p = $self->cache->data->{"$name"}{"\U$type"}{"\U$class"}{$dnssec}{$usevc}{$recurse}{$edns_size};
     Zonemaster->logger->add( CACHED_RETURN => { packet => ( $p ? $p->string : 'undef' ) } );
 
     return $p;

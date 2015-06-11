@@ -141,7 +141,7 @@ ok( $res{NAMESERVER_IP_PTR_MISMATCH},  q{Nameserver IP PTR mismatch} );
 ok( $res{NO_IP_PRIVATE_NETWORK},       q{All Nameserver addresses are in the routable public addressing space} );
 ok( $res{NAMESERVERS_IP_WITH_REVERSE}, q{Reverse DNS entry exist for all Nameserver IP addresses} );
 
-%res = map { $_->tag => 1 } Zonemaster->test_module( q{address}, q{bisexualmenace.org} );
+%res = map { $_->tag => 1 } Zonemaster->test_module( q{address}, q{address02.zut-root.rd.nic.fr} );
 ok( $res{NAMESERVER_IP_WITHOUT_REVERSE}, q{Nameserver IP without PTR} );
 
 %res = map { $_->tag => 1 } Zonemaster->test_module( q{address}, q{is.se} );

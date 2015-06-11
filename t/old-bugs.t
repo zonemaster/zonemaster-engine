@@ -25,14 +25,15 @@ is( scalar( @{ $zft_zone->ns } ), 2, 'Two nameservers for zft.rd.nic.fr.' );
 my $root = Zonemaster->zone( '.' );
 my @msg = Zonemaster->test_method( 'Delegation', 'delegation03', $root );
 
+foreach my $msg (@msg) { print $msg, "\n"; }
 ok( any { $_->tag eq 'REFERRAL_SIZE_OK' } @msg );
 ok( none { $_->tag eq 'MODULE_ERROR' } @msg );
 
-my $azn = Zonemaster->zone( 'asnlookup.zonemaster.net' );
-is( scalar( @{ $azn->glue_names } ), 4, 'All glue names' );
-is( scalar( @{ $azn->glue } ),       2, 'All glue objects' );
-is( scalar( @{ $azn->ns_names } ),   4, 'All NS names' );
-is( scalar( @{ $azn->ns } ),         2, 'All NS objects' );
+my $nf = Zonemaster->zone( 'nic.fr' );
+is( scalar( @{ $nf->glue_names } ), 6, 'All glue names' );
+is( scalar( @{ $nf->glue } ),       11, 'All glue objects' );
+is( scalar( @{ $nf->ns_names } ),   6, 'All NS names' );
+is( scalar( @{ $nf->ns } ),         11, 'All NS objects' );
 
 my $rootfr = Zonemaster->zone( 'root.fr' );
 @res = Zonemaster->test_method( 'DNSSEC', 'dnssec02', $rootfr );

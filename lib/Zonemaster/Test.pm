@@ -37,6 +37,7 @@ sub _log_versions {
     info( DEPENDENCY_VERSION => { name => 'Scalar::Util',          version => $Scalar::Util::VERSION } );
     info( DEPENDENCY_VERSION => { name => 'Hash::Merge',           version => $Hash::Merge::VERSION } );
     info( DEPENDENCY_VERSION => { name => 'Readonly',              version => $Readonly::VERSION } );
+    info( DEPENDENCY_VERSION => { name => 'Text::Capitalize',      version => $Text::Capitalize::VERSION } );
 
     foreach my $file ( @{ Zonemaster->config->cfiles } ) {
         info( CONFIG_FILE => { name => $file } );
