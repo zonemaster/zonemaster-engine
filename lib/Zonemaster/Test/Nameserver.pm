@@ -448,19 +448,19 @@ sub nameserver07 {
             next if $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short };
 
             my $p = $local_ns->query( q{.}, q{NS} );
+            if ( $p ) {
+                my @ns = $p->get_records( q{NS}, q{authority} );
 
-            my @ns = $p->get_records( q{NS}, q{authority} );
-
-            if ( @ns ) {
-                push @results,
-                  info(
-                    UPWARD_REFERRAL => {
-                        ns      => $local_ns->name->string,
-                        address => $local_ns->address->short,
-                    }
-                  );
+                if ( @ns ) {
+                    push @results,
+                      info(
+                        UPWARD_REFERRAL => {
+                            ns      => $local_ns->name->string,
+                            address => $local_ns->address->short,
+                        }
+                      );
+                }
             }
-
             $nsnames{ $local_ns->name }++;
             $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short }++;
         } ## end foreach my $local_ns ( @{ Zonemaster::TestMethods...})

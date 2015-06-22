@@ -178,6 +178,7 @@ sub metadata {
         dnssec03 => [
             qw(
               NO_NSEC3PARAM
+              NO_DNSKEY
               MANY_ITERATIONS
               TOO_MANY_ITERATIONS
               ITERATIONS_OK
@@ -555,22 +556,6 @@ sub dnssec03 {
     my @nsec3params;
     @nsec3params = $param_p->get_records( 'NSEC3PARAM', 'answer' ) if $param_p;
 
-    my $dk_p = $zone->query_one( $zone->name, 'DNSKEY', { dnssec => 1 } );
-
-    my @dnskey;
-    @dnskey = $dk_p->get_records( 'DNSKEY', 'answer' ) if $dk_p;
-    my $min_len = min map { $_->keysize } @dnskey;
-    # Do rounding as per RFC5155 section 10.3
-    if ($min_len > 2048) {
-        $min_len = 4096
-    }
-    elsif ($min_len > 1024) {
-        $min_len = 2048
-    }
-    else {
-        $min_len = 1024
-    }
-
     if ( @nsec3params == 0 ) {
         push @results,
           info(
@@ -580,6 +565,30 @@ sub dnssec03 {
           );
     }
     else {
+        my $dk_p = $zone->query_one( $zone->name, 'DNSKEY', { dnssec => 1 } );
+
+        my @dnskey;
+        @dnskey = $dk_p->get_records( 'DNSKEY', 'answer' ) if $dk_p;
+
+        my $min_len = 0;
+        if ( @dnskey ) {
+            $min_len = min map { $_->keysize } @dnskey;
+            # Do rounding as per RFC5155 section 10.3
+            if ($min_len > 2048) {
+                $min_len = 4096;
+            }
+            elsif ($min_len > 1024) {
+                $min_len = 2048;
+            }
+            else {
+                $min_len = 1024;
+            }
+        }
+        else {
+            push @results,
+              info( NO_DNSKEY => {} );
+        }
+
         foreach my $n3p ( @nsec3params ) {
             my $iter = $n3p->iterations;
             if ( $iter > 100 ) {
@@ -602,7 +611,8 @@ sub dnssec03 {
                       );
                 }
             } ## end if ( $iter > 100 )
-            else {
+            elsif ( $min_len > 0 ) 
+            {
                 push @results,
                   info(
                     ITERATIONS_OK => {
