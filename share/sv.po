@@ -463,27 +463,27 @@ msgstr "Namnservern {ns}/{address} svarade på en SOA-fråga från en annan käl
 
 #: NAMESERVER:UPWARD_REFERRAL_IRRELEVANT
 msgid  "Upward referral tests skipped for root zone."
-msgstr "Upward referral tests skipped for root zone."
+msgstr "Testerna för hänvisning till förälderzonen skippades för root-zonen."
 
 #: NAMESERVER:UPWARD_REFERRAL
 msgid  "Nameserver {ns}/{address} returns an upward referral."
-msgstr "Nameserver {ns}/{address} returns an upward referral."
+msgstr "Nameservern {ns}/{address} returnerade en hänvisning till förälderzonen."
 
 #: NAMESERVER:NO_UPWARD_REFERRAL
 msgid  "None of the following nameservers returns an upward referral : {names}."
-msgstr "None of the following nameservers returns an upward referral : {names}."
+msgstr "Ingen av följande nameserverar returnerade en hänvisning till föräldern : {names}."
 
 #: NAMESERVER:QNAME_CASE_SENSITIVE
 msgid  "Nameserver {ns}/{address} preserves original case of queried names."
-msgstr "Nameserver {ns}/{address} preserves original case of queried names."
+msgstr "Namnservern {ns}/{address} bevarade versaler och gemener från frågan."
 
 #: NAMESERVER:QNAME_CASE_INSENSITIVE
 msgid  "Nameserver {ns}/{address} does not preserve original case of queried names."
-msgstr "Nameserver {ns}/{address} does not preserve original case of queried names."
+msgstr "Nameservern {ns}/{address} bevarar inte versaler och gemener från frågan."
 
 #: NAMESERVER:QNAME_CASE_SENSITIVITY_IRRELEVANT
 msgid  "QNAME case sensitivity test skipped for domain name {dname}."
-msgstr "QNAME case sensitivity test skipped for domain name {dname}."
+msgstr "QNAME case sensitivity-testet skippat för domännamnet {dname}."
 
 #: SYNTAX:DISCOURAGED_DOUBLE_DASH
 msgid  "Domain name ({name}) has a label ({label}) with a double hyphen ('--') in position 3 and 4 (with a prefix which is not 'xn--')."
