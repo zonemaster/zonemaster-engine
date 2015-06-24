@@ -1,5 +1,18 @@
 Revision history for Perl module Zonemaster.
 
+v1.0.4 2015-06-24
+ - Fixed NSEC3 iterations evaluation, issue #77
+ - Key size info on DNSKEY records, issue #79
+ - Signature expiration info, issue #13
+ - Added new test case, nameserver08, QNAME case insensitivity
+ - Fixed English log entry on open recursors, issue #76
+ - Added new test case, nameserver07, upward referrals
+ - Fixed nameserver response times, issue cli #20
+ - Fix empty key list crash, issue zonemaster #320
+ - Logging improvements, work on issue #60
+ - Improvements on JSON output
+ - Fixed locale problems
+
 v1.0.3 2015-04-07
  - Add message stating clearly that a name is not a domain.
  - Check more thoroughly that answers are answers when building zone NS
