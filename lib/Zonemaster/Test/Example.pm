@@ -4,9 +4,10 @@ package Zonemaster::Test::Example v1.0.1;
 ### This test module is meant to serve as an example when writing proper ones.
 ###
 
-use 5.14.2;
 use strict;
 use warnings;
+
+use 5.014002;
 
 use Zonemaster;
 use Zonemaster::Util;
@@ -19,7 +20,7 @@ sub all {
     my ( $class, $zone ) = @_;
     my @results;
 
-    push @results, $class->placeholder if Zonemaster->config->should_run('placeholder');
+    push @results, $class->placeholder if Zonemaster->config->should_run( 'placeholder' );
 
     return @results;
 }

@@ -1,0 +1,8 @@
+{
+    "__testcases__": {
+        "consistency01": 0,
+        "consistency02": 0,
+        "consistency03": 1,
+        "consistency04": 0 
+    }
+}
