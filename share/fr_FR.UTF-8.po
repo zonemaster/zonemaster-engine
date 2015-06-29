@@ -42,60 +42,60 @@ msgid  "Nameservers did not respond to A query."
 msgstr "Aucune réponse des serveurs de noms sur une requête de type \"A\"."
 
 #: BASIC:DOMAIN_NAME_LABEL_TOO_LONG
-msgid  "Domain name ({name}) has a label ({label}) too long ({length}/{max})."
-msgstr "Le nom de domaine ({name}) a un label ({label}) trop long ({length}/{max})."
+msgid  "Domain name ({dname}) has a label ({dlabel}) too long ({dlength}/{max})."
+msgstr "Le nom de domaine ({dname}) a un label ({dlabel}) trop long ({dlength}/{max})."
 
 #: BASIC:DOMAIN_NAME_TOO_LONG
-msgid  "Domain name is too long ({length}/{max})."
-msgstr "Le nom de domaine est trop long ({length}/{max})."
+msgid  "Domain name is too long ({fqdnlength}/{max})."
+msgstr "Le nom de domaine est trop long ({fqdnlength}/{max})."
 
 #: BASIC:DOMAIN_NAME_ZERO_LENGTH_LABEL
-msgid  "Domain name ({name}) has a zero length label."
-msgstr "Le nom de domaine ({name}) a un label de taille zéro."
+msgid  "Domain name ({dname}) has a zero length label."
+msgstr "Le nom de domaine ({dname}) a un label de taille zéro."
 
 #: BASIC:HAS_A_RECORDS
-msgid  "Nameserver {source} returned A record(s) for {name}."
-msgstr "Le serveur de noms {source} renvoie un enregistrement de type \"A\" en réponse à une requête pour {name}."
+msgid  "Nameserver {ns} returned A record(s) for {dname}."
+msgstr "Le serveur de noms {ns} renvoie un enregistrement de type \"A\" en réponse à une requête pour {dname}."
 
 #: BASIC:HAS_GLUE
-msgid  "Nameserver for zone {parent} listed these nameservers as glue: {ns}."
-msgstr "Le serveur de noms pour la zone {parent} renvoie la liste de serveurs de noms suivants: {ns}."
+msgid  "Nameserver for zone {pname} listed these nameservers as glue: {nsnlist}."
+msgstr "Le serveur de noms pour la zone {pname} renvoie la liste de serveurs de noms suivants: {nsnlist}."
 
 #: BASIC:HAS_NAMESERVERS
-msgid  "Nameserver {source} listed these servers as glue: {ns}."
-msgstr "Une requête NS sur le serveur de noms {source} renvoie la liste de serveurs de noms suivants: {ns}."
+msgid  "Nameserver {ns} listed these servers as glue: {nsnlist}."
+msgstr "Une requête NS sur le serveur de noms {ns} renvoie la liste de serveurs de noms suivants: {nsnlist}."
 
 #: BASIC:HAS_NAMESERVER_NO_WWW_A_TEST
-msgid  "Functional nameserver found. \"A\" query for www.{name} test aborted."
-msgstr "Un serveur de noms fonctionnel a été trouvé. Inutile de réaliser une requête de type \"A\" sur www.{name}."
+msgid  "Functional nameserver found. \"A\" query for www.{zname} test aborted."
+msgstr "Un serveur de noms fonctionnel a été trouvé. Inutile de réaliser une requête de type \"A\" sur www.{zname}."
 
 #: BASIC:IPV4_DISABLED
-msgid  "IPv4 is disabled, not sending \"{type}\" query to {ns}."
-msgstr "IPv4 a été désactivé, la requête de type \"{type}\" sur le serveur {ns} est annulée."
+msgid  "IPv4 is disabled, not sending \"{rrtype}\" query to {ns}."
+msgstr "IPv4 a été désactivé, la requête de type \"{rrtype}\" sur le serveur {ns} est annulée."
 
 #: BASIC:IPV4_ENABLED
-msgid  "IPv4 is enabled, can send \"{type}\" query to {ns}."
-msgstr "IPv4 est activé, il est possible de réaliser une requête de type \"{type}\" sur le serveur {ns}."
+msgid  "IPv4 is enabled, can send \"{rrtype}\" query to {ns}."
+msgstr "IPv4 est activé, il est possible de réaliser une requête de type \"{rrtype}\" sur le serveur {ns}."
 
 #: BASIC:IPV6_DISABLED
-msgid  "IPv6 is disabled, not sending \"{type}\" query to {ns}."
-msgstr "IPv6 a été désactivé, la requête de type \"{type}\" sur le serveur {ns} est annulée."
+msgid  "IPv6 is disabled, not sending \"{rrtype}\" query to {ns}."
+msgstr "IPv6 a été désactivé, la requête de type \"{rrtype}\" sur le serveur {ns} est annulée."
 
 #: BASIC:IPV6_ENABLED
-msgid  "IPv6 is enabled, can send \"{type}\" query to {ns}."
-msgstr "IPv6 est activé, il est possible de réaliser une requête de type \"{type}\" sur le serveur {ns}."
+msgid  "IPv6 is enabled, can send \"{rrtype}\" query to {ns}."
+msgstr "IPv6 est activé, il est possible de réaliser une requête de type \"{rrtype}\" sur le serveur {ns}."
 
 #: BASIC:NO_A_RECORDS
-msgid  "Nameserver {source} did not return A record(s) for {name}."
-msgstr "Le serveur de noms {source} ne renvoie pas d'enregistrement de type \"A\" en réponse à une requête pour {name}."
+msgid  "Nameserver {ns} did not return A record(s) for {dname}."
+msgstr "Le serveur de noms {ns} ne renvoie pas d'enregistrement de type \"A\" en réponse à une requête pour {dname}."
 
 #: BASIC:NO_DOMAIN
-msgid  "Nameserver for zone {parent} responded with NXDOMAIN to query for glue."
-msgstr "Le serveur de noms pour la zone {parent} retourne un code NXDOMAIN à une requête de type \"NS\" pour la zone testée."
+msgid  "Nameserver for zone {pname} responded with NXDOMAIN to query for glue."
+msgstr "Le serveur de noms pour la zone {pname} retourne un code NXDOMAIN à une requête de type \"NS\" pour la zone testée."
 
 #: BASIC:NO_GLUE
-msgid  "Nameservers for \"{parent}\" provided no NS records for tested zone. RCODE given was {rcode}."
-msgstr "Les serveurs de noms pour la zone \"{parent}\" ne renvoient pas d'enregistrements de type \"NS\" pour la zone testée. Le code {rcode} a été retourné."
+msgid  "Nameservers for \"{pname}\" provided no NS records for tested zone. RCODE given was {rcode}."
+msgstr "Les serveurs de noms pour la zone \"{pname}\" ne renvoient pas d'enregistrements de type \"NS\" pour la zone testée. Le code {rcode} a été retourné."
 
 #: BASIC:NO_GLUE_PREVENTS_NAMESERVER_TESTS
 msgid  "No NS records for tested zone from parent. NS tests aborted."
@@ -106,20 +106,20 @@ msgid  "No parent domain could be found for the tested domain."
 msgstr "Aucune zone parente n'a pu être trouvée pour le nom de domaine testé."
 
 #: BASIC:NO_PARENT_RESPONSE
-msgid  "No response from nameserver for zone {parent} when trying to fetch glue."
-msgstr "Aucune réponse obtenue des serveurs de noms de la zone {parent} en essayant de récupérer la liste des serveurs de noms de la zone testée."
+msgid  "No response from nameserver for zone {pname} when trying to fetch glue."
+msgstr "Aucune réponse obtenue des serveurs de noms de la zone {pname} en essayant de récupérer la liste des serveurs de noms de la zone testée."
 
 #: BASIC:NS_FAILED
-msgid  "Nameserver {source} did not return NS records. RCODE was {rcode}."
-msgstr "Le serveur de noms {source} ne renvoie pas d'enregistrements de type \"NS\" pour la zone testée. Le code {rcode} a été retourné."
+msgid  "Nameserver {ns} did not return NS records. RCODE was {rcode}."
+msgstr "Le serveur de noms {ns} ne renvoie pas d'enregistrements de type \"NS\" pour la zone testée. Le code {rcode} a été retourné."
 
 #: BASIC:NS_NO_RESPONSE
-msgid  "Nameserver {source} did not respond to NS query."
-msgstr "Le serveur de noms {source} ne répond pas à une requête de type \"NS\"."
+msgid  "Nameserver {ns} did not respond to NS query."
+msgstr "Le serveur de noms {ns} ne répond pas à une requête de type \"NS\"."
 
 #: BASIC:PARENT_REPLIES
-msgid  "Nameserver for zone {parent} replies when trying to fetch glue."
-msgstr "Les serveurs de noms de la zone {parent} répondent lorsque l'on essaye de récupérer la liste des serveurs de noms de la zone testée."
+msgid  "Nameserver for zone {pname} replies when trying to fetch glue."
+msgstr "Les serveurs de noms de la zone {pname} répondent lorsque l'on essaye de récupérer la liste des serveurs de noms de la zone testée."
 
 #: CONNECTIVITY:NAMESERVERS_IPV4_NO_AS
 msgid  "No IPv4 nameserver address is in an AS."
@@ -646,11 +646,11 @@ msgstr "Il a été impossible de trouver une adresse IP pour les serveurs de nom
 
 #: NAMESERVER:QNAME_CASE_SENSITIVE
 msgid  "Nameserver {ns}/{address} preserves original case of queried names."
-msgstr "Nameserver {ns}/{address} preserves original case of queried names."
+msgstr "Dans la réponse, le serveur de noms {ns}/{address} conserve la casse du nom tel qu'il a été requếté."
 
 #: NAMESERVER:QNAME_CASE_INSENSITIVE
 msgid  "Nameserver {ns}/{address} does not preserve original case of queried names."
-msgstr "Nameserver {ns}/{address} does not preserve original case of queried names."
+msgstr "Dans la réponse, le serveur de noms {ns}/{address} ne conserve pas la casse du nom tel qu'il a été requếté."
 
 #: NAMESERVER:QNAME_CASE_SENSITIVITY_IRRELEVANT
 msgid  "QNAME case sensitivity test skipped for domain name {dname}."
