@@ -1,8 +1,9 @@
 package Zonemaster::Test::Delegation v1.0.1;
 
-use 5.14.2;
 use strict;
 use warnings;
+
+use 5.014002;
 
 use Zonemaster;
 use Zonemaster::Util;
@@ -24,13 +25,13 @@ sub all {
     my ( $class, $zone ) = @_;
     my @results;
 
-    push @results, $class->delegation01( $zone ) if Zonemaster->config->should_run('delegation01');
-    push @results, $class->delegation02( $zone ) if Zonemaster->config->should_run('delegation02');
-    push @results, $class->delegation03( $zone ) if Zonemaster->config->should_run('delegation03');
-    push @results, $class->delegation04( $zone ) if Zonemaster->config->should_run('delegation04');
-    push @results, $class->delegation05( $zone ) if Zonemaster->config->should_run('delegation05');
-    push @results, $class->delegation06( $zone ) if Zonemaster->config->should_run('delegation06');
-    push @results, $class->delegation07( $zone ) if Zonemaster->config->should_run('delegation07');
+    push @results, $class->delegation01( $zone ) if Zonemaster->config->should_run( 'delegation01' );
+    push @results, $class->delegation02( $zone ) if Zonemaster->config->should_run( 'delegation02' );
+    push @results, $class->delegation03( $zone ) if Zonemaster->config->should_run( 'delegation03' );
+    push @results, $class->delegation04( $zone ) if Zonemaster->config->should_run( 'delegation04' );
+    push @results, $class->delegation05( $zone ) if Zonemaster->config->should_run( 'delegation05' );
+    push @results, $class->delegation06( $zone ) if Zonemaster->config->should_run( 'delegation06' );
+    push @results, $class->delegation07( $zone ) if Zonemaster->config->should_run( 'delegation07' );
 
     return @results;
 }
@@ -239,8 +240,7 @@ sub delegation02 {
     }
 
     if ( scalar keys %ips and not scalar @results ) {
-        push @results,
-          info( DISTINCT_IP_ADDRESS => {} );
+        push @results, info( DISTINCT_IP_ADDRESS => {} );
     }
 
     return @results;
@@ -366,8 +366,7 @@ sub delegation04 {
         and not scalar @results
       )
     {
-        push @results,
-          info( ARE_AUTHORITATIVE => {} );
+        push @results, info( ARE_AUTHORITATIVE => {} );
     }
 
     return @results;
@@ -407,8 +406,7 @@ sub delegation05 {
         and not scalar @results
       )
     {
-        push @results,
-          info( NS_RR_NO_CNAME => {} );
+        push @results, info( NS_RR_NO_CNAME => {} );
     }
 
     return @results;
@@ -470,8 +468,7 @@ sub delegation06 {
         and not scalar @results
       )
     {
-        push @results,
-          info( SOA_EXISTS => {} );
+        push @results, info( SOA_EXISTS => {} );
     }
 
     return @results;

@@ -1,5 +1,7 @@
 use Test::More;
 
+use List::MoreUtils qw[uniq none any];
+
 BEGIN {
     use_ok( q{Zonemaster} );
     use_ok( q{Zonemaster::Test::Nameserver} );
@@ -36,6 +38,23 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster->config->no_network( 1 );
 }
 
+my @testcases_with_network = (qw{nameserver01 nameserver02 nameserver06 nameserver07 nameserver08});
+foreach my $testcase ( qw{nameserver01 nameserver02 nameserver03 nameserver04 nameserver05 nameserver06 nameserver07 nameserver08} ) {
+    next if grep { $_ eq $testcase } @testcases_with_network;
+    Zonemaster->config->load_policy_file( 't/policies/Test-'.$testcase.'-only.json' );
+    my @testcases;
+    Zonemaster->logger->clear_history();
+    foreach my $result ( Zonemaster->test_module( q{nameserver}, q{afnic.fr} ) ) {
+        foreach my $trace (@{$result->trace}) {
+            push @testcases, grep /Zonemaster::Test::Nameserver::nameserver/, @$trace;
+        }
+    }
+    @testcases = uniq sort @testcases;
+    is( scalar( @testcases ), 1, 'only one test-case' );
+    is( $testcases[0], 'Zonemaster::Test::Nameserver::'.$testcase, 'expected test-case' );
+}
+Zonemaster->config->load_policy_file( 't/policies/Test-nameserver-all.json' );
+
 my $zone;
 my @res;
 my %tag;
@@ -53,6 +72,12 @@ zone_gives( 'nameserver01', $zone, [q{IS_A_RECURSOR}] );
 $zone = Zonemaster->zone( 'perennaguiden.se' );
 zone_gives( 'nameserver02', $zone, ['EDNS0_BAD_ANSWER']);
 
+$zone = Zonemaster->zone( 'pricelessstockolm.se' );
+zone_gives( 'nameserver02', $zone, ['EDNS0_BAD_QUERY'] );
+
+$zone = Zonemaster->zone( 'dyad.se' );
+zone_gives( 'nameserver02', $zone, ['EDNS0_SUPPORT'] );
+
 # nameserver03
 $zone = Zonemaster->zone( 'nameserver03-axfr-failure.zut-root.rd.nic.fr' );
 zone_gives( 'nameserver03', $zone, [q{AXFR_FAILURE}] );
@@ -66,6 +91,9 @@ zone_gives( 'nameserver04', $zone, [q{SAME_SOURCE_IP}] );
 $zone = Zonemaster->zone( 'afnic.fr' );
 zone_gives( 'nameserver05', $zone, [q{AAAA_WELL_PROCESSED}] );
 
+$zone = Zonemaster->zone( 'uddevallafiber.se' );
+zone_gives( 'nameserver05', $zone, ['QUERY_DROPPED'] );
+
 # nameserver06
 $zone = Zonemaster->zone( 'nameserver06-can-not-be-resolved.zut-root.rd.nic.fr' );
 zone_gives( 'nameserver06', $zone, [q{CAN_NOT_BE_RESOLVED}] );
@@ -73,23 +101,24 @@ zone_gives( 'nameserver06', $zone, [q{CAN_NOT_BE_RESOLVED}] );
 $zone = Zonemaster->zone( 'nameserver06-no-resolution.zut-root.rd.nic.fr' );
 zone_gives( 'nameserver06', $zone, [q{NO_RESOLUTION}] );
 
-$zone = Zonemaster->zone( 'pricelessstockolm.se' );
-zone_gives( 'nameserver02', $zone, ['EDNS0_BAD_QUERY'] );
+$zone = Zonemaster->zone( 'nameserver06-can-be-resolved.zut-root.rd.nic.fr' );
+zone_gives( 'nameserver06', $zone, [q{CAN_BE_RESOLVED}] );
 
-$zone = Zonemaster->zone( 'dyad.se' );
-zone_gives( 'nameserver02', $zone, ['EDNS0_SUPPORT'] );
+# nameserver07
+$zone = Zonemaster->zone( '.' );
+zone_gives( 'nameserver07', $zone, [q{UPWARD_REFERRAL_IRRELEVANT}] );
+zone_gives_not( 'nameserver07', $zone, [qw{UPWARD_REFERRAL NO_UPWARD_REFERRAL}] );
 
-$zone = Zonemaster->zone( 'uddevallafiber.se' );
-zone_gives( 'nameserver05', $zone, ['QUERY_DROPPED'] );
+# nameserver08
+$zone = Zonemaster->zone( '.' );
+zone_gives( 'nameserver08', $zone, [q{QNAME_CASE_SENSITIVITY_IRRELEVANT}] );
+zone_gives_not( 'nameserver08', $zone, [qw{QNAME_CASE_INSENSITIVE QNAME_CASE_SENSITIVE}] );
 
 SKIP: {
     skip "Zone does not actually have tested problem", 1,
     $zone = Zonemaster->zone( 'escargot.se' );
     zone_gives( 'nameserver05', $zone, ['ANSWER_BAD_RCODE'] );
 }
-
-$zone = Zonemaster->zone( 'nameserver06-can-be-resolved.zut-root.rd.nic.fr' );
-zone_gives( 'nameserver06', $zone, [q{CAN_BE_RESOLVED}] );
 
 TODO: {
     local $TODO = "Need to find/create zones with that error";
@@ -102,13 +131,60 @@ TODO: {
     ok( $tag{DIFFERENT_SOURCE_IP}, q{DIFFERENT_SOURCE_IP} );
 
     # nameserver07
-    ok( $tag{UPWARD_REFERRAL_IRRELEVANT}, q{UPWARD_REFERRAL_IRRELEVANT} );
     ok( $tag{UPWARD_REFERRAL}, q{UPWARD_REFERRAL} );
     ok( $tag{NO_UPWARD_REFERRAL}, q{NO_UPWARD_REFERRAL} );
+
+    # nameserver08
+    ok( $tag{QNAME_CASE_INSENSITIVE}, q{QNAME_CASE_INSENSITIVE} );
+    ok( $tag{QNAME_CASE_SENSITIVE}, q{QNAME_CASE_SENSITIVE} );
 }
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Nameserver->save( $datafile );
 }
+
+Zonemaster->config->no_network( 0 );
+$zone = Zonemaster->zone( 'arpa' );
+zone_gives( 'nameserver03', $zone, [q{AXFR_AVAILABLE}] );
+zone_gives( 'nameserver03', $zone, [q{AXFR_FAILURE}] );
+Zonemaster->config->ipv6_ok( 0 );
+Zonemaster->config->ipv4_ok( 0 );
+$zone = Zonemaster->zone( 'fr' );
+zone_gives( 'nameserver01', $zone, [q{NO_NETWORK}] );
+zone_gives_not( 'nameserver01', $zone, [qw{NO_RECURSOR IS_A_RECURSOR}] );
+$zone = Zonemaster->zone( 'afnic.fr' );
+zone_gives( 'nameserver05', $zone, [q{NO_NETWORK}] );
+zone_gives_not( 'nameserver05', $zone, [qw{IPV6_DISABLED IPV4_DISABLED}] );
+$zone = Zonemaster->zone( '.' );
+zone_gives( 'nameserver08', $zone, [q{NO_NETWORK}] );
+zone_gives_not( 'nameserver08', $zone, [qw{QNAME_CASE_SENSITIVITY_IRRELEVANT QNAME_CASE_INSENSITIVE QNAME_CASE_SENSITIVE}] );
+
+
+Zonemaster->config->ipv6_ok( 0 );
+Zonemaster->config->ipv4_ok( 1 );
+$zone = Zonemaster->zone( 'fr' );
+zone_gives( 'nameserver01', $zone, [q{NO_RECURSOR}] );
+zone_gives_not( 'nameserver01', $zone, [qw{NO_NETWORK IS_A_RECURSOR}] );
+$zone = Zonemaster->zone( 'afnic.fr' );
+zone_gives( 'nameserver05', $zone, [q{IPV6_DISABLED}] );
+zone_gives_not( 'nameserver05', $zone, [qw{NO_NETWORK IPV4_DISABLED}] );
+
+Zonemaster->config->ipv6_ok( 1 );
+Zonemaster->config->ipv4_ok( 0 );
+$zone = Zonemaster->zone( 'fr' );
+zone_gives( 'nameserver01', $zone, [q{NO_RECURSOR}] );
+zone_gives_not( 'nameserver01', $zone, [qw{NO_NETWORK IS_A_RECURSOR}] );
+$zone = Zonemaster->zone( 'afnic.fr' );
+zone_gives( 'nameserver05', $zone, [q{IPV4_DISABLED}] );
+zone_gives_not( 'nameserver05', $zone, [qw{NO_NETWORK IPV6_DISABLED}] );
+
+Zonemaster->config->ipv6_ok( 1 );
+Zonemaster->config->ipv4_ok( 1 );
+$zone = Zonemaster->zone( 'fr' );
+zone_gives( 'nameserver01', $zone, [q{NO_RECURSOR}] );
+zone_gives_not( 'nameserver01', $zone, [qw{NO_NETWORK IS_A_RECURSOR}] );
+$zone = Zonemaster->zone( 'afnic.fr' );
+zone_gives_not( 'nameserver05', $zone, [qw{NO_NETWORK IPV4_DISABLED IPV6_DISABLED}] );
+Zonemaster->config->no_network( 1 );
 
 done_testing;
