@@ -1,8 +1,9 @@
 package Zonemaster::Test::Nameserver v1.0.1;
 
-use 5.14.2;
 use strict;
 use warnings;
+
+use 5.014002;
 
 use Zonemaster;
 use Zonemaster::Util;
@@ -20,17 +21,33 @@ sub all {
     my ( $class, $zone ) = @_;
     my @results;
 
-    push @results, $class->nameserver01( $zone ) if Zonemaster->config->should_run('nameserver01');
-    push @results, $class->nameserver02( $zone ) if Zonemaster->config->should_run('nameserver02');
-    push @results, $class->nameserver03( $zone ) if Zonemaster->config->should_run('nameserver03');
-    push @results, $class->nameserver04( $zone ) if Zonemaster->config->should_run('nameserver04');
-    push @results, $class->nameserver05( $zone ) if Zonemaster->config->should_run('nameserver05');
-    push @results, $class->nameserver06( $zone ) if Zonemaster->config->should_run('nameserver06');
-    push @results, $class->nameserver07( $zone ) if Zonemaster->config->should_run('nameserver07');
-    push @results, $class->nameserver08( $zone ) if Zonemaster->config->should_run('nameserver08');
+    if ( Zonemaster->config->should_run( 'nameserver01' ) ) {
+        push @results, $class->nameserver01( $zone );
+    }
+    if ( Zonemaster->config->should_run( 'nameserver02' ) ) {
+        push @results, $class->nameserver02( $zone );
+    }
+    if ( Zonemaster->config->should_run( 'nameserver03' ) ) {
+        push @results, $class->nameserver03( $zone );
+    }
+    if ( Zonemaster->config->should_run( 'nameserver04' ) ) {
+        push @results, $class->nameserver04( $zone );
+    }
+    if ( Zonemaster->config->should_run( 'nameserver05' ) ) {
+        push @results, $class->nameserver05( $zone );
+    }
+    if ( Zonemaster->config->should_run( 'nameserver06' ) ) {
+        push @results, $class->nameserver06( $zone );
+    }
+    if ( Zonemaster->config->should_run( 'nameserver07' ) ) {
+        push @results, $class->nameserver07( $zone );
+    }
+    if ( Zonemaster->config->should_run( 'nameserver08' ) ) {
+        push @results, $class->nameserver08( $zone );
+    }
 
     return @results;
-}
+} ## end sub all
 
 ###
 ### Metadata Exposure
@@ -99,28 +116,29 @@ sub metadata {
 
 sub translation {
     return {
-        'AAAA_WELL_PROCESSED'               => 'The following nameservers answer AAAA queries without problems : {names}.',
-        'EDNS0_BAD_QUERY'                   => 'Nameserver {ns}/{address} does not support EDNS0 (replies with FORMERR).',
-        'DIFFERENT_SOURCE_IP'               => 'Nameserver {ns}/{address} replies on a SOA query with a different source address ({source}).',
-        'SAME_SOURCE_IP'                    => 'All nameservers reply with same IP used to query them.',
-        'AXFR_AVAILABLE'                    => 'Nameserver {ns}/{address} allow zone transfer using AXFR.',
-        'AXFR_FAILURE'                      => 'AXFR not available on nameserver {ns}/{address}.',
-        'QUERY_DROPPED'                     => 'Nameserver {ns}/{address} dropped AAAA query.',
-        'IS_A_RECURSOR'                     => 'Nameserver {ns}/{address} is a recursor.',
-        'NO_RECURSOR'                       => 'None of the following nameservers is a recursor : {names}.',
-        'ANSWER_BAD_RCODE'                  => 'Nameserver {ns}/{address} answered AAAA query with an unexpected rcode ({rcode}).',
-        'EDNS0_BAD_ANSWER'                  => 'Nameserver {ns}/{address} does not support EDNS0 (OPT not set in reply).',
-        'EDNS0_SUPPORT'                     => 'The following nameservers support EDNS0 : {names}.',
-        'CAN_NOT_BE_RESOLVED'               => 'The following nameservers failed to resolve to an IP address : {names}.',
-        'CAN_BE_RESOLVED'                   => 'All nameservers succeeded to resolve to an IP address.',
-        'NO_RESOLUTION'                     => 'No nameservers succeeded to resolve to an IP address.',
-        'IPV4_DISABLED'                     => 'IPv4 is disabled, not sending "{type}" query to {ns}.',
-        'IPV6_DISABLED'                     => 'IPv6 is disabled, not sending "{type}" query to {ns}.',
-        'UPWARD_REFERRAL_IRRELEVANT'        => 'Upward referral tests skipped for root zone.',
-        'UPWARD_REFERRAL'                   => 'Nameserver {ns}/{address} returns an upward referral.',
-        'NO_UPWARD_REFERRAL'                => 'None of the following nameservers returns an upward referral : {names}.',
-        'QNAME_CASE_SENSITIVE'              => 'Nameserver {ns}/{address} preserves original case of queried names.',
-        'QNAME_CASE_INSENSITIVE'            => 'Nameserver {ns}/{address} does not preserve original case of queried names.',
+        'AAAA_WELL_PROCESSED' => 'The following nameservers answer AAAA queries without problems : {names}.',
+        'EDNS0_BAD_QUERY'     => 'Nameserver {ns}/{address} does not support EDNS0 (replies with FORMERR).',
+        'DIFFERENT_SOURCE_IP' =>
+          'Nameserver {ns}/{address} replies on a SOA query with a different source address ({source}).',
+        'SAME_SOURCE_IP'      => 'All nameservers reply with same IP used to query them.',
+        'AXFR_AVAILABLE'      => 'Nameserver {ns}/{address} allow zone transfer using AXFR.',
+        'AXFR_FAILURE'        => 'AXFR not available on nameserver {ns}/{address}.',
+        'QUERY_DROPPED'       => 'Nameserver {ns}/{address} dropped AAAA query.',
+        'IS_A_RECURSOR'       => 'Nameserver {ns}/{address} is a recursor.',
+        'NO_RECURSOR'         => 'None of the following nameservers is a recursor : {names}.',
+        'ANSWER_BAD_RCODE'    => 'Nameserver {ns}/{address} answered AAAA query with an unexpected rcode ({rcode}).',
+        'EDNS0_BAD_ANSWER'    => 'Nameserver {ns}/{address} does not support EDNS0 (OPT not set in reply).',
+        'EDNS0_SUPPORT'       => 'The following nameservers support EDNS0 : {names}.',
+        'CAN_NOT_BE_RESOLVED' => 'The following nameservers failed to resolve to an IP address : {names}.',
+        'CAN_BE_RESOLVED'     => 'All nameservers succeeded to resolve to an IP address.',
+        'NO_RESOLUTION'       => 'No nameservers succeeded to resolve to an IP address.',
+        'IPV4_DISABLED'       => 'IPv4 is disabled, not sending "{type}" query to {ns}.',
+        'IPV6_DISABLED'       => 'IPv6 is disabled, not sending "{type}" query to {ns}.',
+        'UPWARD_REFERRAL_IRRELEVANT' => 'Upward referral tests skipped for root zone.',
+        'UPWARD_REFERRAL'            => 'Nameserver {ns}/{address} returns an upward referral.',
+        'NO_UPWARD_REFERRAL'         => 'None of the following nameservers returns an upward referral : {names}.',
+        'QNAME_CASE_SENSITIVE'       => 'Nameserver {ns}/{address} preserves original case of queried names.',
+        'QNAME_CASE_INSENSITIVE'     => 'Nameserver {ns}/{address} does not preserve original case of queried names.',
         'QNAME_CASE_SENSITIVITY_IRRELEVANT' => 'QNAME case sensitivity test skipped for domain name {dname}.',
     };
 } ## end sub translation
@@ -443,15 +461,11 @@ sub nameserver07 {
     my %nsnames;
 
     if ( $zone->name eq q{.} ) {
-        push @results,
-          info(
-            UPWARD_REFERRAL_IRRELEVANT => {
-            }
-          );
+        push @results, info( UPWARD_REFERRAL_IRRELEVANT => {} );
     }
     else {
-        foreach
-          my $local_ns ( @{ Zonemaster::TestMethods->method4( $zone ) }, @{ Zonemaster::TestMethods->method5( $zone ) } )
+        foreach my $local_ns ( @{ Zonemaster::TestMethods->method4( $zone ) },
+            @{ Zonemaster::TestMethods->method5( $zone ) } )
         {
             next if ( not Zonemaster->config->ipv6_ok and $local_ns->address->version == $IP_VERSION_6 );
 
@@ -485,7 +499,7 @@ sub nameserver07 {
                 }
               );
         }
-    }
+    } ## end else [ if ( $zone->name eq q{.})]
 
     return @results;
 } ## end sub nameserver07
@@ -496,14 +510,14 @@ sub nameserver08 {
     my %nsnames_and_ip;
     my $randomized_uc_name;
 
-    if ( $zone->name->string ne q{.} and $zone->name->string =~ /[a-zA-Z]/ ) {
+    if ( $zone->name->string ne q{.} and $zone->name->string =~ /[a-zA-Z]/x ) {
 
         do {
             $randomized_uc_name = scramble_case $zone->name->string;
         } while ( $randomized_uc_name eq $zone->name->string );
 
-        foreach
-          my $local_ns ( @{ Zonemaster::TestMethods->method4( $zone ) }, @{ Zonemaster::TestMethods->method5( $zone ) } )
+        foreach my $local_ns ( @{ Zonemaster::TestMethods->method4( $zone ) },
+            @{ Zonemaster::TestMethods->method5( $zone ) } )
         {
             next if ( not Zonemaster->config->ipv6_ok and $local_ns->address->version == $IP_VERSION_6 );
 
@@ -513,8 +527,9 @@ sub nameserver08 {
 
             my $p = $local_ns->query( $randomized_uc_name, q{SOA} );
 
-            if ( $p and my ( $qrr ) = $p->question( ) ) {
-                my $qrr_name = $qrr->name(); $qrr_name =~ s/\.\z//smgx; 
+            if ( $p and my ( $qrr ) = $p->question() ) {
+                my $qrr_name = $qrr->name();
+                $qrr_name =~ s/\.\z//smgx;
                 if ( $qrr_name eq $randomized_uc_name ) {
                     push @results,
                       info(
@@ -535,16 +550,16 @@ sub nameserver08 {
                         }
                       );
                 }
-            }
+            } ## end if ( $p and my ( $qrr ...))
             $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short }++;
         } ## end foreach my $local_ns ( @{ Zonemaster::TestMethods...})
 
-    }
+    } ## end if ( $zone->name->string...)
     else {
         push @results,
-          info(   
+          info(
             QNAME_CASE_SENSITIVITY_IRRELEVANT => {
-                dname   => $zone->name->string,
+                dname => $zone->name->string,
             }
           );
     }

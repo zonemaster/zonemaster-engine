@@ -3,8 +3,11 @@ use Test::More;
 use strict;
 use 5.14.2;
 
-use Zonemaster;
-use Zonemaster::Nameserver;
+BEGIN {
+    use_ok( q{Zonemaster} );
+    use_ok( q{Zonemaster::Nameserver} );
+}
+
 my $datafile = 't/zone.data';
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die "Stored data file missing" if not -r $datafile;
@@ -43,6 +46,28 @@ isa_ok( $p, 'Zonemaster::Packet' );
 my @rrs = $p->get_records( 'a', 'answer' );
 is( scalar( @rrs ), 1, 'one answer A RR' );
 is( $rrs[0]->address, '91.226.36.46', 'expected address' );
+Zonemaster->config->ipv6_ok( 0 );
+Zonemaster->config->ipv4_ok( 0 );
+Zonemaster->logger->clear_history();
+$p = $zone->query_one( 'www.iis.se', 'A' );
+ok( ( grep { $_->tag eq 'SKIP_IPV6_DISABLED' } @{Zonemaster->logger->entries} ), "IPv6 disabled" );
+ok( ( grep { $_->tag eq 'SKIP_IPV4_DISABLED' } @{Zonemaster->logger->entries} ), "IPv4 disabled" );
+Zonemaster->config->ipv6_ok( 1 );
+Zonemaster->config->ipv4_ok( 0 );
+Zonemaster->logger->clear_history();
+$p = $zone->query_one( 'www.iis.se', 'A' );
+ok( !( grep { $_->tag eq 'SKIP_IPV6_DISABLED' } @{Zonemaster->logger->entries} ), "IPv6 not disabled" );
+Zonemaster->config->ipv6_ok( 0 );
+Zonemaster->config->ipv4_ok( 1 );
+Zonemaster->logger->clear_history();
+$p = $zone->query_one( 'www.iis.se', 'A' );
+ok( !( grep { $_->tag eq 'SKIP_IPV4_DISABLED' } @{Zonemaster->logger->entries} ), "IPv4 not disabled" );
+Zonemaster->config->ipv6_ok( 1 );
+Zonemaster->config->ipv4_ok( 1 );
+Zonemaster->logger->clear_history();
+$p = $zone->query_one( 'www.iis.se', 'A' );
+ok( !( grep { $_->tag eq 'SKIP_IPV6_DISABLED' } @{Zonemaster->logger->entries} ), "IPv6 not disabled" );
+ok( !( grep { $_->tag eq 'SKIP_IPV4_DISABLED' } @{Zonemaster->logger->entries} ), "IPv4 not disabled" );
 
 $p = $zone->query_persistent( 'www.iis.se', 'A' );
 isa_ok( $p, 'Zonemaster::Packet' );

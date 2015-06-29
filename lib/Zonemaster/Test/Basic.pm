@@ -1,8 +1,9 @@
 package Zonemaster::Test::Basic v1.0.1;
 
-use 5.14.2;
 use strict;
 use warnings;
+
+use 5.014002;
 
 use Zonemaster;
 use Zonemaster::Util;
@@ -40,13 +41,12 @@ sub all {
             push @results, $class->basic02( $zone );
         }
         else {
-            push @results,
-              info( NO_GLUE_PREVENTS_NAMESERVER_TESTS => {} );
+            push @results, info( NO_GLUE_PREVENTS_NAMESERVER_TESTS => {} );
         }
 
         # Perform BASIC3 if BASIC2 failed
         if ( none { $_->tag eq q{HAS_NAMESERVERS} } @results ) {
-            push @results, $class->basic03( $zone ) if Zonemaster->config->should_run('basic03');
+            push @results, $class->basic03( $zone ) if Zonemaster->config->should_run( 'basic03' );
         }
         else {
             push @results,
@@ -56,7 +56,7 @@ sub all {
                 }
               );
         }
-    } ## end if ( none {  $_->tag eq...})
+    } ## end if ( none { $_->tag eq...})
 
     return @results;
 } ## end sub all
@@ -131,10 +131,10 @@ sub translation {
         "DOMAIN_NAME_ZERO_LENGTH_LABEL" => "Domain name ({dname}) has a zero length label.",
         "DOMAIN_NAME_TOO_LONG"          => "Domain name is too long ({fqdnlength}/{max}).",
         'NO_PARENT'                     => 'No parent domain could be found for the tested domain.',
-        'NO_GLUE' => 'Nameservers for "{pname}" provided no NS records for tested zone. RCODE given was {rcode}.',
-        'HAS_A_RECORDS'      => 'Nameserver {ns} returned A record(s) for {dname}.',
-        'NO_A_RECORDS'       => 'Nameserver {ns} did not return A record(s) for {dname}.',
-        'NO_DOMAIN'          => 'Nameserver for zone {pname} responded with NXDOMAIN to query for glue.',
+        'NO_GLUE'       => 'Nameservers for "{pname}" provided no NS records for tested zone. RCODE given was {rcode}.',
+        'HAS_A_RECORDS' => 'Nameserver {ns} returned A record(s) for {dname}.',
+        'NO_A_RECORDS'  => 'Nameserver {ns} did not return A record(s) for {dname}.',
+        'NO_DOMAIN'     => 'Nameserver for zone {pname} responded with NXDOMAIN to query for glue.',
         'HAS_NAMESERVERS'    => 'Nameserver {ns} listed these servers as glue: {nsnlist}.',
         'PARENT_REPLIES'     => 'Nameserver for zone {pname} replies when trying to fetch glue.',
         'NO_PARENT_RESPONSE' => 'No response from nameserver for zone {pname} when trying to fetch glue.',
@@ -143,12 +143,12 @@ sub translation {
         'NS_NO_RESPONSE'                    => 'Nameserver {ns} did not respond to NS query.',
         'A_QUERY_NO_RESPONSES'              => 'Nameservers did not respond to A query.',
         'HAS_NAMESERVER_NO_WWW_A_TEST'      => 'Functional nameserver found. "A" query for www.{zname} test aborted.',
-        'HAS_GLUE'                          => 'Nameserver for zone {pname} listed these nameservers as glue: {nsnlist}.',
-        'IPV4_DISABLED'                     => 'IPv4 is disabled, not sending "{rrtype}" query to {ns}.',
-        'IPV4_ENABLED'                      => 'IPv4 is enabled, can send "{rrtype}" query to {ns}.',
-        'IPV6_DISABLED'                     => 'IPv6 is disabled, not sending "{rrtype}" query to {ns}.',
-        'IPV6_ENABLED'                      => 'IPv6 is enabled, can send "{rrtype}" query to {ns}.',
-        'NOT_A_ZONE'                        => '{zname} is not a zone.',
+        'HAS_GLUE'      => 'Nameserver for zone {pname} listed these nameservers as glue: {nsnlist}.',
+        'IPV4_DISABLED' => 'IPv4 is disabled, not sending "{rrtype}" query to {ns}.',
+        'IPV4_ENABLED'  => 'IPv4 is enabled, can send "{rrtype}" query to {ns}.',
+        'IPV6_DISABLED' => 'IPv6 is disabled, not sending "{rrtype}" query to {ns}.',
+        'IPV6_ENABLED'  => 'IPv6 is enabled, can send "{rrtype}" query to {ns}.',
+        'NOT_A_ZONE'    => '{zname} is not a zone.',
     };
 } ## end sub translation
 
@@ -173,7 +173,7 @@ sub basic00 {
                     dname   => "$name",
                     dlabel  => $local_label,
                     dlength => length( $local_label ),
-                    max    => $LABEL_MAX_LENGTH,
+                    max     => $LABEL_MAX_LENGTH,
                 }
               );
         }
@@ -192,9 +192,9 @@ sub basic00 {
         push @results,
           info(
             q{DOMAIN_NAME_TOO_LONG} => {
-                fqdn   => $fqdn,
+                fqdn       => $fqdn,
                 fqdnlength => length( $fqdn ),
-                max    => $FQDN_MAX_LENGTH,
+                max        => $FQDN_MAX_LENGTH,
             }
           );
     }
@@ -256,12 +256,12 @@ sub basic01 {
               info(
                 NO_GLUE => {
                     pname => $parent->name->string,
-                    rcode  => $p->rcode,
+                    rcode => $p->rcode,
                 }
               );
-              if ($p->aa and (grep {$_->type eq 'SOA'} $p->authority)) {
-                  push @results, info( NOT_A_ZONE => { zname => $zone->name->string } );
-              }
+            if ( $p->aa and ( grep { $_->type eq 'SOA' } $p->authority ) ) {
+                push @results, info( NOT_A_ZONE => { zname => $zone->name->string } );
+            }
         }
     } ## end else [ if ( $p->rcode eq q{NXDOMAIN})]
 
@@ -277,7 +277,7 @@ sub basic02 {
             push @results,
               info(
                 IPV4_DISABLED => {
-                    ns   => "$ns",
+                    ns     => "$ns",
                     rrtype => q{NS},
                 }
               );
@@ -287,7 +287,7 @@ sub basic02 {
             push @results,
               info(
                 IPV4_ENABLED => {
-                    ns   => "$ns",
+                    ns     => "$ns",
                     rrtype => q{NS},
                 }
               );
@@ -297,7 +297,7 @@ sub basic02 {
             push @results,
               info(
                 IPV6_DISABLED => {
-                    ns   => "$ns",
+                    ns     => "$ns",
                     rrtype => q{NS},
                 }
               );
@@ -307,7 +307,7 @@ sub basic02 {
             push @results,
               info(
                 IPV6_ENABLED => {
-                    ns   => "$ns",
+                    ns     => "$ns",
                     rrtype => q{NS},
                 }
               );
@@ -319,7 +319,8 @@ sub basic02 {
                 push @results,
                   info(
                     HAS_NAMESERVERS => {
-                        nsnlist     => join( q{,}, sort map { $_->nsdname } $p->get_records_for_name( q{NS}, $zone->name ) ),
+                        nsnlist =>
+                          join( q{,}, sort map { $_->nsdname } $p->get_records_for_name( q{NS}, $zone->name ) ),
                         ns => $ns->string,
                     }
                   );
@@ -328,8 +329,8 @@ sub basic02 {
                 push @results,
                   info(
                     NS_FAILED => {
-                        ns => $ns->string,
-                        rcode  => $p->rcode,
+                        ns    => $ns->string,
+                        rcode => $p->rcode,
                     }
                   );
             }
@@ -358,17 +359,17 @@ sub basic03 {
             push @results,
               info(
                 IPV4_DISABLED => {
-                    ns   => "$ns",
+                    ns     => "$ns",
                     rrtype => q{A},
                 }
               );
             next;
         }
-        else {
+        elsif ( Zonemaster->config->ipv4_ok and $ns->address->version == $IP_VERSION_4 ) {
             push @results,
               info(
                 IPV4_ENABLED => {
-                    ns   => "$ns",
+                    ns     => "$ns",
                     rrtype => q{NS},
                 }
               );
@@ -378,7 +379,7 @@ sub basic03 {
             push @results,
               info(
                 IPV6_DISABLED => {
-                    ns   => "$ns",
+                    ns     => "$ns",
                     rrtype => q{A},
                 }
               );
@@ -388,7 +389,7 @@ sub basic03 {
             push @results,
               info(
                 IPV6_ENABLED => {
-                    ns   => "$ns",
+                    ns     => "$ns",
                     rrtype => q{NS},
                 }
               );
@@ -401,8 +402,8 @@ sub basic03 {
             push @results,
               info(
                 HAS_A_RECORDS => {
-                    ns => $ns->string,
-                    dname   => $name,
+                    ns    => $ns->string,
+                    dname => $name,
                 }
               );
         }
@@ -410,16 +411,15 @@ sub basic03 {
             push @results,
               info(
                 NO_A_RECORDS => {
-                    ns => $ns->string,
-                    dname   => $name,
+                    ns    => $ns->string,
+                    dname => $name,
                 }
               );
         }
     } ## end foreach my $ns ( @{ Zonemaster::TestMethods...})
 
     if ( scalar( @{ Zonemaster::TestMethods->method4( $zone ) } ) and not $response_nb ) {
-        push @results,
-          info( A_QUERY_NO_RESPONSES => {} );
+        push @results, info( A_QUERY_NO_RESPONSES => {} );
     }
 
     return @results;

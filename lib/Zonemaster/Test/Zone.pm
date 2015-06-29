@@ -1,8 +1,9 @@
 package Zonemaster::Test::Zone v1.0.1;
 
-use 5.14.2;
 use strict;
 use warnings;
+
+use 5.014002;
 
 use Zonemaster;
 use Zonemaster::Util;
@@ -21,22 +22,22 @@ sub all {
     my ( $class, $zone ) = @_;
     my @results;
 
-    push @results, $class->zone01( $zone ) if Zonemaster->config->should_run('zone01');
+    push @results, $class->zone01( $zone ) if Zonemaster->config->should_run( 'zone01' );
     if ( none { $_->tag eq q{NO_RESPONSE_SOA_QUERY} } @results ) {
 
-        push @results, $class->zone02( $zone ) if Zonemaster->config->should_run('zone02');
-        push @results, $class->zone03( $zone ) if Zonemaster->config->should_run('zone03');
-        push @results, $class->zone04( $zone ) if Zonemaster->config->should_run('zone04');
-        push @results, $class->zone05( $zone ) if Zonemaster->config->should_run('zone05');
-        push @results, $class->zone06( $zone ) if Zonemaster->config->should_run('zone06');
+        push @results, $class->zone02( $zone ) if Zonemaster->config->should_run( 'zone02' );
+        push @results, $class->zone03( $zone ) if Zonemaster->config->should_run( 'zone03' );
+        push @results, $class->zone04( $zone ) if Zonemaster->config->should_run( 'zone04' );
+        push @results, $class->zone05( $zone ) if Zonemaster->config->should_run( 'zone05' );
+        push @results, $class->zone06( $zone ) if Zonemaster->config->should_run( 'zone06' );
         if ( none { $_->tag eq q{MNAME_RECORD_DOES_NOT_EXIST} } @results ) {
-            push @results, $class->zone07( $zone ) if Zonemaster->config->should_run('zone07');
+            push @results, $class->zone07( $zone ) if Zonemaster->config->should_run( 'zone07' );
         }
     }
     if ( none { $_->tag eq q{MNAME_RECORD_DOES_NOT_EXIST} } @results ) {
-        push @results, $class->zone08( $zone ) if Zonemaster->config->should_run('zone08');
+        push @results, $class->zone08( $zone ) if Zonemaster->config->should_run( 'zone08' );
         if ( none { $_->tag eq q{NO_RESPONSE_MX_QUERY} } @results ) {
-            push @results, $class->zone09( $zone ) if Zonemaster->config->should_run('zone09');
+            push @results, $class->zone09( $zone ) if Zonemaster->config->should_run( 'zone09' );
         }
     }
 
@@ -189,7 +190,7 @@ sub zone01 {
 
                 my $ns = Zonemaster::Nameserver->new( { name => $soa_mname, address => $ip_address->short } );
 
-                if ( _is_ip_version_disabled($ns) ) {
+                if ( _is_ip_version_disabled( $ns ) ) {
                     next;
                 }
 
@@ -532,7 +533,13 @@ sub zone09 {
         }
         else {
             my @mx = $p->get_records_for_name( q{MX}, $zone->name );
-            $info = join q{/}, map { my $tmp = q{MX=} . $_->exchange; $tmp =~ s/[.]\z//smx; $tmp } @mx;
+            for my $mx ( @mx ) {
+                my $tmp = q{MX=};
+                $tmp .= $mx->exchange;
+                $tmp =~ s/[.]\z//smx;
+                $info .= $tmp . q{/};
+            }
+            chop $info;
         }
         if ( not scalar @results ) {
             push @results, info( MX_RECORD_EXISTS => { info => $info } );
@@ -551,7 +558,7 @@ sub _retrieve_record_from_zone {
     # Return response from the first authoritative server that gives one
     foreach my $ns ( @{ Zonemaster::TestMethods->method5( $zone ) } ) {
 
-        if ( _is_ip_version_disabled($ns) ) {
+        if ( _is_ip_version_disabled( $ns ) ) {
             next;
         }
 
@@ -563,7 +570,7 @@ sub _retrieve_record_from_zone {
     }
 
     return;
-} ## end sub _retrieve_record_from_zone
+}
 
 sub _is_ip_version_disabled {
     my $ns = shift;

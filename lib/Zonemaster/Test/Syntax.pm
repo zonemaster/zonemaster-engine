@@ -1,8 +1,9 @@
 package Zonemaster::Test::Syntax v1.0.1;
 
-use 5.14.2;
 use strict;
 use warnings;
+
+use 5.014002;
 
 use Zonemaster;
 use Zonemaster::Util;
@@ -25,26 +26,26 @@ sub all {
     my ( $class, $zone ) = @_;
     my @results;
 
-    push @results, $class->syntax01( $zone->name ) if Zonemaster->config->should_run('syntax01');
-    push @results, $class->syntax02( $zone->name ) if Zonemaster->config->should_run('syntax02');
-    push @results, $class->syntax03( $zone->name ) if Zonemaster->config->should_run('syntax03');
+    push @results, $class->syntax01( $zone->name ) if Zonemaster->config->should_run( 'syntax01' );
+    push @results, $class->syntax02( $zone->name ) if Zonemaster->config->should_run( 'syntax02' );
+    push @results, $class->syntax03( $zone->name ) if Zonemaster->config->should_run( 'syntax03' );
 
     if ( any { $_->tag eq q{ONLY_ALLOWED_CHARS} } @results ) {
 
         foreach my $local_nsname ( uniq map { $_->string } @{ Zonemaster::TestMethods->method2( $zone ) },
             @{ Zonemaster::TestMethods->method3( $zone ) } )
         {
-            push @results, $class->syntax04( $local_nsname ) if Zonemaster->config->should_run('syntax04');
+            push @results, $class->syntax04( $local_nsname ) if Zonemaster->config->should_run( 'syntax04' );
         }
 
-        push @results, $class->syntax05( $zone ) if Zonemaster->config->should_run('syntax05');
+        push @results, $class->syntax05( $zone ) if Zonemaster->config->should_run( 'syntax05' );
 
         if ( none { $_->tag eq q{NO_RESPONSE_SOA_QUERY} } @results ) {
-            push @results, $class->syntax06( $zone ) if Zonemaster->config->should_run('syntax06');
-            push @results, $class->syntax07( $zone ) if Zonemaster->config->should_run('syntax07');
+            push @results, $class->syntax06( $zone ) if Zonemaster->config->should_run( 'syntax06' );
+            push @results, $class->syntax07( $zone ) if Zonemaster->config->should_run( 'syntax07' );
         }
 
-        push @results, $class->syntax08( $zone ) if Zonemaster->config->should_run('syntax08');
+        push @results, $class->syntax08( $zone ) if Zonemaster->config->should_run( 'syntax08' );
 
     }
 
@@ -361,7 +362,8 @@ sub syntax08 {
     my $p = $zone->query_one( $zone->name, q{MX} );
 
     if ( $p ) {
-        foreach my $mx ( sort keys %{ { map { $_->exchange => 1 } $p->get_records( q{MX}, q{answer} ) } } ) {
+        my %mx = map { $_->exchange => 1 } $p->get_records( q{MX}, q{answer} );
+        foreach my $mx ( sort keys %mx ) {
             push @results, check_name_syntax( q{MX}, $mx );
         }
     }

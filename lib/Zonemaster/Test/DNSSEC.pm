@@ -4,9 +4,10 @@ package Zonemaster::Test::DNSSEC v1.0.2;
 ### This test module implements DNSSEC tests.
 ###
 
-use 5.14.2;
 use strict;
 use warnings;
+
+use 5.014002;
 
 use Zonemaster;
 use Zonemaster::Util;

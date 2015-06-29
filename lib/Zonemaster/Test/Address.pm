@@ -1,8 +1,9 @@
 package Zonemaster::Test::Address v1.0.1;
 
-use 5.14.2;
 use strict;
 use warnings;
+
+use 5.014002;
 
 use Zonemaster;
 use Zonemaster::Util;
@@ -20,11 +21,11 @@ sub all {
     my ( $class, $zone ) = @_;
     my @results;
 
-    push @results, $class->address01( $zone ) if Zonemaster->config->should_run('address01');
-    push @results, $class->address02( $zone ) if Zonemaster->config->should_run('address02');
+    push @results, $class->address01( $zone ) if Zonemaster->config->should_run( 'address01' );
+    push @results, $class->address02( $zone ) if Zonemaster->config->should_run( 'address02' );
     # Perform ADDRESS03 if ADDRESS02 passed
     if ( any { $_->tag eq q{NAMESERVERS_IP_WITH_REVERSE} } @results ) {
-        push @results, $class->address03( $zone ) if Zonemaster->config->should_run('address03');
+        push @results, $class->address03( $zone ) if Zonemaster->config->should_run( 'address03' );
     }
 
     return @results;
@@ -143,7 +144,9 @@ sub address02 {
 
     my %ips;
 
-    foreach my $local_ns ( @{ Zonemaster::TestMethods->method5( $zone ) } ) {
+    foreach
+      my $local_ns ( @{ Zonemaster::TestMethods->method4( $zone ) }, @{ Zonemaster::TestMethods->method5( $zone ) } )
+    {
 
         next if $ips{ $local_ns->address->short };
 
@@ -154,7 +157,7 @@ sub address02 {
         if ( $p ) {
             # In case of Classless IN-ADDR.ARPA delegation, query returns
             # CNAME records. A PTR query is done on the CNAME.
-            if ($p->rcode eq q{NOERROR} and $p->get_records( q{CNAME}, q{answer} ) ) {
+            if ( $p->rcode eq q{NOERROR} and $p->get_records( q{CNAME}, q{answer} ) ) {
                 my ( $cname ) = $p->get_records( q{CNAME}, q{answer} );
                 $p = Zonemaster::Recursor->recurse( $cname->cname, q{PTR} );
             }
@@ -207,7 +210,7 @@ sub address03 {
 
         # In case of Classless IN-ADDR.ARPA delegation, query returns
         # CNAME records. A PTR query is done on the CNAME.
-        if ($p->rcode eq q{NOERROR} and $p->get_records( q{CNAME}, q{answer} ) ) {
+        if ( $p->rcode eq q{NOERROR} and $p->get_records( q{CNAME}, q{answer} ) ) {
             my ( $cname ) = $p->get_records( q{CNAME}, q{answer} );
             $ptr_query = $cname->cname;
             $p = Zonemaster::Recursor->recurse( $ptr_query, q{PTR} );

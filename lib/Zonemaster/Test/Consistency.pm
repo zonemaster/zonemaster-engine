@@ -1,8 +1,9 @@
 package Zonemaster::Test::Consistency v1.0.1;
 
-use 5.14.2;
 use strict;
 use warnings;
+
+use 5.014002;
 
 use Zonemaster;
 use Zonemaster::Util;
@@ -19,10 +20,18 @@ sub all {
     my ( $class, $zone ) = @_;
     my @results;
 
-    push @results, $class->consistency01( $zone ) if Zonemaster->config->should_run('consistency01');
-    push @results, $class->consistency02( $zone ) if Zonemaster->config->should_run('consistency02');
-    push @results, $class->consistency03( $zone ) if Zonemaster->config->should_run('consistency03');
-    push @results, $class->consistency04( $zone ) if Zonemaster->config->should_run('consistency04');
+    if ( Zonemaster->config->should_run( 'consistency01' ) ) {
+        push @results, $class->consistency01( $zone );
+    }
+    if ( Zonemaster->config->should_run( 'consistency02' ) ) {
+        push @results, $class->consistency02( $zone );
+    }
+    if ( Zonemaster->config->should_run( 'consistency03' ) ) {
+        push @results, $class->consistency03( $zone );
+    }
+    if ( Zonemaster->config->should_run( 'consistency04' ) ) {
+        push @results, $class->consistency04( $zone );
+    }
 
     return @results;
 }
@@ -468,7 +477,7 @@ sub consistency04 {
             next;
         }
 
-        my ( @ns ) = sort map { lc($_->nsdname) } $p->get_records_for_name( q{NS}, $zone->name );
+        my ( @ns ) = sort map { lc( $_->nsdname ) } $p->get_records_for_name( q{NS}, $zone->name );
 
         if ( not scalar( @ns ) ) {
             push @results,
