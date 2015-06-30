@@ -109,11 +109,6 @@ $zone = Zonemaster->zone( '.' );
 zone_gives( 'nameserver07', $zone, [q{UPWARD_REFERRAL_IRRELEVANT}] );
 zone_gives_not( 'nameserver07', $zone, [qw{UPWARD_REFERRAL NO_UPWARD_REFERRAL}] );
 
-# nameserver08
-$zone = Zonemaster->zone( '.' );
-zone_gives( 'nameserver08', $zone, [q{QNAME_CASE_SENSITIVITY_IRRELEVANT}] );
-zone_gives_not( 'nameserver08', $zone, [qw{QNAME_CASE_INSENSITIVE QNAME_CASE_SENSITIVE}] );
-
 SKIP: {
     skip "Zone does not actually have tested problem", 1,
     $zone = Zonemaster->zone( 'escargot.se' );
@@ -157,7 +152,7 @@ zone_gives( 'nameserver05', $zone, [q{NO_NETWORK}] );
 zone_gives_not( 'nameserver05', $zone, [qw{IPV6_DISABLED IPV4_DISABLED}] );
 $zone = Zonemaster->zone( '.' );
 zone_gives( 'nameserver08', $zone, [q{NO_NETWORK}] );
-zone_gives_not( 'nameserver08', $zone, [qw{QNAME_CASE_SENSITIVITY_IRRELEVANT QNAME_CASE_INSENSITIVE QNAME_CASE_SENSITIVE}] );
+zone_gives_not( 'nameserver08', $zone, [qw{QNAME_CASE_INSENSITIVE QNAME_CASE_SENSITIVE}] );
 
 
 Zonemaster->config->ipv6_ok( 0 );

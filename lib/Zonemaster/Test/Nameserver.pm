@@ -106,7 +106,6 @@ sub metadata {
         ],
         nameserver08 => [
             qw(
-              QNAME_CASE_SENSITIVITY_IRRELEVANT
               QNAME_CASE_INSENSITIVE
               QNAME_CASE_SENSITIVE
               )
@@ -139,7 +138,6 @@ sub translation {
         'NO_UPWARD_REFERRAL'         => 'None of the following nameservers returns an upward referral : {names}.',
         'QNAME_CASE_SENSITIVE'       => 'Nameserver {ns}/{address} preserves original case of queried names.',
         'QNAME_CASE_INSENSITIVE'     => 'Nameserver {ns}/{address} does not preserve original case of queried names.',
-        'QNAME_CASE_SENSITIVITY_IRRELEVANT' => 'QNAME case sensitivity test skipped for domain name {dname}.',
     };
 } ## end sub translation
 
@@ -508,61 +506,50 @@ sub nameserver08 {
     my ( $class, $zone ) = @_;
     my @results;
     my %nsnames_and_ip;
+    my $original_name = q{www.}.$zone->name->string;
     my $randomized_uc_name;
 
-    if ( $zone->name->string ne q{.} and $zone->name->string =~ /[a-zA-Z]/x ) {
+    $original_name =~ s/[.]+\z//smgx;
 
-        do {
-            $randomized_uc_name = scramble_case $zone->name->string;
-        } while ( $randomized_uc_name eq $zone->name->string );
+    do {
+        $randomized_uc_name = scramble_case $original_name;
+    } while ( $randomized_uc_name eq $original_name );
 
-        foreach my $local_ns ( @{ Zonemaster::TestMethods->method4( $zone ) },
-            @{ Zonemaster::TestMethods->method5( $zone ) } )
-        {
-            next if ( not Zonemaster->config->ipv6_ok and $local_ns->address->version == $IP_VERSION_6 );
+    foreach my $local_ns ( @{ Zonemaster::TestMethods->method4( $zone ) }, @{ Zonemaster::TestMethods->method5( $zone ) } ) {
+        next if ( not Zonemaster->config->ipv6_ok and $local_ns->address->version == $IP_VERSION_6 );
 
-            next if ( not Zonemaster->config->ipv4_ok and $local_ns->address->version == $IP_VERSION_4 );
+        next if ( not Zonemaster->config->ipv4_ok and $local_ns->address->version == $IP_VERSION_4 );
 
-            next if $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short };
+        next if $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short };
 
-            my $p = $local_ns->query( $randomized_uc_name, q{SOA} );
+        my $p = $local_ns->query( $randomized_uc_name, q{SOA} );
 
-            if ( $p and my ( $qrr ) = $p->question() ) {
-                my $qrr_name = $qrr->name();
-                $qrr_name =~ s/\.\z//smgx;
-                if ( $qrr_name eq $randomized_uc_name ) {
-                    push @results,
-                      info(
-                        QNAME_CASE_SENSITIVE => {
-                            ns      => $local_ns->name->string,
-                            address => $local_ns->address->short,
-                            dname   => $randomized_uc_name,
-                        }
-                      );
-                }
-                else {
-                    push @results,
-                      info(
-                        QNAME_CASE_INSENSITIVE => {
-                            ns      => $local_ns->name->string,
-                            address => $local_ns->address->short,
-                            dname   => $randomized_uc_name,
-                        }
-                      );
-                }
-            } ## end if ( $p and my ( $qrr ...))
-            $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short }++;
-        } ## end foreach my $local_ns ( @{ Zonemaster::TestMethods...})
-
-    } ## end if ( $zone->name->string...)
-    else {
-        push @results,
-          info(
-            QNAME_CASE_SENSITIVITY_IRRELEVANT => {
-                dname => $zone->name->string,
+        if ( $p and my ( $qrr ) = $p->question() ) {
+            my $qrr_name = $qrr->name();
+            $qrr_name =~ s/\.\z//smgx;
+            if ( $qrr_name eq $randomized_uc_name ) {
+                push @results,
+                  info(
+                    QNAME_CASE_SENSITIVE => {
+                        ns      => $local_ns->name->string,
+                        address => $local_ns->address->short,
+                        dname   => $randomized_uc_name,
+                    }
+                  );
             }
-          );
-    }
+            else {
+                push @results,
+                  info(
+                    QNAME_CASE_INSENSITIVE => {
+                        ns      => $local_ns->name->string,
+                        address => $local_ns->address->short,
+                        dname   => $randomized_uc_name,
+                    }
+                  );
+            }
+        } ## end if ( $p and my ( $qrr ...))
+        $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short }++;
+    } ## end foreach my $local_ns ( @{ Zonemaster::TestMethods...})
 
     return @results;
 } ## end sub nameserver08
