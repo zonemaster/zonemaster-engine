@@ -646,11 +646,11 @@ msgstr "Il a été impossible de trouver une adresse IP pour les serveurs de nom
 
 #: NAMESERVER:QNAME_CASE_SENSITIVE
 msgid  "Nameserver {ns}/{address} preserves original case of queried names."
-msgstr "Nameserver {ns}/{address} preserves original case of queried names."
+msgstr "Dans la réponse, le serveur de noms {ns}/{address} conserve la casse du nom tel qu'il a été requếté."
 
 #: NAMESERVER:QNAME_CASE_INSENSITIVE
 msgid  "Nameserver {ns}/{address} does not preserve original case of queried names."
-msgstr "Nameserver {ns}/{address} does not preserve original case of queried names."
+msgstr "Dans la réponse, le serveur de noms {ns}/{address} ne conserve pas la casse du nom tel qu'il a été requếté."
 
 #: NAMESERVER:QNAME_CASE_SENSITIVITY_IRRELEVANT
 msgid  "QNAME case sensitivity test skipped for domain name {dname}."
