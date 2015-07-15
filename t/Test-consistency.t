@@ -17,6 +17,7 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
 foreach my $testcase ( qw{consistency01 consistency02 consistency03 consistency04} ) {
     Zonemaster->config->load_policy_file( 't/policies/Test-'.$testcase.'-only.json' );
     my @testcases;
+    Zonemaster->logger->clear_history();
     foreach my $result ( Zonemaster->test_module( q{consistency}, q{afnic.fr} ) ) {
         foreach my $trace (@{$result->trace}) {
             push @testcases, grep /Zonemaster::Test::Consistency::consistency/, @$trace;

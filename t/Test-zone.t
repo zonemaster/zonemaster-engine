@@ -73,6 +73,22 @@ ok( $res{MNAME_HAS_NO_ADDRESS}, q{No IP address found for SOA 'mname' nameserver
 # %res = map { $_->tag => 1 } Zonemaster->test_method( q{Zone}, q{zone08}, $zone );
 # ok( $res{NO_RESPONSE_MX_QUERY}, q{No response from nameserver(s) on MX queries} );
 
+$zone = Zonemaster->zone( 'name.doesnotexist' );
+%res = map { $_->tag => 1 } Zonemaster->test_method( q{Zone}, q{zone01}, $zone );
+ok( $res{NO_RESPONSE_SOA_QUERY}, q{No response from nameserver(s) on SOA queries} );
+%res = map { $_->tag => 1 } Zonemaster->test_method( q{Zone}, q{zone02}, $zone );
+ok( $res{NO_RESPONSE_SOA_QUERY}, q{No response from nameserver(s) on SOA queries} );
+%res = map { $_->tag => 1 } Zonemaster->test_method( q{Zone}, q{zone03}, $zone );
+ok( $res{NO_RESPONSE_SOA_QUERY}, q{No response from nameserver(s) on SOA queries} );
+%res = map { $_->tag => 1 } Zonemaster->test_method( q{Zone}, q{zone04}, $zone );
+ok( $res{NO_RESPONSE_SOA_QUERY}, q{No response from nameserver(s) on SOA queries} );
+%res = map { $_->tag => 1 } Zonemaster->test_method( q{Zone}, q{zone05}, $zone );
+ok( $res{NO_RESPONSE_SOA_QUERY}, q{No response from nameserver(s) on SOA queries} );
+%res = map { $_->tag => 1 } Zonemaster->test_method( q{Zone}, q{zone06}, $zone );
+ok( $res{NO_RESPONSE_SOA_QUERY}, q{No response from nameserver(s) on SOA queries} );
+%res = map { $_->tag => 1 } Zonemaster->test_method( q{Zone}, q{zone07}, $zone );
+ok( $res{NO_RESPONSE_SOA_QUERY}, q{No response from nameserver(s) on SOA queries} );
+
 Zonemaster->config->ipv4_ok( 1 );
 Zonemaster->config->ipv6_ok( 0 );
 

@@ -1,0 +1,15 @@
+{
+    "__testcases__": {
+        "dnssec01": 1,
+        "dnssec02": 1,
+        "dnssec03": 1,
+        "dnssec04": 1,
+        "dnssec05": 1,
+        "dnssec06": 1,
+        "dnssec07": 1,
+        "dnssec08": 1,
+        "dnssec09": 1,
+        "dnssec10": 1,
+        "dnssec11": 1
+    }
+}
