@@ -1,5 +1,7 @@
 use Test::More;
 
+use List::MoreUtils qw[uniq none any];
+
 BEGIN {
     use_ok( q{Zonemaster} );
     use_ok( q{Zonemaster::Nameserver} );
@@ -42,6 +44,22 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Nameserver->restore( $datafile );
     Zonemaster->config->no_network( 1 );
 }
+
+# Find a way with dependences for syntax04 syntax05 syntax06 syntax07 syntax08
+foreach my $testcase ( qw{syntax01 syntax02 syntax03} ) {
+    Zonemaster->config->load_policy_file( 't/policies/Test-'.$testcase.'-only.json' );
+    my @testcases;
+    foreach my $result ( Zonemaster->test_module( q{syntax}, q{afnic.fr} ) ) {
+        foreach my $trace (@{$result->trace}) {
+            push @testcases, grep /Zonemaster::Test::Syntax::syntax/, @$trace;
+        }
+    }
+    @testcases = uniq sort @testcases;
+    is( scalar( @testcases ), 1, 'only one test-case' );
+    is( $testcases[0], 'Zonemaster::Test::Syntax::'.$testcase, 'expected test-case' );
+}
+
+Zonemaster->config->load_policy_file( 't/policies/Test-syntax-all.json' );
 
 my $ns_ok = Zonemaster::DNSName->new( q{ns1.nic.fr} );
 my $dn_ok = Zonemaster::DNSName->new( q{www.nic.se} );
@@ -107,6 +125,14 @@ zone_gives( q{syntax08}, $zone, q{MX_NUMERIC_TLD} );
 zone_gives( q{syntax08}, $zone, q{MX_DISCOURAGED_DOUBLE_DASH} );
 zone_gives_not( q{syntax08}, $zone, q{NO_RESPONSE_MX_QUERY} );
 zone_gives_not( q{syntax06}, $zone, q{NO_RESPONSE_SOA_QUERY} );
+
+$zone = Zonemaster->zone( 'name.doesnotexist' );
+%res = map { $_->tag => 1 } Zonemaster->test_method( q{Syntax}, q{syntax05}, $zone );
+ok( $res{NO_RESPONSE_SOA_QUERY}, q{No response from nameserver(s) on SOA queries} );
+%res = map { $_->tag => 1 } Zonemaster->test_method( q{Syntax}, q{syntax06}, $zone );
+ok( $res{NO_RESPONSE_SOA_QUERY}, q{No response from nameserver(s) on SOA queries} );
+%res = map { $_->tag => 1 } Zonemaster->test_method( q{Syntax}, q{syntax07}, $zone );
+ok( $res{NO_RESPONSE_SOA_QUERY}, q{No response from nameserver(s) on SOA queries} );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Nameserver->save( $datafile );

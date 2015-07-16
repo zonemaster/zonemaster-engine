@@ -1,5 +1,7 @@
 use Test::More;
 
+use List::MoreUtils qw[uniq none any];
+
 BEGIN {
     use_ok( 'Zonemaster' );
     use_ok( 'Zonemaster::Test::DNSSEC' );
@@ -35,6 +37,23 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Nameserver->restore( $datafile );
     Zonemaster->config->no_network( 1 );
 }
+
+# Find a way for dnssec06 which have a dependence...
+foreach my $testcase ( qw{dnssec01 dnssec02 dnssec03 dnssec04 dnssec05 dnssec07 dnssec08 dnssec09 dnssec10 dnssec11} ) {
+    Zonemaster->config->load_policy_file( 't/policies/Test-'.$testcase.'-only.json' );
+    my @testcases;
+    Zonemaster->logger->clear_history();
+    foreach my $result ( Zonemaster->test_module( q{dnssec}, q{nic.se} ) ) {
+        foreach my $trace (@{$result->trace}) {
+            push @testcases, grep /Zonemaster::Test::DNSSEC::dnssec/, @$trace;
+        }
+    }
+    @testcases = uniq sort @testcases;
+    is( scalar( @testcases ), 1, 'only one test-case' );
+    is( $testcases[0], 'Zonemaster::Test::DNSSEC::'.$testcase, 'expected test-case' );
+}
+
+Zonemaster->config->load_policy_file( 't/policies/Test-dnssec-all.json' );
 
 my $zone;
 my @res;
@@ -167,6 +186,15 @@ zone_gives( 'dnssec08', $zone, [q{NO_KEYS_OR_NO_SIGS}] );
 # dnssec09
 $zone = Zonemaster->zone( 'dnssec09-soa-signature-not-ok.zut-root.rd.nic.fr' );
 zone_gives( 'dnssec09', $zone, [qw{SOA_NOT_SIGNED SOA_SIGNATURE_NOT_OK}] );
+
+# GOST
+#$zone = Zonemaster->zone( 'caint.su' );
+#@res = Zonemaster->test_method( 'DNSSEC', 'dnssec08', $zone );
+#ok( ( grep { $_->string =~ /error=no GOST support/s } @res ), $zone->name->string . " no GOST support" );
+#@res = Zonemaster->test_method( 'DNSSEC', 'dnssec09', $zone );
+#ok( ( grep { $_->string =~ /error=no GOST support/s } @res ), $zone->name->string . " no GOST support" );
+#@res = Zonemaster->test_method( 'DNSSEC', 'dnssec10', $zone );
+#ok( ( grep { $_->string =~ /error=no GOST support/s } @res ), $zone->name->string . " no GOST support" );
 
 TODO: {
     local $TODO = "Need to find/create zones with that error";
