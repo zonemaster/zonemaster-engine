@@ -94,7 +94,12 @@ sub _recurse {
     $state->{in_progress}{$name}{$type} = 1;
 
     while ( my $ns = pop @{ $state->{ns} } ) {
-        Zonemaster->logger->add( RECURSE_QUERY => { ns => "$ns", name => $name, type => $type, class => $class } );
+	use Data::Dumper;
+        Zonemaster->logger->add( RECURSE_QUERY => { ns => ''.$ns->name,
+						    address => $ns->address->ip,
+						    name => $name,
+						    type => $type,
+						    class => $class } );
         my $p = $self->_do_query( $ns, $name, $type, { class => $class }, $state );
 
         next if not $p;    # Ask next server if no response
