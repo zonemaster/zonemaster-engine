@@ -28,8 +28,8 @@ use overload
 subtype 'Zonemaster::Net::IP::XS', as 'Object', where { $_->isa( 'Net::IP::XS' ) };
 coerce 'Zonemaster::Net::IP::XS', from 'Str', via { Net::IP::XS->new( $_ ) };
 
-has 'name'        => ( is => 'ro', isa => 'Zonemaster::DNSName',     coerce => 1, required => 0 );
-has 'address'     => ( is => 'ro', isa => 'Zonemaster::Net::IP::XS', coerce => 1, required => 1 );
+has 'name'    => ( is => 'ro', isa => 'Zonemaster::DNSName',     coerce => 1, required => 0 );
+has 'address' => ( is => 'ro', isa => 'Zonemaster::Net::IP::XS', coerce => 1, required => 1 );
 
 has 'dns'   => ( is => 'ro', isa => 'Net::LDNS',                     lazy_build => 1 );
 has 'cache' => ( is => 'ro', isa => 'Zonemaster::Nameserver::Cache', lazy_build => 1 );
@@ -247,7 +247,7 @@ sub add_fake_ds {
 } ## end sub add_fake_ds
 
 sub _query {
-    my ( $self, $name, $type, $usevc, $href ) = @_;
+    my ( $self, $name, $type, $href ) = @_;
     my %flags;
 
     $type //= 'A';
