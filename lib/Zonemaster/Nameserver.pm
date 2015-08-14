@@ -40,7 +40,6 @@ has 'source_address' => ( is => 'ro', isa => 'Maybe[Str]', lazy => 1, default =>
 has 'fake_delegations' => ( is => 'ro', isa => 'HashRef', default => sub { {} } );
 has 'fake_ds'          => ( is => 'ro', isa => 'HashRef', default => sub { {} } );
 
-#has 'blacklisted' => ( is => 'rw', isa => 'Bool', default => 0, required => 1 );
 has 'blacklisted' => ( is => 'rw', isa => 'HashRef', default => sub { {} }, required => 1 );
 
 ###
@@ -283,9 +282,9 @@ sub _query {
 
     my $before = time();
     my $res;
-    if ( $self->blacklisted->{$flags{usevc}}  ) {
+    if ( $self->blacklisted->{$flags{usevc}}{$flags{dnssec}} ) {
         Zonemaster->logger->add(
-            IS_BLACKLISTED => { message => "Server transport has been blacklisted due to previous failure", ns => "$self", name => "$name", type => $type, class => $href->{class}, proto => $flags{usevc} ? q{TCP} : q{UDP} }
+            IS_BLACKLISTED => { message => "Server transport has been blacklisted due to previous failure", ns => "$self", name => "$name", type => $type, class => $href->{class}, proto => $flags{usevc} ? q{TCP} : q{UDP}, dnssec => $flags{dnssec} }
         );
     }
     else {
@@ -296,7 +295,10 @@ sub _query {
             Zonemaster->logger->add(
                 LOOKUP_ERROR => { message => $msg, ns => "$self", name => "$name", type => $type, class => $href->{class} }
             );
-            $self->blacklisted->{$flags{usevc}} = 1;
+            $self->blacklisted->{$flags{usevc}}{$flags{dnssec}} = 1;
+            if ( ! $flags{dnssec} ) {
+                $self->blacklisted->{$flags{usevc}}{!$flags{dnssec}} = 1;
+            }
         }
     }
     push @{ $self->times }, ( time() - $before );
