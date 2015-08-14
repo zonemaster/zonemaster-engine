@@ -285,7 +285,7 @@ sub _query {
     my $res;
     if ( $self->blacklisted->{$flags{usevc}}  ) {
         Zonemaster->logger->add(
-            IS_BLACKLISTED => { message => "Server transport has been blacklisted due to previous failure", ns => "$self", name => "$name", type => $type, class => $href->{class}, proto => $usevc ? q{TCP} : q{UDP} }
+            IS_BLACKLISTED => { message => "Server transport has been blacklisted due to previous failure", ns => "$self", name => "$name", type => $type, class => $href->{class}, proto => $flags{usevc} ? q{TCP} : q{UDP} }
         );
     }
     else {
