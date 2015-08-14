@@ -28,8 +28,8 @@ use overload
 subtype 'Zonemaster::Net::IP::XS', as 'Object', where { $_->isa( 'Net::IP::XS' ) };
 coerce 'Zonemaster::Net::IP::XS', from 'Str', via { Net::IP::XS->new( $_ ) };
 
-has 'name'    => ( is => 'ro', isa => 'Zonemaster::DNSName',     coerce => 1, required => 0 );
-has 'address' => ( is => 'ro', isa => 'Zonemaster::Net::IP::XS', coerce => 1, required => 1 );
+has 'name'        => ( is => 'ro', isa => 'Zonemaster::DNSName',     coerce => 1, required => 0 );
+has 'address'     => ( is => 'ro', isa => 'Zonemaster::Net::IP::XS', coerce => 1, required => 1 );
 
 has 'dns'   => ( is => 'ro', isa => 'Net::LDNS',                     lazy_build => 1 );
 has 'cache' => ( is => 'ro', isa => 'Zonemaster::Nameserver::Cache', lazy_build => 1 );
@@ -39,6 +39,9 @@ has 'source_address' => ( is => 'ro', isa => 'Maybe[Str]', lazy => 1, default =>
 
 has 'fake_delegations' => ( is => 'ro', isa => 'HashRef', default => sub { {} } );
 has 'fake_ds'          => ( is => 'ro', isa => 'HashRef', default => sub { {} } );
+
+#has 'blacklisted' => ( is => 'rw', isa => 'Bool', default => 0, required => 1 );
+has 'blacklisted' => ( is => 'rw', isa => 'HashRef', default => sub { {} }, required => 1 );
 
 ###
 ### Variables
@@ -244,7 +247,7 @@ sub add_fake_ds {
 } ## end sub add_fake_ds
 
 sub _query {
-    my ( $self, $name, $type, $href ) = @_;
+    my ( $self, $name, $type, $usevc, $href ) = @_;
     my %flags;
 
     $type //= 'A';
@@ -279,13 +282,22 @@ sub _query {
     }
 
     my $before = time();
-    my $res = eval { $self->dns->query( "$name", $type, $href->{class} ) };
-    if ( $@ ) {
-        my $msg = "$@";
-        chomp( $msg );
+    my $res;
+    if ( $self->blacklisted->{$flags{usevc}}  ) {
         Zonemaster->logger->add(
-            LOOKUP_ERROR => { message => $msg, ns => "$self", name => "$name", type => $type, class => $href->{class} }
+            IS_BLACKLISTED => { message => "Server transport has been blacklisted due to previous failure", ns => "$self", name => "$name", type => $type, class => $href->{class}, proto => $usevc ? q{TCP} : q{UDP} }
         );
+    }
+    else {
+        $res = eval { $self->dns->query( "$name", $type, $href->{class} ) };
+        if ( $@ ) {
+            my $msg = "$@";
+            chomp( $msg );
+            Zonemaster->logger->add(
+                LOOKUP_ERROR => { message => $msg, ns => "$self", name => "$name", type => $type, class => $href->{class} }
+            );
+            $self->blacklisted->{$flags{usevc}} = 1;
+        }
     }
     push @{ $self->times }, ( time() - $before );
 
