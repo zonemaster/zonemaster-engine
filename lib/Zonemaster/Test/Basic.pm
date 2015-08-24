@@ -139,15 +139,15 @@ sub translation {
         'PARENT_REPLIES'     => 'Nameserver for zone {pname} replies when trying to fetch glue.',
         'NO_PARENT_RESPONSE' => 'No response from nameserver for zone {pname} when trying to fetch glue.',
         'NO_GLUE_PREVENTS_NAMESERVER_TESTS' => 'No NS records for tested zone from parent. NS tests aborted.',
-        'NS_FAILED'                         => 'Nameserver {ns} did not return NS records. RCODE was {rcode}.',
-        'NS_NO_RESPONSE'                    => 'Nameserver {ns} did not respond to NS query.',
+        'NS_FAILED'                         => 'Nameserver {ns}/{address} did not return NS records. RCODE was {rcode}.',
+        'NS_NO_RESPONSE'                    => 'Nameserver {ns}/{address} did not respond to NS query.',
         'A_QUERY_NO_RESPONSES'              => 'Nameservers did not respond to A query.',
         'HAS_NAMESERVER_NO_WWW_A_TEST'      => 'Functional nameserver found. "A" query for www.{zname} test aborted.',
         'HAS_GLUE'      => 'Nameserver for zone {pname} listed these nameservers as glue: {nsnlist}.',
-        'IPV4_DISABLED' => 'IPv4 is disabled, not sending "{rrtype}" query to {ns}.',
-        'IPV4_ENABLED'  => 'IPv4 is enabled, can send "{rrtype}" query to {ns}.',
-        'IPV6_DISABLED' => 'IPv6 is disabled, not sending "{rrtype}" query to {ns}.',
-        'IPV6_ENABLED'  => 'IPv6 is enabled, can send "{rrtype}" query to {ns}.',
+        'IPV4_DISABLED' => 'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
+        'IPV4_ENABLED'  => 'IPv4 is enabled, can send "{rrtype}" query to {ns}/{address}.',
+        'IPV6_DISABLED' => 'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
+        'IPV6_ENABLED'  => 'IPv6 is enabled, can send "{rrtype}" query to {ns}/{address}.',
         'NOT_A_ZONE'    => '{zname} is not a zone.',
     };
 } ## end sub translation
@@ -277,7 +277,8 @@ sub basic02 {
             push @results,
               info(
                 IPV4_DISABLED => {
-                    ns     => "$ns",
+                    ns      => $ns->name->string,
+                    address => $ns->address->short,
                     rrtype => q{NS},
                 }
               );
@@ -287,7 +288,8 @@ sub basic02 {
             push @results,
               info(
                 IPV4_ENABLED => {
-                    ns     => "$ns",
+                    ns      => $ns->name->string,
+                    address => $ns->address->short,
                     rrtype => q{NS},
                 }
               );
@@ -297,7 +299,8 @@ sub basic02 {
             push @results,
               info(
                 IPV6_DISABLED => {
-                    ns     => "$ns",
+                    ns      => $ns->name->string,
+                    address => $ns->address->short,
                     rrtype => q{NS},
                 }
               );
@@ -307,7 +310,8 @@ sub basic02 {
             push @results,
               info(
                 IPV6_ENABLED => {
-                    ns     => "$ns",
+                    ns      => $ns->name->string,
+                    address => $ns->address->short,
                     rrtype => q{NS},
                 }
               );
@@ -321,7 +325,8 @@ sub basic02 {
                     HAS_NAMESERVERS => {
                         nsnlist =>
                           join( q{,}, sort map { $_->nsdname } $p->get_records_for_name( q{NS}, $zone->name ) ),
-                        ns => $ns->string,
+			    ns => $ns->name->string,
+			    address => $ns->address->short,
                     }
                   );
             }
@@ -329,7 +334,8 @@ sub basic02 {
                 push @results,
                   info(
                     NS_FAILED => {
-                        ns    => $ns->string,
+			ns => $ns->name->string,
+			address => $ns->address->short,
                         rcode => $p->rcode,
                     }
                   );
@@ -339,7 +345,8 @@ sub basic02 {
             push @results,
               info(
                 NS_NO_RESPONSE => {
-                    ns => $ns->string,
+		    ns => $ns->name->string,
+		    address => $ns->address->short,
                 }
               );
         }
@@ -402,7 +409,8 @@ sub basic03 {
             push @results,
               info(
                 HAS_A_RECORDS => {
-                    ns    => $ns->string,
+		    ns => $ns->name->string,
+		    address => $ns->address->short,
                     dname => $name,
                 }
               );
@@ -411,7 +419,8 @@ sub basic03 {
             push @results,
               info(
                 NO_A_RECORDS => {
-                    ns    => $ns->string,
+		    ns => $ns->name->string,
+		    address => $ns->address->short,
                     dname => $name,
                 }
               );
