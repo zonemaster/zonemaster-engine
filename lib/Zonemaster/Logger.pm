@@ -83,6 +83,22 @@ sub clear_history {
     return;
 }
 
+# get the max level from a log, return as a string
+sub get_max_level {
+    my ( $self ) = @_;
+
+    my %levels = reverse Zonemaster::Logger::Entry->levels();
+    my $level = 0;
+
+    use Data::Dumper;
+    print Dumper( @{ $self->entries } );
+    foreach ( @{ $self->entries } ) {
+	$level = $_->numeric_level if $_->numeric_level > $level;
+    }
+
+    return $levels{ $level };
+}
+
 sub json {
     my ( $self, $min_level ) = @_;
     my $json    = JSON::XS->new->allow_blessed->convert_blessed->canonical;
@@ -161,6 +177,10 @@ Adds an entry with the given tag and arguments to the logger object.
 Returns a JSON-formatted string with all the stored log entries. If an argument
 is given and is a known severity level, only messages with at least that level
 will be included.
+
+=item get_max_level
+
+Returns the maximum log level from the entire log as the level string.
 
 =back
 
