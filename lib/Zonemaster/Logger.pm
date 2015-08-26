@@ -90,8 +90,6 @@ sub get_max_level {
     my %levels = reverse Zonemaster::Logger::Entry->levels();
     my $level = 0;
 
-    use Data::Dumper;
-    print Dumper( @{ $self->entries } );
     foreach ( @{ $self->entries } ) {
 	$level = $_->numeric_level if $_->numeric_level > $level;
     }
