@@ -1,5 +1,6 @@
 Zonemaster Engine
 =================
+[![Build Status](https://travis-ci.org/dotse/zonemaster-engine.svg?branch=master)](https://travis-ci.org/dotse/zonemaster-engine)
 
 Zonemaster is a cooperative project between .SE and AFNIC. It is a
 successor to both .SE's DNSCheck and AFNIC's Zonecheck.
