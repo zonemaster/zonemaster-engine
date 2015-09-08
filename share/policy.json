@@ -251,6 +251,7 @@
         "nameserver06": true,
         "nameserver07": true,
         "nameserver08": true,
+        "nameserver09": true,
         "syntax01": true,
         "syntax02": true,
         "syntax03": true,

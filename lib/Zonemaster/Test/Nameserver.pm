@@ -45,6 +45,9 @@ sub all {
     if ( Zonemaster->config->should_run( 'nameserver08' ) ) {
         push @results, $class->nameserver08( $zone );
     }
+    if ( Zonemaster->config->should_run( 'nameserver09' ) ) {
+        push @results, $class->nameserver09( $zone );
+    }
 
     return @results;
 } ## end sub all
@@ -108,6 +111,11 @@ sub metadata {
             qw(
               QNAME_CASE_INSENSITIVE
               QNAME_CASE_SENSITIVE
+              )
+        ],
+        nameserver09 => [
+            qw(
+              
               )
         ],
     };
@@ -235,8 +243,7 @@ sub nameserver02 {
         $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short }++;
     } ## end foreach my $local_ns ( @{ Zonemaster::TestMethods...})
 
-    if ( scalar keys %nsnames_and_ip and not scalar @results ) {
-        push @results,
+    if ( scalar keys %nsnames_and_ip and not scalar @results ) { push @results,
           info(
             EDNS0_SUPPORT => {
                 names => join( q{,}, keys %nsnames_and_ip ),
@@ -554,6 +561,79 @@ sub nameserver08 {
     return @results;
 } ## end sub nameserver08
 
+sub nameserver09 {
+    my ( $class, $zone ) = @_;
+    my @results;
+    my %nsnames_and_ip;
+    my $original_name = q{www.}.$zone->name->string;
+    my $randomized_uc_name1;
+    my $randomized_uc_name2;
+    my $all_results_match = 1;
+
+    $original_name =~ s/[.]+\z//smgx;
+
+    do {
+        $randomized_uc_name1 = scramble_case $original_name;
+    } while ( $randomized_uc_name1 eq $original_name );
+
+    do {
+        $randomized_uc_name2 = scramble_case $original_name;
+    } while ( $randomized_uc_name2 eq $original_name or $randomized_uc_name2 eq $randomized_uc_name1 );
+
+    foreach my $local_ns ( @{ Zonemaster::TestMethods->method4( $zone ) }, @{ Zonemaster::TestMethods->method5( $zone ) } ) {
+        next if ( not Zonemaster->config->ipv6_ok and $local_ns->address->version == $IP_VERSION_6 );
+
+        next if ( not Zonemaster->config->ipv4_ok and $local_ns->address->version == $IP_VERSION_4 );
+
+        next if $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short };
+
+        my $p1 = $local_ns->query( $randomized_uc_name1, q{SOA} );
+        my $p2 = $local_ns->query( $randomized_uc_name2, q{SOA} );
+
+        my $answer1_string;
+        my $answer2_string;
+        my $json = JSON::XS->new->canonical->pretty;
+        if ( $p1 and scalar $p1->answer ) {
+
+            my @answer1 = map { $_->string } sort $p1->answer;
+            $answer1_string = $json->encode(\@answer1);
+
+            if ( $p2 and scalar $p2->answer ) {
+
+                my @answer2 = map { $_->string } sort $p2->answer;
+                $answer2_string = $json->encode(\@answer2);
+            }
+
+            if ( $answer1_string eq $answer2_string ) {
+                # OK
+            }
+            else {
+                $all_results_match = 0;
+            }
+
+        }
+        elsif ( $p1 and $p2 ) {
+
+            if ( $p1->rcode eq $p2->rcode ) {
+                # OK
+            }
+            else {
+                $all_results_match = 0;
+            }
+
+        }
+        elsif ( $p1 or $p2 ) {
+
+            $all_results_match = 0;
+        
+        }
+
+        $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short }++;
+    } ## end foreach my $local_ns ( @{ Zonemaster::TestMethods...})
+
+    return @results;
+} ## end sub nameserver09
+
 1;
 
 =head1 NAME
@@ -619,11 +699,13 @@ Verify that each nameserver can be resolved to an IP address.
 
 Check whether authoritative name servers return an upward referral.
 
-=back
-
 =item nameserver08($zone)
 
 Check whether authoritative name servers responses match the case of every letter in QNAME.
+
+=item nameserver09($zone)
+
+Check whether authoritative name servers return same results for equivalent names with different cases in the request.
 
 =back
 
