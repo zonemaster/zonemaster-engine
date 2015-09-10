@@ -661,6 +661,34 @@ msgstr "Nameserver {ns}/{address} preserves original case of queried names ({dna
 msgid  "Nameserver {ns}/{address} does not preserve original case of queried names."
 msgstr "Nameserver {ns}/{address} does not preserve original case of queried names ({dname})."
 
+#: NAMESERVER:CASE_QUERY_SAME_ANSWER
+msgid  "When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver {ns}/{address} returns same answers."
+msgstr "When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver {ns}/{address} returns same answers."
+
+#: NAMESERVER:CASE_QUERY_DIFFERENT_ANSWER
+msgid  "When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver {ns}/{address} returns different answers."
+msgstr "When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver {ns}/{address} returns different answers."
+
+#: NAMESERVER:CASE_QUERY_SAME_RC
+msgid  "When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver {ns}/{address} returns same RCODE \"{rcode}\"."
+msgstr "When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver {ns}/{address} returns same RCODE \"{rcode}\"."
+
+#: NAMESERVER:CASE_QUERY_DIFFERENT_RC
+msgid  "When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver {ns}/{address} returns different RCODE (\"{rcode1}\" vs \"{rcode2}\")."
+msgstr "When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver {ns}/{address} returns different RCODE (\"{rcode1}\" vs \"{rcode2}\")."
+
+#: NAMESERVER:CASE_QUERY_NO_ANSWER
+msgid  "When asked for {type} records on \"{query}\", nameserver {ns}/{address} returns nothing."
+msgstr "When asked for {type} records on \"{query}\", nameserver {ns}/{address} returns nothing."
+
+#: NAMESERVER:CASE_QUERIES_RESULTS_OK
+msgid  "When asked for {type} records on \"{query}\" with different cases, all servers reply consistently."
+msgstr "When asked for {type} records on \"{query}\" with different cases, all servers reply consistently."
+
+#: NAMESERVER:CASE_QUERIES_RESULTS_DIFFER
+msgid  "When asked for {type} records on \"{query}\" with different cases, all servers do not reply consistently."
+msgstr "When asked for {type} records on \"{query}\" with different cases, all servers do not reply consistently."
+
 #: SYNTAX:DISCOURAGED_DOUBLE_DASH
 msgid  "Domain name ({name}) has a label ({label}) with a double hyphen ('--') in position 3 and 4 (with a prefix which is not 'xn--')."
 msgstr "Domain name ({name}) has a label ({label}) with a double hyphen ('--') in position 3 and 4 (with a prefix which is not 'xn--')."

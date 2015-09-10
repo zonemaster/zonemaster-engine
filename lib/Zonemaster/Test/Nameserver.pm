@@ -115,7 +115,13 @@ sub metadata {
         ],
         nameserver09 => [
             qw(
-              
+              CASE_QUERY_SAME_ANSWER
+              CASE_QUERY_DIFFERENT_ANSWER
+              CASE_QUERY_SAME_RC
+              CASE_QUERY_DIFFERENT_RC
+              CASE_QUERY_NO_ANSWER
+              CASE_QUERIES_RESULTS_OK
+              CASE_QUERIES_RESULTS_DIFFER
               )
         ],
     };
@@ -146,6 +152,13 @@ sub translation {
         'NO_UPWARD_REFERRAL'         => 'None of the following nameservers returns an upward referral : {names}.',
         'QNAME_CASE_SENSITIVE'       => 'Nameserver {ns}/{address} preserves original case of queried names.',
         'QNAME_CASE_INSENSITIVE'     => 'Nameserver {ns}/{address} does not preserve original case of queried names.',
+        'CASE_QUERY_SAME_ANSWER'      => 'When asked for {type} records on "{query1}" and "{query2}", nameserver {ns}/{address} returns same answers.',
+        'CASE_QUERY_DIFFERENT_ANSWER' => 'When asked for {type} records on "{query1}" and "{query2}", nameserver {ns}/{address} returns different answers.',
+        'CASE_QUERY_SAME_RC'          => 'When asked for {type} records on "{query1}" and "{query2}", nameserver {ns}/{address} returns same RCODE "{rcode}".',
+        'CASE_QUERY_DIFFERENT_RC'     => 'When asked for {type} records on "{query1}" and "{query2}", nameserver {ns}/{address} returns different RCODE ("{rcode1}" vs "{rcode2}").',
+        'CASE_QUERY_NO_ANSWER'        => 'When asked for {type} records on "{query}", nameserver {ns}/{address} returns nothing.',
+        'CASE_QUERIES_RESULTS_OK'     => 'When asked for {type} records on "{query}" with different cases, all servers reply consistently.',
+        'CASE_QUERIES_RESULTS_DIFFER' => 'When asked for {type} records on "{query}" with different cases, all servers do not reply consistently.',
     };
 } ## end sub translation
 
@@ -566,6 +579,7 @@ sub nameserver09 {
     my @results;
     my %nsnames_and_ip;
     my $original_name = q{www.}.$zone->name->string;
+    my $record_type = q{SOA};
     my $randomized_uc_name1;
     my $randomized_uc_name2;
     my $all_results_match = 1;
@@ -587,8 +601,8 @@ sub nameserver09 {
 
         next if $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short };
 
-        my $p1 = $local_ns->query( $randomized_uc_name1, q{SOA} );
-        my $p2 = $local_ns->query( $randomized_uc_name2, q{SOA} );
+        my $p1 = $local_ns->query( $randomized_uc_name1, $record_type );
+        my $p2 = $local_ns->query( $randomized_uc_name2, $record_type );
 
         my $answer1_string;
         my $answer2_string;
@@ -605,31 +619,95 @@ sub nameserver09 {
             }
 
             if ( $answer1_string eq $answer2_string ) {
-                # OK
+                push @results,
+                  info(
+                    CASE_QUERY_SAME_ANSWER => {
+                        ns      => $local_ns->name,
+                        address => $local_ns->address->short,
+                        type    => $record_type,
+                        query1  => $randomized_uc_name1,
+                        query2  => $randomized_uc_name2,
+                    }
+                  );
             }
             else {
                 $all_results_match = 0;
+                push @results,
+                  info(
+                    CASE_QUERY_DIFFERENT_ANSWER => {
+                        ns      => $local_ns->name,
+                        address => $local_ns->address->short,
+                        type    => $record_type,
+                        query1  => $randomized_uc_name1,
+                        query2  => $randomized_uc_name2,
+                    }
+                  );
             }
 
         }
         elsif ( $p1 and $p2 ) {
 
             if ( $p1->rcode eq $p2->rcode ) {
-                # OK
+                push @results,
+                  info(
+                    CASE_QUERY_SAME_RC => {
+                        ns      => $local_ns->name,
+                        address => $local_ns->address->short,
+                        type    => $record_type,
+                        rcode1  => $p1->rcode,
+                        rcode2  => $p2->rcode,
+                    }
+                  );
             }
             else {
                 $all_results_match = 0;
+                push @results,
+                  info(
+                    CASE_QUERY_DIFFERENT_RC => {
+                        ns      => $local_ns->name,
+                        address => $local_ns->address->short,
+                        type    => $record_type,
+                        rcode1  => $p1->rcode,
+                        rcode2  => $p2->rcode,
+                    }
+                  );
             }
 
         }
         elsif ( $p1 or $p2 ) {
-
             $all_results_match = 0;
-        
+            push @results,
+              info(
+                CASE_QUERY_NO_ANSWER => {
+                    ns      => $local_ns->name,
+                    address => $local_ns->address->short,
+                    type    => $record_type,
+                    query   => $p1 ? $randomized_uc_name1 : $randomized_uc_name2,
+                }
+              );
         }
 
         $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short }++;
     } ## end foreach my $local_ns ( @{ Zonemaster::TestMethods...})
+
+    if ( $all_results_match ) {
+        push @results,
+          info(
+            CASE_QUERIES_RESULTS_OK => {
+                type  => $record_type,
+                query => $original_name,
+            }
+          );
+    }
+    else {
+        push @results,
+          info(
+            CASE_QUERIES_RESULTS_DIFFER => {
+                type  => $record_type,
+                query => $original_name,
+            }
+          );
+    }
 
     return @results;
 } ## end sub nameserver09
