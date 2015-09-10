@@ -94,7 +94,14 @@ sub _recurse {
     $state->{in_progress}{$name}{$type} = 1;
 
     while ( my $ns = pop @{ $state->{ns} } ) {
-        Zonemaster->logger->add( RECURSE_QUERY => { ns => "$ns", name => $name, type => $type, class => $class } );
+	my $nsname    = $ns->can('name')    ? ''.$ns->name : '';
+	my $nsaddress = $ns->can('address') ? $ns->address->ip : '';
+        Zonemaster->logger->add( RECURSE_QUERY => { source => "$ns",
+						    ns => $nsname,
+						    address => $nsaddress,
+						    name => $name,
+						    type => $type,
+						    class => $class } );
         my $p = $self->_do_query( $ns, $name, $type, { class => $class }, $state );
 
         next if not $p;    # Ask next server if no response
