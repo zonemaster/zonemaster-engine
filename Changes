@@ -1,5 +1,12 @@
 Revision history for Perl module Zonemaster.
 
+v1.0.5 2015-09-10
+
+ - Added blacklisting functionality for non-responding name servers
+ - Removed GOST functionality
+ - Improved test coverage
+ - Fixed the test nameserver08
+
 v1.0.4 2015-06-24
  - Fixed NSEC3 iterations evaluation, issue #77
  - Key size info on DNSKEY records, issue #79
