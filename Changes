@@ -1,7 +1,8 @@
 Revision history for Perl module Zonemaster.
 
 v1.0.5 2015-09-10
-
+ - Split the ns and address args fields in the log (continuing work), including RECURSE_QUERY
+ - Added get_max_level() to Zonemaster::Logger
  - Added blacklisting functionality for non-responding name servers
  - Removed GOST functionality
  - Improved test coverage
