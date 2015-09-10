@@ -38,8 +38,8 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster->config->no_network( 1 );
 }
 
-my @testcases_with_network = (qw{nameserver01 nameserver02 nameserver06 nameserver07 nameserver08});
-foreach my $testcase ( qw{nameserver01 nameserver02 nameserver03 nameserver04 nameserver05 nameserver06 nameserver07 nameserver08} ) {
+my @testcases_with_network = (qw{nameserver01 nameserver02 nameserver06 nameserver07 nameserver08 nameserver09});
+foreach my $testcase ( qw{nameserver01 nameserver02 nameserver03 nameserver04 nameserver05 nameserver06 nameserver07 nameserver08 nameserver09} ) {
     next if grep { $_ eq $testcase } @testcases_with_network;
     Zonemaster->config->load_policy_file( 't/policies/Test-'.$testcase.'-only.json' );
     my @testcases;

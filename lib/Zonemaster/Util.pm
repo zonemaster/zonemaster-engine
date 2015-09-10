@@ -9,8 +9,8 @@ use Zonemaster::DNSName;
 use Pod::Simple::SimpleTree;
 
 ## no critic (Modules::ProhibitAutomaticExportation)
-our @EXPORT      = qw[ ns info name pod_extract_for ];
-our @EXPORT_OK   = qw[ ns info name pod_extract_for policy ];
+our @EXPORT      = qw[ ns info name pod_extract_for scramble_case ];
+our @EXPORT_OK   = qw[ ns info name pod_extract_for policy scramble_case ];
 our %EXPORT_TAGS = ( all => \@EXPORT_OK );
 
 ## no critic (Subroutines::RequireArgUnpacking)
@@ -95,7 +95,33 @@ sub pod_extract_for {
     my %desc = eval { _pod_process_tree( $parser->parse_file( $INC{"Zonemaster/Test/$name.pm"} )->root ) };
 
     return \%desc;
-}
+} ## end sub pod_extract_for
+
+# Function from CPAN package Text::Capitalize that causes
+# issues when installing ZM.
+#
+sub scramble_case {
+   my $string = shift;
+   my (@chars, $uppity, $newstring, $total, $uppers, $downers, $tweak);
+
+   @chars = split //, $string;
+
+   $uppers = 2;
+   $downers = 1;
+   foreach my $c (@chars) {
+      $uppity = int( rand( 1 + $downers/$uppers) );
+
+      if ($uppity) {
+         $c = uc($c);
+         $uppers++;
+       } else {
+         $c = lc($c);
+         $downers++;
+       }
+   }
+   $newstring = join '', @chars;
+   return $newstring;
+} # end sub scramble_case
 
 1;
 
@@ -141,5 +167,9 @@ values the documentation strings.
 This method blindly assumes that the structure of the POD is exactly
 like that in the Example and Basic test modules. If it's not, the
 results are undefined.
+
+=item scramble_case
+
+This routine provides a special effect: sCraMBliNg tHe CaSe
 
 =back
