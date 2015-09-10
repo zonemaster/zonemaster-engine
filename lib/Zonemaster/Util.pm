@@ -95,7 +95,7 @@ sub pod_extract_for {
     my %desc = eval { _pod_process_tree( $parser->parse_file( $INC{"Zonemaster/Test/$name.pm"} )->root ) };
 
     return \%desc;
-}
+} ## end sub pod_extract_for
 
 # Function from CPAN package Text::Capitalize that causes
 # issues when installing ZM.
