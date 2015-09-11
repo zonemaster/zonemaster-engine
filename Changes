@@ -1,12 +1,13 @@
 Revision history for Perl module Zonemaster.
 
 v1.0.5 2015-09-10
+ - Removes dependency on Text::Capitalize (issue #110 and #109)
  - Split the ns and address args fields in the log (continuing work), including RECURSE_QUERY
  - Added get_max_level() to Zonemaster::Logger
- - Added blacklisting functionality for non-responding name servers
+ - Added blacklisting functionality for non-responding name servers (issue #96)
  - Removed GOST functionality
  - Improved test coverage
- - Fixed the test nameserver08
+ - Fixed the test nameserver08 (issue #93 and issue #94)
 
 v1.0.4 2015-06-24
  - Fixed NSEC3 iterations evaluation, issue #77
