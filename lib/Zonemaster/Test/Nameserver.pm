@@ -11,7 +11,6 @@ use Zonemaster::Test::Address;
 use Zonemaster::Constants qw[:ip];
 
 use List::MoreUtils qw[uniq none];
-use Text::Capitalize qw[scramble_case];
 
 ###
 ### Entry Points
