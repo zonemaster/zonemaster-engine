@@ -27,8 +27,6 @@ The Engine Perl module name is 'Zonemaster'.
 
 3) Install non-packaged software.
 
-`sudo cpan -i Text::Capitalize`
-
 `sudo cpan -i Zonemaster`
 
 If necessary, answer any questions from the cpan script by accepting the default value (just press enter).
@@ -45,8 +43,6 @@ If necessary, answer any questions from the cpan script by accepting the default
 `pkg install libidn p5-Devel-CheckLib p5-MIME-Base64 p5-Test-Fatal p5-JSON-PP p5-IO-Socket-INET6 p5-Moose p5-Module-Find p5-JSON p5-File-ShareDir p5-File-Slurp p5-Mail-RFC822-Address p5-Hash-Merge p5-Time-HiRes p5-Locale-libintl p5-JSON-XS p5-Readonly-XS p5-Tie-Simple p5-Math-BigInt p5-IP-Country p5-IO-Capture`
 
 3) Install non-packaged-software.
-
-`cpan -i Text::Capitalize`
 
 `cpan -i Zonemaster`
 
@@ -68,8 +64,6 @@ If necessary, answer any questions from the cpan script by accepting the default
 If it's the first time you use the CPAN module, it will ask three questions.
 For the first and third, the default responses are fine. For the second, answer
 "sudo" (the default is "local::lib", which you do not want).
-
-`sudo cpan -i Text::Capitalize`
 
 `sudo cpan -i Zonemaster`
 

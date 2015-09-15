@@ -23,7 +23,6 @@ requires 'Hash::Merge'           => 0;
 requires 'Readonly'              => 0;
 requires 'Time::HiRes'           => 0;
 requires 'Locale::TextDomain'    => 0;
-requires 'Text::Capitalize'      => 0;
 
 test_requires 'JSON::XS' => 2.32;
 
