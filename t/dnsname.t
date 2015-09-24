@@ -28,7 +28,7 @@ is( $name->next_higher->next_higher, 'se' );
 is( $root->next_higher,              undef );
 
 my $lower = Zonemaster::DNSName->new( 'iis.se' );
-my $upper = Zonemaster::DNSName->new( 'IIS.SE' );
+my $upper = Zonemaster::DNSName->new( 'IISIIS' );
 ok( $lower eq $upper, 'Comparison is case-insensitive' );
 
 my $one = Zonemaster::DNSName->new( 'foo.bar.baz.com' );
