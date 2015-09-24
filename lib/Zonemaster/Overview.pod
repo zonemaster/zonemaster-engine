@@ -4,7 +4,7 @@ The Zonemaster Test Engine
 
 =head1 INTRODUCTION
 
-The Zonemaster system is a quality control tool for DNS zones, produced in cooperation between AFNIC and .SE (the top-level registries for respectively France and Sweden). It is a successor both to AFNIC's tool Zonecheck and .SE's tool DNSCheck, and is intended to be an improvement over both.
+The Zonemaster system is a quality control tool for DNS zones, produced in cooperation between AFNIC and IIS (the top-level registries for respectively France and Sweden). It is a successor both to AFNIC's tool Zonecheck and IIS's tool DNSCheck, and is intended to be an improvement over both.
 
 The system as a whole consists of the test engine and, as distributed by the project, two different front ends. One is a command-line interface intended for use by experienced technicians, and one is a web interface meant for use by anyone. This document only talks about the test engine.
 
