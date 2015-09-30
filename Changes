@@ -1,5 +1,8 @@
 Revision history for Perl module Zonemaster.
 
+v1.0.7 ...
+ - ASN in logs are now arrays
+
 v1.0.6 2015-09-16
  - Fix for removal of Text::Capitalize
 
