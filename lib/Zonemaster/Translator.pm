@@ -1,4 +1,4 @@
-package Zonemaster::Translator v1.0.0;
+package Zonemaster::Translator v1.0.1;
 
 use 5.14.2;
 use strict;
@@ -74,7 +74,7 @@ sub translate_tag {
         return $entry->string;
     }
 
-    return __x( $string, %{ $entry->args } );
+    return __x( $string, %{ $entry->printable_args } );
 }
 
 sub _system_translation {
