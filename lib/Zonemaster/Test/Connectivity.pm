@@ -1,4 +1,4 @@
-package Zonemaster::Test::Connectivity v1.0.1;
+package Zonemaster::Test::Connectivity v1.0.2;
 
 use strict;
 use warnings;
@@ -248,14 +248,14 @@ sub connectivity03 {
     my @v6asns = uniq grep { $_ } map { Zonemaster::ASNLookup->get( $_ ) } @v6ips;
     my @all_asns = uniq( @v4asns, @v6asns );
 
-    push @results, info( IPV4_ASN => { asn => join( q{,}, @v4asns ) } );
-    push @results, info( IPV6_ASN => { asn => join( q{,}, @v6asns ) } );
+    push @results, info( IPV4_ASN => { asn => \@v4asns } );
+    push @results, info( IPV6_ASN => { asn => \@v6asns } );
 
     if ( @v4asns == 1 ) {
         push @results, info( NAMESERVERS_IPV4_WITH_UNIQ_AS => { asn => $v4asns[0] } );
     }
     elsif ( @v4asns > 1 ) {
-        push @results, info( NAMESERVERS_IPV4_WITH_MULTIPLE_AS => { asn => join( q{;}, @v4asns ) } );
+        push @results, info( NAMESERVERS_IPV4_WITH_MULTIPLE_AS => { asn => \@v4asns } );
     }
     else {
         push @results, info( NAMESERVERS_IPV4_NO_AS => {} );
@@ -265,7 +265,7 @@ sub connectivity03 {
         push @results, info( NAMESERVERS_IPV6_WITH_UNIQ_AS => { asn => $v6asns[0] } );
     }
     elsif ( @v6asns > 1 ) {
-        push @results, info( NAMESERVERS_IPV6_WITH_MULTIPLE_AS => { asn => join( q{;}, @v6asns ) } );
+        push @results, info( NAMESERVERS_IPV6_WITH_MULTIPLE_AS => { asn => \@v6asns } );
     }
     else {
         push @results, info( NAMESERVERS_IPV6_NO_AS => {} );
@@ -275,7 +275,7 @@ sub connectivity03 {
         push @results, info( NAMESERVERS_WITH_UNIQ_AS => { asn => $all_asns[0] } );
     }
     elsif ( @all_asns > 1 ) {
-        push @results, info( NAMESERVERS_WITH_MULTIPLE_AS => { asn => join( q{;}, @all_asns ) } );
+        push @results, info( NAMESERVERS_WITH_MULTIPLE_AS => { asn => \@all_asns } );
     }
     else {
         push @results, info( NAMESERVERS_NO_AS => {} );    # Shouldn't pass Basic

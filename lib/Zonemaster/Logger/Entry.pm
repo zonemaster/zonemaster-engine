@@ -1,4 +1,4 @@
-package Zonemaster::Logger::Entry v1.0.0;
+package Zonemaster::Logger::Entry v1.1.0;
 
 use 5.14.2;
 use Time::HiRes qw[time];
@@ -91,16 +91,38 @@ sub levels {
 
 sub string {
     my ( $self ) = @_;
-    my $argstr = '';
+    my $argstr = q{};
     ## no critic (TestingAndDebugging::ProhibitNoWarnings)
     no warnings 'uninitialized';
 
-    $argstr = join( ', ',
-        map { $_ . '=' . ( ref( $self->args->{$_} ) ? $json->encode( $self->args->{$_} ) : $self->args->{$_} ) }
-        sort keys %{ $self->args } )
-      if $self->args;
+    if ( $self->args ) {
+        my $p_args = $self->printable_args;
+        $argstr = join( q{; },
+            map { $_ . q{=} . ( ref( $p_args->{$_} ) ? $json->encode( $p_args->{$_} ) : $p_args->{$_} ) }
+            sort keys %{ $p_args } );
+    }
 
     return sprintf( '%s:%s %s', $self->module, $self->tag, $argstr );
+}
+
+sub printable_args {
+    my ( $self ) = @_;
+    
+    if ( $self->args ) {
+        my %p_args;
+        foreach my $key_arg ( keys %{ $self->args } ) {
+            if ( not ref( $self->args->{$key_arg} ) ) {
+                $p_args{ $key_arg } = $self->args->{$key_arg};
+            } elsif ( $key_arg eq q{asn} and ref( $self->args->{$key_arg} ) eq q{ARRAY} ) {
+                $p_args{ q{asn} } = join(q{,}, @{ $self->args->{$key_arg} } );
+            } else {
+                $p_args{ $key_arg } = $self->args->{$key_arg};
+            }
+        }
+        return \%p_args;
+    }
+
+    return;
 }
 
 ###
@@ -176,6 +198,10 @@ A partial stack trace for the call that created the entry. Used to create the mo
 =item string
 
 Simple method to generate a string representation of the log entry. Overloaded to the stringification operator.
+
+=item printable_args
+
+Used to transform data from an internal/JSON representation to a "user friendly" representation one.
 
 =item numeric_level
 
