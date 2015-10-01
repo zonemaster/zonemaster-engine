@@ -1,7 +1,10 @@
 Revision history for Perl module Zonemaster.
 
-v1.0.7 ...
+v1.0.7 2015-10-01
  - ASN in logs are now arrays
+ - Make test witout IPv6 connectivity works, fixes #121
+ - Now requires Net::Socket::IP
+ - Fixes malformed log messages
 
 v1.0.6 2015-09-16
  - Fix for removal of Text::Capitalize
