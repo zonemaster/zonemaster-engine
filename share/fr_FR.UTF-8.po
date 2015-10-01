@@ -70,19 +70,19 @@ msgid  "Functional nameserver found. \"A\" query for www.{zname} test aborted."
 msgstr "Un serveur de noms fonctionnel a été trouvé. Inutile de réaliser une requête de type \"A\" sur www.{zname}."
 
 #: BASIC:IPV4_DISABLED
-msgid  "IPv4 is disabled, not sending \"{rrtype}\" query to {ns}."
-msgstr "IPv4 a été désactivé, la requête de type \"{rrtype}\" sur le serveur {ns} est annulée."
+msgid  "IPv4 is disabled, not sending \"{rrtype}\" query to {ns}/{address}."
+msgstr "IPv4 a été désactivé, la requête de type \"{rrtype}\" sur le serveur {ns}/{address} est annulée."
 
 #: BASIC:IPV4_ENABLED
-msgid  "IPv4 is enabled, can send \"{rrtype}\" query to {ns}."
-msgstr "IPv4 est activé, il est possible de réaliser une requête de type \"{rrtype}\" sur le serveur {ns}."
+msgid  "IPv4 is enabled, can send \"{rrtype}\" query to {ns}/{address}."
+msgstr "IPv4 est activé, il est possible de réaliser une requête de type \"{rrtype}\" sur le serveur {ns}/{address}."
 
 #: BASIC:IPV6_DISABLED
-msgid  "IPv6 is disabled, not sending \"{rrtype}\" query to {ns}."
+msgid  "IPv6 is disabled, not sending \"{rrtype}\" query to {ns}/{address}."
 msgstr "IPv6 a été désactivé, la requête de type \"{rrtype}\" sur le serveur {ns} est annulée."
 
 #: BASIC:IPV6_ENABLED
-msgid  "IPv6 is enabled, can send \"{rrtype}\" query to {ns}."
+msgid  "IPv6 is enabled, can send \"{rrtype}\" query to {ns}/{address}."
 msgstr "IPv6 est activé, il est possible de réaliser une requête de type \"{rrtype}\" sur le serveur {ns}."
 
 #: BASIC:NO_A_RECORDS
@@ -110,12 +110,12 @@ msgid  "No response from nameserver for zone {pname} when trying to fetch glue."
 msgstr "Aucune réponse obtenue des serveurs de noms de la zone {pname} en essayant de récupérer la liste des serveurs de noms de la zone testée."
 
 #: BASIC:NS_FAILED
-msgid  "Nameserver {ns} did not return NS records. RCODE was {rcode}."
-msgstr "Le serveur de noms {ns} ne renvoie pas d'enregistrements de type \"NS\" pour la zone testée. Le code {rcode} a été retourné."
+msgid  "Nameserver {ns}/{address} did not return NS records. RCODE was {rcode}."
+msgstr "Le serveur de noms {ns}/{address} ne renvoie pas d'enregistrements de type \"NS\" pour la zone testée. Le code {rcode} a été retourné."
 
 #: BASIC:NS_NO_RESPONSE
-msgid  "Nameserver {ns} did not respond to NS query."
-msgstr "Le serveur de noms {ns} ne répond pas à une requête de type \"NS\"."
+msgid  "Nameserver {ns}/{address} did not respond to NS query."
+msgstr "Le serveur de noms {ns}/{address} ne répond pas à une requête de type \"NS\"."
 
 #: BASIC:PARENT_REPLIES
 msgid  "Nameserver for zone {pname} replies when trying to fetch glue."
