@@ -653,8 +653,9 @@ sub nameserver09 {
                         ns      => $local_ns->name,
                         address => $local_ns->address->short,
                         type    => $record_type,
-                        rcode1  => $p1->rcode,
-                        rcode2  => $p2->rcode,
+                        query1  => $randomized_uc_name1,
+                        query2  => $randomized_uc_name2,
+                        rcode   => $p1->rcode,
                     }
                   );
             }
@@ -666,6 +667,8 @@ sub nameserver09 {
                         ns      => $local_ns->name,
                         address => $local_ns->address->short,
                         type    => $record_type,
+                        query1  => $randomized_uc_name1,
+                        query2  => $randomized_uc_name2,
                         rcode1  => $p1->rcode,
                         rcode2  => $p2->rcode,
                     }
