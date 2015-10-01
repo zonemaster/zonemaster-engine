@@ -7,6 +7,7 @@ use warnings;
 use Zonemaster;
 use Zonemaster::DNSName;
 use Pod::Simple::SimpleTree;
+use IO::Socket::IP;
 
 ## no critic (Modules::ProhibitAutomaticExportation)
 our @EXPORT      = qw[ ns info name pod_extract_for scramble_case ];
@@ -123,6 +124,24 @@ sub scramble_case {
    return $newstring;
 } # end sub scramble_case
 
+sub supports_ipv6 {
+    my $has_ipv6;
+
+    eval {
+        $has_ipv6 = IO::Socket::IP->new (
+            Domain => PF_INET6,
+            LocalHost => '::1',
+            Listen => 1 ) or die;
+    };
+
+    if ($@) {
+        return 0;
+    }
+    else {
+        return 1;
+    }
+}
+
 1;
 
 =head1 NAME
@@ -171,5 +190,9 @@ results are undefined.
 =item scramble_case
 
 This routine provides a special effect: sCraMBliNg tHe CaSe
+
+=item supports_ipv6
+
+Check if ZOnemaster hosting server supports IPv6.
 
 =back
