@@ -1,4 +1,4 @@
-package Zonemaster::Util v1.0.0;
+package Zonemaster::Util v1.1.0;
 
 use 5.14.2;
 use parent 'Exporter';
