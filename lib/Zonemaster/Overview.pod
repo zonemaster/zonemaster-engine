@@ -1,6 +1,6 @@
 =head1 NAME
 
-The Zonemaster Test Engine
+Zonemaster::Overview - The Zonemaster Test Engine
 
 =head1 INTRODUCTION
 
