@@ -1,11 +1,11 @@
 .perlcriticrc
 .perltidyrc
 Changes
-doc/ConfigAndPolicy.pod
-doc/Implementing_Tests.pod
-doc/installation.md
-doc/logentry_args.md
-doc/Translation.pod
+docs/ConfigAndPolicy.pod
+docs/Implementing_Tests.pod
+docs/installation.md
+docs/logentry_args.md
+docs/Translation.pod
 inc/Module/Install.pm
 inc/Module/Install/Base.pm
 inc/Module/Install/Can.pm
