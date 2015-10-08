@@ -1,6 +1,7 @@
 Zonemaster Engine
 =================
 [![Build Status](https://travis-ci.org/dotse/zonemaster-engine.svg?branch=master)](https://travis-ci.org/dotse/zonemaster-engine)
+[![CPAN version](https://badge.fury.io/pl/Zonemaster.svg)](https://metacpan.org/pod/Zonemaster)
 
 Zonemaster is a cooperative project between IIS and AFNIC. It is a
 successor to both IIS's DNSCheck and AFNIC's Zonecheck.
