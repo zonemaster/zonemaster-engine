@@ -608,12 +608,12 @@ sub nameserver09 {
         my $json = JSON::XS->new->canonical->pretty;
         if ( $p1 and scalar $p1->answer ) {
 
-            my @answer1 = map { $_->string } sort $p1->answer;
+            my @answer1 = map { lc $_->string } sort $p1->answer;
             $answer1_string = $json->encode(\@answer1);
 
             if ( $p2 and scalar $p2->answer ) {
 
-                my @answer2 = map { $_->string } sort $p2->answer;
+                my @answer2 = map { lc $_->string } sort $p2->answer;
                 $answer2_string = $json->encode(\@answer2);
             }
 
