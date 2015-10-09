@@ -117,6 +117,18 @@ msgstr "Namnservrarna har IPv4-adresser i följande AS: {asn}."
 msgid  "Name servers have IPv6 addresses in the following ASs: {asn}."
 msgstr "Namnservrarna har IPv6-adresser i följande AS: {asn}."
 
+#: CONNECTIVITY:ASN_INFOS_RAW
+msgid  "[ASN:RAW] {ip};{data}"
+msgstr "[ASN:RAW] {ip};{data}"
+
+#: CONNECTIVITY:ASN_INFOS_ANNOUNCE_BY
+msgid  "[ASN:ANNOUNCE_BY] {ip};{data}"
+msgstr "[ASN:ANNOUNCE_BY] {ip};{data}"
+
+#: CONNECTIVITY:ASN_INFOS_ANNOUNCE_IN
+msgid  "[ASN:ANNOUNCE_IN] {ip};{data}"
+msgstr "[ASN:ANNOUNCE_IN] {ip};{data}"
+
 #: CONSISTENCY:MULTIPLE_SOA_RNAMES
 msgid  "Saw {count} SOA rname."
 msgstr "Såg {count} olika SOA RNAME."

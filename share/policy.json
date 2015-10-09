@@ -43,7 +43,10 @@
       "NAMESERVERS_WITH_UNIQ_AS" : "WARNING",
       "NAMESERVERS_WITH_MULTIPLE_AS" : "INFO",
       "IPV4_ASN" : "INFO",
-      "IPV6_ASN" : "INFO"
+      "IPV6_ASN" : "INFO",
+      "ASN_INFOS_RAW" : "DEBUG",
+      "ASN_INFOS_ANNOUNCE_BY" : "DEBUG",
+      "ASN_INFOS_ANNOUNCE_IN" : "DEBUG"
    },
    "CONSISTENCY" : {
       "IPV4_DISABLED" : "DEBUG",
