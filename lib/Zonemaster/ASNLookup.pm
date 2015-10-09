@@ -41,7 +41,7 @@ sub get_with_prefix {
                 my @fields = split( / \| ?/, $str );
                 my @asns   = split( /\s+/,   $fields[0] );
 
-                return \@asns, Net::IP::XS->new( $fields[1] );
+                return \@asns, Net::IP::XS->new( $fields[1] ), $str;
             }
         }
     } ## end foreach my $zone ( @roots )
@@ -51,7 +51,7 @@ sub get_with_prefix {
 sub get {
     my ( $class, $ip ) = @_;
 
-    my ( $asnref, $prefix ) = $class->get_with_prefix( $ip );
+    my ( $asnref, $prefix, $raw ) = $class->get_with_prefix( $ip );
 
     if ( $asnref ) {
         return @$asnref;
