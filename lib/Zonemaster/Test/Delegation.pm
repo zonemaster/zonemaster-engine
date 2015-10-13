@@ -1,4 +1,4 @@
-package Zonemaster::Test::Delegation v1.0.1;
+package Zonemaster::Test::Delegation v1.0.2;
 
 use strict;
 use warnings;
