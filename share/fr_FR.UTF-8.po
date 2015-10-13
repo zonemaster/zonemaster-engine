@@ -260,8 +260,8 @@ msgid  "Saw SOA time parameter set (REFRESH={refresh},RETRY={retry},EXPIRE={expi
 msgstr "L'ensemble de paramètres temporels (REFRESH={refresh},RETRY={retry},EXPIRE={expire},MINIMUM={minimum}) a été récupérée sur les serveurs suivants : {servers}."
 
 #: DELEGATION:ARE_AUTHORITATIVE
-msgid  "All the nameservers are authoritative."
-msgstr "Tous les serveurs de noms font autorité."
+msgid  "All these nameservers are confirmed to be authoritative : {nsset}."
+msgstr "Ces serveurs de noms ont pu être vérifiés comme faisant autorité : {nsset}."
 
 #: DELEGATION:DISTINCT_IP_ADDRESS
 msgid  "All the IP addresses used by the nameservers are unique"
@@ -277,7 +277,7 @@ msgstr "Les serveurs de noms de la zone parente retournent suffisamment de serve
 
 #: DELEGATION:ENOUGH_NS_TOTAL
 msgid  "Parent and child list enough nameservers ({ns}). Lower limit set to {minimum}."
-msgstr "Les serveurs de noms de la zone parente et les serveurs de noms de la zone retournent suffisamment de serveurs faisant autorité ({{ns}). La limite inférieure étant fixée à {minimum}."
+msgstr "Les serveurs de noms de la zone parente et les serveurs de noms de la zone retournent suffisamment de serveurs faisant autorité ({ns}). La limite inférieure étant fixée à {minimum}."
 
 #: DELEGATION:EXTRA_NAME_CHILD
 msgid  "Child has nameserver(s) not listed at parent ({extra})."

@@ -70,6 +70,7 @@ sub metadata {
               IS_NOT_AUTHORITATIVE
               IPV4_DISABLED
               IPV6_DISABLED
+              ARE_AUTHORITATIVE
               )
         ],
         delegation05 => [
@@ -113,7 +114,7 @@ sub translation {
         "EXTRA_NAME_PARENT"    => "Parent has nameserver(s) not listed at the child ({extra}).",
         "NOT_ENOUGH_NS_GLUE"   => "Parent does not list enough nameservers ({glue}). Lower limit set to {minimum}.",
         "NOT_ENOUGH_NS"        => "Child does not list enough nameservers ({ns}). Lower limit set to {minimum}.",
-        "ARE_AUTHORITATIVE"    => "All the nameservers are authoritative.",
+        "ARE_AUTHORITATIVE"    => "All these nameservers are confirmed to be authoritative : {nsset}.",
         "NS_RR_NO_CNAME"       => "No nameserver point to CNAME alias.",
         "SOA_EXISTS"           => "All the nameservers have SOA record.",
         "ENOUGH_NS_TOTAL"      => "Parent and child list enough nameservers ({ns}). Lower limit set to {minimum}.",
@@ -313,6 +314,7 @@ sub delegation04 {
     my ( $class, $zone ) = @_;
     my @results;
     my %nsnames;
+    my @authoritatives;
 
     foreach
       my $local_ns ( @{ Zonemaster::TestMethods->method4( $zone ) }, @{ Zonemaster::TestMethods->method5( $zone ) } )
@@ -344,14 +346,19 @@ sub delegation04 {
 
         foreach my $usevc ( 0, 1 ) {
             my $p = $local_ns->query( $zone->name, q{SOA}, { usevc => $usevc } );
-            if ( not $p or not $p->aa ) {    # Consider non-responsive server non-auth
-                push @results,
-                  info(
-                    IS_NOT_AUTHORITATIVE => {
-                        ns    => $local_ns->name,
-                        proto => $usevc ? q{TCP} : q{UDP},
-                    }
-                  );
+            if ( $p ) {
+                if ( not $p->aa ) {
+                    push @results,
+                      info(
+                        IS_NOT_AUTHORITATIVE => {
+                            ns    => $local_ns->name,
+                            proto => $usevc ? q{TCP} : q{UDP},
+                        }
+                      );
+                }
+                else {
+                    push @authoritatives, $local_ns->name;
+                }
             }
         }
 
@@ -364,9 +371,15 @@ sub delegation04 {
             or scalar @{ Zonemaster::TestMethods->method5( $zone ) }
         )
         and not scalar @results
+        and scalar @authoritatives
       )
     {
-        push @results, info( ARE_AUTHORITATIVE => {} );
+        push @results,
+          info(
+            ARE_AUTHORITATIVE => {
+                nsset => join( q{,}, @authoritatives ),
+            }
+          );
     }
 
     return @results;
