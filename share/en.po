@@ -266,8 +266,8 @@ msgid  "Saw SOA time parameter set (REFRESH={refresh},RETRY={retry},EXPIRE={expi
 msgstr "Found SOA time parameter set (REFRESH={refresh},RETRY={retry},EXPIRE={expire},MINIMUM={minimum}) on following nameserver set : {servers}."
 
 #: DELEGATION:ARE_AUTHORITATIVE
-msgid  "All the nameservers are authoritative."
-msgstr "All the nameservers are authoritative."
+msgid  "All these nameservers are confirmed to be authoritative : {nsset}."
+msgstr "All these nameservers are confirmed to be authoritative : {nsset}."
 
 #: DELEGATION:DISTINCT_IP_ADDRESS
 msgid  "All the IP addresses used by the nameservers are unique"

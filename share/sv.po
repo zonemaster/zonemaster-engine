@@ -766,7 +766,7 @@ msgid  "This is an example tag."
 msgstr "Detta är en exempel-tagg."
 
 #: DELEGATION:ARE_AUTHORITATIVE
-msgid  "All the nameservers are authoritative."
+msgid  "All these nameservers are confirmed to be authoritative : {nsset}."
 msgstr "Alla namnservrar är auktoritativa."
 
 #: DELEGATION:DISTINCT_IP_ADDRESS
