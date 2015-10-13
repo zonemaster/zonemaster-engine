@@ -9,6 +9,7 @@ use Zonemaster;
 use Zonemaster::Packet;
 use Zonemaster::Nameserver::Cache;
 use Zonemaster::Recursor;
+use Zonemaster::Constants ':misc';
 
 use Net::LDNS;
 
@@ -310,6 +311,13 @@ sub _query {
 
     if ( $res ) {
         my $p = Zonemaster::Packet->new( { packet => $res } );
+        my $size = length( $p->data );
+        if ( $size > $UDP_COMMON_EDNS_LIMIT ) {
+            my $command = sprintf q{dig @%s %s%s %s}, $self->address->short, $flags{dnssec} ? q{+dnssec } : q{}, "$name", $type;
+            Zonemaster->logger->add(
+                PACKET_BIG => { size => $size, maxsize => $UDP_COMMON_EDNS_LIMIT, command => $command }
+            );
+        }
         Zonemaster->logger->add( EXTERNAL_RESPONSE => { packet => $p->string } );
         return $p;
     }

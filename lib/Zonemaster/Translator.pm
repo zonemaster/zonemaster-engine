@@ -98,6 +98,7 @@ sub _system_translation {
         "FAKE_DELEGATION"         => "Followed a fake delegation.",
         "ADDED_FAKE_DELEGATION"   => "Added a fake delegation for domain {domain} to name server {ns}.",
         "FAKE_DELEGATION_TO_SELF" => "Name server {ns} not adding fake delegation for domain {domain} to itself.",
+        "PACKET_BIG"              => "Packet size ({size}) exceeds common maximum size of {maxsize} bytes (try with \"{command}\").",
     };
 } ## end sub _system_translation
 

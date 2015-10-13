@@ -856,6 +856,10 @@ msgstr "Demande d'exécuter une méthode inconnue {method} pour le module {modul
 msgid  "Request to run {method} in unknown module {module}. Known modules: {known}."
 msgstr "Demande d'exécuter une méthode {method} pour le module inconnu {module}. Liste des modules connus: {known}."
 
+#: SYSTEM:PACKET_BIG
+msgid  "Packet size ({size}) exceeds common maximum size of {maxsize} bytes (try with \"{command}\")."
+msgstr "La taille du paquet ({size} octets) dépasse le maximum communément utilisé de {maxsize} octets (tester avec la commande \"{command}\")."
+
 #: ZONE:EXPIRE_LOWER_THAN_REFRESH
 msgid  "SOA 'expire' value ({expire}) is lower than the SOA 'refresh' value ({refresh})."
 msgstr "Dans le SOA, la valeur du champ 'expire' ({expire}) est plus petite que la valeur du champ 'refresh' ({refresh})."

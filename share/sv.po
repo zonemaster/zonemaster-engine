@@ -649,6 +649,10 @@ msgstr "Lade till en artificiell delegering för domänen {domain} hos namnserve
 msgid  "Name server {ns} not adding fake delegation for domain {domain} to itself."
 msgstr "Namnservern {ns} lade inte till en artificiell delegering för domänen {domain}."
 
+#: SYSTEM:PACKET_BIG
+msgid  "Packet size ({size}) exceeds common maximum size of {maxsize} bytes (try with \"{command}\")."
+msgstr "Packet size ({size}) exceeds common maximum size of {maxsize} bytes (try with \"{command}\")."
+
 #: ZONE:EXPIRE_LOWER_THAN_REFRESH
 msgid  "SOA 'expire' value ({expire}) is lower than the SOA 'refresh' value ({refresh})."
 msgstr "Värdet för SOA 'expire' ({expire}) är lägre än värdet för SOA 'refresh' ({refresh})."
