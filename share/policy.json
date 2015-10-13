@@ -195,7 +195,8 @@
       "TEST_ARGS": "DEBUG",
       "UNKNOWN_METHOD" : "CRITICAL",
       "UNKNOWN_MODULE" : "CRITICAL",
-      "IS_BLACKLISTED" : "DEBUG"
+      "IS_BLACKLISTED" : "DEBUG",
+      "PACKET_BIG" : "WARNING"
    },
    "ZONE" : {
       "EXPIRE_LOWER_THAN_REFRESH" : "WARNING",
