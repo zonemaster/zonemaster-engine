@@ -7,7 +7,7 @@ module. For an overview of the Zonemaster components, please see the
 The documentation covers the following operating systems:
 
  
- * <a href="#Debian distributions">Ubuntu 12.0.4 (LTS)</a>
+ * <a href="#Debian">Ubuntu 12.0.4 (LTS)</a>
  * (# Ubuntu 14.04 (LTS))
  * (# Debian Wheezy (version 7))
  * [2] (# FreeBSD 10.1)
@@ -16,7 +16,7 @@ The documentation covers the following operating systems:
 The Engine Perl module name is 'Zonemaster'.
 
 
-<a name="Debian distributions"></a> Instructions for Debian 7, Ubuntu 14.04 and
+### <a name="Debian"></a> Instructions for Debian 7, Ubuntu 14.04 and
 Ubuntu 12.04 
 
 1) Make sure the package database is up to date.
