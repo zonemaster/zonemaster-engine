@@ -7,15 +7,15 @@ module. For an overview of the Zonemaster components, please see the
 The documentation covers the following operating systems:
 
  * [1] (# Ubuntu 12.04 (LTS))
- * [1] (Ubuntu 14.04 (LTS))
- * [1] (Debian Wheezy (version 7))
- * [2] (FreeBSD 10.1)
- * [3] (CentOS 7)
+ * [1] (# Ubuntu 14.04 (LTS))
+ * [1] (# Debian Wheezy (version 7))
+ * [2] (# FreeBSD 10.1)
+ * [3] (# CentOS 7)
 
 The Engine Perl module name is 'Zonemaster'.
 
 
-## 1 Instructions for Debian 7, Ubuntu 14.04 and Ubuntu 12.04
+# 1 Instructions for Debian 7, Ubuntu 14.04 and Ubuntu 12.04
 
 1) Make sure the package database is up to date.
 
