@@ -17,7 +17,7 @@ The Engine Perl module name is 'Zonemaster'.
 
 
 <a name="Debian distributions"> Instructions for Debian 7, Ubuntu 14.04 and
-Ubuntu 12.04 </a>
+Ubuntu 12.04 
 
 1) Make sure the package database is up to date.
 
