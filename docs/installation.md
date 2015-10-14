@@ -10,8 +10,8 @@ The documentation covers the following operating systems:
  * [1] <a href="#Debian">Ubuntu 12.0.4 (LTS)</a>
  * [2] <a href="#Debian">Ubuntu 14.04 (LTS))</a>
  * [3] <a href="#Debian">Debian Wheezy (version 7)</a>
- * [4] <a href="#FreeBSD"> FreeBSD 10.1</a>
- * [5] <a href="#CentOS"> CentOS 7 </a>
+ * [4] <a href="#FreeBSD">FreeBSD 10.1</a>
+ * [5] <a href="#CentOS">CentOS 7 </a>
 
 The Engine Perl module name is 'Zonemaster'.
 
