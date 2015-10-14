@@ -6,16 +6,17 @@ module. For an overview of the Zonemaster components, please see the
 
 The documentation covers the following operating systems:
 
- * Ubuntu 12.04 (LTS)
- * Ubuntu 14.04 (LTS)
- * Debian Wheezy (version 7)
- * FreeBSD 10.1
- * CentOS 7
+ 
+ * [1] <a href="#Debian">Ubuntu 12.0.4 (LTS)</a>
+ * [2] <a href="#Debian">Ubuntu 14.04 (LTS))</a>
+ * [3] <a href="#Debian">Debian Wheezy (version 7)</a>
+ * [4] <a href="#FreeBSD">FreeBSD 10.1</a>
+ * [5] <a href="#CentOS">CentOS 7 </a>
 
 The Engine Perl module name is 'Zonemaster'.
 
 
-## Instructions for Debian 7, Ubuntu 14.04 and Ubuntu 12.04
+### <a name="Debian"></a> Instructions for Ubuntu 12.04, Ubuntu 14.04 and Debian 7
 
 1) Make sure the package database is up to date.
 
@@ -32,7 +33,7 @@ The Engine Perl module name is 'Zonemaster'.
 If necessary, answer any questions from the cpan script by accepting the default value (just press enter).
 
 
-### Instructions for FreeBSD 10.1
+### <a name="FreeBSD"></a> Instructions for FreeBSD 10.1
 
 1) Become root.
 
@@ -49,7 +50,7 @@ If necessary, answer any questions from the cpan script by accepting the default
 If necessary, answer any questions from the cpan script by accepting the default value (just press enter).
 
 
-## Instructions for CentOS 7
+## <a name="CentOS"></a> Instructions for CentOS 7
 
 1) Make sure the development environment is installed.
 
