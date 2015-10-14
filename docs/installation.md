@@ -6,7 +6,7 @@ module. For an overview of the Zonemaster components, please see the
 
 The documentation covers the following operating systems:
 
- * <a name="Debian distributions"></a>
+ * <a name="Debian distributions"> Ubuntu 12.0.4 (LTS) </a>
  * (# Ubuntu 14.04 (LTS))
  * (# Debian Wheezy (version 7))
  * [2] (# FreeBSD 10.1)
