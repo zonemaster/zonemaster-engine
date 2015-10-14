@@ -7,8 +7,8 @@ module. For an overview of the Zonemaster components, please see the
 The documentation covers the following operating systems:
 
  * [Ubuntu 12.04 (LTS))][1]
- * [1] (# Ubuntu 14.04 (LTS))
- * [1] (# Debian Wheezy (version 7))
+ * (# Ubuntu 14.04 (LTS))
+ * (# Debian Wheezy (version 7))
  * [2] (# FreeBSD 10.1)
  * [3] (# CentOS 7)
 
