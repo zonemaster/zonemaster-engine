@@ -1,4 +1,4 @@
-package Zonemaster::Test::Connectivity v1.0.4;
+package Zonemaster::Test::Connectivity v1.0.5;
 
 use strict;
 use warnings;
@@ -97,8 +97,8 @@ sub translation {
         'NAMESERVER_HAS_UDP_53'             => 'Nameserver {ns}/{address} accessible over UDP on port 53.',
         'NAMESERVER_NO_TCP_53'              => 'Nameserver {ns}/{address} not accessible over TCP on port 53.',
         'NAMESERVER_NO_UDP_53'              => 'Nameserver {ns}/{address} not accessible over UDP on port 53.',
-        'IPV4_DISABLED'                     => 'IPv4 is disabled, not sending "{type}" query to {ns}.',
-        'IPV6_DISABLED'                     => 'IPv6 is disabled, not sending "{type}" query to {ns}.',
+        'IPV4_DISABLED'                     => 'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
+        'IPV6_DISABLED'                     => 'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
         'IPV4_ASN'                          => 'Name servers have IPv4 addresses in the following ASs: {asn}.',
         'IPV6_ASN'                          => 'Name servers have IPv6 addresses in the following ASs: {asn}.',
         'ASN_INFOS_RAW'                     => '[ASN:RAW] {address};{data}',
@@ -118,6 +118,7 @@ sub version {
 sub connectivity01 {
     my ( $class, $zone ) = @_;
     my @results;
+    my $query_type = q{SOA};
 
     my %ips;
 
@@ -129,8 +130,9 @@ sub connectivity01 {
             push @results,
               info(
                 IPV6_DISABLED => {
-                    ns   => "$local_ns",
-                    type => q{SOA},
+                    ns      => $local_ns->name->string,
+                    address => $local_ns->address->short,
+                    rrtype  => $query_type,
                 }
               );
             next;
@@ -140,8 +142,9 @@ sub connectivity01 {
             push @results,
               info(
                 IPV4_DISABLED => {
-                    ns   => "$local_ns",
-                    type => q{SOA},
+                    ns      => $local_ns->name->string,
+                    address => $local_ns->address->short,
+                    rrtype  => $query_type,
                 }
               );
             next;
@@ -149,7 +152,7 @@ sub connectivity01 {
 
         next if $ips{ $local_ns->address->short };
 
-        my $p = $local_ns->query( $zone->name, q{SOA}, { usevc => 0 } );
+        my $p = $local_ns->query( $zone->name, $query_type, { usevc => 0 } );
 
         if ( $p and $p->rcode eq q{NOERROR} ) {
             push @results,
@@ -181,6 +184,7 @@ sub connectivity02 {
     my ( $class, $zone ) = @_;
     my @results;
     my %ips;
+    my $query_type = q{SOA};
 
     foreach
       my $local_ns ( @{ Zonemaster::TestMethods->method4( $zone ) }, @{ Zonemaster::TestMethods->method5( $zone ) } )
@@ -190,8 +194,9 @@ sub connectivity02 {
             push @results,
               info(
                 IPV6_DISABLED => {
-                    ns   => "$local_ns",
-                    type => q{SOA},
+                    ns      => $local_ns->name->string,
+                    address => $local_ns->address->short,
+                    rrtype  => $query_type,
                 }
               );
             next;
@@ -201,8 +206,9 @@ sub connectivity02 {
             push @results,
               info(
                 IPV4_DISABLED => {
-                    ns   => "$local_ns",
-                    type => q{SOA},
+                    ns      => $local_ns->name->string,
+                    address => $local_ns->address->short,
+                    rrtype  => $query_type,
                 }
               );
             next;
@@ -210,7 +216,7 @@ sub connectivity02 {
 
         next if $ips{ $local_ns->address->short };
 
-        my $p = $local_ns->query( $zone->name, q{SOA}, { usevc => 1 } );
+        my $p = $local_ns->query( $zone->name, $query_type, { usevc => 1 } );
 
         if ( $p and $p->rcode eq q{NOERROR} ) {
             push @results,

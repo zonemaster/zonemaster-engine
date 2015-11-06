@@ -1,4 +1,4 @@
-package Zonemaster::Test::Consistency v1.0.1;
+package Zonemaster::Test::Consistency v1.0.2;
 
 use strict;
 use warnings;
@@ -113,8 +113,8 @@ sub translation {
         'ONE_NS_SET'           => 'A unique NS set was seen ({nsset}).',
         'MULTIPLE_NS_SET'      => 'Saw {count} NS set.',
         'NS_SET'               => 'Saw NS set ({nsset}) on following nameserver set : {servers}.',
-        'IPV4_DISABLED'        => 'IPv4 is disabled, not sending "{type}" query to {ns}.',
-        'IPV6_DISABLED'        => 'IPv6 is disabled, not sending "{type}" query to {ns}.',
+        'IPV4_DISABLED'        => 'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
+        'IPV6_DISABLED'        => 'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
     };
 } ## end sub translation
 
@@ -131,6 +131,7 @@ sub consistency01 {
     my @results;
     my %nsnames_and_ip;
     my %serials;
+    my $query_type = q{SOA};
 
     foreach
       my $local_ns ( @{ Zonemaster::TestMethods->method4( $zone ) }, @{ Zonemaster::TestMethods->method5( $zone ) } )
@@ -142,8 +143,9 @@ sub consistency01 {
             push @results,
               info(
                 IPV6_DISABLED => {
-                    ns   => "$local_ns",
-                    type => q{SOA},
+                    ns      => $local_ns->name->string,
+                    address => $local_ns->address->short,
+                    type    => $query_type,
                 }
               );
             next;
@@ -153,33 +155,34 @@ sub consistency01 {
             push @results,
               info(
                 IPV4_DISABLED => {
-                    ns   => "$local_ns",
-                    type => q{SOA},
+                    ns      => $local_ns->name->string,
+                    address => $local_ns->address->short,
+                    type    => $query_type,
                 }
               );
             next;
         }
 
-        my $p = $local_ns->query( $zone->name, q{SOA} );
+        my $p = $local_ns->query( $zone->name, $query_type );
 
         if ( not $p ) {
             push @results,
               info(
                 NO_RESPONSE => {
-                    ns      => $local_ns->name,
+                    ns      => $local_ns->name->string,
                     address => $local_ns->address->short,
                 }
               );
             next;
         }
 
-        my ( $soa ) = $p->get_records_for_name( q{SOA}, $zone->name );
+        my ( $soa ) = $p->get_records_for_name( $query_type, $zone->name );
 
         if ( not $soa ) {
             push @results,
               info(
                 NO_RESPONSE_SOA_QUERY => {
-                    ns      => $local_ns->name,
+                    ns      => $local_ns->name->string,
                     address => $local_ns->address->short,
                 }
               );
@@ -236,6 +239,7 @@ sub consistency02 {
     my @results;
     my %nsnames_and_ip;
     my %rnames;
+    my $query_type = q{SOA};
 
     foreach
       my $local_ns ( @{ Zonemaster::TestMethods->method4( $zone ) }, @{ Zonemaster::TestMethods->method5( $zone ) } )
@@ -247,8 +251,9 @@ sub consistency02 {
             push @results,
               info(
                 IPV6_DISABLED => {
-                    ns   => "$local_ns",
-                    type => q{SOA},
+                    ns      => $local_ns->name->string,
+                    address => $local_ns->address->short,
+                    type    => $query_type,
                 }
               );
             next;
@@ -258,33 +263,34 @@ sub consistency02 {
             push @results,
               info(
                 IPV4_DISABLED => {
-                    ns   => "$local_ns",
-                    type => q{SOA},
+                    ns      => $local_ns->name->string,
+                    address => $local_ns->address->short,
+                    type    => $query_type,
                 }
               );
             next;
         }
 
-        my $p = $local_ns->query( $zone->name, q{SOA} );
+        my $p = $local_ns->query( $zone->name, $query_type );
 
         if ( not $p ) {
             push @results,
               info(
                 NO_RESPONSE => {
-                    ns      => $local_ns->name,
+                    ns      => $local_ns->name->string,
                     address => $local_ns->address->short,
                 }
               );
             next;
         }
 
-        my ( $soa ) = $p->get_records_for_name( q{SOA}, $zone->name );
+        my ( $soa ) = $p->get_records_for_name( $query_type, $zone->name );
 
         if ( not $soa ) {
             push @results,
               info(
                 NO_RESPONSE_SOA_QUERY => {
-                    ns      => $local_ns->name,
+                    ns      => $local_ns->name->string,
                     address => $local_ns->address->short,
                 }
               );
@@ -330,6 +336,7 @@ sub consistency03 {
     my @results;
     my %nsnames_and_ip;
     my %time_parameter_sets;
+    my $query_type = q{SOA};
 
     foreach
       my $local_ns ( @{ Zonemaster::TestMethods->method4( $zone ) }, @{ Zonemaster::TestMethods->method5( $zone ) } )
@@ -341,8 +348,9 @@ sub consistency03 {
             push @results,
               info(
                 IPV6_DISABLED => {
-                    ns   => "$local_ns",
-                    type => q{SOA},
+                    ns      => $local_ns->name->string,
+                    address => $local_ns->address->short,
+                    type    => $query_type,
                 }
               );
             next;
@@ -352,33 +360,34 @@ sub consistency03 {
             push @results,
               info(
                 IPV4_DISABLED => {
-                    ns   => "$local_ns",
-                    type => q{SOA},
+                    ns      => $local_ns->name->string,
+                    address => $local_ns->address->short,
+                    type    => $query_type,
                 }
               );
             next;
         }
 
-        my $p = $local_ns->query( $zone->name, q{SOA} );
+        my $p = $local_ns->query( $zone->name, $query_type );
 
         if ( not $p ) {
             push @results,
               info(
                 NO_RESPONSE => {
-                    ns      => $local_ns->name,
+                    ns      => $local_ns->name->string,
                     address => $local_ns->address->short,
                 }
               );
             next;
         }
 
-        my ( $soa ) = $p->get_records_for_name( q{SOA}, $zone->name );
+        my ( $soa ) = $p->get_records_for_name( $query_type, $zone->name );
 
         if ( not $soa ) {
             push @results,
               info(
                 NO_RESPONSE_SOA_QUERY => {
-                    ns      => $local_ns->name,
+                    ns      => $local_ns->name->string,
                     address => $local_ns->address->short,
                 }
               );
@@ -435,6 +444,7 @@ sub consistency04 {
     my @results;
     my %nsnames_and_ip;
     my %ns_sets;
+    my $query_type = q{NS};
 
     foreach
       my $local_ns ( @{ Zonemaster::TestMethods->method4( $zone ) }, @{ Zonemaster::TestMethods->method5( $zone ) } )
@@ -446,8 +456,9 @@ sub consistency04 {
             push @results,
               info(
                 IPV6_DISABLED => {
-                    ns   => "$local_ns",
-                    type => q{SOA},
+                    ns      => $local_ns->name->string,
+                    address => $local_ns->address->short,
+                    type    => $query_type,
                 }
               );
             next;
@@ -457,33 +468,34 @@ sub consistency04 {
             push @results,
               info(
                 IPV4_DISABLED => {
-                    ns   => "$local_ns",
-                    type => q{SOA},
+                    ns      => $local_ns->name->string,
+                    address => $local_ns->address->short,
+                    type    => $query_type,
                 }
               );
             next;
         }
 
-        my $p = $local_ns->query( $zone->name, q{NS} );
+        my $p = $local_ns->query( $zone->name, $query_type );
 
         if ( not $p ) {
             push @results,
               info(
                 NO_RESPONSE => {
-                    ns      => $local_ns->name,
+                    ns      => $local_ns->name->string,
                     address => $local_ns->address->short,
                 }
               );
             next;
         }
 
-        my ( @ns ) = sort map { lc( $_->nsdname ) } $p->get_records_for_name( q{NS}, $zone->name );
+        my ( @ns ) = sort map { lc( $_->nsdname ) } $p->get_records_for_name( $query_type, $zone->name );
 
         if ( not scalar( @ns ) ) {
             push @results,
               info(
                 NO_RESPONSE_NS_QUERY => {
-                    ns      => $local_ns->name,
+                    ns      => $local_ns->name->string,
                     address => $local_ns->address->short,
                 }
               );

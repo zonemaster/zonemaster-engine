@@ -754,7 +754,7 @@ msgstr "Des caractèrs interdits ont été trouvés dans le nom de domaine ({nam
 
 #: SYNTAX:NO_DOUBLE_DASH
 msgid  "Domain name ({name}) has no label with a double hyphen ('--') in position 3 and 4 (with a prefix which is not 'xn--')."
-msgstr "Le nom de domaine ({name}) n'a aucun label contenant un n double tiret ('--') en positions 3 et 4 (avec un préfixe différent de 'xn--')."
+msgstr "Le nom de domaine ({name}) n'a aucun label contenant un double tiret ('--') en positions 3 et 4 (avec un préfixe différent de 'xn--')."
 
 #: SYNTAX:NO_ENDING_HYPHENS
 msgid  "Both ends of all labels of the domain name ({name}) have no hyphens."
