@@ -1,4 +1,4 @@
-package Zonemaster::Test::Connectivity v1.0.2;
+package Zonemaster::Test::Connectivity v1.0.3;
 
 use strict;
 use warnings;
@@ -75,6 +75,8 @@ sub metadata {
               ASN_INFOS_RAW
               ASN_INFOS_ANNOUNCE_BY
               ASN_INFOS_ANNOUNCE_IN
+              IPV4_DISABLED
+              IPV6_DISABLED
               )
         ],
     };
@@ -255,53 +257,65 @@ sub connectivity03 {
 
     foreach my $v4ip ( @v4ips ) {
         my ( $asnref, $prefix, $raw ) = Zonemaster::ASNLookup->get_with_prefix( $v4ip );
-        push @results,
-          info(
-            ASN_INFOS_RAW => {
-                ip   => $v4ip->short,
-                data => $raw,
-            }
-        );
-        push @results,
-          info(
-            ASN_INFOS_ANNOUNCE_BY => {
-                ip   => $v4ip->short,
-                data => join( q{,}, @{ $asnref } ),
-            }
-        );
-        push @results,
-          info(
-            ASN_INFOS_ANNOUNCE_IN => {
-                ip   => $v4ip->short,
-                data => sprintf "%s/%d", $prefix->ip, $prefix->prefixlen,
-            }
-        );
-        push @v4asns, @{ $asnref };
+        if ( $raw ) {
+            push @results,
+              info(
+                ASN_INFOS_RAW => {
+                    ip   => $v4ip->short,
+                    data => $raw,
+                }
+            );
+        }
+        if ( $asnref ) {
+            push @results,
+              info(
+                ASN_INFOS_ANNOUNCE_BY => {
+                    ip   => $v4ip->short,
+                    data => join( q{,}, @{ $asnref } ),
+                }
+            );
+            push @v4asns, @{ $asnref };
+        }
+        if ( $prefix ) {
+            push @results,
+              info(
+                ASN_INFOS_ANNOUNCE_IN => {
+                    ip   => $v4ip->short,
+                    data => sprintf "%s/%d", $prefix->ip, $prefix->prefixlen,
+                }
+            );
+        }
     }
     foreach my $v6ip ( @v6ips ) {
         my ( $asnref, $prefix, $raw ) = Zonemaster::ASNLookup->get_with_prefix( $v6ip );
-        push @results,
-          info(
-            ASN_INFOS_RAW => {
-                ip   => $v6ip->short,
-                data => $raw,
-            }
-        );
-        push @results,
-          info(
-            ASN_INFOS_ANNOUNCE_BY => {
-                ip   => $v6ip->short,
-                data => join( q{,}, @{ $asnref } ),
-            }
-        );
-        push @results,
-          info(
-            ASN_INFOS_ANNOUNCE_IN => {
-                ip   => $v6ip->short,
-                data => sprintf "%s/%d", $prefix->short, $prefix->prefixlen,
-            }
-        );
-        push @v6asns, @{ $asnref };
+        if ( $raw ) {
+            push @results,
+              info(
+                ASN_INFOS_RAW => {
+                    ip   => $v6ip->short,
+                    data => $raw,
+                }
+            );
+        }
+        if ( $asnref ) {
+            push @results,
+              info(
+                ASN_INFOS_ANNOUNCE_BY => {
+                    ip   => $v6ip->short,
+                    data => join( q{,}, @{ $asnref } ),
+                }
+            );
+            push @v6asns, @{ $asnref };
+        }
+        if ( $prefix ) {
+            push @results,
+              info(
+                ASN_INFOS_ANNOUNCE_IN => {
+                    ip   => $v6ip->short,
+                    data => sprintf "%s/%d", $prefix->short, $prefix->prefixlen,
+                }
+            );
+        }
     }
 
     @v4asns = uniq @v4asns;
