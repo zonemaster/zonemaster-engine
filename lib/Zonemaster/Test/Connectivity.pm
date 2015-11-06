@@ -1,4 +1,4 @@
-package Zonemaster::Test::Connectivity v1.0.3;
+package Zonemaster::Test::Connectivity v1.0.4;
 
 use strict;
 use warnings;
@@ -101,9 +101,9 @@ sub translation {
         'IPV6_DISABLED'                     => 'IPv6 is disabled, not sending "{type}" query to {ns}.',
         'IPV4_ASN'                          => 'Name servers have IPv4 addresses in the following ASs: {asn}.',
         'IPV6_ASN'                          => 'Name servers have IPv6 addresses in the following ASs: {asn}.',
-        'ASN_INFOS_RAW'                     => '[ASN:RAW] {ip};{data}',
-        'ASN_INFOS_ANNOUNCE_BY'             => '[ASN:ANNOUNCE_BY] {ip};{data}',
-        'ASN_INFOS_ANNOUNCE_IN'             => '[ASN:ANNOUNCE_IN] {ip};{data}',
+        'ASN_INFOS_RAW'                     => '[ASN:RAW] {address};{data}',
+        'ASN_INFOS_ANNOUNCE_BY'             => '[ASN:ANNOUNCE_BY] {address};{asn}',
+        'ASN_INFOS_ANNOUNCE_IN'             => '[ASN:ANNOUNCE_IN] {address};{prefix}',
     };
 } ## end sub translation
 
@@ -242,15 +242,15 @@ sub connectivity03 {
     my ( $class, $zone ) = @_;
     my @results;
 
-    my %ips = ( 4 => {}, 6 => {} );
+    my %ips = ( $IP_VERSION_4 => {}, $IP_VERSION_6 => {} );
 
     foreach my $ns ( @{ Zonemaster::TestMethods->method4( $zone ) }, @{ Zonemaster::TestMethods->method5( $zone ) } ) {
         my $addr = $ns->address;
         $ips{ $addr->version }{ $addr->ip } = $addr;
     }
 
-    my @v4ips = values %{ $ips{4} };
-    my @v6ips = values %{ $ips{6} };
+    my @v4ips = values %{ $ips{$IP_VERSION_4} };
+    my @v6ips = values %{ $ips{$IP_VERSION_6} };
 
     my @v4asns;
     my @v6asns;
@@ -261,62 +261,64 @@ sub connectivity03 {
             push @results,
               info(
                 ASN_INFOS_RAW => {
-                    ip   => $v4ip->short,
-                    data => $raw,
+                    address => $v4ip->short,
+                    data    => $raw,
                 }
-            );
+              );
         }
         if ( $asnref ) {
             push @results,
               info(
                 ASN_INFOS_ANNOUNCE_BY => {
-                    ip   => $v4ip->short,
-                    data => join( q{,}, @{ $asnref } ),
+                    address => $v4ip->short,
+                    asn     => join( q{,}, @{$asnref} ),
                 }
-            );
-            push @v4asns, @{ $asnref };
+              );
+            push @v4asns, @{$asnref};
         }
         if ( $prefix ) {
             push @results,
               info(
                 ASN_INFOS_ANNOUNCE_IN => {
-                    ip   => $v4ip->short,
-                    data => sprintf "%s/%d", $prefix->ip, $prefix->prefixlen,
+                    address => $v4ip->short,
+                    prefix  => sprintf "%s/%d",
+                    $prefix->ip, $prefix->prefixlen,
                 }
-            );
+              );
         }
-    }
+    } ## end foreach my $v4ip ( @v4ips )
     foreach my $v6ip ( @v6ips ) {
         my ( $asnref, $prefix, $raw ) = Zonemaster::ASNLookup->get_with_prefix( $v6ip );
         if ( $raw ) {
             push @results,
               info(
                 ASN_INFOS_RAW => {
-                    ip   => $v6ip->short,
-                    data => $raw,
+                    address => $v6ip->short,
+                    data    => $raw,
                 }
-            );
+              );
         }
         if ( $asnref ) {
             push @results,
               info(
                 ASN_INFOS_ANNOUNCE_BY => {
-                    ip   => $v6ip->short,
-                    data => join( q{,}, @{ $asnref } ),
+                    address => $v6ip->short,
+                    asn     => join( q{,}, @{$asnref} ),
                 }
-            );
-            push @v6asns, @{ $asnref };
+              );
+            push @v6asns, @{$asnref};
         }
         if ( $prefix ) {
             push @results,
               info(
                 ASN_INFOS_ANNOUNCE_IN => {
-                    ip   => $v6ip->short,
-                    data => sprintf "%s/%d", $prefix->short, $prefix->prefixlen,
+                    address => $v6ip->short,
+                    prefix  => sprintf "%s/%d",
+                    $prefix->short, $prefix->prefixlen,
                 }
-            );
+              );
         }
-    }
+    } ## end foreach my $v6ip ( @v6ips )
 
     @v4asns = uniq @v4asns;
     @v6asns = uniq @v6asns;
