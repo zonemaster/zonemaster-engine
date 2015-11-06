@@ -1,4 +1,4 @@
-package Zonemaster::Test::Delegation v1.0.2;
+package Zonemaster::Test::Delegation v1.0.3;
 
 use strict;
 use warnings;
@@ -120,8 +120,8 @@ sub translation {
         "ENOUGH_NS_TOTAL"      => "Parent and child list enough nameservers ({ns}). Lower limit set to {minimum}.",
         "NOT_ENOUGH_NS_TOTAL" =>
           "Parent and child do not list enough nameservers ({ns}). Lower limit set to {minimum}.",
-        'IPV4_DISABLED' => 'IPv4 is disabled, not sending "{type}" query to {ns}.',
-        'IPV6_DISABLED' => 'IPv6 is disabled, not sending "{type}" query to {ns}.',
+        'IPV4_DISABLED' => 'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
+        'IPV6_DISABLED' => 'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
     };
 } ## end sub translation
 
@@ -315,6 +315,7 @@ sub delegation04 {
     my @results;
     my %nsnames;
     my @authoritatives;
+    my $query_type = q{SOA};
 
     foreach
       my $local_ns ( @{ Zonemaster::TestMethods->method4( $zone ) }, @{ Zonemaster::TestMethods->method5( $zone ) } )
@@ -324,8 +325,9 @@ sub delegation04 {
             push @results,
               info(
                 IPV6_DISABLED => {
-                    ns   => "$local_ns",
-                    type => q{SOA},
+                    ns      => $local_ns->name->string,
+                    address => $local_ns->address->short,
+                    type    => $query_type,
                 }
               );
             next;
@@ -335,8 +337,9 @@ sub delegation04 {
             push @results,
               info(
                 IPV4_DISABLED => {
-                    ns   => "$local_ns",
-                    type => q{SOA},
+                    ns      => $local_ns->name->string,
+                    address => $local_ns->address->short,
+                    type    => $query_type,
                 }
               );
             next;
@@ -345,7 +348,7 @@ sub delegation04 {
         next if $nsnames{ $local_ns->name };
 
         foreach my $usevc ( 0, 1 ) {
-            my $p = $local_ns->query( $zone->name, q{SOA}, { usevc => $usevc } );
+            my $p = $local_ns->query( $zone->name, $query_type, { usevc => $usevc } );
             if ( $p ) {
                 if ( not $p->aa ) {
                     push @results,
@@ -429,6 +432,7 @@ sub delegation06 {
     my ( $class, $zone ) = @_;
     my @results;
     my %nsnames;
+    my $query_type = q{SOA};
 
     foreach
       my $local_ns ( @{ Zonemaster::TestMethods->method4( $zone ) }, @{ Zonemaster::TestMethods->method5( $zone ) } )
@@ -438,8 +442,9 @@ sub delegation06 {
             push @results,
               info(
                 IPV6_DISABLED => {
-                    ns   => "$local_ns",
-                    type => q{SOA},
+                    ns      => $local_ns->name->string,
+                    address => $local_ns->address->short,
+                    type    => $query_type,
                 }
               );
             next;
@@ -449,8 +454,9 @@ sub delegation06 {
             push @results,
               info(
                 IPV4_DISABLED => {
-                    ns   => "$local_ns",
-                    type => q{SOA},
+                    ns      => $local_ns->name->string,
+                    address => $local_ns->address->short,
+                    type    => $query_type,
                 }
               );
             next;
@@ -458,9 +464,9 @@ sub delegation06 {
 
         next if $nsnames{ $local_ns->name };
 
-        my $p = $local_ns->query( $zone->name, q{SOA} );
+        my $p = $local_ns->query( $zone->name, $query_type );
         if ( $p and $p->rcode eq q{NOERROR} ) {
-            if ( not $p->get_records( q{SOA}, q{answer} ) ) {
+            if ( not $p->get_records( $query_type, q{answer} ) ) {
                 push @results,
                   info(
                     SOA_NOT_EXISTS => {
@@ -553,7 +559,7 @@ sub _max_length_name_for {
     my @chars = q{A} .. q{Z};
 
     my $name = name( $top )->fqdn;
-    $name = '' if $name eq '.';    # Special case for root zone
+    $name = q{} if $name eq q{.};    # Special case for root zone
 
     while ( length( $name ) < $FQDN_MAX_LENGTH - 1 ) {
         my $len = $FQDN_MAX_LENGTH - length( $name ) - 1;
