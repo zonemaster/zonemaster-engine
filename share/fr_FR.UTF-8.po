@@ -906,7 +906,7 @@ msgstr "Le champ 'mname' n'est pas présent dans le SOA."
 
 #: ZONE:MX_RECORD_EXISTS
 msgid  "Target ({info}) found to deliver e-mail for the domain name."
-msgstr "Aucune cible ({info}) n'a été trouvée pour faire parvenir un message à ce nom de domaine."
+msgstr "Information ({info}) trouvée pour faire parvenir un message à ce nom de domaine."
 
 #: ZONE:MX_RECORD_IS_CNAME
 msgid  "MX record for the domain is pointing to a CNAME."
