@@ -1,13 +1,17 @@
-package Zonemaster::Util v1.1.0;
+package Zonemaster::Util v1.1.1;
 
-use 5.14.2;
+use 5.014002;
+
 use parent 'Exporter';
+
+use strict;
 use warnings;
 
 use Zonemaster;
 use Zonemaster::DNSName;
 use Pod::Simple::SimpleTree;
 use IO::Socket::IP;
+use Net::Interface;
 
 ## no critic (Modules::ProhibitAutomaticExportation)
 our @EXPORT      = qw[ ns info name pod_extract_for scramble_case ];
@@ -39,7 +43,7 @@ sub name {
 
 sub _pod_process_tree {
     my ( $node, $flags ) = @_;
-    my ( $name, $ahash, @subnodes ) = @$node;
+    my ( $name, $ahash, @subnodes ) = @{$node};
     my @res;
 
     $flags //= {};
@@ -48,7 +52,7 @@ sub _pod_process_tree {
         if ( ref( $node ) ne 'ARRAY' ) {
             $flags->{tests} = 1 if $name eq 'head1' and $node eq 'TESTS';
             if ( $name eq 'item-text' and $flags->{tests} ) {
-                $node =~ s/^(\w+).*$/$1/;
+                $node =~ s/\A(\w+).*\z/$1/x;
                 $flags->{item} = $node;
                 push @res, $node;
             }
@@ -68,15 +72,15 @@ sub _pod_process_tree {
 
 sub _pod_extract_text {
     my ( $node ) = @_;
-    my ( $name, $ahash, @subnodes ) = @$node;
-    my $res = '';
+    my ( $name, $ahash, @subnodes ) = @{$node};
+    my $res = q{};
 
     foreach my $node ( @subnodes ) {
-        if ( $name eq 'item-text' ) {
-            $node =~ s/^(\w+).*$/$1/;
+        if ( $name eq q{item-text} ) {
+            $node =~ s/\A(\w+).*\z/$1/x;
         }
 
-        if ( ref( $node ) eq 'ARRAY' ) {
+        if ( ref( $node ) eq q{ARRAY} ) {
             $res .= _pod_extract_text( $node );
         }
         else {
@@ -96,50 +100,53 @@ sub pod_extract_for {
     my %desc = eval { _pod_process_tree( $parser->parse_file( $INC{"Zonemaster/Test/$name.pm"} )->root ) };
 
     return \%desc;
-} ## end sub pod_extract_for
+}
 
 # Function from CPAN package Text::Capitalize that causes
 # issues when installing ZM.
 #
 sub scramble_case {
-   my $string = shift;
-   my (@chars, $uppity, $newstring, $total, $uppers, $downers, $tweak);
+    my $string = shift;
+    my ( @chars, $uppity, $newstring, $uppers, $downers );
 
-   @chars = split //, $string;
+    @chars = split //, $string;
 
-   $uppers = 2;
-   $downers = 1;
-   foreach my $c (@chars) {
-      $uppity = int( rand( 1 + $downers/$uppers) );
+    $uppers  = 2;
+    $downers = 1;
+    foreach my $c ( @chars ) {
+        $uppity = int( rand( 1 + $downers / $uppers ) );
 
-      if ($uppity) {
-         $c = uc($c);
-         $uppers++;
-       } else {
-         $c = lc($c);
-         $downers++;
-       }
-   }
-   $newstring = join '', @chars;
-   return $newstring;
-} # end sub scramble_case
+        if ( $uppity ) {
+            $c = uc( $c );
+            $uppers++;
+        }
+        else {
+            $c = lc( $c );
+            $downers++;
+        }
+    }
+    $newstring = join q{}, @chars;
+    return $newstring;
+}    # end sub scramble_case
 
 sub supports_ipv6 {
-    my $has_ipv6;
+    my @all_ifs = Net::Interface->interfaces();
 
-    eval {
-        $has_ipv6 = IO::Socket::IP->new (
-            Domain => PF_INET6,
-            LocalHost => '::1',
-            Listen => 1 ) or die;
-    };
+    foreach my $if ( @all_ifs ) {
+        next if $if->name =~ /\Adocker/smgx;
+        next if $if->name =~ /\Aveth/smgx;
+        next if $if->name eq q{lo};
+        my @addresses = $if->address( AF_INET6 );
+        if ( @addresses ) {
+            foreach my $address ( @addresses ) {
+                if ( Net::Interface::scope( $address ) != 0x1 and Net::Interface::scope( $address ) != 0x2 ) {
+                    return 1;
+                }
+            }
+        }
+    }
 
-    if ($@) {
-        return 0;
-    }
-    else {
-        return 1;
-    }
+    return 0;
 }
 
 1;
