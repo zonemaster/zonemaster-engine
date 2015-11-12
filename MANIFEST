@@ -1,6 +1,5 @@
 .perlcriticrc
 .perltidyrc
-.travis.yml
 Changes
 docs/ConfigAndPolicy.pod
 docs/Implementing_Tests.pod
@@ -148,5 +147,3 @@ t/zonemaster.data
 t/zonemaster.t
 util/extract_po.pl
 util/reformat_json.pl
-Zonemaster-v1.0.6.tar.gz
-Zonemaster-v1.0.7.tar.gz
