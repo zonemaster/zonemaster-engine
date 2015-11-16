@@ -1,5 +1,13 @@
 Revision history for Perl module Zonemaster.
 
+v1.0.8 2015-11-16
+ - Make test should work much better, #149 #137 #139 #121
+ - Translation fixes for French and Swedish #144
+ - Better output for ASN debug messages #138
+ - Fixes for Upper and lower case queries, #128
+ - Fixes in output of arrays in log messages
+ - Increase EDNS0_BAD_QUERY message severity level
+
 v1.0.7 2015-10-01
  - ASN in logs are now arrays
  - Make test witout IPv6 connectivity works, fixes #121
