@@ -10,8 +10,6 @@ use warnings;
 use Zonemaster;
 use Zonemaster::DNSName;
 use Pod::Simple::SimpleTree;
-use IO::Socket::IP;
-use Net::Interface;
 
 ## no critic (Modules::ProhibitAutomaticExportation)
 our @EXPORT      = qw[ ns info name pod_extract_for scramble_case ];
@@ -130,23 +128,7 @@ sub scramble_case {
 }    # end sub scramble_case
 
 sub supports_ipv6 {
-    my @all_ifs = Net::Interface->interfaces();
-
-    foreach my $if ( @all_ifs ) {
-        next if $if->name =~ /\Adocker/smgx;
-        next if $if->name =~ /\Aveth/smgx;
-        next if $if->name eq q{lo};
-        my @addresses = $if->address( AF_INET6 );
-        if ( @addresses ) {
-            foreach my $address ( @addresses ) {
-                if ( Net::Interface::scope( $address ) != 0x1 and Net::Interface::scope( $address ) != 0x2 ) {
-                    return 1;
-                }
-            }
-        }
-    }
-
-    return 0;
+    return;
 }
 
 1;
