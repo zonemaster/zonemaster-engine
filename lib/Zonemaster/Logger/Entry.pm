@@ -1,6 +1,8 @@
-package Zonemaster::Logger::Entry v1.1.0;
+package Zonemaster::Logger::Entry v1.1.1;
 
-use 5.14.2;
+use 5.014002;
+use warnings;
+
 use Time::HiRes qw[time];
 use JSON;
 use Moose;
@@ -99,7 +101,7 @@ sub string {
         my $p_args = $self->printable_args;
         $argstr = join( q{; },
             map { $_ . q{=} . ( ref( $p_args->{$_} ) ? $json->encode( $p_args->{$_} ) : $p_args->{$_} ) }
-            sort keys %{ $p_args } );
+            sort keys %{$p_args} );
     }
 
     return sprintf( '%s:%s %s', $self->module, $self->tag, $argstr );
@@ -107,23 +109,25 @@ sub string {
 
 sub printable_args {
     my ( $self ) = @_;
-    
+
     if ( $self->args ) {
         my %p_args;
         foreach my $key_arg ( keys %{ $self->args } ) {
             if ( not ref( $self->args->{$key_arg} ) ) {
-                $p_args{ $key_arg } = $self->args->{$key_arg};
-            } elsif ( $key_arg eq q{asn} and ref( $self->args->{$key_arg} ) eq q{ARRAY} ) {
-                $p_args{ q{asn} } = join(q{,}, @{ $self->args->{$key_arg} } );
-            } else {
-                $p_args{ $key_arg } = $self->args->{$key_arg};
+                $p_args{$key_arg} = $self->args->{$key_arg};
+            }
+            elsif ( $key_arg eq q{asn} and ref( $self->args->{$key_arg} ) eq q{ARRAY} ) {
+                $p_args{q{asn}} = join( q{,}, @{ $self->args->{$key_arg} } );
+            }
+            else {
+                $p_args{$key_arg} = $self->args->{$key_arg};
             }
         }
         return \%p_args;
     }
 
     return;
-}
+} ## end sub printable_args
 
 ###
 ### Class method
@@ -131,6 +135,7 @@ sub printable_args {
 
 sub start_time_now {
     $start_time = time();
+    return;
 }
 
 no Moose;

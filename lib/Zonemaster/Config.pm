@@ -1,6 +1,8 @@
-package Zonemaster::Config v1.0.1;
+package Zonemaster::Config v1.0.2;
 
-use 5.14.2;
+use 5.014002;
+use warnings;
+
 use Moose;
 use JSON;
 use File::ShareDir qw[dist_dir dist_file];
@@ -56,14 +58,16 @@ sub BUILD {
         if ( $new ) {
             my $tc = $new->{__testcases__};
             delete $new->{__testcases__};
-            foreach my $case (keys %$tc) {
+            foreach my $case ( keys %{$tc} ) {
                 $self->testcases->{$case} = $tc->{$case};
             }
             $policy = $merger->merge( $policy, $new );
             push @{ $self->pfiles }, $pfile;
         }
 
-    }
+    } ## end foreach my $dir ( _config_directory_list...)
+
+    return $self;
 } ## end sub BUILD
 
 sub get {
@@ -98,13 +102,15 @@ sub _config_directory_list {
 }
 
 sub _load_base_config {
-    my $internal = decode_json( join( '', <DATA> ) );
+    my $internal = decode_json( join( q{}, <DATA> ) );
     # my $filename = dist_file( 'Zonemaster', 'config.json' );
     # my $default = eval { decode_json read_file $filename };
     #
     # $internal = $merger->merge( $internal, $default ) if $default;
 
     $config = $internal;
+
+    return;
 }
 
 sub load_module_policy {
@@ -149,7 +155,7 @@ sub load_policy_file {
     if ( $new ) {
         my $tc = $new->{__testcases__};
         delete $new->{__testcases__};
-        foreach my $case (keys %$tc) {
+        foreach my $case ( keys %{$tc} ) {
             $self->testcases->{$case} = $tc->{$case};
         }
         $policy = $merger->merge( $policy, $new );
@@ -196,9 +202,9 @@ sub resolver_defaults {
 }
 
 sub resolver_source {
-    my ($class, $sourceaddr) = @_;
+    my ( $class, $sourceaddr ) = @_;
 
-    if (defined($sourceaddr)) {
+    if ( defined( $sourceaddr ) ) {
         $class->get->{resolver}{source} = $sourceaddr;
     }
 
@@ -220,10 +226,10 @@ sub asnroots {
 sub should_run {
     my ( $self, $name ) = @_;
 
-    if (not defined $self->testcases->{$name}) {
-        return 1; # Default to runnings test
+    if ( not defined $self->testcases->{$name} ) {
+        return 1;    # Default to runnings test
     }
-    elsif ($self->testcases->{$name}) {
+    elsif ( $self->testcases->{$name} ) {
         return 1;
     }
     else {

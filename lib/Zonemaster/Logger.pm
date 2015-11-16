@@ -1,6 +1,6 @@
-package Zonemaster::Logger v1.0.0;
+package Zonemaster::Logger v1.0.1;
 
-use 5.14.2;
+use 5.014002;
 use Moose;
 
 use Zonemaster::Logger::Entry;
@@ -72,6 +72,7 @@ sub _check_filter {
 
 sub start_time_now {
     Zonemaster::Logger::Entry->start_time_now();
+    return;
 }
 
 sub clear_history {
@@ -88,13 +89,13 @@ sub get_max_level {
     my ( $self ) = @_;
 
     my %levels = reverse Zonemaster::Logger::Entry->levels();
-    my $level = 0;
+    my $level  = 0;
 
     foreach ( @{ $self->entries } ) {
-	$level = $_->numeric_level if $_->numeric_level > $level;
+        $level = $_->numeric_level if $_->numeric_level > $level;
     }
 
-    return $levels{ $level };
+    return $levels{$level};
 }
 
 sub json {

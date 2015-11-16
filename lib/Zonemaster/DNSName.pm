@@ -1,6 +1,8 @@
-package Zonemaster::DNSName v1.0.0;
+package Zonemaster::DNSName v1.0.1;
 
-use 5.14.2;
+use 5.014002;
+use warnings;
+
 use Moose;
 use Moose::Util::TypeConstraints;
 
@@ -18,8 +20,8 @@ around BUILDARGS => sub {
 
     if ( @_ == 1 && !ref $_[0] ) {
         my $name = shift;
-        $name = '' if not defined( $name );
-        my @labels = split( /\./, $name );
+        $name = q{} if not defined( $name );
+        my @labels = split( /[.]/x, $name );
         return $class->$orig( labels => \@labels );
     }
     elsif ( ref( $_[0] ) and ref( $_[0] ) eq __PACKAGE__ ) {
@@ -37,7 +39,7 @@ sub string {
     my $self = shift;
 
     my $name = join( '.', @{ $self->labels } );
-    $name = '.' if $name eq '';
+    $name = '.' if $name eq q{};
 
     return $name;
 }
@@ -50,9 +52,9 @@ sub fqdn {
 
 sub str_cmp {
     my ( $self, $other ) = @_;
-    $other //= ''; # Treat undefined value as root
+    $other //= q{};    # Treat undefined value as root
 
-    $other =~ s/(.+)\.$/$1/;
+    $other =~ s/(.+)[.]\z/$1/x;
 
     return ( uc( "$self" ) cmp uc( $other ) );
 }
