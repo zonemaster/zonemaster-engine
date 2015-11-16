@@ -1,6 +1,8 @@
-package Zonemaster::Recursor v1.0.1;
+package Zonemaster::Recursor v1.0.2;
 
-use 5.14.2;
+use 5.014002;
+use warnings;
+
 use Moose;
 use JSON::PP;
 use Zonemaster::Util;
@@ -54,27 +56,28 @@ sub parent {
     }
 
     # Extra check that parent really is parent.
-    if ($name->next_higher ne $pname) {
+    if ( $name->next_higher ne $pname ) {
         my $source_ns = $state->{trace}[0][1];
         my $source_ip = $state->{trace}[0][2];
 
         # No $source_ns means we're looking at root taken from priming
-        if ($source_ns) {
+        if ( $source_ns ) {
             my $pp;
-            if ($source_ns->can('query')) {
-                $pp = $source_ns->query($name->next_higher->string, 'SOA');
-            } else {
-                my $n = ns($source_ns, $source_ip);
-                $pp = $n->query($name->next_higher->string, 'SOA');
+            if ( $source_ns->can( 'query' ) ) {
+                $pp = $source_ns->query( $name->next_higher->string, 'SOA' );
             }
-            if ($pp) {
-                my ($rr) = $pp->get_records('SOA', 'answer');
-                if ($rr) {
-                    $pname = name($rr->owner);
+            else {
+                my $n = ns( $source_ns, $source_ip );
+                $pp = $n->query( $name->next_higher->string, 'SOA' );
+            }
+            if ( $pp ) {
+                my ( $rr ) = $pp->get_records( 'SOA', 'answer' );
+                if ( $rr ) {
+                    $pname = name( $rr->owner );
                 }
             }
         }
-    }
+    } ## end if ( $name->next_higher...)
 
     if ( wantarray() ) {
         return ( $pname, $p );
@@ -86,7 +89,7 @@ sub parent {
 
 sub _recurse {
     my ( $self, $name, $type, $class, $state ) = @_;
-    $name = '' . name( $name );
+    $name = q{} . name( $name );
 
     if ( $state->{in_progress}{$name}{$type} ) {
         return;
@@ -94,14 +97,18 @@ sub _recurse {
     $state->{in_progress}{$name}{$type} = 1;
 
     while ( my $ns = pop @{ $state->{ns} } ) {
-	my $nsname    = $ns->can('name')    ? ''.$ns->name : '';
-	my $nsaddress = $ns->can('address') ? $ns->address->ip : '';
-        Zonemaster->logger->add( RECURSE_QUERY => { source => "$ns",
-						    ns => $nsname,
-						    address => $nsaddress,
-						    name => $name,
-						    type => $type,
-						    class => $class } );
+        my $nsname    = $ns->can( 'name' )    ? q{} . $ns->name  : q{};
+        my $nsaddress = $ns->can( 'address' ) ? $ns->address->ip : q{};
+        Zonemaster->logger->add(
+            RECURSE_QUERY => {
+                source  => "$ns",
+                ns      => $nsname,
+                address => $nsaddress,
+                name    => $name,
+                type    => $type,
+                class   => $class
+            }
+        );
         my $p = $self->_do_query( $ns, $name, $type, { class => $class }, $state );
 
         next if not $p;    # Ask next server if no response
@@ -143,7 +150,7 @@ sub _recurse {
             $state->{ns} = $self->get_ns_from( $p, $state );    # Follow redirect
             $state->{count} += 1;
             return ( undef, $state ) if $state->{count} > 20;    # Loop protection
-            unshift @{ $state->{trace} }, [$zname, $ns, $p->answerfrom];
+            unshift @{ $state->{trace} }, [ $zname, $ns, $p->answerfrom ];
 
             next;
         } ## end if ( $p->is_redirect )
@@ -253,18 +260,17 @@ sub get_addresses_for {
 
     my @rrs;
     my %cname;
-    if ($pa) {
+    if ( $pa ) {
         push @rrs, $pa->get_records( 'a' );
-        $cname{$_->cname} = 1 for $pa->get_records_for_name('CNAME', $name);
+        $cname{ $_->cname } = 1 for $pa->get_records_for_name( 'CNAME', $name );
     }
-    if ($paaaa) {
+    if ( $paaaa ) {
         push @rrs, $paaaa->get_records( 'aaaa' );
-        $cname{$_->cname} = 1 for $paaaa->get_records_for_name('CNAME', $name);
+        $cname{ $_->cname } = 1 for $paaaa->get_records_for_name( 'CNAME', $name );
     }
 
-    foreach my $rr ( sort { $a->address cmp $b->address } @rrs )
-    {
-        if (name($rr->name) eq $name or $cname{$rr->name}) {
+    foreach my $rr ( sort { $a->address cmp $b->address } @rrs ) {
+        if ( name( $rr->name ) eq $name or $cname{ $rr->name } ) {
             push @res, Net::IP::XS->new( $rr->address );
         }
     }

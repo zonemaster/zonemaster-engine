@@ -1,6 +1,6 @@
-package Zonemaster::Test v1.0.0;
+package Zonemaster::Test v1.0.1;
 
-use 5.14.2;
+use 5.014002;
 use strict;
 use warnings;
 
@@ -44,6 +44,8 @@ sub _log_versions {
     foreach my $file ( @{ Zonemaster->config->pfiles } ) {
         info( POLICY_FILE => { name => $file } );
     }
+
+    return;
 } ## end sub _log_versions
 
 sub modules {
@@ -55,7 +57,7 @@ sub run_all_for {
     my @results;
 
     Zonemaster->start_time_now();
-    push @results, info( START_TIME => { time_t => time(), string => strftime("%F %T %z", (localtime())) } );
+    push @results, info( START_TIME => { time_t => time(), string => strftime( "%F %T %z", ( localtime() ) ) } );
     push @results, info( TEST_TARGET => { zone => $zone->name->string, module => 'all' } );
 
     info(
@@ -114,7 +116,7 @@ sub run_module {
     $module = 'Basic' if ( not $module and lc( $requested ) eq 'basic' );
 
     Zonemaster->start_time_now();
-    push @res, info( START_TIME => { time_t => time(), string => strftime("%F %T %z", (localtime())) } );
+    push @res, info( START_TIME => { time_t => time(), string => strftime( "%F %T %z", ( localtime() ) ) } );
     push @res, info( TEST_TARGET => { zone => $zone->name->string, module => $requested } );
     _log_versions();
     if ( not( Zonemaster->config->ipv4_ok or Zonemaster->config->ipv6_ok ) ) {
@@ -152,8 +154,9 @@ sub run_one {
     $module = 'Basic' if ( not $module and lc( $requested ) eq 'basic' );
 
     Zonemaster->start_time_now();
-    push @res, info( START_TIME => { time_t => time(), string => strftime("%F %T %z", (localtime())) } );
-    push @res, info( TEST_ARGS => { module => $requested, method => $test, args => join(';', map {"$_"} @arguments ) } );
+    push @res, info( START_TIME => { time_t => time(), string => strftime( "%F %T %z", ( localtime() ) ) } );
+    push @res,
+      info( TEST_ARGS => { module => $requested, method => $test, args => join( ';', map { "$_" } @arguments ) } );
     _log_versions();
     if ( not( Zonemaster->config->ipv4_ok or Zonemaster->config->ipv6_ok ) ) {
         return info( NO_NETWORK => {} );

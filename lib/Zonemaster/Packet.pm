@@ -1,6 +1,8 @@
-package Zonemaster::Packet v1.0.0;
+package Zonemaster::Packet v1.0.1;
 
-use 5.14.2;
+use 5.014002;
+use warnings;
+
 use Moose;
 use Zonemaster::Util;
 

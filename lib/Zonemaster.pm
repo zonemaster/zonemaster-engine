@@ -1,4 +1,4 @@
-package Zonemaster v1.0.7;
+package Zonemaster v1.0.8;
 
 use 5.014002;
 use Moose;
@@ -64,8 +64,8 @@ sub all_tags {
     foreach my $module ( 'Basic', sort { $a cmp $b } Zonemaster::Test->modules ) {
         my $full = "Zonemaster::Test::$module";
         my $ref  = $full->metadata;
-        foreach my $list ( values %$ref ) {
-            push @res, map { uc( $module ) . ':' . $_ } sort { $a cmp $b } @$list;
+        foreach my $list ( values %{$ref} ) {
+            push @res, map { uc( $module ) . q{:} . $_ } sort { $a cmp $b } @{$list};
         }
     }
 
@@ -79,7 +79,7 @@ sub all_methods {
     foreach my $module ( 'Basic', Zonemaster::Test->modules ) {
         my $full = "Zonemaster::Test::$module";
         my $ref  = $full->metadata;
-        foreach my $method ( sort { $a cmp $b } keys %$ref ) {
+        foreach my $method ( sort { $a cmp $b } keys %{$ref} ) {
             push @{ $res{$module} }, $method;
         }
     }
@@ -145,6 +145,7 @@ sub modules {
 
 sub start_time_now {
     Zonemaster::Logger->start_time_now();
+    return;
 }
 
 sub reset {

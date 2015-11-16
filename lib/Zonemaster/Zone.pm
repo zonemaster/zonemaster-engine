@@ -1,6 +1,6 @@
-package Zonemaster::Zone v1.0.0;
+package Zonemaster::Zone v1.0.1;
 
-use 5.14.2;
+use 5.014002;
 use strict;
 use warnings;
 
@@ -29,7 +29,7 @@ sub _build_parent {
         return $self;
     }
 
-    my $pname = Zonemaster::Recursor->parent( '' . $self->name );
+    my $pname = Zonemaster::Recursor->parent( q{} . $self->name );
     return if not $pname;
     ## no critic (Modules::RequireExplicitInclusion)
     return __PACKAGE__->new( { name => $pname } );

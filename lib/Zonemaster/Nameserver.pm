@@ -1,6 +1,6 @@
-package Zonemaster::Nameserver v1.1.0;
+package Zonemaster::Nameserver v1.1.1;
 
-use 5.14.2;
+use 5.014002;
 use Moose;
 use Moose::Util::TypeConstraints;
 
@@ -36,7 +36,8 @@ has 'dns'   => ( is => 'ro', isa => 'Net::LDNS',                     lazy_build 
 has 'cache' => ( is => 'ro', isa => 'Zonemaster::Nameserver::Cache', lazy_build => 1 );
 has 'times' => ( is => 'ro', isa => 'ArrayRef',                      default    => sub { [] } );
 
-has 'source_address' => ( is => 'ro', isa => 'Maybe[Str]', lazy => 1, default => sub {return Zonemaster->config->resolver_source} );
+has 'source_address' =>
+  ( is => 'ro', isa => 'Maybe[Str]', lazy => 1, default => sub { return Zonemaster->config->resolver_source } );
 
 has 'fake_delegations' => ( is => 'ro', isa => 'HashRef', default => sub { {} } );
 has 'fake_ds'          => ( is => 'ro', isa => 'HashRef', default => sub { {} } );
@@ -58,7 +59,7 @@ around 'new' => sub {
     my $self = shift;
 
     my $obj  = $self->$orig( @_ );
-    my $name = lc( '' . $obj->name ) ;
+    my $name = lc( q{} . $obj->name );
     $name = '$$$NONAME' unless $name;
 
     if ( not exists $object_cache{$name}{ $obj->address->ip } ) {
@@ -81,7 +82,7 @@ sub _build_dns {
     }
 
     if ( $self->source_address ) {
-        $res->source($self->source_address);
+        $res->source( $self->source_address );
     }
 
     return $res;
@@ -145,18 +146,18 @@ sub query {
 
     # Fake a delegation
     foreach my $fname ( sort keys %{ $self->fake_delegations } ) {
-        if ( $name =~ m/(\.|^)\Q$fname\E$/i ) {
+        if ( $name =~ m/([.]|\A)\Q$fname\E\z/xi ) {
             my $p = Net::LDNS::Packet->new( $name, $type, $class );
 
             if ( lc( $name ) eq lc( $fname ) and $type eq 'NS' ) {
                 my $name = $self->fake_delegations->{$fname}{authority};
                 my $addr = $self->fake_delegations->{$fname}{additional};
-                $p->unique_push( 'answer',     $_ ) for @$name;
-                $p->unique_push( 'additional', $_ ) for @$addr;
+                $p->unique_push( 'answer',     $_ ) for @{$name};
+                $p->unique_push( 'additional', $_ ) for @{$addr};
             }
             else {
                 while ( my ( $section, $aref ) = each %{ $self->fake_delegations->{$fname} } ) {
-                    $p->unique_push( $section, $_ ) for @$aref;
+                    $p->unique_push( $section, $_ ) for @{$aref};
                 }
             }
 
@@ -177,7 +178,7 @@ sub query {
             my $res = Zonemaster::Packet->new( { packet => $p } );
             Zonemaster->logger->add( FAKED_RETURN => { packet => $res->string } );
             return $res;
-        } ## end if ( $name =~ m/(\.|^)\Q$fname\E$/i)
+        } ## end if ( $name =~ m/([.]|\A)\Q$fname\E\z/xi)
     } ## end foreach my $fname ( sort keys...)
 
     if ( not exists( $self->cache->data->{"$name"}{"\U$type"}{"\U$class"}{$dnssec}{$usevc}{$recurse}{$edns_size} ) ) {
@@ -195,8 +196,8 @@ sub add_fake_delegation {
     my ( $self, $domain, $href ) = @_;
     my %delegation;
 
-    $domain = '' . Zonemaster::DNSName->new( $domain );
-    foreach my $name ( keys %$href ) {
+    $domain = q{} . Zonemaster::DNSName->new( $domain );
+    foreach my $name ( keys %{$href} ) {
         push @{ $delegation{authority} }, Net::LDNS::RR->new( sprintf( '%s IN NS %s', $domain, $name ) );
         foreach my $ip ( @{ $href->{$name} } ) {
             if ( Net::IP::XS->new( $ip )->ip eq $self->address->ip ) {
@@ -228,7 +229,7 @@ sub add_fake_ds {
     }
 
     Zonemaster->logger->add( FAKE_DS => { domain => lc( "$domain" ), data => $aref, ns => "$self" } );
-    foreach my $href ( @$aref ) {
+    foreach my $href ( @{$aref} ) {
         push @ds,
           Net::LDNS::RR->new(
             sprintf(
@@ -283,9 +284,17 @@ sub _query {
 
     my $before = time();
     my $res;
-    if ( $self->blacklisted->{$flags{usevc}}{$flags{dnssec}} ) {
+    if ( $self->blacklisted->{ $flags{usevc} }{ $flags{dnssec} } ) {
         Zonemaster->logger->add(
-            IS_BLACKLISTED => { message => "Server transport has been blacklisted due to previous failure", ns => "$self", name => "$name", type => $type, class => $href->{class}, proto => $flags{usevc} ? q{TCP} : q{UDP}, dnssec => $flags{dnssec} }
+            IS_BLACKLISTED => {
+                message => "Server transport has been blacklisted due to previous failure",
+                ns      => "$self",
+                name    => "$name",
+                type    => $type,
+                class   => $href->{class},
+                proto   => $flags{usevc} ? q{TCP} : q{UDP},
+                dnssec  => $flags{dnssec}
+            }
         );
     }
     else {
@@ -293,12 +302,11 @@ sub _query {
         if ( $@ ) {
             my $msg = "$@";
             chomp( $msg );
-            Zonemaster->logger->add(
-                LOOKUP_ERROR => { message => $msg, ns => "$self", name => "$name", type => $type, class => $href->{class} }
-            );
-            $self->blacklisted->{$flags{usevc}}{$flags{dnssec}} = 1;
-            if ( ! $flags{dnssec} ) {
-                $self->blacklisted->{$flags{usevc}}{!$flags{dnssec}} = 1;
+            Zonemaster->logger->add( LOOKUP_ERROR =>
+                  { message => $msg, ns => "$self", name => "$name", type => $type, class => $href->{class} } );
+            $self->blacklisted->{ $flags{usevc} }{ $flags{dnssec} } = 1;
+            if ( !$flags{dnssec} ) {
+                $self->blacklisted->{ $flags{usevc} }{ !$flags{dnssec} } = 1;
             }
         }
     }
@@ -313,10 +321,10 @@ sub _query {
         my $p = Zonemaster::Packet->new( { packet => $res } );
         my $size = length( $p->data );
         if ( $size > $UDP_COMMON_EDNS_LIMIT ) {
-            my $command = sprintf q{dig @%s %s%s %s}, $self->address->short, $flags{dnssec} ? q{+dnssec } : q{}, "$name", $type;
+            my $command = sprintf q{dig @%s %s%s %s}, $self->address->short, $flags{dnssec} ? q{+dnssec } : q{},
+              "$name", $type;
             Zonemaster->logger->add(
-                PACKET_BIG => { size => $size, maxsize => $UDP_COMMON_EDNS_LIMIT, command => $command }
-            );
+                PACKET_BIG => { size => $size, maxsize => $UDP_COMMON_EDNS_LIMIT, command => $command } );
         }
         Zonemaster->logger->add( EXTERNAL_RESPONSE => { packet => $p->string } );
         return $p;
@@ -330,7 +338,7 @@ sub _query {
 sub string {
     my ( $self ) = @_;
 
-    return $self->name->string . '/' . $self->address->short;
+    return $self->name->string . q{/} . $self->address->short;
 }
 
 sub compare {
@@ -342,7 +350,7 @@ sub compare {
 sub save {
     my ( $class, $filename ) = @_;
 
-    my $old = POSIX::setlocale(POSIX::LC_ALL,'C');
+    my $old = POSIX::setlocale( POSIX::LC_ALL, 'C' );
     my $json = JSON::XS->new->allow_blessed->convert_blessed;
     open my $fh, '>', $filename or die "Cache save failed: $!";
     foreach my $name ( keys %object_cache ) {
@@ -355,7 +363,7 @@ sub save {
 
     Zonemaster->logger->add( SAVED_NS_CACHE => { file => $filename } );
 
-    POSIX::setlocale(POSIX::LC_ALL, $old);
+    POSIX::setlocale( POSIX::LC_ALL, $old );
     return;
 }
 
@@ -433,7 +441,8 @@ sub median_time {
     my $c = scalar( @t );
     if ( $c == 0 ) {
         return 0;
-    } elsif ( $c % 2 == 0 ) {
+    }
+    elsif ( $c % 2 == 0 ) {
         return ( $t[ $c / 2 ] + $t[ ( $c / 2 ) - 1 ] ) / 2;
     }
     else {
@@ -456,7 +465,7 @@ sub all_known_nameservers {
     my @res;
 
     foreach my $n ( values %object_cache ) {
-        push @res, values %$n;
+        push @res, values %{$n};
     }
 
     return @res;

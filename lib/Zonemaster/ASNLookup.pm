@@ -1,4 +1,4 @@
-package Zonemaster::ASNLookup v1.0.0;
+package Zonemaster::ASNLookup v1.0.1;
 
 use 5.014002;
 use warnings;
@@ -28,8 +28,8 @@ sub get_with_prefix {
             'in-addr.arpa.' => "origin.$domain",
             'ip6.arpa.'     => "origin6.$domain",
         };
-        foreach my $root ( keys %$pair ) {
-            if ( $reverse =~ s/$root/$pair->{$root}/i ) {
+        foreach my $root ( keys %{$pair} ) {
+            if ( $reverse =~ s/$root/$pair->{$root}/ix ) {
                 my $p = $zone->query_persistent( $reverse, 'TXT' );
                 next if not $p;
 
@@ -37,9 +37,9 @@ sub get_with_prefix {
                 return if not $rr;
 
                 my $str = $rr->txtdata;
-                $str =~ s/"([^"]+)"/$1/;
-                my @fields = split( / \| ?/, $str );
-                my @asns   = split( /\s+/,   $fields[0] );
+                $str =~ s/"([^"]+)"/$1/x;
+                my @fields = split( /[ ]\|[ ]?/x, $str );
+                my @asns   = split( /\s+/x,       $fields[0] );
 
                 return \@asns, Net::IP::XS->new( $fields[1] ), $str;
             }
@@ -54,7 +54,7 @@ sub get {
     my ( $asnref, $prefix, $raw ) = $class->get_with_prefix( $ip );
 
     if ( $asnref ) {
-        return @$asnref;
+        return @{$asnref};
     }
     else {
         return;
