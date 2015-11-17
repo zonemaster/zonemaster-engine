@@ -1,5 +1,8 @@
 Revision history for Perl module Zonemaster.
 
+v1.0.9 2015-11-17
+ - Removed files from distribution, added to MANIFEST.SKIP, #153 #154
+
 v1.0.8 2015-11-16
  - Make test should work much better, #149 #137 #139 #121
  - Translation fixes for French and Swedish #144
