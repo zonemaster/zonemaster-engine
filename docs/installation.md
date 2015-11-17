@@ -15,6 +15,9 @@ The documentation covers the following operating systems:
 
 The Engine Perl module name is 'Zonemaster'.
 
+## Prerequisite
+
+   No other Zonemaster component is required by the engine.
 
 ### <a name="Debian"></a> Instructions for Ubuntu 12.04, Ubuntu 14.04 and Debian 7
 

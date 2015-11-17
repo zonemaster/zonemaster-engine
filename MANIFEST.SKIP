@@ -1,5 +1,4 @@
 .travis.yml
 .git
-Makefile
 MYMETA.json
 MYMETA.yml
