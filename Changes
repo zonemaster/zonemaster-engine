@@ -1,5 +1,8 @@
 Revision history for Perl module Zonemaster.
 
+v1.0.10 2015-11-18
+ - Proper Makefile regex in MANIFEST.SKIP
+
 v1.0.9 2015-11-17
  - Removed files from distribution, added to MANIFEST.SKIP, #153 #154
 
