@@ -1,4 +1,4 @@
-package Zonemaster::Test::Nameserver v1.0.2;
+package Zonemaster::Test::Nameserver v1.0.3;
 
 use strict;
 use warnings;
@@ -175,6 +175,7 @@ sub version {
 sub nameserver01 {
     my ( $class, $zone ) = @_;
     my $nonexistent_name = q{xx--domain-cannot-exist.xx--illegal-syntax-tld};
+    my $existing_name    = q{fr};
     my @results;
     my %ips;
     my %nsnames;
@@ -193,14 +194,19 @@ sub nameserver01 {
 
         if ( $p ) {
             if ( $p->rcode eq q{NXDOMAIN} ) {
-                push @results,
-                  info(
-                    IS_A_RECURSOR => {
-                        ns      => $local_ns->name,
-                        address => $local_ns->address->short,
-                        dname   => $nonexistent_name,
+                my $p2 = $local_ns->query( $existing_name, q{SOA}, { recurse => 1 } );
+                if ( $p2 ) {
+                    if ( $p2->rcode ne q{NXDOMAIN} ) {
+                        push @results,
+                          info(
+                            IS_A_RECURSOR => {
+                                ns      => $local_ns->name,
+                                address => $local_ns->address->short,
+                                dname   => $nonexistent_name,
+                            }
+                          );
                     }
-                  );
+                }
             }
             $nsnames{ $local_ns->name }++;
             $ips{ $local_ns->address->short }++;
