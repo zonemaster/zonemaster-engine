@@ -65,10 +65,6 @@ $zone = Zonemaster->zone( 'fr' );
 zone_gives( 'nameserver01', $zone, [q{NO_RECURSOR}] );
 zone_gives_not( 'nameserver01', $zone, [q{IS_A_RECURSOR}] );
 
-$zone = Zonemaster->zone( '.' );
-zone_gives_not( 'nameserver01', $zone, [q{NO_RECURSOR}] );
-zone_gives( 'nameserver01', $zone, [q{IS_A_RECURSOR}] );
-
 # nameserver02
 $zone = Zonemaster->zone( 'perennaguiden.se' );
 zone_gives( 'nameserver02', $zone, ['EDNS0_BAD_ANSWER']);

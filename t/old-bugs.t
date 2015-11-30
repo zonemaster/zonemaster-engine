@@ -3,8 +3,31 @@ use Test::More;
 use Zonemaster;
 use Zonemaster::Nameserver;
 use Zonemaster::Test::Delegation;
+use Zonemaster::Test::Nameserver;
 
 use List::MoreUtils qw[any none];
+
+sub zone_gives {
+    my ( $checking_module, $test, $zone, $gives_ref ) = @_;
+
+    Zonemaster->logger->clear_history();
+    my @res = Zonemaster->test_method( $checking_module, $test, $zone );
+    foreach my $gives ( @{$gives_ref} ) {
+        ok( ( grep { $_->tag eq $gives } @res ), $zone->name->string . " gives $gives" );
+    }
+    return scalar( @res );
+}
+
+sub zone_gives_not {
+    my ( $checking_module, $test, $zone, $gives_ref ) = @_;
+
+    Zonemaster->logger->clear_history();
+    my @res = Zonemaster->test_method( $checking_module, $test, $zone );
+    foreach my $gives ( @{$gives_ref} ) {
+        ok( !( grep { $_->tag eq $gives } @res ), $zone->name->string . " does not give $gives" );
+    }
+    return scalar( @res );
+}
 
 my $datafile = q{t/old-bugs.data};
 if ( not $ENV{ZONEMASTER_RECORD} ) {
@@ -49,6 +72,14 @@ ok( ( any { $_->tag eq 'NSEC3_COVERS' } @res ), 'NSEC3 test works for domain wit
 my $bobo = Zonemaster->zone( 'bobo.nl' );
 @res = Zonemaster->test_method('Address', 'address03', $bobo);
 ok( ( none { $_->tag eq 'NO_RESPONSE_PTR_QUERY' } @res ), 'Recursor can deal with CNAMEs when recursing.' );
+
+my $zone = Zonemaster->zone( 'tirsen-aili.se' );
+zone_gives( q{Nameserver}, 'nameserver01', $zone, [q{NO_RECURSOR}] );
+zone_gives_not( q{Nameserver}, 'nameserver01', $zone, [q{IS_A_RECURSOR}] );
+
+$zone = Zonemaster->zone( '.' );
+zone_gives_not( q{Nameserver}, 'nameserver01', $zone, [q{NO_RECURSOR}] );
+zone_gives( q{Nameserver}, 'nameserver01', $zone, [q{IS_A_RECURSOR}] );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Nameserver->save( $datafile );

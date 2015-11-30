@@ -3,8 +3,8 @@ msgstr ""
 "Language: sv\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Project-Id-Version: 0.0.4\n"
-"PO-Revision-Date: 2014-09-15 10:24+0200\n"
+"Project-Id-Version: 1.0.0\n"
+"PO-Revision-Date: 2015-11-18\n"
 "Last-Translator: calle@init.se\n"
 "Language-Team: Zonemaster Team\n"
 "MIME-Version: 1.0\n"
@@ -118,16 +118,16 @@ msgid  "Name servers have IPv6 addresses in the following ASs: {asn}."
 msgstr "Namnservrarna har IPv6-adresser i följande AS: {asn}."
 
 #: CONNECTIVITY:ASN_INFOS_RAW
-msgid  "[ASN:RAW] {ip};{data}"
-msgstr "[ASN:RAW] {ip};{data}"
+msgid  "[ASN:RAW] {address};{data}"
+msgstr "[ASN:RAW] {address};{data}"
 
 #: CONNECTIVITY:ASN_INFOS_ANNOUNCE_BY
-msgid  "[ASN:ANNOUNCE_BY] {ip};{data}"
-msgstr "[ASN:ANNOUNCE_BY] {ip};{data}"
+msgid  "[ASN:ANNOUNCE_BY] {address};{asn}"
+msgstr "[ASN:ANNOUNCE_BY] {address};{asn}"
 
 #: CONNECTIVITY:ASN_INFOS_ANNOUNCE_IN
-msgid  "[ASN:ANNOUNCE_IN] {ip};{data}"
-msgstr "[ASN:ANNOUNCE_IN] {ip};{data}"
+msgid  "[ASN:ANNOUNCE_IN] {address};{prefix}"
+msgstr "[ASN:ANNOUNCE_IN] {address};{prefix}"
 
 #: CONSISTENCY:MULTIPLE_SOA_RNAMES
 msgid  "Saw {count} SOA rname."
