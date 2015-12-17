@@ -1,5 +1,9 @@
 Revision history for Perl module Zonemaster.
 
+v1.0.11 2015-12-17
+ - Added IANA profile
+ - Fixed a spelling error
+
 v1.0.10 2015-11-18
  - Proper Makefile regex in MANIFEST.SKIP
 
