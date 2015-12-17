@@ -1,4 +1,4 @@
-package Zonemaster v1.0.10;
+package Zonemaster v1.0.11;
 
 use 5.014002;
 use Moose;
