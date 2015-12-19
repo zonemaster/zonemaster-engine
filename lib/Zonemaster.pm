@@ -214,7 +214,7 @@ Returns a hash, where the keys are test module names and the values are lists wi
 =item recurse($name, $type, $class)
 
 Does a recursive lookup for the given name, type and class, and returns the resulting packet (if any). Simply calls
-L<Zonemaster::Recursor/recurse()> on a globally stored object.
+L<Zonemaster::Recursor/recurse> on a globally stored object.
 
 =item save_cache($filename)
 
