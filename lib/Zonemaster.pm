@@ -214,7 +214,7 @@ Returns a hash, where the keys are test module names and the values are lists wi
 =item recurse($name, $type, $class)
 
 Does a recursive lookup for the given name, type and class, and returns the resulting packet (if any). Simply calls
-L<Zonemaster::Recursor::recurse()> on a globally stored object.
+L<Zonemaster::Recursor/recurse()> on a globally stored object.
 
 =item save_cache($filename)
 
@@ -223,7 +223,7 @@ After running the tests, save the accumulated cache to a file with the given nam
 =item preload_cache($filename)
 
 Before running the tests, load the cache with information from a file with the given name. This file must have the same format as is produced by
-L<save_cache()>.
+L</save_cache()>.
 
 =item asn_lookup($ip)
 
@@ -247,7 +247,7 @@ If called in scalar context, only the AS number.
 
 =item modules()
 
-Returns a list of the loaded test modules. Exactly the same as L<Zonemaster::Test::modules>.
+Returns a list of the loaded test modules. Exactly the same as L<Zonemaster::Test/modules>.
 
 =item add_fake_delegation($domain, $data)
 
