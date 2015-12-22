@@ -1,5 +1,10 @@
 Revision history for Perl module Zonemaster.
 
+v1.0.12 2015-12-22
+ - Fixed pod testing
+ - Fixed links in pods
+ - Update CPAN dependencies for centos
+
 v1.0.11 2015-12-17
  - Added IANA profile
  - Fixed a spelling error
