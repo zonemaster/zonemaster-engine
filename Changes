@@ -1,5 +1,8 @@
 Revision history for Perl module Zonemaster.
 
+v1.0.13 2016-01-27
+ - Updates to MANIFEST.skip
+
 v1.0.12 2015-12-22
  - Fixed pod testing
  - Fixed links in pods
