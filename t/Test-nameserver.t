@@ -136,9 +136,13 @@ if ( $ENV{ZONEMASTER_RECORD} ) {
 }
 
 Zonemaster->config->no_network( 0 );
-$zone = Zonemaster->zone( 'arpa' );
-zone_gives( 'nameserver03', $zone, [q{AXFR_AVAILABLE}] );
-zone_gives( 'nameserver03', $zone, [q{AXFR_FAILURE}] );
+SKIP: {
+    skip 'no network', 2 if $ENV{TEST_NO_NETWORK};
+
+    $zone = Zonemaster->zone( 'arpa' );
+    zone_gives( 'nameserver03', $zone, [q{AXFR_AVAILABLE}] );
+    zone_gives( 'nameserver03', $zone, [q{AXFR_FAILURE}] );
+}
 Zonemaster->config->ipv6_ok( 0 );
 Zonemaster->config->ipv4_ok( 0 );
 $zone = Zonemaster->zone( 'fr' );
