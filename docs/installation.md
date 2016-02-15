@@ -69,6 +69,7 @@ If it's the first time you use the CPAN module, it will ask three questions.
 For the first and third, the default responses are fine. For the second, answer
 "sudo" (the default is "local::lib", which you do not want).
 
+`sudo cpan -i Hash::Merge Net::IP::XS Net::LDNS JSON::XS Moose`
 `sudo cpan -i Zonemaster`
 
 

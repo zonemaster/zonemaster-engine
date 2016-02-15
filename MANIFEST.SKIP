@@ -1,5 +1,12 @@
-.travis.yml
 .git
+.gitignore
+.perltidyrc
+.perlcriticrc
+.travis.yml
 MYMETA.json
 MYMETA.yml
 ^Makefile$
+^blib
+.tar.gz$
+.bak$
+~$
