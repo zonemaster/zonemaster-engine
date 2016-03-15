@@ -165,7 +165,7 @@ sub translation {
         'NO_RESPONSE_MX_QUERY'   => 'No response from nameserver(s) on MX queries.',
         'MNAME_HAS_NO_ADDRESS'   => 'No IP address found for SOA \'mname\' nameserver ({mname}).',
         'EXPIRE_MINIMUM_VALUE_OK' =>
-'SOA \'expire\' value ({expire}) is higher than the minimum recommended value ({required_expire}) and lower than \'refresh\' value.',
+'SOA \'expire\' value ({expire}) is higher than the minimum recommended value ({required_expire}) and not lower than the \'refresh\' value ({refresh}).',
     };
 } ## end sub translation
 
@@ -379,6 +379,7 @@ sub zone05 {
               info(
                 EXPIRE_MINIMUM_VALUE_OK => {
                     expire          => $soa_expire,
+                    refresh         => $soa_refresh,
                     required_expire => $SOA_EXPIRE_MINIMUM_VALUE,
                 }
               );
