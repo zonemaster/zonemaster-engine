@@ -28,7 +28,8 @@ find(
 );
 
 foreach my $name ( @modules ) {
-    my $pc = Pod::Coverage->new( package => $name );
+    next if $name =~ q{Zonemaster::Constants};
+    my $pc = Pod::Coverage->new( package => $name , private => [ qr/^_/ ] );
     if ( defined $pc->coverage ) {
         my @uncovered = $pc->uncovered;
         if ( @uncovered == 1 and $uncovered[0] eq 'LC_MESSAGES' ) {

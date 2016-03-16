@@ -139,10 +139,6 @@ All exportable names.
 
 DNSSEC algorithms.
 
-=item asn
-
-Constants used by the ASN test module.
-
 =item name
 
 Label and name lengths.
@@ -188,38 +184,6 @@ C<$ALGO_STATUS_UNASSIGNED>
 =item *
 
 C<$ALGO_STATUS_VALID>
-
-=item *
-
-C<$ASN_CHECKING_ROUTE_VIEWS_SERVICE_NAME>
-
-=item *
-
-C<$ASN_CHECKING_SERVICE_USED>
-
-=item *
-
-C<$ASN_CHECKING_ZONEMASTER_SERVICE_NAME>
-
-=item *
-
-C<$ASN_IPV4_CHECKING_SERVICE_ROUTE_VIEWS_DOMAIN>
-
-=item *
-
-C<$ASN_IPV4_CHECKING_SERVICE_ZONEMASTER_DOMAIN>
-
-=item *
-
-C<$ASN_IPV6_CHECKING_SERVICE_ROUTE_VIEWS_DOMAIN>
-
-=item *
-
-C<$ASN_IPV6_CHECKING_SERVICE_ZONEMASTER_DOMAIN>
-
-=item *
-
-C<$ASN_UNASSIGNED_UNANNOUNCED_ADDRESS_SPACE_VALUE>
 
 =item *
 
@@ -279,6 +243,10 @@ C<$UDP_PAYLOAD_LIMIT>
 
 =item *
 
+C<UDP_COMMON_EDNS_LIMIT>
+
+=item *
+
 C<@IPV4_SPECIAL_ADDRESSES>
 
 =item *
@@ -286,3 +254,5 @@ C<@IPV4_SPECIAL_ADDRESSES>
 C<@IPV6_SPECIAL_ADDRESSES>
 
 =back
+
+=cut
