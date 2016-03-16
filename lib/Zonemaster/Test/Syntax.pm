@@ -465,29 +465,33 @@ sub check_name_syntax {
           );
     }
 
-    foreach my $local_label ( @{ $name->labels } ) {
-        if ( _label_not_ace_has_double_hyphen_in_position_3_and_4( $local_label ) ) {
+    if ( $name ne q{.} ) {
+
+        foreach my $local_label ( @{ $name->labels } ) {
+            if ( _label_not_ace_has_double_hyphen_in_position_3_and_4( $local_label ) ) {
+                push @results,
+                  info(
+                    $info_label_prefix
+                      . q{_DISCOURAGED_DOUBLE_DASH} => {
+                        label => $local_label,
+                        name  => "$name",
+                      }
+                  );
+            }
+        }
+
+        my $tld = @{ $name->labels }[-1];
+        if ( $tld =~ /\A\d+\z/smgx ) {
             push @results,
               info(
                 $info_label_prefix
-                  . q{_DISCOURAGED_DOUBLE_DASH} => {
-                    label => $local_label,
-                    name  => "$name",
+                  . q{_NUMERIC_TLD} => {
+                    name => "$name",
+                    tld  => $tld,
                   }
               );
         }
-    }
 
-    my $tld = @{ $name->labels }[-1];
-    if ( $tld =~ /\A\d+\z/smgx ) {
-        push @results,
-          info(
-            $info_label_prefix
-              . q{_NUMERIC_TLD} => {
-                name => "$name",
-                tld  => $tld,
-              }
-          );
     }
 
     if ( not scalar @results ) {
