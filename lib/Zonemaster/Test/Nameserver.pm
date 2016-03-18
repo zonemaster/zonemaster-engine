@@ -1,4 +1,4 @@
-package Zonemaster::Test::Nameserver v1.0.3;
+package Zonemaster::Test::Nameserver v1.0.4;
 
 use strict;
 use warnings;
@@ -626,7 +626,7 @@ sub nameserver09 {
 
         my $answer1_string;
         my $answer2_string;
-        my $json = JSON::XS->new->canonical->pretty;
+        my $json = JSON->new->canonical->pretty;
         if ( $p1 and scalar $p1->answer ) {
 
             my @answer1 = map { lc $_->string } sort $p1->answer;

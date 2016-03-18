@@ -26,7 +26,7 @@ requires 'Locale::TextDomain'    => 0;
 
 test_requires 'JSON::XS' => 2.32;
 
-recommends 'JSON::XS'     => 2.32;
+recommends 'JSON'         => 2.53;
 recommends 'Readonly::XS' => 0;
 
 install_share;

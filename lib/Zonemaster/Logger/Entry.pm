@@ -1,4 +1,4 @@
-package Zonemaster::Logger::Entry v1.1.1;
+package Zonemaster::Logger::Entry v1.1.2;
 
 use 5.014002;
 use warnings;
@@ -23,7 +23,7 @@ our %numeric = (
 
 our $start_time = time();
 
-my $json = JSON::XS->new->allow_blessed->convert_blessed->canonical;
+my $json = JSON->new->allow_blessed->convert_blessed->canonical;
 
 has 'module'    => ( is => 'ro', isa => 'Str',                lazy_build => 1 );
 has 'tag'       => ( is => 'ro', isa => 'Str',                required   => 1 );
