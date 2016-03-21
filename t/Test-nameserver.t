@@ -115,10 +115,6 @@ SKIP: {
 TODO: {
     local $TODO = "Need to find/create zones with that error";
 
-    # nameserver03 does not work with saved data ???
-    #    $zone = Zonemaster->zone( 'nameserver03-axfr-available.zut-root.rd.nic.fr' );
-    #    zone_gives( 'nameserver03', $zone, [q{AXFR_AVAILABLE}] );
-
     # nameserver04
     ok( $tag{DIFFERENT_SOURCE_IP}, q{DIFFERENT_SOURCE_IP} );
 
@@ -131,18 +127,25 @@ TODO: {
     ok( $tag{QNAME_CASE_SENSITIVE}, q{QNAME_CASE_SENSITIVE} );
 }
 
+SKIP: {
+    # Default behaviour changed. It's always skipped unless we have network
+    # available.
+    skip 'no network', 3 if not $ENV{ZONEMASTER_RECORD};
+
+    # AXFR results not well cached. Can not test cases where AXFR is avaibale
+    # without network, even in case of ZONEMASTER_RECORD is not set.
+    $zone = Zonemaster->zone( 'nameserver03-axfr-available.zut-root.rd.nic.fr' );
+    zone_gives( 'nameserver03', $zone, [q{AXFR_AVAILABLE}] );
+    $zone = Zonemaster->zone( 'arpa' );
+    zone_gives( 'nameserver03', $zone, [q{AXFR_AVAILABLE}] );
+    zone_gives( 'nameserver03', $zone, [q{AXFR_FAILURE}] );
+}
+
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Nameserver->save( $datafile );
 }
 
 Zonemaster->config->no_network( 0 );
-SKIP: {
-    skip 'no network', 2 if $ENV{TEST_NO_NETWORK};
-
-    $zone = Zonemaster->zone( 'arpa' );
-    zone_gives( 'nameserver03', $zone, [q{AXFR_AVAILABLE}] );
-    zone_gives( 'nameserver03', $zone, [q{AXFR_FAILURE}] );
-}
 Zonemaster->config->ipv6_ok( 0 );
 Zonemaster->config->ipv4_ok( 0 );
 $zone = Zonemaster->zone( 'fr' );
