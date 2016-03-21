@@ -24,8 +24,6 @@ requires 'Readonly'              => 0;
 requires 'Time::HiRes'           => 0;
 requires 'Locale::TextDomain'    => 0;
 
-test_requires 'JSON::XS' => 2.32;
-
 recommends 'Readonly::XS' => 0;
 
 install_share;
