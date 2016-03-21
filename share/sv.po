@@ -854,8 +854,8 @@ msgid  "SOA 'minimum' value ({minimum}) is between the recommended ones ({lowest
 msgstr "SOA minimum-värdet ligger i det rekommenderade spannet."
 
 #: ZONE:EXPIRE_MINIMUM_VALUE_OK
-msgid  "SOA 'expire' value ({expire}) is higher than the minimum recommended value ({required_expire}) and lower than 'refresh' value."
-msgstr "SOA expire-värdet ligger i det rekommenderade spannet (högre än {required_expire} och lägre än refresh-värdet)."
+msgid  "SOA 'expire' value ({expire}) is higher than the minimum recommended value ({required_expire}) and not lower than the 'refresh' value ({refresh})."
+msgstr "SOA expire-värdet ligger i det rekommenderade spannet (högre än {required_expire} och inte lägre än refresh-värdet)."
 
 #: ZONE:MNAME_IS_NOT_CNAME
 msgid  "SOA 'mname' value ({mname}) refers to a NS which is not an alias (CNAME)."

@@ -890,8 +890,8 @@ msgid  "SOA 'expire' value ({expire}) is less than the recommended one ({require
 msgstr "SOA 'expire' value ({expire}) is less than the recommended minimum ({required_expire})."
 
 #: ZONE:EXPIRE_MINIMUM_VALUE_OK
-msgid  "SOA 'expire' value ({expire}) is higher than the minimum recommended value ({required_expire}) and lower than 'refresh' value."
-msgstr "SOA 'expire' value ({expire}) is higher than the minimum recommended value ({required_expire}) and lower than 'refresh' value."
+msgid  "SOA 'expire' value ({expire}) is higher than the minimum recommended value ({required_expire}) and not lower than the 'refresh' value ({refresh})."
+msgstr "SOA 'expire' value ({expire}) is higher than the minimum recommended value ({required_expire}) and not lower than the 'refresh' value ({refresh})."
 
 #: ZONE:MNAME_HAS_NO_ADDRESS
 msgid  "No IP address found for SOA 'mname' nameserver ({mname})."
