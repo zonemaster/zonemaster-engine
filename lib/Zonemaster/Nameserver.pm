@@ -1,4 +1,4 @@
-package Zonemaster::Nameserver v1.1.1;
+package Zonemaster::Nameserver v1.1.2;
 
 use 5.014002;
 use Moose;
@@ -15,7 +15,7 @@ use Net::LDNS;
 
 use Net::IP::XS qw(:PROC);
 use Time::HiRes qw[time];
-use JSON::XS;
+use JSON;
 use MIME::Base64;
 use Module::Find qw[useall];
 use Carp;
@@ -351,7 +351,7 @@ sub save {
     my ( $class, $filename ) = @_;
 
     my $old = POSIX::setlocale( POSIX::LC_ALL, 'C' );
-    my $json = JSON::XS->new->allow_blessed->convert_blessed;
+    my $json = JSON->new->allow_blessed->convert_blessed;
     open my $fh, '>', $filename or die "Cache save failed: $!";
     foreach my $name ( keys %object_cache ) {
         foreach my $addr ( keys %{ $object_cache{$name} } ) {
@@ -371,7 +371,7 @@ sub restore {
     my ( $class, $filename ) = @_;
 
     useall 'Net::LDNS::RR';
-    my $decode = JSON::XS->new->filter_json_single_key_object(
+    my $decode = JSON->new->filter_json_single_key_object(
         'Net::LDNS::Packet' => sub {
             my ( $ref ) = @_;
             ## no critic (Modules::RequireExplicitInclusion)

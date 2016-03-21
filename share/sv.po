@@ -170,12 +170,12 @@ msgid  "Saw SOA time parameter set (REFRESH={refresh},RETRY={retry},EXPIRE={expi
 msgstr "Såg dessa SOA-tidsparametrar (REFRESH={refresh},RETRY={retry},EXPIRE={expire},MINIMUM={minimum}) på följande namnservrar : {servers}."
 
 #: DELEGATION:ENOUGH_NS
-msgid  "Child lists enough nameservers ({ns}). Lower limit set to {minimum}."
-msgstr "Barnsidan listar tillräckligt många namnservrar ({count})."
+msgid  "Child lists enough ({count}) nameservers ({ns}). Lower limit set to {minimum}."
+msgstr "Barnsidan listar tillräckligt många ({count}) namnservrar ({count})."
 
 #: DELEGATION:ENOUGH_NS_GLUE
-msgid  "Parent lists enough nameservers ({glue}). Lower limit set to {minimum}."
-msgstr "Föräldrasidan listar tillräckligt många namnservrar ({count})."
+msgid  "Parent lists enough ({count}) nameservers ({glue}). Lower limit set to {minimum}."
+msgstr "Föräldrasidan listar tillräckligt många ({count}) namnservrar ({count})."
 
 #: DELEGATION:EXTRA_NAME_CHILD
 msgid  "Child has nameserver(s) not listed at parent ({extra})."
@@ -194,11 +194,11 @@ msgid  "All of the nameserver names are listed both at parent and child."
 msgstr "Alla namnserver-namn listas både på föräldra- och barn-sidan."
 
 #: DELEGATION:NOT_ENOUGH_NS
-msgid  "Child does not list enough nameservers ({ns}). Lower limit set to {minimum}."
+msgid  "Child does not list enough ({count}) nameservers ({ns}). Lower limit set to {minimum}."
 msgstr "Barn-sidan listar inte tillräckligt många namnservrar ({count})."
 
 #: DELEGATION:NOT_ENOUGH_NS_GLUE
-msgid  "Parent does not list enough nameservers ({glue}). Lower limit set to {minimum}."
+msgid  "Parent does not list enough ({count}) nameservers ({glue}). Lower limit set to {minimum}."
 msgstr "Föräldrasidan listar inte tillräckligt många namnservrar ({count})."
 
 #: DELEGATION:NS_RR_IS_CNAME
@@ -834,12 +834,12 @@ msgid  "No IP address found for SOA 'mname' nameserver ({mname})."
 msgstr "Ingen IP-adress hittades för servern angiven som SOA MNAME ({mname})."
 
 #: DELEGATION:ENOUGH_NS_TOTAL
-msgid  "Parent and child list enough nameservers ({ns}). Lower limit set to {minimum}."
-msgstr "Förälder- och barnzonerna listar tillräckligt många namnservrar ({ns})."
+msgid  "Parent and child list enough ({count}) nameservers ({ns}). Lower limit set to {minimum}."
+msgstr "Förälder- och barnzonerna listar tillräckligt många ({count}) namnservrar ({ns})."
 
 #: DELEGATION:NOT_ENOUGH_NS_TOTAL
-msgid  "Parent and child do not list enough nameservers ({ns}). Lower limit set to {minimum}."
-msgstr "Förälder- och barnzonerna listar inte tillräckligt många namnservrar ({ns}). Måste vara minst {minimum} stycken."
+msgid  "Parent and child do not list enough ({count}) nameservers ({ns}). Lower limit set to {minimum}."
+msgstr "Förälder- och barnzonerna listar inte tillräckligt många ({count}) namnservrar ({ns}). Måste vara minst {minimum} stycken."
 
 #: CONSISTENCY:NO_RESPONSE_SOA_QUERY
 msgid  "No response from nameserver {ns}/{address} on SOA queries."
