@@ -29,6 +29,13 @@ test_requires 'JSON::XS' => 2.32;
 recommends 'JSON::XS'     => 2.32;
 recommends 'Readonly::XS' => 0;
 
+sub MY::postamble {
+        return <<'MAKE_FRAG';
+	$(MYEXTLIB): share/Makefile
+	cd share && $(MAKE) all
+MAKE_FRAG
+};
+
 install_share;
 
 WriteAll;
