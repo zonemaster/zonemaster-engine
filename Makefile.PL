@@ -24,7 +24,7 @@ requires 'Readonly'              => 0;
 requires 'Time::HiRes'           => 0;
 requires 'Locale::TextDomain'    => 0;
 
-test_requires 'JSON' => 2.53;
+test_requires 'JSON::XS' => 2.32;
 
 recommends 'Readonly::XS' => 0;
 
