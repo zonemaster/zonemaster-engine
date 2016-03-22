@@ -250,7 +250,7 @@ sub connectivity03 {
 
     my %ips = ( $IP_VERSION_4 => {}, $IP_VERSION_6 => {} );
 
-    foreach my $ns ( @{ Zonemaster::TestMethods->method4( $zone ) }, @{ Zonemaster::TestMethods->method5( $zone ) } ) {
+    foreach my $ns ( @{ Zonemaster::TestMethods->method4( $zone ) } ) {
         my $addr = $ns->address;
         $ips{ $addr->version }{ $addr->ip } = $addr;
     }
