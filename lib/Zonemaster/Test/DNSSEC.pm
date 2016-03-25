@@ -1,4 +1,4 @@
-package Zonemaster::Test::DNSSEC v1.0.3;
+package Zonemaster::Test::DNSSEC v1.0.4;
 
 ###
 ### This test module implements DNSSEC tests.
@@ -204,6 +204,7 @@ sub metadata {
               NO_DS
               DS_FOUND
               NO_DNSKEY
+              DS_RFC4509_NOT_VALID
               COMMON_KEYTAGS
               DS_MATCHES_DNSKEY
               DS_DOES_NOT_MATCH_DNSKEY
@@ -324,11 +325,12 @@ sub translation {
         "DS_BUT_NOT_DNSKEY"       => "{parent} sent a DS record, but {child} did not send a DNSKEY record.",
         "DS_DIGTYPE_NOT_OK"       => "DS record with keytag {keytag} uses forbidden digest type {digtype}.",
         "DS_DIGTYPE_OK"           => "DS record with keytag {keytag} uses digest type {digtype}, which is OK.",
-        "DS_DOES_NOT_MATCH_DNSKEY" => "DS record with keytag {keytag} does not match the DNSKEY with the same tag.",
+        "DS_DOES_NOT_MATCH_DNSKEY" => "DS record with keytag {keytag} and digest type {digtype} does not match the DNSKEY with the same tag.",
         "DS_FOUND"                 => "Found DS records with tags {keytags}.",
-        "DS_MATCHES_DNSKEY"        => "DS record with keytag {keytag} matches the DNSKEY with the same tag.",
+        "DS_MATCHES_DNSKEY"        => "DS record with keytag {keytag} and digest type {digtype} matches the DNSKEY with the same tag.",
         "DS_MATCH_FOUND"           => "At least one DS record with a matching DNSKEY record was found.",
         "DS_MATCH_NOT_FOUND"       => "No DS record with a matching DNSKEY record was found.",
+        "DS_RFC4509_NOT_VALID"     => "Existing DS with digest type 2, while they do not match DNSKEY records, prevent use of DS with digest type 1 (RFC4509, section 3).",
         "DURATION_LONG" =>
 "RRSIG with keytag {tag} and covering type(s) {types} has a duration of {duration} seconds, which is too long.",
         "DURATION_OK" =>
@@ -401,6 +403,7 @@ sub policy {
         "DS_MATCHES_DNSKEY"            => "INFO",
         "DS_MATCH_FOUND"               => "INFO",
         "DS_MATCH_NOT_FOUND"           => "ERROR",
+        "DS_RFC4509_NOT_VALID"         => "ERROR",
         "DURATION_LONG"                => "WARNING",
         "DURATION_OK"                  => "DEBUG",
         "EXTRA_PROCESSING_BROKEN"      => "ERROR",
@@ -413,7 +416,7 @@ sub policy {
         "MANY_ITERATIONS"              => "NOTICE",
         "NEITHER_DNSKEY_NOR_DS"        => "NOTICE",
         "NO_COMMON_KEYTAGS"            => "ERROR",
-        "NO_DNSKEY"                    => "WARNING",
+        "NO_DNSKEY"                    => "ERROR",
         "NO_DS"                        => "NOTICE",
         "NO_KEYS_OR_NO_SIGS"           => "DEBUG",
         "NO_KEYS_OR_NO_SIGS_OR_NO_SOA" => "DEBUG",
@@ -501,6 +504,8 @@ sub dnssec02 {
     my @results;
 
     return if not $zone->parent;
+
+    # 1. Retrieve the DS RR set from the parent zone. If there are no DS RR present, exit the test
     my $ds_p = $zone->parent->query_one( $zone->name, 'DS', { dnssec => 1 } );
     die "No response from parent nameservers" if not $ds_p;
     my %ds = map { $_->keytag => $_ } $ds_p->get_records( 'DS', 'answer' );
@@ -521,11 +526,12 @@ sub dnssec02 {
                 keytags => join( q{:}, map { $_->keytag } values %ds ),
             }
           );
+
+        # 2. Retrieve the DNSKEY RR set from the child zone. If there are no DNSKEY RR present, then the test case fail
         my $dnskey_p = $zone->query_one( $zone->name, 'DNSKEY', { dnssec => 1 } );
 
         my %dnskey;
         %dnskey = map { $_->keytag => $_ } $dnskey_p->get_records( 'DNSKEY', 'answer' ) if $dnskey_p;
-
         if ( scalar( keys %dnskey ) == 0 ) {
             push @results,
               info( NO_DNSKEY => {} );
@@ -533,7 +539,7 @@ sub dnssec02 {
         }
 
         # Pick out keys with a tag that a DS has using a hash slice
-        my @common = grep { $_ } @dnskey{ keys %ds };
+        my @common = grep { exists $ds{$_->keytag} } values %dnskey;
         if ( @common ) {
             push @results,
               info(
@@ -541,13 +547,56 @@ sub dnssec02 {
                     keytags => join( q{:}, map { $_->keytag } @common ),
                 }
               );
+
             my $found = 0;
+            my $rfc4509_compliant = 1;
+            # 4. Match all DS RR with type digest algorithm “2” with DNSKEY RR from the child. If no DS RRs with algorithm 2 matches a
+            #    DNSKEY RR from the child, this test case fails.
+            my %ds_digtype2 = map { $_->keytag => $_ } grep { $_->digtype == 2 } $ds_p->get_records( 'DS', 'answer' );
+            if ( scalar( keys %ds_digtype2 ) >= 1 ) {
+                @common = grep { exists $ds_digtype2{$_->keytag} } values %dnskey;
+
+                foreach my $key ( @common ) {
+                    if ( $ds_digtype2{ $key->keytag }->verify( $key ) ) {
+                        push @results,
+                          info(
+                            DS_MATCHES_DNSKEY => {
+                                keytag  => $key->keytag,
+                                digtype => 2,
+                            }
+                          );
+                        $found = 1;
+                    }
+                    else {
+                        push @results,
+                          info(
+                            DS_DOES_NOT_MATCH_DNSKEY => {
+                                keytag  => $key->keytag,
+                                digtype => 2,
+                            }
+                          );
+                    }
+                }
+
+                if ( not grep { $_->tag eq q{DS_MATCHES_DNSKEY} } @results ) {
+                    $rfc4509_compliant = 0;
+                    push @results,
+                      info( DS_RFC4509_NOT_VALID => {} );
+                }
+                
+            }
+
+            # 5. Match all DS RR with type digest algorithm “1” with DNSKEY RR from the child. If no DS RRs with algorithm 1 matches a
+            #    DNSKEY RR from the child, this test case fails.
+            my %ds_digtype1 = map { $_->keytag => $_ } grep { $_->digtype == 1 } $ds_p->get_records( 'DS', 'answer' );
+            @common = grep { exists $ds_digtype1{$_->keytag} } values %dnskey;
             foreach my $key ( @common ) {
-                if ( $ds{ $key->keytag }->verify( $key ) ) {
+                if ( $ds_digtype1{ $key->keytag }->verify( $key ) ) {
                     push @results,
                       info(
                         DS_MATCHES_DNSKEY => {
-                            keytag => $key->keytag,
+                            keytag  => $key->keytag,
+                            digtype => 1,
                         }
                       );
                     $found = 1;
@@ -556,11 +605,13 @@ sub dnssec02 {
                     push @results,
                       info(
                         DS_DOES_NOT_MATCH_DNSKEY => {
-                            keytag => $key->keytag,
+                            keytag  => $key->keytag,
+                            digtype => 1,
                         }
                       );
                 }
             }
+
             if ( $found ) {
                 push @results,
                   info( DS_MATCH_FOUND => {} );
@@ -571,6 +622,7 @@ sub dnssec02 {
             }
         } ## end if ( @common )
         else {
+            # 3. If no Key Tag from the DS RR matches any Key Tag from the DNSKEY RR, this test case fails
             push @results,
               info(
                 NO_COMMON_KEYTAGS => {
