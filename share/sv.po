@@ -266,7 +266,7 @@ msgid  "DS record with keytag {keytag} uses digest type {digtype}, which is OK."
 msgstr "DS-posten med keytag {keytag} använder digest-typen {digtype}, vilket är OK."
 
 #: DNSSEC:DS_DOES_NOT_MATCH_DNSKEY
-msgid  "DS record with keytag {keytag} does not match the DNSKEY with the same tag."
+msgid  "DS record with keytag {keytag} and digest type {digtype} does not match the DNSKEY with the same tag."
 msgstr "DS-posten med keytag {keytag} matchar inte DNSKEY-posten med samma keytag."
 
 #: DNSSEC:DS_FOUND
@@ -274,7 +274,7 @@ msgid  "Found DS records with tags {keytags}."
 msgstr "Hittade DS-poster med keytaggarna {keytags}."
 
 #: DNSSEC:DS_MATCHES_DNSKEY
-msgid  "DS record with keytag {keytag} matches the DNSKEY with the same tag."
+msgid  "DS record with keytag {keytag} and digest type {digtype} matches the DNSKEY with the same tag."
 msgstr "DS-posten med keytag {keytag} matchar DNSKEY-posten med samma keytag."
 
 #: DNSSEC:DS_MATCH_FOUND
@@ -284,6 +284,10 @@ msgstr "Minst en DS-post med med en matchande DNSKEY-post hittades."
 #: DNSSEC:DS_MATCH_NOT_FOUND
 msgid  "No DS record with a matching DNSKEY record was found."
 msgstr "Ingen DS-post med någon matchande DNSKEY-post hittades."
+
+#: DNSSEC:DS_RFC4509_NOT_VALID
+msgid  "Existing DS with digest type 2, while they do not match DNSKEY records, prevent use of DS with digest type 1 (RFC4509, section 3)."
+msgstr "Existing DS with digest type 2, while they do not match DNSKEY records, prevent use of DS with digest type 1 (RFC4509, section 3)."
 
 #: DNSSEC:DURATION_LONG
 msgid  "RRSIG with keytag {tag} and covering type(s) {types} has a duration of {duration} seconds, which is too long."
