@@ -1,4 +1,4 @@
-package Zonemaster::Test::DNSSEC v1.0.2;
+package Zonemaster::Test::DNSSEC v1.0.3;
 
 ###
 ### This test module implements DNSSEC tests.
@@ -125,50 +125,60 @@ sub all {
     my ( $class, $zone ) = @_;
     my @results;
 
-    if ( Zonemaster->config->should_run('dnssec01') ) {
-        push @results, $class->dnssec01( $zone );
-    }
-
-    if ( none { $_->tag eq 'NO_DS' } @results ) {
-        if ( Zonemaster->config->should_run('dnssec02') ) {
-            push @results, $class->dnssec02( $zone );
-        }
-    }
-
-    if ( Zonemaster->config->should_run('dnssec03') ) {
-        push @results, $class->dnssec03( $zone );
-    }
-    if ( Zonemaster->config->should_run('dnssec04') ) {
-        push @results, $class->dnssec04( $zone );
-    }
-    if ( Zonemaster->config->should_run('dnssec05') ) {
-        push @results, $class->dnssec05( $zone );
-    }
     if ( Zonemaster->config->should_run('dnssec07') ) {
         push @results, $class->dnssec07( $zone );
     }
 
-    if ( grep { $_->tag eq q{DNSKEY_BUT_NOT_DS} or $_->tag eq q{DNSKEY_AND_DS} } @results ) {
-        if ( Zonemaster->config->should_run('dnssec06') ) {
-            push @results, $class->dnssec06( $zone );
-        }
-    }
-    else {
-        push @results,
-          info( ADDITIONAL_DNSKEY_SKIPPED => {} );
-    }
+    unless ( Zonemaster->config->should_run('dnssec07') and grep { $_->tag eq 'NEITHER_DNSKEY_NOR_DS' } @results ) {
 
-    if ( Zonemaster->config->should_run('dnssec08') ) {
-        push @results, $class->dnssec08( $zone );
-    }
-    if ( Zonemaster->config->should_run('dnssec09') ) {
-        push @results, $class->dnssec09( $zone );
-    }
-    if ( Zonemaster->config->should_run('dnssec10') ) {
-        push @results, $class->dnssec10( $zone );
-    }
-    if ( Zonemaster->config->should_run('dnssec11') ) {
-        push @results, $class->dnssec11( $zone );
+        if ( Zonemaster->config->should_run('dnssec01') ) {
+            push @results, $class->dnssec01( $zone );
+        }
+
+        if ( none { $_->tag eq 'NO_DS' } @results ) {
+            if ( Zonemaster->config->should_run('dnssec02') ) {
+                push @results, $class->dnssec02( $zone );
+            }
+        }
+
+        if ( Zonemaster->config->should_run('dnssec03') ) {
+            push @results, $class->dnssec03( $zone );
+        }
+
+        if ( Zonemaster->config->should_run('dnssec04') ) {
+            push @results, $class->dnssec04( $zone );
+        }
+
+        if ( Zonemaster->config->should_run('dnssec05') ) {
+            push @results, $class->dnssec05( $zone );
+        }
+    
+        if ( grep { $_->tag eq q{DNSKEY_BUT_NOT_DS} or $_->tag eq q{DNSKEY_AND_DS} } @results ) {
+            if ( Zonemaster->config->should_run('dnssec06') ) {
+                push @results, $class->dnssec06( $zone );
+            }
+        }
+        else {
+            push @results,
+              info( ADDITIONAL_DNSKEY_SKIPPED => {} );
+        }
+
+        if ( Zonemaster->config->should_run('dnssec08') ) {
+            push @results, $class->dnssec08( $zone );
+        }
+
+        if ( Zonemaster->config->should_run('dnssec09') ) {
+            push @results, $class->dnssec09( $zone );
+        }
+
+        if ( Zonemaster->config->should_run('dnssec10') ) {
+            push @results, $class->dnssec10( $zone );
+        }
+
+        if ( Zonemaster->config->should_run('dnssec11') ) {
+            push @results, $class->dnssec11( $zone );
+        }
+
     }
 
     return @results;
@@ -401,7 +411,7 @@ sub policy {
         "ITERATIONS_OK"                => "DEBUG",
         "KEY_DETAILS"                  => "DEBUG",
         "MANY_ITERATIONS"              => "NOTICE",
-        "NEITHER_DNSKEY_NOR_DS"        => "DEBUG",
+        "NEITHER_DNSKEY_NOR_DS"        => "NOTICE",
         "NO_COMMON_KEYTAGS"            => "ERROR",
         "NO_DNSKEY"                    => "WARNING",
         "NO_DS"                        => "NOTICE",
