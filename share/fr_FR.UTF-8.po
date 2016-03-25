@@ -409,16 +409,16 @@ msgid  "DS record with keytag {keytag} uses digest type {digtype}, which is OK."
 msgstr "L'enregistrement de type \"DS\" avec le tag de clé {keytag} utilise un type de condensat (digest) correct."
 
 #: DNSSEC:DS_DOES_NOT_MATCH_DNSKEY
-msgid  "DS record with keytag {keytag} does not match the DNSKEY with the same tag."
-msgstr "L'enregistrement de type \"DS\" avec le tag de clé {keytag} ne correspond à l'enregistrement de type \"DNSKEY\" ayant le même tag."
+msgid  "DS record with keytag {keytag} and digest type {digtype} does not match the DNSKEY with the same tag."
+msgstr "L'enregistrement de type \"DS\" avec le tag de clé {keytag} et de type de condensat \"{digtype}\" ne correspond à l'enregistrement de type \"DNSKEY\" ayant le même tag."
 
 #: DNSSEC:DS_FOUND
 msgid  "Found DS records with tags {keytags}."
 msgstr "Des enregistrements de type \"DS\" ont été trouvés avec les tags suivants {keytags}."
 
 #: DNSSEC:DS_MATCHES_DNSKEY
-msgid  "DS record with keytag {keytag} matches the DNSKEY with the same tag."
-msgstr "L'enregistrement de type \"DS\" avec le tag de clé {keytag} correspond à l'enregistrement de type \"DNSKEY\" ayant le même tag."
+msgid  "DS record with keytag {keytag} and digest type {digtype} matches the DNSKEY with the same tag."
+msgstr "L'enregistrement de type \"DS\" avec le tag de clé {keytag} et de type de condensat \"{digtype}\" correspond à l'enregistrement de type \"DNSKEY\" ayant le même tag."
 
 #: DNSSEC:DS_MATCH_FOUND
 msgid  "At least one DS record with a matching DNSKEY record was found."
@@ -427,6 +427,10 @@ msgstr "Au moins un enregistrement de type \"DS\" avec un enregistrement de type
 #: DNSSEC:DS_MATCH_NOT_FOUND
 msgid  "No DS record with a matching DNSKEY record was found."
 msgstr "Aucun enregistrement de type \"DS\" avec un enregistrement de type \"DNSKEY\" correspondant n'a été trouvé."
+
+#: DNSSEC:DS_RFC4509_NOT_VALID
+msgid  "Existing DS with digest type 2, while they do not match DNSKEY records, prevent use of DS with digest type 1 (RFC4509, section 3)."
+msgstr "Un condensat de type 2 existe (mais il ne correspond pas à un enregistrement de type \"DNSKEY\" existant) et conformément au RFC4509 (section 3) cela pourrait empêcher la validation."
 
 #: DNSSEC:DURATION_LONG
 msgid  "RRSIG with keytag {tag} and covering type(s) {types} has a duration of {duration} seconds, which is too long."
