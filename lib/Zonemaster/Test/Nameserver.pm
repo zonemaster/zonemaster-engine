@@ -386,7 +386,7 @@ sub nameserver05 {
                 IPV6_DISABLED => {
                     ns      => $local_ns->name->string,
                     address => $local_ns->address->short,
-                    type    => $query_type,
+                    rrtype  => $query_type,
                 }
               );
             next;
@@ -398,7 +398,7 @@ sub nameserver05 {
                 IPV4_DISABLED => {
                     ns      => $local_ns->name->string,
                     address => $local_ns->address->short,
-                    type    => $query_type,
+                    rrtype  => $query_type,
                 }
               );
             next;
