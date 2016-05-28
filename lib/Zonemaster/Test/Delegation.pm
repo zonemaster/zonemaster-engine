@@ -327,7 +327,7 @@ sub delegation04 {
                 IPV6_DISABLED => {
                     ns      => $local_ns->name->string,
                     address => $local_ns->address->short,
-                    type    => $query_type,
+                    rrtype  => $query_type,
                 }
               );
             next;
@@ -339,7 +339,7 @@ sub delegation04 {
                 IPV4_DISABLED => {
                     ns      => $local_ns->name->string,
                     address => $local_ns->address->short,
-                    type    => $query_type,
+                    rrtype  => $query_type,
                 }
               );
             next;
@@ -444,7 +444,7 @@ sub delegation06 {
                 IPV6_DISABLED => {
                     ns      => $local_ns->name->string,
                     address => $local_ns->address->short,
-                    type    => $query_type,
+                    rrtype  => $query_type,
                 }
               );
             next;
@@ -456,7 +456,7 @@ sub delegation06 {
                 IPV4_DISABLED => {
                     ns      => $local_ns->name->string,
                     address => $local_ns->address->short,
-                    type    => $query_type,
+                    rrtype  => $query_type,
                 }
               );
             next;
