@@ -1,4 +1,4 @@
-package Zonemaster::Test::Delegation v1.0.3;
+package Zonemaster::Test::Delegation v1.0.4;
 
 use strict;
 use warnings;
@@ -145,7 +145,7 @@ sub delegation01 {
             ENOUGH_NS_GLUE => {
                 count   => scalar( @parent_nsnames ),
                 minimum => $MINIMUM_NUMBER_OF_NAMESERVERS,
-                glue    => join( q{;}, @parent_nsnames ),
+                glue    => join( q{;}, sort @parent_nsnames ),
             }
           );
     }
@@ -155,7 +155,7 @@ sub delegation01 {
             NOT_ENOUGH_NS_GLUE => {
                 count   => scalar( @parent_nsnames ),
                 minimum => $MINIMUM_NUMBER_OF_NAMESERVERS,
-                glue    => join( q{;}, @parent_nsnames ),
+                glue    => join( q{;}, sort @parent_nsnames ),
             }
           );
     }
@@ -168,7 +168,7 @@ sub delegation01 {
             ENOUGH_NS => {
                 count   => scalar( @child_nsnames ),
                 minimum => $MINIMUM_NUMBER_OF_NAMESERVERS,
-                ns      => join( q{;}, @child_nsnames ),
+                ns      => join( q{;}, sort @child_nsnames ),
             }
           );
     }
@@ -178,7 +178,7 @@ sub delegation01 {
             NOT_ENOUGH_NS => {
                 count   => scalar( @child_nsnames ),
                 minimum => $MINIMUM_NUMBER_OF_NAMESERVERS,
-                ns      => join( q{;}, @child_nsnames ),
+                ns      => join( q{;}, sort @child_nsnames ),
             }
           );
     }
@@ -192,7 +192,7 @@ sub delegation01 {
             ENOUGH_NS_TOTAL => {
                 count   => scalar( @all_nsnames ),
                 minimum => $MINIMUM_NUMBER_OF_NAMESERVERS,
-                ns      => join( q{;}, @all_nsnames ),
+                ns      => join( q{;}, sort @all_nsnames ),
             }
           );
     }
@@ -202,7 +202,7 @@ sub delegation01 {
             NOT_ENOUGH_NS_TOTAL => {
                 count   => scalar( @all_nsnames ),
                 minimum => $MINIMUM_NUMBER_OF_NAMESERVERS,
-                ns      => join( q{;}, @all_nsnames ),
+                ns      => join( q{;}, sort @all_nsnames ),
             }
           );
     }
@@ -260,7 +260,7 @@ sub delegation03 {
       my $local_ns ( @{ Zonemaster::TestMethods->method4( $zone ) }, @{ Zonemaster::TestMethods->method5( $zone ) } )
     {
         next if $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short };
-        if ( $zone->is_in_zone( $local_ns->name ) ) {
+        if ( $zone->is_in_zone( $local_ns->name->string ) ) {
             push @needs_glue, $local_ns;
         }
         $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short }++;
@@ -345,7 +345,7 @@ sub delegation04 {
             next;
         }
 
-        next if $nsnames{ $local_ns->name };
+        next if $nsnames{ $local_ns->name->string };
 
         foreach my $usevc ( 0, 1 ) {
             my $p = $local_ns->query( $zone->name, $query_type, { usevc => $usevc } );
@@ -354,13 +354,13 @@ sub delegation04 {
                     push @results,
                       info(
                         IS_NOT_AUTHORITATIVE => {
-                            ns    => $local_ns->name,
+                            ns    => $local_ns->name->string,
                             proto => $usevc ? q{TCP} : q{UDP},
                         }
                       );
                 }
                 else {
-                    push @authoritatives, $local_ns->name;
+                    push @authoritatives, $local_ns->name->string;
                 }
             }
         }
@@ -380,7 +380,7 @@ sub delegation04 {
         push @results,
           info(
             ARE_AUTHORITATIVE => {
-                nsset => join( q{,}, @authoritatives ),
+                nsset => join( q{,}, uniq sort @authoritatives ),
             }
           );
     }
@@ -462,7 +462,7 @@ sub delegation06 {
             next;
         }
 
-        next if $nsnames{ $local_ns->name };
+        next if $nsnames{ $local_ns->name->string };
 
         my $p = $local_ns->query( $zone->name, $query_type );
         if ( $p and $p->rcode eq q{NOERROR} ) {
@@ -470,13 +470,13 @@ sub delegation06 {
                 push @results,
                   info(
                     SOA_NOT_EXISTS => {
-                        ns => $local_ns->name,
+                        ns => $local_ns->name->string,
                     }
                   );
             }
         }
 
-        $nsnames{ $local_ns->name }++;
+        $nsnames{ $local_ns->name->string }++;
     } ## end foreach my $local_ns ( @{ Zonemaster::TestMethods...})
 
     if (
@@ -513,7 +513,7 @@ sub delegation07 {
         push @results,
           info(
             EXTRA_NAME_PARENT => {
-                extra => join( q{;}, @extra_name_parent ),
+                extra => join( q{;}, sort @extra_name_parent ),
             }
           );
     }
@@ -522,7 +522,7 @@ sub delegation07 {
         push @results,
           info(
             EXTRA_NAME_CHILD => {
-                extra => join( q{;}, @extra_name_child ),
+                extra => join( q{;}, sort @extra_name_child ),
             }
           );
     }
@@ -531,7 +531,7 @@ sub delegation07 {
         push @results,
           info(
             NAMES_MATCH => {
-                names => join( q{;}, @same_name ),
+                names => join( q{;}, sort @same_name ),
             }
           );
     }
@@ -540,8 +540,8 @@ sub delegation07 {
         push @results,
           info(
             TOTAL_NAME_MISMATCH => {
-                glue  => join( q{;}, @extra_name_parent ),
-                child => join( q{;}, @extra_name_child ),
+                glue  => join( q{;}, sort @extra_name_parent ),
+                child => join( q{;}, sort @extra_name_child ),
             }
           );
     }
