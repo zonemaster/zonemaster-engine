@@ -12,7 +12,7 @@ use Zonemaster::Test::Syntax;
 use Zonemaster::TestMethods;
 use Zonemaster::Constants ':all';
 
-use Net::IP::XS;
+use Zonemaster::Net::IP;
 use List::MoreUtils qw[uniq];
 use Net::LDNS::Packet;
 use Net::LDNS::RR;
