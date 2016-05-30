@@ -16,7 +16,7 @@ requires 'Module::Find'          => 0.10;
 requires 'JSON'                  => 2.53;
 requires 'File::ShareDir'        => 1.00;
 requires 'File::Slurp'           => 0;
-requires 'Net::IP'               => 0;
+requires 'Net::IP'               => 1.26;
 requires 'List::MoreUtils'       => 0;
 requires 'Mail::RFC822::Address' => 0;
 requires 'Hash::Merge'           => 0;
@@ -27,7 +27,6 @@ requires 'Locale::TextDomain'    => 0;
 test_requires 'JSON::XS' => 2.32;
 
 recommends 'Readonly::XS' => 0;
-recommends 'Net::IP::XS'  => 0;
 
 sub MY::postamble {
         return <<'MAKE_FRAG';
