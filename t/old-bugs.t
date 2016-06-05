@@ -74,12 +74,14 @@ my $bobo = Zonemaster->zone( 'bobo.nl' );
 ok( ( none { $_->tag eq 'NO_RESPONSE_PTR_QUERY' } @res ), 'Recursor can deal with CNAMEs when recursing.' );
 
 my $zone = Zonemaster->zone( 'tirsen-aili.se' );
-zone_gives( q{Nameserver}, 'nameserver01', $zone, [q{NO_RECURSOR}] );
+# Old version of nameserver01 Result
+#zone_gives( q{Nameserver}, 'nameserver01', $zone, [q{NO_RECURSOR}] );
+zone_gives( q{Nameserver}, 'nameserver01', $zone, [q{RECURSIVITY_UNDEF}] );
 zone_gives_not( q{Nameserver}, 'nameserver01', $zone, [q{IS_A_RECURSOR}] );
 
 $zone = Zonemaster->zone( '.' );
-zone_gives_not( q{Nameserver}, 'nameserver01', $zone, [q{NO_RECURSOR}] );
-zone_gives( q{Nameserver}, 'nameserver01', $zone, [q{IS_A_RECURSOR}] );
+zone_gives_not( q{Nameserver}, 'nameserver01', $zone, [q{IS_A_RECURSOR}] );
+zone_gives( q{Nameserver}, 'nameserver01', $zone, [q{NO_RECURSOR}] );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Nameserver->save( $datafile );
