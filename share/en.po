@@ -649,6 +649,10 @@ msgstr "Nameserver {ns}/{address} is a recursor."
 msgid  "None of the following nameservers is a recursor : {names}."
 msgstr "None of the following nameservers is a recursor : {names}."
 
+#: NAMESERVER:RECURSIVITY_UNDEF
+msgid  "Can not determine nameservers recursivity."
+msgstr "Can not determine nameservers recursivity."
+
 #: NAMESERVER:NO_RESOLUTION
 msgid  "No nameservers succeeded to resolve to an IP address."
 msgstr "No nameserver was successfully resolved to an IP address."
