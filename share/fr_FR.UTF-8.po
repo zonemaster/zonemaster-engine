@@ -628,6 +628,10 @@ msgstr "Le serveur de noms {ns}/{address} retourne le code NXDOMAIN lors d'une r
 msgid  "None of the following nameservers is a recursor : {names}."
 msgstr "Aucun des serveurs de noms suivants n'est récursif : {names}."
 
+#: NAMESERVER:RECURSIVITY_UNDEF
+msgid  "Can not determine nameservers recursivity."
+msgstr "Impossible de déterminer si les serveurs sont récursifs ou non."
+
 #: NAMESERVER:QUERY_DROPPED
 msgid  "Nameserver {ns}/{address} dropped AAAA query."
 msgstr "Le serveur de noms {ns}/{address} ne répond pas aux requêtes portant sur le type \"AAAA\"."

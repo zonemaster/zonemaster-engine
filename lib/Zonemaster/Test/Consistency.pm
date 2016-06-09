@@ -145,7 +145,7 @@ sub consistency01 {
                 IPV6_DISABLED => {
                     ns      => $local_ns->name->string,
                     address => $local_ns->address->short,
-                    type    => $query_type,
+                    rrtype  => $query_type,
                 }
               );
             next;
@@ -157,7 +157,7 @@ sub consistency01 {
                 IPV4_DISABLED => {
                     ns      => $local_ns->name->string,
                     address => $local_ns->address->short,
-                    type    => $query_type,
+                    rrtype  => $query_type,
                 }
               );
             next;
@@ -253,7 +253,7 @@ sub consistency02 {
                 IPV6_DISABLED => {
                     ns      => $local_ns->name->string,
                     address => $local_ns->address->short,
-                    type    => $query_type,
+                    rrtype  => $query_type,
                 }
               );
             next;
@@ -265,7 +265,7 @@ sub consistency02 {
                 IPV4_DISABLED => {
                     ns      => $local_ns->name->string,
                     address => $local_ns->address->short,
-                    type    => $query_type,
+                    rrtype  => $query_type,
                 }
               );
             next;
@@ -350,7 +350,7 @@ sub consistency03 {
                 IPV6_DISABLED => {
                     ns      => $local_ns->name->string,
                     address => $local_ns->address->short,
-                    type    => $query_type,
+                    rrtype  => $query_type,
                 }
               );
             next;
@@ -362,7 +362,7 @@ sub consistency03 {
                 IPV4_DISABLED => {
                     ns      => $local_ns->name->string,
                     address => $local_ns->address->short,
-                    type    => $query_type,
+                    rrtype  => $query_type,
                 }
               );
             next;
@@ -458,7 +458,7 @@ sub consistency04 {
                 IPV6_DISABLED => {
                     ns      => $local_ns->name->string,
                     address => $local_ns->address->short,
-                    type    => $query_type,
+                    rrtype  => $query_type,
                 }
               );
             next;
@@ -470,7 +470,7 @@ sub consistency04 {
                 IPV4_DISABLED => {
                     ns      => $local_ns->name->string,
                     address => $local_ns->address->short,
-                    type    => $query_type,
+                    rrtype  => $query_type,
                 }
               );
             next;

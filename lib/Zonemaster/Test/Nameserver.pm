@@ -1,4 +1,4 @@
-package Zonemaster::Test::Nameserver v1.0.4;
+package Zonemaster::Test::Nameserver v1.0.5;
 
 use strict;
 use warnings;
@@ -63,6 +63,7 @@ sub metadata {
             qw(
               IS_A_RECURSOR
               NO_RECURSOR
+              RECURSIVITY_UNDEF
               )
         ],
         nameserver02 => [
@@ -138,6 +139,7 @@ sub translation {
         'QUERY_DROPPED'       => 'Nameserver {ns}/{address} dropped AAAA query.',
         'IS_A_RECURSOR'       => 'Nameserver {ns}/{address} is a recursor.',
         'NO_RECURSOR'         => 'None of the following nameservers is a recursor : {names}.',
+        'RECURSIVITY_UNDEF'   => 'Can not determine nameservers recursivity.',
         'ANSWER_BAD_RCODE'    => 'Nameserver {ns}/{address} answered AAAA query with an unexpected rcode ({rcode}).',
         'EDNS0_BAD_ANSWER'    => 'Nameserver {ns}/{address} does not support EDNS0 (OPT not set in reply).',
         'EDNS0_SUPPORT'       => 'The following nameservers support EDNS0 : {names}.',
@@ -175,10 +177,12 @@ sub version {
 sub nameserver01 {
     my ( $class, $zone ) = @_;
     my $nonexistent_name = q{xx--domain-cannot-exist.xx--illegal-syntax-tld};
-    my $existing_name    = q{fr};
+    my $unlikely_label   = q{xx--domain-should-not-exist};
+    my @existing_tld     = qw{fr re pm tf yt wf si};
     my @results;
     my %ips;
     my %nsnames;
+    my %is_not_recursor = ();
 
     foreach
       my $local_ns ( @{ Zonemaster::TestMethods->method4( $zone ) }, @{ Zonemaster::TestMethods->method5( $zone ) } )
@@ -193,20 +197,24 @@ sub nameserver01 {
         my $p = $local_ns->query( $nonexistent_name, q{SOA}, { recurse => 1 } );
 
         if ( $p ) {
-            if ( $p->rcode eq q{NXDOMAIN} ) {
-                my $p2 = $local_ns->query( $existing_name, q{SOA}, { recurse => 1 } );
-                if ( $p2 ) {
-                    if ( $p2->rcode ne q{NXDOMAIN} ) {
-                        push @results,
-                          info(
-                            IS_A_RECURSOR => {
-                                ns      => $local_ns->name,
-                                address => $local_ns->address->short,
-                                dname   => $nonexistent_name,
-                            }
-                          );
+            if ( $p->rcode eq q{REFUSED} ) {
+                $is_not_recursor{ $local_ns->address->short }++;
+            }
+            elsif ( $p->rcode eq q{SERVFAIL} ) {
+                $is_not_recursor{ $local_ns->address->short }++;
+            }
+            elsif ( $p->rcode eq q{NXDOMAIN} and not $p->aa ) {
+                push @results,
+                  info(
+                    IS_A_RECURSOR => {
+                        ns      => $local_ns->name,
+                        address => $local_ns->address->short,
+                        dname   => $nonexistent_name,
                     }
-                }
+                  );
+            }
+            elsif ( $p->is_redirect and not $p->aa ) {
+                $is_not_recursor{ $local_ns->address->short }++;
             }
             $nsnames{ $local_ns->name }++;
             $ips{ $local_ns->address->short }++;
@@ -214,13 +222,84 @@ sub nameserver01 {
 
     } ## end foreach my $local_ns ( @{ Zonemaster::TestMethods...})
 
-    if ( scalar keys %nsnames and not scalar @results ) {
+    my $ips_string = join '#', sort keys %ips;
+    my $is_not_recursor_string = join '#', sort keys %is_not_recursor;
+    if ( $ips_string and $ips_string eq $is_not_recursor_string ) {
         push @results,
           info(
             NO_RECURSOR => {
                 names => join( q{,}, sort keys %nsnames ),
             }
           );
+    }
+    elsif ( not grep { $_->tag eq q{IS_A_RECURSOR} } @results ) {
+        foreach my $tld ( @existing_tld ) {
+
+            next if $tld eq $zone->name;
+            my $checking_name = $unlikely_label . q{.} . $tld;
+            %is_not_recursor = ();
+            %ips = ();
+
+            foreach my $local_ns ( @{ Zonemaster::TestMethods->method4( $zone ) }, @{ Zonemaster::TestMethods->method5( $zone ) } ) {
+
+                next if ( not Zonemaster->config->ipv6_ok and $local_ns->address->version == $IP_VERSION_6 );
+
+                next if ( not Zonemaster->config->ipv4_ok and $local_ns->address->version == $IP_VERSION_4 );
+
+                next if $ips{ $local_ns->address->short };
+
+                next if $is_not_recursor{ $local_ns->address->short };
+
+                my $p = $local_ns->query( $checking_name, q{SOA}, { recurse => 1 } );
+
+                if ( $p ) {
+                    if ( $p->rcode eq q{REFUSED} ) {
+                        $is_not_recursor{ $local_ns->address->short }++;
+                    }
+                    elsif ( $p->rcode eq q{SERVFAIL} ) {
+                        $is_not_recursor{ $local_ns->address->short }++;
+                    }
+                    elsif ( $p->rcode eq q{NXDOMAIN} and not $p->aa ) {
+                        push @results,
+                          info(
+                            IS_A_RECURSOR => {
+                                ns      => $local_ns->name,
+                                address => $local_ns->address->short,
+                                dname   => $checking_name,
+                            }
+                          );
+                    }
+                    elsif ( $p->is_redirect and not $p->aa ) {
+                        $is_not_recursor{ $local_ns->address->short }++;
+                    }
+                    $nsnames{ $local_ns->name }++;
+                    $ips{ $local_ns->address->short }++;
+                }
+            }
+
+            my $ips_string = join '#', sort keys %ips;
+            my $is_not_recursor_string = join '#', sort keys %is_not_recursor;
+            if ( $ips_string and $ips_string eq $is_not_recursor_string ) {
+                push @results,
+                  info(
+                    NO_RECURSOR => {
+                        names => join( q{,}, sort keys %nsnames ),
+                    }
+                  );
+                last;
+            }
+
+            if ( grep { $_->tag eq q{IS_A_RECURSOR} } @results ) {
+                last;
+            }
+        }
+
+        if ( not grep { $_->tag eq q{IS_A_RECURSOR} } @results and not grep { $_->tag eq q{NO_RECURSOR} } @results ) {
+            push @results,
+              info(
+                RECURSIVITY_UNDEF => {}
+              );
+        }
     }
 
     return @results;
@@ -386,7 +465,7 @@ sub nameserver05 {
                 IPV6_DISABLED => {
                     ns      => $local_ns->name->string,
                     address => $local_ns->address->short,
-                    type    => $query_type,
+                    rrtype  => $query_type,
                 }
               );
             next;
@@ -398,7 +477,7 @@ sub nameserver05 {
                 IPV4_DISABLED => {
                     ns      => $local_ns->name->string,
                     address => $local_ns->address->short,
-                    type    => $query_type,
+                    rrtype  => $query_type,
                 }
               );
             next;
