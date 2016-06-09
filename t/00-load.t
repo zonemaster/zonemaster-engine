@@ -10,3 +10,5 @@ BEGIN {
 }
 
 diag( "Testing Zonemaster $Zonemaster::VERSION, Perl $], $^X" );
+
+done_testing;
