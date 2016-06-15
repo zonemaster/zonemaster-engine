@@ -1,5 +1,23 @@
 Revision history for Perl module Zonemaster.
 
+v1.0.14 2016-06-15
+
+ - Make it possible to run tests without network (pull request #166)
+ - Error in status message (Zone category) issue #175
+ - Fixed Swedish translation, issue #176 
+ - no public symbols defined for Zonemaster::NSArray issue #446 
+ - uninitialized value $tld (issue #179)
+ - Would be nice to add a count of name servers #453  
+ - Partly resolved "JSON/JSON::XS usage and requirement", see issue #165 
+ - nameserver03 test should not perform network requests, issue #168 
+ - Locale files are not generated nor installed #173
+ - ASN test should only look at authoritative nameservers at the child, issue #441 
+ - Modify the "Notice" information when DNSSEC not signed, issue #193
+ - Implement updated test case dnssec02, issue #187
+ - Log issues (pull request #203)
+ - Delegation::ARE_AUTHORITATIVE display too many name servers + translation, issue #186 
+ - False positive on open recursive name server, issue #171
+
 v1.0.13 2016-01-27
  - Updates to MANIFEST.skip
 
