@@ -3,18 +3,18 @@
       "BASIC" : {
          "IPV6_ENABLED" : [
             {
-            "when" : {
-               "rrtype" : "NS",
-               "ns" : "f.ext.nic.fr",
-               "address" : "2001:67c:1010:11::53"
-            },
-            "set" : "WARNING"
+               "when" : {
+                  "rrtype" : "NS",
+                  "ns" : "f.ext.nic.fr",
+                  "address" : "2001:67c:1010:11::53"
+               },
+               "set" : "WARNING"
             },
             {
-            "when" : {
-               "ns" : "h.ext.nic.fr"
-            },
-            "set" : "ERROR"
+               "when" : {
+                  "ns" : "h.ext.nic.fr"
+               },
+               "set" : "ERROR"
             }
          ]
       },
