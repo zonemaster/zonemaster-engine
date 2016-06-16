@@ -1,11 +1,11 @@
-package Zonemaster::Logger v1.0.2;
+package Zonemaster::Logger v1.0.3;
 
 use 5.014002;
 use Moose;
 
 use Zonemaster::Logger::Entry;
 use Zonemaster;
-use List::MoreUtils qw[none];
+use List::MoreUtils qw[none any];
 use Scalar::Util qw[blessed];
 use JSON;
 
@@ -47,24 +47,35 @@ sub _check_filter {
 
     if ( $config ) {
         if ( $config->{ $entry->module } ) {
-            if ( my $rule = $config->{ $entry->module }{ $entry->tag } ) {
+            my $match = 0;
+            foreach my $rule ( @{$config->{ $entry->module }{ $entry->tag }} ) {
                 foreach my $key ( keys %{ $rule->{when} } ) {
                     my $cond = $rule->{when}{$key};
                     if ( ref( $cond ) and ref( $cond ) eq 'ARRAY' ) {
-                        # No match in list, so overall fail, so return
                         ## no critic (TestingAndDebugging::ProhibitNoWarnings)
-                        no warnings 'uninitialized';
-                        return if none { $_ eq $entry->args->{$key} } @$cond;
+                        # no warnings 'uninitialized';
+                        if ( any { $_ eq $entry->args->{$key} } @$cond ) {
+                            $match = 1;
+                        } else {
+                            $match = 0;
+                            last;
+                        }
                     }
                     else {
-                        # No match, so overall fail, so return
                         ## no critic (TestingAndDebugging::ProhibitNoWarnings)
-                        no warnings 'uninitialized';
-                        return if $cond ne $entry->args->{$key};
+                        # no warnings 'uninitialized';
+                        if ( $cond eq $entry->args->{$key} ) {
+                            $match = 1;
+                        } else {
+                            $match = 0;
+                            last;
+                        }
                     }
                 }
-                # Still here, so all rules matched
-                $entry->_set_level( $rule->{set} );
+                if ( $match ) {
+                    $entry->_set_level( $rule->{set} );
+                    last;
+                }
             }
         } ## end if ( $config->{ $entry...})
     } ## end if ( $config )
