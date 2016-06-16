@@ -1,4 +1,4 @@
-package Zonemaster::Test::Consistency v1.0.2;
+package Zonemaster::Test::Consistency v1.1.0;
 
 use strict;
 use warnings;
@@ -31,6 +31,9 @@ sub all {
     }
     if ( Zonemaster->config->should_run( 'consistency04' ) ) {
         push @results, $class->consistency04( $zone );
+    }
+    if ( Zonemaster->config->should_run( 'consistency05' ) ) {
+        push @results, $class->consistency05( $zone );
     }
 
     return @results;
@@ -89,6 +92,14 @@ sub metadata {
               IPV6_DISABLED
               )
         ],
+        consistency05 => [
+            qw(
+              EXTRA_ADDRESS_PARENT
+              EXTRA_ADDRESS_CHILD
+              TOTAL_ADDRESS_MISMATCH
+              ADDRESSES_MATCH
+              )
+        ],
     };
 } ## end sub metadata
 
@@ -115,6 +126,10 @@ sub translation {
         'NS_SET'               => 'Saw NS set ({nsset}) on following nameserver set : {servers}.',
         'IPV4_DISABLED'        => 'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
         'IPV6_DISABLED'        => 'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
+        'EXTRA_ADDRESS_PARENT' => 'Parent has extra nameserver IP address(es) not listed at child ({addresses}).',
+        'EXTRA_ADDRESS_CHILD'  => 'Child has extra nameserver IP address(es) not listed at parent ({addresses}).',
+        'TOTAL_ADDRESS_MISMATCH' => 'No common nameserver IP addresses between child ({child}) and parent ({glue}).',
+        'ADDRESSES_MATCH'        => 'Glue records are consistent between glue and authoritative data.',
     };
 } ## end sub translation
 
@@ -536,6 +551,62 @@ sub consistency04 {
     return @results;
 } ## end sub consistency04
 
+sub consistency05 {
+    my ( $class, $zone ) = @_;
+    my @results;
+
+    my %addresses;
+    foreach my $address ( uniq map { lc( $_->address->short ) } @{ Zonemaster::TestMethods->method4( $zone ) } ) {
+        $addresses{$address} += 1;
+    }
+    foreach my $address ( uniq map { lc( $_->address->short ) } @{ Zonemaster::TestMethods->method5( $zone ) } ) {
+        $addresses{$address} -= 1;
+    }
+
+    my @same_address         = sort grep { $addresses{$_} == 0 } keys %addresses;
+    my @extra_address_parent = sort grep { $addresses{$_} > 0 } keys %addresses;
+    my @extra_address_child  = sort grep { $addresses{$_} < 0 } keys %addresses;
+
+    if ( @extra_address_parent ) {
+        push @results,
+          info(
+            EXTRA_ADDRESS_PARENT => {
+                addresses => join( q{;}, @extra_address_parent ),
+            }
+          );
+    }
+
+    if ( @extra_address_child ) {
+        push @results,
+          info(
+            EXTRA_ADDRESS_CHILD => {
+                addresses => join( q{;}, @extra_address_child ),
+            }
+          );
+    }
+
+    if ( @extra_address_parent == 0 and @extra_address_child == 0 ) {
+        push @results,
+          info(
+            ADDRESSES_MATCH => {
+                addresses => join( q{;}, @same_address ),
+            }
+          );
+    }
+
+    if ( scalar( @same_address ) == 0 ) {
+        push @results,
+          info(
+            TOTAL_ADDRESS_MISMATCH => {
+                glue  => join( q{;}, @extra_address_parent ),
+                child => join( q{;}, @extra_address_child ),
+            }
+          );
+    }
+
+    return @results;
+} ## end sub consistency05
+
 1;
 
 =head1 NAME
@@ -588,6 +659,10 @@ Query all nameservers for SOA, and see that they all have the same time paramete
 =item consistency04($zone)
 
 Query all nameservers for NS set, and see that they have all the same content.
+
+=item consistency05($zone)
+
+Verify that the glue records are consistent between glue and authoritative data.
 
 =back
 
