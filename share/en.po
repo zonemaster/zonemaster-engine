@@ -487,6 +487,10 @@ msgstr "The number of NSEC3 iterations is {count}, which is on the high side."
 msgid  "There are neither DS nor DNSKEY records for the zone."
 msgstr "There are neither DS nor DNSKEY records for the zone."
 
+#: DNSSEC:NOT_SIGNED
+msgid  "The zone is not signed with DNSSEC."
+msgstr "The zone is not signed with DNSSEC."
+
 #: DNSSEC:NO_COMMON_KEYTAGS
 msgid  "No DS record had a DNSKEY with a matching keytag."
 msgstr "No DS record had a DNSKEY with a matching keytag."

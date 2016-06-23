@@ -129,7 +129,15 @@ sub all {
         push @results, $class->dnssec07( $zone );
     }
 
-    unless ( Zonemaster->config->should_run('dnssec07') and grep { $_->tag eq 'NEITHER_DNSKEY_NOR_DS' } @results ) {
+    if ( Zonemaster->config->should_run('dnssec07') and grep { $_->tag eq 'NEITHER_DNSKEY_NOR_DS' } @results ) {
+        push @results,
+          info(
+            NOT_SIGNED => {
+                zone => q{} . $zone->name
+            }
+          );
+
+    } else {
 
         if ( Zonemaster->config->should_run('dnssec01') ) {
             push @results, $class->dnssec01( $zone );
@@ -352,6 +360,7 @@ sub translation {
         "KEY_DETAILS"        => "Key with keytag {keytag} details : Size = {keysize}, Flags ({sep}, {rfc5011}).",
         "MANY_ITERATIONS"    => "The number of NSEC3 iterations is {count}, which is on the high side.",
         "NEITHER_DNSKEY_NOR_DS" => "There are neither DS nor DNSKEY records for the zone.",
+        "NOT_SIGNED"         => "The zone is not signed with DNSSEC.",
         "NO_COMMON_KEYTAGS"     => "No DS record had a DNSKEY with a matching keytag.",
         "NO_DNSKEY"             => "No DNSKEYs were returned.",
         "NO_DS"                 => "{from} returned no DS records for {zone}.",
@@ -415,6 +424,7 @@ sub policy {
         "KEY_DETAILS"                  => "DEBUG",
         "MANY_ITERATIONS"              => "NOTICE",
         "NEITHER_DNSKEY_NOR_DS"        => "NOTICE",
+        "NOT_SIGNED"                   => "NOTICE",
         "NO_COMMON_KEYTAGS"            => "ERROR",
         "NO_DNSKEY"                    => "ERROR",
         "NO_DS"                        => "NOTICE",
