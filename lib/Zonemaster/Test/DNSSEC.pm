@@ -1,4 +1,4 @@
-package Zonemaster::Test::DNSSEC v1.0.4;
+package Zonemaster::Test::DNSSEC v1.0.5;
 
 ###
 ### This test module implements DNSSEC tests.
