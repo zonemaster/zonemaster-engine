@@ -906,7 +906,7 @@ sub dnssec06 {
                 }
               );
         }
-        else {
+        elsif ( $key_p->rcode eq q{NOERROR} and ( @sigs == 0 or @keys == 0 ) ) {
             push @results,
               info(
                 EXTRA_PROCESSING_BROKEN => {
