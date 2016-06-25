@@ -15,6 +15,9 @@ The documentation covers the following operating systems:
 
 The Engine Perl module name is 'Zonemaster'.
 
+## Prerequisite
+
+   No other Zonemaster component is required by the engine.
 
 ### <a name="Debian"></a> Instructions for Ubuntu 12.04, Ubuntu 14.04 and Debian 7
 
@@ -41,7 +44,7 @@ If necessary, answer any questions from the cpan script by accepting the default
 
 2) Install all necessary packages
 
-`pkg install libidn p5-Devel-CheckLib p5-MIME-Base64 p5-Test-Fatal p5-JSON-PP p5-IO-Socket-INET6 p5-Moose p5-Module-Find p5-JSON p5-File-ShareDir p5-File-Slurp p5-Mail-RFC822-Address p5-Hash-Merge p5-Time-HiRes p5-Locale-libintl p5-JSON-XS p5-Readonly-XS p5-Tie-Simple p5-Math-BigInt p5-IP-Country p5-IO-Capture`
+`pkg install libidn p5-Devel-CheckLib p5-MIME-Base64 p5-Test-Fatal p5-JSON-PP p5-IO-Socket-INET6 p5-Moose p5-Module-Find p5-JSON p5-File-ShareDir p5-File-Slurp p5-Mail-RFC822-Address p5-Hash-Merge p5-Time-HiRes p5-Locale-libintl p5-JSON p5-Readonly-XS p5-Tie-Simple p5-Math-BigInt p5-IP-Country p5-IO-Capture`
 
 3) Install non-packaged-software.
 
@@ -66,7 +69,7 @@ If it's the first time you use the CPAN module, it will ask three questions.
 For the first and third, the default responses are fine. For the second, answer
 "sudo" (the default is "local::lib", which you do not want).
 
-`sudo cpan -i Hash::Merge Net::IP::XS Net::LDNS JSON::XS Moose`
+`sudo cpan -i Hash::Merge Net::IP::XS Net::LDNS JSON Moose`
 `sudo cpan -i Zonemaster`
 
 
