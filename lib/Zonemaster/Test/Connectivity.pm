@@ -1,4 +1,4 @@
-package Zonemaster::Test::Connectivity v1.0.5;
+package Zonemaster::Test::Connectivity v1.0.6;
 
 use strict;
 use warnings;
@@ -154,7 +154,7 @@ sub connectivity01 {
 
         my $p = $local_ns->query( $zone->name, $query_type, { usevc => 0 } );
 
-        if ( $p and $p->rcode eq q{NOERROR} ) {
+        if ( $p ) {
             push @results,
               info(
                 NAMESERVER_HAS_UDP_53 => {
@@ -218,7 +218,7 @@ sub connectivity02 {
 
         my $p = $local_ns->query( $zone->name, $query_type, { usevc => 1 } );
 
-        if ( $p and $p->rcode eq q{NOERROR} ) {
+        if ( $p ) {
             push @results,
               info(
                 NAMESERVER_HAS_TCP_53 => {
