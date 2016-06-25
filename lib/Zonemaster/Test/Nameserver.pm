@@ -421,7 +421,7 @@ sub nameserver04 {
 
         my $p = $local_ns->query( $zone->name, q{SOA} );
         if ( $p ) {
-            if ( $p->answerfrom and ( $local_ns->address->short ne Net::IP::XS->new( $p->answerfrom )->short ) ) {
+            if ( $p->answerfrom and ( $local_ns->address->short ne Zonemaster::Net::IP->new( $p->answerfrom )->short ) ) {
                 push @results,
                   info(
                     DIFFERENT_SOURCE_IP => {

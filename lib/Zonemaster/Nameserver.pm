@@ -13,7 +13,7 @@ use Zonemaster::Constants ':misc';
 
 use Net::LDNS;
 
-use Net::IP::XS qw(:PROC);
+use Zonemaster::Net::IP qw(:PROC);
 use Time::HiRes qw[time];
 use JSON;
 use MIME::Base64;
@@ -26,11 +26,10 @@ use overload
   '""'  => \&string,
   'cmp' => \&compare;
 
-subtype 'Zonemaster::Net::IP::XS', as 'Object', where { $_->isa( 'Net::IP::XS' ) };
-coerce 'Zonemaster::Net::IP::XS', from 'Str', via { Net::IP::XS->new( $_ ) };
+coerce 'Zonemaster::Net::IP', from 'Str', via { Zonemaster::Net::IP->new( $_ ) };
 
-has 'name'    => ( is => 'ro', isa => 'Zonemaster::DNSName',     coerce => 1, required => 0 );
-has 'address' => ( is => 'ro', isa => 'Zonemaster::Net::IP::XS', coerce => 1, required => 1 );
+has 'name'    => ( is => 'ro', isa => 'Zonemaster::DNSName', coerce => 1, required => 0 );
+has 'address' => ( is => 'ro', isa => 'Zonemaster::Net::IP', coerce => 1, required => 1 );
 
 has 'dns'   => ( is => 'ro', isa => 'Net::LDNS',                     lazy_build => 1 );
 has 'cache' => ( is => 'ro', isa => 'Zonemaster::Nameserver::Cache', lazy_build => 1 );
@@ -61,7 +60,6 @@ around 'new' => sub {
     my $obj  = $self->$orig( @_ );
     my $name = lc( q{} . $obj->name );
     $name = '$$$NONAME' unless $name;
-
     if ( not exists $object_cache{$name}{ $obj->address->ip } ) {
         Zonemaster->logger->add( NS_CREATED => { name => $name, ip => $obj->address->ip } );
         $object_cache{$name}{ $obj->address->ip } = $obj;
@@ -200,14 +198,14 @@ sub add_fake_delegation {
     foreach my $name ( keys %{$href} ) {
         push @{ $delegation{authority} }, Net::LDNS::RR->new( sprintf( '%s IN NS %s', $domain, $name ) );
         foreach my $ip ( @{ $href->{$name} } ) {
-            if ( Net::IP::XS->new( $ip )->ip eq $self->address->ip ) {
+            if ( Zonemaster::Net::IP->new( $ip )->ip eq $self->address->ip ) {
                 Zonemaster->logger->add(
                     FAKE_DELEGATION_TO_SELF => { ns => "$self", domain => $domain, data => $href } );
                 return;
             }
 
             push @{ $delegation{additional} },
-              Net::LDNS::RR->new( sprintf( '%s IN %s %s', $name, ( ip_is_ipv6( $ip ) ? 'AAAA' : 'A' ), $ip ) );
+              Net::LDNS::RR->new( sprintf( '%s IN %s %s', $name, ( Zonemaster::Net::IP::ip_is_ipv6( $ip ) ? 'AAAA' : 'A' ), $ip ) );
         }
     }
 
@@ -397,7 +395,7 @@ sub restore {
             {
                 name    => $name,
                 address => $addr,
-                cache   => Zonemaster::Nameserver::Cache->new( { data => $ref, address => Net::IP::XS->new( $addr ) } )
+                cache   => Zonemaster::Nameserver::Cache->new( { data => $ref, address => Zonemaster::Net::IP->new( $addr ) } )
             }
         );
     }
@@ -539,7 +537,7 @@ A L<Zonemaster::DNSName> object holding the nameserver's name.
 
 =item address
 
-A L<Net::IP::XS> object holding the nameserver's address.
+A L<Zonemaster::Net::IP> object holding the nameserver's address.
 
 =item dns
 
