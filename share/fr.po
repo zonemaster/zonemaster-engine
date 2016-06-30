@@ -259,6 +259,22 @@ msgstr "La différence entre le plus petit numéro de série de la zone récupé
 msgid  "Saw SOA time parameter set (REFRESH={refresh},RETRY={retry},EXPIRE={expire},MINIMUM={minimum}) on following nameserver set : {servers}."
 msgstr "L'ensemble de paramètres temporels (REFRESH={refresh},RETRY={retry},EXPIRE={expire},MINIMUM={minimum}) a été récupérée sur les serveurs suivants : {servers}."
 
+#: CONSISTENCY:EXTRA_ADDRESS_PARENT
+msgid  "Parent has extra nameserver IP address(es) not listed at child ({addresses})."
+msgstr "Les serveurs de noms de la zone parente retournent des adresses IP pour les serveurs de nom de la zone qui ne sont pas connues par les serveurs de noms de la zone ({addresses})."
+
+#: CONSISTENCY:EXTRA_ADDRESS_CHILD
+msgid  "Child has extra nameserver IP address(es) not listed at parent ({addresses})."
+msgstr "Les serveurs de noms de la zone retournent des adresses IP pour les serveurs de nom de la zone qui ne sont pas connues par les serveurs de noms de la zone parente ({addresses})."
+
+#: CONSISTENCY:TOTAL_ADDRESS_MISMATCH
+msgid  "No common nameserver IP addresses between child ({child}) and parent ({glue})."
+msgstr "La liste des adresses IP des serveurs de nom retournée par les serveurs de noms de la zone parente et par ceux de la zone est complètement différente."
+
+#: CONSISTENCY:ADDRESSES_MATCH
+msgid  "Glue records are consistent between glue and authoritative data."
+msgstr "La liste des adresses IP des serveurs de nom retournée par les serveurs de noms de la zone parente et par ceux de la zone est identique."
+
 #: DELEGATION:ARE_AUTHORITATIVE
 msgid  "All these nameservers are confirmed to be authoritative : {nsset}."
 msgstr "Ces serveurs de noms ont pu être vérifiés comme faisant autorité : {nsset}."
@@ -492,6 +508,10 @@ msgstr "Le nombre d'itérations pour \"NSEC3\" est de {count}, ce qui est élev�
 msgid  "There are neither DS nor DNSKEY records for the zone."
 msgstr "Il n'y a pas enregistrements de type \"DS\", ni de type \"DNSKEY\" pour la zone."
 
+#: DNSSEC:NOT_SIGNED
+msgid  "The zone is not signed with DNSSEC."
+msgstr "La zone n'est pas signée avec DNSSEC."
+
 #: DNSSEC:NO_COMMON_KEYTAGS
 msgid  "No DS record had a DNSKEY with a matching keytag."
 msgstr "Aucun enregistrement de type \"DS\" n'a d'enregistrement de type \"DNSKEY\" correspondant (avec le même tag de clé)."
@@ -627,6 +647,10 @@ msgstr "Le serveur de noms {ns}/{address} retourne le code NXDOMAIN lors d'une r
 #: NAMESERVER:NO_RECURSOR
 msgid  "None of the following nameservers is a recursor : {names}."
 msgstr "Aucun des serveurs de noms suivants n'est récursif : {names}."
+
+#: NAMESERVER:RECURSIVITY_UNDEF
+msgid  "Can not determine nameservers recursivity."
+msgstr "Impossible de déterminer si les serveurs sont récursifs ou non."
 
 #: NAMESERVER:QUERY_DROPPED
 msgid  "Nameserver {ns}/{address} dropped AAAA query."

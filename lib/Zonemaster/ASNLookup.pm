@@ -1,9 +1,9 @@
-package Zonemaster::ASNLookup v1.0.1;
+package Zonemaster::ASNLookup v1.0.2;
 
 use 5.014002;
 use warnings;
 
-use Net::IP::XS;
+use Zonemaster::Net::IP;
 
 use Zonemaster;
 use Zonemaster::Nameserver;
@@ -17,8 +17,8 @@ sub get_with_prefix {
         @roots = map { Zonemaster->zone( $_ ) } @{ Zonemaster->config->asnroots };
     }
 
-    if ( not ref( $ip ) or not $ip->isa( 'Net::IP::XS' ) ) {
-        $ip = Net::IP::XS->new( $ip );
+    if ( not ref( $ip ) or not $ip->isa( 'Zonemaster::Net::IP' ) ) {
+        $ip = Zonemaster::Net::IP->new( $ip );
     }
 
     my $reverse = $ip->reverse_ip;
@@ -41,7 +41,7 @@ sub get_with_prefix {
                 my @fields = split( /[ ]\|[ ]?/x, $str );
                 my @asns   = split( /\s+/x,       $fields[0] );
 
-                return \@asns, Net::IP::XS->new( $fields[1] ), $str;
+                return \@asns, Zonemaster::Net::IP->new( $fields[1] ), $str;
             }
         }
     } ## end foreach my $zone ( @roots )

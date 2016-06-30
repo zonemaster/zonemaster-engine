@@ -1,4 +1,4 @@
-package Zonemaster::Recursor v1.0.2;
+package Zonemaster::Recursor v1.0.3;
 
 use 5.014002;
 use warnings;
@@ -6,7 +6,7 @@ use warnings;
 use Moose;
 use JSON::PP;
 use Zonemaster::Util;
-use Net::IP::XS;
+use Zonemaster::Net::IP;
 use Zonemaster;
 
 my $seed_data;
@@ -271,7 +271,7 @@ sub get_addresses_for {
 
     foreach my $rr ( sort { $a->address cmp $b->address } @rrs ) {
         if ( name( $rr->name ) eq $name or $cname{ $rr->name } ) {
-            push @res, Net::IP::XS->new( $rr->address );
+            push @res, Zonemaster::Net::IP->new( $rr->address );
         }
     }
 
@@ -327,7 +327,7 @@ Internal method. Takes a packet and a recursion state and returns a list of ns o
 =item get_addresses_for($name[, $state])
 
 Takes a name and returns a (possibly empty) list of IP addresses for
-that name (in the form of L<Net::IP::XS> objects). When used
+that name (in the form of L<Zonemaster::Net::IP> objects). When used
 internally by the recursor it's passed a recursion state as its second
 argument.
 

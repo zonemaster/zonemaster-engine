@@ -1,4 +1,4 @@
-package Zonemaster::Config v1.0.2;
+package Zonemaster::Config v1.0.3;
 
 use 5.014002;
 use warnings;
@@ -125,9 +125,13 @@ sub load_module_policy {
 }
 
 sub load_config_file {
-    my ( $class, $filename ) = @_;
+    my ( $self, $filename ) = @_;
     my $new = decode_json read_file $filename;
-    $config = $merger->merge( $config, $new ) if $new;
+
+    if ( $new ) {
+        $config = $merger->merge( $config, $new );
+        push @{ $self->cfiles }, $filename if ( ref( $self ) and $self->isa( __PACKAGE__ ) );
+    }
 
     return !!$new;
 }

@@ -143,6 +143,7 @@ sub address02 {
     my @results;
 
     my %ips;
+    my $ptr_query;
 
     foreach
       my $local_ns ( @{ Zonemaster::TestMethods->method4( $zone ) }, @{ Zonemaster::TestMethods->method5( $zone ) } )
@@ -151,17 +152,19 @@ sub address02 {
         next if $ips{ $local_ns->address->short };
 
         my $reverse_ip_query = $local_ns->address->reverse_ip;
+        $ptr_query = $reverse_ip_query;
 
-        my $p = Zonemaster::Recursor->recurse( $reverse_ip_query, q{PTR} );
+        my $p = Zonemaster::Recursor->recurse( $ptr_query, q{PTR} );
+
+        # In case of Classless IN-ADDR.ARPA delegation, query returns
+        # CNAME records. A PTR query is done on the CNAME.
+        if ( $p and $p->rcode eq q{NOERROR} and $p->get_records( q{CNAME}, q{answer} ) ) {
+            my ( $cname ) = $p->get_records( q{CNAME}, q{answer} );
+            $ptr_query = $cname->cname;
+            $p = Zonemaster::Recursor->recurse( $ptr_query, q{PTR} );
+        }
 
         if ( $p ) {
-            # In case of Classless IN-ADDR.ARPA delegation, query returns
-            # CNAME records. A PTR query is done on the CNAME.
-            if ( $p->rcode eq q{NOERROR} and $p->get_records( q{CNAME}, q{answer} ) ) {
-                my ( $cname ) = $p->get_records( q{CNAME}, q{answer} );
-                $p = Zonemaster::Recursor->recurse( $cname->cname, q{PTR} );
-            }
-
             if ( $p->rcode ne q{NOERROR} or not $p->get_records( q{PTR}, q{answer} ) ) {
                 push @results,
                   info(
@@ -176,7 +179,7 @@ sub address02 {
             push @results,
               info(
                 NO_RESPONSE_PTR_QUERY => {
-                    reverse => $reverse_ip_query,
+                    reverse => $ptr_query,
                 }
               );
         }
@@ -210,7 +213,7 @@ sub address03 {
 
         # In case of Classless IN-ADDR.ARPA delegation, query returns
         # CNAME records. A PTR query is done on the CNAME.
-        if ( $p->rcode eq q{NOERROR} and $p->get_records( q{CNAME}, q{answer} ) ) {
+        if ( $p and $p->rcode eq q{NOERROR} and $p->get_records( q{CNAME}, q{answer} ) ) {
             my ( $cname ) = $p->get_records( q{CNAME}, q{answer} );
             $ptr_query = $cname->cname;
             $p = Zonemaster::Recursor->recurse( $ptr_query, q{PTR} );
@@ -244,7 +247,7 @@ sub address03 {
             push @results,
               info(
                 NO_RESPONSE_PTR_QUERY => {
-                    reverse => $reverse_ip_query,
+                    reverse => $ptr_query,
                 }
               );
         }

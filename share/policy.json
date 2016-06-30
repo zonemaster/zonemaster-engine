@@ -66,7 +66,11 @@
       "SOA_RNAME" : "INFO",
       "SOA_SERIAL" : "INFO",
       "SOA_SERIAL_VARIATION" : "NOTICE",
-      "SOA_TIME_PARAMETER_SET" : "INFO"
+      "SOA_TIME_PARAMETER_SET" : "INFO",
+      "EXTRA_ADDRESS_PARENT" : "NOTICE",
+      "EXTRA_ADDRESS_CHILD" : "NOTICE",
+      "TOTAL_ADDRESS_MISMATCH" : "ERROR",
+      "ADDRESSES_MATCH" : "INFO"
    },
    "DELEGATION" : {
       "ARE_AUTHORITATIVE" : "INFO",
@@ -111,6 +115,7 @@
       "IPV6_DISABLED" : "DEBUG",
       "IS_A_RECURSOR" : "ERROR",
       "NO_RECURSOR" : "INFO",
+      "RECURSIVITY_UNDEF" : "WARNING",
       "NO_RESOLUTION" : "ERROR",
       "NO_UPWARD_REFERRAL" : "INFO",
       "QNAME_CASE_SENSITIVITY_IRRELEVANT" : "INFO",
@@ -235,6 +240,7 @@
         "consistency02": true,
         "consistency03": true,
         "consistency04": true,
+        "consistency05": true,
         "dnssec01": true,
         "dnssec02": true,
         "dnssec03": true,
