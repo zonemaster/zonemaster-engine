@@ -4,6 +4,15 @@ BEGIN { use_ok( 'Zonemaster::Nameserver' ); }
 use Zonemaster;
 use Zonemaster::Util;
 
+use Net::Ping;
+use List::Util qw/ first /;
+
+my $ping = Net::Ping->new;
+my $nonexisting_ip = first { ! $ping->ping($_) }
+                     map   { '127.0.0.'.$_ } 
+                           17..250
+    or BAIL_OUT "can't find an unused ip address in the range 127.0.0.[17..250]";
+
 my $datafile = 't/nameserver.data';
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die "Stored data file missing" if not -r $datafile;
@@ -59,7 +68,7 @@ SKIP: {
     unlink $name;
 }
 
-my $broken = new_ok( 'Zonemaster::Nameserver' => [ { name => 'ns.not.existing', address => '192.0.2.17' } ] );
+my $broken = new_ok( 'Zonemaster::Nameserver' => [ { name => 'ns.not.existing', address => $nonexisting_ip } ] );
 my $p = $broken->query( 'www.iis.se' );
 ok( !$p, 'no response from broken server' );
 
@@ -123,7 +132,7 @@ my $ns_test = new_ok( 'Zonemaster::Nameserver' => [ { name => 'ns.nic.se', addre
 is($ns_test->dns->source, '127.0.0.1', 'Source address set.');
 
 Zonemaster->config->no_network( 0 );
-my $fail_ns = Zonemaster::Nameserver->new( { name => 'fail', address => '127.0.0.17' } );
+my $fail_ns = Zonemaster::Nameserver->new( { name => 'fail', address => $nonexisting_ip } );
 my $fail_p = $fail_ns->_query( 'example.org', 'A', {} );
 is( $fail_p, undef, 'No return from broken server' );
 my ( $e ) = grep { $_->tag eq 'LOOKUP_ERROR' } @{ Zonemaster->logger->entries };
