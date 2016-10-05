@@ -1,6 +1,6 @@
 package Zonemaster::Net::IP v0.0.3;
 
-no strict refs;
+no strict 'refs';
 use warnings;
 
 use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
