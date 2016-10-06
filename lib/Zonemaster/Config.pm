@@ -47,14 +47,14 @@ sub BUILD {
 
     foreach my $dir ( _config_directory_list() ) {
         my $cfile = File::Spec->catfile( $dir, 'config.json' );
-        my $new = eval { decode_json read_file $cfile };
+        my $new = eval { decode_json scalar read_file $cfile };
         if ( $new ) {
             $config = $merger->merge( $config, $new );
             push @{ $self->cfiles }, $cfile;
         }
 
         my $pfile = File::Spec->catfile( $dir, 'policy.json' );
-        $new = eval { decode_json read_file $pfile };
+        $new = eval { decode_json scalar read_file $pfile };
         if ( $new ) {
             my $tc = $new->{__testcases__};
             delete $new->{__testcases__};
@@ -104,7 +104,7 @@ sub _config_directory_list {
 sub _load_base_config {
     my $internal = decode_json( join( q{}, <DATA> ) );
     # my $filename = dist_file( 'Zonemaster', 'config.json' );
-    # my $default = eval { decode_json read_file $filename };
+    # my $default = eval { decode_json scalar read_file $filename };
     #
     # $internal = $merger->merge( $internal, $default ) if $default;
 
@@ -126,7 +126,7 @@ sub load_module_policy {
 
 sub load_config_file {
     my ( $self, $filename ) = @_;
-    my $new = decode_json read_file $filename;
+    my $new = decode_json scalar read_file $filename;
 
     if ( $new ) {
         $config = $merger->merge( $config, $new );
@@ -155,7 +155,7 @@ sub load_policy_file {
         }
     }
 
-    my $new = decode_json read_file $filename;
+    my $new = decode_json scalar read_file $filename;
     if ( $new ) {
         my $tc = $new->{__testcases__};
         delete $new->{__testcases__};
