@@ -1,5 +1,19 @@
 Revision history for Perl module Zonemaster.
 
+v1.0.15 2016-10-14 (upcomning release)
+
+- DNSSEC:EXTRA_PROCESSING_BROKEN when not authoritative #210
+- Remove dependency on Net::IP::XS, use Net::IP (#174)
+- remove-JSON-XS-from-installation (#208)
+- Add filters to hostnames / messages (#206)
+- Bug in comparison between parent and child (dotse/zonemaster#439)
+- Fixing can't call method "rcode" on an undefined value at (dotse/zonemaster#463)
+- Fixing french FAQ last version (dotse/zonemaster#210)
+- Modify the "Notice" information when DNSSEC not signed (#193)
+- Fixing CONNECTIVITY:NAMESERVER_NO_UDP_53 (and TCP) when ns not authoritative (#209)
+- Fix perl warning about unquoted 'refs' (#229)
+- Fixing issue while running "make test" in "CentOS Linux (#230)
+
 v1.0.14 2016-06-15
 
  - Make it possible to run tests without network (pull request #166)
