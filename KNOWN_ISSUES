@@ -8,3 +8,5 @@ importance, and while we intend to fix them we make no promises about when.
   
 * Testing alternative root zones is not possible. Testing the usual root zone
   is possible, but not all results make sense.
+  
+* Testing IDN names (U-label) does not always work.
