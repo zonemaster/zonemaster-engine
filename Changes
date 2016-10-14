@@ -1,6 +1,6 @@
 Revision history for Perl module Zonemaster.
 
-v1.0.15 2016-10-14 (upcomning release)
+v1.0.15 2016-10-14
 
 - DNSSEC:EXTRA_PROCESSING_BROKEN when not authoritative #210
 - Remove dependency on Net::IP::XS, use Net::IP (#174)
@@ -13,6 +13,8 @@ v1.0.15 2016-10-14 (upcomning release)
 - Fixing CONNECTIVITY:NAMESERVER_NO_UDP_53 (and TCP) when ns not authoritative (#209)
 - Fix perl warning about unquoted 'refs' (#229)
 - Fixing issue while running "make test" in "CentOS Linux (#230)
+- Add missing dependency in dotse/zonemaster-engine/docs/installation.md
+
 
 v1.0.14 2016-06-15
 
