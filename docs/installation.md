@@ -27,7 +27,12 @@ The Engine Perl module name is 'Zonemaster'.
 
 2) Install all necessary packages.
 
-`sudo apt-get install build-essential libfile-slurp-perl libjson-perl liblist-moreutils-perl libio-socket-inet6-perl libmodule-find-perl libmoose-perl libfile-sharedir-perl libhash-merge-perl libreadonly-perl libmail-rfc822-address-perl libintl-xs-perl libssl-dev libdevel-checklib-perl libtest-fatal-perl libtie-simple-perl libio-capture-perl libgeography-countries-perl libidn11-dev`
+`sudo apt-get install build-essential libfile-slurp-perl libjson-perl
+liblist-moreutils-perl libio-socket-inet6-perl libmodule-find-perl libmoose-perl
+libfile-sharedir-perl libhash-merge-perl libreadonly-perl
+libmail-rfc822-address-perl libintl-xs-perl libssl-dev libdevel-checklib-perl
+libtest-fatal-perl libtie-simple-perl libio-capture-perl
+libgeography-countries-perl libidn11-dev gettext`
 
 3) Install non-packaged software.
 
