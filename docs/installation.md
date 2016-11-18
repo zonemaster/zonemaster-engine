@@ -81,6 +81,19 @@ For the first and third, the default responses are fine. For the second, answer
 `sudo cpan -i Zonemaster`
 
 
+## Post-install sanity check
+
+Make sure Zonemaster Engine was properly installed.
+
+```sh
+time perl -MZonemaster -e 'print scalar Zonemaster->test_zone("zonemaster.net"), "\n"'
+```
+
+The command is expected to take very roughly 15 seconds and print a number
+greater than one.
+
+
+
 -------
 
 Copyright (c) 2013, 2014, 2015, IIS (The Internet Infrastructure Foundation)  
