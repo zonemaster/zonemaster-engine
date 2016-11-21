@@ -137,7 +137,7 @@ msgstr "Authoritative IPv4 nameservers are in more than one AS."
 
 #: CONNECTIVITY:NAMESERVERS_IPV4_WITH_UNIQ_AS
 msgid  "All nameservers IPv4 addresses are in the same AS ({asn})."
-msgstr "All nameservers have IPv4 addresses in the same AS ({asn})."
+msgstr "All nameservers in the delegation have IPv4 addresses in the same AS ({asn})."
 
 #: CONNECTIVITY:NAMESERVERS_IPV6_NO_AS
 msgid  "No IPv6 nameserver address is in an AS."
@@ -149,7 +149,7 @@ msgstr "Authoritative IPv6 nameservers are in more than one AS."
 
 #: CONNECTIVITY:NAMESERVERS_IPV6_WITH_UNIQ_AS
 msgid  "All nameservers IPv6 addresses are in the same AS ({asn})."
-msgstr "All nameservers have IPv6 addresses in the same AS ({asn})."
+msgstr "All nameservers in the delegation have IPv6 addresses in the same AS ({asn})."
 
 #: CONNECTIVITY:NAMESERVERS_NO_AS
 msgid  "No nameserver address is in an AS."
@@ -161,7 +161,7 @@ msgstr "Domain's authoritative nameservers do not belong to the same AS."
 
 #: CONNECTIVITY:NAMESERVERS_WITH_UNIQ_AS
 msgid  "All nameservers are in the same AS ({asn})."
-msgstr "All nameservers are in the same AS ({asn})."
+msgstr "All nameservers in the delegation are in the same AS ({asn})."
 
 #: CONNECTIVITY:NAMESERVER_HAS_TCP_53
 msgid  "Nameserver {ns}/{address} accessible over TCP on port 53."
