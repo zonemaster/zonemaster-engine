@@ -4,7 +4,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Project-Id-Version: 1.0.0\n"
-"PO-Revision-Date: 2015-11-18\n"
+"PO-Revision-Date: 2016-11-21\n"
 "Last-Translator: vincent.levigneron@afnic.fr\n"
 "Language-Team: Zonemaster Team\n"
 "MIME-Version: 1.0\n"
@@ -487,6 +487,10 @@ msgstr "La zone a des enregistrements de type \"NSEC\"."
 #: DNSSEC:HAS_NSEC3
 msgid  "The zone has NSEC3 records."
 msgstr "La zone a des enregistrements de type \"NSEC3\"."
+
+#: DNSSEC:HAS_NSEC3_OPTOUT
+msgid  "The zone has NSEC3 opt-out records."
+msgstr "L'opt-out est mis en oeuvre pour des enregistrements de type \"NSEC3\"."
 
 #: DNSSEC:INVALID_NAME_RCODE
 msgid  "When asked for the name {name}, which must not exist, the response had RCODE {rcode}."
