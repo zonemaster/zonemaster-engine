@@ -42,7 +42,7 @@ sub _build_glue_names {
         return [];
     }
 
-    my $p = $self->parent->query_one( $self->name, 'NS' );
+    my $p = $self->parent->query_persistent( $self->name, 'NS' );
 
     return [] if not defined $p;
 
