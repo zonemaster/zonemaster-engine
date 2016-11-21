@@ -78,10 +78,10 @@ ok( $res{DOMAIN_NAME_ZERO_LENGTH_LABEL}, q{DOMAIN_NAME_ZERO_LENGTH_LABEL} );
 my $zone = Zonemaster->zone( q{001.tf} );
 zone_gives( q{basic01}, $zone, q{HAS_GLUE} );
 zone_gives( q{basic01}, $zone, q{PARENT_REPLIES} );
-zone_gives( q{basic02}, $zone, q{NS_FAILED} );
 
 SKIP: {
-    skip "Zone does not longer have tested problem", 1;
+    skip "Zone does not longer have tested problem", 2;
+    zone_gives( q{basic02}, $zone, q{NS_FAILED} );
     zone_gives( q{basic02}, $zone, q{NS_NO_RESPONSE} );
 }
 
