@@ -298,7 +298,8 @@ sub metadata {
               NSEC3_SIG_VERIFY_ERROR
               NSEC3_SIGNED
               NSEC3_NOT_SIGNED
-              HAS_NSEC3 )
+              HAS_NSEC3
+              HAS_NSEC3_OPTOUT )
         ],
         dnssec11 => [
             qw(
@@ -355,6 +356,7 @@ sub translation {
         "EXTRA_PROCESSING_OK"     => "Server at {server} sent {keys} DNSKEY records and {sigs} RRSIG records.",
         "HAS_NSEC"                => "The zone has NSEC records.",
         "HAS_NSEC3"               => "The zone has NSEC3 records.",
+        "HAS_NSEC3_OPTOUT"        => "The zone has NSEC3 opt-out records.",
         "INVALID_NAME_RCODE" => "When asked for the name {name}, which must not exist, the response had RCODE {rcode}.",
         "ITERATIONS_OK"      => "The number of NSEC3 iterations is {count}, which is OK.",
         "KEY_DETAILS"        => "Key with keytag {keytag} details : Size = {keysize}, Flags ({sep}, {rfc5011}).",
@@ -419,6 +421,7 @@ sub policy {
         "EXTRA_PROCESSING_OK"          => "DEBUG",
         "HAS_NSEC"                     => "INFO",
         "HAS_NSEC3"                    => "INFO",
+        "HAS_NSEC3_OPTOUT"             => "INFO",
         "INVALID_NAME_RCODE"           => "NOTICE",
         "ITERATIONS_OK"                => "DEBUG",
         "KEY_DETAILS"                  => "DEBUG",
@@ -1223,9 +1226,12 @@ sub dnssec10 {
     my @nsec3 = $test_p->get_records( 'NSEC3', 'authority' );
     if ( @nsec3 ) {
         my $covered = 0;
+        my $opt_out = 0;
         push @results, info( HAS_NSEC3 => {} );
         foreach my $nsec3 ( @nsec3 ) {
-
+            if ( $nsec3->optout ) {
+                $opt_out = 1;
+            }
             if ( $nsec3->covers( $name ) ) {
                 $covered = 1;
 
@@ -1280,6 +1286,9 @@ sub dnssec10 {
                     name => $name,
                 }
               );
+        }
+        if ( $opt_out ) {
+            push @results, info( HAS_NSEC3_OPTOUT => {} );
         }
     } ## end if ( @nsec3 )
 
