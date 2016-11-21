@@ -1,4 +1,4 @@
-package Zonemaster::Test::Basic v1.0.2;
+package Zonemaster::Test::Basic v1.0.3;
 
 use strict;
 use warnings;
