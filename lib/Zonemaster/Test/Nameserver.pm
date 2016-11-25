@@ -1,4 +1,4 @@
-package Zonemaster::Test::Nameserver v1.0.5;
+package Zonemaster::Test::Nameserver v1.0.6;
 
 use strict;
 use warnings;
@@ -216,6 +216,9 @@ sub nameserver01 {
             elsif ( $p->is_redirect and not $p->aa ) {
                 $is_not_recursor{ $local_ns->address->short }++;
             }
+            elsif ( not $p->is_redirect and not $p->aa and not $p->answer and $p->rcode eq q{NOERROR} ) {
+                $is_not_recursor{ $local_ns->address->short }++;
+            }
             $nsnames{ $local_ns->name }++;
             $ips{ $local_ns->address->short }++;
         }
@@ -270,6 +273,9 @@ sub nameserver01 {
                           );
                     }
                     elsif ( $p->is_redirect and not $p->aa ) {
+                        $is_not_recursor{ $local_ns->address->short }++;
+                    }
+                    elsif ( not $p->is_redirect and not $p->aa and not $p->answer and $p->rcode eq q{NOERROR} ) {
                         $is_not_recursor{ $local_ns->address->short }++;
                     }
                     $nsnames{ $local_ns->name }++;

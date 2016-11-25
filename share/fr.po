@@ -4,7 +4,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Project-Id-Version: 1.0.0\n"
-"PO-Revision-Date: 2015-11-18\n"
+"PO-Revision-Date: 2016-11-21\n"
 "Last-Translator: vincent.levigneron@afnic.fr\n"
 "Language-Team: Zonemaster Team\n"
 "MIME-Version: 1.0\n"
@@ -131,7 +131,7 @@ msgstr "Les adresses IPv4 des serveurs faisant autorité se trouvent dans plusie
 
 #: CONNECTIVITY:NAMESERVERS_IPV4_WITH_UNIQ_AS
 msgid  "All nameservers IPv4 addresses are in the same AS ({asn})."
-msgstr "Toutes les adresses IPv4 des serveurs de noms se trouvent dans le même AS ({asn})."
+msgstr "Toutes les adresses IPv4 des serveurs de noms retournées par les serveurs de noms de la zone parente se trouvent dans le même AS ({asn})."
 
 #: CONNECTIVITY:NAMESERVERS_IPV6_NO_AS
 msgid  "No IPv6 nameserver address is in an AS."
@@ -143,7 +143,7 @@ msgstr "Les adresses IPv6 des serveurs faisant autorité se trouvent dans plusie
 
 #: CONNECTIVITY:NAMESERVERS_IPV6_WITH_UNIQ_AS
 msgid  "All nameservers IPv6 addresses are in the same AS ({asn})."
-msgstr "Toutes les adresses IPv6 des serveurs de noms se trouvent dans le même AS ({asn})."
+msgstr "Toutes les adresses IPv6 des serveurs de noms retournées par les serveurs de noms de la zone parente se trouvent dans le même AS ({asn})."
 
 #: CONNECTIVITY:NAMESERVERS_NO_AS
 msgid  "No nameserver address is in an AS."
@@ -155,7 +155,7 @@ msgstr "Les serveurs de noms pour le nom de domaine ne se trouvent pas tous dans
 
 #: CONNECTIVITY:NAMESERVERS_WITH_UNIQ_AS
 msgid  "All nameservers are in the same AS ({asn})."
-msgstr "Tous les serveurs de noms pour le nom de domaine se trouvent dans le même AS ({asn})."
+msgstr "Tous les serveurs de noms pour le nom de domaine retournés par les serveurs de noms de la zone parente se trouvent dans le même AS ({asn})."
 
 #: CONNECTIVITY:NAMESERVER_HAS_TCP_53
 msgid  "Nameserver {ns}/{address} accessible over TCP on port 53."
@@ -487,6 +487,10 @@ msgstr "La zone a des enregistrements de type \"NSEC\"."
 #: DNSSEC:HAS_NSEC3
 msgid  "The zone has NSEC3 records."
 msgstr "La zone a des enregistrements de type \"NSEC3\"."
+
+#: DNSSEC:HAS_NSEC3_OPTOUT
+msgid  "The zone has NSEC3 opt-out records."
+msgstr "L'opt-out est mis en oeuvre pour des enregistrements de type \"NSEC3\"."
 
 #: DNSSEC:INVALID_NAME_RCODE
 msgid  "When asked for the name {name}, which must not exist, the response had RCODE {rcode}."

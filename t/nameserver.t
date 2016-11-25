@@ -123,7 +123,10 @@ my $ns_test = new_ok( 'Zonemaster::Nameserver' => [ { name => 'ns.nic.se', addre
 is($ns_test->dns->source, '127.0.0.1', 'Source address set.');
 
 Zonemaster->config->no_network( 0 );
-my $fail_ns = Zonemaster::Nameserver->new( { name => 'fail', address => '127.0.0.17' } );
+# Address was 127.0.0.17 (https://github.com/dotse/zonemaster-engine/issues/219).
+# 192.0.2.17 is part of TEST-NET-1 IP address range (See RFC6890) and should be reserved
+# for documentation.
+my $fail_ns = Zonemaster::Nameserver->new( { name => 'fail', address => '192.0.2.17' } );
 my $fail_p = $fail_ns->_query( 'example.org', 'A', {} );
 is( $fail_p, undef, 'No return from broken server' );
 my ( $e ) = grep { $_->tag eq 'LOOKUP_ERROR' } @{ Zonemaster->logger->entries };

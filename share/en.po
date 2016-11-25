@@ -4,7 +4,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Project-Id-Version: 1.0.0\n"
-"PO-Revision-Date: 2015-11-18\n"
+"PO-Revision-Date: 2016-11-21\n"
 "Last-Translator: vincent.levigneron@afnic.fr\n"
 "Language-Team: Zonemaster Team\n"
 "MIME-Version: 1.0\n"
@@ -137,7 +137,7 @@ msgstr "Authoritative IPv4 nameservers are in more than one AS."
 
 #: CONNECTIVITY:NAMESERVERS_IPV4_WITH_UNIQ_AS
 msgid  "All nameservers IPv4 addresses are in the same AS ({asn})."
-msgstr "All nameservers have IPv4 addresses in the same AS ({asn})."
+msgstr "All nameservers in the delegation have IPv4 addresses in the same AS ({asn})."
 
 #: CONNECTIVITY:NAMESERVERS_IPV6_NO_AS
 msgid  "No IPv6 nameserver address is in an AS."
@@ -149,7 +149,7 @@ msgstr "Authoritative IPv6 nameservers are in more than one AS."
 
 #: CONNECTIVITY:NAMESERVERS_IPV6_WITH_UNIQ_AS
 msgid  "All nameservers IPv6 addresses are in the same AS ({asn})."
-msgstr "All nameservers have IPv6 addresses in the same AS ({asn})."
+msgstr "All nameservers in the delegation have IPv6 addresses in the same AS ({asn})."
 
 #: CONNECTIVITY:NAMESERVERS_NO_AS
 msgid  "No nameserver address is in an AS."
@@ -161,7 +161,7 @@ msgstr "Domain's authoritative nameservers do not belong to the same AS."
 
 #: CONNECTIVITY:NAMESERVERS_WITH_UNIQ_AS
 msgid  "All nameservers are in the same AS ({asn})."
-msgstr "All nameservers are in the same AS ({asn})."
+msgstr "All nameservers in the delegation are in the same AS ({asn})."
 
 #: CONNECTIVITY:NAMESERVER_HAS_TCP_53
 msgid  "Nameserver {ns}/{address} accessible over TCP on port 53."
@@ -482,6 +482,10 @@ msgstr "The zone has NSEC records."
 #: DNSSEC:HAS_NSEC3
 msgid  "The zone has NSEC3 records."
 msgstr "The zone has NSEC3 records."
+
+#: DNSSEC:HAS_NSEC3_OPTOUT
+msgid  "The zone has NSEC3 opt-out records."
+msgstr "The zone has NSEC3 opt-out records."
 
 #: DNSSEC:INVALID_NAME_RCODE
 msgid  "When asked for the name {name}, which must not exist, the response had RCODE {rcode}."

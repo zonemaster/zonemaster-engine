@@ -187,6 +187,13 @@ zone_gives( 'dnssec08', $zone, [q{NO_KEYS_OR_NO_SIGS}] );
 $zone = Zonemaster->zone( 'dnssec09-soa-signature-not-ok.zut-root.rd.nic.fr' );
 zone_gives( 'dnssec09', $zone, [qw{SOA_NOT_SIGNED SOA_SIGNATURE_NOT_OK}] );
 
+# dnssec10
+$zone = Zonemaster->zone( 'fr'  );
+zone_gives( 'dnssec10', $zone, ['HAS_NSEC3_OPTOUT'] );
+
+$zone = Zonemaster->zone( 'ma'  );
+zone_gives_not( 'dnssec10', $zone, ['HAS_NSEC3_OPTOUT'] );
+
 # GOST
 #$zone = Zonemaster->zone( 'caint.su' );
 #@res = Zonemaster->test_method( 'DNSSEC', 'dnssec08', $zone );
