@@ -1,4 +1,4 @@
-package Zonemaster::Test::Basic v1.0.2;
+package Zonemaster::Test::Basic v1.0.3;
 
 use strict;
 use warnings;
@@ -206,14 +206,16 @@ sub basic00 {
 sub basic01 {
     my ( $class, $zone ) = @_;
     my @results;
-
     my $parent = $zone->parent;
 
     if ( not $parent ) {
         return info( NO_PARENT => { zone => $zone->name->string } );
     }
 
-    my $p = $parent->query_one( $zone->name, q{NS} );
+    my $p = $parent->query_persistent( $zone->name, q{NS} );
+    if ( not $p ) {
+        $p = $parent->query_one( $zone->name, q{NS} );
+    }
 
     if ( $p ) {
         push @results,
@@ -319,6 +321,7 @@ sub basic02 {
         }
 
         my $p = $ns->query( $zone->name, $query_type );
+
         if ( $p ) {
             if ( $p->has_rrs_of_type_for_name( $query_type, $zone->name ) ) {
                 push @results,
