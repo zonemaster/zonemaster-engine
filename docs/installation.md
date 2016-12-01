@@ -107,7 +107,8 @@ To use the engine from the command line, you will have to install the
 *[CLI](https://github.com/dotse/zonemaster-cli/blob/master/docs/installation.md)*. 
 To use the engine from a web interface, you will have to install the
 *[Backend](https://github.com/dotse/zonemaster-backend/blob/master/docs/installation.md)* and
-the *[GUI](https://github.com/dotse/zonemaster-gui/blob/master/docs/installation.md*. 
+the
+*[GUI](https://github.com/dotse/zonemaster-gui/blob/master/docs/installation.md)*. 
 To use the engine from the
 *[API](https://github.com/dotse/zonemaster-backend/blob/master/docs/API.md)*, you will have to install the *Backend*.
 
