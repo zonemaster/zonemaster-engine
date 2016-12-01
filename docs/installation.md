@@ -25,7 +25,7 @@ This section covers the following operating systems:
 There is no prerequisites. To install the engine, one installs the dependecies
 for the chosen OS and then finally install the engine itself.
 
-### <a name="Debian"></a> Install instructions for Debian & Ubuntu
+### <a name="Debian"></a> Install dependencies for Debian & Ubuntu
 
 1) Make sure the package database is up to date.
 
@@ -41,7 +41,7 @@ libgeography-countries-perl libidn11-dev gettext
 ```
 
 
-### <a name="FreeBSD"></a> Instructions for FreeBSD 
+### <a name="FreeBSD"></a> Install dependencies for FreeBSD 
 
 1) Become root.
 
@@ -57,7 +57,7 @@ sudo cpanm -i Net::IP Net::LDNS
 ```
 
 
-### <a name="CentOS"></a> Instructions for CentOS 
+### <a name="CentOS"></a> Install dependencies for CentOS 
 
 1) Make sure the development environment is installed.
 
@@ -81,7 +81,7 @@ For the first and third, the default responses are fine. For the second, answer
 sudo cpanm -i Hash::Merge Net::IP::XS Net::LDNS JSON Moose
 ```
 
-## Installation of the Zonemaster Engine
+## Install the Zonemaster Engine
 
 ```sh
 sudo cpanm -i Zonemaster
