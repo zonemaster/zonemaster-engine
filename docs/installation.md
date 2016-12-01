@@ -102,6 +102,7 @@ The command is expected to take very roughly 15 seconds and print a number
 greater than one.
 
 ## What to do next
+
 To use the engine from the command line, you will have to install the
 *[CLI](https://github.com/dotse/zonemaster-cli/blob/master/docs/installation.md)*. 
 To use the engine from a web interface, you will have to install the *Backend* and
