@@ -14,7 +14,7 @@ This section covers the following operating systems:
  * [2] <a href="#Debian">Ubuntu 14.04 (LTS))</a>
  * [3] <a href="#Debian">Debian Jessie (version 8) - 64 bits</a>
  * [4] <a href="#FreeBSD">FreeBSD 10.1</a>
- * [5] <a href="#CentOS">CentOS 7 </a>
+ * [5] <a href="#CentOS">CentOS 7 - 64 bits</a>
 
 >
 > Note: We assume the installation instructions will work for earlier OS
@@ -101,7 +101,12 @@ time perl -MZonemaster -e 'print scalar Zonemaster->test_zone("zonemaster.net"),
 The command is expected to take very roughly 15 seconds and print a number
 greater than one.
 
-
+## What to do next
+To use the engine from the command line, you will have to install the
+*[CLI](https://github.com/dotse/zonemaster-cli/blob/master/docs/installation.md)*. 
+To use the engine from a web interface, you will have to install the *Backend* and
+the *GUI*. 
+To use the engine from an *API*, you will have to install the *Backend*.
 
 -------
 
