@@ -53,7 +53,7 @@ su
 
 ```sh
 sudo pkg install libidn p5-Devel-CheckLib p5-MIME-Base64 p5-Test-Fatal p5-JSON-PP p5-IO-Socket-INET6 p5-Moose p5-Module-Find p5-JSON p5-File-ShareDir p5-File-Slurp p5-Mail-RFC822-Address p5-Hash-Merge p5-Time-HiRes p5-Locale-libintl p5-Readonly-XS p5-Tie-Simple p5-Math-BigInt p5-IP-Country p5-IO-Capture p5-List-MoreUtils
-sudo cpan Net::IP Net::LDNS
+sudo cpanm -i Net::IP Net::LDNS
 ```
 
 
@@ -78,16 +78,16 @@ For the first and third, the default responses are fine. For the second, answer
 "sudo" (the default is "local::lib", which you do not want).
 
 ```sh
-sudo cpan -i Hash::Merge Net::IP::XS Net::LDNS JSON Moose
+sudo cpanm -i Hash::Merge Net::IP::XS Net::LDNS JSON Moose
 ```
 
 ## Installation of the Zonemaster Engine
 
 ```sh
-sudo cpan -i Zonemaster
+sudo cpanm -i Zonemaster
 ```
 
-If necessary, answer any questions from the cpan script by accepting the default value (just press enter).
+If necessary, answer any questions from the cpanm script by accepting the default value (just press enter).
 
 
 ## Post-installation sanity check
@@ -105,9 +105,11 @@ greater than one.
 
 To use the engine from the command line, you will have to install the
 *[CLI](https://github.com/dotse/zonemaster-cli/blob/master/docs/installation.md)*. 
-To use the engine from a web interface, you will have to install the *Backend* and
-the *GUI*. 
-To use the engine from an *API*, you will have to install the *Backend*.
+To use the engine from a web interface, you will have to install the
+*[Backend](https://github.com/dotse/zonemaster-backend/blob/master/docs/installation.md)* and
+the *[GUI](https://github.com/dotse/zonemaster-gui/blob/master/docs/installation.md*. 
+To use the engine from the
+*[API](https://github.com/dotse/zonemaster-backend/blob/master/docs/API.md)*, you will have to install the *Backend*.
 
 -------
 
