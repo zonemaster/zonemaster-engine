@@ -51,8 +51,8 @@ su
 2) Install all necessary packages
 
 ```sh
-sudo pkg install libidn p5-Devel-CheckLib p5-MIME-Base64 p5-Test-Fatal p5-JSON-PP p5-IO-Socket-INET6 p5-Moose p5-Module-Find p5-JSON p5-File-ShareDir p5-File-Slurp p5-Mail-RFC822-Address p5-Hash-Merge p5-Time-HiRes p5-Locale-libintl p5-Readonly-XS p5-Tie-Simple p5-Math-BigInt p5-IP-Country p5-IO-Capture p5-List-MoreUtils
-sudo cpan -i Net::IP Net::LDNS
+su pkg install libidn p5-Devel-CheckLib p5-MIME-Base64 p5-Test-Fatal p5-JSON-PP p5-IO-Socket-INET6 p5-Moose p5-Module-Find p5-JSON p5-File-ShareDir p5-File-Slurp p5-Mail-RFC822-Address p5-Hash-Merge p5-Time-HiRes p5-Locale-libintl p5-Readonly-XS p5-Tie-Simple p5-Math-BigInt p5-IP-Country p5-IO-Capture p5-List-MoreUtils
+su cpan -i Net::IP Net::LDNS
 ```
 
 
@@ -113,8 +113,8 @@ To use the engine from the
 
 -------
 
-Copyright (c) 2013, 2014, 2015, IIS (The Internet Infrastructure Foundation)  
-Copyright (c) 2013, 2014, 2015, AFNIC  
+Copyright (c) 2013 - 2016, IIS ((The Internet Foundation in Sweden))  
+Copyright (c) 2013 - 2016, AFNIC  
 Creative Commons Attribution 4.0 International License
 
 You should have received a copy of the license along with this
