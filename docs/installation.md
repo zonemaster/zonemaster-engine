@@ -22,10 +22,10 @@ This section covers the following operating systems:
 > earlier versions, please send a mail with details to contact@zonemaster.net
 >
 
-There is no prerequisites. To install the engine, one installs the dependecies
-for the chosen OS and then finally install the engine itself.
+To install the engine, one installs the dependecies for the chosen OS and then
+finally install the engine itself. 
 
-### <a name="Debian"></a> Install dependencies for Debian & Ubuntu
+## <a name="Debian"></a> Debian & Ubuntu
 
 1) Make sure the package database is up to date.
 
@@ -39,8 +39,16 @@ sudo apt-get update
 sudo apt-get install build-essential libfile-slurp-perl libjson-perl liblist-moreutils-perl libio-socket-inet6-perl libmodule-find-perl libmoose-perl libfile-sharedir-perl libhash-merge-perl libreadonly-perl libmail-rfc822-address-perl libintl-xs-perl libssl-dev libdevel-checklib-perl libtest-fatal-perl libtie-simple-perl libio-capture-perl libgeography-countries-perl libidn11-dev gettext
 ```
 
+3) Install the Zonemaster engine
 
-### <a name="FreeBSD"></a> Install dependencies for FreeBSD 
+```sh
+sudo cpan -i Zonemaster
+```
+
+If necessary, answer any questions from the cpan script by accepting the default
+value (just press enter).
+
+## <a name="FreeBSD"></a> FreeBSD 
 
 1) Become root.
 
@@ -51,12 +59,25 @@ su
 2) Install all necessary packages
 
 ```sh
-su pkg install libidn p5-Devel-CheckLib p5-MIME-Base64 p5-Test-Fatal p5-JSON-PP p5-IO-Socket-INET6 p5-Moose p5-Module-Find p5-JSON p5-File-ShareDir p5-File-Slurp p5-Mail-RFC822-Address p5-Hash-Merge p5-Time-HiRes p5-Locale-libintl p5-Readonly-XS p5-Tie-Simple p5-Math-BigInt p5-IP-Country p5-IO-Capture p5-List-MoreUtils
-su cpan -i Net::IP Net::LDNS
+pkg install libidn p5-Devel-CheckLib p5-MIME-Base64 p5-Test-Fatal p5-JSON-PP p5-IO-Socket-INET6 p5-Moose p5-Module-Find p5-JSON p5-File-ShareDir p5-File-Slurp p5-Mail-RFC822-Address p5-Hash-Merge p5-Time-HiRes p5-Locale-libintl p5-Readonly-XS p5-Tie-Simple p5-Math-BigInt p5-IP-Country p5-IO-Capture p5-List-MoreUtils
 ```
 
+3) Install the CPAN modules
 
-### <a name="CentOS"></a> Install dependencies for CentOS 
+```sh
+cpan -i Net::IP Net::LDNS
+```
+
+4) Install the Zonemaster engine
+
+```sh
+cpan -i Zonemaster
+```
+
+If necessary, answer any questions from the cpan script by accepting the default
+value (just press enter).
+
+### <a name="CentOS"></a> CentOS 
 
 1) Make sure the development environment is installed.
 
@@ -80,7 +101,7 @@ For the first and third, the default responses are fine. For the second, answer
 sudo cpan -i Hash::Merge Net::IP::XS Net::LDNS JSON Moose
 ```
 
-## Install the Zonemaster Engine
+4) Install the Zonemaster Engine
 
 ```sh
 sudo cpan -i Zonemaster
