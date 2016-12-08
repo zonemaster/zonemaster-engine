@@ -1,5 +1,16 @@
 Revision history for Perl module Zonemaster.
 
+v1.0.16 2016-12-12
+
+- Updated and added Swedish translations (#249, #248, #216, #196, partially #127)
+- Corrected installation instructions for Debian/Ubuntu (#240)
+- If one nameserver is "lame" then the Basic test could halt on that and not
+  continue with next nameserver. Fixed in #239.
+- Added test for NSEC3 OPT-OUT (#226).
+- Using different IP address in unit test to avoid false fail (#219).
+- Remove dependency on Net::IP::XS (#174).
+- Updated the algorithm for discovering open resolvers to be more correct (#171).
+
 v1.0.15 2016-10-14
 
 - DNSSEC:EXTRA_PROCESSING_BROKEN when not authoritative #210

@@ -15,7 +15,10 @@ tests.
 
 ### Prerequisites
 
-There are no prerequisites required for this repository.
+For supported processor architectures, operating systems (and versions) 
+and Perl versions see 
+[Zonemaster/README.md](https://github.com/dotse/zonemaster/blob/master/README.md).
+
 
 ### Installation
 
