@@ -3,8 +3,8 @@
 use 5.14.2;
 use warnings;
 
-use JSON::XS;
+use JSON::PP;
 
-my $json = JSON::XS->new->canonical->pretty->utf8;
+my $json = JSON::PP->new->canonical->pretty->utf8;
 
 say $json->encode($json->decode(join('',<>)));

@@ -711,7 +711,7 @@ sub nameserver09 {
 
         my $answer1_string;
         my $answer2_string;
-        my $json = JSON->new->canonical->pretty;
+        my $json = JSON::PP->new->canonical->pretty;
         if ( $p1 and scalar $p1->answer ) {
 
             my @answer1 = map { lc $_->string } sort $p1->answer;
