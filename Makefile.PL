@@ -9,6 +9,7 @@ bugtracker 'https://github.com/dotse/zonemaster-engine/issues';
 
 all_from 'lib/Zonemaster.pm';
 
+requires 'version'               => 0.77;
 requires 'Net::LDNS'             => 0.75;
 requires 'IO::Socket::INET6'     => 2.69;
 requires 'Moose'                 => 2.0401;
