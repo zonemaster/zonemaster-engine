@@ -1,4 +1,6 @@
-package Zonemaster::Zone v1.1.0;
+package Zonemaster::Zone;
+
+use version; our $VERSION = version->declare("v1.1.1");
 
 use 5.014002;
 use strict;

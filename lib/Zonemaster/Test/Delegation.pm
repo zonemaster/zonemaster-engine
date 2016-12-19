@@ -1,4 +1,6 @@
-package Zonemaster::Test::Delegation v1.0.4;
+package Zonemaster::Test::Delegation;
+
+use version; our $VERSION = version->declare("v1.0.5");
 
 use strict;
 use warnings;
