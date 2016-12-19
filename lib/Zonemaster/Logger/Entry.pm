@@ -4,7 +4,7 @@ use 5.014002;
 use warnings;
 
 use Time::HiRes qw[time];
-use JSON;
+use JSON::PP;
 use Moose;
 use Zonemaster;
 
@@ -23,7 +23,7 @@ our %numeric = (
 
 our $start_time = time();
 
-my $json = JSON->new->allow_blessed->convert_blessed->canonical;
+my $json = JSON::PP->new->allow_blessed->convert_blessed->canonical;
 
 has 'module'    => ( is => 'ro', isa => 'Str',                lazy_build => 1 );
 has 'tag'       => ( is => 'ro', isa => 'Str',                required   => 1 );
