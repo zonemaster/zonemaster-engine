@@ -1,4 +1,6 @@
-package Zonemaster::Translator v1.0.3;
+package Zonemaster::Translator;
+
+use version; our $VERSION = version->declare("v1.0.4");
 
 use 5.014002;
 use strict;

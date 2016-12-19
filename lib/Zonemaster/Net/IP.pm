@@ -1,4 +1,6 @@
-package Zonemaster::Net::IP v0.0.3;
+package Zonemaster::Net::IP;
+
+use version; our $VERSION = version->declare("v0.0.4");
 
 no strict 'refs';
 use warnings;

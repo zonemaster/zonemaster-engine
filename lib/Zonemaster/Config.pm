@@ -1,4 +1,6 @@
-package Zonemaster::Config v1.0.3;
+package Zonemaster::Config;
+
+use version; our $VERSION = version->declare("v1.0.4");
 
 use 5.014002;
 use warnings;

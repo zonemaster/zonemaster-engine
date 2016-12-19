@@ -1,4 +1,6 @@
-package Zonemaster::Nameserver v1.1.2;
+package Zonemaster::Nameserver;
+
+use version; our $VERSION = version->declare("v1.1.3");
 
 use 5.014002;
 use Moose;
