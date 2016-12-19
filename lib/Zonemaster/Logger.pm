@@ -9,7 +9,7 @@ use Zonemaster::Logger::Entry;
 use Zonemaster;
 use List::MoreUtils qw[none any];
 use Scalar::Util qw[blessed];
-use JSON;
+use JSON::PP;
 
 has 'entries' => (
     is      => 'ro',
@@ -113,7 +113,7 @@ sub get_max_level {
 
 sub json {
     my ( $self, $min_level ) = @_;
-    my $json    = JSON->new->allow_blessed->convert_blessed->canonical;
+    my $json    = JSON::PP->new->allow_blessed->convert_blessed->canonical;
     my %numeric = Zonemaster::Logger::Entry->levels();
 
     my @msg = @{ $self->entries };

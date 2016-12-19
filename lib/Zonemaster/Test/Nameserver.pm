@@ -1,6 +1,6 @@
 package Zonemaster::Test::Nameserver;
 
-use version; our $VERSION = version->declare("v1.0.7");
+use version; our $VERSION = version->declare("v1.0.8");
 
 use strict;
 use warnings;
@@ -711,9 +711,9 @@ sub nameserver09 {
         my $p1 = $local_ns->query( $randomized_uc_name1, $record_type );
         my $p2 = $local_ns->query( $randomized_uc_name2, $record_type );
 
-        my $answer1_string;
-        my $answer2_string;
-        my $json = JSON->new->canonical->pretty;
+        my $answer1_string = q{};
+        my $answer2_string = q{};
+        my $json = JSON::PP->new->canonical->pretty;
         if ( $p1 and scalar $p1->answer ) {
 
             my @answer1 = map { lc $_->string } sort $p1->answer;

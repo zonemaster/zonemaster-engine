@@ -6,7 +6,7 @@ use 5.014002;
 use warnings;
 
 use Moose;
-use JSON;
+use JSON::PP;
 use File::ShareDir qw[dist_dir dist_file];
 use File::Slurp;
 use Hash::Merge;
