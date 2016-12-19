@@ -1,4 +1,6 @@
-package Zonemaster::Test::DNSSEC v1.0.5;
+package Zonemaster::Test::DNSSEC;
+
+use version; our $VERSION = version->declare("v1.0.6");
 
 ###
 ### This test module implements DNSSEC tests.

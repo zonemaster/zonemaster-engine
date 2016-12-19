@@ -1,4 +1,6 @@
-package Zonemaster::Test::Consistency v1.1.0;
+package Zonemaster::Test::Consistency;
+
+use version; our $VERSION = version->declare("v1.1.1");
 
 use strict;
 use warnings;

@@ -1,4 +1,6 @@
-package Zonemaster::TestMethods v1.0.1;
+package Zonemaster::TestMethods;
+
+use version; our $VERSION = version->declare("v1.0.2");
 
 use 5.014002;
 use strict;
