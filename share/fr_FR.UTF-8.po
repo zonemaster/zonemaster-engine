@@ -4,7 +4,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Project-Id-Version: 1.0.0\n"
-"PO-Revision-Date: 2016-11-21\n"
+"PO-Revision-Date: 2016-12-26\n"
 "Last-Translator: vincent.levigneron@afnic.fr\n"
 "Language-Team: Zonemaster Team\n"
 "MIME-Version: 1.0\n"
@@ -121,6 +121,10 @@ msgstr "Le serveur de noms {ns}/{address} ne répond pas à une requête de type
 msgid  "Nameserver for zone {pname} replies when trying to fetch glue."
 msgstr "Les serveurs de noms de la zone {pname} répondent lorsque l'on essaye de récupérer la liste des serveurs de noms de la zone testée."
 
+#: CONNECTIVITY:IPV4_DISABLED (Même contenu que BASIC:IPV4_DISABLED, ne pas dupliqué à moins que le contenu du message ne vienne à changer)
+
+#: CONNECTIVITY:IPV6_DISABLED (Même contenu que BASIC:IPV6_DISABLED, ne pas dupliqué à moins que le contenu du message ne vienne à changer)
+
 #: CONNECTIVITY:NAMESERVERS_IPV4_NO_AS
 msgid  "No IPv4 nameserver address is in an AS."
 msgstr "Aucune adresse IPv4 des serveurs de noms ne se trouve dans un AS."
@@ -193,8 +197,10 @@ msgstr "[ASN:ANNOUNCE_BY] {address};{asn}"
 msgid  "[ASN:ANNOUNCE_IN] {address};{prefix}"
 msgstr "[ASN:ANNOUNCE_IN] {address};{prefix}"
 
-#: CONSISTENCY:IPV4_DISABLED
-#: CONSISTENCY:IPV6_DISABLED
+#: CONSISTENCY:IPV4_DISABLED (Même contenu que BASIC:IPV4_DISABLED, ne pas dupliqué à moins que le contenu du message ne vienne à changer)
+
+#: CONSISTENCY:IPV6_DISABLED (Même contenu que BASIC:IPV6_DISABLED, ne pas dupliqué à moins que le contenu du message ne vienne à changer)
+
 #: CONSISTENCY:MULTIPLE_NS_SET
 msgid  "Saw {count} NS set."
 msgstr "Plusieurs ensembles de serveurs de noms ({count}) ont été trouvés dans les différents SOA."
@@ -302,6 +308,10 @@ msgstr "Les serveurs de noms de la zone retournent des serveurs faisant autorit�
 #: DELEGATION:EXTRA_NAME_PARENT
 msgid  "Parent has nameserver(s) not listed at the child ({extra})."
 msgstr "Les serveurs de noms de la zone parente retournent des serveurs faisant autorité ({extra}) qui ne le sont pas par les serveurs de noms de la zone."
+
+#: DELEGATION:IPV4_DISABLED (Même contenu que BASIC:IPV4_DISABLED, ne pas dupliqué à moins que le contenu du message ne vienne à changer)
+
+#: DELEGATION:IPV6_DISABLED (Même contenu que BASIC:IPV6_DISABLED, ne pas dupliqué à moins que le contenu du message ne vienne à changer)
 
 #: DELEGATION:IS_NOT_AUTHORITATIVE
 msgid  "Nameserver {ns} response is not authoritative on {proto} port 53."
@@ -644,6 +654,10 @@ msgstr "Le serveur de noms {ns}/{address} ne supporte pas EDNS0 (pas d'enregistr
 msgid  "The following nameservers support EDNS0 : {names}."
 msgstr "Les serveurs de noms suivants supportent EDNS0 : {names}."
 
+#: NAMESERVER:IPV4_DISABLED (Même contenu que BASIC:IPV4_DISABLED, ne pas dupliqué à moins que le contenu du message ne vienne à changer)
+
+#: NAMESERVER:IPV6_DISABLED (Même contenu que BASIC:IPV6_DISABLED, ne pas dupliqué à moins que le contenu du message ne vienne à changer)
+
 #: NAMESERVER:IS_A_RECURSOR
 msgid  "Nameserver {ns}/{address} is a recursor."
 msgstr "Le serveur de noms {ns}/{address} retourne le code NXDOMAIN lors d'une requête de type \"SOA\" sur le nom de domaine {dname}. Il est récursif."
@@ -952,8 +966,10 @@ msgstr "L'enregistrement de type \"MX\" pour le domaine ne pointe pas sur un ali
 msgid  "No target (MX, A or AAAA record) to deliver e-mail for the domain name."
 msgstr "Aucune possibilité (enregistrement de type \"MX\", \"A\" ou \"AAAA\") de faire parvenir un message à ce nom de domaine."
 
-#: ZONE:NO_RESPONSE_MX_QUERY
-#: ZONE:NO_RESPONSE_SOA_QUERY
+#: ZONE:NO_RESPONSE_MX_QUERY (Même contenu que SYNTAX:NO_RESPONSE_MX_QUERY, ne pas dupliqué à moins que le contenu du message ne vienne à changer)
+
+#: ZONE:NO_RESPONSE_SOA_QUERY (Même contenu que SYNTAX:NO_RESPONSE_SOA_QUERY, ne pas dupliqué à moins que le contenu du message ne vienne à changer)
+
 #: ZONE:REFRESH_HIGHER_THAN_RETRY
 msgid  "SOA 'refresh' value ({refresh}) is higher than the SOA 'retry' value ({retry})."
 msgstr "Dans le SOA, la valeur du champ 'refresh' ({refresh}) est plus grande que la valeur du champ 'retry' ({retry})."
