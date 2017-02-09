@@ -1,6 +1,6 @@
 package Zonemaster::Config;
 
-use version; our $VERSION = version->declare("v1.0.4");
+use version; our $VERSION = version->declare("v1.0.5");
 
 use 5.014002;
 use warnings;
@@ -449,30 +449,48 @@ used, the rest are backups in case the earlier ones don't work.
 
 By using this key, the log level of messages can be set in a much more fine-grained way than by the policy file. The intended use is to remove known erroneous results. If you, for example, know that a certain name server is recursive and for some reason should be, you can use this functionality to lower the severity of the complaint about it to a lower level than normal.
 
-The the data under the C<logfilter> key should be structured like this:
+The data under the C<logfilter> key should be structured like this:
 
    Module
       Tag
-         "when"
-            Hash with conditions
-         "set"
-            Level to set if all conditions match
+         Array of exceptions
+             "when"
+                Hash with conditions
+             "set"
+                Level to set if all conditions match
 
 The hash with conditions should have keys matching the attributes of the log entry that's being filtered (check the translation files to see what they are). The values for the keys should be either a single value that the attribute should be, or an array of values any one of which the attribute should be.
 
 A complete entry might could look like this:
 
        "SYSTEM": {
-           "FILTER_THIS": {
-               "when": {
-                   "count": 1,
-                   "type": ["this", "or"]
+           "FILTER_THIS": [
+               {
+                   "when": {
+                       "count": 1,
+                       "type": ["this", "or"]
+                   },
+                   "set": "INFO"
                },
-               "set": "INFO"
-           }
+               {
+                   "when": {
+                       "count": 128,
+                       "type": ["that"]
+                   },
+                   "set": "INFO"
+               },
+               {
+                   "when": {
+                       "count": 0
+                   },
+                   "set": "WARNING"
+               }
+           ]
        }
 
 This would set the level to C<INFO> for any C<SYSTEM:FILTER_THIS> messages that had a C<count> attribute set to 1 and a C<type> attribute set to either C<this> or C<or>.
+This also would set the level to C<INFO> for any C<SYSTEM:FILTER_THIS> messages that had a C<count> attribute set to 128 and a C<type> attribute set to C<that>.
+And this would set the level to C<WARNING> for any C<SYSTEM:FILTER_THIS> messages that had a C<count> attribute set to 0.
 
 =head1 POLICY DATA
 
