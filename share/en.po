@@ -4,7 +4,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Project-Id-Version: 1.0.0\n"
-"PO-Revision-Date: 2016-11-21\n"
+"PO-Revision-Date: 2017-02-09\n"
 "Last-Translator: vincent.levigneron@afnic.fr\n"
 "Language-Team: Zonemaster Team\n"
 "MIME-Version: 1.0\n"
@@ -448,10 +448,6 @@ msgstr "DS record with keytag {keytag} and digest type {digtype} matches the DNS
 #: DNSSEC:DS_FOUND
 msgid  "Found DS records with tags {keytags}."
 msgstr "Found DS records with tags {keytags}."
-
-#: DNSSEC:DS_MATCHES_DNSKEY
-msgid  "DS record with keytag {keytag} matches the DNSKEY with the same tag."
-msgstr "DS record with keytag {keytag} matches the DNSKEY with the same tag."
 
 #: DNSSEC:DS_MATCH_FOUND
 msgid  "At least one DS record with a matching DNSKEY record was found."
