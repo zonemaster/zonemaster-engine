@@ -214,9 +214,9 @@ sub basic01 {
         return info( NO_PARENT => { zone => $zone->name->string } );
     }
 
-    my $p = $parent->query_persistent( $zone->name, q{NS} );
+    my $p = $parent->query_persistent( $parent->name, q{NS} );
     if ( not $p ) {
-        $p = $parent->query_one( $zone->name, q{NS} );
+        $p = $parent->query_one( $parent->name, q{NS} );
     }
 
     if ( $p ) {
@@ -246,12 +246,12 @@ sub basic01 {
           );
     }
     else {
-        if ( $p->has_rrs_of_type_for_name( q{NS}, $zone->name ) ) {
+        if ( $p->has_rrs_of_type_for_name( q{NS}, $parent->name ) ) {
             push @results,
               info(
                 HAS_GLUE => {
                     pname   => $parent->name->string,
-                    nsnlist => join( q{,}, sort map { $_->nsdname } $p->get_records_for_name( q{NS}, $zone->name ) ),
+                    nsnlist => join( q{,}, sort map { $_->nsdname } $p->get_records_for_name( q{NS}, $parent->name ) ),
                 }
               );
         }
@@ -264,7 +264,7 @@ sub basic01 {
                 }
               );
             if ( $p->aa and ( grep { $_->type eq 'SOA' } $p->authority ) ) {
-                push @results, info( NOT_A_ZONE => { zname => $zone->name->string } );
+                push @results, info( NOT_A_ZONE => { zname => $parent->name->string } );
             }
         }
     } ## end else [ if ( $p->rcode eq q{NXDOMAIN})]
