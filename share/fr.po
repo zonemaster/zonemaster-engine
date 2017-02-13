@@ -4,7 +4,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Project-Id-Version: 1.0.0\n"
-"PO-Revision-Date: 2016-12-26\n"
+"PO-Revision-Date: 2017-02-13\n"
 "Last-Translator: vincent.levigneron@afnic.fr\n"
 "Language-Team: Zonemaster Team\n"
 "MIME-Version: 1.0\n"
@@ -853,6 +853,22 @@ msgstr "Utilisation du module prérequis {name} version {version}."
 #: SYSTEM:GLOBAL_VERSION
 msgid  "Using version {version} of the Zonemaster engine."
 msgstr "Utilisation de la version {version} du moteur Zonemaster."
+
+#: SYSTEM:FAKE_DELEGATION
+msgid  "Followed a fake delegation."
+msgstr "Utilisation d'une configuration DNS alternative (fake delegation)."
+
+#: SYSTEM:FAKE_DELEGATION_TO_SELF
+msgid  "Name server {ns} not adding fake delegation for domain {domain} to itself."
+msgstr "Refus d'ajout de configuration DNS alternative au serveur de nom {ns} pour le domaine '{domain}' sur lui-même."
+
+#: SYSTEM:FAKE_DELEGATION_IN_ZONE_NO_IP
+msgid  "Name server {ns} not adding fake delegation for domain {domain}. In zone name server {ns} needs an IP address."
+msgstr "Refus d'ajout de configuration DNS alternative au serveur de nom {ns} pour le domaine '{domain}'. Le serveur de nom {ns} 'in-zone' nécessite une adresse IP."
+
+#: SYSTEM:FAKE_DELEGATION_NO_IP
+msgid  "Can not add a fake delegation for domain {domain} to name server {ns} without IP address."
+msgstr "Impossible d'ajouter une configuration DNS alternative (fake delegation) pour le domaine '{domain'} au serveur de nom {ns} sans adresse IP."
 
 #: SYSTEM:LOGGER_CALLBACK_ERROR
 msgid  "Logger callback died with error: {exception}"

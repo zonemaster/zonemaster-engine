@@ -1,6 +1,6 @@
 package Zonemaster::Test;
 
-use version; our $VERSION = version->declare("v1.0.2");
+use version; our $VERSION = version->declare("v1.1.0");
 
 use 5.014002;
 use strict;
@@ -77,7 +77,7 @@ sub run_all_for {
     push @results, Zonemaster::Test::Basic->all( $zone );
     info( MODULE_END => { module => 'Zonemaster::Test::Basic' } );
 
-    if ( Zonemaster::Test::Basic->can_continue( @results ) ) {
+    if ( Zonemaster::Test::Basic->can_continue( @results ) and Zonemaster->can_continue() ) {
         ## no critic (Modules::RequireExplicitInclusion)
         foreach my $mod ( __PACKAGE__->modules ) {
             Zonemaster->config->load_module_policy( $mod );
@@ -125,25 +125,30 @@ sub run_module {
         return info( NO_NETWORK => {} );
     }
 
-    if ( $module ) {
-        Zonemaster->config->load_module_policy( $module );
-        my $m = "Zonemaster::Test::$module";
-        info( MODULE_VERSION => { module => $m, version => $m->version } );
-        push @res, eval { $m->all( $zone ) };
-        if ( $@ ) {
-            my $err = $@;
-            if ( blessed $err and $err->isa( 'Zonemaster::Exception' ) ) {
-                die $err;    # Utility exception, pass it on
+    if ( Zonemaster->can_continue() ) {
+        if ( $module ) {
+            Zonemaster->config->load_module_policy( $module );
+            my $m = "Zonemaster::Test::$module";
+            info( MODULE_VERSION => { module => $m, version => $m->version } );
+            push @res, eval { $m->all( $zone ) };
+            if ( $@ ) {
+                my $err = $@;
+                if ( blessed $err and $err->isa( 'Zonemaster::Exception' ) ) {
+                    die $err;    # Utility exception, pass it on
+                }
+                else {
+                    push @res, info( MODULE_ERROR => { module => $module, msg => "$err" } );
+                }
             }
-            else {
-                push @res, info( MODULE_ERROR => { module => $module, msg => "$err" } );
-            }
+            info( MODULE_END => { module => $module } );
+            return @res;
         }
-        info( MODULE_END => { module => $module } );
-        return @res;
+        else {
+            info( UNKNOWN_MODULE => { name => $requested, method => 'all', known => join( ':', sort $class->modules ) } );
+        }
     }
     else {
-        info( UNKNOWN_MODULE => { name => $requested, method => 'all', known => join( ':', sort $class->modules ) } );
+        info( CANNOT_CONTINUE => { zone => $zone->name->string } );
     }
 
     return;
@@ -164,30 +169,41 @@ sub run_one {
         return info( NO_NETWORK => {} );
     }
 
-    if ( $module ) {
-        Zonemaster->config->load_module_policy( $module );
-        my $m = "Zonemaster::Test::$module";
-        if ( $m->metadata->{$test} ) {
-            info( MODULE_CALL => { module => $module, method => $test, version => $m->version } );
-            push @res, eval { $m->$test( @arguments ) };
-            if ( $@ ) {
-                my $err = $@;
-                if ( blessed $err and $err->isa( 'Zonemaster::Exception' ) ) {
-                    die $err;    # Utility exception, pass it on
+    if ( Zonemaster->can_continue() ) {
+        if ( $module ) {
+            Zonemaster->config->load_module_policy( $module );
+            my $m = "Zonemaster::Test::$module";
+            if ( $m->metadata->{$test} ) {
+                info( MODULE_CALL => { module => $module, method => $test, version => $m->version } );
+                push @res, eval { $m->$test( @arguments ) };
+                if ( $@ ) {
+                    my $err = $@;
+                    if ( blessed $err and $err->isa( 'Zonemaster::Exception' ) ) {
+                        die $err;    # Utility exception, pass it on
+                    }
+                    else {
+                        push @res, info( MODULE_ERROR => { module => $module, msg => "$err" } );
+                    }
                 }
-                else {
-                    push @res, info( MODULE_ERROR => { module => $module, msg => "$err" } );
-                }
+                info( MODULE_CALL_END => { module => $module, method => $test } );
+                return @res;
             }
-            info( MODULE_CALL_END => { module => $module, method => $test } );
-            return @res;
-        }
+            else {
+                info( UNKNOWN_METHOD => { module => $m, method => $test } );
+            }
+        } ## end if ( $module )
         else {
-            info( UNKNOWN_METHOD => { module => $m, method => $test } );
+            info( UNKNOWN_MODULE => { module => $requested, method => $test, known => join( ':', sort $class->modules ) } );
         }
-    } ## end if ( $module )
+    }
     else {
-        info( UNKNOWN_MODULE => { module => $requested, method => $test, known => join( ':', sort $class->modules ) } );
+        my $zname = q{};
+        foreach my $arg ( @arguments ) {
+            if ( ref($arg) eq q{Zonemaster::Zone} ) {
+                $zname = $arg->name;
+            }
+        }
+        info( CANNOT_CONTINUE => { zone => $zname } );
     }
 
     return;

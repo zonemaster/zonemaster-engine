@@ -1,6 +1,6 @@
 package Zonemaster;
 
-use version; our $VERSION = version->declare("v1.0.17");
+use version; our $VERSION = version->declare("v1.1.0");
 
 use 5.014002;
 use Moose;
@@ -100,6 +100,27 @@ sub recurse {
 sub add_fake_delegation {
     my ( $class, $domain, $href ) = @_;
 
+    # Check fake delegation
+    foreach my $name ( keys %{$href} ) {
+        if ( not defined $href->{$name} or not scalar @{ $href->{$name} } ) {
+            if ( Zonemaster::Zone->new( { name => $domain } )->is_in_zone( $name ) ) {
+                Zonemaster->logger->add(
+                    FAKE_DELEGATION_IN_ZONE_NO_IP => { domain => $domain , ns => $name }
+                );
+            }
+            else {
+                my @ips = Net::LDNS->new->name2addr($name);
+                if ( @ips ) {
+                    push @{ $href->{$name} }, @ips;
+                }
+                else {
+                    Zonemaster->logger->add(
+                        FAKE_DELEGATION_NO_IP => { domain => $domain , ns => $name  }
+                    );
+		}
+            }
+        }  
+    }  
     my $parent = $class->zone( $recursor->parent( $domain ) );
     foreach my $ns ( @{ $parent->ns } ) {
         $ns->add_fake_delegation( $domain => $href );
@@ -121,6 +142,20 @@ sub add_fake_ds {
     }
 
     return;
+}
+
+sub can_continue {
+    my ( $class ) = @_;
+
+    if ( grep { $_->tag eq 'FAKE_DELEGATION_IN_ZONE_NO_IP' } @{ Zonemaster->logger->entries } ) {
+        return;
+    }
+    elsif ( grep { $_->tag eq 'FAKE_DELEGATION_NO_IP' } @{ Zonemaster->logger->entries } ) {
+        return;
+    }
+
+    return 1;
+    
 }
 
 sub save_cache {
@@ -217,6 +252,10 @@ Returns a hash, where the keys are test module names and the values are lists wi
 
 Does a recursive lookup for the given name, type and class, and returns the resulting packet (if any). Simply calls
 L<Zonemaster::Recursor/recurse> on a globally stored object.
+
+=item can_continue()
+
+In case of broken fake delegation (could be used in other cases, to be defined) return False.
 
 =item save_cache($filename)
 
