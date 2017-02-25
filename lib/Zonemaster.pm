@@ -1,6 +1,6 @@
 package Zonemaster;
 
-use version; our $VERSION = version->declare("v1.1.0");
+use version; our $VERSION = version->declare("v1.1.1");
 
 use 5.014002;
 use Moose;
@@ -147,13 +147,6 @@ sub add_fake_ds {
 sub can_continue {
     my ( $class ) = @_;
 
-    if ( grep { $_->tag eq 'FAKE_DELEGATION_IN_ZONE_NO_IP' } @{ Zonemaster->logger->entries } ) {
-        return;
-    }
-    elsif ( grep { $_->tag eq 'FAKE_DELEGATION_NO_IP' } @{ Zonemaster->logger->entries } ) {
-        return;
-    }
-
     return 1;
     
 }
@@ -255,7 +248,7 @@ L<Zonemaster::Recursor/recurse> on a globally stored object.
 
 =item can_continue()
 
-In case of broken fake delegation (could be used in other cases, to be defined) return False.
+In case of critical condition that prevents tool to process tests, add test here and return False.
 
 =item save_cache($filename)
 
