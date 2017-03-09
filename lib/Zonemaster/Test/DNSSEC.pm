@@ -19,7 +19,7 @@ use List::MoreUtils qw[none];
 
 use Carp;
 
-### Table fetched from IANA on 2014-09-12
+### Table fetched from IANA on 2017-03-09
 Readonly::Hash our %algo_properties => (
     0 => {
         status      => $ALGO_STATUS_RESERVED,
@@ -92,8 +92,18 @@ Readonly::Hash our %algo_properties => (
         description => q{ECDSA Curve P-384 with SHA-384},
         mnemonic    => q{ECDSAP384SHA384},
     },
+    15 => {
+        status      => $ALGO_STATUS_VALID,
+        description => q{Ed25519},
+        mnemonic    => q{Ed25519},
+    },
+    16 => {
+        status      => $ALGO_STATUS_VALID,
+        description => q{Ed448},
+        mnemonic    => q{Ed448},
+    },
     (
-        map { $_ => { status => $ALGO_STATUS_UNASSIGNED, description => q{Unassigned}, } } ( 15 .. 122 )
+        map { $_ => { status => $ALGO_STATUS_UNASSIGNED, description => q{Unassigned}, } } ( 17 .. 122 )
     ),
     (
         map { $_ => { status => $ALGO_STATUS_RESERVED, description => q{Reserved}, } } ( 123 .. 251 )
