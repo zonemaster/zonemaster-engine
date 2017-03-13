@@ -286,12 +286,15 @@ Returns a list of the loaded test modules. Exactly the same as L<Zonemaster::Tes
 =item add_fake_delegation($domain, $data)
 
 This method adds some fake delegation information to the system. The arguments are a domain name, and a reference to a hash with delegation
-information. The keys in the hash must be nameserver names, and the values references to lists of IP addresses for the corresponding nameserver.
+information. The keys in the hash must be nameserver names, and the values references to lists of IP addresses (which can be left empty) for
+the corresponding nameserver. If IP addresses are not provided for nameservers, the engine will perform queries to find them, except for
+in-bailiwick nameservers.
 
 Example:
 
     Zonemaster->add_fake_delegation(
         'lysator.liu.se' => {
+            'ns1.nic.fr' => [ ],
             'ns.nic.se'  => [ '212.247.7.228',  '2a00:801:f0:53::53' ],
             'i.ns.se'    => [ '194.146.106.22', '2001:67c:1010:5::53' ],
             'ns3.nic.se' => [ '212.247.8.152',  '2a00:801:f0:211::152' ]
