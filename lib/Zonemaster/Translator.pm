@@ -1,6 +1,6 @@
 package Zonemaster::Translator;
 
-use version; our $VERSION = version->declare("v1.0.5");
+use version; our $VERSION = version->declare("v1.0.6");
 
 use 5.014002;
 use strict;
@@ -100,8 +100,8 @@ sub _system_translation {
         "FAKE_DELEGATION"               => "Followed a fake delegation.",
         "ADDED_FAKE_DELEGATION"         => "Added a fake delegation for domain {domain} to name server {ns}.",
         "FAKE_DELEGATION_TO_SELF"       => "Name server {ns} not adding fake delegation for domain {domain} to itself.",
-        "FAKE_DELEGATION_IN_ZONE_NO_IP" => "Name server {ns} not adding fake delegation for domain {domain}. In zone name server {ns} needs an IP address.",
-        "FAKE_DELEGATION_NO_IP"         => "Can not add a fake delegation for domain {domain} to name server {ns} without IP address.",
+        "FAKE_DELEGATION_IN_ZONE_NO_IP" => "Add a fake delegation for domain {domain} to in zone name server {ns} without IP address.",
+        "FAKE_DELEGATION_NO_IP"         => "Add a fake delegation for domain {domain} to name server {ns} without IP address.",
         "PACKET_BIG"                    => "Packet size ({size}) exceeds common maximum size of {maxsize} bytes (try with \"{command}\").",
     };
 } ## end sub _system_translation
