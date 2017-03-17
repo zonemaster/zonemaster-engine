@@ -4,7 +4,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Project-Id-Version: 1.0.0\n"
-"PO-Revision-Date: 2016-11-21\n"
+"PO-Revision-Date: 2017-03-14\n"
 "Last-Translator: vincent.levigneron@afnic.fr\n"
 "Language-Team: Zonemaster Team\n"
 "MIME-Version: 1.0\n"
@@ -125,8 +125,10 @@ msgstr "Nameserver {ns}/{address} did not respond to NS query."
 msgid  "Nameserver for zone {pname} replies when trying to fetch glue."
 msgstr "Nameserver for zone {pname} replies when trying to fetch glue."
 
-#: CONNECTIVITY:IPV4_DISABLED
-#: CONNECTIVITY:IPV6_DISABLED
+#: CONNECTIVITY:IPV4_DISABLED (Same content that BASIC:IPV4_DISABLED, do not duplicate unless msgid should be different)
+
+#: CONNECTIVITY:IPV6_DISABLED (Same content that BASIC:IPV6_DISABLED, do not duplicate unless msgid should be different)
+
 #: CONNECTIVITY:NAMESERVERS_IPV4_NO_AS
 msgid  "No IPv4 nameserver address is in an AS."
 msgstr "No IPv4 nameserver address is in an AS."
@@ -199,8 +201,10 @@ msgstr "[ASN:ANNOUNCE_BY] {address};{asn}"
 msgid  "[ASN:ANNOUNCE_IN] {address};{prefix}"
 msgstr "[ASN:ANNOUNCE_IN] {address};{prefix}"
 
-#: CONSISTENCY:IPV4_DISABLED
-#: CONSISTENCY:IPV6_DISABLED
+#: CONSISTENCY:IPV4_DISABLED (Same content that BASIC:IPV4_DISABLED, do not duplicate unless msgid should be different)
+
+#: CONSISTENCY:IPV6_DISABLED (Same content that BASIC:IPV6_DISABLED, do not duplicate unless msgid should be different)
+
 #: CONSISTENCY:MULTIPLE_NS_SET
 msgid  "Saw {count} NS set."
 msgstr "Found {count} NS set(s)."
@@ -309,8 +313,10 @@ msgstr "Child has nameserver(s) not listed at parent ({extra})."
 msgid  "Parent has nameserver(s) not listed at the child ({extra})."
 msgstr "Parent has nameserver(s) not listed at the child ({extra})."
 
-#: DELEGATION:IPV4_DISABLED
-#: DELEGATION:IPV6_DISABLED
+#: DELEGATION:IPV4_DISABLED (Same content that BASIC:IPV4_DISABLED, do not duplicate unless msgid should be different)
+
+#: DELEGATION:IPV6_DISABLED (Same content that BASIC:IPV6_DISABLED, do not duplicate unless msgid should be different)
+
 #: DELEGATION:IS_NOT_AUTHORITATIVE
 msgid  "Nameserver {ns} response is not authoritative on {proto} port 53."
 msgstr "Nameserver {ns} response is not authoritative on {proto} port 53."
@@ -442,10 +448,6 @@ msgstr "DS record with keytag {keytag} and digest type {digtype} matches the DNS
 #: DNSSEC:DS_FOUND
 msgid  "Found DS records with tags {keytags}."
 msgstr "Found DS records with tags {keytags}."
-
-#: DNSSEC:DS_MATCHES_DNSKEY
-msgid  "DS record with keytag {keytag} matches the DNSKEY with the same tag."
-msgstr "DS record with keytag {keytag} matches the DNSKEY with the same tag."
 
 #: DNSSEC:DS_MATCH_FOUND
 msgid  "At least one DS record with a matching DNSKEY record was found."
@@ -663,8 +665,10 @@ msgstr "Nameserver {ns}/{address} does not support EDNS0 (replies with FORMERR).
 msgid  "The following nameservers support EDNS0 : {names}."
 msgstr "The following nameservers support EDNS0 : {names}."
 
-#: NAMESERVER:IPV4_DISABLED
-#: NAMESERVER:IPV6_DISABLED
+#: NAMESERVER:IPV4_DISABLED (Same content that BASIC:IPV4_DISABLED, do not duplicate unless msgid should be different)
+
+#: NAMESERVER:IPV6_DISABLED (Same content that BASIC:IPV6_DISABLED, do not duplicate unless msgid should be different)
+
 #: NAMESERVER:IS_A_RECURSOR
 msgid  "Nameserver {ns}/{address} is a recursor."
 msgstr "Nameserver {ns}/{address} is a recursor."
@@ -805,13 +809,9 @@ msgstr "Domain name ({name}) has no label with a double hyphen ('--') in positio
 msgid  "Both ends of all labels of the domain name ({name}) have no hyphens."
 msgstr "Neither end of any label in the domain name ({name}) has a hyphen."
 
-#: SYNTAX:NO_RESPONSE_MX_QUERY
-msgid  "No response from nameserver(s) on MX queries."
-msgstr "No response from nameserver(s) on MX queries."
+#: SYNTAX:NO_RESPONSE_MX_QUERY (Same content that SYNTAX:NO_RESPONSE_MX_QUERY, do not duplicate unless msgid should be different)
 
-#: SYNTAX:NO_RESPONSE_SOA_QUERY
-msgid  "No response from nameserver(s) on SOA queries."
-msgstr "No response from nameserver(s) on SOA queries."
+#: SYNTAX:NO_RESPONSE_SOA_QUERY (Same content that SYNTAX:NO_RESPONSE_SOA_QUERY, do not duplicate unless msgid should be different)
 
 #: SYNTAX:ONLY_ALLOWED_CHARS
 msgid  "No illegal characters in the domain name ({name})."
@@ -864,6 +864,14 @@ msgstr "Followed a fake delegation."
 #: SYSTEM:FAKE_DELEGATION_TO_SELF
 msgid  "Name server {ns} not adding fake delegation for domain {domain} to itself."
 msgstr "Name server {ns} not adding fake delegation for domain {domain} to itself."
+
+#: SYSTEM:FAKE_DELEGATION_IN_ZONE_NO_IP
+msgid  "Add a fake delegation for domain {domain} to in zone name server {ns} without IP address."
+msgstr "Add a fake delegation for domain {domain} to in zone name server {ns} without IP address."
+
+#: SYSTEM:FAKE_DELEGATION_NO_IP
+msgid  "Add a fake delegation for domain {domain} to name server {ns} without IP address."
+msgstr "Add a fake delegation for domain {domain} to name server {ns} without IP address."
 
 #: SYSTEM:LOGGER_CALLBACK_ERROR
 msgid  "Logger callback died with error: {exception}"
@@ -978,7 +986,13 @@ msgid  "No target (MX, A or AAAA record) to deliver e-mail for the domain name."
 msgstr "No target (MX, A or AAAA record) to deliver e-mail for the domain name."
 
 #: ZONE:NO_RESPONSE_MX_QUERY
+msgid  "No response from nameserver(s) on MX queries."
+msgstr "No response from nameserver(s) on MX queries."
+
 #: ZONE:NO_RESPONSE_SOA_QUERY
+msgid  "No response from nameserver(s) on SOA queries."
+msgstr "No response from nameserver(s) on SOA queries."
+
 #: ZONE:REFRESH_HIGHER_THAN_RETRY
 msgid  "SOA 'refresh' value ({refresh}) is higher than the SOA 'retry' value ({retry})."
 msgstr "SOA 'refresh' value ({refresh}) is greater than the SOA 'retry' value ({retry})."

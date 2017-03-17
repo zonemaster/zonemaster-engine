@@ -1,6 +1,6 @@
 package Zonemaster;
 
-use version; our $VERSION = version->declare("v1.0.17");
+use version; our $VERSION = version->declare("v1.0.19");
 
 use 5.014002;
 use Moose;
@@ -100,6 +100,27 @@ sub recurse {
 sub add_fake_delegation {
     my ( $class, $domain, $href ) = @_;
 
+    # Check fake delegation
+    foreach my $name ( keys %{$href} ) {
+        if ( not defined $href->{$name} or not scalar @{ $href->{$name} } ) {
+            if ( Zonemaster::Zone->new( { name => $domain } )->is_in_zone( $name ) ) {
+                Zonemaster->logger->add(
+                    FAKE_DELEGATION_IN_ZONE_NO_IP => { domain => $domain , ns => $name }
+                );
+            }
+            else {
+                my @ips = Net::LDNS->new->name2addr($name);
+                if ( @ips ) {
+                    push @{ $href->{$name} }, @ips;
+                }
+                else {
+                    Zonemaster->logger->add(
+                        FAKE_DELEGATION_NO_IP => { domain => $domain , ns => $name  }
+                    );
+		}
+            }
+        }  
+    }  
     my $parent = $class->zone( $recursor->parent( $domain ) );
     foreach my $ns ( @{ $parent->ns } ) {
         $ns->add_fake_delegation( $domain => $href );
@@ -121,6 +142,13 @@ sub add_fake_ds {
     }
 
     return;
+}
+
+sub can_continue {
+    my ( $class ) = @_;
+
+    return 1;
+    
 }
 
 sub save_cache {
@@ -218,6 +246,10 @@ Returns a hash, where the keys are test module names and the values are lists wi
 Does a recursive lookup for the given name, type and class, and returns the resulting packet (if any). Simply calls
 L<Zonemaster::Recursor/recurse> on a globally stored object.
 
+=item can_continue()
+
+In case of critical condition that prevents tool to process tests, add test here and return False.
+
 =item save_cache($filename)
 
 After running the tests, save the accumulated cache to a file with the given name.
@@ -254,12 +286,15 @@ Returns a list of the loaded test modules. Exactly the same as L<Zonemaster::Tes
 =item add_fake_delegation($domain, $data)
 
 This method adds some fake delegation information to the system. The arguments are a domain name, and a reference to a hash with delegation
-information. The keys in the hash must be nameserver names, and the values references to lists of IP addresses for the corresponding nameserver.
+information. The keys in the hash must be nameserver names, and the values references to lists of IP addresses (which can be left empty) for
+the corresponding nameserver. If IP addresses are not provided for nameservers, the engine will perform queries to find them, except for
+in-bailiwick nameservers.
 
 Example:
 
     Zonemaster->add_fake_delegation(
         'lysator.liu.se' => {
+            'ns1.nic.fr' => [ ],
             'ns.nic.se'  => [ '212.247.7.228',  '2a00:801:f0:53::53' ],
             'i.ns.se'    => [ '194.146.106.22', '2001:67c:1010:5::53' ],
             'ns3.nic.se' => [ '212.247.8.152',  '2a00:801:f0:211::152' ]

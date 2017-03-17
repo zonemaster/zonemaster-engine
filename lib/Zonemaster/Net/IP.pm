@@ -1,6 +1,6 @@
 package Zonemaster::Net::IP;
 
-use version; our $VERSION = version->declare("v0.0.4");
+use version; our $VERSION = version->declare("v0.0.5");
 
 no strict 'refs';
 use warnings;
@@ -42,3 +42,23 @@ sub new {
 }
 
 1;
+
+=head1 NAME
+
+Zonemaster::Net::IP - Net::IP/Net::IP::XS Wrapper (STILL EXPERIMENTAL)
+
+=head1 SYNOPSIS
+
+    my $ip = Zonemaster::Net::IP->new( q{0.0.0.0/8} );
+
+=head1 METHODS
+
+=over
+
+=item new
+
+Constructor of object.
+
+=back
+
+=cut

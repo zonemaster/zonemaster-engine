@@ -1,6 +1,6 @@
 package Zonemaster::Translator;
 
-use version; our $VERSION = version->declare("v1.0.4");
+use version; our $VERSION = version->declare("v1.0.6");
 
 use 5.014002;
 use strict;
@@ -81,26 +81,28 @@ sub translate_tag {
 
 sub _system_translation {
     return {
-        "CANNOT_CONTINUE"         => "Not enough data about {zone} was found to be able to run tests.",
-        "CONFIG_FILE"             => "Configuration was read from {name}.",
-        "DEPENDENCY_VERSION"      => "Using prerequisite module {name} version {version}.",
-        "GLOBAL_VERSION"          => "Using version {version} of the Zonemaster engine.",
-        "LOGGER_CALLBACK_ERROR"   => "Logger callback died with error: {exception}",
-        "LOOKUP_ERROR"            => "DNS query to {ns} for {name}/{type}/{class} failed with error: {message}",
-        "MODULE_ERROR"            => "Fatal error in {module}: {msg}",
-        "MODULE_VERSION"          => "Using module {module} version {version}.",
-        "MODULE_END"              => "Module {module} finished running.",
-        "NO_NETWORK"              => "Both IPv4 and IPv6 are disabled.",
-        "POLICY_FILE"             => "Policy was read from {name}.",
-        "POLICY_DISABLED"         => "The module {name} was disabled by the policy.",
-        "UNKNOWN_METHOD"          => "Request to run unknown method {method} in module {module}.",
-        "UNKNOWN_MODULE"          => "Request to run {method} in unknown module {module}. Known modules: {known}.",
-        "SKIP_IPV4_DISABLED"      => "IPv4 is disabled, not sending query to {ns}.",
-        "SKIP_IPV6_DISABLED"      => "IPv6 is disabled, not sending query to {ns}.",
-        "FAKE_DELEGATION"         => "Followed a fake delegation.",
-        "ADDED_FAKE_DELEGATION"   => "Added a fake delegation for domain {domain} to name server {ns}.",
-        "FAKE_DELEGATION_TO_SELF" => "Name server {ns} not adding fake delegation for domain {domain} to itself.",
-        "PACKET_BIG" => "Packet size ({size}) exceeds common maximum size of {maxsize} bytes (try with \"{command}\").",
+        "CANNOT_CONTINUE"               => "Not enough data about {zone} was found to be able to run tests.",
+        "CONFIG_FILE"                   => "Configuration was read from {name}.",
+        "DEPENDENCY_VERSION"            => "Using prerequisite module {name} version {version}.",
+        "GLOBAL_VERSION"                => "Using version {version} of the Zonemaster engine.",
+        "LOGGER_CALLBACK_ERROR"         => "Logger callback died with error: {exception}",
+        "LOOKUP_ERROR"                  => "DNS query to {ns} for {name}/{type}/{class} failed with error: {message}",
+        "MODULE_ERROR"                  => "Fatal error in {module}: {msg}",
+        "MODULE_VERSION"                => "Using module {module} version {version}.",
+        "MODULE_END"                    => "Module {module} finished running.",
+        "NO_NETWORK"                    => "Both IPv4 and IPv6 are disabled.",
+        "POLICY_FILE"                   => "Policy was read from {name}.",
+        "POLICY_DISABLED"               => "The module {name} was disabled by the policy.",
+        "UNKNOWN_METHOD"                => "Request to run unknown method {method} in module {module}.",
+        "UNKNOWN_MODULE"                => "Request to run {method} in unknown module {module}. Known modules: {known}.",
+        "SKIP_IPV4_DISABLED"            => "IPv4 is disabled, not sending query to {ns}.",
+        "SKIP_IPV6_DISABLED"            => "IPv6 is disabled, not sending query to {ns}.",
+        "FAKE_DELEGATION"               => "Followed a fake delegation.",
+        "ADDED_FAKE_DELEGATION"         => "Added a fake delegation for domain {domain} to name server {ns}.",
+        "FAKE_DELEGATION_TO_SELF"       => "Name server {ns} not adding fake delegation for domain {domain} to itself.",
+        "FAKE_DELEGATION_IN_ZONE_NO_IP" => "Add a fake delegation for domain {domain} to in zone name server {ns} without IP address.",
+        "FAKE_DELEGATION_NO_IP"         => "Add a fake delegation for domain {domain} to name server {ns} without IP address.",
+        "PACKET_BIG"                    => "Packet size ({size}) exceeds common maximum size of {maxsize} bytes (try with \"{command}\").",
     };
 } ## end sub _system_translation
 
