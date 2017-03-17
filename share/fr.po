@@ -863,11 +863,11 @@ msgid  "Name server {ns} not adding fake delegation for domain {domain} to itsel
 msgstr "Refus d'ajout de configuration DNS alternative au serveur de nom {ns} pour le domaine '{domain}' sur lui-même."
 
 #: SYSTEM:FAKE_DELEGATION_IN_ZONE_NO_IP
-msgid  "Add a fake delegation for domain {domain} to in zone name server {ns} without IP address."
+msgid  "Add an in-zone name server {ns} without IP address for a fake delegation of domain {domain}."
 msgstr "Ajout de configuration DNS alternative (fake delegation) pour le domaine '{domain'} au serveur de nom 'in-bailiwick' {ns} sans adresse IP."
 
 #: SYSTEM:FAKE_DELEGATION_NO_IP
-msgid  "Add a fake delegation for domain {domain} to name server {ns} without IP address."
+msgid  "Add a name server {ns} that cannot be resolved to any IP address for fake delegation for domain {domain}."
 msgstr "Ajout de configuration DNS alternative (fake delegation) pour le domaine '{domain'} au serveur de nom {ns} sans adresse IP."
 
 #: SYSTEM:LOGGER_CALLBACK_ERROR

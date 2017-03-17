@@ -100,8 +100,8 @@ sub _system_translation {
         "FAKE_DELEGATION"               => "Followed a fake delegation.",
         "ADDED_FAKE_DELEGATION"         => "Added a fake delegation for domain {domain} to name server {ns}.",
         "FAKE_DELEGATION_TO_SELF"       => "Name server {ns} not adding fake delegation for domain {domain} to itself.",
-        "FAKE_DELEGATION_IN_ZONE_NO_IP" => "Add a fake delegation for domain {domain} to in zone name server {ns} without IP address.",
-        "FAKE_DELEGATION_NO_IP"         => "Add a fake delegation for domain {domain} to name server {ns} without IP address.",
+        "FAKE_DELEGATION_IN_ZONE_NO_IP" => "Add an in-zone name server {ns} without IP address for a fake delegation of domain {domain}.",
+        "FAKE_DELEGATION_NO_IP"         => "Add a name server {ns} that cannot be resolved to any IP address for fake delegation for domain {domain}.",
         "PACKET_BIG"                    => "Packet size ({size}) exceeds common maximum size of {maxsize} bytes (try with \"{command}\").",
     };
 } ## end sub _system_translation
