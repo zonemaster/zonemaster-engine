@@ -4,7 +4,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Project-Id-Version: 1.0.0\n"
-"PO-Revision-Date: 2017-02-09\n"
+"PO-Revision-Date: 2017-03-14\n"
 "Last-Translator: vincent.levigneron@afnic.fr\n"
 "Language-Team: Zonemaster Team\n"
 "MIME-Version: 1.0\n"
@@ -864,6 +864,14 @@ msgstr "Followed a fake delegation."
 #: SYSTEM:FAKE_DELEGATION_TO_SELF
 msgid  "Name server {ns} not adding fake delegation for domain {domain} to itself."
 msgstr "Name server {ns} not adding fake delegation for domain {domain} to itself."
+
+#: SYSTEM:FAKE_DELEGATION_IN_ZONE_NO_IP
+msgid  "Add a fake delegation for domain {domain} to in zone name server {ns} without IP address."
+msgstr "Add a fake delegation for domain {domain} to in zone name server {ns} without IP address."
+
+#: SYSTEM:FAKE_DELEGATION_NO_IP
+msgid  "Add a fake delegation for domain {domain} to name server {ns} without IP address."
+msgstr "Add a fake delegation for domain {domain} to name server {ns} without IP address."
 
 #: SYSTEM:LOGGER_CALLBACK_ERROR
 msgid  "Logger callback died with error: {exception}"
