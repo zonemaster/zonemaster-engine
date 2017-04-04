@@ -1,5 +1,19 @@
 Revision history for Perl module Zonemaster.
 
+v1.1.0 2017-04-04 Public pre-release
+
+- This release will not be published on CPAN since it contains updates that have
+  not been fully tested. Do not update production systems without verification.
+- Use JSON::PP instead of JSON (#262)
+- Changed versioning (#263)
+- Fixes Use of uninitialized value in Nameserver.pm (#267)
+- Solved couldn't find pod for Zonemaster::Net::IP (#222)
+- Solved Tags without translations in en.po (#253)
+- Solved Duplicate tag in en.po (#252)
+- Solved Update documentation for logfilters (#221)
+- add Ed25519 (15) and Ed448 (16) algorithms (#290)
+- Solved Not-existent name server doesn't cause a failure (#278)
+
 v1.0.16 2016-12-12
 
 - Updated and added Swedish translations (#249, #248, #216, #196, partially #127)
