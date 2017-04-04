@@ -1,6 +1,6 @@
 package Zonemaster;
 
-use version; our $VERSION = version->declare("v1.0.19");
+use version; our $VERSION = version->declare("v1.1.0");
 
 use 5.014002;
 use Moose;
