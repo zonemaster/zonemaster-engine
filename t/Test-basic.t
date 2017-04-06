@@ -104,12 +104,6 @@ SKIP: {
 %res = map { $_->tag => 1 } Zonemaster->test_module( q{basic}, q{birgerjarlhotel.se} );
 ok( $res{A_QUERY_NO_RESPONSES}, q{A_QUERY_NO_RESPONSES} );
 
-TODO: {
-    local $TODO = "Need to find domain name with that error";
-
-    ok( $res{NO_PARENT_RESPONSE}, q{NO_PARENT_RESPONSE} );
-}
-
 $zone = Zonemaster->zone( q{afnic.fr} );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
