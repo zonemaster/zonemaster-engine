@@ -38,13 +38,7 @@ sub all {
     {
         push @results, $class->basic01( $zone );
 
-        # Perform BASIC2 if BASIC1 passed
-        if ( any { $_->tag eq q{HAS_GLUE} } @results ) {
-            push @results, $class->basic02( $zone );
-        }
-        else {
-            push @results, info( NO_GLUE_PREVENTS_NAMESERVER_TESTS => {} );
-        }
+        push @results, $class->basic02( $zone );
 
         # Perform BASIC3 if BASIC2 failed
         if ( none { $_->tag eq q{HAS_NAMESERVERS} } @results ) {
@@ -67,7 +61,7 @@ sub can_continue {
     my ( $class, @results ) = @_;
     my %tag = map { $_->tag => 1 } @results;
 
-    if ( $tag{HAS_GLUE} and $tag{HAS_NAMESERVERS} ) {
+    if ( not $tag{NO_GLUE_PREVENTS_NAMESERVER_TESTS} and $tag{HAS_NAMESERVERS} ) {
         return 1;
     }
     else {
@@ -93,12 +87,7 @@ sub metadata {
         basic01 => [
             qw(
               NO_PARENT
-              HAS_GLUE
-              NO_GLUE
-              NO_DOMAIN
-              PARENT_REPLIES
-              NO_PARENT_RESPONSE
-              NOT_A_ZONE
+              HAS_PARENT
               )
         ],
         basic02 => [
@@ -133,24 +122,19 @@ sub translation {
         "DOMAIN_NAME_ZERO_LENGTH_LABEL" => "Domain name ({dname}) has a zero length label.",
         "DOMAIN_NAME_TOO_LONG"          => "Domain name is too long ({fqdnlength}/{max}).",
         'NO_PARENT'                     => 'No parent domain could be found for the tested domain.',
-        'NO_GLUE'       => 'Nameservers for "{pname}" provided no NS records for tested zone. RCODE given was {rcode}.',
+        'HAS_PARENT'                    => 'Parent domain \'{pname}\' was found for the tested domain.',
         'HAS_A_RECORDS' => 'Nameserver {ns} returned A record(s) for {dname}.',
         'NO_A_RECORDS'  => 'Nameserver {ns} did not return A record(s) for {dname}.',
-        'NO_DOMAIN'     => 'Nameserver for zone {pname} responded with NXDOMAIN to query for glue.',
         'HAS_NAMESERVERS'    => 'Nameserver {ns} listed these servers as glue: {nsnlist}.',
-        'PARENT_REPLIES'     => 'Nameserver for zone {pname} replies when trying to fetch glue.',
-        'NO_PARENT_RESPONSE' => 'No response from nameserver for zone {pname} when trying to fetch glue.',
         'NO_GLUE_PREVENTS_NAMESERVER_TESTS' => 'No NS records for tested zone from parent. NS tests aborted.',
         'NS_FAILED'                    => 'Nameserver {ns}/{address} did not return NS records. RCODE was {rcode}.',
         'NS_NO_RESPONSE'               => 'Nameserver {ns}/{address} did not respond to NS query.',
         'A_QUERY_NO_RESPONSES'         => 'Nameservers did not respond to A query.',
         'HAS_NAMESERVER_NO_WWW_A_TEST' => 'Functional nameserver found. "A" query for www.{zname} test aborted.',
-        'HAS_GLUE'                     => 'Nameserver for zone {pname} listed these nameservers as glue: {nsnlist}.',
         'IPV4_DISABLED'                => 'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
         'IPV4_ENABLED'                 => 'IPv4 is enabled, can send "{rrtype}" query to {ns}/{address}.',
         'IPV6_DISABLED'                => 'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
         'IPV6_ENABLED'                 => 'IPv6 is enabled, can send "{rrtype}" query to {ns}/{address}.',
-        'NOT_A_ZONE'                   => '{zname} is not a zone.',
     };
 } ## end sub translation
 
@@ -211,63 +195,22 @@ sub basic01 {
     my $parent = $zone->parent;
 
     if ( not $parent ) {
-        return info( NO_PARENT => { zone => $zone->name->string } );
-    }
-
-    my $p = $parent->query_persistent( $parent->name, q{NS} );
-    if ( not $p ) {
-        $p = $parent->query_one( $parent->name, q{NS} );
-    }
-
-    if ( $p ) {
         push @results,
           info(
-            PARENT_REPLIES => {
-                pname => $parent->name->string,
+            NO_PARENT => {
+                zone => $zone->name->string,
             }
           );
     }
     else {
         push @results,
           info(
-            NO_PARENT_RESPONSE => {
-                pname => $parent->name->string,
-            }
-          );
-        return @results;
-    }
-
-    if ( $p->rcode eq q{NXDOMAIN} ) {
-        push @results,
-          info(
-            NO_DOMAIN => {
+            HAS_PARENT => {
+                zone  => $zone->name->string,
                 pname => $parent->name->string,
             }
           );
     }
-    else {
-        if ( $p->has_rrs_of_type_for_name( q{NS}, $parent->name ) ) {
-            push @results,
-              info(
-                HAS_GLUE => {
-                    pname   => $parent->name->string,
-                    nsnlist => join( q{,}, sort map { $_->nsdname } $p->get_records_for_name( q{NS}, $parent->name ) ),
-                }
-              );
-        }
-        else {
-            push @results,
-              info(
-                NO_GLUE => {
-                    pname => $parent->name->string,
-                    rcode => $p->rcode,
-                }
-              );
-            if ( $p->aa and ( grep { $_->type eq 'SOA' } $p->authority ) ) {
-                push @results, info( NOT_A_ZONE => { zname => $parent->name->string } );
-            }
-        }
-    } ## end else [ if ( $p->rcode eq q{NXDOMAIN})]
 
     return @results;
 } ## end sub basic01
@@ -276,8 +219,16 @@ sub basic02 {
     my ( $class, $zone ) = @_;
     my @results;
     my $query_type = q{NS};
+    my @ns = @{ Zonemaster::TestMethods->method4( $zone ) };
 
-    foreach my $ns ( @{ Zonemaster::TestMethods->method4( $zone ) } ) {
+    if ( not scalar @ns ) {
+        push @results,
+          info(
+            NO_GLUE_PREVENTS_NAMESERVER_TESTS => {}
+          );
+    }
+
+    foreach my $ns ( @ns ) {
         if ( not Zonemaster->config->ipv4_ok and $ns->address->version == $IP_VERSION_4 ) {
             push @results,
               info(

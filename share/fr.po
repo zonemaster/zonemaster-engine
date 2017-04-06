@@ -4,7 +4,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Project-Id-Version: 1.0.0\n"
-"PO-Revision-Date: 2017-03-14\n"
+"PO-Revision-Date: 2017-04-06\n"
 "Last-Translator: vincent.levigneron@afnic.fr\n"
 "Language-Team: Zonemaster Team\n"
 "MIME-Version: 1.0\n"
@@ -57,10 +57,6 @@ msgstr "Le nom de domaine ({dname}) a un label de taille zéro."
 msgid  "Nameserver {ns} returned A record(s) for {dname}."
 msgstr "Le serveur de noms {ns} renvoie un enregistrement de type \"A\" en réponse à une requête pour {dname}."
 
-#: BASIC:HAS_GLUE
-msgid  "Nameserver for zone {pname} listed these nameservers as glue: {nsnlist}."
-msgstr "Le serveur de noms pour la zone {pname} renvoie la liste de serveurs de noms suivants: {nsnlist}."
-
 #: BASIC:HAS_NAMESERVERS
 msgid  "Nameserver {ns} listed these servers as glue: {nsnlist}."
 msgstr "Une requête NS sur le serveur de noms {ns} renvoie la liste de serveurs de noms suivants: {nsnlist}."
@@ -68,6 +64,10 @@ msgstr "Une requête NS sur le serveur de noms {ns} renvoie la liste de serveurs
 #: BASIC:HAS_NAMESERVER_NO_WWW_A_TEST
 msgid  "Functional nameserver found. \"A\" query for www.{zname} test aborted."
 msgstr "Un serveur de noms fonctionnel a été trouvé. Inutile de réaliser une requête de type \"A\" sur www.{zname}."
+
+#: BASIC:HAS_PARENT
+msgid  "Parent domain '{pname}' was found for the tested domain."
+msgstr "Une zone parente '{pname}' a pu être trouvée pour le nom de domaine testé."
 
 #: BASIC:IPV4_DISABLED
 msgid  "IPv4 is disabled, not sending \"{rrtype}\" query to {ns}/{address}."
@@ -89,14 +89,6 @@ msgstr "IPv6 est activé, il est possible de réaliser une requête de type \"{r
 msgid  "Nameserver {ns} did not return A record(s) for {dname}."
 msgstr "Le serveur de noms {ns} ne renvoie pas d'enregistrement de type \"A\" en réponse à une requête pour {dname}."
 
-#: BASIC:NO_DOMAIN
-msgid  "Nameserver for zone {pname} responded with NXDOMAIN to query for glue."
-msgstr "Le serveur de noms pour la zone {pname} retourne un code NXDOMAIN à une requête de type \"NS\" pour la zone testée."
-
-#: BASIC:NO_GLUE
-msgid  "Nameservers for \"{pname}\" provided no NS records for tested zone. RCODE given was {rcode}."
-msgstr "Les serveurs de noms pour la zone \"{pname}\" ne renvoient pas d'enregistrements de type \"NS\" pour la zone testée. Le code {rcode} a été retourné."
-
 #: BASIC:NO_GLUE_PREVENTS_NAMESERVER_TESTS
 msgid  "No NS records for tested zone from parent. NS tests aborted."
 msgstr "Aucun enregistrement de type \"NS\" renvoyé par la zone parente pour la zone testée. Les tests complémentaires sur ces serveurs sont annulés."
@@ -105,10 +97,6 @@ msgstr "Aucun enregistrement de type \"NS\" renvoyé par la zone parente pour la
 msgid  "No parent domain could be found for the tested domain."
 msgstr "Aucune zone parente n'a pu être trouvée pour le nom de domaine testé."
 
-#: BASIC:NO_PARENT_RESPONSE
-msgid  "No response from nameserver for zone {pname} when trying to fetch glue."
-msgstr "Aucune réponse obtenue des serveurs de noms de la zone {pname} en essayant de récupérer la liste des serveurs de noms de la zone testée."
-
 #: BASIC:NS_FAILED
 msgid  "Nameserver {ns}/{address} did not return NS records. RCODE was {rcode}."
 msgstr "Le serveur de noms {ns}/{address} ne renvoie pas d'enregistrements de type \"NS\" pour la zone testée. Le code {rcode} a été retourné."
@@ -116,10 +104,6 @@ msgstr "Le serveur de noms {ns}/{address} ne renvoie pas d'enregistrements de ty
 #: BASIC:NS_NO_RESPONSE
 msgid  "Nameserver {ns}/{address} did not respond to NS query."
 msgstr "Le serveur de noms {ns}/{address} ne répond pas à une requête de type \"NS\"."
-
-#: BASIC:PARENT_REPLIES
-msgid  "Nameserver for zone {pname} replies when trying to fetch glue."
-msgstr "Les serveurs de noms de la zone {pname} répondent lorsque l'on essaye de récupérer la liste des serveurs de noms de la zone testée."
 
 #: CONNECTIVITY:IPV4_DISABLED (Même contenu que BASIC:IPV4_DISABLED, ne pas dupliqué à moins que le contenu du message ne vienne à changer)
 
