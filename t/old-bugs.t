@@ -36,10 +36,7 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster->config->no_network( 1 );
 }
 
-my @res = Zonemaster->test_method( q{basic}, q{basic01}, Zonemaster->zone( q{001.tf} ) );
-is( $res[2]->tag, q{PARENT_REPLIES}, 'Running single tests in Basic works.' );
-
-@res = Zonemaster->test_method( 'Syntax', 'syntax03', 'XN--MGBERP4A5D4AR' );
+my @res = Zonemaster->test_method( 'Syntax', 'syntax03', 'XN--MGBERP4A5D4AR' );
 is( $res[2]->tag, q{NO_DOUBLE_DASH}, 'No complaint for XN--MGBERP4A5D4AR' );
 
 my $zft_zone = Zonemaster->zone( 'zft.rd.nic.fr' );
