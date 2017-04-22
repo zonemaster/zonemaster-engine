@@ -58,6 +58,8 @@ sub all {
                 }
               );
         }
+
+        push @results, $class->basic04( $zone ) if Zonemaster->config->should_run( 'basic04' );
     } ## end if ( none { $_->tag eq...})
 
     return @results;
@@ -124,6 +126,12 @@ sub metadata {
               A_QUERY_NO_RESPONSES
               )
         ],
+        basic04 => [
+            qw(
+              HAS_RECORDS_TTL
+              NO_RECORDS
+              )
+        ],
     };
 } ## end sub metadata
 
@@ -136,6 +144,8 @@ sub translation {
         'NO_GLUE'       => 'Nameservers for "{pname}" provided no NS records for tested zone. RCODE given was {rcode}.',
         'HAS_A_RECORDS' => 'Nameserver {ns} returned A record(s) for {dname}.',
         'NO_A_RECORDS'  => 'Nameserver {ns} did not return A record(s) for {dname}.',
+        'HAS_RECORDS_TTL' => 'Found an {rr} type record for {dname}/{address}/{ttl}',
+        'NO_RECORDS'      => 'No A/AAAA records for {dname} or www.{dname}.',
         'NO_DOMAIN'     => 'Nameserver for zone {pname} responded with NXDOMAIN to query for glue.',
         'HAS_NAMESERVERS'    => 'Nameserver {ns} listed these servers as glue: {nsnlist}.',
         'PARENT_REPLIES'     => 'Nameserver for zone {pname} replies when trying to fetch glue.',
@@ -445,6 +455,40 @@ sub basic03 {
     return @results;
 } ## end sub basic03
 
+sub basic04 {
+    my ( $class, $zone ) = @_;
+    my @results;
+    my $response_nb = 0;
+
+    foreach my $query_type ( 'A', 'AAAA' ) {
+        foreach my $prefix ( '', 'www.' ) {
+            my $name = $prefix . $zone->name;
+            my $p = $zone->query_one( $name, $query_type );
+
+            foreach my $a ( $p->answer() ) {
+                $response_nb++;
+                push @results,
+                  info(
+                    HAS_RECORDS_TTL => {
+                        rr      => $query_type,
+                        dname   => $name,
+                        address => $a->address(),
+                        ttl     => $a->ttl(),
+                    }
+                  );
+            }
+        }
+    } ## end foreach my $query_type ( 'A'...)
+
+    if ( not $response_nb ) {
+        push @results, info( NO_RECORDS => { dname => $zone->name->string } );
+    }
+
+    return @results;
+} ## end sub basic04
+
+1;
+
 1;
 
 =head1 NAME
@@ -461,7 +505,7 @@ Zonemaster::Test::Basic - module implementing test for very basic domain functio
 
 =item all($zone)
 
-Runs between one and three tests, depending on the zone. If L<basic01> passes, L<basic02> is run. If L<basic02> fails, L<basic03> is run.
+Runs between one and three tests, depending on the zone. If L<basic01> passes, L<basic02> and L<basic04> is run. If L<basic02> fails, L<basic03> is run.
 
 =item metadata()
 
@@ -505,6 +549,12 @@ responds sensibly to an NS query for the tested zone.
 Checks if at least one of the nameservers pointed out by the parent zone gives a useful response when sent an A query for the C<www> label in the
 tested zone (that is, if we're testing C<example.org> this test will as for A records for C<www.example.org>). This test is only run if the
 L<basic02> test has I<failed>.
+
+=item basic04
+
+Checks if at least one of the nameservers pointed out by the parent zone gives a useful response when sent an A/AAAA query for both the root and
+the C<www> label in the tested zone (that is, if we're testing C<example.org> this test will as for A/AAAA records for C<example.com> and
+C<www.example.org>).
 
 =back
 
