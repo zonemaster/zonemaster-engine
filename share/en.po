@@ -4,7 +4,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Project-Id-Version: 1.0.0\n"
-"PO-Revision-Date: 2017-03-14\n"
+"PO-Revision-Date: 2017-04-06\n"
 "Last-Translator: vincent.levigneron@afnic.fr\n"
 "Language-Team: Zonemaster Team\n"
 "MIME-Version: 1.0\n"
@@ -57,10 +57,6 @@ msgstr "Domain name ({dname}) has a zero-length label."
 msgid  "Nameserver {ns} returned A record(s) for {dname}."
 msgstr "Nameserver {ns} returned \"A\" record(s) for {dname}."
 
-#: BASIC:HAS_GLUE
-msgid  "Nameserver for zone {pname} listed these nameservers as glue: {nsnlist}."
-msgstr "Nameserver for zone {pname} listed these nameservers as glue: {nsnlist}."
-
 #: BASIC:HAS_NAMESERVERS
 msgid  "Nameserver {ns} listed these servers as glue: {nsnlist}."
 msgstr "Nameserver {ns} listed these servers as glue: {nsnlist}."
@@ -68,6 +64,10 @@ msgstr "Nameserver {ns} listed these servers as glue: {nsnlist}."
 #: BASIC:HAS_NAMESERVER_NO_WWW_A_TEST
 msgid  "Functional nameserver found. \"A\" query for www.{zname} test aborted."
 msgstr "Functional nameserver found. \"A\" query for www.{zname} test skipped."
+
+#: BASIC:HAS_PARENT
+msgid  "Parent domain '{pname}' was found for the tested domain."
+msgstr "Parent domain '{pname}' was found for the tested domain."
 
 #: BASIC:IPV4_DISABLED
 msgid  "IPv4 is disabled, not sending \"{rrtype}\" query to {ns}/{address}."
@@ -89,14 +89,6 @@ msgstr "IPv6 is enabled, can send \"{rrtype}\" query to {ns}/{address}."
 msgid  "Nameserver {ns} did not return A record(s) for {dname}."
 msgstr "Nameserver {ns} did not return \"A\" record(s) for {dname}."
 
-#: BASIC:NO_DOMAIN
-msgid  "Nameserver for zone {pname} responded with NXDOMAIN to query for glue."
-msgstr "Nameserver for zone {pname} responded with NXDOMAIN to query for glue."
-
-#: BASIC:NO_GLUE
-msgid  "Nameservers for \"{pname}\" provided no NS records for tested zone. RCODE given was {rcode}."
-msgstr "Nameservers for \"{pname}\" provided no NS records for tested zone. RCODE given was {rcode}."
-
 #: BASIC:NO_GLUE_PREVENTS_NAMESERVER_TESTS
 msgid  "No NS records for tested zone from parent. NS tests aborted."
 msgstr "No NS records for tested zone from parent. NS tests skipped."
@@ -105,14 +97,6 @@ msgstr "No NS records for tested zone from parent. NS tests skipped."
 msgid  "No parent domain could be found for the tested domain."
 msgstr "No parent domain could be found for the domain under test."
 
-#: BASIC:NO_PARENT_RESPONSE
-msgid  "No response from nameserver for zone {pname} when trying to fetch glue."
-msgstr "No response from nameserver for zone {pname} when trying to fetch glue."
-
-#: BASIC:NOT_A_ZONE
-msgid  "{zname} is not a zone."
-msgstr "{zname} is not a zone."
-
 #: BASIC:NS_FAILED
 msgid  "Nameserver {ns}/{address} did not return NS records. RCODE was {rcode}."
 msgstr "Nameserver {ns}/{address} did not return NS records. RCODE was {rcode}."
@@ -120,10 +104,6 @@ msgstr "Nameserver {ns}/{address} did not return NS records. RCODE was {rcode}."
 #: BASIC:NS_NO_RESPONSE
 msgid  "Nameserver {ns}/{address} did not respond to NS query."
 msgstr "Nameserver {ns}/{address} did not respond to NS query."
-
-#: BASIC:PARENT_REPLIES
-msgid  "Nameserver for zone {pname} replies when trying to fetch glue."
-msgstr "Nameserver for zone {pname} replies when trying to fetch glue."
 
 #: CONNECTIVITY:IPV4_DISABLED (Same content that BASIC:IPV4_DISABLED, do not duplicate unless msgid should be different)
 
