@@ -43,7 +43,7 @@ msgstr "Aucune réponse des serveurs de noms sur une requête de type \"A\"."
 
 #: BASIC:DOMAIN_NAME_LABEL_TOO_LONG
 msgid  "Domain name ({dname}) has a label ({dlabel}) too long ({dlength}/{max})."
-msgstr "Le nom de domaine ({dname}) a un label ({dlabel}) trop long ({dlength}/{max})."
+msgstr "Le nom de domaine '{dname}' a un label ({dlabel}) trop long ({dlength}/{max})."
 
 #: BASIC:DOMAIN_NAME_TOO_LONG
 msgid  "Domain name is too long ({fqdnlength}/{max})."
@@ -51,11 +51,11 @@ msgstr "Le nom de domaine est trop long ({fqdnlength}/{max})."
 
 #: BASIC:DOMAIN_NAME_ZERO_LENGTH_LABEL
 msgid  "Domain name ({dname}) has a zero length label."
-msgstr "Le nom de domaine ({dname}) a un label de taille zéro."
+msgstr "Le nom de domaine '{dname}' a un label de taille zéro."
 
 #: BASIC:HAS_A_RECORDS
 msgid  "Nameserver {ns} returned A record(s) for {dname}."
-msgstr "Le serveur de noms {ns} renvoie un enregistrement de type \"A\" en réponse à une requête pour {dname}."
+msgstr "Le serveur de noms {ns} renvoie un enregistrement de type \"A\" en réponse à une requête pour '{dname}'."
 
 #: BASIC:HAS_NAMESERVERS
 msgid  "Nameserver {ns} listed these servers as glue: {nsnlist}."
@@ -87,7 +87,7 @@ msgstr "IPv6 est activé, il est possible de réaliser une requête de type \"{r
 
 #: BASIC:NO_A_RECORDS
 msgid  "Nameserver {ns} did not return A record(s) for {dname}."
-msgstr "Le serveur de noms {ns} ne renvoie pas d'enregistrement de type \"A\" en réponse à une requête pour {dname}."
+msgstr "Le serveur de noms {ns} ne renvoie pas d'enregistrement de type \"A\" en réponse à une requête pour '{dname}'."
 
 #: BASIC:NO_GLUE_PREVENTS_NAMESERVER_TESTS
 msgid  "No NS records for tested zone from parent. NS tests aborted."
@@ -520,7 +520,7 @@ msgstr "Aucun enregistrement de type \"DNSKEY\" n'a été retourné."
 
 #: DNSSEC:NO_DS
 msgid  "{from} returned no DS records for {zone}."
-msgstr "Le serveur de noms {from} ne retourne aucun enregistrement de type \"DS\" pour la zone {zone}."
+msgstr "Le serveur de noms {from} ne retourne aucun enregistrement de type \"DS\" pour la zone '{zone}'."
 
 #: DNSSEC:NO_KEYS_OR_NO_SIGS
 msgid  "Cannot test DNSKEY signatures, because we got {keys} DNSKEY records and {sigs} RRSIG records."
@@ -644,7 +644,7 @@ msgstr "Les serveurs de noms suivants supportent EDNS0 : {names}."
 
 #: NAMESERVER:IS_A_RECURSOR
 msgid  "Nameserver {ns}/{address} is a recursor."
-msgstr "Le serveur de noms {ns}/{address} retourne le code NXDOMAIN lors d'une requête de type \"SOA\" sur le nom de domaine {dname}. Il est récursif."
+msgstr "Le serveur de noms {ns}/{address} retourne le code NXDOMAIN lors d'une requête de type \"SOA\" sur le nom de domaine '{dname}'. Il est récursif."
 
 #: NAMESERVER:NO_RECURSOR
 msgid  "None of the following nameservers is a recursor : {names}."
@@ -688,11 +688,11 @@ msgstr "Il a été impossible de trouver une adresse IP pour les serveurs de nom
 
 #: NAMESERVER:QNAME_CASE_SENSITIVE
 msgid  "Nameserver {ns}/{address} preserves original case of queried names."
-msgstr "Le serveur de noms {ns}/{address} conserve la casse des noms requêtés dans les réponses ({dname})."
+msgstr "Le serveur de noms {ns}/{address} conserve la casse des noms requêtés dans les réponses '{dname}'."
 
 #: NAMESERVER:QNAME_CASE_INSENSITIVE
 msgid  "Nameserver {ns}/{address} does not preserve original case of queried names."
-msgstr "Le serveur de noms {ns}/{address} ne conserve pas la casse des noms requêtés dans les réponses ({dname})."
+msgstr "Le serveur de noms {ns}/{address} ne conserve pas la casse des noms requêtés dans les réponses '{dname}'."
 
 #: NAMESERVER:CASE_QUERY_SAME_ANSWER
 msgid  "When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver {ns}/{address} returns same answers."
@@ -724,11 +724,11 @@ msgstr "Lors d'une requête de type {type} pour la ressource \"{query}\" avec de
 
 #: SYNTAX:DISCOURAGED_DOUBLE_DASH
 msgid  "Domain name ({name}) has a label ({label}) with a double hyphen ('--') in position 3 and 4 (with a prefix which is not 'xn--')."
-msgstr "Le nom de domaine ({name}) contient un label avec un double tiret ('--') en positions 3 et 4 (avec un préfixe différent de 'xn--')."
+msgstr "Le nom de domaine '{name}' contient un label avec un double tiret ('--') en positions 3 et 4 (avec un préfixe différent de 'xn--')."
 
 #: SYNTAX:INITIAL_HYPHEN
 msgid  "Domain name ({name}) has a label ({label}) starting with an hyphen ('-')."
-msgstr "Le nom de domaine ({name}) contient un label commençant par un tiret ('-')."
+msgstr "Le nom de domaine '{name}' contient un label commençant par un tiret ('-')."
 
 #: SYNTAX:MNAME_DISCOURAGED_DOUBLE_DASH
 msgid  "SOA MNAME ({name}) has a label ({label}) with a double hyphen ('--') in position 3 and 4 (with a prefix which is not 'xn--')."
@@ -780,15 +780,15 @@ msgstr "La syntaxe du nom du serveur de noms ({name}) est valide."
 
 #: SYNTAX:NON_ALLOWED_CHARS
 msgid  "Found illegal characters in the domain name ({name})."
-msgstr "Des caractèrs interdits ont été trouvés dans le nom de domaine ({name})."
+msgstr "Des caractèrs interdits ont été trouvés dans le nom de domaine '{name}'."
 
 #: SYNTAX:NO_DOUBLE_DASH
 msgid  "Domain name ({name}) has no label with a double hyphen ('--') in position 3 and 4 (with a prefix which is not 'xn--')."
-msgstr "Le nom de domaine ({name}) n'a aucun label contenant un double tiret ('--') en positions 3 et 4 (avec un préfixe différent de 'xn--')."
+msgstr "Le nom de domaine '{name}' n'a aucun label contenant un double tiret ('--') en positions 3 et 4 (avec un préfixe différent de 'xn--')."
 
 #: SYNTAX:NO_ENDING_HYPHENS
 msgid  "Both ends of all labels of the domain name ({name}) have no hyphens."
-msgstr "Aucune des extrémités des labels du nom de domain ({name}) n'est un tiret '-'."
+msgstr "Aucune des extrémités des labels du nom de domain '{name}' n'est un tiret '-'."
 
 #: SYNTAX:NO_RESPONSE_MX_QUERY
 msgid  "No response from nameserver(s) on MX queries."
@@ -800,7 +800,7 @@ msgstr "Aucune réponse des serveurs de noms sur une requête de type \"SOA\"."
 
 #: SYNTAX:ONLY_ALLOWED_CHARS
 msgid  "No illegal characters in the domain name ({name})."
-msgstr "Le nom de domaine ({name}) ne contient aucun caractère interdit."
+msgstr "Le nom de domaine '{name}' ne contient aucun caractère interdit."
 
 #: SYNTAX:RNAME_MISUSED_AT_SIGN
 msgid  "There must be no misused '@' character in the SOA RNAME field ({rname})."
@@ -820,11 +820,11 @@ msgstr "Le champ RNAME ({rname}) du SOA est conforme aux règles définies dans 
 
 #: SYNTAX:TERMINAL_HYPHEN
 msgid  "Domain name ({name}) has a label ({label}) ending with an hyphen ('-')."
-msgstr "Le nom de domaine ({name}) contient un label ({label}) se terminant par un tiret '-'."
+msgstr "Le nom de domaine '{name}' contient un label ({label}) se terminant par un tiret '-'."
 
 #: SYSTEM:CANNOT_CONTINUE
 msgid  "Not enough data about {zone} was found to be able to run tests."
-msgstr "Pas assez d'informations obtenues sur la zone {zone} pour permettre la poursuite des tests."
+msgstr "Pas assez d'informations obtenues sur la zone '{zone}' pour permettre la poursuite des tests."
 
 #: SYSTEM:CONFIG_FILE
 msgid  "Configuration was read from {name}."
