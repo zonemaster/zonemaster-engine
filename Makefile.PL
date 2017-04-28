@@ -25,7 +25,6 @@ requires 'Readonly'              => 0;
 requires 'Time::HiRes'           => 0;
 requires 'Locale::TextDomain'    => 0;
 requires 'Text::CSV'             => 0;
-requires 'File::Share'           => 0;
 
 recommends 'Readonly::XS' => 0;
 

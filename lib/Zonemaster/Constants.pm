@@ -1,14 +1,18 @@
 package Zonemaster::Constants;
 
-use version; our $VERSION = version->declare("v1.2.0");
+use version; our $VERSION = version->declare("v1.2.1");
 
 use strict;
 use warnings;
 
+use Carp;
+
+use English qw( -no_match_vars ) ;
+
 use parent 'Exporter';
 use Zonemaster::Net::IP;
 use Text::CSV;
-use File::Share q{:all};
+use File::ShareDir qw[dist_dir dist_file];
 
 use Readonly;
 
@@ -91,7 +95,7 @@ sub _extract_iana_ip_blocks {
     my $csv = Text::CSV->new ({
       binary    => 1,
       auto_diag => 1,
-      sep_char  => ','
+      sep_char  => q{,}
     });
     my @files_details = (
         { name => q{iana-ipv4-special-registry.csv}, ip_version => $IP_VERSION_4 },
@@ -100,22 +104,22 @@ sub _extract_iana_ip_blocks {
 
     foreach my $file_details ( @files_details ) {
         my $first_line = 1;
-        next unless ${$file_details}{ip_version} == $ip_version;
+        next if ${$file_details}{ip_version} != $ip_version;
         my $data_location = dist_file('Zonemaster', ${$file_details}{name});
-        open(my $data, '<:encoding(utf8)', $data_location);
+        open(my $data, '<:encoding(utf8)', $data_location) or croak "Cannot open '${data_location}' : ${OS_ERROR}";
         while (my $fields = $csv->getline( $data )) {
             if ( $first_line ) {
                 $first_line = 0;
                 next;
             }
             my $address_data = $fields->[0];
-            $address_data =~ s/ +//g;
-            foreach my $address_item ( split q{,}, $address_data ) {
-                $address_item =~ s/(^.+\/\d+).*$/$1/;
+            $address_data =~ s/[ ]+//smx;
+            foreach my $address_item ( split /,/smx, $address_data ) {
+                $address_item =~ s/(\A.+\/\d+).*\z/$1/smx;
                 push @list, { ip => Zonemaster::Net::IP->new( $address_item ), name => $fields->[1], reference => $fields->[2] };
             }
         }
-        close $data;
+        close $data or croak "Cannot close '${data_location}' : ${OS_ERROR}";
     }
 
     return @list;
