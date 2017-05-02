@@ -866,12 +866,12 @@ msgid  "Name server {ns} not adding fake delegation for domain {domain} to itsel
 msgstr "Name server {ns} not adding fake delegation for domain {domain} to itself."
 
 #: SYSTEM:FAKE_DELEGATION_IN_ZONE_NO_IP
-msgid  "Add an in-zone name server {ns} without IP address for a fake delegation of domain {domain}."
-msgstr "Add an in-zone name server {ns} without IP address for a fake delegation of domain {domain}."
+msgid  "The fake delegation of domain {domain} includes an in-zone name server {ns} without mandatory glue (without IP address)."
+msgstr "The fake delegation of domain {domain} includes an in-zone name server {ns} without mandatory glue (without IP address)."
 
 #: SYSTEM:FAKE_DELEGATION_NO_IP
-msgid  "Add a name server {ns} that cannot be resolved to any IP address for fake delegation for domain {domain}."
-msgstr "Add a name server {ns} that cannot be resolved to any IP address for fake delegation for domain {domain}."
+msgid  "The fake delegation of domain {domain} includes a name server {ns} that cannot be resolved to any IP address."
+msgstr "The fake delegation of domain {domain} includes a name server {ns} that cannot be resolved to any IP address."
 
 #: SYSTEM:LOGGER_CALLBACK_ERROR
 msgid  "Logger callback died with error: {exception}"

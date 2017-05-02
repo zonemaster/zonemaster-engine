@@ -866,12 +866,12 @@ msgid  "Name server {ns} not adding fake delegation for domain {domain} to itsel
 msgstr "Namnservern '{ns}' lade inte till en skapad delegering av domänen '{domain}' till sig själv."
 
 #: SYSTEM:FAKE_DELEGATION_IN_ZONE_NO_IP
-msgid  "Add an in-zone name server {ns} without IP address for a fake delegation of domain {domain}."
-msgstr "Lade till namnservern '{ns}', som kräver glue, men utan IP-adress for en skapad delegering av domänen '{domain}'."
+msgid  "The fake delegation of domain {domain} includes an in-zone name server {ns} without mandatory glue (without IP address)."
+msgstr "Försöksdelegering av domänen '{domain}' innehåller en namnservern '{ns}' som kräver en glue-post (kräver IP-adress)."
 
 #: SYSTEM:FAKE_DELEGATION_NO_IP
-msgid  "Add a name server {ns} that cannot be resolved to any IP address for fake delegation for domain {domain}."
-msgstr "Lade till namnserern '{ns}', som inte kan slås upp till någon IP-adress, för en skapad delegering av domänen '{domain}'."
+msgid  "The fake delegation of domain {domain} includes a name server {ns} that cannot be resolved to any IP address."
+msgstr "Försöksdelegering av domänen '{domain}' innehåller en namnservern '{ns}' som inte kan slås upp till någon IP-adress."
 
 #: SYSTEM:LOGGER_CALLBACK_ERROR
 msgid  "Logger callback died with error: {exception}"
