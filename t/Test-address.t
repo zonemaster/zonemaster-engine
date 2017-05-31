@@ -296,7 +296,7 @@ ok(
 );
 
 SKIP: {
-    skip "::cafe:cafe Was RFC4291: Deprecated (IPv4-compatible Address) (Zonemaster::Constants prior to 1.2.0 version)", 1;
+    skip "::cafe:cafe Was RFC4291: Deprecated (IPv4-compatible Address) (Zonemaster::Engine::Constants prior to 1.2.0 version)", 1;
     ok(
         defined(
             Zonemaster::Engine::Test::Address->find_special_address(
@@ -308,7 +308,7 @@ SKIP: {
 }
 
 SKIP: {
-    skip "5fff:cafe:cafe:cafe:cafe:cafe:cafe:cafe Was RFC3701: unallocated (ex 6bone) (Zonemaster::Constants prior to 1.2.0 version)", 1;
+    skip "5fff:cafe:cafe:cafe:cafe:cafe:cafe:cafe Was RFC3701: unallocated (ex 6bone) (Zonemaster::Engine::Constants prior to 1.2.0 version)", 1;
     ok(
         defined(
             Zonemaster::Engine::Test::Address->find_special_address(
@@ -320,7 +320,7 @@ SKIP: {
 }
 
 SKIP: {
-    skip "ffff:cafe:cafe:cafe:cafe:cafe:cafe:cafe Was RFC4291: IPv6 multicast addresses (Zonemaster::Constants prior to 1.2.0 version)", 1;
+    skip "ffff:cafe:cafe:cafe:cafe:cafe:cafe:cafe Was RFC4291: IPv6 multicast addresses (Zonemaster::Engine::Constants prior to 1.2.0 version)", 1;
     ok(
         defined(
             Zonemaster::Engine::Test::Address->find_special_address(

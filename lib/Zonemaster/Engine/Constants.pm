@@ -1,4 +1,4 @@
-package Zonemaster::Constants;
+package Zonemaster::Engine::Constants;
 
 use version; our $VERSION = version->declare("v1.2.1");
 
@@ -129,11 +129,11 @@ sub _extract_iana_ip_blocks {
 
 =head1 NAME
 
-Zonemaster::Constants - module holding constants used in test modules
+Zonemaster::Engine::Constants - module holding constants used in test modules
 
 =head1 SYNOPSIS
 
-   use Zonemaster::Constants ':all';
+   use Zonemaster::Engine::Constants ':all';
 
 =head1 EXPORTED GROUPS
 

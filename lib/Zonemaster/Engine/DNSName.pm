@@ -1,4 +1,4 @@
-package Zonemaster::DNSName;
+package Zonemaster::Engine::DNSName;
 
 use version; our $VERSION = version->declare("v1.0.2");
 
@@ -8,7 +8,7 @@ use warnings;
 use Moose;
 use Moose::Util::TypeConstraints;
 
-coerce 'Zonemaster::DNSName', from 'Str', via { Zonemaster::DNSName->new( $_ ) };
+coerce 'Zonemaster::Engine::DNSName', from 'Str', via { Zonemaster::Engine::DNSName->new( $_ ) };
 
 use overload
   '""'  => \&string,
@@ -66,7 +66,7 @@ sub next_higher {
     my @l    = @{ $self->labels };
     if ( @l ) {
         shift @l;
-        return Zonemaster::DNSName->new( labels => \@l );
+        return Zonemaster::Engine::DNSName->new( labels => \@l );
     }
     else {
         return;
@@ -116,7 +116,7 @@ __PACKAGE__->meta->make_immutable;
 
 =head1 NAME
 
-Zonemaster::DNSName - class representing DNS names
+Zonemaster::Engine::DNSName - class representing DNS names
 
 =head1 SYNOPSIS
 
@@ -144,12 +144,12 @@ The constructor can be called with either a single argument or with a reference
 to a hash as in the example above.
 
 If there is a single argument, it must be either a non-reference, a
-L<Zonemaster::DNSName> object or a L<Zonemaster::Zone> object.
+L<Zonemaster::Engine::DNSName> object or a L<Zonemaster::Zone> object.
 
 If it's a non-reference, it will be split at period characters (possibly after
 stringification) and the resulting list used as the name's labels.
 
-If it's a L<Zonemaster::DNSName> object it will simply be returned.
+If it's a L<Zonemaster::Engine::DNSName> object it will simply be returned.
 
 If it's a L<Zonemaster::Zone> object, the value of its C<name> attribute will
 be returned.
@@ -171,7 +171,7 @@ Overloads string comparison. Comparison is made after converting the names to up
 
 =item next_higher()
 
-Returns a new L<Zonemaster::DNSName> object, representing the name of the called one with the leftmost label removed.
+Returns a new L<Zonemaster::Engine::DNSName> object, representing the name of the called one with the leftmost label removed.
 
 =item common($other)
 
@@ -180,7 +180,7 @@ up the DNS tree.
 
 =item prepend($label)
 
-Returns a new L<Zonemaster::DNSName> object, representing the called one with the given label prepended.
+Returns a new L<Zonemaster::Engine::DNSName> object, representing the called one with the given label prepended.
 
 =item TO_JSON
 

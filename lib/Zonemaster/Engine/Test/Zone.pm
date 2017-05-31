@@ -11,7 +11,7 @@ use Zonemaster;
 use Zonemaster::Util;
 use Zonemaster::Engine::Test::Address;
 use Zonemaster::TestMethods;
-use Zonemaster::Constants qw[:soa :ip];
+use Zonemaster::Engine::Constants qw[:soa :ip];
 use List::MoreUtils qw[none];
 
 use Carp;

@@ -1,4 +1,4 @@
-package Zonemaster::Config;
+package Zonemaster::Engine::Config;
 
 use version; our $VERSION = version->declare("v1.0.5");
 
@@ -250,13 +250,13 @@ __PACKAGE__->meta->make_immutable;
 
 =head1 NAME
 
-Zonemaster::Config - configuration access module for Zonemaster
+Zonemaster::Engine::Config - configuration access module for Zonemaster
 
 =head1 SYNOPSIS
 
     Zonemaster->config->no_network(1); # Forbid network traffic
 
-    my $value = Zonemaster::Config->get->{key}{subkey}; # Not really recommended way to access config data
+    my $value = Zonemaster::Engine::Config->get->{key}{subkey}; # Not really recommended way to access config data
 
 =head1 LOADING CONFIGURATION
 

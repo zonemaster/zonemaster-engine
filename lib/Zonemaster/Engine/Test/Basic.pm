@@ -12,7 +12,7 @@ use Zonemaster::Util;
 use Zonemaster::TestMethods;
 use Zonemaster::Engine::Test::Address;
 use Zonemaster::Engine::Test::Syntax;
-use Zonemaster::Constants qw[:ip :name];
+use Zonemaster::Engine::Constants qw[:ip :name];
 use List::MoreUtils qw[any none];
 
 use Carp;

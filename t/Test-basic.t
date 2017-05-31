@@ -49,11 +49,11 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
 my @res;
 my %res;
 
-my $ns_ok       = Zonemaster::DNSName->new( q{ns1.nic.fr} );
-my $ns_too_long = Zonemaster::DNSName->new(
+my $ns_ok       = Zonemaster::Engine::DNSName->new( q{ns1.nic.fr} );
+my $ns_too_long = Zonemaster::Engine::DNSName->new(
 q{ns123456789012345678901234567890123456789012345678901234567890.dom123456789012345678901234567890123456789012345678901234567890.dom123456789012345678901234567890123456789012345678901234567890.tld123456789012345678901234567890123456789012345678901234567890}
 );
-my $ns_ok_long = Zonemaster::DNSName->new(
+my $ns_ok_long = Zonemaster::Engine::DNSName->new(
 q{ns23456789012345678901234567890123456789012345678901234567890.dom123456789012345678901234567890123456789012345678901234567890.dom123456789012345678901234567890123456789012345678901234567890.tld123456789012345678901234567890123456789012345678901234567890}
 );
 name_gives( q{basic00}, $ns_too_long, q{DOMAIN_NAME_TOO_LONG} );
@@ -66,7 +66,7 @@ name_gives_not( q{basic00}, $ns_ok_long, q{DOMAIN_NAME_TOO_LONG} );
 %res = map { $_->tag => 1 } Zonemaster->test_module( q{basic}, $ns_ok_long );
 ok( !$res{DOMAIN_NAME_TOO_LONG}, q{Not DOMAIN_NAME_TOO_LONG} );
 
-my $ns_label_too_long = Zonemaster::DNSName->new( q{ns1234567890123456789012345678901234567890123456789012345678901234567890.nic.fr} );
+my $ns_label_too_long = Zonemaster::Engine::DNSName->new( q{ns1234567890123456789012345678901234567890123456789012345678901234567890.nic.fr} );
 name_gives( q{basic00}, $ns_label_too_long, q{DOMAIN_NAME_LABEL_TOO_LONG} );
 %res = map { $_->tag => 1 } Zonemaster->test_module( q{basic}, $ns_label_too_long );
 ok( $res{DOMAIN_NAME_LABEL_TOO_LONG}, q{DOMAIN_NAME_LABEL_TOO_LONG} );
@@ -74,7 +74,7 @@ name_gives_not( q{basic00}, $ns_ok, q{DOMAIN_NAME_LABEL_TOO_LONG} );
 %res = map { $_->tag => 1 } Zonemaster->test_module( q{basic}, $ns_ok );
 ok( !$res{DOMAIN_NAME_LABEL_TOO_LONG}, q{Not DOMAIN_NAME_LABEL_TOO_LONG} );
 
-my $ns_null_label = Zonemaster::DNSName->new( q{dom12134..fr} );
+my $ns_null_label = Zonemaster::Engine::DNSName->new( q{dom12134..fr} );
 name_gives( q{basic00}, $ns_null_label, q{DOMAIN_NAME_ZERO_LENGTH_LABEL} );
 %res = map { $_->tag => 1 } Zonemaster->test_module( q{basic}, $ns_null_label );
 ok( $res{DOMAIN_NAME_ZERO_LENGTH_LABEL}, q{DOMAIN_NAME_ZERO_LENGTH_LABEL} );

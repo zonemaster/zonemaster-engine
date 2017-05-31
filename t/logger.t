@@ -15,7 +15,7 @@ isa_ok( $log, 'Zonemaster::Engine::Logger' );
 $log->add( 'TAG', { seventeen => 17 } );
 
 # Make sure all our policy comes from our config file.
-$Zonemaster::Config::policy = {};
+$Zonemaster::Engine::Config::policy = {};
 Zonemaster->config->load_policy_file( 't/policy.json' );
 
 my $e = $log->entries->[-1];

@@ -10,7 +10,7 @@ use strict;
 use warnings;
 
 use Zonemaster;
-use Zonemaster::DNSName;
+use Zonemaster::Engine::DNSName;
 use Pod::Simple::SimpleTree;
 
 ## no critic (Modules::ProhibitAutomaticExportation)
@@ -36,7 +36,7 @@ sub policy {
 sub name {
     my ( $name ) = @_;
 
-    return Zonemaster::DNSName->new( $name );
+    return Zonemaster::Engine::DNSName->new( $name );
 }
 
 # Functions for extracting POD documentation from test modules
@@ -165,7 +165,7 @@ Returns a reference to the global policy hash.
 
 =item name($string_name_or_zone)
 
-Creates and returns a L<Zonemaster::DNSName> object for the given argument.
+Creates and returns a L<Zonemaster::Engine::DNSName> object for the given argument.
 
 =item pod_extract_for($testname)
 

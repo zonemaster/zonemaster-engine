@@ -12,7 +12,7 @@ use Zonemaster::Util;
 use Zonemaster::Engine::Test::Address;
 use Zonemaster::Engine::Test::Syntax;
 use Zonemaster::TestMethods;
-use Zonemaster::Constants ':all';
+use Zonemaster::Engine::Constants ':all';
 
 use Zonemaster::Net::IP;
 use List::MoreUtils qw[uniq];

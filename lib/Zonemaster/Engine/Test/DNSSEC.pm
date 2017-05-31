@@ -13,7 +13,7 @@ use 5.014002;
 
 use Zonemaster;
 use Zonemaster::Util;
-use Zonemaster::Constants qw[:algo :soa];
+use Zonemaster::Engine::Constants qw[:algo :soa];
 use List::Util qw[min];
 use List::MoreUtils qw[none];
 

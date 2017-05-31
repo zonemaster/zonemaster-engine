@@ -1,4 +1,4 @@
-package Zonemaster::ASNLookup;
+package Zonemaster::Engine::ASNLookup;
 
 use version; our $VERSION = version->declare("v1.0.3");
 
@@ -67,12 +67,12 @@ sub get {
 
 =head1 NAME
 
-Zonemaster::ASNLookup - do lookups of ASNs for IP addresses
+Zonemaster::Engine::ASNLookup - do lookups of ASNs for IP addresses
 
 =head1 SYNOPSIS
 
-   my ($asnref, $prefix) = Zonemaster::ASNLookup->get_with_prefix( '8.8.4.4' );
-   my $asnref = Zonemaster::ASNLookup->get( '192.168.0.1' );
+   my ($asnref, $prefix) = Zonemaster::Engine::ASNLookup->get_with_prefix( '8.8.4.4' );
+   my $asnref = Zonemaster::Engine::ASNLookup->get( '192.168.0.1' );
 
 =head1 FUNCTION
 

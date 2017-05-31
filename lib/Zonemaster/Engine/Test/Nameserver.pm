@@ -10,7 +10,7 @@ use 5.014002;
 use Zonemaster;
 use Zonemaster::Util;
 use Zonemaster::Engine::Test::Address;
-use Zonemaster::Constants qw[:ip];
+use Zonemaster::Engine::Constants qw[:ip];
 
 use List::MoreUtils qw[uniq none];
 

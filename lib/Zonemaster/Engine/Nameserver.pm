@@ -6,12 +6,12 @@ use 5.014002;
 use Moose;
 use Moose::Util::TypeConstraints;
 
-use Zonemaster::DNSName;
+use Zonemaster::Engine::DNSName;
 use Zonemaster;
 use Zonemaster::Packet;
 use Zonemaster::Engine::Nameserver::Cache;
 use Zonemaster::Recursor;
-use Zonemaster::Constants ':misc';
+use Zonemaster::Engine::Constants ':misc';
 
 use Net::LDNS;
 
@@ -30,7 +30,7 @@ use overload
 
 coerce 'Zonemaster::Net::IP', from 'Str', via { Zonemaster::Net::IP->new( $_ ) };
 
-has 'name'    => ( is => 'ro', isa => 'Zonemaster::DNSName', coerce => 1, required => 0 );
+has 'name'    => ( is => 'ro', isa => 'Zonemaster::Engine::DNSName', coerce => 1, required => 0 );
 has 'address' => ( is => 'ro', isa => 'Zonemaster::Net::IP', coerce => 1, required => 1 );
 
 has 'dns'   => ( is => 'ro', isa => 'Net::LDNS',                     lazy_build => 1 );
@@ -196,7 +196,7 @@ sub add_fake_delegation {
     my ( $self, $domain, $href ) = @_;
     my %delegation;
 
-    $domain = q{} . Zonemaster::DNSName->new( $domain );
+    $domain = q{} . Zonemaster::Engine::DNSName->new( $domain );
     foreach my $name ( keys %{$href} ) {
         push @{ $delegation{authority} }, Net::LDNS::RR->new( sprintf( '%s IN NS %s', $domain, $name ) );
         foreach my $ip ( @{ $href->{$name} } ) {
@@ -225,7 +225,7 @@ sub add_fake_ds {
     my @ds;
 
     if ( not ref $domain ) {
-        $domain = Zonemaster::DNSName->new( $domain );
+        $domain = Zonemaster::Engine::DNSName->new( $domain );
     }
 
     Zonemaster->logger->add( FAKE_DS => { domain => lc( "$domain" ), data => $aref, ns => "$self" } );
@@ -535,7 +535,7 @@ Class methods on this class allows saving and loading cache contents.
 
 =item name
 
-A L<Zonemaster::DNSName> object holding the nameserver's name.
+A L<Zonemaster::Engine::DNSName> object holding the nameserver's name.
 
 =item address
 

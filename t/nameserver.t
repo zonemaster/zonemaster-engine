@@ -18,7 +18,7 @@ eval { Zonemaster::Engine::Nameserver->new( { name => 'dummy' } ); };
 like( $@, qr/Attribute \(address\) is required/, 'create fails without address.' );
 
 isa_ok( $nsv6->address, 'Zonemaster::Net::IP' );
-isa_ok( $nsv6->name,    'Zonemaster::DNSName' );
+isa_ok( $nsv6->name,    'Zonemaster::Engine::DNSName' );
 is( $nsv6->dns->retry, 2 );
 
 my $p1 = $nsv6->query( 'iis.se', 'SOA' );

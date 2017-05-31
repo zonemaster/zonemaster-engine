@@ -5,7 +5,7 @@ use List::MoreUtils qw[uniq none any];
 BEGIN {
     use_ok( q{Zonemaster} );
     use_ok( q{Zonemaster::Engine::Nameserver} );
-    use_ok( q{Zonemaster::DNSName} );
+    use_ok( q{Zonemaster::Engine::DNSName} );
     use_ok( q{Zonemaster::Zone} );
     use_ok( q{Zonemaster::Engine::Test::Syntax} );
 }
@@ -61,27 +61,27 @@ foreach my $testcase ( qw{syntax01 syntax02 syntax03} ) {
 
 Zonemaster->config->load_policy_file( 't/policies/Test-syntax-all.json' );
 
-my $ns_ok = Zonemaster::DNSName->new( q{ns1.nic.fr} );
-my $dn_ok = Zonemaster::DNSName->new( q{www.nic.se} );
-my $dn_ko = Zonemaster::DNSName->new( q{www.nic&nac.se} );
+my $ns_ok = Zonemaster::Engine::DNSName->new( q{ns1.nic.fr} );
+my $dn_ok = Zonemaster::Engine::DNSName->new( q{www.nic.se} );
+my $dn_ko = Zonemaster::Engine::DNSName->new( q{www.nic&nac.se} );
 name_gives( q{syntax01}, $dn_ok, q{ONLY_ALLOWED_CHARS} );
 name_gives_not( q{syntax01}, $dn_ko, q{ONLY_ALLOWED_CHARS} );
 name_gives( q{syntax01}, $dn_ko, q{NON_ALLOWED_CHARS} );
 name_gives_not( q{syntax01}, $dn_ok, q{NON_ALLOWED_CHARS} );
 
-$dn_ko = Zonemaster::DNSName->new( q{www.-nic.se} );
+$dn_ko = Zonemaster::Engine::DNSName->new( q{www.-nic.se} );
 name_gives( q{syntax02}, $dn_ko, q{INITIAL_HYPHEN} );
 name_gives_not( q{syntax02}, $dn_ko, q{NO_ENDING_HYPHENS} );
 name_gives_not( q{syntax02}, $dn_ok, q{INITIAL_HYPHEN} );
 name_gives( q{syntax02}, $dn_ok, q{NO_ENDING_HYPHENS} );
 
-$dn_ko = Zonemaster::DNSName->new( q{www.nic-.se} );
+$dn_ko = Zonemaster::Engine::DNSName->new( q{www.nic-.se} );
 name_gives( q{syntax02}, $dn_ko, q{TERMINAL_HYPHEN} );
 name_gives_not( q{syntax02}, $dn_ko, q{NO_ENDING_HYPHENS} );
 name_gives_not( q{syntax02}, $dn_ok, q{TERMINAL_HYPHEN} );
 
-my $dn_idn_ok = Zonemaster::DNSName->new( q{www.xn--nic.se} );
-$dn_ko = Zonemaster::DNSName->new( q{www.ni--c.se} );
+my $dn_idn_ok = Zonemaster::Engine::DNSName->new( q{www.xn--nic.se} );
+$dn_ko = Zonemaster::Engine::DNSName->new( q{www.ni--c.se} );
 name_gives( q{syntax03}, $dn_ko, q{DISCOURAGED_DOUBLE_DASH} );
 name_gives_not( q{syntax03}, $dn_ko,     q{NO_DOUBLE_DASH} );
 name_gives_not( q{syntax03}, $dn_ok,     q{DISCOURAGED_DOUBLE_DASH} );
@@ -89,11 +89,11 @@ name_gives_not( q{syntax03}, $dn_idn_ok, q{DISCOURAGED_DOUBLE_DASH} );
 name_gives( q{syntax03}, $dn_ok,     q{NO_DOUBLE_DASH} );
 name_gives( q{syntax03}, $dn_idn_ok, q{NO_DOUBLE_DASH} );
 
-my $ns_double_dash = Zonemaster::DNSName->new( q{ns1.ns--nic.fr} );
+my $ns_double_dash = Zonemaster::Engine::DNSName->new( q{ns1.ns--nic.fr} );
 name_gives( q{syntax04}, $ns_double_dash, q{NAMESERVER_DISCOURAGED_DOUBLE_DASH} );
 name_gives_not( q{syntax04}, $ns_ok, q{NAMESERVER_DISCOURAGED_DOUBLE_DASH} );
 
-my $ns_num_tld = Zonemaster::DNSName->new( q{ns1.nic.47} );
+my $ns_num_tld = Zonemaster::Engine::DNSName->new( q{ns1.nic.47} );
 name_gives( q{syntax04}, $ns_num_tld, q{NAMESERVER_NUMERIC_TLD} );
 name_gives_not( q{syntax04}, $ns_ok, q{NAMESERVER_NUMERIC_TLD} );
 

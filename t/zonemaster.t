@@ -19,7 +19,7 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
 }
 
 isa_ok( Zonemaster->logger, 'Zonemaster::Engine::Logger' );
-isa_ok( Zonemaster->config, 'Zonemaster::Config' );
+isa_ok( Zonemaster->config, 'Zonemaster::Engine::Config' );
 
 my %module = map { $_ => 1 } Zonemaster::Engine::Test->modules;
 

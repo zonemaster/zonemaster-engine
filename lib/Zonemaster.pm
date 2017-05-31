@@ -7,11 +7,11 @@ use Moose;
 
 use Zonemaster::Engine::Nameserver;
 use Zonemaster::Engine::Logger;
-use Zonemaster::Config;
+use Zonemaster::Engine::Config;
 use Zonemaster::Zone;
 use Zonemaster::Engine::Test;
 use Zonemaster::Recursor;
-use Zonemaster::ASNLookup;
+use Zonemaster::Engine::ASNLookup;
 
 our $logger;
 our $config;
@@ -23,7 +23,7 @@ sub logger {
 
 sub config {
     if ( not defined $config ) {
-        $config = Zonemaster::Config->new;
+        $config = Zonemaster::Engine::Config->new;
     }
 
     return $config;
@@ -166,7 +166,7 @@ sub preload_cache {
 sub asn_lookup {
     my ( undef, $ip ) = @_;
 
-    return Zonemaster::ASNLookup->get( $ip );
+    return Zonemaster::Engine::ASNLookup->get( $ip );
 }
 
 sub modules {
@@ -227,7 +227,7 @@ Returns a L<Zonemaster::Engine::Nameserver> object for the given name and addres
 
 =item config()
 
-Returns the global L<Zonemaster::Config> object.
+Returns the global L<Zonemaster::Engine::Config> object.
 
 =item logger()
 

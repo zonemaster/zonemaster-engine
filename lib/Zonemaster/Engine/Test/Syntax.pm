@@ -10,9 +10,9 @@ use 5.014002;
 use Zonemaster;
 use Zonemaster::Util;
 use Zonemaster::Recursor;
-use Zonemaster::DNSName;
+use Zonemaster::Engine::DNSName;
 use Zonemaster::TestMethods;
-use Zonemaster::Constants qw[:name];
+use Zonemaster::Engine::Constants qw[:name];
 
 use Carp;
 
@@ -444,7 +444,7 @@ sub get_name {
     elsif ( ref( $item ) eq q{Zonemaster::Zone} ) {
         $name = $item->name;
     }
-    elsif ( ref( $item ) eq q{Zonemaster::DNSName} ) {
+    elsif ( ref( $item ) eq q{Zonemaster::Engine::DNSName} ) {
         $name = $item;
     }
 
@@ -548,27 +548,27 @@ Returns a version string for the module.
 
 =item syntax01($name)
 
-Verifies that the name (Zonemaster::DNSName) given contains only allowed characters.
+Verifies that the name (Zonemaster::Engine::DNSName) given contains only allowed characters.
 
 =item syntax02($name)
 
-Verifies that the name (Zonemaster::DNSName) given does not start or end with a hyphen ('-').
+Verifies that the name (Zonemaster::Engine::DNSName) given does not start or end with a hyphen ('-').
 
 =item syntax03($name)
 
-Verifies that the name (Zonemaster::DNSName) given does not contain a hyphen in 3rd and 4th position (in the exception of 'xn--').
+Verifies that the name (Zonemaster::Engine::DNSName) given does not contain a hyphen in 3rd and 4th position (in the exception of 'xn--').
 
 =item syntax04($name)
 
-Verify that a nameserver (Zonemaster::DNSName) given is conform to previous syntax rules. It also verify name total length as well as labels.
+Verify that a nameserver (Zonemaster::Engine::DNSName) given is conform to previous syntax rules. It also verify name total length as well as labels.
 
 =item syntax05($zone)
 
-Verify that a SOA rname (Zonemaster::DNSName) given has a conform usage of at sign (@).
+Verify that a SOA rname (Zonemaster::Engine::DNSName) given has a conform usage of at sign (@).
 
 =item syntax06($zone)
 
-Verify that a SOA rname (Zonemaster::DNSName) given is RFC822 compliant.
+Verify that a SOA rname (Zonemaster::Engine::DNSName) given is RFC822 compliant.
 
 =item syntax07($zone)
 
@@ -576,7 +576,7 @@ Verify that SOA mname of zone given is conform to previous syntax rules (syntax0
 
 =item syntax08(@mx_names)
 
-Verify that MX name (Zonemaster::DNSName) given is conform to previous syntax rules (syntax01, syntax02, syntax03). It also verify name total length as well as labels.
+Verify that MX name (Zonemaster::Engine::DNSName) given is conform to previous syntax rules (syntax01, syntax02, syntax03). It also verify name total length as well as labels.
 
 =back
 
@@ -586,7 +586,7 @@ Verify that MX name (Zonemaster::DNSName) given is conform to previous syntax ru
 
 =item get_name($item)
 
-Converts argument to a L<Zonemaster::DNSName> object.
+Converts argument to a L<Zonemaster::Engine::DNSName> object.
 
 =item check_name_syntax
 

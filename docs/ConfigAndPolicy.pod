@@ -1,6 +1,6 @@
 =head1 OVERVIEW
 
-At the moment, the configuration system is exceedingly simple: it's just a JSON-serialized hash stored as data in the L<Zonemaster::Config> module.
+At the moment, the configuration system is exceedingly simple: it's just a JSON-serialized hash stored as data in the L<Zonemaster::Engine::Config> module.
 Eventually, this will be changed to loading a file and providing the ability for local overrides of defaults.
 
 The policy data is already distributed as and loaded from an external JSON file. There isn't yet any ability to override policy data, or specify

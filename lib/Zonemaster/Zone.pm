@@ -10,14 +10,14 @@ use Moose;
 use Carp;
 use List::MoreUtils qw[uniq];
 
-use Zonemaster::DNSName;
+use Zonemaster::Engine::DNSName;
 use Zonemaster::Recursor;
 use Zonemaster::NSArray;
 
-has 'name' => ( is => 'ro', isa => 'Zonemaster::DNSName', required => 1, coerce => 1 );
+has 'name' => ( is => 'ro', isa => 'Zonemaster::Engine::DNSName', required => 1, coerce => 1 );
 has 'parent' => ( is => 'ro', isa => 'Maybe[Zonemaster::Zone]', lazy_build => 1 );
 has [ 'ns', 'glue' ] => ( is => 'ro', isa => 'ArrayRef', lazy_build => 1 );
-has [ 'ns_names', 'glue_names' ] => ( is => 'ro', isa => 'ArrayRef[Zonemaster::DNSName]', lazy_build => 1 );
+has [ 'ns_names', 'glue_names' ] => ( is => 'ro', isa => 'ArrayRef[Zonemaster::Engine::DNSName]', lazy_build => 1 );
 has 'glue_addresses' => ( is => 'ro', isa => 'ArrayRef[Net::LDNS::RR]', lazy_build => 1 );
 
 ###
@@ -48,7 +48,7 @@ sub _build_glue_names {
 
     return [] if not defined $p;
 
-    return [ uniq sort map { Zonemaster::DNSName->new( lc( $_->nsdname ) ) }
+    return [ uniq sort map { Zonemaster::Engine::DNSName->new( lc( $_->nsdname ) ) }
           $p->get_records_for_name( 'ns', $self->name->string ) ];
 }
 
@@ -79,7 +79,7 @@ sub _build_ns_names {
     }
     return [] if not defined $p;
 
-    return [ uniq sort map { Zonemaster::DNSName->new( lc( $_->nsdname ) ) }
+    return [ uniq sort map { Zonemaster::Engine::DNSName->new( lc( $_->nsdname ) ) }
           $p->get_records_for_name( 'ns', $self->name->string ) ];
 } ## end sub _build_ns_names
 
@@ -218,8 +218,8 @@ sub query_persistent {
 sub is_in_zone {
     my ( $self, $name ) = @_;
 
-    if ( not ref( $name ) or ref( $name ) ne 'Zonemaster::DNSName' ) {
-        $name = Zonemaster::DNSName->new( $name );
+    if ( not ref( $name ) or ref( $name ) ne 'Zonemaster::Engine::DNSName' ) {
+        $name = Zonemaster::Engine::DNSName->new( $name );
     }
 
     if ( scalar( @{ $self->name->labels } ) != $self->name->common( $name ) ) {
@@ -241,7 +241,7 @@ sub is_in_zone {
         return 0;    # Auth server is broken, call it a "no".
     }
 
-    if ( Zonemaster::DNSName->new( $soa->name ) eq $self->name ) {
+    if ( Zonemaster::Engine::DNSName->new( $soa->name ) eq $self->name ) {
         return 1;
     }
     else {
@@ -279,7 +279,7 @@ delegated.
 
 =item name
 
-A L<Zonemaster::DNSName> object representing the name of the zone.
+A L<Zonemaster::Engine::DNSName> object representing the name of the zone.
 
 =item parent
 
@@ -289,7 +289,7 @@ look for that if you recurse up the tree).
 
 =item ns_names
 
-A reference to an array of L<Zonemaster::DNSName> objects, holding the
+A reference to an array of L<Zonemaster::Engine::DNSName> objects, holding the
 names of the nameservers for the domain, as returned by the first
 responding nameserver in the glue list.
 
@@ -306,7 +306,7 @@ them all can take som considerable time.
 
 =item glue_names
 
-A reference to a an array of L<Zonemaster::DNSName> objects, holding the names
+A reference to a an array of L<Zonemaster::Engine::DNSName> objects, holding the names
 of this zones nameservers as listed at the first responding nameserver of the
 parent zone.
 

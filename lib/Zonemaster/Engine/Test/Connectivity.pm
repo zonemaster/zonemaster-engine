@@ -10,8 +10,8 @@ use 5.014002;
 use Zonemaster;
 use Zonemaster::Util;
 use Zonemaster::TestMethods;
-use Zonemaster::Constants qw[:ip];
-use Zonemaster::ASNLookup;
+use Zonemaster::Engine::Constants qw[:ip];
+use Zonemaster::Engine::ASNLookup;
 use Carp;
 
 use List::MoreUtils qw[uniq];
@@ -264,7 +264,7 @@ sub connectivity03 {
     my @v6asns;
 
     foreach my $v4ip ( @v4ips ) {
-        my ( $asnref, $prefix, $raw ) = Zonemaster::ASNLookup->get_with_prefix( $v4ip );
+        my ( $asnref, $prefix, $raw ) = Zonemaster::Engine::ASNLookup->get_with_prefix( $v4ip );
         if ( $raw ) {
             push @results,
               info(
@@ -296,7 +296,7 @@ sub connectivity03 {
         }
     } ## end foreach my $v4ip ( @v4ips )
     foreach my $v6ip ( @v6ips ) {
-        my ( $asnref, $prefix, $raw ) = Zonemaster::ASNLookup->get_with_prefix( $v6ip );
+        my ( $asnref, $prefix, $raw ) = Zonemaster::Engine::ASNLookup->get_with_prefix( $v6ip );
         if ( $raw ) {
             push @results,
               info(
