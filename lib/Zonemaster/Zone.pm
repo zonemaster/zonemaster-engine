@@ -11,7 +11,7 @@ use Carp;
 use List::MoreUtils qw[uniq];
 
 use Zonemaster::Engine::DNSName;
-use Zonemaster::Recursor;
+use Zonemaster::Engine::Recursor;
 use Zonemaster::Engine::NSArray;
 
 has 'name' => ( is => 'ro', isa => 'Zonemaster::Engine::DNSName', required => 1, coerce => 1 );
@@ -31,7 +31,7 @@ sub _build_parent {
         return $self;
     }
 
-    my $pname = Zonemaster::Recursor->parent( q{} . $self->name );
+    my $pname = Zonemaster::Engine::Recursor->parent( q{} . $self->name );
     return if not $pname;
     ## no critic (Modules::RequireExplicitInclusion)
     return __PACKAGE__->new( { name => $pname } );
@@ -87,7 +87,7 @@ sub _build_ns {
     my ( $self ) = @_;
 
     if ( $self->name eq '.' ) {    # Root is a special case
-        return [ Zonemaster::Recursor->root_servers ];
+        return [ Zonemaster::Engine::Recursor->root_servers ];
     }
 
     my $aref = [];

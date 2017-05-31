@@ -4,7 +4,7 @@ BEGIN {
     use_ok( q{Zonemaster} );
     use_ok( q{Zonemaster::Engine::Nameserver} );
     use_ok( q{Zonemaster::Engine::Test::Basic} );
-    use_ok( q{Zonemaster::Util} );
+    use_ok( q{Zonemaster::Engine::Util} );
 }
 
 sub name_gives {
@@ -135,7 +135,7 @@ zone_gives_not( q{basic03}, $zone, q{IPV6_DISABLED} );
 #zone_gives_not( q{basic03}, $zone, q{IPV4_DISABLED} );
 #zone_gives_not( q{basic03}, $zone, q{IPV6_ENABLED} );
 #
-#if ( Zonemaster::Util::supports_ipv6() ) {
+#if ( Zonemaster::Engine::Util::supports_ipv6() ) {
 #
 #    Zonemaster->config->ipv4_ok( 0 );
 #    Zonemaster->config->ipv6_ok( 1 );

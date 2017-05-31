@@ -1,6 +1,6 @@
 use Test::More;
 
-BEGIN { use_ok( 'Zonemaster::Util' ) }
+BEGIN { use_ok( 'Zonemaster::Engine::Util' ) }
 
 isa_ok( ns( 'name', '::1' ), 'Zonemaster::Engine::Nameserver' );
 isa_ok( info( 'TAG', {} ), 'Zonemaster::Engine::Logger::Entry' );

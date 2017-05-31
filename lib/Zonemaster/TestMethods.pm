@@ -9,7 +9,7 @@ use warnings;
 use List::MoreUtils qw[uniq];
 
 use Zonemaster;
-use Zonemaster::Util;
+use Zonemaster::Engine::Util;
 
 sub method1 {
     my ( $class, $zone ) = @_;

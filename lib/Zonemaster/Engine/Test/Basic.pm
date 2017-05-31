@@ -8,7 +8,7 @@ use warnings;
 use 5.014002;
 
 use Zonemaster;
-use Zonemaster::Util;
+use Zonemaster::Engine::Util;
 use Zonemaster::TestMethods;
 use Zonemaster::Engine::Test::Address;
 use Zonemaster::Engine::Test::Syntax;

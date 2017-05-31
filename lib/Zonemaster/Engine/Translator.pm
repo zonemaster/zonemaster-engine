@@ -1,4 +1,4 @@
-package Zonemaster::Translator;
+package Zonemaster::Engine::Translator;
 
 use version; our $VERSION = version->declare("v1.0.6");
 
@@ -113,11 +113,11 @@ __PACKAGE__->meta->make_immutable;
 
 =head1 NAME
 
-Zonemaster::Translator - translation support for Zonemaster
+Zonemaster::Engine::Translator - translation support for Zonemaster
 
 =head1 SYNOPSIS
 
-    my $trans = Zonemaster::Translator->new({ locale => 'sv_SE.UTF-8' });
+    my $trans = Zonemaster::Engine::Translator->new({ locale => 'sv_SE.UTF-8' });
     say $trans->to_string($entry);
 
 =head1 ATTRIBUTES

@@ -1,4 +1,4 @@
-package Zonemaster::Util;
+package Zonemaster::Engine::Util;
 
 use version; our $VERSION = version->declare("v1.1.2");
 
@@ -137,11 +137,11 @@ sub supports_ipv6 {
 
 =head1 NAME
 
-Zonemaster::Util - utility functions for other Zonemaster modules
+Zonemaster::Engine::Util - utility functions for other Zonemaster modules
 
 =head1 SYNOPSIS
 
-    use Zonemaster::Util;
+    use Zonemaster::Engine::Util;
     info(TAG => { some => 'argument'});
     my $ns = ns($name, $address);
     my $name = name('whatever.example.org');

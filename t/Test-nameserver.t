@@ -5,7 +5,7 @@ use List::MoreUtils qw[uniq none any];
 BEGIN {
     use_ok( q{Zonemaster} );
     use_ok( q{Zonemaster::Engine::Test::Nameserver} );
-    use_ok( q{Zonemaster::Util} );
+    use_ok( q{Zonemaster::Engine::Util} );
 }
 
 my $checking_module = q{Nameserver};
@@ -181,7 +181,7 @@ zone_gives_not( 'nameserver08', $zone, [qw{QNAME_CASE_INSENSITIVE QNAME_CASE_SEN
 #zone_gives( 'nameserver05', $zone, [q{IPV6_DISABLED}] );
 #zone_gives_not( 'nameserver05', $zone, [qw{NO_NETWORK IPV4_DISABLED}] );
 #
-#if ( Zonemaster::Util::supports_ipv6() ) {
+#if ( Zonemaster::Engine::Util::supports_ipv6() ) {
 #
 #    Zonemaster->config->ipv6_ok( 1 );
 #    Zonemaster->config->ipv4_ok( 0 );

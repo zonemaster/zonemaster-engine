@@ -54,7 +54,7 @@ sub _build_module {
     my ( $self ) = @_;
 
     foreach my $e ( @{ $self->trace } ) {
-        if (    $e->[1] eq 'Zonemaster::Util::info'
+        if (    $e->[1] eq 'Zonemaster::Engine::Util::info'
             and $e->[0] =~ /^Zonemaster::Engine::Test::(.*)$/ )
         {
             return uc $1;

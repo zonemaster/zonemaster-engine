@@ -2,7 +2,7 @@ use Test::More;
 
 BEGIN { use_ok( 'Zonemaster::Engine::Nameserver' ); }
 use Zonemaster;
-use Zonemaster::Util;
+use Zonemaster::Engine::Util;
 
 my $datafile = 't/nameserver.data';
 if ( not $ENV{ZONEMASTER_RECORD} ) {

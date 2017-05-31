@@ -8,8 +8,8 @@ use warnings;
 use 5.014002;
 
 use Zonemaster;
-use Zonemaster::Util;
-use Zonemaster::Recursor;
+use Zonemaster::Engine::Util;
+use Zonemaster::Engine::Recursor;
 use Zonemaster::Engine::DNSName;
 use Zonemaster::TestMethods;
 use Zonemaster::Engine::Constants qw[:name];

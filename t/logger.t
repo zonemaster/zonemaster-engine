@@ -6,7 +6,7 @@ BEGIN {
     use_ok( 'Zonemaster::Engine::Logger::Entry' );
     use_ok( 'Zonemaster::Engine::Exception' );
 }
-use Zonemaster::Util;
+use Zonemaster::Engine::Util;
 
 my $log = Zonemaster->logger;
 

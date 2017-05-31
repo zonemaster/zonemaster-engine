@@ -10,12 +10,12 @@ use Zonemaster::Engine::Logger;
 use Zonemaster::Engine::Config;
 use Zonemaster::Zone;
 use Zonemaster::Engine::Test;
-use Zonemaster::Recursor;
+use Zonemaster::Engine::Recursor;
 use Zonemaster::Engine::ASNLookup;
 
 our $logger;
 our $config;
-our $recursor = Zonemaster::Recursor->new;
+our $recursor = Zonemaster::Engine::Recursor->new;
 
 sub logger {
     return $logger //= Zonemaster::Engine::Logger->new;
@@ -182,7 +182,7 @@ sub reset {
     Zonemaster::Engine::Logger->start_time_now();
     Zonemaster::Engine::Nameserver->empty_cache();
     $logger->clear_history() if $logger;
-    Zonemaster::Recursor->clear_cache();
+    Zonemaster::Engine::Recursor->clear_cache();
 
     return;
 }
@@ -244,7 +244,7 @@ Returns a hash, where the keys are test module names and the values are lists wi
 =item recurse($name, $type, $class)
 
 Does a recursive lookup for the given name, type and class, and returns the resulting packet (if any). Simply calls
-L<Zonemaster::Recursor/recurse> on a globally stored object.
+L<Zonemaster::Engine::Recursor/recurse> on a globally stored object.
 
 =item can_continue()
 

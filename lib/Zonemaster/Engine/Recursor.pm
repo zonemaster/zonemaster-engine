@@ -1,4 +1,4 @@
-package Zonemaster::Recursor;
+package Zonemaster::Engine::Recursor;
 
 use version; our $VERSION = version->declare("v1.0.4");
 
@@ -7,7 +7,7 @@ use warnings;
 
 use Moose;
 use JSON::PP;
-use Zonemaster::Util;
+use Zonemaster::Engine::Util;
 use Zonemaster::Net::IP;
 use Zonemaster;
 
@@ -291,7 +291,7 @@ sub clear_cache {
 }
 
 sub root_servers {
-    return map { Zonemaster::Util::ns( $_->{name}, $_->{address} ) }
+    return map { Zonemaster::Engine::Util::ns( $_->{name}, $_->{address} ) }
       sort { $a->{name} cmp $b->{name} } @{ $seed_data->{'.'} };
 }
 
@@ -302,12 +302,12 @@ __PACKAGE__->meta->make_immutable;
 
 =head1 NAME
 
-Zonemaster::Recursor - recursive resolver for Zonemaster
+Zonemaster::Engine::Recursor - recursive resolver for Zonemaster
 
 =head1 SYNOPSIS
 
-    my $packet = Zonemaster::Recursor->recurse($name, $type, $class);
-    my $pname = Zonemaster::Recursor->parent('example.org');
+    my $packet = Zonemaster::Engine::Recursor->recurse($name, $type, $class);
+    my $pname = Zonemaster::Engine::Recursor->parent('example.org');
 
 =head1 METHODS
 

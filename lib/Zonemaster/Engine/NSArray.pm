@@ -6,7 +6,7 @@ use 5.014002;
 use warnings;
 
 use Carp;
-use Zonemaster::Recursor;
+use Zonemaster::Engine::Recursor;
 use Zonemaster::Engine::Nameserver;
 
 use Moose;
@@ -118,7 +118,7 @@ sub UNTIE {
 
 sub _load_name {
     my ( $self, $name ) = @_;
-    my @addrs = Zonemaster::Recursor->get_addresses_for( $name );
+    my @addrs = Zonemaster::Engine::Recursor->get_addresses_for( $name );
     foreach my $addr ( sort { $a->ip cmp $b->ip } @addrs ) {
         my $ns = Zonemaster::Engine::Nameserver->new( { name => $name, address => $addr } );
         if ( not grep { "$ns" eq "$_" } @{ $self->ary } ) {

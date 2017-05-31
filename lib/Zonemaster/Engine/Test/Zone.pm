@@ -8,7 +8,7 @@ use warnings;
 use 5.014002;
 
 use Zonemaster;
-use Zonemaster::Util;
+use Zonemaster::Engine::Util;
 use Zonemaster::Engine::Test::Address;
 use Zonemaster::TestMethods;
 use Zonemaster::Engine::Constants qw[:soa :ip];
@@ -188,7 +188,7 @@ sub zone01 {
             push @results, info( MNAME_RECORD_DOES_NOT_EXIST => {} );
         }
         else {
-            foreach my $ip_address ( Zonemaster::Recursor->get_addresses_for( $soa_mname ) ) {
+            foreach my $ip_address ( Zonemaster::Engine::Recursor->get_addresses_for( $soa_mname ) ) {
 
                 my $ns = Zonemaster::Engine::Nameserver->new( { name => $soa_mname, address => $ip_address->short } );
 
@@ -218,7 +218,7 @@ sub zone01 {
                         }
                       );
                 }
-            } ## end foreach my $ip_address ( Zonemaster::Recursor...)
+            } ## end foreach my $ip_address ( Zonemaster::Engine::Recursor...)
             if ( none { $_ eq $soa_mname } @{ Zonemaster::TestMethods->method2( $zone ) } ) {
                 push @results,
                   info(
@@ -449,7 +449,7 @@ sub zone07 {
         $soa_mname =~ s/[.]\z//smx;
         my $addresses_nb = 0;
         foreach my $address_type ( q{A}, q{AAAA} ) {
-            my $p_mname = Zonemaster::Recursor->recurse( $soa_mname, $address_type );
+            my $p_mname = Zonemaster::Engine::Recursor->recurse( $soa_mname, $address_type );
             if ( $p_mname ) {
                 if ( $p_mname->has_rrs_of_type_for_name( $address_type, $soa_mname ) ) {
                     $addresses_nb++;

@@ -7,7 +7,7 @@ use strict;
 use warnings;
 
 use Zonemaster;
-use Zonemaster::Util;
+use Zonemaster::Engine::Util;
 use Zonemaster::Engine::Test::Basic;
 
 use IO::Socket::INET6;    # Lazy-loads, so make sure it's here for the version logging
@@ -212,7 +212,7 @@ sub run_one {
 sub _policy_allowed {
     my ( $name ) = @_;
 
-    return not Zonemaster::Util::policy()->{ uc( $name ) }{DISABLED};
+    return not Zonemaster::Engine::Util::policy()->{ uc( $name ) }{DISABLED};
 }
 
 1;

@@ -6,7 +6,7 @@ use strict;
 use warnings;
 
 BEGIN { use_ok( 'Zonemaster::Engine::Nameserver' ); }
-use Zonemaster::Util;
+use Zonemaster::Engine::Util;
 use Net::LDNS;
 
 my $datafile = 't/nameserver-axfr.data';

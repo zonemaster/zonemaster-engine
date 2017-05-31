@@ -12,7 +12,7 @@ use warnings;
 use 5.014002;
 
 use Zonemaster;
-use Zonemaster::Util;
+use Zonemaster::Engine::Util;
 
 ###
 ### Entry points

@@ -8,7 +8,7 @@ use warnings;
 use 5.014002;
 
 use Zonemaster;
-use Zonemaster::Util;
+use Zonemaster::Engine::Util;
 use Zonemaster::TestMethods;
 use Zonemaster::Engine::Constants qw[:addresses :ip];
 use List::MoreUtils qw[none any];
@@ -156,14 +156,14 @@ sub address02 {
         my $reverse_ip_query = $local_ns->address->reverse_ip;
         $ptr_query = $reverse_ip_query;
 
-        my $p = Zonemaster::Recursor->recurse( $ptr_query, q{PTR} );
+        my $p = Zonemaster::Engine::Recursor->recurse( $ptr_query, q{PTR} );
 
         # In case of Classless IN-ADDR.ARPA delegation, query returns
         # CNAME records. A PTR query is done on the CNAME.
         if ( $p and $p->rcode eq q{NOERROR} and $p->get_records( q{CNAME}, q{answer} ) ) {
             my ( $cname ) = $p->get_records( q{CNAME}, q{answer} );
             $ptr_query = $cname->cname;
-            $p = Zonemaster::Recursor->recurse( $ptr_query, q{PTR} );
+            $p = Zonemaster::Engine::Recursor->recurse( $ptr_query, q{PTR} );
         }
 
         if ( $p ) {
@@ -211,14 +211,14 @@ sub address03 {
         my $reverse_ip_query = $local_ns->address->reverse_ip;
         $ptr_query = $reverse_ip_query;
 
-        my $p = Zonemaster::Recursor->recurse( $ptr_query, q{PTR} );
+        my $p = Zonemaster::Engine::Recursor->recurse( $ptr_query, q{PTR} );
 
         # In case of Classless IN-ADDR.ARPA delegation, query returns
         # CNAME records. A PTR query is done on the CNAME.
         if ( $p and $p->rcode eq q{NOERROR} and $p->get_records( q{CNAME}, q{answer} ) ) {
             my ( $cname ) = $p->get_records( q{CNAME}, q{answer} );
             $ptr_query = $cname->cname;
-            $p = Zonemaster::Recursor->recurse( $ptr_query, q{PTR} );
+            $p = Zonemaster::Engine::Recursor->recurse( $ptr_query, q{PTR} );
         }
 
         if ( $p ) {

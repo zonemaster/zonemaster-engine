@@ -5,7 +5,7 @@ use List::MoreUtils qw[uniq none any];
 BEGIN {
     use_ok( q{Zonemaster} );
     use_ok( q{Zonemaster::Engine::Test::Nameserver} );
-    use_ok( q{Zonemaster::Util} );
+    use_ok( q{Zonemaster::Engine::Util} );
 }
 
 my $checking_module;

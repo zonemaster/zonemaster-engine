@@ -4,7 +4,7 @@ use 5.12.4;
 
 use Zonemaster;
 use Zonemaster::Engine::Nameserver;
-use Zonemaster::Util;
+use Zonemaster::Engine::Util;
 
 ###
 my $datafile = 't/undelegated.data';

@@ -6,7 +6,7 @@ BEGIN {
     use_ok( q{Zonemaster} );
     use_ok( q{Zonemaster::Engine::Nameserver} );
     use_ok( q{Zonemaster::Engine::Test::Connectivity} );
-    use_ok( q{Zonemaster::Util} );
+    use_ok( q{Zonemaster::Engine::Util} );
 }
 
 my $datafile = q{t/Test-connectivity.data};
@@ -81,7 +81,7 @@ ok( ( none { $_->tag eq 'IPV4_DISABLED' } @res ), 'No network' );
 #ok( ( any { $_->tag eq 'IPV6_DISABLED' } @res ), 'IPv6 disabled' );
 #ok( ( none { $_->tag eq 'IPV4_DISABLED' } @res ), 'IPv4 not disabled' );
 #
-#if ( Zonemaster::Util::supports_ipv6() ) {
+#if ( Zonemaster::Engine::Util::supports_ipv6() ) {
 #
 #    Zonemaster->config->ipv6_ok( 1 );
 #    Zonemaster->config->ipv4_ok( 0 );

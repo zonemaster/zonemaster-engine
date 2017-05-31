@@ -10,7 +10,7 @@ use Zonemaster::Engine::DNSName;
 use Zonemaster;
 use Zonemaster::Packet;
 use Zonemaster::Engine::Nameserver::Cache;
-use Zonemaster::Recursor;
+use Zonemaster::Engine::Recursor;
 use Zonemaster::Engine::Constants ':misc';
 
 use Net::LDNS;
@@ -215,7 +215,7 @@ sub add_fake_delegation {
     Zonemaster->logger->add( ADDED_FAKE_DELEGATION => { ns => "$self", domain => $domain, data => $href } );
 
     # We're changing the world, so the cache can't be trusted
-    Zonemaster::Recursor->clear_cache;
+    Zonemaster::Engine::Recursor->clear_cache;
 
     return;
 } ## end sub add_fake_delegation
@@ -242,7 +242,7 @@ sub add_fake_ds {
     $self->fake_ds->{ lc( "$domain" ) } = \@ds;
 
     # We're changing the world, so the cache can't be trusted
-    Zonemaster::Recursor->clear_cache;
+    Zonemaster::Engine::Recursor->clear_cache;
 
     return;
 } ## end sub add_fake_ds

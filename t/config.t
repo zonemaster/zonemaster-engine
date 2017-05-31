@@ -1,7 +1,7 @@
 use Test::More;
 
 BEGIN { use_ok( 'Zonemaster::Engine::Config' ) }
-use Zonemaster::Util;
+use Zonemaster::Engine::Util;
 
 my $ref = Zonemaster::Engine::Config->get;
 
