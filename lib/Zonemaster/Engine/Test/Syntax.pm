@@ -1,4 +1,4 @@
-package Zonemaster::Test::Syntax;
+package Zonemaster::Engine::Test::Syntax;
 
 use version; our $VERSION = version->declare("v1.0.2");
 
@@ -159,7 +159,7 @@ sub translation {
 } ## end sub translation
 
 sub version {
-    return "$Zonemaster::Test::Syntax::VERSION";
+    return "$Zonemaster::Engine::Test::Syntax::VERSION";
 }
 
 ###
@@ -513,11 +513,11 @@ sub check_name_syntax {
 
 =head1 NAME
 
-Zonemaster::Test::Syntax - test validating the syntax of host names and other data
+Zonemaster::Engine::Test::Syntax - test validating the syntax of host names and other data
 
 =head1 SYNOPSIS
 
-    my @results = Zonemaster::Test::Syntax->all($zone);
+    my @results = Zonemaster::Engine::Test::Syntax->all($zone);
 
 =head1 METHODS
 

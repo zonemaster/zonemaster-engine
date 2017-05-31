@@ -4,7 +4,7 @@ use List::MoreUtils qw[uniq none any];
 
 BEGIN {
     use_ok( 'Zonemaster' );
-    use_ok( 'Zonemaster::Test::DNSSEC' );
+    use_ok( 'Zonemaster::Engine::Test::DNSSEC' );
 }
 
 my $checking_module = q{DNSSEC};
@@ -34,7 +34,7 @@ sub zone_gives_not {
 my $datafile = 't/Test-dnssec.data';
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die "Stored data file missing" if not -r $datafile;
-    Zonemaster::Nameserver->restore( $datafile );
+    Zonemaster::Engine::Nameserver->restore( $datafile );
     Zonemaster->config->no_network( 1 );
 }
 
@@ -45,12 +45,12 @@ foreach my $testcase ( qw{dnssec01 dnssec02 dnssec03 dnssec04 dnssec05 dnssec07 
     Zonemaster->logger->clear_history();
     foreach my $result ( Zonemaster->test_module( q{dnssec}, q{nic.se} ) ) {
         foreach my $trace (@{$result->trace}) {
-            push @testcases, grep /Zonemaster::Test::DNSSEC::dnssec/, @$trace;
+            push @testcases, grep /Zonemaster::Engine::Test::DNSSEC::dnssec/, @$trace;
         }
     }
     @testcases = uniq sort @testcases;
     is( scalar( @testcases ), 1, 'only one test-case' );
-    is( $testcases[0], 'Zonemaster::Test::DNSSEC::'.$testcase, 'expected test-case' );
+    is( $testcases[0], 'Zonemaster::Engine::Test::DNSSEC::'.$testcase, 'expected test-case' );
 }
 
 Zonemaster->config->load_policy_file( 't/policies/Test-dnssec-all.json' );
@@ -220,7 +220,7 @@ TODO: {
 }
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
-    Zonemaster::Nameserver->save( $datafile );
+    Zonemaster::Engine::Nameserver->save( $datafile );
 }
 
 done_testing;

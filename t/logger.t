@@ -2,15 +2,15 @@ use Test::More;
 use Test::Fatal;
 
 BEGIN {
-    use_ok( 'Zonemaster::Logger' );
-    use_ok( 'Zonemaster::Logger::Entry' );
+    use_ok( 'Zonemaster::Engine::Logger' );
+    use_ok( 'Zonemaster::Engine::Logger::Entry' );
     use_ok( 'Zonemaster::Exception' );
 }
 use Zonemaster::Util;
 
 my $log = Zonemaster->logger;
 
-isa_ok( $log, 'Zonemaster::Logger' );
+isa_ok( $log, 'Zonemaster::Engine::Logger' );
 
 $log->add( 'TAG', { seventeen => 17 } );
 
@@ -19,20 +19,20 @@ $Zonemaster::Config::policy = {};
 Zonemaster->config->load_policy_file( 't/policy.json' );
 
 my $e = $log->entries->[-1];
-isa_ok( $e, 'Zonemaster::Logger::Entry' );
+isa_ok( $e, 'Zonemaster::Engine::Logger::Entry' );
 is( $e->module, 'SYSTEM', 'module ok' );
 is( $e->tag,    'TAG',    'tag ok' );
 is_deeply( $e->args, { seventeen => 17 }, 'args ok' );
 
 my $entry = info( 'TEST', { an => 'argument' } );
-isa_ok( $entry, 'Zonemaster::Logger::Entry' );
+isa_ok( $entry, 'Zonemaster::Engine::Logger::Entry' );
 
 ok( scalar( @{ Zonemaster->logger->entries } ) >= 2, 'expected number of entries' );
 
 like( "$entry", qr/SYSTEM:TEST an=argument/, 'stringification overload' );
 
 is( $entry->level, 'DEBUG', 'right level' );
-my $example = Zonemaster::Logger::Entry->new( { module => 'BASIC', tag => 'NS_FAILED' } );
+my $example = Zonemaster::Engine::Logger::Entry->new( { module => 'BASIC', tag => 'NS_FAILED' } );
 is( $example->level,         'ERROR', 'expected level' );
 is( $example->numeric_level, 4,       'expected numeric level' );
 
@@ -40,7 +40,7 @@ my $canary = 0;
 $log->callback(
     sub {
         my ( $e ) = @_;
-        isa_ok( $e, 'Zonemaster::Logger::Entry' );
+        isa_ok( $e, 'Zonemaster::Engine::Logger::Entry' );
         is( $e->tag, 'CALLBACK', 'expected tag in callback' );
         $canary = $e->args->{canary};
     }
@@ -77,7 +77,7 @@ is( $not_filtered->level,  'DEBUG', 'Unfiltered level' );
 is( $filtered->level,      'INFO',  'Filtered level' );
 is( $also_filtered->level, 'INFO',  'Filtered level' );
 
-my %levels = Zonemaster::Logger::Entry->levels;
+my %levels = Zonemaster::Engine::Logger::Entry->levels;
 is( $levels{CRITICAL}, 5, 'CRITICAL is level 5' );
 is( $levels{INFO},     1, 'INFO is level 1' );
 
@@ -93,7 +93,7 @@ qr[[{"args":{"exception":"in callback at t/logger.t line 47, <DATA> line 1.\n"},
 );
 
 Zonemaster->config->policy->{BASIC}{NS_FAILED} = 'GURKSALLAD';
-my $fail = Zonemaster::Logger::Entry->new( { module => 'BASIC', tag => 'NS_FAILED' } );
+my $fail = Zonemaster::Engine::Logger::Entry->new( { module => 'BASIC', tag => 'NS_FAILED' } );
 like( exception { $fail->level }, qr/Unknown level string: GURKSALLAD/, 'Dies on unknown level string' );
 
 done_testing;

@@ -1,4 +1,4 @@
-package Zonemaster::Test::Nameserver;
+package Zonemaster::Engine::Test::Nameserver;
 
 use version; our $VERSION = version->declare("v1.0.8");
 
@@ -9,7 +9,7 @@ use 5.014002;
 
 use Zonemaster;
 use Zonemaster::Util;
-use Zonemaster::Test::Address;
+use Zonemaster::Engine::Test::Address;
 use Zonemaster::Constants qw[:ip];
 
 use List::MoreUtils qw[uniq none];
@@ -173,7 +173,7 @@ sub translation {
 } ## end sub translation
 
 sub version {
-    return "$Zonemaster::Test::Nameserver::VERSION";
+    return "$Zonemaster::Engine::Test::Nameserver::VERSION";
 }
 
 sub nameserver01 {
@@ -826,11 +826,11 @@ sub nameserver09 {
 
 =head1 NAME
 
-Zonemaster::Test::Nameserver - module implementing tests of the properties of a name server
+Zonemaster::Engine::Test::Nameserver - module implementing tests of the properties of a name server
 
 =head1 SYNOPSIS
 
-    my @results = Zonemaster::Test::Nameserver->all($zone);
+    my @results = Zonemaster::Engine::Test::Nameserver->all($zone);
 
 =head1 METHODS
 

@@ -8,7 +8,7 @@ use warnings;
 use Zonemaster::Net::IP;
 
 use Zonemaster;
-use Zonemaster::Nameserver;
+use Zonemaster::Engine::Nameserver;
 
 our @roots;
 

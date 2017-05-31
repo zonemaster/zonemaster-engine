@@ -3,14 +3,14 @@ use Test::More;
 use 5.12.4;
 
 use Zonemaster;
-use Zonemaster::Nameserver;
+use Zonemaster::Engine::Nameserver;
 use Zonemaster::Util;
 
 ###
 my $datafile = 't/undelegated.data';
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die "Stored data file missing" if not -r $datafile;
-    Zonemaster::Nameserver->restore( $datafile );
+    Zonemaster::Engine::Nameserver->restore( $datafile );
     Zonemaster->config->no_network( 1 );
 }
 ###
@@ -90,7 +90,7 @@ ok( !!( grep { $_->tag eq 'FAKE_DELEGATION_IN_ZONE_NO_IP' } @{ Zonemaster->logge
     'Refused in-zone fake delegation without IP address.' );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
-    Zonemaster::Nameserver->save( $datafile );
+    Zonemaster::Engine::Nameserver->save( $datafile );
 }
 
 done_testing;

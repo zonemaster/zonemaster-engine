@@ -5,7 +5,7 @@ use 5.14.2;
 use strict;
 use warnings;
 
-BEGIN { use_ok( 'Zonemaster::Nameserver' ); }
+BEGIN { use_ok( 'Zonemaster::Engine::Nameserver' ); }
 use Zonemaster::Util;
 use Net::LDNS;
 
@@ -15,7 +15,7 @@ my %saved_axfr;
 setup( $datafile );
 
 # This should be a successful AXFR
-my $ns = Zonemaster::Nameserver->new( { name => 'kennedy.faerywicca.se', address => '46.21.106.227' } );
+my $ns = Zonemaster::Engine::Nameserver->new( { name => 'kennedy.faerywicca.se', address => '46.21.106.227' } );
 my $counter = 0;
 is(
     exception {
@@ -28,7 +28,7 @@ ok( ( $counter > 10 ), 'At least ten records seen' );
 
 # This should be a refused AXFR
 $counter = 0;
-my $ns2 = Zonemaster::Nameserver->new( { name => 'ns.nic.se', address => '212.247.7.228' } );
+my $ns2 = Zonemaster::Engine::Nameserver->new( { name => 'ns.nic.se', address => '212.247.7.228' } );
 like(
     exception {
         $ns2->axfr( 'iis.se', sub { $counter += 1; return 1; } );
@@ -48,7 +48,7 @@ done_testing;
 
 sub setup {
     my ( $datafile ) = @_;
-    my $meta = Class::MOP::Class->initialize( 'Zonemaster::Nameserver' );
+    my $meta = Class::MOP::Class->initialize( 'Zonemaster::Engine::Nameserver' );
     $meta->make_mutable;
     if ( not $ENV{ZONEMASTER_RECORD} ) {
 

@@ -5,11 +5,11 @@ use version; our $VERSION = version->declare("v1.1.0");
 use 5.014002;
 use Moose;
 
-use Zonemaster::Nameserver;
-use Zonemaster::Logger;
+use Zonemaster::Engine::Nameserver;
+use Zonemaster::Engine::Logger;
 use Zonemaster::Config;
 use Zonemaster::Zone;
-use Zonemaster::Test;
+use Zonemaster::Engine::Test;
 use Zonemaster::Recursor;
 use Zonemaster::ASNLookup;
 
@@ -18,7 +18,7 @@ our $config;
 our $recursor = Zonemaster::Recursor->new;
 
 sub logger {
-    return $logger //= Zonemaster::Logger->new;
+    return $logger //= Zonemaster::Engine::Logger->new;
 }
 
 sub config {
@@ -32,7 +32,7 @@ sub config {
 sub ns {
     my ( $class, $name, $address ) = @_;
 
-    return Zonemaster::Nameserver->new( { name => $name, address => $address } );
+    return Zonemaster::Engine::Nameserver->new( { name => $name, address => $address } );
 }
 
 sub zone {
@@ -44,27 +44,27 @@ sub zone {
 sub test_zone {
     my ( $class, $zname ) = @_;
 
-    return Zonemaster::Test->run_all_for( $class->zone( $zname ) );
+    return Zonemaster::Engine::Test->run_all_for( $class->zone( $zname ) );
 }
 
 sub test_module {
     my ( $class, $module, $zname ) = @_;
 
-    return Zonemaster::Test->run_module( $module, $class->zone( $zname ) );
+    return Zonemaster::Engine::Test->run_module( $module, $class->zone( $zname ) );
 }
 
 sub test_method {
     my ( $class, $module, $method, @arguments ) = @_;
 
-    return Zonemaster::Test->run_one( $module, $method, @arguments );
+    return Zonemaster::Engine::Test->run_one( $module, $method, @arguments );
 }
 
 sub all_tags {
     my ( $class ) = @_;
     my @res;
 
-    foreach my $module ( 'Basic', sort { $a cmp $b } Zonemaster::Test->modules ) {
-        my $full = "Zonemaster::Test::$module";
+    foreach my $module ( 'Basic', sort { $a cmp $b } Zonemaster::Engine::Test->modules ) {
+        my $full = "Zonemaster::Engine::Test::$module";
         my $ref  = $full->metadata;
         foreach my $list ( values %{$ref} ) {
             push @res, map { uc( $module ) . q{:} . $_ } sort { $a cmp $b } @{$list};
@@ -78,8 +78,8 @@ sub all_methods {
     my ( $class ) = @_;
     my %res;
 
-    foreach my $module ( 'Basic', Zonemaster::Test->modules ) {
-        my $full = "Zonemaster::Test::$module";
+    foreach my $module ( 'Basic', Zonemaster::Engine::Test->modules ) {
+        my $full = "Zonemaster::Engine::Test::$module";
         my $ref  = $full->metadata;
         foreach my $method ( sort { $a cmp $b } keys %{$ref} ) {
             push @{ $res{$module} }, $method;
@@ -154,13 +154,13 @@ sub can_continue {
 sub save_cache {
     my ( $class, $filename ) = @_;
 
-    return Zonemaster::Nameserver->save( $filename );
+    return Zonemaster::Engine::Nameserver->save( $filename );
 }
 
 sub preload_cache {
     my ( $class, $filename ) = @_;
 
-    return Zonemaster::Nameserver->restore( $filename );
+    return Zonemaster::Engine::Nameserver->restore( $filename );
 }
 
 sub asn_lookup {
@@ -170,17 +170,17 @@ sub asn_lookup {
 }
 
 sub modules {
-    return Zonemaster::Test->modules;
+    return Zonemaster::Engine::Test->modules;
 }
 
 sub start_time_now {
-    Zonemaster::Logger->start_time_now();
+    Zonemaster::Engine::Logger->start_time_now();
     return;
 }
 
 sub reset {
-    Zonemaster::Logger->start_time_now();
-    Zonemaster::Nameserver->empty_cache();
+    Zonemaster::Engine::Logger->start_time_now();
+    Zonemaster::Engine::Nameserver->empty_cache();
     $logger->clear_history() if $logger;
     Zonemaster::Recursor->clear_cache();
 
@@ -205,7 +205,7 @@ This manual describes the main L<Zonemaster> module. If what you're after is doc
 
 =item test_zone($name)
 
-Runs all available tests and returns a list of L<Zonemaster::Logger::Entry> objects.
+Runs all available tests and returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =item test_module($module, $name)
 
@@ -223,7 +223,7 @@ Returns a L<Zonemaster::Zone> object for the given name.
 
 =item ns($name, $address)
 
-Returns a L<Zonemaster::Nameserver> object for the given name and address.
+Returns a L<Zonemaster::Engine::Nameserver> object for the given name and address.
 
 =item config()
 
@@ -231,7 +231,7 @@ Returns the global L<Zonemaster::Config> object.
 
 =item logger()
 
-Returns the global L<Zonemaster::Logger> object.
+Returns the global L<Zonemaster::Engine::Logger> object.
 
 =item all_tags()
 
@@ -281,7 +281,7 @@ If called in scalar context, only the AS number.
 
 =item modules()
 
-Returns a list of the loaded test modules. Exactly the same as L<Zonemaster::Test/modules>.
+Returns a list of the loaded test modules. Exactly the same as L<Zonemaster::Engine::Test/modules>.
 
 =item add_fake_delegation($domain, $data)
 

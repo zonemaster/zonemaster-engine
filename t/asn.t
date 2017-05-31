@@ -1,12 +1,12 @@
 use Test::More;
-use Zonemaster::Nameserver;
+use Zonemaster::Engine::Nameserver;
 
 BEGIN { use_ok( 'Zonemaster::ASNLookup' ) }
 
 my $datafile = 't/asn.data';
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die "Stored data file missing" if not -r $datafile;
-    Zonemaster::Nameserver->restore( $datafile );
+    Zonemaster::Engine::Nameserver->restore( $datafile );
     Zonemaster->config->no_network( 1 );
 }
 
@@ -28,7 +28,7 @@ my ( $asn4, $prefix4 ) = Zonemaster::ASNLookup->get_with_prefix( '192.168.0.1' )
 ok( !$asn4, 'RFC1918 address is in no AS' );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
-    Zonemaster::Nameserver->save( $datafile );
+    Zonemaster::Engine::Nameserver->save( $datafile );
 }
 
 done_testing;

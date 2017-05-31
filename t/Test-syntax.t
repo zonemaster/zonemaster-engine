@@ -4,10 +4,10 @@ use List::MoreUtils qw[uniq none any];
 
 BEGIN {
     use_ok( q{Zonemaster} );
-    use_ok( q{Zonemaster::Nameserver} );
+    use_ok( q{Zonemaster::Engine::Nameserver} );
     use_ok( q{Zonemaster::DNSName} );
     use_ok( q{Zonemaster::Zone} );
-    use_ok( q{Zonemaster::Test::Syntax} );
+    use_ok( q{Zonemaster::Engine::Test::Syntax} );
 }
 
 sub name_gives {
@@ -41,7 +41,7 @@ sub zone_gives_not {
 my $datafile = q{t/Test-syntax.data};
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die q{Stored data file missing} if not -r $datafile;
-    Zonemaster::Nameserver->restore( $datafile );
+    Zonemaster::Engine::Nameserver->restore( $datafile );
     Zonemaster->config->no_network( 1 );
 }
 
@@ -51,12 +51,12 @@ foreach my $testcase ( qw{syntax01 syntax02 syntax03} ) {
     my @testcases;
     foreach my $result ( Zonemaster->test_module( q{syntax}, q{afnic.fr} ) ) {
         foreach my $trace (@{$result->trace}) {
-            push @testcases, grep /Zonemaster::Test::Syntax::syntax/, @$trace;
+            push @testcases, grep /Zonemaster::Engine::Test::Syntax::syntax/, @$trace;
         }
     }
     @testcases = uniq sort @testcases;
     is( scalar( @testcases ), 1, 'only one test-case' );
-    is( $testcases[0], 'Zonemaster::Test::Syntax::'.$testcase, 'expected test-case' );
+    is( $testcases[0], 'Zonemaster::Engine::Test::Syntax::'.$testcase, 'expected test-case' );
 }
 
 Zonemaster->config->load_policy_file( 't/policies/Test-syntax-all.json' );
@@ -135,7 +135,7 @@ ok( $res{NO_RESPONSE_SOA_QUERY}, q{No response from nameserver(s) on SOA queries
 ok( $res{NO_RESPONSE_SOA_QUERY}, q{No response from nameserver(s) on SOA queries} );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
-    Zonemaster::Nameserver->save( $datafile );
+    Zonemaster::Engine::Nameserver->save( $datafile );
 }
 
 done_testing;

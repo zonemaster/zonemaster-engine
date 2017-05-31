@@ -4,7 +4,7 @@ use List::MoreUtils qw[uniq none any];
 
 BEGIN {
     use_ok( q{Zonemaster} );
-    use_ok( q{Zonemaster::Test::Nameserver} );
+    use_ok( q{Zonemaster::Engine::Test::Nameserver} );
     use_ok( q{Zonemaster::Util} );
 }
 
@@ -35,7 +35,7 @@ sub zone_gives_not {
 my $datafile = q{t/Test-lastcases.data};
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die q{Stored data file missing} if not -r $datafile;
-    Zonemaster::Nameserver->restore( $datafile );
+    Zonemaster::Engine::Nameserver->restore( $datafile );
     Zonemaster->config->no_network( 1 );
 }
 
@@ -51,7 +51,7 @@ zone_gives_not( 'nameserver01', $zone, [q{NO_RECURSOR}] );
 zone_gives( 'nameserver01', $zone, [q{IS_A_RECURSOR}] );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
-    Zonemaster::Nameserver->save( $datafile );
+    Zonemaster::Engine::Nameserver->save( $datafile );
 }
 
 done_testing;

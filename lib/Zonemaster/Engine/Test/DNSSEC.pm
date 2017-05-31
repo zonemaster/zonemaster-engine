@@ -1,4 +1,4 @@
-package Zonemaster::Test::DNSSEC;
+package Zonemaster::Engine::Test::DNSSEC;
 
 use version; our $VERSION = version->declare("v1.0.6");
 
@@ -471,7 +471,7 @@ sub policy {
 } ## end sub policy
 
 sub version {
-    return "$Zonemaster::Test::DNSSEC::VERSION";
+    return "$Zonemaster::Engine::Test::DNSSEC::VERSION";
 }
 
 ###
@@ -1382,11 +1382,11 @@ sub dnssec11 {
 
 =head1 NAME
 
-Zonemaster::Test::DNSSEC - dnssec module showing the expected structure of Zonemaster test modules
+Zonemaster::Engine::Test::DNSSEC - dnssec module showing the expected structure of Zonemaster test modules
 
 =head1 SYNOPSIS
 
-    my @results = Zonemaster::Test::DNSSEC->all($zone);
+    my @results = Zonemaster::Engine::Test::DNSSEC->all($zone);
 
 =head1 METHODS
 

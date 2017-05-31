@@ -1,4 +1,4 @@
-package Zonemaster::Test::Delegation;
+package Zonemaster::Engine::Test::Delegation;
 
 use version; our $VERSION = version->declare("v1.0.5");
 
@@ -9,8 +9,8 @@ use 5.014002;
 
 use Zonemaster;
 use Zonemaster::Util;
-use Zonemaster::Test::Address;
-use Zonemaster::Test::Syntax;
+use Zonemaster::Engine::Test::Address;
+use Zonemaster::Engine::Test::Syntax;
 use Zonemaster::TestMethods;
 use Zonemaster::Constants ':all';
 
@@ -128,7 +128,7 @@ sub translation {
 } ## end sub translation
 
 sub version {
-    return "$Zonemaster::Test::Delegation::VERSION";
+    return "$Zonemaster::Engine::Test::Delegation::VERSION";
 }
 
 ###
@@ -576,11 +576,11 @@ sub _max_length_name_for {
 
 =head1 NAME
 
-Zonemaster::Test::Delegation - Tests regarding delegation details
+Zonemaster::Engine::Test::Delegation - Tests regarding delegation details
 
 =head1 SYNOPSIS
 
-    my @results = Zonemaster::Test::Delegation->all($zone);
+    my @results = Zonemaster::Engine::Test::Delegation->all($zone);
 
 =head1 METHODS
 

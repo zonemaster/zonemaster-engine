@@ -1,4 +1,4 @@
-package Zonemaster::Test::Example;
+package Zonemaster::Engine::Test::Example;
 
 use version; our $VERSION = version->declare("v1.0.2");
 
@@ -38,7 +38,7 @@ sub metadata {
 }
 
 sub version {
-    return "$Zonemaster::Test::Example::VERSION";
+    return "$Zonemaster::Engine::Test::Example::VERSION";
 }
 
 sub translation {
@@ -66,11 +66,11 @@ sub placeholder {
 
 =head1 NAME
 
-Zonemaster::Test::Example - example module showing the expected structure of Zonemaster test modules
+Zonemaster::Engine::Test::Example - example module showing the expected structure of Zonemaster test modules
 
 =head1 SYNOPSIS
 
-    my @results = Zonemaster::Test::Example->all($zone);
+    my @results = Zonemaster::Engine::Test::Example->all($zone);
 
 =head1 METHODS
 

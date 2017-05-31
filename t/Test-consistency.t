@@ -4,14 +4,14 @@ use List::MoreUtils qw[uniq none any];
 
 BEGIN {
     use_ok( q{Zonemaster} );
-    use_ok( q{Zonemaster::Test::Consistency} );
+    use_ok( q{Zonemaster::Engine::Test::Consistency} );
     use_ok( q{Zonemaster::Util} );
 }
 
 my $datafile = q{t/Test-consistency.data};
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die q{Stored data file missing} if not -r $datafile;
-    Zonemaster::Nameserver->restore( $datafile );
+    Zonemaster::Engine::Nameserver->restore( $datafile );
     Zonemaster->config->no_network( 1 );
 }
 
@@ -21,12 +21,12 @@ foreach my $testcase ( qw{consistency01 consistency02 consistency03 consistency0
     Zonemaster->logger->clear_history();
     foreach my $result ( Zonemaster->test_module( q{consistency}, q{afnic.fr} ) ) {
         foreach my $trace (@{$result->trace}) {
-            push @testcases, grep /Zonemaster::Test::Consistency::consistency/, @$trace;
+            push @testcases, grep /Zonemaster::Engine::Test::Consistency::consistency/, @$trace;
         }
     }
     @testcases = uniq sort @testcases;
     is( scalar( @testcases ), 1, 'only one test-case' );
-    is( $testcases[0], 'Zonemaster::Test::Consistency::'.$testcase, 'expected test-case' );
+    is( $testcases[0], 'Zonemaster::Engine::Test::Consistency::'.$testcase, 'expected test-case' );
 }
 
 Zonemaster->config->load_policy_file( 't/policies/Test-consistency-all.json' );
@@ -63,7 +63,7 @@ ok( $res{EXTRA_ADDRESS_PARENT}, q{Extra IP parent} );
 ok( $res{EXTRA_ADDRESS_CHILD},  q{Extra IP parent} );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
-    Zonemaster::Nameserver->save( $datafile );
+    Zonemaster::Engine::Nameserver->save( $datafile );
 }
 
 Zonemaster->config->no_network( 0 );

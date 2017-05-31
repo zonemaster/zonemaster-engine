@@ -1,4 +1,4 @@
-package Zonemaster::Nameserver::Cache;
+package Zonemaster::Engine::Nameserver::Cache;
 
 use version; our $VERSION = version->declare("v1.0.3");
 
@@ -41,7 +41,7 @@ __PACKAGE__->meta->make_immutable( inline_constructor => 0 );
 
 =head1 NAME
 
-Zonemaster::Nameserver::Cache - shared caches for nameserver objects
+Zonemaster::Engine::Nameserver::Cache - shared caches for nameserver objects
 
 =head1 SYNOPSIS
 

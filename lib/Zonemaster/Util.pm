@@ -97,7 +97,7 @@ sub pod_extract_for {
     my $parser = Pod::Simple::SimpleTree->new;
     $parser->no_whining( 1 );
 
-    my %desc = eval { _pod_process_tree( $parser->parse_file( $INC{"Zonemaster/Test/$name.pm"} )->root ) };
+    my %desc = eval { _pod_process_tree( $parser->parse_file( $INC{"Zonemaster/Engine/Test/$name.pm"} )->root ) };
 
     return \%desc;
 }
@@ -152,7 +152,7 @@ Zonemaster::Util - utility functions for other Zonemaster modules
 
 =item info($tag, $href)
 
-Creates and returns a L<Zonemaster::Logger::Entry> object. The object
+Creates and returns a L<Zonemaster::Engine::Logger::Entry> object. The object
 is also added to the global logger object's list of entries.
 
 =item ns($name, $address)

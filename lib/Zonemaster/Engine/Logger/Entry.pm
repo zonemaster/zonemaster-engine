@@ -1,4 +1,4 @@
-package Zonemaster::Logger::Entry;
+package Zonemaster::Engine::Logger::Entry;
 
 use version; our $VERSION = version->declare("v1.1.3");
 
@@ -55,7 +55,7 @@ sub _build_module {
 
     foreach my $e ( @{ $self->trace } ) {
         if (    $e->[1] eq 'Zonemaster::Util::info'
-            and $e->[0] =~ /^Zonemaster::Test::(.*)$/ )
+            and $e->[0] =~ /^Zonemaster::Engine::Test::(.*)$/ )
         {
             return uc $1;
         }
@@ -147,7 +147,7 @@ __PACKAGE__->meta->make_immutable;
 
 =head1 NAME
 
-Zonemaster::Logger::Entry - module for single log entries
+Zonemaster::Engine::Logger::Entry - module for single log entries
 
 =head1 SYNOPSIS
 
@@ -175,8 +175,8 @@ Set the logger's start time to the current time.
 
 =item module
 
-An auto-generated identifier of the module that created the log entry. If it was generated from a module under Zonemaster::Test, it will be an
-uppercased version of the part of the name after "Zonemaster::Test". For example, "Zonemaster::Test::Basic" gets the module identifier "BASIC". If the
+An auto-generated identifier of the module that created the log entry. If it was generated from a module under Zonemaster::Engine::Test, it will be an
+uppercased version of the part of the name after "Zonemaster::Engine::Test". For example, "Zonemaster::Engine::Test::Basic" gets the module identifier "BASIC". If the
 entry was generated from anywhere else, it will get the module identifier "SYSTEM".
 
 =item tag

@@ -1,4 +1,4 @@
-package Zonemaster::Test;
+package Zonemaster::Engine::Test;
 
 use version; our $VERSION = version->declare("v1.1.1");
 
@@ -8,7 +8,7 @@ use warnings;
 
 use Zonemaster;
 use Zonemaster::Util;
-use Zonemaster::Test::Basic;
+use Zonemaster::Engine::Test::Basic;
 
 use IO::Socket::INET6;    # Lazy-loads, so make sure it's here for the version logging
 
@@ -20,8 +20,8 @@ my @all_test_modules;
 
 @all_test_modules =
   sort { $a cmp $b }
-  map { my $f = $_; $f =~ s|^Zonemaster::Test::||; $f }
-  grep { $_ ne 'Zonemaster::Test::Basic' } useall( 'Zonemaster::Test' );
+  map { my $f = $_; $f =~ s|^Zonemaster::Engine::Test::||; $f }
+  grep { $_ ne 'Zonemaster::Engine::Test::Basic' } useall( 'Zonemaster::Engine::Test' );
 
 sub _log_versions {
     info( GLOBAL_VERSION => { version => Zonemaster->VERSION } );
@@ -64,8 +64,8 @@ sub run_all_for {
 
     info(
         MODULE_VERSION => {
-            module  => 'Zonemaster::Test::Basic',
-            version => Zonemaster::Test::Basic->version
+            module  => 'Zonemaster::Engine::Test::Basic',
+            version => Zonemaster::Engine::Test::Basic->version
         }
     );
     _log_versions();
@@ -74,10 +74,10 @@ sub run_all_for {
         return info( NO_NETWORK => {} );
     }
 
-    push @results, Zonemaster::Test::Basic->all( $zone );
-    info( MODULE_END => { module => 'Zonemaster::Test::Basic' } );
+    push @results, Zonemaster::Engine::Test::Basic->all( $zone );
+    info( MODULE_END => { module => 'Zonemaster::Engine::Test::Basic' } );
 
-    if ( Zonemaster::Test::Basic->can_continue( @results ) and Zonemaster->can_continue() ) {
+    if ( Zonemaster::Engine::Test::Basic->can_continue( @results ) and Zonemaster->can_continue() ) {
         ## no critic (Modules::RequireExplicitInclusion)
         foreach my $mod ( __PACKAGE__->modules ) {
             Zonemaster->config->load_module_policy( $mod );
@@ -87,7 +87,7 @@ sub run_all_for {
                 next;
             }
 
-            my $module = "Zonemaster::Test::$mod";
+            my $module = "Zonemaster::Engine::Test::$mod";
             info( MODULE_VERSION => { module => $module, version => $module->version } );
             my @res = eval { $module->all( $zone ) };
             if ( $@ ) {
@@ -103,7 +103,7 @@ sub run_all_for {
 
             push @results, @res;
         } ## end foreach my $mod ( __PACKAGE__...)
-    } ## end if ( Zonemaster::Test::Basic...)
+    } ## end if ( Zonemaster::Engine::Test::Basic...)
     else {
         push @results, info( CANNOT_CONTINUE => { zone => $zone->name->string } );
     }
@@ -128,7 +128,7 @@ sub run_module {
     if ( Zonemaster->can_continue() ) {
         if ( $module ) {
             Zonemaster->config->load_module_policy( $module );
-            my $m = "Zonemaster::Test::$module";
+            my $m = "Zonemaster::Engine::Test::$module";
             info( MODULE_VERSION => { module => $m, version => $m->version } );
             push @res, eval { $m->all( $zone ) };
             if ( $@ ) {
@@ -172,7 +172,7 @@ sub run_one {
     if ( Zonemaster->can_continue() ) {
         if ( $module ) {
             Zonemaster->config->load_module_policy( $module );
-            my $m = "Zonemaster::Test::$module";
+            my $m = "Zonemaster::Engine::Test::$module";
             if ( $m->metadata->{$test} ) {
                 info( MODULE_CALL => { module => $module, method => $test, version => $m->version } );
                 push @res, eval { $m->$test( @arguments ) };
@@ -219,18 +219,18 @@ sub _policy_allowed {
 
 =head1 NAME
 
-Zonemaster::Test - module to find, load and execute all test modules
+Zonemaster::Engine::Test - module to find, load and execute all test modules
 
 =head1 SYNOPSIS
 
-    my @results = Zonemaster::Test->run_all_for($zone);
-    my @results = Zonemaster::Test->run_module('DNSSEC', $zone);
+    my @results = Zonemaster::Engine::Test->run_all_for($zone);
+    my @results = Zonemaster::Engine::Test->run_module('DNSSEC', $zone);
 
 
 =head1 TEST MODULES
 
 Test modules are defined as modules with names starting with
-"Zonemaster::Test::". They are expected to provide at least four
+"Zonemaster::Engine::Test::". They are expected to provide at least four
 class methods, and optionally a fifth one.
 
 =over
@@ -238,7 +238,7 @@ class methods, and optionally a fifth one.
 =item all($zone)
 
 C<all> will be given a zone object as its only argument, and is
-epected to return a list of L<Zonemaster::Logger::Entry> objects. This
+epected to return a list of L<Zonemaster::Engine::Logger::Entry> objects. This
 is the entry point used by the C<run_all_for> and C<run_module>
 methods.
 
@@ -276,7 +276,7 @@ are their recommended default log levels.
 =item modules()
 
 Returns a list with the names of all available test modules except
-L<Zonemaster::Test::Basic> (since that one is a bit special).
+L<Zonemaster::Engine::Test::Basic> (since that one is a bit special).
 
 =item run_all_for($zone)
 
@@ -284,7 +284,7 @@ Runs all (default) tests in all test modules found, and returns a list
 of the log entry objects they returned.
 
 The order in which the test modules found will be executed is not
-defined, except that L<Zonemaster::Test::Basic> is always executed
+defined, except that L<Zonemaster::Engine::Test::Basic> is always executed
 first. If the Basic tests fail to indicate a very basic level of
 function (it must have a parent domain, and it must have at least one
 functional nameserver) for the zone, no further tests will be

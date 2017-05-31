@@ -1,4 +1,4 @@
-package Zonemaster::Test::Consistency;
+package Zonemaster::Engine::Test::Consistency;
 
 use version; our $VERSION = version->declare("v1.1.1");
 
@@ -9,7 +9,7 @@ use 5.014002;
 
 use Zonemaster;
 use Zonemaster::Util;
-use Zonemaster::Test::Address;
+use Zonemaster::Engine::Test::Address;
 use Zonemaster::Constants qw[:ip :soa];
 
 use List::MoreUtils qw[uniq];
@@ -136,7 +136,7 @@ sub translation {
 } ## end sub translation
 
 sub version {
-    return "$Zonemaster::Test::Consistency::VERSION";
+    return "$Zonemaster::Engine::Test::Consistency::VERSION";
 }
 
 ###
@@ -613,11 +613,11 @@ sub consistency05 {
 
 =head1 NAME
 
-Zonemaster::Test::Consistency - Consistency module showing the expected structure of Zonemaster test modules
+Zonemaster::Engine::Test::Consistency - Consistency module showing the expected structure of Zonemaster test modules
 
 =head1 SYNOPSIS
 
-    my @results = Zonemaster::Test::Consistency->all($zone);
+    my @results = Zonemaster::Engine::Test::Consistency->all($zone);
 
 =head1 METHODS
 

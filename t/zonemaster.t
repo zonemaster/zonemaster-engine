@@ -4,8 +4,8 @@ use File::Temp qw[:POSIX];
 
 BEGIN {
     use_ok( 'Zonemaster' );
-    use_ok( 'Zonemaster::Test' );
-    use_ok( 'Zonemaster::Nameserver' );
+    use_ok( 'Zonemaster::Engine::Test' );
+    use_ok( 'Zonemaster::Engine::Nameserver' );
     use_ok( 'Zonemaster::Exception' );
 }
 
@@ -14,14 +14,14 @@ is( exception { Zonemaster->reset(); }, undef, 'No crash on instant reset.');
 my $datafile = q{t/zonemaster.data};
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die q{Stored data file missing} if not -r $datafile;
-    Zonemaster::Nameserver->restore( $datafile );
+    Zonemaster::Engine::Nameserver->restore( $datafile );
     Zonemaster->config->no_network( 1 );
 }
 
-isa_ok( Zonemaster->logger, 'Zonemaster::Logger' );
+isa_ok( Zonemaster->logger, 'Zonemaster::Engine::Logger' );
 isa_ok( Zonemaster->config, 'Zonemaster::Config' );
 
-my %module = map { $_ => 1 } Zonemaster::Test->modules;
+my %module = map { $_ => 1 } Zonemaster::Engine::Test->modules;
 
 ok( $module{Consistency},  'Consistency' );
 ok( $module{Delegation},   'Delegation' );
@@ -70,25 +70,25 @@ my @results = Zonemaster->test_zone( 'nic.se' );
 ok( $global_version,     "Global version: $global_version" );
 ok( $dependency_version, 'At least one dependency version logged' );
 
-ok( $module{'Zonemaster::Test::Address'},      'Zonemaster::Test::Address did run.' );
-ok( $module{'Zonemaster::Test::Basic'},        'Zonemaster::Test::Basic did run.' );
-ok( $module{'Zonemaster::Test::Connectivity'}, 'Zonemaster::Test::Connectivity did run.' );
-ok( $module{'Zonemaster::Test::Consistency'},  'Zonemaster::Test::Consistency did run.' );
-ok( $module{'Zonemaster::Test::DNSSEC'},       'Zonemaster::Test::DNSSEC did run.' );
-ok( $module{'Zonemaster::Test::Delegation'},   'Zonemaster::Test::Delegation did run.' );
-ok( $module{'Zonemaster::Test::Nameserver'},   'Zonemaster::Test::Nameserver did run.' );
-ok( $module{'Zonemaster::Test::Syntax'},       'Zonemaster::Test::Syntax did run.' );
-ok( $module{'Zonemaster::Test::Zone'},         'Zonemaster::Test::Zone did run.' );
+ok( $module{'Zonemaster::Engine::Test::Address'},      'Zonemaster::Engine::Test::Address did run.' );
+ok( $module{'Zonemaster::Engine::Test::Basic'},        'Zonemaster::Engine::Test::Basic did run.' );
+ok( $module{'Zonemaster::Engine::Test::Connectivity'}, 'Zonemaster::Engine::Test::Connectivity did run.' );
+ok( $module{'Zonemaster::Engine::Test::Consistency'},  'Zonemaster::Engine::Test::Consistency did run.' );
+ok( $module{'Zonemaster::Engine::Test::DNSSEC'},       'Zonemaster::Engine::Test::DNSSEC did run.' );
+ok( $module{'Zonemaster::Engine::Test::Delegation'},   'Zonemaster::Engine::Test::Delegation did run.' );
+ok( $module{'Zonemaster::Engine::Test::Nameserver'},   'Zonemaster::Engine::Test::Nameserver did run.' );
+ok( $module{'Zonemaster::Engine::Test::Syntax'},       'Zonemaster::Engine::Test::Syntax did run.' );
+ok( $module{'Zonemaster::Engine::Test::Zone'},         'Zonemaster::Engine::Test::Zone did run.' );
 
-ok( $end{'Zonemaster::Test::Address'},      'Zonemaster::Test::Address did end.' );
-ok( $end{'Zonemaster::Test::Basic'},        'Zonemaster::Test::Basic did end.' );
-ok( $end{'Zonemaster::Test::Connectivity'}, 'Zonemaster::Test::Connectivity did end.' );
-ok( $end{'Zonemaster::Test::Consistency'},  'Zonemaster::Test::Consistency did end.' );
-ok( $end{'Zonemaster::Test::DNSSEC'},       'Zonemaster::Test::DNSSEC did end.' );
-ok( $end{'Zonemaster::Test::Delegation'},   'Zonemaster::Test::Delegation did end.' );
-ok( $end{'Zonemaster::Test::Nameserver'},   'Zonemaster::Test::Nameserver did end.' );
-ok( $end{'Zonemaster::Test::Syntax'},       'Zonemaster::Test::Syntax did end.' );
-ok( $end{'Zonemaster::Test::Zone'},         'Zonemaster::Test::Zone did end.' );
+ok( $end{'Zonemaster::Engine::Test::Address'},      'Zonemaster::Engine::Test::Address did end.' );
+ok( $end{'Zonemaster::Engine::Test::Basic'},        'Zonemaster::Engine::Test::Basic did end.' );
+ok( $end{'Zonemaster::Engine::Test::Connectivity'}, 'Zonemaster::Engine::Test::Connectivity did end.' );
+ok( $end{'Zonemaster::Engine::Test::Consistency'},  'Zonemaster::Engine::Test::Consistency did end.' );
+ok( $end{'Zonemaster::Engine::Test::DNSSEC'},       'Zonemaster::Engine::Test::DNSSEC did end.' );
+ok( $end{'Zonemaster::Engine::Test::Delegation'},   'Zonemaster::Engine::Test::Delegation did end.' );
+ok( $end{'Zonemaster::Engine::Test::Nameserver'},   'Zonemaster::Engine::Test::Nameserver did end.' );
+ok( $end{'Zonemaster::Engine::Test::Syntax'},       'Zonemaster::Engine::Test::Syntax did end.' );
+ok( $end{'Zonemaster::Engine::Test::Zone'},         'Zonemaster::Engine::Test::Zone did end.' );
 
 ok( $disabled, 'Blocking of disabled module was logged.' );
 
@@ -142,14 +142,14 @@ Zonemaster->config->ipv4_ok( 1 );
 Zonemaster->config->ipv6_ok( 1 );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
-    Zonemaster::Nameserver->save( $datafile );
+    Zonemaster::Engine::Nameserver->save( $datafile );
 }
 
 ok( @{ Zonemaster->logger->entries } > 0,                        'There are log entries' );
-ok( scalar( keys( %Zonemaster::Nameserver::object_cache ) ) > 0, 'There are things in the object cache' );
+ok( scalar( keys( %Zonemaster::Engine::Nameserver::object_cache ) ) > 0, 'There are things in the object cache' );
 Zonemaster->reset;
 ok( @{ Zonemaster->logger->entries } == 0,                        'There are no log entries' );
-ok( scalar( keys( %Zonemaster::Nameserver::object_cache ) ) == 0, 'The object cache is empty' );
-ok( scalar( keys( %Zonemaster::Nameserver::Cache::object_cache ) ) == 0, 'The packet cache is empty' );
+ok( scalar( keys( %Zonemaster::Engine::Nameserver::object_cache ) ) == 0, 'The object cache is empty' );
+ok( scalar( keys( %Zonemaster::Engine::Nameserver::Cache::object_cache ) ) == 0, 'The packet cache is empty' );
 
 done_testing;

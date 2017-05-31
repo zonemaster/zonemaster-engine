@@ -7,7 +7,7 @@ use warnings;
 
 use Carp;
 use Zonemaster::Recursor;
-use Zonemaster::Nameserver;
+use Zonemaster::Engine::Nameserver;
 
 use Moose;
 
@@ -120,7 +120,7 @@ sub _load_name {
     my ( $self, $name ) = @_;
     my @addrs = Zonemaster::Recursor->get_addresses_for( $name );
     foreach my $addr ( sort { $a->ip cmp $b->ip } @addrs ) {
-        my $ns = Zonemaster::Nameserver->new( { name => $name, address => $addr } );
+        my $ns = Zonemaster::Engine::Nameserver->new( { name => $name, address => $addr } );
         if ( not grep { "$ns" eq "$_" } @{ $self->ary } ) {
             push @{ $self->ary }, $ns;
         }
@@ -146,7 +146,7 @@ Zonemaster::NSArray - Class implementing arrays that lazily looks up name server
 
 This class is used for the C<glue> and C<ns> attributes of the
 L<Zonemaster::Zone> class. It is initially seeded with a list of
-names, which will be expanded into proper L<Zonemaster::Nameserver>
+names, which will be expanded into proper L<Zonemaster::Engine::Nameserver>
 objects on demand. Be careful with using Perl functions that act on
 whole arrays (particularly C<foreach>), since they will usually force
 the entire array to expand, negating the use of the lazy-loading.

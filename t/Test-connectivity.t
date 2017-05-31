@@ -4,15 +4,15 @@ use List::MoreUtils qw[uniq none any];
 
 BEGIN {
     use_ok( q{Zonemaster} );
-    use_ok( q{Zonemaster::Nameserver} );
-    use_ok( q{Zonemaster::Test::Connectivity} );
+    use_ok( q{Zonemaster::Engine::Nameserver} );
+    use_ok( q{Zonemaster::Engine::Test::Connectivity} );
     use_ok( q{Zonemaster::Util} );
 }
 
 my $datafile = q{t/Test-connectivity.data};
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die q{Stored data file missing} if not -r $datafile;
-    Zonemaster::Nameserver->restore( $datafile );
+    Zonemaster::Engine::Nameserver->restore( $datafile );
     Zonemaster->config->no_network( 1 );
 }
 
@@ -21,12 +21,12 @@ foreach my $testcase ( qw{connectivity01 connectivity02 connectivity03} ) {
     my @testcases;
     foreach my $result ( Zonemaster->test_module( q{connectivity}, q{afnic.fr} ) ) {
         foreach my $trace (@{$result->trace}) {
-            push @testcases, grep /Zonemaster::Test::Connectivity::connectivity/, @$trace;
+            push @testcases, grep /Zonemaster::Engine::Test::Connectivity::connectivity/, @$trace;
         }
     }
     @testcases = uniq sort @testcases;
     is( scalar( @testcases ), 1, 'only one test-case' );
-    is( $testcases[0], 'Zonemaster::Test::Connectivity::'.$testcase, 'expected test-case' );
+    is( $testcases[0], 'Zonemaster::Engine::Test::Connectivity::'.$testcase, 'expected test-case' );
 }
 
 Zonemaster->config->load_policy_file( 't/policies/Test-connectivity-all.json' );
@@ -57,7 +57,7 @@ ok( $res{NAMESERVERS_WITH_UNIQ_AS},      q{Nameservers with Uniq AS} );
 ok( $res{NAMESERVERS_IPV4_WITH_UNIQ_AS}, q{Nameservers IPv4 with Uniq AS} );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
-    Zonemaster::Nameserver->save( $datafile );
+    Zonemaster::Engine::Nameserver->save( $datafile );
 }
 
 Zonemaster->config->no_network( 0 );

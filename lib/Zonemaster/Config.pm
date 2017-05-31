@@ -118,7 +118,7 @@ sub _load_base_config {
 sub load_module_policy {
     my ( $class, $mod ) = @_;
 
-    my $m = 'Zonemaster::Test::' . $mod;
+    my $m = 'Zonemaster::Engine::Test::' . $mod;
     if ( $m->can( 'policy' ) and $m->policy ) {
         $policy = $merger->merge( $policy, { $mod => $m->policy } );
     }
@@ -368,7 +368,7 @@ Load configuration information from the given file and merge it into the pre-loa
 =item load_module_policy($module)
 
 Loads policy data included in a test module. The argument must be the short
-form (without the initial C<Zonemaster::Test::>) and correctly capitalized.
+form (without the initial C<Zonemaster::Engine::Test::>) and correctly capitalized.
 
 =item BUILD
 
@@ -494,7 +494,7 @@ And this would set the level to C<WARNING> for any C<SYSTEM:FILTER_THIS> message
 
 =head1 POLICY DATA
 
-Like the configuration data, policy data is stored in JSON format. Structurally, it's a bit less complex. All the keys on the top level, with one exception, are names of test implementation modules (without the C<Zonemaster::Test::> prefix). Each of those keys hold another hash, where the keys are the tags that the module in question can emit and the values are the the severity levels that should apply to the tags. Any tags that are not found in the policy data will default to level C<DEBUG>.
+Like the configuration data, policy data is stored in JSON format. Structurally, it's a bit less complex. All the keys on the top level, with one exception, are names of test implementation modules (without the C<Zonemaster::Engine::Test::> prefix). Each of those keys hold another hash, where the keys are the tags that the module in question can emit and the values are the the severity levels that should apply to the tags. Any tags that are not found in the policy data will default to level C<DEBUG>.
 
 The one exception is a top-level key C<__testcases__>. The value of that must be a hash where the keys are names of test cases from the test specifications, and the corresponding values are booleans specifying if the test case in question should be executed or not. Any missing test cases are treated as if they had the value C<true> set. The test cases C<basic00>, C<basic01> and C<basic02> will be executed even if their values are set to C<false>, since part of their function is to verify that the given name can be tested at all. The values here only apply when test modules are asked to run all their tests. A test case that is set to C<false> here will still run if asked for specifically.
 

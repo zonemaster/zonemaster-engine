@@ -1,4 +1,4 @@
-package Zonemaster::Test::Zone;
+package Zonemaster::Engine::Test::Zone;
 
 use version; our $VERSION = version->declare("v1.0.2");
 
@@ -9,7 +9,7 @@ use 5.014002;
 
 use Zonemaster;
 use Zonemaster::Util;
-use Zonemaster::Test::Address;
+use Zonemaster::Engine::Test::Address;
 use Zonemaster::TestMethods;
 use Zonemaster::Constants qw[:soa :ip];
 use List::MoreUtils qw[none];
@@ -172,7 +172,7 @@ sub translation {
 } ## end sub translation
 
 sub version {
-    return "$Zonemaster::Test::Zone::VERSION";
+    return "$Zonemaster::Engine::Test::Zone::VERSION";
 }
 
 sub zone01 {
@@ -190,7 +190,7 @@ sub zone01 {
         else {
             foreach my $ip_address ( Zonemaster::Recursor->get_addresses_for( $soa_mname ) ) {
 
-                my $ns = Zonemaster::Nameserver->new( { name => $soa_mname, address => $ip_address->short } );
+                my $ns = Zonemaster::Engine::Nameserver->new( { name => $soa_mname, address => $ip_address->short } );
 
                 if ( _is_ip_version_disabled( $ns ) ) {
                     next;
@@ -595,11 +595,11 @@ sub _is_ip_version_disabled {
 
 =head1 NAME
 
-Zonemaster::Test::Zone - module implementing tests of the zone content in DNS, such as SOA and MX records
+Zonemaster::Engine::Test::Zone - module implementing tests of the zone content in DNS, such as SOA and MX records
 
 =head1 SYNOPSIS
 
-    my @results = Zonemaster::Test::Zone->all($zone);
+    my @results = Zonemaster::Engine::Test::Zone->all($zone);
 
 =head1 METHODS
 

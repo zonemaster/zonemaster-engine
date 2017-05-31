@@ -1,20 +1,20 @@
 use Test::More;
 
-BEGIN { use_ok( 'Zonemaster::Nameserver' ); }
+BEGIN { use_ok( 'Zonemaster::Engine::Nameserver' ); }
 use Zonemaster;
 use Zonemaster::Util;
 
 my $datafile = 't/nameserver.data';
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die "Stored data file missing" if not -r $datafile;
-    Zonemaster::Nameserver->restore( $datafile );
+    Zonemaster::Engine::Nameserver->restore( $datafile );
     Zonemaster->config->no_network( 1 );
 }
 
-my $nsv6 = new_ok( 'Zonemaster::Nameserver' => [ { name => 'ns.nic.se', address => '2a00:801:f0:53::53' } ] );
-my $nsv4 = new_ok( 'Zonemaster::Nameserver' => [ { name => 'ns.nic.se', address => '212.247.7.228' } ] );
+my $nsv6 = new_ok( 'Zonemaster::Engine::Nameserver' => [ { name => 'ns.nic.se', address => '2a00:801:f0:53::53' } ] );
+my $nsv4 = new_ok( 'Zonemaster::Engine::Nameserver' => [ { name => 'ns.nic.se', address => '212.247.7.228' } ] );
 
-eval { Zonemaster::Nameserver->new( { name => 'dummy' } ); };
+eval { Zonemaster::Engine::Nameserver->new( { name => 'dummy' } ); };
 like( $@, qr/Attribute \(address\) is required/, 'create fails without address.' );
 
 isa_ok( $nsv6->address, 'Zonemaster::Net::IP' );
@@ -49,17 +49,17 @@ ok(
 SKIP: {
     skip '/tmp not writable', 2 unless -w '/tmp';
     my $name = "/tmp/namserver_test_$$";
-    Zonemaster::Nameserver->save( $name );
-    my $count = keys %Zonemaster::Nameserver::object_cache;
-    undef %Zonemaster::Nameserver::object_cache;
-    is( scalar( keys %Zonemaster::Nameserver::object_cache ), 0, 'Nameserver cache is empty after clear.' );
-    Zonemaster::Nameserver->restore( $name );
-    is( scalar( keys %Zonemaster::Nameserver::object_cache ),
+    Zonemaster::Engine::Nameserver->save( $name );
+    my $count = keys %Zonemaster::Engine::Nameserver::object_cache;
+    undef %Zonemaster::Engine::Nameserver::object_cache;
+    is( scalar( keys %Zonemaster::Engine::Nameserver::object_cache ), 0, 'Nameserver cache is empty after clear.' );
+    Zonemaster::Engine::Nameserver->restore( $name );
+    is( scalar( keys %Zonemaster::Engine::Nameserver::object_cache ),
         $count, 'Same number of top-level keys in cache after restore.' );
     unlink $name;
 }
 
-my $broken = new_ok( 'Zonemaster::Nameserver' => [ { name => 'ns.not.existing', address => '192.0.2.17' } ] );
+my $broken = new_ok( 'Zonemaster::Engine::Nameserver' => [ { name => 'ns.not.existing', address => '192.0.2.17' } ] );
 my $p = $broken->query( 'www.iis.se' );
 ok( !$p, 'no response from broken server' );
 
@@ -82,11 +82,11 @@ is( $nsv6->min_time,     2 );
 @{ $nsv6->times } = ( qw[2 4 4 4 5 5 7] );
 is( $nsv6->median_time, 4 );
 
-foreach my $ns ( Zonemaster::Nameserver->all_known_nameservers ) {
-    isa_ok( $ns, 'Zonemaster::Nameserver' );
+foreach my $ns ( Zonemaster::Engine::Nameserver->all_known_nameservers ) {
+    isa_ok( $ns, 'Zonemaster::Engine::Nameserver' );
 }
 
-ok( scalar( keys %Zonemaster::Nameserver::Cache::object_cache ) >= 4 );
+ok( scalar( keys %Zonemaster::Engine::Nameserver::Cache::object_cache ) >= 4 );
 
 Zonemaster->config->ipv4_ok( 0 );
 Zonemaster->config->ipv6_ok( 0 );
@@ -119,20 +119,20 @@ is( $dsrr->keytag,    16696,      'Expected keytag' );
 is( $dsrr->hexdigest, 'deadbeef', 'Expected digest data' );
 
 Zonemaster->config->resolver_source('127.0.0.1');
-my $ns_test = new_ok( 'Zonemaster::Nameserver' => [ { name => 'ns.nic.se', address => '212.247.7.228' } ] );
+my $ns_test = new_ok( 'Zonemaster::Engine::Nameserver' => [ { name => 'ns.nic.se', address => '212.247.7.228' } ] );
 is($ns_test->dns->source, '127.0.0.1', 'Source address set.');
 
 Zonemaster->config->no_network( 0 );
 # Address was 127.0.0.17 (https://github.com/dotse/zonemaster-engine/issues/219).
 # 192.0.2.17 is part of TEST-NET-1 IP address range (See RFC6890) and should be reserved
 # for documentation.
-my $fail_ns = Zonemaster::Nameserver->new( { name => 'fail', address => '192.0.2.17' } );
+my $fail_ns = Zonemaster::Engine::Nameserver->new( { name => 'fail', address => '192.0.2.17' } );
 my $fail_p = $fail_ns->_query( 'example.org', 'A', {} );
 is( $fail_p, undef, 'No return from broken server' );
 my ( $e ) = grep { $_->tag eq 'LOOKUP_ERROR' } @{ Zonemaster->logger->entries };
-isa_ok( $e, 'Zonemaster::Logger::Entry' );
+isa_ok( $e, 'Zonemaster::Engine::Logger::Entry' );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
-    Zonemaster::Nameserver->save( $datafile );
+    Zonemaster::Engine::Nameserver->save( $datafile );
 }
 done_testing;

@@ -295,7 +295,7 @@ responding nameserver in the glue list.
 
 =item ns
 
-A reference to an array of L<Zonemaster::Nameserver> objects for the
+A reference to an array of L<Zonemaster::Engine::Nameserver> objects for the
 domain, built by taking the list returned from L<ns_names()> and
 looking up addresses for the names. One element will be added to this
 list for each unique name/IP pair. Names for which no addresses could
@@ -312,7 +312,7 @@ parent zone.
 
 =item glue
 
-A reference to an array of L<Zonemaster::Nameserver> objects for the
+A reference to an array of L<Zonemaster::Engine::Nameserver> objects for the
 domain, built by taking the list returned from L<glue_names()> and
 looking up addresses for the names. One element will be added to this
 list for each unique name/IP pair. Names for which no addresses could

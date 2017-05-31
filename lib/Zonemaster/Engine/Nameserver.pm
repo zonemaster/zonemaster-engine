@@ -1,4 +1,4 @@
-package Zonemaster::Nameserver;
+package Zonemaster::Engine::Nameserver;
 
 use version; our $VERSION = version->declare("v1.1.3");
 
@@ -9,7 +9,7 @@ use Moose::Util::TypeConstraints;
 use Zonemaster::DNSName;
 use Zonemaster;
 use Zonemaster::Packet;
-use Zonemaster::Nameserver::Cache;
+use Zonemaster::Engine::Nameserver::Cache;
 use Zonemaster::Recursor;
 use Zonemaster::Constants ':misc';
 
@@ -34,7 +34,7 @@ has 'name'    => ( is => 'ro', isa => 'Zonemaster::DNSName', coerce => 1, requir
 has 'address' => ( is => 'ro', isa => 'Zonemaster::Net::IP', coerce => 1, required => 1 );
 
 has 'dns'   => ( is => 'ro', isa => 'Net::LDNS',                     lazy_build => 1 );
-has 'cache' => ( is => 'ro', isa => 'Zonemaster::Nameserver::Cache', lazy_build => 1 );
+has 'cache' => ( is => 'ro', isa => 'Zonemaster::Engine::Nameserver::Cache', lazy_build => 1 );
 has 'times' => ( is => 'ro', isa => 'ArrayRef',                      default    => sub { [] } );
 
 has 'source_address' =>
@@ -91,7 +91,7 @@ sub _build_dns {
 sub _build_cache {
     my ( $self ) = @_;
 
-    Zonemaster::Nameserver::Cache->new( { address => $self->address } );
+    Zonemaster::Engine::Nameserver::Cache->new( { address => $self->address } );
 }
 
 ###
@@ -393,11 +393,11 @@ sub restore {
     while ( my $line = <$fh> ) {
         my ( $name, $addr, $data ) = split( / /, $line, 3 );
         my $ref = $decode->decode( $data );
-        my $ns  = Zonemaster::Nameserver->new(
+        my $ns  = Zonemaster::Engine::Nameserver->new(
             {
                 name    => $name,
                 address => $addr,
-                cache   => Zonemaster::Nameserver::Cache->new( { data => $ref, address => Zonemaster::Net::IP->new( $addr ) } )
+                cache   => Zonemaster::Engine::Nameserver::Cache->new( { data => $ref, address => Zonemaster::Net::IP->new( $addr ) } )
             }
         );
     }
@@ -497,7 +497,7 @@ sub axfr {
 sub empty_cache {
     %object_cache = ();
 
-    Zonemaster::Nameserver::Cache::empty_cache();
+    Zonemaster::Engine::Nameserver::Cache::empty_cache();
 
     return;
 }
@@ -509,11 +509,11 @@ __PACKAGE__->meta->make_immutable( inline_constructor => 0 );
 
 =head1 NAME
 
-Zonemaster::Nameserver - object representing a DNS nameserver
+Zonemaster::Engine::Nameserver - object representing a DNS nameserver
 
 =head1 SYNOPSIS
 
-    my $ns = Zonemaster::Nameserver->new({ name => 'ns.nic.se', address => '212.247.7.228' });
+    my $ns = Zonemaster::Engine::Nameserver->new({ name => 'ns.nic.se', address => '212.247.7.228' });
     my $p = $ns->query('www.iis.se', 'AAAA');
 
 =head1 DESCRIPTION
@@ -547,7 +547,7 @@ The L<Net::LDNS> object used to actually send and recieve DNS queries.
 
 =item cache
 
-A reference to a L<Zonemaster::Nameserver::Cache> object holding the cache of sent queries. Not meant for external use.
+A reference to a L<Zonemaster::Engine::Nameserver::Cache> object holding the cache of sent queries. Not meant for external use.
 
 =item times
 

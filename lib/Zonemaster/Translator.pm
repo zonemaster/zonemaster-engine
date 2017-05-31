@@ -40,7 +40,7 @@ sub _load_data {
 
     $data{SYSTEM} = _system_translation();
     foreach my $mod ( 'Basic', Zonemaster->modules ) {
-        my $module = 'Zonemaster::Test::' . $mod;
+        my $module = 'Zonemaster::Engine::Test::' . $mod;
         $data{ uc( $mod ) } = $module->translation();
     }
 
@@ -144,12 +144,12 @@ end-users.
 
 =item to_string($entry)
 
-Takes a L<Zonemaster::Logger::Entry> object as its argument and returns a translated string with the timestamp, level, message and arguments in the
+Takes a L<Zonemaster::Engine::Logger::Entry> object as its argument and returns a translated string with the timestamp, level, message and arguments in the
 entry.
 
 =item translate_tag
 
-Takes a L<Zonemaster::Logger::Entry> object as its argument and returns a translation of its tag and arguments.
+Takes a L<Zonemaster::Engine::Logger::Entry> object as its argument and returns a translation of its tag and arguments.
 
 =item BUILD
 

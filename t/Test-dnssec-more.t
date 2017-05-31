@@ -2,7 +2,7 @@ use Test::More;
 
 BEGIN {
     use_ok( 'Zonemaster' );
-    use_ok( 'Zonemaster::Test::DNSSEC' );
+    use_ok( 'Zonemaster::Engine::Test::DNSSEC' );
 }
 
 my $checking_module = q{DNSSEC};
@@ -32,7 +32,7 @@ sub zone_gives_not {
 my $datafile = 't/Test-dnssec-more.data';
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die "Stored data file missing" if not -r $datafile;
-    Zonemaster::Nameserver->restore( $datafile );
+    Zonemaster::Engine::Nameserver->restore( $datafile );
     Zonemaster->config->no_network( 1 );
 }
 
@@ -81,7 +81,7 @@ $zone = Zonemaster->zone( 'y.nu' );
 zone_gives_not( 'dnssec03', $zone, ['TOO_MANY_ITERATIONS'] );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
-    Zonemaster::Nameserver->save( $datafile );
+    Zonemaster::Engine::Nameserver->save( $datafile );
 }
 
 done_testing;

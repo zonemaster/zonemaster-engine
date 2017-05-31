@@ -1,4 +1,4 @@
-package Zonemaster::Test::Basic;
+package Zonemaster::Engine::Test::Basic;
 
 use version; our $VERSION = version->declare("v1.0.5");
 
@@ -10,8 +10,8 @@ use 5.014002;
 use Zonemaster;
 use Zonemaster::Util;
 use Zonemaster::TestMethods;
-use Zonemaster::Test::Address;
-use Zonemaster::Test::Syntax;
+use Zonemaster::Engine::Test::Address;
+use Zonemaster::Engine::Test::Syntax;
 use Zonemaster::Constants qw[:ip :name];
 use List::MoreUtils qw[any none];
 
@@ -139,7 +139,7 @@ sub translation {
 } ## end sub translation
 
 sub version {
-    return "$Zonemaster::Test::Basic::VERSION";
+    return "$Zonemaster::Engine::Test::Basic::VERSION";
 }
 
 ###
@@ -400,11 +400,11 @@ sub basic03 {
 
 =head1 NAME
 
-Zonemaster::Test::Basic - module implementing test for very basic domain functionality
+Zonemaster::Engine::Test::Basic - module implementing test for very basic domain functionality
 
 =head1 SYNOPSIS
 
-    my @results = Zonemaster::Test::Basic->all($zone);
+    my @results = Zonemaster::Engine::Test::Basic->all($zone);
 
 =head1 METHODS
 

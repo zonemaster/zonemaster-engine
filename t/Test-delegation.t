@@ -4,14 +4,14 @@ use List::MoreUtils qw[uniq none any];
 
 BEGIN {
     use_ok( q{Zonemaster} );
-    use_ok( q{Zonemaster::Test::Delegation} );
+    use_ok( q{Zonemaster::Engine::Test::Delegation} );
     use_ok( q{Zonemaster::Util} );
 }
 
 my $datafile = q{t/Test-delegation.data};
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die q{Stored data file missing} if not -r $datafile;
-    Zonemaster::Nameserver->restore( $datafile );
+    Zonemaster::Engine::Nameserver->restore( $datafile );
     Zonemaster->config->no_network( 1 );
 }
 
@@ -19,7 +19,7 @@ my @res;
 my %res;
 
 my $iis = Zonemaster->zone( q{iis.se} );
-%res = map { $_->tag => $_ } Zonemaster::Test::Delegation->all( $iis );
+%res = map { $_->tag => $_ } Zonemaster::Engine::Test::Delegation->all( $iis );
 ok( $res{ENOUGH_NS},       q{ENOUGH_NS} );
 ok( $res{ENOUGH_NS_GLUE},  q{ENOUGH_NS_GLUE} );
 ok( $res{ENOUGH_NS_TOTAL}, q{ENOUGH_NS_TOTAL} );
@@ -56,7 +56,7 @@ TODO: {
 }
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
-    Zonemaster::Nameserver->save( $datafile );
+    Zonemaster::Engine::Nameserver->save( $datafile );
 }
 
 Zonemaster->config->no_network( 0 );

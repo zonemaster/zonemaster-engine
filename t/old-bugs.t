@@ -1,9 +1,9 @@
 use Test::More;
 
 use Zonemaster;
-use Zonemaster::Nameserver;
-use Zonemaster::Test::Delegation;
-use Zonemaster::Test::Nameserver;
+use Zonemaster::Engine::Nameserver;
+use Zonemaster::Engine::Test::Delegation;
+use Zonemaster::Engine::Test::Nameserver;
 
 use List::MoreUtils qw[any none];
 
@@ -32,7 +32,7 @@ sub zone_gives_not {
 my $datafile = q{t/old-bugs.data};
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die q{Stored data file missing} if not -r $datafile;
-    Zonemaster::Nameserver->restore( $datafile );
+    Zonemaster::Engine::Nameserver->restore( $datafile );
     Zonemaster->config->no_network( 1 );
 }
 
@@ -81,7 +81,7 @@ zone_gives_not( q{Nameserver}, 'nameserver01', $zone, [q{IS_A_RECURSOR}] );
 zone_gives( q{Nameserver}, 'nameserver01', $zone, [q{NO_RECURSOR}] );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
-    Zonemaster::Nameserver->save( $datafile );
+    Zonemaster::Engine::Nameserver->save( $datafile );
 }
 
 done_testing;

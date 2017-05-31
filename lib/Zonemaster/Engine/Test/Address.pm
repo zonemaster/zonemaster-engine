@@ -1,4 +1,4 @@
-package Zonemaster::Test::Address;
+package Zonemaster::Engine::Test::Address;
 
 use version; our $VERSION = version->declare("v1.0.2");
 
@@ -80,7 +80,7 @@ sub translation {
 }
 
 sub version {
-    return "$Zonemaster::Test::Address::VERSION";
+    return "$Zonemaster::Engine::Test::Address::VERSION";
 }
 
 sub find_special_address {
@@ -269,11 +269,11 @@ sub address03 {
 
 =head1 NAME
 
-Zonemaster::Test::Address - module implementing tests focused on the Address specific test cases of the DNS tests
+Zonemaster::Engine::Test::Address - module implementing tests focused on the Address specific test cases of the DNS tests
 
 =head1 SYNOPSIS
 
-    my @results = Zonemaster::Test::Address->all($zone);
+    my @results = Zonemaster::Engine::Test::Address->all($zone);
 
 =head1 METHODS
 

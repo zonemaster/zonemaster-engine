@@ -20,7 +20,7 @@ If all you want to do is run tests, you need to care about four or five modules.
 
 There are two ways that you can get the results of a test you've requested: the simple-but-inflexible way and the flexible-but-complex way.
 
-The simple-but-inflexible way is that all the methods in L<Zonemaster> that run tests return lists of L<Zonemaster::Logger::Entry> objects. Those lists incude all the results that the writer of the test module(s) considered important enough to return by default. The advantage of this method is that it is extremely easy to use. The following is a functional (if not very useful) way to run a full test and print the results from a command line prompt:
+The simple-but-inflexible way is that all the methods in L<Zonemaster> that run tests return lists of L<Zonemaster::Engine::Logger::Entry> objects. Those lists incude all the results that the writer of the test module(s) considered important enough to return by default. The advantage of this method is that it is extremely easy to use. The following is a functional (if not very useful) way to run a full test and print the results from a command line prompt:
 
  perl -MZonemaster -E 'say "$_" for Zonemaster->new->test_zone("example.org")'
 
@@ -34,13 +34,13 @@ If you try running those, you'll notice two main differences. First, the second 
 
 You can do pretty much whatever you want with the message objects in the callback (including modifying them, although we don't promise that behavior will stay around). If the callback code throws an exception, and that exception is not a subcless of L<Zonemaster::Exception>, the callback will be removed. Note also that while the callback is running, the test engine itself is not. So think twice before you do potentially time-consuming tasks (like sticking the message in a database) in the callback. After waiting for responses from remote name servers (which usually stands for more than 90% of the time used), the result logging is the single most time-consuming task in a Zonemaster test run.
 
-From here, you probably want to look at the documentation for L<Zonemaster>, L<Zonemaster::Logger>, L<Zonemaster::Logger::Entry>, L<Zonemaster::Config> and L<Zonemaster::Translator>.
+From here, you probably want to look at the documentation for L<Zonemaster>, L<Zonemaster::Engine::Logger>, L<Zonemaster::Engine::Logger::Entry>, L<Zonemaster::Config> and L<Zonemaster::Translator>.
 
 =head2 For developers of Zonemaster Test Modules
 
-If you want to develop a test module of your own, the L<Zonemaster::Test::Example> module is intended to serve as an example. The standard set of modules also fulfil that purpose to various degrees, of course. L<Zonemaster::Test::DNSSEC> may be especially interesting, since it is an example of including default translation and policy data with the module source code.
+If you want to develop a test module of your own, the L<Zonemaster::Engine::Test::Example> module is intended to serve as an example. The standard set of modules also fulfil that purpose to various degrees, of course. L<Zonemaster::Engine::Test::DNSSEC> may be especially interesting, since it is an example of including default translation and policy data with the module source code.
 
-As an entry point to the "inside" of the Zonemaster framework, you want to read L<Zonemaster::Zone> and follow references from there. Of particular interest after the zone class should be the L<Zonemaster::Nameserver> and possibly L<Zonemaster::Recursor> classes.
+As an entry point to the "inside" of the Zonemaster framework, you want to read L<Zonemaster::Zone> and follow references from there. Of particular interest after the zone class should be the L<Zonemaster::Engine::Nameserver> and possibly L<Zonemaster::Recursor> classes.
 
 If you do write your own test module, I would very much appreciate feedback on which parts were tricky to figure out, because I'm honestly not sure what I need to explain here. So please, if there's somethat that you think really needs to be written about, add an issue about at L<https://github.com/dotse/zonemaster-engine/issues>.
 

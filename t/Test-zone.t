@@ -2,14 +2,14 @@ use Test::More;
 
 BEGIN {
     use_ok( q{Zonemaster} );
-    use_ok( q{Zonemaster::Nameserver} );
-    use_ok( q{Zonemaster::Test::Zone} );
+    use_ok( q{Zonemaster::Engine::Nameserver} );
+    use_ok( q{Zonemaster::Engine::Test::Zone} );
 }
 
 my $datafile = q{t/Test-zone.data};
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die q{Stored data file missing} if not -r $datafile;
-    Zonemaster::Nameserver->restore( $datafile );
+    Zonemaster::Engine::Nameserver->restore( $datafile );
     Zonemaster->config->no_network( 1 );
 }
 
@@ -97,7 +97,7 @@ $zone = Zonemaster->zone( q{trasigdnssec.se} );
 ok( !$res{MNAME_NO_RESPONSE}, q{SOA 'mname' found with IPv4 only} );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
-    Zonemaster::Nameserver->save( $datafile );
+    Zonemaster::Engine::Nameserver->save( $datafile );
 }
 
 done_testing;

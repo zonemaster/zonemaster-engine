@@ -2,8 +2,8 @@ use Test::More;
 
 BEGIN {
     use_ok( q{Zonemaster} );
-    use_ok( q{Zonemaster::Nameserver} );
-    use_ok( q{Zonemaster::Test::Basic} );
+    use_ok( q{Zonemaster::Engine::Nameserver} );
+    use_ok( q{Zonemaster::Engine::Test::Basic} );
     use_ok( q{Zonemaster::Util} );
 }
 
@@ -42,7 +42,7 @@ sub zone_gives_not {
 my $datafile = q{t/Test-basic.data};
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die q{Stored data file missing} if not -r $datafile;
-    Zonemaster::Nameserver->restore( $datafile );
+    Zonemaster::Engine::Nameserver->restore( $datafile );
     Zonemaster->config->no_network( 1 );
 }
 
@@ -107,7 +107,7 @@ ok( $res{A_QUERY_NO_RESPONSES}, q{A_QUERY_NO_RESPONSES} );
 $zone = Zonemaster->zone( q{afnic.fr} );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
-    Zonemaster::Nameserver->save( $datafile );
+    Zonemaster::Engine::Nameserver->save( $datafile );
 }
 
 Zonemaster->config->no_network( 0 );

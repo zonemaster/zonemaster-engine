@@ -5,13 +5,13 @@ use 5.14.2;
 
 BEGIN {
     use_ok( q{Zonemaster} );
-    use_ok( q{Zonemaster::Nameserver} );
+    use_ok( q{Zonemaster::Engine::Nameserver} );
 }
 
 my $datafile = 't/zone.data';
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die "Stored data file missing" if not -r $datafile;
-    Zonemaster::Nameserver->restore( $datafile );
+    Zonemaster::Engine::Nameserver->restore( $datafile );
     Zonemaster->config->no_network( 1 );
 }
 
@@ -30,13 +30,13 @@ is_deeply( $zone->glue_names, [qw(i.ns.se ns.nic.se ns3.nic.se)] );
 
 isa_ok( $zone->glue, 'ARRAY' );
 ok( @{ $zone->glue } > 0, 'glue list not empty' );
-isa_ok( $_, 'Zonemaster::Nameserver' ) for @{ $zone->glue };
+isa_ok( $_, 'Zonemaster::Engine::Nameserver' ) for @{ $zone->glue };
 
 isa_ok( $zone->ns_names, 'ARRAY' );
 is_deeply( $zone->ns_names, [qw(i.ns.se ns.nic.se ns3.nic.se)] );
 isa_ok( $zone->ns, 'ARRAY' );
 ok( @{ $zone->ns } > 0, 'NS list not empty' );
-isa_ok( $_, 'Zonemaster::Nameserver' ) for @{ $zone->ns };
+isa_ok( $_, 'Zonemaster::Engine::Nameserver' ) for @{ $zone->ns };
 
 isa_ok( $zone->glue_addresses, 'ARRAY' );
 isa_ok( $_, 'Net::LDNS::RR' ) for @{ $zone->glue_addresses };
@@ -129,7 +129,7 @@ ok( Zonemaster::Zone->new( { name => 'gtld-servers.net' } )->is_in_zone( 'k.gtld
     'k.gtld-servers.net is in zone' );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
-    Zonemaster::Nameserver->save( $datafile );
+    Zonemaster::Engine::Nameserver->save( $datafile );
 }
 
 done_testing;

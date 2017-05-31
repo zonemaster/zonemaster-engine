@@ -1,4 +1,4 @@
-package Zonemaster::Test::Connectivity;
+package Zonemaster::Engine::Test::Connectivity;
 
 use version; our $VERSION = version->declare("v1.0.7");
 
@@ -110,7 +110,7 @@ sub translation {
 } ## end sub translation
 
 sub version {
-    return "$Zonemaster::Test::Connectivity::VERSION";
+    return "$Zonemaster::Engine::Test::Connectivity::VERSION";
 }
 
 ###
@@ -372,11 +372,11 @@ sub connectivity03 {
 
 =head1 NAME
 
-Zonemaster::Test::Connectivity - module implementing tests of nameservers reachability
+Zonemaster::Engine::Test::Connectivity - module implementing tests of nameservers reachability
 
 =head1 SYNOPSIS
 
-    my @results = Zonemaster::Test::Connectivity->all($zone);
+    my @results = Zonemaster::Engine::Test::Connectivity->all($zone);
 
 =head1 METHODS
 
