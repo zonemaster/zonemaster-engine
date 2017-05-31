@@ -6,7 +6,7 @@ BEGIN {
     use_ok( 'Zonemaster' );
     use_ok( 'Zonemaster::Engine::Test' );
     use_ok( 'Zonemaster::Engine::Nameserver' );
-    use_ok( 'Zonemaster::Exception' );
+    use_ok( 'Zonemaster::Engine::Exception' );
 }
 
 is( exception { Zonemaster->reset(); }, undef, 'No crash on instant reset.');
@@ -117,12 +117,12 @@ Zonemaster->logger->callback(
     sub {
         my ( $e ) = @_;
         return if ( $e->module eq 'SYSTEM' or $e->module eq 'BASIC' );
-        die Zonemaster::Exception->new( { message => 'canary' } );
+        die Zonemaster::Engine::Exception->new( { message => 'canary' } );
     }
 );
-isa_ok( exception { Zonemaster->test_zone( 'nic.se' ) }, 'Zonemaster::Exception' );
-isa_ok( exception { Zonemaster->test_module( 'SyNtAx', 'nic.se' ) }, 'Zonemaster::Exception' );
-isa_ok( exception { Zonemaster->test_method( 'Syntax', 'syntax01', 'nic.se' ) }, 'Zonemaster::Exception' );
+isa_ok( exception { Zonemaster->test_zone( 'nic.se' ) }, 'Zonemaster::Engine::Exception' );
+isa_ok( exception { Zonemaster->test_module( 'SyNtAx', 'nic.se' ) }, 'Zonemaster::Engine::Exception' );
+isa_ok( exception { Zonemaster->test_method( 'Syntax', 'syntax01', 'nic.se' ) }, 'Zonemaster::Engine::Exception' );
 Zonemaster->logger->clear_callback;
 
 Zonemaster->config->ipv4_ok( 0 );

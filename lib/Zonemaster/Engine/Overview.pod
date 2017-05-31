@@ -1,6 +1,6 @@
 =head1 NAME
 
-Zonemaster::Overview - The Zonemaster Test Engine
+Zonemaster::Engine::Overview - The Zonemaster Test Engine
 
 =head1 INTRODUCTION
 
@@ -32,7 +32,7 @@ The get around those drawbacks there is the flexible-but-complex way, which cons
 
 If you try running those, you'll notice two main differences. First, the second variant prints results as they are generated. Second, it generates a B<lot> more output. On my machine right now, the first example gives me 94 lines of output. The second example gives me 17684.
 
-You can do pretty much whatever you want with the message objects in the callback (including modifying them, although we don't promise that behavior will stay around). If the callback code throws an exception, and that exception is not a subcless of L<Zonemaster::Exception>, the callback will be removed. Note also that while the callback is running, the test engine itself is not. So think twice before you do potentially time-consuming tasks (like sticking the message in a database) in the callback. After waiting for responses from remote name servers (which usually stands for more than 90% of the time used), the result logging is the single most time-consuming task in a Zonemaster test run.
+You can do pretty much whatever you want with the message objects in the callback (including modifying them, although we don't promise that behavior will stay around). If the callback code throws an exception, and that exception is not a subcless of L<Zonemaster::Engine::Exception>, the callback will be removed. Note also that while the callback is running, the test engine itself is not. So think twice before you do potentially time-consuming tasks (like sticking the message in a database) in the callback. After waiting for responses from remote name servers (which usually stands for more than 90% of the time used), the result logging is the single most time-consuming task in a Zonemaster test run.
 
 From here, you probably want to look at the documentation for L<Zonemaster>, L<Zonemaster::Engine::Logger>, L<Zonemaster::Engine::Logger::Entry>, L<Zonemaster::Engine::Config> and L<Zonemaster::Translator>.
 

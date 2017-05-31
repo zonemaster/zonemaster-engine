@@ -12,7 +12,7 @@ use List::MoreUtils qw[uniq];
 
 use Zonemaster::Engine::DNSName;
 use Zonemaster::Recursor;
-use Zonemaster::NSArray;
+use Zonemaster::Engine::NSArray;
 
 has 'name' => ( is => 'ro', isa => 'Zonemaster::Engine::DNSName', required => 1, coerce => 1 );
 has 'parent' => ( is => 'ro', isa => 'Maybe[Zonemaster::Zone]', lazy_build => 1 );
@@ -56,7 +56,7 @@ sub _build_glue {
     my ( $self ) = @_;
 
     my $aref = [];
-    tie @$aref, 'Zonemaster::NSArray', @{ $self->glue_names };
+    tie @$aref, 'Zonemaster::Engine::NSArray', @{ $self->glue_names };
 
     return $aref;
 }
@@ -91,7 +91,7 @@ sub _build_ns {
     }
 
     my $aref = [];
-    tie @$aref, 'Zonemaster::NSArray', @{ $self->ns_names };
+    tie @$aref, 'Zonemaster::Engine::NSArray', @{ $self->ns_names };
 
     return $aref;
 }

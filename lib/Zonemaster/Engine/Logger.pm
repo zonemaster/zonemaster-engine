@@ -30,7 +30,7 @@ sub add {
         eval { $self->callback->( $new ) };
         if ( $@ ) {
             my $err = $@;
-            if ( blessed( $err ) and $err->isa( "Zonemaster::Exception" ) ) {
+            if ( blessed( $err ) and $err->isa( "Zonemaster::Engine::Exception" ) ) {
                 die $err;
             }
             else {
@@ -166,11 +166,11 @@ log entry is added. The referenced code will be called with the newly created
 entry as its single argument. The return value of the called code is ignored.
 
 If the called code throws an exception, and the exception is not an object of
-class L<Zonemaster::Exception> (or a subclass of it), the exception will be
+class L<Zonemaster::Engine::Exception> (or a subclass of it), the exception will be
 logged as a system message at default level C<CRITICAL> and the callback
 attribute will be cleared.
 
-If an exception that is of (sub)class L<Zonemaster::Exception> is called, the
+If an exception that is of (sub)class L<Zonemaster::Engine::Exception> is called, the
 exception will simply be rethrown until it reaches the code that started the
 test run that logged the message.
 

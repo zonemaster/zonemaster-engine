@@ -1,4 +1,4 @@
-package Zonemaster::Exception;
+package Zonemaster::Engine::Exception;
 
 use version; our $VERSION = version->declare("v1.0.2");
 
@@ -24,11 +24,11 @@ __PACKAGE__->meta->make_immutable;
 
 =head1 NAME
 
-Zonemaster::Exception -- base class for Zonemaster exceptions
+Zonemaster::Engine::Exception -- base class for Zonemaster exceptions
 
 =head1 SYNOPSIS
 
-   die Zonemaster::Exception->new({ message => "This is an exception" });
+   die Zonemaster::Engine::Exception->new({ message => "This is an exception" });
 
 =head1 ATTRIBUTES
 

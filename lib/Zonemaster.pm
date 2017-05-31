@@ -197,7 +197,7 @@ Zonemaster - A tool to check the quality of a DNS zone
 
 =head1 INTRODUCTION
 
-This manual describes the main L<Zonemaster> module. If what you're after is documentation on the Zonemaster test engine as a whole, see L<Zonemaster::Overview>.
+This manual describes the main L<Zonemaster> module. If what you're after is documentation on the Zonemaster test engine as a whole, see L<Zonemaster::Engine::Overview>.
 
 =head1 METHODS
 

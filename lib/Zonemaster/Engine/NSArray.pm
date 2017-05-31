@@ -1,4 +1,4 @@
-package Zonemaster::NSArray;
+package Zonemaster::Engine::NSArray;
 
 use version; our $VERSION = version->declare("v1.0.2");
 
@@ -136,11 +136,11 @@ __PACKAGE__->meta->make_immutable;
 
 =head1 NAME
 
-Zonemaster::NSArray - Class implementing arrays that lazily looks up name server addresses from their names
+Zonemaster::Engine::NSArray - Class implementing arrays that lazily looks up name server addresses from their names
 
 =head1 SYNOPSIS
 
-    tie @ary, 'Zonemaster::NSArray', @ns_names
+    tie @ary, 'Zonemaster::Engine::NSArray', @ns_names
 
 =head1 DESCRIPTION
 

@@ -92,7 +92,7 @@ sub run_all_for {
             my @res = eval { $module->all( $zone ) };
             if ( $@ ) {
                 my $err = $@;
-                if ( blessed $err and $err->isa( 'Zonemaster::Exception' ) ) {
+                if ( blessed $err and $err->isa( 'Zonemaster::Engine::Exception' ) ) {
                     die $err;    # Utility exception, pass it on
                 }
                 else {
@@ -133,7 +133,7 @@ sub run_module {
             push @res, eval { $m->all( $zone ) };
             if ( $@ ) {
                 my $err = $@;
-                if ( blessed $err and $err->isa( 'Zonemaster::Exception' ) ) {
+                if ( blessed $err and $err->isa( 'Zonemaster::Engine::Exception' ) ) {
                     die $err;    # Utility exception, pass it on
                 }
                 else {
@@ -178,7 +178,7 @@ sub run_one {
                 push @res, eval { $m->$test( @arguments ) };
                 if ( $@ ) {
                     my $err = $@;
-                    if ( blessed $err and $err->isa( 'Zonemaster::Exception' ) ) {
+                    if ( blessed $err and $err->isa( 'Zonemaster::Engine::Exception' ) ) {
                         die $err;    # Utility exception, pass it on
                     }
                     else {
