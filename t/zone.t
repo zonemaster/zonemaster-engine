@@ -42,7 +42,7 @@ isa_ok( $zone->glue_addresses, 'ARRAY' );
 isa_ok( $_, 'Net::LDNS::RR' ) for @{ $zone->glue_addresses };
 
 my $p = $zone->query_one( 'www.iis.se', 'A' );
-isa_ok( $p, 'Zonemaster::Packet' );
+isa_ok( $p, 'Zonemaster::Engine::Packet' );
 my @rrs = $p->get_records( 'a', 'answer' );
 is( scalar( @rrs ), 1, 'one answer A RR' );
 is( $rrs[0]->address, '91.226.36.46', 'expected address' );
@@ -90,13 +90,13 @@ ok( !( grep { $_->tag eq 'SKIP_IPV6_DISABLED' } @{Zonemaster->logger->entries} )
 ok( !( grep { $_->tag eq 'SKIP_IPV4_DISABLED' } @{Zonemaster->logger->entries} ), "query_persistent: IPv4 not disabled" );
 
 $p = $zone->query_persistent( 'www.iis.se', 'A' );
-isa_ok( $p, 'Zonemaster::Packet' );
+isa_ok( $p, 'Zonemaster::Engine::Packet' );
 @rrs = $p->get_records( 'a', 'answer' );
 is( scalar( @rrs ), 1, 'one answer A RR' );
 is( $rrs[0]->address, '91.226.36.46', 'expected address' );
 
 $p = $zone->query_auth( 'www.iis.se', 'A' );
-isa_ok( $p, 'Zonemaster::Packet' );
+isa_ok( $p, 'Zonemaster::Engine::Packet' );
 @rrs = $p->get_records( 'a', 'answer' );
 is( scalar( @rrs ), 1, 'one answer A RR' );
 is( $rrs[0]->address, '91.226.36.46', 'expected address' );
@@ -104,7 +104,7 @@ is( $rrs[0]->address, '91.226.36.46', 'expected address' );
 my $ary = $zone->query_all( 'www.iis.se', 'A' );
 isa_ok( $ary, 'ARRAY' );
 foreach my $p ( @$ary ) {
-    isa_ok( $p, 'Zonemaster::Packet' );
+    isa_ok( $p, 'Zonemaster::Engine::Packet' );
     my @rrs = $p->get_records( 'a', 'answer' );
     is( scalar( @rrs ), 1, 'one answer A RR' );
     is( $rrs[0]->address, '91.226.36.46', 'expected address' );
@@ -113,7 +113,7 @@ foreach my $p ( @$ary ) {
 $ary = $zone->query_all( 'www.iis.se', 'A', { dnssec => 1 } );
 isa_ok( $ary, 'ARRAY' );
 foreach my $p ( @$ary ) {
-    isa_ok( $p, 'Zonemaster::Packet' );
+    isa_ok( $p, 'Zonemaster::Engine::Packet' );
     my @a_rrs = $p->get_records( 'a', 'answer' );
     is( scalar( @a_rrs ), 1, 'one answer A RR' );
     my @sigs = $p->get_records( 'RRSIG', 'ANSWER' );

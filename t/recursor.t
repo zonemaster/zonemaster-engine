@@ -17,13 +17,13 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
 }
 
 my $p = Zonemaster::Engine::Recursor->recurse( 'www.iis.se' );
-isa_ok( $p, 'Zonemaster::Packet' );
+isa_ok( $p, 'Zonemaster::Engine::Packet' );
 ok( $p->answer > 0, 'answer records' );
 my ( $rr ) = $p->answer;
 is( name( $rr->name ), 'www.iis.se', 'RR name ok' );
 
 my $p2 = Zonemaster::Engine::Recursor->recurse( 'www.wiccainfo.se' );
-isa_ok( $p2, 'Zonemaster::Packet' );
+isa_ok( $p2, 'Zonemaster::Engine::Packet' );
 is( scalar( $p2->answer ), 2, 'answer records' );
 
 is_parent( 'iis.se',                                                                   'se' );
@@ -46,7 +46,7 @@ sub is_parent {
 }
 
 my ( $name, $packet ) = Zonemaster::Engine::Recursor->parent( 'www.iis.se' );
-isa_ok( $packet, 'Zonemaster::Packet' );
+isa_ok( $packet, 'Zonemaster::Engine::Packet' );
 is( $name, 'iis.se', 'name ok' );
 ok( $packet->no_such_record, 'expected packet content' );
 

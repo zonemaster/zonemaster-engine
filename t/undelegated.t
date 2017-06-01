@@ -16,7 +16,7 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
 ###
 
 my $plain_p = Zonemaster->recurse( 'www.lysator.liu.se', 'AAAA' );
-isa_ok( $plain_p, 'Zonemaster::Packet' );
+isa_ok( $plain_p, 'Zonemaster::Engine::Packet' );
 ok( $plain_p,        'Got answer' );
 
 Zonemaster->add_fake_delegation(
@@ -48,7 +48,7 @@ Zonemaster->add_fake_ds( 'lysator.liu.se' => [ { keytag => 4711, algorithm => 17
 
 my $lys = Zonemaster->zone( 'lysator.liu.se' );
 my $ds_p = $lys->parent->query_one( 'lysator.liu.se', 'DS' );
-isa_ok( $ds_p, 'Zonemaster::Packet' );
+isa_ok( $ds_p, 'Zonemaster::Engine::Packet' );
 my ( $ds ) = $ds_p->answer;
 isa_ok( $ds, 'Net::LDNS::RR::DS' );
 is( $ds->hexdigest, 'faceb00c', 'Correct digest' );

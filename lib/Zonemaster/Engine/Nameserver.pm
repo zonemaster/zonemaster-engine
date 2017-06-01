@@ -8,7 +8,7 @@ use Moose::Util::TypeConstraints;
 
 use Zonemaster::Engine::DNSName;
 use Zonemaster;
-use Zonemaster::Packet;
+use Zonemaster::Engine::Packet;
 use Zonemaster::Engine::Nameserver::Cache;
 use Zonemaster::Engine::Recursor;
 use Zonemaster::Engine::Constants ':misc';
@@ -139,7 +139,7 @@ sub query {
         foreach my $rr ( @{ $self->fake_ds->{ lc( $name ) } } ) {
             $p->unique_push( 'answer', $rr );
         }
-        my $res = Zonemaster::Packet->new( { packet => $p } );
+        my $res = Zonemaster::Engine::Packet->new( { packet => $p } );
         Zonemaster->logger->add( FAKE_DS_RETURNED => { name => "$name", from => "$self" } );
         return $res;
     }
@@ -175,7 +175,7 @@ sub query {
                 }
             );
 
-            my $res = Zonemaster::Packet->new( { packet => $p } );
+            my $res = Zonemaster::Engine::Packet->new( { packet => $p } );
             Zonemaster->logger->add( FAKED_RETURN => { packet => $res->string } );
             return $res;
         } ## end if ( $name =~ m/([.]|\A)\Q$fname\E\z/xi)
@@ -318,7 +318,7 @@ sub _query {
     }
 
     if ( $res ) {
-        my $p = Zonemaster::Packet->new( { packet => $res } );
+        my $p = Zonemaster::Engine::Packet->new( { packet => $res } );
         my $size = length( $p->data );
         if ( $size > $UDP_COMMON_EDNS_LIMIT ) {
             my $command = sprintf q{dig @%s %s%s %s}, $self->address->short, $flags{dnssec} ? q{+dnssec } : q{},
@@ -382,10 +382,10 @@ sub restore {
             return $obj;
         }
       )->filter_json_single_key_object(
-        'Zonemaster::Packet' => sub {
+        'Zonemaster::Engine::Packet' => sub {
             my ( $ref ) = @_;
 
-            return Zonemaster::Packet->new( { packet => $ref } );
+            return Zonemaster::Engine::Packet->new( { packet => $ref } );
         }
       );
 

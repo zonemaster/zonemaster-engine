@@ -1,4 +1,4 @@
-package Zonemaster::Packet;
+package Zonemaster::Engine::Packet;
 
 use version; our $VERSION = version->declare("v1.0.2");
 
@@ -140,7 +140,7 @@ sub answerfrom {
 sub TO_JSON {
     my ( $self ) = @_;
 
-    return { 'Zonemaster::Packet' => $self->packet };
+    return { 'Zonemaster::Engine::Packet' => $self->packet };
 }
 
 no Moose;
@@ -150,7 +150,7 @@ __PACKAGE__->meta->make_immutable;
 
 =head1 NAME
 
-Zonemaster::Packet - wrapping object for L<Net::LDNS::Packet> objects
+Zonemaster::Engine::Packet - wrapping object for L<Net::LDNS::Packet> objects
 
 =head1 SYNOPSIS
 
