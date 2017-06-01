@@ -90,8 +90,8 @@ sub policy {
 
 sub _config_directory_list {
     my @dirlist;
-
-    push @dirlist, dist_dir( 'Zonemaster-Engine' );
+    my $makefile_name = 'Zonemaster-Engine'; # This must be the same name as "name" in Makefile.PL
+    push @dirlist, dist_dir( $makefile_name );
     push @dirlist, '/etc/zonemaster';
     push @dirlist, '/usr/local/etc/zonemaster';
 
