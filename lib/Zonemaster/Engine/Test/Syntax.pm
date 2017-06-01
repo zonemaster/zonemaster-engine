@@ -11,7 +11,7 @@ use Zonemaster;
 use Zonemaster::Engine::Util;
 use Zonemaster::Engine::Recursor;
 use Zonemaster::Engine::DNSName;
-use Zonemaster::TestMethods;
+use Zonemaster::Engine::TestMethods;
 use Zonemaster::Engine::Constants qw[:name];
 
 use Carp;
@@ -34,8 +34,8 @@ sub all {
 
     if ( any { $_->tag eq q{ONLY_ALLOWED_CHARS} } @results ) {
 
-        foreach my $local_nsname ( uniq map { $_->string } @{ Zonemaster::TestMethods->method2( $zone ) },
-            @{ Zonemaster::TestMethods->method3( $zone ) } )
+        foreach my $local_nsname ( uniq map { $_->string } @{ Zonemaster::Engine::TestMethods->method2( $zone ) },
+            @{ Zonemaster::Engine::TestMethods->method3( $zone ) } )
         {
             push @results, $class->syntax04( $local_nsname ) if Zonemaster->config->should_run( 'syntax04' );
         }
@@ -441,7 +441,7 @@ sub get_name {
     if ( not ref $item ) {
         $name = name( $item );
     }
-    elsif ( ref( $item ) eq q{Zonemaster::Zone} ) {
+    elsif ( ref( $item ) eq q{Zonemaster::Engine::Zone} ) {
         $name = $item->name;
     }
     elsif ( ref( $item ) eq q{Zonemaster::Engine::DNSName} ) {

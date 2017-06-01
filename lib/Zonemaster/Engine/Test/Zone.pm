@@ -10,7 +10,7 @@ use 5.014002;
 use Zonemaster;
 use Zonemaster::Engine::Util;
 use Zonemaster::Engine::Test::Address;
-use Zonemaster::TestMethods;
+use Zonemaster::Engine::TestMethods;
 use Zonemaster::Engine::Constants qw[:soa :ip];
 use List::MoreUtils qw[none];
 
@@ -219,12 +219,12 @@ sub zone01 {
                       );
                 }
             } ## end foreach my $ip_address ( Zonemaster::Engine::Recursor...)
-            if ( none { $_ eq $soa_mname } @{ Zonemaster::TestMethods->method2( $zone ) } ) {
+            if ( none { $_ eq $soa_mname } @{ Zonemaster::Engine::TestMethods->method2( $zone ) } ) {
                 push @results,
                   info(
                     MNAME_NOT_IN_GLUE => {
                         mname => $soa_mname,
-                        ns    => join( q{;}, @{ Zonemaster::TestMethods->method2( $zone ) } ),
+                        ns    => join( q{;}, @{ Zonemaster::Engine::TestMethods->method2( $zone ) } ),
                     }
                   );
             }
@@ -559,7 +559,7 @@ sub _retrieve_record_from_zone {
     my ( $zone, $name, $type ) = @_;
 
     # Return response from the first authoritative server that gives one
-    foreach my $ns ( @{ Zonemaster::TestMethods->method5( $zone ) } ) {
+    foreach my $ns ( @{ Zonemaster::Engine::TestMethods->method5( $zone ) } ) {
 
         if ( _is_ip_version_disabled( $ns ) ) {
             next;

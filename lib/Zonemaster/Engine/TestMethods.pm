@@ -1,4 +1,4 @@
-package Zonemaster::TestMethods;
+package Zonemaster::Engine::TestMethods;
 
 use version; our $VERSION = version->declare("v1.0.2");
 
@@ -52,11 +52,11 @@ sub method5 {
 
 =head1 NAME
 
-Zonemaster::TestMethods - Methods common to Test Specification used in test modules
+Zonemaster::Engine::TestMethods - Methods common to Test Specification used in test modules
 
 =head1 SYNOPSIS
 
-    my @results = Zonemaster::TestMethods->method1($zone);
+    my @results = Zonemaster::Engine::TestMethods->method1($zone);
 
 =head1 METHODS
 

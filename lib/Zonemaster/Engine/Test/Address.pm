@@ -9,7 +9,7 @@ use 5.014002;
 
 use Zonemaster;
 use Zonemaster::Engine::Util;
-use Zonemaster::TestMethods;
+use Zonemaster::Engine::TestMethods;
 use Zonemaster::Engine::Constants qw[:addresses :ip];
 use List::MoreUtils qw[none any];
 
@@ -109,7 +109,7 @@ sub address01 {
     my %ips;
 
     foreach
-      my $local_ns ( @{ Zonemaster::TestMethods->method4( $zone ) }, @{ Zonemaster::TestMethods->method5( $zone ) } )
+      my $local_ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) }, @{ Zonemaster::Engine::TestMethods->method5( $zone ) } )
     {
 
         next if $ips{ $local_ns->address->short };
@@ -131,7 +131,7 @@ sub address01 {
 
         $ips{ $local_ns->address->short }++;
 
-    } ## end foreach my $local_ns ( @{ Zonemaster::TestMethods...})
+    } ## end foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods...})
 
     if ( scalar keys %ips and not scalar @results ) {
         push @results, info( NO_IP_PRIVATE_NETWORK => {} );
@@ -148,7 +148,7 @@ sub address02 {
     my $ptr_query;
 
     foreach
-      my $local_ns ( @{ Zonemaster::TestMethods->method4( $zone ) }, @{ Zonemaster::TestMethods->method5( $zone ) } )
+      my $local_ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) }, @{ Zonemaster::Engine::TestMethods->method5( $zone ) } )
     {
 
         next if $ips{ $local_ns->address->short };
@@ -188,7 +188,7 @@ sub address02 {
 
         $ips{ $local_ns->address->short }++;
 
-    } ## end foreach my $local_ns ( @{ Zonemaster::TestMethods...})
+    } ## end foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods...})
 
     if ( scalar keys %ips and not scalar @results ) {
         push @results, info( NAMESERVERS_IP_WITH_REVERSE => {} );
@@ -204,7 +204,7 @@ sub address03 {
 
     my %ips;
 
-    foreach my $local_ns ( @{ Zonemaster::TestMethods->method5( $zone ) } ) {
+    foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods->method5( $zone ) } ) {
 
         next if $ips{ $local_ns->address->short };
 
@@ -256,7 +256,7 @@ sub address03 {
 
         $ips{ $local_ns->address->short }++;
 
-    } ## end foreach my $local_ns ( @{ Zonemaster::TestMethods...})
+    } ## end foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods...})
 
     if ( scalar keys %ips and not scalar @results ) {
         push @results, info( NAMESERVER_IP_PTR_MATCH => {} );

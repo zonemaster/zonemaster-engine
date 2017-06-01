@@ -199,7 +199,7 @@ sub run_one {
     else {
         my $zname = q{};
         foreach my $arg ( @arguments ) {
-            if ( ref($arg) eq q{Zonemaster::Zone} ) {
+            if ( ref($arg) eq q{Zonemaster::Engine::Zone} ) {
                 $zname = $arg->name;
             }
         }

@@ -67,7 +67,7 @@ values for each key should be a reference to an array listing all the possible m
 
 =head2 Test-running method(s)
 
-The framework expects to be able to run all tests in a module by calling a class method C<all()> with a L<Zonemaster::Zone> object as the argument.
+The framework expects to be able to run all tests in a module by calling a class method C<all()> with a L<Zonemaster::Engine::Zone> object as the argument.
 The return value from this method is expected to be a list of L<Zonemaster::Engine::Logger::Entry> objects describing the results of the tests run. The
 example test module has one possible implementation of this.
 

@@ -40,7 +40,7 @@ From here, you probably want to look at the documentation for L<Zonemaster>, L<Z
 
 If you want to develop a test module of your own, the L<Zonemaster::Engine::Test::Example> module is intended to serve as an example. The standard set of modules also fulfil that purpose to various degrees, of course. L<Zonemaster::Engine::Test::DNSSEC> may be especially interesting, since it is an example of including default translation and policy data with the module source code.
 
-As an entry point to the "inside" of the Zonemaster framework, you want to read L<Zonemaster::Zone> and follow references from there. Of particular interest after the zone class should be the L<Zonemaster::Engine::Nameserver> and possibly L<Zonemaster::Engine::Recursor> classes.
+As an entry point to the "inside" of the Zonemaster framework, you want to read L<Zonemaster::Engine::Zone> and follow references from there. Of particular interest after the zone class should be the L<Zonemaster::Engine::Nameserver> and possibly L<Zonemaster::Engine::Recursor> classes.
 
 If you do write your own test module, I would very much appreciate feedback on which parts were tricky to figure out, because I'm honestly not sure what I need to explain here. So please, if there's somethat that you think really needs to be written about, add an issue about at L<https://github.com/dotse/zonemaster-engine/issues>.
 

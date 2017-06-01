@@ -9,7 +9,7 @@ use 5.014002;
 
 use Zonemaster;
 use Zonemaster::Engine::Util;
-use Zonemaster::TestMethods;
+use Zonemaster::Engine::TestMethods;
 use Zonemaster::Engine::Constants qw[:ip];
 use Zonemaster::Engine::ASNLookup;
 use Carp;
@@ -125,7 +125,7 @@ sub connectivity01 {
     my %ips;
 
     foreach
-      my $local_ns ( @{ Zonemaster::TestMethods->method4( $zone ) }, @{ Zonemaster::TestMethods->method5( $zone ) } )
+      my $local_ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) }, @{ Zonemaster::Engine::TestMethods->method5( $zone ) } )
     {
 
         if ( not Zonemaster->config->ipv6_ok and $local_ns->address->version == $IP_VERSION_6 ) {
@@ -177,7 +177,7 @@ sub connectivity01 {
 
         $ips{ $local_ns->address->short }++;
 
-    } ## end foreach my $local_ns ( @{ Zonemaster::TestMethods...})
+    } ## end foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods...})
 
     return @results;
 } ## end sub connectivity01
@@ -189,7 +189,7 @@ sub connectivity02 {
     my $query_type = q{SOA};
 
     foreach
-      my $local_ns ( @{ Zonemaster::TestMethods->method4( $zone ) }, @{ Zonemaster::TestMethods->method5( $zone ) } )
+      my $local_ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) }, @{ Zonemaster::Engine::TestMethods->method5( $zone ) } )
     {
 
         if ( not Zonemaster->config->ipv6_ok and $local_ns->address->version == $IP_VERSION_6 ) {
@@ -241,7 +241,7 @@ sub connectivity02 {
 
         $ips{ $local_ns->address->short }++;
 
-    } ## end foreach my $local_ns ( @{ Zonemaster::TestMethods...})
+    } ## end foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods...})
 
     return @results;
 } ## end sub connectivity02
@@ -252,7 +252,7 @@ sub connectivity03 {
 
     my %ips = ( $IP_VERSION_4 => {}, $IP_VERSION_6 => {} );
 
-    foreach my $ns ( @{ Zonemaster::TestMethods->method4( $zone ) } ) {
+    foreach my $ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) } ) {
         my $addr = $ns->address;
         $ips{ $addr->version }{ $addr->ip } = $addr;
     }

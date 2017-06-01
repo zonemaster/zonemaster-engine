@@ -6,7 +6,7 @@ BEGIN {
     use_ok( q{Zonemaster} );
     use_ok( q{Zonemaster::Engine::Nameserver} );
     use_ok( q{Zonemaster::Engine::DNSName} );
-    use_ok( q{Zonemaster::Zone} );
+    use_ok( q{Zonemaster::Engine::Zone} );
     use_ok( q{Zonemaster::Engine::Test::Syntax} );
 }
 

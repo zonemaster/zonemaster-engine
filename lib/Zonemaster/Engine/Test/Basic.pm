@@ -9,7 +9,7 @@ use 5.014002;
 
 use Zonemaster;
 use Zonemaster::Engine::Util;
-use Zonemaster::TestMethods;
+use Zonemaster::Engine::TestMethods;
 use Zonemaster::Engine::Test::Address;
 use Zonemaster::Engine::Test::Syntax;
 use Zonemaster::Engine::Constants qw[:ip :name];
@@ -219,7 +219,7 @@ sub basic02 {
     my ( $class, $zone ) = @_;
     my @results;
     my $query_type = q{NS};
-    my @ns = @{ Zonemaster::TestMethods->method4( $zone ) };
+    my @ns = @{ Zonemaster::Engine::TestMethods->method4( $zone ) };
 
     if ( not scalar @ns ) {
         push @results,
@@ -307,7 +307,7 @@ sub basic02 {
                 }
               );
         }
-    } ## end foreach my $ns ( @{ Zonemaster::TestMethods...})
+    } ## end foreach my $ns ( @{ Zonemaster::Engine::TestMethods...})
 
     return @results;
 } ## end sub basic02
@@ -319,7 +319,7 @@ sub basic03 {
 
     my $name        = q{www.} . $zone->name;
     my $response_nb = 0;
-    foreach my $ns ( @{ Zonemaster::TestMethods->method4( $zone ) } ) {
+    foreach my $ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) } ) {
         if ( not Zonemaster->config->ipv4_ok and $ns->address->version == $IP_VERSION_4 ) {
             push @results,
               info(
@@ -387,9 +387,9 @@ sub basic03 {
                 }
               );
         }
-    } ## end foreach my $ns ( @{ Zonemaster::TestMethods...})
+    } ## end foreach my $ns ( @{ Zonemaster::Engine::TestMethods...})
 
-    if ( scalar( @{ Zonemaster::TestMethods->method4( $zone ) } ) and not $response_nb ) {
+    if ( scalar( @{ Zonemaster::Engine::TestMethods->method4( $zone ) } ) and not $response_nb ) {
         push @results, info( A_QUERY_NO_RESPONSES => {} );
     }
 

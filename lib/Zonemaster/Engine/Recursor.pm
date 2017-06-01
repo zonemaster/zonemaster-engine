@@ -8,7 +8,7 @@ use warnings;
 use Moose;
 use JSON::PP;
 use Zonemaster::Engine::Util;
-use Zonemaster::Net::IP;
+use Zonemaster::Engine::Net::IP;
 use Zonemaster;
 
 my $seed_data;
@@ -273,7 +273,7 @@ sub get_addresses_for {
 
     foreach my $rr ( sort { $a->address cmp $b->address } @rrs ) {
         if ( name( $rr->name ) eq $name or $cname{ $rr->name } ) {
-            push @res, Zonemaster::Net::IP->new( $rr->address );
+            push @res, Zonemaster::Engine::Net::IP->new( $rr->address );
         }
     }
 
@@ -329,7 +329,7 @@ Internal method. Takes a packet and a recursion state and returns a list of ns o
 =item get_addresses_for($name[, $state])
 
 Takes a name and returns a (possibly empty) list of IP addresses for
-that name (in the form of L<Zonemaster::Net::IP> objects). When used
+that name (in the form of L<Zonemaster::Engine::Net::IP> objects). When used
 internally by the recursor it's passed a recursion state as its second
 argument.
 

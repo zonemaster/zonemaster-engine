@@ -145,7 +145,7 @@ Zonemaster::Engine::NSArray - Class implementing arrays that lazily looks up nam
 =head1 DESCRIPTION
 
 This class is used for the C<glue> and C<ns> attributes of the
-L<Zonemaster::Zone> class. It is initially seeded with a list of
+L<Zonemaster::Engine::Zone> class. It is initially seeded with a list of
 names, which will be expanded into proper L<Zonemaster::Engine::Nameserver>
 objects on demand. Be careful with using Perl functions that act on
 whole arrays (particularly C<foreach>), since they will usually force

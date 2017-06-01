@@ -8,7 +8,7 @@ use Moose;
 use Zonemaster::Engine::Nameserver;
 use Zonemaster::Engine::Logger;
 use Zonemaster::Engine::Config;
-use Zonemaster::Zone;
+use Zonemaster::Engine::Zone;
 use Zonemaster::Engine::Test;
 use Zonemaster::Engine::Recursor;
 use Zonemaster::Engine::ASNLookup;
@@ -38,7 +38,7 @@ sub ns {
 sub zone {
     my ( $class, $name ) = @_;
 
-    return Zonemaster::Zone->new( { name => $name } );
+    return Zonemaster::Engine::Zone->new( { name => $name } );
 }
 
 sub test_zone {
@@ -103,7 +103,7 @@ sub add_fake_delegation {
     # Check fake delegation
     foreach my $name ( keys %{$href} ) {
         if ( not defined $href->{$name} or not scalar @{ $href->{$name} } ) {
-            if ( Zonemaster::Zone->new( { name => $domain } )->is_in_zone( $name ) ) {
+            if ( Zonemaster::Engine::Zone->new( { name => $domain } )->is_in_zone( $name ) ) {
                 Zonemaster->logger->add(
                     FAKE_DELEGATION_IN_ZONE_NO_IP => { domain => $domain , ns => $name }
                 );
@@ -219,7 +219,7 @@ are fulfilled, the method will be called with the provided arguments.
 
 =item zone($name)
 
-Returns a L<Zonemaster::Zone> object for the given name.
+Returns a L<Zonemaster::Engine::Zone> object for the given name.
 
 =item ns($name, $address)
 

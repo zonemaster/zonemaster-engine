@@ -151,7 +151,7 @@ sub consistency01 {
     my $query_type = q{SOA};
 
     foreach
-      my $local_ns ( @{ Zonemaster::TestMethods->method4( $zone ) }, @{ Zonemaster::TestMethods->method5( $zone ) } )
+      my $local_ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) }, @{ Zonemaster::Engine::TestMethods->method5( $zone ) } )
     {
 
         next if $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short };
@@ -209,7 +209,7 @@ sub consistency01 {
             push @{ $serials{ $soa->serial } }, $local_ns->name->string . q{/} . $local_ns->address->short;
             $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short }++;
         }
-    } ## end foreach my $local_ns ( @{ Zonemaster::TestMethods...})
+    } ## end foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods...})
 
     my @serial_numbers = sort keys %serials;
     if ( scalar( @serial_numbers ) == 1 ) {
@@ -259,7 +259,7 @@ sub consistency02 {
     my $query_type = q{SOA};
 
     foreach
-      my $local_ns ( @{ Zonemaster::TestMethods->method4( $zone ) }, @{ Zonemaster::TestMethods->method5( $zone ) } )
+      my $local_ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) }, @{ Zonemaster::Engine::TestMethods->method5( $zone ) } )
     {
 
         next if $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short };
@@ -317,7 +317,7 @@ sub consistency02 {
             push @{ $rnames{ lc( $soa->rname ) } }, $local_ns->name->string . q{/} . $local_ns->address->short;
             $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short }++;
         }
-    } ## end foreach my $local_ns ( @{ Zonemaster::TestMethods...})
+    } ## end foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods...})
 
     if ( scalar( keys %rnames ) == 1 ) {
         push @results,
@@ -356,7 +356,7 @@ sub consistency03 {
     my $query_type = q{SOA};
 
     foreach
-      my $local_ns ( @{ Zonemaster::TestMethods->method4( $zone ) }, @{ Zonemaster::TestMethods->method5( $zone ) } )
+      my $local_ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) }, @{ Zonemaster::Engine::TestMethods->method5( $zone ) } )
     {
 
         next if $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short };
@@ -417,7 +417,7 @@ sub consistency03 {
               $local_ns->name->string . q{/} . $local_ns->address->short;
             $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short }++;
         }
-    } ## end foreach my $local_ns ( @{ Zonemaster::TestMethods...})
+    } ## end foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods...})
 
     if ( scalar( keys %time_parameter_sets ) == 1 ) {
         my ( $refresh, $retry, $expire, $minimum ) = split /;/sxm, ( keys %time_parameter_sets )[0];
@@ -464,7 +464,7 @@ sub consistency04 {
     my $query_type = q{NS};
 
     foreach
-      my $local_ns ( @{ Zonemaster::TestMethods->method4( $zone ) }, @{ Zonemaster::TestMethods->method5( $zone ) } )
+      my $local_ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) }, @{ Zonemaster::Engine::TestMethods->method5( $zone ) } )
     {
 
         next if $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short };
@@ -522,7 +522,7 @@ sub consistency04 {
             push @{ $ns_sets{ join( q{,}, @ns ) } }, $local_ns->name->string . q{/} . $local_ns->address->short;
             $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short }++;
         }
-    } ## end foreach my $local_ns ( @{ Zonemaster::TestMethods...})
+    } ## end foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods...})
 
     if ( scalar( keys %ns_sets ) == 1 ) {
         push @results,
@@ -558,10 +558,10 @@ sub consistency05 {
     my @results;
 
     my %addresses;
-    foreach my $address ( uniq map { lc( $_->address->short ) } @{ Zonemaster::TestMethods->method4( $zone ) } ) {
+    foreach my $address ( uniq map { lc( $_->address->short ) } @{ Zonemaster::Engine::TestMethods->method4( $zone ) } ) {
         $addresses{$address} += 1;
     }
-    foreach my $address ( uniq map { lc( $_->address->short ) } @{ Zonemaster::TestMethods->method5( $zone ) } ) {
+    foreach my $address ( uniq map { lc( $_->address->short ) } @{ Zonemaster::Engine::TestMethods->method5( $zone ) } ) {
         $addresses{$address} -= 1;
     }
 

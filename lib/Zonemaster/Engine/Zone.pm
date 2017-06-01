@@ -1,4 +1,4 @@
-package Zonemaster::Zone;
+package Zonemaster::Engine::Zone;
 
 use version; our $VERSION = version->declare("v1.1.1");
 
@@ -15,7 +15,7 @@ use Zonemaster::Engine::Recursor;
 use Zonemaster::Engine::NSArray;
 
 has 'name' => ( is => 'ro', isa => 'Zonemaster::Engine::DNSName', required => 1, coerce => 1 );
-has 'parent' => ( is => 'ro', isa => 'Maybe[Zonemaster::Zone]', lazy_build => 1 );
+has 'parent' => ( is => 'ro', isa => 'Maybe[Zonemaster::Engine::Zone]', lazy_build => 1 );
 has [ 'ns', 'glue' ] => ( is => 'ro', isa => 'ArrayRef', lazy_build => 1 );
 has [ 'ns_names', 'glue_names' ] => ( is => 'ro', isa => 'ArrayRef[Zonemaster::Engine::DNSName]', lazy_build => 1 );
 has 'glue_addresses' => ( is => 'ro', isa => 'ArrayRef[Net::LDNS::RR]', lazy_build => 1 );
@@ -256,11 +256,11 @@ __PACKAGE__->meta->make_immutable;
 
 =head1 NAME
 
-Zonemaster::Zone - Object representing a DNS zone
+Zonemaster::Engine::Zone - Object representing a DNS zone
 
 =head1 SYNOPSIS
 
-    my $zone = Zonemaster::Zone->new({ name => 'nic.se' });
+    my $zone = Zonemaster::Engine::Zone->new({ name => 'nic.se' });
     my $packet = $zone->parent->query_one($zone->name, 'NS');
 
 
@@ -283,7 +283,7 @@ A L<Zonemaster::Engine::DNSName> object representing the name of the zone.
 
 =item parent
 
-A L<Zonemaster::Zone> object for this domain's parent domain. As a
+A L<Zonemaster::Engine::Zone> object for this domain's parent domain. As a
 special case, the root zone is considered to be its own parent (so
 look for that if you recurse up the tree).
 

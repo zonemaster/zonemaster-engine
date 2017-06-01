@@ -5,7 +5,7 @@ use version; our $VERSION = version->declare("v1.0.3");
 use 5.014002;
 use warnings;
 
-use Zonemaster::Net::IP;
+use Zonemaster::Engine::Net::IP;
 
 use Zonemaster;
 use Zonemaster::Engine::Nameserver;
@@ -19,8 +19,8 @@ sub get_with_prefix {
         @roots = map { Zonemaster->zone( $_ ) } @{ Zonemaster->config->asnroots };
     }
 
-    if ( not ref( $ip ) or not $ip->isa( 'Zonemaster::Net::IP' ) ) {
-        $ip = Zonemaster::Net::IP->new( $ip );
+    if ( not ref( $ip ) or not $ip->isa( 'Zonemaster::Engine::Net::IP' ) ) {
+        $ip = Zonemaster::Engine::Net::IP->new( $ip );
     }
 
     my $reverse = $ip->reverse_ip;
@@ -43,7 +43,7 @@ sub get_with_prefix {
                 my @fields = split( /[ ]\|[ ]?/x, $str );
                 my @asns   = split( /\s+/x,       $fields[0] );
 
-                return \@asns, Zonemaster::Net::IP->new( $fields[1] ), $str;
+                return \@asns, Zonemaster::Engine::Net::IP->new( $fields[1] ), $str;
             }
         }
     } ## end foreach my $zone ( @roots )

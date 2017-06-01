@@ -10,7 +10,7 @@ use Carp;
 use English qw( -no_match_vars ) ;
 
 use parent 'Exporter';
-use Zonemaster::Net::IP;
+use Zonemaster::Engine::Net::IP;
 use Text::CSV;
 use File::ShareDir qw[dist_dir dist_file];
 
@@ -116,7 +116,7 @@ sub _extract_iana_ip_blocks {
             $address_data =~ s/[ ]+//smx;
             foreach my $address_item ( split /,/smx, $address_data ) {
                 $address_item =~ s/(\A.+\/\d+).*\z/$1/smx;
-                push @list, { ip => Zonemaster::Net::IP->new( $address_item ), name => $fields->[1], reference => $fields->[2] };
+                push @list, { ip => Zonemaster::Engine::Net::IP->new( $address_item ), name => $fields->[1], reference => $fields->[2] };
             }
         }
         close $data or croak "Cannot close '${data_location}' : ${OS_ERROR}";

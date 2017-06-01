@@ -29,7 +29,7 @@ around BUILDARGS => sub {
     elsif ( ref( $_[0] ) and ref( $_[0] ) eq __PACKAGE__ ) {
         return $_[0];
     }
-    elsif ( ref( $_[0] ) and ref( $_[0] ) eq 'Zonemaster::Zone' ) {
+    elsif ( ref( $_[0] ) and ref( $_[0] ) eq 'Zonemaster::Engine::Zone' ) {
         return $_[0]->name;
     }
     else {
@@ -144,14 +144,14 @@ The constructor can be called with either a single argument or with a reference
 to a hash as in the example above.
 
 If there is a single argument, it must be either a non-reference, a
-L<Zonemaster::Engine::DNSName> object or a L<Zonemaster::Zone> object.
+L<Zonemaster::Engine::DNSName> object or a L<Zonemaster::Engine::Zone> object.
 
 If it's a non-reference, it will be split at period characters (possibly after
 stringification) and the resulting list used as the name's labels.
 
 If it's a L<Zonemaster::Engine::DNSName> object it will simply be returned.
 
-If it's a L<Zonemaster::Zone> object, the value of its C<name> attribute will
+If it's a L<Zonemaster::Engine::Zone> object, the value of its C<name> attribute will
 be returned.
 
 =item string()
