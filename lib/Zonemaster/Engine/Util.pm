@@ -9,7 +9,7 @@ use parent 'Exporter';
 use strict;
 use warnings;
 
-use Zonemaster;
+use Zonemaster::Engine;
 use Zonemaster::Engine::DNSName;
 use Pod::Simple::SimpleTree;
 
@@ -20,17 +20,17 @@ our %EXPORT_TAGS = ( all => \@EXPORT_OK );
 
 ## no critic (Subroutines::RequireArgUnpacking)
 sub ns {
-    return Zonemaster->ns( @_ );
+    return Zonemaster::Engine->ns( @_ );
 }
 
 sub info {
     my ( $tag, $argref ) = @_;
 
-    return Zonemaster->logger->add( $tag, $argref );
+    return Zonemaster::Engine->logger->add( $tag, $argref );
 }
 
 sub policy {
-    return Zonemaster->config->policy;
+    return Zonemaster::Engine->config->policy;
 }
 
 sub name {

@@ -7,7 +7,7 @@ use warnings;
 
 use Zonemaster::Engine::Net::IP;
 
-use Zonemaster;
+use Zonemaster::Engine;
 use Zonemaster::Engine::Nameserver;
 
 our @roots;
@@ -16,7 +16,7 @@ sub get_with_prefix {
     my ( $class, $ip ) = @_;
 
     if ( not @roots ) {
-        @roots = map { Zonemaster->zone( $_ ) } @{ Zonemaster->config->asnroots };
+        @roots = map { Zonemaster::Engine->zone( $_ ) } @{ Zonemaster::Engine->config->asnroots };
     }
 
     if ( not ref( $ip ) or not $ip->isa( 'Zonemaster::Engine::Net::IP' ) ) {

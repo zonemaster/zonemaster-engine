@@ -7,7 +7,7 @@ use warnings;
 
 use 5.014002;
 
-use Zonemaster;
+use Zonemaster::Engine;
 use Zonemaster::Engine::Util;
 use Zonemaster::Engine::Test::Address;
 use Zonemaster::Engine::Test::Syntax;
@@ -27,13 +27,13 @@ sub all {
     my ( $class, $zone ) = @_;
     my @results;
 
-    push @results, $class->delegation01( $zone ) if Zonemaster->config->should_run( 'delegation01' );
-    push @results, $class->delegation02( $zone ) if Zonemaster->config->should_run( 'delegation02' );
-    push @results, $class->delegation03( $zone ) if Zonemaster->config->should_run( 'delegation03' );
-    push @results, $class->delegation04( $zone ) if Zonemaster->config->should_run( 'delegation04' );
-    push @results, $class->delegation05( $zone ) if Zonemaster->config->should_run( 'delegation05' );
-    push @results, $class->delegation06( $zone ) if Zonemaster->config->should_run( 'delegation06' );
-    push @results, $class->delegation07( $zone ) if Zonemaster->config->should_run( 'delegation07' );
+    push @results, $class->delegation01( $zone ) if Zonemaster::Engine->config->should_run( 'delegation01' );
+    push @results, $class->delegation02( $zone ) if Zonemaster::Engine->config->should_run( 'delegation02' );
+    push @results, $class->delegation03( $zone ) if Zonemaster::Engine->config->should_run( 'delegation03' );
+    push @results, $class->delegation04( $zone ) if Zonemaster::Engine->config->should_run( 'delegation04' );
+    push @results, $class->delegation05( $zone ) if Zonemaster::Engine->config->should_run( 'delegation05' );
+    push @results, $class->delegation06( $zone ) if Zonemaster::Engine->config->should_run( 'delegation06' );
+    push @results, $class->delegation07( $zone ) if Zonemaster::Engine->config->should_run( 'delegation07' );
 
     return @results;
 }
@@ -323,7 +323,7 @@ sub delegation04 {
       my $local_ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) }, @{ Zonemaster::Engine::TestMethods->method5( $zone ) } )
     {
 
-        if ( not Zonemaster->config->ipv6_ok and $local_ns->address->version == $IP_VERSION_6 ) {
+        if ( not Zonemaster::Engine->config->ipv6_ok and $local_ns->address->version == $IP_VERSION_6 ) {
             push @results,
               info(
                 IPV6_DISABLED => {
@@ -335,7 +335,7 @@ sub delegation04 {
             next;
         }
 
-        if ( not Zonemaster->config->ipv4_ok and $local_ns->address->version == $IP_VERSION_4 ) {
+        if ( not Zonemaster::Engine->config->ipv4_ok and $local_ns->address->version == $IP_VERSION_4 ) {
             push @results,
               info(
                 IPV4_DISABLED => {
@@ -440,7 +440,7 @@ sub delegation06 {
       my $local_ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) }, @{ Zonemaster::Engine::TestMethods->method5( $zone ) } )
     {
 
-        if ( not Zonemaster->config->ipv6_ok and $local_ns->address->version == $IP_VERSION_6 ) {
+        if ( not Zonemaster::Engine->config->ipv6_ok and $local_ns->address->version == $IP_VERSION_6 ) {
             push @results,
               info(
                 IPV6_DISABLED => {
@@ -452,7 +452,7 @@ sub delegation06 {
             next;
         }
 
-        if ( not Zonemaster->config->ipv4_ok and $local_ns->address->version == $IP_VERSION_4 ) {
+        if ( not Zonemaster::Engine->config->ipv4_ok and $local_ns->address->version == $IP_VERSION_4 ) {
             push @results,
               info(
                 IPV4_DISABLED => {

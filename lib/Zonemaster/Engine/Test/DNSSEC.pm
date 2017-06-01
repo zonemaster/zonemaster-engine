@@ -11,7 +11,7 @@ use warnings;
 
 use 5.014002;
 
-use Zonemaster;
+use Zonemaster::Engine;
 use Zonemaster::Engine::Util;
 use Zonemaster::Engine::Constants qw[:algo :soa];
 use List::Util qw[min];
@@ -137,11 +137,11 @@ sub all {
     my ( $class, $zone ) = @_;
     my @results;
 
-    if ( Zonemaster->config->should_run('dnssec07') ) {
+    if ( Zonemaster::Engine->config->should_run('dnssec07') ) {
         push @results, $class->dnssec07( $zone );
     }
 
-    if ( Zonemaster->config->should_run('dnssec07') and grep { $_->tag eq 'NEITHER_DNSKEY_NOR_DS' } @results ) {
+    if ( Zonemaster::Engine->config->should_run('dnssec07') and grep { $_->tag eq 'NEITHER_DNSKEY_NOR_DS' } @results ) {
         push @results,
           info(
             NOT_SIGNED => {
@@ -151,30 +151,30 @@ sub all {
 
     } else {
 
-        if ( Zonemaster->config->should_run('dnssec01') ) {
+        if ( Zonemaster::Engine->config->should_run('dnssec01') ) {
             push @results, $class->dnssec01( $zone );
         }
 
         if ( none { $_->tag eq 'NO_DS' } @results ) {
-            if ( Zonemaster->config->should_run('dnssec02') ) {
+            if ( Zonemaster::Engine->config->should_run('dnssec02') ) {
                 push @results, $class->dnssec02( $zone );
             }
         }
 
-        if ( Zonemaster->config->should_run('dnssec03') ) {
+        if ( Zonemaster::Engine->config->should_run('dnssec03') ) {
             push @results, $class->dnssec03( $zone );
         }
 
-        if ( Zonemaster->config->should_run('dnssec04') ) {
+        if ( Zonemaster::Engine->config->should_run('dnssec04') ) {
             push @results, $class->dnssec04( $zone );
         }
 
-        if ( Zonemaster->config->should_run('dnssec05') ) {
+        if ( Zonemaster::Engine->config->should_run('dnssec05') ) {
             push @results, $class->dnssec05( $zone );
         }
     
         if ( grep { $_->tag eq q{DNSKEY_BUT_NOT_DS} or $_->tag eq q{DNSKEY_AND_DS} } @results ) {
-            if ( Zonemaster->config->should_run('dnssec06') ) {
+            if ( Zonemaster::Engine->config->should_run('dnssec06') ) {
                 push @results, $class->dnssec06( $zone );
             }
         }
@@ -183,19 +183,19 @@ sub all {
               info( ADDITIONAL_DNSKEY_SKIPPED => {} );
         }
 
-        if ( Zonemaster->config->should_run('dnssec08') ) {
+        if ( Zonemaster::Engine->config->should_run('dnssec08') ) {
             push @results, $class->dnssec08( $zone );
         }
 
-        if ( Zonemaster->config->should_run('dnssec09') ) {
+        if ( Zonemaster::Engine->config->should_run('dnssec09') ) {
             push @results, $class->dnssec09( $zone );
         }
 
-        if ( Zonemaster->config->should_run('dnssec10') ) {
+        if ( Zonemaster::Engine->config->should_run('dnssec10') ) {
             push @results, $class->dnssec10( $zone );
         }
 
-        if ( Zonemaster->config->should_run('dnssec11') ) {
+        if ( Zonemaster::Engine->config->should_run('dnssec11') ) {
             push @results, $class->dnssec11( $zone );
         }
 

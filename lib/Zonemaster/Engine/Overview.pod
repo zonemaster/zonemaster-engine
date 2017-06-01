@@ -16,25 +16,25 @@ Conceptually, the test engine consists of a number of test implementation module
 
 =head2 For users of Zonemaster
 
-If all you want to do is run tests, you need to care about four or five modules. L<Zonemaster> is the main access point to the framework, and it is via its methods that you set the configuration (if needed), request that tests be started and access the logger. The logger is where the test results end up, so that's pretty important. On top of those, you may want to use the L<Zonemaster::Engine::Translator> to turn the results into human-readable messages.
+If all you want to do is run tests, you need to care about four or five modules. L<Zonemaster::Engine> is the main access point to the framework, and it is via its methods that you set the configuration (if needed), request that tests be started and access the logger. The logger is where the test results end up, so that's pretty important. On top of those, you may want to use the L<Zonemaster::Engine::Translator> to turn the results into human-readable messages.
 
 There are two ways that you can get the results of a test you've requested: the simple-but-inflexible way and the flexible-but-complex way.
 
-The simple-but-inflexible way is that all the methods in L<Zonemaster> that run tests return lists of L<Zonemaster::Engine::Logger::Entry> objects. Those lists incude all the results that the writer of the test module(s) considered important enough to return by default. The advantage of this method is that it is extremely easy to use. The following is a functional (if not very useful) way to run a full test and print the results from a command line prompt:
+The simple-but-inflexible way is that all the methods in L<Zonemaster::Engine> that run tests return lists of L<Zonemaster::Engine::Logger::Entry> objects. Those lists incude all the results that the writer of the test module(s) considered important enough to return by default. The advantage of this method is that it is extremely easy to use. The following is a functional (if not very useful) way to run a full test and print the results from a command line prompt:
 
- perl -MZonemaster -E 'say "$_" for Zonemaster->new->test_zone("example.org")'
+ perl -MZonemaster::Engine -E 'say "$_" for Zonemaster::Engine->new->test_zone("example.org")'
 
 The main drawbacks of this method are that there is no choice about what messages to see, and it's entirely asynchronous. The code that started the test does not get a chance to do anything at all until the whole test has finished, which may be several minutes later.
 
 The get around those drawbacks there is the flexible-but-complex way, which consists of installing a callback that gets executed every time a message is logged. It's not that much more complicated, code-wise. The following example does roughly the same thing as the one above:
 
- perl -MZonemaster -E 'Zonemaster->logger->callback(sub {say "$_[0]"}); Zonemaster->new->test_zone("example.org");'
+ perl -MZonemaster::Engine -E 'Zonemaster::Engine->logger->callback(sub {say "$_[0]"}); Zonemaster::Engine->new->test_zone("example.org");'
 
 If you try running those, you'll notice two main differences. First, the second variant prints results as they are generated. Second, it generates a B<lot> more output. On my machine right now, the first example gives me 94 lines of output. The second example gives me 17684.
 
 You can do pretty much whatever you want with the message objects in the callback (including modifying them, although we don't promise that behavior will stay around). If the callback code throws an exception, and that exception is not a subcless of L<Zonemaster::Engine::Exception>, the callback will be removed. Note also that while the callback is running, the test engine itself is not. So think twice before you do potentially time-consuming tasks (like sticking the message in a database) in the callback. After waiting for responses from remote name servers (which usually stands for more than 90% of the time used), the result logging is the single most time-consuming task in a Zonemaster test run.
 
-From here, you probably want to look at the documentation for L<Zonemaster>, L<Zonemaster::Engine::Logger>, L<Zonemaster::Engine::Logger::Entry>, L<Zonemaster::Engine::Config> and L<Zonemaster::Engine::Translator>.
+From here, you probably want to look at the documentation for L<Zonemaster::Engine>, L<Zonemaster::Engine::Logger>, L<Zonemaster::Engine::Logger::Entry>, L<Zonemaster::Engine::Config> and L<Zonemaster::Engine::Translator>.
 
 =head2 For developers of Zonemaster Test Modules
 

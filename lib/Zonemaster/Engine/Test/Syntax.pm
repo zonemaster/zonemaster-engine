@@ -7,7 +7,7 @@ use warnings;
 
 use 5.014002;
 
-use Zonemaster;
+use Zonemaster::Engine;
 use Zonemaster::Engine::Util;
 use Zonemaster::Engine::Recursor;
 use Zonemaster::Engine::DNSName;
@@ -28,26 +28,26 @@ sub all {
     my ( $class, $zone ) = @_;
     my @results;
 
-    push @results, $class->syntax01( $zone->name ) if Zonemaster->config->should_run( 'syntax01' );
-    push @results, $class->syntax02( $zone->name ) if Zonemaster->config->should_run( 'syntax02' );
-    push @results, $class->syntax03( $zone->name ) if Zonemaster->config->should_run( 'syntax03' );
+    push @results, $class->syntax01( $zone->name ) if Zonemaster::Engine->config->should_run( 'syntax01' );
+    push @results, $class->syntax02( $zone->name ) if Zonemaster::Engine->config->should_run( 'syntax02' );
+    push @results, $class->syntax03( $zone->name ) if Zonemaster::Engine->config->should_run( 'syntax03' );
 
     if ( any { $_->tag eq q{ONLY_ALLOWED_CHARS} } @results ) {
 
         foreach my $local_nsname ( uniq map { $_->string } @{ Zonemaster::Engine::TestMethods->method2( $zone ) },
             @{ Zonemaster::Engine::TestMethods->method3( $zone ) } )
         {
-            push @results, $class->syntax04( $local_nsname ) if Zonemaster->config->should_run( 'syntax04' );
+            push @results, $class->syntax04( $local_nsname ) if Zonemaster::Engine->config->should_run( 'syntax04' );
         }
 
-        push @results, $class->syntax05( $zone ) if Zonemaster->config->should_run( 'syntax05' );
+        push @results, $class->syntax05( $zone ) if Zonemaster::Engine->config->should_run( 'syntax05' );
 
         if ( none { $_->tag eq q{NO_RESPONSE_SOA_QUERY} } @results ) {
-            push @results, $class->syntax06( $zone ) if Zonemaster->config->should_run( 'syntax06' );
-            push @results, $class->syntax07( $zone ) if Zonemaster->config->should_run( 'syntax07' );
+            push @results, $class->syntax06( $zone ) if Zonemaster::Engine->config->should_run( 'syntax06' );
+            push @results, $class->syntax07( $zone ) if Zonemaster::Engine->config->should_run( 'syntax07' );
         }
 
-        push @results, $class->syntax08( $zone ) if Zonemaster->config->should_run( 'syntax08' );
+        push @results, $class->syntax08( $zone ) if Zonemaster::Engine->config->should_run( 'syntax08' );
 
     }
 

@@ -8,10 +8,10 @@ use warnings;
 
 use Moose;
 use Carp;
-use Zonemaster;
+use Zonemaster::Engine;
 
 use POSIX qw[setlocale LC_MESSAGES];
-use Locale::TextDomain qw[Zonemaster];
+use Locale::TextDomain qw[Zonemaster-Engine];
 
 has 'locale' => ( is => 'rw', isa => 'Str',     lazy => 1, builder => '_get_locale' );
 has 'data'   => ( is => 'ro', isa => 'HashRef', lazy => 1, builder => '_load_data' );
@@ -39,7 +39,7 @@ sub _load_data {
     my %data;
 
     $data{SYSTEM} = _system_translation();
-    foreach my $mod ( 'Basic', Zonemaster->modules ) {
+    foreach my $mod ( 'Basic', Zonemaster::Engine->modules ) {
         my $module = 'Zonemaster::Engine::Test::' . $mod;
         $data{ uc( $mod ) } = $module->translation();
     }

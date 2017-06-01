@@ -24,7 +24,7 @@ __PACKAGE__->meta->make_immutable;
 
 =head1 NAME
 
-Zonemaster::Engine::Exception -- base class for Zonemaster exceptions
+Zonemaster::Engine::Exception -- base class for Zonemaster::Engine exceptions
 
 =head1 SYNOPSIS
 

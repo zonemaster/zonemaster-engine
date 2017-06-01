@@ -70,7 +70,7 @@ sub setup {
                 $saved_axfr{$domain} = $str;
             }
         }
-        Zonemaster->config->no_network( 1 );
+        Zonemaster::Engine->config->no_network( 1 );
         $meta->add_around_method_modifier(
             'axfr',
             sub {

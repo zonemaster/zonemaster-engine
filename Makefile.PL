@@ -1,13 +1,13 @@
 use inc::Module::Install;
 use Module::Install::Share;
 
-name 'Zonemaster';
+name 'Zonemaster-Engine';
 
 license 'http://www.opensource.org/licenses/BSD-3-Clause';
 repository 'https://github.com/dotse/zonemaster-engine';
 bugtracker 'https://github.com/dotse/zonemaster-engine/issues';
 
-all_from 'lib/Zonemaster.pm';
+all_from 'lib/Zonemaster/Engine.pm';
 
 requires 'version'               => 0.77;
 requires 'Net::LDNS'             => 0.75;

@@ -6,7 +6,7 @@ use 5.014002;
 use Moose;
 
 use Zonemaster::Engine::Logger::Entry;
-use Zonemaster;
+use Zonemaster::Engine;
 use List::MoreUtils qw[none any];
 use Scalar::Util qw[blessed];
 use JSON::PP;
@@ -45,7 +45,7 @@ sub add {
 
 sub _check_filter {
     my ( $self, $entry ) = @_;
-    my $config = Zonemaster->config->logfilter;
+    my $config = Zonemaster::Engine->config->logfilter;
 
     if ( $config ) {
         if ( $config->{ $entry->module } ) {

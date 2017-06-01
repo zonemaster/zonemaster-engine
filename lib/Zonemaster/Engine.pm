@@ -1,4 +1,4 @@
-package Zonemaster;
+package Zonemaster::Engine;
 
 use version; our $VERSION = version->declare("v1.1.0");
 
@@ -104,7 +104,7 @@ sub add_fake_delegation {
     foreach my $name ( keys %{$href} ) {
         if ( not defined $href->{$name} or not scalar @{ $href->{$name} } ) {
             if ( Zonemaster::Engine::Zone->new( { name => $domain } )->is_in_zone( $name ) ) {
-                Zonemaster->logger->add(
+                Zonemaster::Engine->logger->add(
                     FAKE_DELEGATION_IN_ZONE_NO_IP => { domain => $domain , ns => $name }
                 );
             }
@@ -114,7 +114,7 @@ sub add_fake_delegation {
                     push @{ $href->{$name} }, @ips;
                 }
                 else {
-                    Zonemaster->logger->add(
+                    Zonemaster::Engine->logger->add(
                         FAKE_DELEGATION_NO_IP => { domain => $domain , ns => $name  }
                     );
 		}
@@ -193,7 +193,7 @@ Zonemaster - A tool to check the quality of a DNS zone
 
 =head1 SYNOPSIS
 
-    my @results = Zonemaster->test_zone('iis.se')
+    my @results = Zonemaster::Engine->test_zone('iis.se')
 
 =head1 INTRODUCTION
 
@@ -292,7 +292,7 @@ in-bailiwick nameservers.
 
 Example:
 
-    Zonemaster->add_fake_delegation(
+    Zonemaster::Engine->add_fake_delegation(
         'lysator.liu.se' => {
             'ns1.nic.fr' => [ ],
             'ns.nic.se'  => [ '212.247.7.228',  '2a00:801:f0:53::53' ],
@@ -311,7 +311,7 @@ unbroken string of hexadecimal digits.
 
 Example:
 
-   Zonemaster->add_fake_ds(
+   Zonemaster::Engine->add_fake_ds(
       'nic.se' => [
          { keytag => 16696, algorithm => 5, type => 2, digest => '40079DDF8D09E7F10BB248A69B6630478A28EF969DDE399F95BC3B39F8CBACD7' },
          { keytag => 16696, algorithm => 5, type => 1, digest => 'EF5D421412A5EAF1230071AFFD4F585E3B2B1A60' },

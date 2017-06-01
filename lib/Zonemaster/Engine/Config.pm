@@ -12,7 +12,7 @@ use File::Slurp;
 use Hash::Merge;
 use File::Spec;
 
-use Zonemaster;
+use Zonemaster::Engine;
 
 has 'cfiles'    => ( is => 'ro', isa => 'ArrayRef', default => sub { [] } );
 has 'pfiles'    => ( is => 'ro', isa => 'ArrayRef', default => sub { [] } );
@@ -91,7 +91,7 @@ sub policy {
 sub _config_directory_list {
     my @dirlist;
 
-    push @dirlist, dist_dir( 'Zonemaster' );
+    push @dirlist, dist_dir( 'Zonemaster-Engine' );
     push @dirlist, '/etc/zonemaster';
     push @dirlist, '/usr/local/etc/zonemaster';
 
@@ -250,11 +250,11 @@ __PACKAGE__->meta->make_immutable;
 
 =head1 NAME
 
-Zonemaster::Engine::Config - configuration access module for Zonemaster
+Zonemaster::Engine::Config - configuration access module for Zonemaster::Engine
 
 =head1 SYNOPSIS
 
-    Zonemaster->config->no_network(1); # Forbid network traffic
+    Zonemaster::Engine->config->no_network(1); # Forbid network traffic
 
     my $value = Zonemaster::Engine::Config->get->{key}{subkey}; # Not really recommended way to access config data
 
@@ -272,7 +272,7 @@ are, in order from first checked to last:
 
 =over
 
-=item The L<Zonemaster> perl module installation directory
+=item The L<Zonemaster::Engine> perl module installation directory
 
 This is where the installation process puts the default configuration. It is
 not meant to be modified by the user, and it will be overwritten when the

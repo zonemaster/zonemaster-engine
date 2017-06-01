@@ -24,6 +24,8 @@ like(
     'string to_stringd as expected'
 );
 
+
+
 my $untranslated = Zonemaster::Engine::Logger::Entry->new(
     {
         module => 'SYSTEM',

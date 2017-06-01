@@ -4,7 +4,7 @@ use 5.14.2;
 use strict;
 use warnings;
 
-use Zonemaster;
+use Zonemaster::Engine;
 use File::Find;
 
 eval { require Pod::Coverage };

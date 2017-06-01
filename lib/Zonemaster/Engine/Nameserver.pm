@@ -7,7 +7,7 @@ use Moose;
 use Moose::Util::TypeConstraints;
 
 use Zonemaster::Engine::DNSName;
-use Zonemaster;
+use Zonemaster::Engine;
 use Zonemaster::Engine::Packet;
 use Zonemaster::Engine::Nameserver::Cache;
 use Zonemaster::Engine::Recursor;
@@ -38,7 +38,7 @@ has 'cache' => ( is => 'ro', isa => 'Zonemaster::Engine::Nameserver::Cache', laz
 has 'times' => ( is => 'ro', isa => 'ArrayRef',                      default    => sub { [] } );
 
 has 'source_address' =>
-  ( is => 'ro', isa => 'Maybe[Str]', lazy => 1, default => sub { return Zonemaster->config->resolver_source } );
+  ( is => 'ro', isa => 'Maybe[Str]', lazy => 1, default => sub { return Zonemaster::Engine->config->resolver_source } );
 
 has 'fake_delegations' => ( is => 'ro', isa => 'HashRef', default => sub { {} } );
 has 'fake_ds'          => ( is => 'ro', isa => 'HashRef', default => sub { {} } );
@@ -63,7 +63,7 @@ around 'new' => sub {
     my $name = lc( q{} . $obj->name );
     $name = '$$$NONAME' unless $name;
     if ( not exists $object_cache{$name}{ $obj->address->ip } ) {
-        Zonemaster->logger->add( NS_CREATED => { name => $name, ip => $obj->address->ip } );
+        Zonemaster::Engine->logger->add( NS_CREATED => { name => $name, ip => $obj->address->ip } );
         $object_cache{$name}{ $obj->address->ip } = $obj;
     }
 
@@ -76,7 +76,7 @@ sub _build_dns {
     my $res = Net::LDNS->new( $self->address->ip );
     $res->recurse( 0 );
 
-    my %defaults = %{ Zonemaster->config->resolver_defaults };
+    my %defaults = %{ Zonemaster::Engine->config->resolver_defaults };
     foreach my $flag ( keys %defaults ) {
         $res->$flag( $defaults{$flag} );
     }
@@ -102,17 +102,17 @@ sub query {
     my ( $self, $name, $type, $href ) = @_;
     $type //= 'A';
 
-    if ( $self->address->version == 4 and not Zonemaster->config->ipv4_ok ) {
-        Zonemaster->logger->add( IPV4_BLOCKED => { ns => $self->string } );
+    if ( $self->address->version == 4 and not Zonemaster::Engine->config->ipv4_ok ) {
+        Zonemaster::Engine->logger->add( IPV4_BLOCKED => { ns => $self->string } );
         return;
     }
 
-    if ( $self->address->version == 6 and not Zonemaster->config->ipv6_ok ) {
-        Zonemaster->logger->add( IPV6_BLOCKED => { ns => $self->string } );
+    if ( $self->address->version == 6 and not Zonemaster::Engine->config->ipv6_ok ) {
+        Zonemaster::Engine->logger->add( IPV6_BLOCKED => { ns => $self->string } );
         return;
     }
 
-    Zonemaster->logger->add(
+    Zonemaster::Engine->logger->add(
         'query',
         {
             name  => "$name",
@@ -122,7 +122,7 @@ sub query {
         }
     );
 
-    my %defaults = %{ Zonemaster->config->resolver_defaults };
+    my %defaults = %{ Zonemaster::Engine->config->resolver_defaults };
 
     my $class     = $href->{class}     // 'IN';
     my $dnssec    = $href->{dnssec}    // $defaults{dnssec};
@@ -140,7 +140,7 @@ sub query {
             $p->unique_push( 'answer', $rr );
         }
         my $res = Zonemaster::Engine::Packet->new( { packet => $p } );
-        Zonemaster->logger->add( FAKE_DS_RETURNED => { name => "$name", from => "$self" } );
+        Zonemaster::Engine->logger->add( FAKE_DS_RETURNED => { name => "$name", from => "$self" } );
         return $res;
     }
 
@@ -165,7 +165,7 @@ sub query {
             $p->do( $dnssec );
             $p->rd( $recurse );
             $p->answerfrom( $self->address->ip );
-            Zonemaster->logger->add(
+            Zonemaster::Engine->logger->add(
                 'FAKE_DELEGATION',
                 {
                     name  => "$name",
@@ -176,7 +176,7 @@ sub query {
             );
 
             my $res = Zonemaster::Engine::Packet->new( { packet => $p } );
-            Zonemaster->logger->add( FAKED_RETURN => { packet => $res->string } );
+            Zonemaster::Engine->logger->add( FAKED_RETURN => { packet => $res->string } );
             return $res;
         } ## end if ( $name =~ m/([.]|\A)\Q$fname\E\z/xi)
     } ## end foreach my $fname ( sort keys...)
@@ -187,7 +187,7 @@ sub query {
     }
 
     my $p = $self->cache->data->{"$name"}{"\U$type"}{"\U$class"}{$dnssec}{$usevc}{$recurse}{$edns_size};
-    Zonemaster->logger->add( CACHED_RETURN => { packet => ( $p ? $p->string : 'undef' ) } );
+    Zonemaster::Engine->logger->add( CACHED_RETURN => { packet => ( $p ? $p->string : 'undef' ) } );
 
     return $p;
 } ## end sub query
@@ -201,7 +201,7 @@ sub add_fake_delegation {
         push @{ $delegation{authority} }, Net::LDNS::RR->new( sprintf( '%s IN NS %s', $domain, $name ) );
         foreach my $ip ( @{ $href->{$name} } ) {
             if ( Zonemaster::Engine::Net::IP->new( $ip )->ip eq $self->address->ip ) {
-                Zonemaster->logger->add(
+                Zonemaster::Engine->logger->add(
                     FAKE_DELEGATION_TO_SELF => { ns => "$self", domain => $domain, data => $href } );
                 return;
             }
@@ -212,7 +212,7 @@ sub add_fake_delegation {
     }
 
     $self->fake_delegations->{$domain} = \%delegation;
-    Zonemaster->logger->add( ADDED_FAKE_DELEGATION => { ns => "$self", domain => $domain, data => $href } );
+    Zonemaster::Engine->logger->add( ADDED_FAKE_DELEGATION => { ns => "$self", domain => $domain, data => $href } );
 
     # We're changing the world, so the cache can't be trusted
     Zonemaster::Engine::Recursor->clear_cache;
@@ -228,7 +228,7 @@ sub add_fake_ds {
         $domain = Zonemaster::Engine::DNSName->new( $domain );
     }
 
-    Zonemaster->logger->add( FAKE_DS => { domain => lc( "$domain" ), data => $aref, ns => "$self" } );
+    Zonemaster::Engine->logger->add( FAKE_DS => { domain => lc( "$domain" ), data => $aref, ns => "$self" } );
     foreach my $href ( @{$aref} ) {
         push @ds,
           Net::LDNS::RR->new(
@@ -254,13 +254,13 @@ sub _query {
     $type //= 'A';
     $href->{class} //= 'IN';
 
-    if ( Zonemaster->config->no_network ) {
+    if ( Zonemaster::Engine->config->no_network ) {
         croak sprintf
           "External query for %s, %s attempted to %s while running with no_network",
           $name, $type, $self->string;
     }
 
-    Zonemaster->logger->add(
+    Zonemaster::Engine->logger->add(
         'external_query',
         {
             name  => "$name",
@@ -270,7 +270,7 @@ sub _query {
         }
     );
 
-    my %defaults = %{ Zonemaster->config->resolver_defaults };
+    my %defaults = %{ Zonemaster::Engine->config->resolver_defaults };
 
     # Make sure we have a value for each flag
     foreach my $flag ( keys %defaults ) {
@@ -285,7 +285,7 @@ sub _query {
     my $before = time();
     my $res;
     if ( $self->blacklisted->{ $flags{usevc} }{ $flags{dnssec} } ) {
-        Zonemaster->logger->add(
+        Zonemaster::Engine->logger->add(
             IS_BLACKLISTED => {
                 message => "Server transport has been blacklisted due to previous failure",
                 ns      => "$self",
@@ -302,7 +302,7 @@ sub _query {
         if ( $@ ) {
             my $msg = "$@";
             chomp( $msg );
-            Zonemaster->logger->add( LOOKUP_ERROR =>
+            Zonemaster::Engine->logger->add( LOOKUP_ERROR =>
                   { message => $msg, ns => "$self", name => "$name", type => $type, class => $href->{class} } );
             $self->blacklisted->{ $flags{usevc} }{ $flags{dnssec} } = 1;
             if ( !$flags{dnssec} ) {
@@ -323,14 +323,14 @@ sub _query {
         if ( $size > $UDP_COMMON_EDNS_LIMIT ) {
             my $command = sprintf q{dig @%s %s%s %s}, $self->address->short, $flags{dnssec} ? q{+dnssec } : q{},
               "$name", $type;
-            Zonemaster->logger->add(
+            Zonemaster::Engine->logger->add(
                 PACKET_BIG => { size => $size, maxsize => $UDP_COMMON_EDNS_LIMIT, command => $command } );
         }
-        Zonemaster->logger->add( EXTERNAL_RESPONSE => { packet => $p->string } );
+        Zonemaster::Engine->logger->add( EXTERNAL_RESPONSE => { packet => $p->string } );
         return $p;
     }
     else {
-        Zonemaster->logger->add( EMPTY_RETURN => {} );
+        Zonemaster::Engine->logger->add( EMPTY_RETURN => {} );
         return;
     }
 } ## end sub _query
@@ -361,7 +361,7 @@ sub save {
 
     close $fh or die $!;
 
-    Zonemaster->logger->add( SAVED_NS_CACHE => { file => $filename } );
+    Zonemaster::Engine->logger->add( SAVED_NS_CACHE => { file => $filename } );
 
     POSIX::setlocale( POSIX::LC_ALL, $old );
     return;
@@ -403,7 +403,7 @@ sub restore {
     }
     close $fh;
 
-    Zonemaster->logger->add( RESTORED_NS_CACHE => { file => $filename } );
+    Zonemaster::Engine->logger->add( RESTORED_NS_CACHE => { file => $filename } );
 
     return;
 } ## end sub restore
@@ -475,19 +475,19 @@ sub axfr {
     my ( $self, $domain, $callback, $class ) = @_;
     $class //= 'IN';
 
-    if ( Zonemaster->config->no_network ) {
+    if ( Zonemaster::Engine->config->no_network ) {
         croak sprintf
           "External AXFR query for %s attempted to %s while running with no_network",
           $domain, $self->string;
     }
 
-    if ( $self->address->version == 4 and not Zonemaster->config->ipv4_ok ) {
-        Zonemaster->logger->add( IPV4_BLOCKED => { ns => $self->string } );
+    if ( $self->address->version == 4 and not Zonemaster::Engine->config->ipv4_ok ) {
+        Zonemaster::Engine->logger->add( IPV4_BLOCKED => { ns => $self->string } );
         return;
     }
 
-    if ( $self->address->version == 6 and not Zonemaster->config->ipv6_ok ) {
-        Zonemaster->logger->add( IPV6_BLOCKED => { ns => $self->string } );
+    if ( $self->address->version == 6 and not Zonemaster::Engine->config->ipv6_ok ) {
+        Zonemaster::Engine->logger->add( IPV6_BLOCKED => { ns => $self->string } );
         return;
     }
 
@@ -518,7 +518,7 @@ Zonemaster::Engine::Nameserver - object representing a DNS nameserver
 
 =head1 DESCRIPTION
 
-This is a very central object in the L<Zonemaster> framework. All DNS
+This is a very central object in the L<Zonemaster::Engine> framework. All DNS
 communications with the outside world pass through here, so we can do
 things like synthezising and recording traffic. All the objects are
 also unique per name/IP pair, and creating a new one with an already
@@ -667,7 +667,7 @@ Returns the standard deviation for the whole set of query times.
 =item add_fake_delegation($domain,$data)
 
 Adds fake delegation information to this specific nameserver object. Takes the
-same arguments as the similarly named method in L<Zonemaster>. This is
+same arguments as the similarly named method in L<Zonemaster::Engine>. This is
 primarily used for internal information, and using it directly will likely give
 confusing results (but may be useful to model certain kinds of
 misconfigurations).
@@ -675,7 +675,7 @@ misconfigurations).
 =item add_fake_ds($domain, $data)
 
 Adds fake DS information to this nameserver object. Takes the same arguments as
-the similarly named method in L<Zonemaster>.
+the similarly named method in L<Zonemaster::Engine>.
 
 =item axfr( $domain, $callback, $class )
 

@@ -1,7 +1,7 @@
 use Test::More;
 
 BEGIN { use_ok( 'Zonemaster::Engine::DNSName' ); }
-use Zonemaster;
+use Zonemaster::Engine;
 
 my $name = new_ok( 'Zonemaster::Engine::DNSName', ['www.iis.se'] );
 
@@ -44,7 +44,7 @@ is( $pr, 'xx-example', "Prepend to root works: $pr" );
 
 is( $name, Zonemaster::Engine::DNSName->new( $name ), 'Roundtrip creation works' );
 
-my $zone  = Zonemaster->zone( 'nic.se' );
+my $zone  = Zonemaster::Engine->zone( 'nic.se' );
 my $zname = Zonemaster::Engine::DNSName->new( $zone );
 isa_ok( $zname, 'Zonemaster::Engine::DNSName' );
 ok( $zname eq 'nic.se' );

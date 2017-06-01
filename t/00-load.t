@@ -6,9 +6,9 @@ use Test::More;
 plan tests => 1;
 
 BEGIN {
-    use_ok( 'Zonemaster' ) || print "Bail out!\n";
+    use_ok( 'Zonemaster::Engine' ) || print "Bail out!\n";
 }
 
-diag( "Testing Zonemaster $Zonemaster::VERSION, Perl $], $^X" );
+diag( "Testing Zonemaster Engine $Zonemaster::Engine::VERSION, Perl $], $^X" );
 
 done_testing;

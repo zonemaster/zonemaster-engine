@@ -6,7 +6,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use Zonemaster;
+use Zonemaster::Engine;
 use Zonemaster::Engine::Util;
 use Zonemaster::Engine::Test::Basic;
 
@@ -24,7 +24,7 @@ my @all_test_modules;
   grep { $_ ne 'Zonemaster::Engine::Test::Basic' } useall( 'Zonemaster::Engine::Test' );
 
 sub _log_versions {
-    info( GLOBAL_VERSION => { version => Zonemaster->VERSION } );
+    info( GLOBAL_VERSION => { version => Zonemaster::Engine->VERSION } );
 
     info( DEPENDENCY_VERSION => { name => 'Net::LDNS',             version => $Net::LDNS::VERSION } );
     info( DEPENDENCY_VERSION => { name => 'IO::Socket::INET6',     version => $IO::Socket::INET6::VERSION } );
@@ -40,10 +40,10 @@ sub _log_versions {
     info( DEPENDENCY_VERSION => { name => 'Hash::Merge',           version => $Hash::Merge::VERSION } );
     info( DEPENDENCY_VERSION => { name => 'Readonly',              version => $Readonly::VERSION } );
 
-    foreach my $file ( @{ Zonemaster->config->cfiles } ) {
+    foreach my $file ( @{ Zonemaster::Engine->config->cfiles } ) {
         info( CONFIG_FILE => { name => $file } );
     }
-    foreach my $file ( @{ Zonemaster->config->pfiles } ) {
+    foreach my $file ( @{ Zonemaster::Engine->config->pfiles } ) {
         info( POLICY_FILE => { name => $file } );
     }
 
@@ -58,7 +58,7 @@ sub run_all_for {
     my ( $class, $zone ) = @_;
     my @results;
 
-    Zonemaster->start_time_now();
+    Zonemaster::Engine->start_time_now();
     push @results, info( START_TIME => { time_t => time(), string => strftime( "%F %T %z", ( localtime() ) ) } );
     push @results, info( TEST_TARGET => { zone => $zone->name->string, module => 'all' } );
 
@@ -70,17 +70,17 @@ sub run_all_for {
     );
     _log_versions();
 
-    if ( not( Zonemaster->config->ipv4_ok or Zonemaster->config->ipv6_ok ) ) {
+    if ( not( Zonemaster::Engine->config->ipv4_ok or Zonemaster::Engine->config->ipv6_ok ) ) {
         return info( NO_NETWORK => {} );
     }
 
     push @results, Zonemaster::Engine::Test::Basic->all( $zone );
     info( MODULE_END => { module => 'Zonemaster::Engine::Test::Basic' } );
 
-    if ( Zonemaster::Engine::Test::Basic->can_continue( @results ) and Zonemaster->can_continue() ) {
+    if ( Zonemaster::Engine::Test::Basic->can_continue( @results ) and Zonemaster::Engine->can_continue() ) {
         ## no critic (Modules::RequireExplicitInclusion)
         foreach my $mod ( __PACKAGE__->modules ) {
-            Zonemaster->config->load_module_policy( $mod );
+            Zonemaster::Engine->config->load_module_policy( $mod );
 
             if ( not _policy_allowed( $mod ) ) {
                 push @results, info( POLICY_DISABLED => { name => $mod } );
@@ -117,17 +117,17 @@ sub run_module {
     my ( $module ) = grep { lc( $requested ) eq lc( $_ ) } $class->modules;
     $module = 'Basic' if ( not $module and lc( $requested ) eq 'basic' );
 
-    Zonemaster->start_time_now();
+    Zonemaster::Engine->start_time_now();
     push @res, info( START_TIME => { time_t => time(), string => strftime( "%F %T %z", ( localtime() ) ) } );
     push @res, info( TEST_TARGET => { zone => $zone->name->string, module => $requested } );
     _log_versions();
-    if ( not( Zonemaster->config->ipv4_ok or Zonemaster->config->ipv6_ok ) ) {
+    if ( not( Zonemaster::Engine->config->ipv4_ok or Zonemaster::Engine->config->ipv6_ok ) ) {
         return info( NO_NETWORK => {} );
     }
 
-    if ( Zonemaster->can_continue() ) {
+    if ( Zonemaster::Engine->can_continue() ) {
         if ( $module ) {
-            Zonemaster->config->load_module_policy( $module );
+            Zonemaster::Engine->config->load_module_policy( $module );
             my $m = "Zonemaster::Engine::Test::$module";
             info( MODULE_VERSION => { module => $m, version => $m->version } );
             push @res, eval { $m->all( $zone ) };
@@ -160,18 +160,18 @@ sub run_one {
     my ( $module ) = grep { lc( $requested ) eq lc( $_ ) } $class->modules;
     $module = 'Basic' if ( not $module and lc( $requested ) eq 'basic' );
 
-    Zonemaster->start_time_now();
+    Zonemaster::Engine->start_time_now();
     push @res, info( START_TIME => { time_t => time(), string => strftime( "%F %T %z", ( localtime() ) ) } );
     push @res,
       info( TEST_ARGS => { module => $requested, method => $test, args => join( ';', map { "$_" } @arguments ) } );
     _log_versions();
-    if ( not( Zonemaster->config->ipv4_ok or Zonemaster->config->ipv6_ok ) ) {
+    if ( not( Zonemaster::Engine->config->ipv4_ok or Zonemaster::Engine->config->ipv6_ok ) ) {
         return info( NO_NETWORK => {} );
     }
 
-    if ( Zonemaster->can_continue() ) {
+    if ( Zonemaster::Engine->can_continue() ) {
         if ( $module ) {
-            Zonemaster->config->load_module_policy( $module );
+            Zonemaster::Engine->config->load_module_policy( $module );
             my $m = "Zonemaster::Engine::Test::$module";
             if ( $m->metadata->{$test} ) {
                 info( MODULE_CALL => { module => $module, method => $test, version => $m->version } );

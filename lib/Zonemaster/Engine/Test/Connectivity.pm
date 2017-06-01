@@ -7,7 +7,7 @@ use warnings;
 
 use 5.014002;
 
-use Zonemaster;
+use Zonemaster::Engine;
 use Zonemaster::Engine::Util;
 use Zonemaster::Engine::TestMethods;
 use Zonemaster::Engine::Constants qw[:ip];
@@ -24,13 +24,13 @@ sub all {
     my ( $class, $zone ) = @_;
     my @results;
 
-    if ( Zonemaster->config->should_run( 'connectivity01' ) ) {
+    if ( Zonemaster::Engine->config->should_run( 'connectivity01' ) ) {
         push @results, $class->connectivity01( $zone );
     }
-    if ( Zonemaster->config->should_run( 'connectivity02' ) ) {
+    if ( Zonemaster::Engine->config->should_run( 'connectivity02' ) ) {
         push @results, $class->connectivity02( $zone );
     }
-    if ( Zonemaster->config->should_run( 'connectivity03' ) ) {
+    if ( Zonemaster::Engine->config->should_run( 'connectivity03' ) ) {
         push @results, $class->connectivity03( $zone );
     }
 
@@ -128,7 +128,7 @@ sub connectivity01 {
       my $local_ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) }, @{ Zonemaster::Engine::TestMethods->method5( $zone ) } )
     {
 
-        if ( not Zonemaster->config->ipv6_ok and $local_ns->address->version == $IP_VERSION_6 ) {
+        if ( not Zonemaster::Engine->config->ipv6_ok and $local_ns->address->version == $IP_VERSION_6 ) {
             push @results,
               info(
                 IPV6_DISABLED => {
@@ -140,7 +140,7 @@ sub connectivity01 {
             next;
         }
 
-        if ( not Zonemaster->config->ipv4_ok and $local_ns->address->version == $IP_VERSION_4 ) {
+        if ( not Zonemaster::Engine->config->ipv4_ok and $local_ns->address->version == $IP_VERSION_4 ) {
             push @results,
               info(
                 IPV4_DISABLED => {
@@ -192,7 +192,7 @@ sub connectivity02 {
       my $local_ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) }, @{ Zonemaster::Engine::TestMethods->method5( $zone ) } )
     {
 
-        if ( not Zonemaster->config->ipv6_ok and $local_ns->address->version == $IP_VERSION_6 ) {
+        if ( not Zonemaster::Engine->config->ipv6_ok and $local_ns->address->version == $IP_VERSION_6 ) {
             push @results,
               info(
                 IPV6_DISABLED => {
@@ -204,7 +204,7 @@ sub connectivity02 {
             next;
         }
 
-        if ( not Zonemaster->config->ipv4_ok and $local_ns->address->version == $IP_VERSION_4 ) {
+        if ( not Zonemaster::Engine->config->ipv4_ok and $local_ns->address->version == $IP_VERSION_4 ) {
             push @results,
               info(
                 IPV4_DISABLED => {

@@ -8,7 +8,7 @@ use warnings;
 use Time::HiRes qw[time];
 use JSON::PP;
 use Moose;
-use Zonemaster;
+use Zonemaster::Engine;
 
 use overload '""' => \&string;
 
@@ -43,7 +43,7 @@ sub _build_trace {
     #        0          1      2            3         4           5          6            7       8         9         10
     # $package, $filename, $line, $subroutine, $hasargs, $wantarray, $evaltext, $is_require, $hints, $bitmask, $hinthash
     while ( my @line = caller( $i++ ) ) {
-        next unless index( $line[3], 'Zonemaster' ) == 0;
+        next unless index( $line[3], 'Zonemaster::Engine' ) == 0;
         push @trace, [ @line[ 0, 3 ] ];
     }
 
@@ -68,8 +68,8 @@ sub _build_level {
     my ( $self ) = @_;
     my $string;
 
-    if ( Zonemaster->config->policy->{ $self->module }{ $self->tag } ) {
-        $string = uc Zonemaster->config->policy->{ $self->module }{ $self->tag };
+    if ( Zonemaster::Engine->config->policy->{ $self->module }{ $self->tag } ) {
+        $string = uc Zonemaster::Engine->config->policy->{ $self->module }{ $self->tag };
     }
     else {
         $string = 'DEBUG';
@@ -151,7 +151,7 @@ Zonemaster::Engine::Logger::Entry - module for single log entries
 
 =head1 SYNOPSIS
 
-    Zonemaster->logger->add( TAG => { some => 'arguments' });
+    Zonemaster::Engine->logger->add( TAG => { some => 'arguments' });
 
 There should never be a need to create a log entry object in isolation. They should always be associated with and created via a logger object.
 

@@ -11,7 +11,7 @@ use warnings;
 
 use 5.014002;
 
-use Zonemaster;
+use Zonemaster::Engine;
 use Zonemaster::Engine::Util;
 
 ###
@@ -22,7 +22,7 @@ sub all {
     my ( $class, $zone ) = @_;
     my @results;
 
-    push @results, $class->placeholder if Zonemaster->config->should_run( 'placeholder' );
+    push @results, $class->placeholder if Zonemaster::Engine->config->should_run( 'placeholder' );
 
     return @results;
 }

@@ -9,7 +9,7 @@ use Moose;
 use JSON::PP;
 use Zonemaster::Engine::Util;
 use Zonemaster::Engine::Net::IP;
-use Zonemaster;
+use Zonemaster::Engine;
 
 my $seed_data;
 
@@ -27,7 +27,7 @@ sub recurse {
     $type  //= 'A';
     $class //= 'IN';
 
-    Zonemaster->logger->add( RECURSE => { name => $name, type => $type, class => $class } );
+    Zonemaster::Engine->logger->add( RECURSE => { name => $name, type => $type, class => $class } );
 
     if ( exists $recurse_cache{$name}{$type}{$class} ) {
         return $recurse_cache{$name}{$type}{$class};
@@ -101,7 +101,7 @@ sub _recurse {
     while ( my $ns = pop @{ $state->{ns} } ) {
         my $nsname    = $ns->can( 'name' )    ? q{} . $ns->name  : q{};
         my $nsaddress = $ns->can( 'address' ) ? $ns->address->ip : q{};
-        Zonemaster->logger->add(
+        Zonemaster::Engine->logger->add(
             RECURSE_QUERY => {
                 source  => "$ns",
                 ns      => $nsname,

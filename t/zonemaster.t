@@ -3,23 +3,23 @@ use Test::Fatal;
 use File::Temp qw[:POSIX];
 
 BEGIN {
-    use_ok( 'Zonemaster' );
+    use_ok( 'Zonemaster::Engine' );
     use_ok( 'Zonemaster::Engine::Test' );
     use_ok( 'Zonemaster::Engine::Nameserver' );
     use_ok( 'Zonemaster::Engine::Exception' );
 }
 
-is( exception { Zonemaster->reset(); }, undef, 'No crash on instant reset.');
+is( exception { Zonemaster::Engine->reset(); }, undef, 'No crash on instant reset.');
 
 my $datafile = q{t/zonemaster.data};
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die q{Stored data file missing} if not -r $datafile;
     Zonemaster::Engine::Nameserver->restore( $datafile );
-    Zonemaster->config->no_network( 1 );
+    Zonemaster::Engine->config->no_network( 1 );
 }
 
-isa_ok( Zonemaster->logger, 'Zonemaster::Engine::Logger' );
-isa_ok( Zonemaster->config, 'Zonemaster::Engine::Config' );
+isa_ok( Zonemaster::Engine->logger, 'Zonemaster::Engine::Logger' );
+isa_ok( Zonemaster::Engine->config, 'Zonemaster::Engine::Config' );
 
 my %module = map { $_ => 1 } Zonemaster::Engine::Test->modules;
 
@@ -28,10 +28,10 @@ ok( $module{Delegation},   'Delegation' );
 ok( $module{Syntax},       'Syntax' );
 ok( $module{Connectivity}, 'Connectivity' );
 
-my %methods = Zonemaster->all_methods;
+my %methods = Zonemaster::Engine->all_methods;
 ok( exists( $methods{Basic} ), 'all_methods' );
 
-my @tags = Zonemaster->all_tags;
+my @tags = Zonemaster::Engine->all_tags;
 ok( ( grep { /BASIC:HAS_NAMESERVERS/ } @tags ), 'all_tags' );
 
 my $disabled           = 0;
@@ -39,7 +39,7 @@ my $dependency_version = 0;
 my $global_version     = 0;
 %module = ();
 %end    = ();
-Zonemaster->logger->callback(
+Zonemaster::Engine->logger->callback(
     sub {
         my ( $e ) = shift;
 
@@ -65,7 +65,7 @@ Zonemaster->logger->callback(
 
     }
 );
-my @results = Zonemaster->test_zone( 'nic.se' );
+my @results = Zonemaster::Engine->test_zone( 'nic.se' );
 
 ok( $global_version,     "Global version: $global_version" );
 ok( $dependency_version, 'At least one dependency version logged' );
@@ -93,62 +93,62 @@ ok( $end{'Zonemaster::Engine::Test::Zone'},         'Zonemaster::Engine::Test::Z
 ok( $disabled, 'Blocking of disabled module was logged.' );
 
 my $filename = tmpnam();
-Zonemaster->save_cache( $filename );
-my $save_entry = Zonemaster->logger->entries->[-1];
-Zonemaster->preload_cache( $filename );
-my $restore_entry = Zonemaster->logger->entries->[-1];
+Zonemaster::Engine->save_cache( $filename );
+my $save_entry = Zonemaster::Engine->logger->entries->[-1];
+Zonemaster::Engine->preload_cache( $filename );
+my $restore_entry = Zonemaster::Engine->logger->entries->[-1];
 is( $save_entry->tag,             'SAVED_NS_CACHE',    'Saving worked.' );
 is( $save_entry->args->{file},    $filename,           'To the right file name.' );
 is( $restore_entry->tag,          'RESTORED_NS_CACHE', 'Restoring worked.' );
 is( $restore_entry->args->{file}, $filename,           'From the right file name.' );
 unlink( $filename );
 
-Zonemaster->test_module( 'gurksallad', 'nic.se' );
-is( Zonemaster->logger->entries->[-1]->tag, 'UNKNOWN_MODULE', 'Proper message for unknown module' );
+Zonemaster::Engine->test_module( 'gurksallad', 'nic.se' );
+is( Zonemaster::Engine->logger->entries->[-1]->tag, 'UNKNOWN_MODULE', 'Proper message for unknown module' );
 
-Zonemaster->test_method( 'gurksallad', 'nic.se' );
-is( Zonemaster->logger->entries->[-1]->tag, 'UNKNOWN_MODULE', 'Proper message for unknown module' );
+Zonemaster::Engine->test_method( 'gurksallad', 'nic.se' );
+is( Zonemaster::Engine->logger->entries->[-1]->tag, 'UNKNOWN_MODULE', 'Proper message for unknown module' );
 
-Zonemaster->test_method( 'basic', 'basic17' );
-is( Zonemaster->logger->entries->[-1]->tag, 'UNKNOWN_METHOD', 'Proper message for unknown method' );
+Zonemaster::Engine->test_method( 'basic', 'basic17' );
+is( Zonemaster::Engine->logger->entries->[-1]->tag, 'UNKNOWN_METHOD', 'Proper message for unknown method' );
 
 # Test exceptions in callbacks
-Zonemaster->logger->callback(
+Zonemaster::Engine->logger->callback(
     sub {
         my ( $e ) = @_;
         return if ( $e->module eq 'SYSTEM' or $e->module eq 'BASIC' );
         die Zonemaster::Engine::Exception->new( { message => 'canary' } );
     }
 );
-isa_ok( exception { Zonemaster->test_zone( 'nic.se' ) }, 'Zonemaster::Engine::Exception' );
-isa_ok( exception { Zonemaster->test_module( 'SyNtAx', 'nic.se' ) }, 'Zonemaster::Engine::Exception' );
-isa_ok( exception { Zonemaster->test_method( 'Syntax', 'syntax01', 'nic.se' ) }, 'Zonemaster::Engine::Exception' );
-Zonemaster->logger->clear_callback;
+isa_ok( exception { Zonemaster::Engine->test_zone( 'nic.se' ) }, 'Zonemaster::Engine::Exception' );
+isa_ok( exception { Zonemaster::Engine->test_module( 'SyNtAx', 'nic.se' ) }, 'Zonemaster::Engine::Exception' );
+isa_ok( exception { Zonemaster::Engine->test_method( 'Syntax', 'syntax01', 'nic.se' ) }, 'Zonemaster::Engine::Exception' );
+Zonemaster::Engine->logger->clear_callback;
 
-Zonemaster->config->ipv4_ok( 0 );
-Zonemaster->config->ipv6_ok( 0 );
-my ( $msg ) = Zonemaster->test_zone( 'nic.se' );
+Zonemaster::Engine->config->ipv4_ok( 0 );
+Zonemaster::Engine->config->ipv6_ok( 0 );
+my ( $msg ) = Zonemaster::Engine->test_zone( 'nic.se' );
 ok( !!$msg, 'Got a message.' );
 is( $msg->tag, 'NO_NETWORK', 'It is the right message.' );
 
-( $msg ) = Zonemaster->test_module( 'Basic', 'nic.se' );
+( $msg ) = Zonemaster::Engine->test_module( 'Basic', 'nic.se' );
 ok( !!$msg, 'Got a message.' );
 is( $msg->tag, 'NO_NETWORK', 'It is the right message.' );
 
-( $msg ) = Zonemaster->test_method( 'Basic', 'basic01', 'nic.se' );
+( $msg ) = Zonemaster::Engine->test_method( 'Basic', 'basic01', 'nic.se' );
 ok( !!$msg, 'Got a message.' );
 is( $msg->tag, 'NO_NETWORK', 'It is the right message.' );
-Zonemaster->config->ipv4_ok( 1 );
-Zonemaster->config->ipv6_ok( 1 );
+Zonemaster::Engine->config->ipv4_ok( 1 );
+Zonemaster::Engine->config->ipv6_ok( 1 );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Nameserver->save( $datafile );
 }
 
-ok( @{ Zonemaster->logger->entries } > 0,                        'There are log entries' );
+ok( @{ Zonemaster::Engine->logger->entries } > 0,                        'There are log entries' );
 ok( scalar( keys( %Zonemaster::Engine::Nameserver::object_cache ) ) > 0, 'There are things in the object cache' );
-Zonemaster->reset;
-ok( @{ Zonemaster->logger->entries } == 0,                        'There are no log entries' );
+Zonemaster::Engine->reset;
+ok( @{ Zonemaster::Engine->logger->entries } == 0,                        'There are no log entries' );
 ok( scalar( keys( %Zonemaster::Engine::Nameserver::object_cache ) ) == 0, 'The object cache is empty' );
 ok( scalar( keys( %Zonemaster::Engine::Nameserver::Cache::object_cache ) ) == 0, 'The packet cache is empty' );
 

@@ -3,7 +3,7 @@ use Test::More;
 use Zonemaster::Engine::Net::IP;
 
 BEGIN {
-    use_ok( q{Zonemaster} );
+    use_ok( q{Zonemaster::Engine} );
     use_ok( q{Zonemaster::Engine::Nameserver} );
     use_ok( q{Zonemaster::Engine::Test::Address} );
 }
@@ -12,7 +12,7 @@ my $datafile = q{t/Test-address.data};
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die "Stored data file missing" if not -r $datafile;
     Zonemaster::Engine::Nameserver->restore( $datafile );
-    Zonemaster->config->no_network( 1 );
+    Zonemaster::Engine->config->no_network( 1 );
 }
 
 
@@ -342,24 +342,24 @@ ok(
 
 my %res;
 
-%res = map { $_->tag => 1 } Zonemaster->test_module( q{address}, q{nic.fr} );
+%res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{address}, q{nic.fr} );
 ok( $res{NAMESERVER_IP_PTR_MISMATCH},  q{Nameserver IP PTR mismatch} );
 ok( $res{NO_IP_PRIVATE_NETWORK},       q{All Nameserver addresses are in the routable public addressing space} );
 ok( $res{NAMESERVERS_IP_WITH_REVERSE}, q{Reverse DNS entry exist for all Nameserver IP addresses} );
 
-%res = map { $_->tag => 1 } Zonemaster->test_module( q{address}, q{address02.zut-root.rd.nic.fr} );
+%res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{address}, q{address02.zut-root.rd.nic.fr} );
 ok( $res{NAMESERVER_IP_WITHOUT_REVERSE}, q{Nameserver IP without PTR} );
 
-%res = map { $_->tag => 1 } Zonemaster->test_module( q{address}, q{is.se} );
+%res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{address}, q{is.se} );
 ok( $res{NAMESERVER_IP_PTR_MATCH}, q{All reverse DNS entry matches name server name} );
 
-%res = map { $_->tag => 1 } Zonemaster->test_module( q{address}, q{address01.zut-root.rd.nic.fr} );
+%res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{address}, q{address01.zut-root.rd.nic.fr} );
 ok( $res{NAMESERVER_IP_PRIVATE_NETWORK}, q{Nameserver address in non routable public addressing space} );
 
-my $torsasse =  Zonemaster->zone( q{torsas.se} );
-my @res = Zonemaster->test_method( q{Address}, q{address02}, $torsasse );
+my $torsasse =  Zonemaster::Engine->zone( q{torsas.se} );
+my @res = Zonemaster::Engine->test_method( q{Address}, q{address02}, $torsasse );
 ok( !( grep { $_->tag eq 'NAMESERVER_IP_WITHOUT_REVERSE' } @res ), 'Classless in-addr.arpa properly handled when querying PTR.' );
-@res = Zonemaster->test_method( q{Address}, q{address03}, $torsasse );
+@res = Zonemaster::Engine->test_method( q{Address}, q{address03}, $torsasse );
 ok( !( grep { $_->tag eq 'NAMESERVER_IP_WITHOUT_REVERSE' } @res ), 'Classless in-addr.arpa properly handled when querying PTR.' );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
