@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::Connectivity;
 
-use version; our $VERSION = version->declare("v1.0.7");
+use version; our $VERSION = version->declare("v1.0.8");
 
 use strict;
 use warnings;

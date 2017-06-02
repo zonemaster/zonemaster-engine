@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::Zone;
 
-use version; our $VERSION = version->declare("v1.0.2");
+use version; our $VERSION = version->declare("v1.0.3");
 
 use strict;
 use warnings;

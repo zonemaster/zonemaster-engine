@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::Delegation;
 
-use version; our $VERSION = version->declare("v1.0.5");
+use version; our $VERSION = version->declare("v1.0.6");
 
 use strict;
 use warnings;

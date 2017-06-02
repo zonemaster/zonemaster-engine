@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::Example;
 
-use version; our $VERSION = version->declare("v1.0.2");
+use version; our $VERSION = version->declare("v1.0.3");
 
 ###
 ### This test module is meant to serve as an example when writing proper ones.

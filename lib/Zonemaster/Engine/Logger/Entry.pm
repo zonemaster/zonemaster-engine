@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Logger::Entry;
 
-use version; our $VERSION = version->declare("v1.1.3");
+use version; our $VERSION = version->declare("v1.1.4");
 
 use 5.014002;
 use warnings;
