@@ -4,7 +4,7 @@ use 5.14.2;
 use strict;
 use warnings;
 
-use Zonemaster;
+use Zonemaster::Engine;
 use File::Find;
 
 eval { require Pod::Coverage };
@@ -28,7 +28,7 @@ find(
 );
 
 foreach my $name ( @modules ) {
-    next if $name =~ q{Zonemaster::Constants};
+    next if $name =~ q{Zonemaster::Engine::Constants};
     my $pc = Pod::Coverage->new( package => $name , private => [ qr/^_/ ] );
     if ( defined $pc->coverage ) {
         my @uncovered = $pc->uncovered;

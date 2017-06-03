@@ -3,9 +3,9 @@
 use 5.14.2;
 use warnings;
 
-use Zonemaster::Translator;
+use Zonemaster::Engine::Translator;
 
-my $data = Zonemaster::Translator->new->data;
+my $data = Zonemaster::Engine::Translator->new->data;
 
 print<<'PRELUDE';
 msgid ""

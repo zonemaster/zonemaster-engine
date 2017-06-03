@@ -5,7 +5,7 @@ module. For an overview of the Zonemaster components, please see the
 [Zonemaster repository](https://github.com/dotse/zonemaster).
 
 >
-> The Engine Perl module name is 'Zonemaster'.
+> The Engine Perl module name is 'Zonemaster::Engine'.
 >
 
 
@@ -42,7 +42,7 @@ sudo apt-get install build-essential libfile-slurp-perl libjson-pp-perl liblist-
 3) Install the Zonemaster engine
 
 ```sh
-sudo cpan -i Zonemaster
+sudo cpan -i Zonemaster::Engine
 ```
 
 If necessary, answer any questions from the cpan script by accepting the default
@@ -71,7 +71,7 @@ cpan -i Net::IP Net::LDNS
 4) Install the Zonemaster engine
 
 ```sh
-cpan -i Zonemaster
+cpan -i Zonemaster::Engine
 ```
 
 If necessary, answer any questions from the cpan script by accepting the default
@@ -104,7 +104,7 @@ sudo cpan -i Hash::Merge Net::IP::XS Net::LDNS Moose
 4) Install the Zonemaster Engine
 
 ```sh
-sudo cpan -i Zonemaster
+sudo cpan -i Zonemaster::Engine
 ```
 
 If necessary, answer any questions from the cpan script by accepting the default value (just press enter).
@@ -115,7 +115,7 @@ If necessary, answer any questions from the cpan script by accepting the default
 Make sure Zonemaster Engine was properly installed.
 
 ```sh
-time perl -MZonemaster -e 'print scalar Zonemaster->test_zone("zonemaster.net"), "\n"'
+time perl -MZonemaster::Engine -e 'print scalar Zonemaster::Engine->test_zone("zonemaster.net"), "\n"'
 ```
 
 The command is expected to take very roughly 15 seconds and print a number

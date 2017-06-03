@@ -5,25 +5,25 @@ use strict;
 use warnings;
 use List::Util qw[max];
 
-use Zonemaster::Nameserver;
-use Zonemaster::Util;
-BEGIN { use_ok( 'Zonemaster::Recursor' ) }
+use Zonemaster::Engine::Nameserver;
+use Zonemaster::Engine::Util;
+BEGIN { use_ok( 'Zonemaster::Engine::Recursor' ) }
 
 my $datafile = 't/recursor.data';
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die "Stored data file missing" if not -r $datafile;
-    Zonemaster::Nameserver->restore( $datafile );
-    Zonemaster->config->no_network( 1 );
+    Zonemaster::Engine::Nameserver->restore( $datafile );
+    Zonemaster::Engine->config->no_network( 1 );
 }
 
-my $p = Zonemaster::Recursor->recurse( 'www.iis.se' );
-isa_ok( $p, 'Zonemaster::Packet' );
+my $p = Zonemaster::Engine::Recursor->recurse( 'www.iis.se' );
+isa_ok( $p, 'Zonemaster::Engine::Packet' );
 ok( $p->answer > 0, 'answer records' );
 my ( $rr ) = $p->answer;
 is( name( $rr->name ), 'www.iis.se', 'RR name ok' );
 
-my $p2 = Zonemaster::Recursor->recurse( 'www.wiccainfo.se' );
-isa_ok( $p2, 'Zonemaster::Packet' );
+my $p2 = Zonemaster::Engine::Recursor->recurse( 'www.wiccainfo.se' );
+isa_ok( $p2, 'Zonemaster::Engine::Packet' );
 is( scalar( $p2->answer ), 2, 'answer records' );
 
 is_parent( 'iis.se',                                                                   'se' );
@@ -41,26 +41,26 @@ is_parent( 'melbourneit.com.au',                                                
 sub is_parent {
     my ( $name, $pname ) = @_;
 
-    my $pn = Zonemaster::Recursor->parent( $name );
+    my $pn = Zonemaster::Engine::Recursor->parent( $name );
     is( $pn, $pname, "parent for $name is $pn" );
 }
 
-my ( $name, $packet ) = Zonemaster::Recursor->parent( 'www.iis.se' );
-isa_ok( $packet, 'Zonemaster::Packet' );
+my ( $name, $packet ) = Zonemaster::Engine::Recursor->parent( 'www.iis.se' );
+isa_ok( $packet, 'Zonemaster::Engine::Packet' );
 is( $name, 'iis.se', 'name ok' );
 ok( $packet->no_such_record, 'expected packet content' );
 
-my @addr = Zonemaster::Recursor->get_addresses_for( 'ns.nic.se' );
-isa_ok( $_, 'Zonemaster::Net::IP' ) for @addr;
+my @addr = Zonemaster::Engine::Recursor->get_addresses_for( 'ns.nic.se' );
+isa_ok( $_, 'Zonemaster::Engine::Net::IP' ) for @addr;
 is( $addr[0]->short, '212.247.7.228',      'expected address' );
 is( $addr[1]->short, '2a00:801:f0:53::53', 'expected address' );
 
-my $ns_count    = Zonemaster::Nameserver->all_known_nameservers;
-my $cache_count = keys %Zonemaster::Nameserver::Cache::object_cache;
+my $ns_count    = Zonemaster::Engine::Nameserver->all_known_nameservers;
+my $cache_count = keys %Zonemaster::Engine::Nameserver::Cache::object_cache;
 ok( $cache_count < $ns_count, 'Fewer cache than ns' );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
-    Zonemaster::Nameserver->save( $datafile );
+    Zonemaster::Engine::Nameserver->save( $datafile );
 }
 
 done_testing;

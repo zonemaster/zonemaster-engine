@@ -1,10 +1,10 @@
 use Test::More;
 
-BEGIN { use_ok( 'Zonemaster::Util' ) }
+BEGIN { use_ok( 'Zonemaster::Engine::Util' ) }
 
-isa_ok( ns( 'name', '::1' ), 'Zonemaster::Nameserver' );
-isa_ok( info( 'TAG', {} ), 'Zonemaster::Logger::Entry' );
-isa_ok( name( "foo.bar.com" ), 'Zonemaster::DNSName' );
+isa_ok( ns( 'name', '::1' ), 'Zonemaster::Engine::Nameserver' );
+isa_ok( info( 'TAG', {} ), 'Zonemaster::Engine::Logger::Entry' );
+isa_ok( name( "foo.bar.com" ), 'Zonemaster::Engine::DNSName' );
 
 my $dref = pod_extract_for( 'DNSSEC' );
 isa_ok( $dref, 'HASH' );

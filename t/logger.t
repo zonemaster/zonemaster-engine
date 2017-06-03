@@ -2,37 +2,37 @@ use Test::More;
 use Test::Fatal;
 
 BEGIN {
-    use_ok( 'Zonemaster::Logger' );
-    use_ok( 'Zonemaster::Logger::Entry' );
-    use_ok( 'Zonemaster::Exception' );
+    use_ok( 'Zonemaster::Engine::Logger' );
+    use_ok( 'Zonemaster::Engine::Logger::Entry' );
+    use_ok( 'Zonemaster::Engine::Exception' );
 }
-use Zonemaster::Util;
+use Zonemaster::Engine::Util;
 
-my $log = Zonemaster->logger;
+my $log = Zonemaster::Engine->logger;
 
-isa_ok( $log, 'Zonemaster::Logger' );
+isa_ok( $log, 'Zonemaster::Engine::Logger' );
 
 $log->add( 'TAG', { seventeen => 17 } );
 
 # Make sure all our policy comes from our config file.
-$Zonemaster::Config::policy = {};
-Zonemaster->config->load_policy_file( 't/policy.json' );
+$Zonemaster::Engine::Config::policy = {};
+Zonemaster::Engine->config->load_policy_file( 't/policy.json' );
 
 my $e = $log->entries->[-1];
-isa_ok( $e, 'Zonemaster::Logger::Entry' );
+isa_ok( $e, 'Zonemaster::Engine::Logger::Entry' );
 is( $e->module, 'SYSTEM', 'module ok' );
 is( $e->tag,    'TAG',    'tag ok' );
 is_deeply( $e->args, { seventeen => 17 }, 'args ok' );
 
 my $entry = info( 'TEST', { an => 'argument' } );
-isa_ok( $entry, 'Zonemaster::Logger::Entry' );
+isa_ok( $entry, 'Zonemaster::Engine::Logger::Entry' );
 
-ok( scalar( @{ Zonemaster->logger->entries } ) >= 2, 'expected number of entries' );
+ok( scalar( @{ Zonemaster::Engine->logger->entries } ) >= 2, 'expected number of entries' );
 
 like( "$entry", qr/SYSTEM:TEST an=argument/, 'stringification overload' );
 
 is( $entry->level, 'DEBUG', 'right level' );
-my $example = Zonemaster::Logger::Entry->new( { module => 'BASIC', tag => 'NS_FAILED' } );
+my $example = Zonemaster::Engine::Logger::Entry->new( { module => 'BASIC', tag => 'NS_FAILED' } );
 is( $example->level,         'ERROR', 'expected level' );
 is( $example->numeric_level, 4,       'expected numeric level' );
 
@@ -40,7 +40,7 @@ my $canary = 0;
 $log->callback(
     sub {
         my ( $e ) = @_;
-        isa_ok( $e, 'Zonemaster::Logger::Entry' );
+        isa_ok( $e, 'Zonemaster::Engine::Logger::Entry' );
         is( $e->tag, 'CALLBACK', 'expected tag in callback' );
         $canary = $e->args->{canary};
     }
@@ -55,17 +55,17 @@ ok( $res{LOGGER_CALLBACK_ERROR}, 'Callback crash logged' );
 ok( $res{DO_CRASH},              'DO_CRASH got logged anyway' );
 ok( !$log->callback,             'Callback got removed' );
 
-$log->callback( sub { die Zonemaster::Exception->new( { message => 'canary' } ) } );
+$log->callback( sub { die Zonemaster::Engine::Exception->new( { message => 'canary' } ) } );
 eval { $log->add( DO_NOT_CRASH => {} ) };
 my $err = $@;
 %res = map { $_->tag => 1 } @{ $log->entries };
 ok( $res{DO_NOT_CRASH}, 'DO_NOT_CRASH got logged' );
 ok( $log->callback,     'Callback still there' );
-isa_ok( $err, 'Zonemaster::Exception' );
+isa_ok( $err, 'Zonemaster::Engine::Exception' );
 is( "$err", 'canary' );
 $log->clear_callback;
 
-ok( Zonemaster->config->load_config_file( 't/config.json' ), 'config loaded' );
+ok( Zonemaster::Engine->config->load_config_file( 't/config.json' ), 'config loaded' );
 $log->add( FILTER_THIS => { when => 1, and => 'this' } );
 my $filtered = $log->entries->[-1];
 $log->add( FILTER_THIS => { when => 1, and => 'or' } );
@@ -77,7 +77,7 @@ is( $not_filtered->level,  'DEBUG', 'Unfiltered level' );
 is( $filtered->level,      'INFO',  'Filtered level' );
 is( $also_filtered->level, 'INFO',  'Filtered level' );
 
-my %levels = Zonemaster::Logger::Entry->levels;
+my %levels = Zonemaster::Engine::Logger::Entry->levels;
 is( $levels{CRITICAL}, 5, 'CRITICAL is level 5' );
 is( $levels{INFO},     1, 'INFO is level 1' );
 
@@ -92,8 +92,8 @@ qr[[{"args":{"exception":"in callback at t/logger.t line 47, <DATA> line 1.\n"},
     'JSON looks OK'
 );
 
-Zonemaster->config->policy->{BASIC}{NS_FAILED} = 'GURKSALLAD';
-my $fail = Zonemaster::Logger::Entry->new( { module => 'BASIC', tag => 'NS_FAILED' } );
+Zonemaster::Engine->config->policy->{BASIC}{NS_FAILED} = 'GURKSALLAD';
+my $fail = Zonemaster::Engine::Logger::Entry->new( { module => 'BASIC', tag => 'NS_FAILED' } );
 like( exception { $fail->level }, qr/Unknown level string: GURKSALLAD/, 'Dies on unknown level string' );
 
 done_testing;

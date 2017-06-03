@@ -28,12 +28,12 @@ the F<extract_po.pl> script as descibed in the next section.
 
 =head1 FOR TRANSLATORS
 
-The translation files live in the subdirectory F<share> in the L<Zonemaster>
+The translation files live in the subdirectory F<share> in the L<Zonemaster::Engine>
 source directory, and are named as C<{language_code}.po> (for example,
 F<en.po>, F<sv.po> or F<fr.po>). The master file is F<en.po>. All other
 translations should be based on that file, and that file should never be
 edited. It is produced by running the script F<util/extract_po.pl>, which will
-walk through all installed L<Zonemaster> test modules, pull out their provided
+walk through all installed L<Zonemaster::Engine> test modules, pull out their provided
 English translations and make these into a valid C<po> file. This should only
 be necessary to do when a developer has added or changed a test module. If the
 new code is installed, just running the script works. If the new code has not
