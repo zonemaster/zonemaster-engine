@@ -54,11 +54,15 @@ zone_gives( 'dnssec11', $zone, ['DELEGATION_NOT_SIGNED'] );
 $zone = Zonemaster::Engine->zone( 'dnssec07-ds-but-not-dnskey.zut-root.rd.nic.fr' );
 zone_gives( 'dnssec11', $zone, ['DELEGATION_NOT_SIGNED'] );
 
-$zone = Zonemaster::Engine->zone( 'dnssec08-dnskey-not-signed.zut-root.rd.nic.fr' );
+$zone = Zonemaster::Engine->zone( 'dnssec08-no-keys-or-no-sigs-1.zut-root.rd.nic.fr.' );
 zone_gives( 'dnssec11', $zone, ['DELEGATION_NOT_SIGNED'] );
 
-$zone = Zonemaster::Engine->zone( 'dnssec08-dnskey-signature-not-ok.zut-root.rd.nic.fr' );
-zone_gives( 'dnssec11', $zone, ['DELEGATION_NOT_SIGNED'] );
+SKIP: {
+    skip "Need to configure another zone for this test case.", 1;
+
+    $zone = Zonemaster::Engine->zone( 'dnssec08-dnskey-signature-not-ok.zut-root.rd.nic.fr' );
+    zone_gives( 'dnssec11', $zone, ['DELEGATION_NOT_SIGNED'] );
+}
 
 $zone = Zonemaster::Engine->zone( 'rsa4096.nxdomain.se' );
 zone_gives_not( 'dnssec03', $zone, ['TOO_MANY_ITERATIONS'] );
@@ -68,11 +72,15 @@ zone_gives( 'dnssec11', $zone, ['DELEGATION_SIGNED']);
 zone_gives_not( 'dnssec11', $zone, ['DELEGATION_NOT_SIGNED']);
 
 # dnssec10
-$zone = Zonemaster::Engine->zone( 'wwwyahoo.se' );
-zone_gives( 'dnssec10', $zone, ['INVALID_NAME_RCODE']);
+SKIP: {
+    skip "Need to configure another zone for this test case.", 2;
 
-$zone = Zonemaster::Engine->zone( 'denki.se' );
-zone_gives( 'dnssec10', $zone, ['NSEC3_COVERS_NOT']);
+    $zone = Zonemaster::Engine->zone( 'wwwyahoo.se' );
+    zone_gives( 'dnssec10', $zone, ['INVALID_NAME_RCODE']);
+
+    $zone = Zonemaster::Engine->zone( 'denki.se' );
+    zone_gives( 'dnssec10', $zone, ['NSEC3_COVERS_NOT']);
+}
 
 $zone = Zonemaster::Engine->zone( 'retailacademicsconsulting.se' );
 zone_gives( 'dnssec10', $zone, ['NSEC3_SIG_VERIFY_ERROR']);

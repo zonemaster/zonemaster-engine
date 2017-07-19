@@ -49,10 +49,10 @@ ok( any { $_->tag eq 'REFERRAL_SIZE_OK' } @msg );
 ok( none { $_->tag eq 'MODULE_ERROR' } @msg );
 
 my $nf = Zonemaster::Engine->zone( 'nic.fr' );
-is( scalar( @{ $nf->glue_names } ), 6, 'All glue names' );
-is( scalar( @{ $nf->glue } ),       11, 'All glue objects' );
-is( scalar( @{ $nf->ns_names } ),   6, 'All NS names' );
-is( scalar( @{ $nf->ns } ),         11, 'All NS objects' );
+is( scalar( @{ $nf->glue_names } ), 5, 'All glue names' );
+is( scalar( @{ $nf->glue } ),       9, 'All glue objects' );
+is( scalar( @{ $nf->ns_names } ),   5, 'All NS names' );
+is( scalar( @{ $nf->ns } ),         9, 'All NS objects' );
 
 my $rootfr = Zonemaster::Engine->zone( 'root.fr' );
 @res = Zonemaster::Engine->test_method( 'DNSSEC', 'dnssec02', $rootfr );

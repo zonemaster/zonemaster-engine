@@ -34,10 +34,6 @@ Zonemaster::Engine->config->load_policy_file( 't/policies/Test-consistency-all.j
 my @res;
 my %res;
 
-%res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{consistency}, q{zft-sandoche.rd.nic.fr} );
-ok( $res{MULTIPLE_NS_SET}, q{Saw several NS set} );
-ok( $res{NS_SET},          q{NS set details} );
-
 %res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{consistency}, q{consistency01.zut-root.rd.nic.fr} );
 ok( $res{SOA_SERIAL_VARIATION}, q{Big variation between multiple SOA serials} );
 ok( $res{MULTIPLE_SOA_SERIALS}, q{Multiple SOA serials} );
@@ -51,6 +47,10 @@ ok( $res{SOA_RNAME},           q{SOA rname details} );
 %res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{consistency}, q{consistency03.zut-root.rd.nic.fr} );
 ok( $res{MULTIPLE_SOA_TIME_PARAMETER_SET}, q{Multiple SOA time parameters} );
 ok( $res{SOA_TIME_PARAMETER_SET},          q{SOA time parameters details} );
+
+%res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{consistency}, q{consistency04.zut-root.rd.nic.fr} );
+ok( $res{MULTIPLE_NS_SET}, q{Saw several NS set} );
+ok( $res{NS_SET},          q{NS set details} );
 
 %res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{consistency}, q{afnic.fr} );
 ok( $res{ONE_SOA_SERIAL},             q{One SOA serial} );

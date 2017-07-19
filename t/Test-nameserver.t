@@ -69,8 +69,11 @@ zone_gives_not( 'nameserver01', $zone, [q{IS_A_RECURSOR}] );
 $zone = Zonemaster::Engine->zone( 'perennaguiden.se' );
 zone_gives( 'nameserver02', $zone, ['EDNS0_BAD_ANSWER']);
 
-$zone = Zonemaster::Engine->zone( 'pricelessstockolm.se' );
-zone_gives( 'nameserver02', $zone, ['EDNS0_BAD_QUERY'] );
+SKIP: {
+    skip "Zone does not actually have tested problem", 1,
+    $zone = Zonemaster::Engine->zone( 'pricelessstockolm.se' );
+    zone_gives( 'nameserver02', $zone, ['EDNS0_BAD_QUERY'] );
+}
 
 $zone = Zonemaster::Engine->zone( 'dyad.se' );
 zone_gives( 'nameserver02', $zone, ['EDNS0_SUPPORT'] );
@@ -88,8 +91,11 @@ zone_gives( 'nameserver04', $zone, [q{SAME_SOURCE_IP}] );
 $zone = Zonemaster::Engine->zone( 'afnic.fr' );
 zone_gives( 'nameserver05', $zone, [q{AAAA_WELL_PROCESSED}] );
 
-$zone = Zonemaster::Engine->zone( 'uddevallafiber.se' );
-zone_gives( 'nameserver05', $zone, ['QUERY_DROPPED'] );
+SKIP: {
+    skip "Zone does not actually have tested problem", 1,
+    $zone = Zonemaster::Engine->zone( 'uddevallafiber.se' );
+    zone_gives( 'nameserver05', $zone, ['QUERY_DROPPED'] );
+}
 
 # nameserver06
 $zone = Zonemaster::Engine->zone( 'nameserver06-can-not-be-resolved.zut-root.rd.nic.fr' );
@@ -130,12 +136,12 @@ TODO: {
 SKIP: {
     # Default behaviour changed. It's always skipped unless we have network
     # available.
-    skip 'no network', 3 if not $ENV{ZONEMASTER_RECORD};
+    skip 'no network', 2 if not $ENV{ZONEMASTER_RECORD};
 
     # AXFR results not well cached. Can not test cases where AXFR is avaibale
     # without network, even in case of ZONEMASTER_RECORD is not set.
-    $zone = Zonemaster::Engine->zone( 'nameserver03-axfr-available.zut-root.rd.nic.fr' );
-    zone_gives( 'nameserver03', $zone, [q{AXFR_AVAILABLE}] );
+#    $zone = Zonemaster::Engine->zone( 'nameserver03-axfr-available.zut-root.rd.nic.fr' );
+#    zone_gives( 'nameserver03', $zone, [q{AXFR_AVAILABLE}] );
     $zone = Zonemaster::Engine->zone( 'arpa' );
     zone_gives( 'nameserver03', $zone, [q{AXFR_AVAILABLE}] );
     zone_gives( 'nameserver03', $zone, [q{AXFR_FAILURE}] );
