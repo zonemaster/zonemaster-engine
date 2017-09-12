@@ -646,7 +646,7 @@ msgid  "None of the following nameservers is a recursor : {names}."
 msgstr "Ingen av följande namnservrar är en rekursiv resolver: {names}."
 
 #: NAMESERVER:RECURSIVITY_UNDEF
-msgid  "Can not determine nameservers recursivity."
+msgid  "None of the following nameservers is a recursor : {names}."
 msgstr "Det går inte att fastställa om namnservern är en rekursiv resolver eller inte."
 
 #: NAMESERVER:NO_RESOLUTION

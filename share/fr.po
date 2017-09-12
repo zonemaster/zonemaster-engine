@@ -643,8 +643,8 @@ msgid  "None of the following nameservers is a recursor : {names}."
 msgstr "Aucun des serveurs de noms suivants n'est récursif : {names}."
 
 #: NAMESERVER:RECURSIVITY_UNDEF
-msgid  "Can not determine nameservers recursivity."
-msgstr "Impossible de déterminer si les serveurs sont récursifs ou non."
+msgid  "Can not determine recursivity of the following nameservers : {names}."
+msgstr "Impossible de déterminer si les serveurs suivants sont récursifs ou non : {names}."
 
 #: NAMESERVER:QUERY_DROPPED
 msgid  "Nameserver {ns}/{address} dropped AAAA query."

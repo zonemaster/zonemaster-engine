@@ -141,7 +141,7 @@ sub translation {
         'QUERY_DROPPED'       => 'Nameserver {ns}/{address} dropped AAAA query.',
         'IS_A_RECURSOR'       => 'Nameserver {ns}/{address} is a recursor.',
         'NO_RECURSOR'         => 'None of the following nameservers is a recursor : {names}.',
-        'RECURSIVITY_UNDEF'   => 'Can not determine nameservers recursivity.',
+        'RECURSIVITY_UNDEF'   => 'Can not determine recursivity of the following nameservers : {names}.',
         'ANSWER_BAD_RCODE'    => 'Nameserver {ns}/{address} answered AAAA query with an unexpected rcode ({rcode}).',
         'EDNS0_BAD_ANSWER'    => 'Nameserver {ns}/{address} does not support EDNS0 (OPT not set in reply).',
         'EDNS0_SUPPORT'       => 'The following nameservers support EDNS0 : {names}.',
@@ -305,7 +305,9 @@ sub nameserver01 {
         if ( not grep { $_->tag eq q{IS_A_RECURSOR} } @results and not grep { $_->tag eq q{NO_RECURSOR} } @results ) {
             push @results,
               info(
-                RECURSIVITY_UNDEF => {}
+                RECURSIVITY_UNDEF => {
+                    names => join( q{,}, sort keys %nsnames ),
+                }
               );
         }
     }
