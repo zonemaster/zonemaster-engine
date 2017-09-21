@@ -65,7 +65,7 @@ pkg install libidn p5-Devel-CheckLib p5-MIME-Base64 p5-Test-Fatal p5-JSON-PP p5-
 3) Install the CPAN modules
 
 ```sh
-cpan -i Net::IP Net::LDNS
+cpan -i Net::IP Zonemaster::LDNS
 ```
 
 4) Install the Zonemaster engine
@@ -98,7 +98,7 @@ For the first and third, the default responses are fine. For the second, answer
 "sudo" (the default is "local::lib", which you do not want).
 
 ```sh
-sudo cpan -i Hash::Merge Net::IP::XS Net::LDNS Moose
+sudo cpan -i Hash::Merge Net::IP::XS Zonemaster::LDNS Moose
 ```
 
 4) Install the Zonemaster Engine

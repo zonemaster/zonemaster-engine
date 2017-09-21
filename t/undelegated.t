@@ -50,7 +50,7 @@ my $lys = Zonemaster::Engine->zone( 'lysator.liu.se' );
 my $ds_p = $lys->parent->query_one( 'lysator.liu.se', 'DS' );
 isa_ok( $ds_p, 'Zonemaster::Engine::Packet' );
 my ( $ds ) = $ds_p->answer;
-isa_ok( $ds, 'Net::LDNS::RR::DS' );
+isa_ok( $ds, 'Zonemaster::LDNS::RR::DS' );
 is( $ds->hexdigest, 'faceb00c', 'Correct digest' );
 
 Zonemaster::Engine->logger->clear_history;

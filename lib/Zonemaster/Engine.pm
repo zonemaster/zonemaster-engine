@@ -1,6 +1,6 @@
 package Zonemaster::Engine;
 
-use version; our $VERSION = version->declare("v1.1.1");
+use version; our $VERSION = version->declare("v1.1.2");
 
 use 5.014002;
 use Moose;
@@ -109,7 +109,7 @@ sub add_fake_delegation {
                 );
             }
             else {
-                my @ips = Net::LDNS->new->name2addr($name);
+                my @ips = Zonemaster::LDNS->new->name2addr($name);
                 if ( @ips ) {
                     push @{ $href->{$name} }, @ips;
                 }

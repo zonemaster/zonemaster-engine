@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Nameserver;
 
-use version; our $VERSION = version->declare("v1.1.4");
+use version; our $VERSION = version->declare("v1.1.5");
 
 use 5.014002;
 use Moose;
@@ -13,7 +13,7 @@ use Zonemaster::Engine::Nameserver::Cache;
 use Zonemaster::Engine::Recursor;
 use Zonemaster::Engine::Constants ':misc';
 
-use Net::LDNS;
+use Zonemaster::LDNS;
 
 use Zonemaster::Engine::Net::IP qw(:PROC);
 use Time::HiRes qw[time];
@@ -33,7 +33,7 @@ coerce 'Zonemaster::Engine::Net::IP', from 'Str', via { Zonemaster::Engine::Net:
 has 'name'    => ( is => 'ro', isa => 'Zonemaster::Engine::DNSName', coerce => 1, required => 0 );
 has 'address' => ( is => 'ro', isa => 'Zonemaster::Engine::Net::IP', coerce => 1, required => 1 );
 
-has 'dns'   => ( is => 'ro', isa => 'Net::LDNS',                     lazy_build => 1 );
+has 'dns'   => ( is => 'ro', isa => 'Zonemaster::LDNS',                     lazy_build => 1 );
 has 'cache' => ( is => 'ro', isa => 'Zonemaster::Engine::Nameserver::Cache', lazy_build => 1 );
 has 'times' => ( is => 'ro', isa => 'ArrayRef',                      default    => sub { [] } );
 
@@ -73,7 +73,7 @@ around 'new' => sub {
 sub _build_dns {
     my ( $self ) = @_;
 
-    my $res = Net::LDNS->new( $self->address->ip );
+    my $res = Zonemaster::LDNS->new( $self->address->ip );
     $res->recurse( 0 );
 
     my %defaults = %{ Zonemaster::Engine->config->resolver_defaults };
@@ -132,7 +132,7 @@ sub query {
 
     # Fake a DS answer
     if ( $type eq 'DS' and $class eq 'IN' and $self->fake_ds->{ lc( $name ) } ) {
-        my $p = Net::LDNS::Packet->new( $name, $type, $class );
+        my $p = Zonemaster::LDNS::Packet->new( $name, $type, $class );
         $p->aa( 1 );
         $p->do( $dnssec );
         $p->rd( $recurse );
@@ -147,7 +147,7 @@ sub query {
     # Fake a delegation
     foreach my $fname ( sort keys %{ $self->fake_delegations } ) {
         if ( $name =~ m/([.]|\A)\Q$fname\E\z/xi ) {
-            my $p = Net::LDNS::Packet->new( $name, $type, $class );
+            my $p = Zonemaster::LDNS::Packet->new( $name, $type, $class );
 
             if ( lc( $name ) eq lc( $fname ) and $type eq 'NS' ) {
                 my $name = $self->fake_delegations->{$fname}{authority};
@@ -198,7 +198,7 @@ sub add_fake_delegation {
 
     $domain = q{} . Zonemaster::Engine::DNSName->new( $domain );
     foreach my $name ( keys %{$href} ) {
-        push @{ $delegation{authority} }, Net::LDNS::RR->new( sprintf( '%s IN NS %s', $domain, $name ) );
+        push @{ $delegation{authority} }, Zonemaster::LDNS::RR->new( sprintf( '%s IN NS %s', $domain, $name ) );
         foreach my $ip ( @{ $href->{$name} } ) {
             if ( Zonemaster::Engine::Net::IP->new( $ip )->ip eq $self->address->ip ) {
                 Zonemaster::Engine->logger->add(
@@ -207,7 +207,7 @@ sub add_fake_delegation {
             }
 
             push @{ $delegation{additional} },
-              Net::LDNS::RR->new( sprintf( '%s IN %s %s', $name, ( Zonemaster::Engine::Net::IP::ip_is_ipv6( $ip ) ? 'AAAA' : 'A' ), $ip ) );
+              Zonemaster::LDNS::RR->new( sprintf( '%s IN %s %s', $name, ( Zonemaster::Engine::Net::IP::ip_is_ipv6( $ip ) ? 'AAAA' : 'A' ), $ip ) );
         }
     }
 
@@ -231,7 +231,7 @@ sub add_fake_ds {
     Zonemaster::Engine->logger->add( FAKE_DS => { domain => lc( "$domain" ), data => $aref, ns => "$self" } );
     foreach my $href ( @{$aref} ) {
         push @ds,
-          Net::LDNS::RR->new(
+          Zonemaster::LDNS::RR->new(
             sprintf(
                 '%s IN DS %d %d %d %s',
                 "$domain", $href->{keytag}, $href->{algorithm}, $href->{type}, $href->{digest}
@@ -370,12 +370,12 @@ sub save {
 sub restore {
     my ( $class, $filename ) = @_;
 
-    useall 'Net::LDNS::RR';
+    useall 'Zonemaster::LDNS::RR';
     my $decode = JSON::PP->new->filter_json_single_key_object(
-        'Net::LDNS::Packet' => sub {
+        'Zonemaster::LDNS::Packet' => sub {
             my ( $ref ) = @_;
             ## no critic (Modules::RequireExplicitInclusion)
-            my $obj = Net::LDNS::Packet->new_from_wireformat( decode_base64( $ref->{data} ) );
+            my $obj = Zonemaster::LDNS::Packet->new_from_wireformat( decode_base64( $ref->{data} ) );
             $obj->answerfrom( $ref->{answerfrom} );
             $obj->timestamp( $ref->{timestamp} );
 
@@ -543,7 +543,7 @@ A L<Zonemaster::Engine::Net::IP> object holding the nameserver's address.
 
 =item dns
 
-The L<Net::LDNS> object used to actually send and recieve DNS queries.
+The L<Zonemaster::LDNS> object used to actually send and recieve DNS queries.
 
 =item cache
 
@@ -586,7 +586,7 @@ Remove all cached nameserver objects and queries.
 
 Send a DNS query to the nameserver the object represents. C<$name> and C<$type> are the name and type that will be queried for (C<$type> defaults
 to 'A' if it's left undefined). C<$flagref> is a reference to a hash, the keys of which are flags and the values are their corresponding values.
-The available flags are as follows. All but the first directly correspond to methods in the L<Net::LDNS::Resolver> object.
+The available flags are as follows. All but the first directly correspond to methods in the L<Zonemaster::LDNS::Resolver> object.
 
 =over
 
@@ -682,7 +682,7 @@ the similarly named method in L<Zonemaster::Engine>.
 Does an AXFR for the requested domain from the nameserver. The callback
 function will be called once for each received RR, with that RR as its only
 argument. To continue getting more RRs, the callback must return a true value.
-If it returns a true value, the AXFR will be aborted. See L<Net::LDNS::axfr>
+If it returns a true value, the AXFR will be aborted. See L<Zonemaster::LDNS::axfr>
 for more details.
 
 =back
