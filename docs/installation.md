@@ -12,9 +12,9 @@ module. For an overview of the Zonemaster components, please see the
 This section covers the following operating systems:
 
  * [2] <a href="#Debian">Ubuntu 14.04 (LTS))</a>
- * [3] <a href="#Debian">Debian Jessie (version 8) - 64 bits</a>
+ * [3] <a href="#Debian">Debian Jessie (version 8) - 64 bits</a>
  * [4] <a href="#FreeBSD">FreeBSD 10.1</a>
- * [5] <a href="#CentOS">CentOS 7 - 64 bits</a>
+ * [5] <a href="#CentOS">CentOS 7 - 64 bits</a>
 
 >
 > Note: We assume the installation instructions will work for earlier OS
