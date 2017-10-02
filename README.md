@@ -13,7 +13,7 @@ This Git repository contains the *Zonemaster Engine testing framework*,
 and contains all code needed to perform the full suite of Zonemaster
 tests.
 
-### Prerequisites
+### Prerequisites
 
 For supported processor architectures, operating systems (and versions) 
 and Perl versions see 
@@ -29,7 +29,7 @@ Installation instructions for the Engine is provided in the
 
 This repository does not need any specific configuration.
 
-### Documentation
+### Documentation
 
 There is full POD coverage of the Perl code. The documentation can be
 read on the [CPAN site](https://metacpan.org/pod/Zonemaster-Engine).
@@ -48,7 +48,7 @@ You can follow the project in these two mailinglists:
  * [zonemaster-users](http://lists.iis.se/cgi-bin/mailman/listinfo/zonemaster-users)
  * [zonemaster-devel](http://lists.iis.se/cgi-bin/mailman/listinfo/zonemaster-devel)
 
-### Contact or Bug reporting 
+### Contact or Bug reporting
 
 For any contacts or bug reporting, please send a mail to
 "contact@zonemaster.net".
