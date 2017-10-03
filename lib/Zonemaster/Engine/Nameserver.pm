@@ -1,7 +1,5 @@
 package Zonemaster::Engine::Nameserver;
 
-use version; our $VERSION = version->declare("v1.1.5");
-
 use 5.014002;
 use Moose;
 use Moose::Util::TypeConstraints;

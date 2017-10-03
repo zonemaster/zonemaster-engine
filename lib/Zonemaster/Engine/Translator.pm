@@ -1,7 +1,5 @@
 package Zonemaster::Engine::Translator;
 
-use version; our $VERSION = version->declare("v1.0.7");
-
 use 5.014002;
 use strict;
 use warnings;

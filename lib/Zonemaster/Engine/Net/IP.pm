@@ -1,7 +1,5 @@
 package Zonemaster::Engine::Net::IP;
 
-use version; our $VERSION = version->declare("v0.0.6");
-
 no strict 'refs';
 use warnings;
 

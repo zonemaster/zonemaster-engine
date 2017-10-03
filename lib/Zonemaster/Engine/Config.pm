@@ -1,7 +1,5 @@
 package Zonemaster::Engine::Config;
 
-use version; our $VERSION = version->declare("v1.0.6");
-
 use 5.014002;
 use warnings;
 
