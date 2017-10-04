@@ -3,10 +3,13 @@
 .perltidyrc
 .perlcriticrc
 .travis.yml
+MANIFEST.SKIP
 MYMETA.json
 MYMETA.yml
 ^Makefile$
 ^blib
+\bpm_to_blib$
 .tar.gz$
 .bak$
+.po$
 ~$
