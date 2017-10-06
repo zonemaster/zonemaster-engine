@@ -329,9 +329,13 @@ nameserver object cache and recursor cache.
 
 =back
 
-=head1 AUTHOR
+=head1 AUTHORS
 
-Calle Dybedahl, C<< <calle at init.se> >>
+Vincent Levigneron <vincent.levigneron at nic.fr>
+- Current maintainer
+
+Calle Dybedahl <calle at init.se>
+- Original author
 
 =cut
 
