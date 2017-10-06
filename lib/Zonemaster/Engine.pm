@@ -109,7 +109,7 @@ sub add_fake_delegation {
                 );
             }
             else {
-                my @ips = Net::LDNS->new->name2addr($name);
+                my @ips = Zonemaster::LDNS->new->name2addr($name);
                 if ( @ips ) {
                     push @{ $href->{$name} }, @ips;
                 }

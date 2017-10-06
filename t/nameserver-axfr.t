@@ -7,7 +7,7 @@ use warnings;
 
 BEGIN { use_ok( 'Zonemaster::Engine::Nameserver' ); }
 use Zonemaster::Engine::Util;
-use Net::LDNS;
+use Zonemaster::LDNS;
 
 my $datafile = 't/nameserver-axfr.data';
 my %saved_axfr;
@@ -58,7 +58,7 @@ sub setup {
         while ( my $line = $fh->getline ) {
             my ( $domain, $type, $str ) = split( /\t/, $line, 3 );
             if ( $type eq 'RR' ) {
-                my $rr = eval { Net::LDNS::RR->new( $str ) };
+                my $rr = eval { Zonemaster::LDNS::RR->new( $str ) };
                 if ( $rr ) {
                     push @{ $saved_axfr{$domain} }, $rr;
                 }

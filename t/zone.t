@@ -39,7 +39,7 @@ ok( @{ $zone->ns } > 0, 'NS list not empty' );
 isa_ok( $_, 'Zonemaster::Engine::Nameserver' ) for @{ $zone->ns };
 
 isa_ok( $zone->glue_addresses, 'ARRAY' );
-isa_ok( $_, 'Net::LDNS::RR' ) for @{ $zone->glue_addresses };
+isa_ok( $_, 'Zonemaster::LDNS::RR' ) for @{ $zone->glue_addresses };
 
 my $p = $zone->query_one( 'www.iis.se', 'A' );
 isa_ok( $p, 'Zonemaster::Engine::Packet' );
