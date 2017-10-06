@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::Delegation;
 
-use version; our $VERSION = version->declare("v1.0.6");
+use version; our $VERSION = version->declare("v1.0.7");
 
 use strict;
 use warnings;
@@ -16,8 +16,8 @@ use Zonemaster::Engine::Constants ':all';
 
 use Zonemaster::Engine::Net::IP;
 use List::MoreUtils qw[uniq];
-use Net::LDNS::Packet;
-use Net::LDNS::RR;
+use Zonemaster::LDNS::Packet;
+use Zonemaster::LDNS::RR;
 
 ###
 ### Entry points
@@ -272,22 +272,22 @@ sub delegation03 {
     my @needs_v6_glue = grep { $_->address->version == $IP_VERSION_6 } @needs_glue;
     my $long_name     = _max_length_name_for( $zone->name );
 
-    my $p = Net::LDNS::Packet->new( $long_name, q{NS}, q{IN} );
+    my $p = Zonemaster::LDNS::Packet->new( $long_name, q{NS}, q{IN} );
 
     foreach my $ns ( @nsnames ) {
-        my $rr = Net::LDNS::RR->new( sprintf( q{%s IN NS %s}, $zone->name, $ns ) );
+        my $rr = Zonemaster::LDNS::RR->new( sprintf( q{%s IN NS %s}, $zone->name, $ns ) );
         $p->unique_push( q{authority}, $rr );
     }
 
     if ( @needs_v4_glue ) {
         my $ns = $needs_v4_glue[0];
-        my $rr = Net::LDNS::RR->new( sprintf( q{%s IN A %s}, $ns->name, $ns->address->short ) );
+        my $rr = Zonemaster::LDNS::RR->new( sprintf( q{%s IN A %s}, $ns->name, $ns->address->short ) );
         $p->unique_push( q{additional}, $rr );
     }
 
     if ( @needs_v6_glue ) {
         my $ns = $needs_v6_glue[0];
-        my $rr = Net::LDNS::RR->new( sprintf( q{%s IN AAAA %s}, $ns->name, $ns->address->short ) );
+        my $rr = Zonemaster::LDNS::RR->new( sprintf( q{%s IN AAAA %s}, $ns->name, $ns->address->short ) );
         $p->unique_push( q{additional}, $rr );
     }
 

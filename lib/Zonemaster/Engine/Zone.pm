@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Zone;
 
-use version; our $VERSION = version->declare("v1.1.2");
+use version; our $VERSION = version->declare("v1.1.3");
 
 use 5.014002;
 use strict;
@@ -18,7 +18,7 @@ has 'name' => ( is => 'ro', isa => 'Zonemaster::Engine::DNSName', required => 1,
 has 'parent' => ( is => 'ro', isa => 'Maybe[Zonemaster::Engine::Zone]', lazy_build => 1 );
 has [ 'ns', 'glue' ] => ( is => 'ro', isa => 'ArrayRef', lazy_build => 1 );
 has [ 'ns_names', 'glue_names' ] => ( is => 'ro', isa => 'ArrayRef[Zonemaster::Engine::DNSName]', lazy_build => 1 );
-has 'glue_addresses' => ( is => 'ro', isa => 'ArrayRef[Net::LDNS::RR]', lazy_build => 1 );
+has 'glue_addresses' => ( is => 'ro', isa => 'ArrayRef[Zonemaster::LDNS::RR]', lazy_build => 1 );
 
 ###
 ### Builders
@@ -321,7 +321,7 @@ care to only look at as many entries as you really need.
 
 =item glue_addresses
 
-A list of L<Net::LDNS::RR::A> and L<Net::LDNS::RR::AAAA> records returned in
+A list of L<Zonemaster::LDNS::RR::A> and L<Zonemaster::LDNS::RR::AAAA> records returned in
 the Additional section of an NS query to the first listed nameserver for the
 parent domain.
 
