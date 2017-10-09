@@ -102,6 +102,9 @@ This instruction covers the following operating systems:
    > **Note:** If necessary, answer any questions from the cpan script by
    > accepting the default value (just press enter).
 
+   > **Note:** libidn must be installed prior to Zonemaster::LDNS, or otherwise
+   > Zonemaster::LDNS will be installed without IDN support.
+
 4) Install Zonemaster::Engine:
 
    ```sh
