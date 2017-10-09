@@ -122,11 +122,10 @@ Use the procedure for [installation on Debian].
 Make sure Zonemaster::Engine is properly installed.
 
 ```sh
-time perl -MZonemaster::Engine -e 'print scalar Zonemaster::Engine->test_zone("zonemaster.net"), "\n"'
+time perl -MZonemaster::Engine -e 'print map {"$_\n"} Zonemaster::Engine->test_module("BASIC", "zonemaster.net")'
 ```
 
-The command is expected to take very roughly 15 seconds and print a number
-greater than one.
+The command is expected to take a few seconds and print some results about the delegation of zonemaster.net.
 
 
 ## What to do next
