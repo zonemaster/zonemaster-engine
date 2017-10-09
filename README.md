@@ -4,7 +4,7 @@
 
 ## Purpose
 
-This repository holds one of the components of the Zonemaster product. For an 
+This repository holds one of the components of the Zonemaster product. For an
 overview of the Zonemaster software, please see the
 [Zonemaster main repository](https://github.com/dotse/zonemaster).
 
@@ -37,9 +37,16 @@ a new language, implementing a new test and the log entries under the directory
 
 ## Participation, Contact and Bug reporting
 
-For participation, contact and bug reporting, please see 
+For [participation], [contact] and [bug reporting], please see 
 [Zonemaster/README.md](https://github.com/dotse/zonemaster/blob/master/README.md).
+
 
 ## License
 
 The software is released under the 2-clause BSD license. See separate LICENSE file.
+
+[participation]: https://github.com/dotse/zonemaster/blob/master/README.md#participation
+[contact]: https://github.com/dotse/zonemaster/blob/master/README.md#contact
+[bug reporting]: https://github.com/dotse/zonemaster/blob/master/README.md#bug-reporting
+
+
