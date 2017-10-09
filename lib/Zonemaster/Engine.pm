@@ -1,6 +1,6 @@
 package Zonemaster::Engine;
 
-use version; our $VERSION = version->declare("v1.1.2");
+use version; our $VERSION = version->declare("v2.0.0");
 
 use 5.014002;
 use Moose;
@@ -329,9 +329,13 @@ nameserver object cache and recursor cache.
 
 =back
 
-=head1 AUTHOR
+=head1 AUTHORS
 
-Calle Dybedahl, C<< <calle at init.se> >>
+Vincent Levigneron <vincent.levigneron at nic.fr>
+- Current maintainer
+
+Calle Dybedahl <calle at init.se>
+- Original author
 
 =cut
 
