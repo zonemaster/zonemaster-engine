@@ -20,7 +20,7 @@ For supported processor architectures, operating systems and Perl versions see
 ## Installation
 
 Installation instructions for the Engine is provided in the
-[installation](docs/installation.md) document.
+[installation](docs/Installation.md) document.
 
 ## Configuration 
 

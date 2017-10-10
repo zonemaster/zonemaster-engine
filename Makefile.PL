@@ -32,6 +32,9 @@ requires 'Time::HiRes'           => 0;
 requires 'Locale::TextDomain'    => 0;
 requires 'Text::CSV'             => 0;
 requires 'Locale::Msgfmt'        => 0.15;
+requires 'MIME::Base64'          => 0;
+
+test_requires 'Test::Fatal' => 0;
 
 recommends 'Readonly::XS' => 0;
 

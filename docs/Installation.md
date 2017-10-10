@@ -81,32 +81,35 @@ This instruction covers the following operating systems:
 
 ### Installation on FreeBSD
 
-1) Become root.
+1) Become root:
 
    ```sh
    su
    ```
 
-2) Install all necessary packages
+2) Install dependencies from binary packages:
 
    ```sh
-   pkg install libidn p5-Devel-CheckLib p5-MIME-Base64 p5-Test-Fatal p5-JSON-PP p5-IO-Socket-INET6 p5-Moose p5-Module-Find p5-File-ShareDir p5-File-Slurp p5-Mail-RFC822-Address p5-Hash-Merge p5-Time-HiRes p5-Locale-libintl p5-Readonly-XS p5-Tie-Simple p5-Math-BigInt p5-IP-Country p5-IO-Capture p5-List-MoreUtils
+   pkg install libidn p5-File-ShareDir p5-File-Slurp p5-Hash-Merge p5-IO-Socket-INET6 p5-JSON-PP p5-List-MoreUtils p5-Locale-Msgfmt p5-Locale-libintl p5-Mail-RFC822-Address p5-MIME-Base64 p5-Module-Find p5-Moose p5-Net-IP p5-Readonly-XS p5-Text-CSV p5-Time-HiRes p5-version
    ```
 
-3) Install the CPAN modules
+3) Install dependencies from CPAN:
 
    ```sh
-   cpan -i Net::IP Zonemaster::LDNS
+   cpan -i Zonemaster::LDNS
    ```
 
-4) Install Zonemaster::Engine
+   > **Note:** If necessary, answer any questions from the cpan script by
+   > accepting the default value (just press enter).
+
+   > **Note:** libidn must be installed prior to Zonemaster::LDNS, or otherwise
+   > Zonemaster::LDNS will be installed without IDN support.
+
+4) Install Zonemaster::Engine:
 
    ```sh
    cpan -i Zonemaster::Engine
    ```
-
-If necessary, answer any questions from the cpan script by accepting the default
-value (just press enter).
 
 
 ### Installation on Ubuntu
@@ -119,11 +122,10 @@ Use the procedure for [installation on Debian].
 Make sure Zonemaster::Engine is properly installed.
 
 ```sh
-time perl -MZonemaster::Engine -e 'print scalar Zonemaster::Engine->test_zone("zonemaster.net"), "\n"'
+time perl -MZonemaster::Engine -e 'print map {"$_\n"} Zonemaster::Engine->test_module("BASIC", "zonemaster.net")'
 ```
 
-The command is expected to take very roughly 15 seconds and print a number
-greater than one.
+The command is expected to take a few seconds and print some results about the delegation of zonemaster.net.
 
 
 ## What to do next
