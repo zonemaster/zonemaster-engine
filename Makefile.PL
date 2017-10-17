@@ -15,6 +15,8 @@ bugtracker 'https://github.com/dotse/zonemaster-engine/issues';
 
 all_from 'lib/Zonemaster/Engine.pm';
 
+configure_requires 'Locale::Msgfmt' => 0.15;
+
 requires 'Zonemaster::LDNS'      => 1.0;
 requires 'IO::Socket::INET6'     => 2.69;
 requires 'Moose'                 => 2.0401;
