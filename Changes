@@ -1,5 +1,20 @@
 Revision history for Perl module Zonemaster.
 
+v2.0.0
+
+- Switch version scheme to Semantic Versioning.
+- Breaking changes
+  - Renamed module from Zonemaster to Zonemaster::Engine (#303)
+- Patches
+  - Updated implementation of ADDRESS01/Name server address must be globally routable (#264)
+  - Updated implementation of BASIC01/The domain must have a parent domain (#260)
+  - Updated translations (#127, #196, #216, #248, #249, #291)
+  - Incremented VERSION of internal packages (98868cb)
+- Other changes
+  - Fixed Commonmark rendering for Github (cc7a28a)
+  - Switch msgfmt implementation to pure Perl (#223, #224)
+  - New Unit tests infrastructure. 896 tests kept, 2 removed, will be added back later (#310)
+
 v1.1.0 2017-04-04 Public pre-release
 
 - This release will not be published on CPAN since it contains updates that have

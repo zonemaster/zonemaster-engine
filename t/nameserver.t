@@ -105,16 +105,16 @@ ok( defined( $p6 ), 'IPv6 not blocked' );
 is( $p5->edns_size,  4096, 'EDNS0 size' );
 is( $p5->edns_rcode, 0,    'EDNS0 rcode' );
 
-$p5->unique_push( 'additional', Net::LDNS::RR->new( 'www.iis.se.		26	IN	A	91.226.36.46' ) );
+$p5->unique_push( 'additional', Zonemaster::LDNS::RR->new( 'www.iis.se.		26	IN	A	91.226.36.46' ) );
 my ( $rr ) = $p5->additional;
-isa_ok( $rr, 'Net::LDNS::RR::A' );
+isa_ok( $rr, 'Zonemaster::LDNS::RR::A' );
 
 $nsv4->add_fake_ds( 'iis.se' => [ { keytag => 16696, algorithm => 5, type => 1, digest => 'DEADBEEF' } ] );
 ok( $nsv4->fake_ds->{'iis.se'}, 'Fake DS data added' );
 my $p7 = $nsv4->query( 'iis.se', 'DS', { class => 'IN' } );
 isa_ok( $p7, 'Zonemaster::Engine::Packet' );
 my ( $dsrr ) = $p7->answer;
-isa_ok( $dsrr, 'Net::LDNS::RR::DS' );
+isa_ok( $dsrr, 'Zonemaster::LDNS::RR::DS' );
 is( $dsrr->keytag,    16696,      'Expected keytag' );
 is( $dsrr->hexdigest, 'deadbeef', 'Expected digest data' );
 

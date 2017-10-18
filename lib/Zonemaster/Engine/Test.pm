@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test;
 
-use version; our $VERSION = version->declare("v1.1.2");
+use version; our $VERSION = version->declare("v1.1.3");
 
 use 5.014002;
 use strict;
@@ -26,7 +26,7 @@ my @all_test_modules;
 sub _log_versions {
     info( GLOBAL_VERSION => { version => Zonemaster::Engine->VERSION } );
 
-    info( DEPENDENCY_VERSION => { name => 'Net::LDNS',             version => $Net::LDNS::VERSION } );
+    info( DEPENDENCY_VERSION => { name => 'Zonemaster::LDNS',      version => $Zonemaster::LDNS::VERSION } );
     info( DEPENDENCY_VERSION => { name => 'IO::Socket::INET6',     version => $IO::Socket::INET6::VERSION } );
     info( DEPENDENCY_VERSION => { name => 'Moose',                 version => $Moose::VERSION } );
     info( DEPENDENCY_VERSION => { name => 'Module::Find',          version => $Module::Find::VERSION } );

@@ -3,7 +3,7 @@ importance, and while we intend to fix them we make no promises about when.
 
 * When testing a zone using GOST-family algorithms in DNSSEC and having an
   underlying OpenSSL library without GOST support, the Zonemaster DNSSEC test
-  results may be misleading or unpredictable. The Net::LDNS module will warn at
+  results may be misleading or unpredictable. The Zonemaster::LDNS module will warn at
   build time if OpenSSL lacks GOST support.
   
 * Testing alternative root zones is not possible. Testing the usual root zone
