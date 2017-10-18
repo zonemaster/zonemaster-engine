@@ -90,7 +90,7 @@ This instruction covers the following operating systems:
 2) Install dependencies from binary packages:
 
    ```sh
-   pkg install libidn p5-File-ShareDir p5-File-Slurp p5-Hash-Merge p5-IO-Socket-INET6 p5-JSON-PP p5-List-MoreUtils p5-Locale-Msgfmt p5-Locale-libintl p5-Mail-RFC822-Address p5-MIME-Base64 p5-Module-Find p5-Moose p5-Net-IP p5-Readonly-XS p5-Text-CSV p5-Time-HiRes p5-version
+   pkg install libidn p5-File-ShareDir p5-File-Slurp p5-Hash-Merge p5-IO-Socket-INET6 p5-List-MoreUtils p5-Locale-libintl p5-Mail-RFC822-Address p5-Module-Find p5-Moose p5-Net-IP p5-Readonly-XS p5-Text-CSV
    ```
 
 3) Install dependencies from CPAN:
