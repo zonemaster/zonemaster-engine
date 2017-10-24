@@ -1,6 +1,6 @@
 # Zonemaster Engine
 [![Build Status](https://travis-ci.org/dotse/zonemaster-engine.svg?branch=master)](https://travis-ci.org/dotse/zonemaster-engine)
-[![CPAN version](https://badge.fury.io/pl/Zonemaster.svg)](https://metacpan.org/pod/Zonemaster)
+[![CPAN version](https://badge.fury.io/pl/Zonemaster-Engine.svg)](https://badge.fury.io/pl/Zonemaster-Engine)
 
 ## Purpose
 
@@ -29,7 +29,7 @@ This repository does not need any specific configuration.
 ## Documentation
 
 There is full POD coverage of the Perl code. The documentation can be
-read on the [CPAN site](https://metacpan.org/pod/Zonemaster-Engine).
+read on the [CPAN site](https://metacpan.org/pod/Zonemaster::Engine).
 
 For a curious user, there are documentations regarding translating the output to
 a new language, implementing a new test and the log entries under the directory
