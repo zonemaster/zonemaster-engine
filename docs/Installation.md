@@ -84,7 +84,7 @@ This instruction covers the following operating systems:
 1) Become root:
 
    ```sh
-   su
+   su -l
    ```
 
 2) Install dependencies from binary packages:
