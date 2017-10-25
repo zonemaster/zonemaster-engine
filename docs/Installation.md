@@ -30,23 +30,34 @@ This instruction covers the following operating systems:
    sudo yum groupinstall "Development Tools"
    ```
 
-2) Install packages.
+2) Install Perl core from package.
 
    ```sh
-   sudo yum install perl-core perl-ExtUtils-MakeMaker perl-File-ShareDir perl-File-Slurp perl-IO-Socket-INET6 perl-JSON-PP perl-List-MoreUtils perl-Readonly perl-Time-HiRes perl-YAML libidn-devel perl-libintl perl-Devel-CheckLib openssl-devel perl-Test-Fatal
+   sudo yum install perl-core
    ```
-
-3) Install CPAN modules.
+3) Install Locale::TextDomain from CPAN.
 
    If it's the first time you use the CPAN module, it will ask three questions.
    For the first and third, the default responses are fine. For the second, answer
    "sudo" (the default is "local::lib", which you do not want).
 
+```sh
+   sudo cpan -i Locale::TextDomain
+   ```
+
+4) Install packages.
+
+   ```sh
+   sudo yum install perl-core perl-ExtUtils-MakeMaker perl-File-ShareDir perl-File-Slurp perl-IO-Socket-INET6 perl-JSON-PP perl-List-MoreUtils perl-Readonly perl-Time-HiRes perl-YAML libidn-devel perl-Devel-CheckLib openssl-devel perl-Test-Fatal
+   ```
+
+5) Install CPAN modules.
+
    ```sh
    sudo cpan -i Hash::Merge Net::IP::XS Zonemaster::LDNS Moose
    ```
 
-4) Install Zonemaster::Engine
+6) Install Zonemaster::Engine
 
    ```sh
    sudo cpan -i Zonemaster::Engine
