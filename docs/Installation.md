@@ -57,26 +57,29 @@ This instruction covers the following operating systems:
 
 ### Installation on Debian
 
-1) Make sure the package database is up to date.
+1) Install dependencies from binary packages:
 
    ```sh
-   sudo apt-get update
+   sudo apt install libidn11-dev libfile-sharedir-perl libfile-slurp-perl libhash-merge-perl libio-socket-inet6-perl liblist-moreutils-perl libintl-xs-perl libmail-rfc822-address-perl libmodule-find-perl libmoose-perl libnet-ip-perl libreadonly-xs-perl libtext-csv-perl
    ```
 
-2) Install all necessary packages.
+2) Install dependencies from CPAN:
 
    ```sh
-   sudo apt-get install build-essential libfile-slurp-perl libjson-pp-perl liblist-moreutils-perl libio-socket-inet6-perl libmodule-find-perl libmoose-perl libfile-sharedir-perl libhash-merge-perl libreadonly-perl libmail-rfc822-address-perl libintl-xs-perl libssl-dev libdevel-checklib-perl libtest-fatal-perl libtie-simple-perl libio-capture-perl libgeography-countries-perl libidn11-dev gettext
+   cpan -i Zonemaster::LDNS
    ```
 
-3) Install Zonemaster::Engine
+   > **Note:** If necessary, answer any questions from the cpan program by
+   > accepting the default value (just press enter).
+
+   > **Note:** libidn must be installed prior to Zonemaster::LDNS, or otherwise
+   > Zonemaster::LDNS will be installed without IDN support.
+
+3) Install Zonemaster::Engine:
 
    ```sh
    sudo cpan -i Zonemaster::Engine
    ```
-
-   If necessary, answer any questions from the cpan script by accepting the default
-   value (just press enter).
 
 
 ### Installation on FreeBSD
@@ -99,7 +102,7 @@ This instruction covers the following operating systems:
    cpan -i Zonemaster::LDNS
    ```
 
-   > **Note:** If necessary, answer any questions from the cpan script by
+   > **Note:** If necessary, answer any questions from the cpan program by
    > accepting the default value (just press enter).
 
    > **Note:** libidn must be installed prior to Zonemaster::LDNS, or otherwise
