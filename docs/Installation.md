@@ -38,9 +38,9 @@ This instruction covers the following operating systems:
 
 3) Install packages from CPAN.
 
-   If it's the first time you use the CPAN module, it will ask some questions.
-   For the first and third, the default responses are fine. For the second, answer
-   "sudo" (the default is "local::lib", which you do not want).
+   > If it's the first time you use the CPAN module, it will ask some questions.
+   > For the first and third, the default responses are fine. For the second, answer
+   > "sudo" (the default is "local::lib", which you do not want).
 
    ```sh
    sudo cpan -i Locale::TextDomain Hash::Merge Net::IP::XS Zonemaster::LDNS Moose
