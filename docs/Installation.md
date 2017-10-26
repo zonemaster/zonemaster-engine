@@ -66,7 +66,7 @@ This instruction covers the following operating systems:
 2) Install dependencies from CPAN:
 
    ```sh
-   cpan -i Zonemaster::LDNS
+   sudo cpan -i Zonemaster::LDNS
    ```
 
    > **Note:** If necessary, answer any questions from the cpan program by
