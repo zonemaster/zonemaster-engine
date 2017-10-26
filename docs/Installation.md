@@ -60,13 +60,13 @@ This instruction covers the following operating systems:
 1) Install dependencies from binary packages:
 
    ```sh
-   sudo apt-get install build-essential libidn11-dev libfile-sharedir-perl libfile-slurp-perl libhash-merge-perl libio-socket-inet6-perl liblist-moreutils-perl libintl-xs-perl libmail-rfc822-address-perl libmodule-find-perl libmoose-perl libnet-ip-perl libreadonly-xs-perl libtext-csv-perl
+   sudo apt-get install build-essential libidn11-dev libfile-sharedir-perl libfile-slurp-perl libhash-merge-perl libio-socket-inet6-perl liblist-moreutils-perl libmail-rfc822-address-perl libmodule-find-perl libmoose-perl libnet-ip-perl libreadonly-xs-perl libtext-csv-perl libssl-dev
    ```
 
 2) Install dependencies from CPAN:
 
    ```sh
-   sudo cpan -i Zonemaster::LDNS
+   sudo cpan -i Locale::DomainText Zonemaster::LDNS
    ```
 
    > **Note:** If necessary, answer any questions from the cpan program by
