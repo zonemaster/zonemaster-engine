@@ -147,10 +147,10 @@ The command is expected to take a few seconds and print some results about the d
 [Installation on Ubuntu]: #installation-on-ubuntu
 [JSON-RPC API]: https://github.com/dotse/zonemaster-backend/blob/master/docs/API.md
 [Main Zonemaster Repository]: https://github.com/dotse/zonemaster
-[Zonemaster::Backend installation]: https://github.com/dotse/zonemaster-backend/blob/master/docs/installation.md
-[Zonemaster::CLI installation]: https://github.com/dotse/zonemaster-cli/blob/master/docs/installation.md
+[Zonemaster::Backend installation]: https://github.com/dotse/zonemaster-backend/blob/master/docs/Installation.md
+[Zonemaster::CLI installation]: https://github.com/dotse/zonemaster-cli/blob/master/docs/Installation.md
 [Zonemaster::Engine API]: http://search.cpan.org/~znmstr/Zonemaster-Engine/lib/Zonemaster/Engine/Overview.pod
-[Zonemaster::GUI installation]: https://github.com/dotse/zonemaster-gui/blob/master/docs/installation.md
+[Zonemaster::GUI installation]: https://github.com/dotse/zonemaster-gui/blob/master/docs/Installation.md
 
 Copyright (c) 2013 - 2017, IIS (The Internet Foundation in Sweden)\
 Copyright (c) 2013 - 2017, AFNIC\
