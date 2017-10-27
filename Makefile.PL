@@ -9,7 +9,7 @@ name 'Zonemaster-Engine';
 # share/Makefile
 
 
-license 'http://www.opensource.org/licenses/BSD-3-Clause';
+license 'bsd';
 repository 'https://github.com/dotse/zonemaster-engine';
 bugtracker 'https://github.com/dotse/zonemaster-engine/issues';
 
