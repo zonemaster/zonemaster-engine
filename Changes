@@ -1,4 +1,15 @@
-Revision history for Perl module Zonemaster.
+Release history for Zonemaster component Zonemaster-Engine
+
+v2.0.1 2017-11-02
+
+- Fixed
+  - Fixed licensing discrepancy (#336)
+  - Updated dependency version (#334)
+  - Updated links in documentation (#330)
+  - Updated installation instructions (#332, #333, #335)
+
+- Changed in v2.0.0
+  - Renamed distribution from Zonemaster to Zonemaster-Engine (#303)
 
 v2.0.0
 

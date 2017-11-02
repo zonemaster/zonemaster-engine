@@ -9,7 +9,7 @@ name 'Zonemaster-Engine';
 # share/Makefile
 
 
-license 'http://www.opensource.org/licenses/BSD-3-Clause';
+license 'bsd';
 repository 'https://github.com/dotse/zonemaster-engine';
 bugtracker 'https://github.com/dotse/zonemaster-engine/issues';
 
@@ -28,7 +28,7 @@ requires 'List::MoreUtils'       => 0;
 requires 'Mail::RFC822::Address' => 0;
 requires 'Hash::Merge'           => 0;
 requires 'Readonly'              => 0;
-requires 'Locale::TextDomain'    => 0;
+requires 'Locale::TextDomain'    => 1.23;
 requires 'Text::CSV'             => 0;
 requires 'MIME::Base64'          => 0;
 
