@@ -57,11 +57,11 @@ This instruction covers the following operating systems:
 
 ### Installation on Debian
 
-1) Resynchronize the package index files
+1) Refresh the package information
 
-  ```sh
-  sudo apt-get update
-  ```
+   ```sh
+   sudo apt-get update
+   ```
 
 2) Install dependencies from binary packages:
 
