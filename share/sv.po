@@ -281,10 +281,6 @@ msgstr "Dotterzonen har tillräckligt många ({count}) namnservrar ({ns}). Minst
 msgid  "Parent lists enough ({count}) nameservers ({glue}). Lower limit set to {minimum}."
 msgstr "Delegeringen i moderzonen har tillräckligt många ({count}) namnservrar ({glue}). Minsta tillåtna antalet är {minimum}."
 
-#: DELEGATION:ENOUGH_NS_TOTAL
-msgid  "Parent and child list enough ({count}) nameservers ({ns}). Lower limit set to {minimum}."
-msgstr "Moderzonen och dotterzonen har tillräckligt många ({count}) namnservrar ({ns}). Minsta tillåtna antalet är {minimum}."
-
 #: DELEGATION:EXTRA_NAME_CHILD
 msgid  "Child has nameserver(s) not listed at parent ({extra})."
 msgstr "Dotterzonen har en eller flera namnservrar som inte finns i delegeringen i moderzonen ({extra})."
@@ -310,10 +306,6 @@ msgstr "Det finns inte tillräckligt många namnservrar (NS-poster) i dotterzone
 #: DELEGATION:NOT_ENOUGH_NS_GLUE
 msgid  "Parent does not list enough ({count}) nameservers ({glue}). Lower limit set to {minimum}."
 msgstr "Det finns inte tillräckligt många ({count}) namnservrar (NS-poster) i delegeringen (moderzonen). Minsta tillåtna antal är {minimum}."
-
-#: DELEGATION:NOT_ENOUGH_NS_TOTAL
-msgid  "Parent and child do not list enough ({count}) nameservers ({ns}). Lower limit set to {minimum}."
-msgstr "Delegeringen (moderzonen) och dotterzonen har inte tillräckligt många ({count}) namnservrar ({ns}). Minsta tillåtna antal är {minimum}."
 
 #: DELEGATION:NS_RR_IS_CNAME
 msgid  "Nameserver {ns} {address_type} RR point to CNAME."

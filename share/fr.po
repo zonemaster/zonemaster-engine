@@ -281,10 +281,6 @@ msgstr "Les serveurs de noms de la zone retournent suffisamment de serveurs ({co
 msgid  "Parent lists enough ({count}) nameservers ({glue}). Lower limit set to {minimum}."
 msgstr "Les serveurs de noms de la zone parente retournent suffisamment de serveurs ({count}) faisant autorité ({glue}). La limite inférieure étant fixée à {minimum}."
 
-#: DELEGATION:ENOUGH_NS_TOTAL
-msgid  "Parent and child list enough ({count}) nameservers ({ns}). Lower limit set to {minimum}."
-msgstr "Les serveurs de noms de la zone parente et les serveurs de noms de la zone retournent suffisamment de serveurs ({count}) faisant autorité ({ns}). La limite inférieure étant fixée à {minimum}."
-
 #: DELEGATION:EXTRA_NAME_CHILD
 msgid  "Child has nameserver(s) not listed at parent ({extra})."
 msgstr "Les serveurs de noms de la zone retournent des serveurs faisant autorité ({extra}) qui ne le sont pas par les serveurs de noms de la zone parente."
@@ -313,10 +309,6 @@ msgstr "Les serveurs de noms de la zone ne retournent pas assez de serveurs ({co
 #: DELEGATION:NOT_ENOUGH_NS_GLUE
 msgid  "Parent does not list enough ({count}) nameservers ({glue}). Lower limit set to {minimum}."
 msgstr "Les serveurs de noms de la zone parente ne retournent pas assez de serveurs ({count}) faisant autorité ({glue}). La limite inférieure étant fixée à {minimum}."
-
-#: DELEGATION:NOT_ENOUGH_NS_TOTAL
-msgid  "Parent and child do not list enough ({count}) nameservers ({ns}). Lower limit set to {minimum}."
-msgstr "Les serveurs de noms de la zone parente et les serveurs de noms de la zone ne retournent pas suffisamment de serveurs ({count}) faisant autorité ({{ns}). La limite inférieure étant fixée à {minimum}."
 
 #: DELEGATION:NS_RR_IS_CNAME
 msgid  "Nameserver {ns} {address_type} RR point to CNAME."
