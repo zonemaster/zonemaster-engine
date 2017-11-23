@@ -57,13 +57,19 @@ This instruction covers the following operating systems:
 
 ### Installation on Debian
 
-1) Install dependencies from binary packages:
+1) Refresh the package information
+
+   ```sh
+   sudo apt-get update
+   ```
+
+2) Install dependencies from binary packages:
 
    ```sh
    sudo apt-get install build-essential libidn11-dev libfile-sharedir-perl libfile-slurp-perl libhash-merge-perl libio-socket-inet6-perl liblist-moreutils-perl libmail-rfc822-address-perl libmodule-find-perl libmoose-perl libnet-ip-perl libreadonly-xs-perl libtext-csv-perl libssl-dev libdevel-checklib-perl
    ```
 
-2) Install dependencies from CPAN:
+3) Install dependencies from CPAN:
 
    ```sh
    sudo cpan -i Locale::TextDomain Zonemaster::LDNS
@@ -75,7 +81,7 @@ This instruction covers the following operating systems:
    > **Note:** libidn must be installed prior to Zonemaster::LDNS, or otherwise
    > Zonemaster::LDNS will be installed without IDN support.
 
-3) Install Zonemaster::Engine:
+4) Install Zonemaster::Engine:
 
    ```sh
    sudo cpan -i Zonemaster::Engine
