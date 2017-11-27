@@ -1,7 +1,5 @@
 package Zonemaster::Engine::ASNLookup;
 
-use version; our $VERSION = version->declare("v1.0.4");
-
 use 5.014002;
 use warnings;
 
