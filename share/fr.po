@@ -664,15 +664,15 @@ msgstr "Tous les serveurs de noms répondent avec la même adresse IP que celle 
 
 #: NAMESERVER:UPWARD_REFERRAL_IRRELEVANT
 msgid  "Upward referral tests skipped for root zone."
-msgstr "Upward referral tests skipped for root zone."
+msgstr "Les tests de type \"Upward Referral\" n'ont pas de sens pour la racine '.'."
 
 #: NAMESERVER:UPWARD_REFERRAL
 msgid  "Nameserver {ns}/{address} returns an upward referral."
-msgstr "Nameserver {ns}/{address} returns an upward referral."
+msgstr "Le serveur de noms {ns}/{address} répond à la requête de type \"NS\" sur la racine '.' (upward referral)."
 
 #: NAMESERVER:NO_UPWARD_REFERRAL
 msgid  "None of the following nameservers returns an upward referral : {names}."
-msgstr "None of the following nameservers returns an upward referral : {names}."
+msgstr "Aucun des serveurs de noms suivants ne répond à la requête de type \"NS\" sur la racine '.' (upward referral) : {names}."
 
 #: NAMESERVER:CAN_NOT_BE_RESOLVED
 msgid  "The following nameservers failed to resolve to an IP address : {names}."
