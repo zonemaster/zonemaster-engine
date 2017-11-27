@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::Delegation;
 
-use version; our $VERSION = version->declare("v1.0.7");
+use version; our $VERSION = version->declare("v1.0.8");
 
 use strict;
 use warnings;
@@ -52,8 +52,6 @@ sub metadata {
               NOT_ENOUGH_NS_GLUE
               ENOUGH_NS
               NOT_ENOUGH_NS
-              ENOUGH_NS_TOTAL
-              NOT_ENOUGH_NS_TOTAL
               )
         ],
         delegation02 => [
@@ -119,9 +117,6 @@ sub translation {
         "ARE_AUTHORITATIVE"    => "All these nameservers are confirmed to be authoritative : {nsset}.",
         "NS_RR_NO_CNAME"       => "No nameserver point to CNAME alias.",
         "SOA_EXISTS"           => "All the nameservers have SOA record.",
-        "ENOUGH_NS_TOTAL"      => "Parent and child list enough ({count}) nameservers ({ns}). Lower limit set to {minimum}.",
-        "NOT_ENOUGH_NS_TOTAL" =>
-          "Parent and child do not list enough ({count}) nameservers ({ns}). Lower limit set to {minimum}.",
         'IPV4_DISABLED' => 'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
         'IPV6_DISABLED' => 'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
     };
@@ -181,30 +176,6 @@ sub delegation01 {
                 count   => scalar( @child_nsnames ),
                 minimum => $MINIMUM_NUMBER_OF_NAMESERVERS,
                 ns      => join( q{;}, sort @child_nsnames ),
-            }
-          );
-    }
-
-    my @all_nsnames = uniq map { $_->string } @{ Zonemaster::Engine::TestMethods->method2( $zone ) },
-      @{ Zonemaster::Engine::TestMethods->method3( $zone ) };
-
-    if ( scalar( @all_nsnames ) >= $MINIMUM_NUMBER_OF_NAMESERVERS ) {
-        push @results,
-          info(
-            ENOUGH_NS_TOTAL => {
-                count   => scalar( @all_nsnames ),
-                minimum => $MINIMUM_NUMBER_OF_NAMESERVERS,
-                ns      => join( q{;}, sort @all_nsnames ),
-            }
-          );
-    }
-    else {
-        push @results,
-          info(
-            NOT_ENOUGH_NS_TOTAL => {
-                count   => scalar( @all_nsnames ),
-                minimum => $MINIMUM_NUMBER_OF_NAMESERVERS,
-                ns      => join( q{;}, sort @all_nsnames ),
             }
           );
     }
