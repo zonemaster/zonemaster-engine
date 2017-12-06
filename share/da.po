@@ -4,10 +4,10 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Project-Id-Version: 1.0.0\n"
-"PO-Revision-Date: 2017-09-25 13:40+0200\n"
+"PO-Revision-Date: 2017-12-06 13:40+0100\n"
 "Language-Team: Zonemaster Team\n"
 "MIME-Version: 1.0\n"
-"Last-Translator: Niels Haarbo <haarbo@dk-hostmaster.dk>\n"
+"Last-Translator: Mats Dufberg <mats.dufberg@iis.se>\n"
 
 #: ADDRESS:NAMESERVERS_IP_WITH_REVERSE
 msgid  "Reverse DNS entry exist for all Nameserver IP addresses."
