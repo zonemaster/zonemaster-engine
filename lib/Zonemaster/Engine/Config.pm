@@ -256,52 +256,18 @@ Zonemaster::Engine::Config - configuration access module for Zonemaster::Engine
 
     Zonemaster::Engine->config->no_network(1); # Forbid network traffic
 
-    my $value = Zonemaster::Engine::Config->get->{key}{subkey}; # Not really recommended way to access config data
+    my $value = Zonemaster::Engine::Config->get->{key}{subkey}; # Not really recommended way to access profile data
 
-=head1 LOADING CONFIGURATION
+=head1 LOADING PROFILES
 
-Configuration data is loaded in several stages, each one overlaying the result
-from the previous one (that is, the later in the list take priority over the
-earlier). The first stage is hardcoded into the source code and loaded while it
-is being compiled, to make sure that there will always be some basic
-information available. Later, when the configuration object is first used, the
-system will look for a file named F<config.json> in each of a list of
-directories. If the file exists, is readable and contains proper JSON data, it
-will be loaded and overlaid on the current internal config. The directories
-are, in order from first checked to last:
-
-=over
-
-=item The L<Zonemaster::Engine> perl module installation directory
-
-This is where the installation process puts the default configuration. It is
-not meant to be modified by the user, and it will be overwritten when the
-module is upgraded (or reinstalled for any other reason). If you really need to
-know where it is, you can either check the log message left when loading it or
-run this command to find the path:
-
-    perl -MFile::ShareDir=dist_dir -E 'say dist_dir( "Zonemaster-Engine" )'
-
-=item /etc/zonemaster
-
-Intended to hold system-global configuration changes.
-
-=item /usr/local/etc/zonemaster
-
-Basically the same as the previous one, but for those who like to keep their
-locally installed software inside F</usr/local>.
-
-=item ~/.zonemaster
-
-That is, a F<.zonemaster> directory in the home directory of the current user.
-Intended, obviously, for configuration changes local to one particular user.
-
-=back
+Initial profile data for the effective profile is loaded from the default profile.
+The effective profile can be updated with custom profile data.
+The default profile is parsed from a JSON file called F<default.profile> in the Zonemaster-Engine L<dist_dir|File::ShareDir/dist_dir>.
 
 The possible contents of the JSON data is described further down in this manual
 page.
 
-=head1 METHODS FOR CONFIGURATION ITEMS
+=head1 PROFILE DATA ACCESS METHODS
 
 =over
 
@@ -337,38 +303,20 @@ Returns a reference to the list of ASN lookup domains.
 
 =back
 
-=head1 METHODS
+=head1 MANAGEMENT METHODS
 
 =over
 
 =item get()
 
-Returns a reference to a hash with configuration values.
+Returns the effective profile in the data structure described in the L<PROFILE DATA> section.
 
-=item policy()
+=item load_profile_file($path)
 
-Returns a reference to the current policy data. The format of that data is described further down in this document.
+Loads profile data from the given file and merges it into the effective profile.
 
-=item load_policy_file($filename)
-
-Load policy information from the given file and merge it into the pre-loaded
-policy. Information from the loaded file overrides the pre-loaded information
-when the same keys exist in both places.
-
-If the given name does not lead directly to a readable file, each of the usual
-directories will be checked if the name is there. If the plain name isn't, the
-suffix C<.json> will be appended and another try will be done. For example, a
-file F<$HOME/.zonemaster/Example.json> may be loaded by calling this method
-with the string C<"Example">.
-
-=item load_config_file($filename)
-
-Load configuration information from the given file and merge it into the pre-loaded config. Information from the loaded file overrides the pre-loaded information when the same keys exist in both places.
-
-=item load_module_policy($module)
-
-Loads policy data included in a test module. The argument must be the short
-form (without the initial C<Zonemaster::Engine::Test::>) and correctly capitalized.
+The given path must be a JSON file matching the L<PROFILE DATA> format.
+Data from the file overrides the effective profile when the same keys exist in both places.
 
 =item BUILD
 
@@ -377,15 +325,15 @@ Internal method only mentioned here to please L<Pod::Coverage>.
 =item should_run($name)
 
 Given a test case name, it returns true if that test case should be included in
-a test run according to the currently active policy or false if not.
+a test run according to the effective profile or false if not.
 
 =back
 
-=head1 CONFIGURATION DATA
+=head1 PROFILE DATA
 
-The configuration data is stored internally in a nested hash (possibly with arrays as values in places). As of this writing, the file format used is JSON.
+Profile data is represented as a nested hash (possibly with arrays as values in places).
 
-The interesting keys are as follows.
+The allowed keys are as follows.
 
 =head2 resolver
 
@@ -447,7 +395,7 @@ used, the rest are backups in case the earlier ones don't work.
 
 =head2 logfilter
 
-By using this key, the log level of messages can be set in a much more fine-grained way than by the policy file. The intended use is to remove known erroneous results. If you, for example, know that a certain name server is recursive and for some reason should be, you can use this functionality to lower the severity of the complaint about it to a lower level than normal.
+By using this key, the log level of messages can be set in a much more fine-grained way than by the C<test_levels> element. The intended use is to remove known erroneous results. If you, for example, know that a certain name server is recursive and for some reason should be, you can use this functionality to lower the severity of the complaint about it to a lower level than normal.
 
 The data under the C<logfilter> key should be structured like this:
 
@@ -492,13 +440,13 @@ This would set the level to C<INFO> for any C<SYSTEM:FILTER_THIS> messages that 
 This also would set the level to C<INFO> for any C<SYSTEM:FILTER_THIS> messages that had a C<count> attribute set to 128 and a C<type> attribute set to C<that>.
 And this would set the level to C<WARNING> for any C<SYSTEM:FILTER_THIS> messages that had a C<count> attribute set to 0.
 
-=head1 POLICY DATA
+=head2 test_levels
 
-Like the configuration data, policy data is stored in JSON format. Structurally, it's a bit less complex. All the keys on the top level, with one exception, are names of test implementation modules (without the C<Zonemaster::Engine::Test::> prefix). Each of those keys hold another hash, where the keys are the tags that the module in question can emit and the values are the the severity levels that should apply to the tags. Any tags that are not found in the policy data will default to level C<DEBUG>.
+The value is a hash where the keys are names of test implementation modules (without the C<Zonemaster::Engine::Test::> prefix). Each of those keys hold another hash, where the keys are the tags that the module in question can emit and the values are the the severity levels that should apply to the tags. Any tags that are not found in the C<test_levels> data will default to level C<DEBUG>.
 
-The one exception is a top-level key C<__testcases__>. The value of that must be a hash where the keys are names of test cases from the test specifications, and the corresponding values are booleans specifying if the test case in question should be executed or not. Any missing test cases are treated as if they had the value C<true> set. The test cases C<basic00>, C<basic01> and C<basic02> will be executed even if their values are set to C<false>, since part of their function is to verify that the given name can be tested at all. The values here only apply when test modules are asked to run all their tests. A test case that is set to C<false> here will still run if asked for specifically.
+=head2 test_cases
 
-The easiest way to create a modified policy is to copy the default one and change the relevant values.
+The value is a hash where the keys are names of test cases from the test specifications, and the corresponding values are booleans specifying if the test case in question should be executed or not. Any missing test cases are treated as if they had the value C<true> set. The test cases C<basic00>, C<basic01> and C<basic02> will be executed even if their values are set to C<false>, since part of their function is to verify that the given name can be tested at all. The values here only apply when test modules are asked to run all their tests. A test case that is set to C<false> here will still run if asked for specifically.
 
 =cut
 
