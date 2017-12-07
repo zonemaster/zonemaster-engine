@@ -1,6 +1,6 @@
 package Zonemaster::Engine;
 
-use version; our $VERSION = version->declare("v2.0.1");
+use version; our $VERSION = version->declare("v2.0.2");
 
 use 5.014002;
 use Moose;
@@ -99,6 +99,7 @@ sub recurse {
 
 sub add_fake_delegation {
     my ( $class, $domain, $href ) = @_;
+    my $incomplete_delegation;
 
     # Check fake delegation
     foreach my $name ( keys %{$href} ) {
@@ -107,6 +108,7 @@ sub add_fake_delegation {
                 Zonemaster::Engine->logger->add(
                     FAKE_DELEGATION_IN_ZONE_NO_IP => { domain => $domain , ns => $name }
                 );
+                $incomplete_delegation = 1;
             }
             else {
                 my @ips = Zonemaster::LDNS->new->name2addr($name);
@@ -117,16 +119,23 @@ sub add_fake_delegation {
                     Zonemaster::Engine->logger->add(
                         FAKE_DELEGATION_NO_IP => { domain => $domain , ns => $name  }
                     );
+                    $incomplete_delegation = 1;
 		}
             }
-        }  
-    }  
+        }
+    }
+
+    $recursor->add_fake_addresses($href);
     my $parent = $class->zone( $recursor->parent( $domain ) );
     foreach my $ns ( @{ $parent->ns } ) {
         $ns->add_fake_delegation( $domain => $href );
     }
 
-    return;
+    if ( $incomplete_delegation ) {
+        Zonemaster::Engine->logger->add( CANNOT_CONTINUE => { zone => $domain } );
+        return;
+    }
+    return 1;
 }
 
 sub add_fake_ds {
@@ -183,7 +192,7 @@ sub reset {
     Zonemaster::Engine::Nameserver->empty_cache();
     $logger->clear_history() if $logger;
     Zonemaster::Engine::Recursor->clear_cache();
-
+    Zonemaster::Engine::Recursor->clear_fake_cache();
     return;
 }
 

@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Recursor;
 
-use version; our $VERSION = version->declare("v1.0.5");
+use version; our $VERSION = version->declare("v1.0.6");
 
 use 5.014002;
 use warnings;
@@ -10,15 +10,50 @@ use JSON::PP;
 use Zonemaster::Engine::Util;
 use Zonemaster::Engine::Net::IP;
 use Zonemaster::Engine;
+use Zonemaster::Engine::Packet;
+use Zonemaster::LDNS::Packet;
+use Zonemaster::LDNS::RR;
 
 my $seed_data;
 
 our %recurse_cache;
+our %fake_addresses_cache;
 
 {
     local $/;
     my $json = <DATA>;
     $seed_data = decode_json $json;
+}
+
+sub add_fake_addresses {
+    my ( $self, $href ) = @_;
+
+    foreach my $name ( keys %{$href} ) {
+        foreach my $ip (@{ $href->{$name} }) {
+            push @{ $fake_addresses_cache{$name} }, $ip;
+        }
+    }
+
+    $self->populate_cache_with_fake_addresses();
+
+    return;
+}
+
+sub populate_cache_with_fake_addresses {
+    my $class = 'IN';
+
+    foreach my $name ( keys %fake_addresses_cache ) {
+        foreach my $ip (@{ $fake_addresses_cache{$name} }) {
+            my $type = Zonemaster::Engine::Net::IP::ip_is_ipv6( $ip ) ? 'AAAA' : 'A';
+            my $p = Zonemaster::LDNS::Packet->new( $name, $type, $class );
+            $p->unique_push( 'answer', Zonemaster::LDNS::RR->new( sprintf( '%s IN %s %s', $name, $type, $ip ) ) );
+            $recurse_cache{$name}{$type}{$class} = Zonemaster::Engine::Packet->new( { packet => $p } );
+        }
+    }
+}
+
+sub clear_fake_cache {
+    %fake_addresses_cache = ();
 }
 
 sub recurse {
@@ -28,7 +63,6 @@ sub recurse {
     $class //= 'IN';
 
     Zonemaster::Engine->logger->add( RECURSE => { name => $name, type => $type, class => $class } );
-
     if ( exists $recurse_cache{$name}{$type}{$class} ) {
         return $recurse_cache{$name}{$type}{$class};
     }
@@ -230,53 +264,59 @@ sub get_ns_from {
 sub get_addresses_for {
     my ( $self, $name, $state ) = @_;
     my @res;
-    $state //=
-      { ns => [ root_servers() ], count => 0, common => 0, seen => {} };
 
-    my ( $pa ) = $self->_recurse(
-        "$name", 'A', 'IN',
-        {
-            ns          => [ root_servers() ],
-            count       => $state->{count},
-            common      => 0,
-            in_progress => $state->{in_progress},
-            glue        => $state->{glue}
+    if ( $fake_addresses_cache{$name} ) {
+        foreach my $ip ( @{ $fake_addresses_cache{$name} } ) {
+            push @res, Zonemaster::Engine::Net::IP->new( $ip );
         }
-    );
+    } else {
+        $state //=
+          { ns => [ root_servers() ], count => 0, common => 0, seen => {} };
 
-    # Name does not exist, just stop
-    if ( $pa and $pa->no_such_name ) {
-        return;
-    }
+        my ( $pa ) = $self->_recurse(
+            "$name", 'A', 'IN',
+            {
+                ns          => [ root_servers() ],
+                count       => $state->{count},
+                common      => 0,
+                in_progress => $state->{in_progress},
+                glue        => $state->{glue}
+            }
+        );
 
-    my ( $paaaa ) = $self->_recurse(
-        "$name", 'AAAA', 'IN',
-        {
-            ns          => [ root_servers() ],
-            count       => $state->{count},
-            common      => 0,
-            in_progress => $state->{in_progress},
-            glue        => $state->{glue}
+        # Name does not exist, just stop
+        if ( $pa and $pa->no_such_name ) {
+            return;
         }
-    );
 
-    my @rrs;
-    my %cname;
-    if ( $pa ) {
-        push @rrs, $pa->get_records( 'a' );
-        $cname{ $_->cname } = 1 for $pa->get_records_for_name( 'CNAME', $name );
-    }
-    if ( $paaaa ) {
-        push @rrs, $paaaa->get_records( 'aaaa' );
-        $cname{ $_->cname } = 1 for $paaaa->get_records_for_name( 'CNAME', $name );
-    }
+        my ( $paaaa ) = $self->_recurse(
+            "$name", 'AAAA', 'IN',
+            {
+                ns          => [ root_servers() ],
+                count       => $state->{count},
+                common      => 0,
+                in_progress => $state->{in_progress},
+                glue        => $state->{glue}
+            }
+        );
 
-    foreach my $rr ( sort { $a->address cmp $b->address } @rrs ) {
-        if ( name( $rr->name ) eq $name or $cname{ $rr->name } ) {
-            push @res, Zonemaster::Engine::Net::IP->new( $rr->address );
+        my @rrs;
+        my %cname;
+        if ( $pa ) {
+            push @rrs, $pa->get_records( 'a' );
+            $cname{ $_->cname } = 1 for $pa->get_records_for_name( 'CNAME', $name );
+        }
+        if ( $paaaa ) {
+            push @rrs, $paaaa->get_records( 'aaaa' );
+            $cname{ $_->cname } = 1 for $paaaa->get_records_for_name( 'CNAME', $name );
+        }
+
+        foreach my $rr ( sort { $a->address cmp $b->address } @rrs ) {
+            if ( name( $rr->name ) eq $name or $cname{ $rr->name } ) {
+                push @res, Zonemaster::Engine::Net::IP->new( $rr->address );
+            }
         }
     }
-
     return @res;
 } ## end sub get_addresses_for
 
@@ -288,6 +328,7 @@ sub _is_answer {
 
 sub clear_cache {
     %recurse_cache = ();
+    populate_cache_with_fake_addresses();
 }
 
 sub root_servers {
@@ -333,9 +374,21 @@ that name (in the form of L<Zonemaster::Engine::Net::IP> objects). When used
 internally by the recursor it's passed a recursion state as its second
 argument.
 
+=item add_fake_addresses()
+
+Class method to create fake adresses for fake delegations.
+
+=item populate_cache_with_fake_addresses()
+
+Class method to populate cache of responses to recursive queries with fake adresseses.
+
+=item clear_fake_cache()
+
+Class method to empty the cache of responses to recursive queries for fake delegations.
+
 =item clear_cache()
 
-Class method to empty the cache of responses to recursive queries.
+Class method to empty the cache of responses to recursive queries (but not the ones for fake delegations).
 
 =item root_servers()
 

@@ -58,8 +58,8 @@ msgid  "Domain name ({dname}) has a zero length label."
 msgstr "Domännamnet '{dname}' har en domändel med längden noll."
 
 #: BASIC:HAS_A_RECORDS
-msgid  "Nameserver {ns} returned A record(s) for {dname}."
-msgstr "Namnservern '{ns}' svarade med A-poster för '{dname}'."
+msgid  "Nameserver {ns}/{address} returned A record(s) for {dname}."
+msgstr "Namnservern '{ns}/{address}' svarade med A-poster för '{dname}'."
 
 #: BASIC:HAS_NAMESERVERS
 msgid  "Nameserver {ns} listed these servers as glue: {nsnlist}."
@@ -90,8 +90,8 @@ msgid  "IPv6 is enabled, can send \"{rrtype}\" query to {ns}/{address}."
 msgstr "IPv6 är påslaget. Skickar fråga om '{rrtype}' till {ns}/{address}."
 
 #: BASIC:NO_A_RECORDS
-msgid  "Nameserver {ns} did not return A record(s) for {dname}."
-msgstr "Namnservern {ns} svarade inte med några A-poster för '{dname}'."
+msgid  "Nameserver {ns}/{address} did not return A record(s) for {dname}."
+msgstr "Namnservern {ns}/{address} svarade inte med några A-poster för '{dname}'."
 
 #: BASIC:NO_GLUE_PREVENTS_NAMESERVER_TESTS
 msgid  "No NS records for tested zone from parent. NS tests aborted."

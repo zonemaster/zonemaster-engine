@@ -54,8 +54,8 @@ msgid  "Domain name ({dname}) has a zero length label."
 msgstr "Le nom de domaine '{dname}' a un label de taille zéro."
 
 #: BASIC:HAS_A_RECORDS
-msgid  "Nameserver {ns} returned A record(s) for {dname}."
-msgstr "Le serveur de noms {ns} renvoie un enregistrement de type \"A\" en réponse à une requête pour '{dname}'."
+msgid  "Nameserver {ns}/{address} returned A record(s) for {dname}."
+msgstr "Le serveur de noms {ns}/{address} renvoie un enregistrement de type \"A\" en réponse à une requête pour '{dname}'."
 
 #: BASIC:HAS_NAMESERVERS
 msgid  "Nameserver {ns} listed these servers as glue: {nsnlist}."
@@ -86,8 +86,8 @@ msgid  "IPv6 is enabled, can send \"{rrtype}\" query to {ns}/{address}."
 msgstr "IPv6 est activé, il est possible de réaliser une requête de type \"{rrtype}\" sur le serveur {ns}."
 
 #: BASIC:NO_A_RECORDS
-msgid  "Nameserver {ns} did not return A record(s) for {dname}."
-msgstr "Le serveur de noms {ns} ne renvoie pas d'enregistrement de type \"A\" en réponse à une requête pour '{dname}'."
+msgid  "Nameserver {ns}/{address} did not return A record(s) for {dname}."
+msgstr "Le serveur de noms {ns}/{address} ne renvoie pas d'enregistrement de type \"A\" en réponse à une requête pour '{dname}'."
 
 #: BASIC:NO_GLUE_PREVENTS_NAMESERVER_TESTS
 msgid  "No NS records for tested zone from parent. NS tests aborted."
@@ -840,11 +840,11 @@ msgstr "Refus d'ajout de configuration DNS alternative au serveur de nom {ns} po
 
 #: SYSTEM:FAKE_DELEGATION_IN_ZONE_NO_IP
 msgid  "The fake delegation of domain {domain} includes an in-zone name server {ns} without mandatory glue (without IP address)."
-msgstr "Ajout de configuration DNS alternative (fake delegation) pour le domaine '{domain'} au serveur de nom 'in-bailiwick' {ns} sans adresse IP."
+msgstr "Ajout de configuration DNS alternative (fake delegation) pour le domaine '{domain}' au serveur de nom 'in-bailiwick' {ns} sans adresse IP."
 
 #: SYSTEM:FAKE_DELEGATION_NO_IP
 msgid  "The fake delegation of domain {domain} includes a name server {ns} that cannot be resolved to any IP address."
-msgstr "Ajout de configuration DNS alternative (fake delegation) pour le domaine '{domain'} au serveur de nom {ns} sans adresse IP."
+msgstr "Ajout de configuration DNS alternative (fake delegation) pour le domaine '{domain}' au serveur de nom {ns} sans adresse IP."
 
 #: SYSTEM:LOGGER_CALLBACK_ERROR
 msgid  "Logger callback died with error: {exception}"
