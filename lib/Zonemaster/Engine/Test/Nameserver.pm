@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::Nameserver;
 
-use version; our $VERSION = version->declare("v1.0.10");
+use version; our $VERSION = version->declare("v1.0.11");
 
 use strict;
 use warnings;
@@ -183,7 +183,8 @@ sub nameserver01 {
     my @existing_tld     = qw{fr re pm tf yt wf si};
     my @results;
     my %ips;
-    my %nsnames;
+    my %nsnames_and_ip;
+
     my %is_not_recursor = ();
 
     foreach
@@ -221,7 +222,7 @@ sub nameserver01 {
             elsif ( not $p->is_redirect and not $p->aa and not $p->answer and $p->rcode eq q{NOERROR} ) {
                 $is_not_recursor{ $local_ns->address->short }++;
             }
-            $nsnames{ $local_ns->name }++;
+            $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short }++;
             $ips{ $local_ns->address->short }++;
         }
 
@@ -233,7 +234,7 @@ sub nameserver01 {
         push @results,
           info(
             NO_RECURSOR => {
-                names => join( q{,}, sort keys %nsnames ),
+                names => join( q{,}, sort keys %nsnames_and_ip ),
             }
           );
     }
@@ -280,7 +281,7 @@ sub nameserver01 {
                     elsif ( not $p->is_redirect and not $p->aa and not $p->answer and $p->rcode eq q{NOERROR} ) {
                         $is_not_recursor{ $local_ns->address->short }++;
                     }
-                    $nsnames{ $local_ns->name }++;
+                    $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short }++;
                     $ips{ $local_ns->address->short }++;
                 }
             }
@@ -291,7 +292,7 @@ sub nameserver01 {
                 push @results,
                   info(
                     NO_RECURSOR => {
-                        names => join( q{,}, sort keys %nsnames ),
+                        names => join( q{,}, sort keys %nsnames_and_ip ),
                     }
                   );
                 last;
@@ -306,7 +307,7 @@ sub nameserver01 {
             push @results,
               info(
                 RECURSIVITY_UNDEF => {
-                    names => join( q{,}, sort keys %nsnames ),
+                    names => join( q{,}, sort keys %nsnames_and_ip ),
                 }
               );
         }
