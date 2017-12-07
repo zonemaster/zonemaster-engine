@@ -280,7 +280,7 @@ module is upgraded (or reinstalled for any other reason). If you really need to
 know where it is, you can either check the log message left when loading it or
 run this command to find the path:
 
-    perl -MFile::ShareDir=dist_dir -E 'say dist_dir( "Zonemaster" )'
+    perl -MFile::ShareDir=dist_dir -E 'say dist_dir( "Zonemaster-Engine" )'
 
 =item /etc/zonemaster
 
