@@ -365,6 +365,10 @@ The number of times a query is sent before we give up. Can be set to zero, altho
 
 If set, queries that get truncated UDP responses will be automatically retried over TCP. Default not set.
 
+=head2 resolver.source
+
+The source address all resolver objects should use when sending queries, if one is set.
+
 =head2 net.ipv4
 
 If set, resolver objects are allowed to send queries over IPv4. Default set.
