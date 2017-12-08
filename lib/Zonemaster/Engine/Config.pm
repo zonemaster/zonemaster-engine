@@ -440,7 +440,14 @@ The value is a hash where the keys are names of test implementation modules (wit
 
 =head2 test_cases
 
-The value is a hash where the keys are names of test cases from the test specifications, and the corresponding values are booleans specifying if the test case in question should be executed or not. Any missing test cases are treated as if they had the value C<true> set. The test cases C<basic00>, C<basic01> and C<basic02> will be executed even if their values are set to C<false>, since part of their function is to verify that the given name can be tested at all. The values here only apply when test modules are asked to run all their tests. A test case that is set to C<false> here will still run if asked for specifically.
+The value is a hash where keys are names of test cases from the test specifications and values are booleans.
+Only test cases that are set to C<false> are considered.
+Test cases that are set to C<true> are ignored.
+
+Specifies a blacklist of test cases to skip when a test module is asked to run of all of its test cases.
+Test cases blacklisted here can still be run individually.
+The test cases C<basic00>, C<basic01> and C<basic02> cannot be blacklisted this way.
+The reason these particular test cases cannot be blacklisted is that part of their function is to verify that the given name can be tested at all.
 
 =cut
 
