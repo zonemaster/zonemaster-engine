@@ -337,33 +337,34 @@ The allowed keys are as follows.
 Top-level keys are denoted by the keys themselves (e.g. I<asn_roots> is just a top-level key).
 Hierarchy is denoted by dots (e.g. I<net.ipv4> means a top-level key I<net> mapping to a second-level hashref which in turn has an I<ipv4> key).
 
-=head2 resolver.defaults
-
-These are the default flag and timing values used for the resolver objects used to actually send DNS queries.
 
 =head2 resolver.defaults.usevc
 
-If set, only use TCP. Default not set.
+A boolean. If C<true>, only use TCP. Default C<false>.
 
 =head2 resolver.defaults.retrans
 
-The number of seconds between retries. Default 3.
+A number. The number of seconds between retries. Default 3.
 
 =head2 resolver.defaults.dnssec
 
-If set, sets the DO flag in queries. Default not set.
+A boolean. If C<true>, sets the DO flag in queries. Default C<false>.
 
 =head2 resolver.defaults.recurse
 
-If set, sets the RD flag in queries. Default not set (and almost certainly should remain that way).
+A boolean. If C<true>, sets the RD flag in queries. Default C<false>.
+
+This should almost certainly be kept C<true>.
 
 =head2 resolver.defaults.retry
 
-The number of times a query is sent before we give up. Can be set to zero, although that's not very useful (since no queries will be sent at all). Defaults to 2.
+A non-negative integer. The number of times a query is sent before we give up. Default 2.
+
+If set to zero, no queries will be sent at all, which isn't very useful.
 
 =head2 resolver.defaults.igntc
 
-If set, queries that get truncated UDP responses will be automatically retried over TCP. Default not set.
+A boolean. If C<true>, queries that get truncated UDP responses will be automatically retried over TCP. Default C<false>.
 
 =head2 resolver.source
 
@@ -371,15 +372,17 @@ The source address all resolver objects should use when sending queries, if one 
 
 =head2 net.ipv4
 
-If set, resolver objects are allowed to send queries over IPv4. Default set.
+A boolean. If C<true>, resolver objects are allowed to send queries over IPv4. Default C<true>.
 
 =head2 net.ipv6
 
-If set, resolver objects are allowed to send queries over IPv6. Default set.
+A boolean. If C<true>, resolver objects are allowed to send queries over IPv6. Default C<true>.
 
 =head2 no_network
 
-If set to a true value, network traffic is forbidden. Use when you want to be sure that any data is only taken from a preloaded cache.
+A boolean. If true, network traffic is forbidden. Default C<false>.
+
+Use when you want to be sure that any data is only taken from a preloaded cache.
 
 =head2 asnroots
 
