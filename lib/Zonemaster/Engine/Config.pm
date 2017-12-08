@@ -250,7 +250,7 @@ __PACKAGE__->meta->make_immutable;
 
 =head1 NAME
 
-Zonemaster::Engine::Config - configuration access module for Zonemaster::Engine
+Zonemaster::Engine::Config - profile access module for Zonemaster::Engine
 
 =head1 SYNOPSIS
 
@@ -258,13 +258,23 @@ Zonemaster::Engine::Config - configuration access module for Zonemaster::Engine
 
     my $value = Zonemaster::Engine::Config->get->{key}{subkey}; # Not really recommended way to access profile data
 
-=head1 LOADING PROFILES
+=head1 DESCRIPTION
 
-Initial profile data for the effective profile is loaded from the default profile.
-The effective profile can be updated with custom profile data.
-The default profile is parsed from a JSON file called F<default.profile> in the Zonemaster-Engine L<dist_dir|File::ShareDir/dist_dir>.
+Zonemaster::Engine::Config provides methods for reading and updating the effective profile.
 
-The possible contents of the JSON data is described further down in this manual
+A profile is a set of configuration options (a.k.a. profile data) regarding:
+
+ * sets of tests to run
+ * test result severity levels
+ * DNS querying behavior
+
+The I<effective profile> is a set of profile values that is consulted by various parts of Zonemaster::Engine.
+The I<default profile> is a set of profile values that is used to initialize the effective profile.
+
+Zonemaster::Engine::Config reads profile data from disk in a JSON sub-format.
+The JSON sub-format is described below in the L<PROFILE DATA> section.
+The default profile is read from the file F<default.profile> located by L<dist_dir|File::ShareDir/dist_dir> for Zonemaster-Engine.
+
 page.
 
 =head1 PROFILE DATA ACCESS METHODS
