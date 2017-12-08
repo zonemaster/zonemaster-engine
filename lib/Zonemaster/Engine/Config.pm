@@ -334,54 +334,44 @@ a test run according to the effective profile or false if not.
 Profile data is represented as a nested hash (possibly with arrays as values in places).
 
 The allowed keys are as follows.
+Top-level keys are denoted by the keys themselves (e.g. I<asn_roots> is just a top-level key).
+Hierarchy is denoted by dots (e.g. I<net.ipv4> means a top-level key I<net> mapping to a second-level hashref which in turn has an I<ipv4> key).
 
-=head2 resolver
-
-=head3 defaults
+=head2 resolver.defaults
 
 These are the default flag and timing values used for the resolver objects used to actually send DNS queries.
 
-=over
-
-=item usevc
+=head2 resolver.defaults.usevc
 
 If set, only use TCP. Default not set.
 
-=item retrans
+=head2 resolver.defaults.retrans
 
 The number of seconds between retries. Default 3.
 
-=item dnssec
+=head2 resolver.defaults.dnssec
 
 If set, sets the DO flag in queries. Default not set.
 
-=item recurse
+=head2 resolver.defaults.recurse
 
 If set, sets the RD flag in queries. Default not set (and almost certainly should remain that way).
 
-=item retry
+=head2 resolver.defaults.retry
 
 The number of times a query is sent before we give up. Can be set to zero, although that's not very useful (since no queries will be sent at all). Defaults to 2.
 
-=item igntc
+=head2 resolver.defaults.igntc
 
 If set, queries that get truncated UDP responses will be automatically retried over TCP. Default not set.
 
-=back
-
-=head2 net
-
-=over
-
-=item ipv4
+=head2 net.ipv4
 
 If set, resolver objects are allowed to send queries over IPv4. Default set.
 
-=item ipv6
+=head2 net.ipv6
 
 If set, resolver objects are allowed to send queries over IPv6. Default set.
-
-=back
 
 =head2 no_network
 
