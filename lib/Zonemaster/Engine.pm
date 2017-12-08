@@ -132,7 +132,6 @@ sub add_fake_delegation {
     }
 
     if ( $incomplete_delegation ) {
-        Zonemaster::Engine->logger->add( CANNOT_CONTINUE => { zone => $domain } );
         return;
     }
     return 1;
