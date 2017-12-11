@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Recursor;
 
-use version; our $VERSION = version->declare("v1.0.6");
+use version; our $VERSION = version->declare("v1.0.7");
 
 use 5.014002;
 use warnings;
@@ -34,12 +34,12 @@ sub add_fake_addresses {
         }
     }
 
-    $self->populate_cache_with_fake_addresses();
+    $self->_populate_cache_with_fake_addresses();
 
     return;
 }
 
-sub populate_cache_with_fake_addresses {
+sub _populate_cache_with_fake_addresses {
     my $class = 'IN';
 
     foreach my $name ( keys %fake_addresses_cache ) {
@@ -328,7 +328,7 @@ sub _is_answer {
 
 sub clear_cache {
     %recurse_cache = ();
-    populate_cache_with_fake_addresses();
+    _populate_cache_with_fake_addresses();
 }
 
 sub root_servers {
@@ -354,6 +354,16 @@ Zonemaster::Engine::Recursor - recursive resolver for Zonemaster
 
 =over
 
+=item %recurse_cache
+
+Will cache result of previous queries.
+
+=item %fake_addresses_cache
+
+Contains namservers IP addresses which are used in case of fake delegations 
+(pre-publication tests). This data are used to initialize %recurse_cache to 
+prevent A|AAAA recursive queries on fake nameservers.
+
 =item recurse($name, $type, $class)
 
 Does a recursive resolution from the root servers down for the given triplet.
@@ -372,15 +382,16 @@ Internal method. Takes a packet and a recursion state and returns a list of ns o
 Takes a name and returns a (possibly empty) list of IP addresses for
 that name (in the form of L<Zonemaster::Engine::Net::IP> objects). When used
 internally by the recursor it's passed a recursion state as its second
-argument.
+argument. If the name has an entry in %fake_addresses_cache, these are these 
+IP addresses which are returned.
 
 =item add_fake_addresses()
 
 Class method to create fake adresses for fake delegations.
 
-=item populate_cache_with_fake_addresses()
+=item _populate_cache_with_fake_addresses()
 
-Class method to populate cache of responses to recursive queries with fake adresseses.
+Private method to populate cache of responses to recursive queries with fake adresseses.
 
 =item clear_fake_cache()
 
