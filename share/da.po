@@ -4,10 +4,10 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Project-Id-Version: 1.0.0\n"
-"PO-Revision-Date: 2017-09-25 13:40+0200\n"
+"PO-Revision-Date: 2017-12-06 13:40+0100\n"
 "Language-Team: Zonemaster Team\n"
 "MIME-Version: 1.0\n"
-"Last-Translator: Niels Haarbo <haarbo@dk-hostmaster.dk>\n"
+"Last-Translator: Mats Dufberg <mats.dufberg@iis.se>\n"
 
 #: ADDRESS:NAMESERVERS_IP_WITH_REVERSE
 msgid  "Reverse DNS entry exist for all Nameserver IP addresses."
@@ -57,10 +57,6 @@ msgstr "Domænenavnet ({dname}) har en label med længden nul."
 msgid  "Nameserver {ns} returned A record(s) for {dname}."
 msgstr "Navneserveren {ns} svarede med A-record(s) for {dname}."
 
-#: BASIC:HAS_GLUE
-msgid  "Nameserver for zone {pname} listed these nameservers as glue: {nsnlist}."
-msgstr "Navneserveren for zonen {pname} returnerede disse navneservere som glue: {nsnlist}."
-
 #: BASIC:HAS_NAMESERVERS
 msgid  "Nameserver {ns} listed these servers as glue: {nsnlist}."
 msgstr "Navneserveren {ns} returnerede disse servere som glue: {nsnlist}."
@@ -68,6 +64,10 @@ msgstr "Navneserveren {ns} returnerede disse servere som glue: {nsnlist}."
 #: BASIC:HAS_NAMESERVER_NO_WWW_A_TEST
 msgid  "Functional nameserver found. \"A\" query for www.{zname} test aborted."
 msgstr "Fungerende navneserver fundet. Test på \"A\"-forespørgsel for www.{zname} afbrydes."
+
+#: BASIC:HAS_PARENT
+msgid  "Parent domain '{pname}' was found for the tested domain."
+msgstr "Forælder-domænet '{pname}' blev fundet for det testede domæne."
 
 #: BASIC:IPV4_DISABLED
 msgid  "IPv4 is disabled, not sending \"{rrtype}\" query to {ns}/{address}."
@@ -89,14 +89,6 @@ msgstr "IPv6 er aktiveret, kan udføre \"{rrtype}\"-forespørgsel til {ns}/{addr
 msgid  "Nameserver {ns} did not return A record(s) for {dname}."
 msgstr "Navneserveren {ns} returnerede ikke nogle A-records for {dname}."
 
-#: BASIC:NO_DOMAIN
-msgid  "Nameserver for zone {pname} responded with NXDOMAIN to query for glue."
-msgstr "Navneserveren for zone {pname} svarede med NXDOMAIN på en forespørgsel om glue."
-
-#: BASIC:NO_GLUE
-msgid  "Nameservers for \"{pname}\" provided no NS records for tested zone. RCODE given was {rcode}."
-msgstr "Navneserverne for \"{pname}\" returnerede ingen NS-records for den testede zone. Den returnerede RCODE var {rcode}."
-
 #: BASIC:NO_GLUE_PREVENTS_NAMESERVER_TESTS
 msgid  "No NS records for tested zone from parent. NS tests aborted."
 msgstr "Ingen NS-records for den testede zone fra forælderzonen. NS-test afbrydes."
@@ -104,14 +96,6 @@ msgstr "Ingen NS-records for den testede zone fra forælderzonen. NS-test afbryd
 #: BASIC:NO_PARENT
 msgid  "No parent domain could be found for the tested domain."
 msgstr "Ikke muligt at finde forælder-domænet for det testede domæne."
-
-#: BASIC:NO_PARENT_RESPONSE
-msgid  "No response from nameserver for zone {pname} when trying to fetch glue."
-msgstr "Navneserveren for zonen {pname} returnerede intet svar under forsøg på at hente glue."
-
-#: BASIC:NOT_A_ZONE
-msgid  "{zname} is not a zone."
-msgstr "{zname} er ikke en zone."
 
 #: BASIC:NS_FAILED
 msgid  "Nameserver {ns}/{address} did not return NS records. RCODE was {rcode}."
@@ -121,13 +105,15 @@ msgstr "Navneserveren {ns}/{address} returnerede ikke NS-records. RCODE var {rco
 msgid  "Nameserver {ns}/{address} did not respond to NS query."
 msgstr "Navneserveren {ns}/{address} svarede ikke på en NS-forespørgsel."
 
-#: BASIC:PARENT_REPLIES
-msgid  "Nameserver for zone {pname} replies when trying to fetch glue."
-msgstr "Navneserver for zonen {pname} svarede på anmodning om glue-record."
+#: CONNECTIVITY:IPV4_DISABLED 
+# (Same content as BASIC:IPV4_DISABLED. Do not duplicate unless msgid should be 
+# different) 
 
-#: CONNECTIVITY:IPV4_DISABLED (Same content that BASIC:IPV4_DISABLED, do not
-#: duplicate unless msgid should be different) CONNECTIVITY:IPV6_DISABLED
-#: BASIC:IPV6_DISABLED, CONNECTIVITY:NAMESERVERS_IPV4_NO_AS
+#: CONNECTIVITY:IPV6_DISABLED
+# (Same content that BASIC:IPV6_DISABLED. Do not duplicate unless msgid should be 
+# different)
+
+#: CONNECTIVITY:NAMESERVERS_IPV4_NO_AS
 msgid  "No IPv4 nameserver address is in an AS."
 msgstr "Ingen navneserver har en IPv4-adresse i et AS."
 
@@ -199,9 +185,15 @@ msgstr "[ASN:ANNOUNCE_BY] {address};{asn}"
 msgid  "[ASN:ANNOUNCE_IN] {address};{prefix}"
 msgstr "[ASN:ANNOUNCE_IN] {address};{prefix}"
 
-#: CONSISTENCY:IPV4_DISABLED (Same content that BASIC:IPV4_DISABLED, do not
-#: duplicate unless msgid should be different) CONSISTENCY:IPV6_DISABLED
-#: BASIC:IPV6_DISABLED, CONSISTENCY:MULTIPLE_NS_SET
+#: CONSISTENCY:IPV4_DISABLED 
+# (Same content that BASIC:IPV4_DISABLED, do not duplicate unless msgid should 
+# be different) 
+
+#: CONSISTENCY:IPV6_DISABLED
+# (Same content that BASIC:IPV6_DISABLED, do not duplicate unless msgid should 
+# be different)
+
+#: CONSISTENCY:MULTIPLE_NS_SET
 msgid  "Saw {count} NS set."
 msgstr "Fandt {count} NS-sæt."
 
@@ -297,10 +289,6 @@ msgstr "Barnet returnerer tilstrækkeligt antal ({count}) navneservere ({ns}). M
 msgid  "Parent lists enough ({count}) nameservers ({glue}). Lower limit set to {minimum}."
 msgstr "Forælderen returnerer tilstrækkeligt antal ({count}) navneservere ({glue}). Mindsteværdi sat til {minimum}."
 
-#: DELEGATION:ENOUGH_NS_TOTAL
-msgid  "Parent and child list enough ({count}) nameservers ({ns}). Lower limit set to {minimum}."
-msgstr "Forælder- og børnezone returnerer tilstrækkeligt antal ({count}) navneservere ({ns}). Mindsteværdi sat til {minimum}."
-
 #: DELEGATION:EXTRA_NAME_CHILD
 msgid  "Child has nameserver(s) not listed at parent ({extra})."
 msgstr "Barnet indeholder en eller flera navneservere som ikke findes hos forælderen ({extra})."
@@ -309,9 +297,15 @@ msgstr "Barnet indeholder en eller flera navneservere som ikke findes hos foræl
 msgid  "Parent has nameserver(s) not listed at the child ({extra})."
 msgstr "Forælderen har en eller flera navneservere som ikke findes hos barnet ({extra})."
 
-#: DELEGATION:IPV4_DISABLED (Same content that BASIC:IPV4_DISABLED, do not
-#: duplicate unless msgid should be different) DELEGATION:IPV6_DISABLED
-#: BASIC:IPV6_DISABLED, DELEGATION:IS_NOT_AUTHORITATIVE
+#: DELEGATION:IPV4_DISABLED 
+# (Same content that BASIC:IPV4_DISABLED, do not duplicate unless msgid should 
+# be different) 
+
+#: DELEGATION:IPV6_DISABLED
+# (Same content that BASIC:IPV6_DISABLED, do not duplicate unless msgid should 
+# be different)
+
+#: DELEGATION:IS_NOT_AUTHORITATIVE
 msgid  "Nameserver {ns} response is not authoritative on {proto} port 53."
 msgstr "Navneserveren {ns} svarede ikke autoritativt på {proto} port 53."
 
@@ -326,10 +320,6 @@ msgstr "Barnet returnerer ikke tilstrækkeligt antal ({count}) navneservere ({ns
 #: DELEGATION:NOT_ENOUGH_NS_GLUE
 msgid  "Parent does not list enough ({count}) nameservers ({glue}). Lower limit set to {minimum}."
 msgstr "Forælderen returnerer ikke tilstrækkeligt antal ({count}) navneservere ({glue}). Mindsteværdi er sat til {minimum}."
-
-#: DELEGATION:NOT_ENOUGH_NS_TOTAL
-msgid  "Parent and child do not list enough ({count}) nameservers ({ns}). Lower limit set to {minimum}."
-msgstr "Forælder- og børnezone returnerer ikke tilstrækkeligt antal ({count}) navneservere ({ns}). Mindsteværdi sat til {minimum}."
 
 #: DELEGATION:NS_RR_IS_CNAME
 msgid  "Nameserver {ns} {address_type} RR point to CNAME."
@@ -659,9 +649,15 @@ msgstr "Navneserveren {ns}/{address} understøtter ikke EDNS0 (svarer FORMERR)."
 msgid  "The following nameservers support EDNS0 : {names}."
 msgstr "Følgende navneservere understøtter EDNS0 : {names}."
 
-#: NAMESERVER:IPV4_DISABLED (Same content that BASIC:IPV4_DISABLED, do not
-#: duplicate unless msgid should be different) NAMESERVER:IPV6_DISABLED
-#: BASIC:IPV6_DISABLED, NAMESERVER:IS_A_RECURSOR
+#: NAMESERVER:IPV4_DISABLED 
+#  (Same content as BASIC:IPV4_DISABLED. Do not duplicate unless msgid should be 
+#  different) 
+
+#: NAMESERVER:IPV6_DISABLED
+#  (Same content as BASIC:IPV6_DISABLED. Do not duplicate unless msgid should be 
+#  different) 
+
+#: NAMESERVER:IS_A_RECURSOR
 msgid  "Nameserver {ns}/{address} is a recursor."
 msgstr "Navneserveren {ns}/{address} er rekursiv."
 
@@ -801,9 +797,14 @@ msgstr "Domænenavnet ({name}) indeholder ikke bindestreg i position 3 og 4 (med
 msgid  "Both ends of all labels of the domain name ({name}) have no hyphens."
 msgstr "Alle labels i domænenavnet ({name}) begynder eller slutter ikke med bindestreg."
 
-#: SYNTAX:NO_RESPONSE_MX_QUERY (Same content that SYNTAX:NO_RESPONSE_MX_QUERY,
-#: do not duplicate unless msgid should be different)
-#: SYNTAX:NO_RESPONSE_SOA_QUERY SYNTAX:NO_RESPONSE_SOA_QUERY,
+#: SYNTAX:NO_RESPONSE_MX_QUERY 
+# (Same content as ZONE:NO_RESPONSE_MX_QUERY. Do not duplicate unless msgid 
+# should be different)
+
+#: SYNTAX:NO_RESPONSE_SOA_QUERY
+# (Same content as ZONE:NO_RESPONSE_SOA_QUERY. Do not duplicate unless msgid 
+# should be different)
+
 #: SYNTAX:ONLY_ALLOWED_CHARS
 msgid  "No illegal characters in the domain name ({name})."
 msgstr "Udelukkende lovlige tegn i domænenavnet ({name})."
@@ -857,11 +858,11 @@ msgid  "Name server {ns} not adding fake delegation for domain {domain} to itsel
 msgstr "Navneserveren {ns} tilføjede ikke en falsk delegering for domænet {domain}."
 
 #: SYSTEM:FAKE_DELEGATION_IN_ZONE_NO_IP
-msgid  "Add a fake delegation for domain {domain} to in zone name server {ns} without IP address."
+msgid  "The fake delegation of domain {domain} includes an in-zone name server {ns} without mandatory glue (without IP address)."
 msgstr "Ugyldig delegation for domænenavnet {domain} til zone indeholdende en navneserver {ns} uden IP-adresse."
 
 #: SYSTEM:FAKE_DELEGATION_NO_IP
-msgid  "Add a fake delegation for domain {domain} to name server {ns} without IP address."
+msgid  "The fake delegation of domain {domain} includes a name server {ns} that cannot be resolved to any IP address."
 msgstr "Ugyldig delegation for domænenavnet {domain} til en navneserver {ns} uden IP-adresse."
 
 #: SYSTEM:LOGGER_CALLBACK_ERROR
