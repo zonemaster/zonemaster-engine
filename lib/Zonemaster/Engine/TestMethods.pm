@@ -1,6 +1,6 @@
 package Zonemaster::Engine::TestMethods;
 
-use version; our $VERSION = version->declare("v1.0.3");
+use version; our $VERSION = version->declare("v1.1.0");
 
 use 5.014002;
 use strict;
@@ -28,12 +28,19 @@ sub method3 {
 
     my @child_nsnames;
     my @nsnames;
-    my $ns_aref = $zone->query_all( $zone->name, q{NS} );
-    foreach my $p ( @{$ns_aref} ) {
-        next if not $p;
-        push @nsnames, $p->get_records_for_name( q{NS}, $zone->name );
+
+    if ( keys %Zonemaster::Engine::Recursor::fake_addresses_cache ) {
+        foreach my $name ( keys %Zonemaster::Engine::Recursor::fake_addresses_cache ) {
+            push @child_nsnames, Zonemaster::Engine::DNSName->new( lc($name) );
+        }
+    } else {
+        my $ns_aref = $zone->query_all( $zone->name, q{NS} );
+        foreach my $p ( @{$ns_aref} ) {
+            next if not $p;
+            push @nsnames, $p->get_records_for_name( q{NS}, $zone->name );
+        }
+        @child_nsnames = uniq map { name( lc( $_->nsdname ) ) } @nsnames;
     }
-    @child_nsnames = uniq map { name( lc( $_->nsdname ) ) } @nsnames;
 
     return [@child_nsnames];
 }
@@ -47,7 +54,14 @@ sub method4 {
 sub method5 {
     my ( $class, $zone ) = @_;
 
-    return $zone->ns;
+    if ( keys %Zonemaster::Engine::Recursor::fake_addresses_cache ) {
+        my $aref = [];
+        tie @$aref, 'Zonemaster::Engine::NSArray', keys %Zonemaster::Engine::Recursor::fake_addresses_cache;
+        return $aref;
+    }
+    else {
+        return $zone->ns;
+    }
 }
 
 =head1 NAME
