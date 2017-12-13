@@ -71,7 +71,7 @@ msgstr "En fungerande namnserver hittades. Skickade ingen fråga om 'A' för 'ww
 
 #: BASIC:HAS_PARENT
 msgid  "Parent domain '{pname}' was found for the tested domain."
-msgstr "Parent domain '{pname}' was found for the tested domain."
+msgstr "Moderdomänen '{pname}' till den testade domänen har identifierats."
 
 #: BASIC:IPV4_DISABLED
 msgid  "IPv4 is disabled, not sending \"{rrtype}\" query to {ns}/{address}."
@@ -111,6 +111,7 @@ msgstr "Namnservern {ns}/{address} svarade inte på frågan om 'NS'."
 
 #: CONNECTIVITY:IPV4_DISABLED
 #: CONNECTIVITY:IPV6_DISABLED
+
 #: CONNECTIVITY:NAMESERVERS_IPV4_NO_AS
 msgid  "No IPv4 nameserver address is in an AS."
 msgstr "Ingen namnserver har någon IPv4-adress i något AS."
@@ -291,6 +292,7 @@ msgstr "Delegeringen i moderzonen har en eller flera namnservrar som inte listas
 
 #: DELEGATION:IPV4_DISABLED
 #: DELEGATION:IPV6_DISABLED
+
 #: DELEGATION:IS_NOT_AUTHORITATIVE
 msgid  "Nameserver {ns} response is not authoritative on {proto} port 53."
 msgstr "Namnservern '{ns}' svarade inte auktoritativt på {proto} port 53."
@@ -429,7 +431,7 @@ msgstr "Det finns ingen DS-post med matchande DNSKEY-post."
 
 #: DNSSEC:DS_RFC4509_NOT_VALID
 msgid  "Existing DS with digest type 2, while they do not match DNSKEY records, prevent use of DS with digest type 1 (RFC4509, section 3)."
-msgstr "Existing DS with digest type 2, while they do not match DNSKEY records, prevent use of DS with digest type 1 (RFC4509, section 3)."
+msgstr "Befintlig DS med 'digest' typ 2 som inte stämmer med DNSKEY-posten, förhindrar ändå, i enlighet med RFC 4509 (stycke 3), att DS med 'digest' typ 1."
 
 #: DNSSEC:DURATION_LONG
 msgid  "RRSIG with keytag {tag} and covering type(s) {types} has a duration of {duration} seconds, which is too long."
@@ -637,6 +639,7 @@ msgstr "Följande namnservrar stöder EDNS0: {names}."
 
 #: NAMESERVER:IPV4_DISABLED
 #: NAMESERVER:IPV6_DISABLED
+
 #: NAMESERVER:IS_A_RECURSOR
 msgid  "Nameserver {ns}/{address} is a recursor."
 msgstr "Namnservern {ns}/{address} är en rekursiv resolver."
@@ -778,12 +781,7 @@ msgid  "Both ends of all labels of the domain name ({name}) have no hyphens."
 msgstr "Domännamnet '{name}' har ingen domändel som börjar eller slutar med ett bindestreck."
 
 #: SYNTAX:NO_RESPONSE_MX_QUERY
-msgid  "No response from nameserver(s) on MX queries."
-msgstr "Inget svar gavs på fråga om MX-record."
-
 #: SYNTAX:NO_RESPONSE_SOA_QUERY
-msgid  "No response from nameserver(s) on SOA queries."
-msgstr "Inget svar gavs på fråga om SOA-record."
 
 #: SYNTAX:ONLY_ALLOWED_CHARS
 msgid  "No illegal characters in the domain name ({name})."
@@ -958,7 +956,13 @@ msgid  "No target (MX, A or AAAA record) to deliver e-mail for the domain name."
 msgstr "Inget mål att levera mail till (MX-, A- eller AAAA-post) är angivet för domänen."
 
 #: ZONE:NO_RESPONSE_MX_QUERY
+msgid  "No response from nameserver(s) on MX queries."
+msgstr "Inget svar gavs på fråga om MX-record."
+
 #: ZONE:NO_RESPONSE_SOA_QUERY
+msgid  "No response from nameserver(s) on SOA queries."
+msgstr "Inget svar gavs på fråga om SOA-record."
+
 #: ZONE:REFRESH_HIGHER_THAN_RETRY
 msgid  "SOA 'refresh' value ({refresh}) is higher than the SOA 'retry' value ({retry})."
 msgstr "'refresh'-värdet i SOA-posten ({refresh}) är högre än SOA-postens 'retry'-värde ({retry})."
