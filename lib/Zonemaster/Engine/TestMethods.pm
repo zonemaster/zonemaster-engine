@@ -1,6 +1,6 @@
 package Zonemaster::Engine::TestMethods;
 
-use version; our $VERSION = version->declare("v1.1.0");
+use version; our $VERSION = version->declare("v1.1.1");
 
 use 5.014002;
 use strict;
@@ -19,8 +19,16 @@ sub method1 {
 
 sub method2 {
     my ( $class, $zone ) = @_;
+    my @parent_nsnames;
 
-    return $zone->glue_names;
+    if ( keys %Zonemaster::Engine::Recursor::fake_addresses_cache ) {
+        foreach my $name ( keys %Zonemaster::Engine::Recursor::fake_addresses_cache ) {
+            push @parent_nsnames, Zonemaster::Engine::DNSName->new( lc($name) );
+        }
+        return [@parent_nsnames];
+    } else {
+        return $zone->glue_names;
+    }
 }
 
 sub method3 {
@@ -29,29 +37,17 @@ sub method3 {
     my @child_nsnames;
     my @nsnames;
 
-    if ( keys %Zonemaster::Engine::Recursor::fake_addresses_cache ) {
-        foreach my $name ( keys %Zonemaster::Engine::Recursor::fake_addresses_cache ) {
-            push @child_nsnames, Zonemaster::Engine::DNSName->new( lc($name) );
-        }
-    } else {
-        my $ns_aref = $zone->query_all( $zone->name, q{NS} );
-        foreach my $p ( @{$ns_aref} ) {
-            next if not $p;
-            push @nsnames, $p->get_records_for_name( q{NS}, $zone->name );
-        }
-        @child_nsnames = uniq map { name( lc( $_->nsdname ) ) } @nsnames;
+    my $ns_aref = $zone->query_all( $zone->name, q{NS} );
+    foreach my $p ( @{$ns_aref} ) {
+        next if not $p;
+        push @nsnames, $p->get_records_for_name( q{NS}, $zone->name );
     }
+    @child_nsnames = uniq map { name( lc( $_->nsdname ) ) } @nsnames;
 
     return [@child_nsnames];
 }
 
 sub method4 {
-    my ( $class, $zone ) = @_;
-
-    return $zone->glue;
-}
-
-sub method5 {
     my ( $class, $zone ) = @_;
 
     if ( keys %Zonemaster::Engine::Recursor::fake_addresses_cache ) {
@@ -60,8 +56,14 @@ sub method5 {
         return $aref;
     }
     else {
-        return $zone->ns;
+        return $zone->glue;
     }
+}
+
+sub method5 {
+    my ( $class, $zone ) = @_;
+
+    return $zone->ns;
 }
 
 =head1 NAME
