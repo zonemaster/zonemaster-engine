@@ -85,7 +85,7 @@
       "NS_RR_NO_CNAME" : "INFO",
       "REFERRAL_SIZE_LARGE" : "WARNING",
       "REFERRAL_SIZE_OK" : "INFO",
-      "SAME_IP_ADDRESS" : "NOTICE",
+      "SAME_IP_ADDRESS" : "ERROR",
       "SOA_EXISTS" : "INFO",
       "SOA_NOT_EXISTS" : "ERROR",
       "TOTAL_NAME_MISMATCH" : "ERROR"
