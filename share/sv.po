@@ -423,7 +423,7 @@ msgstr "Det finns ingen DS-post med matchande DNSKEY-post."
 
 #: DNSSEC:DS_RFC4509_NOT_VALID
 msgid  "Existing DS with digest type 2, while they do not match DNSKEY records, prevent use of DS with digest type 1 (RFC4509, section 3)."
-msgstr "Befintlig DS med 'digest' typ 2, som inte stämmer med DNSKEY-posten, förhindrar ändå, i enlighet med RFC 4509 (stycke 3), att DS med 'digest' typ 1 används."
+msgstr "Befintlig DS med 'digest' typ 2 stämmer inte med DNSKEY-posten. Det finns en DS med 'digest' typ 1, men RFC 4509 (stycke 3) tillåter inte att den används när det finns en DS med 'digest' typ 2."
 
 #: DNSSEC:DURATION_LONG
 msgid  "RRSIG with keytag {tag} and covering type(s) {types} has a duration of {duration} seconds, which is too long."
