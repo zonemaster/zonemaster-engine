@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Recursor;
 
-use version; our $VERSION = version->declare("v1.0.7");
+use version; our $VERSION = version->declare("v1.0.8");
 
 use 5.014002;
 use warnings;
@@ -29,6 +29,7 @@ sub add_fake_addresses {
     my ( $self, $href ) = @_;
 
     foreach my $name ( keys %{$href} ) {
+        push @{ $fake_addresses_cache{$name} }, ();
         foreach my $ip (@{ $href->{$name} }) {
             push @{ $fake_addresses_cache{$name} }, $ip;
         }

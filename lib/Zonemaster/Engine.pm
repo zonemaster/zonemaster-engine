@@ -1,6 +1,6 @@
 package Zonemaster::Engine;
 
-use version; our $VERSION = version->declare("v2.0.3");
+use version; our $VERSION = version->declare("v2.0.4");
 
 use 5.014002;
 use Moose;
@@ -108,6 +108,7 @@ sub add_fake_delegation {
                 Zonemaster::Engine->logger->add(
                     FAKE_DELEGATION_IN_ZONE_NO_IP => { domain => $domain , ns => $name }
                 );
+                push @{ $href->{$name} }, ();
                 $incomplete_delegation = 1;
             }
             else {
@@ -119,6 +120,7 @@ sub add_fake_delegation {
                     Zonemaster::Engine->logger->add(
                         FAKE_DELEGATION_NO_IP => { domain => $domain , ns => $name  }
                     );
+                    push @{ $href->{$name} }, ();
                     $incomplete_delegation = 1;
 		}
             }
