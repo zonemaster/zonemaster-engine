@@ -296,7 +296,8 @@ Returns a list of the loaded test modules. Exactly the same as L<Zonemaster::Eng
 This method adds some fake delegation information to the system. The arguments are a domain name, and a reference to a hash with delegation
 information. The keys in the hash must be nameserver names, and the values references to lists of IP addresses (which can be left empty) for
 the corresponding nameserver. If IP addresses are not provided for nameservers, the engine will perform queries to find them, except for
-in-bailiwick nameservers. If all servers can be associated to IP addresses, it returns 1, undefined value otherwise.
+in-bailiwick nameservers. All IP addresses found/provided are then used to initialize %Zonemaster::Engine::Recursor::fake_addresses_cache
+for later usage. If all servers can be associated to IP addresses, add_fake_delegation method returns 1, 'undef' otherwise.
 
 Example:
 
@@ -320,7 +321,7 @@ will return 1.
         }
     );
 
-will return undefind value (missing address for ns1.lysator.liu.se).
+will return 'undef' (missing address for ns1.lysator.liu.se).
 
 =item add_fake_ds($domain, $data)
 

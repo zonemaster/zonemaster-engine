@@ -350,7 +350,7 @@ Zonemaster::Engine::Recursor - recursive resolver for Zonemaster
     my $packet = Zonemaster::Engine::Recursor->recurse($name, $type, $class);
     my $pname = Zonemaster::Engine::Recursor->parent('example.org');
 
-=head1 METHODS
+=head1 CLASS VARIABLES
 
 =over
 
@@ -363,6 +363,12 @@ Will cache result of previous queries.
 Contains namservers IP addresses which are used in case of fake delegations 
 (pre-publication tests). This data are used to initialize %recurse_cache to 
 prevent A|AAAA recursive queries on fake nameservers.
+
+=back
+
+=head1 METHODS
+
+=over
 
 =item recurse($name, $type, $class)
 
@@ -385,9 +391,9 @@ internally by the recursor it's passed a recursion state as its second
 argument. If the name has an entry in %fake_addresses_cache, these are these 
 IP addresses which are returned.
 
-=item add_fake_addresses()
+=item add_fake_addresses($data)
 
-Class method to create fake adresses for fake delegations.
+Class method to create fake adresses for fake delegations from data provided.
 
 =item _populate_cache_with_fake_addresses()
 
