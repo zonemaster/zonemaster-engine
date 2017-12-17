@@ -1,6 +1,6 @@
 package Zonemaster::Engine::TestMethods;
 
-use version; our $VERSION = version->declare("v1.1.1");
+use version; our $VERSION = version->declare("v1.1.2");
 
 use 5.014002;
 use strict;
@@ -19,16 +19,8 @@ sub method1 {
 
 sub method2 {
     my ( $class, $zone ) = @_;
-    my @parent_nsnames;
 
-    if ( keys %Zonemaster::Engine::Recursor::fake_addresses_cache ) {
-        foreach my $name ( keys %Zonemaster::Engine::Recursor::fake_addresses_cache ) {
-            push @parent_nsnames, Zonemaster::Engine::DNSName->new( lc($name) );
-        }
-        return [@parent_nsnames];
-    } else {
-        return $zone->glue_names;
-    }
+    return $zone->glue_names;
 }
 
 sub method3 {
@@ -36,7 +28,6 @@ sub method3 {
 
     my @child_nsnames;
     my @nsnames;
-
     my $ns_aref = $zone->query_all( $zone->name, q{NS} );
     foreach my $p ( @{$ns_aref} ) {
         next if not $p;
@@ -50,14 +41,7 @@ sub method3 {
 sub method4 {
     my ( $class, $zone ) = @_;
 
-    if ( keys %Zonemaster::Engine::Recursor::fake_addresses_cache ) {
-        my $aref = [];
-        tie @$aref, 'Zonemaster::Engine::NSArray', keys %Zonemaster::Engine::Recursor::fake_addresses_cache;
-        return $aref;
-    }
-    else {
-        return $zone->glue;
-    }
+    return $zone->glue;
 }
 
 sub method5 {

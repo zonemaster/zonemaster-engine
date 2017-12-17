@@ -1,6 +1,6 @@
 package Zonemaster::Engine;
 
-use version; our $VERSION = version->declare("v2.0.4");
+use version; our $VERSION = version->declare("v2.0.5");
 
 use 5.014002;
 use Moose;
@@ -126,8 +126,7 @@ sub add_fake_delegation {
             }
         }
     }
-
-    $recursor->add_fake_addresses($href);
+    $recursor->add_fake_addresses($domain, $href);
     my $parent = $class->zone( $recursor->parent( $domain ) );
     foreach my $ns ( @{ $parent->ns } ) {
         $ns->add_fake_delegation( $domain => $href );
@@ -193,7 +192,6 @@ sub reset {
     Zonemaster::Engine::Nameserver->empty_cache();
     $logger->clear_history() if $logger;
     Zonemaster::Engine::Recursor->clear_cache();
-    Zonemaster::Engine::Recursor->clear_fake_cache();
     return;
 }
 
