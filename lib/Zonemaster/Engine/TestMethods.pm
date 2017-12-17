@@ -1,6 +1,6 @@
 package Zonemaster::Engine::TestMethods;
 
-use version; our $VERSION = version->declare("v1.1.2");
+use version; our $VERSION = version->declare("v1.0.3");
 
 use 5.014002;
 use strict;
