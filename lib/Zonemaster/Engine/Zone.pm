@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Zone;
 
-use version; our $VERSION = version->declare("v1.1.5");
+use version; our $VERSION = version->declare("v1.1.6");
 
 use 5.014002;
 use strict;
@@ -332,8 +332,12 @@ A reference to an array of L<Zonemaster::Engine::Nameserver> objects for the
 domain, built by taking the list returned from L<glue_names()> and
 looking up addresses for the names. One element will be added to this
 list for each unique name/IP pair. Names for which no addresses could
-be found will not be in this list. The list is lazy-loading, so take
-care to only look at as many entries as you really need.
+be found will not be in this list. In this case, the list is lazy-loading, so take
+care to only look at as many entries as you really need. In case of 
+undelegated tests and fake delegation the IP associated with name servers
+for the tested zone will be the ones set by users (saved in 
+%Zonemaster::Engine::Recursor::fake_addresses_cache), instead of the ones
+found recursively.
 
 =item glue_addresses
 
