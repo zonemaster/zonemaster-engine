@@ -69,7 +69,7 @@ msgstr "Un serveur de noms fonctionnel a été trouvé. Inutile de réaliser une
 msgid  "Parent domain '{pname}' was found for the tested domain."
 msgstr "Une zone parente '{pname}' a pu être trouvée pour le nom de domaine testé."
 
-#: BASIC:IPV4_DISABLED
+#: BASIC:IPV4_DISABLED CONNECTIVITY:IPV4_DISABLED CONSISTENCY:IPV4_DISABLED DELEGATION:IPV4_DISABLED NAMESERVER:IPV4_DISABLED
 msgid  "IPv4 is disabled, not sending \"{rrtype}\" query to {ns}/{address}."
 msgstr "IPv4 a été désactivé, la requête de type \"{rrtype}\" sur le serveur {ns}/{address} est annulée."
 
@@ -77,7 +77,7 @@ msgstr "IPv4 a été désactivé, la requête de type \"{rrtype}\" sur le serveu
 msgid  "IPv4 is enabled, can send \"{rrtype}\" query to {ns}/{address}."
 msgstr "IPv4 est activé, il est possible de réaliser une requête de type \"{rrtype}\" sur le serveur {ns}/{address}."
 
-#: BASIC:IPV6_DISABLED
+#: BASIC:IPV6_DISABLED CONNECTIVITY:IPV6_DISABLED CONSISTENCY:IPV6_DISABLED DELEGATION:IPV6_DISABLED NAMESERVER:IPV6_DISABLED
 msgid  "IPv6 is disabled, not sending \"{rrtype}\" query to {ns}/{address}."
 msgstr "IPv6 a été désactivé, la requête de type \"{rrtype}\" sur le serveur {ns} est annulée."
 
@@ -104,10 +104,6 @@ msgstr "Le serveur de noms {ns}/{address} ne renvoie pas d'enregistrements de ty
 #: BASIC:NS_NO_RESPONSE
 msgid  "Nameserver {ns}/{address} did not respond to NS query."
 msgstr "Le serveur de noms {ns}/{address} ne répond pas à une requête de type \"NS\"."
-
-#: CONNECTIVITY:IPV4_DISABLED (Même contenu que BASIC:IPV4_DISABLED, ne pas dupliqué à moins que le contenu du message ne vienne à changer)
-
-#: CONNECTIVITY:IPV6_DISABLED (Même contenu que BASIC:IPV6_DISABLED, ne pas dupliqué à moins que le contenu du message ne vienne à changer)
 
 #: CONNECTIVITY:NAMESERVERS_IPV4_NO_AS
 msgid  "No IPv4 nameserver address is in an AS."
@@ -180,10 +176,6 @@ msgstr "[ASN:ANNOUNCE_BY] {address};{asn}"
 #: CONNECTIVITY:ASN_INFOS_ANNOUNCE_IN
 msgid  "[ASN:ANNOUNCE_IN] {address};{prefix}"
 msgstr "[ASN:ANNOUNCE_IN] {address};{prefix}"
-
-#: CONSISTENCY:IPV4_DISABLED (Même contenu que BASIC:IPV4_DISABLED, ne pas dupliqué à moins que le contenu du message ne vienne à changer)
-
-#: CONSISTENCY:IPV6_DISABLED (Même contenu que BASIC:IPV6_DISABLED, ne pas dupliqué à moins que le contenu du message ne vienne à changer)
 
 #: CONSISTENCY:MULTIPLE_NS_SET
 msgid  "Saw {count} NS set."
@@ -289,10 +281,6 @@ msgstr "Les serveurs de noms de la zone retournent des serveurs faisant autorit�
 msgid  "Parent has nameserver(s) not listed at the child ({extra})."
 msgstr "Les serveurs de noms de la zone parente retournent des serveurs faisant autorité ({extra}) qui ne le sont pas par les serveurs de noms de la zone."
 
-#: DELEGATION:IPV4_DISABLED (Même contenu que BASIC:IPV4_DISABLED, ne pas dupliqué à moins que le contenu du message ne vienne à changer)
-
-#: DELEGATION:IPV6_DISABLED (Même contenu que BASIC:IPV6_DISABLED, ne pas dupliqué à moins que le contenu du message ne vienne à changer)
-
 #: DELEGATION:IS_NOT_AUTHORITATIVE
 msgid  "Nameserver {ns} response is not authoritative on {proto} port 53."
 msgstr "La réponse du serveur de noms {ns} reçue sur le port 53/{proto} ne fait pas autorité."
@@ -304,7 +292,6 @@ msgstr "Tous les serveurs de noms de la zone font partie de la liste des serveur
 #: DELEGATION:NOT_ENOUGH_NS
 msgid  "Child does not list enough ({count}) nameservers ({ns}). Lower limit set to {minimum}."
 msgstr "Les serveurs de noms de la zone ne retournent pas assez de serveurs ({count}) faisant autorité ({ns}). La limite inférieure étant fixée à {minimum}."
-
 
 #: DELEGATION:NOT_ENOUGH_NS_GLUE
 msgid  "Parent does not list enough ({count}) nameservers ({glue}). Lower limit set to {minimum}."
@@ -414,13 +401,13 @@ msgstr "L'enregistrement de type \"DS\" avec le tag de clé {keytag} utilise un 
 msgid  "DS record with keytag {keytag} and digest type {digtype} does not match the DNSKEY with the same tag."
 msgstr "L'enregistrement de type \"DS\" avec le tag de clé {keytag} et de type de condensat \"{digtype}\" ne correspond à l'enregistrement de type \"DNSKEY\" ayant le même tag."
 
-#: DNSSEC:DS_FOUND
-msgid  "Found DS records with tags {keytags}."
-msgstr "Des enregistrements de type \"DS\" ont été trouvés avec les tags suivants {keytags}."
-
 #: DNSSEC:DS_MATCHES_DNSKEY
 msgid  "DS record with keytag {keytag} and digest type {digtype} matches the DNSKEY with the same tag."
 msgstr "L'enregistrement de type \"DS\" avec le tag de clé {keytag} et de type de condensat \"{digtype}\" correspond à l'enregistrement de type \"DNSKEY\" ayant le même tag."
+
+#: DNSSEC:DS_FOUND
+msgid  "Found DS records with tags {keytags}."
+msgstr "Des enregistrements de type \"DS\" ont été trouvés avec les tags suivants {keytags}."
 
 #: DNSSEC:DS_MATCH_FOUND
 msgid  "At least one DS record with a matching DNSKEY record was found."
@@ -441,22 +428,6 @@ msgstr "La signature (RRSIG) avec la clé de tag {tag} et couvrant les enregistr
 #: DNSSEC:DURATION_OK
 msgid  "RRSIG with keytag {tag} and covering type(s) {types} has a duration of {duration} seconds, which is just fine."
 msgstr "La signature (RRSIG) avec la clé de tag {tag} et couvrant les enregistrements de type(s) \"{types}\" a une durée de {duration} secondes, ce qui est raisonnable."
-
-#: DNSSEC:RRSIG_EXPIRATION
-msgid  "RRSIG with keytag {tag} and covering type(s) {types} expires at : {date}."
-msgstr "La signature (RRSIG) avec la clé de tag {tag} et couvrant les enregistrements de type(s) \"{types}\" expire à la date suivante : {date}."
-
-#: DNSSEC:RRSIG_EXPIRED
-msgid  "RRSIG with keytag {tag} and covering type(s) {types} has already expired (expiration is: {expiration})."
-msgstr "La signature (RRSIG) avec la clé de tag {tag} et couvrant les enregistrements de type(s) \"{types}\" a expiré (date d'expiration: {expiration})."
-
-#: DNSSEC:REMAINING_SHORT
-msgid  "RRSIG with keytag {tag} and covering type(s) {types} has a remaining validity of {duration} seconds, which is too short."
-msgstr "La signature (RRSIG) avec la clé de tag {tag} et couvrant les enregistrements de type(s) \"{types}\" a une durée de validitée restante de {duration} secondes, ce qui est trop court."
-
-#: DNSSEC:REMAINING_LONG
-msgid  "RRSIG with keytag {tag} and covering type(s) {types} has a remaining validity of {duration} seconds, which is too long."
-msgstr "La signature (RRSIG) avec la clé de tag {tag} et couvrant les enregistrements de type(s) \"{types}\" a une durée de validitée restante de {duration} secondes, ce qui est trop long."
 
 #: DNSSEC:EXTRA_PROCESSING_BROKEN
 msgid  "Server at {server} sent {keys} DNSKEY records, and {sigs} RRSIG records."
@@ -526,10 +497,6 @@ msgstr "Impossible de tester les signatures des enregistrements de type \"SOA\" 
 msgid  "{server} returned no NSEC3PARAM records."
 msgstr "Le serveur de noms {server} ne retourne pas d'enregistrements de type \"NSEC3PARAM\"."
 
-#: DNSSEC:NSEC3_SIG_VERIFY_ERROR
-msgid  "Trying to verify NSEC3 RRset with RRSIG {sig} gave error '{error}'."
-msgstr "Une erreur '{error}' a été obtenue en essayant de vérifier l'ensemble des enregistrements de type \"NSEC3\" avec la signature {sig}."
-
 #: DNSSEC:NSEC3_COVERS
 msgid  "NSEC3 record covers {name}."
 msgstr "NSEC3 couvre le nom {name}."
@@ -545,6 +512,10 @@ msgstr "Aucune signature correcte ne signe l'ensemble des enregistrements de typ
 #: DNSSEC:NSEC3_SIGNED
 msgid  "At least one signature correctly signed the NSEC3 RRset."
 msgstr "Au moins une signature correcte signe l'ensemble des enregistrements de type \"NSEC3\"."
+
+#: DNSSEC:NSEC3_SIG_VERIFY_ERROR
+msgid  "Trying to verify NSEC3 RRset with RRSIG {sig} gave error '{error}'."
+msgstr "Une erreur '{error}' a été obtenue en essayant de vérifier l'ensemble des enregistrements de type \"NSEC3\" avec la signature {sig}."
 
 #: DNSSEC:NSEC_COVERS
 msgid  "NSEC covers {name}."
@@ -565,6 +536,22 @@ msgstr "Au moins une signature (RRSIG) correcte signe l'ensemble des enregistrem
 #: DNSSEC:NSEC_SIG_VERIFY_ERROR
 msgid  "Trying to verify NSEC RRset with RRSIG {sig} gave error '{error}'."
 msgstr "Une erreur '{error}' a été obtenue en essayant de vérifier l'ensemble des enregistrements de type \"NSEC\" avec la signature {sig}."
+
+#: DNSSEC:REMAINING_LONG
+msgid  "RRSIG with keytag {tag} and covering type(s) {types} has a remaining validity of {duration} seconds, which is too long."
+msgstr "La signature (RRSIG) avec la clé de tag {tag} et couvrant les enregistrements de type(s) \"{types}\" a une durée de validitée restante de {duration} secondes, ce qui est trop long."
+
+#: DNSSEC:REMAINING_SHORT
+msgid  "RRSIG with keytag {tag} and covering type(s) {types} has a remaining validity of {duration} seconds, which is too short."
+msgstr "La signature (RRSIG) avec la clé de tag {tag} et couvrant les enregistrements de type(s) \"{types}\" a une durée de validitée restante de {duration} secondes, ce qui est trop court."
+
+#: DNSSEC:RRSIG_EXPIRATION
+msgid  "RRSIG with keytag {tag} and covering type(s) {types} expires at : {date}."
+msgstr "La signature (RRSIG) avec la clé de tag {tag} et couvrant les enregistrements de type(s) \"{types}\" expire à la date suivante : {date}."
+
+#: DNSSEC:RRSIG_EXPIRED
+msgid  "RRSIG with keytag {tag} and covering type(s) {types} has already expired (expiration is: {expiration})."
+msgstr "La signature (RRSIG) avec la clé de tag {tag} et couvrant les enregistrements de type(s) \"{types}\" a expiré (date d'expiration: {expiration})."
 
 #: DNSSEC:SOA_NOT_SIGNED
 msgid  "No RRSIG correctly signed the SOA RRset."
@@ -614,25 +601,29 @@ msgstr "Il est possible de réaliser un transfert de zone depuis le serveur de n
 msgid  "AXFR not available on nameserver {ns}/{address}."
 msgstr "Il n'est pas  possible de réaliser un transfert de zone depuis le serveur de noms {ns}/{address}."
 
+#: NAMESERVER:CAN_BE_RESOLVED
+msgid  "All nameservers succeeded to resolve to an IP address."
+msgstr "Il a été possible de trouver au moins une adresse IP pour tous les serveurs de noms."
+
+#: NAMESERVER:CAN_NOT_BE_RESOLVED
+msgid  "The following nameservers failed to resolve to an IP address : {names}."
+msgstr "Aucune adresse IP n'a pu être trouvée pour les serveurs de noms suivants : {names}."
+
 #: NAMESERVER:DIFFERENT_SOURCE_IP
 msgid  "Nameserver {ns}/{address} replies on a SOA query with a different source address ({source})."
 msgstr "Le serveur de noms {ns}/{address} répond depuis une autre adresse que celle à laquelle la requête a été envoyée."
-
-#: NAMESERVER:EDNS0_BAD_QUERY
-msgid  "Nameserver {ns}/{address} does not support EDNS0 (replies with FORMERR)."
-msgstr "Le serveur de noms {ns}/{address} ne supporte pas EDNS0 (retourne le code FORMERR)."
 
 #: NAMESERVER:EDNS0_BAD_ANSWER
 msgid  "Nameserver {ns}/{address} does not support EDNS0 (OPT not set in reply)."
 msgstr "Le serveur de noms {ns}/{address} ne supporte pas EDNS0 (pas d'enregistrement OPT dans la réponse)."
 
+#: NAMESERVER:EDNS0_BAD_QUERY
+msgid  "Nameserver {ns}/{address} does not support EDNS0 (replies with FORMERR)."
+msgstr "Le serveur de noms {ns}/{address} ne supporte pas EDNS0 (retourne le code FORMERR)."
+
 #: NAMESERVER:EDNS0_SUPPORT
 msgid  "The following nameservers support EDNS0 : {names}."
 msgstr "Les serveurs de noms suivants supportent EDNS0 : {names}."
-
-#: NAMESERVER:IPV4_DISABLED (Même contenu que BASIC:IPV4_DISABLED, ne pas dupliqué à moins que le contenu du message ne vienne à changer)
-
-#: NAMESERVER:IPV6_DISABLED (Même contenu que BASIC:IPV6_DISABLED, ne pas dupliqué à moins que le contenu du message ne vienne à changer)
 
 #: NAMESERVER:IS_A_RECURSOR
 msgid  "Nameserver {ns}/{address} is a recursor."
@@ -645,6 +636,10 @@ msgstr "Aucun des serveurs de noms suivants n'est récursif : {names}."
 #: NAMESERVER:RECURSIVITY_UNDEF
 msgid  "Cannot determine if the following servers are recursive nameservers or not: {names}."
 msgstr "Impossible de déterminer si les serveurs suivants sont récursifs ou non : {names}."
+
+#: NAMESERVER:NO_RESOLUTION
+msgid  "No nameservers succeeded to resolve to an IP address."
+msgstr "Il a été impossible de trouver une adresse IP pour les serveurs de noms."
 
 #: NAMESERVER:QUERY_DROPPED
 msgid  "Nameserver {ns}/{address} dropped AAAA query."
@@ -665,18 +660,6 @@ msgstr "Le serveur de noms {ns}/{address} répond à la requête de type \"NS\" 
 #: NAMESERVER:NO_UPWARD_REFERRAL
 msgid  "None of the following nameservers returns an upward referral : {names}."
 msgstr "Aucun des serveurs de noms suivants ne répond à la requête de type \"NS\" sur la racine '.' (upward referral) : {names}."
-
-#: NAMESERVER:CAN_NOT_BE_RESOLVED
-msgid  "The following nameservers failed to resolve to an IP address : {names}."
-msgstr "Aucune adresse IP n'a pu être trouvée pour les serveurs de noms suivants : {names}."
-
-#: NAMESERVER:CAN_BE_RESOLVED
-msgid  "All nameservers succeeded to resolve to an IP address."
-msgstr "Il a été possible de trouver au moins une adresse IP pour tous les serveurs de noms."
-
-#: NAMESERVER:NO_RESOLUTION
-msgid  "No nameservers succeeded to resolve to an IP address."
-msgstr "Il a été impossible de trouver une adresse IP pour les serveurs de noms."
 
 #: NAMESERVER:QNAME_CASE_SENSITIVE
 msgid  "Nameserver {ns}/{address} preserves original case of queried names."
@@ -782,11 +765,11 @@ msgstr "Le nom de domaine '{name}' n'a aucun label contenant un double tiret ('-
 msgid  "Both ends of all labels of the domain name ({name}) have no hyphens."
 msgstr "Aucune des extrémités des labels du nom de domain '{name}' n'est un tiret '-'."
 
-#: SYNTAX:NO_RESPONSE_MX_QUERY
+#: SYNTAX:NO_RESPONSE_MX_QUERY ZONE:NO_RESPONSE_MX_QUERY
 msgid  "No response from nameserver(s) on MX queries."
 msgstr "Aucune réponse des serveurs de noms sur une requête de type \"MX\"."
 
-#: SYNTAX:NO_RESPONSE_SOA_QUERY
+#: SYNTAX:NO_RESPONSE_SOA_QUERY ZONE:NO_RESPONSE_SOA_QUERY
 msgid  "No response from nameserver(s) on SOA queries."
 msgstr "Aucune réponse des serveurs de noms sur une requête de type \"SOA\"."
 
@@ -813,6 +796,10 @@ msgstr "Le champ RNAME ({rname}) du SOA est conforme aux règles définies dans 
 #: SYNTAX:TERMINAL_HYPHEN
 msgid  "Domain name ({name}) has a label ({label}) ending with an hyphen ('-')."
 msgstr "Le nom de domaine '{name}' contient un label ({label}) se terminant par un tiret '-'."
+
+#: SYSTEM:ADDED_FAKE_DELEGATION
+msgid  "Added a fake delegation for domain {domain} to name server {ns}."
+msgstr "Added a fake delegation for domain {domain} to name server {ns}."
 
 #: SYSTEM:CANNOT_CONTINUE
 msgid  "Not enough data about {zone} was found to be able to run tests."
@@ -957,10 +944,6 @@ msgstr "L'enregistrement de type \"MX\" pour le domaine ne pointe pas sur un ali
 #: ZONE:NO_MX_RECORD
 msgid  "No target (MX, A or AAAA record) to deliver e-mail for the domain name."
 msgstr "Aucune possibilité (enregistrement de type \"MX\", \"A\" ou \"AAAA\") de faire parvenir un message à ce nom de domaine."
-
-#: ZONE:NO_RESPONSE_MX_QUERY (Même contenu que SYNTAX:NO_RESPONSE_MX_QUERY, ne pas dupliqué à moins que le contenu du message ne vienne à changer)
-
-#: ZONE:NO_RESPONSE_SOA_QUERY (Même contenu que SYNTAX:NO_RESPONSE_SOA_QUERY, ne pas dupliqué à moins que le contenu du message ne vienne à changer)
 
 #: ZONE:REFRESH_HIGHER_THAN_RETRY
 msgid  "SOA 'refresh' value ({refresh}) is higher than the SOA 'retry' value ({retry})."
