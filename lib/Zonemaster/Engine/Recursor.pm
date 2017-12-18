@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Recursor;
 
-use version; our $VERSION = version->declare("v1.0.9");
+use version; our $VERSION = version->declare("v1.0.10");
 
 use 5.014002;
 use warnings;
@@ -332,8 +332,7 @@ Will cache result of previous queries.
 =item %fake_addresses_cache
 
 Contains namservers IP addresses which are used in case of fake delegations 
-(pre-publication tests). This data are used to initialize %recurse_cache to 
-prevent A|AAAA recursive queries on fake nameservers.
+(pre-publication tests).
 
 =back
 
@@ -359,8 +358,7 @@ Internal method. Takes a packet and a recursion state and returns a list of ns o
 Takes a name and returns a (possibly empty) list of IP addresses for
 that name (in the form of L<Zonemaster::Engine::Net::IP> objects). When used
 internally by the recursor it's passed a recursion state as its second
-argument. If the name has an entry in %fake_addresses_cache, these are these 
-IP addresses which are returned.
+argument.
 
 =item add_fake_addresses($domain, $data)
 

@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Zone;
 
-use version; our $VERSION = version->declare("v1.1.4");
+use version; our $VERSION = version->declare("v1.1.5");
 
 use 5.014002;
 use strict;
@@ -55,12 +55,15 @@ sub _build_glue_names {
 sub _build_glue {
     my ( $self ) = @_;
     my @glue_names = @{ $self->glue_names };
+    my $zname = $self->name->string;
 
-    if ( $Zonemaster::Engine::Recursor::fake_addresses_cache{$self->name->string} ) {
+    if ( $Zonemaster::Engine::Recursor::fake_addresses_cache{$zname} ) {
         my @ns_list;
         foreach my $ns ( @glue_names ) {
-            foreach my $ip ( @{ $Zonemaster::Engine::Recursor::fake_addresses_cache{$self->name->string}{$ns} } ) {
-                push @ns_list, Zonemaster::Engine::Nameserver->new( { name => $ns, address => $ip } );
+            if ( $Zonemaster::Engine::Recursor::fake_addresses_cache{$zname}{$ns} and scalar @{ $Zonemaster::Engine::Recursor::fake_addresses_cache{$zname}{$ns} } ) {
+                foreach my $ip ( @{ $Zonemaster::Engine::Recursor::fake_addresses_cache{$zname}{$ns} } ) {
+                    push @ns_list, Zonemaster::Engine::Nameserver->new( { name => $ns, address => $ip } );
+                }
             }
         }
         return \@ns_list;
