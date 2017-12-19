@@ -339,14 +339,20 @@ a test run according to the effective profile or false if not.
 
 =back
 
+
 =head1 PROFILE DATA
 
-Profile data is represented as a nested hash (possibly with arrays as values in places).
+Profile data consists of a set of paths mapping to values.
 
-The allowed keys are as follows.
-Top-level keys are denoted by the keys themselves (e.g. I<asn_roots> is just a top-level key).
-Hierarchy is denoted by dots (e.g. I<net.ipv4> means a top-level key I<net> mapping to a second-level hashref which in turn has an I<ipv4> key).
+The paths are expressed as nested hashrefs with the hash keys being
+elements of the path.
+Top-level keys are denoted by the keys themselves (e.g. I<asn_roots>
+is just a top-level key).
+Hierarchy is denoted by dots.
+E.g. I<net.ipv4> means a top-level key I<net> mapping to a second-level
+hashref which in turn has an I<ipv4> key.
 
+The allowed paths and their respective allowed values are as follows.
 
 =head2 resolver.defaults.usevc
 
@@ -396,13 +402,23 @@ Use when you want to be sure that any data is only taken from a preloaded cache.
 
 =head2 asnroots
 
-This key must be a list of domain names. The domains will be assumed to be
-Cymru-style AS lookup zones. Normally only the first name in the list will be
-used, the rest are backups in case the earlier ones don't work.
+An arrayref of domain names.
+
+The domains will be assumed to be Cymru-style AS lookup zones.
+Normally only the first name in the list will be used, the rest are
+backups in case the earlier ones don't work.
 
 =head2 logfilter
 
-By using this key, the severity level of messages can be set in a much more fine-grained way than by the C<test_levels> item. The intended use is to remove known erroneous results. If you, for example, know that a certain name server is recursive and for some reason should be, you can use this functionality to lower the severity of the complaint about it to a lower level than normal.
+A complex data structure.
+
+Specifies the severity level of each tag emitted by a specific module.
+The intended use is to remove known erroneous results.
+E.g. if you know that a certain name server is recursive and for some
+reason should be, you can use this functionality to lower the severity
+of the complaint about it to a lower level than normal.
+The C<test_levels> item also specifies tag severity level, but with
+coarser granularity and lower precedence.
 
 The data under the C<logfilter> key should be structured like this:
 
@@ -449,18 +465,33 @@ And this would set the level to C<WARNING> for any C<SYSTEM:FILTER_THIS> message
 
 =head2 test_levels
 
-The value is a hash where the keys are names of test implementation modules (without the C<Zonemaster::Engine::Test::> prefix). Each of those keys hold another hash, where the keys are the tags that the module in question can emit and the values are the the severity levels that should apply to the tags. Any tags that are not found in the C<test_levels> data will default to level C<DEBUG>.
+A complex data structure.
+
+Specifies the severity level of each tag emitted by a specific module.
+The C<logfilter> item also specifies tag severity level, but with finer
+granularity and higher precedence.
+
+At the top level of this data structure are two levels of nested hashrefs.
+The keys of the top level hash are names of test implementation modules
+(without the C<Zonemaster::Engine::Test::> prefix).
+The keys of the second level hashes are tags that the respective
+modules emit.
+The values of the second level hashes are mapped to severity levels.
+The default severity level is C<DEBUG> for tags not found in the C<test_levels> item.
 
 =head2 test_cases
 
-The value is a hash where keys are names of test cases from the test specifications and values are booleans.
-Only test cases that are set to C<false> are considered.
-Test cases that are set to C<true> are ignored.
+A hashref mapping test case names to booleans.
 
 Specifies a blacklist of test cases to skip when a test module is asked to run of all of its test cases.
 Test cases blacklisted here can still be run individually.
 The test cases C<basic00>, C<basic01> and C<basic02> cannot be blacklisted this way.
 The reason these particular test cases cannot be blacklisted is that part of their function is to verify that the given name can be tested at all.
+
+The keys of this hash are names of test cases from the test
+specifications.
+Only test cases mapped to C<false> are considered.
+Test cases mapped to C<true> are ignored.
 
 =cut
 
