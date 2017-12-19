@@ -260,22 +260,26 @@ Zonemaster::Engine::Config - profile access module for Zonemaster::Engine
 
 =head1 DESCRIPTION
 
-Zonemaster::Engine::Config provides methods for reading and updating the effective profile.
+Zonemaster::Engine::Config provides methods for reading and updating
+the effective profile.
 
-A profile is a set of configuration options (a.k.a. profile data) regarding:
+A profile is a set of configuration options (a.k.a. profile data)
+regarding:
 
  * sets of tests to run
  * test result severity levels
  * DNS querying behavior
 
-The I<effective profile> is a set of profile values that is consulted by various parts of Zonemaster::Engine.
-The I<default profile> is a set of profile values that is used to initialize the effective profile.
+The I<effective profile> is a set of profile values that is consulted
+by various parts of Zonemaster::Engine.
+The I<default profile> is a set of profile values that is used to
+initialize the effective profile.
 
-Zonemaster::Engine::Config reads profile data from disk in a JSON sub-format.
+Zonemaster::Engine::Config reads profile data from disk in a JSON
+sub-format.
 The JSON sub-format is described below in the L<PROFILE DATA> section.
-The default profile is read from the file F<default.profile> located by L<dist_dir|File::ShareDir/dist_dir> for Zonemaster-Engine.
-
-page.
+The default profile is read from the file F<default.profile> located by
+L<dist_dir|File::ShareDir/dist_dir> for Zonemaster-Engine.
 
 =head1 PROFILE DATA ACCESS METHODS
 
@@ -319,14 +323,17 @@ Returns a reference to the list of ASN lookup domains.
 
 =item get()
 
-Returns the effective profile in the data structure described in the L<PROFILE DATA> section.
+Returns the effective profile in the data structure described in the
+L<PROFILE DATA> section.
 
 =item load_profile_file($path)
 
-Loads profile data from the given file and merges it into the effective profile.
+Loads profile data from the given file and merges it into the effective
+profile.
 
 The given path must be a JSON file matching the L<PROFILE DATA> format.
-Data from the file overrides the effective profile when the same keys exist in both places.
+Data from the file overrides the effective profile when the same keys
+exist in both places.
 
 =item BUILD
 
@@ -374,31 +381,37 @@ This should almost certainly be kept C<true>.
 
 =head2 resolver.defaults.retry
 
-A non-negative integer. The number of times a query is sent before we give up. Default 2.
+A non-negative integer. The number of times a query is sent before we
+give up. Default 2.
 
 If set to zero, no queries will be sent at all, which isn't very useful.
 
 =head2 resolver.defaults.igntc
 
-A boolean. If C<true>, queries that get truncated UDP responses will be automatically retried over TCP. Default C<false>.
+A boolean. If C<true>, queries that get truncated UDP responses will be
+automatically retried over TCP. Default C<false>.
 
 =head2 resolver.source
 
-The source address all resolver objects should use when sending queries, if one is set.
+The source address all resolver objects should use when sending queries,
+if one is set.
 
 =head2 net.ipv4
 
-A boolean. If C<true>, resolver objects are allowed to send queries over IPv4. Default C<true>.
+A boolean. If C<true>, resolver objects are allowed to send queries over
+IPv4. Default C<true>.
 
 =head2 net.ipv6
 
-A boolean. If C<true>, resolver objects are allowed to send queries over IPv6. Default C<true>.
+A boolean. If C<true>, resolver objects are allowed to send queries over
+IPv6. Default C<true>.
 
 =head2 no_network
 
 A boolean. If true, network traffic is forbidden. Default C<false>.
 
-Use when you want to be sure that any data is only taken from a preloaded cache.
+Use when you want to be sure that any data is only taken from a preloaded
+cache.
 
 =head2 asnroots
 
@@ -459,9 +472,14 @@ A complete entry might could look like this:
            ]
        }
 
-This would set the severity level to C<INFO> for any C<SYSTEM:FILTER_THIS> messages that had a C<count> attribute set to 1 and a C<type> attribute set to either C<this> or C<or>.
-This also would set the level to C<INFO> for any C<SYSTEM:FILTER_THIS> messages that had a C<count> attribute set to 128 and a C<type> attribute set to C<that>.
-And this would set the level to C<WARNING> for any C<SYSTEM:FILTER_THIS> messages that had a C<count> attribute set to 0.
+This would set the severity level to C<INFO> for any C<SYSTEM:FILTER_THIS>
+messages that had a C<count> attribute set to 1 and a C<type> attribute
+set to either C<this> or C<or>.
+This also would set the level to C<INFO> for any C<SYSTEM:FILTER_THIS>
+messages that had a C<count> attribute set to 128 and a C<type> attribute
+set to C<that>.
+And this would set the level to C<WARNING> for any C<SYSTEM:FILTER_THIS>
+messages that had a C<count> attribute set to 0.
 
 =head2 test_levels
 
@@ -477,16 +495,20 @@ The keys of the top level hash are names of test implementation modules
 The keys of the second level hashes are tags that the respective
 modules emit.
 The values of the second level hashes are mapped to severity levels.
-The default severity level is C<DEBUG> for tags not found in the C<test_levels> item.
+The default severity level is C<DEBUG> for tags not found in the
+C<test_levels> item.
 
 =head2 test_cases
 
 A hashref mapping test case names to booleans.
 
-Specifies a blacklist of test cases to skip when a test module is asked to run of all of its test cases.
+Specifies a blacklist of test cases to skip when a test module is asked
+to run of all of its test cases.
 Test cases blacklisted here can still be run individually.
-The test cases C<basic00>, C<basic01> and C<basic02> cannot be blacklisted this way.
-The reason these particular test cases cannot be blacklisted is that part of their function is to verify that the given name can be tested at all.
+The test cases C<basic00>, C<basic01> and C<basic02> cannot be blacklisted
+this way.
+The reason these particular test cases cannot be blacklisted is that part
+of their function is to verify that the given name can be tested at all.
 
 The keys of this hash are names of test cases from the test
 specifications.

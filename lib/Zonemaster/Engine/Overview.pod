@@ -24,10 +24,14 @@ The simple-but-inflexible way is that all the methods in L<Zonemaster::Engine> t
 
  perl -MZonemaster::Engine -E 'say "$_" for Zonemaster::Engine->new->test_zone("example.org")'
 
-The main drawbacks of this method are that there is no choice about what messages to see, and it's entirely synchronous.
-The code that started the test does not get a chance to do anything at all until the whole test has finished, which may be several minutes later.
+The main drawbacks of this method are that there is no choice about what
+messages to see, and it's entirely synchronous.
+The code that started the test does not get a chance to do anything at
+all until the whole test has finished, which may be several minutes later.
 
-To get around those drawbacks there is the flexible-but-complex way, which consists of installing a callback that gets executed every time a message is logged.
+To get around those drawbacks there is the flexible-but-complex way,
+which consists of installing a callback that gets executed every time
+a message is logged.
 It's not that much more complicated, code-wise.
 The following example does roughly the same thing as the one above:
 
