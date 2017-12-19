@@ -54,8 +54,8 @@ msgid  "Domain name ({dname}) has a zero length label."
 msgstr "Domain name ({dname}) has a zero-length label."
 
 #: BASIC:HAS_A_RECORDS
-msgid  "Nameserver {ns} returned A record(s) for {dname}."
-msgstr "Nameserver {ns} returned \"A\" record(s) for {dname}."
+msgid  "Nameserver {ns}/{address} returned A record(s) for {dname}."
+msgstr "Nameserver {ns}/{address} returned \"A\" record(s) for {dname}."
 
 #: BASIC:HAS_NAMESERVERS
 msgid  "Nameserver {ns} listed these servers as glue: {nsnlist}."
@@ -86,8 +86,8 @@ msgid  "IPv6 is enabled, can send \"{rrtype}\" query to {ns}/{address}."
 msgstr "IPv6 is enabled, can send \"{rrtype}\" query to {ns}/{address}."
 
 #: BASIC:NO_A_RECORDS
-msgid  "Nameserver {ns} did not return A record(s) for {dname}."
-msgstr "Nameserver {ns} did not return \"A\" record(s) for {dname}."
+msgid  "Nameserver {ns}/{address} did not return A record(s) for {dname}."
+msgstr "Nameserver {ns}/{address} did not return \"A\" record(s) for {dname}."
 
 #: BASIC:NO_GLUE_PREVENTS_NAMESERVER_TESTS
 msgid  "No NS records for tested zone from parent. NS tests aborted."
