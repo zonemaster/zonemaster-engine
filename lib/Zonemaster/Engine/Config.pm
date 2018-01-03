@@ -326,6 +326,39 @@ Returns a reference to the list of ASN lookup domains.
 Returns the effective profile in the data structure described in the
 L<PROFILE DATA> section.
 
+=item policy()
+
+B<NOTE:> I believe this method won't make sense after the update.
+
+Returns a reference to the current policy data. The format of that data is described further down in this document.
+
+=item load_policy_file($filename)
+
+B<NOTE:> I believe this method won't make sense after the update.
+
+Load policy information from the given file and merge it into the pre-loaded
+policy. Information from the loaded file overrides the pre-loaded information
+when the same keys exist in both places.
+
+If the given name does not lead directly to a readable file, each of the usual
+directories will be checked if the name is there. If the plain name isn't, the
+suffix C<.json> will be appended and another try will be done. For example, a
+file F<$HOME/.zonemaster/Example.json> may be loaded by calling this method
+with the string C<"Example">.
+
+=item load_config_file($filename)
+
+B<NOTE:> I believe this method won't make sense after the update.
+
+Load configuration information from the given file and merge it into the pre-loaded config. Information from the loaded file overrides the pre-loaded information when the same keys exist in both places.
+
+=item load_module_policy($module)
+
+B<NOTE:> I believe this method won't make sense after the update.
+
+Loads policy data included in a test module. The argument must be the short
+form (without the initial C<Zonemaster::Engine::Test::>) and correctly capitalized.
+
 =item load_profile_file($path)
 
 Loads profile data from the given file and merges it into the effective
