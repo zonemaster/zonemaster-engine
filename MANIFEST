@@ -143,3 +143,7 @@ t/zone.data
 t/zone.t
 t/zonemaster.data
 t/zonemaster.t
+share/locale/da/LC_MESSAGES/Zonemaster-Engine.mo
+share/locale/en/LC_MESSAGES/Zonemaster-Engine.mo
+share/locale/fr/LC_MESSAGES/Zonemaster-Engine.mo
+share/locale/sv/LC_MESSAGES/Zonemaster-Engine.mo
