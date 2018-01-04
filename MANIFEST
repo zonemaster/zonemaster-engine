@@ -1,6 +1,8 @@
 Changes
 docs/ConfigAndPolicy.pod
 docs/Implementing_Tests.pod
+docs/Installation.md
+docs/logentry_args.md
 docs/Translation.pod
 inc/Module/Install.pm
 inc/Module/Install/Base.pm
@@ -52,6 +54,10 @@ share/config_example_logfilter.json
 share/iana-ipv4-special-registry.csv
 share/iana-ipv6-special-registry.csv
 share/iana-profile.json
+share/locale/da/LC_MESSAGES/Zonemaster-Engine.mo
+share/locale/en/LC_MESSAGES/Zonemaster-Engine.mo
+share/locale/fr/LC_MESSAGES/Zonemaster-Engine.mo
+share/locale/sv/LC_MESSAGES/Zonemaster-Engine.mo
 share/Makefile
 share/policy.json
 t/00-load.t
@@ -143,7 +149,3 @@ t/zone.data
 t/zone.t
 t/zonemaster.data
 t/zonemaster.t
-share/locale/da/LC_MESSAGES/Zonemaster-Engine.mo
-share/locale/en/LC_MESSAGES/Zonemaster-Engine.mo
-share/locale/fr/LC_MESSAGES/Zonemaster-Engine.mo
-share/locale/sv/LC_MESSAGES/Zonemaster-Engine.mo
