@@ -478,41 +478,52 @@ The data under the C<logfilter> key should be structured like this:
 
 The hash with conditions should have keys matching the attributes of the log entry that's being filtered (check the translation files to see what they are). The values for the keys should be either a single value that the attribute should be, or an array of values any one of which the attribute should be.
 
-A complete entry might could look like this:
+A complete logfilter structure might could look like this:
 
-       "SYSTEM": {
-           "FILTER_THIS": [
-               {
-                   "when": {
-                       "count": 1,
-                       "type": ["this", "or"]
-                   },
-                   "set": "INFO"
-               },
-               {
-                   "when": {
-                       "count": 128,
-                       "type": ["that"]
-                   },
-                   "set": "INFO"
-               },
-               {
-                   "when": {
-                       "count": 0
-                   },
-                   "set": "WARNING"
-               }
-           ]
-       }
+    {
+      "A_MODULE": {
+        "SOME_TAG": [
+          {
+            "when": {
+              "count": 1,
+              "type": [
+                "this",
+                "or"
+              ]
+            },
+            "set": "INFO"
+          },
+          {
+            "when": {
+              "count": 128,
+              "type": [
+                "that"
+              ]
+            },
+            "set": "INFO"
+          }
+        ]
+      },
+      "ANOTHER_MODULE": {
+        "OTHER_TAG": [
+          {
+            "when": {
+              "bananas": 0
+            },
+            "set": "WARNING"
+          }
+        ]
+      }
+    }
 
-This would set the severity level to C<INFO> for any C<SYSTEM:FILTER_THIS>
+This would set the severity level to C<INFO> for any C<A_MODULE:SOME_TAG>
 messages that had a C<count> attribute set to 1 and a C<type> attribute
 set to either C<this> or C<or>.
-This also would set the level to C<INFO> for any C<SYSTEM:FILTER_THIS>
+This also would set the level to C<INFO> for any C<A_MODULE:SOME_TAG>
 messages that had a C<count> attribute set to 128 and a C<type> attribute
 set to C<that>.
-And this would set the level to C<WARNING> for any C<SYSTEM:FILTER_THIS>
-messages that had a C<count> attribute set to 0.
+And this would set the level to C<WARNING> for any C<ANOTHER_MODULE:OTHER_TAG>
+messages that had a C<bananas> attribute set to 0.
 
 =head2 test_levels
 
