@@ -1,5 +1,28 @@
 Release history for Zonemaster component Zonemaster-Engine
 
+v2.0.6 2018-01-12
+
+- Natural Language support
+  - Added support for Danish language (#351, #354)
+  
+- Patches
+  - Fixed installation instruction (#342)
+  - Update distribution description (#339)
+  - Updated according to updated Delegation01 (#296, #346)
+  - Fixes: Missing French translation (#343, #347)
+  - Fixes: NAMESERVER:RECURSIVITY_UNDEF does not log host (#275, #311)
+  - Fixes: Fake delegation with explicit IP address is ignored (#295, #355)
+  - Fixes: Engine fails to verify NS in zone (#356, #357)
+  - Fixes: When testing a zone with 2 NS that point to the same IP (#140, #360)
+  - Update sv.po to match updates of en.po (#271, #359)
+  - Editorial updates of po files (#362)
+
+- Other changes
+  - Unneeded translation file removed (#345)
+  - Add (and corrected) MANIFEST to repo (#364, #366)
+
+v2.0.2 - v2.0.5 never released.
+
 v2.0.1 2017-11-02
 
 - Fixed
