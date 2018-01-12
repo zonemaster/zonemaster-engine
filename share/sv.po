@@ -4,7 +4,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Project-Id-Version: 1.0.0\n"
-"PO-Revision-Date: 2017-04-06\n"
+"PO-Revision-Date: 2017-12-15\n"
 "Last-Translator: mats.dufberg@iis.se\n"
 "Language-Team: Zonemaster Team\n"
 "MIME-Version: 1.0\n"
@@ -58,8 +58,8 @@ msgid  "Domain name ({dname}) has a zero length label."
 msgstr "Domännamnet '{dname}' har en domändel med längden noll."
 
 #: BASIC:HAS_A_RECORDS
-msgid  "Nameserver {ns} returned A record(s) for {dname}."
-msgstr "Namnservern '{ns}' svarade med A-poster för '{dname}'."
+msgid  "Nameserver {ns}/{address} returned A record(s) for {dname}."
+msgstr "Namnservern '{ns}/{address}' svarade med A-poster för '{dname}'."
 
 #: BASIC:HAS_NAMESERVERS
 msgid  "Nameserver {ns} listed these servers as glue: {nsnlist}."
@@ -71,9 +71,9 @@ msgstr "En fungerande namnserver hittades. Skickade ingen fråga om 'A' för 'ww
 
 #: BASIC:HAS_PARENT
 msgid  "Parent domain '{pname}' was found for the tested domain."
-msgstr "Parent domain '{pname}' was found for the tested domain."
+msgstr "Moderdomänen '{pname}' till den testade domänen har identifierats."
 
-#: BASIC:IPV4_DISABLED
+#: BASIC:IPV4_DISABLED CONNECTIVITY:IPV4_DISABLED CONSISTENCY:IPV4_DISABLED DELEGATION:IPV4_DISABLED NAMESERVER:IPV4_DISABLED
 msgid  "IPv4 is disabled, not sending \"{rrtype}\" query to {ns}/{address}."
 msgstr "IPv4 är avstängt. Skickar ingen fråga om '{rrtype}' till {ns}/{address}."
 
@@ -81,7 +81,7 @@ msgstr "IPv4 är avstängt. Skickar ingen fråga om '{rrtype}' till {ns}/{addres
 msgid  "IPv4 is enabled, can send \"{rrtype}\" query to {ns}/{address}."
 msgstr "IPv4 är påslaget. Skickar fråga om '{rrtype}' till {ns}/{address}."
 
-#: BASIC:IPV6_DISABLED
+#: BASIC:IPV6_DISABLED CONNECTIVITY:IPV6_DISABLED CONSISTENCY:IPV6_DISABLED DELEGATION:IPV6_DISABLED NAMESERVER:IPV6_DISABLED
 msgid  "IPv6 is disabled, not sending \"{rrtype}\" query to {ns}/{address}."
 msgstr "IPv6 är avstängt. Skickar ingen fråga om '{rrtype}' till {ns}/{address}."
 
@@ -90,8 +90,8 @@ msgid  "IPv6 is enabled, can send \"{rrtype}\" query to {ns}/{address}."
 msgstr "IPv6 är påslaget. Skickar fråga om '{rrtype}' till {ns}/{address}."
 
 #: BASIC:NO_A_RECORDS
-msgid  "Nameserver {ns} did not return A record(s) for {dname}."
-msgstr "Namnservern {ns} svarade inte med några A-poster för '{dname}'."
+msgid  "Nameserver {ns}/{address} did not return A record(s) for {dname}."
+msgstr "Namnservern {ns}/{address} svarade inte med några A-poster för '{dname}'."
 
 #: BASIC:NO_GLUE_PREVENTS_NAMESERVER_TESTS
 msgid  "No NS records for tested zone from parent. NS tests aborted."
@@ -109,8 +109,6 @@ msgstr "Namnservern {ns}/{address} svarade inte med några NS-poster. RCODE var 
 msgid  "Nameserver {ns}/{address} did not respond to NS query."
 msgstr "Namnservern {ns}/{address} svarade inte på frågan om 'NS'."
 
-#: CONNECTIVITY:IPV4_DISABLED
-#: CONNECTIVITY:IPV6_DISABLED
 #: CONNECTIVITY:NAMESERVERS_IPV4_NO_AS
 msgid  "No IPv4 nameserver address is in an AS."
 msgstr "Ingen namnserver har någon IPv4-adress i något AS."
@@ -183,8 +181,6 @@ msgstr "[ASN:ANNOUNCE_BY] {address};{asn}"
 msgid  "[ASN:ANNOUNCE_IN] {address};{prefix}"
 msgstr "[ASN:ANNOUNCE_IN] {address};{prefix}"
 
-#: CONSISTENCY:IPV4_DISABLED
-#: CONSISTENCY:IPV6_DISABLED
 #: CONSISTENCY:MULTIPLE_NS_SET
 msgid  "Saw {count} NS set."
 msgstr "{count} NS-uppsättningar hittades."
@@ -203,19 +199,19 @@ msgstr "{count} olika uppsättningar med SOA-tidsparametrar hittades."
 
 #: CONSISTENCY:NO_RESPONSE
 msgid  "Nameserver {ns}/{address} did not respond."
-msgstr "Inget svar från namnservern {ns}/{address}."
+msgstr "Inget svar från namnservern '{ns}/{address}'."
 
 #: CONSISTENCY:NO_RESPONSE_NS_QUERY
 msgid  "No response from nameserver {ns}/{address} on NS queries."
-msgstr "Inget svar från namnservern {ns}/{address} på fråga efter NS-post."
+msgstr "Inget svar från namnservern '{ns}/{address}' på fråga efter NS-post."
 
 #: CONSISTENCY:NO_RESPONSE_SOA_QUERY
 msgid  "No response from nameserver {ns}/{address} on SOA queries."
-msgstr "Inget svar från namnservern på fråga efter SOA-post."
+msgstr "Inget svar från namnservern '{ns}/{address}' på fråga efter SOA-post."
 
 #: CONSISTENCY:NS_SET
 msgid  "Saw NS set ({nsset}) on following nameserver set : {servers}."
-msgstr "NS-uppsättningen {nsset} hittades på följande namnservrar: {servers}"
+msgstr "NS-uppsättningen '{nsset}' hittades på följande namnservrar: {servers}"
 
 #: CONSISTENCY:ONE_NS_SET
 msgid  "A unique NS set was seen ({nsset})."
@@ -281,10 +277,6 @@ msgstr "Dotterzonen har tillräckligt många ({count}) namnservrar ({ns}). Minst
 msgid  "Parent lists enough ({count}) nameservers ({glue}). Lower limit set to {minimum}."
 msgstr "Delegeringen i moderzonen har tillräckligt många ({count}) namnservrar ({glue}). Minsta tillåtna antalet är {minimum}."
 
-#: DELEGATION:ENOUGH_NS_TOTAL
-msgid  "Parent and child list enough ({count}) nameservers ({ns}). Lower limit set to {minimum}."
-msgstr "Moderzonen och dotterzonen har tillräckligt många ({count}) namnservrar ({ns}). Minsta tillåtna antalet är {minimum}."
-
 #: DELEGATION:EXTRA_NAME_CHILD
 msgid  "Child has nameserver(s) not listed at parent ({extra})."
 msgstr "Dotterzonen har en eller flera namnservrar som inte finns i delegeringen i moderzonen ({extra})."
@@ -293,8 +285,6 @@ msgstr "Dotterzonen har en eller flera namnservrar som inte finns i delegeringen
 msgid  "Parent has nameserver(s) not listed at the child ({extra})."
 msgstr "Delegeringen i moderzonen har en eller flera namnservrar som inte listas på dotterzonen ({extra})."
 
-#: DELEGATION:IPV4_DISABLED
-#: DELEGATION:IPV6_DISABLED
 #: DELEGATION:IS_NOT_AUTHORITATIVE
 msgid  "Nameserver {ns} response is not authoritative on {proto} port 53."
 msgstr "Namnservern '{ns}' svarade inte auktoritativt på {proto} port 53."
@@ -310,10 +300,6 @@ msgstr "Det finns inte tillräckligt många namnservrar (NS-poster) i dotterzone
 #: DELEGATION:NOT_ENOUGH_NS_GLUE
 msgid  "Parent does not list enough ({count}) nameservers ({glue}). Lower limit set to {minimum}."
 msgstr "Det finns inte tillräckligt många ({count}) namnservrar (NS-poster) i delegeringen (moderzonen). Minsta tillåtna antal är {minimum}."
-
-#: DELEGATION:NOT_ENOUGH_NS_TOTAL
-msgid  "Parent and child do not list enough ({count}) nameservers ({ns}). Lower limit set to {minimum}."
-msgstr "Delegeringen (moderzonen) och dotterzonen har inte tillräckligt många ({count}) namnservrar ({ns}). Minsta tillåtna antal är {minimum}."
 
 #: DELEGATION:NS_RR_IS_CNAME
 msgid  "Nameserver {ns} {address_type} RR point to CNAME."
@@ -437,7 +423,7 @@ msgstr "Det finns ingen DS-post med matchande DNSKEY-post."
 
 #: DNSSEC:DS_RFC4509_NOT_VALID
 msgid  "Existing DS with digest type 2, while they do not match DNSKEY records, prevent use of DS with digest type 1 (RFC4509, section 3)."
-msgstr "Existing DS with digest type 2, while they do not match DNSKEY records, prevent use of DS with digest type 1 (RFC4509, section 3)."
+msgstr "Befintlig DS med 'digest' typ 2 stämmer inte med DNSKEY-posten. Det finns en DS med 'digest' typ 1, men RFC 4509 (stycke 3) tillåter inte att den används när det finns en DS med 'digest' typ 2."
 
 #: DNSSEC:DURATION_LONG
 msgid  "RRSIG with keytag {tag} and covering type(s) {types} has a duration of {duration} seconds, which is too long."
@@ -643,8 +629,6 @@ msgstr "Namnservern {ns}/{address} stöder inte EDNS0 (svarar med 'FORMERR')."
 msgid  "The following nameservers support EDNS0 : {names}."
 msgstr "Följande namnservrar stöder EDNS0: {names}."
 
-#: NAMESERVER:IPV4_DISABLED
-#: NAMESERVER:IPV6_DISABLED
 #: NAMESERVER:IS_A_RECURSOR
 msgid  "Nameserver {ns}/{address} is a recursor."
 msgstr "Namnservern {ns}/{address} är en rekursiv resolver."
@@ -654,8 +638,8 @@ msgid  "None of the following nameservers is a recursor : {names}."
 msgstr "Ingen av följande namnservrar är en rekursiv resolver: {names}."
 
 #: NAMESERVER:RECURSIVITY_UNDEF
-msgid  "Can not determine nameservers recursivity."
-msgstr "Det går inte att fastställa om namnservern är en rekursiv resolver eller inte."
+msgid  "Cannot determine if the following servers are recursive nameservers or not: {names}."
+msgstr "Det går inte att fastställa om namnservern är en rekursiv resolver eller inte: {names}."
 
 #: NAMESERVER:NO_RESOLUTION
 msgid  "No nameservers succeeded to resolve to an IP address."
@@ -785,13 +769,13 @@ msgstr "Domännamnet '{name}' har ingen domändel med bindestreck i position 3 o
 msgid  "Both ends of all labels of the domain name ({name}) have no hyphens."
 msgstr "Domännamnet '{name}' har ingen domändel som börjar eller slutar med ett bindestreck."
 
-#: SYNTAX:NO_RESPONSE_MX_QUERY
+#: SYNTAX:NO_RESPONSE_MX_QUERY ZONE:NO_RESPONSE_MX_QUERY
 msgid  "No response from nameserver(s) on MX queries."
-msgstr "Inget svar gavs på fråga om MX-record."
+msgstr "Inget svar från namnserver på fråga efter MX-post."
 
-#: SYNTAX:NO_RESPONSE_SOA_QUERY
+#: SYNTAX:NO_RESPONSE_SOA_QUERY ZONE:NO_RESPONSE_SOA_QUERY
 msgid  "No response from nameserver(s) on SOA queries."
-msgstr "Inget svar gavs på fråga om SOA-record."
+msgstr "Inget svar från namnserver på fråga efter SOA-post."
 
 #: SYNTAX:ONLY_ALLOWED_CHARS
 msgid  "No illegal characters in the domain name ({name})."
@@ -965,8 +949,6 @@ msgstr "MX-post för domänen pekar inte ut ett CNAME."
 msgid  "No target (MX, A or AAAA record) to deliver e-mail for the domain name."
 msgstr "Inget mål att levera mail till (MX-, A- eller AAAA-post) är angivet för domänen."
 
-#: ZONE:NO_RESPONSE_MX_QUERY
-#: ZONE:NO_RESPONSE_SOA_QUERY
 #: ZONE:REFRESH_HIGHER_THAN_RETRY
 msgid  "SOA 'refresh' value ({refresh}) is higher than the SOA 'retry' value ({retry})."
 msgstr "'refresh'-värdet i SOA-posten ({refresh}) är högre än SOA-postens 'retry'-värde ({retry})."

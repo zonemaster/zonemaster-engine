@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::Basic;
 
-use version; our $VERSION = version->declare("v1.0.6");
+use version; our $VERSION = version->declare("v1.0.7");
 
 use strict;
 use warnings;
@@ -123,8 +123,8 @@ sub translation {
         "DOMAIN_NAME_TOO_LONG"          => "Domain name is too long ({fqdnlength}/{max}).",
         'NO_PARENT'                     => 'No parent domain could be found for the tested domain.',
         'HAS_PARENT'                    => 'Parent domain \'{pname}\' was found for the tested domain.',
-        'HAS_A_RECORDS' => 'Nameserver {ns} returned A record(s) for {dname}.',
-        'NO_A_RECORDS'  => 'Nameserver {ns} did not return A record(s) for {dname}.',
+        'HAS_A_RECORDS' => 'Nameserver {ns}/{address} returned A record(s) for {dname}.',
+        'NO_A_RECORDS'  => 'Nameserver {ns}/{address} did not return A record(s) for {dname}.',
         'HAS_NAMESERVERS'    => 'Nameserver {ns} listed these servers as glue: {nsnlist}.',
         'NO_GLUE_PREVENTS_NAMESERVER_TESTS' => 'No NS records for tested zone from parent. NS tests aborted.',
         'NS_FAILED'                    => 'Nameserver {ns}/{address} did not return NS records. RCODE was {rcode}.',

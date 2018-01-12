@@ -22,7 +22,6 @@ my $iis = Zonemaster::Engine->zone( q{iis.se} );
 %res = map { $_->tag => $_ } Zonemaster::Engine::Test::Delegation->all( $iis );
 ok( $res{ENOUGH_NS},       q{ENOUGH_NS} );
 ok( $res{ENOUGH_NS_GLUE},  q{ENOUGH_NS_GLUE} );
-ok( $res{ENOUGH_NS_TOTAL}, q{ENOUGH_NS_TOTAL} );
 ok( $res{NAMES_MATCH},     q{NAMES_MATCH} );
 ok( $res{REFERRAL_SIZE_OK}, q{REFERRAL_SIZE_OK} );
 
@@ -37,7 +36,6 @@ ok( $res{SOA_EXISTS},           q{SOA_EXISTS} );
 ok( $res{ARE_AUTHORITATIVE},    q{ARE_AUTHORITATIVE} );
 
 %res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{delegation}, q{delegation02.zut-root.rd.nic.fr} );
-ok( $res{NOT_ENOUGH_NS_TOTAL}, q{NOT_ENOUGH_NS_TOTAL} );
 ok( $res{NOT_ENOUGH_NS},       q{NOT_ENOUGH_NS} );
 ok( $res{NOT_ENOUGH_NS_GLUE},  q{NOT_ENOUGH_NS_GLUE} );
 
