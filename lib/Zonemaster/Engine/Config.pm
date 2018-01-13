@@ -264,21 +264,23 @@ Zonemaster::Engine::Config provides methods for reading and updating
 the effective profile.
 
 A profile is a set of configuration options (a.k.a. profile data)
-regarding:
+regarding what tests are performed and how, as well as result analysis.
 
- * sets of tests to run
- * test result severity levels
- * DNS querying behavior
+Zonemaster::Engine deals with both runtime representations of profiles
+and profiles stored on disk.
+Profiles are represented at runtime as Zonemaster::Engine::Profile
+objects.
+Profiles are stored on disk in a JSON sub-format described below in the
+L<PROFILE DATA> section.
 
-The I<effective profile> is a set of profile values that is consulted
-by various parts of Zonemaster::Engine.
-The I<default profile> is a set of profile values that is used to
-initialize the effective profile.
+Zonemaster::Engine has a special runtime profile that it consults for
+current settings as need arises.
+This profile is called the I<effective profile>.
 
-Zonemaster::Engine::Config reads profile data from disk in a JSON
-sub-format.
-The JSON sub-format is described below in the L<PROFILE DATA> section.
-The default profile is read from the file F<default.profile> located by
+The effective profile is initialized with values from a special profile
+stored on disk.
+This profile is called the I<default profile>.
+The default profile is stored in the file F<default.profile> located by
 L<dist_dir|File::ShareDir/dist_dir> for Zonemaster-Engine.
 
 =head1 PROFILE DATA ACCESS METHODS
