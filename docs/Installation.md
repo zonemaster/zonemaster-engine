@@ -43,7 +43,7 @@ This instruction covers the following operating systems:
    > "sudo" (the default is "local::lib", which you do not want).
 
    ```sh
-   sudo cpan -i Locale::TextDomain Hash::Merge Net::IP::XS Zonemaster::LDNS Moose
+   sudo cpan -i Locale::TextDomain Hash::Merge Net::IP::XS Moose Test::More Zonemaster::LDNS
    ```
 
 4) Install Zonemaster::Engine
@@ -72,7 +72,7 @@ This instruction covers the following operating systems:
 3) Install dependencies from CPAN:
 
    ```sh
-   sudo cpan -i Locale::TextDomain Zonemaster::LDNS
+   sudo cpan -i Locale::TextDomain Test::More Zonemaster::LDNS
    ```
 
    > **Note:** If necessary, answer any questions from the cpan program by
@@ -105,7 +105,7 @@ This instruction covers the following operating systems:
 3) Install dependencies from CPAN:
 
    ```sh
-   cpan -i Zonemaster::LDNS
+   cpan -i Test::More Zonemaster::LDNS
    ```
 
    > **Note:** If necessary, answer any questions from the cpan program by
