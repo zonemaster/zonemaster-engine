@@ -359,6 +359,15 @@ Vincent Levigneron <vincent.levigneron at nic.fr>
 Calle Dybedahl <calle at init.se>
 - Original author
 
+=head1 LICENSE
+
+This is free software, licensed under:
+
+The (three-clause) BSD License
+
+The full text of the license can be found in the
+F<LICENSE> file included with this distribution.
+
 =cut
 
 no Moose;
