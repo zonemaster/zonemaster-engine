@@ -29,7 +29,11 @@ messages to see, and it's entirely synchronous.
 The code that started the test does not get a chance to do anything at
 all until the whole test has finished, which may be several minutes later.
 
-The get around those drawbacks there is the flexible-but-complex way, which consists of installing a callback that gets executed every time a message is logged. It's not that much more complicated, code-wise. The following example does roughly the same thing as the one above:
+To get around those drawbacks there is the flexible-but-complex way,
+which consists of installing a callback that gets executed every time
+a message is logged.
+It's not that much more complicated, code-wise.
+The following example does roughly the same thing as the one above:
 
  perl -MZonemaster::Engine -E 'Zonemaster::Engine->logger->callback(sub {say "$_[0]"}); Zonemaster::Engine->new->test_zone("example.org");'
 
