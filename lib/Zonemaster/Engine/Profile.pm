@@ -25,13 +25,20 @@ A I<profile> consists of a collection of named properties.
 The properties determine the configurable behaviors of Zonemaster
 Engine with regard to what tests are to be performed, how they are to
 be performed, and how the results are to be analyzed.
-For details on available properties see the L<PROFILE PROPERTIES> section.
+For details on available properties see the L</PROFILE PROPERTIES>
+section.
 
-Here is an example that overrides the effective profile with values from
-a profile file.
-For details on the file format see the L<JSON REPRESENTATION> section.
+Here is an example that resets the effective profile to the default
+profile values.
 
     use Zonemaster::Engine::Profile;
+
+    my $default = Zonemaster::Engine::Profile->default;
+    Zonemaster::Engine::Profile->effective_profile->merge( $default );
+
+Here is an example that overrides the effective profile with values from
+a given profile file.
+For details on the file format see the L</JSON REPRESENTATION> section.
 
     my $foo = Zonemaster::Engine::Profile->load( "/path/to/foo.profile" );
     Zonemaster::Engine::Profile->effective_profile->merge( $foo );
@@ -61,11 +68,8 @@ This is the effective profile.
 It serves as the global runtime configuration for Zonemaster Engine.
 Update it to change the configuration.
 
-The effective profile is initialized with values from a special profile
-stored on disk (the I<default profile>).
-The default profile is stored in the file F<default.profile> located by
-L<dist_dir|File::ShareDir/dist_dir> for Zonemaster-Engine.
-For details on the file format see the L<JSON REPRESENTATION> section.
+The effective profile is initialized with the default values declared
+in the L</PROFILE PROPERTIES> section.
 
 For the effective profile, all properties are always set (to valid
 values).
@@ -75,10 +79,16 @@ valid value for each and every property.
 =head1 CLASS METHODS
 
 =head2 new
-
 A constructor that returns a new profile with all properties unset.
 
     my $profile = Zonemaster::Engine::Profile->new;
+
+=head2 default
+
+A contstructor that returns a new profile with the default property
+values declared in the L</PROFILE PROPERTIES> section.
+
+    my $default_profile = Zonemaster::Engine::Profile->default;
 
 =head2 load
 
@@ -93,17 +103,18 @@ The remaining properties are unset.
 
 Dies if the given profile file is invalid.
 
-For details on the file format see the L<JSON REPRESENTATION> section.
+For details on the file format see the L</JSON REPRESENTATION> section.
 
 =head1 INSTANCE METHODS
 
 =head2 get
 
-Get a deep copy of the value of a proparty.
+Get the value of a property.
 
     my $value = $profile1->get( 'net.ipv6' );
 
-Returns value of the property, or C<undef> if the property is unset.
+Returns value of the given property, or C<undef> if the property is unset.
+The returned value is a deep copy.
 
 Dies if the given property name is invalid.
 
@@ -123,9 +134,9 @@ Dies if the value is invalid for the given property.
 
 =head2 merge
 
-Merge this profile data of another profile into this one.
+Merge the profile data of another profile into this one.
 
-    $profile1->merge( $profile2 );
+    $profile1->merge( $other );
 
 Properties from the other profile take precedence when the same property
 name exists in both profiles.
@@ -139,6 +150,9 @@ Each property has a name and is either set or unset.
 If it is set it has a value that is valid for that specific property.
 Here is a listing of all the properties and their respective sets of
 valid values.
+
+Default values are listed here as specified in the distributed default
+profile JSON file.
 
 =head2 resolver.defaults.usevc
 
@@ -172,8 +186,8 @@ flag set will be automatically resent over TCP. Default C<false>.
 
 =head2 resolver.source
 
-The source address all resolver objects should use when sending queries,
-if one is set.
+A string or C<undef>. The source address all resolver objects should
+use when sending queries. If C<undef>, the OS default address is used.
 
 =head2 net.ipv4
 
@@ -302,12 +316,14 @@ of their function is to verify that the given name can be tested at all.
 
 The keys of this hash are names of test cases from the test
 specifications.
-Only test cases mapped to C<false> are considered.
-Test cases mapped to C<true> are ignored.
+Only test cases mapped to C<false> are considered, i.e. only those
+included in the blacklisted.
+Test cases mapped to C<true> are ignored, i.e. they are not included
+the blacklist.
 
 =head1 JSON REPRESENTATION
 
-Property names in L<PROFILE PROPERTIES> section correspond to paths in
+Property names in L</PROFILE PROPERTIES> section correspond to paths in
 a datastructure of nested JSON objects.
 Property values are stored at their respective paths.
 Paths are formed from property names by splitting them at dot characters
