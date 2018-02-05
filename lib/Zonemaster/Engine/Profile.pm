@@ -209,7 +209,8 @@ cache.
 
 =head2 asnroots
 
-An arrayref of domain names.
+An arrayref of domain names. Default C<["asnlookup.zonemaster.net",
+"asnlookup.iis.se", "asn.cymru.com"]>.
 
 The domains will be assumed to be Cymru-style AS lookup zones.
 Normally only the first name in the list will be used, the rest are
