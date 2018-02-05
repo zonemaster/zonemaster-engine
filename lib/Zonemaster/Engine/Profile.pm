@@ -186,8 +186,9 @@ flag set will be automatically resent over TCP. Default C<false>.
 
 =head2 resolver.source
 
-A string or C<undef>. The source address all resolver objects should
-use when sending queries. If C<undef>, the OS default address is used.
+A string or C<undef>. The source address all resolver objects should use
+when sending queries. If C<undef>, the OS default address is used. Default
+C<undef>.
 
 =head2 net.ipv4
 
@@ -216,7 +217,7 @@ backups in case the earlier ones don't work.
 
 =head2 logfilter
 
-A complex data structure.
+A complex data structure. Default C<{}>.
 
 Specifies the severity level of each tag emitted by a specific module.
 The intended use is to remove known erroneous results.
@@ -304,7 +305,7 @@ C<test_levels> item.
 
 =head2 test_cases
 
-A hashref mapping test case names to booleans.
+A hashref mapping test case names to booleans. Default C<{}>.
 
 Specifies a blacklist of test cases to skip when a test module is asked
 to run of all of its test cases.
