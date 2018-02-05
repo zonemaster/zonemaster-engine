@@ -304,6 +304,12 @@ The values of the second level hashes are mapped to severity levels.
 The default severity level is C<DEBUG> for tags not found in the
 C<test_levels> item.
 
+N.B. At the time of writing there is no authoritative documentation for
+the default value of this property.
+For the time being, please refer to the file
+located by L<dist_file("Zonemaster-Engine",
+"default.profile")|File::ShareDir/dist_file>.
+
 =head2 test_cases
 
 A hashref mapping test case names to booleans. Default C<{}>.
