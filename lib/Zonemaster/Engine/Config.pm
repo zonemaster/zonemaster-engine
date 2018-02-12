@@ -250,58 +250,40 @@ __PACKAGE__->meta->make_immutable;
 
 =head1 NAME
 
-Zonemaster::Engine::Config - configuration access module for Zonemaster::Engine
+Zonemaster::Engine::Config - profile access module for Zonemaster::Engine
 
 =head1 SYNOPSIS
 
     Zonemaster::Engine->config->no_network(1); # Forbid network traffic
 
-    my $value = Zonemaster::Engine::Config->get->{key}{subkey}; # Not really recommended way to access config data
+    my $value = Zonemaster::Engine::Config->get->{key}{subkey}; # Not really recommended way to access profile data
 
-=head1 LOADING CONFIGURATION
+=head1 DESCRIPTION
 
-Configuration data is loaded in several stages, each one overlaying the result
-from the previous one (that is, the later in the list take priority over the
-earlier). The first stage is hardcoded into the source code and loaded while it
-is being compiled, to make sure that there will always be some basic
-information available. Later, when the configuration object is first used, the
-system will look for a file named F<config.json> in each of a list of
-directories. If the file exists, is readable and contains proper JSON data, it
-will be loaded and overlaid on the current internal config. The directories
-are, in order from first checked to last:
+Zonemaster::Engine::Config provides methods for reading and updating
+the effective profile.
 
-=over
+A profile is a set of configuration options (a.k.a. profile data)
+regarding what tests are performed and how, as well as result analysis.
 
-=item The L<Zonemaster::Engine> perl module installation directory
+Zonemaster::Engine deals with both runtime representations of profiles
+and profiles stored on disk.
+Profiles are represented at runtime as Zonemaster::Engine::Profile
+objects.
+Profiles are stored on disk in a JSON sub-format described below in the
+L<PROFILE DATA> section.
 
-This is where the installation process puts the default configuration. It is
-not meant to be modified by the user, and it will be overwritten when the
-module is upgraded (or reinstalled for any other reason). If you really need to
-know where it is, you can either check the log message left when loading it or
-run this command to find the path:
+Zonemaster::Engine has a special runtime profile that it consults for
+current settings as need arises.
+This profile is called the I<effective profile>.
 
-    perl -MFile::ShareDir=dist_dir -E 'say dist_dir( "Zonemaster" )'
+The effective profile is initialized with values from a special profile
+stored on disk.
+This profile is called the I<default profile>.
+The default profile is stored in the file F<default.profile> located by
+L<dist_dir|File::ShareDir/dist_dir> for Zonemaster-Engine.
 
-=item /etc/zonemaster
-
-Intended to hold system-global configuration changes.
-
-=item /usr/local/etc/zonemaster
-
-Basically the same as the previous one, but for those who like to keep their
-locally installed software inside F</usr/local>.
-
-=item ~/.zonemaster
-
-That is, a F<.zonemaster> directory in the home directory of the current user.
-Intended, obviously, for configuration changes local to one particular user.
-
-=back
-
-The possible contents of the JSON data is described further down in this manual
-page.
-
-=head1 METHODS FOR CONFIGURATION ITEMS
+=head1 PROFILE DATA ACCESS METHODS
 
 =over
 
@@ -337,19 +319,24 @@ Returns a reference to the list of ASN lookup domains.
 
 =back
 
-=head1 METHODS
+=head1 MANAGEMENT METHODS
 
 =over
 
 =item get()
 
-Returns a reference to a hash with configuration values.
+Returns the effective profile in the data structure described in the
+L<PROFILE DATA> section.
 
 =item policy()
+
+B<NOTE:> I believe this method won't make sense after the update.
 
 Returns a reference to the current policy data. The format of that data is described further down in this document.
 
 =item load_policy_file($filename)
+
+B<NOTE:> I believe this method won't make sense after the update.
 
 Load policy information from the given file and merge it into the pre-loaded
 policy. Information from the loaded file overrides the pre-loaded information
@@ -363,12 +350,25 @@ with the string C<"Example">.
 
 =item load_config_file($filename)
 
+B<NOTE:> I believe this method won't make sense after the update.
+
 Load configuration information from the given file and merge it into the pre-loaded config. Information from the loaded file overrides the pre-loaded information when the same keys exist in both places.
 
 =item load_module_policy($module)
 
+B<NOTE:> I believe this method won't make sense after the update.
+
 Loads policy data included in a test module. The argument must be the short
 form (without the initial C<Zonemaster::Engine::Test::>) and correctly capitalized.
+
+=item load_profile_file($path)
+
+Loads profile data from the given file and merges it into the effective
+profile.
+
+The given path must be a JSON file matching the L<PROFILE DATA> format.
+Data from the file overrides the effective profile when the same keys
+exist in both places.
 
 =item BUILD
 
@@ -377,77 +377,96 @@ Internal method only mentioned here to please L<Pod::Coverage>.
 =item should_run($name)
 
 Given a test case name, it returns true if that test case should be included in
-a test run according to the currently active policy or false if not.
+a test run according to the effective profile or false if not.
 
 =back
 
-=head1 CONFIGURATION DATA
 
-The configuration data is stored internally in a nested hash (possibly with arrays as values in places). As of this writing, the file format used is JSON.
+=head1 PROFILE DATA
 
-The interesting keys are as follows.
+Profile data consists of a set of paths mapping to values.
 
-=head2 resolver
+The paths are expressed as nested hashrefs with the hash keys being
+elements of the path.
+Top-level keys are denoted by the keys themselves (e.g. I<asn_roots>
+is just a top-level key).
+Hierarchy is denoted by dots.
+E.g. I<net.ipv4> means a top-level key I<net> mapping to a second-level
+hashref which in turn has an I<ipv4> key.
 
-=head3 defaults
+The allowed paths and their respective allowed values are as follows.
 
-These are the default flag and timing values used for the resolver objects used to actually send DNS queries.
+=head2 resolver.defaults.usevc
 
-=over
+A boolean. If C<true>, only use TCP. Default C<false>.
 
-=item usevc
+=head2 resolver.defaults.retrans
 
-If set, only use TCP. Default not set.
+A number. The number of seconds between retries. Default 3.
 
-=item retrans
+=head2 resolver.defaults.dnssec
 
-The number of seconds between retries. Default 3.
+A boolean. If C<true>, sets the DO flag in queries. Default C<false>.
 
-=item dnssec
+=head2 resolver.defaults.recurse
 
-If set, sets the DO flag in queries. Default not set.
+A boolean. If C<true>, sets the RD flag in queries. Default C<false>.
 
-=item recurse
+This should almost certainly be kept C<true>.
 
-If set, sets the RD flag in queries. Default not set (and almost certainly should remain that way).
+=head2 resolver.defaults.retry
 
-=item retry
+A non-negative integer. The number of times a query is sent before we
+give up. Default 2.
 
-The number of times a query is sent before we give up. Can be set to zero, although that's not very useful (since no queries will be sent at all). Defaults to 2.
+If set to zero, no queries will be sent at all, which isn't very useful.
 
-=item igntc
+=head2 resolver.defaults.igntc
 
-If set, queries that get truncated UDP responses will be automatically retried over TCP. Default not set.
+A boolean. If C<true>, queries that get truncated UDP responses will be
+automatically retried over TCP. Default C<false>.
 
-=back
+=head2 resolver.source
 
-=head2 net
+The source address all resolver objects should use when sending queries,
+if one is set.
 
-=over
+=head2 net.ipv4
 
-=item ipv4
+A boolean. If C<true>, resolver objects are allowed to send queries over
+IPv4. Default C<true>.
 
-If set, resolver objects are allowed to send queries over IPv4. Default set.
+=head2 net.ipv6
 
-=item ipv6
-
-If set, resolver objects are allowed to send queries over IPv6. Default set.
-
-=back
+A boolean. If C<true>, resolver objects are allowed to send queries over
+IPv6. Default C<true>.
 
 =head2 no_network
 
-If set to a true value, network traffic is forbidden. Use when you want to be sure that any data is only taken from a preloaded cache.
+A boolean. If true, network traffic is forbidden. Default C<false>.
+
+Use when you want to be sure that any data is only taken from a preloaded
+cache.
 
 =head2 asnroots
 
-This key must be a list of domain names. The domains will be assumed to be
-Cymru-style AS lookup zones. Normally only the first name in the list will be
-used, the rest are backups in case the earlier ones don't work.
+An arrayref of domain names.
+
+The domains will be assumed to be Cymru-style AS lookup zones.
+Normally only the first name in the list will be used, the rest are
+backups in case the earlier ones don't work.
 
 =head2 logfilter
 
-By using this key, the log level of messages can be set in a much more fine-grained way than by the policy file. The intended use is to remove known erroneous results. If you, for example, know that a certain name server is recursive and for some reason should be, you can use this functionality to lower the severity of the complaint about it to a lower level than normal.
+A complex data structure.
+
+Specifies the severity level of each tag emitted by a specific module.
+The intended use is to remove known erroneous results.
+E.g. if you know that a certain name server is recursive and for some
+reason should be, you can use this functionality to lower the severity
+of the complaint about it to a lower level than normal.
+The C<test_levels> item also specifies tag severity level, but with
+coarser granularity and lower precedence.
 
 The data under the C<logfilter> key should be structured like this:
 
@@ -457,48 +476,90 @@ The data under the C<logfilter> key should be structured like this:
              "when"
                 Hash with conditions
              "set"
-                Level to set if all conditions match
+                Severity level to set if all conditions match
 
 The hash with conditions should have keys matching the attributes of the log entry that's being filtered (check the translation files to see what they are). The values for the keys should be either a single value that the attribute should be, or an array of values any one of which the attribute should be.
 
-A complete entry might could look like this:
+A complete logfilter structure might could look like this:
 
-       "SYSTEM": {
-           "FILTER_THIS": [
-               {
-                   "when": {
-                       "count": 1,
-                       "type": ["this", "or"]
-                   },
-                   "set": "INFO"
-               },
-               {
-                   "when": {
-                       "count": 128,
-                       "type": ["that"]
-                   },
-                   "set": "INFO"
-               },
-               {
-                   "when": {
-                       "count": 0
-                   },
-                   "set": "WARNING"
-               }
-           ]
-       }
+    {
+      "A_MODULE": {
+        "SOME_TAG": [
+          {
+            "when": {
+              "count": 1,
+              "type": [
+                "this",
+                "or"
+              ]
+            },
+            "set": "INFO"
+          },
+          {
+            "when": {
+              "count": 128,
+              "type": [
+                "that"
+              ]
+            },
+            "set": "INFO"
+          }
+        ]
+      },
+      "ANOTHER_MODULE": {
+        "OTHER_TAG": [
+          {
+            "when": {
+              "bananas": 0
+            },
+            "set": "WARNING"
+          }
+        ]
+      }
+    }
 
-This would set the level to C<INFO> for any C<SYSTEM:FILTER_THIS> messages that had a C<count> attribute set to 1 and a C<type> attribute set to either C<this> or C<or>.
-This also would set the level to C<INFO> for any C<SYSTEM:FILTER_THIS> messages that had a C<count> attribute set to 128 and a C<type> attribute set to C<that>.
-And this would set the level to C<WARNING> for any C<SYSTEM:FILTER_THIS> messages that had a C<count> attribute set to 0.
+This would set the severity level to C<INFO> for any C<A_MODULE:SOME_TAG>
+messages that had a C<count> attribute set to 1 and a C<type> attribute
+set to either C<this> or C<or>.
+This also would set the level to C<INFO> for any C<A_MODULE:SOME_TAG>
+messages that had a C<count> attribute set to 128 and a C<type> attribute
+set to C<that>.
+And this would set the level to C<WARNING> for any C<ANOTHER_MODULE:OTHER_TAG>
+messages that had a C<bananas> attribute set to 0.
 
-=head1 POLICY DATA
+=head2 test_levels
 
-Like the configuration data, policy data is stored in JSON format. Structurally, it's a bit less complex. All the keys on the top level, with one exception, are names of test implementation modules (without the C<Zonemaster::Engine::Test::> prefix). Each of those keys hold another hash, where the keys are the tags that the module in question can emit and the values are the the severity levels that should apply to the tags. Any tags that are not found in the policy data will default to level C<DEBUG>.
+A complex data structure.
 
-The one exception is a top-level key C<__testcases__>. The value of that must be a hash where the keys are names of test cases from the test specifications, and the corresponding values are booleans specifying if the test case in question should be executed or not. Any missing test cases are treated as if they had the value C<true> set. The test cases C<basic00>, C<basic01> and C<basic02> will be executed even if their values are set to C<false>, since part of their function is to verify that the given name can be tested at all. The values here only apply when test modules are asked to run all their tests. A test case that is set to C<false> here will still run if asked for specifically.
+Specifies the severity level of each tag emitted by a specific module.
+The C<logfilter> item also specifies tag severity level, but with finer
+granularity and higher precedence.
 
-The easiest way to create a modified policy is to copy the default one and change the relevant values.
+At the top level of this data structure are two levels of nested hashrefs.
+The keys of the top level hash are names of test implementation modules
+(without the C<Zonemaster::Engine::Test::> prefix).
+The keys of the second level hashes are tags that the respective
+modules emit.
+The values of the second level hashes are mapped to severity levels.
+The default severity level is C<DEBUG> for tags not found in the
+C<test_levels> item.
+
+=head2 test_cases
+
+A hashref mapping test case names to booleans.
+
+Specifies a blacklist of test cases to skip when a test module is asked
+to run of all of its test cases.
+Test cases blacklisted here can still be run individually.
+The test cases C<basic00>, C<basic01> and C<basic02> cannot be blacklisted
+this way.
+The reason these particular test cases cannot be blacklisted is that part
+of their function is to verify that the given name can be tested at all.
+
+The keys of this hash are names of test cases from the test
+specifications.
+Only test cases mapped to C<false> are considered.
+Test cases mapped to C<true> are ignored.
 
 =cut
 
