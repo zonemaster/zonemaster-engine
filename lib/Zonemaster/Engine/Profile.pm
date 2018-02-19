@@ -28,20 +28,21 @@ be performed, and how the results are to be analyzed.
 For details on available properties see the L</PROFILE PROPERTIES>
 section.
 
-Here is an example that resets the effective profile to the default
-profile values.
+Here is an example for updating the effective profile with values from
+a given file and setting all properties not mentioned in the file to
+default values.
+For details on the file format see the L</JSON REPRESENTATION> section.
 
     use Zonemaster::Engine::Profile;
 
-    my $default = Zonemaster::Engine::Profile->default;
-    Zonemaster::Engine::Profile->effective_profile->merge( $default );
+    my $foo     = Zonemaster::Engine::Profile->load( "/path/to/foo.profile" );
+    my $profile = Zonemaster::Engine::Profile->default;
+    $profile->merge( $foo );
+    Zonemaster::Engine::Profile->effective->merge( $profile );
 
-Here is an example that overrides the effective profile with values from
-a given profile file.
-For details on the file format see the L</JSON REPRESENTATION> section.
+Here is an example for serializing the default profile to JSON.
 
-    my $foo = Zonemaster::Engine::Profile->load( "/path/to/foo.profile" );
-    Zonemaster::Engine::Profile->effective_profile->merge( $foo );
+    my $string = Zonemaster::Engine::Profile->default->to_json;
 
 For any given profile:
 
@@ -61,7 +62,7 @@ For any given profile:
 
 =head1 CLASS ATTRIBUTES
 
-=head2 effective_profile
+=head2 effective
 
 A L<Zonemaster::Engine::Profile>.
 This is the effective profile.
@@ -79,6 +80,7 @@ valid value for each and every property.
 =head1 CLASS METHODS
 
 =head2 new
+
 A constructor that returns a new profile with all properties unset.
 
     my $profile = Zonemaster::Engine::Profile->new;
@@ -88,7 +90,7 @@ A constructor that returns a new profile with all properties unset.
 A contstructor that returns a new profile with the default property
 values declared in the L</PROFILE PROPERTIES> section.
 
-    my $default_profile = Zonemaster::Engine::Profile->default;
+    my $default = Zonemaster::Engine::Profile->default;
 
 =head2 load
 
@@ -143,6 +145,14 @@ name exists in both profiles.
 The other profile object remains unmodified.
 
 Returns C<$self>;
+
+=head2 to_json
+
+Serialize the profile to the L</JSON REPRESENTATION> format.
+
+    my $string = $profile->to_json();
+
+Returns a string.
 
 =head1 PROFILE PROPERTIES
 
