@@ -350,7 +350,9 @@ The left-most path component corresponds to a key in the top-most
 JSON object.
 Properties with unset values are omitted in the JSON representation.
 
-E.g. a profile with the only two properties set, C<net.ipv4> = 1 and
+For a complete example, refer to the file located by L<dist_file(
+"Zonemaster-Engine", "default.profile" )|File::ShareDir/dist_file>.
+A profile with the only two properties set, C<net.ipv4> = 1 and
 C<net.ipv6> = 1 has this JSON representation:
 
     {
