@@ -47,9 +47,9 @@ $checking_module = q{Nameserver};
 
 # nameserver01
 # NEED To re-configure a recursive server
-#$zone = Zonemaster::Engine->zone( 'nameserver06-can-be-resolved.zut-root.rd.nic.fr' );
-#zone_gives_not( 'nameserver01', $zone, [q{NO_RECURSOR}] );
-#zone_gives( 'nameserver01', $zone, [q{IS_A_RECURSOR}] );
+$zone = Zonemaster::Engine->zone( 'nameserver06-can-be-resolved.zut-root.rd.nic.fr' );
+zone_gives_not( 'nameserver01', $zone, [q{NO_RECURSOR}] );
+zone_gives( 'nameserver01', $zone, [q{IS_A_RECURSOR}] );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Nameserver->save( $datafile );
