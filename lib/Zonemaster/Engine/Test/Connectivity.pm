@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::Connectivity;
 
-use version; our $VERSION = version->declare("v1.0.8");
+use version; our $VERSION = version->declare("v1.0.9");
 
 use strict;
 use warnings;
@@ -332,8 +332,12 @@ sub connectivity03 {
     @v6asns = uniq @v6asns;
     my @all_asns = uniq( @v4asns, @v6asns );
 
-    push @results, info( IPV4_ASN => { asn => \@v4asns } );
-    push @results, info( IPV6_ASN => { asn => \@v6asns } );
+    if ( @v4asns ) {
+        push @results, info( IPV4_ASN => { asn => \@v4asns } );
+    }
+    if ( @v6asns ) {
+        push @results, info( IPV6_ASN => { asn => \@v6asns } );
+    }
 
     if ( @v4asns == 1 ) {
         push @results, info( NAMESERVERS_IPV4_WITH_UNIQ_AS => { asn => $v4asns[0] } );
