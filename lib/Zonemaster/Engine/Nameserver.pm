@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Nameserver;
 
-use version; our $VERSION = version->declare("v1.1.5");
+use version; our $VERSION = version->declare("v1.1.6");
 
 use 5.014002;
 use Moose;
@@ -301,7 +301,9 @@ sub _query {
         $res = eval { $self->dns->query( "$name", $type, $href->{class} ) };
         if ( $@ ) {
             my $msg = "$@";
+            my $trailing_info = " at ".__FILE__;
             chomp( $msg );
+            $msg =~ s/$trailing_info.*/\./;
             Zonemaster::Engine->logger->add( LOOKUP_ERROR =>
                   { message => $msg, ns => "$self", name => "$name", type => $type, class => $href->{class} } );
             $self->blacklisted->{ $flags{usevc} }{ $flags{dnssec} } = 1;
