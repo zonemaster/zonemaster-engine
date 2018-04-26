@@ -4,7 +4,7 @@ use 5.14.2;
 use warnings;
 use strict;
 
-use version; our $VERSION = version->declare("v1.0.0");
+use version; our $VERSION = version->declare("v1.0.1");
 
 use Carp;
 
@@ -38,7 +38,8 @@ if ( $DEST_DIR ) {
 }
 
 if ($DEBUG) {
-    print "Debug Mode set ON.\n";
+    print "Debug Mode set ON\n";
+    print "Destination directory : $dest_dir\n\n";
 }
 
 #-------------------------------------------------
