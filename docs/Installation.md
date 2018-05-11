@@ -36,19 +36,19 @@ This instruction covers the following operating systems:
    sudo yum install cpanminus
    ```
 
-2) Install binary packages.
+3) Install binary packages.
 
    ```sh
    sudo yum install perl-core perl-ExtUtils-MakeMaker perl-File-ShareDir perl-File-Slurp perl-IO-Socket-INET6 perl-JSON-PP perl-List-MoreUtils perl-Readonly perl-Time-HiRes perl-YAML libidn-devel perl-Devel-CheckLib openssl-devel perl-Test-Fatal
    ```
 
-3) Install packages from CPAN.
+4) Install packages from CPAN.
 
    ```sh
    sudo cpanm Locale::TextDomain Hash::Merge Net::IP::XS Moose Test::More Zonemaster::LDNS
    ```
 
-4) Install Zonemaster::Engine
+5) Install Zonemaster::Engine
 
    ```sh
    sudo cpanm Zonemaster::Engine
