@@ -38,22 +38,15 @@ This instruction covers the following operating systems:
 
 3) Install packages from CPAN.
 
-   > If it's the first time you use the CPAN module, it will ask some questions.
-   > For the first and third, the default responses are fine. For the second, answer
-   > "sudo" (the default is "local::lib", which you do not want).
-
    ```sh
-   sudo cpan -i Locale::TextDomain Hash::Merge Net::IP::XS Moose Test::More Zonemaster::LDNS
+   sudo cpanm Locale::TextDomain Hash::Merge Net::IP::XS Moose Test::More Zonemaster::LDNS
    ```
 
 4) Install Zonemaster::Engine
 
    ```sh
-   sudo cpan -i Zonemaster::Engine
+   sudo cpanm Zonemaster::Engine
    ```
-
-   If necessary, answer any questions from the cpan script by accepting the default value (just press enter).
-
 
 ### Installation on Debian
 
@@ -61,30 +54,31 @@ This instruction covers the following operating systems:
 
    ```sh
    sudo apt-get update
+   sudo apt-get install cpanminus
    ```
 
 2) Install dependencies from binary packages:
 
    ```sh
-   sudo apt-get install build-essential libidn11-dev libfile-sharedir-perl libfile-slurp-perl libhash-merge-perl libio-socket-inet6-perl liblist-moreutils-perl libmail-rfc822-address-perl libmodule-find-perl libmoose-perl libnet-ip-perl libreadonly-xs-perl libtext-csv-perl libssl-dev libdevel-checklib-perl
+   sudo apt-get install build-essential libidn11-dev libfile-sharedir-perl libfile-slurp-perl libhash-merge-perl libio-socket-inet6-perl liblist-moreutils-perl libmail-rfc822-address-perl libmodule-find-perl libmoose-perl libnet-ip-perl libreadonly-xs-perl libtext-csv-perl libssl-dev libdevel-checklib-perl libtool m4 autoconf automake
    ```
 
 3) Install dependencies from CPAN:
 
    ```sh
-   sudo cpan -i Locale::TextDomain Test::More Zonemaster::LDNS
+   sudo cpanm inc::Module::Install Devel::CheckLib
    ```
 
-   > **Note:** If necessary, answer any questions from the cpan program by
-   > accepting the default value (just press enter).
-
-   > **Note:** libidn must be installed prior to Zonemaster::LDNS, or otherwise
-   > Zonemaster::LDNS will be installed without IDN support.
-
-4) Install Zonemaster::Engine:
+4) Install Zonemaster::LDNS:
 
    ```sh
-   sudo cpan -i Zonemaster::Engine
+   sudo cpanm Zonemaster::LDNS
+   ```
+
+5) Install Zonemaster::Engine:
+
+   ```sh
+   sudo cpanm Zonemaster::Engine
    ```
 
 
