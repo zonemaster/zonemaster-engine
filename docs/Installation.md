@@ -30,6 +30,12 @@ This instruction covers the following operating systems:
    sudo yum groupinstall "Development Tools"
    ```
 
+2) Install cpan minus 
+
+   ```sh
+   sudo yum install cpanminus
+   ```
+
 2) Install binary packages.
 
    ```sh
