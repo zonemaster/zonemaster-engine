@@ -134,50 +134,38 @@ sub delegation01 {
     my ( $class, $zone ) = @_;
     my @results;
 
+    # Determine parent NS names
     my @parent_nsnames = map { $_->string } @{ Zonemaster::Engine::TestMethods->method2( $zone ) };
+    my $parent_nsnames_args = {
+        count   => scalar( @parent_nsnames ),
+        minimum => $MINIMUM_NUMBER_OF_NAMESERVERS,
+        glue    => join( q{;}, sort @parent_nsnames ),
+    };
 
+    # Check parent NS names
     if ( scalar( @parent_nsnames ) >= $MINIMUM_NUMBER_OF_NAMESERVERS ) {
-        push @results,
-          info(
-            ENOUGH_NS_GLUE => {
-                count   => scalar( @parent_nsnames ),
-                minimum => $MINIMUM_NUMBER_OF_NAMESERVERS,
-                glue    => join( q{;}, sort @parent_nsnames ),
-            }
-          );
+        push @results, info( ENOUGH_NS_GLUE => $parent_nsnames_args );
     }
     else {
         push @results,
-          info(
-            NOT_ENOUGH_NS_GLUE => {
-                count   => scalar( @parent_nsnames ),
-                minimum => $MINIMUM_NUMBER_OF_NAMESERVERS,
-                glue    => join( q{;}, sort @parent_nsnames ),
-            }
-          );
+          info( NOT_ENOUGH_NS_GLUE => $parent_nsnames_args );
     }
 
+    # Determine child NS names
     my @child_nsnames = map { $_->string } @{ Zonemaster::Engine::TestMethods->method3( $zone ) };
+    my $child_nsnames_args = {
+        count   => scalar( @child_nsnames ),
+        minimum => $MINIMUM_NUMBER_OF_NAMESERVERS,
+        ns      => join( q{;}, sort @child_nsnames ),
+    };
 
+    # Check child NS names
     if ( scalar( @child_nsnames ) >= $MINIMUM_NUMBER_OF_NAMESERVERS ) {
-        push @results,
-          info(
-            ENOUGH_NS => {
-                count   => scalar( @child_nsnames ),
-                minimum => $MINIMUM_NUMBER_OF_NAMESERVERS,
-                ns      => join( q{;}, sort @child_nsnames ),
-            }
-          );
+        push @results, info( ENOUGH_NS => $child_nsnames_args );
     }
     else {
         push @results,
-          info(
-            NOT_ENOUGH_NS => {
-                count   => scalar( @child_nsnames ),
-                minimum => $MINIMUM_NUMBER_OF_NAMESERVERS,
-                ns      => join( q{;}, sort @child_nsnames ),
-            }
-          );
+          info( NOT_ENOUGH_NS => $child_nsnames_args );
     }
 
     return @results;
