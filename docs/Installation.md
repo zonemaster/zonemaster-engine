@@ -60,22 +60,27 @@ This instruction covers the following operating systems:
 
    ```sh
    sudo apt-get update
+   ```
+
+2) Install cpan minus
+
+   ```sh
    sudo apt-get install cpanminus
    ```
 
-2) Install dependencies from binary packages:
+3) Install dependencies from binary packages:
 
    ```sh
    sudo apt-get install build-essential libidn11-dev libfile-sharedir-perl libfile-slurp-perl libhash-merge-perl libio-socket-inet6-perl liblist-moreutils-perl libmail-rfc822-address-perl libmodule-find-perl libmoose-perl libnet-ip-perl libreadonly-xs-perl libtext-csv-perl libssl-dev libdevel-checklib-perl libtool m4 autoconf automake
    ```
 
-3) Install Zonemaster::LDNS:
+4) Install Zonemaster::LDNS:
 
    ```sh
    sudo cpanm Zonemaster::LDNS
    ```
 
-4) Install Zonemaster::Engine:
+5) Install Zonemaster::Engine:
 
    ```sh
    sudo cpanm Zonemaster::Engine
