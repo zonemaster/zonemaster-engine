@@ -1,0 +1,109 @@
+#!/usr/bin/env perl
+use strict;
+use warnings;
+use feature 'say';
+
+use Zonemaster::Engine::Packet;
+
+use JSON::PP;
+use MIME::Base64;
+use Module::Find qw[useall];
+use Readonly;
+use Scalar::Util qw[blessed];
+useall 'Zonemaster::LDNS::RR';
+
+# Decoder taken from Zonemaster::Engine::Nameserver->restore
+Readonly my $decoder => JSON::PP->new->filter_json_single_key_object(
+    'Zonemaster::LDNS::Packet' => sub {
+        my ( $ref ) = @_;
+        ## no critic (Modules::RequireExplicitInclusion)
+        my $obj = Zonemaster::LDNS::Packet->new_from_wireformat( decode_base64( $ref->{data} ) );
+        $obj->answerfrom( $ref->{answerfrom} );
+        $obj->timestamp( $ref->{timestamp} );
+        $obj->querytime( $ref->{querytime} );
+        return $obj;
+    }
+  )->filter_json_single_key_object(
+    'Zonemaster::Engine::Packet' => sub {
+        my ( $ref ) = @_;
+        return Zonemaster::Engine::Packet->new( { packet => $ref } );
+    }
+  );
+
+
+# Decode input into packets
+my @packets;
+while ( my $line = <> ) {
+    my ( $name, $addr, $data ) = split( / /, $line, 3 );
+    my $tree = deserialize( $data );
+    push @packets, packets( $tree );
+}
+
+# Order packets chronologically
+@packets = sort { $a->timestamp cmp $b->timestamp } @packets;
+
+# Print delimited packets
+my $delim = ";" x 78;
+for my $packet ( @packets ) {
+    say $delim;
+    say $packet->string;
+    $delim = "\n" . ";" x 78;
+}
+
+
+=head1 NAME
+
+    data2dig - Export saved Zonemaster::Engine cache files to a dig format
+
+
+=head1 SYNOPSIS
+
+    data2dig foo.data
+
+
+=head1 DESCRIPTION
+
+B<data2dig> exports saved Zonemaster::Engine cache files to human readable
+format as cronologically ordered response packets in dig format.
+
+
+=head1 SUBROUTINES
+
+
+=head2 deserialize
+
+Deserialize a string in Zonemaster::Engine saved cache format.
+
+Returns a tree of nested HASHREFs with decoded Zonemaster::Engine::Packet
+objects.
+
+=cut
+
+sub deserialize {
+    my $data = shift;
+    return $decoder->decode( $data );
+}
+
+
+=head2 packets
+
+Return all Zonemaster::Engine::Packet objects from a tree of nested HASHREFs.
+
+=cut
+
+sub packets {
+    my ( $data ) = @_;
+    if ( ref $data eq 'HASH' && %{$data} && not blessed $data ) {
+        my @packets;
+        for my $key ( sort keys %$data ) {
+            push @packets, packets( $data->{$key} );
+        }
+        return @packets;
+    }
+    elsif ( blessed $data && $data->isa( 'Zonemaster::Engine::Packet' ) ) {
+        return ( $data );
+    }
+    else {
+        return ();
+    }
+}
