@@ -92,7 +92,13 @@
       "SAME_IP_ADDRESS" : "ERROR",
       "SOA_EXISTS" : "INFO",
       "SOA_NOT_EXISTS" : "ERROR",
-      "TOTAL_NAME_MISMATCH" : "ERROR"
+      "TOTAL_NAME_MISMATCH" : "ERROR",
+      "ENOUGH_IPV4_NS_CHILD" : "INFO",
+      "ENOUGH_IPV6_NS_CHILD" : "INFO",
+      "NOT_ENOUGH_IPV4_NS_CHILD" : "ERROR",
+      "NOT_ENOUGH_IPV6_NS_CHILD" : "ERROR",
+      "NO_IPV4_NS_CHILD" : "ERROR",
+      "NO_IPV6_NS_CHILD" : "NOTICE"
    },
    "EXAMPLE" : {
       "DISABLED" : true,
