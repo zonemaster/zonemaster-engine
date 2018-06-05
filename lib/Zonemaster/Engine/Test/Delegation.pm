@@ -173,15 +173,15 @@ sub delegation01 {
     return @results;
 } ## end sub delegation01
 
-sub delegation02 {
-    my ( $class, $zone ) = @_;
-    my @results;
+sub _find_dup_ns {
+    my %args = @_;
+    my $duplicate_tag = $args{duplicate_tag};
+    my $distinct_tag = $args{distinct_tag};
+    my @nss = @{ $args{nss} };
+
     my %nsnames_and_ip;
     my %ips;
-
-    foreach
-      my $local_ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) }, @{ Zonemaster::Engine::TestMethods->method5( $zone ) } )
-    {
+    foreach my $local_ns ( @nss ) {
 
         next if $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short };
 
@@ -191,11 +191,12 @@ sub delegation02 {
 
     }
 
+    my @results;
     foreach my $local_ip ( sort keys %ips ) {
         if ( scalar @{ $ips{$local_ip} } > 1 ) {
             push @results,
               info(
-                SAME_IP_ADDRESS => {
+                $duplicate_tag => {
                     nss     => join( q{;}, @{ $ips{$local_ip} } ),
                     address => $local_ip,
                 }
@@ -203,9 +204,26 @@ sub delegation02 {
         }
     }
 
-    if ( scalar keys %ips and not scalar @results ) {
-        push @results, info( DISTINCT_IP_ADDRESS => {} );
+    if ( @nss && !@results ) {
+        push @results, info( $distinct_tag => {} );
     }
+
+    return @results;
+}
+
+sub delegation02 {
+    my ( $class, $zone ) = @_;
+    my @results;
+
+    my @nss_del   = @{ Zonemaster::Engine::TestMethods->method4( $zone ) };
+    my @nss_child = @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
+
+    push @results,
+      _find_dup_ns(
+        duplicate_tag => 'SAME_IP_ADDRESS',
+        distinct_tag  => 'DISTINCT_IP_ADDRESS',
+        nss           => [ @nss_del, @nss_child ],
+      );
 
     return @results;
 } ## end sub delegation02
