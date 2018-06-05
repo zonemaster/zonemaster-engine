@@ -56,6 +56,8 @@ sub metadata {
         ],
         delegation02 => [
             qw(
+              CHILD_DISTINCT_NS_IP
+              CHILD_NS_SAME_IP
               SAME_IP_ADDRESS
               )
         ],
@@ -105,6 +107,8 @@ sub translation {
         "IS_NOT_AUTHORITATIVE" => "Nameserver {ns} response is not authoritative on {proto} port 53.",
         "ENOUGH_NS_DEL"        => "Parent lists enough ({count}) nameservers ({glue}). Lower limit set to {minimum}.",
         "NS_RR_IS_CNAME"       => "Nameserver {ns} {address_type} RR point to CNAME.",
+        "CHILD_DISTINCT_NS_IP" => "All the IP addresses used by the nameservers in child are unique.",
+        "CHILD_NS_SAME_IP"     => "IP {address} in child refers to multiple nameservers ({nss}).",
         "SAME_IP_ADDRESS"      => "IP {address} refers to multiple nameservers ({nss}).",
         "DISTINCT_IP_ADDRESS"  => "All the IP addresses used by the nameservers are unique",
         "ENOUGH_NS_CHILD"      => "Child lists enough ({count}) nameservers ({ns}). Lower limit set to {minimum}.",
@@ -217,6 +221,13 @@ sub delegation02 {
 
     my @nss_del   = @{ Zonemaster::Engine::TestMethods->method4( $zone ) };
     my @nss_child = @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
+
+    push @results,
+      _find_dup_ns(
+        duplicate_tag => 'CHILD_NS_SAME_IP',
+        distinct_tag  => 'CHILD_DISTINCT_NS_IP',
+        nss           => [@nss_child],
+      );
 
     push @results,
       _find_dup_ns(
