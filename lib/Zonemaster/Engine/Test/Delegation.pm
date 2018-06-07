@@ -58,6 +58,8 @@ sub metadata {
             qw(
               CHILD_DISTINCT_NS_IP
               CHILD_NS_SAME_IP
+              DEL_DISTINCT_NS_IP
+              DEL_NS_SAME_IP
               SAME_IP_ADDRESS
               )
         ],
@@ -109,6 +111,8 @@ sub translation {
         "NS_RR_IS_CNAME"       => "Nameserver {ns} {address_type} RR point to CNAME.",
         "CHILD_DISTINCT_NS_IP" => "All the IP addresses used by the nameservers in child are unique.",
         "CHILD_NS_SAME_IP"     => "IP {address} in child refers to multiple nameservers ({nss}).",
+        "DEL_DISTINCT_NS_IP"   => "All the IP addresses used by the nameservers in parent are unique.",
+        "DEL_NS_SAME_IP"       => "IP {address} in parent refers to multiple nameservers ({nss}).",
         "SAME_IP_ADDRESS"      => "IP {address} refers to multiple nameservers ({nss}).",
         "DISTINCT_IP_ADDRESS"  => "All the IP addresses used by the nameservers are unique",
         "ENOUGH_NS_CHILD"      => "Child lists enough ({count}) nameservers ({ns}). Lower limit set to {minimum}.",
@@ -221,6 +225,13 @@ sub delegation02 {
 
     my @nss_del   = @{ Zonemaster::Engine::TestMethods->method4( $zone ) };
     my @nss_child = @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
+
+    push @results,
+      _find_dup_ns(
+        duplicate_tag => 'DEL_NS_SAME_IP',
+        distinct_tag  => 'DEL_DISTINCT_NS_IP',
+        nss           => [@nss_del],
+      );
 
     push @results,
       _find_dup_ns(
