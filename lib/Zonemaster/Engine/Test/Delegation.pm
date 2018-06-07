@@ -48,10 +48,10 @@ sub metadata {
     return {
         delegation01 => [
             qw(
-              ENOUGH_NS_GLUE
-              NOT_ENOUGH_NS_GLUE
-              ENOUGH_NS
-              NOT_ENOUGH_NS
+              ENOUGH_NS_CHILD
+              ENOUGH_NS_DEL
+              NOT_ENOUGH_NS_DEL
+              NOT_ENOUGH_NS_CHILD
               )
         ],
         delegation02 => [
@@ -103,22 +103,24 @@ sub translation {
         "EXTRA_NAME_CHILD" => "Child has nameserver(s) not listed at parent ({extra}).",
         "REFERRAL_SIZE_OK" => "The smallest possible legal referral packet is smaller than 513 octets (it is {size}).",
         "IS_NOT_AUTHORITATIVE" => "Nameserver {ns} response is not authoritative on {proto} port 53.",
-        "ENOUGH_NS_GLUE"       => "Parent lists enough ({count}) nameservers ({glue}). Lower limit set to {minimum}.",
+        "ENOUGH_NS_DEL"        => "Parent lists enough ({count}) nameservers ({glue}). Lower limit set to {minimum}.",
         "NS_RR_IS_CNAME"       => "Nameserver {ns} {address_type} RR point to CNAME.",
         "SAME_IP_ADDRESS"      => "IP {address} refers to multiple nameservers ({nss}).",
         "DISTINCT_IP_ADDRESS"  => "All the IP addresses used by the nameservers are unique",
-        "ENOUGH_NS"            => "Child lists enough ({count}) nameservers ({ns}). Lower limit set to {minimum}.",
+        "ENOUGH_NS_CHILD"      => "Child lists enough ({count}) nameservers ({ns}). Lower limit set to {minimum}.",
         "NAMES_MATCH"          => "All of the nameserver names are listed both at parent and child.",
         "TOTAL_NAME_MISMATCH"  => "None of the nameservers listed at the parent are listed at the child.",
         "SOA_NOT_EXISTS"       => "A SOA query NOERROR response from {ns} was received empty.",
         "EXTRA_NAME_PARENT"    => "Parent has nameserver(s) not listed at the child ({extra}).",
-        "NOT_ENOUGH_NS_GLUE"   => "Parent does not list enough ({count}) nameservers ({glue}). Lower limit set to {minimum}.",
-        "NOT_ENOUGH_NS"        => "Child does not list enough ({count}) nameservers ({ns}). Lower limit set to {minimum}.",
-        "ARE_AUTHORITATIVE"    => "All these nameservers are confirmed to be authoritative : {nsset}.",
-        "NS_RR_NO_CNAME"       => "No nameserver point to CNAME alias.",
-        "SOA_EXISTS"           => "All the nameservers have SOA record.",
-        'IPV4_DISABLED' => 'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
-        'IPV6_DISABLED' => 'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
+        "NOT_ENOUGH_NS_DEL" =>
+          "Parent does not list enough ({count}) nameservers ({glue}). Lower limit set to {minimum}.",
+        "NOT_ENOUGH_NS_CHILD" =>
+          "Child does not list enough ({count}) nameservers ({ns}). Lower limit set to {minimum}.",
+        "ARE_AUTHORITATIVE" => "All these nameservers are confirmed to be authoritative : {nsset}.",
+        "NS_RR_NO_CNAME"    => "No nameserver point to CNAME alias.",
+        "SOA_EXISTS"        => "All the nameservers have SOA record.",
+        'IPV4_DISABLED'     => 'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
+        'IPV6_DISABLED'     => 'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
     };
 } ## end sub translation
 
@@ -134,50 +136,38 @@ sub delegation01 {
     my ( $class, $zone ) = @_;
     my @results;
 
-    my @parent_nsnames = map { $_->string } @{ Zonemaster::Engine::TestMethods->method2( $zone ) };
+    # Determine delegation NS names
+    my @del_nsnames = map { $_->string } @{ Zonemaster::Engine::TestMethods->method2( $zone ) };
+    my $del_nsnames_args = {
+        count   => scalar( @del_nsnames ),
+        minimum => $MINIMUM_NUMBER_OF_NAMESERVERS,
+        glue    => join( q{;}, sort @del_nsnames ),
+    };
 
-    if ( scalar( @parent_nsnames ) >= $MINIMUM_NUMBER_OF_NAMESERVERS ) {
-        push @results,
-          info(
-            ENOUGH_NS_GLUE => {
-                count   => scalar( @parent_nsnames ),
-                minimum => $MINIMUM_NUMBER_OF_NAMESERVERS,
-                glue    => join( q{;}, sort @parent_nsnames ),
-            }
-          );
+    # Check delegation NS names
+    if ( scalar( @del_nsnames ) >= $MINIMUM_NUMBER_OF_NAMESERVERS ) {
+        push @results, info( ENOUGH_NS_DEL => $del_nsnames_args );
     }
     else {
         push @results,
-          info(
-            NOT_ENOUGH_NS_GLUE => {
-                count   => scalar( @parent_nsnames ),
-                minimum => $MINIMUM_NUMBER_OF_NAMESERVERS,
-                glue    => join( q{;}, sort @parent_nsnames ),
-            }
-          );
+          info( NOT_ENOUGH_NS_DEL => $del_nsnames_args );
     }
 
+    # Determine child NS names
     my @child_nsnames = map { $_->string } @{ Zonemaster::Engine::TestMethods->method3( $zone ) };
+    my $child_nsnames_args = {
+        count   => scalar( @child_nsnames ),
+        minimum => $MINIMUM_NUMBER_OF_NAMESERVERS,
+        ns      => join( q{;}, sort @child_nsnames ),
+    };
 
+    # Check child NS names
     if ( scalar( @child_nsnames ) >= $MINIMUM_NUMBER_OF_NAMESERVERS ) {
-        push @results,
-          info(
-            ENOUGH_NS => {
-                count   => scalar( @child_nsnames ),
-                minimum => $MINIMUM_NUMBER_OF_NAMESERVERS,
-                ns      => join( q{;}, sort @child_nsnames ),
-            }
-          );
+        push @results, info( ENOUGH_NS_CHILD => $child_nsnames_args );
     }
     else {
         push @results,
-          info(
-            NOT_ENOUGH_NS => {
-                count   => scalar( @child_nsnames ),
-                minimum => $MINIMUM_NUMBER_OF_NAMESERVERS,
-                ns      => join( q{;}, sort @child_nsnames ),
-            }
-          );
+          info( NOT_ENOUGH_NS_CHILD => $child_nsnames_args );
     }
 
     return @results;
