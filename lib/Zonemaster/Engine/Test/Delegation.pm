@@ -194,39 +194,40 @@ sub delegation01 {
           info( NOT_ENOUGH_NS_CHILD => $child_nsnames_args );
     }
 
-    # Determine child NS addresses
-    my @child_addresses = map { $_->address } @{ Zonemaster::Engine::TestMethods->method4( $zone ) };
-    my @child_ipv4 = grep { $_->version == 4 } @child_addresses;
-    my @child_ipv6 = grep { $_->version == 6 } @child_addresses;
-    my $child_ipv4_args = {
-        count   => scalar( @child_ipv4 ),
+    # Determine child NS names with addresses
+    my @child_ns = @{ Zonemaster::Engine::TestMethods->method4( $zone ) };
+    my @child_ns_ipv4 = uniq map { $_->name->string } grep { $_->address->version == 4 } @child_ns;
+    my @child_ns_ipv6 = uniq map { $_->name->string } grep { $_->address->version == 6 } @child_ns;
+
+    my $child_ns_ipv4_args = {
+        count   => scalar( @child_ns_ipv4 ),
         minimum => $MINIMUM_NUMBER_OF_NAMESERVERS,
-        addrs   => join( q{;}, map { $_->short } sort { $a->binip cmp $b->binip } @child_ipv4 ),
+        ns      => join( q{;}, sort @child_ns_ipv4 ),
     };
-    my $child_ipv6_args = {
-        count   => scalar( @child_ipv6 ),
+    my $child_ns_ipv6_args = {
+        count   => scalar( @child_ns_ipv6 ),
         minimum => $MINIMUM_NUMBER_OF_NAMESERVERS,
-        addrs   => join( q{;}, map { $_->short } sort { $a->binip cmp $b->binip } @child_ipv6 ),
+        ns      => join( q{;}, sort @child_ns_ipv6 ),
     };
 
-    if ( scalar( @child_ipv4 ) >= $MINIMUM_NUMBER_OF_NAMESERVERS ) {
-        push @results, info( ENOUGH_IPV4_NS_CHILD => $child_ipv4_args );
+    if ( scalar( @child_ns_ipv4 ) >= $MINIMUM_NUMBER_OF_NAMESERVERS ) {
+        push @results, info( ENOUGH_IPV4_NS_CHILD => $child_ns_ipv4_args );
     }
-    elsif ( scalar( @child_ipv4 ) > 0 ) {
-        push @results, info( NOT_ENOUGH_IPV4_NS_CHILD => $child_ipv4_args );
+    elsif ( scalar( @child_ns_ipv4 ) > 0 ) {
+        push @results, info( NOT_ENOUGH_IPV4_NS_CHILD => $child_ns_ipv4_args );
     }
     else {
-        push @results, info( NO_IPV4_NS_CHILD => $child_ipv4_args );
+        push @results, info( NO_IPV4_NS_CHILD => $child_ns_ipv4_args );
     }
 
-    if ( scalar( @child_ipv6 ) >= $MINIMUM_NUMBER_OF_NAMESERVERS ) {
-        push @results, info( ENOUGH_IPV6_NS_CHILD => $child_ipv6_args );
+    if ( scalar( @child_ns_ipv6 ) >= $MINIMUM_NUMBER_OF_NAMESERVERS ) {
+        push @results, info( ENOUGH_IPV6_NS_CHILD => $child_ns_ipv6_args );
     }
-    elsif ( scalar( @child_ipv6 ) > 0 ) {
-        push @results, info( NOT_ENOUGH_IPV6_NS_CHILD => $child_ipv6_args );
+    elsif ( scalar( @child_ns_ipv6 ) > 0 ) {
+        push @results, info( NOT_ENOUGH_IPV6_NS_CHILD => $child_ns_ipv6_args );
     }
     else {
-        push @results, info( NO_IPV6_NS_CHILD => $child_ipv4_args );
+        push @results, info( NO_IPV6_NS_CHILD => $child_ns_ipv6_args );
     }
 
     return @results;
