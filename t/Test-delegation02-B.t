@@ -27,8 +27,8 @@ my %res = map { $_->tag => $_ } Zonemaster::Engine::Test::Delegation->delegation
 
 ok( $res{DEL_NS_SAME_IP},       q{should emit DEL_NS_SAME_IP} );
 ok( !$res{CHILD_NS_SAME_IP},    q{should not emit CHILD_NS_SAME_IP} );
-ok( !$res{DEL_DISTINCT_NS_IP},  q{should not emit DEL_DISTINCE_NS_IP} );
-ok( $res{CHILD_DISTINCT_NS_IP}, q{should emit CHILD_DISTINCE_NS_IP} );
+ok( !$res{DEL_DISTINCT_NS_IP},  q{should not emit DEL_DISTINCT_NS_IP} );
+ok( $res{CHILD_DISTINCT_NS_IP}, q{should emit CHILD_DISTINCT_NS_IP} );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Nameserver->save( $datafile );
