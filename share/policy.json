@@ -70,6 +70,10 @@
    },
    "DELEGATION" : {
       "ARE_AUTHORITATIVE" : "INFO",
+      "CHILD_DISTINCT_NS_IP" : "INFO",
+      "CHILD_NS_SAME_IP" : "ERROR",
+      "DEL_DISTINCT_NS_IP" : "INFO",
+      "DEL_NS_SAME_IP" : "ERROR",
       "DISTINCT_IP_ADDRESS" : "INFO",
       "ENOUGH_NS_CHILD" : "INFO",
       "ENOUGH_NS_DEL" : "INFO",
