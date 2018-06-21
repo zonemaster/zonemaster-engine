@@ -131,44 +131,44 @@ sub metadata {
 
 sub translation {
     return {
-        'AAAA_WELL_PROCESSED' => 'The following nameservers answer AAAA queries without problems : {names}.',
-        'EDNS0_BAD_QUERY'     => 'Nameserver {ns}/{address} does not support EDNS0 (replies with FORMERR).',
-        'DIFFERENT_SOURCE_IP' =>
-          'Nameserver {ns}/{address} replies on a SOA query with a different source address ({source}).',
-        'SAME_SOURCE_IP'      => 'All nameservers reply with same IP used to query them.',
-        'AXFR_AVAILABLE'      => 'Nameserver {ns}/{address} allow zone transfer using AXFR.',
-        'AXFR_FAILURE'        => 'AXFR not available on nameserver {ns}/{address}.',
-        'QUERY_DROPPED'       => 'Nameserver {ns}/{address} dropped AAAA query.',
-        'IS_A_RECURSOR'       => 'Nameserver {ns}/{address} is a recursor.',
-        'NO_RECURSOR'         => 'None of the following nameservers is a recursor : {names}.',
-        'RECURSIVITY_UNDEF'   => 'Cannot determine if the following servers are recursive nameservers or not: {names}.',
-        'ANSWER_BAD_RCODE'    => 'Nameserver {ns}/{address} answered AAAA query with an unexpected rcode ({rcode}).',
-        'EDNS0_BAD_ANSWER'    => 'Nameserver {ns}/{address} does not support EDNS0 (OPT not set in reply).',
-        'EDNS0_SUPPORT'       => 'The following nameservers support EDNS0 : {names}.',
-        'CAN_NOT_BE_RESOLVED' => 'The following nameservers failed to resolve to an IP address : {names}.',
-        'CAN_BE_RESOLVED'     => 'All nameservers succeeded to resolve to an IP address.',
-        'NO_RESOLUTION'       => 'No nameservers succeeded to resolve to an IP address.',
-        'IPV4_DISABLED'       => 'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
-        'IPV6_DISABLED'       => 'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
-        'UPWARD_REFERRAL_IRRELEVANT' => 'Upward referral tests skipped for root zone.',
-        'UPWARD_REFERRAL'            => 'Nameserver {ns}/{address} returns an upward referral.',
-        'NO_UPWARD_REFERRAL'         => 'None of the following nameservers returns an upward referral : {names}.',
-        'QNAME_CASE_SENSITIVE'       => 'Nameserver {ns}/{address} preserves original case of queried names.',
-        'QNAME_CASE_INSENSITIVE'     => 'Nameserver {ns}/{address} does not preserve original case of queried names.',
-        'CASE_QUERY_SAME_ANSWER' =>
-          'When asked for {type} records on "{query1}" and "{query2}", nameserver {ns}/{address} returns same answers.',
-        'CASE_QUERY_DIFFERENT_ANSWER' =>
-'When asked for {type} records on "{query1}" and "{query2}", nameserver {ns}/{address} returns different answers.',
-        'CASE_QUERY_SAME_RC' =>
-'When asked for {type} records on "{query1}" and "{query2}", nameserver {ns}/{address} returns same RCODE "{rcode}".',
-        'CASE_QUERY_DIFFERENT_RC' =>
-'When asked for {type} records on "{query1}" and "{query2}", nameserver {ns}/{address} returns different RCODE ("{rcode1}" vs "{rcode2}").',
-        'CASE_QUERY_NO_ANSWER' =>
-          'When asked for {type} records on "{query}", nameserver {ns}/{address} returns nothing.',
-        'CASE_QUERIES_RESULTS_OK' =>
-          'When asked for {type} records on "{query}" with different cases, all servers reply consistently.',
-        'CASE_QUERIES_RESULTS_DIFFER' =>
-          'When asked for {type} records on "{query}" with different cases, all servers do not reply consistently.',
+        AAAA_WELL_PROCESSED => 'The following nameservers answer AAAA queries without problems : {names}.',
+        ANSWER_BAD_RCODE    => 'Nameserver {ns}/{address} answered AAAA query with an unexpected rcode ({rcode}).',
+        AXFR_AVAILABLE      => 'Nameserver {ns}/{address} allow zone transfer using AXFR.',
+        AXFR_FAILURE        => 'AXFR not available on nameserver {ns}/{address}.',
+        CAN_BE_RESOLVED     => 'All nameservers succeeded to resolve to an IP address.',
+        CAN_NOT_BE_RESOLVED => 'The following nameservers failed to resolve to an IP address : {names}.',
+        CASE_QUERIES_RESULTS_DIFFER => 'When asked for {type} records on "{query}" with different cases, '
+          . 'all servers do not reply consistently.',
+        CASE_QUERIES_RESULTS_OK => 'When asked for {type} records on "{query}" with different cases, '
+          . 'all servers reply consistently.',
+        CASE_QUERY_DIFFERENT_ANSWER => 'When asked for {type} records on "{query1}" and "{query2}", '
+          . 'nameserver {ns}/{address} returns different answers.',
+        CASE_QUERY_DIFFERENT_RC => 'When asked for {type} records on "{query1}" and "{query2}", '
+          . 'nameserver {ns}/{address} returns different RCODE ("{rcode1}" vs "{rcode2}").',
+        CASE_QUERY_NO_ANSWER => 'When asked for {type} records on "{query}", '
+          . 'nameserver {ns}/{address} returns nothing.',
+        CASE_QUERY_SAME_ANSWER => 'When asked for {type} records on "{query1}" and "{query2}", '
+          . 'nameserver {ns}/{address} returns same answers.',
+        CASE_QUERY_SAME_RC => 'When asked for {type} records on "{query1}" and "{query2}", '
+          . 'nameserver {ns}/{address} returns same RCODE "{rcode}".',
+        DIFFERENT_SOURCE_IP => 'Nameserver {ns}/{address} replies on a SOA query with a different source address '
+          . '({source}).',
+        EDNS0_BAD_ANSWER       => 'Nameserver {ns}/{address} does not support EDNS0 (OPT not set in reply).',
+        EDNS0_BAD_QUERY        => 'Nameserver {ns}/{address} does not support EDNS0 (replies with FORMERR).',
+        EDNS0_SUPPORT          => 'The following nameservers support EDNS0 : {names}.',
+        IPV4_DISABLED          => 'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
+        IPV6_DISABLED          => 'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
+        IS_A_RECURSOR          => 'Nameserver {ns}/{address} is a recursor.',
+        NO_RECURSOR            => 'None of the following nameservers is a recursor : {names}.',
+        NO_RESOLUTION          => 'No nameservers succeeded to resolve to an IP address.',
+        NO_UPWARD_REFERRAL     => 'None of the following nameservers returns an upward referral : {names}.',
+        QNAME_CASE_INSENSITIVE => 'Nameserver {ns}/{address} does not preserve original case of queried names.',
+        QNAME_CASE_SENSITIVE   => 'Nameserver {ns}/{address} preserves original case of queried names.',
+        QUERY_DROPPED          => 'Nameserver {ns}/{address} dropped AAAA query.',
+        RECURSIVITY_UNDEF => 'Cannot determine if the following servers are recursive nameservers or not: {names}.',
+        SAME_SOURCE_IP    => 'All nameservers reply with same IP used to query them.',
+        UPWARD_REFERRAL   => 'Nameserver {ns}/{address} returns an upward referral.',
+        UPWARD_REFERRAL_IRRELEVANT => 'Upward referral tests skipped for root zone.',
     };
 } ## end sub translation
 

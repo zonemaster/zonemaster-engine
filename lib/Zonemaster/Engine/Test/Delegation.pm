@@ -102,33 +102,31 @@ sub metadata {
 
 sub translation {
     return {
-        "REFERRAL_SIZE_LARGE" =>
-          "The smallest possible legal referral packet is larger than 512 octets (it is {size}).",
-        "EXTRA_NAME_CHILD" => "Child has nameserver(s) not listed at parent ({extra}).",
-        "REFERRAL_SIZE_OK" => "The smallest possible legal referral packet is smaller than 513 octets (it is {size}).",
-        "IS_NOT_AUTHORITATIVE" => "Nameserver {ns} response is not authoritative on {proto} port 53.",
-        "ENOUGH_NS_DEL"        => "Parent lists enough ({count}) nameservers ({glue}). Lower limit set to {minimum}.",
-        "NS_RR_IS_CNAME"       => "Nameserver {ns} {address_type} RR point to CNAME.",
-        "CHILD_DISTINCT_NS_IP" => "All the IP addresses used by the nameservers in child are unique.",
-        "CHILD_NS_SAME_IP"     => "IP {address} in child refers to multiple nameservers ({nss}).",
-        "DEL_DISTINCT_NS_IP"   => "All the IP addresses used by the nameservers in parent are unique.",
-        "DEL_NS_SAME_IP"       => "IP {address} in parent refers to multiple nameservers ({nss}).",
-        "SAME_IP_ADDRESS"      => "IP {address} refers to multiple nameservers ({nss}).",
-        "DISTINCT_IP_ADDRESS"  => "All the IP addresses used by the nameservers are unique",
-        "ENOUGH_NS_CHILD"      => "Child lists enough ({count}) nameservers ({ns}). Lower limit set to {minimum}.",
-        "NAMES_MATCH"          => "All of the nameserver names are listed both at parent and child.",
-        "TOTAL_NAME_MISMATCH"  => "None of the nameservers listed at the parent are listed at the child.",
-        "SOA_NOT_EXISTS"       => "A SOA query NOERROR response from {ns} was received empty.",
-        "EXTRA_NAME_PARENT"    => "Parent has nameserver(s) not listed at the child ({extra}).",
-        "NOT_ENOUGH_NS_DEL" =>
-          "Parent does not list enough ({count}) nameservers ({glue}). Lower limit set to {minimum}.",
-        "NOT_ENOUGH_NS_CHILD" =>
-          "Child does not list enough ({count}) nameservers ({ns}). Lower limit set to {minimum}.",
-        "ARE_AUTHORITATIVE" => "All these nameservers are confirmed to be authoritative : {nsset}.",
-        "NS_RR_NO_CNAME"    => "No nameserver point to CNAME alias.",
-        "SOA_EXISTS"        => "All the nameservers have SOA record.",
-        'IPV4_DISABLED'     => 'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
-        'IPV6_DISABLED'     => 'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
+        ARE_AUTHORITATIVE    => "All these nameservers are confirmed to be authoritative : {nsset}.",
+        CHILD_DISTINCT_NS_IP => "All the IP addresses used by the nameservers in child are unique.",
+        CHILD_NS_SAME_IP     => "IP {address} in child refers to multiple nameservers ({nss}).",
+        DEL_DISTINCT_NS_IP   => "All the IP addresses used by the nameservers in parent are unique.",
+        DEL_NS_SAME_IP       => "IP {address} in parent refers to multiple nameservers ({nss}).",
+        DISTINCT_IP_ADDRESS  => "All the IP addresses used by the nameservers are unique",
+        ENOUGH_NS_CHILD      => "Child lists enough ({count}) nameservers ({ns}). Lower limit set to {minimum}.",
+        ENOUGH_NS_DEL        => "Parent lists enough ({count}) nameservers ({glue}). Lower limit set to {minimum}.",
+        EXTRA_NAME_CHILD     => "Child has nameserver(s) not listed at parent ({extra}).",
+        EXTRA_NAME_PARENT    => "Parent has nameserver(s) not listed at the child ({extra}).",
+        IPV4_DISABLED        => 'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
+        IPV6_DISABLED        => 'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
+        IS_NOT_AUTHORITATIVE => "Nameserver {ns} response is not authoritative on {proto} port 53.",
+        NAMES_MATCH          => "All of the nameserver names are listed both at parent and child.",
+        NOT_ENOUGH_NS_CHILD => "Child does not list enough ({count}) nameservers ({ns}). Lower limit set to {minimum}.",
+        NOT_ENOUGH_NS_DEL   => "Parent does not list enough ({count}) nameservers ({glue}). "
+          . "Lower limit set to {minimum}.",
+        NS_RR_IS_CNAME      => "Nameserver {ns} {address_type} RR point to CNAME.",
+        NS_RR_NO_CNAME      => "No nameserver point to CNAME alias.",
+        REFERRAL_SIZE_LARGE => "The smallest possible legal referral packet is larger than 512 octets (it is {size}).",
+        REFERRAL_SIZE_OK    => "The smallest possible legal referral packet is smaller than 513 octets (it is {size}).",
+        SAME_IP_ADDRESS     => "IP {address} refers to multiple nameservers ({nss}).",
+        SOA_EXISTS          => "All the nameservers have SOA record.",
+        SOA_NOT_EXISTS      => "A SOA query NOERROR response from {ns} was received empty.",
+        TOTAL_NAME_MISMATCH => "None of the nameservers listed at the parent are listed at the child.",
     };
 } ## end sub translation
 

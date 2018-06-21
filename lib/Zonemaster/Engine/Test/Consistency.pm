@@ -107,31 +107,31 @@ sub metadata {
 
 sub translation {
     return {
-        'SOA_TIME_PARAMETER_SET' =>
-'Saw SOA time parameter set (REFRESH={refresh},RETRY={retry},EXPIRE={expire},MINIMUM={minimum}) on following nameserver set : {servers}.',
-        'ONE_SOA_RNAME'                   => 'A single SOA rname value was seen ({rname})',
-        'MULTIPLE_SOA_SERIALS'            => 'Saw {count} SOA serial numbers.',
-        'SOA_SERIAL'                      => 'Saw SOA serial number {serial} on following nameserver set : {servers}.',
-        'SOA_RNAME'                       => 'Saw SOA rname {rname} on following nameserver set : {servers}.',
-        'MULTIPLE_SOA_RNAMES'             => 'Saw {count} SOA rname.',
-        'ONE_SOA_SERIAL'                  => 'A single SOA serial number was seen ({serial}).',
-        'MULTIPLE_SOA_TIME_PARAMETER_SET' => 'Saw {count} SOA time parameter set.',
-        'NO_RESPONSE'                     => 'Nameserver {ns}/{address} did not respond.',
-        'ONE_SOA_TIME_PARAMETER_SET' =>
-'A single SOA time parameter set was seen (REFRESH={refresh},RETRY={retry},EXPIRE={expire},MINIMUM={minimum}).',
-        'NO_RESPONSE_SOA_QUERY' => 'No response from nameserver {ns}/{address} on SOA queries.',
-        'SOA_SERIAL_VARIATION' =>
-'Difference between the smaller serial ({serial_min}) and the bigger one ({serial_max}) is greater than the maximum allowed ({max_variation}).',
-        'NO_RESPONSE_NS_QUERY' => 'No response from nameserver {ns}/{address} on NS queries.',
-        'ONE_NS_SET'           => 'A unique NS set was seen ({nsset}).',
-        'MULTIPLE_NS_SET'      => 'Saw {count} NS set.',
-        'NS_SET'               => 'Saw NS set ({nsset}) on following nameserver set : {servers}.',
-        'IPV4_DISABLED'        => 'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
-        'IPV6_DISABLED'        => 'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
-        'EXTRA_ADDRESS_PARENT' => 'Parent has extra nameserver IP address(es) not listed at child ({addresses}).',
-        'EXTRA_ADDRESS_CHILD'  => 'Child has extra nameserver IP address(es) not listed at parent ({addresses}).',
-        'TOTAL_ADDRESS_MISMATCH' => 'No common nameserver IP addresses between child ({child}) and parent ({glue}).',
-        'ADDRESSES_MATCH'        => 'Glue records are consistent between glue and authoritative data.',
+        ADDRESSES_MATCH      => 'Glue records are consistent between glue and authoritative data.',
+        EXTRA_ADDRESS_CHILD  => 'Child has extra nameserver IP address(es) not listed at parent ({addresses}).',
+        EXTRA_ADDRESS_PARENT => 'Parent has extra nameserver IP address(es) not listed at child ({addresses}).',
+        IPV4_DISABLED        => 'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
+        IPV6_DISABLED        => 'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
+        MULTIPLE_NS_SET      => 'Saw {count} NS set.',
+        MULTIPLE_SOA_RNAMES  => 'Saw {count} SOA rname.',
+        MULTIPLE_SOA_SERIALS => 'Saw {count} SOA serial numbers.',
+        MULTIPLE_SOA_TIME_PARAMETER_SET => 'Saw {count} SOA time parameter set.',
+        NO_RESPONSE                     => 'Nameserver {ns}/{address} did not respond.',
+        NO_RESPONSE_NS_QUERY            => 'No response from nameserver {ns}/{address} on NS queries.',
+        NO_RESPONSE_SOA_QUERY           => 'No response from nameserver {ns}/{address} on SOA queries.',
+        NS_SET                          => 'Saw NS set ({nsset}) on following nameserver set : {servers}.',
+        ONE_NS_SET                      => 'A unique NS set was seen ({nsset}).',
+        ONE_SOA_RNAME                   => 'A single SOA rname value was seen ({rname})',
+        ONE_SOA_SERIAL                  => 'A single SOA serial number was seen ({serial}).',
+        ONE_SOA_TIME_PARAMETER_SET      => 'A single SOA time parameter set was seen '
+          . '(REFRESH={refresh},RETRY={retry},EXPIRE={expire},MINIMUM={minimum}).',
+        SOA_RNAME            => 'Saw SOA rname {rname} on following nameserver set : {servers}.',
+        SOA_SERIAL           => 'Saw SOA serial number {serial} on following nameserver set : {servers}.',
+        SOA_SERIAL_VARIATION => 'Difference between the smaller serial '
+          . '({serial_min}) and the bigger one ({serial_max}) is greater than the maximum allowed ({max_variation}).',
+        SOA_TIME_PARAMETER_SET => 'Saw SOA time parameter set '
+          . '(REFRESH={refresh},RETRY={retry},EXPIRE={expire},MINIMUM={minimum}) on following nameserver set : {servers}.',
+        TOTAL_ADDRESS_MISMATCH => 'No common nameserver IP addresses between child ({child}) and parent ({glue}).',
     };
 } ## end sub translation
 
