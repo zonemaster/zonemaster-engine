@@ -1,5 +1,20 @@
 Release history for Zonemaster component Zonemaster-Engine
 
+v2.0.7 2018-06-25
+
+- Fixed
+  - Update Installation.md. Add installation of Test::More from 
+    CPAN to get the newest version. (#371) 
+  - Minor updates (#374, #386, #375, #377)
+  - Restore unit tests (#378)
+  - Better report when Cymru reports no ASN (#272, #385)
+  - More checks in get_iana_address_spaces_infos.pl (#300, #387)
+  - Fixed bug in Nameserver.pm (#384, #389)
+  - Update install instructions for debian and centos (#393)
+  - Updated installation instructions for FreeBSD. Now using 
+    cpanm instead of cpan. (#403) 
+
+
 v2.0.6 2018-01-12
 
 - Natural Language support
