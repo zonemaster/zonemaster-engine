@@ -95,28 +95,28 @@ This instruction covers the following operating systems:
    su -l
    ```
 
-2) Install dependencies from binary packages:
+2) Install cpan minus:
+
+   ```sh
+   pkg install p5-App-cpanminus
+   ```
+
+3) Install dependencies from binary packages:
 
    ```sh
    pkg install libidn p5-File-ShareDir p5-File-Slurp p5-Hash-Merge p5-IO-Socket-INET6 p5-List-MoreUtils p5-Locale-libintl p5-Mail-RFC822-Address p5-Module-Find p5-Moose p5-Net-IP p5-Readonly-XS p5-Text-CSV
    ```
 
-3) Install dependencies from CPAN:
+4) Install dependencies from CPAN:
 
    ```sh
-   cpan -i Test::More Zonemaster::LDNS
+   cpanm Test::More Zonemaster::LDNS inc::Module::Install
    ```
 
-   > **Note:** If necessary, answer any questions from the cpan program by
-   > accepting the default value (just press enter).
-
-   > **Note:** libidn must be installed prior to Zonemaster::LDNS, or otherwise
-   > Zonemaster::LDNS will be installed without IDN support.
-
-4) Install Zonemaster::Engine:
+5) Install Zonemaster::Engine:
 
    ```sh
-   cpan -i Zonemaster::Engine
+   cpanm Zonemaster::Engine
    ```
 
 
