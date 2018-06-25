@@ -13,6 +13,8 @@ use Zonemaster::Engine::Recursor;
 use Zonemaster::Engine::DNSName;
 use Zonemaster::Engine::TestMethods;
 use Zonemaster::Engine::Constants qw[:name];
+use Zonemaster::LDNS;
+use Zonemaster::Engine::Packet;
 
 use Carp;
 
@@ -309,33 +311,59 @@ sub syntax06 {
     my ( $class, $zone ) = @_;
     my @results;
 
+    # TODO: Query all name servers
+    # TODO: Cache the MX query
     my $p = $zone->query_one( $zone->name, q{SOA} );
 
-    if ( $p and my ( $soa ) = $p->get_records( q{SOA}, q{answer} ) ) {
-        my $rname = $soa->rname;
-        $rname =~ s/([^\\])[.]/$1@/smx;    # Replace first non-escaped dot with an at-sign
-        $rname =~ s/[\\][.]/./smgx;        # Un-escape dots
-        $rname =~ s/[.]\z//smgx;           # Validator does not like final dots
-        if ( not valid( $rname ) ) {
-            push @results,
-              info(
-                RNAME_RFC822_INVALID => {
-                    rname => $rname,
-                }
-              );
-        }
-        else {
-            push @results,
-              info(
-                RNAME_RFC822_VALID => {
-                    rname => $rname,
-                }
-              );
-        }
-    } ## end if ( $p and my ( $soa ...))
-    else {
-        push @results, info( NO_RESPONSE_SOA_QUERY => {} );
+    if ( not $p ) {
+        push @results, info( NO_RESPONSE => {} );
+        return @results;
     }
+
+    my ( $soa ) = $p->get_records( q{SOA}, q{answer} );
+
+    if ( not $soa ) {
+        push @results, info( NO_RESPONSE_SOA_QUERY => {} );
+        return @results;
+    }
+
+    my $rname = $soa->rname;
+    $rname =~ s/([^\\])[.]/$1@/smx;    # Replace first non-escaped dot with an at-sign
+    $rname =~ s/[\\][.]/./smgx;        # Un-escape dots
+    $rname =~ s/[.]\z//smgx;           # Validator does not like final dots
+    if ( not valid( $rname ) ) {
+        push @results,
+          info(
+            RNAME_RFC822_INVALID => {
+                rname => $rname,
+            }
+          );
+        return @results;
+    }
+
+    my $domain = ($rname =~ s/.*@//r);
+
+    my $p_mx = Zonemaster::LDNS->new('8.8.8.8')->query( $domain, 'MX', 'IN' );
+
+    if ( not $p_mx or $p_mx->rcode ne 'NOERROR' && $p_mx->rcode ne 'NXDOMAIN' ) {
+        push @results, info( RNAME_MAIL_DOMAIN_INVALID => { domain => $domain } );
+        return @results;
+    }
+
+    my @mxs = Zonemaster::Engine::Packet->new( packet => $p_mx )->get_records_for_name( q{MX}, $domain );
+
+    if ( !@mxs ) {
+        push @results, info( RNAME_MAIL_DOMAIN_INVALID => { domain => $domain } );
+        return @results;
+    }
+
+    push @results,
+      info(
+        RNAME_RFC822_VALID => {
+            rname => $rname,
+        }
+      );
+
     return @results;
 } ## end sub syntax06
 
