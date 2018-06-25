@@ -1,6 +1,6 @@
 package Zonemaster::Engine;
 
-use version; our $VERSION = version->declare("v2.0.6");
+use version; our $VERSION = version->declare("v2.0.7");
 
 use 5.014002;
 use Moose;
@@ -358,6 +358,15 @@ Vincent Levigneron <vincent.levigneron at nic.fr>
 
 Calle Dybedahl <calle at init.se>
 - Original author
+
+=head1 LICENSE
+
+This is free software, licensed under:
+
+The (three-clause) BSD License
+
+The full text of the license can be found in the
+F<LICENSE> file included with this distribution.
 
 =cut
 
