@@ -6,7 +6,7 @@ BEGIN {
     use_ok( q{Zonemaster::Engine::Util} );
 }
 
-my $datafile = q{t/Test-dnssec05-E.data};
+my $datafile = q{t/Test-dnssec05-H.data};
 
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die q{Stored data file missing} if not -r $datafile;
@@ -15,13 +15,13 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
 }
 
 Zonemaster::Engine->add_fake_delegation(
-    'e.dnssec05.exempelvis.se' => {
-        'ns1.e.dnssec05.exempelvis.se' => ['46.21.97.97'],
-        'ns2.e.dnssec05.exempelvis.se' => ['2a02:750:12:77::97'],
+    'h.dnssec05.exempelvis.se' => {
+        'ns1.h.dnssec05.exempelvis.se' => ['46.21.97.97'],
+        'ns2.h.dnssec05.exempelvis.se' => ['2a02:750:12:77::97'],
     }
 );
 
-my $zone = Zonemaster::Engine->zone( q{e.dnssec05.exempelvis.se} );
+my $zone = Zonemaster::Engine->zone( q{h.dnssec05.exempelvis.se} );
 
 my %res = map { $_->tag => $_ } Zonemaster::Engine::Test::DNSSEC->dnssec05( $zone );
 
@@ -29,10 +29,10 @@ ok( !$res{NO_RESPONSE},            q{should not emit NO_RESPONSE} );
 ok( !$res{NO_RESPONSE_DNSKEY},     q{should not emit NO_RESPONSE_DNSKEY} );
 ok( !$res{ALGORITHM_DEPRECATED},   q{should not emit ALGORITHM_DEPRECATED} );
 ok( !$res{ALGORITHM_RESERVED},     q{should not emit ALGORITHM_RESERVED} );
-ok( $res{ALGORITHM_UNASSIGNED},    q{should emit ALGORITHM_UNASSIGNED} );
+ok( !$res{ALGORITHM_UNASSIGNED},   q{should not emit ALGORITHM_UNASSIGNED} );
 ok( !$res{ALGORITHM_PRIVATE},      q{should not emit ALGORITHM_PRIVATE} );
 ok( $res{ALGORITHM_NOT_ZONE_SIGN}, q{should emit ALGORITHM_NOT_ZONE_SIGN} );
-ok( !$res{ALGORITHM_DELETE_DS},    q{should not emit ALGORITHM_DELETE_DS} );
+ok( $res{ALGORITHM_DELETE_DS},     q{should emit ALGORITHM_DELETE_DS} );
 ok( !$res{ALGORITHM_INDIRECT_KEY}, q{should not emit ALGORITHM_INDIRECT_KEY} );
 ok( !$res{ALGORITHM_OK},           q{should not emit ALGORITHM_OK} );
 
