@@ -828,85 +828,65 @@ sub dnssec05 {
     my ( $self, $zone ) = @_;
     my @results;
 
-    my $key_p = $zone->query_one( $zone->name, 'DNSKEY', { dnssec => 1 } );
-    if ( not $key_p ) {
-        return;
-    }
-    my @keys = $key_p->get_records( 'DNSKEY', 'answer' );
+    my @nss_del   = @{ Zonemaster::Engine::TestMethods->method4( $zone ) };
+    my @nss_child = @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
+    my %nss       = map { $_->name->string . '/' . $_->address->short => $_ } @nss_del, @nss_child;
 
-    foreach my $key ( @keys ) {
-        my $algo = $key->algorithm;
-        if ( $algo_properties{$algo}{status} == $ALGO_STATUS_DEPRECATED ) {
-            push @results,
-              info(
-                ALGORITHM_DEPRECATED => {
-                    algorithm   => $algo,
-                    keytag      => $key->keytag,
-                    description => $algo_properties{$algo}{description},
-                }
-              );
+    for my $key ( sort keys %nss ) {
+        my $ns = $nss{$key};
+
+        my $key_p = $ns->query( $zone->name, 'DNSKEY', { dnssec => 1 } );
+        if ( not $key_p ) {
+            next;
         }
-        elsif ( $algo_properties{$algo}{status} == $ALGO_STATUS_RESERVED ) {
-            push @results,
-              info(
-                ALGORITHM_RESERVED => {
-                    algorithm   => $algo,
-                    keytag      => $key->keytag,
-                    description => $algo_properties{$algo}{description},
+        my @keys = $key_p->get_records( 'DNSKEY', 'answer' );
+
+        foreach my $key ( @keys ) {
+            my $algo      = $key->algorithm;
+            my $algo_args = {
+                algorithm   => $algo,
+                keytag      => $key->keytag,
+                description => $algo_properties{$algo}{description},
+            };
+            if ( $algo_properties{$algo}{status} == $ALGO_STATUS_DEPRECATED ) {
+                push @results, info( ALGORITHM_DEPRECATED => $algo_args );
+            }
+            elsif ( $algo_properties{$algo}{status} == $ALGO_STATUS_RESERVED ) {
+                push @results, info( ALGORITHM_RESERVED => $algo_args );
+            }
+            elsif ( $algo_properties{$algo}{status} == $ALGO_STATUS_UNASSIGNED ) {
+                push @results, info( ALGORITHM_UNASSIGNED => $algo_args );
+            }
+            elsif ( $algo_properties{$algo}{status} == $ALGO_STATUS_PRIVATE ) {
+                push @results, info( ALGORITHM_PRIVATE => $algo_args );
+            }
+            elsif ( $algo_properties{$algo}{status} == $ALGO_STATUS_VALID ) {
+                push @results, info( ALGORITHM_OK => $algo_args );
+                if ( $key->flags & 256 ) {    # This is a Key
+                    push @results,
+                      info(
+                        KEY_DETAILS => {
+                            keytag  => $key->keytag,
+                            keysize => $key->keysize,
+                            sep     => $key->flags & 1 ? q{SEP bit set} : q{SEP bit *not* set},
+                            rfc5011 => $key->flags & 128
+                            ? q{RFC 5011 revocation bit set}
+                            : q{RFC 5011 revocation bit *not* set},
+                        }
+                      );
                 }
-              );
-        }
-        elsif ( $algo_properties{$algo}{status} == $ALGO_STATUS_UNASSIGNED ) {
-            push @results,
-              info(
-                ALGORITHM_UNASSIGNED => {
-                    algorithm   => $algo,
-                    keytag      => $key->keytag,
-                    description => $algo_properties{$algo}{description},
-                }
-              );
-        }
-        elsif ( $algo_properties{$algo}{status} == $ALGO_STATUS_PRIVATE ) {
-            push @results,
-              info(
-                ALGORITHM_PRIVATE => {
-                    algorithm   => $algo,
-                    keytag      => $key->keytag,
-                    description => $algo_properties{$algo}{description},
-                }
-              );
-        }
-        elsif ( $algo_properties{$algo}{status} == $ALGO_STATUS_VALID ) {
-            push @results,
-              info(
-                ALGORITHM_OK => {
-                    algorithm   => $algo,
-                    keytag      => $key->keytag,
-                    description => $algo_properties{$algo}{description},
-                }
-              );
-            if ( $key->flags & 256 ) { # This is a Key
+            }
+            else {
                 push @results,
                   info(
-                    KEY_DETAILS => {
-                        keytag  => $key->keytag,
-                        keysize => $key->keysize,
-                        sep     => $key->flags & 1 ? q{SEP bit set} : q{SEP bit *not* set},
-                        rfc5011 => $key->flags & 128 ? q{RFC 5011 revocation bit set} : q{RFC 5011 revocation bit *not* set},
+                    ALGORITHM_UNKNOWN => {
+                        algorithm => $algo,
+                        keytag    => $key->keytag,
                     }
-                );
+                  );
             }
-        }
-        else {
-            push @results,
-              info(
-                ALGORITHM_UNKNOWN => {
-                    algorithm => $algo,
-                    keytag    => $key->keytag,
-                }
-              );
-        }
-    } ## end foreach my $key ( @keys )
+        } ## end foreach my $key ( @keys )
+    }
 
     return @results;
 } ## end sub dnssec05
