@@ -216,7 +216,7 @@ sub nameserver01 {
 
             if ( $tag ) {
                 my $args = {
-                    ns      => $ns->name,
+                    ns      => $ns->name->string,
                     address => $ns->address->short,
                     dname   => $nonexistent_name,
                 };
