@@ -22,23 +22,28 @@ use Carp;
 ### Table fetched from IANA on 2017-03-09
 Readonly::Hash our %algo_properties => (
     0 => {
-        status      => $ALGO_STATUS_RESERVED,
-        description => q{Reserved},
+        status      => $ALGO_STATUS_DELETE_DS,
+        description => q{Delete DS},
+        mnemonic    => q{DELETE},
+        sig         => 0,
     },
     1 => {
         status      => $ALGO_STATUS_DEPRECATED,
         description => q{RSA/MD5},
         mnemonic    => q{RSAMD5},
+        sig         => 0,
     },
     2 => {
         status      => $ALGO_STATUS_VALID,
         description => q{Diffie-Hellman},
         mnemonic    => q{DH},
+        sig         => 0,
     },
     3 => {
         status      => $ALGO_STATUS_VALID,
         description => q{DSA/SHA1},
         mnemonic    => q{DSA},
+        sig         => 1,
     },
     4 => {
         status      => $ALGO_STATUS_RESERVED,
@@ -48,21 +53,25 @@ Readonly::Hash our %algo_properties => (
         status      => $ALGO_STATUS_VALID,
         description => q{RSA/SHA1},
         mnemonic    => q{RSASHA1},
+        sig         => 1,
     },
     6 => {
         status      => $ALGO_STATUS_VALID,
         description => q{DSA-NSEC3-SHA1},
         mnemonic    => q{DSA-NSEC3-SHA1},
+        sig         => 1,
     },
     7 => {
         status      => $ALGO_STATUS_VALID,
         description => q{RSASHA1-NSEC3-SHA1},
         mnemonic    => q{RSASHA1-NSEC3-SHA1},
+        sig         => 1,
     },
     8 => {
         status      => $ALGO_STATUS_VALID,
         description => q{RSA/SHA-256},
-        mnemonic    => q{RSA/SHA256},
+        mnemonic    => q{RSASHA256},
+        sig         => 1,
     },
     9 => {
         status      => $ALGO_STATUS_RESERVED,
@@ -71,7 +80,8 @@ Readonly::Hash our %algo_properties => (
     10 => {
         status      => $ALGO_STATUS_VALID,
         description => q{RSA/SHA-512},
-        mnemonic    => q{RSA/SHA512},
+        mnemonic    => q{RSASHA512},
+        sig         => 1,
     },
     11 => {
         status      => $ALGO_STATUS_RESERVED,
@@ -81,26 +91,31 @@ Readonly::Hash our %algo_properties => (
         status      => $ALGO_STATUS_VALID,
         description => q{GOST R 34.10-2001},
         mnemonic    => q{ECC-GOST},
+        sig         => 1,
     },
     13 => {
         status      => $ALGO_STATUS_VALID,
         description => q{ECDSA Curve P-256 with SHA-256},
         mnemonic    => q{ECDSAP256SHA256},
+        sig         => 1,
     },
     14 => {
         status      => $ALGO_STATUS_VALID,
         description => q{ECDSA Curve P-384 with SHA-384},
         mnemonic    => q{ECDSAP384SHA384},
+        sig         => 1,
     },
     15 => {
         status      => $ALGO_STATUS_VALID,
         description => q{Ed25519},
-        mnemonic    => q{Ed25519},
+        mnemonic    => q{ED25519},
+        sig         => 1,
     },
     16 => {
         status      => $ALGO_STATUS_VALID,
         description => q{Ed448},
-        mnemonic    => q{Ed448},
+        mnemonic    => q{ED448},
+        sig         => 1,
     },
     (
         map { $_ => { status => $ALGO_STATUS_UNASSIGNED, description => q{Unassigned}, } } ( 17 .. 122 )
@@ -109,19 +124,22 @@ Readonly::Hash our %algo_properties => (
         map { $_ => { status => $ALGO_STATUS_RESERVED, description => q{Reserved}, } } ( 123 .. 251 )
     ),
     252 => {
-        status      => $ALGO_STATUS_RESERVED,
+        status      => $ALGO_STATUS_INDIRECT_KEY,
         description => q{Reserved for Indirect Keys},
         mnemonic    => q{INDIRECT},
+        sig         => 0,
     },
     253 => {
         status      => $ALGO_STATUS_PRIVATE,
         description => q{private algorithm},
         mnemonic    => q{PRIVATEDNS},
+        sig         => 1,
     },
     254 => {
         status      => $ALGO_STATUS_PRIVATE,
         description => q{private algorithm OID},
         mnemonic    => q{PRIVATEOID},
+        sig         => 1,
     },
     255 => {
         status      => $ALGO_STATUS_RESERVED,
@@ -254,13 +272,17 @@ sub metadata {
         ],
         dnssec05 => [
             qw(
+              ALGORITHM_DELETE_DS
               ALGORITHM_DEPRECATED
+              ALGORITHM_INDIRECT_KEY
+              ALGORITHM_NOT_ZONE_SIGN
+              ALGORITHM_OK
+              ALGORITHM_PRIVATE
               ALGORITHM_RESERVED
               ALGORITHM_UNASSIGNED
-              ALGORITHM_PRIVATE
-              ALGORITHM_OK
-              ALGORITHM_UNKNOWN
               KEY_DETAILS
+              NO_RESPONSE
+              NO_RESPONSE_DNSKEY
               )
         ],
         dnssec06 => [
@@ -325,7 +347,13 @@ sub metadata {
 sub translation {
     return {
         ADDITIONAL_DNSKEY_SKIPPED => "No DNSKEYs found. Additional tests skipped.",
-        ALGORITHM_DEPRECATED      => "The DNSKEY with tag {keytag} uses deprecated algorithm number "
+        ALGORITHM_DELETE_DS       => "The DNSKEY with tag {keytag} uses Delete DS algorithm number "
+          . "{algorithm}/({description}).",
+        ALGORITHM_DEPRECATED => "The DNSKEY with tag {keytag} uses deprecated algorithm number "
+          . "{algorithm}/({description}).",
+        ALGORITHM_INDIRECT_KEY => "The DNSKEY with tag {keytag} uses algorithm number reserved for indirect keys "
+          . "{algorithm}/({description}).",
+        ALGORITHM_NOT_ZONE_SIGN => "The DNSKEY with tag {keytag} uses algorithm number not meant for zone signing"
           . "{algorithm}/({description}).",
         ALGORITHM_OK => "The DNSKEY with tag {keytag} uses algorithm number {algorithm}/({description}), which is OK.",
         ALGORITHM_PRIVATE  => "The DNSKEY with tag {keytag} uses private algorithm number {algorithm}/({description}).",
@@ -333,7 +361,6 @@ sub translation {
           . "{algorithm}/({description}).",
         ALGORITHM_UNASSIGNED => "The DNSKEY with tag {keytag} uses unassigned algorithm number "
           . "{algorithm}/({description}).",
-        ALGORITHM_UNKNOWN        => "The DNSKEY with tag {keytag} uses unknown algorithm number {algorithm}.",
         COMMON_KEYTAGS           => "There are both DS and DNSKEY records with key tags {keytags}.",
         DELEGATION_NOT_SIGNED    => "Delegation from parent to child is not properly signed {reason}.",
         DELEGATION_SIGNED        => "Delegation from parent to child is properly signed.",
@@ -377,6 +404,8 @@ sub translation {
         NO_KEYS_OR_NO_SIGS_OR_NO_SOA => "Cannot test SOA signatures, because we got {keys} DNSKEY records, "
           . "{sigs} RRSIG records and {soas} SOA records.",
         NO_NSEC3PARAM          => "{server} returned no NSEC3PARAM records.",
+        NO_RESPONSE_DNSKEY     => "Nameserver {ns}/{address} responded with no DNSKEY record(s).",
+        NO_RESPONSE            => "Nameserver {ns}/{address} did not respond.",
         NOT_SIGNED             => "The zone is not signed with DNSSEC.",
         NSEC3_COVERS_NOT       => "NSEC3 record does not cover {name}.",
         NSEC3_COVERS           => "NSEC3 record covers {name}.",
@@ -407,7 +436,10 @@ sub translation {
 sub policy {
     return {
         "ADDITIONAL_DNSKEY_SKIPPED"    => "DEBUG",
+        "ALGORITHM_DELETE_DS"          => "ERROR",
         "ALGORITHM_DEPRECATED"         => "WARNING",
+        "ALGORITHM_INDIRECT_KEY"       => "ERROR",
+        "ALGORITHM_NOT_ZONE_SIGN"      => "ERROR",
         "ALGORITHM_OK"                 => "INFO",
         "ALGORITHM_RESERVED"           => "ERROR",
         "ALGORITHM_UNASSIGNED"         => "ERROR",
@@ -447,6 +479,8 @@ sub policy {
         "NO_KEYS_OR_NO_SIGS"           => "DEBUG",
         "NO_KEYS_OR_NO_SIGS_OR_NO_SOA" => "DEBUG",
         "NO_NSEC3PARAM"                => "DEBUG",
+        "NO_RESPONSE_DNSKEY"           => "ERROR",
+        "NO_RESPONSE"                  => "ERROR",
         "NOT_SIGNED"                   => "NOTICE",
         "NSEC3_COVERS"                 => "DEBUG",
         "NSEC3_COVERS_NOT"             => "WARNING",
@@ -834,12 +868,22 @@ sub dnssec05 {
 
     for my $key ( sort keys %nss ) {
         my $ns = $nss{$key};
+        my $ns_args = {
+            ns      => $ns->name->string,
+            address => $ns->address->short,
+        };
 
         my $key_p = $ns->query( $zone->name, 'DNSKEY', { dnssec => 1 } );
         if ( not $key_p ) {
+            push @results, info( NO_RESPONSE => $ns_args );
             next;
         }
+
         my @keys = $key_p->get_records( 'DNSKEY', 'answer' );
+        if ( not @keys ) {
+            push @results, info( NO_RESPONSE_DNSKEY => $ns_args );
+            next;
+        }
 
         foreach my $key ( @keys ) {
             my $algo      = $key->algorithm;
@@ -848,6 +892,7 @@ sub dnssec05 {
                 keytag      => $key->keytag,
                 description => $algo_properties{$algo}{description},
             };
+
             if ( $algo_properties{$algo}{status} == $ALGO_STATUS_DEPRECATED ) {
                 push @results, info( ALGORITHM_DEPRECATED => $algo_args );
             }
@@ -860,7 +905,13 @@ sub dnssec05 {
             elsif ( $algo_properties{$algo}{status} == $ALGO_STATUS_PRIVATE ) {
                 push @results, info( ALGORITHM_PRIVATE => $algo_args );
             }
-            elsif ( $algo_properties{$algo}{status} == $ALGO_STATUS_VALID ) {
+            elsif ( $algo_properties{$algo}{status} == $ALGO_STATUS_DELETE_DS ) {
+                push @results, info( ALGORITHM_DELETE_DS => $algo_args );
+            }
+            elsif ( $algo_properties{$algo}{status} == $ALGO_STATUS_INDIRECT_KEY ) {
+                push @results, info( ALGORITHM_INDIRECT_KEY => $algo_args );
+            }
+            elsif ( $algo_properties{$algo}{sig} ) {
                 push @results, info( ALGORITHM_OK => $algo_args );
                 if ( $key->flags & 256 ) {    # This is a Key
                     push @results,
@@ -876,14 +927,9 @@ sub dnssec05 {
                       );
                 }
             }
-            else {
-                push @results,
-                  info(
-                    ALGORITHM_UNKNOWN => {
-                        algorithm => $algo,
-                        keytag    => $key->keytag,
-                    }
-                  );
+
+            if ( not $algo_properties{$algo}{sig} ) {
+                push @results, info( ALGORITHM_NOT_ZONE_SIGN => $algo_args );
             }
         } ## end foreach my $key ( @keys )
     }
