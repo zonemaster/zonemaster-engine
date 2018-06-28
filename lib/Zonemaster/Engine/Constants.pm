@@ -204,6 +204,14 @@ C<$ALGO_STATUS_OTHER>
 
 =item *
 
+C<$ALGO_STATUS_DELETE_DS>
+
+=item *
+
+C<$ALGO_STATUS_INDIRECT_KEY>
+
+=item *
+
 C<$DURATION_12_HOURS_IN_SECONDS>
 
 =item *
