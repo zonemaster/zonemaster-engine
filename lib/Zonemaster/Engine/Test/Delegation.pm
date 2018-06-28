@@ -195,7 +195,7 @@ sub delegation01 {
     }
 
     # Determine child NS names with addresses
-    my @child_ns = @{ Zonemaster::Engine::TestMethods->method4( $zone ) };
+    my @child_ns = @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
     my @child_ns_ipv4 = uniq map { $_->name->string } grep { $_->address->version == 4 } @child_ns;
     my @child_ns_ipv6 = uniq map { $_->name->string } grep { $_->address->version == 6 } @child_ns;
 
