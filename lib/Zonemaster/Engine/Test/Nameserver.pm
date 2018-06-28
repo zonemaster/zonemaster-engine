@@ -188,17 +188,22 @@ sub nameserver01 {
     my ( $class, $zone ) = @_;
     my @results;
 
-    my @nss_child = @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
+    my @nss;
+    {
+        my %nss = map { $_->string => $_ }
+          @{ Zonemaster::Engine::TestMethods->method4( $zone ) },
+          @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
+        @nss = values %nss;
+    }
 
     if ( not Zonemaster::Engine->config->ipv6_ok ) {
-        @nss_child = grep { $_->address->version != $IP_VERSION_6 } @nss_child
+        @nss = grep { $_->address->version != $IP_VERSION_6 } @nss;
     }
     if ( not Zonemaster::Engine->config->ipv4_ok ) {
-        @nss_child = grep { $_->address->version != $IP_VERSION_4 } @nss_child
+        @nss = grep { $_->address->version != $IP_VERSION_4 } @nss;
     }
 
-    my %nsnames_and_ip;
-    for my $ns ( @nss_child ) {
+    for my $ns ( @nss ) {
 
         my $is_no_recursor = 1;
         for my $nonexistent_name ( @NONEXISTENT_NAMES ) {
