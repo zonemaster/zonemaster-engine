@@ -311,58 +311,73 @@ sub syntax06 {
     my ( $class, $zone ) = @_;
     my @results;
 
-    # TODO: Query all name servers
-    # TODO: Cache the MX query
-    my $p = $zone->query_one( $zone->name, q{SOA} );
-
-    if ( not $p ) {
-        push @results, info( NO_RESPONSE => {} );
-        return @results;
+    my @nss;
+    {
+        my %nss = map { $_->string => $_ }
+          @{ Zonemaster::Engine::TestMethods->method4( $zone ) },
+          @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
+        @nss = sort values %nss;
     }
 
-    my ( $soa ) = $p->get_records( q{SOA}, q{answer} );
+    my $resolver = Zonemaster::Engine->ns( 'google-public-dns-a.google.com', '8.8.8.8' );
 
-    if ( not $soa ) {
-        push @results, info( NO_RESPONSE_SOA_QUERY => {} );
-        return @results;
-    }
+    my %seen_rnames;
+    for my $ns ( @nss ) {
 
-    my $rname = $soa->rname;
-    $rname =~ s/([^\\])[.]/$1@/smx;    # Replace first non-escaped dot with an at-sign
-    $rname =~ s/[\\][.]/./smgx;        # Un-escape dots
-    $rname =~ s/[.]\z//smgx;           # Validator does not like final dots
-    if ( not valid( $rname ) ) {
-        push @results,
-          info(
-            RNAME_RFC822_INVALID => {
-                rname => $rname,
-            }
-          );
-        return @results;
-    }
+        my $p = $ns->query( $zone->name, q{SOA} );
 
-    my $domain = ($rname =~ s/.*@//r);
-
-    my $p_mx = Zonemaster::LDNS->new('8.8.8.8')->query( $domain, 'MX', 'IN' );
-
-    if ( not $p_mx or $p_mx->rcode ne 'NOERROR' && $p_mx->rcode ne 'NXDOMAIN' ) {
-        push @results, info( RNAME_MAIL_DOMAIN_INVALID => { domain => $domain } );
-        return @results;
-    }
-
-    my @mxs = Zonemaster::Engine::Packet->new( packet => $p_mx )->get_records_for_name( q{MX}, $domain );
-
-    if ( !@mxs ) {
-        push @results, info( RNAME_MAIL_DOMAIN_INVALID => { domain => $domain } );
-        return @results;
-    }
-
-    push @results,
-      info(
-        RNAME_RFC822_VALID => {
-            rname => $rname,
+        if ( not $p ) {
+            push @results, info( NO_RESPONSE => {} );
+            next;
         }
-      );
+
+        my ( $soa ) = $p->get_records( q{SOA}, q{answer} );
+
+        if ( not $soa ) {
+            push @results, info( NO_RESPONSE_SOA_QUERY => {} );
+            next;
+        }
+
+        my $rname = $soa->rname;
+        $rname =~ s/([^\\])[.]/$1@/smx;    # Replace first non-escaped dot with an at-sign
+        $rname =~ s/[\\][.]/./smgx;        # Un-escape dots
+        $rname =~ s/[.]\z//smgx;           # Validator does not like final dots
+        if ( not valid( $rname ) ) {
+            push @results,
+              info(
+                RNAME_RFC822_INVALID => {
+                    rname => $rname,
+                }
+              );
+            next;
+        }
+
+        my $domain = ( $rname =~ s/.*@//r );
+
+        my $p_mx = $resolver->query( $domain, q{MX}, { recurse => 1 } );
+
+        if ( not $p_mx or $p_mx->rcode ne 'NOERROR' && $p_mx->rcode ne 'NXDOMAIN' ) {
+            push @results, info( RNAME_MAIL_DOMAIN_INVALID => { domain => $domain } );
+            next;
+        }
+
+        my @mxs = $p_mx->get_records_for_name( q{MX}, $domain );
+
+        if ( !@mxs ) {
+            push @results, info( RNAME_MAIL_DOMAIN_INVALID => { domain => $domain } );
+            next;
+        }
+
+        if ( !exists $seen_rnames{$rname} ) {
+            $seen_rnames{$rname} = 1;
+            push @results,
+              info(
+                RNAME_RFC822_VALID => {
+                    rname => $rname,
+                }
+              );
+        }
+    } ## end for my $ns ( @nss )
 
     return @results;
 } ## end sub syntax06
