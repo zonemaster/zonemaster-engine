@@ -52,6 +52,12 @@ sub metadata {
               ENOUGH_NS_DEL
               NOT_ENOUGH_NS_DEL
               NOT_ENOUGH_NS_CHILD
+              ENOUGH_IPV4_NS_CHILD
+              ENOUGH_IPV6_NS_CHILD
+              NOT_ENOUGH_IPV4_NS_CHILD
+              NOT_ENOUGH_IPV6_NS_CHILD
+              NO_IPV4_NS_CHILD
+              NO_IPV6_NS_CHILD
               )
         ],
         delegation02 => [
@@ -108,17 +114,29 @@ sub translation {
         DEL_DISTINCT_NS_IP   => "All the IP addresses used by the nameservers in parent are unique.",
         DEL_NS_SAME_IP       => "IP {address} in parent refers to multiple nameservers ({nss}).",
         DISTINCT_IP_ADDRESS  => "All the IP addresses used by the nameservers are unique",
-        ENOUGH_NS_CHILD      => "Child lists enough ({count}) nameservers ({ns}). Lower limit set to {minimum}.",
-        ENOUGH_NS_DEL        => "Parent lists enough ({count}) nameservers ({glue}). Lower limit set to {minimum}.",
-        EXTRA_NAME_CHILD     => "Child has nameserver(s) not listed at parent ({extra}).",
-        EXTRA_NAME_PARENT    => "Parent has nameserver(s) not listed at the child ({extra}).",
-        IPV4_DISABLED        => 'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
-        IPV6_DISABLED        => 'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
-        IS_NOT_AUTHORITATIVE => "Nameserver {ns} response is not authoritative on {proto} port 53.",
-        NAMES_MATCH          => "All of the nameserver names are listed both at parent and child.",
+        ENOUGH_IPV4_NS_CHILD => "Child lists enough ({count}) IPv4 nameserver addresses ({addrs}). "
+          . "Lower limit set to {minimum}.",
+        ENOUGH_IPV6_NS_CHILD => "Child lists enough ({count}) IPv6 nameserver addresses ({addrs}). "
+          . "Lower limit set to {minimum}.",
+        ENOUGH_NS_CHILD          => "Child lists enough ({count}) nameservers ({ns}). Lower limit set to {minimum}.",
+        ENOUGH_NS_DEL            => "Parent lists enough ({count}) nameservers ({glue}). Lower limit set to {minimum}.",
+        EXTRA_NAME_CHILD         => "Child has nameserver(s) not listed at parent ({extra}).",
+        EXTRA_NAME_PARENT        => "Parent has nameserver(s) not listed at the child ({extra}).",
+        IPV4_DISABLED            => 'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
+        IPV6_DISABLED            => 'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
+        IS_NOT_AUTHORITATIVE     => "Nameserver {ns} response is not authoritative on {proto} port 53.",
+        NAMES_MATCH              => "All of the nameserver names are listed both at parent and child.",
+        NOT_ENOUGH_IPV4_NS_CHILD => "Child does not list enough ({count}) IPv4 nameserver addresses ({addrs}). "
+          . "Lower limit set to {minimum}.",
+        NOT_ENOUGH_IPV6_NS_CHILD => "Child does not list enough ({count}) IPv6 nameserver addresses ({addrs}). "
+          . "Lower limit set to {minimum}.",
         NOT_ENOUGH_NS_CHILD => "Child does not list enough ({count}) nameservers ({ns}). Lower limit set to {minimum}.",
         NOT_ENOUGH_NS_DEL   => "Parent does not list enough ({count}) nameservers ({glue}). "
           . "Lower limit set to {minimum}.",
+        NO_IPV4_NS_CHILD => "Child lists no ({count}) IPv4 nameserver addresses ({addrs}). If any were present, "
+          . "the minimum allowed would be {minimum}.",
+        NO_IPV6_NS_CHILD => "Child lists no ({count}) IPv6 nameserver addresses ({addrs}). If any were present, "
+          . "the minimum allowed would be {minimum}.",
         NS_RR_IS_CNAME      => "Nameserver {ns} {address_type} RR point to CNAME.",
         NS_RR_NO_CNAME      => "No nameserver point to CNAME alias.",
         REFERRAL_SIZE_LARGE => "The smallest possible legal referral packet is larger than 512 octets (it is {size}).",
@@ -174,6 +192,42 @@ sub delegation01 {
     else {
         push @results,
           info( NOT_ENOUGH_NS_CHILD => $child_nsnames_args );
+    }
+
+    # Determine child NS names with addresses
+    my @child_ns = @{ Zonemaster::Engine::TestMethods->method4( $zone ) };
+    my @child_ns_ipv4 = uniq map { $_->name->string } grep { $_->address->version == 4 } @child_ns;
+    my @child_ns_ipv6 = uniq map { $_->name->string } grep { $_->address->version == 6 } @child_ns;
+
+    my $child_ns_ipv4_args = {
+        count   => scalar( @child_ns_ipv4 ),
+        minimum => $MINIMUM_NUMBER_OF_NAMESERVERS,
+        ns      => join( q{;}, sort @child_ns_ipv4 ),
+    };
+    my $child_ns_ipv6_args = {
+        count   => scalar( @child_ns_ipv6 ),
+        minimum => $MINIMUM_NUMBER_OF_NAMESERVERS,
+        ns      => join( q{;}, sort @child_ns_ipv6 ),
+    };
+
+    if ( scalar( @child_ns_ipv4 ) >= $MINIMUM_NUMBER_OF_NAMESERVERS ) {
+        push @results, info( ENOUGH_IPV4_NS_CHILD => $child_ns_ipv4_args );
+    }
+    elsif ( scalar( @child_ns_ipv4 ) > 0 ) {
+        push @results, info( NOT_ENOUGH_IPV4_NS_CHILD => $child_ns_ipv4_args );
+    }
+    else {
+        push @results, info( NO_IPV4_NS_CHILD => $child_ns_ipv4_args );
+    }
+
+    if ( scalar( @child_ns_ipv6 ) >= $MINIMUM_NUMBER_OF_NAMESERVERS ) {
+        push @results, info( ENOUGH_IPV6_NS_CHILD => $child_ns_ipv6_args );
+    }
+    elsif ( scalar( @child_ns_ipv6 ) > 0 ) {
+        push @results, info( NOT_ENOUGH_IPV6_NS_CHILD => $child_ns_ipv6_args );
+    }
+    else {
+        push @results, info( NO_IPV6_NS_CHILD => $child_ns_ipv6_args );
     }
 
     return @results;
