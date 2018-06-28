@@ -37,6 +37,9 @@ sub all {
     if ( Zonemaster::Engine->config->should_run( 'consistency05' ) ) {
         push @results, $class->consistency05( $zone );
     }
+    if ( Zonemaster::Engine->config->should_run( 'consistency06' ) ) {
+        push @results, $class->consistency06( $zone );
+    }
 
     return @results;
 }
@@ -102,6 +105,14 @@ sub metadata {
               ADDRESSES_MATCH
               )
         ],
+        consistency06 => [
+            qw(
+              NO_RESPONSE
+              NO_RESPONSE_SOA_QUERY
+              ONE_SOA_MNAME
+              MULTIPLE_SOA_MNAMES
+              )
+        ],
     };
 } ## end sub metadata
 
@@ -113,6 +124,7 @@ sub translation {
         IPV4_DISABLED        => 'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
         IPV6_DISABLED        => 'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
         MULTIPLE_NS_SET      => 'Saw {count} NS set.',
+        MULTIPLE_SOA_MNAMES  => 'Saw {count} SOA mname.',
         MULTIPLE_SOA_RNAMES  => 'Saw {count} SOA rname.',
         MULTIPLE_SOA_SERIALS => 'Saw {count} SOA serial numbers.',
         MULTIPLE_SOA_TIME_PARAMETER_SET => 'Saw {count} SOA time parameter set.',
@@ -121,6 +133,7 @@ sub translation {
         NO_RESPONSE_SOA_QUERY           => 'No response from nameserver {ns}/{address} on SOA queries.',
         NS_SET                          => 'Saw NS set ({nsset}) on following nameserver set : {servers}.',
         ONE_NS_SET                      => 'A unique NS set was seen ({nsset}).',
+        ONE_SOA_MNAME                   => 'A single SOA mname value was seen ({mname})',
         ONE_SOA_RNAME                   => 'A single SOA rname value was seen ({rname})',
         ONE_SOA_SERIAL                  => 'A single SOA serial number was seen ({serial}).',
         ONE_SOA_TIME_PARAMETER_SET      => 'A single SOA time parameter set was seen '
@@ -609,6 +622,106 @@ sub consistency05 {
     return @results;
 } ## end sub consistency05
 
+sub _get_soa {
+}
+
+sub consistency06 {
+    my ( $class, $zone ) = @_;
+    my @results;
+    my %nsnames_and_ip;
+    my %mnames;
+    my $query_type = q{SOA};
+
+    foreach
+      my $local_ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) }, @{ Zonemaster::Engine::TestMethods->method5( $zone ) } )
+    {
+
+        next if $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short };
+
+        if ( not Zonemaster::Engine->config->ipv6_ok and $local_ns->address->version == $IP_VERSION_6 ) {
+            push @results,
+              info(
+                IPV6_DISABLED => {
+                    ns      => $local_ns->name->string,
+                    address => $local_ns->address->short,
+                    rrtype  => $query_type,
+                }
+              );
+            next;
+        }
+
+        if ( not Zonemaster::Engine->config->ipv4_ok and $local_ns->address->version == $IP_VERSION_4 ) {
+            push @results,
+              info(
+                IPV4_DISABLED => {
+                    ns      => $local_ns->name->string,
+                    address => $local_ns->address->short,
+                    rrtype  => $query_type,
+                }
+              );
+            next;
+        }
+
+        my $p = $local_ns->query( $zone->name, $query_type );
+
+        if ( not $p ) {
+            push @results,
+              info(
+                NO_RESPONSE => {
+                    ns      => $local_ns->name->string,
+                    address => $local_ns->address->short,
+                }
+              );
+            next;
+        }
+
+        my ( $soa ) = $p->get_records_for_name( $query_type, $zone->name );
+
+        if ( not $soa ) {
+            push @results,
+              info(
+                NO_RESPONSE_SOA_QUERY => {
+                    ns      => $local_ns->name->string,
+                    address => $local_ns->address->short,
+                }
+              );
+            next;
+        }
+        else {
+            push @{ $mnames{ lc( $soa->mname ) } }, $local_ns->name->string . q{/} . $local_ns->address->short;
+            $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short }++;
+        }
+    } ## end foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods...})
+
+    if ( scalar( keys %mnames ) == 1 ) {
+        push @results,
+          info(
+            ONE_SOA_MNAME => {
+                mname => ( keys %mnames )[0],
+            }
+          );
+    }
+    elsif ( scalar( keys %mnames ) ) {
+        push @results,
+          info(
+            MULTIPLE_SOA_MNAMES => {
+                count => scalar( keys %mnames ),
+            }
+          );
+        foreach my $mname ( keys %mnames ) {
+            push @results,
+              info(
+                SOA_MNAME => {
+                    mname   => $mname,
+                    servers => join( q{;}, @{ $mnames{$mname} } ),
+                }
+              );
+        }
+    }
+
+    return @results;
+} ## end sub consistency06
+
 1;
 
 =head1 NAME
@@ -665,6 +778,10 @@ Query all nameservers for NS set, and see that they have all the same content.
 =item consistency05($zone)
 
 Verify that the glue records are consistent between glue and authoritative data.
+
+=item consistency06($zone)
+
+Query all nameservers for SOA, and see that they all have the same SOA mname.
 
 =back
 
