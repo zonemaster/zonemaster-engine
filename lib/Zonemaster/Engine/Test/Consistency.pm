@@ -124,6 +124,7 @@ sub translation {
         IPV4_DISABLED        => 'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
         IPV6_DISABLED        => 'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
         MULTIPLE_NS_SET      => 'Saw {count} NS set.',
+        MULTIPLE_SOA_MNAMES  => 'Saw {count} SOA mname.',
         MULTIPLE_SOA_RNAMES  => 'Saw {count} SOA rname.',
         MULTIPLE_SOA_SERIALS => 'Saw {count} SOA serial numbers.',
         MULTIPLE_SOA_TIME_PARAMETER_SET => 'Saw {count} SOA time parameter set.',
@@ -132,6 +133,7 @@ sub translation {
         NO_RESPONSE_SOA_QUERY           => 'No response from nameserver {ns}/{address} on SOA queries.',
         NS_SET                          => 'Saw NS set ({nsset}) on following nameserver set : {servers}.',
         ONE_NS_SET                      => 'A unique NS set was seen ({nsset}).',
+        ONE_SOA_MNAME                   => 'A single SOA mname value was seen ({mname})',
         ONE_SOA_RNAME                   => 'A single SOA rname value was seen ({rname})',
         ONE_SOA_SERIAL                  => 'A single SOA serial number was seen ({serial}).',
         ONE_SOA_TIME_PARAMETER_SET      => 'A single SOA time parameter set was seen '
