@@ -15,7 +15,7 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine->config->no_network( 1 );
 }
 
-foreach my $testcase ( qw{consistency01 consistency02 consistency03 consistency04 consistency05} ) {
+foreach my $testcase ( qw{consistency01 consistency02 consistency03 consistency04 consistency05 consistency06} ) {
     Zonemaster::Engine->config->load_policy_file( 't/policies/Test-'.$testcase.'-only.json' );
     my @testcases;
     Zonemaster::Engine->logger->clear_history();
