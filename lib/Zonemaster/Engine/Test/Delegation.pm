@@ -57,6 +57,7 @@ sub metadata {
         delegation02 => [
             qw(
               SAME_IP_ADDRESS
+              DISTINCT_IP_ADDRESS
               )
         ],
         delegation03 => [
@@ -76,11 +77,13 @@ sub metadata {
         delegation05 => [
             qw(
               NS_RR_IS_CNAME
+              NS_RR_NO_CNAME
               )
         ],
         delegation06 => [
             qw(
               SOA_NOT_EXISTS
+              SOA_EXISTS
               IPV4_DISABLED
               IPV6_DISABLED
               )
