@@ -276,6 +276,7 @@ sub metadata {
               DNSKEY_AND_DS
               NEITHER_DNSKEY_NOR_DS
               DS_BUT_NOT_DNSKEY
+              NOT_SIGNED
               )
         ],
         dnssec08 => [
@@ -409,6 +410,7 @@ sub policy {
         "ADDITIONAL_DNSKEY_SKIPPED"    => "DEBUG",
         "ALGORITHM_DEPRECATED"         => "WARNING",
         "ALGORITHM_OK"                 => "INFO",
+        "ALGORITHM_PRIVATE"            => "WARNING",
         "ALGORITHM_RESERVED"           => "ERROR",
         "ALGORITHM_UNASSIGNED"         => "ERROR",
         "COMMON_KEYTAGS"               => "INFO",
