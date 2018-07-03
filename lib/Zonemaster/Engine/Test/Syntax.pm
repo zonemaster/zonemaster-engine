@@ -100,6 +100,7 @@ sub metadata {
             qw(
               RNAME_RFC822_INVALID
               NO_RESPONSE_SOA_QUERY
+              RNAME_RFC822_VALID
               )
         ],
         syntax07 => [
