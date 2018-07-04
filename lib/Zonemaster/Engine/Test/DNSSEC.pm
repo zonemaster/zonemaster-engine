@@ -793,8 +793,6 @@ sub dnssec04 {
     my @soa_sigs = $soa_p->get_records( 'RRSIG', 'answer' );
 
     foreach my $sig ( @key_sigs, @soa_sigs ) {
-        my $duration  = $sig->expiration - $sig->inception;
-        my $remaining = $sig->expiration - int( $key_p->timestamp );
         push @results,
           info(
             RRSIG_EXPIRATION => {
@@ -803,45 +801,52 @@ sub dnssec04 {
                 types => $sig->typecovered,
             }
           );
+
+        my $remaining = $sig->expiration - int( $key_p->timestamp );
+        my $result_remaining;
         if ( $remaining < 0 ) {    # already expired
-            push @results,
-              info(
+            $result_remaining = info(
                 RRSIG_EXPIRED => {
                     expiration => $sig->expiration,
                     tag        => $sig->keytag,
                     types      => $sig->typecovered,
                 }
-              );
+            );
         }
         elsif ( $remaining < ( $DURATION_12_HOURS_IN_SECONDS ) ) {
-            push @results,
-              info(
+            $result_remaining = info(
                 REMAINING_SHORT => {
                     duration => $remaining,
                     tag      => $sig->keytag,
                     types    => $sig->typecovered,
                 }
-              );
+            );
         }
         elsif ( $remaining > ( $DURATION_180_DAYS_IN_SECONDS ) ) {
-            push @results,
-              info(
+            $result_remaining = info(
                 REMAINING_LONG => {
                     duration => $remaining,
                     tag      => $sig->keytag,
                     types    => $sig->typecovered,
                 }
-              );
+            );
         }
-        elsif ( $duration > ( $DURATION_180_DAYS_IN_SECONDS ) ) {
-            push @results,
-              info(
+
+        my $duration = $sig->expiration - $sig->inception;
+        my $result_duration;
+        if ( $duration > ( $DURATION_180_DAYS_IN_SECONDS ) ) {
+            $result_duration = info(
                 DURATION_LONG => {
                     duration => $duration,
                     tag      => $sig->keytag,
                     types    => $sig->typecovered,
                 }
-              );
+            );
+        }
+
+        if ( $result_remaining or $result_duration ) {
+            push @results, $result_remaining if $result_remaining;
+            push @results, $result_duration  if $result_duration;
         }
         else {
             push @results,
