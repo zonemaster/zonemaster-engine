@@ -368,6 +368,28 @@ sub syntax06 {
             next;
         }
 
+        my $exchange_invalid = 1;
+        for my $mx ( @mxs ) {
+            my $p_a = $resolver->query( $mx->exchange, q{A}, { recurse => 1 } );
+            if ( $p_a ) {
+                if ( grep { $_->owner eq $mx->exchange and $_->type eq q{A} } $p_a->answer ) {
+                    $exchange_invalid = 0;
+                    last;
+                }
+            }
+            my $p_aaaa = $resolver->query( $mx->exchange, q{AAAA}, { recurse => 1 } );
+            if ( $p_aaaa ) {
+                if ( grep { $_->owner eq $mx->exchange and $_->type eq q{AAAA} } $p_aaaa->answer ) {
+                    $exchange_invalid = 0;
+                    last;
+                }
+            }
+        }
+        if ( $exchange_invalid ) {
+            push @results, info( RNAME_MAIL_DOMAIN_INVALID => { domain => $domain } );
+            next;
+        }
+
         if ( !exists $seen_rnames{$rname} ) {
             $seen_rnames{$rname} = 1;
             push @results,
