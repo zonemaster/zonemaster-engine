@@ -98,7 +98,13 @@
       "NOT_ENOUGH_IPV4_NS_CHILD" : "ERROR",
       "NOT_ENOUGH_IPV6_NS_CHILD" : "ERROR",
       "NO_IPV4_NS_CHILD" : "ERROR",
-      "NO_IPV6_NS_CHILD" : "NOTICE"
+      "NO_IPV6_NS_CHILD" : "NOTICE",
+      "ENOUGH_IPV4_NS_DEL" : "INFO",
+      "ENOUGH_IPV6_NS_DEL" : "INFO",
+      "NOT_ENOUGH_IPV4_NS_DEL" : "ERROR",
+      "NOT_ENOUGH_IPV6_NS_DEL" : "ERROR",
+      "NO_IPV4_NS_DEL" : "ERROR",
+      "NO_IPV6_NS_DEL" : "NOTICE"
    },
    "EXAMPLE" : {
       "DISABLED" : true,
