@@ -20,9 +20,9 @@ my %res;
 
 my $iis = Zonemaster::Engine->zone( q{iis.se} );
 %res = map { $_->tag => $_ } Zonemaster::Engine::Test::Delegation->all( $iis );
-ok( $res{ENOUGH_NS},       q{ENOUGH_NS} );
-ok( $res{ENOUGH_NS_GLUE},  q{ENOUGH_NS_GLUE} );
-ok( $res{NAMES_MATCH},     q{NAMES_MATCH} );
+ok( $res{ENOUGH_NS_CHILD},  q{ENOUGH_NS_CHILD} );
+ok( $res{ENOUGH_NS_DEL},    q{ENOUGH_NS_DEL} );
+ok( $res{NAMES_MATCH},      q{NAMES_MATCH} );
 ok( $res{REFERRAL_SIZE_OK}, q{REFERRAL_SIZE_OK} );
 
 %res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{delegation}, q{crystone.se} );
@@ -36,8 +36,8 @@ ok( $res{SOA_EXISTS},           q{SOA_EXISTS} );
 ok( $res{ARE_AUTHORITATIVE},    q{ARE_AUTHORITATIVE} );
 
 %res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{delegation}, q{delegation02.zut-root.rd.nic.fr} );
-ok( $res{NOT_ENOUGH_NS},       q{NOT_ENOUGH_NS} );
-ok( $res{NOT_ENOUGH_NS_GLUE},  q{NOT_ENOUGH_NS_GLUE} );
+ok( $res{NOT_ENOUGH_NS_CHILD}, q{NOT_ENOUGH_NS_CHILD} );
+ok( $res{NOT_ENOUGH_NS_DEL},   q{NOT_ENOUGH_NS_DEL} );
 
 %res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{delegation}, q{woli.se} );
 ok( $res{SOA_NOT_EXISTS}, q{SOA_NOT_EXISTS} );

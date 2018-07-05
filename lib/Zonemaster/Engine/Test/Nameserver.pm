@@ -13,6 +13,13 @@ use Zonemaster::Engine::Test::Address;
 use Zonemaster::Engine::Constants qw[:ip];
 
 use List::MoreUtils qw[uniq none];
+use Readonly;
+
+Readonly my @NONEXISTENT_NAMES => qw{
+  xn--nameservertest.iis.se
+  xn--nameservertest.icann.org
+  xn--nameservertest.ripe.net
+};
 
 ###
 ### Entry Points
@@ -65,7 +72,7 @@ sub metadata {
             qw(
               IS_A_RECURSOR
               NO_RECURSOR
-              RECURSIVITY_UNDEF
+              NO_RESPONSE
               )
         ],
         nameserver02 => [
@@ -131,44 +138,45 @@ sub metadata {
 
 sub translation {
     return {
-        'AAAA_WELL_PROCESSED' => 'The following nameservers answer AAAA queries without problems : {names}.',
-        'EDNS0_BAD_QUERY'     => 'Nameserver {ns}/{address} does not support EDNS0 (replies with FORMERR).',
-        'DIFFERENT_SOURCE_IP' =>
-          'Nameserver {ns}/{address} replies on a SOA query with a different source address ({source}).',
-        'SAME_SOURCE_IP'      => 'All nameservers reply with same IP used to query them.',
-        'AXFR_AVAILABLE'      => 'Nameserver {ns}/{address} allow zone transfer using AXFR.',
-        'AXFR_FAILURE'        => 'AXFR not available on nameserver {ns}/{address}.',
-        'QUERY_DROPPED'       => 'Nameserver {ns}/{address} dropped AAAA query.',
-        'IS_A_RECURSOR'       => 'Nameserver {ns}/{address} is a recursor.',
-        'NO_RECURSOR'         => 'None of the following nameservers is a recursor : {names}.',
-        'RECURSIVITY_UNDEF'   => 'Cannot determine if the following servers are recursive nameservers or not: {names}.',
-        'ANSWER_BAD_RCODE'    => 'Nameserver {ns}/{address} answered AAAA query with an unexpected rcode ({rcode}).',
-        'EDNS0_BAD_ANSWER'    => 'Nameserver {ns}/{address} does not support EDNS0 (OPT not set in reply).',
-        'EDNS0_SUPPORT'       => 'The following nameservers support EDNS0 : {names}.',
-        'CAN_NOT_BE_RESOLVED' => 'The following nameservers failed to resolve to an IP address : {names}.',
-        'CAN_BE_RESOLVED'     => 'All nameservers succeeded to resolve to an IP address.',
-        'NO_RESOLUTION'       => 'No nameservers succeeded to resolve to an IP address.',
-        'IPV4_DISABLED'       => 'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
-        'IPV6_DISABLED'       => 'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
-        'UPWARD_REFERRAL_IRRELEVANT' => 'Upward referral tests skipped for root zone.',
-        'UPWARD_REFERRAL'            => 'Nameserver {ns}/{address} returns an upward referral.',
-        'NO_UPWARD_REFERRAL'         => 'None of the following nameservers returns an upward referral : {names}.',
-        'QNAME_CASE_SENSITIVE'       => 'Nameserver {ns}/{address} preserves original case of queried names.',
-        'QNAME_CASE_INSENSITIVE'     => 'Nameserver {ns}/{address} does not preserve original case of queried names.',
-        'CASE_QUERY_SAME_ANSWER' =>
-          'When asked for {type} records on "{query1}" and "{query2}", nameserver {ns}/{address} returns same answers.',
-        'CASE_QUERY_DIFFERENT_ANSWER' =>
-'When asked for {type} records on "{query1}" and "{query2}", nameserver {ns}/{address} returns different answers.',
-        'CASE_QUERY_SAME_RC' =>
-'When asked for {type} records on "{query1}" and "{query2}", nameserver {ns}/{address} returns same RCODE "{rcode}".',
-        'CASE_QUERY_DIFFERENT_RC' =>
-'When asked for {type} records on "{query1}" and "{query2}", nameserver {ns}/{address} returns different RCODE ("{rcode1}" vs "{rcode2}").',
-        'CASE_QUERY_NO_ANSWER' =>
-          'When asked for {type} records on "{query}", nameserver {ns}/{address} returns nothing.',
-        'CASE_QUERIES_RESULTS_OK' =>
-          'When asked for {type} records on "{query}" with different cases, all servers reply consistently.',
-        'CASE_QUERIES_RESULTS_DIFFER' =>
-          'When asked for {type} records on "{query}" with different cases, all servers do not reply consistently.',
+        AAAA_WELL_PROCESSED => 'The following nameservers answer AAAA queries without problems : {names}.',
+        ANSWER_BAD_RCODE    => 'Nameserver {ns}/{address} answered AAAA query with an unexpected rcode ({rcode}).',
+        AXFR_AVAILABLE      => 'Nameserver {ns}/{address} allow zone transfer using AXFR.',
+        AXFR_FAILURE        => 'AXFR not available on nameserver {ns}/{address}.',
+        CAN_BE_RESOLVED     => 'All nameservers succeeded to resolve to an IP address.',
+        CAN_NOT_BE_RESOLVED => 'The following nameservers failed to resolve to an IP address : {names}.',
+        CASE_QUERIES_RESULTS_DIFFER => 'When asked for {type} records on "{query}" with different cases, '
+          . 'all servers do not reply consistently.',
+        CASE_QUERIES_RESULTS_OK => 'When asked for {type} records on "{query}" with different cases, '
+          . 'all servers reply consistently.',
+        CASE_QUERY_DIFFERENT_ANSWER => 'When asked for {type} records on "{query1}" and "{query2}", '
+          . 'nameserver {ns}/{address} returns different answers.',
+        CASE_QUERY_DIFFERENT_RC => 'When asked for {type} records on "{query1}" and "{query2}", '
+          . 'nameserver {ns}/{address} returns different RCODE ("{rcode1}" vs "{rcode2}").',
+        CASE_QUERY_NO_ANSWER => 'When asked for {type} records on "{query}", '
+          . 'nameserver {ns}/{address} returns nothing.',
+        CASE_QUERY_SAME_ANSWER => 'When asked for {type} records on "{query1}" and "{query2}", '
+          . 'nameserver {ns}/{address} returns same answers.',
+        CASE_QUERY_SAME_RC => 'When asked for {type} records on "{query1}" and "{query2}", '
+          . 'nameserver {ns}/{address} returns same RCODE "{rcode}".',
+        DIFFERENT_SOURCE_IP => 'Nameserver {ns}/{address} replies on a SOA query with a different source address '
+          . '({source}).',
+        EDNS0_BAD_ANSWER       => 'Nameserver {ns}/{address} does not support EDNS0 (OPT not set in reply).',
+        EDNS0_BAD_QUERY        => 'Nameserver {ns}/{address} does not support EDNS0 (replies with FORMERR).',
+        EDNS0_SUPPORT          => 'The following nameservers support EDNS0 : {names}.',
+        IPV4_DISABLED          => 'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
+        IPV6_DISABLED          => 'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
+        IS_A_RECURSOR          => 'Nameserver {ns}/{address} is a recursor.',
+        NO_RECURSOR            => 'None of the following nameservers is a recursor : {names}.',
+        NO_RESOLUTION          => 'No nameservers succeeded to resolve to an IP address.',
+        NO_RESPONSE            => 'No response from {ns}/{address} asking for {dname}.',
+        NO_UPWARD_REFERRAL     => 'None of the following nameservers returns an upward referral : {names}.',
+        QNAME_CASE_INSENSITIVE => 'Nameserver {ns}/{address} does not preserve original case of queried names.',
+        QNAME_CASE_SENSITIVE   => 'Nameserver {ns}/{address} preserves original case of queried names.',
+        QUERY_DROPPED          => 'Nameserver {ns}/{address} dropped AAAA query.',
+        RECURSIVITY_UNDEF => 'Cannot determine if the following servers are recursive nameservers or not: {names}.',
+        SAME_SOURCE_IP    => 'All nameservers reply with same IP used to query them.',
+        UPWARD_REFERRAL   => 'Nameserver {ns}/{address} returns an upward referral.',
+        UPWARD_REFERRAL_IRRELEVANT => 'Upward referral tests skipped for root zone.',
     };
 } ## end sub translation
 
@@ -178,142 +186,60 @@ sub version {
 
 sub nameserver01 {
     my ( $class, $zone ) = @_;
-    my $nonexistent_name = q{xx--domain-cannot-exist.xx--illegal-syntax-tld};
-    my $unlikely_label   = q{xx--domain-should-not-exist};
-    my @existing_tld     = qw{fr re pm tf yt wf si};
     my @results;
-    my %ips;
-    my %nsnames_and_ip;
 
-    my %is_not_recursor = ();
-
-    foreach
-      my $local_ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) }, @{ Zonemaster::Engine::TestMethods->method5( $zone ) } )
+    my @nss;
     {
-
-        next if ( not Zonemaster::Engine->config->ipv6_ok and $local_ns->address->version == $IP_VERSION_6 );
-
-        next if ( not Zonemaster::Engine->config->ipv4_ok and $local_ns->address->version == $IP_VERSION_4 );
-
-        next if $ips{ $local_ns->address->short };
-
-        my $p = $local_ns->query( $nonexistent_name, q{SOA}, { recurse => 1 } );
-
-        if ( $p ) {
-            if ( $p->rcode eq q{REFUSED} ) {
-                $is_not_recursor{ $local_ns->address->short }++;
-            }
-            elsif ( $p->rcode eq q{SERVFAIL} ) {
-                $is_not_recursor{ $local_ns->address->short }++;
-            }
-            elsif ( $p->rcode eq q{NXDOMAIN} and not $p->aa ) {
-                push @results,
-                  info(
-                    IS_A_RECURSOR => {
-                        ns      => $local_ns->name,
-                        address => $local_ns->address->short,
-                        dname   => $nonexistent_name,
-                    }
-                  );
-            }
-            elsif ( $p->is_redirect and not $p->aa ) {
-                $is_not_recursor{ $local_ns->address->short }++;
-            }
-            elsif ( not $p->is_redirect and not $p->aa and not $p->answer and $p->rcode eq q{NOERROR} ) {
-                $is_not_recursor{ $local_ns->address->short }++;
-            }
-            $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short }++;
-            $ips{ $local_ns->address->short }++;
-        }
-
-    } ## end foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods...})
-
-    my $ips_string = join '#', sort keys %ips;
-    my $is_not_recursor_string = join '#', sort keys %is_not_recursor;
-    if ( $ips_string and $ips_string eq $is_not_recursor_string ) {
-        push @results,
-          info(
-            NO_RECURSOR => {
-                names => join( q{,}, sort keys %nsnames_and_ip ),
-            }
-          );
+        my %nss = map { $_->string => $_ }
+          @{ Zonemaster::Engine::TestMethods->method4( $zone ) },
+          @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
+        @nss = values %nss;
     }
-    elsif ( not grep { $_->tag eq q{IS_A_RECURSOR} } @results ) {
-        foreach my $tld ( @existing_tld ) {
 
-            next if $tld eq $zone->name;
-            my $checking_name = $unlikely_label . q{.} . $tld;
-            %is_not_recursor = ();
-            %ips = ();
-
-            foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) }, @{ Zonemaster::Engine::TestMethods->method5( $zone ) } ) {
-
-                next if ( not Zonemaster::Engine->config->ipv6_ok and $local_ns->address->version == $IP_VERSION_6 );
-
-                next if ( not Zonemaster::Engine->config->ipv4_ok and $local_ns->address->version == $IP_VERSION_4 );
-
-                next if $ips{ $local_ns->address->short };
-
-                next if $is_not_recursor{ $local_ns->address->short };
-
-                my $p = $local_ns->query( $checking_name, q{SOA}, { recurse => 1 } );
-
-                if ( $p ) {
-                    if ( $p->rcode eq q{REFUSED} ) {
-                        $is_not_recursor{ $local_ns->address->short }++;
-                    }
-                    elsif ( $p->rcode eq q{SERVFAIL} ) {
-                        $is_not_recursor{ $local_ns->address->short }++;
-                    }
-                    elsif ( $p->rcode eq q{NXDOMAIN} and not $p->aa ) {
-                        push @results,
-                          info(
-                            IS_A_RECURSOR => {
-                                ns      => $local_ns->name,
-                                address => $local_ns->address->short,
-                                dname   => $checking_name,
-                            }
-                          );
-                    }
-                    elsif ( $p->is_redirect and not $p->aa ) {
-                        $is_not_recursor{ $local_ns->address->short }++;
-                    }
-                    elsif ( not $p->is_redirect and not $p->aa and not $p->answer and $p->rcode eq q{NOERROR} ) {
-                        $is_not_recursor{ $local_ns->address->short }++;
-                    }
-                    $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short }++;
-                    $ips{ $local_ns->address->short }++;
-                }
-            }
-
-            my $ips_string = join '#', sort keys %ips;
-            my $is_not_recursor_string = join '#', sort keys %is_not_recursor;
-            if ( $ips_string and $ips_string eq $is_not_recursor_string ) {
-                push @results,
-                  info(
-                    NO_RECURSOR => {
-                        names => join( q{,}, sort keys %nsnames_and_ip ),
-                    }
-                  );
-                last;
-            }
-
-            if ( grep { $_->tag eq q{IS_A_RECURSOR} } @results ) {
-                last;
-            }
-        }
-
-        if ( not grep { $_->tag eq q{IS_A_RECURSOR} } @results and not grep { $_->tag eq q{NO_RECURSOR} } @results ) {
-            push @results,
-              info(
-                RECURSIVITY_UNDEF => {
-                    names => join( q{,}, sort keys %nsnames_and_ip ),
-                }
-              );
-        }
+    if ( not Zonemaster::Engine->config->ipv6_ok ) {
+        @nss = grep { $_->address->version != $IP_VERSION_6 } @nss;
     }
+    if ( not Zonemaster::Engine->config->ipv4_ok ) {
+        @nss = grep { $_->address->version != $IP_VERSION_4 } @nss;
+    }
+
+    for my $ns ( @nss ) {
+
+        my $is_no_recursor = 1;
+        for my $nonexistent_name ( @NONEXISTENT_NAMES ) {
+            my $p = $ns->query( $nonexistent_name, q{A} );
+
+            my $tag;
+            if ( !$p ) {
+                $tag = q{NO_RESPONSE};
+                $is_no_recursor = 0;
+            }
+            elsif ( $p->ra || $p->rcode eq q{NXDOMAIN} ) {
+                $tag = q{IS_A_RECURSOR};
+                $is_no_recursor = 0;
+            }
+
+            if ( $tag ) {
+                my $args = {
+                    ns      => $ns->name->string,
+                    address => $ns->address->short,
+                    dname   => $nonexistent_name,
+                };
+                push @results, info( $tag => $args );
+            }
+        } ## end for my $nonexistent_name...
+
+        if ( $is_no_recursor ) {
+
+            my $nsname_and_ip = $ns->name->string . q{/} . $ns->address->short;
+
+            my $args = { ns => $nsname_and_ip };
+            push @results, info( NO_RECURSOR => $args );
+        }
+    } ## end for my $ns ( @nss_child )
 
     return @results;
+
 } ## end sub nameserver01
 
 sub nameserver02 {

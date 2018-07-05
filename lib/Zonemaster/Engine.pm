@@ -4,6 +4,7 @@ use version; our $VERSION = version->declare("v2.0.7");
 
 use 5.014002;
 use Moose;
+use Carp;
 
 use Zonemaster::Engine::Nameserver;
 use Zonemaster::Engine::Logger;
@@ -99,9 +100,17 @@ sub recurse {
 
 sub add_fake_delegation {
     my ( $class, $domain, $href ) = @_;
-    my $incomplete_delegation;
+
+    # Validate arguments
+    $domain =~ /[^.]$|^\.$/
+      or croak 'Argument $domain must omit the trailing dot, or it must be a single dot';
+    foreach my $name ( keys %{$href} ) {
+        $name =~ /[^.]$|^\.$/
+          or croak 'Each key of argument $href must omit the trailing dot, or it must be a single dot';
+    }
 
     # Check fake delegation
+    my $incomplete_delegation;
     foreach my $name ( keys %{$href} ) {
         if ( not defined $href->{$name} or not scalar @{ $href->{$name} } ) {
             if ( Zonemaster::Engine::Zone->new( { name => $domain } )->is_in_zone( $name ) ) {

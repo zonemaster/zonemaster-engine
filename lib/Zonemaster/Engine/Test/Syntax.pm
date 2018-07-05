@@ -125,36 +125,36 @@ sub metadata {
 
 sub translation {
     return {
-        'NAMESERVER_DISCOURAGED_DOUBLE_DASH' =>
-'Nameserver ({name}) has a label ({label}) with a double hyphen (\'--\') in position 3 and 4 (with a prefix which is not \'xn--\').',
-        'NAMESERVER_NON_ALLOWED_CHARS' => 'Found illegal characters in the nameserver ({name}).',
-        'NAMESERVER_NUMERIC_TLD'       => 'Nameserver ({name}) within a \'numeric only\' TLD ({tld}).',
-        'NAMESERVER_SYNTAX_OK'         => 'Nameserver ({name}) syntax is valid.',
-        'MNAME_DISCOURAGED_DOUBLE_DASH' =>
-'SOA MNAME ({name}) has a label ({label}) with a double hyphen (\'--\') in position 3 and 4 (with a prefix which is not \'xn--\').',
-        'MNAME_NON_ALLOWED_CHARS' => 'Found illegal characters in SOA MNAME ({name}).',
-        'MNAME_NUMERIC_TLD'       => 'SOA MNAME ({name}) within a \'numeric only\' TLD ({tld}).',
-        'MNAME_SYNTAX_OK'         => 'SOA MNAME ({name}) syntax is valid.',
-        'MX_DISCOURAGED_DOUBLE_DASH' =>
-'Domain name MX ({name}) has a label ({label}) with a double hyphen (\'--\') in position 3 and 4 (with a prefix which is not \'xn--\').',
-        'MX_NON_ALLOWED_CHARS' => 'Found illegal characters in MX ({name}).',
-        'MX_NUMERIC_TLD'       => 'Domain name MX ({name}) within a \'numeric only\' TLD ({tld}).',
-        'MX_SYNTAX_OK'         => 'Domain name MX ({name}) syntax is valid.',
-        'DISCOURAGED_DOUBLE_DASH' =>
-'Domain name ({name}) has a label ({label}) with a double hyphen (\'--\') in position 3 and 4 (with a prefix which is not \'xn--\').',
-        'INITIAL_HYPHEN'        => 'Domain name ({name}) has a label ({label}) starting with an hyphen (\'-\').',
-        'TERMINAL_HYPHEN'       => 'Domain name ({name}) has a label ({label}) ending with an hyphen (\'-\').',
-        'NON_ALLOWED_CHARS'     => 'Found illegal characters in the domain name ({name}).',
-        'ONLY_ALLOWED_CHARS'    => 'No illegal characters in the domain name ({name}).',
-        'RNAME_MISUSED_AT_SIGN' => 'There must be no misused \'@\' character in the SOA RNAME field ({rname}).',
-        'RNAME_RFC822_INVALID'  => 'There must be no illegal characters in the SOA RNAME field ({rname}).',
-        'RNAME_RFC822_VALID'    => 'The SOA RNAME field ({rname}) is compliant with RFC2822.',
-        'NO_ENDING_HYPHENS'     => 'Both ends of all labels of the domain name ({name}) have no hyphens.',
-        'NO_DOUBLE_DASH' =>
-'Domain name ({name}) has no label with a double hyphen (\'--\') in position 3 and 4 (with a prefix which is not \'xn--\').',
-        'RNAME_NO_AT_SIGN'      => 'There is no misused \'@\' character in the SOA RNAME field ({rname}).',
-        'NO_RESPONSE_SOA_QUERY' => 'No response from nameserver(s) on SOA queries.',
-        'NO_RESPONSE_MX_QUERY'  => 'No response from nameserver(s) on MX queries.',
+        DISCOURAGED_DOUBLE_DASH => 'Domain name ({name}) has a label ({label}) with a double hyphen (\'--\') '
+          . 'in position 3 and 4 (with a prefix which is not \'xn--\').',
+        INITIAL_HYPHEN                => 'Domain name ({name}) has a label ({label}) starting with an hyphen (\'-\').',
+        MNAME_DISCOURAGED_DOUBLE_DASH => 'SOA MNAME ({name}) has a label ({label}) with a double hyphen (\'--\') '
+          . 'in position 3 and 4 (with a prefix which is not \'xn--\').',
+        MNAME_NON_ALLOWED_CHARS    => 'Found illegal characters in SOA MNAME ({name}).',
+        MNAME_NUMERIC_TLD          => 'SOA MNAME ({name}) within a \'numeric only\' TLD ({tld}).',
+        MNAME_SYNTAX_OK            => 'SOA MNAME ({name}) syntax is valid.',
+        MX_DISCOURAGED_DOUBLE_DASH => 'Domain name MX ({name}) has a label ({label}) with a double hyphen (\'--\') '
+          . 'in position 3 and 4 (with a prefix which is not \'xn--\').',
+        MX_NON_ALLOWED_CHARS               => 'Found illegal characters in MX ({name}).',
+        MX_NUMERIC_TLD                     => 'Domain name MX ({name}) within a \'numeric only\' TLD ({tld}).',
+        MX_SYNTAX_OK                       => 'Domain name MX ({name}) syntax is valid.',
+        NAMESERVER_DISCOURAGED_DOUBLE_DASH => 'Nameserver ({name}) has a label ({label}) '
+          . 'with a double hyphen (\'--\') in position 3 and 4 (with a prefix which is not \'xn--\').',
+        NAMESERVER_NON_ALLOWED_CHARS => 'Found illegal characters in the nameserver ({name}).',
+        NAMESERVER_NUMERIC_TLD       => 'Nameserver ({name}) within a \'numeric only\' TLD ({tld}).',
+        NAMESERVER_SYNTAX_OK         => 'Nameserver ({name}) syntax is valid.',
+        NON_ALLOWED_CHARS            => 'Found illegal characters in the domain name ({name}).',
+        NO_DOUBLE_DASH               => 'Domain name ({name}) has no label with a double hyphen (\'--\') '
+          . 'in position 3 and 4 (with a prefix which is not \'xn--\').',
+        NO_ENDING_HYPHENS     => 'Both ends of all labels of the domain name ({name}) have no hyphens.',
+        NO_RESPONSE_MX_QUERY  => 'No response from nameserver(s) on MX queries.',
+        NO_RESPONSE_SOA_QUERY => 'No response from nameserver(s) on SOA queries.',
+        ONLY_ALLOWED_CHARS    => 'No illegal characters in the domain name ({name}).',
+        RNAME_MISUSED_AT_SIGN => 'There must be no misused \'@\' character in the SOA RNAME field ({rname}).',
+        RNAME_NO_AT_SIGN      => 'There is no misused \'@\' character in the SOA RNAME field ({rname}).',
+        RNAME_RFC822_INVALID  => 'There must be no illegal characters in the SOA RNAME field ({rname}).',
+        RNAME_RFC822_VALID    => 'The SOA RNAME field ({rname}) is compliant with RFC2822.',
+        TERMINAL_HYPHEN       => 'Domain name ({name}) has a label ({label}) ending with an hyphen (\'-\').',
     };
 } ## end sub translation
 
