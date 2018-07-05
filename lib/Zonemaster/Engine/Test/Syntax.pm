@@ -356,49 +356,75 @@ sub syntax06 {
 
         my $p_mx = $resolver->query( $domain, q{MX}, { recurse => 1 } );
 
-        if ( not $p_mx or $p_mx->rcode ne 'NOERROR' && $p_mx->rcode ne 'NXDOMAIN' ) {
+        if ( not $p_mx or $p_mx->rcode ne 'NOERROR' ) {
             push @results, info( RNAME_MAIL_DOMAIN_INVALID => { domain => $domain } );
             next;
         }
 
-        my @mxs = $p_mx->get_records_for_name( q{MX}, $domain );
+        # Follow CNAMEs in the MX response
+        my %cnames =
+          map { $_->owner => $_->cname } $p_mx->get_records( q{CNAME}, q{answer} );
+        $domain .= q{.};    # Add back final dot
+        $domain = $cnames{$domain} while $cnames{$domain};
 
-        if ( !@mxs ) {
-            push @results, info( RNAME_MAIL_DOMAIN_INVALID => { domain => $domain } );
-            next;
+        # Determine mail domain(s)
+        my @mail_domains;
+        if ( my @mxs = $p_mx->get_records_for_name( q{MX}, $domain ) ) {
+            @mail_domains = map { $_->exchange } @mxs;
+        }
+        else {
+            @mail_domains = ( $domain );
         }
 
-        my $exchange_invalid = 1;
-        for my $mx ( @mxs ) {
-            my $p_a = $resolver->query( $mx->exchange, q{A}, { recurse => 1 } );
+        for my $mail_domain ( @mail_domains ) {
+
+            # Assume mail domain is invalid until we see an actual IP address
+            my $exchange_valid = 0;
+
+            # Lookup IPv4 address for mail server
+            my $p_a = $resolver->query( $mail_domain, q{A}, { recurse => 1 } );
             if ( $p_a ) {
-                if ( grep { $_->owner eq $mx->exchange and $_->type eq q{A} } $p_a->answer ) {
-                    $exchange_invalid = 0;
-                    last;
-                }
-            }
-            my $p_aaaa = $resolver->query( $mx->exchange, q{AAAA}, { recurse => 1 } );
-            if ( $p_aaaa ) {
-                if ( grep { $_->owner eq $mx->exchange and $_->type eq q{AAAA} } $p_aaaa->answer ) {
-                    $exchange_invalid = 0;
-                    last;
-                }
-            }
-        }
-        if ( $exchange_invalid ) {
-            push @results, info( RNAME_MAIL_DOMAIN_INVALID => { domain => $domain } );
-            next;
-        }
+                my @rrs_a =
+                  grep { $_->address ne '127.0.0.1' }
+                  grep { $_->owner eq $mail_domain } $p_a->get_records( q{A}, q{answer} );
 
-        if ( !exists $seen_rnames{$rname} ) {
-            $seen_rnames{$rname} = 1;
-            push @results,
-              info(
-                RNAME_RFC822_VALID => {
-                    rname => $rname,
+                if ( @rrs_a ) {
+                    $exchange_valid = 1;
                 }
-              );
-        }
+            }
+
+            # Lookup IPv6 address for mail domain
+            my $p_aaaa;
+            if ( !$exchange_valid ) {    # Skip a query if we can
+                $p_aaaa = $resolver->query( $mail_domain, q{AAAA}, { recurse => 1 } );
+            }
+            if ( $p_aaaa ) {
+                my @rrs_aaaa =
+                  grep { $_->address ne '::1' }
+                  grep { $_->owner eq $mail_domain } $p_aaaa->get_records( q{AAAA}, q{answer} );
+
+                if ( @rrs_aaaa ) {
+                    $exchange_valid = 1;
+                }
+            }
+
+            # Emit verdict for mail domain
+            if ( $exchange_valid ) {
+                if ( !exists $seen_rnames{$rname} ) {
+                    $seen_rnames{$rname} = 1;
+                    push @results,
+                      info(
+                        RNAME_RFC822_VALID => {
+                            rname => $rname,
+                        }
+                      );
+                }
+            }
+            else {
+                push @results, info( RNAME_MAIL_DOMAIN_INVALID => { domain => $mail_domain } );
+            }
+        } ## end for my $mail_domain ( @mail_domains)
+
     } ## end for my $ns ( @nss )
 
     return @results;
