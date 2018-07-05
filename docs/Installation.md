@@ -145,17 +145,17 @@ The command is expected to take a few seconds and print some results about the d
 
 -------
 
-[Declaration of prerequisites]: https://github.com/dotse/zonemaster#prerequisites
+[Declaration of prerequisites]: https://github.com/zonemaster/zonemaster#prerequisites
 [Installation on CentOS]: #installation-on-centos
 [Installation on Debian]: #installation-on-debian
 [Installation on FreeBSD]: #installation-on-freebsd
 [Installation on Ubuntu]: #installation-on-ubuntu
-[JSON-RPC API]: https://github.com/dotse/zonemaster-backend/blob/master/docs/API.md
-[Main Zonemaster Repository]: https://github.com/dotse/zonemaster
-[Zonemaster::Backend installation]: https://github.com/dotse/zonemaster-backend/blob/master/docs/Installation.md
-[Zonemaster::CLI installation]: https://github.com/dotse/zonemaster-cli/blob/master/docs/Installation.md
+[JSON-RPC API]: https://github.com/zonemaster/zonemaster-backend/blob/master/docs/API.md
+[Main Zonemaster Repository]: https://github.com/zonemaster/zonemaster
+[Zonemaster::Backend installation]: https://github.com/zonemaster/zonemaster-backend/blob/master/docs/Installation.md
+[Zonemaster::CLI installation]: https://github.com/zonemaster/zonemaster-cli/blob/master/docs/Installation.md
 [Zonemaster::Engine API]: http://search.cpan.org/~znmstr/Zonemaster-Engine/lib/Zonemaster/Engine/Overview.pod
-[Zonemaster::GUI installation]: https://github.com/dotse/zonemaster-gui/blob/master/docs/Installation.md
+[Zonemaster::GUI installation]: https://github.com/zonemaster/zonemaster-gui/blob/master/docs/Installation.md
 
 Copyright (c) 2013 - 2017, IIS (The Internet Foundation in Sweden)\
 Copyright (c) 2013 - 2017, AFNIC\

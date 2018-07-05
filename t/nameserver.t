@@ -123,7 +123,7 @@ my $ns_test = new_ok( 'Zonemaster::Engine::Nameserver' => [ { name => 'ns.nic.se
 is($ns_test->dns->source, '127.0.0.1', 'Source address set.');
 
 Zonemaster::Engine->config->no_network( 0 );
-# Address was 127.0.0.17 (https://github.com/dotse/zonemaster-engine/issues/219).
+# Address was 127.0.0.17 (https://github.com/zonemaster/zonemaster-engine/issues/219).
 # 192.0.2.17 is part of TEST-NET-1 IP address range (See RFC6890) and should be reserved
 # for documentation.
 my $fail_ns = Zonemaster::Engine::Nameserver->new( { name => 'fail', address => '192.0.2.17' } );
