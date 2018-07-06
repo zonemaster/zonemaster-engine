@@ -152,16 +152,17 @@ sub translation {
         NO_DOUBLE_DASH               => 'Domain name ({name}) has no label with a double hyphen (\'--\') '
           . 'in position 3 and 4 (with a prefix which is not \'xn--\').',
         NO_ENDING_HYPHENS         => 'Both ends of all labels of the domain name ({name}) have no hyphens.',
-        NO_RESPONSE               => 'No response from nameserver.',
+        NO_RESPONSE               => 'No response from {ns}/{address} asking for {dname}.',
         NO_RESPONSE_MX_QUERY      => 'No response from nameserver(s) on MX queries.',
         NO_RESPONSE_SOA_QUERY     => 'No response from nameserver(s) on SOA queries.',
         ONLY_ALLOWED_CHARS        => 'No illegal characters in the domain name ({name}).',
-        RNAME_MAIL_DOMAIN_INVALID => 'The SOA RNAME mail domain ({domain}) cannot be resolved to an IP address.',
-        RNAME_MISUSED_AT_SIGN     => 'There must be no misused \'@\' character in the SOA RNAME field ({rname}).',
-        RNAME_NO_AT_SIGN          => 'There is no misused \'@\' character in the SOA RNAME field ({rname}).',
-        RNAME_RFC822_INVALID      => 'There must be no illegal characters in the SOA RNAME field ({rname}).',
-        RNAME_RFC822_VALID        => 'The SOA RNAME field ({rname}) is compliant with RFC2822.',
-        TERMINAL_HYPHEN           => 'Domain name ({name}) has a label ({label}) ending with an hyphen (\'-\').',
+        RNAME_MAIL_DOMAIN_INVALID => 'The SOA RNAME mail domain ({domain}) cannot be resolved to a mail server '
+          . 'with an IP address.',
+        RNAME_MISUSED_AT_SIGN => 'There must be no misused \'@\' character in the SOA RNAME field ({rname}).',
+        RNAME_NO_AT_SIGN      => 'There is no misused \'@\' character in the SOA RNAME field ({rname}).',
+        RNAME_RFC822_INVALID  => 'There must be no illegal characters in the SOA RNAME field ({rname}).',
+        RNAME_RFC822_VALID    => 'The SOA RNAME field ({rname}) is compliant with RFC2822.',
+        TERMINAL_HYPHEN       => 'Domain name ({name}) has a label ({label}) ending with an hyphen (\'-\').',
     };
 } ## end sub translation
 
@@ -332,7 +333,14 @@ sub syntax06 {
         my $p = $ns->query( $zone->name, q{SOA} );
 
         if ( not $p ) {
-            push @results, info( NO_RESPONSE => {} );
+            push @results,
+              info(
+                NO_RESPONSE => {
+                    ns      => $ns->name->string,
+                    address => $ns->address->short,
+                    dname   => $zone->name,
+                }
+              );
             next;
         }
 
