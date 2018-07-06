@@ -100,8 +100,11 @@ sub metadata {
         ],
         syntax06 => [
             qw(
-              RNAME_RFC822_INVALID
+              NO_RESPONSE
               NO_RESPONSE_SOA_QUERY
+              RNAME_MAIL_DOMAIN_INVALID
+              RNAME_RFC822_INVALID
+              RNAME_RFC822_VALID
               )
         ],
         syntax07 => [
@@ -148,15 +151,17 @@ sub translation {
         NON_ALLOWED_CHARS            => 'Found illegal characters in the domain name ({name}).',
         NO_DOUBLE_DASH               => 'Domain name ({name}) has no label with a double hyphen (\'--\') '
           . 'in position 3 and 4 (with a prefix which is not \'xn--\').',
-        NO_ENDING_HYPHENS     => 'Both ends of all labels of the domain name ({name}) have no hyphens.',
-        NO_RESPONSE_MX_QUERY  => 'No response from nameserver(s) on MX queries.',
-        NO_RESPONSE_SOA_QUERY => 'No response from nameserver(s) on SOA queries.',
-        ONLY_ALLOWED_CHARS    => 'No illegal characters in the domain name ({name}).',
-        RNAME_MISUSED_AT_SIGN => 'There must be no misused \'@\' character in the SOA RNAME field ({rname}).',
-        RNAME_NO_AT_SIGN      => 'There is no misused \'@\' character in the SOA RNAME field ({rname}).',
-        RNAME_RFC822_INVALID  => 'There must be no illegal characters in the SOA RNAME field ({rname}).',
-        RNAME_RFC822_VALID    => 'The SOA RNAME field ({rname}) is compliant with RFC2822.',
-        TERMINAL_HYPHEN       => 'Domain name ({name}) has a label ({label}) ending with an hyphen (\'-\').',
+        NO_ENDING_HYPHENS         => 'Both ends of all labels of the domain name ({name}) have no hyphens.',
+        NO_RESPONSE               => 'No response from nameserver.',
+        NO_RESPONSE_MX_QUERY      => 'No response from nameserver(s) on MX queries.',
+        NO_RESPONSE_SOA_QUERY     => 'No response from nameserver(s) on SOA queries.',
+        ONLY_ALLOWED_CHARS        => 'No illegal characters in the domain name ({name}).',
+        RNAME_MAIL_DOMAIN_INVALID => 'The SOA RNAME mail domain ({domain}) cannot be resolved to an IP address.',
+        RNAME_MISUSED_AT_SIGN     => 'There must be no misused \'@\' character in the SOA RNAME field ({rname}).',
+        RNAME_NO_AT_SIGN          => 'There is no misused \'@\' character in the SOA RNAME field ({rname}).',
+        RNAME_RFC822_INVALID      => 'There must be no illegal characters in the SOA RNAME field ({rname}).',
+        RNAME_RFC822_VALID        => 'The SOA RNAME field ({rname}) is compliant with RFC2822.',
+        TERMINAL_HYPHEN           => 'Domain name ({name}) has a label ({label}) ending with an hyphen (\'-\').',
     };
 } ## end sub translation
 
