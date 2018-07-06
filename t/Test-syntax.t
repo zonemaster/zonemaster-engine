@@ -129,8 +129,6 @@ zone_gives_not( q{syntax06}, $zone, q{NO_RESPONSE_SOA_QUERY} );
 $zone = Zonemaster::Engine->zone( 'name.doesnotexist' );
 %res = map { $_->tag => 1 } Zonemaster::Engine->test_method( q{Syntax}, q{syntax05}, $zone );
 ok( $res{NO_RESPONSE_SOA_QUERY}, q{No response from nameserver(s) on SOA queries} );
-%res = map { $_->tag => 1 } Zonemaster::Engine->test_method( q{Syntax}, q{syntax06}, $zone );
-ok( $res{NO_RESPONSE_SOA_QUERY}, q{No response from nameserver(s) on SOA queries} );
 %res = map { $_->tag => 1 } Zonemaster::Engine->test_method( q{Syntax}, q{syntax07}, $zone );
 ok( $res{NO_RESPONSE_SOA_QUERY}, q{No response from nameserver(s) on SOA queries} );
 
