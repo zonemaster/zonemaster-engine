@@ -172,6 +172,12 @@ t/Test-delegation02-C.data
 t/Test-delegation02-C.t
 t/Test-delegation02-D.data
 t/Test-delegation02-D.t
+t/Test-delegation03-A.data
+t/Test-delegation03-A.t
+t/Test-delegation03-B.data
+t/Test-delegation03-B.t
+t/Test-delegation03-C.data
+t/Test-delegation03-C.t
 t/Test-dnssec-more.data
 t/Test-dnssec-more.t
 t/Test-dnssec.data
