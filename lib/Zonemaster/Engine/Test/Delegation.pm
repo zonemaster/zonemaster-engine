@@ -131,14 +131,14 @@ sub translation {
         IPV6_DISABLED            => 'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
         IS_NOT_AUTHORITATIVE     => "Nameserver {ns} response is not authoritative on {proto} port 53.",
         NAMES_MATCH              => "All of the nameserver names are listed both at parent and child.",
-        NOT_ENOUGH_IPV4_NS_CHILD => "Child does not list enough ({count}) nameservers that resolve to IPv4 addresses ({addrs}). "
-          . "Lower limit set to {minimum}.",
-        NOT_ENOUGH_IPV4_NS_DEL => "Delegation does not list enough ({count}) nameservers that resolve to IPv4 addresses ({addrs}). "
-          . "Lower limit set to {minimum}.",
-        NOT_ENOUGH_IPV6_NS_CHILD => "Child does not list enough ({count}) nameservers that resolve to IPv6 addresses ({addrs}). "
-          . "Lower limit set to {minimum}.",
-        NOT_ENOUGH_IPV6_NS_DEL => "Delegation does not list enough ({count}) nameservers that resolve to IPv6 addresses ({addrs}). "
-          . "Lower limit set to {minimum}.",
+        NOT_ENOUGH_IPV4_NS_CHILD => "Child does not list enough ({count}) nameservers that "
+          . "resolve to IPv4 addresses ({addrs}). Lower limit set to {minimum}.",
+        NOT_ENOUGH_IPV4_NS_DEL => "Delegation does not list enough ({count}) nameservers that "
+          . "resolve to IPv4 addresses ({addrs}). Lower limit set to {minimum}.",
+        NOT_ENOUGH_IPV6_NS_CHILD => "Child does not list enough ({count}) nameservers that "
+          . "resolve to IPv6 addresses ({addrs}). Lower limit set to {minimum}.",
+        NOT_ENOUGH_IPV6_NS_DEL => "Delegation does not list enough ({count}) nameservers that "
+          . "resolve to IPv6 addresses ({addrs}). Lower limit set to {minimum}.",
         NOT_ENOUGH_NS_CHILD => "Child does not list enough ({count}) nameservers ({ns}). Lower limit set to {minimum}.",
         NOT_ENOUGH_NS_DEL   => "Parent does not list enough ({count}) nameservers ({glue}). "
           . "Lower limit set to {minimum}.",
@@ -150,10 +150,10 @@ sub translation {
           . "the minimum allowed would be {minimum}.",
         NO_IPV6_NS_DEL => "Delegation lists no nameserver that resolves to an IPv6 address. If any were present, "
           . "the minimum allowed would be {minimum}.",
-        NS_RR_IS_CNAME => "Nameserver {ns} {address_type} RR point to CNAME.",
-        NS_RR_NO_CNAME => "No nameserver point to CNAME alias.",
-        REFERRAL_SIZE_TOO_LARGE =>
-          "The smallest possible legal referral packet is larger than 512 octets (it is {size}).",
+        NS_RR_IS_CNAME          => "Nameserver {ns} {address_type} RR point to CNAME.",
+        NS_RR_NO_CNAME          => "No nameserver point to CNAME alias.",
+        REFERRAL_SIZE_TOO_LARGE => "The smallest possible legal referral packet is larger than 512 octets "
+          . "(it is {size}).",
         REFERRAL_SIZE_OK    => "The smallest possible legal referral packet is smaller than 513 octets (it is {size}).",
         SAME_IP_ADDRESS     => "IP {address} refers to multiple nameservers ({nss}).",
         SOA_EXISTS          => "All the nameservers have SOA record.",
