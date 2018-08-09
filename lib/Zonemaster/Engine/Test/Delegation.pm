@@ -369,13 +369,13 @@ sub delegation03 {
         $p->unique_push( q{authority}, $rr );
     }
     if ( @nss_v4 && List::Util::all { $parent->name->is_in_bailiwick( $_->name ) } @nss_v4 ) {
-        my ( $shortest_v4 ) = sort { length( $a->name->string ) <=> length( $b->name->string ) } @nss_v4;
-        my $rr = Zonemaster::LDNS::RR->new( sprintf( q{%s IN A %s}, $shortest_v4->name, $shortest_v4->address->short ) );
+        my $ns = $nss_v4[0];
+        my $rr = Zonemaster::LDNS::RR->new( sprintf( q{%s IN A %s}, $ns->name, $ns->address->short ) );
         $p->unique_push( q{additional}, $rr );
     }
     if ( @nss_v6 && List::Util::all { $parent->name->is_in_bailiwick( $_->name ) } @nss_v6 ) {
-        my ( $shortest_v6 ) = sort { length( $a->name->string ) <=> length( $b->name->string ) } @nss_v6;
-        my $rr = Zonemaster::LDNS::RR->new( sprintf( q{%s IN AAAA %s}, $shortest_v6->name, $shortest_v6->address->short ) );
+        my $ns = $nss_v6[0];
+        my $rr = Zonemaster::LDNS::RR->new( sprintf( q{%s IN AAAA %s}, $ns->name, $ns->address->short ) );
         $p->unique_push( q{additional}, $rr );
     }
 
