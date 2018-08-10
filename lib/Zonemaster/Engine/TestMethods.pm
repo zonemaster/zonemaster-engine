@@ -67,13 +67,23 @@ specification documents.
 
 =item method1($zone)
 
+Returns either a Zonemaster::Engine::Zone or undef.
+
 =item method2($zone)
+
+Returns an arrayref of Zonemaster::Engine::DNSName objects.
 
 =item method3($zone)
 
+Returns an arrayref of Zonemaster::Engine::DNSName objects.
+
 =item method4($zone)
 
+Returns something that behaves like an arrayref of Zonemaster::Engine::Nameserver objects.
+
 =item method5($zone)
+
+Returns something that behaves like an arrayref of Zonemaster::Engine::Nameserver objects.
 
 =back
 

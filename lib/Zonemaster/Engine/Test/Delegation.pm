@@ -13,9 +13,10 @@ use Zonemaster::Engine::Test::Address;
 use Zonemaster::Engine::Test::Syntax;
 use Zonemaster::Engine::TestMethods;
 use Zonemaster::Engine::Constants ':all';
-
 use Zonemaster::Engine::Net::IP;
+
 use List::MoreUtils qw[uniq];
+use List::Util;
 use Zonemaster::LDNS::Packet;
 use Zonemaster::LDNS::RR;
 
@@ -71,7 +72,7 @@ sub metadata {
         ],
         delegation03 => [
             qw(
-              REFERRAL_SIZE_LARGE
+              REFERRAL_SIZE_TOO_LARGE
               REFERRAL_SIZE_OK
               )
         ],
@@ -130,14 +131,14 @@ sub translation {
         IPV6_DISABLED            => 'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
         IS_NOT_AUTHORITATIVE     => "Nameserver {ns} response is not authoritative on {proto} port 53.",
         NAMES_MATCH              => "All of the nameserver names are listed both at parent and child.",
-        NOT_ENOUGH_IPV4_NS_CHILD => "Child does not list enough ({count}) nameservers that resolve to IPv4 addresses ({addrs}). "
-          . "Lower limit set to {minimum}.",
-        NOT_ENOUGH_IPV4_NS_DEL => "Delegation does not list enough ({count}) nameservers that resolve to IPv4 addresses ({addrs}). "
-          . "Lower limit set to {minimum}.",
-        NOT_ENOUGH_IPV6_NS_CHILD => "Child does not list enough ({count}) nameservers that resolve to IPv6 addresses ({addrs}). "
-          . "Lower limit set to {minimum}.",
-        NOT_ENOUGH_IPV6_NS_DEL => "Delegation does not list enough ({count}) nameservers that resolve to IPv6 addresses ({addrs}). "
-          . "Lower limit set to {minimum}.",
+        NOT_ENOUGH_IPV4_NS_CHILD => "Child does not list enough ({count}) nameservers that "
+          . "resolve to IPv4 addresses ({addrs}). Lower limit set to {minimum}.",
+        NOT_ENOUGH_IPV4_NS_DEL => "Delegation does not list enough ({count}) nameservers that "
+          . "resolve to IPv4 addresses ({addrs}). Lower limit set to {minimum}.",
+        NOT_ENOUGH_IPV6_NS_CHILD => "Child does not list enough ({count}) nameservers that "
+          . "resolve to IPv6 addresses ({addrs}). Lower limit set to {minimum}.",
+        NOT_ENOUGH_IPV6_NS_DEL => "Delegation does not list enough ({count}) nameservers that "
+          . "resolve to IPv6 addresses ({addrs}). Lower limit set to {minimum}.",
         NOT_ENOUGH_NS_CHILD => "Child does not list enough ({count}) nameservers ({ns}). Lower limit set to {minimum}.",
         NOT_ENOUGH_NS_DEL   => "Parent does not list enough ({count}) nameservers ({glue}). "
           . "Lower limit set to {minimum}.",
@@ -149,9 +150,10 @@ sub translation {
           . "the minimum allowed would be {minimum}.",
         NO_IPV6_NS_DEL => "Delegation lists no nameserver that resolves to an IPv6 address. If any were present, "
           . "the minimum allowed would be {minimum}.",
-        NS_RR_IS_CNAME      => "Nameserver {ns} {address_type} RR point to CNAME.",
-        NS_RR_NO_CNAME      => "No nameserver point to CNAME alias.",
-        REFERRAL_SIZE_LARGE => "The smallest possible legal referral packet is larger than 512 octets (it is {size}).",
+        NS_RR_IS_CNAME          => "Nameserver {ns} {address_type} RR point to CNAME.",
+        NS_RR_NO_CNAME          => "No nameserver point to CNAME alias.",
+        REFERRAL_SIZE_TOO_LARGE => "The smallest possible legal referral packet is larger than 512 octets "
+          . "(it is {size}).",
         REFERRAL_SIZE_OK    => "The smallest possible legal referral packet is smaller than 513 octets (it is {size}).",
         SAME_IP_ADDRESS     => "IP {address} refers to multiple nameservers ({nss}).",
         SOA_EXISTS          => "All the nameservers have SOA record.",
@@ -353,41 +355,26 @@ sub delegation02 {
 sub delegation03 {
     my ( $class, $zone ) = @_;
     my @results;
-    my %nsnames_and_ip;
 
-    my @nsnames = uniq map { $_->string } @{ Zonemaster::Engine::TestMethods->method2( $zone ) },
-      @{ Zonemaster::Engine::TestMethods->method3( $zone ) };
-    my @needs_glue;
-
-    foreach
-      my $local_ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) }, @{ Zonemaster::Engine::TestMethods->method5( $zone ) } )
-    {
-        next if $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short };
-        if ( $zone->is_in_zone( $local_ns->name->string ) ) {
-            push @needs_glue, $local_ns;
-        }
-        $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short }++;
-    }
-    @needs_glue = sort { length( $a->name->string ) <=> length( $b->name->string ) } @needs_glue;
-    my @needs_v4_glue = grep { $_->address->version == $IP_VERSION_4 } @needs_glue;
-    my @needs_v6_glue = grep { $_->address->version == $IP_VERSION_6 } @needs_glue;
-    my $long_name     = _max_length_name_for( $zone->name );
+    my $long_name = _max_length_name_for( $zone->name );
+    my @nsnames   = map { $_->string } @{ Zonemaster::Engine::TestMethods->method2( $zone ) };
+    my @nss       = @{ Zonemaster::Engine::TestMethods->method4( $zone ) };
+    my @nss_v4    = grep { $_->address->version == $IP_VERSION_4 } @nss;
+    my @nss_v6    = grep { $_->address->version == $IP_VERSION_6 } @nss;
+    my $parent    = $zone->parent();
 
     my $p = Zonemaster::LDNS::Packet->new( $long_name, q{NS}, q{IN} );
-
-    foreach my $ns ( @nsnames ) {
-        my $rr = Zonemaster::LDNS::RR->new( sprintf( q{%s IN NS %s}, $zone->name, $ns ) );
+    for my $nsname ( @nsnames ) {
+        my $rr = Zonemaster::LDNS::RR->new( sprintf( q{%s IN NS %s}, $zone->name, $nsname ) );
         $p->unique_push( q{authority}, $rr );
     }
-
-    if ( @needs_v4_glue ) {
-        my $ns = $needs_v4_glue[0];
+    if ( @nss_v4 && List::Util::all { $parent->name->is_in_bailiwick( $_->name ) } @nss_v4 ) {
+        my $ns = $nss_v4[0];
         my $rr = Zonemaster::LDNS::RR->new( sprintf( q{%s IN A %s}, $ns->name, $ns->address->short ) );
         $p->unique_push( q{additional}, $rr );
     }
-
-    if ( @needs_v6_glue ) {
-        my $ns = $needs_v6_glue[0];
+    if ( @nss_v6 && List::Util::all { $parent->name->is_in_bailiwick( $_->name ) } @nss_v6 ) {
+        my $ns = $nss_v6[0];
         my $rr = Zonemaster::LDNS::RR->new( sprintf( q{%s IN AAAA %s}, $ns->name, $ns->address->short ) );
         $p->unique_push( q{additional}, $rr );
     }
@@ -396,7 +383,7 @@ sub delegation03 {
     if ( $size > $UDP_PAYLOAD_LIMIT ) {
         push @results,
           info(
-            REFERRAL_SIZE_LARGE => {
+            REFERRAL_SIZE_TOO_LARGE => {
                 size => $size,
             }
           );
