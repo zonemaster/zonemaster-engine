@@ -622,9 +622,6 @@ sub consistency05 {
     return @results;
 } ## end sub consistency05
 
-sub _get_soa {
-}
-
 sub consistency06 {
     my ( $class, $zone ) = @_;
     my @results;
