@@ -566,64 +566,154 @@ sub consistency04 {
     return @results;
 } ## end sub consistency04
 
+sub _get_addr_rrs {
+    my ( $class, $ns, $name, $qtype, $resolver ) = @_;
+    my $p = $ns->query( $name, $qtype );
+    if ( !$p ) {
+        return info(
+            NO_RESPONSE => {
+                ns      => $ns->name->string,
+                address => $ns->address->short,
+            }
+        );
+    }
+    elsif ($p->is_redirect) {
+        my $p_pub = $resolver->query( $name, $qtype, { recurse => 1 } );
+        if ( $p_pub ) {
+            return ( undef, $p_pub->get_records_for_name( $qtype, $name, 'answer' ) );
+        } else {
+            return ( undef );
+        }
+    }
+    elsif ( $p->aa and $p->rcode eq 'NOERROR' ) {
+        return ( undef, $p->get_records_for_name( $qtype, $name, 'answer' ) );
+    }
+    elsif (not ($p->aa and $p->rcode eq 'NXDOMAIN')) {
+        return info(
+            CHILD_NS_FAILED => {
+                ns      => $ns->name->string,
+                address => $ns->address->short,
+            }
+        );
+    }
+}
+
 sub consistency05 {
     my ( $class, $zone ) = @_;
     my @results;
 
-    my %addresses;
-    foreach my $address ( uniq map { lc( $_->address->short ) } @{ Zonemaster::Engine::TestMethods->method4( $zone ) } ) {
-        $addresses{$address} += 1;
-    }
-    foreach my $address ( uniq map { lc( $_->address->short ) } @{ Zonemaster::Engine::TestMethods->method5( $zone ) } ) {
-        $addresses{$address} -= 1;
+    my %strict_glue;
+    my %extended_glue;
+    for my $ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) } ) {
+        my $ns_string = $ns->name->fqdn . "/" . $ns->address->short;
+        if ( $zone->name->is_in_bailiwick( $ns->name ) ) {
+            $strict_glue{ $ns_string } = 1;
+        }
+        else {
+            push @{ $extended_glue{ $ns->name->string } }, $ns_string;
+        }
     }
 
-    my @same_address         = sort grep { $addresses{$_} == 0 } keys %addresses;
-    my @extra_address_parent = sort grep { $addresses{$_} > 0 } keys %addresses;
-    my @extra_address_child  = sort grep { $addresses{$_} < 0 } keys %addresses;
+    my @ib_nsnames =
+      grep { $zone->name->is_in_bailiwick( $_ ) } @{ Zonemaster::Engine::TestMethods->method2and3( $zone ) };
+    my @nss = grep { Zonemaster::Engine->config->ipversion_ok( $_->address->version ) }
+      @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) };
+    my $resolver = Zonemaster::Engine->ns( 'google-public-dns-a.google.com', '8.8.8.8' );
 
-    if ( @extra_address_parent ) {
+    my %child_ib_strings;
+    for my $ib_nsname ( @ib_nsnames ) {
+        my $is_lame = 1;
+        for my $ns ( @nss ) {
+            my ( $msg_a,    @rrs_a )    = $class->_get_addr_rrs( $ns, $ib_nsname, 'A',    $resolver );
+            my ( $msg_aaaa, @rrs_aaaa ) = $class->_get_addr_rrs( $ns, $ib_nsname, 'AAAA', $resolver );
+
+            if ( defined $msg_a ) {
+                push @results, $msg_a;
+            }
+            if ( defined $msg_aaaa ) {
+                push @results, $msg_aaaa;
+            }
+            if ( !defined $msg_a || !defined $msg_aaaa ) {
+                $is_lame = 0;
+            }
+
+            for my $rr ( @rrs_a, @rrs_aaaa ) {
+                $child_ib_strings{ $rr->name . "/" . $rr->address } = 1;
+            }
+        }
+
+        if ( $is_lame ) {
+            push @results, info( CHILD_ZONE_LAME => {} );
+            return @results;
+        }
+    } ## end for my $ib_nsname ( @ib_nsnames)
+
+    my @ib_match       = grep { exists $child_ib_strings{$_} } keys %strict_glue;
+    my @ib_mismatch    = grep { !exists $child_ib_strings{$_} } keys %strict_glue;
+    my @ib_extra_child = grep { !exists $strict_glue{$_} } keys %child_ib_strings;
+
+    if ( @ib_mismatch ) {
         push @results,
           info(
-            EXTRA_ADDRESS_PARENT => {
-                addresses => join( q{;}, @extra_address_parent ),
+            IN_BAILIWICK_ADDR_MISMATCH => {
+                addresses => join( q{;}, sort @ib_mismatch ),
             }
           );
     }
-
-    if ( @extra_address_child ) {
+    if ( @ib_extra_child ) {
         push @results,
           info(
             EXTRA_ADDRESS_CHILD => {
-                addresses => join( q{;}, @extra_address_child ),
+                addresses => join( q{;}, sort @ib_extra_child ),
             }
           );
     }
 
-    if ( @extra_address_parent == 0 and @extra_address_child == 0 ) {
+    my @oob_match;
+    my @oob_mismatch;
+    for my $glue_name ( keys %extended_glue ) {
+        my @glue_strings = @{ $extended_glue{$glue_name} };
+
+        my %child_oob_strings;
+
+        my $p_a = $resolver->query( $glue_name, 'A', { recurse => 1 } );
+        if ( $p_a ) {
+            for my $rr ( $p_a->get_records_for_name( 'A', $glue_name, 'answer' ) ) {
+                $child_oob_strings{ $rr->owner . "/" . $rr->address } = 1;
+            }
+        }
+
+        my $p_aaaa = $resolver->query( $glue_name, 'AAAA', { recurse => 1 } );
+        if ( $p_aaaa ) {
+            for my $rr ( $p_aaaa->get_records_for_name( 'AAAA', $glue_name, 'answer' ) ) {
+                $child_oob_strings{ $rr->owner . "/" . $rr->address } = 1;
+            }
+        }
+
+        push @oob_match,    grep { exists $child_oob_strings{$_} } @glue_strings;
+        push @oob_mismatch, grep { !exists $child_oob_strings{$_} } @glue_strings;
+    } ## end for my $glue_name ( keys...)
+
+    if ( @oob_mismatch ) {
+        push @results,
+          info(
+            OUT_OF_BAILIWICK_ADDR_MISMATCH => {
+                addresses => join( q{;}, @oob_mismatch )
+            }
+          );
+    }
+
+    if ( !@ib_extra_child && !@ib_mismatch && !@oob_mismatch ) {
         push @results,
           info(
             ADDRESSES_MATCH => {
-                addresses => join( q{;}, @same_address ),
-            }
-          );
-    }
-
-    if ( scalar( @same_address ) == 0 ) {
-        push @results,
-          info(
-            TOTAL_ADDRESS_MISMATCH => {
-                glue  => join( q{;}, @extra_address_parent ),
-                child => join( q{;}, @extra_address_child ),
+                addresses => join( q{;}, sort @ib_match, @oob_match ),
             }
           );
     }
 
     return @results;
 } ## end sub consistency05
-
-sub _get_soa {
-}
 
 sub consistency06 {
     my ( $class, $zone ) = @_;

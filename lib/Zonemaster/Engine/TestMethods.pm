@@ -50,6 +50,20 @@ sub method5 {
     return $zone->ns;
 }
 
+sub method2and3 {
+    my ( $class, $zone ) = @_;
+
+    my %union = map { $_->string => $_ } @{ $class->method2( $zone ) }, @{ $class->method3( $zone ) };
+    return [ @union{ sort keys %union } ];
+}
+
+sub method4and5 {
+    my ( $class, $zone ) = @_;
+
+    my %union = map { $_->string => $_ } @{ $class->method4( $zone ) }, @{ $class->method5( $zone ) };
+    return [ @union{ sort keys %union } ];
+}
+
 =head1 NAME
 
 Zonemaster::Engine::TestMethods - Methods common to Test Specification used in test modules
@@ -84,6 +98,18 @@ Returns something that behaves like an arrayref of Zonemaster::Engine::Nameserve
 =item method5($zone)
 
 Returns something that behaves like an arrayref of Zonemaster::Engine::Nameserver objects.
+
+=item method2and3($zone)
+
+Returns the union of Zonemaster::Engine::DNSName objects returned by
+method2($zone) and method3($zone) in a arrayref.
+The elements are sorted according to their string representation.
+
+=item method4and5($zone)
+
+Returns the union of Zonemaster::Engine::Nameserver objects returned by
+method4($zone) and method5($zone) in a arrayref.
+The elements are sorted according to their string representation.
 
 =back
 
