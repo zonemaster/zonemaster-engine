@@ -99,10 +99,13 @@ sub metadata {
         ],
         consistency05 => [
             qw(
-              EXTRA_ADDRESS_PARENT
-              EXTRA_ADDRESS_CHILD
-              TOTAL_ADDRESS_MISMATCH
               ADDRESSES_MATCH
+              CHILD_NS_FAILED
+              CHILD_ZONE_LAME
+              EXTRA_ADDRESS_CHILD
+              IN_BAILIWICK_ADDR_MISMATCH
+              NO_RESPONSE
+              OUT_OF_BAILIWICK_ADDR_MISMATCH
               )
         ],
         consistency06 => [
