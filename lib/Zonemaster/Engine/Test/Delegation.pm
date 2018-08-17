@@ -16,7 +16,6 @@ use Zonemaster::Engine::Constants ':all';
 use Zonemaster::Engine::Net::IP;
 
 use List::MoreUtils qw[uniq];
-use List::Util;
 use Zonemaster::LDNS::Packet;
 use Zonemaster::LDNS::RR;
 
@@ -368,12 +367,16 @@ sub delegation03 {
         my $rr = Zonemaster::LDNS::RR->new( sprintf( q{%s IN NS %s}, $zone->name, $nsname ) );
         $p->unique_push( q{authority}, $rr );
     }
-    if ( @nss_v4 && List::Util::all { $parent->name->is_in_bailiwick( $_->name ) } @nss_v4 ) {
+
+    # If @nss_v4 is non-empty and all of its elements are in bailiwick of parent
+    if ( @nss_v4 && not grep { not $parent->name->is_in_bailiwick( $_->name ) } @nss_v4 ) {
         my $ns = $nss_v4[0];
         my $rr = Zonemaster::LDNS::RR->new( sprintf( q{%s IN A %s}, $ns->name, $ns->address->short ) );
         $p->unique_push( q{additional}, $rr );
     }
-    if ( @nss_v6 && List::Util::all { $parent->name->is_in_bailiwick( $_->name ) } @nss_v6 ) {
+
+    # If @nss_v6 is non-empty and all of its elements are in bailiwick of parent
+    if ( @nss_v6 && not grep { not $parent->name->is_in_bailiwick( $_->name ) } @nss_v6 ) {
         my $ns = $nss_v6[0];
         my $rr = Zonemaster::LDNS::RR->new( sprintf( q{%s IN AAAA %s}, $ns->name, $ns->address->short ) );
         $p->unique_push( q{additional}, $rr );
