@@ -228,6 +228,17 @@ sub consistency01 {
     } ## end foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods...})
 
     my @serial_numbers = sort keys %serials;
+
+    foreach my $serial ( @serial_numbers ) {
+        push @results,
+          info(
+            SOA_SERIAL => {
+                serial  => $serial,
+                servers => join( q{;}, sort @{ $serials{$serial} } ),
+            }
+          );
+    }
+
     if ( scalar( @serial_numbers ) == 1 ) {
         push @results,
           info(
@@ -243,15 +254,6 @@ sub consistency01 {
                 count => scalar( keys %serials ),
             }
           );
-        foreach my $serial ( keys %serials ) {
-            push @results,
-              info(
-                SOA_SERIAL => {
-                    serial  => $serial,
-                    servers => join( q{;}, sort @{ $serials{$serial} } ),
-                }
-              );
-        }
         if ( $serial_numbers[-1] - $serial_numbers[0] > $MAX_SERIAL_VARIATION ) {
             push @results,
               info(
