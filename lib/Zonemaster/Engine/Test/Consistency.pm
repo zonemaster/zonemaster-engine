@@ -102,6 +102,17 @@ sub metadata {
               ADDRESSES_MATCH
               )
         ],
+        consistency06 => [
+            qw(
+              NO_RESPONSE
+              NO_RESPONSE_CDS_QUERY
+              ONE_CDS_RDATA
+              MULTIPLE_CDS_RDATA
+              CDS_RDATA
+              IPV4_DISABLED
+              IPV6_DISABLED
+              )
+        ],
     };
 } ## end sub metadata
 
@@ -132,6 +143,10 @@ sub translation {
         'EXTRA_ADDRESS_CHILD'  => 'Child has extra nameserver IP address(es) not listed at parent ({addresses}).',
         'TOTAL_ADDRESS_MISMATCH' => 'No common nameserver IP addresses between child ({child}) and parent ({glue}).',
         'ADDRESSES_MATCH'        => 'Glue records are consistent between glue and authoritative data.',
+        'NO_RESPONSE_CDS_QUERY' => 'No response from nameserver {ns}/{address} on CDS queries.',
+        'ONE_CDS_RDATA'        => 'A single CDS rdata was seen ({rdata}).',
+        'MULTIPLE_CDS_RDATA'   => 'Saw {count} CDS rdata.',
+        'CDS_RDATA'            => 'Saw CDS rdata {cds} on following nameserver set : {servers}.',
     };
 } ## end sub translation
 
@@ -608,6 +623,104 @@ sub consistency05 {
 
     return @results;
 } ## end sub consistency05
+
+sub consistency06 {
+    my ( $class, $zone ) = @_;
+    my @results;
+    my %nsnames_and_ip;
+    my %cdss;
+    my $query_type = q{CDS};
+
+    foreach
+      my $local_ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) }, @{ Zonemaster::Engine::TestMethods->method5( $zone ) } )
+    {
+
+        next if $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short };
+
+        if ( not Zonemaster::Engine->config->ipv6_ok and $local_ns->address->version == $IP_VERSION_6 ) {
+            push @results,
+              info(
+                IPV6_DISABLED => {
+                    ns      => $local_ns->name->string,
+                    address => $local_ns->address->short,
+                    rrtype  => $query_type,
+                }
+              );
+            next;
+        }
+
+        if ( not Zonemaster::Engine->config->ipv4_ok and $local_ns->address->version == $IP_VERSION_4 ) {
+            push @results,
+              info(
+                IPV4_DISABLED => {
+                    ns      => $local_ns->name->string,
+                    address => $local_ns->address->short,
+                    rrtype  => $query_type,
+                }
+              );
+            next;
+        }
+
+        my $p = $local_ns->query( $zone->name, $query_type );
+
+        if ( not $p ) {
+            push @results,
+              info(
+                NO_RESPONSE => {
+                    ns      => $local_ns->name->string,
+                    address => $local_ns->address->short,
+                }
+              );
+            next;
+        }
+
+        my ( $cds ) = $p->get_records_for_name( $query_type, $zone->name );
+
+        if ( not $cds ) {
+            push @results,
+              info(
+                NO_RESPONSE_CDS_QUERY => {
+                    ns      => $local_ns->name->string,
+                    address => $local_ns->address->short,
+                }
+              );
+            next;
+        }
+        else {
+            push @{ $cdss{ $cds->string } }, $local_ns->name->string . q{/} . $local_ns->address->short;
+            $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short }++;
+        }
+    } ## end foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods...})
+
+    my @cds_rdata = sort keys %cdss;
+    if ( scalar( @cds_rdata ) == 1 ) {
+        push @results,
+          info(
+            ONE_CDS_RDATA => {
+                rdata => ( keys %cdss )[0],
+            }
+          );
+    }
+    elsif ( scalar @cds_rdata ) {
+        push @results,
+          info(
+            MULTIPLE_CDS_RDATA => {
+                count => scalar( keys %cdss ),
+            }
+          );
+        foreach my $cds ( keys %cdss ) {
+            push @results,
+              info(
+                CDS_RDATA => {
+                    cds     => $cds,
+                    servers => join( q{;}, sort @{ $cdss{$cds} } ),
+                }
+              );
+        }
+    } ## end elsif ( scalar @serial_numbers)
+
+    return @results;
+} ## end sub consistency06
 
 1;
 
