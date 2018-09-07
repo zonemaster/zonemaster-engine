@@ -661,7 +661,7 @@ sub consistency06 {
             next;
         }
 
-        my $p = $local_ns->query( $zone->name, $query_type );
+        my $p = $local_ns->query( $zone->name, $query_type, { usevc => 1 } );
 
         if ( not $p ) {
             push @results,
