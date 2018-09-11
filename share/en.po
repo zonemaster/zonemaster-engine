@@ -846,8 +846,8 @@ msgid  "Nameserver {ns}/{address} is a recursor."
 msgstr "Nameserver {ns}/{address} is a recursor."
 
 #: NAMESERVER:NO_RECURSOR
-msgid  "None of the following nameservers is a recursor : {names}."
-msgstr "None of the following nameservers is a recursor : {names}."
+msgid  "Nameserver {ns}/{address} is not a recursor."
+msgstr "Nameserver {ns}/{address} is not a recursor."
 
 #: NAMESERVER:NO_RESOLUTION
 msgid  "No nameservers succeeded to resolve to an IP address."

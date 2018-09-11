@@ -166,7 +166,7 @@ sub translation {
         IPV4_DISABLED              => 'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
         IPV6_DISABLED              => 'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
         IS_A_RECURSOR              => 'Nameserver {ns}/{address} is a recursor.',
-        NO_RECURSOR                => 'None of the following nameservers is a recursor : {names}.',
+        NO_RECURSOR                => 'Nameserver {ns}/{address} is not a recursor.',
         NO_RESOLUTION              => 'No nameservers succeeded to resolve to an IP address.',
         NO_RESPONSE                => 'No response from {ns}/{address} asking for {dname}.',
         NO_UPWARD_REFERRAL         => 'None of the following nameservers returns an upward referral : {names}.',
@@ -203,6 +203,10 @@ sub nameserver01 {
     }
 
     for my $ns ( @nss ) {
+        my %ns_args = (
+            ns      => $ns->name->string,
+            address => $ns->address->short,
+        );
 
         my $is_no_recursor = 1;
         for my $nonexistent_name ( @NONEXISTENT_NAMES ) {
@@ -229,11 +233,7 @@ sub nameserver01 {
         } ## end for my $nonexistent_name...
 
         if ( $is_no_recursor ) {
-
-            my $nsname_and_ip = $ns->name->string . q{/} . $ns->address->short;
-
-            my $args = { ns => $nsname_and_ip };
-            push @results, info( NO_RECURSOR => $args );
+            push @results, info( NO_RECURSOR => \%ns_args );
         }
     } ## end for my $ns ( @nss_child )
 

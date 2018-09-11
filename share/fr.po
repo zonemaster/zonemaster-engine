@@ -1027,8 +1027,8 @@ msgstr ""
 "requête de type \"SOA\" sur le nom de domaine '{dname}'. Il est récursif."
 
 #: NAMESERVER:NO_RECURSOR
-msgid  "None of the following nameservers is a recursor : {names}."
-msgstr "Aucun des serveurs de noms suivants n'est récursif : {names}."
+msgid  "Nameserver {ns}/{address} is not a recursor."
+msgstr "Nameserver {ns}/{address} is not a recursor."
 
 #: NAMESERVER:NO_RESOLUTION
 msgid  "No nameservers succeeded to resolve to an IP address."

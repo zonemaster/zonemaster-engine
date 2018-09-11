@@ -893,8 +893,8 @@ msgid  "Nameserver {ns}/{address} is a recursor."
 msgstr "Namnservern {ns}/{address} är en rekursiv resolver."
 
 #: NAMESERVER:NO_RECURSOR
-msgid  "None of the following nameservers is a recursor : {names}."
-msgstr "Ingen av följande namnservrar är en rekursiv resolver: {names}."
+msgid  "Nameserver {ns}/{address} is not a recursor."
+msgstr "Namnservern {ns}/{address} är ingen rekursiv resolver."
 
 #: NAMESERVER:NO_RESOLUTION
 msgid  "No nameservers succeeded to resolve to an IP address."
