@@ -208,6 +208,8 @@ sub nameserver01 {
             address => $ns->address->short,
         );
 
+        my $response_count = 0;
+        my $nxdomain_count = 0;
         my $is_no_recursor = 1;
         for my $nonexistent_name ( @NONEXISTENT_NAMES ) {
             my $p = $ns->query( $nonexistent_name, q{A} );
@@ -217,9 +219,17 @@ sub nameserver01 {
                 $tag = q{NO_RESPONSE};
                 $is_no_recursor = 0;
             }
-            elsif ( $p->ra || $p->rcode eq q{NXDOMAIN} ) {
-                $tag = q{IS_A_RECURSOR};
-                $is_no_recursor = 0;
+            else {
+                $response_count++;
+
+                if ( $p->ra ) {
+                    $tag = q{IS_A_RECURSOR};
+                    $is_no_recursor = 0;
+                }
+
+                if ( $p->rcode eq q{NXDOMAIN} ) {
+                    $nxdomain_count++;
+                }
             }
 
             if ( $tag ) {
@@ -231,6 +241,11 @@ sub nameserver01 {
                 push @results, info( $tag => $args );
             }
         } ## end for my $nonexistent_name...
+
+        if ( $nxdomain_count > 0 && $nxdomain_count == $response_count ) {
+            push @results, info( IS_A_RECURSOR => \%ns_args );
+            $is_no_recursor = 0;
+        }
 
         if ( $is_no_recursor ) {
             push @results, info( NO_RECURSOR => \%ns_args );
