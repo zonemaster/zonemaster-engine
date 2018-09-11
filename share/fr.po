@@ -1060,14 +1060,6 @@ msgstr ""
 "Le serveur de noms {ns}/{address} ne répond pas aux requêtes portant sur le "
 "type \"AAAA\"."
 
-#: NAMESERVER:RECURSIVITY_UNDEF
-msgid  ""
-"Cannot determine if the following servers are recursive nameservers or not: "
-"{names}."
-msgstr ""
-"Impossible de déterminer si les serveurs suivants sont récursifs ou non : "
-"{names}."
-
 #: NAMESERVER:SAME_SOURCE_IP
 msgid  "All nameservers reply with same IP used to query them."
 msgstr ""
