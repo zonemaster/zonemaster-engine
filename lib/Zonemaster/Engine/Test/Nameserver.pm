@@ -160,22 +160,21 @@ sub translation {
           . 'nameserver {ns}/{address} returns same RCODE "{rcode}".',
         DIFFERENT_SOURCE_IP => 'Nameserver {ns}/{address} replies on a SOA query with a different source address '
           . '({source}).',
-        EDNS0_BAD_ANSWER       => 'Nameserver {ns}/{address} does not support EDNS0 (OPT not set in reply).',
-        EDNS0_BAD_QUERY        => 'Nameserver {ns}/{address} does not support EDNS0 (replies with FORMERR).',
-        EDNS0_SUPPORT          => 'The following nameservers support EDNS0 : {names}.',
-        IPV4_DISABLED          => 'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
-        IPV6_DISABLED          => 'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
-        IS_A_RECURSOR          => 'Nameserver {ns}/{address} is a recursor.',
-        NO_RECURSOR            => 'None of the following nameservers is a recursor : {names}.',
-        NO_RESOLUTION          => 'No nameservers succeeded to resolve to an IP address.',
-        NO_RESPONSE            => 'No response from {ns}/{address} asking for {dname}.',
-        NO_UPWARD_REFERRAL     => 'None of the following nameservers returns an upward referral : {names}.',
-        QNAME_CASE_INSENSITIVE => 'Nameserver {ns}/{address} does not preserve original case of queried names.',
-        QNAME_CASE_SENSITIVE   => 'Nameserver {ns}/{address} preserves original case of queried names.',
-        QUERY_DROPPED          => 'Nameserver {ns}/{address} dropped AAAA query.',
-        RECURSIVITY_UNDEF => 'Cannot determine if the following servers are recursive nameservers or not: {names}.',
-        SAME_SOURCE_IP    => 'All nameservers reply with same IP used to query them.',
-        UPWARD_REFERRAL   => 'Nameserver {ns}/{address} returns an upward referral.',
+        EDNS0_BAD_ANSWER           => 'Nameserver {ns}/{address} does not support EDNS0 (OPT not set in reply).',
+        EDNS0_BAD_QUERY            => 'Nameserver {ns}/{address} does not support EDNS0 (replies with FORMERR).',
+        EDNS0_SUPPORT              => 'The following nameservers support EDNS0 : {names}.',
+        IPV4_DISABLED              => 'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
+        IPV6_DISABLED              => 'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
+        IS_A_RECURSOR              => 'Nameserver {ns}/{address} is a recursor.',
+        NO_RECURSOR                => 'Nameserver {ns}/{address} is not a recursor.',
+        NO_RESOLUTION              => 'No nameservers succeeded to resolve to an IP address.',
+        NO_RESPONSE                => 'No response from {ns}/{address} asking for {dname}.',
+        NO_UPWARD_REFERRAL         => 'None of the following nameservers returns an upward referral : {names}.',
+        QNAME_CASE_INSENSITIVE     => 'Nameserver {ns}/{address} does not preserve original case of queried names.',
+        QNAME_CASE_SENSITIVE       => 'Nameserver {ns}/{address} preserves original case of queried names.',
+        QUERY_DROPPED              => 'Nameserver {ns}/{address} dropped AAAA query.',
+        SAME_SOURCE_IP             => 'All nameservers reply with same IP used to query them.',
+        UPWARD_REFERRAL            => 'Nameserver {ns}/{address} returns an upward referral.',
         UPWARD_REFERRAL_IRRELEVANT => 'Upward referral tests skipped for root zone.',
     };
 } ## end sub translation
@@ -204,39 +203,48 @@ sub nameserver01 {
     }
 
     for my $ns ( @nss ) {
+        my %ns_args = (
+            ns      => $ns->name->string,
+            address => $ns->address->short,
+        );
 
+        my $response_count = 0;
+        my $nxdomain_count = 0;
         my $is_no_recursor = 1;
+        my $has_seen_ra    = 0;
         for my $nonexistent_name ( @NONEXISTENT_NAMES ) {
+
             my $p = $ns->query( $nonexistent_name, q{A} );
-
-            my $tag;
             if ( !$p ) {
-                $tag = q{NO_RESPONSE};
+                my %name_args = (
+                    dname => $nonexistent_name,
+                    %ns_args,
+                );
+                push @results, info( NO_RESPONSE => \%name_args );
                 $is_no_recursor = 0;
             }
-            elsif ( $p->ra || $p->rcode eq q{NXDOMAIN} ) {
-                $tag = q{IS_A_RECURSOR};
-                $is_no_recursor = 0;
-            }
+            else {
+                $response_count++;
 
-            if ( $tag ) {
-                my $args = {
-                    ns      => $ns->name->string,
-                    address => $ns->address->short,
-                    dname   => $nonexistent_name,
-                };
-                push @results, info( $tag => $args );
+                if ( $p->ra ) {
+                    $has_seen_ra = 1;
+                }
+
+                if ( $p->rcode eq q{NXDOMAIN} ) {
+                    $nxdomain_count++;
+                }
             }
         } ## end for my $nonexistent_name...
 
-        if ( $is_no_recursor ) {
-
-            my $nsname_and_ip = $ns->name->string . q{/} . $ns->address->short;
-
-            my $args = { ns => $nsname_and_ip };
-            push @results, info( NO_RECURSOR => $args );
+        if ( $has_seen_ra || ( $response_count > 0 && $nxdomain_count == $response_count ) ) {
+            push @results, info( IS_A_RECURSOR => \%ns_args );
+            $is_no_recursor = 0;
         }
-    } ## end for my $ns ( @nss_child )
+
+        if ( $is_no_recursor ) {
+            push @results, info( NO_RECURSOR => \%ns_args );
+        }
+    } ## end for my $ns ( @nss )
 
     return @results;
 

@@ -62,7 +62,8 @@ my %tag;
 
 # nameserver01
 $zone = Zonemaster::Engine->zone( 'fr' );
-zone_gives( 'nameserver01', $zone, [qw{NO_RECURSOR IS_A_RECURSOR}] );
+zone_gives( 'nameserver01', $zone, [q{NO_RECURSOR}] );
+zone_gives_not( 'nameserver01', $zone, [q{IS_A_RECURSOR}] );
 
 # nameserver02
 $zone = Zonemaster::Engine->zone( 'perennaguiden.se' );

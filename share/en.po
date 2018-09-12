@@ -846,8 +846,8 @@ msgid  "Nameserver {ns}/{address} is a recursor."
 msgstr "Nameserver {ns}/{address} is a recursor."
 
 #: NAMESERVER:NO_RECURSOR
-msgid  "None of the following nameservers is a recursor : {names}."
-msgstr "None of the following nameservers is a recursor : {names}."
+msgid  "Nameserver {ns}/{address} is not a recursor."
+msgstr "Nameserver {ns}/{address} is not a recursor."
 
 #: NAMESERVER:NO_RESOLUTION
 msgid  "No nameservers succeeded to resolve to an IP address."
@@ -873,14 +873,6 @@ msgstr ""
 #: NAMESERVER:QUERY_DROPPED
 msgid  "Nameserver {ns}/{address} dropped AAAA query."
 msgstr "Nameserver {ns}/{address} dropped AAAA query."
-
-#: NAMESERVER:RECURSIVITY_UNDEF
-msgid  ""
-"Cannot determine if the following servers are recursive nameservers or not: "
-"{names}."
-msgstr ""
-"Cannot determine if the following servers are recursive nameservers or not: "
-"{names}."
 
 #: NAMESERVER:SAME_SOURCE_IP
 msgid  "All nameservers reply with same IP used to query them."
