@@ -1028,7 +1028,7 @@ msgstr ""
 
 #: NAMESERVER:NO_RECURSOR
 msgid  "Nameserver {ns}/{address} is not a recursor."
-msgstr "Nameserver {ns}/{address} is not a recursor."
+msgstr "Le serveur de noms {ns}/{address} n'est pas un récurseur."
 
 #: NAMESERVER:NO_RESOLUTION
 msgid  "No nameservers succeeded to resolve to an IP address."
