@@ -892,6 +892,8 @@ sub consistency07 {
                     address => $local_ns->address->short,
                 }
               );
+            push @{ $cdss{ 'NODATA' } }, $local_ns->name->string . q{/} . $local_ns->address->short;
+            $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short }++;
             next;
         }
         else {
