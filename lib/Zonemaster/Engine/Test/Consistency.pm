@@ -40,6 +40,9 @@ sub all {
     if ( Zonemaster::Engine->config->should_run( 'consistency06' ) ) {
         push @results, $class->consistency06( $zone );
     }
+    if ( Zonemaster::Engine->config->should_run( 'consistency07' ) ) {
+        push @results, $class->consistency07( $zone );
+    }
 
     return @results;
 }

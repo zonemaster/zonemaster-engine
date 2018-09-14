@@ -15,7 +15,7 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine->config->no_network( 1 );
 }
 
-foreach my $testcase ( qw{consistency01 consistency02 consistency03 consistency04 consistency05 consistency06} ) {
+foreach my $testcase ( qw{consistency01 consistency02 consistency03 consistency04 consistency05 consistency06 consistency07} ) {
     Zonemaster::Engine->config->load_policy_file( 't/policies/Test-'.$testcase.'-only.json' );
     my @testcases;
     Zonemaster::Engine->logger->clear_history();
@@ -57,6 +57,14 @@ ok( $res{ONE_SOA_SERIAL},             q{One SOA serial} );
 ok( $res{ONE_SOA_RNAME},              q{One SOA rname} );
 ok( $res{ONE_SOA_TIME_PARAMETER_SET}, q{One SOA time parameters set} );
 ok( $res{ADDRESSES_MATCH},            q{Addresses IP match} );
+
+Zonemaster::Engine->config->load_policy_file( 't/policies/Test-consistency07-only.json' );
+%res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{consistency}, q{sync-cds.dnssec.lab.nic.cl} );
+ok( $res{ONE_CDS_RDATA},         q{Unique CDS rdata} );
+%res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{consistency}, q{async-cds.dnssec.lab.nic.cl} );
+ok( $res{MULTIPLE_CDS_RDATA},         q{Multiple CDS rdata} );
+%res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{consistency}, q{nons-cds.dnssec.lab.nic.cl} );
+ok( $res{MULTIPLE_CDS_RDATA},         q{Inconsistent CDS rdata} );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Nameserver->save( $datafile );
