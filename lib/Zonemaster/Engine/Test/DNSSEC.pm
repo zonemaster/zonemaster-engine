@@ -298,6 +298,7 @@ sub metadata {
               DNSKEY_AND_DS
               NEITHER_DNSKEY_NOR_DS
               DS_BUT_NOT_DNSKEY
+              NOT_SIGNED
               )
         ],
         dnssec08 => [
@@ -441,6 +442,7 @@ sub policy {
         "ALGORITHM_INDIRECT_KEY"       => "ERROR",
         "ALGORITHM_NOT_ZONE_SIGN"      => "ERROR",
         "ALGORITHM_OK"                 => "INFO",
+        "ALGORITHM_PRIVATE"            => "WARNING",
         "ALGORITHM_RESERVED"           => "ERROR",
         "ALGORITHM_UNASSIGNED"         => "ERROR",
         "COMMON_KEYTAGS"               => "INFO",
