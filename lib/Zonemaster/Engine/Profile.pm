@@ -87,7 +87,7 @@ A constructor that returns a new profile with all properties unset.
 
 =head2 default
 
-A contstructor that returns a new profile with the default property
+A constructor that returns a new profile with the default property
 values declared in the L</PROFILE PROPERTIES> section.
 
     my $default = Zonemaster::Engine::Profile->default;
@@ -248,9 +248,13 @@ The data under the C<logfilter> key should be structured like this:
              "set"
                 Severity level to set if all conditions match
 
-The hash with conditions should have keys matching the attributes of the log entry that's being filtered (check the translation files to see what they are). The values for the keys should be either a single value that the attribute should be, or an array of values any one of which the attribute should be.
+The hash with conditions should have keys matching the attributes of 
+the log entry that's being filtered (check the translation files to see 
+what they are). The values for the keys should be either a single value 
+that the attribute should be, or an array of values any one of which the 
+attribute should be.
 
-A complete logfilter structure might could look like this:
+A complete logfilter structure might look like this:
 
     {
       "A_MODULE": {
