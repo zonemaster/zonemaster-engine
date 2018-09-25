@@ -98,6 +98,7 @@ sub metadata {
             qw(
               QUERY_DROPPED
               ANSWER_BAD_RCODE
+              AAAA_WELL_PROCESSED
               IPV4_DISABLED
               IPV6_DISABLED
               )
