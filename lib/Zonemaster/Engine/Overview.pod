@@ -49,7 +49,7 @@ If you want to develop a test module of your own, the L<Zonemaster::Engine::Test
 
 As an entry point to the "inside" of the Zonemaster framework, you want to read L<Zonemaster::Engine::Zone> and follow references from there. Of particular interest after the zone class should be the L<Zonemaster::Engine::Nameserver> and possibly L<Zonemaster::Engine::Recursor> classes.
 
-If you do write your own test module, I would very much appreciate feedback on which parts were tricky to figure out, because I'm honestly not sure what I need to explain here. So please, if there's somethat that you think really needs to be written about, add an issue about at L<https://github.com/dotse/zonemaster-engine/issues>.
+If you do write your own test module, I would very much appreciate feedback on which parts were tricky to figure out, because I'm honestly not sure what I need to explain here. So please, if there's somethat that you think really needs to be written about, add an issue about at L<https://github.com/zonemaster/zonemaster-engine/issues>.
 
 =head2 For developers of the Zonemaster Test Framework
 
@@ -87,7 +87,7 @@ Adding a new message tag is more work than it first looks, since it needs to be 
 
 =over
 
-=item L<https://github.com/dotse/zonemaster>
+=item L<https://github.com/zonemaster/zonemaster>
 
 Main repository, holding among other things our test specifications.
 

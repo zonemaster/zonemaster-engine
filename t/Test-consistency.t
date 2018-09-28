@@ -15,7 +15,7 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine->config->no_network( 1 );
 }
 
-foreach my $testcase ( qw{consistency01 consistency02 consistency03 consistency04 consistency05} ) {
+foreach my $testcase ( qw{consistency01 consistency02 consistency03 consistency04 consistency05 consistency06} ) {
     Zonemaster::Engine->config->load_policy_file( 't/policies/Test-'.$testcase.'-only.json' );
     my @testcases;
     Zonemaster::Engine->logger->clear_history();
@@ -57,10 +57,6 @@ ok( $res{ONE_SOA_SERIAL},             q{One SOA serial} );
 ok( $res{ONE_SOA_RNAME},              q{One SOA rname} );
 ok( $res{ONE_SOA_TIME_PARAMETER_SET}, q{One SOA time parameters set} );
 ok( $res{ADDRESSES_MATCH},            q{Addresses IP match} );
-
-%res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{consistency}, q{ci} );
-ok( $res{EXTRA_ADDRESS_PARENT}, q{Extra IP parent} );
-ok( $res{EXTRA_ADDRESS_CHILD},  q{Extra IP parent} );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Nameserver->save( $datafile );
