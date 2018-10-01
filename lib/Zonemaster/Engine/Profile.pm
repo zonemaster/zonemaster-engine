@@ -116,7 +116,7 @@ Get the value of a property.
     my $value = $profile1->get( 'net.ipv6' );
 
 Returns value of the given property, or C<undef> if the property is unset.
-The returned value is a deep copy.
+The returned value is a L<deep copy|https://en.wiktionary.org/wiki/deep_copy#Noun>.
 
 Dies if the given property name is invalid.
 
