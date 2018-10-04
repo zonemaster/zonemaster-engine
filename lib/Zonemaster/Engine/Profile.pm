@@ -315,14 +315,24 @@ The keys of the top level hash are names of test implementation modules
 The keys of the second level hashes are tags that the respective
 modules emit.
 The values of the second level hashes are mapped to severity levels.
-The default severity level is C<DEBUG> for tags not found in the
-C<test_levels> item.
 
-N.B. At the time of writing there is no authoritative documentation for
-the default value of this property.
-For the time being, please refer to the file
-located by L<dist_file("Zonemaster-Engine",
-"default.profile")|File::ShareDir/dist_file>.
+The various L<test case specifications|
+https://github.com/zonemaster/zonemaster/tree/master/docs/specifications/tests>
+define the default severity level for some of the messages.
+These specifications are the only authoritative documents on the default
+severity level for the various messages.
+For messages not defined in any of these specifications please refer to the file
+located by L<dist_file("Zonemaster-Engine", "default.profile")|
+File::ShareDir/dist_file>, or in the special case of the DNSSEC module,
+refer to the module source code.
+For messages neither defined in test specifications, nor listed in
+C<default.profile>, nor listed in the DNSSEC module source code,
+the default severity level is C<DEBUG>.
+
+I<Note:> Sometimes multiple test cases within the same test module define
+messages for the same tag.
+When they do, it is imperative that all test cases define the same severity
+level for the tag.
 
 =head2 test_cases
 
