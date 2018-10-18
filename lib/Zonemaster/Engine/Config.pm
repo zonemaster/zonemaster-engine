@@ -13,6 +13,7 @@ use Hash::Merge;
 use File::Spec;
 
 use Zonemaster::Engine;
+use Zonemaster::Engine::Constants qw[:ip];
 
 has 'cfiles'    => ( is => 'ro', isa => 'ArrayRef', default => sub { [] } );
 has 'pfiles'    => ( is => 'ro', isa => 'ArrayRef', default => sub { [] } );
@@ -201,6 +202,20 @@ sub ipv6_ok {
     return $class->get->{net}{ipv6};
 }
 
+sub ipversion_ok {
+    my ( $class, $version ) = @_;
+
+    if ( $version == $IP_VERSION_4 ) {
+        return Zonemaster::Engine->config->ipv4_ok;
+    }
+    elsif ( $version == $IP_VERSION_6 ) {
+        return Zonemaster::Engine->config->ipv6_ok;
+    }
+    else {
+        return;
+    }
+}
+
 sub resolver_defaults {
     my ( $class ) = @_;
 
@@ -316,6 +331,11 @@ Returns the value of the C<ipv4> flag. If given a defined value, sets the value 
 =item ipv6_ok([$value])
 
 Returns the value of the C<ipv6> flag. If given a defined value, sets the value to that value.
+
+=item ipversion_ok($version)
+
+Returns the value of the flag that corresponds to the given IP version.
+I.e. either the C<ipv4> or the C<ipv6> flag.
 
 =item resolver_defaults()
 

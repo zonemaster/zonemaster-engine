@@ -9,8 +9,8 @@ name 'Zonemaster-Engine';
 # share/Makefile
 
 
-repository 'https://github.com/dotse/zonemaster-engine';
-bugtracker 'https://github.com/dotse/zonemaster-engine/issues';
+repository 'https://github.com/zonemaster/zonemaster-engine';
+bugtracker 'https://github.com/zonemaster/zonemaster-engine/issues';
 
 all_from 'lib/Zonemaster/Engine.pm';
 

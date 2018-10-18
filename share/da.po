@@ -1,37 +1,47 @@
-msgid ""
+msgid  ""
 msgstr ""
-"Language: da\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
 "Project-Id-Version: 1.0.0\n"
 "PO-Revision-Date: 2017-12-18\n"
-"Language-Team: Zonemaster Team\n"
-"MIME-Version: 1.0\n"
 "Last-Translator: Mats Dufberg <mats.dufberg@iis.se>\n"
+"Language-Team: Zonemaster Team\n"
+"Language: da\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 
 #: ADDRESS:NAMESERVERS_IP_WITH_REVERSE
 msgid  "Reverse DNS entry exist for all Nameserver IP addresses."
 msgstr "Reverse DNS eksisterer for samtlige navneserveradresser."
 
 #: ADDRESS:NAMESERVER_IP_PRIVATE_NETWORK
-msgid  "Nameserver {ns} has an IP address ({address}) with prefix {prefix} referenced in {reference} as a '{name}'."
-msgstr "Navneserveren {ns} har en IP-adresse ({address}) med præfikset {prefix}, som {reference} klassificerer som '{name}'."
+msgid  ""
+"Nameserver {ns} has an IP address ({address}) with prefix {prefix} "
+"referenced in {reference} as a '{name}'."
+msgstr ""
+"Navneserveren {ns} har en IP-adresse ({address}) med præfikset {prefix}, som "
+"{reference} klassificerer som '{name}'."
 
 #: ADDRESS:NAMESERVER_IP_PTR_MATCH
 msgid  "All reverse DNS entry matches name server name."
 msgstr "Alle PTR-records matcher navneservernavne."
 
 #: ADDRESS:NAMESERVER_IP_PTR_MISMATCH
-msgid  "Nameserver {ns} has an IP address ({address}) with mismatched PTR result ({names})."
-msgstr "Navneserveren {ns} har en IP-adresse ({address}) med en ikke matchende PTR ({names})."
+msgid  ""
+"Nameserver {ns} has an IP address ({address}) with mismatched PTR result "
+"({names})."
+msgstr ""
+"Navneserveren {ns} har en IP-adresse ({address}) med en ikke matchende PTR "
+"({names})."
 
 #: ADDRESS:NAMESERVER_IP_WITHOUT_REVERSE
 msgid  "Nameserver {ns} has an IP address ({address}) without PTR configured."
-msgstr "Navneserveren {ns} har en IP-adresse ({address}) uden konfigureret PTR."
+msgstr ""
+"Navneserveren {ns} har en IP-adresse ({address}) uden konfigureret PTR."
 
 #: ADDRESS:NO_IP_PRIVATE_NETWORK
 msgid  "All Nameserver addresses are in the routable public addressing space."
-msgstr "Alle navneserveradresser eksisterer i det routebare offentlige adresserum."
+msgstr ""
+"Alle navneserveradresser eksisterer i det routebare offentlige adresserum."
 
 #: ADDRESS:NO_RESPONSE_PTR_QUERY
 msgid  "No response from nameserver(s) on PTR query ({reverse})."
@@ -42,8 +52,11 @@ msgid  "Nameservers did not respond to A query."
 msgstr "Navneserverne svarede ikke på en A-forespørgsel."
 
 #: BASIC:DOMAIN_NAME_LABEL_TOO_LONG
-msgid  "Domain name ({dname}) has a label ({dlabel}) too long ({dlength}/{max})."
-msgstr "Domænenavnet ({dname}) indeholder en label ({dlabel}), der er for lang ({dlength}/{max})."
+msgid  ""
+"Domain name ({dname}) has a label ({dlabel}) too long ({dlength}/{max})."
+msgstr ""
+"Domænenavnet ({dname}) indeholder en label ({dlabel}), der er for lang "
+"({dlength}/{max})."
 
 #: BASIC:DOMAIN_NAME_TOO_LONG
 msgid  "Domain name is too long ({fqdnlength}/{max})."
@@ -54,7 +67,8 @@ msgid  "Domain name ({dname}) has a zero length label."
 msgstr "Domænenavnet ({dname}) har en label med længden nul."
 
 #: BASIC:HAS_A_RECORDS
-msgid  "Nameserver {ns} returned A record(s) for {dname}."
+#, fuzzy
+msgid  "Nameserver {ns}/{address} returned A record(s) for {dname}."
 msgstr "Navneserveren {ns} svarede med A-record(s) for {dname}."
 
 #: BASIC:HAS_NAMESERVERS
@@ -63,35 +77,47 @@ msgstr "Navneserveren {ns} returnerede disse servere som glue: {nsnlist}."
 
 #: BASIC:HAS_NAMESERVER_NO_WWW_A_TEST
 msgid  "Functional nameserver found. \"A\" query for www.{zname} test aborted."
-msgstr "Fungerende navneserver fundet. Test på \"A\"-forespørgsel for www.{zname} afbrydes."
+msgstr ""
+"Fungerende navneserver fundet. Test på \"A\"-forespørgsel for www.{zname} "
+"afbrydes."
 
 #: BASIC:HAS_PARENT
 msgid  "Parent domain '{pname}' was found for the tested domain."
 msgstr "Forælder-domænet '{pname}' blev fundet for det testede domæne."
 
-#: BASIC:IPV4_DISABLED CONNECTIVITY:IPV4_DISABLED CONSISTENCY:IPV4_DISABLED DELEGATION:IPV4_DISABLED NAMESERVER:IPV4_DISABLED
+#: BASIC:IPV4_DISABLED CONNECTIVITY:IPV4_DISABLED CONSISTENCY:IPV4_DISABLED
+#: DELEGATION:IPV4_DISABLED NAMESERVER:IPV4_DISABLED
 msgid  "IPv4 is disabled, not sending \"{rrtype}\" query to {ns}/{address}."
-msgstr "IPv4 er deaktiveret, udfører ikke \"{rrtype}\"-forespørgsel til {ns}/{address}."
+msgstr ""
+"IPv4 er deaktiveret, udfører ikke \"{rrtype}\"-forespørgsel til {ns}/"
+"{address}."
 
 #: BASIC:IPV4_ENABLED
 msgid  "IPv4 is enabled, can send \"{rrtype}\" query to {ns}/{address}."
-msgstr "IPv4 er aktiveret, kan udføre \"{rrtype}\"-forespørgsel til {ns}/{address}."
+msgstr ""
+"IPv4 er aktiveret, kan udføre \"{rrtype}\"-forespørgsel til {ns}/{address}."
 
-#: BASIC:IPV6_DISABLED CONNECTIVITY:IPV6_DISABLED CONSISTENCY:IPV6_DISABLED DELEGATION:IPV6_DISABLED NAMESERVER:IPV6_DISABLED
+#: BASIC:IPV6_DISABLED CONNECTIVITY:IPV6_DISABLED CONSISTENCY:IPV6_DISABLED
+#: DELEGATION:IPV6_DISABLED NAMESERVER:IPV6_DISABLED
 msgid  "IPv6 is disabled, not sending \"{rrtype}\" query to {ns}/{address}."
-msgstr "IPv6 er deaktiveret, udfører ikke \"{rrtype}\"-forespørgsel til {ns}/{address}."
+msgstr ""
+"IPv6 er deaktiveret, udfører ikke \"{rrtype}\"-forespørgsel til {ns}/"
+"{address}."
 
 #: BASIC:IPV6_ENABLED
 msgid  "IPv6 is enabled, can send \"{rrtype}\" query to {ns}/{address}."
-msgstr "IPv6 er aktiveret, kan udføre \"{rrtype}\"-forespørgsel til {ns}/{address}."
+msgstr ""
+"IPv6 er aktiveret, kan udføre \"{rrtype}\"-forespørgsel til {ns}/{address}."
 
 #: BASIC:NO_A_RECORDS
-msgid  "Nameserver {ns} did not return A record(s) for {dname}."
+#, fuzzy
+msgid  "Nameserver {ns}/{address} did not return A record(s) for {dname}."
 msgstr "Navneserveren {ns} returnerede ikke nogle A-records for {dname}."
 
 #: BASIC:NO_GLUE_PREVENTS_NAMESERVER_TESTS
 msgid  "No NS records for tested zone from parent. NS tests aborted."
-msgstr "Ingen NS-records for den testede zone fra forælderzonen. NS-test afbrydes."
+msgstr ""
+"Ingen NS-records for den testede zone fra forælderzonen. NS-test afbrydes."
 
 #: BASIC:NO_PARENT
 msgid  "No parent domain could be found for the tested domain."
@@ -99,11 +125,32 @@ msgstr "Ikke muligt at finde forælder-domænet for det testede domæne."
 
 #: BASIC:NS_FAILED
 msgid  "Nameserver {ns}/{address} did not return NS records. RCODE was {rcode}."
-msgstr "Navneserveren {ns}/{address} returnerede ikke NS-records. RCODE var {rcode}."
+msgstr ""
+"Navneserveren {ns}/{address} returnerede ikke NS-records. RCODE var {rcode}."
 
 #: BASIC:NS_NO_RESPONSE
 msgid  "Nameserver {ns}/{address} did not respond to NS query."
 msgstr "Navneserveren {ns}/{address} svarede ikke på en NS-forespørgsel."
+
+#: CONNECTIVITY:ASN_INFOS_ANNOUNCE_BY
+msgid  "[ASN:ANNOUNCE_BY] {address};{asn}"
+msgstr "[ASN:ANNOUNCE_BY] {address};{asn}"
+
+#: CONNECTIVITY:ASN_INFOS_ANNOUNCE_IN
+msgid  "[ASN:ANNOUNCE_IN] {address};{prefix}"
+msgstr "[ASN:ANNOUNCE_IN] {address};{prefix}"
+
+#: CONNECTIVITY:ASN_INFOS_RAW
+msgid  "[ASN:RAW] {address};{data}"
+msgstr "[ASN:RAW] {address};{data}"
+
+#: CONNECTIVITY:IPV4_ASN
+msgid  "Name servers have IPv4 addresses in the following ASs: {asn}."
+msgstr "Navneserverne har IPv4-adresser i følgende AS'er: {asn}."
+
+#: CONNECTIVITY:IPV6_ASN
+msgid  "Name servers have IPv6 addresses in the following ASs: {asn}."
+msgstr "Navneserverne har IPv6-adresser i følgende AS: {asn}."
 
 #: CONNECTIVITY:NAMESERVERS_IPV4_NO_AS
 msgid  "No IPv4 nameserver address is in an AS."
@@ -157,25 +204,23 @@ msgstr "Navneserveren {ns}/{address} er ikke tilgængelig over TCP port 53."
 msgid  "Nameserver {ns}/{address} not accessible over UDP on port 53."
 msgstr "Navneserveren {ns}/{address} er ikke tilgængelig over UDP port 53."
 
-#: CONNECTIVITY:IPV4_ASN
-msgid  "Name servers have IPv4 addresses in the following ASs: {asn}."
-msgstr "Navneserverne har IPv4-adresser i følgende AS'er: {asn}."
+#: CONSISTENCY:ADDRESSES_MATCH
+msgid  "Glue records are consistent between glue and authoritative data."
+msgstr "Glue-records er konsistente mellem forælder og barn."
 
-#: CONNECTIVITY:IPV6_ASN
-msgid  "Name servers have IPv6 addresses in the following ASs: {asn}."
-msgstr "Navneserverne har IPv6-adresser i følgende AS: {asn}."
+#: CONSISTENCY:EXTRA_ADDRESS_CHILD
+msgid  ""
+"Child has extra nameserver IP address(es) not listed at parent ({addresses})."
+msgstr ""
+"Barnet har ekstra IP-adresser på navneservere som ikke findes hos forælderen "
+"({addresses})."
 
-#: CONNECTIVITY:ASN_INFOS_RAW
-msgid  "[ASN:RAW] {address};{data}"
-msgstr "[ASN:RAW] {address};{data}"
-
-#: CONNECTIVITY:ASN_INFOS_ANNOUNCE_BY
-msgid  "[ASN:ANNOUNCE_BY] {address};{asn}"
-msgstr "[ASN:ANNOUNCE_BY] {address};{asn}"
-
-#: CONNECTIVITY:ASN_INFOS_ANNOUNCE_IN
-msgid  "[ASN:ANNOUNCE_IN] {address};{prefix}"
-msgstr "[ASN:ANNOUNCE_IN] {address};{prefix}"
+#: CONSISTENCY:EXTRA_ADDRESS_PARENT
+msgid  ""
+"Parent has extra nameserver IP address(es) not listed at child ({addresses})."
+msgstr ""
+"Forælder har ekstra IP-adresser på navneservere som ikke findes hos barnet "
+"({addresses})."
 
 #: CONSISTENCY:MULTIPLE_NS_SET
 msgid  "Saw {count} NS set."
@@ -203,7 +248,8 @@ msgstr "Intet svar på NS-forespørgsel fra nameserveren {ns}/{address}."
 
 #: CONSISTENCY:NO_RESPONSE_SOA_QUERY
 msgid  "No response from nameserver {ns}/{address} on SOA queries."
-msgstr "Intet svar fra navneserveren {ns}/{address} på forespørgsel om SOA-record."
+msgstr ""
+"Intet svar fra navneserveren {ns}/{address} på forespørgsel om SOA-record."
 
 #: CONSISTENCY:NS_SET
 msgid  "Saw NS set ({nsset}) on following nameserver set : {servers}."
@@ -222,8 +268,12 @@ msgid  "A single SOA serial number was seen ({serial})."
 msgstr "Et enkelt SOA-serienummer blev returneret ({serial})."
 
 #: CONSISTENCY:ONE_SOA_TIME_PARAMETER_SET
-msgid  "A single SOA time parameter set was seen (REFRESH={refresh},RETRY={retry},EXPIRE={expire},MINIMUM={minimum})."
-msgstr "Et enkelt SOA-tidsparametersæt blev returneret (REFRESH={refresh},RETRY={retry},EXPIRE={expire},MINIMUM={minimum})."
+msgid  ""
+"A single SOA time parameter set was seen (REFRESH={refresh},RETRY={retry},"
+"EXPIRE={expire},MINIMUM={minimum})."
+msgstr ""
+"Et enkelt SOA-tidsparametersæt blev returneret (REFRESH={refresh},"
+"RETRY={retry},EXPIRE={expire},MINIMUM={minimum})."
 
 #: CONSISTENCY:SOA_RNAME
 msgid  "Saw SOA rname {rname} on following nameserver set : {servers}."
@@ -234,28 +284,28 @@ msgid  "Saw SOA serial number {serial} on following nameserver set : {servers}."
 msgstr "Så SOA-serienummer {serial} på følgende navneservere : {servers}."
 
 #: CONSISTENCY:SOA_SERIAL_VARIATION
-msgid  "Difference between the smaller serial ({serial_min}) and the bigger one ({serial_max}) is greater than the maximum allowed ({max_variation})."
-msgstr "Forskellen mellem det mindste serienummer ({serial_min}) og det største ({serial_max}) er større end det tilladte ({max_variation})."
+msgid  ""
+"Difference between the smaller serial ({serial_min}) and the bigger one "
+"({serial_max}) is greater than the maximum allowed ({max_variation})."
+msgstr ""
+"Forskellen mellem det mindste serienummer ({serial_min}) og det største "
+"({serial_max}) er større end det tilladte ({max_variation})."
 
 #: CONSISTENCY:SOA_TIME_PARAMETER_SET
-msgid  "Saw SOA time parameter set (REFRESH={refresh},RETRY={retry},EXPIRE={expire},MINIMUM={minimum}) on following nameserver set : {servers}."
-msgstr "Så dette SOA-tidsparametersæt (REFRESH={refresh},RETRY={retry},EXPIRE={expire},MINIMUM={minimum}) på følgende navneservere : {servers}."
-
-#: CONSISTENCY:EXTRA_ADDRESS_PARENT
-msgid  "Parent has extra nameserver IP address(es) not listed at child ({addresses})."
-msgstr "Forælder har ekstra IP-adresser på navneservere som ikke findes hos barnet ({addresses})."
-
-#: CONSISTENCY:EXTRA_ADDRESS_CHILD
-msgid  "Child has extra nameserver IP address(es) not listed at parent ({addresses})."
-msgstr "Barnet har ekstra IP-adresser på navneservere som ikke findes hos forælderen ({addresses})."
+msgid  ""
+"Saw SOA time parameter set (REFRESH={refresh},RETRY={retry},EXPIRE={expire},"
+"MINIMUM={minimum}) on following nameserver set : {servers}."
+msgstr ""
+"Så dette SOA-tidsparametersæt (REFRESH={refresh},RETRY={retry},"
+"EXPIRE={expire},MINIMUM={minimum}) på følgende navneservere : {servers}."
 
 #: CONSISTENCY:TOTAL_ADDRESS_MISMATCH
-msgid  "No common nameserver IP addresses between child ({child}) and parent ({glue})."
-msgstr "Ingen fælles IP-adresser på navneservere mellem barnet ({child}) og forælderen ({glue})."
-
-#: CONSISTENCY:ADDRESSES_MATCH
-msgid  "Glue records are consistent between glue and authoritative data."
-msgstr "Glue-records er konsistente mellem forælder og barn."
+msgid  ""
+"No common nameserver IP addresses between child ({child}) and parent "
+"({glue})."
+msgstr ""
+"Ingen fælles IP-adresser på navneservere mellem barnet ({child}) og "
+"forælderen ({glue})."
 
 #: DELEGATION:ARE_AUTHORITATIVE
 msgid  "All these nameservers are confirmed to be authoritative : {nsset}."
@@ -266,20 +316,32 @@ msgid  "All the IP addresses used by the nameservers are unique"
 msgstr "Alle navneservernes IP-adresser er unikke."
 
 #: DELEGATION:ENOUGH_NS
-msgid  "Child lists enough ({count}) nameservers ({ns}). Lower limit set to {minimum}."
-msgstr "Barnet returnerer tilstrækkeligt antal ({count}) navneservere ({ns}). Mindsteværdi sat til {minimum}."
+msgid  ""
+"Child lists enough ({count}) nameservers ({ns}). Lower limit set to "
+"{minimum}."
+msgstr ""
+"Barnet returnerer tilstrækkeligt antal ({count}) navneservere ({ns}). "
+"Mindsteværdi sat til {minimum}."
 
 #: DELEGATION:ENOUGH_NS_GLUE
-msgid  "Parent lists enough ({count}) nameservers ({glue}). Lower limit set to {minimum}."
-msgstr "Forælderen returnerer tilstrækkeligt antal ({count}) navneservere ({glue}). Mindsteværdi sat til {minimum}."
+msgid  ""
+"Parent lists enough ({count}) nameservers ({glue}). Lower limit set to "
+"{minimum}."
+msgstr ""
+"Forælderen returnerer tilstrækkeligt antal ({count}) navneservere ({glue}). "
+"Mindsteværdi sat til {minimum}."
 
 #: DELEGATION:EXTRA_NAME_CHILD
 msgid  "Child has nameserver(s) not listed at parent ({extra})."
-msgstr "Barnet indeholder en eller flera navneservere som ikke findes hos forælderen ({extra})."
+msgstr ""
+"Barnet indeholder en eller flera navneservere som ikke findes hos forælderen "
+"({extra})."
 
 #: DELEGATION:EXTRA_NAME_PARENT
 msgid  "Parent has nameserver(s) not listed at the child ({extra})."
-msgstr "Forælderen har en eller flera navneservere som ikke findes hos barnet ({extra})."
+msgstr ""
+"Forælderen har en eller flera navneservere som ikke findes hos barnet "
+"({extra})."
 
 #: DELEGATION:IS_NOT_AUTHORITATIVE
 msgid  "Nameserver {ns} response is not authoritative on {proto} port 53."
@@ -290,12 +352,20 @@ msgid  "All of the nameserver names are listed both at parent and child."
 msgstr "Alle navneservere listet findes både hos forælder og barn."
 
 #: DELEGATION:NOT_ENOUGH_NS
-msgid  "Child does not list enough ({count}) nameservers ({ns}). Lower limit set to {minimum}."
-msgstr "Barnet returnerer ikke tilstrækkeligt antal ({count}) navneservere ({ns}). Mindsteværdi er sat til {minimum}."
+msgid  ""
+"Child does not list enough ({count}) nameservers ({ns}). Lower limit set to "
+"{minimum}."
+msgstr ""
+"Barnet returnerer ikke tilstrækkeligt antal ({count}) navneservere ({ns}). "
+"Mindsteværdi er sat til {minimum}."
 
 #: DELEGATION:NOT_ENOUGH_NS_GLUE
-msgid  "Parent does not list enough ({count}) nameservers ({glue}). Lower limit set to {minimum}."
-msgstr "Forælderen returnerer ikke tilstrækkeligt antal ({count}) navneservere ({glue}). Mindsteværdi er sat til {minimum}."
+msgid  ""
+"Parent does not list enough ({count}) nameservers ({glue}). Lower limit set "
+"to {minimum}."
+msgstr ""
+"Forælderen returnerer ikke tilstrækkeligt antal ({count}) navneservere "
+"({glue}). Mindsteværdi er sat til {minimum}."
 
 #: DELEGATION:NS_RR_IS_CNAME
 msgid  "Nameserver {ns} {address_type} RR point to CNAME."
@@ -306,12 +376,20 @@ msgid  "No nameserver point to CNAME alias."
 msgstr "Ingen NS-record peger på et CNAME-alias."
 
 #: DELEGATION:REFERRAL_SIZE_LARGE
-msgid  "The smallest possible legal referral packet is larger than 512 octets (it is {size})."
-msgstr "Den mindst mulige lovlige pakkestørrelse for henvisninger er større end 512 oktetter ({size})."
+msgid  ""
+"The smallest possible legal referral packet is larger than 512 octets (it is "
+"{size})."
+msgstr ""
+"Den mindst mulige lovlige pakkestørrelse for henvisninger er større end 512 "
+"oktetter ({size})."
 
 #: DELEGATION:REFERRAL_SIZE_OK
-msgid  "The smallest possible legal referral packet is smaller than 513 octets (it is {size})."
-msgstr "Den mindst mulige lovlige pakkestørrelse for henvisninger er mindre end eller lig med 512 oktetter ({size})."
+msgid  ""
+"The smallest possible legal referral packet is smaller than 513 octets (it "
+"is {size})."
+msgstr ""
+"Den mindst mulige lovlige pakkestørrelse for henvisninger er mindre end "
+"eller lig med 512 oktetter ({size})."
 
 #: DELEGATION:SAME_IP_ADDRESS
 msgid  "IP {address} refers to multiple nameservers ({nss})."
@@ -323,7 +401,8 @@ msgstr "Alle navneservere har en SOA-record."
 
 #: DELEGATION:SOA_NOT_EXISTS
 msgid  "A SOA query NOERROR response from {ns} was received empty."
-msgstr "En SOA-forespørgsel med RCODE NOERROR fra {ns} returnerede et tomt svar."
+msgstr ""
+"En SOA-forespørgsel med RCODE NOERROR fra {ns} returnerede et tomt svar."
 
 #: DELEGATION:TOTAL_NAME_MISMATCH
 msgid  "None of the nameservers listed at the parent are listed at the child."
@@ -334,32 +413,63 @@ msgid  "No DNSKEYs found. Additional tests skipped."
 msgstr "Ingen DNSKEY-records fundet. Yderligere tests ignoreret."
 
 #: DNSSEC:ALGORITHM_DEPRECATED
-msgid  "The DNSKEY with tag {keytag} uses deprecated algorithm number {algorithm}/({description})."
-msgstr "DNSKEY-recorden med tag {keytag} anvender forældet algoritme nummer {algorithm}/({description})."
+msgid  ""
+"The DNSKEY with tag {keytag} uses deprecated algorithm number {algorithm}/"
+"({description})."
+msgstr ""
+"DNSKEY-recorden med tag {keytag} anvender forældet algoritme nummer "
+"{algorithm}/({description})."
 
 #: DNSSEC:ALGORITHM_OK
-msgid  "The DNSKEY with tag {keytag} uses algorithm number {algorithm}/({description}), which is OK."
-msgstr "DNSKEY-recorden med tag {keytag} anvender algoritme nummer {algorithm}/({description}), hvilket er OK."
+msgid  ""
+"The DNSKEY with tag {keytag} uses algorithm number {algorithm}/"
+"({description}), which is OK."
+msgstr ""
+"DNSKEY-recorden med tag {keytag} anvender algoritme nummer {algorithm}/"
+"({description}), hvilket er OK."
 
 #: DNSSEC:ALGORITHM_PRIVATE
-msgid  "The DNSKEY with tag {keytag} uses private algorithm number {algorithm}/({description})."
-msgstr "DNSKEY-recorden med tag {keytag} anvender den private algoritme med nummer {algorithm}/({description})."
+msgid  ""
+"The DNSKEY with tag {keytag} uses private algorithm number {algorithm}/"
+"({description})."
+msgstr ""
+"DNSKEY-recorden med tag {keytag} anvender den private algoritme med nummer "
+"{algorithm}/({description})."
 
 #: DNSSEC:ALGORITHM_RESERVED
-msgid  "The DNSKEY with tag {keytag} uses reserved algorithm number {algorithm}/({description})."
-msgstr "DNSKEY-recorden med tag {keytag} anvender reserveret algoritme nummer {algorithm}/({description})."
+msgid  ""
+"The DNSKEY with tag {keytag} uses reserved algorithm number {algorithm}/"
+"({description})."
+msgstr ""
+"DNSKEY-recorden med tag {keytag} anvender reserveret algoritme nummer "
+"{algorithm}/({description})."
 
 #: DNSSEC:ALGORITHM_UNASSIGNED
-msgid  "The DNSKEY with tag {keytag} uses unassigned algorithm number {algorithm}/({description})."
-msgstr "DNSKEY-recorden med tag {keytag} anvender en ikke tildelt algoritme med nummer {algorithm}/({description})."
+msgid  ""
+"The DNSKEY with tag {keytag} uses unassigned algorithm number {algorithm}/"
+"({description})."
+msgstr ""
+"DNSKEY-recorden med tag {keytag} anvender en ikke tildelt algoritme med "
+"nummer {algorithm}/({description})."
 
 #: DNSSEC:ALGORITHM_UNKNOWN
 msgid  "The DNSKEY with tag {keytag} uses unknown algorithm number {algorithm}."
-msgstr "DNSKEY-recorden med tag {keytag} anvender ukendt algoritme med nummer {algorithm}."
+msgstr ""
+"DNSKEY-recorden med tag {keytag} anvender ukendt algoritme med nummer "
+"{algorithm}."
 
 #: DNSSEC:COMMON_KEYTAGS
 msgid  "There are both DS and DNSKEY records with key tags {keytags}."
 msgstr "Der findes både DS- and DNSKEY-records med keytag {keytags}."
+
+#: DNSSEC:DELEGATION_NOT_SIGNED
+msgid  "Delegation from parent to child is not properly signed {reason}."
+msgstr ""
+"Delegeringen fra forælder- til børnezone er ikke korrekt signeret ({reason})."
+
+#: DNSSEC:DELEGATION_SIGNED
+msgid  "Delegation from parent to child is properly signed."
+msgstr "Delegeringen fra forælder- til børnezonen er korrekt signeret."
 
 #: DNSSEC:DNSKEY_AND_DS
 msgid  "{parent} sent a DS record, and {child} a DNSKEY record."
@@ -367,19 +477,27 @@ msgstr "{parent} returnerede en DS-record, og {child} en DNSKEY-record."
 
 #: DNSSEC:DNSKEY_BUT_NOT_DS
 msgid  "{child} sent a DNSKEY record, but {parent} did not send a DS record."
-msgstr "{child} returnerede en DNSKEY-record, men {parent} returnerede ikke en DS-record."
+msgstr ""
+"{child} returnerede en DNSKEY-record, men {parent} returnerede ikke en DS-"
+"record."
 
 #: DNSSEC:DNSKEY_NOT_SIGNED
 msgid  "The apex DNSKEY RRset was not correctly signed."
 msgstr "DNSKEY RRset i zonetoppen var ikke korrekt signeret."
 
 #: DNSSEC:DNSKEY_SIGNATURE_NOT_OK
-msgid  "Signature for DNSKEY with tag {signature} failed to verify with error '{error}'."
-msgstr "Verificering af signaturen for DNSKEY-recorden med keytag {signature} fejlede med fejlmeddelelsen '{error}'."
+msgid  ""
+"Signature for DNSKEY with tag {signature} failed to verify with error "
+"'{error}'."
+msgstr ""
+"Verificering af signaturen for DNSKEY-recorden med keytag {signature} "
+"fejlede med fejlmeddelelsen '{error}'."
 
 #: DNSSEC:DNSKEY_SIGNATURE_OK
 msgid  "A signature for DNSKEY with tag {signature} was correctly signed."
-msgstr "Verificering af en signatur for DNSKEY-recorden med keytag {signature} lykkedes."
+msgstr ""
+"Verificering af en signatur for DNSKEY-recorden med keytag {signature} "
+"lykkedes."
 
 #: DNSSEC:DNSKEY_SIGNED
 msgid  "The apex DNSKEY RRset was correcly signed."
@@ -387,27 +505,40 @@ msgstr "DNSKEY RRset i zonetoppen var korrekt signeret."
 
 #: DNSSEC:DS_BUT_NOT_DNSKEY
 msgid  "{parent} sent a DS record, but {child} did not send a DNSKEY record."
-msgstr "{parent} returnerede en DS-record, men {child} returnerede ingen DNSKEY-record."
+msgstr ""
+"{parent} returnerede en DS-record, men {child} returnerede ingen DNSKEY-"
+"record."
 
 #: DNSSEC:DS_DIGTYPE_NOT_OK
 msgid  "DS record with keytag {keytag} uses forbidden digest type {digtype}."
-msgstr "DS-recorden med keytag {keytag} anvender en illegal digest-type {digtype}."
+msgstr ""
+"DS-recorden med keytag {keytag} anvender en illegal digest-type {digtype}."
 
 #: DNSSEC:DS_DIGTYPE_OK
 msgid  "DS record with keytag {keytag} uses digest type {digtype}, which is OK."
-msgstr "DS-recorden med keytag {keytag} anvender digest-typen {digtype}, hvilket er OK."
+msgstr ""
+"DS-recorden med keytag {keytag} anvender digest-typen {digtype}, hvilket er "
+"OK."
 
 #: DNSSEC:DS_DOES_NOT_MATCH_DNSKEY
-msgid  "DS record with keytag {keytag} and digest type {digtype} does not match the DNSKEY with the same tag."
-msgstr "DS-recorden med keytag {keytag} og digest type {digtype} matcher ikke DNSKEY-recorden med samme keytag."
-
-#: DNSSEC:DS_MATCHES_DNSKEY
-msgid  "DS record with keytag {keytag} and digest type {digtype} matches the DNSKEY with the same tag."
-msgstr "DS-recorden med keytag {keytag} og digest type {digtype} matcher DNSKEY-recorden med samme keytag."
+msgid  ""
+"DS record with keytag {keytag} and digest type {digtype} does not match the "
+"DNSKEY with the same tag."
+msgstr ""
+"DS-recorden med keytag {keytag} og digest type {digtype} matcher ikke DNSKEY-"
+"recorden med samme keytag."
 
 #: DNSSEC:DS_FOUND
 msgid  "Found DS records with tags {keytags}."
 msgstr "Fandt DS-records med tags {keytags}."
+
+#: DNSSEC:DS_MATCHES_DNSKEY
+msgid  ""
+"DS record with keytag {keytag} and digest type {digtype} matches the DNSKEY "
+"with the same tag."
+msgstr ""
+"DS-recorden med keytag {keytag} og digest type {digtype} matcher DNSKEY-"
+"recorden med samme keytag."
 
 #: DNSSEC:DS_MATCH_FOUND
 msgid  "At least one DS record with a matching DNSKEY record was found."
@@ -418,24 +549,41 @@ msgid  "No DS record with a matching DNSKEY record was found."
 msgstr "Ingen DS-record med en matchende DNSKEY-record blev fundet."
 
 #: DNSSEC:DS_RFC4509_NOT_VALID
-msgid  "Existing DS with digest type 2, while they do not match DNSKEY records, prevent use of DS with digest type 1 (RFC4509, section 3)."
-msgstr "Eksisterende DS med digest type 2 forbyder, på trods af, at de ikke matcher DNSKEY-records, brug af DS med digest type 1 (RFC4509, section 3)."
+msgid  ""
+"Existing DS with digest type 2, while they do not match DNSKEY records, "
+"prevent use of DS with digest type 1 (RFC4509, section 3)."
+msgstr ""
+"Eksisterende DS med digest type 2 forbyder, på trods af, at de ikke matcher "
+"DNSKEY-records, brug af DS med digest type 1 (RFC4509, section 3)."
 
 #: DNSSEC:DURATION_LONG
-msgid  "RRSIG with keytag {tag} and covering type(s) {types} has a duration of {duration} seconds, which is too long."
-msgstr "RRSIG-recorden med keytag {tag}, dækkende typerne {types} har en gyldighed på {duration} sekunder, hvilket er for længe."
+msgid  ""
+"RRSIG with keytag {tag} and covering type(s) {types} has a duration of "
+"{duration} seconds, which is too long."
+msgstr ""
+"RRSIG-recorden med keytag {tag}, dækkende typerne {types} har en gyldighed "
+"på {duration} sekunder, hvilket er for længe."
 
 #: DNSSEC:DURATION_OK
-msgid  "RRSIG with keytag {tag} and covering type(s) {types} has a duration of {duration} seconds, which is just fine."
-msgstr "RRSIG-recorden med keytag {tag}, dækkende typerne {types} har en gyldighed på {duration} sekunder, hvilket er OK."
+msgid  ""
+"RRSIG with keytag {tag} and covering type(s) {types} has a duration of "
+"{duration} seconds, which is just fine."
+msgstr ""
+"RRSIG-recorden med keytag {tag}, dækkende typerne {types} har en gyldighed "
+"på {duration} sekunder, hvilket er OK."
 
 #: DNSSEC:EXTRA_PROCESSING_BROKEN
-msgid  "Server at {server} sent {keys} DNSKEY records, and {sigs} RRSIG records."
-msgstr "Navneserveren {server} returnerede {keys} DNSKEY-records, og {sigs} RRSIG-records."
+msgid  ""
+"Server at {server} sent {keys} DNSKEY records, and {sigs} RRSIG records."
+msgstr ""
+"Navneserveren {server} returnerede {keys} DNSKEY-records, og {sigs} RRSIG-"
+"records."
 
 #: DNSSEC:EXTRA_PROCESSING_OK
 msgid  "Server at {server} sent {keys} DNSKEY records and {sigs} RRSIG records."
-msgstr "Navneserveren {server} returnerede {keys} DNSKEY-records, og {sigs} RRSIG-records."
+msgstr ""
+"Navneserveren {server} returnerede {keys} DNSKEY-records, og {sigs} RRSIG-"
+"records."
 
 #: DNSSEC:HAS_NSEC
 msgid  "The zone has NSEC records."
@@ -450,16 +598,24 @@ msgid  "The zone has NSEC3 opt-out records."
 msgstr "Zonen indeholder NSEC3 opt-out records."
 
 #: DNSSEC:INVALID_NAME_RCODE
-msgid  "When asked for the name {name}, which must not exist, the response had RCODE {rcode}."
-msgstr "Svaret på en forespørgsel om navnet {name}, som ikke må eksistere, returnerede RCODE {rcode}."
+msgid  ""
+"When asked for the name {name}, which must not exist, the response had RCODE "
+"{rcode}."
+msgstr ""
+"Svaret på en forespørgsel om navnet {name}, som ikke må eksistere, "
+"returnerede RCODE {rcode}."
 
 #: DNSSEC:ITERATIONS_OK
 msgid  "The number of NSEC3 iterations is {count}, which is OK."
 msgstr "Antallet af NSEC3-iterationer er {count}, hvilket er OK."
 
 #: DNSSEC:KEY_DETAILS
-msgid  "Key with keytag {keytag} details : Size = {keysize}, Flags ({sep}, {rfc5011})."
-msgstr "Key med keytag {keytag}, detaljer : Size = {keysize}, Flags ({sep}, {rfc5011})."
+msgid  ""
+"Key with keytag {keytag} details : Size = {keysize}, Flags ({sep}, "
+"{rfc5011})."
+msgstr ""
+"Key med keytag {keytag}, detaljer : Size = {keysize}, Flags ({sep}, "
+"{rfc5011})."
 
 #: DNSSEC:MANY_ITERATIONS
 msgid  "The number of NSEC3 iterations is {count}, which is on the high side."
@@ -486,12 +642,20 @@ msgid  "{from} returned no DS records for {zone}."
 msgstr "{from} returnerede ingen DS-records for {zone}."
 
 #: DNSSEC:NO_KEYS_OR_NO_SIGS
-msgid  "Cannot test DNSKEY signatures, because we got {keys} DNSKEY records and {sigs} RRSIG records."
-msgstr "Kan ikke teste DNSKEY-signaturer, fordi vi fik {keys} DNSKEY-records og {sigs} RRSIG-records."
+msgid  ""
+"Cannot test DNSKEY signatures, because we got {keys} DNSKEY records and "
+"{sigs} RRSIG records."
+msgstr ""
+"Kan ikke teste DNSKEY-signaturer, fordi vi fik {keys} DNSKEY-records og "
+"{sigs} RRSIG-records."
 
 #: DNSSEC:NO_KEYS_OR_NO_SIGS_OR_NO_SOA
-msgid  "Cannot test SOA signatures, because we got {keys} DNSKEY records, {sigs} RRSIG records and {soas} SOA records."
-msgstr "Kan ikke teste SOA-signaturer på baggrund af {keys} DNSKEY-records, {sigs} RRSIG-records og {soas} SOA-records."
+msgid  ""
+"Cannot test SOA signatures, because we got {keys} DNSKEY records, {sigs} "
+"RRSIG records and {soas} SOA records."
+msgstr ""
+"Kan ikke teste SOA-signaturer på baggrund af {keys} DNSKEY-records, {sigs} "
+"RRSIG-records og {soas} SOA-records."
 
 #: DNSSEC:NO_NSEC3PARAM
 msgid  "{server} returned no NSEC3PARAM records."
@@ -515,7 +679,9 @@ msgstr "Mindst en signatur signerede NSEC3 RRset korrekt."
 
 #: DNSSEC:NSEC3_SIG_VERIFY_ERROR
 msgid  "Trying to verify NSEC3 RRset with RRSIG {sig} gave error '{error}'."
-msgstr "Forsøg på at verificere NSEC3 RRset med RRSIG {sig} returnerede fejlen '{error}'."
+msgstr ""
+"Forsøg på at verificere NSEC3 RRset med RRSIG {sig} returnerede fejlen "
+"'{error}'."
 
 #: DNSSEC:NSEC_COVERS
 msgid  "NSEC covers {name}."
@@ -535,31 +701,49 @@ msgstr "Mindst en signatur signerede NSEC RRset korrekt."
 
 #: DNSSEC:NSEC_SIG_VERIFY_ERROR
 msgid  "Trying to verify NSEC RRset with RRSIG {sig} gave error '{error}'."
-msgstr "Forsøg på at verificere NSEC RRset med RRSIG {sig} returnerede fejlen '{error}'."
+msgstr ""
+"Forsøg på at verificere NSEC RRset med RRSIG {sig} returnerede fejlen "
+"'{error}'."
 
 #: DNSSEC:REMAINING_LONG
-msgid  "RRSIG with keytag {tag} and covering type(s) {types} has a remaining validity of {duration} seconds, which is too long."
-msgstr "RRSIG-recorden med keytag {tag}, dækkende typerne {types} har en resterende gyldighed på {duration} sekunder, hvilket er for længe."
+msgid  ""
+"RRSIG with keytag {tag} and covering type(s) {types} has a remaining "
+"validity of {duration} seconds, which is too long."
+msgstr ""
+"RRSIG-recorden med keytag {tag}, dækkende typerne {types} har en resterende "
+"gyldighed på {duration} sekunder, hvilket er for længe."
 
 #: DNSSEC:REMAINING_SHORT
-msgid  "RRSIG with keytag {tag} and covering type(s) {types} has a remaining validity of {duration} seconds, which is too short."
-msgstr "RRSIG-recorden med keytag {tag}, dækkende typerne {types} har en resterende gyldighed på {duration} sekunder, hvilket er for lidt."
+msgid  ""
+"RRSIG with keytag {tag} and covering type(s) {types} has a remaining "
+"validity of {duration} seconds, which is too short."
+msgstr ""
+"RRSIG-recorden med keytag {tag}, dækkende typerne {types} har en resterende "
+"gyldighed på {duration} sekunder, hvilket er for lidt."
 
 #: DNSSEC:RRSIG_EXPIRATION
-msgid  "RRSIG with keytag {tag} and covering type(s) {types} expires at : {date}."
+msgid  ""
+"RRSIG with keytag {tag} and covering type(s) {types} expires at : {date}."
 msgstr "RRSIG med keytag {tag} dækkende typerne {types} udløber : {date}."
 
 #: DNSSEC:RRSIG_EXPIRED
-msgid  "RRSIG with keytag {tag} and covering type(s) {types} has already expired (expiration is: {expiration})."
-msgstr "RRSIG-recorden med {tag}, dækkende typerne {types}, er allerede udløbet (udløbsdato er: {expiration})."
+msgid  ""
+"RRSIG with keytag {tag} and covering type(s) {types} has already expired "
+"(expiration is: {expiration})."
+msgstr ""
+"RRSIG-recorden med {tag}, dækkende typerne {types}, er allerede udløbet "
+"(udløbsdato er: {expiration})."
 
 #: DNSSEC:SOA_NOT_SIGNED
 msgid  "No RRSIG correctly signed the SOA RRset."
 msgstr "Ingen RRSIG signerede SOA RRset korrekt."
 
 #: DNSSEC:SOA_SIGNATURE_NOT_OK
-msgid  "Trying to verify SOA RRset with signature {signature} gave error '{error}'."
-msgstr "Forsøg på at verificere SOA RRset med signatur {signature} returnerede fejlen '{error}'."
+msgid  ""
+"Trying to verify SOA RRset with signature {signature} gave error '{error}'."
+msgstr ""
+"Forsøg på at verificere SOA RRset med signatur {signature} returnerede "
+"fejlen '{error}'."
 
 #: DNSSEC:SOA_SIGNATURE_OK
 msgid  "RRSIG {signature} correctly signs SOA RRset."
@@ -570,28 +754,31 @@ msgid  "At least one RRSIG correctly signs the SOA RRset."
 msgstr "Mindst en RRSIG-record signerer SOA RRset korrekt."
 
 #: DNSSEC:TOO_MANY_ITERATIONS
-msgid  "The number of NSEC3 iterations is {count}, which is too high for key length {keylength}."
-msgstr "Antallet af NSEC3-iterationer er {count}, hvilket er for højt for nøglelængden {keylength}."
-
-#: DNSSEC:DELEGATION_NOT_SIGNED
-msgid  "Delegation from parent to child is not properly signed {reason}."
-msgstr "Delegeringen fra forælder- til børnezone er ikke korrekt signeret ({reason})."
-
-#: DNSSEC:DELEGATION_SIGNED
-msgid  "Delegation from parent to child is properly signed."
-msgstr "Delegeringen fra forælder- til børnezonen er korrekt signeret."
+msgid  ""
+"The number of NSEC3 iterations is {count}, which is too high for key length "
+"{keylength}."
+msgstr ""
+"Antallet af NSEC3-iterationer er {count}, hvilket er for højt for "
+"nøglelængden {keylength}."
 
 #: EXAMPLE:EXAMPLE_TAG
 msgid  "This is an example tag."
 msgstr "Dette er et eksempel-tag."
 
 #: NAMESERVER:AAAA_WELL_PROCESSED
-msgid  "The following nameservers answer AAAA queries without problems : {names}."
-msgstr "De følgende navneservere svarede problemfrit på alle AAAA-forespørgsler : {names}."
+msgid  ""
+"The following nameservers answer AAAA queries without problems : {names}."
+msgstr ""
+"De følgende navneservere svarede problemfrit på alle AAAA-forespørgsler : "
+"{names}."
 
 #: NAMESERVER:ANSWER_BAD_RCODE
-msgid  "Nameserver {ns}/{address} answered AAAA query with an unexpected rcode ({rcode})."
-msgstr "Navneserveren {ns}/{address} besvarede en AAAA-forespørgsel med den uventede returkode ({rcode})."
+msgid  ""
+"Nameserver {ns}/{address} answered AAAA query with an unexpected rcode "
+"({rcode})."
+msgstr ""
+"Navneserveren {ns}/{address} besvarede en AAAA-forespørgsel med den uventede "
+"returkode ({rcode})."
 
 #: NAMESERVER:AXFR_AVAILABLE
 msgid  "Nameserver {ns}/{address} allow zone transfer using AXFR."
@@ -609,16 +796,81 @@ msgstr "Alle navneservere kan oversættes til en IP-adresse."
 msgid  "The following nameservers failed to resolve to an IP address : {names}."
 msgstr "IP-adresser bag følgende navneservere kunne ikke findes : {names}."
 
+#: NAMESERVER:CASE_QUERIES_RESULTS_DIFFER
+msgid  ""
+"When asked for {type} records on \"{query}\" with different cases, all "
+"servers do not reply consistently."
+msgstr ""
+"Ikke alle navneservere svarede konsistent på forespørgsler vedrørende "
+"recordtype {type} på \"{query}\" med en blanding af versaler og minuskler."
+
+#: NAMESERVER:CASE_QUERIES_RESULTS_OK
+msgid  ""
+"When asked for {type} records on \"{query}\" with different cases, all "
+"servers reply consistently."
+msgstr ""
+"Alle navneservere svarede konsistent på forespørgsler vedrørende recordtype "
+"{type} på \"{query}\" med en blanding af versaler og minuskler."
+
+#: NAMESERVER:CASE_QUERY_DIFFERENT_ANSWER
+msgid  ""
+"When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver "
+"{ns}/{address} returns different answers."
+msgstr ""
+"Navneserveren {ns}/{address} returnerede forskellige svar på forespørgsler "
+"vedrørende recordtype {type} på \"{query1}\" og \"{query2}\"."
+
+#: NAMESERVER:CASE_QUERY_DIFFERENT_RC
+msgid  ""
+"When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver "
+"{ns}/{address} returns different RCODE (\"{rcode1}\" vs \"{rcode2}\")."
+msgstr ""
+"Navneserveren {ns}/{address} returnerede forskellige RCODE (\"{rcode1}\" vs "
+"\"{rcode2}\") på forespørgsler vedrørende recordtype {type} på \"{query1}\" "
+"og \"{query2}\"."
+
+#: NAMESERVER:CASE_QUERY_NO_ANSWER
+msgid  ""
+"When asked for {type} records on \"{query}\", nameserver {ns}/{address} "
+"returns nothing."
+msgstr ""
+"Navneserveren {ns}/{address} returnerede intet svar på forespørgsel "
+"vedrørende recordtype {type} på \"{query}\"."
+
+#: NAMESERVER:CASE_QUERY_SAME_ANSWER
+msgid  ""
+"When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver "
+"{ns}/{address} returns same answers."
+msgstr ""
+"Navneserveren {ns}/{address} returnerede ens svar på forespørgsler "
+"vedrørende recordtype {type} på \"{query1}\" og \"{query2}\"."
+
+#: NAMESERVER:CASE_QUERY_SAME_RC
+msgid  ""
+"When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver "
+"{ns}/{address} returns same RCODE \"{rcode}\"."
+msgstr ""
+"Navneserveren {ns}/{address} returnerede samme RCODE \"{rcode}\" på "
+"forespørgsler vedrørende recordtype {type} på \"{query1}\" og \"{query2}\"."
+
 #: NAMESERVER:DIFFERENT_SOURCE_IP
-msgid  "Nameserver {ns}/{address} replies on a SOA query with a different source address ({source})."
-msgstr "Navneserveren {ns}/{address} svarede på en SOA-forespørgsel fra en anden kilde ({source})."
+msgid  ""
+"Nameserver {ns}/{address} replies on a SOA query with a different source "
+"address ({source})."
+msgstr ""
+"Navneserveren {ns}/{address} svarede på en SOA-forespørgsel fra en anden "
+"kilde ({source})."
 
 #: NAMESERVER:EDNS0_BAD_ANSWER
-msgid  "Nameserver {ns}/{address} does not support EDNS0 (OPT not set in reply)."
-msgstr "Navneserveren {ns}/{address} understøtter ikke EDNS0 (OPT ikke markeret i svaret)."
+msgid  ""
+"Nameserver {ns}/{address} does not support EDNS0 (OPT not set in reply)."
+msgstr ""
+"Navneserveren {ns}/{address} understøtter ikke EDNS0 (OPT ikke markeret i "
+"svaret)."
 
 #: NAMESERVER:EDNS0_BAD_QUERY
-msgid  "Nameserver {ns}/{address} does not support EDNS0 (replies with FORMERR)."
+msgid  ""
+"Nameserver {ns}/{address} does not support EDNS0 (replies with FORMERR)."
 msgstr "Navneserveren {ns}/{address} understøtter ikke EDNS0 (svarer FORMERR)."
 
 #: NAMESERVER:EDNS0_SUPPORT
@@ -630,16 +882,31 @@ msgid  "Nameserver {ns}/{address} is a recursor."
 msgstr "Navneserveren {ns}/{address} er rekursiv."
 
 #: NAMESERVER:NO_RECURSOR
-msgid  "None of the following nameservers is a recursor : {names}."
-msgstr "Ingen af de følgende navneservere er rekursive : {names}."
-
-#: NAMESERVER:RECURSIVITY_UNDEF
-msgid  "Can not determine nameservers recursivity."
-msgstr "Kan ikke afgøre, om navneserverne er rekursive."
+msgid  "Nameserver {ns}/{address} is not a recursor."
+msgstr "Nameserver {ns}/{address} is not a recursor."
 
 #: NAMESERVER:NO_RESOLUTION
 msgid  "No nameservers succeeded to resolve to an IP address."
 msgstr "IP-adresse ikke fundet for nogen af navneserverne."
+
+#: NAMESERVER:NO_UPWARD_REFERRAL
+msgid  "None of the following nameservers returns an upward referral : {names}."
+msgstr ""
+"Ingen af følgende navneservere returnerede en opadgående henvisning : "
+"{names}."
+
+#: NAMESERVER:QNAME_CASE_INSENSITIVE
+msgid  ""
+"Nameserver {ns}/{address} does not preserve original case of queried names."
+msgstr ""
+"Nameservern {ns}/{address} bevarede ikke versaler og minuskler fra "
+"forespørgslen."
+
+#: NAMESERVER:QNAME_CASE_SENSITIVE
+msgid  "Nameserver {ns}/{address} preserves original case of queried names."
+msgstr ""
+"Navneserveren {ns}/{address} bevarede versaler og minuskler fra "
+"forespørgslen."
 
 #: NAMESERVER:QUERY_DROPPED
 msgid  "Nameserver {ns}/{address} dropped AAAA query."
@@ -649,65 +916,36 @@ msgstr "Navneserveren {ns}/{address} mistede en AAAA-forespørgsel."
 msgid  "All nameservers reply with same IP used to query them."
 msgstr "Alle navneservere svarede fra samme IP-adresse som de blev spurgt på."
 
+#: NAMESERVER:UPWARD_REFERRAL
+msgid  "Nameserver {ns}/{address} returns an upward referral."
+msgstr ""
+"Nameservern {ns}/{address} returnerede en henvisning til en forælderzone."
+
 #: NAMESERVER:UPWARD_REFERRAL_IRRELEVANT
 msgid  "Upward referral tests skipped for root zone."
 msgstr "Opadgående test af henvisninger springes over for root-zonen."
 
-#: NAMESERVER:UPWARD_REFERRAL
-msgid  "Nameserver {ns}/{address} returns an upward referral."
-msgstr "Nameservern {ns}/{address} returnerede en henvisning til en forælderzone."
-
-#: NAMESERVER:NO_UPWARD_REFERRAL
-msgid  "None of the following nameservers returns an upward referral : {names}."
-msgstr "Ingen af følgende navneservere returnerede en opadgående henvisning : {names}."
-
-#: NAMESERVER:QNAME_CASE_SENSITIVE
-msgid  "Nameserver {ns}/{address} preserves original case of queried names."
-msgstr "Navneserveren {ns}/{address} bevarede versaler og minuskler fra forespørgslen."
-
-#: NAMESERVER:QNAME_CASE_INSENSITIVE
-msgid  "Nameserver {ns}/{address} does not preserve original case of queried names."
-msgstr "Nameservern {ns}/{address} bevarede ikke versaler og minuskler fra forespørgslen."
-
-#: NAMESERVER:CASE_QUERY_SAME_ANSWER
-msgid  "When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver {ns}/{address} returns same answers."
-msgstr "Navneserveren {ns}/{address} returnerede ens svar på forespørgsler vedrørende recordtype {type} på \"{query1}\" og \"{query2}\"."
-
-#: NAMESERVER:CASE_QUERY_DIFFERENT_ANSWER
-msgid  "When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver {ns}/{address} returns different answers."
-msgstr "Navneserveren {ns}/{address} returnerede forskellige svar på forespørgsler vedrørende recordtype {type} på \"{query1}\" og \"{query2}\"."
-
-#: NAMESERVER:CASE_QUERY_SAME_RC
-msgid  "When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver {ns}/{address} returns same RCODE \"{rcode}\"."
-msgstr "Navneserveren {ns}/{address} returnerede samme RCODE \"{rcode}\" på forespørgsler vedrørende recordtype {type} på \"{query1}\" og \"{query2}\"."
-
-#: NAMESERVER:CASE_QUERY_DIFFERENT_RC
-msgid  "When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver {ns}/{address} returns different RCODE (\"{rcode1}\" vs \"{rcode2}\")."
-msgstr "Navneserveren {ns}/{address} returnerede forskellige RCODE (\"{rcode1}\" vs \"{rcode2}\") på forespørgsler vedrørende recordtype {type} på \"{query1}\" og \"{query2}\"."
-
-#: NAMESERVER:CASE_QUERY_NO_ANSWER
-msgid  "When asked for {type} records on \"{query}\", nameserver {ns}/{address} returns nothing."
-msgstr "Navneserveren {ns}/{address} returnerede intet svar på forespørgsel vedrørende recordtype {type} på \"{query}\"."
-
-#: NAMESERVER:CASE_QUERIES_RESULTS_OK
-msgid  "When asked for {type} records on \"{query}\" with different cases, all servers reply consistently."
-msgstr "Alle navneservere svarede konsistent på forespørgsler vedrørende recordtype {type} på \"{query}\" med en blanding af versaler og minuskler."
-
-#: NAMESERVER:CASE_QUERIES_RESULTS_DIFFER
-msgid  "When asked for {type} records on \"{query}\" with different cases, all servers do not reply consistently."
-msgstr "Ikke alle navneservere svarede konsistent på forespørgsler vedrørende recordtype {type} på \"{query}\" med en blanding af versaler og minuskler."
-
 #: SYNTAX:DISCOURAGED_DOUBLE_DASH
-msgid  "Domain name ({name}) has a label ({label}) with a double hyphen ('--') in position 3 and 4 (with a prefix which is not 'xn--')."
-msgstr "Domænenavnet ({name}) har en label ({label}) med bindestreg i position 3 og 4, og et præfiks som ikke er 'xn--'."
+msgid  ""
+"Domain name ({name}) has a label ({label}) with a double hyphen ('--') in "
+"position 3 and 4 (with a prefix which is not 'xn--')."
+msgstr ""
+"Domænenavnet ({name}) har en label ({label}) med bindestreg i position 3 og "
+"4, og et præfiks som ikke er 'xn--'."
 
 #: SYNTAX:INITIAL_HYPHEN
-msgid  "Domain name ({name}) has a label ({label}) starting with an hyphen ('-')."
-msgstr "Domænenavnet ({name}) har en label ({label}) som begynder med en bindestreg."
+msgid  ""
+"Domain name ({name}) has a label ({label}) starting with an hyphen ('-')."
+msgstr ""
+"Domænenavnet ({name}) har en label ({label}) som begynder med en bindestreg."
 
 #: SYNTAX:MNAME_DISCOURAGED_DOUBLE_DASH
-msgid  "SOA MNAME ({name}) has a label ({label}) with a double hyphen ('--') in position 3 and 4 (with a prefix which is not 'xn--')."
-msgstr "SOA MNAME ({name}) har en label ({label}) med bindestreg i position 3 og 4 (og et præfix som ikke er 'xn--'."
+msgid  ""
+"SOA MNAME ({name}) has a label ({label}) with a double hyphen ('--') in "
+"position 3 and 4 (with a prefix which is not 'xn--')."
+msgstr ""
+"SOA MNAME ({name}) har en label ({label}) med bindestreg i position 3 og 4 "
+"(og et præfix som ikke er 'xn--'."
 
 #: SYNTAX:MNAME_NON_ALLOWED_CHARS
 msgid  "Found illegal characters in SOA MNAME ({name})."
@@ -722,8 +960,12 @@ msgid  "SOA MNAME ({name}) syntax is valid."
 msgstr "SOA MNAME ({name}) syntaks er valid."
 
 #: SYNTAX:MX_DISCOURAGED_DOUBLE_DASH
-msgid  "Domain name MX ({name}) has a label ({label}) with a double hyphen ('--') in position 3 and 4 (with a prefix which is not 'xn--')."
-msgstr "Domænets MX ({name}) har en label ({label}) med bindestreg i position 3 og 4, og et præfiks som ikke er 'xn--'."
+msgid  ""
+"Domain name MX ({name}) has a label ({label}) with a double hyphen ('--') in "
+"position 3 and 4 (with a prefix which is not 'xn--')."
+msgstr ""
+"Domænets MX ({name}) har en label ({label}) med bindestreg i position 3 og "
+"4, og et præfiks som ikke er 'xn--'."
 
 #: SYNTAX:MX_NON_ALLOWED_CHARS
 msgid  "Found illegal characters in MX ({name})."
@@ -738,8 +980,12 @@ msgid  "Domain name MX ({name}) syntax is valid."
 msgstr "Domænenavnets MX-record ({name}) syntaks er valid."
 
 #: SYNTAX:NAMESERVER_DISCOURAGED_DOUBLE_DASH
-msgid  "Nameserver ({name}) has a label ({label}) with a double hyphen ('--') in position 3 and 4 (with a prefix which is not 'xn--')."
-msgstr "Navneserveren ({name}) har en label ({label}) med bindestreg i position 3 og 4, og et præfiks som ikke er 'xn--'."
+msgid  ""
+"Nameserver ({name}) has a label ({label}) with a double hyphen ('--') in "
+"position 3 and 4 (with a prefix which is not 'xn--')."
+msgstr ""
+"Navneserveren ({name}) har en label ({label}) med bindestreg i position 3 og "
+"4, og et præfiks som ikke er 'xn--'."
 
 #: SYNTAX:NAMESERVER_NON_ALLOWED_CHARS
 msgid  "Found illegal characters in the nameserver ({name})."
@@ -758,12 +1004,18 @@ msgid  "Found illegal characters in the domain name ({name})."
 msgstr "Ulovlige tegn fundet i domænenavnet ({name})."
 
 #: SYNTAX:NO_DOUBLE_DASH
-msgid  "Domain name ({name}) has no label with a double hyphen ('--') in position 3 and 4 (with a prefix which is not 'xn--')."
-msgstr "Domænenavnet ({name}) indeholder ikke bindestreg i position 3 og 4 (med et præfiks, der ikke er 'xn--')."
+msgid  ""
+"Domain name ({name}) has no label with a double hyphen ('--') in position 3 "
+"and 4 (with a prefix which is not 'xn--')."
+msgstr ""
+"Domænenavnet ({name}) indeholder ikke bindestreg i position 3 og 4 (med et "
+"præfiks, der ikke er 'xn--')."
 
 #: SYNTAX:NO_ENDING_HYPHENS
 msgid  "Both ends of all labels of the domain name ({name}) have no hyphens."
-msgstr "Alle labels i domænenavnet ({name}) begynder eller slutter ikke med bindestreg."
+msgstr ""
+"Alle labels i domænenavnet ({name}) begynder eller slutter ikke med "
+"bindestreg."
 
 #: SYNTAX:NO_RESPONSE_MX_QUERY ZONE:NO_RESPONSE_MX_QUERY
 msgid  "No response from nameserver(s) on MX queries."
@@ -778,7 +1030,8 @@ msgid  "No illegal characters in the domain name ({name})."
 msgstr "Udelukkende lovlige tegn i domænenavnet ({name})."
 
 #: SYNTAX:RNAME_MISUSED_AT_SIGN
-msgid  "There must be no misused '@' character in the SOA RNAME field ({rname})."
+msgid  ""
+"There must be no misused '@' character in the SOA RNAME field ({rname})."
 msgstr "'@' må ikke anvendes i SOA RNAME ({rname})."
 
 #: SYNTAX:RNAME_NO_AT_SIGN
@@ -795,7 +1048,8 @@ msgstr "SOA RNAME værdi ({rname}) overholder RFC2822."
 
 #: SYNTAX:TERMINAL_HYPHEN
 msgid  "Domain name ({name}) has a label ({label}) ending with an hyphen ('-')."
-msgstr "Domænenavnet ({name}) har en label ({label}) som slutter med en bindestreg."
+msgstr ""
+"Domænenavnet ({name}) har en label ({label}) som slutter med en bindestreg."
 
 #: SYSTEM:ADDED_FAKE_DELEGATION
 msgid  "Added a fake delegation for domain {domain} to name server {ns}."
@@ -803,7 +1057,9 @@ msgstr "Tilføjet en falsk delegering for {domain} til navneserver {ns}."
 
 #: SYSTEM:CANNOT_CONTINUE
 msgid  "Not enough data about {zone} was found to be able to run tests."
-msgstr "Kunne ikke finde tilstrækkeligt med information om {zone} til at afvikle test."
+msgstr ""
+"Kunne ikke finde tilstrækkeligt med information om {zone} til at afvikle "
+"test."
 
 #: SYSTEM:CONFIG_FILE
 msgid  "Configuration was read from {name}."
@@ -813,33 +1069,51 @@ msgstr "Konfigurationen blev hentet fra {name}."
 msgid  "Using prerequisite module {name} version {version}."
 msgstr "Anvender version {version} af modulet {name}."
 
-#: SYSTEM:GLOBAL_VERSION
-msgid  "Using version {version} of the Zonemaster engine."
-msgstr "Anvender version {version} af Zonemasters testmotor."
-
 #: SYSTEM:FAKE_DELEGATION
 msgid  "Followed a fake delegation."
 msgstr "Fulgte en falsk delegering."
 
-#: SYSTEM:FAKE_DELEGATION_TO_SELF
-msgid  "Name server {ns} not adding fake delegation for domain {domain} to itself."
-msgstr "Navneserveren {ns} tilføjede ikke en falsk delegering for domænet {domain}."
-
 #: SYSTEM:FAKE_DELEGATION_IN_ZONE_NO_IP
-msgid  "The fake delegation of domain {domain} includes an in-zone name server {ns} without mandatory glue (without IP address)."
-msgstr "Ugyldig delegation for domænenavnet {domain} til zone indeholdende en navneserver {ns} uden IP-adresse."
+msgid  ""
+"The fake delegation of domain {domain} includes an in-zone name server {ns} "
+"without mandatory glue (without IP address)."
+msgstr ""
+"Ugyldig delegation for domænenavnet {domain} til zone indeholdende en "
+"navneserver {ns} uden IP-adresse."
 
 #: SYSTEM:FAKE_DELEGATION_NO_IP
-msgid  "The fake delegation of domain {domain} includes a name server {ns} that cannot be resolved to any IP address."
-msgstr "Ugyldig delegation for domænenavnet {domain} til en navneserver {ns} uden IP-adresse."
+msgid  ""
+"The fake delegation of domain {domain} includes a name server {ns} that "
+"cannot be resolved to any IP address."
+msgstr ""
+"Ugyldig delegation for domænenavnet {domain} til en navneserver {ns} uden IP-"
+"adresse."
+
+#: SYSTEM:FAKE_DELEGATION_TO_SELF
+msgid  ""
+"Name server {ns} not adding fake delegation for domain {domain} to itself."
+msgstr ""
+"Navneserveren {ns} tilføjede ikke en falsk delegering for domænet {domain}."
+
+#: SYSTEM:GLOBAL_VERSION
+msgid  "Using version {version} of the Zonemaster engine."
+msgstr "Anvender version {version} af Zonemasters testmotor."
 
 #: SYSTEM:LOGGER_CALLBACK_ERROR
 msgid  "Logger callback died with error: {exception}"
-msgstr "Callback-funktionen for log-modulet døde med fejlmeddelelsen: {exception}"
+msgstr ""
+"Callback-funktionen for log-modulet døde med fejlmeddelelsen: {exception}"
 
 #: SYSTEM:LOOKUP_ERROR
-msgid  "DNS query to {ns} for {name}/{type}/{class} failed with error: {message}"
-msgstr "DNS-forespørgsel til {ns} på {name}/{type}/{class} fejlede med beskeden: {message}"
+msgid  ""
+"DNS query to {ns} for {name}/{type}/{class} failed with error: {message}"
+msgstr ""
+"DNS-forespørgsel til {ns} på {name}/{type}/{class} fejlede med beskeden: "
+"{message}"
+
+#: SYSTEM:MODULE_END
+msgid  "Module {module} finished running."
+msgstr "Modulet {module} afsluttede."
 
 #: SYSTEM:MODULE_ERROR
 msgid  "Fatal error in {module}: {msg}"
@@ -849,13 +1123,17 @@ msgstr "Fatal fejl i {module}: {msg}"
 msgid  "Using module {module} version {version}."
 msgstr "Anvender version {version} af modulet {module}."
 
-#: SYSTEM:MODULE_END
-msgid  "Module {module} finished running."
-msgstr "Modulet {module} afsluttede."
-
 #: SYSTEM:NO_NETWORK
 msgid  "Both IPv4 and IPv6 are disabled."
 msgstr "Både IPv4 og IPv6 er deaktiveret."
+
+#: SYSTEM:PACKET_BIG
+msgid  ""
+"Packet size ({size}) exceeds common maximum size of {maxsize} bytes (try "
+"with \"{command}\")."
+msgstr ""
+"Pakkestørrelse ({size}) overstiger normal maksimum størrelse på {maxsize} "
+"bytes (prøv med \"{command}\")."
 
 #: SYSTEM:POLICY_DISABLED
 msgid  "The module {name} was disabled by the policy."
@@ -875,27 +1153,39 @@ msgstr "IPv6 er deaktiveret, sender ingen forespørgsel til {ns}."
 
 #: SYSTEM:UNKNOWN_METHOD
 msgid  "Request to run unknown method {method} in module {module}."
-msgstr "Anmodning om at afvikle den ukendte metode {method} i modulet {module}."
+msgstr ""
+"Anmodning om at afvikle den ukendte metode {method} i modulet {module}."
 
 #: SYSTEM:UNKNOWN_MODULE
-msgid  "Request to run {method} in unknown module {module}. Known modules: {known}."
-msgstr "Anmodning om at afvikle metoden {method} i det ukendte modul {module}. Kendte moduler: {known}."
-
-#: SYSTEM:PACKET_BIG
-msgid  "Packet size ({size}) exceeds common maximum size of {maxsize} bytes (try with \"{command}\")."
-msgstr "Pakkestørrelse ({size}) overstiger normal maksimum størrelse på {maxsize} bytes (prøv med \"{command}\")."
+msgid  ""
+"Request to run {method} in unknown module {module}. Known modules: {known}."
+msgstr ""
+"Anmodning om at afvikle metoden {method} i det ukendte modul {module}. "
+"Kendte moduler: {known}."
 
 #: ZONE:EXPIRE_LOWER_THAN_REFRESH
-msgid  "SOA 'expire' value ({expire}) is lower than the SOA 'refresh' value ({refresh})."
-msgstr "Værdien for SOA 'expire' ({expire}) er mindre end værdien for SOA 'refresh' ({refresh})."
+msgid  ""
+"SOA 'expire' value ({expire}) is lower than the SOA 'refresh' value "
+"({refresh})."
+msgstr ""
+"Værdien for SOA 'expire' ({expire}) er mindre end værdien for SOA "
+"'refresh' ({refresh})."
 
 #: ZONE:EXPIRE_MINIMUM_VALUE_LOWER
-msgid  "SOA 'expire' value ({expire}) is less than the recommended one ({required_expire})."
-msgstr "Værdien for SOA 'expire' ({expire}) er mindre end anbefalet ({required_expire})."
+msgid  ""
+"SOA 'expire' value ({expire}) is less than the recommended one "
+"({required_expire})."
+msgstr ""
+"Værdien for SOA 'expire' ({expire}) er mindre end anbefalet "
+"({required_expire})."
 
 #: ZONE:EXPIRE_MINIMUM_VALUE_OK
-msgid  "SOA 'expire' value ({expire}) is higher than the minimum recommended value ({required_expire}) and not lower than the 'refresh' value ({refresh})."
-msgstr "SOA 'expire' værdi ({expire}) er højere end den anbefalede minimumsværdi ({required_expire}) og ikke mindre end 'refresh' værdi ({refresh})."
+msgid  ""
+"SOA 'expire' value ({expire}) is higher than the minimum recommended value "
+"({required_expire}) and not lower than the 'refresh' value ({refresh})."
+msgstr ""
+"SOA 'expire' værdi ({expire}) er højere end den anbefalede minimumsværdi "
+"({required_expire}) og ikke mindre end 'refresh' værdi ({refresh})."
 
 #: ZONE:MNAME_HAS_NO_ADDRESS
 msgid  "No IP address found for SOA 'mname' nameserver ({mname})."
@@ -907,19 +1197,26 @@ msgstr "SOA 'MNAME'-navneserveren ({mname}) er autoritativ for zonen '{zone}'."
 
 #: ZONE:MNAME_IS_CNAME
 msgid  "SOA 'mname' value ({mname}) refers to a NS which is an alias (CNAME)."
-msgstr "SOA 'MNAME' ({mname}) refererer til en NS-record som er et alias (CNAME)."
+msgstr ""
+"SOA 'MNAME' ({mname}) refererer til en NS-record som er et alias (CNAME)."
 
 #: ZONE:MNAME_IS_NOT_CNAME
-msgid  "SOA 'mname' value ({mname}) refers to a NS which is not an alias (CNAME)."
+msgid  ""
+"SOA 'mname' value ({mname}) refers to a NS which is not an alias (CNAME)."
 msgstr "SOA MNAME {mname} refererer ikke til et alias (CNAME)."
 
 #: ZONE:MNAME_NOT_AUTHORITATIVE
-msgid  "SOA 'mname' nameserver {ns}/{address} is not authoritative for '{zone}' zone."
+msgid  ""
+"SOA 'mname' nameserver {ns}/{address} is not authoritative for '{zone}' zone."
 msgstr "SOA 'MNAME' ({ns}/{address}) er ikke autoritativ for zonen '{zone}'."
 
 #: ZONE:MNAME_NOT_IN_GLUE
-msgid  "SOA 'mname' nameserver ({mname}) is not listed in \"parent\" NS records for tested zone ({ns})."
-msgstr "Navneserveren i SOA 'MNAME' ({mname}) er ikke blandt de NS-records ({ns}) som angivet i forælderzonen \"parent\"."
+msgid  ""
+"SOA 'mname' nameserver ({mname}) is not listed in \"parent\" NS records for "
+"tested zone ({ns})."
+msgstr ""
+"Navneserveren i SOA 'MNAME' ({mname}) er ikke blandt de NS-records ({ns}) "
+"som angivet i forælderzonen \"parent\"."
 
 #: ZONE:MNAME_NO_RESPONSE
 msgid  "SOA 'mname' nameserver {ns}/{address} does not respond."
@@ -943,40 +1240,79 @@ msgstr "MX-record for domænenavnet peger ikke på et alias (CNAME)."
 
 #: ZONE:NO_MX_RECORD
 msgid  "No target (MX, A or AAAA record) to deliver e-mail for the domain name."
-msgstr "Manglende RR til levering af e-mail (MX-, A- eller AAAA-record) for domænet."
+msgstr ""
+"Manglende RR til levering af e-mail (MX-, A- eller AAAA-record) for domænet."
 
 #: ZONE:REFRESH_HIGHER_THAN_RETRY
-msgid  "SOA 'refresh' value ({refresh}) is higher than the SOA 'retry' value ({retry})."
-msgstr "SOA 'refresh'-værdi ({refresh}) er større end SOA 'retry'-værdi ({retry})."
+msgid  ""
+"SOA 'refresh' value ({refresh}) is higher than the SOA 'retry' value "
+"({retry})."
+msgstr ""
+"SOA 'refresh'-værdi ({refresh}) er større end SOA 'retry'-værdi ({retry})."
 
 #: ZONE:REFRESH_LOWER_THAN_RETRY
-msgid  "SOA 'refresh' value ({refresh}) is lower than the SOA 'retry' value ({retry})."
-msgstr "SOA-recordens 'refresh'-værdi ({refresh}) er mindre end SOA 'retry'-værdi ({retry})."
+msgid  ""
+"SOA 'refresh' value ({refresh}) is lower than the SOA 'retry' value "
+"({retry})."
+msgstr ""
+"SOA-recordens 'refresh'-værdi ({refresh}) er mindre end SOA 'retry'-værdi "
+"({retry})."
 
 #: ZONE:REFRESH_MINIMUM_VALUE_LOWER
-msgid  "SOA 'refresh' value ({refresh}) is less than the recommended one ({required_refresh})."
-msgstr "SOA-recordens 'refresh'-værdi ({refresh}) er mindre end anbefalet værdi ({required_refresh})."
+msgid  ""
+"SOA 'refresh' value ({refresh}) is less than the recommended one "
+"({required_refresh})."
+msgstr ""
+"SOA-recordens 'refresh'-værdi ({refresh}) er mindre end anbefalet værdi "
+"({required_refresh})."
 
 #: ZONE:REFRESH_MINIMUM_VALUE_OK
-msgid  "SOA 'refresh' value ({refresh}) is higher than the minimum recommended value ({required_refresh})."
-msgstr "SOA 'refresh'-værdi ({refresh}) er større end den anbefalede minimumsværdi ({required_refresh})."
+msgid  ""
+"SOA 'refresh' value ({refresh}) is higher than the minimum recommended value "
+"({required_refresh})."
+msgstr ""
+"SOA 'refresh'-værdi ({refresh}) er større end den anbefalede minimumsværdi "
+"({required_refresh})."
 
 #: ZONE:RETRY_MINIMUM_VALUE_LOWER
-msgid  "SOA 'retry' value ({retry}) is less than the recommended one ({required_retry})."
-msgstr "SOA-recordens 'retry'-værdi ({retry}) er mindre end anbefalet værdi ({required_retry})."
+msgid  ""
+"SOA 'retry' value ({retry}) is less than the recommended one "
+"({required_retry})."
+msgstr ""
+"SOA-recordens 'retry'-værdi ({retry}) er mindre end anbefalet værdi "
+"({required_retry})."
 
 #: ZONE:RETRY_MINIMUM_VALUE_OK
-msgid  "SOA 'retry' value ({retry}) is more than the minimum recommended value ({required_retry})."
-msgstr "SOA 'retry'-værdi ({retry}) er større end den anbefalede minimumsværdi ({required_retry})."
+msgid  ""
+"SOA 'retry' value ({retry}) is more than the minimum recommended value "
+"({required_retry})."
+msgstr ""
+"SOA 'retry'-værdi ({retry}) er større end den anbefalede minimumsværdi "
+"({required_retry})."
 
 #: ZONE:SOA_DEFAULT_TTL_MAXIMUM_VALUE_HIGHER
-msgid  "SOA 'minimum' value ({minimum}) is higher than the recommended one ({highest_minimum})."
-msgstr "SOA-recordens 'minimum'-værdi ({minimum}) er større end anbefalet værdi ({highest_minimum})."
+msgid  ""
+"SOA 'minimum' value ({minimum}) is higher than the recommended one "
+"({highest_minimum})."
+msgstr ""
+"SOA-recordens 'minimum'-værdi ({minimum}) er større end anbefalet værdi "
+"({highest_minimum})."
 
 #: ZONE:SOA_DEFAULT_TTL_MAXIMUM_VALUE_LOWER
-msgid  "SOA 'minimum' value ({minimum}) is less than the recommended one ({lowest_minimum})."
-msgstr "SOA-recordens 'minimum'-værdi ({minimum}) er mindre end anbefalet værdi ({lowest_minimum})."
+msgid  ""
+"SOA 'minimum' value ({minimum}) is less than the recommended one "
+"({lowest_minimum})."
+msgstr ""
+"SOA-recordens 'minimum'-værdi ({minimum}) er mindre end anbefalet værdi "
+"({lowest_minimum})."
 
 #: ZONE:SOA_DEFAULT_TTL_MAXIMUM_VALUE_OK
-msgid  "SOA 'minimum' value ({minimum}) is between the recommended ones ({lowest_minimum}/{highest_minimum})."
-msgstr "SOA 'minimum' værdi ({minimum}) er i det anbefalede område ({lowest_minimum}/{highest_minimum})."
+msgid  ""
+"SOA 'minimum' value ({minimum}) is between the recommended ones "
+"({lowest_minimum}/{highest_minimum})."
+msgstr ""
+"SOA 'minimum' værdi ({minimum}) er i det anbefalede område ({lowest_minimum}/"
+"{highest_minimum})."
+
+#~ msgid "Can not determine nameservers recursivity."
+#~ msgstr "Kan ikke afgøre, om navneserverne er rekursive."

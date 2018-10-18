@@ -104,7 +104,7 @@ sub metadata {
         ],
         basic03 => [
             qw(
-              NO_NAMESERVER_PREVENTS_WWW_A_TEST
+              NO_A_RECORDS
               HAS_A_RECORDS
               IPV4_DISABLED
               IPV6_DISABLED

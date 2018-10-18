@@ -17,6 +17,7 @@ has 'packet' => (
           data
           rcode
           aa
+          ra
           question
           answer
           authority
@@ -114,9 +115,9 @@ sub get_records {
 } ## end sub get_records
 
 sub get_records_for_name {
-    my ( $self, $type, $name ) = @_;
+    my ( $self, $type, $name, @section ) = @_;
 
-    return grep { name( $_->name ) eq name( $name ) } $self->get_records( $type );
+    return grep { name( $_->name ) eq name( $name ) } $self->get_records( $type, @section );
 }
 
 sub has_rrs_of_type_for_name {
@@ -183,14 +184,17 @@ Returns true if the packet represents a non-existent DNS node.
 
 Returns true if the packet is a redirect to another set of nameservers.
 
-=item get_records($type[, $section])
+=item get_records($type[, @section])
 
-Returns the L<Zonemaster::LDNS::RR> objects of the requested type in the packet. If the optional C<$section> argument is given, and is one of C<answer>,
-C<authority> and C<additional>, only RRs from that section are returned.
+Returns the L<Zonemaster::LDNS::RR> objects of the requested type in the packet.
+If the optional C<@section> argument is given, and is a list of C<answer>,
+C<authority> and C<additional>, only RRs from those sections are returned.
 
-=item get_records_for_name($type, $name)
+=item get_records_for_name($type, $name[, @section])
 
 Returns all L<Zonemaster::LDNS::RR> objects for the given name in the packet.
+If the optional C<@section> argument is given, and is a list of C<answer>,
+C<authority> and C<additional>, only RRs from those sections are returned.
 
 =item has_rrs_of_type_for_name($type, $name)
 
