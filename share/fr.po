@@ -1244,10 +1244,6 @@ msgstr ""
 "Pas assez d'informations obtenues sur la zone '{zone}' pour permettre la "
 "poursuite des tests."
 
-#: SYSTEM:CONFIG_FILE
-msgid  "Configuration was read from {name}."
-msgstr "La configuration a été lue depuis le fichier {name}."
-
 #: SYSTEM:DEPENDENCY_VERSION
 msgid  "Using prerequisite module {name} version {version}."
 msgstr "Utilisation du module prérequis {name} version {version}."
@@ -1323,10 +1319,6 @@ msgstr ""
 #: SYSTEM:POLICY_DISABLED
 msgid  "The module {name} was disabled by the policy."
 msgstr "Le module {name} a été désactivé par la politique en cours."
-
-#: SYSTEM:POLICY_FILE
-msgid  "Policy was read from {name}."
-msgstr "La politique a été lue depuis le fichier {name}."
 
 #: SYSTEM:SKIP_IPV4_DISABLED
 msgid  "IPv4 is disabled, not sending query to {ns}."

@@ -82,7 +82,6 @@ sub translate_tag {
 sub _system_translation {
     return {
         "CANNOT_CONTINUE"               => "Not enough data about {zone} was found to be able to run tests.",
-        "CONFIG_FILE"                   => "Configuration was read from {name}.",
         "DEPENDENCY_VERSION"            => "Using prerequisite module {name} version {version}.",
         "GLOBAL_VERSION"                => "Using version {version} of the Zonemaster engine.",
         "LOGGER_CALLBACK_ERROR"         => "Logger callback died with error: {exception}",
@@ -91,7 +90,6 @@ sub _system_translation {
         "MODULE_VERSION"                => "Using module {module} version {version}.",
         "MODULE_END"                    => "Module {module} finished running.",
         "NO_NETWORK"                    => "Both IPv4 and IPv6 are disabled.",
-        "POLICY_FILE"                   => "Policy was read from {name}.",
         "POLICY_DISABLED"               => "The module {name} was disabled by the policy.",
         "UNKNOWN_METHOD"                => "Request to run unknown method {method} in module {module}.",
         "UNKNOWN_MODULE"                => "Request to run {method} in unknown module {module}. Known modules: {known}.",

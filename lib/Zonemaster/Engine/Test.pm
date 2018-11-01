@@ -40,13 +40,6 @@ sub _log_versions {
     info( DEPENDENCY_VERSION => { name => 'Hash::Merge',           version => $Hash::Merge::VERSION } );
     info( DEPENDENCY_VERSION => { name => 'Readonly',              version => $Readonly::VERSION } );
 
-    foreach my $file ( @{ Zonemaster::Engine->config->cfiles } ) {
-        info( CONFIG_FILE => { name => $file } );
-    }
-    foreach my $file ( @{ Zonemaster::Engine->config->pfiles } ) {
-        info( POLICY_FILE => { name => $file } );
-    }
-
     return;
 } ## end sub _log_versions
 
