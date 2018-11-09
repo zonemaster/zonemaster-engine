@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Logger::Entry;
 
-use version; our $VERSION = version->declare("v1.1.4");
+use version; our $VERSION = version->declare("v1.1.5");
 
 use 5.014002;
 use warnings;
@@ -68,8 +68,8 @@ sub _build_level {
     my ( $self ) = @_;
     my $string;
 
-    if ( Zonemaster::Engine->config->policy->{ $self->module }{ $self->tag } ) {
-        $string = uc Zonemaster::Engine->config->policy->{ $self->module }{ $self->tag };
+    if ( Zonemaster::Engine->profile->test_levels->{ $self->module }{ $self->tag } ) {
+        $string = uc Zonemaster::Engine->profile->test_levels->{ $self->module }{ $self->tag };
     }
     else {
         $string = 'DEBUG';

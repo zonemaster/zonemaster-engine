@@ -35,12 +35,12 @@ my $datafile = 't/Test-dnssec.data';
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die "Stored data file missing" if not -r $datafile;
     Zonemaster::Engine::Nameserver->restore( $datafile );
-    Zonemaster::Engine->config->no_network( 1 );
+    Zonemaster::Engine->profile->no_network( 1 );
 }
 
 # Find a way for dnssec06 which have a dependence...
 foreach my $testcase ( qw{dnssec01 dnssec02 dnssec03 dnssec04 dnssec05 dnssec07 dnssec08 dnssec09 dnssec10 dnssec11} ) {
-    Zonemaster::Engine->config->load_policy_file( 't/policies/Test-'.$testcase.'-only.json' );
+    Zonemaster::Engine->profile->load( 't/profiles/Test-'.$testcase.'-only.json' );
     my @testcases;
     Zonemaster::Engine->logger->clear_history();
     foreach my $result ( Zonemaster::Engine->test_module( q{dnssec}, q{nic.se} ) ) {
@@ -53,7 +53,7 @@ foreach my $testcase ( qw{dnssec01 dnssec02 dnssec03 dnssec04 dnssec05 dnssec07 
     is( $testcases[0], 'Zonemaster::Engine::Test::DNSSEC::'.$testcase, 'expected test-case' );
 }
 
-Zonemaster::Engine->config->load_policy_file( 't/policies/Test-dnssec-all.json' );
+Zonemaster::Engine->profile->load( 't/profiles/Test-dnssec-all.json' );
 
 my $zone;
 my @res;

@@ -12,7 +12,7 @@ my $datafile = q{t/Test-delegation.data};
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die q{Stored data file missing} if not -r $datafile;
     Zonemaster::Engine::Nameserver->restore( $datafile );
-    Zonemaster::Engine->config->no_network( 1 );
+    Zonemaster::Engine->profile->no_network( 1 );
 }
 
 my @res;
@@ -57,9 +57,9 @@ if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Nameserver->save( $datafile );
 }
 
-Zonemaster::Engine->config->no_network( 0 );
-Zonemaster::Engine->config->ipv6_ok( 0 );
-Zonemaster::Engine->config->ipv4_ok( 0 );
+Zonemaster::Engine->profile->no_network( 0 );
+Zonemaster::Engine->profile->ipv6_ok( 0 );
+Zonemaster::Engine->profile->ipv4_ok( 0 );
 @res = Zonemaster::Engine->test_method( 'Delegation', 'delegation04', Zonemaster::Engine->zone( q{iis.se} ) );
 ok( ( any { $_->tag eq 'NO_NETWORK' } @res ), 'IPv6 and IPv4 disabled' );
 ok( ( none { $_->tag eq 'IPV6_DISABLED' } @res ), 'No network' );
@@ -69,8 +69,8 @@ ok( ( any { $_->tag eq 'NO_NETWORK' } @res ), 'IPv6 and IPv4 disabled' );
 ok( ( none { $_->tag eq 'IPV6_DISABLED' } @res ), 'No network' );
 ok( ( none { $_->tag eq 'IPV4_DISABLED' } @res ), 'No network' );
 
-#Zonemaster::Engine->config->ipv6_ok( 0 );
-#Zonemaster::Engine->config->ipv4_ok( 1 );
+#Zonemaster::Engine->profile->ipv6_ok( 0 );
+#Zonemaster::Engine->profile->ipv4_ok( 1 );
 #@res = Zonemaster::Engine->test_method( 'Delegation', 'delegation04', Zonemaster::Engine->zone( q{iis.se} ) );
 #ok( ( any { $_->tag eq 'IPV6_DISABLED' } @res ), 'IPv6 disabled' );
 #ok( ( none { $_->tag eq 'IPV4_DISABLED' } @res ), 'IPv4 not disabled' );
@@ -80,8 +80,8 @@ ok( ( none { $_->tag eq 'IPV4_DISABLED' } @res ), 'No network' );
 #
 #if ( Zonemaster::Engine::Util::supports_ipv6() ) {
 #
-#    Zonemaster::Engine->config->ipv6_ok( 1 );
-#    Zonemaster::Engine->config->ipv4_ok( 0 );
+#    Zonemaster::Engine->profile->ipv6_ok( 1 );
+#    Zonemaster::Engine->profile->ipv4_ok( 0 );
 #    @res = Zonemaster::Engine->test_method( 'Delegation', 'delegation04', Zonemaster::Engine->zone( q{iis.se} ) );
 #    ok( ( none { $_->tag eq 'IPV6_DISABLED' } @res ), 'IPv6 not disabled' );
 #    ok( ( any { $_->tag eq 'IPV4_DISABLED' } @res ), 'IPv4 disabled' );
@@ -89,8 +89,8 @@ ok( ( none { $_->tag eq 'IPV4_DISABLED' } @res ), 'No network' );
 #    ok( ( none { $_->tag eq 'IPV6_DISABLED' } @res ), 'IPv6 not disabled' );
 #    ok( ( any { $_->tag eq 'IPV4_DISABLED' } @res ), 'IPv4 disabled' );
 #
-#    Zonemaster::Engine->config->ipv6_ok( 1 );
-#    Zonemaster::Engine->config->ipv4_ok( 1 );
+#    Zonemaster::Engine->profile->ipv6_ok( 1 );
+#    Zonemaster::Engine->profile->ipv4_ok( 1 );
 #    @res = Zonemaster::Engine->test_method( 'Delegation', 'delegation04', Zonemaster::Engine->zone( q{iis.se} ) );
 #    ok( ( none { $_->tag eq 'IPV6_DISABLED' } @res ), 'IPv6 not disabled' );
 #    ok( ( none { $_->tag eq 'IPV4_DISABLED' } @res ), 'IPv4 not disabled' );
@@ -100,6 +100,6 @@ ok( ( none { $_->tag eq 'IPV4_DISABLED' } @res ), 'No network' );
 #
 #}
 
-Zonemaster::Engine->config->no_network( 1 );
+Zonemaster::Engine->profile->no_network( 1 );
 
 done_testing;

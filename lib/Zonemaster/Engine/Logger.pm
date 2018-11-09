@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Logger;
 
-use version; our $VERSION = version->declare("v1.0.5");
+use version; our $VERSION = version->declare("v1.0.6");
 
 use 5.014002;
 use Moose;
@@ -45,7 +45,7 @@ sub add {
 
 sub _check_filter {
     my ( $self, $entry ) = @_;
-    my $config = Zonemaster::Engine->config->logfilter;
+    my $config = Zonemaster::Engine->profile->logfilter;
 
     if ( $config ) {
         if ( $config->{ $entry->module } ) {

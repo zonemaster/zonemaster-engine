@@ -10,7 +10,7 @@ my $datafile = q{t/Test-zone.data};
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die q{Stored data file missing} if not -r $datafile;
     Zonemaster::Engine::Nameserver->restore( $datafile );
-    Zonemaster::Engine->config->no_network( 1 );
+    Zonemaster::Engine->profile->no_network( 1 );
 }
 
 my %res;
@@ -89,8 +89,8 @@ ok( $res{NO_RESPONSE_SOA_QUERY}, q{No response from nameserver(s) on SOA queries
 %res = map { $_->tag => 1 } Zonemaster::Engine->test_method( q{Zone}, q{zone07}, $zone );
 ok( $res{NO_RESPONSE_SOA_QUERY}, q{No response from nameserver(s) on SOA queries} );
 
-Zonemaster::Engine->config->ipv4_ok( 1 );
-Zonemaster::Engine->config->ipv6_ok( 0 );
+Zonemaster::Engine->profile->ipv4_ok( 1 );
+Zonemaster::Engine->profile->ipv6_ok( 0 );
 
 $zone = Zonemaster::Engine->zone( q{trasigdnssec.se} );
 %res = map { $_->tag => 1 } Zonemaster::Engine->test_method( q{Zone}, q{zone01}, $zone );

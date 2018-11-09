@@ -1,6 +1,6 @@
 package Zonemaster::Engine::ASNLookup;
 
-use version; our $VERSION = version->declare("v1.0.4");
+use version; our $VERSION = version->declare("v1.0.5");
 
 use 5.014002;
 use warnings;
@@ -16,7 +16,7 @@ sub get_with_prefix {
     my ( $class, $ip ) = @_;
 
     if ( not @roots ) {
-        @roots = map { Zonemaster::Engine->zone( $_ ) } @{ Zonemaster::Engine->config->asnroots };
+        @roots = map { Zonemaster::Engine->zone( $_ ) } @{ Zonemaster::Engine->profile->asnroots };
     }
 
     if ( not ref( $ip ) or not $ip->isa( 'Zonemaster::Engine::Net::IP' ) ) {

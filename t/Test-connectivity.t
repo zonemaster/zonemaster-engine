@@ -13,11 +13,11 @@ my $datafile = q{t/Test-connectivity.data};
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die q{Stored data file missing} if not -r $datafile;
     Zonemaster::Engine::Nameserver->restore( $datafile );
-    Zonemaster::Engine->config->no_network( 1 );
+    Zonemaster::Engine->profile->no_network( 1 );
 }
 
 foreach my $testcase ( qw{connectivity01 connectivity02 connectivity03} ) {
-    Zonemaster::Engine->config->load_policy_file( 't/policies/Test-'.$testcase.'-only.json' );
+    Zonemaster::Engine->profile->load( 't/profiles/Test-'.$testcase.'-only.json' );
     my @testcases;
     foreach my $result ( Zonemaster::Engine->test_module( q{connectivity}, q{afnic.fr} ) ) {
         foreach my $trace (@{$result->trace}) {
@@ -29,7 +29,7 @@ foreach my $testcase ( qw{connectivity01 connectivity02 connectivity03} ) {
     is( $testcases[0], 'Zonemaster::Engine::Test::Connectivity::'.$testcase, 'expected test-case' );
 }
 
-Zonemaster::Engine->config->load_policy_file( 't/policies/Test-connectivity-all.json' );
+Zonemaster::Engine->profile->load( 't/profiles/Test-connectivity-all.json' );
 
 my @res;
 my %res;
@@ -61,9 +61,9 @@ if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Nameserver->save( $datafile );
 }
 
-Zonemaster::Engine->config->no_network( 0 );
-Zonemaster::Engine->config->ipv6_ok( 0 );
-Zonemaster::Engine->config->ipv4_ok( 0 );
+Zonemaster::Engine->profile->no_network( 0 );
+Zonemaster::Engine->profile->ipv6_ok( 0 );
+Zonemaster::Engine->profile->ipv4_ok( 0 );
 @res = Zonemaster::Engine->test_method( 'Connectivity', 'connectivity01', Zonemaster::Engine->zone( q{afnic.fr} ) );
 ok( ( any { $_->tag eq 'NO_NETWORK' } @res ), 'IPv6 and IPv4 disabled' );
 ok( ( none { $_->tag eq 'IPV6_DISABLED' } @res ), 'No network' );
@@ -73,8 +73,8 @@ ok( ( any { $_->tag eq 'NO_NETWORK' } @res ), 'IPv6 and IPv4 disabled' );
 ok( ( none { $_->tag eq 'IPV6_DISABLED' } @res ), 'No network' );
 ok( ( none { $_->tag eq 'IPV4_DISABLED' } @res ), 'No network' );
 
-#Zonemaster::Engine->config->ipv6_ok( 0 );
-#Zonemaster::Engine->config->ipv4_ok( 1 );
+#Zonemaster::Engine->profile->ipv6_ok( 0 );
+#Zonemaster::Engine->profile->ipv4_ok( 1 );
 #@res = Zonemaster::Engine->test_method( 'Connectivity', 'connectivity01', Zonemaster::Engine->zone( q{afnic.fr} ) );
 #ok( ( any { $_->tag eq 'IPV6_DISABLED' } @res ), 'IPv6 disabled' );
 #ok( ( none { $_->tag eq 'IPV4_DISABLED' } @res ), 'IPv4 not disabled' );
@@ -84,8 +84,8 @@ ok( ( none { $_->tag eq 'IPV4_DISABLED' } @res ), 'No network' );
 #
 #if ( Zonemaster::Engine::Util::supports_ipv6() ) {
 #
-#    Zonemaster::Engine->config->ipv6_ok( 1 );
-#    Zonemaster::Engine->config->ipv4_ok( 0 );
+#    Zonemaster::Engine->profile->ipv6_ok( 1 );
+#    Zonemaster::Engine->profile->ipv4_ok( 0 );
 #    @res = Zonemaster::Engine->test_method( 'Connectivity', 'connectivity01', Zonemaster::Engine->zone( q{afnic.fr} ) );
 #    ok( ( none { $_->tag eq 'IPV6_DISABLED' } @res ), 'IPv6 not disabled' );
 #    ok( ( any { $_->tag eq 'IPV4_DISABLED' } @res ), 'IPv4 disabled' );
@@ -93,8 +93,8 @@ ok( ( none { $_->tag eq 'IPV4_DISABLED' } @res ), 'No network' );
 #    ok( ( none { $_->tag eq 'IPV6_DISABLED' } @res ), 'IPv6 not disabled' );
 #    ok( ( any { $_->tag eq 'IPV4_DISABLED' } @res ), 'IPv4 disabled' );
 #
-#    Zonemaster::Engine->config->ipv6_ok( 1 );
-#    Zonemaster::Engine->config->ipv4_ok( 1 );
+#    Zonemaster::Engine->profile->ipv6_ok( 1 );
+#    Zonemaster::Engine->profile->ipv4_ok( 1 );
 #    @res = Zonemaster::Engine->test_method( 'Connectivity', 'connectivity01', Zonemaster::Engine->zone( q{afnic.fr} ) );
 #    ok( ( none { $_->tag eq 'IPV6_DISABLED' } @res ), 'IPv6 not disabled' );
 #    ok( ( none { $_->tag eq 'IPV4_DISABLED' } @res ), 'IPv4 not disabled' );
@@ -104,6 +104,6 @@ ok( ( none { $_->tag eq 'IPV4_DISABLED' } @res ), 'No network' );
 #
 #}
 
-Zonemaster::Engine->config->no_network( 1 );
+Zonemaster::Engine->profile->no_network( 1 );
 
 done_testing;

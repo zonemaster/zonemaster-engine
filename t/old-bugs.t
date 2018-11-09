@@ -33,7 +33,7 @@ my $datafile = q{t/old-bugs.data};
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die q{Stored data file missing} if not -r $datafile;
     Zonemaster::Engine::Nameserver->restore( $datafile );
-    Zonemaster::Engine->config->no_network( 1 );
+    Zonemaster::Engine->profile->no_network( 1 );
 }
 
 my @res = Zonemaster::Engine->test_method( 'Syntax', 'syntax03', 'XN--MGBERP4A5D4AR' );

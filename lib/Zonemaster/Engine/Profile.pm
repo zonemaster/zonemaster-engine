@@ -1,8 +1,235 @@
 package Zonemaster::Engine::Profile;
 
-use 5.006;
+use version; our $VERSION = version->declare("v1.0.0");
+
+use 5.014002;
 use strict;
 use warnings;
+
+use Moose;
+use JSON::PP;
+use File::ShareDir qw[dist_dir dist_file];
+use File::Slurp;
+use Hash::Merge;
+use File::Spec;
+
+use Zonemaster::Engine;
+use Zonemaster::Engine::Constants qw[:ip];
+
+has 'profiles'    => ( is => 'ro', isa => 'ArrayRef', default => sub { [] } );
+has 'testcases'  => ( is => 'ro', isa => 'HashRef',  default => sub { {} } );
+
+my $merger = Hash::Merge->new;
+$merger->specify_behavior(
+    {
+        'SCALAR' => {
+            'SCALAR' => sub { $_[1] },
+            'ARRAY'  => sub { [ $_[0], @{ $_[1] } ] },
+            'HASH'   => sub { $_[1] },
+        },
+        'ARRAY' => {
+            'SCALAR' => sub { $_[1] },
+            'ARRAY'  => sub { [ @{ $_[1] } ] },
+            'HASH'   => sub { $_[1] },
+        },
+        'HASH' => {
+            'SCALAR' => sub { $_[1] },
+            'ARRAY'  => sub { [ values %{ $_[0] }, @{ $_[1] } ] },
+            'HASH'   => sub { Hash::Merge::_merge_hashes( $_[0], $_[1] ) },
+        },
+    }
+);
+
+our $profile;
+_load_base_profile();
+
+our $test_levels = {};
+
+sub BUILD {
+    my ( $self ) = @_;
+
+    foreach my $dir ( _config_directory_list() ) {
+        my $pfile = File::Spec->catfile( $dir, 'profile.json' );
+        my $new = eval { decode_json scalar read_file $pfile };
+        if ( $new ) {
+            my $tc = $new->{test_cases};
+            delete $new->{test_cases};
+            foreach my $case ( keys %{$tc} ) {
+                $self->testcases->{$case} = $tc->{$case};
+            }
+            my $tl = $new->{test_levels};
+            delete $new->{test_levels};
+            foreach my $level ( keys %{$tl} ) {
+                $test_levels->{$level} = $tl->{$level};
+            }
+            $profile = $merger->merge( $profile, $new );
+            push @{ $self->profiles }, $pfile;
+        }
+    }
+    return $self;
+} ## end sub BUILD
+
+sub get {
+    my ( $class ) = @_;
+
+    return $profile;
+}
+
+sub test_levels {
+    my ( $class ) = @_;
+
+    return $test_levels;
+}
+
+sub _config_directory_list {
+    my @dirlist;
+    my $makefile_name = 'Zonemaster-Engine'; # This must be the same name as "name" in Makefile.PL
+    push @dirlist, dist_dir( $makefile_name );
+    push @dirlist, '/etc/zonemaster';
+    push @dirlist, '/usr/local/etc/zonemaster';
+
+    my $dir = ( getpwuid( $> ) )[7];
+    if ( $dir ) {
+        push @dirlist, $dir . '/.zonemaster';
+    }
+
+    return @dirlist;
+}
+
+sub _load_base_profile {
+    my $internal = decode_json( join( q{}, <DATA> ) ); 
+
+    $profile = $internal;
+
+    return;
+}
+
+# WIP
+# Comprendre ce que fait cette méthode...
+# Remplacer son nom avec test_levels
+sub load_module_policy {
+    my ( $class, $mod ) = @_;
+
+    my $m = 'Zonemaster::Engine::Test::' . $mod;
+    if ( $m->can( 'policy' ) and $m->policy ) {
+        $test_levels = $merger->merge( $test_levels, { $mod => $m->policy } );
+    }
+
+    return;
+}
+
+sub load {
+    my ( $self, $filename ) = @_;
+    my $new = decode_json scalar read_file $filename;
+
+    if ( $new ) {
+        my $tc = $new->{test_cases};
+        delete $new->{test_cases};
+        foreach my $case ( keys %{$tc} ) {
+            $self->testcases->{$case} = $tc->{$case};
+        }
+        my $tl = $new->{test_levels};
+        delete $new->{test_levels};
+        foreach my $level ( keys %{$tl} ) {
+            $test_levels->{$level} = $tl->{$level};
+        }
+        $profile = $merger->merge( $profile, $new );
+        push @{ $self->profiles }, $filename if ( ref( $self ) and $self->isa( __PACKAGE__ ) );
+    }
+
+    return !!$new;
+}
+
+sub no_network {
+    my ( $class, $value ) = @_;
+
+    if ( defined( $value ) ) {
+        $class->get->{no_network} = $value;
+    }
+
+    return $class->get->{no_network};
+}
+
+sub ipv4_ok {
+    my ( $class, $value ) = @_;
+
+    if ( defined( $value ) ) {
+        $class->get->{net}{ipv4} = $value;
+    }
+
+    return $class->get->{net}{ipv4};
+}
+
+sub ipv6_ok {
+    my ( $class, $value ) = @_;
+
+    if ( defined( $value ) ) {
+        $class->get->{net}{ipv6} = $value;
+    }
+
+    return $class->get->{net}{ipv6};
+}
+
+sub ipversion_ok {
+    my ( $class, $version ) = @_;
+
+    if ( $version == $IP_VERSION_4 ) {
+        return Zonemaster::Engine->profile->ipv4_ok;
+    }
+    elsif ( $version == $IP_VERSION_6 ) {
+        return Zonemaster::Engine->profile->ipv6_ok;
+    }
+    else {
+        return;
+    }
+}
+
+sub resolver_defaults {
+    my ( $class ) = @_;
+
+    return $class->get->{resolver}{defaults};
+}
+
+sub resolver_source {
+    my ( $class, $sourceaddr ) = @_;
+
+    if ( defined( $sourceaddr ) ) {
+        $class->get->{resolver}{source} = $sourceaddr;
+    }
+
+    return $class->get->{resolver}{source};
+}
+
+sub logfilter {
+    my ( $class ) = @_;
+
+    return $class->get->{logfilter};
+}
+
+sub asnroots {
+    my ( $class ) = @_;
+
+    return $class->get->{asnroots};
+}
+
+sub should_run {
+    my ( $self, $name ) = @_;
+
+    if ( not defined $self->testcases->{$name} ) {
+        return 1;    # Default to runnings test
+    }
+    elsif ( $self->testcases->{$name} ) {
+        return 1;
+    }
+    else {
+        return;
+    }
+}
+
+no Moose;
+__PACKAGE__->meta->make_immutable;
+
+1;
 
 =head1 NAME
 
@@ -378,4 +605,22 @@ C<net.ipv6> = 1 has this JSON representation:
 
 =cut
 
-1; # End of Zonemaster::Engine::Profile
+__DATA__
+{
+   "asnroots" : [ "asnlookup.zonemaster.net", "asnlookup.iis.se", "asn.cymru.com"],
+   "net" : {
+      "ipv4" : true,
+      "ipv6" : true
+   },
+   "no_network" : false,
+   "resolver" : {
+      "defaults" : {
+         "usevc" : false,
+         "retrans" : 3,
+         "dnssec" : false,
+         "recurse" : false,
+         "retry" : 2,
+         "igntc" : false
+      }
+   }
+}

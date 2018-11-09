@@ -15,11 +15,11 @@ my $datafile = q{t/zonemaster.data};
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die q{Stored data file missing} if not -r $datafile;
     Zonemaster::Engine::Nameserver->restore( $datafile );
-    Zonemaster::Engine->config->no_network( 1 );
+    Zonemaster::Engine->profile->no_network( 1 );
 }
 
 isa_ok( Zonemaster::Engine->logger, 'Zonemaster::Engine::Logger' );
-isa_ok( Zonemaster::Engine->config, 'Zonemaster::Engine::Config' );
+isa_ok( Zonemaster::Engine->profile, 'Zonemaster::Engine::Profile' );
 
 my %module = map { $_ => 1 } Zonemaster::Engine::Test->modules;
 
@@ -125,8 +125,8 @@ isa_ok( exception { Zonemaster::Engine->test_module( 'SyNtAx', 'nic.se' ) }, 'Zo
 isa_ok( exception { Zonemaster::Engine->test_method( 'Syntax', 'syntax01', 'nic.se' ) }, 'Zonemaster::Engine::Exception' );
 Zonemaster::Engine->logger->clear_callback;
 
-Zonemaster::Engine->config->ipv4_ok( 0 );
-Zonemaster::Engine->config->ipv6_ok( 0 );
+Zonemaster::Engine->profile->ipv4_ok( 0 );
+Zonemaster::Engine->profile->ipv6_ok( 0 );
 my ( $msg ) = Zonemaster::Engine->test_zone( 'nic.se' );
 ok( !!$msg, 'Got a message.' );
 is( $msg->tag, 'NO_NETWORK', 'It is the right message.' );
@@ -138,8 +138,8 @@ is( $msg->tag, 'NO_NETWORK', 'It is the right message.' );
 ( $msg ) = Zonemaster::Engine->test_method( 'Basic', 'basic01', 'nic.se' );
 ok( !!$msg, 'Got a message.' );
 is( $msg->tag, 'NO_NETWORK', 'It is the right message.' );
-Zonemaster::Engine->config->ipv4_ok( 1 );
-Zonemaster::Engine->config->ipv6_ok( 1 );
+Zonemaster::Engine->profile->ipv4_ok( 1 );
+Zonemaster::Engine->profile->ipv6_ok( 1 );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Nameserver->save( $datafile );

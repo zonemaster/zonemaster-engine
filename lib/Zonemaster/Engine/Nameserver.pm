@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Nameserver;
 
-use version; our $VERSION = version->declare("v1.1.6");
+use version; our $VERSION = version->declare("v1.1.7");
 
 use 5.014002;
 use Moose;
@@ -38,7 +38,7 @@ has 'cache' => ( is => 'ro', isa => 'Zonemaster::Engine::Nameserver::Cache', laz
 has 'times' => ( is => 'ro', isa => 'ArrayRef',                      default    => sub { [] } );
 
 has 'source_address' =>
-  ( is => 'ro', isa => 'Maybe[Str]', lazy => 1, default => sub { return Zonemaster::Engine->config->resolver_source } );
+  ( is => 'ro', isa => 'Maybe[Str]', lazy => 1, default => sub { return Zonemaster::Engine->profile->resolver_source } );
 
 has 'fake_delegations' => ( is => 'ro', isa => 'HashRef', default => sub { {} } );
 has 'fake_ds'          => ( is => 'ro', isa => 'HashRef', default => sub { {} } );
@@ -76,7 +76,7 @@ sub _build_dns {
     my $res = Zonemaster::LDNS->new( $self->address->ip );
     $res->recurse( 0 );
 
-    my %defaults = %{ Zonemaster::Engine->config->resolver_defaults };
+    my %defaults = %{ Zonemaster::Engine->profile->resolver_defaults };
     foreach my $flag ( keys %defaults ) {
         $res->$flag( $defaults{$flag} );
     }
@@ -102,12 +102,12 @@ sub query {
     my ( $self, $name, $type, $href ) = @_;
     $type //= 'A';
 
-    if ( $self->address->version == 4 and not Zonemaster::Engine->config->ipv4_ok ) {
+    if ( $self->address->version == 4 and not Zonemaster::Engine->profile->ipv4_ok ) {
         Zonemaster::Engine->logger->add( IPV4_BLOCKED => { ns => $self->string } );
         return;
     }
 
-    if ( $self->address->version == 6 and not Zonemaster::Engine->config->ipv6_ok ) {
+    if ( $self->address->version == 6 and not Zonemaster::Engine->profile->ipv6_ok ) {
         Zonemaster::Engine->logger->add( IPV6_BLOCKED => { ns => $self->string } );
         return;
     }
@@ -122,7 +122,7 @@ sub query {
         }
     );
 
-    my %defaults = %{ Zonemaster::Engine->config->resolver_defaults };
+    my %defaults = %{ Zonemaster::Engine->profile->resolver_defaults };
 
     my $class     = $href->{class}     // 'IN';
     my $dnssec    = $href->{dnssec}    // $defaults{dnssec};
@@ -254,7 +254,7 @@ sub _query {
     $type //= 'A';
     $href->{class} //= 'IN';
 
-    if ( Zonemaster::Engine->config->no_network ) {
+    if ( Zonemaster::Engine->profile->no_network ) {
         croak sprintf
           "External query for %s, %s attempted to %s while running with no_network",
           $name, $type, $self->string;
@@ -270,7 +270,7 @@ sub _query {
         }
     );
 
-    my %defaults = %{ Zonemaster::Engine->config->resolver_defaults };
+    my %defaults = %{ Zonemaster::Engine->profile->resolver_defaults };
 
     # Make sure we have a value for each flag
     foreach my $flag ( keys %defaults ) {
@@ -477,18 +477,18 @@ sub axfr {
     my ( $self, $domain, $callback, $class ) = @_;
     $class //= 'IN';
 
-    if ( Zonemaster::Engine->config->no_network ) {
+    if ( Zonemaster::Engine->profile->no_network ) {
         croak sprintf
           "External AXFR query for %s attempted to %s while running with no_network",
           $domain, $self->string;
     }
 
-    if ( $self->address->version == 4 and not Zonemaster::Engine->config->ipv4_ok ) {
+    if ( $self->address->version == 4 and not Zonemaster::Engine->profile->ipv4_ok ) {
         Zonemaster::Engine->logger->add( IPV4_BLOCKED => { ns => $self->string } );
         return;
     }
 
-    if ( $self->address->version == 6 and not Zonemaster::Engine->config->ipv6_ok ) {
+    if ( $self->address->version == 6 and not Zonemaster::Engine->profile->ipv6_ok ) {
         Zonemaster::Engine->logger->add( IPV6_BLOCKED => { ns => $self->string } );
         return;
     }

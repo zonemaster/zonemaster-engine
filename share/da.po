@@ -1061,9 +1061,9 @@ msgstr ""
 "Kunne ikke finde tilstrækkeligt med information om {zone} til at afvikle "
 "test."
 
-#: SYSTEM:CONFIG_FILE
-msgid  "Configuration was read from {name}."
-msgstr "Konfigurationen blev hentet fra {name}."
+#: SYSTEM:PROFILE_FILE
+msgid  "Profile was read from {name}."
+msgstr "Profile blev hentet fra {name}."
 
 #: SYSTEM:DEPENDENCY_VERSION
 msgid  "Using prerequisite module {name} version {version}."
@@ -1138,10 +1138,6 @@ msgstr ""
 #: SYSTEM:POLICY_DISABLED
 msgid  "The module {name} was disabled by the policy."
 msgstr "Modulet {name} var deaktiveret i politikken."
-
-#: SYSTEM:POLICY_FILE
-msgid  "Policy was read from {name}."
-msgstr "Politikken er læst fra {name}."
 
 #: SYSTEM:SKIP_IPV4_DISABLED
 msgid  "IPv4 is disabled, not sending query to {ns}."

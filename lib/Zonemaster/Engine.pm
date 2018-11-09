@@ -1,6 +1,6 @@
 package Zonemaster::Engine;
 
-use version; our $VERSION = version->declare("v2.0.7");
+use version; our $VERSION = version->declare("v2.0.8");
 
 use 5.014002;
 use Moose;
@@ -8,26 +8,26 @@ use Carp;
 
 use Zonemaster::Engine::Nameserver;
 use Zonemaster::Engine::Logger;
-use Zonemaster::Engine::Config;
+use Zonemaster::Engine::Profile;
 use Zonemaster::Engine::Zone;
 use Zonemaster::Engine::Test;
 use Zonemaster::Engine::Recursor;
 use Zonemaster::Engine::ASNLookup;
 
 our $logger;
-our $config;
+our $profile;
 our $recursor = Zonemaster::Engine::Recursor->new;
 
 sub logger {
     return $logger //= Zonemaster::Engine::Logger->new;
 }
 
-sub config {
-    if ( not defined $config ) {
-        $config = Zonemaster::Engine::Config->new;
+sub profile {
+    if ( not defined $profile ) {
+        $profile = Zonemaster::Engine::Profile->new;
     }
 
-    return $config;
+    return $profile;
 }
 
 sub ns {
@@ -242,9 +242,9 @@ Returns a L<Zonemaster::Engine::Zone> object for the given name.
 
 Returns a L<Zonemaster::Engine::Nameserver> object for the given name and address.
 
-=item config()
+=item profile()
 
-Returns the global L<Zonemaster::Engine::Config> object.
+Returns the global L<Zonemaster::Engine::Profile> object.
 
 =item logger()
 

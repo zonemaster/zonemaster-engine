@@ -1,0 +1,13 @@
+{
+    "test_cases": {
+        "nameserver01": 0,
+        "nameserver02": 0,
+        "nameserver03": 0,
+        "nameserver04": 0,
+        "nameserver05": 0,
+        "nameserver06": 0,
+        "nameserver07": 0,
+        "nameserver08": 0,
+        "nameserver09": 1
+    }
+}

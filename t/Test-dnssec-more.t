@@ -33,7 +33,7 @@ my $datafile = 't/Test-dnssec-more.data';
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die "Stored data file missing" if not -r $datafile;
     Zonemaster::Engine::Nameserver->restore( $datafile );
-    Zonemaster::Engine->config->no_network( 1 );
+    Zonemaster::Engine->profile->no_network( 1 );
 }
 
 my $zone;
@@ -58,7 +58,7 @@ $zone = Zonemaster::Engine->zone( 'dnssec08-no-keys-or-no-sigs-1.zut-root.rd.nic
 zone_gives( 'dnssec11', $zone, ['DELEGATION_NOT_SIGNED'] );
 
 SKIP: {
-    skip "Need to configure another zone for this test case.", 1;
+    skip "Need to profileure another zone for this test case.", 1;
 
     $zone = Zonemaster::Engine->zone( 'dnssec08-dnskey-signature-not-ok.zut-root.rd.nic.fr' );
     zone_gives( 'dnssec11', $zone, ['DELEGATION_NOT_SIGNED'] );
@@ -73,7 +73,7 @@ zone_gives_not( 'dnssec11', $zone, ['DELEGATION_NOT_SIGNED']);
 
 # dnssec10
 SKIP: {
-    skip "Need to configure another zone for this test case.", 2;
+    skip "Need to profileure another zone for this test case.", 2;
 
     $zone = Zonemaster::Engine->zone( 'wwwyahoo.se' );
     zone_gives( 'dnssec10', $zone, ['INVALID_NAME_RCODE']);

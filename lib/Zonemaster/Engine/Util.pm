@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Util;
 
-use version; our $VERSION = version->declare("v1.1.3");
+use version; our $VERSION = version->declare("v1.1.4");
 
 use 5.014002;
 
@@ -15,7 +15,7 @@ use Pod::Simple::SimpleTree;
 
 ## no critic (Modules::ProhibitAutomaticExportation)
 our @EXPORT      = qw[ ns info name pod_extract_for scramble_case ];
-our @EXPORT_OK   = qw[ ns info name pod_extract_for policy scramble_case ];
+our @EXPORT_OK   = qw[ ns info name pod_extract_for test_levels scramble_case ];
 our %EXPORT_TAGS = ( all => \@EXPORT_OK );
 
 ## no critic (Subroutines::RequireArgUnpacking)
@@ -29,8 +29,10 @@ sub info {
     return Zonemaster::Engine->logger->add( $tag, $argref );
 }
 
-sub policy {
-    return Zonemaster::Engine->config->policy;
+# WIP
+# was policy
+sub test_levels {
+    return Zonemaster::Engine->profile->test_levels;
 }
 
 sub name {

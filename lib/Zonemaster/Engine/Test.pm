@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test;
 
-use version; our $VERSION = version->declare("v1.1.3");
+use version; our $VERSION = version->declare("v1.1.4");
 
 use 5.014002;
 use strict;
@@ -40,11 +40,8 @@ sub _log_versions {
     info( DEPENDENCY_VERSION => { name => 'Hash::Merge',           version => $Hash::Merge::VERSION } );
     info( DEPENDENCY_VERSION => { name => 'Readonly',              version => $Readonly::VERSION } );
 
-    foreach my $file ( @{ Zonemaster::Engine->config->cfiles } ) {
-        info( CONFIG_FILE => { name => $file } );
-    }
-    foreach my $file ( @{ Zonemaster::Engine->config->pfiles } ) {
-        info( POLICY_FILE => { name => $file } );
+    foreach my $file ( @{ Zonemaster::Engine->profile->profiles } ) {
+        info( PROFILE_FILE => { name => $file } );
     }
 
     return;
@@ -70,7 +67,7 @@ sub run_all_for {
     );
     _log_versions();
 
-    if ( not( Zonemaster::Engine->config->ipv4_ok or Zonemaster::Engine->config->ipv6_ok ) ) {
+    if ( not( Zonemaster::Engine->profile->ipv4_ok or Zonemaster::Engine->profile->ipv6_ok ) ) {
         return info( NO_NETWORK => {} );
     }
 
@@ -80,7 +77,7 @@ sub run_all_for {
     if ( Zonemaster::Engine::Test::Basic->can_continue( @results ) and Zonemaster::Engine->can_continue() ) {
         ## no critic (Modules::RequireExplicitInclusion)
         foreach my $mod ( __PACKAGE__->modules ) {
-            Zonemaster::Engine->config->load_module_policy( $mod );
+            Zonemaster::Engine->profile->load_module_policy( $mod );
 
             if ( not _policy_allowed( $mod ) ) {
                 push @results, info( POLICY_DISABLED => { name => $mod } );
@@ -121,13 +118,13 @@ sub run_module {
     push @res, info( START_TIME => { time_t => time(), string => strftime( "%F %T %z", ( localtime() ) ) } );
     push @res, info( TEST_TARGET => { zone => $zone->name->string, module => $requested } );
     _log_versions();
-    if ( not( Zonemaster::Engine->config->ipv4_ok or Zonemaster::Engine->config->ipv6_ok ) ) {
+    if ( not( Zonemaster::Engine->profile->ipv4_ok or Zonemaster::Engine->profile->ipv6_ok ) ) {
         return info( NO_NETWORK => {} );
     }
 
     if ( Zonemaster::Engine->can_continue() ) {
         if ( $module ) {
-            Zonemaster::Engine->config->load_module_policy( $module );
+            Zonemaster::Engine->profile->load_module_policy( $module );
             my $m = "Zonemaster::Engine::Test::$module";
             info( MODULE_VERSION => { module => $m, version => $m->version } );
             push @res, eval { $m->all( $zone ) };
@@ -165,13 +162,13 @@ sub run_one {
     push @res,
       info( TEST_ARGS => { module => $requested, method => $test, args => join( ';', map { "$_" } @arguments ) } );
     _log_versions();
-    if ( not( Zonemaster::Engine->config->ipv4_ok or Zonemaster::Engine->config->ipv6_ok ) ) {
+    if ( not( Zonemaster::Engine->profile->ipv4_ok or Zonemaster::Engine->profile->ipv6_ok ) ) {
         return info( NO_NETWORK => {} );
     }
 
     if ( Zonemaster::Engine->can_continue() ) {
         if ( $module ) {
-            Zonemaster::Engine->config->load_module_policy( $module );
+            Zonemaster::Engine->profile->load_module_policy( $module );
             my $m = "Zonemaster::Engine::Test::$module";
             if ( $m->metadata->{$test} ) {
                 info( MODULE_CALL => { module => $module, method => $test, version => $m->version } );
@@ -212,7 +209,7 @@ sub run_one {
 sub _policy_allowed {
     my ( $name ) = @_;
 
-    return not Zonemaster::Engine::Util::policy()->{ uc( $name ) }{DISABLED};
+    return not Zonemaster::Engine::Util::test_levels()->{ uc( $name ) }{DISABLED};
 }
 
 1;
