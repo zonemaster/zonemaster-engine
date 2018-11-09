@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Util;
 
-use version; our $VERSION = version->declare("v1.1.4");
+use version; our $VERSION = version->declare("v1.1.5");
 
 use 5.014002;
 
@@ -186,6 +186,10 @@ This routine provides a special effect: sCraMBliNg tHe CaSe
 
 =item supports_ipv6
 
-Check if ZOnemaster hosting server supports IPv6.
+Check if Zonemaster hosting server supports IPv6.
+
+=item test_levels
+
+WIP, here to please L<Pod::Coverage>.
 
 =back

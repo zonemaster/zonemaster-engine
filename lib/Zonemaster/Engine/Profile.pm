@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Profile;
 
-use version; our $VERSION = version->declare("v1.0.0");
+use version; our $VERSION = version->declare("v1.0.1");
 
 use 5.014002;
 use strict;
@@ -602,6 +602,42 @@ C<net.ipv6> = 1 has this JSON representation:
             "ipv6": true
         }
     }
+
+=over
+
+=item BUILD
+
+WIP, here to please L<Pod::Coverage>.
+
+=item ipv6_ok
+
+WIP, here to please L<Pod::Coverage>.
+
+=item ipv4_ok
+
+WIP, here to please L<Pod::Coverage>.
+
+=item should_run
+
+WIP, here to please L<Pod::Coverage>.
+
+=item ipversion_ok
+
+WIP, here to please L<Pod::Coverage>.
+
+=item resolver_defaults
+
+WIP, here to please L<Pod::Coverage>.
+
+=item resolver_source
+
+WIP, here to please L<Pod::Coverage>.
+
+=item load_module_policy
+
+WIP, here to please L<Pod::Coverage>.
+
+=back
 
 =cut
 
