@@ -10,7 +10,7 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine->profile->no_network( 1 );
 }
 
-Zonemaster::Engine->profile->get->{asnroots} = [ "asnlookup.zonemaster.net", "asnlookup.iis.se", "asn.cymru,com" ];
+Zonemaster::Engine->profile->effective->{asnroots} = [ "asnlookup.zonemaster.net", "asnlookup.iis.se", "asn.cymru,com" ];
 
 my ( $asn1, $prefix1 ) = Zonemaster::Engine::ASNLookup->get_with_prefix( '8.8.8.8' );
 is $asn1->[0], 15169, '8.8.8.8 is in 15169';

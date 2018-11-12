@@ -196,10 +196,10 @@ sub nameserver01 {
         @nss = values %nss;
     }
 
-    if ( not Zonemaster::Engine->profile->ipv6_ok ) {
+    if ( not Zonemaster::Engine->profile->get(q{net.ipv6}) ) {
         @nss = grep { $_->address->version != $IP_VERSION_6 } @nss;
     }
-    if ( not Zonemaster::Engine->profile->ipv4_ok ) {
+    if ( not Zonemaster::Engine->profile->get(q{net.ipv4}) ) {
         @nss = grep { $_->address->version != $IP_VERSION_4 } @nss;
     }
 
@@ -260,9 +260,9 @@ sub nameserver02 {
       my $local_ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) }, @{ Zonemaster::Engine::TestMethods->method5( $zone ) } )
     {
 
-        next if ( not Zonemaster::Engine->profile->ipv6_ok and $local_ns->address->version == $IP_VERSION_6 );
+        next if ( not Zonemaster::Engine->profile->get(q{net.ipv6}) and $local_ns->address->version == $IP_VERSION_6 );
 
-        next if ( not Zonemaster::Engine->profile->ipv4_ok and $local_ns->address->version == $IP_VERSION_4 );
+        next if ( not Zonemaster::Engine->profile->get(q{net.ipv4}) and $local_ns->address->version == $IP_VERSION_4 );
 
         next if $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short };
 
@@ -314,9 +314,9 @@ sub nameserver03 {
       my $local_ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) }, @{ Zonemaster::Engine::TestMethods->method5( $zone ) } )
     {
 
-        next if ( not Zonemaster::Engine->profile->ipv6_ok and $local_ns->address->version == $IP_VERSION_6 );
+        next if ( not Zonemaster::Engine->profile->get(q{net.ipv6}) and $local_ns->address->version == $IP_VERSION_6 );
 
-        next if ( not Zonemaster::Engine->profile->ipv4_ok and $local_ns->address->version == $IP_VERSION_4 );
+        next if ( not Zonemaster::Engine->profile->get(q{net.ipv4}) and $local_ns->address->version == $IP_VERSION_4 );
 
         next if $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short };
 
@@ -359,9 +359,9 @@ sub nameserver04 {
       my $local_ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) }, @{ Zonemaster::Engine::TestMethods->method5( $zone ) } )
     {
 
-        next if ( not Zonemaster::Engine->profile->ipv6_ok and $local_ns->address->version == $IP_VERSION_6 );
+        next if ( not Zonemaster::Engine->profile->get(q{net.ipv6}) and $local_ns->address->version == $IP_VERSION_6 );
 
-        next if ( not Zonemaster::Engine->profile->ipv4_ok and $local_ns->address->version == $IP_VERSION_4 );
+        next if ( not Zonemaster::Engine->profile->get(q{net.ipv4}) and $local_ns->address->version == $IP_VERSION_4 );
 
         next if $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short };
 
@@ -405,7 +405,7 @@ sub nameserver05 {
 
         next if $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short };
 
-        if ( not Zonemaster::Engine->profile->ipv6_ok and $local_ns->address->version == $IP_VERSION_6 ) {
+        if ( not Zonemaster::Engine->profile->get(q{net.ipv6}) and $local_ns->address->version == $IP_VERSION_6 ) {
             push @results,
               info(
                 IPV6_DISABLED => {
@@ -417,7 +417,7 @@ sub nameserver05 {
             next;
         }
 
-        if ( not Zonemaster::Engine->profile->ipv4_ok and $local_ns->address->version == $IP_VERSION_4 ) {
+        if ( not Zonemaster::Engine->profile->get(q{net.ipv4}) and $local_ns->address->version == $IP_VERSION_4 ) {
             push @results,
               info(
                 IPV4_DISABLED => {
@@ -526,9 +526,9 @@ sub nameserver07 {
         foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) },
             @{ Zonemaster::Engine::TestMethods->method5( $zone ) } )
         {
-            next if ( not Zonemaster::Engine->profile->ipv6_ok and $local_ns->address->version == $IP_VERSION_6 );
+            next if ( not Zonemaster::Engine->profile->get(q{net.ipv6}) and $local_ns->address->version == $IP_VERSION_6 );
 
-            next if ( not Zonemaster::Engine->profile->ipv4_ok and $local_ns->address->version == $IP_VERSION_4 );
+            next if ( not Zonemaster::Engine->profile->get(q{net.ipv4}) and $local_ns->address->version == $IP_VERSION_4 );
 
             next if $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short };
 
@@ -579,9 +579,9 @@ sub nameserver08 {
     foreach
       my $local_ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) }, @{ Zonemaster::Engine::TestMethods->method5( $zone ) } )
     {
-        next if ( not Zonemaster::Engine->profile->ipv6_ok and $local_ns->address->version == $IP_VERSION_6 );
+        next if ( not Zonemaster::Engine->profile->get(q{net.ipv6}) and $local_ns->address->version == $IP_VERSION_6 );
 
-        next if ( not Zonemaster::Engine->profile->ipv4_ok and $local_ns->address->version == $IP_VERSION_4 );
+        next if ( not Zonemaster::Engine->profile->get(q{net.ipv4}) and $local_ns->address->version == $IP_VERSION_4 );
 
         next if $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short };
 
@@ -640,9 +640,9 @@ sub nameserver09 {
     foreach
       my $local_ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) }, @{ Zonemaster::Engine::TestMethods->method5( $zone ) } )
     {
-        next if ( not Zonemaster::Engine->profile->ipv6_ok and $local_ns->address->version == $IP_VERSION_6 );
+        next if ( not Zonemaster::Engine->profile->get(q{net.ipv6}) and $local_ns->address->version == $IP_VERSION_6 );
 
-        next if ( not Zonemaster::Engine->profile->ipv4_ok and $local_ns->address->version == $IP_VERSION_4 );
+        next if ( not Zonemaster::Engine->profile->get(q{net.ipv4}) and $local_ns->address->version == $IP_VERSION_4 );
 
         next if $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short };
 

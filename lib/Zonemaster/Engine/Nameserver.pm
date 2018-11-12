@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Nameserver;
 
-use version; our $VERSION = version->declare("v1.1.7");
+use version; our $VERSION = version->declare("v1.1.8");
 
 use 5.014002;
 use Moose;
@@ -102,12 +102,12 @@ sub query {
     my ( $self, $name, $type, $href ) = @_;
     $type //= 'A';
 
-    if ( $self->address->version == 4 and not Zonemaster::Engine->profile->ipv4_ok ) {
+    if ( $self->address->version == 4 and not Zonemaster::Engine->profile->get(q{net.ipv4}) ) {
         Zonemaster::Engine->logger->add( IPV4_BLOCKED => { ns => $self->string } );
         return;
     }
 
-    if ( $self->address->version == 6 and not Zonemaster::Engine->profile->ipv6_ok ) {
+    if ( $self->address->version == 6 and not Zonemaster::Engine->profile->get(q{net.ipv6}) ) {
         Zonemaster::Engine->logger->add( IPV6_BLOCKED => { ns => $self->string } );
         return;
     }
@@ -483,12 +483,12 @@ sub axfr {
           $domain, $self->string;
     }
 
-    if ( $self->address->version == 4 and not Zonemaster::Engine->profile->ipv4_ok ) {
+    if ( $self->address->version == 4 and not Zonemaster::Engine->profile->get(q{net.ipv4}) ) {
         Zonemaster::Engine->logger->add( IPV4_BLOCKED => { ns => $self->string } );
         return;
     }
 
-    if ( $self->address->version == 6 and not Zonemaster::Engine->profile->ipv6_ok ) {
+    if ( $self->address->version == 6 and not Zonemaster::Engine->profile->get(q{net.ipv6}) ) {
         Zonemaster::Engine->logger->add( IPV6_BLOCKED => { ns => $self->string } );
         return;
     }

@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::Connectivity;
 
-use version; our $VERSION = version->declare("v1.0.10");
+use version; our $VERSION = version->declare("v1.0.11");
 
 use strict;
 use warnings;
@@ -128,7 +128,7 @@ sub connectivity01 {
       my $local_ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) }, @{ Zonemaster::Engine::TestMethods->method5( $zone ) } )
     {
 
-        if ( not Zonemaster::Engine->profile->ipv6_ok and $local_ns->address->version == $IP_VERSION_6 ) {
+        if ( not Zonemaster::Engine->profile->get(q{net.ipv6}) and $local_ns->address->version == $IP_VERSION_6 ) {
             push @results,
               info(
                 IPV6_DISABLED => {
@@ -140,7 +140,7 @@ sub connectivity01 {
             next;
         }
 
-        if ( not Zonemaster::Engine->profile->ipv4_ok and $local_ns->address->version == $IP_VERSION_4 ) {
+        if ( not Zonemaster::Engine->profile->get(q{net.ipv4}) and $local_ns->address->version == $IP_VERSION_4 ) {
             push @results,
               info(
                 IPV4_DISABLED => {
@@ -192,7 +192,7 @@ sub connectivity02 {
       my $local_ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) }, @{ Zonemaster::Engine::TestMethods->method5( $zone ) } )
     {
 
-        if ( not Zonemaster::Engine->profile->ipv6_ok and $local_ns->address->version == $IP_VERSION_6 ) {
+        if ( not Zonemaster::Engine->profile->get(q{net.ipv6}) and $local_ns->address->version == $IP_VERSION_6 ) {
             push @results,
               info(
                 IPV6_DISABLED => {
@@ -204,7 +204,7 @@ sub connectivity02 {
             next;
         }
 
-        if ( not Zonemaster::Engine->profile->ipv4_ok and $local_ns->address->version == $IP_VERSION_4 ) {
+        if ( not Zonemaster::Engine->profile->get(q{net.ipv4}) and $local_ns->address->version == $IP_VERSION_4 ) {
             push @results,
               info(
                 IPV4_DISABLED => {

@@ -51,8 +51,8 @@ foreach my $testcase ( qw{nameserver01 nameserver02 nameserver03 nameserver04 na
         }
     }
     @testcases = uniq sort @testcases;
-    is( scalar( @testcases ), 1, 'only one test-case' );
-    is( $testcases[0], 'Zonemaster::Engine::Test::Nameserver::'.$testcase, 'expected test-case' );
+    is( scalar( @testcases ), 1, 'only one test-case ('.$testcase.')' );
+    is( $testcases[0], 'Zonemaster::Engine::Test::Nameserver::'.$testcase, 'expected test-case ('.$testcases[0].')' );
 }
 Zonemaster::Engine->profile->load( 't/profiles/Test-nameserver-all.json' );
 
@@ -152,8 +152,8 @@ if ( $ENV{ZONEMASTER_RECORD} ) {
 }
 
 Zonemaster::Engine->profile->no_network( 0 );
-Zonemaster::Engine->profile->ipv6_ok( 0 );
-Zonemaster::Engine->profile->ipv4_ok( 0 );
+Zonemaster::Engine->profile->set(q{net.ipv4}, 0 );
+Zonemaster::Engine->profile->set(q{net.ipv6}, 0 );
 $zone = Zonemaster::Engine->zone( 'fr' );
 zone_gives( 'nameserver01', $zone, [q{NO_NETWORK}] );
 zone_gives_not( 'nameserver01', $zone, [qw{NO_RECURSOR IS_A_RECURSOR}] );
@@ -177,9 +177,8 @@ zone_gives_not( 'nameserver07', $zone, [qw{UPWARD_REFERRAL_IRRELEVANT UPWARD_REF
 zone_gives( 'nameserver08', $zone, [q{NO_NETWORK}] );
 zone_gives_not( 'nameserver08', $zone, [qw{QNAME_CASE_INSENSITIVE QNAME_CASE_SENSITIVE}] );
 
-
-#Zonemaster::Engine->profile->ipv6_ok( 0 );
-#Zonemaster::Engine->profile->ipv4_ok( 1 );
+#Zonemaster::Engine->profile->set(q{net.ipv4}, 1 );
+#Zonemaster::Engine->profile->set(q{net.ipv6}, 0 );
 #$zone = Zonemaster::Engine->zone( 'fr' );
 #zone_gives( 'nameserver01', $zone, [q{NO_RECURSOR}] );
 #zone_gives_not( 'nameserver01', $zone, [qw{NO_NETWORK IS_A_RECURSOR}] );
@@ -189,8 +188,8 @@ zone_gives_not( 'nameserver08', $zone, [qw{QNAME_CASE_INSENSITIVE QNAME_CASE_SEN
 #
 #if ( Zonemaster::Engine::Util::supports_ipv6() ) {
 #
-#    Zonemaster::Engine->profile->ipv6_ok( 1 );
-#    Zonemaster::Engine->profile->ipv4_ok( 0 );
+#    Zonemaster::Engine->profile->set(q{net.ipv4}, 0 );
+#    Zonemaster::Engine->profile->set(q{net.ipv6}, 1 );
 #    $zone = Zonemaster::Engine->zone( 'fr' );
 #    zone_gives( 'nameserver01', $zone, [q{NO_RECURSOR}] );
 #    zone_gives_not( 'nameserver01', $zone, [qw{NO_NETWORK IS_A_RECURSOR}] );
@@ -198,8 +197,8 @@ zone_gives_not( 'nameserver08', $zone, [qw{QNAME_CASE_INSENSITIVE QNAME_CASE_SEN
 #    zone_gives( 'nameserver05', $zone, [q{IPV4_DISABLED}] );
 #    zone_gives_not( 'nameserver05', $zone, [qw{NO_NETWORK IPV6_DISABLED}] );
 #
-#    Zonemaster::Engine->profile->ipv6_ok( 1 );
-#    Zonemaster::Engine->profile->ipv4_ok( 1 );
+#    Zonemaster::Engine->profile->set(q{net.ipv4}, 1 );
+#    Zonemaster::Engine->profile->set(q{net.ipv6}, 1 );
 #    $zone = Zonemaster::Engine->zone( 'fr' );
 #    zone_gives( 'nameserver01', $zone, [q{NO_RECURSOR}] );
 #    zone_gives_not( 'nameserver01', $zone, [qw{NO_NETWORK IS_A_RECURSOR}] );

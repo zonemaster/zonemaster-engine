@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Profile;
 
-use version; our $VERSION = version->declare("v1.0.1");
+use version; our $VERSION = version->declare("v1.1.0");
 
 use 5.014002;
 use strict;
@@ -12,6 +12,7 @@ use File::ShareDir qw[dist_dir dist_file];
 use File::Slurp;
 use Hash::Merge;
 use File::Spec;
+use Data::DRef qw( :dref_access );
 
 use Zonemaster::Engine;
 use Zonemaster::Engine::Constants qw[:ip];
@@ -69,7 +70,23 @@ sub BUILD {
     return $self;
 } ## end sub BUILD
 
+# WIP
 sub get {
+    my ( $class, $property ) = @_;
+
+    return get_value_for_dref($profile, $property);
+}
+
+# WIP
+sub set {
+    my ( $class, $property, $value ) = @_;
+
+    return set_value_for_dref($profile, $property, $value);
+}   
+    
+
+# WIP
+sub effective {
     my ( $class ) = @_;
 
     return $profile;
@@ -105,8 +122,6 @@ sub _load_base_profile {
 }
 
 # WIP
-# Comprendre ce que fait cette méthode...
-# Remplacer son nom avec test_levels
 sub load_module_policy {
     my ( $class, $mod ) = @_;
 
@@ -144,40 +159,20 @@ sub no_network {
     my ( $class, $value ) = @_;
 
     if ( defined( $value ) ) {
-        $class->get->{no_network} = $value;
+        $class->effective->{no_network} = $value;
     }
 
-    return $class->get->{no_network};
-}
-
-sub ipv4_ok {
-    my ( $class, $value ) = @_;
-
-    if ( defined( $value ) ) {
-        $class->get->{net}{ipv4} = $value;
-    }
-
-    return $class->get->{net}{ipv4};
-}
-
-sub ipv6_ok {
-    my ( $class, $value ) = @_;
-
-    if ( defined( $value ) ) {
-        $class->get->{net}{ipv6} = $value;
-    }
-
-    return $class->get->{net}{ipv6};
+    return $class->effective->{no_network};
 }
 
 sub ipversion_ok {
     my ( $class, $version ) = @_;
 
     if ( $version == $IP_VERSION_4 ) {
-        return Zonemaster::Engine->profile->ipv4_ok;
+        return Zonemaster::Engine->profile->get(q{net.ipv4});;
     }
     elsif ( $version == $IP_VERSION_6 ) {
-        return Zonemaster::Engine->profile->ipv6_ok;
+        return Zonemaster::Engine->profile->get(q{net.ipv6});
     }
     else {
         return;
@@ -187,29 +182,29 @@ sub ipversion_ok {
 sub resolver_defaults {
     my ( $class ) = @_;
 
-    return $class->get->{resolver}{defaults};
+    return $class->effective->{resolver}{defaults};
 }
 
 sub resolver_source {
     my ( $class, $sourceaddr ) = @_;
 
     if ( defined( $sourceaddr ) ) {
-        $class->get->{resolver}{source} = $sourceaddr;
+        $class->effective->{resolver}{source} = $sourceaddr;
     }
 
-    return $class->get->{resolver}{source};
+    return $class->effective->{resolver}{source};
 }
 
 sub logfilter {
     my ( $class ) = @_;
 
-    return $class->get->{logfilter};
+    return $class->effective->{logfilter};
 }
 
 sub asnroots {
     my ( $class ) = @_;
 
-    return $class->get->{asnroots};
+    return $class->effective->{asnroots};
 }
 
 sub should_run {
@@ -606,14 +601,6 @@ C<net.ipv6> = 1 has this JSON representation:
 =over
 
 =item BUILD
-
-WIP, here to please L<Pod::Coverage>.
-
-=item ipv6_ok
-
-WIP, here to please L<Pod::Coverage>.
-
-=item ipv4_ok
 
 WIP, here to please L<Pod::Coverage>.
 

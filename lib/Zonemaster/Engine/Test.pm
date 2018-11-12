@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test;
 
-use version; our $VERSION = version->declare("v1.1.4");
+use version; our $VERSION = version->declare("v1.1.6");
 
 use 5.014002;
 use strict;
@@ -67,7 +67,7 @@ sub run_all_for {
     );
     _log_versions();
 
-    if ( not( Zonemaster::Engine->profile->ipv4_ok or Zonemaster::Engine->profile->ipv6_ok ) ) {
+    if ( not( Zonemaster::Engine->profile->get(q{net.ipv4}) or Zonemaster::Engine->profile->get(q{net.ipv6}) ) ) {
         return info( NO_NETWORK => {} );
     }
 
@@ -118,7 +118,7 @@ sub run_module {
     push @res, info( START_TIME => { time_t => time(), string => strftime( "%F %T %z", ( localtime() ) ) } );
     push @res, info( TEST_TARGET => { zone => $zone->name->string, module => $requested } );
     _log_versions();
-    if ( not( Zonemaster::Engine->profile->ipv4_ok or Zonemaster::Engine->profile->ipv6_ok ) ) {
+    if ( not( Zonemaster::Engine->profile->get(q{net.ipv4}) or Zonemaster::Engine->profile->get(q{net.ipv6}) ) ) {
         return info( NO_NETWORK => {} );
     }
 
@@ -162,7 +162,7 @@ sub run_one {
     push @res,
       info( TEST_ARGS => { module => $requested, method => $test, args => join( ';', map { "$_" } @arguments ) } );
     _log_versions();
-    if ( not( Zonemaster::Engine->profile->ipv4_ok or Zonemaster::Engine->profile->ipv6_ok ) ) {
+    if ( not( Zonemaster::Engine->profile->get(q{net.ipv4}) or Zonemaster::Engine->profile->get(q{net.ipv6}) ) ) {
         return info( NO_NETWORK => {} );
     }
 

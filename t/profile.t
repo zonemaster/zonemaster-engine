@@ -3,7 +3,7 @@ use Test::More;
 BEGIN { use_ok( 'Zonemaster::Engine::Profile' ) }
 use Zonemaster::Engine::Util;
 
-my $ref = Zonemaster::Engine::Profile->get;
+my $ref = Zonemaster::Engine::Profile->effective;
 
 isa_ok( $ref, 'HASH' );
 is( $ref->{resolver}{defaults}{retry},              2, 'retry exists and has expected value' );

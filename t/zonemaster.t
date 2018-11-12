@@ -125,8 +125,8 @@ isa_ok( exception { Zonemaster::Engine->test_module( 'SyNtAx', 'nic.se' ) }, 'Zo
 isa_ok( exception { Zonemaster::Engine->test_method( 'Syntax', 'syntax01', 'nic.se' ) }, 'Zonemaster::Engine::Exception' );
 Zonemaster::Engine->logger->clear_callback;
 
-Zonemaster::Engine->profile->ipv4_ok( 0 );
-Zonemaster::Engine->profile->ipv6_ok( 0 );
+Zonemaster::Engine->profile->set(q{net.ipv4}, 0 );
+Zonemaster::Engine->profile->set(q{net.ipv6}, 0 );
 my ( $msg ) = Zonemaster::Engine->test_zone( 'nic.se' );
 ok( !!$msg, 'Got a message.' );
 is( $msg->tag, 'NO_NETWORK', 'It is the right message.' );
@@ -138,8 +138,8 @@ is( $msg->tag, 'NO_NETWORK', 'It is the right message.' );
 ( $msg ) = Zonemaster::Engine->test_method( 'Basic', 'basic01', 'nic.se' );
 ok( !!$msg, 'Got a message.' );
 is( $msg->tag, 'NO_NETWORK', 'It is the right message.' );
-Zonemaster::Engine->profile->ipv4_ok( 1 );
-Zonemaster::Engine->profile->ipv6_ok( 1 );
+Zonemaster::Engine->profile->set(q{net.ipv4}, 1 );
+Zonemaster::Engine->profile->set(q{net.ipv6}, 1 );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Nameserver->save( $datafile );
