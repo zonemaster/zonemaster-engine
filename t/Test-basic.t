@@ -111,8 +111,8 @@ if ( $ENV{ZONEMASTER_RECORD} ) {
 }
 
 Zonemaster::Engine->profile->no_network( 0 );
-Zonemaster::Engine->profile->set(q{net.ipv4}, 0 );
-Zonemaster::Engine->profile->set(q{net.ipv6}, 0 );
+Zonemaster::Engine->profile->set( q{net.ipv4}, 0 );
+Zonemaster::Engine->profile->set( q{net.ipv6}, 0 );
 zone_gives( q{basic02}, $zone, q{NO_NETWORK} );
 zone_gives_not( q{basic02}, $zone, q{IPV4_ENABLED} );
 zone_gives_not( q{basic02}, $zone, q{IPV6_ENABLED} );
@@ -124,8 +124,8 @@ zone_gives_not( q{basic03}, $zone, q{IPV6_ENABLED} );
 zone_gives_not( q{basic03}, $zone, q{IPV4_DISABLED} );
 zone_gives_not( q{basic03}, $zone, q{IPV6_DISABLED} );
 
-#Zonemaster::Engine->profile->set(q{net.ipv4}, 1 );
-#Zonemaster::Engine->profile->set(q{net.ipv6}, 1 );
+#Zonemaster::Engine->profile->set( q{net.ipv4}, 1 );
+#Zonemaster::Engine->profile->set( q{net.ipv6}, 1 );
 #zone_gives( q{basic02}, $zone, q{IPV4_ENABLED} );
 #zone_gives( q{basic02}, $zone, q{IPV6_DISABLED} );
 #zone_gives_not( q{basic02}, $zone, q{IPV4_DISABLED} );
@@ -137,8 +137,8 @@ zone_gives_not( q{basic03}, $zone, q{IPV6_DISABLED} );
 #
 #if ( Zonemaster::Engine::Util::supports_ipv6() ) {
 #
-#    Zonemaster::Engine->profile->set(q{net.ipv4}, 0 );
-#    Zonemaster::Engine->profile->set(q{net.ipv6}, 1 );
+#    Zonemaster::Engine->profile->set( q{net.ipv4}, 0 );
+#    Zonemaster::Engine->profile->set( q{net.ipv6}, 1 );
 #    zone_gives_not( q{basic02}, $zone, q{IPV4_ENABLED} );
 #    zone_gives_not( q{basic02}, $zone, q{IPV6_DISABLED} );
 #    zone_gives( q{basic02}, $zone, q{IPV4_DISABLED} );
@@ -148,8 +148,8 @@ zone_gives_not( q{basic03}, $zone, q{IPV6_DISABLED} );
 #    zone_gives( q{basic03}, $zone, q{IPV4_DISABLED} );
 #    zone_gives( q{basic03}, $zone, q{IPV6_ENABLED} );
 #
-#    Zonemaster::Engine->profile->set(q{net.ipv4}, 1 );
-#    Zonemaster::Engine->profile->set(q{net.ipv6}, 1 );
+#    Zonemaster::Engine->profile->set( q{net.ipv4}, 1 );
+#    Zonemaster::Engine->profile->set( q{net.ipv6}, 1 );
 #    zone_gives( q{basic02}, $zone, q{IPV4_ENABLED} );
 #    zone_gives( q{basic02}, $zone, q{IPV6_ENABLED} );
 #    zone_gives_not( q{basic02}, $zone, q{IPV4_DISABLED} );

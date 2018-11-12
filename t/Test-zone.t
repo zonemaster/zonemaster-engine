@@ -89,8 +89,8 @@ ok( $res{NO_RESPONSE_SOA_QUERY}, q{No response from nameserver(s) on SOA queries
 %res = map { $_->tag => 1 } Zonemaster::Engine->test_method( q{Zone}, q{zone07}, $zone );
 ok( $res{NO_RESPONSE_SOA_QUERY}, q{No response from nameserver(s) on SOA queries} );
 
-Zonemaster::Engine->profile->set(q{net.ipv4}, 1 );
-Zonemaster::Engine->profile->set(q{net.ipv6}, 0 );
+Zonemaster::Engine->profile->set( q{net.ipv4}, 1 );
+Zonemaster::Engine->profile->set( q{net.ipv6}, 0 );
 
 $zone = Zonemaster::Engine->zone( q{trasigdnssec.se} );
 %res = map { $_->tag => 1 } Zonemaster::Engine->test_method( q{Zone}, q{zone01}, $zone );
