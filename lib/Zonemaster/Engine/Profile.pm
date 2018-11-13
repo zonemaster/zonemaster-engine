@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Profile;
 
-use version; our $VERSION = version->declare("v1.1.0");
+use version; our $VERSION = version->declare("v1.1.1");
 
 use 5.014002;
 use strict;
@@ -153,16 +153,6 @@ sub load {
     }
 
     return !!$new;
-}
-
-sub no_network {
-    my ( $class, $value ) = @_;
-
-    if ( defined( $value ) ) {
-        $class->effective->{no_network} = $value;
-    }
-
-    return $class->effective->{no_network};
 }
 
 sub ipversion_ok {

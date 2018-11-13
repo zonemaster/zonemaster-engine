@@ -35,7 +35,7 @@ my $datafile = 't/Test-dnssec.data';
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die "Stored data file missing" if not -r $datafile;
     Zonemaster::Engine::Nameserver->restore( $datafile );
-    Zonemaster::Engine->profile->no_network( 1 );
+    Zonemaster::Engine->profile->set( q{no_network}, 1 );
 }
 
 # Find a way for dnssec06 which have a dependence...

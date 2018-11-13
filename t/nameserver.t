@@ -8,7 +8,7 @@ my $datafile = 't/nameserver.data';
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die "Stored data file missing" if not -r $datafile;
     Zonemaster::Engine::Nameserver->restore( $datafile );
-    Zonemaster::Engine->profile->no_network( 1 );
+    Zonemaster::Engine->profile->set( q{no_network}, 1 );
 }
 
 my $nsv6 = new_ok( 'Zonemaster::Engine::Nameserver' => [ { name => 'ns.nic.se', address => '2a00:801:f0:53::53' } ] );
@@ -64,14 +64,14 @@ my $p = $broken->query( 'www.iis.se' );
 ok( !$p, 'no response from broken server' );
 
 my $googlens = ns( 'ns1.google.com', '216.239.32.10' );
-my $save = Zonemaster::Engine->profile->no_network;
-Zonemaster::Engine->profile->no_network( 1 );
+my $save = Zonemaster::Engine->profile->get( q{no_network} );
+Zonemaster::Engine->profile->set( q{no_network}, 1 );
 delete( $googlens->cache->{'www.google.com'} );
 eval { $googlens->query( 'www.google.com', 'TXT' ) };
 like( $@,
-    qr{External query for www.google.com, TXT attempted to ns1.google.com/216.239.32.10 while running with no_network}i
+    qr{External query for www.google.com, TXT attempted to ns1.google.com/216.239.32.10 while running with no_network}
 );
-Zonemaster::Engine->profile->no_network( $save );
+Zonemaster::Engine->profile->set( q{no_network}, $save );
 
 @{ $nsv6->times } = ( qw[2 4 4 4 5 5 7 9] );
 is( $nsv6->stddev_time, 2, 'known value check' );
@@ -122,7 +122,7 @@ Zonemaster::Engine->profile->resolver_source('127.0.0.1');
 my $ns_test = new_ok( 'Zonemaster::Engine::Nameserver' => [ { name => 'ns.nic.se', address => '212.247.7.228' } ] );
 is($ns_test->dns->source, '127.0.0.1', 'Source address set.');
 
-Zonemaster::Engine->profile->no_network( 0 );
+Zonemaster::Engine->profile->set( q{no_network}, 0 );
 # Address was 127.0.0.17 (https://github.com/zonemaster/zonemaster-engine/issues/219).
 # 192.0.2.17 is part of TEST-NET-1 IP address range (See RFC6890) and should be reserved
 # for documentation.

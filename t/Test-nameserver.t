@@ -36,7 +36,7 @@ my $datafile = q{t/Test-nameserver.data};
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die q{Stored data file missing} if not -r $datafile;
     Zonemaster::Engine::Nameserver->restore( $datafile );
-    Zonemaster::Engine->profile->no_network( 1 );
+    Zonemaster::Engine->profile->set( q{no_network}, 1 );
 }
 
 my @testcases_with_network = (qw{nameserver01 nameserver02 nameserver06 nameserver07 nameserver08 nameserver09});
@@ -151,7 +151,7 @@ if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Nameserver->save( $datafile );
 }
 
-Zonemaster::Engine->profile->no_network( 0 );
+Zonemaster::Engine->profile->set( q{no_network}, 0 );
 Zonemaster::Engine->profile->set( q{net.ipv4}, 0 );
 Zonemaster::Engine->profile->set( q{net.ipv6}, 0 );
 $zone = Zonemaster::Engine->zone( 'fr' );
@@ -207,6 +207,6 @@ zone_gives_not( 'nameserver08', $zone, [qw{QNAME_CASE_INSENSITIVE QNAME_CASE_SEN
 #
 #}
 
-Zonemaster::Engine->profile->no_network( 1 );
+Zonemaster::Engine->profile->set( q{no_network}, 1 );
 
 done_testing;

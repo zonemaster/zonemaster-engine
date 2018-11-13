@@ -7,7 +7,7 @@ my $datafile = 't/asn.data';
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die "Stored data file missing" if not -r $datafile;
     Zonemaster::Engine::Nameserver->restore( $datafile );
-    Zonemaster::Engine->profile->no_network( 1 );
+    Zonemaster::Engine->profile->set( q{no_network}, 1 );
 }
 
 Zonemaster::Engine->profile->effective->{asnroots} = [ "asnlookup.zonemaster.net", "asnlookup.iis.se", "asn.cymru,com" ];

@@ -13,7 +13,7 @@ my $datafile = q{t/Test-connectivity.data};
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die q{Stored data file missing} if not -r $datafile;
     Zonemaster::Engine::Nameserver->restore( $datafile );
-    Zonemaster::Engine->profile->no_network( 1 );
+    Zonemaster::Engine->profile->set( q{no_network}, 1 );
 }
 
 foreach my $testcase ( qw{connectivity01 connectivity02 connectivity03} ) {
@@ -61,7 +61,7 @@ if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Nameserver->save( $datafile );
 }
 
-Zonemaster::Engine->profile->no_network( 0 );
+Zonemaster::Engine->profile->set( q{no_network}, 0 );
 Zonemaster::Engine->profile->set( q{net.ipv4}, 0 );
 Zonemaster::Engine->profile->set( q{net.ipv6}, 0 );
 @res = Zonemaster::Engine->test_method( 'Connectivity', 'connectivity01', Zonemaster::Engine->zone( q{afnic.fr} ) );
@@ -104,6 +104,6 @@ ok( ( none { $_->tag eq 'IPV4_DISABLED' } @res ), 'No network' );
 #
 #}
 
-Zonemaster::Engine->profile->no_network( 1 );
+Zonemaster::Engine->profile->set( q{no_network}, 1 );
 
 done_testing;

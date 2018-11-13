@@ -42,7 +42,7 @@ my $datafile = q{t/Test-syntax.data};
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die q{Stored data file missing} if not -r $datafile;
     Zonemaster::Engine::Nameserver->restore( $datafile );
-    Zonemaster::Engine->profile->no_network( 1 );
+    Zonemaster::Engine->profile->set( q{no_network}, 1 );
 }
 
 # Find a way with dependences for syntax04 syntax05 syntax06 syntax07 syntax08
