@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::Consistency;
 
-use version; our $VERSION = version->declare("v1.1.5");
+use version; our $VERSION = version->declare("v1.1.6");
 
 use strict;
 use warnings;
@@ -621,7 +621,7 @@ sub consistency05 {
 
     my @ib_nsnames =
       grep { $zone->name->is_in_bailiwick( $_ ) } @{ Zonemaster::Engine::TestMethods->method2and3( $zone ) };
-    my @nss = grep { Zonemaster::Engine->profile->ipversion_ok( $_->address->version ) }
+    my @nss = grep { Zonemaster::Engine::Util::ipversion_ok( $_->address->version ) }
       @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) };
     my $resolver = Zonemaster::Engine->ns( 'google-public-dns-a.google.com', '8.8.8.8' );
 

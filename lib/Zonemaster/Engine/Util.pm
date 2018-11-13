@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Util;
 
-use version; our $VERSION = version->declare("v1.1.7");
+use version; our $VERSION = version->declare("v1.1.8");
 
 use 5.014002;
 
@@ -11,6 +11,7 @@ use warnings;
 
 use Zonemaster::Engine;
 use Zonemaster::Engine::DNSName;
+use Zonemaster::Engine::Constants qw[:ip];
 use Pod::Simple::SimpleTree;
 
 ## no critic (Modules::ProhibitAutomaticExportation)
@@ -32,6 +33,20 @@ sub info {
 sub should_run_test {
     my ( $test_name ) = @_;
     return  Zonemaster::Engine->profile->get( q{test_cases} )->{ $test_name } // 1
+}
+
+sub ipversion_ok {
+    my ( $version ) = @_;
+
+    if ( $version == $IP_VERSION_4 ) {
+        return Zonemaster::Engine->profile->get( q{net.ipv4} );
+    }
+    elsif ( $version == $IP_VERSION_6 ) {
+        return Zonemaster::Engine->profile->get( q{net.ipv6} );
+    }
+    else {
+        return;
+    }
 }
 
 # WIP
@@ -196,6 +211,10 @@ Check if Zonemaster hosting server supports IPv6.
 =item should_run_test
 
 Check if a test is blacklisted ad should run or not.
+
+=item ipversion_ok
+
+Check if IP version operations are permitted. Tests are done against Zonemaster::Engine->profile content.
 
 =item test_levels
 

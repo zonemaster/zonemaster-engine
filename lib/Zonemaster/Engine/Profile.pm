@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Profile;
 
-use version; our $VERSION = version->declare("v1.2.0");
+use version; our $VERSION = version->declare("v1.2.1");
 
 use 5.014002;
 use strict;
@@ -15,10 +15,8 @@ use File::Spec;
 use Data::DRef qw( :dref_access );
 
 use Zonemaster::Engine;
-use Zonemaster::Engine::Constants qw[:ip];
 
 has 'profiles'    => ( is => 'ro', isa => 'ArrayRef', default => sub { [] } );
-#has 'testcases'  => ( is => 'ro', isa => 'HashRef',  default => sub { {} } );
 
 my $merger = Hash::Merge->new;
 $merger->specify_behavior(
@@ -53,11 +51,6 @@ sub BUILD {
         my $pfile = File::Spec->catfile( $dir, 'profile.json' );
         my $new = eval { decode_json scalar read_file $pfile };
         if ( $new ) {
-		#my $tc = $new->{test_cases};
-		#delete $new->{test_cases};
-		#foreach my $case ( keys %{$tc} ) {
-		#$self->testcases->{$case} = $tc->{$case};
-		#}
             my $tl = $new->{test_levels};
             delete $new->{test_levels};
             foreach my $level ( keys %{$tl} ) {
@@ -138,11 +131,6 @@ sub load {
     my $new = decode_json scalar read_file $filename;
 
     if ( $new ) {
-	    #my $tc = $new->{test_cases};
-	#        delete $new->{test_cases};
-	#foreach my $case ( keys %{$tc} ) {
-	#    $self->testcases->{$case} = $tc->{$case};
-	#}
         my $tl = $new->{test_levels};
         delete $new->{test_levels};
         foreach my $level ( keys %{$tl} ) {
@@ -153,20 +141,6 @@ sub load {
     }
 
     return !!$new;
-}
-
-sub ipversion_ok {
-    my ( $class, $version ) = @_;
-
-    if ( $version == $IP_VERSION_4 ) {
-        return Zonemaster::Engine->profile->get( q{net.ipv4} );
-    }
-    elsif ( $version == $IP_VERSION_6 ) {
-        return Zonemaster::Engine->profile->get( q{net.ipv6} );
-    }
-    else {
-        return;
-    }
 }
 
 sub resolver_defaults {
@@ -567,10 +541,6 @@ C<net.ipv6> = 1 has this JSON representation:
 =over
 
 =item BUILD
-
-WIP, here to please L<Pod::Coverage>.
-
-=item ipversion_ok
 
 WIP, here to please L<Pod::Coverage>.
 
