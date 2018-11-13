@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Nameserver;
 
-use version; our $VERSION = version->declare("v1.1.9");
+use version; our $VERSION = version->declare("v1.1.10");
 
 use 5.014002;
 use Moose;
@@ -38,7 +38,7 @@ has 'cache' => ( is => 'ro', isa => 'Zonemaster::Engine::Nameserver::Cache', laz
 has 'times' => ( is => 'ro', isa => 'ArrayRef',                      default    => sub { [] } );
 
 has 'source_address' =>
-  ( is => 'ro', isa => 'Maybe[Str]', lazy => 1, default => sub { return Zonemaster::Engine->profile->resolver_source } );
+  ( is => 'ro', isa => 'Maybe[Str]', lazy => 1, default => sub { return Zonemaster::Engine->profile->get( q{resolver.source} ) } );
 
 has 'fake_delegations' => ( is => 'ro', isa => 'HashRef', default => sub { {} } );
 has 'fake_ds'          => ( is => 'ro', isa => 'HashRef', default => sub { {} } );
@@ -102,12 +102,12 @@ sub query {
     my ( $self, $name, $type, $href ) = @_;
     $type //= 'A';
 
-    if ( $self->address->version == 4 and not Zonemaster::Engine->profile->get(q{net.ipv4}) ) {
+    if ( $self->address->version == 4 and not Zonemaster::Engine->profile->get( q{net.ipv4} ) ) {
         Zonemaster::Engine->logger->add( IPV4_BLOCKED => { ns => $self->string } );
         return;
     }
 
-    if ( $self->address->version == 6 and not Zonemaster::Engine->profile->get(q{net.ipv6}) ) {
+    if ( $self->address->version == 6 and not Zonemaster::Engine->profile->get( q{net.ipv6} ) ) {
         Zonemaster::Engine->logger->add( IPV6_BLOCKED => { ns => $self->string } );
         return;
     }
@@ -483,12 +483,12 @@ sub axfr {
           $domain, $self->string;
     }
 
-    if ( $self->address->version == 4 and not Zonemaster::Engine->profile->get(q{net.ipv4}) ) {
+    if ( $self->address->version == 4 and not Zonemaster::Engine->profile->get( q{net.ipv4} ) ) {
         Zonemaster::Engine->logger->add( IPV4_BLOCKED => { ns => $self->string } );
         return;
     }
 
-    if ( $self->address->version == 6 and not Zonemaster::Engine->profile->get(q{net.ipv6}) ) {
+    if ( $self->address->version == 6 and not Zonemaster::Engine->profile->get( q{net.ipv6} ) ) {
         Zonemaster::Engine->logger->add( IPV6_BLOCKED => { ns => $self->string } );
         return;
     }

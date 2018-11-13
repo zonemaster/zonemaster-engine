@@ -14,10 +14,10 @@ is( Zonemaster::Engine::Profile->test_levels->{'EXAMPLE'}{'EXAMPLE_TAG'}, 'DEBUG
 Zonemaster::Engine::Profile->load_module_policy( "DNSSEC" );
 is( Zonemaster::Engine::Profile->test_levels->{DNSSEC}{ALGORITHM_OK}, 'INFO', 'Found policy loaded from module' );
 
-Zonemaster::Engine::Profile->load( 't/profile.json' );
+Zonemaster::Engine::Profile->load( q{t/profile.json} );
 is( Zonemaster::Engine->profile->resolver_defaults->{retry}, 4711, 'loading profile works' );
 
-Zonemaster::Engine::Profile->load( 't/profile_policy.json' );
+Zonemaster::Engine::Profile->load( q{t/profile_policy.json} );
 is( Zonemaster::Engine::Profile->test_levels->{'EXAMPLE'}{'EXAMPLE_TAG'}, 'WARNING', 'loading policy works' );
 
 my $conf = Zonemaster::Engine::Profile->new;
@@ -32,8 +32,8 @@ ok($conf->should_run(basic02), 'basic02 should run');
 ok(defined($conf->testcases->{placeholder}), 'Data for placeholder in place');
 ok(!$conf->should_run('placeholder'), 'placeholder should not run');
 
-ok(!defined(Zonemaster::Engine->profile->resolver_source), 'No source set.');
-Zonemaster::Engine->profile->resolver_source('192.0.2.2');
-is(Zonemaster::Engine->profile->resolver_source, '192.0.2.2', 'Source correctly set.');
+ok(!defined(Zonemaster::Engine->profile->get( q{resolver.source} )), 'No source set.');
+Zonemaster::Engine->profile->set( q{resolver.source}, q{192.0.2.2} );
+is(Zonemaster::Engine->profile->get( q{resolver.source} ), '192.0.2.2', 'Source correctly set.');
 
 done_testing;

@@ -118,7 +118,7 @@ isa_ok( $dsrr, 'Zonemaster::LDNS::RR::DS' );
 is( $dsrr->keytag,    16696,      'Expected keytag' );
 is( $dsrr->hexdigest, 'deadbeef', 'Expected digest data' );
 
-Zonemaster::Engine->profile->resolver_source('127.0.0.1');
+Zonemaster::Engine->profile->set( q{resolver.source}, q{127.0.0.1} );
 my $ns_test = new_ok( 'Zonemaster::Engine::Nameserver' => [ { name => 'ns.nic.se', address => '212.247.7.228' } ] );
 is($ns_test->dns->source, '127.0.0.1', 'Source address set.');
 

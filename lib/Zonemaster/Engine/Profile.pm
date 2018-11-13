@@ -175,16 +175,6 @@ sub resolver_defaults {
     return $class->effective->{resolver}{defaults};
 }
 
-sub resolver_source {
-    my ( $class, $sourceaddr ) = @_;
-
-    if ( defined( $sourceaddr ) ) {
-        $class->effective->{resolver}{source} = $sourceaddr;
-    }
-
-    return $class->effective->{resolver}{source};
-}
-
 sub logfilter {
     my ( $class ) = @_;
 
@@ -603,10 +593,6 @@ WIP, here to please L<Pod::Coverage>.
 WIP, here to please L<Pod::Coverage>.
 
 =item resolver_defaults
-
-WIP, here to please L<Pod::Coverage>.
-
-=item resolver_source
 
 WIP, here to please L<Pod::Coverage>.
 
