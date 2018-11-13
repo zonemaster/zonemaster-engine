@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Profile;
 
-use version; our $VERSION = version->declare("v1.1.1");
+use version; our $VERSION = version->declare("v1.2.0");
 
 use 5.014002;
 use strict;
@@ -18,7 +18,7 @@ use Zonemaster::Engine;
 use Zonemaster::Engine::Constants qw[:ip];
 
 has 'profiles'    => ( is => 'ro', isa => 'ArrayRef', default => sub { [] } );
-has 'testcases'  => ( is => 'ro', isa => 'HashRef',  default => sub { {} } );
+#has 'testcases'  => ( is => 'ro', isa => 'HashRef',  default => sub { {} } );
 
 my $merger = Hash::Merge->new;
 $merger->specify_behavior(
@@ -53,11 +53,11 @@ sub BUILD {
         my $pfile = File::Spec->catfile( $dir, 'profile.json' );
         my $new = eval { decode_json scalar read_file $pfile };
         if ( $new ) {
-            my $tc = $new->{test_cases};
-            delete $new->{test_cases};
-            foreach my $case ( keys %{$tc} ) {
-                $self->testcases->{$case} = $tc->{$case};
-            }
+		#my $tc = $new->{test_cases};
+		#delete $new->{test_cases};
+		#foreach my $case ( keys %{$tc} ) {
+		#$self->testcases->{$case} = $tc->{$case};
+		#}
             my $tl = $new->{test_levels};
             delete $new->{test_levels};
             foreach my $level ( keys %{$tl} ) {
@@ -138,11 +138,11 @@ sub load {
     my $new = decode_json scalar read_file $filename;
 
     if ( $new ) {
-        my $tc = $new->{test_cases};
-        delete $new->{test_cases};
-        foreach my $case ( keys %{$tc} ) {
-            $self->testcases->{$case} = $tc->{$case};
-        }
+	    #my $tc = $new->{test_cases};
+	#        delete $new->{test_cases};
+	#foreach my $case ( keys %{$tc} ) {
+	#    $self->testcases->{$case} = $tc->{$case};
+	#}
         my $tl = $new->{test_levels};
         delete $new->{test_levels};
         foreach my $level ( keys %{$tl} ) {
@@ -159,10 +159,10 @@ sub ipversion_ok {
     my ( $class, $version ) = @_;
 
     if ( $version == $IP_VERSION_4 ) {
-        return Zonemaster::Engine->profile->get(q{net.ipv4});;
+        return Zonemaster::Engine->profile->get( q{net.ipv4} );
     }
     elsif ( $version == $IP_VERSION_6 ) {
-        return Zonemaster::Engine->profile->get(q{net.ipv6});
+        return Zonemaster::Engine->profile->get( q{net.ipv6} );
     }
     else {
         return;
@@ -185,20 +185,6 @@ sub asnroots {
     my ( $class ) = @_;
 
     return $class->effective->{asnroots};
-}
-
-sub should_run {
-    my ( $self, $name ) = @_;
-
-    if ( not defined $self->testcases->{$name} ) {
-        return 1;    # Default to runnings test
-    }
-    elsif ( $self->testcases->{$name} ) {
-        return 1;
-    }
-    else {
-        return;
-    }
 }
 
 no Moose;
@@ -581,10 +567,6 @@ C<net.ipv6> = 1 has this JSON representation:
 =over
 
 =item BUILD
-
-WIP, here to please L<Pod::Coverage>.
-
-=item should_run
 
 WIP, here to please L<Pod::Coverage>.
 

@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::Zone;
 
-use version; our $VERSION = version->declare("v1.0.4");
+use version; our $VERSION = version->declare("v1.0.5");
 
 use strict;
 use warnings;
@@ -24,22 +24,22 @@ sub all {
     my ( $class, $zone ) = @_;
     my @results;
 
-    push @results, $class->zone01( $zone ) if Zonemaster::Engine->profile->should_run( 'zone01' );
+    push @results, $class->zone01( $zone ) if Zonemaster::Engine::Util::should_run_test( q{zone01} );
     if ( none { $_->tag eq q{NO_RESPONSE_SOA_QUERY} } @results ) {
 
-        push @results, $class->zone02( $zone ) if Zonemaster::Engine->profile->should_run( 'zone02' );
-        push @results, $class->zone03( $zone ) if Zonemaster::Engine->profile->should_run( 'zone03' );
-        push @results, $class->zone04( $zone ) if Zonemaster::Engine->profile->should_run( 'zone04' );
-        push @results, $class->zone05( $zone ) if Zonemaster::Engine->profile->should_run( 'zone05' );
-        push @results, $class->zone06( $zone ) if Zonemaster::Engine->profile->should_run( 'zone06' );
+        push @results, $class->zone02( $zone ) if Zonemaster::Engine::Util::should_run_test( q{zone02} );
+        push @results, $class->zone03( $zone ) if Zonemaster::Engine::Util::should_run_test( q{zone03} );
+        push @results, $class->zone04( $zone ) if Zonemaster::Engine::Util::should_run_test( q{zone04} );
+        push @results, $class->zone05( $zone ) if Zonemaster::Engine::Util::should_run_test( q{zone05} );
+        push @results, $class->zone06( $zone ) if Zonemaster::Engine::Util::should_run_test( q{zone06} );
         if ( none { $_->tag eq q{MNAME_RECORD_DOES_NOT_EXIST} } @results ) {
-            push @results, $class->zone07( $zone ) if Zonemaster::Engine->profile->should_run( 'zone07' );
+            push @results, $class->zone07( $zone ) if Zonemaster::Engine::Util::should_run_test( q{zone07} );
         }
     }
     if ( none { $_->tag eq q{MNAME_RECORD_DOES_NOT_EXIST} } @results ) {
-        push @results, $class->zone08( $zone ) if Zonemaster::Engine->profile->should_run( 'zone08' );
+        push @results, $class->zone08( $zone ) if Zonemaster::Engine::Util::should_run_test( q{zone08} );
         if ( none { $_->tag eq q{NO_RESPONSE_MX_QUERY} } @results ) {
-            push @results, $class->zone09( $zone ) if Zonemaster::Engine->profile->should_run( 'zone09' );
+            push @results, $class->zone09( $zone ) if Zonemaster::Engine::Util::should_run_test( q{zone09} );
         }
     }
 

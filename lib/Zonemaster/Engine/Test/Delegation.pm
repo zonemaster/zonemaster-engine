@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::Delegation;
 
-use version; our $VERSION = version->declare("v1.0.9");
+use version; our $VERSION = version->declare("v1.0.10");
 
 use strict;
 use warnings;
@@ -27,13 +27,13 @@ sub all {
     my ( $class, $zone ) = @_;
     my @results;
 
-    push @results, $class->delegation01( $zone ) if Zonemaster::Engine->profile->should_run( 'delegation01' );
-    push @results, $class->delegation02( $zone ) if Zonemaster::Engine->profile->should_run( 'delegation02' );
-    push @results, $class->delegation03( $zone ) if Zonemaster::Engine->profile->should_run( 'delegation03' );
-    push @results, $class->delegation04( $zone ) if Zonemaster::Engine->profile->should_run( 'delegation04' );
-    push @results, $class->delegation05( $zone ) if Zonemaster::Engine->profile->should_run( 'delegation05' );
-    push @results, $class->delegation06( $zone ) if Zonemaster::Engine->profile->should_run( 'delegation06' );
-    push @results, $class->delegation07( $zone ) if Zonemaster::Engine->profile->should_run( 'delegation07' );
+    push @results, $class->delegation01( $zone ) if Zonemaster::Engine::Util::should_run_test( q{delegation01} );
+    push @results, $class->delegation02( $zone ) if Zonemaster::Engine::Util::should_run_test( q{delegation02} );
+    push @results, $class->delegation03( $zone ) if Zonemaster::Engine::Util::should_run_test( q{delegation03} );
+    push @results, $class->delegation04( $zone ) if Zonemaster::Engine::Util::should_run_test( q{delegation04} );
+    push @results, $class->delegation05( $zone ) if Zonemaster::Engine::Util::should_run_test( q{delegation05} );
+    push @results, $class->delegation06( $zone ) if Zonemaster::Engine::Util::should_run_test( q{delegation06} );
+    push @results, $class->delegation07( $zone ) if Zonemaster::Engine::Util::should_run_test( q{delegation07} );
 
     return @results;
 }

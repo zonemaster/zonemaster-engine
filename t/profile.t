@@ -22,15 +22,15 @@ is( Zonemaster::Engine::Profile->test_levels->{'EXAMPLE'}{'EXAMPLE_TAG'}, 'WARNI
 
 my $conf = Zonemaster::Engine::Profile->new;
 isa_ok($conf, 'Zonemaster::Engine::Profile');
-isa_ok($conf->testcases, 'HASH');
-ok($conf->testcases->{basic03}, 'Data for basic03 in place');
-ok($conf->should_run(basic03), 'basic03 should run');
+isa_ok($conf->get( q{test_cases} ), 'HASH');
+ok($conf->get( q{test_cases} )->{basic03}, 'Data for basic03 in place');
+ok(Zonemaster::Engine::Util::should_run_test(q{basic03}), 'basic03 should run');
 
-is($conf->testcases->{basic02}, undef, 'Data for basic02 does not exist');
-ok($conf->should_run(basic02), 'basic02 should run');
+is($conf->get( q{test_cases} )->{basic02}, undef, 'Data for basic02 does not exist');
+ok(Zonemaster::Engine::Util::should_run_test(q{basic02}), 'basic02 should run');
 
-ok(defined($conf->testcases->{placeholder}), 'Data for placeholder in place');
-ok(!$conf->should_run('placeholder'), 'placeholder should not run');
+ok(defined($conf->get( q{test_cases} )->{placeholder}), 'Data for placeholder in place');
+ok(!Zonemaster::Engine::Util::should_run_test(q{placeholder}), 'placeholder should not run');
 
 ok(!defined(Zonemaster::Engine->profile->get( q{resolver.source} )), 'No source set.');
 Zonemaster::Engine->profile->set( q{resolver.source}, q{192.0.2.2} );

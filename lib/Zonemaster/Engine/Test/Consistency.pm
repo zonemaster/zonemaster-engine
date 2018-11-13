@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::Consistency;
 
-use version; our $VERSION = version->declare("v1.1.4");
+use version; our $VERSION = version->declare("v1.1.5");
 
 use strict;
 use warnings;
@@ -22,22 +22,22 @@ sub all {
     my ( $class, $zone ) = @_;
     my @results;
 
-    if ( Zonemaster::Engine->profile->should_run( 'consistency01' ) ) {
+    if ( Zonemaster::Engine::Util::should_run_test( q{consistency01} ) ) {
         push @results, $class->consistency01( $zone );
     }
-    if ( Zonemaster::Engine->profile->should_run( 'consistency02' ) ) {
+    if ( Zonemaster::Engine::Util::should_run_test( q{consistency02} ) ) {
         push @results, $class->consistency02( $zone );
     }
-    if ( Zonemaster::Engine->profile->should_run( 'consistency03' ) ) {
+    if ( Zonemaster::Engine::Util::should_run_test( q{consistency03} ) ) {
         push @results, $class->consistency03( $zone );
     }
-    if ( Zonemaster::Engine->profile->should_run( 'consistency04' ) ) {
+    if ( Zonemaster::Engine::Util::should_run_test( q{consistency04} ) ) {
         push @results, $class->consistency04( $zone );
     }
-    if ( Zonemaster::Engine->profile->should_run( 'consistency05' ) ) {
+    if ( Zonemaster::Engine::Util::should_run_test( q{consistency05} ) ) {
         push @results, $class->consistency05( $zone );
     }
-    if ( Zonemaster::Engine->profile->should_run( 'consistency06' ) ) {
+    if ( Zonemaster::Engine::Util::should_run_test( q{consistency06} ) ) {
         push @results, $class->consistency06( $zone );
     }
 

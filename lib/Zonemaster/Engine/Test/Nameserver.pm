@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::Nameserver;
 
-use version; our $VERSION = version->declare("v1.0.13");
+use version; our $VERSION = version->declare("v1.0.14");
 
 use strict;
 use warnings;
@@ -29,31 +29,31 @@ sub all {
     my ( $class, $zone ) = @_;
     my @results;
 
-    if ( Zonemaster::Engine->profile->should_run( 'nameserver01' ) ) {
+    if ( Zonemaster::Engine::Util::should_run_test( q{nameserver01} ) ) {
         push @results, $class->nameserver01( $zone );
     }
-    if ( Zonemaster::Engine->profile->should_run( 'nameserver02' ) ) {
+    if ( Zonemaster::Engine::Util::should_run_test( q{nameserver02} ) ) {
         push @results, $class->nameserver02( $zone );
     }
-    if ( Zonemaster::Engine->profile->should_run( 'nameserver03' ) ) {
+    if ( Zonemaster::Engine::Util::should_run_test( q{nameserver03} ) ) {
         push @results, $class->nameserver03( $zone );
     }
-    if ( Zonemaster::Engine->profile->should_run( 'nameserver04' ) ) {
+    if ( Zonemaster::Engine::Util::should_run_test( q{nameserver04} ) ) {
         push @results, $class->nameserver04( $zone );
     }
-    if ( Zonemaster::Engine->profile->should_run( 'nameserver05' ) ) {
+    if ( Zonemaster::Engine::Util::should_run_test( q{nameserver05} ) ) {
         push @results, $class->nameserver05( $zone );
     }
-    if ( Zonemaster::Engine->profile->should_run( 'nameserver06' ) ) {
+    if ( Zonemaster::Engine::Util::should_run_test( q{nameserver06} ) ) {
         push @results, $class->nameserver06( $zone );
     }
-    if ( Zonemaster::Engine->profile->should_run( 'nameserver07' ) ) {
+    if ( Zonemaster::Engine::Util::should_run_test( q{nameserver07} ) ) {
         push @results, $class->nameserver07( $zone );
     }
-    if ( Zonemaster::Engine->profile->should_run( 'nameserver08' ) ) {
+    if ( Zonemaster::Engine::Util::should_run_test( q{nameserver08} ) ) {
         push @results, $class->nameserver08( $zone );
     }
-    if ( Zonemaster::Engine->profile->should_run( 'nameserver09' ) ) {
+    if ( Zonemaster::Engine::Util::should_run_test( q{nameserver09} ) ) {
         push @results, $class->nameserver09( $zone );
     }
 

@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Util;
 
-use version; our $VERSION = version->declare("v1.1.5");
+use version; our $VERSION = version->declare("v1.1.7");
 
 use 5.014002;
 
@@ -27,6 +27,11 @@ sub info {
     my ( $tag, $argref ) = @_;
 
     return Zonemaster::Engine->logger->add( $tag, $argref );
+}
+
+sub should_run_test {
+    my ( $test_name ) = @_;
+    return  Zonemaster::Engine->profile->get( q{test_cases} )->{ $test_name } // 1
 }
 
 # WIP
@@ -187,6 +192,10 @@ This routine provides a special effect: sCraMBliNg tHe CaSe
 =item supports_ipv6
 
 Check if Zonemaster hosting server supports IPv6.
+
+=item should_run_test
+
+Check if a test is blacklisted ad should run or not.
 
 =item test_levels
 

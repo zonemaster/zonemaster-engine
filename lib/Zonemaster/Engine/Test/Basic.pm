@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::Basic;
 
-use version; our $VERSION = version->declare("v1.0.9");
+use version; our $VERSION = version->declare("v1.0.10");
 
 use strict;
 use warnings;
@@ -42,7 +42,7 @@ sub all {
 
         # Perform BASIC3 if BASIC2 failed
         if ( none { $_->tag eq q{HAS_NAMESERVERS} } @results ) {
-            push @results, $class->basic03( $zone ) if Zonemaster::Engine->profile->should_run( 'basic03' );
+            push @results, $class->basic03( $zone ) if Zonemaster::Engine::Util::should_run_test( q{basic03} );
         }
         else {
             push @results,

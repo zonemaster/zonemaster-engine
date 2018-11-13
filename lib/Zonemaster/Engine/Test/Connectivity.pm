@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::Connectivity;
 
-use version; our $VERSION = version->declare("v1.0.11");
+use version; our $VERSION = version->declare("v1.0.13");
 
 use strict;
 use warnings;
@@ -24,13 +24,13 @@ sub all {
     my ( $class, $zone ) = @_;
     my @results;
 
-    if ( Zonemaster::Engine->profile->should_run( 'connectivity01' ) ) {
+    if ( Zonemaster::Engine::Util::should_run_test( q{connectivity01} ) ) {
         push @results, $class->connectivity01( $zone );
     }
-    if ( Zonemaster::Engine->profile->should_run( 'connectivity02' ) ) {
+    if ( Zonemaster::Engine::Util::should_run_test( q{connectivity02} ) ) {
         push @results, $class->connectivity02( $zone );
     }
-    if ( Zonemaster::Engine->profile->should_run( 'connectivity03' ) ) {
+    if ( Zonemaster::Engine::Util::should_run_test( q{connectivity03} ) ) {
         push @results, $class->connectivity03( $zone );
     }
 
