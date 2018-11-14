@@ -166,7 +166,7 @@ profile JSON file.
 
 =head2 resolver.defaults.usevc
 
-A boolean. If C<true>, only use TCP. Default C<false>.
+1 or 0. If C<1>, only use TCP. Default C<0>.
 
 =head2 resolver.defaults.retrans
 
@@ -174,13 +174,13 @@ A number. The number of seconds between retries. Default 3.
 
 =head2 resolver.defaults.dnssec
 
-A boolean. If C<true>, sets the DO flag in queries. Default C<false>.
+1 or 0. If C<1>, sets the DO flag in queries. Default C<0>.
 
 =head2 resolver.defaults.recurse
 
-A boolean. If C<true>, sets the RD flag in queries. Default C<false>.
+1 or 0. If C<1>, sets the RD flag in queries. Default C<0>.
 
-This should almost certainly be kept C<false>.
+This should almost certainly be kept C<0>.
 
 =head2 resolver.defaults.retry
 
@@ -191,8 +191,8 @@ If set to zero, no queries will be sent at all, which isn't very useful.
 
 =head2 resolver.defaults.igntc
 
-A boolean. If C<false>, UDP queries that get responses with the C<TC>
-flag set will be automatically resent over TCP. Default C<false>.
+1 or 0. If C<0>, UDP queries that get responses with the C<TC>
+flag set will be automatically resent over TCP. Default C<0>.
 
 =head2 resolver.source
 
@@ -202,17 +202,17 @@ C<undef>.
 
 =head2 net.ipv4
 
-A boolean. If C<true>, resolver objects are allowed to send queries over
-IPv4. Default C<true>.
+1 or 0. If C<1>, resolver objects are allowed to send queries over
+IPv4. Default C<1>.
 
 =head2 net.ipv6
 
-A boolean. If C<true>, resolver objects are allowed to send queries over
-IPv6. Default C<true>.
+1 or 0. If C<1>, resolver objects are allowed to send queries over
+IPv6. Default C<1>.
 
 =head2 no_network
 
-A boolean. If true, network traffic is forbidden. Default C<false>.
+1 or 0. If C<1>, network traffic is forbidden. Default C<0>.
 
 Use when you want to be sure that any data is only taken from a preloaded
 cache.
@@ -336,7 +336,8 @@ level for the tag.
 
 =head2 test_cases
 
-A hashref mapping test case names to booleans. Default C<{}>.
+A hashref mapping test case names to booleans (represented as C<1> or C<0>).
+Default C<{}>.
 
 Specifies a blacklist of test cases to skip when a test module is asked
 to run of all of its test cases.
@@ -348,9 +349,9 @@ of their function is to verify that the given name can be tested at all.
 
 The keys of this hash are names of test cases from the test
 specifications.
-Only test cases mapped to C<false> are considered, i.e. only those
+Only test cases mapped to C<0> are considered, i.e. only those
 included in the blacklisted.
-Test cases mapped to C<true> are ignored, i.e. they are not included
+Test cases mapped to C<1> are ignored, i.e. they are not included
 the blacklist.
 
 =head1 JSON REPRESENTATION
