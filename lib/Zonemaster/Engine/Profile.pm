@@ -330,23 +330,20 @@ level for the tag.
 
 =head2 test_cases
 
-A hashref mapping test case names to booleans (represented as C<1> or C<0>).
-Default C<{}>.
+An arrayref of names of test implementation modules (without the
+C<Zonemaster::Engine::Test::> prefix).
+Default is an arrayref with an element for each module in
+C<Zonemaster::Engine::Test>.
 
-Specifies a blacklist of test cases to skip when a test module is asked
-to run of all of its test cases.
-Test cases blacklisted here can still be run individually.
-The test cases C<basic00>, C<basic01> and C<basic02> cannot be blacklisted
-this way.
-The reason these particular test cases cannot be blacklisted is that part
-of their function is to verify that the given name can be tested at all.
+Specifies which test cases to consider when a test module is asked 
+to run of all of its test cases. 
 
-The keys of this hash are names of test cases from the test
-specifications.
-Only test cases mapped to C<0> are considered, i.e. only those
-included in the blacklisted.
-Test cases mapped to C<1> are ignored, i.e. they are not included
-the blacklist.
+Test cases not included here can still be run individually.
+
+The test cases C<basic00>, C<basic01> and C<basic02> are always considered no
+matter if they're excluded from this property.
+This is because part of their function is to verify that the given domain name
+can be tested at all.
 
 =head1 JSON REPRESENTATION
 
