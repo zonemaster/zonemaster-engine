@@ -92,20 +92,19 @@ values declared in the L</PROFILE PROPERTIES> section.
 
     my $default = Zonemaster::Engine::Profile->default;
 
-=head2 load
+=head2 from_json
 
-A constructor that returns a new profile with values loaded from a
-profile file.
+A constructor that returns a new profile with values parsed from a JSON string.
 
-    my $profile = Zonemaster::Engine::Profile->load( '/path/to/file.profile' );
+    my $profile = Zonemaster::Engine::Profile->from_json( '{ "no_network": 1 }' );
 
 The returned profile has set values for all properties specified in the
-given file.
+given string.
 The remaining properties are unset.
 
-Dies if the given profile file is invalid.
-
-For details on the file format see the L</JSON REPRESENTATION> section.
+Dies if the given string is illegal according to the L</JSON REPRESENTATION>
+section or if the property values are illegal according to the L</PROFILE
+PROPERTIES> section.
 
 =head1 INSTANCE METHODS
 
