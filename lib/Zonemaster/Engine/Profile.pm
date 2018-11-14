@@ -319,11 +319,9 @@ These specifications are the only authoritative documents on the default
 severity level for the various messages.
 For messages not defined in any of these specifications please refer to the file
 located by L<dist_file("Zonemaster-Engine", "default.profile")|
-File::ShareDir/dist_file>, or in the special case of the DNSSEC module,
-refer to the module source code.
+File::ShareDir/dist_file>.
 For messages neither defined in test specifications, nor listed in
-C<default.profile>, nor listed in the DNSSEC module source code,
-the default severity level is C<DEBUG>.
+C<default.profile>, the default severity level is C<DEBUG>.
 
 I<Note:> Sometimes multiple test cases within the same test module define
 messages for the same tag.
