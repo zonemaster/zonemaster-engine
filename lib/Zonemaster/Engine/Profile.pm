@@ -196,9 +196,10 @@ flag set will be automatically resent over TCP. Default C<0>.
 
 =head2 resolver.source
 
-A string or C<undef>. The source address all resolver objects should use
-when sending queries. If C<undef>, the OS default address is used. Default
-C<undef>.
+A string that is either an IP address or the exact string C<"os_default">.
+The source address all resolver objects should use when sending queries.
+If C<"os_default">, the OS default address is used.
+Default C<"os_default">.
 
 =head2 net.ipv4
 
