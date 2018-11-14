@@ -127,8 +127,6 @@ Set the value of a property.
 
 Takes a property name and value and updates the property accordingly.
 
-Returns C<$self>.
-
 Dies if the given property name is invalid.
 
 Dies if the value is invalid for the given property.
@@ -142,8 +140,6 @@ Merge the profile data of another profile into this one.
 Properties from the other profile take precedence when the same property
 name exists in both profiles.
 The other profile object remains unmodified.
-
-Returns C<$self>;
 
 =head2 to_json
 
