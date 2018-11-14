@@ -170,7 +170,7 @@ profile JSON file.
 
 =head2 resolver.defaults.retrans
 
-A number. The number of seconds between retries. Default 3.
+A non-negative integer. The number of seconds between retries. Default 3.
 
 =head2 resolver.defaults.dnssec
 
