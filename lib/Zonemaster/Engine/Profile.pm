@@ -317,14 +317,15 @@ The keys of the second level hashes are tags that the respective
 modules emit.
 The values of the second level hashes are mapped to severity levels.
 
-The various L<test case specifications|
-https://github.com/zonemaster/zonemaster/tree/master/docs/specifications/tests>
-define the default severity level for some of the messages.
-These specifications are the only authoritative documents on the default
+The various test case specifications linked from the L<test case list|
+https://github.com/zonemaster/zonemaster/tree/master/docs/specifications/tests/TestCases.md>
+define the default severity level for a sub-set of the messages.
+These specifications are the only authoritative documents of the default
 severity level for the various messages.
 For messages not defined in any of these specifications please refer to the file
 located by L<dist_file("Zonemaster-Engine", "default.profile")|
-File::ShareDir/dist_file>.
+File::ShareDir/dist_file> or to the L<default profile|
+https://github.com/zonemaster/zonemaster-engine/blob/master/share/policy.json>.
 For messages neither defined in test specifications, nor listed in
 C<default.profile>, the default severity level is C<DEBUG>.
 
@@ -335,8 +336,8 @@ level for the tag.
 
 =head2 test_cases
 
-An arrayref of names of test cases as listed in the L<test case specifications|
-https://github.com/zonemaster/zonemaster/tree/master/docs/specifications/tests>.
+An arrayref of names of test cases as listed in the L<test case list|
+https://github.com/zonemaster/zonemaster/tree/master/docs/specifications/tests/TestCases.md>.
 Default is an arrayref listing all the test cases.
 
 Specifies which test cases to consider when a test module is asked 
