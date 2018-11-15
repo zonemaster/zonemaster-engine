@@ -115,7 +115,7 @@ Get the value of a property.
     my $value = $profile1->get( 'net.ipv6' );
 
 Returns value of the given property, or C<undef> if the property is unset.
-For boolean properties the returned value is either C<1> for true and C<0> for
+For boolean properties the returned value is either C<1> for true or C<0> for
 false.
 For properties with complex types, the returned value is a
 L<deep copy|https://en.wiktionary.org/wiki/deep_copy#Noun>.
