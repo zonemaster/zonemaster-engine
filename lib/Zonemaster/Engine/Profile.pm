@@ -35,9 +35,9 @@ For details on the file format see the L</JSON REPRESENTATION> section.
 
     use Zonemaster::Engine::Profile;
 
-    my $profile_json = read_file( "/path/to/foo.profile" );
-    my $foo          = Zonemaster::Engine::Profile->from_json( $profile_json );
-    my $profile      = Zonemaster::Engine::Profile->default;
+    my $json    = read_file( "/path/to/foo.profile" );
+    my $foo     = Zonemaster::Engine::Profile->from_json( $json );
+    my $profile = Zonemaster::Engine::Profile->default;
     $profile->merge( $foo );
     Zonemaster::Engine::Profile->effective->merge( $profile );
 
