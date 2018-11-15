@@ -334,10 +334,9 @@ level for the tag.
 
 =head2 test_cases
 
-An arrayref of names of test implementation modules (without the
-C<Zonemaster::Engine::Test::> prefix).
-Default is an arrayref with an element for each module in
-C<Zonemaster::Engine::Test>.
+An arrayref of names of test cases as listed in the L<test case specifications|
+https://github.com/zonemaster/zonemaster/tree/master/docs/specifications/tests>.
+Default is an arrayref listing all the test cases.
 
 Specifies which test cases to consider when a test module is asked 
 to run of all of its test cases. 
