@@ -1,7 +1,7 @@
 #!perl -T
 use 5.006;
 use strict;
-use warnings FATAL => 'all';
+use warnings FATAL   => 'all';
 use Test::More tests => 25;
 
 use JSON;
@@ -207,47 +207,47 @@ subtest 'from_json() parses values from a string' => sub {
 };
 
 subtest 'from_json() dies on illegal paths' => sub {
-    throws_ok { Zonemaster::Engine::Profile->from_json( '{"foobar":1}' ) } 'foobar';
-    throws_ok { Zonemaster::Engine::Profile->from_json( '{"net":1}' ) } 'net';
-    throws_ok { Zonemaster::Engine::Profile->from_json( '{"net":{"foobar":1}}' ) } 'net.foobar';
-    throws_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":1}' ) } 'resolver';
-    throws_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":1}}' ) } 'resolver.defaults';
-    throws_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"foobar":1}}}' ) }
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"foobar":1}' ) } 'foobar';
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"net":1}' ) } 'net';
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"net":{"foobar":1}}' ) } 'net.foobar';
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":1}' ) } 'resolver';
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":1}}' ) } 'resolver.defaults';
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"foobar":1}}}' ) }
     'resolver.defaults.foobar';
 };
 
 subtest 'from_json() dies on illegal values' => sub {
-    throws_ok { Zonemaster::Engine::Profile->from_json( '{"resolver.defaults.usevc":"false"}' ); }
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver.defaults.usevc":"false"}' ); }
     "checks type of resolver.defaults.usevc";
-    throws_ok { Zonemaster::Engine::Profile->from_json( '{"resolver.defaults.dnssec":"false"}' ); }
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver.defaults.dnssec":"false"}' ); }
     "checks type of resolver.defaults.dnssec";
-    throws_ok { Zonemaster::Engine::Profile->from_json( '{"resolver.defaults.recurse":"false"}' ); }
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver.defaults.recurse":"false"}' ); }
     "checks type of resolver.defaults.recurse";
-    throws_ok { Zonemaster::Engine::Profile->from_json( '{"resolver.defaults.igntc":"false"}' ); }
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver.defaults.igntc":"false"}' ); }
     "checks type of resolver.defaults.igntc";
-    throws_ok { Zonemaster::Engine::Profile->from_json( '{"net.ipv4":"false"}' ); } "checks type of net.ipv4";
-    throws_ok { Zonemaster::Engine::Profile->from_json( '{"net.ipv6":"false"}' ); } "checks type of net.ipv6";
-    throws_ok { Zonemaster::Engine::Profile->from_json( '{"no_network":"false"}' ); } "checks type of no_network";
-    throws_ok { Zonemaster::Engine::Profile->from_json( '{"resolver.defaults.retry":0}' ); }
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"net.ipv4":"false"}' ); } "checks type of net.ipv4";
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"net.ipv6":"false"}' ); } "checks type of net.ipv6";
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"no_network":"false"}' ); } "checks type of no_network";
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver.defaults.retry":0}' ); }
     "checks lower bound of resolver.defaults.retry";
-    throws_ok { Zonemaster::Engine::Profile->from_json( '{"resolver.defaults.retry":256}' ); }
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver.defaults.retry":256}' ); }
     "checks upper bound of resolver.defaults.retry";
-    throws_ok { Zonemaster::Engine::Profile->from_json( '{"resolver.defaults.retry":1.5}' ); }
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver.defaults.retry":1.5}' ); }
     "checks type of resolver.defaults.retry";
-    throws_ok { Zonemaster::Engine::Profile->from_json( '{"resolver.defaults.retrans":0}' ); }
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver.defaults.retrans":0}' ); }
     "checks lower bound of resolver.defaults.retrans";
-    throws_ok { Zonemaster::Engine::Profile->from_json( '{"resolver.defaults.retrans":256}' ); }
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver.defaults.retrans":256}' ); }
     "checks upper bound of resolver.defaults.retrans";
-    throws_ok { Zonemaster::Engine::Profile->from_json( '{"resolver.defaults.retrans":1.5}' ); }
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver.defaults.retrans":1.5}' ); }
     "checks type of resolver.defaults.retrans";
-    throws_ok { Zonemaster::Engine::Profile->from_json( '{"resolver.source":"example.com"}' ); }
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver.source":"example.com"}' ); }
     "checks type of resolver.source";
-    throws_ok { Zonemaster::Engine::Profile->from_json( '{"asnroots":["noreply@example.com"]}' ); }
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"asnroots":["noreply@example.com"]}' ); }
     "checks type of asnroots";
-    throws_ok { Zonemaster::Engine::Profile->from_json( 'logfilter', '{"logfilter":[]}' ); } "checks type of logfilter";
-    throws_ok { Zonemaster::Engine::Profile->from_json( 'test_levels', '{"test_levels":[]}' ); }
+    dies_ok { Zonemaster::Engine::Profile->from_json( 'logfilter',   '{"logfilter":[]}' ); } "checks type of logfilter";
+    dies_ok { Zonemaster::Engine::Profile->from_json( 'test_levels', '{"test_levels":[]}' ); }
     "checks type of test_levels";
-    throws_ok { Zonemaster::Engine::Profile->from_json( 'test_cases', '{"test_cases":{}}' ); }
+    dies_ok { Zonemaster::Engine::Profile->from_json( 'test_cases', '{"test_cases":{}}' ); }
     "checks type of test_cases";
 };
 
@@ -332,14 +332,14 @@ subtest 'get() dies if the given property name is invalid' => sub {
     $profile->set( 'test_levels', { Zone => { TAG => 'INFO' } } );
     $profile->set( 'test_cases', ['Zone01'] );
 
-    throws_ok { $profile->get( 'net' ) } 'net';
-    throws_ok { $profile->get( 'net.foobar' ) } 'net.foobar';
-    throws_ok { $profile->get( 'resolver.defaults' ) } 'resolver.defaults';
-    throws_ok { $profile->get( 'resolver' ) } 'resolver';
-    throws_ok { $profile->get( 'asnroots.1' ) } 'asnroots.1';
-    throws_ok { $profile->get( 'logfilter.Zone' ) } 'logfilter.Zone';
-    throws_ok { $profile->get( 'test_levels.Zone' ) } 'test_levels.Zone';
-    throws_ok { $profile->get( 'test_cases.Zone01' ) } 'test_cases.Zone01';
+    dies_ok { $profile->get( 'net' ) } 'net';
+    dies_ok { $profile->get( 'net.foobar' ) } 'net.foobar';
+    dies_ok { $profile->get( 'resolver.defaults' ) } 'resolver.defaults';
+    dies_ok { $profile->get( 'resolver' ) } 'resolver';
+    dies_ok { $profile->get( 'asnroots.1' ) } 'asnroots.1';
+    dies_ok { $profile->get( 'logfilter.Zone' ) } 'logfilter.Zone';
+    dies_ok { $profile->get( 'test_levels.Zone' ) } 'test_levels.Zone';
+    dies_ok { $profile->get( 'test_cases.Zone01' ) } 'test_cases.Zone01';
 };
 
 subtest 'set() inserts values for unset properties' => sub {
@@ -360,20 +360,22 @@ subtest 'set() inserts values for unset properties' => sub {
     $profile->set( 'test_levels', { Zone => { TAG => 'INFO' } } );
     $profile->set( 'test_cases', ['Zone01'] );
 
-    is $profile->get( 'resolver.defaults.usevc' ),   1;
-    is $profile->get( 'resolver.defaults.dnssec' ),  0;
-    is $profile->get( 'resolver.defaults.recurse' ), 1;
-    is $profile->get( 'resolver.defaults.igntc' ),   0;
-    is $profile->get( 'net.ipv4' ),                  1;
-    is $profile->get( 'net.ipv6' ),                  0;
-    is $profile->get( 'no_network' ),                1;
-    is $profile->get( 'resolver.defaults.retry' ),   123;
-    is $profile->get( 'resolver.defaults.retrans' ), 456;
-    is $profile->get( 'resolver.source' ),           '192.0.2.53';
-    eq_or_diff $profile->get( 'asnroots' ), ['example.com'];
-    eq_or_diff $profile->get( 'logfilter' ), { Zone => { TAG => [ { when => { bananas => 0 }, set => 'WARNING' } ] } };
-    eq_or_diff $profile->get( 'test_levels' ), { Zone => { TAG => 'INFO' } };
-    eq_or_diff $profile->get( 'test_cases' ), ['Zone01'];
+    is $profile->get( 'resolver.defaults.usevc' ),   1,   'resolver.defaults.usevc can be given a value when unset';
+    is $profile->get( 'resolver.defaults.dnssec' ),  0,   'resolver.defaults.dnssec can be given a value when unset';
+    is $profile->get( 'resolver.defaults.recurse' ), 1,   'resolver.defaults.recurse can be given a value when unset';
+    is $profile->get( 'resolver.defaults.igntc' ),   0,   'resolver.defaults.igntc can be given a value when unset';
+    is $profile->get( 'net.ipv4' ),                  1,   'net.ipv4 can be given a value when unset';
+    is $profile->get( 'net.ipv6' ),                  0,   'net.ipv6 can be given a value when unset';
+    is $profile->get( 'no_network' ),                1,   'no_network can be given a value when unset';
+    is $profile->get( 'resolver.defaults.retry' ),   123, 'resolver.defaults.retry can be given a value when unset';
+    is $profile->get( 'resolver.defaults.retrans' ), 456, 'resolver.defaults.retrans can be given a value when unset';
+    is $profile->get( 'resolver.source' ), '192.0.2.53', 'resolver.source can be given a value when unset';
+    eq_or_diff $profile->get( 'asnroots' ), ['example.com'], 'anroots can be given a value when unset';
+    eq_or_diff $profile->get( 'logfilter' ), { Zone => { TAG => [ { when => { bananas => 0 }, set => 'WARNING' } ] } },
+      'logfilter can be given a value when unset';
+    eq_or_diff $profile->get( 'test_levels' ), { Zone => { TAG => 'INFO' } },
+      'test_levels can be given a value when unset';
+    eq_or_diff $profile->get( 'test_cases' ), ['Zone01'], 'test_cases can be given a value when unset';
 };
 
 subtest 'set() updates values for set properties' => sub {
@@ -412,22 +414,22 @@ subtest 'set() updates values for set properties' => sub {
 };
 
 subtest 'set() dies on attempts to unset properties' => sub {
-    my $profile = Zonemaster::Engine::Profile->new;
+    my $profile = Zonemaster::Engine::Profile->from_json( $EXAMPLE_PROFILE_1 );
 
-    throws_ok { $profile->set( 'resolver.defaults.usevc',   undef ); } 'resolver.defaults.usevc';
-    throws_ok { $profile->set( 'resolver.defaults.dnssec',  undef ); } 'resolver.defaults.dnssec';
-    throws_ok { $profile->set( 'resolver.defaults.recurse', undef ); } 'resolver.defaults.recurse';
-    throws_ok { $profile->set( 'resolver.defaults.igntc',   undef ); } 'resolver.defaults.igntc';
-    throws_ok { $profile->set( 'net.ipv4',                  undef ); } 'net.ipv4';
-    throws_ok { $profile->set( 'net.ipv6',                  undef ); } 'net.ipv6';
-    throws_ok { $profile->set( 'no_network',                undef ); } 'no_network';
-    throws_ok { $profile->set( 'resolver.defaults.retry',   undef ); } 'resolver.defaults.retry';
-    throws_ok { $profile->set( 'resolver.defaults.retrans', undef ); } 'resolver.defaults.retans';
-    throws_ok { $profile->set( 'resolver.source',           undef ); } 'resolver.source';
-    throws_ok { $profile->set( 'asnroots',                  undef ); } 'asnroots';
-    throws_ok { $profile->set( 'logfilter',                 undef ); } 'logfilter';
-    throws_ok { $profile->set( 'test_levels',               undef ); } 'test_levels';
-    throws_ok { $profile->set( 'test_cases',                undef ); } 'test_cases';
+    dies_ok { $profile->set( 'resolver.defaults.usevc',   undef ); } 'dies on attempt to unset resolver.defaults.usevc';
+    dies_ok { $profile->set( 'resolver.defaults.dnssec',  undef ); } 'dies on attempt to unset resolver.defaults.dnssec';
+    dies_ok { $profile->set( 'resolver.defaults.recurse', undef ); } 'dies on attempt to unset resolver.defaults.recurse';
+    dies_ok { $profile->set( 'resolver.defaults.igntc',   undef ); } 'dies on attempt to unset resolver.defaults.igntc';
+    dies_ok { $profile->set( 'net.ipv4',                  undef ); } 'dies on attempt to unset net.ipv4';
+    dies_ok { $profile->set( 'net.ipv6',                  undef ); } 'dies on attempt to unset net.ipv6';
+    dies_ok { $profile->set( 'no_network',                undef ); } 'dies on attempt to unset no_network';
+    dies_ok { $profile->set( 'resolver.defaults.retry',   undef ); } 'dies on attempt to unset resolver.defaults.retry';
+    dies_ok { $profile->set( 'resolver.defaults.retrans', undef ); } 'dies on attempt to unset resolver.defaults.retans';
+    dies_ok { $profile->set( 'resolver.source',           undef ); } 'dies on attempt to unset resolver.source';
+    dies_ok { $profile->set( 'asnroots',                  undef ); } 'dies on attempt to unset asnroots';
+    dies_ok { $profile->set( 'logfilter',                 undef ); } 'dies on attempt to unset logfilter';
+    dies_ok { $profile->set( 'test_levels',               undef ); } 'dies on attempt to unset test_levels';
+    dies_ok { $profile->set( 'test_cases',                undef ); } 'dies on attempt to unset test_cases';
 };
 
 subtest 'set() dies if the given property name is invalid' => sub {
@@ -437,37 +439,37 @@ subtest 'set() dies if the given property name is invalid' => sub {
     $profile->set( 'test_levels', { Zone => {} } );
     $profile->set( 'test_cases', ['Zone01'] );
 
-    throws_ok { $profile->set( 'net',               1 ) } 'net';
-    throws_ok { $profile->set( 'net.foobar',        1 ) } 'net.foobar';
-    throws_ok { $profile->set( 'resolver.defaults', 1 ) } 'resolver.defaults';
-    throws_ok { $profile->set( 'resolver',          1 ) } 'resolver';
-    throws_ok { $profile->set( 'asnroots.1',        1 ) } 'asnroots.1';
-    throws_ok { $profile->set( 'logfilter.Zone',    1 ) } 'logfilter.Zone';
-    throws_ok { $profile->set( 'test_levels.Zone',  1 ) } 'test_levels.Zone';
-    throws_ok { $profile->set( 'test_cases.Zone01', 1 ) } 'test_cases.Zone01';
+    dies_ok { $profile->set( 'net',               1 ) } 'dies on attempt to set a value for net';
+    dies_ok { $profile->set( 'net.foobar',        1 ) } 'dies on attempt to set a value for net.foobar';
+    dies_ok { $profile->set( 'resolver.defaults', 1 ) } 'dies on attempt to set a value for resolver.defaults';
+    dies_ok { $profile->set( 'resolver',          1 ) } 'dies on attempt to set a value for resolver';
+    dies_ok { $profile->set( 'asnroots.1',        1 ) } 'dies on attempt to set a value for asnroots.1';
+    dies_ok { $profile->set( 'logfilter.Zone',    1 ) } 'dies on attempt to set a value for logfilter.Zone';
+    dies_ok { $profile->set( 'test_levels.Zone',  1 ) } 'dies on attempt to set a value for test_levels.Zone';
+    dies_ok { $profile->set( 'test_cases.Zone01', 1 ) } 'dies on attempt to set a value for test_cases.Zone01';
 };
 
 subtest 'set() dies on illegal value' => sub {
     my $profile = Zonemaster::Engine::Profile->new;
 
-    throws_ok { $profile->set( 'resolver.defaults.usevc',   'false' ); } "checks type of resolver.defaults.usevc";
-    throws_ok { $profile->set( 'resolver.defaults.dnssec',  'false' ); } "checks type of resolver.defaults.dnssec";
-    throws_ok { $profile->set( 'resolver.defaults.recurse', 'false' ); } "checks type of resolver.defaults.recurse";
-    throws_ok { $profile->set( 'resolver.defaults.igntc',   'false' ); } "checks type of resolver.defaults.igntc";
-    throws_ok { $profile->set( 'net.ipv4',                  'false' ); } "checks type of net.ipv4";
-    throws_ok { $profile->set( 'net.ipv6',                  'false' ); } "checks type of net.ipv6";
-    throws_ok { $profile->set( 'no_network',                'false' ); } "checks type of no_network";
-    throws_ok { $profile->set( 'resolver.defaults.retry',   0 ); } "checks lower bound of resolver.defaults.retry";
-    throws_ok { $profile->set( 'resolver.defaults.retry',   256 ); } "checks upper bound of resolver.defaults.retry";
-    throws_ok { $profile->set( 'resolver.defaults.retry',   1.5 ); } "checks type of resolver.defaults.retry";
-    throws_ok { $profile->set( 'resolver.defaults.retrans', 0 ); } "checks lower bound of resolver.defaults.retrans";
-    throws_ok { $profile->set( 'resolver.defaults.retrans', 256 ); } "checks upper bound of resolver.defaults.retrans";
-    throws_ok { $profile->set( 'resolver.defaults.retrans', 1.5 ); } "checks type of resolver.defaults.retrans";
-    throws_ok { $profile->set( 'resolver.source', ['192.0.2.53'] ); } "checks type of resolver.defaults.usevc";
-    throws_ok { $profile->set( 'asnroots',        ['noreply@example.com'] ); } "checks type of resolver.defaults.usevc";
-    throws_ok { $profile->set( 'logfilter',       [] ); } "checks type of resolver.defaults.usevc";
-    throws_ok { $profile->set( 'test_levels',     [] ); } "checks type of resolver.defaults.usevc";
-    throws_ok { $profile->set( 'test_cases', {} ); } "checks type of resolver.defaults.usevc";
+    dies_ok { $profile->set( 'resolver.defaults.usevc',   'false' ); } 'checks type of resolver.defaults.usevc';
+    dies_ok { $profile->set( 'resolver.defaults.dnssec',  'false' ); } 'checks type of resolver.defaults.dnssec';
+    dies_ok { $profile->set( 'resolver.defaults.recurse', 'false' ); } 'checks type of resolver.defaults.recurse';
+    dies_ok { $profile->set( 'resolver.defaults.igntc',   'false' ); } 'checks type of resolver.defaults.igntc';
+    dies_ok { $profile->set( 'net.ipv4',                  'false' ); } 'checks type of net.ipv4';
+    dies_ok { $profile->set( 'net.ipv6',                  'false' ); } 'checks type of net.ipv6';
+    dies_ok { $profile->set( 'no_network',                'false' ); } 'checks type of no_network';
+    dies_ok { $profile->set( 'resolver.defaults.retry',   0 ); } 'checks lower bound of resolver.defaults.retry';
+    dies_ok { $profile->set( 'resolver.defaults.retry',   256 ); } 'checks upper bound of resolver.defaults.retry';
+    dies_ok { $profile->set( 'resolver.defaults.retry',   1.5 ); } 'checks type of resolver.defaults.retry';
+    dies_ok { $profile->set( 'resolver.defaults.retrans', 0 ); } 'checks lower bound of resolver.defaults.retrans';
+    dies_ok { $profile->set( 'resolver.defaults.retrans', 256 ); } 'checks upper bound of resolver.defaults.retrans';
+    dies_ok { $profile->set( 'resolver.defaults.retrans', 1.5 ); } 'checks type of resolver.defaults.retrans';
+    dies_ok { $profile->set( 'resolver.source', ['192.0.2.53'] ); } 'checks type of resolver.defaults.usevc';
+    dies_ok { $profile->set( 'asnroots',        ['noreply@example.com'] ); } 'checks type of resolver.defaults.usevc';
+    dies_ok { $profile->set( 'logfilter',       [] ); } 'checks type of resolver.defaults.usevc';
+    dies_ok { $profile->set( 'test_levels',     [] ); } 'checks type of resolver.defaults.usevc';
+    dies_ok { $profile->set( 'test_cases', {} ); } 'checks type of resolver.defaults.usevc';
 };
 
 subtest 'merge() with a profile with all properties unset' => sub {
