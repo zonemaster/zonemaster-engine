@@ -96,7 +96,7 @@ values declared in the L</PROFILE PROPERTIES> section.
 
 A constructor that returns a new profile with values parsed from a JSON string.
 
-    my $profile = Zonemaster::Engine::Profile->from_json( '{ "no_network": 1 }' );
+    my $profile = Zonemaster::Engine::Profile->from_json( '{ "no_network": true }' );
 
 The returned profile has set values for all properties specified in the
 given string.
@@ -115,7 +115,10 @@ Get the value of a property.
     my $value = $profile1->get( 'net.ipv6' );
 
 Returns value of the given property, or C<undef> if the property is unset.
-The returned value is a L<deep copy|https://en.wiktionary.org/wiki/deep_copy#Noun>.
+For boolean properties the returned value is either C<1> for true and C<0> for
+false.
+For properties with complex types, the returned value is a
+L<deep copy|https://en.wiktionary.org/wiki/deep_copy#Noun>.
 
 Dies if the given property name is invalid.
 
@@ -126,10 +129,12 @@ Set the value of a property.
     $profile1->set( 'net.ipv6', 0 );
 
 Takes a property name and value and updates the property accordingly.
+For boolean properties any truthy value is interpreted as true and any falsy
+value except C<undef> is interpreted as false.
 
 Dies if the given property name is invalid.
 
-Dies if the value is invalid for the given property.
+Dies if the value is C<undef> or otherwise invalid for the given property.
 
 =head2 merge
 
@@ -161,7 +166,7 @@ profile JSON file.
 
 =head2 resolver.defaults.usevc
 
-1 or 0. If C<1>, only use TCP. Default C<0>.
+A boolean. If true, only use TCP. Default false.
 
 =head2 resolver.defaults.retrans
 
@@ -169,13 +174,13 @@ A non-negative integer. The number of seconds between retries. Default 3.
 
 =head2 resolver.defaults.dnssec
 
-1 or 0. If C<1>, sets the DO flag in queries. Default C<0>.
+A boolean. If true, sets the DO flag in queries. Default false.
 
 =head2 resolver.defaults.recurse
 
-1 or 0. If C<1>, sets the RD flag in queries. Default C<0>.
+A boolean. If true, sets the RD flag in queries. Default false.
 
-This should almost certainly be kept C<0>.
+This should almost certainly be kept false.
 
 =head2 resolver.defaults.retry
 
@@ -186,8 +191,8 @@ If set to zero, no queries will be sent at all, which isn't very useful.
 
 =head2 resolver.defaults.igntc
 
-1 or 0. If C<0>, UDP queries that get responses with the C<TC>
-flag set will be automatically resent over TCP. Default C<0>.
+A boolean. If false, UDP queries that get responses with the C<TC>
+flag set will be automatically resent over TCP. Default false.
 
 =head2 resolver.source
 
@@ -198,17 +203,17 @@ Default C<"os_default">.
 
 =head2 net.ipv4
 
-1 or 0. If C<1>, resolver objects are allowed to send queries over
-IPv4. Default C<1>.
+A boolean. If true, resolver objects are allowed to send queries over
+IPv4. Default true.
 
 =head2 net.ipv6
 
-1 or 0. If C<1>, resolver objects are allowed to send queries over
-IPv6. Default C<1>.
+A boolean. If true, resolver objects are allowed to send queries over
+IPv6. Default true.
 
 =head2 no_network
 
-1 or 0. If C<1>, network traffic is forbidden. Default C<0>.
+A boolean. If true, network traffic is forbidden. Default false.
 
 Use when you want to be sure that any data is only taken from a preloaded
 cache.
