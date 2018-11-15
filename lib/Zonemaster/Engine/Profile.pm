@@ -170,7 +170,8 @@ A boolean. If true, only use TCP. Default false.
 
 =head2 resolver.defaults.retrans
 
-A non-negative integer. The number of seconds between retries. Default 3.
+An integer between 1 and 255 inclusive. The number of seconds between retries.
+Default 3.
 
 =head2 resolver.defaults.dnssec
 
@@ -184,10 +185,8 @@ This should almost certainly be kept false.
 
 =head2 resolver.defaults.retry
 
-A non-negative integer. The number of times a query is sent before we
-give up. Default 2.
-
-If set to zero, no queries will be sent at all, which isn't very useful.
+An integer between 1 and 255 inclusive.
+The number of times a query is sent before we give up. Default 2.
 
 =head2 resolver.defaults.igntc
 
