@@ -197,7 +197,8 @@ For details on the file format see the L</JSON REPRESENTATION> section.
 
     use Zonemaster::Engine::Profile;
 
-    my $foo     = Zonemaster::Engine::Profile->load( "/path/to/foo.profile" );
+    my $json    = read_file( "/path/to/foo.profile" );
+    my $foo     = Zonemaster::Engine::Profile->from_json( $json );
     my $profile = Zonemaster::Engine::Profile->default;
     $profile->merge( $foo );
     Zonemaster::Engine::Profile->effective->merge( $profile );
@@ -254,20 +255,19 @@ values declared in the L</PROFILE PROPERTIES> section.
 
     my $default = Zonemaster::Engine::Profile->default;
 
-=head2 load
+=head2 from_json
 
-A constructor that returns a new profile with values loaded from a
-profile file.
+A constructor that returns a new profile with values parsed from a JSON string.
 
-    my $profile = Zonemaster::Engine::Profile->load( '/path/to/file.profile' );
+    my $profile = Zonemaster::Engine::Profile->from_json( '{ "no_network": true }' );
 
 The returned profile has set values for all properties specified in the
-given file.
+given string.
 The remaining properties are unset.
 
-Dies if the given profile file is invalid.
-
-For details on the file format see the L</JSON REPRESENTATION> section.
+Dies if the given string is illegal according to the L</JSON REPRESENTATION>
+section or if the property values are illegal according to the L</PROFILE
+PROPERTIES> section.
 
 =head1 INSTANCE METHODS
 
@@ -278,7 +278,10 @@ Get the value of a property.
     my $value = $profile1->get( 'net.ipv6' );
 
 Returns value of the given property, or C<undef> if the property is unset.
-The returned value is a L<deep copy|https://en.wiktionary.org/wiki/deep_copy#Noun>.
+For boolean properties the returned value is either C<1> for true or C<0> for
+false.
+For properties with complex types, the returned value is a
+L<deep copy|https://en.wiktionary.org/wiki/deep_copy#Noun>.
 
 Dies if the given property name is invalid.
 
@@ -289,12 +292,12 @@ Set the value of a property.
     $profile1->set( 'net.ipv6', 0 );
 
 Takes a property name and value and updates the property accordingly.
-
-Returns C<$self>.
+For boolean properties any truthy value is interpreted as true and any falsy
+value except C<undef> is interpreted as false.
 
 Dies if the given property name is invalid.
 
-Dies if the value is invalid for the given property.
+Dies if the value is C<undef> or otherwise invalid for the given property.
 
 =head2 merge
 
@@ -305,8 +308,6 @@ Merge the profile data of another profile into this one.
 Properties from the other profile take precedence when the same property
 name exists in both profiles.
 The other profile object remains unmodified.
-
-Returns C<$self>;
 
 =head2 to_json
 
@@ -328,53 +329,53 @@ profile JSON file.
 
 =head2 resolver.defaults.usevc
 
-A boolean. If C<true>, only use TCP. Default C<false>.
+A boolean. If true, only use TCP. Default false.
 
 =head2 resolver.defaults.retrans
 
-A number. The number of seconds between retries. Default 3.
+An integer between 1 and 255 inclusive. The number of seconds between retries.
+Default 3.
 
 =head2 resolver.defaults.dnssec
 
-A boolean. If C<true>, sets the DO flag in queries. Default C<false>.
+A boolean. If true, sets the DO flag in queries. Default false.
 
 =head2 resolver.defaults.recurse
 
-A boolean. If C<true>, sets the RD flag in queries. Default C<false>.
+A boolean. If true, sets the RD flag in queries. Default false.
 
-This should almost certainly be kept C<false>.
+This should almost certainly be kept false.
 
 =head2 resolver.defaults.retry
 
-A non-negative integer. The number of times a query is sent before we
-give up. Default 2.
-
-If set to zero, no queries will be sent at all, which isn't very useful.
+An integer between 1 and 255 inclusive.
+The number of times a query is sent before we give up. Default 2.
 
 =head2 resolver.defaults.igntc
 
-A boolean. If C<false>, UDP queries that get responses with the C<TC>
-flag set will be automatically resent over TCP. Default C<false>.
+A boolean. If false, UDP queries that get responses with the C<TC>
+flag set will be automatically resent over TCP. Default false.
 
 =head2 resolver.source
 
-A string or C<undef>. The source address all resolver objects should use
-when sending queries. If C<undef>, the OS default address is used. Default
-C<undef>.
+A string that is either an IP address or the exact string C<"os_default">.
+The source address all resolver objects should use when sending queries.
+If C<"os_default">, the OS default address is used.
+Default C<"os_default">.
 
 =head2 net.ipv4
 
-A boolean. If C<true>, resolver objects are allowed to send queries over
-IPv4. Default C<true>.
+A boolean. If true, resolver objects are allowed to send queries over
+IPv4. Default true.
 
 =head2 net.ipv6
 
-A boolean. If C<true>, resolver objects are allowed to send queries over
-IPv6. Default C<true>.
+A boolean. If true, resolver objects are allowed to send queries over
+IPv6. Default true.
 
 =head2 no_network
 
-A boolean. If true, network traffic is forbidden. Default C<false>.
+A boolean. If true, network traffic is forbidden. Default false.
 
 Use when you want to be sure that any data is only taken from a preloaded
 cache.
@@ -485,11 +486,9 @@ These specifications are the only authoritative documents on the default
 severity level for the various messages.
 For messages not defined in any of these specifications please refer to the file
 located by L<dist_file("Zonemaster-Engine", "default.profile")|
-File::ShareDir/dist_file>, or in the special case of the DNSSEC module,
-refer to the module source code.
+File::ShareDir/dist_file>.
 For messages neither defined in test specifications, nor listed in
-C<default.profile>, nor listed in the DNSSEC module source code,
-the default severity level is C<DEBUG>.
+C<default.profile>, the default severity level is C<DEBUG>.
 
 I<Note:> Sometimes multiple test cases within the same test module define
 messages for the same tag.
@@ -498,22 +497,19 @@ level for the tag.
 
 =head2 test_cases
 
-A hashref mapping test case names to booleans. Default C<{}>.
+An arrayref of names of test cases as listed in the L<test case specifications|
+https://github.com/zonemaster/zonemaster/tree/master/docs/specifications/tests>.
+Default is an arrayref listing all the test cases.
 
-Specifies a blacklist of test cases to skip when a test module is asked
-to run of all of its test cases.
-Test cases blacklisted here can still be run individually.
-The test cases C<basic00>, C<basic01> and C<basic02> cannot be blacklisted
-this way.
-The reason these particular test cases cannot be blacklisted is that part
-of their function is to verify that the given name can be tested at all.
+Specifies which test cases to consider when a test module is asked 
+to run of all of its test cases. 
 
-The keys of this hash are names of test cases from the test
-specifications.
-Only test cases mapped to C<false> are considered, i.e. only those
-included in the blacklisted.
-Test cases mapped to C<true> are ignored, i.e. they are not included
-the blacklist.
+Test cases not included here can still be run individually.
+
+The test cases C<basic00>, C<basic01> and C<basic02> are always considered no
+matter if they're excluded from this property.
+This is because part of their function is to verify that the given domain name
+can be tested at all.
 
 =head1 JSON REPRESENTATION
 
@@ -528,8 +524,8 @@ Properties with unset values are omitted in the JSON representation.
 
 For a complete example, refer to the file located by L<dist_file(
 "Zonemaster-Engine", "default.profile" )|File::ShareDir/dist_file>.
-A profile with the only two properties set, C<net.ipv4> = 1 and
-C<net.ipv6> = 1 has this JSON representation:
+A profile with the only two properties set, C<net.ipv4> = true and
+C<net.ipv6> = true has this JSON representation:
 
     {
         "net": {
