@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Util;
 
-use version; our $VERSION = version->declare("v1.1.8");
+use version; our $VERSION = version->declare("v1.1.10");
 
 use 5.014002;
 
@@ -32,27 +32,28 @@ sub info {
 
 sub should_run_test {
     my ( $test_name ) = @_;
-    return  Zonemaster::Engine->profile->get( q{test_cases} )->{ $test_name } // 1
+    my %test_names = map { $_ => 1 } @{ Zonemaster::Engine::Profile->effective->get( q{test_cases} ) };
+
+    return exists $test_names{$test_name};
 }
 
 sub ipversion_ok {
     my ( $version ) = @_;
 
     if ( $version == $IP_VERSION_4 ) {
-        return Zonemaster::Engine->profile->get( q{net.ipv4} );
+        return Zonemaster::Engine::Profile->effective->get( q{net.ipv4} );
     }
     elsif ( $version == $IP_VERSION_6 ) {
-        return Zonemaster::Engine->profile->get( q{net.ipv6} );
+        return Zonemaster::Engine::Profile->effective->get( q{net.ipv6} );
     }
     else {
         return;
     }
 }
 
-# WIP
-# was policy
 sub test_levels {
-    return Zonemaster::Engine->profile->test_levels;
+
+    return Zonemaster::Engine::Profile->effective->get( q{test_levels} );
 }
 
 sub name {
@@ -214,7 +215,7 @@ Check if a test is blacklisted ad should run or not.
 
 =item ipversion_ok
 
-Check if IP version operations are permitted. Tests are done against Zonemaster::Engine->profile content.
+Check if IP version operations are permitted. Tests are done against Zonemaster::Engine::Profile->effective content.
 
 =item test_levels
 

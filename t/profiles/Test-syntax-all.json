@@ -1,12 +1,12 @@
 {
-    "test_cases": {
-        "syntax01": 1,
-        "syntax02": 1,
-        "syntax03": 1,
-        "syntax04": 1,
-        "syntax05": 1,
-        "syntax06": 1,
-        "syntax07": 1,
-        "syntax08": 1
-    }
+    "test_cases": [
+        "syntax01",
+        "syntax02",
+        "syntax03",
+        "syntax04",
+        "syntax05",
+        "syntax06",
+        "syntax07",
+        "syntax08"
+    ]
 }

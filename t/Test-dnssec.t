@@ -1,4 +1,5 @@
 use Test::More;
+use File::Slurp;
 
 use List::MoreUtils qw[uniq none any];
 
@@ -39,8 +40,11 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
 }
 
 # Find a way for dnssec06 which have a dependence...
+my ($json, $foo);
 foreach my $testcase ( qw{dnssec01 dnssec02 dnssec03 dnssec04 dnssec05 dnssec07 dnssec08 dnssec09 dnssec10 dnssec11} ) {
-    Zonemaster::Engine->profile->load( 't/profiles/Test-'.$testcase.'-only.json' );
+    $json = read_file( 't/profiles/Test-'.$testcase.'-only.json' );
+    $foo  = Zonemaster::Engine::Profile->from_json( $json );
+    Zonemaster::Engine::Profile->effective->merge( $foo );
     my @testcases;
     Zonemaster::Engine->logger->clear_history();
     foreach my $result ( Zonemaster::Engine->test_module( q{dnssec}, q{nic.se} ) ) {
@@ -49,11 +53,13 @@ foreach my $testcase ( qw{dnssec01 dnssec02 dnssec03 dnssec04 dnssec05 dnssec07 
         }
     }
     @testcases = uniq sort @testcases;
-    is( scalar( @testcases ), 1, 'only one test-case' );
-    is( $testcases[0], 'Zonemaster::Engine::Test::DNSSEC::'.$testcase, 'expected test-case' );
+    is( scalar( @testcases ), 1, 'only one test-case ('.$testcase.')' );
+    is( $testcases[0], 'Zonemaster::Engine::Test::DNSSEC::'.$testcase, 'expected test-case ('.$testcases[0].')' );
 }
 
-Zonemaster::Engine->profile->load( 't/profiles/Test-dnssec-all.json' );
+$json = read_file( 't/profiles/Test-dnssec-all.json' );
+$foo  = Zonemaster::Engine::Profile->from_json( $json );
+Zonemaster::Engine::Profile->effective->merge( $foo );
 
 my $zone;
 my @res;

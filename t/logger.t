@@ -1,5 +1,6 @@
 use Test::More;
 use Test::Fatal;
+use File::Slurp;
 
 BEGIN {
     use_ok( 'Zonemaster::Engine::Logger' );
@@ -15,8 +16,11 @@ isa_ok( $log, 'Zonemaster::Engine::Logger' );
 $log->add( 'TAG', { seventeen => 17 } );
 
 # Make sure all our "policy" comes from our "policy" file.
-$Zonemaster::Engine::Profile::test_levels = {};
-Zonemaster::Engine->profile->load( 't/policy.json' );
+my $json    = read_file( "t/policy.json" );
+my $foo     = Zonemaster::Engine::Profile->from_json( $json );
+my $profile = Zonemaster::Engine::Profile->default;
+$profile->merge( $foo );
+Zonemaster::Engine::Profile->effective->merge( $profile );
 
 my $e = $log->entries->[-1];
 isa_ok( $e, 'Zonemaster::Engine::Logger::Entry' );
@@ -65,7 +69,9 @@ isa_ok( $err, 'Zonemaster::Engine::Exception' );
 is( "$err", 'canary' );
 $log->clear_callback;
 
-ok( Zonemaster::Engine->profile->load( 't/profile.json' ), 'profile loaded' );
+$json = read_file( "t/profile.json" );
+$foo  = Zonemaster::Engine::Profile->from_json( $json );
+ok( Zonemaster::Engine::Profile->effective->merge( $foo ), 'profile loaded' );
 $log->add( FILTER_THIS => { when => 1, and => 'this' } );
 my $filtered = $log->entries->[-1];
 $log->add( FILTER_THIS => { when => 1, and => 'or' } );
@@ -92,7 +98,7 @@ qr[[{"args":{"exception":"in callback at t/logger.t line 47, <DATA> line 1.\n"},
     'JSON looks OK'
 );
 
-Zonemaster::Engine->profile->test_levels->{BASIC}{NS_FAILED} = 'GURKSALLAD';
+Zonemaster::Engine::Profile->effective->set( q{test_levels}, {"BASIC" => {"NS_FAILED" => "GURKSALLAD" }}); #->{BASIC}{NS_FAILED} = 'GURKSALLAD';
 my $fail = Zonemaster::Engine::Logger::Entry->new( { module => 'BASIC', tag => 'NS_FAILED' } );
 like( exception { $fail->level }, qr/Unknown level string: GURKSALLAD/, 'Dies on unknown level string' );
 

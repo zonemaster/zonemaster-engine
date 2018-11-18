@@ -1,4 +1,5 @@
 use Test::More;
+use File::Slurp;
 
 BEGIN {
     use_ok( q{Zonemaster::Engine} );
@@ -43,8 +44,13 @@ my $datafile = q{t/Test-basic.data};
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die q{Stored data file missing} if not -r $datafile;
     Zonemaster::Engine::Nameserver->restore( $datafile );
-    Zonemaster::Engine->profile->set( q{no_network}, 1 );
+    Zonemaster::Engine::Profile->effective->set( q{no_network}, 1 );
 }
+
+my ($json, $foo);
+$json = read_file( 't/profiles/Test-basic-all.json' );
+$foo  = Zonemaster::Engine::Profile->from_json( $json );
+Zonemaster::Engine::Profile->effective->merge( $foo );
 
 my @res;
 my %res;
@@ -110,9 +116,9 @@ if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Nameserver->save( $datafile );
 }
 
-Zonemaster::Engine->profile->set( q{no_network}, 0 );
-Zonemaster::Engine->profile->set( q{net.ipv4}, 0 );
-Zonemaster::Engine->profile->set( q{net.ipv6}, 0 );
+Zonemaster::Engine::Profile->effective->set( q{no_network}, 0 );
+Zonemaster::Engine::Profile->effective->set( q{net.ipv4}, 0 );
+Zonemaster::Engine::Profile->effective->set( q{net.ipv6}, 0 );
 zone_gives( q{basic02}, $zone, q{NO_NETWORK} );
 zone_gives_not( q{basic02}, $zone, q{IPV4_ENABLED} );
 zone_gives_not( q{basic02}, $zone, q{IPV6_ENABLED} );
@@ -124,8 +130,8 @@ zone_gives_not( q{basic03}, $zone, q{IPV6_ENABLED} );
 zone_gives_not( q{basic03}, $zone, q{IPV4_DISABLED} );
 zone_gives_not( q{basic03}, $zone, q{IPV6_DISABLED} );
 
-#Zonemaster::Engine->profile->set( q{net.ipv4}, 1 );
-#Zonemaster::Engine->profile->set( q{net.ipv6}, 1 );
+#Zonemaster::Engine::Profile->effective->set( q{net.ipv4}, 1 );
+#Zonemaster::Engine::Profile->effective->set( q{net.ipv6}, 1 );
 #zone_gives( q{basic02}, $zone, q{IPV4_ENABLED} );
 #zone_gives( q{basic02}, $zone, q{IPV6_DISABLED} );
 #zone_gives_not( q{basic02}, $zone, q{IPV4_DISABLED} );
@@ -137,8 +143,8 @@ zone_gives_not( q{basic03}, $zone, q{IPV6_DISABLED} );
 #
 #if ( Zonemaster::Engine::Util::supports_ipv6() ) {
 #
-#    Zonemaster::Engine->profile->set( q{net.ipv4}, 0 );
-#    Zonemaster::Engine->profile->set( q{net.ipv6}, 1 );
+#    Zonemaster::Engine::Profile->effective->set( q{net.ipv4}, 0 );
+#    Zonemaster::Engine::Profile->effective->set( q{net.ipv6}, 1 );
 #    zone_gives_not( q{basic02}, $zone, q{IPV4_ENABLED} );
 #    zone_gives_not( q{basic02}, $zone, q{IPV6_DISABLED} );
 #    zone_gives( q{basic02}, $zone, q{IPV4_DISABLED} );
@@ -148,8 +154,8 @@ zone_gives_not( q{basic03}, $zone, q{IPV6_DISABLED} );
 #    zone_gives( q{basic03}, $zone, q{IPV4_DISABLED} );
 #    zone_gives( q{basic03}, $zone, q{IPV6_ENABLED} );
 #
-#    Zonemaster::Engine->profile->set( q{net.ipv4}, 1 );
-#    Zonemaster::Engine->profile->set( q{net.ipv6}, 1 );
+#    Zonemaster::Engine::Profile->effective->set( q{net.ipv4}, 1 );
+#    Zonemaster::Engine::Profile->effective->set( q{net.ipv6}, 1 );
 #    zone_gives( q{basic02}, $zone, q{IPV4_ENABLED} );
 #    zone_gives( q{basic02}, $zone, q{IPV6_ENABLED} );
 #    zone_gives_not( q{basic02}, $zone, q{IPV4_DISABLED} );
@@ -161,7 +167,7 @@ zone_gives_not( q{basic03}, $zone, q{IPV6_DISABLED} );
 #
 #}
 
-Zonemaster::Engine->profile->set( q{no_network}, 1 );
+Zonemaster::Engine::Profile->effective->set( q{no_network}, 1 );
 
 done_testing;
 

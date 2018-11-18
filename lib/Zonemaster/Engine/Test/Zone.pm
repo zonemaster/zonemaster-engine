@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::Zone;
 
-use version; our $VERSION = version->declare("v1.0.5");
+use version; our $VERSION = version->declare("v1.0.6");
 
 use strict;
 use warnings;
@@ -578,12 +578,12 @@ sub _retrieve_record_from_zone {
 sub _is_ip_version_disabled {
     my $ns = shift;
 
-    if ( not Zonemaster::Engine->profile->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
+    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
         Zonemaster::Engine->logger->add( SKIP_IPV4_DISABLED => { ns => "$ns" } );
         return 1;
     }
 
-    if ( not Zonemaster::Engine->profile->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
+    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
         Zonemaster::Engine->logger->add( SKIP_IPV6_DISABLED => { ns => "$ns" } );
         return 1;
     }

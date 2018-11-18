@@ -1,10 +1,5 @@
 {
-    "test_cases": {
-        "consistency01": 1,
-        "consistency02": 0,
-        "consistency03": 0,
-        "consistency04": 0,
-        "consistency05": 0,
-        "consistency06": 0
-    }
+    "test_cases": [
+        "consistency01"
+    ]
 }

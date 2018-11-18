@@ -13,7 +13,7 @@ my $datafile = 't/recursor.data';
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die "Stored data file missing" if not -r $datafile;
     Zonemaster::Engine::Nameserver->restore( $datafile );
-    Zonemaster::Engine->profile->set( q{no_network}, 1 );
+    Zonemaster::Engine::Profile->effective->set( q{no_network}, 1 );
 }
 
 my $p = Zonemaster::Engine::Recursor->recurse( 'www.iis.se' );

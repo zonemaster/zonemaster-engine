@@ -1,10 +1,19 @@
 use Test::More;
 use Test::Fatal;
+use File::Slurp;
 
 use Zonemaster::Engine::Logger::Entry;
 use POSIX qw[setlocale :locale_h];
 
 BEGIN { use_ok( 'Zonemaster::Engine::Translator' ) }
+
+my ($json, $foo);
+$json = read_file( 't/profiles/Test-all.json' );
+$foo  = Zonemaster::Engine::Profile->from_json( $json );
+Zonemaster::Engine::Profile->effective->merge( $foo );
+$json = read_file( 't/profiles/Test-all-levels.json' );
+$foo  = Zonemaster::Engine::Profile->from_json( $json );
+Zonemaster::Engine::Profile->effective->merge( $foo );
 
 my $trans = new_ok( 'Zonemaster::Engine::Translator' => [ { locale => 'C' } ] );
 ok( exists $trans->data->{BASIC}{HAS_PARENT},       'expected key from file exists' );

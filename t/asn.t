@@ -7,11 +7,11 @@ my $datafile = 't/asn.data';
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die "Stored data file missing" if not -r $datafile;
     Zonemaster::Engine::Nameserver->restore( $datafile );
-    Zonemaster::Engine->profile->set( q{no_network}, 1 );
+    Zonemaster::Engine::Profile->effective->set( q{no_network}, 1 );
 }
 
-Zonemaster::Engine->profile->effective->{asnroots} = [ "asnlookup.zonemaster.net", "asnlookup.iis.se", "asn.cymru,com" ];
-
+Zonemaster::Engine::Profile->effective->set(q{asnroots}, [ "asnlookup.zonemaster.net", "asnlookup.iis.se", "asn.cymru,com" ]);
+use Data::Dumper; print Data::Dumper::Dumper(Zonemaster::Engine::Profile->effective->{q{profile}});
 my ( $asn1, $prefix1 ) = Zonemaster::Engine::ASNLookup->get_with_prefix( '8.8.8.8' );
 is $asn1->[0], 15169, '8.8.8.8 is in 15169';
 is $prefix1->prefix, '8.8.8.0/24', '8.8.8.8 is in 8.8.8.0/24';

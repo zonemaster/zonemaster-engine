@@ -1,4 +1,5 @@
 use Test::More;
+use File::Slurp;
 
 use Zonemaster::Engine::Net::IP;
 
@@ -12,8 +13,11 @@ my $datafile = q{t/Test-address.data};
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die "Stored data file missing" if not -r $datafile;
     Zonemaster::Engine::Nameserver->restore( $datafile );
-    Zonemaster::Engine->profile->set( q{no_network}, 1 );
+    Zonemaster::Engine::Profile->effective->set( q{no_network}, 1 );
 }
+my $json = read_file( "t/profiles/Test-address-all.json" );
+my $foo  = Zonemaster::Engine::Profile->from_json( $json );
+Zonemaster::Engine::Profile->effective->merge( $foo );
 
 
 ok(

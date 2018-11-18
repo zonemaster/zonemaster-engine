@@ -1,6 +1,6 @@
 package Zonemaster::Engine;
 
-use version; our $VERSION = version->declare("v2.0.8");
+use version; our $VERSION = version->declare("v2.0.9");
 
 use 5.014002;
 use Moose;
@@ -23,11 +23,7 @@ sub logger {
 }
 
 sub profile {
-    if ( not defined $profile ) {
-        $profile = Zonemaster::Engine::Profile->new;
-    }
-
-    return $profile;
+    return $profile //= Zonemaster::Engine::Profile->new;
 }
 
 sub ns {

@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::Basic;
 
-use version; our $VERSION = version->declare("v1.0.10");
+use version; our $VERSION = version->declare("v1.0.11");
 
 use strict;
 use warnings;
@@ -229,7 +229,7 @@ sub basic02 {
     }
 
     foreach my $ns ( @ns ) {
-        if ( not Zonemaster::Engine->profile->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
+        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
             push @results,
               info(
                 IPV4_DISABLED => {
@@ -240,7 +240,7 @@ sub basic02 {
               );
             next;
         }
-        elsif ( Zonemaster::Engine->profile->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
+        elsif ( Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
             push @results,
               info(
                 IPV4_ENABLED => {
@@ -251,7 +251,7 @@ sub basic02 {
               );
         }
 
-        if ( not Zonemaster::Engine->profile->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
+        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
             push @results,
               info(
                 IPV6_DISABLED => {
@@ -262,7 +262,7 @@ sub basic02 {
               );
             next;
         }
-        elsif ( Zonemaster::Engine->profile->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
+        elsif ( Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
             push @results,
               info(
                 IPV6_ENABLED => {
@@ -320,7 +320,7 @@ sub basic03 {
     my $name        = q{www.} . $zone->name;
     my $response_nb = 0;
     foreach my $ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) } ) {
-        if ( not Zonemaster::Engine->profile->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
+        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
             push @results,
               info(
                 IPV4_DISABLED => {
@@ -331,7 +331,7 @@ sub basic03 {
               );
             next;
         }
-        elsif ( Zonemaster::Engine->profile->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
+        elsif ( Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
             push @results,
               info(
                 IPV4_ENABLED => {
@@ -342,7 +342,7 @@ sub basic03 {
               );
         }
 
-        if ( not Zonemaster::Engine->profile->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
+        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
             push @results,
               info(
                 IPV6_DISABLED => {
@@ -353,7 +353,7 @@ sub basic03 {
               );
             next;
         }
-        elsif ( Zonemaster::Engine->profile->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
+        elsif ( Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
             push @results,
               info(
                 IPV6_ENABLED => {

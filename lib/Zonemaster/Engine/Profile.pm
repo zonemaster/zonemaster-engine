@@ -1,168 +1,201 @@
 package Zonemaster::Engine::Profile;
 
-use version; our $VERSION = version->declare("v1.2.1");
+use version; our $VERSION = version->declare("v1.2.2");
 
 use 5.014002;
 use strict;
 use warnings;
 
-use Moose;
-use JSON::PP;
-use File::ShareDir qw[dist_dir dist_file];
-use File::Slurp;
+use JSON::PP qw( encode_json decode_json );
 use Hash::Merge;
-use File::Spec;
 use Data::DRef qw( :dref_access );
+use Scalar::Util qw(reftype);
+use Sys::Hostname;
+use Socket;
+use Clone qw(clone);
+use Data::Dumper;
 
 use Zonemaster::Engine;
 
-has 'profiles'    => ( is => 'ro', isa => 'ArrayRef', default => sub { [] } );
-
-my $merger = Hash::Merge->new;
-$merger->specify_behavior(
-    {
-        'SCALAR' => {
-            'SCALAR' => sub { $_[1] },
-            'ARRAY'  => sub { [ $_[0], @{ $_[1] } ] },
-            'HASH'   => sub { $_[1] },
-        },
-        'ARRAY' => {
-            'SCALAR' => sub { $_[1] },
-            'ARRAY'  => sub { [ @{ $_[1] } ] },
-            'HASH'   => sub { $_[1] },
-        },
-        'HASH' => {
-            'SCALAR' => sub { $_[1] },
-            'ARRAY'  => sub { [ values %{ $_[0] }, @{ $_[1] } ] },
-            'HASH'   => sub { Hash::Merge::_merge_hashes( $_[0], $_[1] ) },
-        },
+my %profile_properties_details = (
+    q{resolver.defaults.usevc} => {
+        q{type}    => q{Bool},
+        q{default} => 0
+    },
+    q{resolver.defaults.retrans} => {
+        q{type}    => q{Num},
+        q{default} => 3
+    },
+    q{resolver.defaults.dnssec} => {
+        q{type}    => q{Bool},
+        q{default} => 0
+    },
+    q{resolver.defaults.recurse} => {
+        q{type}    => q{Bool},
+        q{default} => 0
+    },
+    q{resolver.defaults.retry} => {
+        q{type}    => q{Num},
+        q{default} => 2
+    },
+    q{resolver.defaults.igntc} => {
+        q{type}    => q{Bool},
+        q{default} => 0
+    },
+    q{resolver.defaults.edns_size} => {
+        q{type}    => q{Num},
+        q{default} => 0
+    },
+    q{resolver.defaults.debug} => {
+        q{type}    => q{Bool},
+        q{default} => 0
+    },
+    q{resolver.source} => {
+        q{type}    => q{Str},
+        q{default} => inet_ntoa((gethostbyname(hostname))[4])
+    },
+    q{net.ipv4} => {
+        q{type}    => q{Bool},
+        q{default} => 1
+    },
+    q{net.ipv6} => {
+        q{type}    => q{Bool},
+        q{default} => 1
+    },
+    q{no_network} => {
+        q{type}    => q{Bool},
+        q{default} => 0
+    },
+    q{asnroots} => {
+        q{type}    => q{ArrayRef},
+        q{default} => [qw(asnlookup.zonemaster.net asnlookup.iis.se asn.cymru.com)]
+    },
+    q{logfilter} => {
+        q{type} => q{HashRef},
+        q{default} => {}
+    },
+    q{test_levels} => {
+        q{type} => q{HashRef},
+        q{default} => {}
+    },
+    q{test_cases} => {
+        q{type} => q{ArrayRef},
+        q{default} => []
     }
 );
 
-our $profile;
-_load_base_profile();
+sub get_profile_paths {
+    my ( $paths_ref, $data, @path ) = @_;
 
-our $test_levels = {};
+    foreach my $key (sort keys %$data) {
 
-sub BUILD {
-    my ( $self ) = @_;
-
-    foreach my $dir ( _config_directory_list() ) {
-        my $pfile = File::Spec->catfile( $dir, 'profile.json' );
-        my $new = eval { decode_json scalar read_file $pfile };
-        if ( $new ) {
-            my $tl = $new->{test_levels};
-            delete $new->{test_levels};
-            foreach my $level ( keys %{$tl} ) {
-                $test_levels->{$level} = $tl->{$level};
-            }
-            $profile = $merger->merge( $profile, $new );
-            push @{ $self->profiles }, $pfile;
+	my $path = join '.', @path, $key;
+        if (ref($data->{$key}) eq 'HASH' and not exists $profile_properties_details{$path} ) {
+            get_profile_paths($paths_ref, $data->{$key}, @path, $key);
+            next;
+        }
+        else {
+	    $paths_ref->{$path} = 1;
         }
     }
+}
+
+our $effective = Zonemaster::Engine::Profile->default;
+
+sub new {
+    my $class = shift;
+    my $self = {};
+    $self->{q{profile}} = {};
+
+    bless $self, $class;
+
     return $self;
-} ## end sub BUILD
+}
 
-# WIP
+sub default {
+    my ( $class ) = @_;
+    my $new = $class->new;
+    foreach my $property_name ( keys %profile_properties_details ) {
+        if ( exists $profile_properties_details{$property_name}{default} ) {
+            $new->set( $property_name, $profile_properties_details{$property_name}{default} );
+        }
+    }
+    return $new;
+}
+
 sub get {
-    my ( $class, $property ) = @_;
+    my ( $self, $property_name ) = @_;
 
-    return get_value_for_dref($profile, $property);
+    die "Unknown property '$property_name'"  if not exists $profile_properties_details{$property_name};
+
+    if ( $profile_properties_details{$property_name}->{type} eq q{ArrayRef} or $profile_properties_details{$property_name}->{type} eq q{HashRef} ) {
+        return clone get_value_for_dref( $self->{q{profile}}, $property_name );
+    } else {
+        return get_value_for_dref( $self->{q{profile}}, $property_name );
+    }
 }
 
 # WIP
 sub set {
-    my ( $class, $property, $value ) = @_;
+    my ( $self, $property_name, $value ) = @_;
+    my $value_type = reftype($value);
 
-    return set_value_for_dref($profile, $property, $value);
-}   
-    
+    die "Unknown property '$property_name'" if not exists $profile_properties_details{$property_name};
 
-# WIP
-sub effective {
-    my ( $class ) = @_;
-
-    return $profile;
-}
-
-sub test_levels {
-    my ( $class ) = @_;
-
-    return $test_levels;
-}
-
-sub _config_directory_list {
-    my @dirlist;
-    my $makefile_name = 'Zonemaster-Engine'; # This must be the same name as "name" in Makefile.PL
-    push @dirlist, dist_dir( $makefile_name );
-    push @dirlist, '/etc/zonemaster';
-    push @dirlist, '/usr/local/etc/zonemaster';
-
-    my $dir = ( getpwuid( $> ) )[7];
-    if ( $dir ) {
-        push @dirlist, $dir . '/.zonemaster';
+    # $value is undefined or is a Scalar
+    if ( ! $value_type ) {
+	die "Property $property_name can not be undef" if not defined $value;
     }
-
-    return @dirlist;
-}
-
-sub _load_base_profile {
-    my $internal = decode_json( join( q{}, <DATA> ) ); 
-
-    $profile = $internal;
-
-    return;
-}
-
-# WIP
-sub load_module_policy {
-    my ( $class, $mod ) = @_;
-
-    my $m = 'Zonemaster::Engine::Test::' . $mod;
-    if ( $m->can( 'policy' ) and $m->policy ) {
-        $test_levels = $merger->merge( $test_levels, { $mod => $m->policy } );
-    }
-
-    return;
-}
-
-sub load {
-    my ( $self, $filename ) = @_;
-    my $new = decode_json scalar read_file $filename;
-
-    if ( $new ) {
-        my $tl = $new->{test_levels};
-        delete $new->{test_levels};
-        foreach my $level ( keys %{$tl} ) {
-            $test_levels->{$level} = $tl->{$level};
+    else {
+        # Array
+	if ( $profile_properties_details{$property_name}->{type} eq q{ArrayRef} and reftype($value) ne q{ARRAY} ) {
+            die "Property $property_name is not a ArrayRef";
         }
-        $profile = $merger->merge( $profile, $new );
-        push @{ $self->profiles }, $filename if ( ref( $self ) and $self->isa( __PACKAGE__ ) );
+	# Hash
+	elsif ( $profile_properties_details{$property_name}->{type} eq q{HashRef} and reftype($value) ne q{HASH} ) {
+            die "Property $property_name is not a HashRef";
+        }
     }
 
-    return !!$new;
+    return set_value_for_dref( $self->{q{profile}}, $property_name, $value );
+}   
+
+sub merge {
+    my ( $self, $other_profile ) = @_;
+
+    foreach my $property_name ( keys %profile_properties_details ) {
+        if ( defined get_value_for_dref( $other_profile->{q{profile}}, $property_name ) ) {
+            $self->set( $property_name, get_value_for_dref( $other_profile->{q{profile}}, $property_name ) );
+        }
+    }
+    return $other_profile->{q{profile}};
 }
 
-sub resolver_defaults {
-    my ( $class ) = @_;
+sub from_json {
+    my ( $class, $json ) = @_;
+    my $new = $class->new;
+    my $internal = decode_json( $json );
 
-    return $class->effective->{resolver}{defaults};
+    my %paths;
+    get_profile_paths(\%paths, $internal);
+    foreach my $property_name ( keys %paths ) {
+        if ( defined get_value_for_dref( $internal, $property_name ) ) {
+            $new->set( $property_name, get_value_for_dref( $internal, $property_name ) );
+        }
+    }
+
+    return $new;
 }
 
-sub logfilter {
-    my ( $class ) = @_;
+sub to_json {
+    my ( $self ) = @_;
 
-    return $class->effective->{logfilter};
+    return encode_json($self->{q{profile}});
 }
 
-sub asnroots {
-    my ( $class ) = @_;
-
-    return $class->effective->{asnroots};
+sub effective {
+    return $effective;
 }
-
-no Moose;
-__PACKAGE__->meta->make_immutable;
 
 1;
 
@@ -536,15 +569,7 @@ C<net.ipv6> = true has this JSON representation:
 
 =over
 
-=item BUILD
-
-WIP, here to please L<Pod::Coverage>.
-
-=item resolver_defaults
-
-WIP, here to please L<Pod::Coverage>.
-
-=item load_module_policy
+=item get_profile_paths
 
 WIP, here to please L<Pod::Coverage>.
 
@@ -554,7 +579,7 @@ WIP, here to please L<Pod::Coverage>.
 
 __DATA__
 {
-   "asnroots" : [ "asnlookup.zonemaster.net", "asnlookup.iis.se", "asn.cymru.com"],
+   "asnroots" : [ "asnlookup.zonemaster.net", "asnlookup.iis.se", "asn.cymru.com" ],
    "net" : {
       "ipv4" : true,
       "ipv6" : true

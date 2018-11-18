@@ -1,7 +1,5 @@
 {
-    "test_cases": {
-        "connectivity01": 0,
-        "connectivity02": 0,
-        "connectivity03": 1 
-    }
+    "test_cases": [
+        "connectivity03" 
+    ]
 }
