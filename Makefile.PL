@@ -30,7 +30,10 @@ requires 'Readonly'              => 0;
 requires 'Locale::TextDomain'    => 1.23;
 requires 'Text::CSV'             => 0;
 requires 'MIME::Base64'          => 0;
+requires 'Clone'                 => 0;
 requires 'Data::DRef'            => 0;
+requires 'Socket'                => 0;
+requires 'Sys::Hostname'         => 0;
 
 test_requires 'Test::Fatal' => 0;
 

@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Profile;
 
-use version; our $VERSION = version->declare("v1.2.2");
+use version; our $VERSION = version->declare("v1.2.3");
 
 use 5.014002;
 use strict;
@@ -24,7 +24,9 @@ my %profile_properties_details = (
     },
     q{resolver.defaults.retrans} => {
         q{type}    => q{Num},
-        q{default} => 3
+        q{default} => 3,
+        q{min}     => 1,
+        q{max}     => 255
     },
     q{resolver.defaults.dnssec} => {
         q{type}    => q{Bool},
@@ -36,7 +38,9 @@ my %profile_properties_details = (
     },
     q{resolver.defaults.retry} => {
         q{type}    => q{Num},
-        q{default} => 2
+        q{default} => 2,
+        q{min}     => 1,
+        q{max}     => 255
     },
     q{resolver.defaults.igntc} => {
         q{type}    => q{Bool},
@@ -135,16 +139,40 @@ sub get {
     }
 }
 
-# WIP
 sub set {
     my ( $self, $property_name, $value ) = @_;
     my $value_type = reftype($value);
 
     die "Unknown property '$property_name'" if not exists $profile_properties_details{$property_name};
 
-    # $value is undefined or is a Scalar
-    if ( ! $value_type ) {
+    # $value is a Scalar
+    if ( ! $value_type  or $value_type eq q{SCALAR} ) {
 	die "Property $property_name can not be undef" if not defined $value;
+
+        # Boolean (Should we accept (true|false) values ?
+        if ( $profile_properties_details{$property_name}->{type} eq q{Bool} ) {
+            if ( $value =~ /^(0|false)$/ ) {
+                $value = JSON::PP::false;
+            }
+            elsif ( $value =~ /^(1|true)$/ ) {
+                $value = JSON::PP::true;
+            }
+            else {
+	        die "Property $property_name is of type Boolean";
+            }
+        }
+        # Number. In our case, only non-negative integers
+	elsif ( $profile_properties_details{$property_name}->{type} eq q{Num} ) {
+            if ( $value !~ /^(\d+)$/ ) {
+                die "Property $property_name is of type non-negative integer";
+            }
+            if ( exists $profile_properties_details{$property_name}->{min} and $value < $profile_properties_details{$property_name}->{min} ) {
+                die "Property $property_name value is out of limit (smaller)";
+            }
+            if ( exists $profile_properties_details{$property_name}->{max} and $value > $profile_properties_details{$property_name}->{max} ) {
+                die "Property $property_name value is out of limit (bigger)";
+            }
+        }
     }
     else {
         # Array
@@ -154,6 +182,9 @@ sub set {
 	# Hash
 	elsif ( $profile_properties_details{$property_name}->{type} eq q{HashRef} and reftype($value) ne q{HASH} ) {
             die "Property $property_name is not a HashRef";
+        }
+	elsif ( $profile_properties_details{$property_name}->{type} eq q{Bool} or $profile_properties_details{$property_name}->{type} eq q{Num} or $profile_properties_details{$property_name}->{type} eq q{Str} ) {
+            die "Property $property_name is a Scalar";
         }
     }
 
@@ -190,7 +221,7 @@ sub from_json {
 sub to_json {
     my ( $self ) = @_;
 
-    return encode_json($self->{q{profile}});
+    return encode_json( $self->{q{profile}} );
 }
 
 sub effective {
@@ -576,23 +607,3 @@ WIP, here to please L<Pod::Coverage>.
 =back
 
 =cut
-
-__DATA__
-{
-   "asnroots" : [ "asnlookup.zonemaster.net", "asnlookup.iis.se", "asn.cymru.com" ],
-   "net" : {
-      "ipv4" : true,
-      "ipv6" : true
-   },
-   "no_network" : false,
-   "resolver" : {
-      "defaults" : {
-         "usevc" : false,
-         "retrans" : 3,
-         "dnssec" : false,
-         "recurse" : false,
-         "retry" : 2,
-         "igntc" : false
-      }
-   }
-}
