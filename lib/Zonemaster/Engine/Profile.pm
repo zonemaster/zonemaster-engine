@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Profile;
 
-use version; our $VERSION = version->declare("v1.2.4");
+use version; our $VERSION = version->declare("v1.2.5");
 
 use 5.014002;
 use strict;
@@ -206,6 +206,8 @@ sub _set {
 sub merge {
     my ( $self, $other_profile ) = @_;
 
+    die "Merge with ", __PACKAGE__, " only" if ref($other_profile) ne __PACKAGE__;
+
     foreach my $property_name ( keys %profile_properties_details ) {
         if ( defined get_value_for_dref( $other_profile->{q{profile}}, $property_name ) ) {
             $self->_set( q{JSON}, $property_name, get_value_for_dref( $other_profile->{q{profile}}, $property_name ) );
@@ -218,7 +220,6 @@ sub from_json {
     my ( $class, $json ) = @_;
     my $new = $class->new;
     my $internal = decode_json( $json );
-    #use Data::Dumper; print Data::Dumper::Dumper( $internal );
     my %paths;
     get_profile_paths(\%paths, $internal);
     foreach my $property_name ( keys %paths ) {
