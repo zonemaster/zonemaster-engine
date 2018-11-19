@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Profile;
 
-use version; our $VERSION = version->declare("v1.2.5");
+use version; our $VERSION = version->declare("v1.2.6");
 
 use 5.014002;
 use strict;
@@ -8,7 +8,6 @@ use warnings;
 
 use JSON::PP qw( encode_json decode_json );
 use Hash::Merge;
-use Data::DRef qw( :dref_access );
 use Scalar::Util qw(reftype);
 use Sys::Hostname;
 use Socket;
@@ -104,6 +103,45 @@ sub get_profile_paths {
     }
 }
 
+sub get_value_from_nested_hash {
+    my ( $hash_ref, @path ) = @_;
+
+    my $key = shift @path;
+    if ( exists $hash_ref->{$key} ) {
+        if ( @path ) {
+            my $value_type = reftype($hash_ref->{$key});
+            if ( $value_type eq q{HASH} ) {
+                return get_value_from_nested_hash( $hash_ref->{$key}, @path );
+            }
+            else {
+                return undef;
+            }
+        }
+        else {
+            return $hash_ref->{$key};
+        }
+    }
+    else {
+        return undef;
+    }
+}
+
+sub set_value_to_nested_hash {
+    my ( $hash_ref, $value, @path ) = @_;
+
+    my $key = shift @path;
+    
+    if (  ! exists $hash_ref->{$key} ) {
+        $hash_ref->{$key} = {};
+    }
+    if ( @path ) {
+        set_value_to_nested_hash( $hash_ref->{$key}, $value, @path );
+    }
+    else {
+        $hash_ref->{$key} = clone $value;
+    }
+}
+
 our $effective = Zonemaster::Engine::Profile->default;
 
 sub new {
@@ -133,9 +171,9 @@ sub get {
     die "Unknown property '$property_name'"  if not exists $profile_properties_details{$property_name};
 
     if ( $profile_properties_details{$property_name}->{type} eq q{ArrayRef} or $profile_properties_details{$property_name}->{type} eq q{HashRef} ) {
-        return clone get_value_for_dref( $self->{q{profile}}, $property_name );
+        return clone get_value_from_nested_hash( $self->{q{profile}}, split /\./, $property_name );
     } else {
-        return get_value_for_dref( $self->{q{profile}}, $property_name );
+        return get_value_from_nested_hash( $self->{q{profile}}, split /\./, $property_name );
     }
 }
 
@@ -200,7 +238,7 @@ sub _set {
         }
     }
 
-    return set_value_for_dref( $self->{q{profile}}, $property_name, $value );
+    return set_value_to_nested_hash( $self->{q{profile}}, $value, split /\./, $property_name );
 }   
 
 sub merge {
@@ -209,8 +247,8 @@ sub merge {
     die "Merge with ", __PACKAGE__, " only" if ref($other_profile) ne __PACKAGE__;
 
     foreach my $property_name ( keys %profile_properties_details ) {
-        if ( defined get_value_for_dref( $other_profile->{q{profile}}, $property_name ) ) {
-            $self->_set( q{JSON}, $property_name, get_value_for_dref( $other_profile->{q{profile}}, $property_name ) );
+        if ( defined get_value_from_nested_hash( $other_profile->{q{profile}}, split /\./, $property_name ) ) {
+            $self->_set( q{JSON}, $property_name, get_value_from_nested_hash( $other_profile->{q{profile}}, split /\./, $property_name ) );
         }
     }
     return $other_profile->{q{profile}};
@@ -223,8 +261,8 @@ sub from_json {
     my %paths;
     get_profile_paths(\%paths, $internal);
     foreach my $property_name ( keys %paths ) {
-        if ( defined get_value_for_dref( $internal, $property_name ) ) {
-            $new->_set( q{JSON}, $property_name, get_value_for_dref( $internal, $property_name ) );
+        if ( defined get_value_from_nested_hash( $internal, split /\./, $property_name ) ) {
+            $new->_set( q{JSON}, $property_name, get_value_from_nested_hash( $internal, split /\./, $property_name ) );
         }
     }
 
@@ -614,6 +652,14 @@ C<net.ipv6> = true has this JSON representation:
 =over
 
 =item get_profile_paths
+
+WIP, here to please L<Pod::Coverage>.
+
+=item get_value_from_nested_hash
+
+WIP, here to please L<Pod::Coverage>.
+
+=item set_value_to_nested_hash
 
 WIP, here to please L<Pod::Coverage>.
 
