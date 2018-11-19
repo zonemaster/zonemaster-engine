@@ -1,20 +1,19 @@
 package Zonemaster::Engine::Profile;
 
-use version; our $VERSION = version->declare("v1.2.6");
+use version; our $VERSION = version->declare("v1.2.7");
 
 use 5.014002;
 use strict;
 use warnings;
 
 use JSON::PP qw( encode_json decode_json );
-use Hash::Merge;
 use Scalar::Util qw(reftype);
 use Sys::Hostname;
 use Socket;
 use Clone qw(clone);
-use Data::Dumper;
 
 use Zonemaster::Engine;
+use Zonemaster::Engine::Net::IP;
 
 my %profile_properties_details = (
     q{resolver.defaults.usevc} => {
@@ -55,7 +54,8 @@ my %profile_properties_details = (
     },
     q{resolver.source} => {
         q{type}    => q{Str},
-        q{default} => inet_ntoa((gethostbyname(hostname))[4])
+        q{default} => inet_ntoa((gethostbyname(hostname))[4]),
+	q{test}    => sub { Zonemaster::Engine::Net::IP->new( $_[0] ); }
     },
     q{net.ipv4} => {
         q{type}    => q{Bool},
@@ -71,7 +71,17 @@ my %profile_properties_details = (
     },
     q{asnroots} => {
         q{type}    => q{ArrayRef},
-        q{default} => [qw(asnlookup.zonemaster.net asnlookup.iis.se asn.cymru.com)]
+        q{default} => [qw(asnlookup.zonemaster.net asnlookup.iis.se asn.cymru.com)],
+	q{test}    => sub {
+                          foreach my $ndd ( @{$_[0]} ) {
+                              die "Property asnroots has a NULL item" if not defined $ndd;
+                              die "Property asnroots has a non scalar item" if not defined ref($ndd);
+                              die "Property asnroots has a item too long" if length($ndd) > 255;
+                              foreach my $label ( split /\./, $ndd ) {
+                                  die "Property asnroots has a non domain name item" if $label !~ /^[a-z0-9](?:[-a-z0-9]{0,61}[a-z0-9])?$/;
+			      }
+                          }
+                      }
     },
     q{logfilter} => {
         q{type} => q{HashRef},
@@ -236,6 +246,10 @@ sub _set {
 	elsif ( $profile_properties_details{$property_name}->{type} eq q{Bool} or $profile_properties_details{$property_name}->{type} eq q{Num} or $profile_properties_details{$property_name}->{type} eq q{Str} ) {
             die "Property $property_name is a Scalar";
         }
+    }
+
+    if ( $profile_properties_details{$property_name}->{test} ) {
+        $profile_properties_details{$property_name}->{test}->( $value );
     }
 
     return set_value_to_nested_hash( $self->{q{profile}}, $value, split /\./, $property_name );

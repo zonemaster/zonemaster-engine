@@ -25,7 +25,6 @@ requires 'File::Slurp'           => 0;
 requires 'Net::IP'               => 1.26;
 requires 'List::MoreUtils'       => 0;
 requires 'Mail::RFC822::Address' => 0;
-requires 'Hash::Merge'           => 0;
 requires 'Readonly'              => 0;
 requires 'Locale::TextDomain'    => 1.23;
 requires 'Text::CSV'             => 0;
