@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Profile;
 
-use version; our $VERSION = version->declare("v1.2.3");
+use version; our $VERSION = version->declare("v1.2.4");
 
 use 5.014002;
 use strict;
@@ -141,6 +141,12 @@ sub get {
 
 sub set {
     my ( $self, $property_name, $value ) = @_;
+
+    $self->_set( q{DIRECT}, $property_name, $value );
+}
+
+sub _set {
+    my ( $self, $from, $property_name, $value ) = @_;
     my $value_type = reftype($value);
 
     die "Unknown property '$property_name'" if not exists $profile_properties_details{$property_name};
@@ -151,10 +157,16 @@ sub set {
 
         # Boolean (Should we accept (true|false) values ?
         if ( $profile_properties_details{$property_name}->{type} eq q{Bool} ) {
-            if ( $value =~ /^(0|false)$/ ) {
+            if ( $from eq q{DIRECT} and $value =~ /^0$/ ) {
                 $value = JSON::PP::false;
             }
-            elsif ( $value =~ /^(1|true)$/ ) {
+            elsif ( $from eq q{DIRECT} and $value =~ /^1$/ ) {
+                $value = JSON::PP::true;
+            }
+            elsif ( $from eq q{JSON} and $value_type and $value == JSON::PP::false ) {
+                $value = JSON::PP::false;
+            }
+            elsif ( $from eq q{JSON} and $value_type and $value == JSON::PP::true ) {
                 $value = JSON::PP::true;
             }
             else {
@@ -196,7 +208,7 @@ sub merge {
 
     foreach my $property_name ( keys %profile_properties_details ) {
         if ( defined get_value_for_dref( $other_profile->{q{profile}}, $property_name ) ) {
-            $self->set( $property_name, get_value_for_dref( $other_profile->{q{profile}}, $property_name ) );
+            $self->_set( q{JSON}, $property_name, get_value_for_dref( $other_profile->{q{profile}}, $property_name ) );
         }
     }
     return $other_profile->{q{profile}};
@@ -206,12 +218,12 @@ sub from_json {
     my ( $class, $json ) = @_;
     my $new = $class->new;
     my $internal = decode_json( $json );
-
+    #use Data::Dumper; print Data::Dumper::Dumper( $internal );
     my %paths;
     get_profile_paths(\%paths, $internal);
     foreach my $property_name ( keys %paths ) {
         if ( defined get_value_for_dref( $internal, $property_name ) ) {
-            $new->set( $property_name, get_value_for_dref( $internal, $property_name ) );
+            $new->_set( q{JSON}, $property_name, get_value_for_dref( $internal, $property_name ) );
         }
     }
 
