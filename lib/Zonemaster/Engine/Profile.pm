@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Profile;
 
-use version; our $VERSION = version->declare("v1.2.7");
+use version; our $VERSION = version->declare("v1.2.8");
 
 use 5.014002;
 use strict;
@@ -17,83 +17,83 @@ use Zonemaster::Engine::Net::IP;
 
 my %profile_properties_details = (
     q{resolver.defaults.usevc} => {
-        q{type}    => q{Bool},
-        q{default} => 0
+        type    => q{Bool},
+        default => 0
     },
     q{resolver.defaults.retrans} => {
-        q{type}    => q{Num},
-        q{default} => 3,
-        q{min}     => 1,
-        q{max}     => 255
+        type    => q{Num},
+        default => 3,
+        min     => 1,
+        max     => 255
     },
     q{resolver.defaults.dnssec} => {
-        q{type}    => q{Bool},
-        q{default} => 0
+        type    => q{Bool},
+        default => 0
     },
     q{resolver.defaults.recurse} => {
-        q{type}    => q{Bool},
-        q{default} => 0
+        type    => q{Bool},
+        default => 0
     },
     q{resolver.defaults.retry} => {
-        q{type}    => q{Num},
-        q{default} => 2,
-        q{min}     => 1,
-        q{max}     => 255
+        type    => q{Num},
+        default => 2,
+        min     => 1,
+        max     => 255
     },
     q{resolver.defaults.igntc} => {
-        q{type}    => q{Bool},
-        q{default} => 0
+        type    => q{Bool},
+        default => 0
     },
     q{resolver.defaults.edns_size} => {
-        q{type}    => q{Num},
-        q{default} => 0
+        type    => q{Num},
+        default => 0
     },
     q{resolver.defaults.debug} => {
-        q{type}    => q{Bool},
-        q{default} => 0
+        type    => q{Bool},
+        default => 0
     },
     q{resolver.source} => {
-        q{type}    => q{Str},
-        q{default} => inet_ntoa((gethostbyname(hostname))[4]),
-	q{test}    => sub { Zonemaster::Engine::Net::IP->new( $_[0] ); }
+        type    => q{Str},
+        default => inet_ntoa((gethostbyname(hostname))[4]),
+        test    => sub { Zonemaster::Engine::Net::IP->new( $_[0] ); }
     },
     q{net.ipv4} => {
-        q{type}    => q{Bool},
-        q{default} => 1
+        type    => q{Bool},
+        default => 1
     },
     q{net.ipv6} => {
-        q{type}    => q{Bool},
-        q{default} => 1
+        type    => q{Bool},
+        default => 1
     },
     q{no_network} => {
-        q{type}    => q{Bool},
-        q{default} => 0
+        type    => q{Bool},
+        default => 0
     },
     q{asnroots} => {
-        q{type}    => q{ArrayRef},
-        q{default} => [qw(asnlookup.zonemaster.net asnlookup.iis.se asn.cymru.com)],
-	q{test}    => sub {
+        type    => q{ArrayRef},
+        default => [qw(asnlookup.zonemaster.net asnlookup.iis.se asn.cymru.com)],
+        test    => sub {
                           foreach my $ndd ( @{$_[0]} ) {
                               die "Property asnroots has a NULL item" if not defined $ndd;
                               die "Property asnroots has a non scalar item" if not defined ref($ndd);
                               die "Property asnroots has a item too long" if length($ndd) > 255;
                               foreach my $label ( split /\./, $ndd ) {
                                   die "Property asnroots has a non domain name item" if $label !~ /^[a-z0-9](?:[-a-z0-9]{0,61}[a-z0-9])?$/;
-			      }
+                              }
                           }
                       }
     },
     q{logfilter} => {
-        q{type} => q{HashRef},
-        q{default} => {}
+        type    => q{HashRef},
+        default => {}
     },
     q{test_levels} => {
-        q{type} => q{HashRef},
-        q{default} => {}
+        type    => q{HashRef},
+        default => {}
     },
     q{test_cases} => {
-        q{type} => q{ArrayRef},
-        q{default} => []
+        type    => q{ArrayRef},
+        default => []
     }
 );
 
@@ -102,13 +102,13 @@ sub get_profile_paths {
 
     foreach my $key (sort keys %$data) {
 
-	my $path = join '.', @path, $key;
+        my $path = join '.', @path, $key;
         if (ref($data->{$key}) eq 'HASH' and not exists $profile_properties_details{$path} ) {
             get_profile_paths($paths_ref, $data->{$key}, @path, $key);
             next;
         }
         else {
-	    $paths_ref->{$path} = 1;
+            $paths_ref->{$path} = 1;
         }
     }
 }
@@ -201,7 +201,7 @@ sub _set {
 
     # $value is a Scalar
     if ( ! $value_type  or $value_type eq q{SCALAR} ) {
-	die "Property $property_name can not be undef" if not defined $value;
+        die "Property $property_name can not be undef" if not defined $value;
 
         # Boolean (Should we accept (true|false) values ?
         if ( $profile_properties_details{$property_name}->{type} eq q{Bool} ) {
@@ -218,11 +218,11 @@ sub _set {
                 $value = JSON::PP::true;
             }
             else {
-	        die "Property $property_name is of type Boolean";
+                die "Property $property_name is of type Boolean";
             }
         }
         # Number. In our case, only non-negative integers
-	elsif ( $profile_properties_details{$property_name}->{type} eq q{Num} ) {
+        elsif ( $profile_properties_details{$property_name}->{type} eq q{Num} ) {
             if ( $value !~ /^(\d+)$/ ) {
                 die "Property $property_name is of type non-negative integer";
             }
@@ -236,14 +236,14 @@ sub _set {
     }
     else {
         # Array
-	if ( $profile_properties_details{$property_name}->{type} eq q{ArrayRef} and reftype($value) ne q{ARRAY} ) {
+    if ( $profile_properties_details{$property_name}->{type} eq q{ArrayRef} and reftype($value) ne q{ARRAY} ) {
             die "Property $property_name is not a ArrayRef";
         }
-	# Hash
-	elsif ( $profile_properties_details{$property_name}->{type} eq q{HashRef} and reftype($value) ne q{HASH} ) {
+    # Hash
+        elsif ( $profile_properties_details{$property_name}->{type} eq q{HashRef} and reftype($value) ne q{HASH} ) {
             die "Property $property_name is not a HashRef";
         }
-	elsif ( $profile_properties_details{$property_name}->{type} eq q{Bool} or $profile_properties_details{$property_name}->{type} eq q{Num} or $profile_properties_details{$property_name}->{type} eq q{Str} ) {
+        elsif ( $profile_properties_details{$property_name}->{type} eq q{Bool} or $profile_properties_details{$property_name}->{type} eq q{Num} or $profile_properties_details{$property_name}->{type} eq q{Str} ) {
             die "Property $property_name is a Scalar";
         }
     }
