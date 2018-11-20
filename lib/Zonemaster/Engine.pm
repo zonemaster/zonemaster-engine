@@ -1,6 +1,6 @@
 package Zonemaster::Engine;
 
-use version; our $VERSION = version->declare("v2.0.9");
+use version; our $VERSION = version->declare("v2.0.10");
 
 use 5.014002;
 use Moose;
@@ -127,7 +127,7 @@ sub add_fake_delegation {
                     );
                     push @{ $href->{$name} }, ();
                     $incomplete_delegation = 1;
-		}
+                }
             }
         }
     }
