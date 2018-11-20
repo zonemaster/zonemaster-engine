@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Profile;
 
-use version; our $VERSION = version->declare("v1.2.8");
+use version; our $VERSION = version->declare("v1.2.9");
 
 use 5.014002;
 use strict;
@@ -97,14 +97,14 @@ my %profile_properties_details = (
     }
 );
 
-sub get_profile_paths {
+sub _get_profile_paths {
     my ( $paths_ref, $data, @path ) = @_;
 
     foreach my $key (sort keys %$data) {
 
         my $path = join '.', @path, $key;
         if (ref($data->{$key}) eq 'HASH' and not exists $profile_properties_details{$path} ) {
-            get_profile_paths($paths_ref, $data->{$key}, @path, $key);
+            _get_profile_paths($paths_ref, $data->{$key}, @path, $key);
             next;
         }
         else {
@@ -113,7 +113,7 @@ sub get_profile_paths {
     }
 }
 
-sub get_value_from_nested_hash {
+sub _get_value_from_nested_hash {
     my ( $hash_ref, @path ) = @_;
 
     my $key = shift @path;
@@ -121,7 +121,7 @@ sub get_value_from_nested_hash {
         if ( @path ) {
             my $value_type = reftype($hash_ref->{$key});
             if ( $value_type eq q{HASH} ) {
-                return get_value_from_nested_hash( $hash_ref->{$key}, @path );
+                return _get_value_from_nested_hash( $hash_ref->{$key}, @path );
             }
             else {
                 return undef;
@@ -136,7 +136,7 @@ sub get_value_from_nested_hash {
     }
 }
 
-sub set_value_to_nested_hash {
+sub _set_value_to_nested_hash {
     my ( $hash_ref, $value, @path ) = @_;
 
     my $key = shift @path;
@@ -145,7 +145,7 @@ sub set_value_to_nested_hash {
         $hash_ref->{$key} = {};
     }
     if ( @path ) {
-        set_value_to_nested_hash( $hash_ref->{$key}, $value, @path );
+        _set_value_to_nested_hash( $hash_ref->{$key}, $value, @path );
     }
     else {
         $hash_ref->{$key} = clone $value;
@@ -181,9 +181,9 @@ sub get {
     die "Unknown property '$property_name'"  if not exists $profile_properties_details{$property_name};
 
     if ( $profile_properties_details{$property_name}->{type} eq q{ArrayRef} or $profile_properties_details{$property_name}->{type} eq q{HashRef} ) {
-        return clone get_value_from_nested_hash( $self->{q{profile}}, split /\./, $property_name );
+        return clone _get_value_from_nested_hash( $self->{q{profile}}, split /\./, $property_name );
     } else {
-        return get_value_from_nested_hash( $self->{q{profile}}, split /\./, $property_name );
+        return _get_value_from_nested_hash( $self->{q{profile}}, split /\./, $property_name );
     }
 }
 
@@ -252,7 +252,7 @@ sub _set {
         $profile_properties_details{$property_name}->{test}->( $value );
     }
 
-    return set_value_to_nested_hash( $self->{q{profile}}, $value, split /\./, $property_name );
+    return _set_value_to_nested_hash( $self->{q{profile}}, $value, split /\./, $property_name );
 }   
 
 sub merge {
@@ -261,8 +261,8 @@ sub merge {
     die "Merge with ", __PACKAGE__, " only" if ref($other_profile) ne __PACKAGE__;
 
     foreach my $property_name ( keys %profile_properties_details ) {
-        if ( defined get_value_from_nested_hash( $other_profile->{q{profile}}, split /\./, $property_name ) ) {
-            $self->_set( q{JSON}, $property_name, get_value_from_nested_hash( $other_profile->{q{profile}}, split /\./, $property_name ) );
+        if ( defined _get_value_from_nested_hash( $other_profile->{q{profile}}, split /\./, $property_name ) ) {
+            $self->_set( q{JSON}, $property_name, _get_value_from_nested_hash( $other_profile->{q{profile}}, split /\./, $property_name ) );
         }
     }
     return $other_profile->{q{profile}};
@@ -273,10 +273,10 @@ sub from_json {
     my $new = $class->new;
     my $internal = decode_json( $json );
     my %paths;
-    get_profile_paths(\%paths, $internal);
+    _get_profile_paths(\%paths, $internal);
     foreach my $property_name ( keys %paths ) {
-        if ( defined get_value_from_nested_hash( $internal, split /\./, $property_name ) ) {
-            $new->_set( q{JSON}, $property_name, get_value_from_nested_hash( $internal, split /\./, $property_name ) );
+        if ( defined _get_value_from_nested_hash( $internal, split /\./, $property_name ) ) {
+            $new->_set( q{JSON}, $property_name, _get_value_from_nested_hash( $internal, split /\./, $property_name ) );
         }
     }
 
@@ -665,17 +665,35 @@ C<net.ipv6> = true has this JSON representation:
 
 =over
 
-=item get_profile_paths
+=item _get_profile_paths
 
-WIP, here to please L<Pod::Coverage>.
+Internal method used to get all the paths of a nested hashes-of-hashes.
+It creates a hash where keys are dotted keys of the nested hashes-of-hashes
+that exist in %profile_properties_details.
 
-=item get_value_from_nested_hash
+    _get_profile_paths(\%paths, $internal);
 
-WIP, here to please L<Pod::Coverage>.
 
-=item set_value_to_nested_hash
+=item _get_value_from_nested_hash
 
-WIP, here to please L<Pod::Coverage>.
+Internal method used to get a value in a nested hashes-of-hashes. 
+
+    _get_value_from_nested_hash( $hash_ref, @path );
+
+Where $hash_ref is the hash to explore and @path are the labels of the property to get.
+
+   @path = split /\./,  q{resolver.defaults.usevc};
+
+=item _set_value_to_nested_hash
+
+Internal method used to set a value in a nested hashes-of-hashes.
+
+    _get_value_from_nested_hash( $hash_ref, $value, @path );
+
+Where $hash_ref is the hash to explore and @path are the labels of the property to set.
+
+   @path = split /\./,  q{resolver.defaults.usevc};
+
 
 =back
 

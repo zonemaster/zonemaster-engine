@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Util;
 
-use version; our $VERSION = version->declare("v1.1.10");
+use version; our $VERSION = version->declare("v1.1.11");
 
 use 5.014002;
 
@@ -211,7 +211,7 @@ Check if Zonemaster hosting server supports IPv6.
 
 =item should_run_test
 
-Check if a test is blacklisted ad should run or not.
+Check if a test is blacklisted and should run or not.
 
 =item ipversion_ok
 

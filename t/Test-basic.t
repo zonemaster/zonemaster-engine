@@ -131,7 +131,7 @@ zone_gives_not( q{basic03}, $zone, q{IPV4_DISABLED} );
 zone_gives_not( q{basic03}, $zone, q{IPV6_DISABLED} );
 
 #Zonemaster::Engine::Profile->effective->set( q{net.ipv4}, 1 );
-#Zonemaster::Engine::Profile->effective->set( q{net.ipv6}, 1 );
+#Zonemaster::Engine::Profile->effective->set( q{net.ipv6}, 0 );
 #zone_gives( q{basic02}, $zone, q{IPV4_ENABLED} );
 #zone_gives( q{basic02}, $zone, q{IPV6_DISABLED} );
 #zone_gives_not( q{basic02}, $zone, q{IPV4_DISABLED} );

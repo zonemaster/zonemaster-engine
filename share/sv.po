@@ -1075,7 +1075,7 @@ msgstr ""
 
 #: SYSTEM:PROFILE_FILE
 msgid  "Profile was read from {name}."
-msgstr "Profile lästes från '{name}'."
+msgstr "Profil lästes från '{name}'."
 
 #: SYSTEM:DEPENDENCY_VERSION
 msgid  "Using prerequisite module {name} version {version}."
