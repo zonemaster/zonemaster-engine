@@ -36,10 +36,7 @@ sub _log_versions {
     info( DEPENDENCY_VERSION => { name => 'Net::IP',               version => $Net::IP::VERSION } );
     info( DEPENDENCY_VERSION => { name => 'List::MoreUtils',       version => $List::MoreUtils::VERSION } );
     info( DEPENDENCY_VERSION => { name => 'Mail::RFC822::Address', version => $Mail::RFC822::Address::VERSION } );
-    info( DEPENDENCY_VERSION => { name => 'Scalar::Util',          version => $Scalar::Util::VERSION } );
     info( DEPENDENCY_VERSION => { name => 'Clone',                 version => $Clone::VERSION } );
-    info( DEPENDENCY_VERSION => { name => 'Socket',                version => $Socket::VERSION } );
-    info( DEPENDENCY_VERSION => { name => 'Sys::Hostname',                 version => $Sys::Hostname::VERSION } );
     info( DEPENDENCY_VERSION => { name => 'Readonly',              version => $Readonly::VERSION } );
 
     return;
