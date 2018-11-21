@@ -207,13 +207,12 @@ subtest 'from_json() parses values from a string' => sub {
 };
 
 subtest 'from_json() dies on illegal paths' => sub {
-    dies_ok { Zonemaster::Engine::Profile->from_json( '{"foobar":1}' ) } 'foobar';
-    dies_ok { Zonemaster::Engine::Profile->from_json( '{"net":1}' ) } 'net';
-    dies_ok { Zonemaster::Engine::Profile->from_json( '{"net":{"foobar":1}}' ) } 'net.foobar';
-    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":1}' ) } 'resolver';
-    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":1}}' ) } 'resolver.defaults';
-    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"foobar":1}}}' ) }
-    'resolver.defaults.foobar';
+    throws_ok { Zonemaster::Engine::Profile->from_json( '{"foobar":1}' ) }                           qr/^.*Unknown property .*/, 'foobar';
+    throws_ok { Zonemaster::Engine::Profile->from_json( '{"net":1}' ) }                              qr/^.*Unknown property .*/, 'net';
+    throws_ok { Zonemaster::Engine::Profile->from_json( '{"net":{"foobar":1}}' ) }                   qr/^.*Unknown property .*/, 'net.foobar';
+    throws_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":1}' ) }                         qr/^.*Unknown property .*/, 'resolver';
+    throws_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":1}}' ) }            qr/^.*Unknown property .*/, 'resolver.defaults';
+    throws_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"foobar":1}}}' ) } qr/^.*Unknown property .*/, 'resolver.defaults.foobar';
 };
 
 subtest 'from_json() dies on illegal values' => sub {
@@ -330,14 +329,14 @@ subtest 'get() dies if the given property name is invalid' => sub {
     $profile->set( 'test_levels', { Zone => { TAG => 'INFO' } } );
     $profile->set( 'test_cases', ['Zone01'] );
 
-    dies_ok { $profile->get( 'net' ) } 'net';
-    dies_ok { $profile->get( 'net.foobar' ) } 'net.foobar';
-    dies_ok { $profile->get( 'resolver.defaults' ) } 'resolver.defaults';
-    dies_ok { $profile->get( 'resolver' ) } 'resolver';
-    dies_ok { $profile->get( 'asnroots.1' ) } 'asnroots.1';
-    dies_ok { $profile->get( 'logfilter.Zone' ) } 'logfilter.Zone';
-    dies_ok { $profile->get( 'test_levels.Zone' ) } 'test_levels.Zone';
-    dies_ok { $profile->get( 'test_cases.Zone01' ) } 'test_cases.Zone01';
+    throws_ok { $profile->get( 'net' ) }               qr/^.*Unknown property .*/, 'net';
+    throws_ok { $profile->get( 'net.foobar' ) }        qr/^.*Unknown property .*/, 'net.foobar';
+    throws_ok { $profile->get( 'resolver.defaults' ) } qr/^.*Unknown property .*/, 'resolver.defaults';
+    throws_ok { $profile->get( 'resolver' ) }          qr/^.*Unknown property .*/, 'resolver';
+    throws_ok { $profile->get( 'asnroots.1' ) }        qr/^.*Unknown property .*/, 'asnroots.1';
+    throws_ok { $profile->get( 'logfilter.Zone' ) }    qr/^.*Unknown property .*/, 'logfilter.Zone';
+    throws_ok { $profile->get( 'test_levels.Zone' ) }  qr/^.*Unknown property .*/, 'test_levels.Zone';
+    throws_ok { $profile->get( 'test_cases.Zone01' ) } qr/^.*Unknown property .*/, 'test_cases.Zone01';
 };
 
 subtest 'set() inserts values for unset properties' => sub {
@@ -414,22 +413,20 @@ subtest 'set() updates values for set properties' => sub {
 subtest 'set() dies on attempts to unset properties' => sub {
     my $profile = Zonemaster::Engine::Profile->from_json( $EXAMPLE_PROFILE_1 );
 
-    dies_ok { $profile->set( 'resolver.defaults.usevc',  undef ); } 'dies on attempt to unset resolver.defaults.usevc';
-    dies_ok { $profile->set( 'resolver.defaults.dnssec', undef ); } 'dies on attempt to unset resolver.defaults.dnssec';
-    dies_ok { $profile->set( 'resolver.defaults.recurse', undef ); }
-    'dies on attempt to unset resolver.defaults.recurse';
-    dies_ok { $profile->set( 'resolver.defaults.igntc',   undef ); } 'dies on attempt to unset resolver.defaults.igntc';
-    dies_ok { $profile->set( 'net.ipv4',                  undef ); } 'dies on attempt to unset net.ipv4';
-    dies_ok { $profile->set( 'net.ipv6',                  undef ); } 'dies on attempt to unset net.ipv6';
-    dies_ok { $profile->set( 'no_network',                undef ); } 'dies on attempt to unset no_network';
-    dies_ok { $profile->set( 'resolver.defaults.retry',   undef ); } 'dies on attempt to unset resolver.defaults.retry';
-    dies_ok { $profile->set( 'resolver.defaults.retrans', undef ); }
-    'dies on attempt to unset resolver.defaults.retans';
-    dies_ok { $profile->set( 'resolver.source', undef ); } 'dies on attempt to unset resolver.source';
-    dies_ok { $profile->set( 'asnroots',        undef ); } 'dies on attempt to unset asnroots';
-    dies_ok { $profile->set( 'logfilter',       undef ); } 'dies on attempt to unset logfilter';
-    dies_ok { $profile->set( 'test_levels',     undef ); } 'dies on attempt to unset test_levels';
-    dies_ok { $profile->set( 'test_cases',      undef ); } 'dies on attempt to unset test_cases';
+    throws_ok { $profile->set( 'resolver.defaults.usevc',   undef ); } qr/^.* can not be undef/, 'dies on attempt to unset resolver.defaults.usevc';
+    throws_ok { $profile->set( 'resolver.defaults.dnssec',  undef ); } qr/^.* can not be undef/, 'dies on attempt to unset resolver.defaults.dnssec';
+    throws_ok { $profile->set( 'resolver.defaults.recurse', undef ); } qr/^.* can not be undef/, 'dies on attempt to unset resolver.defaults.recurse';
+    throws_ok { $profile->set( 'resolver.defaults.igntc',   undef ); } qr/^.* can not be undef/, 'dies on attempt to unset resolver.defaults.igntc';
+    throws_ok { $profile->set( 'net.ipv4',                  undef ); } qr/^.* can not be undef/, 'dies on attempt to unset net.ipv4';
+    throws_ok { $profile->set( 'net.ipv6',                  undef ); } qr/^.* can not be undef/, 'dies on attempt to unset net.ipv6';
+    throws_ok { $profile->set( 'no_network',                undef ); } qr/^.* can not be undef/, 'dies on attempt to unset no_network';
+    throws_ok { $profile->set( 'resolver.defaults.retry',   undef ); } qr/^.* can not be undef/, 'dies on attempt to unset resolver.defaults.retry';
+    throws_ok { $profile->set( 'resolver.defaults.retrans', undef ); } qr/^.* can not be undef/, 'dies on attempt to unset resolver.defaults.retans';
+    throws_ok { $profile->set( 'resolver.source',           undef ); } qr/^.* can not be undef/, 'dies on attempt to unset resolver.source';
+    throws_ok { $profile->set( 'asnroots',                  undef ); } qr/^.* can not be undef/, 'dies on attempt to unset asnroots';
+    throws_ok { $profile->set( 'logfilter',                 undef ); } qr/^.* can not be undef/, 'dies on attempt to unset logfilter';
+    throws_ok { $profile->set( 'test_levels',               undef ); } qr/^.* can not be undef/, 'dies on attempt to unset test_levels';
+    throws_ok { $profile->set( 'test_cases',                undef ); } qr/^.* can not be undef/, 'dies on attempt to unset test_cases';
 };
 
 subtest 'set() dies if the given property name is invalid' => sub {
@@ -439,14 +436,14 @@ subtest 'set() dies if the given property name is invalid' => sub {
     $profile->set( 'test_levels', { Zone => {} } );
     $profile->set( 'test_cases', ['Zone01'] );
 
-    dies_ok { $profile->set( 'net',               1 ) } 'dies on attempt to set a value for net';
-    dies_ok { $profile->set( 'net.foobar',        1 ) } 'dies on attempt to set a value for net.foobar';
-    dies_ok { $profile->set( 'resolver.defaults', 1 ) } 'dies on attempt to set a value for resolver.defaults';
-    dies_ok { $profile->set( 'resolver',          1 ) } 'dies on attempt to set a value for resolver';
-    dies_ok { $profile->set( 'asnroots.1',        1 ) } 'dies on attempt to set a value for asnroots.1';
-    dies_ok { $profile->set( 'logfilter.Zone',    1 ) } 'dies on attempt to set a value for logfilter.Zone';
-    dies_ok { $profile->set( 'test_levels.Zone',  1 ) } 'dies on attempt to set a value for test_levels.Zone';
-    dies_ok { $profile->set( 'test_cases.Zone01', 1 ) } 'dies on attempt to set a value for test_cases.Zone01';
+    throws_ok { $profile->set( 'net',               1 ) } qr/^.*Unknown property .*/, 'dies on attempt to set a value for net';
+    throws_ok { $profile->set( 'net.foobar',        1 ) } qr/^.*Unknown property .*/, 'dies on attempt to set a value for net.foobar';
+    throws_ok { $profile->set( 'resolver.defaults', 1 ) } qr/^.*Unknown property .*/, 'dies on attempt to set a value for resolver.defaults';
+    throws_ok { $profile->set( 'resolver',          1 ) } qr/^.*Unknown property .*/, 'dies on attempt to set a value for resolver';
+    throws_ok { $profile->set( 'asnroots.1',        1 ) } qr/^.*Unknown property .*/, 'dies on attempt to set a value for asnroots.1';
+    throws_ok { $profile->set( 'logfilter.Zone',    1 ) } qr/^.*Unknown property .*/, 'dies on attempt to set a value for logfilter.Zone';
+    throws_ok { $profile->set( 'test_levels.Zone',  1 ) } qr/^.*Unknown property .*/, 'dies on attempt to set a value for test_levels.Zone';
+    throws_ok { $profile->set( 'test_cases.Zone01', 1 ) } qr/^.*Unknown property .*/, 'dies on attempt to set a value for test_cases.Zone01';
 };
 
 subtest 'set() dies on illegal value' => sub {
