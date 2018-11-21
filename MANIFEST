@@ -74,6 +74,7 @@ t/old-bugs.t
 t/pod-coverage.t
 t/pod.t
 t/policy.json
+t/profiles.t
 t/profiles/Test-address-all.json
 t/profiles/Test-all.json
 t/profiles/Test-all-levels.json
