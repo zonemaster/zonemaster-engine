@@ -32,6 +32,8 @@ requires 'MIME::Base64'          => 0;
 requires 'Clone'                 => 0;
 requires 'Socket'                => 0;
 requires 'Sys::Hostname'         => 0;
+requires 'JSON'                  => 0;
+requires 'JSON::PP'              => 0;
 
 test_requires 'Test::Fatal' => 0;
 
