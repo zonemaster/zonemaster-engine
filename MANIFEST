@@ -59,7 +59,6 @@ share/locale/en/LC_MESSAGES/Zonemaster-Engine.mo
 share/locale/fr/LC_MESSAGES/Zonemaster-Engine.mo
 share/locale/sv/LC_MESSAGES/Zonemaster-Engine.mo
 share/Makefile
-share/profile.json
 t/00-load.t
 t/asn.data
 t/asn.t

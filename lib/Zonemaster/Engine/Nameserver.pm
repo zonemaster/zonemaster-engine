@@ -82,6 +82,8 @@ sub _build_dns {
     $res->usevc( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.usevc} ) );
     $res->igntc( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.igntc} ) );
     $res->recurse( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.recurse} ) );
+    $res->debug( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.debug} ) );
+    $res->edns_size( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.edns_size} ) );
 
     if ( $self->source_address ) {
         $res->source( $self->source_address );
