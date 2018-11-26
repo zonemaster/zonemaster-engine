@@ -72,8 +72,6 @@ sub run_all_for {
     if ( Zonemaster::Engine::Test::Basic->can_continue( @results ) and Zonemaster::Engine->can_continue() ) {
         ## no critic (Modules::RequireExplicitInclusion)
         foreach my $mod ( __PACKAGE__->modules ) {
-# WIP
-#            Zonemaster::Engine->profile->load_module_policy( $mod );
 
             if ( not _policy_allowed( $mod ) ) {
                 push @results, info( POLICY_DISABLED => { name => $mod } );
@@ -120,8 +118,6 @@ sub run_module {
 
     if ( Zonemaster::Engine->can_continue() ) {
         if ( $module ) {
-# WIP
-#            Zonemaster::Engine->profile->load_module_policy( $module );
             my $m = "Zonemaster::Engine::Test::$module";
             info( MODULE_VERSION => { module => $m, version => $m->version } );
             push @res, eval { $m->all( $zone ) };
@@ -165,8 +161,6 @@ sub run_one {
 
     if ( Zonemaster::Engine->can_continue() ) {
         if ( $module ) {
-# WIP
-#            Zonemaster::Engine->profile->load_module_policy( $module );
             my $m = "Zonemaster::Engine::Test::$module";
             if ( $m->metadata->{$test} ) {
                 info( MODULE_CALL => { module => $module, method => $test, version => $m->version } );
