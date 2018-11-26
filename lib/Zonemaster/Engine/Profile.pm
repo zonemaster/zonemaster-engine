@@ -446,6 +446,36 @@ Serialize the profile to the L</JSON REPRESENTATION> format.
 
 Returns a string.
 
+=head1 SUBROUTINES
+
+=head2 _get_profile_paths
+
+Internal method used to get all the paths of a nested hashes-of-hashes.
+It creates a hash where keys are dotted keys of the nested hashes-of-hashes
+that exist in %profile_properties_details.
+
+    _get_profile_paths(\%paths, $internal);
+
+=head2 _get_value_from_nested_hash
+
+Internal method used to get a value in a nested hashes-of-hashes.
+
+    _get_value_from_nested_hash( $hash_ref, @path );
+
+Where $hash_ref is the hash to explore and @path are the labels of the property to get.
+
+   @path = split /\./,  q{resolver.defaults.usevc};
+
+=head2 _set_value_to_nested_hash
+
+Internal method used to set a value in a nested hashes-of-hashes.
+
+    _set_value_from_nested_hash( $hash_ref, $value, @path );
+
+Where $hash_ref is the hash to explore and @path are the labels of the property to set.
+
+   @path = split /\./,  q{resolver.defaults.usevc};
+
 =head1 PROFILE PROPERTIES
 
 Each property has a name and is either set or unset.
@@ -664,36 +694,6 @@ C<net.ipv6> = true has this JSON representation:
     }
 
 =over
-
-=item _get_profile_paths
-
-Internal method used to get all the paths of a nested hashes-of-hashes.
-It creates a hash where keys are dotted keys of the nested hashes-of-hashes
-that exist in %profile_properties_details.
-
-    _get_profile_paths(\%paths, $internal);
-
-
-=item _get_value_from_nested_hash
-
-Internal method used to get a value in a nested hashes-of-hashes. 
-
-    _get_value_from_nested_hash( $hash_ref, @path );
-
-Where $hash_ref is the hash to explore and @path are the labels of the property to get.
-
-   @path = split /\./,  q{resolver.defaults.usevc};
-
-=item _set_value_to_nested_hash
-
-Internal method used to set a value in a nested hashes-of-hashes.
-
-    _get_value_from_nested_hash( $hash_ref, $value, @path );
-
-Where $hash_ref is the hash to explore and @path are the labels of the property to set.
-
-   @path = split /\./,  q{resolver.defaults.usevc};
-
 
 =back
 
