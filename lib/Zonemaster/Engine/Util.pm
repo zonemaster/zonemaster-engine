@@ -152,10 +152,6 @@ sub scramble_case {
     return $newstring;
 }    # end sub scramble_case
 
-sub supports_ipv6 {
-    return;
-}
-
 1;
 
 =head1 NAME
@@ -204,10 +200,6 @@ results are undefined.
 =item scramble_case
 
 This routine provides a special effect: sCraMBliNg tHe CaSe
-
-=item supports_ipv6
-
-Check if Zonemaster hosting server supports IPv6.
 
 =item should_run_test
 
