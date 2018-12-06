@@ -40,13 +40,13 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Profile->effective->set( q{no_network}, 1 );
 }
 
-my ($json, $foo);
+my ($json, $profile_test);
 my @testcases_with_network = (qw{nameserver01 nameserver02 nameserver06 nameserver07 nameserver08 nameserver09});
 foreach my $testcase ( qw{nameserver01 nameserver02 nameserver03 nameserver04 nameserver05 nameserver06 nameserver07 nameserver08 nameserver09} ) {
     next if grep { $_ eq $testcase } @testcases_with_network;
-    $json = read_file( 't/profiles/Test-'.$testcase.'-only.json' );
-    $foo  = Zonemaster::Engine::Profile->from_json( $json );
-    Zonemaster::Engine::Profile->effective->merge( $foo );
+    $json         = read_file( 't/profiles/Test-'.$testcase.'-only.json' );
+    $profile_test = Zonemaster::Engine::Profile->from_json( $json );
+    Zonemaster::Engine::Profile->effective->merge( $profile_test );
     my @testcases;
     Zonemaster::Engine->logger->clear_history();
     foreach my $result ( Zonemaster::Engine->test_module( q{nameserver}, q{afnic.fr} ) ) {
@@ -59,9 +59,9 @@ foreach my $testcase ( qw{nameserver01 nameserver02 nameserver03 nameserver04 na
     is( $testcases[0], 'Zonemaster::Engine::Test::Nameserver::'.$testcase, 'expected test-case ('.$testcases[0].')' );
 }
 
-$json = read_file( 't/profiles/Test-nameserver-all.json' );
-$foo  = Zonemaster::Engine::Profile->from_json( $json );
-Zonemaster::Engine::Profile->effective->merge( $foo );
+$json         = read_file( 't/profiles/Test-nameserver-all.json' );
+$profile_test = Zonemaster::Engine::Profile->from_json( $json );
+Zonemaster::Engine::Profile->effective->merge( $profile_test );
 
 my $zone;
 my @res;

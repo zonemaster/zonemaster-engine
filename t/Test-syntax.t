@@ -47,11 +47,11 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
 }
 
 # Find a way with dependences for syntax04 syntax05 syntax06 syntax07 syntax08
-my ($json, $foo);
+my ($json, $profile_test);
 foreach my $testcase ( qw{syntax01 syntax02 syntax03} ) {
-    $json = read_file( 't/profiles/Test-'.$testcase.'-only.json' );
-    $foo  = Zonemaster::Engine::Profile->from_json( $json );
-    Zonemaster::Engine::Profile->effective->merge( $foo );
+    $json         = read_file( 't/profiles/Test-'.$testcase.'-only.json' );
+    $profile_test = Zonemaster::Engine::Profile->from_json( $json );
+    Zonemaster::Engine::Profile->effective->merge( $profile_test );
     my @testcases;
     foreach my $result ( Zonemaster::Engine->test_module( q{syntax}, q{afnic.fr} ) ) {
         foreach my $trace (@{$result->trace}) {
@@ -63,9 +63,9 @@ foreach my $testcase ( qw{syntax01 syntax02 syntax03} ) {
     is( $testcases[0], 'Zonemaster::Engine::Test::Syntax::'.$testcase, 'expected test-case ('.$testcases[0].')' );
 }
 
-$json = read_file( 't/profiles/Test-syntax-all.json' );
-$foo  = Zonemaster::Engine::Profile->from_json( $json );
-Zonemaster::Engine::Profile->effective->merge( $foo );
+$json         = read_file( 't/profiles/Test-syntax-all.json' );
+$profile_test = Zonemaster::Engine::Profile->from_json( $json );
+Zonemaster::Engine::Profile->effective->merge( $profile_test );
 
 my $ns_ok = Zonemaster::Engine::DNSName->new( q{ns1.nic.fr} );
 my $dn_ok = Zonemaster::Engine::DNSName->new( q{www.nic.se} );

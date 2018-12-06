@@ -47,10 +47,10 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Profile->effective->set( q{no_network}, 1 );
 }
 
-my ($json, $foo);
-$json = read_file( 't/profiles/Test-basic-all.json' );
-$foo  = Zonemaster::Engine::Profile->from_json( $json );
-Zonemaster::Engine::Profile->effective->merge( $foo );
+my ($json, $profile_test);
+$json         = read_file( 't/profiles/Test-basic-all.json' );
+$profile_test = Zonemaster::Engine::Profile->from_json( $json );
+Zonemaster::Engine::Profile->effective->merge( $profile_test );
 
 my @res;
 my %res;

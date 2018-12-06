@@ -40,11 +40,11 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
 }
 
 # Find a way for dnssec06 which have a dependence...
-my ($json, $foo);
+my ($json, $profile_test);
 foreach my $testcase ( qw{dnssec01 dnssec02 dnssec03 dnssec04 dnssec05 dnssec07 dnssec08 dnssec09 dnssec10 dnssec11} ) {
-    $json = read_file( 't/profiles/Test-'.$testcase.'-only.json' );
-    $foo  = Zonemaster::Engine::Profile->from_json( $json );
-    Zonemaster::Engine::Profile->effective->merge( $foo );
+    $json         = read_file( 't/profiles/Test-'.$testcase.'-only.json' );
+    $profile_test = Zonemaster::Engine::Profile->from_json( $json );
+    Zonemaster::Engine::Profile->effective->merge( $profile_test );
     my @testcases;
     Zonemaster::Engine->logger->clear_history();
     foreach my $result ( Zonemaster::Engine->test_module( q{dnssec}, q{nic.se} ) ) {
@@ -57,9 +57,9 @@ foreach my $testcase ( qw{dnssec01 dnssec02 dnssec03 dnssec04 dnssec05 dnssec07 
     is( $testcases[0], 'Zonemaster::Engine::Test::DNSSEC::'.$testcase, 'expected test-case ('.$testcases[0].')' );
 }
 
-$json = read_file( 't/profiles/Test-dnssec-all.json' );
-$foo  = Zonemaster::Engine::Profile->from_json( $json );
-Zonemaster::Engine::Profile->effective->merge( $foo );
+$json         = read_file( 't/profiles/Test-dnssec-all.json' );
+$profile_test = Zonemaster::Engine::Profile->from_json( $json );
+Zonemaster::Engine::Profile->effective->merge( $profile_test );
 
 my $zone;
 my @res;

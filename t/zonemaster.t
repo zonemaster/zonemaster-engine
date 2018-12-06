@@ -19,13 +19,13 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Profile->effective->set( q{no_network}, 1 );
 }
 
-my ($json, $foo);
-$json = read_file( 't/profiles/Test-all.json' );
-$foo  = Zonemaster::Engine::Profile->from_json( $json );
-Zonemaster::Engine::Profile->effective->merge( $foo );
-$json = read_file( 't/profiles/Test-all-levels.json' );
-$foo  = Zonemaster::Engine::Profile->from_json( $json );
-Zonemaster::Engine::Profile->effective->merge( $foo );
+my ($json, $profile_tmp);
+$json        = read_file( 't/profiles/Test-all.json' );
+$profile_tmp = Zonemaster::Engine::Profile->from_json( $json );
+Zonemaster::Engine::Profile->effective->merge( $profile_tmp );
+$json        = read_file( 't/profiles/Test-all-levels.json' );
+$profile_tmp = Zonemaster::Engine::Profile->from_json( $json );
+Zonemaster::Engine::Profile->effective->merge( $profile_tmp );
 
 isa_ok( Zonemaster::Engine->logger, 'Zonemaster::Engine::Logger' );
 isa_ok( Zonemaster::Engine::Profile->effective, 'Zonemaster::Engine::Profile' );

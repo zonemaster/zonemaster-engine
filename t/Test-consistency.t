@@ -16,11 +16,11 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Profile->effective->set( q{no_network}, 1 );
 }
 
-my ($json, $foo);
+my ($json, $profile_test);
 foreach my $testcase ( qw{consistency01 consistency02 consistency03 consistency04 consistency05 consistency06} ) {
-    $json = read_file( 't/profiles/Test-'.$testcase.'-only.json' );
-    $foo  = Zonemaster::Engine::Profile->from_json( $json );
-    Zonemaster::Engine::Profile->effective->merge( $foo );
+    $json         = read_file( 't/profiles/Test-'.$testcase.'-only.json' );
+    $profile_test = Zonemaster::Engine::Profile->from_json( $json );
+    Zonemaster::Engine::Profile->effective->merge( $profile_test );
     my @testcases;
     Zonemaster::Engine->logger->clear_history();
     foreach my $result ( Zonemaster::Engine->test_module( q{consistency}, q{afnic.fr} ) ) {
@@ -33,9 +33,9 @@ foreach my $testcase ( qw{consistency01 consistency02 consistency03 consistency0
     is( $testcases[0], 'Zonemaster::Engine::Test::Consistency::'.$testcase, 'expected test-case ('.$testcases[0].')' );
 }
 
-$json = read_file( 't/profiles/Test-consistency-all.json' );
-$foo  = Zonemaster::Engine::Profile->from_json( $json );
-Zonemaster::Engine::Profile->effective->merge( $foo );
+$json         = read_file( 't/profiles/Test-consistency-all.json' );
+$profile_test = Zonemaster::Engine::Profile->from_json( $json );
+Zonemaster::Engine::Profile->effective->merge( $profile_test );
 
 my @res;
 my %res;

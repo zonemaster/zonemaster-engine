@@ -236,10 +236,10 @@ sub _set {
     }
     else {
         # Array
-    if ( $profile_properties_details{$property_name}->{type} eq q{ArrayRef} and reftype($value) ne q{ARRAY} ) {
+        if ( $profile_properties_details{$property_name}->{type} eq q{ArrayRef} and reftype($value) ne q{ARRAY} ) {
             die "Property $property_name is not a ArrayRef";
         }
-    # Hash
+        # Hash
         elsif ( $profile_properties_details{$property_name}->{type} eq q{HashRef} and reftype($value) ne q{HASH} ) {
             die "Property $property_name is not a HashRef";
         }

@@ -17,11 +17,11 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Profile->effective->set( q{no_network}, 1 );
 }
 
-my ($json, $foo);
+my ($json, $profile_test);
 foreach my $testcase ( qw{connectivity01 connectivity02 connectivity03} ) {
-    $json = read_file( 't/profiles/Test-'.$testcase.'-only.json' );
-    $foo  = Zonemaster::Engine::Profile->from_json( $json );
-    Zonemaster::Engine::Profile->effective->merge( $foo );
+    $json          = read_file( 't/profiles/Test-'.$testcase.'-only.json' );
+    $profile_test  = Zonemaster::Engine::Profile->from_json( $json );
+    Zonemaster::Engine::Profile->effective->merge( $profile_test );
     my @testcases;
     foreach my $result ( Zonemaster::Engine->test_module( q{connectivity}, q{afnic.fr} ) ) {
         foreach my $trace (@{$result->trace}) {
@@ -33,9 +33,9 @@ foreach my $testcase ( qw{connectivity01 connectivity02 connectivity03} ) {
     is( $testcases[0], 'Zonemaster::Engine::Test::Connectivity::'.$testcase, 'expected test-case ('.$testcases[0].')' );
 }
 
-$json = read_file( 't/profiles/Test-connectivity-all.json' );
-$foo  = Zonemaster::Engine::Profile->from_json( $json );
-Zonemaster::Engine::Profile->effective->merge( $foo );
+$json         = read_file( 't/profiles/Test-connectivity-all.json' );
+$profile_test = Zonemaster::Engine::Profile->from_json( $json );
+Zonemaster::Engine::Profile->effective->merge( $profile_test );
 
 my @res;
 my %res;
