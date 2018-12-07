@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Nameserver;
 
-use version; our $VERSION = version->declare("v1.1.10");
+use version; our $VERSION = version->declare("v1.1.11");
 
 use 5.014002;
 use Moose;
@@ -273,13 +273,13 @@ sub _query {
     );
 
     # Make sure we have a value for each flag
-    $flags{q{retry}}     = Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.retry} );
-    $flags{q{retrans}}   = Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.retrans} );
-    $flags{q{dnssec}}    = Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.dnssec} );
-    $flags{q{usevc}}     = Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.usevc} );
-    $flags{q{igntc}}     = Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.igntc} );
-    $flags{q{recurse}}   = Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.recurse} );
-    $flags{q{edns_size}} = Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.edns_size} );
+    $flags{q{retry}}     = $href->{q{retry}} // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.retry} );
+    $flags{q{retrans}}   = $flags{q{retrans}} // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.retrans} );
+    $flags{q{dnssec}}    = $flags{q{dnssec}} // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.dnssec} );
+    $flags{q{usevc}}     = $flags{q{usevc}} // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.usevc} );
+    $flags{q{igntc}}     = $flags{q{igntc}} // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.igntc} );
+    $flags{q{recurse}}   = $flags{q{recurse}} // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.recurse} );
+    $flags{q{edns_size}} = $flags{q{edns_size}} // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.edns_size} );
 
     # Set flags for this query
     foreach my $flag ( keys %flags ) {
