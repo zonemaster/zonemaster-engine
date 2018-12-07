@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Profile;
 
-use version; our $VERSION = version->declare("v1.2.9");
+use version; our $VERSION = version->declare("v1.2.10");
 
 use 5.014002;
 use strict;
@@ -76,7 +76,7 @@ my %profile_properties_details = (
                           foreach my $ndd ( @{$_[0]} ) {
                               die "Property asnroots has a NULL item" if not defined $ndd;
                               die "Property asnroots has a non scalar item" if not defined ref($ndd);
-                              die "Property asnroots has a item too long" if length($ndd) > 255;
+                              die "Property asnroots has an item too long" if length($ndd) > 255;
                               foreach my $label ( split /\./, $ndd ) {
                                   die "Property asnroots has a non domain name item" if $label !~ /^[a-z0-9](?:[-a-z0-9]{0,61}[a-z0-9])?$/;
                               }
