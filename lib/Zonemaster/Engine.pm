@@ -1,6 +1,6 @@
 package Zonemaster::Engine;
 
-use version; our $VERSION = version->declare("v2.0.10");
+use version; our $VERSION = version->declare("v2.0.11");
 
 use 5.014002;
 use Moose;
@@ -15,7 +15,6 @@ use Zonemaster::Engine::Recursor;
 use Zonemaster::Engine::ASNLookup;
 
 our $logger;
-our $profile;
 our $recursor = Zonemaster::Engine::Recursor->new;
 
 sub logger {
@@ -23,7 +22,7 @@ sub logger {
 }
 
 sub profile {
-    return $profile //= Zonemaster::Engine::Profile->new;
+    return Zonemaster::Engine::Profile->effective;
 }
 
 sub ns {
