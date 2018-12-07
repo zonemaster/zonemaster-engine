@@ -1,6 +1,6 @@
 package Zonemaster::Engine;
 
-use version; our $VERSION = version->declare("v2.0.11");
+use version; our $VERSION = version->declare("v2.0.12");
 
 use 5.014002;
 use Moose;
@@ -239,7 +239,7 @@ Returns a L<Zonemaster::Engine::Nameserver> object for the given name and addres
 
 =item profile()
 
-Returns the global L<Zonemaster::Engine::Profile> object.
+Returns the effective profile (L<Zonemaster::Engine::Profile> object).
 
 =item logger()
 
