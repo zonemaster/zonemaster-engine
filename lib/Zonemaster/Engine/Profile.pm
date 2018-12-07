@@ -1,56 +1,50 @@
 package Zonemaster::Engine::Profile;
 
-use version; our $VERSION = version->declare("v1.2.10");
+use version; our $VERSION = version->declare("v1.2.11");
 
 use 5.014002;
 use strict;
 use warnings;
 
+use File::ShareDir qw[dist_file];
 use JSON::PP qw( encode_json decode_json );
 use Scalar::Util qw(reftype);
 use Sys::Hostname;
 use Socket;
+use File::Slurp;
 use Clone qw(clone);
 
 use Zonemaster::Engine;
 use Zonemaster::Engine::Net::IP;
 
 my %profile_properties_details = (
-    q{resolver.defaults.usevc} => {
-        type    => q{Bool},
-        default => 0
+    q{resolver.defaults.debug} => {
+        type    => q{Bool}
+    },
+    q{resolver.defaults.dnssec} => {
+        type    => q{Bool}
+    },
+    q{resolver.defaults.edns_size} => {
+        type    => q{Num}
+    },
+    q{resolver.defaults.igntc} => {
+        type    => q{Bool}
+    },
+    q{resolver.defaults.recurse} => {
+        type    => q{Bool}
     },
     q{resolver.defaults.retrans} => {
         type    => q{Num},
-        default => 3,
         min     => 1,
         max     => 255
-    },
-    q{resolver.defaults.dnssec} => {
-        type    => q{Bool},
-        default => 0
-    },
-    q{resolver.defaults.recurse} => {
-        type    => q{Bool},
-        default => 0
     },
     q{resolver.defaults.retry} => {
         type    => q{Num},
-        default => 2,
         min     => 1,
         max     => 255
     },
-    q{resolver.defaults.igntc} => {
-        type    => q{Bool},
-        default => 0
-    },
-    q{resolver.defaults.edns_size} => {
-        type    => q{Num},
-        default => 0
-    },
-    q{resolver.defaults.debug} => {
-        type    => q{Bool},
-        default => 0
+    q{resolver.defaults.usevc} => {
+        type    => q{Bool}
     },
     q{resolver.source} => {
         type    => q{Str},
@@ -58,20 +52,16 @@ my %profile_properties_details = (
         test    => sub { Zonemaster::Engine::Net::IP->new( $_[0] ); }
     },
     q{net.ipv4} => {
-        type    => q{Bool},
-        default => 1
+        type    => q{Bool}
     },
     q{net.ipv6} => {
-        type    => q{Bool},
-        default => 1
+        type    => q{Bool}
     },
     q{no_network} => {
-        type    => q{Bool},
-        default => 0
+        type    => q{Bool}
     },
     q{asnroots} => {
         type    => q{ArrayRef},
-        default => [qw(asnlookup.zonemaster.net asnlookup.iis.se asn.cymru.com)],
         test    => sub {
                           foreach my $ndd ( @{$_[0]} ) {
                               die "Property asnroots has a NULL item" if not defined $ndd;
@@ -88,14 +78,25 @@ my %profile_properties_details = (
         default => {}
     },
     q{test_levels} => {
-        type    => q{HashRef},
-        default => {}
+        type    => q{HashRef}
     },
     q{test_cases} => {
-        type    => q{ArrayRef},
-        default => []
+        type    => q{ArrayRef}
     }
 );
+
+_init_profile_properties_details_defaults();
+
+sub _init_profile_properties_details_defaults {
+    my $default_file   = dist_file( 'Zonemaster-Engine',  'profile.json');
+    my $json           = read_file( $default_file );
+    my $default_values = decode_json( $json );
+    foreach my $property_name ( keys %profile_properties_details ) {
+        if ( defined _get_value_from_nested_hash( $default_values, split /\./, $property_name ) ) {
+            $profile_properties_details{$property_name}{default} = clone _get_value_from_nested_hash( $default_values, split /\./, $property_name );
+        }
+    }
+}
 
 sub _get_profile_paths {
     my ( $paths_ref, $data, @path ) = @_;
