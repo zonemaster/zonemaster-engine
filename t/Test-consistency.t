@@ -1,4 +1,5 @@
 use Test::More;
+use File::Slurp;
 
 use List::MoreUtils qw[uniq none any];
 
@@ -12,11 +13,14 @@ my $datafile = q{t/Test-consistency.data};
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die q{Stored data file missing} if not -r $datafile;
     Zonemaster::Engine::Nameserver->restore( $datafile );
-    Zonemaster::Engine->config->no_network( 1 );
+    Zonemaster::Engine::Profile->effective->set( q{no_network}, 1 );
 }
 
+my ($json, $profile_test);
 foreach my $testcase ( qw{consistency01 consistency02 consistency03 consistency04 consistency05 consistency06} ) {
-    Zonemaster::Engine->config->load_policy_file( 't/policies/Test-'.$testcase.'-only.json' );
+    $json         = read_file( 't/profiles/Test-'.$testcase.'-only.json' );
+    $profile_test = Zonemaster::Engine::Profile->from_json( $json );
+    Zonemaster::Engine::Profile->effective->merge( $profile_test );
     my @testcases;
     Zonemaster::Engine->logger->clear_history();
     foreach my $result ( Zonemaster::Engine->test_module( q{consistency}, q{afnic.fr} ) ) {
@@ -25,11 +29,13 @@ foreach my $testcase ( qw{consistency01 consistency02 consistency03 consistency0
         }
     }
     @testcases = uniq sort @testcases;
-    is( scalar( @testcases ), 1, 'only one test-case' );
-    is( $testcases[0], 'Zonemaster::Engine::Test::Consistency::'.$testcase, 'expected test-case' );
+    is( scalar( @testcases ), 1, 'only one test-case ('.$testcase.')' );
+    is( $testcases[0], 'Zonemaster::Engine::Test::Consistency::'.$testcase, 'expected test-case ('.$testcases[0].')' );
 }
 
-Zonemaster::Engine->config->load_policy_file( 't/policies/Test-consistency-all.json' );
+$json         = read_file( 't/profiles/Test-consistency-all.json' );
+$profile_test = Zonemaster::Engine::Profile->from_json( $json );
+Zonemaster::Engine::Profile->effective->merge( $profile_test );
 
 my @res;
 my %res;
@@ -62,9 +68,9 @@ if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Nameserver->save( $datafile );
 }
 
-Zonemaster::Engine->config->no_network( 0 );
-Zonemaster::Engine->config->ipv6_ok( 0 );
-Zonemaster::Engine->config->ipv4_ok( 0 );
+Zonemaster::Engine::Profile->effective->set( q{no_network}, 0 );
+Zonemaster::Engine::Profile->effective->set( q{net.ipv4}, 0 );
+Zonemaster::Engine::Profile->effective->set( q{net.ipv6}, 0 );
 @res = Zonemaster::Engine->test_method( 'Consistency', 'consistency01', Zonemaster::Engine->zone( q{afnic.fr} ) );
 ok( ( any { $_->tag eq 'NO_NETWORK' } @res ), 'IPv6 and IPv4 disabled' );
 ok( ( none { $_->tag eq 'IPV6_DISABLED' } @res ), 'No network' );
@@ -82,8 +88,8 @@ ok( ( any { $_->tag eq 'NO_NETWORK' } @res ), 'IPv6 and IPv4 disabled' );
 ok( ( none { $_->tag eq 'IPV6_DISABLED' } @res ), 'No network' );
 ok( ( none { $_->tag eq 'IPV4_DISABLED' } @res ), 'No network' );
 
-#Zonemaster::Engine->config->ipv6_ok( 0 );
-#Zonemaster::Engine->config->ipv4_ok( 1 );
+#Zonemaster::Engine::Profile->effective->set( q{net.ipv4}, 1 );
+#Zonemaster::Engine::Profile->effective->set( q{net.ipv6}, 0 );
 #@res = Zonemaster::Engine->test_method( 'Consistency', 'consistency01', Zonemaster::Engine->zone( q{afnic.fr} ) );
 #ok( ( any { $_->tag eq 'IPV6_DISABLED' } @res ), 'IPv6 disabled' );
 #ok( ( none { $_->tag eq 'IPV4_DISABLED' } @res ), 'IPv4 not disabled' );
@@ -99,8 +105,8 @@ ok( ( none { $_->tag eq 'IPV4_DISABLED' } @res ), 'No network' );
 #
 #if ( Zonemaster::Engine::Util::supports_ipv6() ) {
 #
-#    Zonemaster::Engine->config->ipv6_ok( 1 );
-#    Zonemaster::Engine->config->ipv4_ok( 0 );
+#    Zonemaster::Engine::Profile->effective->set( q{net.ipv4}, 0 );
+#    Zonemaster::Engine::Profile->effective->set( q{net.ipv6}, 1 );
 #    @res = Zonemaster::Engine->test_method( 'Consistency', 'consistency01', Zonemaster::Engine->zone( q{afnic.fr} ) );
 #    ok( ( none { $_->tag eq 'IPV6_DISABLED' } @res ), 'IPv6 not disabled' );
 #    ok( ( any { $_->tag eq 'IPV4_DISABLED' } @res ), 'IPv4 disabled' );
@@ -114,8 +120,8 @@ ok( ( none { $_->tag eq 'IPV4_DISABLED' } @res ), 'No network' );
 #    ok( ( none { $_->tag eq 'IPV6_DISABLED' } @res ), 'IPv6 not disabled' );
 #    ok( ( any { $_->tag eq 'IPV4_DISABLED' } @res ), 'IPv4 disabled' );
 #
-#    Zonemaster::Engine->config->ipv6_ok( 1 );
-#    Zonemaster::Engine->config->ipv4_ok( 1 );
+#    Zonemaster::Engine::Profile->effective->set( q{net.ipv4}, 1 );
+#    Zonemaster::Engine::Profile->effective->set( q{net.ipv6}, 1 );
 #    @res = Zonemaster::Engine->test_method( 'Consistency', 'consistency01', Zonemaster::Engine->zone( q{afnic.fr} ) );
 #    ok( ( none { $_->tag eq 'IPV6_DISABLED' } @res ), 'IPv6 not disabled' );
 #    ok( ( none { $_->tag eq 'IPV4_DISABLED' } @res ), 'IPv4 not disabled' );
@@ -131,6 +137,6 @@ ok( ( none { $_->tag eq 'IPV4_DISABLED' } @res ), 'No network' );
 #
 #}
 
-Zonemaster::Engine->config->no_network( 1 );
+Zonemaster::Engine::Profile->effective->set( q{no_network}, 1 );
 
 done_testing;

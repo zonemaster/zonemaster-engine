@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::Consistency;
 
-use version; our $VERSION = version->declare("v1.1.2");
+use version; our $VERSION = version->declare("v1.1.6");
 
 use strict;
 use warnings;
@@ -22,22 +22,22 @@ sub all {
     my ( $class, $zone ) = @_;
     my @results;
 
-    if ( Zonemaster::Engine->config->should_run( 'consistency01' ) ) {
+    if ( Zonemaster::Engine::Util::should_run_test( q{consistency01} ) ) {
         push @results, $class->consistency01( $zone );
     }
-    if ( Zonemaster::Engine->config->should_run( 'consistency02' ) ) {
+    if ( Zonemaster::Engine::Util::should_run_test( q{consistency02} ) ) {
         push @results, $class->consistency02( $zone );
     }
-    if ( Zonemaster::Engine->config->should_run( 'consistency03' ) ) {
+    if ( Zonemaster::Engine::Util::should_run_test( q{consistency03} ) ) {
         push @results, $class->consistency03( $zone );
     }
-    if ( Zonemaster::Engine->config->should_run( 'consistency04' ) ) {
+    if ( Zonemaster::Engine::Util::should_run_test( q{consistency04} ) ) {
         push @results, $class->consistency04( $zone );
     }
-    if ( Zonemaster::Engine->config->should_run( 'consistency05' ) ) {
+    if ( Zonemaster::Engine::Util::should_run_test( q{consistency05} ) ) {
         push @results, $class->consistency05( $zone );
     }
-    if ( Zonemaster::Engine->config->should_run( 'consistency06' ) ) {
+    if ( Zonemaster::Engine::Util::should_run_test( q{consistency06} ) ) {
         push @results, $class->consistency06( $zone );
     }
 
@@ -172,7 +172,7 @@ sub consistency01 {
 
         next if $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short };
 
-        if ( not Zonemaster::Engine->config->ipv6_ok and $local_ns->address->version == $IP_VERSION_6 ) {
+        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $local_ns->address->version == $IP_VERSION_6 ) {
             push @results,
               info(
                 IPV6_DISABLED => {
@@ -184,7 +184,7 @@ sub consistency01 {
             next;
         }
 
-        if ( not Zonemaster::Engine->config->ipv4_ok and $local_ns->address->version == $IP_VERSION_4 ) {
+        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $local_ns->address->version == $IP_VERSION_4 ) {
             push @results,
               info(
                 IPV4_DISABLED => {
@@ -282,7 +282,7 @@ sub consistency02 {
 
         next if $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short };
 
-        if ( not Zonemaster::Engine->config->ipv6_ok and $local_ns->address->version == $IP_VERSION_6 ) {
+        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $local_ns->address->version == $IP_VERSION_6 ) {
             push @results,
               info(
                 IPV6_DISABLED => {
@@ -294,7 +294,7 @@ sub consistency02 {
             next;
         }
 
-        if ( not Zonemaster::Engine->config->ipv4_ok and $local_ns->address->version == $IP_VERSION_4 ) {
+        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $local_ns->address->version == $IP_VERSION_4 ) {
             push @results,
               info(
                 IPV4_DISABLED => {
@@ -379,7 +379,7 @@ sub consistency03 {
 
         next if $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short };
 
-        if ( not Zonemaster::Engine->config->ipv6_ok and $local_ns->address->version == $IP_VERSION_6 ) {
+        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $local_ns->address->version == $IP_VERSION_6 ) {
             push @results,
               info(
                 IPV6_DISABLED => {
@@ -391,7 +391,7 @@ sub consistency03 {
             next;
         }
 
-        if ( not Zonemaster::Engine->config->ipv4_ok and $local_ns->address->version == $IP_VERSION_4 ) {
+        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $local_ns->address->version == $IP_VERSION_4 ) {
             push @results,
               info(
                 IPV4_DISABLED => {
@@ -487,7 +487,7 @@ sub consistency04 {
 
         next if $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short };
 
-        if ( not Zonemaster::Engine->config->ipv6_ok and $local_ns->address->version == $IP_VERSION_6 ) {
+        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $local_ns->address->version == $IP_VERSION_6 ) {
             push @results,
               info(
                 IPV6_DISABLED => {
@@ -499,7 +499,7 @@ sub consistency04 {
             next;
         }
 
-        if ( not Zonemaster::Engine->config->ipv4_ok and $local_ns->address->version == $IP_VERSION_4 ) {
+        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $local_ns->address->version == $IP_VERSION_4 ) {
             push @results,
               info(
                 IPV4_DISABLED => {
@@ -621,7 +621,7 @@ sub consistency05 {
 
     my @ib_nsnames =
       grep { $zone->name->is_in_bailiwick( $_ ) } @{ Zonemaster::Engine::TestMethods->method2and3( $zone ) };
-    my @nss = grep { Zonemaster::Engine->config->ipversion_ok( $_->address->version ) }
+    my @nss = grep { Zonemaster::Engine::Util::ipversion_ok( $_->address->version ) }
       @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) };
     my $resolver = Zonemaster::Engine->ns( 'google-public-dns-a.google.com', '8.8.8.8' );
 
@@ -733,7 +733,7 @@ sub consistency06 {
 
         next if $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short };
 
-        if ( not Zonemaster::Engine->config->ipv6_ok and $local_ns->address->version == $IP_VERSION_6 ) {
+        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $local_ns->address->version == $IP_VERSION_6 ) {
             push @results,
               info(
                 IPV6_DISABLED => {
@@ -745,7 +745,7 @@ sub consistency06 {
             next;
         }
 
-        if ( not Zonemaster::Engine->config->ipv4_ok and $local_ns->address->version == $IP_VERSION_4 ) {
+        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $local_ns->address->version == $IP_VERSION_4 ) {
             push @results,
               info(
                 IPV4_DISABLED => {

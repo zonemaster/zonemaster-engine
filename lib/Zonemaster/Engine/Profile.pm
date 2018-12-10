@@ -1,8 +1,300 @@
 package Zonemaster::Engine::Profile;
 
-use 5.006;
+use version; our $VERSION = version->declare("v1.2.11");
+
+use 5.014002;
 use strict;
 use warnings;
+
+use File::ShareDir qw[dist_file];
+use JSON::PP qw( encode_json decode_json );
+use Scalar::Util qw(reftype);
+use Sys::Hostname;
+use Socket;
+use File::Slurp;
+use Clone qw(clone);
+
+use Zonemaster::Engine;
+use Zonemaster::Engine::Net::IP;
+
+my %profile_properties_details = (
+    q{resolver.defaults.debug} => {
+        type    => q{Bool}
+    },
+    q{resolver.defaults.dnssec} => {
+        type    => q{Bool}
+    },
+    q{resolver.defaults.edns_size} => {
+        type    => q{Num}
+    },
+    q{resolver.defaults.igntc} => {
+        type    => q{Bool}
+    },
+    q{resolver.defaults.recurse} => {
+        type    => q{Bool}
+    },
+    q{resolver.defaults.retrans} => {
+        type    => q{Num},
+        min     => 1,
+        max     => 255
+    },
+    q{resolver.defaults.retry} => {
+        type    => q{Num},
+        min     => 1,
+        max     => 255
+    },
+    q{resolver.defaults.usevc} => {
+        type    => q{Bool}
+    },
+    q{resolver.source} => {
+        type    => q{Str},
+        default => inet_ntoa((gethostbyname(hostname))[4]),
+        test    => sub { Zonemaster::Engine::Net::IP->new( $_[0] ); }
+    },
+    q{net.ipv4} => {
+        type    => q{Bool}
+    },
+    q{net.ipv6} => {
+        type    => q{Bool}
+    },
+    q{no_network} => {
+        type    => q{Bool}
+    },
+    q{asnroots} => {
+        type    => q{ArrayRef},
+        test    => sub {
+                          foreach my $ndd ( @{$_[0]} ) {
+                              die "Property asnroots has a NULL item" if not defined $ndd;
+                              die "Property asnroots has a non scalar item" if not defined ref($ndd);
+                              die "Property asnroots has an item too long" if length($ndd) > 255;
+                              foreach my $label ( split /\./, $ndd ) {
+                                  die "Property asnroots has a non domain name item" if $label !~ /^[a-z0-9](?:[-a-z0-9]{0,61}[a-z0-9])?$/;
+                              }
+                          }
+                      }
+    },
+    q{logfilter} => {
+        type    => q{HashRef},
+        default => {}
+    },
+    q{test_levels} => {
+        type    => q{HashRef}
+    },
+    q{test_cases} => {
+        type    => q{ArrayRef}
+    }
+);
+
+_init_profile_properties_details_defaults();
+
+sub _init_profile_properties_details_defaults {
+    my $default_file   = dist_file( 'Zonemaster-Engine',  'profile.json');
+    my $json           = read_file( $default_file );
+    my $default_values = decode_json( $json );
+    foreach my $property_name ( keys %profile_properties_details ) {
+        if ( defined _get_value_from_nested_hash( $default_values, split /\./, $property_name ) ) {
+            $profile_properties_details{$property_name}{default} = clone _get_value_from_nested_hash( $default_values, split /\./, $property_name );
+        }
+    }
+}
+
+sub _get_profile_paths {
+    my ( $paths_ref, $data, @path ) = @_;
+
+    foreach my $key (sort keys %$data) {
+
+        my $path = join '.', @path, $key;
+        if (ref($data->{$key}) eq 'HASH' and not exists $profile_properties_details{$path} ) {
+            _get_profile_paths($paths_ref, $data->{$key}, @path, $key);
+            next;
+        }
+        else {
+            $paths_ref->{$path} = 1;
+        }
+    }
+}
+
+sub _get_value_from_nested_hash {
+    my ( $hash_ref, @path ) = @_;
+
+    my $key = shift @path;
+    if ( exists $hash_ref->{$key} ) {
+        if ( @path ) {
+            my $value_type = reftype($hash_ref->{$key});
+            if ( $value_type eq q{HASH} ) {
+                return _get_value_from_nested_hash( $hash_ref->{$key}, @path );
+            }
+            else {
+                return undef;
+            }
+        }
+        else {
+            return $hash_ref->{$key};
+        }
+    }
+    else {
+        return undef;
+    }
+}
+
+sub _set_value_to_nested_hash {
+    my ( $hash_ref, $value, @path ) = @_;
+
+    my $key = shift @path;
+    
+    if (  ! exists $hash_ref->{$key} ) {
+        $hash_ref->{$key} = {};
+    }
+    if ( @path ) {
+        _set_value_to_nested_hash( $hash_ref->{$key}, $value, @path );
+    }
+    else {
+        $hash_ref->{$key} = clone $value;
+    }
+}
+
+our $effective = Zonemaster::Engine::Profile->default;
+
+sub new {
+    my $class = shift;
+    my $self = {};
+    $self->{q{profile}} = {};
+
+    bless $self, $class;
+
+    return $self;
+}
+
+sub default {
+    my ( $class ) = @_;
+    my $new = $class->new;
+    foreach my $property_name ( keys %profile_properties_details ) {
+        if ( exists $profile_properties_details{$property_name}{default} ) {
+            $new->set( $property_name, $profile_properties_details{$property_name}{default} );
+        }
+    }
+    return $new;
+}
+
+sub get {
+    my ( $self, $property_name ) = @_;
+
+    die "Unknown property '$property_name'"  if not exists $profile_properties_details{$property_name};
+
+    if ( $profile_properties_details{$property_name}->{type} eq q{ArrayRef} or $profile_properties_details{$property_name}->{type} eq q{HashRef} ) {
+        return clone _get_value_from_nested_hash( $self->{q{profile}}, split /\./, $property_name );
+    } else {
+        return _get_value_from_nested_hash( $self->{q{profile}}, split /\./, $property_name );
+    }
+}
+
+sub set {
+    my ( $self, $property_name, $value ) = @_;
+
+    $self->_set( q{DIRECT}, $property_name, $value );
+}
+
+sub _set {
+    my ( $self, $from, $property_name, $value ) = @_;
+    my $value_type = reftype($value);
+
+    die "Unknown property '$property_name'" if not exists $profile_properties_details{$property_name};
+
+    # $value is a Scalar
+    if ( ! $value_type  or $value_type eq q{SCALAR} ) {
+        die "Property $property_name can not be undef" if not defined $value;
+
+        # Boolean (Should we accept (true|false) values ?
+        if ( $profile_properties_details{$property_name}->{type} eq q{Bool} ) {
+            if ( $from eq q{DIRECT} and $value =~ /^0$/ ) {
+                $value = JSON::PP::false;
+            }
+            elsif ( $from eq q{DIRECT} and $value =~ /^1$/ ) {
+                $value = JSON::PP::true;
+            }
+            elsif ( $from eq q{JSON} and $value_type and $value == JSON::PP::false ) {
+                $value = JSON::PP::false;
+            }
+            elsif ( $from eq q{JSON} and $value_type and $value == JSON::PP::true ) {
+                $value = JSON::PP::true;
+            }
+            else {
+                die "Property $property_name is of type Boolean";
+            }
+        }
+        # Number. In our case, only non-negative integers
+        elsif ( $profile_properties_details{$property_name}->{type} eq q{Num} ) {
+            if ( $value !~ /^(\d+)$/ ) {
+                die "Property $property_name is of type non-negative integer";
+            }
+            if ( exists $profile_properties_details{$property_name}->{min} and $value < $profile_properties_details{$property_name}->{min} ) {
+                die "Property $property_name value is out of limit (smaller)";
+            }
+            if ( exists $profile_properties_details{$property_name}->{max} and $value > $profile_properties_details{$property_name}->{max} ) {
+                die "Property $property_name value is out of limit (bigger)";
+            }
+        }
+    }
+    else {
+        # Array
+        if ( $profile_properties_details{$property_name}->{type} eq q{ArrayRef} and reftype($value) ne q{ARRAY} ) {
+            die "Property $property_name is not a ArrayRef";
+        }
+        # Hash
+        elsif ( $profile_properties_details{$property_name}->{type} eq q{HashRef} and reftype($value) ne q{HASH} ) {
+            die "Property $property_name is not a HashRef";
+        }
+        elsif ( $profile_properties_details{$property_name}->{type} eq q{Bool} or $profile_properties_details{$property_name}->{type} eq q{Num} or $profile_properties_details{$property_name}->{type} eq q{Str} ) {
+            die "Property $property_name is a Scalar";
+        }
+    }
+
+    if ( $profile_properties_details{$property_name}->{test} ) {
+        $profile_properties_details{$property_name}->{test}->( $value );
+    }
+
+    return _set_value_to_nested_hash( $self->{q{profile}}, $value, split /\./, $property_name );
+}   
+
+sub merge {
+    my ( $self, $other_profile ) = @_;
+
+    die "Merge with ", __PACKAGE__, " only" if ref($other_profile) ne __PACKAGE__;
+
+    foreach my $property_name ( keys %profile_properties_details ) {
+        if ( defined _get_value_from_nested_hash( $other_profile->{q{profile}}, split /\./, $property_name ) ) {
+            $self->_set( q{JSON}, $property_name, _get_value_from_nested_hash( $other_profile->{q{profile}}, split /\./, $property_name ) );
+        }
+    }
+    return $other_profile->{q{profile}};
+}
+
+sub from_json {
+    my ( $class, $json ) = @_;
+    my $new = $class->new;
+    my $internal = decode_json( $json );
+    my %paths;
+    _get_profile_paths(\%paths, $internal);
+    foreach my $property_name ( keys %paths ) {
+        if ( defined _get_value_from_nested_hash( $internal, split /\./, $property_name ) ) {
+            $new->_set( q{JSON}, $property_name, _get_value_from_nested_hash( $internal, split /\./, $property_name ) );
+        }
+    }
+
+    return $new;
+}
+
+sub to_json {
+    my ( $self ) = @_;
+
+    return encode_json( $self->{q{profile}} );
+}
+
+sub effective {
+    return $effective;
+}
+
+1;
 
 =head1 NAME
 
@@ -154,6 +446,36 @@ Serialize the profile to the L</JSON REPRESENTATION> format.
     my $string = $profile->to_json();
 
 Returns a string.
+
+=head1 SUBROUTINES
+
+=head2 _get_profile_paths
+
+Internal method used to get all the paths of a nested hashes-of-hashes.
+It creates a hash where keys are dotted keys of the nested hashes-of-hashes
+that exist in %profile_properties_details.
+
+    _get_profile_paths(\%paths, $internal);
+
+=head2 _get_value_from_nested_hash
+
+Internal method used to get a value in a nested hashes-of-hashes.
+
+    _get_value_from_nested_hash( $hash_ref, @path );
+
+Where $hash_ref is the hash to explore and @path are the labels of the property to get.
+
+   @path = split /\./,  q{resolver.defaults.usevc};
+
+=head2 _set_value_to_nested_hash
+
+Internal method used to set a value in a nested hashes-of-hashes.
+
+    _set_value_from_nested_hash( $hash_ref, $value, @path );
+
+Where $hash_ref is the hash to explore and @path are the labels of the property to set.
+
+   @path = split /\./,  q{resolver.defaults.usevc};
 
 =head1 PROFILE PROPERTIES
 
@@ -372,6 +694,8 @@ C<net.ipv6> = true has this JSON representation:
         }
     }
 
-=cut
+=over
 
-1; # End of Zonemaster::Engine::Profile
+=back
+
+=cut

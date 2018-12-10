@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Constants;
 
-use version; our $VERSION = version->declare("v1.2.2");
+use version; our $VERSION = version->declare("v1.2.3");
 
 use strict;
 use warnings;
@@ -109,7 +109,7 @@ sub _extract_iana_ip_blocks {
     foreach my $file_details ( @files_details ) {
         my $first_line = 1;
         next if ${$file_details}{ip_version} != $ip_version;
-	my $makefile_name = 'Zonemaster-Engine'; # This must be the same name as "name" in Makefile.PL
+        my $makefile_name = 'Zonemaster-Engine'; # This must be the same name as "name" in Makefile.PL
         my $data_location = dist_file($makefile_name, ${$file_details}{name});
         open(my $data, '<:encoding(utf8)', $data_location) or croak "Cannot open '${data_location}' : ${OS_ERROR}";
         while (my $fields = $csv->getline( $data )) {

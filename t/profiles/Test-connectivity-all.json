@@ -1,0 +1,7 @@
+{
+    "test_cases": [
+        "connectivity01",
+        "connectivity02",
+        "connectivity03" 
+    ]
+}
