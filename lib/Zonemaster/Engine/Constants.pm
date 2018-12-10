@@ -12,7 +12,7 @@ use English qw( -no_match_vars ) ;
 use parent 'Exporter';
 use Zonemaster::Engine::Net::IP;
 use Text::CSV;
-use File::ShareDir qw[dist_dir dist_file];
+use Zonemaster::Engine::Util qw( dist_file );
 
 use Readonly;
 
