@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::Nameserver;
 
-use version; our $VERSION = version->declare("v1.0.15");
+use version; our $VERSION = version->declare("v1.0.16");
 
 use strict;
 use warnings;
@@ -55,6 +55,9 @@ sub all {
     }
     if ( Zonemaster::Engine::Util::should_run_test( q{nameserver09} ) ) {
         push @results, $class->nameserver09( $zone );
+    }
+    if ( Zonemaster::Engine::Util::should_run_test( q{nameserver10} ) ) {
+        push @results, $class->nameserver10( $zone );
     }
 
     return @results;
@@ -134,6 +137,15 @@ sub metadata {
               CASE_QUERIES_RESULTS_DIFFER
               )
         ],
+        nameserver10 => [
+            qw(
+              NO_RESPONSE
+              NO_EDNS_SUPPORT
+              BAD_UNSUPPORTED_VER
+              NS_ERROR
+              )
+        ],
+
     };
 } ## end sub metadata
 
@@ -167,10 +179,12 @@ sub translation {
         IPV4_DISABLED              => 'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
         IPV6_DISABLED              => 'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
         IS_A_RECURSOR              => 'Nameserver {ns}/{address} is a recursor.',
+        NO_EDNS_SUPPORT            => 'Nameserver {ns}/{address}...',
         NO_RECURSOR                => 'Nameserver {ns}/{address} is not a recursor.',
         NO_RESOLUTION              => 'No nameservers succeeded to resolve to an IP address.',
         NO_RESPONSE                => 'No response from {ns}/{address} asking for {dname}.',
         NO_UPWARD_REFERRAL         => 'None of the following nameservers returns an upward referral : {names}.',
+        NS_ERROR                   => 'Nameserver {ns}/{address}...',
         QNAME_CASE_INSENSITIVE     => 'Nameserver {ns}/{address} does not preserve original case of queried names.',
         QNAME_CASE_SENSITIVE       => 'Nameserver {ns}/{address} preserves original case of queried names.',
         QUERY_DROPPED              => 'Nameserver {ns}/{address} dropped AAAA query.',
@@ -259,7 +273,6 @@ sub nameserver02 {
     foreach
       my $local_ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) }, @{ Zonemaster::Engine::TestMethods->method5( $zone ) } )
     {
-
         next if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $local_ns->address->version == $IP_VERSION_6 );
 
         next if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $local_ns->address->version == $IP_VERSION_4 );
@@ -760,6 +773,76 @@ sub nameserver09 {
     return @results;
 } ## end sub nameserver09
 
+sub nameserver10 {
+    my ( $class, $zone ) = @_;
+    my @results;
+
+    my @nss;
+    {
+        my %nss = map { $_->string => $_ }
+          @{ Zonemaster::Engine::TestMethods->method4( $zone ) },
+          @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
+        @nss = values %nss;
+    }
+
+    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) ) {
+        @nss = grep { $_->address->version != $IP_VERSION_6 } @nss;
+    }
+    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) ) {
+        @nss = grep { $_->address->version != $IP_VERSION_4 } @nss;
+    }
+
+    for my $ns ( @nss ) {
+
+	my $p = $ns->query( $zone->name, q{SOA}, { edns_details => { version => 1 } } );
+        if ( $p ) {
+            if ( $p->rcode eq q{FORMERR} ) {
+                push @results,
+                  info(
+                    NO_EDNS_SUPPORT => {
+                        ns      => $ns->name,
+                        address => $ns->address->short,
+                    }
+                  );
+            }
+            elsif ( $p->rcode eq q{NOERROR} or $p->rcode eq q{NXDOMAIN} ) {
+                push @results,
+                  info(
+                    BAD_UNSUPPORTED_VER => {
+                        ns      => $ns->name,
+                        address => $ns->address->short,
+                    }
+                  );
+            }
+            elsif ( $p->rcode eq q{BADVERS} and $p->edns_version == 0 and not scalar $p->answer) {
+                next;
+            }
+            else {
+                push @results,
+                  info(
+                    NS_ERROR => {
+                        ns      => $ns->name,
+                        address => $ns->address->short,
+                    }
+                  );
+            }
+        }
+	else {
+            push @results,
+              info(
+                NO_RESPONSE => {
+                    ns      => $ns->name,
+                    address => $ns->address->short,
+                }
+              );
+        }
+    }
+    if ( not scalar @results ) {
+        print "nameserver10: NO_ERROR\n";
+    }
+    return @results;
+} ## end sub nameserver10
+
 1;
 
 =head1 NAME
@@ -832,6 +915,10 @@ Check whether authoritative name servers responses match the case of every lette
 =item nameserver09($zone)
 
 Check whether authoritative name servers return same results for equivalent names with different cases in the request.
+
+=item nameserver10($zone)
+
+WIP
 
 =back
 
