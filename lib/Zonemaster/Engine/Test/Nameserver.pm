@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::Nameserver;
 
-use version; our $VERSION = version->declare("v1.0.16");
+use version; our $VERSION = version->declare("v1.0.17");
 
 use strict;
 use warnings;
@@ -58,6 +58,9 @@ sub all {
     }
     if ( Zonemaster::Engine::Util::should_run_test( q{nameserver10} ) ) {
         push @results, $class->nameserver10( $zone );
+    }
+    if ( Zonemaster::Engine::Util::should_run_test( q{nameserver12} ) ) {
+        push @results, $class->nameserver12( $zone );
     }
 
     return @results;
@@ -142,6 +145,13 @@ sub metadata {
               NO_RESPONSE
               NO_EDNS_SUPPORT
               BAD_UNSUPPORTED_VER
+              NS_ERROR
+              )
+        ],
+        nameserver12 => [
+            qw(
+              NO_RESPONSE
+              NO_EDNS_SUPPORT
               NS_ERROR
               )
         ],
@@ -793,7 +803,6 @@ sub nameserver10 {
     }
 
     for my $ns ( @nss ) {
-
 	my $p = $ns->query( $zone->name, q{SOA}, { edns_details => { version => 1 } } );
         if ( $p ) {
             if ( $p->rcode eq q{FORMERR} ) {
@@ -842,6 +851,66 @@ sub nameserver10 {
     }
     return @results;
 } ## end sub nameserver10
+
+sub nameserver12 {
+    my ( $class, $zone ) = @_;
+    my @results;
+
+    my @nss;
+    {
+        my %nss = map { $_->string => $_ }
+          @{ Zonemaster::Engine::TestMethods->method4( $zone ) },
+          @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
+        @nss = values %nss;
+    }
+
+    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) ) {
+        @nss = grep { $_->address->version != $IP_VERSION_6 } @nss;
+    }
+    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) ) {
+        @nss = grep { $_->address->version != $IP_VERSION_4 } @nss;
+    }
+
+    for my $ns ( @nss ) {
+	my $p = $ns->query( $zone->name, q{SOA}, { edns_details => { z => 3 } } );
+        if ( $p ) {
+            if ( $p->rcode eq q{FORMERR} ) {
+                push @results,
+                  info(
+                    NO_EDNS_SUPPORT => {
+                        ns      => $ns->name,
+                        address => $ns->address->short,
+                    }
+                  );
+            }
+            elsif ( $p->rcode eq q{NOERROR} and $p->edns_version == 0 and $p->edns_z == 0 and $p->get_records( q{SOA}, q{answer} ) ) {
+                next;
+            }
+            else {
+                push @results,
+                  info(
+                    NS_ERROR => {
+                        ns      => $ns->name,
+                        address => $ns->address->short,
+                    }
+                  );
+            }
+        }
+	else {
+            push @results,
+              info(
+                NO_RESPONSE => {
+                    ns      => $ns->name,
+                    address => $ns->address->short,
+                }
+              );
+        }
+    }
+    if ( not scalar @results ) {
+        print "nameserver12: NO_ERROR\n";
+    }
+    return @results;
+} ## end sub nameserver12
 
 1;
 
@@ -917,6 +986,10 @@ Check whether authoritative name servers responses match the case of every lette
 Check whether authoritative name servers return same results for equivalent names with different cases in the request.
 
 =item nameserver10($zone)
+
+WIP
+
+=item nameserver12($zone)
 
 WIP
 
