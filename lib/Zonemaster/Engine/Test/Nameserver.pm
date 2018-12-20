@@ -814,7 +814,7 @@ sub nameserver10 {
                     }
                   );
             }
-            elsif ( $p->rcode eq q{NOERROR} or $p->rcode eq q{NXDOMAIN} ) {
+            elsif ( $p->rcode eq q{NOERROR} ) {
                 push @results,
                   info(
                     BAD_UNSUPPORTED_VER => {
@@ -846,9 +846,7 @@ sub nameserver10 {
               );
         }
     }
-    if ( not scalar @results ) {
-        print "nameserver10: NO_ERROR\n";
-    }
+
     return @results;
 } ## end sub nameserver10
 
