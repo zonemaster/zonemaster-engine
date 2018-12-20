@@ -889,7 +889,6 @@ sub nameserver11 {
     my $opt_data = q{};
     my $opt_length = length($opt_data);
     my $rdata = $opt_code*65536 + $opt_length;
-    print $rdata, "<===\n";
     for my $ns ( @nss ) {
 	    my $p = $ns->query( $zone->name, q{SOA}, { edns_details => { data => $rdata } } );
         if ( $p ) {
