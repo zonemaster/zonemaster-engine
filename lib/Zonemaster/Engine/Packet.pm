@@ -32,6 +32,7 @@ has 'packet' => (
           edns_rcode
           edns_version
           edns_z
+          edns_data
           has_edns
           id
           querytime
@@ -285,6 +286,10 @@ edns_version
 =item *
 
 edns_z
+
+=item *
+
+edns_data
 
 =item *
 

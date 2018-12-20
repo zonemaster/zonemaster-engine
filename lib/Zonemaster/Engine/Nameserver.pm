@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Nameserver;
 
-use version; our $VERSION = version->declare("v1.1.13");
+use version; our $VERSION = version->declare("v1.1.14");
 
 use 5.014002;
 use Moose;
@@ -189,13 +189,16 @@ sub query {
         if ( defined $href->{edns_details}{version} and $href->{edns_details}{version} != 0 ) {
             $edns_special_case = 1;
         }
-	elsif ( defined $href->{edns_details}{z} ) {
+        elsif ( defined $href->{edns_details}{z} ) {
             $edns_special_case = 1;
         }
-	elsif ( defined $href->{edns_details}{extended_rcode} ) {
+        elsif ( defined $href->{edns_details}{extended_rcode} ) {
             $edns_special_case = 1;
         }
-	elsif ( defined $href->{edns_details}{udp_size} ) {
+        elsif ( defined $href->{edns_details}{data} ) {
+            $edns_special_case = 1;
+        }
+        elsif ( defined $href->{edns_details}{udp_size} ) {
             $edns_size = $href->{edns_details}{udp_size};
         }
     }
@@ -347,6 +350,11 @@ sub _query {
                 $pkt->set_edns_present();
                 $pkt->edns_rcode($href->{edns_details}{extended_rcode});
             }
+            if ( defined $href->{edns_details} and defined $href->{edns_details}{data} ) {
+                $pkt->set_edns_present();
+                $pkt->edns_data($href->{edns_details}{data});
+            }
+
 	    $res = eval { $self->dns->query_with_pkt( $pkt ) };
         }
         else {
