@@ -913,7 +913,7 @@ sub nameserver11 {
     my $rdata = $opt_code*65536 + $opt_length;
 
     for my $ns ( @nss ) {
-	    my $p = $ns->query( $zone->name, q{SOA}, { edns_details => { data => $rdata } } );
+        my $p = $ns->query( $zone->name, q{SOA}, { edns_details => { data => $rdata } } );
         if ( $p ) {
             if ( $p->rcode eq q{FORMERR} ) {
                 push @results,
@@ -933,7 +933,7 @@ sub nameserver11 {
                     }
                   );
             }
-	    elsif ( $p->rcode eq q{NOERROR} and $p->edns_version == 0 and not defined $p->edns_data and $p->get_records( q{SOA}, q{answer} ) ) {
+            elsif ( $p->rcode eq q{NOERROR} and $p->edns_version == 0 and not defined $p->edns_data and $p->get_records( q{SOA}, q{answer} ) ) {
                 next;
             }
             else {
@@ -946,7 +946,7 @@ sub nameserver11 {
                   );
             }
         }
-	else {
+        else {
             push @results,
               info(
                 NO_RESPONSE => {
@@ -982,7 +982,7 @@ sub nameserver12 {
     }
 
     for my $ns ( @nss ) {
-	my $p = $ns->query( $zone->name, q{SOA}, { edns_details => { z => 3 } } );
+        my $p = $ns->query( $zone->name, q{SOA}, { edns_details => { z => 3 } } );
         if ( $p ) {
             if ( $p->rcode eq q{FORMERR} ) {
                 push @results,
@@ -1006,7 +1006,7 @@ sub nameserver12 {
                   );
             }
         }
-	else {
+        else {
             push @results,
               info(
                 NO_RESPONSE => {
@@ -1054,7 +1054,7 @@ sub nameserver13 {
             }
 
         }
-	else {
+        else {
             push @results,
               info(
                 NO_RESPONSE => {
@@ -1122,7 +1122,7 @@ sub nameserver14 {
             }
 
         }
-	else {
+        else {
             push @results,
               info(
                 NO_RESPONSE => {
