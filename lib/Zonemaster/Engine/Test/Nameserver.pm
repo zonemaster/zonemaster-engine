@@ -68,9 +68,6 @@ sub all {
     if ( Zonemaster::Engine::Util::should_run_test( q{nameserver13} ) ) {
         push @results, $class->nameserver13( $zone );
     }
-    if ( Zonemaster::Engine::Util::should_run_test( q{nameserver14} ) ) {
-        push @results, $class->nameserver13( $zone );
-    }
 
     return @results;
 } ## end sub all
@@ -169,6 +166,7 @@ sub metadata {
             qw(
               NO_RESPONSE
               NO_EDNS_SUPPORT
+              Z_FLAGS_NOTCLEAR
               NS_ERROR
               )
         ],
@@ -180,14 +178,6 @@ sub metadata {
               MISSING_OPT_IN_TRUNCATED
               )
         ],
-        nameserver14 => [
-            qw(
-              NO_RESPONSE
-              NO_EDNS_SUPPORT
-              NS_ERROR
-              )
-        ],
-
     };
 } ## end sub metadata
 
@@ -221,8 +211,8 @@ sub translation {
         IPV4_DISABLED              => 'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
         IPV6_DISABLED              => 'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
         IS_A_RECURSOR              => 'Nameserver {ns}/{address} is a recursor.',
-        MISSING_OPT_IN_TRUNCATED   => 'Nameserver {ns}/{address}...',
-        NO_EDNS_SUPPORT            => 'Nameserver {ns}/{address}...',
+        MISSING_OPT_IN_TRUNCATED   => 'Nameserver {ns}/{address} replies on an EDNS query with a truncated response without EDNS.',
+        NO_EDNS_SUPPORT            => 'Nameserver {ns}/{address} does not support EDNS.',
         NO_RECURSOR                => 'Nameserver {ns}/{address} is not a recursor.',
         NO_RESOLUTION              => 'No nameservers succeeded to resolve to an IP address.',
         NO_RESPONSE                => 'No response from {ns}/{address} asking for {dname}.',
@@ -232,10 +222,11 @@ sub translation {
         QNAME_CASE_SENSITIVE       => 'Nameserver {ns}/{address} preserves original case of queried names.',
         QUERY_DROPPED              => 'Nameserver {ns}/{address} dropped AAAA query.',
         SAME_SOURCE_IP             => 'All nameservers reply with same IP used to query them.',
-        UNKNOWN_OPTION_CODE        => 'Nameserver {ns}/{address}...',
-        UNSUPPORTED_EDNS_VER       => 'Nameserver {ns}/{address}...',
+        UNKNOWN_OPTION_CODE        => 'Nameserver {ns}/{address} accepts an unknown EDNS option-code.',
+        UNSUPPORTED_EDNS_VER       => 'Nameserver {ns}/{address} accepts an unsupported EDNS version.',
         UPWARD_REFERRAL            => 'Nameserver {ns}/{address} returns an upward referral.',
         UPWARD_REFERRAL_IRRELEVANT => 'Upward referral tests skipped for root zone.',
+        Z_FLAGS_NOTCLEAR           => 'Nameserver {ns}/{address}...',
     };
 } ## end sub translation
 
@@ -993,6 +984,15 @@ sub nameserver12 {
                     }
                   );
             }
+            elsif ( $p->edns_z or $p->do ) {
+                push @results,
+                  info(
+                    Z_FLAGS_NOTCLEAR => {
+                        ns      => $ns->name,
+                        address => $ns->address->short,
+                    }
+                  );
+            }
             elsif ( $p->rcode eq q{NOERROR} and $p->edns_version == 0 and $p->edns_z == 0 and $p->get_records( q{SOA}, q{answer} ) ) {
                 next;
             }
@@ -1069,73 +1069,6 @@ sub nameserver13 {
     return @results;
 } ## end sub nameserver13
 
-sub nameserver14 {
-    my ( $class, $zone ) = @_;
-    my @results;
-
-    my @nss;
-    {
-        my %nss = map { $_->string => $_ }
-          @{ Zonemaster::Engine::TestMethods->method4( $zone ) },
-          @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
-        @nss = values %nss;
-    }
-
-    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) ) {
-        @nss = grep { $_->address->version != $IP_VERSION_6 } @nss;
-    }
-    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) ) {
-        @nss = grep { $_->address->version != $IP_VERSION_4 } @nss;
-    }
-
-    # Choose an unassigned EDNS0 Option Codes
-    # values 15-26945 are Unassigned. Let's say we use 137 ???
-    my $opt_code = 137;
-    my $opt_data = q{};
-    my $opt_length = length($opt_data);
-    my $rdata = $opt_code*65536 + $opt_length;
-
-    for my $ns ( @nss ) {
-
-        my $p = $ns->query( $zone->name, q{SOA}, { edns_details => { version => 1, data => $rdata  } } );
-        if ( $p ) {
-            if ( $p->rcode eq q{FORMERR} ) {
-                push @results,
-                  info(
-                    NO_EDNS_SUPPORT => {
-                        ns      => $ns->name,
-                        address => $ns->address->short,
-                    }
-                  );
-            }
-            elsif ( $p->rcode eq q{BADVERS} and $p->edns_version == 0 and not defined $p->edns_data and $p->get_records( q{SOA}, q{answer} ) ) {
-                next;
-            }
-            else {
-                push @results,
-                  info(
-                    NS_ERROR => {
-                        ns      => $ns->name,
-                        address => $ns->address->short,
-                    }
-                  );
-            }
-
-        }
-        else {
-            push @results,
-              info(
-                NO_RESPONSE => {
-                    ns      => $ns->name,
-                    address => $ns->address->short,
-                    dname   => $zone->name,
-                }
-              );
-        }
-    }
-
-    return @results;
-} ## end sub nameserver14
 1;
 
 =head1 NAME
@@ -1222,10 +1155,6 @@ WIP
 WIP
 
 =item nameserver13($zone)
-
-WIP
-
-=item nameserver14($zone)
 
 WIP
 
