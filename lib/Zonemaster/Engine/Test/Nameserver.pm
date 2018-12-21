@@ -222,11 +222,11 @@ sub translation {
         QNAME_CASE_SENSITIVE       => 'Nameserver {ns}/{address} preserves original case of queried names.',
         QUERY_DROPPED              => 'Nameserver {ns}/{address} dropped AAAA query.',
         SAME_SOURCE_IP             => 'All nameservers reply with same IP used to query them.',
-        UNKNOWN_OPTION_CODE        => 'Nameserver {ns}/{address} accepts an unknown EDNS option-code.',
+        UNKNOWN_OPTION_CODE        => 'Nameserver {ns}/{address} responds with an unknown ENDS OPTION-CODE.',
         UNSUPPORTED_EDNS_VER       => 'Nameserver {ns}/{address} accepts an unsupported EDNS version.',
         UPWARD_REFERRAL            => 'Nameserver {ns}/{address} returns an upward referral.',
         UPWARD_REFERRAL_IRRELEVANT => 'Upward referral tests skipped for root zone.',
-        Z_FLAGS_NOTCLEAR           => 'Nameserver {ns}/{address}...',
+        Z_FLAGS_NOTCLEAR           => 'Nameserver {ns}/{address} has one or more unknown EDNS Z flag bits set.',
     };
 } ## end sub translation
 
@@ -984,7 +984,7 @@ sub nameserver12 {
                     }
                   );
             }
-            elsif ( $p->edns_z or $p->do ) {
+            elsif ( $p->edns_z ) {
                 push @results,
                   info(
                     Z_FLAGS_NOTCLEAR => {
