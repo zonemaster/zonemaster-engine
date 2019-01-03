@@ -607,6 +607,8 @@ sub consistency05 {
     my ( $class, $zone ) = @_;
     my @results;
 
+    my $resolver = Zonemaster::Engine->ns( 'google-public-dns-a.google.com', '8.8.8.8' );
+
     my %strict_glue;
     my %extended_glue;
     for my $ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) } ) {
@@ -621,14 +623,14 @@ sub consistency05 {
 
     my @ib_nsnames =
       grep { $zone->name->is_in_bailiwick( $_ ) } @{ Zonemaster::Engine::TestMethods->method2and3( $zone ) };
-    my @nss = grep { Zonemaster::Engine::Util::ipversion_ok( $_->address->version ) }
+
+    my @ib_nss = grep { Zonemaster::Engine::Util::ipversion_ok( $_->address->version ) }
       @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) };
-    my $resolver = Zonemaster::Engine->ns( 'google-public-dns-a.google.com', '8.8.8.8' );
 
     my %child_ib_strings;
     for my $ib_nsname ( @ib_nsnames ) {
         my $is_lame = 1;
-        for my $ns ( @nss ) {
+        for my $ns ( @ib_nss ) {
             my ( $msg_a,    @rrs_a )    = $class->_get_addr_rrs( $ns, $ib_nsname, 'A',    $resolver );
             my ( $msg_aaaa, @rrs_aaaa ) = $class->_get_addr_rrs( $ns, $ib_nsname, 'AAAA', $resolver );
 
