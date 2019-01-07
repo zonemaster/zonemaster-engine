@@ -302,6 +302,7 @@ sub _query {
     $flags{q{dnssec}}    = $href->{q{dnssec}}    // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.dnssec} );
     $flags{q{usevc}}     = $href->{q{usevc}}     // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.usevc} );
     $flags{q{igntc}}     = $href->{q{igntc}}     // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.igntc} );
+    $flags{q{fallback}}  = $href->{q{fallback}}  // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.fallback} );
     $flags{q{recurse}}   = $href->{q{recurse}}   // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.recurse} );
     $flags{q{edns_size}} = $href->{q{edns_size}} // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.edns_size} );
     if ( defined $href->{edns_details} and $href->{edns_details}{udp_size} ) {
@@ -693,6 +694,10 @@ Set the number of times the query is tried.
 =item igntc
 
 If set to true, incoming response packets with the TC flag set are not automatically retried over TCP.
+
+=item fallback
+
+If set to true, incoming response packets with the TC flag set fall back to EDNS and/or TCP.
 
 =back
 

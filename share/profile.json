@@ -11,6 +11,7 @@
             "dnssec" : false,
             "edns_size" : false,
             "igntc" : false,
+	    "fallback" : true,
             "recurse" : false,
             "retrans" : 3,
             "retry" : 2,

@@ -18,6 +18,7 @@ has 'packet' => (
           rcode
           aa
           ra
+	  tc
           question
           answer
           authority
@@ -230,6 +231,14 @@ rcode
 =item *
 
 aa
+
+=item *
+
+ra
+
+=item *
+
+tc
 
 =item *
 

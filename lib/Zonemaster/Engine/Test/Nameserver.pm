@@ -217,7 +217,7 @@ sub translation {
         NO_RESOLUTION              => 'No nameservers succeeded to resolve to an IP address.',
         NO_RESPONSE                => 'No response from {ns}/{address} asking for {dname}.',
         NO_UPWARD_REFERRAL         => 'None of the following nameservers returns an upward referral : {names}.',
-        NS_ERROR                   => 'Nameserver {ns}/{address}...',
+        NS_ERROR                   => 'Nameserver {ns}/{address} ',
         QNAME_CASE_INSENSITIVE     => 'Nameserver {ns}/{address} does not preserve original case of queried names.',
         QNAME_CASE_SENSITIVE       => 'Nameserver {ns}/{address} preserves original case of queried names.',
         QUERY_DROPPED              => 'Nameserver {ns}/{address} dropped AAAA query.',
@@ -1041,7 +1041,7 @@ sub nameserver13 {
     }
 
     for my $ns ( @nss ) {
-        my $p = $ns->query( $zone->name, q{SOA}, { usevc => 0, igntc => 1, edns_details => { do => 1, udp_size => 512  } } );
+        my $p = $ns->query( $zone->name, q{SOA}, { usevc => 0, fallback => 0, edns_details => { do => 1, udp_size => 512  } } );
         if ( $p ) {
             if ( $p->rcode eq q{FORMERR} ) {
                 push @results,
@@ -1052,7 +1052,27 @@ sub nameserver13 {
                     }
                   );
             }
-
+            elsif ( $p->tc and not $p->has_edns ) {
+                push @results,
+                  info(
+                    MISSING_OPT_IN_TRUNCATED => {
+                        ns      => $ns->name,
+                        address => $ns->address->short,
+                    }
+                  );
+            }
+            elsif ( $p->rcode eq q{NOERROR} and $p->edns_version == 0 ) {
+                next;
+            }
+            else {
+                push @results,
+                  info(
+                    NS_ERROR => {
+                        ns      => $ns->name,
+                        address => $ns->address->short,
+                    }
+                  );
+            }
         }
         else {
             push @results,

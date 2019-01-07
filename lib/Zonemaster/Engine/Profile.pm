@@ -30,6 +30,9 @@ my %profile_properties_details = (
     q{resolver.defaults.igntc} => {
         type    => q{Bool}
     },
+    q{resolver.defaults.fallback} => {
+        type    => q{Bool}
+    },
     q{resolver.defaults.recurse} => {
         type    => q{Bool}
     },
@@ -88,7 +91,7 @@ my %profile_properties_details = (
 _init_profile_properties_details_defaults();
 
 sub _init_profile_properties_details_defaults {
-    my $default_file   = dist_file( 'Zonemaster-Engine',  'profile.json');
+    my $default_file   = dist_file( 'Zonemaster-Engine', 'profile.json');
     my $json           = read_file( $default_file );
     my $default_values = decode_json( $json );
     foreach my $property_name ( keys %profile_properties_details ) {
@@ -515,6 +518,12 @@ The number of times a query is sent before we give up. Default 2.
 
 A boolean. If false, UDP queries that get responses with the C<TC>
 flag set will be automatically resent over TCP. Default false.
+
+=head2 resolver.defaults.fallback
+
+A boolean. If false, UDP queries that get responses with the C<TC>
+flag set will be automatically resent over TCP or using EDNS. Default 
+true.
 
 =head2 resolver.source
 
