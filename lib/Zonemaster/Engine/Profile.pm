@@ -525,6 +525,11 @@ A boolean. If true, UDP queries that get responses with the C<TC>
 flag set will be automatically resent over TCP or using EDNS. Default 
 true.
 
+In ldns-1.7.0 (NLnet Labs), in case of truncated answer when UDP is used,
+the same query is resent with EDNS0 and TCP (if needed). If you
+want the original answer (with TC bit set) and avoid this kind of
+replay, set this flag to false.
+
 =head2 resolver.source
 
 A string that is either an IP address or the exact string C<"os_default">.
