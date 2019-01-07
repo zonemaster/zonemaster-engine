@@ -521,7 +521,7 @@ flag set will be automatically resent over TCP. Default false.
 
 =head2 resolver.defaults.fallback
 
-A boolean. If false, UDP queries that get responses with the C<TC>
+A boolean. If true, UDP queries that get responses with the C<TC>
 flag set will be automatically resent over TCP or using EDNS. Default 
 true.
 
