@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Packet;
 
-use version; our $VERSION = version->declare("v1.0.4");
+use version; our $VERSION = version->declare("v1.0.5");
 
 use 5.014002;
 use warnings;
@@ -18,6 +18,7 @@ has 'packet' => (
           rcode
           aa
           ra
+	  tc
           question
           answer
           authority
@@ -30,6 +31,9 @@ has 'packet' => (
           type
           edns_size
           edns_rcode
+          edns_version
+          edns_z
+          edns_data
           has_edns
           id
           querytime
@@ -230,6 +234,14 @@ aa
 
 =item *
 
+ra
+
+=item *
+
+tc
+
+=item *
+
 question
 
 =item *
@@ -275,6 +287,18 @@ edns_size
 =item *
 
 edns_rcode
+
+=item *
+
+edns_version
+
+=item *
+
+edns_z
+
+=item *
+
+edns_data
 
 =item *
 
