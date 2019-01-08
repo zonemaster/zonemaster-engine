@@ -572,7 +572,7 @@ sub consistency04 {
 } ## end sub consistency04
 
 sub _get_addr_rrs {
-    my ( $class, $ns, $name, $qtype, $resolver ) = @_;
+    my ( $class, $ns, $name, $qtype ) = @_;
     my $p = $ns->query( $name, $qtype );
     if ( !$p ) {
         return info(
@@ -583,7 +583,7 @@ sub _get_addr_rrs {
         );
     }
     elsif ($p->is_redirect) {
-        my $p_pub = $resolver->query( $name, $qtype, { recurse => 1 } );
+        my $p_pub = Zonemaster::Engine->recurse( $name, $qtype, 'IN' );
         if ( $p_pub ) {
             return ( undef, $p_pub->get_records_for_name( $qtype, $name, 'answer' ) );
         } else {
@@ -607,8 +607,6 @@ sub consistency05 {
     my ( $class, $zone ) = @_;
     my @results;
 
-    my $resolver = Zonemaster::Engine->ns( 'google-public-dns-a.google.com', '8.8.8.8' );
-
     my %strict_glue;
     my %extended_glue;
     for my $ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) } ) {
@@ -631,8 +629,8 @@ sub consistency05 {
     for my $ib_nsname ( @ib_nsnames ) {
         my $is_lame = 1;
         for my $ns ( @ib_nss ) {
-            my ( $msg_a,    @rrs_a )    = $class->_get_addr_rrs( $ns, $ib_nsname, 'A',    $resolver );
-            my ( $msg_aaaa, @rrs_aaaa ) = $class->_get_addr_rrs( $ns, $ib_nsname, 'AAAA', $resolver );
+            my ( $msg_a,    @rrs_a )    = $class->_get_addr_rrs( $ns, $ib_nsname, 'A' );
+            my ( $msg_aaaa, @rrs_aaaa ) = $class->_get_addr_rrs( $ns, $ib_nsname, 'AAAA' );
 
             if ( defined $msg_a ) {
                 push @results, $msg_a;
@@ -683,14 +681,14 @@ sub consistency05 {
 
         my %child_oob_strings;
 
-        my $p_a = $resolver->query( $glue_name, 'A', { recurse => 1 } );
+        my $p_a = Zonemaster::Engine->recurse( $glue_name, 'A', 'IN' );
         if ( $p_a ) {
             for my $rr ( $p_a->get_records_for_name( 'A', $glue_name, 'answer' ) ) {
                 $child_oob_strings{ $rr->owner . "/" . $rr->address } = 1;
             }
         }
 
-        my $p_aaaa = $resolver->query( $glue_name, 'AAAA', { recurse => 1 } );
+        my $p_aaaa = Zonemaster::Engine->recurse( $glue_name, 'AAAA', 'IN' );
         if ( $p_aaaa ) {
             for my $rr ( $p_aaaa->get_records_for_name( 'AAAA', $glue_name, 'answer' ) ) {
                 $child_oob_strings{ $rr->owner . "/" . $rr->address } = 1;
