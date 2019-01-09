@@ -1073,9 +1073,9 @@ msgid  "Not enough data about {zone} was found to be able to run tests."
 msgstr ""
 "Det finns inte tillräckligt med data om '{zone}' för att kunna köra tester."
 
-#: SYSTEM:CONFIG_FILE
-msgid  "Configuration was read from {name}."
-msgstr "Konfiguration lästes från '{name}'."
+#: SYSTEM:PROFILE_FILE
+msgid  "Profile was read from {name}."
+msgstr "Profil lästes från '{name}'."
 
 #: SYSTEM:DEPENDENCY_VERSION
 msgid  "Using prerequisite module {name} version {version}."
@@ -1151,10 +1151,6 @@ msgstr ""
 #: SYSTEM:POLICY_DISABLED
 msgid  "The module {name} was disabled by the policy."
 msgstr "Modulen '{name}' var inaktiverad i policyn."
-
-#: SYSTEM:POLICY_FILE
-msgid  "Policy was read from {name}."
-msgstr "Policy lästes från '{name}'."
 
 #: SYSTEM:SKIP_IPV4_DISABLED
 msgid  "IPv4 is disabled, not sending query to {ns}."

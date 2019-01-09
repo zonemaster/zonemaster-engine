@@ -25,11 +25,13 @@ requires 'File::Slurp'           => 0;
 requires 'Net::IP'               => 1.26;
 requires 'List::MoreUtils'       => 0;
 requires 'Mail::RFC822::Address' => 0;
-requires 'Hash::Merge'           => 0;
 requires 'Readonly'              => 0;
 requires 'Locale::TextDomain'    => 1.23;
 requires 'Text::CSV'             => 0;
 requires 'MIME::Base64'          => 0;
+requires 'Clone'                 => 0;
+requires 'JSON'                  => 0;
+requires 'JSON::PP'              => 0;
 
 test_requires 'Test::Fatal' => 0;
 

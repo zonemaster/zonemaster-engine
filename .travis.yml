@@ -7,3 +7,9 @@ perl:
     - "5.20"
     - "5.18"
     - "5.16"
+
+before_install:
+    - eval $(curl https://travis-perl.github.io/init) --auto
+    - local-lib
+    - git clone --depth=1 --branch=develop https://github.com/zonemaster/zonemaster-ldns.git
+    - cpan-install --deps Devel::CheckLib ./zonemaster-ldns

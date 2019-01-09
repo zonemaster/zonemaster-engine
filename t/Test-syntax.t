@@ -1,4 +1,5 @@
 use Test::More;
+use File::Slurp;
 
 use List::MoreUtils qw[uniq none any];
 
@@ -42,12 +43,15 @@ my $datafile = q{t/Test-syntax.data};
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die q{Stored data file missing} if not -r $datafile;
     Zonemaster::Engine::Nameserver->restore( $datafile );
-    Zonemaster::Engine->config->no_network( 1 );
+    Zonemaster::Engine::Profile->effective->set( q{no_network}, 1 );
 }
 
 # Find a way with dependences for syntax04 syntax05 syntax06 syntax07 syntax08
+my ($json, $profile_test);
 foreach my $testcase ( qw{syntax01 syntax02 syntax03} ) {
-    Zonemaster::Engine->config->load_policy_file( 't/policies/Test-'.$testcase.'-only.json' );
+    $json         = read_file( 't/profiles/Test-'.$testcase.'-only.json' );
+    $profile_test = Zonemaster::Engine::Profile->from_json( $json );
+    Zonemaster::Engine::Profile->effective->merge( $profile_test );
     my @testcases;
     foreach my $result ( Zonemaster::Engine->test_module( q{syntax}, q{afnic.fr} ) ) {
         foreach my $trace (@{$result->trace}) {
@@ -56,10 +60,12 @@ foreach my $testcase ( qw{syntax01 syntax02 syntax03} ) {
     }
     @testcases = uniq sort @testcases;
     is( scalar( @testcases ), 1, 'only one test-case' );
-    is( $testcases[0], 'Zonemaster::Engine::Test::Syntax::'.$testcase, 'expected test-case' );
+    is( $testcases[0], 'Zonemaster::Engine::Test::Syntax::'.$testcase, 'expected test-case ('.$testcases[0].')' );
 }
 
-Zonemaster::Engine->config->load_policy_file( 't/policies/Test-syntax-all.json' );
+$json         = read_file( 't/profiles/Test-syntax-all.json' );
+$profile_test = Zonemaster::Engine::Profile->from_json( $json );
+Zonemaster::Engine::Profile->effective->merge( $profile_test );
 
 my $ns_ok = Zonemaster::Engine::DNSName->new( q{ns1.nic.fr} );
 my $dn_ok = Zonemaster::Engine::DNSName->new( q{www.nic.se} );
