@@ -37,8 +37,20 @@ has 'dns'   => ( is => 'ro', isa => 'Zonemaster::LDNS',                     lazy
 has 'cache' => ( is => 'ro', isa => 'Zonemaster::Engine::Nameserver::Cache', lazy_build => 1 );
 has 'times' => ( is => 'ro', isa => 'ArrayRef',                      default    => sub { [] } );
 
-has 'source_address' =>
-  ( is => 'ro', isa => 'Maybe[Str]', lazy => 1, default => sub { return Zonemaster::Engine::Profile->effective->get( q{resolver.source} ) } );
+has 'source_address' => (
+    is      => 'ro',
+    isa     => 'Maybe[Str]',
+    lazy    => 1,
+    default => sub {
+        my $value = Zonemaster::Engine::Profile->effective->get( q{resolver.source} );
+        if ( $value eq $RESOLVER_SOURCE_OS_DEFAULT ) {
+            return;
+        }
+        else {
+            return $value;
+        }
+    }
+);
 
 has 'fake_delegations' => ( is => 'ro', isa => 'HashRef', default => sub { {} } );
 has 'fake_ds'          => ( is => 'ro', isa => 'HashRef', default => sub { {} } );
