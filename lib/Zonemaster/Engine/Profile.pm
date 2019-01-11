@@ -13,6 +13,7 @@ use Sys::Hostname;
 use Socket;
 use File::Slurp;
 use Clone qw(clone);
+use Data::Dumper;
 
 use Zonemaster::Engine;
 use Zonemaster::Engine::Net::IP;
@@ -200,9 +201,16 @@ sub set {
 sub _set {
     my ( $self, $from, $property_name, $value ) = @_;
     my $value_type = reftype($value);
+    my $data_details;
 
     die "Unknown property '$property_name'" if not exists $profile_properties_details{$property_name};
 
+    $data_details = sprintf "[TYPE=%s][FROM=%s][VALUE_TYPE=%s][VALUE=%s]\n%s",
+                            exists $profile_properties_details{$property_name}->{type} ? $profile_properties_details{$property_name}->{type} : q{UNDEF},
+                            defined $from ? $from : q{UNDEF},
+                            defined $value_type ? $value_type : q{UNDEF},
+                            defined $value ? $value : q{[UNDEF]},
+                            Data::Dumper::Dumper($value);
     # $value is a Scalar
     if ( ! $value_type  or $value_type eq q{SCALAR} ) {
         die "Property $property_name can not be undef" if not defined $value;
@@ -222,13 +230,13 @@ sub _set {
                 $value = JSON::PP::true;
             }
             else {
-                die "Property $property_name is of type Boolean";
+                die "Property $property_name is of type Boolean $data_details";
             }
         }
         # Number. In our case, only non-negative integers
         elsif ( $profile_properties_details{$property_name}->{type} eq q{Num} ) {
             if ( $value !~ /^(\d+)$/ ) {
-                die "Property $property_name is of type non-negative integer";
+                die "Property $property_name is of type non-negative integer $data_details";
             }
             if ( exists $profile_properties_details{$property_name}->{min} and $value < $profile_properties_details{$property_name}->{min} ) {
                 die "Property $property_name value is out of limit (smaller)";
@@ -241,14 +249,14 @@ sub _set {
     else {
         # Array
         if ( $profile_properties_details{$property_name}->{type} eq q{ArrayRef} and reftype($value) ne q{ARRAY} ) {
-            die "Property $property_name is not a ArrayRef";
+            die "Property $property_name is not a ArrayRef $data_details";
         }
         # Hash
         elsif ( $profile_properties_details{$property_name}->{type} eq q{HashRef} and reftype($value) ne q{HASH} ) {
-            die "Property $property_name is not a HashRef";
+            die "Property $property_name is not a HashRef $data_details";
         }
         elsif ( $profile_properties_details{$property_name}->{type} eq q{Bool} or $profile_properties_details{$property_name}->{type} eq q{Num} or $profile_properties_details{$property_name}->{type} eq q{Str} ) {
-            die "Property $property_name is a Scalar";
+            die "Property $property_name is a Scalar $data_details";
         }
     }
 
