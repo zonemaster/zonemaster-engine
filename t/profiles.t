@@ -1,7 +1,7 @@
 use 5.006;
 use strict;
 use warnings FATAL   => 'all';
-use Test::More tests => 25;
+use Test::More tests => 27;
 
 use JSON;
 use Readonly;
@@ -19,6 +19,7 @@ Readonly my $EXAMPLE_PROFILE_1 => q(
       "dnssec": false,
       "recurse": true,
       "igntc": false,
+      "fallback": true,
       "retry": 123,
       "retrans": 234
     },
@@ -65,6 +66,7 @@ Readonly my $EXAMPLE_PROFILE_2 => q(
       "dnssec": true,
       "recurse": false,
       "igntc": true,
+      "fallback": false,
       "retry": 99,
       "retrans": 88
     },
@@ -113,20 +115,21 @@ subtest 'new() returns a new profile every time' => sub {
 subtest 'new() returns a profile with all properties unset' => sub {
     my $profile = Zonemaster::Engine::Profile->new;
 
-    is $profile->get( 'resolver.defaults.usevc' ),   undef, 'resolver.defaults.usevc is unset';
-    is $profile->get( 'resolver.defaults.retrans' ), undef, 'resolver.defaults.retrans is unset';
-    is $profile->get( 'resolver.defaults.dnssec' ),  undef, 'resolver.defaults.dnssec is unset';
-    is $profile->get( 'resolver.defaults.recurse' ), undef, 'resolver.defaults.recurse is unset';
-    is $profile->get( 'resolver.defaults.retry' ),   undef, 'resolver.defaults.retry is unset';
-    is $profile->get( 'resolver.defaults.igntc' ),   undef, 'resolver.defaults.igntc is unset';
-    is $profile->get( 'resolver.source' ),           undef, 'resolver.source is unset';
-    is $profile->get( 'net.ipv4' ),                  undef, 'net.ipv4 is unset';
-    is $profile->get( 'net.ipv6' ),                  undef, 'net.ipv6 is unset';
-    is $profile->get( 'no_network' ),                undef, 'no_network is unset';
-    is $profile->get( 'asnroots' ),                  undef, 'asnroots is unset';
-    is $profile->get( 'logfilter' ),                 undef, 'logfilter is unset';
-    is $profile->get( 'test_levels' ),               undef, 'test_levels is unset';
-    is $profile->get( 'test_cases' ),                undef, 'test_cases is unset';
+    is $profile->get( 'resolver.defaults.usevc' ),    undef, 'resolver.defaults.usevc is unset';
+    is $profile->get( 'resolver.defaults.retrans' ),  undef, 'resolver.defaults.retrans is unset';
+    is $profile->get( 'resolver.defaults.dnssec' ),   undef, 'resolver.defaults.dnssec is unset';
+    is $profile->get( 'resolver.defaults.recurse' ),  undef, 'resolver.defaults.recurse is unset';
+    is $profile->get( 'resolver.defaults.retry' ),    undef, 'resolver.defaults.retry is unset';
+    is $profile->get( 'resolver.defaults.igntc' ),    undef, 'resolver.defaults.igntc is unset';
+    is $profile->get( 'resolver.defaults.fallback' ), undef, 'resolver.defaults.fallback is unset';
+    is $profile->get( 'resolver.source' ),            undef, 'resolver.source is unset';
+    is $profile->get( 'net.ipv4' ),                   undef, 'net.ipv4 is unset';
+    is $profile->get( 'net.ipv6' ),                   undef, 'net.ipv6 is unset';
+    is $profile->get( 'no_network' ),                 undef, 'no_network is unset';
+    is $profile->get( 'asnroots' ),                   undef, 'asnroots is unset';
+    is $profile->get( 'logfilter' ),                  undef, 'logfilter is unset';
+    is $profile->get( 'test_levels' ),                undef, 'test_levels is unset';
+    is $profile->get( 'test_cases' ),                 undef, 'test_cases is unset';
 };
 
 subtest 'default() returns a new profile every time' => sub {
@@ -142,20 +145,21 @@ subtest 'default() returns a new profile every time' => sub {
 subtest 'default() returns a profile with all properties set' => sub {
     my $profile = Zonemaster::Engine::Profile->default;
 
-    ok defined( $profile->get( 'resolver.defaults.usevc' ) ),   'resolver.defaults.usevc is set';
-    ok defined( $profile->get( 'resolver.defaults.dnssec' ) ),  'resolver.defaults.dnssec is set';
-    ok defined( $profile->get( 'resolver.defaults.recurse' ) ), 'resolver.defaults.recurse is set';
-    ok defined( $profile->get( 'resolver.defaults.igntc' ) ),   'resolver.defaults.igntc is set';
-    ok defined( $profile->get( 'net.ipv4' ) ),                  'net.ipv4 is set';
-    ok defined( $profile->get( 'net.ipv6' ) ),                  'net.ipv6 is set';
-    ok defined( $profile->get( 'no_network' ) ),                'no_network is set';
-    ok defined( $profile->get( 'resolver.defaults.retry' ) ),   'resolver.defaults.retry is set';
-    ok defined( $profile->get( 'resolver.defaults.retrans' ) ), 'resolver.defaults.retrans is set';
-    ok defined( $profile->get( 'resolver.source' ) ),           'resolver.source is set';
-    ok defined( $profile->get( 'asnroots' ) ),                  'asnroots is set';
-    ok defined( $profile->get( 'logfilter' ) ),                 'logfilter is set';
-    ok defined( $profile->get( 'test_levels' ) ),               'test_levels is set';
-    ok defined( $profile->get( 'test_cases' ) ),                'test_cases is set';
+    ok defined( $profile->get( 'resolver.defaults.usevc' ) ),    'resolver.defaults.usevc is set';
+    ok defined( $profile->get( 'resolver.defaults.dnssec' ) ),   'resolver.defaults.dnssec is set';
+    ok defined( $profile->get( 'resolver.defaults.recurse' ) ),  'resolver.defaults.recurse is set';
+    ok defined( $profile->get( 'resolver.defaults.igntc' ) ),    'resolver.defaults.igntc is set';
+    ok defined( $profile->get( 'resolver.defaults.fallback' ) ), 'resolver.defaults.fallback is set';
+    ok defined( $profile->get( 'net.ipv4' ) ),                   'net.ipv4 is set';
+    ok defined( $profile->get( 'net.ipv6' ) ),                   'net.ipv6 is set';
+    ok defined( $profile->get( 'no_network' ) ),                 'no_network is set';
+    ok defined( $profile->get( 'resolver.defaults.retry' ) ),    'resolver.defaults.retry is set';
+    ok defined( $profile->get( 'resolver.defaults.retrans' ) ),  'resolver.defaults.retrans is set';
+    ok defined( $profile->get( 'resolver.source' ) ),            'resolver.source is set';
+    ok defined( $profile->get( 'asnroots' ) ),                   'asnroots is set';
+    ok defined( $profile->get( 'logfilter' ) ),                  'logfilter is set';
+    ok defined( $profile->get( 'test_levels' ) ),                'test_levels is set';
+    ok defined( $profile->get( 'test_cases' ) ),                 'test_cases is set';
 };
 
 subtest 'from_json() returns a new profile every time' => sub {
@@ -170,35 +174,37 @@ subtest 'from_json() returns a new profile every time' => sub {
 subtest 'from_json("{}") returns a profile with all properties unset' => sub {
     my $profile = Zonemaster::Engine::Profile->from_json( "{}" );
 
-    is $profile->get( 'resolver.defaults.usevc' ),   undef, 'resolver.defaults.usevc is unset';
-    is $profile->get( 'resolver.defaults.dnssec' ),  undef, 'resolver.defaults.dnssec is unset';
-    is $profile->get( 'resolver.defaults.recurse' ), undef, 'resolver.defaults.recurse is unset';
-    is $profile->get( 'resolver.defaults.igntc' ),   undef, 'resolver.defaults.igntc is unset';
-    is $profile->get( 'net.ipv4' ),                  undef, 'net.ipv4 is unset';
-    is $profile->get( 'net.ipv6' ),                  undef, 'net.ipv6 is unset';
-    is $profile->get( 'no_network' ),                undef, 'no_network is unset';
-    is $profile->get( 'resolver.defaults.retry' ),   undef, 'resolver.defaults.retry is unset';
-    is $profile->get( 'resolver.defaults.retrans' ), undef, 'resolver.defaults.retrans is unset';
-    is $profile->get( 'resolver.source' ),           undef, 'resolver.source is unset';
-    is $profile->get( 'asnroots' ),                  undef, 'asnroots is unset';
-    is $profile->get( 'logfilter' ),                 undef, 'logfilter is unset';
-    is $profile->get( 'test_levels' ),               undef, 'test_levels is unset';
-    is $profile->get( 'test_cases' ),                undef, 'test_cases is unset';
+    is $profile->get( 'resolver.defaults.usevc' ),    undef, 'resolver.defaults.usevc is unset';
+    is $profile->get( 'resolver.defaults.dnssec' ),   undef, 'resolver.defaults.dnssec is unset';
+    is $profile->get( 'resolver.defaults.recurse' ),  undef, 'resolver.defaults.recurse is unset';
+    is $profile->get( 'resolver.defaults.igntc' ),    undef, 'resolver.defaults.igntc is unset';
+    is $profile->get( 'resolver.defaults.fallback' ), undef, 'resolver.defaults.fallback is unset';
+    is $profile->get( 'net.ipv4' ),                   undef, 'net.ipv4 is unset';
+    is $profile->get( 'net.ipv6' ),                   undef, 'net.ipv6 is unset';
+    is $profile->get( 'no_network' ),                 undef, 'no_network is unset';
+    is $profile->get( 'resolver.defaults.retry' ),    undef, 'resolver.defaults.retry is unset';
+    is $profile->get( 'resolver.defaults.retrans' ),  undef, 'resolver.defaults.retrans is unset';
+    is $profile->get( 'resolver.source' ),            undef, 'resolver.source is unset';
+    is $profile->get( 'asnroots' ),                   undef, 'asnroots is unset';
+    is $profile->get( 'logfilter' ),                  undef, 'logfilter is unset';
+    is $profile->get( 'test_levels' ),                undef, 'test_levels is unset';
+    is $profile->get( 'test_cases' ),                 undef, 'test_cases is unset';
 };
 
 subtest 'from_json() parses values from a string' => sub {
     my $profile = Zonemaster::Engine::Profile->from_json( $EXAMPLE_PROFILE_1 );
 
-    is $profile->get( 'resolver.defaults.usevc' ),   1,            'resolver.defaults.usevc was parsed from JSON';
-    is $profile->get( 'resolver.defaults.dnssec' ),  0,            'resolver.defaults.dnssec was parsed from JSON';
-    is $profile->get( 'resolver.defaults.recurse' ), 1,            'resolver.defaults.recurse was parsed from JSON';
-    is $profile->get( 'resolver.defaults.igntc' ),   0,            'resolver.defaults.igntc was parsed from JSON';
-    is $profile->get( 'net.ipv4' ),                  1,            'net.ipv4 was parsed from JSON';
-    is $profile->get( 'net.ipv6' ),                  0,            'net.ipv6 was parsed from JSON';
-    is $profile->get( 'no_network' ),                1,            'no_network was parsed from JSON';
-    is $profile->get( 'resolver.defaults.retry' ),   123,          'resolver.defaults.retry was parsed from JSON';
-    is $profile->get( 'resolver.defaults.retrans' ), 234,          'resolver.defaults.retrans was parsed from JSON';
-    is $profile->get( 'resolver.source' ),           '192.0.2.53', 'resolver.source was parsed from JSON';
+    is $profile->get( 'resolver.defaults.usevc' ),    1,            'resolver.defaults.usevc was parsed from JSON';
+    is $profile->get( 'resolver.defaults.dnssec' ),   0,            'resolver.defaults.dnssec was parsed from JSON';
+    is $profile->get( 'resolver.defaults.recurse' ),  1,            'resolver.defaults.recurse was parsed from JSON';
+    is $profile->get( 'resolver.defaults.igntc' ),    0,            'resolver.defaults.igntc was parsed from JSON';
+    is $profile->get( 'resolver.defaults.fallback' ), 1,            'resolver.defaults.fallback was parsed from JSON';
+    is $profile->get( 'net.ipv4' ),                   1,            'net.ipv4 was parsed from JSON';
+    is $profile->get( 'net.ipv6' ),                   0,            'net.ipv6 was parsed from JSON';
+    is $profile->get( 'no_network' ),                 1,            'no_network was parsed from JSON';
+    is $profile->get( 'resolver.defaults.retry' ),    123,          'resolver.defaults.retry was parsed from JSON';
+    is $profile->get( 'resolver.defaults.retrans' ),  234,          'resolver.defaults.retrans was parsed from JSON';
+    is $profile->get( 'resolver.source' ),            '192.0.2.53', 'resolver.source was parsed from JSON';
     eq_or_diff $profile->get( 'asnroots' ), ['example.com'], 'asnroots was parsed from JSON';
     eq_or_diff $profile->get( 'logfilter' ), { Zone => { TAG => [ { when => { bananas => 0 }, set => 'WARNING' } ] } },
       'logfilter was parsed from JSON';
@@ -216,17 +222,19 @@ subtest 'from_json() dies on illegal paths' => sub {
 };
 
 subtest 'from_json() dies on illegal values' => sub {
-    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"usevc":0}}}' ); }
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"usevc":}}}' ); }
     "checks type of resolver.defaults.usevc";
-    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"dnssec":0}}}' ); }
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"dnssec":2}}}' ); }
     "checks type of resolver.defaults.dnssec";
-    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"recurse":0}}}' ); }
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"recurse":2}}}' ); }
     "checks type of resolver.defaults.recurse";
-    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"igntc":0}}}' ); }
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"igntc":2}}}' ); }
     "checks type of resolver.defaults.igntc";
-    dies_ok { Zonemaster::Engine::Profile->from_json( '{"net":{"ipv4":0}}' ); } "checks type of net.ipv4";
-    dies_ok { Zonemaster::Engine::Profile->from_json( '{"net":{"ipv6":0}}' ); } "checks type of net.ipv6";
-    dies_ok { Zonemaster::Engine::Profile->from_json( '{"no_network":0}' ); } "checks type of no_network";
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"fallback":2}}}' ); }
+    "checks type of resolver.defaults.fallback";
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"net":{"ipv4":2}}' ); } "checks type of net.ipv4";
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"net":{"ipv6":2}}' ); } "checks type of net.ipv6";
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"no_network":2}' ); } "checks type of no_network";
     dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"retry":0}}}' ); }
     "checks lower bound of resolver.defaults.retry";
     dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"retry":256}}}' ); }
@@ -256,7 +264,8 @@ subtest 'get() returns 1 for true' => sub {
                     "usevc": true,
                     "dnssec": true,
                     "recurse": true,
-                    "igntc": true
+                    "igntc": true,
+                    "fallback": true
                 }
             },
             "net": {
@@ -267,13 +276,44 @@ subtest 'get() returns 1 for true' => sub {
         }'
     );
 
-    is $profile->get( 'resolver.defaults.usevc' ),   1, "returns 1 for true resolver.defaults.usevc";
-    is $profile->get( 'resolver.defaults.dnssec' ),  1, "returns 1 for true resolver.defaults.dnssec";
-    is $profile->get( 'resolver.defaults.recurse' ), 1, "returns 1 for true resolver.defaults.recurse";
-    is $profile->get( 'resolver.defaults.igntc' ),   1, "returns 1 for true resolver.defaults.igntc";
-    is $profile->get( 'net.ipv4' ),                  1, "returns 1 for true net.ipv4";
-    is $profile->get( 'net.ipv6' ),                  1, "returns 1 for true net.ipv6";
-    is $profile->get( 'no_network' ),                1, "returns 1 for true no_network";
+    is $profile->get( 'resolver.defaults.usevc' ),    1, "returns 1 for true resolver.defaults.usevc";
+    is $profile->get( 'resolver.defaults.dnssec' ),   1, "returns 1 for true resolver.defaults.dnssec";
+    is $profile->get( 'resolver.defaults.recurse' ),  1, "returns 1 for true resolver.defaults.recurse";
+    is $profile->get( 'resolver.defaults.igntc' ),    1, "returns 1 for true resolver.defaults.igntc";
+    is $profile->get( 'resolver.defaults.fallback' ), 1, "returns 1 for true resolver.defaults.fallback";
+    is $profile->get( 'net.ipv4' ),                   1, "returns 1 for true net.ipv4";
+    is $profile->get( 'net.ipv6' ),                   1, "returns 1 for true net.ipv6";
+    is $profile->get( 'no_network' ),                 1, "returns 1 for true no_network";
+};
+
+subtest 'get() returns 1 for 1' => sub {
+    my $profile = Zonemaster::Engine::Profile->from_json(
+        '{
+            "resolver": {
+                "defaults": {
+                    "usevc": 1,
+                    "dnssec": 1,
+                    "recurse": 1,
+                    "igntc": 1,
+                    "fallback": 1
+                }
+            },
+            "net": {
+                "ipv4": 1,
+                "ipv6": 1
+            },
+            "no_network": 1
+        }'
+    );
+
+    is $profile->get( 'resolver.defaults.usevc' ),    1, "returns 1 for 1 resolver.defaults.usevc";
+    is $profile->get( 'resolver.defaults.dnssec' ),   1, "returns 1 for 1 resolver.defaults.dnssec";
+    is $profile->get( 'resolver.defaults.recurse' ),  1, "returns 1 for 1 resolver.defaults.recurse";
+    is $profile->get( 'resolver.defaults.igntc' ),    1, "returns 1 for 1 resolver.defaults.igntc";
+    is $profile->get( 'resolver.defaults.fallback' ), 1, "returns 1 for 1 resolver.defaults.fallback";
+    is $profile->get( 'net.ipv4' ),                   1, "returns 1 for 1 net.ipv4";
+    is $profile->get( 'net.ipv6' ),                   1, "returns 1 for 1 net.ipv6";
+    is $profile->get( 'no_network' ),                 1, "returns 1 for 1 no_network";
 };
 
 subtest 'get() returns 0 for false' => sub {
@@ -284,7 +324,8 @@ subtest 'get() returns 0 for false' => sub {
                     "usevc": false,
                     "dnssec": false,
                     "recurse": false,
-                    "igntc": false
+                    "igntc": false,
+                    "fallback": false
                 }
             },
             "net": {
@@ -295,13 +336,44 @@ subtest 'get() returns 0 for false' => sub {
         }'
     );
 
-    is $profile->get( 'resolver.defaults.usevc' ),   0, "returns 0 for false resolver.defaults.usevc";
-    is $profile->get( 'resolver.defaults.dnssec' ),  0, "returns 0 for false resolver.defaults.dnssec";
-    is $profile->get( 'resolver.defaults.recurse' ), 0, "returns 0 for false resolver.defaults.recurse";
-    is $profile->get( 'resolver.defaults.igntc' ),   0, "returns 0 for false resolver.defaults.igntc";
-    is $profile->get( 'net.ipv4' ),                  0, "returns 0 for false net.ipv4";
-    is $profile->get( 'net.ipv6' ),                  0, "returns 0 for false net.ipv6";
-    is $profile->get( 'no_network' ),                0, "returns 0 for false no_network";
+    is $profile->get( 'resolver.defaults.usevc' ),    0, "returns 0 for false resolver.defaults.usevc";
+    is $profile->get( 'resolver.defaults.dnssec' ),   0, "returns 0 for false resolver.defaults.dnssec";
+    is $profile->get( 'resolver.defaults.recurse' ),  0, "returns 0 for false resolver.defaults.recurse";
+    is $profile->get( 'resolver.defaults.igntc' ),    0, "returns 0 for false resolver.defaults.igntc";
+    is $profile->get( 'resolver.defaults.fallback' ), 0, "returns 0 for false resolver.defaults.fallback";
+    is $profile->get( 'net.ipv4' ),                   0, "returns 0 for false net.ipv4";
+    is $profile->get( 'net.ipv6' ),                   0, "returns 0 for false net.ipv6";
+    is $profile->get( 'no_network' ),                 0, "returns 0 for false no_network";
+};
+
+subtest 'get() returns 0 for 0' => sub {
+    my $profile = Zonemaster::Engine::Profile->from_json(
+        '{
+            "resolver": {
+                "defaults": {
+                    "usevc": 0,
+                    "dnssec": 0,
+                    "recurse": 0,
+                    "igntc": 0,
+                    "fallback": 0
+                }
+            },
+            "net": {
+                "ipv4": 0,
+                "ipv6": 0
+            },
+            "no_network": 0
+        }'
+    );
+
+    is $profile->get( 'resolver.defaults.usevc' ),    0, "returns 0 for 0 resolver.defaults.usevc";
+    is $profile->get( 'resolver.defaults.dnssec' ),   0, "returns 0 for 0 resolver.defaults.dnssec";
+    is $profile->get( 'resolver.defaults.recurse' ),  0, "returns 0 for 0 resolver.defaults.recurse";
+    is $profile->get( 'resolver.defaults.igntc' ),    0, "returns 0 for 0 resolver.defaults.igntc";
+    is $profile->get( 'resolver.defaults.fallback' ), 0, "returns 0 for 0 resolver.defaults.fallback";
+    is $profile->get( 'net.ipv4' ),                   0, "returns 0 for 0 net.ipv4";
+    is $profile->get( 'net.ipv6' ),                   0, "returns 0 for 0 net.ipv6";
+    is $profile->get( 'no_network' ),                 0, "returns 0 for 0 no_network";
 };
 
 subtest 'get() returns deep copies of properties with complex types' => sub {
@@ -342,31 +414,33 @@ subtest 'get() dies if the given property name is invalid' => sub {
 subtest 'set() inserts values for unset properties' => sub {
     my $profile = Zonemaster::Engine::Profile->new;
 
-    $profile->set( 'resolver.defaults.usevc',   1 );
-    $profile->set( 'resolver.defaults.dnssec',  0 );
-    $profile->set( 'resolver.defaults.recurse', 1 );
-    $profile->set( 'resolver.defaults.igntc',   0 );
-    $profile->set( 'net.ipv4',                  1 );
-    $profile->set( 'net.ipv6',                  0 );
-    $profile->set( 'no_network',                1 );
-    $profile->set( 'resolver.defaults.retry',   123 );
-    $profile->set( 'resolver.defaults.retrans', 234 );
-    $profile->set( 'resolver.source',           '192.0.2.53' );
+    $profile->set( 'resolver.defaults.usevc',    1 );
+    $profile->set( 'resolver.defaults.dnssec',   0 );
+    $profile->set( 'resolver.defaults.recurse',  1 );
+    $profile->set( 'resolver.defaults.igntc',    0 );
+    $profile->set( 'resolver.defaults.fallback', 1 );
+    $profile->set( 'net.ipv4',                   0 );
+    $profile->set( 'net.ipv6',                   1 );
+    $profile->set( 'no_network',                 0 );
+    $profile->set( 'resolver.defaults.retry',    123 );
+    $profile->set( 'resolver.defaults.retrans',  234 );
+    $profile->set( 'resolver.source',            '192.0.2.53' );
     $profile->set( 'asnroots', ['example.com'] );
     $profile->set( 'logfilter', { Zone => { TAG => [ { when => { bananas => 0 }, set => 'WARNING' } ] } } );
     $profile->set( 'test_levels', { Zone => { TAG => 'INFO' } } );
     $profile->set( 'test_cases', ['Zone01'] );
 
-    is $profile->get( 'resolver.defaults.usevc' ),   1,   'resolver.defaults.usevc can be given a value when unset';
-    is $profile->get( 'resolver.defaults.dnssec' ),  0,   'resolver.defaults.dnssec can be given a value when unset';
-    is $profile->get( 'resolver.defaults.recurse' ), 1,   'resolver.defaults.recurse can be given a value when unset';
-    is $profile->get( 'resolver.defaults.igntc' ),   0,   'resolver.defaults.igntc can be given a value when unset';
-    is $profile->get( 'net.ipv4' ),                  1,   'net.ipv4 can be given a value when unset';
-    is $profile->get( 'net.ipv6' ),                  0,   'net.ipv6 can be given a value when unset';
-    is $profile->get( 'no_network' ),                1,   'no_network can be given a value when unset';
-    is $profile->get( 'resolver.defaults.retry' ),   123, 'resolver.defaults.retry can be given a value when unset';
-    is $profile->get( 'resolver.defaults.retrans' ), 234, 'resolver.defaults.retrans can be given a value when unset';
-    is $profile->get( 'resolver.source' ), '192.0.2.53', 'resolver.source can be given a value when unset';
+    is $profile->get( 'resolver.defaults.usevc' ),    1,   'resolver.defaults.usevc can be given a value when unset';
+    is $profile->get( 'resolver.defaults.dnssec' ),   0,   'resolver.defaults.dnssec can be given a value when unset';
+    is $profile->get( 'resolver.defaults.recurse' ),  1,   'resolver.defaults.recurse can be given a value when unset';
+    is $profile->get( 'resolver.defaults.igntc' ),    0,   'resolver.defaults.igntc can be given a value when unset';
+    is $profile->get( 'resolver.defaults.fallback' ), 1,   'resolver.defaults.fallback can be given a value when unset';
+    is $profile->get( 'net.ipv4' ),                   0,   'net.ipv4 can be given a value when unset';
+    is $profile->get( 'net.ipv6' ),                   1,   'net.ipv6 can be given a value when unset';
+    is $profile->get( 'no_network' ),                 0,   'no_network can be given a value when unset';
+    is $profile->get( 'resolver.defaults.retry' ),    123, 'resolver.defaults.retry can be given a value when unset';
+    is $profile->get( 'resolver.defaults.retrans' ),  234, 'resolver.defaults.retrans can be given a value when unset';
+    is $profile->get( 'resolver.source' ),            '192.0.2.53', 'resolver.source can be given a value when unset';
     eq_or_diff $profile->get( 'asnroots' ), ['example.com'], 'anroots can be given a value when unset';
     eq_or_diff $profile->get( 'logfilter' ), { Zone => { TAG => [ { when => { bananas => 0 }, set => 'WARNING' } ] } },
       'logfilter can be given a value when unset';
@@ -378,16 +452,17 @@ subtest 'set() inserts values for unset properties' => sub {
 subtest 'set() updates values for set properties' => sub {
     my $profile = Zonemaster::Engine::Profile->from_json( $EXAMPLE_PROFILE_1 );
 
-    $profile->set( 'resolver.defaults.usevc',   0 );
-    $profile->set( 'resolver.defaults.dnssec',  1 );
-    $profile->set( 'resolver.defaults.recurse', 0 );
-    $profile->set( 'resolver.defaults.igntc',   1 );
-    $profile->set( 'net.ipv4',                  0 );
-    $profile->set( 'net.ipv6',                  1 );
-    $profile->set( 'no_network',                0 );
-    $profile->set( 'resolver.defaults.retry',   99 );
-    $profile->set( 'resolver.defaults.retrans', 88 );
-    $profile->set( 'resolver.source',           '198.51.100.53' );
+    $profile->set( 'resolver.defaults.usevc',    0 );
+    $profile->set( 'resolver.defaults.dnssec',   1 );
+    $profile->set( 'resolver.defaults.recurse',  0 );
+    $profile->set( 'resolver.defaults.igntc',    1 );
+    $profile->set( 'resolver.defaults.fallback', 0 );
+    $profile->set( 'net.ipv4',                   0 );
+    $profile->set( 'net.ipv6',                   1 );
+    $profile->set( 'no_network',                 0 );
+    $profile->set( 'resolver.defaults.retry',    99 );
+    $profile->set( 'resolver.defaults.retrans',  88 );
+    $profile->set( 'resolver.source',            '198.51.100.53' );
     $profile->set( 'asnroots', [ 'asn1.example.com', 'asn2.example.com' ] );
     $profile->set( 'logfilter', { Nameserver => { OTHER_TAG => [ { when => { apples => 1 }, set => 'INFO' } ] } } );
     $profile->set( 'test_levels', { Nameserver => { OTHER_TAG => 'ERROR' } } );
@@ -413,20 +488,21 @@ subtest 'set() updates values for set properties' => sub {
 subtest 'set() dies on attempts to unset properties' => sub {
     my $profile = Zonemaster::Engine::Profile->from_json( $EXAMPLE_PROFILE_1 );
 
-    throws_ok { $profile->set( 'resolver.defaults.usevc',   undef ); } qr/^.* can not be undef/, 'dies on attempt to unset resolver.defaults.usevc';
-    throws_ok { $profile->set( 'resolver.defaults.dnssec',  undef ); } qr/^.* can not be undef/, 'dies on attempt to unset resolver.defaults.dnssec';
-    throws_ok { $profile->set( 'resolver.defaults.recurse', undef ); } qr/^.* can not be undef/, 'dies on attempt to unset resolver.defaults.recurse';
-    throws_ok { $profile->set( 'resolver.defaults.igntc',   undef ); } qr/^.* can not be undef/, 'dies on attempt to unset resolver.defaults.igntc';
-    throws_ok { $profile->set( 'net.ipv4',                  undef ); } qr/^.* can not be undef/, 'dies on attempt to unset net.ipv4';
-    throws_ok { $profile->set( 'net.ipv6',                  undef ); } qr/^.* can not be undef/, 'dies on attempt to unset net.ipv6';
-    throws_ok { $profile->set( 'no_network',                undef ); } qr/^.* can not be undef/, 'dies on attempt to unset no_network';
-    throws_ok { $profile->set( 'resolver.defaults.retry',   undef ); } qr/^.* can not be undef/, 'dies on attempt to unset resolver.defaults.retry';
-    throws_ok { $profile->set( 'resolver.defaults.retrans', undef ); } qr/^.* can not be undef/, 'dies on attempt to unset resolver.defaults.retans';
-    throws_ok { $profile->set( 'resolver.source',           undef ); } qr/^.* can not be undef/, 'dies on attempt to unset resolver.source';
-    throws_ok { $profile->set( 'asnroots',                  undef ); } qr/^.* can not be undef/, 'dies on attempt to unset asnroots';
-    throws_ok { $profile->set( 'logfilter',                 undef ); } qr/^.* can not be undef/, 'dies on attempt to unset logfilter';
-    throws_ok { $profile->set( 'test_levels',               undef ); } qr/^.* can not be undef/, 'dies on attempt to unset test_levels';
-    throws_ok { $profile->set( 'test_cases',                undef ); } qr/^.* can not be undef/, 'dies on attempt to unset test_cases';
+    throws_ok { $profile->set( 'resolver.defaults.usevc',    undef ); } qr/^.* can not be undef/, 'dies on attempt to unset resolver.defaults.usevc';
+    throws_ok { $profile->set( 'resolver.defaults.dnssec',   undef ); } qr/^.* can not be undef/, 'dies on attempt to unset resolver.defaults.dnssec';
+    throws_ok { $profile->set( 'resolver.defaults.recurse',  undef ); } qr/^.* can not be undef/, 'dies on attempt to unset resolver.defaults.recurse';
+    throws_ok { $profile->set( 'resolver.defaults.igntc',    undef ); } qr/^.* can not be undef/, 'dies on attempt to unset resolver.defaults.igntc';
+    throws_ok { $profile->set( 'resolver.defaults.fallback', undef ); } qr/^.* can not be undef/, 'dies on attempt to unset resolver.defaults.fallback';
+    throws_ok { $profile->set( 'net.ipv4',                   undef ); } qr/^.* can not be undef/, 'dies on attempt to unset net.ipv4';
+    throws_ok { $profile->set( 'net.ipv6',                   undef ); } qr/^.* can not be undef/, 'dies on attempt to unset net.ipv6';
+    throws_ok { $profile->set( 'no_network',                 undef ); } qr/^.* can not be undef/, 'dies on attempt to unset no_network';
+    throws_ok { $profile->set( 'resolver.defaults.retry',    undef ); } qr/^.* can not be undef/, 'dies on attempt to unset resolver.defaults.retry';
+    throws_ok { $profile->set( 'resolver.defaults.retrans',  undef ); } qr/^.* can not be undef/, 'dies on attempt to unset resolver.defaults.retans';
+    throws_ok { $profile->set( 'resolver.source',            undef ); } qr/^.* can not be undef/, 'dies on attempt to unset resolver.source';
+    throws_ok { $profile->set( 'asnroots',                   undef ); } qr/^.* can not be undef/, 'dies on attempt to unset asnroots';
+    throws_ok { $profile->set( 'logfilter',                  undef ); } qr/^.* can not be undef/, 'dies on attempt to unset logfilter';
+    throws_ok { $profile->set( 'test_levels',                undef ); } qr/^.* can not be undef/, 'dies on attempt to unset test_levels';
+    throws_ok { $profile->set( 'test_cases',                 undef ); } qr/^.* can not be undef/, 'dies on attempt to unset test_cases';
 };
 
 subtest 'set() dies if the given property name is invalid' => sub {
@@ -449,13 +525,14 @@ subtest 'set() dies if the given property name is invalid' => sub {
 subtest 'set() dies on illegal value' => sub {
     my $profile = Zonemaster::Engine::Profile->new;
 
-    dies_ok { $profile->set( 'resolver.defaults.usevc',   'false' ); } 'checks type of resolver.defaults.usevc';
-    dies_ok { $profile->set( 'resolver.defaults.dnssec',  'false' ); } 'checks type of resolver.defaults.dnssec';
-    dies_ok { $profile->set( 'resolver.defaults.recurse', 'false' ); } 'checks type of resolver.defaults.recurse';
-    dies_ok { $profile->set( 'resolver.defaults.igntc',   'false' ); } 'checks type of resolver.defaults.igntc';
-    dies_ok { $profile->set( 'net.ipv4',                  'false' ); } 'checks type of net.ipv4';
-    dies_ok { $profile->set( 'net.ipv6',                  'false' ); } 'checks type of net.ipv6';
-    dies_ok { $profile->set( 'no_network',                'false' ); } 'checks type of no_network';
+    dies_ok { $profile->set( 'resolver.defaults.usevc',    'folse' ); } 'checks type of resolver.defaults.usevc';
+    dies_ok { $profile->set( 'resolver.defaults.dnssec',   'folse' ); } 'checks type of resolver.defaults.dnssec';
+    dies_ok { $profile->set( 'resolver.defaults.recurse',  'folse' ); } 'checks type of resolver.defaults.recurse';
+    dies_ok { $profile->set( 'resolver.defaults.igntc',    'folse' ); } 'checks type of resolver.defaults.igntc';
+    dies_ok { $profile->set( 'resolver.defaults.fallback', 'folse' ); } 'checks type of resolver.defaults.fallback';
+    dies_ok { $profile->set( 'net.ipv4',                   'folse' ); } 'checks type of net.ipv4';
+    dies_ok { $profile->set( 'net.ipv6',                   'folse' ); } 'checks type of net.ipv6';
+    dies_ok { $profile->set( 'no_network',                 'folse' ); } 'checks type of no_network';
     dies_ok { $profile->set( 'resolver.defaults.retry',   0 ); } 'checks lower bound of resolver.defaults.retry';
     dies_ok { $profile->set( 'resolver.defaults.retry',   256 ); } 'checks upper bound of resolver.defaults.retry';
     dies_ok { $profile->set( 'resolver.defaults.retry',   1.5 ); } 'checks type of resolver.defaults.retry';
@@ -475,16 +552,17 @@ subtest 'merge() with a profile with all properties unset' => sub {
 
     $profile1->merge( $profile2 );
 
-    is $profile1->get( 'resolver.defaults.usevc' ),   1,            'keeps value of resolver.defaults.usevc';
-    is $profile1->get( 'resolver.defaults.dnssec' ),  0,            'keeps value of resolver.defaults.dnssec';
-    is $profile1->get( 'resolver.defaults.recurse' ), 1,            'keeps value of resolver.defaults.recurse';
-    is $profile1->get( 'resolver.defaults.igntc' ),   0,            'keeps value of resolver.defaults.igntc';
-    is $profile1->get( 'net.ipv4' ),                  1,            'keeps value of net.ipv4';
-    is $profile1->get( 'net.ipv6' ),                  0,            'keeps value of net.ipv6';
-    is $profile1->get( 'no_network' ),                1,            'keeps value of no_network';
-    is $profile1->get( 'resolver.defaults.retry' ),   123,          'keeps value of resolver.defaults.retry';
-    is $profile1->get( 'resolver.defaults.retrans' ), 234,          'keeps value of resolver.defaults.retrans';
-    is $profile1->get( 'resolver.source' ),           '192.0.2.53', 'keeps value of resolver.source';
+    is $profile1->get( 'resolver.defaults.usevc' ),    1,            'keeps value of resolver.defaults.usevc';
+    is $profile1->get( 'resolver.defaults.dnssec' ),   0,            'keeps value of resolver.defaults.dnssec';
+    is $profile1->get( 'resolver.defaults.recurse' ),  1,            'keeps value of resolver.defaults.recurse';
+    is $profile1->get( 'resolver.defaults.igntc' ),    0,            'keeps value of resolver.defaults.igntc';
+    is $profile1->get( 'resolver.defaults.fallback' ), 1,            'keeps value of resolver.defaults.fallback';
+    is $profile1->get( 'net.ipv4' ),                   1,            'keeps value of net.ipv4';
+    is $profile1->get( 'net.ipv6' ),                   0,            'keeps value of net.ipv6';
+    is $profile1->get( 'no_network' ),                 1,            'keeps value of no_network';
+    is $profile1->get( 'resolver.defaults.retry' ),    123,          'keeps value of resolver.defaults.retry';
+    is $profile1->get( 'resolver.defaults.retrans' ),  234,          'keeps value of resolver.defaults.retrans';
+    is $profile1->get( 'resolver.source' ),            '192.0.2.53', 'keeps value of resolver.source';
     eq_or_diff $profile1->get( 'asnroots' ), ['example.com'], 'keeps value of asnroots';
     eq_or_diff $profile1->get( 'logfilter' ), { Zone => { TAG => [ { when => { bananas => 0 }, set => 'WARNING' } ] } },
       'keeps value of logfilter';
@@ -498,16 +576,17 @@ subtest 'merge() with a profile with all properties set' => sub {
 
     $profile1->merge( $profile2 );
 
-    is $profile1->get( 'resolver.defaults.usevc' ),   0,               'updates resolver.defaults.usevc';
-    is $profile1->get( 'resolver.defaults.dnssec' ),  1,               'updates resolver.defaults.dnssec';
-    is $profile1->get( 'resolver.defaults.recurse' ), 0,               'updates resolver.defaults.recurse';
-    is $profile1->get( 'resolver.defaults.igntc' ),   1,               'updates resolver.defaults.igntc';
-    is $profile1->get( 'net.ipv4' ),                  0,               'updates net.ipv4';
-    is $profile1->get( 'net.ipv6' ),                  1,               'updates net.ipv6';
-    is $profile1->get( 'no_network' ),                0,               'updates no_network';
-    is $profile1->get( 'resolver.defaults.retry' ),   99,              'updates resolver.defaults.retry';
-    is $profile1->get( 'resolver.defaults.retrans' ), 88,              'updates resolver.defaults.retrans';
-    is $profile1->get( 'resolver.source' ),           '198.51.100.53', 'updates resolver.source';
+    is $profile1->get( 'resolver.defaults.usevc' ),    0,               'updates resolver.defaults.usevc';
+    is $profile1->get( 'resolver.defaults.dnssec' ),   1,               'updates resolver.defaults.dnssec';
+    is $profile1->get( 'resolver.defaults.recurse' ),  0,               'updates resolver.defaults.recurse';
+    is $profile1->get( 'resolver.defaults.igntc' ),    1,               'updates resolver.defaults.igntc';
+    is $profile1->get( 'resolver.defaults.fallback' ), 0,               'updates resolver.defaults.fallback';
+    is $profile1->get( 'net.ipv4' ),                   0,               'updates net.ipv4';
+    is $profile1->get( 'net.ipv6' ),                   1,               'updates net.ipv6';
+    is $profile1->get( 'no_network' ),                 0,               'updates no_network';
+    is $profile1->get( 'resolver.defaults.retry' ),    99,              'updates resolver.defaults.retry';
+    is $profile1->get( 'resolver.defaults.retrans' ),  88,              'updates resolver.defaults.retrans';
+    is $profile1->get( 'resolver.source' ),            '198.51.100.53', 'updates resolver.source';
     eq_or_diff $profile1->get( 'asnroots' ), [ 'asn1.example.com', 'asn2.example.com' ], 'updates asnroots';
     eq_or_diff $profile1->get( 'logfilter' ),
       { Nameserver => { OTHER_TAG => [ { when => { apples => 1 }, set => 'INFO' } ] } }, 'updates logfilter';
@@ -521,20 +600,21 @@ subtest 'merge() does not update the other profile' => sub {
 
     $profile1->merge( $profile2 );
 
-    is $profile2->get( 'resolver.defaults.usevc' ),   undef, 'resolver.defaults.usevc was untouched in other';
-    is $profile2->get( 'resolver.defaults.retrans' ), undef, 'resolver.defaults.retrans was untouched in other';
-    is $profile2->get( 'resolver.defaults.dnssec' ),  undef, 'resolver.defaults.dnssec was untouched in other';
-    is $profile2->get( 'resolver.defaults.recurse' ), undef, 'resolver.defaults.recurse was untouched in other';
-    is $profile2->get( 'resolver.defaults.retry' ),   undef, 'resolver.defaults.retry was untouched in other';
-    is $profile2->get( 'resolver.defaults.igntc' ),   undef, 'resolver.defaults.igntc was untouched in other';
-    is $profile2->get( 'resolver.source' ),           undef, 'resolver.source was untouched in other';
-    is $profile2->get( 'net.ipv4' ),                  undef, 'net.ipv4 was untouched in other';
-    is $profile2->get( 'net.ipv6' ),                  undef, 'net.ipv6 was untouched in other';
-    is $profile2->get( 'no_network' ),                undef, 'no_network was untouched in other';
-    is $profile2->get( 'asnroots' ),                  undef, 'asnroots was untouched in other';
-    is $profile2->get( 'logfilter' ),                 undef, 'logfilter was untouched in other';
-    is $profile2->get( 'test_levels' ),               undef, 'test_levels was untouched in other';
-    is $profile2->get( 'test_cases' ),                undef, 'test_cases was untouched in other';
+    is $profile2->get( 'resolver.defaults.usevc' ),    undef, 'resolver.defaults.usevc was untouched in other';
+    is $profile2->get( 'resolver.defaults.retrans' ),  undef, 'resolver.defaults.retrans was untouched in other';
+    is $profile2->get( 'resolver.defaults.dnssec' ),   undef, 'resolver.defaults.dnssec was untouched in other';
+    is $profile2->get( 'resolver.defaults.recurse' ),  undef, 'resolver.defaults.recurse was untouched in other';
+    is $profile2->get( 'resolver.defaults.retry' ),    undef, 'resolver.defaults.retry was untouched in other';
+    is $profile2->get( 'resolver.defaults.igntc' ),    undef, 'resolver.defaults.igntc was untouched in other';
+    is $profile2->get( 'resolver.defaults.fallback' ), undef, 'resolver.defaults.fallback was untouched in other';
+    is $profile2->get( 'resolver.source' ),            undef, 'resolver.source was untouched in other';
+    is $profile2->get( 'net.ipv4' ),                   undef, 'net.ipv4 was untouched in other';
+    is $profile2->get( 'net.ipv6' ),                   undef, 'net.ipv6 was untouched in other';
+    is $profile2->get( 'no_network' ),                 undef, 'no_network was untouched in other';
+    is $profile2->get( 'asnroots' ),                   undef, 'asnroots was untouched in other';
+    is $profile2->get( 'logfilter' ),                  undef, 'logfilter was untouched in other';
+    is $profile2->get( 'test_levels' ),                undef, 'test_levels was untouched in other';
+    is $profile2->get( 'test_cases' ),                 undef, 'test_cases was untouched in other';
 };
 
 subtest 'to_json() serializes each property' => sub {
@@ -572,6 +652,15 @@ subtest 'to_json() serializes each property' => sub {
         my $json = $profile->to_json;
 
         eq_or_diff decode_json( $json ), decode_json( '{"resolver":{"defaults":{"igntc":false}}}' );
+    };
+
+    subtest 'resolver.defaults.fallback' => sub {
+        my $profile = Zonemaster::Engine::Profile->new;
+        $profile->set( 'resolver.defaults.fallback', 0 );
+
+        my $json = $profile->to_json;
+
+        eq_or_diff decode_json( $json ), decode_json( '{"resolver":{"defaults":{"fallback":false}}}' );
     };
 
     subtest 'net.ipv4' => sub {
