@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Profile;
 
-use version; our $VERSION = version->declare("v1.2.12");
+use version; our $VERSION = version->declare("v1.2.13");
 
 use 5.014002;
 use strict;
@@ -211,7 +211,6 @@ sub _set {
                             defined $value_type ? $value_type : q{UNDEF},
                             defined $value ? $value : q{[UNDEF]},
                             Data::Dumper::Dumper($value);
-			    #printf "%s : %s\n", $property_name, $data_details;
     # $value is a Scalar
     if ( ! $value_type  or $value_type eq q{SCALAR} ) {
         die "Property $property_name can not be undef" if not defined $value;
