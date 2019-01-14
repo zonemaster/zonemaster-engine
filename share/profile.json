@@ -11,12 +11,13 @@
             "dnssec" : false,
             "edns_size" : false,
             "igntc" : false,
-	    "fallback" : true,
+            "fallback" : true,
             "recurse" : false,
             "retrans" : 3,
             "retry" : 2,
             "usevc" : false
-        }
+        },
+        "source": "os_default"
     },
     "test_levels" : {
         "ADDRESS" : {

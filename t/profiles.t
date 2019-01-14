@@ -1,14 +1,17 @@
 use 5.006;
 use strict;
 use warnings FATAL   => 'all';
-use Test::More tests => 25;
+use Test::More tests => 28;
 
 use JSON;
 use Readonly;
 use Test::Differences;
 use Test::Exception;
 
-use_ok 'Zonemaster::Engine::Profile';
+BEGIN {
+    use_ok 'Zonemaster::Engine::Profile';
+    use_ok 'Zonemaster::Engine::Constants', qw( $RESOLVER_SOURCE_OS_DEFAULT );
+}
 
 # JSON representation of an example profile with all properties set
 Readonly my $EXAMPLE_PROFILE_1 => q(
@@ -56,7 +59,7 @@ Readonly my $EXAMPLE_PROFILE_1 => q(
 );
 
 # JSON representation of an example profile with all properties set to values
-# that are different than those in $EXAMPLE_PROFILE_1
+# that are different from those in $EXAMPLE_PROFILE_1
 Readonly my $EXAMPLE_PROFILE_2 => q(
 {
   "resolver": {
@@ -98,6 +101,15 @@ Readonly my $EXAMPLE_PROFILE_2 => q(
   "test_cases": [
     "Zone02"
   ]
+}
+);
+
+# JSON representation of an example profile where all set values are sentinels
+Readonly my $EXAMPLE_PROFILE_3 => qq(
+{
+  "resolver": {
+    "source": "$RESOLVER_SOURCE_OS_DEFAULT"
+  }
 }
 );
 
@@ -204,6 +216,12 @@ subtest 'from_json() parses values from a string' => sub {
       'logfilter was parsed from JSON';
     eq_or_diff $profile->get( 'test_levels' ), { Zone => { TAG => 'INFO' } }, 'test_levels was parsed from JSON';
     eq_or_diff $profile->get( 'test_cases' ), ['Zone01'], 'test_cases was parsed from JSON';
+};
+
+subtest 'from_json() parses sentinel values from a string' => sub {
+    my $profile = Zonemaster::Engine::Profile->from_json( $EXAMPLE_PROFILE_3 );
+
+    is $profile->get( 'resolver.source' ), $RESOLVER_SOURCE_OS_DEFAULT, 'resolver.source was parsed from JSON';
 };
 
 subtest 'from_json() dies on illegal paths' => sub {
@@ -469,6 +487,14 @@ subtest 'set() dies on illegal value' => sub {
     dies_ok { $profile->set( 'test_cases', {} ); } 'checks type of test_cases';
 };
 
+subtest 'set() accepts sentinel values' => sub {
+    my $profile = Zonemaster::Engine::Profile->new;
+
+    $profile->set( 'resolver.source', $RESOLVER_SOURCE_OS_DEFAULT );
+
+    is $profile->get( 'resolver.source' ), $RESOLVER_SOURCE_OS_DEFAULT, 'resolver.source was updated';
+};
+
 subtest 'merge() with a profile with all properties unset' => sub {
     my $profile1 = Zonemaster::Engine::Profile->from_json( $EXAMPLE_PROFILE_1 );
     my $profile2 = Zonemaster::Engine::Profile->new;
@@ -626,6 +652,15 @@ subtest 'to_json() serializes each property' => sub {
         my $json = $profile->to_json;
 
         eq_or_diff decode_json( $json ), decode_json( '{"resolver":{"source":"192.0.2.53"}}' );
+    };
+
+    subtest 'resolver.source sentinel value' => sub {
+        my $profile = Zonemaster::Engine::Profile->new;
+        $profile->set( 'resolver.source', $RESOLVER_SOURCE_OS_DEFAULT );
+
+        my $json = $profile->to_json;
+
+        eq_or_diff decode_json( $json ), decode_json( qq({"resolver":{"source":"$RESOLVER_SOURCE_OS_DEFAULT"}}) );
     };
 
     subtest 'asnroots' => sub {

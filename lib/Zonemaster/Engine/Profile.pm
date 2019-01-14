@@ -9,14 +9,13 @@ use warnings;
 use File::ShareDir qw[dist_file];
 use JSON::PP qw( encode_json decode_json );
 use Scalar::Util qw(reftype);
-use Sys::Hostname;
-use Socket;
 use File::Slurp;
 use Clone qw(clone);
 use Data::Dumper;
 
 use Zonemaster::Engine;
 use Zonemaster::Engine::Net::IP;
+use Zonemaster::Engine::Constants qw( $RESOLVER_SOURCE_OS_DEFAULT );
 
 my %profile_properties_details = (
     q{resolver.defaults.debug} => {
@@ -52,8 +51,14 @@ my %profile_properties_details = (
     },
     q{resolver.source} => {
         type    => q{Str},
-        default => inet_ntoa((gethostbyname(hostname))[4]),
-        test    => sub { Zonemaster::Engine::Net::IP->new( $_[0] ); }
+        test    => sub {
+            if ( $_[0] ne $RESOLVER_SOURCE_OS_DEFAULT ) {
+                eval { Zonemaster::Engine::Net::IP->new( $_[0] ) };
+                if ( $@ ) {
+                    die "Property resolver.source must be an IP address or the exact string $RESOLVER_SOURCE_OS_DEFAULT";
+                }
+            }
+        }
     },
     q{net.ipv4} => {
         type    => q{Bool}
