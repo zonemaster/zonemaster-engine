@@ -1,7 +1,7 @@
 use 5.006;
 use strict;
 use warnings FATAL   => 'all';
-use Test::More tests => 27;
+use Test::More tests => 25;
 
 use JSON;
 use Readonly;
@@ -222,19 +222,19 @@ subtest 'from_json() dies on illegal paths' => sub {
 };
 
 subtest 'from_json() dies on illegal values' => sub {
-    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"usevc":}}}' ); }
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"usevc":0}}}' ); }
     "checks type of resolver.defaults.usevc";
-    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"dnssec":2}}}' ); }
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"dnssec":1}}}' ); }
     "checks type of resolver.defaults.dnssec";
-    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"recurse":2}}}' ); }
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"recurse":0}}}' ); }
     "checks type of resolver.defaults.recurse";
-    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"igntc":2}}}' ); }
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"igntc":1}}}' ); }
     "checks type of resolver.defaults.igntc";
-    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"fallback":2}}}' ); }
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"fallback":0}}}' ); }
     "checks type of resolver.defaults.fallback";
-    dies_ok { Zonemaster::Engine::Profile->from_json( '{"net":{"ipv4":2}}' ); } "checks type of net.ipv4";
-    dies_ok { Zonemaster::Engine::Profile->from_json( '{"net":{"ipv6":2}}' ); } "checks type of net.ipv6";
-    dies_ok { Zonemaster::Engine::Profile->from_json( '{"no_network":2}' ); } "checks type of no_network";
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"net":{"ipv4":1}}' ); } "checks type of net.ipv4";
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"net":{"ipv6":0}}' ); } "checks type of net.ipv6";
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"no_network":1}' ); } "checks type of no_network";
     dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"retry":0}}}' ); }
     "checks lower bound of resolver.defaults.retry";
     dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"retry":256}}}' ); }
@@ -286,36 +286,6 @@ subtest 'get() returns 1 for true' => sub {
     is $profile->get( 'no_network' ),                 1, "returns 1 for true no_network";
 };
 
-subtest 'get() returns 1 for 1' => sub {
-    my $profile = Zonemaster::Engine::Profile->from_json(
-        '{
-            "resolver": {
-                "defaults": {
-                    "usevc": 1,
-                    "dnssec": 1,
-                    "recurse": 1,
-                    "igntc": 1,
-                    "fallback": 1
-                }
-            },
-            "net": {
-                "ipv4": 1,
-                "ipv6": 1
-            },
-            "no_network": 1
-        }'
-    );
-
-    is $profile->get( 'resolver.defaults.usevc' ),    1, "returns 1 for 1 resolver.defaults.usevc";
-    is $profile->get( 'resolver.defaults.dnssec' ),   1, "returns 1 for 1 resolver.defaults.dnssec";
-    is $profile->get( 'resolver.defaults.recurse' ),  1, "returns 1 for 1 resolver.defaults.recurse";
-    is $profile->get( 'resolver.defaults.igntc' ),    1, "returns 1 for 1 resolver.defaults.igntc";
-    is $profile->get( 'resolver.defaults.fallback' ), 1, "returns 1 for 1 resolver.defaults.fallback";
-    is $profile->get( 'net.ipv4' ),                   1, "returns 1 for 1 net.ipv4";
-    is $profile->get( 'net.ipv6' ),                   1, "returns 1 for 1 net.ipv6";
-    is $profile->get( 'no_network' ),                 1, "returns 1 for 1 no_network";
-};
-
 subtest 'get() returns 0 for false' => sub {
     my $profile = Zonemaster::Engine::Profile->from_json(
         '{
@@ -344,36 +314,6 @@ subtest 'get() returns 0 for false' => sub {
     is $profile->get( 'net.ipv4' ),                   0, "returns 0 for false net.ipv4";
     is $profile->get( 'net.ipv6' ),                   0, "returns 0 for false net.ipv6";
     is $profile->get( 'no_network' ),                 0, "returns 0 for false no_network";
-};
-
-subtest 'get() returns 0 for 0' => sub {
-    my $profile = Zonemaster::Engine::Profile->from_json(
-        '{
-            "resolver": {
-                "defaults": {
-                    "usevc": 0,
-                    "dnssec": 0,
-                    "recurse": 0,
-                    "igntc": 0,
-                    "fallback": 0
-                }
-            },
-            "net": {
-                "ipv4": 0,
-                "ipv6": 0
-            },
-            "no_network": 0
-        }'
-    );
-
-    is $profile->get( 'resolver.defaults.usevc' ),    0, "returns 0 for 0 resolver.defaults.usevc";
-    is $profile->get( 'resolver.defaults.dnssec' ),   0, "returns 0 for 0 resolver.defaults.dnssec";
-    is $profile->get( 'resolver.defaults.recurse' ),  0, "returns 0 for 0 resolver.defaults.recurse";
-    is $profile->get( 'resolver.defaults.igntc' ),    0, "returns 0 for 0 resolver.defaults.igntc";
-    is $profile->get( 'resolver.defaults.fallback' ), 0, "returns 0 for 0 resolver.defaults.fallback";
-    is $profile->get( 'net.ipv4' ),                   0, "returns 0 for 0 net.ipv4";
-    is $profile->get( 'net.ipv6' ),                   0, "returns 0 for 0 net.ipv6";
-    is $profile->get( 'no_network' ),                 0, "returns 0 for 0 no_network";
 };
 
 subtest 'get() returns deep copies of properties with complex types' => sub {

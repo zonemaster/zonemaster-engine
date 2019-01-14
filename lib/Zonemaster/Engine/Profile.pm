@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Profile;
 
-use version; our $VERSION = version->declare("v1.2.13");
+use version; our $VERSION = version->declare("v1.2.14");
 
 use 5.014002;
 use strict;
@@ -227,12 +227,6 @@ sub _set {
                 $value = JSON::PP::false;
             }
             elsif ( $from eq q{JSON} and $value_type and $value == JSON::PP::true ) {
-                $value = JSON::PP::true;
-            }
-            elsif ( $from eq q{JSON} and $value =~ /^0$/ ) {
-                $value = JSON::PP::false;
-            }
-            elsif ( $from eq q{JSON} and $value =~ /^1$/ ) {
                 $value = JSON::PP::true;
             }
             else {
