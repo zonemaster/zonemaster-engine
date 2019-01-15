@@ -222,10 +222,10 @@ sub _set {
 
         # Boolean
         if ( $profile_properties_details{$property_name}->{type} eq q{Bool} ) {
-            if ( $from eq q{DIRECT} and ($value eq q{0} or $value eq q{false}) ) {
+            if ( $from eq q{DIRECT} and !$value ) {
                 $value = JSON::PP::false;
             }
-            elsif ( $from eq q{DIRECT} and ($value eq q{1} or $value eq q{true}) ) {
+            elsif ( $from eq q{DIRECT} and $value ) {
                 $value = JSON::PP::true;
             }
             elsif ( $from eq q{JSON} and $value_type and $value == JSON::PP::false ) {

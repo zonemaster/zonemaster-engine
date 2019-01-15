@@ -1,7 +1,7 @@
 use 5.006;
 use strict;
 use warnings FATAL   => 'all';
-use Test::More tests => 28;
+use Test::More tests => 29;
 
 use JSON;
 use Readonly;
@@ -483,14 +483,6 @@ subtest 'set() dies if the given property name is invalid' => sub {
 subtest 'set() dies on illegal value' => sub {
     my $profile = Zonemaster::Engine::Profile->new;
 
-    dies_ok { $profile->set( 'resolver.defaults.usevc',    'folse' ); } 'checks type of resolver.defaults.usevc';
-    dies_ok { $profile->set( 'resolver.defaults.dnssec',   'folse' ); } 'checks type of resolver.defaults.dnssec';
-    dies_ok { $profile->set( 'resolver.defaults.recurse',  'folse' ); } 'checks type of resolver.defaults.recurse';
-    dies_ok { $profile->set( 'resolver.defaults.igntc',    'folse' ); } 'checks type of resolver.defaults.igntc';
-    dies_ok { $profile->set( 'resolver.defaults.fallback', 'folse' ); } 'checks type of resolver.defaults.fallback';
-    dies_ok { $profile->set( 'net.ipv4',                   'folse' ); } 'checks type of net.ipv4';
-    dies_ok { $profile->set( 'net.ipv6',                   'folse' ); } 'checks type of net.ipv6';
-    dies_ok { $profile->set( 'no_network',                 'folse' ); } 'checks type of no_network';
     dies_ok { $profile->set( 'resolver.defaults.retry',   0 ); } 'checks lower bound of resolver.defaults.retry';
     dies_ok { $profile->set( 'resolver.defaults.retry',   256 ); } 'checks upper bound of resolver.defaults.retry';
     dies_ok { $profile->set( 'resolver.defaults.retry',   1.5 ); } 'checks type of resolver.defaults.retry';
@@ -510,6 +502,41 @@ subtest 'set() accepts sentinel values' => sub {
     $profile->set( 'resolver.source', $RESOLVER_SOURCE_OS_DEFAULT );
 
     is $profile->get( 'resolver.source' ), $RESOLVER_SOURCE_OS_DEFAULT, 'resolver.source was updated';
+};
+
+subtest 'set() uses standard truthiness rules for boolean properties' => sub {
+    my $profile = Zonemaster::Engine::Profile->new;
+
+    subtest 'values considered false' => sub {
+        $profile->set( 'no_network', 0 );
+        ok !$profile->get( 'no_network' ), 'the number 0';
+
+        $profile->set( 'no_network', "" );
+        ok !$profile->get( 'no_network' ), 'the empty string';
+
+        $profile->set( 'no_network', "0" );
+        ok !$profile->get( 'no_network' ), 'the string that contains a single 0 digit';
+    };
+
+    subtest 'values considered true' => sub {
+        $profile->set( 'no_network', 1 );
+        ok $profile->get( 'no_network' ), 'any non-0 number';
+
+        $profile->set( 'no_network', " " );
+        ok $profile->get( 'no_network' ), 'the string with a space in it';
+
+        $profile->set( 'no_network', "00" );
+        ok $profile->get( 'no_network' ), 'two or more 0 characters in a string';
+
+        $profile->set( 'no_network', "0\n" );
+        ok $profile->get( 'no_network' ), 'a 0 followed by a newline';
+
+        $profile->set( 'no_network', "true" );
+        ok $profile->get( 'no_network' ), 'the string "true"';
+
+        $profile->set( 'no_network', "false" );
+        ok $profile->get( 'no_network' ), 'yes, even the string "false"';
+    };
 };
 
 subtest 'merge() with a profile with all properties unset' => sub {
