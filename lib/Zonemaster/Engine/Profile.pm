@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Profile;
 
-use version; our $VERSION = version->declare("v1.2.11");
+use version; our $VERSION = version->declare("v1.2.15");
 
 use 5.014002;
 use strict;
@@ -220,12 +220,12 @@ sub _set {
     if ( ! $value_type  or $value_type eq q{SCALAR} ) {
         die "Property $property_name can not be undef" if not defined $value;
 
-        # Boolean (Should we accept (true|false) values ?
+        # Boolean
         if ( $profile_properties_details{$property_name}->{type} eq q{Bool} ) {
-            if ( $from eq q{DIRECT} and $value =~ /^0$/ ) {
+            if ( $from eq q{DIRECT} and ($value eq q{0} or $value eq q{false}) ) {
                 $value = JSON::PP::false;
             }
-            elsif ( $from eq q{DIRECT} and $value =~ /^1$/ ) {
+            elsif ( $from eq q{DIRECT} and ($value eq q{1} or $value eq q{true}) ) {
                 $value = JSON::PP::true;
             }
             elsif ( $from eq q{JSON} and $value_type and $value == JSON::PP::false ) {
