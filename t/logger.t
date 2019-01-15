@@ -1,6 +1,9 @@
 use Test::More;
-use Test::Fatal;
+
 use File::Slurp;
+use POSIX qw( setlocale LC_ALL );
+use Test::Exception;
+use Test::Fatal;
 
 BEGIN {
     use_ok( 'Zonemaster::Engine::Logger' );
@@ -101,5 +104,16 @@ qr[[{"args":{"exception":"in callback at t/logger.t line 47, <DATA> line 1.\n"},
 Zonemaster::Engine::Profile->effective->set( q{test_levels}, {"BASIC" => {"NS_FAILED" => "GURKSALLAD" }}); #->{BASIC}{NS_FAILED} = 'GURKSALLAD';
 my $fail = Zonemaster::Engine::Logger::Entry->new( { module => 'BASIC', tag => 'NS_FAILED' } );
 like( exception { $fail->level }, qr/Unknown level string: GURKSALLAD/, 'Dies on unknown level string' );
+
+subtest 'Localization' => sub {
+    use locale;
+    my $prev = setlocale( LC_ALL, "sv_SE.UTF-8" ); # Override LC_NUMERIC
+
+    lives_ok {
+        Zonemaster::Engine::Logger::Entry->new( { module => 'BASIC', tag => 'NS_FAILED' } );
+    } 'Work in the presence of number format l10n';
+
+    setlocale( LC_ALL, $prev );
+};
 
 done_testing;
