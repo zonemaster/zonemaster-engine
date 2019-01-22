@@ -34,7 +34,11 @@ requires 'JSON'                  => 0;
 requires 'JSON::PP'              => 0;
 requires 'Data::Dumper'          => 0;
 
-test_requires 'Test::Fatal' => 0;
+test_requires 'Test::Fatal'       => 0;
+test_requires 'Test::Exception'   => 0;
+test_requires 'Test::Differences' => 0;
+test_requires 'Pod::Coverage'     => 0;
+test_requires 'Test::Pod'         => 1.22;
 
 recommends 'Readonly::XS' => 0;
 
