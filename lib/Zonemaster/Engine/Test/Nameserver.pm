@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::Nameserver;
 
-use version; our $VERSION = version->declare("v1.0.17");
+use version; our $VERSION = version->declare("v1.0.18");
 
 use strict;
 use warnings;
@@ -831,7 +831,7 @@ sub nameserver10 {
     for my $ns ( @nss ) {
 	my $p = $ns->query( $zone->name, q{SOA}, { edns_details => { version => 1 } } );
         if ( $p ) {
-            if ( $p->rcode eq q{FORMERR} ) {
+            if ( $p->rcode eq q{FORMERR} and not $p->edns_rcode ) {
                 push @results,
                   info(
                     NO_EDNS_SUPPORT => {
@@ -840,7 +840,7 @@ sub nameserver10 {
                     }
                   );
             }
-            elsif ( $p->rcode eq q{NOERROR} ) {
+            elsif ( $p->rcode eq q{NOERROR} and not $p->edns_rcode ) {
                 push @results,
                   info(
                     UNSUPPORTED_EDNS_VER => {
@@ -849,7 +849,7 @@ sub nameserver10 {
                     }
                   );
             }
-            elsif ( $p->rcode eq q{BADVERS} and $p->edns_version == 0 and not scalar $p->answer) {
+            elsif ( ($p->rcode eq q{NOERROR} and $p->edns_rcode == 1) and $p->edns_version == 0 and not scalar $p->answer) {
                 next;
             }
             else {
@@ -906,7 +906,7 @@ sub nameserver11 {
     for my $ns ( @nss ) {
         my $p = $ns->query( $zone->name, q{SOA}, { edns_details => { data => $rdata } } );
         if ( $p ) {
-            if ( $p->rcode eq q{FORMERR} ) {
+            if ( $p->rcode eq q{FORMERR} and not $p->edns_rcode ) {
                 push @results,
                   info(
                     NO_EDNS_SUPPORT => {
@@ -924,7 +924,7 @@ sub nameserver11 {
                     }
                   );
             }
-            elsif ( $p->rcode eq q{NOERROR} and $p->edns_version == 0 and not defined $p->edns_data and $p->get_records( q{SOA}, q{answer} ) ) {
+            elsif ( $p->rcode eq q{NOERROR} and not $p->edns_rcode and $p->edns_version == 0 and not defined $p->edns_data and $p->get_records( q{SOA}, q{answer} ) ) {
                 next;
             }
             else {
@@ -975,7 +975,7 @@ sub nameserver12 {
     for my $ns ( @nss ) {
         my $p = $ns->query( $zone->name, q{SOA}, { edns_details => { z => 3 } } );
         if ( $p ) {
-            if ( $p->rcode eq q{FORMERR} ) {
+            if ( $p->rcode eq q{FORMERR} and not $p->edns_rcode ) {
                 push @results,
                   info(
                     NO_EDNS_SUPPORT => {
@@ -993,7 +993,7 @@ sub nameserver12 {
                     }
                   );
             }
-            elsif ( $p->rcode eq q{NOERROR} and $p->edns_version == 0 and $p->edns_z == 0 and $p->get_records( q{SOA}, q{answer} ) ) {
+            elsif ( $p->rcode eq q{NOERROR} and not $p->edns_rcode and $p->edns_version == 0 and $p->edns_z == 0 and $p->get_records( q{SOA}, q{answer} ) ) {
                 next;
             }
             else {
@@ -1043,7 +1043,7 @@ sub nameserver13 {
     for my $ns ( @nss ) {
         my $p = $ns->query( $zone->name, q{SOA}, { usevc => 0, fallback => 0, edns_details => { do => 1, udp_size => 512  } } );
         if ( $p ) {
-            if ( $p->rcode eq q{FORMERR} ) {
+            if ( $p->rcode eq q{FORMERR} and not $p->edns_rcode ) {
                 push @results,
                   info(
                     NO_EDNS_SUPPORT => {
@@ -1061,7 +1061,7 @@ sub nameserver13 {
                     }
                   );
             }
-            elsif ( $p->rcode eq q{NOERROR} and $p->edns_version == 0 ) {
+            elsif ( $p->rcode eq q{NOERROR} and not $p->edns_rcode and $p->edns_version == 0 ) {
                 next;
             }
             else {
