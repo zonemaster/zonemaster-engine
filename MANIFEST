@@ -3,6 +3,7 @@ docs/ConfigAndPolicy.pod
 docs/Implementing_Tests.pod
 docs/Installation.md
 docs/logentry_args.md
+docs/Profiles.md
 docs/Translation.pod
 inc/Module/Install.pm
 inc/Module/Install/Base.pm
@@ -49,9 +50,9 @@ Makefile.PL
 MANIFEST			This list of files
 META.yml
 README.md
+share/config_example_logfilter.json
 share/iana-ipv4-special-registry.csv
 share/iana-ipv6-special-registry.csv
-share/iana-profile.json
 share/profile.json
 share/profile_example_logfilter.json
 share/locale/da/LC_MESSAGES/Zonemaster-Engine.mo
@@ -147,6 +148,10 @@ t/Test-consistency05-I.data
 t/Test-consistency05-I.t
 t/Test-consistency05-J.data
 t/Test-consistency05-J.t
+t/Test-consistency05-K.data
+t/Test-consistency05-K.t
+t/Test-consistency05-L.data
+t/Test-consistency05-L.t
 t/Test-consistency06-A.data
 t/Test-consistency06-A.t
 t/Test-consistency06-B.data
