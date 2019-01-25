@@ -71,7 +71,7 @@ This instruction covers the following operating systems:
 3) Install dependencies from binary packages:
 
    ```sh
-   sudo apt-get install build-essential libidn11-dev libfile-sharedir-perl libfile-slurp-perl libhash-merge-perl libio-socket-inet6-perl liblist-moreutils-perl libmail-rfc822-address-perl libmodule-find-perl libmoose-perl libnet-ip-perl libreadonly-xs-perl libtext-csv-perl libssl-dev libdevel-checklib-perl libtool m4 autoconf automake
+   sudo apt-get install build-essential libidn11-dev libfile-sharedir-perl libfile-slurp-perl libhash-merge-perl libio-socket-inet6-perl liblist-moreutils-perl libmail-rfc822-address-perl libmodule-find-perl libmodule-install-perl libmoose-perl libnet-ip-perl libreadonly-xs-perl libtext-csv-perl libssl-dev libdevel-checklib-perl libtool m4 autoconf automake
    ```
 
 4) Install Zonemaster::LDNS:
