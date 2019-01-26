@@ -1,5 +1,63 @@
 Release history for Zonemaster component Zonemaster-Engine
 
+v3.0.0 2019-01-25 (pre-release version)
+
+ - Status
+   - This is a pre-release version not fully tested on all supported
+     OS's and Perl versions. This version will not be available on
+     CPAN.
+ - API change
+   - Replaced separate config and policy with a unified profile
+     (see below)
+ - Features
+   - Updated implementation of Delegation01 (#396, #410)
+   - Updated implementation of Consistency06 (#408)
+   - Updated implementation of Nameserver01 (#399, #435)
+   - Updated implementation of DNSSEC05 (#409)
+   - Updated translation tooling #394
+   - Updated implementation of Syntax06 (#421)
+   - Updated implementation of Delegation03 (#425)
+   - Updated implementation of Consistency05 (#427, #429, #470)
+   - Updated implementation of Consistency01 (#433)
+   - Updated translation of messages (#436)
+   - Replaced separate config and policy with a unified profile
+     - Updated profile.pm (#386)
+     - Profiles updates #441
+     - Profile instead of config and policy #446
+     - Profiles tweaks #447
+     - Add script to convert Config/Policy to Profile files #446
+     - Fixed flags issue #459
+     - Add more details in case of crash for profile properties #471
+     - Add true/false processing for Booleans #472
+     - Deleted iana-profile.json #465
+     - Updated profile.json files; removed unused messages and added
+       missing messages #464
+     - Update resolver.source default value to match 
+       documentation #473
+     - Align tests and impl for boolean properties with 
+       documentation #474
+     - Various #478
+   - Added support to test EDNS features
+     - Support for Edns and test case implementation (Nameserver10,
+       ..11, ..12 and ..13; ..14 excluded) #460
+     - Test against develop version of Zonemaster LDNS with EDNS
+       support #462
+     - Various #481, #485 
+ - Fixes
+   - Uppdated formatting of msgid tables #402
+   - Fixed broken tests #412
+   - All link references on Github now to zonemaster/zonemaster instead
+     of old dotse/zonemaster #406
+   - Updated manifest #422
+   - Updated travis conf to match supported perl versions (#426, #463)
+   - Removed List::Util::all (only supported in Perl 5.20 and higher) #432
+   - Added missing message in Delegation.pm #415 
+   - Added missing message in DNSSEC.pm #416
+   - Added missing message in Nameserver.pm #417
+   - Removed unused message and added used message in Basic.pm #413
+   - Various #487
+   
+
 v2.0.7 2018-06-25
 
 - Fixed
