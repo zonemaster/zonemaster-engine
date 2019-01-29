@@ -9,8 +9,8 @@ name 'Zonemaster-Engine';
 # share/Makefile
 
 
-repository 'https://github.com/dotse/zonemaster-engine';
-bugtracker 'https://github.com/dotse/zonemaster-engine/issues';
+repository 'https://github.com/zonemaster/zonemaster-engine';
+bugtracker 'https://github.com/zonemaster/zonemaster-engine/issues';
 
 all_from 'lib/Zonemaster/Engine.pm';
 
@@ -25,13 +25,20 @@ requires 'File::Slurp'           => 0;
 requires 'Net::IP'               => 1.26;
 requires 'List::MoreUtils'       => 0;
 requires 'Mail::RFC822::Address' => 0;
-requires 'Hash::Merge'           => 0;
 requires 'Readonly'              => 0;
 requires 'Locale::TextDomain'    => 1.23;
 requires 'Text::CSV'             => 0;
 requires 'MIME::Base64'          => 0;
+requires 'Clone'                 => 0;
+requires 'JSON'                  => 0;
+requires 'JSON::PP'              => 0;
+requires 'Data::Dumper'          => 0;
 
-test_requires 'Test::Fatal' => 0;
+test_requires 'Test::Fatal'       => 0;
+test_requires 'Test::Exception'   => 0;
+test_requires 'Test::Differences' => 0;
+test_requires 'Pod::Coverage'     => 0;
+test_requires 'Test::Pod'         => 1.22;
 
 recommends 'Readonly::XS' => 0;
 

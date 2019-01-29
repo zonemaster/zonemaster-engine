@@ -1,29 +1,37 @@
-msgid ""
+msgid  ""
 msgstr ""
-"Language: en\n"
-"Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: 8bit\n"
 "Project-Id-Version: 1.0.0\n"
 "PO-Revision-Date: 2017-12-18\n"
 "Last-Translator: mats.dufberg@iis.se\n"
 "Language-Team: Zonemaster Team\n"
+"Language: en\n"
 "MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 
 #: ADDRESS:NAMESERVERS_IP_WITH_REVERSE
 msgid  "Reverse DNS entry exist for all Nameserver IP addresses."
 msgstr "Reverse DNS entry exists for each Nameserver IP address."
 
 #: ADDRESS:NAMESERVER_IP_PRIVATE_NETWORK
-msgid  "Nameserver {ns} has an IP address ({address}) with prefix {prefix} referenced in {reference} as a '{name}'."
-msgstr "Nameserver {ns} has an IP address ({address}) with prefix {prefix} referenced in {reference} as a '{name}'."
+msgid  ""
+"Nameserver {ns} has an IP address ({address}) with prefix {prefix} "
+"referenced in {reference} as a '{name}'."
+msgstr ""
+"Nameserver {ns} has an IP address ({address}) with prefix {prefix} "
+"referenced in {reference} as a '{name}'."
 
 #: ADDRESS:NAMESERVER_IP_PTR_MATCH
 msgid  "All reverse DNS entry matches name server name."
 msgstr "Every reverse DNS entry matches name server name."
 
 #: ADDRESS:NAMESERVER_IP_PTR_MISMATCH
-msgid  "Nameserver {ns} has an IP address ({address}) with mismatched PTR result ({names})."
-msgstr "Nameserver {ns} has an IP address ({address}) with mismatched PTR result ({names})."
+msgid  ""
+"Nameserver {ns} has an IP address ({address}) with mismatched PTR result "
+"({names})."
+msgstr ""
+"Nameserver {ns} has an IP address ({address}) with mismatched PTR result "
+"({names})."
 
 #: ADDRESS:NAMESERVER_IP_WITHOUT_REVERSE
 msgid  "Nameserver {ns} has an IP address ({address}) without PTR configured."
@@ -42,8 +50,10 @@ msgid  "Nameservers did not respond to A query."
 msgstr "Nameservers did not respond to A query."
 
 #: BASIC:DOMAIN_NAME_LABEL_TOO_LONG
-msgid  "Domain name ({dname}) has a label ({dlabel}) too long ({dlength}/{max})."
-msgstr "Label ({dlabel}) in domain name ({dname}) is too long ({dlength}/{max})."
+msgid  ""
+"Domain name ({dname}) has a label ({dlabel}) too long ({dlength}/{max})."
+msgstr ""
+"Label ({dlabel}) in domain name ({dname}) is too long ({dlength}/{max})."
 
 #: BASIC:DOMAIN_NAME_TOO_LONG
 msgid  "Domain name is too long ({fqdnlength}/{max})."
@@ -69,7 +79,8 @@ msgstr "Functional nameserver found. \"A\" query for www.{zname} test skipped."
 msgid  "Parent domain '{pname}' was found for the tested domain."
 msgstr "Parent domain '{pname}' was found for the tested domain."
 
-#: BASIC:IPV4_DISABLED CONNECTIVITY:IPV4_DISABLED CONSISTENCY:IPV4_DISABLED DELEGATION:IPV4_DISABLED NAMESERVER:IPV4_DISABLED
+#: BASIC:IPV4_DISABLED CONNECTIVITY:IPV4_DISABLED CONSISTENCY:IPV4_DISABLED
+#: DELEGATION:IPV4_DISABLED NAMESERVER:IPV4_DISABLED
 msgid  "IPv4 is disabled, not sending \"{rrtype}\" query to {ns}/{address}."
 msgstr "IPv4 is disabled, not sending \"{rrtype}\" query to {ns}/{address}."
 
@@ -77,7 +88,8 @@ msgstr "IPv4 is disabled, not sending \"{rrtype}\" query to {ns}/{address}."
 msgid  "IPv4 is enabled, can send \"{rrtype}\" query to {ns}/{address}."
 msgstr "IPv4 is enabled, can send \"{rrtype}\" query to {ns}/{address}."
 
-#: BASIC:IPV6_DISABLED CONNECTIVITY:IPV6_DISABLED CONSISTENCY:IPV6_DISABLED DELEGATION:IPV6_DISABLED NAMESERVER:IPV6_DISABLED
+#: BASIC:IPV6_DISABLED CONNECTIVITY:IPV6_DISABLED CONSISTENCY:IPV6_DISABLED
+#: DELEGATION:IPV6_DISABLED NAMESERVER:IPV6_DISABLED
 msgid  "IPv6 is disabled, not sending \"{rrtype}\" query to {ns}/{address}."
 msgstr "IPv6 is disabled, not sending \"{rrtype}\" query to {ns}/{address}."
 
@@ -99,11 +111,32 @@ msgstr "No parent domain could be found for the domain under test."
 
 #: BASIC:NS_FAILED
 msgid  "Nameserver {ns}/{address} did not return NS records. RCODE was {rcode}."
-msgstr "Nameserver {ns}/{address} did not return NS records. RCODE was {rcode}."
+msgstr ""
+"Nameserver {ns}/{address} did not return NS records. RCODE was {rcode}."
 
 #: BASIC:NS_NO_RESPONSE
 msgid  "Nameserver {ns}/{address} did not respond to NS query."
 msgstr "Nameserver {ns}/{address} did not respond to NS query."
+
+#: CONNECTIVITY:ASN_INFOS_ANNOUNCE_BY
+msgid  "[ASN:ANNOUNCE_BY] {address};{asn}"
+msgstr "[ASN:ANNOUNCE_BY] {address};{asn}"
+
+#: CONNECTIVITY:ASN_INFOS_ANNOUNCE_IN
+msgid  "[ASN:ANNOUNCE_IN] {address};{prefix}"
+msgstr "[ASN:ANNOUNCE_IN] {address};{prefix}"
+
+#: CONNECTIVITY:ASN_INFOS_RAW
+msgid  "[ASN:RAW] {address};{data}"
+msgstr "[ASN:RAW] {address};{data}"
+
+#: CONNECTIVITY:IPV4_ASN
+msgid  "Name servers have IPv4 addresses in the following ASs: {asn}."
+msgstr "Name servers have IPv4 addresses in the following ASs: {asn}."
+
+#: CONNECTIVITY:IPV6_ASN
+msgid  "Name servers have IPv6 addresses in the following ASs: {asn}."
+msgstr "Name servers have IPv6 addresses in the following ASs: {asn}."
 
 #: CONNECTIVITY:NAMESERVERS_IPV4_NO_AS
 msgid  "No IPv4 nameserver address is in an AS."
@@ -115,7 +148,8 @@ msgstr "Authoritative IPv4 nameservers are in more than one AS."
 
 #: CONNECTIVITY:NAMESERVERS_IPV4_WITH_UNIQ_AS
 msgid  "All nameservers IPv4 addresses are in the same AS ({asn})."
-msgstr "All nameservers in the delegation have IPv4 addresses in the same AS ({asn})."
+msgstr ""
+"All nameservers in the delegation have IPv4 addresses in the same AS ({asn})."
 
 #: CONNECTIVITY:NAMESERVERS_IPV6_NO_AS
 msgid  "No IPv6 nameserver address is in an AS."
@@ -127,7 +161,8 @@ msgstr "Authoritative IPv6 nameservers are in more than one AS."
 
 #: CONNECTIVITY:NAMESERVERS_IPV6_WITH_UNIQ_AS
 msgid  "All nameservers IPv6 addresses are in the same AS ({asn})."
-msgstr "All nameservers in the delegation have IPv6 addresses in the same AS ({asn})."
+msgstr ""
+"All nameservers in the delegation have IPv6 addresses in the same AS ({asn})."
 
 #: CONNECTIVITY:NAMESERVERS_NO_AS
 msgid  "No nameserver address is in an AS."
@@ -157,25 +192,21 @@ msgstr "Nameserver {ns}/{address} not accessible over TCP on port 53."
 msgid  "Nameserver {ns}/{address} not accessible over UDP on port 53."
 msgstr "Nameserver {ns}/{address} not accessible over UDP on port 53."
 
-#: CONNECTIVITY:IPV4_ASN
-msgid  "Name servers have IPv4 addresses in the following ASs: {asn}."
-msgstr "Name servers have IPv4 addresses in the following ASs: {asn}."
+#: CONSISTENCY:ADDRESSES_MATCH
+msgid  "Glue records are consistent between glue and authoritative data."
+msgstr "Glue records are consistent between glue and authoritative data."
 
-#: CONNECTIVITY:IPV6_ASN
-msgid  "Name servers have IPv6 addresses in the following ASs: {asn}."
-msgstr "Name servers have IPv6 addresses in the following ASs: {asn}."
+#: CONSISTENCY:EXTRA_ADDRESS_CHILD
+msgid  ""
+"Child has extra nameserver IP address(es) not listed at parent ({addresses})."
+msgstr ""
+"Child has extra nameserver IP address(es) not listed at parent ({addresses})."
 
-#: CONNECTIVITY:ASN_INFOS_RAW
-msgid  "[ASN:RAW] {address};{data}"
-msgstr "[ASN:RAW] {address};{data}"
-
-#: CONNECTIVITY:ASN_INFOS_ANNOUNCE_BY
-msgid  "[ASN:ANNOUNCE_BY] {address};{asn}"
-msgstr "[ASN:ANNOUNCE_BY] {address};{asn}"
-
-#: CONNECTIVITY:ASN_INFOS_ANNOUNCE_IN
-msgid  "[ASN:ANNOUNCE_IN] {address};{prefix}"
-msgstr "[ASN:ANNOUNCE_IN] {address};{prefix}"
+#: CONSISTENCY:EXTRA_ADDRESS_PARENT
+msgid  ""
+"Parent has extra nameserver IP address(es) not listed at child ({addresses})."
+msgstr ""
+"Parent has extra nameserver IP address(es) not listed at child ({addresses})."
 
 #: CONSISTENCY:MULTIPLE_NS_SET
 msgid  "Saw {count} NS set."
@@ -222,8 +253,12 @@ msgid  "A single SOA serial number was seen ({serial})."
 msgstr "A single SOA serial number was found ({serial})."
 
 #: CONSISTENCY:ONE_SOA_TIME_PARAMETER_SET
-msgid  "A single SOA time parameter set was seen (REFRESH={refresh},RETRY={retry},EXPIRE={expire},MINIMUM={minimum})."
-msgstr "A single SOA time parameter set was seen (REFRESH={refresh},RETRY={retry},EXPIRE={expire},MINIMUM={minimum})."
+msgid  ""
+"A single SOA time parameter set was seen (REFRESH={refresh},RETRY={retry},"
+"EXPIRE={expire},MINIMUM={minimum})."
+msgstr ""
+"A single SOA time parameter set was seen (REFRESH={refresh},RETRY={retry},"
+"EXPIRE={expire},MINIMUM={minimum})."
 
 #: CONSISTENCY:SOA_RNAME
 msgid  "Saw SOA rname {rname} on following nameserver set : {servers}."
@@ -231,31 +266,32 @@ msgstr "Found SOA rname {rname} on following nameserver set : {servers}."
 
 #: CONSISTENCY:SOA_SERIAL
 msgid  "Saw SOA serial number {serial} on following nameserver set : {servers}."
-msgstr "Found SOA serial number {serial} on following nameserver set : {servers}."
+msgstr ""
+"Found SOA serial number {serial} on following nameserver set : {servers}."
 
 #: CONSISTENCY:SOA_SERIAL_VARIATION
-msgid  "Difference between the smaller serial ({serial_min}) and the bigger one ({serial_max}) is greater than the maximum allowed ({max_variation})."
-msgstr "Difference between the smaller serial ({serial_min}) and the bigger one ({serial_max}) is greater than the maximum allowed ({max_variation})."
+msgid  ""
+"Difference between the smaller serial ({serial_min}) and the bigger one "
+"({serial_max}) is greater than the maximum allowed ({max_variation})."
+msgstr ""
+"Difference between the smaller serial ({serial_min}) and the bigger one "
+"({serial_max}) is greater than the maximum allowed ({max_variation})."
 
 #: CONSISTENCY:SOA_TIME_PARAMETER_SET
-msgid  "Saw SOA time parameter set (REFRESH={refresh},RETRY={retry},EXPIRE={expire},MINIMUM={minimum}) on following nameserver set : {servers}."
-msgstr "Found SOA time parameter set (REFRESH={refresh},RETRY={retry},EXPIRE={expire},MINIMUM={minimum}) on following nameserver set : {servers}."
-
-#: CONSISTENCY:EXTRA_ADDRESS_PARENT
-msgid  "Parent has extra nameserver IP address(es) not listed at child ({addresses})."
-msgstr "Parent has extra nameserver IP address(es) not listed at child ({addresses})."
-
-#: CONSISTENCY:EXTRA_ADDRESS_CHILD
-msgid  "Child has extra nameserver IP address(es) not listed at parent ({addresses})."
-msgstr "Child has extra nameserver IP address(es) not listed at parent ({addresses})."
+msgid  ""
+"Saw SOA time parameter set (REFRESH={refresh},RETRY={retry},EXPIRE={expire},"
+"MINIMUM={minimum}) on following nameserver set : {servers}."
+msgstr ""
+"Found SOA time parameter set (REFRESH={refresh},RETRY={retry},"
+"EXPIRE={expire},MINIMUM={minimum}) on following nameserver set : {servers}."
 
 #: CONSISTENCY:TOTAL_ADDRESS_MISMATCH
-msgid  "No common nameserver IP addresses between child ({child}) and parent ({glue})."
-msgstr "No common nameserver IP addresses between child ({child}) and parent ({glue})."
-
-#: CONSISTENCY:ADDRESSES_MATCH
-msgid  "Glue records are consistent between glue and authoritative data."
-msgstr "Glue records are consistent between glue and authoritative data."
+msgid  ""
+"No common nameserver IP addresses between child ({child}) and parent "
+"({glue})."
+msgstr ""
+"No common nameserver IP addresses between child ({child}) and parent "
+"({glue})."
 
 #: DELEGATION:ARE_AUTHORITATIVE
 msgid  "All these nameservers are confirmed to be authoritative : {nsset}."
@@ -266,12 +302,20 @@ msgid  "All the IP addresses used by the nameservers are unique"
 msgstr "All the IP addresses used by the nameservers are unique"
 
 #: DELEGATION:ENOUGH_NS
-msgid  "Child lists enough ({count}) nameservers ({ns}). Lower limit set to {minimum}."
-msgstr "Child lists enough ({count}) nameservers ({ns}). Lower limit set to {minimum}."
+msgid  ""
+"Child lists enough ({count}) nameservers ({ns}). Lower limit set to "
+"{minimum}."
+msgstr ""
+"Child lists enough ({count}) nameservers ({ns}). Lower limit set to "
+"{minimum}."
 
 #: DELEGATION:ENOUGH_NS_GLUE
-msgid  "Parent lists enough ({count}) nameservers ({glue}). Lower limit set to {minimum}."
-msgstr "Parent lists enough ({count}) nameservers ({glue}). Lower limit set to {minimum}."
+msgid  ""
+"Parent lists enough ({count}) nameservers ({glue}). Lower limit set to "
+"{minimum}."
+msgstr ""
+"Parent lists enough ({count}) nameservers ({glue}). Lower limit set to "
+"{minimum}."
 
 #: DELEGATION:EXTRA_NAME_CHILD
 msgid  "Child has nameserver(s) not listed at parent ({extra})."
@@ -290,12 +334,20 @@ msgid  "All of the nameserver names are listed both at parent and child."
 msgstr "All of the nameserver names are listed both at parent and child."
 
 #: DELEGATION:NOT_ENOUGH_NS
-msgid  "Child does not list enough ({count}) nameservers ({ns}). Lower limit set to {minimum}."
-msgstr "Child does not list enough ({count}) nameservers ({ns}). Lower limit set to {minimum}."
+msgid  ""
+"Child does not list enough ({count}) nameservers ({ns}). Lower limit set to "
+"{minimum}."
+msgstr ""
+"Child does not list enough ({count}) nameservers ({ns}). Lower limit set to "
+"{minimum}."
 
 #: DELEGATION:NOT_ENOUGH_NS_GLUE
-msgid  "Parent does not list enough ({count}) nameservers ({glue}). Lower limit set to {minimum}."
-msgstr "Parent does not list enough ({count}) nameservers ({glue}). Lower limit set to {minimum}."
+msgid  ""
+"Parent does not list enough ({count}) nameservers ({glue}). Lower limit set "
+"to {minimum}."
+msgstr ""
+"Parent does not list enough ({count}) nameservers ({glue}). Lower limit set "
+"to {minimum}."
 
 #: DELEGATION:NS_RR_IS_CNAME
 msgid  "Nameserver {ns} {address_type} RR point to CNAME."
@@ -306,12 +358,20 @@ msgid  "No nameserver point to CNAME alias."
 msgstr "No nameserver points to CNAME alias."
 
 #: DELEGATION:REFERRAL_SIZE_LARGE
-msgid  "The smallest possible legal referral packet is larger than 512 octets (it is {size})."
-msgstr "The smallest possible legal referral packet is larger than 512 octets (it is {size})."
+msgid  ""
+"The smallest possible legal referral packet is larger than 512 octets (it is "
+"{size})."
+msgstr ""
+"The smallest possible legal referral packet is larger than 512 octets (it is "
+"{size})."
 
 #: DELEGATION:REFERRAL_SIZE_OK
-msgid  "The smallest possible legal referral packet is smaller than 513 octets (it is {size})."
-msgstr "The smallest possible legal referral packet is smaller than 513 octets (it is {size})."
+msgid  ""
+"The smallest possible legal referral packet is smaller than 513 octets (it "
+"is {size})."
+msgstr ""
+"The smallest possible legal referral packet is smaller than 513 octets (it "
+"is {size})."
 
 #: DELEGATION:SAME_IP_ADDRESS
 msgid  "IP {address} refers to multiple nameservers ({nss})."
@@ -334,32 +394,61 @@ msgid  "No DNSKEYs found. Additional tests skipped."
 msgstr "No DNSKEYs found. Additional tests skipped."
 
 #: DNSSEC:ALGORITHM_DEPRECATED
-msgid  "The DNSKEY with tag {keytag} uses deprecated algorithm number {algorithm}/({description})."
-msgstr "The DNSKEY with tag {keytag} uses deprecated algorithm number {algorithm}/({description})."
+msgid  ""
+"The DNSKEY with tag {keytag} uses deprecated algorithm number {algorithm}/"
+"({description})."
+msgstr ""
+"The DNSKEY with tag {keytag} uses deprecated algorithm number {algorithm}/"
+"({description})."
 
 #: DNSSEC:ALGORITHM_OK
-msgid  "The DNSKEY with tag {keytag} uses algorithm number {algorithm}/({description}), which is OK."
-msgstr "The DNSKEY with tag {keytag} uses algorithm number {algorithm}/({description}) [OK]."
+msgid  ""
+"The DNSKEY with tag {keytag} uses algorithm number {algorithm}/"
+"({description}), which is OK."
+msgstr ""
+"The DNSKEY with tag {keytag} uses algorithm number {algorithm}/"
+"({description}) [OK]."
 
 #: DNSSEC:ALGORITHM_PRIVATE
-msgid  "The DNSKEY with tag {keytag} uses private algorithm number {algorithm}/({description})."
-msgstr "The DNSKEY with tag {keytag} uses private algorithm number {algorithm}/({description})."
+msgid  ""
+"The DNSKEY with tag {keytag} uses private algorithm number {algorithm}/"
+"({description})."
+msgstr ""
+"The DNSKEY with tag {keytag} uses private algorithm number {algorithm}/"
+"({description})."
 
 #: DNSSEC:ALGORITHM_RESERVED
-msgid  "The DNSKEY with tag {keytag} uses reserved algorithm number {algorithm}/({description})."
-msgstr "The DNSKEY with tag {keytag} uses reserved algorithm number {algorithm}/({description})."
+msgid  ""
+"The DNSKEY with tag {keytag} uses reserved algorithm number {algorithm}/"
+"({description})."
+msgstr ""
+"The DNSKEY with tag {keytag} uses reserved algorithm number {algorithm}/"
+"({description})."
 
 #: DNSSEC:ALGORITHM_UNASSIGNED
-msgid  "The DNSKEY with tag {keytag} uses unassigned algorithm number {algorithm}/({description})."
-msgstr "The DNSKEY with tag {keytag} uses unassigned algorithm number {algorithm}/({description})."
+msgid  ""
+"The DNSKEY with tag {keytag} uses unassigned algorithm number {algorithm}/"
+"({description})."
+msgstr ""
+"The DNSKEY with tag {keytag} uses unassigned algorithm number {algorithm}/"
+"({description})."
 
 #: DNSSEC:ALGORITHM_UNKNOWN
 msgid  "The DNSKEY with tag {keytag} uses unknown algorithm number {algorithm}."
-msgstr "The DNSKEY with tag {keytag} uses unknown algorithm number {algorithm}."
+msgstr ""
+"The DNSKEY with tag {keytag} uses unknown algorithm number {algorithm}."
 
 #: DNSSEC:COMMON_KEYTAGS
 msgid  "There are both DS and DNSKEY records with key tags {keytags}."
 msgstr "There are both DS and DNSKEY records with key tags {keytags}."
+
+#: DNSSEC:DELEGATION_NOT_SIGNED
+msgid  "Delegation from parent to child is not properly signed {reason}."
+msgstr "Delegation from parent to child is not properly signed ({reason})."
+
+#: DNSSEC:DELEGATION_SIGNED
+msgid  "Delegation from parent to child is properly signed."
+msgstr "Delegation from parent to child is properly signed."
 
 #: DNSSEC:DNSKEY_AND_DS
 msgid  "{parent} sent a DS record, and {child} a DNSKEY record."
@@ -374,8 +463,12 @@ msgid  "The apex DNSKEY RRset was not correctly signed."
 msgstr "The apex DNSKEY RRset was not correctly signed."
 
 #: DNSSEC:DNSKEY_SIGNATURE_NOT_OK
-msgid  "Signature for DNSKEY with tag {signature} failed to verify with error '{error}'."
-msgstr "Signature verification for DNSKEY with tag {signature} failed with error '{error}'."
+msgid  ""
+"Signature for DNSKEY with tag {signature} failed to verify with error "
+"'{error}'."
+msgstr ""
+"Signature verification for DNSKEY with tag {signature} failed with error "
+"'{error}'."
 
 #: DNSSEC:DNSKEY_SIGNATURE_OK
 msgid  "A signature for DNSKEY with tag {signature} was correctly signed."
@@ -395,19 +488,28 @@ msgstr "DS record with keytag {keytag} uses forbidden digest type {digtype}."
 
 #: DNSSEC:DS_DIGTYPE_OK
 msgid  "DS record with keytag {keytag} uses digest type {digtype}, which is OK."
-msgstr "DS record with keytag {keytag} uses digest type {digtype}, which is OK."
+msgstr ""
+"DS record with keytag {keytag} uses digest type {digtype}, which is OK."
 
 #: DNSSEC:DS_DOES_NOT_MATCH_DNSKEY
-msgid  "DS record with keytag {keytag} and digest type {digtype} does not match the DNSKEY with the same tag."
-msgstr "DS record with keytag {keytag} and digest type {digtype} does not match the DNSKEY with the same tag."
-
-#: DNSSEC:DS_MATCHES_DNSKEY
-msgid  "DS record with keytag {keytag} and digest type {digtype} matches the DNSKEY with the same tag."
-msgstr "DS record with keytag {keytag} and digest type {digtype} matches the DNSKEY with the same tag."
+msgid  ""
+"DS record with keytag {keytag} and digest type {digtype} does not match the "
+"DNSKEY with the same tag."
+msgstr ""
+"DS record with keytag {keytag} and digest type {digtype} does not match the "
+"DNSKEY with the same tag."
 
 #: DNSSEC:DS_FOUND
 msgid  "Found DS records with tags {keytags}."
 msgstr "Found DS records with tags {keytags}."
+
+#: DNSSEC:DS_MATCHES_DNSKEY
+msgid  ""
+"DS record with keytag {keytag} and digest type {digtype} matches the DNSKEY "
+"with the same tag."
+msgstr ""
+"DS record with keytag {keytag} and digest type {digtype} matches the DNSKEY "
+"with the same tag."
 
 #: DNSSEC:DS_MATCH_FOUND
 msgid  "At least one DS record with a matching DNSKEY record was found."
@@ -418,24 +520,39 @@ msgid  "No DS record with a matching DNSKEY record was found."
 msgstr "No DS record with a matching DNSKEY record was found."
 
 #: DNSSEC:DS_RFC4509_NOT_VALID
-msgid  "Existing DS with digest type 2, while they do not match DNSKEY records, prevent use of DS with digest type 1 (RFC4509, section 3)."
-msgstr "Existing DS with digest type 2, while they do not match DNSKEY records, prevent use of DS with digest type 1 (RFC4509, section 3)."
+msgid  ""
+"Existing DS with digest type 2, while they do not match DNSKEY records, "
+"prevent use of DS with digest type 1 (RFC4509, section 3)."
+msgstr ""
+"Existing DS with digest type 2, while they do not match DNSKEY records, "
+"prevent use of DS with digest type 1 (RFC4509, section 3)."
 
 #: DNSSEC:DURATION_LONG
-msgid  "RRSIG with keytag {tag} and covering type(s) {types} has a duration of {duration} seconds, which is too long."
-msgstr "RRSIG with keytag {tag} and covering type(s) {types} has a duration of {duration} seconds, which is too long."
+msgid  ""
+"RRSIG with keytag {tag} and covering type(s) {types} has a duration of "
+"{duration} seconds, which is too long."
+msgstr ""
+"RRSIG with keytag {tag} and covering type(s) {types} has a duration of "
+"{duration} seconds, which is too long."
 
 #: DNSSEC:DURATION_OK
-msgid  "RRSIG with keytag {tag} and covering type(s) {types} has a duration of {duration} seconds, which is just fine."
-msgstr "RRSIG with keytag {tag} and covering type(s) {types} has a duration of {duration} seconds, which is just fine."
+msgid  ""
+"RRSIG with keytag {tag} and covering type(s) {types} has a duration of "
+"{duration} seconds, which is just fine."
+msgstr ""
+"RRSIG with keytag {tag} and covering type(s) {types} has a duration of "
+"{duration} seconds, which is just fine."
 
 #: DNSSEC:EXTRA_PROCESSING_BROKEN
-msgid  "Server at {server} sent {keys} DNSKEY records, and {sigs} RRSIG records."
-msgstr "Server at {server} sent {keys} DNSKEY records, and {sigs} RRSIG records."
+msgid  ""
+"Server at {server} sent {keys} DNSKEY records, and {sigs} RRSIG records."
+msgstr ""
+"Server at {server} sent {keys} DNSKEY records, and {sigs} RRSIG records."
 
 #: DNSSEC:EXTRA_PROCESSING_OK
 msgid  "Server at {server} sent {keys} DNSKEY records and {sigs} RRSIG records."
-msgstr "Server at {server} sent {keys} DNSKEY records and {sigs} RRSIG records."
+msgstr ""
+"Server at {server} sent {keys} DNSKEY records and {sigs} RRSIG records."
 
 #: DNSSEC:HAS_NSEC
 msgid  "The zone has NSEC records."
@@ -450,16 +567,24 @@ msgid  "The zone has NSEC3 opt-out records."
 msgstr "The zone has NSEC3 opt-out records."
 
 #: DNSSEC:INVALID_NAME_RCODE
-msgid  "When asked for the name {name}, which must not exist, the response had RCODE {rcode}."
-msgstr "When asked for the name {name}, which must not exist, the response had RCODE {rcode}."
+msgid  ""
+"When asked for the name {name}, which must not exist, the response had RCODE "
+"{rcode}."
+msgstr ""
+"When asked for the name {name}, which must not exist, the response had RCODE "
+"{rcode}."
 
 #: DNSSEC:ITERATIONS_OK
 msgid  "The number of NSEC3 iterations is {count}, which is OK."
 msgstr "The number of NSEC3 iterations is {count}, which is OK."
 
 #: DNSSEC:KEY_DETAILS
-msgid  "Key with keytag {keytag} details : Size = {keysize}, Flags ({sep}, {rfc5011})."
-msgstr "Key with keytag {keytag} details : Size = {keysize}, Flags ({sep}, {rfc5011})."
+msgid  ""
+"Key with keytag {keytag} details : Size = {keysize}, Flags ({sep}, "
+"{rfc5011})."
+msgstr ""
+"Key with keytag {keytag} details : Size = {keysize}, Flags ({sep}, "
+"{rfc5011})."
 
 #: DNSSEC:MANY_ITERATIONS
 msgid  "The number of NSEC3 iterations is {count}, which is on the high side."
@@ -486,12 +611,20 @@ msgid  "{from} returned no DS records for {zone}."
 msgstr "{from} returned no DS records for {zone}."
 
 #: DNSSEC:NO_KEYS_OR_NO_SIGS
-msgid  "Cannot test DNSKEY signatures, because we got {keys} DNSKEY records and {sigs} RRSIG records."
-msgstr "Cannot test DNSKEY signatures, because we got {keys} DNSKEY records and {sigs} RRSIG records."
+msgid  ""
+"Cannot test DNSKEY signatures, because we got {keys} DNSKEY records and "
+"{sigs} RRSIG records."
+msgstr ""
+"Cannot test DNSKEY signatures, because we got {keys} DNSKEY records and "
+"{sigs} RRSIG records."
 
 #: DNSSEC:NO_KEYS_OR_NO_SIGS_OR_NO_SOA
-msgid  "Cannot test SOA signatures, because we got {keys} DNSKEY records, {sigs} RRSIG records and {soas} SOA records."
-msgstr "Cannot test SOA signatures, because we got {keys} DNSKEY records, {sigs} RRSIG records and {soas} SOA records."
+msgid  ""
+"Cannot test SOA signatures, because we got {keys} DNSKEY records, {sigs} "
+"RRSIG records and {soas} SOA records."
+msgstr ""
+"Cannot test SOA signatures, because we got {keys} DNSKEY records, {sigs} "
+"RRSIG records and {soas} SOA records."
 
 #: DNSSEC:NO_NSEC3PARAM
 msgid  "{server} returned no NSEC3PARAM records."
@@ -538,28 +671,44 @@ msgid  "Trying to verify NSEC RRset with RRSIG {sig} gave error '{error}'."
 msgstr "Trying to verify NSEC RRset with RRSIG {sig} gave error '{error}'."
 
 #: DNSSEC:REMAINING_LONG
-msgid  "RRSIG with keytag {tag} and covering type(s) {types} has a remaining validity of {duration} seconds, which is too long."
-msgstr "RRSIG with keytag {tag} and covering type(s) {types} has a remaining validity of {duration} seconds, which is too long."
+msgid  ""
+"RRSIG with keytag {tag} and covering type(s) {types} has a remaining "
+"validity of {duration} seconds, which is too long."
+msgstr ""
+"RRSIG with keytag {tag} and covering type(s) {types} has a remaining "
+"validity of {duration} seconds, which is too long."
 
 #: DNSSEC:REMAINING_SHORT
-msgid  "RRSIG with keytag {tag} and covering type(s) {types} has a remaining validity of {duration} seconds, which is too short."
-msgstr "RRSIG with keytag {tag} and covering type(s) {types} has a remaining validity of {duration} seconds, which is too short."
+msgid  ""
+"RRSIG with keytag {tag} and covering type(s) {types} has a remaining "
+"validity of {duration} seconds, which is too short."
+msgstr ""
+"RRSIG with keytag {tag} and covering type(s) {types} has a remaining "
+"validity of {duration} seconds, which is too short."
 
 #: DNSSEC:RRSIG_EXPIRATION
-msgid  "RRSIG with keytag {tag} and covering type(s) {types} expires at : {date}."
-msgstr "RRSIG with keytag {tag} and covering type(s) {types} expires at : {date}."
+msgid  ""
+"RRSIG with keytag {tag} and covering type(s) {types} expires at : {date}."
+msgstr ""
+"RRSIG with keytag {tag} and covering type(s) {types} expires at : {date}."
 
 #: DNSSEC:RRSIG_EXPIRED
-msgid  "RRSIG with keytag {tag} and covering type(s) {types} has already expired (expiration is: {expiration})."
-msgstr "RRSIG with keytag {tag} and covering type(s) {types} has already expired (expiration is: {expiration})."
+msgid  ""
+"RRSIG with keytag {tag} and covering type(s) {types} has already expired "
+"(expiration is: {expiration})."
+msgstr ""
+"RRSIG with keytag {tag} and covering type(s) {types} has already expired "
+"(expiration is: {expiration})."
 
 #: DNSSEC:SOA_NOT_SIGNED
 msgid  "No RRSIG correctly signed the SOA RRset."
 msgstr "No RRSIG correctly signed the SOA RRset."
 
 #: DNSSEC:SOA_SIGNATURE_NOT_OK
-msgid  "Trying to verify SOA RRset with signature {signature} gave error '{error}'."
-msgstr "Trying to verify SOA RRset with signature {signature} gave error '{error}'."
+msgid  ""
+"Trying to verify SOA RRset with signature {signature} gave error '{error}'."
+msgstr ""
+"Trying to verify SOA RRset with signature {signature} gave error '{error}'."
 
 #: DNSSEC:SOA_SIGNATURE_OK
 msgid  "RRSIG {signature} correctly signs SOA RRset."
@@ -570,28 +719,30 @@ msgid  "At least one RRSIG correctly signs the SOA RRset."
 msgstr "At least one RRSIG correctly signs the SOA RRset."
 
 #: DNSSEC:TOO_MANY_ITERATIONS
-msgid  "The number of NSEC3 iterations is {count}, which is too high for key length {keylength}."
-msgstr "The number of NSEC3 iterations is {count}, which is too high for key length {keylength}."
-
-#: DNSSEC:DELEGATION_NOT_SIGNED
-msgid  "Delegation from parent to child is not properly signed {reason}."
-msgstr "Delegation from parent to child is not properly signed ({reason})."
-
-#: DNSSEC:DELEGATION_SIGNED
-msgid  "Delegation from parent to child is properly signed."
-msgstr "Delegation from parent to child is properly signed."
+msgid  ""
+"The number of NSEC3 iterations is {count}, which is too high for key length "
+"{keylength}."
+msgstr ""
+"The number of NSEC3 iterations is {count}, which is too high for key length "
+"{keylength}."
 
 #: EXAMPLE:EXAMPLE_TAG
 msgid  "This is an example tag."
 msgstr "This is an example tag."
 
 #: NAMESERVER:AAAA_WELL_PROCESSED
-msgid  "The following nameservers answer AAAA queries without problems : {names}."
-msgstr "The following nameservers answer AAAA queries without problems : {names}."
+msgid  ""
+"The following nameservers answer AAAA queries without problems : {names}."
+msgstr ""
+"The following nameservers answer AAAA queries without problems : {names}."
 
 #: NAMESERVER:ANSWER_BAD_RCODE
-msgid  "Nameserver {ns}/{address} answered AAAA query with an unexpected rcode ({rcode})."
-msgstr "Nameserver {ns}/{address} answered AAAA query with an unexpected rcode ({rcode})."
+msgid  ""
+"Nameserver {ns}/{address} answered AAAA query with an unexpected rcode "
+"({rcode})."
+msgstr ""
+"Nameserver {ns}/{address} answered AAAA query with an unexpected rcode "
+"({rcode})."
 
 #: NAMESERVER:AXFR_AVAILABLE
 msgid  "Nameserver {ns}/{address} allow zone transfer using AXFR."
@@ -607,19 +758,84 @@ msgstr "All nameservers succeeded to resolve to an IP address."
 
 #: NAMESERVER:CAN_NOT_BE_RESOLVED
 msgid  "The following nameservers failed to resolve to an IP address : {names}."
-msgstr "The following nameservers failed to resolve to an IP address : {names}."
+msgstr ""
+"The following nameservers failed to resolve to an IP address : {names}."
+
+#: NAMESERVER:CASE_QUERIES_RESULTS_DIFFER
+msgid  ""
+"When asked for {type} records on \"{query}\" with different cases, all "
+"servers do not reply consistently."
+msgstr ""
+"When asked for {type} records on \"{query}\" with different cases, all "
+"servers do not reply consistently."
+
+#: NAMESERVER:CASE_QUERIES_RESULTS_OK
+msgid  ""
+"When asked for {type} records on \"{query}\" with different cases, all "
+"servers reply consistently."
+msgstr ""
+"When asked for {type} records on \"{query}\" with different cases, all "
+"servers reply consistently."
+
+#: NAMESERVER:CASE_QUERY_DIFFERENT_ANSWER
+msgid  ""
+"When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver "
+"{ns}/{address} returns different answers."
+msgstr ""
+"When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver "
+"{ns}/{address} returns different answers."
+
+#: NAMESERVER:CASE_QUERY_DIFFERENT_RC
+msgid  ""
+"When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver "
+"{ns}/{address} returns different RCODE (\"{rcode1}\" vs \"{rcode2}\")."
+msgstr ""
+"When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver "
+"{ns}/{address} returns different RCODE (\"{rcode1}\" vs \"{rcode2}\")."
+
+#: NAMESERVER:CASE_QUERY_NO_ANSWER
+msgid  ""
+"When asked for {type} records on \"{query}\", nameserver {ns}/{address} "
+"returns nothing."
+msgstr ""
+"When asked for {type} records on \"{query}\", nameserver {ns}/{address} "
+"returns nothing."
+
+#: NAMESERVER:CASE_QUERY_SAME_ANSWER
+msgid  ""
+"When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver "
+"{ns}/{address} returns same answers."
+msgstr ""
+"When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver "
+"{ns}/{address} returns same answers."
+
+#: NAMESERVER:CASE_QUERY_SAME_RC
+msgid  ""
+"When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver "
+"{ns}/{address} returns same RCODE \"{rcode}\"."
+msgstr ""
+"When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver "
+"{ns}/{address} returns same RCODE \"{rcode}\"."
 
 #: NAMESERVER:DIFFERENT_SOURCE_IP
-msgid  "Nameserver {ns}/{address} replies on a SOA query with a different source address ({source})."
-msgstr "Nameserver {ns}/{address} replies on a SOA query with a different source address ({source})."
+msgid  ""
+"Nameserver {ns}/{address} replies on a SOA query with a different source "
+"address ({source})."
+msgstr ""
+"Nameserver {ns}/{address} replies on a SOA query with a different source "
+"address ({source})."
 
 #: NAMESERVER:EDNS0_BAD_ANSWER
-msgid  "Nameserver {ns}/{address} does not support EDNS0 (OPT not set in reply)."
-msgstr "Nameserver {ns}/{address} does not support EDNS0 (OPT not set in reply)."
+msgid  ""
+"Nameserver {ns}/{address} does not support EDNS0 (OPT not set in reply)."
+msgstr ""
+"Nameserver {ns}/{address} does not support EDNS0 (OPT not set in reply)."
 
 #: NAMESERVER:EDNS0_BAD_QUERY
-msgid  "Nameserver {ns}/{address} does not support EDNS0 (replies with FORMERR)."
-msgstr "Nameserver {ns}/{address} does not support EDNS0 (replies with FORMERR)."
+msgid  ""
+"Nameserver {ns}/{address} does not support EDNS0 (replies with FORMERR)."
+msgstr ""
+"Nameserver {ns}/{address} does not support EDNS0 (replies with FORMERR)."
 
 #: NAMESERVER:EDNS0_SUPPORT
 msgid  "The following nameservers support EDNS0 : {names}."
@@ -630,16 +846,29 @@ msgid  "Nameserver {ns}/{address} is a recursor."
 msgstr "Nameserver {ns}/{address} is a recursor."
 
 #: NAMESERVER:NO_RECURSOR
-msgid  "None of the following nameservers is a recursor : {names}."
-msgstr "None of the following nameservers is a recursor : {names}."
-
-#: NAMESERVER:RECURSIVITY_UNDEF
-msgid  "Cannot determine if the following servers are recursive nameservers or not: {names}."
-msgstr "Cannot determine if the following servers are recursive nameservers or not: {names}."
+msgid  "Nameserver {ns}/{address} is not a recursor."
+msgstr "Nameserver {ns}/{address} is not a recursor."
 
 #: NAMESERVER:NO_RESOLUTION
 msgid  "No nameservers succeeded to resolve to an IP address."
 msgstr "No nameserver was successfully resolved to an IP address."
+
+#: NAMESERVER:NO_UPWARD_REFERRAL
+msgid  "None of the following nameservers returns an upward referral : {names}."
+msgstr ""
+"None of the following nameservers returns an upward referral : {names}."
+
+#: NAMESERVER:QNAME_CASE_INSENSITIVE
+msgid  ""
+"Nameserver {ns}/{address} does not preserve original case of queried names."
+msgstr ""
+"Nameserver {ns}/{address} does not preserve original case of queried names "
+"({dname})."
+
+#: NAMESERVER:QNAME_CASE_SENSITIVE
+msgid  "Nameserver {ns}/{address} preserves original case of queried names."
+msgstr ""
+"Nameserver {ns}/{address} preserves original case of queried names ({dname})."
 
 #: NAMESERVER:QUERY_DROPPED
 msgid  "Nameserver {ns}/{address} dropped AAAA query."
@@ -649,65 +878,35 @@ msgstr "Nameserver {ns}/{address} dropped AAAA query."
 msgid  "All nameservers reply with same IP used to query them."
 msgstr "All nameservers reply with same IP used to query them."
 
-#: NAMESERVER:UPWARD_REFERRAL_IRRELEVANT
-msgid  "Upward referral tests skipped for root zone."
-msgstr "Upward referral tests skipped for root zone."
-
 #: NAMESERVER:UPWARD_REFERRAL
 msgid  "Nameserver {ns}/{address} returns an upward referral."
 msgstr "Nameserver {ns}/{address} returns an upward referral."
 
-#: NAMESERVER:NO_UPWARD_REFERRAL
-msgid  "None of the following nameservers returns an upward referral : {names}."
-msgstr "None of the following nameservers returns an upward referral : {names}."
-
-#: NAMESERVER:QNAME_CASE_SENSITIVE
-msgid  "Nameserver {ns}/{address} preserves original case of queried names."
-msgstr "Nameserver {ns}/{address} preserves original case of queried names ({dname})."
-
-#: NAMESERVER:QNAME_CASE_INSENSITIVE
-msgid  "Nameserver {ns}/{address} does not preserve original case of queried names."
-msgstr "Nameserver {ns}/{address} does not preserve original case of queried names ({dname})."
-
-#: NAMESERVER:CASE_QUERY_SAME_ANSWER
-msgid  "When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver {ns}/{address} returns same answers."
-msgstr "When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver {ns}/{address} returns same answers."
-
-#: NAMESERVER:CASE_QUERY_DIFFERENT_ANSWER
-msgid  "When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver {ns}/{address} returns different answers."
-msgstr "When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver {ns}/{address} returns different answers."
-
-#: NAMESERVER:CASE_QUERY_SAME_RC
-msgid  "When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver {ns}/{address} returns same RCODE \"{rcode}\"."
-msgstr "When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver {ns}/{address} returns same RCODE \"{rcode}\"."
-
-#: NAMESERVER:CASE_QUERY_DIFFERENT_RC
-msgid  "When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver {ns}/{address} returns different RCODE (\"{rcode1}\" vs \"{rcode2}\")."
-msgstr "When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver {ns}/{address} returns different RCODE (\"{rcode1}\" vs \"{rcode2}\")."
-
-#: NAMESERVER:CASE_QUERY_NO_ANSWER
-msgid  "When asked for {type} records on \"{query}\", nameserver {ns}/{address} returns nothing."
-msgstr "When asked for {type} records on \"{query}\", nameserver {ns}/{address} returns nothing."
-
-#: NAMESERVER:CASE_QUERIES_RESULTS_OK
-msgid  "When asked for {type} records on \"{query}\" with different cases, all servers reply consistently."
-msgstr "When asked for {type} records on \"{query}\" with different cases, all servers reply consistently."
-
-#: NAMESERVER:CASE_QUERIES_RESULTS_DIFFER
-msgid  "When asked for {type} records on \"{query}\" with different cases, all servers do not reply consistently."
-msgstr "When asked for {type} records on \"{query}\" with different cases, all servers do not reply consistently."
+#: NAMESERVER:UPWARD_REFERRAL_IRRELEVANT
+msgid  "Upward referral tests skipped for root zone."
+msgstr "Upward referral tests skipped for root zone."
 
 #: SYNTAX:DISCOURAGED_DOUBLE_DASH
-msgid  "Domain name ({name}) has a label ({label}) with a double hyphen ('--') in position 3 and 4 (with a prefix which is not 'xn--')."
-msgstr "Domain name ({name}) has a label ({label}) with a double hyphen ('--') in position 3 and 4 (with a prefix which is not 'xn--')."
+msgid  ""
+"Domain name ({name}) has a label ({label}) with a double hyphen ('--') in "
+"position 3 and 4 (with a prefix which is not 'xn--')."
+msgstr ""
+"Domain name ({name}) has a label ({label}) with a double hyphen ('--') in "
+"position 3 and 4 (with a prefix which is not 'xn--')."
 
 #: SYNTAX:INITIAL_HYPHEN
-msgid  "Domain name ({name}) has a label ({label}) starting with an hyphen ('-')."
-msgstr "Domain name ({name}) has a label ({label}) starting with a hyphen ('-')."
+msgid  ""
+"Domain name ({name}) has a label ({label}) starting with an hyphen ('-')."
+msgstr ""
+"Domain name ({name}) has a label ({label}) starting with a hyphen ('-')."
 
 #: SYNTAX:MNAME_DISCOURAGED_DOUBLE_DASH
-msgid  "SOA MNAME ({name}) has a label ({label}) with a double hyphen ('--') in position 3 and 4 (with a prefix which is not 'xn--')."
-msgstr "SOA MNAME ({name}) has a label ({label}) with a double hyphen ('--') in position 3 and 4 (with a prefix which is not 'xn--')."
+msgid  ""
+"SOA MNAME ({name}) has a label ({label}) with a double hyphen ('--') in "
+"position 3 and 4 (with a prefix which is not 'xn--')."
+msgstr ""
+"SOA MNAME ({name}) has a label ({label}) with a double hyphen ('--') in "
+"position 3 and 4 (with a prefix which is not 'xn--')."
 
 #: SYNTAX:MNAME_NON_ALLOWED_CHARS
 msgid  "Found illegal characters in SOA MNAME ({name})."
@@ -722,8 +921,12 @@ msgid  "SOA MNAME ({name}) syntax is valid."
 msgstr "SOA MNAME ({name}) syntax is valid."
 
 #: SYNTAX:MX_DISCOURAGED_DOUBLE_DASH
-msgid  "Domain name MX ({name}) has a label ({label}) with a double hyphen ('--') in position 3 and 4 (with a prefix which is not 'xn--')."
-msgstr "Domain name MX ({name}) has a label ({label}) with a double hyphen ('--') in position 3 and 4 (with a prefix which is not 'xn--')."
+msgid  ""
+"Domain name MX ({name}) has a label ({label}) with a double hyphen ('--') in "
+"position 3 and 4 (with a prefix which is not 'xn--')."
+msgstr ""
+"Domain name MX ({name}) has a label ({label}) with a double hyphen ('--') in "
+"position 3 and 4 (with a prefix which is not 'xn--')."
 
 #: SYNTAX:MX_NON_ALLOWED_CHARS
 msgid  "Found illegal characters in MX ({name})."
@@ -738,8 +941,12 @@ msgid  "Domain name MX ({name}) syntax is valid."
 msgstr "Domain name MX ({name}) syntax is valid."
 
 #: SYNTAX:NAMESERVER_DISCOURAGED_DOUBLE_DASH
-msgid  "Nameserver ({name}) has a label ({label}) with a double hyphen ('--') in position 3 and 4 (with a prefix which is not 'xn--')."
-msgstr "Nameserver ({name}) has a label ({label}) with a double hyphen ('--') in position 3 and 4 (with a prefix which is not 'xn--')."
+msgid  ""
+"Nameserver ({name}) has a label ({label}) with a double hyphen ('--') in "
+"position 3 and 4 (with a prefix which is not 'xn--')."
+msgstr ""
+"Nameserver ({name}) has a label ({label}) with a double hyphen ('--') in "
+"position 3 and 4 (with a prefix which is not 'xn--')."
 
 #: SYNTAX:NAMESERVER_NON_ALLOWED_CHARS
 msgid  "Found illegal characters in the nameserver ({name})."
@@ -758,8 +965,12 @@ msgid  "Found illegal characters in the domain name ({name})."
 msgstr "Found illegal characters in the domain name ({name})."
 
 #: SYNTAX:NO_DOUBLE_DASH
-msgid  "Domain name ({name}) has no label with a double hyphen ('--') in position 3 and 4 (with a prefix which is not 'xn--')."
-msgstr "Domain name ({name}) has no label with a double hyphen ('--') in position 3 and 4 (with a prefix which is not 'xn--')."
+msgid  ""
+"Domain name ({name}) has no label with a double hyphen ('--') in position 3 "
+"and 4 (with a prefix which is not 'xn--')."
+msgstr ""
+"Domain name ({name}) has no label with a double hyphen ('--') in position 3 "
+"and 4 (with a prefix which is not 'xn--')."
 
 #: SYNTAX:NO_ENDING_HYPHENS
 msgid  "Both ends of all labels of the domain name ({name}) have no hyphens."
@@ -778,7 +989,8 @@ msgid  "No illegal characters in the domain name ({name})."
 msgstr "No illegal characters in the domain name ({name})."
 
 #: SYNTAX:RNAME_MISUSED_AT_SIGN
-msgid  "There must be no misused '@' character in the SOA RNAME field ({rname})."
+msgid  ""
+"There must be no misused '@' character in the SOA RNAME field ({rname})."
 msgstr "Misused '@' character found in SOA RNAME field ({rname})."
 
 #: SYNTAX:RNAME_NO_AT_SIGN
@@ -805,41 +1017,57 @@ msgstr "Added a fake delegation for domain {domain} to name server {ns}."
 msgid  "Not enough data about {zone} was found to be able to run tests."
 msgstr "Not enough data about {zone} was found to be able to run tests."
 
-#: SYSTEM:CONFIG_FILE
-msgid  "Configuration was read from {name}."
-msgstr "Configuration was read from {name}."
+#: SYSTEM:PROFILE_FILE
+msgid  "Profile was read from {name}."
+msgstr "Profile was read from {name}."
 
 #: SYSTEM:DEPENDENCY_VERSION
 msgid  "Using prerequisite module {name} version {version}."
 msgstr "Using prerequisite module {name} version {version}."
 
-#: SYSTEM:GLOBAL_VERSION
-msgid "Using version {version} of the Zonemaster engine."
-msgstr "Using version {version} of the Zonemaster engine."
-
 #: SYSTEM:FAKE_DELEGATION
 msgid  "Followed a fake delegation."
 msgstr "Followed a fake delegation."
 
-#: SYSTEM:FAKE_DELEGATION_TO_SELF
-msgid  "Name server {ns} not adding fake delegation for domain {domain} to itself."
-msgstr "Name server {ns} not adding fake delegation for domain {domain} to itself."
-
 #: SYSTEM:FAKE_DELEGATION_IN_ZONE_NO_IP
-msgid  "The fake delegation of domain {domain} includes an in-zone name server {ns} without mandatory glue (without IP address)."
-msgstr "The fake delegation of domain {domain} includes an in-zone name server {ns} without mandatory glue (without IP address)."
+msgid  ""
+"The fake delegation of domain {domain} includes an in-zone name server {ns} "
+"without mandatory glue (without IP address)."
+msgstr ""
+"The fake delegation of domain {domain} includes an in-zone name server {ns} "
+"without mandatory glue (without IP address)."
 
 #: SYSTEM:FAKE_DELEGATION_NO_IP
-msgid  "The fake delegation of domain {domain} includes a name server {ns} that cannot be resolved to any IP address."
-msgstr "The fake delegation of domain {domain} includes a name server {ns} that cannot be resolved to any IP address."
+msgid  ""
+"The fake delegation of domain {domain} includes a name server {ns} that "
+"cannot be resolved to any IP address."
+msgstr ""
+"The fake delegation of domain {domain} includes a name server {ns} that "
+"cannot be resolved to any IP address."
+
+#: SYSTEM:FAKE_DELEGATION_TO_SELF
+msgid  ""
+"Name server {ns} not adding fake delegation for domain {domain} to itself."
+msgstr ""
+"Name server {ns} not adding fake delegation for domain {domain} to itself."
+
+#: SYSTEM:GLOBAL_VERSION
+msgid  "Using version {version} of the Zonemaster engine."
+msgstr "Using version {version} of the Zonemaster engine."
 
 #: SYSTEM:LOGGER_CALLBACK_ERROR
 msgid  "Logger callback died with error: {exception}"
 msgstr "Logger callback died with error: {exception}"
 
 #: SYSTEM:LOOKUP_ERROR
-msgid  "DNS query to {ns} for {name}/{type}/{class} failed with error: {message}"
-msgstr "DNS query to {ns} for {name}/{type}/{class} failed with error: {message}"
+msgid  ""
+"DNS query to {ns} for {name}/{type}/{class} failed with error: {message}"
+msgstr ""
+"DNS query to {ns} for {name}/{type}/{class} failed with error: {message}"
+
+#: SYSTEM:MODULE_END
+msgid  "Module {module} finished running."
+msgstr "Module {module} finished running."
 
 #: SYSTEM:MODULE_ERROR
 msgid  "Fatal error in {module}: {msg}"
@@ -849,21 +1077,21 @@ msgstr "Fatal error in {module}: {msg}"
 msgid  "Using module {module} version {version}."
 msgstr "Using module {module} version {version}."
 
-#: SYSTEM:MODULE_END
-msgid  "Module {module} finished running."
-msgstr "Module {module} finished running."
-
 #: SYSTEM:NO_NETWORK
 msgid  "Both IPv4 and IPv6 are disabled."
 msgstr "Both IPv4 and IPv6 are disabled."
 
+#: SYSTEM:PACKET_BIG
+msgid  ""
+"Packet size ({size}) exceeds common maximum size of {maxsize} bytes (try "
+"with \"{command}\")."
+msgstr ""
+"Packet size ({size}) exceeds common maximum size of {maxsize} bytes (try "
+"with \"{command}\")."
+
 #: SYSTEM:POLICY_DISABLED
 msgid  "The module {name} was disabled by the policy."
 msgstr "The module {name} was disabled by the policy."
-
-#: SYSTEM:POLICY_FILE
-msgid  "Policy was read from {name}."
-msgstr "Policy was read from {name}."
 
 #: SYSTEM:SKIP_IPV4_DISABLED
 msgid  "IPv4 is disabled, not sending query to {ns}."
@@ -878,24 +1106,34 @@ msgid  "Request to run unknown method {method} in module {module}."
 msgstr "Request to run unknown method {method} in module {module}."
 
 #: SYSTEM:UNKNOWN_MODULE
-msgid  "Request to run {method} in unknown module {module}. Known modules: {known}."
-msgstr "Request to run {method} in unknown module {module}. Known modules: {known}."
-
-#: SYSTEM:PACKET_BIG
-msgid  "Packet size ({size}) exceeds common maximum size of {maxsize} bytes (try with \"{command}\")."
-msgstr "Packet size ({size}) exceeds common maximum size of {maxsize} bytes (try with \"{command}\")."
+msgid  ""
+"Request to run {method} in unknown module {module}. Known modules: {known}."
+msgstr ""
+"Request to run {method} in unknown module {module}. Known modules: {known}."
 
 #: ZONE:EXPIRE_LOWER_THAN_REFRESH
-msgid  "SOA 'expire' value ({expire}) is lower than the SOA 'refresh' value ({refresh})."
-msgstr "SOA 'expire' value ({expire}) is less than the SOA 'refresh' value ({refresh})."
+msgid  ""
+"SOA 'expire' value ({expire}) is lower than the SOA 'refresh' value "
+"({refresh})."
+msgstr ""
+"SOA 'expire' value ({expire}) is less than the SOA 'refresh' value "
+"({refresh})."
 
 #: ZONE:EXPIRE_MINIMUM_VALUE_LOWER
-msgid  "SOA 'expire' value ({expire}) is less than the recommended one ({required_expire})."
-msgstr "SOA 'expire' value ({expire}) is less than the recommended minimum ({required_expire})."
+msgid  ""
+"SOA 'expire' value ({expire}) is less than the recommended one "
+"({required_expire})."
+msgstr ""
+"SOA 'expire' value ({expire}) is less than the recommended minimum "
+"({required_expire})."
 
 #: ZONE:EXPIRE_MINIMUM_VALUE_OK
-msgid  "SOA 'expire' value ({expire}) is higher than the minimum recommended value ({required_expire}) and not lower than the 'refresh' value ({refresh})."
-msgstr "SOA 'expire' value ({expire}) is higher than the minimum recommended value ({required_expire}) and not lower than the 'refresh' value ({refresh})."
+msgid  ""
+"SOA 'expire' value ({expire}) is higher than the minimum recommended value "
+"({required_expire}) and not lower than the 'refresh' value ({refresh})."
+msgstr ""
+"SOA 'expire' value ({expire}) is higher than the minimum recommended value "
+"({required_expire}) and not lower than the 'refresh' value ({refresh})."
 
 #: ZONE:MNAME_HAS_NO_ADDRESS
 msgid  "No IP address found for SOA 'mname' nameserver ({mname})."
@@ -910,16 +1148,24 @@ msgid  "SOA 'mname' value ({mname}) refers to a NS which is an alias (CNAME)."
 msgstr "SOA 'mname' value ({mname}) refers to a NS which is an alias (CNAME)."
 
 #: ZONE:MNAME_IS_NOT_CNAME
-msgid  "SOA 'mname' value ({mname}) refers to a NS which is not an alias (CNAME)."
-msgstr "SOA 'mname' value ({mname}) refers to a NS which is not an alias (CNAME)."
+msgid  ""
+"SOA 'mname' value ({mname}) refers to a NS which is not an alias (CNAME)."
+msgstr ""
+"SOA 'mname' value ({mname}) refers to a NS which is not an alias (CNAME)."
 
 #: ZONE:MNAME_NOT_AUTHORITATIVE
-msgid  "SOA 'mname' nameserver {ns}/{address} is not authoritative for '{zone}' zone."
-msgstr "SOA 'mname' nameserver {ns}/{address} is not authoritative for '{zone}' zone."
+msgid  ""
+"SOA 'mname' nameserver {ns}/{address} is not authoritative for '{zone}' zone."
+msgstr ""
+"SOA 'mname' nameserver {ns}/{address} is not authoritative for '{zone}' zone."
 
 #: ZONE:MNAME_NOT_IN_GLUE
-msgid  "SOA 'mname' nameserver ({mname}) is not listed in \"parent\" NS records for tested zone ({ns})."
-msgstr "SOA 'mname' nameserver ({mname}) is not listed in \"parent\" NS records for tested zone ({ns})."
+msgid  ""
+"SOA 'mname' nameserver ({mname}) is not listed in \"parent\" NS records for "
+"tested zone ({ns})."
+msgstr ""
+"SOA 'mname' nameserver ({mname}) is not listed in \"parent\" NS records for "
+"tested zone ({ns})."
 
 #: ZONE:MNAME_NO_RESPONSE
 msgid  "SOA 'mname' nameserver {ns}/{address} does not respond."
@@ -943,41 +1189,77 @@ msgstr "MX record for the domain is not pointing to a CNAME."
 
 #: ZONE:NO_MX_RECORD
 msgid  "No target (MX, A or AAAA record) to deliver e-mail for the domain name."
-msgstr "No target (MX, A or AAAA record) to deliver e-mail for the domain name."
+msgstr ""
+"No target (MX, A or AAAA record) to deliver e-mail for the domain name."
 
 #: ZONE:REFRESH_HIGHER_THAN_RETRY
-msgid  "SOA 'refresh' value ({refresh}) is higher than the SOA 'retry' value ({retry})."
-msgstr "SOA 'refresh' value ({refresh}) is greater than the SOA 'retry' value ({retry})."
+msgid  ""
+"SOA 'refresh' value ({refresh}) is higher than the SOA 'retry' value "
+"({retry})."
+msgstr ""
+"SOA 'refresh' value ({refresh}) is greater than the SOA 'retry' value "
+"({retry})."
 
 #: ZONE:REFRESH_LOWER_THAN_RETRY
-msgid  "SOA 'refresh' value ({refresh}) is lower than the SOA 'retry' value ({retry})."
-msgstr "SOA 'refresh' value ({refresh}) is lower than the SOA 'retry' value ({retry})."
+msgid  ""
+"SOA 'refresh' value ({refresh}) is lower than the SOA 'retry' value "
+"({retry})."
+msgstr ""
+"SOA 'refresh' value ({refresh}) is lower than the SOA 'retry' value "
+"({retry})."
 
 #: ZONE:REFRESH_MINIMUM_VALUE_LOWER
-msgid  "SOA 'refresh' value ({refresh}) is less than the recommended one ({required_refresh})."
-msgstr "SOA 'refresh' value ({refresh}) is less than the recommended minimum ({required_refresh})."
+msgid  ""
+"SOA 'refresh' value ({refresh}) is less than the recommended one "
+"({required_refresh})."
+msgstr ""
+"SOA 'refresh' value ({refresh}) is less than the recommended minimum "
+"({required_refresh})."
 
 #: ZONE:REFRESH_MINIMUM_VALUE_OK
-msgid  "SOA 'refresh' value ({refresh}) is higher than the minimum recommended value ({required_refresh})."
-msgstr "SOA 'refresh' value ({refresh}) is greater than the minimum recommended value ({required_refresh})."
+msgid  ""
+"SOA 'refresh' value ({refresh}) is higher than the minimum recommended value "
+"({required_refresh})."
+msgstr ""
+"SOA 'refresh' value ({refresh}) is greater than the minimum recommended "
+"value ({required_refresh})."
 
 #: ZONE:RETRY_MINIMUM_VALUE_LOWER
-msgid  "SOA 'retry' value ({retry}) is less than the recommended one ({required_retry})."
-msgstr "SOA 'retry' value ({retry}) is less than the recommended minimum ({required_retry})."
+msgid  ""
+"SOA 'retry' value ({retry}) is less than the recommended one "
+"({required_retry})."
+msgstr ""
+"SOA 'retry' value ({retry}) is less than the recommended minimum "
+"({required_retry})."
 
 #: ZONE:RETRY_MINIMUM_VALUE_OK
-msgid  "SOA 'retry' value ({retry}) is more than the minimum recommended value ({required_retry})."
-msgstr "SOA 'retry' value ({retry}) is greater than the minimum recommended value ({required_retry})."
+msgid  ""
+"SOA 'retry' value ({retry}) is more than the minimum recommended value "
+"({required_retry})."
+msgstr ""
+"SOA 'retry' value ({retry}) is greater than the minimum recommended value "
+"({required_retry})."
 
 #: ZONE:SOA_DEFAULT_TTL_MAXIMUM_VALUE_HIGHER
-msgid  "SOA 'minimum' value ({minimum}) is higher than the recommended one ({highest_minimum})."
-msgstr "SOA 'minimum' value ({minimum}) is greater than the recommended one ({highest_minimum})."
+msgid  ""
+"SOA 'minimum' value ({minimum}) is higher than the recommended one "
+"({highest_minimum})."
+msgstr ""
+"SOA 'minimum' value ({minimum}) is greater than the recommended one "
+"({highest_minimum})."
 
 #: ZONE:SOA_DEFAULT_TTL_MAXIMUM_VALUE_LOWER
-msgid  "SOA 'minimum' value ({minimum}) is less than the recommended one ({lowest_minimum})."
-msgstr "SOA 'minimum' value ({minimum}) is less than the recommended minimum ({lowest_minimum})."
+msgid  ""
+"SOA 'minimum' value ({minimum}) is less than the recommended one "
+"({lowest_minimum})."
+msgstr ""
+"SOA 'minimum' value ({minimum}) is less than the recommended minimum "
+"({lowest_minimum})."
 
 #: ZONE:SOA_DEFAULT_TTL_MAXIMUM_VALUE_OK
-msgid  "SOA 'minimum' value ({minimum}) is between the recommended ones ({lowest_minimum}/{highest_minimum})."
-msgstr "SOA 'minimum' value ({minimum}) is within the recommended ones ({lowest_minimum}/{highest_minimum})."
-
+msgid  ""
+"SOA 'minimum' value ({minimum}) is between the recommended ones "
+"({lowest_minimum}/{highest_minimum})."
+msgstr ""
+"SOA 'minimum' value ({minimum}) is within the recommended ones "
+"({lowest_minimum}/{highest_minimum})."

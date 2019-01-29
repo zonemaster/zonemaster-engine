@@ -95,6 +95,12 @@ sub common {
     return $count;
 } ## end sub common
 
+sub is_in_bailiwick {
+    my ( $self, $other ) = @_;
+
+    return scalar( @{ $self->labels } ) == $self->common( $other );
+}
+
 sub prepend {
     my ( $self, $label ) = @_;
     my @labels = ( $label, @{ $self->labels } );
@@ -177,6 +183,11 @@ Returns a new L<Zonemaster::Engine::DNSName> object, representing the name of th
 
 Returns the number of labels from the rightmost going left that are the same in both names. Used by the recursor to check for redirections going
 up the DNS tree.
+
+=item is_in_bailiwick($other)
+
+Returns true if $other is in-bailiwick of $self, and false otherwise.
+See also L<https://tools.ietf.org/html/rfc7719#section-6>.
 
 =item prepend($label)
 

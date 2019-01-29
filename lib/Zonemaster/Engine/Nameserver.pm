@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Nameserver;
 
-use version; our $VERSION = version->declare("v1.1.6");
+use version; our $VERSION = version->declare("v1.1.14");
 
 use 5.014002;
 use Moose;
@@ -37,8 +37,20 @@ has 'dns'   => ( is => 'ro', isa => 'Zonemaster::LDNS',                     lazy
 has 'cache' => ( is => 'ro', isa => 'Zonemaster::Engine::Nameserver::Cache', lazy_build => 1 );
 has 'times' => ( is => 'ro', isa => 'ArrayRef',                      default    => sub { [] } );
 
-has 'source_address' =>
-  ( is => 'ro', isa => 'Maybe[Str]', lazy => 1, default => sub { return Zonemaster::Engine->config->resolver_source } );
+has 'source_address' => (
+    is      => 'ro',
+    isa     => 'Maybe[Str]',
+    lazy    => 1,
+    default => sub {
+        my $value = Zonemaster::Engine::Profile->effective->get( q{resolver.source} );
+        if ( $value eq $RESOLVER_SOURCE_OS_DEFAULT ) {
+            return;
+        }
+        else {
+            return $value;
+        }
+    }
+);
 
 has 'fake_delegations' => ( is => 'ro', isa => 'HashRef', default => sub { {} } );
 has 'fake_ds'          => ( is => 'ro', isa => 'HashRef', default => sub { {} } );
@@ -76,10 +88,14 @@ sub _build_dns {
     my $res = Zonemaster::LDNS->new( $self->address->ip );
     $res->recurse( 0 );
 
-    my %defaults = %{ Zonemaster::Engine->config->resolver_defaults };
-    foreach my $flag ( keys %defaults ) {
-        $res->$flag( $defaults{$flag} );
-    }
+    $res->retry( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.retry} ) );
+    $res->retrans( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.retrans} ) );
+    $res->dnssec( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.dnssec} ) );
+    $res->usevc( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.usevc} ) );
+    $res->igntc( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.igntc} ) );
+    $res->recurse( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.recurse} ) );
+    $res->debug( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.debug} ) );
+    $res->edns_size( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.edns_size} ) );
 
     if ( $self->source_address ) {
         $res->source( $self->source_address );
@@ -102,12 +118,12 @@ sub query {
     my ( $self, $name, $type, $href ) = @_;
     $type //= 'A';
 
-    if ( $self->address->version == 4 and not Zonemaster::Engine->config->ipv4_ok ) {
+    if ( $self->address->version == 4 and not Zonemaster::Engine::Profile->effective->get( q{net.ipv4} ) ) {
         Zonemaster::Engine->logger->add( IPV4_BLOCKED => { ns => $self->string } );
         return;
     }
 
-    if ( $self->address->version == 6 and not Zonemaster::Engine->config->ipv6_ok ) {
+    if ( $self->address->version == 6 and not Zonemaster::Engine::Profile->effective->get( q{net.ipv6} ) ) {
         Zonemaster::Engine->logger->add( IPV6_BLOCKED => { ns => $self->string } );
         return;
     }
@@ -122,13 +138,11 @@ sub query {
         }
     );
 
-    my %defaults = %{ Zonemaster::Engine->config->resolver_defaults };
-
     my $class     = $href->{class}     // 'IN';
-    my $dnssec    = $href->{dnssec}    // $defaults{dnssec};
-    my $usevc     = $href->{usevc}     // $defaults{usevc};
-    my $recurse   = $href->{recurse}   // $defaults{recurse};
-    my $edns_size = $href->{edns_size} // $defaults{edns_size};
+    my $dnssec    = $href->{dnssec}    // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.dnssec} );
+    my $usevc     = $href->{usevc}     // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.usevc} );
+    my $recurse   = $href->{recurse}   // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.recurse} );
+    my $edns_size = $href->{edns_size} // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.edns_size} );
 
     # Fake a DS answer
     if ( $type eq 'DS' and $class eq 'IN' and $self->fake_ds->{ lc( $name ) } ) {
@@ -181,12 +195,36 @@ sub query {
         } ## end if ( $name =~ m/([.]|\A)\Q$fname\E\z/xi)
     } ## end foreach my $fname ( sort keys...)
 
-    if ( not exists( $self->cache->data->{"$name"}{"\U$type"}{"\U$class"}{$dnssec}{$usevc}{$recurse}{$edns_size} ) ) {
-        $self->cache->data->{"$name"}{"\U$type"}{"\U$class"}{$dnssec}{$usevc}{$recurse}{$edns_size} =
-          $self->_query( $name, $type, $href );
+    my $p;
+    my $edns_special_case = 0;
+    if ( defined $href->{edns_details} ) {
+        if ( defined $href->{edns_details}{version} and $href->{edns_details}{version} != 0 ) {
+            $edns_special_case = 1;
+        }
+        elsif ( defined $href->{edns_details}{z} ) {
+            $edns_special_case = 1;
+        }
+        elsif ( defined $href->{edns_details}{extended_rcode} ) {
+            $edns_special_case = 1;
+        }
+        elsif ( defined $href->{edns_details}{data} ) {
+            $edns_special_case = 1;
+        }
+        elsif ( defined $href->{edns_details}{udp_size} ) {
+            $edns_size = $href->{edns_details}{udp_size};
+        }
     }
 
-    my $p = $self->cache->data->{"$name"}{"\U$type"}{"\U$class"}{$dnssec}{$usevc}{$recurse}{$edns_size};
+    if ( not $edns_special_case ) {
+        if ( not exists( $self->cache->data->{"$name"}{"\U$type"}{"\U$class"}{$dnssec}{$usevc}{$recurse}{$edns_size} ) ) {
+            $self->cache->data->{"$name"}{"\U$type"}{"\U$class"}{$dnssec}{$usevc}{$recurse}{$edns_size} =
+              $self->_query( $name, $type, $href, $edns_special_case );
+        }
+        $p = $self->cache->data->{"$name"}{"\U$type"}{"\U$class"}{$dnssec}{$usevc}{$recurse}{$edns_size};
+    }
+    else {
+        $p = $self->_query( $name, $type, $href, $edns_special_case );
+    }
     Zonemaster::Engine->logger->add( CACHED_RETURN => { packet => ( $p ? $p->string : 'undef' ) } );
 
     return $p;
@@ -248,13 +286,13 @@ sub add_fake_ds {
 } ## end sub add_fake_ds
 
 sub _query {
-    my ( $self, $name, $type, $href ) = @_;
+    my ( $self, $name, $type, $href, $edns_special_case ) = @_;
     my %flags;
 
     $type //= 'A';
     $href->{class} //= 'IN';
 
-    if ( Zonemaster::Engine->config->no_network ) {
+    if ( Zonemaster::Engine::Profile->effective->get( q{no_network} ) ) {
         croak sprintf
           "External query for %s, %s attempted to %s while running with no_network",
           $name, $type, $self->string;
@@ -270,13 +308,18 @@ sub _query {
         }
     );
 
-    my %defaults = %{ Zonemaster::Engine->config->resolver_defaults };
-
     # Make sure we have a value for each flag
-    foreach my $flag ( keys %defaults ) {
-        $flags{$flag} = $href->{$flag} // $defaults{$flag};
+    $flags{q{retry}}     = $href->{q{retry}}     // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.retry} );
+    $flags{q{retrans}}   = $href->{q{retrans}}   // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.retrans} );
+    $flags{q{dnssec}}    = $href->{q{dnssec}}    // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.dnssec} );
+    $flags{q{usevc}}     = $href->{q{usevc}}     // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.usevc} );
+    $flags{q{igntc}}     = $href->{q{igntc}}     // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.igntc} );
+    $flags{q{fallback}}  = $href->{q{fallback}}  // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.fallback} );
+    $flags{q{recurse}}   = $href->{q{recurse}}   // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.recurse} );
+    $flags{q{edns_size}} = $href->{q{edns_size}} // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.edns_size} );
+    if ( defined $href->{edns_details} and $href->{edns_details}{udp_size} ) {
+        $flags{q{edns_size}} = $href->{edns_details}{udp_size};
     }
-
     # Set flags for this query
     foreach my $flag ( keys %flags ) {
         $self->dns->$flag( $flags{$flag} );
@@ -298,7 +341,38 @@ sub _query {
         );
     }
     else {
-        $res = eval { $self->dns->query( "$name", $type, $href->{class} ) };
+        if ( $edns_special_case ) {
+            my $pkt = Zonemaster::LDNS::Packet->new("$name", $type, $href->{class} );
+            if ( defined $href->{edns_details} and defined $href->{edns_details}{version} and $href->{edns_details}{version} != 0 ) {
+                $pkt->set_edns_present();
+                $pkt->edns_version($href->{edns_details}{version});
+            }
+	    if ( defined $href->{edns_details} and defined $href->{edns_details}{z} ) {
+                $pkt->set_edns_present();
+                $pkt->edns_z($href->{edns_details}{z});
+            }
+	    if ( defined $href->{edns_details} and defined $href->{edns_details}{do} ) {
+                $pkt->set_edns_present();
+                $pkt->do($href->{edns_details}{do});
+            }
+	    if ( defined $href->{edns_details} and defined $href->{edns_details}{udp_size} ) {
+                $pkt->set_edns_present();
+                $pkt->edns_size($href->{edns_details}{udp_size});
+            }
+	    if ( defined $href->{edns_details} and defined $href->{edns_details}{extended_rcode} ) {
+                $pkt->set_edns_present();
+                $pkt->edns_rcode($href->{edns_details}{extended_rcode});
+            }
+            if ( defined $href->{edns_details} and defined $href->{edns_details}{data} ) {
+                $pkt->set_edns_present();
+                $pkt->edns_data($href->{edns_details}{data});
+            }
+
+	    $res = eval { $self->dns->query_with_pkt( $pkt ) };
+        }
+        else {
+            $res = eval { $self->dns->query( "$name", $type, $href->{class} ) };
+        }
         if ( $@ ) {
             my $msg = "$@";
             my $trailing_info = " at ".__FILE__;
@@ -315,8 +389,9 @@ sub _query {
     push @{ $self->times }, ( time() - $before );
 
     # Reset to defaults
+
     foreach my $flag ( keys %flags ) {
-        $self->dns->$flag( $defaults{$flag} );
+        $self->dns->$flag( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.}.$flag ) );
     }
 
     if ( $res ) {
@@ -477,18 +552,18 @@ sub axfr {
     my ( $self, $domain, $callback, $class ) = @_;
     $class //= 'IN';
 
-    if ( Zonemaster::Engine->config->no_network ) {
+    if ( Zonemaster::Engine::Profile->effective->get( q{no_network} ) ) {
         croak sprintf
           "External AXFR query for %s attempted to %s while running with no_network",
           $domain, $self->string;
     }
 
-    if ( $self->address->version == 4 and not Zonemaster::Engine->config->ipv4_ok ) {
+    if ( $self->address->version == 4 and not Zonemaster::Engine::Profile->effective->get( q{net.ipv4} ) ) {
         Zonemaster::Engine->logger->add( IPV4_BLOCKED => { ns => $self->string } );
         return;
     }
 
-    if ( $self->address->version == 6 and not Zonemaster::Engine->config->ipv6_ok ) {
+    if ( $self->address->version == 6 and not Zonemaster::Engine::Profile->effective->get( q{net.ipv6} ) ) {
         Zonemaster::Engine->logger->add( IPV6_BLOCKED => { ns => $self->string } );
         return;
     }
@@ -631,6 +706,10 @@ Set the number of times the query is tried.
 =item igntc
 
 If set to true, incoming response packets with the TC flag set are not automatically retried over TCP.
+
+=item fallback
+
+If set to true, incoming response packets with the TC flag set fall back to EDNS and/or TCP.
 
 =back
 

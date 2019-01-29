@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Util;
 
-use version; our $VERSION = version->declare("v1.1.3");
+use version; our $VERSION = version->declare("v1.1.11");
 
 use 5.014002;
 
@@ -11,11 +11,12 @@ use warnings;
 
 use Zonemaster::Engine;
 use Zonemaster::Engine::DNSName;
+use Zonemaster::Engine::Constants qw[:ip];
 use Pod::Simple::SimpleTree;
 
 ## no critic (Modules::ProhibitAutomaticExportation)
 our @EXPORT      = qw[ ns info name pod_extract_for scramble_case ];
-our @EXPORT_OK   = qw[ ns info name pod_extract_for policy scramble_case ];
+our @EXPORT_OK   = qw[ ns info name pod_extract_for test_levels scramble_case ];
 our %EXPORT_TAGS = ( all => \@EXPORT_OK );
 
 ## no critic (Subroutines::RequireArgUnpacking)
@@ -29,8 +30,30 @@ sub info {
     return Zonemaster::Engine->logger->add( $tag, $argref );
 }
 
-sub policy {
-    return Zonemaster::Engine->config->policy;
+sub should_run_test {
+    my ( $test_name ) = @_;
+    my %test_names = map { $_ => 1 } @{ Zonemaster::Engine::Profile->effective->get( q{test_cases} ) };
+
+    return exists $test_names{$test_name};
+}
+
+sub ipversion_ok {
+    my ( $version ) = @_;
+
+    if ( $version == $IP_VERSION_4 ) {
+        return Zonemaster::Engine::Profile->effective->get( q{net.ipv4} );
+    }
+    elsif ( $version == $IP_VERSION_6 ) {
+        return Zonemaster::Engine::Profile->effective->get( q{net.ipv6} );
+    }
+    else {
+        return;
+    }
+}
+
+sub test_levels {
+
+    return Zonemaster::Engine::Profile->effective->get( q{test_levels} );
 }
 
 sub name {
@@ -129,10 +152,6 @@ sub scramble_case {
     return $newstring;
 }    # end sub scramble_case
 
-sub supports_ipv6 {
-    return;
-}
-
 1;
 
 =head1 NAME
@@ -182,8 +201,16 @@ results are undefined.
 
 This routine provides a special effect: sCraMBliNg tHe CaSe
 
-=item supports_ipv6
+=item should_run_test
 
-Check if ZOnemaster hosting server supports IPv6.
+Check if a test is blacklisted and should run or not.
+
+=item ipversion_ok
+
+Check if IP version operations are permitted. Tests are done against Zonemaster::Engine::Profile->effective content.
+
+=item test_levels
+
+WIP, here to please L<Pod::Coverage>.
 
 =back

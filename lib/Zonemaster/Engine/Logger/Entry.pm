@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Logger::Entry;
 
-use version; our $VERSION = version->declare("v1.1.4");
+use version; our $VERSION = version->declare("v1.1.6");
 
 use 5.014002;
 use warnings;
@@ -30,7 +30,7 @@ my $json = JSON::PP->new->allow_blessed->convert_blessed->canonical;
 has 'module'    => ( is => 'ro', isa => 'Str',                lazy_build => 1 );
 has 'tag'       => ( is => 'ro', isa => 'Str',                required   => 1 );
 has 'args'      => ( is => 'ro', isa => 'Maybe[HashRef]',     required   => 0 );
-has 'timestamp' => ( is => 'ro', isa => 'Num',                default    => sub { time() - $start_time } );
+has 'timestamp' => ( is => 'ro', isa => 'Num',                default    => sub { my $time = time() - $start_time; $time =~ s/,/\./; $time; } );
 has 'trace'     => ( is => 'ro', isa => 'ArrayRef[ArrayRef]', builder    => '_build_trace' );
 has 'level'     => ( is => 'ro', isa => 'Str',                lazy_build => 1, writer => '_set_level' );
 
@@ -68,8 +68,8 @@ sub _build_level {
     my ( $self ) = @_;
     my $string;
 
-    if ( Zonemaster::Engine->config->policy->{ $self->module }{ $self->tag } ) {
-        $string = uc Zonemaster::Engine->config->policy->{ $self->module }{ $self->tag };
+    if ( Zonemaster::Engine::Profile->effective->get( q{test_levels} )->{ $self->module }{ $self->tag } ) {
+        $string = uc Zonemaster::Engine::Profile->effective->get( q{test_levels} )->{ $self->module }{ $self->tag };
     }
     else {
         $string = 'DEBUG';

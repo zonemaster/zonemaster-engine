@@ -1,0 +1,31 @@
+{
+   "net" : {
+      "ipv4" : true,
+      "ipv6" :true 
+   },
+   "no_network" : true,
+   "resolver" : {
+      "defaults" : {
+         "debug" : false,
+         "dnssec" : false,
+         "igntc" : false,
+         "recurse" : false,
+         "retrans" : 3,
+         "retry" : 2,
+         "usevc" :false 
+      }
+   },
+   "logfilter": {
+       "SYSTEM": {
+           "FILTER_THIS": [
+               {
+                   "when": {
+                       "when": 1,
+                       "and": ["this", "or"]
+                   },
+                   "set": "INFO"
+               }
+           ]
+       }
+   }
+}

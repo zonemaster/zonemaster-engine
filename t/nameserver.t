@@ -8,7 +8,7 @@ my $datafile = 't/nameserver.data';
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die "Stored data file missing" if not -r $datafile;
     Zonemaster::Engine::Nameserver->restore( $datafile );
-    Zonemaster::Engine->config->no_network( 1 );
+    Zonemaster::Engine::Profile->effective->set( q{no_network}, 1 );
 }
 
 my $nsv6 = new_ok( 'Zonemaster::Engine::Nameserver' => [ { name => 'ns.nic.se', address => '2a00:801:f0:53::53' } ] );
@@ -64,14 +64,14 @@ my $p = $broken->query( 'www.iis.se' );
 ok( !$p, 'no response from broken server' );
 
 my $googlens = ns( 'ns1.google.com', '216.239.32.10' );
-my $save = Zonemaster::Engine->config->no_network;
-Zonemaster::Engine->config->no_network( 1 );
+my $save = Zonemaster::Engine::Profile->effective->get( q{no_network} );
+Zonemaster::Engine::Profile->effective->set( q{no_network}, 1 );
 delete( $googlens->cache->{'www.google.com'} );
 eval { $googlens->query( 'www.google.com', 'TXT' ) };
 like( $@,
-    qr{External query for www.google.com, TXT attempted to ns1.google.com/216.239.32.10 while running with no_network}i
+    qr{External query for www.google.com, TXT attempted to ns1.google.com/216.239.32.10 while running with no_network}
 );
-Zonemaster::Engine->config->no_network( $save );
+Zonemaster::Engine::Profile->effective->set( q{no_network}, $save );
 
 @{ $nsv6->times } = ( qw[2 4 4 4 5 5 7 9] );
 is( $nsv6->stddev_time, 2, 'known value check' );
@@ -88,15 +88,15 @@ foreach my $ns ( Zonemaster::Engine::Nameserver->all_known_nameservers ) {
 
 ok( scalar( keys %Zonemaster::Engine::Nameserver::Cache::object_cache ) >= 4 );
 
-Zonemaster::Engine->config->ipv4_ok( 0 );
-Zonemaster::Engine->config->ipv6_ok( 0 );
+Zonemaster::Engine::Profile->effective->set( q{net.ipv4}, 0 );
+Zonemaster::Engine::Profile->effective->set( q{net.ipv6}, 0 );
 my $p5 = $nsv6->query( 'iis.se', 'SOA', { dnssec => 1 } );
 my $p6 = $nsv4->query( 'iis.se', 'SOA', { dnssec => 1 } );
 ok( !defined( $p5 ), 'IPv4 blocked' );
 ok( !defined( $p6 ), 'IPv6 blocked' );
 
-Zonemaster::Engine->config->ipv4_ok( 1 );
-Zonemaster::Engine->config->ipv6_ok( 1 );
+Zonemaster::Engine::Profile->effective->set( q{net.ipv4}, 1 );
+Zonemaster::Engine::Profile->effective->set( q{net.ipv6}, 1 );
 $p5 = $nsv6->query( 'iis.se', 'SOA', { dnssec => 1 } );
 $p6 = $nsv4->query( 'iis.se', 'SOA', { dnssec => 1 } );
 ok( defined( $p5 ), 'IPv4 not blocked' );
@@ -118,12 +118,12 @@ isa_ok( $dsrr, 'Zonemaster::LDNS::RR::DS' );
 is( $dsrr->keytag,    16696,      'Expected keytag' );
 is( $dsrr->hexdigest, 'deadbeef', 'Expected digest data' );
 
-Zonemaster::Engine->config->resolver_source('127.0.0.1');
+Zonemaster::Engine::Profile->effective->set( q{resolver.source}, q{127.0.0.1} );
 my $ns_test = new_ok( 'Zonemaster::Engine::Nameserver' => [ { name => 'ns.nic.se', address => '212.247.7.228' } ] );
 is($ns_test->dns->source, '127.0.0.1', 'Source address set.');
 
-Zonemaster::Engine->config->no_network( 0 );
-# Address was 127.0.0.17 (https://github.com/dotse/zonemaster-engine/issues/219).
+Zonemaster::Engine::Profile->effective->set( q{no_network}, 0 );
+# Address was 127.0.0.17 (https://github.com/zonemaster/zonemaster-engine/issues/219).
 # 192.0.2.17 is part of TEST-NET-1 IP address range (See RFC6890) and should be reserved
 # for documentation.
 my $fail_ns = Zonemaster::Engine::Nameserver->new( { name => 'fail', address => '192.0.2.17' } );

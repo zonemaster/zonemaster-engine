@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::Syntax;
 
-use version; our $VERSION = version->declare("v1.0.3");
+use version; our $VERSION = version->declare("v1.0.5");
 
 use strict;
 use warnings;
@@ -13,6 +13,8 @@ use Zonemaster::Engine::Recursor;
 use Zonemaster::Engine::DNSName;
 use Zonemaster::Engine::TestMethods;
 use Zonemaster::Engine::Constants qw[:name];
+use Zonemaster::LDNS;
+use Zonemaster::Engine::Packet;
 
 use Carp;
 
@@ -28,26 +30,26 @@ sub all {
     my ( $class, $zone ) = @_;
     my @results;
 
-    push @results, $class->syntax01( $zone->name ) if Zonemaster::Engine->config->should_run( 'syntax01' );
-    push @results, $class->syntax02( $zone->name ) if Zonemaster::Engine->config->should_run( 'syntax02' );
-    push @results, $class->syntax03( $zone->name ) if Zonemaster::Engine->config->should_run( 'syntax03' );
+    push @results, $class->syntax01( $zone->name ) if Zonemaster::Engine::Util::should_run_test( q{syntax01} );
+    push @results, $class->syntax02( $zone->name ) if Zonemaster::Engine::Util::should_run_test( q{syntax02} );
+    push @results, $class->syntax03( $zone->name ) if Zonemaster::Engine::Util::should_run_test( q{syntax03} );
 
     if ( any { $_->tag eq q{ONLY_ALLOWED_CHARS} } @results ) {
 
         foreach my $local_nsname ( uniq map { $_->string } @{ Zonemaster::Engine::TestMethods->method2( $zone ) },
             @{ Zonemaster::Engine::TestMethods->method3( $zone ) } )
         {
-            push @results, $class->syntax04( $local_nsname ) if Zonemaster::Engine->config->should_run( 'syntax04' );
+            push @results, $class->syntax04( $local_nsname ) if Zonemaster::Engine::Util::should_run_test( q{syntax04} );
         }
 
-        push @results, $class->syntax05( $zone ) if Zonemaster::Engine->config->should_run( 'syntax05' );
+        push @results, $class->syntax05( $zone ) if Zonemaster::Engine::Util::should_run_test( q{syntax05} );
 
         if ( none { $_->tag eq q{NO_RESPONSE_SOA_QUERY} } @results ) {
-            push @results, $class->syntax06( $zone ) if Zonemaster::Engine->config->should_run( 'syntax06' );
-            push @results, $class->syntax07( $zone ) if Zonemaster::Engine->config->should_run( 'syntax07' );
+            push @results, $class->syntax06( $zone ) if Zonemaster::Engine::Util::should_run_test( q{syntax06} );
+            push @results, $class->syntax07( $zone ) if Zonemaster::Engine::Util::should_run_test( q{syntax07} );
         }
 
-        push @results, $class->syntax08( $zone ) if Zonemaster::Engine->config->should_run( 'syntax08' );
+        push @results, $class->syntax08( $zone ) if Zonemaster::Engine::Util::should_run_test( q{syntax08} );
 
     }
 
@@ -98,8 +100,11 @@ sub metadata {
         ],
         syntax06 => [
             qw(
-              RNAME_RFC822_INVALID
+              NO_RESPONSE
               NO_RESPONSE_SOA_QUERY
+              RNAME_MAIL_DOMAIN_INVALID
+              RNAME_RFC822_INVALID
+              RNAME_RFC822_VALID
               )
         ],
         syntax07 => [
@@ -125,36 +130,39 @@ sub metadata {
 
 sub translation {
     return {
-        'NAMESERVER_DISCOURAGED_DOUBLE_DASH' =>
-'Nameserver ({name}) has a label ({label}) with a double hyphen (\'--\') in position 3 and 4 (with a prefix which is not \'xn--\').',
-        'NAMESERVER_NON_ALLOWED_CHARS' => 'Found illegal characters in the nameserver ({name}).',
-        'NAMESERVER_NUMERIC_TLD'       => 'Nameserver ({name}) within a \'numeric only\' TLD ({tld}).',
-        'NAMESERVER_SYNTAX_OK'         => 'Nameserver ({name}) syntax is valid.',
-        'MNAME_DISCOURAGED_DOUBLE_DASH' =>
-'SOA MNAME ({name}) has a label ({label}) with a double hyphen (\'--\') in position 3 and 4 (with a prefix which is not \'xn--\').',
-        'MNAME_NON_ALLOWED_CHARS' => 'Found illegal characters in SOA MNAME ({name}).',
-        'MNAME_NUMERIC_TLD'       => 'SOA MNAME ({name}) within a \'numeric only\' TLD ({tld}).',
-        'MNAME_SYNTAX_OK'         => 'SOA MNAME ({name}) syntax is valid.',
-        'MX_DISCOURAGED_DOUBLE_DASH' =>
-'Domain name MX ({name}) has a label ({label}) with a double hyphen (\'--\') in position 3 and 4 (with a prefix which is not \'xn--\').',
-        'MX_NON_ALLOWED_CHARS' => 'Found illegal characters in MX ({name}).',
-        'MX_NUMERIC_TLD'       => 'Domain name MX ({name}) within a \'numeric only\' TLD ({tld}).',
-        'MX_SYNTAX_OK'         => 'Domain name MX ({name}) syntax is valid.',
-        'DISCOURAGED_DOUBLE_DASH' =>
-'Domain name ({name}) has a label ({label}) with a double hyphen (\'--\') in position 3 and 4 (with a prefix which is not \'xn--\').',
-        'INITIAL_HYPHEN'        => 'Domain name ({name}) has a label ({label}) starting with an hyphen (\'-\').',
-        'TERMINAL_HYPHEN'       => 'Domain name ({name}) has a label ({label}) ending with an hyphen (\'-\').',
-        'NON_ALLOWED_CHARS'     => 'Found illegal characters in the domain name ({name}).',
-        'ONLY_ALLOWED_CHARS'    => 'No illegal characters in the domain name ({name}).',
-        'RNAME_MISUSED_AT_SIGN' => 'There must be no misused \'@\' character in the SOA RNAME field ({rname}).',
-        'RNAME_RFC822_INVALID'  => 'There must be no illegal characters in the SOA RNAME field ({rname}).',
-        'RNAME_RFC822_VALID'    => 'The SOA RNAME field ({rname}) is compliant with RFC2822.',
-        'NO_ENDING_HYPHENS'     => 'Both ends of all labels of the domain name ({name}) have no hyphens.',
-        'NO_DOUBLE_DASH' =>
-'Domain name ({name}) has no label with a double hyphen (\'--\') in position 3 and 4 (with a prefix which is not \'xn--\').',
-        'RNAME_NO_AT_SIGN'      => 'There is no misused \'@\' character in the SOA RNAME field ({rname}).',
-        'NO_RESPONSE_SOA_QUERY' => 'No response from nameserver(s) on SOA queries.',
-        'NO_RESPONSE_MX_QUERY'  => 'No response from nameserver(s) on MX queries.',
+        DISCOURAGED_DOUBLE_DASH => 'Domain name ({name}) has a label ({label}) with a double hyphen (\'--\') '
+          . 'in position 3 and 4 (with a prefix which is not \'xn--\').',
+        INITIAL_HYPHEN                => 'Domain name ({name}) has a label ({label}) starting with an hyphen (\'-\').',
+        MNAME_DISCOURAGED_DOUBLE_DASH => 'SOA MNAME ({name}) has a label ({label}) with a double hyphen (\'--\') '
+          . 'in position 3 and 4 (with a prefix which is not \'xn--\').',
+        MNAME_NON_ALLOWED_CHARS    => 'Found illegal characters in SOA MNAME ({name}).',
+        MNAME_NUMERIC_TLD          => 'SOA MNAME ({name}) within a \'numeric only\' TLD ({tld}).',
+        MNAME_SYNTAX_OK            => 'SOA MNAME ({name}) syntax is valid.',
+        MX_DISCOURAGED_DOUBLE_DASH => 'Domain name MX ({name}) has a label ({label}) with a double hyphen (\'--\') '
+          . 'in position 3 and 4 (with a prefix which is not \'xn--\').',
+        MX_NON_ALLOWED_CHARS               => 'Found illegal characters in MX ({name}).',
+        MX_NUMERIC_TLD                     => 'Domain name MX ({name}) within a \'numeric only\' TLD ({tld}).',
+        MX_SYNTAX_OK                       => 'Domain name MX ({name}) syntax is valid.',
+        NAMESERVER_DISCOURAGED_DOUBLE_DASH => 'Nameserver ({name}) has a label ({label}) '
+          . 'with a double hyphen (\'--\') in position 3 and 4 (with a prefix which is not \'xn--\').',
+        NAMESERVER_NON_ALLOWED_CHARS => 'Found illegal characters in the nameserver ({name}).',
+        NAMESERVER_NUMERIC_TLD       => 'Nameserver ({name}) within a \'numeric only\' TLD ({tld}).',
+        NAMESERVER_SYNTAX_OK         => 'Nameserver ({name}) syntax is valid.',
+        NON_ALLOWED_CHARS            => 'Found illegal characters in the domain name ({name}).',
+        NO_DOUBLE_DASH               => 'Domain name ({name}) has no label with a double hyphen (\'--\') '
+          . 'in position 3 and 4 (with a prefix which is not \'xn--\').',
+        NO_ENDING_HYPHENS         => 'Both ends of all labels of the domain name ({name}) have no hyphens.',
+        NO_RESPONSE               => 'No response from {ns}/{address} asking for {dname}.',
+        NO_RESPONSE_MX_QUERY      => 'No response from nameserver(s) on MX queries.',
+        NO_RESPONSE_SOA_QUERY     => 'No response from nameserver(s) on SOA queries.',
+        ONLY_ALLOWED_CHARS        => 'No illegal characters in the domain name ({name}).',
+        RNAME_MAIL_DOMAIN_INVALID => 'The SOA RNAME mail domain ({domain}) cannot be resolved to a mail server '
+          . 'with an IP address.',
+        RNAME_MISUSED_AT_SIGN => 'There must be no misused \'@\' character in the SOA RNAME field ({rname}).',
+        RNAME_NO_AT_SIGN      => 'There is no misused \'@\' character in the SOA RNAME field ({rname}).',
+        RNAME_RFC822_INVALID  => 'There must be no illegal characters in the SOA RNAME field ({rname}).',
+        RNAME_RFC822_VALID    => 'The SOA RNAME field ({rname}) is compliant with RFC2822.',
+        TERMINAL_HYPHEN       => 'Domain name ({name}) has a label ({label}) ending with an hyphen (\'-\').',
     };
 } ## end sub translation
 
@@ -309,9 +317,40 @@ sub syntax06 {
     my ( $class, $zone ) = @_;
     my @results;
 
-    my $p = $zone->query_one( $zone->name, q{SOA} );
+    my @nss;
+    {
+        my %nss = map { $_->string => $_ }
+          @{ Zonemaster::Engine::TestMethods->method4( $zone ) },
+          @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
+        @nss = sort values %nss;
+    }
 
-    if ( $p and my ( $soa ) = $p->get_records( q{SOA}, q{answer} ) ) {
+    my $resolver = Zonemaster::Engine->ns( 'google-public-dns-a.google.com', '8.8.8.8' );
+
+    my %seen_rnames;
+    for my $ns ( @nss ) {
+
+        my $p = $ns->query( $zone->name, q{SOA} );
+
+        if ( not $p ) {
+            push @results,
+              info(
+                NO_RESPONSE => {
+                    ns      => $ns->name->string,
+                    address => $ns->address->short,
+                    dname   => $zone->name,
+                }
+              );
+            next;
+        }
+
+        my ( $soa ) = $p->get_records( q{SOA}, q{answer} );
+
+        if ( not $soa ) {
+            push @results, info( NO_RESPONSE_SOA_QUERY => {} );
+            next;
+        }
+
         my $rname = $soa->rname;
         $rname =~ s/([^\\])[.]/$1@/smx;    # Replace first non-escaped dot with an at-sign
         $rname =~ s/[\\][.]/./smgx;        # Un-escape dots
@@ -323,19 +362,84 @@ sub syntax06 {
                     rname => $rname,
                 }
               );
+            next;
+        }
+
+        my $domain = ( $rname =~ s/.*@//r );
+
+        my $p_mx = $resolver->query( $domain, q{MX}, { recurse => 1 } );
+
+        if ( not $p_mx or $p_mx->rcode ne 'NOERROR' ) {
+            push @results, info( RNAME_MAIL_DOMAIN_INVALID => { domain => $domain } );
+            next;
+        }
+
+        # Follow CNAMEs in the MX response
+        my %cnames =
+          map { $_->owner => $_->cname } $p_mx->get_records( q{CNAME}, q{answer} );
+        $domain .= q{.};    # Add back final dot
+        $domain = $cnames{$domain} while $cnames{$domain};
+
+        # Determine mail domain(s)
+        my @mail_domains;
+        if ( my @mxs = $p_mx->get_records_for_name( q{MX}, $domain ) ) {
+            @mail_domains = map { $_->exchange } @mxs;
         }
         else {
-            push @results,
-              info(
-                RNAME_RFC822_VALID => {
-                    rname => $rname,
-                }
-              );
+            @mail_domains = ( $domain );
         }
-    } ## end if ( $p and my ( $soa ...))
-    else {
-        push @results, info( NO_RESPONSE_SOA_QUERY => {} );
-    }
+
+        for my $mail_domain ( @mail_domains ) {
+
+            # Assume mail domain is invalid until we see an actual IP address
+            my $exchange_valid = 0;
+
+            # Lookup IPv4 address for mail server
+            my $p_a = $resolver->query( $mail_domain, q{A}, { recurse => 1 } );
+            if ( $p_a ) {
+                my @rrs_a =
+                  grep { $_->address ne '127.0.0.1' }
+                  grep { $_->owner eq $mail_domain } $p_a->get_records( q{A}, q{answer} );
+
+                if ( @rrs_a ) {
+                    $exchange_valid = 1;
+                }
+            }
+
+            # Lookup IPv6 address for mail domain
+            my $p_aaaa;
+            if ( !$exchange_valid ) {    # Skip a query if we can
+                $p_aaaa = $resolver->query( $mail_domain, q{AAAA}, { recurse => 1 } );
+            }
+            if ( $p_aaaa ) {
+                my @rrs_aaaa =
+                  grep { $_->address ne '::1' }
+                  grep { $_->owner eq $mail_domain } $p_aaaa->get_records( q{AAAA}, q{answer} );
+
+                if ( @rrs_aaaa ) {
+                    $exchange_valid = 1;
+                }
+            }
+
+            # Emit verdict for mail domain
+            if ( $exchange_valid ) {
+                if ( !exists $seen_rnames{$rname} ) {
+                    $seen_rnames{$rname} = 1;
+                    push @results,
+                      info(
+                        RNAME_RFC822_VALID => {
+                            rname => $rname,
+                        }
+                      );
+                }
+            }
+            else {
+                push @results, info( RNAME_MAIL_DOMAIN_INVALID => { domain => $mail_domain } );
+            }
+        } ## end for my $mail_domain ( @mail_domains)
+
+    } ## end for my $ns ( @nss )
+
     return @results;
 } ## end sub syntax06
 
