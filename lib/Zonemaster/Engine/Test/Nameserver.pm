@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::Nameserver;
 
-use version; our $VERSION = version->declare("v1.0.18");
+use version; our $VERSION = version->declare("v1.0.19");
 
 use strict;
 use warnings;
@@ -89,9 +89,11 @@ sub metadata {
         ],
         nameserver02 => [
             qw(
-              EDNS0_BAD_QUERY
-              EDNS0_BAD_ANSWER
+              BROKEN_EDNS_SUPPORT
               EDNS0_SUPPORT
+              NO_EDNS_SUPPORT
+              NO_RESPONSE
+              NS_ERROR
               )
         ],
         nameserver03 => [
@@ -187,6 +189,7 @@ sub translation {
         ANSWER_BAD_RCODE    => 'Nameserver {ns}/{address} answered AAAA query with an unexpected rcode ({rcode}).',
         AXFR_AVAILABLE      => 'Nameserver {ns}/{address} allow zone transfer using AXFR.',
         AXFR_FAILURE        => 'AXFR not available on nameserver {ns}/{address}.',
+	BROKEN_EDNS_SUPPORT => 'Incorrect response from {ns}/{address} asking for {dname} when EDNS is used.',
         CAN_BE_RESOLVED     => 'All nameservers succeeded to resolve to an IP address.',
         CAN_NOT_BE_RESOLVED => 'The following nameservers failed to resolve to an IP address : {names}.',
         CASE_QUERIES_RESULTS_DIFFER => 'When asked for {type} records on "{query}" with different cases, '
@@ -205,8 +208,7 @@ sub translation {
           . 'nameserver {ns}/{address} returns same RCODE "{rcode}".',
         DIFFERENT_SOURCE_IP => 'Nameserver {ns}/{address} replies on a SOA query with a different source address '
           . '({source}).',
-        EDNS0_BAD_ANSWER           => 'Nameserver {ns}/{address} does not support EDNS0 (OPT not set in reply).',
-        EDNS0_BAD_QUERY            => 'Nameserver {ns}/{address} does not support EDNS0 (replies with FORMERR).',
+        NO_EDNS_SUPPORT            => 'Nameserver {ns}/{address} does not support EDNS0 (replies with FORMERR).',
         EDNS0_SUPPORT              => 'The following nameservers support EDNS0 : {names}.',
         IPV4_DISABLED              => 'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
         IPV6_DISABLED              => 'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
@@ -317,27 +319,72 @@ sub nameserver02 {
 
         my $p = $local_ns->query( $zone->name, q{SOA}, { edns_size => 512 } );
         if ( $p ) {
-            if ( $p->rcode eq q{FORMERR} ) {
+            if ( $p->rcode eq q{FORMERR} and not $p->has_edns) {
                 push @results,
                   info(
-                    EDNS0_BAD_QUERY => {
+                    NO_EDNS_SUPPORT => {
                         ns      => $local_ns->name,
                         address => $local_ns->address->short,
                     }
                   );
             }
-            else {
-                if ( not $p->has_edns ) {
-                    push @results,
-                      info(
-                        EDNS0_BAD_ANSWER => {
-                            ns      => $local_ns->name,
-                            address => $local_ns->address->short,
-                        }
-                      );
-                }
+            elsif ( $p->rcode eq q{NOERROR} and not $p->edns_rcode and $p->get_records( q{SOA}, q{answer} ) and $p->edns_version == 0 ) {
+                $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short }++;
+                next;
             }
-        } ## end if ( $p )
+            elsif ( $p->rcode eq q{NOERROR} and not $p->has_edns ) {
+                push @results,
+                  info(
+                    BROKEN_EDNS_SUPPORT => {
+                        ns      => $local_ns->name,
+                        address => $local_ns->address->short,
+                        dname   => $zone->name,
+                    }
+                  );
+            }
+            elsif ( $p->rcode eq q{NOERROR} and $p->has_edns and $p->edns_version != 0 ) {
+                push @results,
+                  info(
+                    BROKEN_EDNS_SUPPORT => {
+                        ns      => $local_ns->name,
+                        address => $local_ns->address->short,
+                        dname   => $zone->name,
+                    }
+                  );
+            }
+            else {
+                push @results,
+                  info(
+                    NS_ERROR => {
+                        ns      => $local_ns->name,
+                        address => $local_ns->address->short,
+                    }
+                  );
+            }
+        }
+        else {
+            my $p2 = $local_ns->query( $zone->name, q{SOA} );
+            if ( $p2 ) {
+                push @results,
+                  info(
+                    BROKEN_EDNS_SUPPORT => {
+                        ns      => $local_ns->name,
+                        address => $local_ns->address->short,
+                        dname   => $zone->name,
+                    }
+                  );
+            }
+	    else {
+                push @results,
+                  info(
+                    NO_RESPONSE => {
+                        ns      => $local_ns->name,
+                        address => $local_ns->address->short,
+                        dname   => $zone->name,
+                    }
+                  );
+            }
+        }
 
         $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short }++;
     } ## end foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods...})
