@@ -788,6 +788,10 @@ msgstr "Navneserveren {ns}/{address} tillader zoneoverførsler via AXFR."
 msgid  "AXFR not available on nameserver {ns}/{address}."
 msgstr "AXFR er ikke tilgængeligt på navneserveren {ns}/{address}."
 
+#: NAMESERVER:BROKEN_EDNS_SUPPORT
+msgid  "Incorrect response from {ns}/{address} asking for {dname} when EDNS is used."
+msgstr "Incorrect response from {ns}/{address} asking for {dname} when EDNS is used."
+
 #: NAMESERVER:CAN_BE_RESOLVED
 msgid  "All nameservers succeeded to resolve to an IP address."
 msgstr "Alle navneservere kan oversættes til en IP-adresse."
@@ -861,18 +865,6 @@ msgstr ""
 "Navneserveren {ns}/{address} svarede på en SOA-forespørgsel fra en anden "
 "kilde ({source})."
 
-#: NAMESERVER:EDNS0_BAD_ANSWER
-msgid  ""
-"Nameserver {ns}/{address} does not support EDNS0 (OPT not set in reply)."
-msgstr ""
-"Navneserveren {ns}/{address} understøtter ikke EDNS0 (OPT ikke markeret i "
-"svaret)."
-
-#: NAMESERVER:EDNS0_BAD_QUERY
-msgid  ""
-"Nameserver {ns}/{address} does not support EDNS0 (replies with FORMERR)."
-msgstr "Navneserveren {ns}/{address} understøtter ikke EDNS0 (svarer FORMERR)."
-
 #: NAMESERVER:EDNS0_SUPPORT
 msgid  "The following nameservers support EDNS0 : {names}."
 msgstr "Følgende navneservere understøtter EDNS0 : {names}."
@@ -880,6 +872,11 @@ msgstr "Følgende navneservere understøtter EDNS0 : {names}."
 #: NAMESERVER:IS_A_RECURSOR
 msgid  "Nameserver {ns}/{address} is a recursor."
 msgstr "Navneserveren {ns}/{address} er rekursiv."
+
+#: NAMESERVER:NO_EDNS_SUPPORT
+msgid  ""
+"Nameserver {ns}/{address} does not support EDNS0 (replies with FORMERR)."
+msgstr "Navneserveren {ns}/{address} understøtter ikke EDNS0 (svarer FORMERR)."
 
 #: NAMESERVER:NO_RECURSOR
 msgid  "Nameserver {ns}/{address} is not a recursor."
