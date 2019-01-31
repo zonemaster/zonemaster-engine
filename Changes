@@ -1,5 +1,15 @@
 Release history for Zonemaster component Zonemaster-Engine
 
+v3.0.1 2019-01-31 (pre-release version)
+
+- Status
+   - This is a pre-release version not fully tested on all supported
+     OS's and Perl versions. This version will not be available on
+     CPAN.
+ - Fixes
+   - Fixed nameserver02 algorithm to match specification (#493)
+
+
 v3.0.0 2019-01-25 (pre-release version)
 
  - Status

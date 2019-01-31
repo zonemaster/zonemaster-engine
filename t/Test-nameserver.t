@@ -73,14 +73,8 @@ zone_gives( 'nameserver01', $zone, [q{NO_RECURSOR}] );
 zone_gives_not( 'nameserver01', $zone, [q{IS_A_RECURSOR}] );
 
 # nameserver02
-$zone = Zonemaster::Engine->zone( 'perennaguiden.se' );
-zone_gives( 'nameserver02', $zone, ['EDNS0_BAD_ANSWER']);
-
-SKIP: {
-    skip "Zone does not actually have tested problem", 1,
-    $zone = Zonemaster::Engine->zone( 'pricelessstockolm.se' );
-    zone_gives( 'nameserver02', $zone, ['EDNS0_BAD_QUERY'] );
-}
+$zone = Zonemaster::Engine->zone( 'flagday.rootcanary.net' );
+zone_gives( 'nameserver02', $zone, ['BROKEN_EDNS_SUPPORT']);
 
 $zone = Zonemaster::Engine->zone( 'dyad.se' );
 zone_gives( 'nameserver02', $zone, ['EDNS0_SUPPORT'] );

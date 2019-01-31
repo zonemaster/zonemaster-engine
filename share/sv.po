@@ -801,6 +801,10 @@ msgstr "Namnservern {ns}/{address} tillåter zonöverföringar med AXFR."
 msgid  "AXFR not available on nameserver {ns}/{address}."
 msgstr "AXFR är inte tillgänglig från namnservern {ns}/{address}."
 
+#: NAMESERVER:BROKEN_EDNS_SUPPORT
+msgid  "Incorrect response from {ns}/{address} asking for {dname} when EDNS is used."
+msgstr "Felaktigt DNS-svar från {ns}/{address} när {dname} efterfrågas med EDNS."
+
 #: NAMESERVER:CAN_BE_RESOLVED
 msgid  "All nameservers succeeded to resolve to an IP address."
 msgstr "Alla namnservrar kunde slås upp till minst en IP-adress."
@@ -874,16 +878,6 @@ msgstr ""
 "Namnservern {ns}/{address} besvarade en SOA-fråga från en annan källadress "
 "({source})."
 
-#: NAMESERVER:EDNS0_BAD_ANSWER
-msgid  ""
-"Nameserver {ns}/{address} does not support EDNS0 (OPT not set in reply)."
-msgstr "Namnservern {ns}/{address} stöder inte EDNS0 (ingen 'OPT' i svaret)."
-
-#: NAMESERVER:EDNS0_BAD_QUERY
-msgid  ""
-"Nameserver {ns}/{address} does not support EDNS0 (replies with FORMERR)."
-msgstr "Namnservern {ns}/{address} stöder inte EDNS0 (svarar med 'FORMERR')."
-
 #: NAMESERVER:EDNS0_SUPPORT
 msgid  "The following nameservers support EDNS0 : {names}."
 msgstr "Följande namnservrar stöder EDNS0: {names}."
@@ -891,6 +885,11 @@ msgstr "Följande namnservrar stöder EDNS0: {names}."
 #: NAMESERVER:IS_A_RECURSOR
 msgid  "Nameserver {ns}/{address} is a recursor."
 msgstr "Namnservern {ns}/{address} är en rekursiv resolver."
+
+#: NAMESERVER:NO_EDNS_SUPPORT
+msgid  ""
+"Nameserver {ns}/{address} does not support EDNS0 (replies with FORMERR)."
+msgstr "Namnservern {ns}/{address} stöder inte EDNS0 (svarar med 'FORMERR')."
 
 #: NAMESERVER:NO_RECURSOR
 msgid  "Nameserver {ns}/{address} is not a recursor."

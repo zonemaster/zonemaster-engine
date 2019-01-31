@@ -923,6 +923,10 @@ msgstr ""
 "Il n'est pas  possible de réaliser un transfert de zone depuis le serveur de "
 "noms {ns}/{address}."
 
+#: NAMESERVER:BROKEN_EDNS_SUPPORT
+msgid  "Incorrect response from {ns}/{address} asking for {dname} when EDNS is used."
+msgstr "Réponse incorrecte de {ns}/{address} sur le nom de domaine '{dname}' lorsque EDNS est utilisé."
+
 #: NAMESERVER:CAN_BE_RESOLVED
 msgid  "All nameservers succeeded to resolve to an IP address."
 msgstr ""
@@ -1002,20 +1006,6 @@ msgstr ""
 "Le serveur de noms {ns}/{address} répond depuis une autre adresse que celle "
 "à laquelle la requête a été envoyée."
 
-#: NAMESERVER:EDNS0_BAD_ANSWER
-msgid  ""
-"Nameserver {ns}/{address} does not support EDNS0 (OPT not set in reply)."
-msgstr ""
-"Le serveur de noms {ns}/{address} ne supporte pas EDNS0 (pas "
-"d'enregistrement OPT dans la réponse)."
-
-#: NAMESERVER:EDNS0_BAD_QUERY
-msgid  ""
-"Nameserver {ns}/{address} does not support EDNS0 (replies with FORMERR)."
-msgstr ""
-"Le serveur de noms {ns}/{address} ne supporte pas EDNS0 (retourne le code "
-"FORMERR)."
-
 #: NAMESERVER:EDNS0_SUPPORT
 msgid  "The following nameservers support EDNS0 : {names}."
 msgstr "Les serveurs de noms suivants supportent EDNS0 : {names}."
@@ -1025,6 +1015,13 @@ msgid  "Nameserver {ns}/{address} is a recursor."
 msgstr ""
 "Le serveur de noms {ns}/{address} retourne le code NXDOMAIN lors d'une "
 "requête de type \"SOA\" sur le nom de domaine '{dname}'. Il est récursif."
+
+#: NAMESERVER:NO_EDNS_SUPPORT
+msgid  ""
+"Nameserver {ns}/{address} does not support EDNS0 (replies with FORMERR)."
+msgstr ""
+"Le serveur de noms {ns}/{address} ne supporte pas EDNS0 (retourne le code "
+"FORMERR)."
 
 #: NAMESERVER:NO_RECURSOR
 msgid  "Nameserver {ns}/{address} is not a recursor."
