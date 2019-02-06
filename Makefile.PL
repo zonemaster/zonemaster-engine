@@ -17,7 +17,6 @@ all_from 'lib/Zonemaster/Engine.pm';
 configure_requires 'Locale::Msgfmt' => 0.15;
 
 requires 'Clone'                 => 0;
-requires 'Data::Dumper'          => 0;
 requires 'File::ShareDir'        => 1.00;
 requires 'File::Slurp'           => 0;
 requires 'IO::Socket::INET6'     => 2.69;
