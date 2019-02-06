@@ -33,7 +33,7 @@ This instruction covers the following operating systems:
 2) Install binary packages:
 
    ```sh
-   sudo yum install cpanminus libidn-devel openssl-devel perl-core perl-Devel-CheckLib perl-File-ShareDir perl-File-Slurp perl-IO-Socket-INET6 perl-JSON-PP perl-List-MoreUtils perl-Readonly perl-Test-Fatal perl-YAML
+   sudo yum install cpanminus libidn-devel openssl-devel perl-core perl-Devel-CheckLib perl-File-ShareDir perl-File-Slurp perl-IO-Socket-INET6 perl-JSON-PP perl-List-MoreUtils perl-Readonly-XS perl-Test-Fatal perl-YAML
    ```
 
 3) Install packages from CPAN:
