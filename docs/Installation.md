@@ -24,25 +24,31 @@ This instruction covers the following operating systems:
 
 ### Installation on CentOS
 
-1) Make sure the development environment is installed.
+1) Install the [EPEL 7][EPEL] repository:
+
+   ```sh
+   sudo yum --enablerepo=extras install epel-release
+   ```
+
+2) Make sure the development environment is installed:
 
    ```sh
    sudo yum groupinstall "Development Tools"
    ```
 
-2) Install binary packages:
+3) Install binary packages:
 
    ```sh
-   sudo yum install cpanminus libidn-devel openssl-devel perl-Clone perl-core perl-Devel-CheckLib perl-File-ShareDir perl-File-Slurp perl-IO-Socket-INET6 perl-JSON-PP perl-List-MoreUtils perl-Pod-Coverage perl-Readonly-XS perl-Test-Differences perl-Test-Exception perl-Test-Fatal perl-Test-Pod perl-YAML
+   sudo yum install cpanminus libidn-devel openssl-devel perl-Clone perl-core perl-Devel-CheckLib perl-File-ShareDir perl-File-Slurp perl-IO-Socket-INET6 perl-JSON-PP perl-List-MoreUtils perl-Module-Find perl-Moose perl-Net-IP perl-Pod-Coverage perl-Readonly-XS perl-Test-Differences perl-Test-Exception perl-Test-Fatal perl-Test-Pod perl-YAML
    ```
 
-3) Install packages from CPAN:
+4) Install packages from CPAN:
 
    ```sh
-   sudo cpanm Locale::Msgfmt Locale::TextDomain Mail::RFC822::Address Module::Find Module::Install Module::Install::XSUtil Moose Net::IP Test::More Text::CSV
+   sudo cpanm Locale::Msgfmt Locale::TextDomain Mail::RFC822::Address Module::Install Module::Install::XSUtil Test::More Text::CSV
    ```
 
-4) Install Zonemaster::LDNS and Zonemaster::Engine:
+5) Install Zonemaster::LDNS and Zonemaster::Engine:
 
    ```sh
    sudo cpanm Zonemaster::LDNS Zonemaster::Engine
@@ -122,6 +128,7 @@ The command is expected to take a few seconds and print some results about the d
 -------
 
 [Declaration of prerequisites]: https://github.com/zonemaster/zonemaster#prerequisites
+[EPEL]: https://fedoraproject.org/wiki/EPEL
 [Installation on CentOS]: #installation-on-centos
 [Installation on Debian]: #installation-on-debian
 [Installation on FreeBSD]: #installation-on-freebsd
