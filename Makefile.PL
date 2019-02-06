@@ -30,7 +30,6 @@ requires 'Locale::TextDomain'    => 1.23;
 requires 'Text::CSV'             => 0;
 requires 'MIME::Base64'          => 0;
 requires 'Clone'                 => 0;
-requires 'JSON'                  => 0;
 requires 'JSON::PP'              => 0;
 requires 'Data::Dumper'          => 0;
 requires 'Digest::MD5'           => 0;
