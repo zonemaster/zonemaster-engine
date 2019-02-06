@@ -30,25 +30,19 @@ This instruction covers the following operating systems:
    sudo yum groupinstall "Development Tools"
    ```
 
-2) Install cpan minus 
+2) Install binary packages:
 
    ```sh
-   sudo yum install cpanminus
+   sudo yum install perl-core perl-ExtUtils-MakeMaker perl-File-ShareDir perl-File-Slurp perl-IO-Socket-INET6 perl-JSON-PP perl-List-MoreUtils perl-Readonly perl-Time-HiRes perl-YAML libidn-devel perl-Devel-CheckLib openssl-devel perl-Test-Fatal cpanminus
    ```
 
-3) Install binary packages.
-
-   ```sh
-   sudo yum install perl-core perl-ExtUtils-MakeMaker perl-File-ShareDir perl-File-Slurp perl-IO-Socket-INET6 perl-JSON-PP perl-List-MoreUtils perl-Readonly perl-Time-HiRes perl-YAML libidn-devel perl-Devel-CheckLib openssl-devel perl-Test-Fatal
-   ```
-
-4) Install packages from CPAN.
+3) Install packages from CPAN:
 
    ```sh
    sudo cpanm Locale::TextDomain Hash::Merge Net::IP::XS Moose Test::More Zonemaster::LDNS
    ```
 
-5) Install Zonemaster::Engine
+4) Install Zonemaster::Engine:
 
    ```sh
    sudo cpanm Zonemaster::Engine
@@ -62,25 +56,19 @@ This instruction covers the following operating systems:
    sudo apt-get update
    ```
 
-2) Install cpan minus
+2) Install dependencies from binary packages:
 
    ```sh
-   sudo apt-get install cpanminus
+   sudo apt-get install build-essential libidn11-dev libfile-sharedir-perl libfile-slurp-perl libhash-merge-perl libio-socket-inet6-perl liblist-moreutils-perl libmail-rfc822-address-perl libmodule-find-perl libmoose-perl libnet-ip-perl libreadonly-xs-perl libtext-csv-perl libssl-dev libdevel-checklib-perl libtool m4 autoconf automake cpanminus
    ```
 
-3) Install dependencies from binary packages:
-
-   ```sh
-   sudo apt-get install build-essential libidn11-dev libfile-sharedir-perl libfile-slurp-perl libhash-merge-perl libio-socket-inet6-perl liblist-moreutils-perl libmail-rfc822-address-perl libmodule-find-perl libmoose-perl libnet-ip-perl libreadonly-xs-perl libtext-csv-perl libssl-dev libdevel-checklib-perl libtool m4 autoconf automake
-   ```
-
-4) Install Zonemaster::LDNS:
+3) Install Zonemaster::LDNS:
 
    ```sh
    sudo cpanm Zonemaster::LDNS
    ```
 
-5) Install Zonemaster::Engine:
+4) Install Zonemaster::Engine:
 
    ```sh
    sudo cpanm Zonemaster::Engine
@@ -95,25 +83,19 @@ This instruction covers the following operating systems:
    su -l
    ```
 
-2) Install cpan minus:
+2) Install dependencies from binary packages:
 
    ```sh
-   pkg install p5-App-cpanminus
+   pkg install libidn p5-File-ShareDir p5-File-Slurp p5-Hash-Merge p5-IO-Socket-INET6 p5-List-MoreUtils p5-Locale-libintl p5-Mail-RFC822-Address p5-Module-Find p5-Moose p5-Net-IP p5-Readonly-XS p5-Text-CSV p5-App-cpanminus
    ```
 
-3) Install dependencies from binary packages:
-
-   ```sh
-   pkg install libidn p5-File-ShareDir p5-File-Slurp p5-Hash-Merge p5-IO-Socket-INET6 p5-List-MoreUtils p5-Locale-libintl p5-Mail-RFC822-Address p5-Module-Find p5-Moose p5-Net-IP p5-Readonly-XS p5-Text-CSV
-   ```
-
-4) Install dependencies from CPAN:
+3) Install dependencies from CPAN:
 
    ```sh
    cpanm Test::More Zonemaster::LDNS inc::Module::Install
    ```
 
-5) Install Zonemaster::Engine:
+4) Install Zonemaster::Engine:
 
    ```sh
    cpanm Zonemaster::Engine
