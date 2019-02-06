@@ -92,16 +92,10 @@ This instruction covers the following operating systems:
 2) Install dependencies from binary packages:
 
    ```sh
-   pkg install libidn p5-File-ShareDir p5-File-Slurp p5-Hash-Merge p5-IO-Socket-INET6 p5-List-MoreUtils p5-Locale-libintl p5-Mail-RFC822-Address p5-Module-Find p5-Moose p5-Net-IP p5-Readonly-XS p5-Text-CSV p5-App-cpanminus
+   pkg install libidn p5-App-cpanminus p5-Clone p5-Devel-CheckLib p5-File-ShareDir p5-File-Slurp p5-IO-Socket-INET6 p5-JSON-PP p5-List-MoreUtils p5-Locale-libintl p5-Locale-Msgfmt p5-Mail-RFC822-Address p5-Module-Find p5-Module-Install p5-Module-Install-XSUtil p5-Moose p5-Net-IP p5-Pod-Coverage p5-Readonly-XS p5-Test-Differences p5-Test-Exception p5-Test-Fatal p5-Test-Pod p5-Text-CSV
    ```
 
-3) Install dependencies from CPAN:
-
-   ```sh
-   cpanm Test::More inc::Module::Install
-   ```
-
-4) Install Zonemaster::LDNS and Zonemaster::Engine:
+3) Install Zonemaster::LDNS and Zonemaster::Engine:
 
    ```sh
    cpanm Zonemaster::LDNS Zonemaster::Engine
