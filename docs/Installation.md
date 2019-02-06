@@ -33,13 +33,13 @@ This instruction covers the following operating systems:
 2) Install binary packages:
 
    ```sh
-   sudo yum install cpanminus libidn-devel openssl-devel perl-core perl-Devel-CheckLib perl-ExtUtils-MakeMaker perl-File-ShareDir perl-File-Slurp perl-IO-Socket-INET6 perl-JSON-PP perl-List-MoreUtils perl-Readonly perl-Test-Fatal perl-Time-HiRes perl-YAML
+   sudo yum install cpanminus libidn-devel openssl-devel perl-Clone perl-core perl-Data-Dumper perl-Devel-CheckLib perl-ExtUtils-MakeMaker perl-File-ShareDir perl-File-Slurp perl-IO-Socket-INET6 perl-JSON-PP perl-List-MoreUtils perl-Readonly perl-Test-Fatal perl-Time-HiRes perl-YAML
    ```
 
 3) Install packages from CPAN:
 
    ```sh
-   sudo cpanm Hash::Merge Locale::TextDomain Moose Net::IP Test::More
+   sudo cpanm Hash::Merge Locale::TextDomain Mail::RFC822::Address MIME::Base64 Module::Find Moose Net::IP Test::More Text::CSV
    ```
 
 4) Install Zonemaster::LDNS and Zonemaster::Engine:
