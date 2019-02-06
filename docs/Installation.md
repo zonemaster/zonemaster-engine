@@ -39,13 +39,13 @@ This instruction covers the following operating systems:
 3) Install binary packages.
 
    ```sh
-   sudo yum install perl-core perl-ExtUtils-MakeMaker perl-File-ShareDir perl-File-Slurp perl-IO-Socket-INET6 perl-JSON-PP perl-List-MoreUtils perl-Readonly perl-Time-HiRes perl-YAML libidn-devel perl-Devel-CheckLib openssl-devel perl-Test-Fatal
+   sudo yum install libidn-devel openssl-devel perl-core perl-Devel-CheckLib perl-ExtUtils-MakeMaker perl-File-ShareDir perl-File-Slurp perl-IO-Socket-INET6 perl-JSON-PP perl-List-MoreUtils perl-Readonly perl-Test-Fatal perl-Time-HiRes perl-YAML
    ```
 
 4) Install packages from CPAN.
 
    ```sh
-   sudo cpanm Locale::TextDomain Hash::Merge Net::IP Moose Test::More Zonemaster::LDNS
+   sudo cpanm Hash::Merge Locale::TextDomain Moose Net::IP Test::More Zonemaster::LDNS
    ```
 
 5) Install Zonemaster::Engine
@@ -71,7 +71,7 @@ This instruction covers the following operating systems:
 3) Install dependencies from binary packages:
 
    ```sh
-   sudo apt-get install build-essential libidn11-dev libfile-sharedir-perl libfile-slurp-perl libhash-merge-perl libio-socket-inet6-perl liblist-moreutils-perl libmail-rfc822-address-perl libmodule-find-perl libmoose-perl libnet-ip-perl libreadonly-xs-perl libtext-csv-perl libssl-dev libdevel-checklib-perl libtool m4 autoconf automake
+   sudo apt-get install autoconf automake build-essential libdevel-checklib-perl libfile-sharedir-perl libfile-slurp-perl libhash-merge-perl libidn11-dev libio-socket-inet6-perl liblist-moreutils-perl libmail-rfc822-address-perl libmodule-find-perl libmoose-perl libnet-ip-perl libreadonly-xs-perl libssl-dev libtext-csv-perl libtool m4
    ```
 
 4) Install Zonemaster::LDNS:
