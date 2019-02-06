@@ -39,13 +39,13 @@ This instruction covers the following operating systems:
 3) Install packages from CPAN:
 
    ```sh
-   sudo cpanm Locale::TextDomain Hash::Merge Net::IP::XS Moose Test::More Zonemaster::LDNS
+   sudo cpanm Locale::TextDomain Hash::Merge Net::IP::XS Moose Test::More
    ```
 
-4) Install Zonemaster::Engine:
+4) Install Zonemaster::LDNS and Zonemaster::Engine:
 
    ```sh
-   sudo cpanm Zonemaster::Engine
+   sudo cpanm Zonemaster::LDNS Zonemaster::Engine
    ```
 
 ### Installation on Debian
@@ -62,16 +62,10 @@ This instruction covers the following operating systems:
    sudo apt-get install build-essential libidn11-dev libfile-sharedir-perl libfile-slurp-perl libhash-merge-perl libio-socket-inet6-perl liblist-moreutils-perl libmail-rfc822-address-perl libmodule-find-perl libmoose-perl libnet-ip-perl libreadonly-xs-perl libtext-csv-perl libssl-dev libdevel-checklib-perl libtool m4 autoconf automake cpanminus
    ```
 
-3) Install Zonemaster::LDNS:
+3) Install Zonemaster::LDNS and Zonemaster::Engine:
 
    ```sh
-   sudo cpanm Zonemaster::LDNS
-   ```
-
-4) Install Zonemaster::Engine:
-
-   ```sh
-   sudo cpanm Zonemaster::Engine
+   sudo cpanm Zonemaster::LDNS Zonemaster::Engine
    ```
 
 
@@ -92,13 +86,13 @@ This instruction covers the following operating systems:
 3) Install dependencies from CPAN:
 
    ```sh
-   cpanm Test::More Zonemaster::LDNS inc::Module::Install
+   cpanm Test::More inc::Module::Install
    ```
 
-4) Install Zonemaster::Engine:
+4) Install Zonemaster::LDNS and Zonemaster::Engine:
 
    ```sh
-   cpanm Zonemaster::Engine
+   cpanm Zonemaster::LDNS Zonemaster::Engine
    ```
 
 
