@@ -24,7 +24,6 @@ requires 'JSON::PP'              => 0;
 requires 'List::MoreUtils'       => 0;
 requires 'Locale::TextDomain'    => 1.23;
 requires 'Mail::RFC822::Address' => 0;
-requires 'MIME::Base64'          => 0;
 requires 'Module::Find'          => 0.10;
 requires 'Moose'                 => 2.0401;
 requires 'Net::IP'               => 1.26;
