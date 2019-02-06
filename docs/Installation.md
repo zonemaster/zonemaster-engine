@@ -39,7 +39,7 @@ This instruction covers the following operating systems:
 3) Install packages from CPAN:
 
    ```sh
-   sudo cpanm Hash::Merge Locale::TextDomain Mail::RFC822::Address MIME::Base64 Module::Find Moose Net::IP Test::More Text::CSV
+   sudo cpanm Hash::Merge Locale::TextDomain Locale::Msgfmt Mail::RFC822::Address MIME::Base64 Module::Find Moose Net::IP Test::More Text::CSV
    ```
 
 4) Install Zonemaster::LDNS and Zonemaster::Engine:
