@@ -39,7 +39,7 @@ This instruction covers the following operating systems:
 3) Install packages from CPAN:
 
    ```sh
-   sudo cpanm Locale::TextDomain Hash::Merge Net::IP::XS Moose Test::More
+   sudo cpanm Locale::TextDomain Hash::Merge Net::IP Moose Test::More
    ```
 
 4) Install Zonemaster::LDNS and Zonemaster::Engine:
