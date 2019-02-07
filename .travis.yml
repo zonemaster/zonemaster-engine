@@ -12,4 +12,4 @@ before_install:
     - eval $(curl https://travis-perl.github.io/init) --auto
     - local-lib
     - git clone --depth=1 --branch=develop https://github.com/zonemaster/zonemaster-ldns.git
-    - cpan-install --deps Devel::CheckLib ./zonemaster-ldns
+    - cpan-install --deps Devel::CheckLib Module::Install Module::Install::XSUtil ./zonemaster-ldns
