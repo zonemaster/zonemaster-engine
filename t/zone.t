@@ -45,7 +45,7 @@ my $p = $zone->query_one( 'www.iis.se', 'A' );
 isa_ok( $p, 'Zonemaster::Engine::Packet' );
 my @rrs = $p->get_records( 'a', 'answer' );
 is( scalar( @rrs ), 1, 'one answer A RR' );
-is( $rrs[0]->address, '91.226.36.46', 'expected address' );
+is( $rrs[0]->address, '91.226.37.214', 'expected address' );
 Zonemaster::Engine::Profile->effective->set( q{net.ipv4}, 0 );
 Zonemaster::Engine::Profile->effective->set( q{net.ipv6}, 0 );
 Zonemaster::Engine->logger->clear_history();
@@ -93,13 +93,13 @@ $p = $zone->query_persistent( 'www.iis.se', 'A' );
 isa_ok( $p, 'Zonemaster::Engine::Packet' );
 @rrs = $p->get_records( 'a', 'answer' );
 is( scalar( @rrs ), 1, 'one answer A RR' );
-is( $rrs[0]->address, '91.226.36.46', 'expected address' );
+is( $rrs[0]->address, '91.226.37.214', 'expected address' );
 
 $p = $zone->query_auth( 'www.iis.se', 'A' );
 isa_ok( $p, 'Zonemaster::Engine::Packet' );
 @rrs = $p->get_records( 'a', 'answer' );
 is( scalar( @rrs ), 1, 'one answer A RR' );
-is( $rrs[0]->address, '91.226.36.46', 'expected address' );
+is( $rrs[0]->address, '91.226.37.214', 'expected address' );
 
 my $ary = $zone->query_all( 'www.iis.se', 'A' );
 isa_ok( $ary, 'ARRAY' );
@@ -107,7 +107,7 @@ foreach my $p ( @$ary ) {
     isa_ok( $p, 'Zonemaster::Engine::Packet' );
     my @rrs = $p->get_records( 'a', 'answer' );
     is( scalar( @rrs ), 1, 'one answer A RR' );
-    is( $rrs[0]->address, '91.226.36.46', 'expected address' );
+    is( $rrs[0]->address, '91.226.37.214', 'expected address' );
 }
 
 $ary = $zone->query_all( 'www.iis.se', 'A', { dnssec => 1 } );

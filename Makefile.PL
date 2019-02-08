@@ -33,6 +33,7 @@ requires 'Clone'                 => 0;
 requires 'JSON'                  => 0;
 requires 'JSON::PP'              => 0;
 requires 'Data::Dumper'          => 0;
+requires 'Digest::MD5'           => 0;
 
 test_requires 'Test::Fatal'       => 0;
 test_requires 'Test::Exception'   => 0;
