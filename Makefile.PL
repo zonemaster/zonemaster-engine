@@ -29,7 +29,7 @@ requires 'Moose'                 => 2.0401;
 requires 'Net::IP'               => 1.26;
 requires 'Readonly'              => 0;
 requires 'Text::CSV'             => 0;
-requires 'Zonemaster::LDNS'      => 1.0;
+requires 'Zonemaster::LDNS'      => 2.0;
 
 test_requires 'Pod::Coverage'     => 0;
 test_requires 'Test::Differences' => 0;
