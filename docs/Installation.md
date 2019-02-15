@@ -59,16 +59,22 @@ This instruction covers the following operating systems:
 1) Refresh the package information
 
    ```sh
-   sudo apt-get update
+   sudo apt update
    ```
 
 2) Install dependencies from binary packages:
 
    ```sh
-   sudo apt-get install build-essential libidn11-dev libfile-sharedir-perl libfile-slurp-perl libhash-merge-perl libio-socket-inet6-perl liblist-moreutils-perl libmail-rfc822-address-perl libmodule-find-perl libmodule-install-perl libmoose-perl libnet-ip-perl libreadonly-xs-perl libtext-csv-perl libssl-dev libdevel-checklib-perl libtool m4 autoconf automake cpanminus
+   sudo apt install autoconf automake build-essential cpanminus libclone-perl libdevel-checklib-perl libfile-sharedir-perl libfile-slurp-perl libidn11-dev libintl-perl libio-socket-inet6-perl libjson-pp-perl liblist-moreutils-perl liblocale-msgfmt-perl libmail-rfc822-address-perl libmodule-find-perl libmodule-install-xsutil-perl libmoose-perl libnet-ip-perl libpod-coverage-perl libreadonly-xs-perl libssl-dev libtest-differences-perl libtest-exception-perl libtest-fatal-perl libtest-pod-perl libtext-csv-perl libtool m4
    ```
 
-3) Install Zonemaster::LDNS and Zonemaster::Engine:
+3) Install dependencies from CPAN:
+
+   ```sh
+   sudo cpanm Module::Install Test::More
+   ```
+
+4) Install Zonemaster::LDNS and Zonemaster::Engine:
 
    ```sh
    sudo cpanm Zonemaster::LDNS Zonemaster::Engine
