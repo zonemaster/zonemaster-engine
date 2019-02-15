@@ -3,7 +3,7 @@ use strict;
 use warnings FATAL   => 'all';
 use Test::More tests => 29;
 
-use JSON;
+use JSON::PP;
 use Readonly;
 use Test::Differences;
 use Test::Exception;
