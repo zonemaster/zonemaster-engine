@@ -125,7 +125,6 @@ The command is expected to take a few seconds and print some results about the d
 * For a [JSON-RPC API], follow the [Zonemaster::Backend installation] instruction.
 * For a Perl API, see the [Zonemaster::Engine API] documentation.
 
--------
 
 [Declaration of prerequisites]: https://github.com/zonemaster/zonemaster#prerequisites
 [EPEL]: https://fedoraproject.org/wiki/EPEL
@@ -139,10 +138,3 @@ The command is expected to take a few seconds and print some results about the d
 [Zonemaster::CLI installation]: https://github.com/zonemaster/zonemaster-cli/blob/master/docs/Installation.md
 [Zonemaster::Engine API]: http://search.cpan.org/~znmstr/Zonemaster-Engine/lib/Zonemaster/Engine/Overview.pod
 [Zonemaster::GUI installation]: https://github.com/zonemaster/zonemaster-gui/blob/master/docs/Installation.md
-
-Copyright (c) 2013 - 2017, IIS (The Internet Foundation in Sweden)\
-Copyright (c) 2013 - 2017, AFNIC\
-Creative Commons Attribution 4.0 International License
-
-You should have received a copy of the license along with this
-work.  If not, see <https://creativecommons.org/licenses/by/4.0/>.
