@@ -249,6 +249,8 @@ sub _set {
             if ( exists $profile_properties_details{$property_name}->{max} and $value > $profile_properties_details{$property_name}->{max} ) {
                 die "Property $property_name value is out of limit (bigger)";
             }
+
+            $value = 0+ $value;    # Make sure JSON::PP doesn't serialize it as a JSON string
         }
     }
     else {
