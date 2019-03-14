@@ -341,7 +341,7 @@ sub _query {
 
     my $before = time();
     my $res;
-    if ( $self->blacklisted->{ $flags{usevc} }{ $flags{dnssec} } ) {
+    if ( $BLACKLISTING_ENABLED and $self->blacklisted->{ $flags{usevc} }{ $flags{dnssec} } ) {
         Zonemaster::Engine->logger->add(
             IS_BLACKLISTED => {
                 message => "Server transport has been blacklisted due to previous failure",
