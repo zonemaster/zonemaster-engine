@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::Nameserver;
 
-use version; our $VERSION = version->declare("v1.0.20");
+use version; our $VERSION = version->declare("v1.0.21");
 
 use strict;
 use warnings;
@@ -267,7 +267,7 @@ sub nameserver01 {
         my $has_seen_ra    = 0;
         for my $nonexistent_name ( @NONEXISTENT_NAMES ) {
 
-            my $p = $ns->query( $nonexistent_name, q{A} );
+            my $p = $ns->query( $nonexistent_name, q{A}, { blacklisting_disabled => 1 } );
             if ( !$p ) {
                 my %name_args = (
                     dname => $nonexistent_name,
