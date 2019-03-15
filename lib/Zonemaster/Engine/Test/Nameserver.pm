@@ -628,7 +628,7 @@ sub nameserver07 {
 
             next if $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short };
 
-            my $p = $local_ns->query( q{.}, q{NS} );
+	    my $p = $local_ns->query( q{.}, q{NS}, { blacklisting_disabled => 1 } );
             if ( $p ) {
                 my @ns = $p->get_records( q{NS}, q{authority} );
 

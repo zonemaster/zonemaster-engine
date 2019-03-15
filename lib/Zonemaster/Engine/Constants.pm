@@ -68,7 +68,7 @@ Readonly our $ALGO_STATUS_OTHER        => 5;
 Readonly our $ALGO_STATUS_DELETE_DS    => 6;
 Readonly our $ALGO_STATUS_INDIRECT_KEY => 7;
 
-Readonly our $BLACKLISTING_ENABLED     => 0;
+Readonly our $BLACKLISTING_ENABLED     => 1;
 
 Readonly our $DURATION_12_HOURS_IN_SECONDS => 12 * 60 * 60;
 Readonly our $DURATION_180_DAYS_IN_SECONDS => 180 * 24 * 60 * 60;
