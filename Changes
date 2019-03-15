@@ -1,14 +1,15 @@
 Release history for Zonemaster component Zonemaster-Engine
 
-v3.0.2 2019-03-14 (pre-release version)
+v3.0.2 2019-03-15 (pre-release version)
 
- - Status
-   - This is a pre-release version not fully tested on all supported
-     OS's and Perl versions. This version will not be available on
-     CPAN.
- - Fixes
-   - Never serialize numeric profile properties as JSON strings (#505)
-   - Add a forgotten dependency to the installation instruction.
+ [Status]
+ - This is a pre-release version not fully tested on all supported
+   OS's and Perl versions. This version will not be available on
+   CPAN.
+
+ [Fixes]
+ - Never serialize numeric profile properties as JSON strings (#505)
+ - Add a forgotten dependency to the installation instruction. (#490)
 
 
 v3.0.1 2019-01-31 (pre-release version)
