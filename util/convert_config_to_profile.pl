@@ -4,7 +4,7 @@ use 5.14.2;
 use warnings;
 use strict;
 
-use version; our $VERSION = version->declare("v1.0.0");
+use version; our $VERSION = version->declare("v1.0.1");
 
 use Carp;
 
@@ -23,6 +23,7 @@ my $DEST_DIR = q{};
 my $CONFIG_FILE = q{};
 my $POLICY_FILE = q{};
 
+my $scriptName = basename($PROGRAM_NAME);
 my $dest_dir = q{./};
 my $config_file = q{};
 my $policy_file = q{};
@@ -50,6 +51,7 @@ if ($DEBUG) {
 # STEP 0: Check Directory existence and Directory/Files permissions
 #-------------------------------------------------
 if ( ! -d $dest_dir ) {
+    printf "(\"%s --help\" for help)\n", $scriptName;
     print "Directory $dest_dir does not exist.\n";
     unless ( mkdir $dest_dir ) {
         croak "Unable to create $dest_dir.";
@@ -57,6 +59,7 @@ if ( ! -d $dest_dir ) {
 }
 
 if ( ! -w $dest_dir ) {
+    printf "(\"%s --help\" for help)\n", $scriptName;
     print "Directory $dest_dir mode must be changed.\n";
     unless ( chmod (oct(755), $dest_dir) ) {
         croak "Can not change directory mode.";
@@ -64,26 +67,32 @@ if ( ! -w $dest_dir ) {
 }
 
 if ( ! $config_file ) {
+    printf "(\"%s --help\" for help)\n", $scriptName;
     croak "A Config file must be provided.";
 }
 
 if ( ! -e $config_file ) {
+    printf "(\"%s --help\" for help)\n", $scriptName;
     croak "Config file $config_file does not exists.";
 }
 
 if ( ! -r $config_file ) {
+    printf "(\"%s --help\" for help)\n", $scriptName;
     croak "Config file $config_file is not readable.";
 }
 
 if ( ! $policy_file ) {
+    printf "(\"%s --help\" for help)\n", $scriptName;
     croak "A Policy file must be provided.";
 }
 
 if ( ! -e $policy_file ) {
+    printf "(\"%s --help\" for help)\n", $scriptName;
     croak "Policy file $policy_file does not exists.";
 }
 
 if ( ! -r $policy_file ) {
+    printf "(\"%s --help\" for help)\n", $scriptName;
     croak "Policy file $policy_file is not readable.";
 }
 
@@ -144,14 +153,15 @@ print $fh $json->encode( $profile->{q{profile}} );
 close $fh;
 
 sub process_options {
-    my ( $opt_dest, $opt_config, $opt_policy, $opt_help, $opt_debug );
+    my ( $opt_dest, $opt_config, $opt_policy, $opt_help, $opt_debug, $opt_version );
 
     GetOptions(
-        q{dest-dir=s} => \$opt_dest,   # Dest directory for generated profile file
-	q{config=s}   => \$opt_config, # Config File
-	q{policy=s}   => \$opt_policy, # Policy file
-        q{help}       => \$opt_help,   # Print Usage
-        q{debug}      => \$opt_debug,  # Set Debug MODE
+        q{dest-dir=s} => \$opt_dest,    # Dest directory for generated profile file
+	q{config=s}   => \$opt_config,  # Config File
+	q{policy=s}   => \$opt_policy,  # Policy file
+        q{help}       => \$opt_help,    # Print Usage
+        q{debug}      => \$opt_debug,   # Set Debug MODE
+        q{version}    => \$opt_version, # Print Version
     );
 
     if ( $opt_debug ) {
@@ -174,6 +184,10 @@ sub process_options {
         Usage();
     }
 
+    if ( $opt_version ) {
+        Version();
+    }
+
     return;
 }
 
@@ -181,7 +195,6 @@ sub Usage {
     my $_bold           = "\e[1m";
     my $_normal         = "\e[0m";
     my $_ul             = "\e[4m";
-    my $scriptName      = basename($PROGRAM_NAME);
     my $scriptNameBlank = $scriptName;
     $scriptNameBlank =~ s/./ /smxg;
 
@@ -211,8 +224,17 @@ ${_bold}OPTIONS${_normal}
         --debug
              Set Debug mode ON.
 
+        --version
+             Print version of this program.
+
 EOM
 
     exit 0;
 
 }
+
+sub Version {
+    printf "%s %s\n", $scriptName, $VERSION;
+    exit 0;
+}
+
