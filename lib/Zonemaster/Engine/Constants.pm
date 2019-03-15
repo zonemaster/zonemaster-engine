@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Constants;
 
-use version; our $VERSION = version->declare("v1.2.3");
+use version; our $VERSION = version->declare("v1.2.4");
 
 use strict;
 use warnings;
