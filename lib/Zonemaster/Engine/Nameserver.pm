@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Nameserver;
 
-use version; our $VERSION = version->declare("v1.1.15");
+use version; our $VERSION = version->declare("v1.1.16");
 
 use 5.014002;
 use Moose;
@@ -725,6 +725,10 @@ If set to true, incoming response packets with the TC flag set are not automatic
 =item fallback
 
 If set to true, incoming response packets with the TC flag set fall back to EDNS and/or TCP.
+
+=item blacklisting_disabled
+
+If set to true, prevents a server to be black-listed on a query in case there is no answer OR rcode is REFUSED.
 
 =back
 
