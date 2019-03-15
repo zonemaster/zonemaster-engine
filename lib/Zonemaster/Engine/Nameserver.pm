@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Nameserver;
 
-use version; our $VERSION = version->declare("v1.1.15");
+use version; our $VERSION = version->declare("v1.1.16");
 
 use 5.014002;
 use Moose;
@@ -341,7 +341,7 @@ sub _query {
 
     my $before = time();
     my $res;
-    if ( $self->blacklisted->{ $flags{usevc} }{ $flags{dnssec} } ) {
+    if ( $BLACKLISTING_ENABLED and $self->blacklisted->{ $flags{usevc} }{ $flags{dnssec} } ) {
         Zonemaster::Engine->logger->add(
             IS_BLACKLISTED => {
                 message => "Server transport has been blacklisted due to previous failure",
@@ -393,9 +393,11 @@ sub _query {
             $msg =~ s/$trailing_info.*/\./;
             Zonemaster::Engine->logger->add( LOOKUP_ERROR =>
                   { message => $msg, ns => "$self", name => "$name", type => $type, class => $href->{class} } );
-            $self->blacklisted->{ $flags{usevc} }{ $flags{dnssec} } = 1;
-            if ( !$flags{dnssec} ) {
-                $self->blacklisted->{ $flags{usevc} }{ !$flags{dnssec} } = 1;
+            if ( not $href->{q{blacklisting_disabled}} ) {
+                $self->blacklisted->{ $flags{usevc} }{ $flags{dnssec} } = 1;
+                if ( !$flags{dnssec} ) {
+                    $self->blacklisted->{ $flags{usevc} }{ !$flags{dnssec} } = 1;
+                }
             }
         }
     }
@@ -723,6 +725,10 @@ If set to true, incoming response packets with the TC flag set are not automatic
 =item fallback
 
 If set to true, incoming response packets with the TC flag set fall back to EDNS and/or TCP.
+
+=item blacklisting_disabled
+
+If set to true, prevents a server to be black-listed on a query in case there is no answer OR rcode is REFUSED.
 
 =back
 
