@@ -924,8 +924,8 @@ msgstr ""
 "noms {ns}/{address}."
 
 #: NAMESERVER:BROKEN_EDNS_SUPPORT
-msgid  "Incorrect response from {ns}/{address} asking for {dname} when EDNS is used."
-msgstr "Réponse incorrecte de {ns}/{address} sur le nom de domaine '{dname}' lorsque EDNS est utilisé."
+msgid  "Incorrect response from {ns}/{address} asking for {dname} when EDNS is used (No Response)."
+msgstr "Réponse incorrecte de {ns}/{address} sur le nom de domaine '{dname}' lorsque EDNS est utilisé (Aucune réponse)."
 
 #: NAMESERVER:CAN_BE_RESOLVED
 msgid  "All nameservers succeeded to resolve to an IP address."
@@ -1005,6 +1005,14 @@ msgid  ""
 msgstr ""
 "Le serveur de noms {ns}/{address} répond depuis une autre adresse que celle "
 "à laquelle la requête a été envoyée."
+
+#: NAMESERVER:EDNS_RESPONSE_WITHOUT_EDNS
+msgid  "Incorrect response from {ns}/{address} asking for {dname} when EDNS is used (No OPT record)."
+msgstr "Réponse incorrecte de {ns}/{address} sur le nom de domaine '{dname}' lorsque EDNS est utilisé (Pas d'enregistrement de type OPT)."
+
+#: NAMESERVER:EDNS_VERSION_ERROR
+msgid  "Incorrect response from {ns}/{address} asking for {dname} when EDNS is used (EDNS version should be 0)."
+msgstr "Réponse incorrecte de {ns}/{address} sur le nom de domaine '{dname}' lorsque EDNS est utilisé (La version EDNS devrait être 0)."
 
 #: NAMESERVER:EDNS0_SUPPORT
 msgid  "The following nameservers support EDNS0 : {names}."

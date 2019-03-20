@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::Nameserver;
 
-use version; our $VERSION = version->declare("v1.0.21");
+use version; our $VERSION = version->declare("v1.0.22");
 
 use strict;
 use warnings;
@@ -89,7 +89,9 @@ sub metadata {
         ],
         nameserver02 => [
             qw(
-              BROKEN_EDNS_SUPPORT
+              BREAKS_ON_EDNS
+              EDNS_RESPONSE_WITHOUT_EDNS
+              EDNS_VERSION_ERROR
               EDNS0_SUPPORT
               NO_EDNS_SUPPORT
               NO_RESPONSE
@@ -189,7 +191,7 @@ sub translation {
         ANSWER_BAD_RCODE    => 'Nameserver {ns}/{address} answered AAAA query with an unexpected rcode ({rcode}).',
         AXFR_AVAILABLE      => 'Nameserver {ns}/{address} allow zone transfer using AXFR.',
         AXFR_FAILURE        => 'AXFR not available on nameserver {ns}/{address}.',
-	BROKEN_EDNS_SUPPORT => 'Incorrect response from {ns}/{address} asking for {dname} when EDNS is used.',
+        BREAKS_ON_EDNS      => 'Incorrect response from {ns}/{address} asking for {dname} when EDNS is used (No Response).',
         CAN_BE_RESOLVED     => 'All nameservers succeeded to resolve to an IP address.',
         CAN_NOT_BE_RESOLVED => 'The following nameservers failed to resolve to an IP address : {names}.',
         CASE_QUERIES_RESULTS_DIFFER => 'When asked for {type} records on "{query}" with different cases, '
@@ -208,13 +210,14 @@ sub translation {
           . 'nameserver {ns}/{address} returns same RCODE "{rcode}".',
         DIFFERENT_SOURCE_IP => 'Nameserver {ns}/{address} replies on a SOA query with a different source address '
           . '({source}).',
-        NO_EDNS_SUPPORT            => 'Nameserver {ns}/{address} does not support EDNS0 (replies with FORMERR).',
+        EDNS_RESPONSE_WITHOUT_EDNS => 'Incorrect response from {ns}/{address} asking for {dname} when EDNS is used (No OPT record).',
+        EDNS_VERSION_ERROR         => 'Incorrect response from {ns}/{address} asking for {dname} when EDNS is used (EDNS version should be 0).',
         EDNS0_SUPPORT              => 'The following nameservers support EDNS0 : {names}.',
         IPV4_DISABLED              => 'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
         IPV6_DISABLED              => 'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
         IS_A_RECURSOR              => 'Nameserver {ns}/{address} is a recursor.',
         MISSING_OPT_IN_TRUNCATED   => 'Nameserver {ns}/{address} replies on an EDNS query with a truncated response without EDNS.',
-        NO_EDNS_SUPPORT            => 'Nameserver {ns}/{address} does not support EDNS.',
+        NO_EDNS_SUPPORT            => 'Nameserver {ns}/{address} does not support EDNS0 (replies with FORMERR).',
         NO_RECURSOR                => 'Nameserver {ns}/{address} is not a recursor.',
         NO_RESOLUTION              => 'No nameservers succeeded to resolve to an IP address.',
         NO_RESPONSE                => 'No response from {ns}/{address} asking for {dname}.',
@@ -335,7 +338,7 @@ sub nameserver02 {
             elsif ( $p->rcode eq q{NOERROR} and not $p->has_edns ) {
                 push @results,
                   info(
-                    BROKEN_EDNS_SUPPORT => {
+                    EDNS_RESPONSE_WITHOUT_EDNS => {
                         ns      => $local_ns->name,
                         address => $local_ns->address->short,
                         dname   => $zone->name,
@@ -345,7 +348,7 @@ sub nameserver02 {
             elsif ( $p->rcode eq q{NOERROR} and $p->has_edns and $p->edns_version != 0 ) {
                 push @results,
                   info(
-                    BROKEN_EDNS_SUPPORT => {
+                    EDNS_VERSION_ERROR => {
                         ns      => $local_ns->name,
                         address => $local_ns->address->short,
                         dname   => $zone->name,
@@ -367,7 +370,7 @@ sub nameserver02 {
             if ( $p2 ) {
                 push @results,
                   info(
-                    BROKEN_EDNS_SUPPORT => {
+                    BREAKS_ON_EDNS => {
                         ns      => $local_ns->name,
                         address => $local_ns->address->short,
                         dname   => $zone->name,
