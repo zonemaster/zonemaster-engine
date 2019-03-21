@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::Nameserver;
 
-use version; our $VERSION = version->declare("v1.0.22");
+use version; our $VERSION = version->declare("v1.0.23");
 
 use strict;
 use warnings;
@@ -191,7 +191,7 @@ sub translation {
         ANSWER_BAD_RCODE    => 'Nameserver {ns}/{address} answered AAAA query with an unexpected rcode ({rcode}).',
         AXFR_AVAILABLE      => 'Nameserver {ns}/{address} allow zone transfer using AXFR.',
         AXFR_FAILURE        => 'AXFR not available on nameserver {ns}/{address}.',
-        BREAKS_ON_EDNS      => 'Incorrect response from {ns}/{address} asking for {dname} when EDNS is used (No Response).',
+        BREAKS_ON_EDNS      => 'No response from {ns}/{address} when EDNS is used in query asking for {dname}.',
         CAN_BE_RESOLVED     => 'All nameservers succeeded to resolve to an IP address.',
         CAN_NOT_BE_RESOLVED => 'The following nameservers failed to resolve to an IP address : {names}.',
         CASE_QUERIES_RESULTS_DIFFER => 'When asked for {type} records on "{query}" with different cases, '
@@ -210,8 +210,8 @@ sub translation {
           . 'nameserver {ns}/{address} returns same RCODE "{rcode}".',
         DIFFERENT_SOURCE_IP => 'Nameserver {ns}/{address} replies on a SOA query with a different source address '
           . '({source}).',
-        EDNS_RESPONSE_WITHOUT_EDNS => 'Incorrect response from {ns}/{address} asking for {dname} when EDNS is used (No OPT record).',
-        EDNS_VERSION_ERROR         => 'Incorrect response from {ns}/{address} asking for {dname} when EDNS is used (EDNS version should be 0).',
+        EDNS_RESPONSE_WITHOUT_EDNS => 'Response without EDNS from {ns}/{address} on query with EDNS0 asking for {dname}.',
+        EDNS_VERSION_ERROR         => 'Incorrect version of EDNS (expected 0) in response from {ns}/{address} on query with EDNS (version 0) asking for {dname}.',
         EDNS0_SUPPORT              => 'The following nameservers support EDNS0 : {names}.',
         IPV4_DISABLED              => 'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
         IPV6_DISABLED              => 'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.',

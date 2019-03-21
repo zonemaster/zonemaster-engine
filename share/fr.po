@@ -923,9 +923,9 @@ msgstr ""
 "Il n'est pas  possible de réaliser un transfert de zone depuis le serveur de "
 "noms {ns}/{address}."
 
-#: NAMESERVER:BROKEN_EDNS_SUPPORT
-msgid  "Incorrect response from {ns}/{address} asking for {dname} when EDNS is used (No Response)."
-msgstr "Réponse incorrecte de {ns}/{address} sur le nom de domaine '{dname}' lorsque EDNS est utilisé (Aucune réponse)."
+#: NAMESERVER:BREAKS_ON_EDNS
+msgid  "No response from {ns}/{address} when EDNS is used in query asking for {dname}."
+msgstr "Aucune réponse de {ns}/{address} sur le nom de domaine '{dname}' lorsque EDNS est utilisé."
 
 #: NAMESERVER:CAN_BE_RESOLVED
 msgid  "All nameservers succeeded to resolve to an IP address."
@@ -1007,11 +1007,11 @@ msgstr ""
 "à laquelle la requête a été envoyée."
 
 #: NAMESERVER:EDNS_RESPONSE_WITHOUT_EDNS
-msgid  "Incorrect response from {ns}/{address} asking for {dname} when EDNS is used (No OPT record)."
-msgstr "Réponse incorrecte de {ns}/{address} sur le nom de domaine '{dname}' lorsque EDNS est utilisé (Pas d'enregistrement de type OPT)."
+msgid  "Response without EDNS from {ns}/{address} on query with EDNS0 asking for {dname}."
+msgstr "Réponse sans enregistrement de type OPT de {ns}/{address} sur le nom de domaine '{dname}' lorsque EDNS est utilisé."
 
 #: NAMESERVER:EDNS_VERSION_ERROR
-msgid  "Incorrect response from {ns}/{address} asking for {dname} when EDNS is used (EDNS version should be 0)."
+msgid  "Incorrect version of EDNS (expected 0) in response from {ns}/{address} on query with EDNS (version 0) asking for {dname}."
 msgstr "Réponse incorrecte de {ns}/{address} sur le nom de domaine '{dname}' lorsque EDNS est utilisé (La version EDNS devrait être 0)."
 
 #: NAMESERVER:EDNS0_SUPPORT
