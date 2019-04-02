@@ -803,7 +803,7 @@ msgstr "AXFR är inte tillgänglig från namnservern {ns}/{address}."
 
 #: NAMESERVER:BREAKS_ON_EDNS
 msgid  "No response from {ns}/{address} when EDNS is used in query asking for {dname}."
-msgstr "Felaktigt DNS-svar från {ns}/{address} när {dname} efterfrågas med EDNS."
+msgstr "Inget svar från {ns}/{address} på förfrågan med EDNS (fråga efter {dname})."
 
 #: NAMESERVER:CAN_BE_RESOLVED
 msgid  "All nameservers succeeded to resolve to an IP address."
