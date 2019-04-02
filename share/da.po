@@ -789,8 +789,8 @@ msgid  "AXFR not available on nameserver {ns}/{address}."
 msgstr "AXFR er ikke tilgængeligt på navneserveren {ns}/{address}."
 
 #: NAMESERVER:BREAKS_ON_EDNS
-msgid  "Incorrect response from {ns}/{address} asking for {dname} when EDNS is used (No Response)."
-msgstr "Incorrect response from {ns}/{address} asking for {dname} when EDNS is used (No Response)."
+msgid  "No response from {ns}/{address} when EDNS is used in query asking for {dname}."
+msgstr "No response from {ns}/{address} when EDNS is used in query asking for {dname}."
 
 #: NAMESERVER:CAN_BE_RESOLVED
 msgid  "All nameservers succeeded to resolve to an IP address."
@@ -866,13 +866,12 @@ msgstr ""
 "kilde ({source})."
 
 #: NAMESERVER:EDNS_RESPONSE_WITHOUT_EDNS
-msgid  "Incorrect response from {ns}/{address} asking for {dname} when EDNS is used (No OPT record)."
-msgstr "Incorrect response from {ns}/{address} asking for {dname} when EDNS is used (No OPT record)."
-
+msgid  "Response without EDNS from {ns}/{address} on query with EDNS0 asking for {dname}."
+msgstr "Response without EDNS from {ns}/{address} on query with EDNS0 asking for {dname}."
 
 #: NAMESERVER:EDNS_VERSION_ERROR
-msgid  "Incorrect response from {ns}/{address} asking for {dname} when EDNS is used (EDNS version should be 0)."
-msgstr "Incorrect response from {ns}/{address} asking for {dname} when EDNS is used (EDNS version should be 0)."
+msgid  "Incorrect version of EDNS (expected 0) in response from {ns}/{address} on query with EDNS (version 0) asking for {dname}."
+msgstr "Incorrect version of EDNS (expected 0) in response from {ns}/{address} on query with EDNS (version 0) asking for {dname}."
 
 #: NAMESERVER:EDNS0_SUPPORT
 msgid  "The following nameservers support EDNS0 : {names}."
