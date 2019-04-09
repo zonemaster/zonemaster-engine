@@ -39,13 +39,13 @@ This instruction covers the following operating systems:
 3) Install binary packages:
 
    ```sh
-   sudo yum install cpanminus libidn-devel openssl-devel perl-Clone perl-core perl-Devel-CheckLib perl-Email-Valid perl-File-ShareDir perl-File-Slurp perl-IO-Socket-INET6 perl-JSON-PP perl-List-MoreUtils perl-Module-Find perl-Moose perl-Net-IP perl-Pod-Coverage perl-Readonly-XS perl-Test-Differences perl-Test-Exception perl-Test-Fatal perl-Test-Pod perl-Text-CSV perl-YAML
+   sudo yum install cpanminus libidn-devel openssl-devel perl-Clone perl-core perl-Devel-CheckLib perl-Email-Valid perl-File-ShareDir perl-File-Slurp perl-libintl perl-IO-Socket-INET6 perl-JSON-PP perl-List-MoreUtils perl-Module-Find perl-Moose perl-Net-IP perl-Pod-Coverage perl-Readonly-XS perl-Test-Differences perl-Test-Exception perl-Test-Fatal perl-Test-Pod perl-Text-CSV perl-YAML
    ```
 
 4) Install packages from CPAN:
 
    ```sh
-   sudo cpanm Locale::Msgfmt Locale::TextDomain Module::Install Module::Install::XSUtil Test::More
+   sudo cpanm Locale::Msgfmt Module::Install Module::Install::XSUtil Test::More
    ```
 
 5) Install Zonemaster::LDNS and Zonemaster::Engine:

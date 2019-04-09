@@ -11,7 +11,16 @@ use Carp;
 use Zonemaster::Engine;
 
 use POSIX qw[setlocale LC_MESSAGES];
-use Locale::TextDomain qw[Zonemaster-Engine]; # This must be the same name as "name" in Makefile.PL
+
+BEGIN {
+    # Locale::TextDomain (<= 1.20) doesn't know about File::ShareDir so give a helping hand.
+    # This is a hugely simplified version of the reference implementation located here:
+    # https://metacpan.org/source/GUIDO/libintl-perl-1.21/lib/Locale/TextDomain.pm
+    require File::ShareDir;
+    require Locale::TextDomain;
+    my $share = File::ShareDir::dist_dir( 'Zonemaster-Engine' );
+    Locale::TextDomain->import( 'Zonemaster-Engine', "$share/locale" );
+}
 
 has 'locale' => ( is => 'rw', isa => 'Str',     lazy => 1, builder => '_get_locale' );
 has 'data'   => ( is => 'ro', isa => 'HashRef', lazy => 1, builder => '_load_data' );
