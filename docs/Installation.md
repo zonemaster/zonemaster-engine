@@ -59,16 +59,22 @@ This instruction covers the following operating systems:
 1) Refresh the package information
 
    ```sh
-   sudo apt-get update
+   sudo apt update
    ```
 
 2) Install dependencies from binary packages:
 
    ```sh
-   sudo apt-get install build-essential libidn11-dev libfile-sharedir-perl libfile-slurp-perl libhash-merge-perl libio-socket-inet6-perl liblist-moreutils-perl libmail-rfc822-address-perl libmodule-find-perl libmodule-install-perl libmoose-perl libnet-ip-perl libreadonly-xs-perl libtext-csv-perl libssl-dev libdevel-checklib-perl libtool m4 autoconf automake cpanminus
+   sudo apt install autoconf automake build-essential cpanminus libclone-perl libdevel-checklib-perl libfile-sharedir-perl libfile-slurp-perl libidn11-dev libintl-perl libio-socket-inet6-perl libjson-pp-perl liblist-moreutils-perl liblocale-msgfmt-perl libmail-rfc822-address-perl libmodule-find-perl libmodule-install-xsutil-perl libmoose-perl libnet-ip-perl libpod-coverage-perl libreadonly-xs-perl libssl-dev libtest-differences-perl libtest-exception-perl libtest-fatal-perl libtest-pod-perl libtext-csv-perl libtool m4
    ```
 
-3) Install Zonemaster::LDNS and Zonemaster::Engine:
+3) Install dependencies from CPAN:
+
+   ```sh
+   sudo cpanm Module::Install Test::More
+   ```
+
+4) Install Zonemaster::LDNS and Zonemaster::Engine:
 
    ```sh
    sudo cpanm Zonemaster::LDNS Zonemaster::Engine
@@ -86,16 +92,10 @@ This instruction covers the following operating systems:
 2) Install dependencies from binary packages:
 
    ```sh
-   pkg install libidn p5-File-ShareDir p5-File-Slurp p5-Hash-Merge p5-IO-Socket-INET6 p5-List-MoreUtils p5-Locale-libintl p5-Mail-RFC822-Address p5-Module-Find p5-Moose p5-Net-IP p5-Readonly-XS p5-Text-CSV p5-App-cpanminus
+   pkg install libidn p5-App-cpanminus p5-Clone p5-Devel-CheckLib p5-File-ShareDir p5-File-Slurp p5-IO-Socket-INET6 p5-JSON-PP p5-List-MoreUtils p5-Locale-libintl p5-Locale-Msgfmt p5-Mail-RFC822-Address p5-Module-Find p5-Module-Install p5-Module-Install-XSUtil p5-Moose p5-Net-IP p5-Pod-Coverage p5-Readonly-XS p5-Test-Differences p5-Test-Exception p5-Test-Fatal p5-Test-Pod p5-Text-CSV
    ```
 
-3) Install dependencies from CPAN:
-
-   ```sh
-   cpanm Test::More inc::Module::Install
-   ```
-
-4) Install Zonemaster::LDNS and Zonemaster::Engine:
+3) Install Zonemaster::LDNS and Zonemaster::Engine:
 
    ```sh
    cpanm Zonemaster::LDNS Zonemaster::Engine
