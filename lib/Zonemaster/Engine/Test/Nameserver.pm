@@ -222,7 +222,7 @@ sub translation {
         NO_RESOLUTION              => 'No nameservers succeeded to resolve to an IP address.',
         NO_RESPONSE                => 'No response from {ns}/{address} asking for {dname}.',
         NO_UPWARD_REFERRAL         => 'None of the following nameservers returns an upward referral : {names}.',
-        NS_ERROR                   => 'Nameserver {ns}/{address} ',
+        NS_ERROR                   => 'Erroneous response from nameserver {ns}/{address}.',
         QNAME_CASE_INSENSITIVE     => 'Nameserver {ns}/{address} does not preserve original case of queried names.',
         QNAME_CASE_SENSITIVE       => 'Nameserver {ns}/{address} preserves original case of queried names.',
         QUERY_DROPPED              => 'Nameserver {ns}/{address} dropped AAAA query.',
