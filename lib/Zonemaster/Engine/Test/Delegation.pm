@@ -112,8 +112,8 @@ sub metadata {
 sub translation {
     return {
         ARE_AUTHORITATIVE    => "All these nameservers are confirmed to be authoritative : {nsset}.",
-        CHILD_DISTINCT_NS_IP => "All the IP addresses used by the nameservers in child are unique.",
-        CHILD_NS_SAME_IP     => "IP {address} in child refers to multiple nameservers ({nss}).",
+        CHILD_DISTINCT_NS_IP => "All the IP addresses used by the nameservers in the zone are unique.",
+        CHILD_NS_SAME_IP     => "IP {address} in the zone refers to multiple nameservers ({nss}).",
         DEL_DISTINCT_NS_IP   => "All the IP addresses used by the nameservers in parent are unique.",
         DEL_NS_SAME_IP       => "IP {address} in parent refers to multiple nameservers ({nss}).",
         DISTINCT_IP_ADDRESS  => "All the IP addresses used by the nameservers are unique",
@@ -146,11 +146,11 @@ sub translation {
           . "Lower limit set to {minimum}.",
         NO_IPV4_NS_CHILD => "Child lists no nameserver that resolves to an IPv4 address. If any were present, "
           . "the minimum allowed would be {minimum}.",
-        NO_IPV4_NS_DEL => "Delegation lists no nameserver that resolves to an IPv4 address. If any were present, "
+        NO_IPV4_NS_DEL => "Parent lists no nameserver that resolves to an IPv4 address. If any were present, "
           . "the minimum allowed would be {minimum}.",
         NO_IPV6_NS_CHILD => "Child lists no nameserver that resolves to an IPv6 address. If any were present, "
           . "the minimum allowed would be {minimum}.",
-        NO_IPV6_NS_DEL => "Delegation lists no nameserver that resolves to an IPv6 address. If any were present, "
+        NO_IPV6_NS_DEL => "Parent lists no nameserver that resolves to an IPv6 address. If any were present, "
           . "the minimum allowed would be {minimum}.",
         NS_RR_IS_CNAME          => "Nameserver {ns} {address_type} RR point to CNAME.",
         NS_RR_NO_CNAME          => "No nameserver point to CNAME alias.",

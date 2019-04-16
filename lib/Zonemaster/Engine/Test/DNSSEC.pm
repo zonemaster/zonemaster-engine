@@ -348,13 +348,13 @@ sub metadata {
 sub translation {
     return {
         ADDITIONAL_DNSKEY_SKIPPED => "No DNSKEYs found. Additional tests skipped.",
-        ALGORITHM_DELETE_DS       => "The DNSKEY with tag {keytag} uses Delete DS algorithm number "
+        ALGORITHM_DELETE_DS       => "The DNSKEY with tag {keytag} uses the Delete DS algorithm number "
           . "{algorithm}/({description}).",
         ALGORITHM_DEPRECATED => "The DNSKEY with tag {keytag} uses deprecated algorithm number "
           . "{algorithm}/({description}).",
-        ALGORITHM_INDIRECT_KEY => "The DNSKEY with tag {keytag} uses algorithm number reserved for indirect keys "
+        ALGORITHM_INDIRECT_KEY => "The DNSKEY with tag {keytag} uses an algorithm number reserved for indirect keys "
           . "{algorithm}/({description}).",
-        ALGORITHM_NOT_ZONE_SIGN => "The DNSKEY with tag {keytag} uses algorithm number not meant for zone signing"
+        ALGORITHM_NOT_ZONE_SIGN => "The DNSKEY with tag {keytag} uses an algorithm number not meant for zone signing "
           . "{algorithm}/({description}).",
         ALGORITHM_OK => "The DNSKEY with tag {keytag} uses algorithm number {algorithm}/({description}), which is OK.",
         ALGORITHM_PRIVATE  => "The DNSKEY with tag {keytag} uses private algorithm number {algorithm}/({description}).",
@@ -405,7 +405,7 @@ sub translation {
         NO_KEYS_OR_NO_SIGS_OR_NO_SOA => "Cannot test SOA signatures, because we got {keys} DNSKEY records, "
           . "{sigs} RRSIG records and {soas} SOA records.",
         NO_NSEC3PARAM          => "{server} returned no NSEC3PARAM records.",
-        NO_RESPONSE_DNSKEY     => "Nameserver {ns}/{address} responded with no DNSKEY record(s).",
+        NO_RESPONSE_DNSKEY     => "Nameserver {ns}/{address} responded without DNSKEY record(s).",
         NO_RESPONSE            => "Nameserver {ns}/{address} did not respond.",
         NOT_SIGNED             => "The zone is not signed with DNSSEC.",
         NSEC3_COVERS_NOT       => "NSEC3 record does not cover {name}.",

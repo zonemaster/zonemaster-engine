@@ -212,6 +212,10 @@ msgstr ""
 msgid  "Saw {count} NS set."
 msgstr "Found {count} NS set(s)."
 
+#: CONSISTENCY:MULTIPLE_SOA_MNAMES
+msgid  "Found {count} SOA mname(s)."
+msgstr "Found {count} SOA mname(s)."
+
 #: CONSISTENCY:MULTIPLE_SOA_RNAMES
 msgid  "Saw {count} SOA rname."
 msgstr "Found {count} SOA rname(s)."
@@ -224,7 +228,7 @@ msgstr "Found {count} SOA serial number(s)."
 msgid  "Saw {count} SOA time parameter set."
 msgstr "Found {count} SOA time parameter set(s)."
 
-#: CONSISTENCY:NO_RESPONSE
+#: CONSISTENCY:NO_RESPONSE DNSSEC:NO_RESPONSE
 msgid  "Nameserver {ns}/{address} did not respond."
 msgstr "Nameserver {ns}/{address} did not respond."
 
@@ -243,6 +247,10 @@ msgstr "Saw NS set ({nsset}) on following nameserver set : {servers}."
 #: CONSISTENCY:ONE_NS_SET
 msgid  "A unique NS set was seen ({nsset})."
 msgstr "A single NS set was found ({nsset})."
+
+#: CONSISTENCY:ONE_SOA_MNAME
+msgid  "A single SOA mname value was found ({mname})."
+msgstr "A single SOA mname value was found ({mname})."
 
 #: CONSISTENCY:ONE_SOA_RNAME
 msgid  "A single SOA rname value was seen ({rname})"
@@ -297,11 +305,60 @@ msgstr ""
 msgid  "All these nameservers are confirmed to be authoritative : {nsset}."
 msgstr "All these nameservers are confirmed to be authoritative : {nsset}."
 
+#: DELEGATION:CHILD_DISTINCT_NS_IP
+msgid  "All the IP addresses used by the nameservers in the zone are unique."
+msgstr ""
+"All the IP addresses used by the nameservers in the the zone are unique."
+
+#: DELEGATION:CHILD_NS_SAME_IP
+msgid  "IP {address} in the zone refers to multiple nameservers ({nss})."
+msgstr "IP {address} in the zone refers to multiple nameservers ({nss})."
+
+#: DELEGATION:DEL_DISTINCT_NS_IP
+msgid  "All the IP addresses used by the nameservers in parent are unique."
+msgstr "All the IP addresses used by the nameservers in parent are unique."
+
+#: DELEGATION:DEL_NS_SAME_IP
+msgid  "IP {address} in parent refers to multiple nameservers ({nss})."
+msgstr "IP {address} in parent refers to multiple nameservers ({nss})."
+
 #: DELEGATION:DISTINCT_IP_ADDRESS
 msgid  "All the IP addresses used by the nameservers are unique"
-msgstr "All the IP addresses used by the nameservers are unique"
+msgstr "All the IP addresses used by the nameservers are unique."
 
-#: DELEGATION:ENOUGH_NS
+#: DELEGATION:ENOUGH_IPV4_NS_CHILD
+msgid  ""
+"Child lists enough ({count}) nameservers that resolve to IPv4 addresses "
+"({addrs}). Lower limit set to {minimum}."
+msgstr ""
+"Child lists enough ({count}) nameservers that resolve to IPv4 addresses "
+"({addrs}). Lower limit set to {minimum}."
+
+#: DELEGATION:ENOUGH_IPV4_NS_DEL
+msgid  ""
+"Delegation lists enough ({count}) nameservers that resolve to IPv4 addresses "
+"({addrs}). Lower limit set to {minimum}."
+msgstr ""
+"Delegation lists enough ({count}) nameservers that resolve to IPv4 addresses "
+"({addrs}). Lower limit set to {minimum}."
+
+#: DELEGATION:ENOUGH_IPV6_NS_CHILD
+msgid  ""
+"Child lists enough ({count}) nameservers that resolve to IPv6 addresses "
+"({addrs}). Lower limit set to {minimum}."
+msgstr ""
+"Child lists enough ({count}) nameservers that resolve to IPv6 addresses "
+"({addrs}). Lower limit set to {minimum}."
+
+#: DELEGATION:ENOUGH_IPV6_NS_DEL
+msgid  ""
+"Delegation lists enough ({count}) nameservers that resolve to IPv6 addresses "
+"({addrs}). Lower limit set to {minimum}."
+msgstr ""
+"Delegation lists enough ({count}) nameservers that resolve to IPv4 addresses "
+"({addrs}). Lower limit set to {minimum}."
+
+#: DELEGATION:ENOUGH_NS_CHILD
 msgid  ""
 "Child lists enough ({count}) nameservers ({ns}). Lower limit set to "
 "{minimum}."
@@ -309,7 +366,7 @@ msgstr ""
 "Child lists enough ({count}) nameservers ({ns}). Lower limit set to "
 "{minimum}."
 
-#: DELEGATION:ENOUGH_NS_GLUE
+#: DELEGATION:ENOUGH_NS_DEL
 msgid  ""
 "Parent lists enough ({count}) nameservers ({glue}). Lower limit set to "
 "{minimum}."
@@ -333,7 +390,39 @@ msgstr "Nameserver {ns} response is not authoritative on {proto} port 53."
 msgid  "All of the nameserver names are listed both at parent and child."
 msgstr "All of the nameserver names are listed both at parent and child."
 
-#: DELEGATION:NOT_ENOUGH_NS
+#: DELEGATION:NOT_ENOUGH_IPV4_NS_CHILD
+msgid  ""
+"Child does not list enough ({count}) nameservers that resolve to IPv4 "
+"addresses ({addrs}). Lower limit set to {minimum}."
+msgstr ""
+"Child does not list enough ({count}) nameservers that resolve to IPv4 "
+"addresses ({addrs}). Lower limit set to {minimum}."
+
+#: DELEGATION:NOT_ENOUGH_IPV4_NS_DEL
+msgid  ""
+"Delegation does not list enough ({count}) nameservers that resolve to IPv4 "
+"addresses ({addrs}). Lower limit set to {minimum}."
+msgstr ""
+"Delegation does not list enough ({count}) nameservers that resolve to IPv4 addresses "
+"({addrs}). Lower limit set to {minimum}."
+
+#: DELEGATION:NOT_ENOUGH_IPV6_NS_CHILD
+msgid  ""
+"Child does not list enough ({count}) nameservers that resolve to IPv6 "
+"addresses ({addrs}). Lower limit set to {minimum}."
+msgstr ""
+"Child does not list enough ({count}) nameservers that resolve to IPv6 "
+"addresses ({addrs}). Lower limit set to {minimum}."
+
+#: DELEGATION:NOT_ENOUGH_IPV6_NS_DEL
+msgid  ""
+"Delegation does not list enough ({count}) nameservers that resolve to IPv6 "
+"addresses ({addrs}). Lower limit set to {minimum}."
+msgstr ""
+"Delegation does not list enough ({count}) nameservers that resolve to IPv4 addresses "
+"({addrs}). Lower limit set to {minimum}."
+
+#: DELEGATION:NOT_ENOUGH_NS_CHILD
 msgid  ""
 "Child does not list enough ({count}) nameservers ({ns}). Lower limit set to "
 "{minimum}."
@@ -341,13 +430,45 @@ msgstr ""
 "Child does not list enough ({count}) nameservers ({ns}). Lower limit set to "
 "{minimum}."
 
-#: DELEGATION:NOT_ENOUGH_NS_GLUE
+#: DELEGATION:NOT_ENOUGH_NS_DEL
 msgid  ""
 "Parent does not list enough ({count}) nameservers ({glue}). Lower limit set "
 "to {minimum}."
 msgstr ""
 "Parent does not list enough ({count}) nameservers ({glue}). Lower limit set "
 "to {minimum}."
+
+#: DELEGATION:NO_IPV4_NS_CHILD
+msgid  ""
+"Child lists no nameserver that resolves to an IPv4 address. If any were "
+"present, the minimum allowed would be {minimum}."
+msgstr ""
+"Child lists no nameserver that resolves to an IPv4 address. If any were "
+"present, the minimum allowed would be {minimum}."
+
+#: DELEGATION:NO_IPV4_NS_DEL
+msgid  ""
+"Parent lists no nameserver that resolves to an IPv4 address. If any were "
+"present, the minimum allowed would be {minimum}."
+msgstr ""
+"Parent lists no nameserver that resolves to an IPv4 address. If any were "
+"present, the minimum allowed would be {minimum}."
+
+#: DELEGATION:NO_IPV6_NS_CHILD
+msgid  ""
+"Child lists no nameserver that resolves to an IPv6 address. If any were "
+"present, the minimum allowed would be {minimum}."
+msgstr ""
+"Child lists no nameserver that resolves to an IPv6 address. If any were "
+"present, the minimum allowed would be {minimum}."
+
+#: DELEGATION:NO_IPV6_NS_DEL
+msgid  ""
+"Parent lists no nameserver that resolves to an IPv6 address. If any were "
+"present, the minimum allowed would be {minimum}."
+msgstr ""
+"Parent lists no nameserver that resolves to an IPv6 address. If any were "
+"present, the minimum allowed would be {minimum}."
 
 #: DELEGATION:NS_RR_IS_CNAME
 msgid  "Nameserver {ns} {address_type} RR point to CNAME."
@@ -357,14 +478,6 @@ msgstr "Nameserver {ns} {address_type} RR point to CNAME."
 msgid  "No nameserver point to CNAME alias."
 msgstr "No nameserver points to CNAME alias."
 
-#: DELEGATION:REFERRAL_SIZE_LARGE
-msgid  ""
-"The smallest possible legal referral packet is larger than 512 octets (it is "
-"{size})."
-msgstr ""
-"The smallest possible legal referral packet is larger than 512 octets (it is "
-"{size})."
-
 #: DELEGATION:REFERRAL_SIZE_OK
 msgid  ""
 "The smallest possible legal referral packet is smaller than 513 octets (it "
@@ -372,6 +485,14 @@ msgid  ""
 msgstr ""
 "The smallest possible legal referral packet is smaller than 513 octets (it "
 "is {size})."
+
+#: DELEGATION:REFERRAL_SIZE_TOO_LARGE
+msgid  ""
+"The smallest possible legal referral packet is larger than 512 octets (it is "
+"{size})."
+msgstr ""
+"The smallest possible legal referral packet is larger than 512 octets (it is "
+"{size})."
 
 #: DELEGATION:SAME_IP_ADDRESS
 msgid  "IP {address} refers to multiple nameservers ({nss})."
@@ -393,6 +514,14 @@ msgstr "None of the nameservers listed at the parent are listed at the child."
 msgid  "No DNSKEYs found. Additional tests skipped."
 msgstr "No DNSKEYs found. Additional tests skipped."
 
+#: DNSSEC:ALGORITHM_DELETE_DS
+msgid  ""
+"The DNSKEY with tag {keytag} uses the Delete DS algorithm number {algorithm}/"
+"({description})."
+msgstr ""
+"The DNSKEY with tag {keytag} uses the Delete DS algorithm number {algorithm}/"
+"({description})."
+
 #: DNSSEC:ALGORITHM_DEPRECATED
 msgid  ""
 "The DNSKEY with tag {keytag} uses deprecated algorithm number {algorithm}/"
@@ -400,6 +529,22 @@ msgid  ""
 msgstr ""
 "The DNSKEY with tag {keytag} uses deprecated algorithm number {algorithm}/"
 "({description})."
+
+#: DNSSEC:ALGORITHM_INDIRECT_KEY
+msgid  ""
+"The DNSKEY with tag {keytag} uses an algorithm number reserved for indirect "
+"keys {algorithm}/({description})."
+msgstr ""
+"The DNSKEY with tag {keytag} uses an algorithm number reserved for indirect "
+"keys {algorithm}/({description})."
+
+#: DNSSEC:ALGORITHM_NOT_ZONE_SIGN
+msgid  ""
+"The DNSKEY with tag {keytag} uses an algorithm number not meant for zone "
+"signing {algorithm}/({description})."
+msgstr ""
+"The DNSKEY with tag {keytag} uses an algorithm number not meant for zone "
+"signing {algorithm}/({description})."
 
 #: DNSSEC:ALGORITHM_OK
 msgid  ""
@@ -432,11 +577,6 @@ msgid  ""
 msgstr ""
 "The DNSKEY with tag {keytag} uses unassigned algorithm number {algorithm}/"
 "({description})."
-
-#: DNSSEC:ALGORITHM_UNKNOWN
-msgid  "The DNSKEY with tag {keytag} uses unknown algorithm number {algorithm}."
-msgstr ""
-"The DNSKEY with tag {keytag} uses unknown algorithm number {algorithm}."
 
 #: DNSSEC:COMMON_KEYTAGS
 msgid  "There are both DS and DNSKEY records with key tags {keytags}."
@@ -630,6 +770,10 @@ msgstr ""
 msgid  "{server} returned no NSEC3PARAM records."
 msgstr "{server} returned no NSEC3PARAM records."
 
+#: DNSSEC:NO_RESPONSE_DNSKEY
+msgid  "Nameserver {ns}/{address} responded without DNSKEY record(s)."
+msgstr "Nameserver {ns}/{address} responded without any DNSKEY record(s)."
+
 #: DNSSEC:NSEC3_COVERS
 msgid  "NSEC3 record covers {name}."
 msgstr "NSEC3 record covers {name}."
@@ -753,8 +897,12 @@ msgid  "AXFR not available on nameserver {ns}/{address}."
 msgstr "AXFR not available on nameserver {ns}/{address}."
 
 #: NAMESERVER:BREAKS_ON_EDNS
-msgid  "No response from {ns}/{address} when EDNS is used in query asking for {dname}."
-msgstr "No response from {ns}/{address} when EDNS is used in query asking for {dname}."
+msgid  ""
+"No response from {ns}/{address} when EDNS is used in query asking for "
+"{dname}."
+msgstr ""
+"No response from {ns}/{address} when EDNS is used in query asking for "
+"{dname}."
 
 #: NAMESERVER:CAN_BE_RESOLVED
 msgid  "All nameservers succeeded to resolve to an IP address."
@@ -829,21 +977,37 @@ msgstr ""
 "Nameserver {ns}/{address} replies on a SOA query with a different source "
 "address ({source})."
 
-#: NAMESERVER:EDNS_RESPONSE_WITHOUT_EDNS
-msgid  "Response without EDNS from {ns}/{address} on query with EDNS0 asking for {dname}."
-msgstr "Response without EDNS from {ns}/{address} on query with EDNS0 asking for {dname}."
-
-#: NAMESERVER:EDNS_VERSION_ERROR
-msgid  "Incorrect version of EDNS (expected 0) in response from {ns}/{address} on query with EDNS (version 0) asking for {dname}."
-msgstr "Incorrect version of EDNS (expected 0) in response from {ns}/{address} on query with EDNS (version 0) asking for {dname}."
-
 #: NAMESERVER:EDNS0_SUPPORT
 msgid  "The following nameservers support EDNS0 : {names}."
 msgstr "The following nameservers support EDNS0 : {names}."
 
+#: NAMESERVER:EDNS_RESPONSE_WITHOUT_EDNS
+msgid  ""
+"Response without EDNS from {ns}/{address} on query with EDNS0 asking for "
+"{dname}."
+msgstr ""
+"Response without EDNS from {ns}/{address} on query with EDNS0 asking for "
+"{dname}."
+
+#: NAMESERVER:EDNS_VERSION_ERROR
+msgid  ""
+"Incorrect version of EDNS (expected 0) in response from {ns}/{address} on "
+"query with EDNS (version 0) asking for {dname}."
+msgstr ""
+"Incorrect version of EDNS (expected 0) in response from {ns}/{address} on "
+"query with EDNS (version 0) asking for {dname}."
+
 #: NAMESERVER:IS_A_RECURSOR
 msgid  "Nameserver {ns}/{address} is a recursor."
 msgstr "Nameserver {ns}/{address} is a recursor."
+
+#: NAMESERVER:MISSING_OPT_IN_TRUNCATED
+msgid  ""
+"Nameserver {ns}/{address} replies on an EDNS query with a truncated response "
+"without EDNS."
+msgstr ""
+"Nameserver {ns}/{address} replies on an EDNS query with a truncated response "
+"without EDNS."
 
 #: NAMESERVER:NO_EDNS_SUPPORT
 msgid  ""
@@ -859,10 +1023,18 @@ msgstr "Nameserver {ns}/{address} is not a recursor."
 msgid  "No nameservers succeeded to resolve to an IP address."
 msgstr "No nameserver was successfully resolved to an IP address."
 
+#: NAMESERVER:NO_RESPONSE SYNTAX:NO_RESPONSE
+msgid  "No response from {ns}/{address} asking for {dname}."
+msgstr "No response from {ns}/{address} asking for {dname}."
+
 #: NAMESERVER:NO_UPWARD_REFERRAL
 msgid  "None of the following nameservers returns an upward referral : {names}."
 msgstr ""
 "None of the following nameservers returns an upward referral : {names}."
+
+#: NAMESERVER:NS_ERROR
+msgid  "Erroneous response from nameserver {ns}/{address}."
+msgstr "Erroneous response from nameserver {ns}/{address}."
 
 #: NAMESERVER:QNAME_CASE_INSENSITIVE
 msgid  ""
@@ -884,6 +1056,14 @@ msgstr "Nameserver {ns}/{address} dropped AAAA query."
 msgid  "All nameservers reply with same IP used to query them."
 msgstr "All nameservers reply with same IP used to query them."
 
+#: NAMESERVER:UNKNOWN_OPTION_CODE
+msgid  "Nameserver {ns}/{address} responds with an unknown ENDS OPTION-CODE."
+msgstr "Nameserver {ns}/{address} responds with an unknown EDNS OPTION-CODE."
+
+#: NAMESERVER:UNSUPPORTED_EDNS_VER
+msgid  "Nameserver {ns}/{address} accepts an unsupported EDNS version."
+msgstr "Nameserver {ns}/{address} accepts an unsupported EDNS version."
+
 #: NAMESERVER:UPWARD_REFERRAL
 msgid  "Nameserver {ns}/{address} returns an upward referral."
 msgstr "Nameserver {ns}/{address} returns an upward referral."
@@ -891,6 +1071,11 @@ msgstr "Nameserver {ns}/{address} returns an upward referral."
 #: NAMESERVER:UPWARD_REFERRAL_IRRELEVANT
 msgid  "Upward referral tests skipped for root zone."
 msgstr "Upward referral tests skipped for root zone."
+
+#: NAMESERVER:Z_FLAGS_NOTCLEAR
+msgid  "Nameserver {ns}/{address} has one or more unknown EDNS Z flag bits set."
+msgstr ""
+"Nameserver {ns}/{address} has one or more unknown EDNS Z flag bits set."
 
 #: SYNTAX:DISCOURAGED_DOUBLE_DASH
 msgid  ""
@@ -994,6 +1179,14 @@ msgstr "No response from nameserver(s) on SOA queries."
 msgid  "No illegal characters in the domain name ({name})."
 msgstr "No illegal characters in the domain name ({name})."
 
+#: SYNTAX:RNAME_MAIL_DOMAIN_INVALID
+msgid  ""
+"The SOA RNAME mail domain ({domain}) cannot be resolved to a mail server "
+"with an IP address."
+msgstr ""
+"The SOA RNAME mail domain ({domain}) cannot be resolved to a mail server "
+"with an IP address."
+
 #: SYNTAX:RNAME_MISUSED_AT_SIGN
 msgid  ""
 "There must be no misused '@' character in the SOA RNAME field ({rname})."
@@ -1022,10 +1215,6 @@ msgstr "Added a fake delegation for domain {domain} to name server {ns}."
 #: SYSTEM:CANNOT_CONTINUE
 msgid  "Not enough data about {zone} was found to be able to run tests."
 msgstr "Not enough data about {zone} was found to be able to run tests."
-
-#: SYSTEM:PROFILE_FILE
-msgid  "Profile was read from {name}."
-msgstr "Profile was read from {name}."
 
 #: SYSTEM:DEPENDENCY_VERSION
 msgid  "Using prerequisite module {name} version {version}."
@@ -1098,6 +1287,10 @@ msgstr ""
 #: SYSTEM:POLICY_DISABLED
 msgid  "The module {name} was disabled by the policy."
 msgstr "The module {name} was disabled by the policy."
+
+#: SYSTEM:PROFILE_FILE
+msgid  "Profile was read from {name}."
+msgstr "Profile was read from {name}."
 
 #: SYSTEM:SKIP_IPV4_DISABLED
 msgid  "IPv4 is disabled, not sending query to {ns}."
