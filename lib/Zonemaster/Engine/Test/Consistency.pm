@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::Consistency;
 
-use version; our $VERSION = version->declare("v1.1.7");
+use version; our $VERSION = version->declare("v1.1.8");
 
 use strict;
 use warnings;
@@ -643,7 +643,7 @@ sub consistency05 {
             }
 
             for my $rr ( @rrs_a, @rrs_aaaa ) {
-                $child_ib_strings{ $rr->name . "/" . $rr->address } = 1;
+                $child_ib_strings{ lc( $rr->name ) . "/" . $rr->address } = 1;
             }
         }
 
