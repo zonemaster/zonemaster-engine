@@ -38,6 +38,7 @@ test_requires 'Test::Fatal'       => 0;
 test_requires 'Test::Pod'         => 1.22;
 
 recommends 'Readonly::XS' => 0;
+recommends 'Net::IP::XS'  => 0;
 
 sub MY::postamble {
         return <<'MAKE_FRAG';

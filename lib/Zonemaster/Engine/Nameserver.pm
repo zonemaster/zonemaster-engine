@@ -15,7 +15,7 @@ use Zonemaster::Engine::Constants ':misc';
 
 use Zonemaster::LDNS;
 
-use Zonemaster::Engine::Net::IP qw(:PROC);
+use Zonemaster::Engine::Net::IP;
 use Time::HiRes qw[time];
 use JSON::PP;
 use MIME::Base64;
