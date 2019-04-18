@@ -41,6 +41,7 @@ my @res;
 my %res;
 
 %res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{connectivity}, q{afnic.fr} );
+ok( !$res{MODULE_ERROR},                q{Test module completes normally} );
 ok( $res{NAMESERVER_HAS_UDP_53},        q{Nameserver has UDP port 53 reachable} );
 ok( $res{NAMESERVER_HAS_TCP_53},        q{Nameserver has TCP port 53 reachable} );
 ok( $res{IPV4_DIFFERENT_ASN},           q{IPv4 Nameservers with multiple AS} );
