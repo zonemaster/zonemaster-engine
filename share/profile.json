@@ -204,10 +204,6 @@
             "SOA_SIGNED" : "DEBUG",
             "TOO_MANY_ITERATIONS" : "WARNING"
         },
-        "EXAMPLE" : {
-            "DISABLED" : true,
-            "EXAMPLE_TAG" : "DEBUG"
-        },
         "NAMESERVER" : {
             "AAAA_WELL_PROCESSED" : "INFO",
             "ANSWER_BAD_RCODE" : "NOTICE",
