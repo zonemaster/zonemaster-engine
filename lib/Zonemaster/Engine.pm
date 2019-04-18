@@ -14,7 +14,7 @@ BEGIN {
     Locale::TextDomain->import( 'Zonemaster-Engine', "$share/locale" );
 }
 
-use Moose;
+use Class::Accessor "antlers";
 use Carp;
 use Zonemaster::Engine::Nameserver;
 use Zonemaster::Engine::Logger;
@@ -383,8 +383,5 @@ The full text of the license can be found in the
 F<LICENSE> file included with this distribution.
 
 =cut
-
-no Moose;
-__PACKAGE__->meta->make_immutable;
 
 1;
