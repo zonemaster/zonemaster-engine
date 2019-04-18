@@ -4,7 +4,6 @@ use version; our $VERSION = version->declare("v1.1.16");
 
 use 5.014002;
 use Moose;
-use Moose::Util::TypeConstraints;
 
 use Zonemaster::Engine::DNSName;
 use Zonemaster::Engine;
@@ -20,19 +19,18 @@ use Time::HiRes qw[time];
 use JSON::PP;
 use MIME::Base64;
 use Module::Find qw[useall];
-use Carp;
+use Carp qw( confess croak );
 use List::Util qw[max min sum];
 use Digest::MD5;
 use POSIX ();
+use Scalar::Util qw[ blessed ];
 
 use overload
   '""'  => \&string,
   'cmp' => \&compare;
 
-coerce 'Zonemaster::Engine::Net::IP', from 'Str', via { Zonemaster::Engine::Net::IP->new( $_ ) };
-
-has 'name'    => ( is => 'ro', isa => 'Zonemaster::Engine::DNSName', coerce => 1, required => 0 );
-has 'address' => ( is => 'ro', isa => 'Zonemaster::Engine::Net::IP', coerce => 1, required => 1 );
+has 'name'    => ( is => 'ro', isa => 'Zonemaster::Engine::DNSName', required => 0 );
+has 'address' => ( is => 'ro', isa => 'Zonemaster::Engine::Net::IP', required => 1 );
 
 has 'dns'   => ( is => 'ro', isa => 'Zonemaster::LDNS',                     lazy_build => 1 );
 has 'cache' => ( is => 'ro', isa => 'Zonemaster::Engine::Nameserver::Cache', lazy_build => 1 );
@@ -71,8 +69,20 @@ our %object_cache;
 around 'new' => sub {
     my $orig = shift;
     my $self = shift;
+    my $args = shift;
 
-    my $obj  = $self->$orig( @_ );
+    # Required arguments
+    confess "Attribute \(address\) is required"
+      if !exists $args->{address};
+
+    if ( !blessed $args->{name} || !$args->{name}->isa( 'Zonemaster::Engine::DNSName' ) ) {
+        $args->{name} = Zonemaster::Engine::DNSName->new( $args->{name} );
+    }
+    if ( !blessed $args->{address} || !$args->{address}->isa( 'Zonemaster::Engine::Net::IP' ) ) {
+        $args->{address} = Zonemaster::Engine::Net::IP->new( $args->{address} );
+    }
+
+    my $obj  = $self->$orig( $args );
     my $name = lc( q{} . $obj->name );
     $name = '$$$NONAME' unless $name;
     if ( not exists $object_cache{$name}{ $obj->address->ip } ) {
