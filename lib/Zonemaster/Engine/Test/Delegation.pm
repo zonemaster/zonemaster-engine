@@ -146,11 +146,11 @@ sub translation {
           . "Lower limit set to {minimum}.",
         NO_IPV4_NS_CHILD => "Child lists no nameserver that resolves to an IPv4 address. If any were present, "
           . "the minimum allowed would be {minimum}.",
-        NO_IPV4_NS_DEL => "Parent lists no nameserver that resolves to an IPv4 address. If any were present, "
+        NO_IPV4_NS_DEL => "Delegation lists no nameserver that resolves to an IPv4 address. If any were present, "
           . "the minimum allowed would be {minimum}.",
         NO_IPV6_NS_CHILD => "Child lists no nameserver that resolves to an IPv6 address. If any were present, "
           . "the minimum allowed would be {minimum}.",
-        NO_IPV6_NS_DEL => "Parent lists no nameserver that resolves to an IPv6 address. If any were present, "
+        NO_IPV6_NS_DEL => "Delegation lists no nameserver that resolves to an IPv6 address. If any were present, "
           . "the minimum allowed would be {minimum}.",
         NS_RR_IS_CNAME          => "Nameserver {ns} {address_type} RR point to CNAME.",
         NS_RR_NO_CNAME          => "No nameserver point to CNAME alias.",

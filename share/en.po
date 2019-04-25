@@ -403,8 +403,8 @@ msgid  ""
 "Delegation does not list enough ({count}) nameservers that resolve to IPv4 "
 "addresses ({addrs}). Lower limit set to {minimum}."
 msgstr ""
-"Delegation does not list enough ({count}) nameservers that resolve to IPv4 addresses "
-"({addrs}). Lower limit set to {minimum}."
+"Delegation does not list enough ({count}) nameservers that resolve to IPv4 "
+"addresses ({addrs}). Lower limit set to {minimum}."
 
 #: DELEGATION:NOT_ENOUGH_IPV6_NS_CHILD
 msgid  ""
@@ -419,8 +419,8 @@ msgid  ""
 "Delegation does not list enough ({count}) nameservers that resolve to IPv6 "
 "addresses ({addrs}). Lower limit set to {minimum}."
 msgstr ""
-"Delegation does not list enough ({count}) nameservers that resolve to IPv4 addresses "
-"({addrs}). Lower limit set to {minimum}."
+"Delegation does not list enough ({count}) nameservers that resolve to IPv4 "
+"addresses ({addrs}). Lower limit set to {minimum}."
 
 #: DELEGATION:NOT_ENOUGH_NS_CHILD
 msgid  ""
@@ -448,10 +448,10 @@ msgstr ""
 
 #: DELEGATION:NO_IPV4_NS_DEL
 msgid  ""
-"Parent lists no nameserver that resolves to an IPv4 address. If any were "
+"Delegation lists no nameserver that resolves to an IPv4 address. If any were "
 "present, the minimum allowed would be {minimum}."
 msgstr ""
-"Parent lists no nameserver that resolves to an IPv4 address. If any were "
+"Delegation lists no nameserver that resolves to an IPv4 address. If any were "
 "present, the minimum allowed would be {minimum}."
 
 #: DELEGATION:NO_IPV6_NS_CHILD
@@ -464,10 +464,10 @@ msgstr ""
 
 #: DELEGATION:NO_IPV6_NS_DEL
 msgid  ""
-"Parent lists no nameserver that resolves to an IPv6 address. If any were "
+"Delegation lists no nameserver that resolves to an IPv6 address. If any were "
 "present, the minimum allowed would be {minimum}."
 msgstr ""
-"Parent lists no nameserver that resolves to an IPv6 address. If any were "
+"Delegation lists no nameserver that resolves to an IPv6 address. If any were "
 "present, the minimum allowed would be {minimum}."
 
 #: DELEGATION:NS_RR_IS_CNAME
