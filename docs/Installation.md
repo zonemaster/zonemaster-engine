@@ -89,13 +89,39 @@ This instruction covers the following operating systems:
    su -l
    ```
 
-2) Install dependencies from binary packages:
+2) Update list of package repositories:
+
+   Create the file `/usr/local/etc/pkg/repos/FreeBSD.conf` with the 
+   following content, unless it is already updated:
+
+   ```
+   FreeBSD: {
+   url: "pkg+http://pkg.FreeBSD.org/${ABI}/latest",
+   }
+   ```
+
+3) Check or activate the package system:
+
+   Run the following command, and accept the installation of the `pkg` package
+   if suggested.
+
+   ```
+   pkg info -E pkg
+   ```
+
+4) Update local package repository:
+
+   ```
+   pkg update -f
+   ```
+
+5) Install dependencies from binary packages:
 
    ```sh
    pkg install libidn p5-App-cpanminus p5-Clone p5-Devel-CheckLib p5-File-ShareDir p5-File-Slurp p5-IO-Socket-INET6 p5-JSON-PP p5-List-MoreUtils p5-Locale-libintl p5-Locale-Msgfmt p5-Mail-RFC822-Address p5-Module-Find p5-Module-Install p5-Module-Install-XSUtil p5-Moose p5-Net-IP p5-Pod-Coverage p5-Readonly-XS p5-Test-Differences p5-Test-Exception p5-Test-Fatal p5-Test-Pod p5-Text-CSV
    ```
 
-3) Install Zonemaster::LDNS and Zonemaster::Engine:
+6) Install Zonemaster::LDNS and Zonemaster::Engine:
 
    ```sh
    cpanm Zonemaster::LDNS Zonemaster::Engine
