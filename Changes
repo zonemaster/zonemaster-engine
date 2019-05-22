@@ -1,5 +1,26 @@
 Release history for Zonemaster component Zonemaster-Engine
 
+v3.0.3 2019-05-22 (public release version)
+
+ [Status]
+ - This a public release fully tested before release. This version
+   will be available on CPAN.
+
+ [Fixes]
+ - Added instructions for preparation of packages for FreeBSD (#544)
+ - Removed example entry from default profile (#536)
+ - Corrected incorrect consistency verification for IP addresses between 
+   the child and the parent (#532, #535)
+ - Corrected message (#523, #533)
+ - Corrected truncated msgid (#528)
+ - Added missing DNSSEC messages to test results (#521, #527)
+ - Updated dependencies for Debian and FreeBSD (#525)
+ - Dropped support for Ubuntu 14.04 (#519)
+ - Split message BROKEN_EDNS_SUPPORT in Nameserver02 (#516, #517)
+ - Made message IN_BAILIWICK_ADDR_MISMATCH more explicit (#467, #515)
+ - Resolve issues around unwanted blacklisting (#504, #511)
+
+
 v3.0.2 2019-03-15 (pre-release version)
 
  [Status]
