@@ -24,34 +24,34 @@ This instruction covers the following operating systems:
 
 ### Installation on CentOS
 
-1) Make sure the development environment is installed.
+1) Install the [EPEL 7][EPEL] repository:
+
+   ```sh
+   sudo yum --enablerepo=extras install epel-release
+   ```
+
+2) Make sure the development environment is installed:
 
    ```sh
    sudo yum groupinstall "Development Tools"
    ```
 
-2) Install cpan minus 
+3) Install binary packages:
 
    ```sh
-   sudo yum install cpanminus
+   sudo yum install cpanminus libidn-devel openssl-devel perl-Clone perl-core perl-Devel-CheckLib perl-File-ShareDir perl-File-Slurp perl-IO-Socket-INET6 perl-JSON-PP perl-List-MoreUtils perl-Module-Find perl-Moose perl-Net-IP perl-Pod-Coverage perl-Readonly-XS perl-Test-Differences perl-Test-Exception perl-Test-Fatal perl-Test-Pod perl-YAML
    ```
 
-3) Install binary packages.
+4) Install packages from CPAN:
 
    ```sh
-   sudo yum install perl-core perl-ExtUtils-MakeMaker perl-File-ShareDir perl-File-Slurp perl-IO-Socket-INET6 perl-JSON-PP perl-List-MoreUtils perl-Readonly perl-Time-HiRes perl-YAML libidn-devel perl-Devel-CheckLib openssl-devel perl-Test-Fatal
+   sudo cpanm Locale::Msgfmt Locale::TextDomain Mail::RFC822::Address Module::Install Module::Install::XSUtil Test::More Text::CSV
    ```
 
-4) Install packages from CPAN.
+5) Install Zonemaster::LDNS and Zonemaster::Engine:
 
    ```sh
-   sudo cpanm Locale::TextDomain Hash::Merge Net::IP::XS Moose Test::More Zonemaster::LDNS
-   ```
-
-5) Install Zonemaster::Engine
-
-   ```sh
-   sudo cpanm Zonemaster::Engine
+   sudo cpanm Zonemaster::LDNS Zonemaster::Engine
    ```
 
 ### Installation on Debian
@@ -59,31 +59,25 @@ This instruction covers the following operating systems:
 1) Refresh the package information
 
    ```sh
-   sudo apt-get update
+   sudo apt update
    ```
 
-2) Install cpan minus
+2) Install dependencies from binary packages:
 
    ```sh
-   sudo apt-get install cpanminus
+   sudo apt install autoconf automake build-essential cpanminus libclone-perl libdevel-checklib-perl libfile-sharedir-perl libfile-slurp-perl libidn11-dev libintl-perl libio-socket-inet6-perl libjson-pp-perl liblist-moreutils-perl liblocale-msgfmt-perl libmail-rfc822-address-perl libmodule-find-perl libmodule-install-xsutil-perl libmoose-perl libnet-ip-perl libpod-coverage-perl libreadonly-xs-perl libssl-dev libtest-differences-perl libtest-exception-perl libtest-fatal-perl libtest-pod-perl libtext-csv-perl libtool m4
    ```
 
-3) Install dependencies from binary packages:
+3) Install dependencies from CPAN:
 
    ```sh
-   sudo apt-get install build-essential libidn11-dev libfile-sharedir-perl libfile-slurp-perl libhash-merge-perl libio-socket-inet6-perl liblist-moreutils-perl libmail-rfc822-address-perl libmodule-find-perl libmodule-install-perl libmoose-perl libnet-ip-perl libreadonly-xs-perl libtext-csv-perl libssl-dev libdevel-checklib-perl libtool m4 autoconf automake
+   sudo cpanm Module::Install Test::More
    ```
 
-4) Install Zonemaster::LDNS:
+4) Install Zonemaster::LDNS and Zonemaster::Engine:
 
    ```sh
-   sudo cpanm Zonemaster::LDNS
-   ```
-
-5) Install Zonemaster::Engine:
-
-   ```sh
-   sudo cpanm Zonemaster::Engine
+   sudo cpanm Zonemaster::LDNS Zonemaster::Engine
    ```
 
 
@@ -95,28 +89,42 @@ This instruction covers the following operating systems:
    su -l
    ```
 
-2) Install cpan minus:
+2) Update list of package repositories:
 
-   ```sh
-   pkg install p5-App-cpanminus
+   Create the file `/usr/local/etc/pkg/repos/FreeBSD.conf` with the 
+   following content, unless it is already updated:
+
+   ```
+   FreeBSD: {
+   url: "pkg+http://pkg.FreeBSD.org/${ABI}/latest",
+   }
    ```
 
-3) Install dependencies from binary packages:
+3) Check or activate the package system:
 
-   ```sh
-   pkg install libidn p5-File-ShareDir p5-File-Slurp p5-Hash-Merge p5-IO-Socket-INET6 p5-List-MoreUtils p5-Locale-libintl p5-Mail-RFC822-Address p5-Module-Find p5-Moose p5-Net-IP p5-Readonly-XS p5-Text-CSV
+   Run the following command, and accept the installation of the `pkg` package
+   if suggested.
+
+   ```
+   pkg info -E pkg
    ```
 
-4) Install dependencies from CPAN:
+4) Update local package repository:
 
-   ```sh
-   cpanm Test::More Zonemaster::LDNS inc::Module::Install
+   ```
+   pkg update -f
    ```
 
-5) Install Zonemaster::Engine:
+5) Install dependencies from binary packages:
 
    ```sh
-   cpanm Zonemaster::Engine
+   pkg install libidn p5-App-cpanminus p5-Clone p5-Devel-CheckLib p5-File-ShareDir p5-File-Slurp p5-IO-Socket-INET6 p5-JSON-PP p5-List-MoreUtils p5-Locale-libintl p5-Locale-Msgfmt p5-Mail-RFC822-Address p5-Module-Find p5-Module-Install p5-Module-Install-XSUtil p5-Moose p5-Net-IP p5-Pod-Coverage p5-Readonly-XS p5-Test-Differences p5-Test-Exception p5-Test-Fatal p5-Test-Pod p5-Text-CSV
+   ```
+
+6) Install Zonemaster::LDNS and Zonemaster::Engine:
+
+   ```sh
+   cpanm Zonemaster::LDNS Zonemaster::Engine
    ```
 
 
@@ -130,7 +138,7 @@ Use the procedure for [installation on Debian].
 Make sure Zonemaster::Engine is properly installed.
 
 ```sh
-time perl -MZonemaster::Engine -e 'print map {"$_\n"} Zonemaster::Engine->test_module("BASIC", "zonemaster.net")'
+time perl -MZonemaster::Engine -E 'say join "\n", Zonemaster::Engine->test_module("BASIC", "zonemaster.net")'
 ```
 
 The command is expected to take a few seconds and print some results about the delegation of zonemaster.net.
@@ -143,9 +151,9 @@ The command is expected to take a few seconds and print some results about the d
 * For a [JSON-RPC API], follow the [Zonemaster::Backend installation] instruction.
 * For a Perl API, see the [Zonemaster::Engine API] documentation.
 
--------
 
 [Declaration of prerequisites]: https://github.com/zonemaster/zonemaster#prerequisites
+[EPEL]: https://fedoraproject.org/wiki/EPEL
 [Installation on CentOS]: #installation-on-centos
 [Installation on Debian]: #installation-on-debian
 [Installation on FreeBSD]: #installation-on-freebsd
@@ -156,10 +164,3 @@ The command is expected to take a few seconds and print some results about the d
 [Zonemaster::CLI installation]: https://github.com/zonemaster/zonemaster-cli/blob/master/docs/Installation.md
 [Zonemaster::Engine API]: http://search.cpan.org/~znmstr/Zonemaster-Engine/lib/Zonemaster/Engine/Overview.pod
 [Zonemaster::GUI installation]: https://github.com/zonemaster/zonemaster-gui/blob/master/docs/Installation.md
-
-Copyright (c) 2013 - 2017, IIS (The Internet Foundation in Sweden)\
-Copyright (c) 2013 - 2017, AFNIC\
-Creative Commons Attribution 4.0 International License
-
-You should have received a copy of the license along with this
-work.  If not, see <https://creativecommons.org/licenses/by/4.0/>.

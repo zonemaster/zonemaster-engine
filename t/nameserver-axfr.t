@@ -28,7 +28,7 @@ ok( ( $counter > 10 ), 'At least ten records seen' );
 
 # This should be a refused AXFR
 $counter = 0;
-my $ns2 = Zonemaster::Engine::Nameserver->new( { name => 'ns.nic.se', address => '212.247.7.228' } );
+my $ns2 = Zonemaster::Engine::Nameserver->new( { name => 'ns.nic.se', address => '91.226.36.45' } );
 like(
     exception {
         $ns2->axfr( 'iis.se', sub { $counter += 1; return 1; } );

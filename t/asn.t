@@ -17,8 +17,8 @@ is $asn1->[0], 15169, '8.8.8.8 is in 15169';
 is $prefix1->prefix, '8.8.8.0/24', '8.8.8.8 is in 8.8.8.0/24';
 
 my ( $asn2, $prefix2 ) = Zonemaster::Engine::ASNLookup->get_with_prefix( '91.226.36.46' );
-is $asn2->[0], 1257, '91.226.36.46 is in 1257';
-is $prefix2->prefix, '91.226.36.0/24', '91.226.36.46 is in 91.226.36.0/24';
+is $asn2->[0], 197564, '91.226.36.46 is in 197564';
+is $prefix2->prefix, '91.226.36.0/23', '91.226.36.46 is in 91.226.36.0/24';
 
 my @asn3 = Zonemaster::Engine::ASNLookup->get( '2001:503:ba3e::2:30' );
 is( scalar( @asn3 ), 1, 'Only one result' );

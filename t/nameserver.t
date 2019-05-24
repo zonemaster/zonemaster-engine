@@ -11,8 +11,8 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Profile->effective->set( q{no_network}, 1 );
 }
 
-my $nsv6 = new_ok( 'Zonemaster::Engine::Nameserver' => [ { name => 'ns.nic.se', address => '2a00:801:f0:53::53' } ] );
-my $nsv4 = new_ok( 'Zonemaster::Engine::Nameserver' => [ { name => 'ns.nic.se', address => '212.247.7.228' } ] );
+my $nsv6 = new_ok( 'Zonemaster::Engine::Nameserver' => [ { name => 'ns.nic.se', address => '2001:67c:124c:100a::45' } ] );
+my $nsv4 = new_ok( 'Zonemaster::Engine::Nameserver' => [ { name => 'ns.nic.se', address => '91.226.36.45' } ] );
 
 eval { Zonemaster::Engine::Nameserver->new( { name => 'dummy' } ); };
 like( $@, qr/Attribute \(address\) is required/, 'create fails without address.' );
@@ -38,9 +38,9 @@ ok( $p3 eq $p2,          'Same packet object returned' );
 ok( $p3 ne $p4,          'Same packet object not returned from other server' );
 ok( $p3 ne $p1,          'Same packet object not returned with other flag' );
 
-my $nscopy = Zonemaster::Engine->ns( 'ns.nic.se.', '2a00:801:f0:53:0000::53' );
+my $nscopy = Zonemaster::Engine->ns( 'ns.nic.se.', '2001:67c:124c:100a:0000::45' );
 ok( $nsv6 eq $nscopy, 'Same nameserver object returned' );
-my $nssame = Zonemaster::Engine->ns( 'foo.example.org', '2a00:801:f0:53:0000::53' );
+my $nssame = Zonemaster::Engine->ns( 'foo.example.org', '2001:67c:124c:100a:0000::45' );
 ok(
     ( $nssame ne $nsv6 and $nssame->cache eq $nsv6->cache ),
     'Different name, same IP are different but has same cache'

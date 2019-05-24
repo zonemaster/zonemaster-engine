@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Nameserver;
 
-use version; our $VERSION = version->declare("v1.1.14");
+use version; our $VERSION = version->declare("v1.1.16");
 
 use 5.014002;
 use Moose;
@@ -22,6 +22,7 @@ use MIME::Base64;
 use Module::Find qw[useall];
 use Carp;
 use List::Util qw[max min sum];
+use Digest::MD5;
 use POSIX ();
 
 use overload
@@ -196,6 +197,7 @@ sub query {
     } ## end foreach my $fname ( sort keys...)
 
     my $p;
+    my $md5 = Digest::MD5->new;
     my $edns_special_case = 0;
     if ( defined $href->{edns_details} ) {
         if ( defined $href->{edns_details}{version} and $href->{edns_details}{version} != 0 ) {
@@ -215,16 +217,28 @@ sub query {
         }
     }
 
-    if ( not $edns_special_case ) {
-        if ( not exists( $self->cache->data->{"$name"}{"\U$type"}{"\U$class"}{$dnssec}{$usevc}{$recurse}{$edns_size} ) ) {
-            $self->cache->data->{"$name"}{"\U$type"}{"\U$class"}{$dnssec}{$usevc}{$recurse}{$edns_size} =
-              $self->_query( $name, $type, $href, $edns_special_case );
-        }
-        $p = $self->cache->data->{"$name"}{"\U$type"}{"\U$class"}{$dnssec}{$usevc}{$recurse}{$edns_size};
+    $md5->add( q{NAME}    , $name );
+    $md5->add( q{TYPE}    , "\U$type" );
+    $md5->add( q{CLASS}   , "\U$class" );
+    $md5->add( q{DNSSEC}  , $dnssec );
+    $md5->add( q{USEVC}   , $usevc );
+    $md5->add( q{RECURSE} , $recurse );
+    if ( $edns_special_case ) {
+        $md5->add( q{EDNS_VERSION}        , $href->{edns_details}{version} ? $href->{edns_details}{version} : 0 );
+        $md5->add( q{EDNS_Z}              , $href->{edns_details}{z} ? $href->{edns_details}{z} : 0 );
+        $md5->add( q{EDNS_EXTENDED_RCODE} , $href->{edns_details}{extended_rcode} ? $href->{edns_details}{extended_rcode} : 0 );
+        $md5->add( q{EDNS_DATA}           , $href->{edns_details}{data} ? $href->{edns_details}{data} : q{} );
+        $md5->add( q{EDNS_UDP_SIZE}       , $href->{edns_details}{udp_size} ? $href->{edns_details}{udp_size} : 0 );
     }
     else {
-        $p = $self->_query( $name, $type, $href, $edns_special_case );
+        $md5->add( q{EDNS_UDP_SIZE}       , $edns_size);
     }
+    my $idx = $md5->b64digest();
+    if ( not exists( $self->cache->data->{$idx} ) ) {
+        $self->cache->data->{$idx} = $self->_query( $name, $type, $href, $edns_special_case );
+    }
+    $p = $self->cache->data->{$idx};
+
     Zonemaster::Engine->logger->add( CACHED_RETURN => { packet => ( $p ? $p->string : 'undef' ) } );
 
     return $p;
@@ -327,7 +341,7 @@ sub _query {
 
     my $before = time();
     my $res;
-    if ( $self->blacklisted->{ $flags{usevc} }{ $flags{dnssec} } ) {
+    if ( $BLACKLISTING_ENABLED and $self->blacklisted->{ $flags{usevc} }{ $flags{dnssec} } ) {
         Zonemaster::Engine->logger->add(
             IS_BLACKLISTED => {
                 message => "Server transport has been blacklisted due to previous failure",
@@ -367,7 +381,6 @@ sub _query {
                 $pkt->set_edns_present();
                 $pkt->edns_data($href->{edns_details}{data});
             }
-
 	    $res = eval { $self->dns->query_with_pkt( $pkt ) };
         }
         else {
@@ -380,9 +393,11 @@ sub _query {
             $msg =~ s/$trailing_info.*/\./;
             Zonemaster::Engine->logger->add( LOOKUP_ERROR =>
                   { message => $msg, ns => "$self", name => "$name", type => $type, class => $href->{class} } );
-            $self->blacklisted->{ $flags{usevc} }{ $flags{dnssec} } = 1;
-            if ( !$flags{dnssec} ) {
-                $self->blacklisted->{ $flags{usevc} }{ !$flags{dnssec} } = 1;
+            if ( not $href->{q{blacklisting_disabled}} ) {
+                $self->blacklisted->{ $flags{usevc} }{ $flags{dnssec} } = 1;
+                if ( !$flags{dnssec} ) {
+                    $self->blacklisted->{ $flags{usevc} }{ !$flags{dnssec} } = 1;
+                }
             }
         }
     }
@@ -710,6 +725,10 @@ If set to true, incoming response packets with the TC flag set are not automatic
 =item fallback
 
 If set to true, incoming response packets with the TC flag set fall back to EDNS and/or TCP.
+
+=item blacklisting_disabled
+
+If set to true, prevents a server to be black-listed on a query in case there is no answer OR rcode is REFUSED.
 
 =back
 

@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::Consistency;
 
-use version; our $VERSION = version->declare("v1.1.6");
+use version; our $VERSION = version->declare("v1.1.8");
 
 use strict;
 use warnings;
@@ -643,7 +643,7 @@ sub consistency05 {
             }
 
             for my $rr ( @rrs_a, @rrs_aaaa ) {
-                $child_ib_strings{ $rr->name . "/" . $rr->address } = 1;
+                $child_ib_strings{ lc( $rr->name ) . "/" . $rr->address } = 1;
             }
         }
 
@@ -661,7 +661,8 @@ sub consistency05 {
         push @results,
           info(
             IN_BAILIWICK_ADDR_MISMATCH => {
-                addresses => join( q{;}, sort @ib_mismatch ),
+                parent_addresses => join( q{;}, sort keys %strict_glue ),
+                zone_addresses => join( q{;}, sort keys %child_ib_strings ),
             }
           );
     }
@@ -697,16 +698,16 @@ sub consistency05 {
 
         push @oob_match,    grep { exists $child_oob_strings{$_} } @glue_strings;
         push @oob_mismatch, grep { !exists $child_oob_strings{$_} } @glue_strings;
+        if ( grep { !exists $child_oob_strings{$_} } @glue_strings ) {
+            push @results,
+              info(
+                OUT_OF_BAILIWICK_ADDR_MISMATCH => {
+                    parent_addresses => join( q{;}, sort @glue_strings ),
+                    zone_addresses => join( q{;}, sort keys %child_oob_strings ),
+                }
+              );
+        }
     } ## end for my $glue_name ( keys...)
-
-    if ( @oob_mismatch ) {
-        push @results,
-          info(
-            OUT_OF_BAILIWICK_ADDR_MISMATCH => {
-                addresses => join( q{;}, @oob_mismatch )
-            }
-          );
-    }
 
     if ( !@ib_extra_child && !@ib_mismatch && !@oob_mismatch ) {
         push @results,

@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::Delegation;
 
-use version; our $VERSION = version->declare("v1.0.11");
+use version; our $VERSION = version->declare("v1.0.12");
 
 use strict;
 use warnings;
@@ -214,16 +214,20 @@ sub delegation01 {
     my @child_ns = @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
     my @child_ns_ipv4 = uniq map { $_->name->string } grep { $_->address->version == 4 } @child_ns;
     my @child_ns_ipv6 = uniq map { $_->name->string } grep { $_->address->version == 6 } @child_ns;
+    my @child_ns_ipv4_addrs = uniq map { $_->address->ip } grep { $_->address->version == 4 } @child_ns;
+    my @child_ns_ipv6_addrs = uniq map { $_->address->short } grep { $_->address->version == 4 } @child_ns;
 
     my $child_ns_ipv4_args = {
         count   => scalar( @child_ns_ipv4 ),
         minimum => $MINIMUM_NUMBER_OF_NAMESERVERS,
         ns      => join( q{;}, sort @child_ns_ipv4 ),
+	addrs   => join( q{;}, sort @child_ns_ipv4_addrs ),
     };
     my $child_ns_ipv6_args = {
         count   => scalar( @child_ns_ipv6 ),
         minimum => $MINIMUM_NUMBER_OF_NAMESERVERS,
         ns      => join( q{;}, sort @child_ns_ipv6 ),
+	addrs   => join( q{;}, sort @child_ns_ipv6_addrs ),
     };
 
     if ( scalar( @child_ns_ipv4 ) >= $MINIMUM_NUMBER_OF_NAMESERVERS ) {
@@ -250,16 +254,20 @@ sub delegation01 {
     my @del_ns = @{ Zonemaster::Engine::TestMethods->method4( $zone ) };
     my @del_ns_ipv4 = uniq map { $_->name->string } grep { $_->address->version == 4 } @del_ns;
     my @del_ns_ipv6 = uniq map { $_->name->string } grep { $_->address->version == 6 } @del_ns;
+    my @del_ns_ipv4_addrs = uniq map { $_->address->ip } grep { $_->address->version == 4 } @del_ns;
+    my @del_ns_ipv6_addrs = uniq map { $_->address->short } grep { $_->address->version == 6 } @del_ns;
 
     my $del_ns_ipv4_args = {
         count   => scalar( @del_ns_ipv4 ),
         minimum => $MINIMUM_NUMBER_OF_NAMESERVERS,
         ns      => join( q{;}, sort @del_ns_ipv4 ),
+	addrs   => join( q{;}, sort @del_ns_ipv4_addrs ),
     };
     my $del_ns_ipv6_args = {
         count   => scalar( @del_ns_ipv6 ),
         minimum => $MINIMUM_NUMBER_OF_NAMESERVERS,
         ns      => join( q{;}, sort @del_ns_ipv6 ),
+	addrs   => join( q{;}, sort @del_ns_ipv6_addrs ),
     };
 
     if ( scalar( @del_ns_ipv4 ) >= $MINIMUM_NUMBER_OF_NAMESERVERS ) {

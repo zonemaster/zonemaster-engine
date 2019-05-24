@@ -801,9 +801,9 @@ msgstr "Namnservern {ns}/{address} tillåter zonöverföringar med AXFR."
 msgid  "AXFR not available on nameserver {ns}/{address}."
 msgstr "AXFR är inte tillgänglig från namnservern {ns}/{address}."
 
-#: NAMESERVER:BROKEN_EDNS_SUPPORT
-msgid  "Incorrect response from {ns}/{address} asking for {dname} when EDNS is used."
-msgstr "Felaktigt DNS-svar från {ns}/{address} när {dname} efterfrågas med EDNS."
+#: NAMESERVER:BREAKS_ON_EDNS
+msgid  "No response from {ns}/{address} when EDNS is used in query asking for {dname}."
+msgstr "Inget svar från {ns}/{address} på förfrågan med EDNS (fråga efter {dname})."
 
 #: NAMESERVER:CAN_BE_RESOLVED
 msgid  "All nameservers succeeded to resolve to an IP address."
@@ -877,6 +877,14 @@ msgid  ""
 msgstr ""
 "Namnservern {ns}/{address} besvarade en SOA-fråga från en annan källadress "
 "({source})."
+
+#: NAMESERVER:EDNS_RESPONSE_WITHOUT_EDNS
+msgid  "Response without EDNS from {ns}/{address} on query with EDNS0 asking for {dname}."
+msgstr "Svar utan EDNS från {ns}/{address} på förfrågan med EDNS0 (fråga efter {dname})."
+
+#: NAMESERVER:EDNS_VERSION_ERROR
+msgid  "Incorrect version of EDNS (expected 0) in response from {ns}/{address} on query with EDNS (version 0) asking for {dname}."
+msgstr "Felaktig EDNS-version (förväntad version var 0) i svar från {ns}/{address} på förfrågan med EDNS version 0 (fråga efter {dname})."
 
 #: NAMESERVER:EDNS0_SUPPORT
 msgid  "The following nameservers support EDNS0 : {names}."

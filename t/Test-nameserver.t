@@ -74,7 +74,7 @@ zone_gives_not( 'nameserver01', $zone, [q{IS_A_RECURSOR}] );
 
 # nameserver02
 $zone = Zonemaster::Engine->zone( 'flagday.rootcanary.net' );
-zone_gives( 'nameserver02', $zone, ['BROKEN_EDNS_SUPPORT']);
+zone_gives( 'nameserver02', $zone, ['BREAKS_ON_EDNS']);
 
 $zone = Zonemaster::Engine->zone( 'dyad.se' );
 zone_gives( 'nameserver02', $zone, ['EDNS0_SUPPORT'] );
