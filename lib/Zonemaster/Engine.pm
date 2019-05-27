@@ -1,5 +1,7 @@
 package Zonemaster::Engine;
 
+# Just a meaningless comment.
+
 use version; our $VERSION = version->declare("v3.0.3");
 
 use 5.014002;
