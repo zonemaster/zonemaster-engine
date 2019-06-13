@@ -76,6 +76,10 @@ sub translate_tag {
         return $entry->string;
     }
 
+    # Partial workaround for FreeBSD 11. It works once, but then translation
+    # gets stuck on that locale.
+    local $ENV{LC_ALL} = $self->{locale};
+
     return __x( $string, %{ $entry->printable_args } );
 }
 
