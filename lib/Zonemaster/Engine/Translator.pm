@@ -123,6 +123,12 @@ Zonemaster::Engine::Translator - translation support for Zonemaster
     my $trans = Zonemaster::Engine::Translator->new({ locale => 'sv_SE.UTF-8' });
     say $trans->to_string($entry);
 
+A side effect of constructing an object of this class is that the program's
+underlying locale for message catalogs (a.k.a. LC_MESSAGES) is updated.
+
+It does not make sense to create more than one object of this class because of
+the globally stateful nature of the locale attribute.
+
 =head1 ATTRIBUTES
 
 =over
@@ -133,6 +139,9 @@ The locale that should be used to find translation data. If not
 explicitly provided, defaults to (in order) the contents of the
 environment variable LANG, LC_ALL, LC_MESSAGES or, if none of them are
 set, to C<en_US.UTF-8>.
+
+Updating this attribute also causes an analogous update of the program's
+underlying LC_MESSAGES.
 
 =item data
 
