@@ -28,9 +28,18 @@ sub BUILD {
     return $self;
 }
 
+# Get the program's underlying LC_MESSAGES.
+#
+# Side effect: Updates the program's underlying LC_MESSAGES to the returned
+# value.
 sub _get_locale {
-    my $locale = $ENV{LANG} || $ENV{LC_ALL} || $ENV{LC_MESSAGES} || 'en_US.UTF-8';
-    setlocale( LC_MESSAGES, $locale );
+    my $locale = setlocale( LC_MESSAGES, "" );
+
+    # C locale is not an option since our msgid and msgstr strings are sometimes
+    # different in C and en_US.UTF-8.
+    if ( $locale eq 'C' ) {
+        $locale = 'en_US.UTF-8';
+    }
 
     return $locale;
 }
