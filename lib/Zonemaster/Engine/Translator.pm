@@ -13,7 +13,7 @@ use Zonemaster::Engine;
 use POSIX qw[setlocale LC_MESSAGES];
 use Locale::TextDomain qw[Zonemaster-Engine]; # This must be the same name as "name" in Makefile.PL
 
-has 'locale' => ( is => 'rw', isa => 'Str',     lazy => 1, builder => '_get_locale' );
+has 'locale' => ( is => 'rw', isa => 'Str' );
 has 'data'   => ( is => 'ro', isa => 'HashRef', lazy => 1, builder => '_load_data' );
 
 ###
@@ -23,7 +23,8 @@ has 'data'   => ( is => 'ro', isa => 'HashRef', lazy => 1, builder => '_load_dat
 sub BUILD {
     my ( $self ) = @_;
 
-    $self->locale;
+    my $locale = $self->{locale} // _get_locale();
+    $self->locale( $locale );
 
     return $self;
 }
