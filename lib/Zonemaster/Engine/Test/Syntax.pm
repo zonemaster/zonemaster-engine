@@ -18,8 +18,8 @@ use Zonemaster::Engine::Packet;
 
 use Carp;
 
+use Email::Valid;
 use List::MoreUtils qw[uniq none any];
-use Mail::RFC822::Address qw[valid];
 use Time::Local;
 
 ###
@@ -355,7 +355,7 @@ sub syntax06 {
         $rname =~ s/([^\\])[.]/$1@/smx;    # Replace first non-escaped dot with an at-sign
         $rname =~ s/[\\][.]/./smgx;        # Un-escape dots
         $rname =~ s/[.]\z//smgx;           # Validator does not like final dots
-        if ( not valid( $rname ) ) {
+        if ( not Email::Valid->address( $rname ) ) {
             push @results,
               info(
                 RNAME_RFC822_INVALID => {
