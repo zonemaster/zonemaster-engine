@@ -215,7 +215,7 @@ sub delegation01 {
     my @child_ns_ipv4 = uniq map { $_->name->string } grep { $_->address->version == 4 } @child_ns;
     my @child_ns_ipv6 = uniq map { $_->name->string } grep { $_->address->version == 6 } @child_ns;
     my @child_ns_ipv4_addrs = uniq map { $_->address->ip } grep { $_->address->version == 4 } @child_ns;
-    my @child_ns_ipv6_addrs = uniq map { $_->address->short } grep { $_->address->version == 4 } @child_ns;
+    my @child_ns_ipv6_addrs = uniq map { $_->address->short } grep { $_->address->version == 6 } @child_ns;
 
     my $child_ns_ipv4_args = {
         count   => scalar( @child_ns_ipv4 ),
