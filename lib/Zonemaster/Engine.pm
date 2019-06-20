@@ -44,6 +44,9 @@ sub ns {
 sub zone {
     my ( $class, $name ) = @_;
 
+    # Coerce string to Z::E::DNSName
+    $name = Zonemaster::Engine::DNSName->new( $name ) if ref $name eq '';
+
     return Zonemaster::Engine::Zone->new( { name => $name } );
 }
 
@@ -118,7 +121,7 @@ sub add_fake_delegation {
     my $incomplete_delegation;
     foreach my $name ( keys %{$href} ) {
         if ( not defined $href->{$name} or not scalar @{ $href->{$name} } ) {
-            if ( Zonemaster::Engine::Zone->new( { name => $domain } )->is_in_zone( $name ) ) {
+            if ( $class->zone( $domain )->is_in_zone( $name ) ) {
                 Zonemaster::Engine->logger->add(
                     FAKE_DELEGATION_IN_ZONE_NO_IP => { domain => $domain , nsname => $name }
                 );

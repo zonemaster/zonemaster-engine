@@ -6,9 +6,6 @@ use 5.014002;
 use warnings;
 
 use Moose;
-use Moose::Util::TypeConstraints;
-
-coerce 'Zonemaster::Engine::DNSName', from 'Str', via { Zonemaster::Engine::DNSName->new( $_ ) };
 
 use overload
   '""'  => \&string,
