@@ -47,6 +47,6 @@ is( $name, Zonemaster::Engine::DNSName->new( $name ), 'Roundtrip creation works'
 my $zone  = Zonemaster::Engine->zone( 'nic.se' );
 my $zname = Zonemaster::Engine::DNSName->new( $zone );
 isa_ok( $zname, 'Zonemaster::Engine::DNSName' );
-ok( $zname eq 'nic.se' );
+is( $zname, 'nic.se' );
 
 done_testing;
