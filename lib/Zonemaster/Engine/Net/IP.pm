@@ -23,7 +23,7 @@ else {
 sub new {
     my ( $class, @args ) = @_;
     my $self = {};
-    $self->{_inner} = $p_class->new( @args ) or die Net::IP::Error();
+    $self->{_inner} = $p_class->new( @args ) or die Error();
     bless( $self, $class );
     return $self;
 }
@@ -78,6 +78,15 @@ sub ip_is_ipv6 {
     }
 }
 
+sub Error {
+    if ( $p_class eq 'Net::IP::XS' ) {
+        return Net::IP::XS::Error();
+    }
+    else {
+        return Net::IP::Error();
+    }
+}
+
 1;
 
 =head1 NAME
@@ -109,6 +118,15 @@ IP address
 =back
 
     ip_is_ipv6($ip) and print "$ip is IPv6";
+
+=item Error
+
+Returns the error string corresponding to the last error generated in the
+module.
+This is also useful for the OO interface, as if the new() function fails, we
+cannot call $ip->error() and so we have to use Error().
+
+    warn Error();
 
 =back
 
