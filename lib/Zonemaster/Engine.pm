@@ -44,10 +44,7 @@ sub ns {
 sub zone {
     my ( $class, $name ) = @_;
 
-    # Coerce string to Z::E::DNSName
-    $name = Zonemaster::Engine::DNSName->new( $name ) if ref $name eq '';
-
-    return Zonemaster::Engine::Zone->new( { name => $name } );
+    return Zonemaster::Engine::Zone->new( { name => Zonemaster::Engine::DNSName->new( $name ) } );
 }
 
 sub test_zone {
