@@ -15,6 +15,15 @@ use overload
 
 has 'labels' => ( is => 'ro' );
 
+sub from_string {
+    my ( $class, $domain ) = @_;
+
+    confess 'Argument must be a string: $domain'
+      if !defined $domain || ref $domain ne '';
+
+    return $class->_new( { labels => [ split( /[.]/x, $domain ) ] } );
+}
+
 sub new {
     my $proto = shift;
     confess "must be called with a single argument"
@@ -58,6 +67,13 @@ sub new {
       && ref $attrs->{labels} ne 'ARRAY';
 
     my $class = ref $proto || $proto;
+    return $class->_new( $attrs );
+}
+
+sub _new {
+    my $class = shift;
+    my $attrs = shift;
+
     my $obj = Class::Accessor::new( $class, $attrs );
 
     return $obj;
@@ -181,6 +197,10 @@ If it's a L<Zonemaster::Engine::DNSName> object it will simply be returned.
 
 If it's a L<Zonemaster::Engine::Zone> object, the value of its C<name> attribute will
 be returned.
+
+=item from_string($domain)
+
+A specialized constructor that must be called with a string.
 
 =item string()
 

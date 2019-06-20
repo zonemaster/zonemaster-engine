@@ -69,7 +69,7 @@ sub new {
       if !exists $attrs->{address};
 
     # Type coercions
-    $attrs->{name} = Zonemaster::Engine::DNSName->new( $attrs->{name} )
+    $attrs->{name} = Zonemaster::Engine::DNSName->from_string( $attrs->{name} )
       if !blessed $attrs->{name} || !$attrs->{name}->isa( 'Zonemaster::Engine::DNSName' );
     $attrs->{address} = Zonemaster::Engine::Net::IP->new( $attrs->{address} )
       if exists $attrs->{address}

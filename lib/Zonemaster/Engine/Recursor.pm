@@ -210,7 +210,7 @@ sub _do_query {
 
         if ( $p ) {
             for my $rr ( grep { $_->type eq 'A' or $_->type eq 'AAAA' } $p->answer, $p->additional ) {
-                $state->{glue}{ lc( name( $rr->name ) ) }{ $rr->address } = 1;
+                $state->{glue}{ lc( Zonemaster::Engine::DNSName->from_string( $rr->name ) ) }{ $rr->address } = 1;
             }
         }
         return $p;
@@ -245,14 +245,14 @@ sub get_ns_from {
     my ( $self, $p, $state ) = @_;
     my ( @new, @extra );
 
-    my @names = sort map { name( lc( $_->nsdname ) ) } $p->get_records( 'ns' );
+    my @names = sort map { Zonemaster::Engine::DNSName->from_string( lc( $_->nsdname ) ) } $p->get_records( 'ns' );
 
-    $state->{glue}{ lc( name( $_->name ) ) }{ $_->address } = 1
+    $state->{glue}{ lc( Zonemaster::Engine::DNSName->from_string( $_->name ) ) }{ $_->address } = 1
       for ( $p->get_records( 'a' ), $p->get_records( 'aaaa' ) );
 
     foreach my $name ( @names ) {
-        if ( exists $state->{glue}{ lc( name( $name ) ) } ) {
-            for my $addr ( keys %{ $state->{glue}{ lc( name( $name ) ) } } ) {
+        if ( exists $state->{glue}{ lc( $name ) } ) {
+            for my $addr ( keys %{ $state->{glue}{ lc( $name ) } } ) {
                 push @new, ns( $name, $addr );
             }
         }
