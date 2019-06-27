@@ -12,6 +12,7 @@ use Zonemaster::Engine;
 use Carp;
 use List::MoreUtils qw[none any];
 use Locale::TextDomain qw[Zonemaster-Engine];
+use Readonly;
 use Zonemaster::Engine::Constants qw[:addresses :ip];
 use Zonemaster::Engine::TestMethods;
 use Zonemaster::Engine::Util;
@@ -66,18 +67,34 @@ sub metadata {
     };
 } ## end sub metadata
 
-sub translation {
-    return {
-        'NAMESERVER_IP_WITHOUT_REVERSE' => 'Nameserver {ns} has an IP address ({address}) without PTR configured.',
-        'NAMESERVER_IP_PTR_MISMATCH' =>
-          'Nameserver {ns} has an IP address ({address}) with mismatched PTR result ({names}).',
-        'NAMESERVER_IP_PRIVATE_NETWORK' =>
-'Nameserver {ns} has an IP address ({address}) with prefix {prefix} referenced in {reference} as a \'{name}\'.',
-        'NO_IP_PRIVATE_NETWORK'       => 'All Nameserver addresses are in the routable public addressing space.',
-        'NAMESERVERS_IP_WITH_REVERSE' => 'Reverse DNS entry exist for all Nameserver IP addresses.',
-        'NAMESERVER_IP_PTR_MATCH'     => 'All reverse DNS entry matches name server name.',
-        'NO_RESPONSE_PTR_QUERY'       => 'No response from nameserver(s) on PTR query ({reverse}).',
-    };
+Readonly my %TAG_DESCRIPTIONS => (
+    NAMESERVER_IP_WITHOUT_REVERSE => sub {
+        __x 'Nameserver {ns} has an IP address ({address}) without PTR configured.', @_;
+    },
+    NAMESERVER_IP_PTR_MISMATCH => sub {
+        __x 'Nameserver {ns} has an IP address ({address}) with mismatched PTR result ({names}).', @_;
+    },
+    NAMESERVER_IP_PRIVATE_NETWORK => sub {
+        __x
+          'Nameserver {ns} has an IP address ({address}) with prefix {prefix} referenced in {reference} as a \'{name}\'.',
+          @_;
+    },
+    NO_IP_PRIVATE_NETWORK => sub {
+        __x 'All Nameserver addresses are in the routable public addressing space.', @_;
+    },
+    NAMESERVERS_IP_WITH_REVERSE => sub {
+        __x 'Reverse DNS entry exist for all Nameserver IP addresses.', @_;
+    },
+    NAMESERVER_IP_PTR_MATCH => sub {
+        __x 'All reverse DNS entry matches name server name.', @_;
+    },
+    NO_RESPONSE_PTR_QUERY => sub {
+        __x 'No response from nameserver(s) on PTR query ({reverse}).', @_;
+    },
+);
+
+sub tag_descriptions {
+    return \%TAG_DESCRIPTIONS;
 }
 
 sub version {
@@ -289,9 +306,9 @@ Runs the default set of tests and returns a list of log entries made by the test
 Returns a reference to a hash, the keys of which are the names of all test methods in the module, and the corresponding values are references to
 lists with all the tags that the method can use in log entries.
 
-=item translation()
+=item tag_descriptions()
 
-Returns a refernce to a hash with translation data. Used by the builtin translation system.
+Returns a refernce to a hash with translation functions. Used by the builtin translation system.
 
 =item version()
 

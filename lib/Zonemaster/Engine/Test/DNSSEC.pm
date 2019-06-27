@@ -17,6 +17,7 @@ use Carp;
 use List::MoreUtils qw[none];
 use List::Util qw[min];
 use Locale::TextDomain qw[Zonemaster-Engine];
+use Readonly;
 use Zonemaster::Engine::Constants qw[:algo :soa];
 use Zonemaster::Engine::Util;
 
@@ -346,94 +347,213 @@ sub metadata {
     };
 } ## end sub metadata
 
-sub translation {
-    return {
-        ADDITIONAL_DNSKEY_SKIPPED => "No DNSKEYs found. Additional tests skipped.",
-        ALGORITHM_DELETE_DS       => "The DNSKEY with tag {keytag} uses Delete DS algorithm number "
-          . "{algorithm}/({description}).",
-        ALGORITHM_DEPRECATED => "The DNSKEY with tag {keytag} uses deprecated algorithm number "
-          . "{algorithm}/({description}).",
-        ALGORITHM_INDIRECT_KEY => "The DNSKEY with tag {keytag} uses algorithm number reserved for indirect keys "
-          . "{algorithm}/({description}).",
-        ALGORITHM_NOT_ZONE_SIGN => "The DNSKEY with tag {keytag} uses algorithm number not meant for zone signing"
-          . "{algorithm}/({description}).",
-        ALGORITHM_OK => "The DNSKEY with tag {keytag} uses algorithm number {algorithm}/({description}), which is OK.",
-        ALGORITHM_PRIVATE  => "The DNSKEY with tag {keytag} uses private algorithm number {algorithm}/({description}).",
-        ALGORITHM_RESERVED => "The DNSKEY with tag {keytag} uses reserved algorithm number "
-          . "{algorithm}/({description}).",
-        ALGORITHM_UNASSIGNED => "The DNSKEY with tag {keytag} uses unassigned algorithm number "
-          . "{algorithm}/({description}).",
-        COMMON_KEYTAGS           => "There are both DS and DNSKEY records with key tags {keytags}.",
-        DELEGATION_NOT_SIGNED    => "Delegation from parent to child is not properly signed {reason}.",
-        DELEGATION_SIGNED        => "Delegation from parent to child is properly signed.",
-        DNSKEY_AND_DS            => "{parent} sent a DS record, and {child} a DNSKEY record.",
-        DNSKEY_BUT_NOT_DS        => "{child} sent a DNSKEY record, but {parent} did not send a DS record.",
-        DNSKEY_NOT_SIGNED        => "The apex DNSKEY RRset was not correctly signed.",
-        DNSKEY_SIGNATURE_NOT_OK  => "Signature for DNSKEY with tag {signature} failed to verify with error '{error}'.",
-        DNSKEY_SIGNATURE_OK      => "A signature for DNSKEY with tag {signature} was correctly signed.",
-        DNSKEY_SIGNED            => "The apex DNSKEY RRset was correcly signed.",
-        DS_BUT_NOT_DNSKEY        => "{parent} sent a DS record, but {child} did not send a DNSKEY record.",
-        DS_DIGTYPE_NOT_OK        => "DS record with keytag {keytag} uses forbidden digest type {digtype}.",
-        DS_DIGTYPE_OK            => "DS record with keytag {keytag} uses digest type {digtype}, which is OK.",
-        DS_DOES_NOT_MATCH_DNSKEY => "DS record with keytag {keytag} and digest type {digtype} "
-          . "does not match the DNSKEY with the same tag.",
-        DS_FOUND          => "Found DS records with tags {keytags}.",
-        DS_MATCHES_DNSKEY => "DS record with keytag {keytag} and digest type {digtype} "
-          . "matches the DNSKEY with the same tag.",
-        DS_MATCH_FOUND       => "At least one DS record with a matching DNSKEY record was found.",
-        DS_MATCH_NOT_FOUND   => "No DS record with a matching DNSKEY record was found.",
-        DS_RFC4509_NOT_VALID => "Existing DS with digest type 2, while they do not match DNSKEY records, "
-          . "prevent use of DS with digest type 1 (RFC4509, section 3).",
-        DURATION_LONG => "RRSIG with keytag {tag} and covering type(s) {types} has a duration of {duration} seconds, "
-          . "which is too long.",
-        DURATION_OK => "RRSIG with keytag {tag} and covering type(s) {types} has a duration of {duration} seconds, "
-          . "which is just fine.",
-        EXTRA_PROCESSING_BROKEN => "Server at {server} sent {keys} DNSKEY records, and {sigs} RRSIG records.",
-        EXTRA_PROCESSING_OK     => "Server at {server} sent {keys} DNSKEY records and {sigs} RRSIG records.",
-        HAS_NSEC3_OPTOUT        => "The zone has NSEC3 opt-out records.",
-        HAS_NSEC3               => "The zone has NSEC3 records.",
-        HAS_NSEC                => "The zone has NSEC records.",
-        INVALID_NAME_RCODE => "When asked for the name {name}, which must not exist, the response had RCODE {rcode}.",
-        ITERATIONS_OK      => "The number of NSEC3 iterations is {count}, which is OK.",
-        KEY_DETAILS        => "Key with keytag {keytag} details : Size = {keysize}, Flags ({sep}, {rfc5011}).",
-        MANY_ITERATIONS    => "The number of NSEC3 iterations is {count}, which is on the high side.",
-        NEITHER_DNSKEY_NOR_DS => "There are neither DS nor DNSKEY records for the zone.",
-        NO_COMMON_KEYTAGS     => "No DS record had a DNSKEY with a matching keytag.",
-        NO_DNSKEY             => "No DNSKEYs were returned.",
-        NO_DS                 => "{from} returned no DS records for {zone}.",
-        NO_KEYS_OR_NO_SIGS    => "Cannot test DNSKEY signatures, because we got {keys} DNSKEY records "
-          . "and {sigs} RRSIG records.",
-        NO_KEYS_OR_NO_SIGS_OR_NO_SOA => "Cannot test SOA signatures, because we got {keys} DNSKEY records, "
-          . "{sigs} RRSIG records and {soas} SOA records.",
-        NO_NSEC3PARAM          => "{server} returned no NSEC3PARAM records.",
-        NO_RESPONSE_DNSKEY     => "Nameserver {ns}/{address} responded with no DNSKEY record(s).",
-        NO_RESPONSE            => "Nameserver {ns}/{address} did not respond.",
-        NOT_SIGNED             => "The zone is not signed with DNSSEC.",
-        NSEC3_COVERS_NOT       => "NSEC3 record does not cover {name}.",
-        NSEC3_COVERS           => "NSEC3 record covers {name}.",
-        NSEC3_NOT_SIGNED       => "No signature correctly signed the NSEC3 RRset.",
-        NSEC3_SIGNED           => "At least one signature correctly signed the NSEC3 RRset.",
-        NSEC3_SIG_VERIFY_ERROR => "Trying to verify NSEC3 RRset with RRSIG {sig} gave error '{error}'.",
-        NSEC_COVERS_NOT        => "NSEC does not cover {name}.",
-        NSEC_COVERS            => "NSEC covers {name}.",
-        NSEC_NOT_SIGNED        => "No signature correctly signed the NSEC RRset.",
-        NSEC_SIGNED            => "At least one signature correctly signed the NSEC RRset.",
-        NSEC_SIG_VERIFY_ERROR  => "Trying to verify NSEC RRset with RRSIG {sig} gave error '{error}'.",
-        REMAINING_LONG         => "RRSIG with keytag {tag} and covering type(s) {types}"
-          . " has a remaining validity of {duration} seconds, which is too long.",
-        REMAINING_SHORT => "RRSIG with keytag {tag} and covering type(s) {types}"
-          . " has a remaining validity of {duration} seconds, which is too short.",
-        RRSIG_EXPIRATION => "RRSIG with keytag {tag} and covering type(s) {types} expires at : {date}.",
-        RRSIG_EXPIRED    => "RRSIG with keytag {tag} and covering type(s) {types} has already expired "
-          . "(expiration is: {expiration}).",
-        SOA_NOT_SIGNED       => "No RRSIG correctly signed the SOA RRset.",
-        SOA_SIGNATURE_NOT_OK => "Trying to verify SOA RRset with signature {signature} gave error '{error}'.",
-        SOA_SIGNATURE_OK     => "RRSIG {signature} correctly signs SOA RRset.",
-        SOA_SIGNED           => "At least one RRSIG correctly signs the SOA RRset.",
-        TOO_MANY_ITERATIONS  => "The number of NSEC3 iterations is {count}, "
-          . "which is too high for key length {keylength}.",
-    };
-} ## end sub translation
+Readonly my %TAG_DESCRIPTIONS => (
+    ADDITIONAL_DNSKEY_SKIPPED => sub {
+        __x "No DNSKEYs found. Additional tests skipped.", @_;
+    },
+    ALGORITHM_DELETE_DS => sub {
+        __x "The DNSKEY with tag {keytag} uses Delete DS algorithm number {algorithm}/({description}).", @_;
+    },
+    ALGORITHM_DEPRECATED => sub {
+        __x "The DNSKEY with tag {keytag} uses deprecated algorithm number {algorithm}/({description}).", @_;
+    },
+    ALGORITHM_INDIRECT_KEY => sub {
+        __x "The DNSKEY with tag {keytag} uses algorithm number reserved for indirect keys {algorithm}/({description}).", @_;
+    },
+    ALGORITHM_NOT_ZONE_SIGN => sub {
+        __x "The DNSKEY with tag {keytag} uses algorithm number not meant for zone signing{algorithm}/({description}).", @_;
+    },
+    ALGORITHM_OK => sub {
+        __x "The DNSKEY with tag {keytag} uses algorithm number {algorithm}/({description}), which is OK.", @_;
+    },
+    ALGORITHM_PRIVATE => sub {
+        __x "The DNSKEY with tag {keytag} uses private algorithm number {algorithm}/({description}).", @_;
+    },
+    ALGORITHM_RESERVED => sub {
+        __x "The DNSKEY with tag {keytag} uses reserved algorithm number {algorithm}/({description}).", @_;
+    },
+    ALGORITHM_UNASSIGNED => sub {
+        __x "The DNSKEY with tag {keytag} uses unassigned algorithm number {algorithm}/({description}).", @_;
+    },
+    COMMON_KEYTAGS => sub {
+        __x "There are both DS and DNSKEY records with key tags {keytags}.", @_;
+    },
+    DELEGATION_NOT_SIGNED => sub {
+        __x "Delegation from parent to child is not properly signed {reason}.", @_;
+    },
+    DELEGATION_SIGNED => sub {
+        __x "Delegation from parent to child is properly signed.", @_;
+    },
+    DNSKEY_AND_DS => sub {
+        __x "{parent} sent a DS record, and {child} a DNSKEY record.", @_;
+    },
+    DNSKEY_BUT_NOT_DS => sub {
+        __x "{child} sent a DNSKEY record, but {parent} did not send a DS record.", @_;
+    },
+    DNSKEY_NOT_SIGNED => sub {
+        __x "The apex DNSKEY RRset was not correctly signed.", @_;
+    },
+    DNSKEY_SIGNATURE_NOT_OK => sub {
+        __x "Signature for DNSKEY with tag {signature} failed to verify with error '{error}'.", @_;
+    },
+    DNSKEY_SIGNATURE_OK => sub {
+        __x "A signature for DNSKEY with tag {signature} was correctly signed.", @_;
+    },
+    DNSKEY_SIGNED => sub {
+        __x "The apex DNSKEY RRset was correcly signed.", @_;
+    },
+    DS_BUT_NOT_DNSKEY => sub {
+        __x "{parent} sent a DS record, but {child} did not send a DNSKEY record.", @_;
+    },
+    DS_DIGTYPE_NOT_OK => sub {
+        __x "DS record with keytag {keytag} uses forbidden digest type {digtype}.", @_;
+    },
+    DS_DIGTYPE_OK => sub {
+        __x "DS record with keytag {keytag} uses digest type {digtype}, which is OK.", @_;
+    },
+    DS_DOES_NOT_MATCH_DNSKEY => sub {
+        __x "DS record with keytag {keytag} and digest type {digtype} does not match the DNSKEY with the same tag.", @_;
+    },
+    DS_FOUND => sub {
+        __x "Found DS records with tags {keytags}.", @_;
+    },
+    DS_MATCHES_DNSKEY => sub {
+        __x "DS record with keytag {keytag} and digest type {digtype} matches the DNSKEY with the same tag.", @_;
+    },
+    DS_MATCH_FOUND => sub {
+        __x "At least one DS record with a matching DNSKEY record was found.", @_;
+    },
+    DS_MATCH_NOT_FOUND => sub {
+        __x "No DS record with a matching DNSKEY record was found.", @_;
+    },
+    DS_RFC4509_NOT_VALID => sub {
+        __x "Existing DS with digest type 2, while they do not match DNSKEY records, prevent use of DS with digest type 1 (RFC4509, section 3).", @_;
+    },
+    DURATION_LONG => sub {
+        __x "RRSIG with keytag {tag} and covering type(s) {types} has a duration of {duration} seconds, which is too long.", @_;
+    },
+    DURATION_OK => sub {
+        __x "RRSIG with keytag {tag} and covering type(s) {types} has a duration of {duration} seconds, which is just fine.", @_;
+    },
+    EXTRA_PROCESSING_BROKEN => sub {
+        __x "Server at {server} sent {keys} DNSKEY records, and {sigs} RRSIG records.", @_;
+    },
+    EXTRA_PROCESSING_OK => sub {
+        __x "Server at {server} sent {keys} DNSKEY records and {sigs} RRSIG records.", @_;
+    },
+    HAS_NSEC3_OPTOUT => sub {
+        __x "The zone has NSEC3 opt-out records.", @_;
+    },
+    HAS_NSEC3 => sub {
+        __x "The zone has NSEC3 records.", @_;
+    },
+    HAS_NSEC => sub {
+        __x "The zone has NSEC records.", @_;
+    },
+    INVALID_NAME_RCODE => sub {
+        __x "When asked for the name {name}, which must not exist, the response had RCODE {rcode}.", @_;
+    },
+    ITERATIONS_OK => sub {
+        __x "The number of NSEC3 iterations is {count}, which is OK.", @_;
+    },
+    KEY_DETAILS => sub {
+        __x "Key with keytag {keytag} details : Size = {keysize}, Flags ({sep}, {rfc5011}).", @_;
+    },
+    MANY_ITERATIONS => sub {
+        __x "The number of NSEC3 iterations is {count}, which is on the high side.", @_;
+    },
+    NEITHER_DNSKEY_NOR_DS => sub {
+        __x "There are neither DS nor DNSKEY records for the zone.", @_;
+    },
+    NO_COMMON_KEYTAGS => sub {
+        __x "No DS record had a DNSKEY with a matching keytag.", @_;
+    },
+    NO_DNSKEY => sub {
+        __x "No DNSKEYs were returned.", @_;
+    },
+    NO_DS => sub {
+        __x "{from} returned no DS records for {zone}.", @_;
+    },
+    NO_KEYS_OR_NO_SIGS => sub {
+        __x "Cannot test DNSKEY signatures, because we got {keys} DNSKEY records and {sigs} RRSIG records.", @_;
+    },
+    NO_KEYS_OR_NO_SIGS_OR_NO_SOA => sub {
+        __x "Cannot test SOA signatures, because we got {keys} DNSKEY records, {sigs} RRSIG records and {soas} SOA records.", @_;
+    },
+    NO_NSEC3PARAM => sub {
+        __x "{server} returned no NSEC3PARAM records.", @_;
+    },
+    NO_RESPONSE_DNSKEY => sub {
+        __x "Nameserver {ns}/{address} responded with no DNSKEY record(s).", @_;
+    },
+    NO_RESPONSE => sub {
+        __x "Nameserver {ns}/{address} did not respond.", @_;
+    },
+    NOT_SIGNED => sub {
+        __x "The zone is not signed with DNSSEC.", @_;
+    },
+    NSEC3_COVERS_NOT => sub {
+        __x "NSEC3 record does not cover {name}.", @_;
+    },
+    NSEC3_COVERS => sub {
+        __x "NSEC3 record covers {name}.", @_;
+    },
+    NSEC3_NOT_SIGNED => sub {
+        __x "No signature correctly signed the NSEC3 RRset.", @_;
+    },
+    NSEC3_SIGNED => sub {
+        __x "At least one signature correctly signed the NSEC3 RRset.", @_;
+    },
+    NSEC3_SIG_VERIFY_ERROR => sub {
+        __x "Trying to verify NSEC3 RRset with RRSIG {sig} gave error '{error}'.", @_;
+    },
+    NSEC_COVERS_NOT => sub {
+        __x "NSEC does not cover {name}.", @_;
+    },
+    NSEC_COVERS => sub {
+        __x "NSEC covers {name}.", @_;
+    },
+    NSEC_NOT_SIGNED => sub {
+        __x "No signature correctly signed the NSEC RRset.", @_;
+    },
+    NSEC_SIGNED => sub {
+        __x "At least one signature correctly signed the NSEC RRset.", @_;
+    },
+    NSEC_SIG_VERIFY_ERROR => sub {
+        __x "Trying to verify NSEC RRset with RRSIG {sig} gave error '{error}'.", @_;
+    },
+    REMAINING_LONG => sub {
+        __x "RRSIG with keytag {tag} and covering type(s) {types} has a remaining validity of {duration} seconds, which is too long.", @_;
+    },
+    REMAINING_SHORT => sub {
+        __x "RRSIG with keytag {tag} and covering type(s) {types} has a remaining validity of {duration} seconds, which is too short.", @_;
+    },
+    RRSIG_EXPIRATION => sub {
+        __x "RRSIG with keytag {tag} and covering type(s) {types} expires at : {date}.", @_;
+    },
+    RRSIG_EXPIRED => sub {
+        __x "RRSIG with keytag {tag} and covering type(s) {types} has already expired (expiration is: {expiration}).", @_;
+    },
+    SOA_NOT_SIGNED => sub {
+        __x "No RRSIG correctly signed the SOA RRset.", @_;
+    },
+    SOA_SIGNATURE_NOT_OK => sub {
+        __x "Trying to verify SOA RRset with signature {signature} gave error '{error}'.", @_;
+    },
+    SOA_SIGNATURE_OK => sub {
+        __x "RRSIG {signature} correctly signs SOA RRset.", @_;
+    },
+    SOA_SIGNED => sub {
+        __x "At least one RRSIG correctly signs the SOA RRset.", @_;
+    },
+    TOO_MANY_ITERATIONS => sub {
+        __x "The number of NSEC3 iterations is {count}, which is too high for key length {keylength}.", @_;
+    },
+);
+
+sub tag_descriptions {
+    return \%TAG_DESCRIPTIONS;
+}
 
 sub version {
     return "$Zonemaster::Engine::Test::DNSSEC::VERSION";
@@ -1363,11 +1483,9 @@ Runs the default set of tests and returns a list of log entries made by the test
 Returns a reference to a hash, the keys of which are the names of all test methods in the module, and the corresponding values are references to
 lists with all the tags that the method can use in log entries.
 
-=item translation()
+=item tag_descriptions()
 
-Returns a reference to a nested hash, where the outermost keys are language
-codes, the keys below that are message tags and their values are translation
-strings.
+Returns a refernce to a hash with translation functions. Used by the builtin translation system.
 
 =item policy()
 

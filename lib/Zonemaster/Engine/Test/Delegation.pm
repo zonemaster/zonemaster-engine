@@ -11,6 +11,7 @@ use Zonemaster::Engine;
 
 use List::MoreUtils qw[uniq];
 use Locale::TextDomain qw[Zonemaster-Engine];
+use Readonly;
 use Zonemaster::Engine::Constants ':all';
 use Zonemaster::Engine::Net::IP;
 use Zonemaster::Engine::Test::Address;
@@ -110,60 +111,120 @@ sub metadata {
     };
 } ## end sub metadata
 
-sub translation {
-    return {
-        ARE_AUTHORITATIVE    => "All these nameservers are confirmed to be authoritative : {nsset}.",
-        CHILD_DISTINCT_NS_IP => "All the IP addresses used by the nameservers in child are unique.",
-        CHILD_NS_SAME_IP     => "IP {address} in child refers to multiple nameservers ({nss}).",
-        DEL_DISTINCT_NS_IP   => "All the IP addresses used by the nameservers in parent are unique.",
-        DEL_NS_SAME_IP       => "IP {address} in parent refers to multiple nameservers ({nss}).",
-        DISTINCT_IP_ADDRESS  => "All the IP addresses used by the nameservers are unique",
-        ENOUGH_IPV4_NS_CHILD => "Child lists enough ({count}) nameservers that resolve to IPv4 addresses ({addrs}). "
-          . "Lower limit set to {minimum}.",
-        ENOUGH_IPV4_NS_DEL => "Delegation lists enough ({count}) nameservers that resolve to IPv4 addresses ({addrs}). "
-          . "Lower limit set to {minimum}.",
-        ENOUGH_IPV6_NS_CHILD => "Child lists enough ({count}) nameservers that resolve to IPv6 addresses ({addrs}). "
-          . "Lower limit set to {minimum}.",
-        ENOUGH_IPV6_NS_DEL => "Delegation lists enough ({count}) nameservers that resolve to IPv6 addresses ({addrs}). "
-          . "Lower limit set to {minimum}.",
-        ENOUGH_NS_CHILD          => "Child lists enough ({count}) nameservers ({ns}). Lower limit set to {minimum}.",
-        ENOUGH_NS_DEL            => "Parent lists enough ({count}) nameservers ({glue}). Lower limit set to {minimum}.",
-        EXTRA_NAME_CHILD         => "Child has nameserver(s) not listed at parent ({extra}).",
-        EXTRA_NAME_PARENT        => "Parent has nameserver(s) not listed at the child ({extra}).",
-        IPV4_DISABLED            => 'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
-        IPV6_DISABLED            => 'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
-        IS_NOT_AUTHORITATIVE     => "Nameserver {ns} response is not authoritative on {proto} port 53.",
-        NAMES_MATCH              => "All of the nameserver names are listed both at parent and child.",
-        NOT_ENOUGH_IPV4_NS_CHILD => "Child does not list enough ({count}) nameservers that "
-          . "resolve to IPv4 addresses ({addrs}). Lower limit set to {minimum}.",
-        NOT_ENOUGH_IPV4_NS_DEL => "Delegation does not list enough ({count}) nameservers that "
-          . "resolve to IPv4 addresses ({addrs}). Lower limit set to {minimum}.",
-        NOT_ENOUGH_IPV6_NS_CHILD => "Child does not list enough ({count}) nameservers that "
-          . "resolve to IPv6 addresses ({addrs}). Lower limit set to {minimum}.",
-        NOT_ENOUGH_IPV6_NS_DEL => "Delegation does not list enough ({count}) nameservers that "
-          . "resolve to IPv6 addresses ({addrs}). Lower limit set to {minimum}.",
-        NOT_ENOUGH_NS_CHILD => "Child does not list enough ({count}) nameservers ({ns}). Lower limit set to {minimum}.",
-        NOT_ENOUGH_NS_DEL   => "Parent does not list enough ({count}) nameservers ({glue}). "
-          . "Lower limit set to {minimum}.",
-        NO_IPV4_NS_CHILD => "Child lists no nameserver that resolves to an IPv4 address. If any were present, "
-          . "the minimum allowed would be {minimum}.",
-        NO_IPV4_NS_DEL => "Delegation lists no nameserver that resolves to an IPv4 address. If any were present, "
-          . "the minimum allowed would be {minimum}.",
-        NO_IPV6_NS_CHILD => "Child lists no nameserver that resolves to an IPv6 address. If any were present, "
-          . "the minimum allowed would be {minimum}.",
-        NO_IPV6_NS_DEL => "Delegation lists no nameserver that resolves to an IPv6 address. If any were present, "
-          . "the minimum allowed would be {minimum}.",
-        NS_RR_IS_CNAME          => "Nameserver {ns} {address_type} RR point to CNAME.",
-        NS_RR_NO_CNAME          => "No nameserver point to CNAME alias.",
-        REFERRAL_SIZE_TOO_LARGE => "The smallest possible legal referral packet is larger than 512 octets "
-          . "(it is {size}).",
-        REFERRAL_SIZE_OK    => "The smallest possible legal referral packet is smaller than 513 octets (it is {size}).",
-        SAME_IP_ADDRESS     => "IP {address} refers to multiple nameservers ({nss}).",
-        SOA_EXISTS          => "All the nameservers have SOA record.",
-        SOA_NOT_EXISTS      => "A SOA query NOERROR response from {ns} was received empty.",
-        TOTAL_NAME_MISMATCH => "None of the nameservers listed at the parent are listed at the child.",
-    };
-} ## end sub translation
+Readonly my %TAG_DESCRIPTIONS => (
+    ARE_AUTHORITATIVE => sub {
+        __x "All these nameservers are confirmed to be authoritative : {nsset}.", @_;
+    },
+    CHILD_DISTINCT_NS_IP => sub {
+        __x "All the IP addresses used by the nameservers in child are unique.", @_;
+    },
+    CHILD_NS_SAME_IP => sub {
+        __x "IP {address} in child refers to multiple nameservers ({nss}).", @_;
+    },
+    DEL_DISTINCT_NS_IP => sub {
+        __x "All the IP addresses used by the nameservers in parent are unique.", @_;
+    },
+    DEL_NS_SAME_IP => sub {
+        __x "IP {address} in parent refers to multiple nameservers ({nss}).", @_;
+    },
+    DISTINCT_IP_ADDRESS => sub {
+        __x "All the IP addresses used by the nameservers are unique", @_;
+    },
+    ENOUGH_IPV4_NS_CHILD => sub {
+        __x "Child lists enough ({count}) nameservers that resolve to IPv4 addresses ({addrs}). Lower limit set to {minimum}.", @_;
+    },
+    ENOUGH_IPV4_NS_DEL => sub {
+        __x "Delegation lists enough ({count}) nameservers that resolve to IPv4 addresses ({addrs}). Lower limit set to {minimum}.", @_;
+    },
+    ENOUGH_IPV6_NS_CHILD => sub {
+        __x "Child lists enough ({count}) nameservers that resolve to IPv6 addresses ({addrs}). Lower limit set to {minimum}.", @_;
+    },
+    ENOUGH_IPV6_NS_DEL => sub {
+        __x "Delegation lists enough ({count}) nameservers that resolve to IPv6 addresses ({addrs}). Lower limit set to {minimum}.", @_;
+    },
+    ENOUGH_NS_CHILD => sub {
+        __x "Child lists enough ({count}) nameservers ({ns}). Lower limit set to {minimum}.", @_;
+    },
+    ENOUGH_NS_DEL => sub {
+        __x "Parent lists enough ({count}) nameservers ({glue}). Lower limit set to {minimum}.", @_;
+    },
+    EXTRA_NAME_CHILD => sub {
+        __x "Child has nameserver(s) not listed at parent ({extra}).", @_;
+    },
+    EXTRA_NAME_PARENT => sub {
+        __x "Parent has nameserver(s) not listed at the child ({extra}).", @_;
+    },
+    IPV4_DISABLED => sub {
+        __x 'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
+    },
+    IPV6_DISABLED => sub {
+        __x 'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
+    },
+    IS_NOT_AUTHORITATIVE => sub {
+        __x "Nameserver {ns} response is not authoritative on {proto} port 53.", @_;
+    },
+    NAMES_MATCH => sub {
+        __x "All of the nameserver names are listed both at parent and child.", @_;
+    },
+    NOT_ENOUGH_IPV4_NS_CHILD => sub {
+        __x "Child does not list enough ({count}) nameservers that resolve to IPv4 addresses ({addrs}). Lower limit set to {minimum}.", @_;
+    },
+    NOT_ENOUGH_IPV4_NS_DEL => sub {
+        __x "Delegation does not list enough ({count}) nameservers that resolve to IPv4 addresses ({addrs}). Lower limit set to {minimum}.", @_;
+    },
+    NOT_ENOUGH_IPV6_NS_CHILD => sub {
+        __x "Child does not list enough ({count}) nameservers that resolve to IPv6 addresses ({addrs}). Lower limit set to {minimum}.", @_;
+    },
+    NOT_ENOUGH_IPV6_NS_DEL => sub {
+        __x "Delegation does not list enough ({count}) nameservers that resolve to IPv6 addresses ({addrs}). Lower limit set to {minimum}.", @_;
+    },
+    NOT_ENOUGH_NS_CHILD => sub {
+        __x "Child does not list enough ({count}) nameservers ({ns}). Lower limit set to {minimum}.", @_;
+    },
+    NOT_ENOUGH_NS_DEL => sub {
+        __x "Parent does not list enough ({count}) nameservers ({glue}). Lower limit set to {minimum}.", @_;
+    },
+    NO_IPV4_NS_CHILD => sub {
+        __x "Child lists no nameserver that resolves to an IPv4 address. If any were present, the minimum allowed would be {minimum}.", @_;
+    },
+    NO_IPV4_NS_DEL => sub {
+        __x "Delegation lists no nameserver that resolves to an IPv4 address. If any were present, the minimum allowed would be {minimum}.", @_;
+    },
+    NO_IPV6_NS_CHILD => sub {
+        __x "Child lists no nameserver that resolves to an IPv6 address. If any were present, the minimum allowed would be {minimum}.", @_;
+    },
+    NO_IPV6_NS_DEL => sub {
+        __x "Delegation lists no nameserver that resolves to an IPv6 address. If any were present, the minimum allowed would be {minimum}.", @_;
+    },
+    NS_RR_IS_CNAME => sub {
+        __x "Nameserver {ns} {address_type} RR point to CNAME.", @_;
+    },
+    NS_RR_NO_CNAME => sub {
+        __x "No nameserver point to CNAME alias.", @_;
+    },
+    REFERRAL_SIZE_TOO_LARGE => sub {
+        __x "The smallest possible legal referral packet is larger than 512 octets (it is {size}).", @_;
+    },
+    REFERRAL_SIZE_OK => sub {
+        __x "The smallest possible legal referral packet is smaller than 513 octets (it is {size}).", @_;
+    },
+    SAME_IP_ADDRESS => sub {
+        __x "IP {address} refers to multiple nameservers ({nss}).", @_;
+    },
+    SOA_EXISTS => sub {
+        __x "All the nameservers have SOA record.", @_;
+    },
+    SOA_NOT_EXISTS => sub {
+        __x "A SOA query NOERROR response from {ns} was received empty.", @_;
+    },
+    TOTAL_NAME_MISMATCH => sub {
+        __x "None of the nameservers listed at the parent are listed at the child.", @_;
+    },
+);
+
+sub tag_descriptions {
+    return \%TAG_DESCRIPTIONS;
+}
 
 sub version {
     return "$Zonemaster::Engine::Test::Delegation::VERSION";
@@ -693,9 +754,9 @@ Zonemaster::Engine::Test::Delegation - Tests regarding delegation details
 
 Runs the default set of tests and returns a list of log entries made by the tests.
 
-=item translation()
+=item tag_descriptions()
 
-Returns a refernce to a hash with translation data. Used by the builtin translation system.
+Returns a refernce to a hash with translation functions. Used by the builtin translation system.
 
 =item metadata()
 

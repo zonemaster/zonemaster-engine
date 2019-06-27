@@ -11,11 +11,85 @@ use Zonemaster::Engine;
 use Carp;
 use Locale::TextDomain qw[Zonemaster-Engine];
 use POSIX qw[setlocale LC_MESSAGES];
+use Readonly;
 
 use Moose;
 
 has 'locale' => ( is => 'rw', isa => 'Str' );
-has 'data'   => ( is => 'ro', isa => 'HashRef', lazy => 1, builder => '_load_data' );
+has 'data' => ( is => 'ro', isa => 'HashRef', lazy => 1, builder => '_load_data' );
+has 'all_tag_descriptions' => ( is => 'ro', isa => 'HashRef', builder => '_build_all_tag_descriptions' );
+
+###
+### Tag descriptions
+###
+
+Readonly my %TAG_DESCRIPTIONS => (
+    CANNOT_CONTINUE => sub {
+        __x "Not enough data about {zone} was found to be able to run tests.", @_;
+    },
+    PROFILE_FILE => sub {
+        __x "Profile was read from {name}.", @_;
+    },
+    DEPENDENCY_VERSION => sub {
+        __x "Using prerequisite module {name} version {version}.", @_;
+    },
+    GLOBAL_VERSION => sub {
+        __x "Using version {version} of the Zonemaster engine.", @_;
+    },
+    LOGGER_CALLBACK_ERROR => sub {
+        __x "Logger callback died with error: {exception}", @_;
+    },
+    LOOKUP_ERROR => sub {
+        __x "DNS query to {ns} for {name}/{type}/{class} failed with error: {message}", @_;
+    },
+    MODULE_ERROR => sub {
+        __x "Fatal error in {module}: {msg}", @_;
+    },
+    MODULE_VERSION => sub {
+        __x "Using module {module} version {version}.", @_;
+    },
+    MODULE_END => sub {
+        __x "Module {module} finished running.", @_;
+    },
+    NO_NETWORK => sub {
+        __x "Both IPv4 and IPv6 are disabled.";
+    },
+    POLICY_DISABLED => sub {
+        __x "The module {name} was disabled by the policy.", @_;
+    },
+    UNKNOWN_METHOD => sub {
+        __x "Request to run unknown method {method} in module {module}.", @_;
+    },
+    UNKNOWN_MODULE => sub {
+        __x "Request to run {method} in unknown module {module}. Known modules: {known}.", @_;
+    },
+    SKIP_IPV4_DISABLED => sub {
+        __x "IPv4 is disabled, not sending query to {ns}.", @_;
+    },
+    SKIP_IPV6_DISABLED => sub {
+        __x "IPv6 is disabled, not sending query to {ns}.", @_;
+    },
+    FAKE_DELEGATION => sub {
+        __x "Followed a fake delegation.";
+    },
+    ADDED_FAKE_DELEGATION => sub {
+        __x "Added a fake delegation for domain {domain} to name server {ns}.", @_;
+    },
+    FAKE_DELEGATION_TO_SELF => sub {
+        __x "Name server {ns} not adding fake delegation for domain {domain} to itself.", @_;
+    },
+    FAKE_DELEGATION_IN_ZONE_NO_IP => sub {
+        __x "The fake delegation of domain {domain} includes an in-zone name server {ns} without mandatory glue (without IP address).", @_;
+    },
+    FAKE_DELEGATION_NO_IP => sub {
+        __x
+          "The fake delegation of domain {domain} includes a name server {ns} that cannot be resolved to any IP address.",
+          @_;
+    },
+    PACKET_BIG => sub {
+        __x "Packet size ({size}) exceeds common maximum size of {maxsize} bytes (try with \"{command}\").", @_;
+    },
+);
 
 ###
 ### Builder Methods
@@ -47,15 +121,34 @@ sub _get_locale {
 }
 
 sub _load_data {
-    my %data;
+    my $self = shift;
 
-    $data{SYSTEM} = _system_translation();
-    foreach my $mod ( 'Basic', Zonemaster::Engine->modules ) {
-        my $module = 'Zonemaster::Engine::Test::' . $mod;
-        $data{ uc( $mod ) } = $module->translation();
+    my $old_locale = $self->locale;
+
+    $self->locale( 'C' );
+
+    my %data;
+    for my $mod ( keys %{ $self->all_tag_descriptions } ) {
+        for my $tag ( keys %{ $self->all_tag_descriptions->{$mod} } ) {
+            $data{$mod}{$tag} = $self->_translate_tag( $mod, $tag, {} );
+        }
     }
 
+    $self->locale( $old_locale );
+
     return \%data;
+}
+
+sub _build_all_tag_descriptions {
+    my %all_tag_descriptions;
+
+    $all_tag_descriptions{SYSTEM} = \%TAG_DESCRIPTIONS;
+    foreach my $mod ( 'Basic', Zonemaster::Engine->modules ) {
+        my $module = 'Zonemaster::Engine::Test::' . $mod;
+        $all_tag_descriptions{ uc( $mod ) } = $module->tag_descriptions;
+    }
+
+    return \%all_tag_descriptions;
 }
 
 ###
@@ -81,44 +174,18 @@ sub to_string {
 sub translate_tag {
     my ( $self, $entry ) = @_;
 
-    my $string = $self->data->{ $entry->module }{ $entry->tag };
+    return $self->_translate_tag( $entry->module, $entry->tag, $entry->printable_args );
+}
 
-    if ( not $string ) {
-        return $entry->string;
-    }
+sub _translate_tag {
+    my ( $self, $module, $tag, $args ) = @_;
 
     # Partial workaround for FreeBSD 11. It works once, but then translation
     # gets stuck on that locale.
     local $ENV{LC_ALL} = $self->{locale};
 
-    return __x( $string, %{ $entry->printable_args } );
+    return $self->all_tag_descriptions->{ $module }{ $tag }->( %{ $args } );
 }
-
-sub _system_translation {
-    return {
-        "CANNOT_CONTINUE"               => "Not enough data about {zone} was found to be able to run tests.",
-        "PROFILE_FILE"                  => "Profile was read from {name}.",
-        "DEPENDENCY_VERSION"            => "Using prerequisite module {name} version {version}.",
-        "GLOBAL_VERSION"                => "Using version {version} of the Zonemaster engine.",
-        "LOGGER_CALLBACK_ERROR"         => "Logger callback died with error: {exception}",
-        "LOOKUP_ERROR"                  => "DNS query to {ns} for {name}/{type}/{class} failed with error: {message}",
-        "MODULE_ERROR"                  => "Fatal error in {module}: {msg}",
-        "MODULE_VERSION"                => "Using module {module} version {version}.",
-        "MODULE_END"                    => "Module {module} finished running.",
-        "NO_NETWORK"                    => "Both IPv4 and IPv6 are disabled.",
-        "POLICY_DISABLED"               => "The module {name} was disabled by the policy.",
-        "UNKNOWN_METHOD"                => "Request to run unknown method {method} in module {module}.",
-        "UNKNOWN_MODULE"                => "Request to run {method} in unknown module {module}. Known modules: {known}.",
-        "SKIP_IPV4_DISABLED"            => "IPv4 is disabled, not sending query to {ns}.",
-        "SKIP_IPV6_DISABLED"            => "IPv6 is disabled, not sending query to {ns}.",
-        "FAKE_DELEGATION"               => "Followed a fake delegation.",
-        "ADDED_FAKE_DELEGATION"         => "Added a fake delegation for domain {domain} to name server {ns}.",
-        "FAKE_DELEGATION_TO_SELF"       => "Name server {ns} not adding fake delegation for domain {domain} to itself.",
-        "FAKE_DELEGATION_IN_ZONE_NO_IP" => "The fake delegation of domain {domain} includes an in-zone name server {ns} without mandatory glue (without IP address).",
-        "FAKE_DELEGATION_NO_IP"         => "The fake delegation of domain {domain} includes a name server {ns} that cannot be resolved to any IP address.",
-        "PACKET_BIG"                    => "Packet size ({size}) exceeds common maximum size of {maxsize} bytes (try with \"{command}\").",
-    };
-} ## end sub _system_translation
 
 no Moose;
 __PACKAGE__->meta->make_immutable;
