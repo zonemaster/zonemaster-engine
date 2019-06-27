@@ -5,6 +5,10 @@ message tags are first translated to English strings with argument
 placeholders, and a second step where GNU gettext is used to translate the
 strings to other languages and fill in the placeholders based on provided data.
 
+All translation files live in the F<share> directory in the
+L<Zonemaster::Engine> source directory and all commands described here are
+executed from that directory.
+
 =head1 FOR DEVELOPERS OF ZONEMASTER TEST MODULES
 
 Your test code should produce log messages with message tags, as documented
@@ -24,21 +28,27 @@ corresponding translated strings in other languages, so be very careful about
 editing them!
 
 Every time you have added, removed or modified a tag or its arguments, re-run
-the F<extract_po.pl> script as descibed in the next section.
+C<make update-po> script as descibed in the next section.
 
 =head1 FOR TRANSLATORS
 
-The translation files live in the subdirectory F<share> in the L<Zonemaster::Engine>
-source directory, and are named as C<{language_code}.po> (for example,
-F<en.po>, F<sv.po> or F<fr.po>). The master file is F<en.po>. All other
-translations should be based on that file, and that file should never be
-edited. It is produced by running the script F<util/extract_po.pl>, which will
-walk through all installed L<Zonemaster::Engine> test modules, pull out their provided
-English translations and make these into a valid C<po> file. This should only
-be necessary to do when a developer has added or changed a test module. If the
-new code is installed, just running the script works. If the new code has not
-been installed, run the script with an C<-I> flag pointing at the edited
-module(s).
+The first step in updating the translations is to generate a new template file
+(F<Zonemaster-Engine.pot>).
+In practice you rarely need to think about generating it as it is generally
+performed as an implicit intermediate step.
+If you do want to generate it, the command is C<make extract-pot>.
+
+The translated strings are maintained in files named C<{language_code}.po> (e.g.
+F<en.po>, F<sv.po> or F<fr.po>).
+Execute C<make update-po> to update these files with new message ids from the
+source code (C<make extract-pot> will be infoked behind the scenes).
+This should only be necessary to do when a developer has added or changed a test
+module.
+
+By default C<make update-po> suggests translations for new message ids based on
+fuzzy matching of similar strings.
+This is not always desirable and you can disable fuzzy matching by executing
+C<make update-po MSGMERGE_OPTS=--no-fuzzy-mathing> instead.
 
 In order to make a new translation usable, it must be compiled to C<mo> format
 and installed. The first step needs the C<msgfmt> program from the GNU gettext
