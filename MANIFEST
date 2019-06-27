@@ -37,7 +37,6 @@ lib/Zonemaster/Engine/Test/Connectivity.pm
 lib/Zonemaster/Engine/Test/Consistency.pm
 lib/Zonemaster/Engine/Test/Delegation.pm
 lib/Zonemaster/Engine/Test/DNSSEC.pm
-lib/Zonemaster/Engine/Test/Example.pm
 lib/Zonemaster/Engine/Test/Nameserver.pm
 lib/Zonemaster/Engine/Test/Syntax.pm
 lib/Zonemaster/Engine/Test/Zone.pm

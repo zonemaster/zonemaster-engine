@@ -194,8 +194,8 @@ reference to a hash where the keys are the test method names and the
 values the documentation strings.
 
 This method blindly assumes that the structure of the POD is exactly
-like that in the Example and Basic test modules. If it's not, the
-results are undefined.
+like that in the Basic test module.
+If it's not, the results are undefined.
 
 =item scramble_case
 
