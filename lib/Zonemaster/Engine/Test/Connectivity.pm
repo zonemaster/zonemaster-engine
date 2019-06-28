@@ -87,64 +87,64 @@ sub metadata {
 } ## end sub metadata
 
 Readonly my %TAG_DESCRIPTIONS => (
-    NAMESERVERS_IPV4_WITH_UNIQ_AS => sub {
+    NAMESERVERS_IPV4_WITH_UNIQ_AS => sub {    # NAMESERVERS_IPV4_WITH_UNIQ_AS
         __x 'All nameservers IPv4 addresses are in the same AS ({asn}).', @_;
     },
-    NAMESERVERS_IPV6_WITH_UNIQ_AS => sub {
+    NAMESERVERS_IPV6_WITH_UNIQ_AS => sub {    # NAMESERVERS_IPV6_WITH_UNIQ_AS
         __x 'All nameservers IPv6 addresses are in the same AS ({asn}).', @_;
     },
-    NAMESERVERS_WITH_MULTIPLE_AS => sub {
+    NAMESERVERS_WITH_MULTIPLE_AS => sub {     # NAMESERVERS_WITH_MULTIPLE_AS
         __x 'Domain\'s authoritative nameservers do not belong to the same AS.', @_;
     },
-    NAMESERVERS_WITH_UNIQ_AS => sub {
+    NAMESERVERS_WITH_UNIQ_AS => sub {         # NAMESERVERS_WITH_UNIQ_AS
         __x 'All nameservers are in the same AS ({asn}).', @_;
     },
-    NAMESERVERS_IPV4_NO_AS => sub {
+    NAMESERVERS_IPV4_NO_AS => sub {           # NAMESERVERS_IPV4_NO_AS
         __x 'No IPv4 nameserver address is in an AS.', @_;
     },
-    NAMESERVERS_IPV4_WITH_MULTIPLE_AS => sub {
+    NAMESERVERS_IPV4_WITH_MULTIPLE_AS => sub {    # NAMESERVERS_IPV4_WITH_MULTIPLE_AS
         __x 'Authoritative IPv4 nameservers are in more than one AS.', @_;
     },
-    NAMESERVERS_IPV6_NO_AS => sub {
+    NAMESERVERS_IPV6_NO_AS => sub {               # NAMESERVERS_IPV6_NO_AS
         __x 'No IPv6 nameserver address is in an AS.', @_;
     },
-    NAMESERVERS_IPV6_WITH_MULTIPLE_AS => sub {
+    NAMESERVERS_IPV6_WITH_MULTIPLE_AS => sub {    # NAMESERVERS_IPV6_WITH_MULTIPLE_AS
         __x 'Authoritative IPv6 nameservers are in more than one AS.', @_;
     },
-    NAMESERVERS_NO_AS => sub {
+    NAMESERVERS_NO_AS => sub {                    # NAMESERVERS_NO_AS
         __x 'No nameserver address is in an AS.', @_;
     },
-    NAMESERVER_HAS_TCP_53 => sub {
+    NAMESERVER_HAS_TCP_53 => sub {                # NAMESERVER_HAS_TCP_53
         __x 'Nameserver {ns}/{address} accessible over TCP on port 53.', @_;
     },
-    NAMESERVER_HAS_UDP_53 => sub {
+    NAMESERVER_HAS_UDP_53 => sub {                # NAMESERVER_HAS_UDP_53
         __x 'Nameserver {ns}/{address} accessible over UDP on port 53.', @_;
     },
-    NAMESERVER_NO_TCP_53 => sub {
+    NAMESERVER_NO_TCP_53 => sub {                 # NAMESERVER_NO_TCP_53
         __x 'Nameserver {ns}/{address} not accessible over TCP on port 53.', @_;
     },
-    NAMESERVER_NO_UDP_53 => sub {
+    NAMESERVER_NO_UDP_53 => sub {                 # NAMESERVER_NO_UDP_53
         __x 'Nameserver {ns}/{address} not accessible over UDP on port 53.', @_;
     },
-    IPV4_DISABLED => sub {
+    IPV4_DISABLED => sub {                        # IPV4_DISABLED
         __x 'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
     },
-    IPV6_DISABLED => sub {
+    IPV6_DISABLED => sub {                        # IPV6_DISABLED
         __x 'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
     },
-    IPV4_ASN => sub {
+    IPV4_ASN => sub {                             # IPV4_ASN
         __x 'Name servers have IPv4 addresses in the following ASs: {asn}.', @_;
     },
-    IPV6_ASN => sub {
+    IPV6_ASN => sub {                             # IPV6_ASN
         __x 'Name servers have IPv6 addresses in the following ASs: {asn}.', @_;
     },
-    ASN_INFOS_RAW => sub {
+    ASN_INFOS_RAW => sub {                        # ASN_INFOS_RAW
         __x '[ASN:RAW] {address};{data}', @_;
     },
-    ASN_INFOS_ANNOUNCE_BY => sub {
+    ASN_INFOS_ANNOUNCE_BY => sub {                # ASN_INFOS_ANNOUNCE_BY
         __x '[ASN:ANNOUNCE_BY] {address};{asn}', @_;
     },
-    ASN_INFOS_ANNOUNCE_IN => sub {
+    ASN_INFOS_ANNOUNCE_IN => sub {                # ASN_INFOS_ANNOUNCE_IN
         __x '[ASN:ANNOUNCE_IN] {address};{prefix}', @_;
     },
 );

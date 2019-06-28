@@ -16,19 +16,28 @@ elsewhere. These tags will be used for translation to human language, for
 determining the severity of the even logged and to make the events easily used
 by other software.
 
-Each test module must also have a method named C<translation()>. This method
-must return a reference to a hash, in which the keys are message tags (short
-form, without module specification), and the corresponding values a string
-describing the meaning of the tag in English. In this string can be
-placeholders of the form C<{somename}>, which will be replaced by the value of
-the log entry argument named C<somename>.
+Each test module must also have a method named C<tag_descriptions()>. This method
+must return a reference to a hash whose entries are expected to look like this:
 
-The English string with its placeholders will be used as a key to look up
-corresponding translated strings in other languages, so be very careful about
-editing them!
+    FRIENDLY_GREETING => sub {    # FRIENDLY_GREETING
+        __x "Hello, {name}!", @_;
+    },
 
-Every time you have added, removed or modified a tag or its arguments, re-run
-C<make update-po> script as descibed in the next section.
+A number of things are important here.
+Keys in the hashref are message tags and values are coderefs.
+The coderef calls Locale::TextDomain::__x() with a Perl brace format string
+(a.k.a. message id) and passes along its own @_).
+The coderef propagates the return value of Locale::TextDomain::__x().
+The line immediately before __x contains a comment consisting of the message
+tag.
+
+The format strings themselves, the message tag comments and the line numbers of
+the __x calls are used by the gettext tooling when updating the PO files with
+new message ids and old message strings.
+
+Every time you add, remove or modify a tag or its message id, re-run
+C<make update-po> as descibed in the next section.
+Make sure the message tag comments are properly added and up to date.
 
 =head1 FOR TRANSLATORS
 

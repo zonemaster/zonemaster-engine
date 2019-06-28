@@ -24,69 +24,69 @@ has 'all_tag_descriptions' => ( is => 'ro', isa => 'HashRef', builder => '_build
 ###
 
 Readonly my %TAG_DESCRIPTIONS => (
-    CANNOT_CONTINUE => sub {
+    CANNOT_CONTINUE => sub {    # CANNOT_CONTINUE
         __x "Not enough data about {zone} was found to be able to run tests.", @_;
     },
-    PROFILE_FILE => sub {
+    PROFILE_FILE => sub {       # PROFILE_FILE
         __x "Profile was read from {name}.", @_;
     },
-    DEPENDENCY_VERSION => sub {
+    DEPENDENCY_VERSION => sub {    # DEPENDENCY_VERSION
         __x "Using prerequisite module {name} version {version}.", @_;
     },
-    GLOBAL_VERSION => sub {
+    GLOBAL_VERSION => sub {        # GLOBAL_VERSION
         __x "Using version {version} of the Zonemaster engine.", @_;
     },
-    LOGGER_CALLBACK_ERROR => sub {
+    LOGGER_CALLBACK_ERROR => sub {    # LOGGER_CALLBACK_ERROR
         __x "Logger callback died with error: {exception}", @_;
     },
-    LOOKUP_ERROR => sub {
+    LOOKUP_ERROR => sub {             # LOOKUP_ERROR
         __x "DNS query to {ns} for {name}/{type}/{class} failed with error: {message}", @_;
     },
-    MODULE_ERROR => sub {
+    MODULE_ERROR => sub {             # MODULE_ERROR
         __x "Fatal error in {module}: {msg}", @_;
     },
-    MODULE_VERSION => sub {
+    MODULE_VERSION => sub {           # MODULE_VERSION
         __x "Using module {module} version {version}.", @_;
     },
-    MODULE_END => sub {
+    MODULE_END => sub {               # MODULE_END
         __x "Module {module} finished running.", @_;
     },
-    NO_NETWORK => sub {
+    NO_NETWORK => sub {               # NO_NETWORK
         __x "Both IPv4 and IPv6 are disabled.";
     },
-    POLICY_DISABLED => sub {
+    POLICY_DISABLED => sub {          # POLICY_DISABLED
         __x "The module {name} was disabled by the policy.", @_;
     },
-    UNKNOWN_METHOD => sub {
+    UNKNOWN_METHOD => sub {           # UNKNOWN_METHOD
         __x "Request to run unknown method {method} in module {module}.", @_;
     },
-    UNKNOWN_MODULE => sub {
+    UNKNOWN_MODULE => sub {           # UNKNOWN_MODULE
         __x "Request to run {method} in unknown module {module}. Known modules: {known}.", @_;
     },
-    SKIP_IPV4_DISABLED => sub {
+    SKIP_IPV4_DISABLED => sub {       # SKIP_IPV4_DISABLED
         __x "IPv4 is disabled, not sending query to {ns}.", @_;
     },
-    SKIP_IPV6_DISABLED => sub {
+    SKIP_IPV6_DISABLED => sub {       # SKIP_IPV6_DISABLED
         __x "IPv6 is disabled, not sending query to {ns}.", @_;
     },
-    FAKE_DELEGATION => sub {
+    FAKE_DELEGATION => sub {          # FAKE_DELEGATION
         __x "Followed a fake delegation.";
     },
-    ADDED_FAKE_DELEGATION => sub {
+    ADDED_FAKE_DELEGATION => sub {    # ADDED_FAKE_DELEGATION
         __x "Added a fake delegation for domain {domain} to name server {ns}.", @_;
     },
-    FAKE_DELEGATION_TO_SELF => sub {
+    FAKE_DELEGATION_TO_SELF => sub {    # FAKE_DELEGATION_TO_SELF
         __x "Name server {ns} not adding fake delegation for domain {domain} to itself.", @_;
     },
-    FAKE_DELEGATION_IN_ZONE_NO_IP => sub {
+    FAKE_DELEGATION_IN_ZONE_NO_IP => sub {    # FAKE_DELEGATION_IN_ZONE_NO_IP
         __x "The fake delegation of domain {domain} includes an in-zone name server {ns} without mandatory glue (without IP address).", @_;
     },
-    FAKE_DELEGATION_NO_IP => sub {
+    FAKE_DELEGATION_NO_IP => sub {            # FAKE_DELEGATION_NO_IP
         __x
           "The fake delegation of domain {domain} includes a name server {ns} that cannot be resolved to any IP address.",
           @_;
     },
-    PACKET_BIG => sub {
+    PACKET_BIG => sub {                       # PACKET_BIG
         __x "Packet size ({size}) exceeds common maximum size of {maxsize} bytes (try with \"{command}\").", @_;
     },
 );

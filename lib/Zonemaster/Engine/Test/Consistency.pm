@@ -122,80 +122,80 @@ sub metadata {
 } ## end sub metadata
 
 Readonly my %TAG_DESCRIPTIONS => (
-    ADDRESSES_MATCH => sub {
+    ADDRESSES_MATCH => sub {    # ADDRESSES_MATCH
         __x 'Glue records are consistent between glue and authoritative data.', @_;
     },
-    EXTRA_ADDRESS_CHILD => sub {
+    EXTRA_ADDRESS_CHILD => sub {    # EXTRA_ADDRESS_CHILD
         __x 'Child has extra nameserver IP address(es) not listed at parent ({addresses}).', @_;
     },
-    EXTRA_ADDRESS_PARENT => sub {
+    EXTRA_ADDRESS_PARENT => sub {    # EXTRA_ADDRESS_PARENT
         __x 'Parent has extra nameserver IP address(es) not listed at child ({addresses}).', @_;
     },
-    IPV4_DISABLED => sub {
+    IPV4_DISABLED => sub {           # IPV4_DISABLED
         __x 'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
     },
-    IPV6_DISABLED => sub {
+    IPV6_DISABLED => sub {           # IPV6_DISABLED
         __x 'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
     },
-    MULTIPLE_NS_SET => sub {
+    MULTIPLE_NS_SET => sub {         # MULTIPLE_NS_SET
         __x 'Saw {count} NS set.', @_;
     },
-    MULTIPLE_SOA_MNAMES => sub {
+    MULTIPLE_SOA_MNAMES => sub {     # MULTIPLE_SOA_MNAMES
         __x 'Saw {count} SOA mname.', @_;
     },
-    MULTIPLE_SOA_RNAMES => sub {
+    MULTIPLE_SOA_RNAMES => sub {     # MULTIPLE_SOA_RNAMES
         __x 'Saw {count} SOA rname.', @_;
     },
-    MULTIPLE_SOA_SERIALS => sub {
+    MULTIPLE_SOA_SERIALS => sub {    # MULTIPLE_SOA_SERIALS
         __x 'Saw {count} SOA serial numbers.', @_;
     },
-    MULTIPLE_SOA_TIME_PARAMETER_SET => sub {
+    MULTIPLE_SOA_TIME_PARAMETER_SET => sub {    # MULTIPLE_SOA_TIME_PARAMETER_SET
         __x 'Saw {count} SOA time parameter set.', @_;
     },
-    NO_RESPONSE => sub {
+    NO_RESPONSE => sub {                        # NO_RESPONSE
         __x 'Nameserver {ns}/{address} did not respond.', @_;
     },
-    NO_RESPONSE_NS_QUERY => sub {
+    NO_RESPONSE_NS_QUERY => sub {               # NO_RESPONSE_NS_QUERY
         __x 'No response from nameserver {ns}/{address} on NS queries.', @_;
     },
-    NO_RESPONSE_SOA_QUERY => sub {
+    NO_RESPONSE_SOA_QUERY => sub {              # NO_RESPONSE_SOA_QUERY
         __x 'No response from nameserver {ns}/{address} on SOA queries.', @_;
     },
-    NS_SET => sub {
+    NS_SET => sub {                             # NS_SET
         __x 'Saw NS set ({nsset}) on following nameserver set : {servers}.', @_;
     },
-    ONE_NS_SET => sub {
+    ONE_NS_SET => sub {                         # ONE_NS_SET
         __x 'A unique NS set was seen ({nsset}).', @_;
     },
-    ONE_SOA_MNAME => sub {
+    ONE_SOA_MNAME => sub {                      # ONE_SOA_MNAME
         __x 'A single SOA mname value was seen ({mname})', @_;
     },
-    ONE_SOA_RNAME => sub {
+    ONE_SOA_RNAME => sub {                      # ONE_SOA_RNAME
         __x 'A single SOA rname value was seen ({rname})', @_;
     },
-    ONE_SOA_SERIAL => sub {
+    ONE_SOA_SERIAL => sub {                     # ONE_SOA_SERIAL
         __x 'A single SOA serial number was seen ({serial}).', @_;
     },
-    ONE_SOA_TIME_PARAMETER_SET => sub {
+    ONE_SOA_TIME_PARAMETER_SET => sub {         # ONE_SOA_TIME_PARAMETER_SET
         __x 'A single SOA time parameter set was seen (REFRESH={refresh},RETRY={retry},EXPIRE={expire},MINIMUM={minimum}).', @_;
     },
-    SOA_RNAME => sub {
+    SOA_RNAME => sub {                          # SOA_RNAME
         __x 'Saw SOA rname {rname} on following nameserver set : {servers}.', @_;
     },
-    SOA_SERIAL => sub {
+    SOA_SERIAL => sub {                         # SOA_SERIAL
         __x 'Saw SOA serial number {serial} on following nameserver set : {servers}.', @_;
     },
-    SOA_SERIAL_VARIATION => sub {
+    SOA_SERIAL_VARIATION => sub {               # SOA_SERIAL_VARIATION
         __x 'Difference between the smaller serial ({serial_min}) and the bigger one ({serial_max}) '
           . 'is greater than the maximum allowed ({max_variation}).',
           @_;
     },
-    SOA_TIME_PARAMETER_SET => sub {
+    SOA_TIME_PARAMETER_SET => sub {             # SOA_TIME_PARAMETER_SET
         __x 'Saw SOA time parameter set (REFRESH={refresh},RETRY={retry},EXPIRE={expire},'
           . 'MINIMUM={minimum}) on following nameserver set : {servers}.',
           @_;
     },
-    TOTAL_ADDRESS_MISMATCH => sub {
+    TOTAL_ADDRESS_MISMATCH => sub {             # TOTAL_ADDRESS_MISMATCH
         __x 'No common nameserver IP addresses between child ({child}) and parent ({glue}).', @_;
     },
 );
