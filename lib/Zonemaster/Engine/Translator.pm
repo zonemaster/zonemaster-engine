@@ -174,17 +174,25 @@ sub to_string {
 sub translate_tag {
     my ( $self, $entry ) = @_;
 
-    return $self->_translate_tag( $entry->module, $entry->tag, $entry->printable_args );
+    return $self->_translate_tag( $entry->module, $entry->tag, $entry->printable_args ) // $entry->string;
 }
 
 sub _translate_tag {
     my ( $self, $module, $tag, $args ) = @_;
 
-    # Partial workaround for FreeBSD 11. It works once, but then translation
-    # gets stuck on that locale.
-    local $ENV{LC_ALL} = $self->{locale};
+    my $code = $self->all_tag_descriptions->{$module}{$tag};
 
-    return $self->all_tag_descriptions->{ $module }{ $tag }->( %{ $args } );
+    if ( $code ) {
+
+        # Partial workaround for FreeBSD 11. It works once, but then translation
+        # gets stuck on that locale.
+        local $ENV{LC_ALL} = $self->{locale};
+
+        return $code->( %{$args} );
+    }
+    else {
+        return undef;
+    }
 }
 
 no Moose;
