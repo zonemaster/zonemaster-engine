@@ -54,4 +54,4 @@ you just added a new translation, that will be missing, for example).
 Once the new translation is compiled and added to F<MANIFEST>, the normal Perl
 C<make install> process will install it.
 
-Don't forget to commit the new C<po> and C<mo> files to git.
+Don't forget to commit the new C<po> files to git.
