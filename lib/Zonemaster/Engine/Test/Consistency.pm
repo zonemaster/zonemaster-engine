@@ -8,11 +8,12 @@ use warnings;
 use 5.014002;
 
 use Zonemaster::Engine;
-use Zonemaster::Engine::Util;
-use Zonemaster::Engine::Test::Address;
-use Zonemaster::Engine::Constants qw[:ip :soa];
 
 use List::MoreUtils qw[uniq];
+use Locale::TextDomain qw[Zonemaster-Engine];
+use Zonemaster::Engine::Constants qw[:ip :soa];
+use Zonemaster::Engine::Test::Address;
+use Zonemaster::Engine::Util;
 
 ###
 ### Entry points

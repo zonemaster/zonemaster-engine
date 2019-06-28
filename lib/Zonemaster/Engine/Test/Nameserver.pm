@@ -8,12 +8,13 @@ use warnings;
 use 5.014002;
 
 use Zonemaster::Engine;
-use Zonemaster::Engine::Util;
-use Zonemaster::Engine::Test::Address;
-use Zonemaster::Engine::Constants qw[:ip];
 
 use List::MoreUtils qw[uniq none];
+use Locale::TextDomain qw[Zonemaster-Engine];
 use Readonly;
+use Zonemaster::Engine::Constants qw[:ip];
+use Zonemaster::Engine::Test::Address;
+use Zonemaster::Engine::Util;
 
 Readonly my @NONEXISTENT_NAMES => qw{
   xn--nameservertest.iis.se

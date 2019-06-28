@@ -8,13 +8,14 @@ use warnings;
 use 5.014002;
 
 use Zonemaster::Engine;
-use Zonemaster::Engine::Util;
-use Zonemaster::Engine::TestMethods;
-use Zonemaster::Engine::Constants qw[:ip];
-use Zonemaster::Engine::ASNLookup;
-use Carp;
 
+use Carp;
 use List::MoreUtils qw[uniq];
+use Locale::TextDomain qw[Zonemaster-Engine];
+use Zonemaster::Engine::ASNLookup;
+use Zonemaster::Engine::Constants qw[:ip];
+use Zonemaster::Engine::TestMethods;
+use Zonemaster::Engine::Util;
 
 ###
 ### Entry Points

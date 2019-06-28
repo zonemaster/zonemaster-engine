@@ -12,12 +12,13 @@ use warnings;
 use 5.014002;
 
 use Zonemaster::Engine;
-use Zonemaster::Engine::Util;
-use Zonemaster::Engine::Constants qw[:algo :soa];
-use List::Util qw[min];
-use List::MoreUtils qw[none];
 
 use Carp;
+use List::MoreUtils qw[none];
+use List::Util qw[min];
+use Locale::TextDomain qw[Zonemaster-Engine];
+use Zonemaster::Engine::Constants qw[:algo :soa];
+use Zonemaster::Engine::Util;
 
 ### Table fetched from IANA on 2017-03-09
 Readonly::Hash our %algo_properties => (

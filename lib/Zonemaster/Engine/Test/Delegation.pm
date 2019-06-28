@@ -8,14 +8,15 @@ use warnings;
 use 5.014002;
 
 use Zonemaster::Engine;
-use Zonemaster::Engine::Util;
+
+use List::MoreUtils qw[uniq];
+use Locale::TextDomain qw[Zonemaster-Engine];
+use Zonemaster::Engine::Constants ':all';
+use Zonemaster::Engine::Net::IP;
 use Zonemaster::Engine::Test::Address;
 use Zonemaster::Engine::Test::Syntax;
 use Zonemaster::Engine::TestMethods;
-use Zonemaster::Engine::Constants ':all';
-use Zonemaster::Engine::Net::IP;
-
-use List::MoreUtils qw[uniq];
+use Zonemaster::Engine::Util;
 use Zonemaster::LDNS::Packet;
 use Zonemaster::LDNS::RR;
 
