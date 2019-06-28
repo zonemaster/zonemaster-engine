@@ -43,7 +43,6 @@ ok( exists( $methods{Basic} ), 'all_methods' );
 my @tags = Zonemaster::Engine->all_tags;
 ok( ( grep { /BASIC:HAS_NAMESERVERS/ } @tags ), 'all_tags' );
 
-my $disabled           = 0;
 my $dependency_version = 0;
 my $global_version     = 0;
 %module = ();
@@ -51,10 +50,6 @@ my $global_version     = 0;
 Zonemaster::Engine->logger->callback(
     sub {
         my ( $e ) = shift;
-
-        if ( $e->tag eq 'POLICY_DISABLED' and $e->args->{name} eq 'Example' ) {
-            $disabled = 1;
-        }
 
         if ( $e->tag eq 'MODULE_VERSION' ) {
             $module{ $e->args->{module} } = $e->args->{version};
@@ -74,6 +69,7 @@ Zonemaster::Engine->logger->callback(
 
     }
 );
+
 my @results = Zonemaster::Engine->test_zone( 'nic.se' );
 
 ok( $global_version,     "Global version: $global_version" );
@@ -98,8 +94,6 @@ ok( $end{'Zonemaster::Engine::Test::Delegation'},   'Zonemaster::Engine::Test::D
 ok( $end{'Zonemaster::Engine::Test::Nameserver'},   'Zonemaster::Engine::Test::Nameserver did end.' );
 ok( $end{'Zonemaster::Engine::Test::Syntax'},       'Zonemaster::Engine::Test::Syntax did end.' );
 ok( $end{'Zonemaster::Engine::Test::Zone'},         'Zonemaster::Engine::Test::Zone did end.' );
-
-ok( $disabled, 'Blocking of disabled module was logged.' );
 
 my $filename = tmpnam();
 Zonemaster::Engine->save_cache( $filename );
@@ -149,6 +143,31 @@ ok( !!$msg, 'Got a message.' );
 is( $msg->tag, 'NO_NETWORK', 'It is the right message.' );
 Zonemaster::Engine::Profile->effective->set( q{net.ipv4}, 1 );
 Zonemaster::Engine::Profile->effective->set( q{net.ipv6}, 1 );
+
+my %disabled;
+Zonemaster::Engine->logger->callback(
+    sub {
+        my ( $e ) = shift;
+
+        if ( $e->tag eq 'POLICY_DISABLED' ) {
+            $disabled{$e->args->{name}} = 1;
+        }
+    }
+);
+
+$json        = read_file( 't/profiles/Test-all.json' );
+$profile_tmp = Zonemaster::Engine::Profile->from_json( $json );
+Zonemaster::Engine::Profile->effective->merge( $profile_tmp );
+Zonemaster::Engine->test_zone( 'nic.se' );
+
+is( join(' ', keys %disabled), '', 'No blocking of disabled module was logged.' );
+
+$json        = read_file( 't/profiles/Test-disabled.json' );
+$profile_tmp = Zonemaster::Engine::Profile->from_json( $json );
+Zonemaster::Engine::Profile->effective->merge( $profile_tmp );
+Zonemaster::Engine->test_zone( 'nic.se' );
+
+is( join( ' ', keys %disabled ), 'Address', 'Zonemaster::Engine::Test::Address was blocked.' );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Nameserver->save( $datafile );
