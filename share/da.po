@@ -1,8 +1,8 @@
 msgid  ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
-"PO-Revision-Date: 2017-12-18\n"
-"Last-Translator: Mats Dufberg <mats.dufberg@iis.se>\n"
+"PO-Revision-Date: 2019-07-08\n"
+"Last-Translator: Niels Haarbo <haarbo@dk-hostmaster.dk>\n"
 "Language-Team: Zonemaster Team\n"
 "Language: da\n"
 "MIME-Version: 1.0\n"
@@ -790,7 +790,7 @@ msgstr "AXFR er ikke tilgængeligt på navneserveren {ns}/{address}."
 
 #: NAMESERVER:BREAKS_ON_EDNS
 msgid  "No response from {ns}/{address} when EDNS is used in query asking for {dname}."
-msgstr "No response from {ns}/{address} when EDNS is used in query asking for {dname}."
+msgstr "Intet svar fra {ns}/{address} når EDNS er brugt i forespørgslen på {dname}."
 
 #: NAMESERVER:CAN_BE_RESOLVED
 msgid  "All nameservers succeeded to resolve to an IP address."
@@ -867,11 +867,11 @@ msgstr ""
 
 #: NAMESERVER:EDNS_RESPONSE_WITHOUT_EDNS
 msgid  "Response without EDNS from {ns}/{address} on query with EDNS0 asking for {dname}."
-msgstr "Response without EDNS from {ns}/{address} on query with EDNS0 asking for {dname}."
+msgstr "Svar uden EDNS fra {ns}/{address} på foregspørgsel med EDNS0 efter {dname}."
 
 #: NAMESERVER:EDNS_VERSION_ERROR
 msgid  "Incorrect version of EDNS (expected 0) in response from {ns}/{address} on query with EDNS (version 0) asking for {dname}."
-msgstr "Incorrect version of EDNS (expected 0) in response from {ns}/{address} on query with EDNS (version 0) asking for {dname}."
+msgstr "Ugyldig version af EDNS (forventede 0) i svaret fra {ns}/{address} på forespørgsel via EDNS (version 0) efter {dname}."
 
 #: NAMESERVER:EDNS0_SUPPORT
 msgid  "The following nameservers support EDNS0 : {names}."
@@ -888,7 +888,7 @@ msgstr "Navneserveren {ns}/{address} understøtter ikke EDNS0 (svarer FORMERR)."
 
 #: NAMESERVER:NO_RECURSOR
 msgid  "Nameserver {ns}/{address} is not a recursor."
-msgstr "Nameserver {ns}/{address} is not a recursor."
+msgstr "Navneserveren {ns}/{address} er ikke rekursiv."
 
 #: NAMESERVER:NO_RESOLUTION
 msgid  "No nameservers succeeded to resolve to an IP address."
@@ -1314,6 +1314,3 @@ msgid  ""
 msgstr ""
 "SOA 'minimum' værdi ({minimum}) er i det anbefalede område ({lowest_minimum}/"
 "{highest_minimum})."
-
-#~ msgid "Can not determine nameservers recursivity."
-#~ msgstr "Kan ikke afgøre, om navneserverne er rekursive."
