@@ -1314,6 +1314,3 @@ msgid  ""
 msgstr ""
 "SOA 'minimum' værdi ({minimum}) er i det anbefalede område ({lowest_minimum}/"
 "{highest_minimum})."
-
-#~ msgid "Can not determine nameservers recursivity."
-#~ msgstr "Kan ikke afgøre, om navneserverne er rekursive."

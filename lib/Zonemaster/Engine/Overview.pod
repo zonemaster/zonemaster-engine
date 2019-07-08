@@ -24,9 +24,16 @@ The simple-but-inflexible way is that all the methods in L<Zonemaster::Engine> t
 
  perl -MZonemaster::Engine -E 'say "$_" for Zonemaster::Engine->new->test_zone("example.org")'
 
-The main drawbacks of this method are that there is no choice about what messages to see, and it's entirely asynchronous. The code that started the test does not get a chance to do anything at all until the whole test has finished, which may be several minutes later.
+The main drawbacks of this method are that there is no choice about what
+messages to see, and it's entirely synchronous.
+The code that started the test does not get a chance to do anything at
+all until the whole test has finished, which may be several minutes later.
 
-The get around those drawbacks there is the flexible-but-complex way, which consists of installing a callback that gets executed every time a message is logged. It's not that much more complicated, code-wise. The following example does roughly the same thing as the one above:
+To get around those drawbacks there is the flexible-but-complex way,
+which consists of installing a callback that gets executed every time
+a message is logged.
+It's not that much more complicated, code-wise.
+The following example does roughly the same thing as the one above:
 
  perl -MZonemaster::Engine -E 'Zonemaster::Engine->logger->callback(sub {say "$_[0]"}); Zonemaster::Engine->new->test_zone("example.org");'
 
@@ -42,7 +49,7 @@ If you want to develop a test module of your own, the L<Zonemaster::Engine::Test
 
 As an entry point to the "inside" of the Zonemaster framework, you want to read L<Zonemaster::Engine::Zone> and follow references from there. Of particular interest after the zone class should be the L<Zonemaster::Engine::Nameserver> and possibly L<Zonemaster::Engine::Recursor> classes.
 
-If you do write your own test module, I would very much appreciate feedback on which parts were tricky to figure out, because I'm honestly not sure what I need to explain here. So please, if there's somethat that you think really needs to be written about, add an issue about at L<https://github.com/dotse/zonemaster-engine/issues>.
+If you do write your own test module, I would very much appreciate feedback on which parts were tricky to figure out, because I'm honestly not sure what I need to explain here. So please, if there's somethat that you think really needs to be written about, add an issue about at L<https://github.com/zonemaster/zonemaster-engine/issues>.
 
 =head2 For developers of the Zonemaster Test Framework
 
@@ -80,7 +87,7 @@ Adding a new message tag is more work than it first looks, since it needs to be 
 
 =over
 
-=item L<https://github.com/dotse/zonemaster>
+=item L<https://github.com/zonemaster/zonemaster>
 
 Main repository, holding among other things our test specifications.
 

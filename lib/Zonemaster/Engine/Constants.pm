@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Constants;
 
-use version; our $VERSION = version->declare("v1.2.2");
+use version; our $VERSION = version->declare("v1.2.4");
 
 use strict;
 use warnings;
@@ -21,15 +21,19 @@ our @EXPORT_OK = qw[
   $ALGO_STATUS_PRIVATE
   $ALGO_STATUS_RESERVED
   $ALGO_STATUS_UNASSIGNED
-  $ALGO_STATUS_VALID
+  $ALGO_STATUS_OTHER
+  $ALGO_STATUS_DELETE_DS
+  $ALGO_STATUS_INDIRECT_KEY
+  $BLACKLISTING_ENABLED
   $DURATION_12_HOURS_IN_SECONDS
   $DURATION_180_DAYS_IN_SECONDS
   $FQDN_MAX_LENGTH
-  $LABEL_MAX_LENGTH
   $IP_VERSION_4
   $IP_VERSION_6
+  $LABEL_MAX_LENGTH
   $MAX_SERIAL_VARIATION
   $MINIMUM_NUMBER_OF_NAMESERVERS
+  $RESOLVER_SOURCE_OS_DEFAULT
   $SOA_DEFAULT_TTL_MAXIMUM_VALUE
   $SOA_DEFAULT_TTL_MINIMUM_VALUE
   $SOA_EXPIRE_MINIMUM_VALUE
@@ -44,22 +48,27 @@ our @EXPORT_OK = qw[
 our %EXPORT_TAGS = (
     all  => \@EXPORT_OK,
     algo => [
-        qw($ALGO_STATUS_DEPRECATED $ALGO_STATUS_PRIVATE $ALGO_STATUS_RESERVED $ALGO_STATUS_UNASSIGNED $ALGO_STATUS_VALID)
+        qw($ALGO_STATUS_DEPRECATED $ALGO_STATUS_PRIVATE $ALGO_STATUS_RESERVED $ALGO_STATUS_UNASSIGNED $ALGO_STATUS_OTHER $ALGO_STATUS_DELETE_DS $ALGO_STATUS_INDIRECT_KEY)
     ],
     name => [qw($FQDN_MAX_LENGTH $LABEL_MAX_LENGTH)],
     ip   => [qw($IP_VERSION_4 $IP_VERSION_6)],
     soa  => [
         qw($SOA_DEFAULT_TTL_MAXIMUM_VALUE $SOA_DEFAULT_TTL_MINIMUM_VALUE $SOA_EXPIRE_MINIMUM_VALUE $SOA_REFRESH_MINIMUM_VALUE $SOA_RETRY_MINIMUM_VALUE $DURATION_12_HOURS_IN_SECONDS $DURATION_180_DAYS_IN_SECONDS $MAX_SERIAL_VARIATION)
     ],
-    misc      => [qw($UDP_PAYLOAD_LIMIT $UDP_COMMON_EDNS_LIMIT $MINIMUM_NUMBER_OF_NAMESERVERS)],
+    misc => [qw($UDP_PAYLOAD_LIMIT $UDP_COMMON_EDNS_LIMIT $MINIMUM_NUMBER_OF_NAMESERVERS $RESOLVER_SOURCE_OS_DEFAULT $BLACKLISTING_ENABLED)]
+    ,    # everyting in %EXPORT_OK that isn't included in any of the other tags
     addresses => [qw(@IPV4_SPECIAL_ADDRESSES @IPV6_SPECIAL_ADDRESSES)],
 );
 
-Readonly our $ALGO_STATUS_DEPRECATED => 1;
-Readonly our $ALGO_STATUS_PRIVATE    => 4;
-Readonly our $ALGO_STATUS_RESERVED   => 2;
-Readonly our $ALGO_STATUS_UNASSIGNED => 3;
-Readonly our $ALGO_STATUS_VALID      => 5;
+Readonly our $ALGO_STATUS_DEPRECATED   => 1;
+Readonly our $ALGO_STATUS_PRIVATE      => 4;
+Readonly our $ALGO_STATUS_RESERVED     => 2;
+Readonly our $ALGO_STATUS_UNASSIGNED   => 3;
+Readonly our $ALGO_STATUS_OTHER        => 5;
+Readonly our $ALGO_STATUS_DELETE_DS    => 6;
+Readonly our $ALGO_STATUS_INDIRECT_KEY => 7;
+
+Readonly our $BLACKLISTING_ENABLED     => 1;
 
 Readonly our $DURATION_12_HOURS_IN_SECONDS => 12 * 60 * 60;
 Readonly our $DURATION_180_DAYS_IN_SECONDS => 180 * 24 * 60 * 60;
@@ -74,6 +83,8 @@ Readonly our $IP_VERSION_6 => 6;
 Readonly our $MAX_SERIAL_VARIATION => 0;
 
 Readonly our $MINIMUM_NUMBER_OF_NAMESERVERS => 2;
+
+Readonly our $RESOLVER_SOURCE_OS_DEFAULT => 'os_default';
 
 Readonly our $SOA_DEFAULT_TTL_MAXIMUM_VALUE => 86_400;     # 1 day
 Readonly our $SOA_DEFAULT_TTL_MINIMUM_VALUE => 300;        # 5 minutes
@@ -105,7 +116,7 @@ sub _extract_iana_ip_blocks {
     foreach my $file_details ( @files_details ) {
         my $first_line = 1;
         next if ${$file_details}{ip_version} != $ip_version;
-	my $makefile_name = 'Zonemaster-Engine'; # This must be the same name as "name" in Makefile.PL
+        my $makefile_name = 'Zonemaster-Engine'; # This must be the same name as "name" in Makefile.PL
         my $data_location = dist_file($makefile_name, ${$file_details}{name});
         open(my $data, '<:encoding(utf8)', $data_location) or croak "Cannot open '${data_location}' : ${OS_ERROR}";
         while (my $fields = $csv->getline( $data )) {
@@ -196,7 +207,15 @@ C<$ALGO_STATUS_UNASSIGNED>
 
 =item *
 
-C<$ALGO_STATUS_VALID>
+C<$ALGO_STATUS_OTHER>
+
+=item *
+
+C<$ALGO_STATUS_DELETE_DS>
+
+=item *
+
+C<$ALGO_STATUS_INDIRECT_KEY>
 
 =item *
 

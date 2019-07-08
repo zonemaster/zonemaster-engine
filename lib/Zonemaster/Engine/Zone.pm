@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Zone;
 
-use version; our $VERSION = version->declare("v1.1.2");
+use version; our $VERSION = version->declare("v1.1.9");
 
 use 5.014002;
 use strict;
@@ -18,7 +18,7 @@ has 'name' => ( is => 'ro', isa => 'Zonemaster::Engine::DNSName', required => 1,
 has 'parent' => ( is => 'ro', isa => 'Maybe[Zonemaster::Engine::Zone]', lazy_build => 1 );
 has [ 'ns', 'glue' ] => ( is => 'ro', isa => 'ArrayRef', lazy_build => 1 );
 has [ 'ns_names', 'glue_names' ] => ( is => 'ro', isa => 'ArrayRef[Zonemaster::Engine::DNSName]', lazy_build => 1 );
-has 'glue_addresses' => ( is => 'ro', isa => 'ArrayRef[Net::LDNS::RR]', lazy_build => 1 );
+has 'glue_addresses' => ( is => 'ro', isa => 'ArrayRef[Zonemaster::LDNS::RR]', lazy_build => 1 );
 
 ###
 ### Builders
@@ -54,11 +54,27 @@ sub _build_glue_names {
 
 sub _build_glue {
     my ( $self ) = @_;
+    my @glue_names = @{ $self->glue_names };
+    my $zname = $self->name->string;
 
-    my $aref = [];
-    tie @$aref, 'Zonemaster::Engine::NSArray', @{ $self->glue_names };
+    if ( $Zonemaster::Engine::Recursor::fake_addresses_cache{$zname} ) {
+        my @ns_list;
+        foreach my $ns ( @glue_names ) {
+            if ( $Zonemaster::Engine::Recursor::fake_addresses_cache{$zname}{$ns} and scalar @{ $Zonemaster::Engine::Recursor::fake_addresses_cache{$zname}{$ns} } ) {
+                foreach my $ip ( @{ $Zonemaster::Engine::Recursor::fake_addresses_cache{$zname}{$ns} } ) {
+                    push @ns_list, Zonemaster::Engine::Nameserver->new( { name => $ns, address => $ip } );
+                }
+            }
+        }
+        return \@ns_list;
+    }
+    else {
 
-    return $aref;
+        my $aref = [];
+        tie @$aref, 'Zonemaster::Engine::NSArray', @glue_names;
+
+        return $aref;
+    }
 }
 
 sub _build_ns_names {
@@ -119,12 +135,12 @@ sub query_one {
     # Return response from the first server that gives one
     my $i = 0;
     while ( my $ns = $self->ns->[$i] ) {
-        if ( not Zonemaster::Engine->config->ipv4_ok and $ns->address->version == 4 ) {
+        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == 4 ) {
             Zonemaster::Engine->logger->add( SKIP_IPV4_DISABLED => { ns => "$ns" } );
             next;
         }
 
-        if ( not Zonemaster::Engine->config->ipv6_ok and $ns->address->version == 6 ) {
+        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == 6 ) {
             Zonemaster::Engine->logger->add( SKIP_IPV6_DISABLED => { ns => "$ns" } );
             next;
         }
@@ -144,13 +160,13 @@ sub query_all {
 
     my @servers = @{ $self->ns };
 
-    if ( not Zonemaster::Engine->config->ipv4_ok ) {
+    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) ) {
         my @nope = grep { $_->address->version == 4 } @servers;
         @servers = grep { $_->address->version != 4 } @servers;
         Zonemaster::Engine->logger->add( SKIP_IPV4_DISABLED => { ns => ( join ';', map { "$_" } @nope ) } );
     }
 
-    if ( not Zonemaster::Engine->config->ipv6_ok ) {
+    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) ) {
         my @nope = grep { $_->address->version == 6 } @servers;
         @servers = grep { $_->address->version != 6 } @servers;
         Zonemaster::Engine->logger->add( SKIP_IPV6_DISABLED => { ns => ( join ';', map { "$_" } @nope ) } );
@@ -165,12 +181,12 @@ sub query_auth {
     # Return response from the first server that replies with AA set
     my $i = 0;
     while ( my $ns = $self->ns->[$i] ) {
-        if ( not Zonemaster::Engine->config->ipv4_ok and $ns->address->version == 4 ) {
+        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == 4 ) {
             Zonemaster::Engine->logger->add( SKIP_IPV4_DISABLED => { ns => "$ns" } );
             next;
         }
 
-        if ( not Zonemaster::Engine->config->ipv6_ok and $ns->address->version == 6 ) {
+        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == 6 ) {
             Zonemaster::Engine->logger->add( SKIP_IPV6_DISABLED => { ns => "$ns" } );
             next;
         }
@@ -193,12 +209,12 @@ sub query_persistent {
     # Return response from the first server that has a record like the one asked for
     my $i = 0;
     while ( my $ns = $self->ns->[$i] ) {
-        if ( not Zonemaster::Engine->config->ipv4_ok and $ns->address->version == 4 ) {
+        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == 4 ) {
             Zonemaster::Engine->logger->add( SKIP_IPV4_DISABLED => { ns => "$ns" } );
             next;
         }
 
-        if ( not Zonemaster::Engine->config->ipv6_ok and $ns->address->version == 6 ) {
+        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == 6 ) {
             Zonemaster::Engine->logger->add( SKIP_IPV6_DISABLED => { ns => "$ns" } );
             next;
         }
@@ -316,12 +332,16 @@ A reference to an array of L<Zonemaster::Engine::Nameserver> objects for the
 domain, built by taking the list returned from L<glue_names()> and
 looking up addresses for the names. One element will be added to this
 list for each unique name/IP pair. Names for which no addresses could
-be found will not be in this list. The list is lazy-loading, so take
-care to only look at as many entries as you really need.
+be found will not be in this list. In this case, the list is lazy-loading, so take
+care to only look at as many entries as you really need. In case of 
+undelegated tests and fake delegation the IP associated with name servers
+for the tested zone will be the ones set by users (saved in 
+%Zonemaster::Engine::Recursor::fake_addresses_cache), instead of the ones
+found recursively.
 
 =item glue_addresses
 
-A list of L<Net::LDNS::RR::A> and L<Net::LDNS::RR::AAAA> records returned in
+A list of L<Zonemaster::LDNS::RR::A> and L<Zonemaster::LDNS::RR::AAAA> records returned in
 the Additional section of an NS query to the first listed nameserver for the
 parent domain.
 

@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Packet;
 
-use version; our $VERSION = version->declare("v1.0.3");
+use version; our $VERSION = version->declare("v1.0.5");
 
 use 5.014002;
 use warnings;
@@ -10,13 +10,15 @@ use Zonemaster::Engine::Util;
 
 has 'packet' => (
     is       => 'ro',
-    isa      => 'Net::LDNS::Packet',
+    isa      => 'Zonemaster::LDNS::Packet',
     required => 1,
     handles  => [
         qw(
           data
           rcode
           aa
+          ra
+	  tc
           question
           answer
           authority
@@ -29,6 +31,9 @@ has 'packet' => (
           type
           edns_size
           edns_rcode
+          edns_version
+          edns_z
+          edns_data
           has_edns
           id
           querytime
@@ -114,9 +119,9 @@ sub get_records {
 } ## end sub get_records
 
 sub get_records_for_name {
-    my ( $self, $type, $name ) = @_;
+    my ( $self, $type, $name, @section ) = @_;
 
-    return grep { name( $_->name ) eq name( $name ) } $self->get_records( $type );
+    return grep { name( $_->name ) eq name( $name ) } $self->get_records( $type, @section );
 }
 
 sub has_rrs_of_type_for_name {
@@ -150,7 +155,7 @@ __PACKAGE__->meta->make_immutable;
 
 =head1 NAME
 
-Zonemaster::Engine::Packet - wrapping object for L<Net::LDNS::Packet> objects
+Zonemaster::Engine::Packet - wrapping object for L<Zonemaster::LDNS::Packet> objects
 
 =head1 SYNOPSIS
 
@@ -163,7 +168,7 @@ Zonemaster::Engine::Packet - wrapping object for L<Net::LDNS::Packet> objects
 
 =item packet
 
-Holds the L<Net::LDNS::Packet> the object is wrapping.
+Holds the L<Zonemaster::LDNS::Packet> the object is wrapping.
 
 =back
 
@@ -183,14 +188,17 @@ Returns true if the packet represents a non-existent DNS node.
 
 Returns true if the packet is a redirect to another set of nameservers.
 
-=item get_records($type[, $section])
+=item get_records($type[, @section])
 
-Returns the L<Net::LDNS::RR> objects of the requested type in the packet. If the optional C<$section> argument is given, and is one of C<answer>,
-C<authority> and C<additional>, only RRs from that section are returned.
+Returns the L<Zonemaster::LDNS::RR> objects of the requested type in the packet.
+If the optional C<@section> argument is given, and is a list of C<answer>,
+C<authority> and C<additional>, only RRs from those sections are returned.
 
-=item get_records_for_name($type, $name)
+=item get_records_for_name($type, $name[, @section])
 
-Returns all L<Net::LDNS::RR> objects for the given name in the packet.
+Returns all L<Zonemaster::LDNS::RR> objects for the given name in the packet.
+If the optional C<@section> argument is given, and is a list of C<answer>,
+C<authority> and C<additional>, only RRs from those sections are returned.
 
 =item has_rrs_of_type_for_name($type, $name)
 
@@ -208,7 +216,7 @@ Support method for L<JSON> to be able to serialize these objects.
 
 =head1 METHODS PASSED THROUGH
 
-These methods are passed through transparently to the underlying L<Net::LDNS::Packet> object.
+These methods are passed through transparently to the underlying L<Zonemaster::LDNS::Packet> object.
 
 =over
 
@@ -223,6 +231,14 @@ rcode
 =item *
 
 aa
+
+=item *
+
+ra
+
+=item *
+
+tc
 
 =item *
 
@@ -271,6 +287,18 @@ edns_size
 =item *
 
 edns_rcode
+
+=item *
+
+edns_version
+
+=item *
+
+edns_z
+
+=item *
+
+edns_data
 
 =item *
 

@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Translator;
 
-use version; our $VERSION = version->declare("v1.0.7");
+use version; our $VERSION = version->declare("v1.0.8");
 
 use 5.014002;
 use strict;
@@ -11,9 +11,18 @@ use Carp;
 use Zonemaster::Engine;
 
 use POSIX qw[setlocale LC_MESSAGES];
-use Locale::TextDomain qw[Zonemaster-Engine]; # This must be the same name as "name" in Makefile.PL
 
-has 'locale' => ( is => 'rw', isa => 'Str',     lazy => 1, builder => '_get_locale' );
+BEGIN {
+    # Locale::TextDomain (<= 1.20) doesn't know about File::ShareDir so give a helping hand.
+    # This is a hugely simplified version of the reference implementation located here:
+    # https://metacpan.org/source/GUIDO/libintl-perl-1.21/lib/Locale/TextDomain.pm
+    require File::ShareDir;
+    require Locale::TextDomain;
+    my $share = File::ShareDir::dist_dir( 'Zonemaster-Engine' );
+    Locale::TextDomain->import( 'Zonemaster-Engine', "$share/locale" );
+}
+
+has 'locale' => ( is => 'rw', isa => 'Str' );
 has 'data'   => ( is => 'ro', isa => 'HashRef', lazy => 1, builder => '_load_data' );
 
 ###
@@ -23,14 +32,24 @@ has 'data'   => ( is => 'ro', isa => 'HashRef', lazy => 1, builder => '_load_dat
 sub BUILD {
     my ( $self ) = @_;
 
-    $self->locale;
+    my $locale = $self->{locale} // _get_locale();
+    $self->locale( $locale );
 
     return $self;
 }
 
+# Get the program's underlying LC_MESSAGES.
+#
+# Side effect: Updates the program's underlying LC_MESSAGES to the returned
+# value.
 sub _get_locale {
-    my $locale = $ENV{LANG} || $ENV{LC_ALL} || $ENV{LC_MESSAGES} || 'en_US.UTF-8';
-    setlocale( LC_MESSAGES, $locale );
+    my $locale = setlocale( LC_MESSAGES, "" );
+
+    # C locale is not an option since our msgid and msgstr strings are sometimes
+    # different in C and en_US.UTF-8.
+    if ( $locale eq 'C' ) {
+        $locale = 'en_US.UTF-8';
+    }
 
     return $locale;
 }
@@ -76,13 +95,17 @@ sub translate_tag {
         return $entry->string;
     }
 
+    # Partial workaround for FreeBSD 11. It works once, but then translation
+    # gets stuck on that locale.
+    local $ENV{LC_ALL} = $self->{locale};
+
     return __x( $string, %{ $entry->printable_args } );
 }
 
 sub _system_translation {
     return {
         "CANNOT_CONTINUE"               => "Not enough data about {zone} was found to be able to run tests.",
-        "CONFIG_FILE"                   => "Configuration was read from {name}.",
+        "PROFILE_FILE"                  => "Profile was read from {name}.",
         "DEPENDENCY_VERSION"            => "Using prerequisite module {name} version {version}.",
         "GLOBAL_VERSION"                => "Using version {version} of the Zonemaster engine.",
         "LOGGER_CALLBACK_ERROR"         => "Logger callback died with error: {exception}",
@@ -91,7 +114,6 @@ sub _system_translation {
         "MODULE_VERSION"                => "Using module {module} version {version}.",
         "MODULE_END"                    => "Module {module} finished running.",
         "NO_NETWORK"                    => "Both IPv4 and IPv6 are disabled.",
-        "POLICY_FILE"                   => "Policy was read from {name}.",
         "POLICY_DISABLED"               => "The module {name} was disabled by the policy.",
         "UNKNOWN_METHOD"                => "Request to run unknown method {method} in module {module}.",
         "UNKNOWN_MODULE"                => "Request to run {method} in unknown module {module}. Known modules: {known}.",
@@ -120,6 +142,12 @@ Zonemaster::Engine::Translator - translation support for Zonemaster
     my $trans = Zonemaster::Engine::Translator->new({ locale => 'sv_SE.UTF-8' });
     say $trans->to_string($entry);
 
+A side effect of constructing an object of this class is that the program's
+underlying locale for message catalogs (a.k.a. LC_MESSAGES) is updated.
+
+It does not make sense to create more than one object of this class because of
+the globally stateful nature of the locale attribute.
+
 =head1 ATTRIBUTES
 
 =over
@@ -130,6 +158,9 @@ The locale that should be used to find translation data. If not
 explicitly provided, defaults to (in order) the contents of the
 environment variable LANG, LC_ALL, LC_MESSAGES or, if none of them are
 set, to C<en_US.UTF-8>.
+
+Updating this attribute also causes an analogous update of the program's
+underlying LC_MESSAGES.
 
 =item data
 

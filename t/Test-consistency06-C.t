@@ -1,0 +1,37 @@
+use Test::More;
+
+BEGIN {
+    use_ok( q{Zonemaster::Engine} );
+    use_ok( q{Zonemaster::Engine::Test::Consistency} );
+    use_ok( q{Zonemaster::Engine::Util} );
+}
+
+my $datafile = q{t/Test-consistency06-C.data};
+
+if ( not $ENV{ZONEMASTER_RECORD} ) {
+    die q{Stored data file missing} if not -r $datafile;
+    Zonemaster::Engine::Nameserver->restore( $datafile );
+    Zonemaster::Engine->profile->set( q{no_network}, 1 );
+}
+
+Zonemaster::Engine->add_fake_delegation(
+    'c.consistency06.exempelvis.se' => {
+        'ns1.c.consistency06.exempelvis.se' => [ '46.21.97.97',   '2a02:750:12:77::97' ],
+        'ns2.c.consistency06.exempelvis.se' => [ '37.123.169.91', '2001:9b0:1:1c13::53' ],
+    }
+);
+
+my $zone = Zonemaster::Engine->zone( q{c.consistency06.exempelvis.se} );
+
+my %res = map { $_->tag => $_ } Zonemaster::Engine::Test::Consistency->consistency06( $zone );
+
+ok( !$res{NO_RESPONSE},          q{should not emit NO_RESPONSE} );
+ok( $res{NO_RESPONSE_SOA_QUERY}, q{should emit NO_RESPONSE_SOA_QUERY} );
+ok( $res{ONE_SOA_MNAME},         q{should emit ONE_SOA_MNAME} );
+ok( !$res{MULTIPLE_SOA_MNAMES},  q{should not emit MULTIPLE_SOA_MNAMES} );
+
+if ( $ENV{ZONEMASTER_RECORD} ) {
+    Zonemaster::Engine::Nameserver->save( $datafile );
+}
+
+done_testing;

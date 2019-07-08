@@ -1,4 +1,5 @@
 use Test::More;
+use File::Slurp;
 
 BEGIN {
     use_ok( q{Zonemaster::Engine} );
@@ -10,8 +11,13 @@ my $datafile = q{t/Test-zone.data};
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die q{Stored data file missing} if not -r $datafile;
     Zonemaster::Engine::Nameserver->restore( $datafile );
-    Zonemaster::Engine->config->no_network( 1 );
+    Zonemaster::Engine::Profile->effective->set( q{no_network}, 1 );
 }
+
+my ($json, $profile_test);
+$json         = read_file( 't/profiles/Test-zone-all.json' );
+$profile_test = Zonemaster::Engine::Profile->from_json( $json );
+Zonemaster::Engine::Profile->effective->merge( $profile_test );
 
 my %res;
 my $zone;
@@ -89,8 +95,8 @@ ok( $res{NO_RESPONSE_SOA_QUERY}, q{No response from nameserver(s) on SOA queries
 %res = map { $_->tag => 1 } Zonemaster::Engine->test_method( q{Zone}, q{zone07}, $zone );
 ok( $res{NO_RESPONSE_SOA_QUERY}, q{No response from nameserver(s) on SOA queries} );
 
-Zonemaster::Engine->config->ipv4_ok( 1 );
-Zonemaster::Engine->config->ipv6_ok( 0 );
+Zonemaster::Engine::Profile->effective->set( q{net.ipv4}, 1 );
+Zonemaster::Engine::Profile->effective->set( q{net.ipv6}, 0 );
 
 $zone = Zonemaster::Engine->zone( q{trasigdnssec.se} );
 %res = map { $_->tag => 1 } Zonemaster::Engine->test_method( q{Zone}, q{zone01}, $zone );

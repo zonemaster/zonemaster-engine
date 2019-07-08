@@ -8,11 +8,11 @@ my $datafile = 't/nameserver.data';
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die "Stored data file missing" if not -r $datafile;
     Zonemaster::Engine::Nameserver->restore( $datafile );
-    Zonemaster::Engine->config->no_network( 1 );
+    Zonemaster::Engine::Profile->effective->set( q{no_network}, 1 );
 }
 
-my $nsv6 = new_ok( 'Zonemaster::Engine::Nameserver' => [ { name => 'ns.nic.se', address => '2a00:801:f0:53::53' } ] );
-my $nsv4 = new_ok( 'Zonemaster::Engine::Nameserver' => [ { name => 'ns.nic.se', address => '212.247.7.228' } ] );
+my $nsv6 = new_ok( 'Zonemaster::Engine::Nameserver' => [ { name => 'ns.nic.se', address => '2001:67c:124c:100a::45' } ] );
+my $nsv4 = new_ok( 'Zonemaster::Engine::Nameserver' => [ { name => 'ns.nic.se', address => '91.226.36.45' } ] );
 
 eval { Zonemaster::Engine::Nameserver->new( { name => 'dummy' } ); };
 like( $@, qr/Attribute \(address\) is required/, 'create fails without address.' );
@@ -38,9 +38,9 @@ ok( $p3 eq $p2,          'Same packet object returned' );
 ok( $p3 ne $p4,          'Same packet object not returned from other server' );
 ok( $p3 ne $p1,          'Same packet object not returned with other flag' );
 
-my $nscopy = Zonemaster::Engine->ns( 'ns.nic.se.', '2a00:801:f0:53:0000::53' );
+my $nscopy = Zonemaster::Engine->ns( 'ns.nic.se.', '2001:67c:124c:100a:0000::45' );
 ok( $nsv6 eq $nscopy, 'Same nameserver object returned' );
-my $nssame = Zonemaster::Engine->ns( 'foo.example.org', '2a00:801:f0:53:0000::53' );
+my $nssame = Zonemaster::Engine->ns( 'foo.example.org', '2001:67c:124c:100a:0000::45' );
 ok(
     ( $nssame ne $nsv6 and $nssame->cache eq $nsv6->cache ),
     'Different name, same IP are different but has same cache'
@@ -64,14 +64,14 @@ my $p = $broken->query( 'www.iis.se' );
 ok( !$p, 'no response from broken server' );
 
 my $googlens = ns( 'ns1.google.com', '216.239.32.10' );
-my $save = Zonemaster::Engine->config->no_network;
-Zonemaster::Engine->config->no_network( 1 );
+my $save = Zonemaster::Engine::Profile->effective->get( q{no_network} );
+Zonemaster::Engine::Profile->effective->set( q{no_network}, 1 );
 delete( $googlens->cache->{'www.google.com'} );
 eval { $googlens->query( 'www.google.com', 'TXT' ) };
 like( $@,
-    qr{External query for www.google.com, TXT attempted to ns1.google.com/216.239.32.10 while running with no_network}i
+    qr{External query for www.google.com, TXT attempted to ns1.google.com/216.239.32.10 while running with no_network}
 );
-Zonemaster::Engine->config->no_network( $save );
+Zonemaster::Engine::Profile->effective->set( q{no_network}, $save );
 
 @{ $nsv6->times } = ( qw[2 4 4 4 5 5 7 9] );
 is( $nsv6->stddev_time, 2, 'known value check' );
@@ -88,15 +88,15 @@ foreach my $ns ( Zonemaster::Engine::Nameserver->all_known_nameservers ) {
 
 ok( scalar( keys %Zonemaster::Engine::Nameserver::Cache::object_cache ) >= 4 );
 
-Zonemaster::Engine->config->ipv4_ok( 0 );
-Zonemaster::Engine->config->ipv6_ok( 0 );
+Zonemaster::Engine::Profile->effective->set( q{net.ipv4}, 0 );
+Zonemaster::Engine::Profile->effective->set( q{net.ipv6}, 0 );
 my $p5 = $nsv6->query( 'iis.se', 'SOA', { dnssec => 1 } );
 my $p6 = $nsv4->query( 'iis.se', 'SOA', { dnssec => 1 } );
 ok( !defined( $p5 ), 'IPv4 blocked' );
 ok( !defined( $p6 ), 'IPv6 blocked' );
 
-Zonemaster::Engine->config->ipv4_ok( 1 );
-Zonemaster::Engine->config->ipv6_ok( 1 );
+Zonemaster::Engine::Profile->effective->set( q{net.ipv4}, 1 );
+Zonemaster::Engine::Profile->effective->set( q{net.ipv6}, 1 );
 $p5 = $nsv6->query( 'iis.se', 'SOA', { dnssec => 1 } );
 $p6 = $nsv4->query( 'iis.se', 'SOA', { dnssec => 1 } );
 ok( defined( $p5 ), 'IPv4 not blocked' );
@@ -105,25 +105,25 @@ ok( defined( $p6 ), 'IPv6 not blocked' );
 is( $p5->edns_size,  4096, 'EDNS0 size' );
 is( $p5->edns_rcode, 0,    'EDNS0 rcode' );
 
-$p5->unique_push( 'additional', Net::LDNS::RR->new( 'www.iis.se.		26	IN	A	91.226.36.46' ) );
+$p5->unique_push( 'additional', Zonemaster::LDNS::RR->new( 'www.iis.se.		26	IN	A	91.226.36.46' ) );
 my ( $rr ) = $p5->additional;
-isa_ok( $rr, 'Net::LDNS::RR::A' );
+isa_ok( $rr, 'Zonemaster::LDNS::RR::A' );
 
 $nsv4->add_fake_ds( 'iis.se' => [ { keytag => 16696, algorithm => 5, type => 1, digest => 'DEADBEEF' } ] );
 ok( $nsv4->fake_ds->{'iis.se'}, 'Fake DS data added' );
 my $p7 = $nsv4->query( 'iis.se', 'DS', { class => 'IN' } );
 isa_ok( $p7, 'Zonemaster::Engine::Packet' );
 my ( $dsrr ) = $p7->answer;
-isa_ok( $dsrr, 'Net::LDNS::RR::DS' );
+isa_ok( $dsrr, 'Zonemaster::LDNS::RR::DS' );
 is( $dsrr->keytag,    16696,      'Expected keytag' );
 is( $dsrr->hexdigest, 'deadbeef', 'Expected digest data' );
 
-Zonemaster::Engine->config->resolver_source('127.0.0.1');
+Zonemaster::Engine::Profile->effective->set( q{resolver.source}, q{127.0.0.1} );
 my $ns_test = new_ok( 'Zonemaster::Engine::Nameserver' => [ { name => 'ns.nic.se', address => '212.247.7.228' } ] );
 is($ns_test->dns->source, '127.0.0.1', 'Source address set.');
 
-Zonemaster::Engine->config->no_network( 0 );
-# Address was 127.0.0.17 (https://github.com/dotse/zonemaster-engine/issues/219).
+Zonemaster::Engine::Profile->effective->set( q{no_network}, 0 );
+# Address was 127.0.0.17 (https://github.com/zonemaster/zonemaster-engine/issues/219).
 # 192.0.2.17 is part of TEST-NET-1 IP address range (See RFC6890) and should be reserved
 # for documentation.
 my $fail_ns = Zonemaster::Engine::Nameserver->new( { name => 'fail', address => '192.0.2.17' } );

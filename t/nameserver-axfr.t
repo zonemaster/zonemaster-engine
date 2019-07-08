@@ -7,7 +7,7 @@ use warnings;
 
 BEGIN { use_ok( 'Zonemaster::Engine::Nameserver' ); }
 use Zonemaster::Engine::Util;
-use Net::LDNS;
+use Zonemaster::LDNS;
 
 my $datafile = 't/nameserver-axfr.data';
 my %saved_axfr;
@@ -28,7 +28,7 @@ ok( ( $counter > 10 ), 'At least ten records seen' );
 
 # This should be a refused AXFR
 $counter = 0;
-my $ns2 = Zonemaster::Engine::Nameserver->new( { name => 'ns.nic.se', address => '212.247.7.228' } );
+my $ns2 = Zonemaster::Engine::Nameserver->new( { name => 'ns.nic.se', address => '91.226.36.45' } );
 like(
     exception {
         $ns2->axfr( 'iis.se', sub { $counter += 1; return 1; } );
@@ -58,7 +58,7 @@ sub setup {
         while ( my $line = $fh->getline ) {
             my ( $domain, $type, $str ) = split( /\t/, $line, 3 );
             if ( $type eq 'RR' ) {
-                my $rr = eval { Net::LDNS::RR->new( $str ) };
+                my $rr = eval { Zonemaster::LDNS::RR->new( $str ) };
                 if ( $rr ) {
                     push @{ $saved_axfr{$domain} }, $rr;
                 }
@@ -70,7 +70,7 @@ sub setup {
                 $saved_axfr{$domain} = $str;
             }
         }
-        Zonemaster::Engine->config->no_network( 1 );
+        Zonemaster::Engine::Profile->effective->set( q{no_network}, 1 );
         $meta->add_around_method_modifier(
             'axfr',
             sub {

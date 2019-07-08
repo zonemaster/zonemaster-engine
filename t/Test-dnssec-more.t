@@ -1,4 +1,5 @@
 use Test::More;
+use File::Slurp;
 
 BEGIN {
     use_ok( 'Zonemaster::Engine' );
@@ -33,8 +34,13 @@ my $datafile = 't/Test-dnssec-more.data';
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die "Stored data file missing" if not -r $datafile;
     Zonemaster::Engine::Nameserver->restore( $datafile );
-    Zonemaster::Engine->config->no_network( 1 );
+    Zonemaster::Engine::Profile->effective->set( q{no_network}, 1 );
 }
+
+my ($json, $profile_test);
+$json         = read_file( 't/profiles/Test-dnssec-all.json' );
+$profile_test = Zonemaster::Engine::Profile->from_json( $json );
+Zonemaster::Engine::Profile->effective->merge( $profile_test );
 
 my $zone;
 my @res;

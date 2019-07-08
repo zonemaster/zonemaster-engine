@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Recursor;
 
-use version; our $VERSION = version->declare("v1.0.5");
+use version; our $VERSION = version->declare("v1.0.10");
 
 use 5.014002;
 use warnings;
@@ -14,11 +14,25 @@ use Zonemaster::Engine;
 my $seed_data;
 
 our %recurse_cache;
+our %fake_addresses_cache;
 
 {
     local $/;
     my $json = <DATA>;
     $seed_data = decode_json $json;
+}
+
+sub add_fake_addresses {
+    my ( $self, $domain, $href ) = @_;
+
+    foreach my $name ( keys %{$href} ) {
+        push @{ $fake_addresses_cache{$domain}{$name} }, ();
+        foreach my $ip (@{ $href->{$name} }) {
+            push @{ $fake_addresses_cache{$domain}{$name} }, $ip;
+        }
+    }
+
+    return;
 }
 
 sub recurse {
@@ -28,7 +42,6 @@ sub recurse {
     $class //= 'IN';
 
     Zonemaster::Engine->logger->add( RECURSE => { name => $name, type => $type, class => $class } );
-
     if ( exists $recurse_cache{$name}{$type}{$class} ) {
         return $recurse_cache{$name}{$type}{$class};
     }
@@ -276,7 +289,6 @@ sub get_addresses_for {
             push @res, Zonemaster::Engine::Net::IP->new( $rr->address );
         }
     }
-
     return @res;
 } ## end sub get_addresses_for
 
@@ -309,6 +321,21 @@ Zonemaster::Engine::Recursor - recursive resolver for Zonemaster
     my $packet = Zonemaster::Engine::Recursor->recurse($name, $type, $class);
     my $pname = Zonemaster::Engine::Recursor->parent('example.org');
 
+=head1 CLASS VARIABLES
+
+=over
+
+=item %recurse_cache
+
+Will cache result of previous queries.
+
+=item %fake_addresses_cache
+
+Contains namservers IP addresses which are used in case of fake delegations 
+(pre-publication tests).
+
+=back
+
 =head1 METHODS
 
 =over
@@ -333,9 +360,13 @@ that name (in the form of L<Zonemaster::Engine::Net::IP> objects). When used
 internally by the recursor it's passed a recursion state as its second
 argument.
 
+=item add_fake_addresses($domain, $data)
+
+Class method to create fake adresses for fake delegations for a specified domain from data provided.
+
 =item clear_cache()
 
-Class method to empty the cache of responses to recursive queries.
+Class method to empty the cache of responses to recursive queries (but not the ones for fake delegations).
 
 =item root_servers()
 

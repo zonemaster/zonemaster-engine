@@ -1,4 +1,169 @@
-Revision history for Perl module Zonemaster.
+Release history for Zonemaster component Zonemaster-Engine
+
+v3.0.3 2019-05-22 (public release version)
+
+ [Status]
+ - This a public release fully tested before release. This version
+   will be available on CPAN.
+
+ [Fixes]
+ - Added instructions for preparation of packages for FreeBSD (#544)
+ - Removed example entry from default profile (#536)
+ - Corrected incorrect consistency verification for IP addresses between 
+   the child and the parent (#532, #535)
+ - Corrected message (#523, #533)
+ - Corrected truncated msgid (#528)
+ - Added missing DNSSEC messages to test results (#521, #527)
+ - Updated dependencies for Debian and FreeBSD (#525)
+ - Dropped support for Ubuntu 14.04 (#519)
+ - Split message BROKEN_EDNS_SUPPORT in Nameserver02 (#516, #517)
+ - Made message IN_BAILIWICK_ADDR_MISMATCH more explicit (#467, #515)
+ - Resolve issues around unwanted blacklisting (#504, #511)
+
+
+v3.0.2 2019-03-15 (pre-release version)
+
+ [Status]
+ - This is a pre-release version not fully tested on all supported
+   OS's and Perl versions. This version will not be available on
+   CPAN.
+
+ [Fixes]
+ - Never serialize numeric profile properties as JSON strings (#505)
+ - Add a forgotten dependency to the installation instruction. (#490)
+
+
+v3.0.1 2019-01-31 (pre-release version)
+
+ - Status
+   - This is a pre-release version not fully tested on all supported
+     OS's and Perl versions. This version will not be available on
+     CPAN.
+ - Fixes
+   - Fixed nameserver02 algorithm to match specification (#493)
+
+
+v3.0.0 2019-01-25 (pre-release version)
+
+ - Status
+   - This is a pre-release version not fully tested on all supported
+     OS's and Perl versions. This version will not be available on
+     CPAN.
+ - API change
+   - Replaced separate config and policy with a unified profile
+     (see below)
+ - Features
+   - Updated implementation of Delegation01 (#396, #410)
+   - Updated implementation of Consistency06 (#408)
+   - Updated implementation of Nameserver01 (#399, #435)
+   - Updated implementation of DNSSEC05 (#409)
+   - Updated translation tooling #394
+   - Updated implementation of Syntax06 (#421)
+   - Updated implementation of Delegation03 (#425)
+   - Updated implementation of Consistency05 (#427, #429, #470)
+   - Updated implementation of Consistency01 (#433)
+   - Updated translation of messages (#436)
+   - Replaced separate config and policy with a unified profile
+     - Updated profile.pm (#386)
+     - Profiles updates #441
+     - Profile instead of config and policy #446
+     - Profiles tweaks #447
+     - Add script to convert Config/Policy to Profile files #446
+     - Fixed flags issue #459
+     - Add more details in case of crash for profile properties #471
+     - Add true/false processing for Booleans #472
+     - Deleted iana-profile.json #465
+     - Updated profile.json files; removed unused messages and added
+       missing messages #464
+     - Update resolver.source default value to match 
+       documentation #473
+     - Align tests and impl for boolean properties with 
+       documentation #474
+     - Various #478
+   - Added support to test EDNS features
+     - Support for Edns and test case implementation (Nameserver10,
+       ..11, ..12 and ..13; ..14 excluded) #460
+     - Test against develop version of Zonemaster LDNS with EDNS
+       support #462
+     - Various #481, #485 
+ - Fixes
+   - Uppdated formatting of msgid tables #402
+   - Fixed broken tests #412
+   - All link references on Github now to zonemaster/zonemaster instead
+     of old dotse/zonemaster #406
+   - Updated manifest #422
+   - Updated travis conf to match supported perl versions (#426, #463)
+   - Removed List::Util::all (only supported in Perl 5.20 and higher) #432
+   - Added missing message in Delegation.pm #415 
+   - Added missing message in DNSSEC.pm #416
+   - Added missing message in Nameserver.pm #417
+   - Removed unused message and added used message in Basic.pm #413
+   - Various #487
+   
+
+v2.0.7 2018-06-25
+
+- Fixed
+  - Update Installation.md. Add installation of Test::More from 
+    CPAN to get the newest version. (#371) 
+  - Minor updates (#374, #386, #375, #377)
+  - Restore unit tests (#378)
+  - Better report when Cymru reports no ASN (#272, #385)
+  - More checks in get_iana_address_spaces_infos.pl (#300, #387)
+  - Fixed bug in Nameserver.pm (#384, #389)
+  - Update install instructions for debian and centos (#393)
+  - Updated installation instructions for FreeBSD. Now using 
+    cpanm instead of cpan. (#403) 
+
+
+v2.0.6 2018-01-12
+
+- Natural Language support
+  - Added support for Danish language (#351, #354)
+  
+- Patches
+  - Fixed installation instruction (#342)
+  - Update distribution description (#339)
+  - Updated according to updated Delegation01 (#296, #346)
+  - Fixes: Missing French translation (#343, #347)
+  - Fixes: NAMESERVER:RECURSIVITY_UNDEF does not log host (#275, #311)
+  - Fixes: Fake delegation with explicit IP address is ignored (#295, #355)
+  - Fixes: Engine fails to verify NS in zone (#356, #357)
+  - Fixes: When testing a zone with 2 NS that point to the same IP (#140, #360)
+  - Update sv.po to match updates of en.po (#271, #359)
+  - Editorial updates of po files (#362)
+
+- Other changes
+  - Unneeded translation file removed (#345)
+  - Add (and corrected) MANIFEST to repo (#364, #366)
+
+v2.0.2 - v2.0.5 never released.
+
+v2.0.1 2017-11-02
+
+- Fixed
+  - Fixed licensing discrepancy (#336)
+  - Updated dependency version (#334)
+  - Updated links in documentation (#330)
+  - Updated installation instructions (#332, #333, #335)
+
+- Changed in v2.0.0
+  - Renamed distribution from Zonemaster to Zonemaster-Engine (#303)
+
+v2.0.0
+
+- Switch version scheme to Semantic Versioning.
+- Breaking changes
+  - Renamed module from Zonemaster to Zonemaster::Engine (#303)
+- Patches
+  - Updated implementation of ADDRESS01/Name server address must be globally routable (#264)
+  - Updated implementation of BASIC01/The domain must have a parent domain (#260)
+  - Updated translations (#127, #196, #216, #248, #249, #291)
+  - Incremented VERSION of internal packages (98868cb)
+- Other changes
+  - Fixed Commonmark rendering for Github (cc7a28a)
+  - Switch msgfmt implementation to pure Perl (#223, #224)
+  - New Unit tests infrastructure. 896 tests kept, 2 removed, will be added back later (#310)
 
 v1.1.0 2017-04-04 Public pre-release
 

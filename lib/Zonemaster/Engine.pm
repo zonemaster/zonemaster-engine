@@ -1,32 +1,28 @@
 package Zonemaster::Engine;
 
-use version; our $VERSION = version->declare("v1.1.1");
+use version; our $VERSION = version->declare("v3.0.3");
 
 use 5.014002;
 use Moose;
+use Carp;
 
 use Zonemaster::Engine::Nameserver;
 use Zonemaster::Engine::Logger;
-use Zonemaster::Engine::Config;
+use Zonemaster::Engine::Profile;
 use Zonemaster::Engine::Zone;
 use Zonemaster::Engine::Test;
 use Zonemaster::Engine::Recursor;
 use Zonemaster::Engine::ASNLookup;
 
 our $logger;
-our $config;
 our $recursor = Zonemaster::Engine::Recursor->new;
 
 sub logger {
     return $logger //= Zonemaster::Engine::Logger->new;
 }
 
-sub config {
-    if ( not defined $config ) {
-        $config = Zonemaster::Engine::Config->new;
-    }
-
-    return $config;
+sub profile {
+    return Zonemaster::Engine::Profile->effective;
 }
 
 sub ns {
@@ -100,16 +96,27 @@ sub recurse {
 sub add_fake_delegation {
     my ( $class, $domain, $href ) = @_;
 
+    # Validate arguments
+    $domain =~ /[^.]$|^\.$/
+      or croak 'Argument $domain must omit the trailing dot, or it must be a single dot';
+    foreach my $name ( keys %{$href} ) {
+        $name =~ /[^.]$|^\.$/
+          or croak 'Each key of argument $href must omit the trailing dot, or it must be a single dot';
+    }
+
     # Check fake delegation
+    my $incomplete_delegation;
     foreach my $name ( keys %{$href} ) {
         if ( not defined $href->{$name} or not scalar @{ $href->{$name} } ) {
             if ( Zonemaster::Engine::Zone->new( { name => $domain } )->is_in_zone( $name ) ) {
                 Zonemaster::Engine->logger->add(
                     FAKE_DELEGATION_IN_ZONE_NO_IP => { domain => $domain , ns => $name }
                 );
+                push @{ $href->{$name} }, ();
+                $incomplete_delegation = 1;
             }
             else {
-                my @ips = Net::LDNS->new->name2addr($name);
+                my @ips = Zonemaster::LDNS->new->name2addr($name);
                 if ( @ips ) {
                     push @{ $href->{$name} }, @ips;
                 }
@@ -117,16 +124,22 @@ sub add_fake_delegation {
                     Zonemaster::Engine->logger->add(
                         FAKE_DELEGATION_NO_IP => { domain => $domain , ns => $name  }
                     );
-		}
+                    push @{ $href->{$name} }, ();
+                    $incomplete_delegation = 1;
+                }
             }
-        }  
-    }  
+        }
+    }
+    $recursor->add_fake_addresses($domain, $href);
     my $parent = $class->zone( $recursor->parent( $domain ) );
     foreach my $ns ( @{ $parent->ns } ) {
         $ns->add_fake_delegation( $domain => $href );
     }
 
-    return;
+    if ( $incomplete_delegation ) {
+        return;
+    }
+    return 1;
 }
 
 sub add_fake_ds {
@@ -183,13 +196,12 @@ sub reset {
     Zonemaster::Engine::Nameserver->empty_cache();
     $logger->clear_history() if $logger;
     Zonemaster::Engine::Recursor->clear_cache();
-
     return;
 }
 
 =head1 NAME
 
-Zonemaster - A tool to check the quality of a DNS zone
+Zonemaster::Engine - A tool to check the quality of a DNS zone
 
 =head1 SYNOPSIS
 
@@ -197,7 +209,7 @@ Zonemaster - A tool to check the quality of a DNS zone
 
 =head1 INTRODUCTION
 
-This manual describes the main L<Zonemaster> module. If what you're after is documentation on the Zonemaster test engine as a whole, see L<Zonemaster::Engine::Overview>.
+This manual describes the main L<Zonemaster::Engine> module. If what you're after is documentation on the Zonemaster test engine as a whole, see L<Zonemaster::Engine::Overview>.
 
 =head1 METHODS
 
@@ -225,9 +237,9 @@ Returns a L<Zonemaster::Engine::Zone> object for the given name.
 
 Returns a L<Zonemaster::Engine::Nameserver> object for the given name and address.
 
-=item config()
+=item profile()
 
-Returns the global L<Zonemaster::Engine::Config> object.
+Returns the effective profile (L<Zonemaster::Engine::Profile> object).
 
 =item logger()
 
@@ -288,7 +300,8 @@ Returns a list of the loaded test modules. Exactly the same as L<Zonemaster::Eng
 This method adds some fake delegation information to the system. The arguments are a domain name, and a reference to a hash with delegation
 information. The keys in the hash must be nameserver names, and the values references to lists of IP addresses (which can be left empty) for
 the corresponding nameserver. If IP addresses are not provided for nameservers, the engine will perform queries to find them, except for
-in-bailiwick nameservers.
+in-bailiwick nameservers. All IP addresses found/provided are then used to initialize %Zonemaster::Engine::Recursor::fake_addresses_cache
+for later usage. If all servers can be associated to IP addresses, add_fake_delegation method returns 1, 'undef' otherwise.
 
 Example:
 
@@ -300,6 +313,19 @@ Example:
             'ns3.nic.se' => [ '212.247.8.152',  '2a00:801:f0:211::152' ]
         }
     );
+
+will return 1.
+
+    Zonemaster::Engine->add_fake_delegation(
+        'lysator.liu.se' => {
+            'ns1.lysator.liu.se' => [ ],
+            'ns.nic.se'  => [ '212.247.7.228',  '2a00:801:f0:53::53' ],
+            'i.ns.se'    => [ '194.146.106.22', '2001:67c:1010:5::53' ],
+            'ns3.nic.se' => [ '212.247.8.152',  '2a00:801:f0:211::152' ]
+        }
+    );
+
+will return 'undef' (missing address for ns1.lysator.liu.se).
 
 =item add_fake_ds($domain, $data)
 
@@ -329,9 +355,22 @@ nameserver object cache and recursor cache.
 
 =back
 
-=head1 AUTHOR
+=head1 AUTHORS
 
-Calle Dybedahl, C<< <calle at init.se> >>
+Vincent Levigneron <vincent.levigneron at nic.fr>
+- Current maintainer
+
+Calle Dybedahl <calle at init.se>
+- Original author
+
+=head1 LICENSE
+
+This is free software, licensed under:
+
+The (three-clause) BSD License
+
+The full text of the license can be found in the
+F<LICENSE> file included with this distribution.
 
 =cut
 

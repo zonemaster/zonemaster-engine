@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::Address;
 
-use version; our $VERSION = version->declare("v1.0.3");
+use version; our $VERSION = version->declare("v1.0.5");
 
 use strict;
 use warnings;
@@ -23,11 +23,11 @@ sub all {
     my ( $class, $zone ) = @_;
     my @results;
 
-    push @results, $class->address01( $zone ) if Zonemaster::Engine->config->should_run( 'address01' );
-    push @results, $class->address02( $zone ) if Zonemaster::Engine->config->should_run( 'address02' );
+    push @results, $class->address01( $zone ) if Zonemaster::Engine::Util::should_run_test( q{address01} );
+    push @results, $class->address02( $zone ) if Zonemaster::Engine::Util::should_run_test( q{address02} );
     # Perform ADDRESS03 if ADDRESS02 passed
     if ( any { $_->tag eq q{NAMESERVERS_IP_WITH_REVERSE} } @results ) {
-        push @results, $class->address03( $zone ) if Zonemaster::Engine->config->should_run( 'address03' );
+        push @results, $class->address03( $zone ) if Zonemaster::Engine::Util::should_run_test( q{address03} );
     }
 
     return @results;
