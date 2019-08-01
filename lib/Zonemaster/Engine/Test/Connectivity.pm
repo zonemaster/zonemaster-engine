@@ -8,13 +8,15 @@ use warnings;
 use 5.014002;
 
 use Zonemaster::Engine;
-use Zonemaster::Engine::Util;
-use Zonemaster::Engine::TestMethods;
-use Zonemaster::Engine::Constants qw[:ip];
-use Zonemaster::Engine::ASNLookup;
-use Carp;
 
+use Carp;
 use List::MoreUtils qw[uniq];
+use Locale::TextDomain qw[Zonemaster-Engine];
+use Readonly;
+use Zonemaster::Engine::ASNLookup;
+use Zonemaster::Engine::Constants qw[:ip];
+use Zonemaster::Engine::TestMethods;
+use Zonemaster::Engine::Util;
 
 ###
 ### Entry Points
@@ -84,30 +86,72 @@ sub metadata {
     };
 } ## end sub metadata
 
-sub translation {
-    return {
-        'NAMESERVERS_IPV4_WITH_UNIQ_AS'     => 'All nameservers IPv4 addresses are in the same AS ({asn}).',
-        'NAMESERVERS_IPV6_WITH_UNIQ_AS'     => 'All nameservers IPv6 addresses are in the same AS ({asn}).',
-        'NAMESERVERS_WITH_MULTIPLE_AS'      => 'Domain\'s authoritative nameservers do not belong to the same AS.',
-        'NAMESERVERS_WITH_UNIQ_AS'          => 'All nameservers are in the same AS ({asn}).',
-        'NAMESERVERS_IPV4_NO_AS'            => 'No IPv4 nameserver address is in an AS.',
-        'NAMESERVERS_IPV4_WITH_MULTIPLE_AS' => 'Authoritative IPv4 nameservers are in more than one AS.',
-        'NAMESERVERS_IPV6_NO_AS'            => 'No IPv6 nameserver address is in an AS.',
-        'NAMESERVERS_IPV6_WITH_MULTIPLE_AS' => 'Authoritative IPv6 nameservers are in more than one AS.',
-        'NAMESERVERS_NO_AS'                 => 'No nameserver address is in an AS.',
-        'NAMESERVER_HAS_TCP_53'             => 'Nameserver {ns}/{address} accessible over TCP on port 53.',
-        'NAMESERVER_HAS_UDP_53'             => 'Nameserver {ns}/{address} accessible over UDP on port 53.',
-        'NAMESERVER_NO_TCP_53'              => 'Nameserver {ns}/{address} not accessible over TCP on port 53.',
-        'NAMESERVER_NO_UDP_53'              => 'Nameserver {ns}/{address} not accessible over UDP on port 53.',
-        'IPV4_DISABLED'                     => 'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
-        'IPV6_DISABLED'                     => 'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
-        'IPV4_ASN'                          => 'Name servers have IPv4 addresses in the following ASs: {asn}.',
-        'IPV6_ASN'                          => 'Name servers have IPv6 addresses in the following ASs: {asn}.',
-        'ASN_INFOS_RAW'                     => '[ASN:RAW] {address};{data}',
-        'ASN_INFOS_ANNOUNCE_BY'             => '[ASN:ANNOUNCE_BY] {address};{asn}',
-        'ASN_INFOS_ANNOUNCE_IN'             => '[ASN:ANNOUNCE_IN] {address};{prefix}',
-    };
-} ## end sub translation
+Readonly my %TAG_DESCRIPTIONS => (
+    NAMESERVERS_IPV4_WITH_UNIQ_AS => sub {    # NAMESERVERS_IPV4_WITH_UNIQ_AS
+        __x 'All nameservers IPv4 addresses are in the same AS ({asn}).', @_;
+    },
+    NAMESERVERS_IPV6_WITH_UNIQ_AS => sub {    # NAMESERVERS_IPV6_WITH_UNIQ_AS
+        __x 'All nameservers IPv6 addresses are in the same AS ({asn}).', @_;
+    },
+    NAMESERVERS_WITH_MULTIPLE_AS => sub {     # NAMESERVERS_WITH_MULTIPLE_AS
+        __x 'Domain\'s authoritative nameservers do not belong to the same AS.', @_;
+    },
+    NAMESERVERS_WITH_UNIQ_AS => sub {         # NAMESERVERS_WITH_UNIQ_AS
+        __x 'All nameservers are in the same AS ({asn}).', @_;
+    },
+    NAMESERVERS_IPV4_NO_AS => sub {           # NAMESERVERS_IPV4_NO_AS
+        __x 'No IPv4 nameserver address is in an AS.', @_;
+    },
+    NAMESERVERS_IPV4_WITH_MULTIPLE_AS => sub {    # NAMESERVERS_IPV4_WITH_MULTIPLE_AS
+        __x 'Authoritative IPv4 nameservers are in more than one AS.', @_;
+    },
+    NAMESERVERS_IPV6_NO_AS => sub {               # NAMESERVERS_IPV6_NO_AS
+        __x 'No IPv6 nameserver address is in an AS.', @_;
+    },
+    NAMESERVERS_IPV6_WITH_MULTIPLE_AS => sub {    # NAMESERVERS_IPV6_WITH_MULTIPLE_AS
+        __x 'Authoritative IPv6 nameservers are in more than one AS.', @_;
+    },
+    NAMESERVERS_NO_AS => sub {                    # NAMESERVERS_NO_AS
+        __x 'No nameserver address is in an AS.', @_;
+    },
+    NAMESERVER_HAS_TCP_53 => sub {                # NAMESERVER_HAS_TCP_53
+        __x 'Nameserver {ns}/{address} accessible over TCP on port 53.', @_;
+    },
+    NAMESERVER_HAS_UDP_53 => sub {                # NAMESERVER_HAS_UDP_53
+        __x 'Nameserver {ns}/{address} accessible over UDP on port 53.', @_;
+    },
+    NAMESERVER_NO_TCP_53 => sub {                 # NAMESERVER_NO_TCP_53
+        __x 'Nameserver {ns}/{address} not accessible over TCP on port 53.', @_;
+    },
+    NAMESERVER_NO_UDP_53 => sub {                 # NAMESERVER_NO_UDP_53
+        __x 'Nameserver {ns}/{address} not accessible over UDP on port 53.', @_;
+    },
+    IPV4_DISABLED => sub {                        # IPV4_DISABLED
+        __x 'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
+    },
+    IPV6_DISABLED => sub {                        # IPV6_DISABLED
+        __x 'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
+    },
+    IPV4_ASN => sub {                             # IPV4_ASN
+        __x 'Name servers have IPv4 addresses in the following ASs: {asn}.', @_;
+    },
+    IPV6_ASN => sub {                             # IPV6_ASN
+        __x 'Name servers have IPv6 addresses in the following ASs: {asn}.', @_;
+    },
+    ASN_INFOS_RAW => sub {                        # ASN_INFOS_RAW
+        __x '[ASN:RAW] {address};{data}', @_;
+    },
+    ASN_INFOS_ANNOUNCE_BY => sub {                # ASN_INFOS_ANNOUNCE_BY
+        __x '[ASN:ANNOUNCE_BY] {address};{asn}', @_;
+    },
+    ASN_INFOS_ANNOUNCE_IN => sub {                # ASN_INFOS_ANNOUNCE_IN
+        __x '[ASN:ANNOUNCE_IN] {address};{prefix}', @_;
+    },
+);
+
+sub tag_descriptions {
+    return \%TAG_DESCRIPTIONS;
+}
 
 sub version {
     return "$Zonemaster::Engine::Test::Connectivity::VERSION";
@@ -395,9 +439,9 @@ Runs the default set of tests and returns a list of log entries made by the test
 Returns a reference to a hash, the keys of which are the names of all test methods in the module, and the corresponding values are references to
 lists with all the tags that the method can use in log entries.
 
-=item translation()
+=item tag_descriptions()
 
-Returns a refernce to a hash with translation data. Used by the builtin translation system.
+Returns a refernce to a hash with translation functions. Used by the builtin translation system.
 
 =item version()
 

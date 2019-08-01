@@ -3,9 +3,19 @@ package Zonemaster::Engine;
 use version; our $VERSION = version->declare("v3.0.3");
 
 use 5.014002;
+
+BEGIN {
+    # Locale::TextDomain (<= 1.20) doesn't know about File::ShareDir so give a helping hand.
+    # This is a hugely simplified version of the reference implementation located here:
+    # https://metacpan.org/source/GUIDO/libintl-perl-1.21/lib/Locale/TextDomain.pm
+    require File::ShareDir;
+    require Locale::TextDomain;
+    my $share = File::ShareDir::dist_dir( 'Zonemaster-Engine' );
+    Locale::TextDomain->import( 'Zonemaster-Engine', "$share/locale" );
+}
+
 use Moose;
 use Carp;
-
 use Zonemaster::Engine::Nameserver;
 use Zonemaster::Engine::Logger;
 use Zonemaster::Engine::Profile;

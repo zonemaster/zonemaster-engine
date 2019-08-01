@@ -8,13 +8,15 @@ use warnings;
 use 5.014002;
 
 use Zonemaster::Engine;
-use Zonemaster::Engine::Util;
-use Zonemaster::Engine::Test::Address;
-use Zonemaster::Engine::TestMethods;
-use Zonemaster::Engine::Constants qw[:soa :ip];
-use List::MoreUtils qw[none];
 
 use Carp;
+use List::MoreUtils qw[none];
+use Locale::TextDomain qw[Zonemaster-Engine];
+use Readonly;
+use Zonemaster::Engine::Constants qw[:soa :ip];
+use Zonemaster::Engine::Test::Address;
+use Zonemaster::Engine::TestMethods;
+use Zonemaster::Engine::Util;
 
 ###
 ### Entry Points
@@ -126,50 +128,92 @@ sub metadata {
     };
 } ## end sub metadata
 
-sub translation {
-    return {
-        'RETRY_MINIMUM_VALUE_LOWER' =>
-          'SOA \'retry\' value ({retry}) is less than the recommended one ({required_retry}).',
-        'RETRY_MINIMUM_VALUE_OK' =>
-          'SOA \'retry\' value ({retry}) is more than the minimum recommended value ({required_retry}).',
-        'MNAME_NO_RESPONSE'  => 'SOA \'mname\' nameserver {ns}/{address} does not respond.',
-        'MNAME_IS_CNAME'     => 'SOA \'mname\' value ({mname}) refers to a NS which is an alias (CNAME).',
-        'MNAME_IS_NOT_CNAME' => 'SOA \'mname\' value ({mname}) refers to a NS which is not an alias (CNAME).',
-        'NO_MX_RECORD'       => 'No target (MX, A or AAAA record) to deliver e-mail for the domain name.',
-        'MX_RECORD_EXISTS'   => 'Target ({info}) found to deliver e-mail for the domain name.',
-        'REFRESH_MINIMUM_VALUE_LOWER' =>
-          'SOA \'refresh\' value ({refresh}) is less than the recommended one ({required_refresh}).',
-        'REFRESH_MINIMUM_VALUE_OK' =>
-          'SOA \'refresh\' value ({refresh}) is higher than the minimum recommended value ({required_refresh}).',
-        'EXPIRE_LOWER_THAN_REFRESH' =>
-          'SOA \'expire\' value ({expire}) is lower than the SOA \'refresh\' value ({refresh}).',
-        'SOA_DEFAULT_TTL_MAXIMUM_VALUE_HIGHER' =>
-          'SOA \'minimum\' value ({minimum}) is higher than the recommended one ({highest_minimum}).',
-        'SOA_DEFAULT_TTL_MAXIMUM_VALUE_LOWER' =>
-          'SOA \'minimum\' value ({minimum}) is less than the recommended one ({lowest_minimum}).',
-        'SOA_DEFAULT_TTL_MAXIMUM_VALUE_OK' =>
-          'SOA \'minimum\' value ({minimum}) is between the recommended ones ({lowest_minimum}/{highest_minimum}).',
-        'MNAME_NOT_AUTHORITATIVE' =>
-          'SOA \'mname\' nameserver {ns}/{address} is not authoritative for \'{zone}\' zone.',
-        'MNAME_RECORD_DOES_NOT_EXIST' => 'SOA \'mname\' field does not exist',
-        'EXPIRE_MINIMUM_VALUE_LOWER' =>
-          'SOA \'expire\' value ({expire}) is less than the recommended one ({required_expire}).',
-        'MNAME_NOT_IN_GLUE' =>
-          'SOA \'mname\' nameserver ({mname}) is not listed in "parent" NS records for tested zone ({ns}).',
-        'REFRESH_LOWER_THAN_RETRY' =>
-          'SOA \'refresh\' value ({refresh}) is lower than the SOA \'retry\' value ({retry}).',
-        'REFRESH_HIGHER_THAN_RETRY' =>
-          'SOA \'refresh\' value ({refresh}) is higher than the SOA \'retry\' value ({retry}).',
-        'MX_RECORD_IS_CNAME'     => 'MX record for the domain is pointing to a CNAME.',
-        'MX_RECORD_IS_NOT_CNAME' => 'MX record for the domain is not pointing to a CNAME.',
-        'MNAME_IS_AUTHORITATIVE' => 'SOA \'mname\' nameserver ({mname}) is authoritative for \'{zone}\' zone.',
-        'NO_RESPONSE_SOA_QUERY'  => 'No response from nameserver(s) on SOA queries.',
-        'NO_RESPONSE_MX_QUERY'   => 'No response from nameserver(s) on MX queries.',
-        'MNAME_HAS_NO_ADDRESS'   => 'No IP address found for SOA \'mname\' nameserver ({mname}).',
-        'EXPIRE_MINIMUM_VALUE_OK' =>
-'SOA \'expire\' value ({expire}) is higher than the minimum recommended value ({required_expire}) and not lower than the \'refresh\' value ({refresh}).',
-    };
-} ## end sub translation
+Readonly my %TAG_DESCRIPTIONS => (
+    RETRY_MINIMUM_VALUE_LOWER => sub {    # RETRY_MINIMUM_VALUE_LOWER
+        __x 'SOA \'retry\' value ({retry}) is less than the recommended one ({required_retry}).', @_;
+    },
+    RETRY_MINIMUM_VALUE_OK => sub {       # RETRY_MINIMUM_VALUE_OK
+        __x 'SOA \'retry\' value ({retry}) is more than the minimum recommended value ({required_retry}).', @_;
+    },
+    MNAME_NO_RESPONSE => sub {            # MNAME_NO_RESPONSE
+        __x 'SOA \'mname\' nameserver {ns}/{address} does not respond.', @_;
+    },
+    MNAME_IS_CNAME => sub {               # MNAME_IS_CNAME
+        __x 'SOA \'mname\' value ({mname}) refers to a NS which is an alias (CNAME).', @_;
+    },
+    MNAME_IS_NOT_CNAME => sub {           # MNAME_IS_NOT_CNAME
+        __x 'SOA \'mname\' value ({mname}) refers to a NS which is not an alias (CNAME).', @_;
+    },
+    NO_MX_RECORD => sub {                 # NO_MX_RECORD
+        __x 'No target (MX, A or AAAA record) to deliver e-mail for the domain name.', @_;
+    },
+    MX_RECORD_EXISTS => sub {             # MX_RECORD_EXISTS
+        __x 'Target ({info}) found to deliver e-mail for the domain name.', @_;
+    },
+    REFRESH_MINIMUM_VALUE_LOWER => sub {    # REFRESH_MINIMUM_VALUE_LOWER
+        __x 'SOA \'refresh\' value ({refresh}) is less than the recommended one ({required_refresh}).', @_;
+    },
+    REFRESH_MINIMUM_VALUE_OK => sub {       # REFRESH_MINIMUM_VALUE_OK
+        __x 'SOA \'refresh\' value ({refresh}) is higher than the minimum recommended value ({required_refresh}).', @_;
+    },
+    EXPIRE_LOWER_THAN_REFRESH => sub {      # EXPIRE_LOWER_THAN_REFRESH
+        __x 'SOA \'expire\' value ({expire}) is lower than the SOA \'refresh\' value ({refresh}).', @_;
+    },
+    SOA_DEFAULT_TTL_MAXIMUM_VALUE_HIGHER => sub {    # SOA_DEFAULT_TTL_MAXIMUM_VALUE_HIGHER
+        __x 'SOA \'minimum\' value ({minimum}) is higher than the recommended one ({highest_minimum}).', @_;
+    },
+    SOA_DEFAULT_TTL_MAXIMUM_VALUE_LOWER => sub {     # SOA_DEFAULT_TTL_MAXIMUM_VALUE_LOWER
+        __x 'SOA \'minimum\' value ({minimum}) is less than the recommended one ({lowest_minimum}).', @_;
+    },
+    SOA_DEFAULT_TTL_MAXIMUM_VALUE_OK => sub {        # SOA_DEFAULT_TTL_MAXIMUM_VALUE_OK
+        __x 'SOA \'minimum\' value ({minimum}) is between the recommended ones ({lowest_minimum}/{highest_minimum}).', @_;
+    },
+    MNAME_NOT_AUTHORITATIVE => sub {                 # MNAME_NOT_AUTHORITATIVE
+        __x 'SOA \'mname\' nameserver {ns}/{address} is not authoritative for \'{zone}\' zone.', @_;
+    },
+    MNAME_RECORD_DOES_NOT_EXIST => sub {             # MNAME_RECORD_DOES_NOT_EXIST
+        __x 'SOA \'mname\' field does not exist', @_;
+    },
+    EXPIRE_MINIMUM_VALUE_LOWER => sub {              # EXPIRE_MINIMUM_VALUE_LOWER
+        __x 'SOA \'expire\' value ({expire}) is less than the recommended one ({required_expire}).', @_;
+    },
+    MNAME_NOT_IN_GLUE => sub {                       # MNAME_NOT_IN_GLUE
+        __x 'SOA \'mname\' nameserver ({mname}) is not listed in "parent" NS records for tested zone ({ns}).', @_;
+    },
+    REFRESH_LOWER_THAN_RETRY => sub {                # REFRESH_LOWER_THAN_RETRY
+        __x 'SOA \'refresh\' value ({refresh}) is lower than the SOA \'retry\' value ({retry}).', @_;
+    },
+    REFRESH_HIGHER_THAN_RETRY => sub {               # REFRESH_HIGHER_THAN_RETRY
+        __x 'SOA \'refresh\' value ({refresh}) is higher than the SOA \'retry\' value ({retry}).', @_;
+    },
+    MX_RECORD_IS_CNAME => sub {                      # MX_RECORD_IS_CNAME
+        __x 'MX record for the domain is pointing to a CNAME.', @_;
+    },
+    MX_RECORD_IS_NOT_CNAME => sub {                  # MX_RECORD_IS_NOT_CNAME
+        __x 'MX record for the domain is not pointing to a CNAME.', @_;
+    },
+    MNAME_IS_AUTHORITATIVE => sub {                  # MNAME_IS_AUTHORITATIVE
+        __x 'SOA \'mname\' nameserver ({mname}) is authoritative for \'{zone}\' zone.', @_;
+    },
+    NO_RESPONSE_SOA_QUERY => sub {                   # NO_RESPONSE_SOA_QUERY
+        __x 'No response from nameserver(s) on SOA queries.';
+    },
+    NO_RESPONSE_MX_QUERY => sub {                    # NO_RESPONSE_MX_QUERY
+        __x 'No response from nameserver(s) on MX queries.';
+    },
+    MNAME_HAS_NO_ADDRESS => sub {                    # MNAME_HAS_NO_ADDRESS
+        __x 'No IP address found for SOA \'mname\' nameserver ({mname}).', @_;
+    },
+    EXPIRE_MINIMUM_VALUE_OK => sub {                 # EXPIRE_MINIMUM_VALUE_OK
+        __x
+          'SOA \'expire\' value ({expire}) is higher than the minimum recommended value ({required_expire}) and not lower than the \'refresh\' value ({refresh}).',
+          @_;
+    },
+);
+
+sub tag_descriptions {
+    return \%TAG_DESCRIPTIONS;
+}
 
 sub version {
     return "$Zonemaster::Engine::Test::Zone::VERSION";
@@ -609,9 +653,9 @@ Zonemaster::Engine::Test::Zone - module implementing tests of the zone content i
 
 Runs the default set of tests and returns a list of log entries made by the tests
 
-=item translation()
+=item tag_descriptions()
 
-Returns a refernce to a hash with translation data. Used by the builtin translation system.
+Returns a refernce to a hash with translation functions. Used by the builtin translation system.
 
 =item metadata()
 
