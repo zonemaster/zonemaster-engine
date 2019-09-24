@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::DNSSEC;
 
-use version; our $VERSION = version->declare("v1.0.10");
+use version; our $VERSION = version->declare("v1.0.11");
 
 ###
 ### This test module implements DNSSEC tests.
@@ -18,7 +18,7 @@ use List::MoreUtils qw[none];
 use List::Util qw[min];
 use Locale::TextDomain qw[Zonemaster-Engine];
 use Readonly;
-use Zonemaster::Engine::Constants qw[:algo :soa];
+use Zonemaster::Engine::Constants qw[:algo :soa :ip];
 use Zonemaster::Engine::Util;
 
 ### Table fetched from IANA on 2017-03-09
@@ -149,6 +149,33 @@ Readonly::Hash our %algo_properties => (
     },
 );
 
+Readonly::Hash our %rsa_key_size_details => (
+    5 => {
+        min_size  => 512,
+        max_size  => 4096,
+        rec_size  => 2048,
+        reference => q{RFC 3110},
+    },
+    7 => {
+        min_size  => 512,
+        max_size  => 4096,
+        rec_size  => 2048,
+        reference => q{RFC 5155},
+    },
+    8 => {
+        min_size  => 512,
+        max_size  => 4096,
+        rec_size  => 2048,
+        reference => q{RFC 5702},
+    },
+    10 => {
+        min_size  => 1024,
+        max_size  => 4096,
+        rec_size  => 2048,
+        reference => q{RFC 5702},
+    },
+);
+
 ###
 ### Entry points
 ###
@@ -217,6 +244,10 @@ sub all {
 
         if ( Zonemaster::Engine::Util::should_run_test( q{dnssec11} ) ) {
             push @results, $class->dnssec11( $zone );
+        }
+
+        if ( Zonemaster::Engine::Util::should_run_test( q{dnssec14} ) ) {
+            push @results, $class->dnssec14( $zone );
         }
 
     }
@@ -344,6 +375,16 @@ sub metadata {
               DELEGATION_SIGNED
               ),
         ],
+        dnssec14 => [
+            qw(
+              NO_RESPONSE
+              NO_RESPONSE_DNSKEY
+	      DNSKEY_SMALLER_THAN_REC
+	      DNSKEY_TOO_SMALL_FOR_ALGO
+	      DNSKEY_TOO_LARGE_FOR_ALGO
+	      KEY_SIZE_OK
+              ),
+        ],
     };
 } ## end sub metadata
 
@@ -402,6 +443,15 @@ Readonly my %TAG_DESCRIPTIONS => (
     DNSKEY_SIGNED => sub {                # DNSKEY_SIGNED
         __x "The apex DNSKEY RRset was correcly signed.", @_;
     },
+    DNSKEY_SMALLER_THAN_REC => sub {      # DNSKEY_SMALLER_THAN_REC
+        __x "Key with keytag {keytag} has a size ({keysize}) smaller than the recommended one ({keysizerec})", @_;
+    },
+    DNSKEY_TOO_SMALL_FOR_ALGO => sub {    # DNSKEY_TOO_SMALL_FOR_ALGO
+        __x "Key with keytag {keytag} has a size ({keysize}) too small (< {keysizemin}) for this algorithm ({algorithm}).", @_;
+    },
+    DNSKEY_TOO_LARGE_FOR_ALGO => sub {    # DNSKEY_TOO_LARGE_FOR_ALGO
+        __x "Key with keytag {keytag} has a size ({keysize}) too large (> {keysizemax}) for this algorithm ({algorithm}).", @_;
+    },
     DS_BUT_NOT_DNSKEY => sub {            # DS_BUT_NOT_DNSKEY
         __x "{parent} sent a DS record, but {child} did not send a DNSKEY record.", @_;
     },
@@ -458,6 +508,9 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     KEY_DETAILS => sub {                  # KEY_DETAILS
         __x "Key with keytag {keytag} details : Size = {keysize}, Flags ({sep}, {rfc5011}).", @_;
+    },
+    KEY_SIZE_OK => sub {                  # KEY_SIZE_OK
+	__x "Keys size are OK", @_;
     },
     MANY_ITERATIONS => sub {              # MANY_ITERATIONS
         __x "The number of NSEC3 iterations is {count}, which is on the high side.", @_;
@@ -1460,6 +1513,82 @@ sub dnssec11 {
     return @results;
 } ## end sub dnssec11
 
+sub dnssec14 {
+    my ( $class, $zone ) = @_;
+    my @results;
+    my @dnskey_rrs;
+    my %dnskey_rrs;
+
+    my @nss_del   = @{ Zonemaster::Engine::TestMethods->method4( $zone ) };
+    my @nss_child = @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
+    my %nss       = map { $_->name->string . '/' . $_->address->short => $_ } @nss_del, @nss_child;
+
+    for my $key ( sort keys %nss ) {
+        my $ns = $nss{$key};
+        my $ns_args = {
+            ns      => $ns->name->string,
+            address => $ns->address->short,
+        };
+
+	if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
+            Zonemaster::Engine->logger->add( SKIP_IPV4_DISABLED => { ns => "$ns" } );
+            next;
+	}
+        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
+            Zonemaster::Engine->logger->add( SKIP_IPV6_DISABLED => { ns => "$ns" } );
+	    next;
+        }
+
+        my $key_p = $ns->query( $zone->name, 'DNSKEY', { dnssec => 1, usevc => 0 } );
+        if ( not $key_p ) {
+            push @results, info( NO_RESPONSE => $ns_args );
+            next;
+        }
+
+        my @keys = $key_p->get_records( 'DNSKEY', 'answer' );
+        if ( not @keys ) {
+            push @results, info( NO_RESPONSE_DNSKEY => $ns_args );
+            next;
+        } else {
+            push @dnskey_rrs, @keys;
+        }
+    }
+
+    foreach my $key ( @dnskey_rrs ) {
+        my $algo = $key->algorithm;  
+
+        next if not exists $rsa_key_size_details{$algo};
+
+        my $algo_args = {
+            algorithm   => $algo,
+            keytag      => $key->keytag,
+            keysize     => $key->keysize,
+            keysizemin  => $rsa_key_size_details{$algo}{min_size},
+            keysizemax  => $rsa_key_size_details{$algo}{max_size},
+            keysizerec  => $rsa_key_size_details{$algo}{rec_size},
+        };
+
+        if ( $key->keysize < $rsa_key_size_details{$algo}{min_size} ) {
+            push @results, info( DNSKEY_TOO_SMALL_FOR_ALGO => $algo_args );
+        }
+
+        if ( $key->keysize < $rsa_key_size_details{$algo}{rec_size} ) {
+            push @results, info( DNSKEY_SMALLER_THAN_REC => $algo_args );
+        }
+
+        if ( $key->keysize > $rsa_key_size_details{$algo}{max_size} ) {
+            push @results, info( DNSKEY_TOO_LARGE_FOR_ALGO => $algo_args );
+        }
+
+    } ## end foreach my $key ( @keys )
+
+    if ( scalar @dnskey_rrs and not scalar @results ) {
+        push @results, info( KEY_SIZE_OK => {} );
+    }
+
+    return @results;
+} ## end sub dnssec14
+
 1;
 
 =head1 NAME
@@ -1545,6 +1674,10 @@ Check for the presence of either NSEC or NSEC3, with proper coverage and signatu
 =item dnssec11($zone)
 
 Check that the delegation step from parent is properly signed.
+
+=item dnssec14($zone)
+
+Check for valid RSA DNSKEY key size
 
 =back
 
