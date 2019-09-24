@@ -8,8 +8,8 @@ perl:
     - "5.16"
 
 before_install:
-    - sudo apt-get install -y libidn11-dev
     - eval $(curl https://travis-perl.github.io/init) --auto
-    - local-lib
+    - sudo apt-get install -y libidn11-dev
+    - cpan-install --deps Devel::CheckLib Module::Install Module::Install::XSUtil
     - git clone --depth=1 --branch=$TRAVIS_BRANCH https://github.com/zonemaster/zonemaster-ldns.git
-    - cpan-install --deps Devel::CheckLib Module::Install Module::Install::XSUtil ./zonemaster-ldns
+    - cpanm --notest --configure-args="--no-ed25519" ./zonemaster-ldns
