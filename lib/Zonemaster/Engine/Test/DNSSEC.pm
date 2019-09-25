@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::DNSSEC;
 
-use version; our $VERSION = version->declare("v1.0.11");
+use version; our $VERSION = version->declare("v1.0.12");
 
 ###
 ### This test module implements DNSSEC tests.
@@ -282,6 +282,8 @@ sub metadata {
               ALGORITHM_PRIVATE
               ALGORITHM_RESERVED
               ALGORITHM_UNASSIGNED
+              IPV4_DISABLED
+              IPV6_DISABLED
               KEY_DETAILS
               NO_RESPONSE
               NO_RESPONSE_DNSKEY
@@ -452,6 +454,12 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     INVALID_NAME_RCODE => sub {           # INVALID_NAME_RCODE
         __x "When asked for the name {name}, which must not exist, the response had RCODE {rcode}.", @_;
+    },
+    IPV4_DISABLED => sub {                  # IPV4_DISABLED
+        __x 'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
+    },
+    IPV6_DISABLED => sub {                  # IPV6_DISABLED
+        __x 'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
     },
     ITERATIONS_OK => sub {                # ITERATIONS_OK
         __x "The number of NSEC3 iterations is {count}, which is OK.", @_;
@@ -929,7 +937,29 @@ sub dnssec05 {
             address => $ns->address->short,
         };
 
-        next if _is_ip_version_disabled($ns);
+        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
+            push @results,
+              info(
+                IPV6_DISABLED => {
+                    ns      => $ns->name->string,
+                    address => $ns->address->short,
+                    rrtype => q{DNSKEY},
+                }
+              );
+            next;
+        }
+
+        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
+            push @results,
+              info(
+                IPV4_DISABLED => {
+                    ns      => $ns->name->string,
+                    address => $ns->address->short,
+                    rrtype => q{DNSKEY},
+                }
+              );
+            next;
+        }
 
         my $key_p = $ns->query( $zone->name, 'DNSKEY', { dnssec => 1 } );
         if ( not $key_p ) {
@@ -1461,22 +1491,6 @@ sub dnssec11 {
 
     return @results;
 } ## end sub dnssec11
-
-sub _is_ip_version_disabled {
-    my $ns = shift;
-
-    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
-        Zonemaster::Engine->logger->add( SKIP_IPV4_DISABLED => { ns => $ns->name->string.q{/}.$ns->address->short } );
-        return 1;
-    }
-
-    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
-        Zonemaster::Engine->logger->add( SKIP_IPV6_DISABLED => { ns => $ns->name->string.q{/}.$ns->address->short } );
-        return 1;
-    }
-
-    return;
-}
 
 1;
 
