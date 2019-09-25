@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::DNSSEC;
 
-use version; our $VERSION = version->declare("v1.0.11");
+use version; our $VERSION = version->declare("v1.0.12");
 
 ###
 ### This test module implements DNSSEC tests.
@@ -367,7 +367,8 @@ sub metadata {
               NSEC3_SIGNED
               NSEC3_NOT_SIGNED
               HAS_NSEC3
-              HAS_NSEC3_OPTOUT )
+              HAS_NSEC3_OPTOUT
+              )
         ],
         dnssec11 => [
             qw(
@@ -379,10 +380,10 @@ sub metadata {
             qw(
               NO_RESPONSE
               NO_RESPONSE_DNSKEY
-	      DNSKEY_SMALLER_THAN_REC
-	      DNSKEY_TOO_SMALL_FOR_ALGO
-	      DNSKEY_TOO_LARGE_FOR_ALGO
-	      KEY_SIZE_OK
+              DNSKEY_SMALLER_THAN_REC
+              DNSKEY_TOO_SMALL_FOR_ALGO
+              DNSKEY_TOO_LARGE_FOR_ALGO
+              KEY_SIZE_OK
               ),
         ],
     };
@@ -1582,7 +1583,7 @@ sub dnssec14 {
 
     } ## end foreach my $key ( @keys )
 
-    if ( scalar @dnskey_rrs and not scalar @results ) {
+    if ( scalar @dnskey_rrs and scalar @results == scalar grep { $_->tag eq 'NO_RESPONSE' } @results) {
         push @results, info( KEY_SIZE_OK => {} );
     }
 
