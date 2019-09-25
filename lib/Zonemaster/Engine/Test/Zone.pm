@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::Zone;
 
-use version; our $VERSION = version->declare("v1.0.6");
+use version; our $VERSION = version->declare("v1.0.7");
 
 use strict;
 use warnings;
@@ -537,13 +537,16 @@ sub zone08 {
     my @results;
 
     my $p = $zone->query_auth( $zone->name, q{MX} );
-
     if ( $p ) {
-        if ( $p->has_rrs_of_type_for_name( q{CNAME}, $zone->name ) ) {
-            push @results, info( MX_RECORD_IS_CNAME => {} );
-        }
-        else {
-            push @results, info( MX_RECORD_IS_NOT_CNAME => {} );
+        my @mx = $p->get_records_for_name( q{MX}, $zone->name );
+        for my $mx ( @mx ) {
+	    my $p2 = $zone->query_auth( $mx->exchange, q{CNAME} );
+            if ( $p2->has_rrs_of_type_for_name( q{CNAME}, $mx->exchange ) ) {
+                push @results, info( MX_RECORD_IS_CNAME => {} );
+            }
+            else {
+                push @results, info( MX_RECORD_IS_NOT_CNAME => {} );
+            }
         }
     }
     else {
