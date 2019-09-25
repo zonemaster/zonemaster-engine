@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::DNSSEC;
 
-use version; our $VERSION = version->declare("v1.0.10");
+use version; our $VERSION = version->declare("v1.0.11");
 
 ###
 ### This test module implements DNSSEC tests.
@@ -18,7 +18,7 @@ use List::MoreUtils qw[none];
 use List::Util qw[min];
 use Locale::TextDomain qw[Zonemaster-Engine];
 use Readonly;
-use Zonemaster::Engine::Constants qw[:algo :soa];
+use Zonemaster::Engine::Constants qw[:algo :soa :ip];
 use Zonemaster::Engine::Util;
 
 ### Table fetched from IANA on 2017-03-09
@@ -929,6 +929,8 @@ sub dnssec05 {
             address => $ns->address->short,
         };
 
+        next if _is_ip_version_disabled($ns);
+
         my $key_p = $ns->query( $zone->name, 'DNSKEY', { dnssec => 1 } );
         if ( not $key_p ) {
             push @results, info( NO_RESPONSE => $ns_args );
@@ -1459,6 +1461,22 @@ sub dnssec11 {
 
     return @results;
 } ## end sub dnssec11
+
+sub _is_ip_version_disabled {
+    my $ns = shift;
+
+    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
+        Zonemaster::Engine->logger->add( SKIP_IPV4_DISABLED => { ns => $ns->name->string.q{/}.$ns->address->short } );
+        return 1;
+    }
+
+    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
+        Zonemaster::Engine->logger->add( SKIP_IPV6_DISABLED => { ns => $ns->name->string.q{/}.$ns->address->short } );
+        return 1;
+    }
+
+    return;
+}
 
 1;
 
