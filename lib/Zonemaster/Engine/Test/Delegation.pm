@@ -112,113 +112,173 @@ sub metadata {
 } ## end sub metadata
 
 Readonly my %TAG_DESCRIPTIONS => (
-    ARE_AUTHORITATIVE => sub {    # ARE_AUTHORITATIVE
-        __x "All these nameservers are confirmed to be authoritative : {nsset}.", @_;
+    ARE_AUTHORITATIVE => sub {
+        __x    # ARE_AUTHORITATIVE
+          "All these nameservers are confirmed to be authoritative : {nsset}.", @_;
     },
-    CHILD_DISTINCT_NS_IP => sub {    # CHILD_DISTINCT_NS_IP
-        __x "All the IP addresses used by the nameservers in child are unique.", @_;
+    CHILD_DISTINCT_NS_IP => sub {
+        __x    # CHILD_DISTINCT_NS_IP
+          "All the IP addresses used by the nameservers in child are unique.", @_;
     },
-    CHILD_NS_SAME_IP => sub {        # CHILD_NS_SAME_IP
-        __x "IP {address} in child refers to multiple nameservers ({nss}).", @_;
+    CHILD_NS_SAME_IP => sub {
+        __x    # CHILD_NS_SAME_IP
+          "IP {address} in child refers to multiple nameservers ({nss}).", @_;
     },
-    DEL_DISTINCT_NS_IP => sub {      # DEL_DISTINCT_NS_IP
-        __x "All the IP addresses used by the nameservers in parent are unique.", @_;
+    DEL_DISTINCT_NS_IP => sub {
+        __x    # DEL_DISTINCT_NS_IP
+          "All the IP addresses used by the nameservers in parent are unique.", @_;
     },
-    DEL_NS_SAME_IP => sub {          # DEL_NS_SAME_IP
-        __x "IP {address} in parent refers to multiple nameservers ({nss}).", @_;
+    DEL_NS_SAME_IP => sub {
+        __x    # DEL_NS_SAME_IP
+          "IP {address} in parent refers to multiple nameservers ({nss}).", @_;
     },
-    DISTINCT_IP_ADDRESS => sub {     # DISTINCT_IP_ADDRESS
-        __x "All the IP addresses used by the nameservers are unique", @_;
+    DISTINCT_IP_ADDRESS => sub {
+        __x    # DISTINCT_IP_ADDRESS
+          "All the IP addresses used by the nameservers are unique", @_;
     },
-    ENOUGH_IPV4_NS_CHILD => sub {    # ENOUGH_IPV4_NS_CHILD
-        __x "Child lists enough ({count}) nameservers that resolve to IPv4 addresses ({addrs}). Lower limit set to {minimum}.", @_;
+    ENOUGH_IPV4_NS_CHILD => sub {
+        __x    # ENOUGH_IPV4_NS_CHILD
+          "Child lists enough ({count}) nameservers "
+          . "that resolve to IPv4 addresses ({addrs}). Lower limit set to {minimum}.",
+          @_;
     },
-    ENOUGH_IPV4_NS_DEL => sub {      # ENOUGH_IPV4_NS_DEL
-        __x "Delegation lists enough ({count}) nameservers that resolve to IPv4 addresses ({addrs}). Lower limit set to {minimum}.", @_;
+    ENOUGH_IPV4_NS_DEL => sub {
+        __x    # ENOUGH_IPV4_NS_DEL
+          "Delegation lists enough ({count}) nameservers "
+          . "that resolve to IPv4 addresses ({addrs}). Lower limit set to {minimum}.",
+          @_;
     },
-    ENOUGH_IPV6_NS_CHILD => sub {    # ENOUGH_IPV6_NS_CHILD
-        __x "Child lists enough ({count}) nameservers that resolve to IPv6 addresses ({addrs}). Lower limit set to {minimum}.", @_;
+    ENOUGH_IPV6_NS_CHILD => sub {
+        __x    # ENOUGH_IPV6_NS_CHILD
+          "Child lists enough ({count}) nameservers "
+          . "that resolve to IPv6 addresses ({addrs}). Lower limit set to {minimum}.",
+          @_;
     },
-    ENOUGH_IPV6_NS_DEL => sub {      # ENOUGH_IPV6_NS_DEL
-        __x "Delegation lists enough ({count}) nameservers that resolve to IPv6 addresses ({addrs}). Lower limit set to {minimum}.", @_;
+    ENOUGH_IPV6_NS_DEL => sub {
+        __x    # ENOUGH_IPV6_NS_DEL
+          "Delegation lists enough ({count}) nameservers "
+          . "that resolve to IPv6 addresses ({addrs}). Lower limit set to {minimum}.",
+          @_;
     },
-    ENOUGH_NS_CHILD => sub {         # ENOUGH_NS_CHILD
-        __x "Child lists enough ({count}) nameservers ({ns}). Lower limit set to {minimum}.", @_;
+    ENOUGH_NS_CHILD => sub {
+        __x    # ENOUGH_NS_CHILD
+          "Child lists enough ({count}) nameservers ({ns}). Lower limit set to {minimum}.", @_;
     },
-    ENOUGH_NS_DEL => sub {           # ENOUGH_NS_DEL
-        __x "Parent lists enough ({count}) nameservers ({glue}). Lower limit set to {minimum}.", @_;
+    ENOUGH_NS_DEL => sub {
+        __x    # ENOUGH_NS_DEL
+          "Parent lists enough ({count}) nameservers ({glue}). Lower limit set to {minimum}.", @_;
     },
-    EXTRA_NAME_CHILD => sub {        # EXTRA_NAME_CHILD
-        __x "Child has nameserver(s) not listed at parent ({extra}).", @_;
+    EXTRA_NAME_CHILD => sub {
+        __x    # EXTRA_NAME_CHILD
+          "Child has nameserver(s) not listed at parent ({extra}).", @_;
     },
-    EXTRA_NAME_PARENT => sub {       # EXTRA_NAME_PARENT
-        __x "Parent has nameserver(s) not listed at the child ({extra}).", @_;
+    EXTRA_NAME_PARENT => sub {
+        __x    # EXTRA_NAME_PARENT
+          "Parent has nameserver(s) not listed at the child ({extra}).", @_;
     },
-    IPV4_DISABLED => sub {           # IPV4_DISABLED
-        __x 'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
+    IPV4_DISABLED => sub {
+        __x    # IPV4_DISABLED
+          'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
     },
-    IPV6_DISABLED => sub {           # IPV6_DISABLED
-        __x 'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
+    IPV6_DISABLED => sub {
+        __x    # IPV6_DISABLED
+          'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
     },
-    IS_NOT_AUTHORITATIVE => sub {    # IS_NOT_AUTHORITATIVE
-        __x "Nameserver {ns} response is not authoritative on {proto} port 53.", @_;
+    IS_NOT_AUTHORITATIVE => sub {
+        __x    # IS_NOT_AUTHORITATIVE
+          "Nameserver {ns} response is not authoritative on {proto} port 53.", @_;
     },
-    NAMES_MATCH => sub {             # NAMES_MATCH
-        __x "All of the nameserver names are listed both at parent and child.", @_;
+    NAMES_MATCH => sub {
+        __x    # NAMES_MATCH
+          "All of the nameserver names are listed both at parent and child.", @_;
     },
-    NOT_ENOUGH_IPV4_NS_CHILD => sub {    # NOT_ENOUGH_IPV4_NS_CHILD
-        __x "Child does not list enough ({count}) nameservers that resolve to IPv4 addresses ({addrs}). Lower limit set to {minimum}.", @_;
+    NOT_ENOUGH_IPV4_NS_CHILD => sub {
+        __x    # NOT_ENOUGH_IPV4_NS_CHILD
+          "Child does not list enough ({count}) nameservers "
+          . "that resolve to IPv4 addresses ({addrs}). Lower limit set to {minimum}.",
+          @_;
     },
-    NOT_ENOUGH_IPV4_NS_DEL => sub {      # NOT_ENOUGH_IPV4_NS_DEL
-        __x "Delegation does not list enough ({count}) nameservers that resolve to IPv4 addresses ({addrs}). Lower limit set to {minimum}.", @_;
+    NOT_ENOUGH_IPV4_NS_DEL => sub {
+        __x    # NOT_ENOUGH_IPV4_NS_DEL
+          "Delegation does not list enough ({count}) nameservers "
+          . "that resolve to IPv4 addresses ({addrs}). Lower limit set to {minimum}.",
+          @_;
     },
-    NOT_ENOUGH_IPV6_NS_CHILD => sub {    # NOT_ENOUGH_IPV6_NS_CHILD
-        __x "Child does not list enough ({count}) nameservers that resolve to IPv6 addresses ({addrs}). Lower limit set to {minimum}.", @_;
+    NOT_ENOUGH_IPV6_NS_CHILD => sub {
+        __x    # NOT_ENOUGH_IPV6_NS_CHILD
+          "Child does not list enough ({count}) nameservers "
+          . "that resolve to IPv6 addresses ({addrs}). Lower limit set to {minimum}.",
+          @_;
     },
-    NOT_ENOUGH_IPV6_NS_DEL => sub {      # NOT_ENOUGH_IPV6_NS_DEL
-        __x "Delegation does not list enough ({count}) nameservers that resolve to IPv6 addresses ({addrs}). Lower limit set to {minimum}.", @_;
+    NOT_ENOUGH_IPV6_NS_DEL => sub {
+        __x    # NOT_ENOUGH_IPV6_NS_DEL
+          "Delegation does not list enough ({count}) nameservers "
+          . "that resolve to IPv6 addresses ({addrs}). Lower limit set to {minimum}.",
+          @_;
     },
-    NOT_ENOUGH_NS_CHILD => sub {         # NOT_ENOUGH_NS_CHILD
-        __x "Child does not list enough ({count}) nameservers ({ns}). Lower limit set to {minimum}.", @_;
+    NOT_ENOUGH_NS_CHILD => sub {
+        __x    # NOT_ENOUGH_NS_CHILD
+          "Child does not list enough ({count}) nameservers ({ns}). Lower limit set to {minimum}.", @_;
     },
-    NOT_ENOUGH_NS_DEL => sub {           # NOT_ENOUGH_NS_DEL
-        __x "Parent does not list enough ({count}) nameservers ({glue}). Lower limit set to {minimum}.", @_;
+    NOT_ENOUGH_NS_DEL => sub {
+        __x    # NOT_ENOUGH_NS_DEL
+          "Parent does not list enough ({count}) nameservers ({glue}). Lower limit set to {minimum}.", @_;
     },
-    NO_IPV4_NS_CHILD => sub {            # NO_IPV4_NS_CHILD
-        __x "Child lists no nameserver that resolves to an IPv4 address. If any were present, the minimum allowed would be {minimum}.", @_;
+    NO_IPV4_NS_CHILD => sub {
+        __x    # NO_IPV4_NS_CHILD
+          "Child lists no nameserver that resolves to an IPv4 address. "
+          . "If any were present, the minimum allowed would be {minimum}.",
+          @_;
     },
-    NO_IPV4_NS_DEL => sub {              # NO_IPV4_NS_DEL
-        __x "Delegation lists no nameserver that resolves to an IPv4 address. If any were present, the minimum allowed would be {minimum}.", @_;
+    NO_IPV4_NS_DEL => sub {
+        __x    # NO_IPV4_NS_DEL
+          "Delegation lists no nameserver that resolves to an IPv4 address. "
+          . "If any were present, the minimum allowed would be {minimum}.",
+          @_;
     },
-    NO_IPV6_NS_CHILD => sub {            # NO_IPV6_NS_CHILD
-        __x "Child lists no nameserver that resolves to an IPv6 address. If any were present, the minimum allowed would be {minimum}.", @_;
+    NO_IPV6_NS_CHILD => sub {
+        __x    # NO_IPV6_NS_CHILD
+          "Child lists no nameserver that resolves to an IPv6 address. "
+          . "If any were present, the minimum allowed would be {minimum}.",
+          @_;
     },
-    NO_IPV6_NS_DEL => sub {              # NO_IPV6_NS_DEL
-        __x "Delegation lists no nameserver that resolves to an IPv6 address. If any were present, the minimum allowed would be {minimum}.", @_;
+    NO_IPV6_NS_DEL => sub {
+        __x    # NO_IPV6_NS_DEL
+          "Delegation lists no nameserver that resolves to an IPv6 address. "
+          . "If any were present, the minimum allowed would be {minimum}.",
+          @_;
     },
-    NS_RR_IS_CNAME => sub {              # NS_RR_IS_CNAME
-        __x "Nameserver {ns} {address_type} RR point to CNAME.", @_;
+    NS_RR_IS_CNAME => sub {
+        __x    # NS_RR_IS_CNAME
+          "Nameserver {ns} {address_type} RR point to CNAME.", @_;
     },
-    NS_RR_NO_CNAME => sub {              # NS_RR_NO_CNAME
-        __x "No nameserver point to CNAME alias.", @_;
+    NS_RR_NO_CNAME => sub {
+        __x    # NS_RR_NO_CNAME
+          "No nameserver point to CNAME alias.", @_;
     },
-    REFERRAL_SIZE_TOO_LARGE => sub {     # REFERRAL_SIZE_TOO_LARGE
-        __x "The smallest possible legal referral packet is larger than 512 octets (it is {size}).", @_;
+    REFERRAL_SIZE_TOO_LARGE => sub {
+        __x    # REFERRAL_SIZE_TOO_LARGE
+          "The smallest possible legal referral packet is larger than 512 octets (it is {size}).", @_;
     },
-    REFERRAL_SIZE_OK => sub {            # REFERRAL_SIZE_OK
-        __x "The smallest possible legal referral packet is smaller than 513 octets (it is {size}).", @_;
+    REFERRAL_SIZE_OK => sub {
+        __x    # REFERRAL_SIZE_OK
+          "The smallest possible legal referral packet is smaller than 513 octets (it is {size}).", @_;
     },
-    SAME_IP_ADDRESS => sub {             # SAME_IP_ADDRESS
-        __x "IP {address} refers to multiple nameservers ({nss}).", @_;
+    SAME_IP_ADDRESS => sub {
+        __x    # SAME_IP_ADDRESS
+          "IP {address} refers to multiple nameservers ({nss}).", @_;
     },
-    SOA_EXISTS => sub {                  # SOA_EXISTS
-        __x "All the nameservers have SOA record.", @_;
+    SOA_EXISTS => sub {
+        __x    # SOA_EXISTS
+          "All the nameservers have SOA record.", @_;
     },
-    SOA_NOT_EXISTS => sub {              # SOA_NOT_EXISTS
-        __x "A SOA query NOERROR response from {ns} was received empty.", @_;
+    SOA_NOT_EXISTS => sub {
+        __x    # SOA_NOT_EXISTS
+          "A SOA query NOERROR response from {ns} was received empty.", @_;
     },
-    TOTAL_NAME_MISMATCH => sub {         # TOTAL_NAME_MISMATCH
-        __x "None of the nameservers listed at the parent are listed at the child.", @_;
+    TOTAL_NAME_MISMATCH => sub {
+        __x    # TOTAL_NAME_MISMATCH
+          "None of the nameservers listed at the parent are listed at the child.", @_;
     },
 );
 

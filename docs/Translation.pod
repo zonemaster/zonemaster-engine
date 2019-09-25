@@ -19,17 +19,18 @@ by other software.
 Each test module must also have a method named C<tag_descriptions()>. This method
 must return a reference to a hash whose entries are expected to look like this:
 
-    FRIENDLY_GREETING => sub {    # FRIENDLY_GREETING
-        __x "Hello, {name}!", @_;
-    },
+    FRIENDLY_GREETING => sub {
+        __x    # FRIENDLY_GREETING
+          "Hello, {name}!", @_;
+      },
 
 A number of things are important here.
 Keys in the hashref are message tags and values are coderefs.
 The coderef calls Locale::TextDomain::__x() with a Perl brace format string
 (a.k.a. message id) and passes along its own @_).
 The coderef propagates the return value of Locale::TextDomain::__x().
-The line immediately before __x contains a comment consisting of the message
-tag.
+The line immediately before the format string contains a comment consisting of
+the message tag.
 
 The format strings themselves, the message tag comments and the line numbers of
 the __x calls are used by the gettext tooling when updating the PO files with
