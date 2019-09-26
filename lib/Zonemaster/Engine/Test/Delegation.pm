@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::Delegation;
 
-use version; our $VERSION = version->declare("v1.0.12");
+use version; our $VERSION = version->declare("v1.0.13");
 
 use strict;
 use warnings;
@@ -55,11 +55,17 @@ sub metadata {
               NOT_ENOUGH_NS_DEL
               NOT_ENOUGH_NS_CHILD
               ENOUGH_IPV4_NS_CHILD
+              ENOUGH_IPV4_NS_DEL
               ENOUGH_IPV6_NS_CHILD
+              ENOUGH_IPV6_NS_DEL
               NOT_ENOUGH_IPV4_NS_CHILD
+              NOT_ENOUGH_IPV4_NS_DEL
               NOT_ENOUGH_IPV6_NS_CHILD
+              NOT_ENOUGH_IPV6_NS_DEL
               NO_IPV4_NS_CHILD
+              NO_IPV4_NS_DEL
               NO_IPV6_NS_CHILD
+              NO_IPV6_NS_DEL
               )
         ],
         delegation02 => [
