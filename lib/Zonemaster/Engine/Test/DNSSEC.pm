@@ -455,11 +455,13 @@ Readonly my %TAG_DESCRIPTIONS => (
     INVALID_NAME_RCODE => sub {           # INVALID_NAME_RCODE
         __x "When asked for the name {name}, which must not exist, the response had RCODE {rcode}.", @_;
     },
-    IPV4_DISABLED => sub {                  # IPV4_DISABLED
-        __x 'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
+    IPV4_DISABLED => sub {
+        __x    # IPV4_DISABLED
+	  'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
     },
-    IPV6_DISABLED => sub {                  # IPV6_DISABLED
-        __x 'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
+    IPV6_DISABLED => sub {
+        __x    # IPV6_DISABLED
+	  'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
     },
     ITERATIONS_OK => sub {                # ITERATIONS_OK
         __x "The number of NSEC3 iterations is {count}, which is OK.", @_;
