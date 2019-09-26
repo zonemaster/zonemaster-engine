@@ -171,6 +171,8 @@
             "HAS_NSEC3_OPTOUT" : "INFO",
             "HAS_NSEC" : "INFO",
             "INVALID_NAME_RCODE" : "NOTICE",
+            "IPV4_DISABLED" : "DEBUG",
+            "IPV6_DISABLED" : "DEBUG",
             "ITERATIONS_OK" : "DEBUG",
             "KEY_DETAILS" : "DEBUG",
             "MANY_ITERATIONS" : "NOTICE",
