@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::DNSSEC;
 
-use version; our $VERSION = version->declare("v1.0.12");
+use version; our $VERSION = version->declare("v1.0.13");
 
 ###
 ### This test module implements DNSSEC tests.
@@ -511,7 +511,7 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x "Key with keytag {keytag} details : Size = {keysize}, Flags ({sep}, {rfc5011}).", @_;
     },
     KEY_SIZE_OK => sub {                  # KEY_SIZE_OK
-	__x "Keys size are OK", @_;
+        __x "Keys size are OK", @_;
     },
     MANY_ITERATIONS => sub {              # MANY_ITERATIONS
         __x "The number of NSEC3 iterations is {count}, which is on the high side.", @_;
@@ -1518,7 +1518,6 @@ sub dnssec14 {
     my ( $class, $zone ) = @_;
     my @results;
     my @dnskey_rrs;
-    my %dnskey_rrs;
 
     my @nss_del   = @{ Zonemaster::Engine::TestMethods->method4( $zone ) };
     my @nss_child = @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
@@ -1531,13 +1530,13 @@ sub dnssec14 {
             address => $ns->address->short,
         };
 
-	if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
+        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
             Zonemaster::Engine->logger->add( SKIP_IPV4_DISABLED => { ns => "$ns" } );
             next;
-	}
+        }
         if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
             Zonemaster::Engine->logger->add( SKIP_IPV6_DISABLED => { ns => "$ns" } );
-	    next;
+            next;
         }
 
         my $key_p = $ns->query( $zone->name, 'DNSKEY', { dnssec => 1, usevc => 0 } );
