@@ -16,13 +16,15 @@ elsewhere. These tags will be used for translation to human language, for
 determining the severity of the even logged and to make the events easily used
 by other software.
 
-Each test module must also have a method named C<tag_descriptions()>. This method
-must return a reference to a hash whose entries are expected to look like this:
+Each test module must also have a method named C<tag_descriptions()>.
+This method must return a reference to a hash whose entries are expected to look
+like this, where C<FRIENDLY_GREETING> is a message tag and C<"Hello, {name}!">
+is a message id:
 
     FRIENDLY_GREETING => sub {
         __x    # FRIENDLY_GREETING
           "Hello, {name}!", @_;
-      },
+    },
 
 A number of things are important here.
 Keys in the hashref are message tags and values are coderefs.
