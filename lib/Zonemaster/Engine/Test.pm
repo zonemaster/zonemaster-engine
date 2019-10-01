@@ -12,16 +12,21 @@ use Zonemaster::Engine::Test::Basic;
 
 use IO::Socket::INET6;    # Lazy-loads, so make sure it's here for the version logging
 
-use Module::Find qw[useall];
+use File::ShareDir qw[dist_file];
+use File::Slurp qw[read_file];
 use Scalar::Util qw[blessed];
 use POSIX qw[strftime];
 
 my @all_test_modules;
 
-@all_test_modules =
-  sort { $a cmp $b }
-  map { my $f = $_; $f =~ s|^Zonemaster::Engine::Test::||; $f }
-  grep { $_ ne 'Zonemaster::Engine::Test::Basic' } useall( 'Zonemaster::Engine::Test' );
+BEGIN {
+    @all_test_modules = split /\n/, read_file( dist_file( 'Zonemaster-Engine', 'modules.txt' ) );
+
+    for my $name ( @all_test_modules ) {
+        require "Zonemaster/Engine/Test/$name.pm";
+        "Zonemaster::Engine::Test::$name"->import();
+    }
+}
 
 sub _log_versions {
     info( GLOBAL_VERSION => { version => Zonemaster::Engine->VERSION } );
