@@ -24,70 +24,93 @@ has 'all_tag_descriptions' => ( is => 'ro', isa => 'HashRef', builder => '_build
 ###
 
 Readonly my %TAG_DESCRIPTIONS => (
-    CANNOT_CONTINUE => sub {    # CANNOT_CONTINUE
-        __x "Not enough data about {zone} was found to be able to run tests.", @_;
+    CANNOT_CONTINUE => sub {
+        __x    # CANNOT_CONTINUE
+          "Not enough data about {zone} was found to be able to run tests.", @_;
     },
-    PROFILE_FILE => sub {       # PROFILE_FILE
-        __x "Profile was read from {name}.", @_;
+    PROFILE_FILE => sub {
+        __x    # PROFILE_FILE
+          "Profile was read from {name}.", @_;
     },
-    DEPENDENCY_VERSION => sub {    # DEPENDENCY_VERSION
-        __x "Using prerequisite module {name} version {version}.", @_;
+    DEPENDENCY_VERSION => sub {
+        __x    # DEPENDENCY_VERSION
+          "Using prerequisite module {name} version {version}.", @_;
     },
-    GLOBAL_VERSION => sub {        # GLOBAL_VERSION
-        __x "Using version {version} of the Zonemaster engine.", @_;
+    GLOBAL_VERSION => sub {
+        __x    # GLOBAL_VERSION
+          "Using version {version} of the Zonemaster engine.", @_;
     },
-    LOGGER_CALLBACK_ERROR => sub {    # LOGGER_CALLBACK_ERROR
-        __x "Logger callback died with error: {exception}", @_;
+    LOGGER_CALLBACK_ERROR => sub {
+        __x    # LOGGER_CALLBACK_ERROR
+          "Logger callback died with error: {exception}", @_;
     },
-    LOOKUP_ERROR => sub {             # LOOKUP_ERROR
-        __x "DNS query to {ns} for {name}/{type}/{class} failed with error: {message}", @_;
+    LOOKUP_ERROR => sub {
+        __x    # LOOKUP_ERROR
+          "DNS query to {ns} for {name}/{type}/{class} failed with error: {message}", @_;
     },
-    MODULE_ERROR => sub {             # MODULE_ERROR
-        __x "Fatal error in {module}: {msg}", @_;
+    MODULE_ERROR => sub {
+        __x    # MODULE_ERROR
+          "Fatal error in {module}: {msg}", @_;
     },
-    MODULE_VERSION => sub {           # MODULE_VERSION
-        __x "Using module {module} version {version}.", @_;
+    MODULE_VERSION => sub {
+        __x    # MODULE_VERSION
+          "Using module {module} version {version}.", @_;
     },
-    MODULE_END => sub {               # MODULE_END
-        __x "Module {module} finished running.", @_;
+    MODULE_END => sub {
+        __x    # MODULE_END
+          "Module {module} finished running.", @_;
     },
-    NO_NETWORK => sub {               # NO_NETWORK
-        __x "Both IPv4 and IPv6 are disabled.";
+    NO_NETWORK => sub {
+        __x    # NO_NETWORK
+          "Both IPv4 and IPv6 are disabled.";
     },
-    POLICY_DISABLED => sub {          # POLICY_DISABLED
-        __x "The module {name} was disabled by the policy.", @_;
+    POLICY_DISABLED => sub {
+        __x    # POLICY_DISABLED
+          "The module {name} was disabled by the policy.", @_;
     },
-    UNKNOWN_METHOD => sub {           # UNKNOWN_METHOD
-        __x "Request to run unknown method {method} in module {module}.", @_;
+    UNKNOWN_METHOD => sub {
+        __x    # UNKNOWN_METHOD
+          "Request to run unknown method {method} in module {module}.", @_;
     },
-    UNKNOWN_MODULE => sub {           # UNKNOWN_MODULE
-        __x "Request to run {method} in unknown module {module}. Known modules: {known}.", @_;
+    UNKNOWN_MODULE => sub {
+        __x    # UNKNOWN_MODULE
+          "Request to run {method} in unknown module {module}. Known modules: {known}.", @_;
     },
-    SKIP_IPV4_DISABLED => sub {       # SKIP_IPV4_DISABLED
-        __x "IPv4 is disabled, not sending query to {ns}.", @_;
+    SKIP_IPV4_DISABLED => sub {
+        __x    # SKIP_IPV4_DISABLED
+          "IPv4 is disabled, not sending query to {ns}.", @_;
     },
-    SKIP_IPV6_DISABLED => sub {       # SKIP_IPV6_DISABLED
-        __x "IPv6 is disabled, not sending query to {ns}.", @_;
+    SKIP_IPV6_DISABLED => sub {
+        __x    # SKIP_IPV6_DISABLED
+          "IPv6 is disabled, not sending query to {ns}.", @_;
     },
-    FAKE_DELEGATION => sub {          # FAKE_DELEGATION
-        __x "Followed a fake delegation.";
+    FAKE_DELEGATION => sub {
+        __x    # FAKE_DELEGATION
+          "Followed a fake delegation.";
     },
-    ADDED_FAKE_DELEGATION => sub {    # ADDED_FAKE_DELEGATION
-        __x "Added a fake delegation for domain {domain} to name server {ns}.", @_;
+    ADDED_FAKE_DELEGATION => sub {
+        __x    # ADDED_FAKE_DELEGATION
+          "Added a fake delegation for domain {domain} to name server {ns}.", @_;
     },
-    FAKE_DELEGATION_TO_SELF => sub {    # FAKE_DELEGATION_TO_SELF
-        __x "Name server {ns} not adding fake delegation for domain {domain} to itself.", @_;
+    FAKE_DELEGATION_TO_SELF => sub {
+        __x    # FAKE_DELEGATION_TO_SELF
+          "Name server {ns} not adding fake delegation for domain {domain} to itself.", @_;
     },
-    FAKE_DELEGATION_IN_ZONE_NO_IP => sub {    # FAKE_DELEGATION_IN_ZONE_NO_IP
-        __x "The fake delegation of domain {domain} includes an in-zone name server {ns} without mandatory glue (without IP address).", @_;
-    },
-    FAKE_DELEGATION_NO_IP => sub {            # FAKE_DELEGATION_NO_IP
-        __x
-          "The fake delegation of domain {domain} includes a name server {ns} that cannot be resolved to any IP address.",
+    FAKE_DELEGATION_IN_ZONE_NO_IP => sub {
+        __x    # FAKE_DELEGATION_IN_ZONE_NO_IP
+          "The fake delegation of domain {domain} includes an in-zone name server {ns} "
+          . "without mandatory glue (without IP address).",
           @_;
     },
-    PACKET_BIG => sub {                       # PACKET_BIG
-        __x "Packet size ({size}) exceeds common maximum size of {maxsize} bytes (try with \"{command}\").", @_;
+    FAKE_DELEGATION_NO_IP => sub {
+        __x    # FAKE_DELEGATION_NO_IP
+          "The fake delegation of domain {domain} includes a name server {ns} "
+          . "that cannot be resolved to any IP address.",
+          @_;
+    },
+    PACKET_BIG => sub {
+        __x    # PACKET_BIG
+          "Packet size ({size}) exceeds common maximum size of {maxsize} bytes (try with \"{command}\").", @_;
     },
 );
 
