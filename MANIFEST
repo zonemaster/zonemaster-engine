@@ -52,6 +52,7 @@ README.md
 share/config_example_logfilter.json
 share/iana-ipv4-special-registry.csv
 share/iana-ipv6-special-registry.csv
+share/modules.txt
 share/profile.json
 share/profile_example_logfilter.json
 share/locale/da/LC_MESSAGES/Zonemaster-Engine.mo

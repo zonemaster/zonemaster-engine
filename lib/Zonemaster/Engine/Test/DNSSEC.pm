@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::DNSSEC;
 
-use version; our $VERSION = version->declare("v1.0.10");
+use version; our $VERSION = version->declare("v1.0.12");
 
 ###
 ### This test module implements DNSSEC tests.
@@ -18,7 +18,7 @@ use List::MoreUtils qw[none];
 use List::Util qw[min];
 use Locale::TextDomain qw[Zonemaster-Engine];
 use Readonly;
-use Zonemaster::Engine::Constants qw[:algo :soa];
+use Zonemaster::Engine::Constants qw[:algo :soa :ip];
 use Zonemaster::Engine::Util;
 
 ### Table fetched from IANA on 2017-03-09
@@ -282,6 +282,8 @@ sub metadata {
               ALGORITHM_PRIVATE
               ALGORITHM_RESERVED
               ALGORITHM_UNASSIGNED
+              IPV4_DISABLED
+              IPV6_DISABLED
               KEY_DETAILS
               NO_RESPONSE
               NO_RESPONSE_DNSKEY
@@ -497,12 +499,10 @@ Readonly my %TAG_DESCRIPTIONS => (
           "When asked for the name {name}, which must not exist, the response had RCODE {rcode}.", @_;
     },
     IPV4_DISABLED => sub {
-
         __x    # IPV4_DISABLED
           'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
     },
     IPV6_DISABLED => sub {
-
         __x    # IPV6_DISABLED
           'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
     },
@@ -1019,6 +1019,30 @@ sub dnssec05 {
             ns      => $ns->name->string,
             address => $ns->address->short,
         };
+
+        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
+            push @results,
+              info(
+                IPV6_DISABLED => {
+                    ns      => $ns->name->string,
+                    address => $ns->address->short,
+                    rrtype => q{DNSKEY},
+                }
+              );
+            next;
+        }
+
+        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
+            push @results,
+              info(
+                IPV4_DISABLED => {
+                    ns      => $ns->name->string,
+                    address => $ns->address->short,
+                    rrtype => q{DNSKEY},
+                }
+              );
+            next;
+        }
 
         my $key_p = $ns->query( $zone->name, 'DNSKEY', { dnssec => 1 } );
         if ( not $key_p ) {

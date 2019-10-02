@@ -55,6 +55,8 @@
 \B\.DS_Store
 # Mac OSX SMB mount metadata files
 \B\._
+# Development mode aid for File::ShareDir
+^lib/auto/share/dist/Zonemaster-Engine
 
 # Avoid Devel::Cover and Devel::CoverX::Covered files.
 \bcover_db\b
