@@ -135,14 +135,13 @@
             "SOA_NOT_EXISTS" : "ERROR",
             "TOTAL_NAME_MISMATCH" : "ERROR"
         },
-	"DNSSEC" : {
+        "DNSSEC" : {
             "ADDITIONAL_DNSKEY_SKIPPED" : "DEBUG",
-            "ALGORITHM_DELETE_DS" : "ERROR",
-            "ALGORITHM_DEPRECATED" : "WARNING",
-            "ALGORITHM_INDIRECT_KEY" : "ERROR",
+            "ALGORITHM_DEPRECATED" : "ERROR",
+            "ALGORITHM_NOT_RECOMMENDED" : "WARNING",
             "ALGORITHM_NOT_ZONE_SIGN" : "ERROR",
             "ALGORITHM_OK" : "INFO",
-            "ALGORITHM_PRIVATE" : "WARNING",
+            "ALGORITHM_PRIVATE" : "ERROR",
             "ALGORITHM_RESERVED" : "ERROR",
             "ALGORITHM_UNASSIGNED" : "ERROR",
             "COMMON_KEYTAGS" : "INFO",
