@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::DNSSEC;
 
-use version; our $VERSION = version->declare("v1.0.13");
+use version; our $VERSION = version->declare("v1.0.14");
 
 ###
 ### This test module implements DNSSEC tests.
@@ -24,7 +24,7 @@ use Zonemaster::Engine::Util;
 ### Table fetched from IANA on 2017-03-09
 Readonly::Hash our %algo_properties => (
     0 => {
-        status      => $ALGO_STATUS_DELETE_DS,
+        status      => $ALGO_STATUS_NOT_ZONE_SIGN,
         description => q{Delete DS},
         mnemonic    => q{DELETE},
         sig         => 0,
@@ -36,13 +36,13 @@ Readonly::Hash our %algo_properties => (
         sig         => 0,
     },
     2 => {
-        status      => $ALGO_STATUS_OTHER,
+        status      => $ALGO_STATUS_NOT_ZONE_SIGN,
         description => q{Diffie-Hellman},
         mnemonic    => q{DH},
         sig         => 0,
     },
     3 => {
-        status      => $ALGO_STATUS_OTHER,
+        status      => $ALGO_STATUS_DEPRECATED,
         description => q{DSA/SHA1},
         mnemonic    => q{DSA},
         sig         => 1,
@@ -52,19 +52,19 @@ Readonly::Hash our %algo_properties => (
         description => q{Reserved},
     },
     5 => {
-        status      => $ALGO_STATUS_OTHER,
+        status      => $ALGO_STATUS_NOT_RECOMMENDED,
         description => q{RSA/SHA1},
         mnemonic    => q{RSASHA1},
         sig         => 1,
     },
     6 => {
-        status      => $ALGO_STATUS_OTHER,
+        status      => $ALGO_STATUS_DEPRECATED,
         description => q{DSA-NSEC3-SHA1},
         mnemonic    => q{DSA-NSEC3-SHA1},
         sig         => 1,
     },
     7 => {
-        status      => $ALGO_STATUS_OTHER,
+        status      => $ALGO_STATUS_NOT_RECOMMENDED,
         description => q{RSASHA1-NSEC3-SHA1},
         mnemonic    => q{RSASHA1-NSEC3-SHA1},
         sig         => 1,
@@ -80,7 +80,7 @@ Readonly::Hash our %algo_properties => (
         description => q{Reserved},
     },
     10 => {
-        status      => $ALGO_STATUS_OTHER,
+        status      => $ALGO_STATUS_NOT_RECOMMENDED,
         description => q{RSA/SHA-512},
         mnemonic    => q{RSASHA512},
         sig         => 1,
@@ -90,7 +90,7 @@ Readonly::Hash our %algo_properties => (
         description => q{Reserved},
     },
     12 => {
-        status      => $ALGO_STATUS_OTHER,
+        status      => $ALGO_STATUS_DEPRECATED,
         description => q{GOST R 34.10-2001},
         mnemonic    => q{ECC-GOST},
         sig         => 1,
@@ -126,7 +126,7 @@ Readonly::Hash our %algo_properties => (
         map { $_ => { status => $ALGO_STATUS_RESERVED, description => q{Reserved}, } } ( 123 .. 251 )
     ),
     252 => {
-        status      => $ALGO_STATUS_INDIRECT_KEY,
+        status      => $ALGO_STATUS_NOT_ZONE_SIGN,
         description => q{Reserved for Indirect Keys},
         mnemonic    => q{INDIRECT},
         sig         => 0,
@@ -305,9 +305,8 @@ sub metadata {
         ],
         dnssec05 => [
             qw(
-              ALGORITHM_DELETE_DS
               ALGORITHM_DEPRECATED
-              ALGORITHM_INDIRECT_KEY
+              ALGORITHM_NOT_RECOMMENDED
               ALGORITHM_NOT_ZONE_SIGN
               ALGORITHM_OK
               ALGORITHM_PRIVATE
@@ -398,17 +397,13 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # ADDITIONAL_DNSKEY_SKIPPED
           "No DNSKEYs found. Additional tests skipped.", @_;
     },
-    ALGORITHM_DELETE_DS => sub {
-        __x    # ALGORITHM_DELETE_DS
-          "The DNSKEY with tag {keytag} uses Delete DS algorithm number {algorithm}/({description}).", @_;
-    },
     ALGORITHM_DEPRECATED => sub {
         __x    # ALGORITHM_DEPRECATED
           "The DNSKEY with tag {keytag} uses deprecated algorithm number {algorithm}/({description}).", @_;
     },
-    ALGORITHM_INDIRECT_KEY => sub {
-        __x    # ALGORITHM_INDIRECT_KEY
-          "The DNSKEY with tag {keytag} uses algorithm number reserved for indirect keys {algorithm}/({description}).",
+    ALGORITHM_NOT_RECOMMENDED => sub {
+        __x    # ALGORITHM_NOT_RECOMMENDED
+          "The DNSKEY with tag {keytag} uses an algorithm number {algorithm}/({description} which which is not recommended to be used.",
           @_;
     },
     ALGORITHM_NOT_ZONE_SIGN => sub {
@@ -1120,13 +1115,13 @@ sub dnssec05 {
             elsif ( $algo_properties{$algo}{status} == $ALGO_STATUS_PRIVATE ) {
                 push @results, info( ALGORITHM_PRIVATE => $algo_args );
             }
-            elsif ( $algo_properties{$algo}{status} == $ALGO_STATUS_DELETE_DS ) {
-                push @results, info( ALGORITHM_DELETE_DS => $algo_args );
+            elsif ( $algo_properties{$algo}{status} == $ALGO_STATUS_NOT_ZONE_SIGN ) {
+                push @results, info( ALGORITHM_NOT_ZONE_SIGN => $algo_args );
             }
-            elsif ( $algo_properties{$algo}{status} == $ALGO_STATUS_INDIRECT_KEY ) {
-                push @results, info( ALGORITHM_INDIRECT_KEY => $algo_args );
+            elsif ( $algo_properties{$algo}{status} == $ALGO_STATUS_NOT_RECOMMENDED ) {
+                push @results, info( ALGORITHM_NOT_RECOMMENDED => $algo_args );
             }
-            elsif ( $algo_properties{$algo}{sig} ) {
+            else {
                 push @results, info( ALGORITHM_OK => $algo_args );
                 if ( $key->flags & 256 ) {    # This is a Key
                     push @results,
@@ -1143,9 +1138,6 @@ sub dnssec05 {
                 }
             }
 
-            if ( not $algo_properties{$algo}{sig} ) {
-                push @results, info( ALGORITHM_NOT_ZONE_SIGN => $algo_args );
-            }
         } ## end foreach my $key ( @keys )
     }
 
