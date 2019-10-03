@@ -385,6 +385,8 @@ sub metadata {
               DNSKEY_SMALLER_THAN_REC
               DNSKEY_TOO_SMALL_FOR_ALGO
               DNSKEY_TOO_LARGE_FOR_ALGO
+              IPV4_DISABLED
+              IPV6_DISABLED
               KEY_SIZE_OK
               ),
         ],
@@ -1563,13 +1565,28 @@ sub dnssec14 {
             ns      => $ns->name->string,
             address => $ns->address->short,
         };
-
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
-            Zonemaster::Engine->logger->add( SKIP_IPV4_DISABLED => { ns => "$ns" } );
+	
+        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
+            push @results,
+              info(
+                IPV6_DISABLED => {
+                    ns      => $ns->name->string,
+                    address => $ns->address->short,
+                    rrtype => q{DNSKEY},
+                }
+              );
             next;
         }
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
-            Zonemaster::Engine->logger->add( SKIP_IPV6_DISABLED => { ns => "$ns" } );
+
+        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
+            push @results,
+              info(
+                IPV4_DISABLED => {
+                    ns      => $ns->name->string,
+                    address => $ns->address->short,
+                    rrtype => q{DNSKEY},
+                }
+              );
             next;
         }
 
