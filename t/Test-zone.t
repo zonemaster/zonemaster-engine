@@ -46,12 +46,23 @@ $zone = Zonemaster::Engine->zone( q{zone05.zut-root.rd.nic.fr} );
 %res = map { $_->tag => 1 } Zonemaster::Engine->test_method( q{Zone}, q{zone09}, $zone );
 ok( $res{NO_MX_RECORD}, q{No MX records} );
 
-SKIP: {
-    skip "Zone does not actually have tested problem", 1,
-    $zone = Zonemaster::Engine->zone( q{see2meet.se} );
-    %res = map { $_->tag => 1 } Zonemaster::Engine->test_method( q{Zone}, q{zone08}, $zone );
-    ok( $res{MX_RECORD_IS_CNAME}, q{MX record is CNAME} );
-}
+#
+# zone08
+#
+$zone = Zonemaster::Engine->zone( q{zone08-mx-are-cname.zut-root.rd.nic.fr} );
+%res = map { $_->tag => 1 } Zonemaster::Engine->test_method( q{Zone}, q{zone08}, $zone );
+ok( $res{MX_RECORD_IS_CNAME}, q{MX records are CNAME} );
+ok( !$res{MX_RECORD_IS_NOT_CNAME}, q{MX records are CNAME (only CNAME found)} );
+
+$zone = Zonemaster::Engine->zone( q{zone08-mx-are-not-cname.zut-root.rd.nic.fr} );
+%res = map { $_->tag => 1 } Zonemaster::Engine->test_method( q{Zone}, q{zone08}, $zone );
+ok( $res{MX_RECORD_IS_NOT_CNAME}, q{MX records are NOT_CNAME} );
+ok( !$res{MX_RECORD_IS_CNAME}, q{MX records are NOT_CNAME (no CNAME found)} );
+
+$zone = Zonemaster::Engine->zone( q{zone08-one-mx-is-cname.zut-root.rd.nic.fr} );
+%res = map { $_->tag => 1 } Zonemaster::Engine->test_method( q{Zone}, q{zone08}, $zone );
+ok( $res{MX_RECORD_IS_CNAME}, q{mixed MX records are partially CNAME} );
+ok( $res{MX_RECORD_IS_NOT_CNAME}, q{mixed MX records are partially NOT CNAME} );
 
 %res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{Zone}, q{zone02.zut-root.rd.nic.fr} );
 ok( $res{MNAME_NOT_AUTHORITATIVE},    q{SOA 'mname' nameserver is not authoritative for zone} );
