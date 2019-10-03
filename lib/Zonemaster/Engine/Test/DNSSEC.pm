@@ -548,6 +548,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     IPV6_DISABLED => sub {
         __x    # IPV6_DISABLED
+          'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
     },
     ITERATIONS_OK => sub {
         __x    # ITERATIONS_OK
