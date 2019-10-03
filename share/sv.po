@@ -1,6 +1,8 @@
-msgid  ""
+msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-09-25 18:32+0200\n"
 "PO-Revision-Date: 2017-12-15\n"
 "Last-Translator: mats.dufberg@iis.se\n"
 "Language-Team: Zonemaster Team\n"
@@ -9,563 +11,388 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-# # IMPORTANT ##
-# Keep this file in sync with en.po
-# #
-#: ADDRESS:NAMESERVERS_IP_WITH_REVERSE
-msgid  "Reverse DNS entry exist for all Nameserver IP addresses."
-msgstr "Bakåtuppslagning finns för varje namnserveradress."
-
-#: ADDRESS:NAMESERVER_IP_PRIVATE_NETWORK
-msgid  ""
-"Nameserver {ns} has an IP address ({address}) with prefix {prefix} "
-"referenced in {reference} as a '{name}'."
+#. SOA_NOT_EXISTS
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:277
+#, perl-brace-format
+msgid "A SOA query NOERROR response from {ns} was received empty."
 msgstr ""
-"Namnservern {ns} har en IP-adress ({address}) med prefixet {prefix}, som "
-"{reference} klassificerar som '{name}'."
+"En SOA-fråga fick ett svar med 'RCODE NOERROR' från {ns}, men svaret var "
+"tomt."
 
-#: ADDRESS:NAMESERVER_IP_PTR_MATCH
-msgid  "All reverse DNS entry matches name server name."
-msgstr "Varje bakåtuppslagning stämmer med motsvarande namnservernamn."
-
-#: ADDRESS:NAMESERVER_IP_PTR_MISMATCH
-msgid  ""
-"Nameserver {ns} has an IP address ({address}) with mismatched PTR result "
-"({names})."
+#. DNSKEY_SIGNATURE_OK
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:419
+#, perl-brace-format
+msgid "A signature for DNSKEY with tag {signature} was correctly signed."
 msgstr ""
-"Namnservern '{ns}' har en IP-adress ({address}) med en icke-matchande "
-"bakåtuppslagning ({names})."
+"Verifiering av en signatur för DNSKEY-posten med 'keytag' {signature} "
+"lyckades."
 
-#: ADDRESS:NAMESERVER_IP_WITHOUT_REVERSE
-msgid  "Nameserver {ns} has an IP address ({address}) without PTR configured."
-msgstr "Namnservern '{ns}' har en IP-adress ({address}) utan bakåtuppslagning."
-
-#: ADDRESS:NO_IP_PRIVATE_NETWORK
-msgid  "All Nameserver addresses are in the routable public addressing space."
-msgstr ""
-"Alla namnserveradresser finns i den publikt routningsbara addressrymden."
-
-#: ADDRESS:NO_RESPONSE_PTR_QUERY
-msgid  "No response from nameserver(s) on PTR query ({reverse})."
-msgstr "Inget svar från namnservern på PTR-fråga ({reverse})."
-
-#: BASIC:A_QUERY_NO_RESPONSES
-msgid  "Nameservers did not respond to A query."
-msgstr "Namnservern svarade inte på en A-fråga."
-
-#: BASIC:DOMAIN_NAME_LABEL_TOO_LONG
-msgid  ""
-"Domain name ({dname}) has a label ({dlabel}) too long ({dlength}/{max})."
-msgstr ""
-"Domändelen '{dlabel}' i domännamnet {dname} är för lång ({dlength}/{max})."
-
-#: BASIC:DOMAIN_NAME_TOO_LONG
-msgid  "Domain name is too long ({fqdnlength}/{max})."
-msgstr "Domännamnet är för långt ({fqdnlength}/{max})."
-
-#: BASIC:DOMAIN_NAME_ZERO_LENGTH_LABEL
-msgid  "Domain name ({dname}) has a zero length label."
-msgstr "Domännamnet '{dname}' har en domändel med längden noll."
-
-#: BASIC:HAS_A_RECORDS
-msgid  "Nameserver {ns}/{address} returned A record(s) for {dname}."
-msgstr "Namnservern '{ns}/{address}' svarade med A-poster för '{dname}'."
-
-#: BASIC:HAS_NAMESERVERS
-msgid  "Nameserver {ns} listed these servers as glue: {nsnlist}."
-msgstr "Namnservern '{ns}' gav dessa servrar som 'glue': {nsnlist}."
-
-#: BASIC:HAS_NAMESERVER_NO_WWW_A_TEST
-msgid  "Functional nameserver found. \"A\" query for www.{zname} test aborted."
-msgstr ""
-"En fungerande namnserver hittades. Skickade ingen fråga om 'A' för 'www."
-"{zname}' (behövdes inte)."
-
-#: BASIC:HAS_PARENT
-msgid  "Parent domain '{pname}' was found for the tested domain."
-msgstr "Moderdomänen '{pname}' till den testade domänen har identifierats."
-
-#: BASIC:IPV4_DISABLED CONNECTIVITY:IPV4_DISABLED CONSISTENCY:IPV4_DISABLED
-#: DELEGATION:IPV4_DISABLED NAMESERVER:IPV4_DISABLED
-msgid  "IPv4 is disabled, not sending \"{rrtype}\" query to {ns}/{address}."
-msgstr ""
-"IPv4 är avstängt. Skickar ingen fråga om '{rrtype}' till {ns}/{address}."
-
-#: BASIC:IPV4_ENABLED
-msgid  "IPv4 is enabled, can send \"{rrtype}\" query to {ns}/{address}."
-msgstr "IPv4 är påslaget. Skickar fråga om '{rrtype}' till {ns}/{address}."
-
-#: BASIC:IPV6_DISABLED CONNECTIVITY:IPV6_DISABLED CONSISTENCY:IPV6_DISABLED
-#: DELEGATION:IPV6_DISABLED NAMESERVER:IPV6_DISABLED
-msgid  "IPv6 is disabled, not sending \"{rrtype}\" query to {ns}/{address}."
-msgstr ""
-"IPv6 är avstängt. Skickar ingen fråga om '{rrtype}' till {ns}/{address}."
-
-#: BASIC:IPV6_ENABLED
-msgid  "IPv6 is enabled, can send \"{rrtype}\" query to {ns}/{address}."
-msgstr "IPv6 är påslaget. Skickar fråga om '{rrtype}' till {ns}/{address}."
-
-#: BASIC:NO_A_RECORDS
-msgid  "Nameserver {ns}/{address} did not return A record(s) for {dname}."
-msgstr ""
-"Namnservern {ns}/{address} svarade inte med några A-poster för '{dname}'."
-
-#: BASIC:NO_GLUE_PREVENTS_NAMESERVER_TESTS
-msgid  "No NS records for tested zone from parent. NS tests aborted."
-msgstr ""
-"Inga NS-poster för den testade zonen från föräldern. NS-tester hoppas över."
-
-#: BASIC:NO_PARENT
-msgid  "No parent domain could be found for the tested domain."
-msgstr "Ingen moderdomän kunde hittas för den testade domänen."
-
-#: BASIC:NS_FAILED
-msgid  "Nameserver {ns}/{address} did not return NS records. RCODE was {rcode}."
-msgstr ""
-"Namnservern {ns}/{address} svarade inte med några NS-poster. RCODE var "
-"'{rcode}'."
-
-#: BASIC:NS_NO_RESPONSE
-msgid  "Nameserver {ns}/{address} did not respond to NS query."
-msgstr "Namnservern {ns}/{address} svarade inte på frågan om 'NS'."
-
-#: CONNECTIVITY:ASN_INFOS_ANNOUNCE_BY
-msgid  "[ASN:ANNOUNCE_BY] {address};{asn}"
-msgstr "[ASN:ANNOUNCE_BY] {address};{asn}"
-
-#: CONNECTIVITY:ASN_INFOS_ANNOUNCE_IN
-msgid  "[ASN:ANNOUNCE_IN] {address};{prefix}"
-msgstr "[ASN:ANNOUNCE_IN] {address};{prefix}"
-
-#: CONNECTIVITY:ASN_INFOS_RAW
-msgid  "[ASN:RAW] {address};{data}"
-msgstr "[ASN:RAW] {address};{data}"
-
-#: CONNECTIVITY:IPV4_ASN
-msgid  "Name servers have IPv4 addresses in the following ASs: {asn}."
-msgstr "Namnservrarna har IPv4-adresser i följande AS: {asn}."
-
-#: CONNECTIVITY:IPV6_ASN
-msgid  "Name servers have IPv6 addresses in the following ASs: {asn}."
-msgstr "Namnservrarna har IPv6-adresser i följande AS: {asn}."
-
-#: CONNECTIVITY:NAMESERVERS_IPV4_NO_AS
-msgid  "No IPv4 nameserver address is in an AS."
-msgstr "Ingen namnserver har någon IPv4-adress i något AS."
-
-#: CONNECTIVITY:NAMESERVERS_IPV4_WITH_MULTIPLE_AS
-msgid  "Authoritative IPv4 nameservers are in more than one AS."
-msgstr ""
-"IPv4-adresserna för de auktoritativa namnservrarna för domännamnet finns i "
-"mer än ett AS."
-
-#: CONNECTIVITY:NAMESERVERS_IPV4_WITH_UNIQ_AS
-msgid  "All nameservers IPv4 addresses are in the same AS ({asn})."
-msgstr ""
-"Alla IPv4-adresser för namnservrarna i delegeringen finns i samma AS ({asn})."
-
-#: CONNECTIVITY:NAMESERVERS_IPV6_NO_AS
-msgid  "No IPv6 nameserver address is in an AS."
-msgstr "Ingen namnserver har någon IPv6-adress i något AS."
-
-#: CONNECTIVITY:NAMESERVERS_IPV6_WITH_MULTIPLE_AS
-msgid  "Authoritative IPv6 nameservers are in more than one AS."
-msgstr ""
-"IPv6-adresserna för de auktoritativa namnservrarna för domännamnet finns i "
-"mer än ett AS."
-
-#: CONNECTIVITY:NAMESERVERS_IPV6_WITH_UNIQ_AS
-msgid  "All nameservers IPv6 addresses are in the same AS ({asn})."
-msgstr ""
-"Alla IPv6-adresser för namnservrar i delegeringen finns i samma AS ({asn})."
-
-#: CONNECTIVITY:NAMESERVERS_NO_AS
-msgid  "No nameserver address is in an AS."
-msgstr "Ingen namnserver har någon adress i något AS."
-
-#: CONNECTIVITY:NAMESERVERS_WITH_MULTIPLE_AS
-msgid  "Domain's authoritative nameservers do not belong to the same AS."
-msgstr ""
-"IP-adresserna för domänens auktoritativa namnservrar finns i mer än ett AS."
-
-#: CONNECTIVITY:NAMESERVERS_WITH_UNIQ_AS
-msgid  "All nameservers are in the same AS ({asn})."
-msgstr "Alla namnservrar i delegeringen av domänen finns i samma AS ({asn})."
-
-#: CONNECTIVITY:NAMESERVER_HAS_TCP_53
-msgid  "Nameserver {ns}/{address} accessible over TCP on port 53."
-msgstr "Namnservern {ns}/{address} är åtkomlig med TCP på port 53."
-
-#: CONNECTIVITY:NAMESERVER_HAS_UDP_53
-msgid  "Nameserver {ns}/{address} accessible over UDP on port 53."
-msgstr "Namnservern {ns}/{address} är åtkomlig med UDP på port 53."
-
-#: CONNECTIVITY:NAMESERVER_NO_TCP_53
-msgid  "Nameserver {ns}/{address} not accessible over TCP on port 53."
-msgstr "Namnservern {ns}/{address} är inte åtkomlig över TCP på port 53."
-
-#: CONNECTIVITY:NAMESERVER_NO_UDP_53
-msgid  "Nameserver {ns}/{address} not accessible over UDP on port 53."
-msgstr "Namnservern {ns}/{address} är inte åtkomlig över UDP på port 53."
-
-#: CONSISTENCY:ADDRESSES_MATCH
-msgid  "Glue records are consistent between glue and authoritative data."
-msgstr ""
-"Glue-poster stämmer överens mellan delegering och auktoritativ data "
-"(dotterzon)."
-
-#: CONSISTENCY:EXTRA_ADDRESS_CHILD
-msgid  ""
-"Child has extra nameserver IP address(es) not listed at parent ({addresses})."
-msgstr ""
-"Dotterzonen har extra namnserver-IP-adress(er) som inte finns med i "
-"moderzonen ({addresses})."
-
-#: CONSISTENCY:EXTRA_ADDRESS_PARENT
-msgid  ""
-"Parent has extra nameserver IP address(es) not listed at child ({addresses})."
-msgstr ""
-"Moderzonen har extra namnserver-IP-adress(er) som inte finns med i "
-"dotterzonen ({addresses})."
-
-#: CONSISTENCY:MULTIPLE_NS_SET
-msgid  "Saw {count} NS set."
-msgstr "{count} NS-uppsättningar hittades."
-
-#: CONSISTENCY:MULTIPLE_SOA_RNAMES
-msgid  "Saw {count} SOA rname."
-msgstr "{count} olika 'SOA RNAME' hittades."
-
-#: CONSISTENCY:MULTIPLE_SOA_SERIALS
-msgid  "Saw {count} SOA serial numbers."
-msgstr "{count} olika SOA-serienummer hittades."
-
-#: CONSISTENCY:MULTIPLE_SOA_TIME_PARAMETER_SET
-msgid  "Saw {count} SOA time parameter set."
-msgstr "{count} olika uppsättningar med SOA-tidsparametrar hittades."
-
-#: CONSISTENCY:NO_RESPONSE
-msgid  "Nameserver {ns}/{address} did not respond."
-msgstr "Inget svar från namnservern '{ns}/{address}'."
-
-#: CONSISTENCY:NO_RESPONSE_NS_QUERY
-msgid  "No response from nameserver {ns}/{address} on NS queries."
-msgstr "Inget svar från namnservern '{ns}/{address}' på fråga efter NS-post."
-
-#: CONSISTENCY:NO_RESPONSE_SOA_QUERY
-msgid  "No response from nameserver {ns}/{address} on SOA queries."
-msgstr "Inget svar från namnservern '{ns}/{address}' på fråga efter SOA-post."
-
-#: CONSISTENCY:NS_SET
-msgid  "Saw NS set ({nsset}) on following nameserver set : {servers}."
-msgstr "NS-uppsättningen '{nsset}' hittades på följande namnservrar: {servers}"
-
-#: CONSISTENCY:ONE_NS_SET
-msgid  "A unique NS set was seen ({nsset})."
-msgstr "Exakt en uppsättning namnservrar hittades: ({nsset})."
-
-#: CONSISTENCY:ONE_SOA_RNAME
-msgid  "A single SOA rname value was seen ({rname})"
+#. ONE_SOA_RNAME
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:191
+#, perl-brace-format
+msgid "A single SOA rname value was seen ({rname})"
 msgstr "Exakt en 'SOA RNAME' hittades: ({rname})"
 
-#: CONSISTENCY:ONE_SOA_SERIAL
-msgid  "A single SOA serial number was seen ({serial})."
+#. ONE_SOA_SERIAL
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:195
+#, perl-brace-format
+msgid "A single SOA serial number was seen ({serial})."
 msgstr "Exakt ett SOA-serienummer hittades: ({serial})."
 
-#: CONSISTENCY:ONE_SOA_TIME_PARAMETER_SET
-msgid  ""
+#. ONE_SOA_TIME_PARAMETER_SET
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:199
+#, perl-brace-format
+msgid ""
 "A single SOA time parameter set was seen (REFRESH={refresh},RETRY={retry},"
 "EXPIRE={expire},MINIMUM={minimum})."
 msgstr ""
 "Exakt en uppsättning SOA-tidsparametrar hittades: (REFRESH={refresh},"
 "RETRY={retry},EXPIRE={expire},MINIMUM={minimum})."
 
-#: CONSISTENCY:SOA_RNAME
-msgid  "Saw SOA rname {rname} on following nameserver set : {servers}."
-msgstr "'{rname}' fanns i 'SOA RNAME' på följande namnservrar: {servers}."
+#. ONE_NS_SET
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:183
+#, perl-brace-format
+msgid "A unique NS set was seen ({nsset})."
+msgstr "Exakt en uppsättning namnservrar hittades: ({nsset})."
 
-#: CONSISTENCY:SOA_SERIAL
-msgid  "Saw SOA serial number {serial} on following nameserver set : {servers}."
-msgstr "SOA-serienumret {serial} hittades på följande namnservrar: {servers}."
+#. AXFR_FAILURE
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:204
+#, perl-brace-format
+msgid "AXFR not available on nameserver {ns}/{address}."
+msgstr "AXFR är inte tillgänglig från namnservern {ns}/{address}."
 
-#: CONSISTENCY:SOA_SERIAL_VARIATION
-msgid  ""
-"Difference between the smaller serial ({serial_min}) and the bigger one "
-"({serial_max}) is greater than the maximum allowed ({max_variation})."
+#. ADDED_FAKE_DELEGATION
+#: ../lib/Zonemaster/Engine/Translator.pm:93
+#, perl-brace-format
+msgid "Added a fake delegation for domain {domain} to name server {ns}."
 msgstr ""
-"Spannet mellan högsta och lägsta SOA-serienumret är större än "
-"{max_variation}."
+"Lade till en skapad delegering för domänen '{domain}' till namnserver '{ns}'."
 
-#: CONSISTENCY:SOA_TIME_PARAMETER_SET
-msgid  ""
-"Saw SOA time parameter set (REFRESH={refresh},RETRY={retry},EXPIRE={expire},"
-"MINIMUM={minimum}) on following nameserver set : {servers}."
+#. NO_IP_PRIVATE_NETWORK
+#: ../lib/Zonemaster/Engine/Test/Address.pm:87
+msgid "All Nameserver addresses are in the routable public addressing space."
 msgstr ""
-"SOA-tidsparametrarna (REFRESH={refresh},RETRY={retry},EXPIRE={expire},"
-"MINIMUM={minimum}) hittades på följande namnservrar: {servers}."
+"Alla namnserveradresser finns i den publikt routningsbara addressrymden."
 
-#: CONSISTENCY:TOTAL_ADDRESS_MISMATCH
-msgid  ""
-"No common nameserver IP addresses between child ({child}) and parent "
-"({glue})."
+#. NAMESERVERS_IPV4_WITH_UNIQ_AS
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:92
+#, perl-brace-format
+msgid "All nameservers IPv4 addresses are in the same AS ({asn})."
 msgstr ""
-"Det finns inga gemensamma namnserver-IP-adresser mellan moderzon ({glue}) "
-"och dotterzon ({child})."
+"Alla IPv4-adresser för namnservrarna i delegeringen finns i samma AS ({asn})."
 
-#: DELEGATION:ARE_AUTHORITATIVE
-msgid  "All these nameservers are confirmed to be authoritative : {nsset}."
-msgstr "Följande namnservrar är auktoritativa : {nsset}."
-
-#: DELEGATION:DISTINCT_IP_ADDRESS
-msgid  "All the IP addresses used by the nameservers are unique"
+#. NAMESERVERS_IPV6_WITH_UNIQ_AS
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:96
+#, perl-brace-format
+msgid "All nameservers IPv6 addresses are in the same AS ({asn})."
 msgstr ""
-"Varje namnserver har unika IP-adress som inte delas med andra namnservrar."
+"Alla IPv6-adresser för namnservrar i delegeringen finns i samma AS ({asn})."
 
-#: DELEGATION:ENOUGH_NS
-msgid  ""
-"Child lists enough ({count}) nameservers ({ns}). Lower limit set to "
-"{minimum}."
+#. NAMESERVERS_WITH_UNIQ_AS
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:104
+#, perl-brace-format
+msgid "All nameservers are in the same AS ({asn})."
+msgstr "Alla namnservrar i delegeringen av domänen finns i samma AS ({asn})."
+
+#. SAME_SOURCE_IP
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:325
+msgid "All nameservers reply with same IP used to query them."
 msgstr ""
-"Dotterzonen har tillräckligt många ({count}) namnservrar ({ns}). Minsta "
-"tillåtna antal är {minimum}."
+"Alla namnservrar skickade svar från samma IP-adress som frågan ställdes till."
 
-#: DELEGATION:ENOUGH_NS_GLUE
-msgid  ""
-"Parent lists enough ({count}) nameservers ({glue}). Lower limit set to "
-"{minimum}."
-msgstr ""
-"Delegeringen i moderzonen har tillräckligt många ({count}) namnservrar "
-"({glue}). Minsta tillåtna antalet är {minimum}."
+#. CAN_BE_RESOLVED
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:212
+msgid "All nameservers succeeded to resolve to an IP address."
+msgstr "Alla namnservrar kunde slås upp till minst en IP-adress."
 
-#: DELEGATION:EXTRA_NAME_CHILD
-msgid  "Child has nameserver(s) not listed at parent ({extra})."
-msgstr ""
-"Dotterzonen har en eller flera namnservrar som inte finns i delegeringen i "
-"moderzonen ({extra})."
-
-#: DELEGATION:EXTRA_NAME_PARENT
-msgid  "Parent has nameserver(s) not listed at the child ({extra})."
-msgstr ""
-"Delegeringen i moderzonen har en eller flera namnservrar som inte listas på "
-"dotterzonen ({extra})."
-
-#: DELEGATION:IS_NOT_AUTHORITATIVE
-msgid  "Nameserver {ns} response is not authoritative on {proto} port 53."
-msgstr "Namnservern '{ns}' svarade inte auktoritativt på {proto} port 53."
-
-#: DELEGATION:NAMES_MATCH
-msgid  "All of the nameserver names are listed both at parent and child."
+#. NAMES_MATCH
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:193
+msgid "All of the nameserver names are listed both at parent and child."
 msgstr ""
 "Alla namnservrar (NS-poster) finns både i delegeringen (moderzon) och i "
 "dotterzonen."
 
-#: DELEGATION:NOT_ENOUGH_NS
-msgid  ""
+#. NAMESERVER_IP_PTR_MATCH
+#: ../lib/Zonemaster/Engine/Test/Address.pm:95
+msgid "All reverse DNS entry matches name server name."
+msgstr "Varje bakåtuppslagning stämmer med motsvarande namnservernamn."
+
+#. DISTINCT_IP_ADDRESS
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:137
+msgid "All the IP addresses used by the nameservers are unique"
+msgstr ""
+"Varje namnserver har unika IP-adress som inte delas med andra namnservrar."
+
+#. SOA_EXISTS
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:273
+msgid "All the nameservers have SOA record."
+msgstr "Alla namnservrar har en SOA-post."
+
+#. ARE_AUTHORITATIVE
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:117
+#, perl-brace-format
+msgid "All these nameservers are confirmed to be authoritative : {nsset}."
+msgstr "Följande namnservrar är auktoritativa : {nsset}."
+
+#. DS_MATCH_FOUND
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:451
+msgid "At least one DS record with a matching DNSKEY record was found."
+msgstr "Det finns minst en DS-post med med en matchande DNSKEY-post."
+
+#. SOA_SIGNED
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:627
+msgid "At least one RRSIG correctly signs the SOA RRset."
+msgstr "Det finns minst en RRSIG-post som korrekt signerar SOA-posten."
+
+#. NSEC_SIGNED
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:587
+msgid "At least one signature correctly signed the NSEC RRset."
+msgstr "Det finns minst en korrekt signatur (RRSIG) för NSEC-posterna."
+
+#. NSEC3_SIGNED
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:567
+msgid "At least one signature correctly signed the NSEC3 RRset."
+msgstr "Det finns minst en signatur som korrekt signerar NSEC3-posterna."
+
+#. NAMESERVERS_IPV4_WITH_MULTIPLE_AS
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:112
+msgid "Authoritative IPv4 nameservers are in more than one AS."
+msgstr ""
+"IPv4-adresserna för de auktoritativa namnservrarna för domännamnet finns i "
+"mer än ett AS."
+
+#. NAMESERVERS_IPV6_WITH_MULTIPLE_AS
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:120
+msgid "Authoritative IPv6 nameservers are in more than one AS."
+msgstr ""
+"IPv6-adresserna för de auktoritativa namnservrarna för domännamnet finns i "
+"mer än ett AS."
+
+#. NO_NETWORK
+#: ../lib/Zonemaster/Engine/Translator.pm:65
+msgid "Both IPv4 and IPv6 are disabled."
+msgstr "Både IPv4 och IPv6 är inaktiverade."
+
+#. NO_ENDING_HYPHENS
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:209
+#, perl-brace-format
+msgid "Both ends of all labels of the domain name ({name}) have no hyphens."
+msgstr ""
+"Domännamnet '{name}' har ingen domändel som börjar eller slutar med ett "
+"bindestreck."
+
+#. NO_KEYS_OR_NO_SIGS
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:529
+#, perl-brace-format
+msgid ""
+"Cannot test DNSKEY signatures, because we got {keys} DNSKEY records and "
+"{sigs} RRSIG records."
+msgstr ""
+"Kan inte testa DNSKEY-signaturer, eftersom vi fick {keys} DNSKEY-poster och "
+"{sigs} RRSIG-poster."
+
+#. NO_KEYS_OR_NO_SIGS_OR_NO_SOA
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:533
+#, perl-brace-format
+msgid ""
+"Cannot test SOA signatures, because we got {keys} DNSKEY records, {sigs} "
+"RRSIG records and {soas} SOA records."
+msgstr ""
+"Kan inte testa DNSSEC-signaturer för SOA-posten, eftersom vi fick {keys} "
+"DNSKEY-poster, {sigs} RRSIG-poster och {soas} SOA-poster."
+
+#. NOT_ENOUGH_NS_CHILD
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:221
+#, fuzzy, perl-brace-format
+msgid ""
 "Child does not list enough ({count}) nameservers ({ns}). Lower limit set to "
 "{minimum}."
 msgstr ""
 "Det finns inte tillräckligt många namnservrar (NS-poster) i dotterzonen "
 "({count}). Minsta tillåtna antal är {minimum}."
 
-#: DELEGATION:NOT_ENOUGH_NS_GLUE
-msgid  ""
-"Parent does not list enough ({count}) nameservers ({glue}). Lower limit set "
-"to {minimum}."
+#. EXTRA_ADDRESS_CHILD
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:131
+#, perl-brace-format
+msgid ""
+"Child has extra nameserver IP address(es) not listed at parent ({addresses})."
 msgstr ""
-"Det finns inte tillräckligt många ({count}) namnservrar (NS-poster) i "
-"delegeringen (moderzonen). Minsta tillåtna antal är {minimum}."
+"Dotterzonen har extra namnserver-IP-adress(er) som inte finns med i "
+"moderzonen ({addresses})."
 
-#: DELEGATION:NS_RR_IS_CNAME
-msgid  "Nameserver {ns} {address_type} RR point to CNAME."
-msgstr "Namnservern '{ns}' har en CNAME-post."
-
-#: DELEGATION:NS_RR_NO_CNAME
-msgid  "No nameserver point to CNAME alias."
-msgstr "Inget namnservernamn har en CNAME-post."
-
-#: DELEGATION:REFERRAL_SIZE_LARGE
-msgid  ""
-"The smallest possible legal referral packet is larger than 512 octets (it is "
-"{size})."
+#. EXTRA_NAME_CHILD
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:173
+#, perl-brace-format
+msgid "Child has nameserver(s) not listed at parent ({extra})."
 msgstr ""
-"Minsta möjliga giltiga hänvisningspaket är större än 512 byte (det är {size} "
-"byte)."
+"Dotterzonen har en eller flera namnservrar som inte finns i delegeringen i "
+"moderzonen ({extra})."
 
-#: DELEGATION:REFERRAL_SIZE_OK
-msgid  ""
-"The smallest possible legal referral packet is smaller than 513 octets (it "
-"is {size})."
+#. ENOUGH_NS_CHILD
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:165
+#, perl-brace-format
+msgid ""
+"Child lists enough ({count}) nameservers ({ns}). Lower limit set to "
+"{minimum}."
 msgstr ""
-"Minsta möjliga giltiga hänvisningspaket är på 512 byte eller mindre (det är "
-"{size} byte)."
+"Dotterzonen har tillräckligt många ({count}) namnservrar ({ns}). Minsta "
+"tillåtna antal är {minimum}."
 
-#: DELEGATION:SAME_IP_ADDRESS
-msgid  "IP {address} refers to multiple nameservers ({nss})."
-msgstr "IP-adressen {address} referrerar till flera namnservrar ({nss})."
-
-#: DELEGATION:SOA_EXISTS
-msgid  "All the nameservers have SOA record."
-msgstr "Alla namnservrar har en SOA-post."
-
-#: DELEGATION:SOA_NOT_EXISTS
-msgid  "A SOA query NOERROR response from {ns} was received empty."
+#. LOOKUP_ERROR
+#: ../lib/Zonemaster/Engine/Translator.pm:49
+#, perl-brace-format
+msgid ""
+"DNS query to {ns} for {name}/{type}/{class} failed with error: {message}"
 msgstr ""
-"En SOA-fråga fick ett svar med 'RCODE NOERROR' från {ns}, men svaret var "
-"tomt."
+"DNS-fråga till {ns} för {name}/{type}/{class} misslyckades med felet: "
+"'{message}'"
 
-#: DELEGATION:TOTAL_NAME_MISMATCH
-msgid  "None of the nameservers listed at the parent are listed at the child."
-msgstr ""
-"Ingen av de namnservrar som finns i delegeringen (moderzonen) finns i "
-"dotterzonen."
-
-#: DNSSEC:ADDITIONAL_DNSKEY_SKIPPED
-msgid  "No DNSKEYs found. Additional tests skipped."
-msgstr "Inga DNSKEY-poster hittades. Resterande DNSSEC-tester hoppas över."
-
-#: DNSSEC:ALGORITHM_DEPRECATED
-msgid  ""
-"The DNSKEY with tag {keytag} uses deprecated algorithm number {algorithm}/"
-"({description})."
-msgstr ""
-"DNSKEY-posten med 'tag' {keytag} använder en algoritm nummmr med det "
-"utfasade algoritmnumret {algorithm}/({description})."
-
-#: DNSSEC:ALGORITHM_OK
-msgid  ""
-"The DNSKEY with tag {keytag} uses algorithm number {algorithm}/"
-"({description}), which is OK."
-msgstr ""
-"DNSKEY-posten med 'tag' {keytag} använder det accepterade algoritm numret "
-"{algorithm}/({description})."
-
-#: DNSSEC:ALGORITHM_PRIVATE
-msgid  ""
-"The DNSKEY with tag {keytag} uses private algorithm number {algorithm}/"
-"({description})."
-msgstr ""
-"DNSKEY-posten med 'tag' {keytag} använder en algoritm med det privata "
-"algoritmnumret {algorithm}/({description})."
-
-#: DNSSEC:ALGORITHM_RESERVED
-msgid  ""
-"The DNSKEY with tag {keytag} uses reserved algorithm number {algorithm}/"
-"({description})."
-msgstr ""
-"DNSKEY-posten med 'tag' {keytag} använder en algoritm med det reserverade "
-"algoritmnumret {algorithm}/({description})."
-
-#: DNSSEC:ALGORITHM_UNASSIGNED
-msgid  ""
-"The DNSKEY with tag {keytag} uses unassigned algorithm number {algorithm}/"
-"({description})."
-msgstr ""
-"DNSKEY-posten med 'tag' {keytag} använder en algoritm med det otilldelade "
-"algoritmnumret {algorithm}/({description})."
-
-#: DNSSEC:ALGORITHM_UNKNOWN
-msgid  "The DNSKEY with tag {keytag} uses unknown algorithm number {algorithm}."
-msgstr ""
-"DNSKEY-posten med 'tag' {keytag} använder algoritmen med det okända numret "
-"{algorithm}."
-
-#: DNSSEC:COMMON_KEYTAGS
-msgid  "There are both DS and DNSKEY records with key tags {keytags}."
-msgstr "Det finns både DS- and DNSKEY-poster med 'keytag' {keytags}."
-
-#: DNSSEC:DELEGATION_NOT_SIGNED
-msgid  "Delegation from parent to child is not properly signed {reason}."
-msgstr ""
-"Delegeringen från moderzonen till dotterzonens namnservrar är inte korrekt "
-"signerad ({reason})."
-
-#: DNSSEC:DELEGATION_SIGNED
-msgid  "Delegation from parent to child is properly signed."
-msgstr ""
-"Delegeringen från moderzonen till dotterzonens namnservrar är korrekt "
-"signerad."
-
-#: DNSSEC:DNSKEY_AND_DS
-msgid  "{parent} sent a DS record, and {child} a DNSKEY record."
-msgstr ""
-"Moderzonen '{parent}' skickade en DS-post, och dotterzonen '{child}' en "
-"DNSKEY-post."
-
-#: DNSSEC:DNSKEY_BUT_NOT_DS
-msgid  "{child} sent a DNSKEY record, but {parent} did not send a DS record."
-msgstr ""
-"Dotterzonen '{child}' skickade en DNSKEY-post, men moderzonen '{parent}' "
-"skickade inte någon DS-post."
-
-#: DNSSEC:DNSKEY_NOT_SIGNED
-msgid  "The apex DNSKEY RRset was not correctly signed."
-msgstr "DNSKEY-posterna i zontoppen var inte korrekt signerad."
-
-#: DNSSEC:DNSKEY_SIGNATURE_NOT_OK
-msgid  ""
-"Signature for DNSKEY with tag {signature} failed to verify with error "
-"'{error}'."
-msgstr ""
-"Verifiering av signaturen för DNSKEY-posten med 'keytag' {signature} "
-"misslyckades med felmeddelandet '{error}'."
-
-#: DNSSEC:DNSKEY_SIGNATURE_OK
-msgid  "A signature for DNSKEY with tag {signature} was correctly signed."
-msgstr ""
-"Verifiering av en signatur för DNSKEY-posten med 'keytag' {signature} "
-"lyckades."
-
-#: DNSSEC:DNSKEY_SIGNED
-msgid  "The apex DNSKEY RRset was correcly signed."
-msgstr "DNSKEY-posterna i zontoppen var korrekt signerad."
-
-#: DNSSEC:DS_BUT_NOT_DNSKEY
-msgid  "{parent} sent a DS record, but {child} did not send a DNSKEY record."
-msgstr ""
-"Moderzonen '{parent}' skickade en DS-post, men dotterzonen '{child}' "
-"skickade ingen DNSKEY-post."
-
-#: DNSSEC:DS_DIGTYPE_NOT_OK
-msgid  "DS record with keytag {keytag} uses forbidden digest type {digtype}."
-msgstr ""
-"DS-posten med 'keytag' {keytag} använder den förbjudna digest-typen "
-"{digtype}."
-
-#: DNSSEC:DS_DIGTYPE_OK
-msgid  "DS record with keytag {keytag} uses digest type {digtype}, which is OK."
-msgstr ""
-"DS-posten med 'keytag' {keytag} använder den accepterade digest-typen "
-"{digtype}."
-
-#: DNSSEC:DS_DOES_NOT_MATCH_DNSKEY
-msgid  ""
+#. DS_DOES_NOT_MATCH_DNSKEY
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:439
+#, fuzzy, perl-brace-format
+msgid ""
 "DS record with keytag {keytag} and digest type {digtype} does not match the "
 "DNSKEY with the same tag."
 msgstr ""
 "DS-posten med 'keytag' {keytag} matchar inte DNSKEY-posten med samma "
 "'keytag'."
 
-#: DNSSEC:DS_FOUND
-msgid  "Found DS records with tags {keytags}."
-msgstr "Det finns DS-poster med keytaggarna {keytags}."
-
-#: DNSSEC:DS_MATCHES_DNSKEY
-msgid  ""
+#. DS_MATCHES_DNSKEY
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:447
+#, fuzzy, perl-brace-format
+msgid ""
 "DS record with keytag {keytag} and digest type {digtype} matches the DNSKEY "
 "with the same tag."
 msgstr ""
 "DS-posten med 'keytag' {keytag} matchar DNSKEY-posten med samma 'keytag'."
 
-#: DNSSEC:DS_MATCH_FOUND
-msgid  "At least one DS record with a matching DNSKEY record was found."
-msgstr "Det finns minst en DS-post med med en matchande DNSKEY-post."
+#. DS_DIGTYPE_OK
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:435
+#, perl-brace-format
+msgid "DS record with keytag {keytag} uses digest type {digtype}, which is OK."
+msgstr ""
+"DS-posten med 'keytag' {keytag} använder den accepterade digest-typen "
+"{digtype}."
 
-#: DNSSEC:DS_MATCH_NOT_FOUND
-msgid  "No DS record with a matching DNSKEY record was found."
-msgstr "Det finns ingen DS-post med matchande DNSKEY-post."
+#. DS_DIGTYPE_NOT_OK
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:431
+#, perl-brace-format
+msgid "DS record with keytag {keytag} uses forbidden digest type {digtype}."
+msgstr ""
+"DS-posten med 'keytag' {keytag} använder den förbjudna digest-typen "
+"{digtype}."
 
-#: DNSSEC:DS_RFC4509_NOT_VALID
-msgid  ""
+#. DELEGATION_NOT_SIGNED
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:395
+#, perl-brace-format
+msgid "Delegation from parent to child is not properly signed {reason}."
+msgstr ""
+"Delegeringen från moderzonen till dotterzonens namnservrar är inte korrekt "
+"signerad ({reason})."
+
+#. DELEGATION_SIGNED
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:399
+msgid "Delegation from parent to child is properly signed."
+msgstr ""
+"Delegeringen från moderzonen till dotterzonens namnservrar är korrekt "
+"signerad."
+
+#. SOA_SERIAL_VARIATION
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:213
+#, fuzzy, perl-brace-format
+msgid ""
+"Difference between the smaller serial ({serial_min}) and the bigger one "
+"({serial_max}) is greater than the maximum allowed ({max_variation})."
+msgstr ""
+"Spannet mellan högsta och lägsta SOA-serienumret är större än "
+"{max_variation}."
+
+#. DOMAIN_NAME_LABEL_TOO_LONG
+#: ../lib/Zonemaster/Engine/Test/Basic.pm:124
+#, perl-brace-format
+msgid ""
+"Domain name ({dname}) has a label ({dlabel}) too long ({dlength}/{max})."
+msgstr ""
+"Domändelen '{dlabel}' i domännamnet {dname} är för lång ({dlength}/{max})."
+
+#. DOMAIN_NAME_ZERO_LENGTH_LABEL
+#: ../lib/Zonemaster/Engine/Test/Basic.pm:128
+#, perl-brace-format
+msgid "Domain name ({dname}) has a zero length label."
+msgstr "Domännamnet '{dname}' har en domändel med längden noll."
+
+#. TERMINAL_HYPHEN
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:249
+#, perl-brace-format
+msgid "Domain name ({name}) has a label ({label}) ending with an hyphen ('-')."
+msgstr ""
+"Domännamnet '{name}' har domändelen '{label}' som slutar med ett bindestreck."
+
+#. INITIAL_HYPHEN
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:141
+#, perl-brace-format
+msgid ""
+"Domain name ({name}) has a label ({label}) starting with an hyphen ('-')."
+msgstr ""
+"Domännamnet '{name}' har en domändel '{label}' som börjar med ett "
+"bindestreck."
+
+#. DISCOURAGED_DOUBLE_DASH
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:135
+#, perl-brace-format
+msgid ""
+"Domain name ({name}) has a label ({label}) with a double hyphen ('--') in "
+"position 3 and 4 (with a prefix which is not 'xn--')."
+msgstr ""
+"Domännamnet '{name}' har en domändel '{label}' med bindestreck i position 3 "
+"och 4, men börjar inte med 'xn--'."
+
+#. NO_DOUBLE_DASH
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:203
+#, perl-brace-format
+msgid ""
+"Domain name ({name}) has no label with a double hyphen ('--') in position 3 "
+"and 4 (with a prefix which is not 'xn--')."
+msgstr ""
+"Domännamnet '{name}' har ingen domändel med bindestreck i position 3 och 4."
+
+#. MX_DISCOURAGED_DOUBLE_DASH
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:163
+#, perl-brace-format
+msgid ""
+"Domain name MX ({name}) has a label ({label}) with a double hyphen ('--') in "
+"position 3 and 4 (with a prefix which is not 'xn--')."
+msgstr ""
+"Domänens MX ({name}) har en domändel ({label}) med bindestreck i position 3 "
+"och 4, men börjar inte på 'xn--'."
+
+#. MX_SYNTAX_OK
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:177
+#, perl-brace-format
+msgid "Domain name MX ({name}) syntax is valid."
+msgstr "MX-namnet '{name}' är giltigt."
+
+#. MX_NUMERIC_TLD
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:173
+#, perl-brace-format
+msgid "Domain name MX ({name}) within a 'numeric only' TLD ({tld})."
+msgstr "Domänens MX ('{name}') är i en helnumerisk TLD ({tld})."
+
+#. DOMAIN_NAME_TOO_LONG
+#: ../lib/Zonemaster/Engine/Test/Basic.pm:132
+#, perl-brace-format
+msgid "Domain name is too long ({fqdnlength}/{max})."
+msgstr "Domännamnet är för långt ({fqdnlength}/{max})."
+
+#. NAMESERVERS_WITH_MULTIPLE_AS
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:100
+msgid "Domain's authoritative nameservers do not belong to the same AS."
+msgstr ""
+"IP-adresserna för domänens auktoritativa namnservrar finns i mer än ett AS."
+
+#. DS_RFC4509_NOT_VALID
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:459
+msgid ""
 "Existing DS with digest type 2, while they do not match DNSKEY records, "
 "prevent use of DS with digest type 1 (RFC4509, section 3)."
 msgstr ""
@@ -573,759 +400,1376 @@ msgstr ""
 "DS med 'digest' typ 1, men RFC 4509 (stycke 3) tillåter inte att den används "
 "när det finns en DS med 'digest' typ 2."
 
-#: DNSSEC:DURATION_LONG
-msgid  ""
-"RRSIG with keytag {tag} and covering type(s) {types} has a duration of "
-"{duration} seconds, which is too long."
-msgstr ""
-"RRSIG-posten med 'keytag' {tag} och täckande typerna {types} har en "
-"livslängd på {duration} sekunder, vilket är för länge."
-
-#: DNSSEC:DURATION_OK
-msgid  ""
-"RRSIG with keytag {tag} and covering type(s) {types} has a duration of "
-"{duration} seconds, which is just fine."
-msgstr ""
-"RRSIG-posten med 'keytag' {tag} och täckande typerna {types} har en "
-"livslängd på {duration} sekunder (accepterad livslängd)."
-
-#: DNSSEC:EXTRA_PROCESSING_BROKEN
-msgid  ""
-"Server at {server} sent {keys} DNSKEY records, and {sigs} RRSIG records."
-msgstr ""
-"Namnservern '{server}' skickade {keys} DNSKEY-poster, och {sigs} RRSIG-"
-"poster."
-
-#: DNSSEC:EXTRA_PROCESSING_OK
-msgid  "Server at {server} sent {keys} DNSKEY records and {sigs} RRSIG records."
-msgstr ""
-"Namnservern '{server}' skickade {keys} DNSKEY-poster och {sigs} RRSIG-poster."
-
-#: DNSSEC:HAS_NSEC
-msgid  "The zone has NSEC records."
-msgstr "Zonen har NSEC-poster."
-
-#: DNSSEC:HAS_NSEC3
-msgid  "The zone has NSEC3 records."
-msgstr "Zonen har NSEC3-poster."
-
-#: DNSSEC:HAS_NSEC3_OPTOUT
-msgid  "The zone has NSEC3 opt-out records."
-msgstr "Zonen har opt-out-flaggan satt för NSEC3."
-
-#: DNSSEC:INVALID_NAME_RCODE
-msgid  ""
-"When asked for the name {name}, which must not exist, the response had RCODE "
-"{rcode}."
-msgstr ""
-"Svaret på en fråga om namnet '{name}', som inte får existera, hade RCODE "
-"'{rcode}'."
-
-#: DNSSEC:ITERATIONS_OK
-msgid  "The number of NSEC3 iterations is {count}, which is OK."
-msgstr "Antalet NSEC3-iterationer är {count} (accepterad antal)."
-
-#: DNSSEC:KEY_DETAILS
-msgid  ""
-"Key with keytag {keytag} details : Size = {keysize}, Flags ({sep}, "
-"{rfc5011})."
-msgstr ""
-"Key with keytag {keytag} details : Size = {keysize}, Flags ({sep}, "
-"{rfc5011})."
-
-#: DNSSEC:MANY_ITERATIONS
-msgid  "The number of NSEC3 iterations is {count}, which is on the high side."
-msgstr "Antalet NSEC3-iterationer är {count}, vilket är högt."
-
-#: DNSSEC:NEITHER_DNSKEY_NOR_DS
-msgid  "There are neither DS nor DNSKEY records for the zone."
-msgstr "Zonen har varken DS- eller DNSKEY-poster."
-
-#: DNSSEC:NOT_SIGNED
-msgid  "The zone is not signed with DNSSEC."
-msgstr "Zonen är inte signerad med DNSSEC."
-
-#: DNSSEC:NO_COMMON_KEYTAGS
-msgid  "No DS record had a DNSKEY with a matching keytag."
-msgstr "Det finns ingen DS-post som har en DNSKEY-post med matchande keytag."
-
-#: DNSSEC:NO_DNSKEY
-msgid  "No DNSKEYs were returned."
-msgstr "Inga DNSKEY-poster returnerades."
-
-#: DNSSEC:NO_DS
-msgid  "{from} returned no DS records for {zone}."
-msgstr "'{from}' skickade inga DS-poster för '{zone}'."
-
-#: DNSSEC:NO_KEYS_OR_NO_SIGS
-msgid  ""
-"Cannot test DNSKEY signatures, because we got {keys} DNSKEY records and "
-"{sigs} RRSIG records."
-msgstr ""
-"Kan inte testa DNSKEY-signaturer, eftersom vi fick {keys} DNSKEY-poster och "
-"{sigs} RRSIG-poster."
-
-#: DNSSEC:NO_KEYS_OR_NO_SIGS_OR_NO_SOA
-msgid  ""
-"Cannot test SOA signatures, because we got {keys} DNSKEY records, {sigs} "
-"RRSIG records and {soas} SOA records."
-msgstr ""
-"Kan inte testa DNSSEC-signaturer för SOA-posten, eftersom vi fick {keys} "
-"DNSKEY-poster, {sigs} RRSIG-poster och {soas} SOA-poster."
-
-#: DNSSEC:NO_NSEC3PARAM
-msgid  "{server} returned no NSEC3PARAM records."
-msgstr "'{server}' gav inga NSEC3PARAM-poster i svaret."
-
-#: DNSSEC:NSEC3_COVERS
-msgid  "NSEC3 record covers {name}."
-msgstr "Det finns en NSEC3-post som täcker '{name}'."
-
-#: DNSSEC:NSEC3_COVERS_NOT
-msgid  "NSEC3 record does not cover {name}."
-msgstr "Det finns ingen NSEC3-post som täcker '{name}'."
-
-#: DNSSEC:NSEC3_NOT_SIGNED
-msgid  "No signature correctly signed the NSEC3 RRset."
-msgstr "Ingen signatur signerade NSEC3-posterna korrekt."
-
-#: DNSSEC:NSEC3_SIGNED
-msgid  "At least one signature correctly signed the NSEC3 RRset."
-msgstr "Det finns minst en signatur som korrekt signerar NSEC3-posterna."
-
-#: DNSSEC:NSEC3_SIG_VERIFY_ERROR
-msgid  "Trying to verify NSEC3 RRset with RRSIG {sig} gave error '{error}'."
-msgstr ""
-"Försöket att verifiera NSEC3-posterna med RRSIG {sig} gav felet '{error}'."
-
-#: DNSSEC:NSEC_COVERS
-msgid  "NSEC covers {name}."
-msgstr "NSEC täcker '{name}'."
-
-#: DNSSEC:NSEC_COVERS_NOT
-msgid  "NSEC does not cover {name}."
-msgstr "NSEC täcker inte '{name}'."
-
-#: DNSSEC:NSEC_NOT_SIGNED
-msgid  "No signature correctly signed the NSEC RRset."
-msgstr "Ingen signatur har korrekt signerat NSEC-posterna."
-
-#: DNSSEC:NSEC_SIGNED
-msgid  "At least one signature correctly signed the NSEC RRset."
-msgstr "Det finns minst en korrekt signatur (RRSIG) för NSEC-posterna."
-
-#: DNSSEC:NSEC_SIG_VERIFY_ERROR
-msgid  "Trying to verify NSEC RRset with RRSIG {sig} gave error '{error}'."
-msgstr ""
-"Försöket att verifiera NSEC-posterna med RRSIG {sig} gav felet '{error}'."
-
-#: DNSSEC:REMAINING_LONG
-msgid  ""
-"RRSIG with keytag {tag} and covering type(s) {types} has a remaining "
-"validity of {duration} seconds, which is too long."
-msgstr ""
-"RRSIG-posten med 'keytag' {tag} och täckande typerna {types} har en "
-"kvarvarande livslängd på {duration} sekunder, vilket är för länge."
-
-#: DNSSEC:REMAINING_SHORT
-msgid  ""
-"RRSIG with keytag {tag} and covering type(s) {types} has a remaining "
-"validity of {duration} seconds, which is too short."
-msgstr ""
-"RRSIG-posten med 'keytag' {tag} och täckande typerna {types} har en "
-"kvarvarande livslängd på {duration} sekunder, vilket är för kort."
-
-#: DNSSEC:RRSIG_EXPIRATION
-msgid  ""
-"RRSIG with keytag {tag} and covering type(s) {types} expires at : {date}."
-msgstr ""
-"RRSIG med 'keytag' {tag} täckande posttyp(er) {types} löper ut datum {date}."
-
-#: DNSSEC:RRSIG_EXPIRED
-msgid  ""
-"RRSIG with keytag {tag} and covering type(s) {types} has already expired "
-"(expiration is: {expiration})."
-msgstr ""
-"RRSIG-posten med 'keytag' {tag} och täckande posttyperna {types} har redan "
-"löpt ut (utgångstiden är: {expiration})."
-
-#: DNSSEC:SOA_NOT_SIGNED
-msgid  "No RRSIG correctly signed the SOA RRset."
-msgstr "Det finns ingen RRSIG som har korrekt signerat SOA-posten."
-
-#: DNSSEC:SOA_SIGNATURE_NOT_OK
-msgid  ""
-"Trying to verify SOA RRset with signature {signature} gave error '{error}'."
-msgstr ""
-"Försöket att verifiera SOA-mängden med signatur {signature} gav felet "
-"'{error}'."
-
-#: DNSSEC:SOA_SIGNATURE_OK
-msgid  "RRSIG {signature} correctly signs SOA RRset."
-msgstr "RRSIG '{signature}' är en korrekt signatur för SOA-posten."
-
-#: DNSSEC:SOA_SIGNED
-msgid  "At least one RRSIG correctly signs the SOA RRset."
-msgstr "Det finns minst en RRSIG-post som korrekt signerar SOA-posten."
-
-#: DNSSEC:TOO_MANY_ITERATIONS
-msgid  ""
-"The number of NSEC3 iterations is {count}, which is too high for key length "
-"{keylength}."
-msgstr ""
-"Antalet NSEC3-iterationer är {count}, vilket är för många för nyckellängden "
-"{keylength}."
-
-#: EXAMPLE:EXAMPLE_TAG
-msgid  "This is an example tag."
-msgstr "Detta är en exempeletikett."
-
-#: NAMESERVER:AAAA_WELL_PROCESSED
-msgid  ""
-"The following nameservers answer AAAA queries without problems : {names}."
-msgstr "Följande namnservrar svarade problemfritt på AAAA-frågor : {names}."
-
-#: NAMESERVER:ANSWER_BAD_RCODE
-msgid  ""
-"Nameserver {ns}/{address} answered AAAA query with an unexpected rcode "
-"({rcode})."
-msgstr ""
-"Namnservern {ns}/{address} besvarade en AAAA-fråga med den oväntade "
-"svarskoden '{rcode}'."
-
-#: NAMESERVER:AXFR_AVAILABLE
-msgid  "Nameserver {ns}/{address} allow zone transfer using AXFR."
-msgstr "Namnservern {ns}/{address} tillåter zonöverföringar med AXFR."
-
-#: NAMESERVER:AXFR_FAILURE
-msgid  "AXFR not available on nameserver {ns}/{address}."
-msgstr "AXFR är inte tillgänglig från namnservern {ns}/{address}."
-
-#: NAMESERVER:BREAKS_ON_EDNS
-msgid  "No response from {ns}/{address} when EDNS is used in query asking for {dname}."
-msgstr "Inget svar från {ns}/{address} på förfrågan med EDNS (fråga efter {dname})."
-
-#: NAMESERVER:CAN_BE_RESOLVED
-msgid  "All nameservers succeeded to resolve to an IP address."
-msgstr "Alla namnservrar kunde slås upp till minst en IP-adress."
-
-#: NAMESERVER:CAN_NOT_BE_RESOLVED
-msgid  "The following nameservers failed to resolve to an IP address : {names}."
-msgstr ""
-"Följande namnservernamn kunde inte slås upp till någon IP-adresser: {names}."
-
-#: NAMESERVER:CASE_QUERIES_RESULTS_DIFFER
-msgid  ""
-"When asked for {type} records on \"{query}\" with different cases, all "
-"servers do not reply consistently."
-msgstr ""
-"Alla servrar svarar inte konsekvent när förfrågade om '{query}' med olika "
-"skiftlägen och posttypen '{type}'."
-
-#: NAMESERVER:CASE_QUERIES_RESULTS_OK
-msgid  ""
-"When asked for {type} records on \"{query}\" with different cases, all "
-"servers reply consistently."
-msgstr ""
-"Alla servrar svarar konsekvent när förfrågade om '{query}' med olika "
-"skiftlägen och posttypen '{type}'."
-
-#: NAMESERVER:CASE_QUERY_DIFFERENT_ANSWER
-msgid  ""
-"When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver "
-"{ns}/{address} returns different answers."
-msgstr ""
-"Namnservern {ns}/{address} ger olika svar när frågan är '{query1}' resp. "
-"'{query2}' för posttypen '{type}'."
-
-#: NAMESERVER:CASE_QUERY_DIFFERENT_RC
-msgid  ""
-"When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver "
-"{ns}/{address} returns different RCODE (\"{rcode1}\" vs \"{rcode2}\")."
-msgstr ""
-"Namnservern {ns}/{address} ger olika RCODE ('{rcode1}' resp. '{rcode2}') när "
-"frågan är '{query1}' resp. '{query2}' för posttypen '{type}'."
-
-#: NAMESERVER:CASE_QUERY_NO_ANSWER
-msgid  ""
-"When asked for {type} records on \"{query}\", nameserver {ns}/{address} "
-"returns nothing."
-msgstr ""
-"Nameserver {ns}/{address} svarar ingenting när den får frågan om '{query}' "
-"med posttypen '{type}'."
-
-#: NAMESERVER:CASE_QUERY_SAME_ANSWER
-msgid  ""
-"When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver "
-"{ns}/{address} returns same answers."
-msgstr ""
-"Namnservern {ns}/{address} ger samma svar när frågan är '{query1}' resp. "
-"'{query2}' för posttypen '{type}'."
-
-#: NAMESERVER:CASE_QUERY_SAME_RC
-msgid  ""
-"When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver "
-"{ns}/{address} returns same RCODE \"{rcode}\"."
-msgstr ""
-"Namnservern {ns}/{address} ger samma RCODE '{rcode}' när frågan är "
-"'{query1}' resp. '{query2}' för posttypen '{type}'."
-
-#: NAMESERVER:DIFFERENT_SOURCE_IP
-msgid  ""
-"Nameserver {ns}/{address} replies on a SOA query with a different source "
-"address ({source})."
-msgstr ""
-"Namnservern {ns}/{address} besvarade en SOA-fråga från en annan källadress "
-"({source})."
-
-#: NAMESERVER:EDNS_RESPONSE_WITHOUT_EDNS
-msgid  "Response without EDNS from {ns}/{address} on query with EDNS0 asking for {dname}."
-msgstr "Svar utan EDNS från {ns}/{address} på förfrågan med EDNS0 (fråga efter {dname})."
-
-#: NAMESERVER:EDNS_VERSION_ERROR
-msgid  "Incorrect version of EDNS (expected 0) in response from {ns}/{address} on query with EDNS (version 0) asking for {dname}."
-msgstr "Felaktig EDNS-version (förväntad version var 0) i svar från {ns}/{address} på förfrågan med EDNS version 0 (fråga efter {dname})."
-
-#: NAMESERVER:EDNS0_SUPPORT
-msgid  "The following nameservers support EDNS0 : {names}."
-msgstr "Följande namnservrar stöder EDNS0: {names}."
-
-#: NAMESERVER:IS_A_RECURSOR
-msgid  "Nameserver {ns}/{address} is a recursor."
-msgstr "Namnservern {ns}/{address} är en rekursiv resolver."
-
-#: NAMESERVER:NO_EDNS_SUPPORT
-msgid  ""
-"Nameserver {ns}/{address} does not support EDNS0 (replies with FORMERR)."
-msgstr "Namnservern {ns}/{address} stöder inte EDNS0 (svarar med 'FORMERR')."
-
-#: NAMESERVER:NO_RECURSOR
-msgid  "Nameserver {ns}/{address} is not a recursor."
-msgstr "Namnservern {ns}/{address} är ingen rekursiv resolver."
-
-#: NAMESERVER:NO_RESOLUTION
-msgid  "No nameservers succeeded to resolve to an IP address."
-msgstr "Det gick inte att slå upp IP-adressen för någon namnserver."
-
-#: NAMESERVER:NO_UPWARD_REFERRAL
-msgid  "None of the following nameservers returns an upward referral : {names}."
-msgstr ""
-"Ingen av följande nameserverar skickar hänvisning till moderzonen: {names}."
-
-#: NAMESERVER:QNAME_CASE_INSENSITIVE
-msgid  ""
-"Nameserver {ns}/{address} does not preserve original case of queried names."
-msgstr ""
-"Nameservern {ns}/{address} bevarar inte skillnaden mellan versaler och "
-"gemener från frågan ({dname})."
-
-#: NAMESERVER:QNAME_CASE_SENSITIVE
-msgid  "Nameserver {ns}/{address} preserves original case of queried names."
-msgstr ""
-"Namnservern {ns}/{address} bevarade versaler och gemener från frågan "
-"({dname})."
-
-#: NAMESERVER:QUERY_DROPPED
-msgid  "Nameserver {ns}/{address} dropped AAAA query."
-msgstr "Namnservern {ns}/{address} besvarade inte AAAA-frågan."
-
-#: NAMESERVER:SAME_SOURCE_IP
-msgid  "All nameservers reply with same IP used to query them."
-msgstr ""
-"Alla namnservrar skickade svar från samma IP-adress som frågan ställdes till."
-
-#: NAMESERVER:UPWARD_REFERRAL
-msgid  "Nameserver {ns}/{address} returns an upward referral."
-msgstr "Nameservern {ns}/{address} skickade en hänvisning till moderzonen."
-
-#: NAMESERVER:UPWARD_REFERRAL_IRRELEVANT
-msgid  "Upward referral tests skipped for root zone."
-msgstr ""
-"Tester för hänvisning till moderzon stryks för root-zonen (det finns ingen "
-"moderzon)."
-
-#: SYNTAX:DISCOURAGED_DOUBLE_DASH
-msgid  ""
-"Domain name ({name}) has a label ({label}) with a double hyphen ('--') in "
-"position 3 and 4 (with a prefix which is not 'xn--')."
-msgstr ""
-"Domännamnet '{name}' har en domändel '{label}' med bindestreck i position 3 "
-"och 4, men börjar inte med 'xn--'."
-
-#: SYNTAX:INITIAL_HYPHEN
-msgid  ""
-"Domain name ({name}) has a label ({label}) starting with an hyphen ('-')."
-msgstr ""
-"Domännamnet '{name}' har en domändel '{label}' som börjar med ett "
-"bindestreck."
-
-#: SYNTAX:MNAME_DISCOURAGED_DOUBLE_DASH
-msgid  ""
-"SOA MNAME ({name}) has a label ({label}) with a double hyphen ('--') in "
-"position 3 and 4 (with a prefix which is not 'xn--')."
-msgstr ""
-"SOA MNAME '{name}' har en domändel '{label}' med bindestreck i position 3 "
-"och 4, men börjar inte med 'xn--'."
-
-#: SYNTAX:MNAME_NON_ALLOWED_CHARS
-msgid  "Found illegal characters in SOA MNAME ({name})."
-msgstr "Otillåtna tecken hittades i SOA MNAME ({name})."
-
-#: SYNTAX:MNAME_NUMERIC_TLD
-msgid  "SOA MNAME ({name}) within a 'numeric only' TLD ({tld})."
-msgstr "SOA MNAME '{name}' är i en helnumerisk TLD ({tld})."
-
-#: SYNTAX:MNAME_SYNTAX_OK
-msgid  "SOA MNAME ({name}) syntax is valid."
-msgstr "SOA MNAME '{name}' har tillåtet format."
-
-#: SYNTAX:MX_DISCOURAGED_DOUBLE_DASH
-msgid  ""
-"Domain name MX ({name}) has a label ({label}) with a double hyphen ('--') in "
-"position 3 and 4 (with a prefix which is not 'xn--')."
-msgstr ""
-"Domänens MX ({name}) har en domändel ({label}) med bindestreck i position 3 "
-"och 4, men börjar inte på 'xn--'."
-
-#: SYNTAX:MX_NON_ALLOWED_CHARS
-msgid  "Found illegal characters in MX ({name})."
+#. MODULE_ERROR
+#: ../lib/Zonemaster/Engine/Translator.pm:53
+#, perl-brace-format
+msgid "Fatal error in {module}: {msg}"
+msgstr "Fatalt fel i '{module}': '{msg}'"
+
+#. FAKE_DELEGATION
+#: ../lib/Zonemaster/Engine/Translator.pm:89
+msgid "Followed a fake delegation."
+msgstr "Följde en skapad delegering."
+
+#. DS_FOUND
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:443
+#, perl-brace-format
+msgid "Found DS records with tags {keytags}."
+msgstr "Det finns DS-poster med keytaggarna {keytags}."
+
+#. MX_NON_ALLOWED_CHARS
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:169
+#, perl-brace-format
+msgid "Found illegal characters in MX ({name})."
 msgstr "Otillåtna tecken hittades i MX ({name})."
 
-#: SYNTAX:MX_NUMERIC_TLD
-msgid  "Domain name MX ({name}) within a 'numeric only' TLD ({tld})."
-msgstr "Domänens MX ('{name}') är i en helnumerisk TLD ({tld})."
+#. MNAME_NON_ALLOWED_CHARS
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:151
+#, perl-brace-format
+msgid "Found illegal characters in SOA MNAME ({name})."
+msgstr "Otillåtna tecken hittades i SOA MNAME ({name})."
 
-#: SYNTAX:MX_SYNTAX_OK
-msgid  "Domain name MX ({name}) syntax is valid."
-msgstr "MX-namnet '{name}' är giltigt."
+#. NON_ALLOWED_CHARS
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:199
+#, perl-brace-format
+msgid "Found illegal characters in the domain name ({name})."
+msgstr "Det finns otillåtna tecken i domännamnet '{name}'."
 
-#: SYNTAX:NAMESERVER_DISCOURAGED_DOUBLE_DASH
-msgid  ""
+#. NAMESERVER_NON_ALLOWED_CHARS
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:187
+#, perl-brace-format
+msgid "Found illegal characters in the nameserver ({name})."
+msgstr "Det finns otillåtna tecken i namnservernamnet '{name}'."
+
+#. HAS_NAMESERVER_NO_WWW_A_TEST
+#: ../lib/Zonemaster/Engine/Test/Basic.pm:172
+#, perl-brace-format
+msgid "Functional nameserver found. \"A\" query for www.{zname} test aborted."
+msgstr ""
+"En fungerande namnserver hittades. Skickade ingen fråga om 'A' för 'www."
+"{zname}' (behövdes inte)."
+
+#. ADDRESSES_MATCH
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:127
+msgid "Glue records are consistent between glue and authoritative data."
+msgstr ""
+"Glue-poster stämmer överens mellan delegering och auktoritativ data "
+"(dotterzon)."
+
+#. SAME_IP_ADDRESS
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:269
+#, perl-brace-format
+msgid "IP {address} refers to multiple nameservers ({nss})."
+msgstr "IP-adressen {address} referrerar till flera namnservrar ({nss})."
+
+#. IPV4_DISABLED
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:139
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:144
+#: ../lib/Zonemaster/Engine/Test/Basic.pm:176
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:181
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:273
+#, perl-brace-format
+msgid "IPv4 is disabled, not sending \"{rrtype}\" query to {ns}/{address}."
+msgstr ""
+"IPv4 är avstängt. Skickar ingen fråga om '{rrtype}' till {ns}/{address}."
+
+#. SKIP_IPV4_DISABLED
+#: ../lib/Zonemaster/Engine/Translator.pm:81
+#, perl-brace-format
+msgid "IPv4 is disabled, not sending query to {ns}."
+msgstr "IPv4 är inaktiverad. Skickar ingen DNS-fråga till '{ns}'."
+
+#. IPV4_ENABLED
+#: ../lib/Zonemaster/Engine/Test/Basic.pm:180
+#, perl-brace-format
+msgid "IPv4 is enabled, can send \"{rrtype}\" query to {ns}/{address}."
+msgstr "IPv4 är påslaget. Skickar fråga om '{rrtype}' till {ns}/{address}."
+
+#. IPV6_DISABLED
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:143
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:148
+#: ../lib/Zonemaster/Engine/Test/Basic.pm:184
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:185
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:277
+#, perl-brace-format
+msgid "IPv6 is disabled, not sending \"{rrtype}\" query to {ns}/{address}."
+msgstr ""
+"IPv6 är avstängt. Skickar ingen fråga om '{rrtype}' till {ns}/{address}."
+
+#. SKIP_IPV6_DISABLED
+#: ../lib/Zonemaster/Engine/Translator.pm:85
+#, perl-brace-format
+msgid "IPv6 is disabled, not sending query to {ns}."
+msgstr "IPv6 är inaktiverad. Skickar ingen DNS-fråga till '{ns}'."
+
+#. IPV6_ENABLED
+#: ../lib/Zonemaster/Engine/Test/Basic.pm:188
+#, perl-brace-format
+msgid "IPv6 is enabled, can send \"{rrtype}\" query to {ns}/{address}."
+msgstr "IPv6 är påslaget. Skickar fråga om '{rrtype}' till {ns}/{address}."
+
+#. EDNS_VERSION_ERROR
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:263
+#, perl-brace-format
+msgid ""
+"Incorrect version of EDNS (expected 0) in response from {ns}/{address} on "
+"query with EDNS (version 0) asking for {dname}."
+msgstr ""
+"Felaktig EDNS-version (förväntad version var 0) i svar från {ns}/{address} "
+"på förfrågan med EDNS version 0 (fråga efter {dname})."
+
+#. KEY_DETAILS
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:505
+#, perl-brace-format
+msgid ""
+"Key with keytag {keytag} details : Size = {keysize}, Flags ({sep}, "
+"{rfc5011})."
+msgstr ""
+"Key with keytag {keytag} details : Size = {keysize}, Flags ({sep}, "
+"{rfc5011})."
+
+#. LOGGER_CALLBACK_ERROR
+#: ../lib/Zonemaster/Engine/Translator.pm:45
+#, perl-brace-format
+msgid "Logger callback died with error: {exception}"
+msgstr ""
+"Callback-funktionen för log-modulen avbröt med felmeddelandet: '{exception}'"
+
+#. MX_RECORD_IS_NOT_CNAME
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:214
+msgid "MX record for the domain is not pointing to a CNAME."
+msgstr "MX-post för domänen pekar inte ut ett CNAME."
+
+#. MX_RECORD_IS_CNAME
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:210
+msgid "MX record for the domain is pointing to a CNAME."
+msgstr "Domänens MX-post pekar på ett alias (CNAME)."
+
+#. MODULE_END
+#: ../lib/Zonemaster/Engine/Translator.pm:61
+#, perl-brace-format
+msgid "Module {module} finished running."
+msgstr "Modulen '{module}' avslutades."
+
+#. NSEC_COVERS
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:579
+#, perl-brace-format
+msgid "NSEC covers {name}."
+msgstr "NSEC täcker '{name}'."
+
+#. NSEC_COVERS_NOT
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:575
+#, perl-brace-format
+msgid "NSEC does not cover {name}."
+msgstr "NSEC täcker inte '{name}'."
+
+#. NSEC3_COVERS
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:559
+#, perl-brace-format
+msgid "NSEC3 record covers {name}."
+msgstr "Det finns en NSEC3-post som täcker '{name}'."
+
+#. NSEC3_COVERS_NOT
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:555
+#, perl-brace-format
+msgid "NSEC3 record does not cover {name}."
+msgstr "Det finns ingen NSEC3-post som täcker '{name}'."
+
+#. FAKE_DELEGATION_TO_SELF
+#: ../lib/Zonemaster/Engine/Translator.pm:97
+#, perl-brace-format
+msgid ""
+"Name server {ns} not adding fake delegation for domain {domain} to itself."
+msgstr ""
+"Namnservern '{ns}' lade inte till en skapad delegering av domänen '{domain}' "
+"till sig själv."
+
+#. IPV4_ASN
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:152
+#, perl-brace-format
+msgid "Name servers have IPv4 addresses in the following ASs: {asn}."
+msgstr "Namnservrarna har IPv4-adresser i följande AS: {asn}."
+
+#. IPV6_ASN
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:156
+#, perl-brace-format
+msgid "Name servers have IPv6 addresses in the following ASs: {asn}."
+msgstr "Namnservrarna har IPv6-adresser i följande AS: {asn}."
+
+#. NAMESERVER_DISCOURAGED_DOUBLE_DASH
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:181
+#, perl-brace-format
+msgid ""
 "Nameserver ({name}) has a label ({label}) with a double hyphen ('--') in "
 "position 3 and 4 (with a prefix which is not 'xn--')."
 msgstr ""
 "Namnservern '{name}' har en domändel ({label}) med bindestreck i position 3 "
 "och 4, men börjar inte på 'xn--'."
 
-#: SYNTAX:NAMESERVER_NON_ALLOWED_CHARS
-msgid  "Found illegal characters in the nameserver ({name})."
-msgstr "Det finns otillåtna tecken i namnservernamnet '{name}'."
-
-#: SYNTAX:NAMESERVER_NUMERIC_TLD
-msgid  "Nameserver ({name}) within a 'numeric only' TLD ({tld})."
-msgstr "Namnservern '{name}' finns under en helnumerisk TLD ('{tld}')."
-
-#: SYNTAX:NAMESERVER_SYNTAX_OK
-msgid  "Nameserver ({name}) syntax is valid."
+#. NAMESERVER_SYNTAX_OK
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:195
+#, perl-brace-format
+msgid "Nameserver ({name}) syntax is valid."
 msgstr "Namnservernamnet '{name}' är giltigt."
 
-#: SYNTAX:NON_ALLOWED_CHARS
-msgid  "Found illegal characters in the domain name ({name})."
-msgstr "Det finns otillåtna tecken i domännamnet '{name}'."
+#. NAMESERVER_NUMERIC_TLD
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:191
+#, perl-brace-format
+msgid "Nameserver ({name}) within a 'numeric only' TLD ({tld})."
+msgstr "Namnservern '{name}' finns under en helnumerisk TLD ('{tld}')."
 
-#: SYNTAX:NO_DOUBLE_DASH
-msgid  ""
-"Domain name ({name}) has no label with a double hyphen ('--') in position 3 "
-"and 4 (with a prefix which is not 'xn--')."
+#. NAMESERVER_IP_PTR_MISMATCH
+#: ../lib/Zonemaster/Engine/Test/Address.pm:77
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} has an IP address ({address}) with mismatched PTR result "
+"({names})."
 msgstr ""
-"Domännamnet '{name}' har ingen domändel med bindestreck i position 3 och 4."
+"Namnservern '{ns}' har en IP-adress ({address}) med en icke-matchande "
+"bakåtuppslagning ({names})."
 
-#: SYNTAX:NO_ENDING_HYPHENS
-msgid  "Both ends of all labels of the domain name ({name}) have no hyphens."
+#. NAMESERVER_IP_PRIVATE_NETWORK
+#: ../lib/Zonemaster/Engine/Test/Address.pm:81
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} has an IP address ({address}) with prefix {prefix} "
+"referenced in {reference} as a '{name}'."
 msgstr ""
-"Domännamnet '{name}' har ingen domändel som börjar eller slutar med ett "
-"bindestreck."
+"Namnservern {ns} har en IP-adress ({address}) med prefixet {prefix}, som "
+"{reference} klassificerar som '{name}'."
 
-#: SYNTAX:NO_RESPONSE_MX_QUERY ZONE:NO_RESPONSE_MX_QUERY
-msgid  "No response from nameserver(s) on MX queries."
-msgstr "Inget svar från namnserver på fråga efter MX-post."
+#. NAMESERVER_IP_WITHOUT_REVERSE
+#: ../lib/Zonemaster/Engine/Test/Address.pm:73
+#, perl-brace-format
+msgid "Nameserver {ns} has an IP address ({address}) without PTR configured."
+msgstr "Namnservern '{ns}' har en IP-adress ({address}) utan bakåtuppslagning."
 
-#: SYNTAX:NO_RESPONSE_SOA_QUERY ZONE:NO_RESPONSE_SOA_QUERY
-msgid  "No response from nameserver(s) on SOA queries."
-msgstr "Inget svar från namnserver på fråga efter SOA-post."
+#. HAS_NAMESERVERS
+#: ../lib/Zonemaster/Engine/Test/Basic.pm:152
+#, perl-brace-format
+msgid "Nameserver {ns} listed these servers as glue: {nsnlist}."
+msgstr "Namnservern '{ns}' gav dessa servrar som 'glue': {nsnlist}."
 
-#: SYNTAX:ONLY_ALLOWED_CHARS
-msgid  "No illegal characters in the domain name ({name})."
+#. IS_NOT_AUTHORITATIVE
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:189
+#, perl-brace-format
+msgid "Nameserver {ns} response is not authoritative on {proto} port 53."
+msgstr "Namnservern '{ns}' svarade inte auktoritativt på {proto} port 53."
+
+#. NS_RR_IS_CNAME
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:253
+#, fuzzy, perl-brace-format
+msgid "Nameserver {ns} {address_type} RR point to CNAME."
+msgstr "Namnservern '{ns}' har en CNAME-post."
+
+#. NAMESERVER_HAS_TCP_53
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:128
+#, perl-brace-format
+msgid "Nameserver {ns}/{address} accessible over TCP on port 53."
+msgstr "Namnservern {ns}/{address} är åtkomlig med TCP på port 53."
+
+#. NAMESERVER_HAS_UDP_53
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:132
+#, perl-brace-format
+msgid "Nameserver {ns}/{address} accessible over UDP on port 53."
+msgstr "Namnservern {ns}/{address} är åtkomlig med UDP på port 53."
+
+#. AXFR_AVAILABLE
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:200
+#, perl-brace-format
+msgid "Nameserver {ns}/{address} allow zone transfer using AXFR."
+msgstr "Namnservern {ns}/{address} tillåter zonöverföringar med AXFR."
+
+#. ANSWER_BAD_RCODE
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:196
+#, perl-brace-format
+msgid ""
+"Nameserver {ns}/{address} answered AAAA query with an unexpected rcode "
+"({rcode})."
+msgstr ""
+"Namnservern {ns}/{address} besvarade en AAAA-fråga med den oväntade "
+"svarskoden '{rcode}'."
+
+#. NS_NO_RESPONSE
+#: ../lib/Zonemaster/Engine/Test/Basic.pm:164
+#, perl-brace-format
+msgid "Nameserver {ns}/{address} did not respond to NS query."
+msgstr "Namnservern {ns}/{address} svarade inte på frågan om 'NS'."
+
+#. NO_RESPONSE
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:167
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:547
+#, perl-brace-format
+msgid "Nameserver {ns}/{address} did not respond."
+msgstr "Inget svar från namnservern '{ns}/{address}'."
+
+#. NO_A_RECORDS
+#: ../lib/Zonemaster/Engine/Test/Basic.pm:148
+#, perl-brace-format
+msgid "Nameserver {ns}/{address} did not return A record(s) for {dname}."
+msgstr ""
+"Namnservern {ns}/{address} svarade inte med några A-poster för '{dname}'."
+
+#. NS_FAILED
+#: ../lib/Zonemaster/Engine/Test/Basic.pm:160
+#, perl-brace-format
+msgid "Nameserver {ns}/{address} did not return NS records. RCODE was {rcode}."
+msgstr ""
+"Namnservern {ns}/{address} svarade inte med några NS-poster. RCODE var "
+"'{rcode}'."
+
+#. QNAME_CASE_INSENSITIVE
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:313
+#, perl-brace-format
+msgid ""
+"Nameserver {ns}/{address} does not preserve original case of queried names."
+msgstr ""
+"Nameservern {ns}/{address} bevarar inte skillnaden mellan versaler och "
+"gemener från frågan ({dname})."
+
+#. NO_EDNS_SUPPORT
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:289
+#, perl-brace-format
+msgid ""
+"Nameserver {ns}/{address} does not support EDNS0 (replies with FORMERR)."
+msgstr "Namnservern {ns}/{address} stöder inte EDNS0 (svarar med 'FORMERR')."
+
+#. QUERY_DROPPED
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:321
+#, perl-brace-format
+msgid "Nameserver {ns}/{address} dropped AAAA query."
+msgstr "Namnservern {ns}/{address} besvarade inte AAAA-frågan."
+
+#. IS_A_RECURSOR
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:281
+#, perl-brace-format
+msgid "Nameserver {ns}/{address} is a recursor."
+msgstr "Namnservern {ns}/{address} är en rekursiv resolver."
+
+#. NO_RECURSOR
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:293
+#, perl-brace-format
+msgid "Nameserver {ns}/{address} is not a recursor."
+msgstr "Namnservern {ns}/{address} är ingen rekursiv resolver."
+
+#. NAMESERVER_NO_TCP_53
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:136
+#, perl-brace-format
+msgid "Nameserver {ns}/{address} not accessible over TCP on port 53."
+msgstr "Namnservern {ns}/{address} är inte åtkomlig över TCP på port 53."
+
+#. NAMESERVER_NO_UDP_53
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:140
+#, perl-brace-format
+msgid "Nameserver {ns}/{address} not accessible over UDP on port 53."
+msgstr "Namnservern {ns}/{address} är inte åtkomlig över UDP på port 53."
+
+#. QNAME_CASE_SENSITIVE
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:317
+#, perl-brace-format
+msgid "Nameserver {ns}/{address} preserves original case of queried names."
+msgstr ""
+"Namnservern {ns}/{address} bevarade versaler och gemener från frågan "
+"({dname})."
+
+#. DIFFERENT_SOURCE_IP
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:255
+#, perl-brace-format
+msgid ""
+"Nameserver {ns}/{address} replies on a SOA query with a different source "
+"address ({source})."
+msgstr ""
+"Namnservern {ns}/{address} besvarade en SOA-fråga från en annan källadress "
+"({source})."
+
+#. HAS_A_RECORDS
+#: ../lib/Zonemaster/Engine/Test/Basic.pm:144
+#, perl-brace-format
+msgid "Nameserver {ns}/{address} returned A record(s) for {dname}."
+msgstr "Namnservern '{ns}/{address}' svarade med A-poster för '{dname}'."
+
+#. UPWARD_REFERRAL
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:337
+#, perl-brace-format
+msgid "Nameserver {ns}/{address} returns an upward referral."
+msgstr "Nameservern {ns}/{address} skickade en hänvisning till moderzonen."
+
+#. A_QUERY_NO_RESPONSES
+#: ../lib/Zonemaster/Engine/Test/Basic.pm:168
+msgid "Nameservers did not respond to A query."
+msgstr "Namnservern svarade inte på en A-fråga."
+
+#. ADDITIONAL_DNSKEY_SKIPPED
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:353
+msgid "No DNSKEYs found. Additional tests skipped."
+msgstr "Inga DNSKEY-poster hittades. Resterande DNSSEC-tester hoppas över."
+
+#. NO_DNSKEY
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:521
+msgid "No DNSKEYs were returned."
+msgstr "Inga DNSKEY-poster returnerades."
+
+#. NO_COMMON_KEYTAGS
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:517
+msgid "No DS record had a DNSKEY with a matching keytag."
+msgstr "Det finns ingen DS-post som har en DNSKEY-post med matchande keytag."
+
+#. DS_MATCH_NOT_FOUND
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:455
+msgid "No DS record with a matching DNSKEY record was found."
+msgstr "Det finns ingen DS-post med matchande DNSKEY-post."
+
+#. MNAME_HAS_NO_ADDRESS
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:230
+#, perl-brace-format
+msgid "No IP address found for SOA 'mname' nameserver ({mname})."
+msgstr "Det finns ingen IP-adress för servern angiven som SOA MNAME ({mname})."
+
+#. NAMESERVERS_IPV4_NO_AS
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:108
+msgid "No IPv4 nameserver address is in an AS."
+msgstr "Ingen namnserver har någon IPv4-adress i något AS."
+
+#. NAMESERVERS_IPV6_NO_AS
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:116
+msgid "No IPv6 nameserver address is in an AS."
+msgstr "Ingen namnserver har någon IPv6-adress i något AS."
+
+#. NO_GLUE_PREVENTS_NAMESERVER_TESTS
+#: ../lib/Zonemaster/Engine/Test/Basic.pm:156
+msgid "No NS records for tested zone from parent. NS tests aborted."
+msgstr ""
+"Inga NS-poster för den testade zonen från föräldern. NS-tester hoppas över."
+
+#. SOA_NOT_SIGNED
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:615
+msgid "No RRSIG correctly signed the SOA RRset."
+msgstr "Det finns ingen RRSIG som har korrekt signerat SOA-posten."
+
+#. TOTAL_ADDRESS_MISMATCH
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:223
+#, perl-brace-format
+msgid ""
+"No common nameserver IP addresses between child ({child}) and parent "
+"({glue})."
+msgstr ""
+"Det finns inga gemensamma namnserver-IP-adresser mellan moderzon ({glue}) "
+"och dotterzon ({child})."
+
+#. ONLY_ALLOWED_CHARS
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:225
+#, perl-brace-format
+msgid "No illegal characters in the domain name ({name})."
 msgstr "Endast tillåtna tecken i namnet '{name}'."
 
-#: SYNTAX:RNAME_MISUSED_AT_SIGN
-msgid  ""
-"There must be no misused '@' character in the SOA RNAME field ({rname})."
-msgstr "Felaktigt använt '@'-tecken i SOA RNAME ({rname})."
+#. NAMESERVERS_NO_AS
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:124
+msgid "No nameserver address is in an AS."
+msgstr "Ingen namnserver har någon adress i något AS."
 
-#: SYNTAX:RNAME_NO_AT_SIGN
-msgid  "There is no misused '@' character in the SOA RNAME field ({rname})."
-msgstr "Inga felanvända @-tecken hittades i SOA RNAME ({rname})."
+#. NS_RR_NO_CNAME
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:257
+msgid "No nameserver point to CNAME alias."
+msgstr "Inget namnservernamn har en CNAME-post."
 
-#: SYNTAX:RNAME_RFC822_INVALID
-msgid  "There must be no illegal characters in the SOA RNAME field ({rname})."
-msgstr "Otillåtet tecken i SOA RNAME ({rname})."
+#. NO_RESOLUTION
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:297
+msgid "No nameservers succeeded to resolve to an IP address."
+msgstr "Det gick inte att slå upp IP-adressen för någon namnserver."
 
-#: SYNTAX:RNAME_RFC822_VALID
-msgid  "The SOA RNAME field ({rname}) is compliant with RFC2822."
-msgstr "Adressen i SOA RNAME ({rname}) är giltig enligt RFC822."
+#. NO_PARENT
+#: ../lib/Zonemaster/Engine/Test/Basic.pm:136
+msgid "No parent domain could be found for the tested domain."
+msgstr "Ingen moderdomän kunde hittas för den testade domänen."
 
-#: SYNTAX:TERMINAL_HYPHEN
-msgid  "Domain name ({name}) has a label ({label}) ending with an hyphen ('-')."
+#. NO_RESPONSE_NS_QUERY
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:171
+#, perl-brace-format
+msgid "No response from nameserver {ns}/{address} on NS queries."
+msgstr "Inget svar från namnservern '{ns}/{address}' på fråga efter NS-post."
+
+#. NO_RESPONSE_SOA_QUERY
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:175
+#, perl-brace-format
+msgid "No response from nameserver {ns}/{address} on SOA queries."
+msgstr "Inget svar från namnservern '{ns}/{address}' på fråga efter SOA-post."
+
+#. NO_RESPONSE_MX_QUERY
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:217
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:226
+msgid "No response from nameserver(s) on MX queries."
+msgstr "Inget svar från namnserver på fråga efter MX-post."
+
+#. NO_RESPONSE_PTR_QUERY
+#: ../lib/Zonemaster/Engine/Test/Address.pm:99
+#, perl-brace-format
+msgid "No response from nameserver(s) on PTR query ({reverse})."
+msgstr "Inget svar från namnservern på PTR-fråga ({reverse})."
+
+#. NO_RESPONSE_SOA_QUERY
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:221
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:222
+msgid "No response from nameserver(s) on SOA queries."
+msgstr "Inget svar från namnserver på fråga efter SOA-post."
+
+#. BREAKS_ON_EDNS
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:208
+#, perl-brace-format
+msgid ""
+"No response from {ns}/{address} when EDNS is used in query asking for "
+"{dname}."
 msgstr ""
-"Domännamnet '{name}' har domändelen '{label}' som slutar med ett bindestreck."
+"Inget svar från {ns}/{address} på förfrågan med EDNS (fråga efter {dname})."
 
-#: SYSTEM:ADDED_FAKE_DELEGATION
-msgid  "Added a fake delegation for domain {domain} to name server {ns}."
+#. NSEC_NOT_SIGNED
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:583
+msgid "No signature correctly signed the NSEC RRset."
+msgstr "Ingen signatur har korrekt signerat NSEC-posterna."
+
+#. NSEC3_NOT_SIGNED
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:563
+msgid "No signature correctly signed the NSEC3 RRset."
+msgstr "Ingen signatur signerade NSEC3-posterna korrekt."
+
+#. NO_MX_RECORD
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:154
+msgid "No target (MX, A or AAAA record) to deliver e-mail for the domain name."
 msgstr ""
-"Lade till en skapad delegering för domänen '{domain}' till namnserver '{ns}'."
+"Inget mål att levera mail till (MX-, A- eller AAAA-post) är angivet för "
+"domänen."
 
-#: SYSTEM:CANNOT_CONTINUE
-msgid  "Not enough data about {zone} was found to be able to run tests."
+#. NO_UPWARD_REFERRAL
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:305
+#, perl-brace-format
+msgid "None of the following nameservers returns an upward referral : {names}."
+msgstr ""
+"Ingen av följande nameserverar skickar hänvisning till moderzonen: {names}."
+
+#. TOTAL_NAME_MISMATCH
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:281
+msgid "None of the nameservers listed at the parent are listed at the child."
+msgstr ""
+"Ingen av de namnservrar som finns i delegeringen (moderzonen) finns i "
+"dotterzonen."
+
+#. CANNOT_CONTINUE
+#: ../lib/Zonemaster/Engine/Translator.pm:29
+#, perl-brace-format
+msgid "Not enough data about {zone} was found to be able to run tests."
 msgstr ""
 "Det finns inte tillräckligt med data om '{zone}' för att kunna köra tester."
 
-#: SYSTEM:PROFILE_FILE
-msgid  "Profile was read from {name}."
-msgstr "Profil lästes från '{name}'."
-
-#: SYSTEM:DEPENDENCY_VERSION
-msgid  "Using prerequisite module {name} version {version}."
-msgstr "Använder version {version} av modulen '{name}'."
-
-#: SYSTEM:FAKE_DELEGATION
-msgid  "Followed a fake delegation."
-msgstr "Följde en skapad delegering."
-
-#: SYSTEM:FAKE_DELEGATION_IN_ZONE_NO_IP
-msgid  ""
-"The fake delegation of domain {domain} includes an in-zone name server {ns} "
-"without mandatory glue (without IP address)."
-msgstr ""
-"Försöksdelegering av domänen '{domain}' innehåller en namnservern '{ns}' som "
-"kräver en glue-post (kräver IP-adress)."
-
-#: SYSTEM:FAKE_DELEGATION_NO_IP
-msgid  ""
-"The fake delegation of domain {domain} includes a name server {ns} that "
-"cannot be resolved to any IP address."
-msgstr ""
-"Försöksdelegering av domänen '{domain}' innehåller en namnservern '{ns}' som "
-"inte kan slås upp till någon IP-adress."
-
-#: SYSTEM:FAKE_DELEGATION_TO_SELF
-msgid  ""
-"Name server {ns} not adding fake delegation for domain {domain} to itself."
-msgstr ""
-"Namnservern '{ns}' lade inte till en skapad delegering av domänen '{domain}' "
-"till sig själv."
-
-#: SYSTEM:GLOBAL_VERSION
-msgid  "Using version {version} of the Zonemaster engine."
-msgstr "Använder version {version} av Zonemasters testmotor."
-
-#: SYSTEM:LOGGER_CALLBACK_ERROR
-msgid  "Logger callback died with error: {exception}"
-msgstr ""
-"Callback-funktionen för log-modulen avbröt med felmeddelandet: '{exception}'"
-
-#: SYSTEM:LOOKUP_ERROR
-msgid  ""
-"DNS query to {ns} for {name}/{type}/{class} failed with error: {message}"
-msgstr ""
-"DNS-fråga till {ns} för {name}/{type}/{class} misslyckades med felet: "
-"'{message}'"
-
-#: SYSTEM:MODULE_END
-msgid  "Module {module} finished running."
-msgstr "Modulen '{module}' avslutades."
-
-#: SYSTEM:MODULE_ERROR
-msgid  "Fatal error in {module}: {msg}"
-msgstr "Fatalt fel i '{module}': '{msg}'"
-
-#: SYSTEM:MODULE_VERSION
-msgid  "Using module {module} version {version}."
-msgstr "Använder version {version} av modulen '{module}'."
-
-#: SYSTEM:NO_NETWORK
-msgid  "Both IPv4 and IPv6 are disabled."
-msgstr "Både IPv4 och IPv6 är inaktiverade."
-
-#: SYSTEM:PACKET_BIG
-msgid  ""
+#. PACKET_BIG
+#: ../lib/Zonemaster/Engine/Translator.pm:113
+#, perl-brace-format
+msgid ""
 "Packet size ({size}) exceeds common maximum size of {maxsize} bytes (try "
 "with \"{command}\")."
 msgstr ""
 "Paketstorleken ({size}) byte överskrider den normalt maximala storleken om "
 "{maxsize} byte. Försök med kommandot '{command}'."
 
-#: SYSTEM:POLICY_DISABLED
-msgid  "The module {name} was disabled by the policy."
-msgstr "Modulen '{name}' var inaktiverad i policyn."
+#. NOT_ENOUGH_NS_DEL
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:225
+#, fuzzy, perl-brace-format
+msgid ""
+"Parent does not list enough ({count}) nameservers ({glue}). Lower limit set "
+"to {minimum}."
+msgstr ""
+"Det finns inte tillräckligt många ({count}) namnservrar (NS-poster) i "
+"delegeringen (moderzonen). Minsta tillåtna antal är {minimum}."
 
-#: SYSTEM:SKIP_IPV4_DISABLED
-msgid  "IPv4 is disabled, not sending query to {ns}."
-msgstr "IPv4 är inaktiverad. Skickar ingen DNS-fråga till '{ns}'."
+#. HAS_PARENT
+#: ../lib/Zonemaster/Engine/Test/Basic.pm:140
+#, perl-brace-format
+msgid "Parent domain '{pname}' was found for the tested domain."
+msgstr "Moderdomänen '{pname}' till den testade domänen har identifierats."
 
-#: SYSTEM:SKIP_IPV6_DISABLED
-msgid  "IPv6 is disabled, not sending query to {ns}."
-msgstr "IPv6 är inaktiverad. Skickar ingen DNS-fråga till '{ns}'."
+#. EXTRA_ADDRESS_PARENT
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:135
+#, perl-brace-format
+msgid ""
+"Parent has extra nameserver IP address(es) not listed at child ({addresses})."
+msgstr ""
+"Moderzonen har extra namnserver-IP-adress(er) som inte finns med i "
+"dotterzonen ({addresses})."
 
-#: SYSTEM:UNKNOWN_METHOD
-msgid  "Request to run unknown method {method} in module {module}."
+#. EXTRA_NAME_PARENT
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:177
+#, perl-brace-format
+msgid "Parent has nameserver(s) not listed at the child ({extra})."
+msgstr ""
+"Delegeringen i moderzonen har en eller flera namnservrar som inte listas på "
+"dotterzonen ({extra})."
+
+#. ENOUGH_NS_DEL
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:169
+#, perl-brace-format
+msgid ""
+"Parent lists enough ({count}) nameservers ({glue}). Lower limit set to "
+"{minimum}."
+msgstr ""
+"Delegeringen i moderzonen har tillräckligt många ({count}) namnservrar "
+"({glue}). Minsta tillåtna antalet är {minimum}."
+
+#. PROFILE_FILE
+#: ../lib/Zonemaster/Engine/Translator.pm:33
+#, perl-brace-format
+msgid "Profile was read from {name}."
+msgstr "Profil lästes från '{name}'."
+
+#. RRSIG_EXPIRATION
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:607
+#, perl-brace-format
+msgid ""
+"RRSIG with keytag {tag} and covering type(s) {types} expires at : {date}."
+msgstr ""
+"RRSIG med 'keytag' {tag} täckande posttyp(er) {types} löper ut datum {date}."
+
+#. DURATION_OK
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:471
+#, perl-brace-format
+msgid ""
+"RRSIG with keytag {tag} and covering type(s) {types} has a duration of "
+"{duration} seconds, which is just fine."
+msgstr ""
+"RRSIG-posten med 'keytag' {tag} och täckande typerna {types} har en "
+"livslängd på {duration} sekunder (accepterad livslängd)."
+
+#. DURATION_LONG
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:465
+#, perl-brace-format
+msgid ""
+"RRSIG with keytag {tag} and covering type(s) {types} has a duration of "
+"{duration} seconds, which is too long."
+msgstr ""
+"RRSIG-posten med 'keytag' {tag} och täckande typerna {types} har en "
+"livslängd på {duration} sekunder, vilket är för länge."
+
+#. REMAINING_LONG
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:595
+#, perl-brace-format
+msgid ""
+"RRSIG with keytag {tag} and covering type(s) {types} has a remaining "
+"validity of {duration} seconds, which is too long."
+msgstr ""
+"RRSIG-posten med 'keytag' {tag} och täckande typerna {types} har en "
+"kvarvarande livslängd på {duration} sekunder, vilket är för länge."
+
+#. REMAINING_SHORT
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:601
+#, perl-brace-format
+msgid ""
+"RRSIG with keytag {tag} and covering type(s) {types} has a remaining "
+"validity of {duration} seconds, which is too short."
+msgstr ""
+"RRSIG-posten med 'keytag' {tag} och täckande typerna {types} har en "
+"kvarvarande livslängd på {duration} sekunder, vilket är för kort."
+
+#. RRSIG_EXPIRED
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:611
+#, perl-brace-format
+msgid ""
+"RRSIG with keytag {tag} and covering type(s) {types} has already expired "
+"(expiration is: {expiration})."
+msgstr ""
+"RRSIG-posten med 'keytag' {tag} och täckande posttyperna {types} har redan "
+"löpt ut (utgångstiden är: {expiration})."
+
+#. SOA_SIGNATURE_OK
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:623
+#, perl-brace-format
+msgid "RRSIG {signature} correctly signs SOA RRset."
+msgstr "RRSIG '{signature}' är en korrekt signatur för SOA-posten."
+
+#. UNKNOWN_METHOD
+#: ../lib/Zonemaster/Engine/Translator.pm:73
+#, perl-brace-format
+msgid "Request to run unknown method {method} in module {module}."
 msgstr ""
 "Begäran om att köra den okända metoden '{method}' i modulen '{module}'."
 
-#: SYSTEM:UNKNOWN_MODULE
-msgid  ""
+#. UNKNOWN_MODULE
+#: ../lib/Zonemaster/Engine/Translator.pm:77
+#, perl-brace-format
+msgid ""
 "Request to run {method} in unknown module {module}. Known modules: {known}."
 msgstr ""
 "Begäran om att köra metoden '{method}' i den okända modulen '{module}'. "
 "Kända moduler: '{known}'."
 
-#: ZONE:EXPIRE_LOWER_THAN_REFRESH
-msgid  ""
-"SOA 'expire' value ({expire}) is lower than the SOA 'refresh' value "
-"({refresh})."
+#. EDNS_RESPONSE_WITHOUT_EDNS
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:259
+#, perl-brace-format
+msgid ""
+"Response without EDNS from {ns}/{address} on query with EDNS0 asking for "
+"{dname}."
 msgstr ""
-"Värdet för SOA 'expire' ({expire}) är lägre än värdet för SOA "
-"'refresh' ({refresh})."
+"Svar utan EDNS från {ns}/{address} på förfrågan med EDNS0 (fråga efter "
+"{dname})."
 
-#: ZONE:EXPIRE_MINIMUM_VALUE_LOWER
-msgid  ""
-"SOA 'expire' value ({expire}) is less than the recommended one "
-"({required_expire})."
-msgstr ""
-"Värdet för SOA 'expire' ({expire}) är lägre än rekommenderat "
-"({required_expire})."
+# # IMPORTANT ##
+# Keep this file in sync with en.po
+# #
+#. NAMESERVERS_IP_WITH_REVERSE
+#: ../lib/Zonemaster/Engine/Test/Address.pm:91
+msgid "Reverse DNS entry exist for all Nameserver IP addresses."
+msgstr "Bakåtuppslagning finns för varje namnserveradress."
 
-#: ZONE:EXPIRE_MINIMUM_VALUE_OK
-msgid  ""
+#. EXPIRE_MINIMUM_VALUE_OK
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:234
+#, fuzzy, perl-brace-format
+msgid ""
 "SOA 'expire' value ({expire}) is higher than the minimum recommended value "
 "({required_expire}) and not lower than the 'refresh' value ({refresh})."
 msgstr ""
 "SOA expire-värdet ligger i det rekommenderade spannet (högre än "
 "{required_expire} och inte lägre än refresh-värdet)."
 
-#: ZONE:MNAME_HAS_NO_ADDRESS
-msgid  "No IP address found for SOA 'mname' nameserver ({mname})."
-msgstr "Det finns ingen IP-adress för servern angiven som SOA MNAME ({mname})."
-
-#: ZONE:MNAME_IS_AUTHORITATIVE
-msgid  "SOA 'mname' nameserver ({mname}) is authoritative for '{zone}' zone."
-msgstr "Nameservern i SOA MNAME ({mname}) är auktoritativ för zonen '{zone}'."
-
-#: ZONE:MNAME_IS_CNAME
-msgid  "SOA 'mname' value ({mname}) refers to a NS which is an alias (CNAME)."
-msgstr "SOA MNAME ('{mname}') har en CNAME-post."
-
-#: ZONE:MNAME_IS_NOT_CNAME
-msgid  ""
-"SOA 'mname' value ({mname}) refers to a NS which is not an alias (CNAME)."
-msgstr "SOA MNAME '{mname}' har ingen CNAME-post."
-
-#: ZONE:MNAME_NOT_AUTHORITATIVE
-msgid  ""
-"SOA 'mname' nameserver {ns}/{address} is not authoritative for '{zone}' zone."
+#. EXPIRE_MINIMUM_VALUE_LOWER
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:194
+#, perl-brace-format
+msgid ""
+"SOA 'expire' value ({expire}) is less than the recommended one "
+"({required_expire})."
 msgstr ""
-"Namnservern angiven som SOA MNAME ({ns}/{address}) är inte auktoritativ för "
-"zonen '{zone}'."
+"Värdet för SOA 'expire' ({expire}) är lägre än rekommenderat "
+"({required_expire})."
 
-#: ZONE:MNAME_NOT_IN_GLUE
-msgid  ""
-"SOA 'mname' nameserver ({mname}) is not listed in \"parent\" NS records for "
-"tested zone ({ns})."
+#. EXPIRE_LOWER_THAN_REFRESH
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:170
+#, perl-brace-format
+msgid ""
+"SOA 'expire' value ({expire}) is lower than the SOA 'refresh' value "
+"({refresh})."
 msgstr ""
-"Namnservern i SOA MNAME finns inte i delegeringen från moderzonen ({ns})."
+"Värdet för SOA 'expire' ({expire}) är lägre än värdet för SOA "
+"'refresh' ({refresh})."
 
-#: ZONE:MNAME_NO_RESPONSE
-msgid  "SOA 'mname' nameserver {ns}/{address} does not respond."
-msgstr "Namnservern i SOA MNAME ({ns}/{address}) svarar inte."
+#. SOA_DEFAULT_TTL_MAXIMUM_VALUE_OK
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:182
+#, fuzzy, perl-brace-format
+msgid ""
+"SOA 'minimum' value ({minimum}) is between the recommended ones "
+"({lowest_minimum}/{highest_minimum})."
+msgstr "SOA minimum-värdet ligger i det rekommenderade spannet."
 
-#: ZONE:MNAME_RECORD_DOES_NOT_EXIST
-msgid  "SOA 'mname' field does not exist"
-msgstr "Fältet för SOA MNAME är tomt."
-
-#: ZONE:MX_RECORD_EXISTS
-msgid  "Target ({info}) found to deliver e-mail for the domain name."
-msgstr "Adressen ({info}) är angiven som mål för mail-leverans till domänen."
-
-#: ZONE:MX_RECORD_IS_CNAME
-msgid  "MX record for the domain is pointing to a CNAME."
-msgstr "Domänens MX-post pekar på ett alias (CNAME)."
-
-#: ZONE:MX_RECORD_IS_NOT_CNAME
-msgid  "MX record for the domain is not pointing to a CNAME."
-msgstr "MX-post för domänen pekar inte ut ett CNAME."
-
-#: ZONE:NO_MX_RECORD
-msgid  "No target (MX, A or AAAA record) to deliver e-mail for the domain name."
-msgstr ""
-"Inget mål att levera mail till (MX-, A- eller AAAA-post) är angivet för "
-"domänen."
-
-#: ZONE:REFRESH_HIGHER_THAN_RETRY
-msgid  ""
-"SOA 'refresh' value ({refresh}) is higher than the SOA 'retry' value "
-"({retry})."
-msgstr ""
-"'refresh'-värdet i SOA-posten ({refresh}) är högre än SOA-postens 'retry'-"
-"värde ({retry})."
-
-#: ZONE:REFRESH_LOWER_THAN_RETRY
-msgid  ""
-"SOA 'refresh' value ({refresh}) is lower than the SOA 'retry' value "
-"({retry})."
-msgstr ""
-"SOA-postens 'refresh'-värde ({refresh}) är lägre än dess 'retry'-värde "
-"({retry})."
-
-#: ZONE:REFRESH_MINIMUM_VALUE_LOWER
-msgid  ""
-"SOA 'refresh' value ({refresh}) is less than the recommended one "
-"({required_refresh})."
-msgstr ""
-"SOA-postens 'refresh'-värde ({refresh}) är lägre än rekommenderat "
-"({required_refresh})."
-
-#: ZONE:REFRESH_MINIMUM_VALUE_OK
-msgid  ""
-"SOA 'refresh' value ({refresh}) is higher than the minimum recommended value "
-"({required_refresh})."
-msgstr ""
-"SOA-postens 'refresh'-värde ({refresh}) är högre än det lägsta "
-"rekommenderade värdet ({required_refresh})."
-
-#: ZONE:RETRY_MINIMUM_VALUE_LOWER
-msgid  ""
-"SOA 'retry' value ({retry}) is less than the recommended one "
-"({required_retry})."
-msgstr ""
-"SOA-postens 'retry'-värde ({retry}) är lägre än rekommenderat "
-"({required_retry})."
-
-#: ZONE:RETRY_MINIMUM_VALUE_OK
-msgid  ""
-"SOA 'retry' value ({retry}) is more than the minimum recommended value "
-"({required_retry})."
-msgstr ""
-"'retry'-värdet i SOA-posten ({retry}) är högre än det lägsta rekommenderade "
-"värdet ({required_retry})."
-
-#: ZONE:SOA_DEFAULT_TTL_MAXIMUM_VALUE_HIGHER
-msgid  ""
+#. SOA_DEFAULT_TTL_MAXIMUM_VALUE_HIGHER
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:174
+#, perl-brace-format
+msgid ""
 "SOA 'minimum' value ({minimum}) is higher than the recommended one "
 "({highest_minimum})."
 msgstr ""
 "SOA-postens 'minimum'-värde ({minimum}) är högre än rekommenderat "
 "({highest_minimum})."
 
-#: ZONE:SOA_DEFAULT_TTL_MAXIMUM_VALUE_LOWER
-msgid  ""
+#. SOA_DEFAULT_TTL_MAXIMUM_VALUE_LOWER
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:178
+#, perl-brace-format
+msgid ""
 "SOA 'minimum' value ({minimum}) is less than the recommended one "
 "({lowest_minimum})."
 msgstr ""
 "SOA-postens 'minimum'-värde ({minimum}) är lägre än rekommenderat "
 "({lowest_minimum})."
 
-#: ZONE:SOA_DEFAULT_TTL_MAXIMUM_VALUE_OK
-msgid  ""
-"SOA 'minimum' value ({minimum}) is between the recommended ones "
-"({lowest_minimum}/{highest_minimum})."
-msgstr "SOA minimum-värdet ligger i det rekommenderade spannet."
+#. MNAME_RECORD_DOES_NOT_EXIST
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:190
+msgid "SOA 'mname' field does not exist"
+msgstr "Fältet för SOA MNAME är tomt."
+
+#. MNAME_IS_AUTHORITATIVE
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:218
+#, perl-brace-format
+msgid "SOA 'mname' nameserver ({mname}) is authoritative for '{zone}' zone."
+msgstr "Nameservern i SOA MNAME ({mname}) är auktoritativ för zonen '{zone}'."
+
+#. MNAME_NOT_IN_GLUE
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:198
+#, fuzzy, perl-brace-format
+msgid ""
+"SOA 'mname' nameserver ({mname}) is not listed in \"parent\" NS records for "
+"tested zone ({ns})."
+msgstr ""
+"Namnservern i SOA MNAME finns inte i delegeringen från moderzonen ({ns})."
+
+#. MNAME_NO_RESPONSE
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:142
+#, perl-brace-format
+msgid "SOA 'mname' nameserver {ns}/{address} does not respond."
+msgstr "Namnservern i SOA MNAME ({ns}/{address}) svarar inte."
+
+#. MNAME_NOT_AUTHORITATIVE
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:186
+#, perl-brace-format
+msgid ""
+"SOA 'mname' nameserver {ns}/{address} is not authoritative for '{zone}' zone."
+msgstr ""
+"Namnservern angiven som SOA MNAME ({ns}/{address}) är inte auktoritativ för "
+"zonen '{zone}'."
+
+#. MNAME_IS_CNAME
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:146
+#, perl-brace-format
+msgid "SOA 'mname' value ({mname}) refers to a NS which is an alias (CNAME)."
+msgstr "SOA MNAME ('{mname}') har en CNAME-post."
+
+#. MNAME_IS_NOT_CNAME
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:150
+#, perl-brace-format
+msgid ""
+"SOA 'mname' value ({mname}) refers to a NS which is not an alias (CNAME)."
+msgstr "SOA MNAME '{mname}' har ingen CNAME-post."
+
+#. REFRESH_HIGHER_THAN_RETRY
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:206
+#, perl-brace-format
+msgid ""
+"SOA 'refresh' value ({refresh}) is higher than the SOA 'retry' value "
+"({retry})."
+msgstr ""
+"'refresh'-värdet i SOA-posten ({refresh}) är högre än SOA-postens 'retry'-"
+"värde ({retry})."
+
+#. REFRESH_MINIMUM_VALUE_OK
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:166
+#, perl-brace-format
+msgid ""
+"SOA 'refresh' value ({refresh}) is higher than the minimum recommended value "
+"({required_refresh})."
+msgstr ""
+"SOA-postens 'refresh'-värde ({refresh}) är högre än det lägsta "
+"rekommenderade värdet ({required_refresh})."
+
+#. REFRESH_MINIMUM_VALUE_LOWER
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:162
+#, perl-brace-format
+msgid ""
+"SOA 'refresh' value ({refresh}) is less than the recommended one "
+"({required_refresh})."
+msgstr ""
+"SOA-postens 'refresh'-värde ({refresh}) är lägre än rekommenderat "
+"({required_refresh})."
+
+#. REFRESH_LOWER_THAN_RETRY
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:202
+#, perl-brace-format
+msgid ""
+"SOA 'refresh' value ({refresh}) is lower than the SOA 'retry' value "
+"({retry})."
+msgstr ""
+"SOA-postens 'refresh'-värde ({refresh}) är lägre än dess 'retry'-värde "
+"({retry})."
+
+#. RETRY_MINIMUM_VALUE_LOWER
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:134
+#, perl-brace-format
+msgid ""
+"SOA 'retry' value ({retry}) is less than the recommended one "
+"({required_retry})."
+msgstr ""
+"SOA-postens 'retry'-värde ({retry}) är lägre än rekommenderat "
+"({required_retry})."
+
+#. RETRY_MINIMUM_VALUE_OK
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:138
+#, perl-brace-format
+msgid ""
+"SOA 'retry' value ({retry}) is more than the minimum recommended value "
+"({required_retry})."
+msgstr ""
+"'retry'-värdet i SOA-posten ({retry}) är högre än det lägsta rekommenderade "
+"värdet ({required_retry})."
+
+#. MNAME_DISCOURAGED_DOUBLE_DASH
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:145
+#, perl-brace-format
+msgid ""
+"SOA MNAME ({name}) has a label ({label}) with a double hyphen ('--') in "
+"position 3 and 4 (with a prefix which is not 'xn--')."
+msgstr ""
+"SOA MNAME '{name}' har en domändel '{label}' med bindestreck i position 3 "
+"och 4, men börjar inte med 'xn--'."
+
+#. MNAME_SYNTAX_OK
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:159
+#, perl-brace-format
+msgid "SOA MNAME ({name}) syntax is valid."
+msgstr "SOA MNAME '{name}' har tillåtet format."
+
+#. MNAME_NUMERIC_TLD
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:155
+#, perl-brace-format
+msgid "SOA MNAME ({name}) within a 'numeric only' TLD ({tld})."
+msgstr "SOA MNAME '{name}' är i en helnumerisk TLD ({tld})."
+
+#. NS_SET
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:179
+#, perl-brace-format
+msgid "Saw NS set ({nsset}) on following nameserver set : {servers}."
+msgstr "NS-uppsättningen '{nsset}' hittades på följande namnservrar: {servers}"
+
+#. SOA_RNAME
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:205
+#, perl-brace-format
+msgid "Saw SOA rname {rname} on following nameserver set : {servers}."
+msgstr "'{rname}' fanns i 'SOA RNAME' på följande namnservrar: {servers}."
+
+#. SOA_SERIAL
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:209
+#, perl-brace-format
+msgid "Saw SOA serial number {serial} on following nameserver set : {servers}."
+msgstr "SOA-serienumret {serial} hittades på följande namnservrar: {servers}."
+
+#. SOA_TIME_PARAMETER_SET
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:218
+#, perl-brace-format
+msgid ""
+"Saw SOA time parameter set (REFRESH={refresh},RETRY={retry},EXPIRE={expire},"
+"MINIMUM={minimum}) on following nameserver set : {servers}."
+msgstr ""
+"SOA-tidsparametrarna (REFRESH={refresh},RETRY={retry},EXPIRE={expire},"
+"MINIMUM={minimum}) hittades på följande namnservrar: {servers}."
+
+#. MULTIPLE_NS_SET
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:147
+#, perl-brace-format
+msgid "Saw {count} NS set."
+msgstr "{count} NS-uppsättningar hittades."
+
+#. MULTIPLE_SOA_RNAMES
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:155
+#, perl-brace-format
+msgid "Saw {count} SOA rname."
+msgstr "{count} olika 'SOA RNAME' hittades."
+
+#. MULTIPLE_SOA_SERIALS
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:159
+#, perl-brace-format
+msgid "Saw {count} SOA serial numbers."
+msgstr "{count} olika SOA-serienummer hittades."
+
+#. MULTIPLE_SOA_TIME_PARAMETER_SET
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:163
+#, perl-brace-format
+msgid "Saw {count} SOA time parameter set."
+msgstr "{count} olika uppsättningar med SOA-tidsparametrar hittades."
+
+#. EXTRA_PROCESSING_OK
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:481
+#, perl-brace-format
+msgid "Server at {server} sent {keys} DNSKEY records and {sigs} RRSIG records."
+msgstr ""
+"Namnservern '{server}' skickade {keys} DNSKEY-poster och {sigs} RRSIG-poster."
+
+#. EXTRA_PROCESSING_BROKEN
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:477
+#, perl-brace-format
+msgid ""
+"Server at {server} sent {keys} DNSKEY records, and {sigs} RRSIG records."
+msgstr ""
+"Namnservern '{server}' skickade {keys} DNSKEY-poster, och {sigs} RRSIG-"
+"poster."
+
+#. DNSKEY_SIGNATURE_NOT_OK
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:415
+#, perl-brace-format
+msgid ""
+"Signature for DNSKEY with tag {signature} failed to verify with error "
+"'{error}'."
+msgstr ""
+"Verifiering av signaturen för DNSKEY-posten med 'keytag' {signature} "
+"misslyckades med felmeddelandet '{error}'."
+
+#. MX_RECORD_EXISTS
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:158
+#, perl-brace-format
+msgid "Target ({info}) found to deliver e-mail for the domain name."
+msgstr "Adressen ({info}) är angiven som mål för mail-leverans till domänen."
+
+#. ALGORITHM_OK
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:375
+#, perl-brace-format
+msgid ""
+"The DNSKEY with tag {keytag} uses algorithm number {algorithm}/"
+"({description}), which is OK."
+msgstr ""
+"DNSKEY-posten med 'tag' {keytag} använder det accepterade algoritm numret "
+"{algorithm}/({description})."
+
+#. ALGORITHM_DEPRECATED
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:361
+#, perl-brace-format
+msgid ""
+"The DNSKEY with tag {keytag} uses deprecated algorithm number {algorithm}/"
+"({description})."
+msgstr ""
+"DNSKEY-posten med 'tag' {keytag} använder en algoritm nummmr med det "
+"utfasade algoritmnumret {algorithm}/({description})."
+
+#. ALGORITHM_PRIVATE
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:379
+#, perl-brace-format
+msgid ""
+"The DNSKEY with tag {keytag} uses private algorithm number {algorithm}/"
+"({description})."
+msgstr ""
+"DNSKEY-posten med 'tag' {keytag} använder en algoritm med det privata "
+"algoritmnumret {algorithm}/({description})."
+
+#. ALGORITHM_RESERVED
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:383
+#, perl-brace-format
+msgid ""
+"The DNSKEY with tag {keytag} uses reserved algorithm number {algorithm}/"
+"({description})."
+msgstr ""
+"DNSKEY-posten med 'tag' {keytag} använder en algoritm med det reserverade "
+"algoritmnumret {algorithm}/({description})."
+
+#. ALGORITHM_UNASSIGNED
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:387
+#, perl-brace-format
+msgid ""
+"The DNSKEY with tag {keytag} uses unassigned algorithm number {algorithm}/"
+"({description})."
+msgstr ""
+"DNSKEY-posten med 'tag' {keytag} använder en algoritm med det otilldelade "
+"algoritmnumret {algorithm}/({description})."
+
+#. RNAME_RFC822_VALID
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:245
+#, perl-brace-format
+msgid "The SOA RNAME field ({rname}) is compliant with RFC2822."
+msgstr "Adressen i SOA RNAME ({rname}) är giltig enligt RFC822."
+
+#. DNSKEY_SIGNED
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:423
+msgid "The apex DNSKEY RRset was correcly signed."
+msgstr "DNSKEY-posterna i zontoppen var korrekt signerad."
+
+#. DNSKEY_NOT_SIGNED
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:411
+msgid "The apex DNSKEY RRset was not correctly signed."
+msgstr "DNSKEY-posterna i zontoppen var inte korrekt signerad."
+
+#. FAKE_DELEGATION_NO_IP
+#: ../lib/Zonemaster/Engine/Translator.pm:107
+#, perl-brace-format
+msgid ""
+"The fake delegation of domain {domain} includes a name server {ns} that "
+"cannot be resolved to any IP address."
+msgstr ""
+"Försöksdelegering av domänen '{domain}' innehåller en namnservern '{ns}' som "
+"inte kan slås upp till någon IP-adress."
+
+#. FAKE_DELEGATION_IN_ZONE_NO_IP
+#: ../lib/Zonemaster/Engine/Translator.pm:101
+#, perl-brace-format
+msgid ""
+"The fake delegation of domain {domain} includes an in-zone name server {ns} "
+"without mandatory glue (without IP address)."
+msgstr ""
+"Försöksdelegering av domänen '{domain}' innehåller en namnservern '{ns}' som "
+"kräver en glue-post (kräver IP-adress)."
+
+#. AAAA_WELL_PROCESSED
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:192
+#, perl-brace-format
+msgid ""
+"The following nameservers answer AAAA queries without problems : {names}."
+msgstr "Följande namnservrar svarade problemfritt på AAAA-frågor : {names}."
+
+#. CAN_NOT_BE_RESOLVED
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:216
+#, perl-brace-format
+msgid "The following nameservers failed to resolve to an IP address : {names}."
+msgstr ""
+"Följande namnservernamn kunde inte slås upp till någon IP-adresser: {names}."
+
+#. EDNS0_SUPPORT
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:269
+#, perl-brace-format
+msgid "The following nameservers support EDNS0 : {names}."
+msgstr "Följande namnservrar stöder EDNS0: {names}."
+
+#. POLICY_DISABLED
+#: ../lib/Zonemaster/Engine/Translator.pm:69
+#, perl-brace-format
+msgid "The module {name} was disabled by the policy."
+msgstr "Modulen '{name}' var inaktiverad i policyn."
+
+#. ITERATIONS_OK
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:501
+#, perl-brace-format
+msgid "The number of NSEC3 iterations is {count}, which is OK."
+msgstr "Antalet NSEC3-iterationer är {count} (accepterad antal)."
+
+#. MANY_ITERATIONS
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:509
+#, perl-brace-format
+msgid "The number of NSEC3 iterations is {count}, which is on the high side."
+msgstr "Antalet NSEC3-iterationer är {count}, vilket är högt."
+
+#. TOO_MANY_ITERATIONS
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:631
+#, perl-brace-format
+msgid ""
+"The number of NSEC3 iterations is {count}, which is too high for key length "
+"{keylength}."
+msgstr ""
+"Antalet NSEC3-iterationer är {count}, vilket är för många för nyckellängden "
+"{keylength}."
+
+#. REFERRAL_SIZE_TOO_LARGE
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:261
+#, perl-brace-format
+msgid ""
+"The smallest possible legal referral packet is larger than 512 octets (it is "
+"{size})."
+msgstr ""
+"Minsta möjliga giltiga hänvisningspaket är större än 512 byte (det är {size} "
+"byte)."
+
+#. REFERRAL_SIZE_OK
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:265
+#, perl-brace-format
+msgid ""
+"The smallest possible legal referral packet is smaller than 513 octets (it "
+"is {size})."
+msgstr ""
+"Minsta möjliga giltiga hänvisningspaket är på 512 byte eller mindre (det är "
+"{size} byte)."
+
+#. HAS_NSEC
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:493
+msgid "The zone has NSEC records."
+msgstr "Zonen har NSEC-poster."
+
+#. HAS_NSEC3_OPTOUT
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:485
+msgid "The zone has NSEC3 opt-out records."
+msgstr "Zonen har opt-out-flaggan satt för NSEC3."
+
+#. HAS_NSEC3
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:489
+msgid "The zone has NSEC3 records."
+msgstr "Zonen har NSEC3-poster."
+
+#. NOT_SIGNED
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:551
+msgid "The zone is not signed with DNSSEC."
+msgstr "Zonen är inte signerad med DNSSEC."
+
+#. COMMON_KEYTAGS
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:391
+#, perl-brace-format
+msgid "There are both DS and DNSKEY records with key tags {keytags}."
+msgstr "Det finns både DS- and DNSKEY-poster med 'keytag' {keytags}."
+
+#. NEITHER_DNSKEY_NOR_DS
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:513
+msgid "There are neither DS nor DNSKEY records for the zone."
+msgstr "Zonen har varken DS- eller DNSKEY-poster."
+
+#. RNAME_NO_AT_SIGN
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:237
+#, perl-brace-format
+msgid "There is no misused '@' character in the SOA RNAME field ({rname})."
+msgstr "Inga felanvända @-tecken hittades i SOA RNAME ({rname})."
+
+#. RNAME_RFC822_INVALID
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:241
+#, perl-brace-format
+msgid "There must be no illegal characters in the SOA RNAME field ({rname})."
+msgstr "Otillåtet tecken i SOA RNAME ({rname})."
+
+#. RNAME_MISUSED_AT_SIGN
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:233
+#, perl-brace-format
+msgid ""
+"There must be no misused '@' character in the SOA RNAME field ({rname})."
+msgstr "Felaktigt använt '@'-tecken i SOA RNAME ({rname})."
+
+#. NSEC_SIG_VERIFY_ERROR
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:591
+#, perl-brace-format
+msgid "Trying to verify NSEC RRset with RRSIG {sig} gave error '{error}'."
+msgstr ""
+"Försöket att verifiera NSEC-posterna med RRSIG {sig} gav felet '{error}'."
+
+#. NSEC3_SIG_VERIFY_ERROR
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:571
+#, perl-brace-format
+msgid "Trying to verify NSEC3 RRset with RRSIG {sig} gave error '{error}'."
+msgstr ""
+"Försöket att verifiera NSEC3-posterna med RRSIG {sig} gav felet '{error}'."
+
+#. SOA_SIGNATURE_NOT_OK
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:619
+#, perl-brace-format
+msgid ""
+"Trying to verify SOA RRset with signature {signature} gave error '{error}'."
+msgstr ""
+"Försöket att verifiera SOA-mängden med signatur {signature} gav felet "
+"'{error}'."
+
+#. UPWARD_REFERRAL_IRRELEVANT
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:341
+msgid "Upward referral tests skipped for root zone."
+msgstr ""
+"Tester för hänvisning till moderzon stryks för root-zonen (det finns ingen "
+"moderzon)."
+
+#. MODULE_VERSION
+#: ../lib/Zonemaster/Engine/Translator.pm:57
+#, perl-brace-format
+msgid "Using module {module} version {version}."
+msgstr "Använder version {version} av modulen '{module}'."
+
+#. DEPENDENCY_VERSION
+#: ../lib/Zonemaster/Engine/Translator.pm:37
+#, perl-brace-format
+msgid "Using prerequisite module {name} version {version}."
+msgstr "Använder version {version} av modulen '{name}'."
+
+#. GLOBAL_VERSION
+#: ../lib/Zonemaster/Engine/Translator.pm:41
+#, perl-brace-format
+msgid "Using version {version} of the Zonemaster engine."
+msgstr "Använder version {version} av Zonemasters testmotor."
+
+#. INVALID_NAME_RCODE
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:497
+#, perl-brace-format
+msgid ""
+"When asked for the name {name}, which must not exist, the response had RCODE "
+"{rcode}."
+msgstr ""
+"Svaret på en fråga om namnet '{name}', som inte får existera, hade RCODE "
+"'{rcode}'."
+
+#. CASE_QUERY_DIFFERENT_RC
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:234
+#, perl-brace-format
+msgid ""
+"When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver "
+"{ns}/{address} returns different RCODE (\"{rcode1}\" vs \"{rcode2}\")."
+msgstr ""
+"Namnservern {ns}/{address} ger olika RCODE ('{rcode1}' resp. '{rcode2}') när "
+"frågan är '{query1}' resp. '{query2}' för posttypen '{type}'."
+
+#. CASE_QUERY_DIFFERENT_ANSWER
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:228
+#, perl-brace-format
+msgid ""
+"When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver "
+"{ns}/{address} returns different answers."
+msgstr ""
+"Namnservern {ns}/{address} ger olika svar när frågan är '{query1}' resp. "
+"'{query2}' för posttypen '{type}'."
+
+#. CASE_QUERY_SAME_RC
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:249
+#, perl-brace-format
+msgid ""
+"When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver "
+"{ns}/{address} returns same RCODE \"{rcode}\"."
+msgstr ""
+"Namnservern {ns}/{address} ger samma RCODE '{rcode}' när frågan är "
+"'{query1}' resp. '{query2}' för posttypen '{type}'."
+
+#. CASE_QUERY_SAME_ANSWER
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:244
+#, perl-brace-format
+msgid ""
+"When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver "
+"{ns}/{address} returns same answers."
+msgstr ""
+"Namnservern {ns}/{address} ger samma svar när frågan är '{query1}' resp. "
+"'{query2}' för posttypen '{type}'."
+
+#. CASE_QUERIES_RESULTS_DIFFER
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:220
+#, perl-brace-format
+msgid ""
+"When asked for {type} records on \"{query}\" with different cases, all "
+"servers do not reply consistently."
+msgstr ""
+"Alla servrar svarar inte konsekvent när förfrågade om '{query}' med olika "
+"skiftlägen och posttypen '{type}'."
+
+#. CASE_QUERIES_RESULTS_OK
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:224
+#, perl-brace-format
+msgid ""
+"When asked for {type} records on \"{query}\" with different cases, all "
+"servers reply consistently."
+msgstr ""
+"Alla servrar svarar konsekvent när förfrågade om '{query}' med olika "
+"skiftlägen och posttypen '{type}'."
+
+#. CASE_QUERY_NO_ANSWER
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:240
+#, perl-brace-format
+msgid ""
+"When asked for {type} records on \"{query}\", nameserver {ns}/{address} "
+"returns nothing."
+msgstr ""
+"Nameserver {ns}/{address} svarar ingenting när den får frågan om '{query}' "
+"med posttypen '{type}'."
+
+#. ASN_INFOS_ANNOUNCE_BY
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:164
+#, perl-brace-format
+msgid "[ASN:ANNOUNCE_BY] {address};{asn}"
+msgstr "[ASN:ANNOUNCE_BY] {address};{asn}"
+
+#. ASN_INFOS_ANNOUNCE_IN
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:168
+#, perl-brace-format
+msgid "[ASN:ANNOUNCE_IN] {address};{prefix}"
+msgstr "[ASN:ANNOUNCE_IN] {address};{prefix}"
+
+#. ASN_INFOS_RAW
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:160
+#, perl-brace-format
+msgid "[ASN:RAW] {address};{data}"
+msgstr "[ASN:RAW] {address};{data}"
+
+#. DNSKEY_BUT_NOT_DS
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:407
+#, perl-brace-format
+msgid "{child} sent a DNSKEY record, but {parent} did not send a DS record."
+msgstr ""
+"Dotterzonen '{child}' skickade en DNSKEY-post, men moderzonen '{parent}' "
+"skickade inte någon DS-post."
+
+#. NO_DS
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:525
+#, perl-brace-format
+msgid "{from} returned no DS records for {zone}."
+msgstr "'{from}' skickade inga DS-poster för '{zone}'."
+
+#. DNSKEY_AND_DS
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:403
+#, perl-brace-format
+msgid "{parent} sent a DS record, and {child} a DNSKEY record."
+msgstr ""
+"Moderzonen '{parent}' skickade en DS-post, och dotterzonen '{child}' en "
+"DNSKEY-post."
+
+#. DS_BUT_NOT_DNSKEY
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:427
+#, perl-brace-format
+msgid "{parent} sent a DS record, but {child} did not send a DNSKEY record."
+msgstr ""
+"Moderzonen '{parent}' skickade en DS-post, men dotterzonen '{child}' "
+"skickade ingen DNSKEY-post."
+
+#. NO_NSEC3PARAM
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:539
+#, perl-brace-format
+msgid "{server} returned no NSEC3PARAM records."
+msgstr "'{server}' gav inga NSEC3PARAM-poster i svaret."
