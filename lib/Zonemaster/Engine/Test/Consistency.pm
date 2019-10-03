@@ -141,7 +141,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     IN_BAILIWICK_ADDR_MISMATCH => sub {
         __x    # IN_BAILIWICK_ADDR_MISMATCH
-          'In Bailiwick addresses mismatch between parent ({parent_addresses}) and child ({zone_addresses})', @_;
+          'In-bailiwick name server listed at parent has a mismatch between glue data at parent ({parent_addresses}) and any equivalent address record in child zone({zone_addresses})', @_;
     },
     IPV4_DISABLED => sub {           # IPV4_DISABLED
         __x 'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
@@ -193,7 +193,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     OUT_OF_BAILIWICK_ADDR_MISMATCH => sub {
         __x    # OUT_OF_BAILIWICK_ADDR_MISMATCH
-          'Out of Bailiwick addresses mismatch between parent ({parent_addresses}) and child ({zone_addresses})', @_;
+          'Out-of-bailiwick name server listed at parent with glue record has a mismatch between the glue at the parent ({parent_addresses}) and iany equivalent address record found in authoritative zone  ({zone_addresses})', @_;
     },
     SOA_RNAME => sub {                          # SOA_RNAME
         __x 'Saw SOA rname {rname} on following nameserver set : {servers}.', @_;
@@ -642,7 +642,7 @@ sub consistency04 {
 
 sub _get_addr_rrs {
     my ( $class, $ns, $name, $qtype ) = @_;
-    my $p = $ns->query( $name, $qtype );
+    my $p = $ns->query( $name, $qtype, { recurse => 0 } );
     if ( !$p ) {
         return info(
             NO_RESPONSE => {
@@ -652,9 +652,9 @@ sub _get_addr_rrs {
         );
     }
     elsif ($p->is_redirect) {
-        my $p_pub = Zonemaster::Engine->recurse( $name, $qtype, 'IN' );
-        if ( $p_pub ) {
-            return ( undef, $p_pub->get_records_for_name( $qtype, $name, 'answer' ) );
+        my $p = $ns->query( $name, $qtype, { recurse => 1 } );
+        if ( $p ) {
+            return ( undef, $p->get_records_for_name( $qtype, $name, 'answer' ) );
         } else {
             return ( undef );
         }
@@ -670,6 +670,7 @@ sub _get_addr_rrs {
             }
         );
     }
+    return ( undef );
 }
 
 sub consistency05 {
@@ -718,10 +719,8 @@ sub consistency05 {
 
     my @ib_nsnames =
       grep { $zone->name->is_in_bailiwick( $_ ) } @{ Zonemaster::Engine::TestMethods->method2and3( $zone ) };
-
     my @ib_nss = grep { Zonemaster::Engine::Util::ipversion_ok( $_->address->version ) }
       @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) };
-
     my %child_ib_strings;
     for my $ib_nsname ( @ib_nsnames ) {
         my $is_lame = 1;
@@ -754,7 +753,7 @@ sub consistency05 {
     my @ib_mismatch    = grep { !exists $child_ib_strings{$_} } keys %strict_glue;
     my @ib_extra_child = grep { !exists $strict_glue{$_} } keys %child_ib_strings;
 
-    if ( @ib_mismatch ) {
+    if ( scalar @ib_mismatch ) {
         push @results,
           info(
             IN_BAILIWICK_ADDR_MISMATCH => {
@@ -763,7 +762,7 @@ sub consistency05 {
             }
           );
     }
-    if ( @ib_extra_child ) {
+    if ( scalar @ib_extra_child ) {
         push @results,
           info(
             EXTRA_ADDRESS_CHILD => {
