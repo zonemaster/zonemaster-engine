@@ -203,7 +203,7 @@ msgstr ""
 
 #. NOT_ENOUGH_NS_CHILD
 #: ../lib/Zonemaster/Engine/Test/Delegation.pm:221
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Child does not list enough ({count}) nameservers ({ns}). Lower limit set to "
 "{minimum}."
@@ -249,22 +249,24 @@ msgstr ""
 
 #. DS_DOES_NOT_MATCH_DNSKEY
 #: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:439
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "DS record with keytag {keytag} and digest type {digtype} does not match the "
 "DNSKEY with the same tag."
 msgstr ""
-"DS-posten med 'keytag' {keytag} matchar inte DNSKEY-posten med samma "
-"'keytag'."
+"DS-posten med 'keytag' {keytag} och digest-typen {digtype} stämmer inte med "
+"DNSKEY-posten med samma 'keytag'."
 
 #. DS_MATCHES_DNSKEY
 #: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:447
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "DS record with keytag {keytag} and digest type {digtype} matches the DNSKEY "
 "with the same tag."
 msgstr ""
-"DS-posten med 'keytag' {keytag} matchar DNSKEY-posten med samma 'keytag'."
+"DS-posten med 'keytag' {keytag} och digest-typen {digtype} stämmer med "
+"DNSKEY-posten med samma 'keytag'."
+
 
 #. DS_DIGTYPE_OK
 #: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:435
@@ -299,13 +301,13 @@ msgstr ""
 
 #. SOA_SERIAL_VARIATION
 #: ../lib/Zonemaster/Engine/Test/Consistency.pm:213
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Difference between the smaller serial ({serial_min}) and the bigger one "
 "({serial_max}) is greater than the maximum allowed ({max_variation})."
 msgstr ""
-"Spannet mellan högsta och lägsta SOA-serienumret är större än "
-"{max_variation}."
+"Spannet mellan högsta och lägsta SOA-serienumret ({serial_min} resp "
+"{serial_max}) är större än det maximalt tillåtna ({max_variation})."
 
 #. DOMAIN_NAME_LABEL_TOO_LONG
 #: ../lib/Zonemaster/Engine/Test/Basic.pm:124
@@ -658,9 +660,10 @@ msgstr "Namnservern '{ns}' svarade inte auktoritativt på {proto} port 53."
 
 #. NS_RR_IS_CNAME
 #: ../lib/Zonemaster/Engine/Test/Delegation.pm:253
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "Nameserver {ns} {address_type} RR point to CNAME."
-msgstr "Namnservern '{ns}' har en CNAME-post."
+msgstr "Namnservern '{ns}' med förväntade posttypen '{address_type}' "
+"är istället ett CNAME."
 
 #. NAMESERVER_HAS_TCP_53
 #: ../lib/Zonemaster/Engine/Test/Connectivity.pm:128
@@ -971,13 +974,14 @@ msgstr ""
 
 #. NOT_ENOUGH_NS_DEL
 #: ../lib/Zonemaster/Engine/Test/Delegation.pm:225
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Parent does not list enough ({count}) nameservers ({glue}). Lower limit set "
 "to {minimum}."
 msgstr ""
 "Det finns inte tillräckligt många ({count}) namnservrar (NS-poster) i "
-"delegeringen (moderzonen). Minsta tillåtna antal är {minimum}."
+"delegeringen (moderzonen). Antlet funna är {count} ({glue}). Minsta "
+"tillåtna antal är {minimum}."
 
 #. HAS_PARENT
 #: ../lib/Zonemaster/Engine/Test/Basic.pm:140
@@ -1118,13 +1122,13 @@ msgstr "Bakåtuppslagning finns för varje namnserveradress."
 
 #. EXPIRE_MINIMUM_VALUE_OK
 #: ../lib/Zonemaster/Engine/Test/Zone.pm:234
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "SOA 'expire' value ({expire}) is higher than the minimum recommended value "
 "({required_expire}) and not lower than the 'refresh' value ({refresh})."
 msgstr ""
-"SOA expire-värdet ligger i det rekommenderade spannet (högre än "
-"{required_expire} och inte lägre än refresh-värdet)."
+"Värdet för SOA 'expire' ligger i det rekommenderade spannet (högre än "
+"{required_expire} och inte lägre än värdet på 'refresh')."
 
 #. EXPIRE_MINIMUM_VALUE_LOWER
 #: ../lib/Zonemaster/Engine/Test/Zone.pm:194
@@ -1148,11 +1152,12 @@ msgstr ""
 
 #. SOA_DEFAULT_TTL_MAXIMUM_VALUE_OK
 #: ../lib/Zonemaster/Engine/Test/Zone.pm:182
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "SOA 'minimum' value ({minimum}) is between the recommended ones "
 "({lowest_minimum}/{highest_minimum})."
-msgstr "SOA minimum-värdet ligger i det rekommenderade spannet."
+msgstr "Värdet för SOA 'minimum' ligger i det rekommenderade spannet "
+"({lowest_minimum} - {highest_minimum})."
 
 #. SOA_DEFAULT_TTL_MAXIMUM_VALUE_HIGHER
 #: ../lib/Zonemaster/Engine/Test/Zone.pm:174
@@ -1187,12 +1192,13 @@ msgstr "Nameservern i SOA MNAME ({mname}) är auktoritativ för zonen '{zone}'."
 
 #. MNAME_NOT_IN_GLUE
 #: ../lib/Zonemaster/Engine/Test/Zone.pm:198
-#, fuzzy, perl-brace-format
+#,  perl-brace-format
 msgid ""
 "SOA 'mname' nameserver ({mname}) is not listed in \"parent\" NS records for "
 "tested zone ({ns})."
 msgstr ""
-"Namnservern i SOA MNAME finns inte i delegeringen från moderzonen ({ns})."
+"Namnservern i SOA MNAME ({mname}) finns inte i delegeringen från moderzonen "
+"({ns})."
 
 #. MNAME_NO_RESPONSE
 #: ../lib/Zonemaster/Engine/Test/Zone.pm:142
