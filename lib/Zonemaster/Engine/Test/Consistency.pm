@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::Consistency;
 
-use version; our $VERSION = version->declare("v1.1.8");
+use version; our $VERSION = version->declare("v1.1.9");
 
 use strict;
 use warnings;
@@ -126,6 +126,14 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # ADDRESSES_MATCH
           'Glue records are consistent between glue and authoritative data.', @_;
     },
+    CHILD_NS_FAILED => sub {
+        __x    # CHILD_NS_FAILED
+          'Query to {ns}/{address} failed', @_;
+    },
+    CHILD_ZONE_LAME => sub {
+        __x    # CHILD_ZONE_LAME
+          'Lame delegation', @_;
+    },
     EXTRA_ADDRESS_CHILD => sub {
         __x    # EXTRA_ADDRESS_CHILD
           'Child has extra nameserver IP address(es) not listed at parent ({addresses}).', @_;
@@ -134,9 +142,14 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # EXTRA_ADDRESS_PARENT
           'Parent has extra nameserver IP address(es) not listed at child ({addresses}).', @_;
     },
+    IN_BAILIWICK_ADDR_MISMATCH => sub {
+        __x    # IN_BAILIWICK_ADDR_MISMATCH
+          'In-bailiwick name server listed at parent has a mismatch between glue data at parent ({parent_addresses}) and any equivalent address record in child zone({zone_addresses})', @_;
+    },
     IPV4_DISABLED => sub {
         __x    # IPV4_DISABLED
           'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
+
     },
     IPV6_DISABLED => sub {
         __x    # IPV6_DISABLED
@@ -199,6 +212,10 @@ Readonly my %TAG_DESCRIPTIONS => (
           'A single SOA time parameter set was seen '
           . '(REFRESH={refresh},RETRY={retry},EXPIRE={expire},MINIMUM={minimum}).',
           @_;
+    },
+    OUT_OF_BAILIWICK_ADDR_MISMATCH => sub {
+        __x    # OUT_OF_BAILIWICK_ADDR_MISMATCH
+          'Out-of-bailiwick name server listed at parent with glue record has a mismatch between the glue at the parent ({parent_addresses}) and iany equivalent address record found in authoritative zone  ({zone_addresses})', @_;
     },
     SOA_RNAME => sub {
         __x    # SOA_RNAME
@@ -650,7 +667,7 @@ sub consistency04 {
 
 sub _get_addr_rrs {
     my ( $class, $ns, $name, $qtype ) = @_;
-    my $p = $ns->query( $name, $qtype );
+    my $p = $ns->query( $name, $qtype, { recurse => 0 } );
     if ( !$p ) {
         return info(
             NO_RESPONSE => {
@@ -660,9 +677,9 @@ sub _get_addr_rrs {
         );
     }
     elsif ($p->is_redirect) {
-        my $p_pub = Zonemaster::Engine->recurse( $name, $qtype, 'IN' );
-        if ( $p_pub ) {
-            return ( undef, $p_pub->get_records_for_name( $qtype, $name, 'answer' ) );
+        my $p = $ns->query( $name, $qtype, { recurse => 1 } );
+        if ( $p ) {
+            return ( undef, $p->get_records_for_name( $qtype, $name, 'answer' ) );
         } else {
             return ( undef );
         }
@@ -678,6 +695,7 @@ sub _get_addr_rrs {
             }
         );
     }
+    return ( undef );
 }
 
 sub consistency05 {
@@ -686,28 +704,54 @@ sub consistency05 {
 
     my %strict_glue;
     my %extended_glue;
-    for my $ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) } ) {
-        my $ns_string = $ns->name->fqdn . "/" . $ns->address->short;
-        if ( $zone->name->is_in_bailiwick( $ns->name ) ) {
+
+    # We need to work on Methods...
+    # This part of code is supposed to replace method4 call
+    my @child_nsnames;
+    my @nsnames;
+    my $ns_aref = $zone->parent->query_all( $zone->name, q{NS} );
+    my %parent_glues;
+    foreach my $p ( @{$ns_aref} ) {
+        next if not $p;
+        push @nsnames, $p->get_records_for_name( q{NS}, $zone->name );
+    }
+    @child_nsnames = uniq map { name( lc( $_->nsdname ) ) } @nsnames;
+    foreach my $nsname ( @child_nsnames ) {
+        my $a_aref = $zone->parent->query_all( $nsname, q{A} );
+        my $aaaa_aref = $zone->parent->query_all( $nsname, q{AAAA} );
+        foreach my $p ( @{$a_aref} ) {
+            next if not $p;
+            foreach my $rr ( $p->get_records_for_name( q{A}, $nsname ) ) {
+                $parent_glues{ $rr->owner . q{/} . $rr->address } = $nsname;
+            }
+        }
+        foreach my $p ( @{$aaaa_aref} ) {
+            next if not $p;
+            foreach my $rr ( $p->get_records_for_name( q{AAAA}, $nsname ) ) {
+                $parent_glues{ $rr->owner . q{/} . $rr->address } = $nsname;
+            }
+        }
+    }
+
+    for my $ns_string ( keys %parent_glues ) {
+        if ( $zone->name->is_in_bailiwick( $parent_glues{$ns_string} ) ) {
             $strict_glue{ $ns_string } = 1;
         }
         else {
-            push @{ $extended_glue{ $ns->name->string } }, $ns_string;
+            push @{ $extended_glue{ $parent_glues{$ns_string} } }, $ns_string;
         }
     }
 
     my @ib_nsnames =
       grep { $zone->name->is_in_bailiwick( $_ ) } @{ Zonemaster::Engine::TestMethods->method2and3( $zone ) };
-
     my @ib_nss = grep { Zonemaster::Engine::Util::ipversion_ok( $_->address->version ) }
       @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) };
-
     my %child_ib_strings;
     for my $ib_nsname ( @ib_nsnames ) {
         my $is_lame = 1;
         for my $ns ( @ib_nss ) {
-            my ( $msg_a,    @rrs_a )    = $class->_get_addr_rrs( $ns, $ib_nsname, 'A' );
-            my ( $msg_aaaa, @rrs_aaaa ) = $class->_get_addr_rrs( $ns, $ib_nsname, 'AAAA' );
+            my ( $msg_a,    @rrs_a )    = $class->_get_addr_rrs( $ns, $ib_nsname, q{A} );
+            my ( $msg_aaaa, @rrs_aaaa ) = $class->_get_addr_rrs( $ns, $ib_nsname, q{AAAA} );
 
             if ( defined $msg_a ) {
                 push @results, $msg_a;
@@ -720,7 +764,7 @@ sub consistency05 {
             }
 
             for my $rr ( @rrs_a, @rrs_aaaa ) {
-                $child_ib_strings{ lc( $rr->name ) . "/" . $rr->address } = 1;
+                $child_ib_strings{ lc( $rr->name ) . q{/} . $rr->address } = 1;
             }
         }
 
@@ -734,7 +778,7 @@ sub consistency05 {
     my @ib_mismatch    = grep { !exists $child_ib_strings{$_} } keys %strict_glue;
     my @ib_extra_child = grep { !exists $strict_glue{$_} } keys %child_ib_strings;
 
-    if ( @ib_mismatch ) {
+    if ( scalar @ib_mismatch ) {
         push @results,
           info(
             IN_BAILIWICK_ADDR_MISMATCH => {
@@ -743,7 +787,7 @@ sub consistency05 {
             }
           );
     }
-    if ( @ib_extra_child ) {
+    if ( scalar @ib_extra_child ) {
         push @results,
           info(
             EXTRA_ADDRESS_CHILD => {
@@ -759,17 +803,17 @@ sub consistency05 {
 
         my %child_oob_strings;
 
-        my $p_a = Zonemaster::Engine->recurse( $glue_name, 'A', 'IN' );
+        my $p_a = Zonemaster::Engine->recurse( $glue_name, q{A}, q{IN} );
         if ( $p_a ) {
-            for my $rr ( $p_a->get_records_for_name( 'A', $glue_name, 'answer' ) ) {
-                $child_oob_strings{ $rr->owner . "/" . $rr->address } = 1;
+            for my $rr ( $p_a->get_records_for_name( q{A}, $glue_name, q{answer} ) ) {
+                $child_oob_strings{ $rr->owner . q{/} . $rr->address } = 1;
             }
         }
 
-        my $p_aaaa = Zonemaster::Engine->recurse( $glue_name, 'AAAA', 'IN' );
+        my $p_aaaa = Zonemaster::Engine->recurse( $glue_name, q{AAAA}, q{IN} );
         if ( $p_aaaa ) {
-            for my $rr ( $p_aaaa->get_records_for_name( 'AAAA', $glue_name, 'answer' ) ) {
-                $child_oob_strings{ $rr->owner . "/" . $rr->address } = 1;
+            for my $rr ( $p_aaaa->get_records_for_name( q{AAAA}, $glue_name, q{answer} ) ) {
+                $child_oob_strings{ $rr->owner . q{/} . $rr->address } = 1;
             }
         }
 
