@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::Basic;
 
-use version; our $VERSION = version->declare("v1.0.11");
+use version; our $VERSION = version->declare("v1.0.12");
 
 use strict;
 use warnings;
@@ -149,7 +149,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     HAS_NAMESERVERS => sub {
         __x    # HAS_NAMESERVERS
-          'Nameserver {ns} listed these servers as glue: {nsnlist}.', @_;
+          'Nameserver {ns}/{address} listed these servers as glue: {nsnlist}.', @_;
     },
     NO_GLUE_PREVENTS_NAMESERVER_TESTS => sub {
         __x    # NO_GLUE_PREVENTS_NAMESERVER_TESTS

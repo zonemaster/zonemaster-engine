@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::Zone;
 
-use version; our $VERSION = version->declare("v1.0.7");
+use version; our $VERSION = version->declare("v1.0.9");
 
 use strict;
 use warnings;
@@ -28,7 +28,6 @@ sub all {
 
     push @results, $class->zone01( $zone ) if Zonemaster::Engine::Util::should_run_test( q{zone01} );
     if ( none { $_->tag eq q{NO_RESPONSE_SOA_QUERY} } @results ) {
-
         push @results, $class->zone02( $zone ) if Zonemaster::Engine::Util::should_run_test( q{zone02} );
         push @results, $class->zone03( $zone ) if Zonemaster::Engine::Util::should_run_test( q{zone03} );
         push @results, $class->zone04( $zone ) if Zonemaster::Engine::Util::should_run_test( q{zone04} );
@@ -44,7 +43,9 @@ sub all {
             push @results, $class->zone09( $zone ) if Zonemaster::Engine::Util::should_run_test( q{zone09} );
         }
     }
-
+    if ( none { $_->tag eq q{NO_RESPONSE_SOA_QUERY} } @results ) {
+        push @results, $class->zone10( $zone ) if Zonemaster::Engine::Util::should_run_test( q{zone10} );
+    }
     return @results;
 } ## end sub all
 
@@ -125,6 +126,15 @@ sub metadata {
               NO_RESPONSE_MX_QUERY
               )
         ],
+        zone10 => [
+            qw(
+              MULTIPLE_SOA
+              NO_RESPONSE
+              NO_SOA_IN_RESPONSE
+              ONE_SOA
+              WRONG_SOA
+              )
+        ],
     };
 } ## end sub metadata
 
@@ -195,7 +205,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     MNAME_NOT_IN_GLUE => sub {
         __x    # MNAME_NOT_IN_GLUE
-          'SOA \'mname\' nameserver ({mname}) is not listed in "parent" NS records for tested zone ({ns}).', @_;
+          'SOA \'mname\' nameserver ({mname}) is not listed in "parent" NS records for tested zone ({nss}).', @_;
     },
     REFRESH_LOWER_THAN_RETRY => sub {
         __x    # REFRESH_LOWER_THAN_RETRY
@@ -217,6 +227,14 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # MNAME_IS_AUTHORITATIVE
           'SOA \'mname\' nameserver ({mname}) is authoritative for \'{zone}\' zone.', @_;
     },
+    MULTIPLE_SOA => sub {
+        __x    # MULTIPLE_SOA
+          'Nameserver {ns}/{address} responds with multiple ({count}) SOA records on SOA queries.', @_;
+    },
+    NO_RESPONSE => sub {
+        __x    # NO_RESPONSE
+          'Nameserver {ns}/{address} did not respond.', @_;
+    },
     NO_RESPONSE_SOA_QUERY => sub {
         __x    # NO_RESPONSE_SOA_QUERY
           'No response from nameserver(s) on SOA queries.';
@@ -225,15 +243,27 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # NO_RESPONSE_MX_QUERY
           'No response from nameserver(s) on MX queries.';
     },
+    NO_SOA_IN_RESPONSE => sub {
+        __x    # NO_SOA_IN_RESPONSE
+          'Response from nameserver {ns}/{address} on SOA queries does not contain SOA record.';
+    },
     MNAME_HAS_NO_ADDRESS => sub {
         __x    # MNAME_HAS_NO_ADDRESS
           'No IP address found for SOA \'mname\' nameserver ({mname}).', @_;
+    },
+    ONE_SOA => sub {
+        __x    # ONE_SOA
+          'A unique SOA record is returned by all nameservers of the zone.', @_;
     },
     EXPIRE_MINIMUM_VALUE_OK => sub {
         __x    # EXPIRE_MINIMUM_VALUE_OK
           'SOA \'expire\' value ({expire}) is higher than the minimum recommended value ({required_expire}) '
           . 'and not lower than the \'refresh\' value ({refresh}).',
           @_;
+    },
+    WRONG_SOA => sub {
+        __x    # WRONG_SOA
+          '', @_;
     },
 );
 
@@ -294,7 +324,7 @@ sub zone01 {
                   info(
                     MNAME_NOT_IN_GLUE => {
                         mname => $soa_mname,
-                        ns    => join( q{;}, @{ Zonemaster::Engine::TestMethods->method2( $zone ) } ),
+                        nss   => join( q{;}, @{ Zonemaster::Engine::TestMethods->method2( $zone ) } ),
                     }
                   );
             }
@@ -566,7 +596,7 @@ sub zone08 {
     if ( $p ) {
         my @mx = $p->get_records_for_name( q{MX}, $zone->name );
         for my $mx ( @mx ) {
-	    my $p2 = $zone->query_auth( $mx->exchange, q{CNAME} );
+            my $p2 = $zone->query_auth( $mx->exchange, q{CNAME} );
             if ( $p2->has_rrs_of_type_for_name( q{CNAME}, $mx->exchange ) ) {
                 push @results, info( MX_RECORD_IS_CNAME => {} );
             }
@@ -627,6 +657,72 @@ sub zone09 {
 
     return @results;
 } ## end sub zone09
+
+sub zone10 {
+    my ( $class, $zone ) = @_;
+    my $name = name( $zone );
+    my @results;
+
+    foreach my $ns ( @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) } ) {
+
+        if ( _is_ip_version_disabled( $ns ) ) {
+            next;
+        }
+
+        my $p = $ns->query( $name, q{SOA} );
+
+        if ( not $p ) {
+            push @results,
+              info(
+                NO_RESPONSE => {
+                    ns      => $ns->name->string,
+                    address => $ns->address->short,
+                }
+              );
+            next;
+        }
+        else {
+            my @soa = $p->get_records( q{SOA}, q{answer} );
+            if ( scalar @soa ) {
+                if ( scalar @soa > 1 ) {
+                    push @results,
+                      info(
+                        MULTIPLE_SOA => {
+                            ns      => $ns->name->string,
+                            address => $ns->address->short,
+                            count   => scalar @soa,
+                        }
+                      );
+                }
+                elsif ( $soa[0]->owner ne $name->fqdn ) {
+                    push @results,
+                      info(
+                        WRONG_SOA => {
+                            ns      => $ns->name->string,
+                            address => $ns->address->short,
+                            owner   => $soa[0]->owner,
+                            name    => $name->fqdn,
+                        }
+                      );
+                }
+            }
+            else {
+                push @results,
+                  info(
+                    NO_SOA_IN_RESPONSE => {
+                        ns      => $ns->name->string,
+                        address => $ns->address->short,
+                    }
+                  );
+            }
+        }
+    }
+    if ( not scalar @results ) {
+        push @results, info( ONE_SOA => {} );
+    }
+
+    return @results;
+} ## end sub zone10
 
 sub _retrieve_record_from_zone {
     my ( $zone, $name, $type ) = @_;
@@ -736,6 +832,10 @@ Verify that MX records does not resolve to a CNAME.
 =item zone09($zone)
 
 Verify that there is a target host (MX, A or AAAA) to deliver e-mail for the domain name.
+
+=item zone10($zone)
+
+Verify that the zone of the domain to be tested return exactly one SOA record.
 
 =back
 

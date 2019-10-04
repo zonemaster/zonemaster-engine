@@ -34,6 +34,7 @@ ok( $res{REFRESH_HIGHER_THAN_RETRY},        q{SOA 'refresh' value is higher than
 ok( $res{EXPIRE_MINIMUM_VALUE_OK},
     q{SOA 'expire' value is higher than the minimum recommended value and lower than 'refresh' value} );
 ok( $res{MX_RECORD_IS_NOT_CNAME}, q{MX record for the domain is not pointing to a CNAME} );
+ok( $res{ONE_SOA} , q{Unique SOA returned} );
 
 $zone = Zonemaster::Engine->zone( q{zone01.zut-root.rd.nic.fr} );
 %res = map { $_->tag => 1 } Zonemaster::Engine->test_method( q{Zone}, q{zone01}, $zone );
