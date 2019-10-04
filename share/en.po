@@ -203,7 +203,7 @@ msgstr ""
 
 #. NOT_ENOUGH_NS_CHILD
 #: ../lib/Zonemaster/Engine/Test/Delegation.pm:227
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Child does not list enough ({count}) nameservers ({nss}). Lower limit set to "
 "{minimum}."
@@ -247,7 +247,7 @@ msgstr "Child has nameserver(s) not listed at parent ({extra})."
 
 #. ENOUGH_NS_CHILD
 #: ../lib/Zonemaster/Engine/Test/Delegation.pm:171
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Child lists enough ({count}) nameservers ({nss}). Lower limit set to "
 "{minimum}."
@@ -879,7 +879,7 @@ msgstr "Nameserver {ns}/{address} is not a recursor."
 
 #. HAS_NAMESERVERS
 #: ../lib/Zonemaster/Engine/Test/Basic.pm:152
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "Nameserver {ns}/{address} listed these servers as glue: {nsnlist}."
 msgstr "Nameserver {ns}/{address} listed these servers as glue: {nsnlist}."
 
@@ -1336,7 +1336,7 @@ msgstr "SOA 'mname' nameserver ({mname}) is authoritative for '{zone}' zone."
 
 #. MNAME_NOT_IN_GLUE
 #: ../lib/Zonemaster/Engine/Test/Zone.pm:198
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "SOA 'mname' nameserver ({mname}) is not listed in \"parent\" NS records for "
 "tested zone ({nss})."
@@ -1562,17 +1562,17 @@ msgid ""
 "({description}), which is OK."
 msgstr ""
 "The DNSKEY with tag {keytag} uses algorithm number {algorithm}/"
-"({description}) [OK]."
+"({description}), which is OK."
 
 #. ALGORITHM_NOT_RECOMMENDED
 #: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:406
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "The DNSKEY with tag {keytag} uses an algorithm number {algorithm}/"
 "({description} which which is not recommended to be used."
 msgstr ""
-"The DNSKEY with tag {keytag} uses algorithm number {algorithm}/"
-"({description}) [OK]."
+"The DNSKEY with tag {keytag} uses an algorithm number {algorithm}/"
+"({description} which which is not recommended to be used."
 
 #. ALGORITHM_DEPRECATED
 #: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:402
