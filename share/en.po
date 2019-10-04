@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-03 23:11+0200\n"
+"POT-Creation-Date: 2019-10-04 19:08+0200\n"
 "PO-Revision-Date: 2017-12-18\n"
 "Last-Translator: mats.dufberg@iis.se\n"
 "Language-Team: Zonemaster Team\n"
@@ -24,25 +24,25 @@ msgid "A signature for DNSKEY with tag {signature} was correctly signed."
 msgstr "A signature for DNSKEY with tag {signature} was correctly signed."
 
 #. ONE_SOA_MNAME
-#: ../lib/Zonemaster/Engine/Test/Consistency.pm:187
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:199
 #, perl-brace-format
 msgid "A single SOA mname value was seen ({mname})"
 msgstr "A single SOA mname value was seen ({mname})"
 
 #. ONE_SOA_RNAME
-#: ../lib/Zonemaster/Engine/Test/Consistency.pm:191
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:203
 #, perl-brace-format
 msgid "A single SOA rname value was seen ({rname})"
 msgstr "A single SOA rname value was found ({rname})"
 
 #. ONE_SOA_SERIAL
-#: ../lib/Zonemaster/Engine/Test/Consistency.pm:195
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:207
 #, perl-brace-format
 msgid "A single SOA serial number was seen ({serial})."
 msgstr "A single SOA serial number was found ({serial})."
 
 #. ONE_SOA_TIME_PARAMETER_SET
-#: ../lib/Zonemaster/Engine/Test/Consistency.pm:199
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:211
 #, perl-brace-format
 msgid ""
 "A single SOA time parameter set was seen (REFRESH={refresh},RETRY={retry},"
@@ -52,10 +52,15 @@ msgstr ""
 "EXPIRE={expire},MINIMUM={minimum})."
 
 #. ONE_NS_SET
-#: ../lib/Zonemaster/Engine/Test/Consistency.pm:183
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:195
 #, perl-brace-format
 msgid "A unique NS set was seen ({nsset})."
 msgstr "A single NS set was found ({nsset})."
+
+#. ONE_SOA
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:256
+msgid "A unique SOA record is returned by all nameservers of the zone."
+msgstr ""
 
 #. AXFR_FAILURE
 #: ../lib/Zonemaster/Engine/Test/Nameserver.pm:204
@@ -232,7 +237,7 @@ msgstr ""
 "addresses ({addrs}). Lower limit set to {minimum}."
 
 #. EXTRA_ADDRESS_CHILD
-#: ../lib/Zonemaster/Engine/Test/Consistency.pm:131
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:139
 #, perl-brace-format
 msgid ""
 "Child has extra nameserver IP address(es) not listed at parent ({addresses})."
@@ -408,7 +413,7 @@ msgstr ""
 "present, the minimum allowed would be {minimum}."
 
 #. SOA_SERIAL_VARIATION
-#: ../lib/Zonemaster/Engine/Test/Consistency.pm:213
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:229
 #, perl-brace-format
 msgid ""
 "Difference between the smaller serial ({serial_min}) and the bigger one "
@@ -587,7 +592,7 @@ msgstr "IP {address} refers to multiple nameservers ({nss})."
 #: ../lib/Zonemaster/Engine/Test/Connectivity.pm:144
 #: ../lib/Zonemaster/Engine/Test/Delegation.pm:187
 #: ../lib/Zonemaster/Engine/Test/Nameserver.pm:273
-#: ../lib/Zonemaster/Engine/Test/Consistency.pm:139
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:151
 #: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:542
 #: ../lib/Zonemaster/Engine/Test/Basic.pm:176
 #, perl-brace-format
@@ -610,7 +615,7 @@ msgstr "IPv4 is enabled, can send \"{rrtype}\" query to {ns}/{address}."
 #: ../lib/Zonemaster/Engine/Test/Connectivity.pm:148
 #: ../lib/Zonemaster/Engine/Test/Delegation.pm:191
 #: ../lib/Zonemaster/Engine/Test/Nameserver.pm:277
-#: ../lib/Zonemaster/Engine/Test/Consistency.pm:143
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:155
 #: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:546
 #: ../lib/Zonemaster/Engine/Test/Basic.pm:184
 #, perl-brace-format
@@ -628,6 +633,15 @@ msgstr "IPv6 is disabled, not sending query to {ns}."
 #, perl-brace-format
 msgid "IPv6 is enabled, can send \"{rrtype}\" query to {ns}/{address}."
 msgstr "IPv6 is enabled, can send \"{rrtype}\" query to {ns}/{address}."
+
+#. IN_BAILIWICK_ADDR_MISMATCH
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:147
+#, perl-brace-format
+msgid ""
+"In-bailiwick name server listed at parent has a mismatch between glue data "
+"at parent ({parent_addresses}) and any equivalent address record in child "
+"zone({zone_addresses})"
+msgstr ""
 
 #. EDNS_VERSION_ERROR
 #: ../lib/Zonemaster/Engine/Test/Nameserver.pm:263
@@ -649,6 +663,12 @@ msgstr ""
 "Key with keytag {keytag} details : Size = {keysize}, Flags ({sep}, "
 "{rfc5011})."
 
+#. CHILD_ZONE_LAME
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:135
+#, fuzzy
+msgid "Lame delegation"
+msgstr "Followed a fake delegation."
+
 #. LOGGER_CALLBACK_ERROR
 #: ../lib/Zonemaster/Engine/Translator.pm:45
 #, perl-brace-format
@@ -656,12 +676,12 @@ msgid "Logger callback died with error: {exception}"
 msgstr "Logger callback died with error: {exception}"
 
 #. MX_RECORD_IS_NOT_CNAME
-#: ../lib/Zonemaster/Engine/Test/Zone.pm:214
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:224
 msgid "MX record for the domain is not pointing to a CNAME."
 msgstr "MX record for the domain is not pointing to a CNAME."
 
 #. MX_RECORD_IS_CNAME
-#: ../lib/Zonemaster/Engine/Test/Zone.pm:210
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:220
 msgid "MX record for the domain is pointing to a CNAME."
 msgstr "MX record for the domain is pointing to a CNAME."
 
@@ -816,7 +836,8 @@ msgid "Nameserver {ns}/{address} did not respond to NS query."
 msgstr "Nameserver {ns}/{address} did not respond to NS query."
 
 #. NO_RESPONSE
-#: ../lib/Zonemaster/Engine/Test/Consistency.pm:167
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:236
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:179
 #: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:596
 #, perl-brace-format
 msgid "Nameserver {ns}/{address} did not respond."
@@ -928,11 +949,29 @@ msgstr ""
 msgid "Nameserver {ns}/{address} responded with no DNSKEY record(s)."
 msgstr "Nameserver {ns}/{address} responded with no DNSKEY record(s)."
 
+#. WRONG_SOA
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:266
+#, fuzzy, perl-brace-format
+msgid ""
+"Nameserver {ns}/{address} responds with a wrong owner name ({owner} instead "
+"of {name}) on SOA queries."
+msgstr ""
+"Nameserver {ns}/{address} does not preserve original case of queried names "
+"({dname})."
+
 #. UNKNOWN_OPTION_CODE
 #: ../lib/Zonemaster/Engine/Test/Nameserver.pm:329
 #, perl-brace-format
 msgid "Nameserver {ns}/{address} responds with an unknown ENDS OPTION-CODE."
 msgstr "Nameserver {ns}/{address} responds with an unknown ENDS OPTION-CODE."
+
+#. MULTIPLE_SOA
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:232
+#, fuzzy, perl-brace-format
+msgid ""
+"Nameserver {ns}/{address} responds with multiple ({count}) SOA records on "
+"SOA queries."
+msgstr "Nameserver {ns}/{address} responded with no DNSKEY record(s)."
 
 #. HAS_A_RECORDS
 #: ../lib/Zonemaster/Engine/Test/Basic.pm:144
@@ -972,7 +1011,7 @@ msgid "No DS record with a matching DNSKEY record was found."
 msgstr "No DS record with a matching DNSKEY record was found."
 
 #. MNAME_HAS_NO_ADDRESS
-#: ../lib/Zonemaster/Engine/Test/Zone.pm:230
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:252
 #, perl-brace-format
 msgid "No IP address found for SOA 'mname' nameserver ({mname})."
 msgstr "No IP address found for SOA 'mname' nameserver ({mname})."
@@ -998,7 +1037,7 @@ msgid "No RRSIG correctly signed the SOA RRset."
 msgstr "No RRSIG correctly signed the SOA RRset."
 
 #. TOTAL_ADDRESS_MISMATCH
-#: ../lib/Zonemaster/Engine/Test/Consistency.pm:223
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:239
 #, perl-brace-format
 msgid ""
 "No common nameserver IP addresses between child ({child}) and parent "
@@ -1034,20 +1073,20 @@ msgid "No parent domain could be found for the tested domain."
 msgstr "No parent domain could be found for the domain under test."
 
 #. NO_RESPONSE_NS_QUERY
-#: ../lib/Zonemaster/Engine/Test/Consistency.pm:171
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:183
 #, perl-brace-format
 msgid "No response from nameserver {ns}/{address} on NS queries."
 msgstr "No response from nameserver {ns}/{address} on NS queries."
 
 #. NO_RESPONSE_SOA_QUERY
-#: ../lib/Zonemaster/Engine/Test/Consistency.pm:175
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:187
 #, perl-brace-format
 msgid "No response from nameserver {ns}/{address} on SOA queries."
 msgstr "No response from nameserver {ns}/{address} on SOA queries."
 
 #. NO_RESPONSE_MX_QUERY
 #: ../lib/Zonemaster/Engine/Test/Syntax.pm:217
-#: ../lib/Zonemaster/Engine/Test/Zone.pm:226
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:244
 msgid "No response from nameserver(s) on MX queries."
 msgstr "No response from nameserver(s) on MX queries."
 
@@ -1059,7 +1098,7 @@ msgstr "No response from nameserver(s) on PTR query ({reverse})."
 
 #. NO_RESPONSE_SOA_QUERY
 #: ../lib/Zonemaster/Engine/Test/Syntax.pm:221
-#: ../lib/Zonemaster/Engine/Test/Zone.pm:222
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:240
 msgid "No response from nameserver(s) on SOA queries."
 msgstr "No response from nameserver(s) on SOA queries."
 
@@ -1091,7 +1130,7 @@ msgid "No signature correctly signed the NSEC3 RRset."
 msgstr "No signature correctly signed the NSEC3 RRset."
 
 #. NO_MX_RECORD
-#: ../lib/Zonemaster/Engine/Test/Zone.pm:154
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:164
 msgid "No target (MX, A or AAAA record) to deliver e-mail for the domain name."
 msgstr ""
 "No target (MX, A or AAAA record) to deliver e-mail for the domain name."
@@ -1113,6 +1152,15 @@ msgstr "None of the nameservers listed at the parent are listed at the child."
 #, perl-brace-format
 msgid "Not enough data about {zone} was found to be able to run tests."
 msgstr "Not enough data about {zone} was found to be able to run tests."
+
+#. OUT_OF_BAILIWICK_ADDR_MISMATCH
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:217
+#, perl-brace-format
+msgid ""
+"Out-of-bailiwick name server listed at parent with glue record has a "
+"mismatch between the glue at the parent ({parent_addresses}) and iany "
+"equivalent address record found in authoritative zone  ({zone_addresses})"
+msgstr ""
 
 #. PACKET_BIG
 #: ../lib/Zonemaster/Engine/Translator.pm:113
@@ -1141,7 +1189,7 @@ msgid "Parent domain '{pname}' was found for the tested domain."
 msgstr "Parent domain '{pname}' was found for the tested domain."
 
 #. EXTRA_ADDRESS_PARENT
-#: ../lib/Zonemaster/Engine/Test/Consistency.pm:135
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:143
 #, perl-brace-format
 msgid ""
 "Parent has extra nameserver IP address(es) not listed at child ({addresses})."
@@ -1248,6 +1296,14 @@ msgid ""
 msgstr ""
 "Request to run {method} in unknown module {module}. Known modules: {known}."
 
+#. NO_SOA_IN_RESPONSE
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:248
+#, fuzzy, perl-brace-format
+msgid ""
+"Response from nameserver {ns}/{address} on SOA queries does not contain SOA "
+"record."
+msgstr "No response from nameserver {ns}/{address} on SOA queries."
+
 #. EDNS_RESPONSE_WITHOUT_EDNS
 #: ../lib/Zonemaster/Engine/Test/Nameserver.pm:259
 #, perl-brace-format
@@ -1264,7 +1320,7 @@ msgid "Reverse DNS entry exist for all Nameserver IP addresses."
 msgstr "Reverse DNS entry exists for each Nameserver IP address."
 
 #. EXPIRE_MINIMUM_VALUE_OK
-#: ../lib/Zonemaster/Engine/Test/Zone.pm:234
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:260
 #, perl-brace-format
 msgid ""
 "SOA 'expire' value ({expire}) is higher than the minimum recommended value "
@@ -1274,7 +1330,7 @@ msgstr ""
 "({required_expire}) and not lower than the 'refresh' value ({refresh})."
 
 #. EXPIRE_MINIMUM_VALUE_LOWER
-#: ../lib/Zonemaster/Engine/Test/Zone.pm:194
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:204
 #, perl-brace-format
 msgid ""
 "SOA 'expire' value ({expire}) is less than the recommended one "
@@ -1284,7 +1340,7 @@ msgstr ""
 "({required_expire})."
 
 #. EXPIRE_LOWER_THAN_REFRESH
-#: ../lib/Zonemaster/Engine/Test/Zone.pm:170
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:180
 #, perl-brace-format
 msgid ""
 "SOA 'expire' value ({expire}) is lower than the SOA 'refresh' value "
@@ -1294,7 +1350,7 @@ msgstr ""
 "({refresh})."
 
 #. SOA_DEFAULT_TTL_MAXIMUM_VALUE_OK
-#: ../lib/Zonemaster/Engine/Test/Zone.pm:182
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:192
 #, perl-brace-format
 msgid ""
 "SOA 'minimum' value ({minimum}) is between the recommended ones "
@@ -1304,7 +1360,7 @@ msgstr ""
 "({lowest_minimum}/{highest_minimum})."
 
 #. SOA_DEFAULT_TTL_MAXIMUM_VALUE_HIGHER
-#: ../lib/Zonemaster/Engine/Test/Zone.pm:174
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:184
 #, perl-brace-format
 msgid ""
 "SOA 'minimum' value ({minimum}) is higher than the recommended one "
@@ -1314,7 +1370,7 @@ msgstr ""
 "({highest_minimum})."
 
 #. SOA_DEFAULT_TTL_MAXIMUM_VALUE_LOWER
-#: ../lib/Zonemaster/Engine/Test/Zone.pm:178
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:188
 #, perl-brace-format
 msgid ""
 "SOA 'minimum' value ({minimum}) is less than the recommended one "
@@ -1324,18 +1380,18 @@ msgstr ""
 "({lowest_minimum})."
 
 #. MNAME_RECORD_DOES_NOT_EXIST
-#: ../lib/Zonemaster/Engine/Test/Zone.pm:190
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:200
 msgid "SOA 'mname' field does not exist"
 msgstr "SOA 'mname' field does not exist"
 
 #. MNAME_IS_AUTHORITATIVE
-#: ../lib/Zonemaster/Engine/Test/Zone.pm:218
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:228
 #, perl-brace-format
 msgid "SOA 'mname' nameserver ({mname}) is authoritative for '{zone}' zone."
 msgstr "SOA 'mname' nameserver ({mname}) is authoritative for '{zone}' zone."
 
 #. MNAME_NOT_IN_GLUE
-#: ../lib/Zonemaster/Engine/Test/Zone.pm:198
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:208
 #, perl-brace-format
 msgid ""
 "SOA 'mname' nameserver ({mname}) is not listed in \"parent\" NS records for "
@@ -1345,13 +1401,13 @@ msgstr ""
 "tested zone ({nss})."
 
 #. MNAME_NO_RESPONSE
-#: ../lib/Zonemaster/Engine/Test/Zone.pm:142
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:152
 #, perl-brace-format
 msgid "SOA 'mname' nameserver {ns}/{address} does not respond."
 msgstr "SOA 'mname' nameserver {ns}/{address} does not respond."
 
 #. MNAME_NOT_AUTHORITATIVE
-#: ../lib/Zonemaster/Engine/Test/Zone.pm:186
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:196
 #, perl-brace-format
 msgid ""
 "SOA 'mname' nameserver {ns}/{address} is not authoritative for '{zone}' zone."
@@ -1359,13 +1415,13 @@ msgstr ""
 "SOA 'mname' nameserver {ns}/{address} is not authoritative for '{zone}' zone."
 
 #. MNAME_IS_CNAME
-#: ../lib/Zonemaster/Engine/Test/Zone.pm:146
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:156
 #, perl-brace-format
 msgid "SOA 'mname' value ({mname}) refers to a NS which is an alias (CNAME)."
 msgstr "SOA 'mname' value ({mname}) refers to a NS which is an alias (CNAME)."
 
 #. MNAME_IS_NOT_CNAME
-#: ../lib/Zonemaster/Engine/Test/Zone.pm:150
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:160
 #, perl-brace-format
 msgid ""
 "SOA 'mname' value ({mname}) refers to a NS which is not an alias (CNAME)."
@@ -1373,7 +1429,7 @@ msgstr ""
 "SOA 'mname' value ({mname}) refers to a NS which is not an alias (CNAME)."
 
 #. REFRESH_HIGHER_THAN_RETRY
-#: ../lib/Zonemaster/Engine/Test/Zone.pm:206
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:216
 #, perl-brace-format
 msgid ""
 "SOA 'refresh' value ({refresh}) is higher than the SOA 'retry' value "
@@ -1383,7 +1439,7 @@ msgstr ""
 "({retry})."
 
 #. REFRESH_MINIMUM_VALUE_OK
-#: ../lib/Zonemaster/Engine/Test/Zone.pm:166
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:176
 #, perl-brace-format
 msgid ""
 "SOA 'refresh' value ({refresh}) is higher than the minimum recommended value "
@@ -1393,7 +1449,7 @@ msgstr ""
 "value ({required_refresh})."
 
 #. REFRESH_MINIMUM_VALUE_LOWER
-#: ../lib/Zonemaster/Engine/Test/Zone.pm:162
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:172
 #, perl-brace-format
 msgid ""
 "SOA 'refresh' value ({refresh}) is less than the recommended one "
@@ -1403,7 +1459,7 @@ msgstr ""
 "({required_refresh})."
 
 #. REFRESH_LOWER_THAN_RETRY
-#: ../lib/Zonemaster/Engine/Test/Zone.pm:202
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:212
 #, perl-brace-format
 msgid ""
 "SOA 'refresh' value ({refresh}) is lower than the SOA 'retry' value "
@@ -1413,7 +1469,7 @@ msgstr ""
 "({retry})."
 
 #. RETRY_MINIMUM_VALUE_LOWER
-#: ../lib/Zonemaster/Engine/Test/Zone.pm:134
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:144
 #, perl-brace-format
 msgid ""
 "SOA 'retry' value ({retry}) is less than the recommended one "
@@ -1423,7 +1479,7 @@ msgstr ""
 "({required_retry})."
 
 #. RETRY_MINIMUM_VALUE_OK
-#: ../lib/Zonemaster/Engine/Test/Zone.pm:138
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:148
 #, perl-brace-format
 msgid ""
 "SOA 'retry' value ({retry}) is more than the minimum recommended value "
@@ -1455,26 +1511,26 @@ msgid "SOA MNAME ({name}) within a 'numeric only' TLD ({tld})."
 msgstr "SOA MNAME ({name}) within a 'numeric only' TLD ({tld})."
 
 #. NS_SET
-#: ../lib/Zonemaster/Engine/Test/Consistency.pm:179
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:191
 #, perl-brace-format
 msgid "Saw NS set ({nsset}) on following nameserver set : {servers}."
 msgstr "Saw NS set ({nsset}) on following nameserver set : {servers}."
 
 #. SOA_RNAME
-#: ../lib/Zonemaster/Engine/Test/Consistency.pm:205
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:221
 #, perl-brace-format
 msgid "Saw SOA rname {rname} on following nameserver set : {servers}."
 msgstr "Found SOA rname {rname} on following nameserver set : {servers}."
 
 #. SOA_SERIAL
-#: ../lib/Zonemaster/Engine/Test/Consistency.pm:209
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:225
 #, perl-brace-format
 msgid "Saw SOA serial number {serial} on following nameserver set : {servers}."
 msgstr ""
 "Found SOA serial number {serial} on following nameserver set : {servers}."
 
 #. SOA_TIME_PARAMETER_SET
-#: ../lib/Zonemaster/Engine/Test/Consistency.pm:218
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:234
 #, perl-brace-format
 msgid ""
 "Saw SOA time parameter set (REFRESH={refresh},RETRY={retry},EXPIRE={expire},"
@@ -1484,31 +1540,31 @@ msgstr ""
 "EXPIRE={expire},MINIMUM={minimum}) on following nameserver set : {servers}."
 
 #. MULTIPLE_NS_SET
-#: ../lib/Zonemaster/Engine/Test/Consistency.pm:147
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:159
 #, perl-brace-format
 msgid "Saw {count} NS set."
 msgstr "Found {count} NS set(s)."
 
 #. MULTIPLE_SOA_MNAMES
-#: ../lib/Zonemaster/Engine/Test/Consistency.pm:151
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:163
 #, perl-brace-format
 msgid "Saw {count} SOA mname."
 msgstr "Saw {count} SOA mname."
 
 #. MULTIPLE_SOA_RNAMES
-#: ../lib/Zonemaster/Engine/Test/Consistency.pm:155
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:167
 #, perl-brace-format
 msgid "Saw {count} SOA rname."
 msgstr "Found {count} SOA rname(s)."
 
 #. MULTIPLE_SOA_SERIALS
-#: ../lib/Zonemaster/Engine/Test/Consistency.pm:159
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:171
 #, perl-brace-format
 msgid "Saw {count} SOA serial numbers."
 msgstr "Found {count} SOA serial number(s)."
 
 #. MULTIPLE_SOA_TIME_PARAMETER_SET
-#: ../lib/Zonemaster/Engine/Test/Consistency.pm:163
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:175
 #, perl-brace-format
 msgid "Saw {count} SOA time parameter set."
 msgstr "Found {count} SOA time parameter set(s)."
@@ -1539,7 +1595,7 @@ msgstr ""
 "'{error}'."
 
 #. MX_RECORD_EXISTS
-#: ../lib/Zonemaster/Engine/Test/Zone.pm:158
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:168
 #, perl-brace-format
 msgid "Target ({info}) found to deliver e-mail for the domain name."
 msgstr "Target ({info}) found to deliver e-mail for the domain name."
@@ -1798,6 +1854,12 @@ msgid ""
 "Trying to verify SOA RRset with signature {signature} gave error '{error}'."
 msgstr ""
 "Trying to verify SOA RRset with signature {signature} gave error '{error}'."
+
+#. CHILD_NS_FAILED
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:131
+#, fuzzy, perl-brace-format
+msgid "Unexepected or erroneous reply from {ns}/{address}."
+msgstr "Erroneous response from nameserver {ns}/{address}."
 
 #. UPWARD_REFERRAL_IRRELEVANT
 #: ../lib/Zonemaster/Engine/Test/Nameserver.pm:341
