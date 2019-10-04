@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::Consistency;
 
-use version; our $VERSION = version->declare("v1.1.9");
+use version; our $VERSION = version->declare("v1.1.10");
 
 use strict;
 use warnings;
@@ -128,7 +128,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     CHILD_NS_FAILED => sub {
         __x    # CHILD_NS_FAILED
-          'Query to {ns}/{address} failed', @_;
+          'Unexepected or erroneous reply from {ns}/{address}.', @_;
     },
     CHILD_ZONE_LAME => sub {
         __x    # CHILD_ZONE_LAME
@@ -149,7 +149,6 @@ Readonly my %TAG_DESCRIPTIONS => (
     IPV4_DISABLED => sub {
         __x    # IPV4_DISABLED
           'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
-
     },
     IPV6_DISABLED => sub {
         __x    # IPV6_DISABLED
