@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::Zone;
 
-use version; our $VERSION = version->declare("v1.0.8");
+use version; our $VERSION = version->declare("v1.0.9");
 
 use strict;
 use warnings;
@@ -130,7 +130,7 @@ sub metadata {
             qw(
               MULTIPLE_SOA
               NO_RESPONSE
-              NO_RESPONSE_SOA_QUERY
+              NO_SOA_IN_RESPONSE
               ONE_SOA
               WRONG_SOA
               )
@@ -242,6 +242,10 @@ Readonly my %TAG_DESCRIPTIONS => (
     NO_RESPONSE_MX_QUERY => sub {
         __x    # NO_RESPONSE_MX_QUERY
           'No response from nameserver(s) on MX queries.';
+    },
+    NO_SOA_IN_RESPONSE => sub {
+        __x    # NO_SOA_IN_RESPONSE
+          'Response from nameserver {ns}/{address} on SOA queries does not contain SOA record.';
     },
     MNAME_HAS_NO_ADDRESS => sub {
         __x    # MNAME_HAS_NO_ADDRESS
@@ -703,7 +707,13 @@ sub zone10 {
                 }
             }
             else {
-                push @results, info( NO_RESPONSE_SOA_QUERY => {} );
+                push @results,
+                  info(
+                    NO_SOA_IN_RESPONSE => {
+                        ns      => $ns->name->string,
+                        address => $ns->address->short,
+                    }
+                  );
             }
         }
     }
