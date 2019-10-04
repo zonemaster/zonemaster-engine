@@ -86,7 +86,8 @@ is( zone_gives( 'dnssec03', $zone3, [q{ITERATIONS_OK}] ), 3, 'Only one (useful) 
 %tag = map { $_->tag => 1 } @res;
 ok( ( $tag{DURATION_OK} || $tag{REMAINING_SHORT} || $tag{RRSIG_EXPIRED} ), 'DURATION_OK (sort of)' );
 
-zone_gives( 'dnssec05', $zone, [q{ALGORITHM_OK}] );
+my $zone4 = Zonemaster::Engine->zone( 'nic.fr' );
+zone_gives( 'dnssec05', $zone4, [q{ALGORITHM_OK}] );
 
 zone_gives( 'dnssec06', $zone, [q{EXTRA_PROCESSING_OK}] );
 

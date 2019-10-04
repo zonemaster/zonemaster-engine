@@ -205,7 +205,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     MNAME_NOT_IN_GLUE => sub {
         __x    # MNAME_NOT_IN_GLUE
-          'SOA \'mname\' nameserver ({mname}) is not listed in "parent" NS records for tested zone ({ns}).', @_;
+          'SOA \'mname\' nameserver ({mname}) is not listed in "parent" NS records for tested zone ({nss}).', @_;
     },
     REFRESH_LOWER_THAN_RETRY => sub {
         __x    # REFRESH_LOWER_THAN_RETRY
@@ -324,7 +324,7 @@ sub zone01 {
                   info(
                     MNAME_NOT_IN_GLUE => {
                         mname => $soa_mname,
-                        ns    => join( q{;}, @{ Zonemaster::Engine::TestMethods->method2( $zone ) } ),
+                        nss   => join( q{;}, @{ Zonemaster::Engine::TestMethods->method2( $zone ) } ),
                     }
                   );
             }
