@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::Delegation;
 
-use version; our $VERSION = version->declare("v1.0.13");
+use version; our $VERSION = version->declare("v1.0.14");
 
 use strict;
 use warnings;
@@ -168,7 +168,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     ENOUGH_NS_CHILD => sub {
         __x    # ENOUGH_NS_CHILD
-          "Child lists enough ({count}) nameservers ({ns}). Lower limit set to {minimum}.", @_;
+          "Child lists enough ({count}) nameservers ({nss}). Lower limit set to {minimum}.", @_;
     },
     ENOUGH_NS_DEL => sub {
         __x    # ENOUGH_NS_DEL
@@ -224,7 +224,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     NOT_ENOUGH_NS_CHILD => sub {
         __x    # NOT_ENOUGH_NS_CHILD
-          "Child does not list enough ({count}) nameservers ({ns}). Lower limit set to {minimum}.", @_;
+          "Child does not list enough ({count}) nameservers ({nss}). Lower limit set to {minimum}.", @_;
     },
     NOT_ENOUGH_NS_DEL => sub {
         __x    # NOT_ENOUGH_NS_DEL
@@ -326,7 +326,7 @@ sub delegation01 {
     my $child_nsnames_args = {
         count   => scalar( @child_nsnames ),
         minimum => $MINIMUM_NUMBER_OF_NAMESERVERS,
-        ns      => join( q{;}, sort @child_nsnames ),
+        nss     => join( q{;}, sort @child_nsnames ),
     };
 
     # Check child NS names

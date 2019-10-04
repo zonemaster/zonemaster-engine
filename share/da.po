@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-25 18:32+0200\n"
+"POT-Creation-Date: 2019-10-03 23:11+0200\n"
 "PO-Revision-Date: 2019-07-08\n"
 "Last-Translator: Niels Haarbo <haarbo@dk-hostmaster.dk>\n"
 "Language-Team: Zonemaster Team\n"
@@ -12,19 +12,25 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #. SOA_NOT_EXISTS
-#: ../lib/Zonemaster/Engine/Test/Delegation.pm:277
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:283
 #, perl-brace-format
 msgid "A SOA query NOERROR response from {ns} was received empty."
 msgstr ""
 "En SOA-forespørgsel med RCODE NOERROR fra {ns} returnerede et tomt svar."
 
 #. DNSKEY_SIGNATURE_OK
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:419
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:460
 #, perl-brace-format
 msgid "A signature for DNSKEY with tag {signature} was correctly signed."
 msgstr ""
 "Verificering af en signatur for DNSKEY-recorden med keytag {signature} "
 "lykkedes."
+
+#. ONE_SOA_MNAME
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:187
+#, fuzzy, perl-brace-format
+msgid "A single SOA mname value was seen ({mname})"
+msgstr "Et enkelt SOA RNAME blev returneret ({rname})"
 
 #. ONE_SOA_RNAME
 #: ../lib/Zonemaster/Engine/Test/Consistency.pm:191
@@ -101,7 +107,7 @@ msgid "All nameservers succeeded to resolve to an IP address."
 msgstr "Alle navneservere kan oversættes til en IP-adresse."
 
 #. NAMES_MATCH
-#: ../lib/Zonemaster/Engine/Test/Delegation.pm:193
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:199
 msgid "All of the nameserver names are listed both at parent and child."
 msgstr "Alle navneservere listet findes både hos forælder og barn."
 
@@ -111,38 +117,50 @@ msgid "All reverse DNS entry matches name server name."
 msgstr "Alle PTR-records matcher navneservernavne."
 
 #. DISTINCT_IP_ADDRESS
-#: ../lib/Zonemaster/Engine/Test/Delegation.pm:137
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:143
 msgid "All the IP addresses used by the nameservers are unique"
 msgstr "Alle navneservernes IP-adresser er unikke."
 
+#. CHILD_DISTINCT_NS_IP
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:127
+#, fuzzy
+msgid "All the IP addresses used by the nameservers in child are unique."
+msgstr "Alle navneservernes IP-adresser er unikke."
+
+#. DEL_DISTINCT_NS_IP
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:135
+#, fuzzy
+msgid "All the IP addresses used by the nameservers in parent are unique."
+msgstr "Alle navneservernes IP-adresser er unikke."
+
 #. SOA_EXISTS
-#: ../lib/Zonemaster/Engine/Test/Delegation.pm:273
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:279
 msgid "All the nameservers have SOA record."
 msgstr "Alle navneservere har en SOA-record."
 
 #. ARE_AUTHORITATIVE
-#: ../lib/Zonemaster/Engine/Test/Delegation.pm:117
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:123
 #, perl-brace-format
 msgid "All these nameservers are confirmed to be authoritative : {nsset}."
 msgstr "Alle disse navneservere er autoritative : {nsset}."
 
 #. DS_MATCH_FOUND
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:451
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:492
 msgid "At least one DS record with a matching DNSKEY record was found."
 msgstr "Mindst en DS-record med med en matchende DNSKEY-record blev fundet."
 
 #. SOA_SIGNED
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:627
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:676
 msgid "At least one RRSIG correctly signs the SOA RRset."
 msgstr "Mindst en RRSIG-record signerer SOA RRset korrekt."
 
 #. NSEC_SIGNED
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:587
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:636
 msgid "At least one signature correctly signed the NSEC RRset."
 msgstr "Mindst en signatur signerede NSEC RRset korrekt."
 
 #. NSEC3_SIGNED
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:567
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:616
 msgid "At least one signature correctly signed the NSEC3 RRset."
 msgstr "Mindst en signatur signerede NSEC3 RRset korrekt."
 
@@ -170,7 +188,7 @@ msgstr ""
 "bindestreg."
 
 #. NO_KEYS_OR_NO_SIGS
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:529
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:578
 #, perl-brace-format
 msgid ""
 "Cannot test DNSKEY signatures, because we got {keys} DNSKEY records and "
@@ -180,7 +198,7 @@ msgstr ""
 "{sigs} RRSIG-records."
 
 #. NO_KEYS_OR_NO_SIGS_OR_NO_SOA
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:533
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:582
 #, perl-brace-format
 msgid ""
 "Cannot test SOA signatures, because we got {keys} DNSKEY records, {sigs} "
@@ -190,11 +208,31 @@ msgstr ""
 "RRSIG-records og {soas} SOA-records."
 
 #. NOT_ENOUGH_NS_CHILD
-#: ../lib/Zonemaster/Engine/Test/Delegation.pm:221
-#, perl-brace-format
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:227
+#, fuzzy, perl-brace-format
 msgid ""
-"Child does not list enough ({count}) nameservers ({ns}). Lower limit set to "
+"Child does not list enough ({count}) nameservers ({nss}). Lower limit set to "
 "{minimum}."
+msgstr ""
+"Barnet returnerer ikke tilstrækkeligt antal ({count}) navneservere ({nss}). "
+"Mindsteværdi er sat til {minimum}."
+
+#. NOT_ENOUGH_IPV4_NS_CHILD
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:203
+#, fuzzy, perl-brace-format
+msgid ""
+"Child does not list enough ({count}) nameservers that resolve to IPv4 "
+"addresses ({addrs}). Lower limit set to {minimum}."
+msgstr ""
+"Barnet returnerer ikke tilstrækkeligt antal ({count}) navneservere ({ns}). "
+"Mindsteværdi er sat til {minimum}."
+
+#. NOT_ENOUGH_IPV6_NS_CHILD
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:215
+#, fuzzy, perl-brace-format
+msgid ""
+"Child does not list enough ({count}) nameservers that resolve to IPv6 "
+"addresses ({addrs}). Lower limit set to {minimum}."
 msgstr ""
 "Barnet returnerer ikke tilstrækkeligt antal ({count}) navneservere ({ns}). "
 "Mindsteværdi er sat til {minimum}."
@@ -209,7 +247,7 @@ msgstr ""
 "({addresses})."
 
 #. EXTRA_NAME_CHILD
-#: ../lib/Zonemaster/Engine/Test/Delegation.pm:173
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:179
 #, perl-brace-format
 msgid "Child has nameserver(s) not listed at parent ({extra})."
 msgstr ""
@@ -217,14 +255,50 @@ msgstr ""
 "({extra})."
 
 #. ENOUGH_NS_CHILD
-#: ../lib/Zonemaster/Engine/Test/Delegation.pm:165
-#, perl-brace-format
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:171
+#, fuzzy, perl-brace-format
 msgid ""
-"Child lists enough ({count}) nameservers ({ns}). Lower limit set to "
+"Child lists enough ({count}) nameservers ({nss}). Lower limit set to "
 "{minimum}."
+msgstr ""
+"Barnet returnerer tilstrækkeligt antal ({count}) navneservere ({nss}). "
+"Mindsteværdi sat til {minimum}."
+
+#. ENOUGH_IPV4_NS_CHILD
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:147
+#, fuzzy, perl-brace-format
+msgid ""
+"Child lists enough ({count}) nameservers that resolve to IPv4 addresses "
+"({addrs}). Lower limit set to {minimum}."
 msgstr ""
 "Barnet returnerer tilstrækkeligt antal ({count}) navneservere ({ns}). "
 "Mindsteværdi sat til {minimum}."
+
+#. ENOUGH_IPV6_NS_CHILD
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:159
+#, fuzzy, perl-brace-format
+msgid ""
+"Child lists enough ({count}) nameservers that resolve to IPv6 addresses "
+"({addrs}). Lower limit set to {minimum}."
+msgstr ""
+"Barnet returnerer tilstrækkeligt antal ({count}) navneservere ({ns}). "
+"Mindsteværdi sat til {minimum}."
+
+#. NO_IPV4_NS_CHILD
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:235
+#, perl-brace-format
+msgid ""
+"Child lists no nameserver that resolves to an IPv4 address. If any were "
+"present, the minimum allowed would be {minimum}."
+msgstr ""
+
+#. NO_IPV6_NS_CHILD
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:247
+#, perl-brace-format
+msgid ""
+"Child lists no nameserver that resolves to an IPv6 address. If any were "
+"present, the minimum allowed would be {minimum}."
+msgstr ""
 
 #. LOOKUP_ERROR
 #: ../lib/Zonemaster/Engine/Translator.pm:49
@@ -236,7 +310,7 @@ msgstr ""
 "{message}"
 
 #. DS_DOES_NOT_MATCH_DNSKEY
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:439
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:480
 #, perl-brace-format
 msgid ""
 "DS record with keytag {keytag} and digest type {digtype} does not match the "
@@ -246,7 +320,7 @@ msgstr ""
 "recorden med samme keytag."
 
 #. DS_MATCHES_DNSKEY
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:447
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:488
 #, perl-brace-format
 msgid ""
 "DS record with keytag {keytag} and digest type {digtype} matches the DNSKEY "
@@ -256,7 +330,7 @@ msgstr ""
 "recorden med samme keytag."
 
 #. DS_DIGTYPE_OK
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:435
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:476
 #, perl-brace-format
 msgid "DS record with keytag {keytag} uses digest type {digtype}, which is OK."
 msgstr ""
@@ -264,23 +338,79 @@ msgstr ""
 "OK."
 
 #. DS_DIGTYPE_NOT_OK
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:431
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:472
 #, perl-brace-format
 msgid "DS record with keytag {keytag} uses forbidden digest type {digtype}."
 msgstr ""
 "DS-recorden med keytag {keytag} anvender en illegal digest-type {digtype}."
 
+#. NOT_ENOUGH_IPV4_NS_DEL
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:209
+#, fuzzy, perl-brace-format
+msgid ""
+"Delegation does not list enough ({count}) nameservers that resolve to IPv4 "
+"addresses ({addrs}). Lower limit set to {minimum}."
+msgstr ""
+"Barnet returnerer ikke tilstrækkeligt antal ({count}) navneservere ({ns}). "
+"Mindsteværdi er sat til {minimum}."
+
+#. NOT_ENOUGH_IPV6_NS_DEL
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:221
+#, fuzzy, perl-brace-format
+msgid ""
+"Delegation does not list enough ({count}) nameservers that resolve to IPv6 "
+"addresses ({addrs}). Lower limit set to {minimum}."
+msgstr ""
+"Barnet returnerer ikke tilstrækkeligt antal ({count}) navneservere ({ns}). "
+"Mindsteværdi er sat til {minimum}."
+
 #. DELEGATION_NOT_SIGNED
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:395
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:436
 #, perl-brace-format
 msgid "Delegation from parent to child is not properly signed {reason}."
 msgstr ""
 "Delegeringen fra forælder- til børnezone er ikke korrekt signeret ({reason})."
 
 #. DELEGATION_SIGNED
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:399
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:440
 msgid "Delegation from parent to child is properly signed."
 msgstr "Delegeringen fra forælder- til børnezonen er korrekt signeret."
+
+#. ENOUGH_IPV4_NS_DEL
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:153
+#, fuzzy, perl-brace-format
+msgid ""
+"Delegation lists enough ({count}) nameservers that resolve to IPv4 addresses "
+"({addrs}). Lower limit set to {minimum}."
+msgstr ""
+"Barnet returnerer tilstrækkeligt antal ({count}) navneservere ({ns}). "
+"Mindsteværdi sat til {minimum}."
+
+#. ENOUGH_IPV6_NS_DEL
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:165
+#, fuzzy, perl-brace-format
+msgid ""
+"Delegation lists enough ({count}) nameservers that resolve to IPv6 addresses "
+"({addrs}). Lower limit set to {minimum}."
+msgstr ""
+"Barnet returnerer tilstrækkeligt antal ({count}) navneservere ({ns}). "
+"Mindsteværdi sat til {minimum}."
+
+#. NO_IPV4_NS_DEL
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:241
+#, perl-brace-format
+msgid ""
+"Delegation lists no nameserver that resolves to an IPv4 address. If any were "
+"present, the minimum allowed would be {minimum}."
+msgstr ""
+
+#. NO_IPV6_NS_DEL
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:253
+#, perl-brace-format
+msgid ""
+"Delegation lists no nameserver that resolves to an IPv6 address. If any were "
+"present, the minimum allowed would be {minimum}."
+msgstr ""
 
 #. SOA_SERIAL_VARIATION
 #: ../lib/Zonemaster/Engine/Test/Consistency.pm:213
@@ -375,8 +505,14 @@ msgstr "Domænenavnet er for langt ({fqdnlength}/{max})."
 msgid "Domain's authoritative nameservers do not belong to the same AS."
 msgstr "Domænets navneservere er i flere AS'er."
 
+#. NS_ERROR
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:309
+#, fuzzy, perl-brace-format
+msgid "Erroneous response from nameserver {ns}/{address}."
+msgstr "Intet svar på NS-forespørgsel fra nameserveren {ns}/{address}."
+
 #. DS_RFC4509_NOT_VALID
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:459
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:500
 msgid ""
 "Existing DS with digest type 2, while they do not match DNSKEY records, "
 "prevent use of DS with digest type 1 (RFC4509, section 3)."
@@ -396,7 +532,7 @@ msgid "Followed a fake delegation."
 msgstr "Fulgte en falsk delegering."
 
 #. DS_FOUND
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:443
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:484
 #, perl-brace-format
 msgid "Found DS records with tags {keytags}."
 msgstr "Fandt DS-records med tags {keytags}."
@@ -438,18 +574,31 @@ msgstr ""
 msgid "Glue records are consistent between glue and authoritative data."
 msgstr "Glue-records er konsistente mellem forælder og barn."
 
+#. CHILD_NS_SAME_IP
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:131
+#, fuzzy, perl-brace-format
+msgid "IP {address} in child refers to multiple nameservers ({nss})."
+msgstr "IP-adressen {address} refererer til flere navneservere ({nss})."
+
+#. DEL_NS_SAME_IP
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:139
+#, fuzzy, perl-brace-format
+msgid "IP {address} in parent refers to multiple nameservers ({nss})."
+msgstr "IP-adressen {address} refererer til flere navneservere ({nss})."
+
 #. SAME_IP_ADDRESS
-#: ../lib/Zonemaster/Engine/Test/Delegation.pm:269
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:275
 #, perl-brace-format
 msgid "IP {address} refers to multiple nameservers ({nss})."
 msgstr "IP-adressen {address} refererer til flere navneservere ({nss})."
 
 #. IPV4_DISABLED
-#: ../lib/Zonemaster/Engine/Test/Consistency.pm:139
 #: ../lib/Zonemaster/Engine/Test/Connectivity.pm:144
-#: ../lib/Zonemaster/Engine/Test/Basic.pm:176
-#: ../lib/Zonemaster/Engine/Test/Delegation.pm:181
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:187
 #: ../lib/Zonemaster/Engine/Test/Nameserver.pm:273
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:139
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:542
+#: ../lib/Zonemaster/Engine/Test/Basic.pm:176
 #, perl-brace-format
 msgid "IPv4 is disabled, not sending \"{rrtype}\" query to {ns}/{address}."
 msgstr ""
@@ -470,11 +619,12 @@ msgstr ""
 "IPv4 er aktiveret, kan udføre \"{rrtype}\"-forespørgsel til {ns}/{address}."
 
 #. IPV6_DISABLED
-#: ../lib/Zonemaster/Engine/Test/Consistency.pm:143
 #: ../lib/Zonemaster/Engine/Test/Connectivity.pm:148
-#: ../lib/Zonemaster/Engine/Test/Basic.pm:184
-#: ../lib/Zonemaster/Engine/Test/Delegation.pm:185
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:191
 #: ../lib/Zonemaster/Engine/Test/Nameserver.pm:277
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:143
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:546
+#: ../lib/Zonemaster/Engine/Test/Basic.pm:184
 #, perl-brace-format
 msgid "IPv6 is disabled, not sending \"{rrtype}\" query to {ns}/{address}."
 msgstr ""
@@ -505,7 +655,7 @@ msgstr ""
 "forespørgsel via EDNS (version 0) efter {dname}."
 
 #. KEY_DETAILS
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:505
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:554
 #, perl-brace-format
 msgid ""
 "Key with keytag {keytag} details : Size = {keysize}, Flags ({sep}, "
@@ -538,25 +688,25 @@ msgid "Module {module} finished running."
 msgstr "Modulet {module} afsluttede."
 
 #. NSEC_COVERS
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:579
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:628
 #, perl-brace-format
 msgid "NSEC covers {name}."
 msgstr "NSEC dækker {name}."
 
 #. NSEC_COVERS_NOT
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:575
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:624
 #, perl-brace-format
 msgid "NSEC does not cover {name}."
 msgstr "NSEC dækker ikke {name}."
 
 #. NSEC3_COVERS
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:559
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:608
 #, perl-brace-format
 msgid "NSEC3 record covers {name}."
 msgstr "NSEC3-record dækker {name}."
 
 #. NSEC3_COVERS_NOT
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:555
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:604
 #, perl-brace-format
 msgid "NSEC3 record does not cover {name}."
 msgstr "NSEC3-record dækker ikke {name}."
@@ -630,23 +780,23 @@ msgid "Nameserver {ns} has an IP address ({address}) without PTR configured."
 msgstr ""
 "Navneserveren {ns} har en IP-adresse ({address}) uden konfigureret PTR."
 
-#. HAS_NAMESERVERS
-#: ../lib/Zonemaster/Engine/Test/Basic.pm:152
-#, perl-brace-format
-msgid "Nameserver {ns} listed these servers as glue: {nsnlist}."
-msgstr "Navneserveren {ns} returnerede disse servere som glue: {nsnlist}."
-
 #. IS_NOT_AUTHORITATIVE
-#: ../lib/Zonemaster/Engine/Test/Delegation.pm:189
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:195
 #, perl-brace-format
 msgid "Nameserver {ns} response is not authoritative on {proto} port 53."
 msgstr "Navneserveren {ns} svarede ikke autoritativt på {proto} port 53."
 
 #. NS_RR_IS_CNAME
-#: ../lib/Zonemaster/Engine/Test/Delegation.pm:253
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:259
 #, perl-brace-format
 msgid "Nameserver {ns} {address_type} RR point to CNAME."
 msgstr "På navneservern {ns} returnerer {address_type} et CNAME."
+
+#. UNSUPPORTED_EDNS_VER
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:333
+#, fuzzy, perl-brace-format
+msgid "Nameserver {ns}/{address} accepts an unsupported EDNS version."
+msgstr "Navneserveren {ns}/{address} er ikke rekursiv."
 
 #. NAMESERVER_HAS_TCP_53
 #: ../lib/Zonemaster/Engine/Test/Connectivity.pm:128
@@ -684,7 +834,7 @@ msgstr "Navneserveren {ns}/{address} svarede ikke på en NS-forespørgsel."
 
 #. NO_RESPONSE
 #: ../lib/Zonemaster/Engine/Test/Consistency.pm:167
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:547
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:596
 #, perl-brace-format
 msgid "Nameserver {ns}/{address} did not respond."
 msgstr "Navneserveren {ns}/{address} svarede ikke."
@@ -724,6 +874,12 @@ msgstr "Navneserveren {ns}/{address} understøtter ikke EDNS0 (svarer FORMERR)."
 msgid "Nameserver {ns}/{address} dropped AAAA query."
 msgstr "Navneserveren {ns}/{address} mistede en AAAA-forespørgsel."
 
+#. Z_FLAGS_NOTCLEAR
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:345
+#, fuzzy, perl-brace-format
+msgid "Nameserver {ns}/{address} has one or more unknown EDNS Z flag bits set."
+msgstr "Navneserveren {ns}/{address} svarede ikke på en NS-forespørgsel."
+
 #. IS_A_RECURSOR
 #: ../lib/Zonemaster/Engine/Test/Nameserver.pm:281
 #, perl-brace-format
@@ -735,6 +891,12 @@ msgstr "Navneserveren {ns}/{address} er rekursiv."
 #, perl-brace-format
 msgid "Nameserver {ns}/{address} is not a recursor."
 msgstr "Navneserveren {ns}/{address} er ikke rekursiv."
+
+#. HAS_NAMESERVERS
+#: ../lib/Zonemaster/Engine/Test/Basic.pm:152
+#, fuzzy, perl-brace-format
+msgid "Nameserver {ns}/{address} listed these servers as glue: {nsnlist}."
+msgstr "Navneserveren {ns}/{address} returnerede disse servere som glue: {nsnlist}."
 
 #. NAMESERVER_NO_TCP_53
 #: ../lib/Zonemaster/Engine/Test/Connectivity.pm:136
@@ -766,6 +928,28 @@ msgstr ""
 "Navneserveren {ns}/{address} svarede på en SOA-forespørgsel fra en anden "
 "kilde ({source})."
 
+#. MISSING_OPT_IN_TRUNCATED
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:285
+#, fuzzy, perl-brace-format
+msgid ""
+"Nameserver {ns}/{address} replies on an EDNS query with a truncated response "
+"without EDNS."
+msgstr ""
+"Navneserveren {ns}/{address} svarede på en SOA-forespørgsel fra en anden "
+"kilde ({source})."
+
+#. NO_RESPONSE_DNSKEY
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:592
+#, fuzzy, perl-brace-format
+msgid "Nameserver {ns}/{address} responded with no DNSKEY record(s)."
+msgstr "Navneserveren {ns}/{address} svarede ikke på en NS-forespørgsel."
+
+#. UNKNOWN_OPTION_CODE
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:329
+#, fuzzy, perl-brace-format
+msgid "Nameserver {ns}/{address} responds with an unknown ENDS OPTION-CODE."
+msgstr "Navneserveren {ns}/{address} svarede ikke på en NS-forespørgsel."
+
 #. HAS_A_RECORDS
 #: ../lib/Zonemaster/Engine/Test/Basic.pm:144
 #, fuzzy, perl-brace-format
@@ -785,22 +969,22 @@ msgid "Nameservers did not respond to A query."
 msgstr "Navneserverne svarede ikke på en A-forespørgsel."
 
 #. ADDITIONAL_DNSKEY_SKIPPED
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:353
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:398
 msgid "No DNSKEYs found. Additional tests skipped."
 msgstr "Ingen DNSKEY-records fundet. Yderligere tests ignoreret."
 
 #. NO_DNSKEY
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:521
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:570
 msgid "No DNSKEYs were returned."
 msgstr "Ingen DNSKEY-records blev returneret."
 
 #. NO_COMMON_KEYTAGS
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:517
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:566
 msgid "No DS record had a DNSKEY with a matching keytag."
 msgstr "Ingen DS-record havde en DNSKEY-record med matchende keytag."
 
 #. DS_MATCH_NOT_FOUND
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:455
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:496
 msgid "No DS record with a matching DNSKEY record was found."
 msgstr "Ingen DS-record med en matchende DNSKEY-record blev fundet."
 
@@ -827,7 +1011,7 @@ msgstr ""
 "Ingen NS-records for den testede zone fra forælderzonen. NS-test afbrydes."
 
 #. SOA_NOT_SIGNED
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:615
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:664
 msgid "No RRSIG correctly signed the SOA RRset."
 msgstr "Ingen RRSIG signerede SOA RRset korrekt."
 
@@ -853,7 +1037,7 @@ msgid "No nameserver address is in an AS."
 msgstr "Ingen navneserver har en adresse i et AS."
 
 #. NS_RR_NO_CNAME
-#: ../lib/Zonemaster/Engine/Test/Delegation.pm:257
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:263
 msgid "No nameserver point to CNAME alias."
 msgstr "Ingen NS-record peger på et CNAME-alias."
 
@@ -898,6 +1082,14 @@ msgstr "Intet svar fra navneserverne på PTR-forespørgsel ({reverse})."
 msgid "No response from nameserver(s) on SOA queries."
 msgstr "Intet svar fra navneserver(ne) på forespørgsel på SOA-record."
 
+#. NO_RESPONSE
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:213
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:301
+#, fuzzy, perl-brace-format
+msgid "No response from {ns}/{address} asking for {dname}."
+msgstr ""
+"Intet svar fra {ns}/{address} når EDNS er brugt i forespørgslen på {dname}."
+
 #. BREAKS_ON_EDNS
 #: ../lib/Zonemaster/Engine/Test/Nameserver.pm:208
 #, perl-brace-format
@@ -908,12 +1100,12 @@ msgstr ""
 "Intet svar fra {ns}/{address} når EDNS er brugt i forespørgslen på {dname}."
 
 #. NSEC_NOT_SIGNED
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:583
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:632
 msgid "No signature correctly signed the NSEC RRset."
 msgstr "Ingen signatur signerede NSEC RRset korrekt."
 
 #. NSEC3_NOT_SIGNED
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:563
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:612
 msgid "No signature correctly signed the NSEC3 RRset."
 msgstr "Ingen signatur signerede NSEC3 RRset korrekt."
 
@@ -932,7 +1124,7 @@ msgstr ""
 "{names}."
 
 #. TOTAL_NAME_MISMATCH
-#: ../lib/Zonemaster/Engine/Test/Delegation.pm:281
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:287
 msgid "None of the nameservers listed at the parent are listed at the child."
 msgstr "Ingen af de navneservere som listes hos forælderen listes hos barnet."
 
@@ -955,7 +1147,7 @@ msgstr ""
 "bytes (prøv med \"{command}\")."
 
 #. NOT_ENOUGH_NS_DEL
-#: ../lib/Zonemaster/Engine/Test/Delegation.pm:225
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:231
 #, perl-brace-format
 msgid ""
 "Parent does not list enough ({count}) nameservers ({glue}). Lower limit set "
@@ -980,7 +1172,7 @@ msgstr ""
 "({addresses})."
 
 #. EXTRA_NAME_PARENT
-#: ../lib/Zonemaster/Engine/Test/Delegation.pm:177
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:183
 #, perl-brace-format
 msgid "Parent has nameserver(s) not listed at the child ({extra})."
 msgstr ""
@@ -988,7 +1180,7 @@ msgstr ""
 "({extra})."
 
 #. ENOUGH_NS_DEL
-#: ../lib/Zonemaster/Engine/Test/Delegation.pm:169
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:175
 #, perl-brace-format
 msgid ""
 "Parent lists enough ({count}) nameservers ({glue}). Lower limit set to "
@@ -1004,14 +1196,14 @@ msgid "Profile was read from {name}."
 msgstr "Profile blev hentet fra {name}."
 
 #. RRSIG_EXPIRATION
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:607
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:656
 #, perl-brace-format
 msgid ""
 "RRSIG with keytag {tag} and covering type(s) {types} expires at : {date}."
 msgstr "RRSIG med keytag {tag} dækkende typerne {types} udløber : {date}."
 
 #. DURATION_OK
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:471
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:512
 #, perl-brace-format
 msgid ""
 "RRSIG with keytag {tag} and covering type(s) {types} has a duration of "
@@ -1021,7 +1213,7 @@ msgstr ""
 "på {duration} sekunder, hvilket er OK."
 
 #. DURATION_LONG
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:465
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:506
 #, perl-brace-format
 msgid ""
 "RRSIG with keytag {tag} and covering type(s) {types} has a duration of "
@@ -1031,7 +1223,7 @@ msgstr ""
 "på {duration} sekunder, hvilket er for længe."
 
 #. REMAINING_LONG
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:595
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:644
 #, perl-brace-format
 msgid ""
 "RRSIG with keytag {tag} and covering type(s) {types} has a remaining "
@@ -1041,7 +1233,7 @@ msgstr ""
 "gyldighed på {duration} sekunder, hvilket er for længe."
 
 #. REMAINING_SHORT
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:601
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:650
 #, perl-brace-format
 msgid ""
 "RRSIG with keytag {tag} and covering type(s) {types} has a remaining "
@@ -1051,7 +1243,7 @@ msgstr ""
 "gyldighed på {duration} sekunder, hvilket er for lidt."
 
 #. RRSIG_EXPIRED
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:611
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:660
 #, perl-brace-format
 msgid ""
 "RRSIG with keytag {tag} and covering type(s) {types} has already expired "
@@ -1061,7 +1253,7 @@ msgstr ""
 "(udløbsdato er: {expiration})."
 
 #. SOA_SIGNATURE_OK
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:623
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:672
 #, perl-brace-format
 msgid "RRSIG {signature} correctly signs SOA RRset."
 msgstr "RRSIG {signature} signerer SOA RRset korrekt."
@@ -1169,10 +1361,10 @@ msgstr "SOA 'MNAME'-navneserveren ({mname}) er autoritativ for zonen '{zone}'."
 
 #. MNAME_NOT_IN_GLUE
 #: ../lib/Zonemaster/Engine/Test/Zone.pm:198
-#, perl-brace-format
+#, fuzzy, perl-brace-format
 msgid ""
 "SOA 'mname' nameserver ({mname}) is not listed in \"parent\" NS records for "
-"tested zone ({ns})."
+"tested zone ({nss})."
 msgstr ""
 "Navneserveren i SOA 'MNAME' ({mname}) er ikke blandt de NS-records ({ns}) "
 "som angivet i forælderzonen \"parent\"."
@@ -1319,6 +1511,12 @@ msgstr ""
 msgid "Saw {count} NS set."
 msgstr "Fandt {count} NS-sæt."
 
+#. MULTIPLE_SOA_MNAMES
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:151
+#, fuzzy, perl-brace-format
+msgid "Saw {count} SOA mname."
+msgstr "Så {count} forskellige SOA RNAME."
+
 #. MULTIPLE_SOA_RNAMES
 #: ../lib/Zonemaster/Engine/Test/Consistency.pm:155
 #, perl-brace-format
@@ -1338,7 +1536,7 @@ msgid "Saw {count} SOA time parameter set."
 msgstr "Så {count} forskellige konfigurationer af SOA-tidsparametre."
 
 #. EXTRA_PROCESSING_OK
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:481
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:522
 #, perl-brace-format
 msgid "Server at {server} sent {keys} DNSKEY records and {sigs} RRSIG records."
 msgstr ""
@@ -1346,7 +1544,7 @@ msgstr ""
 "records."
 
 #. EXTRA_PROCESSING_BROKEN
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:477
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:518
 #, perl-brace-format
 msgid ""
 "Server at {server} sent {keys} DNSKEY records, and {sigs} RRSIG records."
@@ -1355,7 +1553,7 @@ msgstr ""
 "records."
 
 #. DNSKEY_SIGNATURE_NOT_OK
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:415
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:456
 #, perl-brace-format
 msgid ""
 "Signature for DNSKEY with tag {signature} failed to verify with error "
@@ -1370,8 +1568,18 @@ msgstr ""
 msgid "Target ({info}) found to deliver e-mail for the domain name."
 msgstr "Adressen ({info}) modtager e-mail for domænenavnet."
 
+#. ALGORITHM_NOT_ZONE_SIGN
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:411
+#, fuzzy, perl-brace-format
+msgid ""
+"The DNSKEY with tag {keytag} uses algorithm number not meant for zone "
+"signing{algorithm}/({description})."
+msgstr ""
+"DNSKEY-recorden med tag {keytag} anvender den private algoritme med nummer "
+"{algorithm}/({description})."
+
 #. ALGORITHM_OK
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:375
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:416
 #, perl-brace-format
 msgid ""
 "The DNSKEY with tag {keytag} uses algorithm number {algorithm}/"
@@ -1380,8 +1588,18 @@ msgstr ""
 "DNSKEY-recorden med tag {keytag} anvender algoritme nummer {algorithm}/"
 "({description}), hvilket er OK."
 
+#. ALGORITHM_NOT_RECOMMENDED
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:406
+#, fuzzy, perl-brace-format
+msgid ""
+"The DNSKEY with tag {keytag} uses an algorithm number {algorithm}/"
+"({description} which which is not recommended to be used."
+msgstr ""
+"DNSKEY-recorden med tag {keytag} anvender algoritme nummer {algorithm}/"
+"({description}), hvilket er OK."
+
 #. ALGORITHM_DEPRECATED
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:361
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:402
 #, perl-brace-format
 msgid ""
 "The DNSKEY with tag {keytag} uses deprecated algorithm number {algorithm}/"
@@ -1391,7 +1609,7 @@ msgstr ""
 "{algorithm}/({description})."
 
 #. ALGORITHM_PRIVATE
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:379
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:420
 #, perl-brace-format
 msgid ""
 "The DNSKEY with tag {keytag} uses private algorithm number {algorithm}/"
@@ -1401,7 +1619,7 @@ msgstr ""
 "{algorithm}/({description})."
 
 #. ALGORITHM_RESERVED
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:383
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:424
 #, perl-brace-format
 msgid ""
 "The DNSKEY with tag {keytag} uses reserved algorithm number {algorithm}/"
@@ -1411,7 +1629,7 @@ msgstr ""
 "{algorithm}/({description})."
 
 #. ALGORITHM_UNASSIGNED
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:387
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:428
 #, perl-brace-format
 msgid ""
 "The DNSKEY with tag {keytag} uses unassigned algorithm number {algorithm}/"
@@ -1426,13 +1644,21 @@ msgstr ""
 msgid "The SOA RNAME field ({rname}) is compliant with RFC2822."
 msgstr "SOA RNAME værdi ({rname}) overholder RFC2822."
 
+#. RNAME_MAIL_DOMAIN_INVALID
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:229
+#, perl-brace-format
+msgid ""
+"The SOA RNAME mail domain ({domain}) cannot be resolved to a mail server "
+"with an IP address."
+msgstr ""
+
 #. DNSKEY_SIGNED
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:423
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:464
 msgid "The apex DNSKEY RRset was correcly signed."
 msgstr "DNSKEY RRset i zonetoppen var korrekt signeret."
 
 #. DNSKEY_NOT_SIGNED
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:411
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:452
 msgid "The apex DNSKEY RRset was not correctly signed."
 msgstr "DNSKEY RRset i zonetoppen var ikke korrekt signeret."
 
@@ -1484,19 +1710,19 @@ msgid "The module {name} was disabled by the policy."
 msgstr "Modulet {name} var deaktiveret i politikken."
 
 #. ITERATIONS_OK
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:501
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:550
 #, perl-brace-format
 msgid "The number of NSEC3 iterations is {count}, which is OK."
 msgstr "Antallet af NSEC3-iterationer er {count}, hvilket er OK."
 
 #. MANY_ITERATIONS
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:509
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:558
 #, perl-brace-format
 msgid "The number of NSEC3 iterations is {count}, which is on the high side."
 msgstr "Antallet af NSEC3-iterationer er {count}, hvilket er højt."
 
 #. TOO_MANY_ITERATIONS
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:631
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:680
 #, perl-brace-format
 msgid ""
 "The number of NSEC3 iterations is {count}, which is too high for key length "
@@ -1506,7 +1732,7 @@ msgstr ""
 "nøglelængden {keylength}."
 
 #. REFERRAL_SIZE_TOO_LARGE
-#: ../lib/Zonemaster/Engine/Test/Delegation.pm:261
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:267
 #, perl-brace-format
 msgid ""
 "The smallest possible legal referral packet is larger than 512 octets (it is "
@@ -1516,7 +1742,7 @@ msgstr ""
 "oktetter ({size})."
 
 #. REFERRAL_SIZE_OK
-#: ../lib/Zonemaster/Engine/Test/Delegation.pm:265
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:271
 #, perl-brace-format
 msgid ""
 "The smallest possible legal referral packet is smaller than 513 octets (it "
@@ -1526,33 +1752,33 @@ msgstr ""
 "eller lig med 512 oktetter ({size})."
 
 #. HAS_NSEC
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:493
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:534
 msgid "The zone has NSEC records."
 msgstr "Zonen indeholder NSEC-records."
 
 #. HAS_NSEC3_OPTOUT
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:485
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:526
 msgid "The zone has NSEC3 opt-out records."
 msgstr "Zonen indeholder NSEC3 opt-out records."
 
 #. HAS_NSEC3
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:489
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:530
 msgid "The zone has NSEC3 records."
 msgstr "Zonen indeholder NSEC3-records."
 
 #. NOT_SIGNED
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:551
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:600
 msgid "The zone is not signed with DNSSEC."
 msgstr "Zonen er ikke signeret med DNSSEC."
 
 #. COMMON_KEYTAGS
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:391
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:432
 #, perl-brace-format
 msgid "There are both DS and DNSKEY records with key tags {keytags}."
 msgstr "Der findes både DS- and DNSKEY-records med keytag {keytags}."
 
 #. NEITHER_DNSKEY_NOR_DS
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:513
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:562
 msgid "There are neither DS nor DNSKEY records for the zone."
 msgstr "Zonen indeholder hverken DS- eller DNSKEY-records."
 
@@ -1576,7 +1802,7 @@ msgid ""
 msgstr "'@' må ikke anvendes i SOA RNAME ({rname})."
 
 #. NSEC_SIG_VERIFY_ERROR
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:591
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:640
 #, perl-brace-format
 msgid "Trying to verify NSEC RRset with RRSIG {sig} gave error '{error}'."
 msgstr ""
@@ -1584,7 +1810,7 @@ msgstr ""
 "'{error}'."
 
 #. NSEC3_SIG_VERIFY_ERROR
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:571
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:620
 #, perl-brace-format
 msgid "Trying to verify NSEC3 RRset with RRSIG {sig} gave error '{error}'."
 msgstr ""
@@ -1592,7 +1818,7 @@ msgstr ""
 "'{error}'."
 
 #. SOA_SIGNATURE_NOT_OK
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:619
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:668
 #, perl-brace-format
 msgid ""
 "Trying to verify SOA RRset with signature {signature} gave error '{error}'."
@@ -1624,7 +1850,7 @@ msgid "Using version {version} of the Zonemaster engine."
 msgstr "Anvender version {version} af Zonemasters testmotor."
 
 #. INVALID_NAME_RCODE
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:497
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:538
 #, perl-brace-format
 msgid ""
 "When asked for the name {name}, which must not exist, the response had RCODE "
@@ -1723,7 +1949,7 @@ msgid "[ASN:RAW] {address};{data}"
 msgstr "[ASN:RAW] {address};{data}"
 
 #. DNSKEY_BUT_NOT_DS
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:407
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:448
 #, perl-brace-format
 msgid "{child} sent a DNSKEY record, but {parent} did not send a DS record."
 msgstr ""
@@ -1731,19 +1957,19 @@ msgstr ""
 "record."
 
 #. NO_DS
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:525
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:574
 #, perl-brace-format
 msgid "{from} returned no DS records for {zone}."
 msgstr "{from} returnerede ingen DS-records for {zone}."
 
 #. DNSKEY_AND_DS
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:403
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:444
 #, perl-brace-format
 msgid "{parent} sent a DS record, and {child} a DNSKEY record."
 msgstr "{parent} returnerede en DS-record, og {child} en DNSKEY-record."
 
 #. DS_BUT_NOT_DNSKEY
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:427
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:468
 #, perl-brace-format
 msgid "{parent} sent a DS record, but {child} did not send a DNSKEY record."
 msgstr ""
@@ -1751,7 +1977,7 @@ msgstr ""
 "record."
 
 #. NO_NSEC3PARAM
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:539
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:588
 #, perl-brace-format
 msgid "{server} returned no NSEC3PARAM records."
 msgstr "{server} returnerede ingen NSEC3PARAM-records."
