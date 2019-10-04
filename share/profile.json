@@ -339,6 +339,7 @@
             "NO_RESPONSE" : "WARNING",
             "NO_RESPONSE_SOA_QUERY" : "NOTICE",
             "NO_RESPONSE_MX_QUERY" : "DEBUG",
+            "NO_SOA_IN_RESPONSE" : "WARNING",
             "ONE_SOA" : "INFO",
             "REFRESH_HIGHER_THAN_RETRY" : "INFO",
             "REFRESH_LOWER_THAN_RETRY" : "INFO",
