@@ -58,6 +58,16 @@ ok( $res{SOA_TIME_PARAMETER_SET},          q{SOA time parameters details} );
 ok( $res{MULTIPLE_NS_SET}, q{Saw several NS set} );
 ok( $res{NS_SET},          q{NS set details} );
 
+%res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{consistency}, q{consistency05-extra-address-child-1.zut-root.rd.nic.fr} );
+ok( $res{EXTRA_ADDRESS_CHILD}, q{Child has extra addresses} );
+
+%res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{consistency}, q{zone.g00.consistency05.data.zonemaster.se} );
+ok( $res{EXTRA_ADDRESS_CHILD}, q{Child has extra addresses} );
+ok( $res{IN_BAILIWICK_ADDR_MISMATCH}, q{In bailiwick addresses mismatch} );
+
+%res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{consistency}, q{zone.g01.consistency05.data.zonemaster.se} );
+ok( $res{IN_BAILIWICK_ADDR_MISMATCH}, q{In bailiwick addresses mismatch} );
+
 %res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{consistency}, q{afnic.fr} );
 ok( $res{ONE_SOA_SERIAL},             q{One SOA serial} );
 ok( $res{ONE_SOA_RNAME},              q{One SOA rname} );
