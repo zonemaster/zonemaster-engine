@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-05 23:57+0200\n"
+"POT-Creation-Date: 2019-10-04 19:08+0200\n"
 "PO-Revision-Date: 2019-07-08\n"
 "Last-Translator: Niels Haarbo <haarbo@dk-hostmaster.dk>\n"
 "Language-Team: Zonemaster Team\n"
@@ -602,7 +602,7 @@ msgstr "IP-adressen {address} refererer til flere navneservere ({nss})."
 #. IPV4_DISABLED
 #: ../lib/Zonemaster/Engine/Test/Connectivity.pm:144
 #: ../lib/Zonemaster/Engine/Test/Delegation.pm:187
-#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:288
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:273
 #: ../lib/Zonemaster/Engine/Test/Consistency.pm:151
 #: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:542
 #: ../lib/Zonemaster/Engine/Test/Basic.pm:176
@@ -628,7 +628,7 @@ msgstr ""
 #. IPV6_DISABLED
 #: ../lib/Zonemaster/Engine/Test/Connectivity.pm:148
 #: ../lib/Zonemaster/Engine/Test/Delegation.pm:191
-#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:292
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:277
 #: ../lib/Zonemaster/Engine/Test/Consistency.pm:155
 #: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:546
 #: ../lib/Zonemaster/Engine/Test/Basic.pm:184
@@ -987,6 +987,16 @@ msgstr ""
 #, fuzzy, perl-brace-format
 msgid "Nameserver {ns}/{address} responded with no DNSKEY record(s)."
 msgstr "Navneserveren {ns}/{address} svarede ikke på en NS-forespørgsel."
+
+#. WRONG_SOA
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:266
+#, fuzzy, perl-brace-format
+msgid ""
+"Nameserver {ns}/{address} responds with a wrong owner name ({owner} instead "
+"of {name}) on SOA queries."
+msgstr ""
+"Nameservern {ns}/{address} bevarede ikke versaler og minuskler fra "
+"forespørgslen."
 
 #. UNKNOWN_OPTION_CODE
 #: ../lib/Zonemaster/Engine/Test/Nameserver.pm:340

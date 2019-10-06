@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::Zone;
 
-use version; our $VERSION = version->declare("v1.0.9");
+use version; our $VERSION = version->declare("v1.0.10");
 
 use strict;
 use warnings;
@@ -263,7 +263,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     WRONG_SOA => sub {
         __x    # WRONG_SOA
-          '', @_;
+          'Nameserver {ns}/{address} responds with a wrong owner name ({owner} instead of {name}) on SOA queries.', @_;
     },
 );
 

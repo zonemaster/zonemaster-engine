@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-05 23:57+0200\n"
+"POT-Creation-Date: 2019-10-04 19:08+0200\n"
 "PO-Revision-Date: 2017-12-15\n"
 "Last-Translator: mats.dufberg@iis.se\n"
 "Language-Team: Zonemaster Team\n"
@@ -622,7 +622,7 @@ msgstr "IP-adressen {address} referrerar till flera namnservrar ({nss})."
 #. IPV4_DISABLED
 #: ../lib/Zonemaster/Engine/Test/Connectivity.pm:144
 #: ../lib/Zonemaster/Engine/Test/Delegation.pm:187
-#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:288
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:273
 #: ../lib/Zonemaster/Engine/Test/Consistency.pm:151
 #: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:542
 #: ../lib/Zonemaster/Engine/Test/Basic.pm:176
@@ -646,7 +646,7 @@ msgstr "IPv4 är påslaget. Skickar fråga om '{rrtype}' till {ns}/{address}."
 #. IPV6_DISABLED
 #: ../lib/Zonemaster/Engine/Test/Connectivity.pm:148
 #: ../lib/Zonemaster/Engine/Test/Delegation.pm:191
-#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:292
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:277
 #: ../lib/Zonemaster/Engine/Test/Consistency.pm:155
 #: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:546
 #: ../lib/Zonemaster/Engine/Test/Basic.pm:184
@@ -1004,6 +1004,16 @@ msgstr ""
 #, fuzzy, perl-brace-format
 msgid "Nameserver {ns}/{address} responded with no DNSKEY record(s)."
 msgstr "Namnservern {ns}/{address} svarade inte på frågan om 'NS'."
+
+#. WRONG_SOA
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:266
+#, fuzzy, perl-brace-format
+msgid ""
+"Nameserver {ns}/{address} responds with a wrong owner name ({owner} instead "
+"of {name}) on SOA queries."
+msgstr ""
+"Nameservern {ns}/{address} bevarar inte skillnaden mellan versaler och "
+"gemener från frågan ({dname})."
 
 #. UNKNOWN_OPTION_CODE
 #: ../lib/Zonemaster/Engine/Test/Nameserver.pm:340
