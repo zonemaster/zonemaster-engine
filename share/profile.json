@@ -210,10 +210,13 @@
             "TOO_MANY_ITERATIONS" : "WARNING"
         },
         "NAMESERVER" : {
+            "AAAA_BAD_RDATA" : "ERROR",
+            "AAAA_QUERY_DROPPED" : "ERROR",
+            "AAAA_UNEXPECTED_RCODE" : "ERROR",
             "AAAA_WELL_PROCESSED" : "INFO",
-            "ANSWER_BAD_RCODE" : "NOTICE",
             "AXFR_AVAILABLE" : "NOTICE",
             "AXFR_FAILURE" : "INFO",
+            "A_UNEXPECTED_RCODE" : "WARNING",
             "BREAKS_ON_EDNS" : "ERROR",
             "CAN_BE_RESOLVED" : "INFO",
             "CAN_NOT_BE_RESOLVED" : "ERROR",
