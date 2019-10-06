@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::Nameserver;
 
-use version; our $VERSION = version->declare("v1.0.23");
+use version; our $VERSION = version->declare("v1.0.24");
 
 use strict;
 use warnings;
@@ -113,9 +113,12 @@ sub metadata {
         ],
         nameserver05 => [
             qw(
-              QUERY_DROPPED
-              ANSWER_BAD_RCODE
+              AAAA_BAD_RDATA
+              AAAA_QUERY_DROPPED
+              AAAA_UNEXPECTED_RCODE
               AAAA_WELL_PROCESSED
+              A_UNEXPECTED_RCODE
+              NO_RESPONSE
               IPV4_DISABLED
               IPV6_DISABLED
               )
@@ -187,13 +190,25 @@ sub metadata {
 } ## end sub metadata
 
 Readonly my %TAG_DESCRIPTIONS => (
+    AAAA_BAD_RDATA => sub {
+        __x    # AAAA_BAD_RDATA
+            'Nameserver {ns}/{address} answered AAAA query with an unexpected RDATA length ({length} instead of 16)', @_;
+    },
+    AAAA_QUERY_DROPPED => sub {
+        __x    # AAAA_QUERY_DROPPED
+          'Nameserver {ns}/{address} dropped AAAA query.', @_;
+    },
+    AAAA_UNEXPECTED_RCODE => sub {
+        __x    # AAAA_UNEXPECTED_RCODE
+          'Nameserver {ns}/{address} answered AAAA query with an unexpected rcode ({rcode}).', @_;
+    },
     AAAA_WELL_PROCESSED => sub {
         __x    # AAAA_WELL_PROCESSED
           'The following nameservers answer AAAA queries without problems : {names}.', @_;
     },
-    ANSWER_BAD_RCODE => sub {
-        __x    # ANSWER_BAD_RCODE
-          'Nameserver {ns}/{address} answered AAAA query with an unexpected rcode ({rcode}).', @_;
+    A_UNEXPECTED_RCODE => sub {
+        __x    # A_UNEXPECTED_RCODE
+          'Nameserver {ns}/{address} answered A query with an unexpected rcode ({rcode}).', @_;
     },
     AXFR_AVAILABLE => sub {
         __x    # AXFR_AVAILABLE
@@ -315,10 +330,6 @@ Readonly my %TAG_DESCRIPTIONS => (
     QNAME_CASE_SENSITIVE => sub {
         __x    # QNAME_CASE_SENSITIVE
           'Nameserver {ns}/{address} preserves original case of queried names.', @_;
-    },
-    QUERY_DROPPED => sub {
-        __x    # QUERY_DROPPED
-          'Nameserver {ns}/{address} dropped AAAA query.', @_;
     },
     SAME_SOURCE_IP => sub {
         __x    # SAME_SOURCE_IP
@@ -492,7 +503,7 @@ sub nameserver02 {
                     }
                   );
             }
-	    else {
+            else {
                 push @results,
                   info(
                     NO_RESPONSE => {
@@ -611,74 +622,107 @@ sub nameserver05 {
     my ( $class, $zone ) = @_;
     my @results;
     my %nsnames_and_ip;
-    my $query_type = q{AAAA};
+    my $aaaa_issue = 0;
+    my @aaaa_ok;
 
-    foreach
-      my $local_ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) }, @{ Zonemaster::Engine::TestMethods->method5( $zone ) } )
-    {
+    foreach my $ns ( @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) } ) {
 
-        next if $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short };
+        next if $nsnames_and_ip{ $ns->name->string . q{/} . $ns->address->short };
 
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $local_ns->address->version == $IP_VERSION_6 ) {
+        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
             push @results,
               info(
                 IPV6_DISABLED => {
-                    ns      => $local_ns->name->string,
-                    address => $local_ns->address->short,
-                    rrtype  => $query_type,
+                    ns      => $ns->name->string,
+                    address => $ns->address->short,
+                    rrtype  => q{A},
                 }
               );
             next;
         }
 
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $local_ns->address->version == $IP_VERSION_4 ) {
+        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
             push @results,
               info(
                 IPV4_DISABLED => {
-                    ns      => $local_ns->name->string,
-                    address => $local_ns->address->short,
-                    rrtype  => $query_type,
+                    ns      => $ns->name->string,
+                    address => $ns->address->short,
+                    rrtype  => q{A},
                 }
               );
             next;
         }
 
-        $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short }++;
+        $nsnames_and_ip{ $ns->name->string . q{/} . $ns->address->short }++;
 
-        my $p = $local_ns->query( $zone->name, $query_type );
+        my $p = $ns->query( $zone->name, q{A}, { usevc => 0 } );
 
         if ( not $p ) {
             push @results,
               info(
-                QUERY_DROPPED => {
-                    ns      => $local_ns->name->string,
-                    address => $local_ns->address->short,
+                NO_RESPONSE => {
+                    ns      => $ns->name,
+                    address => $ns->address->short,
+                    dname   => $zone->name,
                 }
               );
-            next;
         }
-
-        next if not scalar $p->answer and $p->rcode eq q{NOERROR};
-
-        if (   $p->rcode eq q{FORMERR}
-            or $p->rcode eq q{SERVFAIL}
-            or $p->rcode eq q{NXDOMAIN}
-            or $p->rcode eq q{NOTIMPL} )
-        {
+        elsif ( $p->rcode ne q{NOERROR} ) {
             push @results,
               info(
-                ANSWER_BAD_RCODE => {
-                    ns      => $local_ns->name->string,
-                    address => $local_ns->address->short,
+                A_UNEXPECTED_RCODE => {
+                    ns      => $ns->name,
+                    address => $ns->address->short,
                     rcode   => $p->rcode,
                 }
               );
-            next;
         }
+        else {
+            $p = $ns->query( $zone->name, q{AAAA}, { usevc => 0 } );
 
-    } ## end foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods...})
+            if ( not $p ) {
+                push @results,
+                  info(
+                    AAAA_QUERY_DROPPED => {
+                        ns      => $ns->name,
+                        address => $ns->address->short,
+                    }
+                  );
+                $aaaa_issue++;
+            }
+            elsif ( $p->rcode ne q{NOERROR} ) {
+                push @results,
+                  info(
+                    AAAA_UNEXPECTED_RCODE => {
+                        ns      => $ns->name,
+                        address => $ns->address->short,
+                        rcode   => $p->rcode,
+                    }
+                  );
+                $aaaa_issue++;
+            }
+            else {
+                foreach my $rr ( $p->get_records( q{AAAA}, q{answer} ) ) {
+                    if ( length($rr->rdf(0)) != 16 ) {
+                        push @results,
+                          info(
+                            AAAA_BAD_RDATA => {
+                                ns      => $ns->name,
+                                address => $ns->address->short,
+                                length  => length($rr->rdf(0)),
+                            }
+                          );
+                        $aaaa_issue++;
+                    }
+                    else {
+                        push @aaaa_ok, $rr->address;    
+                    }
+                }
+            }
+        }
+    }
 
-    if ( scalar keys %nsnames_and_ip and none { $_->tag eq q{ANSWER_BAD_RCODE} } @results ) {
+    if ( scalar @aaaa_ok and not $aaaa_issue ) {
         push @results,
           info(
             AAAA_WELL_PROCESSED => {
@@ -746,7 +790,7 @@ sub nameserver07 {
 
             next if $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short };
 
-	    my $p = $local_ns->query( q{.}, q{NS}, { blacklisting_disabled => 1 } );
+            my $p = $local_ns->query( q{.}, q{NS}, { blacklisting_disabled => 1 } );
             if ( $p ) {
                 my @ns = $p->get_records( q{NS}, q{authority} );
 
@@ -994,7 +1038,7 @@ sub nameserver10 {
     }
 
     for my $ns ( @nss ) {
-	my $p = $ns->query( $zone->name, q{SOA}, { edns_details => { version => 1 } } );
+        my $p = $ns->query( $zone->name, q{SOA}, { edns_details => { version => 1 } } );
         if ( $p ) {
             if ( $p->rcode eq q{FORMERR} and not $p->edns_rcode ) {
                 push @results,
@@ -1027,7 +1071,7 @@ sub nameserver10 {
                   );
             }
         }
-	else {
+        else {
             push @results,
               info(
                 NO_RESPONSE => {

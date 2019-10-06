@@ -1,3 +1,5 @@
+#. WRONG_SOA
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:266
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
@@ -63,7 +65,7 @@ msgid "A unique SOA record is returned by all nameservers of the zone."
 msgstr ""
 
 #. AXFR_FAILURE
-#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:204
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:219
 #, perl-brace-format
 msgid "AXFR not available on nameserver {ns}/{address}."
 msgstr "AXFR not available on nameserver {ns}/{address}."
@@ -100,12 +102,12 @@ msgid "All nameservers are in the same AS ({asn})."
 msgstr "All nameservers in the delegation are in the same AS ({asn})."
 
 #. SAME_SOURCE_IP
-#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:325
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:336
 msgid "All nameservers reply with same IP used to query them."
 msgstr "All nameservers reply with same IP used to query them."
 
 #. CAN_BE_RESOLVED
-#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:212
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:227
 msgid "All nameservers succeeded to resolve to an IP address."
 msgstr "All nameservers succeeded to resolve to an IP address."
 
@@ -504,7 +506,7 @@ msgid "Domain's authoritative nameservers do not belong to the same AS."
 msgstr "Domain's authoritative nameservers do not belong to the same AS."
 
 #. NS_ERROR
-#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:309
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:324
 #, perl-brace-format
 msgid "Erroneous response from nameserver {ns}/{address}."
 msgstr "Erroneous response from nameserver {ns}/{address}."
@@ -644,7 +646,7 @@ msgid ""
 msgstr ""
 
 #. EDNS_VERSION_ERROR
-#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:263
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:278
 #, perl-brace-format
 msgid ""
 "Incorrect version of EDNS (expected 0) in response from {ns}/{address} on "
@@ -796,7 +798,7 @@ msgid "Nameserver {ns} {address_type} RR point to CNAME."
 msgstr "Nameserver {ns} {address_type} RR point to CNAME."
 
 #. UNSUPPORTED_EDNS_VER
-#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:333
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:344
 #, perl-brace-format
 msgid "Nameserver {ns}/{address} accepts an unsupported EDNS version."
 msgstr "Nameserver {ns}/{address} accepts an unsupported EDNS version."
@@ -814,13 +816,33 @@ msgid "Nameserver {ns}/{address} accessible over UDP on port 53."
 msgstr "Nameserver {ns}/{address} accessible over UDP on port 53."
 
 #. AXFR_AVAILABLE
-#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:200
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:215
 #, perl-brace-format
 msgid "Nameserver {ns}/{address} allow zone transfer using AXFR."
 msgstr "Nameserver {ns}/{address} allow zone transfer using AXFR."
 
-#. ANSWER_BAD_RCODE
-#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:196
+#. A_UNEXPECTED_RCODE
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:211
+#, fuzzy, perl-brace-format
+msgid ""
+"Nameserver {ns}/{address} answered A query with an unexpected rcode "
+"({rcode})."
+msgstr ""
+"Nameserver {ns}/{address} answered AAAA query with an unexpected rcode "
+"({rcode})."
+
+#. AAAA_BAD_RDATA
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:195
+#, fuzzy, perl-brace-format
+msgid ""
+"Nameserver {ns}/{address} answered AAAA query with an unexpected RDATA "
+"length ({length} instead of 16)"
+msgstr ""
+"Nameserver {ns}/{address} answered AAAA query with an unexpected rcode "
+"({rcode})."
+
+#. AAAA_UNEXPECTED_RCODE
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:203
 #, perl-brace-format
 msgid ""
 "Nameserver {ns}/{address} answered AAAA query with an unexpected rcode "
@@ -857,7 +879,7 @@ msgstr ""
 "Nameserver {ns}/{address} did not return NS records. RCODE was {rcode}."
 
 #. QNAME_CASE_INSENSITIVE
-#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:313
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:328
 #, perl-brace-format
 msgid ""
 "Nameserver {ns}/{address} does not preserve original case of queried names."
@@ -866,34 +888,34 @@ msgstr ""
 "({dname})."
 
 #. NO_EDNS_SUPPORT
-#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:289
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:304
 #, perl-brace-format
 msgid ""
 "Nameserver {ns}/{address} does not support EDNS0 (replies with FORMERR)."
 msgstr ""
 "Nameserver {ns}/{address} does not support EDNS0 (replies with FORMERR)."
 
-#. QUERY_DROPPED
-#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:321
+#. AAAA_QUERY_DROPPED
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:199
 #, perl-brace-format
 msgid "Nameserver {ns}/{address} dropped AAAA query."
 msgstr "Nameserver {ns}/{address} dropped AAAA query."
 
 #. Z_FLAGS_NOTCLEAR
-#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:345
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:356
 #, perl-brace-format
 msgid "Nameserver {ns}/{address} has one or more unknown EDNS Z flag bits set."
 msgstr ""
 "Nameserver {ns}/{address} has one or more unknown EDNS Z flag bits set."
 
 #. IS_A_RECURSOR
-#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:281
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:296
 #, perl-brace-format
 msgid "Nameserver {ns}/{address} is a recursor."
 msgstr "Nameserver {ns}/{address} is a recursor."
 
 #. NO_RECURSOR
-#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:293
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:308
 #, perl-brace-format
 msgid "Nameserver {ns}/{address} is not a recursor."
 msgstr "Nameserver {ns}/{address} is not a recursor."
@@ -917,14 +939,14 @@ msgid "Nameserver {ns}/{address} not accessible over UDP on port 53."
 msgstr "Nameserver {ns}/{address} not accessible over UDP on port 53."
 
 #. QNAME_CASE_SENSITIVE
-#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:317
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:332
 #, perl-brace-format
 msgid "Nameserver {ns}/{address} preserves original case of queried names."
 msgstr ""
 "Nameserver {ns}/{address} preserves original case of queried names ({dname})."
 
 #. DIFFERENT_SOURCE_IP
-#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:255
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:270
 #, perl-brace-format
 msgid ""
 "Nameserver {ns}/{address} replies on a SOA query with a different source "
@@ -934,7 +956,7 @@ msgstr ""
 "address ({source})."
 
 #. MISSING_OPT_IN_TRUNCATED
-#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:285
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:300
 #, perl-brace-format
 msgid ""
 "Nameserver {ns}/{address} replies on an EDNS query with a truncated response "
@@ -960,7 +982,7 @@ msgstr ""
 "({dname})."
 
 #. UNKNOWN_OPTION_CODE
-#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:329
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:340
 #, perl-brace-format
 msgid "Nameserver {ns}/{address} responds with an unknown ENDS OPTION-CODE."
 msgstr "Nameserver {ns}/{address} responds with an unknown ENDS OPTION-CODE."
@@ -980,7 +1002,7 @@ msgid "Nameserver {ns}/{address} returned A record(s) for {dname}."
 msgstr "Nameserver {ns}/{address} returned \"A\" record(s) for {dname}."
 
 #. UPWARD_REFERRAL
-#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:337
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:348
 #, perl-brace-format
 msgid "Nameserver {ns}/{address} returns an upward referral."
 msgstr "Nameserver {ns}/{address} returns an upward referral."
@@ -1063,7 +1085,7 @@ msgid "No nameserver point to CNAME alias."
 msgstr "No nameserver points to CNAME alias."
 
 #. NO_RESOLUTION
-#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:297
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:312
 msgid "No nameservers succeeded to resolve to an IP address."
 msgstr "No nameserver was successfully resolved to an IP address."
 
@@ -1104,13 +1126,13 @@ msgstr "No response from nameserver(s) on SOA queries."
 
 #. NO_RESPONSE
 #: ../lib/Zonemaster/Engine/Test/Syntax.pm:213
-#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:301
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:316
 #, perl-brace-format
 msgid "No response from {ns}/{address} asking for {dname}."
 msgstr "No response from {ns}/{address} asking for {dname}."
 
 #. BREAKS_ON_EDNS
-#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:208
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:223
 #, perl-brace-format
 msgid ""
 "No response from {ns}/{address} when EDNS is used in query asking for "
@@ -1136,7 +1158,7 @@ msgstr ""
 "No target (MX, A or AAAA record) to deliver e-mail for the domain name."
 
 #. NO_UPWARD_REFERRAL
-#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:305
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:320
 #, perl-brace-format
 msgid "None of the following nameservers returns an upward referral : {names}."
 msgstr ""
@@ -1305,7 +1327,7 @@ msgid ""
 msgstr "No response from nameserver {ns}/{address} on SOA queries."
 
 #. EDNS_RESPONSE_WITHOUT_EDNS
-#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:259
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:274
 #, perl-brace-format
 msgid ""
 "Response without EDNS from {ns}/{address} on query with EDNS0 asking for "
@@ -1717,7 +1739,7 @@ msgstr ""
 "without mandatory glue (without IP address)."
 
 #. AAAA_WELL_PROCESSED
-#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:192
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:207
 #, perl-brace-format
 msgid ""
 "The following nameservers answer AAAA queries without problems : {names}."
@@ -1725,14 +1747,14 @@ msgstr ""
 "The following nameservers answer AAAA queries without problems : {names}."
 
 #. CAN_NOT_BE_RESOLVED
-#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:216
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:231
 #, perl-brace-format
 msgid "The following nameservers failed to resolve to an IP address : {names}."
 msgstr ""
 "The following nameservers failed to resolve to an IP address : {names}."
 
 #. EDNS0_SUPPORT
-#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:269
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:284
 #, perl-brace-format
 msgid "The following nameservers support EDNS0 : {names}."
 msgstr "The following nameservers support EDNS0 : {names}."
@@ -1862,7 +1884,7 @@ msgid "Unexepected or erroneous reply from {ns}/{address}."
 msgstr "Erroneous response from nameserver {ns}/{address}."
 
 #. UPWARD_REFERRAL_IRRELEVANT
-#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:341
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:352
 msgid "Upward referral tests skipped for root zone."
 msgstr "Upward referral tests skipped for root zone."
 
@@ -1895,7 +1917,7 @@ msgstr ""
 "{rcode}."
 
 #. CASE_QUERY_DIFFERENT_RC
-#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:234
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:249
 #, perl-brace-format
 msgid ""
 "When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver "
@@ -1905,7 +1927,7 @@ msgstr ""
 "{ns}/{address} returns different RCODE (\"{rcode1}\" vs \"{rcode2}\")."
 
 #. CASE_QUERY_DIFFERENT_ANSWER
-#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:228
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:243
 #, perl-brace-format
 msgid ""
 "When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver "
@@ -1915,7 +1937,7 @@ msgstr ""
 "{ns}/{address} returns different answers."
 
 #. CASE_QUERY_SAME_RC
-#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:249
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:264
 #, perl-brace-format
 msgid ""
 "When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver "
@@ -1925,7 +1947,7 @@ msgstr ""
 "{ns}/{address} returns same RCODE \"{rcode}\"."
 
 #. CASE_QUERY_SAME_ANSWER
-#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:244
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:259
 #, perl-brace-format
 msgid ""
 "When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver "
@@ -1935,7 +1957,7 @@ msgstr ""
 "{ns}/{address} returns same answers."
 
 #. CASE_QUERIES_RESULTS_DIFFER
-#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:220
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:235
 #, perl-brace-format
 msgid ""
 "When asked for {type} records on \"{query}\" with different cases, all "
@@ -1945,7 +1967,7 @@ msgstr ""
 "servers do not reply consistently."
 
 #. CASE_QUERIES_RESULTS_OK
-#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:224
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:239
 #, perl-brace-format
 msgid ""
 "When asked for {type} records on \"{query}\" with different cases, all "
@@ -1955,7 +1977,7 @@ msgstr ""
 "servers reply consistently."
 
 #. CASE_QUERY_NO_ANSWER
-#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:240
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:255
 #, perl-brace-format
 msgid ""
 "When asked for {type} records on \"{query}\", nameserver {ns}/{address} "

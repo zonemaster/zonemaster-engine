@@ -116,7 +116,7 @@ zone_gives_not( 'nameserver07', $zone, [qw{UPWARD_REFERRAL NO_UPWARD_REFERRAL}] 
 SKIP: {
     skip "Zone does not actually have tested problem", 1,
     $zone = Zonemaster::Engine->zone( 'escargot.se' );
-    zone_gives( 'nameserver05', $zone, ['ANSWER_BAD_RCODE'] );
+    zone_gives( 'nameserver05', $zone, ['AAAA_UNEXPECTED_RCODE'] );
 }
 
 TODO: {
