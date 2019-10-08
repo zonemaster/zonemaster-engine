@@ -884,9 +884,9 @@ msgstr "Navneserveren {ns}/{address} svarede ikke."
 
 #. NO_A_RECORDS
 #: ../lib/Zonemaster/Engine/Test/Basic.pm:148
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "Nameserver {ns}/{address} did not return A record(s) for {dname}."
-msgstr "Navneserveren {ns} returnerede ikke nogle A-records for {dname}."
+msgstr "Navneserveren {ns}/{address} returnerede ikke nogle A-records for {dname}."
 
 #. NS_FAILED
 #: ../lib/Zonemaster/Engine/Test/Basic.pm:160
@@ -1014,9 +1014,9 @@ msgstr "Navneserveren {ns}/{address} svarede ikke på en NS-forespørgsel."
 
 #. HAS_A_RECORDS
 #: ../lib/Zonemaster/Engine/Test/Basic.pm:144
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "Nameserver {ns}/{address} returned A record(s) for {dname}."
-msgstr "Navneserveren {ns} svarede med A-record(s) for {dname}."
+msgstr "Navneserveren {ns}/{address} svarede med A-record(s) for {dname}."
 
 #. UPWARD_REFERRAL
 #: ../lib/Zonemaster/Engine/Test/Nameserver.pm:348
