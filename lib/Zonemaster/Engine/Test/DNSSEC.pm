@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::DNSSEC;
 
-use version; our $VERSION = version->declare("v1.1.0");
+use version; our $VERSION = version->declare("v1.1.1");
 
 ###
 ### This test module implements DNSSEC tests.
@@ -444,7 +444,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     ALGO_NOT_SIGNED_RRSET => sub {
         __x    # ALGO_NOT_SIGNED_RRSET
-          "Nameserver {ns}/{address} responded with no RRSIG using the algorithm {algorithm}.", @_;
+          "Nameserver {ns}/{address} responded with no RRSIG for RRset {rrtype} created by the algorithm {algorithm}.", @_;
     },
     ALL_ALGO_SIGNED => sub {
        __x    # ALL_ALGO_SIGNED

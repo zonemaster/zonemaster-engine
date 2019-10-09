@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-09 09:38+0200\n"
+"POT-Creation-Date: 2019-10-09 21:13+0200\n"
 "PO-Revision-Date: 2017-12-18\n"
 "Last-Translator: mats.dufberg@iis.se\n"
 "Language-Team: Zonemaster Team\n"
@@ -996,21 +996,21 @@ msgstr ""
 msgid "Nameserver {ns}/{address} responded with no DNSKEY record(s)."
 msgstr "Nameserver {ns}/{address} responded with no DNSKEY record(s)."
 
+#. ALGO_NOT_SIGNED_RRSET
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:447
+#, fuzzy, perl-brace-format
+msgid ""
+"Nameserver {ns}/{address} responded with no RRSIG for RRset {rrtype} created "
+"by the algorithm {algorithm}."
+msgstr ""
+"Nameserver {ns}/{address} responded with no RRSIG for RRset {rrtype} created "
+"by the algorithm {algorithm}."
+
 #. RRSET_NOT_SIGNED
 #: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:687
 #, perl-brace-format
 msgid "Nameserver {ns}/{address} responded with no RRSIG for {rrtype} RRset."
 msgstr "Nameserver {ns}/{address} responded with no RRSIG for {rrtype} RRset."
-
-#. ALGO_NOT_SIGNED_RRSET
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:447
-#, perl-brace-format
-msgid ""
-"Nameserver {ns}/{address} responded with no RRSIG using the algorithm "
-"{algorithm}."
-msgstr ""
-"Nameserver {ns}/{address} responded with no RRSIG using the algorithm "
-"{algorithm}."
 
 #. NO_RESPONSE_RRSET
 #: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:619
