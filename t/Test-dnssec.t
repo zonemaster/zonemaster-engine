@@ -15,6 +15,7 @@ sub zone_gives {
 
     Zonemaster::Engine->logger->clear_history();
     my @res = Zonemaster::Engine->test_method( $checking_module, $test, $zone );
+    #    foreach my $res (@res) { print $res->tag, "\n"; }
     foreach my $gives ( @{$gives_ref} ) {
         ok( ( grep { $_->tag eq $gives } @res ), $zone->name->string . " gives $gives" );
     }
@@ -41,7 +42,7 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
 
 # Find a way for dnssec06 which have a dependence...
 my ($json, $profile_test);
-foreach my $testcase ( qw{dnssec01 dnssec02 dnssec03 dnssec04 dnssec05 dnssec07 dnssec08 dnssec09 dnssec10 dnssec11} ) {
+foreach my $testcase ( qw{dnssec01 dnssec02 dnssec03 dnssec04 dnssec05 dnssec07 dnssec08 dnssec09 dnssec10 dnssec11 dnssec13 dnssec14} ) {
     $json         = read_file( 't/profiles/Test-'.$testcase.'-only.json' );
     $profile_test = Zonemaster::Engine::Profile->from_json( $json );
     Zonemaster::Engine::Profile->effective->merge( $profile_test );
@@ -210,6 +211,23 @@ zone_gives_not( 'dnssec10', $zone, ['HAS_NSEC3_OPTOUT'] );
 #ok( ( grep { $_->string =~ /error=no GOST support/s } @res ), $zone->name->string . " no GOST support" );
 #@res = Zonemaster::Engine->test_method( 'DNSSEC', 'dnssec10', $zone );
 #ok( ( grep { $_->string =~ /error=no GOST support/s } @res ), $zone->name->string . " no GOST support" );
+
+# dnssec13
+$zone = Zonemaster::Engine->zone( 'afnic.fr' );
+zone_gives( 'dnssec13', $zone, [qw{ALL_ALGO_SIGNED}] );
+zone_gives_not('dnssec13', $zone, [qw{ALGO_NOT_SIGNED_RRSET NO_RESPONSE NO_RESPONSE_RRSET RRSET_NOT_SIGNED RRSIG_BROKEN RRSIG_NOT_MATCH_DNSKEY}] );
+
+$zone = Zonemaster::Engine->zone( 'dnssec09-soa-signature-not-ok.zut-root.rd.nic.fr' );
+zone_gives( 'dnssec13', $zone, [qw{RRSIG_BROKEN}] );
+zone_gives_not('dnssec13', $zone, [qw{ALL_ALGO_SIGNED ALGO_NOT_SIGNED_RRSET RRSET_NOT_SIGNED}] );
+
+$zone = Zonemaster::Engine->zone( 'dnssec08-dnskey-signature-not-ok.zut-root.rd.nic.fr' );
+zone_gives( 'dnssec13', $zone, [qw{RRSIG_BROKEN}] );
+zone_gives_not('dnssec13', $zone, [qw{ALL_ALGO_SIGNED RRSET_NOT_SIGNED RRSIG_NOT_MATCH_DNSKEY ALGO_NOT_SIGNED_RRSET}] );
+
+$zone = Zonemaster::Engine->zone( 'dnssec08-dnskey-not-signed.zut-root.rd.nic.fr' );
+zone_gives( 'dnssec13', $zone, [qw{RRSIG_BROKEN RRSET_NOT_SIGNED}] );
+zone_gives_not('dnssec13', $zone, [qw{ALL_ALGO_SIGNED RRSIG_NOT_MATCH_DNSKEY ALGO_NOT_SIGNED_RRSET}] );
 
 TODO: {
     local $TODO = "Need to find/create zones with that error";
