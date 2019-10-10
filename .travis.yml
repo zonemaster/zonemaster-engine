@@ -11,5 +11,5 @@ before_install:
     - sudo apt-get install -y libidn11-dev
     - eval $(curl https://travis-perl.github.io/init) --auto
     - local-lib
-    - git clone --depth=1 --branch=$TRAVIS_BRANCH https://github.com/zonemaster/zonemaster-ldns.git
+    - git clone --depth=1 --branch=51-ed25519 https://github.com/mattias-p/zonemaster-ldns.git
     - cpan-install --deps Devel::CheckLib Module::Install Module::Install::XSUtil ./zonemaster-ldns
