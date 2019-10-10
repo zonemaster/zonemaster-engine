@@ -13,3 +13,11 @@ before_install:
     - cpan-install --deps Devel::CheckLib Module::Install Module::Install::XSUtil
     - git clone --depth=1 --branch=51-ed25519 https://github.com/mattias-p/zonemaster-ldns.git
     - cpanm --notest --configure-args="--no-ed25519" ./zonemaster-ldns
+    - rm -rf zonemaster-ldns
+
+script:
+    - perl Makefile.PL
+    - make
+    - perldoc -lm Zonemaster::Engine
+    - echo $PERL5LIB
+    - make --trace test
