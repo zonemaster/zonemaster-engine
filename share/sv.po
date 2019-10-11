@@ -460,7 +460,7 @@ msgid ""
 "({serial_max}) is greater than the maximum allowed ({max_variation})."
 msgstr ""
 "Spannet mellan högsta och lägsta SOA-serienumret ({serial_min} resp "
-"{serial_max}) är större än det maximalt tillåtna spann ({max_variation})."
+"{serial_max}) är större än det maximalt tillåtna spannet ({max_variation})."
 
 #. DOMAIN_NAME_LABEL_TOO_LONG
 #: ../lib/Zonemaster/Engine/Test/Basic.pm:124
@@ -844,7 +844,7 @@ msgstr "Namnservern '{ns}' svarade inte auktoritativt på {proto} port 53."
 
 #. NS_RR_IS_CNAME
 #: ../lib/Zonemaster/Engine/Test/Delegation.pm:259
-#,  perl-brace-format
+#, perl-brace-format
 msgid "Nameserver {ns} {address_type} RR point to CNAME."
 msgstr "Namnservern '{ns}' med förväntade posttypen '{address_type}' "
 "är istället ett CNAME."
@@ -891,7 +891,7 @@ msgid ""
 "Nameserver {ns}/{address} answered AAAA query with an unexpected RDATA "
 "length ({length} instead of 16)"
 msgstr ""
-"Namnservern {ns}/{address} besvarade en AAAA-fråga  med den icke-väntade"
+"Namnservern {ns}/{address} besvarade en AAAA-fråga med den icke-väntade"
 "längden på 'RDATA' om '{length}' oktetter istället för förväntade 16"
 "oktetter."
 
@@ -1244,7 +1244,7 @@ msgstr ""
 msgid ""
 "Out-of-bailiwick name server listed at parent with glue record has a "
 "mismatch between the glue at the parent ({parent_addresses}) and iany "
-"equivalent address record found in authoritative zone  ({zone_addresses})"
+"equivalent address record found in authoritative zone ({zone_addresses})"
 msgstr ""
 
 #. PACKET_BIG
