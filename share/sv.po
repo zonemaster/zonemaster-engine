@@ -1,7 +1,3 @@
-#. WRONG_SOA
-#: ../lib/Zonemaster/Engine/Test/Zone.pm:266
-msgid ""
-msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-10-04 19:08+0200\n"
@@ -31,9 +27,9 @@ msgstr ""
 
 #. ONE_SOA_MNAME
 #: ../lib/Zonemaster/Engine/Test/Consistency.pm:199
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "A single SOA mname value was seen ({mname})"
-msgstr "Exakt en 'SOA RNAME' hittades: ({rname})"
+msgstr "Exakt en 'SOA MNAME' hittades: ({mname})"
 
 #. ONE_SOA_RNAME
 #: ../lib/Zonemaster/Engine/Test/Consistency.pm:203
@@ -458,13 +454,13 @@ msgstr ""
 
 #. SOA_SERIAL_VARIATION
 #: ../lib/Zonemaster/Engine/Test/Consistency.pm:229
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Difference between the smaller serial ({serial_min}) and the bigger one "
 "({serial_max}) is greater than the maximum allowed ({max_variation})."
 msgstr ""
 "Spannet mellan högsta och lägsta SOA-serienumret ({serial_min} resp "
-"{serial_max}) är större än det maximalt tillåtna ({max_variation})."
+"{serial_max}) är större än det maximalt tillåtna spann ({max_variation})."
 
 #. DOMAIN_NAME_LABEL_TOO_LONG
 #: ../lib/Zonemaster/Engine/Test/Basic.pm:124
@@ -551,7 +547,7 @@ msgstr ""
 
 #. NS_ERROR
 #: ../lib/Zonemaster/Engine/Test/Nameserver.pm:324
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "Erroneous response from nameserver {ns}/{address}."
 msgstr "Felaktigt svar från namnservern '{ns}/{address}'."
 
@@ -625,7 +621,7 @@ msgstr ""
 #: ../lib/Zonemaster/Engine/Test/Delegation.pm:131
 #, perl-brace-format
 msgid "IP {address} in child refers to multiple nameservers ({nss})."
-msgstr "IP-adressen {address} används till flera namnservrar (NS-poster) "
+msgstr "IP-adressen {address} används av flera namnservrar (NS-poster) "
 "i dotterzonen ({nss})."
 
 #. DEL_NS_SAME_IP
@@ -657,7 +653,7 @@ msgstr ""
 #: ../lib/Zonemaster/Engine/Translator.pm:81
 #, perl-brace-format
 msgid "IPv4 is disabled, not sending query to {ns}."
-msgstr "IPv4 är inaktiverad. Skickar ingen DNS-frågor till '{ns}'."
+msgstr "IPv4 är inaktiverat. Skickar inga DNS-frågor till '{ns}'."
 
 #. IPV4_ENABLED
 #: ../lib/Zonemaster/Engine/Test/Basic.pm:180
@@ -720,9 +716,9 @@ msgstr ""
 
 #. CHILD_ZONE_LAME
 #: ../lib/Zonemaster/Engine/Test/Consistency.pm:135
-#, fuzzy
+#,
 msgid "Lame delegation"
-msgstr "Följde en skapad delegering."
+msgstr "Det går inte att följa delegeringen av domänen."
 
 #. LOGGER_CALLBACK_ERROR
 #: ../lib/Zonemaster/Engine/Translator.pm:45
@@ -855,7 +851,7 @@ msgstr "Namnservern '{ns}' med förväntade posttypen '{address_type}' "
 
 #. UNSUPPORTED_EDNS_VER
 #: ../lib/Zonemaster/Engine/Test/Nameserver.pm:344
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "Nameserver {ns}/{address} accepts an unsupported EDNS version."
 msgstr "Namnservern {ns}/{address} accepterar EDNS-version som inte "
 "stöds i DNS."
@@ -880,23 +876,24 @@ msgstr "Namnservern {ns}/{address} tillåter zonöverföringar med AXFR."
 
 #. A_UNEXPECTED_RCODE
 #: ../lib/Zonemaster/Engine/Test/Nameserver.pm:211
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Nameserver {ns}/{address} answered A query with an unexpected rcode "
 "({rcode})."
 msgstr ""
-"Namnservern {ns}/{address} besvarade en AAAA-fråga med den oväntade "
+"Namnservern {ns}/{address} besvarade en A-fråga med den icke-väntade "
 "svarskoden '{rcode}'."
 
 #. AAAA_BAD_RDATA
 #: ../lib/Zonemaster/Engine/Test/Nameserver.pm:195
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Nameserver {ns}/{address} answered AAAA query with an unexpected RDATA "
 "length ({length} instead of 16)"
 msgstr ""
-"Namnservern {ns}/{address} besvarade en AAAA-fråga med den oväntade "
-"svarskoden '{rcode}'."
+"Namnservern {ns}/{address} besvarade en AAAA-fråga  med den icke-väntade"
+"längden på 'RDATA' om '{length}' oktetter istället för förväntade 16"
+"oktetter."
 
 #. AAAA_UNEXPECTED_RCODE
 #: ../lib/Zonemaster/Engine/Test/Nameserver.pm:203
@@ -961,10 +958,10 @@ msgstr "Namnservern {ns}/{address} besvarade inte AAAA-frågan."
 
 #. Z_FLAGS_NOTCLEAR
 #: ../lib/Zonemaster/Engine/Test/Nameserver.pm:356
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "Nameserver {ns}/{address} has one or more unknown EDNS Z flag bits set."
 msgstr "Svarspaket från namnservern {ns}/{address} har en eller flera "
-"odefinierade bitar satta i EDNS Z lag."
+"odefinierade bitar satta i EDNS Z-flaggan."
 
 #. IS_A_RECURSOR
 #: ../lib/Zonemaster/Engine/Test/Nameserver.pm:296
@@ -1016,13 +1013,13 @@ msgstr ""
 
 #. MISSING_OPT_IN_TRUNCATED
 #: ../lib/Zonemaster/Engine/Test/Nameserver.pm:300
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Nameserver {ns}/{address} replies on an EDNS query with a truncated response "
 "without EDNS."
 msgstr ""
 "Namnservern {ns}/{address} besvarade en förfrågan med EDNS med ett trunkerat "
-"svar utan EDNS."
+"svarspaket utan EDNS."
 
 #. NO_RESPONSE_DNSKEY
 #: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:592
@@ -1032,28 +1029,29 @@ msgstr "Svarspaketet från namnservern {ns}/{address} har ingen DNSKEY-post."
 
 #. WRONG_SOA
 #: ../lib/Zonemaster/Engine/Test/Zone.pm:266
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Nameserver {ns}/{address} responds with a wrong owner name ({owner} instead "
 "of {name}) on SOA queries."
 msgstr ""
-"Nameservern {ns}/{address} bevarar inte skillnaden mellan versaler och "
-"gemener från frågan ({dname})."
+"Nameservern {ns}/{address} ger fel 'owner name' i svaret ({owner} istället "
+"för {name}) på SOA-fråga."
 
 #. UNKNOWN_OPTION_CODE
 #: ../lib/Zonemaster/Engine/Test/Nameserver.pm:340
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "Nameserver {ns}/{address} responds with an unknown ENDS OPTION-CODE."
 msgstr "Svarspaketet från namnservern {ns}/{address} innehåller "
 "'EDNS OPTION-CODE' som är odenfinierad."
 
 #. MULTIPLE_SOA
 #: ../lib/Zonemaster/Engine/Test/Zone.pm:232
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Nameserver {ns}/{address} responds with multiple ({count}) SOA records on "
 "SOA queries."
-msgstr "Namnservern {ns}/{address} svarade inte på frågan om 'NS'."
+msgstr "Namnservern {ns}/{address} svarade med multipla SOA-poster på "
+"SOA-frågor."
 
 #. HAS_A_RECORDS
 #: ../lib/Zonemaster/Engine/Test/Basic.pm:144
@@ -1188,7 +1186,7 @@ msgstr "Inget svar från namnserver på fråga efter SOA-post."
 #. NO_RESPONSE
 #: ../lib/Zonemaster/Engine/Test/Syntax.pm:213
 #: ../lib/Zonemaster/Engine/Test/Nameserver.pm:316
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "No response from {ns}/{address} asking for {dname}."
 msgstr ""
 "Inget svar från {ns}/{address} på förfrågan efter {dname}."
@@ -1390,11 +1388,12 @@ msgstr ""
 
 #. NO_SOA_IN_RESPONSE
 #: ../lib/Zonemaster/Engine/Test/Zone.pm:248
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Response from nameserver {ns}/{address} on SOA queries does not contain SOA "
 "record."
-msgstr "Inget svar från namnservern '{ns}/{address}' på fråga efter SOA-post."
+msgstr "Svaret från namnserver {ns}/{address} på en fråga efter SOA "
+"innehåller ingen SOA-post."
 
 #. EDNS_RESPONSE_WITHOUT_EDNS
 #: ../lib/Zonemaster/Engine/Test/Nameserver.pm:274
@@ -1416,13 +1415,13 @@ msgstr "Bakåtuppslagning finns för varje namnserveradress."
 
 #. EXPIRE_MINIMUM_VALUE_OK
 #: ../lib/Zonemaster/Engine/Test/Zone.pm:260
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "SOA 'expire' value ({expire}) is higher than the minimum recommended value "
 "({required_expire}) and not lower than the 'refresh' value ({refresh})."
 msgstr ""
-"Värdet för SOA 'expire' ligger i det rekommenderade spannet (högre än "
-"{required_expire} och inte lägre än värdet på 'refresh')."
+"Värdet för SOA 'expire' är lika med eller högre än det minsta rekommenderade "
+"värdet ({required_expire}) och inte lägre än värdet på 'refresh' ({refresh})."
 
 #. EXPIRE_MINIMUM_VALUE_LOWER
 #: ../lib/Zonemaster/Engine/Test/Zone.pm:204
@@ -1446,11 +1445,12 @@ msgstr ""
 
 #. SOA_DEFAULT_TTL_MAXIMUM_VALUE_OK
 #: ../lib/Zonemaster/Engine/Test/Zone.pm:192
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "SOA 'minimum' value ({minimum}) is between the recommended ones "
 "({lowest_minimum}/{highest_minimum})."
-msgstr "Värdet för SOA 'minimum' ligger i det rekommenderade spannet "
+msgstr ""
+"Värdet för SOA 'minimum' ligger inom det rekommenderade spannet "
 "({lowest_minimum} - {highest_minimum})."
 
 #. SOA_DEFAULT_TTL_MAXIMUM_VALUE_HIGHER
@@ -1486,13 +1486,13 @@ msgstr "Nameservern i SOA MNAME ({mname}) är auktoritativ för zonen '{zone}'."
 
 #. MNAME_NOT_IN_GLUE
 #: ../lib/Zonemaster/Engine/Test/Zone.pm:208
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "SOA 'mname' nameserver ({mname}) is not listed in \"parent\" NS records for "
 "tested zone ({nss})."
 msgstr ""
 "Namnservern i SOA MNAME ({mname}) finns inte i delegeringen från moderzonen "
-"({nss})."
+"till den testade zonen. Namnservrar i delegeringen: {nss}."
 
 #. MNAME_NO_RESPONSE
 #: ../lib/Zonemaster/Engine/Test/Zone.pm:152
@@ -1640,7 +1640,7 @@ msgstr "{count} NS-uppsättningar hittades."
 
 #. MULTIPLE_SOA_MNAMES
 #: ../lib/Zonemaster/Engine/Test/Consistency.pm:163
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "Saw {count} SOA mname."
 msgstr "{count} olika 'SOA MNAME' hittades."
 
@@ -1712,7 +1712,7 @@ msgid ""
 "({description}), which is OK."
 msgstr ""
 "DNSKEY-posten med 'tag' {keytag} använder algoritm numret "
-"{algorithm}/({description}), som är OK."
+"{algorithm}/({description}), vilket är OK."
 
 #. ALGORITHM_NOT_RECOMMENDED
 #: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:406
@@ -1954,9 +1954,9 @@ msgstr ""
 
 #. CHILD_NS_FAILED
 #: ../lib/Zonemaster/Engine/Test/Consistency.pm:131
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "Unexepected or erroneous reply from {ns}/{address}."
-msgstr "Inget svar från namnservern '{ns}/{address}' på fråga efter NS-post."
+msgstr "Oväntat eller felaktigt svarspaket från '{ns}/{address}'."
 
 #. UPWARD_REFERRAL_IRRELEVANT
 #: ../lib/Zonemaster/Engine/Test/Nameserver.pm:352
