@@ -1,11 +1,9 @@
-#. WRONG_SOA
-#: ../lib/Zonemaster/Engine/Test/Zone.pm:266
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-04 19:08+0200\n"
-"PO-Revision-Date: 2019-07-08\n"
+"POT-Creation-Date: 2019-10-11 17:58+0200\n"
+"PO-Revision-Date: 2019-10-14 16:39+0200\n"
 "Last-Translator: Niels Haarbo <haarbo@dk-hostmaster.dk>\n"
 "Language-Team: Zonemaster Team\n"
 "Language: da\n"
@@ -30,9 +28,9 @@ msgstr ""
 
 #. ONE_SOA_MNAME
 #: ../lib/Zonemaster/Engine/Test/Consistency.pm:199
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "A single SOA mname value was seen ({mname})"
-msgstr "Et enkelt SOA RNAME blev returneret ({rname})"
+msgstr "A single SOA mname value was seen ({mname})"
 
 #. ONE_SOA_RNAME
 #: ../lib/Zonemaster/Engine/Test/Consistency.pm:203
@@ -130,15 +128,15 @@ msgstr "Alle navneservernes IP-adresser er unikke."
 
 #. CHILD_DISTINCT_NS_IP
 #: ../lib/Zonemaster/Engine/Test/Delegation.pm:127
-#, fuzzy
+#,
 msgid "All the IP addresses used by the nameservers in child are unique."
-msgstr "Alle navneservernes IP-adresser er unikke."
+msgstr "All the IP addresses used by the nameservers in child are unique."
 
 #. DEL_DISTINCT_NS_IP
 #: ../lib/Zonemaster/Engine/Test/Delegation.pm:135
-#, fuzzy
+#,
 msgid "All the IP addresses used by the nameservers in parent are unique."
-msgstr "Alle navneservernes IP-adresser er unikke."
+msgstr "All the IP addresses used by the nameservers in parent are unique."
 
 #. SOA_EXISTS
 #: ../lib/Zonemaster/Engine/Test/Delegation.pm:279
@@ -216,33 +214,27 @@ msgstr ""
 
 #. NOT_ENOUGH_NS_CHILD
 #: ../lib/Zonemaster/Engine/Test/Delegation.pm:227
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Child does not list enough ({count}) nameservers ({nss}). Lower limit set to "
 "{minimum}."
-msgstr ""
-"Barnet returnerer ikke tilstrækkeligt antal ({count}) navneservere ({nss}). "
-"Mindsteværdi er sat til {minimum}."
+msgstr "Child does not list enough ({count}) nameservers ({nss}). Lower limit set to {minimum}."
 
 #. NOT_ENOUGH_IPV4_NS_CHILD
 #: ../lib/Zonemaster/Engine/Test/Delegation.pm:203
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Child does not list enough ({count}) nameservers that resolve to IPv4 "
 "addresses ({addrs}). Lower limit set to {minimum}."
-msgstr ""
-"Barnet returnerer ikke tilstrækkeligt antal ({count}) navneservere ({ns}). "
-"Mindsteværdi er sat til {minimum}."
+msgstr "Child does not list enough ({count}) nameservers that resolve to IPv4 addresses ({addrs}). Lower limit set to {minimum}."
 
 #. NOT_ENOUGH_IPV6_NS_CHILD
 #: ../lib/Zonemaster/Engine/Test/Delegation.pm:215
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Child does not list enough ({count}) nameservers that resolve to IPv6 "
 "addresses ({addrs}). Lower limit set to {minimum}."
-msgstr ""
-"Barnet returnerer ikke tilstrækkeligt antal ({count}) navneservere ({ns}). "
-"Mindsteværdi er sat til {minimum}."
+msgstr "Child does not list enough ({count}) nameservers that resolve to IPv6 addresses ({addrs}). Lower limit set to {minimum}."
 
 #. EXTRA_ADDRESS_CHILD
 #: ../lib/Zonemaster/Engine/Test/Consistency.pm:139
@@ -263,33 +255,27 @@ msgstr ""
 
 #. ENOUGH_NS_CHILD
 #: ../lib/Zonemaster/Engine/Test/Delegation.pm:171
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Child lists enough ({count}) nameservers ({nss}). Lower limit set to "
 "{minimum}."
-msgstr ""
-"Barnet returnerer tilstrækkeligt antal ({count}) navneservere ({nss}). "
-"Mindsteværdi sat til {minimum}."
+msgstr "Child lists enough ({count}) nameservers ({nss}). Lower limit set to {minimum}."
 
 #. ENOUGH_IPV4_NS_CHILD
 #: ../lib/Zonemaster/Engine/Test/Delegation.pm:147
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Child lists enough ({count}) nameservers that resolve to IPv4 addresses "
 "({addrs}). Lower limit set to {minimum}."
-msgstr ""
-"Barnet returnerer tilstrækkeligt antal ({count}) navneservere ({ns}). "
-"Mindsteværdi sat til {minimum}."
+msgstr "Child lists enough ({count}) nameservers that resolve to IPv4 addresses ({addrs}). Lower limit set to {minimum}."
 
 #. ENOUGH_IPV6_NS_CHILD
 #: ../lib/Zonemaster/Engine/Test/Delegation.pm:159
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Child lists enough ({count}) nameservers that resolve to IPv6 addresses "
 "({addrs}). Lower limit set to {minimum}."
-msgstr ""
-"Barnet returnerer tilstrækkeligt antal ({count}) navneservere ({ns}). "
-"Mindsteværdi sat til {minimum}."
+msgstr "Child lists enough ({count}) nameservers that resolve to IPv6 addresses ({addrs}). Lower limit set to {minimum}."
 
 #. NO_IPV4_NS_CHILD
 #: ../lib/Zonemaster/Engine/Test/Delegation.pm:235
@@ -353,23 +339,19 @@ msgstr ""
 
 #. NOT_ENOUGH_IPV4_NS_DEL
 #: ../lib/Zonemaster/Engine/Test/Delegation.pm:209
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Delegation does not list enough ({count}) nameservers that resolve to IPv4 "
 "addresses ({addrs}). Lower limit set to {minimum}."
-msgstr ""
-"Barnet returnerer ikke tilstrækkeligt antal ({count}) navneservere ({ns}). "
-"Mindsteværdi er sat til {minimum}."
+msgstr "Delegation does not list enough ({count}) nameservers that resolve to IPv4 addresses ({addrs}). Lower limit set to {minimum}."
 
 #. NOT_ENOUGH_IPV6_NS_DEL
 #: ../lib/Zonemaster/Engine/Test/Delegation.pm:221
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Delegation does not list enough ({count}) nameservers that resolve to IPv6 "
 "addresses ({addrs}). Lower limit set to {minimum}."
-msgstr ""
-"Barnet returnerer ikke tilstrækkeligt antal ({count}) navneservere ({ns}). "
-"Mindsteværdi er sat til {minimum}."
+msgstr "Delegation does not list enough ({count}) nameservers that resolve to IPv6 addresses ({addrs}). Lower limit set to {minimum}."
 
 #. DELEGATION_NOT_SIGNED
 #: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:436
@@ -385,23 +367,19 @@ msgstr "Delegeringen fra forælder- til børnezonen er korrekt signeret."
 
 #. ENOUGH_IPV4_NS_DEL
 #: ../lib/Zonemaster/Engine/Test/Delegation.pm:153
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Delegation lists enough ({count}) nameservers that resolve to IPv4 addresses "
 "({addrs}). Lower limit set to {minimum}."
-msgstr ""
-"Barnet returnerer tilstrækkeligt antal ({count}) navneservere ({ns}). "
-"Mindsteværdi sat til {minimum}."
+msgstr "Delegation lists enough ({count}) nameservers that resolve to IPv4 addresses ({addrs}). Lower limit set to {minimum}."
 
 #. ENOUGH_IPV6_NS_DEL
 #: ../lib/Zonemaster/Engine/Test/Delegation.pm:165
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Delegation lists enough ({count}) nameservers that resolve to IPv6 addresses "
 "({addrs}). Lower limit set to {minimum}."
-msgstr ""
-"Barnet returnerer tilstrækkeligt antal ({count}) navneservere ({ns}). "
-"Mindsteværdi sat til {minimum}."
+msgstr "Delegation lists enough ({count}) nameservers that resolve to IPv6 addresses ({addrs}). Lower limit set to {minimum}."
 
 #. NO_IPV4_NS_DEL
 #: ../lib/Zonemaster/Engine/Test/Delegation.pm:241
@@ -514,9 +492,9 @@ msgstr "Domænets navneservere er i flere AS'er."
 
 #. NS_ERROR
 #: ../lib/Zonemaster/Engine/Test/Nameserver.pm:324
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "Erroneous response from nameserver {ns}/{address}."
-msgstr "Intet svar på NS-forespørgsel fra nameserveren {ns}/{address}."
+msgstr "Erroneous response from nameserver {ns}/{address}."
 
 #. DS_RFC4509_NOT_VALID
 #: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:500
@@ -583,15 +561,15 @@ msgstr "Glue-records er konsistente mellem forælder og barn."
 
 #. CHILD_NS_SAME_IP
 #: ../lib/Zonemaster/Engine/Test/Delegation.pm:131
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "IP {address} in child refers to multiple nameservers ({nss})."
-msgstr "IP-adressen {address} refererer til flere navneservere ({nss})."
+msgstr "IP {address} in child refers to multiple nameservers ({nss})."
 
 #. DEL_NS_SAME_IP
 #: ../lib/Zonemaster/Engine/Test/Delegation.pm:139
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "IP {address} in parent refers to multiple nameservers ({nss})."
-msgstr "IP-adressen {address} refererer til flere navneservere ({nss})."
+msgstr "IP {address} in parent refers to multiple nameservers ({nss})."
 
 #. SAME_IP_ADDRESS
 #: ../lib/Zonemaster/Engine/Test/Delegation.pm:275
@@ -600,12 +578,12 @@ msgid "IP {address} refers to multiple nameservers ({nss})."
 msgstr "IP-adressen {address} refererer til flere navneservere ({nss})."
 
 #. IPV4_DISABLED
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:288
 #: ../lib/Zonemaster/Engine/Test/Connectivity.pm:144
-#: ../lib/Zonemaster/Engine/Test/Delegation.pm:187
-#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:273
-#: ../lib/Zonemaster/Engine/Test/Consistency.pm:151
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:542
 #: ../lib/Zonemaster/Engine/Test/Basic.pm:176
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:187
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:542
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:151
 #, perl-brace-format
 msgid "IPv4 is disabled, not sending \"{rrtype}\" query to {ns}/{address}."
 msgstr ""
@@ -626,12 +604,12 @@ msgstr ""
 "IPv4 er aktiveret, kan udføre \"{rrtype}\"-forespørgsel til {ns}/{address}."
 
 #. IPV6_DISABLED
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:292
 #: ../lib/Zonemaster/Engine/Test/Connectivity.pm:148
-#: ../lib/Zonemaster/Engine/Test/Delegation.pm:191
-#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:277
-#: ../lib/Zonemaster/Engine/Test/Consistency.pm:155
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:546
 #: ../lib/Zonemaster/Engine/Test/Basic.pm:184
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:191
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:546
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:155
 #, perl-brace-format
 msgid "IPv6 is disabled, not sending \"{rrtype}\" query to {ns}/{address}."
 msgstr ""
@@ -682,9 +660,9 @@ msgstr ""
 
 #. CHILD_ZONE_LAME
 #: ../lib/Zonemaster/Engine/Test/Consistency.pm:135
-#, fuzzy
+#,
 msgid "Lame delegation"
-msgstr "Fulgte en falsk delegering."
+msgstr "Lame delegation"
 
 #. LOGGER_CALLBACK_ERROR
 #: ../lib/Zonemaster/Engine/Translator.pm:45
@@ -816,9 +794,9 @@ msgstr "På navneservern {ns} returnerer {address_type} et CNAME."
 
 #. UNSUPPORTED_EDNS_VER
 #: ../lib/Zonemaster/Engine/Test/Nameserver.pm:344
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "Nameserver {ns}/{address} accepts an unsupported EDNS version."
-msgstr "Navneserveren {ns}/{address} er ikke rekursiv."
+msgstr "Nameserver {ns}/{address} accepts an unsupported EDNS version."
 
 #. NAMESERVER_HAS_TCP_53
 #: ../lib/Zonemaster/Engine/Test/Connectivity.pm:128
@@ -840,23 +818,19 @@ msgstr "Navneserveren {ns}/{address} tillader zoneoverførsler via AXFR."
 
 #. A_UNEXPECTED_RCODE
 #: ../lib/Zonemaster/Engine/Test/Nameserver.pm:211
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Nameserver {ns}/{address} answered A query with an unexpected rcode "
 "({rcode})."
-msgstr ""
-"Navneserveren {ns}/{address} besvarede en AAAA-forespørgsel med den uventede "
-"returkode ({rcode})."
+msgstr "Nameserver {ns}/{address} answered A query with an unexpected rcode ({rcode})."
 
 #. AAAA_BAD_RDATA
 #: ../lib/Zonemaster/Engine/Test/Nameserver.pm:195
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Nameserver {ns}/{address} answered AAAA query with an unexpected RDATA "
 "length ({length} instead of 16)"
-msgstr ""
-"Navneserveren {ns}/{address} besvarede en AAAA-forespørgsel med den uventede "
-"returkode ({rcode})."
+msgstr "Nameserver {ns}/{address} answered AAAA query with an unexpected RDATA length ({length} instead of 16)"
 
 #. AAAA_UNEXPECTED_RCODE
 #: ../lib/Zonemaster/Engine/Test/Nameserver.pm:203
@@ -876,8 +850,8 @@ msgstr "Navneserveren {ns}/{address} svarede ikke på en NS-forespørgsel."
 
 #. NO_RESPONSE
 #: ../lib/Zonemaster/Engine/Test/Zone.pm:236
-#: ../lib/Zonemaster/Engine/Test/Consistency.pm:179
 #: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:596
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:179
 #, perl-brace-format
 msgid "Nameserver {ns}/{address} did not respond."
 msgstr "Navneserveren {ns}/{address} svarede ikke."
@@ -886,7 +860,8 @@ msgstr "Navneserveren {ns}/{address} svarede ikke."
 #: ../lib/Zonemaster/Engine/Test/Basic.pm:148
 #, perl-brace-format
 msgid "Nameserver {ns}/{address} did not return A record(s) for {dname}."
-msgstr "Navneserveren {ns}/{address} returnerede ikke nogle A-records for {dname}."
+msgstr ""
+"Navneserveren {ns}/{address} returnerede ikke nogle A-records for {dname}."
 
 #. NS_FAILED
 #: ../lib/Zonemaster/Engine/Test/Basic.pm:160
@@ -919,9 +894,9 @@ msgstr "Navneserveren {ns}/{address} mistede en AAAA-forespørgsel."
 
 #. Z_FLAGS_NOTCLEAR
 #: ../lib/Zonemaster/Engine/Test/Nameserver.pm:356
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "Nameserver {ns}/{address} has one or more unknown EDNS Z flag bits set."
-msgstr "Navneserveren {ns}/{address} svarede ikke på en NS-forespørgsel."
+msgstr "Nameserver {ns}/{address} has one or more unknown EDNS Z flag bits set."
 
 #. IS_A_RECURSOR
 #: ../lib/Zonemaster/Engine/Test/Nameserver.pm:296
@@ -937,10 +912,9 @@ msgstr "Navneserveren {ns}/{address} er ikke rekursiv."
 
 #. HAS_NAMESERVERS
 #: ../lib/Zonemaster/Engine/Test/Basic.pm:152
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "Nameserver {ns}/{address} listed these servers as glue: {nsnlist}."
-msgstr ""
-"Navneserveren {ns}/{address} returnerede disse servere som glue: {nsnlist}."
+msgstr "Nameserver {ns}/{address} listed these servers as glue: {nsnlist}."
 
 #. NAMESERVER_NO_TCP_53
 #: ../lib/Zonemaster/Engine/Test/Connectivity.pm:136
@@ -974,43 +948,39 @@ msgstr ""
 
 #. MISSING_OPT_IN_TRUNCATED
 #: ../lib/Zonemaster/Engine/Test/Nameserver.pm:300
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Nameserver {ns}/{address} replies on an EDNS query with a truncated response "
 "without EDNS."
-msgstr ""
-"Navneserveren {ns}/{address} svarede på en SOA-forespørgsel fra en anden "
-"kilde ({source})."
+msgstr "Nameserver {ns}/{address} replies on an EDNS query with a truncated response without EDNS."
 
 #. NO_RESPONSE_DNSKEY
 #: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:592
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "Nameserver {ns}/{address} responded with no DNSKEY record(s)."
-msgstr "Navneserveren {ns}/{address} svarede ikke på en NS-forespørgsel."
+msgstr "Nameserver {ns}/{address} responded with no DNSKEY record(s)."
 
 #. WRONG_SOA
 #: ../lib/Zonemaster/Engine/Test/Zone.pm:266
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Nameserver {ns}/{address} responds with a wrong owner name ({owner} instead "
 "of {name}) on SOA queries."
-msgstr ""
-"Nameservern {ns}/{address} bevarede ikke versaler og minuskler fra "
-"forespørgslen."
+msgstr "Nameserver {ns}/{address} responds with a wrong owner name ({owner} instead of {name}) on SOA queries."
 
 #. UNKNOWN_OPTION_CODE
 #: ../lib/Zonemaster/Engine/Test/Nameserver.pm:340
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "Nameserver {ns}/{address} responds with an unknown ENDS OPTION-CODE."
-msgstr "Navneserveren {ns}/{address} svarede ikke på en NS-forespørgsel."
+msgstr "Nameserver {ns}/{address} responds with an unknown ENDS OPTION-CODE."
 
 #. MULTIPLE_SOA
 #: ../lib/Zonemaster/Engine/Test/Zone.pm:232
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Nameserver {ns}/{address} responds with multiple ({count}) SOA records on "
 "SOA queries."
-msgstr "Navneserveren {ns}/{address} svarede ikke på en NS-forespørgsel."
+msgstr "Nameserver {ns}/{address} responds with multiple ({count}) SOA records on SOA queries."
 
 #. HAS_A_RECORDS
 #: ../lib/Zonemaster/Engine/Test/Basic.pm:144
@@ -1145,12 +1115,11 @@ msgid "No response from nameserver(s) on SOA queries."
 msgstr "Intet svar fra navneserver(ne) på forespørgsel på SOA-record."
 
 #. NO_RESPONSE
-#: ../lib/Zonemaster/Engine/Test/Syntax.pm:213
 #: ../lib/Zonemaster/Engine/Test/Nameserver.pm:316
-#, fuzzy, perl-brace-format
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:213
+#, perl-brace-format
 msgid "No response from {ns}/{address} asking for {dname}."
-msgstr ""
-"Intet svar fra {ns}/{address} når EDNS er brugt i forespørgslen på {dname}."
+msgstr "No response from {ns}/{address} asking for {dname}."
 
 #. BREAKS_ON_EDNS
 #: ../lib/Zonemaster/Engine/Test/Nameserver.pm:223
@@ -1347,12 +1316,11 @@ msgstr ""
 
 #. NO_SOA_IN_RESPONSE
 #: ../lib/Zonemaster/Engine/Test/Zone.pm:248
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Response from nameserver {ns}/{address} on SOA queries does not contain SOA "
 "record."
-msgstr ""
-"Intet svar fra navneserveren {ns}/{address} på forespørgsel om SOA-record."
+msgstr "Response from nameserver {ns}/{address} on SOA queries does not contain SOA record."
 
 #. EDNS_RESPONSE_WITHOUT_EDNS
 #: ../lib/Zonemaster/Engine/Test/Nameserver.pm:274
@@ -1441,13 +1409,11 @@ msgstr "SOA 'MNAME'-navneserveren ({mname}) er autoritativ for zonen '{zone}'."
 
 #. MNAME_NOT_IN_GLUE
 #: ../lib/Zonemaster/Engine/Test/Zone.pm:208
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "SOA 'mname' nameserver ({mname}) is not listed in \"parent\" NS records for "
 "tested zone ({nss})."
-msgstr ""
-"Navneserveren i SOA 'MNAME' ({mname}) er ikke blandt de NS-records ({ns}) "
-"som angivet i forælderzonen \"parent\"."
+msgstr "SOA 'mname' nameserver ({mname}) is not listed in \"parent\" NS records for tested zone ({nss})."
 
 #. MNAME_NO_RESPONSE
 #: ../lib/Zonemaster/Engine/Test/Zone.pm:152
@@ -1593,9 +1559,9 @@ msgstr "Fandt {count} NS-sæt."
 
 #. MULTIPLE_SOA_MNAMES
 #: ../lib/Zonemaster/Engine/Test/Consistency.pm:163
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "Saw {count} SOA mname."
-msgstr "Så {count} forskellige SOA RNAME."
+msgstr "Saw {count} SOA mname."
 
 #. MULTIPLE_SOA_RNAMES
 #: ../lib/Zonemaster/Engine/Test/Consistency.pm:167
@@ -1650,13 +1616,11 @@ msgstr "Adressen ({info}) modtager e-mail for domænenavnet."
 
 #. ALGORITHM_NOT_ZONE_SIGN
 #: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:411
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "The DNSKEY with tag {keytag} uses algorithm number not meant for zone "
 "signing{algorithm}/({description})."
-msgstr ""
-"DNSKEY-recorden med tag {keytag} anvender den private algoritme med nummer "
-"{algorithm}/({description})."
+msgstr "The DNSKEY with tag {keytag} uses algorithm number not meant for zone signing{algorithm}/({description})."
 
 #. ALGORITHM_OK
 #: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:416
@@ -1670,13 +1634,11 @@ msgstr ""
 
 #. ALGORITHM_NOT_RECOMMENDED
 #: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:406
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "The DNSKEY with tag {keytag} uses an algorithm number {algorithm}/"
 "({description} which which is not recommended to be used."
-msgstr ""
-"DNSKEY-recorden med tag {keytag} anvender algoritme nummer {algorithm}/"
-"({description}), hvilket er OK."
+msgstr "The DNSKEY with tag {keytag} uses an algorithm number {algorithm}/({description} which which is not recommended to be used."
 
 #. ALGORITHM_DEPRECATED
 #: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:402
@@ -1908,9 +1870,9 @@ msgstr ""
 
 #. CHILD_NS_FAILED
 #: ../lib/Zonemaster/Engine/Test/Consistency.pm:131
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "Unexepected or erroneous reply from {ns}/{address}."
-msgstr "Intet svar på NS-forespørgsel fra nameserveren {ns}/{address}."
+msgstr "Unexepected or erroneous reply from {ns}/{address}."
 
 #. UPWARD_REFERRAL_IRRELEVANT
 #: ../lib/Zonemaster/Engine/Test/Nameserver.pm:352
