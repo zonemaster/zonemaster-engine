@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-09 21:13+0200\n"
+"POT-Creation-Date: 2019-10-14 21:30+0200\n"
 "PO-Revision-Date: 2017-12-18\n"
 "Last-Translator: mats.dufberg@iis.se\n"
 "Language-Team: Zonemaster Team\n"
@@ -142,10 +142,10 @@ msgstr "All the nameservers have SOA record."
 #. ALL_ALGO_SIGNED
 #: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:451
 msgid ""
-"All the tested RRset (SOA/DNSKEY/NS) are signed with each algorithm present "
-"in the DNSKEY RRset"
+"All the tested RRset (SOA/DNSKEY/NS) are signed by each algorithm present in "
+"the DNSKEY RRset"
 msgstr ""
-"All the tested RRset (SOA/DNSKEY/NS) are signed with each algorithm present "
+"All the tested RRset (SOA/DNSKEY/NS) are signed by each algorithm present "
 "in the DNSKEY RRset"
 
 #. ARE_AUTHORITATIVE
@@ -976,19 +976,21 @@ msgstr ""
 #: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:691
 #, perl-brace-format
 msgid ""
-"Nameserver {ns}/{address} responded with RRSIG which can not be verified "
+"Nameserver {ns}/{address} responded with an RRSIG which can not be verified "
 "with corresponding DNSKEY (with keytag {keytag})"
 msgstr ""
-"Nameserver {ns}/{address} responded with RRSIG which can not be verified "
+"Nameserver {ns}/{address} responded with an RRSIG which can not be verified "
 "with corresponding DNSKEY (with keytag {keytag})"
 
 #. RRSIG_NOT_MATCH_DNSKEY
 #: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:699
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
-"Nameserver {ns}/{address} responded with RRSIG with unknown keytag {keytag}."
+"Nameserver {ns}/{address} responded with an RRSIG with unknown keytag "
+"{keytag}."
 msgstr ""
-"Nameserver {ns}/{address} responded with RRSIG with unknown keytag {keytag}."
+"Nameserver {ns}/{address} responded with an RRSIG with unknown keytag "
+"{keytag}."
 
 #. NO_RESPONSE_DNSKEY
 #: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:615

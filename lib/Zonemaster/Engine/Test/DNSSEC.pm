@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::DNSSEC;
 
-use version; our $VERSION = version->declare("v1.1.1");
+use version; our $VERSION = version->declare("v1.1.r21");
 
 ###
 ### This test module implements DNSSEC tests.
@@ -448,7 +448,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     ALL_ALGO_SIGNED => sub {
        __x    # ALL_ALGO_SIGNED
-          "All the tested RRset (SOA/DNSKEY/NS) are signed with each algorithm present in the DNSKEY RRset", @_;
+          "All the tested RRset (SOA/DNSKEY/NS) are signed by each algorithm present in the DNSKEY RRset", @_;
     },
     COMMON_KEYTAGS => sub {
         __x    # COMMON_KEYTAGS
@@ -688,7 +688,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     RRSIG_BROKEN => sub {
         __x    # RRSIG_BROKEN
-          "Nameserver {ns}/{address} responded with RRSIG which can not be verified with corresponding DNSKEY (with keytag {keytag})", @_;
+          "Nameserver {ns}/{address} responded with an RRSIG which can not be verified with corresponding DNSKEY (with keytag {keytag})", @_;
     },
     RRSIG_EXPIRED => sub {
         __x    # RRSIG_EXPIRED
@@ -696,7 +696,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     RRSIG_NOT_MATCH_DNSKEY => sub {
         __x    # RRSIG_NOT_MATCH_DNSKEY
-          "Nameserver {ns}/{address} responded with RRSIG with unknown keytag {keytag}.", @_;
+          "Nameserver {ns}/{address} responded with an RRSIG with unknown keytag {keytag}.", @_;
     },
     SOA_NOT_SIGNED => sub {
         __x    # SOA_NOT_SIGNED
