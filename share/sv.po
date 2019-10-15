@@ -691,9 +691,9 @@ msgid ""
 "at parent ({parent_addresses}) and any equivalent address record in child "
 "zone({zone_addresses})"
 msgstr ""
-"Delegeringen listar en IP-adress ({parent_addresses}) för en namnserver "
-"som är 'in-bailiwick' som misstämmer eventuell motsvarande adressenpost "
-"dotterzonen ({zone_addresses})."
+"Delegeringen listar en IP-adress ({parent_addresses}) för en namnserver, "
+"som är 'in-bailiwick', som misstämmer med eventuell motsvarande adresspost "
+"i dotterzonen ({zone_addresses})."
 
 #. EDNS_VERSION_ERROR
 #: ../lib/Zonemaster/Engine/Test/Nameserver.pm:278
@@ -1247,10 +1247,9 @@ msgid ""
 "mismatch between the glue at the parent ({parent_addresses}) and iany "
 "equivalent address record found in authoritative zone ({zone_addresses})"
 msgstr ""
-"Delegeringen listar en IP-adress ({parent_addresses}) för en namnserver "
-"som är 'out-of-bailiwick' som misstämmer med adressen i den auktoritativa "
-"zonen ({zone_addresses})."
-
+"Delegeringen listar en IP-adress ({parent_addresses}) för en namnserver, "
+"som är 'out-of-bailiwick', som misstämmer med eventuell motsvarande "
+"adresspost i den auktoritativa zonen ({zone_addresses})."
 
 #. PACKET_BIG
 #: ../lib/Zonemaster/Engine/Translator.pm:113
