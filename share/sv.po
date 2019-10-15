@@ -692,7 +692,7 @@ msgid ""
 "zone({zone_addresses})"
 msgstr ""
 "Delegeringen listar en IP-adress ({parent_addresses}) för en namnserver, "
-"som är 'in-bailiwick', som misstämmer med eventuell motsvarande adresspost "
+"som är 'in-bailiwick', som inte stämmer med eventuell motsvarande adresspost "
 "i dotterzonen ({zone_addresses})."
 
 #. EDNS_VERSION_ERROR
@@ -1248,7 +1248,7 @@ msgid ""
 "equivalent address record found in authoritative zone ({zone_addresses})"
 msgstr ""
 "Delegeringen listar en IP-adress ({parent_addresses}) för en namnserver, "
-"som är 'out-of-bailiwick', som misstämmer med eventuell motsvarande "
+"som är 'out-of-bailiwick', som inte stämmer med eventuell motsvarande "
 "adresspost i den auktoritativa zonen ({zone_addresses})."
 
 #. PACKET_BIG
