@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::DNSSEC;
 
-use version; our $VERSION = version->declare("v1.0.14");
+use version; our $VERSION = version->declare("v1.1.2");
 
 ###
 ### This test module implements DNSSEC tests.
@@ -14,7 +14,7 @@ use 5.014002;
 use Zonemaster::Engine;
 
 use Carp;
-use List::MoreUtils qw[none];
+use List::MoreUtils qw[uniq none];
 use List::Util qw[min];
 use Locale::TextDomain qw[Zonemaster-Engine];
 use Readonly;
@@ -246,6 +246,10 @@ sub all {
             push @results, $class->dnssec11( $zone );
         }
 
+        if ( Zonemaster::Engine::Util::should_run_test( q{dnssec13} ) ) {
+            push @results, $class->dnssec13( $zone );
+        }
+
         if ( Zonemaster::Engine::Util::should_run_test( q{dnssec14} ) ) {
             push @results, $class->dnssec14( $zone );
         }
@@ -377,6 +381,17 @@ sub metadata {
               DELEGATION_SIGNED
               ),
         ],
+        dnssec13 => [
+            qw(
+              ALGO_NOT_SIGNED_RRSET
+              ALL_ALGO_SIGNED
+              NO_RESPONSE
+              NO_RESPONSE_RRSET
+              RRSET_NOT_SIGNED
+              RRSIG_BROKEN
+              RRSIG_NOT_MATCH_DNSKEY
+              ),
+        ],
         dnssec14 => [
             qw(
               NO_RESPONSE
@@ -426,6 +441,14 @@ Readonly my %TAG_DESCRIPTIONS => (
     ALGORITHM_UNASSIGNED => sub {
         __x    # ALGORITHM_UNASSIGNED
           "The DNSKEY with tag {keytag} uses unassigned algorithm number {algorithm}/({description}).", @_;
+    },
+    ALGO_NOT_SIGNED_RRSET => sub {
+        __x    # ALGO_NOT_SIGNED_RRSET
+          "Nameserver {ns}/{address} responded with no RRSIG for RRset {rrtype} created by the algorithm {algorithm}.", @_;
+    },
+    ALL_ALGO_SIGNED => sub {
+       __x    # ALL_ALGO_SIGNED
+          "All the tested RRset (SOA/DNSKEY/NS) are signed by each algorithm present in the DNSKEY RRset", @_;
     },
     COMMON_KEYTAGS => sub {
         __x    # COMMON_KEYTAGS
@@ -591,6 +614,10 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # NO_RESPONSE_DNSKEY
           "Nameserver {ns}/{address} responded with no DNSKEY record(s).", @_;
     },
+    NO_RESPONSE_RRSET => sub {
+        __x    # NO_RESPONSE_RRSET
+          "Nameserver {ns}/{address} responded with no {rrtype} record(s).", @_;
+    },
     NO_RESPONSE => sub {
         __x    # NO_RESPONSE
           "Nameserver {ns}/{address} did not respond.", @_;
@@ -655,9 +682,21 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # RRSIG_EXPIRATION
           "RRSIG with keytag {tag} and covering type(s) {types} expires at : {date}.", @_;
     },
+    RRSET_NOT_SIGNED => sub {
+        __x    # RRSET_NOT_SIGNED
+          "Nameserver {ns}/{address} responded with no RRSIG for {rrtype} RRset.", @_;
+    },
+    RRSIG_BROKEN => sub {
+        __x    # RRSIG_BROKEN
+          "Nameserver {ns}/{address} responded with an RRSIG which can not be verified with corresponding DNSKEY (with keytag {keytag})", @_;
+    },
     RRSIG_EXPIRED => sub {
         __x    # RRSIG_EXPIRED
           "RRSIG with keytag {tag} and covering type(s) {types} has already expired (expiration is: {expiration}).", @_;
+    },
+    RRSIG_NOT_MATCH_DNSKEY => sub {
+        __x    # RRSIG_NOT_MATCH_DNSKEY
+          "Nameserver {ns}/{address} responded with an RRSIG with unknown keytag {keytag}.", @_;
     },
     SOA_NOT_SIGNED => sub {
         __x    # SOA_NOT_SIGNED
@@ -959,12 +998,12 @@ sub dnssec04 {
     my ( $self, $zone ) = @_;
     my @results;
 
-    my $key_p = $zone->query_one( $zone->name, 'DNSKEY', { dnssec => 1 } );
-    if ( not $key_p ) {
+    my $dnskey_p = $zone->query_one( $zone->name, 'DNSKEY', { dnssec => 1 } );
+    if ( not $dnskey_p ) {
         return;
     }
-    my @keys     = $key_p->get_records( 'DNSKEY', 'answer' );
-    my @key_sigs = $key_p->get_records( 'RRSIG',  'answer' );
+    my @keys     = $dnskey_p->get_records( 'DNSKEY', 'answer' );
+    my @key_sigs = $dnskey_p->get_records( 'RRSIG',  'answer' );
 
     my $soa_p = $zone->query_one( $zone->name, 'SOA', { dnssec => 1 } );
     if ( not $soa_p ) {
@@ -983,7 +1022,7 @@ sub dnssec04 {
             }
           );
 
-        my $remaining = $sig->expiration - int( $key_p->timestamp );
+        my $remaining = $sig->expiration - int( $dnskey_p->timestamp );
         my $result_remaining;
         if ( $remaining < 0 ) {    # already expired
             $result_remaining = info(
@@ -1083,13 +1122,13 @@ sub dnssec05 {
             next;
         }
 
-        my $key_p = $ns->query( $zone->name, 'DNSKEY', { dnssec => 1 } );
-        if ( not $key_p ) {
+        my $dnskey_p = $ns->query( $zone->name, 'DNSKEY', { dnssec => 1 } );
+        if ( not $dnskey_p ) {
             push @results, info( NO_RESPONSE => $ns_args );
             next;
         }
 
-        my @keys = $key_p->get_records( 'DNSKEY', 'answer' );
+        my @keys = $dnskey_p->get_records( 'DNSKEY', 'answer' );
         if ( not @keys ) {
             push @results, info( NO_RESPONSE_DNSKEY => $ns_args );
             next;
@@ -1148,33 +1187,33 @@ sub dnssec06 {
     my ( $self, $zone ) = @_;
     my @results;
 
-    my $key_aref = $zone->query_all( $zone->name, 'DNSKEY', { dnssec => 1 } );
-    foreach my $key_p ( @{$key_aref} ) {
-        next if not $key_p;
+    my $dnskey_aref = $zone->query_all( $zone->name, 'DNSKEY', { dnssec => 1 } );
+    foreach my $dnskey_p ( @{$dnskey_aref} ) {
+        next if not $dnskey_p;
 
-        my @keys = $key_p->get_records( 'DNSKEY', 'answer' );
-        my @sigs = $key_p->get_records( 'RRSIG',  'answer' );
+        my @keys = $dnskey_p->get_records( 'DNSKEY', 'answer' );
+        my @sigs = $dnskey_p->get_records( 'RRSIG',  'answer' );
         if ( @sigs > 0 and @keys > 0 ) {
             push @results,
               info(
                 EXTRA_PROCESSING_OK => {
-                    server => $key_p->answerfrom,
+                    server => $dnskey_p->answerfrom,
                     keys   => scalar( @keys ),
                     sigs   => scalar( @sigs ),
                 }
               );
         }
-        elsif ( $key_p->rcode eq q{NOERROR} and ( @sigs == 0 or @keys == 0 ) ) {
+        elsif ( $dnskey_p->rcode eq q{NOERROR} and ( @sigs == 0 or @keys == 0 ) ) {
             push @results,
               info(
                 EXTRA_PROCESSING_BROKEN => {
-                    server => $key_p->answerfrom,
+                    server => $dnskey_p->answerfrom,
                     keys   => scalar( @keys ),
                     sigs   => scalar( @sigs )
                 }
               );
         }
-    } ## end foreach my $key_p ( @{$key_aref...})
+    } ## end foreach my $dnskey_p ( @{$dnskey_aref...})
 
     return @results;
 } ## end sub dnssec06
@@ -1184,11 +1223,11 @@ sub dnssec07 {
     my @results;
 
     return if not $zone->parent;
-    my $key_p = $zone->query_one( $zone->name, 'DNSKEY', { dnssec => 1 } );
-    if ( not $key_p ) {
+    my $dnskey_p = $zone->query_one( $zone->name, 'DNSKEY', { dnssec => 1 } );
+    if ( not $dnskey_p ) {
         return;
     }
-    my ( $dnskey ) = $key_p->get_records( 'DNSKEY', 'answer' );
+    my ( $dnskey ) = $dnskey_p->get_records( 'DNSKEY', 'answer' );
 
     my $ds_p = $zone->parent->query_one( $zone->name, 'DS', { dnssec => 1 } );
     if ( not $ds_p ) {
@@ -1200,7 +1239,7 @@ sub dnssec07 {
         push @results,
           info(
             DNSKEY_BUT_NOT_DS => {
-                child  => $key_p->answerfrom,
+                child  => $dnskey_p->answerfrom,
                 parent => $ds_p->answerfrom,
             }
           );
@@ -1209,7 +1248,7 @@ sub dnssec07 {
         push @results,
           info(
             DNSKEY_AND_DS => {
-                child  => $key_p->answerfrom,
+                child  => $dnskey_p->answerfrom,
                 parent => $ds_p->answerfrom,
             }
           );
@@ -1218,7 +1257,7 @@ sub dnssec07 {
         push @results,
           info(
             DS_BUT_NOT_DNSKEY => {
-                child  => $key_p->answerfrom,
+                child  => $dnskey_p->answerfrom,
                 parent => $ds_p->answerfrom,
             }
           );
@@ -1227,7 +1266,7 @@ sub dnssec07 {
         push @results,
           info(
             NEITHER_DNSKEY_NOR_DS => {
-                child  => $key_p->answerfrom,
+                child  => $dnskey_p->answerfrom,
                 parent => $ds_p->answerfrom,
             }
           );
@@ -1240,12 +1279,12 @@ sub dnssec08 {
     my ( $self, $zone ) = @_;
     my @results;
 
-    my $key_p = $zone->query_one( $zone->name, 'DNSKEY', { dnssec => 1 } );
-    if ( not $key_p ) {
+    my $dnskey_p = $zone->query_one( $zone->name, 'DNSKEY', { dnssec => 1 } );
+    if ( not $dnskey_p ) {
         return;
     }
-    my @dnskeys = $key_p->get_records( 'DNSKEY', 'answer' );
-    my @sigs    = $key_p->get_records( 'RRSIG',  'answer' );
+    my @dnskeys = $dnskey_p->get_records( 'DNSKEY', 'answer' );
+    my @sigs    = $dnskey_p->get_records( 'RRSIG',  'answer' );
 
     if ( @dnskeys == 0 or @sigs == 0 ) {
         push @results,
@@ -1261,7 +1300,7 @@ sub dnssec08 {
     my $ok = 0;
     foreach my $sig ( @sigs ) {
         my $msg  = q{};
-        my $time = $key_p->timestamp;
+        my $time = $dnskey_p->timestamp;
         if ( $sig->verify_time( \@dnskeys, \@dnskeys, $time, $msg ) ) {
             push @results,
               info(
@@ -1306,11 +1345,11 @@ sub dnssec09 {
     my ( $self, $zone ) = @_;
     my @results;
 
-    my $key_p = $zone->query_one( $zone->name, 'DNSKEY', { dnssec => 1 } );
-    if ( not $key_p ) {
+    my $dnskey_p = $zone->query_one( $zone->name, 'DNSKEY', { dnssec => 1 } );
+    if ( not $dnskey_p ) {
         return;
     }
-    my @dnskeys = $key_p->get_records( 'DNSKEY', 'answer' );
+    my @dnskeys = $dnskey_p->get_records( 'DNSKEY', 'answer' );
 
     my $soa_p = $zone->query_one( $zone->name, 'SOA', { dnssec => 1 } );
     if ( not $soa_p ) {
@@ -1378,11 +1417,11 @@ sub dnssec10 {
     my ( $self, $zone ) = @_;
     my @results;
 
-    my $key_p = $zone->query_one( $zone->name, 'DNSKEY', { dnssec => 1 } );
-    if ( not $key_p ) {
+    my $dnskey_p = $zone->query_one( $zone->name, 'DNSKEY', { dnssec => 1 } );
+    if ( not $dnskey_p ) {
         return;
     }
-    my @dnskeys = $key_p->get_records( 'DNSKEY', 'answer' );
+    my @dnskeys = $dnskey_p->get_records( 'DNSKEY', 'answer' );
 
     my $name = $zone->name->prepend( 'xx--example' );
     my $test_p = $zone->query_one( $name, 'A', { dnssec => 1 } );
@@ -1611,22 +1650,24 @@ sub dnssec11 {
     return @results;
 } ## end sub dnssec11
 
-sub dnssec14 {
+sub dnssec13 {
     my ( $class, $zone ) = @_;
     my @results;
     my @dnskey_rrs;
+    my $all_algo_signed = 1;
+    my $DNSKEY_algorithm_exists = 0;
 
     my @nss_del   = @{ Zonemaster::Engine::TestMethods->method4( $zone ) };
     my @nss_child = @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
     my %nss       = map { $_->name->string . '/' . $_->address->short => $_ } @nss_del, @nss_child;
 
-    for my $key ( sort keys %nss ) {
-        my $ns = $nss{$key};
+    for my $nss_key ( sort keys %nss ) {
+        my $ns = $nss{$nss_key};
         my $ns_args = {
             ns      => $ns->name->string,
             address => $ns->address->short,
         };
-	
+
         if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
             push @results,
               info(
@@ -1651,13 +1692,119 @@ sub dnssec14 {
             next;
         }
 
-        my $key_p = $ns->query( $zone->name, 'DNSKEY', { dnssec => 1, usevc => 0 } );
-        if ( not $key_p ) {
+        my %keytags;
+        my @algorithms;
+        foreach my $query_type ( qw{DNSKEY SOA NS} ) {
+
+            $ns_args->{rrtype} = $query_type;
+            my $p = $ns->query( $zone->name, $query_type, { dnssec => 1, usevc => 0 } );
+            if ( not $p ) {
+                push @results, info( NO_RESPONSE => $ns_args );
+                next;
+            }
+
+            my @rrs = $p->get_records( $query_type, q{answer} );
+            if ( not scalar @rrs ) {
+                $all_algo_signed = 0;
+                push @results, info( NO_RESPONSE_RRSET => $ns_args );
+                next;
+            }
+
+            if ( $query_type eq q{DNSKEY} ) {
+                %keytags = map { $_->keytag => $_ } @rrs;                
+                @algorithms = uniq map { $_->algorithm } @rrs;
+                if ( scalar @algorithms ) {
+                    $DNSKEY_algorithm_exists = 1;
+                }
+            }
+
+            my @sigs = $p->get_records( q{RRSIG},  q{answer} );
+            if ( not scalar @sigs ) {
+                $all_algo_signed = 0;
+                push @results, info( RRSET_NOT_SIGNED => $ns_args );
+                next;
+            }
+
+            foreach my $algorithm ( @algorithms ) {
+                if ( not scalar grep { $_->algorithm == $algorithm } @sigs ) {
+                    $all_algo_signed = 0;
+                    $ns_args->{algorithm} = $algorithm;
+                    push @results, info( ALGO_NOT_SIGNED_RRSET => $ns_args );
+                }
+            }
+
+            foreach my $sig ( @sigs ) {
+                my @keys = ($keytags{$sig->keytag});
+                if ( not scalar @keys ) {
+                    $all_algo_signed = 0;
+                    $ns_args->{keytag} = $sig->keytag;
+                    push @results, info( RRSIG_NOT_MATCH_DNSKEY => $ns_args );
+                }
+                elsif ( not $sig->verify( \@rrs, \@keys ) ) {
+                    $all_algo_signed = 0;
+                    $ns_args->{keytag} = $sig->keytag;
+                    push @results, info( RRSIG_BROKEN => $ns_args );
+                }
+            }
+
+        }
+    }
+
+    if ( $DNSKEY_algorithm_exists and $all_algo_signed ) {
+        push @results, info( ALL_ALGO_SIGNED => {} );
+    }
+
+    return @results;
+
+} ## end sub dnssec13
+
+sub dnssec14 {
+    my ( $class, $zone ) = @_;
+    my @results;
+    my @dnskey_rrs;
+
+    my @nss_del   = @{ Zonemaster::Engine::TestMethods->method4( $zone ) };
+    my @nss_child = @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
+    my %nss       = map { $_->name->string . '/' . $_->address->short => $_ } @nss_del, @nss_child;
+
+    for my $nss_key ( sort keys %nss ) {
+        my $ns = $nss{$nss_key};
+        my $ns_args = {
+            ns      => $ns->name->string,
+            address => $ns->address->short,
+        };
+
+        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
+            push @results,
+              info(
+                IPV6_DISABLED => {
+                    ns      => $ns->name->string,
+                    address => $ns->address->short,
+                    rrtype => q{DNSKEY},
+                }
+              );
+            next;
+        }
+
+        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
+            push @results,
+              info(
+                IPV4_DISABLED => {
+                    ns      => $ns->name->string,
+                    address => $ns->address->short,
+                    rrtype => q{DNSKEY},
+                }
+              );
+            next;
+        }
+
+        my $dnskey_p = $ns->query( $zone->name, 'DNSKEY', { dnssec => 1, usevc => 0 } );
+        if ( not $dnskey_p ) {
             push @results, info( NO_RESPONSE => $ns_args );
             next;
         }
 
-        my @keys = $key_p->get_records( 'DNSKEY', 'answer' );
+        my @keys = $dnskey_p->get_records( 'DNSKEY', 'answer' );
         if ( not @keys ) {
             push @results, info( NO_RESPONSE_DNSKEY => $ns_args );
             next;
@@ -1786,6 +1933,10 @@ Check for the presence of either NSEC or NSEC3, with proper coverage and signatu
 =item dnssec11($zone)
 
 Check that the delegation step from parent is properly signed.
+
+=item dnssec13($zone)
+
+Check that all DNSKEY algorithms are used to sign the zone.
 
 =item dnssec14($zone)
 

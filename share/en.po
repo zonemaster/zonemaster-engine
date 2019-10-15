@@ -1,10 +1,8 @@
-#. WRONG_SOA
-#: ../lib/Zonemaster/Engine/Test/Zone.pm:266
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-04 19:08+0200\n"
+"POT-Creation-Date: 2019-10-14 21:30+0200\n"
 "PO-Revision-Date: 2017-12-18\n"
 "Last-Translator: mats.dufberg@iis.se\n"
 "Language-Team: Zonemaster Team\n"
@@ -20,7 +18,7 @@ msgid "A SOA query NOERROR response from {ns} was received empty."
 msgstr "Empty NOERROR response to SOA query was received from {ns}."
 
 #. DNSKEY_SIGNATURE_OK
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:460
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:483
 #, perl-brace-format
 msgid "A signature for DNSKEY with tag {signature} was correctly signed."
 msgstr "A signature for DNSKEY with tag {signature} was correctly signed."
@@ -141,6 +139,15 @@ msgstr "All the IP addresses used by the nameservers in parent are unique."
 msgid "All the nameservers have SOA record."
 msgstr "All the nameservers have SOA record."
 
+#. ALL_ALGO_SIGNED
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:451
+msgid ""
+"All the tested RRset (SOA/DNSKEY/NS) are signed by each algorithm present in "
+"the DNSKEY RRset"
+msgstr ""
+"All the tested RRset (SOA/DNSKEY/NS) are signed by each algorithm present "
+"in the DNSKEY RRset"
+
 #. ARE_AUTHORITATIVE
 #: ../lib/Zonemaster/Engine/Test/Delegation.pm:123
 #, perl-brace-format
@@ -148,22 +155,22 @@ msgid "All these nameservers are confirmed to be authoritative : {nsset}."
 msgstr "All these nameservers are confirmed to be authoritative : {nsset}."
 
 #. DS_MATCH_FOUND
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:492
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:515
 msgid "At least one DS record with a matching DNSKEY record was found."
 msgstr "At least one DS record with a matching DNSKEY record was found."
 
 #. SOA_SIGNED
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:676
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:715
 msgid "At least one RRSIG correctly signs the SOA RRset."
 msgstr "At least one RRSIG correctly signs the SOA RRset."
 
 #. NSEC_SIGNED
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:636
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:663
 msgid "At least one signature correctly signed the NSEC RRset."
 msgstr "At least one signature correctly signed the NSEC RRset."
 
 #. NSEC3_SIGNED
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:616
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:643
 msgid "At least one signature correctly signed the NSEC3 RRset."
 msgstr "At least one signature correctly signed the NSEC3 RRset."
 
@@ -189,7 +196,7 @@ msgid "Both ends of all labels of the domain name ({name}) have no hyphens."
 msgstr "Neither end of any label in the domain name ({name}) has a hyphen."
 
 #. NO_KEYS_OR_NO_SIGS
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:578
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:601
 #, perl-brace-format
 msgid ""
 "Cannot test DNSKEY signatures, because we got {keys} DNSKEY records and "
@@ -199,7 +206,7 @@ msgstr ""
 "{sigs} RRSIG records."
 
 #. NO_KEYS_OR_NO_SIGS_OR_NO_SOA
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:582
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:605
 #, perl-brace-format
 msgid ""
 "Cannot test SOA signatures, because we got {keys} DNSKEY records, {sigs} "
@@ -311,7 +318,7 @@ msgstr ""
 "DNS query to {ns} for {name}/{type}/{class} failed with error: {message}"
 
 #. DS_DOES_NOT_MATCH_DNSKEY
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:480
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:503
 #, perl-brace-format
 msgid ""
 "DS record with keytag {keytag} and digest type {digtype} does not match the "
@@ -321,7 +328,7 @@ msgstr ""
 "DNSKEY with the same tag."
 
 #. DS_MATCHES_DNSKEY
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:488
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:511
 #, perl-brace-format
 msgid ""
 "DS record with keytag {keytag} and digest type {digtype} matches the DNSKEY "
@@ -331,14 +338,14 @@ msgstr ""
 "with the same tag."
 
 #. DS_DIGTYPE_OK
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:476
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:499
 #, perl-brace-format
 msgid "DS record with keytag {keytag} uses digest type {digtype}, which is OK."
 msgstr ""
 "DS record with keytag {keytag} uses digest type {digtype}, which is OK."
 
 #. DS_DIGTYPE_NOT_OK
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:472
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:495
 #, perl-brace-format
 msgid "DS record with keytag {keytag} uses forbidden digest type {digtype}."
 msgstr "DS record with keytag {keytag} uses forbidden digest type {digtype}."
@@ -364,13 +371,13 @@ msgstr ""
 "addresses ({addrs}). Lower limit set to {minimum}."
 
 #. DELEGATION_NOT_SIGNED
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:436
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:459
 #, perl-brace-format
 msgid "Delegation from parent to child is not properly signed {reason}."
 msgstr "Delegation from parent to child is not properly signed ({reason})."
 
 #. DELEGATION_SIGNED
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:440
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:463
 msgid "Delegation from parent to child is properly signed."
 msgstr "Delegation from parent to child is properly signed."
 
@@ -512,7 +519,7 @@ msgid "Erroneous response from nameserver {ns}/{address}."
 msgstr "Erroneous response from nameserver {ns}/{address}."
 
 #. DS_RFC4509_NOT_VALID
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:500
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:523
 msgid ""
 "Existing DS with digest type 2, while they do not match DNSKEY records, "
 "prevent use of DS with digest type 1 (RFC4509, section 3)."
@@ -532,7 +539,7 @@ msgid "Followed a fake delegation."
 msgstr "Followed a fake delegation."
 
 #. DS_FOUND
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:484
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:507
 #, perl-brace-format
 msgid "Found DS records with tags {keytags}."
 msgstr "Found DS records with tags {keytags}."
@@ -593,9 +600,9 @@ msgstr "IP {address} refers to multiple nameservers ({nss})."
 #. IPV4_DISABLED
 #: ../lib/Zonemaster/Engine/Test/Connectivity.pm:144
 #: ../lib/Zonemaster/Engine/Test/Delegation.pm:187
-#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:273
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:288
 #: ../lib/Zonemaster/Engine/Test/Consistency.pm:151
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:542
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:565
 #: ../lib/Zonemaster/Engine/Test/Basic.pm:176
 #, perl-brace-format
 msgid "IPv4 is disabled, not sending \"{rrtype}\" query to {ns}/{address}."
@@ -616,9 +623,9 @@ msgstr "IPv4 is enabled, can send \"{rrtype}\" query to {ns}/{address}."
 #. IPV6_DISABLED
 #: ../lib/Zonemaster/Engine/Test/Connectivity.pm:148
 #: ../lib/Zonemaster/Engine/Test/Delegation.pm:191
-#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:277
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:292
 #: ../lib/Zonemaster/Engine/Test/Consistency.pm:155
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:546
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:569
 #: ../lib/Zonemaster/Engine/Test/Basic.pm:184
 #, perl-brace-format
 msgid "IPv6 is disabled, not sending \"{rrtype}\" query to {ns}/{address}."
@@ -656,7 +663,7 @@ msgstr ""
 "query with EDNS (version 0) asking for {dname}."
 
 #. KEY_DETAILS
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:554
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:577
 #, perl-brace-format
 msgid ""
 "Key with keytag {keytag} details : Size = {keysize}, Flags ({sep}, "
@@ -694,25 +701,25 @@ msgid "Module {module} finished running."
 msgstr "Module {module} finished running."
 
 #. NSEC_COVERS
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:628
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:655
 #, perl-brace-format
 msgid "NSEC covers {name}."
 msgstr "NSEC covers {name}."
 
 #. NSEC_COVERS_NOT
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:624
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:651
 #, perl-brace-format
 msgid "NSEC does not cover {name}."
 msgstr "NSEC does not cover {name}."
 
 #. NSEC3_COVERS
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:608
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:635
 #, perl-brace-format
 msgid "NSEC3 record covers {name}."
 msgstr "NSEC3 record covers {name}."
 
 #. NSEC3_COVERS_NOT
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:604
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:631
 #, perl-brace-format
 msgid "NSEC3 record does not cover {name}."
 msgstr "NSEC3 record does not cover {name}."
@@ -860,7 +867,7 @@ msgstr "Nameserver {ns}/{address} did not respond to NS query."
 #. NO_RESPONSE
 #: ../lib/Zonemaster/Engine/Test/Zone.pm:236
 #: ../lib/Zonemaster/Engine/Test/Consistency.pm:179
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:596
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:623
 #, perl-brace-format
 msgid "Nameserver {ns}/{address} did not respond."
 msgstr "Nameserver {ns}/{address} did not respond."
@@ -965,11 +972,53 @@ msgstr ""
 "Nameserver {ns}/{address} replies on an EDNS query with a truncated response "
 "without EDNS."
 
+#. RRSIG_BROKEN
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:691
+#, perl-brace-format
+msgid ""
+"Nameserver {ns}/{address} responded with an RRSIG which can not be verified "
+"with corresponding DNSKEY (with keytag {keytag})"
+msgstr ""
+"Nameserver {ns}/{address} responded with an RRSIG which can not be verified "
+"with corresponding DNSKEY (with keytag {keytag})"
+
+#. RRSIG_NOT_MATCH_DNSKEY
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:699
+#, perl-brace-format
+msgid ""
+"Nameserver {ns}/{address} responded with an RRSIG with unknown keytag "
+"{keytag}."
+msgstr ""
+"Nameserver {ns}/{address} responded with an RRSIG with unknown keytag "
+"{keytag}."
+
 #. NO_RESPONSE_DNSKEY
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:592
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:615
 #, perl-brace-format
 msgid "Nameserver {ns}/{address} responded with no DNSKEY record(s)."
 msgstr "Nameserver {ns}/{address} responded with no DNSKEY record(s)."
+
+#. ALGO_NOT_SIGNED_RRSET
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:447
+#, fuzzy, perl-brace-format
+msgid ""
+"Nameserver {ns}/{address} responded with no RRSIG for RRset {rrtype} created "
+"by the algorithm {algorithm}."
+msgstr ""
+"Nameserver {ns}/{address} responded with no RRSIG for RRset {rrtype} created "
+"by the algorithm {algorithm}."
+
+#. RRSET_NOT_SIGNED
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:687
+#, perl-brace-format
+msgid "Nameserver {ns}/{address} responded with no RRSIG for {rrtype} RRset."
+msgstr "Nameserver {ns}/{address} responded with no RRSIG for {rrtype} RRset."
+
+#. NO_RESPONSE_RRSET
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:619
+#, perl-brace-format
+msgid "Nameserver {ns}/{address} responded with no {rrtype} record(s)."
+msgstr "Nameserver {ns}/{address} responded with no {rrtype} record(s)."
 
 #. WRONG_SOA
 #: ../lib/Zonemaster/Engine/Test/Zone.pm:266
@@ -1013,22 +1062,22 @@ msgid "Nameservers did not respond to A query."
 msgstr "Nameservers did not respond to A query."
 
 #. ADDITIONAL_DNSKEY_SKIPPED
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:398
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:413
 msgid "No DNSKEYs found. Additional tests skipped."
 msgstr "No DNSKEYs found. Additional tests skipped."
 
 #. NO_DNSKEY
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:570
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:593
 msgid "No DNSKEYs were returned."
 msgstr "No DNSKEYs were returned."
 
 #. NO_COMMON_KEYTAGS
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:566
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:589
 msgid "No DS record had a DNSKEY with a matching keytag."
 msgstr "No DS record had a DNSKEY with a matching keytag."
 
 #. DS_MATCH_NOT_FOUND
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:496
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:519
 msgid "No DS record with a matching DNSKEY record was found."
 msgstr "No DS record with a matching DNSKEY record was found."
 
@@ -1054,7 +1103,7 @@ msgid "No NS records for tested zone from parent. NS tests aborted."
 msgstr "No NS records for tested zone from parent. NS tests skipped."
 
 #. SOA_NOT_SIGNED
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:664
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:703
 msgid "No RRSIG correctly signed the SOA RRset."
 msgstr "No RRSIG correctly signed the SOA RRset."
 
@@ -1142,12 +1191,12 @@ msgstr ""
 "{dname}."
 
 #. NSEC_NOT_SIGNED
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:632
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:659
 msgid "No signature correctly signed the NSEC RRset."
 msgstr "No signature correctly signed the NSEC RRset."
 
 #. NSEC3_NOT_SIGNED
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:612
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:639
 msgid "No signature correctly signed the NSEC3 RRset."
 msgstr "No signature correctly signed the NSEC3 RRset."
 
@@ -1241,7 +1290,7 @@ msgid "Profile was read from {name}."
 msgstr "Profile was read from {name}."
 
 #. RRSIG_EXPIRATION
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:656
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:683
 #, perl-brace-format
 msgid ""
 "RRSIG with keytag {tag} and covering type(s) {types} expires at : {date}."
@@ -1249,7 +1298,7 @@ msgstr ""
 "RRSIG with keytag {tag} and covering type(s) {types} expires at : {date}."
 
 #. DURATION_OK
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:512
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:535
 #, perl-brace-format
 msgid ""
 "RRSIG with keytag {tag} and covering type(s) {types} has a duration of "
@@ -1259,7 +1308,7 @@ msgstr ""
 "{duration} seconds, which is just fine."
 
 #. DURATION_LONG
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:506
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:529
 #, perl-brace-format
 msgid ""
 "RRSIG with keytag {tag} and covering type(s) {types} has a duration of "
@@ -1269,7 +1318,7 @@ msgstr ""
 "{duration} seconds, which is too long."
 
 #. REMAINING_LONG
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:644
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:671
 #, perl-brace-format
 msgid ""
 "RRSIG with keytag {tag} and covering type(s) {types} has a remaining "
@@ -1279,7 +1328,7 @@ msgstr ""
 "validity of {duration} seconds, which is too long."
 
 #. REMAINING_SHORT
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:650
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:677
 #, perl-brace-format
 msgid ""
 "RRSIG with keytag {tag} and covering type(s) {types} has a remaining "
@@ -1289,7 +1338,7 @@ msgstr ""
 "validity of {duration} seconds, which is too short."
 
 #. RRSIG_EXPIRED
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:660
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:695
 #, perl-brace-format
 msgid ""
 "RRSIG with keytag {tag} and covering type(s) {types} has already expired "
@@ -1299,7 +1348,7 @@ msgstr ""
 "(expiration is: {expiration})."
 
 #. SOA_SIGNATURE_OK
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:672
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:711
 #, perl-brace-format
 msgid "RRSIG {signature} correctly signs SOA RRset."
 msgstr "RRSIG {signature} correctly signs SOA RRset."
@@ -1592,14 +1641,14 @@ msgid "Saw {count} SOA time parameter set."
 msgstr "Found {count} SOA time parameter set(s)."
 
 #. EXTRA_PROCESSING_OK
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:522
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:545
 #, perl-brace-format
 msgid "Server at {server} sent {keys} DNSKEY records and {sigs} RRSIG records."
 msgstr ""
 "Server at {server} sent {keys} DNSKEY records and {sigs} RRSIG records."
 
 #. EXTRA_PROCESSING_BROKEN
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:518
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:541
 #, perl-brace-format
 msgid ""
 "Server at {server} sent {keys} DNSKEY records, and {sigs} RRSIG records."
@@ -1607,7 +1656,7 @@ msgstr ""
 "Server at {server} sent {keys} DNSKEY records, and {sigs} RRSIG records."
 
 #. DNSKEY_SIGNATURE_NOT_OK
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:456
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:479
 #, perl-brace-format
 msgid ""
 "Signature for DNSKEY with tag {signature} failed to verify with error "
@@ -1623,7 +1672,7 @@ msgid "Target ({info}) found to deliver e-mail for the domain name."
 msgstr "Target ({info}) found to deliver e-mail for the domain name."
 
 #. ALGORITHM_NOT_ZONE_SIGN
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:411
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:426
 #, perl-brace-format
 msgid ""
 "The DNSKEY with tag {keytag} uses algorithm number not meant for zone "
@@ -1633,7 +1682,7 @@ msgstr ""
 "signing{algorithm}/({description})."
 
 #. ALGORITHM_OK
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:416
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:431
 #, perl-brace-format
 msgid ""
 "The DNSKEY with tag {keytag} uses algorithm number {algorithm}/"
@@ -1643,7 +1692,7 @@ msgstr ""
 "({description}), which is OK."
 
 #. ALGORITHM_NOT_RECOMMENDED
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:406
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:421
 #, perl-brace-format
 msgid ""
 "The DNSKEY with tag {keytag} uses an algorithm number {algorithm}/"
@@ -1653,7 +1702,7 @@ msgstr ""
 "({description} which which is not recommended to be used."
 
 #. ALGORITHM_DEPRECATED
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:402
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:417
 #, perl-brace-format
 msgid ""
 "The DNSKEY with tag {keytag} uses deprecated algorithm number {algorithm}/"
@@ -1663,7 +1712,7 @@ msgstr ""
 "({description})."
 
 #. ALGORITHM_PRIVATE
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:420
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:435
 #, perl-brace-format
 msgid ""
 "The DNSKEY with tag {keytag} uses private algorithm number {algorithm}/"
@@ -1673,7 +1722,7 @@ msgstr ""
 "({description})."
 
 #. ALGORITHM_RESERVED
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:424
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:439
 #, perl-brace-format
 msgid ""
 "The DNSKEY with tag {keytag} uses reserved algorithm number {algorithm}/"
@@ -1683,7 +1732,7 @@ msgstr ""
 "({description})."
 
 #. ALGORITHM_UNASSIGNED
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:428
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:443
 #, perl-brace-format
 msgid ""
 "The DNSKEY with tag {keytag} uses unassigned algorithm number {algorithm}/"
@@ -1709,12 +1758,12 @@ msgstr ""
 "with an IP address."
 
 #. DNSKEY_SIGNED
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:464
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:487
 msgid "The apex DNSKEY RRset was correcly signed."
 msgstr "The apex DNSKEY RRset was correcly signed."
 
 #. DNSKEY_NOT_SIGNED
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:452
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:475
 msgid "The apex DNSKEY RRset was not correctly signed."
 msgstr "The apex DNSKEY RRset was not correctly signed."
 
@@ -1766,19 +1815,19 @@ msgid "The module {name} was disabled by the policy."
 msgstr "The module {name} was disabled by the policy."
 
 #. ITERATIONS_OK
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:550
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:573
 #, perl-brace-format
 msgid "The number of NSEC3 iterations is {count}, which is OK."
 msgstr "The number of NSEC3 iterations is {count}, which is OK."
 
 #. MANY_ITERATIONS
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:558
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:581
 #, perl-brace-format
 msgid "The number of NSEC3 iterations is {count}, which is on the high side."
 msgstr "The number of NSEC3 iterations is {count}, which is on the high side."
 
 #. TOO_MANY_ITERATIONS
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:680
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:719
 #, perl-brace-format
 msgid ""
 "The number of NSEC3 iterations is {count}, which is too high for key length "
@@ -1808,33 +1857,33 @@ msgstr ""
 "is {size})."
 
 #. HAS_NSEC
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:534
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:557
 msgid "The zone has NSEC records."
 msgstr "The zone has NSEC records."
 
 #. HAS_NSEC3_OPTOUT
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:526
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:549
 msgid "The zone has NSEC3 opt-out records."
 msgstr "The zone has NSEC3 opt-out records."
 
 #. HAS_NSEC3
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:530
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:553
 msgid "The zone has NSEC3 records."
 msgstr "The zone has NSEC3 records."
 
 #. NOT_SIGNED
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:600
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:627
 msgid "The zone is not signed with DNSSEC."
 msgstr "The zone is not signed with DNSSEC."
 
 #. COMMON_KEYTAGS
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:432
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:455
 #, perl-brace-format
 msgid "There are both DS and DNSKEY records with key tags {keytags}."
 msgstr "There are both DS and DNSKEY records with key tags {keytags}."
 
 #. NEITHER_DNSKEY_NOR_DS
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:562
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:585
 msgid "There are neither DS nor DNSKEY records for the zone."
 msgstr "There are neither DS nor DNSKEY records for the zone."
 
@@ -1858,19 +1907,19 @@ msgid ""
 msgstr "Misused '@' character found in SOA RNAME field ({rname})."
 
 #. NSEC_SIG_VERIFY_ERROR
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:640
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:667
 #, perl-brace-format
 msgid "Trying to verify NSEC RRset with RRSIG {sig} gave error '{error}'."
 msgstr "Trying to verify NSEC RRset with RRSIG {sig} gave error '{error}'."
 
 #. NSEC3_SIG_VERIFY_ERROR
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:620
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:647
 #, perl-brace-format
 msgid "Trying to verify NSEC3 RRset with RRSIG {sig} gave error '{error}'."
 msgstr "Trying to verify NSEC3 RRset with RRSIG {sig} gave error '{error}'."
 
 #. SOA_SIGNATURE_NOT_OK
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:668
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:707
 #, perl-brace-format
 msgid ""
 "Trying to verify SOA RRset with signature {signature} gave error '{error}'."
@@ -1907,7 +1956,7 @@ msgid "Using version {version} of the Zonemaster engine."
 msgstr "Using version {version} of the Zonemaster engine."
 
 #. INVALID_NAME_RCODE
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:538
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:561
 #, perl-brace-format
 msgid ""
 "When asked for the name {name}, which must not exist, the response had RCODE "
@@ -2005,31 +2054,31 @@ msgid "[ASN:RAW] {address};{data}"
 msgstr "[ASN:RAW] {address};{data}"
 
 #. DNSKEY_BUT_NOT_DS
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:448
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:471
 #, perl-brace-format
 msgid "{child} sent a DNSKEY record, but {parent} did not send a DS record."
 msgstr "{child} sent a DNSKEY record, but {parent} did not send a DS record."
 
 #. NO_DS
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:574
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:597
 #, perl-brace-format
 msgid "{from} returned no DS records for {zone}."
 msgstr "{from} returned no DS records for {zone}."
 
 #. DNSKEY_AND_DS
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:444
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:467
 #, perl-brace-format
 msgid "{parent} sent a DS record, and {child} a DNSKEY record."
 msgstr "{parent} sent a DS record, and {child} a DNSKEY record."
 
 #. DS_BUT_NOT_DNSKEY
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:468
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:491
 #, perl-brace-format
 msgid "{parent} sent a DS record, but {child} did not send a DNSKEY record."
 msgstr "{parent} sent a DS record, but {child} did not send a DNSKEY record."
 
 #. NO_NSEC3PARAM
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:588
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:611
 #, perl-brace-format
 msgid "{server} returned no NSEC3PARAM records."
 msgstr "{server} returned no NSEC3PARAM records."

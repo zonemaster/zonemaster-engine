@@ -38,7 +38,7 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
 }
 
 my ($json, $profile_test);
-$json         = read_file( 't/profiles/Test-dnssec-all.json' );
+$json         = read_file( 't/profiles/Test-dnssec-more-all.json' );
 $profile_test = Zonemaster::Engine::Profile->from_json( $json );
 Zonemaster::Engine::Profile->effective->merge( $profile_test );
 
