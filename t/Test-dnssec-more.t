@@ -46,9 +46,12 @@ my $zone;
 my @res;
 my %tag;
 
-@res = Zonemaster::Engine->test_module( 'DNSSEC', 'loopia.se' );
-%tag = map { $_->tag => 1 } @res;
-ok( $tag{NO_DS}, 'NO_DS' );
+SKIP: {
+    skip "dnssec01 tests are now in a separate file.", 1;
+    @res = Zonemaster::Engine->test_module( 'DNSSEC', 'loopia.se' );
+    %tag = map { $_->tag => 1 } @res;
+    ok( $tag{NO_RESPONSE_DS}, 'NO_RESPONSE_DS' );
+}
 
 #dnssec11
 $zone = Zonemaster::Engine->zone( 'nic.se' );

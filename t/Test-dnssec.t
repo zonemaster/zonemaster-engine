@@ -15,7 +15,6 @@ sub zone_gives {
 
     Zonemaster::Engine->logger->clear_history();
     my @res = Zonemaster::Engine->test_method( $checking_module, $test, $zone );
-    #    foreach my $res (@res) { print $res->tag, "\n"; }
     foreach my $gives ( @{$gives_ref} ) {
         ok( ( grep { $_->tag eq $gives } @res ), $zone->name->string . " gives $gives" );
     }
@@ -67,14 +66,10 @@ my @res;
 my %tag;
 
 $zone = Zonemaster::Engine->zone( 'nic.se' );
-
-@res = grep {$_->tag ne 'START_TIME' and $_->tag ne 'TEST_ARGS' } Zonemaster::Engine->test_method( 'DNSSEC', 'dnssec01', $zone );
-foreach my $msg ( @res ) {
-    is( $msg->tag, 'DS_DIGTYPE_OK', 'DS_DIGTYPE_OK' );
-}
+zone_gives( 'dnssec01', $zone, [qw{DS_ALGORITHM_DEPRECATED DS_ALGORITHM_OK}] );
 
 my $zone2 = Zonemaster::Engine->zone( 'seb.se' );
-is( zone_gives( 'dnssec01', $zone2, [q{NO_DS}] ), 3, 'Only one (useful) message' );
+is( zone_gives( 'dnssec01', $zone2, [q{DS_ALGORITHM_MISSING}] ), 22, 'Only one (useful) message' );
 
 zone_gives( 'dnssec02', $zone, [qw{DS_MATCHES_DNSKEY COMMON_KEYTAGS DS_MATCH_FOUND DS_FOUND}] );
 
@@ -104,9 +99,28 @@ zone_gives( 'dnssec10', $zone, [qw{HAS_NSEC NSEC_SIGNED NSEC_COVERS}] );
 zone_gives( 'dnssec10', $zone3, [qw{HAS_NSEC3 NSEC3_SIGNED NSEC3_COVERS}] );
 
 # dnssec01
-$zone = Zonemaster::Engine->zone( 'dnssec01-ds-digtype-not-ok.zut-root.rd.nic.fr' );
-zone_gives( 'dnssec01', $zone, [q{DS_DIGTYPE_NOT_OK}] );
-zone_gives_not( 'dnssec01', $zone, [qw{DS_DIGTYPE_OK NO_DS}] );
+$zone = Zonemaster::Engine->zone( 'dnssec01-ds-algorithm-ok.zut-root.rd.nic.fr' );
+zone_gives( 'dnssec01', $zone, [q{DS_ALGORITHM_OK}] );
+zone_gives_not( 'dnssec01', $zone, [qw{DS_ALGORITHM_DEPRECATED DS_ALGORITHM_RESERVED DS_ALGORITHM_NOT_DS DS_ALGORITHM_MISSING}] );
+
+$zone = Zonemaster::Engine->zone( 'dnssec01-nxdomain.zut-root.rd.nic.fr' );
+zone_gives( 'dnssec01', $zone, [q{UNEXPECTED_RESPONSE_DS}] );
+
+$zone = Zonemaster::Engine->zone( 'dnssec01-ds-algorithm-not-ds.zut-root.rd.nic.fr' );
+zone_gives( 'dnssec01', $zone, [qw{DS_ALGORITHM_NOT_DS DS_ALGORITHM_MISSING}] );
+zone_gives_not( 'dnssec01', $zone, [qw{DS_ALGORITHM_DEPRECATED DS_ALGORITHM_RESERVED DS_ALGORITHM_OK}] );
+
+$zone = Zonemaster::Engine->zone( 'dnssec01-ds-algorithm-deprecated1.zut-root.rd.nic.fr' );
+zone_gives( 'dnssec01', $zone, [qw{DS_ALGORITHM_DEPRECATED DS_ALGORITHM_MISSING}] );
+zone_gives_not( 'dnssec01', $zone, [qw{DS_ALGORITHM_NOT_DS DS_ALGORITHM_RESERVED DS_ALGORITHM_OK}] );
+
+$zone = Zonemaster::Engine->zone( 'dnssec01-ds-algorithm-deprecated3.zut-root.rd.nic.fr' );
+zone_gives( 'dnssec01', $zone, [qw{DS_ALGORITHM_DEPRECATED DS_ALGORITHM_MISSING}] );
+zone_gives_not( 'dnssec01', $zone, [qw{DS_ALGORITHM_NOT_DS DS_ALGORITHM_RESERVED DS_ALGORITHM_OK}] );
+
+$zone = Zonemaster::Engine->zone( 'dnssec01-ds-algorithm-reserved.zut-root.rd.nic.fr' );
+zone_gives( 'dnssec01', $zone, [qw{DS_ALGORITHM_RESERVED DS_ALGORITHM_MISSING}] );
+zone_gives_not( 'dnssec01', $zone, [qw{DS_ALGORITHM_DEPRECATED DS_ALGORITHM_NOT_DS DS_ALGORITHM_OK}] );
 
 # dnssec02
 $zone = Zonemaster::Engine->zone( 'dnssec02-no-dnskey.zut-root.rd.nic.fr' );

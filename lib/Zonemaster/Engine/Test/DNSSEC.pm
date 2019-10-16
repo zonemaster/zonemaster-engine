@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::DNSSEC;
 
-use version; our $VERSION = version->declare("v1.1.2");
+use version; our $VERSION = version->declare("v1.1.3");
 
 ###
 ### This test module implements DNSSEC tests.
@@ -176,6 +176,17 @@ Readonly::Hash our %rsa_key_size_details => (
     },
 );
 
+Readonly::Hash our %digest_algorithms => (
+    0 => q{Reserved},
+    1 => q{SHA-1},
+    2 => q{SHA-256},
+    3 => q{GOST R 34.11-94},
+    4 => q{SHA-384},
+    (
+        map { $_ => q{Unassigned} } ( 5 .. 255 )
+    ),
+);
+
 ###
 ### Entry points
 ###
@@ -202,7 +213,7 @@ sub all {
             push @results, $class->dnssec01( $zone );
         }
 
-        if ( none { $_->tag eq 'NO_DS' } @results ) {
+        if ( none { $_->tag eq 'NO_RESPONSE_DS' } @results ) {
             if ( Zonemaster::Engine::Util::should_run_test( q{dnssec02} ) ) {
                 push @results, $class->dnssec02( $zone );
             }
@@ -269,9 +280,13 @@ sub metadata {
     return {
         dnssec01 => [
             qw(
-              DS_DIGTYPE_OK
-              DS_DIGTYPE_NOT_OK
-              NO_DS
+              NO_RESPONSE_DS
+              UNEXPECTED_RESPONSE_DS
+              DS_ALGORITHM_NOT_DS
+              DS_ALGORITHM_MISSING
+              DS_ALGORITHM_OK
+              DS_ALGORITHM_DEPRECATED
+              DS_ALGORITHM_RESERVED
               )
         ],
         dnssec02 => [
@@ -486,17 +501,29 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # DNSKEY_SIGNED
           "The apex DNSKEY RRset was correcly signed.", @_;
     },
+    DS_ALGORITHM_NOT_DS => sub {
+        __x    # DS_ALGORITHM_NOT_DS
+          "{ns}/{address} answered DS query for zone {zone} with a reserved algorithm ({algorithm_number}) for keytag {keytag}.", @_;
+    },
+    DS_ALGORITHM_DEPRECATED => sub {
+        __x    # DS_ALGORITHM_DEPRECATED
+          "{ns}/{address} answered DS query for zone {zone} with a deprecated algorithm ({algorithm_number}/{algorithm_mnemonic}) for keytag {keytag}.", @_;
+    },
+    DS_ALGORITHM_MISSING => sub {
+        __x    # DS_ALGORITHM_MISSING
+          "{ns}/{address} answered DS query for zone {zone} with NO DS record for keytag {keytag} using algorithm {algorithm_number}/{algorithm_mnemonic}, which is not OK.", @_;
+    },
+    DS_ALGORITHM_OK => sub {
+        __x    # DS_ALGORITHM_OK
+          "{ns}/{address} answered DS query for zone {zone} with DS record for keytag {keytag} using algorithm {algorithm_number}/{algorithm_mnemonic}, which is OK.", @_;
+    },
+    DS_ALGORITHM_RESERVED => sub {
+        __x    # DS_ALGORITHM_RESERVED
+          "{ns}/{address} answered DS query for zone {zone} with an unassigned algorithm ({algorithm_number}) for keytag {keytag}.", @_;
+    },
     DS_BUT_NOT_DNSKEY => sub {
         __x    # DS_BUT_NOT_DNSKEY
           "{parent} sent a DS record, but {child} did not send a DNSKEY record.", @_;
-    },
-    DS_DIGTYPE_NOT_OK => sub {
-        __x    # DS_DIGTYPE_NOT_OK
-          "DS record with keytag {keytag} uses forbidden digest type {digtype}.", @_;
-    },
-    DS_DIGTYPE_OK => sub {
-        __x    # DS_DIGTYPE_OK
-          "DS record with keytag {keytag} uses digest type {digtype}, which is OK.", @_;
     },
     DS_DOES_NOT_MATCH_DNSKEY => sub {
         __x    # DS_DOES_NOT_MATCH_DNSKEY
@@ -614,6 +641,10 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # NO_RESPONSE_DNSKEY
           "Nameserver {ns}/{address} responded with no DNSKEY record(s).", @_;
     },
+    NO_RESPONES_DS => sub {
+        __x    # NO_RESPONSE_DS
+          "{ns}/{address} returned no DS records for {zone}.", @_;
+    },
     NO_RESPONSE_RRSET => sub {
         __x    # NO_RESPONSE_RRSET
           "Nameserver {ns}/{address} responded with no {rrtype} record(s).", @_;
@@ -718,6 +749,10 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # TOO_MANY_ITERATIONS
           "The number of NSEC3 iterations is {count}, which is too high for key length {keylength}.", @_;
     },
+    UNEXPECTED_RESPONSE_DS => sub {
+        __x    # UNEXPECTED_RESPONSE_DS
+          "{ns}/{address} answered DS query for zone {zone} with an unexpected rcode ({rcode}).", @_;
+    },
 );
 
 sub tag_descriptions {
@@ -736,44 +771,64 @@ sub dnssec01 {
     my ( $class, $zone ) = @_;
     my @results;
 
-    my %type = ( 1 => 'SHA-1', 2 => 'SHA-256', 3 => 'GOST R 34.11-94', 4 => 'SHA-384' );
+    if ( my $parent = $zone->parent ) {
+        foreach my $ns ( @{ $parent->ns } ) {
+            my $ns_args = {
+                ns      => $ns->name->string,
+                address => $ns->address->short,
+                zone    => q{} . $zone->name,
+                rrtype  => q{DS},
+            };
 
-    return if not $zone->parent;
-    my $ds_p = $zone->parent->query_one( $zone->name, 'DS', { dnssec => 1 } );
-    die "No response from parent nameservers" if not $ds_p;
-    my @ds = $ds_p->get_records( 'DS', 'answer' );
-
-    if ( @ds == 0 ) {
-        push @results,
-          info(
-            NO_DS => {
-                zone => q{} . $zone->name,
-                from => $ds_p->answerfrom
+            if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
+                push @results, info( IPV6_DISABLED => $ns_args );
+                next;
             }
-          );
-    }
-    else {
-        foreach my $ds ( @ds ) {
-            if ( $type{ $ds->digtype } ) {
-                push @results,
-                  info(
-                    DS_DIGTYPE_OK => {
-                        keytag  => $ds->keytag,
-                        digtype => $type{ $ds->digtype },
-                    }
-                  );
+
+            if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
+                push @results, info( IPV4_DISABLED => $ns_args );
+                next;
+            }
+
+            my $ds_p = $ns->query( $zone->name, q{DS}, { usevc => 0, dnssec => 1 } );
+            if ( not $ds_p ) {
+                push @results, info( NO_RESPONSE_DS => $ns_args );
+                next;
+            }
+            elsif ($ds_p->rcode ne q{NOERROR} ) {
+                $ns_args->{rcode} = $ds_p->rcode;
+                push @results, info( UNEXPECTED_RESPONSE_DS => $ns_args );
+                next;
             }
             else {
-                push @results,
-                  info(
-                    DS_DIGTYPE_NOT_OK => {
-                        keytag  => $ds->keytag,
-                        digtype => $ds->digtype
+                my $algorithm2 = 0;
+                my @dss = $ds_p->get_records( q{DS}, q{answer} );
+                foreach my $ds ( @dss ) {
+                    $ns_args->{keytag} = $ds->keytag;
+                    $ns_args->{algorithm_number} = $ds->digtype;
+                    $ns_args->{algorithm_mnemonic} = $digest_algorithms{$ds->digtype};
+                    if ( $ds->digtype == 0 ) {
+                        push @results, info( DS_ALGORITHM_NOT_DS => $ns_args );
                     }
-                  );
-            }
-        } ## end foreach my $ds ( @ds )
-    } ## end else [ if ( @ds == 0 ) ]
+                    elsif ( $ds->digtype == 1 or $ds->digtype == 3 ) {
+                        push @results, info( DS_ALGORITHM_DEPRECATED => $ns_args );
+                    }
+                    elsif ( $ds->digtype >= 5 and $ds->digtype <= 255 ) {
+                        push @results, info( DS_ALGORITHM_RESERVED => $ns_args );
+                    }
+                    else {
+                        $algorithm2++ if $ds->digtype == 2;
+                        push @results, info( DS_ALGORITHM_OK => $ns_args );
+                    }
+                }
+                if ( not $algorithm2 ) {
+                    $ns_args->{algorithm_number} = 2;
+                    $ns_args->{algorithm_mnemonic} = $digest_algorithms{2};
+                    push @results, info( DS_ALGORITHM_MISSING => $ns_args );
+                }
+            }    
+        }
+    }
 
     return @results;
 } ## end sub dnssec01
@@ -1104,7 +1159,7 @@ sub dnssec05 {
                 IPV6_DISABLED => {
                     ns      => $ns->name->string,
                     address => $ns->address->short,
-                    rrtype => q{DNSKEY},
+                    rrtype  => q{DNSKEY},
                 }
               );
             next;

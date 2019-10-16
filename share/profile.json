@@ -158,9 +158,12 @@
             "DNSKEY_SMALLER_THAN_REC" : "WARNING",
             "DNSKEY_TOO_LARGE_FOR_ALGO" : "ERROR",
             "DNSKEY_TOO_SMALL_FOR_ALGO" : "ERROR",
+            "DS_ALGORITHM_DEPRECATED" : "ERROR",
+            "DS_ALGORITHM_MISSING" : "NOTICE",
+            "DS_ALGORITHM_NOT_DS" : "ERROR",
+            "DS_ALGORITHM_OK" : "INFO",
+            "DS_ALGORITHM_RESERVED" : "ERROR",
             "DS_BUT_NOT_DNSKEY" : "ERROR",
-            "DS_DIGTYPE_NOT_OK" : "ERROR",
-            "DS_DIGTYPE_OK" : "DEBUG",
             "DS_DOES_NOT_MATCH_DNSKEY" : "ERROR",
             "DS_FOUND" : "INFO",
             "DS_MATCHES_DNSKEY" : "INFO",
@@ -190,6 +193,7 @@
             "NO_NSEC3PARAM" : "DEBUG",
             "NO_RESPONSE" : "WARNING",
             "NO_RESPONSE_DNSKEY" : "ERROR",
+            "NO_RESPONSE_DS" : "WARNING",
             "NO_RESPONSE_RRSET" : "ERROR",
             "NOT_SIGNED" : "NOTICE",
             "NSEC3_COVERS" : "DEBUG",
@@ -213,7 +217,8 @@
             "SOA_SIGNATURE_NOT_OK" : "ERROR",
             "SOA_SIGNATURE_OK" : "DEBUG",
             "SOA_SIGNED" : "DEBUG",
-            "TOO_MANY_ITERATIONS" : "WARNING"
+            "TOO_MANY_ITERATIONS" : "WARNING",
+            "UNEXPECTED_RESPONSE_DS" : "WARNING"
         },
         "NAMESERVER" : {
             "AAAA_BAD_RDATA" : "ERROR",
