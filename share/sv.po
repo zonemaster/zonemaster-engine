@@ -1,7 +1,9 @@
+msgid ""
+msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-10-04 19:08+0200\n"
-"PO-Revision-Date: 2017-12-15\n"
+"PO-Revision-Date: 2019-10-14 14:58+0200\n"
 "Last-Translator: mats.dufberg@iis.se\n"
 "Language-Team: Zonemaster Team\n"
 "Language: sv\n"
@@ -13,17 +15,13 @@
 #: ../lib/Zonemaster/Engine/Test/Delegation.pm:283
 #, perl-brace-format
 msgid "A SOA query NOERROR response from {ns} was received empty."
-msgstr ""
-"En SOA-fråga fick ett svar med 'RCODE NOERROR' från {ns}, men svaret var "
-"tomt."
+msgstr "En SOA-fråga fick ett svar med 'RCODE NOERROR' från {ns}, men svaret var tomt."
 
 #. DNSKEY_SIGNATURE_OK
 #: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:460
 #, perl-brace-format
 msgid "A signature for DNSKEY with tag {signature} was correctly signed."
-msgstr ""
-"Verifiering av en signatur för DNSKEY-posten med 'keytag' {signature} "
-"lyckades."
+msgstr "Verifiering av en signatur för DNSKEY-posten med 'keytag' {signature} lyckades."
 
 #. ONE_SOA_MNAME
 #: ../lib/Zonemaster/Engine/Test/Consistency.pm:199
@@ -62,7 +60,7 @@ msgstr "Exakt en uppsättning namnservrar hittades: ({nsset})."
 #. ONE_SOA
 #: ../lib/Zonemaster/Engine/Test/Zone.pm:256
 msgid "A unique SOA record is returned by all nameservers of the zone."
-msgstr ""
+msgstr "Alla namnservrar för zonen rapporterade samma SOA-post."
 
 #. AXFR_FAILURE
 #: ../lib/Zonemaster/Engine/Test/Nameserver.pm:219
@@ -607,8 +605,8 @@ msgstr "Det finns otillåtna tecken i namnservernamnet '{name}'."
 #, perl-brace-format
 msgid "Functional nameserver found. \"A\" query for www.{zname} test aborted."
 msgstr ""
-"En fungerande namnserver hittades. Skickade ingen fråga om 'A' för 'www."
-"{zname}' (behövdes inte)."
+"En fungerande namnserver hittades. Skickade ingen fråga om 'A' för "
+"'www.{zname}' (behövdes inte)."
 
 #. ADDRESSES_MATCH
 #: ../lib/Zonemaster/Engine/Test/Consistency.pm:127
@@ -693,6 +691,9 @@ msgid ""
 "at parent ({parent_addresses}) and any equivalent address record in child "
 "zone({zone_addresses})"
 msgstr ""
+"Delegeringen listar en IP-adress ({parent_addresses}) för en namnserver, "
+"som är 'in-bailiwick', som inte stämmer med eventuell motsvarande adresspost "
+"i dotterzonen ({zone_addresses})."
 
 #. EDNS_VERSION_ERROR
 #: ../lib/Zonemaster/Engine/Test/Nameserver.pm:278
@@ -891,8 +892,8 @@ msgid ""
 "Nameserver {ns}/{address} answered AAAA query with an unexpected RDATA "
 "length ({length} instead of 16)"
 msgstr ""
-"Namnservern {ns}/{address} besvarade en AAAA-fråga med den icke-väntade"
-"längden på 'RDATA' om '{length}' oktetter istället för förväntade 16"
+"Namnservern {ns}/{address} besvarade en AAAA-fråga med den icke-väntade "
+"längden på 'RDATA' om '{length}' oktetter istället för förväntade 16 "
 "oktetter."
 
 #. AAAA_UNEXPECTED_RCODE
@@ -1246,6 +1247,9 @@ msgid ""
 "mismatch between the glue at the parent ({parent_addresses}) and iany "
 "equivalent address record found in authoritative zone ({zone_addresses})"
 msgstr ""
+"Delegeringen listar en IP-adress ({parent_addresses}) för en namnserver, "
+"som är 'out-of-bailiwick', som inte stämmer med eventuell motsvarande "
+"adresspost i den auktoritativa zonen ({zone_addresses})."
 
 #. PACKET_BIG
 #: ../lib/Zonemaster/Engine/Translator.pm:113
