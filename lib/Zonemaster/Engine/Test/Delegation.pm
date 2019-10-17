@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::Delegation;
 
-use version; our $VERSION = version->declare("v1.0.14");
+use version; our $VERSION = version->declare("v1.0.15");
 
 use strict;
 use warnings;
@@ -94,8 +94,10 @@ sub metadata {
         ],
         delegation05 => [
             qw(
-              NS_RR_IS_CNAME
-              NS_RR_NO_CNAME
+              NO_NS_CNAME
+              NO_RESPONSE    
+              NS_IS_CNAME
+              UNEXPECTED_RCODE
               )
         ],
         delegation06 => [
@@ -198,6 +200,10 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # NAMES_MATCH
           "All of the nameserver names are listed both at parent and child.", @_;
     },
+    NO_RESPONSE => sub {
+        __x    # NO_RESPONSE
+          "Nameserver {ns}/{address} did not respond.", @_;
+    },
     NOT_ENOUGH_IPV4_NS_CHILD => sub {
         __x    # NOT_ENOUGH_IPV4_NS_CHILD
           "Child does not list enough ({count}) nameservers "
@@ -254,12 +260,12 @@ Readonly my %TAG_DESCRIPTIONS => (
           . "If any were present, the minimum allowed would be {minimum}.",
           @_;
     },
-    NS_RR_IS_CNAME => sub {
-        __x    # NS_RR_IS_CNAME
-          "Nameserver {ns} {address_type} RR point to CNAME.", @_;
+    NS_IS_CNAME => sub {
+        __x    # NS_IS_CNAME
+          "Nameserver {ns} RR point to CNAME.", @_;
     },
-    NS_RR_NO_CNAME => sub {
-        __x    # NS_RR_NO_CNAME
+    NO_NS_CNAME => sub {
+        __x    # NO_NS_CNAME
           "No nameserver point to CNAME alias.", @_;
     },
     REFERRAL_SIZE_TOO_LARGE => sub {
@@ -286,6 +292,11 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # TOTAL_NAME_MISMATCH
           "None of the nameservers listed at the parent are listed at the child.", @_;
     },
+    UNEXPECTED_RCODE => sub {
+        __x    # UNEXPECTED_RCODE
+          'Nameserver {ns}/{address} answered query with an unexpected rcode ({rcode}).', @_;
+    },
+
 );
 
 sub tag_descriptions {
@@ -349,13 +360,13 @@ sub delegation01 {
         count   => scalar( @child_ns_ipv4 ),
         minimum => $MINIMUM_NUMBER_OF_NAMESERVERS,
         ns      => join( q{;}, sort @child_ns_ipv4 ),
-	addrs   => join( q{;}, sort @child_ns_ipv4_addrs ),
+        addrs   => join( q{;}, sort @child_ns_ipv4_addrs ),
     };
     my $child_ns_ipv6_args = {
         count   => scalar( @child_ns_ipv6 ),
         minimum => $MINIMUM_NUMBER_OF_NAMESERVERS,
         ns      => join( q{;}, sort @child_ns_ipv6 ),
-	addrs   => join( q{;}, sort @child_ns_ipv6_addrs ),
+        addrs   => join( q{;}, sort @child_ns_ipv6_addrs ),
     };
 
     if ( scalar( @child_ns_ipv4 ) >= $MINIMUM_NUMBER_OF_NAMESERVERS ) {
@@ -389,13 +400,13 @@ sub delegation01 {
         count   => scalar( @del_ns_ipv4 ),
         minimum => $MINIMUM_NUMBER_OF_NAMESERVERS,
         ns      => join( q{;}, sort @del_ns_ipv4 ),
-	addrs   => join( q{;}, sort @del_ns_ipv4_addrs ),
+        addrs   => join( q{;}, sort @del_ns_ipv4_addrs ),
     };
     my $del_ns_ipv6_args = {
         count   => scalar( @del_ns_ipv6 ),
         minimum => $MINIMUM_NUMBER_OF_NAMESERVERS,
         ns      => join( q{;}, sort @del_ns_ipv6 ),
-	addrs   => join( q{;}, sort @del_ns_ipv6_addrs ),
+        addrs   => join( q{;}, sort @del_ns_ipv6_addrs ),
     };
 
     if ( scalar( @del_ns_ipv4 ) >= $MINIMUM_NUMBER_OF_NAMESERVERS ) {
@@ -624,37 +635,65 @@ sub delegation05 {
     my ( $class, $zone ) = @_;
     my @results;
 
-    my @nsnames = uniq map { $_->string } @{ Zonemaster::Engine::TestMethods->method2( $zone ) },
-      @{ Zonemaster::Engine::TestMethods->method3( $zone ) };
+    my @nsnames = @{ Zonemaster::Engine::TestMethods->method2and3( $zone ) };
 
-    foreach my $local_nsname ( @nsnames ) {
+    foreach my $local_nsname ( @nsnames )  {
 
-        foreach my $address_type ( q{A}, q{AAAA} ) {
-            my $p = $zone->query_one( $local_nsname, $address_type );
-            if ( $p ) {
-                if ( $p->has_rrs_of_type_for_name( q{CNAME}, $zone->name ) ) {
-                    push @results,
-                      info(
-                        NS_RR_IS_CNAME => {
-                            ns           => $local_nsname,
-                            address_type => $address_type,
-                        }
-                      );
+        if ( $zone->name->is_in_bailiwick( $local_nsname ) ) {
+            my @nss_del   = @{ Zonemaster::Engine::TestMethods->method4( $zone ) };
+            my @nss_child = @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
+            my %nss       = map { $_->name->string . '/' . $_->address->short => $_ } @nss_del, @nss_child;
+
+            for my $key ( sort keys %nss ) {
+                my $ns = $nss{$key};
+                my $ns_args = {
+                    ns      => $ns->name->string,
+                    address => $ns->address->short,
+                    rrtype  => q{A},
+                };
+
+                if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
+                    push @results, info( IPV6_DISABLED => $ns_args );
+                    next;
+                }
+
+                if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
+                    push @results, info( IPV4_DISABLED => $ns_args );
+                    next;
+                }
+
+                my $p = $ns->query( $local_nsname, q{A}, { recurse => 0 } );
+                if ( not $p ) {
+                    push @results, info( NO_RESPONSE => $ns_args );
+                    next;
+                }
+                elsif ($p->rcode ne q{NOERROR} ) {
+                    $ns_args->{rcode} = $p->rcode;
+                    push @results, info( UNEXPECTED_RCODE => $ns_args );
+                    next;
+                }
+                elsif ( scalar $p->get_records( q{CNAME}, q{answer} ) > 0 ) {
+                    push @results, info( NS_IS_CNAME => { ns => $local_nsname } );
+                    next;
+                }
+                elsif ($p->is_redirect) {
+                    my $p = $ns->query( $local_nsname, q{A}, { recurse => 1 } );
+                    if ( defined $p and scalar $p->get_records( q{CNAME}, q{answer} ) > 0 ) {
+                        push @results, info( NS_IS_CNAME => { ns => $local_nsname } );
+                    }
                 }
             }
         }
-
+        else {
+            my $p = Zonemaster::Engine::Recursor->recurse( $local_nsname, q{A} );
+            if ( defined $p and scalar $p->get_records( q{CNAME}, q{answer} ) > 0 ) {
+                push @results, info( NS_IS_CNAME => { ns => $local_nsname } );
+            }
+        }
     }
 
-    if (
-        (
-               scalar @{ Zonemaster::Engine::TestMethods->method2( $zone ) }
-            or scalar @{ Zonemaster::Engine::TestMethods->method3( $zone ) }
-        )
-        and not scalar @results
-      )
-    {
-        push @results, info( NS_RR_NO_CNAME => {} );
+    if ( not grep { $_->tag eq q{NS_IS_CNAME} } @results ) {
+        push @results, info( NO_NS_CNAME => {} );
     }
 
     return @results;
