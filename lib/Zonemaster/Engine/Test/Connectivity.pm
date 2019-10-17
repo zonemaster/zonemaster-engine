@@ -88,83 +88,83 @@ sub metadata {
 
 Readonly my %TAG_DESCRIPTIONS => (
     NAMESERVERS_IPV4_WITH_UNIQ_AS => sub {
-        __x    # NAMESERVERS_IPV4_WITH_UNIQ_AS
+        __x    # CONNECTIVITY:NAMESERVERS_IPV4_WITH_UNIQ_AS
           'All nameservers IPv4 addresses are in the same AS ({asn}).', @_;
     },
     NAMESERVERS_IPV6_WITH_UNIQ_AS => sub {
-        __x    # NAMESERVERS_IPV6_WITH_UNIQ_AS
+        __x    # CONNECTIVITY:NAMESERVERS_IPV6_WITH_UNIQ_AS
           'All nameservers IPv6 addresses are in the same AS ({asn}).', @_;
     },
     NAMESERVERS_WITH_MULTIPLE_AS => sub {
-        __x    # NAMESERVERS_WITH_MULTIPLE_AS
+        __x    # CONNECTIVITY:NAMESERVERS_WITH_MULTIPLE_AS
           'Domain\'s authoritative nameservers do not belong to the same AS.', @_;
     },
     NAMESERVERS_WITH_UNIQ_AS => sub {
-        __x    # NAMESERVERS_WITH_UNIQ_AS
+        __x    # CONNECTIVITY:NAMESERVERS_WITH_UNIQ_AS
           'All nameservers are in the same AS ({asn}).', @_;
     },
     NAMESERVERS_IPV4_NO_AS => sub {
-        __x    # NAMESERVERS_IPV4_NO_AS
+        __x    # CONNECTIVITY:NAMESERVERS_IPV4_NO_AS
           'No IPv4 nameserver address is in an AS.', @_;
     },
     NAMESERVERS_IPV4_WITH_MULTIPLE_AS => sub {
-        __x    # NAMESERVERS_IPV4_WITH_MULTIPLE_AS
+        __x    # CONNECTIVITY:NAMESERVERS_IPV4_WITH_MULTIPLE_AS
           'Authoritative IPv4 nameservers are in more than one AS.', @_;
     },
     NAMESERVERS_IPV6_NO_AS => sub {
-        __x    # NAMESERVERS_IPV6_NO_AS
+        __x    # CONNECTIVITY:NAMESERVERS_IPV6_NO_AS
           'No IPv6 nameserver address is in an AS.', @_;
     },
     NAMESERVERS_IPV6_WITH_MULTIPLE_AS => sub {
-        __x    # NAMESERVERS_IPV6_WITH_MULTIPLE_AS
+        __x    # CONNECTIVITY:NAMESERVERS_IPV6_WITH_MULTIPLE_AS
           'Authoritative IPv6 nameservers are in more than one AS.', @_;
     },
     NAMESERVERS_NO_AS => sub {
-        __x    # NAMESERVERS_NO_AS
+        __x    # CONNECTIVITY:NAMESERVERS_NO_AS
           'No nameserver address is in an AS.', @_;
     },
     NAMESERVER_HAS_TCP_53 => sub {
-        __x    # NAMESERVER_HAS_TCP_53
+        __x    # CONNECTIVITY:NAMESERVER_HAS_TCP_53
           'Nameserver {ns}/{address} accessible over TCP on port 53.', @_;
     },
     NAMESERVER_HAS_UDP_53 => sub {
-        __x    # NAMESERVER_HAS_UDP_53
+        __x    # CONNECTIVITY:NAMESERVER_HAS_UDP_53
           'Nameserver {ns}/{address} accessible over UDP on port 53.', @_;
     },
     NAMESERVER_NO_TCP_53 => sub {
-        __x    # NAMESERVER_NO_TCP_53
+        __x    # CONNECTIVITY:NAMESERVER_NO_TCP_53
           'Nameserver {ns}/{address} not accessible over TCP on port 53.', @_;
     },
     NAMESERVER_NO_UDP_53 => sub {
-        __x    # NAMESERVER_NO_UDP_53
+        __x    # CONNECTIVITY:NAMESERVER_NO_UDP_53
           'Nameserver {ns}/{address} not accessible over UDP on port 53.', @_;
     },
     IPV4_DISABLED => sub {
-        __x    # IPV4_DISABLED
+        __x    # CONNECTIVITY:IPV4_DISABLED
           'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
     },
     IPV6_DISABLED => sub {
-        __x    # IPV6_DISABLED
+        __x    # CONNECTIVITY:IPV6_DISABLED
           'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
     },
     IPV4_ASN => sub {
-        __x    # IPV4_ASN
+        __x    # CONNECTIVITY:IPV4_ASN
           'Name servers have IPv4 addresses in the following ASs: {asn}.', @_;
     },
     IPV6_ASN => sub {
-        __x    # IPV6_ASN
+        __x    # CONNECTIVITY:IPV6_ASN
           'Name servers have IPv6 addresses in the following ASs: {asn}.', @_;
     },
     ASN_INFOS_RAW => sub {
-        __x    # ASN_INFOS_RAW
+        __x    # CONNECTIVITY:ASN_INFOS_RAW
           '[ASN:RAW] {address};{data}', @_;
     },
     ASN_INFOS_ANNOUNCE_BY => sub {
-        __x    # ASN_INFOS_ANNOUNCE_BY
+        __x    # CONNECTIVITY:ASN_INFOS_ANNOUNCE_BY
           '[ASN:ANNOUNCE_BY] {address};{asn}', @_;
     },
     ASN_INFOS_ANNOUNCE_IN => sub {
-        __x    # ASN_INFOS_ANNOUNCE_IN
+        __x    # CONNECTIVITY:ASN_INFOS_ANNOUNCE_IN
           '[ASN:ANNOUNCE_IN] {address};{prefix}', @_;
     },
 );
@@ -178,7 +178,7 @@ sub version {
 }
 
 ###
-### Tests
+### CONNECTIVITY:Tests
 ###
 
 sub connectivity01 {

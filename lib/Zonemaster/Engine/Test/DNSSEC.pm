@@ -424,333 +424,333 @@ sub metadata {
 
 Readonly my %TAG_DESCRIPTIONS => (
     ADDITIONAL_DNSKEY_SKIPPED => sub {
-        __x    # ADDITIONAL_DNSKEY_SKIPPED
+        __x    # DNSSEC:ADDITIONAL_DNSKEY_SKIPPED
           "No DNSKEYs found. Additional tests skipped.", @_;
     },
     ALGORITHM_DEPRECATED => sub {
-        __x    # ALGORITHM_DEPRECATED
+        __x    # DNSSEC:ALGORITHM_DEPRECATED
           "The DNSKEY with tag {keytag} uses deprecated algorithm number {algorithm}/({description}).", @_;
     },
     ALGORITHM_NOT_RECOMMENDED => sub {
-        __x    # ALGORITHM_NOT_RECOMMENDED
+        __x    # DNSSEC:ALGORITHM_NOT_RECOMMENDED
           "The DNSKEY with tag {keytag} uses an algorithm number {algorithm}/({description} which which is not recommended to be used.",
           @_;
     },
     ALGORITHM_NOT_ZONE_SIGN => sub {
-        __x    # ALGORITHM_NOT_ZONE_SIGN
+        __x    # DNSSEC:ALGORITHM_NOT_ZONE_SIGN
           "The DNSKEY with tag {keytag} uses algorithm number not meant for zone signing{algorithm}/({description}).",
           @_;
     },
     ALGORITHM_OK => sub {
-        __x    # ALGORITHM_OK
+        __x    # DNSSEC:ALGORITHM_OK
           "The DNSKEY with tag {keytag} uses algorithm number {algorithm}/({description}), which is OK.", @_;
     },
     ALGORITHM_PRIVATE => sub {
-        __x    # ALGORITHM_PRIVATE
+        __x    # DNSSEC:ALGORITHM_PRIVATE
           "The DNSKEY with tag {keytag} uses private algorithm number {algorithm}/({description}).", @_;
     },
     ALGORITHM_RESERVED => sub {
-        __x    # ALGORITHM_RESERVED
+        __x    # DNSSEC:ALGORITHM_RESERVED
           "The DNSKEY with tag {keytag} uses reserved algorithm number {algorithm}/({description}).", @_;
     },
     ALGORITHM_UNASSIGNED => sub {
-        __x    # ALGORITHM_UNASSIGNED
+        __x    # DNSSEC:ALGORITHM_UNASSIGNED
           "The DNSKEY with tag {keytag} uses unassigned algorithm number {algorithm}/({description}).", @_;
     },
     ALGO_NOT_SIGNED_RRSET => sub {
-        __x    # ALGO_NOT_SIGNED_RRSET
+        __x    # DNSSEC:ALGO_NOT_SIGNED_RRSET
           "Nameserver {ns}/{address} responded with no RRSIG for RRset {rrtype} created by the algorithm {algorithm}.", @_;
     },
     ALL_ALGO_SIGNED => sub {
-       __x    # ALL_ALGO_SIGNED
+       __x    # DNSSEC:ALL_ALGO_SIGNED
           "All the tested RRset (SOA/DNSKEY/NS) are signed by each algorithm present in the DNSKEY RRset", @_;
     },
     COMMON_KEYTAGS => sub {
-        __x    # COMMON_KEYTAGS
+        __x    # DNSSEC:COMMON_KEYTAGS
           "There are both DS and DNSKEY records with key tags {keytags}.", @_;
     },
     DELEGATION_NOT_SIGNED => sub {
-        __x    # DELEGATION_NOT_SIGNED
+        __x    # DNSSEC:DELEGATION_NOT_SIGNED
           "Delegation from parent to child is not properly signed {reason}.", @_;
     },
     DELEGATION_SIGNED => sub {
-        __x    # DELEGATION_SIGNED
+        __x    # DNSSEC:DELEGATION_SIGNED
           "Delegation from parent to child is properly signed.", @_;
     },
     DNSKEY_AND_DS => sub {
-        __x    # DNSKEY_AND_DS
+        __x    # DNSSEC:DNSKEY_AND_DS
           "{parent} sent a DS record, and {child} a DNSKEY record.", @_;
     },
     DNSKEY_BUT_NOT_DS => sub {
-        __x    # DNSKEY_BUT_NOT_DS
+        __x    # DNSSEC:DNSKEY_BUT_NOT_DS
           "{child} sent a DNSKEY record, but {parent} did not send a DS record.", @_;
     },
     DNSKEY_NOT_SIGNED => sub {
-        __x    # DNSKEY_NOT_SIGNED
+        __x    # DNSSEC:DNSKEY_NOT_SIGNED
           "The apex DNSKEY RRset was not correctly signed.", @_;
     },
     DNSKEY_SIGNATURE_NOT_OK => sub {
-        __x    # DNSKEY_SIGNATURE_NOT_OK
+        __x    # DNSSEC:DNSKEY_SIGNATURE_NOT_OK
           "Signature for DNSKEY with tag {signature} failed to verify with error '{error}'.", @_;
     },
     DNSKEY_SIGNATURE_OK => sub {
-        __x    # DNSKEY_SIGNATURE_OK
+        __x    # DNSSEC:DNSKEY_SIGNATURE_OK
           "A signature for DNSKEY with tag {signature} was correctly signed.", @_;
     },
     DNSKEY_SIGNED => sub {
-        __x    # DNSKEY_SIGNED
+        __x    # DNSSEC:DNSKEY_SIGNED
           "The apex DNSKEY RRset was correcly signed.", @_;
     },
     DS_ALGORITHM_NOT_DS => sub {
-        __x    # DS_ALGORITHM_NOT_DS
+        __x    # DNSSEC:DS_ALGORITHM_NOT_DS
           "{ns}/{address} returned a DS record created by algorithm {algorithm_number} which is not meant for DS. The DS record is for the DNSKEY record with keytag {keytag} in zone {zone}.", @_;
     },
     DS_ALGORITHM_DEPRECATED => sub {
-        __x    # DS_ALGORITHM_DEPRECATED
+        __x    # DNSSEC:DS_ALGORITHM_DEPRECATED
           "{ns}/{address} returned a DS record created by algorithm ({algorithm_number}/{algorithm_mnemonic}), which is deprecated. The DS record is for the DNSKEY record with keytag {keytag} in zone {zone}.", @_;
     },
     DS_ALGORITHM_MISSING => sub {
-        __x    # DS_ALGORITHM_MISSING
+        __x    # DNSSEC:DS_ALGORITHM_MISSING
           "{ns}/{address} returned a DS record created by algorithm {algorithm_number}/{algorithm_mnemonic}, which is OK. The DS record is for the DNSKEY record with keytag {keytag} in zone {zone}.", @_;
     },
     DS_ALGORITHM_OK => sub {
-        __x    # DS_ALGORITHM_OK
+        __x    # DNSSEC:DS_ALGORITHM_OK
           "{ns}/{address} answered DS query for zone {zone} with DS record for keytag {keytag} using algorithm {algorithm_number}/{algorithm_mnemonic}, which is OK.", @_;
     },
     DS_ALGORITHM_RESERVED => sub {
-        __x    # DS_ALGORITHM_RESERVED
+        __x    # DNSSEC:DS_ALGORITHM_RESERVED
           "{ns}/{address} returned a DS record created by with an unassigned algorithm ({algorithm_number}), which is not OK. The DS record is for the DNSKEY record with keytag {keytag} in zone {zone}.", @_;
     },
     DS_BUT_NOT_DNSKEY => sub {
-        __x    # DS_BUT_NOT_DNSKEY
+        __x    # DNSSEC:DS_BUT_NOT_DNSKEY
           "{parent} sent a DS record, but {child} did not send a DNSKEY record.", @_;
     },
     DS_DOES_NOT_MATCH_DNSKEY => sub {
-        __x    # DS_DOES_NOT_MATCH_DNSKEY
+        __x    # DNSSEC:DS_DOES_NOT_MATCH_DNSKEY
           "DS record with keytag {keytag} and digest type {digtype} does not match the DNSKEY with the same tag.", @_;
     },
     DS_FOUND => sub {
-        __x    # DS_FOUND
+        __x    # DNSSEC:DS_FOUND
           "Found DS records with tags {keytags}.", @_;
     },
     DS_MATCHES_DNSKEY => sub {
-        __x    # DS_MATCHES_DNSKEY
+        __x    # DNSSEC:DS_MATCHES_DNSKEY
           "DS record with keytag {keytag} and digest type {digtype} matches the DNSKEY with the same tag.", @_;
     },
     DS_MATCH_FOUND => sub {
-        __x    # DS_MATCH_FOUND
+        __x    # DNSSEC:DS_MATCH_FOUND
           "At least one DS record with a matching DNSKEY record was found.", @_;
     },
     DS_MATCH_NOT_FOUND => sub {
-        __x    # DS_MATCH_NOT_FOUND
+        __x    # DNSSEC:DS_MATCH_NOT_FOUND
           "No DS record with a matching DNSKEY record was found.", @_;
     },
     DS_RFC4509_NOT_VALID => sub {
-        __x    # DS_RFC4509_NOT_VALID
+        __x    # DNSSEC:DS_RFC4509_NOT_VALID
           "Existing DS with digest type 2, while they do not match DNSKEY records, "
           . "prevent use of DS with digest type 1 (RFC4509, section 3).",
           @_;
     },
     DURATION_LONG => sub {
-        __x    # DURATION_LONG
+        __x    # DNSSEC:DURATION_LONG
           "RRSIG with keytag {tag} and covering type(s) {types} "
           . "has a duration of {duration} seconds, which is too long.",
           @_;
     },
     DURATION_OK => sub {
-        __x    # DURATION_OK
+        __x    # DNSSEC:DURATION_OK
           "RRSIG with keytag {tag} and covering type(s) {types} "
           . "has a duration of {duration} seconds, which is just fine.",
           @_;
     },
     EXTRA_PROCESSING_BROKEN => sub {
-        __x    # EXTRA_PROCESSING_BROKEN
+        __x    # DNSSEC:EXTRA_PROCESSING_BROKEN
           "Server at {server} sent {keys} DNSKEY records, and {sigs} RRSIG records.", @_;
     },
     EXTRA_PROCESSING_OK => sub {
-        __x    # EXTRA_PROCESSING_OK
+        __x    # DNSSEC:EXTRA_PROCESSING_OK
           "Server at {server} sent {keys} DNSKEY records and {sigs} RRSIG records.", @_;
     },
     HAS_NSEC3_OPTOUT => sub {
-        __x    # HAS_NSEC3_OPTOUT
+        __x    # DNSSEC:HAS_NSEC3_OPTOUT
           "The zone has NSEC3 opt-out records.", @_;
     },
     HAS_NSEC3 => sub {
-        __x    # HAS_NSEC3
+        __x    # DNSSEC:HAS_NSEC3
           "The zone has NSEC3 records.", @_;
     },
     HAS_NSEC => sub {
-        __x    # HAS_NSEC
+        __x    # DNSSEC:HAS_NSEC
           "The zone has NSEC records.", @_;
     },
     INVALID_NAME_RCODE => sub {
-        __x    # INVALID_NAME_RCODE
+        __x    # DNSSEC:INVALID_NAME_RCODE
           "When asked for the name {name}, which must not exist, the response had RCODE {rcode}.", @_;
     },
     IPV4_DISABLED => sub {
-        __x    # IPV4_DISABLED
+        __x    # DNSSEC:IPV4_DISABLED
           'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
     },
     IPV6_DISABLED => sub {
-        __x    # IPV6_DISABLED
+        __x    # DNSSEC:IPV6_DISABLED
           'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
     },
     ITERATIONS_OK => sub {
-        __x    # ITERATIONS_OK
+        __x    # DNSSEC:ITERATIONS_OK
           "The number of NSEC3 iterations is {count}, which is OK.", @_;
     },
     KEY_DETAILS => sub {
-        __x    # KEY_DETAILS
+        __x    # DNSSEC:KEY_DETAILS
           "Key with keytag {keytag} details : Size = {keysize}, Flags ({sep}, {rfc5011}).", @_;
     },
     MANY_ITERATIONS => sub {
-        __x    # MANY_ITERATIONS
+        __x    # DNSSEC:MANY_ITERATIONS
           "The number of NSEC3 iterations is {count}, which is on the high side.", @_;
     },
     NEITHER_DNSKEY_NOR_DS => sub {
-        __x    # NEITHER_DNSKEY_NOR_DS
+        __x    # DNSSEC:NEITHER_DNSKEY_NOR_DS
           "There are neither DS nor DNSKEY records for the zone.", @_;
     },
     NO_COMMON_KEYTAGS => sub {
-        __x    # NO_COMMON_KEYTAGS
+        __x    # DNSSEC:NO_COMMON_KEYTAGS
           "No DS record had a DNSKEY with a matching keytag.", @_;
     },
     NO_DNSKEY => sub {
-        __x    # NO_DNSKEY
+        __x    # DNSSEC:NO_DNSKEY
           "No DNSKEYs were returned.", @_;
     },
     NO_DS => sub {
-        __x    # NO_DS
+        __x    # DNSSEC:NO_DS
           "{from} returned no DS records for {zone}.", @_;
     },
     NO_KEYS_OR_NO_SIGS => sub {
-        __x    # NO_KEYS_OR_NO_SIGS
+        __x    # DNSSEC:NO_KEYS_OR_NO_SIGS
           "Cannot test DNSKEY signatures, because we got {keys} DNSKEY records and {sigs} RRSIG records.", @_;
     },
     NO_KEYS_OR_NO_SIGS_OR_NO_SOA => sub {
-        __x    # NO_KEYS_OR_NO_SIGS_OR_NO_SOA
+        __x    # DNSSEC:NO_KEYS_OR_NO_SIGS_OR_NO_SOA
           "Cannot test SOA signatures, because we got {keys} DNSKEY records, "
           . "{sigs} RRSIG records and {soas} SOA records.",
           @_;
     },
     NO_NSEC3PARAM => sub {
-        __x    # NO_NSEC3PARAM
+        __x    # DNSSEC:NO_NSEC3PARAM
           "{server} returned no NSEC3PARAM records.", @_;
     },
     NO_RESPONSE_DNSKEY => sub {
-        __x    # NO_RESPONSE_DNSKEY
+        __x    # DNSSEC:NO_RESPONSE_DNSKEY
           "Nameserver {ns}/{address} responded with no DNSKEY record(s).", @_;
     },
     NO_RESPONES_DS => sub {
-        __x    # NO_RESPONSE_DS
+        __x    # DNSSEC:NO_RESPONSE_DS
           "{ns}/{address} returned no DS records for {zone}.", @_;
     },
     NO_RESPONSE_RRSET => sub {
-        __x    # NO_RESPONSE_RRSET
+        __x    # DNSSEC:NO_RESPONSE_RRSET
           "Nameserver {ns}/{address} responded with no {rrtype} record(s).", @_;
     },
     NO_RESPONSE => sub {
-        __x    # NO_RESPONSE
+        __x    # DNSSEC:NO_RESPONSE
           "Nameserver {ns}/{address} did not respond.", @_;
     },
     NOT_SIGNED => sub {
-        __x    # NOT_SIGNED
+        __x    # DNSSEC:NOT_SIGNED
           "The zone is not signed with DNSSEC.", @_;
     },
     NSEC3_COVERS_NOT => sub {
-        __x    # NSEC3_COVERS_NOT
+        __x    # DNSSEC:NSEC3_COVERS_NOT
           "NSEC3 record does not cover {name}.", @_;
     },
     NSEC3_COVERS => sub {
-        __x    # NSEC3_COVERS
+        __x    # DNSSEC:NSEC3_COVERS
           "NSEC3 record covers {name}.", @_;
     },
     NSEC3_NOT_SIGNED => sub {
-        __x    # NSEC3_NOT_SIGNED
+        __x    # DNSSEC:NSEC3_NOT_SIGNED
           "No signature correctly signed the NSEC3 RRset.", @_;
     },
     NSEC3_SIGNED => sub {
-        __x    # NSEC3_SIGNED
+        __x    # DNSSEC:NSEC3_SIGNED
           "At least one signature correctly signed the NSEC3 RRset.", @_;
     },
     NSEC3_SIG_VERIFY_ERROR => sub {
-        __x    # NSEC3_SIG_VERIFY_ERROR
+        __x    # DNSSEC:NSEC3_SIG_VERIFY_ERROR
           "Trying to verify NSEC3 RRset with RRSIG {sig} gave error '{error}'.", @_;
     },
     NSEC_COVERS_NOT => sub {
-        __x    # NSEC_COVERS_NOT
+        __x    # DNSSEC:NSEC_COVERS_NOT
           "NSEC does not cover {name}.", @_;
     },
     NSEC_COVERS => sub {
-        __x    # NSEC_COVERS
+        __x    # DNSSEC:NSEC_COVERS
           "NSEC covers {name}.", @_;
     },
     NSEC_NOT_SIGNED => sub {
-        __x    # NSEC_NOT_SIGNED
+        __x    # DNSSEC:NSEC_NOT_SIGNED
           "No signature correctly signed the NSEC RRset.", @_;
     },
     NSEC_SIGNED => sub {
-        __x    # NSEC_SIGNED
+        __x    # DNSSEC:NSEC_SIGNED
           "At least one signature correctly signed the NSEC RRset.", @_;
     },
     NSEC_SIG_VERIFY_ERROR => sub {
-        __x    # NSEC_SIG_VERIFY_ERROR
+        __x    # DNSSEC:NSEC_SIG_VERIFY_ERROR
           "Trying to verify NSEC RRset with RRSIG {sig} gave error '{error}'.", @_;
     },
     REMAINING_LONG => sub {
-        __x    # REMAINING_LONG
+        __x    # DNSSEC:REMAINING_LONG
           "RRSIG with keytag {tag} and covering type(s) {types} "
           . "has a remaining validity of {duration} seconds, which is too long.",
           @_;
     },
     REMAINING_SHORT => sub {
-        __x    # REMAINING_SHORT
+        __x    # DNSSEC:REMAINING_SHORT
           "RRSIG with keytag {tag} and covering type(s) {types} "
           . "has a remaining validity of {duration} seconds, which is too short.",
           @_;
     },
     RRSIG_EXPIRATION => sub {
-        __x    # RRSIG_EXPIRATION
+        __x    # DNSSEC:RRSIG_EXPIRATION
           "RRSIG with keytag {tag} and covering type(s) {types} expires at : {date}.", @_;
     },
     RRSET_NOT_SIGNED => sub {
-        __x    # RRSET_NOT_SIGNED
+        __x    # DNSSEC:RRSET_NOT_SIGNED
           "Nameserver {ns}/{address} responded with no RRSIG for {rrtype} RRset.", @_;
     },
     RRSIG_BROKEN => sub {
-        __x    # RRSIG_BROKEN
+        __x    # DNSSEC:RRSIG_BROKEN
           "Nameserver {ns}/{address} responded with an RRSIG which can not be verified with corresponding DNSKEY (with keytag {keytag})", @_;
     },
     RRSIG_EXPIRED => sub {
-        __x    # RRSIG_EXPIRED
+        __x    # DNSSEC:RRSIG_EXPIRED
           "RRSIG with keytag {tag} and covering type(s) {types} has already expired (expiration is: {expiration}).", @_;
     },
     RRSIG_NOT_MATCH_DNSKEY => sub {
-        __x    # RRSIG_NOT_MATCH_DNSKEY
+        __x    # DNSSEC:RRSIG_NOT_MATCH_DNSKEY
           "Nameserver {ns}/{address} responded with an RRSIG with unknown keytag {keytag}.", @_;
     },
     SOA_NOT_SIGNED => sub {
-        __x    # SOA_NOT_SIGNED
+        __x    # DNSSEC:SOA_NOT_SIGNED
           "No RRSIG correctly signed the SOA RRset.", @_;
     },
     SOA_SIGNATURE_NOT_OK => sub {
-        __x    # SOA_SIGNATURE_NOT_OK
+        __x    # DNSSEC:SOA_SIGNATURE_NOT_OK
           "Trying to verify SOA RRset with signature {signature} gave error '{error}'.", @_;
     },
     SOA_SIGNATURE_OK => sub {
-        __x    # SOA_SIGNATURE_OK
+        __x    # DNSSEC:SOA_SIGNATURE_OK
           "RRSIG {signature} correctly signs SOA RRset.", @_;
     },
     SOA_SIGNED => sub {
-        __x    # SOA_SIGNED
+        __x    # DNSSEC:SOA_SIGNED
           "At least one RRSIG correctly signs the SOA RRset.", @_;
     },
     TOO_MANY_ITERATIONS => sub {
-        __x    # TOO_MANY_ITERATIONS
+        __x    # DNSSEC:TOO_MANY_ITERATIONS
           "The number of NSEC3 iterations is {count}, which is too high for key length {keylength}.", @_;
     },
     UNEXPECTED_RESPONSE_DS => sub {
-        __x    # UNEXPECTED_RESPONSE_DS
+        __x    # DNSSEC:UNEXPECTED_RESPONSE_DS
           "{ns}/{address} responded with an unexpected rcode ({rcode}) on a DS query for zone {zone}.", @_;
     },
 );

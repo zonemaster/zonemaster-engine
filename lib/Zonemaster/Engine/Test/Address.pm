@@ -69,33 +69,33 @@ sub metadata {
 
 Readonly my %TAG_DESCRIPTIONS => (
     NAMESERVER_IP_WITHOUT_REVERSE => sub {
-        __x    # NAMESERVER_IP_WITHOUT_REVERSE
+        __x    # ADDRESS:NAMESERVER_IP_WITHOUT_REVERSE
           'Nameserver {ns} has an IP address ({address}) without PTR configured.', @_;
     },
     NAMESERVER_IP_PTR_MISMATCH => sub {
-        __x    # NAMESERVER_IP_PTR_MISMATCH
+        __x    # ADDRESS:NAMESERVER_IP_PTR_MISMATCH
           'Nameserver {ns} has an IP address ({address}) with mismatched PTR result ({names}).', @_;
     },
     NAMESERVER_IP_PRIVATE_NETWORK => sub {
-        __x    # NAMESERVER_IP_PRIVATE_NETWORK
+        __x    # ADDRESS:NAMESERVER_IP_PRIVATE_NETWORK
           'Nameserver {ns} has an IP address ({address}) '
           . 'with prefix {prefix} referenced in {reference} as a \'{name}\'.',
           @_;
     },
     NO_IP_PRIVATE_NETWORK => sub {
-        __x    # NO_IP_PRIVATE_NETWORK
+        __x    # ADDRESS:NO_IP_PRIVATE_NETWORK
           'All Nameserver addresses are in the routable public addressing space.', @_;
     },
     NAMESERVERS_IP_WITH_REVERSE => sub {
-        __x    # NAMESERVERS_IP_WITH_REVERSE
+        __x    # ADDRESS:NAMESERVERS_IP_WITH_REVERSE
           'Reverse DNS entry exist for all Nameserver IP addresses.', @_;
     },
     NAMESERVER_IP_PTR_MATCH => sub {
-        __x    # NAMESERVER_IP_PTR_MATCH
+        __x    # ADDRESS:NAMESERVER_IP_PTR_MATCH
           'All reverse DNS entry matches name server name.', @_;
     },
     NO_RESPONSE_PTR_QUERY => sub {
-        __x    # NO_RESPONSE_PTR_QUERY
+        __x    # ADDRESS:NO_RESPONSE_PTR_QUERY
           'No response from nameserver(s) on PTR query ({reverse}).', @_;
     },
 );
