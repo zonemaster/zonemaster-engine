@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-17 09:38+0200\n"
+"POT-Creation-Date: 2019-10-17 14:55+0200\n"
 "PO-Revision-Date: 2017-12-18\n"
 "Last-Translator: mats.dufberg@iis.se\n"
 "Language-Team: Zonemaster Team\n"
@@ -2073,63 +2073,69 @@ msgstr ""
 "{keytag} using algorithm {algorithm_number}/{algorithm_mnemonic}, which is "
 "OK."
 
-#. DS_ALGORITHM_MISSING
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:514
+#. UNEXPECTED_RESPONSE_DS
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:754
 #, perl-brace-format
 msgid ""
-"{ns}/{address} answered DS query for zone {zone} with NO DS record for "
-"keytag {keytag} using algorithm {algorithm_number}/{algorithm_mnemonic}, "
-"which is not OK."
+"{ns}/{address} responded with an unexpected rcode ({rcode}) on a DS query "
+"for zone {zone}."
 msgstr ""
-"{ns}/{address} answered DS query for zone {zone} with NO DS record for "
-"keytag {keytag} using algorithm {algorithm_number}/{algorithm_mnemonic}, "
-"which is not OK."
+"{ns}/{address} responded with an unexpected rcode ({rcode}) on a DS query "
+"for zone {zone}."
 
 #. DS_ALGORITHM_DEPRECATED
 #: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:510
 #, perl-brace-format
 msgid ""
-"{ns}/{address} answered DS query for zone {zone} with a deprecated algorithm "
-"({algorithm_number}/{algorithm_mnemonic}) for keytag {keytag}."
+"{ns}/{address} returned a DS record created by algorithm ({algorithm_number}/"
+"{algorithm_mnemonic}), which is deprecated. The DS record is for the DNSKEY "
+"record with keytag {keytag} in zone {zone}."
 msgstr ""
-"{ns}/{address} answered DS query for zone {zone} with a deprecated algorithm "
-"({algorithm_number}/{algorithm_mnemonic}) for keytag {keytag}."
+"{ns}/{address} returned a DS record created by algorithm ({algorithm_number}/"
+"{algorithm_mnemonic}), which is deprecated. The DS record is for the DNSKEY "
+"record with keytag {keytag} in zone {zone}."
 
 #. DS_ALGORITHM_NOT_DS
 #: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:506
 #, perl-brace-format
 msgid ""
-"{ns}/{address} answered DS query for zone {zone} with a reserved algorithm "
-"({algorithm_number}) for keytag {keytag}."
+"{ns}/{address} returned a DS record created by algorithm {algorithm_number} "
+"which is not meant for DS. The DS record is for the DNSKEY record with "
+"keytag {keytag} in zone {zone}."
 msgstr ""
-"{ns}/{address} answered DS query for zone {zone} with a reserved algorithm "
-"({algorithm_number}) for keytag {keytag}."
+"{ns}/{address} returned a DS record created by algorithm {algorithm_number} "
+"which is not meant for DS. The DS record is for the DNSKEY record with "
+"keytag {keytag} in zone {zone}."
+
+#. DS_ALGORITHM_MISSING
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:514
+#, perl-brace-format
+msgid ""
+"{ns}/{address} returned a DS record created by algorithm {algorithm_number}/"
+"{algorithm_mnemonic}, which is OK. The DS record is for the DNSKEY record "
+"with keytag {keytag} in zone {zone}."
+msgstr ""
+"{ns}/{address} returned a DS record created by algorithm {algorithm_number}/"
+"{algorithm_mnemonic}, which is OK. The DS record is for the DNSKEY record "
+"with keytag {keytag} in zone {zone}."
 
 #. DS_ALGORITHM_RESERVED
 #: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:522
 #, perl-brace-format
 msgid ""
-"{ns}/{address} answered DS query for zone {zone} with an unassigned "
-"algorithm ({algorithm_number}) for keytag {keytag}."
+"{ns}/{address} returned a DS record created by with an unassigned algorithm "
+"({algorithm_number}), which is not OK. The DS record is for the DNSKEY "
+"record with keytag {keytag} in zone {zone}."
 msgstr ""
-"{ns}/{address} answered DS query for zone {zone} with an unassigned "
-"algorithm ({algorithm_number}) for keytag {keytag}."
-
-#. UNEXPECTED_RESPONSE_DS
-#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:754
-#, fuzzy, perl-brace-format
-msgid ""
-"{ns}/{address} answered DS query for zone {zone} with an unexpected rcode "
-"({rcode})."
-msgstr ""
-"Nameserver {ns}/{address} answered AAAA query with an unexpected rcode "
-"({rcode})."
+"{ns}/{address} returned a DS record created by with an unassigned algorithm "
+"({algorithm_number}), which is not OK. The DS record is for the DNSKEY "
+"record with keytag {keytag} in zone {zone}."
 
 #. NO_RESPONSE_DS
 #: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:646
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "{ns}/{address} returned no DS records for {zone}."
-msgstr "{from} returned no DS records for {zone}."
+msgstr "{ns}/{address} returned no DS records for {zone}."
 
 #. DNSKEY_AND_DS
 #: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:482
@@ -2148,6 +2154,30 @@ msgstr "{parent} sent a DS record, but {child} did not send a DNSKEY record."
 #, perl-brace-format
 msgid "{server} returned no NSEC3PARAM records."
 msgstr "{server} returned no NSEC3PARAM records."
+
+#~ msgid ""
+#~ "{ns}/{address} answered DS query for zone {zone} with NO DS record for "
+#~ "keytag {keytag} using algorithm {algorithm_number}/{algorithm_mnemonic}, "
+#~ "which is not OK."
+#~ msgstr ""
+#~ "{ns}/{address} answered DS query for zone {zone} with NO DS record for "
+#~ "keytag {keytag} using algorithm {algorithm_number}/{algorithm_mnemonic}, "
+#~ "which is not OK."
+
+#~ msgid ""
+#~ "{ns}/{address} answered DS query for zone {zone} with a reserved "
+#~ "algorithm ({algorithm_number}) for keytag {keytag}."
+#~ msgstr ""
+#~ "{ns}/{address} answered DS query for zone {zone} with a reserved "
+#~ "algorithm ({algorithm_number}) for keytag {keytag}."
+
+#, fuzzy
+#~ msgid ""
+#~ "{ns}/{address} answered DS query for zone {zone} with an unexpected rcode "
+#~ "({rcode})."
+#~ msgstr ""
+#~ "Nameserver {ns}/{address} answered AAAA query with an unexpected rcode "
+#~ "({rcode})."
 
 #~ msgid ""
 #~ "DS record with keytag {keytag} uses digest type {digtype}, which is OK."

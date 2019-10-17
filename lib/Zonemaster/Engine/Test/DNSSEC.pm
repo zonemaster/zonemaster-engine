@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::DNSSEC;
 
-use version; our $VERSION = version->declare("v1.1.3");
+use version; our $VERSION = version->declare("v1.1.4");
 
 ###
 ### This test module implements DNSSEC tests.
@@ -503,15 +503,15 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     DS_ALGORITHM_NOT_DS => sub {
         __x    # DS_ALGORITHM_NOT_DS
-          "{ns}/{address} answered DS query for zone {zone} with a reserved algorithm ({algorithm_number}) for keytag {keytag}.", @_;
+          "{ns}/{address} returned a DS record created by algorithm {algorithm_number} which is not meant for DS. The DS record is for the DNSKEY record with keytag {keytag} in zone {zone}.", @_;
     },
     DS_ALGORITHM_DEPRECATED => sub {
         __x    # DS_ALGORITHM_DEPRECATED
-          "{ns}/{address} answered DS query for zone {zone} with a deprecated algorithm ({algorithm_number}/{algorithm_mnemonic}) for keytag {keytag}.", @_;
+          "{ns}/{address} returned a DS record created by algorithm ({algorithm_number}/{algorithm_mnemonic}), which is deprecated. The DS record is for the DNSKEY record with keytag {keytag} in zone {zone}.", @_;
     },
     DS_ALGORITHM_MISSING => sub {
         __x    # DS_ALGORITHM_MISSING
-          "{ns}/{address} answered DS query for zone {zone} with NO DS record for keytag {keytag} using algorithm {algorithm_number}/{algorithm_mnemonic}, which is not OK.", @_;
+          "{ns}/{address} returned a DS record created by algorithm {algorithm_number}/{algorithm_mnemonic}, which is OK. The DS record is for the DNSKEY record with keytag {keytag} in zone {zone}.", @_;
     },
     DS_ALGORITHM_OK => sub {
         __x    # DS_ALGORITHM_OK
@@ -519,7 +519,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     DS_ALGORITHM_RESERVED => sub {
         __x    # DS_ALGORITHM_RESERVED
-          "{ns}/{address} answered DS query for zone {zone} with an unassigned algorithm ({algorithm_number}) for keytag {keytag}.", @_;
+          "{ns}/{address} returned a DS record created by with an unassigned algorithm ({algorithm_number}), which is not OK. The DS record is for the DNSKEY record with keytag {keytag} in zone {zone}.", @_;
     },
     DS_BUT_NOT_DNSKEY => sub {
         __x    # DS_BUT_NOT_DNSKEY
@@ -751,7 +751,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     UNEXPECTED_RESPONSE_DS => sub {
         __x    # UNEXPECTED_RESPONSE_DS
-          "{ns}/{address} answered DS query for zone {zone} with an unexpected rcode ({rcode}).", @_;
+          "{ns}/{address} responded with an unexpected rcode ({rcode}) on a DS query for zone {zone}.", @_;
     },
 );
 
