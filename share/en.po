@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-14 21:30+0200\n"
+"POT-Creation-Date: 2019-10-17 09:38+0200\n"
 "PO-Revision-Date: 2017-12-18\n"
 "Last-Translator: mats.dufberg@iis.se\n"
 "Language-Team: Zonemaster Team\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #. SOA_NOT_EXISTS
-#: ../lib/Zonemaster/Engine/Test/Delegation.pm:283
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:289
 #, perl-brace-format
 msgid "A SOA query NOERROR response from {ns} was received empty."
 msgstr "Empty NOERROR response to SOA query was received from {ns}."
@@ -110,7 +110,7 @@ msgid "All nameservers succeeded to resolve to an IP address."
 msgstr "All nameservers succeeded to resolve to an IP address."
 
 #. NAMES_MATCH
-#: ../lib/Zonemaster/Engine/Test/Delegation.pm:199
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:201
 msgid "All of the nameserver names are listed both at parent and child."
 msgstr "All of the nameserver names are listed both at parent and child."
 
@@ -120,22 +120,22 @@ msgid "All reverse DNS entry matches name server name."
 msgstr "Every reverse DNS entry matches name server name."
 
 #. DISTINCT_IP_ADDRESS
-#: ../lib/Zonemaster/Engine/Test/Delegation.pm:143
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:145
 msgid "All the IP addresses used by the nameservers are unique"
 msgstr "All the IP addresses used by the nameservers are unique"
 
 #. CHILD_DISTINCT_NS_IP
-#: ../lib/Zonemaster/Engine/Test/Delegation.pm:127
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:129
 msgid "All the IP addresses used by the nameservers in child are unique."
 msgstr "All the IP addresses used by the nameservers in child are unique."
 
 #. DEL_DISTINCT_NS_IP
-#: ../lib/Zonemaster/Engine/Test/Delegation.pm:135
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:137
 msgid "All the IP addresses used by the nameservers in parent are unique."
 msgstr "All the IP addresses used by the nameservers in parent are unique."
 
 #. SOA_EXISTS
-#: ../lib/Zonemaster/Engine/Test/Delegation.pm:279
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:285
 msgid "All the nameservers have SOA record."
 msgstr "All the nameservers have SOA record."
 
@@ -145,11 +145,11 @@ msgid ""
 "All the tested RRset (SOA/DNSKEY/NS) are signed by each algorithm present in "
 "the DNSKEY RRset"
 msgstr ""
-"All the tested RRset (SOA/DNSKEY/NS) are signed by each algorithm present "
-"in the DNSKEY RRset"
+"All the tested RRset (SOA/DNSKEY/NS) are signed by each algorithm present in "
+"the DNSKEY RRset"
 
 #. ARE_AUTHORITATIVE
-#: ../lib/Zonemaster/Engine/Test/Delegation.pm:123
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:125
 #, perl-brace-format
 msgid "All these nameservers are confirmed to be authoritative : {nsset}."
 msgstr "All these nameservers are confirmed to be authoritative : {nsset}."
@@ -216,7 +216,7 @@ msgstr ""
 "RRSIG records and {soas} SOA records."
 
 #. NOT_ENOUGH_NS_CHILD
-#: ../lib/Zonemaster/Engine/Test/Delegation.pm:227
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:233
 #, perl-brace-format
 msgid ""
 "Child does not list enough ({count}) nameservers ({nss}). Lower limit set to "
@@ -226,7 +226,7 @@ msgstr ""
 "{minimum}."
 
 #. NOT_ENOUGH_IPV4_NS_CHILD
-#: ../lib/Zonemaster/Engine/Test/Delegation.pm:203
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:209
 #, perl-brace-format
 msgid ""
 "Child does not list enough ({count}) nameservers that resolve to IPv4 "
@@ -236,7 +236,7 @@ msgstr ""
 "addresses ({addrs}). Lower limit set to {minimum}."
 
 #. NOT_ENOUGH_IPV6_NS_CHILD
-#: ../lib/Zonemaster/Engine/Test/Delegation.pm:215
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:221
 #, perl-brace-format
 msgid ""
 "Child does not list enough ({count}) nameservers that resolve to IPv6 "
@@ -254,13 +254,13 @@ msgstr ""
 "Child has extra nameserver IP address(es) not listed at parent ({addresses})."
 
 #. EXTRA_NAME_CHILD
-#: ../lib/Zonemaster/Engine/Test/Delegation.pm:179
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:181
 #, perl-brace-format
 msgid "Child has nameserver(s) not listed at parent ({extra})."
 msgstr "Child has nameserver(s) not listed at parent ({extra})."
 
 #. ENOUGH_NS_CHILD
-#: ../lib/Zonemaster/Engine/Test/Delegation.pm:171
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:173
 #, perl-brace-format
 msgid ""
 "Child lists enough ({count}) nameservers ({nss}). Lower limit set to "
@@ -270,7 +270,7 @@ msgstr ""
 "{minimum}."
 
 #. ENOUGH_IPV4_NS_CHILD
-#: ../lib/Zonemaster/Engine/Test/Delegation.pm:147
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:149
 #, perl-brace-format
 msgid ""
 "Child lists enough ({count}) nameservers that resolve to IPv4 addresses "
@@ -280,7 +280,7 @@ msgstr ""
 "({addrs}). Lower limit set to {minimum}."
 
 #. ENOUGH_IPV6_NS_CHILD
-#: ../lib/Zonemaster/Engine/Test/Delegation.pm:159
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:161
 #, perl-brace-format
 msgid ""
 "Child lists enough ({count}) nameservers that resolve to IPv6 addresses "
@@ -290,7 +290,7 @@ msgstr ""
 "({addrs}). Lower limit set to {minimum}."
 
 #. NO_IPV4_NS_CHILD
-#: ../lib/Zonemaster/Engine/Test/Delegation.pm:235
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:241
 #, perl-brace-format
 msgid ""
 "Child lists no nameserver that resolves to an IPv4 address. If any were "
@@ -300,7 +300,7 @@ msgstr ""
 "present, the minimum allowed would be {minimum}."
 
 #. NO_IPV6_NS_CHILD
-#: ../lib/Zonemaster/Engine/Test/Delegation.pm:247
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:253
 #, perl-brace-format
 msgid ""
 "Child lists no nameserver that resolves to an IPv6 address. If any were "
@@ -351,7 +351,7 @@ msgid "DS record with keytag {keytag} uses forbidden digest type {digtype}."
 msgstr "DS record with keytag {keytag} uses forbidden digest type {digtype}."
 
 #. NOT_ENOUGH_IPV4_NS_DEL
-#: ../lib/Zonemaster/Engine/Test/Delegation.pm:209
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:215
 #, perl-brace-format
 msgid ""
 "Delegation does not list enough ({count}) nameservers that resolve to IPv4 "
@@ -361,7 +361,7 @@ msgstr ""
 "addresses ({addrs}). Lower limit set to {minimum}."
 
 #. NOT_ENOUGH_IPV6_NS_DEL
-#: ../lib/Zonemaster/Engine/Test/Delegation.pm:221
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:227
 #, perl-brace-format
 msgid ""
 "Delegation does not list enough ({count}) nameservers that resolve to IPv6 "
@@ -382,7 +382,7 @@ msgid "Delegation from parent to child is properly signed."
 msgstr "Delegation from parent to child is properly signed."
 
 #. ENOUGH_IPV4_NS_DEL
-#: ../lib/Zonemaster/Engine/Test/Delegation.pm:153
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:155
 #, perl-brace-format
 msgid ""
 "Delegation lists enough ({count}) nameservers that resolve to IPv4 addresses "
@@ -392,7 +392,7 @@ msgstr ""
 "({addrs}). Lower limit set to {minimum}."
 
 #. ENOUGH_IPV6_NS_DEL
-#: ../lib/Zonemaster/Engine/Test/Delegation.pm:165
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:167
 #, perl-brace-format
 msgid ""
 "Delegation lists enough ({count}) nameservers that resolve to IPv6 addresses "
@@ -402,7 +402,7 @@ msgstr ""
 "({addrs}). Lower limit set to {minimum}."
 
 #. NO_IPV4_NS_DEL
-#: ../lib/Zonemaster/Engine/Test/Delegation.pm:241
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:247
 #, perl-brace-format
 msgid ""
 "Delegation lists no nameserver that resolves to an IPv4 address. If any were "
@@ -412,7 +412,7 @@ msgstr ""
 "present, the minimum allowed would be {minimum}."
 
 #. NO_IPV6_NS_DEL
-#: ../lib/Zonemaster/Engine/Test/Delegation.pm:253
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:259
 #, perl-brace-format
 msgid ""
 "Delegation lists no nameserver that resolves to an IPv6 address. If any were "
@@ -580,26 +580,26 @@ msgid "Glue records are consistent between glue and authoritative data."
 msgstr "Glue records are consistent between glue and authoritative data."
 
 #. CHILD_NS_SAME_IP
-#: ../lib/Zonemaster/Engine/Test/Delegation.pm:131
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:133
 #, perl-brace-format
 msgid "IP {address} in child refers to multiple nameservers ({nss})."
 msgstr "IP {address} in child refers to multiple nameservers ({nss})."
 
 #. DEL_NS_SAME_IP
-#: ../lib/Zonemaster/Engine/Test/Delegation.pm:139
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:141
 #, perl-brace-format
 msgid "IP {address} in parent refers to multiple nameservers ({nss})."
 msgstr "IP {address} in parent refers to multiple nameservers ({nss})."
 
 #. SAME_IP_ADDRESS
-#: ../lib/Zonemaster/Engine/Test/Delegation.pm:275
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:281
 #, perl-brace-format
 msgid "IP {address} refers to multiple nameservers ({nss})."
 msgstr "IP {address} refers to multiple nameservers ({nss})."
 
 #. IPV4_DISABLED
 #: ../lib/Zonemaster/Engine/Test/Connectivity.pm:144
-#: ../lib/Zonemaster/Engine/Test/Delegation.pm:187
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:189
 #: ../lib/Zonemaster/Engine/Test/Nameserver.pm:288
 #: ../lib/Zonemaster/Engine/Test/Consistency.pm:151
 #: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:565
@@ -622,7 +622,7 @@ msgstr "IPv4 is enabled, can send \"{rrtype}\" query to {ns}/{address}."
 
 #. IPV6_DISABLED
 #: ../lib/Zonemaster/Engine/Test/Connectivity.pm:148
-#: ../lib/Zonemaster/Engine/Test/Delegation.pm:191
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:193
 #: ../lib/Zonemaster/Engine/Test/Nameserver.pm:292
 #: ../lib/Zonemaster/Engine/Test/Consistency.pm:155
 #: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:569
@@ -766,6 +766,12 @@ msgstr "Nameserver ({name}) syntax is valid."
 msgid "Nameserver ({name}) within a 'numeric only' TLD ({tld})."
 msgstr "Nameserver ({name}) within a 'numeric only' TLD ({tld})."
 
+#. NS_IS_CNAME
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:265
+#, perl-brace-format
+msgid "Nameserver {ns} RR point to CNAME."
+msgstr "Nameserver {ns} RR point to CNAME."
+
 #. NAMESERVER_IP_PTR_MISMATCH
 #: ../lib/Zonemaster/Engine/Test/Address.pm:77
 #, perl-brace-format
@@ -793,16 +799,10 @@ msgid "Nameserver {ns} has an IP address ({address}) without PTR configured."
 msgstr "Nameserver {ns} has an IP address ({address}) without PTR configured."
 
 #. IS_NOT_AUTHORITATIVE
-#: ../lib/Zonemaster/Engine/Test/Delegation.pm:195
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:197
 #, perl-brace-format
 msgid "Nameserver {ns} response is not authoritative on {proto} port 53."
 msgstr "Nameserver {ns} response is not authoritative on {proto} port 53."
-
-#. NS_RR_IS_CNAME
-#: ../lib/Zonemaster/Engine/Test/Delegation.pm:259
-#, perl-brace-format
-msgid "Nameserver {ns} {address_type} RR point to CNAME."
-msgstr "Nameserver {ns} {address_type} RR point to CNAME."
 
 #. UNSUPPORTED_EDNS_VER
 #: ../lib/Zonemaster/Engine/Test/Nameserver.pm:344
@@ -830,12 +830,12 @@ msgstr "Nameserver {ns}/{address} allow zone transfer using AXFR."
 
 #. A_UNEXPECTED_RCODE
 #: ../lib/Zonemaster/Engine/Test/Nameserver.pm:211
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Nameserver {ns}/{address} answered A query with an unexpected rcode "
 "({rcode})."
 msgstr ""
-"Nameserver {ns}/{address} answered AAAA query with an unexpected rcode "
+"Nameserver {ns}/{address} answered A query with an unexpected rcode "
 "({rcode})."
 
 #. AAAA_BAD_RDATA
@@ -858,6 +858,14 @@ msgstr ""
 "Nameserver {ns}/{address} answered AAAA query with an unexpected rcode "
 "({rcode})."
 
+#. UNEXPECTED_RCODE
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:297
+#, perl-brace-format
+msgid ""
+"Nameserver {ns}/{address} answered query with an unexpected rcode ({rcode})."
+msgstr ""
+"Nameserver {ns}/{address} answered query with an unexpected rcode ({rcode})."
+
 #. NS_NO_RESPONSE
 #: ../lib/Zonemaster/Engine/Test/Basic.pm:164
 #, perl-brace-format
@@ -865,6 +873,7 @@ msgid "Nameserver {ns}/{address} did not respond to NS query."
 msgstr "Nameserver {ns}/{address} did not respond to NS query."
 
 #. NO_RESPONSE
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:205
 #: ../lib/Zonemaster/Engine/Test/Zone.pm:236
 #: ../lib/Zonemaster/Engine/Test/Consistency.pm:179
 #: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:623
@@ -1128,8 +1137,8 @@ msgstr "No illegal characters in the domain name ({name})."
 msgid "No nameserver address is in an AS."
 msgstr "No nameserver address is in an AS."
 
-#. NS_RR_NO_CNAME
-#: ../lib/Zonemaster/Engine/Test/Delegation.pm:263
+#. NO_NS_CNAME
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:269
 msgid "No nameserver point to CNAME alias."
 msgstr "No nameserver points to CNAME alias."
 
@@ -1214,7 +1223,7 @@ msgstr ""
 "None of the following nameservers returns an upward referral : {names}."
 
 #. TOTAL_NAME_MISMATCH
-#: ../lib/Zonemaster/Engine/Test/Delegation.pm:287
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:293
 msgid "None of the nameservers listed at the parent are listed at the child."
 msgstr "None of the nameservers listed at the parent are listed at the child."
 
@@ -1244,7 +1253,7 @@ msgstr ""
 "with \"{command}\")."
 
 #. NOT_ENOUGH_NS_DEL
-#: ../lib/Zonemaster/Engine/Test/Delegation.pm:231
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:237
 #, perl-brace-format
 msgid ""
 "Parent does not list enough ({count}) nameservers ({glue}). Lower limit set "
@@ -1268,13 +1277,13 @@ msgstr ""
 "Parent has extra nameserver IP address(es) not listed at child ({addresses})."
 
 #. EXTRA_NAME_PARENT
-#: ../lib/Zonemaster/Engine/Test/Delegation.pm:183
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:185
 #, perl-brace-format
 msgid "Parent has nameserver(s) not listed at the child ({extra})."
 msgstr "Parent has nameserver(s) not listed at the child ({extra})."
 
 #. ENOUGH_NS_DEL
-#: ../lib/Zonemaster/Engine/Test/Delegation.pm:175
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:177
 #, perl-brace-format
 msgid ""
 "Parent lists enough ({count}) nameservers ({glue}). Lower limit set to "
@@ -1837,7 +1846,7 @@ msgstr ""
 "{keylength}."
 
 #. REFERRAL_SIZE_TOO_LARGE
-#: ../lib/Zonemaster/Engine/Test/Delegation.pm:267
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:273
 #, perl-brace-format
 msgid ""
 "The smallest possible legal referral packet is larger than 512 octets (it is "
@@ -1847,7 +1856,7 @@ msgstr ""
 "{size})."
 
 #. REFERRAL_SIZE_OK
-#: ../lib/Zonemaster/Engine/Test/Delegation.pm:271
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:277
 #, perl-brace-format
 msgid ""
 "The smallest possible legal referral packet is smaller than 513 octets (it "
