@@ -18,11 +18,11 @@ by other software.
 
 Each test module must also have a method named C<tag_descriptions()>.
 This method must return a reference to a hash whose entries are expected to look
-like this, where C<FRIENDLY_GREETING> is a message tag and C<"Hello, {name}!">
-is a message id:
+like this, where C<MESSAGE_TAG> is a message, C<TEST_MODULE> is the name of a
+test module tag and C<"Hello, {name}!"> is a message id:
 
-    FRIENDLY_GREETING => sub {
-        __x    # FRIENDLY_GREETING
+    MESSAGE_TAG => sub {
+        __x    # TEST_MODULE:MESSAGE_TAG
           "Hello, {name}!", @_;
     },
 
@@ -32,11 +32,11 @@ The coderef calls Locale::TextDomain::__x() with a Perl brace format string
 (a.k.a. message id) and passes along its own @_).
 The coderef propagates the return value of Locale::TextDomain::__x().
 The line immediately before the format string contains a comment consisting of
-the message tag.
+the module name, a colon and the message tag.
 
-The format strings themselves, the message tag comments and the line numbers of
-the __x calls are used by the gettext tooling when updating the PO files with
-new message ids and old message strings.
+The format strings themselves, the comments and the line numbers of the __x
+calls are used by the gettext tooling when updating the PO files with new
+message ids and old message strings.
 
 Every time you add, remove or modify a tag or its message id, re-run
 C<make update-po> as descibed in the next section.
