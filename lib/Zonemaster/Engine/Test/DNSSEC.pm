@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::DNSSEC;
 
-use version; our $VERSION = version->declare("v1.1.5");
+use version; our $VERSION = version->declare("v1.1.6");
 
 ###
 ### This test module implements DNSSEC tests.
@@ -467,6 +467,10 @@ Readonly my %TAG_DESCRIPTIONS => (
        __x    # DNSSEC:ALL_ALGO_SIGNED
           "All the tested RRset (SOA/DNSKEY/NS) are signed by each algorithm present in the DNSKEY RRset", @_;
     },
+    BROKEN_DNSSEC => sub {
+       __x    # DNSSEC:BROKEN_DNSSEC
+          "All nameservers for zone {zone} responds with neither NSEC nor NSEC3 records when such records are expected.", @_;
+    },
     COMMON_KEYTAGS => sub {
         __x    # DNSSEC:COMMON_KEYTAGS
           "There are both DS and DNSKEY records with key tags {keytags}.", @_;
@@ -581,6 +585,14 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # DNSSEC:HAS_NSEC
           "The zone has NSEC records.", @_;
     },
+    INCONSISTENT_DNSSEC => sub {
+        __x    # DNSSEC:INCONSISTENT_DNSSEC
+          "Some, but not all, nameservers for zone {zone} respond with neither NSEC nor NSEC3 records when such records are expected.", @_;
+    },
+    INCONSISTENT_NSEC_NSEC3 => sub {
+        __x    # DNSSEC:INCONSISTENT_NSEC_NSEC3
+          "Some nameservers for zone {zone} respond with NSEC records and others respond with NSEC3 records. Consistency is expected.", @_;
+    },
     INVALID_NAME_RCODE => sub {
         __x    # DNSSEC:INVALID_NAME_RCODE
           "When asked for the name {name}, which must not exist, the response had RCODE {rcode}.", @_;
@@ -604,6 +616,10 @@ Readonly my %TAG_DESCRIPTIONS => (
     MANY_ITERATIONS => sub {
         __x    # DNSSEC:MANY_ITERATIONS
           "The number of NSEC3 iterations is {count}, which is on the high side.", @_;
+    },
+    MIXED_NSEC_NSEC3 => sub {
+        __x    # DNSSEC:MIXED_NSEC_NSEC3
+          "Nameserver {ns/address} for zone {zone} responds with both NSEC and NSEC3 records when only one record type is expected.", @_;
     },
     NEITHER_DNSKEY_NOR_DS => sub {
         __x    # DNSSEC:NEITHER_DNSKEY_NOR_DS
@@ -634,6 +650,10 @@ Readonly my %TAG_DESCRIPTIONS => (
     NO_NSEC3PARAM => sub {
         __x    # DNSSEC:NO_NSEC3PARAM
           "{server} returned no NSEC3PARAM records.", @_;
+    },
+    NO_NSEC_NSEC3 => sub {
+        __x    # DNSSEC:NO_NSEC_NSEC3
+          "Nameserver {ns/address} for zone {zone} responds with neither NSEC nor NSEC3 record when when such records are expected.", @_;
     },
     NO_RESPONSE_DNSKEY => sub {
         __x    # DNSSEC:NO_RESPONSE_DNSKEY
@@ -726,6 +746,10 @@ Readonly my %TAG_DESCRIPTIONS => (
     SOA_SIGNED => sub {
         __x    # DNSSEC:SOA_SIGNED
           "At least one RRSIG correctly signs the SOA RRset.", @_;
+    },
+    TEST_ABORTED => sub {
+        __x    # DNSSEC:TEST_ABORTED
+          "Nameserver {ns/address} for zone {zone} responds with RCODE \"NOERROR\" on a query that is expected to give response with RCODE \"NXDOMAIN\". Test for NSEC and NSEC3 is aborted for this nameserver.", @_;
     },
     TOO_MANY_ITERATIONS => sub {
         __x    # DNSSEC:TOO_MANY_ITERATIONS
@@ -1484,6 +1508,7 @@ sub dnssec10 {
             push @results, info( NO_RESPONSE => $ns_args );
         }
         elsif ($a_p->rcode eq q{NOERROR} ) {
+            $ns_args->{zone} = $zone->name->string;
             push @results, info( TEST_ABORTED => $ns_args );
         }
         elsif ($a_p->rcode ne q{NXDOMAIN} ) {
@@ -1494,11 +1519,13 @@ sub dnssec10 {
             my @nsec  = $a_p->get_records( q{NSEC}, q{authority} );
             my @nsec3 = $a_p->get_records( q{NSEC3}, q{authority} );
             if ( scalar @nsec and scalar @nsec3 ) {
-                push @results, info( MIXED_NSEC_NSEC3 => {} );
+                $ns_args->{zone} = $zone->name->string;
+                push @results, info( MIXED_NSEC_NSEC3 => $ns_args );
             }
             elsif ( not scalar @nsec and not scalar @nsec3 ) {
+                $ns_args->{zone} = $zone->name->string;
                 $no_dnssec_zone{$ns->address->short}++;
-                push @results, info( NO_NSEC_NSEC3 => {} );
+                push @results, info( NO_NSEC_NSEC3 => $ns_args );
             }
             elsif ( scalar @nsec and not scalar @nsec3 ) {
                 $nsec_zone{$ns->address->short}++;
@@ -1606,13 +1633,13 @@ sub dnssec10 {
     }
 
     if ( scalar keys %no_dnssec_zone and ( scalar keys %nsec_zone or scalar keys %nsec3_zone ) ) {
-        push @results, info( INCONSISTENT_DNSSEC => {} );
+        push @results, info( INCONSISTENT_DNSSEC => { zone => $zone->name->string } );
     }
     elsif ( scalar keys %no_dnssec_zone and not scalar keys %nsec_zone and not scalar keys %nsec3_zone ) {
-        push @results, info( BROKEN_DNSSEC => {} );
+        push @results, info( BROKEN_DNSSEC => { zone => $zone->name->string } );
     }
     elsif ( scalar keys %nsec_zone and scalar keys %nsec3_zone ) {
-        push @results, info( INCONSISTENT_NSEC_NSEC3 => {} );
+        push @results, info( INCONSISTENT_NSEC_NSEC3 => { zone => $zone->name->string } );
     }
     elsif ( scalar keys %nsec_zone and not grep { $_->tag eq q{MIXED_NSEC_NSEC3} } @results ) {
         push @results, info( HAS_NSEC => {} );
