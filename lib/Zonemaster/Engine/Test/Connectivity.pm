@@ -178,7 +178,7 @@ sub version {
 }
 
 ###
-### CONNECTIVITY:Tests
+### Tests
 ###
 
 sub connectivity01 {
