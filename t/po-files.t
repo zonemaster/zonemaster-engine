@@ -13,8 +13,7 @@ chdir 'share' or BAIL_OUT( "chdir: $!" );
 sub make {
     my @make_args = @_;
 
-    my $command = join( ' ', 'make', @make_args );
-    warn "$command";
+    my $command = join( ' ', 'make', '--silent', '--no-print-directory', @make_args );
     my $output = `$command`;
 
     if ( $? == -1 ) {
