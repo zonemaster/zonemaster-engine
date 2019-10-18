@@ -94,9 +94,11 @@ zone_gives( 'dnssec08', $zone, [qw{DNSKEY_SIGNATURE_OK DNSKEY_SIGNED}] );
 
 zone_gives( 'dnssec09', $zone, [qw{SOA_SIGNATURE_OK SOA_SIGNED}] );
 
-zone_gives( 'dnssec10', $zone, [qw{HAS_NSEC NSEC_SIGNED NSEC_COVERS}] );
+zone_gives( 'dnssec10', $zone, [qw{HAS_NSEC}] );
+zone_gives_not( 'dnssec10', $zone, [qw{BROKEN_DNSSEC HAS_NSEC3 INCONSISTENT_DNSSEC INCONSISTENT_NSEC_NSEC3 MIXED_NSEC_NSEC3 NO_NSEC_NSEC3 NSEC3_COVERS_NOT NSEC3_NOT_SIGNED NSEC3_SIG_VERIFY_ERROR NSEC_COVERS_NOT NSEC_NOT_SIGNED NSEC_SIG_VERIFY_ERROR TEST_ABORTED}] );
 
-zone_gives( 'dnssec10', $zone3, [qw{HAS_NSEC3 NSEC3_SIGNED NSEC3_COVERS}] );
+zone_gives( 'dnssec10', $zone3, [qw{HAS_NSEC3}] );
+zone_gives_not( 'dnssec10', $zone3, [qw{BROKEN_DNSSEC HAS_NSEC INCONSISTENT_DNSSEC INCONSISTENT_NSEC_NSEC3 MIXED_NSEC_NSEC3 NO_NSEC_NSEC3 NSEC3_COVERS_NOT NSEC3_NOT_SIGNED NSEC3_SIG_VERIFY_ERROR NSEC_COVERS_NOT NSEC_NOT_SIGNED NSEC_SIG_VERIFY_ERROR TEST_ABORTED}] );
 
 # dnssec01
 $zone = Zonemaster::Engine->zone( 'dnssec01-ds-algorithm-ok.zut-root.rd.nic.fr' );
@@ -211,11 +213,15 @@ $zone = Zonemaster::Engine->zone( 'dnssec09-soa-signature-not-ok.zut-root.rd.nic
 zone_gives( 'dnssec09', $zone, [qw{SOA_NOT_SIGNED SOA_SIGNATURE_NOT_OK}] );
 
 # dnssec10
-$zone = Zonemaster::Engine->zone( 'fr'  );
-zone_gives( 'dnssec10', $zone, ['HAS_NSEC3_OPTOUT'] );
+SKIP: {
+    skip "Opt-out was tested in former dnssec10 version. Is it somethong we want to test again ?", 2;
 
-$zone = Zonemaster::Engine->zone( 'ma'  );
-zone_gives_not( 'dnssec10', $zone, ['HAS_NSEC3_OPTOUT'] );
+    $zone = Zonemaster::Engine->zone( 'fr'  );
+    zone_gives( 'dnssec10', $zone, ['HAS_NSEC3_OPTOUT'] );
+
+    $zone = Zonemaster::Engine->zone( 'ma'  );
+    zone_gives_not( 'dnssec10', $zone, ['HAS_NSEC3_OPTOUT'] );
+}
 
 # GOST
 #$zone = Zonemaster::Engine->zone( 'caint.su' );

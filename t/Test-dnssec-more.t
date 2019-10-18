@@ -82,17 +82,17 @@ zone_gives_not( 'dnssec11', $zone, ['DELEGATION_NOT_SIGNED']);
 
 # dnssec10
 SKIP: {
-    skip "Need to configure another zone for this test case.", 2;
+    skip "Need to configure another zone for this test cases.", 3;
 
     $zone = Zonemaster::Engine->zone( 'wwwyahoo.se' );
     zone_gives( 'dnssec10', $zone, ['INVALID_NAME_RCODE']);
 
     $zone = Zonemaster::Engine->zone( 'denki.se' );
     zone_gives( 'dnssec10', $zone, ['NSEC3_COVERS_NOT']);
-}
 
-$zone = Zonemaster::Engine->zone( 'retailacademicsconsulting.se' );
-zone_gives( 'dnssec10', $zone, ['NSEC3_SIG_VERIFY_ERROR']);
+    $zone = Zonemaster::Engine->zone( 'retailacademicsconsulting.se' );
+    zone_gives( 'dnssec10', $zone, ['NSEC3_SIG_VERIFY_ERROR']);
+}
 
 $zone = Zonemaster::Engine->zone( 'y.nu' );
 zone_gives_not( 'dnssec03', $zone, ['TOO_MANY_ITERATIONS'] );
