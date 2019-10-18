@@ -7,7 +7,9 @@ perl:
     - "5.20"
     - "5.16"
 
-env: PERL_CPANM_OPT="--verbose --notest --force --skip-satisfied"
+# PERL5LIB is needed for Perl 5.16 and 5.20 when we invoke perl from share/Makefile
+env:
+    - PERL5LIB="/home/travis/perl5/lib/perl5" PERL_CPANM_OPT="--verbose --notest --force --skip-satisfied"
 
 before_install:
     - sudo apt-get install -y libidn11-dev
