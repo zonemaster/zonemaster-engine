@@ -123,119 +123,119 @@ sub metadata {
 
 Readonly my %TAG_DESCRIPTIONS => (
     ADDRESSES_MATCH => sub {
-        __x    # ADDRESSES_MATCH
+        __x    # CONSISTENCY:ADDRESSES_MATCH
           'Glue records are consistent between glue and authoritative data.', @_;
     },
     CHILD_NS_FAILED => sub {
-        __x    # CHILD_NS_FAILED
+        __x    # CONSISTENCY:CHILD_NS_FAILED
           'Unexepected or erroneous reply from {ns}/{address}.', @_;
     },
     CHILD_ZONE_LAME => sub {
-        __x    # CHILD_ZONE_LAME
+        __x    # CONSISTENCY:CHILD_ZONE_LAME
           'Lame delegation', @_;
     },
     EXTRA_ADDRESS_CHILD => sub {
-        __x    # EXTRA_ADDRESS_CHILD
+        __x    # CONSISTENCY:EXTRA_ADDRESS_CHILD
           'Child has extra nameserver IP address(es) not listed at parent ({addresses}).', @_;
     },
     EXTRA_ADDRESS_PARENT => sub {
-        __x    # EXTRA_ADDRESS_PARENT
+        __x    # CONSISTENCY:EXTRA_ADDRESS_PARENT
           'Parent has extra nameserver IP address(es) not listed at child ({addresses}).', @_;
     },
     IN_BAILIWICK_ADDR_MISMATCH => sub {
-        __x    # IN_BAILIWICK_ADDR_MISMATCH
+        __x    # CONSISTENCY:IN_BAILIWICK_ADDR_MISMATCH
           'In-bailiwick name server listed at parent has a mismatch between glue data at parent ({parent_addresses}) and any equivalent address record in child zone({zone_addresses})', @_;
     },
     IPV4_DISABLED => sub {
-        __x    # IPV4_DISABLED
+        __x    # CONSISTENCY:IPV4_DISABLED
           'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
     },
     IPV6_DISABLED => sub {
-        __x    # IPV6_DISABLED
+        __x    # CONSISTENCY:IPV6_DISABLED
           'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
     },
     MULTIPLE_NS_SET => sub {
-        __x    # MULTIPLE_NS_SET
+        __x    # CONSISTENCY:MULTIPLE_NS_SET
           'Saw {count} NS set.', @_;
     },
     MULTIPLE_SOA_MNAMES => sub {
-        __x    # MULTIPLE_SOA_MNAMES
+        __x    # CONSISTENCY:MULTIPLE_SOA_MNAMES
           'Saw {count} SOA mname.', @_;
     },
     MULTIPLE_SOA_RNAMES => sub {
-        __x    # MULTIPLE_SOA_RNAMES
+        __x    # CONSISTENCY:MULTIPLE_SOA_RNAMES
           'Saw {count} SOA rname.', @_;
     },
     MULTIPLE_SOA_SERIALS => sub {
-        __x    # MULTIPLE_SOA_SERIALS
+        __x    # CONSISTENCY:MULTIPLE_SOA_SERIALS
           'Saw {count} SOA serial numbers.', @_;
     },
     MULTIPLE_SOA_TIME_PARAMETER_SET => sub {
-        __x    # MULTIPLE_SOA_TIME_PARAMETER_SET
+        __x    # CONSISTENCY:MULTIPLE_SOA_TIME_PARAMETER_SET
           'Saw {count} SOA time parameter set.', @_;
     },
     NO_RESPONSE => sub {
-        __x    # NO_RESPONSE
+        __x    # CONSISTENCY:NO_RESPONSE
           'Nameserver {ns}/{address} did not respond.', @_;
     },
     NO_RESPONSE_NS_QUERY => sub {
-        __x    # NO_RESPONSE_NS_QUERY
+        __x    # CONSISTENCY:NO_RESPONSE_NS_QUERY
           'No response from nameserver {ns}/{address} on NS queries.', @_;
     },
     NO_RESPONSE_SOA_QUERY => sub {
-        __x    # NO_RESPONSE_SOA_QUERY
+        __x    # CONSISTENCY:NO_RESPONSE_SOA_QUERY
           'No response from nameserver {ns}/{address} on SOA queries.', @_;
     },
     NS_SET => sub {
-        __x    # NS_SET
+        __x    # CONSISTENCY:NS_SET
           'Saw NS set ({nsset}) on following nameserver set : {servers}.', @_;
     },
     ONE_NS_SET => sub {
-        __x    # ONE_NS_SET
+        __x    # CONSISTENCY:ONE_NS_SET
           'A unique NS set was seen ({nsset}).', @_;
     },
     ONE_SOA_MNAME => sub {
-        __x    # ONE_SOA_MNAME
+        __x    # CONSISTENCY:ONE_SOA_MNAME
           'A single SOA mname value was seen ({mname})', @_;
     },
     ONE_SOA_RNAME => sub {
-        __x    # ONE_SOA_RNAME
+        __x    # CONSISTENCY:ONE_SOA_RNAME
           'A single SOA rname value was seen ({rname})', @_;
     },
     ONE_SOA_SERIAL => sub {
-        __x    # ONE_SOA_SERIAL
+        __x    # CONSISTENCY:ONE_SOA_SERIAL
           'A single SOA serial number was seen ({serial}).', @_;
     },
     ONE_SOA_TIME_PARAMETER_SET => sub {
-        __x    # ONE_SOA_TIME_PARAMETER_SET
+        __x    # CONSISTENCY:ONE_SOA_TIME_PARAMETER_SET
           'A single SOA time parameter set was seen '
           . '(REFRESH={refresh},RETRY={retry},EXPIRE={expire},MINIMUM={minimum}).',
           @_;
     },
     OUT_OF_BAILIWICK_ADDR_MISMATCH => sub {
-        __x    # OUT_OF_BAILIWICK_ADDR_MISMATCH
+        __x    # CONSISTENCY:OUT_OF_BAILIWICK_ADDR_MISMATCH
           'Out-of-bailiwick name server listed at parent with glue record has a mismatch between the glue at the parent ({parent_addresses}) and iany equivalent address record found in authoritative zone  ({zone_addresses})', @_;
     },
     SOA_RNAME => sub {
-        __x    # SOA_RNAME
+        __x    # CONSISTENCY:SOA_RNAME
           'Saw SOA rname {rname} on following nameserver set : {servers}.', @_;
     },
     SOA_SERIAL => sub {
-        __x    # SOA_SERIAL
+        __x    # CONSISTENCY:SOA_SERIAL
           'Saw SOA serial number {serial} on following nameserver set : {servers}.', @_;
     },
     SOA_SERIAL_VARIATION => sub {
-        __x    # SOA_SERIAL_VARIATION
+        __x    # CONSISTENCY:SOA_SERIAL_VARIATION
           'Difference between the smaller serial ({serial_min}) and the bigger one ({serial_max}) '
           . 'is greater than the maximum allowed ({max_variation}).', @_;
     },
     SOA_TIME_PARAMETER_SET => sub {
-        __x    # SOA_TIME_PARAMETER_SET
+        __x    # CONSISTENCY:SOA_TIME_PARAMETER_SET
           'Saw SOA time parameter set (REFRESH={refresh},RETRY={retry},EXPIRE={expire},'
           . 'MINIMUM={minimum}) on following nameserver set : {servers}.', @_;
     },
     TOTAL_ADDRESS_MISMATCH => sub {
-        __x    # TOTAL_ADDRESS_MISMATCH
+        __x    # CONSISTENCY:TOTAL_ADDRESS_MISMATCH
           'No common nameserver IP addresses between child ({child}) and parent ({glue}).', @_;
     },
 );
