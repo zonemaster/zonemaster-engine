@@ -1582,7 +1582,7 @@ msgstr "Fandt {count} NS-sæt."
 #: ../lib/Zonemaster/Engine/Test/Consistency.pm:163
 #, perl-brace-format
 msgid "Saw {count} SOA mname."
-msgstr "Saw {count} SOA mname."
+msgstr "Så {count} SOA MNAME."
 
 #. MULTIPLE_SOA_RNAMES
 #: ../lib/Zonemaster/Engine/Test/Consistency.pm:167
@@ -1641,7 +1641,7 @@ msgstr "Adressen ({info}) modtager e-mail for domænenavnet."
 msgid ""
 "The DNSKEY with tag {keytag} uses algorithm number not meant for zone "
 "signing{algorithm}/({description})."
-msgstr "The DNSKEY with tag {keytag} uses algorithm number not meant for zone signing{algorithm}/({description})."
+msgstr "DNSKEY med tag {keytag} bruger en algoritme til signering af zone {algorithm}/({description})."
 
 #. ALGORITHM_OK
 #: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:416
@@ -1659,7 +1659,7 @@ msgstr ""
 msgid ""
 "The DNSKEY with tag {keytag} uses an algorithm number {algorithm}/"
 "({description} which which is not recommended to be used."
-msgstr "The DNSKEY with tag {keytag} uses an algorithm number {algorithm}/({description} which which is not recommended to be used."
+msgstr "DNSKEY med tag {keytag} bruger en ikke anbefalet algoritme {algorithm}/({description}."
 
 #. ALGORITHM_DEPRECATED
 #: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:402
@@ -1714,6 +1714,7 @@ msgid ""
 "The SOA RNAME mail domain ({domain}) cannot be resolved to a mail server "
 "with an IP address."
 msgstr ""
+"SOA RNAME maildomæne ({domain}) refererer ikke til en mailserver."
 
 #. DNSKEY_SIGNED
 #: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:464
