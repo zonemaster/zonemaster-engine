@@ -20,7 +20,7 @@ extract-pot:
 $(POTFILE): extract-pot
 
 %.po: $(POTFILE)
-	msgmerge --update --backup=none $(MSGMERGE_OPTS) $@ $(POTFILE)
+	msgmerge --update --backup=none --no-location $(MSGMERGE_OPTS) $@ $(POTFILE)
 
 %.mo: %.po
 	@mkdir -p locale/$*/LC_MESSAGES

@@ -191,168 +191,168 @@ sub metadata {
 
 Readonly my %TAG_DESCRIPTIONS => (
     AAAA_BAD_RDATA => sub {
-        __x    # AAAA_BAD_RDATA
+        __x    # NAMESERVER:AAAA_BAD_RDATA
             'Nameserver {ns}/{address} answered AAAA query with an unexpected RDATA length ({length} instead of 16)', @_;
     },
     AAAA_QUERY_DROPPED => sub {
-        __x    # AAAA_QUERY_DROPPED
+        __x    # NAMESERVER:AAAA_QUERY_DROPPED
           'Nameserver {ns}/{address} dropped AAAA query.', @_;
     },
     AAAA_UNEXPECTED_RCODE => sub {
-        __x    # AAAA_UNEXPECTED_RCODE
+        __x    # NAMESERVER:AAAA_UNEXPECTED_RCODE
           'Nameserver {ns}/{address} answered AAAA query with an unexpected rcode ({rcode}).', @_;
     },
     AAAA_WELL_PROCESSED => sub {
-        __x    # AAAA_WELL_PROCESSED
+        __x    # NAMESERVER:AAAA_WELL_PROCESSED
           'The following nameservers answer AAAA queries without problems : {names}.', @_;
     },
     A_UNEXPECTED_RCODE => sub {
-        __x    # A_UNEXPECTED_RCODE
+        __x    # NAMESERVER:A_UNEXPECTED_RCODE
           'Nameserver {ns}/{address} answered A query with an unexpected rcode ({rcode}).', @_;
     },
     AXFR_AVAILABLE => sub {
-        __x    # AXFR_AVAILABLE
+        __x    # NAMESERVER:AXFR_AVAILABLE
           'Nameserver {ns}/{address} allow zone transfer using AXFR.', @_;
     },
     AXFR_FAILURE => sub {
-        __x    # AXFR_FAILURE
+        __x    # NAMESERVER:AXFR_FAILURE
           'AXFR not available on nameserver {ns}/{address}.', @_;
     },
     BREAKS_ON_EDNS => sub {
-        __x    # BREAKS_ON_EDNS
+        __x    # NAMESERVER:BREAKS_ON_EDNS
           'No response from {ns}/{address} when EDNS is used in query asking for {dname}.', @_;
     },
     CAN_BE_RESOLVED => sub {
-        __x    # CAN_BE_RESOLVED
+        __x    # NAMESERVER:CAN_BE_RESOLVED
           'All nameservers succeeded to resolve to an IP address.', @_;
     },
     CAN_NOT_BE_RESOLVED => sub {
-        __x    # CAN_NOT_BE_RESOLVED
+        __x    # NAMESERVER:CAN_NOT_BE_RESOLVED
           'The following nameservers failed to resolve to an IP address : {names}.', @_;
     },
     CASE_QUERIES_RESULTS_DIFFER => sub {
-        __x    # CASE_QUERIES_RESULTS_DIFFER
+        __x    # NAMESERVER:CASE_QUERIES_RESULTS_DIFFER
           'When asked for {type} records on "{query}" with different cases, all servers do not reply consistently.', @_;
     },
     CASE_QUERIES_RESULTS_OK => sub {
-        __x    # CASE_QUERIES_RESULTS_OK
+        __x    # NAMESERVER:CASE_QUERIES_RESULTS_OK
           'When asked for {type} records on "{query}" with different cases, all servers reply consistently.', @_;
     },
     CASE_QUERY_DIFFERENT_ANSWER => sub {
-        __x    # CASE_QUERY_DIFFERENT_ANSWER
+        __x    # NAMESERVER:CASE_QUERY_DIFFERENT_ANSWER
           'When asked for {type} records on "{query1}" and "{query2}", '
           . 'nameserver {ns}/{address} returns different answers.',
           @_;
     },
     CASE_QUERY_DIFFERENT_RC => sub {
-        __x    # CASE_QUERY_DIFFERENT_RC
+        __x    # NAMESERVER:CASE_QUERY_DIFFERENT_RC
           'When asked for {type} records on "{query1}" and "{query2}", '
           . 'nameserver {ns}/{address} returns different RCODE ("{rcode1}" vs "{rcode2}").',
           @_;
     },
     CASE_QUERY_NO_ANSWER => sub {
-        __x    # CASE_QUERY_NO_ANSWER
+        __x    # NAMESERVER:CASE_QUERY_NO_ANSWER
           'When asked for {type} records on "{query}", nameserver {ns}/{address} returns nothing.', @_;
     },
     CASE_QUERY_SAME_ANSWER => sub {
-        __x    # CASE_QUERY_SAME_ANSWER
+        __x    # NAMESERVER:CASE_QUERY_SAME_ANSWER
           'When asked for {type} records on "{query1}" and "{query2}", nameserver {ns}/{address} returns same answers.',
           @_;
     },
     CASE_QUERY_SAME_RC => sub {
-        __x    # CASE_QUERY_SAME_RC
+        __x    # NAMESERVER:CASE_QUERY_SAME_RC
           'When asked for {type} records on "{query1}" and "{query2}", '
           . 'nameserver {ns}/{address} returns same RCODE "{rcode}".',
           @_;
     },
     DIFFERENT_SOURCE_IP => sub {
-        __x    # DIFFERENT_SOURCE_IP
+        __x    # NAMESERVER:DIFFERENT_SOURCE_IP
           'Nameserver {ns}/{address} replies on a SOA query with a different source address ({source}).', @_;
     },
     EDNS_RESPONSE_WITHOUT_EDNS => sub {
-        __x    # EDNS_RESPONSE_WITHOUT_EDNS
+        __x    # NAMESERVER:EDNS_RESPONSE_WITHOUT_EDNS
           'Response without EDNS from {ns}/{address} on query with EDNS0 asking for {dname}.', @_;
     },
     EDNS_VERSION_ERROR => sub {
-        __x    # EDNS_VERSION_ERROR
+        __x    # NAMESERVER:EDNS_VERSION_ERROR
           'Incorrect version of EDNS (expected 0) in response from {ns}/{address} '
           . 'on query with EDNS (version 0) asking for {dname}.',
           @_;
     },
     EDNS0_SUPPORT => sub {
-        __x    # EDNS0_SUPPORT
+        __x    # NAMESERVER:EDNS0_SUPPORT
           'The following nameservers support EDNS0 : {names}.', @_;
     },
     IPV4_DISABLED => sub {
-        __x    # IPV4_DISABLED
+        __x    # NAMESERVER:IPV4_DISABLED
           'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
     },
     IPV6_DISABLED => sub {
-        __x    # IPV6_DISABLED
+        __x    # NAMESERVER:IPV6_DISABLED
           'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
     },
     IS_A_RECURSOR => sub {
-        __x    # IS_A_RECURSOR
+        __x    # NAMESERVER:IS_A_RECURSOR
           'Nameserver {ns}/{address} is a recursor.', @_;
     },
     MISSING_OPT_IN_TRUNCATED => sub {
-        __x    # MISSING_OPT_IN_TRUNCATED
+        __x    # NAMESERVER:MISSING_OPT_IN_TRUNCATED
           'Nameserver {ns}/{address} replies on an EDNS query with a truncated response without EDNS.', @_;
     },
     NO_EDNS_SUPPORT => sub {
-        __x    # NO_EDNS_SUPPORT
+        __x    # NAMESERVER:NO_EDNS_SUPPORT
           'Nameserver {ns}/{address} does not support EDNS0 (replies with FORMERR).', @_;
     },
     NO_RECURSOR => sub {
-        __x    # NO_RECURSOR
+        __x    # NAMESERVER:NO_RECURSOR
           'Nameserver {ns}/{address} is not a recursor.', @_;
     },
     NO_RESOLUTION => sub {
-        __x    # NO_RESOLUTION
+        __x    # NAMESERVER:NO_RESOLUTION
           'No nameservers succeeded to resolve to an IP address.', @_;
     },
     NO_RESPONSE => sub {
-        __x    # NO_RESPONSE
+        __x    # NAMESERVER:NO_RESPONSE
           'No response from {ns}/{address} asking for {dname}.', @_;
     },
     NO_UPWARD_REFERRAL => sub {
-        __x    # NO_UPWARD_REFERRAL
+        __x    # NAMESERVER:NO_UPWARD_REFERRAL
           'None of the following nameservers returns an upward referral : {names}.', @_;
     },
     NS_ERROR => sub {
-        __x    # NS_ERROR
+        __x    # NAMESERVER:NS_ERROR
           'Erroneous response from nameserver {ns}/{address}.', @_;
     },
     QNAME_CASE_INSENSITIVE => sub {
-        __x    # QNAME_CASE_INSENSITIVE
+        __x    # NAMESERVER:QNAME_CASE_INSENSITIVE
           'Nameserver {ns}/{address} does not preserve original case of queried names.', @_;
     },
     QNAME_CASE_SENSITIVE => sub {
-        __x    # QNAME_CASE_SENSITIVE
+        __x    # NAMESERVER:QNAME_CASE_SENSITIVE
           'Nameserver {ns}/{address} preserves original case of queried names.', @_;
     },
     SAME_SOURCE_IP => sub {
-        __x    # SAME_SOURCE_IP
+        __x    # NAMESERVER:SAME_SOURCE_IP
           'All nameservers reply with same IP used to query them.', @_;
     },
     UNKNOWN_OPTION_CODE => sub {
-        __x    # UNKNOWN_OPTION_CODE
+        __x    # NAMESERVER:UNKNOWN_OPTION_CODE
           'Nameserver {ns}/{address} responds with an unknown ENDS OPTION-CODE.', @_;
     },
     UNSUPPORTED_EDNS_VER => sub {
-        __x    # UNSUPPORTED_EDNS_VER
+        __x    # NAMESERVER:UNSUPPORTED_EDNS_VER
           'Nameserver {ns}/{address} accepts an unsupported EDNS version.', @_;
     },
     UPWARD_REFERRAL => sub {
-        __x    # UPWARD_REFERRAL
+        __x    # NAMESERVER:UPWARD_REFERRAL
           'Nameserver {ns}/{address} returns an upward referral.', @_;
     },
     UPWARD_REFERRAL_IRRELEVANT => sub {
-        __x    # UPWARD_REFERRAL_IRRELEVANT
+        __x    # NAMESERVER:UPWARD_REFERRAL_IRRELEVANT
           'Upward referral tests skipped for root zone.', @_;
     },
     Z_FLAGS_NOTCLEAR => sub {
-        __x    # Z_FLAGS_NOTCLEAR
+        __x    # NAMESERVER:Z_FLAGS_NOTCLEAR
           'Nameserver {ns}/{address} has one or more unknown EDNS Z flag bits set.', @_;
     },
 );
