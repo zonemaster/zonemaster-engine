@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-11 17:58+0200\n"
+"POT-Creation-Date: 2019-10-18 15:00+0200\n"
 "PO-Revision-Date: 2019-10-14 16:39+0200\n"
 "Last-Translator: Niels Haarbo <haarbo@dk-hostmaster.dk>\n"
 "Language-Team: Zonemaster Team\n"
@@ -30,7 +30,7 @@ msgstr ""
 #: ../lib/Zonemaster/Engine/Test/Consistency.pm:199
 #, perl-brace-format
 msgid "A single SOA mname value was seen ({mname})"
-msgstr "A single SOA mname value was seen ({mname})"
+msgstr "Et enkelt SOA MNAME blev returneret ({mname})"
 
 #. ONE_SOA_RNAME
 #: ../lib/Zonemaster/Engine/Test/Consistency.pm:203
@@ -63,7 +63,7 @@ msgstr "Et unikt NS-sæt blev fundet ({nsset})."
 #. ONE_SOA
 #: ../lib/Zonemaster/Engine/Test/Zone.pm:256
 msgid "A unique SOA record is returned by all nameservers of the zone."
-msgstr ""
+msgstr "En unik SOA-record blev returneret af alle navneservere i zonen."
 
 #. AXFR_FAILURE
 #: ../lib/Zonemaster/Engine/Test/Nameserver.pm:219
@@ -130,13 +130,13 @@ msgstr "Alle navneservernes IP-adresser er unikke."
 #: ../lib/Zonemaster/Engine/Test/Delegation.pm:127
 #,
 msgid "All the IP addresses used by the nameservers in child are unique."
-msgstr "All the IP addresses used by the nameservers in child are unique."
+msgstr "Alle IP-adresserne bag barnets navneservere er unikke."
 
 #. DEL_DISTINCT_NS_IP
 #: ../lib/Zonemaster/Engine/Test/Delegation.pm:135
 #,
 msgid "All the IP addresses used by the nameservers in parent are unique."
-msgstr "All the IP addresses used by the nameservers in parent are unique."
+msgstr "Alle IP-adresserne bag forælderens navneservere er unikke."
 
 #. SOA_EXISTS
 #: ../lib/Zonemaster/Engine/Test/Delegation.pm:279
@@ -218,7 +218,8 @@ msgstr ""
 msgid ""
 "Child does not list enough ({count}) nameservers ({nss}). Lower limit set to "
 "{minimum}."
-msgstr "Child does not list enough ({count}) nameservers ({nss}). Lower limit set to {minimum}."
+msgstr "Barnet indeholder ikke tilstrækkeligt antal ({count}) navneservere ({nss}). "
+"Minimumsværdien er {minimum}."
 
 #. NOT_ENOUGH_IPV4_NS_CHILD
 #: ../lib/Zonemaster/Engine/Test/Delegation.pm:203
@@ -226,7 +227,7 @@ msgstr "Child does not list enough ({count}) nameservers ({nss}). Lower limit se
 msgid ""
 "Child does not list enough ({count}) nameservers that resolve to IPv4 "
 "addresses ({addrs}). Lower limit set to {minimum}."
-msgstr "Child does not list enough ({count}) nameservers that resolve to IPv4 addresses ({addrs}). Lower limit set to {minimum}."
+msgstr "Barnet indeholder ikke tilstrækkeligt antal ({count}) navneservere med IPv4-adresser ({addrs}). Minimumsværdien er {minimum}."
 
 #. NOT_ENOUGH_IPV6_NS_CHILD
 #: ../lib/Zonemaster/Engine/Test/Delegation.pm:215
@@ -234,7 +235,7 @@ msgstr "Child does not list enough ({count}) nameservers that resolve to IPv4 ad
 msgid ""
 "Child does not list enough ({count}) nameservers that resolve to IPv6 "
 "addresses ({addrs}). Lower limit set to {minimum}."
-msgstr "Child does not list enough ({count}) nameservers that resolve to IPv6 addresses ({addrs}). Lower limit set to {minimum}."
+msgstr "Barnet indeholder ikke tilstrækkeligt antal ({count}) navneservere med IPv6-adresser ({addrs}). Minimumsværdien er {minimum}."
 
 #. EXTRA_ADDRESS_CHILD
 #: ../lib/Zonemaster/Engine/Test/Consistency.pm:139
@@ -259,7 +260,7 @@ msgstr ""
 msgid ""
 "Child lists enough ({count}) nameservers ({nss}). Lower limit set to "
 "{minimum}."
-msgstr "Child lists enough ({count}) nameservers ({nss}). Lower limit set to {minimum}."
+msgstr "Barnet indeholder tilstrækkeligt antal ({count}) navneservere ({nss}). Minimumsværdien er {minimum}."
 
 #. ENOUGH_IPV4_NS_CHILD
 #: ../lib/Zonemaster/Engine/Test/Delegation.pm:147
