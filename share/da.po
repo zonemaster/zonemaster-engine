@@ -680,7 +680,7 @@ msgstr ""
 #: ../lib/Zonemaster/Engine/Test/Consistency.pm:135
 #,
 msgid "Lame delegation"
-msgstr "Lame delegation"
+msgstr "Lam delegation"
 
 #. LOGGER_CALLBACK_ERROR
 #: ../lib/Zonemaster/Engine/Translator.pm:45
@@ -932,7 +932,7 @@ msgstr "Navneserveren {ns}/{address} er ikke rekursiv."
 #: ../lib/Zonemaster/Engine/Test/Basic.pm:152
 #, perl-brace-format
 msgid "Nameserver {ns}/{address} listed these servers as glue: {nsnlist}."
-msgstr "Nameserver {ns}/{address} listed these servers as glue: {nsnlist}."
+msgstr "Navneserveren {ns}/{address} returnerede følgende servere som glues: {nsnlist}."
 
 #. NAMESERVER_NO_TCP_53
 #: ../lib/Zonemaster/Engine/Test/Connectivity.pm:136
@@ -970,13 +970,13 @@ msgstr ""
 msgid ""
 "Nameserver {ns}/{address} replies on an EDNS query with a truncated response "
 "without EDNS."
-msgstr "Nameserver {ns}/{address} replies on an EDNS query with a truncated response without EDNS."
+msgstr "Navneserveren {ns}/{address} svarede på en EDNS forespørgsel med et trunkeret svar uden EDNS."
 
 #. NO_RESPONSE_DNSKEY
 #: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:592
 #, perl-brace-format
 msgid "Nameserver {ns}/{address} responded with no DNSKEY record(s)."
-msgstr "Nameserver {ns}/{address} responded with no DNSKEY record(s)."
+msgstr "Navneserveren {ns}/{address} returnerede ingen DNSKEY record(s)."
 
 #. WRONG_SOA
 #: ../lib/Zonemaster/Engine/Test/Zone.pm:266
@@ -984,13 +984,13 @@ msgstr "Nameserver {ns}/{address} responded with no DNSKEY record(s)."
 msgid ""
 "Nameserver {ns}/{address} responds with a wrong owner name ({owner} instead "
 "of {name}) on SOA queries."
-msgstr "Nameserver {ns}/{address} responds with a wrong owner name ({owner} instead of {name}) on SOA queries."
+msgstr "Nameserver {ns}/{address} returnerede et ugyldigt ({owner} i stedet for {name}) på SOA forespørgsler."
 
 #. UNKNOWN_OPTION_CODE
 #: ../lib/Zonemaster/Engine/Test/Nameserver.pm:340
 #, perl-brace-format
 msgid "Nameserver {ns}/{address} responds with an unknown ENDS OPTION-CODE."
-msgstr "Nameserver {ns}/{address} responds with an unknown ENDS OPTION-CODE."
+msgstr "Navneserveren {ns}/{address} returnerede en ukendt ENDS OPTION-CODE."
 
 #. MULTIPLE_SOA
 #: ../lib/Zonemaster/Engine/Test/Zone.pm:232
@@ -998,7 +998,7 @@ msgstr "Nameserver {ns}/{address} responds with an unknown ENDS OPTION-CODE."
 msgid ""
 "Nameserver {ns}/{address} responds with multiple ({count}) SOA records on "
 "SOA queries."
-msgstr "Nameserver {ns}/{address} responds with multiple ({count}) SOA records on SOA queries."
+msgstr "Navneserveren {ns}/{address} returnerede flere ({count}) SOA records på SOA forespørgsler."
 
 #. HAS_A_RECORDS
 #: ../lib/Zonemaster/Engine/Test/Basic.pm:144
@@ -1137,7 +1137,7 @@ msgstr "Intet svar fra navneserver(ne) på forespørgsel på SOA-record."
 #: ../lib/Zonemaster/Engine/Test/Syntax.pm:213
 #, perl-brace-format
 msgid "No response from {ns}/{address} asking for {dname}."
-msgstr "No response from {ns}/{address} asking for {dname}."
+msgstr "Intet svar fra {ns}/{address} på forespørgsel om {dname}."
 
 #. BREAKS_ON_EDNS
 #: ../lib/Zonemaster/Engine/Test/Nameserver.pm:223
@@ -1193,6 +1193,9 @@ msgid ""
 "mismatch between the glue at the parent ({parent_addresses}) and iany "
 "equivalent address record found in authoritative zone  ({zone_addresses})"
 msgstr ""
+"Out-of-bailiwick navneserver listet hos forælderen inklusive glue record "
+"har et misforhold mellem glue hos forælderen ({parent_addresses}) og "
+"enhver tilsvarende record fundet i den autoritative zone ({zone_addresses})"
 
 #. PACKET_BIG
 #: ../lib/Zonemaster/Engine/Translator.pm:113
@@ -1338,7 +1341,7 @@ msgstr ""
 msgid ""
 "Response from nameserver {ns}/{address} on SOA queries does not contain SOA "
 "record."
-msgstr "Response from nameserver {ns}/{address} on SOA queries does not contain SOA record."
+msgstr "Svaret fra navneserveren {ns}/{address} på SOA forespørgsler indeholder ikke en SOA record."
 
 #. EDNS_RESPONSE_WITHOUT_EDNS
 #: ../lib/Zonemaster/Engine/Test/Nameserver.pm:274
