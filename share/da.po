@@ -218,7 +218,8 @@ msgstr ""
 msgid ""
 "Child does not list enough ({count}) nameservers ({nss}). Lower limit set to "
 "{minimum}."
-msgstr "Barnet indeholder ikke tilstrækkeligt antal ({count}) navneservere ({nss}). "
+msgstr ""
+"Barnet indeholder ikke tilstrækkeligt antal ({count}) navneservere ({nss}). "
 "Minimumsværdien er {minimum}."
 
 #. NOT_ENOUGH_IPV4_NS_CHILD
@@ -227,7 +228,8 @@ msgstr "Barnet indeholder ikke tilstrækkeligt antal ({count}) navneservere ({ns
 msgid ""
 "Child does not list enough ({count}) nameservers that resolve to IPv4 "
 "addresses ({addrs}). Lower limit set to {minimum}."
-msgstr "Barnet indeholder ikke tilstrækkeligt antal ({count}) navneservere med IPv4-adresser ({addrs}). Minimumsværdien er {minimum}."
+msgstr ""
+"Barnet indeholder ikke tilstrækkeligt antal ({count}) navneservere med IPv4-adresser ({addrs}). Minimumsværdien er {minimum}."
 
 #. NOT_ENOUGH_IPV6_NS_CHILD
 #: ../lib/Zonemaster/Engine/Test/Delegation.pm:215
@@ -235,7 +237,8 @@ msgstr "Barnet indeholder ikke tilstrækkeligt antal ({count}) navneservere med 
 msgid ""
 "Child does not list enough ({count}) nameservers that resolve to IPv6 "
 "addresses ({addrs}). Lower limit set to {minimum}."
-msgstr "Barnet indeholder ikke tilstrækkeligt antal ({count}) navneservere med IPv6-adresser ({addrs}). Minimumsværdien er {minimum}."
+msgstr ""
+"Barnet indeholder ikke tilstrækkeligt antal ({count}) navneservere med IPv6-adresser ({addrs}). Minimumsværdien er {minimum}."
 
 #. EXTRA_ADDRESS_CHILD
 #: ../lib/Zonemaster/Engine/Test/Consistency.pm:139
@@ -260,7 +263,8 @@ msgstr ""
 msgid ""
 "Child lists enough ({count}) nameservers ({nss}). Lower limit set to "
 "{minimum}."
-msgstr "Barnet indeholder tilstrækkeligt antal ({count}) navneservere ({nss}). Minimumsværdien er {minimum}."
+msgstr ""
+"Barnet indeholder tilstrækkeligt antal ({count}) navneservere ({nss}). Minimumsværdien er {minimum}."
 
 #. ENOUGH_IPV4_NS_CHILD
 #: ../lib/Zonemaster/Engine/Test/Delegation.pm:147
@@ -268,7 +272,8 @@ msgstr "Barnet indeholder tilstrækkeligt antal ({count}) navneservere ({nss}). 
 msgid ""
 "Child lists enough ({count}) nameservers that resolve to IPv4 addresses "
 "({addrs}). Lower limit set to {minimum}."
-msgstr "Child lists enough ({count}) nameservers that resolve to IPv4 addresses ({addrs}). Lower limit set to {minimum}."
+msgstr ""
+"Barnet indeholder tilstrækkeligt antal ({count}) navneservere med IPv4-adresser ({addrs}). Minimumsværdien er {minimum}."
 
 #. ENOUGH_IPV6_NS_CHILD
 #: ../lib/Zonemaster/Engine/Test/Delegation.pm:159
@@ -276,7 +281,8 @@ msgstr "Child lists enough ({count}) nameservers that resolve to IPv4 addresses 
 msgid ""
 "Child lists enough ({count}) nameservers that resolve to IPv6 addresses "
 "({addrs}). Lower limit set to {minimum}."
-msgstr "Child lists enough ({count}) nameservers that resolve to IPv6 addresses ({addrs}). Lower limit set to {minimum}."
+msgstr ""
+"Barnet indeholder tilstrækkeligt antal ({count}) navneservere med IPv6-adresser ({addrs}). Minimumsværdien er {minimum}."
 
 #. NO_IPV4_NS_CHILD
 #: ../lib/Zonemaster/Engine/Test/Delegation.pm:235
@@ -285,6 +291,7 @@ msgid ""
 "Child lists no nameserver that resolves to an IPv4 address. If any were "
 "present, the minimum allowed would be {minimum}."
 msgstr ""
+"Barnet indeholder ingen navneservere med IPv4-adresser. Minimumsværdien er {minimum}."
 
 #. NO_IPV6_NS_CHILD
 #: ../lib/Zonemaster/Engine/Test/Delegation.pm:247
@@ -293,6 +300,7 @@ msgid ""
 "Child lists no nameserver that resolves to an IPv6 address. If any were "
 "present, the minimum allowed would be {minimum}."
 msgstr ""
+"Barnet indeholder ingen navneservere med IPv6-adresser. Minimumsværdien er {minimum}."
 
 #. LOOKUP_ERROR
 #: ../lib/Zonemaster/Engine/Translator.pm:49
@@ -344,7 +352,8 @@ msgstr ""
 msgid ""
 "Delegation does not list enough ({count}) nameservers that resolve to IPv4 "
 "addresses ({addrs}). Lower limit set to {minimum}."
-msgstr "Delegation does not list enough ({count}) nameservers that resolve to IPv4 addresses ({addrs}). Lower limit set to {minimum}."
+msgstr ""
+"Delegeringen indeholder ikke tilstrækkeligt antal ({count}) navneservere med IPv4-adresser. Mindsteværdien er {minimum}."
 
 #. NOT_ENOUGH_IPV6_NS_DEL
 #: ../lib/Zonemaster/Engine/Test/Delegation.pm:221
@@ -352,7 +361,8 @@ msgstr "Delegation does not list enough ({count}) nameservers that resolve to IP
 msgid ""
 "Delegation does not list enough ({count}) nameservers that resolve to IPv6 "
 "addresses ({addrs}). Lower limit set to {minimum}."
-msgstr "Delegation does not list enough ({count}) nameservers that resolve to IPv6 addresses ({addrs}). Lower limit set to {minimum}."
+msgstr ""
+"Delegeringen indeholder ikke tilstrækkeligt antal ({count}) navneservere med IPv6-adresser. Mindsteværdien er {minimum}."
 
 #. DELEGATION_NOT_SIGNED
 #: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:436
@@ -372,7 +382,8 @@ msgstr "Delegeringen fra forælder- til børnezonen er korrekt signeret."
 msgid ""
 "Delegation lists enough ({count}) nameservers that resolve to IPv4 addresses "
 "({addrs}). Lower limit set to {minimum}."
-msgstr "Delegation lists enough ({count}) nameservers that resolve to IPv4 addresses ({addrs}). Lower limit set to {minimum}."
+msgstr ""
+"Delegeringen indeholder et tilstrækkeligt antal ({count}) navneservere med IPv4-adresser. Mindsteværdien er {minimum}."
 
 #. ENOUGH_IPV6_NS_DEL
 #: ../lib/Zonemaster/Engine/Test/Delegation.pm:165
@@ -380,7 +391,8 @@ msgstr "Delegation lists enough ({count}) nameservers that resolve to IPv4 addre
 msgid ""
 "Delegation lists enough ({count}) nameservers that resolve to IPv6 addresses "
 "({addrs}). Lower limit set to {minimum}."
-msgstr "Delegation lists enough ({count}) nameservers that resolve to IPv6 addresses ({addrs}). Lower limit set to {minimum}."
+msgstr ""
+"Delegeringen indeholder et tilstrækkeligt antal ({count}) navneservere med IPv6-adresser. Mindsteværdien er {minimum}."
 
 #. NO_IPV4_NS_DEL
 #: ../lib/Zonemaster/Engine/Test/Delegation.pm:241
@@ -389,6 +401,7 @@ msgid ""
 "Delegation lists no nameserver that resolves to an IPv4 address. If any were "
 "present, the minimum allowed would be {minimum}."
 msgstr ""
+"Delegeringen indeholder ikke navneservere med IPv4-adresser. Mindsteværdien er {minimum}."
 
 #. NO_IPV6_NS_DEL
 #: ../lib/Zonemaster/Engine/Test/Delegation.pm:253
@@ -397,6 +410,7 @@ msgid ""
 "Delegation lists no nameserver that resolves to an IPv6 address. If any were "
 "present, the minimum allowed would be {minimum}."
 msgstr ""
+"Delegeringen indeholder ikke navneservere med IPv6-adresser. Mindsteværdien er {minimum}."
 
 #. SOA_SERIAL_VARIATION
 #: ../lib/Zonemaster/Engine/Test/Consistency.pm:229
@@ -495,7 +509,7 @@ msgstr "Domænets navneservere er i flere AS'er."
 #: ../lib/Zonemaster/Engine/Test/Nameserver.pm:324
 #, perl-brace-format
 msgid "Erroneous response from nameserver {ns}/{address}."
-msgstr "Erroneous response from nameserver {ns}/{address}."
+msgstr "Fejlagtigt svar fra navneserver {ns}/{address}."
 
 #. DS_RFC4509_NOT_VALID
 #: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:500
@@ -638,6 +652,9 @@ msgid ""
 "at parent ({parent_addresses}) and any equivalent address record in child "
 "zone({zone_addresses})"
 msgstr ""
+"In-bailiwick navneserver listet hos forælderen har et misforhold mellem glue data "
+"hos forælder ({parent_addresses}) og enhver tilsvarende record i barnezonen "
+"({zone_addresses})"
 
 #. EDNS_VERSION_ERROR
 #: ../lib/Zonemaster/Engine/Test/Nameserver.pm:278
