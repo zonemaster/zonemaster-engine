@@ -1894,7 +1894,7 @@ msgstr ""
 #: ../lib/Zonemaster/Engine/Test/Consistency.pm:131
 #, perl-brace-format
 msgid "Unexepected or erroneous reply from {ns}/{address}."
-msgstr "Unexepected or erroneous reply from {ns}/{address}."
+msgstr "Uventet eller fejlagtigt svar fra {ns}/{address}."
 
 #. UPWARD_REFERRAL_IRRELEVANT
 #: ../lib/Zonemaster/Engine/Test/Nameserver.pm:352
