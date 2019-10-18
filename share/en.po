@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-17 18:33+0200\n"
-"PO-Revision-Date: 2017-12-18\n"
+"POT-Creation-Date: 2019-10-18 14:44+0200\n"
+"PO-Revision-Date: 2019-10-18 14:32+0200\n"
 "Last-Translator: mats.dufberg@iis.se\n"
 "Language-Team: Zonemaster Team\n"
 "Language: en\n"
@@ -503,12 +503,12 @@ msgstr "IP {address} in parent refers to multiple nameservers ({nss})."
 msgid "IP {address} refers to multiple nameservers ({nss})."
 msgstr "IP {address} refers to multiple nameservers ({nss})."
 
-#. CONSISTENCY:IPV4_DISABLED
+#. NAMESERVER:IPV4_DISABLED
 #. CONNECTIVITY:IPV4_DISABLED
 #. BASIC:IPV4_DISABLED
 #. DELEGATION:IPV4_DISABLED
-#. NAMESERVER:IPV4_DISABLED
 #. DNSSEC:IPV4_DISABLED
+#. CONSISTENCY:IPV4_DISABLED
 #, perl-brace-format
 msgid "IPv4 is disabled, not sending \"{rrtype}\" query to {ns}/{address}."
 msgstr "IPv4 is disabled, not sending \"{rrtype}\" query to {ns}/{address}."
@@ -523,12 +523,12 @@ msgstr "IPv4 is disabled, not sending query to {ns}."
 msgid "IPv4 is enabled, can send \"{rrtype}\" query to {ns}/{address}."
 msgstr "IPv4 is enabled, can send \"{rrtype}\" query to {ns}/{address}."
 
-#. CONSISTENCY:IPV6_DISABLED
+#. NAMESERVER:IPV6_DISABLED
 #. CONNECTIVITY:IPV6_DISABLED
 #. BASIC:IPV6_DISABLED
 #. DELEGATION:IPV6_DISABLED
-#. NAMESERVER:IPV6_DISABLED
 #. DNSSEC:IPV6_DISABLED
+#. CONSISTENCY:IPV6_DISABLED
 #, perl-brace-format
 msgid "IPv6 is disabled, not sending \"{rrtype}\" query to {ns}/{address}."
 msgstr "IPv6 is disabled, not sending \"{rrtype}\" query to {ns}/{address}."
@@ -570,9 +570,8 @@ msgstr ""
 "{rfc5011})."
 
 #. CONSISTENCY:CHILD_ZONE_LAME
-#, fuzzy
 msgid "Lame delegation"
-msgstr "Followed a fake delegation."
+msgstr "Lame delegation"
 
 #. SYSTEM:LOGGER_CALLBACK_ERROR
 #, perl-brace-format
@@ -711,13 +710,13 @@ msgstr ""
 "({rcode})."
 
 #. NAMESERVER:AAAA_BAD_RDATA
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Nameserver {ns}/{address} answered AAAA query with an unexpected RDATA "
 "length ({length} instead of 16)"
 msgstr ""
-"Nameserver {ns}/{address} answered AAAA query with an unexpected rcode "
-"({rcode})."
+"Nameserver {ns}/{address} answered AAAA query with an unexpected RDATA "
+"length ({length} instead of 16)"
 
 #. NAMESERVER:AAAA_UNEXPECTED_RCODE
 #, perl-brace-format
@@ -740,10 +739,10 @@ msgstr ""
 msgid "Nameserver {ns}/{address} did not respond to NS query."
 msgstr "Nameserver {ns}/{address} did not respond to NS query."
 
-#. CONSISTENCY:NO_RESPONSE
 #. DELEGATION:NO_RESPONSE
-#. DNSSEC:NO_RESPONSE
 #. ZONE:NO_RESPONSE
+#. DNSSEC:NO_RESPONSE
+#. CONSISTENCY:NO_RESPONSE
 #, perl-brace-format
 msgid "Nameserver {ns}/{address} did not respond."
 msgstr "Nameserver {ns}/{address} did not respond."
@@ -858,7 +857,7 @@ msgid "Nameserver {ns}/{address} responded with no DNSKEY record(s)."
 msgstr "Nameserver {ns}/{address} responded with no DNSKEY record(s)."
 
 #. DNSSEC:ALGO_NOT_SIGNED_RRSET
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Nameserver {ns}/{address} responded with no RRSIG for RRset {rrtype} created "
 "by the algorithm {algorithm}."
@@ -877,13 +876,13 @@ msgid "Nameserver {ns}/{address} responded with no {rrtype} record(s)."
 msgstr "Nameserver {ns}/{address} responded with no {rrtype} record(s)."
 
 #. ZONE:WRONG_SOA
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Nameserver {ns}/{address} responds with a wrong owner name ({owner} instead "
 "of {name}) on SOA queries."
 msgstr ""
-"Nameserver {ns}/{address} does not preserve original case of queried names "
-"({dname})."
+"Nameserver {ns}/{address} responds with a wrong owner name ({owner} instead "
+"of {name}) on SOA queries."
 
 #. NAMESERVER:UNKNOWN_OPTION_CODE
 #, perl-brace-format
@@ -891,11 +890,13 @@ msgid "Nameserver {ns}/{address} responds with an unknown ENDS OPTION-CODE."
 msgstr "Nameserver {ns}/{address} responds with an unknown ENDS OPTION-CODE."
 
 #. ZONE:MULTIPLE_SOA
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Nameserver {ns}/{address} responds with multiple ({count}) SOA records on "
 "SOA queries."
-msgstr "Nameserver {ns}/{address} responded with no DNSKEY record(s)."
+msgstr ""
+"Nameserver {ns}/{address} responds with multiple ({count}) SOA records on "
+"SOA queries."
 
 #. BASIC:HAS_A_RECORDS
 #, perl-brace-format
@@ -1003,8 +1004,8 @@ msgstr "No response from nameserver(s) on PTR query ({reverse})."
 msgid "No response from nameserver(s) on SOA queries."
 msgstr "No response from nameserver(s) on SOA queries."
 
-#. SYNTAX:NO_RESPONSE
 #. NAMESERVER:NO_RESPONSE
+#. SYNTAX:NO_RESPONSE
 #, perl-brace-format
 msgid "No response from {ns}/{address} asking for {dname}."
 msgstr "No response from {ns}/{address} asking for {dname}."
@@ -1173,11 +1174,13 @@ msgstr ""
 "Request to run {method} in unknown module {module}. Known modules: {known}."
 
 #. ZONE:NO_SOA_IN_RESPONSE
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Response from nameserver {ns}/{address} on SOA queries does not contain SOA "
 "record."
-msgstr "No response from nameserver {ns}/{address} on SOA queries."
+msgstr ""
+"Response from nameserver {ns}/{address} on SOA queries does not contain SOA "
+"record."
 
 #. NAMESERVER:EDNS_RESPONSE_WITHOUT_EDNS
 #, perl-brace-format
@@ -1660,9 +1663,9 @@ msgstr ""
 "Trying to verify SOA RRset with signature {signature} gave error '{error}'."
 
 #. CONSISTENCY:CHILD_NS_FAILED
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "Unexepected or erroneous reply from {ns}/{address}."
-msgstr "Erroneous response from nameserver {ns}/{address}."
+msgstr "Unexepected or erroneous reply from {ns}/{address}."
 
 #. NAMESERVER:UPWARD_REFERRAL_IRRELEVANT
 msgid "Upward referral tests skipped for root zone."
@@ -1863,50 +1866,3 @@ msgstr "{parent} sent a DS record, but {child} did not send a DNSKEY record."
 #, perl-brace-format
 msgid "{server} returned no NSEC3PARAM records."
 msgstr "{server} returned no NSEC3PARAM records."
-
-#~ msgid ""
-#~ "{ns}/{address} answered DS query for zone {zone} with NO DS record for "
-#~ "keytag {keytag} using algorithm {algorithm_number}/{algorithm_mnemonic}, "
-#~ "which is not OK."
-#~ msgstr ""
-#~ "{ns}/{address} answered DS query for zone {zone} with NO DS record for "
-#~ "keytag {keytag} using algorithm {algorithm_number}/{algorithm_mnemonic}, "
-#~ "which is not OK."
-
-#~ msgid ""
-#~ "{ns}/{address} answered DS query for zone {zone} with a reserved "
-#~ "algorithm ({algorithm_number}) for keytag {keytag}."
-#~ msgstr ""
-#~ "{ns}/{address} answered DS query for zone {zone} with a reserved "
-#~ "algorithm ({algorithm_number}) for keytag {keytag}."
-
-#, fuzzy
-#~ msgid ""
-#~ "{ns}/{address} answered DS query for zone {zone} with an unexpected rcode "
-#~ "({rcode})."
-#~ msgstr ""
-#~ "Nameserver {ns}/{address} answered AAAA query with an unexpected rcode "
-#~ "({rcode})."
-
-#~ msgid ""
-#~ "DS record with keytag {keytag} uses digest type {digtype}, which is OK."
-#~ msgstr ""
-#~ "DS record with keytag {keytag} uses digest type {digtype}, which is OK."
-
-#~ msgid "DS record with keytag {keytag} uses forbidden digest type {digtype}."
-#~ msgstr ""
-#~ "DS record with keytag {keytag} uses forbidden digest type {digtype}."
-
-#~ msgid ""
-#~ "The DNSKEY with tag {keytag} uses Delete DS algorithm number {algorithm}/"
-#~ "({description})."
-#~ msgstr ""
-#~ "The DNSKEY with tag {keytag} uses Delete DS algorithm number {algorithm}/"
-#~ "({description})."
-
-#~ msgid ""
-#~ "The DNSKEY with tag {keytag} uses algorithm number reserved for indirect "
-#~ "keys {algorithm}/({description})."
-#~ msgstr ""
-#~ "The DNSKEY with tag {keytag} uses algorithm number reserved for indirect "
-#~ "keys {algorithm}/({description})."
