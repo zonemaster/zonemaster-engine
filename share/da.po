@@ -578,13 +578,13 @@ msgstr "Glue-records er konsistente mellem forælder og barn."
 #: ../lib/Zonemaster/Engine/Test/Delegation.pm:131
 #, perl-brace-format
 msgid "IP {address} in child refers to multiple nameservers ({nss})."
-msgstr "IP {address} in child refers to multiple nameservers ({nss})."
+msgstr "IP {address} hos barnet refererer til flere navneservere ({nss})."
 
 #. DEL_NS_SAME_IP
 #: ../lib/Zonemaster/Engine/Test/Delegation.pm:139
 #, perl-brace-format
 msgid "IP {address} in parent refers to multiple nameservers ({nss})."
-msgstr "IP {address} in parent refers to multiple nameservers ({nss})."
+msgstr "IP {address} hos forælderen refererer til flere navneservere ({nss})."
 
 #. SAME_IP_ADDRESS
 #: ../lib/Zonemaster/Engine/Test/Delegation.pm:275
