@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-21 14:57+0200\n"
+"POT-Creation-Date: 2019-10-21 15:54+0200\n"
 "PO-Revision-Date: 2017-12-18\n"
 "Last-Translator: vincent.levigneron@afnic.fr\n"
 "Language-Team: Zonemaster Team\n"
@@ -144,12 +144,14 @@ msgstr ""
 #. DELEGATION:CHILD_DISTINCT_NS_IP
 msgid "All the IP addresses used by the nameservers in child are unique."
 msgstr ""
-"Toutes les adresses IP utilisées par les serveurs de noms sont uniques."
+"Sur les serveurs de noms de la zone, toutes les adresses IP utilisées par "
+"les serveurs de noms sont uniques."
 
 #. DELEGATION:DEL_DISTINCT_NS_IP
 msgid "All the IP addresses used by the nameservers in parent are unique."
 msgstr ""
-"Toutes les adresses IP utilisées par les serveurs de noms sont uniques."
+"Sur les serveurs de noms de la zone parente, toutes les adresses IP "
+"utilisées par les serveurs de noms sont uniques."
 
 #. DELEGATION:SOA_EXISTS
 msgid "All the nameservers have SOA record."
@@ -305,6 +307,8 @@ msgid ""
 "Child lists no nameserver that resolves to an IPv4 address. If any were "
 "present, the minimum allowed would be {minimum}."
 msgstr ""
+"Les serveurs de noms de la zone ne retournent pas de serveurs ayant une "
+"adresse IPv4. Si il y en avait, il en faudrait au minimum {minimum}."
 
 #. DELEGATION:NO_IPV6_NS_CHILD
 #, perl-brace-format
@@ -312,6 +316,8 @@ msgid ""
 "Child lists no nameserver that resolves to an IPv6 address. If any were "
 "present, the minimum allowed would be {minimum}."
 msgstr ""
+"Les serveurs de noms de la zone ne retournent pas de serveurs ayant une "
+"adresse IPv6. Si il y en avait, il en faudrait au minimum {minimum}."
 
 #. SYSTEM:LOOKUP_ERROR
 #, perl-brace-format
@@ -347,7 +353,7 @@ msgid ""
 "Delegation does not list enough ({count}) nameservers that resolve to IPv4 "
 "addresses ({addrs}). Lower limit set to {minimum}."
 msgstr ""
-"Les serveurs de noms de la zone ne retournent pas assez de serveurs "
+"Les serveurs de noms de la zone parente ne retournent pas assez de serveurs "
 "({count}) faisant autorité ({ns}) ayant une adresse IPv4 ({addrs}). La "
 "limite inférieure étant fixée à {minimum}."
 
@@ -357,7 +363,7 @@ msgid ""
 "Delegation does not list enough ({count}) nameservers that resolve to IPv6 "
 "addresses ({addrs}). Lower limit set to {minimum}."
 msgstr ""
-"Les serveurs de noms de la zone ne retournent pas assez de serveurs "
+"Les serveurs de noms de la zone parente ne retournent pas assez de serveurs "
 "({count}) faisant autorité ({ns}) ayant une adresse IPv6 ({addrs}). La "
 "limite inférieure étant fixée à {minimum}."
 
@@ -378,7 +384,7 @@ msgid ""
 "Delegation lists enough ({count}) nameservers that resolve to IPv4 addresses "
 "({addrs}). Lower limit set to {minimum}."
 msgstr ""
-"Les serveurs de noms de la zone retournent suffisamment de serveurs "
+"Les serveurs de noms de la zone parente retournent suffisamment de serveurs "
 "({count}) faisant autorité ({ns}) ayant une adresse IPv4 ({addrs}). La "
 "limite inférieure étant fixée à {minimum}."
 
@@ -388,7 +394,7 @@ msgid ""
 "Delegation lists enough ({count}) nameservers that resolve to IPv6 addresses "
 "({addrs}). Lower limit set to {minimum}."
 msgstr ""
-"Les serveurs de noms de la zone retournent suffisamment de serveurs "
+"Les serveurs de noms de la zone parente retournent suffisamment de serveurs "
 "({count}) faisant autorité ({ns}) ayant une adresse IPv6 ({addrs}).  La "
 "limite inférieure étant fixée à {minimum}."
 
@@ -398,6 +404,8 @@ msgid ""
 "Delegation lists no nameserver that resolves to an IPv4 address. If any were "
 "present, the minimum allowed would be {minimum}."
 msgstr ""
+"Les serveurs de noms de la zone parente ne retournent pas de serveurs ayant "
+"une adresse IPv4. Si il y en avait, il en faudrait au minimum {minimum}."
 
 #. DELEGATION:NO_IPV6_NS_DEL
 #, perl-brace-format
@@ -405,6 +413,8 @@ msgid ""
 "Delegation lists no nameserver that resolves to an IPv6 address. If any were "
 "present, the minimum allowed would be {minimum}."
 msgstr ""
+"Les serveurs de noms de la zone parente retournent pas de serveurs ayant une "
+"adresse IPv6. Si il y en avait, il en faudrait au minimum {minimum}."
 
 #. CONSISTENCY:SOA_SERIAL_VARIATION
 #, perl-brace-format
@@ -981,8 +991,8 @@ msgid ""
 "Nameserver {ns}/{address} responded with an RRSIG which can not be verified "
 "with corresponding DNSKEY (with keytag {keytag})"
 msgstr ""
-"Le serveur de noms {ns}/{address} répond avec une signature (RRSIG) qui ne peut "
-"pas être vérifiée avec la clé (DNSKEY) de tag {keytag} correspondante."
+"Le serveur de noms {ns}/{address} répond avec une signature (RRSIG) qui ne "
+"peut pas être vérifiée avec la clé (DNSKEY) de tag {keytag} correspondante."
 
 #. DNSSEC:RRSIG_NOT_MATCH_DNSKEY
 #, perl-brace-format
@@ -990,8 +1000,8 @@ msgid ""
 "Nameserver {ns}/{address} responded with an RRSIG with unknown keytag "
 "{keytag}."
 msgstr ""
-"Le serveur de noms {ns}/{address} répond avec un enregistrement de type \"RRISG\" "
-"dont le tag de clé {keytag} est inconnu."
+"Le serveur de noms {ns}/{address} répond avec un enregistrement de type "
+"\"RRISG\" dont le tag de clé {keytag} est inconnu."
 
 #. DNSSEC:NO_RESPONSE_DNSKEY
 #, perl-brace-format
@@ -1006,15 +1016,16 @@ msgid ""
 "Nameserver {ns}/{address} responded with no RRSIG for RRset {rrtype} created "
 "by the algorithm {algorithm}."
 msgstr ""
-"Le serveur de noms {ns}/{address} ne retourne aucun enregistrement de type \"RRSIG\" "
-"pour le RRset de type \"{rrtype}\" créé avec l'algorithme {algorithm}."
+"Le serveur de noms {ns}/{address} ne retourne aucun enregistrement de type "
+"\"RRSIG\" pour le RRset de type \"{rrtype}\" créé avec l'algorithme "
+"{algorithm}."
 
 #. DNSSEC:RRSET_NOT_SIGNED
 #, perl-brace-format
 msgid "Nameserver {ns}/{address} responded with no RRSIG for {rrtype} RRset."
 msgstr ""
-"Le serveur de noms {ns}/{address} ne retourne aucun enregistrement de type \"RRSIG\" "
-"pour le RRset de type \"{rrtype}\"."
+"Le serveur de noms {ns}/{address} ne retourne aucun enregistrement de type "
+"\"RRSIG\" pour le RRset de type \"{rrtype}\"."
 
 #. DNSSEC:NO_RESPONSE_RRSET
 #, perl-brace-format
@@ -2103,8 +2114,8 @@ msgstr ""
 #, perl-brace-format
 msgid "{ns}/{address} returned no DS records for {zone}."
 msgstr ""
-"Le serveur de noms {ns}/{address} ne retourne aucun enregistrement de type \"DS\" "
-"pour la zone '{zone}'."
+"Le serveur de noms {ns}/{address} ne retourne aucun enregistrement de type "
+"\"DS\" pour la zone '{zone}'."
 
 #. DNSSEC:DNSKEY_AND_DS
 #, perl-brace-format
