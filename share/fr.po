@@ -114,6 +114,8 @@ msgid ""
 "All nameservers for zone {zone} responds with neither NSEC nor NSEC3 records "
 "when such records are expected."
 msgstr ""
+"Aucun des serveurs de noms de la zone {zone} ne retourne d'enregistrements "
+"de type \"NSEC\" ou \"NSEC3\" alors que ceux-ci sont attendus."
 
 #. NAMESERVER:SAME_SOURCE_IP
 msgid "All nameservers reply with same IP used to query them."
@@ -165,6 +167,8 @@ msgid ""
 "All the tested RRset (SOA/DNSKEY/NS) are signed by each algorithm present in "
 "the DNSKEY RRset"
 msgstr ""
+"L'ensemble des RRset (SOA/DNSKEY/NS) est signé par chaque algorithme présent dans "
+"l'ensemble des enregidtraments de type \"DNSKEY\"."
 
 #. DELEGATION:ARE_AUTHORITATIVE
 #, perl-brace-format
@@ -654,6 +658,9 @@ msgid ""
 "at parent ({parent_addresses}) and any equivalent address record in child "
 "zone({zone_addresses})"
 msgstr ""
+"Problème de glues pour un serveur de noms \"in-bailiwick\", celles trouvées "
+"({parent_addresses}) dans la zone parente sont différentes de celles trouvées "
+"({zone_addresses}) sur les serveurs de noms de la zone."
 
 #. NAMESERVER:EDNS_VERSION_ERROR
 #, perl-brace-format
@@ -757,6 +764,9 @@ msgid ""
 "query that is expected to give response with RCODE \"NXDOMAIN\". Test for "
 "NSEC and NSEC3 is aborted for this nameserver."
 msgstr ""
+"Le serveur de noms {ns}/{address} pour la zone {zone} répond avec un code "
+"retour \"NOERROR\" alors que le code retour \"NXDOMAIN\" était attendu. La "
+"suite des tests \"NSEC\" et \"NSEC3\" est avortée pour ce serveur de nom."
 
 #. DNSSEC:MIXED_NSEC_NSEC3
 #, perl-brace-format
@@ -764,6 +774,8 @@ msgid ""
 "Nameserver {ns/address} for zone {zone} responds with both NSEC and NSEC3 "
 "records when only one record type is expected."
 msgstr ""
+"Le serveur de noms {ns}/{address} pour la zone {zone} répond avec un mélange "
+"d'enregistrements de types \"NSEC\" et \"NSEC3\" alors qu'un seul type est attendu."
 
 #. DNSSEC:NO_NSEC_NSEC3
 #, perl-brace-format
@@ -771,6 +783,8 @@ msgid ""
 "Nameserver {ns/address} for zone {zone} responds with neither NSEC nor NSEC3 "
 "record when when such records are expected."
 msgstr ""
+"Le serveur de noms {ns}/{address} pour la zone {zone} ne répond avec aucun des "
+"enregistrements de types \"NSEC\" ou \"NSEC3\" alors que c'est ce que l'on attend."
 
 #. DELEGATION:NS_IS_CNAME
 #, perl-brace-format
@@ -1250,6 +1264,9 @@ msgid ""
 "mismatch between the glue at the parent ({parent_addresses}) and iany "
 "equivalent address record found in authoritative zone  ({zone_addresses})"
 msgstr ""
+"Problèmes de glues pour un serveur de nom \"out-of-bailiwick\", celles trouvées "
+"({parent_addresses}) dans la zone parente sont différentes de celles trouvées "
+"({zone_addresses}) sur les serveurs de noms faisant autorités pour ces données."
 
 #. SYSTEM:PACKET_BIG
 #, perl-brace-format
@@ -1684,6 +1701,9 @@ msgid ""
 "Some nameservers for zone {zone} respond with NSEC records and others "
 "respond with NSEC3 records. Consistency is expected."
 msgstr ""
+"Certains serveurs de noms de la zone {zone} retournent des enregistrements de "
+"\"NSEC\" alors que d'autres retournent des enregistrements de type \"NSEC3\" "
+"ce qui n'est pas consistent."
 
 #. DNSSEC:INCONSISTENT_DNSSEC
 #, perl-brace-format
@@ -1691,6 +1711,8 @@ msgid ""
 "Some, but not all, nameservers for zone {zone} respond with neither NSEC nor "
 "NSEC3 records when such records are expected."
 msgstr ""
+"Certains serveurs de noms de la zone {zone}, mais pas tous, ne retournent pas "
+"d'enregistrements de type \"NSEC\" ou \"NSEC3\" alors que ceux-ci étaient attendus."
 
 #. ZONE:MX_RECORD_EXISTS
 #, perl-brace-format
@@ -1775,6 +1797,8 @@ msgid ""
 "The SOA RNAME mail domain ({domain}) cannot be resolved to a mail server "
 "with an IP address."
 msgstr ""
+"L'adresse mail du SOA du nom de domaine ({domain}) ne peut pas être résolue "
+"en un serveur de messagerie avec une adresse IP."
 
 #. DNSSEC:DNSKEY_SIGNED
 msgid "The apex DNSKEY RRset was correcly signed."
@@ -2087,6 +2111,10 @@ msgid ""
 "{algorithm_mnemonic}), which is deprecated. The DS record is for the DNSKEY "
 "record with keytag {keytag} in zone {zone}."
 msgstr ""
+"Le serveur de noms {ns}/{address} retourne un enregistrement de type \"DS\" "
+"créé à partir d'un algorithme obsolète ({algorithm_number}/{algorithm_mnemonic}), "
+"ce qui est incorrect. Cet enregistrement de type \"DS\" correspond à la clé "
+"(DNSKEY) avec le tag {keytag} dans la zone {zone}."
 
 #. DNSSEC:DS_ALGORITHM_NOT_DS
 #, perl-brace-format
@@ -2095,6 +2123,10 @@ msgid ""
 "which is not meant for DS. The DS record is for the DNSKEY record with "
 "keytag {keytag} in zone {zone}."
 msgstr ""
+"Le serveur de noms {ns}/{address} retourne un enregistrement de type \"DS\" "
+"créé à partir d'un algorithme ({algorithm_number}) qui n'est pas destiné à "
+"la signature. Cet enregistrement de type \"DS\" correspond à la clé (DNSKEY) "
+"avec le tag {keytag} dans la zone {zone}."
 
 #. DNSSEC:DS_ALGORITHM_MISSING
 #, perl-brace-format
@@ -2111,6 +2143,10 @@ msgid ""
 "({algorithm_number}), which is not OK. The DS record is for the DNSKEY "
 "record with keytag {keytag} in zone {zone}."
 msgstr ""
+"Le serveur de noms {ns}/{address} retourne un enregistrement de type \"DS\" "
+"créé à partir d'un algorithme non assigné ({algorithm_number}), ce qui "
+"est incorrect. Cet enregistrement de type \"DS\" correspond à la clé (DNSKEY) "
+"avec le tag {keytag} dans la zone {zone}."
 
 #. DNSSEC:NO_RESPONSE_DS
 #, perl-brace-format
