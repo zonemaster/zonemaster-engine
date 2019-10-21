@@ -1,8 +1,8 @@
-Consistency
-Connectivity
-Delegation
-Syntax
 Address
-Nameserver
+Connectivity
+Consistency
+Delegation
 DNSSEC
+Nameserver
+Syntax
 Zone

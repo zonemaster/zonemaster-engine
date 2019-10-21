@@ -1,8 +1,8 @@
 POFILES = $(wildcard *.po)
 MOFILES := $(POFILES:.po=.mo)
 POTFILE = Zonemaster-Engine.pot
-PMFILES = $(shell find ../lib -type f -name '*.pm')
-TESTMODULEFILES = $(shell find ../lib/Zonemaster/Engine/Test -type f -name '*.pm')
+PMFILES = $(shell find ../lib -type f -name '*.pm' | sort)
+TESTMODULEFILES = $(shell find ../lib/Zonemaster/Engine/Test -type f -name '*.pm' | sort)
 NON_FUZZY_POFILES := $(shell echo $(POFILES) $(FUZZY_POFILES) | tr ' ' '\n' | sort | uniq -c | sed '/2/d;s/.* //')
 
 .PHONY: all update-po extract-pot
