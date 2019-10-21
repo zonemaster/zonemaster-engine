@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::DNSSEC;
 
-use version; our $VERSION = version->declare("v1.1.4");
+use version; our $VERSION = version->declare("v1.1.6");
 
 ###
 ### This test module implements DNSSEC tests.
@@ -374,20 +374,22 @@ sub metadata {
         ],
         dnssec10 => [
             qw(
-              INVALID_NAME_RCODE
-              NSEC_COVERS
-              NSEC_COVERS_NOT
-              NSEC_SIG_VERIFY_ERROR
-              NSEC_SIGNED
-              NSEC_NOT_SIGNED
+              BROKEN_DNSSEC
               HAS_NSEC
-              NSEC3_COVERS
-              NSEC3_COVERS_NOT
-              NSEC3_SIG_VERIFY_ERROR
-              NSEC3_SIGNED
-              NSEC3_NOT_SIGNED
               HAS_NSEC3
-              HAS_NSEC3_OPTOUT
+              INCONSISTENT_DNSSEC
+              INCONSISTENT_NSEC_NSEC3
+              INVALID_RCODE
+              MIXED_NSEC_NSEC3
+              NO_NSEC_NSEC3
+              NO_RESPONSE
+              NSEC3_COVERS_NOT
+              NSEC3_NOT_SIGNED
+              NSEC3_SIG_VERIFY_ERROR
+              NSEC_COVERS_NOT
+              NSEC_NOT_SIGNED
+              NSEC_SIG_VERIFY_ERROR
+              TEST_ABORTED
               )
         ],
         dnssec11 => [
@@ -464,6 +466,10 @@ Readonly my %TAG_DESCRIPTIONS => (
     ALL_ALGO_SIGNED => sub {
        __x    # DNSSEC:ALL_ALGO_SIGNED
           "All the tested RRset (SOA/DNSKEY/NS) are signed by each algorithm present in the DNSKEY RRset", @_;
+    },
+    BROKEN_DNSSEC => sub {
+       __x    # DNSSEC:BROKEN_DNSSEC
+          "All nameservers for zone {zone} responds with neither NSEC nor NSEC3 records when such records are expected.", @_;
     },
     COMMON_KEYTAGS => sub {
         __x    # DNSSEC:COMMON_KEYTAGS
@@ -571,10 +577,6 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # DNSSEC:EXTRA_PROCESSING_OK
           "Server at {server} sent {keys} DNSKEY records and {sigs} RRSIG records.", @_;
     },
-    HAS_NSEC3_OPTOUT => sub {
-        __x    # DNSSEC:HAS_NSEC3_OPTOUT
-          "The zone has NSEC3 opt-out records.", @_;
-    },
     HAS_NSEC3 => sub {
         __x    # DNSSEC:HAS_NSEC3
           "The zone has NSEC3 records.", @_;
@@ -582,6 +584,14 @@ Readonly my %TAG_DESCRIPTIONS => (
     HAS_NSEC => sub {
         __x    # DNSSEC:HAS_NSEC
           "The zone has NSEC records.", @_;
+    },
+    INCONSISTENT_DNSSEC => sub {
+        __x    # DNSSEC:INCONSISTENT_DNSSEC
+          "Some, but not all, nameservers for zone {zone} respond with neither NSEC nor NSEC3 records when such records are expected.", @_;
+    },
+    INCONSISTENT_NSEC_NSEC3 => sub {
+        __x    # DNSSEC:INCONSISTENT_NSEC_NSEC3
+          "Some nameservers for zone {zone} respond with NSEC records and others respond with NSEC3 records. Consistency is expected.", @_;
     },
     INVALID_NAME_RCODE => sub {
         __x    # DNSSEC:INVALID_NAME_RCODE
@@ -606,6 +616,10 @@ Readonly my %TAG_DESCRIPTIONS => (
     MANY_ITERATIONS => sub {
         __x    # DNSSEC:MANY_ITERATIONS
           "The number of NSEC3 iterations is {count}, which is on the high side.", @_;
+    },
+    MIXED_NSEC_NSEC3 => sub {
+        __x    # DNSSEC:MIXED_NSEC_NSEC3
+          "Nameserver {ns/address} for zone {zone} responds with both NSEC and NSEC3 records when only one record type is expected.", @_;
     },
     NEITHER_DNSKEY_NOR_DS => sub {
         __x    # DNSSEC:NEITHER_DNSKEY_NOR_DS
@@ -637,6 +651,10 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # DNSSEC:NO_NSEC3PARAM
           "{server} returned no NSEC3PARAM records.", @_;
     },
+    NO_NSEC_NSEC3 => sub {
+        __x    # DNSSEC:NO_NSEC_NSEC3
+          "Nameserver {ns/address} for zone {zone} responds with neither NSEC nor NSEC3 record when when such records are expected.", @_;
+    },
     NO_RESPONSE_DNSKEY => sub {
         __x    # DNSSEC:NO_RESPONSE_DNSKEY
           "Nameserver {ns}/{address} responded with no DNSKEY record(s).", @_;
@@ -661,17 +679,9 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # DNSSEC:NSEC3_COVERS_NOT
           "NSEC3 record does not cover {name}.", @_;
     },
-    NSEC3_COVERS => sub {
-        __x    # DNSSEC:NSEC3_COVERS
-          "NSEC3 record covers {name}.", @_;
-    },
     NSEC3_NOT_SIGNED => sub {
         __x    # DNSSEC:NSEC3_NOT_SIGNED
           "No signature correctly signed the NSEC3 RRset.", @_;
-    },
-    NSEC3_SIGNED => sub {
-        __x    # DNSSEC:NSEC3_SIGNED
-          "At least one signature correctly signed the NSEC3 RRset.", @_;
     },
     NSEC3_SIG_VERIFY_ERROR => sub {
         __x    # DNSSEC:NSEC3_SIG_VERIFY_ERROR
@@ -681,17 +691,9 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # DNSSEC:NSEC_COVERS_NOT
           "NSEC does not cover {name}.", @_;
     },
-    NSEC_COVERS => sub {
-        __x    # DNSSEC:NSEC_COVERS
-          "NSEC covers {name}.", @_;
-    },
     NSEC_NOT_SIGNED => sub {
         __x    # DNSSEC:NSEC_NOT_SIGNED
           "No signature correctly signed the NSEC RRset.", @_;
-    },
-    NSEC_SIGNED => sub {
-        __x    # DNSSEC:NSEC_SIGNED
-          "At least one signature correctly signed the NSEC RRset.", @_;
     },
     NSEC_SIG_VERIFY_ERROR => sub {
         __x    # DNSSEC:NSEC_SIG_VERIFY_ERROR
@@ -744,6 +746,10 @@ Readonly my %TAG_DESCRIPTIONS => (
     SOA_SIGNED => sub {
         __x    # DNSSEC:SOA_SIGNED
           "At least one RRSIG correctly signs the SOA RRset.", @_;
+    },
+    TEST_ABORTED => sub {
+        __x    # DNSSEC:TEST_ABORTED
+          "Nameserver {ns/address} for zone {zone} responds with RCODE \"NOERROR\" on a query that is expected to give response with RCODE \"NXDOMAIN\". Test for NSEC and NSEC3 is aborted for this nameserver.", @_;
     },
     TOO_MANY_ITERATIONS => sub {
         __x    # DNSSEC:TOO_MANY_ITERATIONS
@@ -1470,166 +1476,177 @@ sub dnssec09 {
 
 sub dnssec10 {
     my ( $self, $zone ) = @_;
+    my $non_existent_domain_name = $zone->name->prepend( q{xx--test-test-test} );
     my @results;
 
-    my $dnskey_p = $zone->query_one( $zone->name, 'DNSKEY', { dnssec => 1 } );
-    if ( not $dnskey_p ) {
-        return;
-    }
-    my @dnskeys = $dnskey_p->get_records( 'DNSKEY', 'answer' );
+    my @nss_del   = @{ Zonemaster::Engine::TestMethods->method4( $zone ) };
+    my @nss_child = @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
+    my %nss       = map { $_->name->string . '/' . $_->address->short => $_ } @nss_del, @nss_child;
+    my (%nsec_zone, %nsec3_zone, %no_dnssec_zone);
 
-    my $name = $zone->name->prepend( 'xx--example' );
-    my $test_p = $zone->query_one( $name, 'A', { dnssec => 1 } );
-    if ( not $test_p ) {
-        return;
-    }
+    for my $nss_key ( sort keys %nss ) {
+        my $ns = $nss{$nss_key};
+        my $ns_args = {
+            ns      => $ns->name->string,
+            address => $ns->address->short,
+        };
 
-    if ( $test_p->rcode ne 'NXDOMAIN' and $test_p->rcode ne 'NOERROR' ) {
-        push @results,
-          info(
-            INVALID_NAME_RCODE => {
-                name  => $name,
-                rcode => $test_p->rcode,
+        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
+            $ns_args->{rrtype} = q{A};
+            push @results, info( IPV6_DISABLED => $ns_args );
+            next;
+        }
+
+        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
+            $ns_args->{rrtype} = q{A};
+            push @results, info( IPV4_DISABLED => $ns_args );
+            next;
+        }
+
+        my $a_p = $ns->query( $non_existent_domain_name , q{A}, { usevc => 0, dnssec => 1 } );
+        if ( not $a_p ) {
+            push @results, info( NO_RESPONSE => $ns_args );
+        }
+        elsif ($a_p->rcode eq q{NOERROR} ) {
+            $ns_args->{zone} = $zone->name->string;
+            push @results, info( TEST_ABORTED => $ns_args );
+        }
+        elsif ($a_p->rcode ne q{NXDOMAIN} ) {
+            $ns_args->{rcode} = $a_p->rcode;
+            push @results, info( INVALID_RCODE => $ns_args );
+        }
+        else {
+            my @nsec  = $a_p->get_records( q{NSEC}, q{authority} );
+            my @nsec3 = $a_p->get_records( q{NSEC3}, q{authority} );
+            if ( scalar @nsec and scalar @nsec3 ) {
+                $ns_args->{zone} = $zone->name->string;
+                push @results, info( MIXED_NSEC_NSEC3 => $ns_args );
             }
-          );
-        return @results;
+            elsif ( not scalar @nsec and not scalar @nsec3 ) {
+                $ns_args->{zone} = $zone->name->string;
+                $no_dnssec_zone{$ns->address->short}++;
+                push @results, info( NO_NSEC_NSEC3 => $ns_args );
+            }
+            elsif ( scalar @nsec and not scalar @nsec3 ) {
+                $nsec_zone{$ns->address->short}++;
+                my $dnskey_p = $ns->query( $zone->name , q{DNSKEY}, { dnssec => 1 } );
+                my @dnskeys = ();
+                my $covered = 0;
+                if ( $dnskey_p ) {
+                    @dnskeys = $dnskey_p->get_records( q{DNSKEY}, q{answer} );
+                }
+                foreach my $nsec ( @nsec ) {
+                    if ($nsec->covers( $non_existent_domain_name) ) {
+                        $covered = 1;
+                        my @sigs = grep { $_->typecovered eq q{NSEC} } $a_p->get_records_for_name( q{RRSIG}, $nsec->name );
+                        if ( scalar @sigs ) {
+                            my $ok = 0;
+                            foreach my $sig ( @sigs ) {
+                                my $msg = q{};
+                                if ( not scalar @dnskeys ) {
+                                    push @results, info( NSEC_SIG_VERIFY_ERROR => { error => q{DNSKEY missing}, sig => $sig->keytag } );
+                                }
+                                elsif (
+                                    $sig->verify_time(
+                                        [ grep { name( $_->name ) eq name( $sig->name ) } @nsec ],
+                                        \@dnskeys, $a_p->timestamp, $msg
+                                    )
+                                  )
+                                {
+                                    $ok = 1;
+                                }
+                                else {
+                                    if ( $sig->algorithm >= 12 and $sig->algorithm <= 16 and $msg =~ /Unknown cryptographic algorithm/ ) {
+                                        $msg = q{no }. $algo_properties{$sig->algorithm}{description}. q{ support};
+                                    }
+                                    push @results,
+                                      info(
+                                        NSEC_SIG_VERIFY_ERROR => {
+                                            error => $msg,
+                                            sig   => $sig->keytag,
+                                        }
+                                      );
+                                }
+                            }
+                        }
+                        else {
+                            push @results, info( NSEC_NOT_SIGNED => {} );
+                        }
+                    }
+                }
+                if ( not $covered ) {
+                    push @results, info( NSEC_COVERS_NOT => {} );
+                }
+            }
+            elsif ( not scalar @nsec and scalar @nsec3 ) {
+                $nsec3_zone{$ns->address->short}++;
+                my $dnskey_p = $ns->query( $zone->name , q{DNSKEY}, { dnssec => 1 } );
+                my @dnskeys = ();
+                my $covered = 0;
+                if ( $dnskey_p ) {
+                    @dnskeys = $dnskey_p->get_records( 'DNSKEY', 'answer' );
+                }
+                foreach my $nsec3 ( @nsec3 ) {
+                    if ( $nsec3->covers( $non_existent_domain_name ) ) {
+                        $covered = 1;
+                        my @sigs = grep { $_->typecovered eq 'NSEC3' } $a_p->get_records_for_name( 'RRSIG', $nsec3->name );
+                        if ( scalar @sigs ) {
+                            my $ok = 0;
+                            foreach my $sig ( @sigs ) {
+                                my $msg = q{};
+                                if ( not scalar @dnskeys ) {
+                                    push @results, info( NSEC3_SIG_VERIFY_ERROR => { error => 'DNSKEY missing', sig => $sig->keytag } );
+                                }
+                                elsif (
+                                    $sig->verify_time(
+                                        [ grep { name( $_->name ) eq name( $sig->name ) } @nsec3 ],
+                                        \@dnskeys, $a_p->timestamp, $msg
+                                    )
+                                  )
+                                {
+                                    $ok = 1;
+                                }
+                                else {
+                                    if ( $sig->algorithm >= 12 and $sig->algorithm <= 16 and $msg =~ /Unknown cryptographic algorithm/ ) {
+                                        $msg = q{no }. $algo_properties{$sig->algorithm}{description}. q{ support};
+                                    }
+                                    push @results,
+                                      info(
+                                        NSEC3_SIG_VERIFY_ERROR => {
+                                            error => $msg,
+                                            sig   => $sig->keytag,
+                                        }
+                                      );
+                                }
+                            }
+                        }
+                        else {
+                            push @results, info( NSEC3_NOT_SIGNED => {} );
+                        }
+                    }
+                }
+                if ( not $covered ) {
+                    push @results, info( NSEC3_COVERS_NOT => {} );
+                }
+            }
+        }
     }
 
-    my @nsec = $test_p->get_records( 'NSEC', 'authority' );
-    if ( @nsec ) {
+    if ( scalar keys %no_dnssec_zone and ( scalar keys %nsec_zone or scalar keys %nsec3_zone ) ) {
+        push @results, info( INCONSISTENT_DNSSEC => { zone => $zone->name->string } );
+    }
+    elsif ( scalar keys %no_dnssec_zone and not scalar keys %nsec_zone and not scalar keys %nsec3_zone ) {
+        push @results, info( BROKEN_DNSSEC => { zone => $zone->name->string } );
+    }
+    elsif ( scalar keys %nsec_zone and scalar keys %nsec3_zone ) {
+        push @results, info( INCONSISTENT_NSEC_NSEC3 => { zone => $zone->name->string } );
+    }
+    elsif ( scalar keys %nsec_zone and not grep { $_->tag eq q{MIXED_NSEC_NSEC3} } @results ) {
         push @results, info( HAS_NSEC => {} );
-        my $covered = 0;
-        foreach my $nsec ( @nsec ) {
-
-            if ( $nsec->covers( $name ) ) {
-                $covered = 1;
-
-                my @sigs = grep { $_->typecovered eq 'NSEC' } $test_p->get_records_for_name( 'RRSIG', $nsec->name );
-                my $ok = 0;
-                foreach my $sig ( @sigs ) {
-                    my $msg = q{};
-                    if (@dnskeys == 0) {
-                        push @results, info( NSEC_SIG_VERIFY_ERROR => { error => 'DNSKEY missing', sig => $sig->keytag } );
-                    }
-                    elsif (
-                        $sig->verify_time(
-                            [ grep { name( $_->name ) eq name( $sig->name ) } @nsec ],
-                            \@dnskeys, $test_p->timestamp, $msg
-                        )
-                      )
-                    {
-                        $ok = 1;
-                    }
-                    else {
-                        if ($sig->algorithm == 12 and $msg =~ /Unknown cryptographic algorithm/) {
-                            $msg = 'no GOST support';
-                        }
-                        push @results,
-                          info(
-                            NSEC_SIG_VERIFY_ERROR => {
-                                error => $msg,
-                                sig   => $sig->keytag,
-                            }
-                          );
-                    }
-
-                    if ( $ok ) {
-                        push @results,
-                          info( NSEC_SIGNED => {} );
-                    }
-                    else {
-                        push @results,
-                          info( NSEC_NOT_SIGNED => {} );
-                    }
-                } ## end foreach my $sig ( @sigs )
-            } ## end if ( $nsec->covers( $name...))
-        } ## end foreach my $nsec ( @nsec )
-        if ( $covered ) {
-            push @results,
-              info(
-                NSEC_COVERS => {
-                    name => $name,
-                }
-              );
-        }
-        else {
-            push @results,
-              info(
-                NSEC_COVERS_NOT => {
-                    name => $name,
-                }
-              );
-        }
-    } ## end if ( @nsec )
-
-    my @nsec3 = $test_p->get_records( 'NSEC3', 'authority' );
-    if ( @nsec3 ) {
-        my $covered = 0;
-        my $opt_out = 0;
+    }
+    elsif ( scalar keys %nsec3_zone and not grep { $_->tag eq q{MIXED_NSEC_NSEC3} } @results ) {
         push @results, info( HAS_NSEC3 => {} );
-        foreach my $nsec3 ( @nsec3 ) {
-            if ( $nsec3->optout ) {
-                $opt_out = 1;
-            }
-            if ( $nsec3->covers( $name ) ) {
-                $covered = 1;
-
-                my @sigs = grep { $_->typecovered eq 'NSEC3' } $test_p->get_records_for_name( 'RRSIG', $nsec3->name );
-                my $ok = 0;
-                foreach my $sig ( @sigs ) {
-                    my $msg = q{};
-                    if (
-                        $sig->verify_time(
-                            [ grep { name( $_->name ) eq name( $sig->name ) } @nsec3 ],
-                            \@dnskeys, $test_p->timestamp, $msg
-                        )
-                      )
-                    {
-                        $ok = 1;
-                    }
-                    else {
-                        if ($sig->algorithm == 12 and $msg =~ /Unknown cryptographic algorithm/) {
-                            $msg = 'no GOST support';
-                        }
-                        push @results,
-                          info(
-                            NSEC3_SIG_VERIFY_ERROR => {
-                                sig   => $sig->keytag,
-                                error => $msg,
-                            }
-                          );
-                    }
-                    if ( $ok ) {
-                        push @results,
-                          info( NSEC3_SIGNED => {} );
-                    }
-                    else {
-                        push @results,
-                          info( NSE3C_NOT_SIGNED => {} );
-                    }
-                } ## end foreach my $sig ( @sigs )
-            } ## end if ( $nsec3->covers( $name...))
-        } ## end foreach my $nsec3 ( @nsec3 )
-        if ( $covered ) {
-            push @results,
-              info(
-                NSEC3_COVERS => {
-                    name => $name,
-                }
-              );
-        }
-        else {
-            push @results,
-              info(
-                NSEC3_COVERS_NOT => {
-                    name => $name,
-                }
-              );
-        }
-        if ( $opt_out ) {
-            push @results, info( HAS_NSEC3_OPTOUT => {} );
-        }
-    } ## end if ( @nsec3 )
+    }
 
     return @results;
 } ## end sub dnssec10

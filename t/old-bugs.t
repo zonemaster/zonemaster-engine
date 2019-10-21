@@ -67,8 +67,10 @@ is( scalar( @$gnames ), 2, 'Two glue names' );
 my $tld = Zonemaster::Engine->zone( 'abogado' );
 @res = Zonemaster::Engine->test_method( 'DNSSEC', 'dnssec10', $tld );
 ok( ( none { $_->tag eq 'INVALID_NAME_FOUND' } @res ), 'NSEC3 test works for domain with wildcard.' );
-ok( ( any { $_->tag eq 'NSEC3_COVERS' } @res ), 'NSEC3 test works for domain with wildcard.' );
-
+SKIP: {
+    skip "No more NSEC3_COVERS messages in dnssec10. Need to find a new way to check that", 1;
+    ok( ( any { $_->tag eq 'NSEC3_COVERS' } @res ), 'NSEC3 test works for domain with wildcard.' );
+}
 my $bobo = Zonemaster::Engine->zone( 'bobo.nl' );
 @res = Zonemaster::Engine->test_method('Address', 'address03', $bobo);
 ok( ( none { $_->tag eq 'NO_RESPONSE_PTR_QUERY' } @res ), 'Recursor can deal with CNAMEs when recursing.' );
