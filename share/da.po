@@ -699,7 +699,7 @@ msgstr "På navneservern {ns} returnerer {address_type} et CNAME."
 #. NAMESERVER:UNSUPPORTED_EDNS_VER
 #, perl-brace-format
 msgid "Nameserver {ns}/{address} accepts an unsupported EDNS version."
-msgstr "Nameserver {ns}/{address} accepts an unsupported EDNS version."
+msgstr "Navneserveren {ns}/{address} accepterer en ikke supporteret EDNS version."
 
 #. CONNECTIVITY:NAMESERVER_HAS_TCP_53
 #, perl-brace-format
@@ -731,8 +731,8 @@ msgid ""
 "Nameserver {ns}/{address} answered AAAA query with an unexpected RDATA "
 "length ({length} instead of 16)"
 msgstr ""
-"Nameserver {ns}/{address} answered AAAA query with an unexpected RDATA "
-"length ({length} instead of 16)"
+"Navneserveren {ns}/{address} besvarede AAAA forespørgsel med en uventet RDATA "
+"længde ({length} i stedet for 16)"
 
 #. NAMESERVER:AAAA_UNEXPECTED_RCODE
 #, perl-brace-format
@@ -773,7 +773,7 @@ msgstr ""
 msgid ""
 "Nameserver {ns}/{address} does not preserve original case of queried names."
 msgstr ""
-"Nameservern {ns}/{address} bevarede ikke versaler og minuskler fra "
+"Navneserveren {ns}/{address} bevarede ikke versaler og minuskler fra "
 "forespørgslen."
 
 #. NAMESERVER:NO_EDNS_SUPPORT
@@ -1080,7 +1080,7 @@ msgstr ""
 #. SYSTEM:PROFILE_FILE
 #, perl-brace-format
 msgid "Profile was read from {name}."
-msgstr "Profile blev hentet fra {name}."
+msgstr "Profil blev hentet fra {name}."
 
 #. DNSSEC:RRSIG_EXPIRATION
 #, perl-brace-format
@@ -1240,8 +1240,8 @@ msgid ""
 "SOA 'mname' nameserver ({mname}) is not listed in \"parent\" NS records for "
 "tested zone ({nss})."
 msgstr ""
-"SOA 'mname' nameserver ({mname}) is not listed in \"parent\" NS records for "
-"tested zone ({nss})."
+"SOA 'MNAME' navneserver ({mname}) er ikke returneret i \"forældre\" NS records for "
+"den testede zone ({nss})."
 
 #. ZONE:MNAME_NO_RESPONSE
 #, perl-brace-format
