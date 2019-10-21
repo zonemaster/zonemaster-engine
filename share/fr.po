@@ -64,12 +64,14 @@ msgstr ""
 #. ZONE:ONE_SOA
 msgid "A unique SOA record is returned by all nameservers of the zone."
 msgstr ""
+"L'ensemble des serveurs de la zone ont retourné un enregistrement de type "
+"\"SOA\" unique."
 
 #. NAMESERVER:AXFR_FAILURE
 #, perl-brace-format
 msgid "AXFR not available on nameserver {ns}/{address}."
 msgstr ""
-"Il n'est pas  possible de réaliser un transfert de zone depuis le serveur de "
+"Il n'est pas possible de réaliser un transfert de zone depuis le serveur de "
 "noms {ns}/{address}."
 
 #. SYSTEM:ADDED_FAKE_DELEGATION
