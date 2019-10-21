@@ -2,9 +2,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-18 10:33+0200\n"
+"POT-Creation-Date: 2019-10-21 14:57+0200\n"
 "PO-Revision-Date: 2017-12-18\n"
-"Last-Translator: mats.dufberg@iis.se\n"
+"Last-Translator: vincent.levigneron@afnic.fr\n"
 "Language-Team: Zonemaster Team\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -25,11 +25,11 @@ msgid "A signature for DNSKEY with tag {signature} was correctly signed."
 msgstr "La signature de la clé avec le tag {signature} est correcte."
 
 #. CONSISTENCY:ONE_SOA_MNAME
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "A single SOA mname value was seen ({mname})"
 msgstr ""
-"Une unique adresse mail a été trouvée dans les enregistrements de type \"SOA"
-"\" de la zone testée ({rname})."
+"Un unique serveur maître a été trouvée dans les enregistrements de type \"SOA"
+"\" de la zone testée ({mname})."
 
 #. CONSISTENCY:ONE_SOA_RNAME
 #, perl-brace-format
@@ -73,10 +73,10 @@ msgstr ""
 "noms {ns}/{address}."
 
 #. SYSTEM:ADDED_FAKE_DELEGATION
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "Added a fake delegation for domain {domain} to name server {ns}."
 msgstr ""
-"Ajout d'une fausse délégation pour le domaine {domaine} pour le serveur de "
+"Ajout d'une fausse délégation pour le domaine {domain} pour le serveur de "
 "nom {ns}."
 
 #. ADDRESS:NO_IP_PRIVATE_NETWORK
@@ -105,6 +105,13 @@ msgid "All nameservers are in the same AS ({asn})."
 msgstr ""
 "Tous les serveurs de noms pour le nom de domaine retournés par les serveurs "
 "de noms de la zone parente se trouvent dans le même AS ({asn})."
+
+#. DNSSEC:BROKEN_DNSSEC
+#, perl-brace-format
+msgid ""
+"All nameservers for zone {zone} responds with neither NSEC nor NSEC3 records "
+"when such records are expected."
+msgstr ""
 
 #. NAMESERVER:SAME_SOURCE_IP
 msgid "All nameservers reply with same IP used to query them."
@@ -135,13 +142,11 @@ msgstr ""
 "Toutes les adresses IP utilisées par les serveurs de noms sont uniques."
 
 #. DELEGATION:CHILD_DISTINCT_NS_IP
-#, fuzzy
 msgid "All the IP addresses used by the nameservers in child are unique."
 msgstr ""
 "Toutes les adresses IP utilisées par les serveurs de noms sont uniques."
 
 #. DELEGATION:DEL_DISTINCT_NS_IP
-#, fuzzy
 msgid "All the IP addresses used by the nameservers in parent are unique."
 msgstr ""
 "Toutes les adresses IP utilisées par les serveurs de noms sont uniques."
@@ -150,6 +155,12 @@ msgstr ""
 msgid "All the nameservers have SOA record."
 msgstr ""
 "Tous les serveurs de noms retournent un enregistrement de type \"SOA\"."
+
+#. DNSSEC:ALL_ALGO_SIGNED
+msgid ""
+"All the tested RRset (SOA/DNSKEY/NS) are signed by each algorithm present in "
+"the DNSKEY RRset"
+msgstr ""
 
 #. DELEGATION:ARE_AUTHORITATIVE
 #, perl-brace-format
@@ -168,18 +179,6 @@ msgid "At least one RRSIG correctly signs the SOA RRset."
 msgstr ""
 "Au moins une signature (RRSIG) correcte signe correctement l'enregistrement "
 "de type \"SOA\"."
-
-#. DNSSEC:NSEC_SIGNED
-msgid "At least one signature correctly signed the NSEC RRset."
-msgstr ""
-"Au moins une signature (RRSIG) correcte signe l'ensemble des enregistrements "
-"de type \"NSEC\"."
-
-#. DNSSEC:NSEC3_SIGNED
-msgid "At least one signature correctly signed the NSEC3 RRset."
-msgstr ""
-"Au moins une signature correcte signe l'ensemble des enregistrements de type "
-"\"NSEC3\"."
 
 #. CONNECTIVITY:NAMESERVERS_IPV4_WITH_MULTIPLE_AS
 msgid "Authoritative IPv4 nameservers are in more than one AS."
@@ -225,7 +224,7 @@ msgstr ""
 "enregistrements de type \"RRSIG\" et {soas} enregistrements de type \"SOA\"."
 
 #. DELEGATION:NOT_ENOUGH_NS_CHILD
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Child does not list enough ({count}) nameservers ({nss}). Lower limit set to "
 "{minimum}."
@@ -235,24 +234,24 @@ msgstr ""
 "{minimum}."
 
 #. DELEGATION:NOT_ENOUGH_IPV4_NS_CHILD
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Child does not list enough ({count}) nameservers that resolve to IPv4 "
 "addresses ({addrs}). Lower limit set to {minimum}."
 msgstr ""
 "Les serveurs de noms de la zone ne retournent pas assez de serveurs "
-"({count}) faisant autorité ({ns}). La limite inférieure étant fixée à "
-"{minimum}."
+"({count}) faisant autorité ({ns}) ayant une adresse IPv4 ({addrs}). La "
+"limite inférieure étant fixée à {minimum}."
 
 #. DELEGATION:NOT_ENOUGH_IPV6_NS_CHILD
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Child does not list enough ({count}) nameservers that resolve to IPv6 "
 "addresses ({addrs}). Lower limit set to {minimum}."
 msgstr ""
 "Les serveurs de noms de la zone ne retournent pas assez de serveurs "
-"({count}) faisant autorité ({ns}). La limite inférieure étant fixée à "
-"{minimum}."
+"({count}) faisant autorité ({ns}) ayant une adresse IPv6 ({addrs}). La "
+"limite inférieure étant fixée à {minimum}."
 
 #. CONSISTENCY:EXTRA_ADDRESS_CHILD
 #, perl-brace-format
@@ -271,7 +270,7 @@ msgstr ""
 "({extra}) qui ne le sont pas par les serveurs de noms de la zone parente."
 
 #. DELEGATION:ENOUGH_NS_CHILD
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Child lists enough ({count}) nameservers ({nss}). Lower limit set to "
 "{minimum}."
@@ -281,24 +280,24 @@ msgstr ""
 "{minimum}."
 
 #. DELEGATION:ENOUGH_IPV4_NS_CHILD
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Child lists enough ({count}) nameservers that resolve to IPv4 addresses "
 "({addrs}). Lower limit set to {minimum}."
 msgstr ""
 "Les serveurs de noms de la zone retournent suffisamment de serveurs "
-"({count}) faisant autorité ({ns}). La limite inférieure étant fixée à "
-"{minimum}."
+"({count}) faisant autorité ({ns}) ayant une adresse IPv4 ({addrs}). La "
+"limite inférieure étant fixée à {minimum}."
 
 #. DELEGATION:ENOUGH_IPV6_NS_CHILD
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Child lists enough ({count}) nameservers that resolve to IPv6 addresses "
 "({addrs}). Lower limit set to {minimum}."
 msgstr ""
 "Les serveurs de noms de la zone retournent suffisamment de serveurs "
-"({count}) faisant autorité ({ns}). La limite inférieure étant fixée à "
-"{minimum}."
+"({count}) faisant autorité ({ns}) ayant une adresse IPv6 ({addrs}). La "
+"limite inférieure étant fixée à {minimum}."
 
 #. DELEGATION:NO_IPV4_NS_CHILD
 #, perl-brace-format
@@ -342,39 +341,25 @@ msgstr ""
 "condensat \"{digtype}\" correspond à l'enregistrement de type \"DNSKEY\" "
 "ayant le même tag."
 
-#. DNSSEC:DS_DIGTYPE_OK
-#, fuzzy, perl-brace-format
-msgid "DS record with keytag {keytag} uses digest type {digtype}, which is OK."
-msgstr ""
-"L'enregistrement de type \"DS\" avec le tag de clé {keytag} utilise un type "
-"de condensat (digest) correct."
-
-#. DNSSEC:DS_DIGTYPE_NOT_OK
-#, perl-brace-format
-msgid "DS record with keytag {keytag} uses forbidden digest type {digtype}."
-msgstr ""
-"L'enregistrement de type \"DS\" avec le tag de clé {keytag} utilise un type "
-"de condensat (digest) interdit {digtype}."
-
 #. DELEGATION:NOT_ENOUGH_IPV4_NS_DEL
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Delegation does not list enough ({count}) nameservers that resolve to IPv4 "
 "addresses ({addrs}). Lower limit set to {minimum}."
 msgstr ""
 "Les serveurs de noms de la zone ne retournent pas assez de serveurs "
-"({count}) faisant autorité ({ns}). La limite inférieure étant fixée à "
-"{minimum}."
+"({count}) faisant autorité ({ns}) ayant une adresse IPv4 ({addrs}). La "
+"limite inférieure étant fixée à {minimum}."
 
 #. DELEGATION:NOT_ENOUGH_IPV6_NS_DEL
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Delegation does not list enough ({count}) nameservers that resolve to IPv6 "
 "addresses ({addrs}). Lower limit set to {minimum}."
 msgstr ""
 "Les serveurs de noms de la zone ne retournent pas assez de serveurs "
-"({count}) faisant autorité ({ns}). La limite inférieure étant fixée à "
-"{minimum}."
+"({count}) faisant autorité ({ns}) ayant une adresse IPv6 ({addrs}). La "
+"limite inférieure étant fixée à {minimum}."
 
 #. DNSSEC:DELEGATION_NOT_SIGNED
 #, perl-brace-format
@@ -388,24 +373,24 @@ msgid "Delegation from parent to child is properly signed."
 msgstr "L'enregistrement DS dans la zone parente est correctement signé."
 
 #. DELEGATION:ENOUGH_IPV4_NS_DEL
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Delegation lists enough ({count}) nameservers that resolve to IPv4 addresses "
 "({addrs}). Lower limit set to {minimum}."
 msgstr ""
 "Les serveurs de noms de la zone retournent suffisamment de serveurs "
-"({count}) faisant autorité ({ns}). La limite inférieure étant fixée à "
-"{minimum}."
+"({count}) faisant autorité ({ns}) ayant une adresse IPv4 ({addrs}). La "
+"limite inférieure étant fixée à {minimum}."
 
 #. DELEGATION:ENOUGH_IPV6_NS_DEL
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Delegation lists enough ({count}) nameservers that resolve to IPv6 addresses "
 "({addrs}). Lower limit set to {minimum}."
 msgstr ""
 "Les serveurs de noms de la zone retournent suffisamment de serveurs "
-"({count}) faisant autorité ({ns}). La limite inférieure étant fixée à "
-"{minimum}."
+"({count}) faisant autorité ({ns}) ayant une adresse IPv6 ({addrs}).  La "
+"limite inférieure étant fixée à {minimum}."
 
 #. DELEGATION:NO_IPV4_NS_DEL
 #, perl-brace-format
@@ -452,20 +437,21 @@ msgstr ""
 "tiret '-'."
 
 #. SYNTAX:INITIAL_HYPHEN
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Domain name ({name}) has a label ({label}) starting with an hyphen ('-')."
 msgstr ""
-"Le nom de domaine '{name}' contient un label commençant par un tiret ('-')."
+"Le nom de domaine '{name}' contient un label ({label})commençant par un "
+"tiret ('-')."
 
 #. SYNTAX:DISCOURAGED_DOUBLE_DASH
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Domain name ({name}) has a label ({label}) with a double hyphen ('--') in "
 "position 3 and 4 (with a prefix which is not 'xn--')."
 msgstr ""
-"Le nom de domaine '{name}' contient un label avec un double tiret ('--') en "
-"positions 3 et 4 (avec un préfixe différent de 'xn--')."
+"Le nom de domaine '{name}' contient un label ({label}) avec un double tiret "
+"('--') en positions 3 et 4 (avec un préfixe différent de 'xn--')."
 
 #. SYNTAX:NO_DOUBLE_DASH
 #, perl-brace-format
@@ -509,7 +495,7 @@ msgstr ""
 "même AS."
 
 #. NAMESERVER:NS_ERROR
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "Erroneous response from nameserver {ns}/{address}."
 msgstr ""
 "Le serveur de noms {ns}/{address} n'a pas répondu aux requêtes de type \"NS"
@@ -580,17 +566,20 @@ msgstr ""
 "La liste des adresses IP des serveurs de nom retournée par les serveurs de "
 "noms de la zone parente et par ceux de la zone est identique."
 
+# perl-brace-format
 #. DELEGATION:CHILD_NS_SAME_IP
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "IP {address} in child refers to multiple nameservers ({nss})."
 msgstr ""
-"L'adresse IP {address} fait référence à plusieurs serveurs de noms ({nss})."
+"L'adresse IP {address} retournée par les serveurs de noms de la zone fait "
+"référence à plusieurs serveurs de noms ({nss})."
 
 #. DELEGATION:DEL_NS_SAME_IP
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "IP {address} in parent refers to multiple nameservers ({nss})."
 msgstr ""
-"L'adresse IP {address} fait référence à plusieurs serveurs de noms ({nss})."
+"L'adresse IP {address} retournée par les serveurs de noms de la zone parente "
+"fait référence à plusieurs serveurs de noms ({nss})."
 
 #. DELEGATION:SAME_IP_ADDRESS
 #, perl-brace-format
@@ -598,12 +587,12 @@ msgid "IP {address} refers to multiple nameservers ({nss})."
 msgstr ""
 "L'adresse IP {address} fait référence à plusieurs serveurs de noms ({nss})."
 
-#. CONSISTENCY:IPV4_DISABLED
 #. CONNECTIVITY:IPV4_DISABLED
-#. BASIC:IPV4_DISABLED
 #. DELEGATION:IPV4_DISABLED
 #. NAMESERVER:IPV4_DISABLED
+#. CONSISTENCY:IPV4_DISABLED
 #. DNSSEC:IPV4_DISABLED
+#. BASIC:IPV4_DISABLED
 #, perl-brace-format
 msgid "IPv4 is disabled, not sending \"{rrtype}\" query to {ns}/{address}."
 msgstr ""
@@ -622,17 +611,17 @@ msgstr ""
 "IPv4 est activé, il est possible de réaliser une requête de type "
 "\"{rrtype}\" sur le serveur {ns}/{address}."
 
-#. CONSISTENCY:IPV6_DISABLED
 #. CONNECTIVITY:IPV6_DISABLED
-#. BASIC:IPV6_DISABLED
 #. DELEGATION:IPV6_DISABLED
 #. NAMESERVER:IPV6_DISABLED
+#. CONSISTENCY:IPV6_DISABLED
 #. DNSSEC:IPV6_DISABLED
-#, fuzzy, perl-brace-format
+#. BASIC:IPV6_DISABLED
+#, perl-brace-format
 msgid "IPv6 is disabled, not sending \"{rrtype}\" query to {ns}/{address}."
 msgstr ""
-"IPv6 a été désactivé, la requête de type \"{rrtype}\" sur le serveur {ns} "
-"est annulée."
+"IPv6 a été désactivé, la requête de type \"{rrtype}\" sur le serveur {ns}/"
+"{address} est annulée."
 
 #. SYSTEM:SKIP_IPV6_DISABLED
 #, perl-brace-format
@@ -640,11 +629,11 @@ msgid "IPv6 is disabled, not sending query to {ns}."
 msgstr "IPv6 est désactivé, aucune requête envoyée au serveur de noms {ns}."
 
 #. BASIC:IPV6_ENABLED
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "IPv6 is enabled, can send \"{rrtype}\" query to {ns}/{address}."
 msgstr ""
 "IPv6 est activé, il est possible de réaliser une requête de type "
-"\"{rrtype}\" sur le serveur {ns}."
+"\"{rrtype}\" sur le serveur {ns}/{address}."
 
 #. CONSISTENCY:IN_BAILIWICK_ADDR_MISMATCH
 #, perl-brace-format
@@ -673,7 +662,6 @@ msgstr ""
 "{keysize}, Flags ({sep}, {rfc5011})."
 
 #. CONSISTENCY:CHILD_ZONE_LAME
-#, fuzzy
 msgid "Lame delegation"
 msgstr "Utilisation d'une configuration DNS alternative (fake delegation)."
 
@@ -700,20 +688,10 @@ msgstr ""
 msgid "Module {module} finished running."
 msgstr "Exécution du module {module} terminée."
 
-#. DNSSEC:NSEC_COVERS
-#, perl-brace-format
-msgid "NSEC covers {name}."
-msgstr "NSEC couvre le nom {name}."
-
 #. DNSSEC:NSEC_COVERS_NOT
 #, perl-brace-format
 msgid "NSEC does not cover {name}."
 msgstr "NSEC ne couvre pas le nom {name}."
-
-#. DNSSEC:NSEC3_COVERS
-#, perl-brace-format
-msgid "NSEC3 record covers {name}."
-msgstr "NSEC3 couvre le nom {name}."
 
 #. DNSSEC:NSEC3_COVERS_NOT
 #, perl-brace-format
@@ -760,6 +738,35 @@ msgid "Nameserver ({name}) within a 'numeric only' TLD ({tld})."
 msgstr ""
 "Le serveur de noms ({name}) se trouve dans un TLD 'numeric only' ({tld})."
 
+#. DNSSEC:TEST_ABORTED
+#, perl-brace-format
+msgid ""
+"Nameserver {ns/address} for zone {zone} responds with RCODE \"NOERROR\" on a "
+"query that is expected to give response with RCODE \"NXDOMAIN\". Test for "
+"NSEC and NSEC3 is aborted for this nameserver."
+msgstr ""
+
+#. DNSSEC:MIXED_NSEC_NSEC3
+#, perl-brace-format
+msgid ""
+"Nameserver {ns/address} for zone {zone} responds with both NSEC and NSEC3 "
+"records when only one record type is expected."
+msgstr ""
+
+#. DNSSEC:NO_NSEC_NSEC3
+#, perl-brace-format
+msgid ""
+"Nameserver {ns/address} for zone {zone} responds with neither NSEC nor NSEC3 "
+"record when when such records are expected."
+msgstr ""
+
+#. DELEGATION:NS_IS_CNAME
+#, perl-brace-format
+msgid "Nameserver {ns} RR point to CNAME."
+msgstr ""
+"L'enregistrement de type \"{address_type}\" retourné par le serveur de noms "
+"{ns} est un alias (CNAME)."
+
 #. ADDRESS:NAMESERVER_IP_PTR_MISMATCH
 #, perl-brace-format
 msgid ""
@@ -770,13 +777,13 @@ msgstr ""
 "aux enregistrements \"PTR\" retournés ({names}) pour celle-ci."
 
 #. ADDRESS:NAMESERVER_IP_PRIVATE_NETWORK
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Nameserver {ns} has an IP address ({address}) with prefix {prefix} "
 "referenced in {reference} as a '{name}'."
 msgstr ""
-"Le serveur de noms {ns} a une adresse IP ({address}) dont le préfixe est "
-"référéncé dans le {reference} sous le libellé '{name}'."
+"Le serveur de noms {ns} a une adresse IP ({address}) dont le préfixe "
+"{prefix} est référéncé dans le {reference} sous le libellé '{name}'."
 
 #. ADDRESS:NAMESERVER_IP_WITHOUT_REVERSE
 #, perl-brace-format
@@ -792,17 +799,11 @@ msgstr ""
 "La réponse du serveur de noms {ns} reçue sur le port 53/{proto} ne fait pas "
 "autorité."
 
-#. DELEGATION:NS_RR_IS_CNAME
-#, perl-brace-format
-msgid "Nameserver {ns} {address_type} RR point to CNAME."
-msgstr ""
-"L'enregistrement de type \"{address_type}\" retourné par le serveur de noms "
-"{ns} est un alias (CNAME)."
-
 #. NAMESERVER:UNSUPPORTED_EDNS_VER
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "Nameserver {ns}/{address} accepts an unsupported EDNS version."
-msgstr "Le serveur de noms {ns}/{address} n'est pas un récurseur."
+msgstr ""
+"Le serveur de noms {ns}/{address} accepte une version non supportée de EDNS."
 
 #. CONNECTIVITY:NAMESERVER_HAS_TCP_53
 #, perl-brace-format
@@ -824,7 +825,7 @@ msgstr ""
 "{ns}/{address}."
 
 #. NAMESERVER:A_UNEXPECTED_RCODE
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Nameserver {ns}/{address} answered A query with an unexpected rcode "
 "({rcode})."
@@ -833,13 +834,13 @@ msgstr ""
 "avec un code retour inattendu ({rcode})."
 
 #. NAMESERVER:AAAA_BAD_RDATA
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Nameserver {ns}/{address} answered AAAA query with an unexpected RDATA "
 "length ({length} instead of 16)"
 msgstr ""
 "Le serveur de noms {ns}/{address} a répondu à une requête de type \"AAAA\" "
-"avec un code retour inattendu ({rcode})."
+"avec un code taille de champ RDATA inattendu ({length} au lieu de 16)."
 
 #. NAMESERVER:AAAA_UNEXPECTED_RCODE
 #, perl-brace-format
@@ -850,16 +851,24 @@ msgstr ""
 "Le serveur de noms {ns}/{address} a répondu à une requête de type \"AAAA\" "
 "avec un code retour inattendu ({rcode})."
 
+#. DELEGATION:UNEXPECTED_RCODE
+#, perl-brace-format
+msgid ""
+"Nameserver {ns}/{address} answered query with an unexpected rcode ({rcode})."
+msgstr ""
+"Le serveur de noms {ns}/{address} a répondu à une requête de type \"AAAA\" "
+"avec un code retour inattendu ({rcode})."
+
 #. BASIC:NS_NO_RESPONSE
 #, perl-brace-format
 msgid "Nameserver {ns}/{address} did not respond to NS query."
 msgstr ""
 "Le serveur de noms {ns}/{address} ne répond pas à une requête de type \"NS\"."
 
-#. CONSISTENCY:NO_RESPONSE
 #. DELEGATION:NO_RESPONSE
-#. DNSSEC:NO_RESPONSE
 #. ZONE:NO_RESPONSE
+#. CONSISTENCY:NO_RESPONSE
+#. DNSSEC:NO_RESPONSE
 #, perl-brace-format
 msgid "Nameserver {ns}/{address} did not respond."
 msgstr "Le serveur de noms {ns}/{address} n'a pas répondu."
@@ -902,10 +911,11 @@ msgstr ""
 "type \"AAAA\"."
 
 #. NAMESERVER:Z_FLAGS_NOTCLEAR
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "Nameserver {ns}/{address} has one or more unknown EDNS Z flag bits set."
 msgstr ""
-"Le serveur de noms {ns}/{address} ne répond pas à une requête de type \"NS\"."
+"Le serveur de noms {ns}/{address} répond à une requête avec a un ou "
+"plusieurs bits \"Z\" (EDNS) positionnés."
 
 #. NAMESERVER:IS_A_RECURSOR
 #, perl-brace-format
@@ -920,7 +930,7 @@ msgid "Nameserver {ns}/{address} is not a recursor."
 msgstr "Le serveur de noms {ns}/{address} n'est pas un récurseur."
 
 #. BASIC:HAS_NAMESERVERS
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "Nameserver {ns}/{address} listed these servers as glue: {nsnlist}."
 msgstr ""
 "Une requête NS sur le serveur de noms {ns}/{address} renvoie la liste de "
@@ -948,51 +958,94 @@ msgstr ""
 "les réponses '{dname}'."
 
 #. NAMESERVER:DIFFERENT_SOURCE_IP
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Nameserver {ns}/{address} replies on a SOA query with a different source "
 "address ({source})."
 msgstr ""
-"Le serveur de noms {ns}/{address} répond depuis une autre adresse que celle "
-"à laquelle la requête a été envoyée."
+"Le serveur de noms {ns}/{address} répond depuis une autre adresse ({source}) "
+"que celle à laquelle la requête a été envoyée."
 
 #. NAMESERVER:MISSING_OPT_IN_TRUNCATED
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Nameserver {ns}/{address} replies on an EDNS query with a truncated response "
 "without EDNS."
 msgstr ""
-"Le serveur de noms {ns}/{address} répond depuis une autre adresse que celle "
-"à laquelle la requête a été envoyée."
+"La réponse du serveur de noms {ns}/{address} à une requête EDNS est tronquée "
+"et sans EDNS."
+
+#. DNSSEC:RRSIG_BROKEN
+#, perl-brace-format
+msgid ""
+"Nameserver {ns}/{address} responded with an RRSIG which can not be verified "
+"with corresponding DNSKEY (with keytag {keytag})"
+msgstr ""
+"Le serveur de noms {ns}/{address} répond avec une signature (RRSIG) qui ne peut "
+"pas être vérifiée avec la clé (DNSKEY) de tag {keytag} correspondante."
+
+#. DNSSEC:RRSIG_NOT_MATCH_DNSKEY
+#, perl-brace-format
+msgid ""
+"Nameserver {ns}/{address} responded with an RRSIG with unknown keytag "
+"{keytag}."
+msgstr ""
+"Le serveur de noms {ns}/{address} répond avec un enregistrement de type \"RRISG\" "
+"dont le tag de clé {keytag} est inconnu."
 
 #. DNSSEC:NO_RESPONSE_DNSKEY
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "Nameserver {ns}/{address} responded with no DNSKEY record(s)."
 msgstr ""
-"Le serveur de noms {ns}/{address} ne répond pas à une requête de type \"NS\"."
+"Le serveur de noms {ns}/{address} répond mais ne renvoie aucun "
+"enregistrement de type \"DNSKEY\"."
+
+#. DNSSEC:ALGO_NOT_SIGNED_RRSET
+#, perl-brace-format
+msgid ""
+"Nameserver {ns}/{address} responded with no RRSIG for RRset {rrtype} created "
+"by the algorithm {algorithm}."
+msgstr ""
+"Le serveur de noms {ns}/{address} ne retourne aucun enregistrement de type \"RRSIG\" "
+"pour le RRset de type \"{rrtype}\" créé avec l'algorithme {algorithm}."
+
+#. DNSSEC:RRSET_NOT_SIGNED
+#, perl-brace-format
+msgid "Nameserver {ns}/{address} responded with no RRSIG for {rrtype} RRset."
+msgstr ""
+"Le serveur de noms {ns}/{address} ne retourne aucun enregistrement de type \"RRSIG\" "
+"pour le RRset de type \"{rrtype}\"."
+
+#. DNSSEC:NO_RESPONSE_RRSET
+#, perl-brace-format
+msgid "Nameserver {ns}/{address} responded with no {rrtype} record(s)."
+msgstr ""
+"Le serveur de noms {ns}/{address} répond mais ne renvoie aucun "
+"enregistrement de type \"{rrtype}\"."
 
 #. ZONE:WRONG_SOA
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Nameserver {ns}/{address} responds with a wrong owner name ({owner} instead "
 "of {name}) on SOA queries."
 msgstr ""
-"Le serveur de noms {ns}/{address} ne conserve pas la casse des noms requêtés "
-"dans les réponses '{dname}'."
+"Le serveur de noms {ns}/{address} répond aux requêtes de type \"SOA\" avec "
+"un nom de domaine erroné ({owner} à la place de {name})."
 
 #. NAMESERVER:UNKNOWN_OPTION_CODE
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "Nameserver {ns}/{address} responds with an unknown ENDS OPTION-CODE."
 msgstr ""
-"Le serveur de noms {ns}/{address} ne répond pas à une requête de type \"NS\"."
+"Le serveur de noms {ns}/{address} répond avec un code d'option EDNS inconnu."
 
 #. ZONE:MULTIPLE_SOA
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Nameserver {ns}/{address} responds with multiple ({count}) SOA records on "
 "SOA queries."
 msgstr ""
-"Le serveur de noms {ns}/{address} ne répond pas à une requête de type \"NS\"."
+"Le serveur de noms {ns}/{address} répond aux requêtes de type \"SOA\" avec "
+"plusieurs enregistrements ({count})."
 
 #. BASIC:HAS_A_RECORDS
 #, perl-brace-format
@@ -1062,13 +1115,14 @@ msgstr ""
 "\"SOA\"."
 
 #. CONSISTENCY:TOTAL_ADDRESS_MISMATCH
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "No common nameserver IP addresses between child ({child}) and parent "
 "({glue})."
 msgstr ""
 "La liste des adresses IP des serveurs de nom retournée par les serveurs de "
-"noms de la zone parente et par ceux de la zone est complètement différente."
+"noms de la zone parente ({glue}) et par ceux de la zone ({child}) est "
+"complètement différente."
 
 #. SYNTAX:ONLY_ALLOWED_CHARS
 #, perl-brace-format
@@ -1125,11 +1179,9 @@ msgstr "Aucune réponse des serveurs de noms sur une requête de type \"SOA\"."
 
 #. SYNTAX:NO_RESPONSE
 #. NAMESERVER:NO_RESPONSE
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "No response from {ns}/{address} asking for {dname}."
-msgstr ""
-"Aucune réponse de {ns}/{address} sur le nom de domaine '{dname}' lorsque "
-"EDNS est utilisé."
+msgstr "Aucune réponse de {ns}/{address} sur le nom de domaine '{dname}'."
 
 #. NAMESERVER:BREAKS_ON_EDNS
 #, perl-brace-format
@@ -1322,13 +1374,13 @@ msgstr ""
 "Liste des modules connus: {known}."
 
 #. ZONE:NO_SOA_IN_RESPONSE
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Response from nameserver {ns}/{address} on SOA queries does not contain SOA "
 "record."
 msgstr ""
-"Le serveur de noms {ns}/{address} n'a pas répondu aux requêtes de type \"SOA"
-"\"."
+"La réponse du serveur de noms {ns}/{address} à une requête de type \"SOA\" "
+"ne contient aucun enregistrement de type \"SOA\"."
 
 #. NAMESERVER:EDNS_RESPONSE_WITHOUT_EDNS
 #, perl-brace-format
@@ -1412,7 +1464,7 @@ msgstr ""
 "la zone '{zone}'."
 
 #. ZONE:MNAME_NOT_IN_GLUE
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "SOA 'mname' nameserver ({mname}) is not listed in \"parent\" NS records for "
 "tested zone ({nss})."
@@ -1565,7 +1617,7 @@ msgstr ""
 "différents SOA."
 
 #. CONSISTENCY:MULTIPLE_SOA_MNAMES
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "Saw {count} SOA mname."
 msgstr ""
 "Plusieurs adresses mail ({count}) ont été trouvées dans les différents SOA."
@@ -1613,6 +1665,20 @@ msgstr ""
 "La vérification de la signature de la clé avec le tag {signature} a échoué "
 "en retournant l'erreur '{error}'."
 
+#. DNSSEC:INCONSISTENT_NSEC_NSEC3
+#, perl-brace-format
+msgid ""
+"Some nameservers for zone {zone} respond with NSEC records and others "
+"respond with NSEC3 records. Consistency is expected."
+msgstr ""
+
+#. DNSSEC:INCONSISTENT_DNSSEC
+#, perl-brace-format
+msgid ""
+"Some, but not all, nameservers for zone {zone} respond with neither NSEC nor "
+"NSEC3 records when such records are expected."
+msgstr ""
+
 #. ZONE:MX_RECORD_EXISTS
 #, perl-brace-format
 msgid "Target ({info}) found to deliver e-mail for the domain name."
@@ -1621,13 +1687,13 @@ msgstr ""
 "domaine."
 
 #. DNSSEC:ALGORITHM_NOT_ZONE_SIGN
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "The DNSKEY with tag {keytag} uses algorithm number not meant for zone "
 "signing{algorithm}/({description})."
 msgstr ""
-"La clé (DNSKEY) avec le tag {keytag} utilise un numéro d'algorithme privé "
-"{algorithm}/({description})."
+"La clé (DNSKEY) avec le tag {keytag} utilise un numéro d'algorithme non "
+"prévu pour faire des signatures {algorithm}/({description})."
 
 #. DNSSEC:ALGORITHM_OK
 #, perl-brace-format
@@ -1639,13 +1705,13 @@ msgstr ""
 "{algorithm}/({description})."
 
 #. DNSSEC:ALGORITHM_NOT_RECOMMENDED
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "The DNSKEY with tag {keytag} uses an algorithm number {algorithm}/"
 "({description} which which is not recommended to be used."
 msgstr ""
-"La clé (DNSKEY) avec le tag {keytag} utilise un numéro d'algorithme correct "
-"{algorithm}/({description})."
+"La clé (DNSKEY) avec le tag {keytag} utilise un numéro d'algorithme non "
+"recommandé {algorithm}/({description})."
 
 #. DNSSEC:ALGORITHM_DEPRECATED
 #, perl-brace-format
@@ -1792,11 +1858,6 @@ msgstr ""
 msgid "The zone has NSEC records."
 msgstr "La zone a des enregistrements de type \"NSEC\"."
 
-#. DNSSEC:HAS_NSEC3_OPTOUT
-msgid "The zone has NSEC3 opt-out records."
-msgstr ""
-"L'opt-out est mis en oeuvre pour des enregistrements de type \"NSEC3\"."
-
 #. DNSSEC:HAS_NSEC3
 msgid "The zone has NSEC3 records."
 msgstr "La zone a des enregistrements de type \"NSEC3\"."
@@ -1852,19 +1913,17 @@ msgstr ""
 "enregistrements de type \"NSEC3\" avec la RRSIG {sig}."
 
 #. DNSSEC:SOA_SIGNATURE_NOT_OK
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Trying to verify SOA RRset with signature {signature} gave error '{error}'."
 msgstr ""
 "Une erreur '{error}' a été obtenue en essayant de vérifier l'ensemble des "
-"enregistrements de type \"SOA\" avec la signature {sig}."
+"enregistrements de type \"SOA\" avec la signature {signature}."
 
 #. CONSISTENCY:CHILD_NS_FAILED
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "Unexepected or erroneous reply from {ns}/{address}."
-msgstr ""
-"Le serveur de noms {ns}/{address} n'a pas répondu aux requêtes de type \"NS"
-"\"."
+msgstr "Réponse inattendue ou erronéeLe du serveur de noms {ns}/{address}"
 
 #. NAMESERVER:UPWARD_REFERRAL_IRRELEVANT
 msgid "Upward referral tests skipped for root zone."
@@ -1887,13 +1946,13 @@ msgid "Using version {version} of the Zonemaster engine."
 msgstr "Utilisation de la version {version} du moteur Zonemaster."
 
 #. DNSSEC:INVALID_NAME_RCODE
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "When asked for the name {name}, which must not exist, the response had RCODE "
 "{rcode}."
 msgstr ""
-"Lors d'une requête sur un nom de domaine qui ne devrait pas exister, on "
-"obtient une réponse avec le code retour (RCODE) {rcode}."
+"Lors d'une requête sur un nom de domaine qui ne devrait pas exister "
+"({name}), on obtient une réponse avec le code retour (RCODE) {rcode}."
 
 #. NAMESERVER:CASE_QUERY_DIFFERENT_RC
 #, perl-brace-format
@@ -1977,12 +2036,12 @@ msgid "[ASN:RAW] {address};{data}"
 msgstr "[ASN:RAW] {address};{data}"
 
 #. DNSSEC:DNSKEY_BUT_NOT_DS
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "{child} sent a DNSKEY record, but {parent} did not send a DS record."
 msgstr ""
-"Les serveurs de noms de la zone retournent un enregistrement de type \"DNSKEY"
-"\", mais aucun enregistrement de type \"DS\" n'a été trouvé dans la zone "
-"parente."
+"Le serveur de noms de la zone {child} retournent un enregistrement de type "
+"\"DNSKEY\", mais aucun enregistrement de type \"DS\" n'a été retourné par le "
+"serveur de noms de la zone parente {parent}."
 
 #. DNSSEC:NO_DS
 #, perl-brace-format
@@ -1991,19 +2050,77 @@ msgstr ""
 "Le serveur de noms {from} ne retourne aucun enregistrement de type \"DS\" "
 "pour la zone '{zone}'."
 
+#. DNSSEC:DS_ALGORITHM_OK
+#, perl-brace-format
+msgid ""
+"{ns}/{address} answered DS query for zone {zone} with DS record for keytag "
+"{keytag} using algorithm {algorithm_number}/{algorithm_mnemonic}, which is "
+"OK."
+msgstr ""
+
+#. DNSSEC:UNEXPECTED_RESPONSE_DS
+#, perl-brace-format
+msgid ""
+"{ns}/{address} responded with an unexpected rcode ({rcode}) on a DS query "
+"for zone {zone}."
+msgstr ""
+"Le serveur de noms {ns}/{address} a répondu à une requête de type \"AAAA\" "
+"avec un code retour inattendu ({rcode}) pour la zone '{zone}'."
+
+#. DNSSEC:DS_ALGORITHM_DEPRECATED
+#, perl-brace-format
+msgid ""
+"{ns}/{address} returned a DS record created by algorithm ({algorithm_number}/"
+"{algorithm_mnemonic}), which is deprecated. The DS record is for the DNSKEY "
+"record with keytag {keytag} in zone {zone}."
+msgstr ""
+
+#. DNSSEC:DS_ALGORITHM_NOT_DS
+#, perl-brace-format
+msgid ""
+"{ns}/{address} returned a DS record created by algorithm {algorithm_number} "
+"which is not meant for DS. The DS record is for the DNSKEY record with "
+"keytag {keytag} in zone {zone}."
+msgstr ""
+
+#. DNSSEC:DS_ALGORITHM_MISSING
+#, perl-brace-format
+msgid ""
+"{ns}/{address} returned a DS record created by algorithm {algorithm_number}/"
+"{algorithm_mnemonic}, which is OK. The DS record is for the DNSKEY record "
+"with keytag {keytag} in zone {zone}."
+msgstr ""
+
+#. DNSSEC:DS_ALGORITHM_RESERVED
+#, perl-brace-format
+msgid ""
+"{ns}/{address} returned a DS record created by with an unassigned algorithm "
+"({algorithm_number}), which is not OK. The DS record is for the DNSKEY "
+"record with keytag {keytag} in zone {zone}."
+msgstr ""
+
+#. DNSSEC:NO_RESPONSE_DS
+#, perl-brace-format
+msgid "{ns}/{address} returned no DS records for {zone}."
+msgstr ""
+"Le serveur de noms {ns}/{address} ne retourne aucun enregistrement de type \"DS\" "
+"pour la zone '{zone}'."
+
 #. DNSSEC:DNSKEY_AND_DS
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "{parent} sent a DS record, and {child} a DNSKEY record."
 msgstr ""
-"La zone parente retourne un enregistrement de type \"DS\" et les serveurs de "
-"noms de la zone, un enregistrement de type \"DNSKEY\"."
+"Le serveur de noms de la zone parente {parent} retourne un enregistrement de "
+"type \"DS\" et le serveur de noms de la zone {child}, un enregistrement de "
+"type \"DNSKEY\"."
 
 #. DNSSEC:DS_BUT_NOT_DNSKEY
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "{parent} sent a DS record, but {child} did not send a DNSKEY record."
 msgstr ""
-"La zone parente retourne un enregistrement de type \"DS\" mais les serveurs "
-"de noms de la zone ne retournent pas d'enregistrement de type \"DNSKEY\"."
+"Le serveur de noms de la zone parente {parent} retourne un enregistrement de "
+"type \"DS\" mais le serveur de noms de la zone {child} ne retournent pas "
+"d'enregistrement de type \"DNSKEY\"."
 
 #. DNSSEC:NO_NSEC3PARAM
 #, perl-brace-format
@@ -2011,3 +2128,34 @@ msgid "{server} returned no NSEC3PARAM records."
 msgstr ""
 "Le serveur de noms {server} ne retourne pas d'enregistrements de type "
 "\"NSEC3PARAM\"."
+
+#~ msgid "At least one signature correctly signed the NSEC RRset."
+#~ msgstr ""
+#~ "Au moins une signature (RRSIG) correcte signe l'ensemble des "
+#~ "enregistrements de type \"NSEC\"."
+
+#~ msgid "At least one signature correctly signed the NSEC3 RRset."
+#~ msgstr ""
+#~ "Au moins une signature correcte signe l'ensemble des enregistrements de "
+#~ "type \"NSEC3\"."
+
+#~ msgid ""
+#~ "DS record with keytag {keytag} uses digest type {digtype}, which is OK."
+#~ msgstr ""
+#~ "L'enregistrement de type \"DS\" avec le tag de clé {keytag} utilise un "
+#~ "type de condensat (digest) correct ({digtype})."
+
+#~ msgid "DS record with keytag {keytag} uses forbidden digest type {digtype}."
+#~ msgstr ""
+#~ "L'enregistrement de type \"DS\" avec le tag de clé {keytag} utilise un "
+#~ "type de condensat (digest) interdit {digtype}."
+
+#~ msgid "NSEC covers {name}."
+#~ msgstr "NSEC couvre le nom {name}."
+
+#~ msgid "NSEC3 record covers {name}."
+#~ msgstr "NSEC3 couvre le nom {name}."
+
+#~ msgid "The zone has NSEC3 opt-out records."
+#~ msgstr ""
+#~ "L'opt-out est mis en oeuvre pour des enregistrements de type \"NSEC3\"."
