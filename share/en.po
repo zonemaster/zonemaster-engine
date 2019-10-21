@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-18 18:43+0200\n"
+"POT-Creation-Date: 2019-10-21 16:31+0200\n"
 "PO-Revision-Date: 2019-10-18 14:32+0200\n"
 "Last-Translator: mats.dufberg@iis.se\n"
 "Language-Team: Zonemaster Team\n"
@@ -272,6 +272,33 @@ msgid ""
 "DNS query to {ns} for {name}/{type}/{class} failed with error: {message}"
 msgstr ""
 "DNS query to {ns} for {name}/{type}/{class} failed with error: {message}"
+
+#. DNSSEC:DNSKEY_TOO_LARGE_FOR_ALGO
+#, perl-brace-format
+msgid ""
+"DNSKEY with tag {keytag} has a size ({keysize}) larger than the maximum one "
+"({keysizemax})."
+msgstr ""
+"DNSKEY with tag {keytag} has a size ({keysize}) larger than the maximum one "
+"({keysizemax})."
+
+#. DNSSEC:DNSKEY_TOO_SMALL_FOR_ALGO
+#, perl-brace-format
+msgid ""
+"DNSKEY with tag {keytag} has a size ({keysize}) smaller than the minimum one "
+"({keysizemin})."
+msgstr ""
+"DNSKEY with tag {keytag} has a size ({keysize}) smaller than the minimum one "
+"({keysizemin})."
+
+#. DNSSEC:DNSKEY_SMALLER_THAN_REC
+#, perl-brace-format
+msgid ""
+"DNSKEY with tag {keytag} has a size ({keysize}) smaller than the recommended "
+"one ({keysizerec})."
+msgstr ""
+"DNSKEY with tag {keytag} has a size ({keysize}) smaller than the recommended "
+"one ({keysizerec})."
 
 #. DNSSEC:DS_DOES_NOT_MATCH_DNSKEY
 #, perl-brace-format

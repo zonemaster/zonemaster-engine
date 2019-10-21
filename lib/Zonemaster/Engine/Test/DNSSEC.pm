@@ -507,6 +507,18 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # DNSSEC:DNSKEY_SIGNED
           "The apex DNSKEY RRset was correcly signed.", @_;
     },
+    DNSKEY_SMALLER_THAN_REC => sub {
+        __x    # DNSSEC:DNSKEY_SMALLER_THAN_REC
+          "DNSKEY with tag {keytag} has a size ({keysize}) smaller than the recommended one ({keysizerec}).", @_;
+    },
+    DNSKEY_TOO_SMALL_FOR_ALGO => sub {
+        __x    # DNSSEC:DNSKEY_TOO_SMALL_FOR_ALGO
+          "DNSKEY with tag {keytag} has a size ({keysize}) smaller than the minimum one ({keysizemin}).", @_;
+    },
+    DNSKEY_TOO_LARGE_FOR_ALGO => sub {
+        __x    # DNSSEC:DNSKEY_TOO_LARGE_FOR_ALGO
+          "DNSKEY with tag {keytag} has a size ({keysize}) larger than the maximum one ({keysizemax}).", @_;
+    },
     DS_ALGORITHM_NOT_DS => sub {
         __x    # DNSSEC:DS_ALGORITHM_NOT_DS
           "{ns}/{address} returned a DS record created by algorithm {algorithm_number} which is not meant for DS. The DS record is for the DNSKEY record with keytag {keytag} in zone {zone}.", @_;
