@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::DNSSEC;
 
-use version; our $VERSION = version->declare("v1.1.9");
+use version; our $VERSION = version->declare("v1.1.10");
 
 ###
 ### This test module implements DNSSEC tests.
@@ -440,7 +440,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     ALGORITHM_NOT_ZONE_SIGN => sub {
         __x    # DNSSEC:ALGORITHM_NOT_ZONE_SIGN
-          "The DNSKEY with tag {keytag} uses algorithm number not meant for zone signing{algorithm}/({description}).",
+          "The DNSKEY with tag {keytag} uses algorithm number not meant for zone signing {algorithm}/({description}).",
           @_;
     },
     ALGORITHM_OK => sub {
