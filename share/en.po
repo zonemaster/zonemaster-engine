@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-22 11:24+0200\n"
+"POT-Creation-Date: 2019-10-22 14:30+0200\n"
 "PO-Revision-Date: 2019-10-18 14:32+0200\n"
 "Last-Translator: mats.dufberg@iis.se\n"
 "Language-Team: Zonemaster Team\n"
@@ -1516,10 +1516,10 @@ msgstr "Target ({info}) found to deliver e-mail for the domain name."
 #, perl-brace-format
 msgid ""
 "The DNSKEY with tag {keytag} uses algorithm number not meant for zone "
-"signing{algorithm}/({description})."
+"signing {algorithm}/({description})."
 msgstr ""
 "The DNSKEY with tag {keytag} uses algorithm number not meant for zone "
-"signing{algorithm}/({description})."
+"signing {algorithm}/({description})."
 
 #. DNSSEC:ALGORITHM_OK
 #, perl-brace-format
