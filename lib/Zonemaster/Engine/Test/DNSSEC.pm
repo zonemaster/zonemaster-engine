@@ -1384,8 +1384,8 @@ sub dnssec08 {
             $ok = $sig->keytag;
         }
         else {
-            if ($sig->algorithm == 12 and $msg =~ /Unknown cryptographic algorithm/) {
-                $msg = 'no GOST support';
+            if ( $sig->algorithm >= 12 and $sig->algorithm <= 16 and $msg =~ /Unknown cryptographic algorithm/ ) {
+                $msg = q{no }. $algo_properties{$sig->algorithm}{description}. q{ support};
             }
             push @results,
               info(
@@ -1457,8 +1457,8 @@ sub dnssec09 {
             $ok = $sig->keytag;
         }
         else {
-            if ($sig->algorithm == 12 and $msg =~ /Unknown cryptographic algorithm/) {
-                $msg = 'no GOST support';
+            if ( $sig->algorithm >= 12 and $sig->algorithm <= 16 and $msg =~ /Unknown cryptographic algorithm/ ) {
+                $msg = q{no }. $algo_properties{$sig->algorithm}{description}. q{ support};
             }
             push @results,
               info(
@@ -1702,8 +1702,8 @@ sub dnssec11 {
                             $pass = $tag;
                         }
                         else {
-                            if ($sig->algorithm == 12 and $msg =~ /Unknown cryptographic algorithm/) {
-                                $msg = 'no GOST support';
+                            if ( $sig->algorithm >= 12 and $sig->algorithm <= 16 and $msg =~ /Unknown cryptographic algorithm/ ) {
+                                $msg = q{no }. $algo_properties{$sig->algorithm}{description}. q{ support};
                             }
                             push @fail, "signature: $msg" ;
                         }
