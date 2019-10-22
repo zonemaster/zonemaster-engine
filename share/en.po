@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-22 10:30+0200\n"
+"POT-Creation-Date: 2019-10-22 11:24+0200\n"
 "PO-Revision-Date: 2019-10-18 14:32+0200\n"
 "Last-Translator: mats.dufberg@iis.se\n"
 "Language-Team: Zonemaster Team\n"
@@ -537,12 +537,12 @@ msgstr "IP {address} in parent refers to multiple nameservers ({nss})."
 msgid "IP {address} refers to multiple nameservers ({nss})."
 msgstr "IP {address} refers to multiple nameservers ({nss})."
 
-#. CONNECTIVITY:IPV4_DISABLED
-#. DELEGATION:IPV4_DISABLED
-#. NAMESERVER:IPV4_DISABLED
-#. CONSISTENCY:IPV4_DISABLED
-#. DNSSEC:IPV4_DISABLED
 #. BASIC:IPV4_DISABLED
+#. CONNECTIVITY:IPV4_DISABLED
+#. CONSISTENCY:IPV4_DISABLED
+#. DELEGATION:IPV4_DISABLED
+#. DNSSEC:IPV4_DISABLED
+#. NAMESERVER:IPV4_DISABLED
 #, perl-brace-format
 msgid "IPv4 is disabled, not sending \"{rrtype}\" query to {ns}/{address}."
 msgstr "IPv4 is disabled, not sending \"{rrtype}\" query to {ns}/{address}."
@@ -557,12 +557,12 @@ msgstr "IPv4 is disabled, not sending query to {ns}."
 msgid "IPv4 is enabled, can send \"{rrtype}\" query to {ns}/{address}."
 msgstr "IPv4 is enabled, can send \"{rrtype}\" query to {ns}/{address}."
 
-#. CONNECTIVITY:IPV6_DISABLED
-#. DELEGATION:IPV6_DISABLED
-#. NAMESERVER:IPV6_DISABLED
-#. CONSISTENCY:IPV6_DISABLED
-#. DNSSEC:IPV6_DISABLED
 #. BASIC:IPV6_DISABLED
+#. CONNECTIVITY:IPV6_DISABLED
+#. CONSISTENCY:IPV6_DISABLED
+#. DELEGATION:IPV6_DISABLED
+#. DNSSEC:IPV6_DISABLED
+#. NAMESERVER:IPV6_DISABLED
 #, perl-brace-format
 msgid "IPv6 is disabled, not sending \"{rrtype}\" query to {ns}/{address}."
 msgstr "IPv6 is disabled, not sending \"{rrtype}\" query to {ns}/{address}."
@@ -671,33 +671,6 @@ msgstr "Nameserver ({name}) syntax is valid."
 msgid "Nameserver ({name}) within a 'numeric only' TLD ({tld})."
 msgstr "Nameserver ({name}) within a 'numeric only' TLD ({tld})."
 
-#. DNSSEC:TEST_ABORTED
-#, perl-brace-format
-msgid ""
-"Nameserver {ns/address} for zone {zone} responds with RCODE \"NOERROR\" on a "
-"query that is expected to give response with RCODE \"NXDOMAIN\". Test for "
-"NSEC and NSEC3 is aborted for this nameserver."
-msgstr ""
-"Nameserver {ns/address} for zone {zone} responds with RCODE \"NOERROR\" on a "
-"query that is expected to give response with RCODE \"NXDOMAIN\". Test for "
-"NSEC and NSEC3 is aborted for this nameserver."
-
-#. DNSSEC:MIXED_NSEC_NSEC3
-#, perl-brace-format
-msgid ""
-"Nameserver {ns/address} for zone {zone} responds with both NSEC and NSEC3 "
-"records when only one record type is expected."
-msgstr ""
-
-#. DNSSEC:NO_NSEC_NSEC3
-#, perl-brace-format
-msgid ""
-"Nameserver {ns/address} for zone {zone} responds with neither NSEC nor NSEC3 "
-"record when when such records are expected."
-msgstr ""
-"Nameserver {ns/address} for zone {zone} responds with neither NSEC nor NSEC3 "
-"record when when such records are expected."
-
 #. DELEGATION:NS_IS_CNAME
 #, perl-brace-format
 msgid "Nameserver {ns} RR point to CNAME."
@@ -790,10 +763,10 @@ msgstr ""
 msgid "Nameserver {ns}/{address} did not respond to NS query."
 msgstr "Nameserver {ns}/{address} did not respond to NS query."
 
-#. DELEGATION:NO_RESPONSE
-#. ZONE:NO_RESPONSE
 #. CONSISTENCY:NO_RESPONSE
+#. DELEGATION:NO_RESPONSE
 #. DNSSEC:NO_RESPONSE
+#. ZONE:NO_RESPONSE
 #, perl-brace-format
 msgid "Nameserver {ns}/{address} did not respond."
 msgstr "Nameserver {ns}/{address} did not respond."
@@ -828,6 +801,35 @@ msgstr ""
 #, perl-brace-format
 msgid "Nameserver {ns}/{address} dropped AAAA query."
 msgstr "Nameserver {ns}/{address} dropped AAAA query."
+
+#. DNSSEC:TEST_ABORTED
+#, perl-brace-format
+msgid ""
+"Nameserver {ns}/{address} for zone {zone} responds with RCODE \"NOERROR\" on "
+"a query that is expected to give response with RCODE \"NXDOMAIN\". Test for "
+"NSEC and NSEC3 is aborted for this nameserver."
+msgstr ""
+"Nameserver {ns}/{address} for zone {zone} responds with RCODE \"NOERROR\" on "
+"a query that is expected to give response with RCODE \"NXDOMAIN\". Test for "
+"NSEC and NSEC3 is aborted for this nameserver."
+
+#. DNSSEC:MIXED_NSEC_NSEC3
+#, perl-brace-format
+msgid ""
+"Nameserver {ns}/{address} for zone {zone} responds with both NSEC and NSEC3 "
+"records when only one record type is expected."
+msgstr ""
+"Nameserver {ns}/{address} for zone {zone} responds with both NSEC and NSEC3 "
+"records when only one record type is expected."
+
+#. DNSSEC:NO_NSEC_NSEC3
+#, perl-brace-format
+msgid ""
+"Nameserver {ns}/{address} for zone {zone} responds with neither NSEC nor "
+"NSEC3 record when when such records are expected."
+msgstr ""
+"Nameserver {ns}/{address} for zone {zone} responds with neither NSEC nor "
+"NSEC3 record when when such records are expected."
 
 #. NAMESERVER:Z_FLAGS_NOTCLEAR
 #, perl-brace-format
@@ -1055,8 +1057,8 @@ msgstr "No response from nameserver(s) on PTR query ({reverse})."
 msgid "No response from nameserver(s) on SOA queries."
 msgstr "No response from nameserver(s) on SOA queries."
 
-#. SYNTAX:NO_RESPONSE
 #. NAMESERVER:NO_RESPONSE
+#. SYNTAX:NO_RESPONSE
 #, perl-brace-format
 msgid "No response from {ns}/{address} asking for {dname}."
 msgstr "No response from {ns}/{address} asking for {dname}."
@@ -1848,17 +1850,6 @@ msgstr "{child} sent a DNSKEY record, but {parent} did not send a DS record."
 msgid "{from} returned no DS records for {zone}."
 msgstr "{from} returned no DS records for {zone}."
 
-#. DNSSEC:DS_ALGORITHM_OK
-#, perl-brace-format
-msgid ""
-"{ns}/{address} answered DS query for zone {zone} with DS record for keytag "
-"{keytag} using algorithm {algorithm_number}/{algorithm_mnemonic}, which is "
-"OK."
-msgstr ""
-"{ns}/{address} answered DS query for zone {zone} with DS record for keytag "
-"{keytag} using algorithm {algorithm_number}/{algorithm_mnemonic}, which is "
-"OK."
-
 #. DNSSEC:UNEXPECTED_RESPONSE_DS
 #, perl-brace-format
 msgid ""
@@ -1890,7 +1881,7 @@ msgstr ""
 "which is not meant for DS. The DS record is for the DNSKEY record with "
 "keytag {keytag} in zone {zone}."
 
-#. DNSSEC:DS_ALGORITHM_MISSING
+#. DNSSEC:DS_ALGORITHM_OK
 #, perl-brace-format
 msgid ""
 "{ns}/{address} returned a DS record created by algorithm {algorithm_number}/"
@@ -1912,6 +1903,15 @@ msgstr ""
 "({algorithm_number}), which is not OK. The DS record is for the DNSKEY "
 "record with keytag {keytag} in zone {zone}."
 
+#. DNSSEC:DS_ALGORITHM_MISSING
+#, perl-brace-format
+msgid ""
+"{ns}/{address} returned no DS record created by algorithm {algorithm_number}/"
+"{algorithm_mnemonic} for zone {zone}, which is required."
+msgstr ""
+"{ns}/{address} returned no DS record created by algorithm {algorithm_number}/"
+"{algorithm_mnemonic} for zone {zone}, which is required."
+
 #. DNSSEC:NO_RESPONSE_DS
 #, perl-brace-format
 msgid "{ns}/{address} returned no DS records for {zone}."
@@ -1931,6 +1931,15 @@ msgstr "{parent} sent a DS record, but {child} did not send a DNSKEY record."
 #, perl-brace-format
 msgid "{server} returned no NSEC3PARAM records."
 msgstr "{server} returned no NSEC3PARAM records."
+
+#~ msgid ""
+#~ "{ns}/{address} answered DS query for zone {zone} with DS record for "
+#~ "keytag {keytag} using algorithm {algorithm_number}/{algorithm_mnemonic}, "
+#~ "which is OK."
+#~ msgstr ""
+#~ "{ns}/{address} answered DS query for zone {zone} with DS record for "
+#~ "keytag {keytag} using algorithm {algorithm_number}/{algorithm_mnemonic}, "
+#~ "which is OK."
 
 #~ msgid "At least one signature correctly signed the NSEC RRset."
 #~ msgstr "At least one signature correctly signed the NSEC RRset."
