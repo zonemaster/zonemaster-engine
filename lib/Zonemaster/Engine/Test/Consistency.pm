@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::Consistency;
 
-use version; our $VERSION = version->declare("v1.1.10");
+use version; our $VERSION = version->declare("v1.1.11");
 
 use strict;
 use warnings;
@@ -128,7 +128,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     CHILD_NS_FAILED => sub {
         __x    # CONSISTENCY:CHILD_NS_FAILED
-          'Unexepected or erroneous reply from {ns}/{address}.', @_;
+          'Unexpected or erroneous reply from {ns}/{address}.', @_;
     },
     CHILD_ZONE_LAME => sub {
         __x    # CONSISTENCY:CHILD_ZONE_LAME
@@ -144,7 +144,9 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     IN_BAILIWICK_ADDR_MISMATCH => sub {
         __x    # CONSISTENCY:IN_BAILIWICK_ADDR_MISMATCH
-          'In-bailiwick name server listed at parent has a mismatch between glue data at parent ({parent_addresses}) and any equivalent address record in child zone({zone_addresses})', @_;
+          'In-bailiwick name server listed at parent has a mismatch between glue data at parent '
+          . '({parent_addresses}) and any equivalent address record in child zone ({zone_addresses})',
+          @_;
     },
     IPV4_DISABLED => sub {
         __x    # CONSISTENCY:IPV4_DISABLED
@@ -214,7 +216,9 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     OUT_OF_BAILIWICK_ADDR_MISMATCH => sub {
         __x    # CONSISTENCY:OUT_OF_BAILIWICK_ADDR_MISMATCH
-          'Out-of-bailiwick name server listed at parent with glue record has a mismatch between the glue at the parent ({parent_addresses}) and iany equivalent address record found in authoritative zone  ({zone_addresses})', @_;
+          'Out-of-bailiwick name server listed at parent with glue record has a mismatch between '
+          . 'the glue at the parent ({parent_addresses}) and any equivalent address record found '
+          . 'in authoritative zone ({zone_addresses})', @_;
     },
     SOA_RNAME => sub {
         __x    # CONSISTENCY:SOA_RNAME
