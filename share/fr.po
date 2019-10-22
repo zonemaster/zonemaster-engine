@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-22 14:30+0200\n"
+"POT-Creation-Date: 2019-10-22 16:17+0200\n"
 "PO-Revision-Date: 2017-12-18\n"
 "Last-Translator: vincent.levigneron@afnic.fr\n"
 "Language-Team: Zonemaster Team\n"
@@ -231,6 +231,26 @@ msgstr ""
 "nous obtenons {keys} enregistrements de type \"DNSKEY\", {sigs} "
 "enregistrements de type \"RRSIG\" et {soas} enregistrements de type \"SOA\"."
 
+#. DELEGATION:NOT_ENOUGH_IPV4_NS_CHILD
+#, perl-brace-format
+msgid ""
+"Child does not list enough ({count}) nameservers ({nss}) that resolve to "
+"IPv4 addresses ({addrs}). Lower limit set to {minimum}."
+msgstr ""
+"Les serveurs de noms de la zone ne retournent pas assez de serveurs "
+"({count}) faisant autorité ({nss}) ayant une adresse IPv4 ({addrs}). La "
+"limite inférieure étant fixée à {minimum}."
+
+#. DELEGATION:NOT_ENOUGH_IPV6_NS_CHILD
+#, perl-brace-format
+msgid ""
+"Child does not list enough ({count}) nameservers ({nss}) that resolve to "
+"IPv6 addresses ({addrs}). Lower limit set to {minimum}."
+msgstr ""
+"Les serveurs de noms de la zone ne retournent pas assez de serveurs "
+"({count}) faisant autorité ({nss}) ayant une adresse IPv6 ({addrs}). La "
+"limite inférieure étant fixée à {minimum}."
+
 #. DELEGATION:NOT_ENOUGH_NS_CHILD
 #, perl-brace-format
 msgid ""
@@ -240,26 +260,6 @@ msgstr ""
 "Les serveurs de noms de la zone ne retournent pas assez de serveurs "
 "({count}) faisant autorité ({nss}). La limite inférieure étant fixée à "
 "{minimum}."
-
-#. DELEGATION:NOT_ENOUGH_IPV4_NS_CHILD
-#, perl-brace-format
-msgid ""
-"Child does not list enough ({count}) nameservers that resolve to IPv4 "
-"addresses ({addrs}). Lower limit set to {minimum}."
-msgstr ""
-"Les serveurs de noms de la zone ne retournent pas assez de serveurs "
-"({count}) faisant autorité ({ns}) ayant une adresse IPv4 ({addrs}). La "
-"limite inférieure étant fixée à {minimum}."
-
-#. DELEGATION:NOT_ENOUGH_IPV6_NS_CHILD
-#, perl-brace-format
-msgid ""
-"Child does not list enough ({count}) nameservers that resolve to IPv6 "
-"addresses ({addrs}). Lower limit set to {minimum}."
-msgstr ""
-"Les serveurs de noms de la zone ne retournent pas assez de serveurs "
-"({count}) faisant autorité ({ns}) ayant une adresse IPv6 ({addrs}). La "
-"limite inférieure étant fixée à {minimum}."
 
 #. CONSISTENCY:EXTRA_ADDRESS_CHILD
 #, perl-brace-format
@@ -277,6 +277,26 @@ msgstr ""
 "Les serveurs de noms de la zone retournent des serveurs faisant autorité "
 "({extra}) qui ne le sont pas par les serveurs de noms de la zone parente."
 
+#. DELEGATION:ENOUGH_IPV4_NS_CHILD
+#, perl-brace-format
+msgid ""
+"Child lists enough ({count}) nameservers ({nss}) that resolve to IPv4 "
+"addresses ({addrs}). Lower limit set to {minimum}."
+msgstr ""
+"Les serveurs de noms de la zone retournent suffisamment de serveurs "
+"({count}) faisant autorité ({nss}) ayant une adresse IPv4 ({addrs}). La "
+"limite inférieure étant fixée à {minimum}."
+
+#. DELEGATION:ENOUGH_IPV6_NS_CHILD
+#, perl-brace-format
+msgid ""
+"Child lists enough ({count}) nameservers ({nss}) that resolve to IPv6 "
+"addresses ({addrs}). Lower limit set to {minimum}."
+msgstr ""
+"Les serveurs de noms de la zone retournent suffisamment de serveurs "
+"({count}) faisant autorité ({nss}) ayant une adresse IPv6 ({addrs}). La "
+"limite inférieure étant fixée à {minimum}."
+
 #. DELEGATION:ENOUGH_NS_CHILD
 #, perl-brace-format
 msgid ""
@@ -286,26 +306,6 @@ msgstr ""
 "Les serveurs de noms de la zone retournent suffisamment de serveurs "
 "({count}) faisant autorité ({nss}). La limite inférieure étant fixée à "
 "{minimum}."
-
-#. DELEGATION:ENOUGH_IPV4_NS_CHILD
-#, perl-brace-format
-msgid ""
-"Child lists enough ({count}) nameservers that resolve to IPv4 addresses "
-"({addrs}). Lower limit set to {minimum}."
-msgstr ""
-"Les serveurs de noms de la zone retournent suffisamment de serveurs "
-"({count}) faisant autorité ({ns}) ayant une adresse IPv4 ({addrs}). La "
-"limite inférieure étant fixée à {minimum}."
-
-#. DELEGATION:ENOUGH_IPV6_NS_CHILD
-#, perl-brace-format
-msgid ""
-"Child lists enough ({count}) nameservers that resolve to IPv6 addresses "
-"({addrs}). Lower limit set to {minimum}."
-msgstr ""
-"Les serveurs de noms de la zone retournent suffisamment de serveurs "
-"({count}) faisant autorité ({ns}) ayant une adresse IPv6 ({addrs}). La "
-"limite inférieure étant fixée à {minimum}."
 
 #. DELEGATION:NO_IPV4_NS_CHILD
 #, perl-brace-format
@@ -389,21 +389,21 @@ msgstr ""
 #. DELEGATION:NOT_ENOUGH_IPV4_NS_DEL
 #, perl-brace-format
 msgid ""
-"Delegation does not list enough ({count}) nameservers that resolve to IPv4 "
-"addresses ({addrs}). Lower limit set to {minimum}."
+"Delegation does not list enough ({count}) nameservers ({nss}) that resolve "
+"to IPv4 addresses ({addrs}). Lower limit set to {minimum}."
 msgstr ""
 "Les serveurs de noms de la zone parente ne retournent pas assez de serveurs "
-"({count}) faisant autorité ({ns}) ayant une adresse IPv4 ({addrs}). La "
+"({count}) faisant autorité ({nss}) ayant une adresse IPv4 ({addrs}). La "
 "limite inférieure étant fixée à {minimum}."
 
 #. DELEGATION:NOT_ENOUGH_IPV6_NS_DEL
 #, perl-brace-format
 msgid ""
-"Delegation does not list enough ({count}) nameservers that resolve to IPv6 "
-"addresses ({addrs}). Lower limit set to {minimum}."
+"Delegation does not list enough ({count}) nameservers ({nss}) that resolve "
+"to IPv6 addresses ({addrs}). Lower limit set to {minimum}."
 msgstr ""
 "Les serveurs de noms de la zone parente ne retournent pas assez de serveurs "
-"({count}) faisant autorité ({ns}) ayant une adresse IPv6 ({addrs}). La "
+"({count}) faisant autorité ({nss}) ayant une adresse IPv6 ({addrs}). La "
 "limite inférieure étant fixée à {minimum}."
 
 #. DNSSEC:DELEGATION_NOT_SIGNED
@@ -420,21 +420,21 @@ msgstr "L'enregistrement DS dans la zone parente est correctement signé."
 #. DELEGATION:ENOUGH_IPV4_NS_DEL
 #, perl-brace-format
 msgid ""
-"Delegation lists enough ({count}) nameservers that resolve to IPv4 addresses "
-"({addrs}). Lower limit set to {minimum}."
+"Delegation lists enough ({count}) nameservers ({nss}) that resolve to IPv4 "
+"addresses ({addrs}). Lower limit set to {minimum}."
 msgstr ""
 "Les serveurs de noms de la zone parente retournent suffisamment de serveurs "
-"({count}) faisant autorité ({ns}) ayant une adresse IPv4 ({addrs}). La "
+"({count}) faisant autorité ({nss}) ayant une adresse IPv4 ({addrs}). La "
 "limite inférieure étant fixée à {minimum}."
 
 #. DELEGATION:ENOUGH_IPV6_NS_DEL
 #, perl-brace-format
 msgid ""
-"Delegation lists enough ({count}) nameservers that resolve to IPv6 addresses "
-"({addrs}). Lower limit set to {minimum}."
+"Delegation lists enough ({count}) nameservers ({nss}) that resolve to IPv6 "
+"addresses ({addrs}). Lower limit set to {minimum}."
 msgstr ""
 "Les serveurs de noms de la zone parente retournent suffisamment de serveurs "
-"({count}) faisant autorité ({ns}) ayant une adresse IPv6 ({addrs}).  La "
+"({count}) faisant autorité ({nss}) ayant une adresse IPv6 ({addrs}).  La "
 "limite inférieure étant fixée à {minimum}."
 
 #. DELEGATION:NO_IPV4_NS_DEL
