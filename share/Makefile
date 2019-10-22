@@ -3,7 +3,6 @@ MOFILES := $(POFILES:.po=.mo)
 POTFILE = Zonemaster-Engine.pot
 PMFILES = $(shell find ../lib -type f -name '*.pm' | sort)
 TESTMODULEFILES = $(shell find ../lib/Zonemaster/Engine/Test -type f -name '*.pm' | sort)
-NON_FUZZY_POFILES := $(shell echo $(POFILES) $(FUZZY_POFILES) | tr ' ' '\n' | sort | uniq -c | sed '/2/d;s/.* //')
 
 .PHONY: all touch-po update-po extract-pot
 
@@ -32,8 +31,8 @@ $(POTFILE): extract-pot
 	@perl -e 'use Locale::Msgfmt; msgfmt({in => $$ARGV[0], out => $$ARGV[1]});' $< locale/$*/LC_MESSAGES/Zonemaster-Engine.mo
 	@echo locale/$*/LC_MESSAGES/Zonemaster-Engine.mo
 
-show-fuzzy: $(NON_FUZZY_POFILES)
-	@for f in $(NON_FUZZY_POFILES) ; do msgattrib --only-fuzzy $$f ; done
+show-fuzzy: $(POFILES)
+	@for f in $(POFILES) ; do msgattrib --only-fuzzy $$f ; done
 
 modules.txt: $(TESTMODULEFILES)
 	echo $(TESTMODULEFILES) | xargs basename -s .pm -a | grep -vE '^Basic$$' | sort > modules.txt
