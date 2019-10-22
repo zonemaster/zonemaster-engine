@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-22 16:17+0200\n"
+"POT-Creation-Date: 2019-10-22 17:06+0200\n"
 "PO-Revision-Date: 2019-10-18 14:32+0200\n"
 "Last-Translator: mats.dufberg@iis.se\n"
 "Language-Team: Zonemaster Team\n"
@@ -582,8 +582,11 @@ msgstr "IPv6 is enabled, can send \"{rrtype}\" query to {ns}/{address}."
 msgid ""
 "In-bailiwick name server listed at parent has a mismatch between glue data "
 "at parent ({parent_addresses}) and any equivalent address record in child "
-"zone({zone_addresses})"
+"zone ({zone_addresses})"
 msgstr ""
+"In-bailiwick name server listed at parent has a mismatch between glue data "
+"at parent ({parent_addresses}) and any equivalent address record in child "
+"zone ({zone_addresses})"
 
 #. NAMESERVER:EDNS_VERSION_ERROR
 #, perl-brace-format
@@ -1104,9 +1107,12 @@ msgstr "Not enough data about {zone} was found to be able to run tests."
 #, perl-brace-format
 msgid ""
 "Out-of-bailiwick name server listed at parent with glue record has a "
-"mismatch between the glue at the parent ({parent_addresses}) and iany "
-"equivalent address record found in authoritative zone  ({zone_addresses})"
+"mismatch between the glue at the parent ({parent_addresses}) and any "
+"equivalent address record found in authoritative zone ({zone_addresses})"
 msgstr ""
+"Out-of-bailiwick name server listed at parent with glue record has a "
+"mismatch between the glue at the parent ({parent_addresses}) and any "
+"equivalent address record found in authoritative zone ({zone_addresses})"
 
 #. SYSTEM:PACKET_BIG
 #, perl-brace-format
@@ -1731,8 +1737,8 @@ msgstr ""
 
 #. CONSISTENCY:CHILD_NS_FAILED
 #, perl-brace-format
-msgid "Unexepected or erroneous reply from {ns}/{address}."
-msgstr "Unexepected or erroneous reply from {ns}/{address}."
+msgid "Unexpected or erroneous reply from {ns}/{address}."
+msgstr "Unexpected or erroneous reply from {ns}/{address}."
 
 #. NAMESERVER:UPWARD_REFERRAL_IRRELEVANT
 msgid "Upward referral tests skipped for root zone."
