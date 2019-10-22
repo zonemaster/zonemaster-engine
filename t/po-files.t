@@ -27,8 +27,7 @@ sub make {
 }
 
 subtest "no fuzzy marks" => sub {
-    my @fuzzy_po_files = qw( );
-    my ( $output, $status ) = make "show-fuzzy", sprintf( "FUZZY_POFILES='%s'", join( " ", @fuzzy_po_files ) );
+    my ( $output, $status ) = make "show-fuzzy";
     is $status, 0,  'make show-fuzzy exits with value 0';
     is $output, "", 'make show-fuzzy gives empty output';
 };
