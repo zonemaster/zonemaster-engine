@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::Delegation;
 
-use version; our $VERSION = version->declare("v1.0.15");
+use version; our $VERSION = version->declare("v1.0.16");
 
 use strict;
 use warnings;
@@ -146,25 +146,25 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     ENOUGH_IPV4_NS_CHILD => sub {
         __x    # DELEGATION:ENOUGH_IPV4_NS_CHILD
-          "Child lists enough ({count}) nameservers "
+          "Child lists enough ({count}) nameservers ({nss}) "
           . "that resolve to IPv4 addresses ({addrs}). Lower limit set to {minimum}.",
           @_;
     },
     ENOUGH_IPV4_NS_DEL => sub {
         __x    # DELEGATION:ENOUGH_IPV4_NS_DEL
-          "Delegation lists enough ({count}) nameservers "
+          "Delegation lists enough ({count}) nameservers ({nss}) "
           . "that resolve to IPv4 addresses ({addrs}). Lower limit set to {minimum}.",
           @_;
     },
     ENOUGH_IPV6_NS_CHILD => sub {
         __x    # DELEGATION:ENOUGH_IPV6_NS_CHILD
-          "Child lists enough ({count}) nameservers "
+          "Child lists enough ({count}) nameservers ({nss}) "
           . "that resolve to IPv6 addresses ({addrs}). Lower limit set to {minimum}.",
           @_;
     },
     ENOUGH_IPV6_NS_DEL => sub {
         __x    # DELEGATION:ENOUGH_IPV6_NS_DEL
-          "Delegation lists enough ({count}) nameservers "
+          "Delegation lists enough ({count}) nameservers ({nss}) "
           . "that resolve to IPv6 addresses ({addrs}). Lower limit set to {minimum}.",
           @_;
     },
@@ -206,25 +206,25 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     NOT_ENOUGH_IPV4_NS_CHILD => sub {
         __x    # DELEGATION:NOT_ENOUGH_IPV4_NS_CHILD
-          "Child does not list enough ({count}) nameservers "
+          "Child does not list enough ({count}) nameservers ({nss}) "
           . "that resolve to IPv4 addresses ({addrs}). Lower limit set to {minimum}.",
           @_;
     },
     NOT_ENOUGH_IPV4_NS_DEL => sub {
         __x    # DELEGATION:NOT_ENOUGH_IPV4_NS_DEL
-          "Delegation does not list enough ({count}) nameservers "
+          "Delegation does not list enough ({count}) nameservers ({nss}) "
           . "that resolve to IPv4 addresses ({addrs}). Lower limit set to {minimum}.",
           @_;
     },
     NOT_ENOUGH_IPV6_NS_CHILD => sub {
         __x    # DELEGATION:NOT_ENOUGH_IPV6_NS_CHILD
-          "Child does not list enough ({count}) nameservers "
+          "Child does not list enough ({count}) nameservers ({nss}) "
           . "that resolve to IPv6 addresses ({addrs}). Lower limit set to {minimum}.",
           @_;
     },
     NOT_ENOUGH_IPV6_NS_DEL => sub {
         __x    # DELEGATION:NOT_ENOUGH_IPV6_NS_DEL
-          "Delegation does not list enough ({count}) nameservers "
+          "Delegation does not list enough ({count}) nameservers ({nss}) "
           . "that resolve to IPv6 addresses ({addrs}). Lower limit set to {minimum}.",
           @_;
     },
@@ -359,13 +359,13 @@ sub delegation01 {
     my $child_ns_ipv4_args = {
         count   => scalar( @child_ns_ipv4 ),
         minimum => $MINIMUM_NUMBER_OF_NAMESERVERS,
-        ns      => join( q{;}, sort @child_ns_ipv4 ),
+        nss     => join( q{;}, sort @child_ns_ipv4 ),
         addrs   => join( q{;}, sort @child_ns_ipv4_addrs ),
     };
     my $child_ns_ipv6_args = {
         count   => scalar( @child_ns_ipv6 ),
         minimum => $MINIMUM_NUMBER_OF_NAMESERVERS,
-        ns      => join( q{;}, sort @child_ns_ipv6 ),
+        nss     => join( q{;}, sort @child_ns_ipv6 ),
         addrs   => join( q{;}, sort @child_ns_ipv6_addrs ),
     };
 
