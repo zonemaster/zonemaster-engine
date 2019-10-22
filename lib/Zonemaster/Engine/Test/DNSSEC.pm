@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::DNSSEC;
 
-use version; our $VERSION = version->declare("v1.1.8");
+use version; our $VERSION = version->declare("v1.1.9");
 
 ###
 ### This test module implements DNSSEC tests.
@@ -529,11 +529,11 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     DS_ALGORITHM_MISSING => sub {
         __x    # DNSSEC:DS_ALGORITHM_MISSING
-          "{ns}/{address} returned a DS record created by algorithm {algorithm_number}/{algorithm_mnemonic}, which is OK. The DS record is for the DNSKEY record with keytag {keytag} in zone {zone}.", @_;
+          "{ns}/{address} returned no DS record created by algorithm {algorithm_number}/{algorithm_mnemonic} for zone {zone}, which is required.", @_;
     },
     DS_ALGORITHM_OK => sub {
         __x    # DNSSEC:DS_ALGORITHM_OK
-          "{ns}/{address} answered DS query for zone {zone} with DS record for keytag {keytag} using algorithm {algorithm_number}/{algorithm_mnemonic}, which is OK.", @_;
+          "{ns}/{address} returned a DS record created by algorithm {algorithm_number}/{algorithm_mnemonic}, which is OK. The DS record is for the DNSKEY record with keytag {keytag} in zone {zone}.", @_;
     },
     DS_ALGORITHM_RESERVED => sub {
         __x    # DNSSEC:DS_ALGORITHM_RESERVED
@@ -631,7 +631,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     MIXED_NSEC_NSEC3 => sub {
         __x    # DNSSEC:MIXED_NSEC_NSEC3
-          "Nameserver {ns/address} for zone {zone} responds with both NSEC and NSEC3 records when only one record type is expected.", @_;
+          "Nameserver {ns}/{address} for zone {zone} responds with both NSEC and NSEC3 records when only one record type is expected.", @_;
     },
     NEITHER_DNSKEY_NOR_DS => sub {
         __x    # DNSSEC:NEITHER_DNSKEY_NOR_DS
@@ -665,7 +665,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     NO_NSEC_NSEC3 => sub {
         __x    # DNSSEC:NO_NSEC_NSEC3
-          "Nameserver {ns/address} for zone {zone} responds with neither NSEC nor NSEC3 record when when such records are expected.", @_;
+          "Nameserver {ns}/{address} for zone {zone} responds with neither NSEC nor NSEC3 record when when such records are expected.", @_;
     },
     NO_RESPONSE_DNSKEY => sub {
         __x    # DNSSEC:NO_RESPONSE_DNSKEY
@@ -761,7 +761,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     TEST_ABORTED => sub {
         __x    # DNSSEC:TEST_ABORTED
-          "Nameserver {ns/address} for zone {zone} responds with RCODE \"NOERROR\" on a query that is expected to give response with RCODE \"NXDOMAIN\". Test for NSEC and NSEC3 is aborted for this nameserver.", @_;
+          "Nameserver {ns}/{address} for zone {zone} responds with RCODE \"NOERROR\" on a query that is expected to give response with RCODE \"NXDOMAIN\". Test for NSEC and NSEC3 is aborted for this nameserver.", @_;
     },
     TOO_MANY_ITERATIONS => sub {
         __x    # DNSSEC:TOO_MANY_ITERATIONS
