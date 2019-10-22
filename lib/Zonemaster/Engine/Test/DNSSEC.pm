@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::DNSSEC;
 
-use version; our $VERSION = version->declare("v1.1.7");
+use version; our $VERSION = version->declare("v1.1.8");
 
 ###
 ### This test module implements DNSSEC tests.
@@ -506,6 +506,18 @@ Readonly my %TAG_DESCRIPTIONS => (
     DNSKEY_SIGNED => sub {
         __x    # DNSSEC:DNSKEY_SIGNED
           "The apex DNSKEY RRset was correcly signed.", @_;
+    },
+    DNSKEY_SMALLER_THAN_REC => sub {
+        __x    # DNSSEC:DNSKEY_SMALLER_THAN_REC
+          "DNSKEY with tag {keytag} and using algorithm {algorithm_number} ({algorithm_description}) has a size ({keysize}) smaller than the recommended one ({keysizerec}).", @_;
+    },
+    DNSKEY_TOO_SMALL_FOR_ALGO => sub {
+        __x    # DNSSEC:DNSKEY_TOO_SMALL_FOR_ALGO
+          "DNSKEY with tag {keytag} and using algorithm {algorithm_number} ({algorithm_description}) has a size ({keysize}) smaller than the minimum one ({keysizemin}).", @_;
+    },
+    DNSKEY_TOO_LARGE_FOR_ALGO => sub {
+        __x    # DNSSEC:DNSKEY_TOO_LARGE_FOR_ALGO
+          "DNSKEY with tag {keytag} and using algorithm {algorithm_number} ({algorithm_description}) has a size ({keysize}) larger than the maximum one ({keysizemax}).", @_;
     },
     DS_ALGORITHM_NOT_DS => sub {
         __x    # DNSSEC:DS_ALGORITHM_NOT_DS
@@ -1891,12 +1903,13 @@ sub dnssec14 {
         next if not exists $rsa_key_size_details{$algo};
 
         my $algo_args = {
-            algorithm   => $algo,
-            keytag      => $key->keytag,
-            keysize     => $key->keysize,
-            keysizemin  => $rsa_key_size_details{$algo}{min_size},
-            keysizemax  => $rsa_key_size_details{$algo}{max_size},
-            keysizerec  => $rsa_key_size_details{$algo}{rec_size},
+            algorithm_number      => $algo,
+            algorithm_description => $algo_properties{$algo},
+            keytag                => $key->keytag,
+            keysize               => $key->keysize,
+            keysizemin            => $rsa_key_size_details{$algo}{min_size},
+            keysizemax            => $rsa_key_size_details{$algo}{max_size},
+            keysizerec            => $rsa_key_size_details{$algo}{rec_size},
         };
 
         if ( $key->keysize < $rsa_key_size_details{$algo}{min_size} ) {
