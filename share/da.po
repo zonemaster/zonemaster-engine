@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-18 10:33+0200\n"
+"POT-Creation-Date: 2019-10-18 15:00+0200\n"
 "PO-Revision-Date: 2019-10-14 16:39+0200\n"
 "Last-Translator: Niels Haarbo <haarbo@dk-hostmaster.dk>\n"
 "Language-Team: Zonemaster Team\n"
@@ -27,7 +27,7 @@ msgstr ""
 #. CONSISTENCY:ONE_SOA_MNAME
 #, perl-brace-format
 msgid "A single SOA mname value was seen ({mname})"
-msgstr "A single SOA mname value was seen ({mname})"
+msgstr "Et enkelt SOA MNAME blev returneret ({mname})"
 
 #. CONSISTENCY:ONE_SOA_RNAME
 #, perl-brace-format
@@ -55,7 +55,7 @@ msgstr "Et unikt NS-sæt blev fundet ({nsset})."
 
 #. ZONE:ONE_SOA
 msgid "A unique SOA record is returned by all nameservers of the zone."
-msgstr ""
+msgstr "En unik SOA-record blev returneret af alle navneservere i zonen."
 
 #. NAMESERVER:AXFR_FAILURE
 #, perl-brace-format
@@ -109,11 +109,11 @@ msgstr "Alle navneservernes IP-adresser er unikke."
 
 #. DELEGATION:CHILD_DISTINCT_NS_IP
 msgid "All the IP addresses used by the nameservers in child are unique."
-msgstr "All the IP addresses used by the nameservers in child are unique."
+msgstr "Alle IP-adresserne bag barnets navneservere er unikke."
 
 #. DELEGATION:DEL_DISTINCT_NS_IP
 msgid "All the IP addresses used by the nameservers in parent are unique."
-msgstr "All the IP addresses used by the nameservers in parent are unique."
+msgstr "Alle IP-adresserne bag forælderens navneservere er unikke."
 
 #. DELEGATION:SOA_EXISTS
 msgid "All the nameservers have SOA record."
@@ -183,8 +183,8 @@ msgid ""
 "Child does not list enough ({count}) nameservers ({nss}). Lower limit set to "
 "{minimum}."
 msgstr ""
-"Child does not list enough ({count}) nameservers ({nss}). Lower limit set to "
-"{minimum}."
+"Barnet indeholder ikke tilstrækkeligt antal ({count}) navneservere ({nss}). "
+"Minimumsværdien er {minimum}."
 
 #. DELEGATION:NOT_ENOUGH_IPV4_NS_CHILD
 #, perl-brace-format
@@ -192,8 +192,7 @@ msgid ""
 "Child does not list enough ({count}) nameservers that resolve to IPv4 "
 "addresses ({addrs}). Lower limit set to {minimum}."
 msgstr ""
-"Child does not list enough ({count}) nameservers that resolve to IPv4 "
-"addresses ({addrs}). Lower limit set to {minimum}."
+"Barnet indeholder ikke tilstrækkeligt antal ({count}) navneservere med IPv4-adresser ({addrs}). Minimumsværdien er {minimum}."
 
 #. DELEGATION:NOT_ENOUGH_IPV6_NS_CHILD
 #, perl-brace-format
@@ -201,8 +200,7 @@ msgid ""
 "Child does not list enough ({count}) nameservers that resolve to IPv6 "
 "addresses ({addrs}). Lower limit set to {minimum}."
 msgstr ""
-"Child does not list enough ({count}) nameservers that resolve to IPv6 "
-"addresses ({addrs}). Lower limit set to {minimum}."
+"Barnet indeholder ikke tilstrækkeligt antal ({count}) navneservere med IPv6-adresser ({addrs}). Minimumsværdien er {minimum}."
 
 #. CONSISTENCY:EXTRA_ADDRESS_CHILD
 #, perl-brace-format
@@ -225,8 +223,7 @@ msgid ""
 "Child lists enough ({count}) nameservers ({nss}). Lower limit set to "
 "{minimum}."
 msgstr ""
-"Child lists enough ({count}) nameservers ({nss}). Lower limit set to "
-"{minimum}."
+"Barnet indeholder tilstrækkeligt antal ({count}) navneservere ({nss}). Minimumsværdien er {minimum}."
 
 #. DELEGATION:ENOUGH_IPV4_NS_CHILD
 #, perl-brace-format
@@ -234,8 +231,7 @@ msgid ""
 "Child lists enough ({count}) nameservers that resolve to IPv4 addresses "
 "({addrs}). Lower limit set to {minimum}."
 msgstr ""
-"Child lists enough ({count}) nameservers that resolve to IPv4 addresses "
-"({addrs}). Lower limit set to {minimum}."
+"Barnet indeholder tilstrækkeligt antal ({count}) navneservere med IPv4-adresser ({addrs}). Minimumsværdien er {minimum}."
 
 #. DELEGATION:ENOUGH_IPV6_NS_CHILD
 #, perl-brace-format
@@ -243,8 +239,7 @@ msgid ""
 "Child lists enough ({count}) nameservers that resolve to IPv6 addresses "
 "({addrs}). Lower limit set to {minimum}."
 msgstr ""
-"Child lists enough ({count}) nameservers that resolve to IPv6 addresses "
-"({addrs}). Lower limit set to {minimum}."
+"Barnet indeholder tilstrækkeligt antal ({count}) navneservere med IPv6-adresser ({addrs}). Minimumsværdien er {minimum}."
 
 #. DELEGATION:NO_IPV4_NS_CHILD
 #, perl-brace-format
@@ -252,6 +247,7 @@ msgid ""
 "Child lists no nameserver that resolves to an IPv4 address. If any were "
 "present, the minimum allowed would be {minimum}."
 msgstr ""
+"Barnet indeholder ingen navneservere med IPv4-adresser. Minimumsværdien er {minimum}."
 
 #. DELEGATION:NO_IPV6_NS_CHILD
 #, perl-brace-format
@@ -259,6 +255,7 @@ msgid ""
 "Child lists no nameserver that resolves to an IPv6 address. If any were "
 "present, the minimum allowed would be {minimum}."
 msgstr ""
+"Barnet indeholder ingen navneservere med IPv6-adresser. Minimumsværdien er {minimum}."
 
 #. SYSTEM:LOOKUP_ERROR
 #, perl-brace-format
@@ -305,8 +302,7 @@ msgid ""
 "Delegation does not list enough ({count}) nameservers that resolve to IPv4 "
 "addresses ({addrs}). Lower limit set to {minimum}."
 msgstr ""
-"Delegation does not list enough ({count}) nameservers that resolve to IPv4 "
-"addresses ({addrs}). Lower limit set to {minimum}."
+"Delegeringen indeholder ikke tilstrækkeligt antal ({count}) navneservere med IPv4-adresser. Mindsteværdien er {minimum}."
 
 #. DELEGATION:NOT_ENOUGH_IPV6_NS_DEL
 #, perl-brace-format
@@ -314,8 +310,7 @@ msgid ""
 "Delegation does not list enough ({count}) nameservers that resolve to IPv6 "
 "addresses ({addrs}). Lower limit set to {minimum}."
 msgstr ""
-"Delegation does not list enough ({count}) nameservers that resolve to IPv6 "
-"addresses ({addrs}). Lower limit set to {minimum}."
+"Delegeringen indeholder ikke tilstrækkeligt antal ({count}) navneservere med IPv6-adresser. Mindsteværdien er {minimum}."
 
 #. DNSSEC:DELEGATION_NOT_SIGNED
 #, perl-brace-format
@@ -333,8 +328,7 @@ msgid ""
 "Delegation lists enough ({count}) nameservers that resolve to IPv4 addresses "
 "({addrs}). Lower limit set to {minimum}."
 msgstr ""
-"Delegation lists enough ({count}) nameservers that resolve to IPv4 addresses "
-"({addrs}). Lower limit set to {minimum}."
+"Delegeringen indeholder et tilstrækkeligt antal ({count}) navneservere med IPv4-adresser. Mindsteværdien er {minimum}."
 
 #. DELEGATION:ENOUGH_IPV6_NS_DEL
 #, perl-brace-format
@@ -342,8 +336,7 @@ msgid ""
 "Delegation lists enough ({count}) nameservers that resolve to IPv6 addresses "
 "({addrs}). Lower limit set to {minimum}."
 msgstr ""
-"Delegation lists enough ({count}) nameservers that resolve to IPv6 addresses "
-"({addrs}). Lower limit set to {minimum}."
+"Delegeringen indeholder et tilstrækkeligt antal ({count}) navneservere med IPv6-adresser. Mindsteværdien er {minimum}."
 
 #. DELEGATION:NO_IPV4_NS_DEL
 #, perl-brace-format
@@ -351,6 +344,7 @@ msgid ""
 "Delegation lists no nameserver that resolves to an IPv4 address. If any were "
 "present, the minimum allowed would be {minimum}."
 msgstr ""
+"Delegeringen indeholder ikke navneservere med IPv4-adresser. Mindsteværdien er {minimum}."
 
 #. DELEGATION:NO_IPV6_NS_DEL
 #, perl-brace-format
@@ -358,6 +352,7 @@ msgid ""
 "Delegation lists no nameserver that resolves to an IPv6 address. If any were "
 "present, the minimum allowed would be {minimum}."
 msgstr ""
+"Delegeringen indeholder ikke navneservere med IPv6-adresser. Mindsteværdien er {minimum}."
 
 #. CONSISTENCY:SOA_SERIAL_VARIATION
 #, perl-brace-format
@@ -443,7 +438,7 @@ msgstr "Domænets navneservere er i flere AS'er."
 #. NAMESERVER:NS_ERROR
 #, perl-brace-format
 msgid "Erroneous response from nameserver {ns}/{address}."
-msgstr "Erroneous response from nameserver {ns}/{address}."
+msgstr "Fejlagtigt svar fra navneserver {ns}/{address}."
 
 #. DNSSEC:DS_RFC4509_NOT_VALID
 msgid ""
@@ -501,12 +496,12 @@ msgstr "Glue-records er konsistente mellem forælder og barn."
 #. DELEGATION:CHILD_NS_SAME_IP
 #, perl-brace-format
 msgid "IP {address} in child refers to multiple nameservers ({nss})."
-msgstr "IP {address} in child refers to multiple nameservers ({nss})."
+msgstr "IP {address} hos barnet refererer til flere navneservere ({nss})."
 
 #. DELEGATION:DEL_NS_SAME_IP
 #, perl-brace-format
 msgid "IP {address} in parent refers to multiple nameservers ({nss})."
-msgstr "IP {address} in parent refers to multiple nameservers ({nss})."
+msgstr "IP {address} hos forælderen refererer til flere navneservere ({nss})."
 
 #. DELEGATION:SAME_IP_ADDRESS
 #, perl-brace-format
@@ -566,6 +561,9 @@ msgid ""
 "at parent ({parent_addresses}) and any equivalent address record in child "
 "zone({zone_addresses})"
 msgstr ""
+"In-bailiwick navneserver listet hos forælderen har et misforhold mellem glue data "
+"hos forælder ({parent_addresses}) og enhver tilsvarende record i barnezonen "
+"({zone_addresses})"
 
 #. NAMESERVER:EDNS_VERSION_ERROR
 #, perl-brace-format
@@ -587,7 +585,7 @@ msgstr ""
 
 #. CONSISTENCY:CHILD_ZONE_LAME
 msgid "Lame delegation"
-msgstr "Lame delegation"
+msgstr "Lam delegation"
 
 #. SYSTEM:LOGGER_CALLBACK_ERROR
 #, perl-brace-format
@@ -701,7 +699,7 @@ msgstr "På navneservern {ns} returnerer {address_type} et CNAME."
 #. NAMESERVER:UNSUPPORTED_EDNS_VER
 #, perl-brace-format
 msgid "Nameserver {ns}/{address} accepts an unsupported EDNS version."
-msgstr "Nameserver {ns}/{address} accepts an unsupported EDNS version."
+msgstr "Navneserveren {ns}/{address} accepterer en ikke supporteret EDNS version."
 
 #. CONNECTIVITY:NAMESERVER_HAS_TCP_53
 #, perl-brace-format
@@ -733,8 +731,8 @@ msgid ""
 "Nameserver {ns}/{address} answered AAAA query with an unexpected RDATA "
 "length ({length} instead of 16)"
 msgstr ""
-"Nameserver {ns}/{address} answered AAAA query with an unexpected RDATA "
-"length ({length} instead of 16)"
+"Navneserveren {ns}/{address} besvarede AAAA forespørgsel med en uventet RDATA "
+"længde ({length} i stedet for 16)"
 
 #. NAMESERVER:AAAA_UNEXPECTED_RCODE
 #, perl-brace-format
@@ -775,7 +773,7 @@ msgstr ""
 msgid ""
 "Nameserver {ns}/{address} does not preserve original case of queried names."
 msgstr ""
-"Nameservern {ns}/{address} bevarede ikke versaler og minuskler fra "
+"Navneserveren {ns}/{address} bevarede ikke versaler og minuskler fra "
 "forespørgslen."
 
 #. NAMESERVER:NO_EDNS_SUPPORT
@@ -808,7 +806,7 @@ msgstr "Navneserveren {ns}/{address} er ikke rekursiv."
 #. BASIC:HAS_NAMESERVERS
 #, perl-brace-format
 msgid "Nameserver {ns}/{address} listed these servers as glue: {nsnlist}."
-msgstr "Nameserver {ns}/{address} listed these servers as glue: {nsnlist}."
+msgstr "Navneserveren {ns}/{address} returnerede følgende servere som glues: {nsnlist}."
 
 #. CONNECTIVITY:NAMESERVER_NO_TCP_53
 #, perl-brace-format
@@ -841,37 +839,31 @@ msgstr ""
 msgid ""
 "Nameserver {ns}/{address} replies on an EDNS query with a truncated response "
 "without EDNS."
-msgstr ""
-"Nameserver {ns}/{address} replies on an EDNS query with a truncated response "
-"without EDNS."
+msgstr "Navneserveren {ns}/{address} svarede på en EDNS forespørgsel med et trunkeret svar uden EDNS."
 
 #. DNSSEC:NO_RESPONSE_DNSKEY
 #, perl-brace-format
 msgid "Nameserver {ns}/{address} responded with no DNSKEY record(s)."
-msgstr "Nameserver {ns}/{address} responded with no DNSKEY record(s)."
+msgstr "Navneserveren {ns}/{address} returnerede ingen DNSKEY record(s)."
 
 #. ZONE:WRONG_SOA
 #, perl-brace-format
 msgid ""
 "Nameserver {ns}/{address} responds with a wrong owner name ({owner} instead "
 "of {name}) on SOA queries."
-msgstr ""
-"Nameserver {ns}/{address} responds with a wrong owner name ({owner} instead "
-"of {name}) on SOA queries."
+msgstr "Nameserver {ns}/{address} returnerede et ugyldigt ({owner} i stedet for {name}) på SOA forespørgsler."
 
 #. NAMESERVER:UNKNOWN_OPTION_CODE
 #, perl-brace-format
 msgid "Nameserver {ns}/{address} responds with an unknown ENDS OPTION-CODE."
-msgstr "Nameserver {ns}/{address} responds with an unknown ENDS OPTION-CODE."
+msgstr "Navneserveren {ns}/{address} returnerede en ukendt ENDS OPTION-CODE."
 
 #. ZONE:MULTIPLE_SOA
 #, perl-brace-format
 msgid ""
 "Nameserver {ns}/{address} responds with multiple ({count}) SOA records on "
 "SOA queries."
-msgstr ""
-"Nameserver {ns}/{address} responds with multiple ({count}) SOA records on "
-"SOA queries."
+msgstr "Navneserveren {ns}/{address} returnerede flere ({count}) SOA records på SOA forespørgsler."
 
 #. BASIC:HAS_A_RECORDS
 #, perl-brace-format
@@ -986,7 +978,7 @@ msgstr "Intet svar fra navneserver(ne) på forespørgsel på SOA-record."
 #. NAMESERVER:NO_RESPONSE
 #, perl-brace-format
 msgid "No response from {ns}/{address} asking for {dname}."
-msgstr "No response from {ns}/{address} asking for {dname}."
+msgstr "Intet svar fra {ns}/{address} på forespørgsel om {dname}."
 
 #. NAMESERVER:BREAKS_ON_EDNS
 #, perl-brace-format
@@ -1034,6 +1026,9 @@ msgid ""
 "mismatch between the glue at the parent ({parent_addresses}) and iany "
 "equivalent address record found in authoritative zone  ({zone_addresses})"
 msgstr ""
+"Out-of-bailiwick navneserver listet hos forælderen inklusive glue record "
+"har et misforhold mellem glue hos forælderen ({parent_addresses}) og "
+"enhver tilsvarende record fundet i den autoritative zone ({zone_addresses})"
 
 #. SYSTEM:PACKET_BIG
 #, perl-brace-format
@@ -1085,7 +1080,7 @@ msgstr ""
 #. SYSTEM:PROFILE_FILE
 #, perl-brace-format
 msgid "Profile was read from {name}."
-msgstr "Profile blev hentet fra {name}."
+msgstr "Profil blev hentet fra {name}."
 
 #. DNSSEC:RRSIG_EXPIRATION
 #, perl-brace-format
@@ -1162,9 +1157,7 @@ msgstr ""
 msgid ""
 "Response from nameserver {ns}/{address} on SOA queries does not contain SOA "
 "record."
-msgstr ""
-"Response from nameserver {ns}/{address} on SOA queries does not contain SOA "
-"record."
+msgstr "Svaret fra navneserveren {ns}/{address} på SOA forespørgsler indeholder ikke en SOA record."
 
 #. NAMESERVER:EDNS_RESPONSE_WITHOUT_EDNS
 #, perl-brace-format
@@ -1247,8 +1240,8 @@ msgid ""
 "SOA 'mname' nameserver ({mname}) is not listed in \"parent\" NS records for "
 "tested zone ({nss})."
 msgstr ""
-"SOA 'mname' nameserver ({mname}) is not listed in \"parent\" NS records for "
-"tested zone ({nss})."
+"SOA 'MNAME' navneserver ({mname}) er ikke returneret i \"forældre\" NS records for "
+"den testede zone ({nss})."
 
 #. ZONE:MNAME_NO_RESPONSE
 #, perl-brace-format
@@ -1377,7 +1370,7 @@ msgstr "Fandt {count} NS-sæt."
 #. CONSISTENCY:MULTIPLE_SOA_MNAMES
 #, perl-brace-format
 msgid "Saw {count} SOA mname."
-msgstr "Saw {count} SOA mname."
+msgstr "Så {count} SOA MNAME."
 
 #. CONSISTENCY:MULTIPLE_SOA_RNAMES
 #, perl-brace-format
@@ -1428,9 +1421,7 @@ msgstr "Adressen ({info}) modtager e-mail for domænenavnet."
 msgid ""
 "The DNSKEY with tag {keytag} uses algorithm number not meant for zone "
 "signing{algorithm}/({description})."
-msgstr ""
-"The DNSKEY with tag {keytag} uses algorithm number not meant for zone "
-"signing{algorithm}/({description})."
+msgstr "DNSKEY med tag {keytag} bruger en algoritme til signering af zone {algorithm}/({description})."
 
 #. DNSSEC:ALGORITHM_OK
 #, perl-brace-format
@@ -1446,9 +1437,7 @@ msgstr ""
 msgid ""
 "The DNSKEY with tag {keytag} uses an algorithm number {algorithm}/"
 "({description} which which is not recommended to be used."
-msgstr ""
-"The DNSKEY with tag {keytag} uses an algorithm number {algorithm}/"
-"({description} which which is not recommended to be used."
+msgstr "DNSKEY med tag {keytag} bruger en ikke anbefalet algoritme {algorithm}/({description}."
 
 #. DNSSEC:ALGORITHM_DEPRECATED
 #, perl-brace-format
@@ -1497,6 +1486,7 @@ msgid ""
 "The SOA RNAME mail domain ({domain}) cannot be resolved to a mail server "
 "with an IP address."
 msgstr ""
+"SOA RNAME maildomæne ({domain}) refererer ikke til en mailserver."
 
 #. DNSSEC:DNSKEY_SIGNED
 msgid "The apex DNSKEY RRset was correcly signed."
@@ -1650,7 +1640,7 @@ msgstr ""
 #. CONSISTENCY:CHILD_NS_FAILED
 #, perl-brace-format
 msgid "Unexepected or erroneous reply from {ns}/{address}."
-msgstr "Unexepected or erroneous reply from {ns}/{address}."
+msgstr "Uventet eller fejlagtigt svar fra {ns}/{address}."
 
 #. NAMESERVER:UPWARD_REFERRAL_IRRELEVANT
 msgid "Upward referral tests skipped for root zone."
