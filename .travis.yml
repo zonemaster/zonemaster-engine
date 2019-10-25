@@ -44,10 +44,10 @@ before_install:
 - export PERL5LIB=/usr/share/perl5
 
   # Zonemaster LDNS needs a newer version of Module::Install
-- cpan-install Module::Install Module::Install::XSUtil
+- cpanm Module::Install Module::Install::XSUtil
 
   # Moose installed from OS package depends on a newer version of Devel::OverloadInfo
-- cpan-install Devel::OverloadInfo Moose
+- cpanm Devel::OverloadInfo Moose
 
   # Install Zonemaster LDNS
 - git clone --depth=1 --branch=51-ed25519 https://github.com/mattias-p/zonemaster-ldns.git
