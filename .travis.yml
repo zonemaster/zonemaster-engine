@@ -43,9 +43,6 @@ before_install:
   # Help Perl find modules installed from OS packages
 - export PERL5LIB=/usr/share/perl5
 
-  # Provide cpanm helper
-- eval $(curl https://travis-perl.github.io/init) --auto
-
   # Zonemaster LDNS needs a newer version of Module::Install
 - cpan-install Module::Install Module::Install::XSUtil
 
