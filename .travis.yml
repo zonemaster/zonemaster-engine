@@ -54,7 +54,8 @@ before_install:
 
   # Install Zonemaster LDNS
 - git clone --depth=1 --branch=51-ed25519 https://github.com/mattias-p/zonemaster-ldns.git
-- ( cd zonemaster-ldns && cpanm --verbose --notest --configure-args="--no-ed25519" . ) && rm -rf zonemaster-ldns
+- ( cd zonemaster-ldns && PERL_CPANM_OPT="--configure-args=--no-ed25519" cpan-install . ) && rm -rf zonemaster-ldns
+  
 
 before_script:
 - cd /home/travis/build/zonemaster/zonemaster-engine
