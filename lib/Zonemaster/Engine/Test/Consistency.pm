@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::Consistency;
 
-use version; our $VERSION = version->declare("v1.1.11");
+use version; our $VERSION = version->declare("v1.1.12");
 
 use strict;
 use warnings;
@@ -725,13 +725,13 @@ sub consistency05 {
         foreach my $p ( @{$a_aref} ) {
             next if not $p;
             foreach my $rr ( $p->get_records_for_name( q{A}, $nsname ) ) {
-                $parent_glues{ $rr->owner . q{/} . $rr->address } = $nsname;
+                $parent_glues{ lc( $rr->owner ) . q{/} . $rr->address } = $nsname;
             }
         }
         foreach my $p ( @{$aaaa_aref} ) {
             next if not $p;
             foreach my $rr ( $p->get_records_for_name( q{AAAA}, $nsname ) ) {
-                $parent_glues{ $rr->owner . q{/} . $rr->address } = $nsname;
+                $parent_glues{ lc( $rr->owner ) . q{/} . $rr->address } = $nsname;
             }
         }
     }
@@ -809,14 +809,14 @@ sub consistency05 {
         my $p_a = Zonemaster::Engine->recurse( $glue_name, q{A}, q{IN} );
         if ( $p_a ) {
             for my $rr ( $p_a->get_records_for_name( q{A}, $glue_name, q{answer} ) ) {
-                $child_oob_strings{ $rr->owner . q{/} . $rr->address } = 1;
+                $child_oob_strings{ lc( $rr->owner ) . q{/} . $rr->address } = 1;
             }
         }
 
         my $p_aaaa = Zonemaster::Engine->recurse( $glue_name, q{AAAA}, q{IN} );
         if ( $p_aaaa ) {
             for my $rr ( $p_aaaa->get_records_for_name( q{AAAA}, $glue_name, q{answer} ) ) {
-                $child_oob_strings{ $rr->owner . q{/} . $rr->address } = 1;
+                $child_oob_strings{ lc( $rr->owner ) . q{/} . $rr->address } = 1;
             }
         }
 
