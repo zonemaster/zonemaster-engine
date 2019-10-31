@@ -4,13 +4,16 @@ POTFILE = Zonemaster-Engine.pot
 PMFILES = $(shell find ../lib -type f -name '*.pm' | sort)
 TESTMODULEFILES = $(shell find ../lib/Zonemaster/Engine/Test -type f -name '*.pm' | sort)
 
-.PHONY: all update-po extract-pot
+.PHONY: all touch-po update-po extract-pot
 
 all: ${MOFILES} modules.txt
 	@echo
 	@echo Remember to make sure all of the above names are in the
 	@echo MANIFEST file, or they will not be installed.
 	@echo
+
+touch-po:
+	@touch $(POTFILE) $(POFILES)
 
 update-po: extract-pot $(POFILES)
 
@@ -28,7 +31,7 @@ $(MOFILES): locale/%/LC_MESSAGES/Zonemaster-Engine.mo: %.po
 	@perl -e 'use Locale::Msgfmt; msgfmt({in => $$ARGV[0], out => $$ARGV[1]});' $< locale/$*/LC_MESSAGES/Zonemaster-Engine.mo
 	@echo locale/$*/LC_MESSAGES/Zonemaster-Engine.mo
 
-show-fuzzy: $(POFILES)
+show-fuzzy:
 	@for f in $(POFILES) ; do msgattrib --only-fuzzy $$f ; done
 
 modules.txt: $(TESTMODULEFILES)
