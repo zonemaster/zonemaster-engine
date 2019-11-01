@@ -42,8 +42,8 @@ recommends 'Net::IP::XS'  => 0;
 
 sub MY::postamble {
         return <<'MAKE_FRAG';
-	$(MYEXTLIB): share/Makefile
-	cd share && $(MAKE) extract-pot touch-po all
+pure_all :: share/Makefile
+	cd share && $(MAKE) touch-po all
 MAKE_FRAG
 };
 
