@@ -6,10 +6,8 @@ v3.1.0 2019-11-15
  - Updated Travis config after updated zonemaster-ldns (#585)
  - Add more meaningful message for unsupported algorithms in
    DNSSEC test cases (#641, #632)
- - Enable no-fuzzy test for Swedish and Danish PO files
-   (#640, #598, #600)
+ - Improved the hanling of "fuzzy" PO files (#640, #598, #600, #596)
  - Implementation of revised version of DNSSEC10 (#633, #618, #632)
- - Verify absence of fuzzy translations (#596)
  - Implementation of revised version of DNSSEC01 (#627, #616, #308)
  - Implementation of revised version of DELEGATION05 (#628, #617, #236)
  - Added test case DNSSEC13 (#611, #620)
@@ -25,8 +23,9 @@ v3.1.0 2019-11-15
  - A util that prints recorded data in dig format (#555)
 
  [Fixes]
+ - Update management of MO file (#664)
  - Fixed case sensitivity in Consistency05 (#659, #658)
- - Translation to Danish (#636, #626)
+ - Translation to Danish (#636, #626, #624, #604, #600)
  - Fixed Consistency test cases messages typos (#653, #643, #647)
  - Fixed DELEGATION01 messages (#652, #648, #644)
  - Fixed DNSSEC error message typo (#651, #642)
@@ -38,7 +37,6 @@ v3.1.0 2019-11-15
  - Update of en.po (#637, #609)
  - Replace module references (#631, #625)
  - Updated and corrected sv.po (#623, #605, #598)
- - Updated da.po (#624, #604, #600)
  - Fixed missing msgid in Zone.pm (#613, #614)
  - Fixed that Consistency05 not reported extra addresses at child
    (#577, #593)
