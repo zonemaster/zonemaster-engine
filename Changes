@@ -16,7 +16,7 @@ v3.1.0 2019-11-15
  - Update implementation of Delegation01 (#569, #603, #520)
  - Update implementation of DNSSEC05 (#570, #602)
  - Implement DNSSEC14 (#584, #586)
- - Proper gettext usage (#573, #588, #191)
+ - Updated gettext handling of translations (#573, #588, #191, #631, #625)
  - Make test module auto-detection less dynamic (#580)
  - Use Net::IP::XS when available (#565, #567)
  - Install all runtime dependencies from binary packages (#547, #451)
@@ -35,7 +35,6 @@ v3.1.0 2019-11-15
  - Fixed DNSSEC14 missing messages (#645)
  - Remove non-determinism in file generation (#639, #638) 
  - Update of en.po (#637, #609)
- - Replace module references (#631, #625)
  - Updated and corrected sv.po (#623, #605, #598)
  - Fixed missing msgid in Zone.pm (#613, #614)
  - Fixed that Consistency05 not reported extra addresses at child
