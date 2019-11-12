@@ -74,11 +74,19 @@ This instruction covers the following operating systems:
    sudo cpanm Module::Install Test::More
    ```
 
-4) Install Zonemaster::LDNS and Zonemaster::Engine:
+4) Install Zonemaster::LDNS and Zonemaster::Engine.
 
-   ```sh
-   sudo cpanm Zonemaster::LDNS Zonemaster::Engine
-   ```
+   * On Debian 10 (Buster):
+
+     ```sh
+     sudo cpanm Zonemaster::LDNS Zonemaster::Engine
+     ```
+
+   * On Debian 9 (Stretch):
+
+     ```sh
+     sudo cpanm Zonemaster::LDNS Zonemaster::Engine --configure-args="--no-ed25519"
+     ```
 
 
 ### Installation on FreeBSD
