@@ -1,15 +1,15 @@
 package Zonemaster::Engine::Test::DNSSEC;
 
-use version; our $VERSION = version->declare("v1.1.10");
-
-###
-### This test module implements DNSSEC tests.
-###
+use 5.014002;
 
 use strict;
 use warnings;
 
-use 5.014002;
+use version; our $VERSION = version->declare("v1.1.11");
+
+###
+### This test module implements DNSSEC tests.
+###
 
 use Zonemaster::Engine;
 
@@ -18,8 +18,10 @@ use List::MoreUtils qw[uniq none];
 use List::Util qw[min];
 use Locale::TextDomain qw[Zonemaster-Engine];
 use Readonly;
+use Zonemaster::Engine::Profile;
 use Zonemaster::Engine::Constants qw[:algo :soa :ip];
 use Zonemaster::Engine::Util;
+use Zonemaster::Engine::TestMethods;
 
 ### Table fetched from IANA on 2017-03-09
 Readonly::Hash our %algo_properties => (
