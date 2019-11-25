@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare( "v1.0.6" );
+use version; our $VERSION = version->declare( "v1.0.7" );
 
 use Zonemaster::Engine;
 
@@ -141,6 +141,14 @@ Readonly my %TAG_DESCRIPTIONS => (
     INITIAL_HYPHEN => sub {
         __x    # SYNTAX:INITIAL_HYPHEN
           'Domain name ({name}) has a label ({label}) starting with an hyphen (\'-\').', @_;
+    },
+    IPV4_DISABLED => sub {
+        __x    # SYNTAX:IPV4_DISABLED
+          'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
+    },
+    IPV6_DISABLED => sub {
+        __x    # SYNTAX:IPV6_DISABLED
+          'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
     },
     MNAME_DISCOURAGED_DOUBLE_DASH => sub {
         __x    # SYNTAX:MNAME_DISCOURAGED_DOUBLE_DASH
