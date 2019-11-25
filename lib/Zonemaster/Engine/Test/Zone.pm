@@ -1,11 +1,11 @@
 package Zonemaster::Engine::Test::Zone;
 
-use version; our $VERSION = version->declare("v1.0.10");
+use 5.014002;
 
 use strict;
 use warnings;
 
-use 5.014002;
+use version; our $VERSION = version->declare( "v1.0.11" );
 
 use Zonemaster::Engine;
 
@@ -13,7 +13,10 @@ use Carp;
 use List::MoreUtils qw[none];
 use Locale::TextDomain qw[Zonemaster-Engine];
 use Readonly;
+use Zonemaster::Engine::Profile;
 use Zonemaster::Engine::Constants qw[:soa :ip];
+use Zonemaster::Engine::Recursor;
+use Zonemaster::Engine::Nameserver;
 use Zonemaster::Engine::Test::Address;
 use Zonemaster::Engine::TestMethods;
 use Zonemaster::Engine::Util;
@@ -597,11 +600,13 @@ sub zone08 {
         my @mx = $p->get_records_for_name( q{MX}, $zone->name );
         for my $mx ( @mx ) {
             my $p2 = $zone->query_auth( $mx->exchange, q{CNAME} );
-            if ( $p2->has_rrs_of_type_for_name( q{CNAME}, $mx->exchange ) ) {
-                push @results, info( MX_RECORD_IS_CNAME => {} );
-            }
-            else {
-                push @results, info( MX_RECORD_IS_NOT_CNAME => {} );
+            if ( $p2 ) {
+                if ( $p2->has_rrs_of_type_for_name( q{CNAME}, $mx->exchange ) ) {
+                    push @results, info( MX_RECORD_IS_CNAME => {} );
+                }
+                else {
+                    push @results, info( MX_RECORD_IS_NOT_CNAME => {} );
+                }
             }
         }
     }
@@ -705,7 +710,7 @@ sub zone10 {
                         }
                       );
                 }
-            }
+            } ## end if ( scalar @soa )
             else {
                 push @results,
                   info(
@@ -715,8 +720,8 @@ sub zone10 {
                     }
                   );
             }
-        }
-    }
+        } ## end else [ if ( not $p ) ]
+    } ## end foreach my $ns ( @{ Zonemaster::Engine::TestMethods...})
     if ( not scalar @results ) {
         push @results, info( ONE_SOA => {} );
     }
@@ -747,12 +752,12 @@ sub _retrieve_record_from_zone {
 sub _is_ip_version_disabled {
     my $ns = shift;
 
-    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
+    if ( not Zonemaster::Engine::Profile->effective->get( q{net.ipv4} ) and $ns->address->version == $IP_VERSION_4 ) {
         Zonemaster::Engine->logger->add( SKIP_IPV4_DISABLED => { ns => "$ns" } );
         return 1;
     }
 
-    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
+    if ( not Zonemaster::Engine::Profile->effective->get( q{net.ipv6} ) and $ns->address->version == $IP_VERSION_6 ) {
         Zonemaster::Engine->logger->add( SKIP_IPV6_DISABLED => { ns => "$ns" } );
         return 1;
     }
