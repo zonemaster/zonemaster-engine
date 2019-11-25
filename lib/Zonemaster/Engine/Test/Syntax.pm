@@ -1,11 +1,11 @@
 package Zonemaster::Engine::Test::Syntax;
 
-use version; our $VERSION = version->declare("v1.0.5");
+use 5.014002;
 
 use strict;
 use warnings;
 
-use 5.014002;
+use version; our $VERSION = version->declare( "v1.0.6" );
 
 use Zonemaster::Engine;
 
@@ -15,7 +15,8 @@ use List::MoreUtils qw[uniq none any];
 use Locale::TextDomain qw[Zonemaster-Engine];
 use Readonly;
 use Time::Local;
-use Zonemaster::Engine::Constants qw[:name];
+use Zonemaster::Engine::Profile;
+use Zonemaster::Engine::Constants qw[:name :ip];
 use Zonemaster::Engine::DNSName;
 use Zonemaster::Engine::Packet;
 use Zonemaster::Engine::Recursor;
@@ -40,7 +41,8 @@ sub all {
         foreach my $local_nsname ( uniq map { $_->string } @{ Zonemaster::Engine::TestMethods->method2( $zone ) },
             @{ Zonemaster::Engine::TestMethods->method3( $zone ) } )
         {
-            push @results, $class->syntax04( $local_nsname ) if Zonemaster::Engine::Util::should_run_test( q{syntax04} );
+            push @results, $class->syntax04( $local_nsname )
+              if Zonemaster::Engine::Util::should_run_test( q{syntax04} );
         }
 
         push @results, $class->syntax05( $zone ) if Zonemaster::Engine::Util::should_run_test( q{syntax05} );
@@ -418,6 +420,32 @@ sub syntax06 {
     my %seen_rnames;
     for my $ns ( @nss ) {
 
+        if ( not Zonemaster::Engine::Profile->effective->get( q{net.ipv6} ) and $ns->address->version == $IP_VERSION_6 )
+        {
+            push @results,
+              info(
+                IPV6_DISABLED => {
+                    ns      => $ns->name->string,
+                    address => $ns->address->short,
+                    rrtype  => q{SOA},
+                }
+              );
+            next;
+        }
+
+        if ( not Zonemaster::Engine::Profile->effective->get( q{net.ipv4} ) and $ns->address->version == $IP_VERSION_4 )
+        {
+            push @results,
+              info(
+                IPV4_DISABLED => {
+                    ns      => $ns->name->string,
+                    address => $ns->address->short,
+                    rrtype  => q{SOA},
+                }
+              );
+            next;
+        }
+
         my $p = $ns->query( $zone->name, q{SOA} );
 
         if ( not $p ) {
@@ -686,7 +714,7 @@ sub check_name_syntax {
               );
         }
 
-    }
+    } ## end if ( $name ne q{.} )
 
     if ( not scalar @results ) {
         push @results,
