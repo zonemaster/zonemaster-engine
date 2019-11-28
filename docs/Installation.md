@@ -125,11 +125,39 @@ This instruction covers the following operating systems:
 
 5) Install dependencies from binary packages:
 
-   ```sh
-   pkg install libidn p5-App-cpanminus p5-Clone p5-Devel-CheckLib p5-Email-Valid p5-File-ShareDir p5-File-Slurp p5-IO-Socket-INET6 p5-JSON-PP p5-List-MoreUtils p5-Locale-libintl p5-Locale-Msgfmt p5-Module-Find p5-Module-Install p5-Module-Install-XSUtil p5-Moose p5-Net-IP-XS p5-Pod-Coverage p5-Readonly-XS p5-Test-Differences p5-Test-Exception p5-Test-Fatal p5-Test-Pod p5-Text-CSV
-   ```
+   * On all versions of FreeBSD install:
 
-6) Install Zonemaster::LDNS and Zonemaster::Engine:
+     ```sh
+     pkg install libidn p5-App-cpanminus p5-Clone p5-Devel-CheckLib p5-Email-Valid p5-File-ShareDir p5-File-Slurp p5-IO-Socket-INET6 p5-JSON-PP p5-List-MoreUtils p5-Locale-libintl p5-Locale-Msgfmt p5-Module-Find p5-Module-Install p5-Module-Install-XSUtil p5-Moose p5-Net-IP-XS p5-Pod-Coverage p5-Readonly-XS p5-Test-Differences p5-Test-Exception p5-Test-Fatal p5-Test-Pod p5-Text-CSV
+     ```
+
+   * On FreeBSD 11.3 also install:
+
+     ```sh
+     pkg install openssl111
+     ```
+
+   * On FreeBSD 12.1 also install:
+
+     ```sh
+     pkg install ldns
+     ```
+
+6) Install Zonemaster::LDNS:
+
+   * On FreeBSD 11.3:
+
+     ```sh
+     sudo cpanm Zonemaster::LDNS
+     ```
+
+   * On FreeBSD 12.1:
+
+     ```sh
+     sudo cpanm --configure-args="--no-internal-ldns" Zonemaster::LDNS
+     ```
+
+7) Install Zonemaster::Engine:
 
    ```sh
    cpanm Zonemaster::LDNS Zonemaster::Engine
