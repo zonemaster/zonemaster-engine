@@ -88,6 +88,9 @@ This instruction covers the following operating systems:
      sudo cpanm Zonemaster::LDNS Zonemaster::Engine --configure-args="--no-ed25519"
      ```
 
+> Note: Support for DNSSEC algorithm 15 (Ed25519) is not included in Debian 9.
+> OpenSSL version 1.1.1 or higher is required.
+
 
 ### Installation on FreeBSD
 
