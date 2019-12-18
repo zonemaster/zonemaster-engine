@@ -183,7 +183,7 @@ This instruction covers the following operating systems:
 7) Install Zonemaster::Engine:
 
    ```sh
-   cpanm Zonemaster::LDNS Zonemaster::Engine
+   cpanm Zonemaster::Engine
    ```
 
 
