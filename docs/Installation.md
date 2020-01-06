@@ -62,19 +62,27 @@ This instruction covers the following operating systems:
    sudo apt update
    ```
 
-2) Install dependencies from binary packages:
+2) Upgrade to latest patch level on Ubuntu 18.04 to get support for DNSSEC algorithm 15 (Ed25519)
+
+   * On Ubuntu 18.04:
+
+     ```sh
+     sudo apt upgrade
+     ```
+
+3) Install dependencies from binary packages:
 
    ```sh
    sudo apt install autoconf automake build-essential cpanminus libclone-perl libdevel-checklib-perl libemail-valid-perl libfile-sharedir-perl libfile-slurp-perl libidn11-dev libintl-perl libio-socket-inet6-perl libjson-pp-perl liblist-moreutils-perl liblocale-msgfmt-perl libmodule-find-perl libmodule-install-xsutil-perl libmoose-perl libnet-ip-perl libpod-coverage-perl libreadonly-xs-perl libssl-dev libtest-differences-perl libtest-exception-perl libtest-fatal-perl libtest-pod-perl libtext-csv-perl libtool m4
    ```
 
-3) Install dependencies from CPAN:
+4) Install dependencies from CPAN:
 
    ```sh
    sudo cpanm Module::Install Test::More
    ```
 
-4) Install Zonemaster::LDNS and Zonemaster::Engine.
+5) Install Zonemaster::LDNS and Zonemaster::Engine.
 
    * On Debian 10 (Buster):
 
@@ -88,8 +96,20 @@ This instruction covers the following operating systems:
      sudo cpanm Zonemaster::LDNS Zonemaster::Engine --configure-args="--no-ed25519"
      ```
 
-> Note: Support for DNSSEC algorithm 15 (Ed25519) is not included in Debian 9.
-> OpenSSL version 1.1.1 or higher is required.
+   * On Ubuntu 18.04:
+
+     ```sh
+     sudo cpanm Zonemaster::LDNS Zonemaster::Engine
+     ```
+
+   * On Ubuntu 16.04:
+
+     ```sh
+     sudo cpanm Zonemaster::LDNS Zonemaster::Engine --configure-args="--no-ed25519"
+     ```
+
+> Note: Support for DNSSEC algorithm 15 (Ed25519) is not included in neither
+> Debian 9 nor Ubuntu 16.04. OpenSSL version 1.1.1 or higher is required.
 
 
 ### Installation on FreeBSD
@@ -163,7 +183,7 @@ This instruction covers the following operating systems:
 7) Install Zonemaster::Engine:
 
    ```sh
-   cpanm Zonemaster::LDNS Zonemaster::Engine
+   cpanm Zonemaster::Engine
    ```
 
 
