@@ -4,14 +4,11 @@ msgstr ""
 "PO-Revision-Date: 2020-02-13\n"
 "Last-Translator: richard.persson@norid.no\n"
 "Language-Team: Zonemaster Team\n"
-"Language: no\n"
+"Language: nb\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-# # IMPORTANT ##
-# Keep this file in sync with en.po
-# #
 #: ADDRESS:NAMESERVERS_IP_WITH_REVERSE
 msgid  "Reverse DNS entry exist for all Nameserver IP addresses."
 msgstr "Reversoppslag finnes for hver navnetjeneradresse."
@@ -33,7 +30,7 @@ msgid  ""
 "Nameserver {ns} has an IP address ({address}) with mismatched PTR result "
 "({names})."
 msgstr ""
-"Navnetjeneren {ns} har en IP-adresse ({address}) som ikke matcher "
+"[nb]Navnetjeneren {ns} har en IP-adresse ({address}) som ikke matcher "
 "revertsoppslag ({names})."
 
 #: ADDRESS:NAMESERVER_IP_WITHOUT_REVERSE
@@ -84,48 +81,48 @@ msgstr ""
 
 #: BASIC:HAS_PARENT
 msgid  "Parent domain '{pname}' was found for the tested domain."
-msgstr "Parent domain '{pname}' was found for the tested domain."
+msgstr "[nb]Parent domain '{pname}' was found for the tested domain."
 
 #: BASIC:IPV4_DISABLED CONNECTIVITY:IPV4_DISABLED CONSISTENCY:IPV4_DISABLED
 #: DELEGATION:IPV4_DISABLED NAMESERVER:IPV4_DISABLED
 msgid  "IPv4 is disabled, not sending \"{rrtype}\" query to {ns}/{address}."
-msgstr "IPv4 er deaktivert, sender ikke \"{rrtype}\" spørring til "
+msgstr "[nb]IPv4 er deaktivert, sender ikke \"{rrtype}\" spørring til "
 "{ns}/{address}."
 
 #: BASIC:IPV4_ENABLED
 msgid  "IPv4 is enabled, can send \"{rrtype}\" query to {ns}/{address}."
-msgstr "IPv4 er aktivert, sender \"{rrtype}\" spørring til {ns}/{address}."
+msgstr "[nb]IPv4 er aktivert, sender \"{rrtype}\" spørring til {ns}/{address}."
 
 #: BASIC:IPV6_DISABLED CONNECTIVITY:IPV6_DISABLED CONSISTENCY:IPV6_DISABLED
 #: DELEGATION:IPV6_DISABLED NAMESERVER:IPV6_DISABLED
 msgid  "IPv6 is disabled, not sending \"{rrtype}\" query to {ns}/{address}."
-msgstr "IPv6 er deaktivert, sender ikke \"{rrtype}\" spørring til "
+msgstr "[nb]IPv6 er deaktivert, sender ikke \"{rrtype}\" spørring til "
 "{ns}/{address}."
 
 #: BASIC:IPV6_ENABLED
 msgid  "IPv6 is enabled, can send \"{rrtype}\" query to {ns}/{address}."
-msgstr "IPv6 er aktivert, sender \"{rrtype}\" spørring til {ns}/{address}."
+msgstr "[nb]IPv6 er aktivert, sender \"{rrtype}\" spørring til {ns}/{address}."
 
 #: BASIC:NO_A_RECORDS
 msgid  "Nameserver {ns}/{address} did not return A record(s) for {dname}."
-msgstr "Nameserver {ns}/{address} did not return \"A\" record(s) for {dname}."
+msgstr "[nb]Nameserver {ns}/{address} did not return \"A\" record(s) for {dname}."
 
 #: BASIC:NO_GLUE_PREVENTS_NAMESERVER_TESTS
 msgid  "No NS records for tested zone from parent. NS tests aborted."
-msgstr "No NS records for tested zone from parent. NS tests skipped."
+msgstr "[nb]Ingen NS poster for tested zone from parent. NS tests skipped."
 
 #: BASIC:NO_PARENT
 msgid  "No parent domain could be found for the tested domain."
-msgstr "No parent domain could be found for the domain under test."
+msgstr "[nb]Ingen forelder funnet for det testede domenet."
 
 #: BASIC:NS_FAILED
 msgid  "Nameserver {ns}/{address} did not return NS records. RCODE was {rcode}."
 msgstr ""
-"Nameserver {ns}/{address} did not return NS records. RCODE was {rcode}."
+"[nb]Nameserver {ns}/{address} did not return NS records. RCODE was {rcode}."
 
 #: BASIC:NS_NO_RESPONSE
 msgid  "Nameserver {ns}/{address} did not respond to NS query."
-msgstr "Nameserver {ns}/{address} did not respond to NS query."
+msgstr "[nb]Nameserver {ns}/{address} did not respond to NS query."
 
 #: CONNECTIVITY:ASN_INFOS_ANNOUNCE_BY
 msgid  "[ASN:ANNOUNCE_BY] {address};{asn}"
