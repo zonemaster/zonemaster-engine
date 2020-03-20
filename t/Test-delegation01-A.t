@@ -28,6 +28,7 @@ my %res = map { $_->tag => $_ } Zonemaster::Engine::Test::Delegation->delegation
 ok( $res{ENOUGH_IPV4_NS_CHILD},      q{should emit ENOUGH_IPV4_NS_CHILD} );
 ok( $res{ENOUGH_IPV4_NS_DEL},        q{should emit ENOUGH_IPV4_NS_DEL} );
 ok( $res{ENOUGH_IPV6_NS_CHILD},      q{should emit ENOUGH_IPV6_NS_CHILD} );
+ok( $res{ENOUGH_IPV6_NS_CHILD} !~ /\d+(\.\d+){3}/, q{should not show IPv4 addresses in IPv6 message} );
 ok( $res{ENOUGH_IPV6_NS_DEL},        q{should emit ENOUGH_IPV6_NS_DEL} );
 ok( $res{ENOUGH_NS_CHILD},           q{should emit ENOUGH_NS_CHILD} );
 ok( $res{ENOUGH_NS_DEL},             q{should emit ENOUGH_NS_DEL} );
