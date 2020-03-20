@@ -69,6 +69,15 @@ sub version {
     return $self->{_inner}->version();
 }
 
+sub ip_is_ipv4 {
+    if ( $p_class eq 'Net::IP::XS' ) {
+        return Net::IP::XS::ip_is_ipv4( @_ );
+    }
+    else {
+        return Net::IP::ip_is_ipv4( @_ );
+    }
+}
+
 sub ip_is_ipv6 {
     if ( $p_class eq 'Net::IP::XS' ) {
         return Net::IP::XS::ip_is_ipv6( @_ );
@@ -100,6 +109,24 @@ Zonemaster::Engine::Net::IP - Net::IP/Net::IP::XS Wrapper (STILL EXPERIMENTAL)
 =head1 PROCEDURAL INTERFACE
 
 =over
+
+=item ip_is_ipv4
+
+Check if an IP address is of type 4.
+
+=over
+
+=item Params
+
+IP address
+
+=item Returns
+
+1 (yes) or 0 (no)
+
+=back
+
+    ip_is_ipv4($ip) and print "$ip is IPv4";
 
 =item ip_is_ipv6
 
