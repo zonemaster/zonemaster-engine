@@ -433,33 +433,33 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     ALGORITHM_DEPRECATED => sub {
         __x    # DNSSEC:ALGORITHM_DEPRECATED
-          "The DNSKEY with tag {keytag} uses deprecated algorithm number {algorithm}/({description}).", @_;
+          "The DNSKEY with tag {keytag} uses deprecated algorithm number {algorithm} ({description}).", @_;
     },
     ALGORITHM_NOT_RECOMMENDED => sub {
         __x    # DNSSEC:ALGORITHM_NOT_RECOMMENDED
-          "The DNSKEY with tag {keytag} uses an algorithm number {algorithm}/({description} which which is not recommended to be used.",
+          "The DNSKEY with tag {keytag} uses an algorithm number {algorithm} ({description}) which is not recommended to be used.",
           @_;
     },
     ALGORITHM_NOT_ZONE_SIGN => sub {
         __x    # DNSSEC:ALGORITHM_NOT_ZONE_SIGN
-          "The DNSKEY with tag {keytag} uses algorithm number not meant for zone signing {algorithm}/({description}).",
+          "The DNSKEY with tag {keytag} uses algorithm number not meant for zone signing, algorithm number {algorithm} ({description}).",
           @_;
     },
     ALGORITHM_OK => sub {
         __x    # DNSSEC:ALGORITHM_OK
-          "The DNSKEY with tag {keytag} uses algorithm number {algorithm}/({description}), which is OK.", @_;
+          "The DNSKEY with tag {keytag} uses algorithm number {algorithm} ({description}), which is OK.", @_;
     },
     ALGORITHM_PRIVATE => sub {
         __x    # DNSSEC:ALGORITHM_PRIVATE
-          "The DNSKEY with tag {keytag} uses private algorithm number {algorithm}/({description}).", @_;
+          "The DNSKEY with tag {keytag} uses private algorithm number {algorithm} ({description}).", @_;
     },
     ALGORITHM_RESERVED => sub {
         __x    # DNSSEC:ALGORITHM_RESERVED
-          "The DNSKEY with tag {keytag} uses reserved algorithm number {algorithm}/({description}).", @_;
+          "The DNSKEY with tag {keytag} uses reserved algorithm number {algorithm} ({description}).", @_;
     },
     ALGORITHM_UNASSIGNED => sub {
         __x    # DNSSEC:ALGORITHM_UNASSIGNED
-          "The DNSKEY with tag {keytag} uses unassigned algorithm number {algorithm}/({description}).", @_;
+          "The DNSKEY with tag {keytag} uses unassigned algorithm number {algorithm} ({description}).", @_;
     },
     ALGO_NOT_SIGNED_RRSET => sub {
         __x    # DNSSEC:ALGO_NOT_SIGNED_RRSET
@@ -523,23 +523,23 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     DS_ALGORITHM_NOT_DS => sub {
         __x    # DNSSEC:DS_ALGORITHM_NOT_DS
-          "{ns}/{address} returned a DS record created by algorithm {algorithm_number} which is not meant for DS. The DS record is for the DNSKEY record with keytag {keytag} in zone {zone}.", @_;
+          "{ns}/{address} returned a DS record created by algorithm {algorithm_number} ({algorithm_mnemonic}) which is not meant for DS. The DS record is for the DNSKEY record with keytag {keytag} in zone {zone}.", @_;
     },
     DS_ALGORITHM_DEPRECATED => sub {
         __x    # DNSSEC:DS_ALGORITHM_DEPRECATED
-          "{ns}/{address} returned a DS record created by algorithm ({algorithm_number}/{algorithm_mnemonic}), which is deprecated. The DS record is for the DNSKEY record with keytag {keytag} in zone {zone}.", @_;
+          "{ns}/{address} returned a DS record created by algorithm {algorithm_number} ({algorithm_mnemonic}), which is deprecated. The DS record is for the DNSKEY record with keytag {keytag} in zone {zone}.", @_;
     },
     DS_ALGORITHM_MISSING => sub {
         __x    # DNSSEC:DS_ALGORITHM_MISSING
-          "{ns}/{address} returned no DS record created by algorithm {algorithm_number}/{algorithm_mnemonic} for zone {zone}, which is required.", @_;
+          "{ns}/{address} returned no DS record created by algorithm {algorithm_number} ({algorithm_mnemonic}) for zone {zone}, which is required.", @_;
     },
     DS_ALGORITHM_OK => sub {
         __x    # DNSSEC:DS_ALGORITHM_OK
-          "{ns}/{address} returned a DS record created by algorithm {algorithm_number}/{algorithm_mnemonic}, which is OK. The DS record is for the DNSKEY record with keytag {keytag} in zone {zone}.", @_;
+          "{ns}/{address} returned a DS record created by algorithm {algorithm_number} ({algorithm_mnemonic}), which is OK. The DS record is for the DNSKEY record with keytag {keytag} in zone {zone}.", @_;
     },
     DS_ALGORITHM_RESERVED => sub {
         __x    # DNSSEC:DS_ALGORITHM_RESERVED
-          "{ns}/{address} returned a DS record created by with an unassigned algorithm ({algorithm_number}), which is not OK. The DS record is for the DNSKEY record with keytag {keytag} in zone {zone}.", @_;
+          "{ns}/{address} returned a DS record created by with an unassigned algorithm (number {algorithm_number}), which is not OK. The DS record is for the DNSKEY record with keytag {keytag} in zone {zone}.", @_;
     },
     DS_BUT_NOT_DNSKEY => sub {
         __x    # DNSSEC:DS_BUT_NOT_DNSKEY
