@@ -539,7 +539,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     DS_ALGORITHM_RESERVED => sub {
         __x    # DNSSEC:DS_ALGORITHM_RESERVED
-          "{ns}/{address} returned a DS record created by with an unassigned algorithm (number {algorithm_number}), which is not OK. The DS record is for the DNSKEY record with keytag {keytag} in zone {zone}.", @_;
+          "{ns}/{address} returned a DS record created by with an algorithm not assigned (algorithm number {algorithm_number}), which is not OK. The DS record is for the DNSKEY record with keytag {keytag} in zone {zone}.", @_;
     },
     DS_BUT_NOT_DNSKEY => sub {
         __x    # DNSSEC:DS_BUT_NOT_DNSKEY
