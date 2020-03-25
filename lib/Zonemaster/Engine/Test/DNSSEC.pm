@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare("v1.1.11");
+use version; our $VERSION = version->declare( "v1.1.12" );
 
 ###
 ### This test module implements DNSSEC tests.
@@ -1906,7 +1906,7 @@ sub dnssec14 {
 
         my $algo_args = {
             algorithm_number      => $algo,
-            algorithm_description => $algo_properties{$algo},
+            algorithm_description => $algo_properties{$algo}{description},
             keytag                => $key->keytag,
             keysize               => $key->keysize,
             keysizemin            => $rsa_key_size_details{$algo}{min_size},
