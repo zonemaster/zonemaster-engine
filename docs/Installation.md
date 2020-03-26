@@ -151,7 +151,7 @@ This instruction covers the following operating systems:
    * On all versions of FreeBSD install:
 
      ```sh
-     pkg install libidn p5-App-cpanminus p5-Clone p5-Devel-CheckLib p5-Email-Valid p5-File-ShareDir p5-File-Slurp p5-IO-Socket-INET6 p5-JSON-PP p5-List-MoreUtils p5-Locale-libintl p5-Locale-Msgfmt p5-Module-Find p5-Module-Install p5-Module-Install-XSUtil p5-Moose p5-Net-IP-XS p5-Pod-Coverage p5-Readonly-XS p5-Test-Differences p5-Test-Exception p5-Test-Fatal p5-Test-Pod p5-Text-CSV
+     pkg install libidn p5-App-cpanminus p5-Clone p5-Devel-CheckLib p5-Email-Valid p5-File-ShareDir p5-File-Slurp p5-IO-Socket-INET6 p5-JSON-PP p5-List-MoreUtils p5-Locale-libintl p5-Locale-Msgfmt p5-Module-Find p5-Module-Install p5-Module-Install-XSUtil p5-Moose p5-Net-IP-XS p5-Pod-Coverage p5-Readonly-XS p5-Test-Differences p5-Test-Exception p5-Test-Fatal p5-Test-Pod p5-Text-CSV net-mgmt/p5-Net-IP
      ```
 
    * On FreeBSD 11.x (11.3 or newer) also install OpenSSL 1.1.1 or newer:
@@ -166,7 +166,16 @@ This instruction covers the following operating systems:
      pkg install dns/ldns
      ```
 
-6) Install Zonemaster::LDNS:
+6) Verify remaining dependencies.
+
+     > This step is not needed for installation. It is only here for the developers of Zonemaster.
+     ```sh
+     cpanm --scandeps Zonemaster-LDNS-x.y.z.tar.gz # Normally you skip this step.
+     cpanm --scandeps Zonemaster-Engine-x.y.z.tar.gz # Normally you skip this step.
+     ```
+
+
+7) Install Zonemaster::LDNS:
 
    * On FreeBSD 11.x (11.3 or newer):
 
@@ -180,7 +189,7 @@ This instruction covers the following operating systems:
      cpanm --configure-args="--no-internal-ldns" Zonemaster::LDNS
      ```
 
-7) Install Zonemaster::Engine:
+8) Install Zonemaster::Engine:
 
    ```sh
    cpanm Zonemaster::Engine
