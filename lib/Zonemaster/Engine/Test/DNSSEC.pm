@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare( "v1.1.12" );
+use version; our $VERSION = version->declare( "v1.1.13" );
 
 ###
 ### This test module implements DNSSEC tests.
@@ -824,27 +824,29 @@ sub dnssec01 {
                 my $algorithm2 = 0;
                 my @dss = $ds_p->get_records( q{DS}, q{answer} );
                 foreach my $ds ( @dss ) {
-                    $ns_args->{keytag} = $ds->keytag;
-                    $ns_args->{algorithm_number} = $ds->digtype;
-                    $ns_args->{algorithm_mnemonic} = $digest_algorithms{$ds->digtype};
+                    my $ds_args = { %$ns_args };
+                    $ds_args->{keytag} = $ds->keytag;
+                    $ds_args->{algorithm_number} = $ds->digtype;
+                    $ds_args->{algorithm_mnemonic} = $digest_algorithms{$ds->digtype};
                     if ( $ds->digtype == 0 ) {
-                        push @results, info( DS_ALGORITHM_NOT_DS => $ns_args );
+                        push @results, info( DS_ALGORITHM_NOT_DS => $ds_args );
                     }
                     elsif ( $ds->digtype == 1 or $ds->digtype == 3 ) {
-                        push @results, info( DS_ALGORITHM_DEPRECATED => $ns_args );
+                        push @results, info( DS_ALGORITHM_DEPRECATED => $ds_args );
                     }
                     elsif ( $ds->digtype >= 5 and $ds->digtype <= 255 ) {
-                        push @results, info( DS_ALGORITHM_RESERVED => $ns_args );
+                        push @results, info( DS_ALGORITHM_RESERVED => $ds_args );
                     }
                     else {
                         $algorithm2++ if $ds->digtype == 2;
-                        push @results, info( DS_ALGORITHM_OK => $ns_args );
+                        push @results, info( DS_ALGORITHM_OK => $ds_args );
                     }
                 }
                 if ( not $algorithm2 ) {
-                    $ns_args->{algorithm_number} = 2;
-                    $ns_args->{algorithm_mnemonic} = $digest_algorithms{2};
-                    push @results, info( DS_ALGORITHM_MISSING => $ns_args );
+                    my $ds_args = { %$ns_args };
+                    $ds_args->{algorithm_number} = 2;
+                    $ds_args->{algorithm_mnemonic} = $digest_algorithms{2};
+                    push @results, info( DS_ALGORITHM_MISSING => $ds_args );
                 }
             }    
         }
