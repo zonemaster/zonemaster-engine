@@ -1,12 +1,17 @@
 package Zonemaster::Engine::Test;
 
-use version; our $VERSION = version->declare("v1.1.9");
-
 use 5.014002;
+
 use strict;
 use warnings;
 
+use version; our $VERSION = version->declare( "v1.1.10" );
+
+use Moose;
+
+use Zonemaster::LDNS;
 use Zonemaster::Engine;
+use Zonemaster::Engine::Profile;
 use Zonemaster::Engine::Util;
 use Zonemaster::Engine::Test::Basic;
 
@@ -16,6 +21,13 @@ use File::ShareDir qw[dist_file];
 use File::Slurp qw[read_file];
 use Scalar::Util qw[blessed];
 use POSIX qw[strftime];
+use Module::Find;
+use JSON;
+use Net::IP;
+use List::MoreUtils;
+use Clone;
+
+use Readonly;
 
 my @all_test_modules;
 
@@ -23,7 +35,7 @@ BEGIN {
     @all_test_modules = split /\n/, read_file( dist_file( 'Zonemaster-Engine', 'modules.txt' ) );
 
     for my $name ( @all_test_modules ) {
-        require "Zonemaster/Engine/Test/$name.pm";
+        require sprintf q{Zonemaster/Engine/Test/%s.pm}, $name;
         "Zonemaster::Engine::Test::$name"->import();
     }
 }
@@ -40,7 +52,6 @@ sub _log_versions {
     info( DEPENDENCY_VERSION => { name => 'File::Slurp',           version => $File::Slurp::VERSION } );
     info( DEPENDENCY_VERSION => { name => 'Net::IP',               version => $Net::IP::VERSION } );
     info( DEPENDENCY_VERSION => { name => 'List::MoreUtils',       version => $List::MoreUtils::VERSION } );
-    info( DEPENDENCY_VERSION => { name => 'Mail::RFC822::Address', version => $Mail::RFC822::Address::VERSION } );
     info( DEPENDENCY_VERSION => { name => 'Clone',                 version => $Clone::VERSION } );
     info( DEPENDENCY_VERSION => { name => 'Readonly',              version => $Readonly::VERSION } );
 
@@ -75,7 +86,6 @@ sub run_all_for {
     info( MODULE_END => { module => 'Zonemaster::Engine::Test::Basic' } );
 
     if ( Zonemaster::Engine::Test::Basic->can_continue( @results ) and Zonemaster::Engine->can_continue() ) {
-        ## no critic (Modules::RequireExplicitInclusion)
         foreach my $mod ( __PACKAGE__->modules ) {
 
             if ( not _policy_allowed( $mod ) ) {
