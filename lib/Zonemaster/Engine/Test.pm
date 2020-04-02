@@ -7,8 +7,6 @@ use warnings;
 
 use version; our $VERSION = version->declare( "v1.1.10" );
 
-use Moose;
-
 use Zonemaster::LDNS;
 use Zonemaster::Engine;
 use Zonemaster::Engine::Profile;
@@ -21,13 +19,6 @@ use File::ShareDir qw[dist_file];
 use File::Slurp qw[read_file];
 use Scalar::Util qw[blessed];
 use POSIX qw[strftime];
-use Module::Find;
-use JSON;
-use Net::IP;
-use List::MoreUtils;
-use Clone;
-
-use Readonly;
 
 my @all_test_modules;
 
