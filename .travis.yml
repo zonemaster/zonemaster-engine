@@ -24,7 +24,6 @@ addons:
       - libjson-pp-perl
       - liblist-moreutils-perl
       - liblocale-msgfmt-perl
-      - libmail-rfc822-address-perl
       - libmodule-find-perl
       - libnet-ip-perl
       - libpod-coverage-perl
