@@ -105,7 +105,7 @@ To create a fork of F<Zonemaster-Engine> go to
 L<https://github.com/zonemaster/zonemaster-engine>, make sure you are logged
 in at Github and press the "Fork" button.
 
-Make sure you have your public L<ssh> key uploaded to Github and its
+Make sure you have your public C<ssh> key uploaded to Github and its
 private key available on the computer you are going to work from.
 
 =head3 Steps
