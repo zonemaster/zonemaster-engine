@@ -1,4 +1,6 @@
-=head1 Introduction
+=head1 Translation
+
+=head2 Introduction
 
 The translation system in Zonemaster is a two-step process, where internal
 message tags are first replaced by English strings with argument
@@ -47,6 +49,8 @@ Make sure the message tag comments are properly added and up to date.
 =head3 Software preparation
 
 For the steps below you need to work on a computer with Git, Perl and Xgettext.
+Select what OS you want to work on. Other OSs will also work, but you will
+have to find instructions elsewhere.
 
 =head4 FreeBSD
 
@@ -75,8 +79,8 @@ performed as an implicit intermediate step.
 If you do want to generate it, the command is C<make extract-pot> 
 (C<gmake extract-pot> on FreeBSD).
 
-The translated strings are maintained in files named C<{language_code}.po> (e.g.
-F<en.po>, F<sv.po>, F<da.po> or F<fr.po>).
+The translated strings are maintained in files named C<{language_code}.po>
+(currently F<en.po>, F<sv.po>, F<da.po> or F<fr.po>).
 Execute C<make update-po> (C<gmake update-po> on FreeBSD) to update these 
 files with new message ids from the
 source code (C<make extract-pot> will be infoked behind the scenes).
@@ -93,7 +97,9 @@ C<make update-po MSGMERGE_OPTS=--no-fuzzy-mathing> instead.
 For full integration with Zonemaster translation you need a Github account
 and a fork of F<Zonemaster-Engine>. If you do not have a Github account you
 can easily create one at L<https://github.com/>. If you are not prepared to
-create one, contact the Zonemaster work group for instructions.
+create one, contact the Zonemaster work group for instructions, either by
+creating an issue in L<https://github.com/zonemaster/zonemaster-engine/issues>
+or by sending an email to L<mailto:contact@zonemaster.net>.
 
 To create a fork of F<Zonemaster-Engine> go to 
 L<https://github.com/zonemaster/zonemaster-engine>, make sure you are logged
@@ -124,8 +130,8 @@ where F<XXXXX> is your Github user name.
 C<make update-po> (C<gmake update-po> on FreeBSD).
 
 =item * Update the po file the language to be updated. The F<en.po> file should
-not be updated in this way. Instead, create an issue to have the message
-updated in the Perl module.
+not be updated in this way. Instead, create an issue or a pull request
+to have the message updated in the Perl module.
 
 =item * When doing the update, do not add any changes to the F<msgid>, only update
 F<msgstr>.
@@ -135,14 +141,15 @@ a C<git add xx.po> where F<xx> is the language code of the po file you
 have updated. Make sure you do not "add" any other file that might have been
 changed.
 
-=item * Do a commit C<git commit -m 'Write a description of the change'>.
+=item * Create a commit, C<git commit -m 'Write a description of the change'>.
 
 =item * Now push the branch to your fork at Github. Run 
 C<git push -u XXXXX translation-update> where F<XXXXX> is your 
 Github user name and "translation-update" is name of the branch
 you created above and have been working on.
 
-=item * Go to your fork at Github, L<https://github.com/XXXXX/zonemaster-engine>.
+=item * Go to your fork at Github, https://github.com/XXXXX/zonemaster-engine
+where F<XXXXX> is your Github user name.
 
 =item * Select to create a new F<pull request> where the base directory
 should be F<zonemaster-engine> and the base should be F<develop> (not
@@ -150,15 +157,16 @@ should be F<zonemaster-engine> and the base should be F<develop> (not
 branch as you created above and pushed to your fork.
 
 =item * Inspect what Github says that will change by the pull request. It should
-only be the F<po> file that you have updated and nothing else.
+only be the F<po> file that you have updated and nothing else. If additional
+files are listed, please correct or request for help.
 
 =item * Press "create pull request", write a nice description and press "create"
 again.
 
 =item * If you go back to your own computer and just save the clone as it is, you
-can easily update the pull request if needed. When the pull request has
-been merged by the Zonemaster work group, you can delete the local clone
-and on your Github fork you can remove the branch.
+can easily update the pull request if needed with more changes to the same
+po file. When the pull request has been merged by the Zonemaster work group,
+you can delete the local clone and on your Github fork you can remove the branch.
 
 =back
 
