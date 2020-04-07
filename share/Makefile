@@ -1,5 +1,6 @@
 .POSIX:
 .SUFFIXES: .po .mo
+.PHONY: all dist touch-po update-po extract-pot
 
 POFILES != echo *.po
 MOFILES := $(POFILES:%.po=%.mo)
@@ -7,9 +8,7 @@ POTFILE = Zonemaster-Engine.pot
 PMFILES != find ../lib -type f -name '*.pm' | sort
 TESTMODULEFILES != find ../lib/Zonemaster/Engine/Test -type f -name '*.pm' | sort
 
-.PHONY: all dist touch-po update-po extract-pot
-
-all: ${MOFILES} modules.txt
+all: $(MOFILES) modules.txt
 	@echo
 	@echo Remember to make sure all of the above names are in the
 	@echo MANIFEST file, or they will not be installed.
@@ -37,4 +36,4 @@ show-fuzzy:
 	@for f in $(POFILES) ; do msgattrib --only-fuzzy $$f ; done
 
 modules.txt: $(TESTMODULEFILES)
-	echo $(TESTMODULEFILES) | xargs basename -s .pm -a | grep -vE '^Basic$$' | sort > modules.txt
+	@echo $(TESTMODULEFILES) | xargs basename -s .pm -a | grep -vE '^Basic$$' | sort > modules.txt
