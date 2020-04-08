@@ -1,4 +1,4 @@
-=head1 Translation
+=head1 TRANSLATION
 
 =head2 Introduction
 
