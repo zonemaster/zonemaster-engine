@@ -116,8 +116,13 @@ to keep the database structur of the file.
 There are tools that makes editing of the ".po" files easier. When using
 those, the ".po" file is handled rather as a database then a plain file.
 
-There is an add-on to Emacs, L<https://www.emacswiki.org/emacs/PoMode>,
+There is an add-on to Emacs,
+L<https://www.gnu.org/software/gettext/manual/html_node/PO-Mode.html#PO-Mode>,
 which makes updating and searching in the ".po" file easier and more robust.
+
+There is also "GNOME Translation Editor",
+L<https://wiki.gnome.org/Apps/Gtranslator>, a ".po" graphical editor available
+for at least Windows and Linux.
 
 F<This section needs expansion with more details.>
 
