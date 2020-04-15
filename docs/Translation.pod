@@ -76,12 +76,12 @@ The first step in updating the translations is to generate a new template file
 (F<Zonemaster-Engine.pot>).
 In practice you rarely need to think about generating it as it is generally
 performed as an implicit intermediate step.
-If you do want to generate it, the command is C<make extract-pot> 
+If you do want to generate it, the command is C<make extract-pot>
 (C<gmake extract-pot> on FreeBSD).
 
 The translated strings are maintained in files named C<{language_code}.po>
 (currently F<en.po>, F<sv.po>, F<da.po> or F<fr.po>).
-Execute C<make update-po> (C<gmake update-po> on FreeBSD) to update these 
+Execute C<make update-po> (C<gmake update-po> on FreeBSD) to update these
 files with new message ids from the
 source code (C<make extract-pot> will be infoked behind the scenes).
 This should only be necessary to do when a developer has added or changed a test
@@ -101,12 +101,25 @@ create one, contact the Zonemaster work group for instructions, either by
 creating an issue in L<https://github.com/zonemaster/zonemaster-engine/issues>
 or by sending an email to L<mailto:contact@zonemaster.net>.
 
-To create a fork of F<Zonemaster-Engine> go to 
+To create a fork of F<Zonemaster-Engine> go to
 L<https://github.com/zonemaster/zonemaster-engine>, make sure you are logged
 in at Github and press the "Fork" button.
 
 Make sure you have your public C<ssh> key uploaded to Github and its
 private key available on the computer you are going to work from.
+
+=head3 Tools
+
+The ".po" can be edited with a plain text editor, but then it is important
+to keep the database structur of the file.
+
+There are tools that makes editing of the ".po" files easier. When using
+those, the ".po" file is handled rather as a database then a plain file.
+
+There is an add-on to Emacs, L<https://www.emacswiki.org/emacs/PoMode>,
+which makes updating and searching in the ".po" file easier and more robust.
+
+F<This section needs expansion with more details.>
 
 =head3 Steps
 
@@ -114,19 +127,19 @@ For normal translation work, follow the steps below.
 
 =over
 
-=item * Clone the Zonemaster-Engine repository with 
-C<git clone https://github.com/zonemaster/zonemaster-engine.git> 
+=item * Clone the Zonemaster-Engine repository with
+C<git clone https://github.com/zonemaster/zonemaster-engine.git>
 and enter the direcory created, C<cd zonemaster-engine>.
 
 =item * Check-out the F<develop> branch and create a new branch to work in,
 C<git checkout origin/develop; git checkout -b translation-update>
 
-=item * Now it is time to add your own fork of F<Zonemaster-Engine> to the 
-created clone. Run 
-C<git remote add XXXXX git@github.com:XXXXX/zonemaster-engine.git> 
-where F<XXXXX> is your Github user name. 
+=item * Now it is time to add your own fork of F<Zonemaster-Engine> to the
+created clone. Run
+C<git remote add XXXXX git@github.com:XXXXX/zonemaster-engine.git>
+where F<XXXXX> is your Github user name.
 
-=item * Go to the F<share> directory with C<cd share> and execute 
+=item * Go to the F<share> directory with C<cd share> and execute
 C<make update-po> (C<gmake update-po> on FreeBSD).
 
 =item * Update the po file the language to be updated. The F<en.po> file should
@@ -134,17 +147,18 @@ not be updated in this way. Instead, create an issue or a pull request
 to have the message updated in the Perl module.
 
 =item * When doing the update, do not change the F<msgid>, only update
-F<msgstr>.
+F<msgstr>. Instead, create an issue or a pull request to have the message
+updated in the Perl module.
 
-=item * Inspect every every message tagged as "fuzzy". Update F<msgstr> if needed
-and remove the "fuzzy" mark.
+=item * Inspect every F<fuzzy entry> (tagged with "fuzzy"). Update F<msgstr>
+if needed and remove the "fuzzy" tag.
 
-=item * Search for messages that have empty F<msgstr> and add a translation. At
-the end of the file there could be lines starting with "#~" and those could have
-matching translations.
+=item * Search for F<untranslated entries> (empty F<msgstr>) and add a
+translation. At the end of the file there could be F<obsolete entries>
+(lines starting with "#~") and those could have matching translations.
 
-=item * Any remaining lines at the end of the file starting with "#~" could be
-removed.
+=item * Any remaining F<obsolete entries> (lines at the end of the file
+starting with "#~") could be removed.
 
 =item * When the update is completed, it is time to commit the changes. First do
 a C<git add xx.po> where F<xx> is the language code of the po file you
@@ -160,8 +174,8 @@ commit.
 
 =item * Added files not needed can just be removed by C<rm FILE-NAME>.
 
-=item * Now push the branch to your fork at Github. Run 
-C<git push -u XXXXX translation-update> where F<XXXXX> is your 
+=item * Now push the branch to your fork at Github. Run
+C<git push -u XXXXX translation-update> where F<XXXXX> is your
 Github user name and "translation-update" is name of the branch
 you created above and have been working on.
 
