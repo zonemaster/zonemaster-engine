@@ -111,20 +111,24 @@ private key available on the computer you are going to work from.
 =head3 Tools
 
 The ".po" can be edited with a plain text editor, but then it is important
-to keep the database structur of the file.
+to keep the database structur of the file. There are tools that makes
+editing of the ".po" files easier. When using those, the ".po" file is
+handled rather as a database then a plain file.
 
-There are tools that makes editing of the ".po" files easier. When using
-those, the ".po" file is handled rather as a database then a plain file.
+=over
 
-There is an add-on to Emacs,
+=item * There is an add-on to Emacs,
 L<https://www.gnu.org/software/gettext/manual/html_node/PO-Mode.html#PO-Mode>,
 which makes updating and searching in the ".po" file easier and more robust.
 
-There is also "GNOME Translation Editor",
+=item * There is also "GNOME Translation Editor",
 L<https://wiki.gnome.org/Apps/Gtranslator>, a ".po" graphical editor available
 for at least Windows and Linux.
 
-F<This section needs expansion with more details.>
+=item * There are more tools available, either cloud services or programs
+for download, and they could be found by searching for "po editor".
+
+=back
 
 =head3 Steps
 
