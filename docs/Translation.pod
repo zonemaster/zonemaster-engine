@@ -133,15 +133,32 @@ C<make update-po> (C<gmake update-po> on FreeBSD).
 not be updated in this way. Instead, create an issue or a pull request
 to have the message updated in the Perl module.
 
-=item * When doing the update, do not add any changes to the F<msgid>, only update
+=item * When doing the update, do not change the F<msgid>, only update
 F<msgstr>.
+
+=item * Inspect every every message tagged as "fuzzy". Update F<msgstr> if needed
+and remove the "fuzzy" mark.
+
+=item * Search for messages that have empty F<msgstr> and add a translation. At
+the end of the file there could be lines starting with "#~" and those could have
+matching translations.
+
+=item * Any remaining lines at the end of the file starting with "#~" could be
+removed.
 
 =item * When the update is completed, it is time to commit the changes. First do
 a C<git add xx.po> where F<xx> is the language code of the po file you
-have updated. Make sure you do not "add" any other file that might have been
+have updated. Make sure not to "add" any other file that might have been
 changed.
 
+=item * Run C<git status> to verify that only the ".po" file as been added for
+commit.
+
 =item * Create a commit, C<git commit -m 'Write a description of the change'>.
+
+=item * Other changed files could be reset by C<git checkout FILE-NAME>.
+
+=item * Added files not needed can just be removed by C<rm FILE-NAME>.
 
 =item * Now push the branch to your fork at Github. Run 
 C<git push -u XXXXX translation-update> where F<XXXXX> is your 
