@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-25 19:02+0100\n"
+"POT-Creation-Date: 2020-04-17 16:34+0200\n"
 "PO-Revision-Date: 2020-04-02\n"
 "Last-Translator: vincent.levigneron@afnic.fr\n"
 "Language-Team: Zonemaster Team\n"
@@ -2170,6 +2170,19 @@ msgstr ""
 "créé à partir d'un algorithme obsolète ({algorithm_number}/"
 "{algorithm_mnemonic}), ce qui est incorrect. Cet enregistrement de type \"DS"
 "\" correspond à la clé (DNSKEY) avec le tag {keytag} dans la zone {zone}."
+
+#. DNSSEC:DS_ALGO_SHA1_DEPRECATED
+#, perl-brace-format
+msgid ""
+"{ns}/{address} returned a DS record created by algorithm {algorithm_number} "
+"({algorithm_mnemonic}), which, while it is still widely used, is deprecated. "
+"The DS record is for the DNSKEY record with keytag {keytag} in zone {zone}."
+msgstr ""
+"Le serveur de noms {ns}/{address} retourne un enregistrement de type \"DS\" "
+"créé à partir d'un algorithme obsolète ({algorithm_number}/"
+"{algorithm_mnemonic}), ce qui est incorrect (bien que cet algorithme soit "
+"encore très largement utilisé). Cet enregistrement de type \"DS\" "
+"correspond à la clé (DNSKEY) avec le tag {keytag} dans la zone {zone}."
 
 #. DNSSEC:DS_ALGORITHM_RESERVED
 #, perl-brace-format

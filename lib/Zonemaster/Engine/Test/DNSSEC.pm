@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare( "v1.1.13" );
+use version; our $VERSION = version->declare( "v1.1.14" );
 
 ###
 ### This test module implements DNSSEC tests.
@@ -282,13 +282,14 @@ sub metadata {
     return {
         dnssec01 => [
             qw(
+              DS_ALGORITHM_DEPRECATED
+              DS_ALGORITHM_MISSING
+              DS_ALGORITHM_NOT_DS
+              DS_ALGORITHM_OK
+              DS_ALGORITHM_RESERVED
+              DS_ALGO_SHA1_DEPRECATED
               NO_RESPONSE_DS
               UNEXPECTED_RESPONSE_DS
-              DS_ALGORITHM_NOT_DS
-              DS_ALGORITHM_MISSING
-              DS_ALGORITHM_OK
-              DS_ALGORITHM_DEPRECATED
-              DS_ALGORITHM_RESERVED
               )
         ],
         dnssec02 => [
@@ -540,6 +541,10 @@ Readonly my %TAG_DESCRIPTIONS => (
     DS_ALGORITHM_RESERVED => sub {
         __x    # DNSSEC:DS_ALGORITHM_RESERVED
           "{ns}/{address} returned a DS record created by with an algorithm not assigned (algorithm number {algorithm_number}), which is not OK. The DS record is for the DNSKEY record with keytag {keytag} in zone {zone}.", @_;
+    },
+    DS_ALGO_SHA1_DEPRECATED => sub {
+        __x    # DNSSEC:DS_ALGO_SHA1_DEPRECATED
+          "{ns}/{address} returned a DS record created by algorithm {algorithm_number} ({algorithm_mnemonic}), which is, while it is still widely used, deprecated. The DS record is for the DNSKEY record with keytag {keytag} in zone {zone}.", @_;
     },
     DS_BUT_NOT_DNSKEY => sub {
         __x    # DNSSEC:DS_BUT_NOT_DNSKEY
@@ -831,7 +836,10 @@ sub dnssec01 {
                     if ( $ds->digtype == 0 ) {
                         push @results, info( DS_ALGORITHM_NOT_DS => $ds_args );
                     }
-                    elsif ( $ds->digtype == 1 or $ds->digtype == 3 ) {
+                    elsif ( $ds->digtype == 1 ) {
+                        push @results, info( DS_ALGO_SHA1_DEPRECATED => $ds_args );
+                    }
+                    elsif ( $ds->digtype == 3 ) {
                         push @results, info( DS_ALGORITHM_DEPRECATED => $ds_args );
                     }
                     elsif ( $ds->digtype >= 5 and $ds->digtype <= 255 ) {
