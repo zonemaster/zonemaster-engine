@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare( "v1.1.15" );
+use version; our $VERSION = version->declare( "v1.1.16" );
 
 ###
 ### This test module implements DNSSEC tests.
@@ -639,11 +639,15 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     INCONSISTENT_DNSSEC => sub {
         __x    # DNSSEC:INCONSISTENT_DNSSEC
-          'Some, but not all, nameservers for zone {zone} respond with neither NSEC nor NSEC3 records when such records are expected.', @_;
+          'Some, but not all, nameservers for zone {zone} respond with neither NSEC nor NSEC3 records when '
+          . 'such records are expected.',
+          @_;
     },
     INCONSISTENT_NSEC_NSEC3 => sub {
         __x    # DNSSEC:INCONSISTENT_NSEC_NSEC3
-          'Some nameservers for zone {zone} respond with NSEC records and others respond with NSEC3 records. Consistency is expected.', @_;
+          'Some nameservers for zone {zone} respond with NSEC records and others respond with NSEC3 records. '
+          . 'Consistency is expected.',
+          @_;
     },
     INVALID_NAME_RCODE => sub {
         __x    # DNSSEC:INVALID_NAME_RCODE
