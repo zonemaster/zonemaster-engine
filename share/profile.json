@@ -165,6 +165,7 @@
             "DS_ALGORITHM_NOT_DS" : "ERROR",
             "DS_ALGORITHM_OK" : "INFO",
             "DS_ALGORITHM_RESERVED" : "ERROR",
+            "DS_ALGO_SHA1_DEPRECATED" : "WARNING",
             "DS_BUT_NOT_DNSKEY" : "ERROR",
             "DS_DOES_NOT_MATCH_DNSKEY" : "ERROR",
             "DS_FOUND" : "INFO",

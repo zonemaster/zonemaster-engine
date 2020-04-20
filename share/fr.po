@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-25 19:02+0100\n"
+"POT-Creation-Date: 2020-04-20 14:49+0200\n"
 "PO-Revision-Date: 2020-04-02\n"
 "Last-Translator: vincent.levigneron@afnic.fr\n"
 "Language-Team: Zonemaster Team\n"
@@ -1117,6 +1117,20 @@ msgid "Nameserver {ns}/{address} returned A record(s) for {dname}."
 msgstr ""
 "Le serveur de noms {ns}/{address} renvoie un enregistrement de type \"A\" en "
 "réponse à une requête pour '{dname}'."
+
+#. DNSSEC:DS_ALGO_SHA1_DEPRECATED
+#, perl-brace-format
+msgid ""
+"Nameserver {ns}/{address} returned a DS record created by algorithm "
+"{algorithm_number} ({algorithm_mnemonic}) which is deprecated, while it is "
+"still widely used. The DS record is for the DNSKEY record with keytag "
+"{keytag} in zone {zone}."
+msgstr ""
+"Le serveur de noms {ns}/{address} retourne un enregistrement de type \"DS\" "
+"créé à partir d'un algorithme obsolète ({algorithm_number}/"
+"{algorithm_mnemonic}), ce qui est incorrect (bien que cet algorithme soit "
+"encore très largement utilisé). Cet enregistrement de type \"DS\" correspond "
+"à la clé (DNSKEY) avec le tag {keytag} dans la zone {zone}."
 
 #. NAMESERVER:UPWARD_REFERRAL
 #, perl-brace-format
