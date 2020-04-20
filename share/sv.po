@@ -117,7 +117,7 @@ msgstr ""
 
 #. ADDRESS:NAMESERVER_IP_PTR_MATCH
 msgid "All reverse DNS entry matches name server name."
-msgstr "Varje bakåtuppslagning stämmer med motsvarande namnservernamn."
+msgstr "Varje bakåtuppslagning (PTR) stämmer med motsvarande namnservernamn."
 
 #. DELEGATION:DISTINCT_IP_ADDRESS
 msgid "All the IP addresses used by the nameservers are unique"
@@ -743,7 +743,7 @@ msgid ""
 "({names})."
 msgstr ""
 "Namnservern '{ns}' har en IP-adress ({address}) med en bakåtuppslagning "
-"({names}) som inte stämmer med namnservernamnet."
+"(PTR) till '{names}' som inte stämmer med namnservernamnet."
 
 #. ADDRESS:NAMESERVER_IP_PRIVATE_NETWORK
 #, perl-brace-format
@@ -757,7 +757,8 @@ msgstr ""
 #. ADDRESS:NAMESERVER_IP_WITHOUT_REVERSE
 #, perl-brace-format
 msgid "Nameserver {ns} has an IP address ({address}) without PTR configured."
-msgstr "Namnservern '{ns}' har en IP-adress ({address}) utan bakåtuppslagning."
+msgstr "Namnservern '{ns}' har en IP-adress ({address}) utan "
+"bakåtuppslagning (PTR)."
 
 #. DELEGATION:IS_NOT_AUTHORITATIVE
 #, perl-brace-format
@@ -1329,7 +1330,7 @@ msgstr ""
 
 #. ADDRESS:NAMESERVERS_IP_WITH_REVERSE
 msgid "Reverse DNS entry exist for all Nameserver IP addresses."
-msgstr "Bakåtuppslagning finns för varje namnserveradress."
+msgstr "Bakåtuppslagning (PTR) finns för varje namnserveradress."
 
 #. ZONE:EXPIRE_MINIMUM_VALUE_OK
 #, perl-brace-format
@@ -1787,13 +1788,13 @@ msgstr "Inga felanvända @-tecken hittades i SOA RNAME ({rname})."
 #. SYNTAX:RNAME_RFC822_INVALID
 #, perl-brace-format
 msgid "There must be no illegal characters in the SOA RNAME field ({rname})."
-msgstr "Det finns otillåtet tecken i SOA RNAME ({rname})."
+msgstr "Otillåtet tecken finns i SOA RNAME ({rname})."
 
 #. SYNTAX:RNAME_MISUSED_AT_SIGN
 #, perl-brace-format
 msgid ""
 "There must be no misused '@' character in the SOA RNAME field ({rname})."
-msgstr "Det finns felaktigt använt '@'-tecken i SOA RNAME ({rname})."
+msgstr "Felaktigt använt '@'-tecken finns i SOA RNAME ({rname})."
 
 #. DNSSEC:NSEC_SIG_VERIFY_ERROR
 #, perl-brace-format
@@ -2001,8 +2002,8 @@ msgid ""
 "({algorithm_mnemonic}) for zone {zone}, which is required."
 msgstr ""
 "Namnserver {ns}/{address} svarade inte med någon DS-post skapad med hash-"
-"algoritm {algorithm_number} ({algorithm_mnemonic}) för zon {zone}, vilket är "
-"ett krav."
+"algoritm {algorithm_number} ({algorithm_mnemonic}) för zonen {zone}, vilket "
+"är ett krav att den gör."
 
 #. DNSSEC:NO_RESPONSE_DS
 #, perl-brace-format
