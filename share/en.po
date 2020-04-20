@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-17 16:34+0200\n"
+"POT-Creation-Date: 2019-10-22 17:06+0200\n"
 "PO-Revision-Date: 2019-10-18 14:32+0200\n"
 "Last-Translator: mats.dufberg@iis.se\n"
 "Language-Team: Zonemaster Team\n"
@@ -543,7 +543,6 @@ msgstr "IP {address} refers to multiple nameservers ({nss})."
 #. DELEGATION:IPV4_DISABLED
 #. DNSSEC:IPV4_DISABLED
 #. NAMESERVER:IPV4_DISABLED
-#. SYNTAX:IPV4_DISABLED
 #, perl-brace-format
 msgid "IPv4 is disabled, not sending \"{rrtype}\" query to {ns}/{address}."
 msgstr "IPv4 is disabled, not sending \"{rrtype}\" query to {ns}/{address}."
@@ -564,7 +563,6 @@ msgstr "IPv4 is enabled, can send \"{rrtype}\" query to {ns}/{address}."
 #. DELEGATION:IPV6_DISABLED
 #. DNSSEC:IPV6_DISABLED
 #. NAMESERVER:IPV6_DISABLED
-#. SYNTAX:IPV6_DISABLED
 #, perl-brace-format
 msgid "IPv6 is disabled, not sending \"{rrtype}\" query to {ns}/{address}."
 msgstr "IPv6 is disabled, not sending \"{rrtype}\" query to {ns}/{address}."
@@ -1524,63 +1522,63 @@ msgstr "Target ({info}) found to deliver e-mail for the domain name."
 #, perl-brace-format
 msgid ""
 "The DNSKEY with tag {keytag} uses algorithm number not meant for zone "
-"signing, algorithm number {algorithm} ({description})."
+"signing {algorithm}/({description})."
 msgstr ""
 "The DNSKEY with tag {keytag} uses algorithm number not meant for zone "
-"signing, algorithm number {algorithm} ({description})."
+"signing {algorithm}/({description})."
 
 #. DNSSEC:ALGORITHM_OK
 #, perl-brace-format
 msgid ""
-"The DNSKEY with tag {keytag} uses algorithm number {algorithm} "
+"The DNSKEY with tag {keytag} uses algorithm number {algorithm}/"
 "({description}), which is OK."
 msgstr ""
-"The DNSKEY with tag {keytag} uses algorithm number {algorithm} "
+"The DNSKEY with tag {keytag} uses algorithm number {algorithm}/"
 "({description}), which is OK."
 
 #. DNSSEC:ALGORITHM_NOT_RECOMMENDED
 #, perl-brace-format
 msgid ""
-"The DNSKEY with tag {keytag} uses an algorithm number {algorithm} "
-"({description}) which is not recommended to be used."
+"The DNSKEY with tag {keytag} uses an algorithm number {algorithm}/"
+"({description} which which is not recommended to be used."
 msgstr ""
-"The DNSKEY with tag {keytag} uses an algorithm number {algorithm} "
-"({description}) which is not recommended to be used."
+"The DNSKEY with tag {keytag} uses an algorithm number {algorithm}/"
+"({description} which which is not recommended to be used."
 
 #. DNSSEC:ALGORITHM_DEPRECATED
 #, perl-brace-format
 msgid ""
-"The DNSKEY with tag {keytag} uses deprecated algorithm number {algorithm} "
+"The DNSKEY with tag {keytag} uses deprecated algorithm number {algorithm}/"
 "({description})."
 msgstr ""
-"The DNSKEY with tag {keytag} uses deprecated algorithm number {algorithm} "
+"The DNSKEY with tag {keytag} uses deprecated algorithm number {algorithm}/"
 "({description})."
 
 #. DNSSEC:ALGORITHM_PRIVATE
 #, perl-brace-format
 msgid ""
-"The DNSKEY with tag {keytag} uses private algorithm number {algorithm} "
+"The DNSKEY with tag {keytag} uses private algorithm number {algorithm}/"
 "({description})."
 msgstr ""
-"The DNSKEY with tag {keytag} uses private algorithm number {algorithm} "
+"The DNSKEY with tag {keytag} uses private algorithm number {algorithm}/"
 "({description})."
 
 #. DNSSEC:ALGORITHM_RESERVED
 #, perl-brace-format
 msgid ""
-"The DNSKEY with tag {keytag} uses reserved algorithm number {algorithm} "
+"The DNSKEY with tag {keytag} uses reserved algorithm number {algorithm}/"
 "({description})."
 msgstr ""
-"The DNSKEY with tag {keytag} uses reserved algorithm number {algorithm} "
+"The DNSKEY with tag {keytag} uses reserved algorithm number {algorithm}/"
 "({description})."
 
 #. DNSSEC:ALGORITHM_UNASSIGNED
 #, perl-brace-format
 msgid ""
-"The DNSKEY with tag {keytag} uses unassigned algorithm number {algorithm} "
+"The DNSKEY with tag {keytag} uses unassigned algorithm number {algorithm}/"
 "({description})."
 msgstr ""
-"The DNSKEY with tag {keytag} uses unassigned algorithm number {algorithm} "
+"The DNSKEY with tag {keytag} uses unassigned algorithm number {algorithm}/"
 "({description})."
 
 #. SYNTAX:RNAME_RFC822_VALID
@@ -1867,69 +1865,58 @@ msgstr ""
 "{ns}/{address} responded with an unexpected rcode ({rcode}) on a DS query "
 "for zone {zone}."
 
+#. DNSSEC:DS_ALGORITHM_DEPRECATED
+#, perl-brace-format
+msgid ""
+"{ns}/{address} returned a DS record created by algorithm ({algorithm_number}/"
+"{algorithm_mnemonic}), which is deprecated. The DS record is for the DNSKEY "
+"record with keytag {keytag} in zone {zone}."
+msgstr ""
+"{ns}/{address} returned a DS record created by algorithm ({algorithm_number}/"
+"{algorithm_mnemonic}), which is deprecated. The DS record is for the DNSKEY "
+"record with keytag {keytag} in zone {zone}."
+
 #. DNSSEC:DS_ALGORITHM_NOT_DS
 #, perl-brace-format
 msgid ""
 "{ns}/{address} returned a DS record created by algorithm {algorithm_number} "
-"({algorithm_mnemonic}) which is not meant for DS. The DS record is for the "
-"DNSKEY record with keytag {keytag} in zone {zone}."
+"which is not meant for DS. The DS record is for the DNSKEY record with "
+"keytag {keytag} in zone {zone}."
 msgstr ""
 "{ns}/{address} returned a DS record created by algorithm {algorithm_number} "
-"({algorithm_mnemonic}) which is not meant for DS. The DS record is for the "
-"DNSKEY record with keytag {keytag} in zone {zone}."
+"which is not meant for DS. The DS record is for the DNSKEY record with "
+"keytag {keytag} in zone {zone}."
 
 #. DNSSEC:DS_ALGORITHM_OK
 #, perl-brace-format
 msgid ""
-"{ns}/{address} returned a DS record created by algorithm {algorithm_number} "
-"({algorithm_mnemonic}), which is OK. The DS record is for the DNSKEY record "
-"with keytag {keytag} in zone {zone}."
-msgstr ""
-"{ns}/{address} returned a DS record created by algorithm {algorithm_number} "
+"{ns}/{address} returned a DS record created by algorithm {algorithm_number}/"
 "{algorithm_mnemonic}, which is OK. The DS record is for the DNSKEY record "
 "with keytag {keytag} in zone {zone}."
-
-#. DNSSEC:DS_ALGORITHM_DEPRECATED
-#, perl-brace-format
-msgid ""
-"{ns}/{address} returned a DS record created by algorithm {algorithm_number} "
-"({algorithm_mnemonic}), which is deprecated. The DS record is for the DNSKEY "
-"record with keytag {keytag} in zone {zone}."
 msgstr ""
-"{ns}/{address} returned a DS record created by algorithm ({algorithm_number} "
-"{algorithm_mnemonic}), which is deprecated. The DS record is for the DNSKEY "
-"record with keytag {keytag} in zone {zone}."
-
-#. DNSSEC:DS_ALGO_SHA1_DEPRECATED
-#, perl-brace-format
-msgid ""
-"{ns}/{address} returned a DS record created by algorithm {algorithm_number} "
-"({algorithm_mnemonic}), which is, while it is still widely used, deprecated. "
-"The DS record is for the DNSKEY record with keytag {keytag} in zone {zone}."
-msgstr ""
-"{ns}/{address} returned a DS record created by algorithm {algorithm_number} "
-"({algorithm_mnemonic}), which is, while it is still widely used, deprecated. "
-"The DS record is for the DNSKEY record with keytag {keytag} in zone {zone}."
+"{ns}/{address} returned a DS record created by algorithm {algorithm_number}/"
+"{algorithm_mnemonic}, which is OK. The DS record is for the DNSKEY record "
+"with keytag {keytag} in zone {zone}."
 
 #. DNSSEC:DS_ALGORITHM_RESERVED
 #, perl-brace-format
 msgid ""
-"{ns}/{address} returned a DS record created by with an algorithm not "
-"assigned (algorithm number {algorithm_number}), which is not OK. The DS "
-"record is for the DNSKEY record with keytag {keytag} in zone {zone}."
+"{ns}/{address} returned a DS record created by with an unassigned algorithm "
+"({algorithm_number}), which is not OK. The DS record is for the DNSKEY "
+"record with keytag {keytag} in zone {zone}."
 msgstr ""
-"{ns}/{address} returned a DS record created by with an algorithm not "
-"assigned (algorithm number {algorithm_number}), which is not OK. The DS "
-"record is for the DNSKEY record with keytag {keytag} in zone {zone}."
+"{ns}/{address} returned a DS record created by with an unassigned algorithm "
+"({algorithm_number}), which is not OK. The DS record is for the DNSKEY "
+"record with keytag {keytag} in zone {zone}."
 
 #. DNSSEC:DS_ALGORITHM_MISSING
 #, perl-brace-format
 msgid ""
-"{ns}/{address} returned no DS record created by algorithm {algorithm_number} "
-"({algorithm_mnemonic}) for zone {zone}, which is required."
+"{ns}/{address} returned no DS record created by algorithm {algorithm_number}/"
+"{algorithm_mnemonic} for zone {zone}, which is required."
 msgstr ""
-"{ns}/{address} returned no DS record created by algorithm {algorithm_number} "
-"({algorithm_mnemonic}) for zone {zone}, which is required."
+"{ns}/{address} returned no DS record created by algorithm {algorithm_number}/"
+"{algorithm_mnemonic} for zone {zone}, which is required."
 
 #. DNSSEC:NO_RESPONSE_DS
 #, perl-brace-format
@@ -1950,15 +1937,6 @@ msgstr "{parent} sent a DS record, but {child} did not send a DNSKEY record."
 #, perl-brace-format
 msgid "{server} returned no NSEC3PARAM records."
 msgstr "{server} returned no NSEC3PARAM records."
-
-#~ msgid ""
-#~ "{ns}/{address} returned a DS record created by algorithm "
-#~ "{algorithm_number} which is not meant for DS. The DS record is for the "
-#~ "DNSKEY record with keytag {keytag} in zone {zone}."
-#~ msgstr ""
-#~ "{ns}/{address} returned a DS record created by algorithm "
-#~ "{algorithm_number} which is not meant for DS. The DS record is for the "
-#~ "DNSKEY record with keytag {keytag} in zone {zone}."
 
 #~ msgid ""
 #~ "{ns}/{address} answered DS query for zone {zone} with DS record for "
