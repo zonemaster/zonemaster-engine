@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-17 15:19+0200\n"
-"PO-Revision-Date: 2020-04-17 15:18+0200\n"
+"POT-Creation-Date: 2020-04-21 10:02+0200\n"
+"PO-Revision-Date: 2020-04-21 10:01+0200\n"
 "Last-Translator: mats.dufberg@iis.se\n"
 "Language-Team: Zonemaster Team\n"
 "Language: sv\n"
@@ -372,8 +372,8 @@ msgid ""
 "to IPv6 addresses ({addrs}). Lower limit set to {minimum}."
 msgstr ""
 "Det finns inte tillräckligt många namnservrar (NS-poster) i delegeringen med "
-"IPv6-adress. Antal: {count}. Adresser: {addrs}. Namnservrar med IPv6-"
-"adress: {nss}. Minsta tillåtna antal är {minimum}."
+"IPv6-adress. Antal: {count}. Adresser: {addrs}. Namnservrar med IPv6-adress: "
+"{nss}. Minsta tillåtna antal är {minimum}."
 
 #. DNSSEC:DELEGATION_NOT_SIGNED
 #, perl-brace-format
@@ -757,8 +757,8 @@ msgstr ""
 #. ADDRESS:NAMESERVER_IP_WITHOUT_REVERSE
 #, perl-brace-format
 msgid "Nameserver {ns} has an IP address ({address}) without PTR configured."
-msgstr "Namnservern '{ns}' har en IP-adress ({address}) utan "
-"bakåtuppslagning (PTR)."
+msgstr ""
+"Namnservern '{ns}' har en IP-adress ({address}) utan bakåtuppslagning (PTR)."
 
 #. DELEGATION:IS_NOT_AUTHORITATIVE
 #, perl-brace-format
@@ -1025,6 +1025,19 @@ msgstr ""
 #, perl-brace-format
 msgid "Nameserver {ns}/{address} returned A record(s) for {dname}."
 msgstr "Namnserver {ns}/{address} svarade med A-poster för '{dname}'."
+
+#. DNSSEC:DS_ALGO_SHA1_DEPRECATED
+#, perl-brace-format
+msgid ""
+"Nameserver {ns}/{address} returned a DS record created by algorithm "
+"{algorithm_number} ({algorithm_mnemonic}) which is deprecated, while it is "
+"still widely used. The DS record is for the DNSKEY record with keytag "
+"{keytag} in zone {zone}."
+msgstr ""
+"Namnserver {ns}/{address} svarade med en DS-post skapad med hash-algoritm "
+"{algorithm_number} ({algorithm_mnemonic}) som är föråldrad, men fortfarande "
+"allmänt använd. DS-posten gäller DNSKEY-posten med 'keytag' {keytag} i zonen "
+"{zone}."
 
 #. NAMESERVER:UPWARD_REFERRAL
 #, perl-brace-format
