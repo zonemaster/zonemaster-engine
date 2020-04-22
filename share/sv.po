@@ -758,7 +758,7 @@ msgstr ""
 #, perl-brace-format
 msgid "Nameserver {ns} has an IP address ({address}) without PTR configured."
 msgstr ""
-"Namnservern '{ns}' har en IP-adress ({address}) utan bakåtuppslagning (PTR)."
+"Namnserver {ns} har en IP-adress ({address}) utan bakåtuppslagning (PTR)."
 
 #. DELEGATION:IS_NOT_AUTHORITATIVE
 #, perl-brace-format
