@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-16 11:26+0000\n"
-"PO-Revision-Date: 2020-04-16 15:26+0000\n"
+"POT-Creation-Date: 2020-04-24 17:40+0200\n"
+"PO-Revision-Date: 2020-04-24 17:38+0200\n"
 "Last-Translator: Niels Haarbo <haarbo@dk-hostmaster.dk>\n"
 "Language-Team: Zonemaster Team\n"
 "Language: da\n"
@@ -93,8 +93,8 @@ msgid ""
 "All nameservers for zone {zone} responds with neither NSEC nor NSEC3 records "
 "when such records are expected."
 msgstr ""
-"Alle navneservere for zonen {zone} svarede hverken NSEC- eller NSEC3-records, "
-"selvom de var forventede."
+"Alle navneservere for zonen {zone} svarede hverken NSEC- eller NSEC3-"
+"records, selvom de var forventede."
 
 #. NAMESERVER:SAME_SOURCE_IP
 msgid "All nameservers reply with same IP used to query them."
@@ -133,8 +133,8 @@ msgid ""
 "All the tested RRset (SOA/DNSKEY/NS) are signed by each algorithm present in "
 "the DNSKEY RRset"
 msgstr ""
-"Alle de testede RRset (SOA/DNSKEY/NS) er signeret af alle algoritmer fundet i "
-"DNSKEY RRset-svaret."
+"Alle de testede RRset (SOA/DNSKEY/NS) er signeret af alle algoritmer fundet "
+"i DNSKEY RRset-svaret."
 
 #. DELEGATION:ARE_AUTHORITATIVE
 #, perl-brace-format
@@ -192,8 +192,8 @@ msgid ""
 "Child does not list enough ({count}) nameservers ({nss}) that resolve to "
 "IPv4 addresses ({addrs}). Lower limit set to {minimum}."
 msgstr ""
-"Barnet indeholder ikke tilstrækkeligt antal ({count}) navneservere ({nss}) med IPv4-"
-"adresser ({addrs}). Minimumsværdien er {minimum}."
+"Barnet indeholder ikke tilstrækkeligt antal ({count}) navneservere ({nss}) "
+"med IPv4-adresser ({addrs}). Minimumsværdien er {minimum}."
 
 #. DELEGATION:NOT_ENOUGH_IPV6_NS_CHILD
 #, perl-brace-format
@@ -201,8 +201,8 @@ msgid ""
 "Child does not list enough ({count}) nameservers ({nss}) that resolve to "
 "IPv6 addresses ({addrs}). Lower limit set to {minimum}."
 msgstr ""
-"Barnet indeholder ikke tilstrækkeligt antal ({count}) navneservere ({nss}) med IPv6-"
-"adresser ({addrs}). Minimumsværdien er {minimum}."
+"Barnet indeholder ikke tilstrækkeligt antal ({count}) navneservere ({nss}) "
+"med IPv6-adresser ({addrs}). Minimumsværdien er {minimum}."
 
 #. DELEGATION:NOT_ENOUGH_NS_CHILD
 #, perl-brace-format
@@ -234,8 +234,8 @@ msgid ""
 "Child lists enough ({count}) nameservers ({nss}) that resolve to IPv4 "
 "addresses ({addrs}). Lower limit set to {minimum}."
 msgstr ""
-"Barnet indeholder tilstrækkeligt antal ({count}) navneservere ({nss}) med IPv4-"
-"adresser ({addrs}). Minimumsværdien er {minimum}."
+"Barnet indeholder tilstrækkeligt antal ({count}) navneservere ({nss}) med "
+"IPv4-adresser ({addrs}). Minimumsværdien er {minimum}."
 
 #. DELEGATION:ENOUGH_IPV6_NS_CHILD
 #, perl-brace-format
@@ -243,8 +243,8 @@ msgid ""
 "Child lists enough ({count}) nameservers ({nss}) that resolve to IPv6 "
 "addresses ({addrs}). Lower limit set to {minimum}."
 msgstr ""
-"Barnet indeholder tilstrækkeligt antal ({count}) navneservere ({nss}) med IPv6-"
-"adresser ({addrs}). Minimumsværdien er {minimum}."
+"Barnet indeholder tilstrækkeligt antal ({count}) navneservere ({nss}) med "
+"IPv6-adresser ({addrs}). Minimumsværdien er {minimum}."
 
 #. DELEGATION:ENOUGH_NS_CHILD
 #, perl-brace-format
@@ -301,7 +301,7 @@ msgid ""
 msgstr ""
 "DNSKEY med tag {keytag} bruger en algoritme {algorithm_number} "
 "({algorithm_description}) med størrelsen ({keysize}), der er mindre end den "
-"mindst tilladte værdi ({keysizemax})."
+"mindst tilladte værdi ({keysizemin})."
 
 #. DNSSEC:DNSKEY_SMALLER_THAN_REC
 #, perl-brace-format
@@ -338,8 +338,8 @@ msgid ""
 "Delegation does not list enough ({count}) nameservers ({nss}) that resolve "
 "to IPv4 addresses ({addrs}). Lower limit set to {minimum}."
 msgstr ""
-"Delegeringen indeholder ikke tilstrækkeligt antal ({count}) navneservere ({nss}) med "
-"IPv4-adresser ({addrs}). Mindsteværdien er {minimum}."
+"Delegeringen indeholder ikke tilstrækkeligt antal ({count}) navneservere "
+"({nss}) med IPv4-adresser ({addrs}). Mindsteværdien er {minimum}."
 
 #. DELEGATION:NOT_ENOUGH_IPV6_NS_DEL
 #, perl-brace-format
@@ -347,8 +347,8 @@ msgid ""
 "Delegation does not list enough ({count}) nameservers ({nss}) that resolve "
 "to IPv6 addresses ({addrs}). Lower limit set to {minimum}."
 msgstr ""
-"Delegeringen indeholder ikke tilstrækkeligt antal ({count}) navneservere ({nss}) med "
-"IPv6-adresser ({addrs}). Mindsteværdien er {minimum}."
+"Delegeringen indeholder ikke tilstrækkeligt antal ({count}) navneservere "
+"({nss}) med IPv6-adresser ({addrs}). Mindsteværdien er {minimum}."
 
 #. DNSSEC:DELEGATION_NOT_SIGNED
 #, perl-brace-format
@@ -366,8 +366,8 @@ msgid ""
 "Delegation lists enough ({count}) nameservers ({nss}) that resolve to IPv4 "
 "addresses ({addrs}). Lower limit set to {minimum}."
 msgstr ""
-"Delegeringen indeholder et tilstrækkeligt antal ({count}) navneservere ({nss}) med "
-"IPv4-adresser. Mindsteværdien er {minimum}."
+"Delegeringen indeholder et tilstrækkeligt antal ({count}) navneservere "
+"({nss}) med IPv4-adresser ({addrs}). Mindsteværdien er {minimum}."
 
 #. DELEGATION:ENOUGH_IPV6_NS_DEL
 #, perl-brace-format
@@ -375,8 +375,8 @@ msgid ""
 "Delegation lists enough ({count}) nameservers ({nss}) that resolve to IPv6 "
 "addresses ({addrs}). Lower limit set to {minimum}."
 msgstr ""
-"Delegeringen indeholder et tilstrækkeligt antal ({count}) navneservere ({nss}) med "
-"IPv6-adresser. Mindsteværdien er {minimum}."
+"Delegeringen indeholder et tilstrækkeligt antal ({count}) navneservere "
+"({nss}) med IPv6-adresser ({addrs}). Mindsteværdien er {minimum}."
 
 #. DELEGATION:NO_IPV4_NS_DEL
 #, perl-brace-format
@@ -838,8 +838,8 @@ msgid ""
 "NSEC and NSEC3 is aborted for this nameserver."
 msgstr ""
 "Navneserveren {ns}/{address} for zonen {zone} svarede RCODE \"NOERROR\" på "
-"en forespørgsel, der forventes at give et svar med RCODE \"NXDOMAIN\". Test af "
-"NSEC and NSEC3 er afbrudt for denne navneserver."
+"en forespørgsel, der forventes at give et svar med RCODE \"NXDOMAIN\". Test "
+"af NSEC and NSEC3 er afbrudt for denne navneserver."
 
 #. DNSSEC:MIXED_NSEC_NSEC3
 #, perl-brace-format
@@ -847,11 +847,8 @@ msgid ""
 "Nameserver {ns}/{address} for zone {zone} responds with both NSEC and NSEC3 "
 "records when only one record type is expected."
 msgstr ""
-"Navneserveren {ns}/{address} for zonen {zone} svarede både NSEC- og "
-"NSEC3-records på trods af, at kun en recordtype er forventet i svaret."
-
-"Navneserveren {ns}/{address} for zonen {zone} returnerede flere ({count}) SOA records på SOA "
-"forespørgsler."
+"Navneserveren {ns}/{address} for zonen {zone} svarede både NSEC- og NSEC3-"
+"records på trods af, at kun en recordtype er forventet i svaret."
 
 #. DNSSEC:NO_NSEC_NSEC3
 #, perl-brace-format
@@ -865,8 +862,7 @@ msgstr ""
 #. NAMESERVER:Z_FLAGS_NOTCLEAR
 #, perl-brace-format
 msgid "Nameserver {ns}/{address} has one or more unknown EDNS Z flag bits set."
-msgstr ""
-"Navneserveren {ns}/{address} har et eller flere EDNS Z flag bits sat."
+msgstr "Navneserveren {ns}/{address} har et eller flere EDNS Z flag bits sat."
 
 #. NAMESERVER:IS_A_RECURSOR
 #, perl-brace-format
@@ -926,15 +922,17 @@ msgid ""
 "Nameserver {ns}/{address} responded with an RRSIG which can not be verified "
 "with corresponding DNSKEY (with keytag {keytag})"
 msgstr ""
-"Navneserver {ns}/{address} returnerede en RRSIG som ikke kan verificeres "
-"med den tilhørende DNSKEY (med keytag {keytag})"
+"Navneserver {ns}/{address} returnerede en RRSIG som ikke kan verificeres med "
+"den tilhørende DNSKEY (med keytag {keytag})"
 
 #. DNSSEC:RRSIG_NOT_MATCH_DNSKEY
 #, perl-brace-format
 msgid ""
 "Nameserver {ns}/{address} responded with an RRSIG with unknown keytag "
 "{keytag}."
-msgstr "Navneserveren {ns}/{address} returnerede en RRSIG med et ukendt keytag."
+msgstr ""
+"Navneserveren {ns}/{address} returnerede en RRSIG med et ukendt keytag "
+"({keytag})."
 
 #. DNSSEC:NO_RESPONSE_DNSKEY
 #, perl-brace-format
@@ -947,13 +945,14 @@ msgid ""
 "Nameserver {ns}/{address} responded with no RRSIG for RRset {rrtype} created "
 "by the algorithm {algorithm}."
 msgstr ""
-"Navneserveren {ns}/{address} returnerede ikke nogle RRSIG for RRset {rrtype} oprettet "
-"med algoritmen {algorithm}."
+"Navneserveren {ns}/{address} returnerede ikke nogle RRSIG for RRset {rrtype} "
+"oprettet med algoritmen {algorithm}."
 
 #. DNSSEC:RRSET_NOT_SIGNED
 #, perl-brace-format
 msgid "Nameserver {ns}/{address} responded with no RRSIG for {rrtype} RRset."
-msgstr "Navneserveren {ns}/{address} returnerede ingen RRSIG for {rrtype} RRset."
+msgstr ""
+"Navneserveren {ns}/{address} returnerede ingen RRSIG for {rrtype} RRset."
 
 #. DNSSEC:NO_RESPONSE_RRSET
 #, perl-brace-format
@@ -998,8 +997,8 @@ msgid ""
 msgstr ""
 "Navneserveren {ns}/{address} returnerede en DS-record oprettet med algoritme "
 "{algorithm_number} ({algorithm_mnemonic}) som er forældet, men stadigvæk "
-"benyttet af mange. DS-recorden er tilknyttet DNSKEY med keytag "
-"{keytag} i zonen {zone}."
+"benyttet af mange. DS-recorden er tilknyttet DNSKEY med keytag {keytag} i "
+"zonen {zone}."
 
 #. NAMESERVER:UPWARD_REFERRAL
 #, perl-brace-format
@@ -1559,8 +1558,8 @@ msgid ""
 "Some, but not all, nameservers for zone {zone} respond with neither NSEC nor "
 "NSEC3 records when such records are expected."
 msgstr ""
-"Nogle, men ikke alle, navneservere for zonen {zone} svarede hverken NSEC- eller "
-"NSEC3-records selvom disse records er forventet i svaret."
+"Nogle, men ikke alle, navneservere for zonen {zone} svarede hverken NSEC- "
+"eller NSEC3-records selvom disse records er forventet i svaret."
 
 #. ZONE:MX_RECORD_EXISTS
 #, perl-brace-format
@@ -1573,8 +1572,8 @@ msgid ""
 "The DNSKEY with tag {keytag} uses algorithm number not meant for zone "
 "signing, algorithm number {algorithm} ({description})."
 msgstr ""
-"DNSKEY med tag {keytag} bruger et algoritmenummer, der ikke er beregnet "
-"til signering, algoritmenummer {algorithm} ({description})."
+"DNSKEY med tag {keytag} bruger et algoritmenummer, der ikke er beregnet til "
+"signering, algoritmenummer {algorithm} ({description})."
 
 #. DNSSEC:ALGORITHM_OK
 #, perl-brace-format
@@ -1641,8 +1640,8 @@ msgid ""
 "The SOA RNAME mail domain ({domain}) cannot be resolved to a mail server "
 "with an IP address."
 msgstr ""
-"SOA RNAME maildomæne ({domain}) refererer ikke til en mailserver "
-"med en IP-adresse."
+"SOA RNAME maildomæne ({domain}) refererer ikke til en mailserver med en IP-"
+"adresse."
 
 #. DNSSEC:DNSKEY_SIGNED
 msgid "The apex DNSKEY RRset was correcly signed."
@@ -1929,9 +1928,9 @@ msgid ""
 "({algorithm_mnemonic}) which is not meant for DS. The DS record is for the "
 "DNSKEY record with keytag {keytag} in zone {zone}."
 msgstr ""
-"{ns}/{address} returnerede en DS-record oprettet af algoritme {algorithm_number} "
-"({algorithm_mnemonic}) som ikke er beregnet til DS. DS-recorden tilhører "
-"DNSKEY-record med keytag {keytag} i zonen {zone}."
+"{ns}/{address} returnerede en DS-record oprettet af algoritme "
+"{algorithm_number} ({algorithm_mnemonic}) som ikke er beregnet til DS. DS-"
+"recorden tilhører DNSKEY-record med keytag {keytag} i zonen {zone}."
 
 #. DNSSEC:DS_ALGORITHM_OK
 #, perl-brace-format
@@ -1940,9 +1939,9 @@ msgid ""
 "({algorithm_mnemonic}), which is OK. The DS record is for the DNSKEY record "
 "with keytag {keytag} in zone {zone}."
 msgstr ""
-"{ns}/{address} returnerede en DS-record oprettet af algoritme {algorithm_number} "
-"({algorithm_mnemonic}), hvilket er OK. DS-recorden tilhører "
-"DNSKEY-record med keytag {keytag} i zonen {zone}."
+"{ns}/{address} returnerede en DS-record oprettet af algoritme "
+"{algorithm_number} ({algorithm_mnemonic}), hvilket er OK. DS-recorden "
+"tilhører DNSKEY-record med keytag {keytag} i zonen {zone}."
 
 #. DNSSEC:DS_ALGORITHM_DEPRECATED
 #, perl-brace-format
@@ -1951,9 +1950,9 @@ msgid ""
 "({algorithm_mnemonic}), which is deprecated. The DS record is for the DNSKEY "
 "record with keytag {keytag} in zone {zone}."
 msgstr ""
-"{ns}/{address} returnerede en DS-record oprettet af algoritme {algorithm_number} "
-"({algorithm_mnemonic}), der er forældet. DS-recorden tilhører "
-"DNSKEY-record med keytag {keytag} i zonen {zone}."
+"{ns}/{address} returnerede en DS-record oprettet af algoritme "
+"{algorithm_number} ({algorithm_mnemonic}), der er forældet. DS-recorden "
+"tilhører DNSKEY-record med keytag {keytag} i zonen {zone}."
 
 #. DNSSEC:DS_ALGORITHM_RESERVED
 #, perl-brace-format
@@ -1962,9 +1961,9 @@ msgid ""
 "assigned (algorithm number {algorithm_number}), which is not OK. The DS "
 "record is for the DNSKEY record with keytag {keytag} in zone {zone}."
 msgstr ""
-"{ns}/{address} returnerede en DS-record oprettet af algoritme, der ikke "
-"er tildelt (algoritmenummer {algorithm_number}, hvilket ikke er okay. "
-"DS-recorden tilhører DNSKEY-record med keytag {keytag} i zonen {zone}."
+"{ns}/{address} returnerede en DS-record oprettet af algoritme, der ikke er "
+"tildelt (algoritmenummer {algorithm_number}, hvilket ikke er okay. DS-"
+"recorden tilhører DNSKEY-record med keytag {keytag} i zonen {zone}."
 
 #. DNSSEC:DS_ALGORITHM_MISSING
 #, perl-brace-format
@@ -1972,13 +1971,14 @@ msgid ""
 "{ns}/{address} returned no DS record created by algorithm {algorithm_number} "
 "({algorithm_mnemonic}) for zone {zone}, which is required."
 msgstr ""
-"{ns}/{address} returnerede ingen DS-record oprettet af algoritme {algorithm_number} "
-"({algorithm_mnemonic}) for zonen {zone}, hvilket er krævet."
+"{ns}/{address} returnerede ingen DS-record oprettet af algoritme "
+"{algorithm_number} ({algorithm_mnemonic}) for zonen {zone}, hvilket er "
+"krævet."
 
 #. DNSSEC:NO_RESPONSE_DS
 #, perl-brace-format
 msgid "{ns}/{address} returned no DS records for {zone}."
-msgstr "{from} returnerede ingen DS-records for {zone}."
+msgstr "{ns}/{address} returnerede ingen DS-records for {zone}."
 
 #. DNSSEC:DNSKEY_AND_DS
 #, perl-brace-format
