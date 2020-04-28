@@ -24,13 +24,13 @@ This instruction covers the following operating systems:
 
 ### Installation on CentOS
 
-1) *Only* for CentOS8, enable powertools:
+1) *Only* for CentOS 8, enable powertools:
 
    ```sh
    sudo yum config-manager --set-enabled PowerTools
    ```
 
-2) Install the [EPEL][EPEL] repository:
+2) Install the [EPEL] repository:
 
    ```sh
    sudo yum --enablerepo=extras install epel-release
