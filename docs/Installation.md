@@ -166,16 +166,7 @@ This instruction covers the following operating systems:
      pkg install dns/ldns
      ```
 
-6) Verify remaining dependencies.
-
-     > This step is not needed for installation. It is only here for the developers of Zonemaster.
-     ```sh
-     cpanm --scandeps Zonemaster-LDNS-x.y.z.tar.gz # Normally you skip this step.
-     cpanm --scandeps Zonemaster-Engine-x.y.z.tar.gz # Normally you skip this step.
-     ```
-
-
-7) Install Zonemaster::LDNS:
+6) Install Zonemaster::LDNS:
 
    * On FreeBSD 11.x (11.3 or newer):
 
@@ -189,7 +180,7 @@ This instruction covers the following operating systems:
      cpanm --configure-args="--no-internal-ldns" Zonemaster::LDNS
      ```
 
-8) Install Zonemaster::Engine:
+7) Install Zonemaster::Engine:
 
    ```sh
    cpanm Zonemaster::Engine
