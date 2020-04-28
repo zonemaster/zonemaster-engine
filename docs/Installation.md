@@ -24,31 +24,49 @@ This instruction covers the following operating systems:
 
 ### Installation on CentOS
 
-1) Install the [EPEL 7][EPEL] repository:
+1) *Only* for CentOS 8, enable powertools:
+
+   ```sh
+   sudo yum config-manager --set-enabled PowerTools
+   ```
+
+2) Install the [EPEL] repository:
 
    ```sh
    sudo yum --enablerepo=extras install epel-release
    ```
 
-2) Make sure the development environment is installed:
+3) Make sure the development environment is installed:
 
    ```sh
    sudo yum groupinstall "Development Tools"
    ```
 
-3) Install binary packages:
-
+4) Install binary packages:
+   
    ```sh
-   sudo yum install cpanminus libidn-devel openssl-devel perl-Clone perl-core perl-Devel-CheckLib perl-Email-Valid perl-File-ShareDir perl-File-Slurp perl-libintl perl-IO-Socket-INET6 perl-JSON-PP perl-List-MoreUtils perl-Module-Find perl-Moose perl-Net-IP perl-Pod-Coverage perl-Readonly-XS perl-Test-Differences perl-Test-Exception perl-Test-Fatal perl-Test-Pod perl-Text-CSV perl-YAML
+   sudo yum install cpanminus libidn-devel openssl-devel perl-Clone perl-core perl-Devel-CheckLib perl-File-ShareDir perl-File-Slurp perl-libintl perl-IO-Socket-INET6 perl-JSON-PP perl-List-MoreUtils perl-Module-Find perl-Moose perl-Net-IP perl-Pod-Coverage perl-Test-Differences perl-Test-Exception perl-Test-Fatal perl-Test-Pod perl-Text-CSV perl-YAML perl-MailTools
    ```
 
-4) Install packages from CPAN:
+5) Install packages from CPAN:
 
    ```sh
    sudo cpanm Locale::Msgfmt Module::Install Module::Install::XSUtil Test::More
    ```
 
-5) Install Zonemaster::LDNS and Zonemaster::Engine:
+6) Install Zonemaster::LDNS and Zonemaster::Engine for *CentOS 7*:
+
+>   **Note** Since DNSSEC Algorithm 15 is not supported on CentOS 7
+   ```sh
+   sudo cpanm Zonemaster::LDNS --configure-args="--no-ed25519"
+   ```
+
+   ```sh
+   sudo cpanm Zonemaster::Engine
+   ```
+
+
+7) Install Zonemaster::LDNS and Zonemaster::Engine for *CentOS 8*:
 
    ```sh
    sudo cpanm Zonemaster::LDNS Zonemaster::Engine
