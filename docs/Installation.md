@@ -54,8 +54,9 @@ This instruction covers the following operating systems:
    sudo cpanm Locale::Msgfmt Module::Install Module::Install::XSUtil Test::More
    ```
 
-6) Install Zonemaster::LDNS and Zonemaster::Engine for *CentOS7*:
+6) Install Zonemaster::LDNS and Zonemaster::Engine for *CentOS 7*:
 
+>   **Note** Since DNSSEC Algorithm 15 is not supported on CentOS 7
    ```sh
    sudo cpanm Zonemaster::LDNS --configure-args="--no-ed25519"
    ```
@@ -65,7 +66,7 @@ This instruction covers the following operating systems:
    ```
 
 
-7) Install Zonemaster::LDNS and Zonemaster::Engine for *CentOS8*:
+7) Install Zonemaster::LDNS and Zonemaster::Engine for *CentOS 8*:
 
    ```sh
    sudo cpanm Zonemaster::LDNS Zonemaster::Engine
