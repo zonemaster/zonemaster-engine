@@ -48,7 +48,13 @@ This instruction covers the following operating systems:
    sudo yum install cpanminus libidn-devel openssl-devel perl-Clone perl-core perl-Devel-CheckLib perl-File-ShareDir perl-File-Slurp perl-libintl perl-IO-Socket-INET6 perl-JSON-PP perl-List-MoreUtils perl-Module-Find perl-Moose perl-Net-IP perl-Pod-Coverage perl-Test-Differences perl-Test-Exception perl-Test-Fatal perl-Test-Pod perl-Text-CSV perl-YAML perl-MailTools
    ```
 
-5) Install Zonemaster::LDNS and Zonemaster::Engine for *CentOS7*:
+5) Install packages from CPAN:
+
+   ```sh
+   sudo cpanm Locale::Msgfmt Module::Install Module::Install::XSUtil Test::More
+   ```
+
+6) Install Zonemaster::LDNS and Zonemaster::Engine for *CentOS7*:
 
    ```sh
    sudo cpanm Zonemaster::LDNS --configure-args="--no-ed25519"
@@ -58,7 +64,7 @@ This instruction covers the following operating systems:
    sudo cpanm Zonemaster::Engine
    ```
 
-6) Install Zonemaster::LDNS and Zonemaster::Engine for *CentOS8*:
+7) Install Zonemaster::LDNS and Zonemaster::Engine for *CentOS8*:
 
    ```sh
    sudo cpanm Zonemaster::LDNS Zonemaster::Engine
