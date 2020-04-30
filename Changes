@@ -1,9 +1,9 @@
 Release history for Zonemaster component Zonemaster-Engine
 
-v3.1.0 2019-11-15
+v3.1.0 2020-04-30
 
  [Features]
- - Updated Travis config after updated zonemaster-ldns (#585)
+ - Allow installation of new LDNS on Debian 9 (#667)
  - Add more meaningful message for unsupported algorithms in
    DNSSEC test cases (#641, #632)
  - Improved the hanling of "fuzzy" PO files (#640, #598, #600, #596)
@@ -23,6 +23,24 @@ v3.1.0 2019-11-15
  - A util that prints recorded data in dig format (#555)
 
  [Fixes]
+ - Update installation instructions on algo 15 support and other
+   issues (#677, #678, #683, #690)
+ - Update Danish translation da.po (#718, #706)
+ - Updated Swedish translation (sv.po) (#710, #705, #716)
+ - Add DS treatment in case of SHA-1 in DNSSEC01 (#715, #712)
+ - Updated and expanded Translation document (#701, #708)
+ - Remove useless dependency (#700, #699)
+ - French translations updated (#698, #696)
+ - Fixes erroneous duplicated message in dnssec01 test (#695, #694)
+ - Fixes DNSSEC unexpected hash reference in messages (#693, #692)
+ - Editorial changes to some DNSSEC message strings (#691)
+ - Corrected link to default profile (#687)
+ - Add test case for listing IPv6 addresses in IPv6 message (#686)
+ - Fixed Engine fails to install in CentOS 8 due to unit test problem
+   (#680, #681)
+ - Fixed false error when IPv6 was disabled (#674, #676)
+ - Fixed incorrect handling of CNAME (#672, #673)
+ - Fixed code and test data for broken DNSSEC test (#670, #671)
  - Update management of MO file (#664)
  - Fixed case sensitivity in Consistency05 (#659, #658)
  - Translation to Danish (#636, #626, #624, #604, #600)
@@ -46,7 +64,6 @@ v3.1.0 2019-11-15
  - Fixed that some DNSSECxx do not respect "no IPv6" (#543, #587)
  - Fixed missing messages in Delegation.pm (#558, #590)
  - Fixed broken Test-dnssec.t (#419, #583)
- - Fixed Travis (#579)
  - Fixed incorrect message from the Delegation module (#545, #552)
  - Partial fix for translation on FreeBSD 11 (#562, #546)
 
