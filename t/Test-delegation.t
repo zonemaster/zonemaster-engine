@@ -37,7 +37,7 @@ ok( $res{EXTRA_NAME_PARENT},    q{EXTRA_NAME_PARENT} );
 ok( $res{EXTRA_NAME_CHILD},     q{EXTRA_NAME_CHILD} );
 ok( $res{TOTAL_NAME_MISMATCH},  q{TOTAL_NAME_MISMATCH} );
 ok( !$res{DISTINCT_IP_ADDRESS}, q{No DISTINCT_IP_ADDRESS} );
-ok( $res{NS_RR_NO_CNAME},       q{NS_RR_NO_CNAME} );
+ok( $res{NO_NS_CNAME},          q{NO_NS_CNAME} );
 ok( $res{SOA_EXISTS},           q{SOA_EXISTS} );
 ok( $res{ARE_AUTHORITATIVE},    q{ARE_AUTHORITATIVE} );
 
@@ -54,7 +54,7 @@ TODO: {
     %res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{delegation}, q{elsine.se} );
     ok( $res{IS_NOT_AUTHORITATIVE}, q{IS_NOT_AUTHORITATIVE} );
 
-    ok( $res{NS_RR_IS_CNAME}, q{NS_RR_IS_CNAME} );
+    ok( $res{NS_IS_CNAME}, q{NS_IS_CNAME} );
 
     ok( $res{REFERRAL_SIZE_LARGE}, q{REFERRAL_SIZE_LARGE} );
 }

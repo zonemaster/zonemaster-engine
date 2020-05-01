@@ -23,11 +23,11 @@ Zonemaster::Engine->add_fake_delegation(
 
 my $zone = Zonemaster::Engine->zone( 'fi' );
 my %res = map { $_->tag => $_ } Zonemaster::Engine::Test::Consistency->consistency05( $zone );
-ok( $res{ADDRESSES_MATCH},             q{should emit ADDRESSES_MATCH} );
-ok( !$res{IN_BAILIWICK_ADDR_MISMATCH}, q{should not emit IN_BAILIWICK_ADDR_MISMATCH} );
-ok( !$res{EXTRA_ADDRESS_CHILD},        q{should not emit EXTRA_ADDRESS_CHILD} );
-ok( !$res{NO_RESPONSE},                q{should not emit NO_RESPONSE} );
-ok( !$res{LAME_DELEGATION},            q{should not emit LAME_DELEGATION} );
+ok( !$res{ADDRESSES_MATCH},           q{should not emit ADDRESSES_MATCH} );
+ok( $res{IN_BAILIWICK_ADDR_MISMATCH}, q{should emit IN_BAILIWICK_ADDR_MISMATCH} );
+ok( !$res{EXTRA_ADDRESS_CHILD},       q{should not emit EXTRA_ADDRESS_CHILD} );
+ok( !$res{NO_RESPONSE},               q{should not emit NO_RESPONSE} );
+ok( !$res{LAME_DELEGATION},           q{should not emit LAME_DELEGATION} );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Nameserver->save( $datafile );

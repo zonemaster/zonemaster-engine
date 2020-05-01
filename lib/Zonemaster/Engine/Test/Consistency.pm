@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::Consistency;
 
-use version; our $VERSION = version->declare("v1.1.8");
+use version; our $VERSION = version->declare("v1.1.12");
 
 use strict;
 use warnings;
@@ -8,11 +8,13 @@ use warnings;
 use 5.014002;
 
 use Zonemaster::Engine;
-use Zonemaster::Engine::Util;
-use Zonemaster::Engine::Test::Address;
-use Zonemaster::Engine::Constants qw[:ip :soa];
 
 use List::MoreUtils qw[uniq];
+use Locale::TextDomain qw[Zonemaster-Engine];
+use Readonly;
+use Zonemaster::Engine::Constants qw[:ip :soa];
+use Zonemaster::Engine::Test::Address;
+use Zonemaster::Engine::Util;
 
 ###
 ### Entry points
@@ -119,37 +121,132 @@ sub metadata {
     };
 } ## end sub metadata
 
-sub translation {
-    return {
-        ADDRESSES_MATCH      => 'Glue records are consistent between glue and authoritative data.',
-        EXTRA_ADDRESS_CHILD  => 'Child has extra nameserver IP address(es) not listed at parent ({addresses}).',
-        EXTRA_ADDRESS_PARENT => 'Parent has extra nameserver IP address(es) not listed at child ({addresses}).',
-        IPV4_DISABLED        => 'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
-        IPV6_DISABLED        => 'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
-        MULTIPLE_NS_SET      => 'Saw {count} NS set.',
-        MULTIPLE_SOA_MNAMES  => 'Saw {count} SOA mname.',
-        MULTIPLE_SOA_RNAMES  => 'Saw {count} SOA rname.',
-        MULTIPLE_SOA_SERIALS => 'Saw {count} SOA serial numbers.',
-        MULTIPLE_SOA_TIME_PARAMETER_SET => 'Saw {count} SOA time parameter set.',
-        NO_RESPONSE                     => 'Nameserver {ns}/{address} did not respond.',
-        NO_RESPONSE_NS_QUERY            => 'No response from nameserver {ns}/{address} on NS queries.',
-        NO_RESPONSE_SOA_QUERY           => 'No response from nameserver {ns}/{address} on SOA queries.',
-        NS_SET                          => 'Saw NS set ({nsset}) on following nameserver set : {servers}.',
-        ONE_NS_SET                      => 'A unique NS set was seen ({nsset}).',
-        ONE_SOA_MNAME                   => 'A single SOA mname value was seen ({mname})',
-        ONE_SOA_RNAME                   => 'A single SOA rname value was seen ({rname})',
-        ONE_SOA_SERIAL                  => 'A single SOA serial number was seen ({serial}).',
-        ONE_SOA_TIME_PARAMETER_SET      => 'A single SOA time parameter set was seen '
+Readonly my %TAG_DESCRIPTIONS => (
+    ADDRESSES_MATCH => sub {
+        __x    # CONSISTENCY:ADDRESSES_MATCH
+          'Glue records are consistent between glue and authoritative data.', @_;
+    },
+    CHILD_NS_FAILED => sub {
+        __x    # CONSISTENCY:CHILD_NS_FAILED
+          'Unexpected or erroneous reply from {ns}/{address}.', @_;
+    },
+    CHILD_ZONE_LAME => sub {
+        __x    # CONSISTENCY:CHILD_ZONE_LAME
+          'Lame delegation', @_;
+    },
+    EXTRA_ADDRESS_CHILD => sub {
+        __x    # CONSISTENCY:EXTRA_ADDRESS_CHILD
+          'Child has extra nameserver IP address(es) not listed at parent ({addresses}).', @_;
+    },
+    EXTRA_ADDRESS_PARENT => sub {
+        __x    # CONSISTENCY:EXTRA_ADDRESS_PARENT
+          'Parent has extra nameserver IP address(es) not listed at child ({addresses}).', @_;
+    },
+    IN_BAILIWICK_ADDR_MISMATCH => sub {
+        __x    # CONSISTENCY:IN_BAILIWICK_ADDR_MISMATCH
+          'In-bailiwick name server listed at parent has a mismatch between glue data at parent '
+          . '({parent_addresses}) and any equivalent address record in child zone ({zone_addresses})',
+          @_;
+    },
+    IPV4_DISABLED => sub {
+        __x    # CONSISTENCY:IPV4_DISABLED
+          'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
+    },
+    IPV6_DISABLED => sub {
+        __x    # CONSISTENCY:IPV6_DISABLED
+          'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
+    },
+    MULTIPLE_NS_SET => sub {
+        __x    # CONSISTENCY:MULTIPLE_NS_SET
+          'Saw {count} NS set.', @_;
+    },
+    MULTIPLE_SOA_MNAMES => sub {
+        __x    # CONSISTENCY:MULTIPLE_SOA_MNAMES
+          'Saw {count} SOA mname.', @_;
+    },
+    MULTIPLE_SOA_RNAMES => sub {
+        __x    # CONSISTENCY:MULTIPLE_SOA_RNAMES
+          'Saw {count} SOA rname.', @_;
+    },
+    MULTIPLE_SOA_SERIALS => sub {
+        __x    # CONSISTENCY:MULTIPLE_SOA_SERIALS
+          'Saw {count} SOA serial numbers.', @_;
+    },
+    MULTIPLE_SOA_TIME_PARAMETER_SET => sub {
+        __x    # CONSISTENCY:MULTIPLE_SOA_TIME_PARAMETER_SET
+          'Saw {count} SOA time parameter set.', @_;
+    },
+    NO_RESPONSE => sub {
+        __x    # CONSISTENCY:NO_RESPONSE
+          'Nameserver {ns}/{address} did not respond.', @_;
+    },
+    NO_RESPONSE_NS_QUERY => sub {
+        __x    # CONSISTENCY:NO_RESPONSE_NS_QUERY
+          'No response from nameserver {ns}/{address} on NS queries.', @_;
+    },
+    NO_RESPONSE_SOA_QUERY => sub {
+        __x    # CONSISTENCY:NO_RESPONSE_SOA_QUERY
+          'No response from nameserver {ns}/{address} on SOA queries.', @_;
+    },
+    NS_SET => sub {
+        __x    # CONSISTENCY:NS_SET
+          'Saw NS set ({nsset}) on following nameserver set : {servers}.', @_;
+    },
+    ONE_NS_SET => sub {
+        __x    # CONSISTENCY:ONE_NS_SET
+          'A unique NS set was seen ({nsset}).', @_;
+    },
+    ONE_SOA_MNAME => sub {
+        __x    # CONSISTENCY:ONE_SOA_MNAME
+          'A single SOA mname value was seen ({mname})', @_;
+    },
+    ONE_SOA_RNAME => sub {
+        __x    # CONSISTENCY:ONE_SOA_RNAME
+          'A single SOA rname value was seen ({rname})', @_;
+    },
+    ONE_SOA_SERIAL => sub {
+        __x    # CONSISTENCY:ONE_SOA_SERIAL
+          'A single SOA serial number was seen ({serial}).', @_;
+    },
+    ONE_SOA_TIME_PARAMETER_SET => sub {
+        __x    # CONSISTENCY:ONE_SOA_TIME_PARAMETER_SET
+          'A single SOA time parameter set was seen '
           . '(REFRESH={refresh},RETRY={retry},EXPIRE={expire},MINIMUM={minimum}).',
-        SOA_RNAME            => 'Saw SOA rname {rname} on following nameserver set : {servers}.',
-        SOA_SERIAL           => 'Saw SOA serial number {serial} on following nameserver set : {servers}.',
-        SOA_SERIAL_VARIATION => 'Difference between the smaller serial '
-          . '({serial_min}) and the bigger one ({serial_max}) is greater than the maximum allowed ({max_variation}).',
-        SOA_TIME_PARAMETER_SET => 'Saw SOA time parameter set '
-          . '(REFRESH={refresh},RETRY={retry},EXPIRE={expire},MINIMUM={minimum}) on following nameserver set : {servers}.',
-        TOTAL_ADDRESS_MISMATCH => 'No common nameserver IP addresses between child ({child}) and parent ({glue}).',
-    };
-} ## end sub translation
+          @_;
+    },
+    OUT_OF_BAILIWICK_ADDR_MISMATCH => sub {
+        __x    # CONSISTENCY:OUT_OF_BAILIWICK_ADDR_MISMATCH
+          'Out-of-bailiwick name server listed at parent with glue record has a mismatch between '
+          . 'the glue at the parent ({parent_addresses}) and any equivalent address record found '
+          . 'in authoritative zone ({zone_addresses})', @_;
+    },
+    SOA_RNAME => sub {
+        __x    # CONSISTENCY:SOA_RNAME
+          'Saw SOA rname {rname} on following nameserver set : {servers}.', @_;
+    },
+    SOA_SERIAL => sub {
+        __x    # CONSISTENCY:SOA_SERIAL
+          'Saw SOA serial number {serial} on following nameserver set : {servers}.', @_;
+    },
+    SOA_SERIAL_VARIATION => sub {
+        __x    # CONSISTENCY:SOA_SERIAL_VARIATION
+          'Difference between the smaller serial ({serial_min}) and the bigger one ({serial_max}) '
+          . 'is greater than the maximum allowed ({max_variation}).', @_;
+    },
+    SOA_TIME_PARAMETER_SET => sub {
+        __x    # CONSISTENCY:SOA_TIME_PARAMETER_SET
+          'Saw SOA time parameter set (REFRESH={refresh},RETRY={retry},EXPIRE={expire},'
+          . 'MINIMUM={minimum}) on following nameserver set : {servers}.', @_;
+    },
+    TOTAL_ADDRESS_MISMATCH => sub {
+        __x    # CONSISTENCY:TOTAL_ADDRESS_MISMATCH
+          'No common nameserver IP addresses between child ({child}) and parent ({glue}).', @_;
+    },
+);
+
+sub tag_descriptions {
+    return \%TAG_DESCRIPTIONS;
+}
 
 sub version {
     return "$Zonemaster::Engine::Test::Consistency::VERSION";
@@ -573,7 +670,7 @@ sub consistency04 {
 
 sub _get_addr_rrs {
     my ( $class, $ns, $name, $qtype ) = @_;
-    my $p = $ns->query( $name, $qtype );
+    my $p = $ns->query( $name, $qtype, { recurse => 0 } );
     if ( !$p ) {
         return info(
             NO_RESPONSE => {
@@ -583,9 +680,9 @@ sub _get_addr_rrs {
         );
     }
     elsif ($p->is_redirect) {
-        my $p_pub = Zonemaster::Engine->recurse( $name, $qtype, 'IN' );
-        if ( $p_pub ) {
-            return ( undef, $p_pub->get_records_for_name( $qtype, $name, 'answer' ) );
+        my $p = $ns->query( $name, $qtype, { recurse => 1 } );
+        if ( $p ) {
+            return ( undef, $p->get_records_for_name( $qtype, $name, 'answer' ) );
         } else {
             return ( undef );
         }
@@ -601,6 +698,7 @@ sub _get_addr_rrs {
             }
         );
     }
+    return ( undef );
 }
 
 sub consistency05 {
@@ -609,28 +707,54 @@ sub consistency05 {
 
     my %strict_glue;
     my %extended_glue;
-    for my $ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) } ) {
-        my $ns_string = $ns->name->fqdn . "/" . $ns->address->short;
-        if ( $zone->name->is_in_bailiwick( $ns->name ) ) {
+
+    # We need to work on Methods...
+    # This part of code is supposed to replace method4 call
+    my @child_nsnames;
+    my @nsnames;
+    my $ns_aref = $zone->parent->query_all( $zone->name, q{NS} );
+    my %parent_glues;
+    foreach my $p ( @{$ns_aref} ) {
+        next if not $p;
+        push @nsnames, $p->get_records_for_name( q{NS}, $zone->name );
+    }
+    @child_nsnames = uniq map { name( lc( $_->nsdname ) ) } @nsnames;
+    foreach my $nsname ( @child_nsnames ) {
+        my $a_aref = $zone->parent->query_all( $nsname, q{A} );
+        my $aaaa_aref = $zone->parent->query_all( $nsname, q{AAAA} );
+        foreach my $p ( @{$a_aref} ) {
+            next if not $p;
+            foreach my $rr ( $p->get_records_for_name( q{A}, $nsname ) ) {
+                $parent_glues{ lc( $rr->owner ) . q{/} . $rr->address } = $nsname;
+            }
+        }
+        foreach my $p ( @{$aaaa_aref} ) {
+            next if not $p;
+            foreach my $rr ( $p->get_records_for_name( q{AAAA}, $nsname ) ) {
+                $parent_glues{ lc( $rr->owner ) . q{/} . $rr->address } = $nsname;
+            }
+        }
+    }
+
+    for my $ns_string ( keys %parent_glues ) {
+        if ( $zone->name->is_in_bailiwick( $parent_glues{$ns_string} ) ) {
             $strict_glue{ $ns_string } = 1;
         }
         else {
-            push @{ $extended_glue{ $ns->name->string } }, $ns_string;
+            push @{ $extended_glue{ $parent_glues{$ns_string} } }, $ns_string;
         }
     }
 
     my @ib_nsnames =
       grep { $zone->name->is_in_bailiwick( $_ ) } @{ Zonemaster::Engine::TestMethods->method2and3( $zone ) };
-
     my @ib_nss = grep { Zonemaster::Engine::Util::ipversion_ok( $_->address->version ) }
       @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) };
-
     my %child_ib_strings;
     for my $ib_nsname ( @ib_nsnames ) {
         my $is_lame = 1;
         for my $ns ( @ib_nss ) {
-            my ( $msg_a,    @rrs_a )    = $class->_get_addr_rrs( $ns, $ib_nsname, 'A' );
-            my ( $msg_aaaa, @rrs_aaaa ) = $class->_get_addr_rrs( $ns, $ib_nsname, 'AAAA' );
+            my ( $msg_a,    @rrs_a )    = $class->_get_addr_rrs( $ns, $ib_nsname, q{A} );
+            my ( $msg_aaaa, @rrs_aaaa ) = $class->_get_addr_rrs( $ns, $ib_nsname, q{AAAA} );
 
             if ( defined $msg_a ) {
                 push @results, $msg_a;
@@ -643,7 +767,7 @@ sub consistency05 {
             }
 
             for my $rr ( @rrs_a, @rrs_aaaa ) {
-                $child_ib_strings{ lc( $rr->name ) . "/" . $rr->address } = 1;
+                $child_ib_strings{ lc( $rr->name ) . q{/} . $rr->address } = 1;
             }
         }
 
@@ -657,7 +781,7 @@ sub consistency05 {
     my @ib_mismatch    = grep { !exists $child_ib_strings{$_} } keys %strict_glue;
     my @ib_extra_child = grep { !exists $strict_glue{$_} } keys %child_ib_strings;
 
-    if ( @ib_mismatch ) {
+    if ( scalar @ib_mismatch ) {
         push @results,
           info(
             IN_BAILIWICK_ADDR_MISMATCH => {
@@ -666,7 +790,7 @@ sub consistency05 {
             }
           );
     }
-    if ( @ib_extra_child ) {
+    if ( scalar @ib_extra_child ) {
         push @results,
           info(
             EXTRA_ADDRESS_CHILD => {
@@ -682,17 +806,17 @@ sub consistency05 {
 
         my %child_oob_strings;
 
-        my $p_a = Zonemaster::Engine->recurse( $glue_name, 'A', 'IN' );
+        my $p_a = Zonemaster::Engine->recurse( $glue_name, q{A}, q{IN} );
         if ( $p_a ) {
-            for my $rr ( $p_a->get_records_for_name( 'A', $glue_name, 'answer' ) ) {
-                $child_oob_strings{ $rr->owner . "/" . $rr->address } = 1;
+            for my $rr ( $p_a->get_records_for_name( q{A}, $glue_name, q{answer} ) ) {
+                $child_oob_strings{ lc( $rr->owner ) . q{/} . $rr->address } = 1;
             }
         }
 
-        my $p_aaaa = Zonemaster::Engine->recurse( $glue_name, 'AAAA', 'IN' );
+        my $p_aaaa = Zonemaster::Engine->recurse( $glue_name, q{AAAA}, q{IN} );
         if ( $p_aaaa ) {
-            for my $rr ( $p_aaaa->get_records_for_name( 'AAAA', $glue_name, 'answer' ) ) {
-                $child_oob_strings{ $rr->owner . "/" . $rr->address } = 1;
+            for my $rr ( $p_aaaa->get_records_for_name( q{AAAA}, $glue_name, q{answer} ) ) {
+                $child_oob_strings{ lc( $rr->owner ) . q{/} . $rr->address } = 1;
             }
         }
 
@@ -841,9 +965,9 @@ Runs the default set of tests and returns a list of log entries made by the test
 Returns a reference to a hash, the keys of which are the names of all test methods in the module, and the corresponding values are references to
 lists with all the tags that the method can use in log entries.
 
-=item translation()
+=item tag_descriptions()
 
-Returns a refernce to a hash with translation data. Used by the builtin translation system.
+Returns a refernce to a hash with translation functions. Used by the builtin translation system.
 
 =item version()
 

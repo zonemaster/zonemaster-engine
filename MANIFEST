@@ -37,7 +37,6 @@ lib/Zonemaster/Engine/Test/Connectivity.pm
 lib/Zonemaster/Engine/Test/Consistency.pm
 lib/Zonemaster/Engine/Test/Delegation.pm
 lib/Zonemaster/Engine/Test/DNSSEC.pm
-lib/Zonemaster/Engine/Test/Example.pm
 lib/Zonemaster/Engine/Test/Nameserver.pm
 lib/Zonemaster/Engine/Test/Syntax.pm
 lib/Zonemaster/Engine/Test/Zone.pm
@@ -53,6 +52,7 @@ README.md
 share/config_example_logfilter.json
 share/iana-ipv4-special-registry.csv
 share/iana-ipv6-special-registry.csv
+share/modules.txt
 share/profile.json
 share/profile_example_logfilter.json
 share/locale/da/LC_MESSAGES/Zonemaster-Engine.mo
@@ -92,6 +92,7 @@ t/profiles/Test-consistency05-only.json
 t/profiles/Test-consistency06-only.json
 t/profiles/Test-consistency-all.json
 t/profiles/Test-delegation-all.json
+t/profiles/Test-disabled.json
 t/profiles/Test-dnssec01-only.json
 t/profiles/Test-dnssec02-only.json
 t/profiles/Test-dnssec03-only.json
@@ -103,7 +104,10 @@ t/profiles/Test-dnssec08-only.json
 t/profiles/Test-dnssec09-only.json
 t/profiles/Test-dnssec10-only.json
 t/profiles/Test-dnssec11-only.json
+t/profiles/Test-dnssec13-only.json
+t/profiles/Test-dnssec14-only.json
 t/profiles/Test-dnssec-all.json
+t/profiles/Test-dnssec-more-all.json
 t/profiles/Test-nameserver01-only.json
 t/profiles/Test-nameserver02-only.json
 t/profiles/Test-nameserver03-only.json

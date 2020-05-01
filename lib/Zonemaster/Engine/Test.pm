@@ -1,27 +1,35 @@
 package Zonemaster::Engine::Test;
 
-use version; our $VERSION = version->declare("v1.1.9");
-
 use 5.014002;
+
 use strict;
 use warnings;
 
+use version; our $VERSION = version->declare( "v1.1.10" );
+
+use Zonemaster::LDNS;
 use Zonemaster::Engine;
+use Zonemaster::Engine::Profile;
 use Zonemaster::Engine::Util;
 use Zonemaster::Engine::Test::Basic;
 
 use IO::Socket::INET6;    # Lazy-loads, so make sure it's here for the version logging
 
-use Module::Find qw[useall];
+use File::ShareDir qw[dist_file];
+use File::Slurp qw[read_file];
 use Scalar::Util qw[blessed];
 use POSIX qw[strftime];
 
 my @all_test_modules;
 
-@all_test_modules =
-  sort { $a cmp $b }
-  map { my $f = $_; $f =~ s|^Zonemaster::Engine::Test::||; $f }
-  grep { $_ ne 'Zonemaster::Engine::Test::Basic' } useall( 'Zonemaster::Engine::Test' );
+BEGIN {
+    @all_test_modules = split /\n/, read_file( dist_file( 'Zonemaster-Engine', 'modules.txt' ) );
+
+    for my $name ( @all_test_modules ) {
+        require sprintf q{Zonemaster/Engine/Test/%s.pm}, $name;
+        "Zonemaster::Engine::Test::$name"->import();
+    }
+}
 
 sub _log_versions {
     info( GLOBAL_VERSION => { version => Zonemaster::Engine->VERSION } );
@@ -35,7 +43,6 @@ sub _log_versions {
     info( DEPENDENCY_VERSION => { name => 'File::Slurp',           version => $File::Slurp::VERSION } );
     info( DEPENDENCY_VERSION => { name => 'Net::IP',               version => $Net::IP::VERSION } );
     info( DEPENDENCY_VERSION => { name => 'List::MoreUtils',       version => $List::MoreUtils::VERSION } );
-    info( DEPENDENCY_VERSION => { name => 'Mail::RFC822::Address', version => $Mail::RFC822::Address::VERSION } );
     info( DEPENDENCY_VERSION => { name => 'Clone',                 version => $Clone::VERSION } );
     info( DEPENDENCY_VERSION => { name => 'Readonly',              version => $Readonly::VERSION } );
 
@@ -70,7 +77,6 @@ sub run_all_for {
     info( MODULE_END => { module => 'Zonemaster::Engine::Test::Basic' } );
 
     if ( Zonemaster::Engine::Test::Basic->can_continue( @results ) and Zonemaster::Engine->can_continue() ) {
-        ## no critic (Modules::RequireExplicitInclusion)
         foreach my $mod ( __PACKAGE__->modules ) {
 
             if ( not _policy_allowed( $mod ) ) {

@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::Basic;
 
-use version; our $VERSION = version->declare("v1.0.11");
+use version; our $VERSION = version->declare("v1.0.12");
 
 use strict;
 use warnings;
@@ -8,14 +8,16 @@ use warnings;
 use 5.014002;
 
 use Zonemaster::Engine;
-use Zonemaster::Engine::Util;
-use Zonemaster::Engine::TestMethods;
-use Zonemaster::Engine::Test::Address;
-use Zonemaster::Engine::Test::Syntax;
-use Zonemaster::Engine::Constants qw[:ip :name];
-use List::MoreUtils qw[any none];
 
 use Carp;
+use List::MoreUtils qw[any none];
+use Locale::TextDomain qw[Zonemaster-Engine];
+use Readonly;
+use Zonemaster::Engine::Constants qw[:ip :name];
+use Zonemaster::Engine::Test::Address;
+use Zonemaster::Engine::Test::Syntax;
+use Zonemaster::Engine::TestMethods;
+use Zonemaster::Engine::Util;
 
 ###
 ### Entry Points
@@ -116,27 +118,80 @@ sub metadata {
     };
 } ## end sub metadata
 
-sub translation {
-    return {
-        "DOMAIN_NAME_LABEL_TOO_LONG"    => "Domain name ({dname}) has a label ({dlabel}) too long ({dlength}/{max}).",
-        "DOMAIN_NAME_ZERO_LENGTH_LABEL" => "Domain name ({dname}) has a zero length label.",
-        "DOMAIN_NAME_TOO_LONG"          => "Domain name is too long ({fqdnlength}/{max}).",
-        'NO_PARENT'                     => 'No parent domain could be found for the tested domain.',
-        'HAS_PARENT'                    => 'Parent domain \'{pname}\' was found for the tested domain.',
-        'HAS_A_RECORDS' => 'Nameserver {ns}/{address} returned A record(s) for {dname}.',
-        'NO_A_RECORDS'  => 'Nameserver {ns}/{address} did not return A record(s) for {dname}.',
-        'HAS_NAMESERVERS'    => 'Nameserver {ns} listed these servers as glue: {nsnlist}.',
-        'NO_GLUE_PREVENTS_NAMESERVER_TESTS' => 'No NS records for tested zone from parent. NS tests aborted.',
-        'NS_FAILED'                    => 'Nameserver {ns}/{address} did not return NS records. RCODE was {rcode}.',
-        'NS_NO_RESPONSE'               => 'Nameserver {ns}/{address} did not respond to NS query.',
-        'A_QUERY_NO_RESPONSES'         => 'Nameservers did not respond to A query.',
-        'HAS_NAMESERVER_NO_WWW_A_TEST' => 'Functional nameserver found. "A" query for www.{zname} test aborted.',
-        'IPV4_DISABLED'                => 'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
-        'IPV4_ENABLED'                 => 'IPv4 is enabled, can send "{rrtype}" query to {ns}/{address}.',
-        'IPV6_DISABLED'                => 'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
-        'IPV6_ENABLED'                 => 'IPv6 is enabled, can send "{rrtype}" query to {ns}/{address}.',
-    };
-} ## end sub translation
+Readonly my %TAG_DESCRIPTIONS => (
+    DOMAIN_NAME_LABEL_TOO_LONG => sub {
+        __x    # BASIC:DOMAIN_NAME_LABEL_TOO_LONG
+          "Domain name ({dname}) has a label ({dlabel}) too long ({dlength}/{max}).", @_;
+    },
+    DOMAIN_NAME_ZERO_LENGTH_LABEL => sub {
+        __x    # BASIC:DOMAIN_NAME_ZERO_LENGTH_LABEL
+          "Domain name ({dname}) has a zero length label.", @_;
+    },
+    DOMAIN_NAME_TOO_LONG => sub {
+        __x    # BASIC:DOMAIN_NAME_TOO_LONG
+          "Domain name is too long ({fqdnlength}/{max}).", @_;
+    },
+    NO_PARENT => sub {
+        __x    # BASIC:NO_PARENT
+          'No parent domain could be found for the tested domain.', @_;
+    },
+    HAS_PARENT => sub {
+        __x    # BASIC:HAS_PARENT
+          'Parent domain \'{pname}\' was found for the tested domain.', @_;
+    },
+    HAS_A_RECORDS => sub {
+        __x    # BASIC:HAS_A_RECORDS
+          'Nameserver {ns}/{address} returned A record(s) for {dname}.', @_;
+    },
+    NO_A_RECORDS => sub {
+        __x    # BASIC:NO_A_RECORDS
+          'Nameserver {ns}/{address} did not return A record(s) for {dname}.', @_;
+    },
+    HAS_NAMESERVERS => sub {
+        __x    # BASIC:HAS_NAMESERVERS
+          'Nameserver {ns}/{address} listed these servers as glue: {nsnlist}.', @_;
+    },
+    NO_GLUE_PREVENTS_NAMESERVER_TESTS => sub {
+        __x    # BASIC:NO_GLUE_PREVENTS_NAMESERVER_TESTS
+          'No NS records for tested zone from parent. NS tests aborted.', @_;
+    },
+    NS_FAILED => sub {
+        __x    # BASIC:NS_FAILED
+          'Nameserver {ns}/{address} did not return NS records. RCODE was {rcode}.', @_;
+    },
+    NS_NO_RESPONSE => sub {
+        __x    # BASIC:NS_NO_RESPONSE
+          'Nameserver {ns}/{address} did not respond to NS query.', @_;
+    },
+    A_QUERY_NO_RESPONSES => sub {
+        __x    # BASIC:A_QUERY_NO_RESPONSES
+          'Nameservers did not respond to A query.';
+    },
+    HAS_NAMESERVER_NO_WWW_A_TEST => sub {
+        __x    # BASIC:HAS_NAMESERVER_NO_WWW_A_TEST
+          'Functional nameserver found. "A" query for www.{zname} test aborted.', @_;
+    },
+    IPV4_DISABLED => sub {
+        __x    # BASIC:IPV4_DISABLED
+          'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
+    },
+    IPV4_ENABLED => sub {
+        __x    # BASIC:IPV4_ENABLED
+          'IPv4 is enabled, can send "{rrtype}" query to {ns}/{address}.', @_;
+    },
+    IPV6_DISABLED => sub {
+        __x    # BASIC:IPV6_DISABLED
+          'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
+    },
+    IPV6_ENABLED => sub {
+        __x    # BASIC:IPV6_ENABLED
+          'IPv6 is enabled, can send "{rrtype}" query to {ns}/{address}.', @_;
+    },
+);
+
+sub tag_descriptions {
+    return \%TAG_DESCRIPTIONS;
+}
 
 sub version {
     return "$Zonemaster::Engine::Test::Basic::VERSION";
@@ -419,9 +474,9 @@ Runs between one and three tests, depending on the zone. If L<basic01> passes, L
 Returns a reference to a hash, the keys of which are the names of all test methods in the module, and the corresponding values are references to
 lists with all the tags that the method can use in log entries.
 
-=item translation()
+=item tag_descriptions()
 
-Returns a refernce to a hash with translation data. Used by the builtin translation system.
+Returns a refernce to a hash with translation functions. Used by the builtin translation system.
 
 =item version()
 

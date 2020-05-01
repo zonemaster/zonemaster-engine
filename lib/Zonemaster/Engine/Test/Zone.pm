@@ -1,20 +1,25 @@
 package Zonemaster::Engine::Test::Zone;
 
-use version; our $VERSION = version->declare("v1.0.6");
+use 5.014002;
 
 use strict;
 use warnings;
 
-use 5.014002;
+use version; our $VERSION = version->declare( "v1.0.11" );
 
 use Zonemaster::Engine;
-use Zonemaster::Engine::Util;
-use Zonemaster::Engine::Test::Address;
-use Zonemaster::Engine::TestMethods;
-use Zonemaster::Engine::Constants qw[:soa :ip];
-use List::MoreUtils qw[none];
 
 use Carp;
+use List::MoreUtils qw[none];
+use Locale::TextDomain qw[Zonemaster-Engine];
+use Readonly;
+use Zonemaster::Engine::Profile;
+use Zonemaster::Engine::Constants qw[:soa :ip];
+use Zonemaster::Engine::Recursor;
+use Zonemaster::Engine::Nameserver;
+use Zonemaster::Engine::Test::Address;
+use Zonemaster::Engine::TestMethods;
+use Zonemaster::Engine::Util;
 
 ###
 ### Entry Points
@@ -26,7 +31,6 @@ sub all {
 
     push @results, $class->zone01( $zone ) if Zonemaster::Engine::Util::should_run_test( q{zone01} );
     if ( none { $_->tag eq q{NO_RESPONSE_SOA_QUERY} } @results ) {
-
         push @results, $class->zone02( $zone ) if Zonemaster::Engine::Util::should_run_test( q{zone02} );
         push @results, $class->zone03( $zone ) if Zonemaster::Engine::Util::should_run_test( q{zone03} );
         push @results, $class->zone04( $zone ) if Zonemaster::Engine::Util::should_run_test( q{zone04} );
@@ -42,7 +46,9 @@ sub all {
             push @results, $class->zone09( $zone ) if Zonemaster::Engine::Util::should_run_test( q{zone09} );
         }
     }
-
+    if ( none { $_->tag eq q{NO_RESPONSE_SOA_QUERY} } @results ) {
+        push @results, $class->zone10( $zone ) if Zonemaster::Engine::Util::should_run_test( q{zone10} );
+    }
     return @results;
 } ## end sub all
 
@@ -123,53 +129,150 @@ sub metadata {
               NO_RESPONSE_MX_QUERY
               )
         ],
+        zone10 => [
+            qw(
+              MULTIPLE_SOA
+              NO_RESPONSE
+              NO_SOA_IN_RESPONSE
+              ONE_SOA
+              WRONG_SOA
+              )
+        ],
     };
 } ## end sub metadata
 
-sub translation {
-    return {
-        'RETRY_MINIMUM_VALUE_LOWER' =>
-          'SOA \'retry\' value ({retry}) is less than the recommended one ({required_retry}).',
-        'RETRY_MINIMUM_VALUE_OK' =>
-          'SOA \'retry\' value ({retry}) is more than the minimum recommended value ({required_retry}).',
-        'MNAME_NO_RESPONSE'  => 'SOA \'mname\' nameserver {ns}/{address} does not respond.',
-        'MNAME_IS_CNAME'     => 'SOA \'mname\' value ({mname}) refers to a NS which is an alias (CNAME).',
-        'MNAME_IS_NOT_CNAME' => 'SOA \'mname\' value ({mname}) refers to a NS which is not an alias (CNAME).',
-        'NO_MX_RECORD'       => 'No target (MX, A or AAAA record) to deliver e-mail for the domain name.',
-        'MX_RECORD_EXISTS'   => 'Target ({info}) found to deliver e-mail for the domain name.',
-        'REFRESH_MINIMUM_VALUE_LOWER' =>
-          'SOA \'refresh\' value ({refresh}) is less than the recommended one ({required_refresh}).',
-        'REFRESH_MINIMUM_VALUE_OK' =>
-          'SOA \'refresh\' value ({refresh}) is higher than the minimum recommended value ({required_refresh}).',
-        'EXPIRE_LOWER_THAN_REFRESH' =>
-          'SOA \'expire\' value ({expire}) is lower than the SOA \'refresh\' value ({refresh}).',
-        'SOA_DEFAULT_TTL_MAXIMUM_VALUE_HIGHER' =>
-          'SOA \'minimum\' value ({minimum}) is higher than the recommended one ({highest_minimum}).',
-        'SOA_DEFAULT_TTL_MAXIMUM_VALUE_LOWER' =>
-          'SOA \'minimum\' value ({minimum}) is less than the recommended one ({lowest_minimum}).',
-        'SOA_DEFAULT_TTL_MAXIMUM_VALUE_OK' =>
-          'SOA \'minimum\' value ({minimum}) is between the recommended ones ({lowest_minimum}/{highest_minimum}).',
-        'MNAME_NOT_AUTHORITATIVE' =>
-          'SOA \'mname\' nameserver {ns}/{address} is not authoritative for \'{zone}\' zone.',
-        'MNAME_RECORD_DOES_NOT_EXIST' => 'SOA \'mname\' field does not exist',
-        'EXPIRE_MINIMUM_VALUE_LOWER' =>
-          'SOA \'expire\' value ({expire}) is less than the recommended one ({required_expire}).',
-        'MNAME_NOT_IN_GLUE' =>
-          'SOA \'mname\' nameserver ({mname}) is not listed in "parent" NS records for tested zone ({ns}).',
-        'REFRESH_LOWER_THAN_RETRY' =>
-          'SOA \'refresh\' value ({refresh}) is lower than the SOA \'retry\' value ({retry}).',
-        'REFRESH_HIGHER_THAN_RETRY' =>
-          'SOA \'refresh\' value ({refresh}) is higher than the SOA \'retry\' value ({retry}).',
-        'MX_RECORD_IS_CNAME'     => 'MX record for the domain is pointing to a CNAME.',
-        'MX_RECORD_IS_NOT_CNAME' => 'MX record for the domain is not pointing to a CNAME.',
-        'MNAME_IS_AUTHORITATIVE' => 'SOA \'mname\' nameserver ({mname}) is authoritative for \'{zone}\' zone.',
-        'NO_RESPONSE_SOA_QUERY'  => 'No response from nameserver(s) on SOA queries.',
-        'NO_RESPONSE_MX_QUERY'   => 'No response from nameserver(s) on MX queries.',
-        'MNAME_HAS_NO_ADDRESS'   => 'No IP address found for SOA \'mname\' nameserver ({mname}).',
-        'EXPIRE_MINIMUM_VALUE_OK' =>
-'SOA \'expire\' value ({expire}) is higher than the minimum recommended value ({required_expire}) and not lower than the \'refresh\' value ({refresh}).',
-    };
-} ## end sub translation
+Readonly my %TAG_DESCRIPTIONS => (
+    RETRY_MINIMUM_VALUE_LOWER => sub {
+        __x    # ZONE:RETRY_MINIMUM_VALUE_LOWER
+          'SOA \'retry\' value ({retry}) is less than the recommended one ({required_retry}).', @_;
+    },
+    RETRY_MINIMUM_VALUE_OK => sub {
+        __x    # ZONE:RETRY_MINIMUM_VALUE_OK
+          'SOA \'retry\' value ({retry}) is more than the minimum recommended value ({required_retry}).', @_;
+    },
+    MNAME_NO_RESPONSE => sub {
+        __x    # ZONE:MNAME_NO_RESPONSE
+          'SOA \'mname\' nameserver {ns}/{address} does not respond.', @_;
+    },
+    MNAME_IS_CNAME => sub {
+        __x    # ZONE:MNAME_IS_CNAME
+          'SOA \'mname\' value ({mname}) refers to a NS which is an alias (CNAME).', @_;
+    },
+    MNAME_IS_NOT_CNAME => sub {
+        __x    # ZONE:MNAME_IS_NOT_CNAME
+          'SOA \'mname\' value ({mname}) refers to a NS which is not an alias (CNAME).', @_;
+    },
+    NO_MX_RECORD => sub {
+        __x    # ZONE:NO_MX_RECORD
+          'No target (MX, A or AAAA record) to deliver e-mail for the domain name.', @_;
+    },
+    MX_RECORD_EXISTS => sub {
+        __x    # ZONE:MX_RECORD_EXISTS
+          'Target ({info}) found to deliver e-mail for the domain name.', @_;
+    },
+    REFRESH_MINIMUM_VALUE_LOWER => sub {
+        __x    # ZONE:REFRESH_MINIMUM_VALUE_LOWER
+          'SOA \'refresh\' value ({refresh}) is less than the recommended one ({required_refresh}).', @_;
+    },
+    REFRESH_MINIMUM_VALUE_OK => sub {
+        __x    # ZONE:REFRESH_MINIMUM_VALUE_OK
+          'SOA \'refresh\' value ({refresh}) is higher than the minimum recommended value ({required_refresh}).', @_;
+    },
+    EXPIRE_LOWER_THAN_REFRESH => sub {
+        __x    # ZONE:EXPIRE_LOWER_THAN_REFRESH
+          'SOA \'expire\' value ({expire}) is lower than the SOA \'refresh\' value ({refresh}).', @_;
+    },
+    SOA_DEFAULT_TTL_MAXIMUM_VALUE_HIGHER => sub {
+        __x    # ZONE:SOA_DEFAULT_TTL_MAXIMUM_VALUE_HIGHER
+          'SOA \'minimum\' value ({minimum}) is higher than the recommended one ({highest_minimum}).', @_;
+    },
+    SOA_DEFAULT_TTL_MAXIMUM_VALUE_LOWER => sub {
+        __x    # ZONE:SOA_DEFAULT_TTL_MAXIMUM_VALUE_LOWER
+          'SOA \'minimum\' value ({minimum}) is less than the recommended one ({lowest_minimum}).', @_;
+    },
+    SOA_DEFAULT_TTL_MAXIMUM_VALUE_OK => sub {
+        __x    # ZONE:SOA_DEFAULT_TTL_MAXIMUM_VALUE_OK
+          'SOA \'minimum\' value ({minimum}) is between the recommended ones ({lowest_minimum}/{highest_minimum}).', @_;
+    },
+    MNAME_NOT_AUTHORITATIVE => sub {
+        __x    # ZONE:MNAME_NOT_AUTHORITATIVE
+          'SOA \'mname\' nameserver {ns}/{address} is not authoritative for \'{zone}\' zone.', @_;
+    },
+    MNAME_RECORD_DOES_NOT_EXIST => sub {
+        __x    # ZONE:MNAME_RECORD_DOES_NOT_EXIST
+          'SOA \'mname\' field does not exist', @_;
+    },
+    EXPIRE_MINIMUM_VALUE_LOWER => sub {
+        __x    # ZONE:EXPIRE_MINIMUM_VALUE_LOWER
+          'SOA \'expire\' value ({expire}) is less than the recommended one ({required_expire}).', @_;
+    },
+    MNAME_NOT_IN_GLUE => sub {
+        __x    # ZONE:MNAME_NOT_IN_GLUE
+          'SOA \'mname\' nameserver ({mname}) is not listed in "parent" NS records for tested zone ({nss}).', @_;
+    },
+    REFRESH_LOWER_THAN_RETRY => sub {
+        __x    # ZONE:REFRESH_LOWER_THAN_RETRY
+          'SOA \'refresh\' value ({refresh}) is lower than the SOA \'retry\' value ({retry}).', @_;
+    },
+    REFRESH_HIGHER_THAN_RETRY => sub {
+        __x    # ZONE:REFRESH_HIGHER_THAN_RETRY
+          'SOA \'refresh\' value ({refresh}) is higher than the SOA \'retry\' value ({retry}).', @_;
+    },
+    MX_RECORD_IS_CNAME => sub {
+        __x    # ZONE:MX_RECORD_IS_CNAME
+          'MX record for the domain is pointing to a CNAME.', @_;
+    },
+    MX_RECORD_IS_NOT_CNAME => sub {
+        __x    # ZONE:MX_RECORD_IS_NOT_CNAME
+          'MX record for the domain is not pointing to a CNAME.', @_;
+    },
+    MNAME_IS_AUTHORITATIVE => sub {
+        __x    # ZONE:MNAME_IS_AUTHORITATIVE
+          'SOA \'mname\' nameserver ({mname}) is authoritative for \'{zone}\' zone.', @_;
+    },
+    MULTIPLE_SOA => sub {
+        __x    # ZONE:MULTIPLE_SOA
+          'Nameserver {ns}/{address} responds with multiple ({count}) SOA records on SOA queries.', @_;
+    },
+    NO_RESPONSE => sub {
+        __x    # ZONE:NO_RESPONSE
+          'Nameserver {ns}/{address} did not respond.', @_;
+    },
+    NO_RESPONSE_SOA_QUERY => sub {
+        __x    # ZONE:NO_RESPONSE_SOA_QUERY
+          'No response from nameserver(s) on SOA queries.';
+    },
+    NO_RESPONSE_MX_QUERY => sub {
+        __x    # ZONE:NO_RESPONSE_MX_QUERY
+          'No response from nameserver(s) on MX queries.';
+    },
+    NO_SOA_IN_RESPONSE => sub {
+        __x    # ZONE:NO_SOA_IN_RESPONSE
+          'Response from nameserver {ns}/{address} on SOA queries does not contain SOA record.';
+    },
+    MNAME_HAS_NO_ADDRESS => sub {
+        __x    # ZONE:MNAME_HAS_NO_ADDRESS
+          'No IP address found for SOA \'mname\' nameserver ({mname}).', @_;
+    },
+    ONE_SOA => sub {
+        __x    # ZONE:ONE_SOA
+          'A unique SOA record is returned by all nameservers of the zone.', @_;
+    },
+    EXPIRE_MINIMUM_VALUE_OK => sub {
+        __x    # ZONE:EXPIRE_MINIMUM_VALUE_OK
+          'SOA \'expire\' value ({expire}) is higher than the minimum recommended value ({required_expire}) '
+          . 'and not lower than the \'refresh\' value ({refresh}).',
+          @_;
+    },
+    WRONG_SOA => sub {
+        __x    # ZONE:WRONG_SOA
+          'Nameserver {ns}/{address} responds with a wrong owner name ({owner} instead of {name}) on SOA queries.', @_;
+    },
+);
+
+sub tag_descriptions {
+    return \%TAG_DESCRIPTIONS;
+}
 
 sub version {
     return "$Zonemaster::Engine::Test::Zone::VERSION";
@@ -224,7 +327,7 @@ sub zone01 {
                   info(
                     MNAME_NOT_IN_GLUE => {
                         mname => $soa_mname,
-                        ns    => join( q{;}, @{ Zonemaster::Engine::TestMethods->method2( $zone ) } ),
+                        nss   => join( q{;}, @{ Zonemaster::Engine::TestMethods->method2( $zone ) } ),
                     }
                   );
             }
@@ -493,13 +596,18 @@ sub zone08 {
     my @results;
 
     my $p = $zone->query_auth( $zone->name, q{MX} );
-
     if ( $p ) {
-        if ( $p->has_rrs_of_type_for_name( q{CNAME}, $zone->name ) ) {
-            push @results, info( MX_RECORD_IS_CNAME => {} );
-        }
-        else {
-            push @results, info( MX_RECORD_IS_NOT_CNAME => {} );
+        my @mx = $p->get_records_for_name( q{MX}, $zone->name );
+        for my $mx ( @mx ) {
+            my $p2 = $zone->query_auth( $mx->exchange, q{CNAME} );
+            if ( $p2 ) {
+                if ( $p2->has_rrs_of_type_for_name( q{CNAME}, $mx->exchange ) ) {
+                    push @results, info( MX_RECORD_IS_CNAME => {} );
+                }
+                else {
+                    push @results, info( MX_RECORD_IS_NOT_CNAME => {} );
+                }
+            }
         }
     }
     else {
@@ -555,6 +663,72 @@ sub zone09 {
     return @results;
 } ## end sub zone09
 
+sub zone10 {
+    my ( $class, $zone ) = @_;
+    my $name = name( $zone );
+    my @results;
+
+    foreach my $ns ( @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) } ) {
+
+        if ( _is_ip_version_disabled( $ns ) ) {
+            next;
+        }
+
+        my $p = $ns->query( $name, q{SOA} );
+
+        if ( not $p ) {
+            push @results,
+              info(
+                NO_RESPONSE => {
+                    ns      => $ns->name->string,
+                    address => $ns->address->short,
+                }
+              );
+            next;
+        }
+        else {
+            my @soa = $p->get_records( q{SOA}, q{answer} );
+            if ( scalar @soa ) {
+                if ( scalar @soa > 1 ) {
+                    push @results,
+                      info(
+                        MULTIPLE_SOA => {
+                            ns      => $ns->name->string,
+                            address => $ns->address->short,
+                            count   => scalar @soa,
+                        }
+                      );
+                }
+                elsif ( $soa[0]->owner ne $name->fqdn ) {
+                    push @results,
+                      info(
+                        WRONG_SOA => {
+                            ns      => $ns->name->string,
+                            address => $ns->address->short,
+                            owner   => $soa[0]->owner,
+                            name    => $name->fqdn,
+                        }
+                      );
+                }
+            } ## end if ( scalar @soa )
+            else {
+                push @results,
+                  info(
+                    NO_SOA_IN_RESPONSE => {
+                        ns      => $ns->name->string,
+                        address => $ns->address->short,
+                    }
+                  );
+            }
+        } ## end else [ if ( not $p ) ]
+    } ## end foreach my $ns ( @{ Zonemaster::Engine::TestMethods...})
+    if ( not scalar @results ) {
+        push @results, info( ONE_SOA => {} );
+    }
+
+    return @results;
+} ## end sub zone10
+
 sub _retrieve_record_from_zone {
     my ( $zone, $name, $type ) = @_;
 
@@ -578,12 +752,12 @@ sub _retrieve_record_from_zone {
 sub _is_ip_version_disabled {
     my $ns = shift;
 
-    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
+    if ( not Zonemaster::Engine::Profile->effective->get( q{net.ipv4} ) and $ns->address->version == $IP_VERSION_4 ) {
         Zonemaster::Engine->logger->add( SKIP_IPV4_DISABLED => { ns => "$ns" } );
         return 1;
     }
 
-    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
+    if ( not Zonemaster::Engine::Profile->effective->get( q{net.ipv6} ) and $ns->address->version == $IP_VERSION_6 ) {
         Zonemaster::Engine->logger->add( SKIP_IPV6_DISABLED => { ns => "$ns" } );
         return 1;
     }
@@ -609,9 +783,9 @@ Zonemaster::Engine::Test::Zone - module implementing tests of the zone content i
 
 Runs the default set of tests and returns a list of log entries made by the tests
 
-=item translation()
+=item tag_descriptions()
 
-Returns a refernce to a hash with translation data. Used by the builtin translation system.
+Returns a refernce to a hash with translation functions. Used by the builtin translation system.
 
 =item metadata()
 
@@ -663,6 +837,10 @@ Verify that MX records does not resolve to a CNAME.
 =item zone09($zone)
 
 Verify that there is a target host (MX, A or AAAA) to deliver e-mail for the domain name.
+
+=item zone10($zone)
+
+Verify that the zone of the domain to be tested return exactly one SOA record.
 
 =back
 

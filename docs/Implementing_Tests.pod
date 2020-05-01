@@ -46,9 +46,6 @@ The Zonemaster framework will attempt to load and call all modules in the namesp
 defined. One to run all tests it provides, and two to expose metadata about the module. Apart from that (and the rules above) the module can be
 implemented as desired.
 
-There is an example module included in the standard Zonemaster distribution, L<Zonemaster::Engine::Test::Example>, that demonstrates what a test module should
-look like. Incidentally, it also serves to demonstrate how to use the policy to block a test module from being run.
-
 =head2 Metadata methods
 
 =over

@@ -1,0 +1,13 @@
+{
+    "test_cases": [
+        "address01",
+        "basic01",
+        "basic02",
+        "basic03"
+    ],
+    "test_levels": {
+        "ADDRESS": {
+            "DISABLED": true
+        }
+    }
+}

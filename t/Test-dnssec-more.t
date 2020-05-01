@@ -38,7 +38,7 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
 }
 
 my ($json, $profile_test);
-$json         = read_file( 't/profiles/Test-dnssec-all.json' );
+$json         = read_file( 't/profiles/Test-dnssec-more-all.json' );
 $profile_test = Zonemaster::Engine::Profile->from_json( $json );
 Zonemaster::Engine::Profile->effective->merge( $profile_test );
 
@@ -46,9 +46,12 @@ my $zone;
 my @res;
 my %tag;
 
-@res = Zonemaster::Engine->test_module( 'DNSSEC', 'loopia.se' );
-%tag = map { $_->tag => 1 } @res;
-ok( $tag{NO_DS}, 'NO_DS' );
+SKIP: {
+    skip "dnssec01 tests are now in a separate file.", 1;
+    @res = Zonemaster::Engine->test_module( 'DNSSEC', 'loopia.se' );
+    %tag = map { $_->tag => 1 } @res;
+    ok( $tag{NO_RESPONSE_DS}, 'NO_RESPONSE_DS' );
+}
 
 #dnssec11
 $zone = Zonemaster::Engine->zone( 'nic.se' );
@@ -79,17 +82,17 @@ zone_gives_not( 'dnssec11', $zone, ['DELEGATION_NOT_SIGNED']);
 
 # dnssec10
 SKIP: {
-    skip "Need to configure another zone for this test case.", 2;
+    skip "Need to configure another zone for this test cases.", 3;
 
     $zone = Zonemaster::Engine->zone( 'wwwyahoo.se' );
     zone_gives( 'dnssec10', $zone, ['INVALID_NAME_RCODE']);
 
     $zone = Zonemaster::Engine->zone( 'denki.se' );
     zone_gives( 'dnssec10', $zone, ['NSEC3_COVERS_NOT']);
-}
 
-$zone = Zonemaster::Engine->zone( 'retailacademicsconsulting.se' );
-zone_gives( 'dnssec10', $zone, ['NSEC3_SIG_VERIFY_ERROR']);
+    $zone = Zonemaster::Engine->zone( 'retailacademicsconsulting.se' );
+    zone_gives( 'dnssec10', $zone, ['NSEC3_SIG_VERIFY_ERROR']);
+}
 
 $zone = Zonemaster::Engine->zone( 'y.nu' );
 zone_gives_not( 'dnssec03', $zone, ['TOO_MANY_ITERATIONS'] );

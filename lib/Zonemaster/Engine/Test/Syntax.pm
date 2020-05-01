@@ -1,26 +1,28 @@
 package Zonemaster::Engine::Test::Syntax;
 
-use version; our $VERSION = version->declare("v1.0.5");
+use 5.014002;
 
 use strict;
 use warnings;
 
-use 5.014002;
+use version; our $VERSION = version->declare( "v1.0.7" );
 
 use Zonemaster::Engine;
-use Zonemaster::Engine::Util;
-use Zonemaster::Engine::Recursor;
-use Zonemaster::Engine::DNSName;
-use Zonemaster::Engine::TestMethods;
-use Zonemaster::Engine::Constants qw[:name];
-use Zonemaster::LDNS;
-use Zonemaster::Engine::Packet;
 
 use Carp;
-
+use Email::Valid;
 use List::MoreUtils qw[uniq none any];
-use Mail::RFC822::Address qw[valid];
+use Locale::TextDomain qw[Zonemaster-Engine];
+use Readonly;
 use Time::Local;
+use Zonemaster::Engine::Profile;
+use Zonemaster::Engine::Constants qw[:name :ip];
+use Zonemaster::Engine::DNSName;
+use Zonemaster::Engine::Packet;
+use Zonemaster::Engine::Recursor;
+use Zonemaster::Engine::TestMethods;
+use Zonemaster::Engine::Util;
+use Zonemaster::LDNS;
 
 ###
 ### Entry points
@@ -39,7 +41,8 @@ sub all {
         foreach my $local_nsname ( uniq map { $_->string } @{ Zonemaster::Engine::TestMethods->method2( $zone ) },
             @{ Zonemaster::Engine::TestMethods->method3( $zone ) } )
         {
-            push @results, $class->syntax04( $local_nsname ) if Zonemaster::Engine::Util::should_run_test( q{syntax04} );
+            push @results, $class->syntax04( $local_nsname )
+              if Zonemaster::Engine::Util::should_run_test( q{syntax04} );
         }
 
         push @results, $class->syntax05( $zone ) if Zonemaster::Engine::Util::should_run_test( q{syntax05} );
@@ -128,43 +131,138 @@ sub metadata {
     };
 } ## end sub metadata
 
-sub translation {
-    return {
-        DISCOURAGED_DOUBLE_DASH => 'Domain name ({name}) has a label ({label}) with a double hyphen (\'--\') '
+Readonly my %TAG_DESCRIPTIONS => (
+    DISCOURAGED_DOUBLE_DASH => sub {
+        __x    # SYNTAX:DISCOURAGED_DOUBLE_DASH
+          'Domain name ({name}) has a label ({label}) with a double hyphen (\'--\') '
           . 'in position 3 and 4 (with a prefix which is not \'xn--\').',
-        INITIAL_HYPHEN                => 'Domain name ({name}) has a label ({label}) starting with an hyphen (\'-\').',
-        MNAME_DISCOURAGED_DOUBLE_DASH => 'SOA MNAME ({name}) has a label ({label}) with a double hyphen (\'--\') '
+          @_;
+    },
+    INITIAL_HYPHEN => sub {
+        __x    # SYNTAX:INITIAL_HYPHEN
+          'Domain name ({name}) has a label ({label}) starting with an hyphen (\'-\').', @_;
+    },
+    IPV4_DISABLED => sub {
+        __x    # SYNTAX:IPV4_DISABLED
+          'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
+    },
+    IPV6_DISABLED => sub {
+        __x    # SYNTAX:IPV6_DISABLED
+          'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
+    },
+    MNAME_DISCOURAGED_DOUBLE_DASH => sub {
+        __x    # SYNTAX:MNAME_DISCOURAGED_DOUBLE_DASH
+          'SOA MNAME ({name}) has a label ({label}) with a double hyphen (\'--\') '
           . 'in position 3 and 4 (with a prefix which is not \'xn--\').',
-        MNAME_NON_ALLOWED_CHARS    => 'Found illegal characters in SOA MNAME ({name}).',
-        MNAME_NUMERIC_TLD          => 'SOA MNAME ({name}) within a \'numeric only\' TLD ({tld}).',
-        MNAME_SYNTAX_OK            => 'SOA MNAME ({name}) syntax is valid.',
-        MX_DISCOURAGED_DOUBLE_DASH => 'Domain name MX ({name}) has a label ({label}) with a double hyphen (\'--\') '
+          @_;
+    },
+    MNAME_NON_ALLOWED_CHARS => sub {
+        __x    # SYNTAX:MNAME_NON_ALLOWED_CHARS
+          'Found illegal characters in SOA MNAME ({name}).', @_;
+    },
+    MNAME_NUMERIC_TLD => sub {
+        __x    # SYNTAX:MNAME_NUMERIC_TLD
+          'SOA MNAME ({name}) within a \'numeric only\' TLD ({tld}).', @_;
+    },
+    MNAME_SYNTAX_OK => sub {
+        __x    # SYNTAX:MNAME_SYNTAX_OK
+          'SOA MNAME ({name}) syntax is valid.', @_;
+    },
+    MX_DISCOURAGED_DOUBLE_DASH => sub {
+        __x    # SYNTAX:MX_DISCOURAGED_DOUBLE_DASH
+          'Domain name MX ({name}) has a label ({label}) with a double hyphen (\'--\') '
           . 'in position 3 and 4 (with a prefix which is not \'xn--\').',
-        MX_NON_ALLOWED_CHARS               => 'Found illegal characters in MX ({name}).',
-        MX_NUMERIC_TLD                     => 'Domain name MX ({name}) within a \'numeric only\' TLD ({tld}).',
-        MX_SYNTAX_OK                       => 'Domain name MX ({name}) syntax is valid.',
-        NAMESERVER_DISCOURAGED_DOUBLE_DASH => 'Nameserver ({name}) has a label ({label}) '
-          . 'with a double hyphen (\'--\') in position 3 and 4 (with a prefix which is not \'xn--\').',
-        NAMESERVER_NON_ALLOWED_CHARS => 'Found illegal characters in the nameserver ({name}).',
-        NAMESERVER_NUMERIC_TLD       => 'Nameserver ({name}) within a \'numeric only\' TLD ({tld}).',
-        NAMESERVER_SYNTAX_OK         => 'Nameserver ({name}) syntax is valid.',
-        NON_ALLOWED_CHARS            => 'Found illegal characters in the domain name ({name}).',
-        NO_DOUBLE_DASH               => 'Domain name ({name}) has no label with a double hyphen (\'--\') '
+          @_;
+    },
+    MX_NON_ALLOWED_CHARS => sub {
+        __x    # SYNTAX:MX_NON_ALLOWED_CHARS
+          'Found illegal characters in MX ({name}).', @_;
+    },
+    MX_NUMERIC_TLD => sub {
+        __x    # SYNTAX:MX_NUMERIC_TLD
+          'Domain name MX ({name}) within a \'numeric only\' TLD ({tld}).', @_;
+    },
+    MX_SYNTAX_OK => sub {
+        __x    # SYNTAX:MX_SYNTAX_OK
+          'Domain name MX ({name}) syntax is valid.', @_;
+    },
+    NAMESERVER_DISCOURAGED_DOUBLE_DASH => sub {
+        __x    # SYNTAX:NAMESERVER_DISCOURAGED_DOUBLE_DASH
+          'Nameserver ({name}) has a label ({label}) with a double hyphen (\'--\') '
           . 'in position 3 and 4 (with a prefix which is not \'xn--\').',
-        NO_ENDING_HYPHENS         => 'Both ends of all labels of the domain name ({name}) have no hyphens.',
-        NO_RESPONSE               => 'No response from {ns}/{address} asking for {dname}.',
-        NO_RESPONSE_MX_QUERY      => 'No response from nameserver(s) on MX queries.',
-        NO_RESPONSE_SOA_QUERY     => 'No response from nameserver(s) on SOA queries.',
-        ONLY_ALLOWED_CHARS        => 'No illegal characters in the domain name ({name}).',
-        RNAME_MAIL_DOMAIN_INVALID => 'The SOA RNAME mail domain ({domain}) cannot be resolved to a mail server '
-          . 'with an IP address.',
-        RNAME_MISUSED_AT_SIGN => 'There must be no misused \'@\' character in the SOA RNAME field ({rname}).',
-        RNAME_NO_AT_SIGN      => 'There is no misused \'@\' character in the SOA RNAME field ({rname}).',
-        RNAME_RFC822_INVALID  => 'There must be no illegal characters in the SOA RNAME field ({rname}).',
-        RNAME_RFC822_VALID    => 'The SOA RNAME field ({rname}) is compliant with RFC2822.',
-        TERMINAL_HYPHEN       => 'Domain name ({name}) has a label ({label}) ending with an hyphen (\'-\').',
-    };
-} ## end sub translation
+          @_;
+    },
+    NAMESERVER_NON_ALLOWED_CHARS => sub {
+        __x    # SYNTAX:NAMESERVER_NON_ALLOWED_CHARS
+          'Found illegal characters in the nameserver ({name}).', @_;
+    },
+    NAMESERVER_NUMERIC_TLD => sub {
+        __x    # SYNTAX:NAMESERVER_NUMERIC_TLD
+          'Nameserver ({name}) within a \'numeric only\' TLD ({tld}).', @_;
+    },
+    NAMESERVER_SYNTAX_OK => sub {
+        __x    # SYNTAX:NAMESERVER_SYNTAX_OK
+          'Nameserver ({name}) syntax is valid.', @_;
+    },
+    NON_ALLOWED_CHARS => sub {
+        __x    # SYNTAX:NON_ALLOWED_CHARS
+          'Found illegal characters in the domain name ({name}).', @_;
+    },
+    NO_DOUBLE_DASH => sub {
+        __x    # SYNTAX:NO_DOUBLE_DASH
+          'Domain name ({name}) has no label with a double hyphen (\'--\') '
+          . 'in position 3 and 4 (with a prefix which is not \'xn--\').',
+          @_;
+    },
+    NO_ENDING_HYPHENS => sub {
+        __x    # SYNTAX:NO_ENDING_HYPHENS
+          'Both ends of all labels of the domain name ({name}) have no hyphens.', @_;
+    },
+    NO_RESPONSE => sub {
+        __x    # SYNTAX:NO_RESPONSE
+          'No response from {ns}/{address} asking for {dname}.', @_;
+    },
+    NO_RESPONSE_MX_QUERY => sub {
+        __x    # SYNTAX:NO_RESPONSE_MX_QUERY
+          'No response from nameserver(s) on MX queries.', @_;
+    },
+    NO_RESPONSE_SOA_QUERY => sub {
+        __x    # SYNTAX:NO_RESPONSE_SOA_QUERY
+          'No response from nameserver(s) on SOA queries.', @_;
+    },
+    ONLY_ALLOWED_CHARS => sub {
+        __x    # SYNTAX:ONLY_ALLOWED_CHARS
+          'No illegal characters in the domain name ({name}).', @_;
+    },
+    RNAME_MAIL_DOMAIN_INVALID => sub {
+        __x    # SYNTAX:RNAME_MAIL_DOMAIN_INVALID
+          'The SOA RNAME mail domain ({domain}) cannot be resolved to a mail server with an IP address.', @_;
+    },
+    RNAME_MISUSED_AT_SIGN => sub {
+        __x    # SYNTAX:RNAME_MISUSED_AT_SIGN
+          'There must be no misused \'@\' character in the SOA RNAME field ({rname}).', @_;
+    },
+    RNAME_NO_AT_SIGN => sub {
+        __x    # SYNTAX:RNAME_NO_AT_SIGN
+          'There is no misused \'@\' character in the SOA RNAME field ({rname}).', @_;
+    },
+    RNAME_RFC822_INVALID => sub {
+        __x    # SYNTAX:RNAME_RFC822_INVALID
+          'There must be no illegal characters in the SOA RNAME field ({rname}).', @_;
+    },
+    RNAME_RFC822_VALID => sub {
+        __x    # SYNTAX:RNAME_RFC822_VALID
+          'The SOA RNAME field ({rname}) is compliant with RFC2822.', @_;
+    },
+    TERMINAL_HYPHEN => sub {
+        __x    # SYNTAX:TERMINAL_HYPHEN
+          'Domain name ({name}) has a label ({label}) ending with an hyphen (\'-\').', @_;
+    },
+);
+
+sub tag_descriptions {
+    return \%TAG_DESCRIPTIONS;
+}
 
 sub version {
     return "$Zonemaster::Engine::Test::Syntax::VERSION";
@@ -330,6 +428,32 @@ sub syntax06 {
     my %seen_rnames;
     for my $ns ( @nss ) {
 
+        if ( not Zonemaster::Engine::Profile->effective->get( q{net.ipv6} ) and $ns->address->version == $IP_VERSION_6 )
+        {
+            push @results,
+              info(
+                IPV6_DISABLED => {
+                    ns      => $ns->name->string,
+                    address => $ns->address->short,
+                    rrtype  => q{SOA},
+                }
+              );
+            next;
+        }
+
+        if ( not Zonemaster::Engine::Profile->effective->get( q{net.ipv4} ) and $ns->address->version == $IP_VERSION_4 )
+        {
+            push @results,
+              info(
+                IPV4_DISABLED => {
+                    ns      => $ns->name->string,
+                    address => $ns->address->short,
+                    rrtype  => q{SOA},
+                }
+              );
+            next;
+        }
+
         my $p = $ns->query( $zone->name, q{SOA} );
 
         if ( not $p ) {
@@ -355,7 +479,7 @@ sub syntax06 {
         $rname =~ s/([^\\])[.]/$1@/smx;    # Replace first non-escaped dot with an at-sign
         $rname =~ s/[\\][.]/./smgx;        # Un-escape dots
         $rname =~ s/[.]\z//smgx;           # Validator does not like final dots
-        if ( not valid( $rname ) ) {
+        if ( not Email::Valid->address( $rname ) ) {
             push @results,
               info(
                 RNAME_RFC822_INVALID => {
@@ -598,7 +722,7 @@ sub check_name_syntax {
               );
         }
 
-    }
+    } ## end if ( $name ne q{.} )
 
     if ( not scalar @results ) {
         push @results,
@@ -631,9 +755,9 @@ Zonemaster::Engine::Test::Syntax - test validating the syntax of host names and 
 
 Runs the default set of tests and returns a list of log entries made by the tests.
 
-=item translation()
+=item tag_descriptions()
 
-Returns a refernce to a hash with translation data. Used by the builtin translation system.
+Returns a refernce to a hash with translation functions. Used by the builtin translation system.
 
 =item metadata()
 

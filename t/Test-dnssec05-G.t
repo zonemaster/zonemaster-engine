@@ -25,16 +25,15 @@ my $zone = Zonemaster::Engine->zone( q{g.dnssec05.exempelvis.se} );
 
 my %res = map { $_->tag => $_ } Zonemaster::Engine::Test::DNSSEC->dnssec05( $zone );
 
-ok( !$res{NO_RESPONSE},            q{should not emit NO_RESPONSE} );
-ok( !$res{NO_RESPONSE_DNSKEY},     q{should not emit NO_RESPONSE_DNSKEY} );
-ok( !$res{ALGORITHM_DEPRECATED},   q{should not emit ALGORITHM_DEPRECATED} );
-ok( !$res{ALGORITHM_RESERVED},     q{should not emit ALGORITHM_RESERVED} );
-ok( !$res{ALGORITHM_UNASSIGNED},   q{should not emit ALGORITHM_UNASSIGNED} );
-ok( !$res{ALGORITHM_PRIVATE},      q{should not emit ALGORITHM_PRIVATE} );
-ok( $res{ALGORITHM_NOT_ZONE_SIGN}, q{should emit ALGORITHM_NOT_ZONE_SIGN} );
-ok( !$res{ALGORITHM_DELETE_DS},    q{should not emit ALGORITHM_DELETE_DS} );
-ok( !$res{ALGORITHM_INDIRECT_KEY}, q{should not emit ALGORITHM_INDIRECT_KEY} );
-ok( !$res{ALGORITHM_OK},           q{should not emit ALGORITHM_OK} );
+ok( !$res{NO_RESPONSE},               q{should not emit NO_RESPONSE} );
+ok( !$res{NO_RESPONSE_DNSKEY},        q{should not emit NO_RESPONSE_DNSKEY} );
+ok( !$res{ALGORITHM_DEPRECATED},      q{should not emit ALGORITHM_DEPRECATED} );
+ok( !$res{ALGORITHM_RESERVED},        q{should not emit ALGORITHM_RESERVED} );
+ok( !$res{ALGORITHM_UNASSIGNED},      q{should not emit ALGORITHM_UNASSIGNED} );
+ok( !$res{ALGORITHM_PRIVATE},         q{should not emit ALGORITHM_PRIVATE} );
+ok( !$res{ALGORITHM_NOT_RECOMMENDED}, q{should not emit ALGORITHM_NOT_RECOMMENDED} );
+ok( $res{ALGORITHM_NOT_ZONE_SIGN},    q{should emit ALGORITHM_NOT_ZONE_SIGN} );
+ok( !$res{ALGORITHM_OK},              q{should not emit ALGORITHM_OK} );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Nameserver->save( $datafile );

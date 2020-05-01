@@ -1,28 +1,32 @@
 package Zonemaster::Engine::Test::DNSSEC;
 
-use version; our $VERSION = version->declare("v1.0.10");
+use 5.014002;
+
+use strict;
+use warnings;
+
+use version; our $VERSION = version->declare( "v1.1.16" );
 
 ###
 ### This test module implements DNSSEC tests.
 ###
 
-use strict;
-use warnings;
-
-use 5.014002;
-
 use Zonemaster::Engine;
-use Zonemaster::Engine::Util;
-use Zonemaster::Engine::Constants qw[:algo :soa];
-use List::Util qw[min];
-use List::MoreUtils qw[none];
 
 use Carp;
+use List::MoreUtils qw[uniq none];
+use List::Util qw[min];
+use Locale::TextDomain qw[Zonemaster-Engine];
+use Readonly;
+use Zonemaster::Engine::Profile;
+use Zonemaster::Engine::Constants qw[:algo :soa :ip];
+use Zonemaster::Engine::Util;
+use Zonemaster::Engine::TestMethods;
 
 ### Table fetched from IANA on 2017-03-09
 Readonly::Hash our %algo_properties => (
     0 => {
-        status      => $ALGO_STATUS_DELETE_DS,
+        status      => $ALGO_STATUS_NOT_ZONE_SIGN,
         description => q{Delete DS},
         mnemonic    => q{DELETE},
         sig         => 0,
@@ -34,13 +38,13 @@ Readonly::Hash our %algo_properties => (
         sig         => 0,
     },
     2 => {
-        status      => $ALGO_STATUS_OTHER,
+        status      => $ALGO_STATUS_NOT_ZONE_SIGN,
         description => q{Diffie-Hellman},
         mnemonic    => q{DH},
         sig         => 0,
     },
     3 => {
-        status      => $ALGO_STATUS_OTHER,
+        status      => $ALGO_STATUS_DEPRECATED,
         description => q{DSA/SHA1},
         mnemonic    => q{DSA},
         sig         => 1,
@@ -50,19 +54,19 @@ Readonly::Hash our %algo_properties => (
         description => q{Reserved},
     },
     5 => {
-        status      => $ALGO_STATUS_OTHER,
+        status      => $ALGO_STATUS_NOT_RECOMMENDED,
         description => q{RSA/SHA1},
         mnemonic    => q{RSASHA1},
         sig         => 1,
     },
     6 => {
-        status      => $ALGO_STATUS_OTHER,
+        status      => $ALGO_STATUS_DEPRECATED,
         description => q{DSA-NSEC3-SHA1},
         mnemonic    => q{DSA-NSEC3-SHA1},
         sig         => 1,
     },
     7 => {
-        status      => $ALGO_STATUS_OTHER,
+        status      => $ALGO_STATUS_NOT_RECOMMENDED,
         description => q{RSASHA1-NSEC3-SHA1},
         mnemonic    => q{RSASHA1-NSEC3-SHA1},
         sig         => 1,
@@ -78,7 +82,7 @@ Readonly::Hash our %algo_properties => (
         description => q{Reserved},
     },
     10 => {
-        status      => $ALGO_STATUS_OTHER,
+        status      => $ALGO_STATUS_NOT_RECOMMENDED,
         description => q{RSA/SHA-512},
         mnemonic    => q{RSASHA512},
         sig         => 1,
@@ -88,7 +92,7 @@ Readonly::Hash our %algo_properties => (
         description => q{Reserved},
     },
     12 => {
-        status      => $ALGO_STATUS_OTHER,
+        status      => $ALGO_STATUS_DEPRECATED,
         description => q{GOST R 34.10-2001},
         mnemonic    => q{ECC-GOST},
         sig         => 1,
@@ -124,7 +128,7 @@ Readonly::Hash our %algo_properties => (
         map { $_ => { status => $ALGO_STATUS_RESERVED, description => q{Reserved}, } } ( 123 .. 251 )
     ),
     252 => {
-        status      => $ALGO_STATUS_INDIRECT_KEY,
+        status      => $ALGO_STATUS_NOT_ZONE_SIGN,
         description => q{Reserved for Indirect Keys},
         mnemonic    => q{INDIRECT},
         sig         => 0,
@@ -145,6 +149,44 @@ Readonly::Hash our %algo_properties => (
         status      => $ALGO_STATUS_RESERVED,
         description => q{Reserved},
     },
+);
+
+Readonly::Hash our %rsa_key_size_details => (
+    5 => {
+        min_size  => 512,
+        max_size  => 4096,
+        rec_size  => 2048,
+        reference => q{RFC 3110},
+    },
+    7 => {
+        min_size  => 512,
+        max_size  => 4096,
+        rec_size  => 2048,
+        reference => q{RFC 5155},
+    },
+    8 => {
+        min_size  => 512,
+        max_size  => 4096,
+        rec_size  => 2048,
+        reference => q{RFC 5702},
+    },
+    10 => {
+        min_size  => 1024,
+        max_size  => 4096,
+        rec_size  => 2048,
+        reference => q{RFC 5702},
+    },
+);
+
+Readonly::Hash our %digest_algorithms => (
+    0 => q{Reserved},
+    1 => q{SHA-1},
+    2 => q{SHA-256},
+    3 => q{GOST R 34.11-94},
+    4 => q{SHA-384},
+    (
+        map { $_ => q{Unassigned} } ( 5 .. 255 )
+    ),
 );
 
 ###
@@ -173,7 +215,7 @@ sub all {
             push @results, $class->dnssec01( $zone );
         }
 
-        if ( none { $_->tag eq 'NO_DS' } @results ) {
+        if ( none { $_->tag eq 'NO_RESPONSE_DS' } @results ) {
             if ( Zonemaster::Engine::Util::should_run_test( q{dnssec02} ) ) {
                 push @results, $class->dnssec02( $zone );
             }
@@ -217,6 +259,14 @@ sub all {
             push @results, $class->dnssec11( $zone );
         }
 
+        if ( Zonemaster::Engine::Util::should_run_test( q{dnssec13} ) ) {
+            push @results, $class->dnssec13( $zone );
+        }
+
+        if ( Zonemaster::Engine::Util::should_run_test( q{dnssec14} ) ) {
+            push @results, $class->dnssec14( $zone );
+        }
+
     }
 
     return @results;
@@ -232,9 +282,14 @@ sub metadata {
     return {
         dnssec01 => [
             qw(
-              DS_DIGTYPE_OK
-              DS_DIGTYPE_NOT_OK
-              NO_DS
+              DS_ALGORITHM_DEPRECATED
+              DS_ALGORITHM_MISSING
+              DS_ALGORITHM_NOT_DS
+              DS_ALGORITHM_OK
+              DS_ALGORITHM_RESERVED
+              DS_ALGO_SHA1_DEPRECATED
+              NO_RESPONSE_DS
+              UNEXPECTED_RESPONSE_DS
               )
         ],
         dnssec02 => [
@@ -272,14 +327,15 @@ sub metadata {
         ],
         dnssec05 => [
             qw(
-              ALGORITHM_DELETE_DS
               ALGORITHM_DEPRECATED
-              ALGORITHM_INDIRECT_KEY
+              ALGORITHM_NOT_RECOMMENDED
               ALGORITHM_NOT_ZONE_SIGN
               ALGORITHM_OK
               ALGORITHM_PRIVATE
               ALGORITHM_RESERVED
               ALGORITHM_UNASSIGNED
+              IPV4_DISABLED
+              IPV6_DISABLED
               KEY_DETAILS
               NO_RESPONSE
               NO_RESPONSE_DNSKEY
@@ -321,20 +377,23 @@ sub metadata {
         ],
         dnssec10 => [
             qw(
-              INVALID_NAME_RCODE
-              NSEC_COVERS
-              NSEC_COVERS_NOT
-              NSEC_SIG_VERIFY_ERROR
-              NSEC_SIGNED
-              NSEC_NOT_SIGNED
+              BROKEN_DNSSEC
               HAS_NSEC
-              NSEC3_COVERS
-              NSEC3_COVERS_NOT
-              NSEC3_SIG_VERIFY_ERROR
-              NSEC3_SIGNED
-              NSEC3_NOT_SIGNED
               HAS_NSEC3
-              HAS_NSEC3_OPTOUT )
+              INCONSISTENT_DNSSEC
+              INCONSISTENT_NSEC_NSEC3
+              INVALID_RCODE
+              MIXED_NSEC_NSEC3
+              NO_NSEC_NSEC3
+              NO_RESPONSE
+              NSEC3_COVERS_NOT
+              NSEC3_NOT_SIGNED
+              NSEC3_SIG_VERIFY_ERROR
+              NSEC_COVERS_NOT
+              NSEC_NOT_SIGNED
+              NSEC_SIG_VERIFY_ERROR
+              TEST_ABORTED
+              )
         ],
         dnssec11 => [
             qw(
@@ -342,97 +401,437 @@ sub metadata {
               DELEGATION_SIGNED
               ),
         ],
+        dnssec13 => [
+            qw(
+              ALGO_NOT_SIGNED_RRSET
+              ALL_ALGO_SIGNED
+              NO_RESPONSE
+              NO_RESPONSE_RRSET
+              RRSET_NOT_SIGNED
+              RRSIG_BROKEN
+              RRSIG_NOT_MATCH_DNSKEY
+              ),
+        ],
+        dnssec14 => [
+            qw(
+              NO_RESPONSE
+              NO_RESPONSE_DNSKEY
+              DNSKEY_SMALLER_THAN_REC
+              DNSKEY_TOO_SMALL_FOR_ALGO
+              DNSKEY_TOO_LARGE_FOR_ALGO
+              IPV4_DISABLED
+              IPV6_DISABLED
+              KEY_SIZE_OK
+              ),
+        ],
     };
 } ## end sub metadata
 
-sub translation {
-    return {
-        ADDITIONAL_DNSKEY_SKIPPED => "No DNSKEYs found. Additional tests skipped.",
-        ALGORITHM_DELETE_DS       => "The DNSKEY with tag {keytag} uses Delete DS algorithm number "
-          . "{algorithm}/({description}).",
-        ALGORITHM_DEPRECATED => "The DNSKEY with tag {keytag} uses deprecated algorithm number "
-          . "{algorithm}/({description}).",
-        ALGORITHM_INDIRECT_KEY => "The DNSKEY with tag {keytag} uses algorithm number reserved for indirect keys "
-          . "{algorithm}/({description}).",
-        ALGORITHM_NOT_ZONE_SIGN => "The DNSKEY with tag {keytag} uses algorithm number not meant for zone signing"
-          . "{algorithm}/({description}).",
-        ALGORITHM_OK => "The DNSKEY with tag {keytag} uses algorithm number {algorithm}/({description}), which is OK.",
-        ALGORITHM_PRIVATE  => "The DNSKEY with tag {keytag} uses private algorithm number {algorithm}/({description}).",
-        ALGORITHM_RESERVED => "The DNSKEY with tag {keytag} uses reserved algorithm number "
-          . "{algorithm}/({description}).",
-        ALGORITHM_UNASSIGNED => "The DNSKEY with tag {keytag} uses unassigned algorithm number "
-          . "{algorithm}/({description}).",
-        COMMON_KEYTAGS           => "There are both DS and DNSKEY records with key tags {keytags}.",
-        DELEGATION_NOT_SIGNED    => "Delegation from parent to child is not properly signed {reason}.",
-        DELEGATION_SIGNED        => "Delegation from parent to child is properly signed.",
-        DNSKEY_AND_DS            => "{parent} sent a DS record, and {child} a DNSKEY record.",
-        DNSKEY_BUT_NOT_DS        => "{child} sent a DNSKEY record, but {parent} did not send a DS record.",
-        DNSKEY_NOT_SIGNED        => "The apex DNSKEY RRset was not correctly signed.",
-        DNSKEY_SIGNATURE_NOT_OK  => "Signature for DNSKEY with tag {signature} failed to verify with error '{error}'.",
-        DNSKEY_SIGNATURE_OK      => "A signature for DNSKEY with tag {signature} was correctly signed.",
-        DNSKEY_SIGNED            => "The apex DNSKEY RRset was correcly signed.",
-        DS_BUT_NOT_DNSKEY        => "{parent} sent a DS record, but {child} did not send a DNSKEY record.",
-        DS_DIGTYPE_NOT_OK        => "DS record with keytag {keytag} uses forbidden digest type {digtype}.",
-        DS_DIGTYPE_OK            => "DS record with keytag {keytag} uses digest type {digtype}, which is OK.",
-        DS_DOES_NOT_MATCH_DNSKEY => "DS record with keytag {keytag} and digest type {digtype} "
-          . "does not match the DNSKEY with the same tag.",
-        DS_FOUND          => "Found DS records with tags {keytags}.",
-        DS_MATCHES_DNSKEY => "DS record with keytag {keytag} and digest type {digtype} "
-          . "matches the DNSKEY with the same tag.",
-        DS_MATCH_FOUND       => "At least one DS record with a matching DNSKEY record was found.",
-        DS_MATCH_NOT_FOUND   => "No DS record with a matching DNSKEY record was found.",
-        DS_RFC4509_NOT_VALID => "Existing DS with digest type 2, while they do not match DNSKEY records, "
-          . "prevent use of DS with digest type 1 (RFC4509, section 3).",
-        DURATION_LONG => "RRSIG with keytag {tag} and covering type(s) {types} has a duration of {duration} seconds, "
-          . "which is too long.",
-        DURATION_OK => "RRSIG with keytag {tag} and covering type(s) {types} has a duration of {duration} seconds, "
-          . "which is just fine.",
-        EXTRA_PROCESSING_BROKEN => "Server at {server} sent {keys} DNSKEY records, and {sigs} RRSIG records.",
-        EXTRA_PROCESSING_OK     => "Server at {server} sent {keys} DNSKEY records and {sigs} RRSIG records.",
-        HAS_NSEC3_OPTOUT        => "The zone has NSEC3 opt-out records.",
-        HAS_NSEC3               => "The zone has NSEC3 records.",
-        HAS_NSEC                => "The zone has NSEC records.",
-        INVALID_NAME_RCODE => "When asked for the name {name}, which must not exist, the response had RCODE {rcode}.",
-        ITERATIONS_OK      => "The number of NSEC3 iterations is {count}, which is OK.",
-        KEY_DETAILS        => "Key with keytag {keytag} details : Size = {keysize}, Flags ({sep}, {rfc5011}).",
-        MANY_ITERATIONS    => "The number of NSEC3 iterations is {count}, which is on the high side.",
-        NEITHER_DNSKEY_NOR_DS => "There are neither DS nor DNSKEY records for the zone.",
-        NO_COMMON_KEYTAGS     => "No DS record had a DNSKEY with a matching keytag.",
-        NO_DNSKEY             => "No DNSKEYs were returned.",
-        NO_DS                 => "{from} returned no DS records for {zone}.",
-        NO_KEYS_OR_NO_SIGS    => "Cannot test DNSKEY signatures, because we got {keys} DNSKEY records "
-          . "and {sigs} RRSIG records.",
-        NO_KEYS_OR_NO_SIGS_OR_NO_SOA => "Cannot test SOA signatures, because we got {keys} DNSKEY records, "
-          . "{sigs} RRSIG records and {soas} SOA records.",
-        NO_NSEC3PARAM          => "{server} returned no NSEC3PARAM records.",
-        NO_RESPONSE_DNSKEY     => "Nameserver {ns}/{address} responded with no DNSKEY record(s).",
-        NO_RESPONSE            => "Nameserver {ns}/{address} did not respond.",
-        NOT_SIGNED             => "The zone is not signed with DNSSEC.",
-        NSEC3_COVERS_NOT       => "NSEC3 record does not cover {name}.",
-        NSEC3_COVERS           => "NSEC3 record covers {name}.",
-        NSEC3_NOT_SIGNED       => "No signature correctly signed the NSEC3 RRset.",
-        NSEC3_SIGNED           => "At least one signature correctly signed the NSEC3 RRset.",
-        NSEC3_SIG_VERIFY_ERROR => "Trying to verify NSEC3 RRset with RRSIG {sig} gave error '{error}'.",
-        NSEC_COVERS_NOT        => "NSEC does not cover {name}.",
-        NSEC_COVERS            => "NSEC covers {name}.",
-        NSEC_NOT_SIGNED        => "No signature correctly signed the NSEC RRset.",
-        NSEC_SIGNED            => "At least one signature correctly signed the NSEC RRset.",
-        NSEC_SIG_VERIFY_ERROR  => "Trying to verify NSEC RRset with RRSIG {sig} gave error '{error}'.",
-        REMAINING_LONG         => "RRSIG with keytag {tag} and covering type(s) {types}"
-          . " has a remaining validity of {duration} seconds, which is too long.",
-        REMAINING_SHORT => "RRSIG with keytag {tag} and covering type(s) {types}"
-          . " has a remaining validity of {duration} seconds, which is too short.",
-        RRSIG_EXPIRATION => "RRSIG with keytag {tag} and covering type(s) {types} expires at : {date}.",
-        RRSIG_EXPIRED    => "RRSIG with keytag {tag} and covering type(s) {types} has already expired "
-          . "(expiration is: {expiration}).",
-        SOA_NOT_SIGNED       => "No RRSIG correctly signed the SOA RRset.",
-        SOA_SIGNATURE_NOT_OK => "Trying to verify SOA RRset with signature {signature} gave error '{error}'.",
-        SOA_SIGNATURE_OK     => "RRSIG {signature} correctly signs SOA RRset.",
-        SOA_SIGNED           => "At least one RRSIG correctly signs the SOA RRset.",
-        TOO_MANY_ITERATIONS  => "The number of NSEC3 iterations is {count}, "
-          . "which is too high for key length {keylength}.",
-    };
-} ## end sub translation
+Readonly my %TAG_DESCRIPTIONS => (
+    ADDITIONAL_DNSKEY_SKIPPED => sub {
+        __x    # DNSSEC:ADDITIONAL_DNSKEY_SKIPPED
+          'No DNSKEYs found. Additional tests skipped.', @_;
+    },
+    ALGORITHM_DEPRECATED => sub {
+        __x    # DNSSEC:ALGORITHM_DEPRECATED
+          'The DNSKEY with tag {keytag} uses deprecated algorithm number {algorithm} ({description}).',
+          @_;
+    },
+    ALGORITHM_NOT_RECOMMENDED => sub {
+        __x    # DNSSEC:ALGORITHM_NOT_RECOMMENDED
+          'The DNSKEY with tag {keytag} uses an algorithm number {algorithm} ({description}) '
+          . 'which is not recommended to be used.',
+          @_;
+    },
+    ALGORITHM_NOT_ZONE_SIGN => sub {
+        __x    # DNSSEC:ALGORITHM_NOT_ZONE_SIGN
+          'The DNSKEY with tag {keytag} uses algorithm number not meant for zone signing, '
+          . 'algorithm number {algorithm} ({description}).',
+          @_;
+    },
+    ALGORITHM_OK => sub {
+        __x    # DNSSEC:ALGORITHM_OK
+          'The DNSKEY with tag {keytag} uses algorithm number {algorithm} ({description}), which is OK.',
+          @_;
+    },
+    ALGORITHM_PRIVATE => sub {
+        __x    # DNSSEC:ALGORITHM_PRIVATE
+          'The DNSKEY with tag {keytag} uses private algorithm number {algorithm} ({description}).', @_;
+    },
+    ALGORITHM_RESERVED => sub {
+        __x    # DNSSEC:ALGORITHM_RESERVED
+          'The DNSKEY with tag {keytag} uses reserved algorithm number {algorithm} ({description}).', @_;
+    },
+    ALGORITHM_UNASSIGNED => sub {
+        __x    # DNSSEC:ALGORITHM_UNASSIGNED
+          'The DNSKEY with tag {keytag} uses unassigned algorithm number {algorithm} ({description}).', @_;
+    },
+    ALGO_NOT_SIGNED_RRSET => sub {
+        __x    # DNSSEC:ALGO_NOT_SIGNED_RRSET
+          'Nameserver {ns}/{address} responded with no RRSIG for RRset {rrtype} created by the '
+          . 'algorithm {algorithm}.',
+          @_;
+    },
+    ALL_ALGO_SIGNED => sub {
+        __x    # DNSSEC:ALL_ALGO_SIGNED
+          'All the tested RRset (SOA/DNSKEY/NS) are signed by each algorithm present in the DNSKEY RRset',
+          @_;
+    },
+    BROKEN_DNSSEC => sub {
+        __x    # DNSSEC:BROKEN_DNSSEC
+          'All nameservers for zone {zone} responds with neither NSEC nor NSEC3 records when such '
+          . 'records are expected.',
+          @_;
+    },
+    COMMON_KEYTAGS => sub {
+        __x    # DNSSEC:COMMON_KEYTAGS
+          'There are both DS and DNSKEY records with key tags {keytags}.', @_;
+    },
+    DELEGATION_NOT_SIGNED => sub {
+        __x    # DNSSEC:DELEGATION_NOT_SIGNED
+          'Delegation from parent to child is not properly signed {reason}.', @_;
+    },
+    DELEGATION_SIGNED => sub {
+        __x    # DNSSEC:DELEGATION_SIGNED
+          'Delegation from parent to child is properly signed.', @_;
+    },
+    DNSKEY_AND_DS => sub {
+        __x    # DNSSEC:DNSKEY_AND_DS
+          '{parent} sent a DS record, and {child} a DNSKEY record.', @_;
+    },
+    DNSKEY_BUT_NOT_DS => sub {
+        __x    # DNSSEC:DNSKEY_BUT_NOT_DS
+          '{child} sent a DNSKEY record, but {parent} did not send a DS record.', @_;
+    },
+    DNSKEY_NOT_SIGNED => sub {
+        __x    # DNSSEC:DNSKEY_NOT_SIGNED
+          'The apex DNSKEY RRset was not correctly signed.', @_;
+    },
+    DNSKEY_SIGNATURE_NOT_OK => sub {
+        __x    # DNSSEC:DNSKEY_SIGNATURE_NOT_OK
+          'Signature for DNSKEY with tag {signature} failed to verify with error \'{error}\'.', @_;
+    },
+    DNSKEY_SIGNATURE_OK => sub {
+        __x    # DNSSEC:DNSKEY_SIGNATURE_OK
+          'A signature for DNSKEY with tag {signature} was correctly signed.', @_;
+    },
+    DNSKEY_SIGNED => sub {
+        __x    # DNSSEC:DNSKEY_SIGNED
+          'The apex DNSKEY RRset was correcly signed.', @_;
+    },
+    DNSKEY_SMALLER_THAN_REC => sub {
+        __x    # DNSSEC:DNSKEY_SMALLER_THAN_REC
+          'DNSKEY with tag {keytag} and using algorithm {algorithm_number} ({algorithm_description}) '
+          . 'has a size ({keysize}) smaller than the recommended one ({keysizerec}).',
+          @_;
+    },
+    DNSKEY_TOO_SMALL_FOR_ALGO => sub {
+        __x    # DNSSEC:DNSKEY_TOO_SMALL_FOR_ALGO
+          'DNSKEY with tag {keytag} and using algorithm {algorithm_number} ({algorithm_description}) '
+          . 'has a size ({keysize}) smaller than the minimum one ({keysizemin}).',
+          @_;
+    },
+    DNSKEY_TOO_LARGE_FOR_ALGO => sub {
+        __x    # DNSSEC:DNSKEY_TOO_LARGE_FOR_ALGO
+          'DNSKEY with tag {keytag} and using algorithm {algorithm_number} ({algorithm_description}) '
+          . 'has a size ({keysize}) larger than the maximum one ({keysizemax}).',
+          @_;
+    },
+    DS_ALGORITHM_NOT_DS => sub {
+        __x    # DNSSEC:DS_ALGORITHM_NOT_DS
+          '{ns}/{address} returned a DS record created by algorithm {algorithm_number} '
+          . '({algorithm_mnemonic}) which is not meant for DS. The DS record is for the DNSKEY '
+          . 'record with keytag {keytag} in zone {zone}.',
+          @_;
+    },
+    DS_ALGORITHM_DEPRECATED => sub {
+        __x    # DNSSEC:DS_ALGORITHM_DEPRECATED
+          '{ns}/{address} returned a DS record created by algorithm {algorithm_number} '
+          . '({algorithm_mnemonic}), which is deprecated. The DS record is for the DNSKEY '
+          . 'record with keytag {keytag} in zone {zone}.',
+          @_;
+    },
+    DS_ALGORITHM_MISSING => sub {
+        __x    # DNSSEC:DS_ALGORITHM_MISSING
+          '{ns}/{address} returned no DS record created by algorithm {algorithm_number} '
+          . '({algorithm_mnemonic}) for zone {zone}, which is required.',
+          @_;
+    },
+    DS_ALGORITHM_OK => sub {
+        __x    # DNSSEC:DS_ALGORITHM_OK
+          '{ns}/{address} returned a DS record created by algorithm {algorithm_number} '
+          . '({algorithm_mnemonic}), which is OK. The DS record is for the DNSKEY record with '
+          . 'keytag {keytag} in zone {zone}.',
+          @_;
+    },
+    DS_ALGORITHM_RESERVED => sub {
+        __x    # DNSSEC:DS_ALGORITHM_RESERVED
+          '{ns}/{address} returned a DS record created by with an algorithm not assigned (algorithm number '
+          . '{algorithm_number}), which is not OK. The DS record is for the DNSKEY record with keytag {keytag} '
+          . 'in zone {zone}.',
+          @_;
+    },
+    DS_ALGO_SHA1_DEPRECATED => sub {
+        __x    # DNSSEC:DS_ALGO_SHA1_DEPRECATED
+          'Nameserver {ns}/{address} returned a DS record created by algorithm {algorithm_number} '
+          . '({algorithm_mnemonic}) which is deprecated, while it is still widely used. The DS record is '
+          . 'for the DNSKEY record with keytag {keytag} in zone {zone}.',
+          @_;
+    },
+    DS_BUT_NOT_DNSKEY => sub {
+        __x    # DNSSEC:DS_BUT_NOT_DNSKEY
+          '{parent} sent a DS record, but {child} did not send a DNSKEY record.', @_;
+    },
+    DS_DOES_NOT_MATCH_DNSKEY => sub {
+        __x    # DNSSEC:DS_DOES_NOT_MATCH_DNSKEY
+          'DS record with keytag {keytag} and digest type {digtype} does not match the DNSKEY with the same tag.',
+          @_;
+    },
+    DS_FOUND => sub {
+        __x    # DNSSEC:DS_FOUND
+          'Found DS records with tags {keytags}.', @_;
+    },
+    DS_MATCHES_DNSKEY => sub {
+        __x    # DNSSEC:DS_MATCHES_DNSKEY
+          'DS record with keytag {keytag} and digest type {digtype} matches the DNSKEY with the same tag.', @_;
+    },
+    DS_MATCH_FOUND => sub {
+        __x    # DNSSEC:DS_MATCH_FOUND
+          'At least one DS record with a matching DNSKEY record was found.', @_;
+    },
+    DS_MATCH_NOT_FOUND => sub {
+        __x    # DNSSEC:DS_MATCH_NOT_FOUND
+          'No DS record with a matching DNSKEY record was found.', @_;
+    },
+    DS_RFC4509_NOT_VALID => sub {
+        __x    # DNSSEC:DS_RFC4509_NOT_VALID
+          'Existing DS with digest type 2, while they do not match DNSKEY records, '
+          . 'prevent use of DS with digest type 1 (RFC4509, section 3).',
+          @_;
+    },
+    DURATION_LONG => sub {
+        __x    # DNSSEC:DURATION_LONG
+          'RRSIG with keytag {tag} and covering type(s) {types} '
+          . 'has a duration of {duration} seconds, which is too long.',
+          @_;
+    },
+    DURATION_OK => sub {
+        __x    # DNSSEC:DURATION_OK
+          'RRSIG with keytag {tag} and covering type(s) {types} '
+          . 'has a duration of {duration} seconds, which is just fine.',
+          @_;
+    },
+    EXTRA_PROCESSING_BROKEN => sub {
+        __x    # DNSSEC:EXTRA_PROCESSING_BROKEN
+          'Server at {server} sent {keys} DNSKEY records, and {sigs} RRSIG records.', @_;
+    },
+    EXTRA_PROCESSING_OK => sub {
+        __x    # DNSSEC:EXTRA_PROCESSING_OK
+          'Server at {server} sent {keys} DNSKEY records and {sigs} RRSIG records.', @_;
+    },
+    HAS_NSEC3 => sub {
+        __x    # DNSSEC:HAS_NSEC3
+          'The zone has NSEC3 records.', @_;
+    },
+    HAS_NSEC => sub {
+        __x    # DNSSEC:HAS_NSEC
+          'The zone has NSEC records.', @_;
+    },
+    INCONSISTENT_DNSSEC => sub {
+        __x    # DNSSEC:INCONSISTENT_DNSSEC
+          'Some, but not all, nameservers for zone {zone} respond with neither NSEC nor NSEC3 records when '
+          . 'such records are expected.',
+          @_;
+    },
+    INCONSISTENT_NSEC_NSEC3 => sub {
+        __x    # DNSSEC:INCONSISTENT_NSEC_NSEC3
+          'Some nameservers for zone {zone} respond with NSEC records and others respond with NSEC3 records. '
+          . 'Consistency is expected.',
+          @_;
+    },
+    INVALID_NAME_RCODE => sub {
+        __x    # DNSSEC:INVALID_NAME_RCODE
+          'When asked for the name {name}, which must not exist, the response had RCODE {rcode}.', @_;
+    },
+    IPV4_DISABLED => sub {
+        __x    # DNSSEC:IPV4_DISABLED
+          'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
+    },
+    IPV6_DISABLED => sub {
+        __x    # DNSSEC:IPV6_DISABLED
+          'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
+    },
+    ITERATIONS_OK => sub {
+        __x    # DNSSEC:ITERATIONS_OK
+          'The number of NSEC3 iterations is {count}, which is OK.', @_;
+    },
+    KEY_DETAILS => sub {
+        __x    # DNSSEC:KEY_DETAILS
+          'Key with keytag {keytag} details : Size = {keysize}, Flags ({sep}, {rfc5011}).', @_;
+    },
+    MANY_ITERATIONS => sub {
+        __x    # DNSSEC:MANY_ITERATIONS
+          'The number of NSEC3 iterations is {count}, which is on the high side.', @_;
+    },
+    MIXED_NSEC_NSEC3 => sub {
+        __x    # DNSSEC:MIXED_NSEC_NSEC3
+          'Nameserver {ns}/{address} for zone {zone} responds with both NSEC and NSEC3 '
+          . 'records when only one record type is expected.',
+          @_;
+    },
+    NEITHER_DNSKEY_NOR_DS => sub {
+        __x    # DNSSEC:NEITHER_DNSKEY_NOR_DS
+          'There are neither DS nor DNSKEY records for the zone.', @_;
+    },
+    NO_COMMON_KEYTAGS => sub {
+        __x    # DNSSEC:NO_COMMON_KEYTAGS
+          'No DS record had a DNSKEY with a matching keytag.', @_;
+    },
+    NO_DNSKEY => sub {
+        __x    # DNSSEC:NO_DNSKEY
+          'No DNSKEYs were returned.', @_;
+    },
+    NO_DS => sub {
+        __x    # DNSSEC:NO_DS
+          '{from} returned no DS records for {zone}.', @_;
+    },
+    NO_KEYS_OR_NO_SIGS => sub {
+        __x    # DNSSEC:NO_KEYS_OR_NO_SIGS
+          'Cannot test DNSKEY signatures, because we got {keys} DNSKEY records and {sigs} RRSIG records.',
+          @_;
+    },
+    NO_KEYS_OR_NO_SIGS_OR_NO_SOA => sub {
+        __x    # DNSSEC:NO_KEYS_OR_NO_SIGS_OR_NO_SOA
+          'Cannot test SOA signatures, because we got {keys} DNSKEY records, '
+          . '{sigs} RRSIG records and {soas} SOA records.',
+          @_;
+    },
+    NO_NSEC3PARAM => sub {
+        __x    # DNSSEC:NO_NSEC3PARAM
+          '{server} returned no NSEC3PARAM records.', @_;
+    },
+    NO_NSEC_NSEC3 => sub {
+        __x    # DNSSEC:NO_NSEC_NSEC3
+          'Nameserver {ns}/{address} for zone {zone} responds with neither NSEC nor NSEC3 record when '
+          . 'when such records are expected.',
+          @_;
+    },
+    NO_RESPONSE_DNSKEY => sub {
+        __x    # DNSSEC:NO_RESPONSE_DNSKEY
+          'Nameserver {ns}/{address} responded with no DNSKEY record(s).', @_;
+    },
+    NO_RESPONES_DS => sub {
+        __x    # DNSSEC:NO_RESPONSE_DS
+          '{ns}/{address} returned no DS records for {zone}.', @_;
+    },
+    NO_RESPONSE_RRSET => sub {
+        __x    # DNSSEC:NO_RESPONSE_RRSET
+          'Nameserver {ns}/{address} responded with no {rrtype} record(s).', @_;
+    },
+    NO_RESPONSE => sub {
+        __x    # DNSSEC:NO_RESPONSE
+          'Nameserver {ns}/{address} did not respond.', @_;
+    },
+    NOT_SIGNED => sub {
+        __x    # DNSSEC:NOT_SIGNED
+          'The zone is not signed with DNSSEC.', @_;
+    },
+    NSEC3_COVERS_NOT => sub {
+        __x    # DNSSEC:NSEC3_COVERS_NOT
+          'NSEC3 record does not cover {name}.', @_;
+    },
+    NSEC3_NOT_SIGNED => sub {
+        __x    # DNSSEC:NSEC3_NOT_SIGNED
+          'No signature correctly signed the NSEC3 RRset.', @_;
+    },
+    NSEC3_SIG_VERIFY_ERROR => sub {
+        __x    # DNSSEC:NSEC3_SIG_VERIFY_ERROR
+          'Trying to verify NSEC3 RRset with RRSIG {sig} gave error \'{error}\'.', @_;
+    },
+    NSEC_COVERS_NOT => sub {
+        __x    # DNSSEC:NSEC_COVERS_NOT
+          'NSEC does not cover {name}.', @_;
+    },
+    NSEC_NOT_SIGNED => sub {
+        __x    # DNSSEC:NSEC_NOT_SIGNED
+          'No signature correctly signed the NSEC RRset.', @_;
+    },
+    NSEC_SIG_VERIFY_ERROR => sub {
+        __x    # DNSSEC:NSEC_SIG_VERIFY_ERROR
+          'Trying to verify NSEC RRset with RRSIG {sig} gave error \'{error}\'.', @_;
+    },
+    REMAINING_LONG => sub {
+        __x    # DNSSEC:REMAINING_LONG
+          'RRSIG with keytag {tag} and covering type(s) {types} '
+          . 'has a remaining validity of {duration} seconds, which is too long.',
+          @_;
+    },
+    REMAINING_SHORT => sub {
+        __x    # DNSSEC:REMAINING_SHORT
+          'RRSIG with keytag {tag} and covering type(s) {types} '
+          . 'has a remaining validity of {duration} seconds, which is too short.',
+          @_;
+    },
+    RRSIG_EXPIRATION => sub {
+        __x    # DNSSEC:RRSIG_EXPIRATION
+          'RRSIG with keytag {tag} and covering type(s) {types} expires at : {date}.', @_;
+    },
+    RRSET_NOT_SIGNED => sub {
+        __x    # DNSSEC:RRSET_NOT_SIGNED
+          'Nameserver {ns}/{address} responded with no RRSIG for {rrtype} RRset.', @_;
+    },
+    RRSIG_BROKEN => sub {
+        __x    # DNSSEC:RRSIG_BROKEN
+          'Nameserver {ns}/{address} responded with an RRSIG which can not be verified with '
+          . 'corresponding DNSKEY (with keytag {keytag})',
+          @_;
+    },
+    RRSIG_EXPIRED => sub {
+        __x    # DNSSEC:RRSIG_EXPIRED
+          'RRSIG with keytag {tag} and covering type(s) {types} has already expired (expiration '
+          . 'is: {expiration}).',
+          @_;
+    },
+    RRSIG_NOT_MATCH_DNSKEY => sub {
+        __x    # DNSSEC:RRSIG_NOT_MATCH_DNSKEY
+          'Nameserver {ns}/{address} responded with an RRSIG with unknown keytag {keytag}.', @_;
+    },
+    SOA_NOT_SIGNED => sub {
+        __x    # DNSSEC:SOA_NOT_SIGNED
+          'No RRSIG correctly signed the SOA RRset.', @_;
+    },
+    SOA_SIGNATURE_NOT_OK => sub {
+        __x    # DNSSEC:SOA_SIGNATURE_NOT_OK
+          'Trying to verify SOA RRset with signature {signature} gave error \'{error}\'.', @_;
+    },
+    SOA_SIGNATURE_OK => sub {
+        __x    # DNSSEC:SOA_SIGNATURE_OK
+          'RRSIG {signature} correctly signs SOA RRset.', @_;
+    },
+    SOA_SIGNED => sub {
+        __x    # DNSSEC:SOA_SIGNED
+          'At least one RRSIG correctly signs the SOA RRset.', @_;
+    },
+    TEST_ABORTED => sub {
+        __x    # DNSSEC:TEST_ABORTED
+          'Nameserver {ns}/{address} for zone {zone} responds with RCODE "NOERROR" on a query that '
+          . 'is expected to give response with RCODE "NXDOMAIN". Test for NSEC and NSEC3 is aborted '
+          . 'for this nameserver.',
+          @_;
+    },
+    TOO_MANY_ITERATIONS => sub {
+        __x    # DNSSEC:TOO_MANY_ITERATIONS
+          'The number of NSEC3 iterations is {count}, which is too high for key length {keylength}.', @_;
+    },
+    UNEXPECTED_RESPONSE_DS => sub {
+        __x    # DNSSEC:UNEXPECTED_RESPONSE_DS
+          '{ns}/{address} responded with an unexpected rcode ({rcode}) on a DS query for zone {zone}.', @_;
+    },
+);
+
+sub tag_descriptions {
+    return \%TAG_DESCRIPTIONS;
+}
 
 sub version {
     return "$Zonemaster::Engine::Test::DNSSEC::VERSION";
@@ -446,44 +845,69 @@ sub dnssec01 {
     my ( $class, $zone ) = @_;
     my @results;
 
-    my %type = ( 1 => 'SHA-1', 2 => 'SHA-256', 3 => 'GOST R 34.11-94', 4 => 'SHA-384' );
+    if ( my $parent = $zone->parent ) {
+        foreach my $ns ( @{ $parent->ns } ) {
+            my $ns_args = {
+                ns      => $ns->name->string,
+                address => $ns->address->short,
+                zone    => q{} . $zone->name,
+                rrtype  => q{DS},
+            };
 
-    return if not $zone->parent;
-    my $ds_p = $zone->parent->query_one( $zone->name, 'DS', { dnssec => 1 } );
-    die "No response from parent nameservers" if not $ds_p;
-    my @ds = $ds_p->get_records( 'DS', 'answer' );
-
-    if ( @ds == 0 ) {
-        push @results,
-          info(
-            NO_DS => {
-                zone => q{} . $zone->name,
-                from => $ds_p->answerfrom
+            if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
+                push @results, info( IPV6_DISABLED => $ns_args );
+                next;
             }
-          );
-    }
-    else {
-        foreach my $ds ( @ds ) {
-            if ( $type{ $ds->digtype } ) {
-                push @results,
-                  info(
-                    DS_DIGTYPE_OK => {
-                        keytag  => $ds->keytag,
-                        digtype => $type{ $ds->digtype },
-                    }
-                  );
+
+            if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
+                push @results, info( IPV4_DISABLED => $ns_args );
+                next;
+            }
+
+            my $ds_p = $ns->query( $zone->name, q{DS}, { usevc => 0, dnssec => 1 } );
+            if ( not $ds_p ) {
+                push @results, info( NO_RESPONSE_DS => $ns_args );
+                next;
+            }
+            elsif ($ds_p->rcode ne q{NOERROR} ) {
+                $ns_args->{rcode} = $ds_p->rcode;
+                push @results, info( UNEXPECTED_RESPONSE_DS => $ns_args );
+                next;
             }
             else {
-                push @results,
-                  info(
-                    DS_DIGTYPE_NOT_OK => {
-                        keytag  => $ds->keytag,
-                        digtype => $ds->digtype
+                my $algorithm2 = 0;
+                my @dss = $ds_p->get_records( q{DS}, q{answer} );
+                foreach my $ds ( @dss ) {
+                    my $ds_args = { %$ns_args };
+                    $ds_args->{keytag} = $ds->keytag;
+                    $ds_args->{algorithm_number} = $ds->digtype;
+                    $ds_args->{algorithm_mnemonic} = $digest_algorithms{$ds->digtype};
+                    if ( $ds->digtype == 0 ) {
+                        push @results, info( DS_ALGORITHM_NOT_DS => $ds_args );
                     }
-                  );
-            }
-        } ## end foreach my $ds ( @ds )
-    } ## end else [ if ( @ds == 0 ) ]
+                    elsif ( $ds->digtype == 1 ) {
+                        push @results, info( DS_ALGO_SHA1_DEPRECATED => $ds_args );
+                    }
+                    elsif ( $ds->digtype == 3 ) {
+                        push @results, info( DS_ALGORITHM_DEPRECATED => $ds_args );
+                    }
+                    elsif ( $ds->digtype >= 5 and $ds->digtype <= 255 ) {
+                        push @results, info( DS_ALGORITHM_RESERVED => $ds_args );
+                    }
+                    else {
+                        $algorithm2++ if $ds->digtype == 2;
+                        push @results, info( DS_ALGORITHM_OK => $ds_args );
+                    }
+                }
+                if ( not $algorithm2 ) {
+                    my $ds_args = { %$ns_args };
+                    $ds_args->{algorithm_number} = 2;
+                    $ds_args->{algorithm_mnemonic} = $digest_algorithms{2};
+                    push @results, info( DS_ALGORITHM_MISSING => $ds_args );
+                }
+            }    
+        }
+    }
 
     return @results;
 } ## end sub dnssec01
@@ -708,12 +1132,12 @@ sub dnssec04 {
     my ( $self, $zone ) = @_;
     my @results;
 
-    my $key_p = $zone->query_one( $zone->name, 'DNSKEY', { dnssec => 1 } );
-    if ( not $key_p ) {
+    my $dnskey_p = $zone->query_one( $zone->name, 'DNSKEY', { dnssec => 1 } );
+    if ( not $dnskey_p ) {
         return;
     }
-    my @keys     = $key_p->get_records( 'DNSKEY', 'answer' );
-    my @key_sigs = $key_p->get_records( 'RRSIG',  'answer' );
+    my @keys     = $dnskey_p->get_records( 'DNSKEY', 'answer' );
+    my @key_sigs = $dnskey_p->get_records( 'RRSIG',  'answer' );
 
     my $soa_p = $zone->query_one( $zone->name, 'SOA', { dnssec => 1 } );
     if ( not $soa_p ) {
@@ -732,7 +1156,7 @@ sub dnssec04 {
             }
           );
 
-        my $remaining = $sig->expiration - int( $key_p->timestamp );
+        my $remaining = $sig->expiration - int( $dnskey_p->timestamp );
         my $result_remaining;
         if ( $remaining < 0 ) {    # already expired
             $result_remaining = info(
@@ -808,13 +1232,37 @@ sub dnssec05 {
             address => $ns->address->short,
         };
 
-        my $key_p = $ns->query( $zone->name, 'DNSKEY', { dnssec => 1 } );
-        if ( not $key_p ) {
+        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
+            push @results,
+              info(
+                IPV6_DISABLED => {
+                    ns      => $ns->name->string,
+                    address => $ns->address->short,
+                    rrtype  => q{DNSKEY},
+                }
+              );
+            next;
+        }
+
+        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
+            push @results,
+              info(
+                IPV4_DISABLED => {
+                    ns      => $ns->name->string,
+                    address => $ns->address->short,
+                    rrtype => q{DNSKEY},
+                }
+              );
+            next;
+        }
+
+        my $dnskey_p = $ns->query( $zone->name, 'DNSKEY', { dnssec => 1 } );
+        if ( not $dnskey_p ) {
             push @results, info( NO_RESPONSE => $ns_args );
             next;
         }
 
-        my @keys = $key_p->get_records( 'DNSKEY', 'answer' );
+        my @keys = $dnskey_p->get_records( 'DNSKEY', 'answer' );
         if ( not @keys ) {
             push @results, info( NO_RESPONSE_DNSKEY => $ns_args );
             next;
@@ -840,13 +1288,13 @@ sub dnssec05 {
             elsif ( $algo_properties{$algo}{status} == $ALGO_STATUS_PRIVATE ) {
                 push @results, info( ALGORITHM_PRIVATE => $algo_args );
             }
-            elsif ( $algo_properties{$algo}{status} == $ALGO_STATUS_DELETE_DS ) {
-                push @results, info( ALGORITHM_DELETE_DS => $algo_args );
+            elsif ( $algo_properties{$algo}{status} == $ALGO_STATUS_NOT_ZONE_SIGN ) {
+                push @results, info( ALGORITHM_NOT_ZONE_SIGN => $algo_args );
             }
-            elsif ( $algo_properties{$algo}{status} == $ALGO_STATUS_INDIRECT_KEY ) {
-                push @results, info( ALGORITHM_INDIRECT_KEY => $algo_args );
+            elsif ( $algo_properties{$algo}{status} == $ALGO_STATUS_NOT_RECOMMENDED ) {
+                push @results, info( ALGORITHM_NOT_RECOMMENDED => $algo_args );
             }
-            elsif ( $algo_properties{$algo}{sig} ) {
+            else {
                 push @results, info( ALGORITHM_OK => $algo_args );
                 if ( $key->flags & 256 ) {    # This is a Key
                     push @results,
@@ -863,9 +1311,6 @@ sub dnssec05 {
                 }
             }
 
-            if ( not $algo_properties{$algo}{sig} ) {
-                push @results, info( ALGORITHM_NOT_ZONE_SIGN => $algo_args );
-            }
         } ## end foreach my $key ( @keys )
     }
 
@@ -876,33 +1321,33 @@ sub dnssec06 {
     my ( $self, $zone ) = @_;
     my @results;
 
-    my $key_aref = $zone->query_all( $zone->name, 'DNSKEY', { dnssec => 1 } );
-    foreach my $key_p ( @{$key_aref} ) {
-        next if not $key_p;
+    my $dnskey_aref = $zone->query_all( $zone->name, 'DNSKEY', { dnssec => 1 } );
+    foreach my $dnskey_p ( @{$dnskey_aref} ) {
+        next if not $dnskey_p;
 
-        my @keys = $key_p->get_records( 'DNSKEY', 'answer' );
-        my @sigs = $key_p->get_records( 'RRSIG',  'answer' );
+        my @keys = $dnskey_p->get_records( 'DNSKEY', 'answer' );
+        my @sigs = $dnskey_p->get_records( 'RRSIG',  'answer' );
         if ( @sigs > 0 and @keys > 0 ) {
             push @results,
               info(
                 EXTRA_PROCESSING_OK => {
-                    server => $key_p->answerfrom,
+                    server => $dnskey_p->answerfrom,
                     keys   => scalar( @keys ),
                     sigs   => scalar( @sigs ),
                 }
               );
         }
-        elsif ( $key_p->rcode eq q{NOERROR} and ( @sigs == 0 or @keys == 0 ) ) {
+        elsif ( $dnskey_p->rcode eq q{NOERROR} and ( @sigs == 0 or @keys == 0 ) ) {
             push @results,
               info(
                 EXTRA_PROCESSING_BROKEN => {
-                    server => $key_p->answerfrom,
+                    server => $dnskey_p->answerfrom,
                     keys   => scalar( @keys ),
                     sigs   => scalar( @sigs )
                 }
               );
         }
-    } ## end foreach my $key_p ( @{$key_aref...})
+    } ## end foreach my $dnskey_p ( @{$dnskey_aref...})
 
     return @results;
 } ## end sub dnssec06
@@ -912,11 +1357,11 @@ sub dnssec07 {
     my @results;
 
     return if not $zone->parent;
-    my $key_p = $zone->query_one( $zone->name, 'DNSKEY', { dnssec => 1 } );
-    if ( not $key_p ) {
+    my $dnskey_p = $zone->query_one( $zone->name, 'DNSKEY', { dnssec => 1 } );
+    if ( not $dnskey_p ) {
         return;
     }
-    my ( $dnskey ) = $key_p->get_records( 'DNSKEY', 'answer' );
+    my ( $dnskey ) = $dnskey_p->get_records( 'DNSKEY', 'answer' );
 
     my $ds_p = $zone->parent->query_one( $zone->name, 'DS', { dnssec => 1 } );
     if ( not $ds_p ) {
@@ -928,7 +1373,7 @@ sub dnssec07 {
         push @results,
           info(
             DNSKEY_BUT_NOT_DS => {
-                child  => $key_p->answerfrom,
+                child  => $dnskey_p->answerfrom,
                 parent => $ds_p->answerfrom,
             }
           );
@@ -937,7 +1382,7 @@ sub dnssec07 {
         push @results,
           info(
             DNSKEY_AND_DS => {
-                child  => $key_p->answerfrom,
+                child  => $dnskey_p->answerfrom,
                 parent => $ds_p->answerfrom,
             }
           );
@@ -946,7 +1391,7 @@ sub dnssec07 {
         push @results,
           info(
             DS_BUT_NOT_DNSKEY => {
-                child  => $key_p->answerfrom,
+                child  => $dnskey_p->answerfrom,
                 parent => $ds_p->answerfrom,
             }
           );
@@ -955,7 +1400,7 @@ sub dnssec07 {
         push @results,
           info(
             NEITHER_DNSKEY_NOR_DS => {
-                child  => $key_p->answerfrom,
+                child  => $dnskey_p->answerfrom,
                 parent => $ds_p->answerfrom,
             }
           );
@@ -968,12 +1413,12 @@ sub dnssec08 {
     my ( $self, $zone ) = @_;
     my @results;
 
-    my $key_p = $zone->query_one( $zone->name, 'DNSKEY', { dnssec => 1 } );
-    if ( not $key_p ) {
+    my $dnskey_p = $zone->query_one( $zone->name, 'DNSKEY', { dnssec => 1 } );
+    if ( not $dnskey_p ) {
         return;
     }
-    my @dnskeys = $key_p->get_records( 'DNSKEY', 'answer' );
-    my @sigs    = $key_p->get_records( 'RRSIG',  'answer' );
+    my @dnskeys = $dnskey_p->get_records( 'DNSKEY', 'answer' );
+    my @sigs    = $dnskey_p->get_records( 'RRSIG',  'answer' );
 
     if ( @dnskeys == 0 or @sigs == 0 ) {
         push @results,
@@ -989,7 +1434,7 @@ sub dnssec08 {
     my $ok = 0;
     foreach my $sig ( @sigs ) {
         my $msg  = q{};
-        my $time = $key_p->timestamp;
+        my $time = $dnskey_p->timestamp;
         if ( $sig->verify_time( \@dnskeys, \@dnskeys, $time, $msg ) ) {
             push @results,
               info(
@@ -1000,8 +1445,8 @@ sub dnssec08 {
             $ok = $sig->keytag;
         }
         else {
-            if ($sig->algorithm == 12 and $msg =~ /Unknown cryptographic algorithm/) {
-                $msg = 'no GOST support';
+            if ( $sig->algorithm >= 12 and $sig->algorithm <= 16 and $msg =~ /Unknown cryptographic algorithm/ ) {
+                $msg = q{no }. $algo_properties{$sig->algorithm}{description}. q{ support};
             }
             push @results,
               info(
@@ -1034,11 +1479,11 @@ sub dnssec09 {
     my ( $self, $zone ) = @_;
     my @results;
 
-    my $key_p = $zone->query_one( $zone->name, 'DNSKEY', { dnssec => 1 } );
-    if ( not $key_p ) {
+    my $dnskey_p = $zone->query_one( $zone->name, 'DNSKEY', { dnssec => 1 } );
+    if ( not $dnskey_p ) {
         return;
     }
-    my @dnskeys = $key_p->get_records( 'DNSKEY', 'answer' );
+    my @dnskeys = $dnskey_p->get_records( 'DNSKEY', 'answer' );
 
     my $soa_p = $zone->query_one( $zone->name, 'SOA', { dnssec => 1 } );
     if ( not $soa_p ) {
@@ -1073,8 +1518,8 @@ sub dnssec09 {
             $ok = $sig->keytag;
         }
         else {
-            if ($sig->algorithm == 12 and $msg =~ /Unknown cryptographic algorithm/) {
-                $msg = 'no GOST support';
+            if ( $sig->algorithm >= 12 and $sig->algorithm <= 16 and $msg =~ /Unknown cryptographic algorithm/ ) {
+                $msg = q{no }. $algo_properties{$sig->algorithm}{description}. q{ support};
             }
             push @results,
               info(
@@ -1104,166 +1549,177 @@ sub dnssec09 {
 
 sub dnssec10 {
     my ( $self, $zone ) = @_;
+    my $non_existent_domain_name = $zone->name->prepend( q{xx--test-test-test} );
     my @results;
 
-    my $key_p = $zone->query_one( $zone->name, 'DNSKEY', { dnssec => 1 } );
-    if ( not $key_p ) {
-        return;
-    }
-    my @dnskeys = $key_p->get_records( 'DNSKEY', 'answer' );
+    my @nss_del   = @{ Zonemaster::Engine::TestMethods->method4( $zone ) };
+    my @nss_child = @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
+    my %nss       = map { $_->name->string . '/' . $_->address->short => $_ } @nss_del, @nss_child;
+    my (%nsec_zone, %nsec3_zone, %no_dnssec_zone);
 
-    my $name = $zone->name->prepend( 'xx--example' );
-    my $test_p = $zone->query_one( $name, 'A', { dnssec => 1 } );
-    if ( not $test_p ) {
-        return;
-    }
+    for my $nss_key ( sort keys %nss ) {
+        my $ns = $nss{$nss_key};
+        my $ns_args = {
+            ns      => $ns->name->string,
+            address => $ns->address->short,
+        };
 
-    if ( $test_p->rcode ne 'NXDOMAIN' and $test_p->rcode ne 'NOERROR' ) {
-        push @results,
-          info(
-            INVALID_NAME_RCODE => {
-                name  => $name,
-                rcode => $test_p->rcode,
+        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
+            $ns_args->{rrtype} = q{A};
+            push @results, info( IPV6_DISABLED => $ns_args );
+            next;
+        }
+
+        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
+            $ns_args->{rrtype} = q{A};
+            push @results, info( IPV4_DISABLED => $ns_args );
+            next;
+        }
+
+        my $a_p = $ns->query( $non_existent_domain_name , q{A}, { usevc => 0, dnssec => 1 } );
+        if ( not $a_p ) {
+            push @results, info( NO_RESPONSE => $ns_args );
+        }
+        elsif ($a_p->rcode eq q{NOERROR} ) {
+            $ns_args->{zone} = $zone->name->string;
+            push @results, info( TEST_ABORTED => $ns_args );
+        }
+        elsif ($a_p->rcode ne q{NXDOMAIN} ) {
+            $ns_args->{rcode} = $a_p->rcode;
+            push @results, info( INVALID_RCODE => $ns_args );
+        }
+        else {
+            my @nsec  = $a_p->get_records( q{NSEC}, q{authority} );
+            my @nsec3 = $a_p->get_records( q{NSEC3}, q{authority} );
+            if ( scalar @nsec and scalar @nsec3 ) {
+                $ns_args->{zone} = $zone->name->string;
+                push @results, info( MIXED_NSEC_NSEC3 => $ns_args );
             }
-          );
-        return @results;
+            elsif ( not scalar @nsec and not scalar @nsec3 ) {
+                $ns_args->{zone} = $zone->name->string;
+                $no_dnssec_zone{$ns->address->short}++;
+                push @results, info( NO_NSEC_NSEC3 => $ns_args );
+            }
+            elsif ( scalar @nsec and not scalar @nsec3 ) {
+                $nsec_zone{$ns->address->short}++;
+                my $dnskey_p = $ns->query( $zone->name , q{DNSKEY}, { dnssec => 1 } );
+                my @dnskeys = ();
+                my $covered = 0;
+                if ( $dnskey_p ) {
+                    @dnskeys = $dnskey_p->get_records( q{DNSKEY}, q{answer} );
+                }
+                foreach my $nsec ( @nsec ) {
+                    if ($nsec->covers( $non_existent_domain_name) ) {
+                        $covered = 1;
+                        my @sigs = grep { $_->typecovered eq q{NSEC} } $a_p->get_records_for_name( q{RRSIG}, $nsec->name );
+                        if ( scalar @sigs ) {
+                            my $ok = 0;
+                            foreach my $sig ( @sigs ) {
+                                my $msg = q{};
+                                if ( not scalar @dnskeys ) {
+                                    push @results, info( NSEC_SIG_VERIFY_ERROR => { error => q{DNSKEY missing}, sig => $sig->keytag } );
+                                }
+                                elsif (
+                                    $sig->verify_time(
+                                        [ grep { name( $_->name ) eq name( $sig->name ) } @nsec ],
+                                        \@dnskeys, $a_p->timestamp, $msg
+                                    )
+                                  )
+                                {
+                                    $ok = 1;
+                                }
+                                else {
+                                    if ( $sig->algorithm >= 12 and $sig->algorithm <= 16 and $msg =~ /Unknown cryptographic algorithm/ ) {
+                                        $msg = q{no }. $algo_properties{$sig->algorithm}{description}. q{ support};
+                                    }
+                                    push @results,
+                                      info(
+                                        NSEC_SIG_VERIFY_ERROR => {
+                                            error => $msg,
+                                            sig   => $sig->keytag,
+                                        }
+                                      );
+                                }
+                            }
+                        }
+                        else {
+                            push @results, info( NSEC_NOT_SIGNED => {} );
+                        }
+                    }
+                }
+                if ( not $covered ) {
+                    push @results, info( NSEC_COVERS_NOT => {} );
+                }
+            }
+            elsif ( not scalar @nsec and scalar @nsec3 ) {
+                $nsec3_zone{$ns->address->short}++;
+                my $dnskey_p = $ns->query( $zone->name , q{DNSKEY}, { dnssec => 1 } );
+                my @dnskeys = ();
+                my $covered = 0;
+                if ( $dnskey_p ) {
+                    @dnskeys = $dnskey_p->get_records( 'DNSKEY', 'answer' );
+                }
+                foreach my $nsec3 ( @nsec3 ) {
+                    if ( $nsec3->covers( $non_existent_domain_name ) ) {
+                        $covered = 1;
+                        my @sigs = grep { $_->typecovered eq 'NSEC3' } $a_p->get_records_for_name( 'RRSIG', $nsec3->name );
+                        if ( scalar @sigs ) {
+                            my $ok = 0;
+                            foreach my $sig ( @sigs ) {
+                                my $msg = q{};
+                                if ( not scalar @dnskeys ) {
+                                    push @results, info( NSEC3_SIG_VERIFY_ERROR => { error => 'DNSKEY missing', sig => $sig->keytag } );
+                                }
+                                elsif (
+                                    $sig->verify_time(
+                                        [ grep { name( $_->name ) eq name( $sig->name ) } @nsec3 ],
+                                        \@dnskeys, $a_p->timestamp, $msg
+                                    )
+                                  )
+                                {
+                                    $ok = 1;
+                                }
+                                else {
+                                    if ( $sig->algorithm >= 12 and $sig->algorithm <= 16 and $msg =~ /Unknown cryptographic algorithm/ ) {
+                                        $msg = q{no }. $algo_properties{$sig->algorithm}{description}. q{ support};
+                                    }
+                                    push @results,
+                                      info(
+                                        NSEC3_SIG_VERIFY_ERROR => {
+                                            error => $msg,
+                                            sig   => $sig->keytag,
+                                        }
+                                      );
+                                }
+                            }
+                        }
+                        else {
+                            push @results, info( NSEC3_NOT_SIGNED => {} );
+                        }
+                    }
+                }
+                if ( not $covered ) {
+                    push @results, info( NSEC3_COVERS_NOT => {} );
+                }
+            }
+        }
     }
 
-    my @nsec = $test_p->get_records( 'NSEC', 'authority' );
-    if ( @nsec ) {
+    if ( scalar keys %no_dnssec_zone and ( scalar keys %nsec_zone or scalar keys %nsec3_zone ) ) {
+        push @results, info( INCONSISTENT_DNSSEC => { zone => $zone->name->string } );
+    }
+    elsif ( scalar keys %no_dnssec_zone and not scalar keys %nsec_zone and not scalar keys %nsec3_zone ) {
+        push @results, info( BROKEN_DNSSEC => { zone => $zone->name->string } );
+    }
+    elsif ( scalar keys %nsec_zone and scalar keys %nsec3_zone ) {
+        push @results, info( INCONSISTENT_NSEC_NSEC3 => { zone => $zone->name->string } );
+    }
+    elsif ( scalar keys %nsec_zone and not grep { $_->tag eq q{MIXED_NSEC_NSEC3} } @results ) {
         push @results, info( HAS_NSEC => {} );
-        my $covered = 0;
-        foreach my $nsec ( @nsec ) {
-
-            if ( $nsec->covers( $name ) ) {
-                $covered = 1;
-
-                my @sigs = grep { $_->typecovered eq 'NSEC' } $test_p->get_records_for_name( 'RRSIG', $nsec->name );
-                my $ok = 0;
-                foreach my $sig ( @sigs ) {
-                    my $msg = q{};
-                    if (@dnskeys == 0) {
-                        push @results, info( NSEC_SIG_VERIFY_ERROR => { error => 'DNSKEY missing', sig => $sig->keytag } );
-                    }
-                    elsif (
-                        $sig->verify_time(
-                            [ grep { name( $_->name ) eq name( $sig->name ) } @nsec ],
-                            \@dnskeys, $test_p->timestamp, $msg
-                        )
-                      )
-                    {
-                        $ok = 1;
-                    }
-                    else {
-                        if ($sig->algorithm == 12 and $msg =~ /Unknown cryptographic algorithm/) {
-                            $msg = 'no GOST support';
-                        }
-                        push @results,
-                          info(
-                            NSEC_SIG_VERIFY_ERROR => {
-                                error => $msg,
-                                sig   => $sig->keytag,
-                            }
-                          );
-                    }
-
-                    if ( $ok ) {
-                        push @results,
-                          info( NSEC_SIGNED => {} );
-                    }
-                    else {
-                        push @results,
-                          info( NSEC_NOT_SIGNED => {} );
-                    }
-                } ## end foreach my $sig ( @sigs )
-            } ## end if ( $nsec->covers( $name...))
-        } ## end foreach my $nsec ( @nsec )
-        if ( $covered ) {
-            push @results,
-              info(
-                NSEC_COVERS => {
-                    name => $name,
-                }
-              );
-        }
-        else {
-            push @results,
-              info(
-                NSEC_COVERS_NOT => {
-                    name => $name,
-                }
-              );
-        }
-    } ## end if ( @nsec )
-
-    my @nsec3 = $test_p->get_records( 'NSEC3', 'authority' );
-    if ( @nsec3 ) {
-        my $covered = 0;
-        my $opt_out = 0;
+    }
+    elsif ( scalar keys %nsec3_zone and not grep { $_->tag eq q{MIXED_NSEC_NSEC3} } @results ) {
         push @results, info( HAS_NSEC3 => {} );
-        foreach my $nsec3 ( @nsec3 ) {
-            if ( $nsec3->optout ) {
-                $opt_out = 1;
-            }
-            if ( $nsec3->covers( $name ) ) {
-                $covered = 1;
-
-                my @sigs = grep { $_->typecovered eq 'NSEC3' } $test_p->get_records_for_name( 'RRSIG', $nsec3->name );
-                my $ok = 0;
-                foreach my $sig ( @sigs ) {
-                    my $msg = q{};
-                    if (
-                        $sig->verify_time(
-                            [ grep { name( $_->name ) eq name( $sig->name ) } @nsec3 ],
-                            \@dnskeys, $test_p->timestamp, $msg
-                        )
-                      )
-                    {
-                        $ok = 1;
-                    }
-                    else {
-                        if ($sig->algorithm == 12 and $msg =~ /Unknown cryptographic algorithm/) {
-                            $msg = 'no GOST support';
-                        }
-                        push @results,
-                          info(
-                            NSEC3_SIG_VERIFY_ERROR => {
-                                sig   => $sig->keytag,
-                                error => $msg,
-                            }
-                          );
-                    }
-                    if ( $ok ) {
-                        push @results,
-                          info( NSEC3_SIGNED => {} );
-                    }
-                    else {
-                        push @results,
-                          info( NSE3C_NOT_SIGNED => {} );
-                    }
-                } ## end foreach my $sig ( @sigs )
-            } ## end if ( $nsec3->covers( $name...))
-        } ## end foreach my $nsec3 ( @nsec3 )
-        if ( $covered ) {
-            push @results,
-              info(
-                NSEC3_COVERS => {
-                    name => $name,
-                }
-              );
-        }
-        else {
-            push @results,
-              info(
-                NSEC3_COVERS_NOT => {
-                    name => $name,
-                }
-              );
-        }
-        if ( $opt_out ) {
-            push @results, info( HAS_NSEC3_OPTOUT => {} );
-        }
-    } ## end if ( @nsec3 )
+    }
 
     return @results;
 } ## end sub dnssec10
@@ -1307,8 +1763,8 @@ sub dnssec11 {
                             $pass = $tag;
                         }
                         else {
-                            if ($sig->algorithm == 12 and $msg =~ /Unknown cryptographic algorithm/) {
-                                $msg = 'no GOST support';
+                            if ( $sig->algorithm >= 12 and $sig->algorithm <= 16 and $msg =~ /Unknown cryptographic algorithm/ ) {
+                                $msg = q{no }. $algo_properties{$sig->algorithm}{description}. q{ support};
                             }
                             push @fail, "signature: $msg" ;
                         }
@@ -1339,6 +1795,205 @@ sub dnssec11 {
     return @results;
 } ## end sub dnssec11
 
+sub dnssec13 {
+    my ( $class, $zone ) = @_;
+    my @results;
+    my @dnskey_rrs;
+    my $all_algo_signed = 1;
+    my $DNSKEY_algorithm_exists = 0;
+
+    my @nss_del   = @{ Zonemaster::Engine::TestMethods->method4( $zone ) };
+    my @nss_child = @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
+    my %nss       = map { $_->name->string . '/' . $_->address->short => $_ } @nss_del, @nss_child;
+
+    for my $nss_key ( sort keys %nss ) {
+        my $ns = $nss{$nss_key};
+        my $ns_args = {
+            ns      => $ns->name->string,
+            address => $ns->address->short,
+        };
+
+        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
+            push @results,
+              info(
+                IPV6_DISABLED => {
+                    ns      => $ns->name->string,
+                    address => $ns->address->short,
+                    rrtype => q{DNSKEY},
+                }
+              );
+            next;
+        }
+
+        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
+            push @results,
+              info(
+                IPV4_DISABLED => {
+                    ns      => $ns->name->string,
+                    address => $ns->address->short,
+                    rrtype => q{DNSKEY},
+                }
+              );
+            next;
+        }
+
+        my %keytags;
+        my @algorithms;
+        foreach my $query_type ( qw{DNSKEY SOA NS} ) {
+
+            $ns_args->{rrtype} = $query_type;
+            my $p = $ns->query( $zone->name, $query_type, { dnssec => 1, usevc => 0 } );
+            if ( not $p ) {
+                push @results, info( NO_RESPONSE => $ns_args );
+                next;
+            }
+
+            my @rrs = $p->get_records( $query_type, q{answer} );
+            if ( not scalar @rrs ) {
+                $all_algo_signed = 0;
+                push @results, info( NO_RESPONSE_RRSET => $ns_args );
+                next;
+            }
+
+            if ( $query_type eq q{DNSKEY} ) {
+                %keytags = map { $_->keytag => $_ } @rrs;                
+                @algorithms = uniq map { $_->algorithm } @rrs;
+                if ( scalar @algorithms ) {
+                    $DNSKEY_algorithm_exists = 1;
+                }
+            }
+
+            my @sigs = $p->get_records( q{RRSIG},  q{answer} );
+            if ( not scalar @sigs ) {
+                $all_algo_signed = 0;
+                push @results, info( RRSET_NOT_SIGNED => $ns_args );
+                next;
+            }
+
+            foreach my $algorithm ( @algorithms ) {
+                if ( not scalar grep { $_->algorithm == $algorithm } @sigs ) {
+                    $all_algo_signed = 0;
+                    $ns_args->{algorithm} = $algorithm;
+                    push @results, info( ALGO_NOT_SIGNED_RRSET => $ns_args );
+                }
+            }
+
+            foreach my $sig ( @sigs ) {
+                my @keys = ($keytags{$sig->keytag});
+                if ( not scalar @keys ) {
+                    $all_algo_signed = 0;
+                    $ns_args->{keytag} = $sig->keytag;
+                    push @results, info( RRSIG_NOT_MATCH_DNSKEY => $ns_args );
+                }
+                elsif ( not $sig->verify( \@rrs, \@keys ) ) {
+                    $all_algo_signed = 0;
+                    $ns_args->{keytag} = $sig->keytag;
+                    push @results, info( RRSIG_BROKEN => $ns_args );
+                }
+            }
+
+        }
+    }
+
+    if ( $DNSKEY_algorithm_exists and $all_algo_signed ) {
+        push @results, info( ALL_ALGO_SIGNED => {} );
+    }
+
+    return @results;
+
+} ## end sub dnssec13
+
+sub dnssec14 {
+    my ( $class, $zone ) = @_;
+    my @results;
+    my @dnskey_rrs;
+
+    my @nss_del   = @{ Zonemaster::Engine::TestMethods->method4( $zone ) };
+    my @nss_child = @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
+    my %nss       = map { $_->name->string . '/' . $_->address->short => $_ } @nss_del, @nss_child;
+
+    for my $nss_key ( sort keys %nss ) {
+        my $ns = $nss{$nss_key};
+        my $ns_args = {
+            ns      => $ns->name->string,
+            address => $ns->address->short,
+        };
+
+        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
+            push @results,
+              info(
+                IPV6_DISABLED => {
+                    ns      => $ns->name->string,
+                    address => $ns->address->short,
+                    rrtype => q{DNSKEY},
+                }
+              );
+            next;
+        }
+
+        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
+            push @results,
+              info(
+                IPV4_DISABLED => {
+                    ns      => $ns->name->string,
+                    address => $ns->address->short,
+                    rrtype => q{DNSKEY},
+                }
+              );
+            next;
+        }
+
+        my $dnskey_p = $ns->query( $zone->name, 'DNSKEY', { dnssec => 1, usevc => 0 } );
+        if ( not $dnskey_p ) {
+            push @results, info( NO_RESPONSE => $ns_args );
+            next;
+        }
+
+        my @keys = $dnskey_p->get_records( 'DNSKEY', 'answer' );
+        if ( not @keys ) {
+            push @results, info( NO_RESPONSE_DNSKEY => $ns_args );
+            next;
+        } else {
+            push @dnskey_rrs, @keys;
+        }
+    }
+
+    foreach my $key ( @dnskey_rrs ) {
+        my $algo = $key->algorithm;  
+
+        next if not exists $rsa_key_size_details{$algo};
+
+        my $algo_args = {
+            algorithm_number      => $algo,
+            algorithm_description => $algo_properties{$algo}{description},
+            keytag                => $key->keytag,
+            keysize               => $key->keysize,
+            keysizemin            => $rsa_key_size_details{$algo}{min_size},
+            keysizemax            => $rsa_key_size_details{$algo}{max_size},
+            keysizerec            => $rsa_key_size_details{$algo}{rec_size},
+        };
+
+        if ( $key->keysize < $rsa_key_size_details{$algo}{min_size} ) {
+            push @results, info( DNSKEY_TOO_SMALL_FOR_ALGO => $algo_args );
+        }
+
+        if ( $key->keysize < $rsa_key_size_details{$algo}{rec_size} ) {
+            push @results, info( DNSKEY_SMALLER_THAN_REC => $algo_args );
+        }
+
+        if ( $key->keysize > $rsa_key_size_details{$algo}{max_size} ) {
+            push @results, info( DNSKEY_TOO_LARGE_FOR_ALGO => $algo_args );
+        }
+
+    } ## end foreach my $key ( @keys )
+
+    if ( scalar @dnskey_rrs and scalar @results == scalar grep { $_->tag eq 'NO_RESPONSE' } @results) {
+        push @results, info( KEY_SIZE_OK => {} );
+    }
+
+    return @results;
+} ## end sub dnssec14
+
 1;
 
 =head1 NAME
@@ -1362,11 +2017,9 @@ Runs the default set of tests and returns a list of log entries made by the test
 Returns a reference to a hash, the keys of which are the names of all test methods in the module, and the corresponding values are references to
 lists with all the tags that the method can use in log entries.
 
-=item translation()
+=item tag_descriptions()
 
-Returns a reference to a nested hash, where the outermost keys are language
-codes, the keys below that are message tags and their values are translation
-strings.
+Returns a refernce to a hash with translation functions. Used by the builtin translation system.
 
 =item policy()
 
@@ -1426,6 +2079,14 @@ Check for the presence of either NSEC or NSEC3, with proper coverage and signatu
 =item dnssec11($zone)
 
 Check that the delegation step from parent is properly signed.
+
+=item dnssec13($zone)
+
+Check that all DNSKEY algorithms are used to sign the zone.
+
+=item dnssec14($zone)
+
+Check for valid RSA DNSKEY key size
 
 =back
 

@@ -33,6 +33,8 @@
         "dnssec09",
         "dnssec10",
         "dnssec11",
+        "dnssec13",
+        "dnssec14",
         "nameserver01",
         "nameserver02",
         "nameserver03",
@@ -58,6 +60,7 @@
         "zone06",
         "zone07",
         "zone08",
-        "zone09"
+        "zone09",
+        "zone10"
     ]
 }

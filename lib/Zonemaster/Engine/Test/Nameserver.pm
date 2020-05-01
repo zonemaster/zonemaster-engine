@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::Nameserver;
 
-use version; our $VERSION = version->declare("v1.0.23");
+use version; our $VERSION = version->declare("v1.0.24");
 
 use strict;
 use warnings;
@@ -8,12 +8,13 @@ use warnings;
 use 5.014002;
 
 use Zonemaster::Engine;
-use Zonemaster::Engine::Util;
-use Zonemaster::Engine::Test::Address;
-use Zonemaster::Engine::Constants qw[:ip];
 
 use List::MoreUtils qw[uniq none];
+use Locale::TextDomain qw[Zonemaster-Engine];
 use Readonly;
+use Zonemaster::Engine::Constants qw[:ip];
+use Zonemaster::Engine::Test::Address;
+use Zonemaster::Engine::Util;
 
 Readonly my @NONEXISTENT_NAMES => qw{
   xn--nameservertest.iis.se
@@ -112,9 +113,12 @@ sub metadata {
         ],
         nameserver05 => [
             qw(
-              QUERY_DROPPED
-              ANSWER_BAD_RCODE
+              AAAA_BAD_RDATA
+              AAAA_QUERY_DROPPED
+              AAAA_UNEXPECTED_RCODE
               AAAA_WELL_PROCESSED
+              A_UNEXPECTED_RCODE
+              NO_RESPONSE
               IPV4_DISABLED
               IPV6_DISABLED
               )
@@ -185,55 +189,177 @@ sub metadata {
     };
 } ## end sub metadata
 
-sub translation {
-    return {
-        AAAA_WELL_PROCESSED => 'The following nameservers answer AAAA queries without problems : {names}.',
-        ANSWER_BAD_RCODE    => 'Nameserver {ns}/{address} answered AAAA query with an unexpected rcode ({rcode}).',
-        AXFR_AVAILABLE      => 'Nameserver {ns}/{address} allow zone transfer using AXFR.',
-        AXFR_FAILURE        => 'AXFR not available on nameserver {ns}/{address}.',
-        BREAKS_ON_EDNS      => 'No response from {ns}/{address} when EDNS is used in query asking for {dname}.',
-        CAN_BE_RESOLVED     => 'All nameservers succeeded to resolve to an IP address.',
-        CAN_NOT_BE_RESOLVED => 'The following nameservers failed to resolve to an IP address : {names}.',
-        CASE_QUERIES_RESULTS_DIFFER => 'When asked for {type} records on "{query}" with different cases, '
-          . 'all servers do not reply consistently.',
-        CASE_QUERIES_RESULTS_OK => 'When asked for {type} records on "{query}" with different cases, '
-          . 'all servers reply consistently.',
-        CASE_QUERY_DIFFERENT_ANSWER => 'When asked for {type} records on "{query1}" and "{query2}", '
+Readonly my %TAG_DESCRIPTIONS => (
+    AAAA_BAD_RDATA => sub {
+        __x    # NAMESERVER:AAAA_BAD_RDATA
+            'Nameserver {ns}/{address} answered AAAA query with an unexpected RDATA length ({length} instead of 16)', @_;
+    },
+    AAAA_QUERY_DROPPED => sub {
+        __x    # NAMESERVER:AAAA_QUERY_DROPPED
+          'Nameserver {ns}/{address} dropped AAAA query.', @_;
+    },
+    AAAA_UNEXPECTED_RCODE => sub {
+        __x    # NAMESERVER:AAAA_UNEXPECTED_RCODE
+          'Nameserver {ns}/{address} answered AAAA query with an unexpected rcode ({rcode}).', @_;
+    },
+    AAAA_WELL_PROCESSED => sub {
+        __x    # NAMESERVER:AAAA_WELL_PROCESSED
+          'The following nameservers answer AAAA queries without problems : {names}.', @_;
+    },
+    A_UNEXPECTED_RCODE => sub {
+        __x    # NAMESERVER:A_UNEXPECTED_RCODE
+          'Nameserver {ns}/{address} answered A query with an unexpected rcode ({rcode}).', @_;
+    },
+    AXFR_AVAILABLE => sub {
+        __x    # NAMESERVER:AXFR_AVAILABLE
+          'Nameserver {ns}/{address} allow zone transfer using AXFR.', @_;
+    },
+    AXFR_FAILURE => sub {
+        __x    # NAMESERVER:AXFR_FAILURE
+          'AXFR not available on nameserver {ns}/{address}.', @_;
+    },
+    BREAKS_ON_EDNS => sub {
+        __x    # NAMESERVER:BREAKS_ON_EDNS
+          'No response from {ns}/{address} when EDNS is used in query asking for {dname}.', @_;
+    },
+    CAN_BE_RESOLVED => sub {
+        __x    # NAMESERVER:CAN_BE_RESOLVED
+          'All nameservers succeeded to resolve to an IP address.', @_;
+    },
+    CAN_NOT_BE_RESOLVED => sub {
+        __x    # NAMESERVER:CAN_NOT_BE_RESOLVED
+          'The following nameservers failed to resolve to an IP address : {names}.', @_;
+    },
+    CASE_QUERIES_RESULTS_DIFFER => sub {
+        __x    # NAMESERVER:CASE_QUERIES_RESULTS_DIFFER
+          'When asked for {type} records on "{query}" with different cases, all servers do not reply consistently.', @_;
+    },
+    CASE_QUERIES_RESULTS_OK => sub {
+        __x    # NAMESERVER:CASE_QUERIES_RESULTS_OK
+          'When asked for {type} records on "{query}" with different cases, all servers reply consistently.', @_;
+    },
+    CASE_QUERY_DIFFERENT_ANSWER => sub {
+        __x    # NAMESERVER:CASE_QUERY_DIFFERENT_ANSWER
+          'When asked for {type} records on "{query1}" and "{query2}", '
           . 'nameserver {ns}/{address} returns different answers.',
-        CASE_QUERY_DIFFERENT_RC => 'When asked for {type} records on "{query1}" and "{query2}", '
+          @_;
+    },
+    CASE_QUERY_DIFFERENT_RC => sub {
+        __x    # NAMESERVER:CASE_QUERY_DIFFERENT_RC
+          'When asked for {type} records on "{query1}" and "{query2}", '
           . 'nameserver {ns}/{address} returns different RCODE ("{rcode1}" vs "{rcode2}").',
-        CASE_QUERY_NO_ANSWER => 'When asked for {type} records on "{query}", '
-          . 'nameserver {ns}/{address} returns nothing.',
-        CASE_QUERY_SAME_ANSWER => 'When asked for {type} records on "{query1}" and "{query2}", '
-          . 'nameserver {ns}/{address} returns same answers.',
-        CASE_QUERY_SAME_RC => 'When asked for {type} records on "{query1}" and "{query2}", '
+          @_;
+    },
+    CASE_QUERY_NO_ANSWER => sub {
+        __x    # NAMESERVER:CASE_QUERY_NO_ANSWER
+          'When asked for {type} records on "{query}", nameserver {ns}/{address} returns nothing.', @_;
+    },
+    CASE_QUERY_SAME_ANSWER => sub {
+        __x    # NAMESERVER:CASE_QUERY_SAME_ANSWER
+          'When asked for {type} records on "{query1}" and "{query2}", nameserver {ns}/{address} returns same answers.',
+          @_;
+    },
+    CASE_QUERY_SAME_RC => sub {
+        __x    # NAMESERVER:CASE_QUERY_SAME_RC
+          'When asked for {type} records on "{query1}" and "{query2}", '
           . 'nameserver {ns}/{address} returns same RCODE "{rcode}".',
-        DIFFERENT_SOURCE_IP => 'Nameserver {ns}/{address} replies on a SOA query with a different source address '
-          . '({source}).',
-        EDNS_RESPONSE_WITHOUT_EDNS => 'Response without EDNS from {ns}/{address} on query with EDNS0 asking for {dname}.',
-        EDNS_VERSION_ERROR         => 'Incorrect version of EDNS (expected 0) in response from {ns}/{address} on query with EDNS (version 0) asking for {dname}.',
-        EDNS0_SUPPORT              => 'The following nameservers support EDNS0 : {names}.',
-        IPV4_DISABLED              => 'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
-        IPV6_DISABLED              => 'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
-        IS_A_RECURSOR              => 'Nameserver {ns}/{address} is a recursor.',
-        MISSING_OPT_IN_TRUNCATED   => 'Nameserver {ns}/{address} replies on an EDNS query with a truncated response without EDNS.',
-        NO_EDNS_SUPPORT            => 'Nameserver {ns}/{address} does not support EDNS0 (replies with FORMERR).',
-        NO_RECURSOR                => 'Nameserver {ns}/{address} is not a recursor.',
-        NO_RESOLUTION              => 'No nameservers succeeded to resolve to an IP address.',
-        NO_RESPONSE                => 'No response from {ns}/{address} asking for {dname}.',
-        NO_UPWARD_REFERRAL         => 'None of the following nameservers returns an upward referral : {names}.',
-        NS_ERROR                   => 'Erroneous response from nameserver {ns}/{address}.',
-        QNAME_CASE_INSENSITIVE     => 'Nameserver {ns}/{address} does not preserve original case of queried names.',
-        QNAME_CASE_SENSITIVE       => 'Nameserver {ns}/{address} preserves original case of queried names.',
-        QUERY_DROPPED              => 'Nameserver {ns}/{address} dropped AAAA query.',
-        SAME_SOURCE_IP             => 'All nameservers reply with same IP used to query them.',
-        UNKNOWN_OPTION_CODE        => 'Nameserver {ns}/{address} responds with an unknown ENDS OPTION-CODE.',
-        UNSUPPORTED_EDNS_VER       => 'Nameserver {ns}/{address} accepts an unsupported EDNS version.',
-        UPWARD_REFERRAL            => 'Nameserver {ns}/{address} returns an upward referral.',
-        UPWARD_REFERRAL_IRRELEVANT => 'Upward referral tests skipped for root zone.',
-        Z_FLAGS_NOTCLEAR           => 'Nameserver {ns}/{address} has one or more unknown EDNS Z flag bits set.',
-    };
-} ## end sub translation
+          @_;
+    },
+    DIFFERENT_SOURCE_IP => sub {
+        __x    # NAMESERVER:DIFFERENT_SOURCE_IP
+          'Nameserver {ns}/{address} replies on a SOA query with a different source address ({source}).', @_;
+    },
+    EDNS_RESPONSE_WITHOUT_EDNS => sub {
+        __x    # NAMESERVER:EDNS_RESPONSE_WITHOUT_EDNS
+          'Response without EDNS from {ns}/{address} on query with EDNS0 asking for {dname}.', @_;
+    },
+    EDNS_VERSION_ERROR => sub {
+        __x    # NAMESERVER:EDNS_VERSION_ERROR
+          'Incorrect version of EDNS (expected 0) in response from {ns}/{address} '
+          . 'on query with EDNS (version 0) asking for {dname}.',
+          @_;
+    },
+    EDNS0_SUPPORT => sub {
+        __x    # NAMESERVER:EDNS0_SUPPORT
+          'The following nameservers support EDNS0 : {names}.', @_;
+    },
+    IPV4_DISABLED => sub {
+        __x    # NAMESERVER:IPV4_DISABLED
+          'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
+    },
+    IPV6_DISABLED => sub {
+        __x    # NAMESERVER:IPV6_DISABLED
+          'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
+    },
+    IS_A_RECURSOR => sub {
+        __x    # NAMESERVER:IS_A_RECURSOR
+          'Nameserver {ns}/{address} is a recursor.', @_;
+    },
+    MISSING_OPT_IN_TRUNCATED => sub {
+        __x    # NAMESERVER:MISSING_OPT_IN_TRUNCATED
+          'Nameserver {ns}/{address} replies on an EDNS query with a truncated response without EDNS.', @_;
+    },
+    NO_EDNS_SUPPORT => sub {
+        __x    # NAMESERVER:NO_EDNS_SUPPORT
+          'Nameserver {ns}/{address} does not support EDNS0 (replies with FORMERR).', @_;
+    },
+    NO_RECURSOR => sub {
+        __x    # NAMESERVER:NO_RECURSOR
+          'Nameserver {ns}/{address} is not a recursor.', @_;
+    },
+    NO_RESOLUTION => sub {
+        __x    # NAMESERVER:NO_RESOLUTION
+          'No nameservers succeeded to resolve to an IP address.', @_;
+    },
+    NO_RESPONSE => sub {
+        __x    # NAMESERVER:NO_RESPONSE
+          'No response from {ns}/{address} asking for {dname}.', @_;
+    },
+    NO_UPWARD_REFERRAL => sub {
+        __x    # NAMESERVER:NO_UPWARD_REFERRAL
+          'None of the following nameservers returns an upward referral : {names}.', @_;
+    },
+    NS_ERROR => sub {
+        __x    # NAMESERVER:NS_ERROR
+          'Erroneous response from nameserver {ns}/{address}.', @_;
+    },
+    QNAME_CASE_INSENSITIVE => sub {
+        __x    # NAMESERVER:QNAME_CASE_INSENSITIVE
+          'Nameserver {ns}/{address} does not preserve original case of queried names.', @_;
+    },
+    QNAME_CASE_SENSITIVE => sub {
+        __x    # NAMESERVER:QNAME_CASE_SENSITIVE
+          'Nameserver {ns}/{address} preserves original case of queried names.', @_;
+    },
+    SAME_SOURCE_IP => sub {
+        __x    # NAMESERVER:SAME_SOURCE_IP
+          'All nameservers reply with same IP used to query them.', @_;
+    },
+    UNKNOWN_OPTION_CODE => sub {
+        __x    # NAMESERVER:UNKNOWN_OPTION_CODE
+          'Nameserver {ns}/{address} responds with an unknown ENDS OPTION-CODE.', @_;
+    },
+    UNSUPPORTED_EDNS_VER => sub {
+        __x    # NAMESERVER:UNSUPPORTED_EDNS_VER
+          'Nameserver {ns}/{address} accepts an unsupported EDNS version.', @_;
+    },
+    UPWARD_REFERRAL => sub {
+        __x    # NAMESERVER:UPWARD_REFERRAL
+          'Nameserver {ns}/{address} returns an upward referral.', @_;
+    },
+    UPWARD_REFERRAL_IRRELEVANT => sub {
+        __x    # NAMESERVER:UPWARD_REFERRAL_IRRELEVANT
+          'Upward referral tests skipped for root zone.', @_;
+    },
+    Z_FLAGS_NOTCLEAR => sub {
+        __x    # NAMESERVER:Z_FLAGS_NOTCLEAR
+          'Nameserver {ns}/{address} has one or more unknown EDNS Z flag bits set.', @_;
+    },
+);
+
+sub tag_descriptions {
+    return \%TAG_DESCRIPTIONS;
+}
 
 sub version {
     return "$Zonemaster::Engine::Test::Nameserver::VERSION";
@@ -377,7 +503,7 @@ sub nameserver02 {
                     }
                   );
             }
-	    else {
+            else {
                 push @results,
                   info(
                     NO_RESPONSE => {
@@ -496,74 +622,107 @@ sub nameserver05 {
     my ( $class, $zone ) = @_;
     my @results;
     my %nsnames_and_ip;
-    my $query_type = q{AAAA};
+    my $aaaa_issue = 0;
+    my @aaaa_ok;
 
-    foreach
-      my $local_ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) }, @{ Zonemaster::Engine::TestMethods->method5( $zone ) } )
-    {
+    foreach my $ns ( @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) } ) {
 
-        next if $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short };
+        next if $nsnames_and_ip{ $ns->name->string . q{/} . $ns->address->short };
 
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $local_ns->address->version == $IP_VERSION_6 ) {
+        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
             push @results,
               info(
                 IPV6_DISABLED => {
-                    ns      => $local_ns->name->string,
-                    address => $local_ns->address->short,
-                    rrtype  => $query_type,
+                    ns      => $ns->name->string,
+                    address => $ns->address->short,
+                    rrtype  => q{A},
                 }
               );
             next;
         }
 
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $local_ns->address->version == $IP_VERSION_4 ) {
+        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
             push @results,
               info(
                 IPV4_DISABLED => {
-                    ns      => $local_ns->name->string,
-                    address => $local_ns->address->short,
-                    rrtype  => $query_type,
+                    ns      => $ns->name->string,
+                    address => $ns->address->short,
+                    rrtype  => q{A},
                 }
               );
             next;
         }
 
-        $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short }++;
+        $nsnames_and_ip{ $ns->name->string . q{/} . $ns->address->short }++;
 
-        my $p = $local_ns->query( $zone->name, $query_type );
+        my $p = $ns->query( $zone->name, q{A}, { usevc => 0 } );
 
         if ( not $p ) {
             push @results,
               info(
-                QUERY_DROPPED => {
-                    ns      => $local_ns->name->string,
-                    address => $local_ns->address->short,
+                NO_RESPONSE => {
+                    ns      => $ns->name,
+                    address => $ns->address->short,
+                    dname   => $zone->name,
                 }
               );
-            next;
         }
-
-        next if not scalar $p->answer and $p->rcode eq q{NOERROR};
-
-        if (   $p->rcode eq q{FORMERR}
-            or $p->rcode eq q{SERVFAIL}
-            or $p->rcode eq q{NXDOMAIN}
-            or $p->rcode eq q{NOTIMPL} )
-        {
+        elsif ( $p->rcode ne q{NOERROR} ) {
             push @results,
               info(
-                ANSWER_BAD_RCODE => {
-                    ns      => $local_ns->name->string,
-                    address => $local_ns->address->short,
+                A_UNEXPECTED_RCODE => {
+                    ns      => $ns->name,
+                    address => $ns->address->short,
                     rcode   => $p->rcode,
                 }
               );
-            next;
         }
+        else {
+            $p = $ns->query( $zone->name, q{AAAA}, { usevc => 0 } );
 
-    } ## end foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods...})
+            if ( not $p ) {
+                push @results,
+                  info(
+                    AAAA_QUERY_DROPPED => {
+                        ns      => $ns->name,
+                        address => $ns->address->short,
+                    }
+                  );
+                $aaaa_issue++;
+            }
+            elsif ( $p->rcode ne q{NOERROR} ) {
+                push @results,
+                  info(
+                    AAAA_UNEXPECTED_RCODE => {
+                        ns      => $ns->name,
+                        address => $ns->address->short,
+                        rcode   => $p->rcode,
+                    }
+                  );
+                $aaaa_issue++;
+            }
+            else {
+                foreach my $rr ( $p->get_records( q{AAAA}, q{answer} ) ) {
+                    if ( length($rr->rdf(0)) != 16 ) {
+                        push @results,
+                          info(
+                            AAAA_BAD_RDATA => {
+                                ns      => $ns->name,
+                                address => $ns->address->short,
+                                length  => length($rr->rdf(0)),
+                            }
+                          );
+                        $aaaa_issue++;
+                    }
+                    else {
+                        push @aaaa_ok, $rr->address;    
+                    }
+                }
+            }
+        }
+    }
 
-    if ( scalar keys %nsnames_and_ip and none { $_->tag eq q{ANSWER_BAD_RCODE} } @results ) {
+    if ( scalar @aaaa_ok and not $aaaa_issue ) {
         push @results,
           info(
             AAAA_WELL_PROCESSED => {
@@ -631,7 +790,7 @@ sub nameserver07 {
 
             next if $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short };
 
-	    my $p = $local_ns->query( q{.}, q{NS}, { blacklisting_disabled => 1 } );
+            my $p = $local_ns->query( q{.}, q{NS}, { blacklisting_disabled => 1 } );
             if ( $p ) {
                 my @ns = $p->get_records( q{NS}, q{authority} );
 
@@ -879,7 +1038,7 @@ sub nameserver10 {
     }
 
     for my $ns ( @nss ) {
-	my $p = $ns->query( $zone->name, q{SOA}, { edns_details => { version => 1 } } );
+        my $p = $ns->query( $zone->name, q{SOA}, { edns_details => { version => 1 } } );
         if ( $p ) {
             if ( $p->rcode eq q{FORMERR} and not $p->edns_rcode ) {
                 push @results,
@@ -912,7 +1071,7 @@ sub nameserver10 {
                   );
             }
         }
-	else {
+        else {
             push @results,
               info(
                 NO_RESPONSE => {
@@ -1157,9 +1316,9 @@ Zonemaster::Engine::Test::Nameserver - module implementing tests of the properti
 
 Runs the default set of tests and returns a list of log entries made by the tests
 
-=item translation()
+=item tag_descriptions()
 
-Returns a reference to a hash with translation data. Used by the builtin translation system.
+Returns a refernce to a hash with translation functions. Used by the builtin translation system.
 
 =item metadata()
 

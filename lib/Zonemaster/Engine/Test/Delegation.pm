@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Test::Delegation;
 
-use version; our $VERSION = version->declare("v1.0.12");
+use version; our $VERSION = version->declare("v1.0.16");
 
 use strict;
 use warnings;
@@ -8,14 +8,16 @@ use warnings;
 use 5.014002;
 
 use Zonemaster::Engine;
-use Zonemaster::Engine::Util;
+
+use List::MoreUtils qw[uniq];
+use Locale::TextDomain qw[Zonemaster-Engine];
+use Readonly;
+use Zonemaster::Engine::Constants ':all';
+use Zonemaster::Engine::Net::IP;
 use Zonemaster::Engine::Test::Address;
 use Zonemaster::Engine::Test::Syntax;
 use Zonemaster::Engine::TestMethods;
-use Zonemaster::Engine::Constants ':all';
-use Zonemaster::Engine::Net::IP;
-
-use List::MoreUtils qw[uniq];
+use Zonemaster::Engine::Util;
 use Zonemaster::LDNS::Packet;
 use Zonemaster::LDNS::RR;
 
@@ -53,11 +55,17 @@ sub metadata {
               NOT_ENOUGH_NS_DEL
               NOT_ENOUGH_NS_CHILD
               ENOUGH_IPV4_NS_CHILD
+              ENOUGH_IPV4_NS_DEL
               ENOUGH_IPV6_NS_CHILD
+              ENOUGH_IPV6_NS_DEL
               NOT_ENOUGH_IPV4_NS_CHILD
+              NOT_ENOUGH_IPV4_NS_DEL
               NOT_ENOUGH_IPV6_NS_CHILD
+              NOT_ENOUGH_IPV6_NS_DEL
               NO_IPV4_NS_CHILD
+              NO_IPV4_NS_DEL
               NO_IPV6_NS_CHILD
+              NO_IPV6_NS_DEL
               )
         ],
         delegation02 => [
@@ -86,8 +94,10 @@ sub metadata {
         ],
         delegation05 => [
             qw(
-              NS_RR_IS_CNAME
-              NS_RR_NO_CNAME
+              NO_NS_CNAME
+              NO_RESPONSE    
+              NS_IS_CNAME
+              UNEXPECTED_RCODE
               )
         ],
         delegation06 => [
@@ -109,60 +119,189 @@ sub metadata {
     };
 } ## end sub metadata
 
-sub translation {
-    return {
-        ARE_AUTHORITATIVE    => "All these nameservers are confirmed to be authoritative : {nsset}.",
-        CHILD_DISTINCT_NS_IP => "All the IP addresses used by the nameservers in child are unique.",
-        CHILD_NS_SAME_IP     => "IP {address} in child refers to multiple nameservers ({nss}).",
-        DEL_DISTINCT_NS_IP   => "All the IP addresses used by the nameservers in parent are unique.",
-        DEL_NS_SAME_IP       => "IP {address} in parent refers to multiple nameservers ({nss}).",
-        DISTINCT_IP_ADDRESS  => "All the IP addresses used by the nameservers are unique",
-        ENOUGH_IPV4_NS_CHILD => "Child lists enough ({count}) nameservers that resolve to IPv4 addresses ({addrs}). "
-          . "Lower limit set to {minimum}.",
-        ENOUGH_IPV4_NS_DEL => "Delegation lists enough ({count}) nameservers that resolve to IPv4 addresses ({addrs}). "
-          . "Lower limit set to {minimum}.",
-        ENOUGH_IPV6_NS_CHILD => "Child lists enough ({count}) nameservers that resolve to IPv6 addresses ({addrs}). "
-          . "Lower limit set to {minimum}.",
-        ENOUGH_IPV6_NS_DEL => "Delegation lists enough ({count}) nameservers that resolve to IPv6 addresses ({addrs}). "
-          . "Lower limit set to {minimum}.",
-        ENOUGH_NS_CHILD          => "Child lists enough ({count}) nameservers ({ns}). Lower limit set to {minimum}.",
-        ENOUGH_NS_DEL            => "Parent lists enough ({count}) nameservers ({glue}). Lower limit set to {minimum}.",
-        EXTRA_NAME_CHILD         => "Child has nameserver(s) not listed at parent ({extra}).",
-        EXTRA_NAME_PARENT        => "Parent has nameserver(s) not listed at the child ({extra}).",
-        IPV4_DISABLED            => 'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
-        IPV6_DISABLED            => 'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.',
-        IS_NOT_AUTHORITATIVE     => "Nameserver {ns} response is not authoritative on {proto} port 53.",
-        NAMES_MATCH              => "All of the nameserver names are listed both at parent and child.",
-        NOT_ENOUGH_IPV4_NS_CHILD => "Child does not list enough ({count}) nameservers that "
-          . "resolve to IPv4 addresses ({addrs}). Lower limit set to {minimum}.",
-        NOT_ENOUGH_IPV4_NS_DEL => "Delegation does not list enough ({count}) nameservers that "
-          . "resolve to IPv4 addresses ({addrs}). Lower limit set to {minimum}.",
-        NOT_ENOUGH_IPV6_NS_CHILD => "Child does not list enough ({count}) nameservers that "
-          . "resolve to IPv6 addresses ({addrs}). Lower limit set to {minimum}.",
-        NOT_ENOUGH_IPV6_NS_DEL => "Delegation does not list enough ({count}) nameservers that "
-          . "resolve to IPv6 addresses ({addrs}). Lower limit set to {minimum}.",
-        NOT_ENOUGH_NS_CHILD => "Child does not list enough ({count}) nameservers ({ns}). Lower limit set to {minimum}.",
-        NOT_ENOUGH_NS_DEL   => "Parent does not list enough ({count}) nameservers ({glue}). "
-          . "Lower limit set to {minimum}.",
-        NO_IPV4_NS_CHILD => "Child lists no nameserver that resolves to an IPv4 address. If any were present, "
-          . "the minimum allowed would be {minimum}.",
-        NO_IPV4_NS_DEL => "Delegation lists no nameserver that resolves to an IPv4 address. If any were present, "
-          . "the minimum allowed would be {minimum}.",
-        NO_IPV6_NS_CHILD => "Child lists no nameserver that resolves to an IPv6 address. If any were present, "
-          . "the minimum allowed would be {minimum}.",
-        NO_IPV6_NS_DEL => "Delegation lists no nameserver that resolves to an IPv6 address. If any were present, "
-          . "the minimum allowed would be {minimum}.",
-        NS_RR_IS_CNAME          => "Nameserver {ns} {address_type} RR point to CNAME.",
-        NS_RR_NO_CNAME          => "No nameserver point to CNAME alias.",
-        REFERRAL_SIZE_TOO_LARGE => "The smallest possible legal referral packet is larger than 512 octets "
-          . "(it is {size}).",
-        REFERRAL_SIZE_OK    => "The smallest possible legal referral packet is smaller than 513 octets (it is {size}).",
-        SAME_IP_ADDRESS     => "IP {address} refers to multiple nameservers ({nss}).",
-        SOA_EXISTS          => "All the nameservers have SOA record.",
-        SOA_NOT_EXISTS      => "A SOA query NOERROR response from {ns} was received empty.",
-        TOTAL_NAME_MISMATCH => "None of the nameservers listed at the parent are listed at the child.",
-    };
-} ## end sub translation
+Readonly my %TAG_DESCRIPTIONS => (
+    ARE_AUTHORITATIVE => sub {
+        __x    # DELEGATION:ARE_AUTHORITATIVE
+          "All these nameservers are confirmed to be authoritative : {nsset}.", @_;
+    },
+    CHILD_DISTINCT_NS_IP => sub {
+        __x    # DELEGATION:CHILD_DISTINCT_NS_IP
+          "All the IP addresses used by the nameservers in child are unique.", @_;
+    },
+    CHILD_NS_SAME_IP => sub {
+        __x    # DELEGATION:CHILD_NS_SAME_IP
+          "IP {address} in child refers to multiple nameservers ({nss}).", @_;
+    },
+    DEL_DISTINCT_NS_IP => sub {
+        __x    # DELEGATION:DEL_DISTINCT_NS_IP
+          "All the IP addresses used by the nameservers in parent are unique.", @_;
+    },
+    DEL_NS_SAME_IP => sub {
+        __x    # DELEGATION:DEL_NS_SAME_IP
+          "IP {address} in parent refers to multiple nameservers ({nss}).", @_;
+    },
+    DISTINCT_IP_ADDRESS => sub {
+        __x    # DELEGATION:DISTINCT_IP_ADDRESS
+          "All the IP addresses used by the nameservers are unique", @_;
+    },
+    ENOUGH_IPV4_NS_CHILD => sub {
+        __x    # DELEGATION:ENOUGH_IPV4_NS_CHILD
+          "Child lists enough ({count}) nameservers ({nss}) "
+          . "that resolve to IPv4 addresses ({addrs}). Lower limit set to {minimum}.",
+          @_;
+    },
+    ENOUGH_IPV4_NS_DEL => sub {
+        __x    # DELEGATION:ENOUGH_IPV4_NS_DEL
+          "Delegation lists enough ({count}) nameservers ({nss}) "
+          . "that resolve to IPv4 addresses ({addrs}). Lower limit set to {minimum}.",
+          @_;
+    },
+    ENOUGH_IPV6_NS_CHILD => sub {
+        __x    # DELEGATION:ENOUGH_IPV6_NS_CHILD
+          "Child lists enough ({count}) nameservers ({nss}) "
+          . "that resolve to IPv6 addresses ({addrs}). Lower limit set to {minimum}.",
+          @_;
+    },
+    ENOUGH_IPV6_NS_DEL => sub {
+        __x    # DELEGATION:ENOUGH_IPV6_NS_DEL
+          "Delegation lists enough ({count}) nameservers ({nss}) "
+          . "that resolve to IPv6 addresses ({addrs}). Lower limit set to {minimum}.",
+          @_;
+    },
+    ENOUGH_NS_CHILD => sub {
+        __x    # DELEGATION:ENOUGH_NS_CHILD
+          "Child lists enough ({count}) nameservers ({nss}). Lower limit set to {minimum}.", @_;
+    },
+    ENOUGH_NS_DEL => sub {
+        __x    # DELEGATION:ENOUGH_NS_DEL
+          "Parent lists enough ({count}) nameservers ({glue}). Lower limit set to {minimum}.", @_;
+    },
+    EXTRA_NAME_CHILD => sub {
+        __x    # DELEGATION:EXTRA_NAME_CHILD
+          "Child has nameserver(s) not listed at parent ({extra}).", @_;
+    },
+    EXTRA_NAME_PARENT => sub {
+        __x    # DELEGATION:EXTRA_NAME_PARENT
+          "Parent has nameserver(s) not listed at the child ({extra}).", @_;
+    },
+    IPV4_DISABLED => sub {
+        __x    # DELEGATION:IPV4_DISABLED
+          'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
+    },
+    IPV6_DISABLED => sub {
+        __x    # DELEGATION:IPV6_DISABLED
+          'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
+    },
+    IS_NOT_AUTHORITATIVE => sub {
+        __x    # DELEGATION:IS_NOT_AUTHORITATIVE
+          "Nameserver {ns} response is not authoritative on {proto} port 53.", @_;
+    },
+    NAMES_MATCH => sub {
+        __x    # DELEGATION:NAMES_MATCH
+          "All of the nameserver names are listed both at parent and child.", @_;
+    },
+    NO_RESPONSE => sub {
+        __x    # DELEGATION:NO_RESPONSE
+          "Nameserver {ns}/{address} did not respond.", @_;
+    },
+    NOT_ENOUGH_IPV4_NS_CHILD => sub {
+        __x    # DELEGATION:NOT_ENOUGH_IPV4_NS_CHILD
+          "Child does not list enough ({count}) nameservers ({nss}) "
+          . "that resolve to IPv4 addresses ({addrs}). Lower limit set to {minimum}.",
+          @_;
+    },
+    NOT_ENOUGH_IPV4_NS_DEL => sub {
+        __x    # DELEGATION:NOT_ENOUGH_IPV4_NS_DEL
+          "Delegation does not list enough ({count}) nameservers ({nss}) "
+          . "that resolve to IPv4 addresses ({addrs}). Lower limit set to {minimum}.",
+          @_;
+    },
+    NOT_ENOUGH_IPV6_NS_CHILD => sub {
+        __x    # DELEGATION:NOT_ENOUGH_IPV6_NS_CHILD
+          "Child does not list enough ({count}) nameservers ({nss}) "
+          . "that resolve to IPv6 addresses ({addrs}). Lower limit set to {minimum}.",
+          @_;
+    },
+    NOT_ENOUGH_IPV6_NS_DEL => sub {
+        __x    # DELEGATION:NOT_ENOUGH_IPV6_NS_DEL
+          "Delegation does not list enough ({count}) nameservers ({nss}) "
+          . "that resolve to IPv6 addresses ({addrs}). Lower limit set to {minimum}.",
+          @_;
+    },
+    NOT_ENOUGH_NS_CHILD => sub {
+        __x    # DELEGATION:NOT_ENOUGH_NS_CHILD
+          "Child does not list enough ({count}) nameservers ({nss}). Lower limit set to {minimum}.", @_;
+    },
+    NOT_ENOUGH_NS_DEL => sub {
+        __x    # DELEGATION:NOT_ENOUGH_NS_DEL
+          "Parent does not list enough ({count}) nameservers ({glue}). Lower limit set to {minimum}.", @_;
+    },
+    NO_IPV4_NS_CHILD => sub {
+        __x    # DELEGATION:NO_IPV4_NS_CHILD
+          "Child lists no nameserver that resolves to an IPv4 address. "
+          . "If any were present, the minimum allowed would be {minimum}.",
+          @_;
+    },
+    NO_IPV4_NS_DEL => sub {
+        __x    # DELEGATION:NO_IPV4_NS_DEL
+          "Delegation lists no nameserver that resolves to an IPv4 address. "
+          . "If any were present, the minimum allowed would be {minimum}.",
+          @_;
+    },
+    NO_IPV6_NS_CHILD => sub {
+        __x    # DELEGATION:NO_IPV6_NS_CHILD
+          "Child lists no nameserver that resolves to an IPv6 address. "
+          . "If any were present, the minimum allowed would be {minimum}.",
+          @_;
+    },
+    NO_IPV6_NS_DEL => sub {
+        __x    # DELEGATION:NO_IPV6_NS_DEL
+          "Delegation lists no nameserver that resolves to an IPv6 address. "
+          . "If any were present, the minimum allowed would be {minimum}.",
+          @_;
+    },
+    NS_IS_CNAME => sub {
+        __x    # DELEGATION:NS_IS_CNAME
+          "Nameserver {ns} RR point to CNAME.", @_;
+    },
+    NO_NS_CNAME => sub {
+        __x    # DELEGATION:NO_NS_CNAME
+          "No nameserver point to CNAME alias.", @_;
+    },
+    REFERRAL_SIZE_TOO_LARGE => sub {
+        __x    # DELEGATION:REFERRAL_SIZE_TOO_LARGE
+          "The smallest possible legal referral packet is larger than 512 octets (it is {size}).", @_;
+    },
+    REFERRAL_SIZE_OK => sub {
+        __x    # DELEGATION:REFERRAL_SIZE_OK
+          "The smallest possible legal referral packet is smaller than 513 octets (it is {size}).", @_;
+    },
+    SAME_IP_ADDRESS => sub {
+        __x    # DELEGATION:SAME_IP_ADDRESS
+          "IP {address} refers to multiple nameservers ({nss}).", @_;
+    },
+    SOA_EXISTS => sub {
+        __x    # DELEGATION:SOA_EXISTS
+          "All the nameservers have SOA record.", @_;
+    },
+    SOA_NOT_EXISTS => sub {
+        __x    # DELEGATION:SOA_NOT_EXISTS
+          "A SOA query NOERROR response from {ns} was received empty.", @_;
+    },
+    TOTAL_NAME_MISMATCH => sub {
+        __x    # DELEGATION:TOTAL_NAME_MISMATCH
+          "None of the nameservers listed at the parent are listed at the child.", @_;
+    },
+    UNEXPECTED_RCODE => sub {
+        __x    # DELEGATION:UNEXPECTED_RCODE
+          'Nameserver {ns}/{address} answered query with an unexpected rcode ({rcode}).', @_;
+    },
+
+);
+
+sub tag_descriptions {
+    return \%TAG_DESCRIPTIONS;
+}
 
 sub version {
     return "$Zonemaster::Engine::Test::Delegation::VERSION";
@@ -198,7 +337,7 @@ sub delegation01 {
     my $child_nsnames_args = {
         count   => scalar( @child_nsnames ),
         minimum => $MINIMUM_NUMBER_OF_NAMESERVERS,
-        ns      => join( q{;}, sort @child_nsnames ),
+        nss     => join( q{;}, sort @child_nsnames ),
     };
 
     # Check child NS names
@@ -215,19 +354,19 @@ sub delegation01 {
     my @child_ns_ipv4 = uniq map { $_->name->string } grep { $_->address->version == 4 } @child_ns;
     my @child_ns_ipv6 = uniq map { $_->name->string } grep { $_->address->version == 6 } @child_ns;
     my @child_ns_ipv4_addrs = uniq map { $_->address->ip } grep { $_->address->version == 4 } @child_ns;
-    my @child_ns_ipv6_addrs = uniq map { $_->address->short } grep { $_->address->version == 4 } @child_ns;
+    my @child_ns_ipv6_addrs = uniq map { $_->address->short } grep { $_->address->version == 6 } @child_ns;
 
     my $child_ns_ipv4_args = {
         count   => scalar( @child_ns_ipv4 ),
         minimum => $MINIMUM_NUMBER_OF_NAMESERVERS,
-        ns      => join( q{;}, sort @child_ns_ipv4 ),
-	addrs   => join( q{;}, sort @child_ns_ipv4_addrs ),
+        nss     => join( q{;}, sort @child_ns_ipv4 ),
+        addrs   => join( q{;}, sort @child_ns_ipv4_addrs ),
     };
     my $child_ns_ipv6_args = {
         count   => scalar( @child_ns_ipv6 ),
         minimum => $MINIMUM_NUMBER_OF_NAMESERVERS,
-        ns      => join( q{;}, sort @child_ns_ipv6 ),
-	addrs   => join( q{;}, sort @child_ns_ipv6_addrs ),
+        nss     => join( q{;}, sort @child_ns_ipv6 ),
+        addrs   => join( q{;}, sort @child_ns_ipv6_addrs ),
     };
 
     if ( scalar( @child_ns_ipv4 ) >= $MINIMUM_NUMBER_OF_NAMESERVERS ) {
@@ -261,13 +400,13 @@ sub delegation01 {
         count   => scalar( @del_ns_ipv4 ),
         minimum => $MINIMUM_NUMBER_OF_NAMESERVERS,
         ns      => join( q{;}, sort @del_ns_ipv4 ),
-	addrs   => join( q{;}, sort @del_ns_ipv4_addrs ),
+        addrs   => join( q{;}, sort @del_ns_ipv4_addrs ),
     };
     my $del_ns_ipv6_args = {
         count   => scalar( @del_ns_ipv6 ),
         minimum => $MINIMUM_NUMBER_OF_NAMESERVERS,
         ns      => join( q{;}, sort @del_ns_ipv6 ),
-	addrs   => join( q{;}, sort @del_ns_ipv6_addrs ),
+        addrs   => join( q{;}, sort @del_ns_ipv6_addrs ),
     };
 
     if ( scalar( @del_ns_ipv4 ) >= $MINIMUM_NUMBER_OF_NAMESERVERS ) {
@@ -496,37 +635,65 @@ sub delegation05 {
     my ( $class, $zone ) = @_;
     my @results;
 
-    my @nsnames = uniq map { $_->string } @{ Zonemaster::Engine::TestMethods->method2( $zone ) },
-      @{ Zonemaster::Engine::TestMethods->method3( $zone ) };
+    my @nsnames = @{ Zonemaster::Engine::TestMethods->method2and3( $zone ) };
 
-    foreach my $local_nsname ( @nsnames ) {
+    foreach my $local_nsname ( @nsnames )  {
 
-        foreach my $address_type ( q{A}, q{AAAA} ) {
-            my $p = $zone->query_one( $local_nsname, $address_type );
-            if ( $p ) {
-                if ( $p->has_rrs_of_type_for_name( q{CNAME}, $zone->name ) ) {
-                    push @results,
-                      info(
-                        NS_RR_IS_CNAME => {
-                            ns           => $local_nsname,
-                            address_type => $address_type,
-                        }
-                      );
+        if ( $zone->name->is_in_bailiwick( $local_nsname ) ) {
+            my @nss_del   = @{ Zonemaster::Engine::TestMethods->method4( $zone ) };
+            my @nss_child = @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
+            my %nss       = map { $_->name->string . '/' . $_->address->short => $_ } @nss_del, @nss_child;
+
+            for my $key ( sort keys %nss ) {
+                my $ns = $nss{$key};
+                my $ns_args = {
+                    ns      => $ns->name->string,
+                    address => $ns->address->short,
+                    rrtype  => q{A},
+                };
+
+                if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
+                    push @results, info( IPV6_DISABLED => $ns_args );
+                    next;
+                }
+
+                if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
+                    push @results, info( IPV4_DISABLED => $ns_args );
+                    next;
+                }
+
+                my $p = $ns->query( $local_nsname, q{A}, { recurse => 0 } );
+                if ( not $p ) {
+                    push @results, info( NO_RESPONSE => $ns_args );
+                    next;
+                }
+                elsif ($p->rcode ne q{NOERROR} ) {
+                    $ns_args->{rcode} = $p->rcode;
+                    push @results, info( UNEXPECTED_RCODE => $ns_args );
+                    next;
+                }
+                elsif ( scalar $p->get_records( q{CNAME}, q{answer} ) > 0 ) {
+                    push @results, info( NS_IS_CNAME => { ns => $local_nsname } );
+                    next;
+                }
+                elsif ($p->is_redirect) {
+                    my $p = $ns->query( $local_nsname, q{A}, { recurse => 1 } );
+                    if ( defined $p and scalar $p->get_records( q{CNAME}, q{answer} ) > 0 ) {
+                        push @results, info( NS_IS_CNAME => { ns => $local_nsname } );
+                    }
                 }
             }
         }
-
+        else {
+            my $p = Zonemaster::Engine::Recursor->recurse( $local_nsname, q{A} );
+            if ( defined $p and scalar $p->get_records( q{CNAME}, q{answer} ) > 0 ) {
+                push @results, info( NS_IS_CNAME => { ns => $local_nsname } );
+            }
+        }
     }
 
-    if (
-        (
-               scalar @{ Zonemaster::Engine::TestMethods->method2( $zone ) }
-            or scalar @{ Zonemaster::Engine::TestMethods->method3( $zone ) }
-        )
-        and not scalar @results
-      )
-    {
-        push @results, info( NS_RR_NO_CNAME => {} );
+    if ( not grep { $_->tag eq q{NS_IS_CNAME} } @results ) {
+        push @results, info( NO_NS_CNAME => {} );
     }
 
     return @results;
@@ -692,9 +859,9 @@ Zonemaster::Engine::Test::Delegation - Tests regarding delegation details
 
 Runs the default set of tests and returns a list of log entries made by the tests.
 
-=item translation()
+=item tag_descriptions()
 
-Returns a refernce to a hash with translation data. Used by the builtin translation system.
+Returns a refernce to a hash with translation functions. Used by the builtin translation system.
 
 =item metadata()
 

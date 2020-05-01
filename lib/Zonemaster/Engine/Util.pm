@@ -1,22 +1,23 @@
 package Zonemaster::Engine::Util;
 
-use version; our $VERSION = version->declare("v1.1.11");
-
 use 5.014002;
-
-use parent 'Exporter';
 
 use strict;
 use warnings;
 
+use version; our $VERSION = version->declare("v1.1.12");
+
+use parent 'Exporter';
+
 use Zonemaster::Engine;
+use Zonemaster::Engine::Profile;
 use Zonemaster::Engine::DNSName;
 use Zonemaster::Engine::Constants qw[:ip];
 use Pod::Simple::SimpleTree;
 
 ## no critic (Modules::ProhibitAutomaticExportation)
 our @EXPORT      = qw[ ns info name pod_extract_for scramble_case ];
-our @EXPORT_OK   = qw[ ns info name pod_extract_for test_levels scramble_case ];
+our @EXPORT_OK   = qw[ ns info name pod_extract_for test_levels should_run_test scramble_case ];
 our %EXPORT_TAGS = ( all => \@EXPORT_OK );
 
 ## no critic (Subroutines::RequireArgUnpacking)
@@ -194,8 +195,8 @@ reference to a hash where the keys are the test method names and the
 values the documentation strings.
 
 This method blindly assumes that the structure of the POD is exactly
-like that in the Example and Basic test modules. If it's not, the
-results are undefined.
+like that in the Basic test module.
+If it's not, the results are undefined.
 
 =item scramble_case
 
