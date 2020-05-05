@@ -168,7 +168,7 @@ msgid ""
 "the DNSKEY RRset"
 msgstr ""
 "L'ensemble des RRset (SOA/DNSKEY/NS) est signé par chaque algorithme présent "
-"dans l'ensemble des enregidtraments de type \"DNSKEY\"."
+"dans l'ensemble des enregistrements de type \"DNSKEY\"."
 
 #. DELEGATION:ARE_AUTHORITATIVE
 #, perl-brace-format
