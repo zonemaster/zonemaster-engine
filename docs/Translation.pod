@@ -52,21 +52,23 @@ For the steps below you need to work on a computer with Git, Perl and Gettext.
 Select what OS you want to work on. Other OSs will also work, but you will
 have to find instructions elsewhere.
 
+=head4 CentOS
+
+To be written.
+
+=head4 Debian
+
+Install the following:
+
+C<pkg install gettext git>
+
 =head4 FreeBSD
 
 Install the following:
 
 C<pkg install devel/gettext-tools devel/git-lite>
 
-=head4 CentOS
-
-To be written.
-
 =head4 Ubuntu
-
-To be written.
-
-=head4 Debian
 
 To be written.
 
