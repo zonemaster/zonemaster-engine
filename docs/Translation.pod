@@ -48,7 +48,7 @@ Make sure the message tag comments are properly added and up to date.
 
 =head3 Software preparation
 
-For the steps below you need to work on a computer with Git, Perl and Xgettext.
+For the steps below you need to work on a computer with Git, Perl and Gettext.
 Select what OS you want to work on. Other OSs will also work, but you will
 have to find instructions elsewhere.
 
@@ -56,7 +56,7 @@ have to find instructions elsewhere.
 
 Install the following:
 
-C<pkg install git-lite devel/p5-Locale-XGettext devel/p5-Locale-Msgfmt>
+C<pkg install devel/gettext-tools devel/git-lite devel/p5-Locale-Msgfmt>
 
 =head4 CentOS
 
@@ -68,7 +68,7 @@ To be written.
 
 =head4 Debian
 
-To be written
+To be written.
 
 =head3 Background
 
