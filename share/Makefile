@@ -28,7 +28,7 @@ $(POTFILE): extract-pot
 	@msgmerge --update --backup=none --quiet --no-location $(MSGMERGE_OPTS) $@ $(POTFILE)
 
 .po.mo:
-	@perl -e 'use Locale::Msgfmt; msgfmt({in => $$ARGV[0], out => $$ARGV[1]});' $< $@
+	@msgfmt -o $@ $<
 	@mkdir -p locale/`basename $@ .mo`/LC_MESSAGES
 	@ln -vf $@ locale/`basename $@ .mo`/LC_MESSAGES/Zonemaster-Engine.mo
 

@@ -56,7 +56,7 @@ have to find instructions elsewhere.
 
 Install the following:
 
-C<pkg install devel/gettext-tools devel/git-lite devel/p5-Locale-Msgfmt>
+C<pkg install devel/gettext-tools devel/git-lite>
 
 =head4 CentOS
 
