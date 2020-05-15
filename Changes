@@ -1,5 +1,12 @@
 Release history for Zonemaster component Zonemaster-Engine
 
+v3.1.1 2020-05-15
+
+[Fixes]
+ - Resolved issue where Zonemaster crashed when testing zones which
+   have RRSIG referring to absent DNSKEY (#727, #728)
+
+
 v3.1.0 2020-04-30
 
  [Features]

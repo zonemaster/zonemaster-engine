@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare( "v1.1.16" );
+use version; our $VERSION = version->declare( "v1.1.17" );
 
 ###
 ### This test module implements DNSSEC tests.
@@ -1880,6 +1880,14 @@ sub dnssec13 {
 
             foreach my $sig ( @sigs ) {
                 my @keys = ($keytags{$sig->keytag});
+                if ( @keys ) {
+                    my @ks;
+                    foreach my $k (@keys) {
+                        push @ks, $k if $k; # Skip any empty elements
+                    }
+                    @keys = @ks;
+                }
+
                 if ( not scalar @keys ) {
                     $all_algo_signed = 0;
                     $ns_args->{keytag} = $sig->keytag;
