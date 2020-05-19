@@ -144,30 +144,10 @@ is( $msg->tag, 'NO_NETWORK', 'It is the right message.' );
 Zonemaster::Engine::Profile->effective->set( q{net.ipv4}, 1 );
 Zonemaster::Engine::Profile->effective->set( q{net.ipv6}, 1 );
 
-my %disabled;
-Zonemaster::Engine->logger->callback(
-    sub {
-        my ( $e ) = shift;
-
-        if ( $e->tag eq 'POLICY_DISABLED' ) {
-            $disabled{$e->args->{name}} = 1;
-        }
-    }
-);
-
 $json        = read_file( 't/profiles/Test-all.json' );
 $profile_tmp = Zonemaster::Engine::Profile->from_json( $json );
 Zonemaster::Engine::Profile->effective->merge( $profile_tmp );
 Zonemaster::Engine->test_zone( 'nic.se' );
-
-is( join(' ', keys %disabled), '', 'No blocking of disabled module was logged.' );
-
-$json        = read_file( 't/profiles/Test-disabled.json' );
-$profile_tmp = Zonemaster::Engine::Profile->from_json( $json );
-Zonemaster::Engine::Profile->effective->merge( $profile_tmp );
-Zonemaster::Engine->test_zone( 'nic.se' );
-
-is( join( ' ', keys %disabled ), 'Address', 'Zonemaster::Engine::Test::Address was blocked.' );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Nameserver->save( $datafile );

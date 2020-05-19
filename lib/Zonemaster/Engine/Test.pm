@@ -79,11 +79,6 @@ sub run_all_for {
     if ( Zonemaster::Engine::Test::Basic->can_continue( @results ) and Zonemaster::Engine->can_continue() ) {
         foreach my $mod ( __PACKAGE__->modules ) {
 
-            if ( not _policy_allowed( $mod ) ) {
-                push @results, info( POLICY_DISABLED => { name => $mod } );
-                next;
-            }
-
             my $module = "Zonemaster::Engine::Test::$mod";
             info( MODULE_VERSION => { module => $module, version => $module->version } );
             my @res = eval { $module->all( $zone ) };
@@ -203,12 +198,6 @@ sub run_one {
 
     return;
 } ## end sub run_one
-
-sub _policy_allowed {
-    my ( $name ) = @_;
-
-    return not Zonemaster::Engine::Util::test_levels()->{ uc( $name ) }{DISABLED};
-}
 
 1;
 
