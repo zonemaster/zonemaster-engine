@@ -60,7 +60,7 @@ To be written.
 
 Install the following:
 
-C<pkg install gettext git>
+C<apt install gettext git>
 
 =head4 FreeBSD
 
