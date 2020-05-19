@@ -144,11 +144,6 @@ is( $msg->tag, 'NO_NETWORK', 'It is the right message.' );
 Zonemaster::Engine::Profile->effective->set( q{net.ipv4}, 1 );
 Zonemaster::Engine::Profile->effective->set( q{net.ipv6}, 1 );
 
-$json        = read_file( 't/profiles/Test-all.json' );
-$profile_tmp = Zonemaster::Engine::Profile->from_json( $json );
-Zonemaster::Engine::Profile->effective->merge( $profile_tmp );
-Zonemaster::Engine->test_zone( 'nic.se' );
-
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Nameserver->save( $datafile );
 }
