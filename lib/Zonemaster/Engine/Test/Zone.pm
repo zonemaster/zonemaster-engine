@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare( "v1.0.11" );
+use version; our $VERSION = version->declare( "v1.0.12" );
 
 use Zonemaster::Engine;
 
@@ -699,14 +699,14 @@ sub zone10 {
                         }
                       );
                 }
-                elsif ( $soa[0]->owner ne $name->fqdn ) {
+                elsif ( lc( $soa[0]->owner ) ne lc( $name->fqdn ) ) {
                     push @results,
                       info(
                         WRONG_SOA => {
                             ns      => $ns->name->string,
                             address => $ns->address->short,
-                            owner   => $soa[0]->owner,
-                            name    => $name->fqdn,
+                            owner   => lc( $soa[0]->owner ),
+                            name    => lc( $name->fqdn ),
                         }
                       );
                 }
