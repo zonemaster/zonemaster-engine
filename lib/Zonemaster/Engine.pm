@@ -1,6 +1,6 @@
 package Zonemaster::Engine;
 
-use version; our $VERSION = version->declare("v3.1.1");
+use version; our $VERSION = version->declare("v3.1.2");
 
 use 5.014002;
 
