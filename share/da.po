@@ -41,11 +41,11 @@ msgstr ""
 "Alle navneserveradresser eksisterer i det routebare offentlige adresserum."
 
 #. ADDRESS:NAMESERVERS_IP_WITH_REVERSE
-msgid "Reverse DNS entry exist for all Nameserver IP addresses."
+msgid "Reverse DNS entry exists for each Nameserver IP address."
 msgstr "Reverse DNS eksisterer for samtlige navneserveradresser."
 
 #. ADDRESS:NAMESERVER_IP_PTR_MATCH
-msgid "All reverse DNS entry matches name server name."
+msgid "Every reverse DNS entry matches name server name."
 msgstr "Alle PTR-records matcher navneservernavne."
 
 #. ADDRESS:NO_RESPONSE_PTR_QUERY
@@ -63,7 +63,7 @@ msgstr ""
 
 #. BASIC:DOMAIN_NAME_ZERO_LENGTH_LABEL
 #, perl-brace-format
-msgid "Domain name ({dname}) has a zero length label."
+msgid "Domain name ({dname}) has a zero-length label."
 msgstr "Domænenavnet ({dname}) har en label med længden nul."
 
 #. BASIC:DOMAIN_NAME_TOO_LONG
@@ -72,7 +72,7 @@ msgid "Domain name is too long ({fqdnlength}/{max})."
 msgstr "Domænenavnet er for langt ({fqdnlength}/{max})."
 
 #. BASIC:NO_PARENT
-msgid "No parent domain could be found for the tested domain."
+msgid "No parent domain could be found for the domain under test."
 msgstr "Ikke muligt at finde forælder-domænet for det testede domæne."
 
 #. BASIC:HAS_PARENT
@@ -82,12 +82,12 @@ msgstr "Forælder-domænet '{pname}' blev fundet for det testede domæne."
 
 #. BASIC:HAS_A_RECORDS
 #, perl-brace-format
-msgid "Nameserver {ns}/{address} returned A record(s) for {dname}."
+msgid "Nameserver {ns}/{address} returned \"A\" record(s) for {dname}."
 msgstr "Navneserveren {ns}/{address} svarede A-record(s) for {dname}."
 
 #. BASIC:NO_A_RECORDS
 #, perl-brace-format
-msgid "Nameserver {ns}/{address} did not return A record(s) for {dname}."
+msgid "Nameserver {ns}/{address} did not return \"A\" record(s) for {dname}."
 msgstr ""
 "Navneserveren {ns}/{address} returnerede ikke nogle A-records for {dname}."
 
@@ -99,7 +99,7 @@ msgstr ""
 "{nsnlist}."
 
 #. BASIC:NO_GLUE_PREVENTS_NAMESERVER_TESTS
-msgid "No NS records for tested zone from parent. NS tests aborted."
+msgid "No NS records for tested zone from parent. NS tests skipped."
 msgstr ""
 "Ingen NS-records for den testede zone fra forælderzonen. NS-test afbrydes."
 
@@ -120,7 +120,7 @@ msgstr "Navneserverne svarede ikke på en A-forespørgsel."
 
 #. BASIC:HAS_NAMESERVER_NO_WWW_A_TEST
 #, perl-brace-format
-msgid "Functional nameserver found. \"A\" query for www.{zname} test aborted."
+msgid "Functional nameserver found. \"A\" query for www.{zname} test skipped."
 msgstr ""
 "Fungerende navneserver fundet. Test på \"A\"-forespørgsel for www.{zname} "
 "afbrydes."
@@ -165,12 +165,14 @@ msgstr ""
 
 #. CONNECTIVITY:NAMESERVERS_IPV4_WITH_UNIQ_AS
 #, perl-brace-format
-msgid "All nameservers IPv4 addresses are in the same AS ({asn})."
+msgid ""
+"All nameservers in the delegation have IPv4 addresses in the same AS ({asn})."
 msgstr "Alle IPv4-adresser bag navneserverne er i samme AS ({asn})."
 
 #. CONNECTIVITY:NAMESERVERS_IPV6_WITH_UNIQ_AS
 #, perl-brace-format
-msgid "All nameservers IPv6 addresses are in the same AS ({asn})."
+msgid ""
+"All nameservers in the delegation have IPv6 addresses in the same AS ({asn})."
 msgstr "Alle IPv6-adresser bag navneserverne er i samme AS ({asn})."
 
 #. CONNECTIVITY:NAMESERVERS_WITH_MULTIPLE_AS
@@ -179,7 +181,7 @@ msgstr "Domænets navneservere er i flere AS'er."
 
 #. CONNECTIVITY:NAMESERVERS_WITH_UNIQ_AS
 #, perl-brace-format
-msgid "All nameservers are in the same AS ({asn})."
+msgid "All nameservers in the delegation are in the same AS ({asn})."
 msgstr "Alle navneservere bag domænet er i samme AS ({asn})."
 
 #. CONNECTIVITY:NAMESERVERS_IPV4_NO_AS
@@ -289,7 +291,7 @@ msgstr ""
 
 #. CONSISTENCY:MULTIPLE_NS_SET
 #, perl-brace-format
-msgid "Saw {count} NS set."
+msgid "Found {count} NS set(s)."
 msgstr "Fandt {count} NS-sæt."
 
 #. CONSISTENCY:MULTIPLE_SOA_MNAMES
@@ -299,17 +301,17 @@ msgstr "Så {count} SOA MNAME."
 
 #. CONSISTENCY:MULTIPLE_SOA_RNAMES
 #, perl-brace-format
-msgid "Saw {count} SOA rname."
+msgid "Found {count} SOA rname(s)."
 msgstr "Så {count} forskellige SOA RNAME."
 
 #. CONSISTENCY:MULTIPLE_SOA_SERIALS
 #, perl-brace-format
-msgid "Saw {count} SOA serial numbers."
+msgid "Found {count} SOA serial number(s)."
 msgstr "Så {count} forskellige SOA-serienumre."
 
 #. CONSISTENCY:MULTIPLE_SOA_TIME_PARAMETER_SET
 #, perl-brace-format
-msgid "Saw {count} SOA time parameter set."
+msgid "Found {count} SOA time parameter set(s)."
 msgstr "Så {count} forskellige konfigurationer af SOA-tidsparametre."
 
 #. CONSISTENCY:NO_RESPONSE
@@ -338,7 +340,7 @@ msgstr "Fandt NS-sæt ({nsset}) på disse navneservere : {servers}"
 
 #. CONSISTENCY:ONE_NS_SET
 #, perl-brace-format
-msgid "A unique NS set was seen ({nsset})."
+msgid "A single NS set was found ({nsset})."
 msgstr "Et unikt NS-sæt blev fundet ({nsset})."
 
 #. CONSISTENCY:ONE_SOA_MNAME
@@ -348,12 +350,12 @@ msgstr "Et enkelt SOA MNAME blev returneret ({mname})"
 
 #. CONSISTENCY:ONE_SOA_RNAME
 #, perl-brace-format
-msgid "A single SOA rname value was seen ({rname})"
+msgid "A single SOA rname value was found ({rname})"
 msgstr "Et enkelt SOA RNAME blev returneret ({rname})"
 
 #. CONSISTENCY:ONE_SOA_SERIAL
 #, perl-brace-format
-msgid "A single SOA serial number was seen ({serial})."
+msgid "A single SOA serial number was found ({serial})."
 msgstr "Et enkelt SOA-serienummer blev returneret ({serial})."
 
 #. CONSISTENCY:ONE_SOA_TIME_PARAMETER_SET
@@ -378,7 +380,7 @@ msgstr ""
 
 #. CONSISTENCY:SOA_RNAME
 #, perl-brace-format
-msgid "Saw SOA rname {rname} on following nameserver set : {servers}."
+msgid "Found SOA rname {rname} on following nameserver set : {servers}."
 msgstr "Så SOA RNAME {rname} på følgende navneservere : {servers}."
 
 #. CONSISTENCY:SOA_SERIAL
@@ -513,7 +515,7 @@ msgstr "Der findes både DS- and DNSKEY-records med keytag {keytags}."
 
 #. DNSSEC:DELEGATION_NOT_SIGNED
 #, perl-brace-format
-msgid "Delegation from parent to child is not properly signed {reason}."
+msgid "Delegation from parent to child is not properly signed ({reason})."
 msgstr ""
 "Delegeringen fra forælder- til børnezone er ikke korrekt signeret ({reason})."
 
@@ -1206,7 +1208,7 @@ msgid "Nameserver {ns} RR point to CNAME."
 msgstr "RR for navneserveren {ns} peger på et CNAME."
 
 #. DELEGATION:NO_NS_CNAME
-msgid "No nameserver point to CNAME alias."
+msgid "No nameserver points to CNAME alias."
 msgstr "Ingen NS-record peger på et CNAME-alias."
 
 #. DELEGATION:REFERRAL_SIZE_TOO_LARGE
@@ -1238,7 +1240,7 @@ msgstr "Alle navneservere har en SOA-record."
 
 #. DELEGATION:SOA_NOT_EXISTS
 #, perl-brace-format
-msgid "A SOA query NOERROR response from {ns} was received empty."
+msgid "Empty NOERROR response to SOA query was received from {ns}."
 msgstr ""
 "En SOA-forespørgsel med RCODE NOERROR fra {ns} returnerede et tomt svar."
 
@@ -1442,7 +1444,7 @@ msgid "Nameserver {ns}/{address} is not a recursor."
 msgstr "Navneserveren {ns}/{address} er ikke rekursiv."
 
 #. NAMESERVER:NO_RESOLUTION
-msgid "No nameservers succeeded to resolve to an IP address."
+msgid "No nameserver was successfully resolved to an IP address."
 msgstr "IP-adresse ikke fundet for nogen af navneserverne."
 
 #. NAMESERVER:NO_RESPONSE
@@ -1473,7 +1475,8 @@ msgstr ""
 
 #. NAMESERVER:QNAME_CASE_SENSITIVE
 #, perl-brace-format
-msgid "Nameserver {ns}/{address} preserves original case of queried names."
+msgid ""
+"Nameserver {ns}/{address} preserves original case of queried names ({dname})."
 msgstr ""
 "Navneserveren {ns}/{address} bevarede versaler og minuskler fra "
 "forespørgslen."
@@ -1612,7 +1615,7 @@ msgstr ""
 
 #. SYNTAX:NO_ENDING_HYPHENS
 #, perl-brace-format
-msgid "Both ends of all labels of the domain name ({name}) have no hyphens."
+msgid "Neither end of any label in the domain name ({name}) has a hyphen."
 msgstr ""
 "Alle labels i domænenavnet ({name}) begynder eller slutter ikke med "
 "bindestreg."
@@ -1643,8 +1646,7 @@ msgstr ""
 
 #. SYNTAX:RNAME_MISUSED_AT_SIGN
 #, perl-brace-format
-msgid ""
-"There must be no misused '@' character in the SOA RNAME field ({rname})."
+msgid "Misused '@' character found in SOA RNAME field ({rname})."
 msgstr "'@' må ikke anvendes i SOA RNAME ({rname})."
 
 #. SYNTAX:RNAME_NO_AT_SIGN
@@ -1654,7 +1656,7 @@ msgstr "'@' må ikke anvendes i SOA RNAME field ({rname})."
 
 #. SYNTAX:RNAME_RFC822_INVALID
 #, perl-brace-format
-msgid "There must be no illegal characters in the SOA RNAME field ({rname})."
+msgid "Illegal character(s) found in SOA RNAME field ({rname})."
 msgstr "Ulovlige tegn i SOA RNAME ({rname})."
 
 #. SYNTAX:RNAME_RFC822_VALID
@@ -1664,7 +1666,7 @@ msgstr "SOA RNAME værdi ({rname}) overholder RFC2822."
 
 #. SYNTAX:TERMINAL_HYPHEN
 #, perl-brace-format
-msgid "Domain name ({name}) has a label ({label}) ending with an hyphen ('-')."
+msgid "Domain name ({name}) has a label ({label}) ending with a hyphen ('-')."
 msgstr ""
 "Domænenavnet ({name}) har en label ({label}) som slutter med en bindestreg."
 

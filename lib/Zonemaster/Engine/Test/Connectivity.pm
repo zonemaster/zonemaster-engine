@@ -89,11 +89,11 @@ sub metadata {
 Readonly my %TAG_DESCRIPTIONS => (
     NAMESERVERS_IPV4_WITH_UNIQ_AS => sub {
         __x    # CONNECTIVITY:NAMESERVERS_IPV4_WITH_UNIQ_AS
-          'All nameservers IPv4 addresses are in the same AS ({asn}).', @_;
+          "All nameservers in the delegation have IPv4 addresses in the same AS ({asn}).", @_;
     },
     NAMESERVERS_IPV6_WITH_UNIQ_AS => sub {
         __x    # CONNECTIVITY:NAMESERVERS_IPV6_WITH_UNIQ_AS
-          'All nameservers IPv6 addresses are in the same AS ({asn}).', @_;
+          "All nameservers in the delegation have IPv6 addresses in the same AS ({asn}).", @_;
     },
     NAMESERVERS_WITH_MULTIPLE_AS => sub {
         __x    # CONNECTIVITY:NAMESERVERS_WITH_MULTIPLE_AS
@@ -101,7 +101,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     NAMESERVERS_WITH_UNIQ_AS => sub {
         __x    # CONNECTIVITY:NAMESERVERS_WITH_UNIQ_AS
-          'All nameservers are in the same AS ({asn}).', @_;
+          "All nameservers in the delegation are in the same AS ({asn}).", @_;
     },
     NAMESERVERS_IPV4_NO_AS => sub {
         __x    # CONNECTIVITY:NAMESERVERS_IPV4_NO_AS

@@ -125,7 +125,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     DOMAIN_NAME_ZERO_LENGTH_LABEL => sub {
         __x    # BASIC:DOMAIN_NAME_ZERO_LENGTH_LABEL
-          "Domain name ({dname}) has a zero length label.", @_;
+          "Domain name ({dname}) has a zero-length label.", @_;
     },
     DOMAIN_NAME_TOO_LONG => sub {
         __x    # BASIC:DOMAIN_NAME_TOO_LONG
@@ -133,7 +133,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     NO_PARENT => sub {
         __x    # BASIC:NO_PARENT
-          'No parent domain could be found for the tested domain.', @_;
+          "No parent domain could be found for the domain under test.", @_;
     },
     HAS_PARENT => sub {
         __x    # BASIC:HAS_PARENT
@@ -141,11 +141,11 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     HAS_A_RECORDS => sub {
         __x    # BASIC:HAS_A_RECORDS
-          'Nameserver {ns}/{address} returned A record(s) for {dname}.', @_;
+          "Nameserver {ns}/{address} returned \"A\" record(s) for {dname}.", @_;
     },
     NO_A_RECORDS => sub {
         __x    # BASIC:NO_A_RECORDS
-          'Nameserver {ns}/{address} did not return A record(s) for {dname}.', @_;
+          "Nameserver {ns}/{address} did not return \"A\" record(s) for {dname}.", @_;
     },
     HAS_NAMESERVERS => sub {
         __x    # BASIC:HAS_NAMESERVERS
@@ -153,7 +153,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     NO_GLUE_PREVENTS_NAMESERVER_TESTS => sub {
         __x    # BASIC:NO_GLUE_PREVENTS_NAMESERVER_TESTS
-          'No NS records for tested zone from parent. NS tests aborted.', @_;
+          "No NS records for tested zone from parent. NS tests skipped.", @_;
     },
     NS_FAILED => sub {
         __x    # BASIC:NS_FAILED
@@ -169,7 +169,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     HAS_NAMESERVER_NO_WWW_A_TEST => sub {
         __x    # BASIC:HAS_NAMESERVER_NO_WWW_A_TEST
-          'Functional nameserver found. "A" query for www.{zname} test aborted.', @_;
+          "Functional nameserver found. \"A\" query for www.{zname} test skipped.", @_;
     },
     IPV4_DISABLED => sub {
         __x    # BASIC:IPV4_DISABLED

@@ -489,7 +489,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     DELEGATION_NOT_SIGNED => sub {
         __x    # DNSSEC:DELEGATION_NOT_SIGNED
-          'Delegation from parent to child is not properly signed {reason}.', @_;
+          "Delegation from parent to child is not properly signed ({reason}).", @_;
     },
     DELEGATION_SIGNED => sub {
         __x    # DNSSEC:DELEGATION_SIGNED

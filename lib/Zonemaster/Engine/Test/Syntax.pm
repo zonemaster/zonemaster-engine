@@ -216,7 +216,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     NO_ENDING_HYPHENS => sub {
         __x    # SYNTAX:NO_ENDING_HYPHENS
-          'Both ends of all labels of the domain name ({name}) have no hyphens.', @_;
+          "Neither end of any label in the domain name ({name}) has a hyphen.", @_;
     },
     NO_RESPONSE => sub {
         __x    # SYNTAX:NO_RESPONSE
@@ -240,7 +240,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     RNAME_MISUSED_AT_SIGN => sub {
         __x    # SYNTAX:RNAME_MISUSED_AT_SIGN
-          'There must be no misused \'@\' character in the SOA RNAME field ({rname}).', @_;
+          "Misused '\@' character found in SOA RNAME field ({rname}).", @_;
     },
     RNAME_NO_AT_SIGN => sub {
         __x    # SYNTAX:RNAME_NO_AT_SIGN
@@ -248,7 +248,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     RNAME_RFC822_INVALID => sub {
         __x    # SYNTAX:RNAME_RFC822_INVALID
-          'There must be no illegal characters in the SOA RNAME field ({rname}).', @_;
+           "Illegal character(s) found in SOA RNAME field ({rname}).", @_;
     },
     RNAME_RFC822_VALID => sub {
         __x    # SYNTAX:RNAME_RFC822_VALID
@@ -256,7 +256,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     TERMINAL_HYPHEN => sub {
         __x    # SYNTAX:TERMINAL_HYPHEN
-          'Domain name ({name}) has a label ({label}) ending with an hyphen (\'-\').', @_;
+          "Domain name ({name}) has a label ({label}) ending with a hyphen ('-').", @_;
     },
 );
 

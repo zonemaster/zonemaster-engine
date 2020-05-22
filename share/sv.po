@@ -41,11 +41,11 @@ msgstr ""
 "Alla namnserveradresser finns i den publikt routningsbara addressrymden."
 
 #. ADDRESS:NAMESERVERS_IP_WITH_REVERSE
-msgid "Reverse DNS entry exist for all Nameserver IP addresses."
+msgid "Reverse DNS entry exists for each Nameserver IP address."
 msgstr "Bakåtuppslagning (PTR) finns för varje namnserveradress."
 
 #. ADDRESS:NAMESERVER_IP_PTR_MATCH
-msgid "All reverse DNS entry matches name server name."
+msgid "Every reverse DNS entry matches name server name."
 msgstr "Varje bakåtuppslagning (PTR) stämmer med motsvarande namnservernamn."
 
 #. ADDRESS:NO_RESPONSE_PTR_QUERY
@@ -63,7 +63,7 @@ msgstr ""
 
 #. BASIC:DOMAIN_NAME_ZERO_LENGTH_LABEL
 #, perl-brace-format
-msgid "Domain name ({dname}) has a zero length label."
+msgid "Domain name ({dname}) has a zero-length label."
 msgstr "Domännamnet '{dname}' har en domändel med längden noll."
 
 #. BASIC:DOMAIN_NAME_TOO_LONG
@@ -72,7 +72,7 @@ msgid "Domain name is too long ({fqdnlength}/{max})."
 msgstr "Domännamnet är för långt ({fqdnlength}. Maximal längd är {max}."
 
 #. BASIC:NO_PARENT
-msgid "No parent domain could be found for the tested domain."
+msgid "No parent domain could be found for the domain under test."
 msgstr "Ingen moderdomän kunde hittas för den testade domänen."
 
 #. BASIC:HAS_PARENT
@@ -82,12 +82,12 @@ msgstr "Moderdomänen '{pname}' till den testade domänen har identifierats."
 
 #. BASIC:HAS_A_RECORDS
 #, perl-brace-format
-msgid "Nameserver {ns}/{address} returned A record(s) for {dname}."
+msgid "Nameserver {ns}/{address} returned \"A\" record(s) for {dname}."
 msgstr "Namnserver {ns}/{address} svarade med A-poster för '{dname}'."
 
 #. BASIC:NO_A_RECORDS
 #, perl-brace-format
-msgid "Nameserver {ns}/{address} did not return A record(s) for {dname}."
+msgid "Nameserver {ns}/{address} did not return \"A\" record(s) for {dname}."
 msgstr ""
 "Namnserver {ns}/{address} svarade inte med några A-poster för '{dname}'."
 
@@ -97,7 +97,7 @@ msgid "Nameserver {ns}/{address} listed these servers as glue: {nsnlist}."
 msgstr "Namnserver {ns}/{address} gav dessa servrar som 'glue': {nsnlist}."
 
 #. BASIC:NO_GLUE_PREVENTS_NAMESERVER_TESTS
-msgid "No NS records for tested zone from parent. NS tests aborted."
+msgid "No NS records for tested zone from parent. NS tests skipped."
 msgstr ""
 "Det finns inga NS-poster för den testade zonen från föräldern. NS-tester "
 "hoppas över."
@@ -120,7 +120,7 @@ msgstr "Namnservern svarade inte på en A-fråga."
 
 #. BASIC:HAS_NAMESERVER_NO_WWW_A_TEST
 #, perl-brace-format
-msgid "Functional nameserver found. \"A\" query for www.{zname} test aborted."
+msgid "Functional nameserver found. \"A\" query for www.{zname} test skipped."
 msgstr ""
 "En fungerande namnserver hittades. Skickade ingen fråga om 'A' för 'www."
 "{zname}' (behövdes inte)."
@@ -161,13 +161,15 @@ msgstr "IPv6 är aktiverat. Skickar fråga om '{rrtype}' till {ns}/{address}."
 
 #. CONNECTIVITY:NAMESERVERS_IPV4_WITH_UNIQ_AS
 #, perl-brace-format
-msgid "All nameservers IPv4 addresses are in the same AS ({asn})."
+msgid ""
+"All nameservers in the delegation have IPv4 addresses in the same AS ({asn})."
 msgstr ""
 "Alla IPv4-adresser för namnservrarna i delegeringen finns i samma AS ({asn})."
 
 #. CONNECTIVITY:NAMESERVERS_IPV6_WITH_UNIQ_AS
 #, perl-brace-format
-msgid "All nameservers IPv6 addresses are in the same AS ({asn})."
+msgid ""
+"All nameservers in the delegation have IPv6 addresses in the same AS ({asn})."
 msgstr ""
 "Alla IPv6-adresser för namnservrar i delegeringen finns i samma AS ({asn})."
 
@@ -178,7 +180,7 @@ msgstr ""
 
 #. CONNECTIVITY:NAMESERVERS_WITH_UNIQ_AS
 #, perl-brace-format
-msgid "All nameservers are in the same AS ({asn})."
+msgid "All nameservers in the delegation are in the same AS ({asn})."
 msgstr "Alla namnservrar i delegeringen av domänen finns i samma AS ({asn})."
 
 #. CONNECTIVITY:NAMESERVERS_IPV4_NO_AS
@@ -293,7 +295,7 @@ msgstr ""
 
 #. CONSISTENCY:MULTIPLE_NS_SET
 #, perl-brace-format
-msgid "Saw {count} NS set."
+msgid "Found {count} NS set(s)."
 msgstr "{count} NS-uppsättningar hittades."
 
 #. CONSISTENCY:MULTIPLE_SOA_MNAMES
@@ -303,17 +305,17 @@ msgstr "{count} olika 'SOA MNAME' hittades."
 
 #. CONSISTENCY:MULTIPLE_SOA_RNAMES
 #, perl-brace-format
-msgid "Saw {count} SOA rname."
+msgid "Found {count} SOA rname(s)."
 msgstr "{count} olika 'SOA RNAME' hittades."
 
 #. CONSISTENCY:MULTIPLE_SOA_SERIALS
 #, perl-brace-format
-msgid "Saw {count} SOA serial numbers."
+msgid "Found {count} SOA serial number(s)."
 msgstr "{count} olika SOA-serienummer hittades."
 
 #. CONSISTENCY:MULTIPLE_SOA_TIME_PARAMETER_SET
 #, perl-brace-format
-msgid "Saw {count} SOA time parameter set."
+msgid "Found {count} SOA time parameter set(s)."
 msgstr "{count} olika uppsättningar med SOA-tidsparametrar hittades."
 
 #. CONSISTENCY:NO_RESPONSE
@@ -341,7 +343,7 @@ msgstr "NS-uppsättningen '{nsset}' hittades på följande namnservrar: {servers
 
 #. CONSISTENCY:ONE_NS_SET
 #, perl-brace-format
-msgid "A unique NS set was seen ({nsset})."
+msgid "A single NS set was found ({nsset})."
 msgstr "Exakt en uppsättning namnservrar hittades: ({nsset})."
 
 #. CONSISTENCY:ONE_SOA_MNAME
@@ -351,12 +353,12 @@ msgstr "Exakt en 'SOA MNAME' hittades: ({mname})"
 
 #. CONSISTENCY:ONE_SOA_RNAME
 #, perl-brace-format
-msgid "A single SOA rname value was seen ({rname})"
+msgid "A single SOA rname value was found ({rname})"
 msgstr "Exakt en 'SOA RNAME' hittades: ({rname})"
 
 #. CONSISTENCY:ONE_SOA_SERIAL
 #, perl-brace-format
-msgid "A single SOA serial number was seen ({serial})."
+msgid "A single SOA serial number was found ({serial})."
 msgstr "Exakt ett SOA-serienummer hittades: ({serial})."
 
 #. CONSISTENCY:ONE_SOA_TIME_PARAMETER_SET
@@ -382,7 +384,7 @@ msgstr ""
 
 #. CONSISTENCY:SOA_RNAME
 #, perl-brace-format
-msgid "Saw SOA rname {rname} on following nameserver set : {servers}."
+msgid "Found SOA rname {rname} on following nameserver set : {servers}."
 msgstr "'{rname}' fanns i 'SOA RNAME' på följande namnservrar: {servers}."
 
 #. CONSISTENCY:SOA_SERIAL
@@ -518,7 +520,7 @@ msgstr "Det finns både DS- and DNSKEY-poster med 'keytag' {keytags}."
 
 #. DNSSEC:DELEGATION_NOT_SIGNED
 #, perl-brace-format
-msgid "Delegation from parent to child is not properly signed {reason}."
+msgid "Delegation from parent to child is not properly signed ({reason})."
 msgstr ""
 "Delegeringen från moderzonen till dotterzonens namnservrar är inte korrekt "
 "signerad ({reason})."
@@ -1242,7 +1244,7 @@ msgid "Nameserver {ns} RR point to CNAME."
 msgstr "Namnservernamnet '{ns}' pekar på ett CNAME."
 
 #. DELEGATION:NO_NS_CNAME
-msgid "No nameserver point to CNAME alias."
+msgid "No nameserver points to CNAME alias."
 msgstr "Inget namnservernamn har en CNAME-post."
 
 #. DELEGATION:REFERRAL_SIZE_TOO_LARGE
@@ -1274,7 +1276,7 @@ msgstr "Alla namnservrar har en SOA-post."
 
 #. DELEGATION:SOA_NOT_EXISTS
 #, perl-brace-format
-msgid "A SOA query NOERROR response from {ns} was received empty."
+msgid "Empty NOERROR response to SOA query was received from {ns}."
 msgstr ""
 "En SOA-fråga fick ett svar med 'RCODE NOERROR' från {ns}, men svaret var "
 "tomt."
@@ -1481,7 +1483,7 @@ msgid "Nameserver {ns}/{address} is not a recursor."
 msgstr "Namnserver {ns}/{address} är ingen rekursiv resolver."
 
 #. NAMESERVER:NO_RESOLUTION
-msgid "No nameservers succeeded to resolve to an IP address."
+msgid "No nameserver was successfully resolved to an IP address."
 msgstr "Det gick inte att slå upp IP-adressen för någon namnserver."
 
 #. NAMESERVER:NO_RESPONSE
@@ -1511,7 +1513,8 @@ msgstr ""
 
 #. NAMESERVER:QNAME_CASE_SENSITIVE
 #, perl-brace-format
-msgid "Nameserver {ns}/{address} preserves original case of queried names."
+msgid ""
+"Nameserver {ns}/{address} preserves original case of queried names ({dname})."
 msgstr "Namnserver {ns}/{address} bevarade versaler och gemener från frågan."
 
 #. NAMESERVER:SAME_SOURCE_IP
@@ -1655,7 +1658,7 @@ msgstr ""
 
 #. SYNTAX:NO_ENDING_HYPHENS
 #, perl-brace-format
-msgid "Both ends of all labels of the domain name ({name}) have no hyphens."
+msgid "Neither end of any label in the domain name ({name}) has a hyphen."
 msgstr ""
 "Domännamnet '{name}' har ingen domändel som börjar eller slutar med ett "
 "bindestreck."
@@ -1686,8 +1689,7 @@ msgstr ""
 
 #. SYNTAX:RNAME_MISUSED_AT_SIGN
 #, perl-brace-format
-msgid ""
-"There must be no misused '@' character in the SOA RNAME field ({rname})."
+msgid "Misused '@' character found in SOA RNAME field ({rname})."
 msgstr "Felaktigt använt '@'-tecken finns i SOA RNAME ({rname})."
 
 #. SYNTAX:RNAME_NO_AT_SIGN
@@ -1697,8 +1699,9 @@ msgstr "Inga felanvända @-tecken hittades i SOA RNAME ({rname})."
 
 #. SYNTAX:RNAME_RFC822_INVALID
 #, perl-brace-format
-msgid "There must be no illegal characters in the SOA RNAME field ({rname})."
+msgid "Illegal character(s) found in SOA RNAME field ({rname})."
 msgstr "Otillåtet tecken finns i SOA RNAME ({rname})."
+
 
 #. SYNTAX:RNAME_RFC822_VALID
 #, perl-brace-format
@@ -1707,7 +1710,7 @@ msgstr "Adressen i SOA RNAME ({rname}) är giltig enligt RFC822."
 
 #. SYNTAX:TERMINAL_HYPHEN
 #, perl-brace-format
-msgid "Domain name ({name}) has a label ({label}) ending with an hyphen ('-')."
+msgid "Domain name ({name}) has a label ({label}) ending with a hyphen ('-')."
 msgstr ""
 "Domännamnet '{name}' har domändelen '{label}' som slutar med ett bindestreck."
 

@@ -158,7 +158,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     MULTIPLE_NS_SET => sub {
         __x    # CONSISTENCY:MULTIPLE_NS_SET
-          'Saw {count} NS set.', @_;
+          'Found {count} NS set(s).', @_;
     },
     MULTIPLE_SOA_MNAMES => sub {
         __x    # CONSISTENCY:MULTIPLE_SOA_MNAMES
@@ -166,15 +166,15 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     MULTIPLE_SOA_RNAMES => sub {
         __x    # CONSISTENCY:MULTIPLE_SOA_RNAMES
-          'Saw {count} SOA rname.', @_;
+          'Found {count} SOA rname(s).', @_;
     },
     MULTIPLE_SOA_SERIALS => sub {
         __x    # CONSISTENCY:MULTIPLE_SOA_SERIALS
-          'Saw {count} SOA serial numbers.', @_;
+          'Found {count} SOA serial number(s).', @_;
     },
     MULTIPLE_SOA_TIME_PARAMETER_SET => sub {
         __x    # CONSISTENCY:MULTIPLE_SOA_TIME_PARAMETER_SET
-          'Saw {count} SOA time parameter set.', @_;
+          "Found {count} SOA time parameter set(s).", @_;
     },
     NO_RESPONSE => sub {
         __x    # CONSISTENCY:NO_RESPONSE
@@ -194,19 +194,19 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     ONE_NS_SET => sub {
         __x    # CONSISTENCY:ONE_NS_SET
-          'A unique NS set was seen ({nsset}).', @_;
+          "A single NS set was found ({nsset}).", @_;
     },
     ONE_SOA_MNAME => sub {
         __x    # CONSISTENCY:ONE_SOA_MNAME
-          'A single SOA mname value was seen ({mname})', @_;
+          "A single SOA mname value was seen ({mname})", @_;
     },
     ONE_SOA_RNAME => sub {
         __x    # CONSISTENCY:ONE_SOA_RNAME
-          'A single SOA rname value was seen ({rname})', @_;
+          "A single SOA rname value was found ({rname})", @_;
     },
     ONE_SOA_SERIAL => sub {
         __x    # CONSISTENCY:ONE_SOA_SERIAL
-          'A single SOA serial number was seen ({serial}).', @_;
+          "A single SOA serial number was found ({serial}).", @_;
     },
     ONE_SOA_TIME_PARAMETER_SET => sub {
         __x    # CONSISTENCY:ONE_SOA_TIME_PARAMETER_SET
@@ -222,7 +222,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     SOA_RNAME => sub {
         __x    # CONSISTENCY:SOA_RNAME
-          'Saw SOA rname {rname} on following nameserver set : {servers}.', @_;
+          "Found SOA rname {rname} on following nameserver set : {servers}.", @_;
     },
     SOA_SERIAL => sub {
         __x    # CONSISTENCY:SOA_SERIAL
