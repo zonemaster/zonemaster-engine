@@ -48,27 +48,29 @@ Make sure the message tag comments are properly added and up to date.
 
 =head3 Software preparation
 
-For the steps below you need to work on a computer with Git, Perl and Xgettext.
+For the steps below you need to work on a computer with Git, Perl and Gettext.
 Select what OS you want to work on. Other OSs will also work, but you will
 have to find instructions elsewhere.
-
-=head4 FreeBSD
-
-Install the following:
-
-C<pkg install git-lite devel/p5-Locale-XGettext devel/p5-Locale-Msgfmt devel/gmake>
 
 =head4 CentOS
 
 To be written.
 
+=head4 Debian
+
+Install the following:
+
+C<apt install gettext git>
+
+=head4 FreeBSD
+
+Install the following:
+
+C<pkg install devel/gettext-tools devel/git-lite>
+
 =head4 Ubuntu
 
 To be written.
-
-=head4 Debian
-
-To be written
 
 =head3 Background
 
@@ -76,13 +78,11 @@ The first step in updating the translations is to generate a new template file
 (F<Zonemaster-Engine.pot>).
 In practice you rarely need to think about generating it as it is generally
 performed as an implicit intermediate step.
-If you do want to generate it, the command is C<make extract-pot>
-(C<gmake extract-pot> on FreeBSD).
+If you do want to generate it, the command is C<make extract-pot>.
 
 The translated strings are maintained in files named C<{language_code}.po>
 (currently F<en.po>, F<sv.po>, F<da.po> or F<fr.po>).
-Execute C<make update-po> (C<gmake update-po> on FreeBSD) to update these
-files with new message ids from the
+Execute C<make update-po> to update these files with new message ids from the
 source code (C<make extract-pot> will be infoked behind the scenes).
 This should only be necessary to do when a developer has added or changed a test
 module.
@@ -149,7 +149,7 @@ C<git remote add XXXXX git@github.com:XXXXX/zonemaster-engine.git>
 where F<XXXXX> is your Github user name.
 
 =item * Go to the F<share> directory with C<cd share> and execute
-C<make update-po> (C<gmake update-po> on FreeBSD).
+C<make update-po>.
 
 =item * Update the po file the language to be updated. The F<en.po> file should
 not be updated in this way. Instead, create an issue or a pull request
@@ -215,8 +215,8 @@ you can delete the local clone and on your Github fork you can remove the branch
 In order to make a new translation usable, it must be compiled to C<mo> format
 and installed. The first step needs the C<msgfmt> program from the GNU gettext
 package to be installed and available in the shell path. As long as it is, it
-should be enough to go to the F<share> directory and run C<make> (C<gmake> on
-FreeBSD). This is automatically done when following the release instructions.
+should be enough to go to the F<share> directory and run C<make>.
+This is automatically done when following the release instructions.
 
 For the new translation to actually be installed, the C<mo> file must be added
 to the F<MANIFEST> file. At the end of the C<make> run, it should have printed
