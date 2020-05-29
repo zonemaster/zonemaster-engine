@@ -1,7 +1,7 @@
 msgid  ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
-"PO-Revision-Date: 2020-02-13\n"
+"PO-Revision-Date: 2020-05-29\n"
 "Last-Translator: richard.persson@norid.no\n"
 "Language-Team: Zonemaster Team\n"
 "Language: nb\n"
@@ -30,7 +30,7 @@ msgid  ""
 "Nameserver {ns} has an IP address ({address}) with mismatched PTR result "
 "({names})."
 msgstr ""
-"[nb]Navnetjeneren {ns} har en IP-adresse ({address}) som ikke matcher "
+"Navnetjeneren {ns} har en IP-adresse ({address}) som ikke matcher "
 "revertsoppslag ({names})."
 
 #: ADDRESS:NAMESERVER_IP_WITHOUT_REVERSE
@@ -81,48 +81,48 @@ msgstr ""
 
 #: BASIC:HAS_PARENT
 msgid  "Parent domain '{pname}' was found for the tested domain."
-msgstr "[nb]Parent domain '{pname}' was found for the tested domain."
+msgstr "Overordnet domene '{pname}' funnet for det testede domenet."
 
 #: BASIC:IPV4_DISABLED CONNECTIVITY:IPV4_DISABLED CONSISTENCY:IPV4_DISABLED
 #: DELEGATION:IPV4_DISABLED NAMESERVER:IPV4_DISABLED
 msgid  "IPv4 is disabled, not sending \"{rrtype}\" query to {ns}/{address}."
-msgstr "[nb]IPv4 er deaktivert, sender ikke \"{rrtype}\" spørring til "
+msgstr "IPv4 er deaktivert, sender ikke \"{rrtype}\" spørring til "
 "{ns}/{address}."
 
 #: BASIC:IPV4_ENABLED
 msgid  "IPv4 is enabled, can send \"{rrtype}\" query to {ns}/{address}."
-msgstr "[nb]IPv4 er aktivert, sender \"{rrtype}\" spørring til {ns}/{address}."
+msgstr "IPv4 er aktivert, sender \"{rrtype}\" spørring til {ns}/{address}."
 
 #: BASIC:IPV6_DISABLED CONNECTIVITY:IPV6_DISABLED CONSISTENCY:IPV6_DISABLED
 #: DELEGATION:IPV6_DISABLED NAMESERVER:IPV6_DISABLED
 msgid  "IPv6 is disabled, not sending \"{rrtype}\" query to {ns}/{address}."
-msgstr "[nb]IPv6 er deaktivert, sender ikke \"{rrtype}\" spørring til "
+msgstr "IPv6 er deaktivert, sender ikke \"{rrtype}\" spørring til "
 "{ns}/{address}."
 
 #: BASIC:IPV6_ENABLED
 msgid  "IPv6 is enabled, can send \"{rrtype}\" query to {ns}/{address}."
-msgstr "[nb]IPv6 er aktivert, sender \"{rrtype}\" spørring til {ns}/{address}."
+msgstr "IPv6 er aktivert, sender \"{rrtype}\" spørring til {ns}/{address}."
 
 #: BASIC:NO_A_RECORDS
 msgid  "Nameserver {ns}/{address} did not return A record(s) for {dname}."
-msgstr "[nb]Nameserver {ns}/{address} did not return \"A\" record(s) for {dname}."
+msgstr "Navnetjener {ns}/{address} svarade ikke med A-poster for {dname}."
 
 #: BASIC:NO_GLUE_PREVENTS_NAMESERVER_TESTS
 msgid  "No NS records for tested zone from parent. NS tests aborted."
-msgstr "[nb]Ingen NS poster for tested zone from parent. NS tests skipped."
+msgstr "Ingen NS-poster for tested zone fra overordnet domene. Hoppet over NS-tester."
 
 #: BASIC:NO_PARENT
 msgid  "No parent domain could be found for the tested domain."
-msgstr "[nb]Ingen forelder funnet for det testede domenet."
+msgstr "Ingen overordnet domene funnet for det testede domenet."
 
 #: BASIC:NS_FAILED
 msgid  "Nameserver {ns}/{address} did not return NS records. RCODE was {rcode}."
 msgstr ""
-"[nb]Nameserver {ns}/{address} did not return NS records. RCODE was {rcode}."
+"Navnetjener {ns}/{address} svarade ikke med NS-poster. RCODE var {rcode}."
 
 #: BASIC:NS_NO_RESPONSE
 msgid  "Nameserver {ns}/{address} did not respond to NS query."
-msgstr "[nb]Nameserver {ns}/{address} did not respond to NS query."
+msgstr "Navnetjener {ns}/{address} svarade ikke på NS-spørring."
 
 #: CONNECTIVITY:ASN_INFOS_ANNOUNCE_BY
 msgid  "[ASN:ANNOUNCE_BY] {address};{asn}"
@@ -138,75 +138,75 @@ msgstr "[ASN:RAW] {address};{data}"
 
 #: CONNECTIVITY:IPV4_ASN
 msgid  "Name servers have IPv4 addresses in the following ASs: {asn}."
-msgstr "Name servers have IPv4 addresses in the following ASs: {asn}."
+msgstr "Navnetjener har IPv4 adresse i følgende AS: {asn}."
 
 #: CONNECTIVITY:IPV6_ASN
 msgid  "Name servers have IPv6 addresses in the following ASs: {asn}."
-msgstr "Name servers have IPv6 addresses in the following ASs: {asn}."
+msgstr "Navnetjener har IPv6 adresse i følgende AS: {asn}."
 
 #: CONNECTIVITY:NAMESERVERS_IPV4_NO_AS
 msgid  "No IPv4 nameserver address is in an AS."
-msgstr "No IPv4 nameserver address is in an AS."
+msgstr "Ingen IPv4 navnetjeneradresse befinner seg i et AS."
 
 #: CONNECTIVITY:NAMESERVERS_IPV4_WITH_MULTIPLE_AS
 msgid  "Authoritative IPv4 nameservers are in more than one AS."
-msgstr "Authoritative IPv4 nameservers are in more than one AS."
+msgstr "Authoritative IPv4 navnetjenere befinner seg i fler enn en AS."
 
 #: CONNECTIVITY:NAMESERVERS_IPV4_WITH_UNIQ_AS
 msgid  "All nameservers IPv4 addresses are in the same AS ({asn})."
 msgstr ""
-"All nameservers in the delegation have IPv4 addresses in the same AS ({asn})."
+"Alle navnetjenerne for delegeringen har IPv4 adresse i samme AS ({asn})."
 
 #: CONNECTIVITY:NAMESERVERS_IPV6_NO_AS
 msgid  "No IPv6 nameserver address is in an AS."
-msgstr "No IPv6 nameserver address is in an AS."
+msgstr "Ingen IPv6 navnetjeneradress er i et AS."
 
 #: CONNECTIVITY:NAMESERVERS_IPV6_WITH_MULTIPLE_AS
 msgid  "Authoritative IPv6 nameservers are in more than one AS."
-msgstr "Authoritative IPv6 nameservers are in more than one AS."
+msgstr "Authoritative IPv6 navnetjenere befinner seg i fler enn en AS."
 
 #: CONNECTIVITY:NAMESERVERS_IPV6_WITH_UNIQ_AS
 msgid  "All nameservers IPv6 addresses are in the same AS ({asn})."
 msgstr ""
-"All nameservers in the delegation have IPv6 addresses in the same AS ({asn})."
+"Alle navnetjenerne for delegeringen har IPv6 adresse i samme AS ({asn})."
 
 #: CONNECTIVITY:NAMESERVERS_NO_AS
 msgid  "No nameserver address is in an AS."
-msgstr "No nameserver address is in an AS."
+msgstr "Ingen navnetjeneradresse befinner seg i et AS."
 
 #: CONNECTIVITY:NAMESERVERS_WITH_MULTIPLE_AS
 msgid  "Domain's authoritative nameservers do not belong to the same AS."
-msgstr "Domain's authoritative nameservers do not belong to the same AS."
+msgstr "Domenets authoritative navnetjener befinner seg ikke i samme AS."
 
 #: CONNECTIVITY:NAMESERVERS_WITH_UNIQ_AS
 msgid  "All nameservers are in the same AS ({asn})."
-msgstr "All nameservers in the delegation are in the same AS ({asn})."
+msgstr "Alle navnetjenere for delegeringen befinner seg i samme AS ({asn})."
 
 #: CONNECTIVITY:NAMESERVER_HAS_TCP_53
 msgid  "Nameserver {ns}/{address} accessible over TCP on port 53."
-msgstr "Nameserver {ns}/{address} accessible over TCP on port 53."
+msgstr "Navnetjener {ns}/{address} tilgjengelig over TCP på port 53."
 
 #: CONNECTIVITY:NAMESERVER_HAS_UDP_53
 msgid  "Nameserver {ns}/{address} accessible over UDP on port 53."
-msgstr "Nameserver {ns}/{address} accessible over UDP on port 53."
+msgstr "Navnetjener {ns}/{address} tilgjengelig over UDP på port 53."
 
 #: CONNECTIVITY:NAMESERVER_NO_TCP_53
 msgid  "Nameserver {ns}/{address} not accessible over TCP on port 53."
-msgstr "Nameserver {ns}/{address} not accessible over TCP on port 53."
+msgstr "Navnetjener {ns}/{address} er ikke tilgjengelig over TCP på port 53."
 
 #: CONNECTIVITY:NAMESERVER_NO_UDP_53
 msgid  "Nameserver {ns}/{address} not accessible over UDP on port 53."
-msgstr "Nameserver {ns}/{address} not accessible over UDP on port 53."
+msgstr "Navnetjener {ns}/{address} er ikke tilgjengelig over UDP på port 53."
 
 #: CONSISTENCY:ADDRESSES_MATCH
 msgid  "Glue records are consistent between glue and authoritative data."
-msgstr "Glue records are consistent between glue and authoritative data."
+msgstr "Limposter er konsistent mellom poster og authoritative data."
 
 #: CONSISTENCY:EXTRA_ADDRESS_CHILD
 msgid  ""
 "Child has extra nameserver IP address(es) not listed at parent ({addresses})."
 msgstr ""
-"Child has extra nameserver IP address(es) not listed at parent ({addresses})."
+"Subdomene har ekstra navnetjener-IP-adress(er) som ikke er publisert hos foreldresonen ({addresses})."
 
 #: CONSISTENCY:EXTRA_ADDRESS_PARENT
 msgid  ""
