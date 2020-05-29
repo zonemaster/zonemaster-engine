@@ -64,10 +64,6 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # SYSTEM:NO_NETWORK
           "Both IPv4 and IPv6 are disabled.";
     },
-    POLICY_DISABLED => sub {
-        __x    # SYSTEM:POLICY_DISABLED
-          "The module {name} was disabled by the policy.", @_;
-    },
     UNKNOWN_METHOD => sub {
         __x    # SYSTEM:UNKNOWN_METHOD
           "Request to run unknown method {method} in module {module}.", @_;
