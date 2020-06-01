@@ -81,7 +81,7 @@ performed as an implicit intermediate step.
 If you do want to generate it, the command is C<make extract-pot>.
 
 The translated strings are maintained in files named C<{language_code}.po>
-(currently F<en.po>, F<sv.po>, F<da.po> or F<fr.po>).
+(currently F<sv.po>, F<da.po> or F<fr.po>).
 Execute C<make update-po> to update these files with new message ids from the
 source code (C<make extract-pot> will be infoked behind the scenes).
 This should only be necessary to do when a developer has added or changed a test
@@ -151,9 +151,7 @@ where F<XXXXX> is your Github user name.
 =item * Go to the F<share> directory with C<cd share> and execute
 C<make update-po>.
 
-=item * Update the po file the language to be updated. The F<en.po> file should
-not be updated in this way. Instead, create an issue or a pull request
-to have the message updated in the Perl module.
+=item * Update the po file the language to be updated.
 
 =item * When doing the update, do not change the F<msgid>, only update
 F<msgstr>. Instead, create an issue or a pull request to have the message

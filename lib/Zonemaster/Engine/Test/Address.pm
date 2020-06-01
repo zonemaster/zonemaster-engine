@@ -88,11 +88,11 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     NAMESERVERS_IP_WITH_REVERSE => sub {
         __x    # ADDRESS:NAMESERVERS_IP_WITH_REVERSE
-          'Reverse DNS entry exist for all Nameserver IP addresses.', @_;
+          "Reverse DNS entry exists for each Nameserver IP address.", @_;
     },
     NAMESERVER_IP_PTR_MATCH => sub {
         __x    # ADDRESS:NAMESERVER_IP_PTR_MATCH
-          'All reverse DNS entry matches name server name.', @_;
+          "Every reverse DNS entry matches name server name.", @_;
     },
     NO_RESPONSE_PTR_QUERY => sub {
         __x    # ADDRESS:NO_RESPONSE_PTR_QUERY

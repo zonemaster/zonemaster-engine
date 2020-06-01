@@ -266,7 +266,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     NO_NS_CNAME => sub {
         __x    # DELEGATION:NO_NS_CNAME
-          "No nameserver point to CNAME alias.", @_;
+          "No nameserver points to CNAME alias.", @_;
     },
     REFERRAL_SIZE_TOO_LARGE => sub {
         __x    # DELEGATION:REFERRAL_SIZE_TOO_LARGE
@@ -286,7 +286,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     SOA_NOT_EXISTS => sub {
         __x    # DELEGATION:SOA_NOT_EXISTS
-          "A SOA query NOERROR response from {ns} was received empty.", @_;
+          "Empty NOERROR response to SOA query was received from {ns}.", @_;
     },
     TOTAL_NAME_MISMATCH => sub {
         __x    # DELEGATION:TOTAL_NAME_MISMATCH

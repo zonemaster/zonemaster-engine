@@ -309,7 +309,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     NO_RESOLUTION => sub {
         __x    # NAMESERVER:NO_RESOLUTION
-          'No nameservers succeeded to resolve to an IP address.', @_;
+          "No nameserver was successfully resolved to an IP address.", @_;
     },
     NO_RESPONSE => sub {
         __x    # NAMESERVER:NO_RESPONSE
@@ -329,7 +329,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     QNAME_CASE_SENSITIVE => sub {
         __x    # NAMESERVER:QNAME_CASE_SENSITIVE
-          'Nameserver {ns}/{address} preserves original case of queried names.', @_;
+          "Nameserver {ns}/{address} preserves original case of queried names ({dname}).", @_;
     },
     SAME_SOURCE_IP => sub {
         __x    # NAMESERVER:SAME_SOURCE_IP
