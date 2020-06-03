@@ -1023,23 +1023,23 @@ msgstr "Domain name ({name}) has a label ({label}) ending with a hyphen ('-')."
 
 #: SYSTEM:ADDED_FAKE_DELEGATION
 msgid  "Added a fake delegation for domain {domain} to name server {ns}."
-msgstr "Added a fake delegation for domain {domain} to name server {ns}."
+msgstr "La til en falsk delegering for domenet {domain} til navnetjeneren {ns}."
 
 #: SYSTEM:CANNOT_CONTINUE
 msgid  "Not enough data about {zone} was found to be able to run tests."
-msgstr "Not enough data about {zone} was found to be able to run tests."
+msgstr "Fant ikke tilstrekkelig med data for sonen {zone} for å kunne kjøre tester."
 
 #: SYSTEM:PROFILE_FILE
 msgid  "Profile was read from {name}."
-msgstr "Profile was read from {name}."
+msgstr "Profilen ble lest fra {name}."
 
 #: SYSTEM:DEPENDENCY_VERSION
 msgid  "Using prerequisite module {name} version {version}."
-msgstr "Using prerequisite module {name} version {version}."
+msgstr "Bruker modulen {name} med versjon {version} som en forutsetning."
 
 #: SYSTEM:FAKE_DELEGATION
 msgid  "Followed a fake delegation."
-msgstr "Followed a fake delegation."
+msgstr "Fulgte en falsk delegering."
 
 #: SYSTEM:FAKE_DELEGATION_IN_ZONE_NO_IP
 msgid  ""
