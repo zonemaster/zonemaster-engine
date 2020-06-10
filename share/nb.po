@@ -184,11 +184,11 @@ msgstr "Alle navnetjenere for delegeringen befinner seg i samme AS ({asn})."
 
 #: CONNECTIVITY:NAMESERVER_HAS_TCP_53
 msgid  "Nameserver {ns}/{address} accessible over TCP on port 53."
-msgstr "Navnetjener {ns}/{address} tilgjengelig over TCP på port 53."
+msgstr "Navnetjener {ns}/{address} er tilgjengelig over TCP på port 53."
 
 #: CONNECTIVITY:NAMESERVER_HAS_UDP_53
 msgid  "Nameserver {ns}/{address} accessible over UDP on port 53."
-msgstr "Navnetjener {ns}/{address} tilgjengelig over UDP på port 53."
+msgstr "Navnetjener {ns}/{address} er tilgjengelig over UDP på port 53."
 
 #: CONNECTIVITY:NAMESERVER_NO_TCP_53
 msgid  "Nameserver {ns}/{address} not accessible over TCP on port 53."
@@ -206,98 +206,98 @@ msgstr "Limposter er konsistent mellom poster og authoritative data."
 msgid  ""
 "Child has extra nameserver IP address(es) not listed at parent ({addresses})."
 msgstr ""
-"Subdomene har ekstra navnetjener-IP-adress(er) som ikke er publisert hos foreldresonen ({addresses})."
+"Subdomene har ekstra navnetjener-IP-adress(er) som ikke er publisert hos overordnet domene ({addresses})."
 
 #: CONSISTENCY:EXTRA_ADDRESS_PARENT
 msgid  ""
 "Parent has extra nameserver IP address(es) not listed at child ({addresses})."
 msgstr ""
-"Parent has extra nameserver IP address(es) not listed at child ({addresses})."
+"Overordnet domene har ekstra navnetjener-IP-address(er) som ikke er publisert hos subdomene ({addresses})."
 
 #: CONSISTENCY:MULTIPLE_NS_SET
 msgid  "Saw {count} NS set."
-msgstr "Found {count} NS set(s)."
+msgstr "Fant {count} NS-parametervarianter."
 
 #: CONSISTENCY:MULTIPLE_SOA_RNAMES
 msgid  "Saw {count} SOA rname."
-msgstr "Found {count} SOA rname(s)."
+msgstr "Fant {count} SOA rname(s)."
 
 #: CONSISTENCY:MULTIPLE_SOA_SERIALS
 msgid  "Saw {count} SOA serial numbers."
-msgstr "Found {count} SOA serial number(s)."
+msgstr "Fant {count} SOA serienummer."
 
 #: CONSISTENCY:MULTIPLE_SOA_TIME_PARAMETER_SET
 msgid  "Saw {count} SOA time parameter set."
-msgstr "Found {count} SOA time parameter set(s)."
+msgstr "Fant {count} SOA-tidparametervarianter."
 
 #: CONSISTENCY:NO_RESPONSE
 msgid  "Nameserver {ns}/{address} did not respond."
-msgstr "Nameserver {ns}/{address} did not respond."
+msgstr "Navnetjener {ns}/{address} svarte ikke."
 
 #: CONSISTENCY:NO_RESPONSE_NS_QUERY
 msgid  "No response from nameserver {ns}/{address} on NS queries."
-msgstr "No response from nameserver {ns}/{address} on NS queries."
+msgstr "Ingen svar fra navnetjener {ns}/{address} på NS-spørring."
 
 #: CONSISTENCY:NO_RESPONSE_SOA_QUERY
 msgid  "No response from nameserver {ns}/{address} on SOA queries."
-msgstr "No response from nameserver {ns}/{address} on SOA queries."
+msgstr "Ingen svar fra navnetjener {ns}/{address} på SOA-spørring."
 
 #: CONSISTENCY:NS_SET
 msgid  "Saw NS set ({nsset}) on following nameserver set : {servers}."
-msgstr "Saw NS set ({nsset}) on following nameserver set : {servers}."
+msgstr "Fant NS-postvariant ({nsset}) på følgende navnetjenere : {servers}."
 
 #: CONSISTENCY:ONE_NS_SET
 msgid  "A unique NS set was seen ({nsset})."
-msgstr "A single NS set was found ({nsset})."
+msgstr "En NS-postvariant ble funnet ({nsset})."
 
 #: CONSISTENCY:ONE_SOA_RNAME
 msgid  "A single SOA rname value was seen ({rname})"
-msgstr "A single SOA rname value was found ({rname})"
+msgstr "En SOA-rname ble funnet ({rname})"
 
 #: CONSISTENCY:ONE_SOA_SERIAL
 msgid  "A single SOA serial number was seen ({serial})."
-msgstr "A single SOA serial number was found ({serial})."
+msgstr "En SOA-serienummer ble funnet ({serial})."
 
 #: CONSISTENCY:ONE_SOA_TIME_PARAMETER_SET
 msgid  ""
 "A single SOA time parameter set was seen (REFRESH={refresh},RETRY={retry},"
 "EXPIRE={expire},MINIMUM={minimum})."
 msgstr ""
-"A single SOA time parameter set was seen (REFRESH={refresh},RETRY={retry},"
+"En SOA-postvariant ble funnet (REFRESH={refresh},RETRY={retry},"
 "EXPIRE={expire},MINIMUM={minimum})."
 
 #: CONSISTENCY:SOA_RNAME
 msgid  "Saw SOA rname {rname} on following nameserver set : {servers}."
-msgstr "Found SOA rname {rname} on following nameserver set : {servers}."
+msgstr "Fant SOA-rname {rname} på følgende navnetjenere : {servers}."
 
 #: CONSISTENCY:SOA_SERIAL
 msgid  "Saw SOA serial number {serial} on following nameserver set : {servers}."
 msgstr ""
-"Found SOA serial number {serial} on following nameserver set : {servers}."
+"Fant SOA-serienummer {serial} på følgende navnetjenere : {servers}."
 
 #: CONSISTENCY:SOA_SERIAL_VARIATION
 msgid  ""
 "Difference between the smaller serial ({serial_min}) and the bigger one "
 "({serial_max}) is greater than the maximum allowed ({max_variation})."
 msgstr ""
-"Difference between the smaller serial ({serial_min}) and the bigger one "
-"({serial_max}) is greater than the maximum allowed ({max_variation})."
+"Forskjellen mellom minste serienummer ({serial_min}) og største "
+"({serial_max}) er større en det som er tillatt ({max_variation})."
 
 #: CONSISTENCY:SOA_TIME_PARAMETER_SET
 msgid  ""
 "Saw SOA time parameter set (REFRESH={refresh},RETRY={retry},EXPIRE={expire},"
 "MINIMUM={minimum}) on following nameserver set : {servers}."
 msgstr ""
-"Found SOA time parameter set (REFRESH={refresh},RETRY={retry},"
-"EXPIRE={expire},MINIMUM={minimum}) on following nameserver set : {servers}."
+"Fant SOA-postvariant (REFRESH={refresh},RETRY={retry},"
+"EXPIRE={expire},MINIMUM={minimum}) på følgende navnetjerere : {servers}."
 
 #: CONSISTENCY:TOTAL_ADDRESS_MISMATCH
 msgid  ""
 "No common nameserver IP addresses between child ({child}) and parent "
 "({glue})."
 msgstr ""
-"No common nameserver IP addresses between child ({child}) and parent "
-"({glue})."
+"Ingen felles navnetjener-IP-adresse mellom subdomene ({child}) og "
+"overordnet domene ({glue})."
 
 #: DELEGATION:ARE_AUTHORITATIVE
 msgid  "All these nameservers are confirmed to be authoritative : {nsset}."
