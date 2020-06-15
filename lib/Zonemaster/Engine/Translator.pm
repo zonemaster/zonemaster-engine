@@ -9,6 +9,7 @@ use warnings;
 use Zonemaster::Engine;
 
 use Carp;
+use Locale::Messages qw[textdomain];
 use Locale::TextDomain qw[Zonemaster-Engine];
 use POSIX qw[setlocale LC_MESSAGES];
 use Readonly;
@@ -195,6 +196,10 @@ around 'locale' => sub {
     # On some systems gettext takes its locale from %ENV.
     $ENV{LC_MESSAGES} = $new_locale;
 
+    # On some systems gettext refuses to switch over to another locale unless
+    # the textdomain is reset.
+    textdomain( 'Zonemaster-Engine' );
+
     $self->$next( $new_locale );
 
     return $new_locale;
@@ -253,6 +258,7 @@ More than one instance of this class must not be constructed.
 
 The instance of this class requires exclusive control over C<$ENV{LC_MESSAGES}>
 and the program's underlying LC_MESSAGES.
+At times it resets gettext's textdomain.
 On construction it unsets C<$ENV{LC_ALL}> and C<$ENV{LANGUAGE}>, and from then
 on they must remain unset.
 
@@ -275,6 +281,9 @@ When writing to this attribute, a request is made to update the program's
 underlying LC_MESSAGES.
 If this request fails, the attribute value remains unchanged and an empty list
 is returned.
+
+As a side effect when successfully updating this attribute gettext's textdomain
+is reset.
 
 If no initial value is provided to the constructor, one is determined by calling
 setlocale( LC_MESSAGES, "" ).
