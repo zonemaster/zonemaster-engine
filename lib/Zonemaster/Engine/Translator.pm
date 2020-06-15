@@ -118,6 +118,11 @@ sub BUILD {
     my ( $self ) = @_;
 
     my $locale = $self->{locale} // _get_locale();
+
+    # Make sure LC_MESSAGES can be effectively set down the line.
+    delete $ENV{LANGUAGE};
+    delete $ENV{LC_ALL};
+
     $self->locale( $locale );
 
     return $self;
@@ -174,10 +179,25 @@ sub _build_all_tag_descriptions {
 ### Method modifiers
 ###
 
-after 'locale' => sub {
-    my ( $self ) = @_;
+around 'locale' => sub {
+    my $next = shift;
+    my ( $self, @args ) = @_;
 
-    setlocale( LC_MESSAGES, $self->{locale} );
+    return $self->$next()
+      unless @args;
+
+    my $new_locale = shift @args;
+
+    # On some systems gettext takes its locale from setlocale().
+    defined setlocale( LC_MESSAGES, $new_locale )
+      or return;
+
+    # On some systems gettext takes its locale from %ENV.
+    $ENV{LC_MESSAGES} = $new_locale;
+
+    $self->$next( $new_locale );
+
+    return $new_locale;
 };
 
 ###
@@ -233,6 +253,8 @@ More than one instance of this class must not be constructed.
 
 The instance of this class requires exclusive control over C<$ENV{LC_MESSAGES}>
 and the program's underlying LC_MESSAGES.
+On construction it unsets C<$ENV{LC_ALL}> and C<$ENV{LANGUAGE}>, and from then
+on they must remain unset.
 
 =head1 ATTRIBUTES
 
@@ -243,10 +265,16 @@ and the program's underlying LC_MESSAGES.
 The locale used for localized messages.
 
     say $translator->locale();
-    $translator->locale( 'sv_SE.UTF-8' );
+    if ( !$translator->locale( 'sv_SE.UTF-8' ) ) {
+        say "failed to update locale";
+    }
+
+The value of this attribute is mirrored in C<$ENV{LC_MESSAGES}>.
 
 When writing to this attribute, a request is made to update the program's
 underlying LC_MESSAGES.
+If this request fails, the attribute value remains unchanged and an empty list
+is returned.
 
 If no initial value is provided to the constructor, one is determined by calling
 setlocale( LC_MESSAGES, "" ).
