@@ -134,15 +134,7 @@ sub BUILD {
 # Side effect: Updates the program's underlying LC_MESSAGES to the returned
 # value.
 sub _get_locale {
-    my $locale = setlocale( LC_MESSAGES, "" );
-
-    # C locale is not an option since our msgid and msgstr strings are sometimes
-    # different in C and en_US.UTF-8.
-    if ( $locale eq 'C' ) {
-        $locale = 'en_US.UTF-8';
-    }
-
-    return $locale;
+    return setlocale( LC_MESSAGES, "" );
 }
 
 sub _load_data {
@@ -290,7 +282,6 @@ is reset.
 
 If no initial value is provided to the constructor, one is determined by calling
 setlocale( LC_MESSAGES, "" ).
-If this call returns C<"C">, the value C<"en_US.UTF-8"> is used instead.
 
 =item data
 
