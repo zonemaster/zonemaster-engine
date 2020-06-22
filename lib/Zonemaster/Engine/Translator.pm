@@ -16,9 +16,10 @@ use Readonly;
 
 use Moose;
 
-has 'locale' => ( is => 'rw', isa => 'Str' );
-has 'data' => ( is => 'ro', isa => 'HashRef', lazy => 1, builder => '_load_data' );
+has 'locale'               => ( is => 'rw', isa => 'Str' );
+has 'data'                 => ( is => 'ro', isa => 'HashRef', lazy => 1, builder => '_load_data' );
 has 'all_tag_descriptions' => ( is => 'ro', isa => 'HashRef', builder => '_build_all_tag_descriptions' );
+has '_last_language'       => ( is => 'rw', isa => 'Str' );
 
 ###
 ### Tag descriptions
@@ -121,7 +122,6 @@ sub BUILD {
     my $locale = $self->{locale} // _get_locale();
 
     # Make sure LC_MESSAGES can be effectively set down the line.
-    delete $ENV{LANGUAGE};
     delete $ENV{LC_ALL};
 
     $self->locale( $locale );
@@ -193,6 +193,8 @@ around 'locale' => sub {
     defined setlocale( LC_MESSAGES, $new_locale )
       or return;
 
+    $self->_last_language( $ENV{LANGUAGE} // '' );
+
     # On some systems gettext takes its locale from %ENV.
     $ENV{LC_MESSAGES} = $new_locale;
 
@@ -224,6 +226,10 @@ sub translate_tag {
 sub _translate_tag {
     my ( $self, $module, $tag, $args ) = @_;
 
+    if ( $ENV{LANGUAGE} // '' ne $self->_last_language ) {
+        $self->locale( $self->locale );
+    }
+
     my $code = $self->all_tag_descriptions->{$module}{$tag};
 
     if ( $code ) {
@@ -254,8 +260,10 @@ More than one instance of this class must not be constructed.
 The instance of this class requires exclusive control over C<$ENV{LC_MESSAGES}>
 and the program's underlying LC_MESSAGES.
 At times it resets gettext's textdomain.
-On construction it unsets C<$ENV{LC_ALL}> and C<$ENV{LANGUAGE}>, and from then
-on they must remain unset.
+On construction it unsets C<$ENV{LC_ALL}> and from then on it must remain unset.
+
+On systems that support C<$ENV{LANGUAGE}>, this variable overrides the locale()
+attribute unless the locale() attribute is set to C<"C">.
 
 =head1 ATTRIBUTES
 
