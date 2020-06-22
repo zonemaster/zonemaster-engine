@@ -227,11 +227,6 @@ sub _translate_tag {
     my $code = $self->all_tag_descriptions->{$module}{$tag};
 
     if ( $code ) {
-
-        # Partial workaround for FreeBSD 11. It works once, but then translation
-        # gets stuck on that locale.
-        local $ENV{LC_ALL} = $self->{locale};
-
         return $code->( %{$args} );
     }
     else {
