@@ -573,7 +573,7 @@ msgstr "IP-adresse {address} brukes av flere navnetjenere ({nss})."
 #, perl-brace-format
 msgid "IPv4 is disabled, not sending \"{rrtype}\" query to {ns}/{address}."
 msgstr ""
-"IPv4 er deaktivert, sender ikke \"{rrtype}\" spørring til {ns}/{address}."
+"IPv4 er deaktivert, sender ikke {rrtype}-spørring til {ns}/{address}."
 
 #. SYSTEM:SKIP_IPV4_DISABLED
 #, perl-brace-format
@@ -583,7 +583,7 @@ msgstr "IPv4 er deaktivert, sender ikke spørring til {ns}."
 #. BASIC:IPV4_ENABLED
 #, perl-brace-format
 msgid "IPv4 is enabled, can send \"{rrtype}\" query to {ns}/{address}."
-msgstr "IPv4 er aktivert, sender \"{rrtype}\" spørring til {ns}/{address}."
+msgstr "IPv4 er aktivert, sender {rrtype}-spørring til {ns}/{address}."
 
 #. BASIC:IPV6_DISABLED
 #. CONNECTIVITY:IPV6_DISABLED
@@ -595,7 +595,7 @@ msgstr "IPv4 er aktivert, sender \"{rrtype}\" spørring til {ns}/{address}."
 #, perl-brace-format
 msgid "IPv6 is disabled, not sending \"{rrtype}\" query to {ns}/{address}."
 msgstr ""
-"IPv6 er deaktivert, sender ikke \"{rrtype}\" spørring til {ns}/{address}."
+"IPv6 er deaktivert, sender ikke {rrtype}-spørring til {ns}/{address}."
 
 #. SYSTEM:SKIP_IPV6_DISABLED
 #, perl-brace-format
@@ -605,7 +605,7 @@ msgstr "IPv6 er deaktivert, sender ikke spørring til {ns}."
 #. BASIC:IPV6_ENABLED
 #, perl-brace-format
 msgid "IPv6 is enabled, can send \"{rrtype}\" query to {ns}/{address}."
-msgstr "IPv6 er aktivert, sender \"{rrtype}\" spørring til {ns}/{address}."
+msgstr "IPv6 er aktivert, sender {rrtype}-spørring til {ns}/{address}."
 
 #. CONSISTENCY:IN_BAILIWICK_ADDR_MISMATCH
 #, perl-brace-format
@@ -728,7 +728,7 @@ msgid ""
 "referenced in {reference} as a '{name}'."
 msgstr ""
 "Navnetjener {ns} har en IP-adresse ({address}) med prefiks {prefix},\n"
-"som {reference} klassifiseres som \"{name}\"."
+"som {reference} klassifiseres som {name}."
 
 #. ADDRESS:NAMESERVER_IP_WITHOUT_REVERSE
 #, perl-brace-format
@@ -1179,7 +1179,7 @@ msgstr ""
 #. BASIC:HAS_PARENT
 #, perl-brace-format
 msgid "Parent domain '{pname}' was found for the tested domain."
-msgstr "Overordnet domene \"{pname}\" funnet for det testede domenet."
+msgstr "Overordnet domene ({pname}) funnet for det testede domenet."
 
 #. CONSISTENCY:EXTRA_ADDRESS_PARENT
 #, perl-brace-format
