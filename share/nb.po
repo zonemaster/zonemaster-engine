@@ -144,7 +144,7 @@ msgstr ""
 #. DELEGATION:ARE_AUTHORITATIVE
 #, perl-brace-format
 msgid "All these nameservers are confirmed to be authoritative : {nsset}."
-msgstr "Alle disse navnetjenerne er autoritative : {nsset}."
+msgstr "Alle disse navnetjenerne er autoritative: {nsset}."
 
 #. DNSSEC:DS_MATCH_FOUND
 msgid "At least one DS record with a matching DNSKEY record was found."
@@ -1134,7 +1134,7 @@ msgstr "Ingen post (MX, A eller AAAA) for å levere e-post for domenenavnet."
 #. NAMESERVER:NO_UPWARD_REFERRAL
 #, perl-brace-format
 msgid "None of the following nameservers returns an upward referral : {names}."
-msgstr "Ingen av følgende navnetjenere peker på modersonen : {names}."
+msgstr "Ingen av følgende navnetjenere peker på modersonen: {names}."
 
 #. DELEGATION:TOTAL_NAME_MISMATCH
 msgid "None of the nameservers listed at the parent are listed at the child."
@@ -1214,7 +1214,7 @@ msgstr "Profilen ble lest fra {name}."
 #, perl-brace-format
 msgid ""
 "RRSIG with keytag {tag} and covering type(s) {types} expires at : {date}."
-msgstr "RRSIG med \"key tag\" {tag} som dekker posttyper {types} løper ut : {date}."
+msgstr "RRSIG med \"key tag\" {tag} som dekker posttyper {types} løper ut: {date}."
 
 #. DNSSEC:DURATION_OK
 #, perl-brace-format
@@ -1470,17 +1470,17 @@ msgstr "SOA/MNAME-post ({name}) ligger i en heilnummeriskt TLD ({tld})."
 #. CONSISTENCY:NS_SET
 #, perl-brace-format
 msgid "Saw NS set ({nsset}) on following nameserver set : {servers}."
-msgstr "Fant NS-postvariant ({nsset}) på følgende navnetjenere : {servers}."
+msgstr "Fant NS-postvariant ({nsset}) på følgende navnetjenere: {servers}."
 
 #. CONSISTENCY:SOA_RNAME
 #, perl-brace-format
 msgid "Saw SOA rname {rname} on following nameserver set : {servers}."
-msgstr "Fant SOA/RNAME {rname} på følgende navnetjenere : {servers}."
+msgstr "Fant SOA/RNAME {rname} på følgende navnetjenere: {servers}."
 
 #. CONSISTENCY:SOA_SERIAL
 #, perl-brace-format
 msgid "Saw SOA serial number {serial} on following nameserver set : {servers}."
-msgstr "Fant SOA-serienummer {serial} på følgende navnetjenere : {servers}."
+msgstr "Fant SOA-serienummer {serial} på følgende navnetjenere: {servers}."
 
 #. CONSISTENCY:SOA_TIME_PARAMETER_SET
 #, perl-brace-format
@@ -1489,7 +1489,7 @@ msgid ""
 "MINIMUM={minimum}) on following nameserver set : {servers}."
 msgstr ""
 "Fant SOA-postvariant (REFRESH={refresh},RETRY={retry},EXPIRE={expire},"
-"MINIMUM={minimum}) på følgende navnetjerere : {servers}."
+"MINIMUM={minimum}) på følgende navnetjerere: {servers}."
 
 #. CONSISTENCY:MULTIPLE_NS_SET
 #, perl-brace-format
@@ -1652,17 +1652,17 @@ msgstr ""
 #, perl-brace-format
 msgid ""
 "The following nameservers answer AAAA queries without problems : {names}."
-msgstr "Følgende navnetjenere svarer på AAAA-spørringer uten problemer : {names}."
+msgstr "Følgende navnetjenere svarer på AAAA-spørringer uten problemer: {names}."
 
 #. NAMESERVER:CAN_NOT_BE_RESOLVED
 #, perl-brace-format
 msgid "The following nameservers failed to resolve to an IP address : {names}."
-msgstr "Følgende navnetjenere kunne ikke slåes opp til noen IP-adresser : {names}."
+msgstr "Følgende navnetjenere kunne ikke slåes opp til noen IP-adresser: {names}."
 
 #. NAMESERVER:EDNS0_SUPPORT
 #, perl-brace-format
 msgid "The following nameservers support EDNS0 : {names}."
-msgstr "Følgende navnetjenere støtter EDNS0 : {names}."
+msgstr "Følgende navnetjenere støtter EDNS0: {names}."
 
 #. SYSTEM:POLICY_DISABLED
 #, perl-brace-format
