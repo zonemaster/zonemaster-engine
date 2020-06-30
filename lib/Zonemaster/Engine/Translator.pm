@@ -9,15 +9,17 @@ use warnings;
 use Zonemaster::Engine;
 
 use Carp;
+use Locale::Messages qw[textdomain];
 use Locale::TextDomain qw[Zonemaster-Engine];
 use POSIX qw[setlocale LC_MESSAGES];
 use Readonly;
 
 use Moose;
 
-has 'locale' => ( is => 'rw', isa => 'Str' );
-has 'data' => ( is => 'ro', isa => 'HashRef', lazy => 1, builder => '_load_data' );
+has 'locale'               => ( is => 'rw', isa => 'Str' );
+has 'data'                 => ( is => 'ro', isa => 'HashRef', lazy => 1, builder => '_load_data' );
 has 'all_tag_descriptions' => ( is => 'ro', isa => 'HashRef', builder => '_build_all_tag_descriptions' );
+has '_last_language'       => ( is => 'rw', isa => 'Str' );
 
 ###
 ### Tag descriptions
@@ -118,6 +120,10 @@ sub BUILD {
     my ( $self ) = @_;
 
     my $locale = $self->{locale} // _get_locale();
+
+    # Make sure LC_MESSAGES can be effectively set down the line.
+    delete $ENV{LC_ALL};
+
     $self->locale( $locale );
 
     return $self;
@@ -174,10 +180,31 @@ sub _build_all_tag_descriptions {
 ### Method modifiers
 ###
 
-after 'locale' => sub {
-    my ( $self ) = @_;
+around 'locale' => sub {
+    my $next = shift;
+    my ( $self, @args ) = @_;
 
-    setlocale( LC_MESSAGES, $self->{locale} );
+    return $self->$next()
+      unless @args;
+
+    my $new_locale = shift @args;
+
+    # On some systems gettext takes its locale from setlocale().
+    defined setlocale( LC_MESSAGES, $new_locale )
+      or return;
+
+    $self->_last_language( $ENV{LANGUAGE} // '' );
+
+    # On some systems gettext takes its locale from %ENV.
+    $ENV{LC_MESSAGES} = $new_locale;
+
+    # On some systems gettext refuses to switch over to another locale unless
+    # the textdomain is reset.
+    textdomain( 'Zonemaster-Engine' );
+
+    $self->$next( $new_locale );
+
+    return $new_locale;
 };
 
 ###
@@ -199,14 +226,13 @@ sub translate_tag {
 sub _translate_tag {
     my ( $self, $module, $tag, $args ) = @_;
 
+    if ( $ENV{LANGUAGE} // '' ne $self->_last_language ) {
+        $self->locale( $self->locale );
+    }
+
     my $code = $self->all_tag_descriptions->{$module}{$tag};
 
     if ( $code ) {
-
-        # Partial workaround for FreeBSD 11. It works once, but then translation
-        # gets stuck on that locale.
-        local $ENV{LC_ALL} = $self->{locale};
-
         return $code->( %{$args} );
     }
     else {
@@ -228,11 +254,16 @@ Zonemaster::Engine::Translator - translation support for Zonemaster
     my $trans = Zonemaster::Engine::Translator->new({ locale => 'sv_SE.UTF-8' });
     say $trans->to_string($entry);
 
-A side effect of constructing an object of this class is that the program's
-underlying locale for message catalogs (a.k.a. LC_MESSAGES) is updated.
+This is effectively a singleton class.
+More than one instance of this class must not be constructed.
 
-It does not make sense to create more than one object of this class because of
-the globally stateful nature of the locale attribute.
+The instance of this class requires exclusive control over C<$ENV{LC_MESSAGES}>
+and the program's underlying LC_MESSAGES.
+At times it resets gettext's textdomain.
+On construction it unsets C<$ENV{LC_ALL}> and from then on it must remain unset.
+
+On systems that support C<$ENV{LANGUAGE}>, this variable overrides the locale()
+attribute unless the locale() attribute is set to C<"C">.
 
 =head1 ATTRIBUTES
 
@@ -240,13 +271,26 @@ the globally stateful nature of the locale attribute.
 
 =item locale
 
-The locale that should be used to find translation data. If not
-explicitly provided, defaults to (in order) the contents of the
-environment variable LANG, LC_ALL, LC_MESSAGES or, if none of them are
-set, to C<en_US.UTF-8>.
+The locale used for localized messages.
 
-Updating this attribute also causes an analogous update of the program's
+    say $translator->locale();
+    if ( !$translator->locale( 'sv_SE.UTF-8' ) ) {
+        say "failed to update locale";
+    }
+
+The value of this attribute is mirrored in C<$ENV{LC_MESSAGES}>.
+
+When writing to this attribute, a request is made to update the program's
 underlying LC_MESSAGES.
+If this request fails, the attribute value remains unchanged and an empty list
+is returned.
+
+As a side effect when successfully updating this attribute gettext's textdomain
+is reset.
+
+If no initial value is provided to the constructor, one is determined by calling
+setlocale( LC_MESSAGES, "" ).
+If this call returns C<"C">, the value C<"en_US.UTF-8"> is used instead.
 
 =item data
 
