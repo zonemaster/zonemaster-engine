@@ -1,20 +1,22 @@
 package Zonemaster::Engine::Test::Consistency;
 
-use version; our $VERSION = version->declare("v1.1.12");
+use 5.014002;
 
 use strict;
 use warnings;
 
-use 5.014002;
+use version; our $VERSION = version->declare("v1.1.13");
 
 use Zonemaster::Engine;
 
 use List::MoreUtils qw[uniq];
 use Locale::TextDomain qw[Zonemaster-Engine];
 use Readonly;
+use Zonemaster::Engine::Profile;
 use Zonemaster::Engine::Constants qw[:ip :soa];
 use Zonemaster::Engine::Test::Address;
 use Zonemaster::Engine::Util;
+use Zonemaster::Engine::TestMethods;
 
 ###
 ### Entry points
@@ -680,7 +682,7 @@ sub _get_addr_rrs {
         );
     }
     elsif ($p->is_redirect) {
-        my $p = $ns->query( $name, $qtype, { recurse => 1 } );
+        my $p = Zonemaster::Engine->recurse( $name, $qtype, q{IN} );
         if ( $p ) {
             return ( undef, $p->get_records_for_name( $qtype, $name, 'answer' ) );
         } else {

@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare("v1.1.12");
+use version; our $VERSION = version->declare("v1.1.13");
 
 use parent 'Exporter';
 
@@ -17,7 +17,7 @@ use Pod::Simple::SimpleTree;
 
 ## no critic (Modules::ProhibitAutomaticExportation)
 our @EXPORT      = qw[ ns info name pod_extract_for scramble_case ];
-our @EXPORT_OK   = qw[ ns info name pod_extract_for test_levels should_run_test scramble_case ];
+our @EXPORT_OK   = qw[ ns info name pod_extract_for test_levels should_run_test scramble_case ipversion_ok ];
 our %EXPORT_TAGS = ( all => \@EXPORT_OK );
 
 ## no critic (Subroutines::RequireArgUnpacking)
