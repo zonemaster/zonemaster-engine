@@ -709,9 +709,9 @@ msgid ""
 "with keytag {keytag} in zone {zone}."
 msgstr ""
 "Le serveur de noms {ns}/{address} retourne un enregistrement de type \"DS\" "
-"créé à partir d'un algorithme obsolète ({algorithm_number}/"
-"{algorithm_mnemonic}), ce qui est incorrect. Cet enregistrement de type \"DS"
-"\" correspond à la clé (DNSKEY) avec le tag {keytag} dans la zone {zone}."
+"créé à partir de l'algorithme ({algorithm_number}/{algorithm_mnemonic}), "
+"ce qui est correct. Cet enregistrement de type \"DS\" correspond à la clé "
+"(DNSKEY) avec le tag {keytag} dans la zone {zone}."
 
 #. DNSSEC:DS_ALGORITHM_RESERVED
 #, perl-brace-format
