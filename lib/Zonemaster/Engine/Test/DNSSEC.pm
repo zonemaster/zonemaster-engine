@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare( "v1.1.19" );
+use version; our $VERSION = version->declare( "v1.1.20" );
 
 ###
 ### This test module implements DNSSEC tests.
@@ -671,7 +671,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     KEY_SIZE_OK => sub {
           __x    # DNSSEC:KEY_SIZE_OK
-            'All keys from the DNSKEY RRset have the correct size', @_;
+            'All keys from the DNSKEY RRset have the correct size.', @_;
       },
     MANY_ITERATIONS => sub {
         __x    # DNSSEC:MANY_ITERATIONS

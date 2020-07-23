@@ -883,7 +883,7 @@ msgstr ""
 "{keysize}, Flags ({sep}, {rfc5011})."
 
 #. DNSSEC:KEY_SIZE_OK
-msgid "All keys from the DNSKEY RRset have the correct size"
+msgid "All keys from the DNSKEY RRset have the correct size."
 msgstr ""
 "Toutes les clés de l'apex (DNSKEY RRset) ont une taille correcte."
 
