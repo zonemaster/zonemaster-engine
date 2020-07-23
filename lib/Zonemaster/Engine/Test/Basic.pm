@@ -13,6 +13,7 @@ use Carp;
 use List::MoreUtils qw[any none];
 use Locale::TextDomain qw[Zonemaster-Engine];
 use Readonly;
+use Zonemaster::Engine::Profile;
 use Zonemaster::Engine::Constants qw[:ip :name];
 use Zonemaster::Engine::Test::Address;
 use Zonemaster::Engine::Test::Syntax;
@@ -84,12 +85,16 @@ sub metadata {
               DOMAIN_NAME_LABEL_TOO_LONG
               DOMAIN_NAME_ZERO_LENGTH_LABEL
               DOMAIN_NAME_TOO_LONG
+              TEST_CASE_END
+              TEST_CASE_START
               )
         ],
         basic01 => [
             qw(
               NO_PARENT
               HAS_PARENT
+              TEST_CASE_END
+              TEST_CASE_START
               )
         ],
         basic02 => [
@@ -102,6 +107,8 @@ sub metadata {
               IPV6_DISABLED
               IPV4_ENABLED
               IPV6_ENABLED
+              TEST_CASE_END
+              TEST_CASE_START
               )
         ],
         basic03 => [
@@ -113,6 +120,8 @@ sub metadata {
               IPV4_ENABLED
               IPV6_ENABLED
               A_QUERY_NO_RESPONSES
+              TEST_CASE_END
+              TEST_CASE_START
               )
         ],
     };
@@ -186,6 +195,14 @@ Readonly my %TAG_DESCRIPTIONS => (
     IPV6_ENABLED => sub {
         __x    # BASIC:IPV6_ENABLED
           'IPv6 is enabled, can send "{rrtype}" query to {ns}/{address}.', @_;
+    },
+    TEST_CASE_END => sub {
+        __x    # BASIC:TEST_CASE_END
+          'TEST_CASE_END {testcase}.', @_;
+    },
+    TEST_CASE_START => sub {
+        __x    # BASIC:TEST_CASE_START
+          'TEST_CASE_START {testcase}.', @_;
     },
 );
 

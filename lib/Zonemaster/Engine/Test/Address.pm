@@ -1,11 +1,11 @@
 package Zonemaster::Engine::Test::Address;
 
-use version; our $VERSION = version->declare("v1.0.5");
+use 5.014002;
 
 use strict;
 use warnings;
 
-use 5.014002;
+use version; our $VERSION = version->declare("v1.0.6");
 
 use Zonemaster::Engine;
 
@@ -13,6 +13,7 @@ use Carp;
 use List::MoreUtils qw[none any];
 use Locale::TextDomain qw[Zonemaster-Engine];
 use Readonly;
+use Zonemaster::Engine::Recursor;
 use Zonemaster::Engine::Constants qw[:addresses :ip];
 use Zonemaster::Engine::TestMethods;
 use Zonemaster::Engine::Util;
@@ -47,6 +48,8 @@ sub metadata {
             qw(
               NAMESERVER_IP_PRIVATE_NETWORK
               NO_IP_PRIVATE_NETWORK
+              TEST_CASE_END
+              TEST_CASE_START
               )
         ],
         address02 => [
@@ -54,6 +57,8 @@ sub metadata {
               NAMESERVER_IP_WITHOUT_REVERSE
               NAMESERVERS_IP_WITH_REVERSE
               NO_RESPONSE_PTR_QUERY
+              TEST_CASE_END
+              TEST_CASE_START
               )
         ],
         address03 => [
@@ -62,6 +67,8 @@ sub metadata {
               NAMESERVER_IP_PTR_MISMATCH
               NAMESERVER_IP_PTR_MATCH
               NO_RESPONSE_PTR_QUERY
+              TEST_CASE_END
+              TEST_CASE_START
               )
         ],
     };
@@ -98,6 +105,14 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # ADDRESS:NO_RESPONSE_PTR_QUERY
           'No response from nameserver(s) on PTR query ({reverse}).', @_;
     },
+    TEST_CASE_END => sub {
+        __x    # ADDRESS:TEST_CASE_END
+          'TEST_CASE_END {testcase}.', @_;
+    },
+    TEST_CASE_START => sub {
+        __x    # ADDRESS:TEST_CASE_START
+          'TEST_CASE_START {testcase}.', @_;
+    },
 );
 
 sub tag_descriptions {
@@ -130,7 +145,7 @@ sub find_special_address {
 
 sub address01 {
     my ( $class, $zone ) = @_;
-    my @results;
+    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
     my %ips;
 
     foreach
@@ -158,16 +173,18 @@ sub address01 {
 
     } ## end foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods...})
 
-    if ( scalar keys %ips and not scalar @results ) {
+    if ( scalar keys %ips and scalar @results == 1 ) {
         push @results, info( NO_IP_PRIVATE_NETWORK => {} );
     }
+
+    push @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } );
 
     return @results;
 } ## end sub address01
 
 sub address02 {
     my ( $class, $zone ) = @_;
-    my @results;
+    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
 
     my %ips;
     my $ptr_query;
@@ -215,16 +232,18 @@ sub address02 {
 
     } ## end foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods...})
 
-    if ( scalar keys %ips and not scalar @results ) {
+    if ( scalar keys %ips and scalar @results == 1 ) {
         push @results, info( NAMESERVERS_IP_WITH_REVERSE => {} );
     }
+
+    push @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } );
 
     return @results;
 } ## end sub address02
 
 sub address03 {
     my ( $class, $zone ) = @_;
-    my @results;
+    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
     my $ptr_query;
 
     my %ips;
@@ -283,9 +302,11 @@ sub address03 {
 
     } ## end foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods...})
 
-    if ( scalar keys %ips and not scalar @results ) {
+    if ( scalar keys %ips and scalar @results == 1 ) {
         push @results, info( NAMESERVER_IP_PTR_MATCH => {} );
     }
+
+    push @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } );
 
     return @results;
 } ## end sub address03
