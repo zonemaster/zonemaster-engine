@@ -1,17 +1,19 @@
 package Zonemaster::Engine::Test::Delegation;
 
-use version; our $VERSION = version->declare("v1.0.16");
+use 5.014002;
 
 use strict;
 use warnings;
 
-use 5.014002;
+use version; our $VERSION = version->declare("v1.0.17");
 
 use Zonemaster::Engine;
 
 use List::MoreUtils qw[uniq];
 use Locale::TextDomain qw[Zonemaster-Engine];
 use Readonly;
+use Zonemaster::Engine::Profile;
+use Zonemaster::Engine::Recursor;
 use Zonemaster::Engine::Constants ':all';
 use Zonemaster::Engine::Net::IP;
 use Zonemaster::Engine::Test::Address;
@@ -399,13 +401,13 @@ sub delegation01 {
     my $del_ns_ipv4_args = {
         count   => scalar( @del_ns_ipv4 ),
         minimum => $MINIMUM_NUMBER_OF_NAMESERVERS,
-        ns      => join( q{;}, sort @del_ns_ipv4 ),
+        nss     => join( q{;}, sort @del_ns_ipv4 ),
         addrs   => join( q{;}, sort @del_ns_ipv4_addrs ),
     };
     my $del_ns_ipv6_args = {
         count   => scalar( @del_ns_ipv6 ),
         minimum => $MINIMUM_NUMBER_OF_NAMESERVERS,
-        ns      => join( q{;}, sort @del_ns_ipv6 ),
+        nss     => join( q{;}, sort @del_ns_ipv6 ),
         addrs   => join( q{;}, sort @del_ns_ipv6_addrs ),
     };
 
@@ -519,14 +521,14 @@ sub delegation03 {
     }
 
     # If @nss_v4 is non-empty and all of its elements are in bailiwick of parent
-    if ( @nss_v4 && not grep { not $parent->name->is_in_bailiwick( $_->name ) } @nss_v4 ) {
+    if ( @nss_v4 and not grep { not $parent->name->is_in_bailiwick( $_->name ) } @nss_v4 ) {
         my $ns = $nss_v4[0];
         my $rr = Zonemaster::LDNS::RR->new( sprintf( q{%s IN A %s}, $ns->name, $ns->address->short ) );
         $p->unique_push( q{additional}, $rr );
     }
 
     # If @nss_v6 is non-empty and all of its elements are in bailiwick of parent
-    if ( @nss_v6 && not grep { not $parent->name->is_in_bailiwick( $_->name ) } @nss_v6 ) {
+    if ( @nss_v6 and not grep { not $parent->name->is_in_bailiwick( $_->name ) } @nss_v6 ) {
         my $ns = $nss_v6[0];
         my $rr = Zonemaster::LDNS::RR->new( sprintf( q{%s IN AAAA %s}, $ns->name, $ns->address->short ) );
         $p->unique_push( q{additional}, $rr );
