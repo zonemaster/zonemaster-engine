@@ -1,11 +1,11 @@
 package Zonemaster::Engine::Test::Basic;
 
-use version; our $VERSION = version->declare("v1.0.12");
+use 5.014002;
 
 use strict;
 use warnings;
 
-use 5.014002;
+use version; our $VERSION = version->declare("v1.0.13");
 
 use Zonemaster::Engine;
 
@@ -203,8 +203,8 @@ sub version {
 
 sub basic00 {
     my ( $class, $zone ) = @_;
+    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
     my $name = name( $zone );
-    my @results;
 
     foreach my $local_label ( @{ $name->labels } ) {
         if ( length $local_label > $LABEL_MAX_LENGTH ) {
@@ -240,13 +240,15 @@ sub basic00 {
           );
     }
 
+    push @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } );
+
     return @results;
 
 } ## end sub basic00
 
 sub basic01 {
     my ( $class, $zone ) = @_;
-    my @results;
+    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
     my $parent = $zone->parent;
 
     if ( not $parent ) {
@@ -267,12 +269,14 @@ sub basic01 {
           );
     }
 
+    push @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } );
+
     return @results;
 } ## end sub basic01
 
 sub basic02 {
     my ( $class, $zone ) = @_;
-    my @results;
+    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
     my $query_type = q{NS};
     my @ns = @{ Zonemaster::Engine::TestMethods->method4( $zone ) };
 
@@ -364,12 +368,14 @@ sub basic02 {
         }
     } ## end foreach my $ns ( @{ Zonemaster::Engine::TestMethods...})
 
+    push @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } );
+
     return @results;
 } ## end sub basic02
 
 sub basic03 {
     my ( $class, $zone ) = @_;
-    my @results;
+    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
     my $query_type = q{A};
 
     my $name        = q{www.} . $zone->name;
@@ -447,6 +453,8 @@ sub basic03 {
     if ( scalar( @{ Zonemaster::Engine::TestMethods->method4( $zone ) } ) and not $response_nb ) {
         push @results, info( A_QUERY_NO_RESPONSES => {} );
     }
+
+    push @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } );
 
     return @results;
 } ## end sub basic03
