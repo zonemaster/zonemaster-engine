@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-23 02:06+0200\n"
+"POT-Creation-Date: 2020-07-23 11:57+0200\n"
 "PO-Revision-Date: 2020-04-02\n"
 "Last-Translator: vincent.levigneron@afnic.fr\n"
 "Language-Team: Zonemaster Team\n"
@@ -881,6 +881,11 @@ msgid ""
 msgstr ""
 "Quelques détails pour la clé (DNSKEY) avec le tag {keytag} : Size = "
 "{keysize}, Flags ({sep}, {rfc5011})."
+
+#. DNSSEC:KEY_SIZE_OK
+msgid "All keys from the DNSKEY RRset have the correct size."
+msgstr ""
+"Toutes les clés de l'apex (DNSKEY RRset) ont une taille correcte."
 
 #. DNSSEC:MANY_ITERATIONS
 #, perl-brace-format
@@ -2164,11 +2169,6 @@ msgstr "Exécution du module {module} terminée."
 msgid "Both IPv4 and IPv6 are disabled."
 msgstr "IPv6 et IPv4 sont désactivés."
 
-#. SYSTEM:POLICY_DISABLED
-#, perl-brace-format
-msgid "The module {name} was disabled by the policy."
-msgstr "Le module {name} a été désactivé par la politique en cours."
-
 #. SYSTEM:UNKNOWN_METHOD
 #, perl-brace-format
 msgid "Request to run unknown method {method} in module {module}."
@@ -2238,6 +2238,9 @@ msgid ""
 msgstr ""
 "La taille du paquet ({size} octets) dépasse le maximum communément utilisé "
 "de {maxsize} octets (tester avec la commande \"{command}\")."
+
+#~ msgid "The module {name} was disabled by the policy."
+#~ msgstr "Le module {name} a été désactivé par la politique en cours."
 
 #~ msgid "At least one signature correctly signed the NSEC RRset."
 #~ msgstr ""

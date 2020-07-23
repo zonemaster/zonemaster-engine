@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare( "v1.1.17" );
+use version; our $VERSION = version->declare( "v1.1.20" );
 
 ###
 ### This test module implements DNSSEC tests.
@@ -669,6 +669,10 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # DNSSEC:KEY_DETAILS
           'Key with keytag {keytag} details : Size = {keysize}, Flags ({sep}, {rfc5011}).', @_;
     },
+    KEY_SIZE_OK => sub {
+          __x    # DNSSEC:KEY_SIZE_OK
+            'All keys from the DNSKEY RRset have the correct size.', @_;
+      },
     MANY_ITERATIONS => sub {
         __x    # DNSSEC:MANY_ITERATIONS
           'The number of NSEC3 iterations is {count}, which is on the high side.', @_;
@@ -720,7 +724,7 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # DNSSEC:NO_RESPONSE_DNSKEY
           'Nameserver {ns}/{address} responded with no DNSKEY record(s).', @_;
     },
-    NO_RESPONES_DS => sub {
+    NO_RESPONSE_DS => sub {
         __x    # DNSSEC:NO_RESPONSE_DS
           '{ns}/{address} returned no DS records for {zone}.', @_;
     },
