@@ -172,6 +172,15 @@ sub _build_all_tag_descriptions {
 ### Method modifiers
 ###
 
+around 'new' => sub {
+    my $next = shift;
+    my ( $self, @args ) = @_;
+
+    state $instance = $self->$next( @args );
+
+    return $instance;
+};
+
 around 'locale' => sub {
     my $next = shift;
     my ( $self, @args ) = @_;
@@ -246,8 +255,7 @@ Zonemaster::Engine::Translator - translation support for Zonemaster
     my $trans = Zonemaster::Engine::Translator->new({ locale => 'sv_SE.UTF-8' });
     say $trans->to_string($entry);
 
-This is effectively a singleton class.
-More than one instance of this class must not be constructed.
+This is a singleton class.
 
 The instance of this class requires exclusive control over C<$ENV{LC_MESSAGES}>
 and the program's underlying LC_MESSAGES.
