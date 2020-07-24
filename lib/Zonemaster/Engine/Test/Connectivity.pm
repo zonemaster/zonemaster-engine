@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare("v1.0.15");
+use version; our $VERSION = version->declare("v1.0.16");
 
 use Zonemaster::Engine;
 
@@ -258,9 +258,7 @@ sub connectivity01 {
 
     } ## end foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods...})
 
-    push @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } );
-
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) );
 } ## end sub connectivity01
 
 sub connectivity02 {
@@ -324,9 +322,7 @@ sub connectivity02 {
 
     } ## end foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods...})
 
-    push @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } );
-
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) );
 } ## end sub connectivity02
 
 sub connectivity03 {
@@ -452,9 +448,7 @@ sub connectivity03 {
         push @results, info( NAMESERVERS_NO_AS => {} );    # Shouldn't pass Basic
     }
 
-    push @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } );
-
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) );
 } ## end sub connectivity03
 
 1;

@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare("v1.0.6");
+use version; our $VERSION = version->declare("v1.0.7");
 
 use Zonemaster::Engine;
 
@@ -173,13 +173,11 @@ sub address01 {
 
     } ## end foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods...})
 
-    if ( scalar keys %ips and scalar @results == 1 ) {
+    if ( scalar keys %ips and not grep { $_->tag ne q{TEST_CASE_START} } @results ) {
         push @results, info( NO_IP_PRIVATE_NETWORK => {} );
     }
 
-    push @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } );
-
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) );
 } ## end sub address01
 
 sub address02 {
@@ -232,13 +230,11 @@ sub address02 {
 
     } ## end foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods...})
 
-    if ( scalar keys %ips and scalar @results == 1 ) {
+    if ( scalar keys %ips and not grep { $_->tag ne q{TEST_CASE_START} } @results ) {
         push @results, info( NAMESERVERS_IP_WITH_REVERSE => {} );
     }
 
-    push @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } );
-
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) );
 } ## end sub address02
 
 sub address03 {
@@ -302,13 +298,11 @@ sub address03 {
 
     } ## end foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods...})
 
-    if ( scalar keys %ips and scalar @results == 1 ) {
+    if ( scalar keys %ips and not grep { $_->tag ne q{TEST_CASE_START} } @results ) {
         push @results, info( NAMESERVER_IP_PTR_MATCH => {} );
     }
 
-    push @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } );
-
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) );
 } ## end sub address03
 
 1;

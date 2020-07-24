@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare("v1.0.13");
+use version; our $VERSION = version->declare("v1.0.14");
 
 use Zonemaster::Engine;
 
@@ -257,9 +257,7 @@ sub basic00 {
           );
     }
 
-    push @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } );
-
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) );
 
 } ## end sub basic00
 
@@ -286,9 +284,7 @@ sub basic01 {
           );
     }
 
-    push @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } );
-
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) );
 } ## end sub basic01
 
 sub basic02 {
@@ -385,9 +381,7 @@ sub basic02 {
         }
     } ## end foreach my $ns ( @{ Zonemaster::Engine::TestMethods...})
 
-    push @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } );
-
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) );
 } ## end sub basic02
 
 sub basic03 {
@@ -471,9 +465,7 @@ sub basic03 {
         push @results, info( A_QUERY_NO_RESPONSES => {} );
     }
 
-    push @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } );
-
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) );
 } ## end sub basic03
 
 1;

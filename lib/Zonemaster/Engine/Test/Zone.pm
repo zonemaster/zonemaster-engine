@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare( "v1.0.12" );
+use version; our $VERSION = version->declare( "v1.0.13" );
 
 use Zonemaster::Engine;
 
@@ -68,6 +68,8 @@ sub metadata {
               MNAME_NOT_IN_GLUE
               MNAME_IS_AUTHORITATIVE
               NO_RESPONSE_SOA_QUERY
+              TEST_CASE_END
+              TEST_CASE_START
               )
         ],
         zone02 => [
@@ -75,6 +77,8 @@ sub metadata {
               REFRESH_MINIMUM_VALUE_LOWER
               REFRESH_MINIMUM_VALUE_OK
               NO_RESPONSE_SOA_QUERY
+              TEST_CASE_END
+              TEST_CASE_START
               )
         ],
         zone03 => [
@@ -82,6 +86,8 @@ sub metadata {
               REFRESH_LOWER_THAN_RETRY
               REFRESH_HIGHER_THAN_RETRY
               NO_RESPONSE_SOA_QUERY
+              TEST_CASE_END
+              TEST_CASE_START
               )
         ],
         zone04 => [
@@ -89,6 +95,8 @@ sub metadata {
               RETRY_MINIMUM_VALUE_LOWER
               RETRY_MINIMUM_VALUE_OK
               NO_RESPONSE_SOA_QUERY
+              TEST_CASE_END
+              TEST_CASE_START
               )
         ],
         zone05 => [
@@ -97,6 +105,8 @@ sub metadata {
               EXPIRE_LOWER_THAN_REFRESH
               EXPIRE_MINIMUM_VALUE_OK
               NO_RESPONSE_SOA_QUERY
+              TEST_CASE_END
+              TEST_CASE_START
               )
         ],
         zone06 => [
@@ -105,6 +115,8 @@ sub metadata {
               SOA_DEFAULT_TTL_MAXIMUM_VALUE_LOWER
               SOA_DEFAULT_TTL_MAXIMUM_VALUE_OK
               NO_RESPONSE_SOA_QUERY
+              TEST_CASE_END
+              TEST_CASE_START
               )
         ],
         zone07 => [
@@ -113,6 +125,8 @@ sub metadata {
               MNAME_IS_NOT_CNAME
               NO_RESPONSE_SOA_QUERY
               MNAME_HAS_NO_ADDRESS
+              TEST_CASE_END
+              TEST_CASE_START
               )
         ],
         zone08 => [
@@ -120,6 +134,8 @@ sub metadata {
               MX_RECORD_IS_CNAME
               MX_RECORD_IS_NOT_CNAME
               NO_RESPONSE_MX_QUERY
+              TEST_CASE_END
+              TEST_CASE_START
               )
         ],
         zone09 => [
@@ -127,6 +143,8 @@ sub metadata {
               NO_MX_RECORD
               MX_RECORD_EXISTS
               NO_RESPONSE_MX_QUERY
+              TEST_CASE_END
+              TEST_CASE_START
               )
         ],
         zone10 => [
@@ -136,6 +154,8 @@ sub metadata {
               NO_SOA_IN_RESPONSE
               ONE_SOA
               WRONG_SOA
+              TEST_CASE_END
+              TEST_CASE_START
               )
         ],
     };
@@ -264,6 +284,14 @@ Readonly my %TAG_DESCRIPTIONS => (
           . 'and not lower than the \'refresh\' value ({refresh}).',
           @_;
     },
+    TEST_CASE_END => sub {
+        __x    # ZONE:TEST_CASE_END
+          'TEST_CASE_END {testcase}.', @_;
+    },
+    TEST_CASE_START => sub {
+        __x    # ZONE:TEST_CASE_START
+          'TEST_CASE_START {testcase}.', @_;
+    },
     WRONG_SOA => sub {
         __x    # ZONE:WRONG_SOA
           'Nameserver {ns}/{address} responds with a wrong owner name ({owner} instead of {name}) on SOA queries.', @_;
@@ -280,7 +308,7 @@ sub version {
 
 sub zone01 {
     my ( $class, $zone ) = @_;
-    my @results;
+    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
 
     my $p = _retrieve_record_from_zone( $zone, $zone->name, q{SOA} );
 
@@ -332,7 +360,7 @@ sub zone01 {
                   );
             }
         } ## end else [ if ( not $soa_mname ) ]
-        if ( not scalar @results ) {
+        if ( not grep { $_->tag ne q{TEST_CASE_START} } @results ) {
             push @results,
               info(
                 MNAME_IS_AUTHORITATIVE => {
@@ -346,12 +374,12 @@ sub zone01 {
         push @results, info( NO_RESPONSE_SOA_QUERY => {} );
     }
 
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) )
 } ## end sub zone01
 
 sub zone02 {
     my ( $class, $zone ) = @_;
-    my @results;
+    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
 
     my $p = _retrieve_record_from_zone( $zone, $zone->name, q{SOA} );
 
@@ -380,12 +408,12 @@ sub zone02 {
         push @results, info( NO_RESPONSE_SOA_QUERY => {} );
     }
 
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) )
 } ## end sub zone02
 
 sub zone03 {
     my ( $class, $zone ) = @_;
-    my @results;
+    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
 
     my $p = _retrieve_record_from_zone( $zone, $zone->name, q{SOA} );
 
@@ -415,12 +443,12 @@ sub zone03 {
         push @results, info( NO_RESPONSE_SOA_QUERY => {} );
     }
 
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) )
 } ## end sub zone03
 
 sub zone04 {
     my ( $class, $zone ) = @_;
-    my @results;
+    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
 
     my $p = _retrieve_record_from_zone( $zone, $zone->name, q{SOA} );
 
@@ -449,12 +477,12 @@ sub zone04 {
         push @results, info( NO_RESPONSE_SOA_QUERY => {} );
     }
 
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) )
 } ## end sub zone04
 
 sub zone05 {
     my ( $class, $zone ) = @_;
-    my @results;
+    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
 
     my $p = _retrieve_record_from_zone( $zone, $zone->name, q{SOA} );
 
@@ -479,7 +507,7 @@ sub zone05 {
                 }
               );
         }
-        if ( not scalar @results ) {
+        if ( not grep { $_->tag ne q{TEST_CASE_START} } @results ) {
             push @results,
               info(
                 EXPIRE_MINIMUM_VALUE_OK => {
@@ -494,12 +522,12 @@ sub zone05 {
         push @results, info( NO_RESPONSE_SOA_QUERY => {} );
     }
 
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) )
 } ## end sub zone05
 
 sub zone06 {
     my ( $class, $zone ) = @_;
-    my @results;
+    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
 
     my $p = _retrieve_record_from_zone( $zone, $zone->name, q{SOA} );
 
@@ -538,12 +566,12 @@ sub zone06 {
         push @results, info( NO_RESPONSE_SOA_QUERY => {} );
     }
 
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) )
 } ## end sub zone06
 
 sub zone07 {
     my ( $class, $zone ) = @_;
-    my @results;
+    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
 
     my $p = _retrieve_record_from_zone( $zone, $zone->name, q{SOA} );
 
@@ -588,12 +616,12 @@ sub zone07 {
         push @results, info( NO_RESPONSE_SOA_QUERY => {} );
     }
 
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) )
 } ## end sub zone07
 
 sub zone08 {
     my ( $class, $zone ) = @_;
-    my @results;
+    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
 
     my $p = $zone->query_auth( $zone->name, q{MX} );
     if ( $p ) {
@@ -614,12 +642,12 @@ sub zone08 {
         push @results, info( NO_RESPONSE_MX_QUERY => {} );
     }
 
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) )
 } ## end sub zone08
 
 sub zone09 {
     my ( $class, $zone ) = @_;
-    my @results;
+    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
     my $info;
 
     my $p = $zone->query_auth( $zone->name, q{MX} );
@@ -652,7 +680,7 @@ sub zone09 {
             }
             chop $info;
         }
-        if ( not scalar @results ) {
+        if ( not grep { $_->tag ne q{TEST_CASE_START} } @results ) {
             push @results, info( MX_RECORD_EXISTS => { info => $info } );
         }
     } ## end if ( $p )
@@ -660,13 +688,13 @@ sub zone09 {
         push @results, info( NO_RESPONSE_MX_QUERY => {} );
     }
 
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) )
 } ## end sub zone09
 
 sub zone10 {
     my ( $class, $zone ) = @_;
+    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
     my $name = name( $zone );
-    my @results;
 
     foreach my $ns ( @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) } ) {
 
@@ -722,11 +750,11 @@ sub zone10 {
             }
         } ## end else [ if ( not $p ) ]
     } ## end foreach my $ns ( @{ Zonemaster::Engine::TestMethods...})
-    if ( not scalar @results ) {
+    if ( not grep { $_->tag ne q{TEST_CASE_START} } @results ) {
         push @results, info( ONE_SOA => {} );
     }
 
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) )
 } ## end sub zone10
 
 sub _retrieve_record_from_zone {
