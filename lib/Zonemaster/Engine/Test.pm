@@ -5,7 +5,16 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare( "v1.1.10" );
+use version; our $VERSION = version->declare( "v1.1.11" );
+
+use Moose;
+
+use Readonly;
+use Module::Find;
+use JSON;
+use Net::IP;
+use List::MoreUtils;
+use Clone;
 
 use Zonemaster::LDNS;
 use Zonemaster::Engine;
@@ -164,7 +173,7 @@ sub run_one {
         if ( $module ) {
             my $m = "Zonemaster::Engine::Test::$module";
             if ( $m->metadata->{$test} ) {
-                info( MODULE_CALL => { module => $module, method => $test, version => $m->version } );
+                info( MODULE_VERSION => { module => $m, version => $m->version } );
                 push @res, eval { $m->$test( @arguments ) };
                 if ( $@ ) {
                     my $err = $@;
@@ -175,7 +184,7 @@ sub run_one {
                         push @res, info( MODULE_ERROR => { module => $module, msg => "$err" } );
                     }
                 }
-                info( MODULE_CALL_END => { module => $module, method => $test } );
+                info( MODULE_END => { module => $module } );
                 return @res;
             }
             else {
