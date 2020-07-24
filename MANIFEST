@@ -91,7 +91,6 @@ t/profiles/Test-consistency05-only.json
 t/profiles/Test-consistency06-only.json
 t/profiles/Test-consistency-all.json
 t/profiles/Test-delegation-all.json
-t/profiles/Test-disabled.json
 t/profiles/Test-dnssec01-only.json
 t/profiles/Test-dnssec02-only.json
 t/profiles/Test-dnssec03-only.json
