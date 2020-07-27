@@ -1,11 +1,11 @@
 package Zonemaster::Engine::Test::Connectivity;
 
-use version; our $VERSION = version->declare("v1.0.14");
+use 5.014002;
 
 use strict;
 use warnings;
 
-use 5.014002;
+use version; our $VERSION = version->declare("v1.0.17");
 
 use Zonemaster::Engine;
 
@@ -13,6 +13,7 @@ use Carp;
 use List::MoreUtils qw[uniq];
 use Locale::TextDomain qw[Zonemaster-Engine];
 use Readonly;
+use Zonemaster::Engine::Profile;
 use Zonemaster::Engine::ASNLookup;
 use Zonemaster::Engine::Constants qw[:ip];
 use Zonemaster::Engine::TestMethods;
@@ -53,6 +54,8 @@ sub metadata {
               NAMESERVER_NO_UDP_53
               IPV4_DISABLED
               IPV6_DISABLED
+              TEST_CASE_END
+              TEST_CASE_START
               )
         ],
         connectivity02 => [
@@ -61,6 +64,8 @@ sub metadata {
               NAMESERVER_NO_TCP_53
               IPV4_DISABLED
               IPV6_DISABLED
+              TEST_CASE_END
+              TEST_CASE_START
               )
         ],
         connectivity03 => [
@@ -81,6 +86,8 @@ sub metadata {
               ASN_INFOS_ANNOUNCE_IN
               IPV4_DISABLED
               IPV6_DISABLED
+              TEST_CASE_END
+              TEST_CASE_START
               )
         ],
     };
@@ -167,6 +174,14 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # CONNECTIVITY:ASN_INFOS_ANNOUNCE_IN
           '[ASN:ANNOUNCE_IN] {address};{prefix}', @_;
     },
+    TEST_CASE_END => sub {
+        __x    # CONNECTIVITY:TEST_CASE_END
+          'TEST_CASE_END {testcase}.', @_;
+    },
+    TEST_CASE_START => sub {
+        __x    # CONNECTIVITY:TEST_CASE_START
+          'TEST_CASE_START {testcase}.', @_;
+    },
 );
 
 sub tag_descriptions {
@@ -183,7 +198,7 @@ sub version {
 
 sub connectivity01 {
     my ( $class, $zone ) = @_;
-    my @results;
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
     my $query_type = q{SOA};
 
     my %ips;
@@ -243,12 +258,12 @@ sub connectivity01 {
 
     } ## end foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods...})
 
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub connectivity01
 
 sub connectivity02 {
     my ( $class, $zone ) = @_;
-    my @results;
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
     my %ips;
     my $query_type = q{SOA};
 
@@ -307,12 +322,12 @@ sub connectivity02 {
 
     } ## end foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods...})
 
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub connectivity02
 
 sub connectivity03 {
     my ( $class, $zone ) = @_;
-    my @results;
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
     my %ips = ( $IP_VERSION_4 => {}, $IP_VERSION_6 => {} );
 
@@ -433,7 +448,7 @@ sub connectivity03 {
         push @results, info( NAMESERVERS_NO_AS => {} );    # Shouldn't pass Basic
     }
 
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub connectivity03
 
 1;

@@ -27,7 +27,9 @@
             "NAMESERVER_IP_WITHOUT_REVERSE" : "WARNING",
             "NAMESERVERS_IP_WITH_REVERSE" : "INFO",
             "NO_IP_PRIVATE_NETWORK" : "INFO",
-            "NO_RESPONSE_PTR_QUERY" : "WARNING"
+            "NO_RESPONSE_PTR_QUERY" : "WARNING",
+            "TEST_CASE_END" : "DEBUG",
+            "TEST_CASE_START" : "DEBUG"
         },
         "BASIC" : {
             "A_QUERY_NO_RESPONSES" : "INFO",
@@ -45,7 +47,9 @@
             "NO_GLUE_PREVENTS_NAMESERVER_TESTS" : "CRITICAL",
             "NO_PARENT" : "CRITICAL",
             "NS_FAILED" : "ERROR",
-            "NS_NO_RESPONSE" : "NOTICE"
+            "NS_NO_RESPONSE" : "NOTICE",
+            "TEST_CASE_END" : "DEBUG",
+            "TEST_CASE_START" : "DEBUG"
         },
         "CONNECTIVITY" : {
             "ASN_INFOS_ANNOUNCE_BY" : "DEBUG",
@@ -67,7 +71,9 @@
             "NAMESERVERS_IPV6_WITH_UNIQ_AS" : "WARNING",
             "NAMESERVERS_NO_AS" : "INFO",
             "NAMESERVERS_WITH_UNIQ_AS" : "WARNING",
-            "NAMESERVERS_WITH_MULTIPLE_AS" : "INFO"
+            "NAMESERVERS_WITH_MULTIPLE_AS" : "INFO",
+            "TEST_CASE_END" : "DEBUG",
+            "TEST_CASE_START" : "DEBUG"
         },
         "CONSISTENCY" : {
             "ADDRESSES_MATCH" : "INFO",
@@ -95,7 +101,9 @@
             "SOA_RNAME" : "INFO",
             "SOA_SERIAL" : "INFO",
             "SOA_SERIAL_VARIATION" : "NOTICE",
-            "SOA_TIME_PARAMETER_SET" : "INFO"
+            "SOA_TIME_PARAMETER_SET" : "INFO",
+            "TEST_CASE_END" : "DEBUG",
+            "TEST_CASE_START" : "DEBUG"
         },
         "DELEGATION" : {
             "ARE_AUTHORITATIVE" : "INFO",
@@ -134,6 +142,8 @@
             "SAME_IP_ADDRESS" : "ERROR",
             "SOA_EXISTS" : "INFO",
             "SOA_NOT_EXISTS" : "ERROR",
+            "TEST_CASE_END" : "DEBUG",
+            "TEST_CASE_START" : "DEBUG",
             "TOTAL_NAME_MISMATCH" : "ERROR",
             "UNEXPECTED_RCODE" : "WARNING"
         },
@@ -220,6 +230,8 @@
             "SOA_SIGNATURE_NOT_OK" : "ERROR",
             "SOA_SIGNATURE_OK" : "DEBUG",
             "SOA_SIGNED" : "DEBUG",
+            "TEST_CASE_END" : "DEBUG",
+            "TEST_CASE_START" : "DEBUG",
             "TOO_MANY_ITERATIONS" : "WARNING",
             "UNEXPECTED_RESPONSE_DS" : "WARNING"
         },
@@ -259,6 +271,8 @@
             "QNAME_CASE_SENSITIVE" : "INFO",
             "QUERY_DROPPED" : "NOTICE",
             "SAME_SOURCE_IP" : "INFO",
+            "TEST_CASE_END" : "DEBUG",
+            "TEST_CASE_START" : "DEBUG",
             "UNSUPPORTED_EDNS_VER" : "WARNING",
             "UPWARD_REFERRAL" : "WARNING",
             "UPWARD_REFERRAL_IRRELEVANT" : "INFO"
@@ -290,7 +304,9 @@
             "RNAME_NO_AT_SIGN" : "INFO",
             "RNAME_RFC822_INVALID" : "WARNING",
             "RNAME_RFC822_VALID" : "INFO",
-            "TERMINAL_HYPHEN" : "ERROR"
+            "TERMINAL_HYPHEN" : "ERROR",
+            "TEST_CASE_END" : "DEBUG",
+            "TEST_CASE_START" : "DEBUG"
         },
         "SYSTEM" : {
             "CACHED_RETURN" : "DEBUG3",
@@ -365,6 +381,8 @@
             "SOA_DEFAULT_TTL_MAXIMUM_VALUE_OK" : "INFO",
             "SOA_DEFAULT_TTL_MAXIMUM_VALUE_HIGHER" : "NOTICE",
             "SOA_DEFAULT_TTL_MAXIMUM_VALUE_LOWER" : "NOTICE",
+            "TEST_CASE_END" : "DEBUG",
+            "TEST_CASE_START" : "DEBUG",
             "WRONG_SOA" : "ERROR"
         }
     },

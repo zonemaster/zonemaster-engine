@@ -1,11 +1,11 @@
 package Zonemaster::Engine::Test::Basic;
 
-use version; our $VERSION = version->declare("v1.0.12");
+use 5.014002;
 
 use strict;
 use warnings;
 
-use 5.014002;
+use version; our $VERSION = version->declare("v1.0.15");
 
 use Zonemaster::Engine;
 
@@ -13,6 +13,7 @@ use Carp;
 use List::MoreUtils qw[any none];
 use Locale::TextDomain qw[Zonemaster-Engine];
 use Readonly;
+use Zonemaster::Engine::Profile;
 use Zonemaster::Engine::Constants qw[:ip :name];
 use Zonemaster::Engine::Test::Address;
 use Zonemaster::Engine::Test::Syntax;
@@ -84,12 +85,16 @@ sub metadata {
               DOMAIN_NAME_LABEL_TOO_LONG
               DOMAIN_NAME_ZERO_LENGTH_LABEL
               DOMAIN_NAME_TOO_LONG
+              TEST_CASE_END
+              TEST_CASE_START
               )
         ],
         basic01 => [
             qw(
               NO_PARENT
               HAS_PARENT
+              TEST_CASE_END
+              TEST_CASE_START
               )
         ],
         basic02 => [
@@ -102,6 +107,8 @@ sub metadata {
               IPV6_DISABLED
               IPV4_ENABLED
               IPV6_ENABLED
+              TEST_CASE_END
+              TEST_CASE_START
               )
         ],
         basic03 => [
@@ -113,6 +120,8 @@ sub metadata {
               IPV4_ENABLED
               IPV6_ENABLED
               A_QUERY_NO_RESPONSES
+              TEST_CASE_END
+              TEST_CASE_START
               )
         ],
     };
@@ -187,6 +196,14 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # BASIC:IPV6_ENABLED
           'IPv6 is enabled, can send "{rrtype}" query to {ns}/{address}.', @_;
     },
+    TEST_CASE_END => sub {
+        __x    # BASIC:TEST_CASE_END
+          'TEST_CASE_END {testcase}.', @_;
+    },
+    TEST_CASE_START => sub {
+        __x    # BASIC:TEST_CASE_START
+          'TEST_CASE_START {testcase}.', @_;
+    },
 );
 
 sub tag_descriptions {
@@ -203,8 +220,8 @@ sub version {
 
 sub basic00 {
     my ( $class, $zone ) = @_;
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
     my $name = name( $zone );
-    my @results;
 
     foreach my $local_label ( @{ $name->labels } ) {
         if ( length $local_label > $LABEL_MAX_LENGTH ) {
@@ -240,13 +257,13 @@ sub basic00 {
           );
     }
 
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 
 } ## end sub basic00
 
 sub basic01 {
     my ( $class, $zone ) = @_;
-    my @results;
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
     my $parent = $zone->parent;
 
     if ( not $parent ) {
@@ -267,12 +284,12 @@ sub basic01 {
           );
     }
 
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub basic01
 
 sub basic02 {
     my ( $class, $zone ) = @_;
-    my @results;
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
     my $query_type = q{NS};
     my @ns = @{ Zonemaster::Engine::TestMethods->method4( $zone ) };
 
@@ -364,12 +381,12 @@ sub basic02 {
         }
     } ## end foreach my $ns ( @{ Zonemaster::Engine::TestMethods...})
 
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub basic02
 
 sub basic03 {
     my ( $class, $zone ) = @_;
-    my @results;
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
     my $query_type = q{A};
 
     my $name        = q{www.} . $zone->name;
@@ -448,7 +465,7 @@ sub basic03 {
         push @results, info( A_QUERY_NO_RESPONSES => {} );
     }
 
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub basic03
 
 1;

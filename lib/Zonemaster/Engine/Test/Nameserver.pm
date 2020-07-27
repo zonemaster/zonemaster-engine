@@ -1,20 +1,24 @@
 package Zonemaster::Engine::Test::Nameserver;
 
-use version; our $VERSION = version->declare("v1.0.24");
+use 5.014002;
 
 use strict;
 use warnings;
 
-use 5.014002;
+use version; our $VERSION = version->declare("v1.0.26");
 
 use Zonemaster::Engine;
 
 use List::MoreUtils qw[uniq none];
 use Locale::TextDomain qw[Zonemaster-Engine];
 use Readonly;
+use JSON::PP;
+use Zonemaster::Engine::Profile;
 use Zonemaster::Engine::Constants qw[:ip];
 use Zonemaster::Engine::Test::Address;
 use Zonemaster::Engine::Util;
+use Zonemaster::Engine::TestMethods;
+use Zonemaster::Engine::Net::IP;
 
 Readonly my @NONEXISTENT_NAMES => qw{
   xn--nameservertest.iis.se
@@ -86,6 +90,8 @@ sub metadata {
               IS_A_RECURSOR
               NO_RECURSOR
               NO_RESPONSE
+              TEST_CASE_END
+              TEST_CASE_START
               )
         ],
         nameserver02 => [
@@ -97,18 +103,24 @@ sub metadata {
               NO_EDNS_SUPPORT
               NO_RESPONSE
               NS_ERROR
+              TEST_CASE_END
+              TEST_CASE_START
               )
         ],
         nameserver03 => [
             qw(
               AXFR_FAILURE
               AXFR_AVAILABLE
+              TEST_CASE_END
+              TEST_CASE_START
               )
         ],
         nameserver04 => [
             qw(
               DIFFERENT_SOURCE_IP
               SAME_SOURCE_IP
+              TEST_CASE_END
+              TEST_CASE_START
               )
         ],
         nameserver05 => [
@@ -121,6 +133,8 @@ sub metadata {
               NO_RESPONSE
               IPV4_DISABLED
               IPV6_DISABLED
+              TEST_CASE_END
+              TEST_CASE_START
               )
         ],
         nameserver06 => [
@@ -128,6 +142,8 @@ sub metadata {
               CAN_NOT_BE_RESOLVED
               CAN_BE_RESOLVED
               NO_RESOLUTION
+              TEST_CASE_END
+              TEST_CASE_START
               )
         ],
         nameserver07 => [
@@ -135,12 +151,16 @@ sub metadata {
               UPWARD_REFERRAL_IRRELEVANT
               UPWARD_REFERRAL
               NO_UPWARD_REFERRAL
+              TEST_CASE_END
+              TEST_CASE_START
               )
         ],
         nameserver08 => [
             qw(
               QNAME_CASE_INSENSITIVE
               QNAME_CASE_SENSITIVE
+              TEST_CASE_END
+              TEST_CASE_START
               )
         ],
         nameserver09 => [
@@ -152,6 +172,8 @@ sub metadata {
               CASE_QUERY_NO_ANSWER
               CASE_QUERIES_RESULTS_OK
               CASE_QUERIES_RESULTS_DIFFER
+              TEST_CASE_END
+              TEST_CASE_START
               )
         ],
         nameserver10 => [
@@ -160,6 +182,8 @@ sub metadata {
               NO_EDNS_SUPPORT
               UNSUPPORTED_EDNS_VER
               NS_ERROR
+              TEST_CASE_END
+              TEST_CASE_START
               )
         ],
         nameserver11 => [
@@ -168,6 +192,8 @@ sub metadata {
               NO_EDNS_SUPPORT
               UNKNOWN_OPTION_CODE
               NS_ERROR
+              TEST_CASE_END
+              TEST_CASE_START
               )
         ],
         nameserver12 => [
@@ -176,6 +202,8 @@ sub metadata {
               NO_EDNS_SUPPORT
               Z_FLAGS_NOTCLEAR
               NS_ERROR
+              TEST_CASE_END
+              TEST_CASE_START
               )
         ],
         nameserver13 => [
@@ -184,6 +212,8 @@ sub metadata {
               NO_EDNS_SUPPORT
               NS_ERROR
               MISSING_OPT_IN_TRUNCATED
+              TEST_CASE_END
+              TEST_CASE_START
               )
         ],
     };
@@ -335,6 +365,14 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # NAMESERVER:SAME_SOURCE_IP
           'All nameservers reply with same IP used to query them.', @_;
     },
+    TEST_CASE_END => sub {
+        __x    # NAMESERVER:TEST_CASE_END
+          'TEST_CASE_END {testcase}.', @_;
+    },
+    TEST_CASE_START => sub {
+        __x    # NAMESERVER:TEST_CASE_START
+          'TEST_CASE_START {testcase}.', @_;
+    },
     UNKNOWN_OPTION_CODE => sub {
         __x    # NAMESERVER:UNKNOWN_OPTION_CODE
           'Nameserver {ns}/{address} responds with an unknown ENDS OPTION-CODE.', @_;
@@ -367,7 +405,7 @@ sub version {
 
 sub nameserver01 {
     my ( $class, $zone ) = @_;
-    my @results;
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
     my @nss;
     {
@@ -428,13 +466,12 @@ sub nameserver01 {
         }
     } ## end for my $ns ( @nss )
 
-    return @results;
-
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub nameserver01
 
 sub nameserver02 {
     my ( $class, $zone ) = @_;
-    my @results;
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
     my %nsnames_and_ip;
 
     foreach
@@ -518,7 +555,7 @@ sub nameserver02 {
         $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short }++;
     } ## end foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods...})
 
-    if ( scalar keys %nsnames_and_ip and not scalar @results ) {
+    if ( scalar keys %nsnames_and_ip and not grep { $_->tag ne q{TEST_CASE_START} } @results ) {
         push @results,
           info(
             EDNS0_SUPPORT => {
@@ -527,12 +564,12 @@ sub nameserver02 {
           );
     }
 
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub nameserver02
 
 sub nameserver03 {
     my ( $class, $zone ) = @_;
-    my @results;
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
     my %nsnames_and_ip;
 
     foreach
@@ -572,12 +609,12 @@ sub nameserver03 {
         $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short }++;
     } ## end foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods...})
 
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub nameserver03
 
 sub nameserver04 {
     my ( $class, $zone ) = @_;
-    my @results;
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
     my %nsnames_and_ip;
 
     foreach
@@ -606,7 +643,7 @@ sub nameserver04 {
         $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short }++;
     } ## end foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods...})
 
-    if ( scalar keys %nsnames_and_ip and not scalar @results ) {
+    if ( scalar keys %nsnames_and_ip and not grep { $_->tag ne q{TEST_CASE_START} } @results ) {
         push @results,
           info(
             SAME_SOURCE_IP => {
@@ -615,12 +652,12 @@ sub nameserver04 {
           );
     }
 
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub nameserver04
 
 sub nameserver05 {
     my ( $class, $zone ) = @_;
-    my @results;
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
     my %nsnames_and_ip;
     my $aaaa_issue = 0;
     my @aaaa_ok;
@@ -731,12 +768,12 @@ sub nameserver05 {
           );
     }
 
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub nameserver05
 
 sub nameserver06 {
     my ( $class, $zone ) = @_;
-    my @results;
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
     my @all_nsnames = uniq map { lc( $_->string ) } @{ Zonemaster::Engine::TestMethods->method2( $zone ) },
       @{ Zonemaster::Engine::TestMethods->method3( $zone ) };
     my @all_nsnames_with_ip = uniq map { lc( $_->name->string ) } @{ Zonemaster::Engine::TestMethods->method4( $zone ) },
@@ -768,12 +805,12 @@ sub nameserver06 {
         push @results, info( CAN_BE_RESOLVED => {} );
     }
 
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub nameserver06
 
 sub nameserver07 {
     my ( $class, $zone ) = @_;
-    my @results;
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
     my %nsnames_and_ip;
     my %nsnames;
 
@@ -808,7 +845,7 @@ sub nameserver07 {
             $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short }++;
         } ## end foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods...})
 
-        if ( scalar keys %nsnames_and_ip and not scalar @results ) {
+        if ( scalar keys %nsnames_and_ip and not grep { $_->tag ne q{TEST_CASE_START} } @results ) {
             push @results,
               info(
                 NO_UPWARD_REFERRAL => {
@@ -818,12 +855,12 @@ sub nameserver07 {
         }
     } ## end else [ if ( $zone->name eq q{.})]
 
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub nameserver07
 
 sub nameserver08 {
     my ( $class, $zone ) = @_;
-    my @results;
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
     my %nsnames_and_ip;
     my $original_name = q{www.} . $zone->name->string;
     my $randomized_uc_name;
@@ -872,12 +909,12 @@ sub nameserver08 {
         $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short }++;
     } ## end foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods...})
 
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub nameserver08
 
 sub nameserver09 {
     my ( $class, $zone ) = @_;
-    my @results;
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
     my %nsnames_and_ip;
     my $original_name = q{www.} . $zone->name->string;
     my $record_type   = q{SOA};
@@ -1015,12 +1052,12 @@ sub nameserver09 {
           );
     }
 
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub nameserver09
 
 sub nameserver10 {
     my ( $class, $zone ) = @_;
-    my @results;
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
     my @nss;
     {
@@ -1083,12 +1120,12 @@ sub nameserver10 {
         }
     }
 
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub nameserver10
 
 sub nameserver11 {
     my ( $class, $zone ) = @_;
-    my @results;
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
     my @nss;
     {
@@ -1159,12 +1196,12 @@ sub nameserver11 {
 
     }
 
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub nameserver11
 
 sub nameserver12 {
     my ( $class, $zone ) = @_;
-    my @results;
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
     my @nss;
     {
@@ -1227,12 +1264,12 @@ sub nameserver12 {
         }
     }
 
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub nameserver12
 
 sub nameserver13 {
     my ( $class, $zone ) = @_;
-    my @results;
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
     my @nss;
     {
@@ -1295,7 +1332,7 @@ sub nameserver13 {
         }
     }
 
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub nameserver13
 
 1;

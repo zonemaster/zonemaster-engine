@@ -14,7 +14,7 @@ sub zone_gives {
     my ( $test, $zone, $gives_ref ) = @_;
 
     Zonemaster::Engine->logger->clear_history();
-    my @res = Zonemaster::Engine->test_method( $checking_module, $test, $zone );
+    my @res = grep { $_->tag !~ /^TEST_CASE_(END|START)$/ } Zonemaster::Engine->test_method( $checking_module, $test, $zone );
     foreach my $gives ( @{$gives_ref} ) {
         ok( ( grep { $_->tag eq $gives } @res ), $zone->name->string . " gives $gives" );
     }
@@ -25,7 +25,7 @@ sub zone_gives_not {
     my ( $test, $zone, $gives_ref ) = @_;
 
     Zonemaster::Engine->logger->clear_history();
-    my @res = Zonemaster::Engine->test_method( $checking_module, $test, $zone );
+    my @res = grep { $_->tag !~ /^TEST_CASE_(END|START)$/ } Zonemaster::Engine->test_method( $checking_module, $test, $zone );
     foreach my $gives ( @{$gives_ref} ) {
         ok( !( grep { $_->tag eq $gives } @res ), $zone->name->string . " does not give $gives" );
     }
