@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare( "v1.0.8" );
+use version; our $VERSION = version->declare( "v1.0.9" );
 
 use Zonemaster::Engine;
 
@@ -298,7 +298,7 @@ sub version {
 
 sub syntax01 {
     my ( $class, $item ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
     my $name = get_name( $item );
 
@@ -319,12 +319,12 @@ sub syntax01 {
           );
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub syntax01
 
 sub syntax02 {
     my ( $class, $item ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
     my $name = get_name( $item );
 
@@ -358,12 +358,12 @@ sub syntax02 {
           );
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub syntax02
 
 sub syntax03 {
     my ( $class, $item ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
     my $name = get_name( $item );
 
@@ -388,23 +388,23 @@ sub syntax03 {
           );
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub syntax03
 
 sub syntax04 {
     my ( $class, $item ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
     my $name = get_name( $item );
 
     push @results, check_name_syntax( q{NAMESERVER}, $name );
 
-    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 }
 
 sub syntax05 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
     my $p = $zone->query_one( $zone->name, q{SOA} );
 
@@ -432,12 +432,12 @@ sub syntax05 {
         push @results, info( NO_RESPONSE_SOA_QUERY => {} );
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub syntax05
 
 sub syntax06 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
     my @nss;
     {
@@ -588,12 +588,12 @@ sub syntax06 {
 
     } ## end for my $ns ( @nss )
 
-    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub syntax06
 
 sub syntax07 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
     my $p = $zone->query_one( $zone->name, q{SOA} );
 
@@ -606,12 +606,12 @@ sub syntax07 {
         push @results, info( NO_RESPONSE_SOA_QUERY => {} );
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 }
 
 sub syntax08 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
     my $p = $zone->query_one( $zone->name, q{MX} );
 

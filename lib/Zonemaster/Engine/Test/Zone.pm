@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare( "v1.0.13" );
+use version; our $VERSION = version->declare( "v1.0.14" );
 
 use Zonemaster::Engine;
 
@@ -308,7 +308,7 @@ sub version {
 
 sub zone01 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
     my $p = _retrieve_record_from_zone( $zone, $zone->name, q{SOA} );
 
@@ -374,12 +374,12 @@ sub zone01 {
         push @results, info( NO_RESPONSE_SOA_QUERY => {} );
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) )
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) )
 } ## end sub zone01
 
 sub zone02 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
     my $p = _retrieve_record_from_zone( $zone, $zone->name, q{SOA} );
 
@@ -408,12 +408,12 @@ sub zone02 {
         push @results, info( NO_RESPONSE_SOA_QUERY => {} );
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) )
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) )
 } ## end sub zone02
 
 sub zone03 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
     my $p = _retrieve_record_from_zone( $zone, $zone->name, q{SOA} );
 
@@ -443,12 +443,12 @@ sub zone03 {
         push @results, info( NO_RESPONSE_SOA_QUERY => {} );
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) )
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) )
 } ## end sub zone03
 
 sub zone04 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
     my $p = _retrieve_record_from_zone( $zone, $zone->name, q{SOA} );
 
@@ -477,12 +477,12 @@ sub zone04 {
         push @results, info( NO_RESPONSE_SOA_QUERY => {} );
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) )
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) )
 } ## end sub zone04
 
 sub zone05 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
     my $p = _retrieve_record_from_zone( $zone, $zone->name, q{SOA} );
 
@@ -522,12 +522,12 @@ sub zone05 {
         push @results, info( NO_RESPONSE_SOA_QUERY => {} );
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) )
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) )
 } ## end sub zone05
 
 sub zone06 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
     my $p = _retrieve_record_from_zone( $zone, $zone->name, q{SOA} );
 
@@ -566,12 +566,12 @@ sub zone06 {
         push @results, info( NO_RESPONSE_SOA_QUERY => {} );
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) )
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) )
 } ## end sub zone06
 
 sub zone07 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
     my $p = _retrieve_record_from_zone( $zone, $zone->name, q{SOA} );
 
@@ -616,12 +616,12 @@ sub zone07 {
         push @results, info( NO_RESPONSE_SOA_QUERY => {} );
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) )
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) )
 } ## end sub zone07
 
 sub zone08 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
     my $p = $zone->query_auth( $zone->name, q{MX} );
     if ( $p ) {
@@ -642,12 +642,12 @@ sub zone08 {
         push @results, info( NO_RESPONSE_MX_QUERY => {} );
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) )
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) )
 } ## end sub zone08
 
 sub zone09 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
     my $info;
 
     my $p = $zone->query_auth( $zone->name, q{MX} );
@@ -688,12 +688,12 @@ sub zone09 {
         push @results, info( NO_RESPONSE_MX_QUERY => {} );
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) )
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) )
 } ## end sub zone09
 
 sub zone10 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
     my $name = name( $zone );
 
     foreach my $ns ( @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) } ) {
@@ -754,7 +754,7 @@ sub zone10 {
         push @results, info( ONE_SOA => {} );
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) )
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) )
 } ## end sub zone10
 
 sub _retrieve_record_from_zone {

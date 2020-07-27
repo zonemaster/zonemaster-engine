@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare( "v1.1.21" );
+use version; our $VERSION = version->declare( "v1.1.22" );
 
 ###
 ### This test module implements DNSSEC tests.
@@ -269,7 +269,7 @@ sub all {
 
     }
 
-    push @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } );
+    push @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
     return @results;
 } ## end sub all
@@ -883,7 +883,7 @@ sub version {
 
 sub dnssec01 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
     if ( my $parent = $zone->parent ) {
         foreach my $ns ( @{ $parent->ns } ) {
@@ -949,15 +949,15 @@ sub dnssec01 {
         }
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub dnssec01
 
 sub dnssec02 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
     if ( not $zone->parent ) {
-        return (@results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) );
+        return (@results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
     }
 
     # 1. Retrieve the DS RR set from the parent zone. If there are no DS RR present, exit the test
@@ -990,7 +990,7 @@ sub dnssec02 {
         if ( scalar( keys %dnskey ) == 0 ) {
             push @results,
               info( NO_DNSKEY => {} );
-            return (@results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) );
+            return (@results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
         }
 
         # Pick out keys with a tag that a DS has using a hash slice
@@ -1088,12 +1088,12 @@ sub dnssec02 {
         }
     } ## end else [ if ( scalar( keys %ds ...))]
 
-    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub dnssec02
 
 sub dnssec03 {
     my ( $self, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
     my $param_p = $zone->query_one( $zone->name, 'NSEC3PARAM', { dnssec => 1 } );
 
@@ -1167,23 +1167,23 @@ sub dnssec03 {
         } ## end foreach my $n3p ( @nsec3params)
     } ## end else [ if ( @nsec3params == 0)]
 
-    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub dnssec03
 
 sub dnssec04 {
     my ( $self, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
     my $dnskey_p = $zone->query_one( $zone->name, 'DNSKEY', { dnssec => 1 } );
     if ( not $dnskey_p ) {
-        return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) );
+        return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
     }
     my @keys     = $dnskey_p->get_records( 'DNSKEY', 'answer' );
     my @key_sigs = $dnskey_p->get_records( 'RRSIG',  'answer' );
 
     my $soa_p = $zone->query_one( $zone->name, 'SOA', { dnssec => 1 } );
     if ( not $soa_p ) {
-        return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) );
+        return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
     }
     my @soas     = $soa_p->get_records( 'SOA',   'answer' );
     my @soa_sigs = $soa_p->get_records( 'RRSIG', 'answer' );
@@ -1256,12 +1256,12 @@ sub dnssec04 {
         }
     } ## end foreach my $sig ( @key_sigs...)
 
-    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub dnssec04
 
 sub dnssec05 {
     my ( $self, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
     my @nss_del   = @{ Zonemaster::Engine::TestMethods->method4( $zone ) };
     my @nss_child = @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
@@ -1356,12 +1356,12 @@ sub dnssec05 {
         } ## end foreach my $key ( @keys )
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub dnssec05
 
 sub dnssec06 {
     my ( $self, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
     my $dnskey_aref = $zone->query_all( $zone->name, 'DNSKEY', { dnssec => 1 } );
     foreach my $dnskey_p ( @{$dnskey_aref} ) {
@@ -1391,25 +1391,25 @@ sub dnssec06 {
         }
     } ## end foreach my $dnskey_p ( @{$dnskey_aref...})
 
-    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub dnssec06
 
 sub dnssec07 {
     my ( $self, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
     if ( not $zone->parent ) {
-        return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) );
+        return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
     }
     my $dnskey_p = $zone->query_one( $zone->name, 'DNSKEY', { dnssec => 1 } );
     if ( not $dnskey_p ) {
-        return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) );
+        return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
     }
     my ( $dnskey ) = $dnskey_p->get_records( 'DNSKEY', 'answer' );
 
     my $ds_p = $zone->parent->query_one( $zone->name, 'DS', { dnssec => 1 } );
     if ( not $ds_p ) {
-        return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) );
+        return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
     }
     my ( $ds ) = $ds_p->get_records( 'DS', 'answer' );
 
@@ -1450,16 +1450,16 @@ sub dnssec07 {
           );
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub dnssec07
 
 sub dnssec08 {
     my ( $self, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
     my $dnskey_p = $zone->query_one( $zone->name, 'DNSKEY', { dnssec => 1 } );
     if ( not $dnskey_p ) {
-        return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) );
+        return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
     }
     my @dnskeys = $dnskey_p->get_records( 'DNSKEY', 'answer' );
     my @sigs    = $dnskey_p->get_records( 'RRSIG',  'answer' );
@@ -1472,7 +1472,7 @@ sub dnssec08 {
                 sigs => scalar( @sigs ),
             }
           );
-        return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) );
+        return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
     }
 
     my $ok = 0;
@@ -1516,22 +1516,22 @@ sub dnssec08 {
           info( DNSKEY_NOT_SIGNED => {} );
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub dnssec08
 
 sub dnssec09 {
     my ( $self, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
     my $dnskey_p = $zone->query_one( $zone->name, 'DNSKEY', { dnssec => 1 } );
     if ( not $dnskey_p ) {
-        return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) );
+        return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
     }
     my @dnskeys = $dnskey_p->get_records( 'DNSKEY', 'answer' );
 
     my $soa_p = $zone->query_one( $zone->name, 'SOA', { dnssec => 1 } );
     if ( not $soa_p ) {
-        return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) );
+        return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
     }
     my @soa  = $soa_p->get_records( 'SOA',   'answer' );
     my @sigs = $soa_p->get_records( 'RRSIG', 'answer' );
@@ -1545,7 +1545,7 @@ sub dnssec09 {
                 soas => scalar( @soa ),
             }
           );
-        return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) );
+        return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
     }
 
     my $ok = 0;
@@ -1588,12 +1588,12 @@ sub dnssec09 {
           info( SOA_NOT_SIGNED => {} );
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub dnssec09
 
 sub dnssec10 {
     my ( $self, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
     my $non_existent_domain_name = $zone->name->prepend( q{xx--test-test-test} );
 
     my @nss_del   = @{ Zonemaster::Engine::TestMethods->method4( $zone ) };
@@ -1765,7 +1765,7 @@ sub dnssec10 {
         push @results, info( HAS_NSEC3 => {} );
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub dnssec10
 
 ### The error reporting in dnssec11 is deliberately simple, since the point of
@@ -1773,18 +1773,18 @@ sub dnssec10 {
 ### parent as a whole.
 sub dnssec11 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
     my $ds_p = $zone->parent->query_auth( $zone->name->string, 'DS' );
     if ( not $ds_p ) {
         push @results, info( DELEGATION_NOT_SIGNED => { keytag => 'none', reason => 'no_ds_packet' } );
-        return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) );
+        return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
     }
 
     my $dnskey_p = $zone->query_auth( $zone->name->string, 'DNSKEY', { dnssec => 1 } );
     if ( not $dnskey_p ) {
         push @results, info( DELEGATION_NOT_SIGNED => { keytag => 'none', reason => 'no_dnskey_packet' } );
-        return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) );
+        return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
     }
 
     my %ds = map { $_->keytag => $_ } $ds_p->get_records_for_name( 'DS', $zone->name->string );
@@ -1838,12 +1838,12 @@ sub dnssec11 {
         push @results, info( DELEGATION_NOT_SIGNED => { keytag => 'info', reason => join(';', @fail) } )
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub dnssec11
 
 sub dnssec13 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
     my @dnskey_rrs;
     my $all_algo_signed = 1;
     my $DNSKEY_algorithm_exists = 0;
@@ -1953,12 +1953,12 @@ sub dnssec13 {
         push @results, info( ALL_ALGO_SIGNED => {} );
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub dnssec13
 
 sub dnssec14 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
     my @dnskey_rrs;
 
     my @nss_del   = @{ Zonemaster::Engine::TestMethods->method4( $zone ) };
@@ -2044,7 +2044,7 @@ sub dnssec14 {
         push @results, info( KEY_SIZE_OK => {} );
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub dnssec14
 
 1;

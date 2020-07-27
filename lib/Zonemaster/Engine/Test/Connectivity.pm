@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare("v1.0.16");
+use version; our $VERSION = version->declare("v1.0.17");
 
 use Zonemaster::Engine;
 
@@ -198,7 +198,7 @@ sub version {
 
 sub connectivity01 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
     my $query_type = q{SOA};
 
     my %ips;
@@ -258,12 +258,12 @@ sub connectivity01 {
 
     } ## end foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods...})
 
-    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub connectivity01
 
 sub connectivity02 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
     my %ips;
     my $query_type = q{SOA};
 
@@ -322,12 +322,12 @@ sub connectivity02 {
 
     } ## end foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods...})
 
-    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub connectivity02
 
 sub connectivity03 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
     my %ips = ( $IP_VERSION_4 => {}, $IP_VERSION_6 => {} );
 
@@ -448,7 +448,7 @@ sub connectivity03 {
         push @results, info( NAMESERVERS_NO_AS => {} );    # Shouldn't pass Basic
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub connectivity03
 
 1;

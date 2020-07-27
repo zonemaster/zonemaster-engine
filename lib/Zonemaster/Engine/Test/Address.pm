@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare("v1.0.7");
+use version; our $VERSION = version->declare("v1.0.8");
 
 use Zonemaster::Engine;
 
@@ -145,7 +145,7 @@ sub find_special_address {
 
 sub address01 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
     my %ips;
 
     foreach
@@ -177,12 +177,12 @@ sub address01 {
         push @results, info( NO_IP_PRIVATE_NETWORK => {} );
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub address01
 
 sub address02 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
     my %ips;
     my $ptr_query;
@@ -234,12 +234,12 @@ sub address02 {
         push @results, info( NAMESERVERS_IP_WITH_REVERSE => {} );
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub address02
 
 sub address03 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
     my $ptr_query;
 
     my %ips;
@@ -302,7 +302,7 @@ sub address03 {
         push @results, info( NAMESERVER_IP_PTR_MATCH => {} );
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub address03
 
 1;
