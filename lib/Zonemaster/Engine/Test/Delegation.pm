@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare("v1.0.18");
+use version; our $VERSION = version->declare("v1.0.19");
 
 use Zonemaster::Engine;
 
@@ -337,7 +337,7 @@ sub version {
 
 sub delegation01 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
     # Determine delegation NS names
     my @del_nsnames = map { $_->string } @{ Zonemaster::Engine::TestMethods->method2( $zone ) };
@@ -453,7 +453,7 @@ sub delegation01 {
         push @results, info( NO_IPV6_NS_DEL => $del_ns_ipv6_args );
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub delegation01
 
 sub _find_dup_ns {
@@ -496,7 +496,7 @@ sub _find_dup_ns {
 
 sub delegation02 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
     my @nss_del   = @{ Zonemaster::Engine::TestMethods->method4( $zone ) };
     my @nss_child = @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
@@ -522,12 +522,12 @@ sub delegation02 {
         nss           => [ @nss_del, @nss_child ],
       );
 
-    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub delegation02
 
 sub delegation03 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
     my $long_name = _max_length_name_for( $zone->name );
     my @nsnames   = map { $_->string } @{ Zonemaster::Engine::TestMethods->method2( $zone ) };
@@ -574,12 +574,12 @@ sub delegation03 {
           );
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub delegation03
 
 sub delegation04 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
     my %nsnames;
     my @authoritatives;
     my $query_type = q{SOA};
@@ -652,12 +652,12 @@ sub delegation04 {
           );
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub delegation04
 
 sub delegation05 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
     my @nsnames = @{ Zonemaster::Engine::TestMethods->method2and3( $zone ) };
 
@@ -720,12 +720,12 @@ sub delegation05 {
         push @results, info( NO_NS_CNAME => {} );
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub delegation05
 
 sub delegation06 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
     my %nsnames;
     my $query_type = q{SOA};
 
@@ -785,12 +785,12 @@ sub delegation06 {
         push @results, info( SOA_EXISTS => {} );
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub delegation06
 
 sub delegation07 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (caller(0))[3] } );
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
     my %names;
     foreach my $name ( @{ Zonemaster::Engine::TestMethods->method2( $zone ) } ) {
@@ -841,7 +841,7 @@ sub delegation07 {
           );
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (caller(0))[3] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub delegation07
 
 ###
