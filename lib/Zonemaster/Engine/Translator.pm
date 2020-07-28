@@ -15,6 +15,7 @@ use POSIX qw[setlocale LC_MESSAGES];
 use Readonly;
 
 use Moose;
+use MooseX::Singleton;
 
 has 'locale'               => ( is => 'rw', isa => 'Str' );
 has 'data'                 => ( is => 'ro', isa => 'HashRef', lazy => 1, builder => '_load_data' );
@@ -172,15 +173,6 @@ sub _build_all_tag_descriptions {
 ### Method modifiers
 ###
 
-around 'new' => sub {
-    my $next = shift;
-    my ( $self, @args ) = @_;
-
-    state $instance = $self->$next( @args );
-
-    return $instance;
-};
-
 around 'locale' => sub {
     my $next = shift;
     my ( $self, @args ) = @_;
@@ -252,7 +244,9 @@ Zonemaster::Engine::Translator - translation support for Zonemaster
 
 =head1 SYNOPSIS
 
-    my $trans = Zonemaster::Engine::Translator->new({ locale => 'sv_SE.UTF-8' });
+    Zonemaster::Engine::Translator->initialize({ locale => 'sv_SE.UTF-8' });
+
+    my $trans = Zonemaster::Engine::Translator->instance;
     say $trans->to_string($entry);
 
 This is a singleton class.
@@ -288,9 +282,6 @@ is returned.
 As a side effect when successfully updating this attribute gettext's textdomain
 is reset.
 
-If no initial value is provided to the constructor, one is determined by calling
-setlocale( LC_MESSAGES, "" ).
-
 =item data
 
 A reference to a hash with translation data. This is unlikely to be useful to
@@ -301,6 +292,38 @@ end-users.
 =head1 METHODS
 
 =over
+
+=item initialize(%args)
+
+Provide initial values for the single instance of this class.
+
+    Zonemaster::Engine::Translator->initialize( locale => 'sv_SE.UTF-8' );
+
+This method must be called at most once and before the first call to instance().
+
+=item instance()
+
+Returns the single instance of this class.
+
+    my $translator = Zonemaster::Engine::Translator->instance;
+
+If initialize() has not been called prior to the first call to instance(), it
+is the same as if initialize() had been called without arguments.
+
+=item new(%args)
+
+Use of this method is deprecated.
+
+See L<MooseX::Singleton->new|MooseX::Singleton/"Singleton->new">.
+
+=over
+
+=item locale
+
+If no initial value is provided to the constructor, one is determined by calling
+setlocale( LC_MESSAGES, "" ).
+
+=back
 
 =item to_string($entry)
 
