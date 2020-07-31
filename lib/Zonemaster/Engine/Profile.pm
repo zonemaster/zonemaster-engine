@@ -669,7 +669,7 @@ modules emit.
 The values of the second level hashes are mapped to severity levels.
 
 The various L<test case specifications|
-https://github.com/zonemaster/zonemaster/tree/master/docs/specifications/tests>
+https://github.com/zonemaster/zonemaster/tree/master/docs/specifications/tests/README.md>
 define the default severity level for some of the messages.
 These specifications are the only authoritative documents on the default
 severity level for the various messages.
@@ -686,8 +686,9 @@ level for the tag.
 
 =head2 test_cases
 
-An arrayref of names of test cases as listed in the L<test case specifications|
-https://github.com/zonemaster/zonemaster/tree/master/docs/specifications/tests>.
+An arrayref of names of implemented test cases as listed in the
+L<test case specifications|
+https://github.com/zonemaster/zonemaster/tree/master/docs/specifications/tests/ImplementedTestCases.md>.
 Default is an arrayref listing all the test cases.
 
 Specifies which test cases to consider when a test module is asked 
