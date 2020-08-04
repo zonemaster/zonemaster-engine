@@ -642,7 +642,7 @@ msgid ""
 "record is for the DNSKEY record with keytag {keytag} in zone {zone}."
 msgstr ""
 "Navnetjener {ns}/{address} svarte med en DS-post skapad med algoritme "
-"{algorithm_number} ({algorithm_mnemonic}) som ikke er i bruk. DS-posten "
+"{algorithm_number} som ikke er i bruk. DS-posten "
 "gjelder for DNSKEY-posten med \"key tag\" {keytag} i sonen {zone}."
 
 #. DNSSEC:DS_ALGO_SHA1_DEPRECATED
@@ -1025,7 +1025,7 @@ msgstr "Alle navnetjenere i delegeringen bruker unike IP-addresser."
 msgid "IP {address} in parent refers to multiple nameservers ({nss})."
 msgstr ""
 "IP-adresse {address} brukes til flere navnetjenere (NS-poster) i "
-"delegeringen ({mss})."
+"delegeringen ({nss})."
 
 #. DELEGATION:DISTINCT_IP_ADDRESS
 msgid "All the IP addresses used by the nameservers are unique"
@@ -1161,7 +1161,7 @@ msgid ""
 "{minimum}."
 msgstr ""
 "Det finnes ikke tilstrekkelig med navnetjenere (NS-poster) i dattersonen. "
-"Antall: {count}. Navnetjenere: {ns}. Minste antall er satt til {minimum}."
+"Antall: {count}. Navnetjenere: {nss}. Minste antall er satt til {minimum}."
 
 #. DELEGATION:NOT_ENOUGH_NS_DEL
 #, perl-brace-format
@@ -1473,10 +1473,11 @@ msgstr "Feilaktig svar fra navnetjener {ns}/{address}."
 #. NAMESERVER:QNAME_CASE_INSENSITIVE
 #, perl-brace-format
 msgid ""
-"Nameserver {ns}/{address} does not preserve original case of queried names."
+"Nameserver {ns}/{address} does not preserve original case of the queried "
+"name ({dname})."
 msgstr ""
 "Navnetjener {ns}/{address} bevarer ikke opprinnelige store og små bokstaver "
-"i spørringen."
+"i spørringen ({dname})."
 
 #. NAMESERVER:QNAME_CASE_SENSITIVE
 #, perl-brace-format
@@ -1484,7 +1485,7 @@ msgid ""
 "Nameserver {ns}/{address} preserves original case of queried names ({dname})."
 msgstr ""
 "Navnetjener {ns}/{address} bevarer opprinnelige store og små bokstaver i "
-"spørringen."
+"spørringen ({dname})."
 
 #. NAMESERVER:SAME_SOURCE_IP
 msgid "All nameservers reply with same IP used to query them."
@@ -1664,7 +1665,7 @@ msgstr "Ingen feilanvending av \"@\"-tegnet i SOA/RNAME ({rname})."
 #. SYNTAX:RNAME_RFC822_INVALID
 #, perl-brace-format
 msgid "Illegal character(s) found in SOA RNAME field ({rname})."
-msgstr "Fant tegn i SOA/MNAME-post ({name}) som ikke er tillatt."
+msgstr "Fant tegn i SOA/MNAME-post ({rname}) som ikke er tillatt."
 
 #. SYNTAX:RNAME_RFC822_VALID
 #, perl-brace-format
