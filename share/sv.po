@@ -657,9 +657,8 @@ msgid ""
 "record is for the DNSKEY record with keytag {keytag} in zone {zone}."
 msgstr ""
 "Namnserver {ns}/{address} svarade med en DS-post skapad med hash-algoritm "
-"{algorithm_number} ({algorithm_mnemonic}) som inte är satt till någon hash-"
-"algoritm, vilket inte är OK. DS-posten gäller DNSKEY-posten med "
-"'keytag' {keytag} i zonen {zone}."
+"{algorithm_number} som inte är satt till någon hash-algoritm, vilket inte är "
+"OK. DS-posten gäller DNSKEY-posten med 'keytag' {keytag} i zonen {zone}."
 
 #. DNSSEC:DS_ALGO_SHA1_DEPRECATED
 #, perl-brace-format
@@ -1507,7 +1506,8 @@ msgstr "Felaktigt svar från namnserver {ns}/{address}."
 #. NAMESERVER:QNAME_CASE_INSENSITIVE
 #, perl-brace-format
 msgid ""
-"Nameserver {ns}/{address} does not preserve original case of queried names."
+"Nameserver {ns}/{address} does not preserve original case of the queried "
+"name ({dname})."
 msgstr ""
 "Nameserver {ns}/{address} bevarar inte skillnaden mellan versaler och "
 "gemener från frågan ({dname})."
@@ -1516,7 +1516,9 @@ msgstr ""
 #, perl-brace-format
 msgid ""
 "Nameserver {ns}/{address} preserves original case of queried names ({dname})."
-msgstr "Namnserver {ns}/{address} bevarade versaler och gemener från frågan."
+msgstr ""
+"Namnserver {ns}/{address} bevarade versaler och gemener från frågan "
+"({dname})."
 
 #. NAMESERVER:SAME_SOURCE_IP
 msgid "All nameservers reply with same IP used to query them."
@@ -1685,8 +1687,8 @@ msgid ""
 "The SOA RNAME mail domain ({domain}) cannot be resolved to a mail server "
 "with an IP address."
 msgstr ""
-"Maildomänen från 'SOA RNAME' kan inte slås upp till en mailserver med IP-"
-"adress."
+"Maildomänen från 'SOA RNAME' ({domain}) kan inte slås upp till en mailserver "
+"med IP-adress."
 
 #. SYNTAX:RNAME_MISUSED_AT_SIGN
 #, perl-brace-format
@@ -1810,7 +1812,7 @@ msgid ""
 "SOA 'minimum' value ({minimum}) is between the recommended ones "
 "({lowest_minimum}/{highest_minimum})."
 msgstr ""
-"Värdet för SOA 'minimum' ligger inom det rekommenderade spannet "
+"Värdet för SOA 'minimum' ({minimum}) ligger inom det rekommenderade spannet "
 "({lowest_minimum} - {highest_minimum})."
 
 #. ZONE:MNAME_NOT_AUTHORITATIVE
@@ -1880,7 +1882,8 @@ msgid ""
 "Nameserver {ns}/{address} responds with multiple ({count}) SOA records on "
 "SOA queries."
 msgstr ""
-"Namnserver {ns}/{address} svarade med multipla SOA-poster på SOA-frågor."
+"Namnserver {ns}/{address} svarade med multipla ({count}) SOA-poster på SOA-"
+"frågor."
 
 #. ZONE:NO_SOA_IN_RESPONSE
 #, perl-brace-format
@@ -1906,8 +1909,9 @@ msgid ""
 "SOA 'expire' value ({expire}) is higher than the minimum recommended value "
 "({required_expire}) and not lower than the 'refresh' value ({refresh})."
 msgstr ""
-"Värdet för SOA 'expire' är lika med eller högre än det minsta rekommenderade "
-"värdet ({required_expire}) och inte lägre än värdet på 'refresh' ({refresh})."
+"Värdet för SOA 'expire' ({expire}) är lika med eller högre än det minsta "
+"rekommenderade värdet ({required_expire}) och inte lägre än värdet på "
+"'refresh' ({refresh})."
 
 #. ZONE:WRONG_SOA
 #, perl-brace-format
@@ -1971,6 +1975,11 @@ msgstr "Modulen '{module}' avslutades."
 #. SYSTEM:NO_NETWORK
 msgid "Both IPv4 and IPv6 are disabled."
 msgstr "Både IPv4 och IPv6 är inaktiverade."
+
+#. SYSTEM:POLICY_DISABLED
+#, perl-brace-format
+msgid "The module {name} was disabled by the policy."
+msgstr "Modulen '{name}' var inaktiverad i policyn."
 
 #. SYSTEM:UNKNOWN_METHOD
 #, perl-brace-format
