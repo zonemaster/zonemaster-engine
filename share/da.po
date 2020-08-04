@@ -189,7 +189,8 @@ msgid "No IPv4 nameserver address is in an AS."
 msgstr "Ingen navneserver har en IPv4-adresse i et AS."
 
 #. CONNECTIVITY:NAMESERVERS_IPV4_WITH_MULTIPLE_AS
-msgid "Authoritative IPv4 nameservers are in more than one AS."
+#, perl-brace-format
+msgid "Authoritative IPv4 nameservers are in more than one AS ({asn})."
 msgstr "Autoritative navneservere (IPv4) er i flere AS'er ({asn})."
 
 #. CONNECTIVITY:NAMESERVERS_IPV6_NO_AS
@@ -1002,8 +1003,8 @@ msgstr ""
 #. DNSSEC:UNEXPECTED_RESPONSE_DS
 #, perl-brace-format
 msgid ""
-"{ns}/{address} responded with an unexpected rcode ({rcode}) on a DS query "
-"for zone {zone}."
+"Nameserver {ns}/{address} responded with an unexpected rcode ({rcode}) on a "
+"DS query for zone {zone}."
 msgstr ""
 "Nameserver {ns}/{address} answered A query with an unexpected rcode "
 "({rcode})."
@@ -1926,11 +1927,6 @@ msgstr "Modulet {module} afsluttede."
 #. SYSTEM:NO_NETWORK
 msgid "Both IPv4 and IPv6 are disabled."
 msgstr "Både IPv4 og IPv6 er deaktiveret."
-
-#. SYSTEM:POLICY_DISABLED
-#, perl-brace-format
-msgid "The module {name} was disabled by the policy."
-msgstr "Modulet {name} var deaktiveret i politikken."
 
 #. SYSTEM:UNKNOWN_METHOD
 #, perl-brace-format

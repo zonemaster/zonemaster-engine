@@ -188,10 +188,11 @@ msgid "No IPv4 nameserver address is in an AS."
 msgstr "Ingen namnserver har någon IPv4-adress i något AS."
 
 #. CONNECTIVITY:NAMESERVERS_IPV4_WITH_MULTIPLE_AS
-msgid "Authoritative IPv4 nameservers are in more than one AS."
+#, perl-brace-format
+msgid "Authoritative IPv4 nameservers are in more than one AS ({asn})."
 msgstr ""
 "IPv4-adresserna för de auktoritativa namnservrarna för domännamnet finns i "
-"mer än ett AS."
+"mer än ett AS ({asn})."
 
 #. CONNECTIVITY:NAMESERVERS_IPV6_NO_AS
 msgid "No IPv6 nameserver address is in an AS."
@@ -1019,8 +1020,8 @@ msgstr ""
 #. DNSSEC:UNEXPECTED_RESPONSE_DS
 #, perl-brace-format
 msgid ""
-"{ns}/{address} responded with an unexpected rcode ({rcode}) on a DS query "
-"for zone {zone}."
+"Nameserver {ns}/{address} responded with an unexpected rcode ({rcode}) on a "
+"DS query for zone {zone}."
 msgstr ""
 "Namnserver {ns}/{address} besvarade en DS-fråga för zonen {zone} med den "
 "icke-väntade svarskoden '{rcode}'."
@@ -1702,7 +1703,6 @@ msgstr "Inga felanvända @-tecken hittades i SOA RNAME ({rname})."
 msgid "Illegal character(s) found in SOA RNAME field ({rname})."
 msgstr "Otillåtet tecken finns i SOA RNAME ({rname})."
 
-
 #. SYNTAX:RNAME_RFC822_VALID
 #, perl-brace-format
 msgid "The SOA RNAME field ({rname}) is compliant with RFC2822."
@@ -1971,11 +1971,6 @@ msgstr "Modulen '{module}' avslutades."
 #. SYSTEM:NO_NETWORK
 msgid "Both IPv4 and IPv6 are disabled."
 msgstr "Både IPv4 och IPv6 är inaktiverade."
-
-#. SYSTEM:POLICY_DISABLED
-#, perl-brace-format
-msgid "The module {name} was disabled by the policy."
-msgstr "Modulen '{name}' var inaktiverad i policyn."
 
 #. SYSTEM:UNKNOWN_METHOD
 #, perl-brace-format

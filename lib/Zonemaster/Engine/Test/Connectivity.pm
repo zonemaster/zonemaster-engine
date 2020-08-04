@@ -116,7 +116,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     NAMESERVERS_IPV4_WITH_MULTIPLE_AS => sub {
         __x    # CONNECTIVITY:NAMESERVERS_IPV4_WITH_MULTIPLE_AS
-          'Authoritative IPv4 nameservers are in more than one AS.', @_;
+          'Authoritative IPv4 nameservers are in more than one AS ({asn}).', @_;
     },
     NAMESERVERS_IPV6_NO_AS => sub {
         __x    # CONNECTIVITY:NAMESERVERS_IPV6_NO_AS

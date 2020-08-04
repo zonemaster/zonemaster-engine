@@ -180,8 +180,9 @@ msgid "No IPv4 nameserver address is in an AS."
 msgstr "Ingen IPv4 navnetjeneradresse befinner seg i et AS."
 
 #. CONNECTIVITY:NAMESERVERS_IPV4_WITH_MULTIPLE_AS
-msgid "Authoritative IPv4 nameservers are in more than one AS."
-msgstr "Autoritative IPv4 navnetjenere befinner seg i fler enn en AS."
+#, perl-brace-format
+msgid "Authoritative IPv4 nameservers are in more than one AS ({asn})."
+msgstr "Autoritative IPv4 navnetjenere befinner seg i fler enn en AS ({asn})."
 
 #. CONNECTIVITY:NAMESERVERS_IPV6_NO_AS
 msgid "No IPv6 nameserver address is in an AS."
@@ -994,8 +995,8 @@ msgstr ""
 #. DNSSEC:UNEXPECTED_RESPONSE_DS
 #, perl-brace-format
 msgid ""
-"{ns}/{address} responded with an unexpected rcode ({rcode}) on a DS query "
-"for zone {zone}."
+"Nameserver {ns}/{address} responded with an unexpected rcode ({rcode}) on a "
+"DS query for zone {zone}."
 msgstr ""
 "Navnetjener {ns}/{address} svarte på en DS-spørring for sonen {zone} med en "
 "uventede svarkoden ({rcode})."

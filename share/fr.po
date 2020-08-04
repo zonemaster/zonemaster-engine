@@ -212,10 +212,11 @@ msgid "No IPv4 nameserver address is in an AS."
 msgstr "Aucune adresse IPv4 des serveurs de noms ne se trouve dans un AS."
 
 #. CONNECTIVITY:NAMESERVERS_IPV4_WITH_MULTIPLE_AS
-msgid "Authoritative IPv4 nameservers are in more than one AS."
+#, perl-brace-format
+msgid "Authoritative IPv4 nameservers are in more than one AS ({asn})."
 msgstr ""
 "Les adresses IPv4 des serveurs faisant autorité se trouvent dans plusieurs "
-"AS."
+"AS ({asn})."
 
 #. CONNECTIVITY:NAMESERVERS_IPV6_NO_AS
 msgid "No IPv6 nameserver address is in an AS."
@@ -1136,8 +1137,8 @@ msgstr ""
 #. DNSSEC:UNEXPECTED_RESPONSE_DS
 #, perl-brace-format
 msgid ""
-"{ns}/{address} responded with an unexpected rcode ({rcode}) on a DS query "
-"for zone {zone}."
+"Nameserver {ns}/{address} responded with an unexpected rcode ({rcode}) on a "
+"DS query for zone {zone}."
 msgstr ""
 "Le serveur de noms {ns}/{address} a répondu à une requête de type \"AAAA\" "
 "avec un code retour inattendu ({rcode}) pour la zone '{zone}'."
