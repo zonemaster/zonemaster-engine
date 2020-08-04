@@ -1000,15 +1000,6 @@ msgstr ""
 "Antallet af NSEC3-iterationer er {count}, hvilket er for højt for "
 "nøglelængden {keylength}."
 
-#. DNSSEC:UNEXPECTED_RESPONSE_DS
-#, perl-brace-format
-msgid ""
-"Nameserver {ns}/{address} responded with an unexpected rcode ({rcode}) on a "
-"DS query for zone {zone}."
-msgstr ""
-"Nameserver {ns}/{address} answered A query with an unexpected rcode "
-"({rcode})."
-
 #. DELEGATION:ARE_AUTHORITATIVE
 #, perl-brace-format
 msgid "All these nameservers are confirmed to be authoritative : {nsset}."
@@ -1469,10 +1460,11 @@ msgstr "Fejlagtigt svar fra navneserver {ns}/{address}."
 #. NAMESERVER:QNAME_CASE_INSENSITIVE
 #, perl-brace-format
 msgid ""
-"Nameserver {ns}/{address} does not preserve original case of queried names."
+"Nameserver {ns}/{address} does not preserve original case of the queried "
+"name ({dname})."
 msgstr ""
 "Navneserveren {ns}/{address} bevarede ikke versaler og minuskler fra "
-"forespørgslen."
+"forespørgslen ({dname})."
 
 #. NAMESERVER:QNAME_CASE_SENSITIVE
 #, perl-brace-format
@@ -1480,7 +1472,7 @@ msgid ""
 "Nameserver {ns}/{address} preserves original case of queried names ({dname})."
 msgstr ""
 "Navneserveren {ns}/{address} bevarede versaler og minuskler fra "
-"forespørgslen."
+"forespørgslen ({dname})."
 
 #. NAMESERVER:SAME_SOURCE_IP
 msgid "All nameservers reply with same IP used to query them."
@@ -1927,6 +1919,11 @@ msgstr "Modulet {module} afsluttede."
 #. SYSTEM:NO_NETWORK
 msgid "Both IPv4 and IPv6 are disabled."
 msgstr "Både IPv4 og IPv6 er deaktiveret."
+
+#. SYSTEM:POLICY_DISABLED
+#, perl-brace-format
+msgid "The module {name} was disabled by the policy."
+msgstr "Modulet {name} var deaktiveret i politikken."
 
 #. SYSTEM:UNKNOWN_METHOD
 #, perl-brace-format
