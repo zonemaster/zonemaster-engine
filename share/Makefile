@@ -35,5 +35,8 @@ $(POFILES): $(POTFILE)
 show-fuzzy:
 	@for f in $(POFILES) ; do msgattrib --only-fuzzy $$f ; done
 
+check-msg-args:
+	@for f in $(POFILES) ; do ../util/check-msg-args $$f ; done
+
 modules.txt: $(TESTMODULEFILES)
 	@echo $(TESTMODULEFILES) | xargs basename -s .pm -a | grep -vE '^Basic$$' | sort > modules.txt
