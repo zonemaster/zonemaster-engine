@@ -2011,10 +2011,15 @@ sub dnssec14 {
         }
     }
 
+    my %investigated_keys;
     foreach my $key ( @dnskey_rrs ) {
         my $algo = $key->algorithm;  
 
         next if not exists $rsa_key_size_details{$algo};
+
+        # Only test once per keytag, keysize and algorithm
+        my $key_ref = join ':', $key->keytag, $key->keysize, $algo;
+        next if exists $investigated_keys{$key_ref};
 
         my $algo_args = {
             algorithm_number      => $algo,
@@ -2037,6 +2042,8 @@ sub dnssec14 {
         if ( $key->keysize > $rsa_key_size_details{$algo}{max_size} ) {
             push @results, info( DNSKEY_TOO_LARGE_FOR_ALGO => $algo_args );
         }
+
+        $investigated_keys{$key_ref} = 1;
 
     } ## end foreach my $key ( @keys )
 
