@@ -24,7 +24,7 @@ extract-pot:
 
 $(POTFILE): extract-pot
 
-%.po: $(POTFILE)
+$(POFILES): $(POTFILE)
 	@msgmerge --update --backup=none --quiet --no-location $(MSGMERGE_OPTS) $@ $(POTFILE)
 
 .po.mo:
