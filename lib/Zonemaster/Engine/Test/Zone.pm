@@ -248,7 +248,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     NO_SOA_IN_RESPONSE => sub {
         __x    # ZONE:NO_SOA_IN_RESPONSE
-          'Response from nameserver {ns}/{address} on SOA queries does not contain SOA record.';
+          'Response from nameserver {ns}/{address} on SOA queries does not contain SOA record.', @_;
     },
     MNAME_HAS_NO_ADDRESS => sub {
         __x    # ZONE:MNAME_HAS_NO_ADDRESS
