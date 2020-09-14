@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-23 11:57+0200\n"
+"POT-Creation-Date: 2020-09-14 23:12+0200\n"
 "PO-Revision-Date: 2020-09-07\n"
 "Last-Translator: vincent.levigneron@afnic.fr\n"
 "Language-Team: Zonemaster Team\n"
@@ -709,8 +709,8 @@ msgid ""
 "with keytag {keytag} in zone {zone}."
 msgstr ""
 "Le serveur de noms {ns}/{address} retourne un enregistrement de type \"DS\" "
-"créé à partir de l'algorithme ({algorithm_number}/{algorithm_mnemonic}), "
-"ce qui est correct. Cet enregistrement de type \"DS\" correspond à la clé "
+"créé à partir de l'algorithme ({algorithm_number}/{algorithm_mnemonic}), ce "
+"qui est correct. Cet enregistrement de type \"DS\" correspond à la clé "
 "(DNSKEY) avec le tag {keytag} dans la zone {zone}."
 
 #. DNSSEC:DS_ALGORITHM_RESERVED
@@ -884,8 +884,7 @@ msgstr ""
 
 #. DNSSEC:KEY_SIZE_OK
 msgid "All keys from the DNSKEY RRset have the correct size."
-msgstr ""
-"Toutes les clés de l'apex (DNSKEY RRset) ont une taille correcte."
+msgstr "Toutes les clés de l'apex (DNSKEY RRset) ont une taille correcte."
 
 #. DNSSEC:MANY_ITERATIONS
 #, perl-brace-format
@@ -1362,7 +1361,7 @@ msgid ""
 "Delegation lists no nameserver that resolves to an IPv6 address. If any were "
 "present, the minimum allowed would be {minimum}."
 msgstr ""
-"Les serveurs de noms de la zone parente retournent pas de serveurs ayant une "
+"Les serveurs de noms de la zone parente ne retournent pas de serveurs ayant une "
 "adresse IPv6. Si il y en avait, il en faudrait au minimum {minimum}."
 
 #. DELEGATION:NS_IS_CNAME
@@ -1741,8 +1740,8 @@ msgstr ""
 #, perl-brace-format
 msgid "Found illegal characters in SOA MNAME ({name})."
 msgstr ""
-"Des caractèrs interdits ont été trouvés dans le nom du serveur maître défini "
-"dans le SOA, 'mname' ({name})."
+"Des caractères interdits ont été trouvés dans le nom du serveur maître "
+"défini dans le SOA, 'mname' ({name})."
 
 #. SYNTAX:MNAME_NUMERIC_TLD
 #, perl-brace-format
@@ -1771,7 +1770,7 @@ msgstr ""
 #, perl-brace-format
 msgid "Found illegal characters in MX ({name})."
 msgstr ""
-"Des caractèrs interdits ont été trouvés dans le nom du relais de messagerie "
+"Des caractères interdits ont été trouvés dans le nom du relais de messagerie "
 "({name})."
 
 #. SYNTAX:MX_NUMERIC_TLD
@@ -1799,7 +1798,7 @@ msgstr ""
 #, perl-brace-format
 msgid "Found illegal characters in the nameserver ({name})."
 msgstr ""
-"Des caractèrs interdits ont été trouvés dans le nom du serveur de noms "
+"Des caractères interdits ont été trouvés dans le nom du serveur de noms "
 "({name})."
 
 #. SYNTAX:NAMESERVER_NUMERIC_TLD
@@ -1817,7 +1816,7 @@ msgstr "La syntaxe du nom du serveur de noms ({name}) est valide."
 #, perl-brace-format
 msgid "Found illegal characters in the domain name ({name})."
 msgstr ""
-"Des caractèrs interdits ont été trouvés dans le nom de domaine '{name}'."
+"Des caractères interdits ont été trouvés dans le nom de domaine '{name}'."
 
 #. SYNTAX:NO_DOUBLE_DASH
 #, perl-brace-format
