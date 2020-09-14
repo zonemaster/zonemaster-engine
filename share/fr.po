@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-07-23 11:57+0200\n"
-"PO-Revision-Date: 2020-04-02\n"
+"PO-Revision-Date: 2020-09-07\n"
 "Last-Translator: vincent.levigneron@afnic.fr\n"
 "Language-Team: Zonemaster Team\n"
 "Language: fr\n"
@@ -1874,8 +1874,8 @@ msgstr "Il n'y a aucun caractère '@' dans le champ RNAME ({rname}) du SOA."
 #, perl-brace-format
 msgid "Illegal character(s) found in SOA RNAME field ({rname})."
 msgstr ""
-"Des caractèrs interdits ont été trouvés dans le nom du serveur maître défini "
-"dans le SOA, 'mname' ({name})."
+"Le champ RNAME ({rname}) du SOA n'est pas conforme aux règles définies dans "
+"le RFC2822."
 
 #. SYNTAX:RNAME_RFC822_VALID
 #, perl-brace-format
