@@ -33,7 +33,7 @@ isa_ok( $entry, 'Zonemaster::Engine::Logger::Entry' );
 
 ok( scalar( @{ Zonemaster::Engine->logger->entries } ) >= 2, 'expected number of entries' );
 
-like( "$entry", qr/SYSTEM:TEST an=argument/, 'stringification overload' );
+like( "$entry", qr/SYSTEM:UNSPECIFIED:TEST an=argument/, 'stringification overload' );
 
 is( $entry->level, 'DEBUG', 'right level' );
 my $example = Zonemaster::Engine::Logger::Entry->new( { module => 'BASIC', tag => 'NS_FAILED' } );
