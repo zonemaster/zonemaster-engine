@@ -865,7 +865,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     UNEXPECTED_RESPONSE_DS => sub {
         __x    # DNSSEC:UNEXPECTED_RESPONSE_DS
-          '{ns}/{address} responded with an unexpected rcode ({rcode}) on a DS query for zone {zone}.', @_;
+          'Nameserver {ns}/{address} responded with an unexpected rcode ({rcode}) on a DS query for zone {zone}.', @_;
     },
 );
 
