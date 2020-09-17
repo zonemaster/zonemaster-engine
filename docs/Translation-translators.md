@@ -25,21 +25,21 @@ To be written.
 
 Install the following:
 ```
-apt install gettext git
+apt install gettext git liblocale-po-perl
 ```
 
 * FreeBSD
 
 Install the following:
 ```
-pkg install devel/gettext-tools devel/git-lite
+pkg install devel/gettext-tools devel/git-lite devel/p5-Locale-PO
 ```
 
 * Ubuntu
 
 Install the following:
 ```
-apt install gettext git make
+apt install gettext git make liblocale-po-perl
 ```
 
 ##  Background
@@ -174,6 +174,9 @@ make xx.po
 
 * Any remaining *obsolete entries* (lines at the end of the file starting 
   with "#~") could be removed. They have no purpose anymore.
+
+* Run `../util/check-msg-args xx.po` to make sure the messages arguments in the
+  *msgstr* strings match up with those in the *msgid* strings.
 
 * When the update is completed, it is time to commit the changes. First do
   a "git add" of the *PO* file you have updated. Make sure not to "add" any 
