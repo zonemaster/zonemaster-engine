@@ -109,7 +109,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     PACKET_BIG => sub {
         __x    # SYSTEM:PACKET_BIG
-          "Packet size ({size}) exceeds common maximum size of {maxsize} bytes (try with \"{command}\").", @_;
+          "Big packet size ({size}) (try with \"{command}\").", @_;
     },
 );
 
