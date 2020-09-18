@@ -348,7 +348,7 @@
             "UNKNOWN_METHOD" : "CRITICAL",
             "UNKNOWN_MODULE" : "CRITICAL",
             "IS_BLACKLISTED" : "DEBUG",
-            "PACKET_BIG" : "WARNING"
+            "PACKET_BIG" : "DEBUG"
         },
         "ZONE" : {
             "EXPIRE_LOWER_THAN_REFRESH" : "WARNING",
