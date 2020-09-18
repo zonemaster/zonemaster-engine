@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare( "v1.1.22" );
+use version; our $VERSION = version->declare( "v1.1.23" );
 
 ###
 ### This test module implements DNSSEC tests.
@@ -298,18 +298,19 @@ sub metadata {
         ],
         dnssec02 => [
             qw(
-              NO_DS
-              DS_FOUND
-              NO_DNSKEY
-              DS_RFC4509_NOT_VALID
-              COMMON_KEYTAGS
-              DS_MATCHES_DNSKEY
-              DS_DOES_NOT_MATCH_DNSKEY
-              DS_MATCH_FOUND
-              DS_MATCH_NOT_FOUND
-              NO_COMMON_KEYTAGS
+              BROKEN_DS
+              BROKEN_RRSIG
+              DNSKEY_KSK_NOT_SEP
+              DNSKEY_NOT_ZONE_SIGN
+              DS_MATCHES
+              NO_MATCHING_DNSKEY
+              NO_MATCHING_RRSIG
+              NO_RESPONSE
+              NO_RESPONSE_DNSKEY
+              NO_RRSIG_DNSKEY
               TEST_CASE_END
               TEST_CASE_START
+              UNEXPECTED_RESPONSE_DS
               )
         ],
         dnssec03 => [
@@ -511,9 +512,17 @@ Readonly my %TAG_DESCRIPTIONS => (
           . 'records are expected.',
           @_;
     },
-    COMMON_KEYTAGS => sub {
-        __x    # DNSSEC:COMMON_KEYTAGS
-          'There are both DS and DNSKEY records with key tags {keytags}.', @_;
+    BROKEN_DS => sub {
+        __x    # DNSSEC:BROKEN_DS
+          'DNSKEY record with tag {keytag} returned by nameserver {ns}/{address} doe not match '
+          . 'DS record with same tag in parent zone.',
+          @_;
+    },
+    BROKEN_RRSIG => sub {
+        __x    # DNSSEC:BROKEN_RRSIG
+          'Signature for DNSKEY with tag {keytag} returned by nameserver {ns}/{address} failed'
+          . 'to verify with error \'{error}\' although DS with same tag is present in parent.',
+          @_;
     },
     DELEGATION_NOT_SIGNED => sub {
         __x    # DNSSEC:DELEGATION_NOT_SIGNED
@@ -530,6 +539,18 @@ Readonly my %TAG_DESCRIPTIONS => (
     DNSKEY_BUT_NOT_DS => sub {
         __x    # DNSSEC:DNSKEY_BUT_NOT_DS
           '{child} sent a DNSKEY record, but {parent} did not send a DS record.', @_;
+    },
+    DNSKEY_KSK_NOT_SEP => sub {
+        __x    # DNSSEC:DNSKEY_KSK_NOT_SEP
+          'Flags field of DNSKEY record with tag {keytag} returned by nameserver {ns}/{address} '
+          . 'has not SEP bit set although DS with same tag is present in parent.',
+          @_;
+    },
+    DNSKEY_NOT_ZONE_SIGN => sub {
+        __x    # DNSSEC:DNSKEY_NOT_ZONE_SIGN
+          'Flags field of DNSKEY record with tag {keytag} returned by nameserver {ns}/{address} '
+          . 'has not ZONE bit set although DS with same tag is present in parent.',
+          @_;
     },
     DNSKEY_NOT_SIGNED => sub {
         __x    # DNSSEC:DNSKEY_NOT_SIGNED
@@ -610,32 +631,9 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # DNSSEC:DS_BUT_NOT_DNSKEY
           '{parent} sent a DS record, but {child} did not send a DNSKEY record.', @_;
     },
-    DS_DOES_NOT_MATCH_DNSKEY => sub {
-        __x    # DNSSEC:DS_DOES_NOT_MATCH_DNSKEY
-          'DS record with keytag {keytag} and digest type {digtype} does not match the DNSKEY with the same tag.',
-          @_;
-    },
-    DS_FOUND => sub {
-        __x    # DNSSEC:DS_FOUND
-          'Found DS records with tags {keytags}.', @_;
-    },
-    DS_MATCHES_DNSKEY => sub {
-        __x    # DNSSEC:DS_MATCHES_DNSKEY
-          'DS record with keytag {keytag} and digest type {digtype} matches the DNSKEY with the same tag.', @_;
-    },
-    DS_MATCH_FOUND => sub {
-        __x    # DNSSEC:DS_MATCH_FOUND
-          'At least one DS record with a matching DNSKEY record was found.', @_;
-    },
-    DS_MATCH_NOT_FOUND => sub {
-        __x    # DNSSEC:DS_MATCH_NOT_FOUND
-          'No DS record with a matching DNSKEY record was found.', @_;
-    },
-    DS_RFC4509_NOT_VALID => sub {
-        __x    # DNSSEC:DS_RFC4509_NOT_VALID
-          'Existing DS with digest type 2, while they do not match DNSKEY records, '
-          . 'prevent use of DS with digest type 1 (RFC4509, section 3).',
-          @_;
+    DS_MATCHES => sub {
+        __x    # DNSSEC:DS_MATCHES
+          'Found DS records matching DNSKEY records.',  @_;
     },
     DURATION_LONG => sub {
         __x    # DNSSEC:DURATION_LONG
@@ -715,17 +713,9 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # DNSSEC:NEITHER_DNSKEY_NOR_DS
           'There are neither DS nor DNSKEY records for the zone.', @_;
     },
-    NO_COMMON_KEYTAGS => sub {
-        __x    # DNSSEC:NO_COMMON_KEYTAGS
-          'No DS record had a DNSKEY with a matching keytag.', @_;
-    },
     NO_DNSKEY => sub {
         __x    # DNSSEC:NO_DNSKEY
           'No DNSKEYs were returned.', @_;
-    },
-    NO_DS => sub {
-        __x    # DNSSEC:NO_DS
-          '{from} returned no DS records for {zone}.', @_;
     },
     NO_KEYS_OR_NO_SIGS => sub {
         __x    # DNSSEC:NO_KEYS_OR_NO_SIGS
@@ -736,6 +726,18 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # DNSSEC:NO_KEYS_OR_NO_SIGS_OR_NO_SOA
           'Cannot test SOA signatures, because we got {keys} DNSKEY records, '
           . '{sigs} RRSIG records and {soas} SOA records.',
+          @_;
+    },
+    NO_MATCHING_DNSKEY => sub {
+        __x    # DNSSEC:NO_MATCHING_DNSKEY
+          'Although DS record is present in parent, nameserver {ns}/{address} returned no DNSKEY '
+          . 'record with same tag {keytag}.',
+          @_;
+    },
+    NO_MATCHING_RRSIG => sub {
+        __x    # DNSSEC:NO_MATCHING_RRSIG
+          'Although DS record is present in parent, nameserver {ns}/{address} returned no signature '
+          . 'corresponding to the DNSKEY with tag {keytag}.',
           @_;
     },
     NO_NSEC3PARAM => sub {
@@ -763,6 +765,10 @@ Readonly my %TAG_DESCRIPTIONS => (
     NO_RESPONSE => sub {
         __x    # DNSSEC:NO_RESPONSE
           'Nameserver {ns}/{address} did not respond.', @_;
+    },
+    NO_RRSIG_DNSKEY => sub {
+        __x    # DNSSEC:NO_RRSIG_DNSKEY
+          'Nameserver {ns}/{address} responded with no RRSIG record(s) covering the DNSKEY RRset.', @_;
     },
     NOT_SIGNED => sub {
         __x    # DNSSEC:NOT_SIGNED
@@ -954,139 +960,174 @@ sub dnssec01 {
 
 sub dnssec02 {
     my ( $class, $zone ) = @_;
+    my %ds_records;
+    my @keys;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
-    if ( not $zone->parent ) {
-        return (@results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
-    }
+    if ( my $parent = $zone->parent ) {
+        foreach my $ns ( @{ $parent->ns } ) {
+            my $ns_args = {
+                ns      => $ns->name->string,
+                address => $ns->address->short,
+                zone    => q{} . $zone->name,
+                rrtype  => q{DS},
+            };
 
-    # 1. Retrieve the DS RR set from the parent zone. If there are no DS RR present, exit the test
-    my $ds_p = $zone->parent->query_one( $zone->name, 'DS', { dnssec => 1 } );
-    die "No response from parent nameservers" if not $ds_p;
-    my %ds = map { $_->keytag => $_ } $ds_p->get_records( 'DS', 'answer' );
-
-    if ( scalar( keys %ds ) == 0 ) {
-        push @results,
-          info(
-            NO_DS => {
-                zone => q{} . $zone->name,
-                from => $ds_p->answerfrom,
-            }
-          );
-    }
-    else {
-        push @results,
-          info(
-            DS_FOUND => {
-                keytags => join( q{:}, map { $_->keytag } values %ds ),
-            }
-          );
-
-        # 2. Retrieve the DNSKEY RR set from the child zone. If there are no DNSKEY RR present, then the test case fail
-        my $dnskey_p = $zone->query_one( $zone->name, 'DNSKEY', { dnssec => 1 } );
-
-        my %dnskey;
-        %dnskey = map { $_->keytag => $_ } $dnskey_p->get_records( 'DNSKEY', 'answer' ) if $dnskey_p;
-        if ( scalar( keys %dnskey ) == 0 ) {
-            push @results,
-              info( NO_DNSKEY => {} );
-            return (@results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
-        }
-
-        # Pick out keys with a tag that a DS has using a hash slice
-        my @common = grep { exists $ds{$_->keytag} } values %dnskey;
-        if ( @common ) {
-            push @results,
-              info(
-                COMMON_KEYTAGS => {
-                    keytags => join( q{:}, map { $_->keytag } @common ),
-                }
-              );
-
-            my $found = 0;
-            my $rfc4509_compliant = 1;
-            # 4. Match all DS RR with type digest algorithm “2” with DNSKEY RR from the child. If no DS RRs with algorithm 2 matches a
-            #    DNSKEY RR from the child, this test case fails.
-            my %ds_digtype2 = map { $_->keytag => $_ } grep { $_->digtype == 2 } $ds_p->get_records( 'DS', 'answer' );
-            if ( scalar( keys %ds_digtype2 ) >= 1 ) {
-                @common = grep { exists $ds_digtype2{$_->keytag} } values %dnskey;
-
-                foreach my $key ( @common ) {
-                    if ( $ds_digtype2{ $key->keytag }->verify( $key ) ) {
-                        push @results,
-                          info(
-                            DS_MATCHES_DNSKEY => {
-                                keytag  => $key->keytag,
-                                digtype => 2,
-                            }
-                          );
-                        $found = 1;
-                    }
-                    else {
-                        push @results,
-                          info(
-                            DS_DOES_NOT_MATCH_DNSKEY => {
-                                keytag  => $key->keytag,
-                                digtype => 2,
-                            }
-                          );
-                    }
-                }
-
-                if ( not grep { $_->tag eq q{DS_MATCHES_DNSKEY} } @results ) {
-                    $rfc4509_compliant = 0;
-                    push @results,
-                      info( DS_RFC4509_NOT_VALID => {} );
-                }
-                
+            if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
+                push @results, info( IPV6_DISABLED => $ns_args );
+                next;
             }
 
-            # 5. Match all DS RR with type digest algorithm “1” with DNSKEY RR from the child. If no DS RRs with algorithm 1 matches a
-            #    DNSKEY RR from the child, this test case fails.
-            my %ds_digtype1 = map { $_->keytag => $_ } grep { $_->digtype == 1 } $ds_p->get_records( 'DS', 'answer' );
-            @common = grep { exists $ds_digtype1{$_->keytag} } values %dnskey;
-            foreach my $key ( @common ) {
-                if ( $ds_digtype1{ $key->keytag }->verify( $key ) ) {
-                    push @results,
-                      info(
-                        DS_MATCHES_DNSKEY => {
-                            keytag  => $key->keytag,
-                            digtype => 1,
-                        }
-                      );
-                    $found = 1;
-                }
-                else {
-                    push @results,
-                      info(
-                        DS_DOES_NOT_MATCH_DNSKEY => {
-                            keytag  => $key->keytag,
-                            digtype => 1,
-                        }
-                      );
-                }
+            if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
+                push @results, info( IPV4_DISABLED => $ns_args );
+                next;
             }
 
-            if ( $found ) {
-                push @results,
-                  info( DS_MATCH_FOUND => {} );
+            my $ds_p = $ns->query( $zone->name, q{DS}, { usevc => 0, dnssec => 1 } );
+            if ( not $ds_p ) {
+                push @results, info( NO_RESPONSE => $ns_args );
+                next;
+            }
+            elsif ($ds_p->rcode ne q{NOERROR} ) {
+                $ns_args->{rcode} = $ds_p->rcode;
+                push @results, info( UNEXPECTED_RESPONSE_DS => $ns_args );
+                next;
             }
             else {
-                push @results,
-                  info( DS_MATCH_NOT_FOUND => {} );
-            }
-        } ## end if ( @common )
-        else {
-            # 3. If no Key Tag from the DS RR matches any Key Tag from the DNSKEY RR, this test case fails
-            push @results,
-              info(
-                NO_COMMON_KEYTAGS => {
-                    dstags     => join( q{:}, keys %ds ),
-                    dnskeytags => join( q{:}, keys %dnskey ),
+                my @dss = $ds_p->get_records( q{DS}, q{answer} );
+                foreach my $ds ( @dss ) {
+                    $ds_records{ $ds->keytag . q{/} . $ds->digtype . q{/} . $ds->algorithm . q{/} . $ds->hexdigest } = $ds;
                 }
-              );
+            }
         }
-    } ## end else [ if ( scalar( keys %ds ...))]
+
+        if ( scalar values %ds_records ) {
+            my @nss_del     = @{ Zonemaster::Engine::TestMethods->method4( $zone ) };
+            my @nss_child   = @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
+            my %nss         = map { $_->name->string . q{/} . $_->address->short => $_ } @nss_del, @nss_child;
+            my $keys_exists = 0;
+
+            for my $nss_key ( sort keys %nss ) {
+                my $ns = $nss{$nss_key};
+                my $ns_args = {
+                    ns      => $ns->name->string,
+                    address => $ns->address->short,
+                    zone    => q{} . $zone->name,
+                    rrtype  => q{DNSKEY},
+                };
+
+                if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
+                    push @results, info( IPV6_DISABLED => $ns_args );
+                    next;
+                }
+
+                if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
+                    push @results, info( IPV4_DISABLED => $ns_args );
+                    next;
+                }
+
+                my $dnskey_p = $ns->query( $zone->name, q{DNSKEY}, { dnssec => 1, usevc => 0 } );
+                if ( not $dnskey_p ) {
+                    push @results, info( NO_RESPONSE => $ns_args );
+                    next;
+                }
+                my @keys = $dnskey_p->get_records( q{DNSKEY}, q{answer} );
+                if ( not @keys ) {
+                    push @results, info( NO_RESPONSE_DNSKEY => $ns_args );
+                    next;
+                }
+                else {
+                    $keys_exists = 1;
+                }
+
+                my @key_sigs = $dnskey_p->get_records( q{RRSIG}, q{answer} );
+                if ( not scalar @key_sigs ) {
+                    push @results, info( NO_RRSIG_DNSKEY => $ns_args );
+                }
+                else {
+                    DS_LOOP: {
+                        foreach my $ds ( values %ds_records ) {
+                            my @matching_keys = grep { $ds->keytag == $_->keytag } @keys;
+                            if ( not scalar @matching_keys ) {
+                                push @results,
+                                  info(
+                                    NO_MATCHING_DNSKEY => {
+                                        ns      => $ns->name->string,
+                                        address => $ns->address->short,
+                                        keytag  => $ds->keytag,
+                                    }
+                                  );
+                            }
+                            foreach my $key ( @matching_keys ) {
+                                if ( not $ds->verify( $key ) ) {
+                                    push @results,
+                                      info(
+                                        BROKEN_DS => {
+                                            ns      => $ns->name->string,
+                                            address => $ns->address->short,
+                                            keytag  => $ds->keytag,
+                                        }
+                                      );
+                                }
+                                if ( not $key->flags & 256 ) { # Bit 7 (ZONE)
+                                    push @results,
+                                      info(
+                                        DNSKEY_NOT_ZONE_SIGN => {
+                                            ns      => $ns->name->string,
+                                            address => $ns->address->short,
+                                            keytag  => $ds->keytag,
+                                        }
+                                      );
+                                    next DS_LOOP;
+                                }
+                                if ( not $key->flags & 1 ) { # Bit 15 (SEP)
+                                    push @results,
+                                      info(
+                                        DNSKEY_KSK_NOT_SEP => {
+                                            ns      => $ns->name->string,
+                                            address => $ns->address->short,
+                                            keytag  => $ds->keytag,
+                                        }
+                                      );
+                                }
+                            }
+                            my @matching_sigs = grep { $ds->keytag == $_->keytag } @key_sigs;
+                            if ( not scalar @matching_sigs ) {
+                                push @results,
+                                  info(
+                                    NO_MATCHING_RRSIG => {
+                                        ns      => $ns->name->string,
+                                        address => $ns->address->short,
+                                        keytag  => $ds->keytag,
+                                    }
+                                  );
+                            }
+                            my $msg  = q{};
+                            my $time = $dnskey_p->timestamp;
+                            foreach my $sig ( @matching_sigs ) {
+                                if ( not $sig->verify_time( \@keys, \@keys, $time, $msg ) ) {
+                                    push @results,
+                                      info(
+                                        BROKEN_RRSIG => {
+                                            ns      => $ns->name->string,
+                                            address => $ns->address->short,
+                                            keytag  => $ds->keytag,
+                                            error   => $msg,
+                                        }
+                                      );
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if ( $keys_exists ) {
+                if ( not scalar grep { $_->tag ne q{NO_RESPONSE} and $_->tag ne q{DNSKEY_KSK_NOT_SEP} and $_->tag ne q{TEST_CASE_START} } @results ) {
+                    push @results, info( DS_MATCHES => {} );
+                }
+            }
+        }
+    }
 
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub dnssec02
