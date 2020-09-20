@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-07 15:35+0200\n"
+"POT-Creation-Date: 2020-09-20 07:40+0200\n"
 "PO-Revision-Date: 2020-09-22 16:15+0200\n"
 "Last-Translator: richard.persson@norid.no\n"
 "Language-Team: Zonemaster Team\n"
@@ -231,17 +231,17 @@ msgstr "Navnetjener har IPv6-adresse i følgende AS: {asn}."
 
 #. CONNECTIVITY:ASN_INFOS_RAW
 #, perl-brace-format
-msgid "[ASN:RAW] {address};{data}"
+msgid "[ASN:RAW] {address};{data}."
 msgstr "[ASN:RAW] {address};{data}"
 
 #. CONNECTIVITY:ASN_INFOS_ANNOUNCE_BY
 #, perl-brace-format
-msgid "[ASN:ANNOUNCE_BY] {address};{asn}"
+msgid "[ASN:ANNOUNCE_BY] {address};{asn}."
 msgstr "[ASN:ANNOUNCE_BY] {address};{asn}"
 
 #. CONNECTIVITY:ASN_INFOS_ANNOUNCE_IN
 #, perl-brace-format
-msgid "[ASN:ANNOUNCE_IN] {address};{prefix}"
+msgid "[ASN:ANNOUNCE_IN] {address};{prefix}."
 msgstr "[ASN:ANNOUNCE_IN] {address};{prefix}"
 
 #. CONSISTENCY:ADDRESSES_MATCH
@@ -254,7 +254,7 @@ msgid "Unexpected or erroneous reply from {ns}/{address}."
 msgstr "Uventet eller feil svar fra {ns}/{address}."
 
 #. CONSISTENCY:CHILD_ZONE_LAME
-msgid "Lame delegation"
+msgid "Lame delegation."
 msgstr "Det er ikke mulig å følge delegeringen av domenet"
 
 #. CONSISTENCY:EXTRA_ADDRESS_CHILD
@@ -278,7 +278,7 @@ msgstr ""
 msgid ""
 "In-bailiwick name server listed at parent has a mismatch between glue data "
 "at parent ({parent_addresses}) and any equivalent address record in child "
-"zone ({zone_addresses})"
+"zone ({zone_addresses})."
 msgstr ""
 "Limposter hos en eller flere navnetjenere som er \"in-bailiwick\" hos "
 "foreldredomenet ({parent_addresses}) samsvarer ikke med tilsvarende "
@@ -339,12 +339,12 @@ msgstr "Et sett med NS-poster ble funnet ({nsset})."
 
 #. CONSISTENCY:ONE_SOA_MNAME
 #, perl-brace-format
-msgid "A single SOA mname value was seen ({mname})"
+msgid "A single SOA mname value was seen ({mname})."
 msgstr "En SOA/MNAME-post ble funnet ({mname})"
 
 #. CONSISTENCY:ONE_SOA_RNAME
 #, perl-brace-format
-msgid "A single SOA rname value was found ({rname})"
+msgid "A single SOA rname value was found ({rname})."
 msgstr "En SOA/RNAME-post ble funnet ({rname})"
 
 #. CONSISTENCY:ONE_SOA_SERIAL
@@ -366,7 +366,7 @@ msgstr ""
 msgid ""
 "Out-of-bailiwick name server listed at parent with glue record has a "
 "mismatch between the glue at the parent ({parent_addresses}) and any "
-"equivalent address record found in authoritative zone ({zone_addresses})"
+"equivalent address record found in authoritative zone ({zone_addresses})."
 msgstr ""
 "Limposter hos en eller flere navnetjenere som er \"out-of-bailiwick\" hos "
 "foreldredomenet ({parent_addresses}) samsvarer ikke med tilsvarende "
@@ -490,7 +490,7 @@ msgstr ""
 #. DNSSEC:ALL_ALGO_SIGNED
 msgid ""
 "All the tested RRset (SOA/DNSKEY/NS) are signed by each algorithm present in "
-"the DNSKEY RRset"
+"the DNSKEY RRset."
 msgstr ""
 "Alle testede RR-sett (SOA/DNSKEY/NS) er signert med hver algoritme som er i "
 "DNSKEY RR-sett"
@@ -929,7 +929,7 @@ msgstr ""
 #, perl-brace-format
 msgid ""
 "Nameserver {ns}/{address} responded with an RRSIG which can not be verified "
-"with corresponding DNSKEY (with keytag {keytag})"
+"with corresponding DNSKEY (with keytag {keytag})."
 msgstr ""
 "Navnetjener {ns}/{address} svarte med en RRSIG-post som ikke kan verifiseres "
 "med tilsvarende DNSKEY-post med \"key tag\" {keytag}."
@@ -1028,7 +1028,7 @@ msgstr ""
 "delegeringen ({nss})."
 
 #. DELEGATION:DISTINCT_IP_ADDRESS
-msgid "All the IP addresses used by the nameservers are unique"
+msgid "All the IP addresses used by the nameservers are unique."
 msgstr "Alle IP-addresser som brukes av navnetjenerne er unike"
 
 #. DELEGATION:ENOUGH_IPV4_NS_CHILD
@@ -1267,7 +1267,7 @@ msgstr ""
 #, perl-brace-format
 msgid ""
 "Nameserver {ns}/{address} answered AAAA query with an unexpected RDATA "
-"length ({length} instead of 16)"
+"length ({length} instead of 16)."
 msgstr ""
 "Navnetjener {ns}/{address} besvarte AAAA-spørring med en uventet lengde på "
 "RDATA. ({length}) istede for 16."
