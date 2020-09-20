@@ -232,17 +232,17 @@ msgstr "Navnetjener har IPv6-adresse i følgende AS: {asn}."
 #. CONNECTIVITY:ASN_INFOS_RAW
 #, perl-brace-format
 msgid "[ASN:RAW] {address};{data}."
-msgstr "[ASN:RAW] {address};{data}"
+msgstr "[ASN:RAW] {address};{data}."
 
 #. CONNECTIVITY:ASN_INFOS_ANNOUNCE_BY
 #, perl-brace-format
 msgid "[ASN:ANNOUNCE_BY] {address};{asn}."
-msgstr "[ASN:ANNOUNCE_BY] {address};{asn}"
+msgstr "[ASN:ANNOUNCE_BY] {address};{asn}."
 
 #. CONNECTIVITY:ASN_INFOS_ANNOUNCE_IN
 #, perl-brace-format
 msgid "[ASN:ANNOUNCE_IN] {address};{prefix}."
-msgstr "[ASN:ANNOUNCE_IN] {address};{prefix}"
+msgstr "[ASN:ANNOUNCE_IN] {address};{prefix}."
 
 #. CONSISTENCY:ADDRESSES_MATCH
 msgid "Glue records are consistent between glue and authoritative data."
@@ -255,7 +255,7 @@ msgstr "Uventet eller feil svar fra {ns}/{address}."
 
 #. CONSISTENCY:CHILD_ZONE_LAME
 msgid "Lame delegation."
-msgstr "Det er ikke mulig å følge delegeringen av domenet"
+msgstr "Det er ikke mulig å følge delegeringen av domenet."
 
 #. CONSISTENCY:EXTRA_ADDRESS_CHILD
 #, perl-brace-format
@@ -340,12 +340,12 @@ msgstr "Et sett med NS-poster ble funnet ({nsset})."
 #. CONSISTENCY:ONE_SOA_MNAME
 #, perl-brace-format
 msgid "A single SOA mname value was seen ({mname})."
-msgstr "En SOA/MNAME-post ble funnet ({mname})"
+msgstr "En SOA/MNAME-post ble funnet ({mname})."
 
 #. CONSISTENCY:ONE_SOA_RNAME
 #, perl-brace-format
 msgid "A single SOA rname value was found ({rname})."
-msgstr "En SOA/RNAME-post ble funnet ({rname})"
+msgstr "En SOA/RNAME-post ble funnet ({rname})."
 
 #. CONSISTENCY:ONE_SOA_SERIAL
 #, perl-brace-format
@@ -493,7 +493,7 @@ msgid ""
 "the DNSKEY RRset."
 msgstr ""
 "Alle testede RR-sett (SOA/DNSKEY/NS) er signert med hver algoritme som er i "
-"DNSKEY RR-sett"
+"DNSKEY RR-sett."
 
 #. DNSSEC:BROKEN_DNSSEC
 #, perl-brace-format
@@ -1029,7 +1029,7 @@ msgstr ""
 
 #. DELEGATION:DISTINCT_IP_ADDRESS
 msgid "All the IP addresses used by the nameservers are unique."
-msgstr "Alle IP-addresser som brukes av navnetjenerne er unike"
+msgstr "Alle IP-addresser som brukes av navnetjenerne er unike."
 
 #. DELEGATION:ENOUGH_IPV4_NS_CHILD
 #, perl-brace-format
@@ -1787,7 +1787,7 @@ msgstr ""
 
 #. ZONE:MNAME_RECORD_DOES_NOT_EXIST
 msgid "SOA 'mname' field does not exist"
-msgstr "SOA/MNAME-post eksisterer ikke"
+msgstr "SOA/MNAME-post eksisterer ikke."
 
 #. ZONE:EXPIRE_MINIMUM_VALUE_LOWER
 #, perl-brace-format
@@ -1906,7 +1906,7 @@ msgstr "Bruker versjon {version} av Zonemaster engine."
 #, perl-brace-format
 msgid "Logger callback died with error: {exception}"
 msgstr ""
-"Callback-funksjonen for loggmodulen stoppet med feilmelding:  {exception}"
+"Callback-funksjonen for loggmodulen stoppet med feilmelding:  {exception}."
 
 #. SYSTEM:LOOKUP_ERROR
 #, perl-brace-format
@@ -1914,12 +1914,12 @@ msgid ""
 "DNS query to {ns} for {name}/{type}/{class} failed with error: {message}"
 msgstr ""
 "DNS-spørring til {ns} for {name}/{type}/{class} mislyktes med følgende feil: "
-"{message}"
+"{message}."
 
 #. SYSTEM:MODULE_ERROR
 #, perl-brace-format
 msgid "Fatal error in {module}: {msg}"
-msgstr "Fatal feil i {module}: {msg}"
+msgstr "Fatal feil i {module}: {msg}."
 
 #. SYSTEM:MODULE_VERSION
 #, perl-brace-format

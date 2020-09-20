@@ -273,17 +273,17 @@ msgstr ""
 #. CONNECTIVITY:ASN_INFOS_RAW
 #, perl-brace-format
 msgid "[ASN:RAW] {address};{data}."
-msgstr "[ASN:RAW] {address};{data}"
+msgstr "[ASN:RAW] {address};{data}."
 
 #. CONNECTIVITY:ASN_INFOS_ANNOUNCE_BY
 #, perl-brace-format
 msgid "[ASN:ANNOUNCE_BY] {address};{asn}."
-msgstr "[ASN:ANNOUNCE_BY] {address};{asn}"
+msgstr "[ASN:ANNOUNCE_BY] {address};{asn}."
 
 #. CONNECTIVITY:ASN_INFOS_ANNOUNCE_IN
 #, perl-brace-format
 msgid "[ASN:ANNOUNCE_IN] {address};{prefix}."
-msgstr "[ASN:ANNOUNCE_IN] {address};{prefix}"
+msgstr "[ASN:ANNOUNCE_IN] {address};{prefix}."
 
 #. CONSISTENCY:ADDRESSES_MATCH
 msgid "Glue records are consistent between glue and authoritative data."
@@ -294,7 +294,7 @@ msgstr ""
 #. CONSISTENCY:CHILD_NS_FAILED
 #, perl-brace-format
 msgid "Unexpected or erroneous reply from {ns}/{address}."
-msgstr "Réponse inattendue ou erronéeLe du serveur de noms {ns}/{address}"
+msgstr "Réponse inattendue ou erronéeLe du serveur de noms {ns}/{address}."
 
 #. CONSISTENCY:CHILD_ZONE_LAME
 msgid "Lame delegation."
@@ -1362,8 +1362,8 @@ msgid ""
 "Delegation lists no nameserver that resolves to an IPv6 address. If any were "
 "present, the minimum allowed would be {minimum}."
 msgstr ""
-"Les serveurs de noms de la zone parente ne retournent pas de serveurs ayant une "
-"adresse IPv6. Si il y en avait, il en faudrait au minimum {minimum}."
+"Les serveurs de noms de la zone parente ne retournent pas de serveurs ayant "
+"une adresse IPv6. Si il y en avait, il en faudrait au minimum {minimum}."
 
 #. DELEGATION:NO_NS_CNAME
 msgid "No nameserver points to CNAME alias."
@@ -2127,7 +2127,7 @@ msgstr "Utilisation de la version {version} du moteur Zonemaster."
 msgid "Logger callback died with error: {exception}"
 msgstr ""
 "L'appel au système de log (Callback) s'est terminé avec l'erreur suivante: "
-"{exception}"
+"{exception}."
 
 #. SYSTEM:LOOKUP_ERROR
 #, perl-brace-format
@@ -2135,12 +2135,12 @@ msgid ""
 "DNS query to {ns} for {name}/{type}/{class} failed with error: {message}"
 msgstr ""
 "La requête DNS {name}/{type}/{class} au serveur de noms {ns} a échoué avec "
-"le message d'erreur suivant: {message}"
+"le message d'erreur suivant: {message}."
 
 #. SYSTEM:MODULE_ERROR
 #, perl-brace-format
 msgid "Fatal error in {module}: {msg}"
-msgstr "Erreur fatale dans le module {module}: {msg}"
+msgstr "Erreur fatale dans le module {module}: {msg}."
 
 #. SYSTEM:MODULE_VERSION
 #, perl-brace-format

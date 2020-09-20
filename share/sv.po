@@ -340,7 +340,8 @@ msgstr "Inget svar från namnservern {ns}/{address} på fråga efter SOA-post."
 #. CONSISTENCY:NS_SET
 #, perl-brace-format
 msgid "Saw NS set ({nsset}) on following nameserver set : {servers}."
-msgstr "NS-uppsättningen '{nsset}' hittades på följande namnservrar: {servers}"
+msgstr ""
+"NS-uppsättningen '{nsset}' hittades på följande namnservrar: {servers}."
 
 #. CONSISTENCY:ONE_NS_SET
 #, perl-brace-format
@@ -350,12 +351,12 @@ msgstr "Exakt en uppsättning namnservrar hittades: ({nsset})."
 #. CONSISTENCY:ONE_SOA_MNAME
 #, perl-brace-format
 msgid "A single SOA mname value was seen ({mname})."
-msgstr "Exakt en 'SOA MNAME' hittades: ({mname})"
+msgstr "Exakt en 'SOA MNAME' hittades: ({mname})."
 
 #. CONSISTENCY:ONE_SOA_RNAME
 #, perl-brace-format
 msgid "A single SOA rname value was found ({rname})."
-msgstr "Exakt en 'SOA RNAME' hittades: ({rname})"
+msgstr "Exakt en 'SOA RNAME' hittades: ({rname})."
 
 #. CONSISTENCY:ONE_SOA_SERIAL
 #, perl-brace-format
@@ -1947,7 +1948,7 @@ msgstr "Använder version {version} av Zonemasters testmotor."
 #, perl-brace-format
 msgid "Logger callback died with error: {exception}"
 msgstr ""
-"Callback-funktionen för log-modulen avbröt med felmeddelandet: '{exception}'"
+"Callback-funktionen för log-modulen avbröt med felmeddelandet: '{exception}'."
 
 #. SYSTEM:LOOKUP_ERROR
 #, perl-brace-format
@@ -1955,12 +1956,12 @@ msgid ""
 "DNS query to {ns} for {name}/{type}/{class} failed with error: {message}"
 msgstr ""
 "DNS-fråga till {ns} för {name}/{type}/{class} misslyckades med felet: "
-"'{message}'"
+"'{message}'."
 
 #. SYSTEM:MODULE_ERROR
 #, perl-brace-format
 msgid "Fatal error in {module}: {msg}"
-msgstr "Fatalt fel i '{module}': '{msg}'"
+msgstr "Fatalt fel i '{module}': '{msg}'."
 
 #. SYSTEM:MODULE_VERSION
 #, perl-brace-format
