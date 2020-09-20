@@ -132,27 +132,27 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     NAMESERVER_HAS_TCP_53 => sub {
         __x    # CONNECTIVITY:NAMESERVER_HAS_TCP_53
-          'Nameserver {ns}/{address} accessible over TCP on port 53.', @_;
+          'Nameserver {ns} accessible over TCP on port 53.', @_;
     },
     NAMESERVER_HAS_UDP_53 => sub {
         __x    # CONNECTIVITY:NAMESERVER_HAS_UDP_53
-          'Nameserver {ns}/{address} accessible over UDP on port 53.', @_;
+          'Nameserver {ns} accessible over UDP on port 53.', @_;
     },
     NAMESERVER_NO_TCP_53 => sub {
         __x    # CONNECTIVITY:NAMESERVER_NO_TCP_53
-          'Nameserver {ns}/{address} not accessible over TCP on port 53.', @_;
+          'Nameserver {ns} not accessible over TCP on port 53.', @_;
     },
     NAMESERVER_NO_UDP_53 => sub {
         __x    # CONNECTIVITY:NAMESERVER_NO_UDP_53
-          'Nameserver {ns}/{address} not accessible over UDP on port 53.', @_;
+          'Nameserver {ns} not accessible over UDP on port 53.', @_;
     },
     IPV4_DISABLED => sub {
         __x    # CONNECTIVITY:IPV4_DISABLED
-          'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
+          'IPv4 is disabled, not sending "{rrtype}" query to {ns}.', @_;
     },
     IPV6_DISABLED => sub {
         __x    # CONNECTIVITY:IPV6_DISABLED
-          'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
+          'IPv6 is disabled, not sending "{rrtype}" query to {ns}.', @_;
     },
     IPV4_ASN => sub {
         __x    # CONNECTIVITY:IPV4_ASN
@@ -164,15 +164,15 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     ASN_INFOS_RAW => sub {
         __x    # CONNECTIVITY:ASN_INFOS_RAW
-          '[ASN:RAW] {address};{data}.', @_;
+          '[ASN:RAW] {nsip};{data}.', @_;
     },
     ASN_INFOS_ANNOUNCE_BY => sub {
         __x    # CONNECTIVITY:ASN_INFOS_ANNOUNCE_BY
-          '[ASN:ANNOUNCE_BY] {address};{asn}.', @_;
+          '[ASN:ANNOUNCE_BY] {nsip};{asn}.', @_;
     },
     ASN_INFOS_ANNOUNCE_IN => sub {
         __x    # CONNECTIVITY:ASN_INFOS_ANNOUNCE_IN
-          '[ASN:ANNOUNCE_IN] {address};{prefix}.', @_;
+          '[ASN:ANNOUNCE_IN] {nsip};{prefix}.', @_;
     },
     TEST_CASE_END => sub {
         __x    # CONNECTIVITY:TEST_CASE_END
@@ -211,9 +211,8 @@ sub connectivity01 {
             push @results,
               info(
                 IPV6_DISABLED => {
-                    ns      => $local_ns->name->string,
-                    address => $local_ns->address->short,
-                    rrtype  => $query_type,
+                    ns     => $local_ns->string,
+                    rrtype => $query_type,
                 }
               );
             next;
@@ -223,9 +222,8 @@ sub connectivity01 {
             push @results,
               info(
                 IPV4_DISABLED => {
-                    ns      => $local_ns->name->string,
-                    address => $local_ns->address->short,
-                    rrtype  => $query_type,
+                    ns     => $local_ns->string,
+                    rrtype => $query_type,
                 }
               );
             next;
@@ -236,22 +234,10 @@ sub connectivity01 {
         my $p = $local_ns->query( $zone->name, $query_type, { usevc => 0 } );
 
         if ( $p ) {
-            push @results,
-              info(
-                NAMESERVER_HAS_UDP_53 => {
-                    ns      => $local_ns->name->string,
-                    address => $local_ns->address->short,
-                }
-              );
+            push @results, info( NAMESERVER_HAS_UDP_53 => { ns => $local_ns->string } );
         }
         else {
-            push @results,
-              info(
-                NAMESERVER_NO_UDP_53 => {
-                    ns      => $local_ns->name->string,
-                    address => $local_ns->address->short,
-                }
-              );
+            push @results, info( NAMESERVER_NO_UDP_53 => { ns => $local_ns->string } );
         }
 
         $ips{ $local_ns->address->short }++;
@@ -275,9 +261,8 @@ sub connectivity02 {
             push @results,
               info(
                 IPV6_DISABLED => {
-                    ns      => $local_ns->name->string,
-                    address => $local_ns->address->short,
-                    rrtype  => $query_type,
+                    ns     => $local_ns->string,
+                    rrtype => $query_type,
                 }
               );
             next;
@@ -287,9 +272,8 @@ sub connectivity02 {
             push @results,
               info(
                 IPV4_DISABLED => {
-                    ns      => $local_ns->name->string,
-                    address => $local_ns->address->short,
-                    rrtype  => $query_type,
+                    ns     => $local_ns->string,
+                    rrtype => $query_type,
                 }
               );
             next;
@@ -300,22 +284,10 @@ sub connectivity02 {
         my $p = $local_ns->query( $zone->name, $query_type, { usevc => 1 } );
 
         if ( $p ) {
-            push @results,
-              info(
-                NAMESERVER_HAS_TCP_53 => {
-                    ns      => $local_ns->name->string,
-                    address => $local_ns->address->short,
-                }
-              );
+            push @results, info( NAMESERVER_HAS_TCP_53 => { ns => $local_ns->string } );
         }
         else {
-            push @results,
-              info(
-                NAMESERVER_NO_TCP_53 => {
-                    ns      => $local_ns->name->string,
-                    address => $local_ns->address->short,
-                }
-              );
+            push @results, info( NAMESERVER_NO_TCP_53 => { ns => $local_ns->string } );
         }
 
         $ips{ $local_ns->address->short }++;
@@ -348,8 +320,8 @@ sub connectivity03 {
             push @results,
               info(
                 ASN_INFOS_RAW => {
-                    address => $v4ip->short,
-                    data    => $raw,
+                    nsip => $v4ip->short,
+                    data => $raw,
                 }
               );
         }
@@ -357,8 +329,8 @@ sub connectivity03 {
             push @results,
               info(
                 ASN_INFOS_ANNOUNCE_BY => {
-                    address => $v4ip->short,
-                    asn     => join( q{,}, @{$asnref} ),
+                    nsip => $v4ip->short,
+                    asn  => join( q{,}, @{$asnref} ),
                 }
               );
             push @v4asns, @{$asnref};
@@ -367,8 +339,8 @@ sub connectivity03 {
             push @results,
               info(
                 ASN_INFOS_ANNOUNCE_IN => {
-                    address => $v4ip->short,
-                    prefix  => sprintf "%s/%d",
+                    nsip   => $v4ip->short,
+                    prefix => sprintf "%s/%d",
                     $prefix->ip, $prefix->prefixlen,
                 }
               );
@@ -380,8 +352,8 @@ sub connectivity03 {
             push @results,
               info(
                 ASN_INFOS_RAW => {
-                    address => $v6ip->short,
-                    data    => $raw,
+                    nsip => $v6ip->short,
+                    data => $raw,
                 }
               );
         }
@@ -389,8 +361,8 @@ sub connectivity03 {
             push @results,
               info(
                 ASN_INFOS_ANNOUNCE_BY => {
-                    address => $v6ip->short,
-                    asn     => join( q{,}, @{$asnref} ),
+                    nsip => $v6ip->short,
+                    asn  => join( q{,}, @{$asnref} ),
                 }
               );
             push @v6asns, @{$asnref};
@@ -399,8 +371,8 @@ sub connectivity03 {
             push @results,
               info(
                 ASN_INFOS_ANNOUNCE_IN => {
-                    address => $v6ip->short,
-                    prefix  => sprintf "%s/%d",
+                    nsip   => $v6ip->short,
+                    prefix => sprintf "%s/%d",
                     $prefix->short, $prefix->prefixlen,
                 }
               );

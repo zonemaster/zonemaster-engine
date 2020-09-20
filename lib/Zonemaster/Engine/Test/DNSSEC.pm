@@ -497,7 +497,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     ALGO_NOT_SIGNED_RRSET => sub {
         __x    # DNSSEC:ALGO_NOT_SIGNED_RRSET
-          'Nameserver {ns}/{address} responded with no RRSIG for RRset {rrtype} created by the '
+          'Nameserver {ns} responded with no RRSIG for RRset {rrtype} created by the '
           . 'algorithm {algorithm}.',
           @_;
     },
@@ -514,13 +514,13 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     BROKEN_DS => sub {
         __x    # DNSSEC:BROKEN_DS
-          'DNSKEY record with tag {keytag} returned by nameserver {ns}/{address} does not match '
+          'DNSKEY record with tag {keytag} returned by nameserver {ns} does not match '
           . 'the algorithm and hash values in a DS record with same tag in parent zone.',
           @_;
     },
     BROKEN_RRSIG => sub {
         __x    # DNSSEC:BROKEN_RRSIG
-          'The RRSIG of the DNSKEY RRset created by tag {keytag} returned by nameserver {ns}/{address} '
+          'The RRSIG of the DNSKEY RRset created by tag {keytag} returned by nameserver {ns} '
           . 'failed to be verified with error \'{error}\' (a DS record with same tag is present in the '
           . 'parent zone).',
           @_;
@@ -543,13 +543,13 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     DNSKEY_KSK_NOT_SEP => sub {
         __x    # DNSSEC:DNSKEY_KSK_NOT_SEP
-          'Flags field of DNSKEY record with tag {keytag} returned by nameserver {ns}/{address} '
+          'Flags field of DNSKEY record with tag {keytag} returned by nameserver {ns} '
           . 'has not SEP bit set although DS with same tag is present in parent.',
           @_;
     },
     DNSKEY_NOT_ZONE_SIGN => sub {
         __x    # DNSSEC:DNSKEY_NOT_ZONE_SIGN
-          'Flags field of DNSKEY record with tag {keytag} returned by nameserver {ns}/{address} '
+          'Flags field of DNSKEY record with tag {keytag} returned by nameserver {ns} '
           . 'has not ZONE bit set although DS with same tag is present in parent.',
           @_;
     },
@@ -589,41 +589,41 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     DS_ALGORITHM_NOT_DS => sub {
         __x    # DNSSEC:DS_ALGORITHM_NOT_DS
-          '{ns}/{address} returned a DS record created by algorithm {algorithm_number} '
+          '{ns} returned a DS record created by algorithm {algorithm_number} '
           . '({algorithm_mnemonic}) which is not meant for DS. The DS record is for the DNSKEY '
           . 'record with keytag {keytag} in zone {zone}.',
           @_;
     },
     DS_ALGORITHM_DEPRECATED => sub {
         __x    # DNSSEC:DS_ALGORITHM_DEPRECATED
-          '{ns}/{address} returned a DS record created by algorithm {algorithm_number} '
+          '{ns} returned a DS record created by algorithm {algorithm_number} '
           . '({algorithm_mnemonic}), which is deprecated. The DS record is for the DNSKEY '
           . 'record with keytag {keytag} in zone {zone}.',
           @_;
     },
     DS_ALGORITHM_MISSING => sub {
         __x    # DNSSEC:DS_ALGORITHM_MISSING
-          '{ns}/{address} returned no DS record created by algorithm {algorithm_number} '
+          '{ns} returned no DS record created by algorithm {algorithm_number} '
           . '({algorithm_mnemonic}) for zone {zone}, which is required.',
           @_;
     },
     DS_ALGORITHM_OK => sub {
         __x    # DNSSEC:DS_ALGORITHM_OK
-          '{ns}/{address} returned a DS record created by algorithm {algorithm_number} '
+          '{ns} returned a DS record created by algorithm {algorithm_number} '
           . '({algorithm_mnemonic}), which is OK. The DS record is for the DNSKEY record with '
           . 'keytag {keytag} in zone {zone}.',
           @_;
     },
     DS_ALGORITHM_RESERVED => sub {
         __x    # DNSSEC:DS_ALGORITHM_RESERVED
-          '{ns}/{address} returned a DS record created by with an algorithm not assigned (algorithm number '
+          '{ns} returned a DS record created by with an algorithm not assigned (algorithm number '
           . '{algorithm_number}), which is not OK. The DS record is for the DNSKEY record with keytag {keytag} '
           . 'in zone {zone}.',
           @_;
     },
     DS_ALGO_SHA1_DEPRECATED => sub {
         __x    # DNSSEC:DS_ALGO_SHA1_DEPRECATED
-          'Nameserver {ns}/{address} returned a DS record created by algorithm {algorithm_number} '
+          'Nameserver {ns} returned a DS record created by algorithm {algorithm_number} '
           . '({algorithm_mnemonic}) which is deprecated, while it is still widely used. The DS record is '
           . 'for the DNSKEY record with keytag {keytag} in zone {zone}.',
           @_;
@@ -682,11 +682,11 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     IPV4_DISABLED => sub {
         __x    # DNSSEC:IPV4_DISABLED
-          'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
+          'IPv4 is disabled, not sending "{rrtype}" query to {ns}.', @_;
     },
     IPV6_DISABLED => sub {
         __x    # DNSSEC:IPV6_DISABLED
-          'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
+          'IPv6 is disabled, not sending "{rrtype}" query to {ns}.', @_;
     },
     ITERATIONS_OK => sub {
         __x    # DNSSEC:ITERATIONS_OK
@@ -706,7 +706,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     MIXED_NSEC_NSEC3 => sub {
         __x    # DNSSEC:MIXED_NSEC_NSEC3
-          'Nameserver {ns}/{address} for zone {zone} responds with both NSEC and NSEC3 '
+          'Nameserver {ns} for zone {zone} responds with both NSEC and NSEC3 '
           . 'records when only one record type is expected.',
           @_;
     },
@@ -731,13 +731,13 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     NO_MATCHING_DNSKEY => sub {
         __x    # DNSSEC:NO_MATCHING_DNSKEY
-          'Nameserver {ns}/{address} returned no DNSKEY record matching the DS record with tag {keytag} '
+          'Nameserver {ns} returned no DNSKEY record matching the DS record with tag {keytag} '
           . 'found in the parent zone.',
           @_;
     },
     NO_MATCHING_RRSIG => sub {
         __x    # DNSSEC:NO_MATCHING_RRSIG
-          'Nameserver {ns}/{address} returned no signature on the DNSKEY RRset that corresponds to the '
+          'Nameserver {ns} returned no signature on the DNSKEY RRset that corresponds to the '
           . 'DNSKEY with tag {keytag} even though there is a DS record in the parent zone for that '
           . 'DNSKEY record.',
           @_;
@@ -748,29 +748,29 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     NO_NSEC_NSEC3 => sub {
         __x    # DNSSEC:NO_NSEC_NSEC3
-          'Nameserver {ns}/{address} for zone {zone} responds with neither NSEC nor NSEC3 record when '
+          'Nameserver {ns} for zone {zone} responds with neither NSEC nor NSEC3 record when '
           . 'when such records are expected.',
           @_;
     },
     NO_RESPONSE_DNSKEY => sub {
         __x    # DNSSEC:NO_RESPONSE_DNSKEY
-          'Nameserver {ns}/{address} responded with no DNSKEY record(s).', @_;
+          'Nameserver {ns} responded with no DNSKEY record(s).', @_;
     },
     NO_RESPONSE_DS => sub {
         __x    # DNSSEC:NO_RESPONSE_DS
-          '{ns}/{address} returned no DS records for {zone}.', @_;
+          '{ns} returned no DS records for {zone}.', @_;
     },
     NO_RESPONSE_RRSET => sub {
         __x    # DNSSEC:NO_RESPONSE_RRSET
-          'Nameserver {ns}/{address} responded with no {rrtype} record(s).', @_;
+          'Nameserver {ns} responded with no {rrtype} record(s).', @_;
     },
     NO_RESPONSE => sub {
         __x    # DNSSEC:NO_RESPONSE
-          'Nameserver {ns}/{address} did not respond.', @_;
+          'Nameserver {ns} did not respond.', @_;
     },
     NO_RRSIG_DNSKEY => sub {
         __x    # DNSSEC:NO_RRSIG_DNSKEY
-          'Nameserver {ns}/{address} responded with no RRSIG record(s) covering the DNSKEY RRset.', @_;
+          'Nameserver {ns} responded with no RRSIG record(s) covering the DNSKEY RRset.', @_;
     },
     NOT_SIGNED => sub {
         __x    # DNSSEC:NOT_SIGNED
@@ -818,11 +818,11 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     RRSET_NOT_SIGNED => sub {
         __x    # DNSSEC:RRSET_NOT_SIGNED
-          'Nameserver {ns}/{address} responded with no RRSIG for {rrtype} RRset.', @_;
+          'Nameserver {ns} responded with no RRSIG for {rrtype} RRset.', @_;
     },
     RRSIG_BROKEN => sub {
         __x    # DNSSEC:RRSIG_BROKEN
-          'Nameserver {ns}/{address} responded with an RRSIG which can not be verified with '
+          'Nameserver {ns} responded with an RRSIG which can not be verified with '
           . 'corresponding DNSKEY (with keytag {keytag}).',
           @_;
     },
@@ -834,7 +834,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     RRSIG_NOT_MATCH_DNSKEY => sub {
         __x    # DNSSEC:RRSIG_NOT_MATCH_DNSKEY
-          'Nameserver {ns}/{address} responded with an RRSIG with unknown keytag {keytag}.', @_;
+          'Nameserver {ns} responded with an RRSIG with unknown keytag {keytag}.', @_;
     },
     SOA_NOT_SIGNED => sub {
         __x    # DNSSEC:SOA_NOT_SIGNED
@@ -854,7 +854,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     TEST_ABORTED => sub {
         __x    # DNSSEC:TEST_ABORTED
-          'Nameserver {ns}/{address} for zone {zone} responds with RCODE "NOERROR" on a query that '
+          'Nameserver {ns} for zone {zone} responds with RCODE "NOERROR" on a query that '
           . 'is expected to give response with RCODE "NXDOMAIN". Test for NSEC and NSEC3 is aborted '
           . 'for this nameserver.',
           @_;
@@ -873,7 +873,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     UNEXPECTED_RESPONSE_DS => sub {
         __x    # DNSSEC:UNEXPECTED_RESPONSE_DS
-          'Nameserver {ns}/{address} responded with an unexpected rcode ({rcode}) on a DS query for zone {zone}.', @_;
+          'Nameserver {ns} responded with an unexpected rcode ({rcode}) on a DS query for zone {zone}.', @_;
     },
 );
 
@@ -896,10 +896,9 @@ sub dnssec01 {
     if ( my $parent = $zone->parent ) {
         foreach my $ns ( @{ $parent->ns } ) {
             my $ns_args = {
-                ns      => $ns->name->string,
-                address => $ns->address->short,
-                zone    => q{} . $zone->name,
-                rrtype  => q{DS},
+                ns     => $ns->string,
+                zone   => q{} . $zone->name,
+                rrtype => q{DS},
             };
 
             if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
@@ -969,10 +968,9 @@ sub dnssec02 {
     if ( my $parent = $zone->parent ) {
         foreach my $ns ( @{ $parent->ns } ) {
             my $ns_args = {
-                ns      => $ns->name->string,
-                address => $ns->address->short,
-                zone    => q{} . $zone->name,
-                rrtype  => q{DS},
+                ns     => $ns->string,
+                zone   => q{} . $zone->name,
+                rrtype => q{DS},
             };
 
             if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
@@ -987,7 +985,7 @@ sub dnssec02 {
 
             my $ds_p = $ns->query( $zone->name, q{DS}, { usevc => 0, dnssec => 1 } );
             if ( not $ds_p ) {
-                push @results, info( NO_RESPONSE => $ns_args );
+                push @results, info( NO_RESPONSE => { ns => $ns->string } );
                 next;
             }
             elsif ($ds_p->rcode ne q{NOERROR} ) {
@@ -1012,10 +1010,9 @@ sub dnssec02 {
             for my $nss_key ( sort keys %nss ) {
                 my $ns = $nss{$nss_key};
                 my $ns_args = {
-                    ns      => $ns->name->string,
-                    address => $ns->address->short,
-                    zone    => q{} . $zone->name,
-                    rrtype  => q{DNSKEY},
+                    ns     => $ns->string,
+                    zone   => q{} . $zone->name,
+                    rrtype => q{DNSKEY},
                 };
 
                 if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
@@ -1030,12 +1027,12 @@ sub dnssec02 {
 
                 my $dnskey_p = $ns->query( $zone->name, q{DNSKEY}, { dnssec => 1, usevc => 0 } );
                 if ( not $dnskey_p ) {
-                    push @results, info( NO_RESPONSE => $ns_args );
+                    push @results, info( NO_RESPONSE => { ns => $ns->string } );
                     next;
                 }
                 my @keys = $dnskey_p->get_records( q{DNSKEY}, q{answer} );
                 if ( not @keys ) {
-                    push @results, info( NO_RESPONSE_DNSKEY => $ns_args );
+                    push @results, info( NO_RESPONSE_DNSKEY => { ns => $ns->string } );
                     next;
                 }
                 else {
@@ -1044,7 +1041,7 @@ sub dnssec02 {
 
                 my @key_sigs = $dnskey_p->get_records( q{RRSIG}, q{answer} );
                 if ( not scalar @key_sigs ) {
-                    push @results, info( NO_RRSIG_DNSKEY => $ns_args );
+                    push @results, info( NO_RRSIG_DNSKEY => { ns => $ns->string } );
                 }
                 else {
                     DS_LOOP: {
@@ -1054,8 +1051,7 @@ sub dnssec02 {
                                 push @results,
                                   info(
                                     NO_MATCHING_DNSKEY => {
-                                        ns      => $ns->name->string,
-                                        address => $ns->address->short,
+                                        ns      => $ns->string,
                                         keytag  => $ds->keytag,
                                     }
                                   );
@@ -1065,9 +1061,8 @@ sub dnssec02 {
                                     push @results,
                                       info(
                                         BROKEN_DS => {
-                                            ns      => $ns->name->string,
-                                            address => $ns->address->short,
-                                            keytag  => $ds->keytag,
+                                            ns     => $ns->string,
+                                            keytag => $ds->keytag,
                                         }
                                       );
                                 }
@@ -1075,9 +1070,8 @@ sub dnssec02 {
                                     push @results,
                                       info(
                                         DNSKEY_NOT_ZONE_SIGN => {
-                                            ns      => $ns->name->string,
-                                            address => $ns->address->short,
-                                            keytag  => $ds->keytag,
+                                            ns     => $ns->string,
+                                            keytag => $ds->keytag,
                                         }
                                       );
                                     next DS_LOOP;
@@ -1086,9 +1080,8 @@ sub dnssec02 {
                                     push @results,
                                       info(
                                         DNSKEY_KSK_NOT_SEP => {
-                                            ns      => $ns->name->string,
-                                            address => $ns->address->short,
-                                            keytag  => $ds->keytag,
+                                            ns     => $ns->string,
+                                            keytag => $ds->keytag,
                                         }
                                       );
                                 }
@@ -1098,8 +1091,7 @@ sub dnssec02 {
                                 push @results,
                                   info(
                                     NO_MATCHING_RRSIG => {
-                                        ns      => $ns->name->string,
-                                        address => $ns->address->short,
+                                        ns      => $ns->string,
                                         keytag  => $ds->keytag,
                                     }
                                   );
@@ -1111,8 +1103,7 @@ sub dnssec02 {
                                     push @results,
                                       info(
                                         BROKEN_RRSIG => {
-                                            ns      => $ns->name->string,
-                                            address => $ns->address->short,
+                                            ns      => $ns->string,
                                             keytag  => $ds->keytag,
                                             error   => $msg,
                                         }
@@ -1312,18 +1303,13 @@ sub dnssec05 {
 
     for my $key ( sort keys %nss ) {
         my $ns = $nss{$key};
-        my $ns_args = {
-            ns      => $ns->name->string,
-            address => $ns->address->short,
-        };
 
         if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
             push @results,
               info(
                 IPV6_DISABLED => {
-                    ns      => $ns->name->string,
-                    address => $ns->address->short,
-                    rrtype  => q{DNSKEY},
+                    ns     => $ns->string,
+                    rrtype => q{DNSKEY},
                 }
               );
             next;
@@ -1333,8 +1319,7 @@ sub dnssec05 {
             push @results,
               info(
                 IPV4_DISABLED => {
-                    ns      => $ns->name->string,
-                    address => $ns->address->short,
+                    ns     => $ns->string,
                     rrtype => q{DNSKEY},
                 }
               );
@@ -1343,13 +1328,13 @@ sub dnssec05 {
 
         my $dnskey_p = $ns->query( $zone->name, 'DNSKEY', { dnssec => 1 } );
         if ( not $dnskey_p ) {
-            push @results, info( NO_RESPONSE => $ns_args );
+            push @results, info( NO_RESPONSE => { ns => $ns->string } );
             next;
         }
 
         my @keys = $dnskey_p->get_records( 'DNSKEY', 'answer' );
         if ( not @keys ) {
-            push @results, info( NO_RESPONSE_DNSKEY => $ns_args );
+            push @results, info( NO_RESPONSE_DNSKEY => { ns => $ns->string } );
             next;
         }
 
@@ -1646,46 +1631,66 @@ sub dnssec10 {
 
     for my $nss_key ( sort keys %nss ) {
         my $ns = $nss{$nss_key};
-        my $ns_args = {
-            ns      => $ns->name->string,
-            address => $ns->address->short,
-        };
 
         if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
-            $ns_args->{rrtype} = q{A};
-            push @results, info( IPV6_DISABLED => $ns_args );
+            push @results,
+              info(
+                IPV6_DISABLED => {
+                    ns     => $ns->string,
+                    rrtype => q{A},
+                }
+              );
             next;
         }
 
         if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
-            $ns_args->{rrtype} = q{A};
-            push @results, info( IPV4_DISABLED => $ns_args );
+            push @results,
+              info(
+                IPV4_DISABLED => {
+                    ns     => $ns->string,
+                    rrtype => q{A},
+                }
+              );
             next;
         }
 
         my $a_p = $ns->query( $non_existent_domain_name , q{A}, { usevc => 0, dnssec => 1 } );
         if ( not $a_p ) {
-            push @results, info( NO_RESPONSE => $ns_args );
+            push @results, info( NO_RESPONSE => { ns => $ns->string } );
         }
         elsif ($a_p->rcode eq q{NOERROR} ) {
-            $ns_args->{zone} = $zone->name->string;
-            push @results, info( TEST_ABORTED => $ns_args );
+            push @results,
+              info(
+                TEST_ABORTED => {
+                    ns   => $ns->string,
+                    zone => $zone->name->string,
+                }
+              );
         }
         elsif ($a_p->rcode ne q{NXDOMAIN} ) {
-            $ns_args->{rcode} = $a_p->rcode;
-            push @results, info( INVALID_RCODE => $ns_args );
+            my $args = {
+                ns    => $ns->string,
+                rcode => $a_p->rcode,
+            };
+            push @results, info( INVALID_RCODE => $args );
         }
         else {
             my @nsec  = $a_p->get_records( q{NSEC}, q{authority} );
             my @nsec3 = $a_p->get_records( q{NSEC3}, q{authority} );
             if ( scalar @nsec and scalar @nsec3 ) {
-                $ns_args->{zone} = $zone->name->string;
-                push @results, info( MIXED_NSEC_NSEC3 => $ns_args );
+                my $args = {
+                    ns => $ns->string,
+                    zone => $zone->name->string,
+                };
+                push @results, info( MIXED_NSEC_NSEC3 => $args );
             }
             elsif ( not scalar @nsec and not scalar @nsec3 ) {
-                $ns_args->{zone} = $zone->name->string;
+                my $args = {
+                    ns => $ns->string,
+                    zone => $zone->name->string,
+                };
+                push @results, info( NO_NSEC_NSEC3 => $args );
                 $no_dnssec_zone{$ns->address->short}++;
-                push @results, info( NO_NSEC_NSEC3 => $ns_args );
             }
             elsif ( scalar @nsec and not scalar @nsec3 ) {
                 $nsec_zone{$ns->address->short}++;
@@ -1897,17 +1902,12 @@ sub dnssec13 {
 
     for my $nss_key ( sort keys %nss ) {
         my $ns = $nss{$nss_key};
-        my $ns_args = {
-            ns      => $ns->name->string,
-            address => $ns->address->short,
-        };
 
         if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
             push @results,
               info(
                 IPV6_DISABLED => {
-                    ns      => $ns->name->string,
-                    address => $ns->address->short,
+                    ns     => $ns->string,
                     rrtype => q{DNSKEY},
                 }
               );
@@ -1918,8 +1918,7 @@ sub dnssec13 {
             push @results,
               info(
                 IPV4_DISABLED => {
-                    ns      => $ns->name->string,
-                    address => $ns->address->short,
+                    ns     => $ns->string,
                     rrtype => q{DNSKEY},
                 }
               );
@@ -1930,13 +1929,16 @@ sub dnssec13 {
         my @algorithms;
         foreach my $query_type ( qw{DNSKEY SOA NS} ) {
 
-            $ns_args->{rrtype} = $query_type;
             my $p = $ns->query( $zone->name, $query_type, { dnssec => 1, usevc => 0 } );
             if ( not $p ) {
-                push @results, info( NO_RESPONSE => $ns_args );
+                push @results, info( NO_RESPONSE => { ns => $ns->string } );
                 next;
             }
 
+            my $ns_args = {
+                ns     => $ns->string,
+                rrtype => $query_type,
+            };
             my @rrs = $p->get_records( $query_type, q{answer} );
             if ( not scalar @rrs ) {
                 $all_algo_signed = 0;
@@ -2010,17 +2012,12 @@ sub dnssec14 {
 
     for my $nss_key ( sort keys %nss ) {
         my $ns = $nss{$nss_key};
-        my $ns_args = {
-            ns      => $ns->name->string,
-            address => $ns->address->short,
-        };
 
         if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
             push @results,
               info(
                 IPV6_DISABLED => {
-                    ns      => $ns->name->string,
-                    address => $ns->address->short,
+                    ns     => $ns->string,
                     rrtype => q{DNSKEY},
                 }
               );
@@ -2031,8 +2028,7 @@ sub dnssec14 {
             push @results,
               info(
                 IPV4_DISABLED => {
-                    ns      => $ns->name->string,
-                    address => $ns->address->short,
+                    ns     => $ns->string,
                     rrtype => q{DNSKEY},
                 }
               );
@@ -2041,13 +2037,13 @@ sub dnssec14 {
 
         my $dnskey_p = $ns->query( $zone->name, 'DNSKEY', { dnssec => 1, usevc => 0 } );
         if ( not $dnskey_p ) {
-            push @results, info( NO_RESPONSE => $ns_args );
+            push @results, info( NO_RESPONSE => { ns => $ns->string } );
             next;
         }
 
         my @keys = $dnskey_p->get_records( 'DNSKEY', 'answer' );
         if ( not @keys ) {
-            push @results, info( NO_RESPONSE_DNSKEY => $ns_args );
+            push @results, info( NO_RESPONSE_DNSKEY => { ns => $ns->string } );
             next;
         } else {
             push @dnskey_rrs, @keys;

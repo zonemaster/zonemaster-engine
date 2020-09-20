@@ -146,7 +146,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     CHILD_NS_SAME_IP => sub {
         __x    # DELEGATION:CHILD_NS_SAME_IP
-          "IP {address} in child refers to multiple nameservers ({nss}).", @_;
+          "IP {nsip} in child refers to multiple nameservers ({nsnames}).", @_;
     },
     DEL_DISTINCT_NS_IP => sub {
         __x    # DELEGATION:DEL_DISTINCT_NS_IP
@@ -154,7 +154,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     DEL_NS_SAME_IP => sub {
         __x    # DELEGATION:DEL_NS_SAME_IP
-          "IP {address} in parent refers to multiple nameservers ({nss}).", @_;
+          "IP {nsip} in parent refers to multiple nameservers ({nsnames}).", @_;
     },
     DISTINCT_IP_ADDRESS => sub {
         __x    # DELEGATION:DISTINCT_IP_ADDRESS
@@ -162,31 +162,31 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     ENOUGH_IPV4_NS_CHILD => sub {
         __x    # DELEGATION:ENOUGH_IPV4_NS_CHILD
-          "Child lists enough ({count}) nameservers ({nss}) "
+          "Child lists enough ({count}) nameservers ({nsnames}) "
           . "that resolve to IPv4 addresses ({addrs}). Lower limit set to {minimum}.",
           @_;
     },
     ENOUGH_IPV4_NS_DEL => sub {
         __x    # DELEGATION:ENOUGH_IPV4_NS_DEL
-          "Delegation lists enough ({count}) nameservers ({nss}) "
+          "Delegation lists enough ({count}) nameservers ({nsnames}) "
           . "that resolve to IPv4 addresses ({addrs}). Lower limit set to {minimum}.",
           @_;
     },
     ENOUGH_IPV6_NS_CHILD => sub {
         __x    # DELEGATION:ENOUGH_IPV6_NS_CHILD
-          "Child lists enough ({count}) nameservers ({nss}) "
+          "Child lists enough ({count}) nameservers ({nsnames}) "
           . "that resolve to IPv6 addresses ({addrs}). Lower limit set to {minimum}.",
           @_;
     },
     ENOUGH_IPV6_NS_DEL => sub {
         __x    # DELEGATION:ENOUGH_IPV6_NS_DEL
-          "Delegation lists enough ({count}) nameservers ({nss}) "
+          "Delegation lists enough ({count}) nameservers ({nsnames}) "
           . "that resolve to IPv6 addresses ({addrs}). Lower limit set to {minimum}.",
           @_;
     },
     ENOUGH_NS_CHILD => sub {
         __x    # DELEGATION:ENOUGH_NS_CHILD
-          "Child lists enough ({count}) nameservers ({nss}). Lower limit set to {minimum}.", @_;
+          "Child lists enough ({count}) nameservers ({nsnames}). Lower limit set to {minimum}.", @_;
     },
     ENOUGH_NS_DEL => sub {
         __x    # DELEGATION:ENOUGH_NS_DEL
@@ -202,11 +202,11 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     IPV4_DISABLED => sub {
         __x    # DELEGATION:IPV4_DISABLED
-          'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
+          'IPv4 is disabled, not sending "{rrtype}" query to {ns}.', @_;
     },
     IPV6_DISABLED => sub {
         __x    # DELEGATION:IPV6_DISABLED
-          'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
+          'IPv6 is disabled, not sending "{rrtype}" query to {ns}.', @_;
     },
     IS_NOT_AUTHORITATIVE => sub {
         __x    # DELEGATION:IS_NOT_AUTHORITATIVE
@@ -218,35 +218,35 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     NO_RESPONSE => sub {
         __x    # DELEGATION:NO_RESPONSE
-          "Nameserver {ns}/{address} did not respond.", @_;
+          "Nameserver {ns} did not respond.", @_;
     },
     NOT_ENOUGH_IPV4_NS_CHILD => sub {
         __x    # DELEGATION:NOT_ENOUGH_IPV4_NS_CHILD
-          "Child does not list enough ({count}) nameservers ({nss}) "
+          "Child does not list enough ({count}) nameservers ({nsnames}) "
           . "that resolve to IPv4 addresses ({addrs}). Lower limit set to {minimum}.",
           @_;
     },
     NOT_ENOUGH_IPV4_NS_DEL => sub {
         __x    # DELEGATION:NOT_ENOUGH_IPV4_NS_DEL
-          "Delegation does not list enough ({count}) nameservers ({nss}) "
+          "Delegation does not list enough ({count}) nameservers ({nsnames}) "
           . "that resolve to IPv4 addresses ({addrs}). Lower limit set to {minimum}.",
           @_;
     },
     NOT_ENOUGH_IPV6_NS_CHILD => sub {
         __x    # DELEGATION:NOT_ENOUGH_IPV6_NS_CHILD
-          "Child does not list enough ({count}) nameservers ({nss}) "
+          "Child does not list enough ({count}) nameservers ({nsnames}) "
           . "that resolve to IPv6 addresses ({addrs}). Lower limit set to {minimum}.",
           @_;
     },
     NOT_ENOUGH_IPV6_NS_DEL => sub {
         __x    # DELEGATION:NOT_ENOUGH_IPV6_NS_DEL
-          "Delegation does not list enough ({count}) nameservers ({nss}) "
+          "Delegation does not list enough ({count}) nameservers ({nsnames}) "
           . "that resolve to IPv6 addresses ({addrs}). Lower limit set to {minimum}.",
           @_;
     },
     NOT_ENOUGH_NS_CHILD => sub {
         __x    # DELEGATION:NOT_ENOUGH_NS_CHILD
-          "Child does not list enough ({count}) nameservers ({nss}). Lower limit set to {minimum}.", @_;
+          "Child does not list enough ({count}) nameservers ({nsnames}). Lower limit set to {minimum}.", @_;
     },
     NOT_ENOUGH_NS_DEL => sub {
         __x    # DELEGATION:NOT_ENOUGH_NS_DEL
@@ -278,7 +278,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     NS_IS_CNAME => sub {
         __x    # DELEGATION:NS_IS_CNAME
-          "Nameserver {ns} RR point to CNAME.", @_;
+          "Nameserver {nsname} RR point to CNAME.", @_;
     },
     NO_NS_CNAME => sub {
         __x    # DELEGATION:NO_NS_CNAME
@@ -294,7 +294,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     SAME_IP_ADDRESS => sub {
         __x    # DELEGATION:SAME_IP_ADDRESS
-          "IP {address} refers to multiple nameservers ({nss}).", @_;
+          "IP {nsip} refers to multiple nameservers ({nsnames}).", @_;
     },
     SOA_EXISTS => sub {
         __x    # DELEGATION:SOA_EXISTS
@@ -318,7 +318,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     UNEXPECTED_RCODE => sub {
         __x    # DELEGATION:UNEXPECTED_RCODE
-          'Nameserver {ns}/{address} answered query with an unexpected rcode ({rcode}).', @_;
+          'Nameserver {ns} answered query with an unexpected rcode ({rcode}).', @_;
     },
 
 );
@@ -361,7 +361,7 @@ sub delegation01 {
     my $child_nsnames_args = {
         count   => scalar( @child_nsnames ),
         minimum => $MINIMUM_NUMBER_OF_NAMESERVERS,
-        nss     => join( q{;}, sort @child_nsnames ),
+        nsnames => join( q{;}, sort @child_nsnames ),
     };
 
     # Check child NS names
@@ -423,13 +423,13 @@ sub delegation01 {
     my $del_ns_ipv4_args = {
         count   => scalar( @del_ns_ipv4 ),
         minimum => $MINIMUM_NUMBER_OF_NAMESERVERS,
-        nss     => join( q{;}, sort @del_ns_ipv4 ),
+        nsnames => join( q{;}, sort @del_ns_ipv4 ),
         addrs   => join( q{;}, sort @del_ns_ipv4_addrs ),
     };
     my $del_ns_ipv6_args = {
         count   => scalar( @del_ns_ipv6 ),
         minimum => $MINIMUM_NUMBER_OF_NAMESERVERS,
-        nss     => join( q{;}, sort @del_ns_ipv6 ),
+        nsnames => join( q{;}, sort @del_ns_ipv6 ),
         addrs   => join( q{;}, sort @del_ns_ipv6_addrs ),
     };
 
@@ -480,8 +480,8 @@ sub _find_dup_ns {
             push @results,
               info(
                 $duplicate_tag => {
-                    nss     => join( q{;}, @{ $ips{$local_ip} } ),
-                    address => $local_ip,
+                    nsnames => join( q{;}, @{ $ips{$local_ip} } ),
+                    nsip    => $local_ip,
                 }
               );
         }
@@ -592,8 +592,7 @@ sub delegation04 {
             push @results,
               info(
                 IPV6_DISABLED => {
-                    ns      => $local_ns->name->string,
-                    address => $local_ns->address->short,
+                    ns      => $local_ns->string,
                     rrtype  => $query_type,
                 }
               );
@@ -604,8 +603,7 @@ sub delegation04 {
             push @results,
               info(
                 IPV4_DISABLED => {
-                    ns      => $local_ns->name->string,
-                    address => $local_ns->address->short,
+                    ns      => $local_ns->string,
                     rrtype  => $query_type,
                 }
               );
@@ -621,7 +619,7 @@ sub delegation04 {
                     push @results,
                       info(
                         IS_NOT_AUTHORITATIVE => {
-                            ns    => $local_ns->name->string,
+                            ns    => $local_ns->string,
                             proto => $usevc ? q{TCP} : q{UDP},
                         }
                       );
@@ -671,9 +669,8 @@ sub delegation05 {
             for my $key ( sort keys %nss ) {
                 my $ns = $nss{$key};
                 my $ns_args = {
-                    ns      => $ns->name->string,
-                    address => $ns->address->short,
-                    rrtype  => q{A},
+                    ns     => $ns->string,
+                    rrtype => q{A},
                 };
 
                 if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
@@ -697,13 +694,13 @@ sub delegation05 {
                     next;
                 }
                 elsif ( scalar $p->get_records( q{CNAME}, q{answer} ) > 0 ) {
-                    push @results, info( NS_IS_CNAME => { ns => $local_nsname } );
+                    push @results, info( NS_IS_CNAME => { nsname => $local_nsname } );
                     next;
                 }
                 elsif ($p->is_redirect) {
                     my $p = $ns->query( $local_nsname, q{A}, { recurse => 1 } );
                     if ( defined $p and scalar $p->get_records( q{CNAME}, q{answer} ) > 0 ) {
-                        push @results, info( NS_IS_CNAME => { ns => $local_nsname } );
+                        push @results, info( NS_IS_CNAME => { nsname => $local_nsname } );
                     }
                 }
             }
@@ -711,7 +708,7 @@ sub delegation05 {
         else {
             my $p = Zonemaster::Engine::Recursor->recurse( $local_nsname, q{A} );
             if ( defined $p and scalar $p->get_records( q{CNAME}, q{answer} ) > 0 ) {
-                push @results, info( NS_IS_CNAME => { ns => $local_nsname } );
+                push @results, info( NS_IS_CNAME => { nsname => $local_nsname } );
             }
         }
     }
@@ -737,8 +734,7 @@ sub delegation06 {
             push @results,
               info(
                 IPV6_DISABLED => {
-                    ns      => $local_ns->name->string,
-                    address => $local_ns->address->short,
+                    ns      => $local_ns->string,
                     rrtype  => $query_type,
                 }
               );
@@ -749,9 +745,8 @@ sub delegation06 {
             push @results,
               info(
                 IPV4_DISABLED => {
-                    ns      => $local_ns->name->string,
-                    address => $local_ns->address->short,
-                    rrtype  => $query_type,
+                    ns     => $local_ns->string,
+                    rrtype => $query_type,
                 }
               );
             next;
@@ -762,12 +757,7 @@ sub delegation06 {
         my $p = $local_ns->query( $zone->name, $query_type );
         if ( $p and $p->rcode eq q{NOERROR} ) {
             if ( not $p->get_records( $query_type, q{answer} ) ) {
-                push @results,
-                  info(
-                    SOA_NOT_EXISTS => {
-                        ns => $local_ns->name->string,
-                    }
-                  );
+                push @results, info( SOA_NOT_EXISTS => { nsname => $local_ns->string } );
             }
         }
 
