@@ -1051,8 +1051,8 @@ sub dnssec02 {
                                 push @results,
                                   info(
                                     NO_MATCHING_DNSKEY => {
-                                        ns      => $ns->string,
-                                        keytag  => $ds->keytag,
+                                        ns     => $ns->string,
+                                        keytag => $ds->keytag,
                                     }
                                   );
                             }
@@ -1091,8 +1091,8 @@ sub dnssec02 {
                                 push @results,
                                   info(
                                     NO_MATCHING_RRSIG => {
-                                        ns      => $ns->string,
-                                        keytag  => $ds->keytag,
+                                        ns     => $ns->string,
+                                        keytag => $ds->keytag,
                                     }
                                   );
                             }
@@ -1103,9 +1103,9 @@ sub dnssec02 {
                                     push @results,
                                       info(
                                         BROKEN_RRSIG => {
-                                            ns      => $ns->string,
-                                            keytag  => $ds->keytag,
-                                            error   => $msg,
+                                            ns     => $ns->string,
+                                            keytag => $ds->keytag,
+                                            error  => $msg,
                                         }
                                       );
                                 }
@@ -1679,14 +1679,14 @@ sub dnssec10 {
             my @nsec3 = $a_p->get_records( q{NSEC3}, q{authority} );
             if ( scalar @nsec and scalar @nsec3 ) {
                 my $args = {
-                    ns => $ns->string,
+                    ns   => $ns->string,
                     zone => $zone->name->string,
                 };
                 push @results, info( MIXED_NSEC_NSEC3 => $args );
             }
             elsif ( not scalar @nsec and not scalar @nsec3 ) {
                 my $args = {
-                    ns => $ns->string,
+                    ns   => $ns->string,
                     zone => $zone->name->string,
                 };
                 push @results, info( NO_NSEC_NSEC3 => $args );

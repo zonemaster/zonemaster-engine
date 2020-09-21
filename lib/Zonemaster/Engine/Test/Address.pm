@@ -77,15 +77,15 @@ sub metadata {
 Readonly my %TAG_DESCRIPTIONS => (
     NAMESERVER_IP_WITHOUT_REVERSE => sub {
         __x    # ADDRESS:NAMESERVER_IP_WITHOUT_REVERSE
-          'Nameserver {nsname} has an IP address ({nsip}) without PTR configured.', @_;
+          'Nameserver {nsname} has an IP address ({ns_ip}) without PTR configured.', @_;
     },
     NAMESERVER_IP_PTR_MISMATCH => sub {
         __x    # ADDRESS:NAMESERVER_IP_PTR_MISMATCH
-          'Nameserver {nsname} has an IP address ({nsip}) with mismatched PTR result ({names}).', @_;
+          'Nameserver {nsname} has an IP address ({ns_ip}) with mismatched PTR result ({names}).', @_;
     },
     NAMESERVER_IP_PRIVATE_NETWORK => sub {
         __x    # ADDRESS:NAMESERVER_IP_PRIVATE_NETWORK
-          'Nameserver {nsname} has an IP address ({nsip}) '
+          'Nameserver {nsname} has an IP address ({ns_ip}) '
           . 'with prefix {prefix} referenced in {reference} as a \'{name}\'.',
           @_;
     },
@@ -161,7 +161,7 @@ sub address01 {
               info(
                 NAMESERVER_IP_PRIVATE_NETWORK => {
                     nsname    => $local_ns->name->string,
-                    nsip      => $local_ns->address->short,
+                    ns_ip     => $local_ns->address->short,
                     prefix    => ${$ip_details_ref}{ip}->print,
                     name      => ${$ip_details_ref}{name},
                     reference => ${$ip_details_ref}{reference},
@@ -212,7 +212,7 @@ sub address02 {
                   info(
                     NAMESERVER_IP_WITHOUT_REVERSE => {
                         nsname => $local_ns->name->string,
-                        nsip   => $local_ns->address->short,
+                        ns_ip  => $local_ns->address->short,
                     }
                   );
             }
@@ -269,7 +269,7 @@ sub address03 {
                       info(
                         NAMESERVER_IP_PTR_MISMATCH => {
                             nsname => $local_ns->name->string,
-                            nsip   => $local_ns->address->short,
+                            ns_ip  => $local_ns->address->short,
                             names  => join( q{/}, map { $_->ptrdname } @ptr ),
                         }
                       );
@@ -280,7 +280,7 @@ sub address03 {
                   info(
                     NAMESERVER_IP_WITHOUT_REVERSE => {
                         nsname => $local_ns->name->string,
-                        nsip   => $local_ns->address->short,
+                        ns_ip  => $local_ns->address->short,
                     }
                   );
             }

@@ -146,7 +146,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     CHILD_NS_SAME_IP => sub {
         __x    # DELEGATION:CHILD_NS_SAME_IP
-          "IP {nsip} in child refers to multiple nameservers ({nsnames}).", @_;
+          "IP {ns_ip} in child refers to multiple nameservers ({nsname_list}).", @_;
     },
     DEL_DISTINCT_NS_IP => sub {
         __x    # DELEGATION:DEL_DISTINCT_NS_IP
@@ -154,7 +154,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     DEL_NS_SAME_IP => sub {
         __x    # DELEGATION:DEL_NS_SAME_IP
-          "IP {nsip} in parent refers to multiple nameservers ({nsnames}).", @_;
+          "IP {ns_ip} in parent refers to multiple nameservers ({nsname_list}).", @_;
     },
     DISTINCT_IP_ADDRESS => sub {
         __x    # DELEGATION:DISTINCT_IP_ADDRESS
@@ -162,31 +162,31 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     ENOUGH_IPV4_NS_CHILD => sub {
         __x    # DELEGATION:ENOUGH_IPV4_NS_CHILD
-          "Child lists enough ({count}) nameservers ({nsnames}) "
+          "Child lists enough ({count}) nameservers ({nsname_list}) "
           . "that resolve to IPv4 addresses ({addrs}). Lower limit set to {minimum}.",
           @_;
     },
     ENOUGH_IPV4_NS_DEL => sub {
         __x    # DELEGATION:ENOUGH_IPV4_NS_DEL
-          "Delegation lists enough ({count}) nameservers ({nsnames}) "
+          "Delegation lists enough ({count}) nameservers ({nsname_list}) "
           . "that resolve to IPv4 addresses ({addrs}). Lower limit set to {minimum}.",
           @_;
     },
     ENOUGH_IPV6_NS_CHILD => sub {
         __x    # DELEGATION:ENOUGH_IPV6_NS_CHILD
-          "Child lists enough ({count}) nameservers ({nsnames}) "
+          "Child lists enough ({count}) nameservers ({nsname_list}) "
           . "that resolve to IPv6 addresses ({addrs}). Lower limit set to {minimum}.",
           @_;
     },
     ENOUGH_IPV6_NS_DEL => sub {
         __x    # DELEGATION:ENOUGH_IPV6_NS_DEL
-          "Delegation lists enough ({count}) nameservers ({nsnames}) "
+          "Delegation lists enough ({count}) nameservers ({nsname_list}) "
           . "that resolve to IPv6 addresses ({addrs}). Lower limit set to {minimum}.",
           @_;
     },
     ENOUGH_NS_CHILD => sub {
         __x    # DELEGATION:ENOUGH_NS_CHILD
-          "Child lists enough ({count}) nameservers ({nsnames}). Lower limit set to {minimum}.", @_;
+          "Child lists enough ({count}) nameservers ({nsname_list}). Lower limit set to {minimum}.", @_;
     },
     ENOUGH_NS_DEL => sub {
         __x    # DELEGATION:ENOUGH_NS_DEL
@@ -222,31 +222,31 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     NOT_ENOUGH_IPV4_NS_CHILD => sub {
         __x    # DELEGATION:NOT_ENOUGH_IPV4_NS_CHILD
-          "Child does not list enough ({count}) nameservers ({nsnames}) "
+          "Child does not list enough ({count}) nameservers ({nsname_list}) "
           . "that resolve to IPv4 addresses ({addrs}). Lower limit set to {minimum}.",
           @_;
     },
     NOT_ENOUGH_IPV4_NS_DEL => sub {
         __x    # DELEGATION:NOT_ENOUGH_IPV4_NS_DEL
-          "Delegation does not list enough ({count}) nameservers ({nsnames}) "
+          "Delegation does not list enough ({count}) nameservers ({nsname_list}) "
           . "that resolve to IPv4 addresses ({addrs}). Lower limit set to {minimum}.",
           @_;
     },
     NOT_ENOUGH_IPV6_NS_CHILD => sub {
         __x    # DELEGATION:NOT_ENOUGH_IPV6_NS_CHILD
-          "Child does not list enough ({count}) nameservers ({nsnames}) "
+          "Child does not list enough ({count}) nameservers ({nsname_list}) "
           . "that resolve to IPv6 addresses ({addrs}). Lower limit set to {minimum}.",
           @_;
     },
     NOT_ENOUGH_IPV6_NS_DEL => sub {
         __x    # DELEGATION:NOT_ENOUGH_IPV6_NS_DEL
-          "Delegation does not list enough ({count}) nameservers ({nsnames}) "
+          "Delegation does not list enough ({count}) nameservers ({nsname_list}) "
           . "that resolve to IPv6 addresses ({addrs}). Lower limit set to {minimum}.",
           @_;
     },
     NOT_ENOUGH_NS_CHILD => sub {
         __x    # DELEGATION:NOT_ENOUGH_NS_CHILD
-          "Child does not list enough ({count}) nameservers ({nsnames}). Lower limit set to {minimum}.", @_;
+          "Child does not list enough ({count}) nameservers ({nsname_list}). Lower limit set to {minimum}.", @_;
     },
     NOT_ENOUGH_NS_DEL => sub {
         __x    # DELEGATION:NOT_ENOUGH_NS_DEL
@@ -294,7 +294,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     SAME_IP_ADDRESS => sub {
         __x    # DELEGATION:SAME_IP_ADDRESS
-          "IP {nsip} refers to multiple nameservers ({nsnames}).", @_;
+          "IP {ns_ip} refers to multiple nameservers ({nsname_list}).", @_;
     },
     SOA_EXISTS => sub {
         __x    # DELEGATION:SOA_EXISTS
@@ -359,9 +359,9 @@ sub delegation01 {
     # Determine child NS names
     my @child_nsnames = map { $_->string } @{ Zonemaster::Engine::TestMethods->method3( $zone ) };
     my $child_nsnames_args = {
-        count   => scalar( @child_nsnames ),
-        minimum => $MINIMUM_NUMBER_OF_NAMESERVERS,
-        nsnames => join( q{;}, sort @child_nsnames ),
+        count       => scalar( @child_nsnames ),
+        minimum     => $MINIMUM_NUMBER_OF_NAMESERVERS,
+        nsname_list => join( q{;}, sort @child_nsnames ),
     };
 
     # Check child NS names
@@ -383,13 +383,13 @@ sub delegation01 {
     my $child_ns_ipv4_args = {
         count   => scalar( @child_ns_ipv4 ),
         minimum => $MINIMUM_NUMBER_OF_NAMESERVERS,
-        nss     => join( q{;}, sort @child_ns_ipv4 ),
+        ns_list => join( q{;}, sort @child_ns_ipv4 ),
         addrs   => join( q{;}, sort @child_ns_ipv4_addrs ),
     };
     my $child_ns_ipv6_args = {
         count   => scalar( @child_ns_ipv6 ),
         minimum => $MINIMUM_NUMBER_OF_NAMESERVERS,
-        nss     => join( q{;}, sort @child_ns_ipv6 ),
+        ns_list => join( q{;}, sort @child_ns_ipv6 ),
         addrs   => join( q{;}, sort @child_ns_ipv6_addrs ),
     };
 
@@ -421,16 +421,16 @@ sub delegation01 {
     my @del_ns_ipv6_addrs = uniq map { $_->address->short } grep { $_->address->version == 6 } @del_ns;
 
     my $del_ns_ipv4_args = {
-        count   => scalar( @del_ns_ipv4 ),
-        minimum => $MINIMUM_NUMBER_OF_NAMESERVERS,
-        nsnames => join( q{;}, sort @del_ns_ipv4 ),
-        addrs   => join( q{;}, sort @del_ns_ipv4_addrs ),
+        count       => scalar( @del_ns_ipv4 ),
+        minimum     => $MINIMUM_NUMBER_OF_NAMESERVERS,
+        nsname_list => join( q{;}, sort @del_ns_ipv4 ),
+        addrs       => join( q{;}, sort @del_ns_ipv4_addrs ),
     };
     my $del_ns_ipv6_args = {
-        count   => scalar( @del_ns_ipv6 ),
-        minimum => $MINIMUM_NUMBER_OF_NAMESERVERS,
-        nsnames => join( q{;}, sort @del_ns_ipv6 ),
-        addrs   => join( q{;}, sort @del_ns_ipv6_addrs ),
+        count       => scalar( @del_ns_ipv6 ),
+        minimum     => $MINIMUM_NUMBER_OF_NAMESERVERS,
+        nsname_list => join( q{;}, sort @del_ns_ipv6 ),
+        addrs       => join( q{;}, sort @del_ns_ipv6_addrs ),
     };
 
     if ( scalar( @del_ns_ipv4 ) >= $MINIMUM_NUMBER_OF_NAMESERVERS ) {
@@ -457,10 +457,10 @@ sub delegation01 {
 } ## end sub delegation01
 
 sub _find_dup_ns {
-    my %args = @_;
+    my %args          = @_;
     my $duplicate_tag = $args{duplicate_tag};
-    my $distinct_tag = $args{distinct_tag};
-    my @nss = @{ $args{nss} };
+    my $distinct_tag  = $args{distinct_tag};
+    my @nss           = @{ $args{ns_list} };
 
     my %nsnames_and_ip;
     my %ips;
@@ -480,8 +480,8 @@ sub _find_dup_ns {
             push @results,
               info(
                 $duplicate_tag => {
-                    nsnames => join( q{;}, @{ $ips{$local_ip} } ),
-                    nsip    => $local_ip,
+                    nsname_list => join( q{;}, @{ $ips{$local_ip} } ),
+                    ns_ip       => $local_ip,
                 }
               );
         }
@@ -505,21 +505,21 @@ sub delegation02 {
       _find_dup_ns(
         duplicate_tag => 'DEL_NS_SAME_IP',
         distinct_tag  => 'DEL_DISTINCT_NS_IP',
-        nss           => [@nss_del],
+        ns_list       => [@nss_del],
       );
 
     push @results,
       _find_dup_ns(
         duplicate_tag => 'CHILD_NS_SAME_IP',
         distinct_tag  => 'CHILD_DISTINCT_NS_IP',
-        nss           => [@nss_child],
+        ns_list       => [@nss_child],
       );
 
     push @results,
       _find_dup_ns(
         duplicate_tag => 'SAME_IP_ADDRESS',
         distinct_tag  => 'DISTINCT_IP_ADDRESS',
-        nss           => [ @nss_del, @nss_child ],
+        ns_list       => [ @nss_del, @nss_child ],
       );
 
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
@@ -592,8 +592,8 @@ sub delegation04 {
             push @results,
               info(
                 IPV6_DISABLED => {
-                    ns      => $local_ns->string,
-                    rrtype  => $query_type,
+                    ns     => $local_ns->string,
+                    rrtype => $query_type,
                 }
               );
             next;
@@ -603,8 +603,8 @@ sub delegation04 {
             push @results,
               info(
                 IPV4_DISABLED => {
-                    ns      => $local_ns->string,
-                    rrtype  => $query_type,
+                    ns     => $local_ns->string,
+                    rrtype => $query_type,
                 }
               );
             next;
@@ -734,8 +734,8 @@ sub delegation06 {
             push @results,
               info(
                 IPV6_DISABLED => {
-                    ns      => $local_ns->string,
-                    rrtype  => $query_type,
+                    ns     => $local_ns->string,
+                    rrtype => $query_type,
                 }
               );
             next;

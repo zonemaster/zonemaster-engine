@@ -702,7 +702,7 @@ sub nameserver05 {
                           info(
                             AAAA_BAD_RDATA => {
                                 ns     => $ns->string,
-                                length => length($rr->rdf(0)),
+                                length => length( $rr->rdf( 0 ) ),
                             }
                           );
                         $aaaa_issue++;

@@ -164,15 +164,15 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     ASN_INFOS_RAW => sub {
         __x    # CONNECTIVITY:ASN_INFOS_RAW
-          '[ASN:RAW] {nsip};{data}.', @_;
+          '[ASN:RAW] {ns_ip};{data}.', @_;
     },
     ASN_INFOS_ANNOUNCE_BY => sub {
         __x    # CONNECTIVITY:ASN_INFOS_ANNOUNCE_BY
-          '[ASN:ANNOUNCE_BY] {nsip};{asn}.', @_;
+          '[ASN:ANNOUNCE_BY] {ns_ip};{asn}.', @_;
     },
     ASN_INFOS_ANNOUNCE_IN => sub {
         __x    # CONNECTIVITY:ASN_INFOS_ANNOUNCE_IN
-          '[ASN:ANNOUNCE_IN] {nsip};{prefix}.', @_;
+          '[ASN:ANNOUNCE_IN] {ns_ip};{prefix}.', @_;
     },
     TEST_CASE_END => sub {
         __x    # CONNECTIVITY:TEST_CASE_END
@@ -320,8 +320,8 @@ sub connectivity03 {
             push @results,
               info(
                 ASN_INFOS_RAW => {
-                    nsip => $v4ip->short,
-                    data => $raw,
+                    ns_ip => $v4ip->short,
+                    data  => $raw,
                 }
               );
         }
@@ -329,8 +329,8 @@ sub connectivity03 {
             push @results,
               info(
                 ASN_INFOS_ANNOUNCE_BY => {
-                    nsip => $v4ip->short,
-                    asn  => join( q{,}, @{$asnref} ),
+                    ns_ip => $v4ip->short,
+                    asn   => join( q{,}, @{$asnref} ),
                 }
               );
             push @v4asns, @{$asnref};
@@ -339,7 +339,7 @@ sub connectivity03 {
             push @results,
               info(
                 ASN_INFOS_ANNOUNCE_IN => {
-                    nsip   => $v4ip->short,
+                    ns_ip  => $v4ip->short,
                     prefix => sprintf "%s/%d",
                     $prefix->ip, $prefix->prefixlen,
                 }
@@ -352,8 +352,8 @@ sub connectivity03 {
             push @results,
               info(
                 ASN_INFOS_RAW => {
-                    nsip => $v6ip->short,
-                    data => $raw,
+                    ns_ip => $v6ip->short,
+                    data  => $raw,
                 }
               );
         }
@@ -361,8 +361,8 @@ sub connectivity03 {
             push @results,
               info(
                 ASN_INFOS_ANNOUNCE_BY => {
-                    nsip => $v6ip->short,
-                    asn  => join( q{,}, @{$asnref} ),
+                    ns_ip => $v6ip->short,
+                    asn   => join( q{,}, @{$asnref} ),
                 }
               );
             push @v6asns, @{$asnref};
@@ -371,7 +371,7 @@ sub connectivity03 {
             push @results,
               info(
                 ASN_INFOS_ANNOUNCE_IN => {
-                    nsip   => $v6ip->short,
+                    ns_ip  => $v6ip->short,
                     prefix => sprintf "%s/%d",
                     $prefix->short, $prefix->prefixlen,
                 }

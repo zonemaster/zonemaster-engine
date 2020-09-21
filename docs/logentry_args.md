@@ -2,14 +2,14 @@
 
 ## Aggregate list
 
-| Argument | Type of value         | Description and formatting                                    |
-|----------|-----------------------|---------------------------------------------------------------|
-| nsname   | Domain name           | The domain name of a name server.                             |
-| nsip     | IP address            | The IP address of a name server.                              |
-| ns       | Domain name and IP address pair | The name and IP address of a name server, separated by "/".|
-| nsnames  | List of domain names  | The names of a list of nameservers, separated by ";".         |
-| nsips    | List of IP addresses  | The addresses of a list of nameservers, separated by ";".     |
-| nss      | List of domain name and IP address pairs | The names and addresses of a list of nameservers, the name and address of a nameserver are separated by "/", nameservers are separated by ";".|
+| Argument    | Type of value        | Description and formatting                                  |
+|-------------|----------------------|-------------------------------------------------------------|
+| nsname      | Domain name          | The domain name of a name server.                           |
+| ns_ip       | IP address           | The IP address of a name server.                            |
+| ns          | Domain name and IP address pair | The name and IP address of a name server, separated by "/". |
+| nsname_list | List of domain names | A list of name servers, as specified by "nsname", separated by ";". |
+| ns_ip_list  | List of IP addresses | A list of name servers, as specified by "nsip", separated by ";". |
+| ns_list     | List of domain name and IP address pairs | A list of name servers, as specified by "ns", separated by ";". |
 || AS number| An Autonomous Space number for an IP address.|
 || Address record type (A or AAAA)| Used to tell the difference between IPv4 and IPv6.|
 || Count of different SOA RNAMEs.| Total number of different SOA RNAME fields seen.|

@@ -469,8 +469,8 @@ sub syntax06 {
             push @results,
               info(
                 IPV4_DISABLED => {
-                    ns      => $ns->string,
-                    rrtype  => q{SOA},
+                    ns     => $ns->string,
+                    rrtype => q{SOA},
                 }
               );
             next;
