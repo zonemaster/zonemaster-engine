@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare( "v1.1.23" );
+use version; our $VERSION = version->declare( "v1.1.24" );
 
 ###
 ### This test module implements DNSSEC tests.
@@ -514,14 +514,15 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     BROKEN_DS => sub {
         __x    # DNSSEC:BROKEN_DS
-          'DNSKEY record with tag {keytag} returned by nameserver {ns}/{address} doe not match '
-          . 'DS record with same tag in parent zone.',
+          'DNSKEY record with tag {keytag} returned by nameserver {ns}/{address} does not match '
+          . 'the algorithm and hash values in a DS record with same tag in parent zone.',
           @_;
     },
     BROKEN_RRSIG => sub {
         __x    # DNSSEC:BROKEN_RRSIG
-          'Signature for DNSKEY with tag {keytag} returned by nameserver {ns}/{address} failed'
-          . 'to verify with error \'{error}\' although DS with same tag is present in parent.',
+          'The RRSIG of the DNSKEY RRset created by tag {keytag} returned by nameserver {ns}/{address} '
+          . 'failed to be verified with error \'{error}\' (a DS record with same tag is present in the '
+          . 'parent zone).'
           @_;
     },
     DELEGATION_NOT_SIGNED => sub {
@@ -633,7 +634,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     DS_MATCHES => sub {
         __x    # DNSSEC:DS_MATCHES
-          'Found DS records matching DNSKEY records.',  @_;
+          'The DS records in the parent zone match DNSKEY records in the child zone..',  @_;
     },
     DURATION_LONG => sub {
         __x    # DNSSEC:DURATION_LONG
@@ -730,14 +731,15 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     NO_MATCHING_DNSKEY => sub {
         __x    # DNSSEC:NO_MATCHING_DNSKEY
-          'Although DS record is present in parent, nameserver {ns}/{address} returned no DNSKEY '
-          . 'record with same tag {keytag}.',
+          'Nameserver {ns}/{address} returned no DNSKEY record matching the DS record with tag {keytag} '
+          . 'found in the parent zone.',
           @_;
     },
     NO_MATCHING_RRSIG => sub {
         __x    # DNSSEC:NO_MATCHING_RRSIG
-          'Although DS record is present in parent, nameserver {ns}/{address} returned no signature '
-          . 'corresponding to the DNSKEY with tag {keytag}.',
+          'Nameserver {ns}/{address} returned no signature on the DNSKEY RRset that corresponds to the '
+          . 'DNSKEY with tag {keytag} even though there is a DS record in the parent zone for that '
+          . 'DNSKEY record.',
           @_;
     },
     NO_NSEC3PARAM => sub {
