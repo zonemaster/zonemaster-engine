@@ -1,6 +1,6 @@
 .POSIX:
 .SUFFIXES: .po .mo
-.PHONY: all dist touch-po update-po extract-pot
+.PHONY: all check-msg-args dist extract-pot show-fuzzy touch-po update-po
 
 POFILES != echo *.po
 MOFILES := $(POFILES:%.po=%.mo)
