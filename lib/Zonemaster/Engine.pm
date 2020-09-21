@@ -120,7 +120,7 @@ sub add_fake_delegation {
         if ( not defined $href->{$name} or not scalar @{ $href->{$name} } ) {
             if ( Zonemaster::Engine::Zone->new( { name => $domain } )->is_in_zone( $name ) ) {
                 Zonemaster::Engine->logger->add(
-                    FAKE_DELEGATION_IN_ZONE_NO_IP => { domain => $domain , ns => $name }
+                    FAKE_DELEGATION_IN_ZONE_NO_IP => { domain => $domain , nsname => $name }
                 );
                 push @{ $href->{$name} }, ();
                 $incomplete_delegation = 1;
@@ -132,7 +132,7 @@ sub add_fake_delegation {
                 }
                 else {
                     Zonemaster::Engine->logger->add(
-                        FAKE_DELEGATION_NO_IP => { domain => $domain , ns => $name  }
+                        FAKE_DELEGATION_NO_IP => { domain => $domain , nsname => $name  }
                     );
                     push @{ $href->{$name} }, ();
                     $incomplete_delegation = 1;
