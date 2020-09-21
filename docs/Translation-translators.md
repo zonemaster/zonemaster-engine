@@ -76,9 +76,8 @@ and you can disable fuzzy matching by executing
 For full integration with Zonemaster translation you need a Github account
 and a fork of *Zonemaster-Engine*. If you do not have a Github account you
 can easily create one at [Github]. If you are not prepared to
-create one, contact the Zonemaster work group for instructions, either by
-creating an [issue][new issue] or by sending an email to 
-"zonemaster@zonemaster.net".
+create one, contact the Zonemaster work group for instructions by sending
+an email to "zonemaster@zonemaster.net".
 
 To create a fork of *Zonemaster-Engine*: 
 1. Go to [Zonemaster-Engine repository].
@@ -91,7 +90,7 @@ private key is available on the computer you are going to work from.
 ## Tools
 
 The *PO* file can be edited with a plain text editor, but then it is 
-important to keep the database structur of the file. There are tools that 
+important to keep the database structure of the file. There are tools that
 makes editing of the *PO* files easier. When using those, the *PO* file is
 handled as a database instead of as a plain file.
 
@@ -102,50 +101,59 @@ handled as a database instead of as a plain file.
 * There are more tools available, either cloud services or programs
 for download, and they could be found by searching for "po editor".
 
-## Steps
+## Clone preparation
 
-The steps in this section will work for most translation work. We
-welcome comments on these.
+You need a local clone of the repository to work in.
 
-* Clone the Zonemaster-Engine repository and enter the directory
-  created:
+* Clone the Zonemaster-Engine repository, unless you already
+  have a clone that you could reuse:
 ```
-git clone https://github.com/zonemaster/zonemaster-engine.git
-cd zonemaster-engine
+  git clone https://github.com/zonemaster/zonemaster-engine.git
 ```
 
-* If you already have a clone of Zonemaster-Engine, enter that
-  and run an update.
+* Enter the directory of the clone created above or already
+  existing clone:
 ```
-cd zonemaster-engine
-git fetch --all
+  cd zonemaster-engine
 ```
 
-* Check-out the *develop* branch and create a new branch to work in.
-  You can call the new branch whatever you want, but here we use
-  the name "translation-update".
+* If you already have an old clone of Zonemaster-Engine,
+  run an update.
 ```
-git checkout origin/develop
-git checkout -b translation-update
+  git fetch --all
 ```
 
 * Now it is time to connect your own fork of *Zonemaster-Engine*
   at Github to the created clone, unless you have alreday done that,
   in case you can skip the next step.
   
-* You have a user name at Github. Here we use "xxxx" as the user name 
-  and also the name of the remote in clone om local machine.
+* You have a user name at Github. Here we use "xxxx" as your user name
+  and also the name of the remote in clone on the local machine.
 ```
-git remote add xxxx git@github.com:xxxx/zonemaster-engine.git
-git fetch --all
+  git remote add xxxx git@github.com:xxxx/zonemaster-engine.git
+  git fetch --all
+```
+
+## Translation steps
+
+The steps in this section will work for most translation work. We
+welcome comments on these.
+
+* Check-out the *develop* branch and create a new branch to work in.
+  You can call the new branch whatever you want, but here we use
+  the name "translation-update". If that name is already taken,
+  you have to give it a new name or remove the old branch.
+```
+  git checkout origin/develop
+  git checkout -b translation-update
 ```
 
 * Go to the *share* directory and run the update command for the *PO* file 
   for the language you are going to work with. Replace "xx" with the 
   language code in question. This should be done every time.
 ```
-cd share
-make xx.po
+  cd share
+  make xx.po
 ```
 
 * The *PO* file is updated with new *msgids*, if any, and now you can start
@@ -156,8 +164,8 @@ make xx.po
   your Zonemaster-Engine clone.
 
 * When doing the update, do not change the *msgid*, only the *msgstr*. The 
-  *msgid* cannot be be update in this process. They are the links between
-  the Perl module and the *PO* file.
+  *msgid* cannot and must not be be update in this process. They are the
+  links between the Perl module and the *PO* file.
 
 * If you find a *msgid* that needs an update, create an [issue][new issue] 
   or a pull request to have the message updated in the Perl module. If you 
@@ -173,39 +181,36 @@ make xx.po
   especially of the *msgid* has been changed.
 
 * Any remaining *obsolete entries* (lines at the end of the file starting 
-  with "#~") could be removed. They have no purpose anymore.
+  with "#~") could be removed. They serve no purpose anymore.
 
-* Run `../util/check-msg-args xx.po` to make sure the messages arguments in the
-  *msgstr* strings match up with those in the *msgid* strings.
-
-* When the update is completed, it is time to commit the changes. First do
-  a "git add" of the *PO* file you have updated. Make sure not to "add" any 
-  other file that might have been changed.
+* Check that the messages arguments in all *msgstr* strings match up with 
+  those in the *msgid* strings.
 ```
-git add xx.po
+  ../util/check-msg-args xx.po
 ```
 
-* Verify that only the ".po" file as been added for commit. All other
-files should be ignored.
+* When the update is completed, it is time to commit the changes. You should
+  only commit the "xx.po" file.
 ```
-git status
+  git commit -m 'Write a description of the change' xx.po
 ```
 
-* Create a commit
+* There could be other files changed or added that should not be included.
+  Run the status command to see them.
 ```
-git commit -m 'Write a description of the change'.
+  git status
 ```
 
 * Other changed files could be reset by a "checkout". This could also
   be done before creating the commit.
 ```
-git checkout FILENAME
+  git checkout FILENAME
 ```
 
 * Added files not needed can just be removed. This could also be done
   before the commit.
 ```
-rm FILE-NAME
+  rm FILE-NAME
 ```
 
 * Now push the local branch you created to your fork at Github. 
@@ -213,16 +218,17 @@ rm FILE-NAME
   have committed the updates to. Use your Github user name instead of
   "xxxx".
 ```
-git push -u xxxx translation-update
+  git push -u xxxx translation-update
 ```
 
 * Go to your fork at Github, https://github.com/xxxx/zonemaster-engine
   and use your Github user name instead of "xxxx".
 
-* Select to create a new "pull request" where the base directory
-  should be *zonemaster-engine* and the base should be *develop* (not
-  *master*). The "head" should be your fork and "compare" the same
-  branch as you created above and pushed to your fork, "translation-update".
+* Select to create a new "pull request" where the base repository
+  should be *zonemaster/zonemaster-engine* and the base branch should be
+  *develop* (not *master*). The "head" should be your fork and "compare"
+  the same branch as you created above and pushed to your fork,
+  "translation-update".
 
 * Inspect what Github says that will change by the pull request. It should
   only be the *PO* file that you have updated and nothing else. If additional
@@ -264,18 +270,23 @@ of an existing file.
   to see if it is available. Replace "xx" with that code that you think it
   should be.
 ```
-locale -a | grep xx      # Works at least in FreeBSD
-grep xx /etc/locale.gen  # Works at least in Ubuntu 18.04
+  locale -a | grep xx      # Works at least in FreeBSD
+  grep xx /etc/locale.gen  # Works at least in Ubuntu 18.04
 ```
 
 * Go to the *share* and update the *PO* file for some language, say Swedish,
   and make a copy of that to the new file name. And then reset the *PO* file
   for Swedish.
 ```
-cd share
-make sv.po
-cp sv.po xx.po
-git checkout sv.po
+  cd share
+  make sv.po
+  cp sv.po xx.po
+  git checkout sv.po
+```
+
+* You have to "add" the new file to git before you start working on it.
+```
+  git add xx.po
 ```
 
 * When you do the update of the new *PO* file you have to replace all *msgstr*
