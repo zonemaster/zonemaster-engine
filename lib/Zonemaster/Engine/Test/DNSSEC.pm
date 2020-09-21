@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare( "v1.1.24" );
+use version; our $VERSION = version->declare( "v1.1.25" );
 
 ###
 ### This test module implements DNSSEC tests.
@@ -522,7 +522,7 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # DNSSEC:BROKEN_RRSIG
           'The RRSIG of the DNSKEY RRset created by tag {keytag} returned by nameserver {ns}/{address} '
           . 'failed to be verified with error \'{error}\' (a DS record with same tag is present in the '
-          . 'parent zone).'
+          . 'parent zone).',
           @_;
     },
     DELEGATION_NOT_SIGNED => sub {
@@ -634,7 +634,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     DS_MATCHES => sub {
         __x    # DNSSEC:DS_MATCHES
-          'The DS records in the parent zone match DNSKEY records in the child zone..',  @_;
+          'The DS records in the parent zone match DNSKEY records in the child zone.',  @_;
     },
     DURATION_LONG => sub {
         __x    # DNSSEC:DURATION_LONG
