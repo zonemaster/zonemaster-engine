@@ -23,8 +23,8 @@ msgid ""
 "Nameserver {nsname} has an IP address ({ns_ip}) with mismatched PTR result "
 "({names})."
 msgstr ""
-"Navnetjener {nsname} har en IP-adresse ({ns_ip}) som ikke matcher reversoppslag "
-"({names})."
+"Navnetjener {nsname} har en IP-adresse ({ns_ip}) som ikke matcher "
+"reversoppslag ({names})."
 
 #. ADDRESS:NAMESERVER_IP_PRIVATE_NETWORK
 #, perl-brace-format
@@ -1774,8 +1774,7 @@ msgid ""
 "tested zone ({ns_list})."
 msgstr ""
 "Navnetjeneren i SOA/MNAME-post ({mname}) finnes ikke i delegeringen fra "
-"foreldresonen til den testede sonen. Navnetjenere i delegeringen: "
-"{ns_list}."
+"foreldresonen til den testede sonen. Navnetjenere i delegeringen: {ns_list}."
 
 #. ZONE:REFRESH_LOWER_THAN_RETRY
 #, perl-brace-format

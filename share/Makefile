@@ -14,6 +14,7 @@ all: $(MOFILES) modules.txt
 	@echo MANIFEST file, or they will not be installed.
 	@echo
 
+# Tidy the formatting of all PO files
 tidy-po:
 	@tmpdir="`mktemp -d tidy-po.XXXXXXXX`" ;\
 	trap 'rm -rf "$$tmpdir"' EXIT ;\

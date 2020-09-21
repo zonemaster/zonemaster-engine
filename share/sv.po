@@ -23,8 +23,8 @@ msgid ""
 "Nameserver {nsname} has an IP address ({ns_ip}) with mismatched PTR result "
 "({names})."
 msgstr ""
-"Namnservern '{nsname}' har en IP-adress ({ns_ip}) med en bakåtuppslagning (PTR) "
-"till '{names}' som inte stämmer med namnservernamnet."
+"Namnservern '{nsname}' har en IP-adress ({ns_ip}) med en bakåtuppslagning "
+"(PTR) till '{names}' som inte stämmer med namnservernamnet."
 
 #. ADDRESS:NAMESERVER_IP_PRIVATE_NETWORK
 #, perl-brace-format

@@ -15,8 +15,8 @@ msgstr ""
 #, perl-brace-format
 msgid "Nameserver {nsname} has an IP address ({ns_ip}) without PTR configured."
 msgstr ""
-"Le serveur de noms {nsname} a une adresse IP ({ns_ip}) sans enregistrement \"PTR"
-"\" correspondant."
+"Le serveur de noms {nsname} a une adresse IP ({ns_ip}) sans enregistrement "
+"\"PTR\" correspondant."
 
 #. ADDRESS:NAMESERVER_IP_PTR_MISMATCH
 #, perl-brace-format
@@ -24,8 +24,8 @@ msgid ""
 "Nameserver {nsname} has an IP address ({ns_ip}) with mismatched PTR result "
 "({names})."
 msgstr ""
-"Le serveur de noms {nsname} a une adresse IP ({ns_ip}) qui ne correspond pas aux "
-"enregistrements \"PTR\" retournés ({names}) pour celle-ci."
+"Le serveur de noms {nsname} a une adresse IP ({ns_ip}) qui ne correspond pas "
+"aux enregistrements \"PTR\" retournés ({names}) pour celle-ci."
 
 #. ADDRESS:NAMESERVER_IP_PRIVATE_NETWORK
 #, perl-brace-format
@@ -33,8 +33,8 @@ msgid ""
 "Nameserver {nsname} has an IP address ({ns_ip}) with prefix {prefix} "
 "referenced in {reference} as a '{name}'."
 msgstr ""
-"Le serveur de noms {nsname} a une adresse IP ({ns_ip}) dont le préfixe {prefix} "
-"est référéncé dans le {reference} sous le libellé '{name}'."
+"Le serveur de noms {nsname} a une adresse IP ({ns_ip}) dont le préfixe "
+"{prefix} est référéncé dans le {reference} sous le libellé '{name}'."
 
 #. ADDRESS:NO_IP_PRIVATE_NETWORK
 msgid "All Nameserver addresses are in the routable public addressing space."
@@ -370,8 +370,7 @@ msgstr "Le serveur de noms {ns} n'a pas répondu aux requêtes de type \"NS\"."
 #. CONSISTENCY:NO_RESPONSE_SOA_QUERY
 #, perl-brace-format
 msgid "No response from nameserver {ns} on SOA queries."
-msgstr "Le serveur de noms {ns} n'a pas répondu aux requêtes de type \"SOA"
-"\"."
+msgstr "Le serveur de noms {ns} n'a pas répondu aux requêtes de type \"SOA\"."
 
 #. CONSISTENCY:NS_SET
 #, perl-brace-format
@@ -1981,8 +1980,7 @@ msgid ""
 "tested zone ({ns_list})."
 msgstr ""
 "Le serveur maître défini dans le SOA, 'mname' ({mname}), ne fait pas partie "
-"des enregistrements de type \"NS\" listés par la zone parente "
-"({ns_list})."
+"des enregistrements de type \"NS\" listés par la zone parente ({ns_list})."
 
 #. ZONE:REFRESH_LOWER_THAN_RETRY
 #, perl-brace-format
