@@ -1574,11 +1574,6 @@ msgstr ""
 msgid "The following nameservers support EDNS0 : {names}."
 msgstr "Les serveurs de noms suivants supportent EDNS0 : {names}."
 
-#. NAMESERVER:IS_A_RECURSOR
-#, perl-brace-format
-msgid "Nameserver {ns} is a recursor."
-msgstr "Le serveur de noms {ns} n'est pas un récurseur."
-
 #. NAMESERVER:MISSING_OPT_IN_TRUNCATED
 #, perl-brace-format
 msgid ""
