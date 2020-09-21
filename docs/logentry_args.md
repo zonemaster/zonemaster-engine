@@ -8,7 +8,7 @@
 | ns_ip       | IP address           | The IP address of a name server.                            |
 | ns          | Domain name and IP address pair | The name and IP address of a name server, separated by "/". |
 | nsname_list | List of domain names | A list of name servers, as specified by "nsname", separated by ";". |
-| ns_ip_list  | List of IP addresses | A list of name servers, as specified by "nsip", separated by ";". |
+| ns_ip_list  | List of IP addresses | A list of name servers, as specified by "ns_ip", separated by ";". |
 | ns_list     | List of domain name and IP address pairs | A list of name servers, as specified by "ns", separated by ";". |
 || AS number| An Autonomous Space number for an IP address.|
 || Address record type (A or AAAA)| Used to tell the difference between IPv4 and IPv6.|
