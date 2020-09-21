@@ -1964,13 +1964,13 @@ msgstr ""
 
 #. SYSTEM:SKIP_IPV4_DISABLED
 #, perl-brace-format
-msgid "IPv4 is disabled, not sending query to {ns}."
-msgstr "IPv4 är inaktiverat. Skickar inga DNS-frågor till '{ns}'."
+msgid "IPv4 is disabled, not sending query to {ns_list}."
+msgstr "IPv4 är inaktiverat. Skickar inga DNS-frågor till '{ns_list}'."
 
 #. SYSTEM:SKIP_IPV6_DISABLED
 #, perl-brace-format
-msgid "IPv6 is disabled, not sending query to {ns}."
-msgstr "IPv6 är inaktiverat. Skickar ingen DNS-fråga till '{ns}'."
+msgid "IPv6 is disabled, not sending query to {ns_list}."
+msgstr "IPv6 är inaktiverat. Skickar ingen DNS-fråga till '{ns_list}'."
 
 #. SYSTEM:FAKE_DELEGATION
 msgid "Followed a fake delegation."
@@ -1993,19 +1993,19 @@ msgstr ""
 #. SYSTEM:FAKE_DELEGATION_IN_ZONE_NO_IP
 #, perl-brace-format
 msgid ""
-"The fake delegation of domain {domain} includes an in-zone name server {ns} "
-"without mandatory glue (without IP address)."
+"The fake delegation of domain {domain} includes an in-zone name server "
+"{nsname} without mandatory glue (without IP address)."
 msgstr ""
-"Försöksdelegering av domänen '{domain}' innehåller en namnservern '{ns}' som "
+"Försöksdelegering av domänen '{domain}' innehåller en namnservern '{nsname}' som "
 "kräver en glue-post (kräver IP-adress)."
 
 #. SYSTEM:FAKE_DELEGATION_NO_IP
 #, perl-brace-format
 msgid ""
-"The fake delegation of domain {domain} includes a name server {ns} that "
+"The fake delegation of domain {domain} includes a name server {nsname} that "
 "cannot be resolved to any IP address."
 msgstr ""
-"Försöksdelegering av domänen '{domain}' innehåller en namnservern '{ns}' som "
+"Försöksdelegering av domänen '{domain}' innehåller en namnservern '{nsname}' som "
 "inte kan slås upp till någon IP-adress."
 
 #. SYSTEM:PACKET_BIG
