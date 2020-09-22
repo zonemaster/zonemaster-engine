@@ -257,12 +257,12 @@ be update each time a message is added or changed.
 Above you found the following step that must now be modified, but run the
 steps before this step:
 
-> * Go to the *share* and update the *PO* file for the language you are going
->   to work with. Replace "xx" with the language code in question.
-> ```
-> cd share
-> make xx.po
-> ```
+  > * Go to the *share* and update the *PO* file for the language you are going
+  >   to work with. Replace "xx" with the language code in question.
+  > ```
+  > cd share
+  > make xx.po
+  > ```
 
 The new language is not there and cannot be updated. Instead you have to
 create the new language file (*PO* file). The easiest way is to make a copy
