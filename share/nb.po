@@ -23,7 +23,7 @@ msgid ""
 "Nameserver {ns} has an IP address ({address}) with mismatched PTR result "
 "({names})."
 msgstr ""
-"Navnetjener {ns} har en IP-adresse ({address}) som ikke matcher\n"
+"Navnetjener {ns} har en IP-adresse ({address}) som ikke matcher "
 "reversoppslag ({names})."
 
 #. ADDRESS:NAMESERVER_IP_PRIVATE_NETWORK
@@ -32,7 +32,7 @@ msgid ""
 "Nameserver {ns} has an IP address ({address}) with prefix {prefix} "
 "referenced in {reference} as a '{name}'."
 msgstr ""
-"Navnetjener {ns} har en IP-adresse ({address}) med prefiks {prefix},\n"
+"Navnetjener {ns} har en IP-adresse ({address}) med prefiks {prefix}, "
 "som {reference} klassifiseres som {name}."
 
 #. ADDRESS:NO_IP_PRIVATE_NETWORK
@@ -262,7 +262,7 @@ msgstr "Det er ikke mulig å følge delegeringen av domenet"
 msgid ""
 "Child has extra nameserver IP address(es) not listed at parent ({addresses})."
 msgstr ""
-"Underdomene har ekstra IP-adress(er) for navnetjener som ikke er publisert\n"
+"Underdomene har ekstra IP-adress(er) for navnetjener som ikke er publisert "
 "hos foreldredomene ({addresses})."
 
 #. CONSISTENCY:EXTRA_ADDRESS_PARENT
@@ -270,7 +270,7 @@ msgstr ""
 msgid ""
 "Parent has extra nameserver IP address(es) not listed at child ({addresses})."
 msgstr ""
-"Foreldredomene har ekstra IP-adress(er) for navnetjener som ikke er\n"
+"Foreldredomene har ekstra IP-adress(er) for navnetjener som ikke er "
 "publisert hos underdomene ({addresses})."
 
 #. CONSISTENCY:IN_BAILIWICK_ADDR_MISMATCH
@@ -358,7 +358,7 @@ msgid ""
 "A single SOA time parameter set was seen (REFRESH={refresh},RETRY={retry},"
 "EXPIRE={expire},MINIMUM={minimum})."
 msgstr ""
-"Et sett med SOA-tidsparametere ble funnet (REFRESH={refresh},\n"
+"Et sett med SOA-tidsparametere ble funnet (REFRESH={refresh}, "
 "RETRY={retry},EXPIRE={expire},MINIMUM={minimum})."
 
 #. CONSISTENCY:OUT_OF_BAILIWICK_ADDR_MISMATCH
@@ -369,7 +369,7 @@ msgid ""
 "equivalent address record found in authoritative zone ({zone_addresses})"
 msgstr ""
 "Limposter hos en eller flere navnetjenere som er \"out-of-bailiwick\" hos "
-"foreldredomenet ({parent_addresses})\n"
+"foreldredomenet ({parent_addresses}) "
 "samsvarer ikke med tilsvarende adresseposter i autoritativ sone  "
 "({zone_addresses})."
 
@@ -407,7 +407,7 @@ msgid ""
 "No common nameserver IP addresses between child ({child}) and parent "
 "({glue})."
 msgstr ""
-"Ingen felles navnetjener-IP-adresse mellom underdomene ({child}) og\n"
+"Ingen felles navnetjener-IP-adresse mellom underdomene ({child}) og "
 "foreldredomene ({glue})."
 
 #. DNSSEC:ADDITIONAL_DNSKEY_SKIPPED
@@ -544,14 +544,14 @@ msgid ""
 "Signature for DNSKEY with tag {signature} failed to verify with error "
 "'{error}'."
 msgstr ""
-"Verifiseringen av signaturen for DNSKEY-posten med \"key tag\" {signature}\n"
+"Verifiseringen av signaturen for DNSKEY-posten med \"key tag\" {signature} "
 "mislyktes med følgende feil \"{error}\"."
 
 #. DNSSEC:DNSKEY_SIGNATURE_OK
 #, perl-brace-format
 msgid "A signature for DNSKEY with tag {signature} was correctly signed."
 msgstr ""
-"Verifiering av en signatur for DNSKEY-posten med \"key tag\"\n"
+"Verifiering av en signatur for DNSKEY-posten med \"key tag\" "
 "{signature} lyktes."
 
 #. DNSSEC:DNSKEY_SIGNED
@@ -672,7 +672,7 @@ msgid ""
 "DS record with keytag {keytag} and digest type {digtype} does not match the "
 "DNSKEY with the same tag."
 msgstr ""
-"DS-posten med \"key tag\" {keytag} og digest-type {digtype} matcher ikke\n"
+"DS-posten med \"key tag\" {keytag} og digest-type {digtype} matcher ikke "
 "DNSKEY-posten med samme \"key tag\"."
 
 #. DNSSEC:DS_FOUND
@@ -686,7 +686,7 @@ msgid ""
 "DS record with keytag {keytag} and digest type {digtype} matches the DNSKEY "
 "with the same tag."
 msgstr ""
-"DS-posten med \"key tag\" {keytag} og digest-type {digtype} matcher\n"
+"DS-posten med \"key tag\" {keytag} og digest-type {digtype} matcher "
 "DNSKEY-posten med samme \"key tag\"."
 
 #. DNSSEC:DS_MATCH_FOUND
@@ -703,7 +703,7 @@ msgid ""
 "prevent use of DS with digest type 1 (RFC4509, section 3)."
 msgstr ""
 "En eksisterende DS-post med \"digest-type\" 2 som ikke passer med DNSKEY-"
-"postene, hindrer\n"
+"postene, hindrer "
 "bruk av DS-post med \"digest-type\" 1 (RFC4509, punkt 3)."
 
 #. DNSSEC:DURATION_LONG
@@ -712,7 +712,7 @@ msgid ""
 "RRSIG with keytag {tag} and covering type(s) {types} has a duration of "
 "{duration} seconds, which is too long."
 msgstr ""
-"RRSIG med \"key tag\" {tag} som dekker posttyper {types} har en levetid på\n"
+"RRSIG med \"key tag\" {tag} som dekker posttyper {types} har en levetid på "
 "{duration} sekunder, som er for lenge."
 
 #. DNSSEC:DURATION_OK
@@ -721,7 +721,7 @@ msgid ""
 "RRSIG with keytag {tag} and covering type(s) {types} has a duration of "
 "{duration} seconds, which is just fine."
 msgstr ""
-"RRSIG med \"key tag\" {tag} som dekker posttyper {types} har en levetid på\n"
+"RRSIG med \"key tag\" {tag} som dekker posttyper {types} har en levetid på "
 "{duration} sekunder, som er ok."
 
 #. DNSSEC:EXTRA_PROCESSING_BROKEN
@@ -782,7 +782,7 @@ msgid ""
 "Key with keytag {keytag} details : Size = {keysize}, Flags ({sep}, "
 "{rfc5011})."
 msgstr ""
-"Nøkkel med \"key tag\" {keytag}. Detaljer: størrelse = {keysize},\n"
+"Nøkkel med \"key tag\" {keytag}. Detaljer: størrelse = {keysize}, "
 "flagg = ({sep}, {rfc5011})."
 
 #. DNSSEC:MANY_ITERATIONS
@@ -902,7 +902,7 @@ msgid ""
 "RRSIG with keytag {tag} and covering type(s) {types} has a remaining "
 "validity of {duration} seconds, which is too long."
 msgstr ""
-"RRSIG med \"key tag\" {tag} som dekker typer {types}, har en gjenstående\n"
+"RRSIG med \"key tag\" {tag} som dekker typer {types}, har en gjenstående "
 "levetid på {duration} sekunder, som er for lenge."
 
 #. DNSSEC:REMAINING_SHORT
@@ -911,7 +911,7 @@ msgid ""
 "RRSIG with keytag {tag} and covering type(s) {types} has a remaining "
 "validity of {duration} seconds, which is too short."
 msgstr ""
-"RRSIG med \"key tag\" {tag} som dekker typer {types} har en gjenstående\n"
+"RRSIG med \"key tag\" {tag} som dekker typer {types} har en gjenstående "
 "levetid på {duration} sekunder, som er for kort."
 
 #. DNSSEC:RRSIG_EXPIRATION
@@ -942,7 +942,7 @@ msgid ""
 "RRSIG with keytag {tag} and covering type(s) {types} has already expired "
 "(expiration is: {expiration})."
 msgstr ""
-"RRSIG med \"key tag\" {tag} som dekker typer {types} har allerede utløpt\n"
+"RRSIG med \"key tag\" {tag} som dekker typer {types} har allerede utløpt "
 "(utløpstidspunkt er {expiration})."
 
 #. DNSSEC:RRSIG_NOT_MATCH_DNSKEY
@@ -991,7 +991,7 @@ msgid ""
 "The number of NSEC3 iterations is {count}, which is too high for key length "
 "{keylength}."
 msgstr ""
-"Antall NSEC3-iterasjoner er {count}, som er for mange for nøkkellengde\n"
+"Antall NSEC3-iterasjoner er {count}, som er for mange for nøkkellengde "
 "{keylength}."
 
 #. DNSSEC:UNEXPECTED_RESPONSE_DS
@@ -1088,21 +1088,21 @@ msgid ""
 "Parent lists enough ({count}) nameservers ({glue}). Lower limit set to "
 "{minimum}."
 msgstr ""
-"Delegeringen i foreldresonen har tilstrekkelig mange ({count}) navnetjenere\n"
+"Delegeringen i foreldresonen har tilstrekkelig mange ({count}) navnetjenere "
 "({glue}). Nedre grense er {minimum}."
 
 #. DELEGATION:EXTRA_NAME_CHILD
 #, perl-brace-format
 msgid "Child has nameserver(s) not listed at parent ({extra})."
 msgstr ""
-"Underdomene har ekstra navnetjenere som ikke er publisert hos\n"
+"Underdomene har ekstra navnetjenere som ikke er publisert hos "
 "foreldredomene ({extra})."
 
 #. DELEGATION:EXTRA_NAME_PARENT
 #, perl-brace-format
 msgid "Parent has nameserver(s) not listed at the child ({extra})."
 msgstr ""
-"Delegeringen i foreldresonen har en eller flere navnetjenere (NS-poster)\n"
+"Delegeringen i foreldresonen har en eller flere navnetjenere (NS-poster) "
 "som ikke er listet i undersonen ({extra})."
 
 #. DELEGATION:IS_NOT_AUTHORITATIVE
@@ -1171,7 +1171,7 @@ msgid ""
 "Parent does not list enough ({count}) nameservers ({glue}). Lower limit set "
 "to {minimum}."
 msgstr ""
-"Det finnes ikke tilstrekkelig med NS-poster i undersonen.\n"
+"Det finnes ikke tilstrekkelig med NS-poster i undersonen. "
 "Antall: {count}. Navnetjenere: {glue}. Minste tillatte antall er {minimum}."
 
 #. DELEGATION:NO_IPV4_NS_CHILD
@@ -1180,7 +1180,7 @@ msgid ""
 "Child lists no nameserver that resolves to an IPv4 address. If any were "
 "present, the minimum allowed would be {minimum}."
 msgstr ""
-"Underdomene lister ikke noen navnetjener som har IPv4-adresse. Minimum\n"
+"Underdomene lister ikke noen navnetjener som har IPv4-adresse. Minimum "
 "antall er {minimum}."
 
 #. DELEGATION:NO_IPV4_NS_DEL
@@ -1198,7 +1198,7 @@ msgid ""
 "Child lists no nameserver that resolves to an IPv6 address. If any were "
 "present, the minimum allowed would be {minimum}."
 msgstr ""
-"Underdomene lister ikke noen navnetjener som har IPv6-adresse. Minimum\n"
+"Underdomene lister ikke noen navnetjener som har IPv6-adresse. Minimum "
 "antall er {minimum}."
 
 #. DELEGATION:NO_IPV6_NS_DEL
@@ -1225,7 +1225,7 @@ msgid ""
 "The smallest possible legal referral packet is larger than 512 octets (it is "
 "{size})."
 msgstr ""
-"Minste mulige henvisningspakke er på {size} oktetter, som er større\n"
+"Minste mulige henvisningspakke er på {size} oktetter, som er større "
 "enn 512 oktetter."
 
 #. DELEGATION:REFERRAL_SIZE_OK
@@ -1234,7 +1234,7 @@ msgid ""
 "The smallest possible legal referral packet is smaller than 513 octets (it "
 "is {size})."
 msgstr ""
-"Minste mulige henvisningspakke er på {size} oktetter, som er mindre\n"
+"Minste mulige henvisningspakke er på {size} oktetter, som er mindre "
 "enn 513 oktetter."
 
 #. DELEGATION:SAME_IP_ADDRESS
@@ -1250,7 +1250,7 @@ msgstr "Alle navnetjenerne har SOA-post."
 #, perl-brace-format
 msgid "Empty NOERROR response to SOA query was received from {ns}."
 msgstr ""
-"En SOA-spørring returnerte et svar med NOERROR fra {ns}, men svaret\n"
+"En SOA-spørring returnerte et svar med NOERROR fra {ns}, men svaret "
 "var tomt."
 
 #. DELEGATION:TOTAL_NAME_MISMATCH
@@ -1321,7 +1321,7 @@ msgid ""
 "No response from {ns}/{address} when EDNS is used in query asking for "
 "{dname}."
 msgstr ""
-"Ingen svar fra {ns}/{address} når EDNS brukes til å spørre etter\n"
+"Ingen svar fra {ns}/{address} når EDNS brukes til å spørre etter "
 "{dname}."
 
 #. NAMESERVER:CAN_BE_RESOLVED
@@ -1545,7 +1545,7 @@ msgid ""
 "position 3 and 4 (with a prefix which is not 'xn--')."
 msgstr ""
 "SOA/MNAME-post ({name}) har et ledd ({label}) med doble bindestreker (\"--"
-"\")\n"
+"\") "
 "i posisjon 3 og 4 (med en prefiks som ikke er \"xn--\")."
 
 #. SYNTAX:MNAME_NON_ALLOWED_CHARS
@@ -1622,7 +1622,7 @@ msgid ""
 "Domain name ({name}) has no label with a double hyphen ('--') in position 3 "
 "and 4 (with a prefix which is not 'xn--')."
 msgstr ""
-"Domenenavnet ({name}) har ingen ledd med bindestrek i posisjon 3 og 4\n"
+"Domenenavnet ({name}) har ingen ledd med bindestrek i posisjon 3 og 4 "
 "uten at det innledes med IDN-prefikset (\"xn--\")."
 
 #. SYNTAX:NO_ENDING_HYPHENS
@@ -1652,7 +1652,7 @@ msgid ""
 "The SOA RNAME mail domain ({domain}) cannot be resolved to a mail server "
 "with an IP address."
 msgstr ""
-"E-postdomenet ({domain}) fra SOA/RNAME kan ikke resolve til en\n"
+"E-postdomenet ({domain}) fra SOA/RNAME kan ikke resolve til en "
 "e-postserver med IP-adresse."
 
 #. SYNTAX:RNAME_MISUSED_AT_SIGN
@@ -1688,7 +1688,7 @@ msgid ""
 "SOA 'retry' value ({retry}) is less than the recommended one "
 "({required_retry})."
 msgstr ""
-"Verdien på SOA/RETRY ({retry}) er lavere enn anbefalt minimum\n"
+"Verdien på SOA/RETRY ({retry}) er lavere enn anbefalt minimum "
 "({required_retry})."
 
 #. ZONE:RETRY_MINIMUM_VALUE_OK
@@ -1697,7 +1697,7 @@ msgid ""
 "SOA 'retry' value ({retry}) is more than the minimum recommended value "
 "({required_retry})."
 msgstr ""
-"Verdien på SOA/RETRY ({retry}) er høyere enn anbefalt minimum\n"
+"Verdien på SOA/RETRY ({retry}) er høyere enn anbefalt minimum "
 "({required_retry})."
 
 #. ZONE:MNAME_NO_RESPONSE
@@ -1710,7 +1710,7 @@ msgstr "Navnetjeneren i SOA/MNAME-post {ns}/{address} svarer ikke."
 msgid "SOA 'mname' value ({mname}) refers to a NS which is an alias (CNAME)."
 msgstr ""
 "Navnetjeneren i SOA/MNAME-post ({mname}) refererer til en NS-post som er et "
-"alias\n"
+"alias "
 "(CNAME)."
 
 #. ZONE:MNAME_IS_NOT_CNAME
@@ -1719,7 +1719,7 @@ msgid ""
 "SOA 'mname' value ({mname}) refers to a NS which is not an alias (CNAME)."
 msgstr ""
 "Navnetjener i SOA/MNAME-post ({mname}) refererer til en NS-post som ikke er "
-"et\n"
+"et "
 "alias (CNAME)."
 
 #. ZONE:NO_MX_RECORD
@@ -1737,7 +1737,7 @@ msgid ""
 "SOA 'refresh' value ({refresh}) is less than the recommended one "
 "({required_refresh})."
 msgstr ""
-"Verdien på SOA/REFRESH ({refresh}) er lavere enn anbefalt minimum\n"
+"Verdien på SOA/REFRESH ({refresh}) er lavere enn anbefalt minimum "
 "({required_refresh})."
 
 #. ZONE:REFRESH_MINIMUM_VALUE_OK
@@ -1746,7 +1746,7 @@ msgid ""
 "SOA 'refresh' value ({refresh}) is higher than the minimum recommended value "
 "({required_refresh})."
 msgstr ""
-"Verdien på SOA/REFRESH ({refresh}) er høyere enn anbefalt minimumsverdi\n"
+"Verdien på SOA/REFRESH ({refresh}) er høyere enn anbefalt minimumsverdi "
 "({required_refresh})."
 
 #. ZONE:EXPIRE_LOWER_THAN_REFRESH
@@ -1763,7 +1763,7 @@ msgid ""
 "SOA 'minimum' value ({minimum}) is higher than the recommended one "
 "({highest_minimum})."
 msgstr ""
-"Verdien på SOA/MINIMUM ({minimum}) er større enn anbefalt\n"
+"Verdien på SOA/MINIMUM ({minimum}) er større enn anbefalt "
 "({highest_minimum})."
 
 #. ZONE:SOA_DEFAULT_TTL_MAXIMUM_VALUE_LOWER
@@ -1772,7 +1772,7 @@ msgid ""
 "SOA 'minimum' value ({minimum}) is less than the recommended one "
 "({lowest_minimum})."
 msgstr ""
-"Verdien på SOA/MINIMUM ({minimum}) er lavere enn anbefalt verdi\n"
+"Verdien på SOA/MINIMUM ({minimum}) er lavere enn anbefalt verdi "
 "({lowest_minimum})."
 
 #. ZONE:SOA_DEFAULT_TTL_MAXIMUM_VALUE_OK
@@ -1781,7 +1781,7 @@ msgid ""
 "SOA 'minimum' value ({minimum}) is between the recommended ones "
 "({lowest_minimum}/{highest_minimum})."
 msgstr ""
-"Verdien på SOA/MINIMUM ({minimum}) er innenfor anbefalt intervall\n"
+"Verdien på SOA/MINIMUM ({minimum}) er innenfor anbefalt intervall "
 "({lowest_minimum}/{highest_minimum})."
 
 #. ZONE:MNAME_NOT_AUTHORITATIVE
@@ -1789,7 +1789,7 @@ msgstr ""
 msgid ""
 "SOA 'mname' nameserver {ns}/{address} is not authoritative for '{zone}' zone."
 msgstr ""
-"Navnetjeneren i SOA/MNAME-post {ns}/{address} er ikke autoritativ for sonen\n"
+"Navnetjeneren i SOA/MNAME-post {ns}/{address} er ikke autoritativ for sonen "
 "{zone}."
 
 #. ZONE:MNAME_RECORD_DOES_NOT_EXIST
@@ -1802,7 +1802,7 @@ msgid ""
 "SOA 'expire' value ({expire}) is less than the recommended one "
 "({required_expire})."
 msgstr ""
-"Verdien på SOA/EXPIRE ({expire}) er lavere enn anbefalt minimum\n"
+"Verdien på SOA/EXPIRE ({expire}) er lavere enn anbefalt minimum "
 "({required_expire})."
 
 #. ZONE:MNAME_NOT_IN_GLUE
@@ -1811,7 +1811,7 @@ msgid ""
 "SOA 'mname' nameserver ({mname}) is not listed in \"parent\" NS records for "
 "tested zone ({nss})."
 msgstr ""
-"Navnetjeneren i SOA/MNAME-post ({mname}) finnes ikke i delegeringen fra\n"
+"Navnetjeneren i SOA/MNAME-post ({mname}) finnes ikke i delegeringen fra "
 "foreldresonen til den testede sonen. Navnetjenere i delegeringen: {nss}."
 
 #. ZONE:REFRESH_LOWER_THAN_RETRY
@@ -1855,7 +1855,7 @@ msgid ""
 "Response from nameserver {ns}/{address} on SOA queries does not contain SOA "
 "record."
 msgstr ""
-"Svar fra navnetjener {ns}/{address} på spørring om SOA innholdt ingen\n"
+"Svar fra navnetjener {ns}/{address} på spørring om SOA innholdt ingen "
 "SOA-post."
 
 #. ZONE:MNAME_HAS_NO_ADDRESS
@@ -1875,8 +1875,8 @@ msgid ""
 "SOA 'expire' value ({expire}) is higher than the minimum recommended value "
 "({required_expire}) and not lower than the 'refresh' value ({refresh})."
 msgstr ""
-"Verdien på SOA/EXPIRE ({expire}) er høyere enn anbefalt minimum\n"
-"({required_expire}) og ikke lavere enn anbefalt \"refresh\"-verdi\n"
+"Verdien på SOA/EXPIRE ({expire}) er høyere enn anbefalt minimum "
+"({required_expire}) og ikke lavere enn anbefalt \"refresh\"-verdi "
 "({refresh})."
 
 #. ZONE:WRONG_SOA
@@ -1885,7 +1885,7 @@ msgid ""
 "Nameserver {ns}/{address} responds with a wrong owner name ({owner} instead "
 "of {name}) on SOA queries."
 msgstr ""
-"Navnetjener {ns}/{address} svarte med feil \"owner name\",\n"
+"Navnetjener {ns}/{address} svarte med feil \"owner name\", "
 "({owner}), istedenfor {name} på SOA-spørring."
 
 #. SYSTEM:CANNOT_CONTINUE
@@ -1920,7 +1920,7 @@ msgstr ""
 msgid ""
 "DNS query to {ns} for {name}/{type}/{class} failed with error: {message}"
 msgstr ""
-"DNS-spørring til {ns} for {name}/{type}/{class} mislyktes med\n"
+"DNS-spørring til {ns} for {name}/{type}/{class} mislyktes med "
 "følgende feil: {message}"
 
 #. SYSTEM:MODULE_ERROR
@@ -1952,7 +1952,7 @@ msgstr "Prøvde å kjøre en ukjent testmetode {method} i modulen {module}."
 msgid ""
 "Request to run {method} in unknown module {module}. Known modules: {known}."
 msgstr ""
-"Prøvde å kjøre en testmetode {method} i en ukjent modul {module}.\n"
+"Prøvde å kjøre en testmetode {method} i en ukjent modul {module}. "
 "Kjente moduler: {known}."
 
 #. SYSTEM:SKIP_IPV4_DISABLED
@@ -1988,7 +1988,7 @@ msgid ""
 "The fake delegation of domain {domain} includes an in-zone name server {ns} "
 "without mandatory glue (without IP address)."
 msgstr ""
-"Delegeringen av domenet {domain} innholder en navnetjener {ns} som\n"
+"Delegeringen av domenet {domain} innholder en navnetjener {ns} som "
 "trenger limposter."
 
 #. SYSTEM:FAKE_DELEGATION_NO_IP
@@ -1997,7 +1997,7 @@ msgid ""
 "The fake delegation of domain {domain} includes a name server {ns} that "
 "cannot be resolved to any IP address."
 msgstr ""
-"Delegeringen av domenet {domain} innholder en navnetjener {ns} som\n"
+"Delegeringen av domenet {domain} innholder en navnetjener {ns} som "
 "ikke kan slåes opp til noen IP-adresse."
 
 #. SYSTEM:PACKET_BIG
@@ -2006,5 +2006,5 @@ msgid ""
 "Packet size ({size}) exceeds common maximum size of {maxsize} bytes (try "
 "with \"{command}\")."
 msgstr ""
-"Pakkestørrelsen ({size}) byte overskrider maksimal størrelse {maxsize} byte\n"
+"Pakkestørrelsen ({size}) byte overskrider maksimal størrelse {maxsize} byte "
 "(prøv med \"{command}\")."
