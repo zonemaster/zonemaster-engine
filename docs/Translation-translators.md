@@ -3,13 +3,16 @@
 See the general [Translation] document for overall documentation on
 translation.
 
+
 ### Table of contents
 * [Software preparation]
 * [Background]
 * [Github preparation]
 * [Tools]
-* [Steps]
+* [Clone preparation]
+* [Translation steps]
 * [Adding a new language]
+
 
 ## Software preparation
 
@@ -90,6 +93,7 @@ To create a fork of *Zonemaster-Engine*:
 Make sure that your public *ssh* key is uploaded to Github and that its
 private key is available on the computer you are going to work from.
 
+
 ## Tools
 
 The *PO* file can be edited with a plain text editor, but then it is 
@@ -103,6 +107,7 @@ handled as a database instead of as a plain file.
   available for at least Windows and Linux.
 * There are more tools available, either cloud services or programs
   for download, and they could be found by searching for "po editor".
+
 
 ## Clone preparation
 
@@ -136,6 +141,7 @@ You need a local clone of the repository to work in.
   git remote add xxxx git@github.com:xxxx/zonemaster-engine.git
   git fetch --all
   ```
+
 
 ## Translation steps
 
@@ -302,14 +308,15 @@ of an existing file.
 
 [Adding a new language]:             #adding-a-new-language
 [Background]:                        #background
+[Clone preparation]:                 #clone-preparation
 [Emacs PO-mode]:                     https://www.gnu.org/software/gettext/manual/html_node/PO-Mode.html#PO-Mode
 [GNOME Translation Editor]:          https://wiki.gnome.org/Apps/Gtranslator
 [Github preparation]:                #github-preparation
 [Github]:                            https://github.com/
 [Software preparation]:              #software-preparation
-[Steps]:                             #steps
 [Tools]:                             #tools
 [Translation]:                       https://github.com/zonemaster/zonemaster-engine/blob/develop/docs/Translation.pod
+[Translation steps]:                 #translation-steps
 [Zonemaster-Engine repository]:      https://github.com/zonemaster/zonemaster-engine
 [new issue]:                         https://github.com/zonemaster/zonemaster-engine/issues/new
 
