@@ -3,12 +3,18 @@ use File::Slurp;
 
 use List::MoreUtils qw[uniq none any];
 
+use Zonemaster::Engine;
+use Zonemaster::Engine::Nameserver;
+use Zonemaster::Engine::Profile;
+
 BEGIN {
     use_ok( 'Zonemaster::Engine' );
     use_ok( 'Zonemaster::Engine::Test::DNSSEC' );
 }
 
 my $checking_module = q{DNSSEC};
+
+use Data::Dumper;
 
 sub zone_gives {
     my ( $test, $zone, $gives_ref ) = @_;
@@ -71,10 +77,6 @@ zone_gives( 'dnssec01', $zone, [qw{DS_ALGO_SHA1_DEPRECATED DS_ALGORITHM_OK}] );
 my $zone2 = Zonemaster::Engine->zone( 'seb.se' );
 is( zone_gives( 'dnssec01', $zone2, [q{DS_ALGORITHM_MISSING}] ), 22, 'Only one (useful) message' );
 
-zone_gives( 'dnssec02', $zone, [qw{DS_MATCHES_DNSKEY COMMON_KEYTAGS DS_MATCH_FOUND DS_FOUND}] );
-
-is( zone_gives( 'dnssec02', $zone2, [q{NO_DS}] ), 3, 'Only one (useful) message' );
-
 my $zone3 = Zonemaster::Engine->zone( 'com' );
 is( zone_gives( 'dnssec03', $zone3, [q{ITERATIONS_OK}] ), 3, 'Only one (useful) message' );
 
@@ -100,7 +102,9 @@ zone_gives_not( 'dnssec10', $zone, [qw{BROKEN_DNSSEC HAS_NSEC3 INCONSISTENT_DNSS
 zone_gives( 'dnssec10', $zone3, [qw{HAS_NSEC3}] );
 zone_gives_not( 'dnssec10', $zone3, [qw{BROKEN_DNSSEC HAS_NSEC INCONSISTENT_DNSSEC INCONSISTENT_NSEC_NSEC3 MIXED_NSEC_NSEC3 NO_NSEC_NSEC3 NSEC3_COVERS_NOT NSEC3_NOT_SIGNED NSEC3_SIG_VERIFY_ERROR NSEC_COVERS_NOT NSEC_NOT_SIGNED NSEC_SIG_VERIFY_ERROR TEST_ABORTED}] );
 
+###########
 # dnssec01
+###########
 $zone = Zonemaster::Engine->zone( 'dnssec01-ds-algorithm-ok.zut-root.rd.nic.fr' );
 zone_gives( 'dnssec01', $zone, [q{DS_ALGORITHM_OK}] );
 zone_gives_not( 'dnssec01', $zone, [qw{DS_ALGORITHM_DEPRECATED DS_ALGO_SHA1_DEPRECATED DS_ALGORITHM_RESERVED DS_ALGORITHM_NOT_DS DS_ALGORITHM_MISSING}] );
@@ -124,18 +128,52 @@ $zone = Zonemaster::Engine->zone( 'dnssec01-ds-algorithm-reserved.zut-root.rd.ni
 zone_gives( 'dnssec01', $zone, [qw{DS_ALGORITHM_RESERVED DS_ALGORITHM_MISSING}] );
 zone_gives_not( 'dnssec01', $zone, [qw{DS_ALGORITHM_DEPRECATED DS_ALGO_SHA1_DEPRECATED DS_ALGORITHM_NOT_DS DS_ALGORITHM_OK}] );
 
+###########
 # dnssec02
+###########
+my $rootfr = Zonemaster::Engine->zone( 'root.fr' );
+@res = Zonemaster::Engine->test_method( 'DNSSEC', 'dnssec02', $rootfr );
+ok( ( none { $_->tag eq 'MODULE_ERROR' } @res ), 'No crash in dnssec02' );
+
+$zone = Zonemaster::Engine->zone( 'nic.se' );
+zone_gives( 'dnssec02', $zone, [qw{DS_MATCHES NO_RESPONSE}] );
+zone_gives_not( 'dnssec02', $zone, [qw{BROKEN_DS BROKEN_RRSIG DNSKEY_KSK_NOT_SEP DNSKEY_NOT_ZONE_SIGN NO_RESPONSE_DNSKEY NO_MATCHING_DNSKEY NO_MATCHING_RRSIG NO_RRSIG_DNSKEY UNEXPECTED_RESPONSE_DS}] );
+
+$zone = Zonemaster::Engine->zone( 'nic.fr' );
+zone_gives( 'dnssec02', $zone, [q{DS_MATCHES}] );
+zone_gives_not( 'dnssec02', $zone, [qw{BROKEN_DS BROKEN_RRSIG DNSKEY_KSK_NOT_SEP DNSKEY_NOT_ZONE_SIGN NO_RESPONSE NO_RESPONSE_DNSKEY NO_MATCHING_DNSKEY NO_MATCHING_RRSIG NO_RRSIG_DNSKEY UNEXPECTED_RESPONSE_DS}] );
+
 $zone = Zonemaster::Engine->zone( 'dnssec02-no-dnskey.zut-root.rd.nic.fr' );
-zone_gives( 'dnssec02', $zone, [q{NO_DNSKEY}] );
+zone_gives( 'dnssec02', $zone, [q{NO_RESPONSE_DNSKEY}] );
+zone_gives_not( 'dnssec02', $zone, [qw{BROKEN_DS BROKEN_RRSIG DNSKEY_KSK_NOT_SEP DNSKEY_NOT_ZONE_SIGN DS_MATCHES NO_MATCHING_DNSKEY NO_MATCHING_RRSIG NO_RESPONSE NO_RRSIG_DNSKEY UNEXPECTED_RESPONSE_DS}] );
 
 $zone = Zonemaster::Engine->zone( 'dnssec02-ds-does-not-match-dnskey.zut-root.rd.nic.fr' );
-zone_gives_not( 'dnssec02', $zone, q{NO_DS} );
-zone_gives( 'dnssec02', $zone, [qw{DS_FOUND DS_MATCH_NOT_FOUND DS_DOES_NOT_MATCH_DNSKEY}] );
+zone_gives( 'dnssec02', $zone, [q{BROKEN_DS}] );
+zone_gives_not( 'dnssec02', $zone, [qw{BROKEN_RRSIG DNSKEY_KSK_NOT_SEP DNSKEY_NOT_ZONE_SIGN DS_MATCHES NO_MATCHING_DNSKEY NO_MATCHING_RRSIG NO_RESPONS NO_RESPONSE_DNSKEY NO_RRSIG_DNSKEY UNEXPECTED_RESPONSE_DS}] );
 
 $zone = Zonemaster::Engine->zone( 'dnssec02-no-common-keytags.zut-root.rd.nic.fr' );
-zone_gives( 'dnssec02', $zone, [qw{DS_FOUND NO_COMMON_KEYTAGS}] );
+zone_gives( 'dnssec02', $zone, [qw{NO_MATCHING_DNSKEY NO_MATCHING_RRSIG}] );
+zone_gives_not( 'dnssec02', $zone, [qw{BROKEN_DS BROKEN_RRSIG DNSKEY_KSK_NOT_SEP DNSKEY_NOT_ZONE_SIGN DS_MATCHES NO_RESPONS NO_RESPONSE_DNSKEY NO_RRSIG_DNSKEY UNEXPECTED_RESPONSE_DS}] );
 
+$zone = Zonemaster::Engine->zone( 'dnssec08-dnskey-not-signed.zut-root.rd.nic.fr' );
+zone_gives( 'dnssec02', $zone, [q{NO_RRSIG_DNSKEY}] );
+zone_gives_not( 'dnssec02', $zone, [qw{BROKEN_DS BROKEN_RRSIG NO_MATCHING_DNSKEY DNSKEY_KSK_NOT_SEP DNSKEY_NOT_ZONE_SIGN DS_MATCHES NO_MATCHING_RRSIG NO_RESPONS NO_RESPONSE_DNSKEY UNEXPECTED_RESPONSE_DS}] );
+
+$zone = Zonemaster::Engine->zone( 'dnssec08-dnskey-signature-not-ok-broken.zut-root.rd.nic.fr' );
+zone_gives( 'dnssec02', $zone, [q{BROKEN_RRSIG}] );
+zone_gives_not( 'dnssec02', $zone, [qw{BROKEN_DS NO_MATCHING_DNSKEY DNSKEY_KSK_NOT_SEP DNSKEY_NOT_ZONE_SIGN DS_MATCHES NO_MATCHING_RRSIG NO_RESPONS NO_RESPONSE_DNSKEY NO_RRSIG_DNSKEY UNEXPECTED_RESPONSE_DS}] );
+
+$zone = Zonemaster::Engine->zone( 'dnssec02-dnskey-ksk-not-sep.zut-root.rd.nic.fr' );
+zone_gives( 'dnssec02', $zone, [qw{DS_MATCHES DNSKEY_KSK_NOT_SEP}] );
+zone_gives_not( 'dnssec02', $zone, [qw{BROKEN_DS BROKEN_RRSIG NO_RESPONSE DNSKEY_NOT_ZONE_SIGN NO_RESPONSE_DNSKEY NO_MATCHING_DNSKEY NO_MATCHING_RRSIG NO_RRSIG_DNSKEY UNEXPECTED_RESPONSE_DS}] );
+
+# 2 cases missing
+# DNSKEY_NOT_ZONE_SIGN
+# UNEXPECTED_RESPONSE_DS
+
+###########
 # dnssec03
+###########
 $zone = Zonemaster::Engine->zone( 'dnssec03-many-iterations.zut-root.rd.nic.fr' );
 zone_gives( 'dnssec03', $zone, [q{MANY_ITERATIONS}] );
 
@@ -145,14 +183,18 @@ zone_gives( 'dnssec03', $zone, [q{NO_NSEC3PARAM}] );
 $zone = Zonemaster::Engine->zone( 'dnssec03-too-many-iterations.zut-root.rd.nic.fr' );
 zone_gives( 'dnssec03', $zone, [q{TOO_MANY_ITERATIONS}] );
 
+###########
 # dnssec04
+###########
 $zone = Zonemaster::Engine->zone( 'dnssec04-duration-long.zut-root.rd.nic.fr' );
 zone_gives( 'dnssec04', $zone, [q{DURATION_LONG}] );
 
 $zone = Zonemaster::Engine->zone( 'dnssec04-remaining-long.zut-root.rd.nic.fr' );
 zone_gives( 'dnssec04', $zone, [q{REMAINING_LONG}] );
 
+###########
 # dnssec05
+###########
 $zone = Zonemaster::Engine->zone( 'dnssec05-algorithm-deprecated.zut-root.rd.nic.fr' );
 zone_gives( 'dnssec05', $zone, [q{ALGORITHM_DEPRECATED}] );
 zone_gives_not( 'dnssec05', $zone, [qw{ALGORITHM_RESERVED ALGORITHM_UNASSIGNED ALGORITHM_PRIVATE ALGORITHM_UNKNOWN}] );
@@ -171,7 +213,9 @@ zone_gives( 'dnssec05', $zone, [q{ALGORITHM_PRIVATE}] );
 zone_gives_not( 'dnssec05', $zone,
     [qw{ALGORITHM_DEPRECATED ALGORITHM_RESERVED ALGORITHM_UNASSIGNED ALGORITHM_UNKNOWN}] );
 
+###########
 # dnssec06
+###########
 $zone = Zonemaster::Engine->zone( 'dnssec06-extra-processing-broken-1.zut-root.rd.nic.fr' );
 zone_gives( 'dnssec06', $zone, [q{EXTRA_PROCESSING_BROKEN}] );
 zone_gives_not( 'dnssec06', $zone, [q{EXTRA_PROCESSING_OK}] );
@@ -180,7 +224,9 @@ $zone = Zonemaster::Engine->zone( 'dnssec06-extra-processing-broken-2.zut-root.r
 zone_gives( 'dnssec06', $zone, [q{EXTRA_PROCESSING_BROKEN}] );
 zone_gives_not( 'dnssec06', $zone, [q{EXTRA_PROCESSING_OK}] );
 
+###########
 # dnssec07
+###########
 $zone = Zonemaster::Engine->zone( 'dnssec07-dnskey-but-not-ds.zut-root.rd.nic.fr' );
 zone_gives( 'dnssec07', $zone, [q{DNSKEY_BUT_NOT_DS}] );
 zone_gives_not( 'dnssec07', $zone, [qw{DNSKEY_AND_DS DS_BUT_NOT_DNSKEY NEITHER_DNSKEY_NOR_DS}] );
@@ -193,8 +239,9 @@ $zone = Zonemaster::Engine->zone( 'dnssec07-ds-but-not-dnskey.zut-root.rd.nic.fr
 zone_gives( 'dnssec07', $zone, [q{DS_BUT_NOT_DNSKEY}] );
 zone_gives_not( 'dnssec07', $zone, [qw{NEITHER_DNSKEY_NOR_DS DNSKEY_BUT_NOT_DS DNSKEY_AND_DS}] );
 
+###########
 # dnssec08
-
+###########
 $zone = Zonemaster::Engine->zone( 'dnssec08-dnskey-signature-not-ok-broken.zut-root.rd.nic.fr' );
 zone_gives( 'dnssec08', $zone, [qw{DNSKEY_NOT_SIGNED DNSKEY_SIGNATURE_NOT_OK}] );
 
@@ -208,11 +255,15 @@ zone_gives( 'dnssec09', $zone, [q{NO_KEYS_OR_NO_SIGS_OR_NO_SOA}] );
 $zone = Zonemaster::Engine->zone( 'dnssec08-no-keys-or-no-sigs-2.zut-root.rd.nic.fr' );
 zone_gives( 'dnssec08', $zone, [q{NO_KEYS_OR_NO_SIGS}] );
 
+###########
 # dnssec09
+###########
 $zone = Zonemaster::Engine->zone( 'dnssec09-soa-signature-not-ok.zut-root.rd.nic.fr' );
 zone_gives( 'dnssec09', $zone, [qw{SOA_NOT_SIGNED SOA_SIGNATURE_NOT_OK}] );
 
+###########
 # dnssec10
+###########
 SKIP: {
     skip "Opt-out was tested in former dnssec10 version. Is it somethong we want to test again ?", 2;
 
@@ -232,13 +283,12 @@ SKIP: {
 #@res = Zonemaster::Engine->test_method( 'DNSSEC', 'dnssec10', $zone );
 #ok( ( grep { $_->string =~ /error=no GOST support/s } @res ), $zone->name->string . " no GOST support" );
 
+###########
 # dnssec13
+###########
 $zone = Zonemaster::Engine->zone( 'afnic.fr' );
-SKIP: {
-    skip "Need to fix .data file", 2;
-    zone_gives( 'dnssec13', $zone, [qw{ALL_ALGO_SIGNED}] );
-    zone_gives_not('dnssec13', $zone, [qw{ALGO_NOT_SIGNED_RRSET NO_RESPONSE NO_RESPONSE_RRSET RRSET_NOT_SIGNED RRSIG_BROKEN RRSIG_NOT_MATCH_DNSKEY}] );
-}
+zone_gives( 'dnssec13', $zone, [qw{ALL_ALGO_SIGNED}] );
+zone_gives_not('dnssec13', $zone, [qw{ALGO_NOT_SIGNED_RRSET NO_RESPONSE NO_RESPONSE_RRSET RRSET_NOT_SIGNED RRSIG_BROKEN RRSIG_NOT_MATCH_DNSKEY}] );
 
 $zone = Zonemaster::Engine->zone( 'dnssec09-soa-signature-not-ok.zut-root.rd.nic.fr' );
 zone_gives( 'dnssec13', $zone, [qw{RRSIG_BROKEN}] );
@@ -249,7 +299,7 @@ zone_gives( 'dnssec13', $zone, [qw{RRSIG_BROKEN}] );
 zone_gives_not('dnssec13', $zone, [qw{ALL_ALGO_SIGNED RRSET_NOT_SIGNED RRSIG_NOT_MATCH_DNSKEY ALGO_NOT_SIGNED_RRSET}] );
 
 $zone = Zonemaster::Engine->zone( 'dnssec08-dnskey-not-signed.zut-root.rd.nic.fr' );
-zone_gives( 'dnssec13', $zone, [qw{RRSIG_BROKEN RRSET_NOT_SIGNED}] );
+zone_gives( 'dnssec13', $zone, [qw{RRSET_NOT_SIGNED}] );
 zone_gives_not('dnssec13', $zone, [qw{ALL_ALGO_SIGNED RRSIG_NOT_MATCH_DNSKEY ALGO_NOT_SIGNED_RRSET}] );
 
 TODO: {

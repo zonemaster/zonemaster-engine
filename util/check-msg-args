@@ -1,0 +1,110 @@
+#!/usr/bin/env perl
+use utf8;
+use strict;
+use warnings;
+use open qw(:std :utf8);
+use feature 'say';
+
+use Locale::PO;
+use Try::Tiny;
+use Getopt::Long qw( GetOptions );
+use Pod::Usage qw( pod2usage );
+
+sub extract_perl_braces {
+    my $string = shift;
+
+    # Strip text before the first and after the last brace
+    $string =~ s/^[^{]*{?|}?[^}]*$//g;
+
+    # Extract the fields
+    my @fields = split /}[^{]*{/, $string;
+
+    return @fields;
+}
+
+sub diff_perl_braces {
+    my $got_string      = shift // die 'undefined value for $got_string';
+    my $expected_string = shift // die 'undefined value for $expected_string';
+
+    my %got_fields      = map { $_ => 1 } extract_perl_braces( $got_string );
+    my %expected_fields = map { $_ => 1 } extract_perl_braces( $expected_string );
+
+    my %missing = %expected_fields;
+    delete @missing{ keys %got_fields };
+
+    my %extra = %got_fields;
+    delete @extra{ keys %expected_fields };
+
+    return [ sort keys %missing ], [ sort keys %extra ];
+}
+
+sub check_perl_braces {
+    my $po = shift;
+    my $filename = shift;
+
+    my $msgid  = $po->dequote( $po->msgid );
+    my $msgstr = $po->dequote( $po->msgstr );
+    my ( $missing, $extra ) = diff_perl_braces( $msgstr, $msgid );
+
+    if ( @{$missing} or @{$extra} ) {
+        say "";
+        say '# ' . $filename . ' line ' . $po->loaded_line_number;
+        print map { "#. $_\n" } split /\n/, $po->automatic // '';
+        say "msgid ",  $po->msgid;
+        say "msgstr ", $po->msgstr;
+        for my $field ( @{$missing} ) {
+            say "  Only in msgid: {$field}";
+        }
+        for my $field ( @{$extra} ) {
+            say "  Only in msgstr: {$field}";
+        }
+    }
+
+    return;
+}
+
+my $opt_help = 0;
+my $opt_man  = 0;
+GetOptions(
+    "help|h" => \$opt_help,
+    "man"    => \$opt_man,
+) or pod2usage( 2 );
+pod2usage( 1 ) if $opt_help;
+pod2usage( -verbose => 2 ) if $opt_man;
+
+for my $filename ( @ARGV ) {
+    my $aref = Locale::PO->load_file_asarray( $filename, 'UTF-8' ) // die "Failed to load PO file '$filename'";
+    for my $po ( @$aref ) {
+        try {
+            if ( $po->has_flag( 'perl-brace-format' ) ) {
+                check_perl_braces( $po, $filename );
+            }
+        }
+        catch {
+            say STDERR "error processing $filename at line " . $po->loaded_line_number . ": " . $_;
+            exit 1;
+        };
+    }
+}
+
+=head1 NAME
+
+    check-msg-args - Verify that PO files have the same args in the msgid and msgstr of their perl-brace-format messages
+
+=head1 SYNOPSIS
+
+    check-msg-args [options] [file ...]
+
+=head1 OPTIONS
+
+=over 4
+
+=item B<--help>
+
+Print a brief help message and exit.
+
+=item B<--man>
+
+Print the manual page and exit.
+
+=back

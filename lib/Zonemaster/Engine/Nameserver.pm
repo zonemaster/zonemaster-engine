@@ -416,7 +416,7 @@ sub _query {
             my $command = sprintf q{dig @%s %s%s %s}, $self->address->short, $flags{dnssec} ? q{+dnssec } : q{},
               "$name", $type;
             Zonemaster::Engine->logger->add(
-                PACKET_BIG => { size => $size, maxsize => $UDP_COMMON_EDNS_LIMIT, command => $command } );
+                PACKET_BIG => { size => $size, command => $command } );
         }
         Zonemaster::Engine->logger->add( EXTERNAL_RESPONSE => { packet => $p->string } );
         return $p;

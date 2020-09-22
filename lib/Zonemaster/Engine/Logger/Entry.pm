@@ -1,14 +1,17 @@
 package Zonemaster::Engine::Logger::Entry;
 
-use version; our $VERSION = version->declare("v1.1.6");
-
 use 5.014002;
+
+use strict;
 use warnings;
+
+use version; our $VERSION = version->declare("v1.1.7");
 
 use Time::HiRes qw[time];
 use JSON::PP;
 use Moose;
 use Zonemaster::Engine;
+use Zonemaster::Engine::Profile;
 
 use overload '""' => \&string;
 
@@ -28,6 +31,7 @@ our $start_time = time();
 my $json = JSON::PP->new->allow_blessed->convert_blessed->canonical;
 
 has 'module'    => ( is => 'ro', isa => 'Str',                lazy_build => 1 );
+has 'testcase'  => ( is => 'ro', isa => 'Str',                lazy_build => 1 );
 has 'tag'       => ( is => 'ro', isa => 'Str',                required   => 1 );
 has 'args'      => ( is => 'ro', isa => 'Maybe[HashRef]',     required   => 0 );
 has 'timestamp' => ( is => 'ro', isa => 'Num',                default    => sub { my $time = time() - $start_time; $time =~ s/,/\./; $time; } );
@@ -62,6 +66,20 @@ sub _build_module {
     }
 
     return 'SYSTEM';
+}
+
+sub _build_testcase {
+    my ( $self ) = @_;
+
+    foreach my $e ( @{ $self->trace } ) {
+        if (    $e->[0] =~ /^(Zonemaster::Engine::Test::)([^:]+)$/
+            and $e->[1] =~ /^$1$2::($2[0-9]+)$/i )
+        {
+            return uc $1;
+        }
+    }
+
+    return 'UNSPECIFIED';
 }
 
 sub _build_level {
@@ -106,7 +124,7 @@ sub string {
             sort keys %{$p_args} );
     }
 
-    return sprintf( '%s:%s %s', $self->module, $self->tag, $argstr );
+    return sprintf( '%s%s:%s %s', $self->module, $self->testcase ? q{:} . $self->testcase : q{}, $self->tag, $argstr );
 }
 
 sub printable_args {
@@ -178,6 +196,10 @@ Set the logger's start time to the current time.
 An auto-generated identifier of the module that created the log entry. If it was generated from a module under Zonemaster::Engine::Test, it will be an
 uppercased version of the part of the name after "Zonemaster::Engine::Test". For example, "Zonemaster::Engine::Test::Basic" gets the module identifier "BASIC". If the
 entry was generated from anywhere else, it will get the module identifier "SYSTEM".
+
+=item testcase
+
+Get uppercased version of method name called in module.
 
 =item tag
 

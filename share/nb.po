@@ -183,8 +183,9 @@ msgid "No IPv4 nameserver address is in an AS."
 msgstr "Ingen IPv4-navnetjeneradresse er i et AS."
 
 #. CONNECTIVITY:NAMESERVERS_IPV4_WITH_MULTIPLE_AS
-msgid "Authoritative IPv4 nameservers are in more than one AS."
-msgstr "Autoritative IPv4-navnetjenere er i mer enn ett AS."
+#, perl-brace-format
+msgid "Authoritative IPv4 nameservers are in more than one AS ({asn})."
+msgstr "Autoritative IPv4-navnetjenere er i mer enn ett AS ({asn})."
 
 #. CONNECTIVITY:NAMESERVERS_IPV6_NO_AS
 msgid "No IPv6 nameserver address is in an AS."
@@ -644,7 +645,7 @@ msgid ""
 "record is for the DNSKEY record with keytag {keytag} in zone {zone}."
 msgstr ""
 "Navnetjener {ns}/{address} svarte med en DS-post som er laget med algoritme "
-"{algorithm_number} ({algorithm_mnemonic}), som ikke er i bruk. DS-posten "
+"{algorithm_number} som ikke er i bruk. DS-posten "
 "gjelder for DNSKEY-posten med \"key tag\" {keytag} i sonen {zone}."
 
 #. DNSSEC:DS_ALGO_SHA1_DEPRECATED
@@ -996,8 +997,8 @@ msgstr ""
 #. DNSSEC:UNEXPECTED_RESPONSE_DS
 #, perl-brace-format
 msgid ""
-"{ns}/{address} responded with an unexpected rcode ({rcode}) on a DS query "
-"for zone {zone}."
+"Nameserver {ns}/{address} responded with an unexpected rcode ({rcode}) on a "
+"DS query for zone {zone}."
 msgstr ""
 "Navnetjener {ns}/{address} svarte på en DS-spørring for sonen {zone} med "
 "svarkoden ({rcode}), som ikke var forventet."
@@ -1474,10 +1475,11 @@ msgstr "Feil svar fra navnetjener {ns}/{address}."
 #. NAMESERVER:QNAME_CASE_INSENSITIVE
 #, perl-brace-format
 msgid ""
-"Nameserver {ns}/{address} does not preserve original case of queried names."
+"Nameserver {ns}/{address} does not preserve original case of the queried "
+"name ({dname})."
 msgstr ""
 "Navnetjener {ns}/{address} besvarer ikke store og små bokstaver som i den "
-"opprinnelige spørringen."
+"opprinnelige spørringen ({dname})."
 
 #. NAMESERVER:QNAME_CASE_SENSITIVE
 #, perl-brace-format

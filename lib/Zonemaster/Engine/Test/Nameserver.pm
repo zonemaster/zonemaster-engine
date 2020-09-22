@@ -355,7 +355,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     QNAME_CASE_INSENSITIVE => sub {
         __x    # NAMESERVER:QNAME_CASE_INSENSITIVE
-          'Nameserver {ns}/{address} does not preserve original case of queried names.', @_;
+          'Nameserver {ns}/{address} does not preserve original case of the queried name ({dname}).', @_;
     },
     QNAME_CASE_SENSITIVE => sub {
         __x    # NAMESERVER:QNAME_CASE_SENSITIVE

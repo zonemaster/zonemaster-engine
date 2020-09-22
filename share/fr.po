@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-23 11:57+0200\n"
-"PO-Revision-Date: 2020-04-02\n"
+"POT-Creation-Date: 2020-09-14 23:12+0200\n"
+"PO-Revision-Date: 2020-09-07\n"
 "Last-Translator: vincent.levigneron@afnic.fr\n"
 "Language-Team: Zonemaster Team\n"
 "Language: fr\n"
@@ -212,10 +212,11 @@ msgid "No IPv4 nameserver address is in an AS."
 msgstr "Aucune adresse IPv4 des serveurs de noms ne se trouve dans un AS."
 
 #. CONNECTIVITY:NAMESERVERS_IPV4_WITH_MULTIPLE_AS
-msgid "Authoritative IPv4 nameservers are in more than one AS."
+#, perl-brace-format
+msgid "Authoritative IPv4 nameservers are in more than one AS ({asn})."
 msgstr ""
 "Les adresses IPv4 des serveurs faisant autorité se trouvent dans plusieurs "
-"AS."
+"AS ({asn})."
 
 #. CONNECTIVITY:NAMESERVERS_IPV6_NO_AS
 msgid "No IPv6 nameserver address is in an AS."
@@ -709,8 +710,8 @@ msgid ""
 "with keytag {keytag} in zone {zone}."
 msgstr ""
 "Le serveur de noms {ns}/{address} retourne un enregistrement de type \"DS\" "
-"créé à partir de l'algorithme ({algorithm_number}/{algorithm_mnemonic}), "
-"ce qui est correct. Cet enregistrement de type \"DS\" correspond à la clé "
+"créé à partir de l'algorithme ({algorithm_number}/{algorithm_mnemonic}), ce "
+"qui est correct. Cet enregistrement de type \"DS\" correspond à la clé "
 "(DNSKEY) avec le tag {keytag} dans la zone {zone}."
 
 #. DNSSEC:DS_ALGORITHM_RESERVED
@@ -884,8 +885,7 @@ msgstr ""
 
 #. DNSSEC:KEY_SIZE_OK
 msgid "All keys from the DNSKEY RRset have the correct size."
-msgstr ""
-"Toutes les clés de l'apex (DNSKEY RRset) ont une taille correcte."
+msgstr "Toutes les clés de l'apex (DNSKEY RRset) ont une taille correcte."
 
 #. DNSSEC:MANY_ITERATIONS
 #, perl-brace-format
@@ -1137,8 +1137,8 @@ msgstr ""
 #. DNSSEC:UNEXPECTED_RESPONSE_DS
 #, perl-brace-format
 msgid ""
-"{ns}/{address} responded with an unexpected rcode ({rcode}) on a DS query "
-"for zone {zone}."
+"Nameserver {ns}/{address} responded with an unexpected rcode ({rcode}) on a "
+"DS query for zone {zone}."
 msgstr ""
 "Le serveur de noms {ns}/{address} a répondu à une requête de type \"AAAA\" "
 "avec un code retour inattendu ({rcode}) pour la zone '{zone}'."
@@ -1362,15 +1362,8 @@ msgid ""
 "Delegation lists no nameserver that resolves to an IPv6 address. If any were "
 "present, the minimum allowed would be {minimum}."
 msgstr ""
-"Les serveurs de noms de la zone parente retournent pas de serveurs ayant une "
+"Les serveurs de noms de la zone parente ne retournent pas de serveurs ayant une "
 "adresse IPv6. Si il y en avait, il en faudrait au minimum {minimum}."
-
-#. DELEGATION:NS_IS_CNAME
-#, perl-brace-format
-msgid "Nameserver {ns} RR point to CNAME."
-msgstr ""
-"L'enregistrement de type \"{address_type}\" retourné par le serveur de noms "
-"{ns} est un alias (CNAME)."
 
 #. DELEGATION:NO_NS_CNAME
 msgid "No nameserver points to CNAME alias."
@@ -1603,13 +1596,6 @@ msgstr ""
 msgid "The following nameservers support EDNS0 : {names}."
 msgstr "Les serveurs de noms suivants supportent EDNS0 : {names}."
 
-#. NAMESERVER:IS_A_RECURSOR
-#, perl-brace-format
-msgid "Nameserver {ns}/{address} is a recursor."
-msgstr ""
-"Le serveur de noms {ns}/{address} retourne le code NXDOMAIN lors d'une "
-"requête de type \"SOA\" sur le nom de domaine '{dname}'. Il est récursif."
-
 #. NAMESERVER:MISSING_OPT_IN_TRUNCATED
 #, perl-brace-format
 msgid ""
@@ -1660,7 +1646,8 @@ msgstr ""
 #. NAMESERVER:QNAME_CASE_INSENSITIVE
 #, perl-brace-format
 msgid ""
-"Nameserver {ns}/{address} does not preserve original case of queried names."
+"Nameserver {ns}/{address} does not preserve original case of the queried "
+"name ({dname})."
 msgstr ""
 "Le serveur de noms {ns}/{address} ne conserve pas la casse des noms requêtés "
 "dans les réponses '{dname}'."
@@ -1741,8 +1728,8 @@ msgstr ""
 #, perl-brace-format
 msgid "Found illegal characters in SOA MNAME ({name})."
 msgstr ""
-"Des caractèrs interdits ont été trouvés dans le nom du serveur maître défini "
-"dans le SOA, 'mname' ({name})."
+"Des caractères interdits ont été trouvés dans le nom du serveur maître "
+"défini dans le SOA, 'mname' ({name})."
 
 #. SYNTAX:MNAME_NUMERIC_TLD
 #, perl-brace-format
@@ -1771,7 +1758,7 @@ msgstr ""
 #, perl-brace-format
 msgid "Found illegal characters in MX ({name})."
 msgstr ""
-"Des caractèrs interdits ont été trouvés dans le nom du relais de messagerie "
+"Des caractères interdits ont été trouvés dans le nom du relais de messagerie "
 "({name})."
 
 #. SYNTAX:MX_NUMERIC_TLD
@@ -1799,7 +1786,7 @@ msgstr ""
 #, perl-brace-format
 msgid "Found illegal characters in the nameserver ({name})."
 msgstr ""
-"Des caractèrs interdits ont été trouvés dans le nom du serveur de noms "
+"Des caractères interdits ont été trouvés dans le nom du serveur de noms "
 "({name})."
 
 #. SYNTAX:NAMESERVER_NUMERIC_TLD
@@ -1817,7 +1804,7 @@ msgstr "La syntaxe du nom du serveur de noms ({name}) est valide."
 #, perl-brace-format
 msgid "Found illegal characters in the domain name ({name})."
 msgstr ""
-"Des caractèrs interdits ont été trouvés dans le nom de domaine '{name}'."
+"Des caractères interdits ont été trouvés dans le nom de domaine '{name}'."
 
 #. SYNTAX:NO_DOUBLE_DASH
 #, perl-brace-format
@@ -1874,8 +1861,8 @@ msgstr "Il n'y a aucun caractère '@' dans le champ RNAME ({rname}) du SOA."
 #, perl-brace-format
 msgid "Illegal character(s) found in SOA RNAME field ({rname})."
 msgstr ""
-"Des caractèrs interdits ont été trouvés dans le nom du serveur maître défini "
-"dans le SOA, 'mname' ({name})."
+"Le champ RNAME ({rname}) du SOA n'est pas conforme aux règles définies dans "
+"le RFC2822."
 
 #. SYNTAX:RNAME_RFC822_VALID
 #, perl-brace-format
