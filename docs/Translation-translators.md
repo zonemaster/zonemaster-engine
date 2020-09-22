@@ -19,25 +19,25 @@ but you will have to find instructions elsewhere.
 
 * CentOS
 
-To be written.
+  To be written.
 
 * Debian
 
-Install the following:
+  Install the following:
   ```
   apt install gettext git liblocale-po-perl
   ```
 
 * FreeBSD
 
-Install the following:
+  Install the following:
   ```
   pkg install devel/gettext-tools devel/git-lite devel/p5-Locale-PO
   ```
 
 * Ubuntu
 
-Install the following:
+  Install the following:
   ```
   apt install gettext git make liblocale-po-perl
   ```
@@ -102,7 +102,7 @@ handled as a database instead of as a plain file.
 * There is also "[GNOME Translation Editor]", a graphical PO editor 
   available for at least Windows and Linux.
 * There are more tools available, either cloud services or programs
-for download, and they could be found by searching for "po editor".
+  for download, and they could be found by searching for "po editor".
 
 ## Clone preparation
 
@@ -129,7 +129,7 @@ You need a local clone of the repository to work in.
 * Now it is time to connect your own fork of *Zonemaster-Engine*
   at Github to the created clone, unless you have alreday done that,
   in case you can skip the next step.
-  
+
 * You have a user name at Github. Here we use "xxxx" as your user name
   and also the name of the remote in clone on the local machine.
   ```
@@ -257,12 +257,12 @@ be update each time a message is added or changed.
 Above you found the following step that must now be modified, but run the
 steps before this step:
 
-  > * Go to the *share* and update the *PO* file for the language you are going
-  >   to work with. Replace "xx" with the language code in question.
-  > ```
-  > cd share
-  > make xx.po
-  > ```
+> * Go to the *share* and update the *PO* file for the language you are going
+>   to work with. Replace "xx" with the language code in question.
+> ```
+> cd share
+> make xx.po
+> ```
 
 The new language is not there and cannot be updated. Instead you have to
 create the new language file (*PO* file). The easiest way is to make a copy
