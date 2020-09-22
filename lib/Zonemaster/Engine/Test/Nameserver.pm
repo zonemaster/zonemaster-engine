@@ -222,7 +222,7 @@ sub metadata {
 Readonly my %TAG_DESCRIPTIONS => (
     AAAA_BAD_RDATA => sub {
         __x    # NAMESERVER:AAAA_BAD_RDATA
-            'Nameserver {ns}/{address} answered AAAA query with an unexpected RDATA length ({length} instead of 16)', @_;
+            'Nameserver {ns}/{address} answered AAAA query with an unexpected RDATA length ({length} instead of 16).', @_;
     },
     AAAA_QUERY_DROPPED => sub {
         __x    # NAMESERVER:AAAA_QUERY_DROPPED

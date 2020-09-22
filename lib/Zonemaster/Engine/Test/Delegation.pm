@@ -158,7 +158,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     DISTINCT_IP_ADDRESS => sub {
         __x    # DELEGATION:DISTINCT_IP_ADDRESS
-          "All the IP addresses used by the nameservers are unique", @_;
+          "All the IP addresses used by the nameservers are unique.", @_;
     },
     ENOUGH_IPV4_NS_CHILD => sub {
         __x    # DELEGATION:ENOUGH_IPV4_NS_CHILD

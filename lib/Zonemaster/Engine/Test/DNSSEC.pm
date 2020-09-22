@@ -503,7 +503,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     ALL_ALGO_SIGNED => sub {
         __x    # DNSSEC:ALL_ALGO_SIGNED
-          'All the tested RRset (SOA/DNSKEY/NS) are signed by each algorithm present in the DNSKEY RRset',
+          'All the tested RRset (SOA/DNSKEY/NS) are signed by each algorithm present in the DNSKEY RRset.',
           @_;
     },
     BROKEN_DNSSEC => sub {
@@ -823,7 +823,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     RRSIG_BROKEN => sub {
         __x    # DNSSEC:RRSIG_BROKEN
           'Nameserver {ns}/{address} responded with an RRSIG which can not be verified with '
-          . 'corresponding DNSKEY (with keytag {keytag})',
+          . 'corresponding DNSKEY (with keytag {keytag}).',
           @_;
     },
     RRSIG_EXPIRED => sub {
