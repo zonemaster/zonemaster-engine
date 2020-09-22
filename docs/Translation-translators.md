@@ -24,23 +24,23 @@ To be written.
 * Debian
 
 Install the following:
-```
-apt install gettext git liblocale-po-perl
-```
+  ```
+  apt install gettext git liblocale-po-perl
+  ```
 
 * FreeBSD
 
 Install the following:
-```
-pkg install devel/gettext-tools devel/git-lite devel/p5-Locale-PO
-```
+  ```
+  pkg install devel/gettext-tools devel/git-lite devel/p5-Locale-PO
+  ```
 
 * Ubuntu
 
 Install the following:
-```
-apt install gettext git make liblocale-po-perl
-```
+  ```
+  apt install gettext git make liblocale-po-perl
+  ```
 
 ##  Background
 
@@ -67,9 +67,12 @@ from the source code.
 
 By default the updated *PO* file will suggested translations for new message 
 ids based on fuzzy matching of similar strings. This is not always desirable 
-and you can disable fuzzy matching by executing
-`make xx.po MSGMERGE_OPTS=--no-fuzzy-mathing` or
-`make update-po MSGMERGE_OPTS=--no-fuzzy-mathing` instead.
+and you can disable fuzzy matching by executing one of the following
+commands instead:
+  ```
+  make xx.po MSGMERGE_OPTS=--no-fuzzy-mathing
+  make update-po MSGMERGE_OPTS=--no-fuzzy-mathing
+  ```
 
 ## Github preparation
 
@@ -107,21 +110,21 @@ You need a local clone of the repository to work in.
 
 * Clone the Zonemaster-Engine repository, unless you already
   have a clone that you could reuse:
-```
+  ```
   git clone https://github.com/zonemaster/zonemaster-engine.git
-```
+  ```
 
 * Enter the directory of the clone created above or already
   existing clone:
-```
+  ```
   cd zonemaster-engine
-```
+  ```
 
 * If you already have an old clone of Zonemaster-Engine,
   run an update.
-```
+  ```
   git fetch --all
-```
+  ```
 
 * Now it is time to connect your own fork of *Zonemaster-Engine*
   at Github to the created clone, unless you have alreday done that,
@@ -129,10 +132,10 @@ You need a local clone of the repository to work in.
   
 * You have a user name at Github. Here we use "xxxx" as your user name
   and also the name of the remote in clone on the local machine.
-```
+  ```
   git remote add xxxx git@github.com:xxxx/zonemaster-engine.git
   git fetch --all
-```
+  ```
 
 ## Translation steps
 
@@ -143,18 +146,18 @@ welcome comments on these.
   You can call the new branch whatever you want, but here we use
   the name "translation-update". If that name is already taken,
   you have to give it a new name or remove the old branch.
-```
+  ```
   git checkout origin/develop
   git checkout -b translation-update
-```
+  ```
 
 * Go to the *share* directory and run the update command for the *PO* file 
   for the language you are going to work with. Replace "xx" with the 
   language code in question. This should be done every time.
-```
+  ```
   cd share
   make xx.po
-```
+  ```
 
 * The *PO* file is updated with new *msgids*, if any, and now you can start
   working with it.
@@ -185,41 +188,41 @@ welcome comments on these.
 
 * Check that the messages arguments in all *msgstr* strings match up with 
   those in the *msgid* strings.
-```
+  ```
   ../util/check-msg-args xx.po
-```
+  ```
 
 * When the update is completed, it is time to commit the changes. You should
   only commit the "xx.po" file.
-```
+  ```
   git commit -m 'Write a description of the change' xx.po
-```
+  ```
 
 * There could be other files changed or added that should not be included.
   Run the status command to see them.
-```
+  ```
   git status
-```
+  ```
 
 * Other changed files could be reset by a "checkout". This could also
   be done before creating the commit.
-```
+  ```
   git checkout FILENAME
-```
+  ```
 
 * Added files not needed can just be removed. This could also be done
   before the commit.
-```
+  ```
   rm FILE-NAME
-```
+  ```
 
 * Now push the local branch you created to your fork at Github. 
   "translation-update" is name of the branch you created above and 
   have committed the updates to. Use your Github user name instead of
   "xxxx".
-```
+  ```
   git push -u xxxx translation-update
-```
+  ```
 
 * Go to your fork at Github, https://github.com/xxxx/zonemaster-engine
   and use your Github user name instead of "xxxx".
@@ -254,12 +257,12 @@ be update each time a message is added or changed.
 Above you found the following step that must now be modified, but run the
 steps before this step:
 
-> * Go to the *share* and update the *PO* file for the language you are going
->   to work with. Replace "xx" with the language code in question.
-> ```
-> cd share
-> make xx.po
-> ```
+  > * Go to the *share* and update the *PO* file for the language you are going
+  >   to work with. Replace "xx" with the language code in question.
+  > ```
+  > cd share
+  > make xx.po
+  > ```
 
 The new language is not there and cannot be updated. Instead you have to
 create the new language file (*PO* file). The easiest way is to make a copy
@@ -269,25 +272,25 @@ of an existing file.
   a code that is available in the *locale* system. Try the following commands
   to see if it is available. Replace "xx" with that code that you think it
   should be.
-```
+  ```
   locale -a | grep xx      # Works at least in FreeBSD
   grep xx /etc/locale.gen  # Works at least in Ubuntu 18.04
-```
+  ```
 
 * Go to the *share* and update the *PO* file for some language, say Swedish,
   and make a copy of that to the new file name. And then reset the *PO* file
   for Swedish.
-```
+  ```
   cd share
   make sv.po
   cp sv.po xx.po
   git checkout sv.po
-```
+  ```
 
 * You have to "add" the new file to git before you start working on it.
-```
+  ```
   git add xx.po
-```
+  ```
 
 * When you do the update of the new *PO* file you have to replace all *msgstr*
   in Swedish with the translation in the new language, but also update the
