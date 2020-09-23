@@ -164,15 +164,15 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     ASN_INFOS_RAW => sub {
         __x    # CONNECTIVITY:ASN_INFOS_RAW
-          '[ASN:RAW] {address};{data}', @_;
+          '[ASN:RAW] {address};{data}.', @_;
     },
     ASN_INFOS_ANNOUNCE_BY => sub {
         __x    # CONNECTIVITY:ASN_INFOS_ANNOUNCE_BY
-          '[ASN:ANNOUNCE_BY] {address};{asn}', @_;
+          '[ASN:ANNOUNCE_BY] {address};{asn}.', @_;
     },
     ASN_INFOS_ANNOUNCE_IN => sub {
         __x    # CONNECTIVITY:ASN_INFOS_ANNOUNCE_IN
-          '[ASN:ANNOUNCE_IN] {address};{prefix}', @_;
+          '[ASN:ANNOUNCE_IN] {address};{prefix}.', @_;
     },
     TEST_CASE_END => sub {
         __x    # CONNECTIVITY:TEST_CASE_END

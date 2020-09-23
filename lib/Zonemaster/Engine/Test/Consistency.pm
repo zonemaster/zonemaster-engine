@@ -146,7 +146,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     CHILD_ZONE_LAME => sub {
         __x    # CONSISTENCY:CHILD_ZONE_LAME
-          'Lame delegation', @_;
+          'Lame delegation.', @_;
     },
     EXTRA_ADDRESS_CHILD => sub {
         __x    # CONSISTENCY:EXTRA_ADDRESS_CHILD
@@ -159,7 +159,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     IN_BAILIWICK_ADDR_MISMATCH => sub {
         __x    # CONSISTENCY:IN_BAILIWICK_ADDR_MISMATCH
           'In-bailiwick name server listed at parent has a mismatch between glue data at parent '
-          . '({parent_addresses}) and any equivalent address record in child zone ({zone_addresses})',
+          . '({parent_addresses}) and any equivalent address record in child zone ({zone_addresses}).',
           @_;
     },
     IPV4_DISABLED => sub {
@@ -212,11 +212,11 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     ONE_SOA_MNAME => sub {
         __x    # CONSISTENCY:ONE_SOA_MNAME
-          "A single SOA mname value was seen ({mname})", @_;
+          "A single SOA mname value was seen ({mname}).", @_;
     },
     ONE_SOA_RNAME => sub {
         __x    # CONSISTENCY:ONE_SOA_RNAME
-          "A single SOA rname value was found ({rname})", @_;
+          "A single SOA rname value was found ({rname}).", @_;
     },
     ONE_SOA_SERIAL => sub {
         __x    # CONSISTENCY:ONE_SOA_SERIAL
@@ -232,7 +232,7 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # CONSISTENCY:OUT_OF_BAILIWICK_ADDR_MISMATCH
           'Out-of-bailiwick name server listed at parent with glue record has a mismatch between '
           . 'the glue at the parent ({parent_addresses}) and any equivalent address record found '
-          . 'in authoritative zone ({zone_addresses})', @_;
+          . 'in authoritative zone ({zone_addresses}).', @_;
     },
     SOA_RNAME => sub {
         __x    # CONSISTENCY:SOA_RNAME
