@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-23 02:06+0200\n"
+"POT-Creation-Date: 2020-09-20 07:40+0200\n"
 "PO-Revision-Date: 2020-04-24 17:38+0200\n"
 "Last-Translator: Niels Haarbo <haarbo@dk-hostmaster.dk>\n"
 "Language-Team: Zonemaster Team\n"
@@ -237,18 +237,18 @@ msgstr "Navneserverne har IPv6-adresser i følgende AS: {asn}."
 
 #. CONNECTIVITY:ASN_INFOS_RAW
 #, perl-brace-format
-msgid "[ASN:RAW] {address};{data}"
-msgstr "[ASN:RAW] {address};{data}"
+msgid "[ASN:RAW] {address};{data}."
+msgstr "[ASN:RAW] {address};{data}."
 
 #. CONNECTIVITY:ASN_INFOS_ANNOUNCE_BY
 #, perl-brace-format
-msgid "[ASN:ANNOUNCE_BY] {address};{asn}"
-msgstr "[ASN:ANNOUNCE_BY] {address};{asn}"
+msgid "[ASN:ANNOUNCE_BY] {address};{asn}."
+msgstr "[ASN:ANNOUNCE_BY] {address};{asn}."
 
 #. CONNECTIVITY:ASN_INFOS_ANNOUNCE_IN
 #, perl-brace-format
-msgid "[ASN:ANNOUNCE_IN] {address};{prefix}"
-msgstr "[ASN:ANNOUNCE_IN] {address};{prefix}"
+msgid "[ASN:ANNOUNCE_IN] {address};{prefix}."
+msgstr "[ASN:ANNOUNCE_IN] {address};{prefix}."
 
 #. CONSISTENCY:ADDRESSES_MATCH
 msgid "Glue records are consistent between glue and authoritative data."
@@ -260,8 +260,8 @@ msgid "Unexpected or erroneous reply from {ns}/{address}."
 msgstr "Uventet eller fejlagtigt svar fra {ns}/{address}."
 
 #. CONSISTENCY:CHILD_ZONE_LAME
-msgid "Lame delegation"
-msgstr "Lam delegation"
+msgid "Lame delegation."
+msgstr "Lam delegation."
 
 #. CONSISTENCY:EXTRA_ADDRESS_CHILD
 #, perl-brace-format
@@ -284,11 +284,11 @@ msgstr ""
 msgid ""
 "In-bailiwick name server listed at parent has a mismatch between glue data "
 "at parent ({parent_addresses}) and any equivalent address record in child "
-"zone ({zone_addresses})"
+"zone ({zone_addresses})."
 msgstr ""
 "In-bailiwick navneserver listet hos forælderen har et misforhold mellem glue "
 "data hos forælder ({parent_addresses}) og enhver tilsvarende record i "
-"barnezonen ({zone_addresses})"
+"barnezonen ({zone_addresses})."
 
 #. CONSISTENCY:MULTIPLE_NS_SET
 #, perl-brace-format
@@ -337,7 +337,7 @@ msgstr ""
 #. CONSISTENCY:NS_SET
 #, perl-brace-format
 msgid "Saw NS set ({nsset}) on following nameserver set : {servers}."
-msgstr "Fandt NS-sæt ({nsset}) på disse navneservere : {servers}"
+msgstr "Fandt NS-sæt ({nsset}) på disse navneservere : {servers}."
 
 #. CONSISTENCY:ONE_NS_SET
 #, perl-brace-format
@@ -346,13 +346,13 @@ msgstr "Et unikt NS-sæt blev fundet ({nsset})."
 
 #. CONSISTENCY:ONE_SOA_MNAME
 #, perl-brace-format
-msgid "A single SOA mname value was seen ({mname})"
-msgstr "Et enkelt SOA MNAME blev returneret ({mname})"
+msgid "A single SOA mname value was seen ({mname})."
+msgstr "Et enkelt SOA MNAME blev returneret ({mname})."
 
 #. CONSISTENCY:ONE_SOA_RNAME
 #, perl-brace-format
-msgid "A single SOA rname value was found ({rname})"
-msgstr "Et enkelt SOA RNAME blev returneret ({rname})"
+msgid "A single SOA rname value was found ({rname})."
+msgstr "Et enkelt SOA RNAME blev returneret ({rname})."
 
 #. CONSISTENCY:ONE_SOA_SERIAL
 #, perl-brace-format
@@ -373,11 +373,11 @@ msgstr ""
 msgid ""
 "Out-of-bailiwick name server listed at parent with glue record has a "
 "mismatch between the glue at the parent ({parent_addresses}) and any "
-"equivalent address record found in authoritative zone ({zone_addresses})"
+"equivalent address record found in authoritative zone ({zone_addresses})."
 msgstr ""
 "Out-of-bailiwick navneserver listet hos forælderen inklusive glue record har "
 "et misforhold mellem glue hos forælderen ({parent_addresses}) og enhver "
-"tilsvarende record fundet i den autoritative zone ({zone_addresses})"
+"tilsvarende record fundet i den autoritative zone ({zone_addresses})."
 
 #. CONSISTENCY:SOA_RNAME
 #, perl-brace-format
@@ -495,7 +495,7 @@ msgstr ""
 #. DNSSEC:ALL_ALGO_SIGNED
 msgid ""
 "All the tested RRset (SOA/DNSKEY/NS) are signed by each algorithm present in "
-"the DNSKEY RRset"
+"the DNSKEY RRset."
 msgstr ""
 "Alle de testede RRset (SOA/DNSKEY/NS) er signeret af alle algoritmer fundet "
 "i DNSKEY RRset-svaret."
@@ -936,10 +936,10 @@ msgstr ""
 #, perl-brace-format
 msgid ""
 "Nameserver {ns}/{address} responded with an RRSIG which can not be verified "
-"with corresponding DNSKEY (with keytag {keytag})"
+"with corresponding DNSKEY (with keytag {keytag})."
 msgstr ""
 "Navneserver {ns}/{address} returnerede en RRSIG som ikke kan verificeres med "
-"den tilhørende DNSKEY (med keytag {keytag})"
+"den tilhørende DNSKEY (med keytag {keytag})."
 
 #. DNSSEC:RRSIG_EXPIRED
 #, perl-brace-format
@@ -1024,7 +1024,7 @@ msgid "IP {address} in parent refers to multiple nameservers ({nss})."
 msgstr "IP {address} hos forælderen refererer til flere navneservere ({nss})."
 
 #. DELEGATION:DISTINCT_IP_ADDRESS
-msgid "All the IP addresses used by the nameservers are unique"
+msgid "All the IP addresses used by the nameservers are unique."
 msgstr "Alle navneservernes IP-adresser er unikke."
 
 #. DELEGATION:ENOUGH_IPV4_NS_CHILD
@@ -1252,10 +1252,10 @@ msgstr ""
 #, perl-brace-format
 msgid ""
 "Nameserver {ns}/{address} answered AAAA query with an unexpected RDATA "
-"length ({length} instead of 16)"
+"length ({length} instead of 16)."
 msgstr ""
 "Navneserveren {ns}/{address} besvarede AAAA forespørgsel med en uventet "
-"RDATA længde ({length} i stedet for 16)"
+"RDATA længde ({length} i stedet for 16)."
 
 #. NAMESERVER:AAAA_QUERY_DROPPED
 #, perl-brace-format
@@ -1891,7 +1891,7 @@ msgstr "Anvender version {version} af Zonemasters testmotor."
 #, perl-brace-format
 msgid "Logger callback died with error: {exception}"
 msgstr ""
-"Callback-funktionen for log-modulet døde med fejlmeddelelsen: {exception}"
+"Callback-funktionen for log-modulet døde med fejlmeddelelsen: {exception}."
 
 #. SYSTEM:LOOKUP_ERROR
 #, perl-brace-format
@@ -1899,12 +1899,12 @@ msgid ""
 "DNS query to {ns} for {name}/{type}/{class} failed with error: {message}"
 msgstr ""
 "DNS-forespørgsel til {ns} på {name}/{type}/{class} fejlede med beskeden: "
-"{message}"
+"{message}."
 
 #. SYSTEM:MODULE_ERROR
 #, perl-brace-format
 msgid "Fatal error in {module}: {msg}"
-msgstr "Fatal fejl i {module}: {msg}"
+msgstr "Fatal fejl i {module}: {msg}."
 
 #. SYSTEM:MODULE_VERSION
 #, perl-brace-format

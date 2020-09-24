@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-14 23:12+0200\n"
+"POT-Creation-Date: 2020-09-20 07:40+0200\n"
 "PO-Revision-Date: 2020-09-07\n"
 "Last-Translator: vincent.levigneron@afnic.fr\n"
 "Language-Team: Zonemaster Team\n"
@@ -272,18 +272,18 @@ msgstr ""
 
 #. CONNECTIVITY:ASN_INFOS_RAW
 #, perl-brace-format
-msgid "[ASN:RAW] {address};{data}"
-msgstr "[ASN:RAW] {address};{data}"
+msgid "[ASN:RAW] {address};{data}."
+msgstr "[ASN:RAW] {address};{data}."
 
 #. CONNECTIVITY:ASN_INFOS_ANNOUNCE_BY
 #, perl-brace-format
-msgid "[ASN:ANNOUNCE_BY] {address};{asn}"
-msgstr "[ASN:ANNOUNCE_BY] {address};{asn}"
+msgid "[ASN:ANNOUNCE_BY] {address};{asn}."
+msgstr "[ASN:ANNOUNCE_BY] {address};{asn}."
 
 #. CONNECTIVITY:ASN_INFOS_ANNOUNCE_IN
 #, perl-brace-format
-msgid "[ASN:ANNOUNCE_IN] {address};{prefix}"
-msgstr "[ASN:ANNOUNCE_IN] {address};{prefix}"
+msgid "[ASN:ANNOUNCE_IN] {address};{prefix}."
+msgstr "[ASN:ANNOUNCE_IN] {address};{prefix}."
 
 #. CONSISTENCY:ADDRESSES_MATCH
 msgid "Glue records are consistent between glue and authoritative data."
@@ -294,10 +294,10 @@ msgstr ""
 #. CONSISTENCY:CHILD_NS_FAILED
 #, perl-brace-format
 msgid "Unexpected or erroneous reply from {ns}/{address}."
-msgstr "Réponse inattendue ou erronéeLe du serveur de noms {ns}/{address}"
+msgstr "Réponse inattendue ou erronéeLe du serveur de noms {ns}/{address}."
 
 #. CONSISTENCY:CHILD_ZONE_LAME
-msgid "Lame delegation"
+msgid "Lame delegation."
 msgstr "Utilisation d'une configuration DNS alternative (fake delegation)."
 
 #. CONSISTENCY:EXTRA_ADDRESS_CHILD
@@ -323,7 +323,7 @@ msgstr ""
 msgid ""
 "In-bailiwick name server listed at parent has a mismatch between glue data "
 "at parent ({parent_addresses}) and any equivalent address record in child "
-"zone ({zone_addresses})"
+"zone ({zone_addresses})."
 msgstr ""
 "Problème de glues pour un serveur de noms \"in-bailiwick\", celles trouvées "
 "({parent_addresses}) dans la zone parente sont différentes de celles "
@@ -399,14 +399,14 @@ msgstr ""
 
 #. CONSISTENCY:ONE_SOA_MNAME
 #, perl-brace-format
-msgid "A single SOA mname value was seen ({mname})"
+msgid "A single SOA mname value was seen ({mname})."
 msgstr ""
 "Un unique serveur maître a été trouvée dans les enregistrements de type \"SOA"
 "\" de la zone testée ({mname})."
 
 #. CONSISTENCY:ONE_SOA_RNAME
 #, perl-brace-format
-msgid "A single SOA rname value was found ({rname})"
+msgid "A single SOA rname value was found ({rname})."
 msgstr ""
 "Une unique adresse mail a été trouvée dans les enregistrements de type \"SOA"
 "\" de la zone testée ({rname})."
@@ -432,7 +432,7 @@ msgstr ""
 msgid ""
 "Out-of-bailiwick name server listed at parent with glue record has a "
 "mismatch between the glue at the parent ({parent_addresses}) and any "
-"equivalent address record found in authoritative zone ({zone_addresses})"
+"equivalent address record found in authoritative zone ({zone_addresses})."
 msgstr ""
 "Problèmes de glues pour un serveur de nom \"out-of-bailiwick\", celles "
 "trouvées ({parent_addresses}) dans la zone parente sont différentes de "
@@ -564,7 +564,7 @@ msgstr ""
 #. DNSSEC:ALL_ALGO_SIGNED
 msgid ""
 "All the tested RRset (SOA/DNSKEY/NS) are signed by each algorithm present in "
-"the DNSKEY RRset"
+"the DNSKEY RRset."
 msgstr ""
 "L'ensemble des RRset (SOA/DNSKEY/NS) est signé par chaque algorithme présent "
 "dans l'ensemble des enregistrements de type \"DNSKEY\"."
@@ -1063,7 +1063,7 @@ msgstr ""
 #, perl-brace-format
 msgid ""
 "Nameserver {ns}/{address} responded with an RRSIG which can not be verified "
-"with corresponding DNSKEY (with keytag {keytag})"
+"with corresponding DNSKEY (with keytag {keytag})."
 msgstr ""
 "Le serveur de noms {ns}/{address} répond avec une signature (RRSIG) qui ne "
 "peut pas être vérifiée avec la clé (DNSKEY) de tag {keytag} correspondante."
@@ -1177,7 +1177,7 @@ msgstr ""
 "fait référence à plusieurs serveurs de noms ({nss})."
 
 #. DELEGATION:DISTINCT_IP_ADDRESS
-msgid "All the IP addresses used by the nameservers are unique"
+msgid "All the IP addresses used by the nameservers are unique."
 msgstr ""
 "Toutes les adresses IP utilisées par les serveurs de noms sont uniques."
 
@@ -1362,8 +1362,8 @@ msgid ""
 "Delegation lists no nameserver that resolves to an IPv6 address. If any were "
 "present, the minimum allowed would be {minimum}."
 msgstr ""
-"Les serveurs de noms de la zone parente ne retournent pas de serveurs ayant une "
-"adresse IPv6. Si il y en avait, il en faudrait au minimum {minimum}."
+"Les serveurs de noms de la zone parente ne retournent pas de serveurs ayant "
+"une adresse IPv6. Si il y en avait, il en faudrait au minimum {minimum}."
 
 #. DELEGATION:NO_NS_CNAME
 msgid "No nameserver points to CNAME alias."
@@ -1424,7 +1424,7 @@ msgstr ""
 #, perl-brace-format
 msgid ""
 "Nameserver {ns}/{address} answered AAAA query with an unexpected RDATA "
-"length ({length} instead of 16)"
+"length ({length} instead of 16)."
 msgstr ""
 "Le serveur de noms {ns}/{address} a répondu à une requête de type \"AAAA\" "
 "avec un code taille de champ RDATA inattendu ({length} au lieu de 16)."
@@ -2127,7 +2127,7 @@ msgstr "Utilisation de la version {version} du moteur Zonemaster."
 msgid "Logger callback died with error: {exception}"
 msgstr ""
 "L'appel au système de log (Callback) s'est terminé avec l'erreur suivante: "
-"{exception}"
+"{exception}."
 
 #. SYSTEM:LOOKUP_ERROR
 #, perl-brace-format
@@ -2135,12 +2135,12 @@ msgid ""
 "DNS query to {ns} for {name}/{type}/{class} failed with error: {message}"
 msgstr ""
 "La requête DNS {name}/{type}/{class} au serveur de noms {ns} a échoué avec "
-"le message d'erreur suivant: {message}"
+"le message d'erreur suivant: {message}."
 
 #. SYSTEM:MODULE_ERROR
 #, perl-brace-format
 msgid "Fatal error in {module}: {msg}"
-msgstr "Erreur fatale dans le module {module}: {msg}"
+msgstr "Erreur fatale dans le module {module}: {msg}."
 
 #. SYSTEM:MODULE_VERSION
 #, perl-brace-format

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-23 02:06+0200\n"
+"POT-Creation-Date: 2020-09-20 06:54+0200\n"
 "PO-Revision-Date: 2020-04-21 10:01+0200\n"
 "Last-Translator: mats.dufberg@iis.se\n"
 "Language-Team: Zonemaster Team\n"
@@ -240,18 +240,18 @@ msgstr "Namnservrarna har IPv6-adresser i följande AS: {asn}."
 
 #. CONNECTIVITY:ASN_INFOS_RAW
 #, perl-brace-format
-msgid "[ASN:RAW] {address};{data}"
-msgstr "[ASN:RAW] {address};{data}"
+msgid "[ASN:RAW] {address};{data}."
+msgstr "[ASN:RAW] {address};{data}."
 
 #. CONNECTIVITY:ASN_INFOS_ANNOUNCE_BY
 #, perl-brace-format
-msgid "[ASN:ANNOUNCE_BY] {address};{asn}"
-msgstr "[ASN:ANNOUNCE_BY] {address};{asn}"
+msgid "[ASN:ANNOUNCE_BY] {address};{asn}."
+msgstr "[ASN:ANNOUNCE_BY] {address};{asn}."
 
 #. CONNECTIVITY:ASN_INFOS_ANNOUNCE_IN
 #, perl-brace-format
-msgid "[ASN:ANNOUNCE_IN] {address};{prefix}"
-msgstr "[ASN:ANNOUNCE_IN] {address};{prefix}"
+msgid "[ASN:ANNOUNCE_IN] {address};{prefix}."
+msgstr "[ASN:ANNOUNCE_IN] {address};{prefix}."
 
 #. CONSISTENCY:ADDRESSES_MATCH
 msgid "Glue records are consistent between glue and authoritative data."
@@ -263,7 +263,7 @@ msgid "Unexpected or erroneous reply from {ns}/{address}."
 msgstr "Oväntat eller felaktigt svarspaket från {ns}/{address}."
 
 #. CONSISTENCY:CHILD_ZONE_LAME
-msgid "Lame delegation"
+msgid "Lame delegation."
 msgstr "Det går inte att följa delegeringen av domänen."
 
 #. CONSISTENCY:EXTRA_ADDRESS_CHILD
@@ -287,7 +287,7 @@ msgstr ""
 msgid ""
 "In-bailiwick name server listed at parent has a mismatch between glue data "
 "at parent ({parent_addresses}) and any equivalent address record in child "
-"zone ({zone_addresses})"
+"zone ({zone_addresses})."
 msgstr ""
 "Delegeringen inkluderar en eller flera IP-adresser ({parent_addresses}) för "
 "en eller flera namnservrar som är 'in-bailiwick'. IP-adressen/addresserna "
@@ -340,7 +340,8 @@ msgstr "Inget svar från namnservern {ns}/{address} på fråga efter SOA-post."
 #. CONSISTENCY:NS_SET
 #, perl-brace-format
 msgid "Saw NS set ({nsset}) on following nameserver set : {servers}."
-msgstr "NS-uppsättningen '{nsset}' hittades på följande namnservrar: {servers}"
+msgstr ""
+"NS-uppsättningen '{nsset}' hittades på följande namnservrar: {servers}."
 
 #. CONSISTENCY:ONE_NS_SET
 #, perl-brace-format
@@ -349,13 +350,13 @@ msgstr "Exakt en uppsättning namnservrar hittades: ({nsset})."
 
 #. CONSISTENCY:ONE_SOA_MNAME
 #, perl-brace-format
-msgid "A single SOA mname value was seen ({mname})"
-msgstr "Exakt en 'SOA MNAME' hittades: ({mname})"
+msgid "A single SOA mname value was seen ({mname})."
+msgstr "Exakt en 'SOA MNAME' hittades: ({mname})."
 
 #. CONSISTENCY:ONE_SOA_RNAME
 #, perl-brace-format
-msgid "A single SOA rname value was found ({rname})"
-msgstr "Exakt en 'SOA RNAME' hittades: ({rname})"
+msgid "A single SOA rname value was found ({rname})."
+msgstr "Exakt en 'SOA RNAME' hittades: ({rname})."
 
 #. CONSISTENCY:ONE_SOA_SERIAL
 #, perl-brace-format
@@ -376,7 +377,7 @@ msgstr ""
 msgid ""
 "Out-of-bailiwick name server listed at parent with glue record has a "
 "mismatch between the glue at the parent ({parent_addresses}) and any "
-"equivalent address record found in authoritative zone ({zone_addresses})"
+"equivalent address record found in authoritative zone ({zone_addresses})."
 msgstr ""
 "Delegeringen inkluderar en eller flera IP-adresser ({parent_addresses}) för "
 "en eller flera namnservrar som är 'out-of-bailiwick'. IP-adressen/"
@@ -500,7 +501,7 @@ msgstr ""
 #. DNSSEC:ALL_ALGO_SIGNED
 msgid ""
 "All the tested RRset (SOA/DNSKEY/NS) are signed by each algorithm present in "
-"the DNSKEY RRset"
+"the DNSKEY RRset."
 msgstr ""
 "Alla testade RRset (SOA, DNSKEY, NS) är signerade med varje algoritm som "
 "representerad i 'DNSKEY RRset'."
@@ -952,7 +953,7 @@ msgstr ""
 #, perl-brace-format
 msgid ""
 "Nameserver {ns}/{address} responded with an RRSIG which can not be verified "
-"with corresponding DNSKEY (with keytag {keytag})"
+"with corresponding DNSKEY (with keytag {keytag})."
 msgstr ""
 "Namnserver {ns}/{address} svarade med en RRSIG-post som inte kan verifieras "
 "med motsvarande DNSKEY-post med 'keytag' {keytag}."
@@ -1057,7 +1058,7 @@ msgstr ""
 "delegeringen ({nss})."
 
 #. DELEGATION:DISTINCT_IP_ADDRESS
-msgid "All the IP addresses used by the nameservers are unique"
+msgid "All the IP addresses used by the nameservers are unique."
 msgstr ""
 "Varje namnserver har unika IP-adress som inte delas med andra namnservrar."
 
@@ -1299,7 +1300,7 @@ msgstr ""
 #, perl-brace-format
 msgid ""
 "Nameserver {ns}/{address} answered AAAA query with an unexpected RDATA "
-"length ({length} instead of 16)"
+"length ({length} instead of 16)."
 msgstr ""
 "Namnserver {ns}/{address} besvarade en AAAA-fråga med den icke-väntade "
 "längden på 'RDATA' om '{length}' oktetter istället för förväntade 16 "
@@ -1947,7 +1948,7 @@ msgstr "Använder version {version} av Zonemasters testmotor."
 #, perl-brace-format
 msgid "Logger callback died with error: {exception}"
 msgstr ""
-"Callback-funktionen för log-modulen avbröt med felmeddelandet: '{exception}'"
+"Callback-funktionen för log-modulen avbröt med felmeddelandet: '{exception}'."
 
 #. SYSTEM:LOOKUP_ERROR
 #, perl-brace-format
@@ -1955,12 +1956,12 @@ msgid ""
 "DNS query to {ns} for {name}/{type}/{class} failed with error: {message}"
 msgstr ""
 "DNS-fråga till {ns} för {name}/{type}/{class} misslyckades med felet: "
-"'{message}'"
+"'{message}'."
 
 #. SYSTEM:MODULE_ERROR
 #, perl-brace-format
 msgid "Fatal error in {module}: {msg}"
-msgstr "Fatalt fel i '{module}': '{msg}'"
+msgstr "Fatalt fel i '{module}': '{msg}'."
 
 #. SYSTEM:MODULE_VERSION
 #, perl-brace-format
