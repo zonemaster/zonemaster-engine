@@ -172,7 +172,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     MNAME_NO_RESPONSE => sub {
         __x    # ZONE:MNAME_NO_RESPONSE
-          'SOA \'mname\' nameserver {ns}/{address} does not respond.', @_;
+          'SOA \'mname\' nameserver {ns} does not respond.', @_;
     },
     MNAME_IS_CNAME => sub {
         __x    # ZONE:MNAME_IS_CNAME
@@ -216,7 +216,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     MNAME_NOT_AUTHORITATIVE => sub {
         __x    # ZONE:MNAME_NOT_AUTHORITATIVE
-          'SOA \'mname\' nameserver {ns}/{address} is not authoritative for \'{zone}\' zone.', @_;
+          'SOA \'mname\' nameserver {ns} is not authoritative for \'{zone}\' zone.', @_;
     },
     MNAME_RECORD_DOES_NOT_EXIST => sub {
         __x    # ZONE:MNAME_RECORD_DOES_NOT_EXIST
@@ -228,7 +228,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     MNAME_NOT_IN_GLUE => sub {
         __x    # ZONE:MNAME_NOT_IN_GLUE
-          'SOA \'mname\' nameserver ({mname}) is not listed in "parent" NS records for tested zone ({nss}).', @_;
+          'SOA \'mname\' nameserver ({mname}) is not listed in "parent" NS records for tested zone ({ns_list}).', @_;
     },
     REFRESH_LOWER_THAN_RETRY => sub {
         __x    # ZONE:REFRESH_LOWER_THAN_RETRY
@@ -252,11 +252,11 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     MULTIPLE_SOA => sub {
         __x    # ZONE:MULTIPLE_SOA
-          'Nameserver {ns}/{address} responds with multiple ({count}) SOA records on SOA queries.', @_;
+          'Nameserver {ns} responds with multiple ({count}) SOA records on SOA queries.', @_;
     },
     NO_RESPONSE => sub {
         __x    # ZONE:NO_RESPONSE
-          'Nameserver {ns}/{address} did not respond.', @_;
+          'Nameserver {ns} did not respond.', @_;
     },
     NO_RESPONSE_SOA_QUERY => sub {
         __x    # ZONE:NO_RESPONSE_SOA_QUERY
@@ -268,7 +268,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     NO_SOA_IN_RESPONSE => sub {
         __x    # ZONE:NO_SOA_IN_RESPONSE
-          'Response from nameserver {ns}/{address} on SOA queries does not contain SOA record.', @_;
+          'Response from nameserver {ns} on SOA queries does not contain SOA record.', @_;
     },
     MNAME_HAS_NO_ADDRESS => sub {
         __x    # ZONE:MNAME_HAS_NO_ADDRESS
@@ -294,7 +294,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     WRONG_SOA => sub {
         __x    # ZONE:WRONG_SOA
-          'Nameserver {ns}/{address} responds with a wrong owner name ({owner} instead of {name}) on SOA queries.', @_;
+          'Nameserver {ns} responds with a wrong owner name ({owner} instead of {name}) on SOA queries.', @_;
     },
 );
 
@@ -333,29 +333,22 @@ sub zone01 {
                         push @results,
                           info(
                             MNAME_NOT_AUTHORITATIVE => {
-                                ns      => $soa_mname,
-                                address => $ip_address->short,
-                                zone    => $zone->name,
+                                ns   => $ns->string,
+                                zone => $zone->name,
                             }
                           );
                     }
                 }
                 else {
-                    push @results,
-                      info(
-                        MNAME_NO_RESPONSE => {
-                            ns      => $soa_mname,
-                            address => $ip_address->short,
-                        }
-                      );
+                    push @results, info( MNAME_NO_RESPONSE => { ns => $ns->string } );
                 }
             } ## end foreach my $ip_address ( Zonemaster::Engine::Recursor...)
             if ( none { $_ eq $soa_mname } @{ Zonemaster::Engine::TestMethods->method2( $zone ) } ) {
                 push @results,
                   info(
                     MNAME_NOT_IN_GLUE => {
-                        mname => $soa_mname,
-                        nss   => join( q{;}, @{ Zonemaster::Engine::TestMethods->method2( $zone ) } ),
+                        mname   => $soa_mname,
+                        ns_list => join( q{;}, @{ Zonemaster::Engine::TestMethods->method2( $zone ) } ),
                     }
                   );
             }
@@ -705,13 +698,7 @@ sub zone10 {
         my $p = $ns->query( $name, q{SOA} );
 
         if ( not $p ) {
-            push @results,
-              info(
-                NO_RESPONSE => {
-                    ns      => $ns->name->string,
-                    address => $ns->address->short,
-                }
-              );
+            push @results, info( NO_RESPONSE => { ns => $ns->string } );
             next;
         }
         else {
@@ -721,9 +708,8 @@ sub zone10 {
                     push @results,
                       info(
                         MULTIPLE_SOA => {
-                            ns      => $ns->name->string,
-                            address => $ns->address->short,
-                            count   => scalar @soa,
+                            ns    => $ns->string,
+                            count => scalar @soa,
                         }
                       );
                 }
@@ -731,22 +717,15 @@ sub zone10 {
                     push @results,
                       info(
                         WRONG_SOA => {
-                            ns      => $ns->name->string,
-                            address => $ns->address->short,
-                            owner   => lc( $soa[0]->owner ),
-                            name    => lc( $name->fqdn ),
+                            ns    => $ns->string,
+                            owner => lc( $soa[0]->owner ),
+                            name  => lc( $name->fqdn ),
                         }
                       );
                 }
             } ## end if ( scalar @soa )
             else {
-                push @results,
-                  info(
-                    NO_SOA_IN_RESPONSE => {
-                        ns      => $ns->name->string,
-                        address => $ns->address->short,
-                    }
-                  );
+                push @results, info( NO_SOA_IN_RESPONSE => { ns => $ns->string } );
             }
         } ## end else [ if ( not $p ) ]
     } ## end foreach my $ns ( @{ Zonemaster::Engine::TestMethods...})

@@ -160,11 +160,11 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     IPV4_DISABLED => sub {
         __x    # SYNTAX:IPV4_DISABLED
-          'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
+          'IPv4 is disabled, not sending "{rrtype}" query to {ns}.', @_;
     },
     IPV6_DISABLED => sub {
         __x    # SYNTAX:IPV6_DISABLED
-          'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
+          'IPv6 is disabled, not sending "{rrtype}" query to {ns}.', @_;
     },
     MNAME_DISCOURAGED_DOUBLE_DASH => sub {
         __x    # SYNTAX:MNAME_DISCOURAGED_DOUBLE_DASH
@@ -236,7 +236,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     NO_RESPONSE => sub {
         __x    # SYNTAX:NO_RESPONSE
-          'No response from {ns}/{address} asking for {dname}.', @_;
+          'No response from {ns} asking for {dname}.', @_;
     },
     NO_RESPONSE_MX_QUERY => sub {
         __x    # SYNTAX:NO_RESPONSE_MX_QUERY
@@ -457,9 +457,8 @@ sub syntax06 {
             push @results,
               info(
                 IPV6_DISABLED => {
-                    ns      => $ns->name->string,
-                    address => $ns->address->short,
-                    rrtype  => q{SOA},
+                    ns     => $ns->string,
+                    rrtype => q{SOA},
                 }
               );
             next;
@@ -470,9 +469,8 @@ sub syntax06 {
             push @results,
               info(
                 IPV4_DISABLED => {
-                    ns      => $ns->name->string,
-                    address => $ns->address->short,
-                    rrtype  => q{SOA},
+                    ns     => $ns->string,
+                    rrtype => q{SOA},
                 }
               );
             next;
@@ -484,9 +482,8 @@ sub syntax06 {
             push @results,
               info(
                 NO_RESPONSE => {
-                    ns      => $ns->name->string,
-                    address => $ns->address->short,
-                    dname   => $zone->name,
+                    ns    => $ns->string,
+                    dname => $zone->name,
                 }
               );
             next;

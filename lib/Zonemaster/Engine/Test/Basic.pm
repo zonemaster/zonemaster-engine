@@ -150,15 +150,15 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     HAS_A_RECORDS => sub {
         __x    # BASIC:HAS_A_RECORDS
-          "Nameserver {ns}/{address} returned \"A\" record(s) for {dname}.", @_;
+          "Nameserver {ns} returned \"A\" record(s) for {dname}.", @_;
     },
     NO_A_RECORDS => sub {
         __x    # BASIC:NO_A_RECORDS
-          "Nameserver {ns}/{address} did not return \"A\" record(s) for {dname}.", @_;
+          "Nameserver {ns} did not return \"A\" record(s) for {dname}.", @_;
     },
     HAS_NAMESERVERS => sub {
         __x    # BASIC:HAS_NAMESERVERS
-          'Nameserver {ns}/{address} listed these servers as glue: {nsnlist}.', @_;
+          'Nameserver {ns} listed these servers as glue: {nsnlist}.', @_;
     },
     NO_GLUE_PREVENTS_NAMESERVER_TESTS => sub {
         __x    # BASIC:NO_GLUE_PREVENTS_NAMESERVER_TESTS
@@ -166,11 +166,11 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     NS_FAILED => sub {
         __x    # BASIC:NS_FAILED
-          'Nameserver {ns}/{address} did not return NS records. RCODE was {rcode}.', @_;
+          'Nameserver {ns} did not return NS records. RCODE was {rcode}.', @_;
     },
     NS_NO_RESPONSE => sub {
         __x    # BASIC:NS_NO_RESPONSE
-          'Nameserver {ns}/{address} did not respond to NS query.', @_;
+          'Nameserver {ns} did not respond to NS query.', @_;
     },
     A_QUERY_NO_RESPONSES => sub {
         __x    # BASIC:A_QUERY_NO_RESPONSES
@@ -182,19 +182,19 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     IPV4_DISABLED => sub {
         __x    # BASIC:IPV4_DISABLED
-          'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
+          'IPv4 is disabled, not sending "{rrtype}" query to {ns}.', @_;
     },
     IPV4_ENABLED => sub {
         __x    # BASIC:IPV4_ENABLED
-          'IPv4 is enabled, can send "{rrtype}" query to {ns}/{address}.', @_;
+          'IPv4 is enabled, can send "{rrtype}" query to {ns}.', @_;
     },
     IPV6_DISABLED => sub {
         __x    # BASIC:IPV6_DISABLED
-          'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
+          'IPv6 is disabled, not sending "{rrtype}" query to {ns}.', @_;
     },
     IPV6_ENABLED => sub {
         __x    # BASIC:IPV6_ENABLED
-          'IPv6 is enabled, can send "{rrtype}" query to {ns}/{address}.', @_;
+          'IPv6 is enabled, can send "{rrtype}" query to {ns}.', @_;
     },
     TEST_CASE_END => sub {
         __x    # BASIC:TEST_CASE_END
@@ -305,9 +305,8 @@ sub basic02 {
             push @results,
               info(
                 IPV4_DISABLED => {
-                    ns      => $ns->name->string,
-                    address => $ns->address->short,
-                    rrtype  => $query_type,
+                    ns     => $ns->string,
+                    rrtype => $query_type,
                 }
               );
             next;
@@ -316,9 +315,8 @@ sub basic02 {
             push @results,
               info(
                 IPV4_ENABLED => {
-                    ns      => $ns->name->string,
-                    address => $ns->address->short,
-                    rrtype  => $query_type,
+                    ns     => $ns->string,
+                    rrtype => $query_type,
                 }
               );
         }
@@ -327,9 +325,8 @@ sub basic02 {
             push @results,
               info(
                 IPV6_DISABLED => {
-                    ns      => $ns->name->string,
-                    address => $ns->address->short,
-                    rrtype  => $query_type,
+                    ns     => $ns->string,
+                    rrtype => $query_type,
                 }
               );
             next;
@@ -338,9 +335,8 @@ sub basic02 {
             push @results,
               info(
                 IPV6_ENABLED => {
-                    ns      => $ns->name->string,
-                    address => $ns->address->short,
-                    rrtype  => $query_type,
+                    ns     => $ns->string,
+                    rrtype => $query_type,
                 }
               );
         }
@@ -354,8 +350,7 @@ sub basic02 {
                     HAS_NAMESERVERS => {
                         nsnlist =>
                           join( q{,}, sort map { $_->nsdname } $p->get_records_for_name( $query_type, $zone->name ) ),
-                        ns      => $ns->name->string,
-                        address => $ns->address->short,
+                        ns => $ns->string,
                     }
                   );
             }
@@ -363,21 +358,14 @@ sub basic02 {
                 push @results,
                   info(
                     NS_FAILED => {
-                        ns      => $ns->name->string,
-                        address => $ns->address->short,
-                        rcode   => $p->rcode,
+                        ns    => $ns->string,
+                        rcode => $p->rcode,
                     }
                   );
             }
         } ## end if ( $p )
         else {
-            push @results,
-              info(
-                NS_NO_RESPONSE => {
-                    ns      => $ns->name->string,
-                    address => $ns->address->short,
-                }
-              );
+            push @results, info( NS_NO_RESPONSE => { ns => $ns->string } );
         }
     } ## end foreach my $ns ( @{ Zonemaster::Engine::TestMethods...})
 
@@ -396,9 +384,8 @@ sub basic03 {
             push @results,
               info(
                 IPV4_DISABLED => {
-                    ns      => $ns->name->string,
-                    address => $ns->address->short,
-                    rrtype  => $query_type,
+                    ns     => $ns->string,
+                    rrtype => $query_type,
                 }
               );
             next;
@@ -407,9 +394,8 @@ sub basic03 {
             push @results,
               info(
                 IPV4_ENABLED => {
-                    ns      => $ns->name->string,
-                    address => $ns->address->short,
-                    rrtype  => $query_type,
+                    ns     => $ns->string,
+                    rrtype => $query_type,
                 }
               );
         }
@@ -418,9 +404,8 @@ sub basic03 {
             push @results,
               info(
                 IPV6_DISABLED => {
-                    ns      => $ns->name->string,
-                    address => $ns->address->short,
-                    rrtype  => $query_type,
+                    ns     => $ns->string,
+                    rrtype => $query_type,
                 }
               );
             next;
@@ -429,9 +414,8 @@ sub basic03 {
             push @results,
               info(
                 IPV6_ENABLED => {
-                    ns      => $ns->name->string,
-                    address => $ns->address->short,
-                    rrtype  => $query_type,
+                    ns     => $ns->string,
+                    rrtype => $query_type,
                 }
               );
         }
@@ -443,9 +427,8 @@ sub basic03 {
             push @results,
               info(
                 HAS_A_RECORDS => {
-                    ns      => $ns->name->string,
-                    address => $ns->address->short,
-                    dname   => $name,
+                    ns    => $ns->string,
+                    dname => $name,
                 }
               );
         }
@@ -453,9 +436,8 @@ sub basic03 {
             push @results,
               info(
                 NO_A_RECORDS => {
-                    ns      => $ns->name->string,
-                    address => $ns->address->short,
-                    dname   => $name,
+                    ns    => $ns->string,
+                    dname => $name,
                 }
               );
         }
