@@ -164,15 +164,15 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     ASN_INFOS_RAW => sub {
         __x    # CONNECTIVITY:ASN_INFOS_RAW
-          '[ASN:RAW] {ns_ip};{data}.', @_;
+          'The ASN data for name server IP address "{ns_ip}" is "{data}".', @_;
     },
     ASN_INFOS_ANNOUNCE_BY => sub {
         __x    # CONNECTIVITY:ASN_INFOS_ANNOUNCE_BY
-          '[ASN:ANNOUNCE_BY] {ns_ip};{asn}.', @_;
+          'Name server IP address "{ns_ip}" is announced by ASN {asn}.', @_;
     },
     ASN_INFOS_ANNOUNCE_IN => sub {
         __x    # CONNECTIVITY:ASN_INFOS_ANNOUNCE_IN
-          '[ASN:ANNOUNCE_IN] {ns_ip};{prefix}.', @_;
+          'Name server IP address "{ns_ip}" is announced in prefix "{prefix}".', @_;
     },
     TEST_CASE_END => sub {
         __x    # CONNECTIVITY:TEST_CASE_END
