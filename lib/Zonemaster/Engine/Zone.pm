@@ -136,12 +136,12 @@ sub query_one {
     my $i = 0;
     while ( my $ns = $self->ns->[$i] ) {
         if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == 4 ) {
-            Zonemaster::Engine->logger->add( SKIP_IPV4_DISABLED => { ns => "$ns" } );
+            Zonemaster::Engine->logger->add( SKIP_IPV4_DISABLED => { ns_list => "$ns" } );
             next;
         }
 
         if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == 6 ) {
-            Zonemaster::Engine->logger->add( SKIP_IPV6_DISABLED => { ns => "$ns" } );
+            Zonemaster::Engine->logger->add( SKIP_IPV6_DISABLED => { ns_list => "$ns" } );
             next;
         }
 
@@ -163,13 +163,13 @@ sub query_all {
     if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) ) {
         my @nope = grep { $_->address->version == 4 } @servers;
         @servers = grep { $_->address->version != 4 } @servers;
-        Zonemaster::Engine->logger->add( SKIP_IPV4_DISABLED => { ns => ( join ';', map { "$_" } @nope ) } );
+        Zonemaster::Engine->logger->add( SKIP_IPV4_DISABLED => { ns_list => ( join ';', map { "$_" } @nope ) } );
     }
 
     if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) ) {
         my @nope = grep { $_->address->version == 6 } @servers;
         @servers = grep { $_->address->version != 6 } @servers;
-        Zonemaster::Engine->logger->add( SKIP_IPV6_DISABLED => { ns => ( join ';', map { "$_" } @nope ) } );
+        Zonemaster::Engine->logger->add( SKIP_IPV6_DISABLED => { ns_list => ( join ';', map { "$_" } @nope ) } );
     }
 
     return [ map { $_->query( $name, $type, $flags ) } @servers ];
@@ -182,12 +182,12 @@ sub query_auth {
     my $i = 0;
     while ( my $ns = $self->ns->[$i] ) {
         if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == 4 ) {
-            Zonemaster::Engine->logger->add( SKIP_IPV4_DISABLED => { ns => "$ns" } );
+            Zonemaster::Engine->logger->add( SKIP_IPV4_DISABLED => { ns_list => "$ns" } );
             next;
         }
 
         if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == 6 ) {
-            Zonemaster::Engine->logger->add( SKIP_IPV6_DISABLED => { ns => "$ns" } );
+            Zonemaster::Engine->logger->add( SKIP_IPV6_DISABLED => { ns_list => "$ns" } );
             next;
         }
 
@@ -210,12 +210,12 @@ sub query_persistent {
     my $i = 0;
     while ( my $ns = $self->ns->[$i] ) {
         if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == 4 ) {
-            Zonemaster::Engine->logger->add( SKIP_IPV4_DISABLED => { ns => "$ns" } );
+            Zonemaster::Engine->logger->add( SKIP_IPV4_DISABLED => { ns_list => "$ns" } );
             next;
         }
 
         if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == 6 ) {
-            Zonemaster::Engine->logger->add( SKIP_IPV6_DISABLED => { ns => "$ns" } );
+            Zonemaster::Engine->logger->add( SKIP_IPV6_DISABLED => { ns_list => "$ns" } );
             next;
         }
 

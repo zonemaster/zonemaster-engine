@@ -77,11 +77,11 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     SKIP_IPV4_DISABLED => sub {
         __x    # SYSTEM:SKIP_IPV4_DISABLED
-          "IPv4 is disabled, not sending query to {ns}.", @_;
+          "IPv4 is disabled, not sending query to {ns_list}.", @_;
     },
     SKIP_IPV6_DISABLED => sub {
         __x    # SYSTEM:SKIP_IPV6_DISABLED
-          "IPv6 is disabled, not sending query to {ns}.", @_;
+          "IPv6 is disabled, not sending query to {ns_list}.", @_;
     },
     FAKE_DELEGATION => sub {
         __x    # SYSTEM:FAKE_DELEGATION
@@ -97,13 +97,13 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     FAKE_DELEGATION_IN_ZONE_NO_IP => sub {
         __x    # SYSTEM:FAKE_DELEGATION_IN_ZONE_NO_IP
-          "The fake delegation of domain {domain} includes an in-zone name server {ns} "
+          "The fake delegation of domain {domain} includes an in-zone name server {nsname} "
           . "without mandatory glue (without IP address).",
           @_;
     },
     FAKE_DELEGATION_NO_IP => sub {
         __x    # SYSTEM:FAKE_DELEGATION_NO_IP
-          "The fake delegation of domain {domain} includes a name server {ns} "
+          "The fake delegation of domain {domain} includes a name server {nsname} "
           . "that cannot be resolved to any IP address.",
           @_;
     },
