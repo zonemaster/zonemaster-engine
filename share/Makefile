@@ -1,6 +1,6 @@
 .POSIX:
 .SUFFIXES: .po .mo
-.PHONY: all dist touch-po update-po extract-pot
+.PHONY: all check-msg-args dist extract-pot tidy-po show-fuzzy touch-po update-po
 
 POFILES != echo *.po
 MOFILES := $(POFILES:%.po=%.mo)
@@ -13,6 +13,12 @@ all: $(MOFILES) modules.txt
 	@echo Remember to make sure all of the above names are in the
 	@echo MANIFEST file, or they will not be installed.
 	@echo
+
+# Tidy the formatting of all PO files
+tidy-po:
+	@tmpdir="`mktemp -d tidy-po.XXXXXXXX`" ;\
+	trap 'rm -rf "$$tmpdir"' EXIT ;\
+	for f in $(POFILES) ; do msgcat $$f -o $$tmpdir/$$f && mv -f $$tmpdir/$$f $$f  ; done
 
 touch-po:
 	@touch $(POTFILE) $(POFILES)
