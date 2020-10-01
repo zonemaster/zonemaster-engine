@@ -20,7 +20,7 @@ use MooseX::Singleton;
 has 'locale'               => ( is => 'rw', isa => 'Str' );
 has 'data'                 => ( is => 'ro', isa => 'HashRef', lazy => 1, builder => '_load_data' );
 has 'all_tag_descriptions' => ( is => 'ro', isa => 'HashRef', builder => '_build_all_tag_descriptions' );
-has '_last_language'       => ( is => 'rw', isa => 'Str' );
+has '_last_language'       => ( is => 'rw', isa => 'Str', builder => '_build_last_language' );
 
 ###
 ### Tag descriptions
@@ -167,6 +167,10 @@ sub _build_all_tag_descriptions {
     }
 
     return \%all_tag_descriptions;
+}
+
+sub _build_last_language {
+    return $ENV{LANGUAGE} // '';
 }
 
 ###
