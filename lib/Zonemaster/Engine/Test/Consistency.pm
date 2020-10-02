@@ -204,7 +204,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     NS_SET => sub {
         __x    # CONSISTENCY:NS_SET
-          'Saw NS set ({nsset}) on following nameserver set : {servers}.', @_;
+          'Saw NS set ({nsset}) on following nameserver set : {ns_list}.', @_;
     },
     ONE_NS_SET => sub {
         __x    # CONSISTENCY:ONE_NS_SET
@@ -236,11 +236,11 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     SOA_RNAME => sub {
         __x    # CONSISTENCY:SOA_RNAME
-          "Found SOA rname {rname} on following nameserver set : {servers}.", @_;
+          "Found SOA rname {rname} on following nameserver set : {ns_list}.", @_;
     },
     SOA_SERIAL => sub {
         __x    # CONSISTENCY:SOA_SERIAL
-          'Saw SOA serial number {serial} on following nameserver set : {servers}.', @_;
+          'Saw SOA serial number {serial} on following nameserver set : {ns_list}.', @_;
     },
     SOA_SERIAL_VARIATION => sub {
         __x    # CONSISTENCY:SOA_SERIAL_VARIATION
@@ -250,7 +250,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     SOA_TIME_PARAMETER_SET => sub {
         __x    # CONSISTENCY:SOA_TIME_PARAMETER_SET
           'Saw SOA time parameter set (REFRESH={refresh},RETRY={retry},EXPIRE={expire},'
-          . 'MINIMUM={minimum}) on following nameserver set : {servers}.', @_;
+          . 'MINIMUM={minimum}) on following nameserver set : {ns_list}.', @_;
     },
     TEST_CASE_END => sub {
         __x    # CONSISTENCY:TEST_CASE_END
@@ -339,7 +339,7 @@ sub consistency01 {
           info(
             SOA_SERIAL => {
                 serial  => $serial,
-                servers => join( q{;}, sort @{ $serials{$serial} } ),
+                ns_list => join( q{;}, sort @{ $serials{$serial} } ),
             }
           );
     }
@@ -448,7 +448,7 @@ sub consistency02 {
               info(
                 SOA_RNAME => {
                     rname   => $rname,
-                    servers => join( q{;}, @{ $rnames{$rname} } ),
+                    ns_list => join( q{;}, @{ $rnames{$rname} } ),
                 }
               );
         }
@@ -542,7 +542,7 @@ sub consistency03 {
                     retry   => $retry,
                     expire  => $expire,
                     minimum => $minimum,
-                    servers => join( q{;}, sort @{ $time_parameter_sets{$time_parameter_set} } ),
+                    ns_list => join( q{;}, sort @{ $time_parameter_sets{$time_parameter_set} } ),
                 }
               );
         }
@@ -625,7 +625,7 @@ sub consistency04 {
               info(
                 NS_SET => {
                     nsset   => $ns_set,
-                    servers => join( q{;}, @{ $ns_sets{$ns_set} } ),
+                    ns_list => join( q{;}, @{ $ns_sets{$ns_set} } ),
                 }
               );
         }
@@ -874,7 +874,7 @@ sub consistency06 {
               info(
                 SOA_MNAME => {
                     mname   => $mname,
-                    servers => join( q{;}, @{ $mnames{$mname} } ),
+                    ns_list => join( q{;}, @{ $mnames{$mname} } ),
                 }
               );
         }
