@@ -163,25 +163,25 @@ Readonly my %TAG_DESCRIPTIONS => (
     ENOUGH_IPV4_NS_CHILD => sub {
         __x    # DELEGATION:ENOUGH_IPV4_NS_CHILD
           "Child lists enough ({count}) nameservers ({nsname_list}) "
-          . "that resolve to IPv4 addresses ({addrs}). Lower limit set to {minimum}.",
+          . "that resolve to IPv4 addresses ({ns_ip_list}). Lower limit set to {minimum}.",
           @_;
     },
     ENOUGH_IPV4_NS_DEL => sub {
         __x    # DELEGATION:ENOUGH_IPV4_NS_DEL
           "Delegation lists enough ({count}) nameservers ({nsname_list}) "
-          . "that resolve to IPv4 addresses ({addrs}). Lower limit set to {minimum}.",
+          . "that resolve to IPv4 addresses ({ns_ip_list}). Lower limit set to {minimum}.",
           @_;
     },
     ENOUGH_IPV6_NS_CHILD => sub {
         __x    # DELEGATION:ENOUGH_IPV6_NS_CHILD
           "Child lists enough ({count}) nameservers ({nsname_list}) "
-          . "that resolve to IPv6 addresses ({addrs}). Lower limit set to {minimum}.",
+          . "that resolve to IPv6 addresses ({ns_ip_list}). Lower limit set to {minimum}.",
           @_;
     },
     ENOUGH_IPV6_NS_DEL => sub {
         __x    # DELEGATION:ENOUGH_IPV6_NS_DEL
           "Delegation lists enough ({count}) nameservers ({nsname_list}) "
-          . "that resolve to IPv6 addresses ({addrs}). Lower limit set to {minimum}.",
+          . "that resolve to IPv6 addresses ({ns_ip_list}). Lower limit set to {minimum}.",
           @_;
     },
     ENOUGH_NS_CHILD => sub {
@@ -223,25 +223,25 @@ Readonly my %TAG_DESCRIPTIONS => (
     NOT_ENOUGH_IPV4_NS_CHILD => sub {
         __x    # DELEGATION:NOT_ENOUGH_IPV4_NS_CHILD
           "Child does not list enough ({count}) nameservers ({nsname_list}) "
-          . "that resolve to IPv4 addresses ({addrs}). Lower limit set to {minimum}.",
+          . "that resolve to IPv4 addresses ({ns_ip_list}). Lower limit set to {minimum}.",
           @_;
     },
     NOT_ENOUGH_IPV4_NS_DEL => sub {
         __x    # DELEGATION:NOT_ENOUGH_IPV4_NS_DEL
           "Delegation does not list enough ({count}) nameservers ({nsname_list}) "
-          . "that resolve to IPv4 addresses ({addrs}). Lower limit set to {minimum}.",
+          . "that resolve to IPv4 addresses ({ns_ip_list}). Lower limit set to {minimum}.",
           @_;
     },
     NOT_ENOUGH_IPV6_NS_CHILD => sub {
         __x    # DELEGATION:NOT_ENOUGH_IPV6_NS_CHILD
           "Child does not list enough ({count}) nameservers ({nsname_list}) "
-          . "that resolve to IPv6 addresses ({addrs}). Lower limit set to {minimum}.",
+          . "that resolve to IPv6 addresses ({ns_ip_list}). Lower limit set to {minimum}.",
           @_;
     },
     NOT_ENOUGH_IPV6_NS_DEL => sub {
         __x    # DELEGATION:NOT_ENOUGH_IPV6_NS_DEL
           "Delegation does not list enough ({count}) nameservers ({nsname_list}) "
-          . "that resolve to IPv6 addresses ({addrs}). Lower limit set to {minimum}.",
+          . "that resolve to IPv6 addresses ({ns_ip_list}). Lower limit set to {minimum}.",
           @_;
     },
     NOT_ENOUGH_NS_CHILD => sub {
@@ -384,13 +384,13 @@ sub delegation01 {
         count       => scalar( @child_ns_ipv4 ),
         minimum     => $MINIMUM_NUMBER_OF_NAMESERVERS,
         nsname_list => join( q{;}, sort @child_ns_ipv4 ),
-        addrs       => join( q{;}, sort @child_ns_ipv4_addrs ),
+        ns_ip_list  => join( q{;}, sort @child_ns_ipv4_addrs ),
     };
     my $child_ns_ipv6_args = {
         count       => scalar( @child_ns_ipv6 ),
         minimum     => $MINIMUM_NUMBER_OF_NAMESERVERS,
         nsname_list => join( q{;}, sort @child_ns_ipv6 ),
-        addrs       => join( q{;}, sort @child_ns_ipv6_addrs ),
+        ns_ip_list  => join( q{;}, sort @child_ns_ipv6_addrs ),
     };
 
     if ( scalar( @child_ns_ipv4 ) >= $MINIMUM_NUMBER_OF_NAMESERVERS ) {
@@ -424,13 +424,13 @@ sub delegation01 {
         count       => scalar( @del_ns_ipv4 ),
         minimum     => $MINIMUM_NUMBER_OF_NAMESERVERS,
         nsname_list => join( q{;}, sort @del_ns_ipv4 ),
-        addrs       => join( q{;}, sort @del_ns_ipv4_addrs ),
+        ns_ip_list  => join( q{;}, sort @del_ns_ipv4_addrs ),
     };
     my $del_ns_ipv6_args = {
         count       => scalar( @del_ns_ipv6 ),
         minimum     => $MINIMUM_NUMBER_OF_NAMESERVERS,
         nsname_list => join( q{;}, sort @del_ns_ipv6 ),
-        addrs       => join( q{;}, sort @del_ns_ipv6_addrs ),
+        ns_ip_list  => join( q{;}, sort @del_ns_ipv6_addrs ),
     };
 
     if ( scalar( @del_ns_ipv4 ) >= $MINIMUM_NUMBER_OF_NAMESERVERS ) {
