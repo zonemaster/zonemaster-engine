@@ -159,7 +159,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     IN_BAILIWICK_ADDR_MISMATCH => sub {
         __x    # CONSISTENCY:IN_BAILIWICK_ADDR_MISMATCH
           'In-bailiwick name server listed at parent has a mismatch between glue data at parent '
-          . '({parent_addresses}) and any equivalent address record in child zone ({zone_addresses}).',
+          . '({ns_list_parent}) and any equivalent address record in child zone ({ns_list_zone}).',
           @_;
     },
     IPV4_DISABLED => sub {
@@ -231,8 +231,8 @@ Readonly my %TAG_DESCRIPTIONS => (
     OUT_OF_BAILIWICK_ADDR_MISMATCH => sub {
         __x    # CONSISTENCY:OUT_OF_BAILIWICK_ADDR_MISMATCH
           'Out-of-bailiwick name server listed at parent with glue record has a mismatch between '
-          . 'the glue at the parent ({parent_addresses}) and any equivalent address record found '
-          . 'in authoritative zone ({zone_addresses}).', @_;
+          . 'the glue at the parent ({ns_list_parent}) and any equivalent address record found '
+          . 'in authoritative zone ({ns_list_zone}).', @_;
     },
     SOA_RNAME => sub {
         __x    # CONSISTENCY:SOA_RNAME
@@ -740,8 +740,8 @@ sub consistency05 {
         push @results,
           info(
             IN_BAILIWICK_ADDR_MISMATCH => {
-                parent_addresses => join( q{;}, sort keys %strict_glue ),
-                zone_addresses => join( q{;}, sort keys %child_ib_strings ),
+                ns_list_parent => join( q{;}, sort keys %strict_glue ),
+                ns_list_zone  => join( q{;}, sort keys %child_ib_strings ),
             }
           );
     }
@@ -781,8 +781,8 @@ sub consistency05 {
             push @results,
               info(
                 OUT_OF_BAILIWICK_ADDR_MISMATCH => {
-                    parent_addresses => join( q{;}, sort @glue_strings ),
-                    zone_addresses => join( q{;}, sort keys %child_oob_strings ),
+                    ns_list_parent => join( q{;}, sort @glue_strings ),
+                    ns_list_zone  => join( q{;}, sort keys %child_oob_strings ),
                 }
               );
         }
