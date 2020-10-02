@@ -190,7 +190,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     ENOUGH_NS_DEL => sub {
         __x    # DELEGATION:ENOUGH_NS_DEL
-          "Parent lists enough ({count}) nameservers ({glue}). Lower limit set to {minimum}.", @_;
+          "Parent lists enough ({count}) nameservers ({nsname_list}). Lower limit set to {minimum}.", @_;
     },
     EXTRA_NAME_CHILD => sub {
         __x    # DELEGATION:EXTRA_NAME_CHILD
@@ -250,7 +250,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     NOT_ENOUGH_NS_DEL => sub {
         __x    # DELEGATION:NOT_ENOUGH_NS_DEL
-          "Parent does not list enough ({count}) nameservers ({glue}). Lower limit set to {minimum}.", @_;
+          "Parent does not list enough ({count}) nameservers ({nsname_list}). Lower limit set to {minimum}.", @_;
     },
     NO_IPV4_NS_CHILD => sub {
         __x    # DELEGATION:NO_IPV4_NS_CHILD
@@ -342,9 +342,9 @@ sub delegation01 {
     # Determine delegation NS names
     my @del_nsnames = map { $_->string } @{ Zonemaster::Engine::TestMethods->method2( $zone ) };
     my $del_nsnames_args = {
-        count   => scalar( @del_nsnames ),
-        minimum => $MINIMUM_NUMBER_OF_NAMESERVERS,
-        glue    => join( q{;}, sort @del_nsnames ),
+        count       => scalar( @del_nsnames ),
+        minimum     => $MINIMUM_NUMBER_OF_NAMESERVERS,
+        nsname_list => join( q{;}, sort @del_nsnames ),
     };
 
     # Check delegation NS names
@@ -352,8 +352,7 @@ sub delegation01 {
         push @results, info( ENOUGH_NS_DEL => $del_nsnames_args );
     }
     else {
-        push @results,
-          info( NOT_ENOUGH_NS_DEL => $del_nsnames_args );
+        push @results, info( NOT_ENOUGH_NS_DEL => $del_nsnames_args );
     }
 
     # Determine child NS names
@@ -369,8 +368,7 @@ sub delegation01 {
         push @results, info( ENOUGH_NS_CHILD => $child_nsnames_args );
     }
     else {
-        push @results,
-          info( NOT_ENOUGH_NS_CHILD => $child_nsnames_args );
+        push @results, info( NOT_ENOUGH_NS_CHILD => $child_nsnames_args );
     }
 
     # Determine child NS names with addresses
