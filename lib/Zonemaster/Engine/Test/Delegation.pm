@@ -381,16 +381,16 @@ sub delegation01 {
     my @child_ns_ipv6_addrs = uniq map { $_->address->short } grep { $_->address->version == 6 } @child_ns;
 
     my $child_ns_ipv4_args = {
-        count   => scalar( @child_ns_ipv4 ),
-        minimum => $MINIMUM_NUMBER_OF_NAMESERVERS,
-        ns_list => join( q{;}, sort @child_ns_ipv4 ),
-        addrs   => join( q{;}, sort @child_ns_ipv4_addrs ),
+        count       => scalar( @child_ns_ipv4 ),
+        minimum     => $MINIMUM_NUMBER_OF_NAMESERVERS,
+        nsname_list => join( q{;}, sort @child_ns_ipv4 ),
+        addrs       => join( q{;}, sort @child_ns_ipv4_addrs ),
     };
     my $child_ns_ipv6_args = {
-        count   => scalar( @child_ns_ipv6 ),
-        minimum => $MINIMUM_NUMBER_OF_NAMESERVERS,
-        ns_list => join( q{;}, sort @child_ns_ipv6 ),
-        addrs   => join( q{;}, sort @child_ns_ipv6_addrs ),
+        count       => scalar( @child_ns_ipv6 ),
+        minimum     => $MINIMUM_NUMBER_OF_NAMESERVERS,
+        nsname_list => join( q{;}, sort @child_ns_ipv6 ),
+        addrs       => join( q{;}, sort @child_ns_ipv6_addrs ),
     };
 
     if ( scalar( @child_ns_ipv4 ) >= $MINIMUM_NUMBER_OF_NAMESERVERS ) {
