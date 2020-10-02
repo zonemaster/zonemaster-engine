@@ -150,11 +150,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     EXTRA_ADDRESS_CHILD => sub {
         __x    # CONSISTENCY:EXTRA_ADDRESS_CHILD
-          'Child has extra nameserver IP address(es) not listed at parent ({addresses}).', @_;
-    },
-    EXTRA_ADDRESS_PARENT => sub {
-        __x    # CONSISTENCY:EXTRA_ADDRESS_PARENT
-          'Parent has extra nameserver IP address(es) not listed at child ({addresses}).', @_;
+          'Child has extra nameserver IP address(es) not listed at parent ({ns_ip_list}).', @_;
     },
     IN_BAILIWICK_ADDR_MISMATCH => sub {
         __x    # CONSISTENCY:IN_BAILIWICK_ADDR_MISMATCH
@@ -749,7 +745,7 @@ sub consistency05 {
         push @results,
           info(
             EXTRA_ADDRESS_CHILD => {
-                addresses => join( q{;}, sort @ib_extra_child ),
+                ns_ip_list => join( q{;}, sort @ib_extra_child ),
             }
           );
     }
@@ -789,12 +785,7 @@ sub consistency05 {
     } ## end for my $glue_name ( keys...)
 
     if ( !@ib_extra_child && !@ib_mismatch && !@oob_mismatch ) {
-        push @results,
-          info(
-            ADDRESSES_MATCH => {
-                addresses => join( q{;}, sort @ib_match, @oob_match ),
-            }
-          );
+        push @results, info( ADDRESSES_MATCH => {} );
     }
 
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
