@@ -596,8 +596,8 @@ sub consistency04 {
             next;
         }
         else {
-            push @{ $ns_sets{ join( q{,}, @ns ) } }, $local_ns->name->string . q{/} . $local_ns->address->short;
-            $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short }++;
+            push @{ $ns_sets{ join( q{,}, @ns ) } }, $local_ns->string;
+            $nsnames_and_ip{ $local_ns->string }++;
         }
     } ## end foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods...})
 
