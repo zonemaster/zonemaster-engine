@@ -138,7 +138,7 @@ sub metadata {
 Readonly my %TAG_DESCRIPTIONS => (
     ARE_AUTHORITATIVE => sub {
         __x    # DELEGATION:ARE_AUTHORITATIVE
-          "All these nameservers are confirmed to be authoritative : {nsset}.", @_;
+          "All these nameservers are confirmed to be authoritative : {nsname_list}.", @_;
     },
     CHILD_DISTINCT_NS_IP => sub {
         __x    # DELEGATION:CHILD_DISTINCT_NS_IP
@@ -643,7 +643,7 @@ sub delegation04 {
         push @results,
           info(
             ARE_AUTHORITATIVE => {
-                nsset => join( q{,}, uniq sort @authoritatives ),
+                nsname_list => join( q{;}, uniq sort @authoritatives ),
             }
           );
     }

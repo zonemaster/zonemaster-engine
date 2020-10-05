@@ -200,11 +200,11 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     NS_SET => sub {
         __x    # CONSISTENCY:NS_SET
-          'Saw NS set ({nsset}) on following nameserver set : {ns_list}.', @_;
+          'Saw NS set ({nsname_list_response}) on following nameserver set : {ns_list_servers}.', @_;
     },
     ONE_NS_SET => sub {
         __x    # CONSISTENCY:ONE_NS_SET
-          "A single NS set was found ({nsset}).", @_;
+          "A single NS set was found ({nsname_list}).", @_;
     },
     ONE_SOA_MNAME => sub {
         __x    # CONSISTENCY:ONE_SOA_MNAME
@@ -596,18 +596,13 @@ sub consistency04 {
             next;
         }
         else {
-            push @{ $ns_sets{ join( q{,}, @ns ) } }, $local_ns->string;
+            push @{ $ns_sets{ join( q{;}, @ns ) } }, $local_ns->string;
             $nsnames_and_ip{ $local_ns->string }++;
         }
     } ## end foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods...})
 
     if ( scalar( keys %ns_sets ) == 1 ) {
-        push @results,
-          info(
-            ONE_NS_SET => {
-                nsset => ( keys %ns_sets )[0],
-            }
-          );
+        push @results, info( ONE_NS_SET => { nsname_list => ( keys %ns_sets )[0] });
     }
     elsif ( scalar( keys %ns_sets ) ) {
         push @results,
@@ -620,8 +615,8 @@ sub consistency04 {
             push @results,
               info(
                 NS_SET => {
-                    nsset   => $ns_set,
-                    ns_list => join( q{;}, @{ $ns_sets{$ns_set} } ),
+                    nsname_list_response => $ns_set,
+                    ns_list_servers      => join( q{;}, @{ $ns_sets{$ns_set} } ),
                 }
               );
         }
