@@ -5,6 +5,7 @@ docs/Installation.md
 docs/logentry_args.md
 docs/Profiles.md
 docs/Translation.pod
+docs/Translation-translators.md
 inc/Module/Install.pm
 inc/Module/Install/Base.pm
 inc/Module/Install/Can.pm
