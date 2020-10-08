@@ -1,10 +1,11 @@
 package Zonemaster::Engine::Profile;
 
-use version; our $VERSION = version->declare("v1.2.15");
-
 use 5.014002;
+
 use strict;
 use warnings;
+
+use version; our $VERSION = version->declare( "v1.2.16" );
 
 use File::ShareDir qw[dist_file];
 use JSON::PP qw( encode_json decode_json );
@@ -72,15 +73,48 @@ my %profile_properties_details = (
     q{asnroots} => {
         type    => q{ArrayRef},
         test    => sub {
-                          foreach my $ndd ( @{$_[0]} ) {
-                              die "Property asnroots has a NULL item" if not defined $ndd;
-                              die "Property asnroots has a non scalar item" if not defined ref($ndd);
-                              die "Property asnroots has an item too long" if length($ndd) > 255;
-                              foreach my $label ( split /\./, $ndd ) {
-                                  die "Property asnroots has a non domain name item" if $label !~ /^[a-z0-9](?:[-a-z0-9]{0,61}[a-z0-9])?$/;
-                              }
-                          }
-                      }
+            foreach my $ndd ( @{$_[0]} ) {
+                die "Property asnroots has a NULL item" if not defined $ndd;
+                die "Property asnroots has a non scalar item" if not defined ref($ndd);
+                die "Property asnroots has an item too long" if length($ndd) > 255;
+                foreach my $label ( split /[.]/, $ndd ) {
+                    die "Property asnroots has a non domain name item" if $label !~ /^[a-z0-9](?:[-a-z0-9]{0,61}[a-z0-9])?$/;
+                }
+            }
+        }
+    },
+    q{asn_db.style} => {
+        type    => q{Str},
+        test    => sub {
+            if ( $_[0] ne q{Cymru} and $_[0] ne q{RIPE} ) {
+                die "Property asn_db.style has 2 possible values : Cymru or RIPE (case sensitive)";
+            }
+        },
+        default => q{Cymru}
+    },
+    q{asn_db.servers} => {
+        type    => q{HashRef},
+        test    => sub {
+            foreach my $db_style ( keys %{$_[0]} ) {
+                if ( $db_style ne q{Cymru} and $db_style ne q{RIPE} ) {
+                    die "Property asn_db.servers keys have 2 possible values : Cymru or RIPE (case sensitive)";
+                }
+                if ( not scalar @{ ${$_[0]}{$db_style} } ) {
+                    die "Property asn_db.servers.$db_style has no items";
+                }
+                else {
+                    foreach my $ndd ( @{ ${$_[0]}{$db_style} } ) {
+                        die "Property asn_db.servers.$db_style has a NULL item" if not defined $ndd;
+                        die "Property asn_db.servers.$db_style has a non scalar item" if not defined ref($ndd);
+                        die "Property asn_db.servers.$db_style has an item too long" if length($ndd) > 255;
+                        foreach my $label ( split /[.]/, $ndd ) {
+                            die "Property asn_db.servers.$db_style has a non domain name item" if $label !~ /^[a-z0-9](?:[-a-z0-9]{0,61}[a-z0-9])?$/;
+                        }
+                    }
+                }
+            }
+        },
+        default => { Cymru => [ "asnlookup.zonemaster.net" ] }
     },
     q{logfilter} => {
         type    => q{HashRef},
@@ -101,8 +135,8 @@ sub _init_profile_properties_details_defaults {
     my $json           = read_file( $default_file );
     my $default_values = decode_json( $json );
     foreach my $property_name ( keys %profile_properties_details ) {
-        if ( defined _get_value_from_nested_hash( $default_values, split /\./, $property_name ) ) {
-            $profile_properties_details{$property_name}{default} = clone _get_value_from_nested_hash( $default_values, split /\./, $property_name );
+        if ( defined _get_value_from_nested_hash( $default_values, split /[.]/, $property_name ) ) {
+            $profile_properties_details{$property_name}{default} = clone _get_value_from_nested_hash( $default_values, split /[.]/, $property_name );
         }
     }
 }
@@ -191,9 +225,9 @@ sub get {
     die "Unknown property '$property_name'"  if not exists $profile_properties_details{$property_name};
 
     if ( $profile_properties_details{$property_name}->{type} eq q{ArrayRef} or $profile_properties_details{$property_name}->{type} eq q{HashRef} ) {
-        return clone _get_value_from_nested_hash( $self->{q{profile}}, split /\./, $property_name );
+        return clone _get_value_from_nested_hash( $self->{q{profile}}, split /[.]/, $property_name );
     } else {
-        return _get_value_from_nested_hash( $self->{q{profile}}, split /\./, $property_name );
+        return _get_value_from_nested_hash( $self->{q{profile}}, split /[.]/, $property_name );
     }
 }
 
@@ -271,8 +305,8 @@ sub _set {
         $profile_properties_details{$property_name}->{test}->( $value );
     }
 
-    return _set_value_to_nested_hash( $self->{q{profile}}, $value, split /\./, $property_name );
-}   
+    return _set_value_to_nested_hash( $self->{q{profile}}, $value, split /[.]/, $property_name );
+}
 
 sub merge {
     my ( $self, $other_profile ) = @_;
@@ -280,8 +314,8 @@ sub merge {
     die "Merge with ", __PACKAGE__, " only" if ref($other_profile) ne __PACKAGE__;
 
     foreach my $property_name ( keys %profile_properties_details ) {
-        if ( defined _get_value_from_nested_hash( $other_profile->{q{profile}}, split /\./, $property_name ) ) {
-            $self->_set( q{JSON}, $property_name, _get_value_from_nested_hash( $other_profile->{q{profile}}, split /\./, $property_name ) );
+        if ( defined _get_value_from_nested_hash( $other_profile->{q{profile}}, split /[.]/, $property_name ) ) {
+            $self->_set( q{JSON}, $property_name, _get_value_from_nested_hash( $other_profile->{q{profile}}, split /[.]/, $property_name ) );
         }
     }
     return $other_profile->{q{profile}};
@@ -294,8 +328,8 @@ sub from_json {
     my %paths;
     _get_profile_paths(\%paths, $internal);
     foreach my $property_name ( keys %paths ) {
-        if ( defined _get_value_from_nested_hash( $internal, split /\./, $property_name ) ) {
-            $new->_set( q{JSON}, $property_name, _get_value_from_nested_hash( $internal, split /\./, $property_name ) );
+        if ( defined _get_value_from_nested_hash( $internal, split /[.]/, $property_name ) ) {
+            $new->_set( q{JSON}, $property_name, _get_value_from_nested_hash( $internal, split /[.]/, $property_name ) );
         }
     }
 

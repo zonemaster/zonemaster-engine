@@ -43,25 +43,26 @@ my %res;
 %res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{connectivity}, q{afnic.fr} );
 ok( $res{NAMESERVER_HAS_UDP_53},        q{Nameserver has UDP port 53 reachable} );
 ok( $res{NAMESERVER_HAS_TCP_53},        q{Nameserver has TCP port 53 reachable} );
-ok( $res{NAMESERVERS_WITH_MULTIPLE_AS}, q{Nameservers with multiple AS} );
-ok( !$res{NAMESERVERS_WITH_UNIQ_AS},    q{Nameservers with multiple AS (double check)} );
-ok( $res{IPV4_ASN},                     'IPv4 AS list' );
-ok( $res{IPV6_ASN},                     'IPv6 AS list' );
+ok( $res{IPV4_DIFFERENT_ASN},           q{IPv4 Nameservers with multiple AS} );
+ok( !$res{IPV4_ONE_ASN},                q{IPv4 Nameservers with multiple AS (double check)} );
+ok( !$res{IPV4_SAME_ASN},               q{IPv4 Nameservers with multiple AS (triple check)} );
+ok( $res{IPV6_DIFFERENT_ASN},           q{IPv6 Nameservers with multiple AS} );
+ok( !$res{IPV6_ONE_ASN},                q{IPv6 Nameservers with multiple AS (double check)} );
+ok( !$res{IPV6_SAME_ASN},               q{IPv6 Nameservers with multiple AS (triple check)} );
 
 %res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{connectivity}, q{001.tf} );
-ok( $res{NAMESERVERS_IPV6_WITH_UNIQ_AS}, q{Nameservers IPv6 with Uniq AS} );
+ok( $res{IPV6_ONE_ASN}, q{Nameservers IPv6 with Uniq AS} );
 
 %res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{connectivity}, q{go.tf} );
-ok( $res{NAMESERVERS_WITH_UNIQ_AS},      q{Nameservers with Uniq AS} );
-ok( !$res{NAMESERVERS_WITH_MULTIPLE_AS}, q{Nameservers with Uniq AS (double check)} );
+ok( $res{IPV4_ONE_ASN},      q{IPv4 Nameservers with Uniq AS} );
+ok( !$res{IPV4_DIFFERENT_ASN}, q{IPv4 Nameservers with Uniq AS (double check)} );
 
 %res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{connectivity}, q{iphones.se} );
 ok( $res{NAMESERVER_NO_UDP_53}, q{Nameserver UDP port 53 unreachable} );
 ok( $res{NAMESERVER_NO_TCP_53}, q{Nameserver TCP port 53 unreachable} );
 
 %res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{connectivity}, q{zut-root.rd.nic.fr} );
-ok( $res{NAMESERVERS_WITH_UNIQ_AS},      q{Nameservers with Uniq AS} );
-ok( $res{NAMESERVERS_IPV4_WITH_UNIQ_AS}, q{Nameservers IPv4 with Uniq AS} );
+ok( $res{IPV4_ONE_ASN},      q{Nameservers with Uniq AS} );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Nameserver->save( $datafile );

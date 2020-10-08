@@ -25,7 +25,7 @@ is( scalar( @asn3 ), 1, 'Only one result' );
 ok $asn3[0] >= 36000, '2001:503:ba3e::2:30 is in ' . $asn3[0];
 
 my ( $asn4, $prefix4 ) = Zonemaster::Engine::ASNLookup->get_with_prefix( '192.168.0.1' );
-ok( !$asn4, 'RFC1918 address is in no AS' );
+ok( scalar @{$asn4} == 0, 'RFC1918 address is in no AS' );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Nameserver->save( $datafile );

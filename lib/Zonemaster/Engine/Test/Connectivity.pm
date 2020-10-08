@@ -70,22 +70,19 @@ sub metadata {
         ],
         connectivity03 => [
             qw(
-              NAMESERVERS_IPV4_NO_AS
-              NAMESERVERS_IPV4_WITH_MULTIPLE_AS
-              NAMESERVERS_IPV4_WITH_UNIQ_AS
-              NAMESERVERS_IPV6_NO_AS
-              NAMESERVERS_IPV6_WITH_MULTIPLE_AS
-              NAMESERVERS_IPV6_WITH_UNIQ_AS
-              NAMESERVERS_NO_AS
-              NAMESERVERS_WITH_MULTIPLE_AS
-              NAMESERVERS_WITH_UNIQ_AS
-              IPV4_ASN
-              IPV6_ASN
               ASN_INFOS_RAW
               ASN_INFOS_ANNOUNCE_BY
               ASN_INFOS_ANNOUNCE_IN
+              EMPTY_ASN_SET
+              ERROR_ASN_DATABASE
               IPV4_DISABLED
+              IPV4_DIFFERENT_ASN
+              IPV4_ONE_ASN
+              IPV4_SAME_ASN
               IPV6_DISABLED
+              IPV6_DIFFERENT_ASN
+              IPV6_ONE_ASN
+              IPV6_SAME_ASN
               TEST_CASE_END
               TEST_CASE_START
               )
@@ -94,41 +91,37 @@ sub metadata {
 } ## end sub metadata
 
 Readonly my %TAG_DESCRIPTIONS => (
-    NAMESERVERS_IPV4_WITH_UNIQ_AS => sub {
-        __x    # CONNECTIVITY:NAMESERVERS_IPV4_WITH_UNIQ_AS
-          "All nameservers in the delegation have IPv4 addresses in the same AS ({asn}).", @_;
+    ERROR_ASN_DATABASE => sub {
+        __x    # CONNECTIVITY:ERROR_ASN_DATABASE
+          'AS Database error. No data to analyze.', @_;
     },
-    NAMESERVERS_IPV6_WITH_UNIQ_AS => sub {
-        __x    # CONNECTIVITY:NAMESERVERS_IPV6_WITH_UNIQ_AS
-          "All nameservers in the delegation have IPv6 addresses in the same AS ({asn}).", @_;
+    EMPTY_ASN_SET => sub {
+        __x    # CONNECTIVITY:EMPTY_ASN_SET
+          'AS database returned no informations for IP address {ns_ip}.', @_;
     },
-    NAMESERVERS_WITH_MULTIPLE_AS => sub {
-        __x    # CONNECTIVITY:NAMESERVERS_WITH_MULTIPLE_AS
-          'Domain\'s authoritative nameservers do not belong to the same AS.', @_;
+    IPV4_SAME_ASN => sub {
+        __x    # CONNECTIVITY:IPV4_SAME_ASN
+          'All nameservers in the delegation have IPv4 addresses in the same AS set ({asn_list}).', @_;
     },
-    NAMESERVERS_WITH_UNIQ_AS => sub {
-        __x    # CONNECTIVITY:NAMESERVERS_WITH_UNIQ_AS
-          "All nameservers in the delegation are in the same AS ({asn}).", @_;
+    IPV4_ONE_ASN => sub {
+        __x    # CONNECTIVITY:IPV4_ONE_ASN
+          'All nameservers in the delegation have IPv4 addresses in the same AS ({asn}).', @_;
     },
-    NAMESERVERS_IPV4_NO_AS => sub {
-        __x    # CONNECTIVITY:NAMESERVERS_IPV4_NO_AS
-          'No IPv4 nameserver address is in an AS.', @_;
+    IPV4_DIFFERENT_ASN => sub {
+        __x    # CONNECTIVITY:IPV4_DIFFERENT_ASN
+          'Authoritative IPv4 nameservers are in more than one AS ({asn_list}).', @_;
     },
-    NAMESERVERS_IPV4_WITH_MULTIPLE_AS => sub {
-        __x    # CONNECTIVITY:NAMESERVERS_IPV4_WITH_MULTIPLE_AS
-          'Authoritative IPv4 nameservers are in more than one AS ({asn}).', @_;
+    IPV6_SAME_ASN => sub {
+        __x    # CONNECTIVITY:IPV6_SAME_ASN
+          'All nameservers in the delegation have IPv6 addresses in the same AS set ({asn_list}).', @_;
     },
-    NAMESERVERS_IPV6_NO_AS => sub {
-        __x    # CONNECTIVITY:NAMESERVERS_IPV6_NO_AS
-          'No IPv6 nameserver address is in an AS.', @_;
+    IPV6_ONE_ASN => sub {
+        __x    # CONNECTIVITY:IPV6_ONE_ASN
+          'All nameservers in the delegation have IPv6 addresses in the same AS ({asn}).', @_;
     },
-    NAMESERVERS_IPV6_WITH_MULTIPLE_AS => sub {
-        __x    # CONNECTIVITY:NAMESERVERS_IPV6_WITH_MULTIPLE_AS
-          'Authoritative IPv6 nameservers are in more than one AS.', @_;
-    },
-    NAMESERVERS_NO_AS => sub {
-        __x    # CONNECTIVITY:NAMESERVERS_NO_AS
-          'No nameserver address is in an AS.', @_;
+    IPV6_DIFFERENT_ASN => sub {
+        __x    # CONNECTIVITY:IPV6_DIFFERENT_ASN
+          'Authoritative IPv6 nameservers are in more than one AS ({asn_list}).', @_;
     },
     NAMESERVER_HAS_TCP_53 => sub {
         __x    # CONNECTIVITY:NAMESERVER_HAS_TCP_53
@@ -312,113 +305,116 @@ sub connectivity03 {
     my @v6ips = values %{ $ips{$IP_VERSION_6} };
 
     my @v4asns;
+    my @v4asnsets;
     my @v6asns;
+    my @v6asnsets;
 
     foreach my $v4ip ( @v4ips ) {
-        my ( $asnref, $prefix, $raw ) = Zonemaster::Engine::ASNLookup->get_with_prefix( $v4ip );
-        if ( $raw ) {
-            push @results,
-              info(
-                ASN_INFOS_RAW => {
-                    ns_ip => $v4ip->short,
-                    data  => $raw,
-                }
-              );
+        my ( $asnref, $prefix, $raw, $ret_code ) = Zonemaster::Engine::ASNLookup->get_with_prefix( $v4ip );
+        if ( defined $ret_code and ( $ret_code eq q{ERROR_ASN_DATABASE} or $ret_code eq q{EMPTY_ASN_SET} ) ) {
+            push @results, info( $ret_code => { ns_ip => $v4ip->short } );
         }
-        if ( $asnref ) {
-            push @results,
-              info(
-                ASN_INFOS_ANNOUNCE_BY => {
-                    ns_ip => $v4ip->short,
-                    asn   => join( q{,}, @{$asnref} ),
-                }
-              );
-            push @v4asns, @{$asnref};
-        }
-        if ( $prefix ) {
-            push @results,
-              info(
-                ASN_INFOS_ANNOUNCE_IN => {
-                    ns_ip  => $v4ip->short,
-                    prefix => sprintf "%s/%d",
-                    $prefix->ip, $prefix->prefixlen,
-                }
-              );
+        else {
+            if ( $raw ) {
+                push @results,
+                  info(
+                    ASN_INFOS_RAW => {
+                        ns_ip => $v4ip->short,
+                        data  => $raw,
+                    }
+                  );
+            }
+            if ( $asnref ) {
+                push @results,
+                  info(
+                    ASN_INFOS_ANNOUNCE_BY => {
+                        ns_ip => $v4ip->short,
+                        asn   => join( q{,}, sort @{$asnref} ),
+                    }
+                  );
+                push @v4asns, @{$asnref};
+                push @v4asnsets, join( q{,}, sort @{$asnref} );
+            }
+            if ( $prefix ) {
+                push @results,
+                  info(
+                    ASN_INFOS_ANNOUNCE_IN => {
+                        ns_ip  => $v4ip->short,
+                        prefix => sprintf "%s/%d",
+                        $prefix->ip, $prefix->prefixlen,
+                    }
+                  );
+            }
         }
     } ## end foreach my $v4ip ( @v4ips )
     foreach my $v6ip ( @v6ips ) {
-        my ( $asnref, $prefix, $raw ) = Zonemaster::Engine::ASNLookup->get_with_prefix( $v6ip );
-        if ( $raw ) {
-            push @results,
-              info(
-                ASN_INFOS_RAW => {
-                    ns_ip => $v6ip->short,
-                    data  => $raw,
-                }
-              );
+        my ( $asnref, $prefix, $raw, $ret_code ) = Zonemaster::Engine::ASNLookup->get_with_prefix( $v6ip );
+        if ( defined $ret_code and ( $ret_code eq q{ERROR_ASN_DATABASE} or $ret_code eq q{EMPTY_ASN_SET} ) ) {
+            push @results, info( $ret_code => { ns_ip => $v6ip->short } );
         }
-        if ( $asnref ) {
-            push @results,
-              info(
-                ASN_INFOS_ANNOUNCE_BY => {
-                    ns_ip => $v6ip->short,
-                    asn   => join( q{,}, @{$asnref} ),
-                }
-              );
-            push @v6asns, @{$asnref};
-        }
-        if ( $prefix ) {
-            push @results,
-              info(
-                ASN_INFOS_ANNOUNCE_IN => {
-                    ns_ip  => $v6ip->short,
-                    prefix => sprintf "%s/%d",
-                    $prefix->short, $prefix->prefixlen,
-                }
-              );
+        else {
+            if ( $raw ) {
+                push @results,
+                  info(
+                    ASN_INFOS_RAW => {
+                        ns_ip => $v6ip->short,
+                        data  => $raw,
+                    }
+                  );
+            }
+            if ( $asnref ) {
+                push @results,
+                  info(
+                    ASN_INFOS_ANNOUNCE_BY => {
+                        ns_ip => $v6ip->short,
+                        asn   => join( q{,}, sort @{$asnref} ),
+                    }
+                  );
+                push @v6asns, @{$asnref};
+                push @v6asnsets, join( q{,}, sort @{$asnref} );
+            }
+            if ( $prefix ) {
+                push @results,
+                  info(
+                    ASN_INFOS_ANNOUNCE_IN => {
+                        ns_ip  => $v6ip->short,
+                        prefix => sprintf "%s/%d",
+                        $prefix->short, $prefix->prefixlen,
+                    }
+                  );
+            }
         }
     } ## end foreach my $v6ip ( @v6ips )
 
-    @v4asns = uniq @v4asns;
-    @v6asns = uniq @v6asns;
-    my @all_asns = uniq( @v4asns, @v6asns );
+    @v4asns = uniq sort { $a <=> $b } @v4asns;
+    @v4asnsets = uniq sort { $a <=> $b } @v4asnsets;
+    @v6asns = uniq sort { $a <=> $b } @v6asns;
+    @v6asnsets = uniq sort { $a <=> $b } @v6asnsets;
 
-    if ( @v4asns ) {
-        push @results, info( IPV4_ASN => { asn => \@v4asns } );
-    }
-    if ( @v6asns ) {
-        push @results, info( IPV6_ASN => { asn => \@v6asns } );
-    }
-
-    if ( @v4asns == 1 ) {
-        push @results, info( NAMESERVERS_IPV4_WITH_UNIQ_AS => { asn => $v4asns[0] } );
-    }
-    elsif ( @v4asns > 1 ) {
-        push @results, info( NAMESERVERS_IPV4_WITH_MULTIPLE_AS => { asn => \@v4asns } );
-    }
-    else {
-        push @results, info( NAMESERVERS_IPV4_NO_AS => {} );
+    if ( scalar @v4asns ) {
+        if ( @v4asns == 1 ) {
+            push @results, info( IPV4_ONE_ASN => { asn => $v4asns[0] } );
+        }
+        elsif ( @v4asnsets == 1 ) {
+            push @results, info( IPV4_SAME_ASN => { asn_list => $v4asnsets[0] } );
+        }
+        else {
+            push @results, info( IPV4_DIFFERENT_ASN => { asn_list => join( q{,}, @v4asns ) } );
+        }
     }
 
-    if ( @v6asns == 1 ) {
-        push @results, info( NAMESERVERS_IPV6_WITH_UNIQ_AS => { asn => $v6asns[0] } );
-    }
-    elsif ( @v6asns > 1 ) {
-        push @results, info( NAMESERVERS_IPV6_WITH_MULTIPLE_AS => { asn => \@v6asns } );
-    }
-    else {
-        push @results, info( NAMESERVERS_IPV6_NO_AS => {} );
+    if ( scalar @v6asns ) {
+        if ( @v6asns == 1 ) {
+            push @results, info( IPV6_ONE_ASN => { asn => $v6asns[0] } );
+        }
+        elsif ( @v6asnsets == 1 ) {
+            push @results, info( IPV6_SAME_ASN => { asn_list => $v6asnsets[0] } );
+        }
+        else {
+            push @results, info( IPV6_DIFFERENT_ASN => { asn_list => join( q{,}, @v6asns ) } );
+        }
     }
 
-    if ( @all_asns == 1 ) {
-        push @results, info( NAMESERVERS_WITH_UNIQ_AS => { asn => $all_asns[0] } );
-    }
-    elsif ( @all_asns > 1 ) {
-        push @results, info( NAMESERVERS_WITH_MULTIPLE_AS => { asn => \@all_asns } );
-    }
-    else {
-        push @results, info( NAMESERVERS_NO_AS => {} );    # Shouldn't pass Basic
-    }
 
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub connectivity03
