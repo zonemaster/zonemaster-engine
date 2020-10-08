@@ -2,13 +2,7 @@
 
 ## Aggregate list
 
-This table contains prefixes of argument names. An optional suffix may be added
-for disambiguation and/or clarity.
-Suffixes must be in snake_case, they must start with an underscore, and it must
-be unambiguous from the table where the base name ends and where the suffix
-begins.
-
-| Base name   | Type of value        | Description and formatting                                  |
+| Argument    | Type of value        | Description and formatting                                  |
 |-------------|----------------------|-------------------------------------------------------------|
 | nsname      | Domain name          | The domain name of a name server.                           |
 | ns_ip       | IP address           | The IP address of a name server.                            |
