@@ -200,7 +200,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     NS_SET => sub {
         __x    # CONSISTENCY:NS_SET
-          'Saw NS set ({nsset}) on following nameserver set : {servers}.', @_;
+          'Saw NS set ({nsname_list}) on following nameserver set : {servers}.', @_;
     },
     ONE_NS_SET => sub {
         __x    # CONSISTENCY:ONE_NS_SET
@@ -615,8 +615,8 @@ sub consistency04 {
             push @results,
               info(
                 NS_SET => {
-                    nsset   => $ns_set,
-                    servers => join( q{;}, @{ $ns_sets{$ns_set} } ),
+                    nsname_list => $ns_set,
+                    servers     => join( q{;}, @{ $ns_sets{$ns_set} } ),
                 }
               );
         }
