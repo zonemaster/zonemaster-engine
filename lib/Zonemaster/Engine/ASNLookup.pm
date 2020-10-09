@@ -4,7 +4,7 @@ use 5.014002;
 
 use warnings;
 
-use version; our $VERSION = version->declare( "v1.0.8" );
+use version; our $VERSION = version->declare( "v1.0.9" );
 
 use Zonemaster::Engine;
 use Zonemaster::Engine::Net::IP;
@@ -14,13 +14,13 @@ use Zonemaster::Engine::Profile;
 use IO::Socket;
 use IO::Socket::INET;
 
-our @db_servers;
+our @db_sources;
 our $db_style;
 
 sub get_with_prefix {
     my ( $class, $ip ) = @_;
 
-    if ( not @db_servers ) {
+    if ( not @db_sources ) {
         # 
         # Backward compatibility in case asnroots is still configured in profile
         # but we prefer new model if present
@@ -30,13 +30,13 @@ sub get_with_prefix {
             @roots = map { Zonemaster::Engine->zone( $_ ) } @{ Zonemaster::Engine::Profile->effective->get( q{asnroots} ) };
         }
         if ( scalar @roots ) {
-            @db_servers = @roots;
+            @db_sources = @roots;
             $db_style = q{cymru};
         }
         else {
             $db_style = Zonemaster::Engine::Profile->effective->get( q{asn_db.style} );
-            my %db_servers = %{ Zonemaster::Engine::Profile->effective->get( q{asn_db.servers} ) };
-            @db_servers = map { Zonemaster::Engine->zone( $_ ) } @{ $db_servers{ $db_style } };
+            my %db_sources = %{ Zonemaster::Engine::Profile->effective->get( q{asn_db.servers} ) };
+            @db_sources = map { Zonemaster::Engine->zone( $_ ) } @{ $db_sources{ $db_style } };
         }
     }
 
@@ -66,15 +66,15 @@ sub _cymru_asn_lookup {
     my @asns = ();
 
     my $reverse = $ip->reverse_ip;
-    foreach my $db_server ( @db_servers ) {
-        my $domain = $db_server->name->string;
+    foreach my $db_source ( @db_sources ) {
+        my $domain = $db_source->name->string;
         my $pair   = {
             'in-addr.arpa.' => "origin.$domain",
             'ip6.arpa.'     => "origin6.$domain",
         };
         foreach my $root ( keys %{$pair} ) {
             if ( $reverse =~ s/$root/$pair->{$root}/ix ) {
-                my $p = $db_server->query_persistent( $reverse, 'TXT' );
+                my $p = $db_source->query_persistent( $reverse, 'TXT' );
                 my @rr;
                 if ( $p ) {
                     @rr = $p->get_records( 'TXT' );
@@ -110,7 +110,7 @@ sub _cymru_asn_lookup {
                 }
             }
         }
-    } ## end foreach my $db_server ( @db_servers )
+    } ## end foreach my $db_source ( @db_sources )
     return;
 }
 
@@ -118,8 +118,8 @@ sub _ripe_asn_lookup {
     my $ip = shift;
     my @asns = ();
 
-    foreach my $db_server ( @db_servers ) {
-        my $socket = IO::Socket::INET->new( PeerAddr => $db_server->name->string, PeerPort => q{43}, Proto => q{tcp} ) or return \@asns, undef, q{}, q{ERROR_ASN_DATABASE};
+    foreach my $db_source ( @db_sources ) {
+        my $socket = IO::Socket::INET->new( PeerAddr => $db_source->name->string, PeerPort => q{43}, Proto => q{tcp} ) or return \@asns, undef, q{}, q{ERROR_ASN_DATABASE};
 
         printf $socket "-F -M %s\n", $ip->short();
 

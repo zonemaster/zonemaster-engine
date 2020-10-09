@@ -93,23 +93,23 @@ my %profile_properties_details = (
         },
         default => q{cymru}
     },
-    q{asn_db.servers} => {
+    q{asn_db.sources} => {
         type    => q{HashRef},
         test    => sub {
             foreach my $db_style ( keys %{$_[0]} ) {
                 if ( lc($db_style) ne q{cymru} and lc($db_style) ne q{ripe} ) {
-                    die "Property asn_db.servers keys have 2 possible values : Cymru or RIPE (case insensitive)";
+                    die "Property asn_db.sources keys have 2 possible values : Cymru or RIPE (case insensitive)";
                 }
                 if ( not scalar @{ ${$_[0]}{$db_style} } ) {
-                    die "Property asn_db.servers.$db_style has no items";
+                    die "Property asn_db.sources.$db_style has no items";
                 }
                 else {
                     foreach my $ndd ( @{ ${$_[0]}{$db_style} } ) {
-                        die "Property asn_db.servers.$db_style has a NULL item" if not defined $ndd;
-                        die "Property asn_db.servers.$db_style has a non scalar item" if not defined ref($ndd);
-                        die "Property asn_db.servers.$db_style has an item too long" if length($ndd) > 255;
+                        die "Property asn_db.sources.$db_style has a NULL item" if not defined $ndd;
+                        die "Property asn_db.sources.$db_style has a non scalar item" if not defined ref($ndd);
+                        die "Property asn_db.sources.$db_style has an item too long" if length($ndd) > 255;
                         foreach my $label ( split /[.]/, $ndd ) {
-                            die "Property asn_db.servers.$db_style has a non domain name item" if $label !~ /^[a-z0-9](?:[-a-z0-9]{0,61}[a-z0-9])?$/;
+                            die "Property asn_db.sources.$db_style has a non domain name item" if $label !~ /^[a-z0-9](?:[-a-z0-9]{0,61}[a-z0-9])?$/;
                         }
                     }
                     ${$_[0]}{lc($db_style)} = delete ${$_[0]}{$db_style};
