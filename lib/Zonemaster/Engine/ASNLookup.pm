@@ -4,7 +4,7 @@ use 5.014002;
 
 use warnings;
 
-use version; our $VERSION = version->declare( "v1.0.7" );
+use version; our $VERSION = version->declare( "v1.0.8" );
 
 use Zonemaster::Engine;
 use Zonemaster::Engine::Net::IP;
@@ -21,14 +21,17 @@ sub get_with_prefix {
     my ( $class, $ip ) = @_;
 
     if ( not @db_servers ) {
+        # 
         # Backward compatibility in case asnroots is still configured in profile
+        # but we prefer new model if present
+        # 
         my @roots;
         if ( Zonemaster::Engine::Profile->effective->get( q{asnroots} ) ) {
             @roots = map { Zonemaster::Engine->zone( $_ ) } @{ Zonemaster::Engine::Profile->effective->get( q{asnroots} ) };
         }
         if ( scalar @roots ) {
             @db_servers = @roots;
-            $db_style = q{Cymru};
+            $db_style = q{cymru};
         }
         else {
             $db_style = Zonemaster::Engine::Profile->effective->get( q{asn_db.style} );
@@ -41,10 +44,10 @@ sub get_with_prefix {
         $ip = Zonemaster::Engine::Net::IP->new( $ip );
     }
 
-    if ( $db_style eq q{Cymru} ) {
+    if ( $db_style eq q{cymru} ) {
         return _cymru_asn_lookup($ip);
     }
-    elsif ( $db_style eq q{RIPE} ) {
+    elsif ( $db_style eq q{ripe} ) {
         return _ripe_asn_lookup($ip);
     }
     else {

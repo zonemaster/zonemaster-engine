@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare( "v1.2.16" );
+use version; our $VERSION = version->declare( "v1.2.17" );
 
 use File::ShareDir qw[dist_file];
 use JSON::PP qw( encode_json decode_json );
@@ -86,18 +86,19 @@ my %profile_properties_details = (
     q{asn_db.style} => {
         type    => q{Str},
         test    => sub {
-            if ( $_[0] ne q{Cymru} and $_[0] ne q{RIPE} ) {
-                die "Property asn_db.style has 2 possible values : Cymru or RIPE (case sensitive)";
+            if ( lc($_[0]) ne q{cymru} and lc($_[0]) ne q{ripe} ) {
+                die "Property asn_db.style has 2 possible values : Cymru or RIPE (case insensitive)";
             }
+            $_[0] = lc($_[0]);
         },
-        default => q{Cymru}
+        default => q{cymru}
     },
     q{asn_db.servers} => {
         type    => q{HashRef},
         test    => sub {
             foreach my $db_style ( keys %{$_[0]} ) {
-                if ( $db_style ne q{Cymru} and $db_style ne q{RIPE} ) {
-                    die "Property asn_db.servers keys have 2 possible values : Cymru or RIPE (case sensitive)";
+                if ( lc($db_style) ne q{cymru} and lc($db_style) ne q{ripe} ) {
+                    die "Property asn_db.servers keys have 2 possible values : Cymru or RIPE (case insensitive)";
                 }
                 if ( not scalar @{ ${$_[0]}{$db_style} } ) {
                     die "Property asn_db.servers.$db_style has no items";
@@ -111,10 +112,11 @@ my %profile_properties_details = (
                             die "Property asn_db.servers.$db_style has a non domain name item" if $label !~ /^[a-z0-9](?:[-a-z0-9]{0,61}[a-z0-9])?$/;
                         }
                     }
+                    ${$_[0]}{lc($db_style)} = delete ${$_[0]}{$db_style};
                 }
             }
         },
-        default => { Cymru => [ "asnlookup.zonemaster.net" ] }
+        default => { cymru => [ "asnlookup.zonemaster.net" ] }
     },
     q{logfilter} => {
         type    => q{HashRef},
