@@ -51,7 +51,12 @@ sub get_with_prefix {
         return _ripe_asn_lookup($ip);
     }
     else {
-        return;
+        if ( not $db_style ) {
+            die "ASN database style is [UNDEFINED]";
+        }
+        else {
+            die "ASN database style value [$db_style] is illegal";
+        }
     }
 
 } ## end sub get_with_prefix
