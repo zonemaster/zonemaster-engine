@@ -93,7 +93,7 @@ sub metadata {
 Readonly my %TAG_DESCRIPTIONS => (
     ERROR_ASN_DATABASE => sub {
         __x    # CONNECTIVITY:ERROR_ASN_DATABASE
-          'AS Database error. No data to analyze.', @_;
+          'ASN Database error. No data to analyze for {ns_ip}.', @_;
     },
     EMPTY_ASN_SET => sub {
         __x    # CONNECTIVITY:EMPTY_ASN_SET
@@ -101,27 +101,31 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     IPV4_SAME_ASN => sub {
         __x    # CONNECTIVITY:IPV4_SAME_ASN
-          'All nameservers in the delegation have IPv4 addresses in the same AS set ({asn_list}).', @_;
+          'All authoritative nameservers have the IPv4 addresses in the same AS set ({asn_list}).', @_;
     },
     IPV4_ONE_ASN => sub {
         __x    # CONNECTIVITY:IPV4_ONE_ASN
-          'All nameservers in the delegation have IPv4 addresses in the same AS ({asn}).', @_;
+          'All authoritative nameservers have the IPv4 addresses in the same AS ({asn}).', @_;
     },
     IPV4_DIFFERENT_ASN => sub {
         __x    # CONNECTIVITY:IPV4_DIFFERENT_ASN
-          'Authoritative IPv4 nameservers are in more than one AS ({asn_list}).', @_;
+          'At least two IPv4 addresses of the authoritative nameservers are announce by different AS sets. '
+          . 'A merged list of all AS: ({asn_list}).',
+          @_;
     },
     IPV6_SAME_ASN => sub {
         __x    # CONNECTIVITY:IPV6_SAME_ASN
-          'All nameservers in the delegation have IPv6 addresses in the same AS set ({asn_list}).', @_;
+          'All authoritative nameservers have the IPv6 addresses in the same AS set ({asn_list}).', @_;
     },
     IPV6_ONE_ASN => sub {
         __x    # CONNECTIVITY:IPV6_ONE_ASN
-          'All nameservers in the delegation have IPv6 addresses in the same AS ({asn}).', @_;
+          'All authoritative nameservers have the IPv6 addresses in the same AS ({asn}).', @_;
     },
     IPV6_DIFFERENT_ASN => sub {
         __x    # CONNECTIVITY:IPV6_DIFFERENT_ASN
-          'Authoritative IPv6 nameservers are in more than one AS ({asn_list}).', @_;
+          'At least two IPv6 addresses of the authoritative nameservers are announce by different AS sets. '
+          . 'A merged list of all AS: ({asn_list}).',
+          @_;
     },
     NAMESERVER_HAS_TCP_53 => sub {
         __x    # CONNECTIVITY:NAMESERVER_HAS_TCP_53
