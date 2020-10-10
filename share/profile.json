@@ -1,9 +1,8 @@
 {
-    "asnroots" : [ "asnlookup.zonemaster.net", "asnlookup.iis.se", "asn.cymru.com"],
     "asn_db" : {
         "style" : "Cymru",
         "sources" : {
-            "Cymru" : [ "asnlookup.zonemaster.net" ],
+            "Cymru" : [ "asnlookup.zonemaster.net", "asn.cymru.com" ],
             "RIPE" : [ "riswhois.ripe.net" ]
         }
     },
