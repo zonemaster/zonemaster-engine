@@ -4,7 +4,7 @@ use 5.014002;
 
 use warnings;
 
-use version; our $VERSION = version->declare( "v1.0.9" );
+use version; our $VERSION = version->declare( "v1.0.10" );
 
 use Zonemaster::Engine;
 use Zonemaster::Engine::Net::IP;
@@ -35,13 +35,17 @@ sub get_with_prefix {
         }
         else {
             $db_style = Zonemaster::Engine::Profile->effective->get( q{asn_db.style} );
-            my %db_sources = %{ Zonemaster::Engine::Profile->effective->get( q{asn_db.servers} ) };
+            my %db_sources = %{ Zonemaster::Engine::Profile->effective->get( q{asn_db.sources} ) };
             @db_sources = map { Zonemaster::Engine->zone( $_ ) } @{ $db_sources{ $db_style } };
         }
     }
 
     if ( not ref( $ip ) or not $ip->isa( 'Zonemaster::Engine::Net::IP' ) ) {
         $ip = Zonemaster::Engine::Net::IP->new( $ip );
+    }
+
+    if ( not @db_sources ) {
+        die "ASN database sources undefined";
     }
 
     if ( $db_style eq q{cymru} ) {
@@ -66,12 +70,14 @@ sub _cymru_asn_lookup {
     my @asns = ();
 
     my $reverse = $ip->reverse_ip;
+    my $db_source_nb = 0;
     foreach my $db_source ( @db_sources ) {
         my $domain = $db_source->name->string;
         my $pair   = {
             'in-addr.arpa.' => "origin.$domain",
             'ip6.arpa.'     => "origin6.$domain",
         };
+        $db_source_nb++;
         foreach my $root ( keys %{$pair} ) {
             if ( $reverse =~ s/$root/$pair->{$root}/ix ) {
                 my $p = $db_source->query_persistent( $reverse, 'TXT' );
@@ -83,7 +89,12 @@ sub _cymru_asn_lookup {
                     return \@asns, undef, q{}, q{EMPTY_ASN_SET};
                 }
                 if ( not $p or $p->rcode ne q{NOERROR} ) {
-                    return \@asns, undef, q{}, q{ERROR_ASN_DATABASE};
+                    if ( $db_source_nb == scalar @db_sources ) {
+                        return \@asns, undef, q{}, q{ERROR_ASN_DATABASE};
+                    }
+                    else {
+                        last;
+                    }
                 }
 
                 my $prefix_length = 0;
@@ -106,7 +117,12 @@ sub _cymru_asn_lookup {
                     return \@asns, Zonemaster::Engine::Net::IP->new( $fields[1] ), $str, q{AS_FOUND};
                 }
                 else {
-                    return \@asns, q{}, $str, q{ERROR_ASN_DATABASE};
+                    if ( $db_source_nb == scalar @db_sources ) {
+                        return \@asns, undef, $str, q{ERROR_ASN_DATABASE};
+                    }
+                    else {
+                        last;
+                    }
                 }
             }
         }
@@ -118,8 +134,16 @@ sub _ripe_asn_lookup {
     my $ip = shift;
     my @asns = ();
 
+    my $db_source_nb = 0;
     foreach my $db_source ( @db_sources ) {
-        my $socket = IO::Socket::INET->new( PeerAddr => $db_source->name->string, PeerPort => q{43}, Proto => q{tcp} ) or return \@asns, undef, q{}, q{ERROR_ASN_DATABASE};
+        $db_source_nb++;
+        my $socket = IO::Socket::INET->new( PeerAddr => $db_source->name->string, PeerPort => q{43}, Proto => q{tcp} );
+        if ( $db_source_nb == scalar @db_sources ) {
+            return \@asns, undef, q{}, q{ERROR_ASN_DATABASE};
+        }
+        else {
+            next;
+        }
 
         printf $socket "-F -M %s\n", $ip->short();
 
@@ -136,7 +160,12 @@ sub _ripe_asn_lookup {
         }
         $socket->close();
         if ( not $has_answer ) {
-            return \@asns, undef, q{}, q{ERROR_ASN_DATABASE};
+            if ( $db_source_nb == scalar @db_sources ) {
+                return \@asns, undef, q{}, q{ERROR_ASN_DATABASE};
+            }
+            else {
+                next;
+            }
         }
         elsif ( $str )  {
             my @fields = split( /\s+/x, $str );
@@ -146,7 +175,7 @@ sub _ripe_asn_lookup {
         else {
             return \@asns, undef, q{}, q{EMPTY_ASN_SET};
         }
-    }
+    } ## end foreach my $db_source ( @
     return;
 }
 
