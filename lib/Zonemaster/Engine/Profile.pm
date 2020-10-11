@@ -605,7 +605,7 @@ A boolean. If true, network traffic is forbidden. Default false.
 Use when you want to be sure that any data is only taken from a preloaded
 cache.
 
-=head2 asnroots
+=head2 asnroots (DEPRECATED)
 
 An arrayref of domain names. Default C<["asnlookup.zonemaster.net",
 "asnlookup.iis.se", "asn.cymru.com"]>.
@@ -613,6 +613,20 @@ An arrayref of domain names. Default C<["asnlookup.zonemaster.net",
 The domains will be assumed to be Cymru-style AS lookup zones.
 Normally only the first name in the list will be used, the rest are
 backups in case the earlier ones don't work.
+
+=head2 asn_db.style
+
+A string that is either C<"Cymru"> or C<"RIPE">. Defines which method will
+be used for AS lookup zones.
+Default C<"Cymru">.
+
+=head2 asn_db.sources
+
+An arrayref of domain names when asn_db.style is set to C<"Cymru"> or whois
+servers when asn_db.style is set to C<"RIPE">. Normally only the first item
+in the list will be used, the rest are backups in case the earlier ones don't 
+work.
+Default C<"asnlookup.zonemaster.net">.
 
 =head2 logfilter
 
