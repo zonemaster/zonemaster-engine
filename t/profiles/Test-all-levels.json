@@ -1,6 +1,6 @@
 {
     "test_levels" : {
-	"ADDRESS" : {
+        "ADDRESS" : {
             "NAMESERVER_IP_PRIVATE_NETWORK" : "ERROR",
             "NAMESERVER_IP_PTR_MISMATCH" : "NOTICE",
             "NAMESERVER_IP_PTR_MATCH" : "INFO",
@@ -8,8 +8,8 @@
             "NAMESERVERS_IP_WITH_REVERSE" : "INFO",
             "NO_IP_PRIVATE_NETWORK" : "INFO",
             "NO_RESPONSE_PTR_QUERY" : "WARNING"
-	},
-	"BASIC" : {
+        },
+        "BASIC" : {
             "A_QUERY_NO_RESPONSES" : "INFO",
             "DOMAIN_NAME_LABEL_TOO_LONG" : "CRITICAL",
             "DOMAIN_NAME_ZERO_LENGTH_LABEL" : "CRITICAL",
@@ -26,30 +26,29 @@
             "NO_PARENT" : "CRITICAL",
             "NS_FAILED" : "ERROR",
             "NS_NO_RESPONSE" : "NOTICE"
-	},
-	"CONNECTIVITY" : {
+        },
+        "CONNECTIVITY" : {
+            "ASN_INFOS_ANNOUNCE_BY" : "DEBUG",
+            "ASN_INFOS_ANNOUNCE_IN" : "DEBUG",
+            "ASN_INFOS_RAW" : "DEBUG",
+            "EMPTY_ASN_SET" : "ERROR",
+            "ERROR_ASN_DATABASE" : "ERROR",
             "IPV4_DISABLED" : "DEBUG",
+            "IPV4_DIFFERENT_ASN" : "INFO",
+            "IPV4_ONE_ASN" : "WARNING",
+            "IPV4_SAME_ASN" : "NOTICE",
             "IPV6_DISABLED" : "DEBUG",
+            "IPV6_DIFFERENT_ASN" : "INFO",
+            "IPV6_ONE_ASN" : "WARNING",
+            "IPV6_SAME_ASN" : "NOTICE",
             "NAMESERVER_HAS_TCP_53" : "INFO",
             "NAMESERVER_HAS_UDP_53" : "INFO",
             "NAMESERVER_NO_TCP_53" : "ERROR",
             "NAMESERVER_NO_UDP_53" : "ERROR",
-            "NAMESERVERS_IPV4_NO_AS" : "INFO",
-            "NAMESERVERS_IPV4_WITH_MULTIPLE_AS" : "INFO",
-            "NAMESERVERS_IPV4_WITH_UNIQ_AS" : "WARNING",
-            "NAMESERVERS_IPV6_NO_AS" : "INFO",
-            "NAMESERVERS_IPV6_WITH_MULTIPLE_AS" : "INFO",
-            "NAMESERVERS_IPV6_WITH_UNIQ_AS" : "WARNING",
-            "NAMESERVERS_NO_AS" : "INFO",
-            "NAMESERVERS_WITH_UNIQ_AS" : "WARNING",
-            "NAMESERVERS_WITH_MULTIPLE_AS" : "INFO",
-            "IPV4_ASN" : "INFO",
-            "IPV6_ASN" : "INFO",
-            "ASN_INFOS_RAW" : "DEBUG",
-            "ASN_INFOS_ANNOUNCE_BY" : "DEBUG",
-            "ASN_INFOS_ANNOUNCE_IN" : "DEBUG"
-	},
-	"CONSISTENCY" : {
+            "TEST_CASE_END" : "DEBUG",
+            "TEST_CASE_START" : "DEBUG"
+        },
+        "CONSISTENCY" : {
             "ADDRESSES_MATCH" : "INFO",
             "CHILD_NS_FAILED" : "NOTICE",
             "CHILD_ZONE_LAME" : "ERROR",
@@ -76,8 +75,8 @@
             "SOA_SERIAL" : "INFO",
             "SOA_SERIAL_VARIATION" : "NOTICE",
             "SOA_TIME_PARAMETER_SET" : "INFO"
-	},
-	"DELEGATION" : {
+        },
+        "DELEGATION" : {
             "ARE_AUTHORITATIVE" : "INFO",
             "CHILD_DISTINCT_NS_IP" : "INFO",
             "CHILD_NS_SAME_IP" : "ERROR",
@@ -114,8 +113,8 @@
             "NOT_ENOUGH_IPV6_NS_DEL" : "ERROR",
             "NO_IPV4_NS_DEL" : "ERROR",
             "NO_IPV6_NS_DEL" : "NOTICE"
-	},
-	"NAMESERVER" : {
+        },
+        "NAMESERVER" : {
             "AAAA_WELL_PROCESSED" : "INFO",
             "ANSWER_BAD_RCODE" : "NOTICE",
             "AXFR_AVAILABLE" : "NOTICE",
@@ -145,8 +144,8 @@
             "CASE_QUERY_NO_ANSWER" : "WARNING",
             "CASE_QUERIES_RESULTS_OK" : "INFO",
             "CASE_QUERIES_RESULTS_DIFFER" : "ERROR"
-	},
-	"SYNTAX" : {
+        },
+        "SYNTAX" : {
             "DISCOURAGED_DOUBLE_DASH" : "WARNING",
             "INITIAL_HYPHEN" : "ERROR",
             "MNAME_DISCOURAGED_DOUBLE_DASH" : "WARNING",
@@ -174,8 +173,8 @@
             "RNAME_RFC822_INVALID" : "WARNING",
             "RNAME_RFC822_VALID" : "INFO",
             "TERMINAL_HYPHEN" : "ERROR"
-	},
-	"SYSTEM" : {
+        },
+        "SYSTEM" : {
             "CACHED_RETURN" : "DEBUG3",
             "CACHE_CREATED" : "DEBUG2",
             "CACHE_FETCHED" : "DEBUG2",
@@ -216,8 +215,8 @@
             "UNKNOWN_MODULE" : "CRITICAL",
             "IS_BLACKLISTED" : "DEBUG",
             "PACKET_BIG" : "DEBUG"
-	},
-	"ZONE" : {
+        },
+        "ZONE" : {
             "EXPIRE_LOWER_THAN_REFRESH" : "WARNING",
             "EXPIRE_MINIMUM_VALUE_LOWER" : "WARNING",
             "EXPIRE_MINIMUM_VALUE_OK" : "INFO",
@@ -244,6 +243,6 @@
             "SOA_DEFAULT_TTL_MAXIMUM_VALUE_OK" : "INFO",
             "SOA_DEFAULT_TTL_MAXIMUM_VALUE_HIGHER" : "NOTICE",
             "SOA_DEFAULT_TTL_MAXIMUM_VALUE_LOWER" : "NOTICE"
-	}
+        }
     }
 }

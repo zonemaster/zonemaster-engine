@@ -1,5 +1,11 @@
 {
-    "asnroots" : [ "asnlookup.zonemaster.net", "asnlookup.iis.se", "asn.cymru.com"],
+    "asn_db" : {
+        "style" : "Cymru",
+        "sources" : {
+            "Cymru" : [ "asnlookup.zonemaster.net", "asn.cymru.com" ],
+            "RIPE" : [ "riswhois.ripe.net" ]
+        }
+    },
     "net" : {
         "ipv4" : true,
         "ipv6" : true 
@@ -55,23 +61,20 @@
             "ASN_INFOS_ANNOUNCE_BY" : "DEBUG",
             "ASN_INFOS_ANNOUNCE_IN" : "DEBUG",
             "ASN_INFOS_RAW" : "DEBUG",
-            "IPV4_ASN" : "INFO",
+            "EMPTY_ASN_SET" : "ERROR",
+            "ERROR_ASN_DATABASE" : "ERROR",
             "IPV4_DISABLED" : "DEBUG",
-            "IPV6_ASN" : "INFO",
+            "IPV4_DIFFERENT_ASN" : "INFO",
+            "IPV4_ONE_ASN" : "WARNING",
+            "IPV4_SAME_ASN" : "NOTICE",
             "IPV6_DISABLED" : "DEBUG",
+            "IPV6_DIFFERENT_ASN" : "INFO",
+            "IPV6_ONE_ASN" : "WARNING",
+            "IPV6_SAME_ASN" : "NOTICE",
             "NAMESERVER_HAS_TCP_53" : "INFO",
             "NAMESERVER_HAS_UDP_53" : "INFO",
             "NAMESERVER_NO_TCP_53" : "ERROR",
             "NAMESERVER_NO_UDP_53" : "ERROR",
-            "NAMESERVERS_IPV4_NO_AS" : "INFO",
-            "NAMESERVERS_IPV4_WITH_MULTIPLE_AS" : "INFO",
-            "NAMESERVERS_IPV4_WITH_UNIQ_AS" : "WARNING",
-            "NAMESERVERS_IPV6_NO_AS" : "INFO",
-            "NAMESERVERS_IPV6_WITH_MULTIPLE_AS" : "INFO",
-            "NAMESERVERS_IPV6_WITH_UNIQ_AS" : "WARNING",
-            "NAMESERVERS_NO_AS" : "INFO",
-            "NAMESERVERS_WITH_UNIQ_AS" : "WARNING",
-            "NAMESERVERS_WITH_MULTIPLE_AS" : "INFO",
             "TEST_CASE_END" : "DEBUG",
             "TEST_CASE_START" : "DEBUG"
         },
