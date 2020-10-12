@@ -11,7 +11,7 @@ use Zonemaster::Engine;
 use Carp;
 use Locale::Messages qw[textdomain];
 use Locale::TextDomain qw[Zonemaster-Engine];
-use POSIX qw[setlocale LC_MESSAGES];
+use POSIX qw[setlocale LC_ALL LC_MESSAGES];
 use Readonly;
 
 use Moose;
@@ -120,20 +120,40 @@ Readonly my %TAG_DESCRIPTIONS => (
 around 'BUILDARGS' => sub {
     my ( $orig, $class, %args ) = @_;
 
-    $args{locale} //= _get_locale();
-
-    # Make sure LC_MESSAGES can be effectively set down the line.
-    delete $ENV{LC_ALL};
+    $args{locale} //= _init_locale();
 
     return $class->$orig( %args );
 };
 
-# Get the program's underlying LC_MESSAGES.
+# Get the program's underlying LC_MESSAGES and make sure it can be effectively
+# updated down the line.
 #
-# Side effect: Updates the program's underlying LC_MESSAGES to the returned
-# value.
-sub _get_locale {
-    return setlocale( LC_MESSAGES, "" );
+# If the underlying LC_MESSAGES is invalid, it attempts to second guess Perls
+# fallback locale.
+#
+# Side effects:
+# * Updates the program's underlying LC_MESSAGES to the returned value.
+# * Unsets LC_ALL.
+sub _init_locale {
+    my $locale = setlocale( LC_MESSAGES, "" );
+
+    if ( !defined $locale ) {
+        my $language = $ENV{LANGUAGE} // "";
+        for my $value ( split /:/, $language ) {
+            if ( $value ne "" && $value !~ /[.]/ ) {
+                $value .= ".UTF-8";
+            }
+            $locale = setlocale( LC_ALL, $value );
+            if ( defined $locale ) {
+                last;
+            }
+        }
+        $locale //= "C";
+    }
+
+    delete $ENV{LC_ALL};
+
+    return $locale;
 }
 
 sub _load_data {
