@@ -117,18 +117,16 @@ Readonly my %TAG_DESCRIPTIONS => (
 ### Builder Methods
 ###
 
-sub BUILD {
-    my ( $self ) = @_;
+around 'BUILDARGS' => sub {
+    my ( $orig, $class, %args ) = @_;
 
-    my $locale = $self->{locale} // _get_locale();
+    $args{locale} //= _get_locale();
 
     # Make sure LC_MESSAGES can be effectively set down the line.
     delete $ENV{LC_ALL};
 
-    $self->locale( $locale );
-
-    return $self;
-}
+    return $class->$orig( %args );
+};
 
 # Get the program's underlying LC_MESSAGES.
 #
