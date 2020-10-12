@@ -150,11 +150,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     EXTRA_ADDRESS_CHILD => sub {
         __x    # CONSISTENCY:EXTRA_ADDRESS_CHILD
-          'Child has extra nameserver IP address(es) not listed at parent ({addresses}).', @_;
-    },
-    EXTRA_ADDRESS_PARENT => sub {
-        __x    # CONSISTENCY:EXTRA_ADDRESS_PARENT
-          'Parent has extra nameserver IP address(es) not listed at child ({addresses}).', @_;
+          'Child has extra nameserver IP address(es) not listed at parent ({ns_ip_list}).', @_;
     },
     IN_BAILIWICK_ADDR_MISMATCH => sub {
         __x    # CONSISTENCY:IN_BAILIWICK_ADDR_MISMATCH
@@ -204,11 +200,11 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     NS_SET => sub {
         __x    # CONSISTENCY:NS_SET
-          'Saw NS set ({nsset}) on following nameserver set : {servers}.', @_;
+          'Saw NS set ({nsname_list}) on following nameserver set : {servers}.', @_;
     },
     ONE_NS_SET => sub {
         __x    # CONSISTENCY:ONE_NS_SET
-          "A single NS set was found ({nsset}).", @_;
+          "A single NS set was found ({nsname_list}).", @_;
     },
     ONE_SOA_MNAME => sub {
         __x    # CONSISTENCY:ONE_SOA_MNAME
@@ -236,11 +232,11 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     SOA_RNAME => sub {
         __x    # CONSISTENCY:SOA_RNAME
-          "Found SOA rname {rname} on following nameserver set : {servers}.", @_;
+          "Found SOA rname {rname} on following nameserver set : {ns_list}.", @_;
     },
     SOA_SERIAL => sub {
         __x    # CONSISTENCY:SOA_SERIAL
-          'Saw SOA serial number {serial} on following nameserver set : {servers}.', @_;
+          'Saw SOA serial number {serial} on following nameserver set : {ns_list}.', @_;
     },
     SOA_SERIAL_VARIATION => sub {
         __x    # CONSISTENCY:SOA_SERIAL_VARIATION
@@ -250,7 +246,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     SOA_TIME_PARAMETER_SET => sub {
         __x    # CONSISTENCY:SOA_TIME_PARAMETER_SET
           'Saw SOA time parameter set (REFRESH={refresh},RETRY={retry},EXPIRE={expire},'
-          . 'MINIMUM={minimum}) on following nameserver set : {servers}.', @_;
+          . 'MINIMUM={minimum}) on following nameserver set : {ns_list}.', @_;
     },
     TEST_CASE_END => sub {
         __x    # CONSISTENCY:TEST_CASE_END
@@ -339,7 +335,7 @@ sub consistency01 {
           info(
             SOA_SERIAL => {
                 serial  => $serial,
-                servers => join( q{;}, sort @{ $serials{$serial} } ),
+                ns_list => join( q{;}, sort @{ $serials{$serial} } ),
             }
           );
     }
@@ -448,7 +444,7 @@ sub consistency02 {
               info(
                 SOA_RNAME => {
                     rname   => $rname,
-                    servers => join( q{;}, @{ $rnames{$rname} } ),
+                    ns_list => join( q{;}, @{ $rnames{$rname} } ),
                 }
               );
         }
@@ -542,7 +538,7 @@ sub consistency03 {
                     retry   => $retry,
                     expire  => $expire,
                     minimum => $minimum,
-                    servers => join( q{;}, sort @{ $time_parameter_sets{$time_parameter_set} } ),
+                    ns_list => join( q{;}, sort @{ $time_parameter_sets{$time_parameter_set} } ),
                 }
               );
         }
@@ -600,18 +596,13 @@ sub consistency04 {
             next;
         }
         else {
-            push @{ $ns_sets{ join( q{,}, @ns ) } }, $local_ns->name->string . q{/} . $local_ns->address->short;
-            $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short }++;
+            push @{ $ns_sets{ join( q{;}, @ns ) } }, $local_ns->string;
+            $nsnames_and_ip{ $local_ns->string }++;
         }
     } ## end foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods...})
 
     if ( scalar( keys %ns_sets ) == 1 ) {
-        push @results,
-          info(
-            ONE_NS_SET => {
-                nsset => ( keys %ns_sets )[0],
-            }
-          );
+        push @results, info( ONE_NS_SET => { nsname_list => ( keys %ns_sets )[0] });
     }
     elsif ( scalar( keys %ns_sets ) ) {
         push @results,
@@ -624,8 +615,8 @@ sub consistency04 {
             push @results,
               info(
                 NS_SET => {
-                    nsset   => $ns_set,
-                    servers => join( q{;}, @{ $ns_sets{$ns_set} } ),
+                    nsname_list => $ns_set,
+                    servers     => join( q{;}, @{ $ns_sets{$ns_set} } ),
                 }
               );
         }
@@ -749,7 +740,7 @@ sub consistency05 {
         push @results,
           info(
             EXTRA_ADDRESS_CHILD => {
-                addresses => join( q{;}, sort @ib_extra_child ),
+                ns_ip_list => join( q{;}, sort @ib_extra_child ),
             }
           );
     }
@@ -789,12 +780,7 @@ sub consistency05 {
     } ## end for my $glue_name ( keys...)
 
     if ( !@ib_extra_child && !@ib_mismatch && !@oob_mismatch ) {
-        push @results,
-          info(
-            ADDRESSES_MATCH => {
-                addresses => join( q{;}, sort @ib_match, @oob_match ),
-            }
-          );
+        push @results, info( ADDRESSES_MATCH => {} );
     }
 
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
@@ -874,7 +860,7 @@ sub consistency06 {
               info(
                 SOA_MNAME => {
                     mname   => $mname,
-                    servers => join( q{;}, @{ $mnames{$mname} } ),
+                    ns_list => join( q{;}, @{ $mnames{$mname} } ),
                 }
               );
         }

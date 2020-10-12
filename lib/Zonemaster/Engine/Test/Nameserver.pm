@@ -234,7 +234,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     AAAA_WELL_PROCESSED => sub {
         __x    # NAMESERVER:AAAA_WELL_PROCESSED
-          'The following nameservers answer AAAA queries without problems : {names}.', @_;
+          'The following nameservers answer AAAA queries without problems : {ns_list}.', @_;
     },
     A_UNEXPECTED_RCODE => sub {
         __x    # NAMESERVER:A_UNEXPECTED_RCODE
@@ -258,7 +258,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     CAN_NOT_BE_RESOLVED => sub {
         __x    # NAMESERVER:CAN_NOT_BE_RESOLVED
-          'The following nameservers failed to resolve to an IP address : {names}.', @_;
+          'The following nameservers failed to resolve to an IP address : {nsname_list}.', @_;
     },
     CASE_QUERIES_RESULTS_DIFFER => sub {
         __x    # NAMESERVER:CASE_QUERIES_RESULTS_DIFFER
@@ -311,7 +311,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     EDNS0_SUPPORT => sub {
         __x    # NAMESERVER:EDNS0_SUPPORT
-          'The following nameservers support EDNS0 : {names}.', @_;
+          'The following nameservers support EDNS0 : {ns_list}.', @_;
     },
     IPV4_DISABLED => sub {
         __x    # NAMESERVER:IPV4_DISABLED
@@ -347,7 +347,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     NO_UPWARD_REFERRAL => sub {
         __x    # NAMESERVER:NO_UPWARD_REFERRAL
-          'None of the following nameservers returns an upward referral : {names}.', @_;
+          'None of the following nameservers returns an upward referral : {nsname_list}.', @_;
     },
     NS_ERROR => sub {
         __x    # NAMESERVER:NS_ERROR
@@ -539,7 +539,7 @@ sub nameserver02 {
         push @results,
           info(
             EDNS0_SUPPORT => {
-                names => join( q{,}, keys %nsnames_and_ip ),
+                ns_list => join( q{;}, keys %nsnames_and_ip ),
             }
           );
     }
@@ -719,7 +719,7 @@ sub nameserver05 {
         push @results,
           info(
             AAAA_WELL_PROCESSED => {
-                names => join( q{,}, keys %nsnames_and_ip ),
+                ns_list => join( q{;}, keys %nsnames_and_ip ),
             }
           );
     }
@@ -745,7 +745,7 @@ sub nameserver06 {
         push @results,
           info(
             CAN_NOT_BE_RESOLVED => {
-                names => join( q{,}, @all_nsnames_without_ip ),
+                nsname_list => join( q{;}, @all_nsnames_without_ip ),
             }
           );
     }
@@ -799,7 +799,7 @@ sub nameserver07 {
             push @results,
               info(
                 NO_UPWARD_REFERRAL => {
-                    names => join( q{,}, sort keys %nsnames ),
+                    nsname_list => join( q{;}, sort keys %nsnames ),
                 }
               );
         }
