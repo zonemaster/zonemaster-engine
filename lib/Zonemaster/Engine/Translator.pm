@@ -11,7 +11,7 @@ use Zonemaster::Engine;
 use Carp;
 use Locale::Messages qw[textdomain];
 use Locale::TextDomain qw[Zonemaster-Engine];
-use POSIX qw[setlocale LC_ALL LC_MESSAGES];
+use POSIX qw[setlocale LC_MESSAGES];
 use Readonly;
 
 use Moose;
@@ -137,21 +137,21 @@ around 'BUILDARGS' => sub {
 sub _init_locale {
     my $locale = setlocale( LC_MESSAGES, "" );
 
+    delete $ENV{LC_ALL};
+
     if ( !defined $locale ) {
         my $language = $ENV{LANGUAGE} // "";
         for my $value ( split /:/, $language ) {
             if ( $value ne "" && $value !~ /[.]/ ) {
                 $value .= ".UTF-8";
             }
-            $locale = setlocale( LC_ALL, $value );
+            $locale = setlocale( LC_MESSAGES, $value );
             if ( defined $locale ) {
                 last;
             }
         }
         $locale //= "C";
     }
-
-    delete $ENV{LC_ALL};
 
     return $locale;
 }
