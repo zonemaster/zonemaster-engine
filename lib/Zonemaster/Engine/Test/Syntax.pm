@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare( "v1.0.9" );
+use version; our $VERSION = version->declare( "v1.0.10" );
 
 use Zonemaster::Engine;
 
@@ -19,7 +19,6 @@ use Zonemaster::Engine::Profile;
 use Zonemaster::Engine::Constants qw[:name :ip];
 use Zonemaster::Engine::DNSName;
 use Zonemaster::Engine::Packet;
-use Zonemaster::Engine::Recursor;
 use Zonemaster::Engine::TestMethods;
 use Zonemaster::Engine::Util;
 use Zonemaster::LDNS;
@@ -116,6 +115,8 @@ sub metadata {
               NO_RESPONSE
               NO_RESPONSE_SOA_QUERY
               RNAME_MAIL_DOMAIN_INVALID
+              RNAME_MAIL_DOMAIN_LOCALHOST
+              RNAME_MAIL_ILLEGAL_CNAME
               RNAME_RFC822_INVALID
               RNAME_RFC822_VALID
               TEST_CASE_END
@@ -253,6 +254,14 @@ Readonly my %TAG_DESCRIPTIONS => (
     RNAME_MAIL_DOMAIN_INVALID => sub {
         __x    # SYNTAX:RNAME_MAIL_DOMAIN_INVALID
           'The SOA RNAME mail domain ({domain}) cannot be resolved to a mail server with an IP address.', @_;
+    },
+    RNAME_MAIL_DOMAIN_LOCALHOST => sub {
+        __x    # SYNTAX:RNAME_MAIL_DOMAIN_LOCALHOST
+          'The SOA RNAME mail domain ({domain}) resolved to a mail server with localhost ({localhost}) IP address.', @_;
+    },
+    RNAME_MAIL_ILLEGAL_CNAME => sub {
+        __x    # SYNTAX:RNAME_MAIL_ILLEGAL_CNAME
+          'The SOA RNAME mail domain ({domain}) refers to an address which is an alias (CNAME).', @_;
     },
     RNAME_MISUSED_AT_SIGN => sub {
         __x    # SYNTAX:RNAME_MISUSED_AT_SIGN
@@ -476,7 +485,7 @@ sub syntax06 {
             next;
         }
 
-        my $p = $ns->query( $zone->name, q{SOA} );
+        my $p = $ns->query( $zone->name, q{SOA}, { recurse => 0, usevc => 0 } );
 
         if ( not $p ) {
             push @results,
@@ -511,15 +520,14 @@ sub syntax06 {
         }
 
         my $domain = ( $rname =~ s/.*@//r );
-
         my $p_mx = $resolver->query( $domain, q{MX}, { recurse => 1 } );
-
         if ( not $p_mx or $p_mx->rcode ne 'NOERROR' ) {
             push @results, info( RNAME_MAIL_DOMAIN_INVALID => { domain => $domain } );
             next;
         }
 
         # Follow CNAMEs in the MX response
+        foreach my $t ($p_mx->get_records( q{CNAME} )) { print $t->string, "\n"; }
         my %cnames =
           map { $_->owner => $_->cname } $p_mx->get_records( q{CNAME}, q{answer} );
         $domain .= q{.};    # Add back final dot
@@ -542,27 +550,36 @@ sub syntax06 {
             # Lookup IPv4 address for mail server
             my $p_a = $resolver->query( $mail_domain, q{A}, { recurse => 1 } );
             if ( $p_a ) {
-                my @rrs_a =
-                  grep { $_->address ne '127.0.0.1' }
-                  grep { $_->owner eq $mail_domain } $p_a->get_records( q{A}, q{answer} );
+                if ( $p_a->get_records( q{CNAME}, q{answer} ) ) {
+                    push @results, info( RNAME_MAIL_ILLEGAL_CNAME => { domain => $mail_domain } );
+                }
+                else {
+                    my @rrs_a = grep { $_->owner eq $mail_domain } $p_a->get_records( q{A}, q{answer} );
 
-                if ( @rrs_a ) {
-                    $exchange_valid = 1;
+                    if ( grep { $_->address eq q{127.0.0.1} } @rrs_a ) {
+                        push @results, info( RNAME_MAIL_DOMAIN_LOCALHOST => { domain => $mail_domain, localhost => q{127.0.0.1} } );
+                    }
+                    elsif ( @rrs_a ) {
+                        $exchange_valid = 1;
+                    }
                 }
             }
 
             # Lookup IPv6 address for mail domain
-            my $p_aaaa;
-            if ( !$exchange_valid ) {    # Skip a query if we can
-                $p_aaaa = $resolver->query( $mail_domain, q{AAAA}, { recurse => 1 } );
-            }
+            my $p_aaaa = $resolver->query( $mail_domain, q{AAAA}, { recurse => 1 } );
             if ( $p_aaaa ) {
-                my @rrs_aaaa =
-                  grep { $_->address ne '::1' }
-                  grep { $_->owner eq $mail_domain } $p_aaaa->get_records( q{AAAA}, q{answer} );
+                if ( $p_aaaa->get_records( q{CNAME}, q{answer} ) ) {
+                    push @results, info( RNAME_MAIL_ILLEGAL_CNAME => { domain => $mail_domain } );
+                }
+                else {
+                    my @rrs_aaaa = grep { $_->owner eq $mail_domain } $p_aaaa->get_records( q{AAAA}, q{answer} );
 
-                if ( @rrs_aaaa ) {
-                    $exchange_valid = 1;
+                    if ( grep { $_->address eq q{::1} } @rrs_aaaa) {
+                        push @results, info( RNAME_MAIL_DOMAIN_LOCALHOST => { domain => $mail_domain, localhost => q{::1} } );
+                    }
+                    elsif ( @rrs_aaaa ) {
+                        $exchange_valid = 1;
+                    }
                 }
             }
 
