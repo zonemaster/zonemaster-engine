@@ -74,33 +74,25 @@ This instruction covers the following operating systems:
 
 ### Installation on Debian
 
-1) Refresh the package information
+1) Upgrade to latest patch level
 
    ```sh
-   sudo apt update
+   sudo apt update && sudo apt upgrade
    ```
 
-2) Upgrade to latest patch level on Ubuntu 18.04 to get support for DNSSEC algorithm 15 (Ed25519)
-
-   * On Ubuntu 18.04:
-
-     ```sh
-     sudo apt upgrade
-     ```
-
-3) Install dependencies from binary packages:
+2) Install dependencies from binary packages:
 
    ```sh
    sudo apt install autoconf automake build-essential cpanminus libclone-perl libdevel-checklib-perl libemail-valid-perl libfile-sharedir-perl libfile-slurp-perl libidn11-dev libintl-perl libio-socket-inet6-perl libjson-pp-perl liblist-moreutils-perl liblocale-msgfmt-perl libmodule-find-perl libmodule-install-xsutil-perl libmoose-perl libmoosex-singleton-perl libnet-ip-perl libpod-coverage-perl libreadonly-xs-perl libssl-dev libtest-differences-perl libtest-exception-perl libtest-fatal-perl libtest-pod-perl libtext-csv-perl libtool m4
    ```
 
-4) Install dependencies from CPAN:
+3) Install dependencies from CPAN:
 
    ```sh
    sudo cpanm Module::Install Test::More
    ```
 
-5) Install Zonemaster::LDNS and Zonemaster::Engine.
+4) Install Zonemaster::LDNS and Zonemaster::Engine.
 
    * On Debian 10 (Buster):
 
