@@ -117,25 +117,43 @@ Readonly my %TAG_DESCRIPTIONS => (
 ### Builder Methods
 ###
 
-sub BUILD {
-    my ( $self ) = @_;
+around 'BUILDARGS' => sub {
+    my ( $orig, $class, %args ) = @_;
 
-    my $locale = $self->{locale} // _get_locale();
+    $args{locale} //= _init_locale();
 
-    # Make sure LC_MESSAGES can be effectively set down the line.
+    return $class->$orig( %args );
+};
+
+# Get the program's underlying LC_MESSAGES and make sure it can be effectively
+# updated down the line.
+#
+# If the underlying LC_MESSAGES is invalid, it attempts to second guess Perls
+# fallback locale.
+#
+# Side effects:
+# * Updates the program's underlying LC_MESSAGES to the returned value.
+# * Unsets LC_ALL.
+sub _init_locale {
+    my $locale = setlocale( LC_MESSAGES, "" );
+
     delete $ENV{LC_ALL};
 
-    $self->locale( $locale );
+    if ( !defined $locale ) {
+        my $language = $ENV{LANGUAGE} // "";
+        for my $value ( split /:/, $language ) {
+            if ( $value ne "" && $value !~ /[.]/ ) {
+                $value .= ".UTF-8";
+            }
+            $locale = setlocale( LC_MESSAGES, $value );
+            if ( defined $locale ) {
+                last;
+            }
+        }
+        $locale //= "C";
+    }
 
-    return $self;
-}
-
-# Get the program's underlying LC_MESSAGES.
-#
-# Side effect: Updates the program's underlying LC_MESSAGES to the returned
-# value.
-sub _get_locale {
-    return setlocale( LC_MESSAGES, "" );
+    return $locale;
 }
 
 sub _load_data {
