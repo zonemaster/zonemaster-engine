@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-19 17:16+0200\n"
+"POT-Creation-Date: 2020-10-19 22:25+0200\n"
 "PO-Revision-Date: 2020-09-07\n"
 "Last-Translator: vincent.levigneron@afnic.fr\n"
 "Language-Team: Zonemaster Team\n"
@@ -70,7 +70,7 @@ msgstr ""
 #. ZONE:TEST_CASE_END
 #, perl-brace-format
 msgid "TEST_CASE_END {testcase}."
-msgstr ""
+msgstr "TEST_CASE_END {testcase}."
 
 #. ADDRESS:TEST_CASE_START
 #. BASIC:TEST_CASE_START
@@ -83,7 +83,7 @@ msgstr ""
 #. ZONE:TEST_CASE_START
 #, perl-brace-format
 msgid "TEST_CASE_START {testcase}."
-msgstr ""
+msgstr "TEST_CASE_START {testcase}."
 
 #. BASIC:DOMAIN_NAME_LABEL_TOO_LONG
 #, perl-brace-format
@@ -219,8 +219,8 @@ msgid ""
 "All authoritative nameservers have the IPv4 addresses in the same AS set "
 "({asn_list})."
 msgstr ""
-"Toutes les adresses IPv4 des serveurs faisant autorité se trouvent dans "
-"le même ensemble d'AS ({asn_list})."
+"Toutes les adresses IPv4 des serveurs faisant autorité se trouvent dans le "
+"même ensemble d'AS ({asn_list})."
 
 #. CONNECTIVITY:IPV4_ONE_ASN
 #, perl-brace-format
@@ -228,7 +228,7 @@ msgid ""
 "All authoritative nameservers have the IPv4 addresses in the same AS ({asn})."
 msgstr ""
 "Toutes les adresses IPv4 des serveurs faisant autorité se trouvent dans "
-"dans le même AS ({asn})."
+"le même AS ({asn})."
 
 #. CONNECTIVITY:IPV4_DIFFERENT_ASN
 #, perl-brace-format
@@ -236,8 +236,8 @@ msgid ""
 "At least two IPv4 addresses of the authoritative nameservers are announce by "
 "different AS sets. A merged list of all AS: ({asn_list})."
 msgstr ""
-"Au moins 2 adresses IPv4 des serveurs faisant autorité sont annoncées par"
-"des ensembles d'AS différents. Liste de l'ensemble des AS: ({asn_list})."
+"Au moins 2 adresses IPv4 des serveurs faisant autorité sont annoncées par des "
+"ensembles d'AS différents. Liste de l'ensemble des AS: ({asn_list})."
 
 #. CONNECTIVITY:IPV6_SAME_ASN
 #, perl-brace-format
@@ -245,8 +245,8 @@ msgid ""
 "All authoritative nameservers have the IPv6 addresses in the same AS set "
 "({asn_list})."
 msgstr ""
-"Toutes les adresses IPv6 des serveurs faisant autorité se trouvent dans "
-"le même ensemble d'AS ({asn_list})."
+"Toutes les adresses IPv6 des serveurs faisant autorité se trouvent dans le "
+"même ensemble d'AS ({asn_list})."
 
 #. CONNECTIVITY:IPV6_ONE_ASN
 #, perl-brace-format
@@ -254,7 +254,7 @@ msgid ""
 "All authoritative nameservers have the IPv6 addresses in the same AS ({asn})."
 msgstr ""
 "Toutes les adresses IPv6 des serveurs faisant autorité se trouvent dans "
-"dans le même AS ({asn})."
+"le même AS ({asn})."
 
 #. CONNECTIVITY:IPV6_DIFFERENT_ASN
 #, perl-brace-format
@@ -262,8 +262,8 @@ msgid ""
 "At least two IPv6 addresses of the authoritative nameservers are announce by "
 "different AS sets. A merged list of all AS: ({asn_list})."
 msgstr ""
-"Au moins 2 adresses IPv6 des serveurs faisant autorité sont annoncées par"
-"des ensembles d'AS différents. Liste de l'ensemble des AS: ({asn_list})."
+"Au moins 2 adresses IPv6 des serveurs faisant autorité sont annoncées par des "
+"ensembles d'AS différents. Liste de l'ensemble des AS: ({asn_list})."
 
 #. CONNECTIVITY:NAMESERVER_HAS_TCP_53
 #, perl-brace-format
@@ -301,7 +301,8 @@ msgstr ""
 #, perl-brace-format
 msgid "The ASN data for name server IP address \"{ns_ip}\" is \"{data}\"."
 msgstr ""
-"Les données d'AS pour le serveur de noms d'adresse \"{ns_ip}\" sont \"{data}\"."
+"Les données d'AS pour le serveur de noms d'adresse \"{ns_ip}\" sont "
+"\"{data}\"."
 
 #. CONNECTIVITY:ASN_INFOS_ANNOUNCE_BY
 #, perl-brace-format
@@ -313,7 +314,8 @@ msgstr ""
 #, perl-brace-format
 msgid "Name server IP address \"{ns_ip}\" is announced in prefix \"{prefix}\"."
 msgstr ""
-"L'adresse IP du serveur de noms \"{ns_ip}\" est annoncée dans le préfixe \"{prefix}\"."
+"L'adresse IP du serveur de noms \"{ns_ip}\" est annoncée dans le préfixe "
+"\"{prefix}\"."
 
 #. CONSISTENCY:ADDRESSES_MATCH
 msgid "Glue records are consistent between glue and authoritative data."
@@ -454,8 +456,8 @@ msgid ""
 msgstr ""
 "Problèmes de glues pour un serveur de noms \"out-of-bailiwick\", celles "
 "trouvées ({parent_addresses}) dans la zone parente sont différentes de "
-"celles trouvées ({zone_addresses}) sur les serveurs de noms faisant "
-"autorité pour ces données."
+"celles trouvées ({zone_addresses}) sur les serveurs de noms faisant autorité "
+"pour ces données."
 
 #. CONSISTENCY:SOA_RNAME
 #, perl-brace-format
@@ -507,7 +509,7 @@ msgstr ""
 "abandonnés."
 
 #. DNSSEC:ALGORITHM_DEPRECATED
-#, perl-brace-forma
+#, perl-brace-format
 msgid ""
 "The DNSKEY with tag {keytag} uses deprecated algorithm number {algorithm} "
 "({description})."
@@ -602,8 +604,9 @@ msgid ""
 "the algorithm and hash values in a DS record with same tag in parent zone."
 msgstr ""
 "L'enregistrement de type \"DNSKEY\" avec le tag de clé {keytag} retourné par "
-"le serveur de noms {ns} ne correspond pas (algorithme et condensat) à l'enregistrement "
-"de type \"DS\" avec le même tag de clé que l'on trouve dans la zone parente."
+"le serveur de noms {ns} ne correspond pas (algorithme et condensat) à "
+"l'enregistrement de type \"DS\" avec le même tag de clé que l'on trouve dans "
+"la zone parente."
 
 #. DNSSEC:BROKEN_RRSIG
 #, perl-brace-format
@@ -612,10 +615,11 @@ msgid ""
 "{ns} failed to be verified with error '{error}' (a DS record with same tag "
 "is present in the parent zone)."
 msgstr ""
-"La signature (RRSIG) avec la clé de tag {keytag} de l'ensemble des enregistrements "
-"de type \"DNSKEY\" retournée par le serveur de noms {ns} renvoie l'erreur "
-"'{error}' lors de l'étape de vérification (un enregistrement de type \"DS\" avec le "
-"même tag de clé existe dans la zone parente)."
+"La signature (RRSIG) avec la clé de tag {keytag} de l'ensemble des "
+"enregistrements de type \"DNSKEY\" retournée par le serveur de noms {ns} "
+"renvoie l'erreur '{error}' lors de l'étape de vérification (un "
+"enregistrement de type \"DS\" avec le même tag de clé existe dans la zone "
+"parente)."
 
 #. DNSSEC:DELEGATION_NOT_SIGNED
 #, perl-brace-format
@@ -650,9 +654,10 @@ msgid ""
 "Flags field of DNSKEY record with tag {keytag} returned by nameserver {ns} "
 "has not SEP bit set although DS with same tag is present in parent."
 msgstr ""
-"Le champ \"flags\" de l'enregistrement de type \"DNSKEY\" avec le tag {keytag} "
-"retourné par le serveur de noms {ns} n'a pas le bit SEP positionné alors qu'un"
-"enregistrement de type \"DS\" avec le même tag de clé existe dans la zone parente."
+"Le champ \"flags\" de l'enregistrement de type \"DNSKEY\" avec le tag "
+"{keytag} retourné par le serveur de noms {ns} n'a pas le bit SEP positionné "
+"alors qu'unenregistrement de type \"DS\" avec le même tag de clé existe dans "
+"la zone parente."
 
 #. DNSSEC:DNSKEY_NOT_ZONE_SIGN
 #, perl-brace-format
@@ -660,9 +665,10 @@ msgid ""
 "Flags field of DNSKEY record with tag {keytag} returned by nameserver {ns} "
 "has not ZONE bit set although DS with same tag is present in parent."
 msgstr ""
-"Le champ \"flags\" de l'enregistrement de type \"DNSKEY\" avec le tag {keytag} "
-"retourné par le serveur de noms {ns} n'a pas le bit ZONE positionné alors qu'un"
-"enregistrement de type \"DS\" avec le même tag de clé existe dans la zone parente."
+"Le champ \"flags\" de l'enregistrement de type \"DNSKEY\" avec le tag "
+"{keytag} retourné par le serveur de noms {ns} n'a pas le bit ZONE positionné "
+"alors qu'unenregistrement de type \"DS\" avec le même tag de clé existe dans "
+"la zone parente."
 
 #. DNSSEC:DNSKEY_NOT_SIGNED
 msgid "The apex DNSKEY RRset was not correctly signed."
@@ -803,8 +809,9 @@ msgstr ""
 msgid ""
 "The DS records in the parent zone match DNSKEY records in the child zone."
 msgstr ""
-"Les enregistrements de type \"DS\" présents dans la zone parente correspondent "
-"aux enregistrements de type \"DNSKEY\" trouvés dans la zone testée."
+"Les enregistrements de type \"DS\" présents dans la zone parente "
+"correspondent aux enregistrements de type \"DNSKEY\" trouvés dans la zone "
+"testée."
 
 #. DNSSEC:DURATION_LONG
 #, perl-brace-format
@@ -950,8 +957,8 @@ msgid ""
 "{keytag} found in the parent zone."
 msgstr ""
 "Le serveur de noms {ns} ne retourne aucun enregistrement de type \"DNSKEY\" "
-"pour l'enregistrement de type \"DS\" avec le tag de clé {keytag} trouvé "
-"dans la zone parente."
+"pour l'enregistrement de type \"DS\" avec le tag de clé {keytag} trouvé dans "
+"la zone parente."
 
 #. DNSSEC:NO_MATCHING_RRSIG
 #, perl-brace-format
@@ -961,9 +968,9 @@ msgid ""
 "parent zone for that DNSKEY record."
 msgstr ""
 "Le serveur de noms {ns} ne retourne aucune signature pour l'ensemble des "
-"enregistrements de type \"DNSKEY\" avec la clé de tag {keytag}. Pourtant "
-"il existe un enregistrement de type \"DS\" dans la zone parente pour cette "
-"même clé."
+"enregistrements de type \"DNSKEY\" avec la clé de tag {keytag}. Pourtant il "
+"existe un enregistrement de type \"DS\" dans la zone parente pour cette même "
+"clé."
 
 #. DNSSEC:NO_NSEC3PARAM
 #, perl-brace-format
@@ -1165,15 +1172,16 @@ msgid ""
 "Nameserver {ns} responded with an unexpected rcode ({rcode}) on a DS query "
 "for zone {zone}."
 msgstr ""
-"Le serveur de noms {ns} a répondu à une requête de type \"AAAA\" "
-"avec un code retour inattendu ({rcode}) pour la zone '{zone}'."
+"Le serveur de noms {ns} a répondu à une requête de type \"AAAA\" avec un "
+"code retour inattendu ({rcode}) pour la zone '{zone}'."
 
 #. DELEGATION:ARE_AUTHORITATIVE
 #, perl-brace-format
 msgid ""
 "All these nameservers are confirmed to be authoritative : {nsname_list}."
 msgstr ""
-"Ces serveurs de noms ont pu être vérifiés comme faisant autorité : {nsname_list}."
+"Ces serveurs de noms ont pu être vérifiés comme faisant autorité : "
+"{nsname_list}."
 
 #. DELEGATION:CHILD_DISTINCT_NS_IP
 msgid "All the IP addresses used by the nameservers in child are unique."
@@ -1214,8 +1222,8 @@ msgid ""
 "IPv4 addresses ({ns_ip_list}). Lower limit set to {minimum}."
 msgstr ""
 "Les serveurs de noms de la zone retournent suffisamment de serveurs "
-"({count}) faisant autorité ({nsname_list}) ayant une adresse IPv4 ({ns_ip_list}). "
-"La limite inférieure étant fixée à {minimum}."
+"({count}) faisant autorité ({nsname_list}) ayant une adresse IPv4 "
+"({ns_ip_list}). La limite inférieure étant fixée à {minimum}."
 
 #. DELEGATION:ENOUGH_IPV4_NS_DEL
 #, perl-brace-format
@@ -1224,8 +1232,8 @@ msgid ""
 "to IPv4 addresses ({ns_ip_list}). Lower limit set to {minimum}."
 msgstr ""
 "Les serveurs de noms de la zone parente retournent suffisamment de serveurs "
-"({count}) faisant autorité ({nsname_list}) ayant une adresse IPv4 ({ns_ip_list}). "
-"La limite inférieure étant fixée à {minimum}."
+"({count}) faisant autorité ({nsname_list}) ayant une adresse IPv4 "
+"({ns_ip_list}). La limite inférieure étant fixée à {minimum}."
 
 #. DELEGATION:ENOUGH_IPV6_NS_CHILD
 #, perl-brace-format
@@ -1234,8 +1242,8 @@ msgid ""
 "IPv6 addresses ({ns_ip_list}). Lower limit set to {minimum}."
 msgstr ""
 "Les serveurs de noms de la zone retournent suffisamment de serveurs "
-"({count}) faisant autorité ({nsname_list}) ayant une adresse IPv6 ({ns_ip_list}). "
-"La limite inférieure étant fixée à {minimum}."
+"({count}) faisant autorité ({nsname_list}) ayant une adresse IPv6 "
+"({ns_ip_list}). La limite inférieure étant fixée à {minimum}."
 
 #. DELEGATION:ENOUGH_IPV6_NS_DEL
 #, perl-brace-format
@@ -1302,8 +1310,8 @@ msgid ""
 "resolve to IPv4 addresses ({ns_ip_list}). Lower limit set to {minimum}."
 msgstr ""
 "Les serveurs de noms de la zone ne retournent pas assez de serveurs "
-"({count}) faisant autorité ({nsname_list}) ayant une adresse IPv4 ({ns_ip_list}). "
-"La limite inférieure étant fixée à {minimum}."
+"({count}) faisant autorité ({nsname_list}) ayant une adresse IPv4 "
+"({ns_ip_list}). La limite inférieure étant fixée à {minimum}."
 
 #. DELEGATION:NOT_ENOUGH_IPV4_NS_DEL
 #, perl-brace-format
@@ -1312,8 +1320,8 @@ msgid ""
 "resolve to IPv4 addresses ({ns_ip_list}). Lower limit set to {minimum}."
 msgstr ""
 "Les serveurs de noms de la zone parente ne retournent pas assez de serveurs "
-"({count}) faisant autorité ({nsname_list}) ayant une adresse IPv4 ({ns_ip_list}). "
-"La limite inférieure étant fixée à {minimum}."
+"({count}) faisant autorité ({nsname_list}) ayant une adresse IPv4 "
+"({ns_ip_list}). La limite inférieure étant fixée à {minimum}."
 
 #. DELEGATION:NOT_ENOUGH_IPV6_NS_CHILD
 #, perl-brace-format
@@ -1322,8 +1330,8 @@ msgid ""
 "resolve to IPv6 addresses ({ns_ip_list}). Lower limit set to {minimum}."
 msgstr ""
 "Les serveurs de noms de la zone ne retournent pas assez de serveurs "
-"({count}) faisant autorité ({nsname_list}) ayant une adresse IPv6 ({ns_ip_list}). "
-"La limite inférieure étant fixée à {minimum}."
+"({count}) faisant autorité ({nsname_list}) ayant une adresse IPv6 "
+"({ns_ip_list}). La limite inférieure étant fixée à {minimum}."
 
 #. DELEGATION:NOT_ENOUGH_IPV6_NS_DEL
 #, perl-brace-format
@@ -1332,8 +1340,8 @@ msgid ""
 "resolve to IPv6 addresses ({ns_ip_list}). Lower limit set to {minimum}."
 msgstr ""
 "Les serveurs de noms de la zone parente ne retournent pas assez de serveurs "
-"({count}) faisant autorité ({nsname_list}) ayant une adresse IPv6 ({ns_ip_list}). "
-"La limite inférieure étant fixée à {minimum}."
+"({count}) faisant autorité ({nsname_list}) ayant une adresse IPv6 "
+"({ns_ip_list}). La limite inférieure étant fixée à {minimum}."
 
 #. DELEGATION:NOT_ENOUGH_NS_CHILD
 #, perl-brace-format
@@ -1394,7 +1402,9 @@ msgstr ""
 #. DELEGATION:NS_IS_CNAME
 #, perl-brace-format
 msgid "Nameserver {nsname} RR point to CNAME."
-msgstr "L'enregistrement pour le serveur de noms {nsname} pointe sur un alias (CNAME)."
+msgstr ""
+"L'enregistrement pour le serveur de noms {nsname} pointe sur un alias "
+"(CNAME)."
 
 #. DELEGATION:NO_NS_CNAME
 msgid "No nameserver points to CNAME alias."
