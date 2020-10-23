@@ -35,7 +35,7 @@ but you will have to find instructions elsewhere.
 
   Install the following:
   ```
-  pkg install devel/gettext-tools devel/git-lite devel/p5-Locale-PO
+  pkg install devel/gettext-tools devel/git-lite devel/gmake devel/p5-Locale-PO
   ```
 
 * Ubuntu
@@ -50,7 +50,8 @@ but you will have to find instructions elsewhere.
 The first step in updating the translations is to generate a new template file
 ("Zonemaster-Engine.pot"). In practice you rarely need to think about generating 
 it as it is generally performed as an implicit intermediate step.
-If you do want to generate it, the command is `make extract-pot`.
+If you do want to generate it, the command is `make extract-pot` (`gmake
+extract-pot` on FreeBSD).
 
 The translated strings are maintained in files named "<LANG-CODE>.po". 
 Currently there are the following files (and languages):
@@ -59,23 +60,31 @@ Currently there are the following files (and languages):
 * nb.po (Norwegian)
 * sv.po (Swedish)
 
-Execute `make xx.po` to update the *PO* file for language "xx". Choose the
-language code for the language that you want to update. The command will
-update the *PO* file with new message ids (*msgid*) from the source code. 
+Execute `make xx.po` (`gmake xx.po` on FreeBSD) to update the *PO* file for
+language "xx".
+Choose the language code for the language that you want to update.
+The command will update the *PO* file with new message ids (*msgid*) from the
+source code.
 This should only be strictly necessary to do when a module has been added, 
 changed or removed, but it it recommended to do this step every time.
 
-Execute `make update-po` to update all the *PO* files with new message ids 
-from the source code.
+Execute `make update-po` (`gmake update-po` on FreeBSD) to update all the *PO*
+files with new message ids from the source code.
 
 By default the updated *PO* file will suggested translations for new message 
 ids based on fuzzy matching of similar strings. This is not always desirable 
 and you can disable fuzzy matching by executing one of the following
 commands instead:
-  ```
-  make xx.po MSGMERGE_OPTS=--no-fuzzy-mathing
-  make update-po MSGMERGE_OPTS=--no-fuzzy-mathing
-  ```
+```
+make xx.po MSGMERGE_OPTS=--no-fuzzy-mathing
+make update-po MSGMERGE_OPTS=--no-fuzzy-mathing
+```
+
+On FreeBSD do this instead:
+```
+gmake xx.po MSGMERGE_OPTS=--no-fuzzy-mathing
+gmake update-po MSGMERGE_OPTS=--no-fuzzy-mathing
+```
 
 ## Github preparation
 
@@ -163,6 +172,12 @@ welcome comments on these.
   ```
   cd share
   make xx.po
+  ```
+
+  On FreeBSD do this instead:
+  ```
+  cd share
+  gmake xx.po
   ```
 
 * The *PO* file is updated with new *msgids*, if any, and now you can start
@@ -269,6 +284,12 @@ steps before this step:
   > cd share
   > make xx.po
   > ```
+  >
+  > On FreeBSD do this instead:
+  > ```
+  > cd share
+  > gmake xx.po
+  > ```
 
 The new language is not there and cannot be updated. Instead you have to
 create the new language file (*PO* file). The easiest way is to make a copy
@@ -289,6 +310,14 @@ of an existing file.
   ```
   cd share
   make sv.po
+  cp sv.po xx.po
+  git checkout sv.po
+  ```
+
+  On FreeBSD do this instead:
+  ```
+  cd share
+  gmake sv.po
   cp sv.po xx.po
   git checkout sv.po
   ```

@@ -2,11 +2,11 @@
 .SUFFIXES: .po .mo
 .PHONY: all check-msg-args dist extract-pot tidy-po show-fuzzy touch-po update-po
 
-POFILES != find . -maxdepth 1 -type f -name '*.po' -exec basename {} \;
+POFILES := $(shell find . -maxdepth 1 -type f -name '*.po' -exec basename {} \;)
 MOFILES := $(POFILES:%.po=%.mo)
 POTFILE = Zonemaster-Engine.pot
-PMFILES != find ../lib -type f -name '*.pm' | sort
-TESTMODULEFILES != find ../lib/Zonemaster/Engine/Test -type f -name '*.pm' | sort
+PMFILES := $(shell find ../lib -type f -name '*.pm' | sort)
+TESTMODULEFILES := $(shell find ../lib/Zonemaster/Engine/Test -type f -name '*.pm' | sort)
 
 all: $(MOFILES) modules.txt
 	@echo
