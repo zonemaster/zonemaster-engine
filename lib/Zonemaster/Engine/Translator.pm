@@ -118,11 +118,11 @@ Readonly my %TAG_DESCRIPTIONS => (
 ###
 
 around 'BUILDARGS' => sub {
-    my ( $orig, $class, %args ) = @_;
+    my ( $orig, $class, $args ) = @_;
 
-    $args{locale} //= _init_locale();
+    $args->{locale} //= _init_locale();
 
-    return $class->$orig( %args );
+    return $class->$orig( $args );
 };
 
 # Get the program's underlying LC_MESSAGES and make sure it can be effectively
