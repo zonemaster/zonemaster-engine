@@ -207,11 +207,15 @@ msgstr ""
 #, perl-brace-format
 msgid "ASN Database error. No data to analyze for {ns_ip}."
 msgstr ""
+"La base de données des numéros d'AS retourne une erreur. Aucune "
+"donnée à analyser pour l'adresse IP {ns_ip}."
 
 #. CONNECTIVITY:EMPTY_ASN_SET
 #, perl-brace-format
 msgid "AS database returned no informations for IP address {ns_ip}."
 msgstr ""
+"La base de données des numéros d'AS ne retourne aucune information "
+"pour l'adresse IP {ns_ip}."
 
 #. CONNECTIVITY:IPV4_SAME_ASN
 #, perl-brace-format
@@ -656,7 +660,7 @@ msgid ""
 msgstr ""
 "Le champ \"flags\" de l'enregistrement de type \"DNSKEY\" avec le tag "
 "{keytag} retourné par le serveur de noms {ns} n'a pas le bit SEP positionné "
-"alors qu'unenregistrement de type \"DS\" avec le même tag de clé existe dans "
+"alors qu'un enregistrement de type \"DS\" avec le même tag de clé existe dans "
 "la zone parente."
 
 #. DNSSEC:DNSKEY_NOT_ZONE_SIGN
@@ -667,7 +671,7 @@ msgid ""
 msgstr ""
 "Le champ \"flags\" de l'enregistrement de type \"DNSKEY\" avec le tag "
 "{keytag} retourné par le serveur de noms {ns} n'a pas le bit ZONE positionné "
-"alors qu'unenregistrement de type \"DS\" avec le même tag de clé existe dans "
+"alors qu'un enregistrement de type \"DS\" avec le même tag de clé existe dans "
 "la zone parente."
 
 #. DNSSEC:DNSKEY_NOT_SIGNED
