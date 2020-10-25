@@ -352,7 +352,8 @@ msgstr "Intet svar fra navneserveren {ns} på forespørgsel om SOA-record."
 #. CONSISTENCY:NS_SET
 #, perl-brace-format
 msgid "Saw NS set ({nsname_list}) on following nameserver set : {servers}."
-msgstr "Fandt NS-sæt ({nsname_list}) på følgende sæt af navneservere : {servers}."
+msgstr ""
+"Fandt NS-sæt ({nsname_list}) på følgende sæt af navneservere : {servers}."
 
 #. CONSISTENCY:ONE_NS_SET
 #, perl-brace-format
@@ -572,8 +573,9 @@ msgid ""
 "Flags field of DNSKEY record with tag {keytag} returned by nameserver {ns} "
 "has not SEP bit set although DS with same tag is present in parent."
 msgstr ""
-"Feltet flag bag DNSKEY record med tag {keytag} returneret af navneserver {ns} "
-"har ikke SEP bit sat på trods af, at DS med samme tag er til stede hos forælderen."
+"Feltet flag bag DNSKEY record med tag {keytag} returneret af navneserver "
+"{ns} har ikke SEP bit sat på trods af, at DS med samme tag er til stede hos "
+"forælderen."
 
 #. DNSSEC:DNSKEY_NOT_ZONE_SIGN
 #, perl-brace-format
@@ -581,8 +583,9 @@ msgid ""
 "Flags field of DNSKEY record with tag {keytag} returned by nameserver {ns} "
 "has not ZONE bit set although DS with same tag is present in parent."
 msgstr ""
-"Feltet flag bag DNSKEY record med tag {keytag} returneret af navneserver {ns} "
-"har ikke ZONE bit sat på trods af, at DS med samme tag er til stede hos forælderen."
+"Feltet flag bag DNSKEY record med tag {keytag} returneret af navneserver "
+"{ns} har ikke ZONE bit sat på trods af, at DS med samme tag er til stede hos "
+"forælderen."
 
 #. DNSSEC:DNSKEY_NOT_SIGNED
 msgid "The apex DNSKEY RRset was not correctly signed."
@@ -841,8 +844,8 @@ msgid ""
 "Nameserver {ns} returned no DNSKEY record matching the DS record with tag "
 "{keytag} found in the parent zone."
 msgstr ""
-"Navneserveren {ns} returnerede ingen DNSKEY record, der matcher DS record med tag "
-"{keytag} fundet i foræderzonen."
+"Navneserveren {ns} returnerede ingen DNSKEY record, der matcher DS record "
+"med tag {keytag} fundet i foræderzonen."
 
 #. DNSSEC:NO_MATCHING_RRSIG
 #, perl-brace-format
@@ -851,8 +854,8 @@ msgid ""
 "to the DNSKEY with tag {keytag} even though there is a DS record in the "
 "parent zone for that DNSKEY record."
 msgstr ""
-"Navneserveren {ns} returnerede ingen signatur på DNSKEY RR-sættet, der svarer til "
-"DNSKEY med tag {keytag} på trods af, at der er en DS record i "
+"Navneserveren {ns} returnerede ingen signatur på DNSKEY RR-sættet, der "
+"svarer til DNSKEY med tag {keytag} på trods af, at der er en DS record i "
 "forældrezonen for den DNSKEY record."
 
 #. DNSSEC:NO_NSEC3PARAM
@@ -888,7 +891,8 @@ msgstr "Navneserveren {ns} returnerede ingen {rrtype} record(s)."
 #, perl-brace-format
 msgid ""
 "Nameserver {ns} responded with no RRSIG record(s) covering the DNSKEY RRset."
-msgstr "Navneserveren {ns} returnerede ingen RRSIG, der dækker DNSKEY RR-sættet."
+msgstr ""
+"Navneserveren {ns} returnerede ingen RRSIG, der dækker DNSKEY RR-sættet."
 
 #. DNSSEC:NOT_SIGNED
 msgid "The zone is not signed with DNSSEC."
@@ -1055,7 +1059,8 @@ msgid ""
 "IPv4 addresses ({ns_ip_list}). Lower limit set to {minimum}."
 msgstr ""
 "Barnet indeholder tilstrækkeligt antal ({count}) navneservere "
-"({nsname_list}) med IPv4-adresser ({ns_ip_list}). Minimumsværdien er {minimum}."
+"({nsname_list}) med IPv4-adresser ({ns_ip_list}). Minimumsværdien er "
+"{minimum}."
 
 #. DELEGATION:ENOUGH_IPV4_NS_DEL
 #, perl-brace-format
@@ -1064,7 +1069,8 @@ msgid ""
 "to IPv4 addresses ({ns_ip_list}). Lower limit set to {minimum}."
 msgstr ""
 "Delegeringen indeholder et tilstrækkeligt antal ({count}) navneservere "
-"({nsname_list}) med IPv4-adresser ({ns_ip_list}). Mindsteværdien er {minimum}."
+"({nsname_list}) med IPv4-adresser ({ns_ip_list}). Mindsteværdien er "
+"{minimum}."
 
 #. DELEGATION:ENOUGH_IPV6_NS_CHILD
 #, perl-brace-format
@@ -1073,7 +1079,8 @@ msgid ""
 "IPv6 addresses ({ns_ip_list}). Lower limit set to {minimum}."
 msgstr ""
 "Barnet indeholder tilstrækkeligt antal ({count}) navneservere "
-"({nsname_list}) med IPv6-adresser ({ns_ip_list}). Minimumsværdien er {minimum}."
+"({nsname_list}) med IPv6-adresser ({ns_ip_list}). Minimumsværdien er "
+"{minimum}."
 
 #. DELEGATION:ENOUGH_IPV6_NS_DEL
 #, perl-brace-format
@@ -1082,7 +1089,8 @@ msgid ""
 "to IPv6 addresses ({ns_ip_list}). Lower limit set to {minimum}."
 msgstr ""
 "Delegeringen indeholder et tilstrækkeligt antal ({count}) navneservere "
-"({nsname_list}) med IPv6-adresser ({ns_ip_list}). Mindsteværdien er {minimum}."
+"({nsname_list}) med IPv6-adresser ({ns_ip_list}). Mindsteværdien er "
+"{minimum}."
 
 #. DELEGATION:ENOUGH_NS_CHILD
 #, perl-brace-format
@@ -1132,7 +1140,8 @@ msgid ""
 "resolve to IPv4 addresses ({ns_ip_list}). Lower limit set to {minimum}."
 msgstr ""
 "Barnet indeholder ikke tilstrækkeligt antal ({count}) navneservere "
-"({nsname_list}) med IPv4-adresser ({ns_ip_list}). Minimumsværdien er {minimum}."
+"({nsname_list}) med IPv4-adresser ({ns_ip_list}). Minimumsværdien er "
+"{minimum}."
 
 #. DELEGATION:NOT_ENOUGH_IPV4_NS_DEL
 #, perl-brace-format
@@ -1141,7 +1150,8 @@ msgid ""
 "resolve to IPv4 addresses ({ns_ip_list}). Lower limit set to {minimum}."
 msgstr ""
 "Delegeringen indeholder ikke tilstrækkeligt antal ({count}) navneservere "
-"({nsname_list}) med IPv4-adresser ({ns_ip_list}). Mindsteværdien er {minimum}."
+"({nsname_list}) med IPv4-adresser ({ns_ip_list}). Mindsteværdien er "
+"{minimum}."
 
 #. DELEGATION:NOT_ENOUGH_IPV6_NS_CHILD
 #, perl-brace-format
@@ -1150,7 +1160,8 @@ msgid ""
 "resolve to IPv6 addresses ({ns_ip_list}). Lower limit set to {minimum}."
 msgstr ""
 "Barnet indeholder ikke tilstrækkeligt antal ({count}) navneservere "
-"({nsname_list}) med IPv6-adresser ({ns_ip_list}). Minimumsværdien er {minimum}."
+"({nsname_list}) med IPv6-adresser ({ns_ip_list}). Minimumsværdien er "
+"{minimum}."
 
 #. DELEGATION:NOT_ENOUGH_IPV6_NS_DEL
 #, perl-brace-format
@@ -1159,7 +1170,8 @@ msgid ""
 "resolve to IPv6 addresses ({ns_ip_list}). Lower limit set to {minimum}."
 msgstr ""
 "Delegeringen indeholder ikke tilstrækkeligt antal ({count}) navneservere "
-"({nsname_list}) med IPv6-adresser ({ns_ip_list}). Mindsteværdien er {minimum}."
+"({nsname_list}) med IPv6-adresser ({ns_ip_list}). Mindsteværdien er "
+"{minimum}."
 
 #. DELEGATION:NOT_ENOUGH_NS_CHILD
 #, perl-brace-format
@@ -1325,7 +1337,8 @@ msgstr "Alle navneservere kan oversættes til en IP-adresse."
 #, perl-brace-format
 msgid ""
 "The following nameservers failed to resolve to an IP address : {nsname_list}."
-msgstr "IP-adresser bag følgende navneservere kunne ikke findes : {nsname_list}."
+msgstr ""
+"IP-adresser bag følgende navneservere kunne ikke findes : {nsname_list}."
 
 #. NAMESERVER:CASE_QUERIES_RESULTS_DIFFER
 #, perl-brace-format
