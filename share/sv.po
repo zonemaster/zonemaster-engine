@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-20 06:54+0200\n"
-"PO-Revision-Date: 2020-04-21 10:01+0200\n"
+"POT-Creation-Date: 2020-10-23 15:48+0200\n"
+"PO-Revision-Date: 2020-10-25 11:42+0100\n"
 "Last-Translator: mats.dufberg@iis.se\n"
 "Language-Team: Zonemaster Team\n"
 "Language: sv\n"
@@ -52,6 +52,32 @@ msgstr "Varje bakåtuppslagning (PTR) stämmer med motsvarande namnservernamn."
 #, perl-brace-format
 msgid "No response from nameserver(s) on PTR query ({reverse})."
 msgstr "Inget svar från namnservern på PTR-fråga ({reverse})."
+
+#. ADDRESS:TEST_CASE_END
+#. BASIC:TEST_CASE_END
+#. CONNECTIVITY:TEST_CASE_END
+#. CONSISTENCY:TEST_CASE_END
+#. DELEGATION:TEST_CASE_END
+#. DNSSEC:TEST_CASE_END
+#. NAMESERVER:TEST_CASE_END
+#. SYNTAX:TEST_CASE_END
+#. ZONE:TEST_CASE_END
+#, perl-brace-format
+msgid "TEST_CASE_END {testcase}."
+msgstr "TEST_CASE_END {testcase}."
+
+#. ADDRESS:TEST_CASE_START
+#. BASIC:TEST_CASE_START
+#. CONNECTIVITY:TEST_CASE_START
+#. CONSISTENCY:TEST_CASE_START
+#. DELEGATION:TEST_CASE_START
+#. DNSSEC:TEST_CASE_START
+#. NAMESERVER:TEST_CASE_START
+#. SYNTAX:TEST_CASE_START
+#. ZONE:TEST_CASE_START
+#, perl-brace-format
+msgid "TEST_CASE_START {testcase}."
+msgstr "TEST_CASE_START {testcase}."
 
 #. BASIC:DOMAIN_NAME_LABEL_TOO_LONG
 #, perl-brace-format
@@ -154,54 +180,55 @@ msgstr "IPv6 är aktiverat. Skickar ingen fråga om '{rrtype}' till {ns}."
 msgid "IPv6 is enabled, can send \"{rrtype}\" query to {ns}."
 msgstr "IPv6 är aktiverat. Skickar fråga om '{rrtype}' till {ns}."
 
-#. CONNECTIVITY:NAMESERVERS_IPV4_WITH_UNIQ_AS
+#. CONNECTIVITY:ERROR_ASN_DATABASE
+#, perl-brace-format
+msgid "ASN Database error. No data to analyze for {ns_ip}."
+msgstr "Fel på AS-databas. Det finns ingen data att analysera för {ns_ip}."
+
+#. CONNECTIVITY:EMPTY_ASN_SET
+#, perl-brace-format
+msgid "AS database returned no informations for IP address {ns_ip}."
+msgstr "AS-databasen gav ingen information för IP-adressen {ns_ip}."
+
+#. CONNECTIVITY:IPV4_SAME_ASN
 #, perl-brace-format
 msgid ""
-"All nameservers in the delegation have IPv4 addresses in the same AS ({asn})."
-msgstr ""
-"Alla IPv4-adresser för namnservrarna i delegeringen finns i samma AS ({asn})."
+"All authoritative nameservers have the IPv4 addresses in the same AS set "
+"({asn_list})."
+msgstr "IPv4-adresserna för alla auktoritativa namnservrar tillhör samma uppsättning AS ({asn_list})."
 
-#. CONNECTIVITY:NAMESERVERS_IPV6_WITH_UNIQ_AS
+#. CONNECTIVITY:IPV4_ONE_ASN
 #, perl-brace-format
 msgid ""
-"All nameservers in the delegation have IPv6 addresses in the same AS ({asn})."
-msgstr ""
-"Alla IPv6-adresser för namnservrar i delegeringen finns i samma AS ({asn})."
+"All authoritative nameservers have the IPv4 addresses in the same AS ({asn})."
+msgstr "IPv4-adresserna för alla auktoritativa namnservrar tillhör samma AS ({asn})."
 
-#. CONNECTIVITY:NAMESERVERS_WITH_MULTIPLE_AS
-msgid "Domain's authoritative nameservers do not belong to the same AS."
-msgstr ""
-"IP-adresserna för domänens auktoritativa namnservrar finns i mer än ett AS."
-
-#. CONNECTIVITY:NAMESERVERS_WITH_UNIQ_AS
+#. CONNECTIVITY:IPV4_DIFFERENT_ASN
 #, perl-brace-format
-msgid "All nameservers in the delegation are in the same AS ({asn})."
-msgstr "Alla namnservrar i delegeringen av domänen finns i samma AS ({asn})."
+msgid ""
+"At least two IPv4 addresses of the authoritative nameservers are announce by "
+"different AS sets. A merged list of all AS: ({asn_list})."
+msgstr "Minst två IPv4-adresser för de auktoritativa namnservrarna tillhör två olika AS-uppsättningar. En ihopslagen lista över alla AS: {asn_list}."
 
-#. CONNECTIVITY:NAMESERVERS_IPV4_NO_AS
-msgid "No IPv4 nameserver address is in an AS."
-msgstr "Ingen namnserver har någon IPv4-adress i något AS."
-
-#. CONNECTIVITY:NAMESERVERS_IPV4_WITH_MULTIPLE_AS
+#. CONNECTIVITY:IPV6_SAME_ASN
 #, perl-brace-format
-msgid "Authoritative IPv4 nameservers are in more than one AS ({asn})."
-msgstr ""
-"IPv4-adresserna för de auktoritativa namnservrarna för domännamnet finns i "
-"mer än ett AS ({asn})."
+msgid ""
+"All authoritative nameservers have the IPv6 addresses in the same AS set "
+"({asn_list})."
+msgstr "IPv6-adresserna för alla auktoritativa namnservrar tillhör samma uppsättning AS ({asn_list})."
 
-#. CONNECTIVITY:NAMESERVERS_IPV6_NO_AS
-msgid "No IPv6 nameserver address is in an AS."
-msgstr "Ingen namnserver har någon IPv6-adress i något AS."
+#. CONNECTIVITY:IPV6_ONE_ASN
+#, perl-brace-format
+msgid ""
+"All authoritative nameservers have the IPv6 addresses in the same AS ({asn})."
+msgstr "IPv6-adresser för alla auktoritativa namnservrar tillhör samma AS ({asn})."
 
-#. CONNECTIVITY:NAMESERVERS_IPV6_WITH_MULTIPLE_AS
-msgid "Authoritative IPv6 nameservers are in more than one AS."
-msgstr ""
-"IPv6-adresserna för de auktoritativa namnservrarna för domännamnet finns i "
-"mer än ett AS."
-
-#. CONNECTIVITY:NAMESERVERS_NO_AS
-msgid "No nameserver address is in an AS."
-msgstr "Ingen namnserver har någon adress i något AS."
+#. CONNECTIVITY:IPV6_DIFFERENT_ASN
+#, perl-brace-format
+msgid ""
+"At least two IPv6 addresses of the authoritative nameservers are announce by "
+"different AS sets. A merged list of all AS: ({asn_list})."
+msgstr "Minst två IPv6-adresser för de auktoritativa namnservrarna tillhör två olika AS-uppsättningar. En ihopslagen lista över alla AS: {asn_list}."
 
 #. CONNECTIVITY:NAMESERVER_HAS_TCP_53
 #, perl-brace-format
@@ -235,18 +262,18 @@ msgstr "Namnservrarna har IPv6-adresser i följande AS: {asn}."
 
 #. CONNECTIVITY:ASN_INFOS_RAW
 #, perl-brace-format
-msgid "[ASN:RAW] {ns_ip};{data}."
-msgstr "[ASN:RAW] {ns_ip};{data}."
+msgid "The ASN data for name server IP address \"{ns_ip}\" is \"{data}\"."
+msgstr "AS-informationen för IP-adress \"{ns_ip}\" är \"{data}\"."
 
 #. CONNECTIVITY:ASN_INFOS_ANNOUNCE_BY
 #, perl-brace-format
-msgid "[ASN:ANNOUNCE_BY] {ns_ip};{asn}."
-msgstr "[ASN:ANNOUNCE_BY] {ns_ip};{asn}."
+msgid "Name server IP address \"{ns_ip}\" is announced by ASN {asn}."
+msgstr "Namnserver-IP-adressen \"{ns_ip}\" tillhör AS {asn}."
 
 #. CONNECTIVITY:ASN_INFOS_ANNOUNCE_IN
 #, perl-brace-format
-msgid "[ASN:ANNOUNCE_IN] {ns_ip};{prefix}."
-msgstr "[ASN:ANNOUNCE_IN] {ns_ip};{prefix}."
+msgid "Name server IP address \"{ns_ip}\" is announced in prefix \"{prefix}\"."
+msgstr "Namnserver-IP-adressen \"{ns_ip}\" tillhör prefixet \"{prefix}\"."
 
 #. CONSISTENCY:ADDRESSES_MATCH
 msgid "Glue records are consistent between glue and authoritative data."
@@ -264,18 +291,9 @@ msgstr "Det går inte att följa delegeringen av domänen."
 #. CONSISTENCY:EXTRA_ADDRESS_CHILD
 #, perl-brace-format
 msgid ""
-"Child has extra nameserver IP address(es) not listed at parent ({addresses})."
-msgstr ""
-"Dotterzonen har extra namnserver-IP-adress(er) som inte finns med i "
-"moderzonen ({addresses})."
-
-#. CONSISTENCY:EXTRA_ADDRESS_PARENT
-#, perl-brace-format
-msgid ""
-"Parent has extra nameserver IP address(es) not listed at child ({addresses})."
-msgstr ""
-"Delegeringen har extra namnserver-IP-adress(er) som inte finns med i "
-"dotterzonen ({addresses})."
+"Child has extra nameserver IP address(es) not listed at parent "
+"({ns_ip_list})."
+msgstr "Dotterzonen har extra namnserver-IP-adress(er) som inte finns med i moderzonen ({ns_ip_list})."
 
 #. CONSISTENCY:IN_BAILIWICK_ADDR_MISMATCH
 #, perl-brace-format
@@ -334,14 +352,13 @@ msgstr "Inget svar från namnservern {ns} på fråga efter SOA-post."
 
 #. CONSISTENCY:NS_SET
 #, perl-brace-format
-msgid "Saw NS set ({nsset}) on following nameserver set : {servers}."
-msgstr ""
-"NS-uppsättningen '{nsset}' hittades på följande namnservrar: {servers}."
+msgid "Saw NS set ({nsname_list}) on following nameserver set : {servers}."
+msgstr "NS-uppsättningen \"{nsname_list}\" hittades på följande uppsättning namnservrar: {servers}."
 
 #. CONSISTENCY:ONE_NS_SET
 #, perl-brace-format
-msgid "A single NS set was found ({nsset})."
-msgstr "Exakt en uppsättning namnservrar hittades: ({nsset})."
+msgid "A single NS set was found ({nsname_list})."
+msgstr "Exakt en uppsättning namnservrar hittades: ({nsname_list})."
 
 #. CONSISTENCY:ONE_SOA_MNAME
 #, perl-brace-format
@@ -381,13 +398,13 @@ msgstr ""
 
 #. CONSISTENCY:SOA_RNAME
 #, perl-brace-format
-msgid "Found SOA rname {rname} on following nameserver set : {servers}."
-msgstr "'{rname}' fanns i 'SOA RNAME' på följande namnservrar: {servers}."
+msgid "Found SOA rname {rname} on following nameserver set : {ns_list}."
+msgstr "\"{rname}\" fanns i \"SOA RNAME\" på följande namnservrar: {ns_list}."
 
 #. CONSISTENCY:SOA_SERIAL
 #, perl-brace-format
-msgid "Saw SOA serial number {serial} on following nameserver set : {servers}."
-msgstr "SOA-serienumret {serial} hittades på följande namnservrar: {servers}."
+msgid "Saw SOA serial number {serial} on following nameserver set : {ns_list}."
+msgstr "SOA-serienumret {serial} hittades på följande uppsättning namnservrar: {ns_list}."
 
 #. CONSISTENCY:SOA_SERIAL_VARIATION
 #, perl-brace-format
@@ -402,19 +419,15 @@ msgstr ""
 #, perl-brace-format
 msgid ""
 "Saw SOA time parameter set (REFRESH={refresh},RETRY={retry},EXPIRE={expire},"
-"MINIMUM={minimum}) on following nameserver set : {servers}."
-msgstr ""
-"SOA-tidsparametrarna (REFRESH={refresh}, RETRY={retry}, EXPIRE={expire}, "
-"MINIMUM={minimum}) hittades på följande namnservrar: {servers}."
+"MINIMUM={minimum}) on following nameserver set : {ns_list}."
+msgstr "SOA-tidsparametrarna (REFRESH={refresh}, RETRY={retry}, EXPIRE={expire}, MINIMUM={minimum}) hittades på följande uppsättning namnservrar: {ns_list}."
 
 #. CONSISTENCY:TOTAL_ADDRESS_MISMATCH
 #, perl-brace-format
 msgid ""
 "No common nameserver IP addresses between child ({child}) and parent "
 "({glue})."
-msgstr ""
-"Det finns inga gemensamma namnserver-IP-adresser mellan moderzon ({glue}) "
-"och dotterzon ({child})."
+msgstr "Det finns inga gemensamma namnserver-IP-adresser mellan moderzon ({glue}) och dotterzon ({child})."
 
 #. DNSSEC:ADDITIONAL_DNSKEY_SKIPPED
 msgid "No DNSKEYs found. Additional tests skipped."
@@ -510,10 +523,20 @@ msgstr ""
 "Inga namnservrar för zonen {zone} svarade med varken NSEC- eller NSEC3-"
 "poster trots att endera är förväntat."
 
-#. DNSSEC:COMMON_KEYTAGS
+#. DNSSEC:BROKEN_DS
 #, perl-brace-format
-msgid "There are both DS and DNSKEY records with key tags {keytags}."
-msgstr "Det finns både DS- and DNSKEY-poster med 'keytag' {keytags}."
+msgid ""
+"DNSKEY record with tag {keytag} returned by nameserver {ns} does not match "
+"the algorithm and hash values in a DS record with same tag in parent zone."
+msgstr "DNSKEY-posten med \"keytag\" {keytag} som kom från namnservern {ns} har inte överensstämmande algoritm och hashvärde som DS-posten från moderzonen med samma \"keytag\"."
+
+#. DNSSEC:BROKEN_RRSIG
+#, perl-brace-format
+msgid ""
+"The RRSIG of the DNSKEY RRset created by tag {keytag} returned by nameserver "
+"{ns} failed to be verified with error '{error}' (a DS record with same tag "
+"is present in the parent zone)."
+msgstr "Den kryptografiska signaturen (\"RRSIG\") för DNSKEY-uppsättningen (\"RRSET\") skapad av DNSKEY med \"keytag\" {keytag} och som kom från namnserver {ns} kunde inte verifieras utan gav felmeddelandet \"{error}\" (en DNS post som refererar till samma \"keytag\" finns i moderzonen)."
 
 #. DNSSEC:DELEGATION_NOT_SIGNED
 #, perl-brace-format
@@ -541,6 +564,20 @@ msgid "{child} sent a DNSKEY record, but {parent} did not send a DS record."
 msgstr ""
 "Dotterzonen '{child}' skickade en DNSKEY-post, men moderzonen '{parent}' "
 "skickade inte någon DS-post."
+
+#. DNSSEC:DNSKEY_KSK_NOT_SEP
+#, perl-brace-format
+msgid ""
+"Flags field of DNSKEY record with tag {keytag} returned by nameserver {ns} "
+"has not SEP bit set although DS with same tag is present in parent."
+msgstr "Namnserver {ns} skickade en DNSKEY-post med \"keytag\" {keytag}, i vilken SEP-flaggan inte är satt trots att det finns en DS-post som refererar till samma \"keytag\" i moderzonen.\n"
+
+#. DNSSEC:DNSKEY_NOT_ZONE_SIGN
+#, perl-brace-format
+msgid ""
+"Flags field of DNSKEY record with tag {keytag} returned by nameserver {ns} "
+"has not ZONE bit set although DS with same tag is present in parent."
+msgstr "Namnserver {ns} skickade en DNSKEY-post med \"keytag\" {keytag}, i vilken ZONE-flaggan inte är satt trots att det finns en DS-post som refererar till samma \"keytag i moderzonen."
 
 #. DNSSEC:DNSKEY_NOT_SIGNED
 msgid "The apex DNSKEY RRset was not correctly signed."
@@ -675,45 +712,10 @@ msgstr ""
 "Moderzonen '{parent}' skickade en DS-post, men dotterzonen '{child}' "
 "skickade ingen DNSKEY-post."
 
-#. DNSSEC:DS_DOES_NOT_MATCH_DNSKEY
-#, perl-brace-format
+#. DNSSEC:DS_MATCHES
 msgid ""
-"DS record with keytag {keytag} and digest type {digtype} does not match the "
-"DNSKEY with the same tag."
-msgstr ""
-"DS-posten med 'keytag' {keytag} och digest-typen {digtype} stämmer inte med "
-"DNSKEY-posten med samma 'keytag'."
-
-#. DNSSEC:DS_FOUND
-#, perl-brace-format
-msgid "Found DS records with tags {keytags}."
-msgstr "Det finns DS-poster med keytaggarna {keytags}."
-
-#. DNSSEC:DS_MATCHES_DNSKEY
-#, perl-brace-format
-msgid ""
-"DS record with keytag {keytag} and digest type {digtype} matches the DNSKEY "
-"with the same tag."
-msgstr ""
-"DS-posten med 'keytag' {keytag} och digest-typen {digtype} stämmer med "
-"DNSKEY-posten med samma 'keytag'."
-
-#. DNSSEC:DS_MATCH_FOUND
-msgid "At least one DS record with a matching DNSKEY record was found."
-msgstr "Det finns minst en DS-post med med en matchande DNSKEY-post."
-
-#. DNSSEC:DS_MATCH_NOT_FOUND
-msgid "No DS record with a matching DNSKEY record was found."
-msgstr "Det finns ingen DS-post med matchande DNSKEY-post."
-
-#. DNSSEC:DS_RFC4509_NOT_VALID
-msgid ""
-"Existing DS with digest type 2, while they do not match DNSKEY records, "
-"prevent use of DS with digest type 1 (RFC4509, section 3)."
-msgstr ""
-"Befintlig DS med 'digest' typ 2 stämmer inte med DNSKEY-posten. Det finns en "
-"DS med 'digest' typ 1, men RFC 4509 (stycke 3) tillåter inte att den används "
-"när det finns en DS med 'digest' typ 2."
+"The DS records in the parent zone match DNSKEY records in the child zone."
+msgstr "DS-posterna i moderzonen stämmer med DNSKEY-poster i dotterzonen."
 
 #. DNSSEC:DURATION_LONG
 #, perl-brace-format
@@ -796,6 +798,10 @@ msgstr ""
 "Nyckel med 'keytag' {keytag}. Detaljer: storlek = {keysize}, Flaggor = "
 "({sep} {rfc5011})."
 
+#. DNSSEC:KEY_SIZE_OK
+msgid "All keys from the DNSKEY RRset have the correct size."
+msgstr "Alla nycklar i DNSKEY RR-uppsättningen har rätt storlek."
+
 #. DNSSEC:MANY_ITERATIONS
 #, perl-brace-format
 msgid "The number of NSEC3 iterations is {count}, which is on the high side."
@@ -814,18 +820,9 @@ msgstr ""
 msgid "There are neither DS nor DNSKEY records for the zone."
 msgstr "Zonen har varken DS- eller DNSKEY-poster."
 
-#. DNSSEC:NO_COMMON_KEYTAGS
-msgid "No DS record had a DNSKEY with a matching keytag."
-msgstr "Ingen DS-post motsvaras av en DNSKEY-post med samma 'keytag'."
-
 #. DNSSEC:NO_DNSKEY
 msgid "No DNSKEYs were returned."
 msgstr "Inga DNSKEY-poster returnerades."
-
-#. DNSSEC:NO_DS
-#, perl-brace-format
-msgid "{from} returned no DS records for {zone}."
-msgstr "'{from}' skickade inga DS-poster för '{zone}'."
 
 #. DNSSEC:NO_KEYS_OR_NO_SIGS
 #, perl-brace-format
@@ -844,6 +841,21 @@ msgid ""
 msgstr ""
 "Kan inte testa DNSSEC-signaturer för SOA-posten, eftersom vi fick {keys} "
 "DNSKEY-poster, {sigs} RRSIG-poster och {soas} SOA-poster."
+
+#. DNSSEC:NO_MATCHING_DNSKEY
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} returned no DNSKEY record matching the DS record with tag "
+"{keytag} found in the parent zone."
+msgstr "Namnserver {ns} inkluderade ingen DNSKEY i svaret som motsvarar DS-posten med \"keytag\" {keytag} som fanns i moderzonen."
+
+#. DNSSEC:NO_MATCHING_RRSIG
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} returned no signature on the DNSKEY RRset that corresponds "
+"to the DNSKEY with tag {keytag} even though there is a DS record in the "
+"parent zone for that DNSKEY record."
+msgstr "Namnserver {ns} inkluderade ingen kryptografisk signatur på DNSKEY-uppsättningen (\"RRset\") från DNSKEY-posten med \"keytag\" {keytag} trots att det finns en DS-post i moderzonen som motsvarar den DNSKEY-posten.\n"
 
 #. DNSSEC:NO_NSEC3PARAM
 #, perl-brace-format
@@ -874,6 +886,12 @@ msgstr "Namnserver {ns} returnerade inga DS-poster för zonen '{zone}'."
 msgid "Nameserver {ns} responded with no {rrtype} record(s)."
 msgstr ""
 "Namnserver {ns} skickade ett svarspaket utan DNS-post av typen {rrtype}."
+
+#. DNSSEC:NO_RRSIG_DNSKEY
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responded with no RRSIG record(s) covering the DNSKEY RRset."
+msgstr "Namnserver {ns} skickade ett svarspaket utan RRSIG-post för DNSKEY-uppsättningen (RRset)."
 
 #. DNSSEC:NOT_SIGNED
 msgid "The zone is not signed with DNSSEC."
@@ -1010,16 +1028,15 @@ msgstr ""
 #. DNSSEC:UNEXPECTED_RESPONSE_DS
 #, perl-brace-format
 msgid ""
-"Nameserver {ns}/{address} responded with an unexpected rcode ({rcode}) on a "
-"DS query for zone {zone}."
-msgstr ""
-"Namnserver {ns}/{address} besvarade en DS-fråga för zonen {zone} med den "
-"icke-väntade svarskoden '{rcode}'."
+"Nameserver {ns} responded with an unexpected rcode ({rcode}) on a DS query "
+"for zone {zone}."
+msgstr "Namnserver {ns} besvarade en DS-fråga för zonen {zone} med den icke-väntade svarskoden \"{rcode}\"."
 
 #. DELEGATION:ARE_AUTHORITATIVE
 #, perl-brace-format
-msgid "All these nameservers are confirmed to be authoritative : {nsset}."
-msgstr "Följande namnservrar är auktoritativa : {nsset}."
+msgid ""
+"All these nameservers are confirmed to be authoritative : {nsname_list}."
+msgstr "Följande namnservrar har bekräftats vara auktoritativa : {nsname_list}."
 
 #. DELEGATION:CHILD_DISTINCT_NS_IP
 msgid "All the IP addresses used by the nameservers in child are unique."
@@ -1056,41 +1073,29 @@ msgstr ""
 #, perl-brace-format
 msgid ""
 "Child lists enough ({count}) nameservers ({nsname_list}) that resolve to "
-"IPv4 addresses ({addrs}). Lower limit set to {minimum}."
-msgstr ""
-"Det finns tillräckligt många namnservrar (NS-poster) i dotterzonen med IPv4-"
-"adress. Antal: {count}. Adresser: {addrs}. Namnservrar med IPv4-adress: "
-"{nsname_list}. Minsta tillåtna antal är {minimum}."
+"IPv4 addresses ({ns_ip_list}). Lower limit set to {minimum}."
+msgstr "Det finns tillräckligt många namnservrar (NS-poster) i dotterzonen med IPv4-adress. Antal: {count}. Adresser: {ns_ip_list}. Namnservrar med IPv4-adress: {nsname_list}. Minsta tillåtna antal är {minimum}."
 
 #. DELEGATION:ENOUGH_IPV4_NS_DEL
 #, perl-brace-format
 msgid ""
 "Delegation lists enough ({count}) nameservers ({nsname_list}) that resolve "
-"to IPv4 addresses ({addrs}). Lower limit set to {minimum}."
-msgstr ""
-"Det finns tillräckligt många namnservrar (NS-poster) i delegeringen med IPv4-"
-"adress. Antal: {count}. Adresser: {addrs}. Namnservrar med IPv4-adress: "
-"{nsname_list}. Minsta tillåtna antal är {minimum}."
+"to IPv4 addresses ({ns_ip_list}). Lower limit set to {minimum}."
+msgstr "Det finns tillräckligt många namnservrar (NS-poster) i delegeringen med IPv4-adress. Antal: {count}. Adresser: {ns_ip_list}. Namnservrar med IPv4-adress: {nsname_list}. Minsta tillåtna antal är {minimum}."
 
 #. DELEGATION:ENOUGH_IPV6_NS_CHILD
 #, perl-brace-format
 msgid ""
 "Child lists enough ({count}) nameservers ({nsname_list}) that resolve to "
-"IPv6 addresses ({addrs}). Lower limit set to {minimum}."
-msgstr ""
-"Det finns tillräckligt många namnservrar (NS-poster) i dotterzonen med IPv6-"
-"adress. Antal: {count}. Adresser: {addrs}. Namnservrar med IPv6-adress: "
-"{nsname_list}. Minsta tillåtna antal är {minimum}."
+"IPv6 addresses ({ns_ip_list}). Lower limit set to {minimum}."
+msgstr "Det finns tillräckligt många namnservrar (NS-poster) i dotterzonen med IPv6-adress. Antal: {count}. Adresser: {ns_ip_list}. Namnservrar med IPv6-adress: {nsname_list}. Minsta tillåtna antal är {minimum}."
 
 #. DELEGATION:ENOUGH_IPV6_NS_DEL
 #, perl-brace-format
 msgid ""
 "Delegation lists enough ({count}) nameservers ({nsname_list}) that resolve "
-"to IPv6 addresses ({addrs}). Lower limit set to {minimum}."
-msgstr ""
-"Det finns tillräckligt många namnservrar (NS-poster) i delegeringen med IPv6-"
-"adress. Antal: {count}. Adresser: {addrs}. Namnservrar med IPv6-adress: "
-"{nsname_list}. Minsta tillåtna antal är {minimum}."
+"to IPv6 addresses ({ns_ip_list}). Lower limit set to {minimum}."
+msgstr "Det finns tillräckligt många namnservrar (NS-poster) i delegeringen med IPv6-adress. Antal: {count}. Adresser: {ns_ip_list}. Namnservrar med IPv6-adress: {nsname_list}. Minsta tillåtna antal är {minimum}."
 
 #. DELEGATION:ENOUGH_NS_CHILD
 #, perl-brace-format
@@ -1104,11 +1109,9 @@ msgstr ""
 #. DELEGATION:ENOUGH_NS_DEL
 #, perl-brace-format
 msgid ""
-"Parent lists enough ({count}) nameservers ({glue}). Lower limit set to "
-"{minimum}."
-msgstr ""
-"Delegeringen i moderzonen har tillräckligt många ({count}) namnservrar "
-"({glue}). Minsta tillåtna antalet är {minimum}."
+"Parent lists enough ({count}) nameservers ({nsname_list}). Lower limit set "
+"to {minimum}."
+msgstr "Det finns tillräckligt många namnservrar i delegeringen ({nsname_list}). Antal: {count}. Minsta tillåtna antal är {minimum}."
 
 #. DELEGATION:EXTRA_NAME_CHILD
 #, perl-brace-format
@@ -1139,41 +1142,29 @@ msgstr ""
 #, perl-brace-format
 msgid ""
 "Child does not list enough ({count}) nameservers ({nsname_list}) that "
-"resolve to IPv4 addresses ({addrs}). Lower limit set to {minimum}."
-msgstr ""
-"Det finns inte tillräckligt många namnservrar (NS-poster) i dotterzonen med "
-"IPv4-adress. Antal: {count}. Adresser: {addrs}. Minsta tillåtna antal är "
-"{minimum}. Namnservrar med IPv4-adress: {nsname_list}."
+"resolve to IPv4 addresses ({ns_ip_list}). Lower limit set to {minimum}."
+msgstr "Det finns inte tillräckligt många namnservrar (NS-poster) i dotterzonen med IPv4-adress. Antal: {count}. Adresser: {ns_ip_list}. Minsta tillåtna antal är {minimum}. Namnservrar med IPv4-adress: {nsname_list}."
 
 #. DELEGATION:NOT_ENOUGH_IPV4_NS_DEL
 #, perl-brace-format
 msgid ""
 "Delegation does not list enough ({count}) nameservers ({nsname_list}) that "
-"resolve to IPv4 addresses ({addrs}). Lower limit set to {minimum}."
-msgstr ""
-"Det finns inte tillräckligt många namnservrar (NS-poster) i delegeringen med "
-"IPv4-adress. Antal: {count}. Adresser: {addrs}. Namnservrar med IPv4-adress: "
-"{nsname_list}. Minsta tillåtna antal är {minimum}."
+"resolve to IPv4 addresses ({ns_ip_list}). Lower limit set to {minimum}."
+msgstr "Det finns inte tillräckligt många namnservrar (NS-poster) i delegeringen med IPv4-adress. Antal: {count}. Adresser: {ns_ip_list}. Namnservrar med IPv4-adress: {nsname_list}. Minsta tillåtna antal är {minimum}."
 
 #. DELEGATION:NOT_ENOUGH_IPV6_NS_CHILD
 #, perl-brace-format
 msgid ""
 "Child does not list enough ({count}) nameservers ({nsname_list}) that "
-"resolve to IPv6 addresses ({addrs}). Lower limit set to {minimum}."
-msgstr ""
-"Det finns inte tillräckligt många namnservrar (NS-poster) i dotterzonen med "
-"IPv6-adress. Antal: {count}. Adresser: {addrs}. Minsta tillåtna antal är "
-"{minimum}. Namnservrar med IPv6-adress: {nsname_list}."
+"resolve to IPv6 addresses ({ns_ip_list}). Lower limit set to {minimum}."
+msgstr "Det finns inte tillräckligt många namnservrar (NS-poster) i dotterzonen med IPv6-adress. Antal: {count}. Adresser: {ns_ip_list}. Minsta tillåtna antal är {minimum}. Namnservrar med IPv6-adress: {nsname_list}."
 
 #. DELEGATION:NOT_ENOUGH_IPV6_NS_DEL
 #, perl-brace-format
 msgid ""
 "Delegation does not list enough ({count}) nameservers ({nsname_list}) that "
-"resolve to IPv6 addresses ({addrs}). Lower limit set to {minimum}."
-msgstr ""
-"Det finns inte tillräckligt många namnservrar (NS-poster) i delegeringen med "
-"IPv6-adress. Antal: {count}. Adresser: {addrs}. Namnservrar med IPv6-adress: "
-"{nsname_list}. Minsta tillåtna antal är {minimum}."
+"resolve to IPv6 addresses ({ns_ip_list}). Lower limit set to {minimum}."
+msgstr "Det finns inte tillräckligt många namnservrar (NS-poster) i delegeringen med IPv6-adress. Antal: {count}. Adresser: {ns_ip_list}. Namnservrar med IPv6-adress: {nsname_list}. Minsta tillåtna antal är {minimum}."
 
 #. DELEGATION:NOT_ENOUGH_NS_CHILD
 #, perl-brace-format
@@ -1188,11 +1179,9 @@ msgstr ""
 #. DELEGATION:NOT_ENOUGH_NS_DEL
 #, perl-brace-format
 msgid ""
-"Parent does not list enough ({count}) nameservers ({glue}). Lower limit set "
-"to {minimum}."
-msgstr ""
-"Det finns inte tillräckligt många namnservrar (NS-poster) i dotterzonen. "
-"Antal: {count}. Namnservrar: {glue}. Minsta tillåtna antal är {minimum}."
+"Parent does not list enough ({count}) nameservers ({nsname_list}). Lower "
+"limit set to {minimum}."
+msgstr "Det finns inte tillräckligt många namnservrar (NS-poster) i delegeringen. Antal: {count}. Namnservrar: {nsname_list}. Minsta tillåtna antal är {minimum}."
 
 #. DELEGATION:NO_IPV4_NS_CHILD
 #, perl-brace-format
@@ -1309,8 +1298,8 @@ msgstr ""
 #. NAMESERVER:AAAA_WELL_PROCESSED
 #, perl-brace-format
 msgid ""
-"The following nameservers answer AAAA queries without problems : {names}."
-msgstr "Följande namnservrar svarade problemfritt på AAAA-frågor : {names}."
+"The following nameservers answer AAAA queries without problems : {ns_list}."
+msgstr "Följande namnservrar svarade problemfritt på AAAA-frågor : {ns_list}."
 
 #. NAMESERVER:A_UNEXPECTED_RCODE
 #, perl-brace-format
@@ -1340,9 +1329,9 @@ msgstr "Alla namnservrar kunde slås upp till minst en IP-adress."
 
 #. NAMESERVER:CAN_NOT_BE_RESOLVED
 #, perl-brace-format
-msgid "The following nameservers failed to resolve to an IP address : {names}."
-msgstr ""
-"Följande namnservernamn kunde inte slås upp till någon IP-adresser: {names}."
+msgid ""
+"The following nameservers failed to resolve to an IP address : {nsname_list}."
+msgstr "Följande namnservernamn kunde inte slås upp till någon IP-adresser: {nsname_list}."
 
 #. NAMESERVER:CASE_QUERIES_RESULTS_DIFFER
 #, perl-brace-format
@@ -1431,8 +1420,8 @@ msgstr ""
 
 #. NAMESERVER:EDNS0_SUPPORT
 #, perl-brace-format
-msgid "The following nameservers support EDNS0 : {names}."
-msgstr "Följande namnservrar stöder EDNS0: {names}."
+msgid "The following nameservers support EDNS0 : {ns_list}."
+msgstr "Följande namnservrar stöder EDNS0: {ns_list}."
 
 #. NAMESERVER:IS_A_RECURSOR
 #, perl-brace-format
@@ -1470,9 +1459,9 @@ msgstr "Inget svar från {ns} på förfrågan efter {dname}."
 
 #. NAMESERVER:NO_UPWARD_REFERRAL
 #, perl-brace-format
-msgid "None of the following nameservers returns an upward referral : {names}."
-msgstr ""
-"Ingen av följande nameserverar skickar hänvisning till moderzonen: {names}."
+msgid ""
+"None of the following nameservers returns an upward referral : {nsname_list}."
+msgstr "Ingen av följande nameserverar skickar hänvisning till rotzonen: {nsname_list}."
 
 #. NAMESERVER:NS_ERROR
 #, perl-brace-format
@@ -1943,11 +1932,6 @@ msgstr "Modulen '{module}' avslutades."
 msgid "Both IPv4 and IPv6 are disabled."
 msgstr "Både IPv4 och IPv6 är inaktiverade."
 
-#. SYSTEM:POLICY_DISABLED
-#, perl-brace-format
-msgid "The module {name} was disabled by the policy."
-msgstr "Modulen '{name}' var inaktiverad i policyn."
-
 #. SYSTEM:UNKNOWN_METHOD
 #, perl-brace-format
 msgid "Request to run unknown method {method} in module {module}."
@@ -1996,8 +1980,8 @@ msgid ""
 "The fake delegation of domain {domain} includes an in-zone name server "
 "{nsname} without mandatory glue (without IP address)."
 msgstr ""
-"Försöksdelegering av domänen '{domain}' innehåller en namnservern '{nsname}' som "
-"kräver en glue-post (kräver IP-adress)."
+"Försöksdelegering av domänen '{domain}' innehåller en namnservern '{nsname}' "
+"som kräver en glue-post (kräver IP-adress)."
 
 #. SYSTEM:FAKE_DELEGATION_NO_IP
 #, perl-brace-format
@@ -2005,14 +1989,11 @@ msgid ""
 "The fake delegation of domain {domain} includes a name server {nsname} that "
 "cannot be resolved to any IP address."
 msgstr ""
-"Försöksdelegering av domänen '{domain}' innehåller en namnservern '{nsname}' som "
-"inte kan slås upp till någon IP-adress."
+"Försöksdelegering av domänen '{domain}' innehåller en namnservern '{nsname}' "
+"som inte kan slås upp till någon IP-adress."
 
 #. SYSTEM:PACKET_BIG
 #, perl-brace-format
-msgid ""
-"Packet size ({size}) exceeds common maximum size of {maxsize} bytes (try "
-"with \"{command}\")."
-msgstr ""
-"Paketstorleken ({size}) byte överskrider den normalt maximala storleken om "
-"{maxsize} byte. Försök med kommandot '{command}'."
+msgid "Big packet size ({size}) (try with \"{command}\")."
+msgstr "Stort paket (storlek: {size} byte). Försök med kommandot '{command}'."
+
