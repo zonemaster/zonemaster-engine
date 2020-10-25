@@ -35,10 +35,6 @@ msgstr ""
 "Navneserveren {nsname} har en IP-adresse ({ns_ip}) med præfikset {prefix}, "
 "som {reference} klassificerer som '{name}'."
 
-#. BASIC:NO_PARENT
-msgid "No parent domain could be found for the domain under test."
-msgstr "Ikke muligt at finde forælder-domænet for det testede domæne."
-
 #. ADDRESS:NAMESERVERS_IP_WITH_REVERSE
 msgid "Reverse DNS entry exists for each Nameserver IP address."
 msgstr "Reverse DNS eksisterer for samtlige navneserveradresser."
@@ -795,15 +791,6 @@ msgstr ""
 msgid "The number of NSEC3 iterations is {count}, which is OK."
 msgstr "Antallet af NSEC3-iterationer er {count}, hvilket er OK."
 
-#. DNSSEC:DS_ALGORITHM_MISSING
-#, perl-brace-format
-msgid ""
-"{ns} returned no DS record created by algorithm {algorithm_number} "
-"({algorithm_mnemonic}) for zone {zone}, which is required."
-msgstr ""
-"Key med keytag {keytag}, detaljer : Size = {keysize}, Flags ({sep}, "
-"{rfc5011})."
-
 #. DNSSEC:KEY_SIZE_OK
 msgid "All keys from the DNSKEY RRset have the correct size."
 msgstr "Alle nøgler i DNSKEY RRset har den rigtige størrelse."
@@ -1012,17 +999,6 @@ msgstr "RRSIG {signature} signerer SOA RRset korrekt."
 #. DNSSEC:SOA_SIGNED
 msgid "At least one RRSIG correctly signs the SOA RRset."
 msgstr "Mindst en RRSIG-record signerer SOA RRset korrekt."
-
-#. DNSSEC:NO_KEYS_OR_NO_SIGS
-#, perl-brace-format
-msgid ""
-"Nameserver {ns} for zone {zone} responds with RCODE \"NOERROR\" on a query "
-"that is expected to give response with RCODE \"NXDOMAIN\". Test for NSEC and "
-"NSEC3 is aborted for this nameserver."
-msgstr ""
-"Navneserveren {ns} for zonen {zone} svarede RCODE \"NOERROR\" på en "
-"forespørgsel, der forventes at give et svar med RCODE \"NXDOMAIN\". Test af "
-"NSEC and NSEC3 er afbrudt for denne navneserver."
 
 #. DNSSEC:TOO_MANY_ITERATIONS
 #, perl-brace-format
@@ -1568,11 +1544,6 @@ msgstr "Fandt ulovlige tegn i SOA MNAME ({name})."
 #, perl-brace-format
 msgid "SOA MNAME ({name}) within a 'numeric only' TLD ({tld})."
 msgstr "SOA MNAME ({name}) indeholder et 'numerisk' TLD ({tld})."
-
-#. SYNTAX:MNAME_SYNTAX_OK
-#, perl-brace-format
-msgid "Found illegal characters in SOA MNAME ({name})."
-msgstr "Fandt ulovlige tegn i SOA MNAME ({name})."
 
 #. SYNTAX:MX_DISCOURAGED_DOUBLE_DASH
 #, perl-brace-format
