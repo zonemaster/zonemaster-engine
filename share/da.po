@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-23 11:38+0000\n"
-"PO-Revision-Date: 2020-10-23 16:00+0200\n"
+"PO-Revision-Date: 2020-10-26 16:47+0100\n"
 "Last-Translator: Niels Haarbo <haarbo@dk-hostmaster.dk>\n"
 "Language-Team: Zonemaster Team\n"
 "Language: da\n"
@@ -196,8 +196,7 @@ msgstr ""
 #, perl-brace-format
 msgid ""
 "All authoritative nameservers have the IPv4 addresses in the same AS ({asn})."
-msgstr ""
-"Alle autoritative navneservere har IPv4-adresser i samme AS ({asn})."
+msgstr "Alle autoritative navneservere har IPv4-adresser i samme AS ({asn})."
 
 #. CONNECTIVITY:IPV4_DIFFERENT_ASN
 #, perl-brace-format
@@ -220,8 +219,7 @@ msgstr ""
 #, perl-brace-format
 msgid ""
 "All authoritative nameservers have the IPv6 addresses in the same AS ({asn})."
-msgstr ""
-"Alle autoritative navneservere har IPv6-adresser i samme AS ({asn})."
+msgstr "Alle autoritative navneservere har IPv6-adresser i samme AS ({asn})."
 
 #. CONNECTIVITY:IPV6_DIFFERENT_ASN
 #, perl-brace-format
@@ -550,11 +548,10 @@ msgstr ""
 "er til stede i forældrezonen)."
 
 #. DNSSEC:DELEGATION_NOT_SIGNED
-#, perl-brace-format
+#, fuzzy, perl-brace-format
 msgid "Delegation from parent to child is not properly signed ({reason})."
 msgstr ""
-"Delegeringen fra forælder- til børnezone er ikke korrekt signeret "
-" ({reason})."
+"Delegeringen fra forælder- til børnezone er ikke korrekt signeret ({reason})."
 
 #. DNSSEC:DELEGATION_SIGNED
 msgid "Delegation from parent to child is properly signed."
