@@ -189,13 +189,15 @@ msgstr "AS database returnerede ingen informationer om IP-adressen {ns_ip}."
 msgid ""
 "All authoritative nameservers have the IPv4 addresses in the same AS set "
 "({asn_list})."
-msgstr "Alle IPv4-adresser bag navneserverne er i samme AS sæt ({asn_list})."
+msgstr ""
+"Alle autoritative navneservere har IPv4-adresser i samme AS sæt ({asn_list})."
 
 #. CONNECTIVITY:IPV4_ONE_ASN
 #, perl-brace-format
 msgid ""
 "All authoritative nameservers have the IPv4 addresses in the same AS ({asn})."
-msgstr "Alle IPv4-adresser bag navneserverne er i samme AS ({asn})."
+msgstr ""
+"Alle autoritative navneservere har IPv4-adresser i samme AS ({asn})."
 
 #. CONNECTIVITY:IPV4_DIFFERENT_ASN
 #, perl-brace-format
@@ -211,13 +213,15 @@ msgstr ""
 msgid ""
 "All authoritative nameservers have the IPv6 addresses in the same AS set "
 "({asn_list})."
-msgstr "Alle IPv6-adresser bag navneserverne er i samme AS sæt ({asn_list})."
+msgstr ""
+"Alle autoritative navneservere har IPv6-adresser samme AS sæt ({asn_list})."
 
 #. CONNECTIVITY:IPV6_ONE_ASN
 #, perl-brace-format
 msgid ""
 "All authoritative nameservers have the IPv6 addresses in the same AS ({asn})."
-msgstr "Alle IPv6-adresser bag navneserverne er i samme AS ({asn})."
+msgstr ""
+"Alle autoritative navneservere har IPv6-adresser i samme AS ({asn})."
 
 #. CONNECTIVITY:IPV6_DIFFERENT_ASN
 #, perl-brace-format
@@ -549,7 +553,8 @@ msgstr ""
 #, perl-brace-format
 msgid "Delegation from parent to child is not properly signed ({reason})."
 msgstr ""
-"Delegeringen fra forælder- til børnezone er ikke korrekt signeret ({reason})."
+"Delegeringen fra forælder- til børnezone er ikke korrekt signeret "
+" ({reason})."
 
 #. DNSSEC:DELEGATION_SIGNED
 msgid "Delegation from parent to child is properly signed."
@@ -801,7 +806,7 @@ msgstr "Alle nøgler i DNSKEY RRset har den rigtige størrelse."
 #. DNSSEC:MANY_ITERATIONS
 #, perl-brace-format
 msgid "The number of NSEC3 iterations is {count}, which is on the high side."
-msgstr "Antallet af NSEC3-iterationer er {count}, hvilket er højt."
+msgstr "Antallet af NSEC3-iterationer er {count}, hvilket er relativt højt."
 
 #. DNSSEC:MIXED_NSEC_NSEC3
 #, perl-brace-format
@@ -1512,7 +1517,7 @@ msgstr "Navneserveren {ns} accepterer en ikke supporteret EDNS version."
 #. NAMESERVER:UPWARD_REFERRAL
 #, perl-brace-format
 msgid "Nameserver {ns} returns an upward referral."
-msgstr "Nameservern {ns} returnerede en henvisning til en forælderzone."
+msgstr "Navneserveren {ns} returnerede en henvisning til en forælderzone."
 
 #. NAMESERVER:UPWARD_REFERRAL_IRRELEVANT
 msgid "Upward referral tests skipped for root zone."
@@ -1873,8 +1878,8 @@ msgid ""
 "Nameserver {ns} responds with a wrong owner name ({owner} instead of {name}) "
 "on SOA queries."
 msgstr ""
-"Nameserver {ns} returnerede et ugyldigt ({owner} i stedet for {name}) på SOA "
-"forespørgsler."
+"Navneserveren {ns} returnerede et ugyldigt ejernavn ({owner} i stedet for "
+"{name}) på SOA forespørgsler."
 
 #. SYSTEM:CANNOT_CONTINUE
 #, perl-brace-format
