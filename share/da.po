@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-23 11:38+0000\n"
-"PO-Revision-Date: 2020-10-26 16:47+0100\n"
+"PO-Revision-Date: 2020-10-26 17:55+0100\n"
 "Last-Translator: Niels Haarbo <haarbo@dk-hostmaster.dk>\n"
 "Language-Team: Zonemaster Team\n"
 "Language: da\n"
@@ -548,7 +548,7 @@ msgstr ""
 "er til stede i forældrezonen)."
 
 #. DNSSEC:DELEGATION_NOT_SIGNED
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "Delegation from parent to child is not properly signed ({reason})."
 msgstr ""
 "Delegeringen fra forælder- til børnezone er ikke korrekt signeret ({reason})."
@@ -1190,7 +1190,7 @@ msgid ""
 "Parent does not list enough ({count}) nameservers ({nsname_list}). Lower "
 "limit set to {minimum}."
 msgstr ""
-"Barnet indeholder ikke tilstrækkeligt antal ({count}) navneservere "
+"Delegeringen indeholder ikke tilstrækkeligt antal ({count}) navneservere "
 "({nsname_list}). Minimumsværdien er {minimum}."
 
 #. DELEGATION:NO_IPV4_NS_CHILD
