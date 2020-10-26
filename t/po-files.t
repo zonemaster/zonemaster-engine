@@ -16,7 +16,7 @@ if ($^O eq "freebsd") {
     $makebin = 'gmake';
 };
 
-sub makecommand {
+sub make {
     my @make_args = @_;
 
     my $command = join( ' ', $makebin, '--silent', '--no-print-directory', @make_args );
@@ -33,7 +33,7 @@ sub makecommand {
 }
 
 subtest "no fuzzy marks" => sub {
-    my ( $output, $status ) = makecommand "show-fuzzy";
+    my ( $output, $status ) = make "show-fuzzy";
     is $status, 0,  $makebin . ' show-fuzzy exits with value 0';
     is $output, "", $makebin . ' show-fuzzy gives empty output';
 };
