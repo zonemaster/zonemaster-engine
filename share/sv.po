@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-23 15:48+0200\n"
-"PO-Revision-Date: 2020-10-25 11:42+0100\n"
+"PO-Revision-Date: 2020-10-26 16:10+0100\n"
 "Last-Translator: mats.dufberg@iis.se\n"
 "Language-Team: Zonemaster Team\n"
 "Language: sv\n"
@@ -229,7 +229,7 @@ msgstr ""
 msgid ""
 "All authoritative nameservers have the IPv6 addresses in the same AS ({asn})."
 msgstr ""
-"IPv6-adresser för alla auktoritativa namnservrar tillhör samma AS ({asn})."
+"IPv6-adresserna för alla auktoritativa namnservrar tillhör samma AS ({asn})."
 
 #. CONNECTIVITY:IPV6_DIFFERENT_ASN
 #, perl-brace-format
@@ -549,9 +549,9 @@ msgid ""
 "DNSKEY record with tag {keytag} returned by nameserver {ns} does not match "
 "the algorithm and hash values in a DS record with same tag in parent zone."
 msgstr ""
-"DNSKEY-posten med \"keytag\" {keytag} som kom från namnservern {ns} har inte "
-"överensstämmande algoritm och hashvärde som DS-posten från moderzonen med "
-"samma \"keytag\"."
+"DNSKEY-posten med \"keytag\" {keytag} som kom från namnservern {ns} har "
+"algoritm och hashvärde som inte stämmer överens med DS-posten från "
+"moderzonen med samma \"keytag\"."
 
 #. DNSSEC:BROKEN_RRSIG
 #, perl-brace-format
@@ -598,9 +598,9 @@ msgid ""
 "Flags field of DNSKEY record with tag {keytag} returned by nameserver {ns} "
 "has not SEP bit set although DS with same tag is present in parent."
 msgstr ""
-"Namnserver {ns} skickade en DNSKEY-post med \"keytag\" {keytag}, i vilken "
-"SEP-flaggan inte är satt trots att det finns en DS-post som refererar till "
-"samma \"keytag\" i moderzonen.\n"
+"Namnserver {ns} skickade en DNSKEY-post med \"keytag\" {keytag} i vilken SEP-"
+"flaggan inte är satt trots att det finns en DS-post som refererar till samma "
+"\"keytag\" i moderzonen.\n"
 
 #. DNSSEC:DNSKEY_NOT_ZONE_SIGN
 #, perl-brace-format
@@ -608,7 +608,7 @@ msgid ""
 "Flags field of DNSKEY record with tag {keytag} returned by nameserver {ns} "
 "has not ZONE bit set although DS with same tag is present in parent."
 msgstr ""
-"Namnserver {ns} skickade en DNSKEY-post med \"keytag\" {keytag}, i vilken "
+"Namnserver {ns} skickade en DNSKEY-post med \"keytag\" {keytag} i vilken "
 "ZONE-flaggan inte är satt trots att det finns en DS-post som refererar till "
 "samma \"keytag i moderzonen."
 
@@ -2071,4 +2071,6 @@ msgstr ""
 #. SYSTEM:PACKET_BIG
 #, perl-brace-format
 msgid "Big packet size ({size}) (try with \"{command}\")."
-msgstr "Stort paket (storlek: {size} byte). Försök med kommandot '{command}'."
+msgstr ""
+"Stort paket ({size} byte). Använd kommandot '{command}' för att se "
+"svarspaketet."
