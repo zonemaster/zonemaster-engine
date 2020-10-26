@@ -10,10 +10,16 @@ use File::Basename qw( dirname );
 chdir dirname( dirname( __FILE__ ) ) or BAIL_OUT( "chdir: $!" );
 chdir 'share' or BAIL_OUT( "chdir: $!" );
 
+my $makebin = 'make';
+if ($^O eq "freebsd") {
+    # This unit test requires GNU Make
+    $makebin = 'gmake';
+};
+
 sub make {
     my @make_args = @_;
 
-    my $command = join( ' ', 'make', '--silent', '--no-print-directory', @make_args );
+    my $command = join( ' ', $makebin, '--silent', '--no-print-directory', @make_args );
     my $output = `$command`;
 
     if ( $? == -1 ) {
@@ -28,6 +34,6 @@ sub make {
 
 subtest "no fuzzy marks" => sub {
     my ( $output, $status ) = make "show-fuzzy";
-    is $status, 0,  'make show-fuzzy exits with value 0';
-    is $output, "", 'make show-fuzzy gives empty output';
+    is $status, 0,  $makebin . ' show-fuzzy exits with value 0';
+    is $output, "", $makebin . ' show-fuzzy gives empty output';
 };
