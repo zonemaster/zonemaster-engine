@@ -600,7 +600,7 @@ msgid ""
 msgstr ""
 "Namnserver {ns} skickade en DNSKEY-post med \"keytag\" {keytag} i vilken SEP-"
 "flaggan inte är satt trots att det finns en DS-post som refererar till samma "
-"\"keytag\" i moderzonen.\n"
+"\"keytag\" i moderzonen."
 
 #. DNSSEC:DNSKEY_NOT_ZONE_SIGN
 #, perl-brace-format
@@ -893,7 +893,7 @@ msgid ""
 msgstr ""
 "Namnserver {ns} inkluderade ingen kryptografisk signatur på DNSKEY-"
 "uppsättningen (\"RRset\") från DNSKEY-posten med \"keytag\" {keytag} trots "
-"att det finns en DS-post i moderzonen som motsvarar den DNSKEY-posten.\n"
+"att det finns en DS-post i moderzonen som motsvarar den DNSKEY-posten."
 
 #. DNSSEC:NO_NSEC3PARAM
 #, perl-brace-format
