@@ -29,7 +29,7 @@ my $entry = Zonemaster::Engine::Logger::Entry->new(
 
 like(
     $trans->to_string( $entry ),
-    qr'   0.\d\d INFO      Parent domain \'nothing.nowhere\' was found for the tested domain.',
+    qr'   \d+.\d\d INFO      Parent domain \'nothing.nowhere\' was found for the tested domain.',
     'string to_stringd as expected'
 );
 
