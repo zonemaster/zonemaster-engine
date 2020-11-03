@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-23 11:38+0000\n"
-"PO-Revision-Date: 2020-10-26 17:55+0100\n"
+"POT-Creation-Date: 2020-11-03 00:28+0100\n"
+"PO-Revision-Date: 2020-11-03 16:56+0100\n"
 "Last-Translator: Niels Haarbo <haarbo@dk-hostmaster.dk>\n"
 "Language-Team: Zonemaster Team\n"
 "Language: da\n"
@@ -35,6 +35,11 @@ msgstr ""
 "Navneserveren {nsname} har en IP-adresse ({ns_ip}) med præfikset {prefix}, "
 "som {reference} klassificerer som '{name}'."
 
+#. ADDRESS:NO_IP_PRIVATE_NETWORK
+msgid "All Nameserver addresses are in the routable public addressing space."
+msgstr ""
+"Alle navneserveradresser eksisterer i det routebare offentlige adresserum."
+
 #. ADDRESS:NAMESERVERS_IP_WITH_REVERSE
 msgid "Reverse DNS entry exists for each Nameserver IP address."
 msgstr "Reverse DNS eksisterer for samtlige navneserveradresser."
@@ -52,8 +57,8 @@ msgstr "Intet svar fra navneserverne på PTR-forespørgsel ({reverse})."
 #. BASIC:TEST_CASE_END
 #. CONNECTIVITY:TEST_CASE_END
 #. CONSISTENCY:TEST_CASE_END
-#. DELEGATION:TEST_CASE_END
 #. DNSSEC:TEST_CASE_END
+#. DELEGATION:TEST_CASE_END
 #. NAMESERVER:TEST_CASE_END
 #. SYNTAX:TEST_CASE_END
 #. ZONE:TEST_CASE_END
@@ -65,8 +70,8 @@ msgstr "TEST_CASE_END {testcase}."
 #. BASIC:TEST_CASE_START
 #. CONNECTIVITY:TEST_CASE_START
 #. CONSISTENCY:TEST_CASE_START
-#. DELEGATION:TEST_CASE_START
 #. DNSSEC:TEST_CASE_START
+#. DELEGATION:TEST_CASE_START
 #. NAMESERVER:TEST_CASE_START
 #. SYNTAX:TEST_CASE_START
 #. ZONE:TEST_CASE_START
@@ -145,8 +150,8 @@ msgstr ""
 #. BASIC:IPV4_DISABLED
 #. CONNECTIVITY:IPV4_DISABLED
 #. CONSISTENCY:IPV4_DISABLED
-#. DELEGATION:IPV4_DISABLED
 #. DNSSEC:IPV4_DISABLED
+#. DELEGATION:IPV4_DISABLED
 #. NAMESERVER:IPV4_DISABLED
 #. SYNTAX:IPV4_DISABLED
 #, perl-brace-format
@@ -161,8 +166,8 @@ msgstr "IPv4 er aktiveret, kan udføre \"{rrtype}\"-forespørgsel til {ns}."
 #. BASIC:IPV6_DISABLED
 #. CONNECTIVITY:IPV6_DISABLED
 #. CONSISTENCY:IPV6_DISABLED
-#. DELEGATION:IPV6_DISABLED
 #. DNSSEC:IPV6_DISABLED
+#. DELEGATION:IPV6_DISABLED
 #. NAMESERVER:IPV6_DISABLED
 #. SYNTAX:IPV6_DISABLED
 #, perl-brace-format
@@ -334,8 +339,8 @@ msgid "Found {count} SOA time parameter set(s)."
 msgstr "Så {count} forskellige konfigurationer af SOA-tidsparametre."
 
 #. CONSISTENCY:NO_RESPONSE
-#. DELEGATION:NO_RESPONSE
 #. DNSSEC:NO_RESPONSE
+#. DELEGATION:NO_RESPONSE
 #. ZONE:NO_RESPONSE
 #, perl-brace-format
 msgid "Nameserver {ns} did not respond."
@@ -796,6 +801,15 @@ msgstr ""
 msgid "The number of NSEC3 iterations is {count}, which is OK."
 msgstr "Antallet af NSEC3-iterationer er {count}, hvilket er OK."
 
+#. DNSSEC:KEY_DETAILS
+#, perl-brace-format
+msgid ""
+"Key with keytag {keytag} details : Size = {keysize}, Flags ({sep}, "
+"{rfc5011})."
+msgstr ""
+"Detaljer bag nøglen med keytag {keytag}: Størrelse = {keysize}, Flag ({sep}, "
+"{rfc5011})."
+
 #. DNSSEC:KEY_SIZE_OK
 msgid "All keys from the DNSKEY RRset have the correct size."
 msgstr "Alle nøgler i DNSKEY RRset har den rigtige størrelse."
@@ -1006,6 +1020,17 @@ msgstr "RRSIG {signature} signerer SOA RRset korrekt."
 msgid "At least one RRSIG correctly signs the SOA RRset."
 msgstr "Mindst en RRSIG-record signerer SOA RRset korrekt."
 
+#. DNSSEC:TEST_ABORTED
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} for zone {zone} responds with RCODE \"NOERROR\" on a query "
+"that is expected to give response with RCODE \"NXDOMAIN\". Test for NSEC and "
+"NSEC3 is aborted for this nameserver."
+msgstr ""
+"Navneserveren {ns} bag zonen {zone} svarer RCODE \"NOERROR\" på en "
+"forespørgsel som forventes at give svaret RCODE \"NXDOMAIN\". Test af NSEC "
+"and NSEC3 er afbrudt for denne navneserver."
+
 #. DNSSEC:TOO_MANY_ITERATIONS
 #, perl-brace-format
 msgid ""
@@ -1109,7 +1134,7 @@ msgid ""
 "Parent lists enough ({count}) nameservers ({nsname_list}). Lower limit set "
 "to {minimum}."
 msgstr ""
-"Barnet indeholder tilstrækkeligt antal ({count}) navneservere "
+"Delegeringen indeholder tilstrækkeligt antal ({count}) navneservere "
 "({nsname_list}). Minimumsværdien er {minimum}."
 
 #. DELEGATION:EXTRA_NAME_CHILD
@@ -1559,6 +1584,11 @@ msgstr "Fandt ulovlige tegn i SOA MNAME ({name})."
 #, perl-brace-format
 msgid "SOA MNAME ({name}) within a 'numeric only' TLD ({tld})."
 msgstr "SOA MNAME ({name}) indeholder et 'numerisk' TLD ({tld})."
+
+#. SYNTAX:MNAME_SYNTAX_OK
+#, perl-brace-format
+msgid "SOA MNAME ({name}) syntax is valid."
+msgstr "SOA MNAME ({name}) syntaks er valid."
 
 #. SYNTAX:MX_DISCOURAGED_DOUBLE_DASH
 #, perl-brace-format
