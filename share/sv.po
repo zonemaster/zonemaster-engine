@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-23 15:48+0200\n"
-"PO-Revision-Date: 2020-10-26 16:10+0100\n"
+"POT-Creation-Date: 2020-11-03 19:42+0100\n"
+"PO-Revision-Date: 2020-11-03 19:44+0100\n"
 "Last-Translator: mats.dufberg@iis.se\n"
 "Language-Team: Zonemaster Team\n"
 "Language: sv\n"
@@ -173,7 +173,7 @@ msgstr "IPv4 är aktiverat. Skickar fråga om '{rrtype}' till {ns}."
 #. SYNTAX:IPV6_DISABLED
 #, perl-brace-format
 msgid "IPv6 is disabled, not sending \"{rrtype}\" query to {ns}."
-msgstr "IPv6 är aktiverat. Skickar ingen fråga om '{rrtype}' till {ns}."
+msgstr "IPv6 är inaktiverat. Skickar ingen fråga om '{rrtype}' till {ns}."
 
 #. BASIC:IPV6_ENABLED
 #, perl-brace-format
