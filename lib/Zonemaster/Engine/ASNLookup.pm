@@ -137,18 +137,17 @@ sub _ripe_asn_lookup {
     my $db_source_nb = 0;
     foreach my $db_source ( @db_sources ) {
         $db_source_nb++;
-        my $socket;
-        unless( $socket = IO::Socket::INET->new( PeerAddr => $db_source->name->string, 
-                                                 PeerPort => q{43}, 
-                                                 Proto => q{tcp} ) 
-            ) { 
+        my $socket = IO::Socket::INET->new( PeerAddr => $db_source->name->string, 
+                                            PeerPort => q{43}, 
+                                            Proto => q{tcp} );
+        unless ( $socket ) { 
             if ( $db_source_nb == scalar @db_sources ) {
                 return \@asns, undef, q{}, q{ERROR_ASN_DATABASE};
             }
             else {
                 next;
             }
-        } 
+        };
 
         printf $socket "-F -M %s\n", $ip->short();
 
