@@ -1,5 +1,41 @@
 Release history for Zonemaster component Zonemaster-Engine
 
+v4.0.0 2020-11-06 (public release version)
+ [Breaking changes]
+ - Remove the DISABLE feature (#736, #454)
+
+ [Features]
+ - Added Norwegian language (#806, #786, #751)
+ - Updated Connectivity03:
+   - Add support of RIPE Ris whois for ASN lookup (#802, #592),
+     however, also see #833
+   - New messages.
+ - DNSSEC02 with updated logic (#619, #783)
+ - Add Zonemaster::Engine::Net::IP::ip_is_ipv4 (#689, #688)
+
+ [Fixes]
+ - Updated/corrected translations/PO files (#832, #824, #827, #823, #809,
+   #811, #808, #796, #794 #789, #787, #779, #757, #776, #761, #735, #745,
+   #746)
+ - Updated/corrected data for unit test (#831, #830)
+ - Corrected/updated Translator.pm (#826, #817, #805, #775, #766, #798,
+   #776, #755, #749, #748)
+ - Made po-files.t use gmake for FreeBSD (#819, #816)
+ - Made FreeBSD to use gmake at installation (#815)
+ - Corrections to share/Makefile (#813, #814, #807, #804, #771, #726)
+ - Updated msgid and message arguments (#799, #713, #795, #788, #792, #790,
+   #782, #776, #758, #760, #743)
+ - Updated instructions for translators (#772)
+ - Updated documentation in Profile.pm (#768)
+ - Corrected system message (#784, #731)
+ - Corrected Nameserver::Cache (#778, #324)
+ - Removed duplicate messages from DNSSEC14 (#770, #769)
+ - Added START/END messages to test cases (#764, #665)
+ - Clean-up (#801, #767, #765, #752, #736, #454)
+ - Corrected Consistency05 (#759, #742)
+ - Corrected Delegation01 (#760, #743)
+
+
 v3.1.2 2020-05-22
 
 [Fixes]
