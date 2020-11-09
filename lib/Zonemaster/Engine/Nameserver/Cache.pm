@@ -10,7 +10,7 @@ use Zonemaster::Engine;
 
 our %object_cache;
 
-has 'data' => ( is => 'ro', isa => 'HashRef', default => sub { {} } );
+has 'data' => ( is => 'ro', isa => 'HashRef[Maybe[Zonemaster::Engine::Packet]]', default => sub { {} } );
 has 'address' => ( is => 'ro', isa => 'Zonemaster::Engine::Net::IP', required => 1 );
 
 around 'new' => sub {

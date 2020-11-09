@@ -9,15 +9,18 @@ use warnings;
 use Zonemaster::Engine;
 
 use Carp;
+use Locale::Messages qw[textdomain];
 use Locale::TextDomain qw[Zonemaster-Engine];
 use POSIX qw[setlocale LC_MESSAGES];
 use Readonly;
 
 use Moose;
+use MooseX::Singleton;
 
-has 'locale' => ( is => 'rw', isa => 'Str' );
-has 'data' => ( is => 'ro', isa => 'HashRef', lazy => 1, builder => '_load_data' );
+has 'locale'               => ( is => 'rw', isa => 'Str' );
+has 'data'                 => ( is => 'ro', isa => 'HashRef', lazy => 1, builder => '_load_data' );
 has 'all_tag_descriptions' => ( is => 'ro', isa => 'HashRef', builder => '_build_all_tag_descriptions' );
+has '_last_language'       => ( is => 'rw', isa => 'Str', builder => '_build_last_language' );
 
 ###
 ### Tag descriptions
@@ -64,10 +67,6 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # SYSTEM:NO_NETWORK
           "Both IPv4 and IPv6 are disabled.";
     },
-    POLICY_DISABLED => sub {
-        __x    # SYSTEM:POLICY_DISABLED
-          "The module {name} was disabled by the policy.", @_;
-    },
     UNKNOWN_METHOD => sub {
         __x    # SYSTEM:UNKNOWN_METHOD
           "Request to run unknown method {method} in module {module}.", @_;
@@ -78,11 +77,11 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     SKIP_IPV4_DISABLED => sub {
         __x    # SYSTEM:SKIP_IPV4_DISABLED
-          "IPv4 is disabled, not sending query to {ns}.", @_;
+          "IPv4 is disabled, not sending query to {ns_list}.", @_;
     },
     SKIP_IPV6_DISABLED => sub {
         __x    # SYSTEM:SKIP_IPV6_DISABLED
-          "IPv6 is disabled, not sending query to {ns}.", @_;
+          "IPv6 is disabled, not sending query to {ns_list}.", @_;
     },
     FAKE_DELEGATION => sub {
         __x    # SYSTEM:FAKE_DELEGATION
@@ -98,19 +97,19 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     FAKE_DELEGATION_IN_ZONE_NO_IP => sub {
         __x    # SYSTEM:FAKE_DELEGATION_IN_ZONE_NO_IP
-          "The fake delegation of domain {domain} includes an in-zone name server {ns} "
+          "The fake delegation of domain {domain} includes an in-zone name server {nsname} "
           . "without mandatory glue (without IP address).",
           @_;
     },
     FAKE_DELEGATION_NO_IP => sub {
         __x    # SYSTEM:FAKE_DELEGATION_NO_IP
-          "The fake delegation of domain {domain} includes a name server {ns} "
+          "The fake delegation of domain {domain} includes a name server {nsname} "
           . "that cannot be resolved to any IP address.",
           @_;
     },
     PACKET_BIG => sub {
         __x    # SYSTEM:PACKET_BIG
-          "Packet size ({size}) exceeds common maximum size of {maxsize} bytes (try with \"{command}\").", @_;
+          "Big packet size ({size}) (try with \"{command}\").", @_;
     },
 );
 
@@ -118,26 +117,40 @@ Readonly my %TAG_DESCRIPTIONS => (
 ### Builder Methods
 ###
 
-sub BUILD {
-    my ( $self ) = @_;
+around 'BUILDARGS' => sub {
+    my ( $orig, $class, $args ) = @_;
 
-    my $locale = $self->{locale} // _get_locale();
-    $self->locale( $locale );
+    $args->{locale} //= _init_locale();
 
-    return $self;
-}
+    return $class->$orig( $args );
+};
 
-# Get the program's underlying LC_MESSAGES.
+# Get the program's underlying LC_MESSAGES and make sure it can be effectively
+# updated down the line.
 #
-# Side effect: Updates the program's underlying LC_MESSAGES to the returned
-# value.
-sub _get_locale {
+# If the underlying LC_MESSAGES is invalid, it attempts to second guess Perls
+# fallback locale.
+#
+# Side effects:
+# * Updates the program's underlying LC_MESSAGES to the returned value.
+# * Unsets LC_ALL.
+sub _init_locale {
     my $locale = setlocale( LC_MESSAGES, "" );
 
-    # C locale is not an option since our msgid and msgstr strings are sometimes
-    # different in C and en_US.UTF-8.
-    if ( $locale eq 'C' ) {
-        $locale = 'en_US.UTF-8';
+    delete $ENV{LC_ALL};
+
+    if ( !defined $locale ) {
+        my $language = $ENV{LANGUAGE} // "";
+        for my $value ( split /:/, $language ) {
+            if ( $value ne "" && $value !~ /[.]/ ) {
+                $value .= ".UTF-8";
+            }
+            $locale = setlocale( LC_MESSAGES, $value );
+            if ( defined $locale ) {
+                last;
+            }
+        }
+        $locale //= "C";
     }
 
     return $locale;
@@ -174,14 +187,39 @@ sub _build_all_tag_descriptions {
     return \%all_tag_descriptions;
 }
 
+sub _build_last_language {
+    return $ENV{LANGUAGE} // '';
+}
+
 ###
 ### Method modifiers
 ###
 
-after 'locale' => sub {
-    my ( $self ) = @_;
+around 'locale' => sub {
+    my $next = shift;
+    my ( $self, @args ) = @_;
 
-    setlocale( LC_MESSAGES, $self->{locale} );
+    return $self->$next()
+      unless @args;
+
+    my $new_locale = shift @args;
+
+    # On some systems gettext takes its locale from setlocale().
+    defined setlocale( LC_MESSAGES, $new_locale )
+      or return;
+
+    $self->_last_language( $ENV{LANGUAGE} // '' );
+
+    # On some systems gettext takes its locale from %ENV.
+    $ENV{LC_MESSAGES} = $new_locale;
+
+    # On some systems gettext refuses to switch over to another locale unless
+    # the textdomain is reset.
+    textdomain( 'Zonemaster-Engine' );
+
+    $self->$next( $new_locale );
+
+    return $new_locale;
 };
 
 ###
@@ -203,14 +241,13 @@ sub translate_tag {
 sub _translate_tag {
     my ( $self, $module, $tag, $args ) = @_;
 
+    if ( $ENV{LANGUAGE} // '' ne $self->_last_language ) {
+        $self->locale( $self->locale );
+    }
+
     my $code = $self->all_tag_descriptions->{$module}{$tag};
 
     if ( $code ) {
-
-        # Partial workaround for FreeBSD 11. It works once, but then translation
-        # gets stuck on that locale.
-        local $ENV{LC_ALL} = $self->{locale};
-
         return $code->( %{$args} );
     }
     else {
@@ -229,14 +266,20 @@ Zonemaster::Engine::Translator - translation support for Zonemaster
 
 =head1 SYNOPSIS
 
-    my $trans = Zonemaster::Engine::Translator->new({ locale => 'sv_SE.UTF-8' });
+    Zonemaster::Engine::Translator->initialize({ locale => 'sv_SE.UTF-8' });
+
+    my $trans = Zonemaster::Engine::Translator->instance;
     say $trans->to_string($entry);
 
-A side effect of constructing an object of this class is that the program's
-underlying locale for message catalogs (a.k.a. LC_MESSAGES) is updated.
+This is a singleton class.
 
-It does not make sense to create more than one object of this class because of
-the globally stateful nature of the locale attribute.
+The instance of this class requires exclusive control over C<$ENV{LC_MESSAGES}>
+and the program's underlying LC_MESSAGES.
+At times it resets gettext's textdomain.
+On construction it unsets C<$ENV{LC_ALL}> and from then on it must remain unset.
+
+On systems that support C<$ENV{LANGUAGE}>, this variable overrides the locale()
+attribute unless the locale() attribute is set to C<"C">.
 
 =head1 ATTRIBUTES
 
@@ -244,13 +287,22 @@ the globally stateful nature of the locale attribute.
 
 =item locale
 
-The locale that should be used to find translation data. If not
-explicitly provided, defaults to (in order) the contents of the
-environment variable LANG, LC_ALL, LC_MESSAGES or, if none of them are
-set, to C<en_US.UTF-8>.
+The locale used for localized messages.
 
-Updating this attribute also causes an analogous update of the program's
+    say $translator->locale();
+    if ( !$translator->locale( 'sv_SE.UTF-8' ) ) {
+        say "failed to update locale";
+    }
+
+The value of this attribute is mirrored in C<$ENV{LC_MESSAGES}>.
+
+When writing to this attribute, a request is made to update the program's
 underlying LC_MESSAGES.
+If this request fails, the attribute value remains unchanged and an empty list
+is returned.
+
+As a side effect when successfully updating this attribute gettext's textdomain
+is reset.
 
 =item data
 
@@ -262,6 +314,38 @@ end-users.
 =head1 METHODS
 
 =over
+
+=item initialize(%args)
+
+Provide initial values for the single instance of this class.
+
+    Zonemaster::Engine::Translator->initialize( locale => 'sv_SE.UTF-8' );
+
+This method must be called at most once and before the first call to instance().
+
+=item instance()
+
+Returns the single instance of this class.
+
+    my $translator = Zonemaster::Engine::Translator->instance;
+
+If initialize() has not been called prior to the first call to instance(), it
+is the same as if initialize() had been called without arguments.
+
+=item new(%args)
+
+Use of this method is deprecated.
+
+See L<MooseX::Singleton->new|MooseX::Singleton/"Singleton->new">.
+
+=over
+
+=item locale
+
+If no initial value is provided to the constructor, one is determined by calling
+setlocale( LC_MESSAGES, "" ).
+
+=back
 
 =item to_string($entry)
 

@@ -1,20 +1,22 @@
 package Zonemaster::Engine::Test::Consistency;
 
-use version; our $VERSION = version->declare("v1.1.12");
+use 5.014002;
 
 use strict;
 use warnings;
 
-use 5.014002;
+use version; our $VERSION = version->declare("v1.1.15");
 
 use Zonemaster::Engine;
 
 use List::MoreUtils qw[uniq];
 use Locale::TextDomain qw[Zonemaster-Engine];
 use Readonly;
+use Zonemaster::Engine::Profile;
 use Zonemaster::Engine::Constants qw[:ip :soa];
 use Zonemaster::Engine::Test::Address;
 use Zonemaster::Engine::Util;
+use Zonemaster::Engine::TestMethods;
 
 ###
 ### Entry points
@@ -64,6 +66,8 @@ sub metadata {
               SOA_SERIAL_VARIATION
               IPV4_DISABLED
               IPV6_DISABLED
+              TEST_CASE_END
+              TEST_CASE_START
               )
         ],
         consistency02 => [
@@ -75,6 +79,8 @@ sub metadata {
               SOA_RNAME
               IPV4_DISABLED
               IPV6_DISABLED
+              TEST_CASE_END
+              TEST_CASE_START
               )
         ],
         consistency03 => [
@@ -86,6 +92,8 @@ sub metadata {
               SOA_TIME_PARAMETER_SET
               IPV4_DISABLED
               IPV6_DISABLED
+              TEST_CASE_END
+              TEST_CASE_START
               )
         ],
         consistency04 => [
@@ -97,6 +105,8 @@ sub metadata {
               NS_SET
               IPV4_DISABLED
               IPV6_DISABLED
+              TEST_CASE_END
+              TEST_CASE_START
               )
         ],
         consistency05 => [
@@ -108,6 +118,8 @@ sub metadata {
               IN_BAILIWICK_ADDR_MISMATCH
               NO_RESPONSE
               OUT_OF_BAILIWICK_ADDR_MISMATCH
+              TEST_CASE_END
+              TEST_CASE_START
               )
         ],
         consistency06 => [
@@ -116,6 +128,8 @@ sub metadata {
               NO_RESPONSE_SOA_QUERY
               ONE_SOA_MNAME
               MULTIPLE_SOA_MNAMES
+              TEST_CASE_END
+              TEST_CASE_START
               )
         ],
     };
@@ -128,37 +142,33 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     CHILD_NS_FAILED => sub {
         __x    # CONSISTENCY:CHILD_NS_FAILED
-          'Unexpected or erroneous reply from {ns}/{address}.', @_;
+          'Unexpected or erroneous reply from {ns}.', @_;
     },
     CHILD_ZONE_LAME => sub {
         __x    # CONSISTENCY:CHILD_ZONE_LAME
-          'Lame delegation', @_;
+          'Lame delegation.', @_;
     },
     EXTRA_ADDRESS_CHILD => sub {
         __x    # CONSISTENCY:EXTRA_ADDRESS_CHILD
-          'Child has extra nameserver IP address(es) not listed at parent ({addresses}).', @_;
-    },
-    EXTRA_ADDRESS_PARENT => sub {
-        __x    # CONSISTENCY:EXTRA_ADDRESS_PARENT
-          'Parent has extra nameserver IP address(es) not listed at child ({addresses}).', @_;
+          'Child has extra nameserver IP address(es) not listed at parent ({ns_ip_list}).', @_;
     },
     IN_BAILIWICK_ADDR_MISMATCH => sub {
         __x    # CONSISTENCY:IN_BAILIWICK_ADDR_MISMATCH
           'In-bailiwick name server listed at parent has a mismatch between glue data at parent '
-          . '({parent_addresses}) and any equivalent address record in child zone ({zone_addresses})',
+          . '({parent_addresses}) and any equivalent address record in child zone ({zone_addresses}).',
           @_;
     },
     IPV4_DISABLED => sub {
         __x    # CONSISTENCY:IPV4_DISABLED
-          'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
+          'IPv4 is disabled, not sending "{rrtype}" query to {ns}.', @_;
     },
     IPV6_DISABLED => sub {
         __x    # CONSISTENCY:IPV6_DISABLED
-          'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
+          'IPv6 is disabled, not sending "{rrtype}" query to {ns}.', @_;
     },
     MULTIPLE_NS_SET => sub {
         __x    # CONSISTENCY:MULTIPLE_NS_SET
-          'Saw {count} NS set.', @_;
+          'Found {count} NS set(s).', @_;
     },
     MULTIPLE_SOA_MNAMES => sub {
         __x    # CONSISTENCY:MULTIPLE_SOA_MNAMES
@@ -166,47 +176,47 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     MULTIPLE_SOA_RNAMES => sub {
         __x    # CONSISTENCY:MULTIPLE_SOA_RNAMES
-          'Saw {count} SOA rname.', @_;
+          'Found {count} SOA rname(s).', @_;
     },
     MULTIPLE_SOA_SERIALS => sub {
         __x    # CONSISTENCY:MULTIPLE_SOA_SERIALS
-          'Saw {count} SOA serial numbers.', @_;
+          'Found {count} SOA serial number(s).', @_;
     },
     MULTIPLE_SOA_TIME_PARAMETER_SET => sub {
         __x    # CONSISTENCY:MULTIPLE_SOA_TIME_PARAMETER_SET
-          'Saw {count} SOA time parameter set.', @_;
+          "Found {count} SOA time parameter set(s).", @_;
     },
     NO_RESPONSE => sub {
         __x    # CONSISTENCY:NO_RESPONSE
-          'Nameserver {ns}/{address} did not respond.', @_;
+          'Nameserver {ns} did not respond.', @_;
     },
     NO_RESPONSE_NS_QUERY => sub {
         __x    # CONSISTENCY:NO_RESPONSE_NS_QUERY
-          'No response from nameserver {ns}/{address} on NS queries.', @_;
+          'No response from nameserver {ns} on NS queries.', @_;
     },
     NO_RESPONSE_SOA_QUERY => sub {
         __x    # CONSISTENCY:NO_RESPONSE_SOA_QUERY
-          'No response from nameserver {ns}/{address} on SOA queries.', @_;
+          'No response from nameserver {ns} on SOA queries.', @_;
     },
     NS_SET => sub {
         __x    # CONSISTENCY:NS_SET
-          'Saw NS set ({nsset}) on following nameserver set : {servers}.', @_;
+          'Saw NS set ({nsname_list}) on following nameserver set : {servers}.', @_;
     },
     ONE_NS_SET => sub {
         __x    # CONSISTENCY:ONE_NS_SET
-          'A unique NS set was seen ({nsset}).', @_;
+          "A single NS set was found ({nsname_list}).", @_;
     },
     ONE_SOA_MNAME => sub {
         __x    # CONSISTENCY:ONE_SOA_MNAME
-          'A single SOA mname value was seen ({mname})', @_;
+          "A single SOA mname value was seen ({mname}).", @_;
     },
     ONE_SOA_RNAME => sub {
         __x    # CONSISTENCY:ONE_SOA_RNAME
-          'A single SOA rname value was seen ({rname})', @_;
+          "A single SOA rname value was found ({rname}).", @_;
     },
     ONE_SOA_SERIAL => sub {
         __x    # CONSISTENCY:ONE_SOA_SERIAL
-          'A single SOA serial number was seen ({serial}).', @_;
+          "A single SOA serial number was found ({serial}).", @_;
     },
     ONE_SOA_TIME_PARAMETER_SET => sub {
         __x    # CONSISTENCY:ONE_SOA_TIME_PARAMETER_SET
@@ -218,15 +228,15 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # CONSISTENCY:OUT_OF_BAILIWICK_ADDR_MISMATCH
           'Out-of-bailiwick name server listed at parent with glue record has a mismatch between '
           . 'the glue at the parent ({parent_addresses}) and any equivalent address record found '
-          . 'in authoritative zone ({zone_addresses})', @_;
+          . 'in authoritative zone ({zone_addresses}).', @_;
     },
     SOA_RNAME => sub {
         __x    # CONSISTENCY:SOA_RNAME
-          'Saw SOA rname {rname} on following nameserver set : {servers}.', @_;
+          "Found SOA rname {rname} on following nameserver set : {ns_list}.", @_;
     },
     SOA_SERIAL => sub {
         __x    # CONSISTENCY:SOA_SERIAL
-          'Saw SOA serial number {serial} on following nameserver set : {servers}.', @_;
+          'Saw SOA serial number {serial} on following nameserver set : {ns_list}.', @_;
     },
     SOA_SERIAL_VARIATION => sub {
         __x    # CONSISTENCY:SOA_SERIAL_VARIATION
@@ -236,7 +246,15 @@ Readonly my %TAG_DESCRIPTIONS => (
     SOA_TIME_PARAMETER_SET => sub {
         __x    # CONSISTENCY:SOA_TIME_PARAMETER_SET
           'Saw SOA time parameter set (REFRESH={refresh},RETRY={retry},EXPIRE={expire},'
-          . 'MINIMUM={minimum}) on following nameserver set : {servers}.', @_;
+          . 'MINIMUM={minimum}) on following nameserver set : {ns_list}.', @_;
+    },
+    TEST_CASE_END => sub {
+        __x    # CONSISTENCY:TEST_CASE_END
+          'TEST_CASE_END {testcase}.', @_;
+    },
+    TEST_CASE_START => sub {
+        __x    # CONSISTENCY:TEST_CASE_START
+          'TEST_CASE_START {testcase}.', @_;
     },
     TOTAL_ADDRESS_MISMATCH => sub {
         __x    # CONSISTENCY:TOTAL_ADDRESS_MISMATCH
@@ -258,7 +276,7 @@ sub version {
 
 sub consistency01 {
     my ( $class, $zone ) = @_;
-    my @results;
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
     my %nsnames_and_ip;
     my %serials;
     my $query_type = q{SOA};
@@ -273,9 +291,8 @@ sub consistency01 {
             push @results,
               info(
                 IPV6_DISABLED => {
-                    ns      => $local_ns->name->string,
-                    address => $local_ns->address->short,
-                    rrtype  => $query_type,
+                    ns     => $local_ns->string,
+                    rrtype => $query_type,
                 }
               );
             next;
@@ -285,9 +302,8 @@ sub consistency01 {
             push @results,
               info(
                 IPV4_DISABLED => {
-                    ns      => $local_ns->name->string,
-                    address => $local_ns->address->short,
-                    rrtype  => $query_type,
+                    ns     => $local_ns->string,
+                    rrtype => $query_type,
                 }
               );
             next;
@@ -296,26 +312,14 @@ sub consistency01 {
         my $p = $local_ns->query( $zone->name, $query_type );
 
         if ( not $p ) {
-            push @results,
-              info(
-                NO_RESPONSE => {
-                    ns      => $local_ns->name->string,
-                    address => $local_ns->address->short,
-                }
-              );
+            push @results, info( NO_RESPONSE => { ns => $local_ns->string } );
             next;
         }
 
         my ( $soa ) = $p->get_records_for_name( $query_type, $zone->name );
 
         if ( not $soa ) {
-            push @results,
-              info(
-                NO_RESPONSE_SOA_QUERY => {
-                    ns      => $local_ns->name->string,
-                    address => $local_ns->address->short,
-                }
-              );
+            push @results, info( NO_RESPONSE_SOA_QUERY => { ns => $local_ns->string } );
             next;
         }
         else {
@@ -331,7 +335,7 @@ sub consistency01 {
           info(
             SOA_SERIAL => {
                 serial  => $serial,
-                servers => join( q{;}, sort @{ $serials{$serial} } ),
+                ns_list => join( q{;}, sort @{ $serials{$serial} } ),
             }
           );
     }
@@ -363,12 +367,12 @@ sub consistency01 {
         }
     } ## end elsif ( scalar @serial_numbers)
 
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub consistency01
 
 sub consistency02 {
     my ( $class, $zone ) = @_;
-    my @results;
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
     my %nsnames_and_ip;
     my %rnames;
     my $query_type = q{SOA};
@@ -383,9 +387,8 @@ sub consistency02 {
             push @results,
               info(
                 IPV6_DISABLED => {
-                    ns      => $local_ns->name->string,
-                    address => $local_ns->address->short,
-                    rrtype  => $query_type,
+                    ns     => $local_ns->string,
+                    rrtype => $query_type,
                 }
               );
             next;
@@ -395,9 +398,8 @@ sub consistency02 {
             push @results,
               info(
                 IPV4_DISABLED => {
-                    ns      => $local_ns->name->string,
-                    address => $local_ns->address->short,
-                    rrtype  => $query_type,
+                    ns     => $local_ns->string,
+                    rrtype => $query_type,
                 }
               );
             next;
@@ -406,26 +408,14 @@ sub consistency02 {
         my $p = $local_ns->query( $zone->name, $query_type );
 
         if ( not $p ) {
-            push @results,
-              info(
-                NO_RESPONSE => {
-                    ns      => $local_ns->name->string,
-                    address => $local_ns->address->short,
-                }
-              );
+            push @results, info( NO_RESPONSE => { ns => $local_ns->string } );
             next;
         }
 
         my ( $soa ) = $p->get_records_for_name( $query_type, $zone->name );
 
         if ( not $soa ) {
-            push @results,
-              info(
-                NO_RESPONSE_SOA_QUERY => {
-                    ns      => $local_ns->name->string,
-                    address => $local_ns->address->short,
-                }
-              );
+            push @results, info( NO_RESPONSE_SOA_QUERY => { ns => $local_ns->string } );
             next;
         }
         else {
@@ -454,18 +444,18 @@ sub consistency02 {
               info(
                 SOA_RNAME => {
                     rname   => $rname,
-                    servers => join( q{;}, @{ $rnames{$rname} } ),
+                    ns_list => join( q{;}, @{ $rnames{$rname} } ),
                 }
               );
         }
     }
 
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub consistency02
 
 sub consistency03 {
     my ( $class, $zone ) = @_;
-    my @results;
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
     my %nsnames_and_ip;
     my %time_parameter_sets;
     my $query_type = q{SOA};
@@ -480,9 +470,8 @@ sub consistency03 {
             push @results,
               info(
                 IPV6_DISABLED => {
-                    ns      => $local_ns->name->string,
-                    address => $local_ns->address->short,
-                    rrtype  => $query_type,
+                    ns     => $local_ns->string,
+                    rrtype => $query_type,
                 }
               );
             next;
@@ -492,9 +481,8 @@ sub consistency03 {
             push @results,
               info(
                 IPV4_DISABLED => {
-                    ns      => $local_ns->name->string,
-                    address => $local_ns->address->short,
-                    rrtype  => $query_type,
+                    ns     => $local_ns->string,
+                    rrtype => $query_type,
                 }
               );
             next;
@@ -503,26 +491,14 @@ sub consistency03 {
         my $p = $local_ns->query( $zone->name, $query_type );
 
         if ( not $p ) {
-            push @results,
-              info(
-                NO_RESPONSE => {
-                    ns      => $local_ns->name->string,
-                    address => $local_ns->address->short,
-                }
-              );
+            push @results, info( NO_RESPONSE => { ns => $local_ns->string } );
             next;
         }
 
         my ( $soa ) = $p->get_records_for_name( $query_type, $zone->name );
 
         if ( not $soa ) {
-            push @results,
-              info(
-                NO_RESPONSE_SOA_QUERY => {
-                    ns      => $local_ns->name->string,
-                    address => $local_ns->address->short,
-                }
-              );
+            push @results, info( NO_RESPONSE_SOA_QUERY => { ns => $local_ns->string } );
             next;
         }
         else {
@@ -562,18 +538,18 @@ sub consistency03 {
                     retry   => $retry,
                     expire  => $expire,
                     minimum => $minimum,
-                    servers => join( q{;}, sort @{ $time_parameter_sets{$time_parameter_set} } ),
+                    ns_list => join( q{;}, sort @{ $time_parameter_sets{$time_parameter_set} } ),
                 }
               );
         }
     } ## end elsif ( scalar( keys %time_parameter_sets...))
 
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub consistency03
 
 sub consistency04 {
     my ( $class, $zone ) = @_;
-    my @results;
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
     my %nsnames_and_ip;
     my %ns_sets;
     my $query_type = q{NS};
@@ -588,9 +564,8 @@ sub consistency04 {
             push @results,
               info(
                 IPV6_DISABLED => {
-                    ns      => $local_ns->name->string,
-                    address => $local_ns->address->short,
-                    rrtype  => $query_type,
+                    ns     => $local_ns->string,
+                    rrtype => $query_type,
                 }
               );
             next;
@@ -600,9 +575,8 @@ sub consistency04 {
             push @results,
               info(
                 IPV4_DISABLED => {
-                    ns      => $local_ns->name->string,
-                    address => $local_ns->address->short,
-                    rrtype  => $query_type,
+                    ns     => $local_ns->string,
+                    rrtype => $query_type,
                 }
               );
             next;
@@ -611,41 +585,24 @@ sub consistency04 {
         my $p = $local_ns->query( $zone->name, $query_type );
 
         if ( not $p ) {
-            push @results,
-              info(
-                NO_RESPONSE => {
-                    ns      => $local_ns->name->string,
-                    address => $local_ns->address->short,
-                }
-              );
+            push @results, info( NO_RESPONSE => { ns => $local_ns->string } );
             next;
         }
 
         my ( @ns ) = sort map { lc( $_->nsdname ) } $p->get_records_for_name( $query_type, $zone->name );
 
         if ( not scalar( @ns ) ) {
-            push @results,
-              info(
-                NO_RESPONSE_NS_QUERY => {
-                    ns      => $local_ns->name->string,
-                    address => $local_ns->address->short,
-                }
-              );
+            push @results, info( NO_RESPONSE_NS_QUERY => { ns => $local_ns->string } );
             next;
         }
         else {
-            push @{ $ns_sets{ join( q{,}, @ns ) } }, $local_ns->name->string . q{/} . $local_ns->address->short;
-            $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short }++;
+            push @{ $ns_sets{ join( q{;}, @ns ) } }, $local_ns->string;
+            $nsnames_and_ip{ $local_ns->string }++;
         }
     } ## end foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods...})
 
     if ( scalar( keys %ns_sets ) == 1 ) {
-        push @results,
-          info(
-            ONE_NS_SET => {
-                nsset => ( keys %ns_sets )[0],
-            }
-          );
+        push @results, info( ONE_NS_SET => { nsname_list => ( keys %ns_sets )[0] });
     }
     elsif ( scalar( keys %ns_sets ) ) {
         push @results,
@@ -658,29 +615,24 @@ sub consistency04 {
             push @results,
               info(
                 NS_SET => {
-                    nsset   => $ns_set,
-                    servers => join( q{;}, @{ $ns_sets{$ns_set} } ),
+                    nsname_list => $ns_set,
+                    servers     => join( q{;}, @{ $ns_sets{$ns_set} } ),
                 }
               );
         }
     }
 
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub consistency04
 
 sub _get_addr_rrs {
     my ( $class, $ns, $name, $qtype ) = @_;
     my $p = $ns->query( $name, $qtype, { recurse => 0 } );
     if ( !$p ) {
-        return info(
-            NO_RESPONSE => {
-                ns      => $ns->name->string,
-                address => $ns->address->short,
-            }
-        );
+        return info( NO_RESPONSE => { ns => $ns->string } );
     }
     elsif ($p->is_redirect) {
-        my $p = $ns->query( $name, $qtype, { recurse => 1 } );
+        my $p = Zonemaster::Engine->recurse( $name, $qtype, q{IN} );
         if ( $p ) {
             return ( undef, $p->get_records_for_name( $qtype, $name, 'answer' ) );
         } else {
@@ -691,20 +643,14 @@ sub _get_addr_rrs {
         return ( undef, $p->get_records_for_name( $qtype, $name, 'answer' ) );
     }
     elsif (not ($p->aa and $p->rcode eq 'NXDOMAIN')) {
-        return info(
-            CHILD_NS_FAILED => {
-                ns      => $ns->name->string,
-                address => $ns->address->short,
-            }
-        );
+        return info( CHILD_NS_FAILED => { ns => $ns->string } );
     }
     return ( undef );
 }
 
 sub consistency05 {
     my ( $class, $zone ) = @_;
-    my @results;
-
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
     my %strict_glue;
     my %extended_glue;
 
@@ -773,7 +719,7 @@ sub consistency05 {
 
         if ( $is_lame ) {
             push @results, info( CHILD_ZONE_LAME => {} );
-            return @results;
+            return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
         }
     } ## end for my $ib_nsname ( @ib_nsnames)
 
@@ -794,7 +740,7 @@ sub consistency05 {
         push @results,
           info(
             EXTRA_ADDRESS_CHILD => {
-                addresses => join( q{;}, sort @ib_extra_child ),
+                ns_ip_list => join( q{;}, sort @ib_extra_child ),
             }
           );
     }
@@ -834,20 +780,15 @@ sub consistency05 {
     } ## end for my $glue_name ( keys...)
 
     if ( !@ib_extra_child && !@ib_mismatch && !@oob_mismatch ) {
-        push @results,
-          info(
-            ADDRESSES_MATCH => {
-                addresses => join( q{;}, sort @ib_match, @oob_match ),
-            }
-          );
+        push @results, info( ADDRESSES_MATCH => {} );
     }
 
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub consistency05
 
 sub consistency06 {
     my ( $class, $zone ) = @_;
-    my @results;
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
     my %nsnames_and_ip;
     my %mnames;
     my $query_type = q{SOA};
@@ -862,9 +803,8 @@ sub consistency06 {
             push @results,
               info(
                 IPV6_DISABLED => {
-                    ns      => $local_ns->name->string,
-                    address => $local_ns->address->short,
-                    rrtype  => $query_type,
+                    ns     => $local_ns->string,
+                    rrtype => $query_type,
                 }
               );
             next;
@@ -874,9 +814,8 @@ sub consistency06 {
             push @results,
               info(
                 IPV4_DISABLED => {
-                    ns      => $local_ns->name->string,
-                    address => $local_ns->address->short,
-                    rrtype  => $query_type,
+                    ns     => $local_ns->string,
+                    rrtype => $query_type,
                 }
               );
             next;
@@ -885,26 +824,14 @@ sub consistency06 {
         my $p = $local_ns->query( $zone->name, $query_type );
 
         if ( not $p ) {
-            push @results,
-              info(
-                NO_RESPONSE => {
-                    ns      => $local_ns->name->string,
-                    address => $local_ns->address->short,
-                }
-              );
+            push @results, info( NO_RESPONSE => { ns => $local_ns->string } );
             next;
         }
 
         my ( $soa ) = $p->get_records_for_name( $query_type, $zone->name );
 
         if ( not $soa ) {
-            push @results,
-              info(
-                NO_RESPONSE_SOA_QUERY => {
-                    ns      => $local_ns->name->string,
-                    address => $local_ns->address->short,
-                }
-              );
+            push @results, info( NO_RESPONSE_SOA_QUERY => { ns => $local_ns->string } );
             next;
         }
         else {
@@ -933,13 +860,13 @@ sub consistency06 {
               info(
                 SOA_MNAME => {
                     mname   => $mname,
-                    servers => join( q{;}, @{ $mnames{$mname} } ),
+                    ns_list => join( q{;}, @{ $mnames{$mname} } ),
                 }
               );
         }
     }
 
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub consistency06
 
 1;

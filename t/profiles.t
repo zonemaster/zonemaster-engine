@@ -168,7 +168,6 @@ subtest 'default() returns a profile with all properties set' => sub {
     ok defined( $profile->get( 'resolver.defaults.retry' ) ),    'resolver.defaults.retry is set';
     ok defined( $profile->get( 'resolver.defaults.retrans' ) ),  'resolver.defaults.retrans is set';
     ok defined( $profile->get( 'resolver.source' ) ),            'resolver.source is set';
-    ok defined( $profile->get( 'asnroots' ) ),                   'asnroots is set';
     ok defined( $profile->get( 'logfilter' ) ),                  'logfilter is set';
     ok defined( $profile->get( 'test_levels' ) ),                'test_levels is set';
     ok defined( $profile->get( 'test_cases' ) ),                 'test_cases is set';

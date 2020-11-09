@@ -1,10 +1,15 @@
 package Zonemaster::Engine::Logger;
 
-use version; our $VERSION = version->declare("v1.0.7");
-
 use 5.014002;
+
+use strict;
+use warnings;
+
+use version; our $VERSION = version->declare("v1.0.8");
+
 use Moose;
 
+use Zonemaster::Engine::Profile;
 use Zonemaster::Engine::Logger::Entry;
 use Zonemaster::Engine;
 use List::MoreUtils qw[none any];
@@ -54,8 +59,6 @@ sub _check_filter {
                 foreach my $key ( keys %{ $rule->{when} } ) {
                     my $cond = $rule->{when}{$key};
                     if ( ref( $cond ) and ref( $cond ) eq 'ARRAY' ) {
-                        ## no critic (TestingAndDebugging::ProhibitNoWarnings)
-                        # no warnings 'uninitialized';
                         if ( any { $_ eq $entry->args->{$key} } @$cond ) {
                             $match = 1;
                         } else {
@@ -64,8 +67,6 @@ sub _check_filter {
                         }
                     }
                     else {
-                        ## no critic (TestingAndDebugging::ProhibitNoWarnings)
-                        # no warnings 'uninitialized';
                         if ( $cond eq $entry->args->{$key} ) {
                             $match = 1;
                         } else {
@@ -81,6 +82,7 @@ sub _check_filter {
             }
         } ## end if ( $config->{ $entry...})
     } ## end if ( $config )
+    return;
 } ## end sub _check_filter
 
 sub start_time_now {
@@ -127,6 +129,7 @@ sub json {
         my %r;
         $r{timestamp} = $m->timestamp;
         $r{module}    = $m->module;
+        $r{testcase}  = $m->testcase;
         $r{tag}       = $m->tag;
         $r{level}     = $m->level;
         $r{args}      = $m->args if $m->args;

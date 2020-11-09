@@ -69,8 +69,7 @@ If this flag is false, UDP queries that get responses with the C<TC> flag set wi
 =head1 POLICY
 
 The policy data is also a nested hash. The top-level keys are upper-case-only versions of test module names, and under them is all the policy data
-for that particular module. The keys in the next level down are, with one exception, logger tags. The exception is the special key C<DISABLED>,
-which if given a true value will prevent the module from being executed.
+for that particular module. The keys in the next level down are, with one exception, logger tags.
 The values for the tag keys should be the severity level for that tag. For example, under the C<BASIC> top-level key (for the 'Basic' test module),
 there is a key C<NO_GLUE>. That tag will be emitted by the code in the L<Zonemaster::Test::Basic> module if it fails to get NS records for the zone
 being tested from its parent zone. Since that is an error that prevents further testing, the message is given the severity level C<CRITICAL>.

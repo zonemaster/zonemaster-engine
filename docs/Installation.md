@@ -43,7 +43,7 @@ This instruction covers the following operating systems:
    ```
 
 4) Install binary packages:
-   
+
    ```sh
    sudo yum install cpanminus libidn-devel openssl-devel perl-Clone perl-core perl-Devel-CheckLib perl-File-ShareDir perl-File-Slurp perl-libintl perl-IO-Socket-INET6 perl-JSON-PP perl-List-MoreUtils perl-Module-Find perl-Moose perl-Net-IP perl-Pod-Coverage perl-Test-Differences perl-Test-Exception perl-Test-Fatal perl-Test-Pod perl-Text-CSV perl-YAML perl-MailTools
    ```
@@ -51,7 +51,7 @@ This instruction covers the following operating systems:
 5) Install packages from CPAN:
 
    ```sh
-   sudo cpanm Locale::Msgfmt Module::Install Module::Install::XSUtil Test::More
+   sudo cpanm Email::Valid Locale::Msgfmt Module::Install Module::Install::XSUtil MooseX::Singleton Test::More
    ```
 
 6) Install Zonemaster::LDNS and Zonemaster::Engine for *CentOS 7*:
@@ -74,33 +74,25 @@ This instruction covers the following operating systems:
 
 ### Installation on Debian
 
-1) Refresh the package information
+1) Upgrade to latest patch level
 
    ```sh
-   sudo apt update
+   sudo apt update && sudo apt upgrade
    ```
 
-2) Upgrade to latest patch level on Ubuntu 18.04 to get support for DNSSEC algorithm 15 (Ed25519)
-
-   * On Ubuntu 18.04:
-
-     ```sh
-     sudo apt upgrade
-     ```
-
-3) Install dependencies from binary packages:
+2) Install dependencies from binary packages:
 
    ```sh
-   sudo apt install autoconf automake build-essential cpanminus libclone-perl libdevel-checklib-perl libemail-valid-perl libfile-sharedir-perl libfile-slurp-perl libidn11-dev libintl-perl libio-socket-inet6-perl libjson-pp-perl liblist-moreutils-perl liblocale-msgfmt-perl libmodule-find-perl libmodule-install-xsutil-perl libmoose-perl libnet-ip-perl libpod-coverage-perl libreadonly-xs-perl libssl-dev libtest-differences-perl libtest-exception-perl libtest-fatal-perl libtest-pod-perl libtext-csv-perl libtool m4
+   sudo apt install autoconf automake build-essential cpanminus libclone-perl libdevel-checklib-perl libemail-valid-perl libfile-sharedir-perl libfile-slurp-perl libidn11-dev libintl-perl libio-socket-inet6-perl libjson-pp-perl liblist-moreutils-perl liblocale-msgfmt-perl libmodule-find-perl libmodule-install-xsutil-perl libmoose-perl libmoosex-singleton-perl libnet-ip-perl libpod-coverage-perl libreadonly-xs-perl libssl-dev libtest-differences-perl libtest-exception-perl libtest-fatal-perl libtest-pod-perl libtext-csv-perl libtool m4
    ```
 
-4) Install dependencies from CPAN:
+3) Install dependencies from CPAN:
 
    ```sh
    sudo cpanm Module::Install Test::More
    ```
 
-5) Install Zonemaster::LDNS and Zonemaster::Engine.
+4) Install Zonemaster::LDNS and Zonemaster::Engine.
 
    * On Debian 10 (Buster):
 
@@ -169,7 +161,7 @@ This instruction covers the following operating systems:
    * On all versions of FreeBSD install:
 
      ```sh
-     pkg install libidn p5-App-cpanminus p5-Clone p5-Devel-CheckLib p5-Email-Valid p5-File-ShareDir p5-File-Slurp p5-IO-Socket-INET6 p5-JSON-PP p5-List-MoreUtils p5-Locale-libintl p5-Locale-Msgfmt p5-Module-Find p5-Module-Install p5-Module-Install-XSUtil p5-Moose p5-Net-IP-XS p5-Pod-Coverage p5-Readonly-XS p5-Test-Differences p5-Test-Exception p5-Test-Fatal p5-Test-Pod p5-Text-CSV net-mgmt/p5-Net-IP
+     pkg install devel/gmake libidn p5-App-cpanminus p5-Clone p5-Devel-CheckLib p5-Email-Valid p5-File-ShareDir p5-File-Slurp p5-IO-Socket-INET6 p5-JSON-PP p5-List-MoreUtils p5-Locale-libintl p5-Locale-Msgfmt p5-Module-Find p5-Module-Install p5-Module-Install-XSUtil p5-Moose p5-MooseX-Singleton p5-Net-IP-XS p5-Pod-Coverage p5-Readonly-XS p5-Test-Differences p5-Test-Exception p5-Test-Fatal p5-Test-Pod p5-Text-CSV net-mgmt/p5-Net-IP
      ```
 
    * On FreeBSD 11.x (11.3 or newer) also install OpenSSL 1.1.1 or newer:
