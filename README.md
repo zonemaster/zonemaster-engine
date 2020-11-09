@@ -37,7 +37,7 @@ a new language, implementing a new test and the log entries under the directory
 
 ## Participation, Contact and Bug reporting
 
-For [participation], [contact] and [bug reporting], please see 
+For participation, contact and bug reporting, please see
 [Zonemaster/README.md](https://github.com/zonemaster/zonemaster/blob/master/README.md).
 
 
@@ -45,8 +45,5 @@ For [participation], [contact] and [bug reporting], please see
 
 The software is released under the 2-clause BSD license. See separate LICENSE file.
 
-[participation]: https://github.com/zonemaster/zonemaster/blob/master/README.md#participation
-[contact]: https://github.com/zonemaster/zonemaster/blob/master/README.md#contact
-[bug reporting]: https://github.com/zonemaster/zonemaster/blob/master/README.md#bug-reporting
 
 
