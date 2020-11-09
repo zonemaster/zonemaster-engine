@@ -1,5 +1,10 @@
 Release history for Zonemaster component Zonemaster-Engine
 
+v4.0.1 2020-11-09 (public release version)
+ [Fixes]
+ - Fixed a version specification error in Makefile.PL.
+
+
 v4.0.0 2020-11-06 (public release version)
  [Breaking changes]
  - Remove the DISABLE feature (#736, #454)
