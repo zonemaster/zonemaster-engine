@@ -1,11 +1,11 @@
 package Zonemaster::Engine::Test::Basic;
 
-use version; our $VERSION = version->declare("v1.0.12");
+use 5.014002;
 
 use strict;
 use warnings;
 
-use 5.014002;
+use version; our $VERSION = version->declare("v1.0.15");
 
 use Zonemaster::Engine;
 
@@ -13,6 +13,7 @@ use Carp;
 use List::MoreUtils qw[any none];
 use Locale::TextDomain qw[Zonemaster-Engine];
 use Readonly;
+use Zonemaster::Engine::Profile;
 use Zonemaster::Engine::Constants qw[:ip :name];
 use Zonemaster::Engine::Test::Address;
 use Zonemaster::Engine::Test::Syntax;
@@ -84,12 +85,16 @@ sub metadata {
               DOMAIN_NAME_LABEL_TOO_LONG
               DOMAIN_NAME_ZERO_LENGTH_LABEL
               DOMAIN_NAME_TOO_LONG
+              TEST_CASE_END
+              TEST_CASE_START
               )
         ],
         basic01 => [
             qw(
               NO_PARENT
               HAS_PARENT
+              TEST_CASE_END
+              TEST_CASE_START
               )
         ],
         basic02 => [
@@ -102,6 +107,8 @@ sub metadata {
               IPV6_DISABLED
               IPV4_ENABLED
               IPV6_ENABLED
+              TEST_CASE_END
+              TEST_CASE_START
               )
         ],
         basic03 => [
@@ -113,6 +120,8 @@ sub metadata {
               IPV4_ENABLED
               IPV6_ENABLED
               A_QUERY_NO_RESPONSES
+              TEST_CASE_END
+              TEST_CASE_START
               )
         ],
     };
@@ -125,7 +134,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     DOMAIN_NAME_ZERO_LENGTH_LABEL => sub {
         __x    # BASIC:DOMAIN_NAME_ZERO_LENGTH_LABEL
-          "Domain name ({dname}) has a zero length label.", @_;
+          "Domain name ({dname}) has a zero-length label.", @_;
     },
     DOMAIN_NAME_TOO_LONG => sub {
         __x    # BASIC:DOMAIN_NAME_TOO_LONG
@@ -133,7 +142,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     NO_PARENT => sub {
         __x    # BASIC:NO_PARENT
-          'No parent domain could be found for the tested domain.', @_;
+          "No parent domain could be found for the domain under test.", @_;
     },
     HAS_PARENT => sub {
         __x    # BASIC:HAS_PARENT
@@ -141,27 +150,27 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     HAS_A_RECORDS => sub {
         __x    # BASIC:HAS_A_RECORDS
-          'Nameserver {ns}/{address} returned A record(s) for {dname}.', @_;
+          "Nameserver {ns} returned \"A\" record(s) for {dname}.", @_;
     },
     NO_A_RECORDS => sub {
         __x    # BASIC:NO_A_RECORDS
-          'Nameserver {ns}/{address} did not return A record(s) for {dname}.', @_;
+          "Nameserver {ns} did not return \"A\" record(s) for {dname}.", @_;
     },
     HAS_NAMESERVERS => sub {
         __x    # BASIC:HAS_NAMESERVERS
-          'Nameserver {ns}/{address} listed these servers as glue: {nsnlist}.', @_;
+          'Nameserver {ns} listed these servers as glue: {nsnlist}.', @_;
     },
     NO_GLUE_PREVENTS_NAMESERVER_TESTS => sub {
         __x    # BASIC:NO_GLUE_PREVENTS_NAMESERVER_TESTS
-          'No NS records for tested zone from parent. NS tests aborted.', @_;
+          "No NS records for tested zone from parent. NS tests skipped.", @_;
     },
     NS_FAILED => sub {
         __x    # BASIC:NS_FAILED
-          'Nameserver {ns}/{address} did not return NS records. RCODE was {rcode}.', @_;
+          'Nameserver {ns} did not return NS records. RCODE was {rcode}.', @_;
     },
     NS_NO_RESPONSE => sub {
         __x    # BASIC:NS_NO_RESPONSE
-          'Nameserver {ns}/{address} did not respond to NS query.', @_;
+          'Nameserver {ns} did not respond to NS query.', @_;
     },
     A_QUERY_NO_RESPONSES => sub {
         __x    # BASIC:A_QUERY_NO_RESPONSES
@@ -169,23 +178,31 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     HAS_NAMESERVER_NO_WWW_A_TEST => sub {
         __x    # BASIC:HAS_NAMESERVER_NO_WWW_A_TEST
-          'Functional nameserver found. "A" query for www.{zname} test aborted.', @_;
+          "Functional nameserver found. \"A\" query for www.{zname} test skipped.", @_;
     },
     IPV4_DISABLED => sub {
         __x    # BASIC:IPV4_DISABLED
-          'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
+          'IPv4 is disabled, not sending "{rrtype}" query to {ns}.', @_;
     },
     IPV4_ENABLED => sub {
         __x    # BASIC:IPV4_ENABLED
-          'IPv4 is enabled, can send "{rrtype}" query to {ns}/{address}.', @_;
+          'IPv4 is enabled, can send "{rrtype}" query to {ns}.', @_;
     },
     IPV6_DISABLED => sub {
         __x    # BASIC:IPV6_DISABLED
-          'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
+          'IPv6 is disabled, not sending "{rrtype}" query to {ns}.', @_;
     },
     IPV6_ENABLED => sub {
         __x    # BASIC:IPV6_ENABLED
-          'IPv6 is enabled, can send "{rrtype}" query to {ns}/{address}.', @_;
+          'IPv6 is enabled, can send "{rrtype}" query to {ns}.', @_;
+    },
+    TEST_CASE_END => sub {
+        __x    # BASIC:TEST_CASE_END
+          'TEST_CASE_END {testcase}.', @_;
+    },
+    TEST_CASE_START => sub {
+        __x    # BASIC:TEST_CASE_START
+          'TEST_CASE_START {testcase}.', @_;
     },
 );
 
@@ -203,8 +220,8 @@ sub version {
 
 sub basic00 {
     my ( $class, $zone ) = @_;
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
     my $name = name( $zone );
-    my @results;
 
     foreach my $local_label ( @{ $name->labels } ) {
         if ( length $local_label > $LABEL_MAX_LENGTH ) {
@@ -240,13 +257,13 @@ sub basic00 {
           );
     }
 
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 
 } ## end sub basic00
 
 sub basic01 {
     my ( $class, $zone ) = @_;
-    my @results;
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
     my $parent = $zone->parent;
 
     if ( not $parent ) {
@@ -267,12 +284,12 @@ sub basic01 {
           );
     }
 
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub basic01
 
 sub basic02 {
     my ( $class, $zone ) = @_;
-    my @results;
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
     my $query_type = q{NS};
     my @ns = @{ Zonemaster::Engine::TestMethods->method4( $zone ) };
 
@@ -288,9 +305,8 @@ sub basic02 {
             push @results,
               info(
                 IPV4_DISABLED => {
-                    ns      => $ns->name->string,
-                    address => $ns->address->short,
-                    rrtype  => $query_type,
+                    ns     => $ns->string,
+                    rrtype => $query_type,
                 }
               );
             next;
@@ -299,9 +315,8 @@ sub basic02 {
             push @results,
               info(
                 IPV4_ENABLED => {
-                    ns      => $ns->name->string,
-                    address => $ns->address->short,
-                    rrtype  => $query_type,
+                    ns     => $ns->string,
+                    rrtype => $query_type,
                 }
               );
         }
@@ -310,9 +325,8 @@ sub basic02 {
             push @results,
               info(
                 IPV6_DISABLED => {
-                    ns      => $ns->name->string,
-                    address => $ns->address->short,
-                    rrtype  => $query_type,
+                    ns     => $ns->string,
+                    rrtype => $query_type,
                 }
               );
             next;
@@ -321,9 +335,8 @@ sub basic02 {
             push @results,
               info(
                 IPV6_ENABLED => {
-                    ns      => $ns->name->string,
-                    address => $ns->address->short,
-                    rrtype  => $query_type,
+                    ns     => $ns->string,
+                    rrtype => $query_type,
                 }
               );
         }
@@ -337,8 +350,7 @@ sub basic02 {
                     HAS_NAMESERVERS => {
                         nsnlist =>
                           join( q{,}, sort map { $_->nsdname } $p->get_records_for_name( $query_type, $zone->name ) ),
-                        ns      => $ns->name->string,
-                        address => $ns->address->short,
+                        ns => $ns->string,
                     }
                   );
             }
@@ -346,30 +358,23 @@ sub basic02 {
                 push @results,
                   info(
                     NS_FAILED => {
-                        ns      => $ns->name->string,
-                        address => $ns->address->short,
-                        rcode   => $p->rcode,
+                        ns    => $ns->string,
+                        rcode => $p->rcode,
                     }
                   );
             }
         } ## end if ( $p )
         else {
-            push @results,
-              info(
-                NS_NO_RESPONSE => {
-                    ns      => $ns->name->string,
-                    address => $ns->address->short,
-                }
-              );
+            push @results, info( NS_NO_RESPONSE => { ns => $ns->string } );
         }
     } ## end foreach my $ns ( @{ Zonemaster::Engine::TestMethods...})
 
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub basic02
 
 sub basic03 {
     my ( $class, $zone ) = @_;
-    my @results;
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
     my $query_type = q{A};
 
     my $name        = q{www.} . $zone->name;
@@ -379,9 +384,8 @@ sub basic03 {
             push @results,
               info(
                 IPV4_DISABLED => {
-                    ns      => $ns->name->string,
-                    address => $ns->address->short,
-                    rrtype  => $query_type,
+                    ns     => $ns->string,
+                    rrtype => $query_type,
                 }
               );
             next;
@@ -390,9 +394,8 @@ sub basic03 {
             push @results,
               info(
                 IPV4_ENABLED => {
-                    ns      => $ns->name->string,
-                    address => $ns->address->short,
-                    rrtype  => $query_type,
+                    ns     => $ns->string,
+                    rrtype => $query_type,
                 }
               );
         }
@@ -401,9 +404,8 @@ sub basic03 {
             push @results,
               info(
                 IPV6_DISABLED => {
-                    ns      => $ns->name->string,
-                    address => $ns->address->short,
-                    rrtype  => $query_type,
+                    ns     => $ns->string,
+                    rrtype => $query_type,
                 }
               );
             next;
@@ -412,9 +414,8 @@ sub basic03 {
             push @results,
               info(
                 IPV6_ENABLED => {
-                    ns      => $ns->name->string,
-                    address => $ns->address->short,
-                    rrtype  => $query_type,
+                    ns     => $ns->string,
+                    rrtype => $query_type,
                 }
               );
         }
@@ -426,9 +427,8 @@ sub basic03 {
             push @results,
               info(
                 HAS_A_RECORDS => {
-                    ns      => $ns->name->string,
-                    address => $ns->address->short,
-                    dname   => $name,
+                    ns    => $ns->string,
+                    dname => $name,
                 }
               );
         }
@@ -436,9 +436,8 @@ sub basic03 {
             push @results,
               info(
                 NO_A_RECORDS => {
-                    ns      => $ns->name->string,
-                    address => $ns->address->short,
-                    dname   => $name,
+                    ns    => $ns->string,
+                    dname => $name,
                 }
               );
         }
@@ -448,7 +447,7 @@ sub basic03 {
         push @results, info( A_QUERY_NO_RESPONSES => {} );
     }
 
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub basic03
 
 1;

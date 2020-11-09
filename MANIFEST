@@ -5,9 +5,11 @@ docs/Installation.md
 docs/logentry_args.md
 docs/Profiles.md
 docs/Translation.pod
+docs/Translation-translators.md
 inc/Module/Install.pm
 inc/Module/Install/Base.pm
 inc/Module/Install/Can.pm
+inc/Module/Install/External.pm
 inc/Module/Install/Fetch.pm
 inc/Module/Install/Makefile.pm
 inc/Module/Install/Metadata.pm
@@ -56,9 +58,9 @@ share/modules.txt
 share/profile.json
 share/profile_example_logfilter.json
 share/locale/da/LC_MESSAGES/Zonemaster-Engine.mo
-share/locale/en/LC_MESSAGES/Zonemaster-Engine.mo
 share/locale/fr/LC_MESSAGES/Zonemaster-Engine.mo
 share/locale/sv/LC_MESSAGES/Zonemaster-Engine.mo
+share/locale/nb/LC_MESSAGES/Zonemaster-Engine.mo
 share/Makefile
 t/00-load.t
 t/asn.data
@@ -92,7 +94,6 @@ t/profiles/Test-consistency05-only.json
 t/profiles/Test-consistency06-only.json
 t/profiles/Test-consistency-all.json
 t/profiles/Test-delegation-all.json
-t/profiles/Test-disabled.json
 t/profiles/Test-dnssec01-only.json
 t/profiles/Test-dnssec02-only.json
 t/profiles/Test-dnssec03-only.json

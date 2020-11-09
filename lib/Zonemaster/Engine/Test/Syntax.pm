@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare( "v1.0.7" );
+use version; our $VERSION = version->declare( "v1.0.9" );
 
 use Zonemaster::Engine;
 
@@ -71,6 +71,8 @@ sub metadata {
             qw(
               ONLY_ALLOWED_CHARS
               NON_ALLOWED_CHARS
+              TEST_CASE_END
+              TEST_CASE_START
               )
         ],
         syntax02 => [
@@ -78,12 +80,16 @@ sub metadata {
               INITIAL_HYPHEN
               TERMINAL_HYPHEN
               NO_ENDING_HYPHENS
+              TEST_CASE_END
+              TEST_CASE_START
               )
         ],
         syntax03 => [
             qw(
               DISCOURAGED_DOUBLE_DASH
               NO_DOUBLE_DASH
+              TEST_CASE_END
+              TEST_CASE_START
               )
         ],
         syntax04 => [
@@ -92,6 +98,8 @@ sub metadata {
               NAMESERVER_NON_ALLOWED_CHARS
               NAMESERVER_NUMERIC_TLD
               NAMESERVER_SYNTAX_OK
+              TEST_CASE_END
+              TEST_CASE_START
               )
         ],
         syntax05 => [
@@ -99,6 +107,8 @@ sub metadata {
               RNAME_MISUSED_AT_SIGN
               RNAME_NO_AT_SIGN
               NO_RESPONSE_SOA_QUERY
+              TEST_CASE_END
+              TEST_CASE_START
               )
         ],
         syntax06 => [
@@ -108,6 +118,8 @@ sub metadata {
               RNAME_MAIL_DOMAIN_INVALID
               RNAME_RFC822_INVALID
               RNAME_RFC822_VALID
+              TEST_CASE_END
+              TEST_CASE_START
               )
         ],
         syntax07 => [
@@ -117,6 +129,8 @@ sub metadata {
               MNAME_NUMERIC_TLD
               MNAME_SYNTAX_OK
               NO_RESPONSE_SOA_QUERY
+              TEST_CASE_END
+              TEST_CASE_START
               )
         ],
         syntax08 => [
@@ -126,6 +140,8 @@ sub metadata {
               MX_NUMERIC_TLD
               MX_SYNTAX_OK
               NO_RESPONSE_MX_QUERY
+              TEST_CASE_END
+              TEST_CASE_START
               )
         ],
     };
@@ -144,11 +160,11 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     IPV4_DISABLED => sub {
         __x    # SYNTAX:IPV4_DISABLED
-          'IPv4 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
+          'IPv4 is disabled, not sending "{rrtype}" query to {ns}.', @_;
     },
     IPV6_DISABLED => sub {
         __x    # SYNTAX:IPV6_DISABLED
-          'IPv6 is disabled, not sending "{rrtype}" query to {ns}/{address}.', @_;
+          'IPv6 is disabled, not sending "{rrtype}" query to {ns}.', @_;
     },
     MNAME_DISCOURAGED_DOUBLE_DASH => sub {
         __x    # SYNTAX:MNAME_DISCOURAGED_DOUBLE_DASH
@@ -216,11 +232,11 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     NO_ENDING_HYPHENS => sub {
         __x    # SYNTAX:NO_ENDING_HYPHENS
-          'Both ends of all labels of the domain name ({name}) have no hyphens.', @_;
+          "Neither end of any label in the domain name ({name}) has a hyphen.", @_;
     },
     NO_RESPONSE => sub {
         __x    # SYNTAX:NO_RESPONSE
-          'No response from {ns}/{address} asking for {dname}.', @_;
+          'No response from {ns} asking for {dname}.', @_;
     },
     NO_RESPONSE_MX_QUERY => sub {
         __x    # SYNTAX:NO_RESPONSE_MX_QUERY
@@ -240,7 +256,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     RNAME_MISUSED_AT_SIGN => sub {
         __x    # SYNTAX:RNAME_MISUSED_AT_SIGN
-          'There must be no misused \'@\' character in the SOA RNAME field ({rname}).', @_;
+          "Misused '\@' character found in SOA RNAME field ({rname}).", @_;
     },
     RNAME_NO_AT_SIGN => sub {
         __x    # SYNTAX:RNAME_NO_AT_SIGN
@@ -248,7 +264,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     RNAME_RFC822_INVALID => sub {
         __x    # SYNTAX:RNAME_RFC822_INVALID
-          'There must be no illegal characters in the SOA RNAME field ({rname}).', @_;
+           "Illegal character(s) found in SOA RNAME field ({rname}).", @_;
     },
     RNAME_RFC822_VALID => sub {
         __x    # SYNTAX:RNAME_RFC822_VALID
@@ -256,7 +272,15 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     TERMINAL_HYPHEN => sub {
         __x    # SYNTAX:TERMINAL_HYPHEN
-          'Domain name ({name}) has a label ({label}) ending with an hyphen (\'-\').', @_;
+          "Domain name ({name}) has a label ({label}) ending with a hyphen ('-').", @_;
+    },
+    TEST_CASE_END => sub {
+        __x    # SYNTAX:TEST_CASE_END
+          'TEST_CASE_END {testcase}.', @_;
+    },
+    TEST_CASE_START => sub {
+        __x    # SYNTAX:TEST_CASE_START
+          'TEST_CASE_START {testcase}.', @_;
     },
 );
 
@@ -274,7 +298,7 @@ sub version {
 
 sub syntax01 {
     my ( $class, $item ) = @_;
-    my @results;
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
     my $name = get_name( $item );
 
@@ -295,12 +319,12 @@ sub syntax01 {
           );
     }
 
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub syntax01
 
 sub syntax02 {
     my ( $class, $item ) = @_;
-    my @results;
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
     my $name = get_name( $item );
 
@@ -325,7 +349,7 @@ sub syntax02 {
         }
     } ## end foreach my $local_label ( @...)
 
-    if ( scalar @{ $name->labels } and not scalar @results ) {
+    if ( scalar @{ $name->labels } and not grep { $_->tag ne q{TEST_CASE_START} } @results ) {
         push @results,
           info(
             NO_ENDING_HYPHENS => {
@@ -334,12 +358,12 @@ sub syntax02 {
           );
     }
 
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub syntax02
 
 sub syntax03 {
     my ( $class, $item ) = @_;
-    my @results;
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
     my $name = get_name( $item );
 
@@ -355,7 +379,7 @@ sub syntax03 {
         }
     }
 
-    if ( scalar @{ $name->labels } and not scalar @results ) {
+    if ( scalar @{ $name->labels } and not grep { $_->tag ne q{TEST_CASE_START} } @results ) {
         push @results,
           info(
             NO_DOUBLE_DASH => {
@@ -364,23 +388,23 @@ sub syntax03 {
           );
     }
 
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub syntax03
 
 sub syntax04 {
     my ( $class, $item ) = @_;
-    my @results;
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
     my $name = get_name( $item );
 
     push @results, check_name_syntax( q{NAMESERVER}, $name );
 
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 }
 
 sub syntax05 {
     my ( $class, $zone ) = @_;
-    my @results;
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
     my $p = $zone->query_one( $zone->name, q{SOA} );
 
@@ -408,12 +432,12 @@ sub syntax05 {
         push @results, info( NO_RESPONSE_SOA_QUERY => {} );
     }
 
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub syntax05
 
 sub syntax06 {
     my ( $class, $zone ) = @_;
-    my @results;
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
     my @nss;
     {
@@ -433,9 +457,8 @@ sub syntax06 {
             push @results,
               info(
                 IPV6_DISABLED => {
-                    ns      => $ns->name->string,
-                    address => $ns->address->short,
-                    rrtype  => q{SOA},
+                    ns     => $ns->string,
+                    rrtype => q{SOA},
                 }
               );
             next;
@@ -446,9 +469,8 @@ sub syntax06 {
             push @results,
               info(
                 IPV4_DISABLED => {
-                    ns      => $ns->name->string,
-                    address => $ns->address->short,
-                    rrtype  => q{SOA},
+                    ns     => $ns->string,
+                    rrtype => q{SOA},
                 }
               );
             next;
@@ -460,9 +482,8 @@ sub syntax06 {
             push @results,
               info(
                 NO_RESPONSE => {
-                    ns      => $ns->name->string,
-                    address => $ns->address->short,
-                    dname   => $zone->name,
+                    ns    => $ns->string,
+                    dname => $zone->name,
                 }
               );
             next;
@@ -564,12 +585,12 @@ sub syntax06 {
 
     } ## end for my $ns ( @nss )
 
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub syntax06
 
 sub syntax07 {
     my ( $class, $zone ) = @_;
-    my @results;
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
     my $p = $zone->query_one( $zone->name, q{SOA} );
 
@@ -582,12 +603,12 @@ sub syntax07 {
         push @results, info( NO_RESPONSE_SOA_QUERY => {} );
     }
 
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 }
 
 sub syntax08 {
     my ( $class, $zone ) = @_;
-    my @results;
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
     my $p = $zone->query_one( $zone->name, q{MX} );
 
@@ -724,7 +745,7 @@ sub check_name_syntax {
 
     } ## end if ( $name ne q{.} )
 
-    if ( not scalar @results ) {
+    if ( not grep { $_->tag ne q{TEST_CASE_START} } @results ) {
         push @results,
           info(
             $info_label_prefix

@@ -37,7 +37,7 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
 }
 
 my @res = Zonemaster::Engine->test_method( 'Syntax', 'syntax03', 'XN--MGBERP4A5D4AR' );
-is( $res[2]->tag, q{NO_DOUBLE_DASH}, 'No complaint for XN--MGBERP4A5D4AR' );
+is( $res[3]->tag, q{NO_DOUBLE_DASH}, 'No complaint for XN--MGBERP4A5D4AR' );
 
 my $zft_zone = Zonemaster::Engine->zone( 'zft.rd.nic.fr' );
 is( scalar( @{ $zft_zone->ns } ), 2, 'Two nameservers for zft.rd.nic.fr.' );
@@ -56,10 +56,6 @@ is( scalar( @{ $nf->glue_names } ), 5, 'All glue names' );
 is( scalar( @{ $nf->glue } ),       9, 'All glue objects' );
 is( scalar( @{ $nf->ns_names } ),   5, 'All NS names' );
 is( scalar( @{ $nf->ns } ),         9, 'All NS objects' );
-
-my $rootfr = Zonemaster::Engine->zone( 'root.fr' );
-@res = Zonemaster::Engine->test_method( 'DNSSEC', 'dnssec02', $rootfr );
-ok( ( none { $_->tag eq 'MODULE_ERROR' } @res ), 'No crash in dnssec02' );
 
 my $gnames = Zonemaster::Engine->zone( 'nameserver06-no-resolution.zut-root.rd.nic.fr' )->glue_names;
 is( scalar( @$gnames ), 2, 'Two glue names' );

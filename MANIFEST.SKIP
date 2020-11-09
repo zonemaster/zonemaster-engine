@@ -1,4 +1,5 @@
 \.po$
+^share/[^/]*\.mo$
 \.tar\.gz$
 \bMANIFEST\.SKIP$
 ^\.perlcriticrc$

@@ -347,6 +347,7 @@ ok(
 my %res;
 
 %res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{address}, q{nic.fr} );
+
 ok( $res{NAMESERVER_IP_PTR_MISMATCH},  q{Nameserver IP PTR mismatch} );
 ok( $res{NO_IP_PRIVATE_NETWORK},       q{All Nameserver addresses are in the routable public addressing space} );
 ok( $res{NAMESERVERS_IP_WITH_REVERSE}, q{Reverse DNS entry exist for all Nameserver IP addresses} );

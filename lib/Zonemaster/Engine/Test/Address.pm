@@ -1,11 +1,11 @@
 package Zonemaster::Engine::Test::Address;
 
-use version; our $VERSION = version->declare("v1.0.5");
+use 5.014002;
 
 use strict;
 use warnings;
 
-use 5.014002;
+use version; our $VERSION = version->declare("v1.0.8");
 
 use Zonemaster::Engine;
 
@@ -13,6 +13,7 @@ use Carp;
 use List::MoreUtils qw[none any];
 use Locale::TextDomain qw[Zonemaster-Engine];
 use Readonly;
+use Zonemaster::Engine::Recursor;
 use Zonemaster::Engine::Constants qw[:addresses :ip];
 use Zonemaster::Engine::TestMethods;
 use Zonemaster::Engine::Util;
@@ -47,6 +48,8 @@ sub metadata {
             qw(
               NAMESERVER_IP_PRIVATE_NETWORK
               NO_IP_PRIVATE_NETWORK
+              TEST_CASE_END
+              TEST_CASE_START
               )
         ],
         address02 => [
@@ -54,6 +57,8 @@ sub metadata {
               NAMESERVER_IP_WITHOUT_REVERSE
               NAMESERVERS_IP_WITH_REVERSE
               NO_RESPONSE_PTR_QUERY
+              TEST_CASE_END
+              TEST_CASE_START
               )
         ],
         address03 => [
@@ -62,6 +67,8 @@ sub metadata {
               NAMESERVER_IP_PTR_MISMATCH
               NAMESERVER_IP_PTR_MATCH
               NO_RESPONSE_PTR_QUERY
+              TEST_CASE_END
+              TEST_CASE_START
               )
         ],
     };
@@ -70,15 +77,15 @@ sub metadata {
 Readonly my %TAG_DESCRIPTIONS => (
     NAMESERVER_IP_WITHOUT_REVERSE => sub {
         __x    # ADDRESS:NAMESERVER_IP_WITHOUT_REVERSE
-          'Nameserver {ns} has an IP address ({address}) without PTR configured.', @_;
+          'Nameserver {nsname} has an IP address ({ns_ip}) without PTR configured.', @_;
     },
     NAMESERVER_IP_PTR_MISMATCH => sub {
         __x    # ADDRESS:NAMESERVER_IP_PTR_MISMATCH
-          'Nameserver {ns} has an IP address ({address}) with mismatched PTR result ({names}).', @_;
+          'Nameserver {nsname} has an IP address ({ns_ip}) with mismatched PTR result ({names}).', @_;
     },
     NAMESERVER_IP_PRIVATE_NETWORK => sub {
         __x    # ADDRESS:NAMESERVER_IP_PRIVATE_NETWORK
-          'Nameserver {ns} has an IP address ({address}) '
+          'Nameserver {nsname} has an IP address ({ns_ip}) '
           . 'with prefix {prefix} referenced in {reference} as a \'{name}\'.',
           @_;
     },
@@ -88,15 +95,23 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     NAMESERVERS_IP_WITH_REVERSE => sub {
         __x    # ADDRESS:NAMESERVERS_IP_WITH_REVERSE
-          'Reverse DNS entry exist for all Nameserver IP addresses.', @_;
+          "Reverse DNS entry exists for each Nameserver IP address.", @_;
     },
     NAMESERVER_IP_PTR_MATCH => sub {
         __x    # ADDRESS:NAMESERVER_IP_PTR_MATCH
-          'All reverse DNS entry matches name server name.', @_;
+          "Every reverse DNS entry matches name server name.", @_;
     },
     NO_RESPONSE_PTR_QUERY => sub {
         __x    # ADDRESS:NO_RESPONSE_PTR_QUERY
           'No response from nameserver(s) on PTR query ({reverse}).', @_;
+    },
+    TEST_CASE_END => sub {
+        __x    # ADDRESS:TEST_CASE_END
+          'TEST_CASE_END {testcase}.', @_;
+    },
+    TEST_CASE_START => sub {
+        __x    # ADDRESS:TEST_CASE_START
+          'TEST_CASE_START {testcase}.', @_;
     },
 );
 
@@ -130,7 +145,7 @@ sub find_special_address {
 
 sub address01 {
     my ( $class, $zone ) = @_;
-    my @results;
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
     my %ips;
 
     foreach
@@ -145,8 +160,8 @@ sub address01 {
             push @results,
               info(
                 NAMESERVER_IP_PRIVATE_NETWORK => {
-                    ns        => $local_ns->name->string,
-                    address   => $local_ns->address->short,
+                    nsname    => $local_ns->name->string,
+                    ns_ip     => $local_ns->address->short,
                     prefix    => ${$ip_details_ref}{ip}->print,
                     name      => ${$ip_details_ref}{name},
                     reference => ${$ip_details_ref}{reference},
@@ -158,16 +173,16 @@ sub address01 {
 
     } ## end foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods...})
 
-    if ( scalar keys %ips and not scalar @results ) {
+    if ( scalar keys %ips and not grep { $_->tag ne q{TEST_CASE_START} } @results ) {
         push @results, info( NO_IP_PRIVATE_NETWORK => {} );
     }
 
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub address01
 
 sub address02 {
     my ( $class, $zone ) = @_;
-    my @results;
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
     my %ips;
     my $ptr_query;
@@ -196,8 +211,8 @@ sub address02 {
                 push @results,
                   info(
                     NAMESERVER_IP_WITHOUT_REVERSE => {
-                        ns      => $local_ns->name->string,
-                        address => $local_ns->address->short,
+                        nsname => $local_ns->name->string,
+                        ns_ip  => $local_ns->address->short,
                     }
                   );
             }
@@ -215,16 +230,16 @@ sub address02 {
 
     } ## end foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods...})
 
-    if ( scalar keys %ips and not scalar @results ) {
+    if ( scalar keys %ips and not grep { $_->tag ne q{TEST_CASE_START} } @results ) {
         push @results, info( NAMESERVERS_IP_WITH_REVERSE => {} );
     }
 
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub address02
 
 sub address03 {
     my ( $class, $zone ) = @_;
-    my @results;
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
     my $ptr_query;
 
     my %ips;
@@ -253,9 +268,9 @@ sub address03 {
                     push @results,
                       info(
                         NAMESERVER_IP_PTR_MISMATCH => {
-                            ns      => $local_ns->name->string,
-                            address => $local_ns->address->short,
-                            names   => join( q{/}, map { $_->ptrdname } @ptr ),
+                            nsname => $local_ns->name->string,
+                            ns_ip  => $local_ns->address->short,
+                            names  => join( q{/}, map { $_->ptrdname } @ptr ),
                         }
                       );
                 }
@@ -264,8 +279,8 @@ sub address03 {
                 push @results,
                   info(
                     NAMESERVER_IP_WITHOUT_REVERSE => {
-                        ns      => $local_ns->name->string,
-                        address => $local_ns->address->short,
+                        nsname => $local_ns->name->string,
+                        ns_ip  => $local_ns->address->short,
                     }
                   );
             }
@@ -283,11 +298,11 @@ sub address03 {
 
     } ## end foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods...})
 
-    if ( scalar keys %ips and not scalar @results ) {
+    if ( scalar keys %ips and not grep { $_->tag ne q{TEST_CASE_START} } @results ) {
         push @results, info( NAMESERVER_IP_PTR_MATCH => {} );
     }
 
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub address03
 
 1;
