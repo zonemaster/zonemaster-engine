@@ -16,6 +16,9 @@ all_from 'lib/Zonemaster/Engine.pm';
 
 configure_requires 'Locale::Msgfmt' => 0.15;
 
+# "2.1.0" could be declared as "2.001" but not as "2.1"
+# (see Zonemaster::LDNS below)
+
 requires 'Clone'              => 0;
 requires 'Email::Valid'       => 0;
 requires 'File::ShareDir'     => 1.00;
@@ -30,7 +33,7 @@ requires 'MooseX::Singleton'  => 0.30;
 requires 'Net::IP'            => 1.26;
 requires 'Readonly'           => 0;
 requires 'Text::CSV'          => 0;
-requires 'Zonemaster::LDNS'   => 2.1;
+requires 'Zonemaster::LDNS'   => 2.001;
 
 test_requires 'Pod::Coverage'     => 0;
 test_requires 'Test::Differences' => 0;
