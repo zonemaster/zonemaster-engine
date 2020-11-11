@@ -16,6 +16,7 @@
 | nsname_list | List of domain names | A list of name servers, as specified by "nsname", separated by ";". |
 | ns_ip_list  | List of IP addresses | A list of name servers, as specified by "ns_ip", separated by ";". |
 | ns_list     | List of domain name and IP address pairs | A list of name servers, as specified by "ns", separated by ";". |
+| testcase    | A Zonemaster test case, or `all` | The name of a Zonemaster test case.             |
 || AS number| An Autonomous Space number for an IP address.|
 || Address record type (A or AAAA)| Used to tell the difference between IPv4 and IPv6.|
 || Count of different SOA RNAMEs.| Total number of different SOA RNAME fields seen.|
