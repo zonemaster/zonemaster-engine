@@ -7,6 +7,7 @@
 | algo_descr  | Text                 | The human readable description of a DNSKEY algorithm.       |
 | algo_mnemo  | Text                 | The mnemonic of a DNSKEY algorithm.                         |
 | algo_num    | Number               | The numeric value for a DNSKEY algorithm.                   |
+| keytag      | DS/DNSKEY/RRSIG keytag | A keytag for a DS, DNSKEY or RRSIG record.                |
 | nsname      | Domain name          | The domain name of a name server.                           |
 | ns_ip       | IP address           | The IP address of a name server.                            |
 | ns          | Domain name and IP address pair | The name and IP address of a name server, separated by "/". |
@@ -25,7 +26,6 @@
 || DNSKEY key length| The key length for a DNSKEY. The interpretation of this value various quite a bit with the algorithm. Be careful when using it for algorithms that aren't RSA-based.|
 || DNSSEC delegation verification failure reason| A somewhat human-readable reason why the delegation step between the tested zone and its parent is not secure.|
 || DS digest type| The digest type used in a DS record.|
-|| DS/DNSKEY/RRSIG keytag| A keytag for a DS, DNSKEY or RRSIG record.|
 | dname (?) | Domain name| A domain name.|
 | dlabel (?) | Domain name label| A single label from a domain name.|
 | dlength (?) | Domain name label length| The length of a domain name label.|

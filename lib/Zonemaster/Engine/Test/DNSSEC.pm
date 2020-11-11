@@ -567,11 +567,12 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     DNSKEY_SIGNATURE_NOT_OK => sub {
         __x    # DNSSEC:DNSKEY_SIGNATURE_NOT_OK
-          'Signature for DNSKEY with tag {signature} failed to verify with error \'{error}\'.', @_;
+'Signature for DNSKEY with tag {keytag} failed to verify with error \'{error}\'.',
+          @_;
     },
     DNSKEY_SIGNATURE_OK => sub {
         __x    # DNSSEC:DNSKEY_SIGNATURE_OK
-          'A signature for DNSKEY with tag {signature} was correctly signed.', @_;
+          'A signature for DNSKEY with tag {keytag} was correctly signed.', @_;
     },
     DNSKEY_SIGNED => sub {
         __x    # DNSSEC:DNSKEY_SIGNED
@@ -650,13 +651,13 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     DURATION_LONG => sub {
         __x    # DNSSEC:DURATION_LONG
-          'RRSIG with keytag {tag} and covering type(s) {types} '
+          'RRSIG with keytag {keytag} and covering type(s) {types} '
           . 'has a duration of {duration} seconds, which is too long.',
           @_;
     },
     DURATION_OK => sub {
         __x    # DNSSEC:DURATION_OK
-          'RRSIG with keytag {tag} and covering type(s) {types} '
+          'RRSIG with keytag {keytag} and covering type(s) {types} '
           . 'has a duration of {duration} seconds, which is just fine.',
           @_;
     },
@@ -798,7 +799,8 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     NSEC3_SIG_VERIFY_ERROR => sub {
         __x    # DNSSEC:NSEC3_SIG_VERIFY_ERROR
-          'Trying to verify NSEC3 RRset with RRSIG {sig} gave error \'{error}\'.', @_;
+'Trying to verify NSEC3 RRset with RRSIG {keytag} gave error \'{error}\'.',
+          @_;
     },
     NSEC_COVERS_NOT => sub {
         __x    # DNSSEC:NSEC_COVERS_NOT
@@ -810,23 +812,25 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     NSEC_SIG_VERIFY_ERROR => sub {
         __x    # DNSSEC:NSEC_SIG_VERIFY_ERROR
-          'Trying to verify NSEC RRset with RRSIG {sig} gave error \'{error}\'.', @_;
+'Trying to verify NSEC RRset with RRSIG {keytag} gave error \'{error}\'.',
+          @_;
     },
     REMAINING_LONG => sub {
         __x    # DNSSEC:REMAINING_LONG
-          'RRSIG with keytag {tag} and covering type(s) {types} '
+          'RRSIG with keytag {keytag} and covering type(s) {types} '
           . 'has a remaining validity of {duration} seconds, which is too long.',
           @_;
     },
     REMAINING_SHORT => sub {
         __x    # DNSSEC:REMAINING_SHORT
-          'RRSIG with keytag {tag} and covering type(s) {types} '
+          'RRSIG with keytag {keytag} and covering type(s) {types} '
           . 'has a remaining validity of {duration} seconds, which is too short.',
           @_;
     },
     RRSIG_EXPIRATION => sub {
         __x    # DNSSEC:RRSIG_EXPIRATION
-          'RRSIG with keytag {tag} and covering type(s) {types} expires at : {date}.', @_;
+          'RRSIG with keytag {keytag} and covering type(s) {types} expires at '
+          . ': {date}.', @_;
     },
     RRSET_NOT_SIGNED => sub {
         __x    # DNSSEC:RRSET_NOT_SIGNED
@@ -840,8 +844,8 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     RRSIG_EXPIRED => sub {
         __x    # DNSSEC:RRSIG_EXPIRED
-          'RRSIG with keytag {tag} and covering type(s) {types} has already expired (expiration '
-          . 'is: {expiration}).',
+          'RRSIG with keytag {keytag} and covering type(s) {types} has already '
+          . 'expired (expiration is: {expiration}).',
           @_;
     },
     RRSIG_NOT_MATCH_DNSKEY => sub {
@@ -854,11 +858,12 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     SOA_SIGNATURE_NOT_OK => sub {
         __x    # DNSSEC:SOA_SIGNATURE_NOT_OK
-          'Trying to verify SOA RRset with signature {signature} gave error \'{error}\'.', @_;
+'Trying to verify SOA RRset with signature {keytag} gave error \'{error}\'.',
+          @_;
     },
     SOA_SIGNATURE_OK => sub {
         __x    # DNSSEC:SOA_SIGNATURE_OK
-          'RRSIG {signature} correctly signs SOA RRset.', @_;
+          'RRSIG {keytag} correctly signs SOA RRset.', @_;
     },
     SOA_SIGNED => sub {
         __x    # DNSSEC:SOA_SIGNED
@@ -1238,9 +1243,9 @@ sub dnssec04 {
         push @results,
           info(
             RRSIG_EXPIRATION => {
-                date  => scalar( gmtime($sig->expiration) ),
-                tag   => $sig->keytag,
-                types => $sig->typecovered,
+                date   => scalar( gmtime($sig->expiration) ),
+                keytag => $sig->keytag,
+                types  => $sig->typecovered,
             }
           );
 
@@ -1250,7 +1255,7 @@ sub dnssec04 {
             $result_remaining = info(
                 RRSIG_EXPIRED => {
                     expiration => $sig->expiration,
-                    tag        => $sig->keytag,
+                    keytag     => $sig->keytag,
                     types      => $sig->typecovered,
                 }
             );
@@ -1259,7 +1264,7 @@ sub dnssec04 {
             $result_remaining = info(
                 REMAINING_SHORT => {
                     duration => $remaining,
-                    tag      => $sig->keytag,
+                    keytag   => $sig->keytag,
                     types    => $sig->typecovered,
                 }
             );
@@ -1268,7 +1273,7 @@ sub dnssec04 {
             $result_remaining = info(
                 REMAINING_LONG => {
                     duration => $remaining,
-                    tag      => $sig->keytag,
+                    keytag   => $sig->keytag,
                     types    => $sig->typecovered,
                 }
             );
@@ -1280,7 +1285,7 @@ sub dnssec04 {
             $result_duration = info(
                 DURATION_LONG => {
                     duration => $duration,
-                    tag      => $sig->keytag,
+                    keytag   => $sig->keytag,
                     types    => $sig->typecovered,
                 }
             );
@@ -1295,7 +1300,7 @@ sub dnssec04 {
               info(
                 DURATION_OK => {
                     duration => $duration,
-                    tag      => $sig->keytag,
+                    keytag   => $sig->keytag,
                     types    => $sig->typecovered,
                 }
               );
@@ -1523,7 +1528,7 @@ sub dnssec08 {
             push @results,
               info(
                 DNSKEY_SIGNATURE_OK => {
-                    signature => $sig->keytag,
+                    keytag => $sig->keytag,
                 }
               );
             $ok = $sig->keytag;
@@ -1535,9 +1540,9 @@ sub dnssec08 {
             push @results,
               info(
                 DNSKEY_SIGNATURE_NOT_OK => {
-                    signature => $sig->keytag,
-                    error     => $msg,
-                    time      => $time,
+                    keytag => $sig->keytag,
+                    error  => $msg,
+                    time   => $time,
                 }
               );
         }
@@ -1596,7 +1601,7 @@ sub dnssec09 {
             push @results,
               info(
                 SOA_SIGNATURE_OK => {
-                    signature => $sig->keytag,
+                    keytag => $sig->keytag,
                 }
               );
             $ok = $sig->keytag;
@@ -1608,8 +1613,8 @@ sub dnssec09 {
             push @results,
               info(
                 SOA_SIGNATURE_NOT_OK => {
-                    signature => $sig->keytag,
-                    error     => $msg,
+                    keytag => $sig->keytag,
+                    error  => $msg,
                 }
               );
         }
@@ -1772,7 +1777,7 @@ sub dnssec10 {
                             foreach my $sig ( @sigs ) {
                                 my $msg = q{};
                                 if ( not scalar @dnskeys ) {
-                                    push @results, info( NSEC3_SIG_VERIFY_ERROR => { error => 'DNSKEY missing', sig => $sig->keytag } );
+                                    push @results, info( NSEC3_SIG_VERIFY_ERROR => { error => 'DNSKEY missing', keytag => $sig->keytag } );
                                 }
                                 elsif (
                                     $sig->verify_time(
@@ -1790,8 +1795,8 @@ sub dnssec10 {
                                     push @results,
                                       info(
                                         NSEC3_SIG_VERIFY_ERROR => {
-                                            error => $msg,
-                                            sig   => $sig->keytag,
+                                            error  => $msg,
+                                            keytag => $sig->keytag,
                                         }
                                       );
                                 }
