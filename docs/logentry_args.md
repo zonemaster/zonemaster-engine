@@ -8,6 +8,8 @@
 | algo_mnemo  | Text                 | The mnemonic of a DNSKEY algorithm.                         |
 | algo_num    | Number               | The numeric value for a DNSKEY algorithm.                   |
 | keytag      | DS/DNSKEY/RRSIG keytag | A keytag for a DS, DNSKEY or RRSIG record.                |
+| module      | A Zonemaster test module, or `all` | The name of a Zonemaster test module.         |
+| module_list | List of Zonemaster test modules | A list of Zonemaster test modules, separated by ":". |
 | nsname      | Domain name          | The domain name of a name server.                           |
 | ns_ip       | IP address           | The IP address of a name server.                            |
 | ns          | Domain name and IP address pair | The name and IP address of a name server, separated by "/". |

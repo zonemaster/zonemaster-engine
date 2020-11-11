@@ -142,7 +142,7 @@ sub run_module {
             return @res;
         }
         else {
-            info( UNKNOWN_MODULE => { name => $requested, method => 'all', known => join( ':', sort $class->modules ) } );
+            info( UNKNOWN_MODULE => { module => $requested, method => 'all', module_list => join( ':', sort $class->modules ) } );
         }
     }
     else {
@@ -190,7 +190,7 @@ sub run_one {
             }
         } ## end if ( $module )
         else {
-            info( UNKNOWN_MODULE => { module => $requested, method => $test, known => join( ':', sort $class->modules ) } );
+            info( UNKNOWN_MODULE => { module => $requested, method => $test, module_list => join( ':', sort $class->modules ) } );
         }
     }
     else {

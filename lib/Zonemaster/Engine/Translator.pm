@@ -73,7 +73,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     UNKNOWN_MODULE => sub {
         __x    # SYSTEM:UNKNOWN_MODULE
-          "Request to run {method} in unknown module {module}. Known modules: {known}.", @_;
+          "Request to run {method} in unknown module {module}. Known modules: {module_list}.", @_;
     },
     SKIP_IPV4_DISABLED => sub {
         __x    # SYSTEM:SKIP_IPV4_DISABLED
