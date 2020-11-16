@@ -416,9 +416,9 @@ msgstr ""
 #. CONSISTENCY:SOA_TIME_PARAMETER_SET
 #, perl-brace-format
 msgid ""
-"Saw SOA time parameter set (REFRESH={refresh},RETRY={retry},EXPIRE={expire},"
+"Saw SOA time parameter set (REFRESH={refresh}, RETRY={retry}, EXPIRE={expire}, "
 "MINIMUM={minimum}) on following nameserver set : {ns_list}."
-msgstr "Fant SOA-postvariant (REFRESH={refresh},RETRY={retry},EXPIRE={expire},MINIMUM={minimum}) på følgende navnetjerere: {ns_list}."
+msgstr "Fant SOA-postvariant (REFRESH={refresh}, RETRY={retry}, EXPIRE={expire}, MINIMUM={minimum}) på følgende navnetjerere: {ns_list}."
 
 #. CONSISTENCY:TOTAL_ADDRESS_MISMATCH
 #, perl-brace-format
