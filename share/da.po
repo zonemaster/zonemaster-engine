@@ -603,15 +603,14 @@ msgstr "DNSKEY RRset i zonetoppen var ikke korrekt signeret."
 msgid ""
 "Signature for DNSKEY with tag {keytag} failed to verify with error '{error}'."
 msgstr ""
-"Verificering af signaturen for DNSKEY-recorden med keytag {keytag} "
-"fejlede med fejlmeddelelsen '{error}'."
+"Verificering af signaturen for DNSKEY-recorden med keytag {keytag} fejlede "
+"med fejlmeddelelsen '{error}'."
 
 #. DNSSEC:DNSKEY_SIGNATURE_OK
 #, perl-brace-format
 msgid "A signature for DNSKEY with tag {keytag} was correctly signed."
 msgstr ""
-"Verificering af en signatur for DNSKEY-recorden med keytag {keytag} "
-"lykkedes."
+"Verificering af en signatur for DNSKEY-recorden med keytag {keytag} lykkedes."
 
 #. DNSSEC:DNSKEY_SIGNED
 msgid "The apex DNSKEY RRset was correcly signed."
@@ -623,9 +622,9 @@ msgid ""
 "DNSKEY with tag {keytag} and using algorithm {algo_num} ({algo_descr}) has a "
 "size ({keysize}) smaller than the recommended one ({keysizerec})."
 msgstr ""
-"DNSKEY med tag {keytag} bruger en algoritme {algo_num} "
-"({algo_descr}) med størrelsen ({keysize}), der er mindre end den "
-"anbefalede størrelse ({keysizerec})."
+"DNSKEY med tag {keytag} bruger en algoritme {algo_num} ({algo_descr}) med "
+"størrelsen ({keysize}), der er mindre end den anbefalede størrelse "
+"({keysizerec})."
 
 #. DNSSEC:DNSKEY_TOO_SMALL_FOR_ALGO
 #, perl-brace-format
@@ -633,9 +632,9 @@ msgid ""
 "DNSKEY with tag {keytag} and using algorithm {algo_num} ({algo_descr}) has a "
 "size ({keysize}) smaller than the minimum one ({keysizemin})."
 msgstr ""
-"DNSKEY med tag {keytag} bruger en algoritme {algo_num} "
-"({algo_descr}) med størrelsen ({keysize}), der er mindre end den "
-"mindst tilladte værdi ({keysizemin})."
+"DNSKEY med tag {keytag} bruger en algoritme {algo_num} ({algo_descr}) med "
+"størrelsen ({keysize}), der er mindre end den mindst tilladte værdi "
+"({keysizemin})."
 
 #. DNSSEC:DNSKEY_TOO_LARGE_FOR_ALGO
 #, perl-brace-format
@@ -643,9 +642,9 @@ msgid ""
 "DNSKEY with tag {keytag} and using algorithm {algo_num} ({algo_descr}) has a "
 "size ({keysize}) larger than the maximum one ({keysizemax})."
 msgstr ""
-"DNSKEY med tag {keytag} bruger en algoritme {algo_num} "
-"({algo_descr}) med størrelsen ({keysize}), der er større end den "
-"største tilladte værdi ({keysizemax})."
+"DNSKEY med tag {keytag} bruger en algoritme {algo_num} ({algo_descr}) med "
+"størrelsen ({keysize}), der er større end den største tilladte værdi "
+"({keysizemax})."
 
 #. DNSSEC:DS_ALGORITHM_NOT_DS
 #, perl-brace-format
@@ -655,8 +654,8 @@ msgid ""
 "keytag {keytag} in zone {zone}."
 msgstr ""
 "{ns} returnerede en DS-record oprettet af algoritme {algo_num} "
-"({algo_mnemo}) som ikke er beregnet til DS. DS-recorden tilhører "
-"DNSKEY-record med keytag {keytag} i zonen {zone}."
+"({algo_mnemo}) som ikke er beregnet til DS. DS-recorden tilhører DNSKEY-"
+"record med keytag {keytag} i zonen {zone}."
 
 #. DNSSEC:DS_ALGORITHM_DEPRECATED
 #, perl-brace-format
@@ -666,8 +665,8 @@ msgid ""
 "{keytag} in zone {zone}."
 msgstr ""
 "{ns} returnerede en DS-record oprettet af algoritme {algo_num} "
-"({algo_mnemo}), der er forældet. DS-recorden tilhører DNSKEY-record "
-"med keytag {keytag} i zonen {zone}."
+"({algo_mnemo}), der er forældet. DS-recorden tilhører DNSKEY-record med "
+"keytag {keytag} i zonen {zone}."
 
 #. DNSSEC:DS_ALGORITHM_MISSING
 #, perl-brace-format
@@ -686,8 +685,8 @@ msgid ""
 "zone {zone}."
 msgstr ""
 "{ns} returnerede en DS-record oprettet af algoritme {algo_num} "
-"({algo_mnemo}), hvilket er OK. DS-recorden tilhører DNSKEY-record "
-"med keytag {keytag} i zonen {zone}."
+"({algo_mnemo}), hvilket er OK. DS-recorden tilhører DNSKEY-record med keytag "
+"{keytag} i zonen {zone}."
 
 #. DNSSEC:DS_ALGORITHM_RESERVED
 #, perl-brace-format
@@ -697,8 +696,8 @@ msgid ""
 "DNSKEY record with keytag {keytag} in zone {zone}."
 msgstr ""
 "{ns} returnerede en DS-record oprettet af algoritme, der ikke er tildelt "
-"(algoritmenummer {algo_num}, hvilket ikke er okay. DS-recorden "
-"tilhører DNSKEY-record med keytag {keytag} i zonen {zone}."
+"(algoritmenummer {algo_num}, hvilket ikke er okay. DS-recorden tilhører "
+"DNSKEY-record med keytag {keytag} i zonen {zone}."
 
 #. DNSSEC:DS_ALGO_SHA1_DEPRECATED
 #, perl-brace-format
@@ -708,9 +707,8 @@ msgid ""
 "record is for the DNSKEY record with keytag {keytag} in zone {zone}."
 msgstr ""
 "Navneserveren {ns} returnerede en DS-record oprettet med algoritme "
-"{algo_num} ({algo_mnemo}) som er forældet, men stadigvæk "
-"benyttet af mange. DS-recorden er tilknyttet DNSKEY med keytag {keytag} i "
-"zonen {zone}."
+"{algo_num} ({algo_mnemo}) som er forældet, men stadigvæk benyttet af mange. "
+"DS-recorden er tilknyttet DNSKEY med keytag {keytag} i zonen {zone}."
 
 #. DNSSEC:DS_BUT_NOT_DNSKEY
 #, perl-brace-format
@@ -730,8 +728,8 @@ msgid ""
 "RRSIG with keytag {keytag} and covering type(s) {types} has a duration of "
 "{duration} seconds, which is too long."
 msgstr ""
-"RRSIG-recorden med keytag {keytag}, dækkende typerne {types} har en gyldighed "
-"på {duration} sekunder, hvilket er for længe."
+"RRSIG-recorden med keytag {keytag}, dækkende typerne {types} har en "
+"gyldighed på {duration} sekunder, hvilket er for længe."
 
 #. DNSSEC:DURATION_OK
 #, perl-brace-format
@@ -739,8 +737,8 @@ msgid ""
 "RRSIG with keytag {keytag} and covering type(s) {types} has a duration of "
 "{duration} seconds, which is just fine."
 msgstr ""
-"RRSIG-recorden med keytag {keytag}, dækkende typerne {types} har en gyldighed "
-"på {duration} sekunder, hvilket er OK."
+"RRSIG-recorden med keytag {keytag}, dækkende typerne {types} har en "
+"gyldighed på {duration} sekunder, hvilket er OK."
 
 #. DNSSEC:EXTRA_PROCESSING_BROKEN
 #, perl-brace-format
@@ -948,8 +946,8 @@ msgid ""
 "RRSIG with keytag {keytag} and covering type(s) {types} has a remaining "
 "validity of {duration} seconds, which is too long."
 msgstr ""
-"RRSIG-recorden med keytag {keytag}, dækkende typerne {types} har en resterende "
-"gyldighed på {duration} sekunder, hvilket er for længe."
+"RRSIG-recorden med keytag {keytag}, dækkende typerne {types} har en "
+"resterende gyldighed på {duration} sekunder, hvilket er for længe."
 
 #. DNSSEC:REMAINING_SHORT
 #, perl-brace-format
@@ -957,8 +955,8 @@ msgid ""
 "RRSIG with keytag {keytag} and covering type(s) {types} has a remaining "
 "validity of {duration} seconds, which is too short."
 msgstr ""
-"RRSIG-recorden med keytag {keytag}, dækkende typerne {types} har en resterende "
-"gyldighed på {duration} sekunder, hvilket er for lidt."
+"RRSIG-recorden med keytag {keytag}, dækkende typerne {types} har en "
+"resterende gyldighed på {duration} sekunder, hvilket er for lidt."
 
 #. DNSSEC:RRSIG_EXPIRATION
 #, perl-brace-format
@@ -1004,8 +1002,8 @@ msgstr "Ingen RRSIG signerede SOA RRset korrekt."
 msgid ""
 "Trying to verify SOA RRset with signature {keytag} gave error '{error}'."
 msgstr ""
-"Forsøg på at verificere SOA RRset med signatur {keytag} returnerede "
-"fejlen '{error}'."
+"Forsøg på at verificere SOA RRset med signatur {keytag} returnerede fejlen "
+"'{error}'."
 
 #. DNSSEC:SOA_SIGNATURE_OK
 #, perl-brace-format

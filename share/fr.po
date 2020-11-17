@@ -684,8 +684,8 @@ msgstr ""
 msgid ""
 "Signature for DNSKEY with tag {keytag} failed to verify with error '{error}'."
 msgstr ""
-"La vérification de la signature de la clé avec le tag {keytag} a échoué "
-"en retournant l'erreur '{error}'."
+"La vérification de la signature de la clé avec le tag {keytag} a échoué en "
+"retournant l'erreur '{error}'."
 
 #. DNSSEC:DNSKEY_SIGNATURE_OK
 #, perl-brace-format
@@ -702,9 +702,9 @@ msgid ""
 "DNSKEY with tag {keytag} and using algorithm {algo_num} ({algo_descr}) has a "
 "size ({keysize}) smaller than the recommended one ({keysizerec})."
 msgstr ""
-"La clé (DNSKEY) avec le tag {keytag} utilisant l'algorithme "
-"{algo_num} ({algo_descr}) a une taille ({keysize}) plus "
-"petite que la taille recommandée ({keysizerec}) pour cet algorithme."
+"La clé (DNSKEY) avec le tag {keytag} utilisant l'algorithme {algo_num} "
+"({algo_descr}) a une taille ({keysize}) plus petite que la taille "
+"recommandée ({keysizerec}) pour cet algorithme."
 
 #. DNSSEC:DNSKEY_TOO_SMALL_FOR_ALGO
 #, perl-brace-format
@@ -712,9 +712,9 @@ msgid ""
 "DNSKEY with tag {keytag} and using algorithm {algo_num} ({algo_descr}) has a "
 "size ({keysize}) smaller than the minimum one ({keysizemin})."
 msgstr ""
-"La clé (DNSKEY) avec le tag {keytag} utilisant l'algorithme "
-"{algo_num} ({algo_descr}) a une taille ({keysize}) plus "
-"petite que la taille minimum ({keysizemin}) spécifiée pour cet algorithme."
+"La clé (DNSKEY) avec le tag {keytag} utilisant l'algorithme {algo_num} "
+"({algo_descr}) a une taille ({keysize}) plus petite que la taille minimum "
+"({keysizemin}) spécifiée pour cet algorithme."
 
 #. DNSSEC:DNSKEY_TOO_LARGE_FOR_ALGO
 #, perl-brace-format
@@ -722,9 +722,9 @@ msgid ""
 "DNSKEY with tag {keytag} and using algorithm {algo_num} ({algo_descr}) has a "
 "size ({keysize}) larger than the maximum one ({keysizemax})."
 msgstr ""
-"La clé (DNSKEY) avec le tag {keytag} utilisant l'algorithme "
-"{algo_num} ({algo_descr}) a une taille ({keysize}) plus "
-"grande que la taille maximum ({keysizemax}) spécifiée pour cet algorithme."
+"La clé (DNSKEY) avec le tag {keytag} utilisant l'algorithme {algo_num} "
+"({algo_descr}) a une taille ({keysize}) plus grande que la taille maximum "
+"({keysizemax}) spécifiée pour cet algorithme."
 
 #. DNSSEC:DS_ALGORITHM_NOT_DS
 #, perl-brace-format
@@ -734,9 +734,9 @@ msgid ""
 "keytag {keytag} in zone {zone}."
 msgstr ""
 "Le serveur de noms {ns} retourne un enregistrement de type \"DS\" créé à "
-"partir d'un algorithme ({algo_num}/{algo_mnemo}) qui n'est "
-"pas destiné à la signature. Cet enregistrement de type \"DS\" correspond à "
-"la clé (DNSKEY) avec le tag {keytag} dans la zone {zone}."
+"partir d'un algorithme ({algo_num}/{algo_mnemo}) qui n'est pas destiné à la "
+"signature. Cet enregistrement de type \"DS\" correspond à la clé (DNSKEY) "
+"avec le tag {keytag} dans la zone {zone}."
 
 #. DNSSEC:DS_ALGORITHM_DEPRECATED
 #, perl-brace-format
@@ -746,9 +746,9 @@ msgid ""
 "{keytag} in zone {zone}."
 msgstr ""
 "Le serveur de noms {ns} retourne un enregistrement de type \"DS\" créé à "
-"partir d'un algorithme obsolète ({algo_num}/{algo_mnemo}), "
-"ce qui est incorrect. Cet enregistrement de type \"DS\" correspond à la clé "
-"(DNSKEY) avec le tag {keytag} dans la zone {zone}."
+"partir d'un algorithme obsolète ({algo_num}/{algo_mnemo}), ce qui est "
+"incorrect. Cet enregistrement de type \"DS\" correspond à la clé (DNSKEY) "
+"avec le tag {keytag} dans la zone {zone}."
 
 #. DNSSEC:DS_ALGORITHM_MISSING
 #, perl-brace-format
@@ -757,8 +757,8 @@ msgid ""
 "for zone {zone}, which is required."
 msgstr ""
 "Le serveur de noms {ns} ne retourne aucun enregistrement de type \"DS\" créé "
-"à partir de l'algorithme {algo_num}/{algo_mnemo} pour la "
-"zone {zone}, alors que c'est nécessaire."
+"à partir de l'algorithme {algo_num}/{algo_mnemo} pour la zone {zone}, alors "
+"que c'est nécessaire."
 
 #. DNSSEC:DS_ALGORITHM_OK
 #, perl-brace-format
@@ -768,9 +768,9 @@ msgid ""
 "zone {zone}."
 msgstr ""
 "Le serveur de noms {ns} retourne un enregistrement de type \"DS\" créé à "
-"partir de l'algorithme ({algo_num}/{algo_mnemo}), ce qui est "
-"correct. Cet enregistrement de type \"DS\" correspond à la clé (DNSKEY) avec "
-"le tag {keytag} dans la zone {zone}."
+"partir de l'algorithme ({algo_num}/{algo_mnemo}), ce qui est correct. Cet "
+"enregistrement de type \"DS\" correspond à la clé (DNSKEY) avec le tag "
+"{keytag} dans la zone {zone}."
 
 #. DNSSEC:DS_ALGORITHM_RESERVED
 #, perl-brace-format
@@ -780,9 +780,9 @@ msgid ""
 "DNSKEY record with keytag {keytag} in zone {zone}."
 msgstr ""
 "Le serveur de noms {ns} retourne un enregistrement de type \"DS\" créé à "
-"partir d'un algorithme non assigné ({algo_num}), ce qui est "
-"incorrect. Cet enregistrement de type \"DS\" correspond à la clé (DNSKEY) "
-"avec le tag {keytag} dans la zone {zone}."
+"partir d'un algorithme non assigné ({algo_num}), ce qui est incorrect. Cet "
+"enregistrement de type \"DS\" correspond à la clé (DNSKEY) avec le tag "
+"{keytag} dans la zone {zone}."
 
 #. DNSSEC:DS_ALGO_SHA1_DEPRECATED
 #, perl-brace-format
@@ -792,10 +792,10 @@ msgid ""
 "record is for the DNSKEY record with keytag {keytag} in zone {zone}."
 msgstr ""
 "Le serveur de noms {ns} retourne un enregistrement de type \"DS\" créé à "
-"partir d'un algorithme obsolète ({algo_num}/{algo_mnemo}), "
-"ce qui est incorrect (bien que cet algorithme soit encore très largement "
-"utilisé). Cet enregistrement de type \"DS\" correspond à la clé (DNSKEY) "
-"avec le tag {keytag} dans la zone {zone}."
+"partir d'un algorithme obsolète ({algo_num}/{algo_mnemo}), ce qui est "
+"incorrect (bien que cet algorithme soit encore très largement utilisé). Cet "
+"enregistrement de type \"DS\" correspond à la clé (DNSKEY) avec le tag "
+"{keytag} dans la zone {zone}."
 
 #. DNSSEC:DS_BUT_NOT_DNSKEY
 #, perl-brace-format
