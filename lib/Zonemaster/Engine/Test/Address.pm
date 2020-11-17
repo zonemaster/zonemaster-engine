@@ -103,7 +103,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     NO_RESPONSE_PTR_QUERY => sub {
         __x    # ADDRESS:NO_RESPONSE_PTR_QUERY
-          'No response from nameserver(s) on PTR query ({reverse}).', @_;
+          'No response from nameserver(s) on PTR query ({domain}).', @_;
     },
     TEST_CASE_END => sub {
         __x    # ADDRESS:TEST_CASE_END
@@ -221,7 +221,7 @@ sub address02 {
             push @results,
               info(
                 NO_RESPONSE_PTR_QUERY => {
-                    reverse => $ptr_query,
+                    domain => $ptr_query,
                 }
               );
         }
@@ -289,7 +289,7 @@ sub address03 {
             push @results,
               info(
                 NO_RESPONSE_PTR_QUERY => {
-                    reverse => $ptr_query,
+                    domain => $ptr_query,
                 }
               );
         }

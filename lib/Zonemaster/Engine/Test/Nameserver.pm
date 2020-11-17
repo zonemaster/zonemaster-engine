@@ -250,7 +250,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     BREAKS_ON_EDNS => sub {
         __x    # NAMESERVER:BREAKS_ON_EDNS
-          'No response from {ns} when EDNS is used in query asking for {dname}.', @_;
+          'No response from {ns} when EDNS is used in query asking for {domain}.', @_;
     },
     CAN_BE_RESOLVED => sub {
         __x    # NAMESERVER:CAN_BE_RESOLVED
@@ -262,11 +262,11 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     CASE_QUERIES_RESULTS_DIFFER => sub {
         __x    # NAMESERVER:CASE_QUERIES_RESULTS_DIFFER
-          'When asked for {type} records on "{query}" with different cases, all servers do not reply consistently.', @_;
+          'When asked for {type} records on "{domain}" with different cases, all servers do not reply consistently.', @_;
     },
     CASE_QUERIES_RESULTS_OK => sub {
         __x    # NAMESERVER:CASE_QUERIES_RESULTS_OK
-          'When asked for {type} records on "{query}" with different cases, all servers reply consistently.', @_;
+          'When asked for {type} records on "{domain}" with different cases, all servers reply consistently.', @_;
     },
     CASE_QUERY_DIFFERENT_ANSWER => sub {
         __x    # NAMESERVER:CASE_QUERY_DIFFERENT_ANSWER
@@ -282,7 +282,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     CASE_QUERY_NO_ANSWER => sub {
         __x    # NAMESERVER:CASE_QUERY_NO_ANSWER
-          'When asked for {type} records on "{query}", nameserver {ns} returns nothing.', @_;
+          'When asked for {type} records on "{domain}", nameserver {ns} returns nothing.', @_;
     },
     CASE_QUERY_SAME_ANSWER => sub {
         __x    # NAMESERVER:CASE_QUERY_SAME_ANSWER
@@ -301,12 +301,12 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     EDNS_RESPONSE_WITHOUT_EDNS => sub {
         __x    # NAMESERVER:EDNS_RESPONSE_WITHOUT_EDNS
-          'Response without EDNS from {ns} on query with EDNS0 asking for {dname}.', @_;
+          'Response without EDNS from {ns} on query with EDNS0 asking for {domain}.', @_;
     },
     EDNS_VERSION_ERROR => sub {
         __x    # NAMESERVER:EDNS_VERSION_ERROR
           'Incorrect version of EDNS (expected 0) in response from {ns} '
-          . 'on query with EDNS (version 0) asking for {dname}.',
+          . 'on query with EDNS (version 0) asking for {domain}.',
           @_;
     },
     EDNS0_SUPPORT => sub {
@@ -343,7 +343,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     NO_RESPONSE => sub {
         __x    # NAMESERVER:NO_RESPONSE
-          'No response from {ns} asking for {dname}.', @_;
+          'No response from {ns} asking for {domain}.', @_;
     },
     NO_UPWARD_REFERRAL => sub {
         __x    # NAMESERVER:NO_UPWARD_REFERRAL
@@ -355,11 +355,11 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     QNAME_CASE_INSENSITIVE => sub {
         __x    # NAMESERVER:QNAME_CASE_INSENSITIVE
-          'Nameserver {ns} does not preserve original case of the queried name ({dname}).', @_;
+          'Nameserver {ns} does not preserve original case of the queried name ({domain}).', @_;
     },
     QNAME_CASE_SENSITIVE => sub {
         __x    # NAMESERVER:QNAME_CASE_SENSITIVE
-          "Nameserver {ns} preserves original case of queried names ({dname}).", @_;
+          "Nameserver {ns} preserves original case of queried names ({domain}).", @_;
     },
     SAME_SOURCE_IP => sub {
         __x    # NAMESERVER:SAME_SOURCE_IP
@@ -435,8 +435,8 @@ sub nameserver01 {
                 push @results,
                   info(
                     NO_RESPONSE => {
-                        ns    => $ns->string,
-                        dname => $nonexistent_name,
+                        ns     => $ns->string,
+                        domain => $nonexistent_name,
                     }
                   );
                 $is_no_recursor = 0;
@@ -494,8 +494,8 @@ sub nameserver02 {
                 push @results,
                   info(
                     EDNS_RESPONSE_WITHOUT_EDNS => {
-                        ns    => $local_ns->string,
-                        dname => $zone->name,
+                        ns     => $local_ns->string,
+                        domain => $zone->name,
                     }
                   );
             }
@@ -503,8 +503,8 @@ sub nameserver02 {
                 push @results,
                   info(
                     EDNS_VERSION_ERROR => {
-                        ns    => $local_ns->string,
-                        dname => $zone->name,
+                        ns     => $local_ns->string,
+                        domain => $zone->name,
                     }
                   );
             }
@@ -518,8 +518,8 @@ sub nameserver02 {
                 push @results,
                   info(
                     BREAKS_ON_EDNS => {
-                        ns    => $local_ns->string,
-                        dname => $zone->name,
+                        ns     => $local_ns->string,
+                        domain => $zone->name,
                     }
                   );
             }
@@ -527,8 +527,8 @@ sub nameserver02 {
                 push @results,
                   info(
                     NO_RESPONSE => {
-                        ns    => $local_ns->string,
-                        dname => $zone->name,
+                        ns     => $local_ns->string,
+                        domain => $zone->name,
                     }
                   );
             }
@@ -665,8 +665,8 @@ sub nameserver05 {
             push @results,
               info(
                 NO_RESPONSE => {
-                    ns    => $ns->string,
-                    dname => $zone->name,
+                    ns     => $ns->string,
+                    domain => $zone->name,
                 }
               );
         }
@@ -841,8 +841,8 @@ sub nameserver08 {
                 push @results,
                   info(
                     QNAME_CASE_SENSITIVE => {
-                        ns    => $local_ns->string,
-                        dname => $randomized_uc_name,
+                        ns     => $local_ns->string,
+                        domain => $randomized_uc_name,
                     }
                   );
             }
@@ -850,8 +850,8 @@ sub nameserver08 {
                 push @results,
                   info(
                     QNAME_CASE_INSENSITIVE => {
-                        ns    => $local_ns->string,
-                        dname => $randomized_uc_name,
+                        ns     => $local_ns->string,
+                        domain => $randomized_uc_name,
                     }
                   );
             }
@@ -968,9 +968,9 @@ sub nameserver09 {
             push @results,
               info(
                 CASE_QUERY_NO_ANSWER => {
-                    ns    => $local_ns->string,
-                    type  => $record_type,
-                    query => $p1 ? $randomized_uc_name1 : $randomized_uc_name2,
+                    ns     => $local_ns->string,
+                    type   => $record_type,
+                    domain => $p1 ? $randomized_uc_name1 : $randomized_uc_name2,
                 }
               );
         }
@@ -982,8 +982,8 @@ sub nameserver09 {
         push @results,
           info(
             CASE_QUERIES_RESULTS_OK => {
-                type  => $record_type,
-                query => $original_name,
+                type   => $record_type,
+                domain => $original_name,
             }
           );
     }
@@ -991,8 +991,8 @@ sub nameserver09 {
         push @results,
           info(
             CASE_QUERIES_RESULTS_DIFFER => {
-                type  => $record_type,
-                query => $original_name,
+                type   => $record_type,
+                domain => $original_name,
             }
           );
     }
@@ -1039,8 +1039,8 @@ sub nameserver10 {
             push @results,
               info(
                 NO_RESPONSE => {
-                    ns    => $ns->string,
-                    dname => $zone->name,
+                    ns     => $ns->string,
+                    domain => $zone->name,
                 }
               );
         }
@@ -1095,8 +1095,8 @@ sub nameserver11 {
             push @results,
               info(
                 NO_RESPONSE => {
-                    ns    => $ns->string,
-                    dname => $zone->name,
+                    ns     => $ns->string,
+                    domain => $zone->name,
                 }
               );
         }
@@ -1145,8 +1145,8 @@ sub nameserver12 {
             push @results,
               info(
                 NO_RESPONSE => {
-                    ns    => $ns->string,
-                    dname => $zone->name,
+                    ns     => $ns->string,
+                    domain => $zone->name,
                 }
               );
         }
@@ -1194,8 +1194,8 @@ sub nameserver13 {
             push @results,
               info(
                 NO_RESPONSE => {
-                    ns    => $ns->string,
-                    dname => $zone->name,
+                    ns     => $ns->string,
+                    domain => $zone->name,
                 }
               );
         }
