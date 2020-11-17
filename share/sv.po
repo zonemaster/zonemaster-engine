@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-17 13:33+0100\n"
+"POT-Creation-Date: 2020-11-28 04:26+0100\n"
 "PO-Revision-Date: 2020-11-03 19:44+0100\n"
 "Last-Translator: mats.dufberg@iis.se\n"
 "Language-Team: Zonemaster Team\n"
@@ -50,8 +50,8 @@ msgstr "Varje bakåtuppslagning (PTR) stämmer med motsvarande namnservernamn."
 
 #. ADDRESS:NO_RESPONSE_PTR_QUERY
 #, perl-brace-format
-msgid "No response from nameserver(s) on PTR query ({reverse})."
-msgstr "Inget svar från namnservern på PTR-fråga ({reverse})."
+msgid "No response from nameserver(s) on PTR query ({domain})."
+msgstr "Inget svar från namnservern på PTR-fråga ({domain})."
 
 #. ADDRESS:TEST_CASE_END
 #. BASIC:TEST_CASE_END
@@ -82,15 +82,15 @@ msgstr "TEST_CASE_START {testcase}."
 #. BASIC:DOMAIN_NAME_LABEL_TOO_LONG
 #, perl-brace-format
 msgid ""
-"Domain name ({dname}) has a label ({dlabel}) too long ({dlength}/{max})."
+"Domain name ({domain}) has a label ({dlabel}) too long ({dlength}/{max})."
 msgstr ""
-"Domändelen '{dlabel}' i domännamnet {dname} är för lång ({dlength}). Maximal "
+"Domändelen '{dlabel}' i domännamnet {domain} är för lång ({dlength}). Maximal "
 "längd är {max}."
 
 #. BASIC:DOMAIN_NAME_ZERO_LENGTH_LABEL
 #, perl-brace-format
-msgid "Domain name ({dname}) has a zero-length label."
-msgstr "Domännamnet '{dname}' har en domändel med längden noll."
+msgid "Domain name ({domain}) has a zero-length label."
+msgstr "Domännamnet '{domain}' har en domändel med längden noll."
 
 #. BASIC:DOMAIN_NAME_TOO_LONG
 #, perl-brace-format
@@ -108,13 +108,13 @@ msgstr "Moderdomänen '{pname}' till den testade domänen har identifierats."
 
 #. BASIC:HAS_A_RECORDS
 #, perl-brace-format
-msgid "Nameserver {ns} returned \"A\" record(s) for {dname}."
-msgstr "Namnserver {ns} svarade med A-poster för '{dname}'."
+msgid "Nameserver {ns} returned \"A\" record(s) for {domain}."
+msgstr "Namnserver {ns} svarade med A-poster för '{domain}'."
 
 #. BASIC:NO_A_RECORDS
 #, perl-brace-format
-msgid "Nameserver {ns} did not return \"A\" record(s) for {dname}."
-msgstr "Namnserver {ns} svarade inte med några A-poster för '{dname}'."
+msgid "Nameserver {ns} did not return \"A\" record(s) for {domain}."
+msgstr "Namnserver {ns} svarade inte med några A-poster för '{domain}'."
 
 #. BASIC:HAS_NAMESERVERS
 #, perl-brace-format
@@ -440,15 +440,6 @@ msgstr ""
 "SOA-tidsparametrarna (REFRESH={refresh}, RETRY={retry}, EXPIRE={expire}, "
 "MINIMUM={minimum}) hittades på följande uppsättning namnservrar: {ns_list}."
 
-#. CONSISTENCY:TOTAL_ADDRESS_MISMATCH
-#, perl-brace-format
-msgid ""
-"No common nameserver IP addresses between child ({child}) and parent "
-"({glue})."
-msgstr ""
-"Det finns inga gemensamma namnserver-IP-adresser mellan moderzon ({glue}) "
-"och dotterzon ({child})."
-
 #. DNSSEC:ADDITIONAL_DNSKEY_SKIPPED
 msgid "No DNSKEYs found. Additional tests skipped."
 msgstr "Inga DNSKEY-poster hittades. Resterande DNSSEC-tester hoppas över."
@@ -537,10 +528,10 @@ msgstr ""
 #. DNSSEC:BROKEN_DNSSEC
 #, perl-brace-format
 msgid ""
-"All nameservers for zone {zone} responds with neither NSEC nor NSEC3 records "
-"when such records are expected."
+"All nameservers for zone {domain} responds with neither NSEC nor NSEC3 "
+"records when such records are expected."
 msgstr ""
-"Inga namnservrar för zonen {zone} svarade med varken NSEC- eller NSEC3-"
+"Inga namnservrar för zonen {domain} svarade med varken NSEC- eller NSEC3-"
 "poster trots att endera är förväntat."
 
 #. DNSSEC:BROKEN_DS
@@ -669,64 +660,64 @@ msgstr ""
 msgid ""
 "{ns} returned a DS record created by algorithm {algo_num} ({algo_mnemo}) "
 "which is not meant for DS. The DS record is for the DNSKEY record with "
-"keytag {keytag} in zone {zone}."
+"keytag {keytag} in zone {domain}."
 msgstr ""
 "Namnserver {ns} svarade med en DS-post skapad med hash-algoritm {algo_num} "
 "({algo_mnemo}) som inte är avsedd för DS. DS-posten gäller DNSKEY-posten med "
-"'keytag' {keytag} i zonen {zone}."
+"'keytag' {keytag} i zonen {domain}."
 
 #. DNSSEC:DS_ALGORITHM_DEPRECATED
 #, perl-brace-format
 msgid ""
 "{ns} returned a DS record created by algorithm {algo_num} ({algo_mnemo}), "
 "which is deprecated. The DS record is for the DNSKEY record with keytag "
-"{keytag} in zone {zone}."
+"{keytag} in zone {domain}."
 msgstr ""
 "Namnserver {ns} svarade med en DS-post skapad med hash-algoritm {algo_num} "
 "({algo_mnemo}) som är föråldrad. DS-posten gäller DNSKEY-posten med "
-"'keytag' {keytag} i zonen {zone}."
+"'keytag' {keytag} i zonen {domain}."
 
 #. DNSSEC:DS_ALGORITHM_MISSING
 #, perl-brace-format
 msgid ""
 "{ns} returned no DS record created by algorithm {algo_num} ({algo_mnemo}) "
-"for zone {zone}, which is required."
+"for zone {domain}, which is required."
 msgstr ""
 "Namnserver {ns} svarade inte med någon DS-post skapad med hash-algoritm "
-"{algo_num} ({algo_mnemo}) för zonen {zone}, vilket är ett krav att den gör."
+"{algo_num} ({algo_mnemo}) för zonen {domain}, vilket är ett krav att den gör."
 
 #. DNSSEC:DS_ALGORITHM_OK
 #, perl-brace-format
 msgid ""
 "{ns} returned a DS record created by algorithm {algo_num} ({algo_mnemo}), "
 "which is OK. The DS record is for the DNSKEY record with keytag {keytag} in "
-"zone {zone}."
+"zone {domain}."
 msgstr ""
 "Namnserver {ns} svarade med en DS-post skapad med hash-algoritm {algo_num} "
 "({algo_mnemo}), vilken är OK. DS-posten gäller DNSKEY-posten med "
-"'keytag' {keytag} i zonen {zone}."
+"'keytag' {keytag} i zonen {domain}."
 
 #. DNSSEC:DS_ALGORITHM_RESERVED
 #, perl-brace-format
 msgid ""
 "{ns} returned a DS record created by with an algorithm not assigned "
 "(algorithm number {algo_num}), which is not OK. The DS record is for the "
-"DNSKEY record with keytag {keytag} in zone {zone}."
+"DNSKEY record with keytag {keytag} in zone {domain}."
 msgstr ""
 "Namnserver {ns} svarade med en DS-post skapad med hash-algoritm {algo_num} "
 "som inte är satt till någon hash-algoritm, vilket inte är OK. DS-posten "
-"gäller DNSKEY-posten med 'keytag' {keytag} i zonen {zone}."
+"gäller DNSKEY-posten med 'keytag' {keytag} i zonen {domain}."
 
 #. DNSSEC:DS_ALGO_SHA1_DEPRECATED
 #, perl-brace-format
 msgid ""
 "Nameserver {ns} returned a DS record created by algorithm {algo_num} "
 "({algo_mnemo}) which is deprecated, while it is still widely used. The DS "
-"record is for the DNSKEY record with keytag {keytag} in zone {zone}."
+"record is for the DNSKEY record with keytag {keytag} in zone {domain}."
 msgstr ""
 "Namnserver {ns} svarade med en DS-post skapad med hash-algoritm {algo_num} "
 "({algo_mnemo}) som är föråldrad, men fortfarande allmänt använd. DS-posten "
-"gäller DNSKEY-posten med 'keytag' {keytag} i zonen {zone}."
+"gäller DNSKEY-posten med 'keytag' {keytag} i zonen {domain}."
 
 #. DNSSEC:DS_BUT_NOT_DNSKEY
 #, perl-brace-format
@@ -783,29 +774,20 @@ msgstr "Zonen har NSEC-poster."
 #. DNSSEC:INCONSISTENT_DNSSEC
 #, perl-brace-format
 msgid ""
-"Some, but not all, nameservers for zone {zone} respond with neither NSEC nor "
-"NSEC3 records when such records are expected."
+"Some, but not all, nameservers for zone {domain} respond with neither NSEC "
+"nor NSEC3 records when such records are expected."
 msgstr ""
-"Några av namnservrarna för zonen {zone} svarar med varken NSEC- eller NSEC3-"
+"Några av namnservrarna för zonen {domain} svarar med varken NSEC- eller NSEC3-"
 "post trots att endera förväntas."
 
 #. DNSSEC:INCONSISTENT_NSEC_NSEC3
 #, perl-brace-format
 msgid ""
-"Some nameservers for zone {zone} respond with NSEC records and others "
+"Some nameservers for zone {domain} respond with NSEC records and others "
 "respond with NSEC3 records. Consistency is expected."
 msgstr ""
-"Några av namnservrarna för zonen {zone} svarar med NSEC-poster och andra med "
+"Några av namnservrarna för zonen {domain} svarar med NSEC-poster och andra med "
 "NSEC3-poster. Det förväntade är att alla namnservrar ger samma posttyp."
-
-#. DNSSEC:INVALID_NAME_RCODE
-#, perl-brace-format
-msgid ""
-"When asked for the name {name}, which must not exist, the response had RCODE "
-"{rcode}."
-msgstr ""
-"Förfrågan om namnet '{name}', som inte får existera, gav i svaret den "
-"oväntade RCODE '{rcode}'."
 
 #. DNSSEC:ITERATIONS_OK
 #, perl-brace-format
@@ -833,10 +815,10 @@ msgstr "Antalet NSEC3-iterationer är {count}, vilket är högt."
 #. DNSSEC:MIXED_NSEC_NSEC3
 #, perl-brace-format
 msgid ""
-"Nameserver {ns} for zone {zone} responds with both NSEC and NSEC3 records "
+"Nameserver {ns} for zone {domain} responds with both NSEC and NSEC3 records "
 "when only one record type is expected."
 msgstr ""
-"Namnservern {ns} för zonen '{zone}' svarade med både NSEC och NSEC3 poster "
+"Namnservern {ns} för zonen '{domain}' svarade med både NSEC och NSEC3 poster "
 "när bara den ena posttypen är förväntad."
 
 #. DNSSEC:NEITHER_DNSKEY_NOR_DS
@@ -893,10 +875,10 @@ msgstr "'{server}' gav inga NSEC3PARAM-poster i svaret."
 #. DNSSEC:NO_NSEC_NSEC3
 #, perl-brace-format
 msgid ""
-"Nameserver {ns} for zone {zone} responds with neither NSEC nor NSEC3 record "
-"when when such records are expected."
+"Nameserver {ns} for zone {domain} responds with neither NSEC nor NSEC3 "
+"record when when such records are expected."
 msgstr ""
-"Nameservern {ns} för zonen {zone} svarar varken med NSEC- eller NSEC3-poster "
+"Nameservern {ns} för zonen {domain} svarar varken med NSEC- eller NSEC3-poster "
 "trots att sådana var förväntade."
 
 #. DNSSEC:NO_RESPONSE_DNSKEY
@@ -906,8 +888,8 @@ msgstr "Svarspaketet från namnservern {ns} har ingen DNSKEY-post."
 
 #. DNSSEC:NO_RESPONSE_DS
 #, perl-brace-format
-msgid "{ns} returned no DS records for {zone}."
-msgstr "Namnserver {ns} returnerade inga DS-poster för zonen '{zone}'."
+msgid "{ns} returned no DS records for {domain}."
+msgstr "Namnserver {ns} returnerade inga DS-poster för zonen '{domain}'."
 
 #. DNSSEC:NO_RESPONSE_RRSET
 #, perl-brace-format
@@ -929,8 +911,8 @@ msgstr "Zonen är inte signerad med DNSSEC."
 
 #. DNSSEC:NSEC3_COVERS_NOT
 #, perl-brace-format
-msgid "NSEC3 record does not cover {name}."
-msgstr "Det finns ingen NSEC3-post som täcker '{name}'."
+msgid "NSEC3 record does not cover {domain}."
+msgstr "Det finns ingen NSEC3-post som täcker '{domain}'."
 
 #. DNSSEC:NSEC3_NOT_SIGNED
 msgid "No signature correctly signed the NSEC3 RRset."
@@ -944,8 +926,8 @@ msgstr ""
 
 #. DNSSEC:NSEC_COVERS_NOT
 #, perl-brace-format
-msgid "NSEC does not cover {name}."
-msgstr "NSEC täcker inte '{name}'."
+msgid "NSEC does not cover {domain}."
+msgstr "NSEC täcker inte '{domain}'."
 
 #. DNSSEC:NSEC_NOT_SIGNED
 msgid "No signature correctly signed the NSEC RRset."
@@ -1037,11 +1019,11 @@ msgstr "Det finns minst en RRSIG-post som korrekt signerar SOA-posten."
 #. DNSSEC:TEST_ABORTED
 #, perl-brace-format
 msgid ""
-"Nameserver {ns} for zone {zone} responds with RCODE \"NOERROR\" on a query "
+"Nameserver {ns} for zone {domain} responds with RCODE \"NOERROR\" on a query "
 "that is expected to give response with RCODE \"NXDOMAIN\". Test for NSEC and "
 "NSEC3 is aborted for this nameserver."
 msgstr ""
-"Namnservern {ns} för zonen {zone} svarade med statuskod (RCODE) 'NOERROR' på "
+"Namnservern {ns} för zonen {domain} svarade med statuskod (RCODE) 'NOERROR' på "
 "en förfrågan som förväntades ge statuskoden (RCODE) 'NXDOMAIN'. Test av NSEC "
 "och NSEC3 avbröts för denna namnserver."
 
@@ -1058,9 +1040,9 @@ msgstr ""
 #, perl-brace-format
 msgid ""
 "Nameserver {ns} responded with an unexpected rcode ({rcode}) on a DS query "
-"for zone {zone}."
+"for zone {domain}."
 msgstr ""
-"Namnserver {ns} besvarade en DS-fråga för zonen {zone} med den icke-väntade "
+"Namnserver {ns} besvarade en DS-fråga för zonen {domain} med den icke-väntade "
 "svarskoden \"{rcode}\"."
 
 #. DELEGATION:ARE_AUTHORITATIVE
@@ -1381,8 +1363,8 @@ msgstr "AXFR är inte tillgänglig från namnserver {ns}."
 
 #. NAMESERVER:BREAKS_ON_EDNS
 #, perl-brace-format
-msgid "No response from {ns} when EDNS is used in query asking for {dname}."
-msgstr "Inget svar från {ns} på förfrågan med EDNS (fråga efter {dname})."
+msgid "No response from {ns} when EDNS is used in query asking for {domain}."
+msgstr "Inget svar från {ns} på förfrågan med EDNS (fråga efter {domain})."
 
 #. NAMESERVER:CAN_BE_RESOLVED
 msgid "All nameservers succeeded to resolve to an IP address."
@@ -1399,19 +1381,19 @@ msgstr ""
 #. NAMESERVER:CASE_QUERIES_RESULTS_DIFFER
 #, perl-brace-format
 msgid ""
-"When asked for {type} records on \"{query}\" with different cases, all "
+"When asked for {type} records on \"{domain}\" with different cases, all "
 "servers do not reply consistently."
 msgstr ""
-"Alla servrar svarar inte konsekvent när förfrågade om '{query}' med olika "
+"Alla servrar svarar inte konsekvent när förfrågade om '{domain}' med olika "
 "skiftlägen och posttypen '{type}'."
 
 #. NAMESERVER:CASE_QUERIES_RESULTS_OK
 #, perl-brace-format
 msgid ""
-"When asked for {type} records on \"{query}\" with different cases, all "
+"When asked for {type} records on \"{domain}\" with different cases, all "
 "servers reply consistently."
 msgstr ""
-"Alla servrar svarar konsekvent när förfrågade om '{query}' med olika "
+"Alla servrar svarar konsekvent när förfrågade om '{domain}' med olika "
 "skiftlägen och posttypen '{type}'."
 
 #. NAMESERVER:CASE_QUERY_DIFFERENT_ANSWER
@@ -1435,10 +1417,10 @@ msgstr ""
 #. NAMESERVER:CASE_QUERY_NO_ANSWER
 #, perl-brace-format
 msgid ""
-"When asked for {type} records on \"{query}\", nameserver {ns} returns "
+"When asked for {type} records on \"{domain}\", nameserver {ns} returns "
 "nothing."
 msgstr ""
-"Nameserver {ns} svarar ingenting när den får frågan om '{query}' med "
+"Nameserver {ns} svarar ingenting när den får frågan om '{domain}' med "
 "posttypen '{type}'."
 
 #. NAMESERVER:CASE_QUERY_SAME_ANSWER
@@ -1469,17 +1451,18 @@ msgstr ""
 
 #. NAMESERVER:EDNS_RESPONSE_WITHOUT_EDNS
 #, perl-brace-format
-msgid "Response without EDNS from {ns} on query with EDNS0 asking for {dname}."
-msgstr "Svar utan EDNS från {ns} på förfrågan med EDNS0 (fråga efter {dname})."
+msgid ""
+"Response without EDNS from {ns} on query with EDNS0 asking for {domain}."
+msgstr "Svar utan EDNS från {ns} på förfrågan med EDNS0 (fråga efter {domain})."
 
 #. NAMESERVER:EDNS_VERSION_ERROR
 #, perl-brace-format
 msgid ""
 "Incorrect version of EDNS (expected 0) in response from {ns} on query with "
-"EDNS (version 0) asking for {dname}."
+"EDNS (version 0) asking for {domain}."
 msgstr ""
 "Felaktig EDNS-version (förväntad version var 0) i svar från {ns} på "
-"förfrågan med EDNS version 0 (fråga efter {dname})."
+"förfrågan med EDNS version 0 (fråga efter {domain})."
 
 #. NAMESERVER:EDNS0_SUPPORT
 #, perl-brace-format
@@ -1517,8 +1500,8 @@ msgstr "Det gick inte att slå upp IP-adressen för någon namnserver."
 #. NAMESERVER:NO_RESPONSE
 #. SYNTAX:NO_RESPONSE
 #, perl-brace-format
-msgid "No response from {ns} asking for {dname}."
-msgstr "Inget svar från {ns} på förfrågan efter {dname}."
+msgid "No response from {ns} asking for {domain}."
+msgstr "Inget svar från {ns} på förfrågan efter {domain}."
 
 #. NAMESERVER:NO_UPWARD_REFERRAL
 #, perl-brace-format
@@ -1537,15 +1520,15 @@ msgstr "Felaktigt svar från namnserver {ns}."
 #, perl-brace-format
 msgid ""
 "Nameserver {ns} does not preserve original case of the queried name "
-"({dname})."
+"({domain})."
 msgstr ""
 "Nameserver {ns} bevarar inte skillnaden mellan versaler och gemener från "
-"frågan ({dname})."
+"frågan ({domain})."
 
 #. NAMESERVER:QNAME_CASE_SENSITIVE
 #, perl-brace-format
-msgid "Nameserver {ns} preserves original case of queried names ({dname})."
-msgstr "Namnserver {ns} bevarade versaler och gemener från frågan ({dname})."
+msgid "Nameserver {ns} preserves original case of queried names ({domain})."
+msgstr "Namnserver {ns} bevarade versaler och gemener från frågan ({domain})."
 
 #. NAMESERVER:SAME_SOURCE_IP
 msgid "All nameservers reply with same IP used to query them."
@@ -1585,111 +1568,111 @@ msgstr ""
 #. SYNTAX:DISCOURAGED_DOUBLE_DASH
 #, perl-brace-format
 msgid ""
-"Domain name ({name}) has a label ({label}) with a double hyphen ('--') in "
+"Domain name ({domain}) has a label ({label}) with a double hyphen ('--') in "
 "position 3 and 4 (with a prefix which is not 'xn--')."
 msgstr ""
-"Domännamnet '{name}' har domändelen '{label}' med bindestreck i position 3 "
+"Domännamnet '{domain}' har domändelen '{label}' med bindestreck i position 3 "
 "och 4 utan att börja med IDN-prefixet 'xn--'."
 
 #. SYNTAX:INITIAL_HYPHEN
 #, perl-brace-format
 msgid ""
-"Domain name ({name}) has a label ({label}) starting with an hyphen ('-')."
+"Domain name ({domain}) has a label ({label}) starting with an hyphen ('-')."
 msgstr ""
-"Domännamnet '{name}' har en domändel '{label}' som börjar med ett "
+"Domännamnet '{domain}' har en domändel '{label}' som börjar med ett "
 "bindestreck."
 
 #. SYNTAX:MNAME_DISCOURAGED_DOUBLE_DASH
 #, perl-brace-format
 msgid ""
-"SOA MNAME ({name}) has a label ({label}) with a double hyphen ('--') in "
+"SOA MNAME ({domain}) has a label ({label}) with a double hyphen ('--') in "
 "position 3 and 4 (with a prefix which is not 'xn--')."
 msgstr ""
-"SOA MNAME '{name}' har domändelen '{label}' med bindestreck i position 3 och "
+"SOA MNAME '{domain}' har domändelen '{label}' med bindestreck i position 3 och "
 "4 utan att börja med IDN-prefixet 'xn--'."
 
 #. SYNTAX:MNAME_NON_ALLOWED_CHARS
 #, perl-brace-format
-msgid "Found illegal characters in SOA MNAME ({name})."
-msgstr "Otillåtna tecken hittades i SOA MNAME ({name})."
+msgid "Found illegal characters in SOA MNAME ({domain})."
+msgstr "Otillåtna tecken hittades i SOA MNAME ({domain})."
 
 #. SYNTAX:MNAME_NUMERIC_TLD
 #, perl-brace-format
-msgid "SOA MNAME ({name}) within a 'numeric only' TLD ({tld})."
-msgstr "SOA MNAME '{name}' är i en helnumerisk TLD ({tld})."
+msgid "SOA MNAME ({domain}) within a 'numeric only' TLD ({tld})."
+msgstr "SOA MNAME '{domain}' är i en helnumerisk TLD ({tld})."
 
 #. SYNTAX:MNAME_SYNTAX_OK
 #, perl-brace-format
-msgid "SOA MNAME ({name}) syntax is valid."
-msgstr "SOA MNAME '{name}' har tillåtet format."
+msgid "SOA MNAME ({domain}) syntax is valid."
+msgstr "SOA MNAME '{domain}' har tillåtet format."
 
 #. SYNTAX:MX_DISCOURAGED_DOUBLE_DASH
 #, perl-brace-format
 msgid ""
-"Domain name MX ({name}) has a label ({label}) with a double hyphen ('--') in "
-"position 3 and 4 (with a prefix which is not 'xn--')."
+"Domain name MX ({domain}) has a label ({label}) with a double hyphen ('--') "
+"in position 3 and 4 (with a prefix which is not 'xn--')."
 msgstr ""
-"Domänens MX ({name}) har domändelen '{label}' med bindestreck i position 3 "
+"Domänens MX ({domain}) har domändelen '{label}' med bindestreck i position 3 "
 "och 4 utan att börja med IDN-prefixet 'xn--'."
 
 #. SYNTAX:MX_NON_ALLOWED_CHARS
 #, perl-brace-format
-msgid "Found illegal characters in MX ({name})."
-msgstr "Otillåtna tecken hittades i MX ({name})."
+msgid "Found illegal characters in MX ({domain})."
+msgstr "Otillåtna tecken hittades i MX ({domain})."
 
 #. SYNTAX:MX_NUMERIC_TLD
 #, perl-brace-format
-msgid "Domain name MX ({name}) within a 'numeric only' TLD ({tld})."
-msgstr "Domänens MX ('{name}') är i en helnumerisk TLD ({tld})."
+msgid "Domain name MX ({domain}) within a 'numeric only' TLD ({tld})."
+msgstr "Domänens MX ('{domain}') är i en helnumerisk TLD ({tld})."
 
 #. SYNTAX:MX_SYNTAX_OK
 #, perl-brace-format
-msgid "Domain name MX ({name}) syntax is valid."
-msgstr "MX-namnet '{name}' är giltigt."
+msgid "Domain name MX ({domain}) syntax is valid."
+msgstr "MX-namnet '{domain}' är giltigt."
 
 #. SYNTAX:NAMESERVER_DISCOURAGED_DOUBLE_DASH
 #, perl-brace-format
 msgid ""
-"Nameserver ({name}) has a label ({label}) with a double hyphen ('--') in "
+"Nameserver ({domain}) has a label ({label}) with a double hyphen ('--') in "
 "position 3 and 4 (with a prefix which is not 'xn--')."
 msgstr ""
-"Namnservern '{name}' har domändelen ({label}) med bindestreck i position 3 "
+"Namnservern '{domain}' har domändelen ({label}) med bindestreck i position 3 "
 "och 4 utan att börja med IDN-prefixet 'xn--'."
 
 #. SYNTAX:NAMESERVER_NON_ALLOWED_CHARS
 #, perl-brace-format
-msgid "Found illegal characters in the nameserver ({name})."
-msgstr "Det finns otillåtna tecken i namnservernamnet '{name}'."
+msgid "Found illegal characters in the nameserver ({domain})."
+msgstr "Det finns otillåtna tecken i namnservernamnet '{domain}'."
 
 #. SYNTAX:NAMESERVER_NUMERIC_TLD
 #, perl-brace-format
-msgid "Nameserver ({name}) within a 'numeric only' TLD ({tld})."
-msgstr "Namnserver '{name}' finns under en helnumerisk TLD ('{tld}')."
+msgid "Nameserver ({domain}) within a 'numeric only' TLD ({tld})."
+msgstr "Namnserver '{domain}' finns under en helnumerisk TLD ('{tld}')."
 
 #. SYNTAX:NAMESERVER_SYNTAX_OK
 #, perl-brace-format
-msgid "Nameserver ({name}) syntax is valid."
-msgstr "Namnservernamnet '{name}' är giltigt."
+msgid "Nameserver ({domain}) syntax is valid."
+msgstr "Namnservernamnet '{domain}' är giltigt."
 
 #. SYNTAX:NON_ALLOWED_CHARS
 #, perl-brace-format
-msgid "Found illegal characters in the domain name ({name})."
-msgstr "Det finns otillåtna tecken i domännamnet '{name}'."
+msgid "Found illegal characters in the domain name ({domain})."
+msgstr "Det finns otillåtna tecken i domännamnet '{domain}'."
 
 #. SYNTAX:NO_DOUBLE_DASH
 #, perl-brace-format
 msgid ""
-"Domain name ({name}) has no label with a double hyphen ('--') in position 3 "
-"and 4 (with a prefix which is not 'xn--')."
+"Domain name ({domain}) has no label with a double hyphen ('--') in position "
+"3 and 4 (with a prefix which is not 'xn--')."
 msgstr ""
-"Domändelarna i domännamnet '{name}' har antingen inte bindestreck i position "
+"Domändelarna i domännamnet '{domain}' har antingen inte bindestreck i position "
 "3 och 4 eller har IDN-prefixet 'xn--'."
 
 #. SYNTAX:NO_ENDING_HYPHENS
 #, perl-brace-format
-msgid "Neither end of any label in the domain name ({name}) has a hyphen."
+msgid "Neither end of any label in the domain name ({domain}) has a hyphen."
 msgstr ""
-"Domännamnet '{name}' har ingen domändel som börjar eller slutar med ett "
+"Domännamnet '{domain}' har ingen domändel som börjar eller slutar med ett "
 "bindestreck."
 
 #. SYNTAX:NO_RESPONSE_MX_QUERY
@@ -1704,8 +1687,8 @@ msgstr "Inget svar från namnserver på fråga efter SOA-post."
 
 #. SYNTAX:ONLY_ALLOWED_CHARS
 #, perl-brace-format
-msgid "No illegal characters in the domain name ({name})."
-msgstr "Endast tillåtna tecken i namnet '{name}'."
+msgid "No illegal characters in the domain name ({domain})."
+msgstr "Endast tillåtna tecken i namnet '{domain}'."
 
 #. SYNTAX:RNAME_MAIL_DOMAIN_INVALID
 #, perl-brace-format
@@ -1738,9 +1721,10 @@ msgstr "Adressen i SOA RNAME ({rname}) är giltig enligt RFC822."
 
 #. SYNTAX:TERMINAL_HYPHEN
 #, perl-brace-format
-msgid "Domain name ({name}) has a label ({label}) ending with a hyphen ('-')."
+msgid ""
+"Domain name ({domain}) has a label ({label}) ending with a hyphen ('-')."
 msgstr ""
-"Domännamnet '{name}' har domändelen '{label}' som slutar med ett bindestreck."
+"Domännamnet '{domain}' har domändelen '{label}' som slutar med ett bindestreck."
 
 #. ZONE:RETRY_MINIMUM_VALUE_LOWER
 #, perl-brace-format
@@ -1945,14 +1929,9 @@ msgstr ""
 
 #. SYSTEM:CANNOT_CONTINUE
 #, perl-brace-format
-msgid "Not enough data about {zone} was found to be able to run tests."
+msgid "Not enough data about {domain} was found to be able to run tests."
 msgstr ""
-"Det finns inte tillräckligt med data om '{zone}' för att kunna köra tester."
-
-#. SYSTEM:PROFILE_FILE
-#, perl-brace-format
-msgid "Profile was read from {name}."
-msgstr "Profil lästes från '{name}'."
+"Det finns inte tillräckligt med data om '{domain}' för att kunna köra tester."
 
 #. SYSTEM:DEPENDENCY_VERSION
 #, perl-brace-format
@@ -1973,9 +1952,9 @@ msgstr ""
 #. SYSTEM:LOOKUP_ERROR
 #, perl-brace-format
 msgid ""
-"DNS query to {ns} for {name}/{type}/{class} failed with error: {message}"
+"DNS query to {ns} for {domain}/{type}/{class} failed with error: {message}"
 msgstr ""
-"DNS-fråga till {ns} för {name}/{type}/{class} misslyckades med felet: "
+"DNS-fråga till {ns} för {domain}/{type}/{class} misslyckades med felet: "
 "'{message}'."
 
 #. SYSTEM:MODULE_ERROR
