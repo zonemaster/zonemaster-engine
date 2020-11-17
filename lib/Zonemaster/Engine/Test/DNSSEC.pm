@@ -901,62 +901,128 @@ sub dnssec01 {
 
     if ( my $parent = $zone->parent ) {
         foreach my $ns ( @{ $parent->ns } ) {
-            my $ns_args = {
-                ns     => $ns->string,
-                zone   => q{} . $zone->name,
-                rrtype => q{DS},
-            };
 
             if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
-                push @results, info( IPV6_DISABLED => $ns_args );
+                push @results,
+                  info(
+                    IPV6_DISABLED => {
+                        ns     => $ns->string,
+                        rrtype => q{DS},
+                    }
+                  );
                 next;
             }
 
             if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
-                push @results, info( IPV4_DISABLED => $ns_args );
+                push @results,
+                  info(
+                    IPV4_DISABLED => {
+                        ns     => $ns->string,
+                        rrtype => q{DS},
+                    }
+                  );
                 next;
             }
 
             my $ds_p = $ns->query( $zone->name, q{DS}, { usevc => 0, dnssec => 1 } );
             if ( not $ds_p ) {
-                push @results, info( NO_RESPONSE_DS => $ns_args );
+                push @results,
+                  info(
+                    NO_RESPONSE_DS => {
+                        ns   => $ns->string,
+                        zone => q{} . $zone->name,
+                    }
+                  );
                 next;
             }
             elsif ($ds_p->rcode ne q{NOERROR} ) {
-                $ns_args->{rcode} = $ds_p->rcode;
-                push @results, info( UNEXPECTED_RESPONSE_DS => $ns_args );
+                push @results,
+                  info(
+                    UNEXPECTED_RESPONSE_DS => {
+                        ns    => $ns->string,
+                        zone  => q{} . $zone->name,
+                        rcode => $ds_p->rcode,
+                    }
+                  );
                 next;
             }
             else {
                 my $algorithm2 = 0;
                 my @dss = $ds_p->get_records( q{DS}, q{answer} );
                 foreach my $ds (@dss) {
-                    my $ds_args = {%$ns_args};
-                    $ds_args->{keytag}     = $ds->keytag;
-                    $ds_args->{algo_num}   = $ds->digtype;
-                    $ds_args->{algo_mnemo} = $digest_algorithms{ $ds->digtype };
+                    my $mnemonic = $digest_algorithms{ $ds->digtype };
                     if ( $ds->digtype == 0 ) {
-                        push @results, info( DS_ALGORITHM_NOT_DS => $ds_args );
+                        push @results,
+                          info(
+                            DS_ALGORITHM_NOT_DS => {
+                                ns         => $ns->string,
+                                zone       => q{} . $zone->name,
+                                keytag     => $ds->keytag,
+                                algo_num   => $ds->digtype,
+                                algo_mnemo => $mnemonic,
+                            }
+                          );
                     }
                     elsif ( $ds->digtype == 1 ) {
-                        push @results, info( DS_ALGO_SHA1_DEPRECATED => $ds_args );
+                        push @results,
+                          info(
+                            DS_ALGO_SHA1_DEPRECATED => {
+                                ns         => $ns->string,
+                                zone       => q{} . $zone->name,
+                                keytag     => $ds->keytag,
+                                algo_num   => $ds->digtype,
+                                algo_mnemo => $mnemonic,
+                            }
+                          );
                     }
                     elsif ( $ds->digtype == 3 ) {
-                        push @results, info( DS_ALGORITHM_DEPRECATED => $ds_args );
+                        push @results,
+                          info(
+                            DS_ALGORITHM_DEPRECATED => {
+                                ns         => $ns->string,
+                                zone       => q{} . $zone->name,
+                                keytag     => $ds->keytag,
+                                algo_num   => $ds->digtype,
+                                algo_mnemo => $mnemonic,
+                            }
+                          );
                     }
                     elsif ( $ds->digtype >= 5 and $ds->digtype <= 255 ) {
-                        push @results, info( DS_ALGORITHM_RESERVED => $ds_args );
+                        push @results,
+                          info(
+                            DS_ALGORITHM_RESERVED => {
+                                ns         => $ns->string,
+                                zone       => q{} . $zone->name,
+                                keytag     => $ds->keytag,
+                                algo_num   => $ds->digtype,
+                                algo_mnemo => $mnemonic,
+                            }
+                          );
                     }
                     else {
                         $algorithm2++ if $ds->digtype == 2;
-                        push @results, info( DS_ALGORITHM_OK => $ds_args );
+                        push @results,
+                          info(
+                            DS_ALGORITHM_OK => {
+                                ns         => $ns->string,
+                                zone       => q{} . $zone->name,
+                                keytag     => $ds->keytag,
+                                algo_num   => $ds->digtype,
+                                algo_mnemo => $mnemonic,
+                            }
+                          );
                     }
                 }
                 if ( not $algorithm2 ) {
-                    my $ds_args = {%$ns_args};
-                    $ds_args->{algo_num}   = 2;
-                    $ds_args->{algo_mnemo} = $digest_algorithms{2};
-                    push @results, info( DS_ALGORITHM_MISSING => $ds_args );
+                    push @results,
+                      info(
+                        DS_ALGORITHM_MISSING => {
+                            ns         => $ns->string,
+                            zone       => q{} . $zone->name,
+                            algo_num   => 2,
+                            algo_mnemo => $digest_algorithms{2},
+                        }
+                      );
                 }
             }    
         }
@@ -995,8 +1061,14 @@ sub dnssec02 {
                 next;
             }
             elsif ($ds_p->rcode ne q{NOERROR} ) {
-                $ns_args->{rcode} = $ds_p->rcode;
-                push @results, info( UNEXPECTED_RESPONSE_DS => $ns_args );
+                push @results,
+                  info(
+                    UNEXPECTED_RESPONSE_DS => {
+                        ns    => $ns->string,
+                        zone  => q{} . $zone->name,
+                        rcode => $ds_p->rcode,
+                    }
+                  );
                 next;
             }
             else {
@@ -1684,18 +1756,22 @@ sub dnssec10 {
             my @nsec  = $a_p->get_records( q{NSEC}, q{authority} );
             my @nsec3 = $a_p->get_records( q{NSEC3}, q{authority} );
             if ( scalar @nsec and scalar @nsec3 ) {
-                my $args = {
-                    ns   => $ns->string,
-                    zone => $zone->name->string,
-                };
-                push @results, info( MIXED_NSEC_NSEC3 => $args );
+                push @results,
+                  info(
+                    MIXED_NSEC_NSEC3 => {
+                        ns   => $ns->string,
+                        zone => $zone->name->string,
+                    }
+                  );
             }
             elsif ( not scalar @nsec and not scalar @nsec3 ) {
-                my $args = {
-                    ns   => $ns->string,
-                    zone => $zone->name->string,
-                };
-                push @results, info( NO_NSEC_NSEC3 => $args );
+                push @results,
+                  info(
+                    NO_NSEC_NSEC3 => {
+                        ns   => $ns->string,
+                        zone => $zone->name->string,
+                    }
+                  );
                 $no_dnssec_zone{$ns->address->short}++;
             }
             elsif ( scalar @nsec and not scalar @nsec3 ) {

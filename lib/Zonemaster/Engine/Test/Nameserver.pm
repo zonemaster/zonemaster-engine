@@ -432,11 +432,13 @@ sub nameserver01 {
 
             my $p = $ns->query( $nonexistent_name, q{A}, { blacklisting_disabled => 1 } );
             if ( !$p ) {
-                my %name_args = (
-                    dname => $nonexistent_name,
-                    ns    => $ns->string,
-                );
-                push @results, info( NO_RESPONSE => \%name_args );
+                push @results,
+                  info(
+                    NO_RESPONSE => {
+                        ns    => $ns->string,
+                        dname => $nonexistent_name,
+                    }
+                  );
                 $is_no_recursor = 0;
             }
             else {
