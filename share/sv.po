@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-03 19:42+0100\n"
+"POT-Creation-Date: 2020-11-17 13:33+0100\n"
 "PO-Revision-Date: 2020-11-03 19:44+0100\n"
 "Last-Translator: mats.dufberg@iis.se\n"
 "Language-Team: Zonemaster Team\n"
@@ -456,75 +456,75 @@ msgstr "Inga DNSKEY-poster hittades. Resterande DNSSEC-tester hoppas över."
 #. DNSSEC:ALGORITHM_DEPRECATED
 #, perl-brace-format
 msgid ""
-"The DNSKEY with tag {keytag} uses deprecated algorithm number {algorithm} "
-"({description})."
+"The DNSKEY with tag {keytag} uses deprecated algorithm number {algo_num} "
+"({algo_descr})."
 msgstr ""
 "DNSKEY-posten med 'tag' {keytag} använder en utfasad algoritm med "
-"algoritmnummer {algorithm} ({description})."
+"algoritmnummer {algo_num} ({algo_descr})."
 
 #. DNSSEC:ALGORITHM_NOT_RECOMMENDED
 #, perl-brace-format
 msgid ""
-"The DNSKEY with tag {keytag} uses an algorithm number {algorithm} "
-"({description}) which is not recommended to be used."
+"The DNSKEY with tag {keytag} uses an algorithm number {algo_num} "
+"({algo_descr}) which is not recommended to be used."
 msgstr ""
 "DNSKEY-posten med 'tag' {keytag} använder en algoritm med algoritmnumret "
-"{algorithm} ({description}), som rekommenderas att inte användas för "
+"{algo_num} ({algo_descr}), som rekommenderas att inte användas för "
 "zonsignering."
 
 #. DNSSEC:ALGORITHM_NOT_ZONE_SIGN
 #, perl-brace-format
 msgid ""
 "The DNSKEY with tag {keytag} uses algorithm number not meant for zone "
-"signing, algorithm number {algorithm} ({description})."
+"signing, algorithm number {algo_num} ({algo_descr})."
 msgstr ""
 "DNSKEY-posten med 'tag' {keytag} använder en algoritm med algoritmnumret "
-"{algorithm} ({description}), som inte är avsett för zonsignering."
+"{algo_num} ({algo_descr}), som inte är avsett för zonsignering."
 
 #. DNSSEC:ALGORITHM_OK
 #, perl-brace-format
 msgid ""
-"The DNSKEY with tag {keytag} uses algorithm number {algorithm} "
-"({description}), which is OK."
+"The DNSKEY with tag {keytag} uses algorithm number {algo_num} "
+"({algo_descr}), which is OK."
 msgstr ""
-"DNSKEY-posten med 'tag' {keytag} använder algoritm numret {algorithm} "
-"({description}), vilket är OK."
+"DNSKEY-posten med 'tag' {keytag} använder algoritm numret {algo_num} "
+"({algo_descr}), vilket är OK."
 
 #. DNSSEC:ALGORITHM_PRIVATE
 #, perl-brace-format
 msgid ""
-"The DNSKEY with tag {keytag} uses private algorithm number {algorithm} "
-"({description})."
+"The DNSKEY with tag {keytag} uses private algorithm number {algo_num} "
+"({algo_descr})."
 msgstr ""
 "DNSKEY-posten med 'tag' {keytag} använder en algoritm med det privata "
-"algoritmnumret {algorithm} ({description})."
+"algoritmnumret {algo_num} ({algo_descr})."
 
 #. DNSSEC:ALGORITHM_RESERVED
 #, perl-brace-format
 msgid ""
-"The DNSKEY with tag {keytag} uses reserved algorithm number {algorithm} "
-"({description})."
+"The DNSKEY with tag {keytag} uses reserved algorithm number {algo_num} "
+"({algo_descr})."
 msgstr ""
 "DNSKEY-posten med 'tag' {keytag} använder en algoritm med det reserverade "
-"algoritmnumret {algorithm} ({description})."
+"algoritmnumret {algo_num} ({algo_descr})."
 
 #. DNSSEC:ALGORITHM_UNASSIGNED
 #, perl-brace-format
 msgid ""
-"The DNSKEY with tag {keytag} uses unassigned algorithm number {algorithm} "
-"({description})."
+"The DNSKEY with tag {keytag} uses unassigned algorithm number {algo_num} "
+"({algo_descr})."
 msgstr ""
 "DNSKEY-posten med 'tag' {keytag} använder en algoritm med det otilldelade "
-"algoritmnumret {algorithm} ({description})."
+"algoritmnumret {algo_num} ({algo_descr})."
 
 #. DNSSEC:ALGO_NOT_SIGNED_RRSET
 #, perl-brace-format
 msgid ""
 "Nameserver {ns} responded with no RRSIG for RRset {rrtype} created by the "
-"algorithm {algorithm}."
+"algorithm {algo_num}."
 msgstr ""
 "Namnserver {ns} skickade ett svarspaket utan RRSIG-post skapad av algoritm "
-"{algorithm} för 'RRset' av typen {rrtype}."
+"{algo_num} för 'RRset' av typen {rrtype}."
 
 #. DNSSEC:ALL_ALGO_SIGNED
 msgid ""
@@ -619,17 +619,16 @@ msgstr "DNSKEY-posterna i zontoppen var inte korrekt signerad."
 #. DNSSEC:DNSKEY_SIGNATURE_NOT_OK
 #, perl-brace-format
 msgid ""
-"Signature for DNSKEY with tag {signature} failed to verify with error "
-"'{error}'."
+"Signature for DNSKEY with tag {keytag} failed to verify with error '{error}'."
 msgstr ""
-"Verifiering av signaturen för DNSKEY-posten med 'keytag' {signature} "
+"Verifiering av signaturen för DNSKEY-posten med 'keytag' {keytag} "
 "misslyckades med felmeddelandet '{error}'."
 
 #. DNSSEC:DNSKEY_SIGNATURE_OK
 #, perl-brace-format
-msgid "A signature for DNSKEY with tag {signature} was correctly signed."
+msgid "A signature for DNSKEY with tag {keytag} was correctly signed."
 msgstr ""
-"Verifiering av en signatur för DNSKEY-posten med 'keytag' {signature} "
+"Verifiering av en signatur för DNSKEY-posten med 'keytag' {keytag} "
 "lyckades."
 
 #. DNSSEC:DNSKEY_SIGNED
@@ -639,102 +638,99 @@ msgstr "DNSKEY-posterna i zontoppen var korrekt signerad."
 #. DNSSEC:DNSKEY_SMALLER_THAN_REC
 #, perl-brace-format
 msgid ""
-"DNSKEY with tag {keytag} and using algorithm {algorithm_number} "
-"({algorithm_description}) has a size ({keysize}) smaller than the "
-"recommended one ({keysizerec})."
+"DNSKEY with tag {keytag} and using algorithm {algo_num} ({algo_descr}) has a "
+"size ({keysize}) smaller than the recommended one ({keysizerec})."
 msgstr ""
 "DNSKEY-posten med 'keytag' {keytag} som bygger på algorithm "
-"{algorithm_number} ({algorithm_description}) har en nyckelstorlek "
+"{algo_num} ({algo_descr}) har en nyckelstorlek "
 "({keysize}) som är mindre än den minsta rekommenderade storleken "
 "({keysizerec}) för den algoritmen."
 
 #. DNSSEC:DNSKEY_TOO_SMALL_FOR_ALGO
 #, perl-brace-format
 msgid ""
-"DNSKEY with tag {keytag} and using algorithm {algorithm_number} "
-"({algorithm_description}) has a size ({keysize}) smaller than the minimum "
-"one ({keysizemin})."
+"DNSKEY with tag {keytag} and using algorithm {algo_num} ({algo_descr}) has a "
+"size ({keysize}) smaller than the minimum one ({keysizemin})."
 msgstr ""
 "DNSKEY-posten med 'keytag' {keytag} som bygger på algorithm "
-"{algorithm_number} ({algorithm_description}) har en nyckelstorlek "
+"{algo_num} ({algo_descr}) har en nyckelstorlek "
 "({keysize}) som är mindre än den minsta tillåtna storleken ({keysizemin}) "
 "för den algoritmen."
 
 #. DNSSEC:DNSKEY_TOO_LARGE_FOR_ALGO
 #, perl-brace-format
 msgid ""
-"DNSKEY with tag {keytag} and using algorithm {algorithm_number} "
-"({algorithm_description}) has a size ({keysize}) larger than the maximum one "
-"({keysizemax})."
+"DNSKEY with tag {keytag} and using algorithm {algo_num} ({algo_descr}) has a "
+"size ({keysize}) larger than the maximum one ({keysizemax})."
 msgstr ""
 "DNSKEY-posten med 'keytag' {keytag} som bygger på algorithm "
-"{algorithm_number} ({algorithm_description}) har en nyckelstorlek "
+"{algo_num} ({algo_descr}) har en nyckelstorlek "
 "({keysize}) som är större än den maximala storleken ({keysizemax}) för den "
 "algoritmen."
 
 #. DNSSEC:DS_ALGORITHM_NOT_DS
 #, perl-brace-format
 msgid ""
-"{ns} returned a DS record created by algorithm {algorithm_number} "
-"({algorithm_mnemonic}) which is not meant for DS. The DS record is for the "
-"DNSKEY record with keytag {keytag} in zone {zone}."
+"{ns} returned a DS record created by algorithm {algo_num} ({algo_mnemo}) "
+"which is not meant for DS. The DS record is for the DNSKEY record with "
+"keytag {keytag} in zone {zone}."
 msgstr ""
 "Namnserver {ns} svarade med en DS-post skapad med hash-algoritm "
-"{algorithm_number} ({algorithm_mnemonic}) som inte är avsedd för DS. DS-"
+"{algo_num} ({algo_mnemo}) som inte är avsedd för DS. DS-"
 "posten gäller DNSKEY-posten med 'keytag' {keytag} i zonen {zone}."
 
 #. DNSSEC:DS_ALGORITHM_DEPRECATED
 #, perl-brace-format
 msgid ""
-"{ns} returned a DS record created by algorithm {algorithm_number} "
-"({algorithm_mnemonic}), which is deprecated. The DS record is for the DNSKEY "
-"record with keytag {keytag} in zone {zone}."
+"{ns} returned a DS record created by algorithm {algo_num} ({algo_mnemo}), "
+"which is deprecated. The DS record is for the DNSKEY record with keytag "
+"{keytag} in zone {zone}."
 msgstr ""
 "Namnserver {ns} svarade med en DS-post skapad med hash-algoritm "
-"{algorithm_number} ({algorithm_mnemonic}) som är föråldrad. DS-posten gäller "
+"{algo_num} ({algo_mnemo}) som är föråldrad. DS-posten gäller "
 "DNSKEY-posten med 'keytag' {keytag} i zonen {zone}."
 
 #. DNSSEC:DS_ALGORITHM_MISSING
 #, perl-brace-format
 msgid ""
-"{ns} returned no DS record created by algorithm {algorithm_number} "
-"({algorithm_mnemonic}) for zone {zone}, which is required."
+"{ns} returned no DS record created by algorithm {algo_num} ({algo_mnemo}) "
+"for zone {zone}, which is required."
 msgstr ""
 "Namnserver {ns} svarade inte med någon DS-post skapad med hash-algoritm "
-"{algorithm_number} ({algorithm_mnemonic}) för zonen {zone}, vilket är ett "
+"{algo_num} ({algo_mnemo}) för zonen {zone}, vilket är ett "
 "krav att den gör."
 
 #. DNSSEC:DS_ALGORITHM_OK
 #, perl-brace-format
 msgid ""
-"{ns} returned a DS record created by algorithm {algorithm_number} "
-"({algorithm_mnemonic}), which is OK. The DS record is for the DNSKEY record "
-"with keytag {keytag} in zone {zone}."
+"{ns} returned a DS record created by algorithm {algo_num} ({algo_mnemo}), "
+"which is OK. The DS record is for the DNSKEY record with keytag {keytag} in "
+"zone {zone}."
 msgstr ""
 "Namnserver {ns} svarade med en DS-post skapad med hash-algoritm "
-"{algorithm_number} ({algorithm_mnemonic}), vilken är OK. DS-posten gäller "
+"{algo_num} ({algo_mnemo}), vilken är OK. DS-posten gäller "
 "DNSKEY-posten med 'keytag' {keytag} i zonen {zone}."
 
 #. DNSSEC:DS_ALGORITHM_RESERVED
 #, perl-brace-format
 msgid ""
 "{ns} returned a DS record created by with an algorithm not assigned "
-"(algorithm number {algorithm_number}), which is not OK. The DS record is for "
-"the DNSKEY record with keytag {keytag} in zone {zone}."
+"(algorithm number {algo_num}), which is not OK. The DS record is for the "
+"DNSKEY record with keytag {keytag} in zone {zone}."
 msgstr ""
 "Namnserver {ns} svarade med en DS-post skapad med hash-algoritm "
-"{algorithm_number} som inte är satt till någon hash-algoritm, vilket inte är "
+"{algo_num} som inte är satt till någon hash-algoritm, vilket inte är "
 "OK. DS-posten gäller DNSKEY-posten med 'keytag' {keytag} i zonen {zone}."
 
 #. DNSSEC:DS_ALGO_SHA1_DEPRECATED
 #, perl-brace-format
 msgid ""
-"Nameserver {ns} returned a DS record created by algorithm {algorithm_number} "
-"({algorithm_mnemonic}) which is deprecated, while it is still widely used. "
-"The DS record is for the DNSKEY record with keytag {keytag} in zone {zone}."
+"Nameserver {ns} returned a DS record created by algorithm {algo_num} "
+"({algo_mnemo}) which is deprecated, while it is still widely used. The DS "
+"record is for the DNSKEY record with keytag {keytag} in zone {zone}."
 msgstr ""
 "Namnserver {ns} svarade med en DS-post skapad med hash-algoritm "
-"{algorithm_number} ({algorithm_mnemonic}) som är föråldrad, men fortfarande "
+"{algo_num} ({algo_mnemo}) som är föråldrad, men fortfarande "
 "allmänt använd. DS-posten gäller DNSKEY-posten med 'keytag' {keytag} i zonen "
 "{zone}."
 
@@ -753,19 +749,19 @@ msgstr "DS-posterna i moderzonen stämmer med DNSKEY-poster i dotterzonen."
 #. DNSSEC:DURATION_LONG
 #, perl-brace-format
 msgid ""
-"RRSIG with keytag {tag} and covering type(s) {types} has a duration of "
+"RRSIG with keytag {keytag} and covering type(s) {types} has a duration of "
 "{duration} seconds, which is too long."
 msgstr ""
-"RRSIG-posten med 'keytag' {tag} och som täcker posttyp(er) {types} har en "
+"RRSIG-posten med 'keytag' {keytag} och som täcker posttyp(er) {types} har en "
 "livslängd på {duration} sekunder, vilket är för lång tid."
 
 #. DNSSEC:DURATION_OK
 #, perl-brace-format
 msgid ""
-"RRSIG with keytag {tag} and covering type(s) {types} has a duration of "
+"RRSIG with keytag {keytag} and covering type(s) {types} has a duration of "
 "{duration} seconds, which is just fine."
 msgstr ""
-"RRSIG-posten med 'keytag' {tag} och som täcker posttyp(er) {types} har en "
+"RRSIG-posten med 'keytag' {keytag} och som täcker posttyp(er) {types} har en "
 "livslängd på {duration} sekunder (acceptabel livslängd)."
 
 #. DNSSEC:EXTRA_PROCESSING_BROKEN
@@ -948,9 +944,9 @@ msgstr "Ingen signatur signerade NSEC3-posterna korrekt."
 
 #. DNSSEC:NSEC3_SIG_VERIFY_ERROR
 #, perl-brace-format
-msgid "Trying to verify NSEC3 RRset with RRSIG {sig} gave error '{error}'."
+msgid "Trying to verify NSEC3 RRset with RRSIG {keytag} gave error '{error}'."
 msgstr ""
-"Försöket att verifiera NSEC3-posterna med RRSIG {sig} gav felet '{error}'."
+"Försöket att verifiera NSEC3-posterna med RRSIG {keytag} gav felet '{error}'."
 
 #. DNSSEC:NSEC_COVERS_NOT
 #, perl-brace-format
@@ -963,34 +959,34 @@ msgstr "Ingen signatur har korrekt signerat NSEC-posterna."
 
 #. DNSSEC:NSEC_SIG_VERIFY_ERROR
 #, perl-brace-format
-msgid "Trying to verify NSEC RRset with RRSIG {sig} gave error '{error}'."
+msgid "Trying to verify NSEC RRset with RRSIG {keytag} gave error '{error}'."
 msgstr ""
-"Försöket att verifiera NSEC-posterna med RRSIG {sig} gav felet '{error}'."
+"Försöket att verifiera NSEC-posterna med RRSIG {keytag} gav felet '{error}'."
 
 #. DNSSEC:REMAINING_LONG
 #, perl-brace-format
 msgid ""
-"RRSIG with keytag {tag} and covering type(s) {types} has a remaining "
+"RRSIG with keytag {keytag} and covering type(s) {types} has a remaining "
 "validity of {duration} seconds, which is too long."
 msgstr ""
-"RRSIG-posten med 'keytag' {tag} och som täcker posttyp(er) {types} har en "
+"RRSIG-posten med 'keytag' {keytag} och som täcker posttyp(er) {types} har en "
 "kvarvarande livslängd på {duration} sekunder, vilket är för lång tid."
 
 #. DNSSEC:REMAINING_SHORT
 #, perl-brace-format
 msgid ""
-"RRSIG with keytag {tag} and covering type(s) {types} has a remaining "
+"RRSIG with keytag {keytag} and covering type(s) {types} has a remaining "
 "validity of {duration} seconds, which is too short."
 msgstr ""
-"RRSIG-posten med 'keytag' {tag} och som täcker posttyp(er) {types} har en "
+"RRSIG-posten med 'keytag' {keytag} och som täcker posttyp(er) {types} har en "
 "kvarvarande livslängd på {duration} sekunder, vilket är för kort tid."
 
 #. DNSSEC:RRSIG_EXPIRATION
 #, perl-brace-format
 msgid ""
-"RRSIG with keytag {tag} and covering type(s) {types} expires at : {date}."
+"RRSIG with keytag {keytag} and covering type(s) {types} expires at : {date}."
 msgstr ""
-"RRSIG med 'keytag' {tag} som täcker posttyp(er) {types} löper ut {date}."
+"RRSIG med 'keytag' {keytag} som täcker posttyp(er) {types} löper ut {date}."
 
 #. DNSSEC:RRSET_NOT_SIGNED
 #, perl-brace-format
@@ -1011,10 +1007,10 @@ msgstr ""
 #. DNSSEC:RRSIG_EXPIRED
 #, perl-brace-format
 msgid ""
-"RRSIG with keytag {tag} and covering type(s) {types} has already expired "
+"RRSIG with keytag {keytag} and covering type(s) {types} has already expired "
 "(expiration is: {expiration})."
 msgstr ""
-"RRSIG-posten med 'keytag' {tag} och som täcker posttyp(er) {types} har redan "
+"RRSIG-posten med 'keytag' {keytag} och som täcker posttyp(er) {types} har redan "
 "löpt ut (utgångstiden är: {expiration})."
 
 #. DNSSEC:RRSIG_NOT_MATCH_DNSKEY
@@ -1031,15 +1027,15 @@ msgstr "Det finns ingen RRSIG som ger korrekt signering av SOA-posten."
 #. DNSSEC:SOA_SIGNATURE_NOT_OK
 #, perl-brace-format
 msgid ""
-"Trying to verify SOA RRset with signature {signature} gave error '{error}'."
+"Trying to verify SOA RRset with signature {keytag} gave error '{error}'."
 msgstr ""
-"Försöket att verifiera SOA-mängden med signatur {signature} gav felet "
+"Försöket att verifiera SOA-mängden med signatur {keytag} gav felet "
 "'{error}'."
 
 #. DNSSEC:SOA_SIGNATURE_OK
 #, perl-brace-format
-msgid "RRSIG {signature} correctly signs SOA RRset."
-msgstr "RRSIG '{signature}' är en korrekt signatur för SOA-posten."
+msgid "RRSIG {keytag} correctly signs SOA RRset."
+msgstr "RRSIG '{keytag}' är en korrekt signatur för SOA-posten."
 
 #. DNSSEC:SOA_SIGNED
 msgid "At least one RRSIG correctly signs the SOA RRset."
@@ -2010,17 +2006,18 @@ msgstr "Både IPv4 och IPv6 är inaktiverade."
 
 #. SYSTEM:UNKNOWN_METHOD
 #, perl-brace-format
-msgid "Request to run unknown method {method} in module {module}."
+msgid "Request to run unknown method {testcase} in module {module}."
 msgstr ""
-"Begäran om att köra den okända metoden '{method}' i modulen '{module}'."
+"Begäran om att köra den okända metoden '{testcase}' i modulen '{module}'."
 
 #. SYSTEM:UNKNOWN_MODULE
 #, perl-brace-format
 msgid ""
-"Request to run {method} in unknown module {module}. Known modules: {known}."
+"Request to run {testcase} in unknown module {module}. Known modules: "
+"{module_list}."
 msgstr ""
-"Begäran om att köra metoden '{method}' i den okända modulen '{module}'. "
-"Kända moduler: '{known}'."
+"Begäran om att köra metoden '{testcase}' i den okända modulen '{module}'. "
+"Kända moduler: '{module_list}'."
 
 #. SYSTEM:SKIP_IPV4_DISABLED
 #, perl-brace-format
