@@ -31,10 +31,6 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # SYSTEM:CANNOT_CONTINUE
           "Not enough data about {zone} was found to be able to run tests.", @_;
     },
-    PROFILE_FILE => sub {
-        __x    # SYSTEM:PROFILE_FILE
-          "Profile was read from {name}.", @_;
-    },
     DEPENDENCY_VERSION => sub {
         __x    # SYSTEM:DEPENDENCY_VERSION
           "Using prerequisite module {name} version {version}.", @_;

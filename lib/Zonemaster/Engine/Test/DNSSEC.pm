@@ -687,10 +687,6 @@ Readonly my %TAG_DESCRIPTIONS => (
           . 'Consistency is expected.',
           @_;
     },
-    INVALID_NAME_RCODE => sub {
-        __x    # DNSSEC:INVALID_NAME_RCODE
-          'When asked for the name {name}, which must not exist, the response had RCODE {rcode}.', @_;
-    },
     IPV4_DISABLED => sub {
         __x    # DNSSEC:IPV4_DISABLED
           'IPv4 is disabled, not sending "{rrtype}" query to {ns}.', @_;
