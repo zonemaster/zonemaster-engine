@@ -84,8 +84,8 @@ msgstr "TEST_CASE_START {testcase}."
 msgid ""
 "Domain name ({domain}) has a label ({dlabel}) too long ({dlength}/{max})."
 msgstr ""
-"Domändelen '{dlabel}' i domännamnet {domain} är för lång ({dlength}). Maximal "
-"längd är {max}."
+"Domändelen '{dlabel}' i domännamnet {domain} är för lång ({dlength}). "
+"Maximal längd är {max}."
 
 #. BASIC:DOMAIN_NAME_ZERO_LENGTH_LABEL
 #, perl-brace-format
@@ -777,8 +777,8 @@ msgid ""
 "Some, but not all, nameservers for zone {domain} respond with neither NSEC "
 "nor NSEC3 records when such records are expected."
 msgstr ""
-"Några av namnservrarna för zonen {domain} svarar med varken NSEC- eller NSEC3-"
-"post trots att endera förväntas."
+"Några av namnservrarna för zonen {domain} svarar med varken NSEC- eller "
+"NSEC3-post trots att endera förväntas."
 
 #. DNSSEC:INCONSISTENT_NSEC_NSEC3
 #, perl-brace-format
@@ -786,8 +786,8 @@ msgid ""
 "Some nameservers for zone {domain} respond with NSEC records and others "
 "respond with NSEC3 records. Consistency is expected."
 msgstr ""
-"Några av namnservrarna för zonen {domain} svarar med NSEC-poster och andra med "
-"NSEC3-poster. Det förväntade är att alla namnservrar ger samma posttyp."
+"Några av namnservrarna för zonen {domain} svarar med NSEC-poster och andra "
+"med NSEC3-poster. Det förväntade är att alla namnservrar ger samma posttyp."
 
 #. DNSSEC:ITERATIONS_OK
 #, perl-brace-format
@@ -878,8 +878,8 @@ msgid ""
 "Nameserver {ns} for zone {domain} responds with neither NSEC nor NSEC3 "
 "record when when such records are expected."
 msgstr ""
-"Nameservern {ns} för zonen {domain} svarar varken med NSEC- eller NSEC3-poster "
-"trots att sådana var förväntade."
+"Nameservern {ns} för zonen {domain} svarar varken med NSEC- eller NSEC3-"
+"poster trots att sådana var förväntade."
 
 #. DNSSEC:NO_RESPONSE_DNSKEY
 #, perl-brace-format
@@ -1023,9 +1023,9 @@ msgid ""
 "that is expected to give response with RCODE \"NXDOMAIN\". Test for NSEC and "
 "NSEC3 is aborted for this nameserver."
 msgstr ""
-"Namnservern {ns} för zonen {domain} svarade med statuskod (RCODE) 'NOERROR' på "
-"en förfrågan som förväntades ge statuskoden (RCODE) 'NXDOMAIN'. Test av NSEC "
-"och NSEC3 avbröts för denna namnserver."
+"Namnservern {ns} för zonen {domain} svarade med statuskod (RCODE) 'NOERROR' "
+"på en förfrågan som förväntades ge statuskoden (RCODE) 'NXDOMAIN'. Test av "
+"NSEC och NSEC3 avbröts för denna namnserver."
 
 #. DNSSEC:TOO_MANY_ITERATIONS
 #, perl-brace-format
@@ -1042,8 +1042,8 @@ msgid ""
 "Nameserver {ns} responded with an unexpected rcode ({rcode}) on a DS query "
 "for zone {domain}."
 msgstr ""
-"Namnserver {ns} besvarade en DS-fråga för zonen {domain} med den icke-väntade "
-"svarskoden \"{rcode}\"."
+"Namnserver {ns} besvarade en DS-fråga för zonen {domain} med den icke-"
+"väntade svarskoden \"{rcode}\"."
 
 #. DELEGATION:ARE_AUTHORITATIVE
 #, perl-brace-format
@@ -1453,7 +1453,8 @@ msgstr ""
 #, perl-brace-format
 msgid ""
 "Response without EDNS from {ns} on query with EDNS0 asking for {domain}."
-msgstr "Svar utan EDNS från {ns} på förfrågan med EDNS0 (fråga efter {domain})."
+msgstr ""
+"Svar utan EDNS från {ns} på förfrågan med EDNS0 (fråga efter {domain})."
 
 #. NAMESERVER:EDNS_VERSION_ERROR
 #, perl-brace-format
@@ -1588,8 +1589,8 @@ msgid ""
 "SOA MNAME ({domain}) has a label ({label}) with a double hyphen ('--') in "
 "position 3 and 4 (with a prefix which is not 'xn--')."
 msgstr ""
-"SOA MNAME '{domain}' har domändelen '{label}' med bindestreck i position 3 och "
-"4 utan att börja med IDN-prefixet 'xn--'."
+"SOA MNAME '{domain}' har domändelen '{label}' med bindestreck i position 3 "
+"och 4 utan att börja med IDN-prefixet 'xn--'."
 
 #. SYNTAX:MNAME_NON_ALLOWED_CHARS
 #, perl-brace-format
@@ -1665,8 +1666,8 @@ msgid ""
 "Domain name ({domain}) has no label with a double hyphen ('--') in position "
 "3 and 4 (with a prefix which is not 'xn--')."
 msgstr ""
-"Domändelarna i domännamnet '{domain}' har antingen inte bindestreck i position "
-"3 och 4 eller har IDN-prefixet 'xn--'."
+"Domändelarna i domännamnet '{domain}' har antingen inte bindestreck i "
+"position 3 och 4 eller har IDN-prefixet 'xn--'."
 
 #. SYNTAX:NO_ENDING_HYPHENS
 #, perl-brace-format
@@ -1724,7 +1725,8 @@ msgstr "Adressen i SOA RNAME ({rname}) är giltig enligt RFC822."
 msgid ""
 "Domain name ({domain}) has a label ({label}) ending with a hyphen ('-')."
 msgstr ""
-"Domännamnet '{domain}' har domändelen '{label}' som slutar med ett bindestreck."
+"Domännamnet '{domain}' har domändelen '{label}' som slutar med ett "
+"bindestreck."
 
 #. ZONE:RETRY_MINIMUM_VALUE_LOWER
 #, perl-brace-format

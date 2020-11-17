@@ -776,8 +776,8 @@ msgid ""
 "Some nameservers for zone {domain} respond with NSEC records and others "
 "respond with NSEC3 records. Consistency is expected."
 msgstr ""
-"Noen navnetjenere for sonen {domain} svarar med NSEC-poster og andre med NSEC3-"
-"poster. Det er foventet at alle navnetjenere svarer med samme posttype."
+"Noen navnetjenere for sonen {domain} svarar med NSEC-poster og andre med "
+"NSEC3-poster. Det er foventet at alle navnetjenere svarer med samme posttype."
 
 #. DNSSEC:ITERATIONS_OK
 #, perl-brace-format
@@ -808,8 +808,8 @@ msgid ""
 "Nameserver {ns} for zone {domain} responds with both NSEC and NSEC3 records "
 "when only one record type is expected."
 msgstr ""
-"Navnetjener {ns} for sonen {domain} svarte med både NSEC- og NSEC3-poster når "
-"bare den ene typen er forventet."
+"Navnetjener {ns} for sonen {domain} svarte med både NSEC- og NSEC3-poster "
+"når bare den ene typen er forventet."
 
 #. DNSSEC:NEITHER_DNSKEY_NOR_DS
 msgid "There are neither DS nor DNSKEY records for the zone."
@@ -1538,8 +1538,8 @@ msgid ""
 "Domain name ({domain}) has a label ({label}) with a double hyphen ('--') in "
 "position 3 and 4 (with a prefix which is not 'xn--')."
 msgstr ""
-"Domenenavnet ({domain}) har et ledd ({label}) med bindestrek i posisjon 3 og 4 "
-"uten at det innledes med IDN-prefikset \"xn--\"."
+"Domenenavnet ({domain}) har et ledd ({label}) med bindestrek i posisjon 3 og "
+"4 uten at det innledes med IDN-prefikset \"xn--\"."
 
 #. SYNTAX:INITIAL_HYPHEN
 #, perl-brace-format
@@ -1579,8 +1579,8 @@ msgid ""
 "Domain name MX ({domain}) has a label ({label}) with a double hyphen ('--') "
 "in position 3 and 4 (with a prefix which is not 'xn--')."
 msgstr ""
-"Domenets MX-post ({domain}) har et ledd ({label}) med bindestrek i posisjon 3 "
-"og 4 uten at det innledes med IDN-prefikset (\"xn--\")."
+"Domenets MX-post ({domain}) har et ledd ({label}) med bindestrek i posisjon "
+"3 og 4 uten at det innledes med IDN-prefikset (\"xn--\")."
 
 #. SYNTAX:MX_NON_ALLOWED_CHARS
 #, perl-brace-format
@@ -1603,8 +1603,8 @@ msgid ""
 "Nameserver ({domain}) has a label ({label}) with a double hyphen ('--') in "
 "position 3 and 4 (with a prefix which is not 'xn--')."
 msgstr ""
-"Navnetjener ({domain}) har et ledd ({label}) med bindestrek i posisjon 3 og 4 "
-"uten at det innledes med IDN-prefikset \"xn--\"."
+"Navnetjener ({domain}) har et ledd ({label}) med bindestrek i posisjon 3 og "
+"4 uten at det innledes med IDN-prefikset \"xn--\"."
 
 #. SYNTAX:NAMESERVER_NON_ALLOWED_CHARS
 #, perl-brace-format
@@ -1639,7 +1639,8 @@ msgstr ""
 #, perl-brace-format
 msgid "Neither end of any label in the domain name ({domain}) has a hyphen."
 msgstr ""
-"Ingen del av domenenavnet ({domain}) begynner eller slutter med et bindestrek."
+"Ingen del av domenenavnet ({domain}) begynner eller slutter med et "
+"bindestrek."
 
 #. SYNTAX:NO_RESPONSE_MX_QUERY
 #. ZONE:NO_RESPONSE_MX_QUERY
@@ -1918,8 +1919,8 @@ msgstr ""
 msgid ""
 "DNS query to {ns} for {domain}/{type}/{class} failed with error: {message}"
 msgstr ""
-"DNS-spørring til {ns} for {domain}/{type}/{class} mislyktes med følgende feil: "
-"{message}."
+"DNS-spørring til {ns} for {domain}/{type}/{class} mislyktes med følgende "
+"feil: {message}."
 
 #. SYSTEM:MODULE_ERROR
 #, perl-brace-format

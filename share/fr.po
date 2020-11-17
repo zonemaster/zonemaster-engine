@@ -747,8 +747,8 @@ msgid ""
 "for zone {domain}, which is required."
 msgstr ""
 "Le serveur de noms {ns} ne retourne aucun enregistrement de type \"DS\" créé "
-"à partir de l'algorithme {algo_num}/{algo_mnemo} pour la zone {domain}, alors "
-"que c'est nécessaire."
+"à partir de l'algorithme {algo_num}/{algo_mnemo} pour la zone {domain}, "
+"alors que c'est nécessaire."
 
 #. DNSSEC:DS_ALGORITHM_OK
 #, perl-brace-format
@@ -1718,8 +1718,8 @@ msgid ""
 "Domain name ({domain}) has a label ({label}) with a double hyphen ('--') in "
 "position 3 and 4 (with a prefix which is not 'xn--')."
 msgstr ""
-"Le nom de domaine '{domain}' contient un label ({label}) avec un double tiret "
-"('--') en positions 3 et 4 (avec un préfixe différent de 'xn--')."
+"Le nom de domaine '{domain}' contient un label ({label}) avec un double "
+"tiret ('--') en positions 3 et 4 (avec un préfixe différent de 'xn--')."
 
 #. SYNTAX:INITIAL_HYPHEN
 #, perl-brace-format
@@ -1757,8 +1757,8 @@ msgstr ""
 #, perl-brace-format
 msgid "SOA MNAME ({domain}) syntax is valid."
 msgstr ""
-"La syntaxe du nom du serveur maître défini dans le SOA, 'mname' ({domain}) est "
-"valide."
+"La syntaxe du nom du serveur maître défini dans le SOA, 'mname' ({domain}) "
+"est valide."
 
 #. SYNTAX:MX_DISCOURAGED_DOUBLE_DASH
 #, perl-brace-format
@@ -1766,8 +1766,9 @@ msgid ""
 "Domain name MX ({domain}) has a label ({label}) with a double hyphen ('--') "
 "in position 3 and 4 (with a prefix which is not 'xn--')."
 msgstr ""
-"Le relais de messagerie ({domain}) contient un label ({label}) avec un double "
-"tiret ('--') en positions 3 et 4 (avec un préfixe différent de 'xn--')."
+"Le relais de messagerie ({domain}) contient un label ({label}) avec un "
+"double tiret ('--') en positions 3 et 4 (avec un préfixe différent de "
+"'xn--')."
 
 #. SYNTAX:MX_NON_ALLOWED_CHARS
 #, perl-brace-format
@@ -1794,8 +1795,8 @@ msgid ""
 "Nameserver ({domain}) has a label ({label}) with a double hyphen ('--') in "
 "position 3 and 4 (with a prefix which is not 'xn--')."
 msgstr ""
-"Le serveur de noms ({domain}) contient un label ({label}) avec un double tiret "
-"('--') en positions 3 et 4 (avec un préfixe différent de 'xn--')."
+"Le serveur de noms ({domain}) contient un label ({label}) avec un double "
+"tiret ('--') en positions 3 et 4 (avec un préfixe différent de 'xn--')."
 
 #. SYNTAX:NAMESERVER_NON_ALLOWED_CHARS
 #, perl-brace-format
@@ -1827,8 +1828,8 @@ msgid ""
 "Domain name ({domain}) has no label with a double hyphen ('--') in position "
 "3 and 4 (with a prefix which is not 'xn--')."
 msgstr ""
-"Le nom de domaine '{domain}' n'a aucun label contenant un double tiret ('--') "
-"en positions 3 et 4 (avec un préfixe différent de 'xn--')."
+"Le nom de domaine '{domain}' n'a aucun label contenant un double tiret "
+"('--') en positions 3 et 4 (avec un préfixe différent de 'xn--')."
 
 #. SYNTAX:NO_ENDING_HYPHENS
 #, perl-brace-format

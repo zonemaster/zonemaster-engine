@@ -1533,15 +1533,16 @@ msgid ""
 "Domain name ({domain}) has a label ({label}) with a double hyphen ('--') in "
 "position 3 and 4 (with a prefix which is not 'xn--')."
 msgstr ""
-"Domænenavnet ({domain}) har en label ({label}) med bindestreg i position 3 og "
-"4, og et præfiks som ikke er 'xn--'."
+"Domænenavnet ({domain}) har en label ({label}) med bindestreg i position 3 "
+"og 4, og et præfiks som ikke er 'xn--'."
 
 #. SYNTAX:INITIAL_HYPHEN
 #, fuzzy, perl-brace-format
 msgid ""
 "Domain name ({domain}) has a label ({label}) starting with an hyphen ('-')."
 msgstr ""
-"Domænenavnet ({domain}) har en label ({label}) som begynder med en bindestreg."
+"Domænenavnet ({domain}) har en label ({label}) som begynder med en "
+"bindestreg."
 
 #. SYNTAX:MNAME_DISCOURAGED_DOUBLE_DASH
 #, fuzzy, perl-brace-format
@@ -1597,8 +1598,8 @@ msgid ""
 "Nameserver ({domain}) has a label ({label}) with a double hyphen ('--') in "
 "position 3 and 4 (with a prefix which is not 'xn--')."
 msgstr ""
-"Navneserveren ({domain}) har en label ({label}) med bindestreg i position 3 og "
-"4, og et præfiks som ikke er 'xn--'."
+"Navneserveren ({domain}) har en label ({label}) med bindestreg i position 3 "
+"og 4, og et præfiks som ikke er 'xn--'."
 
 #. SYNTAX:NAMESERVER_NON_ALLOWED_CHARS
 #, fuzzy, perl-brace-format
