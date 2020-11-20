@@ -391,9 +391,9 @@ sub connectivity03 {
     } ## end foreach my $v6ip ( @v6ips )
 
     @v4asns = uniq sort { $a <=> $b } @v4asns;
-    @v4asnsets = uniq sort { $a <=> $b } @v4asnsets;
+    @v4asnsets = uniq sort @v4asnsets;
     @v6asns = uniq sort { $a <=> $b } @v6asns;
-    @v6asnsets = uniq sort { $a <=> $b } @v6asnsets;
+    @v6asnsets = uniq sort @v6asnsets;
 
     if ( scalar @v4asns ) {
         if ( @v4asns == 1 ) {
