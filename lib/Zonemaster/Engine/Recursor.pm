@@ -385,15 +385,23 @@ __DATA__
       },
       {
          "name" : "a.root-servers.net",
-         "address" : "2001:503:ba3e:0:0:0:2:30"
+         "address" : "2001:503:ba3e::2:30"
       },
       {
          "name" : "b.root-servers.net",
-         "address" : "192.228.79.201"
+         "address" : "199.9.14.201"
+      },
+      {
+         "name" : "b.root-servers.net",
+         "address" : "2001:500:200::b"
       },
       {
          "name" : "c.root-servers.net",
          "address" : "192.33.4.12"
+      },
+      {
+         "name" : "c.root-servers.net",
+         "address" : "2001:500:2::c"
       },
       {
          "name" : "d.root-servers.net",
@@ -401,11 +409,15 @@ __DATA__
       },
       {
          "name" : "d.root-servers.net",
-         "address" : "2001:500:2d:0:0:0:0:d"
+         "address" : "2001:500:2d::d"
       },
       {
          "name" : "e.root-servers.net",
          "address" : "192.203.230.10"
+      },
+      {
+         "name" : "e.root-servers.net",
+         "address" : "2001:500:a8::e"
       },
       {
          "name" : "f.root-servers.net",
@@ -413,19 +425,23 @@ __DATA__
       },
       {
          "name" : "f.root-servers.net",
-         "address" : "2001:500:2f:0:0:0:0:f"
+         "address" : "2001:500:2f::f"
       },
       {
          "name" : "g.root-servers.net",
          "address" : "192.112.36.4"
       },
       {
-         "name" : "h.root-servers.net",
-         "address" : "128.63.2.53"
+         "name" : "g.root-servers.net",
+         "address" : "2001:500:12::d0d"
       },
       {
          "name" : "h.root-servers.net",
-         "address" : "2001:500:1:0:0:0:803f:235"
+         "address" : "198.97.190.53"
+      },
+      {
+         "name" : "h.root-servers.net",
+         "address" : "2001:500:1::53"
       },
       {
          "name" : "i.root-servers.net",
@@ -433,7 +449,7 @@ __DATA__
       },
       {
          "name" : "i.root-servers.net",
-         "address" : "2001:7fe:0:0:0:0:0:53"
+         "address" : "2001:7fe::53"
       },
       {
          "name" : "j.root-servers.net",
@@ -441,15 +457,15 @@ __DATA__
       },
       {
          "name" : "j.root-servers.net",
-         "address" : "2001:503:c27:0:0:0:2:30"
+         "address" : "2001:503:c27::2:30"
       },
       {
          "name" : "k.root-servers.net",
          "address" : "193.0.14.129"
       },
       {
-         "name" : "k.root-servers.net"
-         "address" : "2001:7fd:0:0:0:0:0:1",
+         "name" : "k.root-servers.net",
+         "address" : "2001:7fd::1"
       },
       {
          "name" : "l.root-servers.net",
@@ -457,7 +473,7 @@ __DATA__
       },
       {
          "name" : "l.root-servers.net",
-         "address" : "2001:500:3:0:0:0:0:42"
+         "address" : "2001:500:9f::42"
       },
       {
          "name" : "m.root-servers.net",
@@ -465,7 +481,7 @@ __DATA__
       },
       {
          "name" : "m.root-servers.net",
-         "address" : "2001:dc3:0:0:0:0:0:35"
+         "address" : "2001:dc3::35"
       }
    ]
 }
