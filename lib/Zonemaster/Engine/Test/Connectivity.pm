@@ -337,7 +337,7 @@ sub connectivity03 {
                     }
                   );
                 push @v4asns, @{$asnref};
-                push @v4asnsets, join( q{,}, sort @{$asnref} );
+                push @v4asnsets, join( q{,}, sort { $a <=> $b } @{$asnref} );
             }
             if ( $prefix ) {
                 push @results,
@@ -375,7 +375,7 @@ sub connectivity03 {
                     }
                   );
                 push @v6asns, @{$asnref};
-                push @v6asnsets, join( q{,}, sort @{$asnref} );
+                push @v6asnsets, join( q{,}, sort { $a <=> $b } @{$asnref} );
             }
             if ( $prefix ) {
                 push @results,
