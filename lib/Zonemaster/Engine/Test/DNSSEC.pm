@@ -511,8 +511,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     ALL_ALGO_SIGNED => sub {
         __x    # DNSSEC:ALL_ALGO_SIGNED
-          'All the tested RRset (SOA/DNSKEY/NS) are signed by each algorithm present in the DNSKEY RRset.',
-          @_;
+          'All the tested RRset (SOA/DNSKEY/NS) are signed by each algorithm present in the DNSKEY RRset.', @_;
     },
     BROKEN_DNSSEC => sub {
         __x    # DNSSEC:BROKEN_DNSSEC
@@ -567,8 +566,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     DNSKEY_SIGNATURE_NOT_OK => sub {
         __x    # DNSSEC:DNSKEY_SIGNATURE_NOT_OK
-'Signature for DNSKEY with tag {keytag} failed to verify with error \'{error}\'.',
-          @_;
+          'Signature for DNSKEY with tag {keytag} failed to verify with error \'{error}\'.', @_;
     },
     DNSKEY_SIGNATURE_OK => sub {
         __x    # DNSSEC:DNSKEY_SIGNATURE_OK
@@ -647,7 +645,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     DS_MATCHES => sub {
         __x    # DNSSEC:DS_MATCHES
-          'The DS records in the parent zone match DNSKEY records in the child zone.',  @_;
+          'The DS records in the parent zone match DNSKEY records in the child zone.', @_;
     },
     DURATION_LONG => sub {
         __x    # DNSSEC:DURATION_LONG
@@ -710,9 +708,9 @@ Readonly my %TAG_DESCRIPTIONS => (
           'Key with keytag {keytag} details : Size = {keysize}, Flags ({sep}, {rfc5011}).', @_;
     },
     KEY_SIZE_OK => sub {
-          __x    # DNSSEC:KEY_SIZE_OK
-            'All keys from the DNSKEY RRset have the correct size.', @_;
-      },
+        __x    # DNSSEC:KEY_SIZE_OK
+          'All keys from the DNSKEY RRset have the correct size.', @_;
+    },
     MANY_ITERATIONS => sub {
         __x    # DNSSEC:MANY_ITERATIONS
           'The number of NSEC3 iterations is {count}, which is on the high side.', @_;
@@ -733,8 +731,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     NO_KEYS_OR_NO_SIGS => sub {
         __x    # DNSSEC:NO_KEYS_OR_NO_SIGS
-          'Cannot test DNSKEY signatures, because we got {keys} DNSKEY records and {sigs} RRSIG records.',
-          @_;
+          'Cannot test DNSKEY signatures, because we got {keys} DNSKEY records and {sigs} RRSIG records.', @_;
     },
     NO_KEYS_OR_NO_SIGS_OR_NO_SOA => sub {
         __x    # DNSSEC:NO_KEYS_OR_NO_SIGS_OR_NO_SOA
@@ -799,8 +796,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     NSEC3_SIG_VERIFY_ERROR => sub {
         __x    # DNSSEC:NSEC3_SIG_VERIFY_ERROR
-'Trying to verify NSEC3 RRset with RRSIG {keytag} gave error \'{error}\'.',
-          @_;
+          'Trying to verify NSEC3 RRset with RRSIG {keytag} gave error \'{error}\'.', @_;
     },
     NSEC_COVERS_NOT => sub {
         __x    # DNSSEC:NSEC_COVERS_NOT
@@ -812,8 +808,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     NSEC_SIG_VERIFY_ERROR => sub {
         __x    # DNSSEC:NSEC_SIG_VERIFY_ERROR
-'Trying to verify NSEC RRset with RRSIG {keytag} gave error \'{error}\'.',
-          @_;
+          'Trying to verify NSEC RRset with RRSIG {keytag} gave error \'{error}\'.', @_;
     },
     REMAINING_LONG => sub {
         __x    # DNSSEC:REMAINING_LONG
@@ -829,8 +824,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     RRSIG_EXPIRATION => sub {
         __x    # DNSSEC:RRSIG_EXPIRATION
-          'RRSIG with keytag {keytag} and covering type(s) {types} expires at '
-          . ': {date}.', @_;
+          'RRSIG with keytag {keytag} and covering type(s) {types} expires at ' . ': {date}.', @_;
     },
     RRSET_NOT_SIGNED => sub {
         __x    # DNSSEC:RRSET_NOT_SIGNED
@@ -858,8 +852,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     SOA_SIGNATURE_NOT_OK => sub {
         __x    # DNSSEC:SOA_SIGNATURE_NOT_OK
-'Trying to verify SOA RRset with signature {keytag} gave error \'{error}\'.',
-          @_;
+          'Trying to verify SOA RRset with signature {keytag} gave error \'{error}\'.', @_;
     },
     SOA_SIGNATURE_OK => sub {
         __x    # DNSSEC:SOA_SIGNATURE_OK
