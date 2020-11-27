@@ -4,10 +4,10 @@
 
 | Argument    | Type of value        | Description and formatting                                  |
 |-------------|----------------------|-------------------------------------------------------------|
-| algo_descr  | Text                 | The human readable description of a DNSKEY algorithm.       |
-| algo_mnemo  | Text                 | The mnemonic of a DNSKEY algorithm.                         |
-| algo_num    | Number               | The numeric value for a DNSKEY algorithm.                   |
-| keytag      | DS/DNSKEY/RRSIG keytag | A keytag for a DS, DNSKEY or RRSIG record.                |
+| algo_descr  | Text                 | The human readable description of a [DNSSEC algorithm].     |
+| algo_mnemo  | Text                 | The mnemonic of a [DNSSEC algorithm].                       |
+| algo_num    | Non-negative integer | The numeric value for a [DNSSEC algorithm].                 |
+| keytag      | Non-negative integer | A keytag for a DNSKEY record or a keytag used in a DS or RRSIG record. |
 | module      | A Zonemaster test module, or `all` | The name of a Zonemaster test module.         |
 | module_list | List of Zonemaster test modules | A list of Zonemaster test modules, separated by ":". |
 | nsname      | Domain name          | The domain name of a name server.                           |
@@ -16,7 +16,7 @@
 | nsname_list | List of domain names | A list of name servers, as specified by "nsname", separated by ";". |
 | ns_ip_list  | List of IP addresses | A list of name servers, as specified by "ns_ip", separated by ";". |
 | ns_list     | List of domain name and IP address pairs | A list of name servers, as specified by "ns", separated by ";". |
-| testcase    | A Zonemaster test case, or `all` | The name of a Zonemaster test case.             |
+| testcase    | A Zonemaster test case, or `all` | A test case identifier.                         |
 || AS number| An Autonomous Space number for an IP address.|
 || Address record type (A or AAAA)| Used to tell the difference between IPv4 and IPv6.|
 || Count of different SOA RNAMEs.| Total number of different SOA RNAME fields seen.|
@@ -314,3 +314,5 @@ Message names maked with a question mark should not be considered stable.
 
 * List of MX domain names
 
+
+[DNSSEC algorithm]: https://www.iana.org/assignments/dns-sec-alg-numbers/dns-sec-alg-numbers.xhtml
