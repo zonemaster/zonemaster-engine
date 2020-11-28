@@ -1719,7 +1719,7 @@ sub dnssec10 {
                             foreach my $sig ( @sigs ) {
                                 my $msg = q{};
                                 if ( not scalar @dnskeys ) {
-                                    push @results, info( NSEC_SIG_VERIFY_ERROR => { error => q{DNSKEY missing}, sig => $sig->keytag } );
+                                    push @results, info( NSEC_SIG_VERIFY_ERROR => { error => q{DNSKEY missing}, keytag => $sig->keytag } );
                                 }
                                 elsif (
                                     $sig->verify_time(
@@ -1737,8 +1737,8 @@ sub dnssec10 {
                                     push @results,
                                       info(
                                         NSEC_SIG_VERIFY_ERROR => {
-                                            error => $msg,
-                                            sig   => $sig->keytag,
+                                            error  => $msg,
+                                            keytag => $sig->keytag,
                                         }
                                       );
                                 }
