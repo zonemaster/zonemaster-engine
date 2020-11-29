@@ -7,7 +7,7 @@
 | algo_descr  | Text                 | The human readable description of a [DNSSEC algorithm].     |
 | algo_mnemo  | Text                 | The mnemonic of a [DNSSEC algorithm].                       |
 | algo_num    | Non-negative integer | The numeric value for a [DNSSEC algorithm].                 |
-| domain      | Domain name          | A domain name.                                              |
+| domain      | Domain name          | A domain name. If nsname is also applicable, use that one instead. |
 | keytag      | Non-negative integer | A keytag for a DNSKEY record or a keytag used in a DS or RRSIG record. |
 | module      | A Zonemaster test module, or `all` | The name of a Zonemaster test module.         |
 | module_list | List of Zonemaster test modules | A list of Zonemaster test modules, separated by ":". |
