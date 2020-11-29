@@ -80,7 +80,7 @@ msgid "TEST_CASE_START {testcase}."
 msgstr "TEST_CASE_START {testcase}."
 
 #. BASIC:DOMAIN_NAME_LABEL_TOO_LONG
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Domain name ({domain}) has a label ({dlabel}) too long ({dlength}/{max})."
 msgstr ""
@@ -88,7 +88,7 @@ msgstr ""
 "({dlength}/{max})."
 
 #. BASIC:DOMAIN_NAME_ZERO_LENGTH_LABEL
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "Domain name ({domain}) has a zero-length label."
 msgstr "Domænenavnet ({domain}) har en label med længden nul."
 
@@ -107,12 +107,12 @@ msgid "Parent domain '{pname}' was found for the tested domain."
 msgstr "Forælder-domænet '{pname}' blev fundet for det testede domæne."
 
 #. BASIC:HAS_A_RECORDS
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "Nameserver {ns} returned \"A\" record(s) for {domain}."
 msgstr "Navneserveren {ns} svarede A-record(s) for {domain}."
 
 #. BASIC:NO_A_RECORDS
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "Nameserver {ns} did not return \"A\" record(s) for {domain}."
 msgstr "Navneserveren {ns} returnerede ikke nogle A-records for {domain}."
 
@@ -515,7 +515,7 @@ msgstr ""
 "i DNSKEY RRset-svaret."
 
 #. DNSSEC:BROKEN_DNSSEC
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "All nameservers for zone {domain} responds with neither NSEC nor NSEC3 "
 "records when such records are expected."
@@ -649,7 +649,7 @@ msgstr ""
 "record med keytag {keytag} i zonen {domain}."
 
 #. DNSSEC:DS_ALGORITHM_DEPRECATED
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "{ns} returned a DS record created by algorithm {algo_num} ({algo_mnemo}), "
 "which is deprecated. The DS record is for the DNSKEY record with keytag "
@@ -660,7 +660,7 @@ msgstr ""
 "keytag {keytag} i zonen {domain}."
 
 #. DNSSEC:DS_ALGORITHM_MISSING
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "{ns} returned no DS record created by algorithm {algo_num} ({algo_mnemo}) "
 "for zone {domain}, which is required."
@@ -669,7 +669,7 @@ msgstr ""
 "({algo_mnemo}) for zonen {domain}, hvilket er krævet."
 
 #. DNSSEC:DS_ALGORITHM_OK
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "{ns} returned a DS record created by algorithm {algo_num} ({algo_mnemo}), "
 "which is OK. The DS record is for the DNSKEY record with keytag {keytag} in "
@@ -680,7 +680,7 @@ msgstr ""
 "{keytag} i zonen {domain}."
 
 #. DNSSEC:DS_ALGORITHM_RESERVED
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "{ns} returned a DS record created by with an algorithm not assigned "
 "(algorithm number {algo_num}), which is not OK. The DS record is for the "
@@ -691,7 +691,7 @@ msgstr ""
 "DNSKEY-record med keytag {keytag} i zonen {domain}."
 
 #. DNSSEC:DS_ALGO_SHA1_DEPRECATED
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Nameserver {ns} returned a DS record created by algorithm {algo_num} "
 "({algo_mnemo}) which is deprecated, while it is still widely used. The DS "
@@ -755,7 +755,7 @@ msgid "The zone has NSEC records."
 msgstr "Zonen indeholder NSEC-records."
 
 #. DNSSEC:INCONSISTENT_DNSSEC
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Some, but not all, nameservers for zone {domain} respond with neither NSEC "
 "nor NSEC3 records when such records are expected."
@@ -764,7 +764,7 @@ msgstr ""
 "eller NSEC3-records selvom disse records er forventet i svaret."
 
 #. DNSSEC:INCONSISTENT_NSEC_NSEC3
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Some nameservers for zone {domain} respond with NSEC records and others "
 "respond with NSEC3 records. Consistency is expected."
@@ -856,7 +856,7 @@ msgid "{server} returned no NSEC3PARAM records."
 msgstr "{server} returnerede ingen NSEC3PARAM-records."
 
 #. DNSSEC:NO_NSEC_NSEC3
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Nameserver {ns} for zone {domain} responds with neither NSEC nor NSEC3 "
 "record when when such records are expected."
@@ -870,7 +870,7 @@ msgid "Nameserver {ns} responded with no DNSKEY record(s)."
 msgstr "Navneserveren {ns} returnerede ingen DNSKEY record(s)."
 
 #. DNSSEC:NO_RESPONSE_DS
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "{ns} returned no DS records for {domain}."
 msgstr "{ns} returnerede ingen DS-records for {domain}."
 
@@ -997,7 +997,7 @@ msgid "At least one RRSIG correctly signs the SOA RRset."
 msgstr "Mindst en RRSIG-record signerer SOA RRset korrekt."
 
 #. DNSSEC:TEST_ABORTED
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Nameserver {ns} for zone {domain} responds with RCODE \"NOERROR\" on a query "
 "that is expected to give response with RCODE \"NXDOMAIN\". Test for NSEC and "
@@ -1017,7 +1017,7 @@ msgstr ""
 "nøglelængden {keylength}."
 
 #. DNSSEC:UNEXPECTED_RESPONSE_DS
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Nameserver {ns} responded with an unexpected rcode ({rcode}) on a DS query "
 "for zone {domain}."
@@ -1328,7 +1328,7 @@ msgid "AXFR not available on nameserver {ns}."
 msgstr "AXFR er ikke tilgængeligt på navneserveren {ns}."
 
 #. NAMESERVER:BREAKS_ON_EDNS
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "No response from {ns} when EDNS is used in query asking for {domain}."
 msgstr "Intet svar fra {ns} når EDNS er brugt i forespørgslen på {domain}."
 
@@ -1344,7 +1344,7 @@ msgstr ""
 "IP-adresser bag følgende navneservere kunne ikke findes : {nsname_list}."
 
 #. NAMESERVER:CASE_QUERIES_RESULTS_DIFFER
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "When asked for {type} records on \"{domain}\" with different cases, all "
 "servers do not reply consistently."
@@ -1353,7 +1353,7 @@ msgstr ""
 "recordtype {type} på \"{domain}\" med en blanding af versaler og minuskler."
 
 #. NAMESERVER:CASE_QUERIES_RESULTS_OK
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "When asked for {type} records on \"{domain}\" with different cases, all "
 "servers reply consistently."
@@ -1381,7 +1381,7 @@ msgstr ""
 "og \"{query2}\"."
 
 #. NAMESERVER:CASE_QUERY_NO_ANSWER
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "When asked for {type} records on \"{domain}\", nameserver {ns} returns "
 "nothing."
@@ -1417,13 +1417,13 @@ msgstr ""
 "({source})."
 
 #. NAMESERVER:EDNS_RESPONSE_WITHOUT_EDNS
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Response without EDNS from {ns} on query with EDNS0 asking for {domain}."
 msgstr "Svar uden EDNS fra {ns} på foregspørgsel med EDNS0 efter {domain}."
 
 #. NAMESERVER:EDNS_VERSION_ERROR
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Incorrect version of EDNS (expected 0) in response from {ns} on query with "
 "EDNS (version 0) asking for {domain}."
@@ -1466,7 +1466,7 @@ msgstr "IP-adresse ikke fundet for nogen af navneserverne."
 
 #. NAMESERVER:NO_RESPONSE
 #. SYNTAX:NO_RESPONSE
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "No response from {ns} asking for {domain}."
 msgstr "Intet svar fra {ns} på forespørgsel om {domain}."
 
@@ -1484,7 +1484,7 @@ msgid "Erroneous response from nameserver {ns}."
 msgstr "Fejlagtigt svar fra navneserver {ns}."
 
 #. NAMESERVER:QNAME_CASE_INSENSITIVE
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Nameserver {ns} does not preserve original case of the queried name "
 "({domain})."
@@ -1493,7 +1493,7 @@ msgstr ""
 "({domain})."
 
 #. NAMESERVER:QNAME_CASE_SENSITIVE
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "Nameserver {ns} preserves original case of queried names ({domain})."
 msgstr ""
 "Navneserveren {ns} bevarede versaler og minuskler fra forespørgslen "
@@ -1528,7 +1528,7 @@ msgid "Nameserver {ns} has one or more unknown EDNS Z flag bits set."
 msgstr "Navneserveren {ns} har et eller flere EDNS Z flag bits sat."
 
 #. SYNTAX:DISCOURAGED_DOUBLE_DASH
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Domain name ({domain}) has a label ({label}) with a double hyphen ('--') in "
 "position 3 and 4 (with a prefix which is not 'xn--')."
@@ -1537,7 +1537,7 @@ msgstr ""
 "og 4, og et præfiks som ikke er 'xn--'."
 
 #. SYNTAX:INITIAL_HYPHEN
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Domain name ({domain}) has a label ({label}) starting with an hyphen ('-')."
 msgstr ""
@@ -1545,7 +1545,7 @@ msgstr ""
 "bindestreg."
 
 #. SYNTAX:MNAME_DISCOURAGED_DOUBLE_DASH
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "SOA MNAME ({domain}) has a label ({label}) with a double hyphen ('--') in "
 "position 3 and 4 (with a prefix which is not 'xn--')."
@@ -1554,22 +1554,22 @@ msgstr ""
 "(og et præfix som ikke er 'xn--'."
 
 #. SYNTAX:MNAME_NON_ALLOWED_CHARS
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "Found illegal characters in SOA MNAME ({domain})."
 msgstr "Fandt ulovlige tegn i SOA MNAME ({domain})."
 
 #. SYNTAX:MNAME_NUMERIC_TLD
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "SOA MNAME ({domain}) within a 'numeric only' TLD ({tld})."
 msgstr "SOA MNAME ({domain}) indeholder et 'numerisk' TLD ({tld})."
 
 #. SYNTAX:MNAME_SYNTAX_OK
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "SOA MNAME ({domain}) syntax is valid."
 msgstr "SOA MNAME ({domain}) syntaks er valid."
 
 #. SYNTAX:MX_DISCOURAGED_DOUBLE_DASH
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Domain name MX ({domain}) has a label ({label}) with a double hyphen ('--') "
 "in position 3 and 4 (with a prefix which is not 'xn--')."
@@ -1578,22 +1578,22 @@ msgstr ""
 "4, og et præfiks som ikke er 'xn--'."
 
 #. SYNTAX:MX_NON_ALLOWED_CHARS
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "Found illegal characters in MX ({domain})."
 msgstr "Fandt ulovlige tegn i MX ({domain})."
 
 #. SYNTAX:MX_NUMERIC_TLD
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "Domain name MX ({domain}) within a 'numeric only' TLD ({tld})."
 msgstr "Domænets MX ({domain}) indeholder et 'numerisk' TLD ({tld})."
 
 #. SYNTAX:MX_SYNTAX_OK
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "Domain name MX ({domain}) syntax is valid."
 msgstr "Domænenavnets MX-record ({domain}) syntaks er valid."
 
 #. SYNTAX:NAMESERVER_DISCOURAGED_DOUBLE_DASH
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Nameserver ({domain}) has a label ({label}) with a double hyphen ('--') in "
 "position 3 and 4 (with a prefix which is not 'xn--')."
@@ -1602,27 +1602,27 @@ msgstr ""
 "og 4, og et præfiks som ikke er 'xn--'."
 
 #. SYNTAX:NAMESERVER_NON_ALLOWED_CHARS
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "Found illegal characters in the nameserver ({domain})."
 msgstr "Fandt ulovlige tegn i navneservernavnet ({domain})."
 
 #. SYNTAX:NAMESERVER_NUMERIC_TLD
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "Nameserver ({domain}) within a 'numeric only' TLD ({tld})."
 msgstr "Navneserveren ({domain}) indeholder et 'numerisk' TLD ({tld})."
 
 #. SYNTAX:NAMESERVER_SYNTAX_OK
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "Nameserver ({domain}) syntax is valid."
 msgstr "Navneserveren ({domain}) - syntaks er valid."
 
 #. SYNTAX:NON_ALLOWED_CHARS
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "Found illegal characters in the domain name ({domain})."
 msgstr "Ulovlige tegn fundet i domænenavnet ({domain})."
 
 #. SYNTAX:NO_DOUBLE_DASH
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Domain name ({domain}) has no label with a double hyphen ('--') in position "
 "3 and 4 (with a prefix which is not 'xn--')."
@@ -1631,7 +1631,7 @@ msgstr ""
 "præfiks, der ikke er 'xn--')."
 
 #. SYNTAX:NO_ENDING_HYPHENS
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "Neither end of any label in the domain name ({domain}) has a hyphen."
 msgstr ""
 "Alle labels i domænenavnet ({domain}) begynder eller slutter ikke med "
@@ -1648,7 +1648,7 @@ msgid "No response from nameserver(s) on SOA queries."
 msgstr "Intet svar fra navneserver(ne) på forespørgsel på SOA-record."
 
 #. SYNTAX:ONLY_ALLOWED_CHARS
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "No illegal characters in the domain name ({domain})."
 msgstr "Udelukkende lovlige tegn i domænenavnet ({domain})."
 
@@ -1682,7 +1682,7 @@ msgid "The SOA RNAME field ({rname}) is compliant with RFC2822."
 msgstr "SOA RNAME værdi ({rname}) overholder RFC2822."
 
 #. SYNTAX:TERMINAL_HYPHEN
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Domain name ({domain}) has a label ({label}) ending with a hyphen ('-')."
 msgstr ""
@@ -1770,7 +1770,7 @@ msgstr ""
 "({highest_minimum})."
 
 #. ZONE:SOA_DEFAULT_TTL_MAXIMUM_VALUE_LOWER
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "SOA 'minimum' value ({minimum}) is less than the recommended one "
 "({lowest_minimum})."
@@ -1888,7 +1888,7 @@ msgstr ""
 "{name}) på SOA forespørgsler."
 
 #. SYSTEM:CANNOT_CONTINUE
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "Not enough data about {domain} was found to be able to run tests."
 msgstr ""
 "Kunne ikke finde tilstrækkeligt med information om {domain} til at afvikle "
@@ -1911,7 +1911,7 @@ msgstr ""
 "Callback-funktionen for log-modulet døde med fejlmeddelelsen: {exception}."
 
 #. SYSTEM:LOOKUP_ERROR
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "DNS query to {ns} for {domain}/{type}/{class} failed with error: {message}"
 msgstr ""
