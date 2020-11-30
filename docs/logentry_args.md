@@ -4,12 +4,19 @@
 
 | Argument    | Type of value        | Description and formatting                                  |
 |-------------|----------------------|-------------------------------------------------------------|
+| algo_descr  | Text                 | The human readable description of a [DNSSEC algorithm].     |
+| algo_mnemo  | Text                 | The mnemonic of a [DNSSEC algorithm].                       |
+| algo_num    | Non-negative integer | The numeric value for a [DNSSEC algorithm].                 |
+| keytag      | Non-negative integer | A keytag for a DNSKEY record or a keytag used in a DS or RRSIG record. |
+| module      | A Zonemaster test module, or `all` | The name of a Zonemaster test module.         |
+| module_list | List of Zonemaster test modules | A list of Zonemaster test modules, separated by ":". |
 | nsname      | Domain name          | The domain name of a name server.                           |
 | ns_ip       | IP address           | The IP address of a name server.                            |
 | ns          | Domain name and IP address pair | The name and IP address of a name server, separated by "/". |
 | nsname_list | List of domain names | A list of name servers, as specified by "nsname", separated by ";". |
 | ns_ip_list  | List of IP addresses | A list of name servers, as specified by "ns_ip", separated by ";". |
 | ns_list     | List of domain name and IP address pairs | A list of name servers, as specified by "ns", separated by ";". |
+| testcase    | A Zonemaster test case, or `all` | A test case identifier.                         |
 || AS number| An Autonomous Space number for an IP address.|
 || Address record type (A or AAAA)| Used to tell the difference between IPv4 and IPv6.|
 || Count of different SOA RNAMEs.| Total number of different SOA RNAME fields seen.|
@@ -19,12 +26,9 @@
 || Count of domain names| A count of domain names.|
 || Count of nameservers| A count of nameservers.|
 || DNS packet size| The size in octets of a DNS packets.|
-|| DNSKEY algorithm name| The name of a DNSKEY algorithm.|
-|| DNSKEY algorithm number| The numeric value for a DNSKEY algorithm.|
 || DNSKEY key length| The key length for a DNSKEY. The interpretation of this value various quite a bit with the algorithm. Be careful when using it for algorithms that aren't RSA-based.|
 || DNSSEC delegation verification failure reason| A somewhat human-readable reason why the delegation step between the tested zone and its parent is not secure.|
 || DS digest type| The digest type used in a DS record.|
-|| DS/DNSKEY/RRSIG keytag| A keytag for a DS, DNSKEY or RRSIG record.|
 | dname (?) | Domain name| A domain name.|
 | dlabel (?) | Domain name label| A single label from a domain name.|
 | dlength (?) | Domain name label length| The length of a domain name label.|
@@ -310,3 +314,5 @@ Message names maked with a question mark should not be considered stable.
 
 * List of MX domain names
 
+
+[DNSSEC algorithm]: https://www.iana.org/assignments/dns-sec-alg-numbers/dns-sec-alg-numbers.xhtml

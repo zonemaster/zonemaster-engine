@@ -142,7 +142,7 @@ sub run_module {
             return @res;
         }
         else {
-            info( UNKNOWN_MODULE => { name => $requested, method => 'all', known => join( ':', sort $class->modules ) } );
+            info( UNKNOWN_MODULE => { module => $requested, testcase => 'all', module_list => join( ':', sort $class->modules ) } );
         }
     }
     else {
@@ -161,7 +161,7 @@ sub run_one {
     Zonemaster::Engine->start_time_now();
     push @res, info( START_TIME => { time_t => time(), string => strftime( "%F %T %z", ( localtime() ) ) } );
     push @res,
-      info( TEST_ARGS => { module => $requested, method => $test, args => join( ';', map { "$_" } @arguments ) } );
+      info( TEST_ARGS => { module => $requested, testcase => $test, args => join( ';', map { "$_" } @arguments ) } );
     _log_versions();
     if ( not( Zonemaster::Engine::Profile->effective->get( q{net.ipv4} ) or Zonemaster::Engine::Profile->effective->get( q{net.ipv6} ) ) ) {
         return info( NO_NETWORK => {} );
@@ -186,11 +186,11 @@ sub run_one {
                 return @res;
             }
             else {
-                info( UNKNOWN_METHOD => { module => $m, method => $test } );
+                info( UNKNOWN_METHOD => { module => $m, testcase => $test } );
             }
         } ## end if ( $module )
         else {
-            info( UNKNOWN_MODULE => { module => $requested, method => $test, known => join( ':', sort $class->modules ) } );
+            info( UNKNOWN_MODULE => { module => $requested, testcase => $test, module_list => join( ':', sort $class->modules ) } );
         }
     }
     else {
