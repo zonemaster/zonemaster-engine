@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-19 08:46+0200\n"
+"POT-Creation-Date: 2020-11-17 13:33+0100\n"
 "PO-Revision-Date: 2020-10-19 12:47+0200\n"
 "Last-Translator: richard.persson@norid.no\n"
 "Language-Team: Zonemaster Team\n"
@@ -195,40 +195,52 @@ msgstr "AS-databasen returnerte ingen informasjon for IP-adressen {ns_ip}."
 msgid ""
 "All authoritative nameservers have the IPv4 addresses in the same AS set "
 "({asn_list})."
-msgstr "Alle autoritative navnetjenerne for delegeringen har IPv4-adresse i samme AS ({asn_list})."
+msgstr ""
+"Alle autoritative navnetjenerne for delegeringen har IPv4-adresse i samme AS "
+"({asn_list})."
 
 #. CONNECTIVITY:IPV4_ONE_ASN
 #, perl-brace-format
 msgid ""
 "All authoritative nameservers have the IPv4 addresses in the same AS ({asn})."
-msgstr "Alle autoritative navnetjenerne for delegeringen har IPv4-adresse i samme AS ({asn})."
+msgstr ""
+"Alle autoritative navnetjenerne for delegeringen har IPv4-adresse i samme AS "
+"({asn})."
 
 #. CONNECTIVITY:IPV4_DIFFERENT_ASN
 #, perl-brace-format
 msgid ""
 "At least two IPv4 addresses of the authoritative nameservers are announce by "
 "different AS sets. A merged list of all AS: ({asn_list})."
-msgstr "Minst to IPv4-adresser til de autoritative navnetjenerne annonseres av forskjellige AS-sett. En sammenslått liste over alle AS: ({asn_list})."
+msgstr ""
+"Minst to IPv4-adresser til de autoritative navnetjenerne annonseres av "
+"forskjellige AS-sett. En sammenslått liste over alle AS: ({asn_list})."
 
 #. CONNECTIVITY:IPV6_SAME_ASN
 #, perl-brace-format
 msgid ""
 "All authoritative nameservers have the IPv6 addresses in the same AS set "
 "({asn_list})."
-msgstr "Alle autoritative navnetjenerne for delegeringen har IPv6-adresse i samme AS ({asn_list})."
+msgstr ""
+"Alle autoritative navnetjenerne for delegeringen har IPv6-adresse i samme AS "
+"({asn_list})."
 
 #. CONNECTIVITY:IPV6_ONE_ASN
 #, perl-brace-format
 msgid ""
 "All authoritative nameservers have the IPv6 addresses in the same AS ({asn})."
-msgstr "Alle autoritative navnetjenerne for delegeringen har IPv6-adresse i samme AS ({asn})."
+msgstr ""
+"Alle autoritative navnetjenerne for delegeringen har IPv6-adresse i samme AS "
+"({asn})."
 
 #. CONNECTIVITY:IPV6_DIFFERENT_ASN
 #, perl-brace-format
 msgid ""
 "At least two IPv6 addresses of the authoritative nameservers are announce by "
 "different AS sets. A merged list of all AS: ({asn_list})."
-msgstr "Minst to IPv6-adresser til de autoritative navnetjenerne annonseres av forskjellige AS-sett. En sammenslått liste over alle AS: ({asn_list})."
+msgstr ""
+"Minst to IPv6-adresser til de autoritative navnetjenerne annonseres av "
+"forskjellige AS-sett. En sammenslått liste over alle AS: ({asn_list})."
 
 #. CONNECTIVITY:NAMESERVER_HAS_TCP_53
 #, perl-brace-format
@@ -293,7 +305,9 @@ msgstr "Det er ikke mulig å følge delegeringen av domenet."
 msgid ""
 "Child has extra nameserver IP address(es) not listed at parent "
 "({ns_ip_list})."
-msgstr "Underdomene har ekstra IP-adress(er) for navnetjener som ikke er publisert hos foreldredomene ({ns_ip_list})."
+msgstr ""
+"Underdomene har ekstra IP-adress(er) for navnetjener som ikke er publisert "
+"hos foreldredomene ({ns_ip_list})."
 
 #. CONSISTENCY:IN_BAILIWICK_ADDR_MISMATCH
 #, perl-brace-format
@@ -352,7 +366,8 @@ msgstr "Ingen svar fra navnetjener {ns} på SOA-spørring."
 #. CONSISTENCY:NS_SET
 #, perl-brace-format
 msgid "Saw NS set ({nsname_list}) on following nameserver set : {servers}."
-msgstr "Fant NS-postvariant ({nsname_list}) på følgende navnetjenere: {servers}."
+msgstr ""
+"Fant NS-postvariant ({nsname_list}) på følgende navnetjenere: {servers}."
 
 #. CONSISTENCY:ONE_NS_SET
 #, perl-brace-format
@@ -418,7 +433,9 @@ msgstr ""
 msgid ""
 "Saw SOA time parameter set (REFRESH={refresh}, RETRY={retry}, EXPIRE={expire}, "
 "MINIMUM={minimum}) on following nameserver set : {ns_list}."
-msgstr "Fant SOA-postvariant (REFRESH={refresh}, RETRY={retry}, EXPIRE={expire}, MINIMUM={minimum}) på følgende navnetjerere: {ns_list}."
+msgstr ""
+"Fant SOA-postvariant (REFRESH={refresh}, RETRY={retry}, EXPIRE={expire}, "
+"MINIMUM={minimum}) på følgende navnetjerere: {ns_list}."
 
 #. CONSISTENCY:TOTAL_ADDRESS_MISMATCH
 #, perl-brace-format
@@ -436,76 +453,75 @@ msgstr "Ingen DNSKEY-poster ble returnert. Hopper over videre DNSKEY-tester."
 #. DNSSEC:ALGORITHM_DEPRECATED
 #, perl-brace-format
 msgid ""
-"The DNSKEY with tag {keytag} uses deprecated algorithm number {algorithm} "
-"({description})."
+"The DNSKEY with tag {keytag} uses deprecated algorithm number {algo_num} "
+"({algo_descr})."
 msgstr ""
 "DNSKEY-posten med \"key tag\" {keytag} bruker en algoritme med "
-"algoritmenummer {algorithm} ({description}), som er foreldet."
+"algoritmenummer {algo_num} ({algo_descr}), som er foreldet."
 
 #. DNSSEC:ALGORITHM_NOT_RECOMMENDED
 #, perl-brace-format
 msgid ""
-"The DNSKEY with tag {keytag} uses an algorithm number {algorithm} "
-"({description}) which is not recommended to be used."
+"The DNSKEY with tag {keytag} uses an algorithm number {algo_num} "
+"({algo_descr}) which is not recommended to be used."
 msgstr ""
 "DNSKEY-posten med \"key tag\" {keytag} bruker en algoritme med "
-"algoritmenummer {algorithm} ({description} som ikke er anbefalt brukt til "
+"algoritmenummer {algo_num} ({algo_descr} som ikke er anbefalt brukt til "
 "sonesignering."
 
 #. DNSSEC:ALGORITHM_NOT_ZONE_SIGN
 #, perl-brace-format
 msgid ""
 "The DNSKEY with tag {keytag} uses algorithm number not meant for zone "
-"signing, algorithm number {algorithm} ({description})."
+"signing, algorithm number {algo_num} ({algo_descr})."
 msgstr ""
 "DNSKEY-posten med \"key tag\" {keytag} bruker en algoritme med "
-"algoritmenummer {algorithm} ({description}) som ikke er ment for "
-"sonesignering."
+"algoritmenummer {algo_num} ({algo_descr}) som ikke er ment for sonesignering."
 
 #. DNSSEC:ALGORITHM_OK
 #, perl-brace-format
 msgid ""
-"The DNSKEY with tag {keytag} uses algorithm number {algorithm} "
-"({description}), which is OK."
+"The DNSKEY with tag {keytag} uses algorithm number {algo_num} "
+"({algo_descr}), which is OK."
 msgstr ""
 "DNSKEY-posten med \"key tag\" {keytag} bruker en algoritme med "
-"algoritmenummer {algorithm} ({description}), som er OK."
+"algoritmenummer {algo_num} ({algo_descr}), som er OK."
 
 #. DNSSEC:ALGORITHM_PRIVATE
 #, perl-brace-format
 msgid ""
-"The DNSKEY with tag {keytag} uses private algorithm number {algorithm} "
-"({description})."
+"The DNSKEY with tag {keytag} uses private algorithm number {algo_num} "
+"({algo_descr})."
 msgstr ""
 "DNSKEY-posten med \"key tag\" {keytag} bruker en algoritme med "
-"algoritmenummer {algorithm} ({description}), som er privat."
+"algoritmenummer {algo_num} ({algo_descr}), som er privat."
 
 #. DNSSEC:ALGORITHM_RESERVED
 #, perl-brace-format
 msgid ""
-"The DNSKEY with tag {keytag} uses reserved algorithm number {algorithm} "
-"({description})."
+"The DNSKEY with tag {keytag} uses reserved algorithm number {algo_num} "
+"({algo_descr})."
 msgstr ""
 "DNSKEY-posten med \"key tag\" {keytag} bruker en algoritme med "
-"algoritmenummer {algorithm} ({description}), som er reservert."
+"algoritmenummer {algo_num} ({algo_descr}), som er reservert."
 
 #. DNSSEC:ALGORITHM_UNASSIGNED
 #, perl-brace-format
 msgid ""
-"The DNSKEY with tag {keytag} uses unassigned algorithm number {algorithm} "
-"({description})."
+"The DNSKEY with tag {keytag} uses unassigned algorithm number {algo_num} "
+"({algo_descr})."
 msgstr ""
 "DNSKEY-posten med \"key tag\" {keytag} bruker en algoritme med "
-"algoritmenummer {algorithm} ({description}),  som ikke er tildelt."
+"algoritmenummer {algo_num} ({algo_descr}),  som ikke er tildelt."
 
 #. DNSSEC:ALGO_NOT_SIGNED_RRSET
 #, perl-brace-format
 msgid ""
 "Nameserver {ns} responded with no RRSIG for RRset {rrtype} created by the "
-"algorithm {algorithm}."
+"algorithm {algo_num}."
 msgstr ""
 "Navnetjener {ns} svarte uten RRSIG-poster for RRset som er laget av "
-"algoritme {algorithm} av typen {rrtype}."
+"algoritme {algo_num} av typen {rrtype}."
 
 #. DNSSEC:ALL_ALGO_SIGNED
 msgid ""
@@ -529,7 +545,10 @@ msgstr ""
 msgid ""
 "DNSKEY record with tag {keytag} returned by nameserver {ns} does not match "
 "the algorithm and hash values in a DS record with same tag in parent zone."
-msgstr "DNSKEY-posten med \"key tag\" {keytag} returnert av nameserveren {ns} samsvarer ikke med algoritmen og hashverdiene i en DS-post med samme tag i foreldresonen."
+msgstr ""
+"DNSKEY-posten med \"key tag\" {keytag} returnert av nameserveren {ns} "
+"samsvarer ikke med algoritmen og hashverdiene i en DS-post med samme tag i "
+"foreldresonen."
 
 #. DNSSEC:BROKEN_RRSIG
 #, perl-brace-format
@@ -537,7 +556,10 @@ msgid ""
 "The RRSIG of the DNSKEY RRset created by tag {keytag} returned by nameserver "
 "{ns} failed to be verified with error '{error}' (a DS record with same tag "
 "is present in the parent zone)."
-msgstr "RRSIG for DNSKEY RR-sett opprettet av \"key tag\" {keytag} returnert av navneserveren {ns} kunne ikke bekreftes med feilen \"{error}\" (en DS-post med samme tag er tilstede i foreldresonen)."
+msgstr ""
+"RRSIG for DNSKEY RR-sett opprettet av \"key tag\" {keytag} returnert av "
+"navneserveren {ns} kunne ikke bekreftes med feilen \"{error}\" (en DS-post "
+"med samme tag er tilstede i foreldresonen)."
 
 #. DNSSEC:DELEGATION_NOT_SIGNED
 #, perl-brace-format
@@ -568,14 +590,20 @@ msgstr ""
 msgid ""
 "Flags field of DNSKEY record with tag {keytag} returned by nameserver {ns} "
 "has not SEP bit set although DS with same tag is present in parent."
-msgstr "Flaggfelt for DNSKEY-post med \"key tag\" {keytag} returnert av nameserver {ns} har ikke satt SEP-bit selv om DS-post med samme tag er tilstede i foreldresonen."
+msgstr ""
+"Flaggfelt for DNSKEY-post med \"key tag\" {keytag} returnert av nameserver "
+"{ns} har ikke satt SEP-bit selv om DS-post med samme tag er tilstede i "
+"foreldresonen."
 
 #. DNSSEC:DNSKEY_NOT_ZONE_SIGN
 #, perl-brace-format
 msgid ""
 "Flags field of DNSKEY record with tag {keytag} returned by nameserver {ns} "
 "has not ZONE bit set although DS with same tag is present in parent."
-msgstr "Flaggfeltet for DNSKEY-posten med \"key tag\" {keytag} returnert av nameserveren {ns} har ikke satt ZONE-bit selv om DS-post med samme tag er tilstede i foreldresonen."
+msgstr ""
+"Flaggfeltet for DNSKEY-posten med \"key tag\" {keytag} returnert av "
+"nameserveren {ns} har ikke satt ZONE-bit selv om DS-post med samme tag er "
+"tilstede i foreldresonen."
 
 #. DNSSEC:DNSKEY_NOT_SIGNED
 msgid "The apex DNSKEY RRset was not correctly signed."
@@ -584,18 +612,16 @@ msgstr "DNSKEY-postene i sonetoppen var ikke korrekt signert."
 #. DNSSEC:DNSKEY_SIGNATURE_NOT_OK
 #, perl-brace-format
 msgid ""
-"Signature for DNSKEY with tag {signature} failed to verify with error "
-"'{error}'."
+"Signature for DNSKEY with tag {keytag} failed to verify with error '{error}'."
 msgstr ""
-"Verifiseringen av signaturen for DNSKEY-posten med \"key tag\" {signature} "
+"Verifiseringen av signaturen for DNSKEY-posten med \"key tag\" {keytag} "
 "mislyktes med følgende feil \"{error}\"."
 
 #. DNSSEC:DNSKEY_SIGNATURE_OK
 #, perl-brace-format
-msgid "A signature for DNSKEY with tag {signature} was correctly signed."
+msgid "A signature for DNSKEY with tag {keytag} was correctly signed."
 msgstr ""
-"Verifiering av en signatur for DNSKEY-posten med \"key tag\" {signature} "
-"lyktes."
+"Verifiering av en signatur for DNSKEY-posten med \"key tag\" {keytag} lyktes."
 
 #. DNSSEC:DNSKEY_SIGNED
 msgid "The apex DNSKEY RRset was correcly signed."
@@ -604,104 +630,96 @@ msgstr "DNSKEY-postene i sonetoppen var korrekt signert."
 #. DNSSEC:DNSKEY_SMALLER_THAN_REC
 #, perl-brace-format
 msgid ""
-"DNSKEY with tag {keytag} and using algorithm {algorithm_number} "
-"({algorithm_description}) has a size ({keysize}) smaller than the "
-"recommended one ({keysizerec})."
+"DNSKEY with tag {keytag} and using algorithm {algo_num} ({algo_descr}) has a "
+"size ({keysize}) smaller than the recommended one ({keysizerec})."
 msgstr ""
-"DNSKEY-posten med \"key tag\" {keytag} som bygger på algoritme "
-"{algorithm_number} ({algorithm_description}) har en nøkkelstørrelse "
-"({keysize}) som er mindre enn anbefalt størrelse ({keysizerec}) for denne "
-"algoritmen."
+"DNSKEY-posten med \"key tag\" {keytag} som bygger på algoritme {algo_num} "
+"({algo_descr}) har en nøkkelstørrelse ({keysize}) som er mindre enn anbefalt "
+"størrelse ({keysizerec}) for denne algoritmen."
 
 #. DNSSEC:DNSKEY_TOO_SMALL_FOR_ALGO
 #, perl-brace-format
 msgid ""
-"DNSKEY with tag {keytag} and using algorithm {algorithm_number} "
-"({algorithm_description}) has a size ({keysize}) smaller than the minimum "
-"one ({keysizemin})."
+"DNSKEY with tag {keytag} and using algorithm {algo_num} ({algo_descr}) has a "
+"size ({keysize}) smaller than the minimum one ({keysizemin})."
 msgstr ""
-"DNSKEY-posten med \"key tag\" {keytag} som bygger på algoritme "
-"{algorithm_number} ({algorithm_description}) har en nøkkelstørrelse "
-"({keysize}) som er mindre enn den minste størrelsen ({keysizemin}) for denne "
-"algoritmen."
+"DNSKEY-posten med \"key tag\" {keytag} som bygger på algoritme {algo_num} "
+"({algo_descr}) har en nøkkelstørrelse ({keysize}) som er mindre enn den "
+"minste størrelsen ({keysizemin}) for denne algoritmen."
 
 #. DNSSEC:DNSKEY_TOO_LARGE_FOR_ALGO
 #, perl-brace-format
 msgid ""
-"DNSKEY with tag {keytag} and using algorithm {algorithm_number} "
-"({algorithm_description}) has a size ({keysize}) larger than the maximum one "
-"({keysizemax})."
+"DNSKEY with tag {keytag} and using algorithm {algo_num} ({algo_descr}) has a "
+"size ({keysize}) larger than the maximum one ({keysizemax})."
 msgstr ""
-"DNSKEY-posten med \"key tag\" {keytag} som bygger på algoritme "
-"{algorithm_number} ({algorithm_description}) har en nøkkelstørrelse "
-"({keysize}) som er større enn den maksimale størrelsen ({keysizemax}) for "
-"denne algoritmen."
+"DNSKEY-posten med \"key tag\" {keytag} som bygger på algoritme {algo_num} "
+"({algo_descr}) har en nøkkelstørrelse ({keysize}) som er større enn den "
+"maksimale størrelsen ({keysizemax}) for denne algoritmen."
 
 #. DNSSEC:DS_ALGORITHM_NOT_DS
 #, perl-brace-format
 msgid ""
-"{ns} returned a DS record created by algorithm {algorithm_number} "
-"({algorithm_mnemonic}) which is not meant for DS. The DS record is for the "
-"DNSKEY record with keytag {keytag} in zone {zone}."
+"{ns} returned a DS record created by algorithm {algo_num} ({algo_mnemo}) "
+"which is not meant for DS. The DS record is for the DNSKEY record with "
+"keytag {keytag} in zone {zone}."
 msgstr ""
-"Navnetjener {ns} svarte med en DS-post som er laget med algoritme "
-"{algorithm_number} ({algorithm_mnemonic}), som ikke er ment for DS. DS-"
-"posten gjelder DNSKEY-posten med \"key tag\" {keytag} i sonen {zone}."
+"Navnetjener {ns} svarte med en DS-post som er laget med algoritme {algo_num} "
+"({algo_mnemo}), som ikke er ment for DS. DS-posten gjelder DNSKEY-posten med "
+"\"key tag\" {keytag} i sonen {zone}."
 
 #. DNSSEC:DS_ALGORITHM_DEPRECATED
 #, perl-brace-format
 msgid ""
-"{ns} returned a DS record created by algorithm {algorithm_number} "
-"({algorithm_mnemonic}), which is deprecated. The DS record is for the DNSKEY "
-"record with keytag {keytag} in zone {zone}."
+"{ns} returned a DS record created by algorithm {algo_num} ({algo_mnemo}), "
+"which is deprecated. The DS record is for the DNSKEY record with keytag "
+"{keytag} in zone {zone}."
 msgstr ""
-"Navnetjener {ns} svarte med en DS-post som er laget med algoritme "
-"{algorithm_number} ({algorithm_mnemonic}), som er foreldet. DS-posten "
-"gjelder for DNSKEY-posten med \"key tag\" {keytag} i sonen {zone}."
+"Navnetjener {ns} svarte med en DS-post som er laget med algoritme {algo_num} "
+"({algo_mnemo}), som er foreldet. DS-posten gjelder for DNSKEY-posten med "
+"\"key tag\" {keytag} i sonen {zone}."
 
 #. DNSSEC:DS_ALGORITHM_MISSING
 #, perl-brace-format
 msgid ""
-"{ns} returned no DS record created by algorithm {algorithm_number} "
-"({algorithm_mnemonic}) for zone {zone}, which is required."
+"{ns} returned no DS record created by algorithm {algo_num} ({algo_mnemo}) "
+"for zone {zone}, which is required."
 msgstr ""
 "Navnetjener {ns} svarte ikke med en DS-post som er laget med algoritme "
-"{algorithm_number} ({algorithm_mnemonic}) for sonen {zone}, noe som er et "
-"krav."
+"{algo_num} ({algo_mnemo}) for sonen {zone}, noe som er et krav."
 
 #. DNSSEC:DS_ALGORITHM_OK
 #, perl-brace-format
 msgid ""
-"{ns} returned a DS record created by algorithm {algorithm_number} "
-"({algorithm_mnemonic}), which is OK. The DS record is for the DNSKEY record "
-"with keytag {keytag} in zone {zone}."
+"{ns} returned a DS record created by algorithm {algo_num} ({algo_mnemo}), "
+"which is OK. The DS record is for the DNSKEY record with keytag {keytag} in "
+"zone {zone}."
 msgstr ""
-"Navnetjener {ns} svarte med en DS-post som er laget med algoritme "
-"{algorithm_number} ({algorithm_mnemonic}), som er OK. DS-posten gjelder for "
-"DNSKEY-posten med \"key tag\" {keytag} i sonen {zone}."
+"Navnetjener {ns} svarte med en DS-post som er laget med algoritme {algo_num} "
+"({algo_mnemo}), som er OK. DS-posten gjelder for DNSKEY-posten med \"key tag"
+"\" {keytag} i sonen {zone}."
 
 #. DNSSEC:DS_ALGORITHM_RESERVED
 #, perl-brace-format
 msgid ""
 "{ns} returned a DS record created by with an algorithm not assigned "
-"(algorithm number {algorithm_number}), which is not OK. The DS record is for "
-"the DNSKEY record with keytag {keytag} in zone {zone}."
+"(algorithm number {algo_num}), which is not OK. The DS record is for the "
+"DNSKEY record with keytag {keytag} in zone {zone}."
 msgstr ""
-"Navnetjener {ns} svarte med en DS-post som er laget med algoritme "
-"{algorithm_number} som ikke er i bruk. DS-posten gjelder for DNSKEY-posten "
-"med \"key tag\" {keytag} i sonen {zone}."
+"Navnetjener {ns} svarte med en DS-post som er laget med algoritme {algo_num} "
+"som ikke er i bruk. DS-posten gjelder for DNSKEY-posten med \"key tag"
+"\" {keytag} i sonen {zone}."
 
 #. DNSSEC:DS_ALGO_SHA1_DEPRECATED
 #, perl-brace-format
 msgid ""
-"Nameserver {ns} returned a DS record created by algorithm {algorithm_number} "
-"({algorithm_mnemonic}) which is deprecated, while it is still widely used. "
-"The DS record is for the DNSKEY record with keytag {keytag} in zone {zone}."
+"Nameserver {ns} returned a DS record created by algorithm {algo_num} "
+"({algo_mnemo}) which is deprecated, while it is still widely used. The DS "
+"record is for the DNSKEY record with keytag {keytag} in zone {zone}."
 msgstr ""
-"Navnetjener {ns} svarte med en DS-post som er laget med algoritme "
-"{algorithm_number} ({algorithm_mnemonic}), som er foreldet, men fortsatt i "
-"bruk. DS-posten gjelder DNSKEY-posten med \"key tag\" {keytag} i sonen "
-"{zone}."
+"Navnetjener {ns} svarte med en DS-post som er laget med algoritme {algo_num} "
+"({algo_mnemo}), som er foreldet, men fortsatt i bruk. DS-posten gjelder "
+"DNSKEY-posten med \"key tag\" {keytag} i sonen {zone}."
 
 #. DNSSEC:DS_BUT_NOT_DNSKEY
 #, perl-brace-format
@@ -716,20 +734,20 @@ msgstr "DS-poster i foreldresone matcher DNSKEY-poster i underordnet sone."
 #. DNSSEC:DURATION_LONG
 #, perl-brace-format
 msgid ""
-"RRSIG with keytag {tag} and covering type(s) {types} has a duration of "
+"RRSIG with keytag {keytag} and covering type(s) {types} has a duration of "
 "{duration} seconds, which is too long."
 msgstr ""
-"RRSIG med \"key tag\" {tag} som dekker posttyper {types} har en levetid på "
-"{duration} sekunder, som er for lenge."
+"RRSIG med \"key tag\" {keytag} som dekker posttyper {types} har en levetid "
+"på {duration} sekunder, som er for lenge."
 
 #. DNSSEC:DURATION_OK
 #, perl-brace-format
 msgid ""
-"RRSIG with keytag {tag} and covering type(s) {types} has a duration of "
+"RRSIG with keytag {keytag} and covering type(s) {types} has a duration of "
 "{duration} seconds, which is just fine."
 msgstr ""
-"RRSIG med \"key tag\" {tag} som dekker posttyper {types} har en levetid på "
-"{duration} sekunder, som er ok."
+"RRSIG med \"key tag\" {keytag} som dekker posttyper {types} har en levetid "
+"på {duration} sekunder, som er ok."
 
 #. DNSSEC:EXTRA_PROCESSING_BROKEN
 #, perl-brace-format
@@ -841,7 +859,9 @@ msgstr ""
 msgid ""
 "Nameserver {ns} returned no DNSKEY record matching the DS record with tag "
 "{keytag} found in the parent zone."
-msgstr "Navneserver {ns} returnerte ingen DNSKEY-poster som samsvarer med DS-posten med \"key tag\" {keytag} funnet i foreldresonen."
+msgstr ""
+"Navneserver {ns} returnerte ingen DNSKEY-poster som samsvarer med DS-posten "
+"med \"key tag\" {keytag} funnet i foreldresonen."
 
 #. DNSSEC:NO_MATCHING_RRSIG
 #, perl-brace-format
@@ -849,7 +869,10 @@ msgid ""
 "Nameserver {ns} returned no signature on the DNSKEY RRset that corresponds "
 "to the DNSKEY with tag {keytag} even though there is a DS record in the "
 "parent zone for that DNSKEY record."
-msgstr "Navnetjener {ns} returnerte ingen signatur på DNSKEY RR-settet som tilsvarer DNSKEY med \"key tag\" {keytag}, selv om det er en DS-post i foreldresonen for den DNSKEY-posten."
+msgstr ""
+"Navnetjener {ns} returnerte ingen signatur på DNSKEY RR-settet som tilsvarer "
+"DNSKEY med \"key tag\" {keytag}, selv om det er en DS-post i foreldresonen "
+"for den DNSKEY-posten."
 
 #. DNSSEC:NO_NSEC3PARAM
 #, perl-brace-format
@@ -901,8 +924,9 @@ msgstr "Ingen signatur signerte NSEC3-postene korrekt."
 
 #. DNSSEC:NSEC3_SIG_VERIFY_ERROR
 #, perl-brace-format
-msgid "Trying to verify NSEC3 RRset with RRSIG {sig} gave error '{error}'."
-msgstr "Forsøk på å verifisere NSEC3-post med RRSIG {sig} ga feil \"{error}\"."
+msgid "Trying to verify NSEC3 RRset with RRSIG {keytag} gave error '{error}'."
+msgstr ""
+"Forsøk på å verifisere NSEC3-post med RRSIG {keytag} ga feil \"{error}\"."
 
 #. DNSSEC:NSEC_COVERS_NOT
 #, perl-brace-format
@@ -915,32 +939,34 @@ msgstr "Ingen signatur signerte NSEC-postene korrekt."
 
 #. DNSSEC:NSEC_SIG_VERIFY_ERROR
 #, perl-brace-format
-msgid "Trying to verify NSEC RRset with RRSIG {sig} gave error '{error}'."
-msgstr "Forsøk på at verifisere NSEC-post med RRSIG {sig} ga feil \"{error}\"."
+msgid "Trying to verify NSEC RRset with RRSIG {keytag} gave error '{error}'."
+msgstr ""
+"Forsøk på at verifisere NSEC-post med RRSIG {keytag} ga feil \"{error}\"."
 
 #. DNSSEC:REMAINING_LONG
 #, perl-brace-format
 msgid ""
-"RRSIG with keytag {tag} and covering type(s) {types} has a remaining "
+"RRSIG with keytag {keytag} and covering type(s) {types} has a remaining "
 "validity of {duration} seconds, which is too long."
 msgstr ""
-"RRSIG med \"key tag\" {tag} som dekker typer {types}, har en gjenstående "
+"RRSIG med \"key tag\" {keytag} som dekker typer {types}, har en gjenstående "
 "levetid på {duration} sekunder, som er for lenge."
 
 #. DNSSEC:REMAINING_SHORT
 #, perl-brace-format
 msgid ""
-"RRSIG with keytag {tag} and covering type(s) {types} has a remaining "
+"RRSIG with keytag {keytag} and covering type(s) {types} has a remaining "
 "validity of {duration} seconds, which is too short."
 msgstr ""
-"RRSIG med \"key tag\" {tag} som dekker typer {types} har en gjenstående "
+"RRSIG med \"key tag\" {keytag} som dekker typer {types} har en gjenstående "
 "levetid på {duration} sekunder, som er for kort."
 
 #. DNSSEC:RRSIG_EXPIRATION
 #, perl-brace-format
 msgid ""
-"RRSIG with keytag {tag} and covering type(s) {types} expires at : {date}."
-msgstr "RRSIG med \"key tag\" {tag} som dekker typer {types} løper ut {date}."
+"RRSIG with keytag {keytag} and covering type(s) {types} expires at : {date}."
+msgstr ""
+"RRSIG med \"key tag\" {keytag} som dekker typer {types} løper ut {date}."
 
 #. DNSSEC:RRSET_NOT_SIGNED
 #, perl-brace-format
@@ -959,10 +985,10 @@ msgstr ""
 #. DNSSEC:RRSIG_EXPIRED
 #, perl-brace-format
 msgid ""
-"RRSIG with keytag {tag} and covering type(s) {types} has already expired "
+"RRSIG with keytag {keytag} and covering type(s) {types} has already expired "
 "(expiration is: {expiration})."
 msgstr ""
-"RRSIG med \"key tag\" {tag} som dekker typer {types} har allerede utløpt "
+"RRSIG med \"key tag\" {keytag} som dekker typer {types} har allerede utløpt "
 "(utløpstidspunkt er {expiration})."
 
 #. DNSSEC:RRSIG_NOT_MATCH_DNSKEY
@@ -978,14 +1004,14 @@ msgstr "Ingen RRSIG signerer SOA-posten korrekt."
 #. DNSSEC:SOA_SIGNATURE_NOT_OK
 #, perl-brace-format
 msgid ""
-"Trying to verify SOA RRset with signature {signature} gave error '{error}'."
+"Trying to verify SOA RRset with signature {keytag} gave error '{error}'."
 msgstr ""
-"Forsøk på å at verifisere SOA-post med signatur {signature} ga feil {error}."
+"Forsøk på å at verifisere SOA-post med signatur {keytag} ga feil {error}."
 
 #. DNSSEC:SOA_SIGNATURE_OK
 #, perl-brace-format
-msgid "RRSIG {signature} correctly signs SOA RRset."
-msgstr "RRSIG {signature} signerer SOA RRset korrekt."
+msgid "RRSIG {keytag} correctly signs SOA RRset."
+msgstr "RRSIG {keytag} signerer SOA RRset korrekt."
 
 #. DNSSEC:SOA_SIGNED
 msgid "At least one RRSIG correctly signs the SOA RRset."
@@ -1016,7 +1042,9 @@ msgstr ""
 msgid ""
 "Nameserver {ns} responded with an unexpected rcode ({rcode}) on a DS query "
 "for zone {zone}."
-msgstr "Navnetjener {ns} svarte på en DS-spørring for sonen {zone} med svarkoden ({rcode}), som ikke var forventet."
+msgstr ""
+"Navnetjener {ns} svarte på en DS-spørring for sonen {zone} med svarkoden "
+"({rcode}), som ikke var forventet."
 
 #. DELEGATION:ARE_AUTHORITATIVE
 #, perl-brace-format
@@ -1054,28 +1082,40 @@ msgstr "Alle IP-addresser som brukes av navnetjenerne er unike."
 msgid ""
 "Child lists enough ({count}) nameservers ({nsname_list}) that resolve to "
 "IPv4 addresses ({ns_ip_list}). Lower limit set to {minimum}."
-msgstr "Det finnes tilstrekkelig mange navnetjenere (NS-poster) i undersonen med IPv4-adresse. Antall: {count}. Adresser: {ns_ip_list}. Navnetjenere med IPv4-adresser: {nsname_list}. Minste tillatte antall er {minimum}."
+msgstr ""
+"Det finnes tilstrekkelig mange navnetjenere (NS-poster) i undersonen med "
+"IPv4-adresse. Antall: {count}. Adresser: {ns_ip_list}. Navnetjenere med IPv4-"
+"adresser: {nsname_list}. Minste tillatte antall er {minimum}."
 
 #. DELEGATION:ENOUGH_IPV4_NS_DEL
 #, perl-brace-format
 msgid ""
 "Delegation lists enough ({count}) nameservers ({nsname_list}) that resolve "
 "to IPv4 addresses ({ns_ip_list}). Lower limit set to {minimum}."
-msgstr "Det finnes tilstrekkelig mange navnetjenere (NS-poster) i delegeringen med IPv4-adresse. Antall: {count}. Adresser: {ns_ip_list}. Navnetjenere med IPv6-adresse: {nsname_list}. Minste tillatte antall er {minimum}."
+msgstr ""
+"Det finnes tilstrekkelig mange navnetjenere (NS-poster) i delegeringen med "
+"IPv4-adresse. Antall: {count}. Adresser: {ns_ip_list}. Navnetjenere med IPv6-"
+"adresse: {nsname_list}. Minste tillatte antall er {minimum}."
 
 #. DELEGATION:ENOUGH_IPV6_NS_CHILD
 #, perl-brace-format
 msgid ""
 "Child lists enough ({count}) nameservers ({nsname_list}) that resolve to "
 "IPv6 addresses ({ns_ip_list}). Lower limit set to {minimum}."
-msgstr "Det finnes tilstrekkelig mange navnetjenere (NS-poster) i undersonen med IPv6-adresse. Antall: {count}. Adresser: {ns_ip_list}. Navnetjenere med IPv6-adresser: {nsname_list}. Minste tillatte antall er {minimum}."
+msgstr ""
+"Det finnes tilstrekkelig mange navnetjenere (NS-poster) i undersonen med "
+"IPv6-adresse. Antall: {count}. Adresser: {ns_ip_list}. Navnetjenere med IPv6-"
+"adresser: {nsname_list}. Minste tillatte antall er {minimum}."
 
 #. DELEGATION:ENOUGH_IPV6_NS_DEL
 #, perl-brace-format
 msgid ""
 "Delegation lists enough ({count}) nameservers ({nsname_list}) that resolve "
 "to IPv6 addresses ({ns_ip_list}). Lower limit set to {minimum}."
-msgstr "Det finnes tilstrekkelig mange navnetjenere (NS-poster) i delegeringen med IPv6-adresse. Antall: {count}. Adresser: {ns_ip_list}. Navnetjenere med IPv6-adresse: {nsname_list}. Minste tillatte antall er {minimum}."
+msgstr ""
+"Det finnes tilstrekkelig mange navnetjenere (NS-poster) i delegeringen med "
+"IPv6-adresse. Antall: {count}. Adresser: {ns_ip_list}. Navnetjenere med IPv6-"
+"adresse: {nsname_list}. Minste tillatte antall er {minimum}."
 
 #. DELEGATION:ENOUGH_NS_CHILD
 #, perl-brace-format
@@ -1091,7 +1131,9 @@ msgstr ""
 msgid ""
 "Parent lists enough ({count}) nameservers ({nsname_list}). Lower limit set "
 "to {minimum}."
-msgstr "Det finnes tilstrekkelig mange navnetjenere ({nsname_list}) i foreldresonen. Antall: {count}. Minste tillatte antall er {minimum}."
+msgstr ""
+"Det finnes tilstrekkelig mange navnetjenere ({nsname_list}) i foreldresonen. "
+"Antall: {count}. Minste tillatte antall er {minimum}."
 
 #. DELEGATION:EXTRA_NAME_CHILD
 #, perl-brace-format
@@ -1123,28 +1165,42 @@ msgstr ""
 msgid ""
 "Child does not list enough ({count}) nameservers ({nsname_list}) that "
 "resolve to IPv4 addresses ({ns_ip_list}). Lower limit set to {minimum}."
-msgstr "Det finnes ikke tilstrekkelig med navnetjenere (NS-poster) med IPv4-adresser i undersonen. Antall: {count}. Adresser: {ns_ip_list}. Minste tillatte antall er {minimum}. Navnetjenere med IPv4-adresser: {nsname_list}."
+msgstr ""
+"Det finnes ikke tilstrekkelig med navnetjenere (NS-poster) med IPv4-adresser "
+"i undersonen. Antall: {count}. Adresser: {ns_ip_list}. Minste tillatte "
+"antall er {minimum}. Navnetjenere med IPv4-adresser: {nsname_list}."
 
 #. DELEGATION:NOT_ENOUGH_IPV4_NS_DEL
 #, perl-brace-format
 msgid ""
 "Delegation does not list enough ({count}) nameservers ({nsname_list}) that "
 "resolve to IPv4 addresses ({ns_ip_list}). Lower limit set to {minimum}."
-msgstr "Det finnes ikke tilstrekkelig mange navnetjenere (NS-poster) med IPv4-adresse i delegeringen. Antall: {count}. Adresser: {ns_ip_list}. Navnetjenere med IPv4-adresse: {nsname_list}. Minste tillatte antall er {minimum}."
+msgstr ""
+"Det finnes ikke tilstrekkelig mange navnetjenere (NS-poster) med IPv4-"
+"adresse i delegeringen. Antall: {count}. Adresser: {ns_ip_list}. "
+"Navnetjenere med IPv4-adresse: {nsname_list}. Minste tillatte antall er "
+"{minimum}."
 
 #. DELEGATION:NOT_ENOUGH_IPV6_NS_CHILD
 #, perl-brace-format
 msgid ""
 "Child does not list enough ({count}) nameservers ({nsname_list}) that "
 "resolve to IPv6 addresses ({ns_ip_list}). Lower limit set to {minimum}."
-msgstr "Det finnes ikke tilstrekkelig med navnetjenere (NS-poster) med IPv6-adresser i undersonen. Antall: {count}. Adresser: {ns_ip_list}. Minste tillatte antall er {minimum}. Navnetjenere med IPv6-adresser: {nsname_list}."
+msgstr ""
+"Det finnes ikke tilstrekkelig med navnetjenere (NS-poster) med IPv6-adresser "
+"i undersonen. Antall: {count}. Adresser: {ns_ip_list}. Minste tillatte "
+"antall er {minimum}. Navnetjenere med IPv6-adresser: {nsname_list}."
 
 #. DELEGATION:NOT_ENOUGH_IPV6_NS_DEL
 #, perl-brace-format
 msgid ""
 "Delegation does not list enough ({count}) nameservers ({nsname_list}) that "
 "resolve to IPv6 addresses ({ns_ip_list}). Lower limit set to {minimum}."
-msgstr "Det finnes ikke tilstrekkelig mange navnetjenere (NS-poster) med IPv6-adresse i delegeringen. Antall: {count}. Adresser: {ns_ip_list}. Navnetjenere med IPv6-adresse: {nsname_list}. Minste tillatte antall er {minimum}."
+msgstr ""
+"Det finnes ikke tilstrekkelig mange navnetjenere (NS-poster) med IPv6-"
+"adresse i delegeringen. Antall: {count}. Adresser: {ns_ip_list}. "
+"Navnetjenere med IPv6-adresse: {nsname_list}. Minste tillatte antall er "
+"{minimum}."
 
 #. DELEGATION:NOT_ENOUGH_NS_CHILD
 #, perl-brace-format
@@ -1161,7 +1217,10 @@ msgstr ""
 msgid ""
 "Parent does not list enough ({count}) nameservers ({nsname_list}). Lower "
 "limit set to {minimum}."
-msgstr "Det finnes ikke tilstrekkelig med navnetjenere (NS-poster) i foreldresonen. Antall: {count}. Navnetjenere: {nsname_list}. Minste antall er satt til {minimum}."
+msgstr ""
+"Det finnes ikke tilstrekkelig med navnetjenere (NS-poster) i foreldresonen. "
+"Antall: {count}. Navnetjenere: {nsname_list}. Minste antall er satt til "
+"{minimum}."
 
 #. DELEGATION:NO_IPV4_NS_CHILD
 #, perl-brace-format
@@ -1275,7 +1334,8 @@ msgstr ""
 #, perl-brace-format
 msgid ""
 "The following nameservers answer AAAA queries without problems : {ns_list}."
-msgstr "Følgende navnetjenere svarer på AAAA-spørringer uten problemer: {ns_list}."
+msgstr ""
+"Følgende navnetjenere svarer på AAAA-spørringer uten problemer: {ns_list}."
 
 #. NAMESERVER:A_UNEXPECTED_RCODE
 #, perl-brace-format
@@ -1305,7 +1365,9 @@ msgstr "Alle navnetjenere kunne slåes opp til minst én IP-addresse."
 #, perl-brace-format
 msgid ""
 "The following nameservers failed to resolve to an IP address : {nsname_list}."
-msgstr "Følgende navnetjenere kunne ikke slåes opp til noen IP-adresser: {nsname_list}."
+msgstr ""
+"Følgende navnetjenere kunne ikke slåes opp til noen IP-adresser: "
+"{nsname_list}."
 
 #. NAMESERVER:CASE_QUERIES_RESULTS_DIFFER
 #, perl-brace-format
@@ -1900,16 +1962,17 @@ msgstr "Både IPv4 og IPv6 er deaktivert."
 
 #. SYSTEM:UNKNOWN_METHOD
 #, perl-brace-format
-msgid "Request to run unknown method {method} in module {module}."
-msgstr "Prøvde å kjøre en ukjent testmetode {method} i modulen {module}."
+msgid "Request to run unknown method {testcase} in module {module}."
+msgstr "Prøvde å kjøre en ukjent testmetode {testcase} i modulen {module}."
 
 #. SYSTEM:UNKNOWN_MODULE
 #, perl-brace-format
 msgid ""
-"Request to run {method} in unknown module {module}. Known modules: {known}."
+"Request to run {testcase} in unknown module {module}. Known modules: "
+"{module_list}."
 msgstr ""
-"Prøvde å kjøre en testmetode {method} i en ukjent modul {module}. Kjente "
-"moduler: {known}."
+"Prøvde å kjøre en testmetode {testcase} i en ukjent modul {module}. Kjente "
+"moduler: {module_list}."
 
 #. SYSTEM:SKIP_IPV4_DISABLED
 #, perl-brace-format

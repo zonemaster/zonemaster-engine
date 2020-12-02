@@ -463,48 +463,55 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     ALGORITHM_DEPRECATED => sub {
         __x    # DNSSEC:ALGORITHM_DEPRECATED
-          'The DNSKEY with tag {keytag} uses deprecated algorithm number {algorithm} ({description}).',
+          'The DNSKEY with tag {keytag} uses deprecated algorithm number '
+          . '{algo_num} ({algo_descr}).',
           @_;
     },
     ALGORITHM_NOT_RECOMMENDED => sub {
         __x    # DNSSEC:ALGORITHM_NOT_RECOMMENDED
-          'The DNSKEY with tag {keytag} uses an algorithm number {algorithm} ({description}) '
-          . 'which is not recommended to be used.',
+          'The DNSKEY with tag {keytag} uses an algorithm number '
+          . '{algo_num} ({algo_descr}) which is not recommended to be used.',
           @_;
     },
     ALGORITHM_NOT_ZONE_SIGN => sub {
         __x    # DNSSEC:ALGORITHM_NOT_ZONE_SIGN
-          'The DNSKEY with tag {keytag} uses algorithm number not meant for zone signing, '
-          . 'algorithm number {algorithm} ({description}).',
+          'The DNSKEY with tag {keytag} uses algorithm number not meant for '
+          . 'zone signing, algorithm number {algo_num} ({algo_descr}).',
           @_;
     },
     ALGORITHM_OK => sub {
         __x    # DNSSEC:ALGORITHM_OK
-          'The DNSKEY with tag {keytag} uses algorithm number {algorithm} ({description}), which is OK.',
+          'The DNSKEY with tag {keytag} uses algorithm number {algo_num} '
+          . '({algo_descr}), which is OK.',
           @_;
     },
     ALGORITHM_PRIVATE => sub {
         __x    # DNSSEC:ALGORITHM_PRIVATE
-          'The DNSKEY with tag {keytag} uses private algorithm number {algorithm} ({description}).', @_;
+          'The DNSKEY with tag {keytag} uses private algorithm number '
+          . '{algo_num} ({algo_descr}).',
+          @_;
     },
     ALGORITHM_RESERVED => sub {
         __x    # DNSSEC:ALGORITHM_RESERVED
-          'The DNSKEY with tag {keytag} uses reserved algorithm number {algorithm} ({description}).', @_;
+          'The DNSKEY with tag {keytag} uses reserved algorithm number '
+          . '{algo_num} ({algo_descr}).',
+          @_;
     },
     ALGORITHM_UNASSIGNED => sub {
         __x    # DNSSEC:ALGORITHM_UNASSIGNED
-          'The DNSKEY with tag {keytag} uses unassigned algorithm number {algorithm} ({description}).', @_;
+          'The DNSKEY with tag {keytag} uses unassigned algorithm number '
+          . '{algo_num} ({algo_descr}).',
+          @_;
     },
     ALGO_NOT_SIGNED_RRSET => sub {
         __x    # DNSSEC:ALGO_NOT_SIGNED_RRSET
-          'Nameserver {ns} responded with no RRSIG for RRset {rrtype} created by the '
-          . 'algorithm {algorithm}.',
+          'Nameserver {ns} responded with no RRSIG for RRset {rrtype} created '
+          . 'by the algorithm {algo_num}.',
           @_;
     },
     ALL_ALGO_SIGNED => sub {
         __x    # DNSSEC:ALL_ALGO_SIGNED
-          'All the tested RRset (SOA/DNSKEY/NS) are signed by each algorithm present in the DNSKEY RRset.',
-          @_;
+          'All the tested RRset (SOA/DNSKEY/NS) are signed by each algorithm present in the DNSKEY RRset.', @_;
     },
     BROKEN_DNSSEC => sub {
         __x    # DNSSEC:BROKEN_DNSSEC
@@ -559,11 +566,11 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     DNSKEY_SIGNATURE_NOT_OK => sub {
         __x    # DNSSEC:DNSKEY_SIGNATURE_NOT_OK
-          'Signature for DNSKEY with tag {signature} failed to verify with error \'{error}\'.', @_;
+          'Signature for DNSKEY with tag {keytag} failed to verify with error \'{error}\'.', @_;
     },
     DNSKEY_SIGNATURE_OK => sub {
         __x    # DNSSEC:DNSKEY_SIGNATURE_OK
-          'A signature for DNSKEY with tag {signature} was correctly signed.', @_;
+          'A signature for DNSKEY with tag {keytag} was correctly signed.', @_;
     },
     DNSKEY_SIGNED => sub {
         __x    # DNSSEC:DNSKEY_SIGNED
@@ -571,61 +578,65 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     DNSKEY_SMALLER_THAN_REC => sub {
         __x    # DNSSEC:DNSKEY_SMALLER_THAN_REC
-          'DNSKEY with tag {keytag} and using algorithm {algorithm_number} ({algorithm_description}) '
-          . 'has a size ({keysize}) smaller than the recommended one ({keysizerec}).',
+          'DNSKEY with tag {keytag} and using algorithm {algo_num} '
+          . '({algo_descr}) has a size ({keysize}) smaller than the '
+          . 'recommended one ({keysizerec}).',
           @_;
     },
     DNSKEY_TOO_SMALL_FOR_ALGO => sub {
         __x    # DNSSEC:DNSKEY_TOO_SMALL_FOR_ALGO
-          'DNSKEY with tag {keytag} and using algorithm {algorithm_number} ({algorithm_description}) '
-          . 'has a size ({keysize}) smaller than the minimum one ({keysizemin}).',
+          'DNSKEY with tag {keytag} and using algorithm {algo_num} '
+          . '({algo_descr}) has a size ({keysize}) smaller than the minimum '
+          . 'one ({keysizemin}).',
           @_;
     },
     DNSKEY_TOO_LARGE_FOR_ALGO => sub {
         __x    # DNSSEC:DNSKEY_TOO_LARGE_FOR_ALGO
-          'DNSKEY with tag {keytag} and using algorithm {algorithm_number} ({algorithm_description}) '
-          . 'has a size ({keysize}) larger than the maximum one ({keysizemax}).',
+          'DNSKEY with tag {keytag} and using algorithm {algo_num} '
+          . '({algo_descr}) has a size ({keysize}) larger than the maximum one '
+          . '({keysizemax}).',
           @_;
     },
     DS_ALGORITHM_NOT_DS => sub {
         __x    # DNSSEC:DS_ALGORITHM_NOT_DS
-          '{ns} returned a DS record created by algorithm {algorithm_number} '
-          . '({algorithm_mnemonic}) which is not meant for DS. The DS record is for the DNSKEY '
-          . 'record with keytag {keytag} in zone {zone}.',
+          '{ns} returned a DS record created by algorithm {algo_num} '
+          . '({algo_mnemo}) which is not meant for DS. The DS record is for '
+          . 'the DNSKEY record with keytag {keytag} in zone {zone}.',
           @_;
     },
     DS_ALGORITHM_DEPRECATED => sub {
         __x    # DNSSEC:DS_ALGORITHM_DEPRECATED
-          '{ns} returned a DS record created by algorithm {algorithm_number} '
-          . '({algorithm_mnemonic}), which is deprecated. The DS record is for the DNSKEY '
-          . 'record with keytag {keytag} in zone {zone}.',
+          '{ns} returned a DS record created by algorithm {algo_num} '
+          . '({algo_mnemo}), which is deprecated. The DS record is for the '
+          . 'DNSKEY record with keytag {keytag} in zone {zone}.',
           @_;
     },
     DS_ALGORITHM_MISSING => sub {
         __x    # DNSSEC:DS_ALGORITHM_MISSING
-          '{ns} returned no DS record created by algorithm {algorithm_number} '
-          . '({algorithm_mnemonic}) for zone {zone}, which is required.',
+          '{ns} returned no DS record created by algorithm {algo_num} '
+          . '({algo_mnemo}) for zone {zone}, which is required.',
           @_;
     },
     DS_ALGORITHM_OK => sub {
         __x    # DNSSEC:DS_ALGORITHM_OK
-          '{ns} returned a DS record created by algorithm {algorithm_number} '
-          . '({algorithm_mnemonic}), which is OK. The DS record is for the DNSKEY record with '
-          . 'keytag {keytag} in zone {zone}.',
+          '{ns} returned a DS record created by algorithm {algo_num} '
+          . '({algo_mnemo}), which is OK. The DS record is for the DNSKEY '
+          . 'record with keytag {keytag} in zone {zone}.',
           @_;
     },
     DS_ALGORITHM_RESERVED => sub {
         __x    # DNSSEC:DS_ALGORITHM_RESERVED
-          '{ns} returned a DS record created by with an algorithm not assigned (algorithm number '
-          . '{algorithm_number}), which is not OK. The DS record is for the DNSKEY record with keytag {keytag} '
-          . 'in zone {zone}.',
+          '{ns} returned a DS record created by with an algorithm not assigned '
+          . '(algorithm number {algo_num}), which is not OK. The DS record is '
+          . 'for the DNSKEY record with keytag {keytag} in zone {zone}.',
           @_;
     },
     DS_ALGO_SHA1_DEPRECATED => sub {
         __x    # DNSSEC:DS_ALGO_SHA1_DEPRECATED
-          'Nameserver {ns} returned a DS record created by algorithm {algorithm_number} '
-          . '({algorithm_mnemonic}) which is deprecated, while it is still widely used. The DS record is '
-          . 'for the DNSKEY record with keytag {keytag} in zone {zone}.',
+          'Nameserver {ns} returned a DS record created by algorithm '
+          . '{algo_num} ({algo_mnemo}) which is deprecated, while it is still '
+          . 'widely used. The DS record is for the DNSKEY record with keytag '
+          . '{keytag} in zone {zone}.',
           @_;
     },
     DS_BUT_NOT_DNSKEY => sub {
@@ -634,17 +645,17 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     DS_MATCHES => sub {
         __x    # DNSSEC:DS_MATCHES
-          'The DS records in the parent zone match DNSKEY records in the child zone.',  @_;
+          'The DS records in the parent zone match DNSKEY records in the child zone.', @_;
     },
     DURATION_LONG => sub {
         __x    # DNSSEC:DURATION_LONG
-          'RRSIG with keytag {tag} and covering type(s) {types} '
+          'RRSIG with keytag {keytag} and covering type(s) {types} '
           . 'has a duration of {duration} seconds, which is too long.',
           @_;
     },
     DURATION_OK => sub {
         __x    # DNSSEC:DURATION_OK
-          'RRSIG with keytag {tag} and covering type(s) {types} '
+          'RRSIG with keytag {keytag} and covering type(s) {types} '
           . 'has a duration of {duration} seconds, which is just fine.',
           @_;
     },
@@ -697,9 +708,9 @@ Readonly my %TAG_DESCRIPTIONS => (
           'Key with keytag {keytag} details : Size = {keysize}, Flags ({sep}, {rfc5011}).', @_;
     },
     KEY_SIZE_OK => sub {
-          __x    # DNSSEC:KEY_SIZE_OK
-            'All keys from the DNSKEY RRset have the correct size.', @_;
-      },
+        __x    # DNSSEC:KEY_SIZE_OK
+          'All keys from the DNSKEY RRset have the correct size.', @_;
+    },
     MANY_ITERATIONS => sub {
         __x    # DNSSEC:MANY_ITERATIONS
           'The number of NSEC3 iterations is {count}, which is on the high side.', @_;
@@ -720,8 +731,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     NO_KEYS_OR_NO_SIGS => sub {
         __x    # DNSSEC:NO_KEYS_OR_NO_SIGS
-          'Cannot test DNSKEY signatures, because we got {keys} DNSKEY records and {sigs} RRSIG records.',
-          @_;
+          'Cannot test DNSKEY signatures, because we got {keys} DNSKEY records and {sigs} RRSIG records.', @_;
     },
     NO_KEYS_OR_NO_SIGS_OR_NO_SOA => sub {
         __x    # DNSSEC:NO_KEYS_OR_NO_SIGS_OR_NO_SOA
@@ -786,7 +796,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     NSEC3_SIG_VERIFY_ERROR => sub {
         __x    # DNSSEC:NSEC3_SIG_VERIFY_ERROR
-          'Trying to verify NSEC3 RRset with RRSIG {sig} gave error \'{error}\'.', @_;
+          'Trying to verify NSEC3 RRset with RRSIG {keytag} gave error \'{error}\'.', @_;
     },
     NSEC_COVERS_NOT => sub {
         __x    # DNSSEC:NSEC_COVERS_NOT
@@ -798,23 +808,23 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     NSEC_SIG_VERIFY_ERROR => sub {
         __x    # DNSSEC:NSEC_SIG_VERIFY_ERROR
-          'Trying to verify NSEC RRset with RRSIG {sig} gave error \'{error}\'.', @_;
+          'Trying to verify NSEC RRset with RRSIG {keytag} gave error \'{error}\'.', @_;
     },
     REMAINING_LONG => sub {
         __x    # DNSSEC:REMAINING_LONG
-          'RRSIG with keytag {tag} and covering type(s) {types} '
+          'RRSIG with keytag {keytag} and covering type(s) {types} '
           . 'has a remaining validity of {duration} seconds, which is too long.',
           @_;
     },
     REMAINING_SHORT => sub {
         __x    # DNSSEC:REMAINING_SHORT
-          'RRSIG with keytag {tag} and covering type(s) {types} '
+          'RRSIG with keytag {keytag} and covering type(s) {types} '
           . 'has a remaining validity of {duration} seconds, which is too short.',
           @_;
     },
     RRSIG_EXPIRATION => sub {
         __x    # DNSSEC:RRSIG_EXPIRATION
-          'RRSIG with keytag {tag} and covering type(s) {types} expires at : {date}.', @_;
+          'RRSIG with keytag {keytag} and covering type(s) {types} expires at ' . ': {date}.', @_;
     },
     RRSET_NOT_SIGNED => sub {
         __x    # DNSSEC:RRSET_NOT_SIGNED
@@ -828,8 +838,8 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     RRSIG_EXPIRED => sub {
         __x    # DNSSEC:RRSIG_EXPIRED
-          'RRSIG with keytag {tag} and covering type(s) {types} has already expired (expiration '
-          . 'is: {expiration}).',
+          'RRSIG with keytag {keytag} and covering type(s) {types} has already '
+          . 'expired (expiration is: {expiration}).',
           @_;
     },
     RRSIG_NOT_MATCH_DNSKEY => sub {
@@ -842,11 +852,11 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     SOA_SIGNATURE_NOT_OK => sub {
         __x    # DNSSEC:SOA_SIGNATURE_NOT_OK
-          'Trying to verify SOA RRset with signature {signature} gave error \'{error}\'.', @_;
+          'Trying to verify SOA RRset with signature {keytag} gave error \'{error}\'.', @_;
     },
     SOA_SIGNATURE_OK => sub {
         __x    # DNSSEC:SOA_SIGNATURE_OK
-          'RRSIG {signature} correctly signs SOA RRset.', @_;
+          'RRSIG {keytag} correctly signs SOA RRset.', @_;
     },
     SOA_SIGNED => sub {
         __x    # DNSSEC:SOA_SIGNED
@@ -924,11 +934,11 @@ sub dnssec01 {
             else {
                 my $algorithm2 = 0;
                 my @dss = $ds_p->get_records( q{DS}, q{answer} );
-                foreach my $ds ( @dss ) {
-                    my $ds_args = { %$ns_args };
-                    $ds_args->{keytag} = $ds->keytag;
-                    $ds_args->{algorithm_number} = $ds->digtype;
-                    $ds_args->{algorithm_mnemonic} = $digest_algorithms{$ds->digtype};
+                foreach my $ds (@dss) {
+                    my $ds_args = {%$ns_args};
+                    $ds_args->{keytag}     = $ds->keytag;
+                    $ds_args->{algo_num}   = $ds->digtype;
+                    $ds_args->{algo_mnemo} = $digest_algorithms{ $ds->digtype };
                     if ( $ds->digtype == 0 ) {
                         push @results, info( DS_ALGORITHM_NOT_DS => $ds_args );
                     }
@@ -947,9 +957,9 @@ sub dnssec01 {
                     }
                 }
                 if ( not $algorithm2 ) {
-                    my $ds_args = { %$ns_args };
-                    $ds_args->{algorithm_number} = 2;
-                    $ds_args->{algorithm_mnemonic} = $digest_algorithms{2};
+                    my $ds_args = {%$ns_args};
+                    $ds_args->{algo_num}   = 2;
+                    $ds_args->{algo_mnemo} = $digest_algorithms{2};
                     push @results, info( DS_ALGORITHM_MISSING => $ds_args );
                 }
             }    
@@ -1226,9 +1236,9 @@ sub dnssec04 {
         push @results,
           info(
             RRSIG_EXPIRATION => {
-                date  => scalar( gmtime($sig->expiration) ),
-                tag   => $sig->keytag,
-                types => $sig->typecovered,
+                date   => scalar( gmtime($sig->expiration) ),
+                keytag => $sig->keytag,
+                types  => $sig->typecovered,
             }
           );
 
@@ -1238,7 +1248,7 @@ sub dnssec04 {
             $result_remaining = info(
                 RRSIG_EXPIRED => {
                     expiration => $sig->expiration,
-                    tag        => $sig->keytag,
+                    keytag     => $sig->keytag,
                     types      => $sig->typecovered,
                 }
             );
@@ -1247,7 +1257,7 @@ sub dnssec04 {
             $result_remaining = info(
                 REMAINING_SHORT => {
                     duration => $remaining,
-                    tag      => $sig->keytag,
+                    keytag   => $sig->keytag,
                     types    => $sig->typecovered,
                 }
             );
@@ -1256,7 +1266,7 @@ sub dnssec04 {
             $result_remaining = info(
                 REMAINING_LONG => {
                     duration => $remaining,
-                    tag      => $sig->keytag,
+                    keytag   => $sig->keytag,
                     types    => $sig->typecovered,
                 }
             );
@@ -1268,7 +1278,7 @@ sub dnssec04 {
             $result_duration = info(
                 DURATION_LONG => {
                     duration => $duration,
-                    tag      => $sig->keytag,
+                    keytag   => $sig->keytag,
                     types    => $sig->typecovered,
                 }
             );
@@ -1283,7 +1293,7 @@ sub dnssec04 {
               info(
                 DURATION_OK => {
                     duration => $duration,
-                    tag      => $sig->keytag,
+                    keytag   => $sig->keytag,
                     types    => $sig->typecovered,
                 }
               );
@@ -1511,7 +1521,7 @@ sub dnssec08 {
             push @results,
               info(
                 DNSKEY_SIGNATURE_OK => {
-                    signature => $sig->keytag,
+                    keytag => $sig->keytag,
                 }
               );
             $ok = $sig->keytag;
@@ -1523,9 +1533,9 @@ sub dnssec08 {
             push @results,
               info(
                 DNSKEY_SIGNATURE_NOT_OK => {
-                    signature => $sig->keytag,
-                    error     => $msg,
-                    time      => $time,
+                    keytag => $sig->keytag,
+                    error  => $msg,
+                    time   => $time,
                 }
               );
         }
@@ -1584,7 +1594,7 @@ sub dnssec09 {
             push @results,
               info(
                 SOA_SIGNATURE_OK => {
-                    signature => $sig->keytag,
+                    keytag => $sig->keytag,
                 }
               );
             $ok = $sig->keytag;
@@ -1596,8 +1606,8 @@ sub dnssec09 {
             push @results,
               info(
                 SOA_SIGNATURE_NOT_OK => {
-                    signature => $sig->keytag,
-                    error     => $msg,
+                    keytag => $sig->keytag,
+                    error  => $msg,
                 }
               );
         }
@@ -1760,7 +1770,7 @@ sub dnssec10 {
                             foreach my $sig ( @sigs ) {
                                 my $msg = q{};
                                 if ( not scalar @dnskeys ) {
-                                    push @results, info( NSEC3_SIG_VERIFY_ERROR => { error => 'DNSKEY missing', sig => $sig->keytag } );
+                                    push @results, info( NSEC3_SIG_VERIFY_ERROR => { error => 'DNSKEY missing', keytag => $sig->keytag } );
                                 }
                                 elsif (
                                     $sig->verify_time(
@@ -1778,8 +1788,8 @@ sub dnssec10 {
                                     push @results,
                                       info(
                                         NSEC3_SIG_VERIFY_ERROR => {
-                                            error => $msg,
-                                            sig   => $sig->keytag,
+                                            error  => $msg,
+                                            keytag => $sig->keytag,
                                         }
                                       );
                                 }
@@ -1964,7 +1974,7 @@ sub dnssec13 {
             foreach my $algorithm ( @algorithms ) {
                 if ( not scalar grep { $_->algorithm == $algorithm } @sigs ) {
                     $all_algo_signed = 0;
-                    $ns_args->{algorithm} = $algorithm;
+                    $ns_args->{algo_num} = $algorithm;
                     push @results, info( ALGO_NOT_SIGNED_RRSET => $ns_args );
                 }
             }
@@ -2061,13 +2071,13 @@ sub dnssec14 {
         next if exists $investigated_keys{$key_ref};
 
         my $algo_args = {
-            algorithm_number      => $algo,
-            algorithm_description => $algo_properties{$algo}{description},
-            keytag                => $key->keytag,
-            keysize               => $key->keysize,
-            keysizemin            => $rsa_key_size_details{$algo}{min_size},
-            keysizemax            => $rsa_key_size_details{$algo}{max_size},
-            keysizerec            => $rsa_key_size_details{$algo}{rec_size},
+            algo_num   => $algo,
+            algo_descr => $algo_properties{$algo}{description},
+            keytag     => $key->keytag,
+            keysize    => $key->keysize,
+            keysizemin => $rsa_key_size_details{$algo}{min_size},
+            keysizemax => $rsa_key_size_details{$algo}{max_size},
+            keysizerec => $rsa_key_size_details{$algo}{rec_size},
         };
 
         if ( $key->keysize < $rsa_key_size_details{$algo}{min_size} ) {
