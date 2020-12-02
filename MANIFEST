@@ -9,6 +9,7 @@ docs/Translation-translators.md
 inc/Module/Install.pm
 inc/Module/Install/Base.pm
 inc/Module/Install/Can.pm
+inc/Module/Install/External.pm
 inc/Module/Install/Fetch.pm
 inc/Module/Install/Makefile.pm
 inc/Module/Install/Metadata.pm
@@ -50,7 +51,6 @@ Makefile.PL
 MANIFEST			This list of files
 META.yml
 README.md
-share/config_example_logfilter.json
 share/iana-ipv4-special-registry.csv
 share/iana-ipv6-special-registry.csv
 share/modules.txt
