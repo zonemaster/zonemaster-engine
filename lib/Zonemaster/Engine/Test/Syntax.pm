@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare( "v1.0.10" );
+use version; our $VERSION = version->declare( "v1.0.11" );
 
 use Zonemaster::Engine;
 
@@ -527,7 +527,6 @@ sub syntax06 {
         }
 
         # Follow CNAMEs in the MX response
-        foreach my $t ($p_mx->get_records( q{CNAME} )) { print $t->string, "\n"; }
         my %cnames =
           map { $_->owner => $_->cname } $p_mx->get_records( q{CNAME}, q{answer} );
         $domain .= q{.};    # Add back final dot
