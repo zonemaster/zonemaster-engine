@@ -527,7 +527,6 @@ sub syntax06 {
         }
 
         # Follow CNAMEs in the MX response
-        foreach my $t ($p_mx->get_records( q{CNAME} )) { print $t->string, "\n"; }
         my %cnames =
           map { $_->owner => $_->cname } $p_mx->get_records( q{CNAME}, q{answer} );
         $domain .= q{.};    # Add back final dot
