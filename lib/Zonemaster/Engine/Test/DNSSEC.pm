@@ -515,7 +515,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     BROKEN_DNSSEC => sub {
         __x    # DNSSEC:BROKEN_DNSSEC
-          'All nameservers for zone {zone} responds with neither NSEC nor NSEC3 records when such '
+          'All nameservers for zone {domain} responds with neither NSEC nor NSEC3 records when such '
           . 'records are expected.',
           @_;
     },
@@ -601,34 +601,34 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # DNSSEC:DS_ALGORITHM_NOT_DS
           '{ns} returned a DS record created by algorithm {algo_num} '
           . '({algo_mnemo}) which is not meant for DS. The DS record is for '
-          . 'the DNSKEY record with keytag {keytag} in zone {zone}.',
+          . 'the DNSKEY record with keytag {keytag} in zone {domain}.',
           @_;
     },
     DS_ALGORITHM_DEPRECATED => sub {
         __x    # DNSSEC:DS_ALGORITHM_DEPRECATED
           '{ns} returned a DS record created by algorithm {algo_num} '
           . '({algo_mnemo}), which is deprecated. The DS record is for the '
-          . 'DNSKEY record with keytag {keytag} in zone {zone}.',
+          . 'DNSKEY record with keytag {keytag} in zone {domain}.',
           @_;
     },
     DS_ALGORITHM_MISSING => sub {
         __x    # DNSSEC:DS_ALGORITHM_MISSING
           '{ns} returned no DS record created by algorithm {algo_num} '
-          . '({algo_mnemo}) for zone {zone}, which is required.',
+          . '({algo_mnemo}) for zone {domain}, which is required.',
           @_;
     },
     DS_ALGORITHM_OK => sub {
         __x    # DNSSEC:DS_ALGORITHM_OK
           '{ns} returned a DS record created by algorithm {algo_num} '
           . '({algo_mnemo}), which is OK. The DS record is for the DNSKEY '
-          . 'record with keytag {keytag} in zone {zone}.',
+          . 'record with keytag {keytag} in zone {domain}.',
           @_;
     },
     DS_ALGORITHM_RESERVED => sub {
         __x    # DNSSEC:DS_ALGORITHM_RESERVED
           '{ns} returned a DS record created by with an algorithm not assigned '
           . '(algorithm number {algo_num}), which is not OK. The DS record is '
-          . 'for the DNSKEY record with keytag {keytag} in zone {zone}.',
+          . 'for the DNSKEY record with keytag {keytag} in zone {domain}.',
           @_;
     },
     DS_ALGO_SHA1_DEPRECATED => sub {
@@ -636,7 +636,7 @@ Readonly my %TAG_DESCRIPTIONS => (
           'Nameserver {ns} returned a DS record created by algorithm '
           . '{algo_num} ({algo_mnemo}) which is deprecated, while it is still '
           . 'widely used. The DS record is for the DNSKEY record with keytag '
-          . '{keytag} in zone {zone}.',
+          . '{keytag} in zone {domain}.',
           @_;
     },
     DS_BUT_NOT_DNSKEY => sub {
@@ -677,19 +677,15 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     INCONSISTENT_DNSSEC => sub {
         __x    # DNSSEC:INCONSISTENT_DNSSEC
-          'Some, but not all, nameservers for zone {zone} respond with neither NSEC nor NSEC3 records when '
+          'Some, but not all, nameservers for zone {domain} respond with neither NSEC nor NSEC3 records when '
           . 'such records are expected.',
           @_;
     },
     INCONSISTENT_NSEC_NSEC3 => sub {
         __x    # DNSSEC:INCONSISTENT_NSEC_NSEC3
-          'Some nameservers for zone {zone} respond with NSEC records and others respond with NSEC3 records. '
+          'Some nameservers for zone {domain} respond with NSEC records and others respond with NSEC3 records. '
           . 'Consistency is expected.',
           @_;
-    },
-    INVALID_NAME_RCODE => sub {
-        __x    # DNSSEC:INVALID_NAME_RCODE
-          'When asked for the name {name}, which must not exist, the response had RCODE {rcode}.', @_;
     },
     IPV4_DISABLED => sub {
         __x    # DNSSEC:IPV4_DISABLED
@@ -717,7 +713,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     MIXED_NSEC_NSEC3 => sub {
         __x    # DNSSEC:MIXED_NSEC_NSEC3
-          'Nameserver {ns} for zone {zone} responds with both NSEC and NSEC3 '
+          'Nameserver {ns} for zone {domain} responds with both NSEC and NSEC3 '
           . 'records when only one record type is expected.',
           @_;
     },
@@ -758,8 +754,8 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     NO_NSEC_NSEC3 => sub {
         __x    # DNSSEC:NO_NSEC_NSEC3
-          'Nameserver {ns} for zone {zone} responds with neither NSEC nor NSEC3 record when '
-          . 'when such records are expected.',
+          'Nameserver {ns} for zone {domain} responds with neither NSEC nor '
+          . 'NSEC3 record when when such records are expected.',
           @_;
     },
     NO_RESPONSE_DNSKEY => sub {
@@ -768,7 +764,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     NO_RESPONSE_DS => sub {
         __x    # DNSSEC:NO_RESPONSE_DS
-          '{ns} returned no DS records for {zone}.', @_;
+          '{ns} returned no DS records for {domain}.', @_;
     },
     NO_RESPONSE_RRSET => sub {
         __x    # DNSSEC:NO_RESPONSE_RRSET
@@ -788,7 +784,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     NSEC3_COVERS_NOT => sub {
         __x    # DNSSEC:NSEC3_COVERS_NOT
-          'NSEC3 record does not cover {name}.', @_;
+          'NSEC3 record does not cover {domain}.', @_;
     },
     NSEC3_NOT_SIGNED => sub {
         __x    # DNSSEC:NSEC3_NOT_SIGNED
@@ -800,7 +796,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     NSEC_COVERS_NOT => sub {
         __x    # DNSSEC:NSEC_COVERS_NOT
-          'NSEC does not cover {name}.', @_;
+          'NSEC does not cover {domain}.', @_;
     },
     NSEC_NOT_SIGNED => sub {
         __x    # DNSSEC:NSEC_NOT_SIGNED
@@ -864,7 +860,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     TEST_ABORTED => sub {
         __x    # DNSSEC:TEST_ABORTED
-          'Nameserver {ns} for zone {zone} responds with RCODE "NOERROR" on a query that '
+          'Nameserver {ns} for zone {domain} responds with RCODE "NOERROR" on a query that '
           . 'is expected to give response with RCODE "NXDOMAIN". Test for NSEC and NSEC3 is aborted '
           . 'for this nameserver.',
           @_;
@@ -883,7 +879,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     UNEXPECTED_RESPONSE_DS => sub {
         __x    # DNSSEC:UNEXPECTED_RESPONSE_DS
-          'Nameserver {ns} responded with an unexpected rcode ({rcode}) on a DS query for zone {zone}.', @_;
+          'Nameserver {ns} responded with an unexpected rcode ({rcode}) on a DS query for zone {domain}.', @_;
     },
 );
 
@@ -905,62 +901,128 @@ sub dnssec01 {
 
     if ( my $parent = $zone->parent ) {
         foreach my $ns ( @{ $parent->ns } ) {
-            my $ns_args = {
-                ns     => $ns->string,
-                zone   => q{} . $zone->name,
-                rrtype => q{DS},
-            };
 
             if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
-                push @results, info( IPV6_DISABLED => $ns_args );
+                push @results,
+                  info(
+                    IPV6_DISABLED => {
+                        ns     => $ns->string,
+                        rrtype => q{DS},
+                    }
+                  );
                 next;
             }
 
             if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
-                push @results, info( IPV4_DISABLED => $ns_args );
+                push @results,
+                  info(
+                    IPV4_DISABLED => {
+                        ns     => $ns->string,
+                        rrtype => q{DS},
+                    }
+                  );
                 next;
             }
 
             my $ds_p = $ns->query( $zone->name, q{DS}, { usevc => 0, dnssec => 1 } );
             if ( not $ds_p ) {
-                push @results, info( NO_RESPONSE_DS => $ns_args );
+                push @results,
+                  info(
+                    NO_RESPONSE_DS => {
+                        ns     => $ns->string,
+                        domain => q{} . $zone->name,
+                    }
+                  );
                 next;
             }
             elsif ($ds_p->rcode ne q{NOERROR} ) {
-                $ns_args->{rcode} = $ds_p->rcode;
-                push @results, info( UNEXPECTED_RESPONSE_DS => $ns_args );
+                push @results,
+                  info(
+                    UNEXPECTED_RESPONSE_DS => {
+                        ns     => $ns->string,
+                        domain => q{} . $zone->name,
+                        rcode  => $ds_p->rcode,
+                    }
+                  );
                 next;
             }
             else {
                 my $algorithm2 = 0;
                 my @dss = $ds_p->get_records( q{DS}, q{answer} );
                 foreach my $ds (@dss) {
-                    my $ds_args = {%$ns_args};
-                    $ds_args->{keytag}     = $ds->keytag;
-                    $ds_args->{algo_num}   = $ds->digtype;
-                    $ds_args->{algo_mnemo} = $digest_algorithms{ $ds->digtype };
+                    my $mnemonic = $digest_algorithms{ $ds->digtype };
                     if ( $ds->digtype == 0 ) {
-                        push @results, info( DS_ALGORITHM_NOT_DS => $ds_args );
+                        push @results,
+                          info(
+                            DS_ALGORITHM_NOT_DS => {
+                                ns         => $ns->string,
+                                domain     => q{} . $zone->name,
+                                keytag     => $ds->keytag,
+                                algo_num   => $ds->digtype,
+                                algo_mnemo => $mnemonic,
+                            }
+                          );
                     }
                     elsif ( $ds->digtype == 1 ) {
-                        push @results, info( DS_ALGO_SHA1_DEPRECATED => $ds_args );
+                        push @results,
+                          info(
+                            DS_ALGO_SHA1_DEPRECATED => {
+                                ns         => $ns->string,
+                                domain     => q{} . $zone->name,
+                                keytag     => $ds->keytag,
+                                algo_num   => $ds->digtype,
+                                algo_mnemo => $mnemonic,
+                            }
+                          );
                     }
                     elsif ( $ds->digtype == 3 ) {
-                        push @results, info( DS_ALGORITHM_DEPRECATED => $ds_args );
+                        push @results,
+                          info(
+                            DS_ALGORITHM_DEPRECATED => {
+                                ns         => $ns->string,
+                                domain     => q{} . $zone->name,
+                                keytag     => $ds->keytag,
+                                algo_num   => $ds->digtype,
+                                algo_mnemo => $mnemonic,
+                            }
+                          );
                     }
                     elsif ( $ds->digtype >= 5 and $ds->digtype <= 255 ) {
-                        push @results, info( DS_ALGORITHM_RESERVED => $ds_args );
+                        push @results,
+                          info(
+                            DS_ALGORITHM_RESERVED => {
+                                ns         => $ns->string,
+                                domain     => q{} . $zone->name,
+                                keytag     => $ds->keytag,
+                                algo_num   => $ds->digtype,
+                                algo_mnemo => $mnemonic,
+                            }
+                          );
                     }
                     else {
                         $algorithm2++ if $ds->digtype == 2;
-                        push @results, info( DS_ALGORITHM_OK => $ds_args );
+                        push @results,
+                          info(
+                            DS_ALGORITHM_OK => {
+                                ns         => $ns->string,
+                                domain     => q{} . $zone->name,
+                                keytag     => $ds->keytag,
+                                algo_num   => $ds->digtype,
+                                algo_mnemo => $mnemonic,
+                            }
+                          );
                     }
                 }
                 if ( not $algorithm2 ) {
-                    my $ds_args = {%$ns_args};
-                    $ds_args->{algo_num}   = 2;
-                    $ds_args->{algo_mnemo} = $digest_algorithms{2};
-                    push @results, info( DS_ALGORITHM_MISSING => $ds_args );
+                    push @results,
+                      info(
+                        DS_ALGORITHM_MISSING => {
+                            ns         => $ns->string,
+                            domain     => q{} . $zone->name,
+                            algo_num   => 2,
+                            algo_mnemo => $digest_algorithms{2},
+                        }
+                      );
                 }
             }    
         }
@@ -999,8 +1061,14 @@ sub dnssec02 {
                 next;
             }
             elsif ($ds_p->rcode ne q{NOERROR} ) {
-                $ns_args->{rcode} = $ds_p->rcode;
-                push @results, info( UNEXPECTED_RESPONSE_DS => $ns_args );
+                push @results,
+                  info(
+                    UNEXPECTED_RESPONSE_DS => {
+                        ns     => $ns->string,
+                        domain => q{} . $zone->name,
+                        rcode  => $ds_p->rcode,
+                    }
+                  );
                 next;
             }
             else {
@@ -1672,8 +1740,8 @@ sub dnssec10 {
             push @results,
               info(
                 TEST_ABORTED => {
-                    ns   => $ns->string,
-                    zone => $zone->name->string,
+                    ns     => $ns->string,
+                    domain => $zone->name->string,
                 }
               );
         }
@@ -1688,18 +1756,22 @@ sub dnssec10 {
             my @nsec  = $a_p->get_records( q{NSEC}, q{authority} );
             my @nsec3 = $a_p->get_records( q{NSEC3}, q{authority} );
             if ( scalar @nsec and scalar @nsec3 ) {
-                my $args = {
-                    ns   => $ns->string,
-                    zone => $zone->name->string,
-                };
-                push @results, info( MIXED_NSEC_NSEC3 => $args );
+                push @results,
+                  info(
+                    MIXED_NSEC_NSEC3 => {
+                        ns     => $ns->string,
+                        domain => $zone->name->string,
+                    }
+                  );
             }
             elsif ( not scalar @nsec and not scalar @nsec3 ) {
-                my $args = {
-                    ns   => $ns->string,
-                    zone => $zone->name->string,
-                };
-                push @results, info( NO_NSEC_NSEC3 => $args );
+                push @results,
+                  info(
+                    NO_NSEC_NSEC3 => {
+                        ns     => $ns->string,
+                        domain => $zone->name->string,
+                    }
+                  );
                 $no_dnssec_zone{$ns->address->short}++;
             }
             elsif ( scalar @nsec and not scalar @nsec3 ) {
@@ -1719,7 +1791,7 @@ sub dnssec10 {
                             foreach my $sig ( @sigs ) {
                                 my $msg = q{};
                                 if ( not scalar @dnskeys ) {
-                                    push @results, info( NSEC_SIG_VERIFY_ERROR => { error => q{DNSKEY missing}, sig => $sig->keytag } );
+                                    push @results, info( NSEC_SIG_VERIFY_ERROR => { error => q{DNSKEY missing}, keytag => $sig->keytag } );
                                 }
                                 elsif (
                                     $sig->verify_time(
@@ -1737,8 +1809,8 @@ sub dnssec10 {
                                     push @results,
                                       info(
                                         NSEC_SIG_VERIFY_ERROR => {
-                                            error => $msg,
-                                            sig   => $sig->keytag,
+                                            error  => $msg,
+                                            keytag => $sig->keytag,
                                         }
                                       );
                                 }
@@ -1750,7 +1822,7 @@ sub dnssec10 {
                     }
                 }
                 if ( not $covered ) {
-                    push @results, info( NSEC_COVERS_NOT => {} );
+                    push @results, info( NSEC_COVERS_NOT => { domain => $non_existent_domain_name } );
                 }
             }
             elsif ( not scalar @nsec and scalar @nsec3 ) {
@@ -1801,20 +1873,20 @@ sub dnssec10 {
                     }
                 }
                 if ( not $covered ) {
-                    push @results, info( NSEC3_COVERS_NOT => {} );
+                    push @results, info( NSEC3_COVERS_NOT => { domain => $non_existent_domain_name } );
                 }
             }
         }
     }
 
     if ( scalar keys %no_dnssec_zone and ( scalar keys %nsec_zone or scalar keys %nsec3_zone ) ) {
-        push @results, info( INCONSISTENT_DNSSEC => { zone => $zone->name->string } );
+        push @results, info( INCONSISTENT_DNSSEC => { domain => $zone->name->string } );
     }
     elsif ( scalar keys %no_dnssec_zone and not scalar keys %nsec_zone and not scalar keys %nsec3_zone ) {
-        push @results, info( BROKEN_DNSSEC => { zone => $zone->name->string } );
+        push @results, info( BROKEN_DNSSEC => { domain => $zone->name->string } );
     }
     elsif ( scalar keys %nsec_zone and scalar keys %nsec3_zone ) {
-        push @results, info( INCONSISTENT_NSEC_NSEC3 => { zone => $zone->name->string } );
+        push @results, info( INCONSISTENT_NSEC_NSEC3 => { domain => $zone->name->string } );
     }
     elsif ( scalar keys %nsec_zone and not grep { $_->tag eq q{MIXED_NSEC_NSEC3} } @results ) {
         push @results, info( HAS_NSEC => {} );

@@ -7,6 +7,7 @@
 | algo_descr  | Text                 | The human readable description of a [DNSSEC algorithm].     |
 | algo_mnemo  | Text                 | The mnemonic of a [DNSSEC algorithm].                       |
 | algo_num    | Non-negative integer | The numeric value for a [DNSSEC algorithm].                 |
+| domain      | Domain name          | A domain name. If nsname is also applicable, use that one instead. |
 | keytag      | Non-negative integer | A keytag for a DNSKEY record or a keytag used in a DS or RRSIG record. |
 | module      | A Zonemaster test module, or `all` | The name of a Zonemaster test module.         |
 | module_list | List of Zonemaster test modules | A list of Zonemaster test modules, separated by ":". |
@@ -29,7 +30,6 @@
 || DNSKEY key length| The key length for a DNSKEY. The interpretation of this value various quite a bit with the algorithm. Be careful when using it for algorithms that aren't RSA-based.|
 || DNSSEC delegation verification failure reason| A somewhat human-readable reason why the delegation step between the tested zone and its parent is not secure.|
 || DS digest type| The digest type used in a DS record.|
-| dname (?) | Domain name| A domain name.|
 | dlabel (?) | Domain name label| A single label from a domain name.|
 | dlength (?) | Domain name label length| The length of a domain name label.|
 || Duration in seconds| An integer number of seconds.|
@@ -56,8 +56,6 @@
 || Number of DNSKEY RRs in packet| The number of DNSKEY records found in a packet.|
 || Number of RRSIG RRs in packet| The number of RRSIG records found in a packet.|
 || Number of SOA RRs in packet| The number of SOA records found in a packet.|
-|| PTR query name| The domain name generated from an IP address for a reverse name lookup.|
-| pname (?) | Parent zone name| The name of a tested zone's parent zone.|
 || Protocol (UDP or TCP)| The protocol used for a query.|
 | rcode (?) | RCODE| An RCODE from a DNS packet.|
 || RFC reference| A reference to an RFC.|
@@ -79,7 +77,6 @@
 || Smallest SOA serial number seen| The smallest value seen in a SOA serial field in the tested zone.|
 || TLD| The name of a top-level domain.|
 || `time_t` value when RRSIG validation was attempted| The time when an RRSIG validation was attempted, in Unix `time_t` format.|
-| zname (?) | Zone name| The domain name of the zone being tested.|
 
 Message names maked with a question mark should not be considered stable.
 

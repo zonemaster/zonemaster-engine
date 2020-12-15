@@ -256,10 +256,6 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # CONSISTENCY:TEST_CASE_START
           'TEST_CASE_START {testcase}.', @_;
     },
-    TOTAL_ADDRESS_MISMATCH => sub {
-        __x    # CONSISTENCY:TOTAL_ADDRESS_MISMATCH
-          'No common nameserver IP addresses between child ({child}) and parent ({glue}).', @_;
-    },
 );
 
 sub tag_descriptions {

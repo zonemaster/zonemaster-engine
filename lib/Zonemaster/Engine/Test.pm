@@ -104,7 +104,7 @@ sub run_all_for {
         } ## end foreach my $mod ( __PACKAGE__...)
     } ## end if ( Zonemaster::Engine::Test::Basic...)
     else {
-        push @results, info( CANNOT_CONTINUE => { zone => $zone->name->string } );
+        push @results, info( CANNOT_CONTINUE => { domain => $zone->name->string } );
     }
 
     return @results;
@@ -146,7 +146,7 @@ sub run_module {
         }
     }
     else {
-        info( CANNOT_CONTINUE => { zone => $zone->name->string } );
+        info( CANNOT_CONTINUE => { domain => $zone->name->string } );
     }
 
     return;
@@ -200,7 +200,7 @@ sub run_one {
                 $zname = $arg->name;
             }
         }
-        info( CANNOT_CONTINUE => { zone => $zname } );
+        info( CANNOT_CONTINUE => { domain => $zname } );
     }
 
     return;
