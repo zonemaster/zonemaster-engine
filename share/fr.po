@@ -1382,7 +1382,7 @@ msgstr ""
 
 #. DELEGATION:NS_IS_CNAME
 #, perl-brace-format
-msgid "Nameserver {nsname} RR point to CNAME."
+msgid "Nameserver {nsname} RR points to CNAME."
 msgstr ""
 "L'enregistrement pour le serveur de noms {nsname} pointe sur un alias "
 "(CNAME)."
