@@ -1232,7 +1232,7 @@ msgstr ""
 
 #. DELEGATION:NS_IS_CNAME
 #, perl-brace-format
-msgid "Nameserver {nsname} RR point to CNAME."
+msgid "Nameserver {nsname} RR points to CNAME."
 msgstr "RR for navneserveren {nsname} peger på et CNAME."
 
 #. DELEGATION:NO_NS_CNAME
