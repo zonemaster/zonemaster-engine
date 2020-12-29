@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare( "v1.2.17" );
+use version; our $VERSION = version->declare( "v1.2.18" );
 
 use File::ShareDir qw[dist_file];
 use JSON::PP qw( encode_json decode_json );
@@ -127,6 +127,25 @@ my %profile_properties_details = (
     },
     q{test_cases} => {
         type    => q{ArrayRef}
+    },
+    q{test_cases_vars} => {
+        type    => q{HashRef},
+        test    => sub {
+            foreach my $test_name ( keys %{$_[0]} ) {
+                if ( $test_name ne q{dnssec04} ) {
+                    die "Property test_cases_vars support only one value : dnssec04";
+                }
+                foreach my $var_name ( keys %{ ${$_[0]}{$test_name} } ) {
+                    if ( uc($var_name) ne q{DURATION_LONG_LIMIT} and uc($var_name) ne q{REMAINING_LONG_LIMIT} and uc($var_name) ne q{REMAINING_SHORT_LIMIT} ) {
+                        die "Property test_cases_vars.dnssec04 keys have 3 possible values : DURATION_LONG_LIMIT, REMAINING_LONG_LIMIT or REMAINING_SHORT_LIMIT (case insensitive)";
+                    }
+                    if ( ${$_[0]}{$test_name}{$var_name} !~ /^[1-9][0-9]*$/ ) {
+                        die "Property test_cases_vars.dnssec04.$var_name is not a positive integer";
+                    }
+                    ${$_[0]}{$test_name}{uc($var_name)} = delete ${$_[0]}{$test_name}{$var_name};
+                }
+            }
+        }
     }
 );
 
@@ -750,6 +769,41 @@ The test cases C<basic00>, C<basic01> and C<basic02> are always considered no
 matter if they're excluded from this property.
 This is because part of their function is to verify that the given domain name
 can be tested at all.
+
+=head2 test_cases_vars
+
+A complex data structure.
+
+Specify some variable values used in test cases.
+
+At the top level of this data structure are two levels of nested hashrefs.
+The keys of the top level hash are names of test cases.
+The keys of the second level hashes are variable names that should be used in 
+test case in place of test case encoded values.
+The values of the second level hashes are values of those variables.
+
+The following test cases variables are implemented :
+
+=head3 dnssec04.DURATION_LONG_LIMIT
+
+Positive integer value.
+
+Returns DURATION_LONG message tag in case signature lifetime is less
+than DURATION_LONG_LIMIT.
+
+=head3 dnssec04.REMAINING_LONG_LIMIT
+
+Positive integer value.
+
+Returns REMAINING_LONG message tag in case signature remaining time is
+more than REMAINING_LONG_LIMIT (in seconds).
+
+=head3 dnssec04.REMAINING_SHORT_LIMIT
+
+Positive integer value.
+
+Returns REMAINING_SHORT message tag in case signature remaining time is
+less than DURATION_LONG_LIMIT (in seconds).
 
 =head1 JSON REPRESENTATION
 
