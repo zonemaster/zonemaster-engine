@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare( "v1.1.26" );
+use version; our $VERSION = version->declare( "v1.1.27" );
 
 ###
 ### This test module implements DNSSEC tests.
@@ -1316,14 +1316,14 @@ sub dnssec04 {
         my $remaining_long_limit  = $DURATION_180_DAYS_IN_SECONDS;
         my $duration_long_limit   = $DURATION_180_DAYS_IN_SECONDS;
         if ( Zonemaster::Engine::Profile->effective->get( q{test_cases_vars} ) and Zonemaster::Engine::Profile->effective->get( q{test_cases_vars} )->{ q{dnssec04} } ) {
-            if ( defined Zonemaster::Engine::Profile->effective->get( q{test_cases_vars} )->{ q{dnssec04} }{ q{REMAINING_SHORT_LIMIT} } ) {
-                $remaining_short_limit = Zonemaster::Engine::Profile->effective->get( q{test_cases_vars} )->{ q{dnssec04} }{ q{REMAINING_SHORT_LIMIT} };
+            if ( defined Zonemaster::Engine::Profile->effective->get( q{test_cases_vars} )->{ q{dnssec04} }{ q{REMAINING_SHORT.posint} } ) {
+                $remaining_short_limit = Zonemaster::Engine::Profile->effective->get( q{test_cases_vars} )->{ q{dnssec04} }{ q{REMAINING_SHORT.posint} };
             }
-            if ( defined Zonemaster::Engine::Profile->effective->get( q{test_cases_vars} )->{ q{dnssec04} }{ q{REMAINING_LONG_LIMIT} } ) {
-                $remaining_long_limit = Zonemaster::Engine::Profile->effective->get( q{test_cases_vars} )->{ q{dnssec04} }{ q{REMAINING_LONG_LIMIT} };
+            if ( defined Zonemaster::Engine::Profile->effective->get( q{test_cases_vars} )->{ q{dnssec04} }{ q{REMAINING_LONG.posint} } ) {
+                $remaining_long_limit = Zonemaster::Engine::Profile->effective->get( q{test_cases_vars} )->{ q{dnssec04} }{ q{REMAINING_LONG.posint} };
             }
-            if ( defined Zonemaster::Engine::Profile->effective->get( q{test_cases_vars} )->{ q{dnssec04} }{ q{DURATION_LONG_LIMIT} } ) {
-                $duration_long_limit = Zonemaster::Engine::Profile->effective->get( q{test_cases_vars} )->{ q{dnssec04} }{ q{DURATION_LONG_LIMIT} };
+            if ( defined Zonemaster::Engine::Profile->effective->get( q{test_cases_vars} )->{ q{dnssec04} }{ q{DURATION_LONG.posint} } ) {
+                $duration_long_limit = Zonemaster::Engine::Profile->effective->get( q{test_cases_vars} )->{ q{dnssec04} }{ q{DURATION_LONG.posint} };
             }
         }
         if ( $remaining < 0 ) {    # already expired

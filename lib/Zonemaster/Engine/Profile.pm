@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare( "v1.2.18" );
+use version; our $VERSION = version->declare( "v1.2.19" );
 
 use File::ShareDir qw[dist_file];
 use JSON::PP qw( encode_json decode_json );
@@ -15,6 +15,7 @@ use Clone qw(clone);
 use Data::Dumper;
 
 use Zonemaster::Engine;
+use Zonemaster::Engine::Test;
 use Zonemaster::Engine::Net::IP;
 use Zonemaster::Engine::Constants qw( $RESOLVER_SOURCE_OS_DEFAULT );
 
@@ -131,18 +132,35 @@ my %profile_properties_details = (
     q{test_cases_vars} => {
         type    => q{HashRef},
         test    => sub {
-            foreach my $test_name ( keys %{$_[0]} ) {
-                if ( $test_name ne q{dnssec04} ) {
-                    die "Property test_cases_vars support only one value : dnssec04";
+            my %all_test_cases;
+            foreach my $module_short ( 'Basic', Zonemaster::Engine::Test->modules ) {
+                my $module_long = "Zonemaster::Engine::Test::$module_short";
+                my $ref  = $module_long->metadata;
+                foreach my $method ( sort { $a cmp $b } keys %{$ref} ) {
+                    $all_test_cases{$method}{tags} = { map { $_ => 1 } grep { $_ ne q{TEST_CASE_START} and $_ ne q{TEST_CASE_END} } @{ ${$ref}{$method} } };
                 }
-                foreach my $var_name ( keys %{ ${$_[0]}{$test_name} } ) {
-                    if ( uc($var_name) ne q{DURATION_LONG_LIMIT} and uc($var_name) ne q{REMAINING_LONG_LIMIT} and uc($var_name) ne q{REMAINING_SHORT_LIMIT} ) {
-                        die "Property test_cases_vars.dnssec04 keys have 3 possible values : DURATION_LONG_LIMIT, REMAINING_LONG_LIMIT or REMAINING_SHORT_LIMIT (case insensitive)";
+            }
+            foreach my $test_name ( keys %{$_[0]} ) {
+                if ( not exists $all_test_cases{lc($test_name)} ) {
+                    die "Property test_cases_vars supports only existing test cases";
+                }
+                foreach my $var_name_and_type ( keys %{ ${$_[0]}{$test_name} } ) {
+                    my ($var_name, $var_type) = ($var_name_and_type =~ /^([^\.]+)\.([^\.]+)$/);
+                    if ( not $var_name or not $var_type ) {
+                        die "Property test_cases_vars.$test_name.$var_name_and_type should have the following format test_cases_vars.$test_name.[Variable name].[Variable type] (ex : test_cases_vars.$test_name.MAX_VALUE.posint)";
                     }
-                    if ( ${$_[0]}{$test_name}{$var_name} !~ /^[1-9][0-9]*$/ ) {
-                        die "Property test_cases_vars.dnssec04.$var_name is not a positive integer";
+                    if ( not exists $all_test_cases{lc($test_name)}{tags}{uc($var_name)} ) {
+                        die "Property test_cases_vars.$test_name keys have these possible values : ", join q{,}, keys %{ $all_test_cases{lc($test_name)}{tags} };
                     }
-                    ${$_[0]}{$test_name}{uc($var_name)} = delete ${$_[0]}{$test_name}{$var_name};
+                    if ( lc($var_type) eq q{posint} ) {
+                        if ( ${$_[0]}{$test_name}{$var_name_and_type} !~ /^[1-9][0-9]*$/ ) {
+                            die "Property test_cases_vars.$test_name.$var_name_and_type is not a positive integer";
+                        }
+                    }
+                    else {
+                        die "Property test_cases_vars.$test_name.$var_name_and_type is of unknown type";
+                    }
+                    ${$_[0]}{lc($test_name)}{uc($var_name).q{.}.lc($var_type)} = delete ${$_[0]}{$test_name}{$var_name_and_type};
                 }
             }
         }
@@ -778,32 +796,32 @@ Specify some variable values used in test cases.
 
 At the top level of this data structure are two levels of nested hashrefs.
 The keys of the top level hash are names of test cases.
-The keys of the second level hashes are variable names that should be used in 
-test case in place of test case encoded values.
+The keys of the second level hashes are variable names (and their associated 
+type) that should be used in test case in place of test case encoded values.
 The values of the second level hashes are values of those variables.
 
 The following test cases variables are implemented :
 
-=head3 dnssec04.DURATION_LONG_LIMIT
+=head3 dnssec04.DURATION_LONG.postint
 
 Positive integer value.
 
 Returns DURATION_LONG message tag in case signature lifetime is less
-than DURATION_LONG_LIMIT.
+than DURATION_LONG.posint.
 
-=head3 dnssec04.REMAINING_LONG_LIMIT
+=head3 dnssec04.REMAINING_LONG.posint
 
 Positive integer value.
 
 Returns REMAINING_LONG message tag in case signature remaining time is
-more than REMAINING_LONG_LIMIT (in seconds).
+more than REMAINING_LONG.posint (in seconds).
 
-=head3 dnssec04.REMAINING_SHORT_LIMIT
+=head3 dnssec04.REMAINING_SHORT.posint
 
 Positive integer value.
 
 Returns REMAINING_SHORT message tag in case signature remaining time is
-less than DURATION_LONG_LIMIT (in seconds).
+less than DURATION_LONG.posint (in seconds).
 
 =head1 JSON REPRESENTATION
 
