@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare( "v1.2.19" );
+use version; our $VERSION = version->declare( "v1.2.20" );
 
 use File::ShareDir qw[dist_file];
 use JSON::PP qw( encode_json decode_json );
@@ -15,7 +15,6 @@ use Clone qw(clone);
 use Data::Dumper;
 
 use Zonemaster::Engine;
-use Zonemaster::Engine::Test;
 use Zonemaster::Engine::Net::IP;
 use Zonemaster::Engine::Constants qw( $RESOLVER_SOURCE_OS_DEFAULT );
 
@@ -129,41 +128,17 @@ my %profile_properties_details = (
     q{test_cases} => {
         type    => q{ArrayRef}
     },
-    q{test_cases_vars} => {
-        type    => q{HashRef},
-        test    => sub {
-            my %all_test_cases;
-            foreach my $module_short ( 'Basic', Zonemaster::Engine::Test->modules ) {
-                my $module_long = "Zonemaster::Engine::Test::$module_short";
-                my $ref  = $module_long->metadata;
-                foreach my $method ( sort { $a cmp $b } keys %{$ref} ) {
-                    $all_test_cases{$method}{tags} = { map { $_ => 1 } grep { $_ ne q{TEST_CASE_START} and $_ ne q{TEST_CASE_END} } @{ ${$ref}{$method} } };
-                }
-            }
-            foreach my $test_name ( keys %{$_[0]} ) {
-                if ( not exists $all_test_cases{lc($test_name)} ) {
-                    die "Property test_cases_vars supports only existing test cases";
-                }
-                foreach my $var_name_and_type ( keys %{ ${$_[0]}{$test_name} } ) {
-                    my ($var_name, $var_type) = ($var_name_and_type =~ /^([^\.]+)\.([^\.]+)$/);
-                    if ( not $var_name or not $var_type ) {
-                        die "Property test_cases_vars.$test_name.$var_name_and_type should have the following format test_cases_vars.$test_name.[Variable name].[Variable type] (ex : test_cases_vars.$test_name.MAX_VALUE.posint)";
-                    }
-                    if ( not exists $all_test_cases{lc($test_name)}{tags}{uc($var_name)} ) {
-                        die "Property test_cases_vars.$test_name keys have these possible values : ", join q{,}, keys %{ $all_test_cases{lc($test_name)}{tags} };
-                    }
-                    if ( lc($var_type) eq q{posint} ) {
-                        if ( ${$_[0]}{$test_name}{$var_name_and_type} !~ /^[1-9][0-9]*$/ ) {
-                            die "Property test_cases_vars.$test_name.$var_name_and_type is not a positive integer";
-                        }
-                    }
-                    else {
-                        die "Property test_cases_vars.$test_name.$var_name_and_type is of unknown type";
-                    }
-                    ${$_[0]}{lc($test_name)}{uc($var_name).q{.}.lc($var_type)} = delete ${$_[0]}{$test_name}{$var_name_and_type};
-                }
-            }
-        }
+    q{test_cases_vars.dnssec04.REMAINING_SHORT} => {
+        type    => q{Num},
+        min     => 1
+    },
+    q{test_cases_vars.dnssec04.REMAINING_LONG} => {
+        type    => q{Num},
+        min     => 1
+    },
+    q{test_cases_vars.dnssec04.DURATION_LONG} => {
+        type    => q{Num},
+        min     => 1
     }
 );
 
@@ -795,33 +770,22 @@ A complex data structure.
 Specify some variable values used in test cases.
 
 At the top level of this data structure are two levels of nested hashrefs.
-The keys of the top level hash are names of test cases.
-The keys of the second level hashes are variable names (and their associated 
-type) that should be used in test case in place of test case encoded values.
-The values of the second level hashes are values of those variables.
+The keys of the top level hash are names of implemented test cases (methods).
+The keys of the second level hashes are message tags.
+For already implemented configurable variables, details can be found in 
+corresponding Zonemaster::Engine::Test::[Module].pm file documentation.
 
-The following test cases variables are implemented :
+=head3 Implemented variables
 
-=head3 dnssec04.DURATION_LONG.postint
+=over
 
-Positive integer value.
+=item test_cases_vars.dnssec04.REMAINING_SHORT
 
-Returns DURATION_LONG message tag in case signature lifetime is less
-than DURATION_LONG.posint.
+=item test_cases_vars.dnssec04.REMAINING_LONG
 
-=head3 dnssec04.REMAINING_LONG.posint
+=item test_cases_vars.dnssec04.DURATION_LONG
 
-Positive integer value.
-
-Returns REMAINING_LONG message tag in case signature remaining time is
-more than REMAINING_LONG.posint (in seconds).
-
-=head3 dnssec04.REMAINING_SHORT.posint
-
-Positive integer value.
-
-Returns REMAINING_SHORT message tag in case signature remaining time is
-less than DURATION_LONG.posint (in seconds).
+=back
 
 =head1 JSON REPRESENTATION
 

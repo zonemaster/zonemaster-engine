@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare( "v1.1.27" );
+use version; our $VERSION = version->declare( "v1.1.29" );
 
 ###
 ### This test module implements DNSSEC tests.
@@ -1315,17 +1315,17 @@ sub dnssec04 {
         my $remaining_short_limit = $DURATION_12_HOURS_IN_SECONDS;
         my $remaining_long_limit  = $DURATION_180_DAYS_IN_SECONDS;
         my $duration_long_limit   = $DURATION_180_DAYS_IN_SECONDS;
-        if ( Zonemaster::Engine::Profile->effective->get( q{test_cases_vars} ) and Zonemaster::Engine::Profile->effective->get( q{test_cases_vars} )->{ q{dnssec04} } ) {
-            if ( defined Zonemaster::Engine::Profile->effective->get( q{test_cases_vars} )->{ q{dnssec04} }{ q{REMAINING_SHORT.posint} } ) {
-                $remaining_short_limit = Zonemaster::Engine::Profile->effective->get( q{test_cases_vars} )->{ q{dnssec04} }{ q{REMAINING_SHORT.posint} };
-            }
-            if ( defined Zonemaster::Engine::Profile->effective->get( q{test_cases_vars} )->{ q{dnssec04} }{ q{REMAINING_LONG.posint} } ) {
-                $remaining_long_limit = Zonemaster::Engine::Profile->effective->get( q{test_cases_vars} )->{ q{dnssec04} }{ q{REMAINING_LONG.posint} };
-            }
-            if ( defined Zonemaster::Engine::Profile->effective->get( q{test_cases_vars} )->{ q{dnssec04} }{ q{DURATION_LONG.posint} } ) {
-                $duration_long_limit = Zonemaster::Engine::Profile->effective->get( q{test_cases_vars} )->{ q{dnssec04} }{ q{DURATION_LONG.posint} };
-            }
+
+        if ( defined Zonemaster::Engine::Profile->effective->get( q{test_cases_vars.dnssec04.REMAINING_SHORT} ) ) {
+            $remaining_short_limit = Zonemaster::Engine::Profile->effective->get( q{test_cases_vars.dnssec04.REMAINING_SHORT} );
         }
+        if ( defined Zonemaster::Engine::Profile->effective->get( q{test_cases_vars.dnssec04.REMAINING_LONG} ) ) {
+            $remaining_long_limit = Zonemaster::Engine::Profile->effective->get( q{test_cases_vars.dnssec04.REMAINING_LONG} );
+        }
+        if ( defined Zonemaster::Engine::Profile->effective->get( q{test_cases_vars.dnssec04.DURATION_LONG} ) ) {
+            $duration_long_limit = Zonemaster::Engine::Profile->effective->get( q{test_cases_vars.dnssec04.DURATION_LONG} );
+        }
+
         if ( $remaining < 0 ) {    # already expired
             $result_remaining = info(
                 RRSIG_EXPIRED => {
@@ -2282,6 +2282,27 @@ Check that all DNSKEY algorithms are used to sign the zone.
 =item dnssec14($zone)
 
 Check for valid RSA DNSKEY key size
+
+=back
+
+=head1 CONFIGURABLE VARIABLES IN PROFILE
+
+=over
+
+=item test_cases_vars.dnssec04.REMAINING_SHORT (Positive integer value)
+
+Returns REMAINING_SHORT message tag in case signature remaining validity time is
+less than the value provided (in seconds).
+
+=item test_cases_vars.dnssec04.REMAINING_LONG (Positive integer value)
+
+Returns REMAINING_LONG message tag in case signature remaining validity time is
+more than the value provided (in seconds).
+
+=item test_cases_vars.dnssec04.DURATION_LONG (Positive integer value)
+
+Returns DURATION_LONG message tag in case signature lifetime is more
+than the value provided (in seconds).
 
 =back
 
