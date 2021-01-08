@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare( "v1.2.21" );
+use version; our $VERSION = version->declare( "v1.2.22" );
 
 use File::ShareDir qw[dist_file];
 use JSON::PP qw( encode_json decode_json );
@@ -233,7 +233,6 @@ sub default {
             $new->set( $property_name, $profile_properties_details{$property_name}{default} );
         }
     }
-    use Data::Dumper;print Data::Dumper::Dumper($new);
     return $new;
 }
 
@@ -767,20 +766,26 @@ matter if they're excluded from this property.
 This is because part of their function is to verify that the given domain name
 can be tested at all.
 
-=head2 test_cases_vars.dnssec04.REMAINING_SHORT (Positive integer value)
+=head2 test_cases_vars.dnssec04.REMAINING_SHORT
 
+A positive integer value.
 If the remaining validity time of the signature is less than test_cases_vars.dnssec04.REMAINING_SHORT (in seconds) 
 this test case returns the REMAINING_SHORT message tag.
+Default C<43200> (12 hours in seconds).
 
-=head2 test_cases_vars.dnssec04.REMAINING_LONG (Positive integer value)
+=head2 test_cases_vars.dnssec04.REMAINING_LONG
 
+A positive integer value.
 If the remaining validity time of the signature is more than test_cases_vars.dnssec04.REMAINING_LONG (in seconds)
 this test case returns the REMAINING_LONG message tag.
+Default C<15552000> (180 days in seconds).
 
-=head2 test_cases_vars.dnssec04.DURATION_LONG (Positive integer value)
+=head2 test_cases_vars.dnssec04.DURATION_LONG
 
+A positive integer value.
 Returns DURATION_LONG message tag in case signature lifetime is more
 than test_cases_vars.dnssec04.DURATION_LONG (in seconds).
+Default C<15552000> (180 days in seconds).
 
 =head1 JSON REPRESENTATION
 
