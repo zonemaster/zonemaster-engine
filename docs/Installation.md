@@ -56,15 +56,16 @@ This instruction covers the following operating systems:
 
 6) Install Zonemaster::LDNS and Zonemaster::Engine for *CentOS 7*:
 
->   **Note** Since DNSSEC Algorithm 15 is not supported on CentOS 7
    ```sh
    sudo cpanm Zonemaster::LDNS --configure-args="--no-ed25519"
    ```
 
    ```sh
    sudo cpanm Zonemaster::Engine
-   ```
+   ``
 
+> **Note**: Support for DNSSEC algorithms 15 (Ed25519) and 16 (Ed448) is not
+> included in CentOS 7. OpenSSL version 1.1.1 or higher is required.
 
 7) Install Zonemaster::LDNS and Zonemaster::Engine for *CentOS 8*:
 
@@ -94,33 +95,9 @@ This instruction covers the following operating systems:
 
 4) Install Zonemaster::LDNS and Zonemaster::Engine.
 
-   * On Debian 10 (Buster):
-
      ```sh
      sudo cpanm Zonemaster::LDNS Zonemaster::Engine
      ```
-
-   * On Debian 9 (Stretch):
-
-     ```sh
-     sudo cpanm Zonemaster::LDNS Zonemaster::Engine --configure-args="--no-ed25519"
-     ```
-
-   * On Ubuntu 18.04:
-
-     ```sh
-     sudo cpanm Zonemaster::LDNS Zonemaster::Engine
-     ```
-
-   * On Ubuntu 16.04:
-
-     ```sh
-     sudo cpanm Zonemaster::LDNS Zonemaster::Engine --configure-args="--no-ed25519"
-     ```
-
-> Note: Support for DNSSEC algorithm 15 (Ed25519) is not included in neither
-> Debian 9 nor Ubuntu 16.04. OpenSSL version 1.1.1 or higher is required.
-
 
 ### Installation on FreeBSD
 
