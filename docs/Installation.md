@@ -62,7 +62,7 @@ This instruction covers the following operating systems:
 
    ```sh
    sudo cpanm Zonemaster::Engine
-   ``
+   ```
 
 > **Note**: Support for DNSSEC algorithms 15 (Ed25519) and 16 (Ed448) is not
 > included in CentOS 7. OpenSSL version 1.1.1 or higher is required.
