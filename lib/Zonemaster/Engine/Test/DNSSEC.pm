@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare( "v1.1.25" );
+use version; our $VERSION = version->declare( "v1.1.30" );
 
 ###
 ### This test module implements DNSSEC tests.
@@ -1312,6 +1312,10 @@ sub dnssec04 {
 
         my $remaining = $sig->expiration - int( $dnskey_p->timestamp );
         my $result_remaining;
+        my $remaining_short_limit = Zonemaster::Engine::Profile->effective->get( q{test_cases_vars.dnssec04.REMAINING_SHORT} );
+        my $remaining_long_limit  = Zonemaster::Engine::Profile->effective->get( q{test_cases_vars.dnssec04.REMAINING_LONG} );
+        my $duration_long_limit   = Zonemaster::Engine::Profile->effective->get( q{test_cases_vars.dnssec04.DURATION_LONG} );
+
         if ( $remaining < 0 ) {    # already expired
             $result_remaining = info(
                 RRSIG_EXPIRED => {
@@ -1321,7 +1325,7 @@ sub dnssec04 {
                 }
             );
         }
-        elsif ( $remaining < ( $DURATION_12_HOURS_IN_SECONDS ) ) {
+        elsif ( $remaining < ( $remaining_short_limit ) ) {
             $result_remaining = info(
                 REMAINING_SHORT => {
                     duration => $remaining,
@@ -1330,7 +1334,7 @@ sub dnssec04 {
                 }
             );
         }
-        elsif ( $remaining > ( $DURATION_180_DAYS_IN_SECONDS ) ) {
+        elsif ( $remaining > ( $remaining_long_limit ) ) {
             $result_remaining = info(
                 REMAINING_LONG => {
                     duration => $remaining,
@@ -1342,7 +1346,7 @@ sub dnssec04 {
 
         my $duration = $sig->expiration - $sig->inception;
         my $result_duration;
-        if ( $duration > ( $DURATION_180_DAYS_IN_SECONDS ) ) {
+        if ( $duration > ( $duration_long_limit ) ) {
             $result_duration = info(
                 DURATION_LONG => {
                     duration => $duration,

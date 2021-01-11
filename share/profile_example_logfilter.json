@@ -431,5 +431,12 @@
         "zone07",
         "zone08",
         "zone09"
-    ]
+    ],
+    "test_cases_vars": {
+        "dnssec04" : {
+            "DURATION_LONG" : 26179200,
+            "REMAINING_LONG" : 26179200,
+            "REMAINING_SHORT" : 43200
+        }
+    }
 }
