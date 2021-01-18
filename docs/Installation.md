@@ -57,7 +57,7 @@ This instruction covers the following operating systems:
 6) Install Zonemaster::LDNS and Zonemaster::Engine for *CentOS 7*:
 
    ```sh
-   sudo cpanm Zonemaster::LDNS --configure-args="--no-ed25519"
+   sudo cpanm --configure-args="--no-ed25519" Zonemaster::LDNS
    ```
 
    ```sh
