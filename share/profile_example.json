@@ -8,7 +8,7 @@
     },
     "net" : {
         "ipv4" : true,
-        "ipv6" : true 
+        "ipv6" : true
     },
     "no_network" : false,
     "resolver" : {
