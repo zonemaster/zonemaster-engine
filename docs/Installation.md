@@ -24,10 +24,10 @@ This instruction covers the following operating systems:
 
 ### Installation on CentOS
 
-1) *Only* for CentOS 8, enable powertools:
+1) *Only* for CentOS 8, enable PowerTools:
 
    ```sh
-   sudo yum config-manager --set-enabled PowerTools
+   sudo yum config-manager --set-enabled powertools
    ```
 
 2) Install the [EPEL] repository:
@@ -57,7 +57,7 @@ This instruction covers the following operating systems:
 6) Install Zonemaster::LDNS and Zonemaster::Engine for *CentOS 7*:
 
    ```sh
-   sudo cpanm Zonemaster::LDNS --configure-args="--no-ed25519"
+   sudo cpanm --configure-args="--no-ed25519" Zonemaster::LDNS
    ```
 
    ```sh
