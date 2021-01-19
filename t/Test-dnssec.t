@@ -299,6 +299,10 @@ $zone = Zonemaster::Engine->zone( 'dnssec08-dnskey-not-signed.zut-root.rd.nic.fr
 zone_gives( 'dnssec13', $zone, [qw{RRSET_NOT_SIGNED}] );
 zone_gives_not('dnssec13', $zone, [qw{ALL_ALGO_SIGNED RRSIG_NOT_MATCH_DNSKEY ALGO_NOT_SIGNED_RRSET}] );
 
+$zone = Zonemaster::Engine->zone( 'afnic.fr' );
+zone_gives( 'dnssec13', $zone, [qw{ALL_ALGO_SIGNED}] );
+zone_gives_not('dnssec13', $zone, [qw{ALGO_NOT_SIGNED_RRSET NO_RESPONSE NO_RESPONSE_RRSET RRSET_NOT_SIGNED RRSIG_BROKEN RRSIG_NOT_MATCH_DNSKEY}] );
+
 TODO: {
     local $TODO = "Need to find/create zones with that error";
 
@@ -313,10 +317,6 @@ TODO: {
     ok( $tag{NSEC_SIG_VERIFY_ERROR},  q{NSEC_SIG_VERIFY_ERROR} );
     ok( $tag{NSEC_NOT_SIGNED},        q{NSEC_NOT_SIGNED} );
     ok( $tag{NSEC3_NOT_SIGNED},       q{NSEC3_NOT_SIGNED} );
-    # Configure a zone with signatures that never expires for dnssec13
-    $zone = Zonemaster::Engine->zone( 'afnic.fr' );
-    zone_gives( 'dnssec13', $zone, [qw{ALL_ALGO_SIGNED}] );
-    zone_gives_not('dnssec13', $zone, [qw{ALGO_NOT_SIGNED_RRSET NO_RESPONSE NO_RESPONSE_RRSET RRSET_NOT_SIGNED RRSIG_BROKEN RRSIG_NOT_MATCH_DNSKEY}] );
 }
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
