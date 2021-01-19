@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare( "v1.1.31" );
+use version; our $VERSION = version->declare( "v1.1.32" );
 
 ###
 ### This test module implements DNSSEC tests.
@@ -1585,7 +1585,7 @@ sub dnssec08 {
         return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
     }
 
-    my $ok = 0;
+    my $ok = undef;
     foreach my $sig ( @sigs ) {
         my $msg  = q{};
         my $time = $dnskey_p->timestamp;
@@ -1613,7 +1613,7 @@ sub dnssec08 {
         }
     } ## end foreach my $sig ( @sigs )
 
-    if ( $ok ) {
+    if ( defined $ok ) {
         push @results,
           info(
             DNSKEY_SIGNED => {
@@ -1658,7 +1658,7 @@ sub dnssec09 {
         return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
     }
 
-    my $ok = 0;
+    my $ok = undef;
     foreach my $sig ( @sigs ) {
         my $msg  = q{};
         my $time = $soa_p->timestamp;
@@ -1685,7 +1685,7 @@ sub dnssec09 {
         }
     } ## end foreach my $sig ( @sigs )
 
-    if ( $ok ) {
+    if ( defined $ok ) {
         push @results,
           info(
             SOA_SIGNED => {
@@ -1925,7 +1925,7 @@ sub dnssec11 {
     my %dnskey = map { $_->keytag => $_ } $dnskey_p->get_records_for_name( 'DNSKEY', $zone->name->string );
     my %rrsig  = map { $_->keytag => $_ } $dnskey_p->get_records_for_name( 'RRSIG',  $zone->name->string );
 
-    my $pass = 0;
+    my $pass = undef;
     my @fail;
     if ( scalar( keys %ds ) > 0 ) {
         foreach my $tag ( keys %ds ) {
@@ -1966,7 +1966,7 @@ sub dnssec11 {
         push @fail, 'no_ds';
     }
 
-    if ($pass) {
+    if ( defined $pass ) {
         push @results, info( DELEGATION_SIGNED => { keytag => $pass } )
     } else {
         push @results, info( DELEGATION_NOT_SIGNED => { keytag => 'info', reason => join(';', @fail) } )
