@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare( "v1.1.30" );
+use version; our $VERSION = version->declare( "v1.1.31" );
 
 ###
 ### This test module implements DNSSEC tests.
@@ -2065,12 +2065,14 @@ sub dnssec13 {
                     @keys = @ks;
                 }
 
+                my $msg  = q{};
+                my $time = $p->timestamp;
                 if ( not scalar @keys ) {
                     $all_algo_signed = 0;
                     $ns_args->{keytag} = $sig->keytag;
                     push @results, info( RRSIG_NOT_MATCH_DNSKEY => $ns_args );
                 }
-                elsif ( not $sig->verify( \@rrs, \@keys ) ) {
+                elsif ( not $sig->verify_time( \@rrs, \@keys, $time, $msg ) ) {
                     $all_algo_signed = 0;
                     $ns_args->{keytag} = $sig->keytag;
                     push @results, info( RRSIG_BROKEN => $ns_args );
