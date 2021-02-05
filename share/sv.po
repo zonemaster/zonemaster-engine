@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-28 04:26+0100\n"
-"PO-Revision-Date: 2020-11-03 19:44+0100\n"
+"POT-Creation-Date: 2021-02-05 17:53+0100\n"
+"PO-Revision-Date: 2021-02-05 17:36+0100\n"
 "Last-Translator: mats.dufberg@iis.se\n"
 "Language-Team: Zonemaster Team\n"
 "Language: sv\n"
@@ -434,8 +434,8 @@ msgstr ""
 #. CONSISTENCY:SOA_TIME_PARAMETER_SET
 #, perl-brace-format
 msgid ""
-"Saw SOA time parameter set (REFRESH={refresh}, RETRY={retry}, EXPIRE={expire}, "
-"MINIMUM={minimum}) on following nameserver set : {ns_list}."
+"Saw SOA time parameter set (REFRESH={refresh}, RETRY={retry}, "
+"EXPIRE={expire}, MINIMUM={minimum}) on following nameserver set : {ns_list}."
 msgstr ""
 "SOA-tidsparametrarna (REFRESH={refresh}, RETRY={retry}, EXPIRE={expire}, "
 "MINIMUM={minimum}) hittades på följande uppsättning namnservrar: {ns_list}."
@@ -1699,6 +1699,23 @@ msgid ""
 msgstr ""
 "Maildomänen från 'SOA RNAME' ({domain}) kan inte slås upp till en mailserver "
 "med IP-adress."
+
+#. SYNTAX:RNAME_MAIL_DOMAIN_LOCALHOST
+#, perl-brace-format
+msgid ""
+"The SOA RNAME mail domain ({domain}) resolved to a mail server with "
+"localhost ({localhost}) IP address."
+msgstr ""
+"Maildomänen från 'SOA RNAME' ({domain}) slås upp till en IP-adress på "
+"\"localhost\" ({localhost})."
+
+#. SYNTAX:RNAME_MAIL_ILLEGAL_CNAME
+#, perl-brace-format
+msgid ""
+"The SOA RNAME mail domain ({domain}) refers to an address which is an alias "
+"(CNAME)."
+msgstr ""
+"Maildomänen från 'SOA RNAME' ({domain}) slås upp till ett alias (CNAME)."
 
 #. SYNTAX:RNAME_MISUSED_AT_SIGN
 #, perl-brace-format
