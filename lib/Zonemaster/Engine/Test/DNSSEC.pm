@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare( "v1.1.32" );
+use version; our $VERSION = version->declare( "v1.1.33" );
 
 ###
 ### This test module implements DNSSEC tests.
@@ -1423,9 +1423,9 @@ sub dnssec05 {
         foreach my $key ( @keys ) {
             my $algo      = $key->algorithm;
             my $algo_args = {
-                algorithm   => $algo,
+                algo_num    => $algo,
                 keytag      => $key->keytag,
-                description => $algo_properties{$algo}{description},
+                algo_descr  => $algo_properties{$algo}{description},
             };
 
             if ( $algo_properties{$algo}{status} == $ALGO_STATUS_DEPRECATED ) {
