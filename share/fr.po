@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-28 04:26+0100\n"
+"POT-Creation-Date: 2021-02-05 18:36+0100\n"
 "PO-Revision-Date: 2020-09-07\n"
 "Last-Translator: vincent.levigneron@afnic.fr\n"
 "Language-Team: Zonemaster Team\n"
@@ -489,8 +489,8 @@ msgstr ""
 #. CONSISTENCY:SOA_TIME_PARAMETER_SET
 #, perl-brace-format
 msgid ""
-"Saw SOA time parameter set (REFRESH={refresh}, RETRY={retry}, EXPIRE={expire}, "
-"MINIMUM={minimum}) on following nameserver set : {ns_list}."
+"Saw SOA time parameter set (REFRESH={refresh}, RETRY={retry}, "
+"EXPIRE={expire}, MINIMUM={minimum}) on following nameserver set : {ns_list}."
 msgstr ""
 "L'ensemble de paramètres temporels (REFRESH={refresh}, RETRY={retry}, "
 "EXPIRE={expire}, MINIMUM={minimum}) a été récupérée sur les serveurs "
@@ -1861,6 +1861,24 @@ msgid ""
 msgstr ""
 "L'adresse mail du SOA du nom de domaine ({domain}) ne peut pas être résolue "
 "en un serveur de messagerie avec une adresse IP."
+
+#. SYNTAX:RNAME_MAIL_DOMAIN_LOCALHOST
+#, perl-brace-format
+msgid ""
+"The SOA RNAME mail domain ({domain}) resolved to a mail server with "
+"localhost ({localhost}) IP address."
+msgstr ""
+"Le nom de domaine ({domain}) de l'adresse mail dans le RNAME du SOA a "
+"pour adresse IP une adresse locale ({localhost})."
+
+#. SYNTAX:RNAME_MAIL_ILLEGAL_CNAME
+#, perl-brace-format
+msgid ""
+"The SOA RNAME mail domain ({domain}) refers to an address which is an alias "
+"(CNAME)."
+msgstr ""
+"Le nom de domaine ({domain}) de l'adresse mail dans le RNAME du SOA fait "
+"référence à une adresse qui est un alias (CNAME)."
 
 #. SYNTAX:RNAME_MISUSED_AT_SIGN
 #, perl-brace-format
