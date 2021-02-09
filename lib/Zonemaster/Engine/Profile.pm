@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare( "v1.2.17" );
+use version; our $VERSION = version->declare( "v1.2.22" );
 
 use File::ShareDir qw[dist_file];
 use JSON::PP qw( encode_json decode_json );
@@ -16,7 +16,7 @@ use Data::Dumper;
 
 use Zonemaster::Engine;
 use Zonemaster::Engine::Net::IP;
-use Zonemaster::Engine::Constants qw( $RESOLVER_SOURCE_OS_DEFAULT );
+use Zonemaster::Engine::Constants qw( $RESOLVER_SOURCE_OS_DEFAULT $DURATION_12_HOURS_IN_SECONDS $DURATION_180_DAYS_IN_SECONDS );
 
 my %profile_properties_details = (
     q{resolver.defaults.debug} => {
@@ -127,6 +127,21 @@ my %profile_properties_details = (
     },
     q{test_cases} => {
         type    => q{ArrayRef}
+    },
+    q{test_cases_vars.dnssec04.REMAINING_SHORT} => {
+        type    => q{Num},
+        min     => 1,
+        default => $DURATION_12_HOURS_IN_SECONDS
+    },
+    q{test_cases_vars.dnssec04.REMAINING_LONG} => {
+        type    => q{Num},
+        min     => 1,
+        default => $DURATION_180_DAYS_IN_SECONDS
+    },
+    q{test_cases_vars.dnssec04.DURATION_LONG} => {
+        type    => q{Num},
+        min     => 1,
+        default => $DURATION_180_DAYS_IN_SECONDS
     }
 );
 
@@ -750,6 +765,27 @@ The test cases C<basic00>, C<basic01> and C<basic02> are always considered no
 matter if they're excluded from this property.
 This is because part of their function is to verify that the given domain name
 can be tested at all.
+
+=head2 test_cases_vars.dnssec04.REMAINING_SHORT
+
+A positive integer value.
+If the remaining validity time of the signature is less than test_cases_vars.dnssec04.REMAINING_SHORT (in seconds) 
+this test case returns the REMAINING_SHORT message tag.
+Default C<43200> (12 hours in seconds).
+
+=head2 test_cases_vars.dnssec04.REMAINING_LONG
+
+A positive integer value.
+If the remaining validity time of the signature is more than test_cases_vars.dnssec04.REMAINING_LONG (in seconds)
+this test case returns the REMAINING_LONG message tag.
+Default C<15552000> (180 days in seconds).
+
+=head2 test_cases_vars.dnssec04.DURATION_LONG
+
+A positive integer value.
+Returns DURATION_LONG message tag in case signature lifetime is more
+than test_cases_vars.dnssec04.DURATION_LONG (in seconds).
+Default C<15552000> (180 days in seconds).
 
 =head1 JSON REPRESENTATION
 

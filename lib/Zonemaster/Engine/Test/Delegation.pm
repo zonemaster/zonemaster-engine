@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare("v1.0.19");
+use version; our $VERSION = version->declare("v1.0.20");
 
 use Zonemaster::Engine;
 
@@ -278,7 +278,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     NS_IS_CNAME => sub {
         __x    # DELEGATION:NS_IS_CNAME
-          "Nameserver {nsname} RR point to CNAME.", @_;
+          "Nameserver {nsname} RR points to CNAME.", @_;
     },
     NO_NS_CNAME => sub {
         __x    # DELEGATION:NO_NS_CNAME
@@ -908,7 +908,7 @@ Verify that nameservers are authoritative.
 
 =item delegation05($zone)
 
-Verify that NS RRs do not point to CNAME alias.
+Verify that NS RRs do not points to CNAME alias.
 
 =item delegation06($zone)
 

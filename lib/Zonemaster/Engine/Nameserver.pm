@@ -392,7 +392,7 @@ sub _query {
             chomp( $msg );
             $msg =~ s/$trailing_info.*/\./;
             Zonemaster::Engine->logger->add( LOOKUP_ERROR =>
-                  { message => $msg, ns => "$self", name => "$name", type => $type, class => $href->{class} } );
+                  { message => $msg, ns => "$self", domain => "$name", type => $type, class => $href->{class} } );
             if ( not $href->{q{blacklisting_disabled}} ) {
                 $self->blacklisted->{ $flags{usevc} }{ $flags{dnssec} } = 1;
                 if ( !$flags{dnssec} ) {

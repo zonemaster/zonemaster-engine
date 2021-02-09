@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare("v1.1.15");
+use version; our $VERSION = version->declare("v1.1.16");
 
 use Zonemaster::Engine;
 
@@ -245,7 +245,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     SOA_TIME_PARAMETER_SET => sub {
         __x    # CONSISTENCY:SOA_TIME_PARAMETER_SET
-          'Saw SOA time parameter set (REFRESH={refresh},RETRY={retry},EXPIRE={expire},'
+          'Saw SOA time parameter set (REFRESH={refresh}, RETRY={retry}, EXPIRE={expire}, '
           . 'MINIMUM={minimum}) on following nameserver set : {ns_list}.', @_;
     },
     TEST_CASE_END => sub {
@@ -255,10 +255,6 @@ Readonly my %TAG_DESCRIPTIONS => (
     TEST_CASE_START => sub {
         __x    # CONSISTENCY:TEST_CASE_START
           'TEST_CASE_START {testcase}.', @_;
-    },
-    TOTAL_ADDRESS_MISMATCH => sub {
-        __x    # CONSISTENCY:TOTAL_ADDRESS_MISMATCH
-          'No common nameserver IP addresses between child ({child}) and parent ({glue}).', @_;
     },
 );
 
