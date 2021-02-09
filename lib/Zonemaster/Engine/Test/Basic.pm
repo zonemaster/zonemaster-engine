@@ -130,11 +130,11 @@ sub metadata {
 Readonly my %TAG_DESCRIPTIONS => (
     DOMAIN_NAME_LABEL_TOO_LONG => sub {
         __x    # BASIC:DOMAIN_NAME_LABEL_TOO_LONG
-          "Domain name ({dname}) has a label ({dlabel}) too long ({dlength}/{max}).", @_;
+          "Domain name ({domain}) has a label ({dlabel}) too long ({dlength}/{max}).", @_;
     },
     DOMAIN_NAME_ZERO_LENGTH_LABEL => sub {
         __x    # BASIC:DOMAIN_NAME_ZERO_LENGTH_LABEL
-          "Domain name ({dname}) has a zero-length label.", @_;
+          "Domain name ({domain}) has a zero-length label.", @_;
     },
     DOMAIN_NAME_TOO_LONG => sub {
         __x    # BASIC:DOMAIN_NAME_TOO_LONG
@@ -150,11 +150,11 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     HAS_A_RECORDS => sub {
         __x    # BASIC:HAS_A_RECORDS
-          "Nameserver {ns} returned \"A\" record(s) for {dname}.", @_;
+          "Nameserver {ns} returned \"A\" record(s) for {domain}.", @_;
     },
     NO_A_RECORDS => sub {
         __x    # BASIC:NO_A_RECORDS
-          "Nameserver {ns} did not return \"A\" record(s) for {dname}.", @_;
+          "Nameserver {ns} did not return \"A\" record(s) for {domain}.", @_;
     },
     HAS_NAMESERVERS => sub {
         __x    # BASIC:HAS_NAMESERVERS
@@ -228,7 +228,7 @@ sub basic00 {
             push @results,
               info(
                 q{DOMAIN_NAME_LABEL_TOO_LONG} => {
-                    dname   => "$name",
+                    domain  => "$name",
                     dlabel  => $local_label,
                     dlength => length( $local_label ),
                     max     => $LABEL_MAX_LENGTH,
@@ -239,7 +239,7 @@ sub basic00 {
             push @results,
               info(
                 q{DOMAIN_NAME_ZERO_LENGTH_LABEL} => {
-                    dname => "$name",
+                    domain => "$name",
                 }
               );
         }
@@ -427,8 +427,8 @@ sub basic03 {
             push @results,
               info(
                 HAS_A_RECORDS => {
-                    ns    => $ns->string,
-                    dname => $name,
+                    ns     => $ns->string,
+                    domain => $name,
                 }
               );
         }
@@ -436,8 +436,8 @@ sub basic03 {
             push @results,
               info(
                 NO_A_RECORDS => {
-                    ns    => $ns->string,
-                    dname => $name,
+                    ns     => $ns->string,
+                    domain => $name,
                 }
               );
         }

@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare( "v1.0.9" );
+use version; our $VERSION = version->declare( "v1.0.10" );
 
 use Zonemaster::Engine;
 
@@ -19,7 +19,6 @@ use Zonemaster::Engine::Profile;
 use Zonemaster::Engine::Constants qw[:name :ip];
 use Zonemaster::Engine::DNSName;
 use Zonemaster::Engine::Packet;
-use Zonemaster::Engine::Recursor;
 use Zonemaster::Engine::TestMethods;
 use Zonemaster::Engine::Util;
 use Zonemaster::LDNS;
@@ -116,6 +115,8 @@ sub metadata {
               NO_RESPONSE
               NO_RESPONSE_SOA_QUERY
               RNAME_MAIL_DOMAIN_INVALID
+              RNAME_MAIL_DOMAIN_LOCALHOST
+              RNAME_MAIL_ILLEGAL_CNAME
               RNAME_RFC822_INVALID
               RNAME_RFC822_VALID
               TEST_CASE_END
@@ -150,13 +151,13 @@ sub metadata {
 Readonly my %TAG_DESCRIPTIONS => (
     DISCOURAGED_DOUBLE_DASH => sub {
         __x    # SYNTAX:DISCOURAGED_DOUBLE_DASH
-          'Domain name ({name}) has a label ({label}) with a double hyphen (\'--\') '
+          'Domain name ({domain}) has a label ({label}) with a double hyphen (\'--\') '
           . 'in position 3 and 4 (with a prefix which is not \'xn--\').',
           @_;
     },
     INITIAL_HYPHEN => sub {
         __x    # SYNTAX:INITIAL_HYPHEN
-          'Domain name ({name}) has a label ({label}) starting with an hyphen (\'-\').', @_;
+          'Domain name ({domain}) has a label ({label}) starting with an hyphen (\'-\').', @_;
     },
     IPV4_DISABLED => sub {
         __x    # SYNTAX:IPV4_DISABLED
@@ -168,75 +169,75 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     MNAME_DISCOURAGED_DOUBLE_DASH => sub {
         __x    # SYNTAX:MNAME_DISCOURAGED_DOUBLE_DASH
-          'SOA MNAME ({name}) has a label ({label}) with a double hyphen (\'--\') '
+          'SOA MNAME ({domain}) has a label ({label}) with a double hyphen (\'--\') '
           . 'in position 3 and 4 (with a prefix which is not \'xn--\').',
           @_;
     },
     MNAME_NON_ALLOWED_CHARS => sub {
         __x    # SYNTAX:MNAME_NON_ALLOWED_CHARS
-          'Found illegal characters in SOA MNAME ({name}).', @_;
+          'Found illegal characters in SOA MNAME ({domain}).', @_;
     },
     MNAME_NUMERIC_TLD => sub {
         __x    # SYNTAX:MNAME_NUMERIC_TLD
-          'SOA MNAME ({name}) within a \'numeric only\' TLD ({tld}).', @_;
+          'SOA MNAME ({domain}) within a \'numeric only\' TLD ({tld}).', @_;
     },
     MNAME_SYNTAX_OK => sub {
         __x    # SYNTAX:MNAME_SYNTAX_OK
-          'SOA MNAME ({name}) syntax is valid.', @_;
+          'SOA MNAME ({domain}) syntax is valid.', @_;
     },
     MX_DISCOURAGED_DOUBLE_DASH => sub {
         __x    # SYNTAX:MX_DISCOURAGED_DOUBLE_DASH
-          'Domain name MX ({name}) has a label ({label}) with a double hyphen (\'--\') '
+          'Domain name MX ({domain}) has a label ({label}) with a double hyphen (\'--\') '
           . 'in position 3 and 4 (with a prefix which is not \'xn--\').',
           @_;
     },
     MX_NON_ALLOWED_CHARS => sub {
         __x    # SYNTAX:MX_NON_ALLOWED_CHARS
-          'Found illegal characters in MX ({name}).', @_;
+          'Found illegal characters in MX ({domain}).', @_;
     },
     MX_NUMERIC_TLD => sub {
         __x    # SYNTAX:MX_NUMERIC_TLD
-          'Domain name MX ({name}) within a \'numeric only\' TLD ({tld}).', @_;
+          'Domain name MX ({domain}) within a \'numeric only\' TLD ({tld}).', @_;
     },
     MX_SYNTAX_OK => sub {
         __x    # SYNTAX:MX_SYNTAX_OK
-          'Domain name MX ({name}) syntax is valid.', @_;
+          'Domain name MX ({domain}) syntax is valid.', @_;
     },
     NAMESERVER_DISCOURAGED_DOUBLE_DASH => sub {
         __x    # SYNTAX:NAMESERVER_DISCOURAGED_DOUBLE_DASH
-          'Nameserver ({name}) has a label ({label}) with a double hyphen (\'--\') '
+          'Nameserver ({domain}) has a label ({label}) with a double hyphen (\'--\') '
           . 'in position 3 and 4 (with a prefix which is not \'xn--\').',
           @_;
     },
     NAMESERVER_NON_ALLOWED_CHARS => sub {
         __x    # SYNTAX:NAMESERVER_NON_ALLOWED_CHARS
-          'Found illegal characters in the nameserver ({name}).', @_;
+          'Found illegal characters in the nameserver ({domain}).', @_;
     },
     NAMESERVER_NUMERIC_TLD => sub {
         __x    # SYNTAX:NAMESERVER_NUMERIC_TLD
-          'Nameserver ({name}) within a \'numeric only\' TLD ({tld}).', @_;
+          'Nameserver ({domain}) within a \'numeric only\' TLD ({tld}).', @_;
     },
     NAMESERVER_SYNTAX_OK => sub {
         __x    # SYNTAX:NAMESERVER_SYNTAX_OK
-          'Nameserver ({name}) syntax is valid.', @_;
+          'Nameserver ({domain}) syntax is valid.', @_;
     },
     NON_ALLOWED_CHARS => sub {
         __x    # SYNTAX:NON_ALLOWED_CHARS
-          'Found illegal characters in the domain name ({name}).', @_;
+          'Found illegal characters in the domain name ({domain}).', @_;
     },
     NO_DOUBLE_DASH => sub {
         __x    # SYNTAX:NO_DOUBLE_DASH
-          'Domain name ({name}) has no label with a double hyphen (\'--\') '
+          'Domain name ({domain}) has no label with a double hyphen (\'--\') '
           . 'in position 3 and 4 (with a prefix which is not \'xn--\').',
           @_;
     },
     NO_ENDING_HYPHENS => sub {
         __x    # SYNTAX:NO_ENDING_HYPHENS
-          "Neither end of any label in the domain name ({name}) has a hyphen.", @_;
+          "Neither end of any label in the domain name ({domain}) has a hyphen.", @_;
     },
     NO_RESPONSE => sub {
         __x    # SYNTAX:NO_RESPONSE
-          'No response from {ns} asking for {dname}.', @_;
+          'No response from {ns} asking for {domain}.', @_;
     },
     NO_RESPONSE_MX_QUERY => sub {
         __x    # SYNTAX:NO_RESPONSE_MX_QUERY
@@ -248,11 +249,19 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     ONLY_ALLOWED_CHARS => sub {
         __x    # SYNTAX:ONLY_ALLOWED_CHARS
-          'No illegal characters in the domain name ({name}).', @_;
+          'No illegal characters in the domain name ({domain}).', @_;
     },
     RNAME_MAIL_DOMAIN_INVALID => sub {
         __x    # SYNTAX:RNAME_MAIL_DOMAIN_INVALID
           'The SOA RNAME mail domain ({domain}) cannot be resolved to a mail server with an IP address.', @_;
+    },
+    RNAME_MAIL_DOMAIN_LOCALHOST => sub {
+        __x    # SYNTAX:RNAME_MAIL_DOMAIN_LOCALHOST
+          'The SOA RNAME mail domain ({domain}) resolved to a mail server with localhost ({localhost}) IP address.', @_;
+    },
+    RNAME_MAIL_ILLEGAL_CNAME => sub {
+        __x    # SYNTAX:RNAME_MAIL_ILLEGAL_CNAME
+          'The SOA RNAME mail domain ({domain}) refers to an address which is an alias (CNAME).', @_;
     },
     RNAME_MISUSED_AT_SIGN => sub {
         __x    # SYNTAX:RNAME_MISUSED_AT_SIGN
@@ -272,7 +281,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     TERMINAL_HYPHEN => sub {
         __x    # SYNTAX:TERMINAL_HYPHEN
-          "Domain name ({name}) has a label ({label}) ending with a hyphen ('-').", @_;
+          "Domain name ({domain}) has a label ({label}) ending with a hyphen ('-').", @_;
     },
     TEST_CASE_END => sub {
         __x    # SYNTAX:TEST_CASE_END
@@ -306,7 +315,7 @@ sub syntax01 {
         push @results,
           info(
             ONLY_ALLOWED_CHARS => {
-                name => $name,
+                domain => $name,
             }
           );
     }
@@ -314,7 +323,7 @@ sub syntax01 {
         push @results,
           info(
             NON_ALLOWED_CHARS => {
-                name => $name,
+                domain => $name,
             }
           );
     }
@@ -333,8 +342,8 @@ sub syntax02 {
             push @results,
               info(
                 INITIAL_HYPHEN => {
-                    label => $local_label,
-                    name  => $name,
+                    label  => $local_label,
+                    domain => $name,
                 }
               );
         }
@@ -342,8 +351,8 @@ sub syntax02 {
             push @results,
               info(
                 TERMINAL_HYPHEN => {
-                    label => $local_label,
-                    name  => $name,
+                    label  => $local_label,
+                    domain => $name,
                 }
               );
         }
@@ -353,7 +362,7 @@ sub syntax02 {
         push @results,
           info(
             NO_ENDING_HYPHENS => {
-                name => $name,
+                domain => $name,
             }
           );
     }
@@ -372,8 +381,8 @@ sub syntax03 {
             push @results,
               info(
                 DISCOURAGED_DOUBLE_DASH => {
-                    label => $local_label,
-                    name  => $name,
+                    label  => $local_label,
+                    domain => $name,
                 }
               );
         }
@@ -383,7 +392,7 @@ sub syntax03 {
         push @results,
           info(
             NO_DOUBLE_DASH => {
-                name => $name,
+                domain => $name,
             }
           );
     }
@@ -476,14 +485,14 @@ sub syntax06 {
             next;
         }
 
-        my $p = $ns->query( $zone->name, q{SOA} );
+        my $p = $ns->query( $zone->name, q{SOA}, { recurse => 0, usevc => 0 } );
 
         if ( not $p ) {
             push @results,
               info(
                 NO_RESPONSE => {
-                    ns    => $ns->string,
-                    dname => $zone->name,
+                    ns     => $ns->string,
+                    domain => $zone->name,
                 }
               );
             next;
@@ -511,9 +520,7 @@ sub syntax06 {
         }
 
         my $domain = ( $rname =~ s/.*@//r );
-
         my $p_mx = $resolver->query( $domain, q{MX}, { recurse => 1 } );
-
         if ( not $p_mx or $p_mx->rcode ne 'NOERROR' ) {
             push @results, info( RNAME_MAIL_DOMAIN_INVALID => { domain => $domain } );
             next;
@@ -542,27 +549,36 @@ sub syntax06 {
             # Lookup IPv4 address for mail server
             my $p_a = $resolver->query( $mail_domain, q{A}, { recurse => 1 } );
             if ( $p_a ) {
-                my @rrs_a =
-                  grep { $_->address ne '127.0.0.1' }
-                  grep { $_->owner eq $mail_domain } $p_a->get_records( q{A}, q{answer} );
+                if ( $p_a->get_records( q{CNAME}, q{answer} ) ) {
+                    push @results, info( RNAME_MAIL_ILLEGAL_CNAME => { domain => $mail_domain } );
+                }
+                else {
+                    my @rrs_a = grep { $_->owner eq $mail_domain } $p_a->get_records( q{A}, q{answer} );
 
-                if ( @rrs_a ) {
-                    $exchange_valid = 1;
+                    if ( grep { $_->address eq q{127.0.0.1} } @rrs_a ) {
+                        push @results, info( RNAME_MAIL_DOMAIN_LOCALHOST => { domain => $mail_domain, localhost => q{127.0.0.1} } );
+                    }
+                    elsif ( @rrs_a ) {
+                        $exchange_valid = 1;
+                    }
                 }
             }
 
             # Lookup IPv6 address for mail domain
-            my $p_aaaa;
-            if ( !$exchange_valid ) {    # Skip a query if we can
-                $p_aaaa = $resolver->query( $mail_domain, q{AAAA}, { recurse => 1 } );
-            }
+            my $p_aaaa = $resolver->query( $mail_domain, q{AAAA}, { recurse => 1 } );
             if ( $p_aaaa ) {
-                my @rrs_aaaa =
-                  grep { $_->address ne '::1' }
-                  grep { $_->owner eq $mail_domain } $p_aaaa->get_records( q{AAAA}, q{answer} );
+                if ( $p_aaaa->get_records( q{CNAME}, q{answer} ) ) {
+                    push @results, info( RNAME_MAIL_ILLEGAL_CNAME => { domain => $mail_domain } );
+                }
+                else {
+                    my @rrs_aaaa = grep { $_->owner eq $mail_domain } $p_aaaa->get_records( q{AAAA}, q{answer} );
 
-                if ( @rrs_aaaa ) {
-                    $exchange_valid = 1;
+                    if ( grep { $_->address eq q{::1} } @rrs_aaaa) {
+                        push @results, info( RNAME_MAIL_DOMAIN_LOCALHOST => { domain => $mail_domain, localhost => q{::1} } );
+                    }
+                    elsif ( @rrs_aaaa ) {
+                        $exchange_valid = 1;
+                    }
                 }
             }
 
@@ -711,7 +727,7 @@ sub check_name_syntax {
           info(
             $info_label_prefix
               . q{_NON_ALLOWED_CHARS} => {
-                name => $name,
+                domain => $name,
               }
           );
     }
@@ -724,8 +740,8 @@ sub check_name_syntax {
                   info(
                     $info_label_prefix
                       . q{_DISCOURAGED_DOUBLE_DASH} => {
-                        label => $local_label,
-                        name  => "$name",
+                        label  => $local_label,
+                        domain => "$name",
                       }
                   );
             }
@@ -737,8 +753,8 @@ sub check_name_syntax {
               info(
                 $info_label_prefix
                   . q{_NUMERIC_TLD} => {
-                    name => "$name",
-                    tld  => $tld,
+                    domain => "$name",
+                    tld    => $tld,
                   }
               );
         }
@@ -750,7 +766,7 @@ sub check_name_syntax {
           info(
             $info_label_prefix
               . q{_SYNTAX_OK} => {
-                name => "$name",
+                domain => "$name",
               }
           );
     }

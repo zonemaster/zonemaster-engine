@@ -29,11 +29,7 @@ has '_last_language'       => ( is => 'rw', isa => 'Str', builder => '_build_las
 Readonly my %TAG_DESCRIPTIONS => (
     CANNOT_CONTINUE => sub {
         __x    # SYSTEM:CANNOT_CONTINUE
-          "Not enough data about {zone} was found to be able to run tests.", @_;
-    },
-    PROFILE_FILE => sub {
-        __x    # SYSTEM:PROFILE_FILE
-          "Profile was read from {name}.", @_;
+          "Not enough data about {domain} was found to be able to run tests.", @_;
     },
     DEPENDENCY_VERSION => sub {
         __x    # SYSTEM:DEPENDENCY_VERSION
@@ -49,7 +45,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     LOOKUP_ERROR => sub {
         __x    # SYSTEM:LOOKUP_ERROR
-          "DNS query to {ns} for {name}/{type}/{class} failed with error: {message}", @_;
+          "DNS query to {ns} for {domain}/{type}/{class} failed with error: {message}", @_;
     },
     MODULE_ERROR => sub {
         __x    # SYSTEM:MODULE_ERROR
@@ -69,11 +65,11 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     UNKNOWN_METHOD => sub {
         __x    # SYSTEM:UNKNOWN_METHOD
-          "Request to run unknown method {method} in module {module}.", @_;
+          "Request to run unknown method {testcase} in module {module}.", @_;
     },
     UNKNOWN_MODULE => sub {
         __x    # SYSTEM:UNKNOWN_MODULE
-          "Request to run {method} in unknown module {module}. Known modules: {known}.", @_;
+          "Request to run {testcase} in unknown module {module}. Known modules: {module_list}.", @_;
     },
     SKIP_IPV4_DISABLED => sub {
         __x    # SYSTEM:SKIP_IPV4_DISABLED
