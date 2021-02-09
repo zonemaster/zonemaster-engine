@@ -1,5 +1,26 @@
 Release history for Zonemaster component Zonemaster-Engine
 
+v4.1.0 2021-02-10 (public release version)
+
+ [Features]
+ - Adds configurable timer settings for RRSIG in test case DNSSEC04
+   (#860, #200)
+ - Updates test case Syntax06 according to updated specification
+   (#803, 610)
+ - Updates messages arguments to be consistent (#854, #853, #60, #713)
+
+ [Fixes]
+ - Updates translation (#874, #873, #872)
+ - Corrects test case messages (#870)
+ - Cleans up profile file (#868, #867, #866, 843)
+ - Updates installation instructions (#865, #861)
+ - Makes code accept key ID 0 (#863, #864)
+ - Corrects DNSSEC unit test (#859, #864, #860)
+ - Corrects typos in test case Delegation05 (#858, #820, #846, #822)
+ - Corrects sorting for test case Connectivity03 (#852, #851)
+ - Updates root hint data (#849)
+
+
 v4.0.3 2020-11-18 (public fix version)
 
  [Fixes]
