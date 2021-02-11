@@ -57,13 +57,11 @@ sub _build_glue {
     my @glue_names = @{ $self->glue_names };
     my $zname = $self->name->string;
 
-    if ( $Zonemaster::Engine::Recursor::fake_addresses_cache{$zname} ) {
+    if ( Zonemaster::Engine::Recursor->has_fake_addresses( $zname ) ) {
         my @ns_list;
         foreach my $ns ( @glue_names ) {
-            if ( $Zonemaster::Engine::Recursor::fake_addresses_cache{$zname}{$ns} and scalar @{ $Zonemaster::Engine::Recursor::fake_addresses_cache{$zname}{$ns} } ) {
-                foreach my $ip ( @{ $Zonemaster::Engine::Recursor::fake_addresses_cache{$zname}{$ns} } ) {
-                    push @ns_list, Zonemaster::Engine::Nameserver->new( { name => $ns, address => $ip } );
-                }
+            foreach my $ip ( Zonemaster::Engine::Recursor->get_fake_addresses( $zname, $ns ) ) {
+                push @ns_list, Zonemaster::Engine::Nameserver->new( { name => $ns, address => $ip } );
             }
         }
         return \@ns_list;
