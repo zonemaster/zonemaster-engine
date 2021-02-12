@@ -1,0 +1,2068 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-02-12 16:24+0100\n"
+"PO-Revision-Date: 2021-02-02 15.10+0200\n"
+"Last-Translator: sami.salmensuo@traficom.fi\n"
+"Language-Team: Traficom domain team\n"
+"Language: fi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. ADDRESS:NAMESERVER_IP_WITHOUT_REVERSE
+#, perl-brace-format
+msgid "Nameserver {nsname} has an IP address ({ns_ip}) without PTR configured."
+msgstr ""
+"Nimipalvelimen {nsname} IP-osoitteen ({ns_ip}) PTR-tietuetta ei ole "
+"konfiguroitu."
+
+#. ADDRESS:NAMESERVER_IP_PTR_MISMATCH
+#, perl-brace-format
+msgid ""
+"Nameserver {nsname} has an IP address ({ns_ip}) with mismatched PTR result "
+"({names})."
+msgstr ""
+"Nimipalvelimen {nsname} IP-osoitteella ({ns_ip}) on yhteensopimaton PTR-"
+"tulos ({names})."
+
+#. ADDRESS:NAMESERVER_IP_PRIVATE_NETWORK
+#, perl-brace-format
+msgid ""
+"Nameserver {nsname} has an IP address ({ns_ip}) with prefix {prefix} "
+"referenced in {reference} as a '{name}'."
+msgstr ""
+"Nimipalvelimen {nsname} IP-osoitteen ({ns_ip}) etuliitteeseen {prefix} "
+"viitataan kohdassa {reference} seuraavasti: '{name}'."
+
+#. ADDRESS:NO_IP_PRIVATE_NETWORK
+msgid "All Nameserver addresses are in the routable public addressing space."
+msgstr ""
+"Kaikki nimipalvelimen osoitteet ovat reititettävässä julkisessa "
+"osoiteavaruudessa."
+
+#. ADDRESS:NAMESERVERS_IP_WITH_REVERSE
+msgid "Reverse DNS entry exists for each Nameserver IP address."
+msgstr ""
+"Nimipalvelimen jokaisella IP-osoitteella on merkintä käänteisnimipalvelussa."
+
+#. ADDRESS:NAMESERVER_IP_PTR_MATCH
+msgid "Every reverse DNS entry matches name server name."
+msgstr "Jokainen käänteisnimipalvelun merkintä vastaa nimipalvelimen nimeä."
+
+#. ADDRESS:NO_RESPONSE_PTR_QUERY
+#, perl-brace-format
+msgid "No response from nameserver(s) on PTR query ({domain})."
+msgstr ""
+"Ei vastausta yhdeltä tai useammalta nimipalvelimelta PTR-kyselyyn ({domain})."
+
+#. ADDRESS:TEST_CASE_END
+#. BASIC:TEST_CASE_END
+#. CONNECTIVITY:TEST_CASE_END
+#. CONSISTENCY:TEST_CASE_END
+#. DELEGATION:TEST_CASE_END
+#. DNSSEC:TEST_CASE_END
+#. NAMESERVER:TEST_CASE_END
+#. SYNTAX:TEST_CASE_END
+#. ZONE:TEST_CASE_END
+#, perl-brace-format
+msgid "TEST_CASE_END {testcase}."
+msgstr "TEST_CASE_END {testcase}."
+
+#. ADDRESS:TEST_CASE_START
+#. BASIC:TEST_CASE_START
+#. CONNECTIVITY:TEST_CASE_START
+#. CONSISTENCY:TEST_CASE_START
+#. DELEGATION:TEST_CASE_START
+#. DNSSEC:TEST_CASE_START
+#. NAMESERVER:TEST_CASE_START
+#. SYNTAX:TEST_CASE_START
+#. ZONE:TEST_CASE_START
+#, perl-brace-format
+msgid "TEST_CASE_START {testcase}."
+msgstr "TEST_CASE_START {testcase}."
+
+#. BASIC:DOMAIN_NAME_LABEL_TOO_LONG
+#, perl-brace-format
+msgid ""
+"Domain name ({domain}) has a label ({dlabel}) too long ({dlength}/{max})."
+msgstr ""
+"Verkkotunnuksen ({domain}) osa ({dlabel}) on liian pitkä ({dlength}/{max})."
+
+#. BASIC:DOMAIN_NAME_ZERO_LENGTH_LABEL
+#, perl-brace-format
+msgid "Domain name ({domain}) has a zero-length label."
+msgstr "Verkkotunnuksen ({domain}) osan pituus on nolla."
+
+#. BASIC:DOMAIN_NAME_TOO_LONG
+#, perl-brace-format
+msgid "Domain name is too long ({fqdnlength}/{max})."
+msgstr "Verkkotunnus on liian pitkä ({fqdnlength}/{max})."
+
+#. BASIC:NO_PARENT
+msgid "No parent domain could be found for the domain under test."
+msgstr "Testattavalle verkkotunnukselle ei löytynyt ylemmän tason tunnusta."
+
+#. BASIC:HAS_PARENT
+#, perl-brace-format
+msgid "Parent domain '{pname}' was found for the tested domain."
+msgstr "Testattavalle verkkotunnukselle löytyi ylemmän tason tunnus '{pname}'."
+
+#. BASIC:HAS_A_RECORDS
+#, perl-brace-format
+msgid "Nameserver {ns} returned \"A\" record(s) for {domain}."
+msgstr ""
+"Nimipalvelin {ns} palautti yhden tai useamman ”A”-tietueen kohteelle "
+"{domain}."
+
+#. BASIC:NO_A_RECORDS
+#, perl-brace-format
+msgid "Nameserver {ns} did not return \"A\" record(s) for {domain}."
+msgstr "Nimipalvelin {ns} ei palauttanut \"A”-tietueita kohteelle {domain}."
+
+#. BASIC:HAS_NAMESERVERS
+#, perl-brace-format
+msgid "Nameserver {ns} listed these servers as glue: {nsnlist}."
+msgstr "Nimipalvelin {ns} listasi seuraavat palvelimet liimana: {nsnlist}."
+
+#. BASIC:NO_GLUE_PREVENTS_NAMESERVER_TESTS
+msgid "No NS records for tested zone from parent. NS tests skipped."
+msgstr ""
+"Ylätasolta ei löytynyt testattavaa vyöhykettä koskevia NS-tietueita. NS-"
+"testit ohitettu."
+
+#. BASIC:NS_FAILED
+#, perl-brace-format
+msgid "Nameserver {ns} did not return NS records. RCODE was {rcode}."
+msgstr "Nimipalvelin {ns} ei palauttanut NS-tietueita. RCODE oli {rcode}."
+
+#. BASIC:NS_NO_RESPONSE
+#, perl-brace-format
+msgid "Nameserver {ns} did not respond to NS query."
+msgstr "Nimipalvelin {ns} ei vastannut NS-kyselyyn."
+
+#. BASIC:A_QUERY_NO_RESPONSES
+msgid "Nameservers did not respond to A query."
+msgstr "Nimipalvelimet eivät vastanneet A-kyselyyn."
+
+#. BASIC:HAS_NAMESERVER_NO_WWW_A_TEST
+#, perl-brace-format
+msgid "Functional nameserver found. \"A\" query for www.{zname} test skipped."
+msgstr ""
+"Toimiva nimipalvelin löytyi. ”A”-kysely www.{zname} testiä varten ohitettiin."
+
+#. BASIC:IPV4_DISABLED
+#. CONNECTIVITY:IPV4_DISABLED
+#. CONSISTENCY:IPV4_DISABLED
+#. DELEGATION:IPV4_DISABLED
+#. DNSSEC:IPV4_DISABLED
+#. NAMESERVER:IPV4_DISABLED
+#. SYNTAX:IPV4_DISABLED
+#, perl-brace-format
+msgid "IPv4 is disabled, not sending \"{rrtype}\" query to {ns}."
+msgstr "IPv4 ei ole käytössä, ei lähetä kyselyä \"{rrtype}\" kohteelle {ns}."
+
+#. BASIC:IPV4_ENABLED
+#, perl-brace-format
+msgid "IPv4 is enabled, can send \"{rrtype}\" query to {ns}."
+msgstr "IPv4 on käytössä ja voi lähettää kyselyn \"{rrtype}\" kohteelle {ns}."
+
+#. BASIC:IPV6_DISABLED
+#. CONNECTIVITY:IPV6_DISABLED
+#. CONSISTENCY:IPV6_DISABLED
+#. DELEGATION:IPV6_DISABLED
+#. DNSSEC:IPV6_DISABLED
+#. NAMESERVER:IPV6_DISABLED
+#. SYNTAX:IPV6_DISABLED
+#, perl-brace-format
+msgid "IPv6 is disabled, not sending \"{rrtype}\" query to {ns}."
+msgstr "IPv6 ei ole käytössä, ei lähetä kyselyä \"{rrtype}\" kohteelle {ns}."
+
+#. BASIC:IPV6_ENABLED
+#, perl-brace-format
+msgid "IPv6 is enabled, can send \"{rrtype}\" query to {ns}."
+msgstr "IPv6 on käytössä ja voi lähettää kyselyn \"{rrtype}\" kohteelle {ns}."
+
+#. CONNECTIVITY:ERROR_ASN_DATABASE
+#, perl-brace-format
+msgid "ASN Database error. No data to analyze for {ns_ip}."
+msgstr "ASN-tietokantavirhe. Ei analysoitavia tietoja kohteelle {ns_ip}."
+
+#. CONNECTIVITY:EMPTY_ASN_SET
+#, perl-brace-format
+msgid "AS database returned no informations for IP address {ns_ip}."
+msgstr "AS-tietokanta ei palauttanut tietoa IP-osoitteesta {ns_ip}."
+
+#. CONNECTIVITY:IPV4_SAME_ASN
+#, perl-brace-format
+msgid ""
+"All authoritative nameservers have the IPv4 addresses in the same AS set "
+"({asn_list})."
+msgstr ""
+"Kaikkien autoritääristen nimipalvelimien IPv4-osoitteet kuuluvat samaan AS-"
+"joukkoon ({asn_list})."
+
+#. CONNECTIVITY:IPV4_ONE_ASN
+#, perl-brace-format
+msgid ""
+"All authoritative nameservers have the IPv4 addresses in the same AS ({asn})."
+msgstr ""
+"Kaikkien autoritääristen nimipalvelimien IPv4-osoitteet kuuluvat samaan AS:"
+"ään ({asn})."
+
+#. CONNECTIVITY:IPV4_DIFFERENT_ASN
+#, perl-brace-format
+msgid ""
+"At least two IPv4 addresses of the authoritative nameservers are announce by "
+"different AS sets. A merged list of all AS: ({asn_list})."
+msgstr ""
+"Eri AS-joukot ilmoittavat ainakin kaksi autoritääristen nimipalvelinten IPv4-"
+"osoitteista. Yhdistetty lista kaikista AS:istä: ({asn_list})."
+
+#. CONNECTIVITY:IPV6_SAME_ASN
+#, perl-brace-format
+msgid ""
+"All authoritative nameservers have the IPv6 addresses in the same AS set "
+"({asn_list})."
+msgstr ""
+"Kaikkien autoritääristen nimipalvelimien IPv6-osoitteet kuuluvat samaan AS-"
+"joukkoon ({asn_list})."
+
+#. CONNECTIVITY:IPV6_ONE_ASN
+#, perl-brace-format
+msgid ""
+"All authoritative nameservers have the IPv6 addresses in the same AS ({asn})."
+msgstr ""
+"Kaikkien autoritääristen nimipalvelimien IPv6-osoitteet kuuluvat samaan AS:"
+"ään ({asn})."
+
+#. CONNECTIVITY:IPV6_DIFFERENT_ASN
+#, perl-brace-format
+msgid ""
+"At least two IPv6 addresses of the authoritative nameservers are announce by "
+"different AS sets. A merged list of all AS: ({asn_list})."
+msgstr ""
+"Eri AS-joukot ilmoittavat ainakin kaksi autoritääristen nimipalvelinten IPv6-"
+"osoitteista. Yhdistetty lista kaikista AS:istä: ({asn_list})."
+
+#. CONNECTIVITY:NAMESERVER_HAS_TCP_53
+#, perl-brace-format
+msgid "Nameserver {ns} accessible over TCP on port 53."
+msgstr "Nimipalvelin {ns} on käytettävissä TCP:n kautta portissa 53."
+
+#. CONNECTIVITY:NAMESERVER_HAS_UDP_53
+#, perl-brace-format
+msgid "Nameserver {ns} accessible over UDP on port 53."
+msgstr "Nimipalvelin {ns} on käytettävissä UDP:n kautta portissa 53."
+
+#. CONNECTIVITY:NAMESERVER_NO_TCP_53
+#, perl-brace-format
+msgid "Nameserver {ns} not accessible over TCP on port 53."
+msgstr "Nimipalvelin {ns} ei ole käytettävissä TCP:n kautta portissa 53."
+
+#. CONNECTIVITY:NAMESERVER_NO_UDP_53
+#, perl-brace-format
+msgid "Nameserver {ns} not accessible over UDP on port 53."
+msgstr "Nimipalvelin {ns} ei ole käytettävissä UDP:n kautta portissa 53."
+
+#. CONNECTIVITY:IPV4_ASN
+#, perl-brace-format
+msgid "Name servers have IPv4 addresses in the following ASs: {asn}."
+msgstr "Nimipalvelimilla on IPv4-osoitteita seuraavissa AS:issä: {asn}."
+
+#. CONNECTIVITY:IPV6_ASN
+#, perl-brace-format
+msgid "Name servers have IPv6 addresses in the following ASs: {asn}."
+msgstr "Nimipalvelimilla on IPv6-osoitteita seuraavissa AS:issä: {asn}."
+
+#. CONNECTIVITY:ASN_INFOS_RAW
+#, perl-brace-format
+msgid "The ASN data for name server IP address \"{ns_ip}\" is \"{data}\"."
+msgstr "Nimipalvelimen IP-osoitteen \"{ns_ip}\" ASN-tieto on \"{data}\"."
+
+#. CONNECTIVITY:ASN_INFOS_ANNOUNCE_BY
+#, perl-brace-format
+msgid "Name server IP address \"{ns_ip}\" is announced by ASN {asn}."
+msgstr "Nimipalvelimen IP-osoitteen \"{ns_ip}\" ilmoittaa ASN {asn}."
+
+#. CONNECTIVITY:ASN_INFOS_ANNOUNCE_IN
+#, perl-brace-format
+msgid "Name server IP address \"{ns_ip}\" is announced in prefix \"{prefix}\"."
+msgstr ""
+"Nimipalvelimen IP-osoite \"{ns_ip}\" ilmoitetaan etuliitteellä \"{prefix}\"."
+
+#. CONSISTENCY:ADDRESSES_MATCH
+msgid "Glue records are consistent between glue and authoritative data."
+msgstr "Liimatietueet ovat yhtäpitäviä liiman ja autoritäärisen tiedon kanssa."
+
+#. CONSISTENCY:CHILD_NS_FAILED
+#, perl-brace-format
+msgid "Unexpected or erroneous reply from {ns}."
+msgstr "Odottamaton tai virheellinen vastaus kohteelta {ns}."
+
+#. CONSISTENCY:CHILD_ZONE_LAME
+msgid "Lame delegation."
+msgstr "Delegointivirhe."
+
+#. CONSISTENCY:EXTRA_ADDRESS_CHILD
+#, perl-brace-format
+msgid ""
+"Child has extra nameserver IP address(es) not listed at parent "
+"({ns_ip_list})."
+msgstr ""
+"Alemmalla tasolla on yksi tai useampia nimipalvelimen IP-osoitteita, joita "
+"ei ole listattu ylemmällä tasolla ({ns_ip_list})."
+
+#. CONSISTENCY:IN_BAILIWICK_ADDR_MISMATCH
+#, perl-brace-format
+msgid ""
+"In-bailiwick name server listed at parent has a mismatch between glue data "
+"at parent ({parent_addresses}) and any equivalent address record in child "
+"zone ({zone_addresses})."
+msgstr ""
+"Ylemmällä tasolla alueelle listatulla nimipalvelimella on "
+"yhteensopimattomuus ylemmän tason liimatietojen ({parent_addresses}) ja "
+"alemman vyöhykkeen mahdollisten vastaavien osoitetietueiden välillä "
+"({zone_addresses})."
+
+#. CONSISTENCY:MULTIPLE_NS_SET
+#, perl-brace-format
+msgid "Found {count} NS set(s)."
+msgstr "NS-joukkoja löydetty {count} kpl."
+
+#. CONSISTENCY:MULTIPLE_SOA_MNAMES
+#, perl-brace-format
+msgid "Saw {count} SOA mname."
+msgstr "SOA mname -tietoja havaittu {count} kpl."
+
+#. CONSISTENCY:MULTIPLE_SOA_RNAMES
+#, perl-brace-format
+msgid "Found {count} SOA rname(s)."
+msgstr "SOA rname -tietoja löydetty {count} kpl."
+
+#. CONSISTENCY:MULTIPLE_SOA_SERIALS
+#, perl-brace-format
+msgid "Found {count} SOA serial number(s)."
+msgstr "SOA-sarjanumeroita löydetty {count} kpl."
+
+#. CONSISTENCY:MULTIPLE_SOA_TIME_PARAMETER_SET
+#, perl-brace-format
+msgid "Found {count} SOA time parameter set(s)."
+msgstr "SOA-aikaparametrijoukkoja löydetty {count} kpl."
+
+#. CONSISTENCY:NO_RESPONSE
+#. DELEGATION:NO_RESPONSE
+#. DNSSEC:NO_RESPONSE
+#. ZONE:NO_RESPONSE
+#, perl-brace-format
+msgid "Nameserver {ns} did not respond."
+msgstr "Nimipalvelin {ns} ei vastannut."
+
+#. CONSISTENCY:NO_RESPONSE_NS_QUERY
+#, perl-brace-format
+msgid "No response from nameserver {ns} on NS queries."
+msgstr "Nimipalvelin {ns} ei vastannut NS-kyselyihin."
+
+#. CONSISTENCY:NO_RESPONSE_SOA_QUERY
+#, perl-brace-format
+msgid "No response from nameserver {ns} on SOA queries."
+msgstr "Nimipalvelin {ns} ei vastannut SOA-kyselyihin."
+
+#. CONSISTENCY:NS_SET
+#, perl-brace-format
+msgid "Saw NS set ({nsname_list}) on following nameserver set : {servers}."
+msgstr ""
+"Havaittu NS-joukko ({nsname_list}) seuraavassa nimipalvelinjoukossa: "
+"{servers}."
+
+#. CONSISTENCY:ONE_NS_SET
+#, perl-brace-format
+msgid "A single NS set was found ({nsname_list})."
+msgstr "Yksi NS-joukko löydettiin kohteesta ({nsname_list})."
+
+#. CONSISTENCY:ONE_SOA_MNAME
+#, perl-brace-format
+msgid "A single SOA mname value was seen ({mname})."
+msgstr "Yksi SOA mname -arvo havaittiin kohteessa ({mname})."
+
+#. CONSISTENCY:ONE_SOA_RNAME
+#, perl-brace-format
+msgid "A single SOA rname value was found ({rname})."
+msgstr "Yksi SOA rname -arvo löydettiin kohteesta ({rname})."
+
+#. CONSISTENCY:ONE_SOA_SERIAL
+#, perl-brace-format
+msgid "A single SOA serial number was found ({serial})."
+msgstr "Yksi SOA-sarjanumero löydettiin kohteesta ({serial})."
+
+#. CONSISTENCY:ONE_SOA_TIME_PARAMETER_SET
+#, perl-brace-format
+msgid ""
+"A single SOA time parameter set was seen (REFRESH={refresh},RETRY={retry},"
+"EXPIRE={expire},MINIMUM={minimum})."
+msgstr ""
+"Yksi SOA-aikaparametrijoukko havaittiin (REFRESH={refresh},RETRY={retry},"
+"EXPIRE={expire},MINIMUM={minimum})."
+
+#. CONSISTENCY:OUT_OF_BAILIWICK_ADDR_MISMATCH
+#, perl-brace-format
+msgid ""
+"Out-of-bailiwick name server listed at parent with glue record has a "
+"mismatch between the glue at the parent ({parent_addresses}) and any "
+"equivalent address record found in authoritative zone ({zone_addresses})."
+msgstr ""
+"Ylemmällä tasolla alueen ulkopuolelle listatulla nimipalvelimella on "
+"yhteensopimattomuus ylemmän tason liimatietojen ({parent_addresses}) ja "
+"autoritäärisen alueen mahdollisten vastaavien osoitetietueiden välillä "
+"({zone_addresses})."
+
+#. CONSISTENCY:SOA_RNAME
+#, perl-brace-format
+msgid "Found SOA rname {rname} on following nameserver set : {ns_list}."
+msgstr ""
+"Löydetty SOA rname {rname} seuraavasta nimipalvelinjoukosta: {ns_list}."
+
+#. CONSISTENCY:SOA_SERIAL
+#, perl-brace-format
+msgid "Saw SOA serial number {serial} on following nameserver set : {ns_list}."
+msgstr ""
+"Havaittu SOA-sarjanumero {serial} seuraavassa nimipalvelinjoukossa: "
+"{ns_list}."
+
+#. CONSISTENCY:SOA_SERIAL_VARIATION
+#, perl-brace-format
+msgid ""
+"Difference between the smaller serial ({serial_min}) and the bigger one "
+"({serial_max}) is greater than the maximum allowed ({max_variation})."
+msgstr ""
+"Pienemmän sarjanumeron ({serial_min}) ja suuremman ({serial_max}) välinen "
+"ero on suurempi kuin suurin mahdollinen sallittu arvo ({max_variation})."
+
+#. CONSISTENCY:SOA_TIME_PARAMETER_SET
+#, perl-brace-format
+msgid ""
+"Saw SOA time parameter set (REFRESH={refresh}, RETRY={retry}, "
+"EXPIRE={expire}, MINIMUM={minimum}) on following nameserver set : {ns_list}."
+msgstr ""
+"Havaittu SOA-aikaparametrijoukko (REFRESH={refresh}, RETRY={retry}, "
+"EXPIRE={expire}, MINIMUM={minimum}) seuraavassa nimipalvelinjoukossa: "
+"{ns_list}."
+
+#. DNSSEC:ADDITIONAL_DNSKEY_SKIPPED
+msgid "No DNSKEYs found. Additional tests skipped."
+msgstr "DNSKEY:tä ei löytynyt. Lisätestit ohitettu."
+
+#. DNSSEC:ALGORITHM_DEPRECATED
+#, perl-brace-format
+msgid ""
+"The DNSKEY with tag {keytag} uses deprecated algorithm number {algo_num} "
+"({algo_descr})."
+msgstr ""
+"DNSKEY, jolla on tunniste {keytag}, käyttää hylättävää algoritmin numeroa "
+"{algo_num} ({algo_descr})."
+
+#. DNSSEC:ALGORITHM_NOT_RECOMMENDED
+#, perl-brace-format
+msgid ""
+"The DNSKEY with tag {keytag} uses an algorithm number {algo_num} "
+"({algo_descr}) which is not recommended to be used."
+msgstr ""
+"DNSKEY, jolla on tunniste {keytag}, käyttää algoritmin numeroa {algo_num} "
+"({algo_descr}), vaikka sen käyttöä ei suositella."
+
+#. DNSSEC:ALGORITHM_NOT_ZONE_SIGN
+#, perl-brace-format
+msgid ""
+"The DNSKEY with tag {keytag} uses algorithm number not meant for zone "
+"signing, algorithm number {algo_num} ({algo_descr})."
+msgstr ""
+"DNSKEY, jolla on tunniste {keytag}, käyttää algoritmin numeroa, jota ei ole "
+"tarkoitettu vyöhykkeen allekirjoittamiseen, algoritmin numero {algo_num} "
+"({algo_descr})."
+
+#. DNSSEC:ALGORITHM_OK
+#, perl-brace-format
+msgid ""
+"The DNSKEY with tag {keytag} uses algorithm number {algo_num} "
+"({algo_descr}), which is OK."
+msgstr ""
+"DNSKEY, jolla on tunniste {keytag}, käyttää algoritmin numeroa {algo_num} "
+"({algo_descr}), joka on OK."
+
+#. DNSSEC:ALGORITHM_PRIVATE
+#, perl-brace-format
+msgid ""
+"The DNSKEY with tag {keytag} uses private algorithm number {algo_num} "
+"({algo_descr})."
+msgstr ""
+"DNSKEY, jolla on tunniste {keytag}, käyttää yksityistä algoritmin numeroa "
+"{algo_num} ({algo_descr})."
+
+#. DNSSEC:ALGORITHM_RESERVED
+#, perl-brace-format
+msgid ""
+"The DNSKEY with tag {keytag} uses reserved algorithm number {algo_num} "
+"({algo_descr})."
+msgstr ""
+"DNSKEY, jolla on tunniste {keytag}, käyttää varattua algoritmin numeroa "
+"{algo_num} ({algo_descr})."
+
+#. DNSSEC:ALGORITHM_UNASSIGNED
+#, perl-brace-format
+msgid ""
+"The DNSKEY with tag {keytag} uses unassigned algorithm number {algo_num} "
+"({algo_descr})."
+msgstr ""
+"DNSKEY, jolla on tunniste {keytag}, käyttää asettamatonta algoritmin numeroa "
+"{algo_num} ({algo_descr})."
+
+#. DNSSEC:ALGO_NOT_SIGNED_RRSET
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responded with no RRSIG for RRset {rrtype} created by the "
+"algorithm {algo_num}."
+msgstr ""
+"Nimipalvelimen {ns} vastauksessa ei ollut RRSIG-tietuetta RRset-joukolle "
+"{rrtype}, jonka oli luonut algoritmi {algo_num}."
+
+#. DNSSEC:ALL_ALGO_SIGNED
+msgid ""
+"All the tested RRset (SOA/DNSKEY/NS) are signed by each algorithm present in "
+"the DNSKEY RRset."
+msgstr ""
+"Kaikki testatut RRset (SOA/DNSKEY/NS) -joukot on allekirjoittanut jokainen "
+"algoritmi, joka löytyy DNSKEY RRset -joukosta."
+
+#. DNSSEC:BROKEN_DNSSEC
+#, perl-brace-format
+msgid ""
+"All nameservers for zone {domain} responds with neither NSEC nor NSEC3 "
+"records when such records are expected."
+msgstr ""
+"Mikään nimipalvelin vyöhykkeelle {domain} ei anna vastaukseksi NSEC- tai "
+"NSEC3 -tietuetta, vaikka näitä tietueita odotetaan."
+
+#. DNSSEC:BROKEN_DS
+#, perl-brace-format
+msgid ""
+"DNSKEY record with tag {keytag} returned by nameserver {ns} does not match "
+"the algorithm and hash values in a DS record with same tag in parent zone."
+msgstr ""
+"DNSKEY-tietue, jolla on tunniste {keytag}, jonka palautti nimipalvelin {ns}, "
+"ei vastaa sitä algoritmia ja tiivistettä, jotka löytyvät ylemmän vyöhykkeen "
+"DS-tietueesta, jolla on sama tunniste."
+
+#. DNSSEC:BROKEN_RRSIG
+#, perl-brace-format
+msgid ""
+"The RRSIG of the DNSKEY RRset created by tag {keytag} returned by nameserver "
+"{ns} failed to be verified with error '{error}' (a DS record with same tag "
+"is present in the parent zone)."
+msgstr ""
+"DNSKEY RRset-joukon RRSIG-tietuetta, jonka on luonut tunniste {keytag}, "
+"jonka palautti nimipalvelin {ns}, ei voitu todentaa, mistä seurasi virhe "
+"'{error}' (ylemmällä vyöhykkeellä on DS-tietue, jolla on sama tunniste)."
+
+#. DNSSEC:DELEGATION_NOT_SIGNED
+#, perl-brace-format
+msgid "Delegation from parent to child is not properly signed ({reason})."
+msgstr ""
+"Delegointia ylemmältä tasolta alemmalle ei ole allekirjoitettu oikein "
+"({reason})."
+
+#. DNSSEC:DELEGATION_SIGNED
+msgid "Delegation from parent to child is properly signed."
+msgstr "Delegointi ylemmältä tasolta alemmalle on allekirjoitettu oikein."
+
+#. DNSSEC:DNSKEY_AND_DS
+#, perl-brace-format
+msgid "{parent} sent a DS record, and {child} a DNSKEY record."
+msgstr "{parent} lähetti DS-tietueen ja {child} DNSKEY-tietueen."
+
+#. DNSSEC:DNSKEY_BUT_NOT_DS
+#, perl-brace-format
+msgid "{child} sent a DNSKEY record, but {parent} did not send a DS record."
+msgstr ""
+"{child} lähetti DNSKEY-tietueen, mutta {parent} ei lähettänyt DS-tietuetta."
+
+#. DNSSEC:DNSKEY_KSK_NOT_SEP
+#, perl-brace-format
+msgid ""
+"Flags field of DNSKEY record with tag {keytag} returned by nameserver {ns} "
+"has not SEP bit set although DS with same tag is present in parent."
+msgstr ""
+"Lippukentälle, joka kuuluu DNSKEY-tietueelle, jolla on tunniste {keytag}, "
+"jonka palautti nimipalvelin {ns}, ei ole asetettu SEP-bittiä vaikka "
+"ylätasolla on DS, jolla on sama tunniste."
+
+#. DNSSEC:DNSKEY_NOT_ZONE_SIGN
+#, perl-brace-format
+msgid ""
+"Flags field of DNSKEY record with tag {keytag} returned by nameserver {ns} "
+"has not ZONE bit set although DS with same tag is present in parent."
+msgstr ""
+"Lippukentälle, joka kuuluu DNSKEY-tietueelle, jolla on tunniste {keytag}, "
+"jonka palautti nimipalvelin {ns}, ei ole asetettu ZONE-bittiä vaikka "
+"ylätasolla on DS, jolla on sama tunniste."
+
+#. DNSSEC:DNSKEY_NOT_SIGNED
+msgid "The apex DNSKEY RRset was not correctly signed."
+msgstr "Ylintä DNSKEY RRset -joukkoa ei ollut allekirjoitettu oikein."
+
+#. DNSSEC:DNSKEY_SIGNATURE_NOT_OK
+#, perl-brace-format
+msgid ""
+"Signature for DNSKEY with tag {keytag} failed to verify with error '{error}'."
+msgstr ""
+"Allekirjoitusta, joka kuuluu DNSKEY-tietueelle, jolla on tunniste {keytag}, "
+"ei voitu todentaa, mistä seurasi virhe '{error}'."
+
+#. DNSSEC:DNSKEY_SIGNATURE_OK
+#, perl-brace-format
+msgid "A signature for DNSKEY with tag {keytag} was correctly signed."
+msgstr ""
+"Allekirjoitus, joka kuuluu DNSKEY-tietueelle, jolla on tunniste {keytag}, "
+"oli allekirjoitettu oikein."
+
+#. DNSSEC:DNSKEY_SIGNED
+msgid "The apex DNSKEY RRset was correcly signed."
+msgstr "Ylin DNSKEY RRset -joukko oli allekirjoitettu oikein."
+
+#. DNSSEC:DNSKEY_SMALLER_THAN_REC
+#, perl-brace-format
+msgid ""
+"DNSKEY with tag {keytag} and using algorithm {algo_num} ({algo_descr}) has a "
+"size ({keysize}) smaller than the recommended one ({keysizerec})."
+msgstr ""
+"DNSKEY, jolla on tunniste {keytag} ja joka käyttää algoritmia {algo_num} "
+"({algo_descr}), on kooltaan ({keysize}) pienempi kuin suositeltu "
+"({keysizerec})."
+
+#. DNSSEC:DNSKEY_TOO_SMALL_FOR_ALGO
+#, perl-brace-format
+msgid ""
+"DNSKEY with tag {keytag} and using algorithm {algo_num} ({algo_descr}) has a "
+"size ({keysize}) smaller than the minimum one ({keysizemin})."
+msgstr ""
+"DNSKEY, jolla on tunniste {keytag} ja joka käyttää algoritmia {algo_num} "
+"({algo_descr}), on kooltaan ({keysize}) pienempi kuin vähimmäiskoko "
+"({keysizemin})."
+
+#. DNSSEC:DNSKEY_TOO_LARGE_FOR_ALGO
+#, perl-brace-format
+msgid ""
+"DNSKEY with tag {keytag} and using algorithm {algo_num} ({algo_descr}) has a "
+"size ({keysize}) larger than the maximum one ({keysizemax})."
+msgstr ""
+"DNSKEY, jolla on tunniste {keytag} ja joka käyttää algoritmia {algo_num} "
+"({algo_descr}), on kooltaan ({keysize}) suurempi kuin enimmäiskoko "
+"({keysizemax})."
+
+#. DNSSEC:DS_ALGORITHM_NOT_DS
+#, perl-brace-format
+msgid ""
+"{ns} returned a DS record created by algorithm {algo_num} ({algo_mnemo}) "
+"which is not meant for DS. The DS record is for the DNSKEY record with "
+"keytag {keytag} in zone {domain}."
+msgstr ""
+"{ns} palautti DS-tietueen, jonka on luonut algoritmi {algo_num} "
+"({algo_mnemo}), jota ei ole tarkoitettu DS:lle. DS-tietue koskee DNSKEY-"
+"tietuetta, jolla on avaintunniste {keytag} vyöhykkeellä {domain}."
+
+#. DNSSEC:DS_ALGORITHM_DEPRECATED
+#, perl-brace-format
+msgid ""
+"{ns} returned a DS record created by algorithm {algo_num} ({algo_mnemo}), "
+"which is deprecated. The DS record is for the DNSKEY record with keytag "
+"{keytag} in zone {domain}."
+msgstr ""
+"{ns} palautti DS-tietueen, jonka on luonut algoritmi {algo_num} "
+"({algo_mnemo}), joka on hylättävä. DS-tietue koskee DNSKEY-tietuetta, jolla "
+"on avaintunniste {keytag} vyöhykkeellä {domain}."
+
+#. DNSSEC:DS_ALGORITHM_MISSING
+#, perl-brace-format
+msgid ""
+"{ns} returned no DS record created by algorithm {algo_num} ({algo_mnemo}) "
+"for zone {domain}, which is required."
+msgstr ""
+"{ns} ei palauttanut mitään DS-tietuetta, jonka oli luonut algoritmi "
+"{algo_num} ({algo_mnemo}) vyöhykkeelle {domain}, mikä on pakollinen."
+
+#. DNSSEC:DS_ALGORITHM_OK
+#, perl-brace-format
+msgid ""
+"{ns} returned a DS record created by algorithm {algo_num} ({algo_mnemo}), "
+"which is OK. The DS record is for the DNSKEY record with keytag {keytag} in "
+"zone {domain}."
+msgstr ""
+"{ns} palautti DS-tietueen, jonka on luonut algoritmi {algo_num} "
+"({algo_mnemo}), joka on OK. DS-tietue koskee DNSKEY-tietuetta, jolla on "
+"avaintunniste {keytag} vyöhykkeellä {domain}."
+
+#. DNSSEC:DS_ALGORITHM_RESERVED
+#, perl-brace-format
+msgid ""
+"{ns} returned a DS record created by with an algorithm not assigned "
+"(algorithm number {algo_num}), which is not OK. The DS record is for the "
+"DNSKEY record with keytag {keytag} in zone {domain}."
+msgstr ""
+"{ns} palautti DS-tietueen, jonka on luonut algoritmi, jota ei ole asetettu "
+"(algoritmi numero {algo_num}), mikä ei ole OK. DS-tietue koskee DNSKEY-"
+"tietuetta, jolla on avaintunniste {keytag} vyöhykkeellä {domain}."
+
+#. DNSSEC:DS_ALGO_SHA1_DEPRECATED
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} returned a DS record created by algorithm {algo_num} "
+"({algo_mnemo}) which is deprecated, while it is still widely used. The DS "
+"record is for the DNSKEY record with keytag {keytag} in zone {domain}."
+msgstr ""
+"Nimipalvelin {ns} palautti DS-tietueen, jonka on luonut algoritmi {algo_num} "
+"({algo_mnemo}), joka on hylättävä, vaikka se on laajalti käytössä. DS-tietue "
+"koskee DNSKEY-tietuetta, jolla on avaintunniste {keytag} vyöhykkeellä "
+"{domain}."
+
+#. DNSSEC:DS_BUT_NOT_DNSKEY
+#, perl-brace-format
+msgid "{parent} sent a DS record, but {child} did not send a DNSKEY record."
+msgstr ""
+"{parent} lähetti DS-tietueen, mutta {child} ei lähettänyt DNSKEY-tietuetta."
+
+#. DNSSEC:DS_MATCHES
+msgid ""
+"The DS records in the parent zone match DNSKEY records in the child zone."
+msgstr ""
+"Ylemmän vyöhykkeen DS-tietueet vastaavat alemman vyöhykkeen DNSKEY-tietueita."
+
+#. DNSSEC:DURATION_LONG
+#, perl-brace-format
+msgid ""
+"RRSIG with keytag {keytag} and covering type(s) {types} has a duration of "
+"{duration} seconds, which is too long."
+msgstr ""
+"RRSIG, jolla on avaintunniste {keytag} ja joka kattaa tyypin/tyypit {types}, "
+"kestää {duration} sekuntia, mikä on liian kauan."
+
+#. DNSSEC:DURATION_OK
+#, perl-brace-format
+msgid ""
+"RRSIG with keytag {keytag} and covering type(s) {types} has a duration of "
+"{duration} seconds, which is just fine."
+msgstr ""
+"RRSIG, jolla on avaintunniste {keytag} ja joka kattaa tyypin/tyypit {types}, "
+"kestää {duration} sekuntia, mikä on sopivasti."
+
+#. DNSSEC:EXTRA_PROCESSING_BROKEN
+#, perl-brace-format
+msgid ""
+"Server at {server} sent {keys} DNSKEY records, and {sigs} RRSIG records."
+msgstr ""
+"Palvelin kohteessa {server} lähetti {keys} DNSKEY-tietueet ja {sigs} RRSIG-"
+"tietueet."
+
+#. DNSSEC:EXTRA_PROCESSING_OK
+#, perl-brace-format
+msgid "Server at {server} sent {keys} DNSKEY records and {sigs} RRSIG records."
+msgstr ""
+"Palvelin kohteessa {server} lähetti {keys} DNSKEY-tietueet ja {sigs} RRSIG-"
+"tietueet."
+
+#. DNSSEC:HAS_NSEC3
+msgid "The zone has NSEC3 records."
+msgstr "Vyöhykkeellä on NSEC3-tietueita."
+
+#. DNSSEC:HAS_NSEC
+msgid "The zone has NSEC records."
+msgstr "Vyöhykkeellä on NSEC-tietueita."
+
+#. DNSSEC:INCONSISTENT_DNSSEC
+#, perl-brace-format
+msgid ""
+"Some, but not all, nameservers for zone {domain} respond with neither NSEC "
+"nor NSEC3 records when such records are expected."
+msgstr ""
+"Jotkut, mutta ei kaikki vyöhykkeen {domain} nimipalvelimet eivät vastaa "
+"NSEC- eikä NSEC3-tietueilla, vaikka näitä tietueita odotetaan."
+
+#. DNSSEC:INCONSISTENT_NSEC_NSEC3
+#, perl-brace-format
+msgid ""
+"Some nameservers for zone {domain} respond with NSEC records and others "
+"respond with NSEC3 records. Consistency is expected."
+msgstr ""
+"Jotkut {domain} vyöhykkeen nimipalvelimista vastaavat NSEC-tietueilla ja "
+"toiset NSEC3-tietueilla. Yhdenmukaisuutta odotetaan."
+
+#. DNSSEC:ITERATIONS_OK
+#, perl-brace-format
+msgid "The number of NSEC3 iterations is {count}, which is OK."
+msgstr "NSEC3-toistojen lukumäärä on {count}, joka on OK."
+
+#. DNSSEC:KEY_DETAILS
+#, perl-brace-format
+msgid ""
+"Key with keytag {keytag} details : Size = {keysize}, Flags ({sep}, "
+"{rfc5011})."
+msgstr ""
+"Avaimen, jolla on avaintunniste {keytag}, tiedot: koko = {keysize}, liput "
+"({sep}, {rfc5011})."
+
+#. DNSSEC:KEY_SIZE_OK
+msgid "All keys from the DNSKEY RRset have the correct size."
+msgstr "Kaikki DNSKEY RRset -joukon avaimet ovat oikean kokoisia."
+
+#. DNSSEC:MANY_ITERATIONS
+#, perl-brace-format
+msgid "The number of NSEC3 iterations is {count}, which is on the high side."
+msgstr "NSEC3-toistojen lukumäärä on {count}, joka on suhteellisen suuri."
+
+#. DNSSEC:MIXED_NSEC_NSEC3
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} for zone {domain} responds with both NSEC and NSEC3 records "
+"when only one record type is expected."
+msgstr ""
+"Nimipalvelin {ns} vyöhykkeelle {domain} vastaa sekä NSEC- että NSEC3-"
+"tietueilla, kun odotetaan vain yhtä tietuetyyppiä."
+
+#. DNSSEC:NEITHER_DNSKEY_NOR_DS
+msgid "There are neither DS nor DNSKEY records for the zone."
+msgstr "Vyöhykkeellä ei ole DS- eikä DNSKEY-tietueita."
+
+#. DNSSEC:NO_DNSKEY
+msgid "No DNSKEYs were returned."
+msgstr "DNSKEY-tietueita ei palautettu."
+
+#. DNSSEC:NO_KEYS_OR_NO_SIGS
+#, perl-brace-format
+msgid ""
+"Cannot test DNSKEY signatures, because we got {keys} DNSKEY records and "
+"{sigs} RRSIG records."
+msgstr ""
+"DNSKEY-allekirjoituksia ei voi testata, koska saimme sekä {keys} DNSKEY-"
+"tietueita että {sigs} RRSIG-tietueita."
+
+#. DNSSEC:NO_KEYS_OR_NO_SIGS_OR_NO_SOA
+#, perl-brace-format
+msgid ""
+"Cannot test SOA signatures, because we got {keys} DNSKEY records, {sigs} "
+"RRSIG records and {soas} SOA records."
+msgstr ""
+"SOA-allekirjoituksia ei voi testata, koska saimme sekä {keys} DNSKEY-"
+"tietueita että {sigs} RRSIG-tietueita ja {soas} SOA-tietueita."
+
+#. DNSSEC:NO_MATCHING_DNSKEY
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} returned no DNSKEY record matching the DS record with tag "
+"{keytag} found in the parent zone."
+msgstr ""
+"Nimipalvelin {ns} ei palauttanut mitään DNSKEY-tietuetta, joka olisi "
+"vastannut ylemmän vyöhykkeen DS-tietuetta, jolla on tunniste {keytag}."
+
+#. DNSSEC:NO_MATCHING_RRSIG
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} returned no signature on the DNSKEY RRset that corresponds "
+"to the DNSKEY with tag {keytag} even though there is a DS record in the "
+"parent zone for that DNSKEY record."
+msgstr ""
+"Nimipalvelin {ns} ei palauttanut allekirjoitusta sille DNSKEY RRset -"
+"joukolle, joka vastaa DNSKEY-tietuetta, jolla on tunniste {keytag}, vaikka "
+"tälle DNSKEY-tietueelle on olemassa DS-tietue ylemmällä vyöhykkeellä."
+
+#. DNSSEC:NO_NSEC3PARAM
+#, perl-brace-format
+msgid "{server} returned no NSEC3PARAM records."
+msgstr "{server} ei palauttanut NSEC3PARAM-tietueita."
+
+#. DNSSEC:NO_NSEC_NSEC3
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} for zone {domain} responds with neither NSEC nor NSEC3 "
+"record when when such records are expected."
+msgstr ""
+"Nimipalvelin {ns} vyöhykkeelle {domain} ei vastaa NSEC- eikä NSEC3-"
+"tietueella, vaikka tällaisia tietueita odotetaan."
+
+#. DNSSEC:NO_RESPONSE_DNSKEY
+#, perl-brace-format
+msgid "Nameserver {ns} responded with no DNSKEY record(s)."
+msgstr "Nimipalvelimen {ns} vastauksessa ei ollut DNSKEY-tietueita."
+
+#. DNSSEC:NO_RESPONSE_DS
+#, perl-brace-format
+msgid "{ns} returned no DS records for {domain}."
+msgstr "{ns} ei palauttanut DS-tietueita kohteelle {domain}."
+
+#. DNSSEC:NO_RESPONSE_RRSET
+#, perl-brace-format
+msgid "Nameserver {ns} responded with no {rrtype} record(s)."
+msgstr "Nimipalvelimen {ns} vastauksessa ei ollut {rrtype}-tietueita."
+
+#. DNSSEC:NO_RRSIG_DNSKEY
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responded with no RRSIG record(s) covering the DNSKEY RRset."
+msgstr ""
+"Nimipalvelimen {ns} vastauksessa ei ollut DNSKEY RRset -joukon kattavia "
+"RRSIG-tietueita."
+
+#. DNSSEC:NOT_SIGNED
+msgid "The zone is not signed with DNSSEC."
+msgstr "Vyöhykkeellä ei ole DNSSEC-allekirjoitusta."
+
+#. DNSSEC:NSEC3_COVERS_NOT
+#, perl-brace-format
+msgid "NSEC3 record does not cover {domain}."
+msgstr "NSEC3-tietue ei kata kohdetta {domain}."
+
+#. DNSSEC:NSEC3_NOT_SIGNED
+msgid "No signature correctly signed the NSEC3 RRset."
+msgstr "NSEC3 RRset -joukkoa ei ole allekirjoitettu oikein."
+
+#. DNSSEC:NSEC3_SIG_VERIFY_ERROR
+#, perl-brace-format
+msgid "Trying to verify NSEC3 RRset with RRSIG {keytag} gave error '{error}'."
+msgstr ""
+"Yrityksestä todentaa NSEC3 RRset -joukko käyttäen RRSIG-tietuetta {keytag} "
+"seurasi virhe '{error}'."
+
+#. DNSSEC:NSEC_COVERS_NOT
+#, perl-brace-format
+msgid "NSEC does not cover {domain}."
+msgstr "NSEC ei kata kohdetta {domain}."
+
+#. DNSSEC:NSEC_NOT_SIGNED
+msgid "No signature correctly signed the NSEC RRset."
+msgstr "NSEC RRset -joukkoa ei ole allekirjoitettu oikein."
+
+#. DNSSEC:NSEC_SIG_VERIFY_ERROR
+#, perl-brace-format
+msgid "Trying to verify NSEC RRset with RRSIG {keytag} gave error '{error}'."
+msgstr ""
+"Yrityksestä todentaa NSEC RRset -joukko käyttäen RRSIG-tietuetta {keytag} "
+"seurasi virhe '{error}'."
+
+#. DNSSEC:REMAINING_LONG
+#, perl-brace-format
+msgid ""
+"RRSIG with keytag {keytag} and covering type(s) {types} has a remaining "
+"validity of {duration} seconds, which is too long."
+msgstr ""
+"RRSIG-tietue, jolla on avaintunniste {keytag} ja joka kattaa tyypin/tyypit "
+"{types}, on voimassa vielä {duration} sekuntia, mikä on liian pitkään."
+
+#. DNSSEC:REMAINING_SHORT
+#, perl-brace-format
+msgid ""
+"RRSIG with keytag {keytag} and covering type(s) {types} has a remaining "
+"validity of {duration} seconds, which is too short."
+msgstr ""
+"RRSIG-tietue, jolla on avaintunniste {keytag} ja joka kattaa tyypin/tyypit "
+"{types}, on voimassa enää {duration} sekuntia, mikä on liian vähän."
+
+#. DNSSEC:RRSIG_EXPIRATION
+#, perl-brace-format
+msgid ""
+"RRSIG with keytag {keytag} and covering type(s) {types} expires at : {date}."
+msgstr ""
+"RRSIG-tietueen, jolla on avaintunniste {keytag} ja joka kattaa tyypin/tyypit "
+"{types}, voimassaolo päättyy: {date}."
+
+#. DNSSEC:RRSET_NOT_SIGNED
+#, perl-brace-format
+msgid "Nameserver {ns} responded with no RRSIG for {rrtype} RRset."
+msgstr ""
+"Nimipalvelimen {ns} vastauksessa ei ollut RRSIG-tietuetta {rrtype} RRset-"
+"joukolle."
+
+#. DNSSEC:RRSIG_BROKEN
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responded with an RRSIG which can not be verified with "
+"corresponding DNSKEY (with keytag {keytag})."
+msgstr ""
+"Nimipalvelin {ns} antoi vastaukseksi RRSIG-tietueen, jota ei voi todentaa "
+"vastaavalla DNSKEY-tietueella (jolla on avaintunniste {keytag})."
+
+#. DNSSEC:RRSIG_EXPIRED
+#, perl-brace-format
+msgid ""
+"RRSIG with keytag {keytag} and covering type(s) {types} has already expired "
+"(expiration is: {expiration})."
+msgstr ""
+"RRSIG-tietueen, jolla on avaintunniste {keytag} ja joka kattaa tyypin/tyypit "
+"{types}, voimassaolo on jo päättynyt (voimassaolon päättymisaika: "
+"{expiration})."
+
+#. DNSSEC:RRSIG_NOT_MATCH_DNSKEY
+#, perl-brace-format
+msgid "Nameserver {ns} responded with an RRSIG with unknown keytag {keytag}."
+msgstr ""
+"Nimipalvelin {ns} antoi vastaukseksi RRSIG-tietueen, jolla on tuntematon "
+"avaintunniste {keytag}."
+
+#. DNSSEC:SOA_NOT_SIGNED
+msgid "No RRSIG correctly signed the SOA RRset."
+msgstr "Mikään RRSIG-tietue ei ole allekirjoittanut SOA RRset -joukkoa oikein."
+
+#. DNSSEC:SOA_SIGNATURE_NOT_OK
+#, perl-brace-format
+msgid ""
+"Trying to verify SOA RRset with signature {keytag} gave error '{error}'."
+msgstr ""
+"Yrityksestä todentaa SOA RRset -joukko allekirjoituksella {keytag} seurasi "
+"virhe '{error}'."
+
+#. DNSSEC:SOA_SIGNATURE_OK
+#, perl-brace-format
+msgid "RRSIG {keytag} correctly signs SOA RRset."
+msgstr "RRSIG-tietue {keytag} on allekirjoittanut SOA RRset -joukon oikein."
+
+#. DNSSEC:SOA_SIGNED
+msgid "At least one RRSIG correctly signs the SOA RRset."
+msgstr ""
+"Ainakin yksi RRSIG-tietue on allekirjoittanut SOA RRset -joukon oikein."
+
+#. DNSSEC:TEST_ABORTED
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} for zone {domain} responds with RCODE \"NOERROR\" on a query "
+"that is expected to give response with RCODE \"NXDOMAIN\". Test for NSEC and "
+"NSEC3 is aborted for this nameserver."
+msgstr ""
+"Nimipalvelin {ns} vyöhykkeelle {domain} antaa vastaukseksi RCODE \"NOERROR\" "
+"kyselyyn, johon odotetaan vastaukseksi RCODE \"NXDOMAIN\". NSEC- ja NSEC3-"
+"testi keskeytetään tällä nimipalvelimella."
+
+#. DNSSEC:TOO_MANY_ITERATIONS
+#, perl-brace-format
+msgid ""
+"The number of NSEC3 iterations is {count}, which is too high for key length "
+"{keylength}."
+msgstr ""
+"NSEC3-toistojen lukumäärä on {count}, joka on liian suuri avaimen pituudelle "
+"{keylength}."
+
+#. DNSSEC:UNEXPECTED_RESPONSE_DS
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responded with an unexpected rcode ({rcode}) on a DS query "
+"for zone {domain}."
+msgstr ""
+"Nimipalvelin {ns} antoi vastaukseksi odottamattoman koodin ({rcode}) DS-"
+"kyselyyn vyöhykkeelle {domain}."
+
+#. DELEGATION:ARE_AUTHORITATIVE
+#, perl-brace-format
+msgid ""
+"All these nameservers are confirmed to be authoritative : {nsname_list}."
+msgstr ""
+"Vahvistetaan, että kaikki nämä nimipalvelimet ovat autoritäärisiä: "
+"{nsname_list}."
+
+#. DELEGATION:CHILD_DISTINCT_NS_IP
+msgid "All the IP addresses used by the nameservers in child are unique."
+msgstr ""
+"Kaikki alemman tason nimipalvelinten käyttämät IP-osoitteet ovat "
+"ainutkertaisia."
+
+#. DELEGATION:CHILD_NS_SAME_IP
+#, perl-brace-format
+msgid "IP {ns_ip} in child refers to multiple nameservers ({nsname_list})."
+msgstr ""
+"IP {ns_ip} alemmalla tasolla viittaa useisiin nimipalvelimiin "
+"({nsname_list})."
+
+#. DELEGATION:DEL_DISTINCT_NS_IP
+msgid "All the IP addresses used by the nameservers in parent are unique."
+msgstr ""
+"Kaikki ylemmän tason nimipalvelinten käyttämät IP-osoitteet ovat "
+"ainutkertaisia."
+
+#. DELEGATION:DEL_NS_SAME_IP
+#, perl-brace-format
+msgid "IP {ns_ip} in parent refers to multiple nameservers ({nsname_list})."
+msgstr ""
+"IP {ns_ip} ylemmällä tasolla viittaa useisiin nimipalvelimiin "
+"({nsname_list})."
+
+#. DELEGATION:DISTINCT_IP_ADDRESS
+msgid "All the IP addresses used by the nameservers are unique."
+msgstr "Kaikki nimipalvelinten käyttämät IP-osoitteet ovat ainutkertaisia."
+
+#. DELEGATION:ENOUGH_IPV4_NS_CHILD
+#, perl-brace-format
+msgid ""
+"Child lists enough ({count}) nameservers ({nsname_list}) that resolve to "
+"IPv4 addresses ({ns_ip_list}). Lower limit set to {minimum}."
+msgstr ""
+"Alemmalla tasolla listataan tarpeeksi ({count}) nimipalvelimia "
+"({nsname_list}), joita vastaavat IPv4-osoitteet ({ns_ip_list}). Alarajaksi "
+"on asetettu {minimum}."
+
+#. DELEGATION:ENOUGH_IPV4_NS_DEL
+#, perl-brace-format
+msgid ""
+"Delegation lists enough ({count}) nameservers ({nsname_list}) that resolve "
+"to IPv4 addresses ({ns_ip_list}). Lower limit set to {minimum}."
+msgstr ""
+"Delegointi listaa tarpeeksi ({count}) nimipalvelimia ({nsname_list}), joita "
+"vastaavat IPv4-osoitteet ({ns_ip_list}). Alarajaksi on asetettu {minimum}."
+
+#. DELEGATION:ENOUGH_IPV6_NS_CHILD
+#, perl-brace-format
+msgid ""
+"Child lists enough ({count}) nameservers ({nsname_list}) that resolve to "
+"IPv6 addresses ({ns_ip_list}). Lower limit set to {minimum}."
+msgstr ""
+"Alemmalla tasolla listataan tarpeeksi ({count}) nimipalvelimia "
+"({nsname_list}), joita vastaavat IPv6-osoitteet ({ns_ip_list}). Alarajaksi "
+"on asetettu {minimum}."
+
+#. DELEGATION:ENOUGH_IPV6_NS_DEL
+#, perl-brace-format
+msgid ""
+"Delegation lists enough ({count}) nameservers ({nsname_list}) that resolve "
+"to IPv6 addresses ({ns_ip_list}). Lower limit set to {minimum}."
+msgstr ""
+"Delegointi listaa tarpeeksi ({count}) nimipalvelimia ({nsname_list}), joita "
+"vastaavat IPv6-osoitteet ({ns_ip_list}). Alarajaksi on asetettu {minimum}."
+
+#. DELEGATION:ENOUGH_NS_CHILD
+#, perl-brace-format
+msgid ""
+"Child lists enough ({count}) nameservers ({nsname_list}). Lower limit set to "
+"{minimum}."
+msgstr ""
+"Alemmalla tasolla listataan tarpeeksi ({count}) nimipalvelimia "
+"({nsname_list}). Alarajaksi on asetettu {minimum}."
+
+#. DELEGATION:ENOUGH_NS_DEL
+#, perl-brace-format
+msgid ""
+"Parent lists enough ({count}) nameservers ({nsname_list}). Lower limit set "
+"to {minimum}."
+msgstr ""
+"Ylemmällä tasolla listataan tarpeeksi ({count}) nimipalvelimia "
+"({nsname_list}). Alarajaksi on asetettu {minimum}."
+
+#. DELEGATION:EXTRA_NAME_CHILD
+#, perl-brace-format
+msgid "Child has nameserver(s) not listed at parent ({extra})."
+msgstr ""
+"Alemmalla tasolla on yksi tai useampi nimipalvelin, joita ei ole listattu "
+"ylemmällä tasolla ({extra})."
+
+#. DELEGATION:EXTRA_NAME_PARENT
+#, perl-brace-format
+msgid "Parent has nameserver(s) not listed at the child ({extra})."
+msgstr ""
+"Ylemmällä tasolla on yksi tai useampi nimipalvelin, joita ei ole listattu "
+"alemmalla tasolla ({extra})."
+
+#. DELEGATION:IS_NOT_AUTHORITATIVE
+#, perl-brace-format
+msgid "Nameserver {ns} response is not authoritative on {proto} port 53."
+msgstr ""
+"Nimipalvelimen {ns} vastaus ei ole autoritäärinen koskien kohdetta {proto} "
+"portissa 53."
+
+#. DELEGATION:NAMES_MATCH
+msgid "All of the nameserver names are listed both at parent and child."
+msgstr ""
+"Kaikki nimipalvelimen nimet on listattu sekä alemmalla että ylemmällä "
+"tasolla."
+
+#. DELEGATION:NOT_ENOUGH_IPV4_NS_CHILD
+#, perl-brace-format
+msgid ""
+"Child does not list enough ({count}) nameservers ({nsname_list}) that "
+"resolve to IPv4 addresses ({ns_ip_list}). Lower limit set to {minimum}."
+msgstr ""
+"Alemmalla tasolla ei listata tarpeeksi ({count}) nimipalvelimia "
+"({nsname_list}), joita vastaavat IPv4-osoitteet ({ns_ip_list}). Alarajaksi "
+"on asetettu {minimum}."
+
+#. DELEGATION:NOT_ENOUGH_IPV4_NS_DEL
+#, perl-brace-format
+msgid ""
+"Delegation does not list enough ({count}) nameservers ({nsname_list}) that "
+"resolve to IPv4 addresses ({ns_ip_list}). Lower limit set to {minimum}."
+msgstr ""
+"Delegointi ei listaa tarpeeksi ({count}) nimipalvelimia ({nsname_list}), "
+"joita vastaavat IPv4-osoitteet ({ns_ip_list}). Alarajaksi on asetettu "
+"{minimum}."
+
+#. DELEGATION:NOT_ENOUGH_IPV6_NS_CHILD
+#, perl-brace-format
+msgid ""
+"Child does not list enough ({count}) nameservers ({nsname_list}) that "
+"resolve to IPv6 addresses ({ns_ip_list}). Lower limit set to {minimum}."
+msgstr ""
+"Alemmalla tasolla ei listata tarpeeksi ({count}) nimipalvelimia "
+"({nsname_list}), joita vastaavat IPv6-osoitteet ({ns_ip_list}). Alarajaksi "
+"on asetettu {minimum}."
+
+#. DELEGATION:NOT_ENOUGH_IPV6_NS_DEL
+#, perl-brace-format
+msgid ""
+"Delegation does not list enough ({count}) nameservers ({nsname_list}) that "
+"resolve to IPv6 addresses ({ns_ip_list}). Lower limit set to {minimum}."
+msgstr ""
+"Delegointi ei listaa tarpeeksi ({count}) nimipalvelimia ({nsname_list}), "
+"joita vastaavat IPv6-osoitteet ({ns_ip_list}). Alarajaksi on asetettu "
+"{minimum}."
+
+#. DELEGATION:NOT_ENOUGH_NS_CHILD
+#, perl-brace-format
+msgid ""
+"Child does not list enough ({count}) nameservers ({nsname_list}). Lower "
+"limit set to {minimum}."
+msgstr ""
+"Alemmalla tasolla ei listata tarpeeksi ({count}) nimipalvelimia "
+"({nsname_list}). Alarajaksi on asetettu {minimum}."
+
+#. DELEGATION:NOT_ENOUGH_NS_DEL
+#, perl-brace-format
+msgid ""
+"Parent does not list enough ({count}) nameservers ({nsname_list}). Lower "
+"limit set to {minimum}."
+msgstr ""
+"Ylemmällä tasolla ei listata tarpeeksi ({count}) nimipalvelimia "
+"({nsname_list}). Alarajaksi on asetettu {minimum}."
+
+#. DELEGATION:NO_IPV4_NS_CHILD
+#, perl-brace-format
+msgid ""
+"Child lists no nameserver that resolves to an IPv4 address. If any were "
+"present, the minimum allowed would be {minimum}."
+msgstr ""
+"Alemmalla tasolla ei listata yhtään nimipalvelinta, joka vastaisi IPv4-"
+"osoitetta. Jos niitä olisi olemassa, alin sallittu määrä olisi {minimum}."
+
+#. DELEGATION:NO_IPV4_NS_DEL
+#, perl-brace-format
+msgid ""
+"Delegation lists no nameserver that resolves to an IPv4 address. If any were "
+"present, the minimum allowed would be {minimum}."
+msgstr ""
+"Delegointi ei listaa yhtään nimipalvelinta, joka vastaisi IPv4-osoitetta. "
+"Jos niitä olisi olemassa, alin sallittu määrä olisi {minimum}."
+
+#. DELEGATION:NO_IPV6_NS_CHILD
+#, perl-brace-format
+msgid ""
+"Child lists no nameserver that resolves to an IPv6 address. If any were "
+"present, the minimum allowed would be {minimum}."
+msgstr ""
+"Alemmalla tasolla ei listata yhtään nimipalvelinta, joka vastaisi IPv6-"
+"osoitetta. Jos niitä olisi olemassa, alin sallittu määrä olisi {minimum}."
+
+#. DELEGATION:NO_IPV6_NS_DEL
+#, perl-brace-format
+msgid ""
+"Delegation lists no nameserver that resolves to an IPv6 address. If any were "
+"present, the minimum allowed would be {minimum}."
+msgstr ""
+"Delegointi ei listaa yhtään nimipalvelinta, joka vastaisi IPv6-osoitetta. "
+"Jos niitä olisi olemassa, alin sallittu määrä olisi {minimum}."
+
+#. DELEGATION:NS_IS_CNAME
+#, fuzzy, perl-brace-format
+msgid "Nameserver {nsname} RR points to CNAME."
+msgstr "Nimipalvelimen {nsname} RR osoittaa tietueeseen CNAME."
+
+#. DELEGATION:NO_NS_CNAME
+msgid "No nameserver points to CNAME alias."
+msgstr "Mikään nimipalvelin ei osoita CNAME-aliakseen."
+
+#. DELEGATION:REFERRAL_SIZE_TOO_LARGE
+#, perl-brace-format
+msgid ""
+"The smallest possible legal referral packet is larger than 512 octets (it is "
+"{size})."
+msgstr ""
+"Pienin mahdollinen sallittu ohjauspaketti on suurempi kuin 512 oktettia (eli "
+"{size})."
+
+#. DELEGATION:REFERRAL_SIZE_OK
+#, perl-brace-format
+msgid ""
+"The smallest possible legal referral packet is smaller than 513 octets (it "
+"is {size})."
+msgstr ""
+"Pienin mahdollinen sallittu ohjauspaketti on pienempi kuin 513 oktettia (eli "
+"{size})."
+
+#. DELEGATION:SAME_IP_ADDRESS
+#, perl-brace-format
+msgid "IP {ns_ip} refers to multiple nameservers ({nsname_list})."
+msgstr "IP {ns_ip} viittaa useisiin nimipalvelimiin ({nsname_list})."
+
+#. DELEGATION:SOA_EXISTS
+msgid "All the nameservers have SOA record."
+msgstr "Kaikilla nimipalvelimilla on SOA-tietue."
+
+#. DELEGATION:SOA_NOT_EXISTS
+#, perl-brace-format
+msgid "Empty NOERROR response to SOA query was received from {ns}."
+msgstr "Tyhjä NOERROR-vastaus SOA-kyselyyn vastaanotettiin kohteesta {ns}."
+
+#. DELEGATION:TOTAL_NAME_MISMATCH
+msgid "None of the nameservers listed at the parent are listed at the child."
+msgstr ""
+"Mitään ylemmällä tasolla listatuista nimipalvelimista ei ole listattu "
+"alemmalla tasolla."
+
+#. DELEGATION:UNEXPECTED_RCODE
+#, perl-brace-format
+msgid "Nameserver {ns} answered query with an unexpected rcode ({rcode})."
+msgstr ""
+"Nimipalvelin {ns} vastasi kyselyyn odottamattomalla rcode:lla ({rcode})."
+
+#. NAMESERVER:AAAA_BAD_RDATA
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} answered AAAA query with an unexpected RDATA length "
+"({length} instead of 16)."
+msgstr ""
+"Nimipalvelin {ns} vastasi AAAA-kyselyyn odottamattomalla RDATA:n pituudella "
+"({length}, ei 16)."
+
+#. NAMESERVER:AAAA_QUERY_DROPPED
+#, perl-brace-format
+msgid "Nameserver {ns} dropped AAAA query."
+msgstr "Nimipalvelin {ns} pudotti AAAA-kyselyn."
+
+#. NAMESERVER:AAAA_UNEXPECTED_RCODE
+#, perl-brace-format
+msgid "Nameserver {ns} answered AAAA query with an unexpected rcode ({rcode})."
+msgstr ""
+"Nimipalvelin {ns} vastasi AAAA-kyselyyn odottamattomalla rcode:lla ({rcode})."
+
+#. NAMESERVER:AAAA_WELL_PROCESSED
+#, perl-brace-format
+msgid ""
+"The following nameservers answer AAAA queries without problems : {ns_list}."
+msgstr ""
+"Seuraavat nimipalvelimet vastaavat AAAA-kyselyihin ongelmitta: {ns_list}."
+
+#. NAMESERVER:A_UNEXPECTED_RCODE
+#, perl-brace-format
+msgid "Nameserver {ns} answered A query with an unexpected rcode ({rcode})."
+msgstr ""
+"Nimipalvelin {ns} vastasi A-kyselyyn odottamattomalla rcode:lla ({rcode})."
+
+#. NAMESERVER:AXFR_AVAILABLE
+#, perl-brace-format
+msgid "Nameserver {ns} allow zone transfer using AXFR."
+msgstr "Nimipalvelin {ns} sallii vyöhykkeen vaihdon käyttäen AXFR:ää."
+
+#. NAMESERVER:AXFR_FAILURE
+#, perl-brace-format
+msgid "AXFR not available on nameserver {ns}."
+msgstr "AXFR ei ole saatavilla nimipalvelimella {ns}."
+
+#. NAMESERVER:BREAKS_ON_EDNS
+#, perl-brace-format
+msgid "No response from {ns} when EDNS is used in query asking for {domain}."
+msgstr ""
+"Nimipalvelin {ns} ei vastaa, kun EDNS:ää käytetään kyselyssä, joka koskee "
+"kohdetta {domain}."
+
+#. NAMESERVER:CAN_BE_RESOLVED
+msgid "All nameservers succeeded to resolve to an IP address."
+msgstr ""
+"Kaikille nimipalvelimille löytyi niitä vastaava IP-osoite onnistuneesti."
+
+#. NAMESERVER:CAN_NOT_BE_RESOLVED
+#, perl-brace-format
+msgid ""
+"The following nameservers failed to resolve to an IP address : {nsname_list}."
+msgstr "Seuraavat nimipalvelimet eivät vastanneet IP-osoitetta: {nsname_list}."
+
+#. NAMESERVER:CASE_QUERIES_RESULTS_DIFFER
+#, perl-brace-format
+msgid ""
+"When asked for {type} records on \"{domain}\" with different cases, all "
+"servers do not reply consistently."
+msgstr ""
+"Pyydettäessä {type}-tietueita koskien kohdetta \"{domain}”, jossa käytetään "
+"eri merkkikokoja, kaikki palvelimet eivät vastaa yhdenmukaisesti."
+
+#. NAMESERVER:CASE_QUERIES_RESULTS_OK
+#, perl-brace-format
+msgid ""
+"When asked for {type} records on \"{domain}\" with different cases, all "
+"servers reply consistently."
+msgstr ""
+"Pyydettäessä {type}-tietueita koskien kohdetta \"{domain}\", jossa käytetään "
+"eri merkkikokoja, kaikki palvelimet vastaavat yhdenmukaisesti."
+
+#. NAMESERVER:CASE_QUERY_DIFFERENT_ANSWER
+#, perl-brace-format
+msgid ""
+"When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver "
+"{ns} returns different answers."
+msgstr ""
+"Pyydettäessä {type}-tietueita koskien kohteita \"{query1}\" ja \"{query2}\", "
+"nimipalvelin {ns} antaa erilaiset vastaukset."
+
+#. NAMESERVER:CASE_QUERY_DIFFERENT_RC
+#, perl-brace-format
+msgid ""
+"When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver "
+"{ns} returns different RCODE (\"{rcode1}\" vs \"{rcode2}\")."
+msgstr ""
+"Pyydettäessä {type}-tietueita koskien kohteita \"{query1}\" ja \"{query2}\", "
+"nimipalvelin {ns} palauttaa eri RCODE:t (\"{rcode1}\" vs. \"{rcode2}\")."
+
+#. NAMESERVER:CASE_QUERY_NO_ANSWER
+#, perl-brace-format
+msgid ""
+"When asked for {type} records on \"{domain}\", nameserver {ns} returns "
+"nothing."
+msgstr ""
+"Pyydettäessä {type}-tietueita koskien kohdetta \"{domain}\", nimipalvelin "
+"{ns} ei palauta mitään."
+
+#. NAMESERVER:CASE_QUERY_SAME_ANSWER
+#, perl-brace-format
+msgid ""
+"When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver "
+"{ns} returns same answers."
+msgstr ""
+"Pyydettäessä {type}-tietueita koskien kohteita \"{query1}\" ja\"{query2}\", "
+"nimipalvelin {ns} palauttaa samat vastaukset."
+
+#. NAMESERVER:CASE_QUERY_SAME_RC
+#, perl-brace-format
+msgid ""
+"When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver "
+"{ns} returns same RCODE \"{rcode}\"."
+msgstr ""
+"Pyydettäessä {type}-tietueita koskien kohteita \"{query1}\" ja \"{query2}\", "
+"nimipalvelin {ns} palauttaa saman RCODE:n \"{rcode}\"."
+
+#. NAMESERVER:DIFFERENT_SOURCE_IP
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} replies on a SOA query with a different source address "
+"({source})."
+msgstr "Nimipalvelin {ns} vastaa SOA-kyselyyn eri lähdeosoitteella ({source})."
+
+#. NAMESERVER:EDNS_RESPONSE_WITHOUT_EDNS
+#, perl-brace-format
+msgid ""
+"Response without EDNS from {ns} on query with EDNS0 asking for {domain}."
+msgstr ""
+"Vastaus ilman EDNS:ää kohteesta {ns} kyselyyn, jolla on EDNS0 ja joka pyytää "
+"kohdetta {domain}."
+
+#. NAMESERVER:EDNS_VERSION_ERROR
+#, perl-brace-format
+msgid ""
+"Incorrect version of EDNS (expected 0) in response from {ns} on query with "
+"EDNS (version 0) asking for {domain}."
+msgstr ""
+"Väärä EDNS-versio (odotettu: 0) vastauksessa kohteelta {ns} kyselyyn, jonka "
+"EDNS (versio 0) pyytää kohdetta {domain}."
+
+#. NAMESERVER:EDNS0_SUPPORT
+#, perl-brace-format
+msgid "The following nameservers support EDNS0 : {ns_list}."
+msgstr "Seuraavat nimipalvelimet tukevat EDNS0:aa: {ns_list}."
+
+#. NAMESERVER:IS_A_RECURSOR
+#, perl-brace-format
+msgid "Nameserver {ns} is a recursor."
+msgstr "Nimipalvelin {ns} on resolveri."
+
+#. NAMESERVER:MISSING_OPT_IN_TRUNCATED
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} replies on an EDNS query with a truncated response without "
+"EDNS."
+msgstr ""
+"Nimipalvelin {ns} vastaa EDNS-kyselyyn typistetyllä vastauksella ilman EDNS:"
+"ää."
+
+#. NAMESERVER:NO_EDNS_SUPPORT
+#, perl-brace-format
+msgid "Nameserver {ns} does not support EDNS0 (replies with FORMERR)."
+msgstr "Nimipalvelin {ns} ei tue EDNS0:aa (antaa vastaukseksi FORMERR)."
+
+#. NAMESERVER:NO_RECURSOR
+#, perl-brace-format
+msgid "Nameserver {ns} is not a recursor."
+msgstr "Nimipalvelin {ns} ei ole resolveri."
+
+#. NAMESERVER:NO_RESOLUTION
+msgid "No nameserver was successfully resolved to an IP address."
+msgstr ""
+"Millekään nimipalvelimelle ei löytynyt onnistuneesti vastaavaa IP-osoitetta."
+
+#. NAMESERVER:NO_RESPONSE
+#. SYNTAX:NO_RESPONSE
+#, perl-brace-format
+msgid "No response from {ns} asking for {domain}."
+msgstr "Ei vastausta kohteelta {ns} kysyttäessä kohteesta {domain}."
+
+#. NAMESERVER:NO_UPWARD_REFERRAL
+#, perl-brace-format
+msgid ""
+"None of the following nameservers returns an upward referral : {nsname_list}."
+msgstr ""
+"Mikään seuraavista nimipalvelimista ei palauta viittausta ylöspäin: "
+"{nsname_list}."
+
+#. NAMESERVER:NS_ERROR
+#, perl-brace-format
+msgid "Erroneous response from nameserver {ns}."
+msgstr "Virheellinen vastaus nimipalvelimelta {ns}."
+
+#. NAMESERVER:QNAME_CASE_INSENSITIVE
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} does not preserve original case of the queried name "
+"({domain})."
+msgstr ""
+"Nimipalvelin {ns} ei säilytä kysytyn nimen alkuperäistä merkkikokoa "
+"({domain})."
+
+#. NAMESERVER:QNAME_CASE_SENSITIVE
+#, perl-brace-format
+msgid "Nameserver {ns} preserves original case of queried names ({domain})."
+msgstr ""
+"Nimipalvelin {ns} säilyttää kysyttyjen nimien alkuperäisen merkkikoon "
+"({domain})."
+
+#. NAMESERVER:SAME_SOURCE_IP
+msgid "All nameservers reply with same IP used to query them."
+msgstr ""
+"Kaikki nimipalvelimet vastaavat samalla IP-osoitteella, jota käytetiin "
+"niiden kyselyyn."
+
+#. NAMESERVER:UNKNOWN_OPTION_CODE
+#, perl-brace-format
+msgid "Nameserver {ns} responds with an unknown ENDS OPTION-CODE."
+msgstr "Nimipalvelin {ns} vastaa tuntemattomalla ENDS OPTION-CODE -tietueella."
+
+#. NAMESERVER:UNSUPPORTED_EDNS_VER
+#, perl-brace-format
+msgid "Nameserver {ns} accepts an unsupported EDNS version."
+msgstr "Nimipalvelin {ns} hyväksyy EDNS-version, jota ei tueta."
+
+#. NAMESERVER:UPWARD_REFERRAL
+#, perl-brace-format
+msgid "Nameserver {ns} returns an upward referral."
+msgstr "Nimipalvelin {ns} palauttaa viittauksen ylöspäin."
+
+#. NAMESERVER:UPWARD_REFERRAL_IRRELEVANT
+msgid "Upward referral tests skipped for root zone."
+msgstr "Juuritason ylöspäin viittauksen testit ohitettu."
+
+#. NAMESERVER:Z_FLAGS_NOTCLEAR
+#, perl-brace-format
+msgid "Nameserver {ns} has one or more unknown EDNS Z flag bits set."
+msgstr ""
+"Nimipalvelimella {ns} on asetettu yksi tai useampi tuntematon EDNS Z -"
+"lippubitti."
+
+#. SYNTAX:DISCOURAGED_DOUBLE_DASH
+#, perl-brace-format
+msgid ""
+"Domain name ({domain}) has a label ({label}) with a double hyphen ('--') in "
+"position 3 and 4 (with a prefix which is not 'xn--')."
+msgstr ""
+"Verkkotunnuksella ({domain}) on osa ({label}), jossa on kaksoisyhdysmerkki "
+"('--') kohdissa 3 ja 4 (sekä etuliite, joka ei ole 'xn--')."
+
+#. SYNTAX:INITIAL_HYPHEN
+#, perl-brace-format
+msgid ""
+"Domain name ({domain}) has a label ({label}) starting with an hyphen ('-')."
+msgstr ""
+"Verkkotunnuksella ({domain}) on osa ({label}), joka alkaa yhdysmerkillä "
+"('-')."
+
+#. SYNTAX:MNAME_DISCOURAGED_DOUBLE_DASH
+#, perl-brace-format
+msgid ""
+"SOA MNAME ({domain}) has a label ({label}) with a double hyphen ('--') in "
+"position 3 and 4 (with a prefix which is not 'xn--')."
+msgstr ""
+"SOA MNAME:lla ({domain}) on osa ({label}), jossa on kaksoisyhdysmerkki "
+"('--') kohdissa 3 ja 4 (sekä etuliite, joka ei ole 'xn--')."
+
+#. SYNTAX:MNAME_NON_ALLOWED_CHARS
+#, perl-brace-format
+msgid "Found illegal characters in SOA MNAME ({domain})."
+msgstr "Kiellettyjä merkkejä löydetty SOA MNAME:sta ({domain})."
+
+#. SYNTAX:MNAME_NUMERIC_TLD
+#, perl-brace-format
+msgid "SOA MNAME ({domain}) within a 'numeric only' TLD ({tld})."
+msgstr ""
+"SOA MNAME ({domain}) kuuluu ’pelkästään numeerisessa muodossa olevaan’ TLD:"
+"hen ({tld})."
+
+#. SYNTAX:MNAME_SYNTAX_OK
+#, perl-brace-format
+msgid "SOA MNAME ({domain}) syntax is valid."
+msgstr "SOA MNAME:n ({domain}) syntaksi on oikein."
+
+#. SYNTAX:MX_DISCOURAGED_DOUBLE_DASH
+#, perl-brace-format
+msgid ""
+"Domain name MX ({domain}) has a label ({label}) with a double hyphen ('--') "
+"in position 3 and 4 (with a prefix which is not 'xn--')."
+msgstr ""
+"Verkkotunnuksella MX ({domain}) on osa ({label}), jossa on "
+"kaksoisyhdysmerkki ('--') kohdissa 3 ja 4 (sekä etuliite, joka ei ole "
+"'xn--')."
+
+#. SYNTAX:MX_NON_ALLOWED_CHARS
+#, perl-brace-format
+msgid "Found illegal characters in MX ({domain})."
+msgstr "Kiellettyjä merkkejä löydetty kohteesta MX ({domain})."
+
+#. SYNTAX:MX_NUMERIC_TLD
+#, perl-brace-format
+msgid "Domain name MX ({domain}) within a 'numeric only' TLD ({tld})."
+msgstr ""
+"Verkkotunnus MX ({domain}) kuuluu ’pelkästään numeerisessa muodossa olevaan’ "
+"TLD:hen ({tld})."
+
+#. SYNTAX:MX_SYNTAX_OK
+#, perl-brace-format
+msgid "Domain name MX ({domain}) syntax is valid."
+msgstr "Verkkotunnuksen MX ({domain}) syntaksi on oikein."
+
+#. SYNTAX:NAMESERVER_DISCOURAGED_DOUBLE_DASH
+#, perl-brace-format
+msgid ""
+"Nameserver ({domain}) has a label ({label}) with a double hyphen ('--') in "
+"position 3 and 4 (with a prefix which is not 'xn--')."
+msgstr ""
+"Nimipalvelimella ({domain}) on osa ({label}), jossa on kaksoisyhdysmerkki "
+"('--') kohdissa 3 ja 4 (sekä etuliite, joka ei ole 'xn--')."
+
+#. SYNTAX:NAMESERVER_NON_ALLOWED_CHARS
+#, perl-brace-format
+msgid "Found illegal characters in the nameserver ({domain})."
+msgstr "Kiellettyjä merkkejä löydetty nimipalvelimelta ({domain})."
+
+#. SYNTAX:NAMESERVER_NUMERIC_TLD
+#, perl-brace-format
+msgid "Nameserver ({domain}) within a 'numeric only' TLD ({tld})."
+msgstr ""
+"Nimipalvelin ({domain}) kuuluu ’pelkästään numeerisessa muodossa olevaan’ "
+"TLD:hen ({tld})."
+
+#. SYNTAX:NAMESERVER_SYNTAX_OK
+#, perl-brace-format
+msgid "Nameserver ({domain}) syntax is valid."
+msgstr "Nimipalvelimen ({domain}) syntaksi on oikein."
+
+#. SYNTAX:NON_ALLOWED_CHARS
+#, perl-brace-format
+msgid "Found illegal characters in the domain name ({domain})."
+msgstr "Kiellettyjä merkkejä löydetty verkkotunnuksesta ({domain})."
+
+#. SYNTAX:NO_DOUBLE_DASH
+#, perl-brace-format
+msgid ""
+"Domain name ({domain}) has no label with a double hyphen ('--') in position "
+"3 and 4 (with a prefix which is not 'xn--')."
+msgstr ""
+"Verkkotunnuksella ({domain}) ei ole osaa, jossa on kaksoisyhdysmerkki ('--') "
+"kohdissa 3 ja 4 (sekä etuliite, joka ei ole 'xn--')."
+
+#. SYNTAX:NO_ENDING_HYPHENS
+#, perl-brace-format
+msgid "Neither end of any label in the domain name ({domain}) has a hyphen."
+msgstr ""
+"Minkään verkkotunnuksen ({domain}) osan kummassakaan päässä ei ole "
+"yhdysmerkkiä."
+
+#. SYNTAX:NO_RESPONSE_MX_QUERY
+#. ZONE:NO_RESPONSE_MX_QUERY
+msgid "No response from nameserver(s) on MX queries."
+msgstr "Yksi tai useampi nimipalvelin ei vastaa MX-kyselyihin."
+
+#. SYNTAX:NO_RESPONSE_SOA_QUERY
+#. ZONE:NO_RESPONSE_SOA_QUERY
+msgid "No response from nameserver(s) on SOA queries."
+msgstr "Yksi tai useampi nimipalvelin ei vastaa SOA-kyselyihin."
+
+#. SYNTAX:ONLY_ALLOWED_CHARS
+#, perl-brace-format
+msgid "No illegal characters in the domain name ({domain})."
+msgstr "Ei kiellettyjä merkkejä verkkotunnuksessa ({domain})."
+
+#. SYNTAX:RNAME_MAIL_DOMAIN_INVALID
+#, perl-brace-format
+msgid ""
+"The SOA RNAME mail domain ({domain}) cannot be resolved to a mail server "
+"with an IP address."
+msgstr ""
+"SOA RNAME postin verkkotunnukselle ({domain}) ei löydy vastaavaa "
+"postipalvelinta, jolla on IP-osoite."
+
+#. SYNTAX:RNAME_MAIL_DOMAIN_LOCALHOST
+#, fuzzy, perl-brace-format
+msgid ""
+"The SOA RNAME mail domain ({domain}) resolved to a mail server with "
+"localhost ({localhost}) IP address."
+msgstr ""
+"SOA RNAME postin verkkotunnukselle ({domain}) ei löydy vastaavaa "
+"postipalvelinta, jolla on IP-osoite."
+
+#. SYNTAX:RNAME_MAIL_ILLEGAL_CNAME
+#, fuzzy, perl-brace-format
+msgid ""
+"The SOA RNAME mail domain ({domain}) refers to an address which is an alias "
+"(CNAME)."
+msgstr "SOA 'mname' -arvo ({mname}) viittaa NS:ään, joka on alias (CNAME)."
+
+#. SYNTAX:RNAME_MISUSED_AT_SIGN
+#, perl-brace-format
+msgid "Misused '@' character found in SOA RNAME field ({rname})."
+msgstr "Väärin käytetty ’@’-merkki löydetty SOA RNAME -kentästä ({rname})."
+
+#. SYNTAX:RNAME_NO_AT_SIGN
+#, perl-brace-format
+msgid "There is no misused '@' character in the SOA RNAME field ({rname})."
+msgstr "Ei väärin käytettyjä ’@’-merkkejä SOA RNAME -kentässä ({rname})."
+
+#. SYNTAX:RNAME_RFC822_INVALID
+#, perl-brace-format
+msgid "Illegal character(s) found in SOA RNAME field ({rname})."
+msgstr ""
+"Yksi tai useampi kielletty merkki löydetty SOA RNAME -kentästä ({rname})."
+
+#. SYNTAX:RNAME_RFC822_VALID
+#, perl-brace-format
+msgid "The SOA RNAME field ({rname}) is compliant with RFC2822."
+msgstr "SOA RNAME -kenttä ({rname}) on RFC2822:n mukainen."
+
+#. SYNTAX:TERMINAL_HYPHEN
+#, perl-brace-format
+msgid ""
+"Domain name ({domain}) has a label ({label}) ending with a hyphen ('-')."
+msgstr ""
+"Verkkotunnuksella ({domain}) on osa ({label}), joka päättyy yhdysmerkkiin "
+"('-')."
+
+#. ZONE:RETRY_MINIMUM_VALUE_LOWER
+#, perl-brace-format
+msgid ""
+"SOA 'retry' value ({retry}) is less than the recommended one "
+"({required_retry})."
+msgstr ""
+"SOA 'retry' -arvo ({retry}) on pienempi kuin suositus ({required_retry})."
+
+#. ZONE:RETRY_MINIMUM_VALUE_OK
+#, perl-brace-format
+msgid ""
+"SOA 'retry' value ({retry}) is more than the minimum recommended value "
+"({required_retry})."
+msgstr ""
+"SOA 'retry' -arvo ({retry}) on suurempi kuin pienin suositeltu arvo "
+"({required_retry})."
+
+#. ZONE:MNAME_NO_RESPONSE
+#, perl-brace-format
+msgid "SOA 'mname' nameserver {ns} does not respond."
+msgstr "SOA 'mname' -nimipalvelin {ns} ei vastaa."
+
+#. ZONE:MNAME_IS_CNAME
+#, perl-brace-format
+msgid "SOA 'mname' value ({mname}) refers to a NS which is an alias (CNAME)."
+msgstr "SOA 'mname' -arvo ({mname}) viittaa NS:ään, joka on alias (CNAME)."
+
+#. ZONE:MNAME_IS_NOT_CNAME
+#, perl-brace-format
+msgid ""
+"SOA 'mname' value ({mname}) refers to a NS which is not an alias (CNAME)."
+msgstr "SOA 'mname' -arvo ({mname}) viittaa NS:ään, joka ei ole alias (CNAME)."
+
+#. ZONE:NO_MX_RECORD
+msgid "No target (MX, A or AAAA record) to deliver e-mail for the domain name."
+msgstr ""
+"Ei kohdetta (MX, A tai AAAA-tietue), jonne voi lähettää sähköpostia "
+"verkkotunnukselle."
+
+#. ZONE:MX_RECORD_EXISTS
+#, perl-brace-format
+msgid "Target ({info}) found to deliver e-mail for the domain name."
+msgstr "Kohde ({info}) löydetty sähköpostin lähettämiseen verkkotunnukselle."
+
+#. ZONE:REFRESH_MINIMUM_VALUE_LOWER
+#, perl-brace-format
+msgid ""
+"SOA 'refresh' value ({refresh}) is less than the recommended one "
+"({required_refresh})."
+msgstr ""
+"SOA 'refresh' -arvo ({refresh}) on pienempi kuin suositus "
+"({required_refresh})."
+
+#. ZONE:REFRESH_MINIMUM_VALUE_OK
+#, perl-brace-format
+msgid ""
+"SOA 'refresh' value ({refresh}) is higher than the minimum recommended value "
+"({required_refresh})."
+msgstr ""
+"SOA 'refresh' -arvo ({refresh}) on suurempi kuin pienin suositeltu arvo "
+"({required_refresh})."
+
+#. ZONE:EXPIRE_LOWER_THAN_REFRESH
+#, perl-brace-format
+msgid ""
+"SOA 'expire' value ({expire}) is lower than the SOA 'refresh' value "
+"({refresh})."
+msgstr ""
+"SOA 'expire' -arvo ({expire}) on pienempi kuin SOA 'refresh' -arvo "
+"({refresh})."
+
+#. ZONE:SOA_DEFAULT_TTL_MAXIMUM_VALUE_HIGHER
+#, perl-brace-format
+msgid ""
+"SOA 'minimum' value ({minimum}) is higher than the recommended one "
+"({highest_minimum})."
+msgstr ""
+"SOA 'minimum' -arvo ({minimum}) on suurempi kuin suositus "
+"({highest_minimum})."
+
+#. ZONE:SOA_DEFAULT_TTL_MAXIMUM_VALUE_LOWER
+#, perl-brace-format
+msgid ""
+"SOA 'minimum' value ({minimum}) is less than the recommended one "
+"({lowest_minimum})."
+msgstr ""
+"SOA 'minimum' -arvo ({minimum}) on pienempi kuin suositus ({lowest_minimum})."
+
+#. ZONE:SOA_DEFAULT_TTL_MAXIMUM_VALUE_OK
+#, perl-brace-format
+msgid ""
+"SOA 'minimum' value ({minimum}) is between the recommended ones "
+"({lowest_minimum}/{highest_minimum})."
+msgstr ""
+"SOA 'minimum' -arvo ({minimum}) on suositusten välillä ({lowest_minimum}/"
+"{highest_minimum})."
+
+#. ZONE:MNAME_NOT_AUTHORITATIVE
+#, perl-brace-format
+msgid "SOA 'mname' nameserver {ns} is not authoritative for '{zone}' zone."
+msgstr ""
+"SOA 'mname' -nimipalvelin {ns} ei ole autoritäärinen vyöhykkeelle '{zone}'."
+
+#. ZONE:MNAME_RECORD_DOES_NOT_EXIST
+msgid "SOA 'mname' field does not exist"
+msgstr "SOA 'mname' -kenttää ei ole olemassa."
+
+#. ZONE:EXPIRE_MINIMUM_VALUE_LOWER
+#, perl-brace-format
+msgid ""
+"SOA 'expire' value ({expire}) is less than the recommended one "
+"({required_expire})."
+msgstr ""
+"SOA 'expire' -arvo ({expire}) on pienempi kuin suositus ({required_expire})."
+
+#. ZONE:MNAME_NOT_IN_GLUE
+#, perl-brace-format
+msgid ""
+"SOA 'mname' nameserver ({mname}) is not listed in \"parent\" NS records for "
+"tested zone ({ns_list})."
+msgstr ""
+"SOA 'mname' -nimipalvelinta ({mname}) ei ole listattu ”ylätason\" NS-"
+"tietueissa testatulle vyöhykkeelle ({ns_list})."
+
+#. ZONE:REFRESH_LOWER_THAN_RETRY
+#, perl-brace-format
+msgid ""
+"SOA 'refresh' value ({refresh}) is lower than the SOA 'retry' value "
+"({retry})."
+msgstr ""
+"SOA 'refresh' -arvo ({refresh}) on pienempi kuin SOA 'retry' -arvo ({retry})."
+
+#. ZONE:REFRESH_HIGHER_THAN_RETRY
+#, perl-brace-format
+msgid ""
+"SOA 'refresh' value ({refresh}) is higher than the SOA 'retry' value "
+"({retry})."
+msgstr ""
+"SOA 'refresh' -arvo ({refresh}) on suurempi kuin SOA 'retry' -arvo ({retry})."
+
+#. ZONE:MX_RECORD_IS_CNAME
+msgid "MX record for the domain is pointing to a CNAME."
+msgstr "Verkkotunnuksen MX-tietue osoittaa CNAME-tietueeseen."
+
+#. ZONE:MX_RECORD_IS_NOT_CNAME
+msgid "MX record for the domain is not pointing to a CNAME."
+msgstr "Verkkotunnuksen MX-tietue ei osoita CNAME-tietueeseen."
+
+#. ZONE:MNAME_IS_AUTHORITATIVE
+#, perl-brace-format
+msgid "SOA 'mname' nameserver ({mname}) is authoritative for '{zone}' zone."
+msgstr ""
+"SOA 'mname' -nimipalvelin ({mname}) on autoritäärinen vyöhykkeelle '{zone}'."
+
+#. ZONE:MULTIPLE_SOA
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responds with multiple ({count}) SOA records on SOA queries."
+msgstr ""
+"Nimipalvelimen {ns} vastaa SOA-kyselyihin useammalla kuin yhdellä ({count}) "
+"SOA-tietueella."
+
+#. ZONE:NO_SOA_IN_RESPONSE
+#, perl-brace-format
+msgid ""
+"Response from nameserver {ns} on SOA queries does not contain SOA record."
+msgstr "Nimipalvelimen {ns} vastaus SOA-kyselyihin ei sisällä SOA-tietuetta."
+
+#. ZONE:MNAME_HAS_NO_ADDRESS
+#, perl-brace-format
+msgid "No IP address found for SOA 'mname' nameserver ({mname})."
+msgstr "IP-osoitetta ei löytynyt SOA 'mname' -nimipalvelimelle ({mname})."
+
+#. ZONE:ONE_SOA
+msgid "A unique SOA record is returned by all nameservers of the zone."
+msgstr ""
+"Vyöhykkeen kaikki nimipalvelimet palauttavat ainutkertaisen SOA-tietueen."
+
+#. ZONE:EXPIRE_MINIMUM_VALUE_OK
+#, perl-brace-format
+msgid ""
+"SOA 'expire' value ({expire}) is higher than the minimum recommended value "
+"({required_expire}) and not lower than the 'refresh' value ({refresh})."
+msgstr ""
+"SOA 'expire' -arvo ({expire}) on suurempi kuin pienin suositeltu arvo "
+"({required_expire}), muttei pienempi kuin 'refresh' -arvo ({refresh})."
+
+#. ZONE:WRONG_SOA
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responds with a wrong owner name ({owner} instead of {name}) "
+"on SOA queries."
+msgstr ""
+"Nimipalvelin {ns} vastaa SOA-kyselyihin väärällä omistajan nimellä ({owner}, "
+"ei {name})."
+
+#. SYSTEM:CANNOT_CONTINUE
+#, perl-brace-format
+msgid "Not enough data about {domain} was found to be able to run tests."
+msgstr "Kohteesta {domain} ei löydetty tarpeeksi tietoa testien ajamiseksi."
+
+#. SYSTEM:DEPENDENCY_VERSION
+#, perl-brace-format
+msgid "Using prerequisite module {name} version {version}."
+msgstr "Käytetään edellytetyn moduulin {name} versiota {version}."
+
+#. SYSTEM:GLOBAL_VERSION
+#, perl-brace-format
+msgid "Using version {version} of the Zonemaster engine."
+msgstr "Käytössä on Zonemaster-moottorin versio {version}."
+
+#. SYSTEM:LOGGER_CALLBACK_ERROR
+#, perl-brace-format
+msgid "Logger callback died with error: {exception}"
+msgstr "Tallentimen takaisinkutsu loppui virheeseen: {exception}"
+
+#. SYSTEM:LOOKUP_ERROR
+#, perl-brace-format
+msgid ""
+"DNS query to {ns} for {domain}/{type}/{class} failed with error: {message}"
+msgstr ""
+"DNS-kysely kohteeseen {ns} koskien kohdetta {domain}/{type}/{class} "
+"epäonnistui ja tapahtui virhe: {message}"
+
+#. SYSTEM:MODULE_ERROR
+#, perl-brace-format
+msgid "Fatal error in {module}: {msg}"
+msgstr "Vakava virhe kohteessa {module}: {msg}"
+
+#. SYSTEM:MODULE_VERSION
+#, perl-brace-format
+msgid "Using module {module} version {version}."
+msgstr "Käytetään moduulin {module} versiota {version}."
+
+#. SYSTEM:MODULE_END
+#, perl-brace-format
+msgid "Module {module} finished running."
+msgstr "Moduulin {module} ajo päättyi."
+
+#. SYSTEM:NO_NETWORK
+msgid "Both IPv4 and IPv6 are disabled."
+msgstr "Sekä IPv4 että IPv6 ovat pois käytöstä."
+
+#. SYSTEM:UNKNOWN_METHOD
+#, perl-brace-format
+msgid "Request to run unknown method {testcase} in module {module}."
+msgstr "Pyyntö ajaa tuntematon metodi {testcase} moduulissa {module}."
+
+#. SYSTEM:UNKNOWN_MODULE
+#, perl-brace-format
+msgid ""
+"Request to run {testcase} in unknown module {module}. Known modules: "
+"{module_list}."
+msgstr ""
+"Pyyntö ajaa {testcase} tuntemattomassa moduulissa {module}. Tunnetut "
+"moduulit: {module_list}."
+
+#. SYSTEM:SKIP_IPV4_DISABLED
+#, perl-brace-format
+msgid "IPv4 is disabled, not sending query to {ns_list}."
+msgstr "IPv4 ei ole käytössä, kyselyä ei lähetetä kohteeseen {ns_list}."
+
+#. SYSTEM:SKIP_IPV6_DISABLED
+#, perl-brace-format
+msgid "IPv6 is disabled, not sending query to {ns_list}."
+msgstr "IPv6 ei ole käytössä, kyselyä ei lähetetä kohteeseen {ns_list}."
+
+#. SYSTEM:FAKE_DELEGATION
+msgid "Followed a fake delegation."
+msgstr "Seurattu väärää delegointia."
+
+#. SYSTEM:ADDED_FAKE_DELEGATION
+#, perl-brace-format
+msgid "Added a fake delegation for domain {domain} to name server {ns}."
+msgstr ""
+"Lisätty väärä delegointi verkkotunnukselle {domain} nimipalvelimelle {ns}."
+
+#. SYSTEM:FAKE_DELEGATION_TO_SELF
+#, perl-brace-format
+msgid ""
+"Name server {ns} not adding fake delegation for domain {domain} to itself."
+msgstr ""
+"Nimipalvelin {ns} ei lisää verkkotunnuksen {domain} väärää delegointia "
+"itselleen."
+
+#. SYSTEM:FAKE_DELEGATION_IN_ZONE_NO_IP
+#, perl-brace-format
+msgid ""
+"The fake delegation of domain {domain} includes an in-zone name server "
+"{nsname} without mandatory glue (without IP address)."
+msgstr ""
+"Verkkotunnuksen {domain} väärään delegointiin kuuluu vyöhykkeen sisäinen "
+"nimipalvelin {nsname} ilman pakollista liimaa (ilman IP-osoitetta)."
+
+#. SYSTEM:FAKE_DELEGATION_NO_IP
+#, perl-brace-format
+msgid ""
+"The fake delegation of domain {domain} includes a name server {nsname} that "
+"cannot be resolved to any IP address."
+msgstr ""
+"Verkkotunnuksen {domain} väärään delegointiin kuuluu nimipalvelin {nsname}, "
+"joka ei vastaa mitään IP-osoitetta."
+
+#. SYSTEM:PACKET_BIG
+#, perl-brace-format
+msgid "Big packet size ({size}) (try with \"{command}\")."
+msgstr "Suurikokoinen paketti ({size}) (yritä käyttää komentoa \"{command}\")."
