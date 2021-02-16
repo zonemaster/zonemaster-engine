@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-12 16:24+0100\n"
-"PO-Revision-Date: 2021-02-02 15.10+0200\n"
+"POT-Creation-Date: 2021-02-16 21:56+0100\n"
+"PO-Revision-Date: 2021-02-16 21:54+0100\n"
 "Last-Translator: sami.salmensuo@traficom.fi\n"
 "Language-Team: Traficom domain team\n"
 "Language: fi\n"
@@ -1272,7 +1272,7 @@ msgstr ""
 "Jos niitä olisi olemassa, alin sallittu määrä olisi {minimum}."
 
 #. DELEGATION:NS_IS_CNAME
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "Nameserver {nsname} RR points to CNAME."
 msgstr "Nimipalvelimen {nsname} RR osoittaa tietueeseen CNAME."
 
@@ -1715,20 +1715,22 @@ msgstr ""
 "postipalvelinta, jolla on IP-osoite."
 
 #. SYNTAX:RNAME_MAIL_DOMAIN_LOCALHOST
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "The SOA RNAME mail domain ({domain}) resolved to a mail server with "
 "localhost ({localhost}) IP address."
 msgstr ""
-"SOA RNAME postin verkkotunnukselle ({domain}) ei löydy vastaavaa "
-"postipalvelinta, jolla on IP-osoite."
+"The SOA RNAME mail domain ({domain}) resolved to a mail server with "
+"localhost ({localhost}) IP address."
 
 #. SYNTAX:RNAME_MAIL_ILLEGAL_CNAME
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "The SOA RNAME mail domain ({domain}) refers to an address which is an alias "
 "(CNAME)."
-msgstr "SOA 'mname' -arvo ({mname}) viittaa NS:ään, joka on alias (CNAME)."
+msgstr ""
+"SOA RNAME sähköpostiosoite ({domain}) viittaa osoitteeseen joka on alias "
+"(CNAME)."
 
 #. SYNTAX:RNAME_MISUSED_AT_SIGN
 #, perl-brace-format
