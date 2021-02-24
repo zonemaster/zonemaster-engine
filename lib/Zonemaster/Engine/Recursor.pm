@@ -5,6 +5,7 @@ use version; our $VERSION = version->declare("v1.0.10");
 use 5.014002;
 use warnings;
 
+use Carp;
 use Moose;
 use JSON::PP;
 use Zonemaster::Engine::Util;
@@ -48,8 +49,10 @@ sub has_fake_addresses {
 
 sub get_fake_addresses {
     my ( undef, $domain, $nsname ) = @_;
+    ( defined $domain ) or croak 'Argument must be defined: $domain';
+
     $domain = lc $domain;
-    $nsname = lc $nsname;
+    $nsname = ( defined $nsname ) ? lc $nsname : q{};
 
     if ( exists $_fake_addresses_cache{$domain}{$nsname} ) {
         return @{ $_fake_addresses_cache{$domain}{$nsname} };
