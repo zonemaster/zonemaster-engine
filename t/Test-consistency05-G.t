@@ -26,11 +26,11 @@ my $zone = Zonemaster::Engine->zone( q{g.consistency05.exempelvis.se} );
 my %res = map { $_->tag => $_ } Zonemaster::Engine::Test::Consistency->consistency05( $zone );
 
 ok( !$res{CHILD_NS_FAILED},                q{should not emit CHILD_NS_FAILED} );
-ok( $res{NO_RESPONSE},                    q{should not emit NO_RESPONSE} );
+ok( !$res{NO_RESPONSE},                    q{should not emit NO_RESPONSE} );
 ok( !$res{CHILD_ZONE_LAME},                q{should not emit CHILD_ZONE_LAME} );
 ok( $res{IN_BAILIWICK_ADDR_MISMATCH},      q{should emit IN_BAILIWICK_ADDR_MISMATCH} );
 ok( !$res{OUT_OF_BAILIWICK_ADDR_MISMATCH}, q{should not emit OUT_OF_BAILIWICK_ADDR_MISMATCH} );
-ok( $res{EXTRA_ADDRESS_CHILD},             q{should emit EXTRA_ADDRESS_CHILD} );
+ok( !$res{EXTRA_ADDRESS_CHILD},            q{should not emit EXTRA_ADDRESS_CHILD} );
 ok( !$res{ADDRESSES_MATCH},                q{should not emit ADDRESSES_MATCH} );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {

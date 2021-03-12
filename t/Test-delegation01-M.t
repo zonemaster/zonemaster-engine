@@ -26,6 +26,12 @@ my %res = map { $_->tag => $_ } Zonemaster::Engine::Test::Delegation->delegation
 
 ok( $res{NOT_ENOUGH_NS_DEL},         q{should emit NOT_ENOUGH_NS_DEL} );
 ok( !$res{ENOUGH_NS_DEL},            q{should not emit ENOUGH_NS_DEL} );
+ok( !$res{NO_IPV4_NS_DEL},           q{should not emit NO_IPV4_NS_DEL} );
+ok( $res{NOT_ENOUGH_IPV4_NS_DEL},    q{should emit NOT_ENOUGH_IPV4_NS_DEL} );
+ok( !$res{ENOUGH_IPV4_NS_DEL},       q{should not emit ENOUGH_IPV4_NS_DEL} );
+ok( $res{NO_IPV6_NS_DEL},            q{should emit NO_IPV6_NS_DEL} );
+ok( !$res{NOT_ENOUGH_IPV6_NS_DEL},   q{should not emit NOT_ENOUGH_IPV6_NS_DEL} );
+ok( !$res{ENOUGH_IPV6_NS_DEL},       q{should not emit ENOUGH_IPV6_NS_DEL} );
 ok( $res{NOT_ENOUGH_NS_CHILD},       q{should emit NOT_ENOUGH_NS_CHILD} );
 ok( !$res{ENOUGH_NS_CHILD},          q{should not emit ENOUGH_NS_CHILD} );
 ok( !$res{NO_IPV4_NS_CHILD},         q{should not emit NO_IPV4_NS_CHILD} );
