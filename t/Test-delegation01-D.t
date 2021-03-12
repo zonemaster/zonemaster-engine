@@ -16,8 +16,8 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
 
 Zonemaster::Engine->add_fake_delegation(
     'd.delegation01.exempelvis.se' => {
-        'ns1.d.delegation01.exempelvis.se' => [ '2a02:750:12:77::97',  '46.21.97.97' ],
-        'ns2.d.delegation01.exempelvis.se' => [ '2001:9b0:1:1c13::53' ],
+        'ns1.d.delegation01.exempelvis.se' => [ '46.21.97.97', '2a02:750:12:77::97' ],
+        'ns2.d.delegation01.exempelvis.se' => [ '2001:2040:2b:1c13::53' ],
     }
 );
 
