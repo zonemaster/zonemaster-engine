@@ -23,6 +23,7 @@ Zonemaster::Engine->add_fake_delegation(
 
 my $zone = Zonemaster::Engine->zone( 'd.delegation01.exempelvis.se' );
 my %res = map { $_->tag => $_ } Zonemaster::Engine::Test::Delegation->delegation01( $zone );
+
 ok( !$res{NO_IPV4_NS_DEL},        q{should not emit NO_IPV4_NS_DEL} );
 ok( $res{NOT_ENOUGH_IPV4_NS_DEL}, q{should emit NOT_ENOUGH_IPV4_NS_DEL} );
 ok( !$res{ENOUGH_IPV4_NS_DEL},    q{should not emit ENOUGH_IPV4_NS_DEL} );

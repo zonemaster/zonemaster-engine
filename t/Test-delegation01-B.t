@@ -22,6 +22,7 @@ Zonemaster::Engine->add_fake_delegation(
 
 my $zone = Zonemaster::Engine->zone( 'b.delegation01.exempelvis.se' );
 my %res = map { $_->tag => $_ } Zonemaster::Engine::Test::Delegation->delegation01( $zone );
+
 ok( $res{NOT_ENOUGH_NS_DEL}, q{should emit NOT_ENOUGH_NS_DEL} );
 ok( !$res{ENOUGH_NS_DEL},    q{should not emit ENOUGH_NS_DEL} );
 
