@@ -1,5 +1,11 @@
 Release history for Zonemaster component Zonemaster-Engine
 
+v4.1.1 2021-03-16 (public fix release version)
+
+ [Fixes]
+ - Updates unit test data to make it possible to install (#882, #884)
+
+
 v4.1.0 2021-02-10 (public release version)
 
  [Features]
