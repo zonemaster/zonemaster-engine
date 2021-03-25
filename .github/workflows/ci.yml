@@ -16,14 +16,15 @@ jobs:
   run-tests:
     strategy:
       matrix:
-        runner:
-          - ubuntu-20.04
+        compatibility:
+          - develop
+          - latest
         perl:
           - '5.32'
-          - '5.30'
-          - '5.28'
           - '5.26'
           - '5.16'
+        runner:
+          - ubuntu-20.04
 
     runs-on: ${{ matrix.runner }}
 
@@ -34,9 +35,7 @@ jobs:
         with:
           perl-version: ${{ matrix.perl }}
 
-      - name: Dependencies
-        env:
-          PERL5LIB: /usr/share/perl5:${{ env.PERL5LIB }}
+      - name: Binary dependencies
         run: |
           sudo apt-get install -y \
             autoconf \
@@ -49,21 +48,27 @@ jobs:
             libtool \
             m4 \
 
-          cpanm --notest Module::Install
-          cpanm --notest --installdeps .
+      - name: Install Zonemaster::LDNS (latest)
+        if: ${{ matrix.compatibility == 'latest' }}
+        run: |
+          cpanm --notest Module::Install Zonemaster::Engine
+
+      - name: Install Zonemaster::LDNS (develop)
+        if: ${{ matrix.compatibility == 'develop' }}
+        run: |
+          cpanm --notest Devel::CheckLib Module::Install Module::Install::XSUtil
+          git clone --branch=develop --depth=1 https://github.com/zonemaster/zonemaster-ldns.git
+          perl Makefile.PL
+          ( cd zonemaster-ldns ; cpanm --notest . )
 
       - name: Show content of log files
         if: ${{ failure() }}
         run: cat /home/runner/.cpanm/work/*/build.log
 
       - name: Install
-        env:
-          PERL5LIB: /usr/share/perl5:${{ env.PERL5LIB }}
         run: |
           cpanm --verbose --notest .
 
       - name: Test
-        env:
-          PERL5LIB: /usr/share/perl5:${{ env.PERL5LIB }}
         run: |
           prove -lv
