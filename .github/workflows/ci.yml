@@ -1,0 +1,82 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - develop
+      - master
+      - 'releases/**'
+  pull_request:
+    branches:
+      - develop
+      - master
+      - 'releases/**'
+
+jobs:
+  run-tests:
+    strategy:
+      matrix:
+        compatibility:
+          - develop
+          - latest
+        perl:
+          - '5.32'
+          - '5.26'
+          - '5.16'
+        runner:
+          - ubuntu-20.04
+
+    runs-on: ${{ matrix.runner }}
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: shogo82148/actions-setup-perl@v1
+        with:
+          perl-version: ${{ matrix.perl }}
+
+      - name: Binary dependencies
+        run: |
+          # * These were taken from the installation instruction.
+          # * Gettext was added so we can run cpanm . on the Engine sources.
+          # * The Perl modules were left out because I couldn't get all of them
+          #   to work with custom Perl versions.
+          # * Cpanminus was left out because actions-setup-perl installs it.
+          sudo apt-get install -y \
+            autoconf \
+            automake \
+            build-essential \
+            gettext \
+            libidn11-dev \
+            libssl-dev \
+            libtool \
+            m4 \
+
+      - name: Install Zonemaster::LDNS (latest)
+        if: ${{ matrix.compatibility == 'latest' }}
+        run: |
+          cpanm --notest Module::Install Zonemaster::LDNS
+
+      - name: Install Zonemaster::LDNS (develop)
+        if: ${{ matrix.compatibility == 'develop' }}
+        run: |
+          cpanm --notest Devel::CheckLib Module::Install Module::Install::XSUtil
+          git clone --branch=develop --depth=1 https://github.com/zonemaster/zonemaster-ldns.git
+          perl Makefile.PL  # Generate MYMETA.yml to appease cpanm .
+          ( cd zonemaster-ldns ; cpanm --notest . )
+
+      - name: Install remaining dependencies
+        run: |
+          cpanm --verbose --notest --installdeps .
+
+      - name: Install Zonemaster::Engine
+        run: |
+          cpanm --verbose --notest .
+
+      - name: Show content of log files
+        if: ${{ failure() }}
+        run: cat /home/runner/.cpanm/work/*/build.log
+
+      - name: Test
+        run: |
+          prove -lv t
