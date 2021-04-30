@@ -159,7 +159,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     B04_MISSING_NS_RECORD => sub {
         __x    # BASIC:B04_MISSING_NS_RECORD
-          'Nameserver {ns} repond to a NS query with no records in answer.', @
+          'Nameserver {ns} repond to a NS query with no records in answer.', @_;
     },
     B04_MISSING_SOA_RECORD => sub {
         __x    # BASIC:B04_MISSING_SOA_RECORD
@@ -562,7 +562,7 @@ sub basic04 {
                     rrtype => $_,
                 }
               )
-            } @query_type;
+            } @query_types;
             next;
         }
         elsif ( Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
@@ -573,7 +573,7 @@ sub basic04 {
                     rrtype => $_,
                 }
               )
-            } @query_type;
+            } @query_types;
         }
 
         my $p_soa_udp = $ns->query( $name, q{SOA}, { usevc => 0 } );
