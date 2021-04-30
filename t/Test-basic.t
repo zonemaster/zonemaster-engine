@@ -12,7 +12,7 @@ sub name_gives {
     my ( $test, $name, $gives ) = @_;
 
     my @res = Zonemaster::Engine->test_method( q{Basic}, $test, $name );
-foreach my $t ( @res ) { print $t->tag, "\n"; }
+
     ok( ( grep { $_->tag eq $gives } @res ), "$name gives $gives" );
 }
 
@@ -20,6 +20,7 @@ sub name_gives_not {
     my ( $test, $name, $gives ) = @_;
 
     my @res = Zonemaster::Engine->test_method( q{Basic}, $test, $name );
+
     ok( !( grep { $_->tag eq $gives } @res ), "$name does not give $gives" );
 }
 
@@ -27,9 +28,7 @@ sub zone_gives {
     my ( $test, $zone, $gives ) = @_;
 
     my @res = Zonemaster::Engine->test_method( q{Basic}, $test, $zone );
-    foreach my $item (@res) {
-        print $item->tag, "\n";
-    }
+
     ok( ( grep { $_->tag eq $gives } @res ), $zone->name->string . " gives $gives" );
 }
 
@@ -37,6 +36,7 @@ sub zone_gives_not {
     my ( $test, $zone, $gives ) = @_;
 
     my @res = Zonemaster::Engine->test_method( q{Basic}, $test, $zone );
+
     ok( !( grep { $_->tag eq $gives } @res ), $zone->name->string . " does not give $gives" );
 }
 
@@ -93,7 +93,8 @@ SKIP: {
     zone_gives( q{basic02}, $zone, q{NS_NO_RESPONSE} );
 }
 
-%res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{basic}, q{aff.tf} );
+%res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{basic}, q{nic.tf} );
+use Data::Dumper;print Data::Dumper::Dumper(%res);
 ok( $res{HAS_NAMESERVERS},              q{HAS_NAMESERVERS} );
 ok( $res{HAS_NAMESERVER_NO_WWW_A_TEST}, q{HAS_NAMESERVER_NO_WWW_A_TEST} );
 
