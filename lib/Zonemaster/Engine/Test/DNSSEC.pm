@@ -5,11 +5,13 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare( "v1.1.33" );
+use version; our $VERSION = version->declare( "v1.1.34" );
 
 ###
 ### This test module implements DNSSEC tests.
 ###
+
+use Zonemaster::LDNS::RR;
 
 use Zonemaster::Engine;
 
@@ -267,6 +269,10 @@ sub all {
             push @results, $class->dnssec14( $zone );
         }
 
+        if ( Zonemaster::Engine::Util::should_run_test( q{dnssec15} ) ) {
+            push @results, $class->dnssec14( $zone );
+        }
+
     }
 
     push @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } );
@@ -453,6 +459,17 @@ sub metadata {
               TEST_CASE_START
               ),
         ],
+        dnssec15 => [
+            qw(
+              DS15_HAS_CDNSKEY_NO_CDS
+              DS15_HAS_CDS_AND_CDNSKEY
+              DS15_HAS_CDS_NO_CDNSKEY
+              DS15_INCONSISTENT_CDNSKEY
+              DS15_INCONSISTENT_CDS
+              DS15_MISMATCH_CDS_CDNSKEY
+              DS15_NO_CDS_CDNSKEY
+              ),
+        ],
     };
 } ## end sub metadata
 
@@ -596,6 +613,34 @@ Readonly my %TAG_DESCRIPTIONS => (
           . '({algo_descr}) has a size ({keysize}) larger than the maximum one '
           . '({keysizemax}).',
           @_;
+    },
+    DS15_HAS_CDNSKEY_NO_CDS => sub {
+        __x    # DS15_HAS_CDNSKEY_NO_CDS
+          'CDNSKEY RRset is found, but no CDS RRset.', @_;
+    },
+    DS15_HAS_CDS_AND_CDNSKEY => sub {
+        __x    # DS15_HAS_CDS_AND_CDNSKEY
+          'CDNSKEY and CDS RRsets are found.', @_;
+    },
+    DS15_HAS_CDS_NO_CDNSKEY => sub {
+        __x    # DS15_HAS_CDS_NO_CDNSKEY
+          'CDS RRset is found, but no CDNSKEY RRset.', @_;
+    },
+    DS15_INCONSISTENT_CDNSKEY => sub {
+        __x    # DS15_INCONSISTENT_CDNSKEY
+          'All servers do not have the same CDNSKEY RRset.', @_;
+    },
+    DS15_INCONSISTENT_CDS => sub {
+        __x    # DS15_INCONSISTENT_CDS
+          'All servers do not have the same CDS RRset.', @_;
+    },
+    DS15_MISMATCH_CDS_CDNSKEY => sub {
+        __x    # DS15_MISMATCH_CDS_CDNSKEY
+          'Both CDS and CDNSKEY RRsets are found but they do not match.', @_;
+    },
+    DS15_NO_CDS_CDNSKEY => sub {
+        __x    # DS15_NO_CDS_CDNSKEY
+          'No CDS or CDNSKEY RRsets are found on any name server.', @_;
     },
     DS_ALGORITHM_NOT_DS => sub {
         __x    # DNSSEC:DS_ALGORITHM_NOT_DS
@@ -2181,6 +2226,179 @@ sub dnssec14 {
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub dnssec14
 
+sub dnssec15 {
+    my ( $class, $zone ) = @_;
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+    my @query_types = qw{CDS CDNSKEY};
+    my %cds_rrsets;
+    my %cdnskey_rrsets;
+    my %mismatch_cds_cdnskey;
+    my %has_cds_no_cdnskey;
+    my %has_cdnskey_no_cds;
+    my %has_cds_and_cdnskey;
+
+    my @nss_del   = @{ Zonemaster::Engine::TestMethods->method4( $zone ) };
+    my @nss_child = @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
+    my %nss       = map { $_->name->string . '/' . $_->address->short => $_ } @nss_del, @nss_child;
+
+    for my $nss_key ( sort keys %nss ) {
+        my $ns = $nss{$nss_key};
+
+        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
+            push @results, map {
+              info(
+                IPV6_DISABLED => {
+                    ns     => $ns->string,
+                    rrtype => $_,
+                }
+              )
+            } @query_types;
+            next;
+        }
+
+        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
+            push @results, map {
+              info(
+                IPV4_DISABLED => {
+                    ns     => $ns->string,
+                    rrtype => $_,
+                }
+              )
+            } @query_types;
+            next;
+        }
+
+        my $cds_p = $ns->query( $zone->name, 'CDS', { dnssec => 1, usevc => 0 } );
+        if ( not $cds_p ) {
+            next;
+        }
+        if ( not $cds_p->aa ) {
+            next;
+        }
+        if ( $cds_p->rcode ne q{NOERROR} ) {
+            next;
+        }
+        my @cds_records = $cds_p->get_records( q{CDS}, q{answer} );
+        push @{ $cds_rrsets{ $ns->address->short } }, @cds_records;
+
+        my $cdnskey_p = $ns->query( $zone->name, 'CDNSKEY', { dnssec => 1, usevc => 0 } );
+        if ( not $cdnskey_p ) {
+            next;
+        }
+        if ( not $cdnskey_p->aa ) {
+            next;
+        }
+        if ( $cdnskey_p->rcode ne q{NOERROR} ) {
+            next;
+        }
+        my @cdnskey_records = $cdnskey_p->get_records( q{CDNSKEY}, q{answer} );
+        push @{ $cdnskey_rrsets{ $ns->address->short } }, @cdnskey_records;
+    }
+
+    my $no_cds_cdnskey = 1;
+    for my $ns_ip ( keys %cds_rrsets ) {
+        if ( scalar @{ $cds_rrsets{ $ns_ip } } ) {
+            $no_cds_cdnskey = 0;
+        }
+    }
+    for my $ns_ip ( keys %cdnskey_rrsets ) {
+        if ( scalar @{ $cdnskey_rrsets{ $ns_ip } } ) {
+            $no_cds_cdnskey = 0;
+        }
+    }
+
+    if ( $no_cds_cdnskey ) {
+        push @results, info( DS15_NO_CDS_CDNSKEY => {} );
+    }
+    else {
+        for my $nss_key ( sort keys %nss ) {
+            my $ns = $nss{$nss_key};
+
+            if (
+                    exists $cds_rrsets{ $ns->address->short }
+                and scalar @{ $cds_rrsets{ $ns->address->short } }
+                and (  not exists $cdnskey_rrsets{ $ns->address->short }
+                    or not scalar @{ $cdnskey_rrsets{ $ns->address->short } } )
+              )
+            {
+                $has_cds_no_cdnskey{ $ns->address->short } = 1;
+            }
+            elsif (
+                    exists $cdnskey_rrsets{ $ns->address->short }
+                and scalar @{ $cdnskey_rrsets{ $ns->address->short } }
+                and (  not exists $cds_rrsets{ $ns->address->short }
+                    or not scalar @{ $cds_rrsets{ $ns->address->short } } )
+              )
+            {
+                $has_cdnskey_no_cds{ $ns->address->short } = 1;
+            }
+            elsif (
+                    exists $cds_rrsets{ $ns->address->short }
+                and scalar @{ $cds_rrsets{ $ns->address->short } }
+                and exists $cdnskey_rrsets{ $ns->address->short }
+                and scalar @{ $cdnskey_rrsets{ $ns->address->short } }
+              )
+            {
+                $has_cds_and_cdnskey{ $ns->address->short } = 1;
+            }
+        }
+
+        for my $ns_ip ( keys %cds_rrsets ) {
+            if (
+                    scalar @{ $cds_rrsets{ $ns_ip } }
+                and exists $cdnskey_rrsets{ $ns_ip }
+                and scalar @{ $cdnskey_rrsets{ $ns_ip } }
+              )
+            {
+                #
+                # Need a fix in Zonemaster::LDNS to prevent that trick
+                #
+                my (@ds, @dnskey);
+                foreach my $cds ( @{ $cds_rrsets{ $ns_ip } } ) {
+                    my $rr_string = $cds->string;
+                    $rr_string =~ s/\s+CDS\s+/ DS /;
+                    push @ds, Zonemaster::LDNS::RR->new( $rr_string );
+                }
+                foreach my $cdnskey ( @{ $cdnskey_rrsets{ $ns_ip } } ) {
+                    my $rr_string = $cdnskey->string;
+                    $rr_string =~ s/\s+CDNSKEY\s+/ DNSKEY /;
+                    push @dnskey, Zonemaster::LDNS::RR->new( $rr_string );
+                }
+                foreach my $ds ( @ds ) {
+                    my @matching_keys = grep { $ds->keytag == $_->keytag } @dnskey;
+                    if ( not scalar @matching_keys ) {
+                        $mismatch_cds_cdnskey{ $ns_ip } = 1;
+                    }
+                }
+                foreach my $dnskey ( @dnskey ) {
+                    my @matching_keys = grep { $dnskey->keytag == $_->keytag } @ds;
+                    if ( not scalar @matching_keys ) {
+                        $mismatch_cds_cdnskey{ $ns_ip } = 1;
+                    }
+                }
+            }
+        }
+
+        if ( scalar keys %has_cds_no_cdnskey ) {
+            push @results, info( DS15_HAS_CDS_NO_CDNSKEY => {} );
+        }
+
+        if ( scalar keys %has_cdnskey_no_cds ) {
+            push @results, info( DS15_HAS_CDNSKEY_NO_CDS => {} );
+        }
+
+        if ( scalar keys %has_cds_and_cdnskey ) {
+            push @results, info( DS15_HAS_CDS_AND_CDNSKEY => {} );
+        }
+
+        if ( scalar keys %mismatch_cds_cdnskey ) {
+            push @results, info( DS15_MISMATCH_CDS_CDNSKEY => {} );
+        }
+    }
+    
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+} ## end sub dnssec15
+
 1;
 
 =head1 NAME
@@ -2274,6 +2492,10 @@ Check that all DNSKEY algorithms are used to sign the zone.
 =item dnssec14($zone)
 
 Check for valid RSA DNSKEY key size
+
+=item dnssec15($zone)
+
+Check existence of CDS and CDNSKEY
 
 =back
 
