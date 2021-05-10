@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare( "v1.1.34" );
+use version; our $VERSION = version->declare( "v1.1.35" );
 
 ###
 ### This test module implements DNSSEC tests.
@@ -270,7 +270,7 @@ sub all {
         }
 
         if ( Zonemaster::Engine::Util::should_run_test( q{dnssec15} ) ) {
-            push @results, $class->dnssec14( $zone );
+            push @results, $class->dnssec15( $zone );
         }
 
     }
@@ -2240,9 +2240,13 @@ sub dnssec15 {
     my @nss_del   = @{ Zonemaster::Engine::TestMethods->method4( $zone ) };
     my @nss_child = @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
     my %nss       = map { $_->name->string . '/' . $_->address->short => $_ } @nss_del, @nss_child;
+    my %ip_already_processed;
 
     for my $nss_key ( sort keys %nss ) {
         my $ns = $nss{$nss_key};
+
+        next if exists $ip_already_processed{$ns->address->short};
+        $ip_already_processed{$ns->address->short} = 1;
 
         if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
             push @results, map {
@@ -2294,6 +2298,7 @@ sub dnssec15 {
         my @cdnskey_records = $cdnskey_p->get_records( q{CDNSKEY}, q{answer} );
         push @{ $cdnskey_rrsets{ $ns->address->short } }, @cdnskey_records;
     }
+    undef %ip_already_processed;
 
     my $no_cds_cdnskey = 1;
     for my $ns_ip ( keys %cds_rrsets ) {
@@ -2389,6 +2394,42 @@ sub dnssec15 {
 
         if ( scalar keys %has_cds_and_cdnskey ) {
             push @results, info( DS15_HAS_CDS_AND_CDNSKEY => {} );
+        }
+
+        my $first_rrset_string = undef;
+        for my $ns_ip ( keys %cds_rrsets ) {
+            my $rrset_string;
+            if ( scalar @{ $cds_rrsets{ $ns_ip } } ) {
+                $rrset_string = join "\n", sort map { $_->string } @{ $cds_rrsets{ $ns_ip } };
+            }
+            else {
+                $rrset_string = q{};
+            }
+            if ( not defined $first_rrset_string ) {
+                $first_rrset_string = $rrset_string;
+            }
+            elsif ( $rrset_string ne $first_rrset_string ) {
+                push @results, info( DS15_INCONSISTENT_CDS => {} );
+                last;
+            }
+        }
+
+        $first_rrset_string = undef;
+        for my $ns_ip ( keys %cdnskey_rrsets ) {
+            my $rrset_string;
+            if ( scalar @{ $cdnskey_rrsets{ $ns_ip } } ) {
+                $rrset_string = join "\n", sort map { $_->string } @{ $cdnskey_rrsets{ $ns_ip } };
+            }
+            else {
+                $rrset_string = q{};
+            }
+            if ( not defined $first_rrset_string ) {
+                $first_rrset_string = $rrset_string;
+            }
+            elsif ( $rrset_string ne $first_rrset_string ) {
+                push @results, info( DS15_INCONSISTENT_CDNSKEY => {} );
+                last;
+            }
         }
 
         if ( scalar keys %mismatch_cds_cdnskey ) {

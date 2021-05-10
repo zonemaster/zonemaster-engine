@@ -47,7 +47,7 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
 
 # Find a way for dnssec06 which have a dependence...
 my ($json, $profile_test);
-foreach my $testcase ( qw{dnssec01 dnssec02 dnssec03 dnssec04 dnssec05 dnssec07 dnssec08 dnssec09 dnssec10 dnssec11 dnssec13 dnssec14} ) {
+foreach my $testcase ( qw{dnssec01 dnssec02 dnssec03 dnssec04 dnssec05 dnssec07 dnssec08 dnssec09 dnssec10 dnssec11 dnssec13 dnssec14 dnssec15} ) {
     $json         = read_file( 't/profiles/Test-'.$testcase.'-only.json' );
     $profile_test = Zonemaster::Engine::Profile->from_json( $json );
     Zonemaster::Engine::Profile->effective->merge( $profile_test );
@@ -302,6 +302,62 @@ zone_gives_not('dnssec13', $zone, [qw{ALL_ALGO_SIGNED RRSIG_NOT_MATCH_DNSKEY ALG
 $zone = Zonemaster::Engine->zone( 'afnic.fr' );
 zone_gives( 'dnssec13', $zone, [qw{ALL_ALGO_SIGNED}] );
 zone_gives_not('dnssec13', $zone, [qw{ALGO_NOT_SIGNED_RRSET NO_RESPONSE NO_RESPONSE_RRSET RRSET_NOT_SIGNED RRSIG_BROKEN RRSIG_NOT_MATCH_DNSKEY}] );
+
+###########
+# dnssec15
+###########
+
+$zone = Zonemaster::Engine->zone( 'dnssec15-no-cds-no-cdnskey.zft-root.rd.nic.fr' );
+zone_gives( 'dnssec15', $zone, [qw{DS15_NO_CDS_CDNSKEY}] );
+zone_gives_not('dnssec15', $zone, [qw{DS15_HAS_CDNSKEY_NO_CDS DS15_HAS_CDS_AND_CDNSKEY DS15_HAS_CDS_NO_CDNSKEY DS15_INCONSISTENT_CDNSKEY DS15_INCONSISTENT_CDS DS15_MISMATCH_CDS_CDNSKEY}] );
+
+$zone = Zonemaster::Engine->zone( 'dnssec15-cds-no-cdnskey.zft-root.rd.nic.fr' );
+zone_gives( 'dnssec15', $zone, [qw{DS15_HAS_CDS_NO_CDNSKEY}] );
+zone_gives_not('dnssec15', $zone, [qw{DS15_HAS_CDNSKEY_NO_CDS DS15_HAS_CDS_AND_CDNSKEY DS15_INCONSISTENT_CDNSKEY DS15_INCONSISTENT_CDS DS15_MISMATCH_CDS_CDNSKEY DS15_NO_CDS_CDNSKEY}] );
+
+$zone = Zonemaster::Engine->zone( 'dnssec15-cdnskey-no-cds.zft-root.rd.nic.fr' );
+zone_gives( 'dnssec15', $zone, [qw{DS15_HAS_CDNSKEY_NO_CDS}] );
+zone_gives_not('dnssec15', $zone, [qw{DS15_HAS_CDS_AND_CDNSKEY DS15_HAS_CDS_NO_CDNSKEY DS15_INCONSISTENT_CDNSKEY DS15_INCONSISTENT_CDS DS15_MISMATCH_CDS_CDNSKEY DS15_NO_CDS_CDNSKEY}] );
+
+$zone = Zonemaster::Engine->zone( 'dnssec15-cds-cdnskey-01.zft-root.rd.nic.fr' );
+zone_gives( 'dnssec15', $zone, [qw{DS15_HAS_CDS_AND_CDNSKEY}] );
+zone_gives_not('dnssec15', $zone, [qw{DS15_HAS_CDNSKEY_NO_CDS DS15_HAS_CDS_NO_CDNSKEY DS15_INCONSISTENT_CDNSKEY DS15_INCONSISTENT_CDS DS15_MISMATCH_CDS_CDNSKEY DS15_NO_CDS_CDNSKEY}] );
+
+$zone = Zonemaster::Engine->zone( 'dnssec15-cds-cdnskey-02.zft-root.rd.nic.fr' );
+zone_gives( 'dnssec15', $zone, [qw{DS15_HAS_CDS_AND_CDNSKEY}] );
+zone_gives_not('dnssec15', $zone, [qw{DS15_HAS_CDNSKEY_NO_CDS DS15_HAS_CDS_NO_CDNSKEY DS15_INCONSISTENT_CDNSKEY DS15_INCONSISTENT_CDS DS15_MISMATCH_CDS_CDNSKEY DS15_NO_CDS_CDNSKEY}] );
+
+$zone = Zonemaster::Engine->zone( 'dnssec15-inconsistent-cds-01.zft-root.rd.nic.fr' );
+zone_gives( 'dnssec15', $zone, [qw{DS15_HAS_CDS_NO_CDNSKEY DS15_INCONSISTENT_CDS}] );
+zone_gives_not('dnssec15', $zone, [qw{DS15_HAS_CDNSKEY_NO_CDS DS15_HAS_CDS_AND_CDNSKEY DS15_INCONSISTENT_CDNSKEY DS15_MISMATCH_CDS_CDNSKEY DS15_NO_CDS_CDNSKEY}] );
+
+$zone = Zonemaster::Engine->zone( 'dnssec15-inconsistent-cds-02.zft-root.rd.nic.fr' );
+zone_gives( 'dnssec15', $zone, [qw{DS15_HAS_CDS_NO_CDNSKEY DS15_INCONSISTENT_CDS}] );
+zone_gives_not('dnssec15', $zone, [qw{DS15_HAS_CDNSKEY_NO_CDS DS15_HAS_CDS_AND_CDNSKEY DS15_INCONSISTENT_CDNSKEY DS15_MISMATCH_CDS_CDNSKEY DS15_NO_CDS_CDNSKEY}] );
+
+$zone = Zonemaster::Engine->zone( 'dnssec15-inconsistent-cds-03.zft-root.rd.nic.fr' );
+zone_gives( 'dnssec15', $zone, [qw{DS15_HAS_CDS_NO_CDNSKEY DS15_INCONSISTENT_CDS}] );
+zone_gives_not('dnssec15', $zone, [qw{DS15_HAS_CDNSKEY_NO_CDS DS15_HAS_CDS_AND_CDNSKEY DS15_INCONSISTENT_CDNSKEY DS15_MISMATCH_CDS_CDNSKEY DS15_NO_CDS_CDNSKEY}] );
+
+$zone = Zonemaster::Engine->zone( 'dnssec15-inconsistent-cds-04.zft-root.rd.nic.fr' );
+zone_gives( 'dnssec15', $zone, [qw{DS15_HAS_CDS_NO_CDNSKEY DS15_INCONSISTENT_CDS}] );
+zone_gives_not('dnssec15', $zone, [qw{DS15_HAS_CDNSKEY_NO_CDS DS15_HAS_CDS_AND_CDNSKEY DS15_INCONSISTENT_CDNSKEY DS15_MISMATCH_CDS_CDNSKEY DS15_NO_CDS_CDNSKEY}] );
+
+$zone = Zonemaster::Engine->zone( 'dnssec15-inconsistent-cdnskey-01.zft-root.rd.nic.fr' );
+zone_gives( 'dnssec15', $zone, [qw{DS15_HAS_CDNSKEY_NO_CDS DS15_INCONSISTENT_CDNSKEY}] );
+zone_gives_not('dnssec15', $zone, [qw{DS15_HAS_CDS_AND_CDNSKEY DS15_HAS_CDS_NO_CDNSKEY DS15_INCONSISTENT_CDS DS15_MISMATCH_CDS_CDNSKEY DS15_NO_CDS_CDNSKEY}] );
+
+$zone = Zonemaster::Engine->zone( 'dnssec15-inconsistent-cdnskey-02.zft-root.rd.nic.fr' );
+zone_gives( 'dnssec15', $zone, [qw{DS15_HAS_CDNSKEY_NO_CDS DS15_INCONSISTENT_CDNSKEY}] );
+zone_gives_not('dnssec15', $zone, [qw{DS15_HAS_CDS_AND_CDNSKEY DS15_HAS_CDS_NO_CDNSKEY DS15_INCONSISTENT_CDS DS15_MISMATCH_CDS_CDNSKEY DS15_NO_CDS_CDNSKEY}] );
+
+$zone = Zonemaster::Engine->zone( 'dnssec15-inconsistent-cdnskey-03.zft-root.rd.nic.fr' );
+zone_gives( 'dnssec15', $zone, [qw{DS15_HAS_CDNSKEY_NO_CDS DS15_INCONSISTENT_CDNSKEY}] );
+zone_gives_not('dnssec15', $zone, [qw{DS15_HAS_CDS_AND_CDNSKEY DS15_HAS_CDS_NO_CDNSKEY DS15_INCONSISTENT_CDS DS15_MISMATCH_CDS_CDNSKEY DS15_NO_CDS_CDNSKEY}] );
+
+$zone = Zonemaster::Engine->zone( 'dnssec15-inconsistent-cdnskey-04.zft-root.rd.nic.fr' );
+zone_gives( 'dnssec15', $zone, [qw{DS15_HAS_CDNSKEY_NO_CDS DS15_INCONSISTENT_CDNSKEY}] );
+zone_gives_not('dnssec15', $zone, [qw{DS15_HAS_CDS_AND_CDNSKEY DS15_HAS_CDS_NO_CDNSKEY DS15_INCONSISTENT_CDS DS15_MISMATCH_CDS_CDNSKEY DS15_NO_CDS_CDNSKEY}] );
 
 TODO: {
     local $TODO = "Need to find/create zones with that error";
