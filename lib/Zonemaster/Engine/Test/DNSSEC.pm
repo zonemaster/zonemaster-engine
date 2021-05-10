@@ -2316,35 +2316,32 @@ sub dnssec15 {
         push @results, info( DS15_NO_CDS_CDNSKEY => {} );
     }
     else {
-        for my $nss_key ( sort keys %nss ) {
-            my $ns = $nss{$nss_key};
+        for my $ns_ip ( keys %cds_rrsets ) {
+
+            if ( not exists $cdnskey_rrsets{ $ns_ip } ) {
+                next;
+            }
 
             if (
-                    exists $cds_rrsets{ $ns->address->short }
-                and scalar @{ $cds_rrsets{ $ns->address->short } }
-                and (  not exists $cdnskey_rrsets{ $ns->address->short }
-                    or not scalar @{ $cdnskey_rrsets{ $ns->address->short } } )
+                    scalar @{ $cds_rrsets{ $ns_ip } }
+                and not scalar @{ $cdnskey_rrsets{ $ns_ip } }
               )
             {
-                $has_cds_no_cdnskey{ $ns->address->short } = 1;
+                $has_cds_no_cdnskey{ $ns_ip } = 1;
             }
             elsif (
-                    exists $cdnskey_rrsets{ $ns->address->short }
-                and scalar @{ $cdnskey_rrsets{ $ns->address->short } }
-                and (  not exists $cds_rrsets{ $ns->address->short }
-                    or not scalar @{ $cds_rrsets{ $ns->address->short } } )
+                    scalar @{ $cdnskey_rrsets{ $ns_ip } }
+                and not scalar @{ $cds_rrsets{ $ns_ip } }
               )
             {
-                $has_cdnskey_no_cds{ $ns->address->short } = 1;
+                $has_cdnskey_no_cds{ $ns_ip } = 1;
             }
             elsif (
-                    exists $cds_rrsets{ $ns->address->short }
-                and scalar @{ $cds_rrsets{ $ns->address->short } }
-                and exists $cdnskey_rrsets{ $ns->address->short }
-                and scalar @{ $cdnskey_rrsets{ $ns->address->short } }
+                    scalar @{ $cds_rrsets{ $ns_ip } }
+                and scalar @{ $cdnskey_rrsets{ $ns_ip } }
               )
             {
-                $has_cds_and_cdnskey{ $ns->address->short } = 1;
+                $has_cds_and_cdnskey{ $ns_ip } = 1;
             }
         }
 
