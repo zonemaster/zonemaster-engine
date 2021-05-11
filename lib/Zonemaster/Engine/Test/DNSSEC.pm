@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare( "v1.1.35" );
+use version; our $VERSION = version->declare( "v1.1.36" );
 
 ###
 ### This test module implements DNSSEC tests.
@@ -616,15 +616,15 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     DS15_HAS_CDNSKEY_NO_CDS => sub {
         __x    # DS15_HAS_CDNSKEY_NO_CDS
-          'CDNSKEY RRset is found, but no CDS RRset.', @_;
+          'CDNSKEY RRset is found on nameservers that resolve to IP addresses ({ns_ip_list}), but no CDS RRset.', @_;
     },
     DS15_HAS_CDS_AND_CDNSKEY => sub {
         __x    # DS15_HAS_CDS_AND_CDNSKEY
-          'CDNSKEY and CDS RRsets are found.', @_;
+          'CDNSKEY and CDS RRsets are found on nameservers that resolve to IP addresses ({ns_ip_list}).', @_;
     },
     DS15_HAS_CDS_NO_CDNSKEY => sub {
         __x    # DS15_HAS_CDS_NO_CDNSKEY
-          'CDS RRset is found, but no CDNSKEY RRset.', @_;
+          'CDS RRset is found on nameservers that resolve to IP addresses ({ns_ip_list}), but no CDNSKEY RRset.', @_;
     },
     DS15_INCONSISTENT_CDNSKEY => sub {
         __x    # DS15_INCONSISTENT_CDNSKEY
@@ -636,7 +636,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     DS15_MISMATCH_CDS_CDNSKEY => sub {
         __x    # DS15_MISMATCH_CDS_CDNSKEY
-          'Both CDS and CDNSKEY RRsets are found but they do not match.', @_;
+          'Both CDS and CDNSKEY RRsets are found on nameservers that resolve to IP addresses ({ns_ip_list}) but they do not match.', @_;
     },
     DS15_NO_CDS_CDNSKEY => sub {
         __x    # DS15_NO_CDS_CDNSKEY
@@ -2382,22 +2382,37 @@ sub dnssec15 {
         }
 
         if ( scalar keys %has_cds_no_cdnskey ) {
-            push @results, info( DS15_HAS_CDS_NO_CDNSKEY => {} );
+            push @results,
+              info(
+                DS15_HAS_CDS_NO_CDNSKEY => {
+                    ns_ip_list => join( q{;}, sort keys %has_cds_no_cdnskey )
+                }
+              );
         }
 
         if ( scalar keys %has_cdnskey_no_cds ) {
-            push @results, info( DS15_HAS_CDNSKEY_NO_CDS => {} );
+            push @results,
+              info(
+                DS15_HAS_CDNSKEY_NO_CDS => {
+                    ns_ip_list => join( q{;}, sort keys %has_cdnskey_no_cds )
+                }
+              );
         }
 
         if ( scalar keys %has_cds_and_cdnskey ) {
-            push @results, info( DS15_HAS_CDS_AND_CDNSKEY => {} );
+            push @results,
+              info(
+                DS15_HAS_CDS_AND_CDNSKEY => {
+                    ns_ip_list => join( q{;}, sort keys %has_cds_and_cdnskey )
+                }
+              );
         }
 
         my $first_rrset_string = undef;
         for my $ns_ip ( keys %cds_rrsets ) {
             my $rrset_string;
             if ( scalar @{ $cds_rrsets{ $ns_ip } } ) {
-                $rrset_string = join "\n", sort map { $_->string } @{ $cds_rrsets{ $ns_ip } };
+                $rrset_string = join( "\n", sort map { $_->string } @{ $cds_rrsets{ $ns_ip } } );
             }
             else {
                 $rrset_string = q{};
@@ -2415,7 +2430,7 @@ sub dnssec15 {
         for my $ns_ip ( keys %cdnskey_rrsets ) {
             my $rrset_string;
             if ( scalar @{ $cdnskey_rrsets{ $ns_ip } } ) {
-                $rrset_string = join "\n", sort map { $_->string } @{ $cdnskey_rrsets{ $ns_ip } };
+                $rrset_string = join( "\n", sort map { $_->string } @{ $cdnskey_rrsets{ $ns_ip } } );
             }
             else {
                 $rrset_string = q{};
@@ -2430,7 +2445,12 @@ sub dnssec15 {
         }
 
         if ( scalar keys %mismatch_cds_cdnskey ) {
-            push @results, info( DS15_MISMATCH_CDS_CDNSKEY => {} );
+            push @results,
+              info(
+                DS15_MISMATCH_CDS_CDNSKEY => {
+                    ns_ip_list => join( q{;}, sort keys %mismatch_cds_cdnskey )
+                }
+              );
         }
     }
     
