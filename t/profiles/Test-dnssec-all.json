@@ -12,6 +12,7 @@
         "dnssec10",
         "dnssec11",
         "dnssec13",
-        "dnssec14"
+        "dnssec14",
+        "dnssec15"
     ]
 }
