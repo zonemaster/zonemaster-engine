@@ -62,6 +62,7 @@ share/locale/fr/LC_MESSAGES/Zonemaster-Engine.mo
 share/locale/nb/LC_MESSAGES/Zonemaster-Engine.mo
 share/locale/sv/LC_MESSAGES/Zonemaster-Engine.mo
 share/Makefile
+share/GNUmakefile
 t/00-load.t
 t/asn.data
 t/asn.t

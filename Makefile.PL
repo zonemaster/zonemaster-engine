@@ -54,7 +54,7 @@ sub MY::postamble {
     my $text;
     if ($^O eq "freebsd") {
         # Make FreeBSD use gmake for share/Makefile
-        $text = 'GMAKE = "gmake"' . "\n"
+        $text = 'GMAKE ?= "gmake"' . "\n"
             . 'pure_all :: share/Makefile' . "\n"
             . "\t" . 'cd share && $(GMAKE) touch-po all' . "\n";
     } else {
