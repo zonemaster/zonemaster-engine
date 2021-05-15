@@ -387,6 +387,18 @@ $zone = Zonemaster::Engine->zone( 'dnssec16-delete-cds.zft-root.rd.nic.fr' );
 zone_gives( 'dnssec16', $zone, [q{DS16_DELETE_CDS}] );
 zone_gives_not('dnssec16', $zone, [qw{DS16_CDS_INVALID_RRSIG DS16_CDS_MATCHES_NO_DNSKEY DS16_CDS_SIGNED_BY_UNKNOWN_DNSKEY DS16_CDS_UNSIGNED DS16_CDS_WITHOUT_DNSKEY DS16_DNSKEY_NOT_SIGNED_BY_CDS DS16_MIXED_DELETE_CDS}] );
 
+$zone = Zonemaster::Engine->zone( 'dnssec16-cds-without-dnskey.zft-root.rd.nic.fr' );
+zone_gives( 'dnssec16', $zone, [qw{DS16_CDS_WITHOUT_DNSKEY}]);
+zone_gives_not('dnssec16', $zone, [qw{DS16_CDS_INVALID_RRSIG DS16_CDS_MATCHES_NO_DNSKEY DS16_CDS_SIGNED_BY_UNKNOWN_DNSKEY DS16_CDS_UNSIGNED DS16_DELETE_CDS DS16_DNSKEY_NOT_SIGNED_BY_CDS DS16_MIXED_DELETE_CDS}] );
+
+$zone = Zonemaster::Engine->zone( 'dnssec16-mixed-delete-cds.zft-root.rd.nic.fr' );
+zone_gives( 'dnssec16', $zone, [q{DS16_MIXED_DELETE_CDS}]);
+zone_gives_not('dnssec16', $zone, [qw{DS16_CDS_INVALID_RRSIG DS16_CDS_MATCHES_NO_DNSKEY DS16_CDS_SIGNED_BY_UNKNOWN_DNSKEY DS16_CDS_UNSIGNED DS16_CDS_WITHOUT_DNSKEY DS16_DELETE_CDS DS16_DNSKEY_NOT_SIGNED_BY_CDS}] );
+
+$zone = Zonemaster::Engine->zone( 'dnssec16-cds-matches-no-dnskey.zft-root.rd.nic.fr' );
+zone_gives( 'dnssec16', $zone, [q{DS16_CDS_MATCHES_NO_DNSKEY}]);
+zone_gives_not('dnssec16', $zone, [qw{DS16_CDS_INVALID_RRSIG DS16_CDS_SIGNED_BY_UNKNOWN_DNSKEY DS16_CDS_UNSIGNED DS16_CDS_WITHOUT_DNSKEY DS16_DELETE_CDS DS16_DNSKEY_NOT_SIGNED_BY_CDS DS16_MIXED_DELETE_CDS}] );
+
 TODO: {
     local $TODO = "Need to find/create zones with that error";
 

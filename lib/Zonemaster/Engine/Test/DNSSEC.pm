@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare( "v1.1.39" );
+use version; our $VERSION = version->declare( "v1.1.40" );
 
 ###
 ### This test module implements DNSSEC tests.
@@ -2635,7 +2635,7 @@ sub dnssec16 {
                 }
                 next;
             }
-            if ( not scalar @{ $dnskey_rrsets{ $ns_ip }{dnskey} } ) {
+            if ( not defined $dnskey_rrsets{ $ns_ip }{dnskey} or not scalar @{ $dnskey_rrsets{ $ns_ip }{dnskey} } ) {
                 $no_dnskey_rrset{ $ns_ip } = 1;
                 next;
             }
