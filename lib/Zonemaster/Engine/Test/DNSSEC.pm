@@ -2577,7 +2577,7 @@ sub dnssec16 {
             next;
         }
 
-        my $cds_p = $ns->query( $zone->name, 'CDS', { dnssec => 1, usevc => 0 } );
+        my $cds_p = $ns->query( $zone->name, q{CDS}, { dnssec => 1, usevc => 0 } );
         if ( not $cds_p ) {
             next;
         }
@@ -2600,7 +2600,7 @@ sub dnssec16 {
             push @{ $cds_rrsets{ $ns->address->short }{ds} }, Zonemaster::LDNS::RR->new( $rr_string );
         }
 
-        my $dnskey_p = $ns->query( $zone->name, 'DNSKEY', { dnssec => 1, usevc => 0 } );
+        my $dnskey_p = $ns->query( $zone->name, q{DNSKEY}, { dnssec => 1, usevc => 0 } );
         if ( not $dnskey_p ) {
             next;
         }
