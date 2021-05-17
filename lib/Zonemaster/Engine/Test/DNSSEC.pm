@@ -670,7 +670,7 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # DS16_CDS_INVALID_RRSIG
           'The CDS RRset is signed with an RRSIG with tag {keytag}, but the RRSIG does '
           . 'not match the DNSKEY with the same key tag. Fetched from the nameservers '
-          . 'with IP addresses "{ns_ip_list}".'
+          . 'with IP addresses "{ns_ip_list}".',
           @_;
     },
     DS16_CDS_MATCHES_NO_DNSKEY => sub {
