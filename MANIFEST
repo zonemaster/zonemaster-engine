@@ -69,6 +69,7 @@ t/asn.data
 t/asn.t
 t/dnsname.t
 t/logger.t
+t/manifest.t
 t/nameserver-axfr.data
 t/nameserver-axfr.t
 t/nameserver.data
