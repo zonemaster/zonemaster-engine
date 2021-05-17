@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare( "v1.1.40" );
+use version; our $VERSION = version->declare( "v1.1.41" );
 
 ###
 ### This test module implements DNSSEC tests.
@@ -668,49 +668,51 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     DS16_CDS_INVALID_RRSIG => sub {
         __x    # DS16_CDS_INVALID_RRSIG
-          'CDS RRset found on nameservers that resolve to IP addresses ({ns_ip_list}) '
-          . 'is signed with an invalid RRSIG created by tag {keytag}.', @_;
+          'The CDS RRset is signed with an invalid RRSIG with tag {keytag}. Fetched '
+          . 'from the nameservers with IP addresses "{ns_ip_list}".',
+          @_;
     },
     DS16_CDS_MATCHES_NO_DNSKEY => sub {
         __x    # DS16_CDS_MATCHES_NO_DNSKEY
-          'CDS record with tag {keytag} found on nameservers that resolve to IP addresses '
-          . '({ns_ip_list}) does not match any DNSKEY in DNSKEY RRset.',
+          'The CDS record with tag {keytag} does not match any DNSKEY record. Fetched '
+          . 'from the nameservers with IP addresses "{ns_ip_list}".',
           @_;
     },
     DS16_CDS_SIGNED_BY_UNKNOWN_DNSKEY => sub {
         __x    # DS16_CDS_SIGNED_BY_UNKNOWN_DNSKEY
-          'CDS RRset found on nameservers that resolve to IP addresses ({ns_ip_list}) is '
-          . 'signed but not by a key in DNSKEY RRset.',
+          'The CDS RRset is signed by RRSIG with tag {keytag} but that is not in the '
+          . 'DNSKEY RRset. Fetched from the nameservers with P addresses "{ns_ip_list}".',
           @_;
     },
     DS16_CDS_UNSIGNED => sub {
         __x    # DS16_CDS_UNSIGNED
-          'CDS RRset found on nameservers that resolve to IP addresses ({ns_ip_list}) '
-          . 'is not signed.',
+          'The CDS RRset is not signed. Fetched from the nameservers with IP addresses '
+          . '"{ns_ip_list}".',
           @_;
     },
     DS16_CDS_WITHOUT_DNSKEY => sub {
         __x    # DS16_CDS_WITHOUT_DNSKEY
-          'CDS RRset exists, but no DNSKEY RRset found on nameservers that resolve '
-          . 'to IP addresses ({ns_ip_list}).',
+          'A CDS RRset exists, but no DNSKEY record exists. Fetched from the '
+          . 'nameservers with IP addresses "{ns_ip_list}".',
           @_;
     },
     DS16_DELETE_CDS => sub {
         __x    # DS16_DELETE_CDS
-          'CDS RRset found on nameservers that resolve to IP addresses ({ns_ip_list}) '
-          . 'has a "delete" CDS record as a single record.',
+          'A single "delete" CDS record is found on the nameservers with IP addresses '
+          . '"{ns_ip_list}".',
           @_;
     },
     DS16_DNSKEY_NOT_SIGNED_BY_CDS => sub {
         __x    # DS16_DNSKEY_NOT_SIGNED_BY_CDS
-          'DNSKEY RRset found on nameservers that resolve to IP addresses ({ns_ip_list}) '
-          . 'is not signed by the key that the CDS record with tag {keytag} points to.',
+          'The DNSKEY RRset is not signed by the DNSKEY that the CDS record with tag '
+          . '{keytag} points to. Fetched from the nameservers with IP addresses '
+          . '"{ns_ip_list}".',
           @_;
     },
     DS16_MIXED_DELETE_CDS => sub {
         __x    # DS16_MIXED_DELETE_CDS
-          '"Delete" CDS record found on nameservers that resolve that resolve to IP '
-          . 'addresses ({ns_ip_list}) is mixed with normal CDS record.',
+          'The CDS RRset is a mixture between "delete" record and other records. '
+          . 'Fetched from the nameservers with IP addresses "{ns_ip_list}".',
           @_;
     },
     DS_ALGORITHM_NOT_DS => sub {
