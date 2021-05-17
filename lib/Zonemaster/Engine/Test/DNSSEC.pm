@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare( "v1.1.41" );
+use version; our $VERSION = version->declare( "v1.1.42" );
 
 ###
 ### This test module implements DNSSEC tests.
@@ -668,8 +668,9 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     DS16_CDS_INVALID_RRSIG => sub {
         __x    # DS16_CDS_INVALID_RRSIG
-          'The CDS RRset is signed with an invalid RRSIG with tag {keytag}. Fetched '
-          . 'from the nameservers with IP addresses "{ns_ip_list}".',
+          'The CDS RRset is signed with an RRSIG with tag {keytag}, but the RRSIG does '
+          . 'not match the DNSKEY with the same key tag. Fetched from the nameservers '
+          . 'with IP addresses "{ns_ip_list}".'
           @_;
     },
     DS16_CDS_MATCHES_NO_DNSKEY => sub {
