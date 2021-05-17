@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare( "v1.1.43" );
+use version; our $VERSION = version->declare( "v1.1.44" );
 
 ###
 ### This test module implements DNSSEC tests.
@@ -778,7 +778,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     DS17_MIXED_DELETE_CDNSKEY => sub {
         __x    # DS17_MIXED_DELETE_CDNSKEY
-          'The CDS RRset is a mixture between "delete" record and other records. '
+          'The CDNSKEY RRset is a mixture between "delete" record and other records. '
           . 'Fetched from the nameservers with IP addresses "{ns_ip_list}".',
           @_;
     },
