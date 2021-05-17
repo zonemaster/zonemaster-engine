@@ -110,6 +110,7 @@ t/profiles/Test-dnssec11-only.json
 t/profiles/Test-dnssec13-only.json
 t/profiles/Test-dnssec14-only.json
 t/profiles/Test-dnssec15-only.json
+t/profiles/Test-dnssec16-only.json
 t/profiles/Test-dnssec-all.json
 t/profiles/Test-dnssec-more-all.json
 t/profiles/Test-nameserver01-only.json
