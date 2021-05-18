@@ -49,7 +49,7 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
 
 # Find a way for dnssec06 which have a dependence...
 my ($json, $profile_test);
-foreach my $testcase ( qw{dnssec01 dnssec02 dnssec03 dnssec04 dnssec05 dnssec07 dnssec08 dnssec09 dnssec10 dnssec11 dnssec13 dnssec14 dnssec15 dnssec16} ) {
+foreach my $testcase ( qw{dnssec01 dnssec02 dnssec03 dnssec04 dnssec05 dnssec07 dnssec08 dnssec09 dnssec10 dnssec11 dnssec13 dnssec14 dnssec15 dnssec16 dnssec17} ) {
     $json         = read_file( 't/profiles/Test-'.$testcase.'-only.json' );
     $profile_test = Zonemaster::Engine::Profile->from_json( $json );
     Zonemaster::Engine::Profile->effective->merge( $profile_test );
@@ -399,6 +399,33 @@ zone_gives_not('dnssec16', $zone, [qw{DS16_CDS_INVALID_RRSIG DS16_CDS_MATCHES_NO
 $zone = Zonemaster::Engine->zone( 'dnssec16-cds-matches-no-dnskey.zft-root.rd.nic.fr' );
 zone_gives( 'dnssec16', $zone, [q{DS16_CDS_MATCHES_NO_DNSKEY}]);
 zone_gives_not('dnssec16', $zone, [qw{DS16_CDS_INVALID_RRSIG DS16_CDS_SIGNED_BY_UNKNOWN_DNSKEY DS16_CDS_UNSIGNED DS16_CDS_WITHOUT_DNSKEY DS16_DELETE_CDS DS16_DNSKEY_NOT_SIGNED_BY_CDS DS16_MIXED_DELETE_CDS}] );
+
+###########
+# dnssec17
+###########
+
+$zone = Zonemaster::Engine->zone( 'dnssec16-cds-cdnskey-signed.zft-root.rd.nic.fr' );
+zone_gives_not('dnssec17', $zone, [qw{DS17_CDNSKEY_INVALID_RRSIG DS17_CDNSKEY_MATCHES_NO_DNSKEY DS17_CDNSKEY_SIGNED_BY_UNKNOWN_DNSKEY DS17_CDNSKEY_UNSIGNED DS17_CDNSKEY_WITHOUT_DNSKEY DS17_DELETE_CDNSKEY DS17_DNSKEY_NOT_SIGNED_BY_CDNSKEY DS17_MIXED_DELETE_CDNSKEY}] );
+
+$zone = Zonemaster::Engine->zone( 'dnssec16-cds-cdnskey-unsigned.zft-root.rd.nic.fr' );
+zone_gives( 'dnssec17', $zone, [q{DS17_DNSKEY_NOT_SIGNED_BY_CDNSKEY}]);
+zone_gives_not('dnssec17', $zone, [qw{DS17_CDNSKEY_INVALID_RRSIG DS17_CDNSKEY_MATCHES_NO_DNSKEY DS17_CDNSKEY_SIGNED_BY_UNKNOWN_DNSKEY DS17_CDNSKEY_UNSIGNED DS17_CDNSKEY_WITHOUT_DNSKEY DS17_DELETE_CDNSKEY DS17_MIXED_DELETE_CDNSKEY}] );
+
+$zone = Zonemaster::Engine->zone( 'dnssec16-cds-cdnskey-invalid-rrsig-01.zft-root.rd.nic.fr' );
+zone_gives( 'dnssec17', $zone, [q{DS17_CDNSKEY_INVALID_RRSIG}]);
+zone_gives_not('dnssec17', $zone, [qw{DS17_CDNSKEY_MATCHES_NO_DNSKEY DS17_CDNSKEY_SIGNED_BY_UNKNOWN_DNSKEY DS17_CDNSKEY_UNSIGNED DS17_CDNSKEY_WITHOUT_DNSKEY DS17_DELETE_CDNSKEY DS17_DNSKEY_NOT_SIGNED_BY_CDNSKEY DS17_MIXED_DELETE_CDNSKEY}] );
+
+$zone = Zonemaster::Engine->zone( 'dnssec16-cds-cdnskey-invalid-rrsig-02.zft-root.rd.nic.fr' );
+zone_gives( 'dnssec17', $zone, [q{DS17_CDNSKEY_INVALID_RRSIG}]);
+zone_gives_not('dnssec17', $zone, [qw{DS17_CDNSKEY_MATCHES_NO_DNSKEY DS17_CDNSKEY_SIGNED_BY_UNKNOWN_DNSKEY DS17_CDNSKEY_UNSIGNED DS17_CDNSKEY_WITHOUT_DNSKEY DS17_DELETE_CDNSKEY DS17_DNSKEY_NOT_SIGNED_BY_CDNSKEY DS17_MIXED_DELETE_CDNSKEY}] );
+
+$zone = Zonemaster::Engine->zone( 'dnssec17-cdnskey-unsigned.zft-root.rd.nic.fr' );
+zone_gives( 'dnssec17', $zone, [qw{DS17_DNSKEY_NOT_SIGNED_BY_CDNSKEY DS17_CDNSKEY_UNSIGNED}]);
+zone_gives_not('dnssec17', $zone, [qw{DS17_CDNSKEY_INVALID_RRSIG DS17_CDNSKEY_MATCHES_NO_DNSKEY DS17_CDNSKEY_SIGNED_BY_UNKNOWN_DNSKEY DS17_CDNSKEY_WITHOUT_DNSKEY DS17_DELETE_CDNSKEY DS17_MIXED_DELETE_CDNSKEY}] );
+
+$zone = Zonemaster::Engine->zone( 'dnssec16-cds-without-dnskey.zft-root.rd.nic.fr' );
+zone_gives( 'dnssec17', $zone, [q{DS17_CDNSKEY_WITHOUT_DNSKEY}]);
+zone_gives_not('dnssec17', $zone, [qw{DS17_CDNSKEY_INVALID_RRSIG DS17_CDNSKEY_MATCHES_NO_DNSKEY DS17_CDNSKEY_SIGNED_BY_UNKNOWN_DNSKEY DS17_CDNSKEY_UNSIGNED DS17_DELETE_CDNSKEY DS17_DNSKEY_NOT_SIGNED_BY_CDNSKEY DS17_MIXED_DELETE_CDNSKEY}] );
 
 TODO: {
     local $TODO = "Need to find/create zones with that error";
