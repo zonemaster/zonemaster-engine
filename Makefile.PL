@@ -56,10 +56,10 @@ sub MY::postamble {
         # Make FreeBSD use gmake for share/Makefile
         $text = 'GMAKE ?= "gmake"' . "\n"
             . 'pure_all :: share/Makefile' . "\n"
-            . "\t" . 'cd share && $(GMAKE) touch-po all' . "\n";
+            . "\t" . 'cd share && $(GMAKE) all' . "\n";
     } else {
         $text = 'pure_all :: share/Makefile' . "\n"
-            . "\t" . 'cd share && $(MAKE) touch-po all' . "\n";
+            . "\t" . 'cd share && $(MAKE) all' . "\n";
     };
     return $text;
 };

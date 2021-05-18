@@ -1,6 +1,6 @@
 .POSIX:
 .SUFFIXES: .po .mo
-.PHONY: all check-msg-args dist extract-pot tidy-po show-fuzzy touch-po update-po
+.PHONY: all check-msg-args dist extract-pot tidy-po show-fuzzy update-po
 
 POFILES := $(shell find . -maxdepth 1 -type f -name '*.po' -exec basename {} \;)
 MOFILES := $(POFILES:%.po=%.mo)
@@ -19,9 +19,6 @@ tidy-po:
 	@tmpdir="`mktemp -d tidy-po.XXXXXXXX`" ;\
 	trap 'rm -rf "$$tmpdir"' EXIT ;\
 	for f in $(POFILES) ; do msgcat $$f -o $$tmpdir/$$f && mv -f $$tmpdir/$$f $$f  ; done
-
-touch-po:
-	@touch $(POFILES)
 
 update-po: extract-pot
 	@for f in $(POFILES) ; do msgmerge --update --backup=none --quiet --no-location $(MSGMERGE_OPTS) $$f $(POTFILE) ; done
