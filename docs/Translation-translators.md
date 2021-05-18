@@ -63,7 +63,8 @@ Currently there are the following files (and languages):
 * nb.po (Norwegian)
 * sv.po (Swedish)
 
-Execute `make xx.po` to update the *PO* file for language "xx".
+Execute `./update-po xx.po` to update the *PO* file for language
+"xx".
 Choose the language code for the language that you want to update.
 The command will update the *PO* file with new message ids (*msgid*) from the
 source code.
@@ -78,7 +79,7 @@ ids based on fuzzy matching of similar strings. This is not always desirable
 and you can disable fuzzy matching by executing one of the following
 commands instead:
 ```
-make xx.po MSGMERGE_OPTS=--no-fuzzy-mathing
+make update-po MSGMERGE_OPTS=--no-fuzzy-mathing POFILES=xx.po
 make update-po MSGMERGE_OPTS=--no-fuzzy-mathing
 ```
 
@@ -167,7 +168,7 @@ welcome comments on these.
   language code in question. This should be done every time.
   ```
   cd share
-  make xx.po
+  ./update-po xx.po
   ```
 
 * The *PO* file is updated with new *msgids*, if any, and now you can start
@@ -272,7 +273,7 @@ steps before this step:
   >   to work with. Replace "xx" with the language code in question.
   > ```
   > cd share
-  > make xx.po
+  > ./update-po xx.po
   > ```
 
 The new language is not there and cannot be updated. Instead you have to
@@ -293,7 +294,7 @@ of an existing file.
   for Swedish.
   ```
   cd share
-  make sv.po
+  ./update-po sv.po
   cp sv.po xx.po
   git checkout sv.po
   ```
