@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-05 18:36+0100\n"
+"POT-Creation-Date: 2021-05-21 19:48+0200\n"
 "PO-Revision-Date: 2020-09-07\n"
 "Last-Translator: vincent.levigneron@afnic.fr\n"
 "Language-Team: Zonemaster Team\n"
@@ -85,6 +85,98 @@ msgstr "TEST_CASE_END {testcase}."
 msgid "TEST_CASE_START {testcase}."
 msgstr "TEST_CASE_START {testcase}."
 
+#. BASIC:A_QUERY_NO_RESPONSES
+msgid "Nameservers did not respond to A query."
+msgstr "Aucune réponse des serveurs de noms sur une requête de type \"A\"."
+
+#. BASIC:B04_MISSING_NS_RECORD
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} reponds to a NS query with no NS records in the answer "
+"section."
+msgstr ""
+"Le serveur de noms {ns} ne retourne aucun enregistrement de type \"NS\" dans "
+"la section \"answer\" de la réponse à une requête de type \"NS\"."
+
+#. BASIC:B04_MISSING_SOA_RECORD
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} reponds to a SOA query with no SOA records in the answer "
+"section."
+msgstr ""
+"Le serveur de noms {ns} ne retourne aucun enregistrement de type \"SOA\" "
+"dans la section \"answer\" de la réponse à une requête de type \"SOA\"."
+
+#. BASIC:B04_NO_RESPONSE
+#, perl-brace-format
+msgid "Nameserver {ns} does not respond over neither UDP nor TCP."
+msgstr "Le serveur de noms {ns} ne répond ni en UDP, ni en TCP."
+
+#. BASIC:B04_NO_RESPONSE_NS_QUERY
+#, perl-brace-format
+msgid "Nameserver {ns} does not respond to NS queries."
+msgstr "Le serveur de noms {ns} ne répond pas à une requête de type \"NS\"."
+
+#. BASIC:B04_NO_RESPONSE_SOA_QUERY
+#, perl-brace-format
+msgid "Nameserver {ns} does not respond to SOA queries."
+msgstr "Le serveur de noms {ns} ne répond pas à une requête de type \"SOA\"."
+
+#. BASIC:B04_NS_RECORD_NOT_AA
+#, perl-brace-format
+msgid "Nameserver {ns} does not give an authoritative response on an NS query."
+msgstr ""
+"La réponse du serveur de noms {ns} à une requête de type \"NS\" ne fait pas "
+"autorité."
+
+#. BASIC:B04_RESPONSE_TCP_NOT_UDP
+#, perl-brace-format
+msgid "Nameserver {ns} does not respond over UDP."
+msgstr "Le serveur de noms {ns} ne répond pas en UDP."
+
+#. BASIC:B04_SOA_RECORD_NOT_AA
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} does not give an authoritative response on an SOA query."
+msgstr ""
+"La réponse du serveur de noms {ns} à une requête de type \"SOA\" ne fait pas "
+"autorité."
+
+#. BASIC:B04_UNEXPECTED_RCODE_NS_QUERY
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responds with an unexpected RCODE ({rcode}) on an NS query."
+msgstr ""
+"Le serveur de noms {ns} a répondu à une requête de type \"NS\" avec un code "
+"retour inattendu ({rcode})."
+
+#. BASIC:B04_UNEXPECTED_RCODE_SOA_QUERY
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responds with an unexpected RCODE ({rcode}) on an SOA query."
+msgstr ""
+"Le serveur de noms {ns} a répondu à une requête de type \"SOA\" avec un code "
+"retour inattendu ({rcode})."
+
+#. BASIC:B04_WRONG_NS_RECORD
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responds with a wrong owner name ({owner} instead of {name}) "
+"on NS queries."
+msgstr ""
+"Le serveur de noms {ns} répond aux requêtes de type \"NS\" avec un nom de "
+"domaine erroné ({owner} à la place de {name})."
+
+#. BASIC:B04_WRONG_SOA_RECORD
+#. ZONE:WRONG_SOA
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responds with a wrong owner name ({owner} instead of {name}) "
+"on SOA queries."
+msgstr ""
+"Le serveur de noms {ns} répond aux requêtes de type \"SOA\" avec un nom de "
+"domaine erroné ({owner} à la place de {name})."
+
 #. BASIC:DOMAIN_NAME_LABEL_TOO_LONG
 #, perl-brace-format
 msgid ""
@@ -93,25 +185,15 @@ msgstr ""
 "Le nom de domaine '{domain}' a un label ({dlabel}) trop long ({dlength}/"
 "{max})."
 
-#. BASIC:DOMAIN_NAME_ZERO_LENGTH_LABEL
-#, perl-brace-format
-msgid "Domain name ({domain}) has a zero-length label."
-msgstr "Le nom de domaine '{domain}' a un label de taille zéro."
-
 #. BASIC:DOMAIN_NAME_TOO_LONG
 #, perl-brace-format
 msgid "Domain name is too long ({fqdnlength}/{max})."
 msgstr "Le nom de domaine est trop long ({fqdnlength}/{max})."
 
-#. BASIC:NO_PARENT
-msgid "No parent domain could be found for the domain under test."
-msgstr "Aucune zone parente n'a pu être trouvée pour le nom de domaine testé."
-
-#. BASIC:HAS_PARENT
+#. BASIC:DOMAIN_NAME_ZERO_LENGTH_LABEL
 #, perl-brace-format
-msgid "Parent domain '{pname}' was found for the tested domain."
-msgstr ""
-"Une zone parente '{pname}' a pu être trouvée pour le nom de domaine testé."
+msgid "Domain name ({domain}) has a zero-length label."
+msgstr "Le nom de domaine '{domain}' a un label de taille zéro."
 
 #. BASIC:HAS_A_RECORDS
 #, perl-brace-format
@@ -120,12 +202,12 @@ msgstr ""
 "Le serveur de noms {ns} renvoie un enregistrement de type \"A\" en réponse à "
 "une requête pour '{domain}'."
 
-#. BASIC:NO_A_RECORDS
+#. BASIC:HAS_NAMESERVER_NO_WWW_A_TEST
 #, perl-brace-format
-msgid "Nameserver {ns} did not return \"A\" record(s) for {domain}."
+msgid "Functional nameserver found. \"A\" query for www.{zname} test skipped."
 msgstr ""
-"Le serveur de noms {ns} ne renvoie pas d'enregistrement de type \"A\" en "
-"réponse à une requête pour '{domain}'."
+"Un serveur de noms fonctionnel a été trouvé. Inutile de réaliser une requête "
+"de type \"A\" sur www.{zname}."
 
 #. BASIC:HAS_NAMESERVERS
 #, perl-brace-format
@@ -134,34 +216,11 @@ msgstr ""
 "Une requête NS sur le serveur de noms {ns} renvoie la liste de serveurs de "
 "noms suivants: {nsnlist}."
 
-#. BASIC:NO_GLUE_PREVENTS_NAMESERVER_TESTS
-msgid "No NS records for tested zone from parent. NS tests skipped."
-msgstr ""
-"Aucun enregistrement de type \"NS\" renvoyé par la zone parente pour la zone "
-"testée. Les tests complémentaires sur ces serveurs sont annulés."
-
-#. BASIC:NS_FAILED
+#. BASIC:HAS_PARENT
 #, perl-brace-format
-msgid "Nameserver {ns} did not return NS records. RCODE was {rcode}."
+msgid "Parent domain '{pname}' was found for the tested domain."
 msgstr ""
-"Le serveur de noms {ns} ne renvoie pas d'enregistrements de type \"NS\" pour "
-"la zone testée. Le code {rcode} a été retourné."
-
-#. BASIC:NS_NO_RESPONSE
-#, perl-brace-format
-msgid "Nameserver {ns} did not respond to NS query."
-msgstr "Le serveur de noms {ns} ne répond pas à une requête de type \"NS\"."
-
-#. BASIC:A_QUERY_NO_RESPONSES
-msgid "Nameservers did not respond to A query."
-msgstr "Aucune réponse des serveurs de noms sur une requête de type \"A\"."
-
-#. BASIC:HAS_NAMESERVER_NO_WWW_A_TEST
-#, perl-brace-format
-msgid "Functional nameserver found. \"A\" query for www.{zname} test skipped."
-msgstr ""
-"Un serveur de noms fonctionnel a été trouvé. Inutile de réaliser une requête "
-"de type \"A\" sur www.{zname}."
+"Une zone parente '{pname}' a pu être trouvée pour le nom de domaine testé."
 
 #. BASIC:IPV4_DISABLED
 #. CONNECTIVITY:IPV4_DISABLED
@@ -202,6 +261,35 @@ msgid "IPv6 is enabled, can send \"{rrtype}\" query to {ns}."
 msgstr ""
 "IPv6 est activé, il est possible de réaliser une requête de type "
 "\"{rrtype}\" sur le serveur {ns}."
+
+#. BASIC:NO_A_RECORDS
+#, perl-brace-format
+msgid "Nameserver {ns} did not return \"A\" record(s) for {domain}."
+msgstr ""
+"Le serveur de noms {ns} ne renvoie pas d'enregistrement de type \"A\" en "
+"réponse à une requête pour '{domain}'."
+
+#. BASIC:NO_GLUE_PREVENTS_NAMESERVER_TESTS
+msgid "No NS records for tested zone from parent. NS tests skipped."
+msgstr ""
+"Aucun enregistrement de type \"NS\" renvoyé par la zone parente pour la zone "
+"testée. Les tests complémentaires sur ces serveurs sont annulés."
+
+#. BASIC:NO_PARENT
+msgid "No parent domain could be found for the domain under test."
+msgstr "Aucune zone parente n'a pu être trouvée pour le nom de domaine testé."
+
+#. BASIC:NS_FAILED
+#, perl-brace-format
+msgid "Nameserver {ns} did not return NS records. RCODE was {rcode}."
+msgstr ""
+"Le serveur de noms {ns} ne renvoie pas d'enregistrements de type \"NS\" pour "
+"la zone testée. Le code {rcode} a été retourné."
+
+#. BASIC:NS_NO_RESPONSE
+#, perl-brace-format
+msgid "Nameserver {ns} did not respond to NS query."
+msgstr "Le serveur de noms {ns} ne répond pas à une requête de type \"NS\"."
 
 #. CONNECTIVITY:ERROR_ASN_DATABASE
 #, perl-brace-format
@@ -715,6 +803,235 @@ msgstr ""
 "La clé (DNSKEY) avec le tag {keytag} utilisant l'algorithme {algo_num} "
 "({algo_descr}) a une taille ({keysize}) plus grande que la taille maximum "
 "({keysizemax}) spécifiée pour cet algorithme."
+
+#. DS15_HAS_CDNSKEY_NO_CDS
+#, perl-brace-format
+msgid ""
+"CDNSKEY RRset is found on nameservers that resolve to IP addresses "
+"({ns_ip_list}), but no CDS RRset."
+msgstr ""
+"Les serveurs de noms ayant une des adresses IP suivantes \"{ns_ip_list}\" "
+"retournent un ensemble d'enregistrements de type \"CDNSKEY\" mais aucun "
+"enregistrement de type \"CDS\"."
+
+#. DS15_HAS_CDS_AND_CDNSKEY
+#, perl-brace-format
+msgid ""
+"CDNSKEY and CDS RRsets are found on nameservers that resolve to IP addresses "
+"({ns_ip_list})."
+msgstr ""
+"Les serveurs de noms ayant une des adresses IP suivantes \"{ns_ip_list}\" "
+"retournent un ensemble d'enregistrements de type \"CDNSKEY\" et de type \"CDS"
+"\"."
+
+#. DS15_HAS_CDS_NO_CDNSKEY
+#, perl-brace-format
+msgid ""
+"CDS RRset is found on nameservers that resolve to IP addresses "
+"({ns_ip_list}), but no CDNSKEY RRset."
+msgstr ""
+"Les serveurs de noms ayant une des adresses IP suivantes \"{ns_ip_list}\" "
+"retournent un ensemble d'enregistrements de type \"CDS\" mais aucun "
+"enregistrement de type \"CDNSKEY\"."
+
+#. DS15_INCONSISTENT_CDNSKEY
+msgid "All servers do not have the same CDNSKEY RRset."
+msgstr ""
+"Tous les serveurs de noms n'ont pas le meme ensemble d'enregistrements de "
+"type \"CDNSKEY\"."
+
+#. DS15_INCONSISTENT_CDS
+msgid "All servers do not have the same CDS RRset."
+msgstr ""
+"Tous les serveurs de noms n'ont pas le meme ensemble d'enregistrements de "
+"type \"CDS\"."
+
+#. DS15_MISMATCH_CDS_CDNSKEY
+#, perl-brace-format
+msgid ""
+"Both CDS and CDNSKEY RRsets are found on nameservers that resolve to IP "
+"addresses ({ns_ip_list}) but they do not match."
+msgstr ""
+"Les serveurs de noms ayant une des adresses IP suivantes \"{ns_ip_list}\" "
+"retournent un ensemble d'enregistrements de type \"CDNSKEY\" et de type \"CDS"
+"\" mais ceux-ci ne correspondent pas."
+
+#. DS15_NO_CDS_CDNSKEY
+msgid "No CDS or CDNSKEY RRsets are found on any name server."
+msgstr ""
+"Aucun des serveurs de noms ne retourne d'enregistrements de type \"CDNSKEY"
+"\"  ou de type \"CDS\"."
+
+#. DS16_CDS_INVALID_RRSIG
+#, perl-brace-format
+msgid ""
+"The CDS RRset is signed with an RRSIG with tag {keytag}, but the RRSIG does "
+"not match the DNSKEY with the same key tag. Fetched from the nameservers "
+"with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"La signature de l'ensemble d'enregistrements de type \"CDS\" a pour tag "
+"{keytag}, mais cette signature (RRSIG) ne correspond pas à la clé (DNSKEY) "
+"ayant ce tag. Information retournée par les serveurs de noms ayant une des "
+"adresses IP suivantes ({ns_ip_list})."
+
+#. DS16_CDS_MATCHES_NO_DNSKEY
+#, perl-brace-format
+msgid ""
+"The CDS record with tag {keytag} does not match any DNSKEY record. Fetched "
+"from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"L'enregistrement de type \"CDS\" avec le tag {keytag} ne correpond à aucun "
+"enregistrement de type \"DNSKEY\". Information retournée par les serveurs de "
+"noms ayant une des adresses IP suivantes ({ns_ip_list})."
+
+#. DS16_CDS_SIGNED_BY_UNKNOWN_DNSKEY
+#, perl-brace-format
+msgid ""
+"The CDS RRset is signed by RRSIG with tag {keytag} but that is not in the "
+"DNSKEY RRset. Fetched from the nameservers with P addresses \"{ns_ip_list}\"."
+msgstr ""
+"La signature de l'ensemble d'enregistrements de type \"CDS\" a pour tag "
+"{keytag} mais cela ne correspond pas à une clé (DNSKEY) existante. "
+"Information retournée par les serveurs de noms ayant une des adresses IP "
+"suivantes ({ns_ip_list})."
+
+#. DS16_CDS_UNSIGNED
+#, perl-brace-format
+msgid ""
+"The CDS RRset is not signed. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"L'ensemble d'enregistrements de type \"CDS\" n'est pas signé. Information "
+"retournée par les serveurs de noms ayant une des adresses IP suivantes "
+"\"({ns_ip_list}\"."
+
+#. DS16_CDS_WITHOUT_DNSKEY
+#, perl-brace-format
+msgid ""
+"A CDS RRset exists, but no DNSKEY record exists. Fetched from the "
+"nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"Il existe un ensemble d'enregistrements de type \"CDS\" mais aucun "
+"enregistrement de type \"DNSKEY\". Information retournée par les serveurs de "
+"noms ayant une des adresses IP suivantes \"{ns_ip_list}\"."
+
+#. DS16_DELETE_CDS
+#, perl-brace-format
+msgid ""
+"A single \"delete\" CDS record is found on the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"Un unique enregitrement de type \"delete CDS\" a été retourné par les "
+"serveurs de noms ayant une des adresses IP suivantes ({ns_ip_list})."
+
+#. DS16_DNSKEY_NOT_SIGNED_BY_CDS
+#, perl-brace-format
+msgid ""
+"The DNSKEY RRset is not signed by the DNSKEY that the CDS record with tag "
+"{keytag} points to. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"L'ensemble d'enregistrements de type \"DNSKEY\" n'est pas signé par la clé "
+"correspondant au tag {keytag} de l'enregistrement de type \"CDS\". "
+"Information retournée par les serveurs de noms ayant une des adresses IP "
+"suivantes \"{ns_ip_list}\"."
+
+#. DS16_MIXED_DELETE_CDS
+#, perl-brace-format
+msgid ""
+"The CDS RRset is a mixture between \"delete\" record and other records. "
+"Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"Lorsqu'il est présent, l'enregistrement de type \"delete CDS\" ne peut pas "
+"etre combiné avec d'autres enregistrements de type \"CDS\". Information "
+"retournée par les serveurs de noms ayant une des adresses IP suivantes "
+"\"{ns_ip_list}\"."
+
+#. DS17_CDNSKEY_INVALID_RRSIG
+#, perl-brace-format
+msgid ""
+"The CDNSKEY RRset is signed with an RRSIG with tag {keytag}, but the RRSIG "
+"does not match the DNSKEY with the same key tag. Fetched from the "
+"nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"La signature de l'ensemble d'enregistrements de type \"CDNSKEY\" a pour tag "
+"{keytag}, mais cette signature (RRSIG) ne correspond pas à la clé (DNSKEY) "
+"ayant ce tag. Information retournée par les serveurs de noms ayant une des "
+"adresses IP suivantes \"{ns_ip_list}\"."
+
+#. DS17_CDNSKEY_MATCHES_NO_DNSKEY
+#, perl-brace-format
+msgid ""
+"The CDNSKEY record with tag {keytag} does not match any DNSKEY record. "
+"Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"L'enregistrement de type \"CDNSKEY\" avec le tag {keytag} ne correpond à "
+"aucun enregistrement de type \"DNSKEY\". Information retournée par les "
+"serveurs de noms ayant une des adresses IP suivantes \"{ns_ip_list}\"."
+
+#. DS17_CDNSKEY_SIGNED_BY_UNKNOWN_DNSKEY
+#, perl-brace-format
+msgid ""
+"The CDNSKEY RRset is signed by RRSIG with tag {keytag} but that is not in "
+"the DNSKEY RRset. Fetched from the nameservers with P addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"La signature de l'ensemble d'enregistrements de type \"CDNSKEY\" a pour tag "
+"{keytag} mais cela ne correspond pas à une clé (DNSKEY) existante. "
+"Information retournée par les serveurs de noms ayant une des adresses IP "
+"suivantes \"{ns_ip_list}\"."
+
+#. DS17_CDNSKEY_UNSIGNED
+#, perl-brace-format
+msgid ""
+"The CDNSKEY RRset is not signed. Fetched from the nameservers with IP "
+"addresses \"{ns_ip_list}\"."
+msgstr ""
+"L'ensemble d'enregistrements de type \"CDNSKEY\" n'est pas signé. "
+"Information retournée par les serveurs de noms ayant une des adresses IP "
+"suivantes \"{ns_ip_list}\"."
+
+#. DS17_CDNSKEY_WITHOUT_DNSKEY
+#, perl-brace-format
+msgid ""
+"A CDNSKEY RRset exists, but no DNSKEY record exists. Fetched from the "
+"nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"Il existe un ensemble d'enregistrements de type \"CDNSKEY\" mais aucun "
+"enregistrement de type \"DNSKEY\". Information retournée par les serveurs de "
+"noms ayant une des adresses IP suivantes \"{ns_ip_list}\"."
+
+#. DS17_DELETE_CDNSKEY
+#, perl-brace-format
+msgid ""
+"A single \"delete\" CDNSKEY record is found on the nameservers with IP "
+"addresses \"{ns_ip_list}\"."
+msgstr ""
+"Un unique enregitrement de type \"delete CDNSKEY\" a été retourné par les "
+"serveurs de noms ayant une des adresses IP suivantes \"{ns_ip_list}\"."
+
+#. DS17_DNSKEY_NOT_SIGNED_BY_CDNSKEY
+#, perl-brace-format
+msgid ""
+"The DNSKEY RRset is not signed by the DNSKEY that the CDNSKEY record with "
+"tag {keytag} points to. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"L'ensemble d'enregistrements de type \"DNSKEY\" n'est pas signé par la clé "
+"correspondant au tag {keytag} de l'enregistrement de type \"CDNSKEY\". "
+"Information retournée par les serveurs de noms ayant une des adresses IP "
+"suivantes \"{ns_ip_list}\"."
+
+#. DS17_MIXED_DELETE_CDNSKEY
+#, perl-brace-format
+msgid ""
+"The CDNSKEY RRset is a mixture between \"delete\" record and other records. "
+"Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"Lorsqu'il est présent, l'enregistrement de type \"delete CDNSKEY\" ne peut "
+"pas etre combiné avec d'autres enregistrements de type \"CDNSKEY\". "
+"Information retournée par les serveurs de noms ayant une des adresses IP "
+"suivantes \"{ns_ip_list}\"."
 
 #. DNSSEC:DS_ALGORITHM_NOT_DS
 #, perl-brace-format
@@ -1868,8 +2185,8 @@ msgid ""
 "The SOA RNAME mail domain ({domain}) resolved to a mail server with "
 "localhost ({localhost}) IP address."
 msgstr ""
-"Le nom de domaine ({domain}) de l'adresse mail dans le RNAME du SOA a "
-"pour adresse IP une adresse locale ({localhost})."
+"Le nom de domaine ({domain}) de l'adresse mail dans le RNAME du SOA a pour "
+"adresse IP une adresse locale ({localhost})."
 
 #. SYNTAX:RNAME_MAIL_ILLEGAL_CNAME
 #, perl-brace-format
@@ -2121,15 +2438,6 @@ msgstr ""
 "Dans le SOA, la valeur du champ 'expire' ({expire}) est plus grande que la "
 "valeur minimale recommandée ({required_expire}) et pas plus petite que la "
 "valeur du champ 'refresh' ({refresh})."
-
-#. ZONE:WRONG_SOA
-#, perl-brace-format
-msgid ""
-"Nameserver {ns} responds with a wrong owner name ({owner} instead of {name}) "
-"on SOA queries."
-msgstr ""
-"Le serveur de noms {ns} répond aux requêtes de type \"SOA\" avec un nom de "
-"domaine erroné ({owner} à la place de {name})."
 
 #. SYSTEM:CANNOT_CONTINUE
 #, perl-brace-format
