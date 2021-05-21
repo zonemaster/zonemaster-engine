@@ -733,7 +733,7 @@ Readonly my %TAG_DESCRIPTIONS => (
           @_;
     },
     DS17_CDNSKEY_INVALID_RRSIG => sub {
-        __x    # DS17_CDSKEY_INVALID_RRSIG
+        __x    # DS17_CDNSKEY_INVALID_RRSIG
           'The CDNSKEY RRset is signed with an RRSIG with tag {keytag}, but the RRSIG does '
           . 'not match the DNSKEY with the same key tag. Fetched from the nameservers '
           . 'with IP addresses "{ns_ip_list}".',
@@ -764,7 +764,7 @@ Readonly my %TAG_DESCRIPTIONS => (
           @_;
     },
     DS17_DELETE_CDNSKEY => sub {
-        __x    # DS17_DELETE_CDS
+        __x    # DS17_DELETE_CDNSKEY
           'A single "delete" CDNSKEY record is found on the nameservers with IP addresses '
           . '"{ns_ip_list}".',
           @_;
