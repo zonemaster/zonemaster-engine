@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-21 16:01+0200\n"
-"PO-Revision-Date: 2021-05-21 15:21+0200\n"
+"POT-Creation-Date: 2021-05-24 11:01+0200\n"
+"PO-Revision-Date: 2021-05-24 10:59+0200\n"
 "Last-Translator: mats.dufberg@iis.se\n"
 "Language-Team: Zonemaster Team\n"
 "Language: sv\n"
@@ -749,7 +749,7 @@ msgid ""
 "CDNSKEY and CDS RRsets are found on nameservers that resolve to IP addresses "
 "({ns_ip_list})."
 msgstr ""
-"CDNSKEY och CDS RRsets finns namnserverarna med IP-adresseserna "
+"CDNSKEY och CDS RRsets finns på namnservrarna med IP-adresseserna "
 "\"{ns_ip_list}\"."
 
 #. DS15_HAS_CDS_NO_CDNSKEY
@@ -791,7 +791,7 @@ msgid ""
 msgstr ""
 "CDS RRset är signerat av en RRSIG med \"key tag\" {keytag}, men den RRSIG "
 "stämmer inte med den DNSKEY som har samma \"key tag\". Hämtad från "
-"namnserverna med IP-adresserna \"{ns_ip_list}\"."
+"namnservrarna med IP-adresserna \"{ns_ip_list}\"."
 
 #. DS16_CDS_MATCHES_NO_DNSKEY
 #, perl-brace-format
@@ -800,7 +800,7 @@ msgid ""
 "from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
 "CDS-posten med \"key tag\" {keytag} stämmer inte med någon DNSKEY-post. "
-"Hämtad från namnserverna med IP-adresserna \"{ns_ip_list}\"."
+"Hämtad från namnservrarna med IP-adresserna \"{ns_ip_list}\"."
 
 #. DS16_CDS_SIGNED_BY_UNKNOWN_DNSKEY
 #, perl-brace-format
@@ -809,7 +809,7 @@ msgid ""
 "DNSKEY RRset. Fetched from the nameservers with P addresses \"{ns_ip_list}\"."
 msgstr ""
 "CDS RRset är signerad av RRSIG med \"key tag\" {keytag} men den stämmer inte "
-"med någon DNSKEY-post. Hämtad från namnserverna med IP-adresserna "
+"med någon DNSKEY-post. Hämtad från namnservrarna med IP-adresserna "
 "\"{ns_ip_list}\"."
 
 #. DS16_CDS_UNSIGNED
@@ -818,7 +818,7 @@ msgid ""
 "The CDS RRset is not signed. Fetched from the nameservers with IP addresses "
 "\"{ns_ip_list}\"."
 msgstr ""
-"CDS RRset är inte signerad. Hämtad från namnserverna med IP-adresserna "
+"CDS RRset är inte signerad. Hämtad från namnservrarna med IP-adresserna "
 "\"{ns_ip_list}\"."
 
 #. DS16_CDS_WITHOUT_DNSKEY
@@ -828,7 +828,7 @@ msgid ""
 "nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
 "Det finns ett CDS RRset, men det finns inga DNSKEY-poster. Hämtat från "
-"namnserverna med IP-adresserna \"{ns_ip_list}\"."
+"namnservrarna med IP-adresserna \"{ns_ip_list}\"."
 
 #. DS16_DELETE_CDS
 #, perl-brace-format
@@ -847,7 +847,7 @@ msgid ""
 "\"{ns_ip_list}\"."
 msgstr ""
 "DNSKEY RRset har inte signerats av den DNSKEY-post som CDS-posten med \"key "
-"tag\" {keytag} refererar till. Hämtat från namnserverna med IP-adresserna "
+"tag\" {keytag} refererar till. Hämtat från namnservrarna med IP-adresserna "
 "\"{ns_ip_list}\"."
 
 #. DS16_MIXED_DELETE_CDS
@@ -868,7 +868,7 @@ msgid ""
 msgstr ""
 "CDNSKEY RRset är signerat av en RRSIG med \"key tag\" {keytag}, men den "
 "RRSIG stämmer inte med den DNSKEY som har samma \"key tag\". Hämtad från "
-"namnserverna med IP-adresserna \"{ns_ip_list}\"."
+"namnservrarna med IP-adresserna \"{ns_ip_list}\"."
 
 #. DS17_CDNSKEY_MATCHES_NO_DNSKEY
 #, perl-brace-format
@@ -877,7 +877,7 @@ msgid ""
 "Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
 "CDNSKEY-posten med \"key tag\" {keytag} stämmer inte med någon DNSKEY-post. "
-"Hämtad från namnserverna med IP-adresserna \"{ns_ip_list}\""
+"Hämtad från namnservrarna med IP-adresserna \"{ns_ip_list}\""
 
 #. DS17_CDNSKEY_SIGNED_BY_UNKNOWN_DNSKEY
 #, perl-brace-format
@@ -887,7 +887,7 @@ msgid ""
 "\"{ns_ip_list}\"."
 msgstr ""
 "CDNSKEY RRset är signerad av RRSIG med \"key tag\" {keytag} men den stämmer "
-"inte med någon DNSKEY-post. Hämtad från namnserverna med IP-adresserna "
+"inte med någon DNSKEY-post. Hämtad från namnservrarna med IP-adresserna "
 "\"{ns_ip_list}\"."
 
 #. DS17_CDNSKEY_UNSIGNED
@@ -896,7 +896,7 @@ msgid ""
 "The CDNSKEY RRset is not signed. Fetched from the nameservers with IP "
 "addresses \"{ns_ip_list}\"."
 msgstr ""
-"CDNSKEY RRset är inte signerad. Hämtad från namnserverna med IP-adresserna "
+"CDNSKEY RRset är inte signerad. Hämtad från namnservrarna med IP-adresserna "
 "\"{ns_ip_list}\"."
 
 #. DS17_CDNSKEY_WITHOUT_DNSKEY
@@ -906,7 +906,7 @@ msgid ""
 "nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
 "Det finns ett CDNSKEY RRset, men det finns inga DNSKEY-poster. Hämtat från "
-"namnserverna med IP-adresserna \"{ns_ip_list}\"."
+"namnservrarna med IP-adresserna \"{ns_ip_list}\"."
 
 #. DS17_DELETE_CDNSKEY
 #, perl-brace-format
@@ -925,7 +925,7 @@ msgid ""
 "\"{ns_ip_list}\"."
 msgstr ""
 "DNSKEY RRset har inte signerats av den DNSKEY-post som CDNSKEY-posten med "
-"\"key tag\" {keytag} refererar till. Hämtat från namnserverna med IP-"
+"\"key tag\" {keytag} refererar till. Hämtat från namnservrarna med IP-"
 "adresserna \"{ns_ip_list}\"."
 
 #. DS17_MIXED_DELETE_CDNSKEY
