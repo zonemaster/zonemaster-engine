@@ -22,7 +22,11 @@ but you will have to find instructions elsewhere.
 
 * CentOS
 
-  To be written.
+  Install the following:
+  ```
+  yum install git make perl-App-cpanminus perl-Try-Tiny
+  cpanm Locale::PO
+  ```
 
 * Debian
 
