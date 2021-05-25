@@ -837,13 +837,13 @@ msgstr ""
 #. DS15_INCONSISTENT_CDNSKEY
 msgid "All servers do not have the same CDNSKEY RRset."
 msgstr ""
-"Tous les serveurs de noms n'ont pas le meme ensemble d'enregistrements de "
+"Tous les serveurs de noms n'ont pas le même ensemble d'enregistrements de "
 "type \"CDNSKEY\"."
 
 #. DS15_INCONSISTENT_CDS
 msgid "All servers do not have the same CDS RRset."
 msgstr ""
-"Tous les serveurs de noms n'ont pas le meme ensemble d'enregistrements de "
+"Tous les serveurs de noms n'ont pas le même ensemble d'enregistrements de "
 "type \"CDS\"."
 
 #. DS15_MISMATCH_CDS_CDNSKEY
@@ -943,7 +943,7 @@ msgid ""
 "Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
 "Lorsqu'il est présent, l'enregistrement de type \"delete CDS\" ne peut pas "
-"etre combiné avec d'autres enregistrements de type \"CDS\". Information "
+"être combiné avec d'autres enregistrements de type \"CDS\". Information "
 "retournée par les serveurs de noms ayant une des adresses IP suivantes "
 "\"{ns_ip_list}\"."
 
@@ -1029,7 +1029,7 @@ msgid ""
 "Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
 "Lorsqu'il est présent, l'enregistrement de type \"delete CDNSKEY\" ne peut "
-"pas etre combiné avec d'autres enregistrements de type \"CDNSKEY\". "
+"pas être combiné avec d'autres enregistrements de type \"CDNSKEY\". "
 "Information retournée par les serveurs de noms ayant une des adresses IP "
 "suivantes \"{ns_ip_list}\"."
 
