@@ -420,7 +420,7 @@
             "SOA_DEFAULT_TTL_MAXIMUM_VALUE_OK" : "INFO",
             "TEST_CASE_END" : "DEBUG",
             "TEST_CASE_START" : "DEBUG",
-            "WRONG_SOA" : "ERROR"
+            "WRONG_SOA" : "DEBUG"
         }
     },
     "test_cases": [
