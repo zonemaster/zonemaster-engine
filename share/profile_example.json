@@ -443,7 +443,7 @@
             "NO_RESPONSE" : "DEBUG",
             "NO_RESPONSE_MX_QUERY" : "DEBUG",
             "NO_RESPONSE_SOA_QUERY" : "DEBUG",
-            "NO_SOA_IN_RESPONSE" : "WARNING",
+            "NO_SOA_IN_RESPONSE" : "DEBUG",
             "ONE_SOA" : "INFO",
             "REFRESH_HIGHER_THAN_RETRY" : "INFO",
             "REFRESH_LOWER_THAN_RETRY" : "INFO",
