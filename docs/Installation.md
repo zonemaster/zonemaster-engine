@@ -33,28 +33,22 @@ This instruction covers the following operating systems:
 2) Install the [EPEL] repository:
 
    ```sh
-   sudo yum --enablerepo=extras install epel-release
+   sudo yum --assumeyes --enablerepo=extras install epel-release
    ```
 
-3) Make sure the development environment is installed:
+3) Install binary packages:
 
    ```sh
-   sudo yum groupinstall "Development Tools"
+   sudo yum --assumeyes install cpanminus gcc libidn-devel openssl-devel perl-Clone perl-core perl-Devel-CheckLib perl-Email-Valid perl-File-ShareDir perl-File-Slurp perl-libintl perl-IO-Socket-INET6 perl-JSON-PP perl-List-MoreUtils perl-Module-Find perl-Moose perl-Net-IP perl-Pod-Coverage perl-Readonly perl-Test-Differences perl-Test-Exception perl-Test-Fatal perl-Test-Pod perl-Text-CSV perl-YAML
    ```
 
-4) Install binary packages:
-
-   ```sh
-   sudo yum install cpanminus libidn-devel openssl-devel perl-Clone perl-core perl-Devel-CheckLib perl-Email-Valid perl-File-ShareDir perl-File-Slurp perl-libintl perl-IO-Socket-INET6 perl-JSON-PP perl-List-MoreUtils perl-Module-Find perl-Moose perl-Net-IP perl-Pod-Coverage perl-Test-Differences perl-Test-Exception perl-Test-Fatal perl-Test-Pod perl-Text-CSV perl-YAML perl-MailTools
-   ```
-
-5) Install packages from CPAN:
+4) Install packages from CPAN:
 
    ```sh
    sudo cpanm Locale::Msgfmt Module::Install Module::Install::XSUtil MooseX::Singleton Test::More
    ```
 
-6) Install Zonemaster::LDNS and Zonemaster::Engine for *CentOS 7*:
+5) Install Zonemaster::LDNS and Zonemaster::Engine for *CentOS 7*:
 
    ```sh
    sudo cpanm --configure-args="--no-ed25519" Zonemaster::LDNS
@@ -67,7 +61,7 @@ This instruction covers the following operating systems:
 > **Note**: Support for DNSSEC algorithms 15 (Ed25519) and 16 (Ed448) is not
 > included in CentOS 7. OpenSSL version 1.1.1 or higher is required.
 
-7) Install Zonemaster::LDNS and Zonemaster::Engine for *CentOS 8*:
+6) Install Zonemaster::LDNS and Zonemaster::Engine for *CentOS 8*:
 
    ```sh
    sudo cpanm Zonemaster::LDNS Zonemaster::Engine
