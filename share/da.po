@@ -88,7 +88,9 @@ msgstr "Navneserverne svarede ikke på en A-forespørgsel."
 msgid ""
 "Nameserver {ns} reponds to a NS query with no NS records in the answer "
 "section."
-msgstr "Navneserveren {ns} svarede ikke på en NS-forespørgsel."
+msgstr ""
+"Navneserveren {ns} svarede på en NS-forespørgsel, men svaret indeholder "
+"ikke nogle NS-records"
 
 #. BASIC:B04_MISSING_SOA_RECORD
 #, perl-brace-format
@@ -96,7 +98,8 @@ msgid ""
 "Nameserver {ns} reponds to a SOA query with no SOA records in the answer "
 "section."
 msgstr ""
-"Navneserveren {ns} svarede ikke på en SOA-forespørgsel"
+"Navneserveren {ns} svarede på en SOA-forespørgsel, men svaret indeholder "
+"ikke nogle SOA-records"
 
 #. BASIC:B04_NO_RESPONSE
 #, perl-brace-format
