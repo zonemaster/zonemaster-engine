@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-21 14:22+0200\n"
-"PO-Revision-Date: 2021-05-28 13:57+0200\n"
+"PO-Revision-Date: 2021-05-28 15:16+0200\n"
 "Last-Translator: richard.persson@norid.no\n"
 "Language-Team: Zonemaster Team\n"
 "Language: nb\n"
@@ -126,7 +126,7 @@ msgstr "Navnetjener {ns} svarte ikke over UDP."
 #, perl-brace-format
 msgid ""
 "Nameserver {ns} does not give an authoritative response on an SOA query."
-msgstr "Navnetjener {ns} svarte ikke autotitativt på SOA-spørring."
+msgstr "Navnetjener {ns} svarte ikke autoritativt på SOA-spørring."
 
 #. BASIC:B04_UNEXPECTED_RCODE_NS_QUERY
 #, perl-brace-format
