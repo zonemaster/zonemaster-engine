@@ -1,5 +1,22 @@
 Release history for Zonemaster component Zonemaster-Engine
 
+v4.2.0 2021-05-28 (public release version)
+
+ [Features]
+ - Updates profile to reduce repeated messages on no response (#923)
+ - Adds test case implementation of DNSSEC17 (#906, #898)
+ - Adds test case implementation of DNSSEC16 (#900, #897)
+ - Adds test case implementation of DNSSEC15 (#896, #894)
+ - Adds test case implementation of Basci04 (#892, #763)
+ - Adds Finnish translation (PO file) (#880, #879)
+
+ [Fixes]
+ - Updates translations (#921, #917, #916, #914)
+ - Updates instructions (#918, #919, #889)
+ - Corrects code (#915)
+ - Updates share/Makefile to be FreeBSD compatible (#893, #702)
+
+
 v4.1.1 2021-03-16 (public fix release version)
 
  [Fixes]
