@@ -11,8 +11,8 @@ v4.2.0 2021-05-28 (public release version)
  - Adds Finnish translation (PO file) (#880, #879)
 
  [Fixes]
- - Updates translations (#921, #917, #916, #914)
- - Updates instructions (#918, #919, #889)
+ - Updates translations (#921, #917, #916, #914, #925, #910)
+ - Updates instructions (#918, #919, #889, #926)
  - Corrects code (#915)
  - Updates share/Makefile to be FreeBSD compatible (#893, #702)
 
