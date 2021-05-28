@@ -33,7 +33,7 @@ requires 'MooseX::Singleton'  => 0.30;
 requires 'Net::IP'            => 1.26;
 requires 'Readonly'           => 0;
 requires 'Text::CSV'          => 0;
-requires 'Zonemaster::LDNS'   => 2.001;
+requires 'Zonemaster::LDNS'   => 2.002;
 
 test_requires 'Pod::Coverage'     => 0;
 test_requires 'Test::Differences' => 0;
