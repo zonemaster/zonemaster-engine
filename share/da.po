@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-28 04:26+0100\n"
+"POT-Creation-Date: 2021-05-28 07:16+0000\n"
 "PO-Revision-Date: 2020-11-03 16:56+0100\n"
 "Last-Translator: Niels Haarbo <haarbo@dk-hostmaster.dk>\n"
 "Language-Team: Zonemaster Team\n"
@@ -79,6 +79,92 @@ msgstr "TEST_CASE_END {testcase}."
 msgid "TEST_CASE_START {testcase}."
 msgstr "TEST_CASE_START {testcase}."
 
+#. BASIC:A_QUERY_NO_RESPONSES
+msgid "Nameservers did not respond to A query."
+msgstr "Navneserverne svarede ikke på en A-forespørgsel."
+
+#. BASIC:B04_MISSING_NS_RECORD
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} reponds to a NS query with no NS records in the answer "
+"section."
+msgstr ""
+"Navneserveren {ns} svarede på en NS-forespørgsel, men svaret indeholder "
+"ikke nogle NS-records"
+
+#. BASIC:B04_MISSING_SOA_RECORD
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} reponds to a SOA query with no SOA records in the answer "
+"section."
+msgstr ""
+"Navneserveren {ns} svarede på en SOA-forespørgsel, men svaret indeholder "
+"ikke nogle SOA-records"
+
+#. BASIC:B04_NO_RESPONSE
+#, perl-brace-format
+msgid "Nameserver {ns} does not respond over neither UDP nor TCP."
+msgstr "Navneserveren {ns} svarede ikke over hverken UDP eller TCP."
+
+#. BASIC:B04_NO_RESPONSE_NS_QUERY
+#, perl-brace-format
+msgid "Nameserver {ns} does not respond to NS queries."
+msgstr "Navneserveren {ns} svarede ikke på NS-forespørgsler."
+
+#. BASIC:B04_NO_RESPONSE_SOA_QUERY
+#, perl-brace-format
+msgid "Nameserver {ns} does not respond to SOA queries."
+msgstr "Navneserveren {ns} svarede ikke på SOA-forespørgsler."
+
+#. BASIC:B04_NS_RECORD_NOT_AA
+#, perl-brace-format
+msgid "Nameserver {ns} does not give an authoritative response on an NS query."
+msgstr "Navneserveren {ns} svarede ikke autoritativt på en NS-forespørgsel."
+
+#. BASIC:B04_RESPONSE_TCP_NOT_UDP
+#, perl-brace-format
+msgid "Nameserver {ns} does not respond over UDP."
+msgstr "Navneserveren {ns} svarede ikke over UDP."
+
+#. BASIC:B04_SOA_RECORD_NOT_AA
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} does not give an authoritative response on an SOA query."
+msgstr "Navneserveren {ns} svarede ikke autoritativt på en SOA-forespørgsel."
+
+#. BASIC:B04_UNEXPECTED_RCODE_NS_QUERY
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responds with an unexpected RCODE ({rcode}) on an NS query."
+msgstr ""
+"Navneserveren {ns} besvarede en NS-forespørgsel med en uventet RCODE ({rcode})."
+
+#. BASIC:B04_UNEXPECTED_RCODE_SOA_QUERY
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responds with an unexpected RCODE ({rcode}) on an SOA query."
+msgstr ""
+"Navneserveren {ns} besvarede en SOA-forespørgsel med en uventet RCODE ({rcode})."
+
+#. BASIC:B04_WRONG_NS_RECORD
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responds with a wrong owner name ({owner} instead of {name}) "
+"on NS queries."
+msgstr ""
+"Navneserveren {ns} returnerede et ugyldigt ejernavn ({owner} i stedet for "
+"{name}) på NS-forespørgsler."
+
+#. BASIC:B04_WRONG_SOA_RECORD
+#. ZONE:WRONG_SOA
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responds with a wrong owner name ({owner} instead of {name}) "
+"on SOA queries."
+msgstr ""
+"Navneserveren {ns} returnerede et ugyldigt ejernavn ({owner} i stedet for "
+"{name}) på SOA forespørgsler."
+
 #. BASIC:DOMAIN_NAME_LABEL_TOO_LONG
 #, perl-brace-format
 msgid ""
@@ -87,58 +173,20 @@ msgstr ""
 "Domænenavnet ({domain}) indeholder en label ({dlabel}), der er for lang "
 "({dlength}/{max})."
 
-#. BASIC:DOMAIN_NAME_ZERO_LENGTH_LABEL
-#, perl-brace-format
-msgid "Domain name ({domain}) has a zero-length label."
-msgstr "Domænenavnet ({domain}) har en label med længden nul."
-
 #. BASIC:DOMAIN_NAME_TOO_LONG
 #, perl-brace-format
 msgid "Domain name is too long ({fqdnlength}/{max})."
 msgstr "Domænenavnet er for langt ({fqdnlength}/{max})."
 
-#. BASIC:NO_PARENT
-msgid "No parent domain could be found for the domain under test."
-msgstr "Ikke muligt at finde forælder-domænet for det testede domæne."
-
-#. BASIC:HAS_PARENT
+#. BASIC:DOMAIN_NAME_ZERO_LENGTH_LABEL
 #, perl-brace-format
-msgid "Parent domain '{pname}' was found for the tested domain."
-msgstr "Forælder-domænet '{pname}' blev fundet for det testede domæne."
+msgid "Domain name ({domain}) has a zero-length label."
+msgstr "Domænenavnet ({domain}) har en label med længden nul."
 
 #. BASIC:HAS_A_RECORDS
 #, perl-brace-format
 msgid "Nameserver {ns} returned \"A\" record(s) for {domain}."
 msgstr "Navneserveren {ns} svarede A-record(s) for {domain}."
-
-#. BASIC:NO_A_RECORDS
-#, perl-brace-format
-msgid "Nameserver {ns} did not return \"A\" record(s) for {domain}."
-msgstr "Navneserveren {ns} returnerede ikke nogle A-records for {domain}."
-
-#. BASIC:HAS_NAMESERVERS
-#, perl-brace-format
-msgid "Nameserver {ns} listed these servers as glue: {nsnlist}."
-msgstr "Navneserveren {ns} returnerede følgende servere som glues: {nsnlist}."
-
-#. BASIC:NO_GLUE_PREVENTS_NAMESERVER_TESTS
-msgid "No NS records for tested zone from parent. NS tests skipped."
-msgstr ""
-"Ingen NS-records for den testede zone fra forælderzonen. NS-test afbrydes."
-
-#. BASIC:NS_FAILED
-#, perl-brace-format
-msgid "Nameserver {ns} did not return NS records. RCODE was {rcode}."
-msgstr "Navneserveren {ns} returnerede ikke NS-records. RCODE var {rcode}."
-
-#. BASIC:NS_NO_RESPONSE
-#, perl-brace-format
-msgid "Nameserver {ns} did not respond to NS query."
-msgstr "Navneserveren {ns} svarede ikke på en NS-forespørgsel."
-
-#. BASIC:A_QUERY_NO_RESPONSES
-msgid "Nameservers did not respond to A query."
-msgstr "Navneserverne svarede ikke på en A-forespørgsel."
 
 #. BASIC:HAS_NAMESERVER_NO_WWW_A_TEST
 #, perl-brace-format
@@ -146,6 +194,16 @@ msgid "Functional nameserver found. \"A\" query for www.{zname} test skipped."
 msgstr ""
 "Fungerende navneserver fundet. Test på A-forespørgsel for www.{zname} "
 "spunget over."
+
+#. BASIC:HAS_NAMESERVERS
+#, perl-brace-format
+msgid "Nameserver {ns} listed these servers as glue: {nsnlist}."
+msgstr "Navneserveren {ns} returnerede følgende servere som glues: {nsnlist}."
+
+#. BASIC:HAS_PARENT
+#, perl-brace-format
+msgid "Parent domain '{pname}' was found for the tested domain."
+msgstr "Forælder-domænet '{pname}' blev fundet for det testede domæne."
 
 #. BASIC:IPV4_DISABLED
 #. CONNECTIVITY:IPV4_DISABLED
@@ -178,6 +236,30 @@ msgstr "IPv6 er deaktiveret, udfører ikke \"{rrtype}\"-forespørgsel til {ns}."
 #, perl-brace-format
 msgid "IPv6 is enabled, can send \"{rrtype}\" query to {ns}."
 msgstr "IPv6 er aktiveret, kan udføre \"{rrtype}\"-forespørgsel til {ns}."
+
+#. BASIC:NO_A_RECORDS
+#, perl-brace-format
+msgid "Nameserver {ns} did not return \"A\" record(s) for {domain}."
+msgstr "Navneserveren {ns} returnerede ikke nogle A-records for {domain}."
+
+#. BASIC:NO_GLUE_PREVENTS_NAMESERVER_TESTS
+msgid "No NS records for tested zone from parent. NS tests skipped."
+msgstr ""
+"Ingen NS-records for den testede zone fra forælderzonen. NS-test afbrydes."
+
+#. BASIC:NO_PARENT
+msgid "No parent domain could be found for the domain under test."
+msgstr "Ikke muligt at finde forælder-domænet for det testede domæne."
+
+#. BASIC:NS_FAILED
+#, perl-brace-format
+msgid "Nameserver {ns} did not return NS records. RCODE was {rcode}."
+msgstr "Navneserveren {ns} returnerede ikke NS-records. RCODE var {rcode}."
+
+#. BASIC:NS_NO_RESPONSE
+#, perl-brace-format
+msgid "Nameserver {ns} did not respond to NS query."
+msgstr "Navneserveren {ns} svarede ikke på en NS-forespørgsel."
 
 #. CONNECTIVITY:ERROR_ASN_DATABASE
 #, perl-brace-format
@@ -424,8 +506,8 @@ msgstr ""
 #. CONSISTENCY:SOA_TIME_PARAMETER_SET
 #, perl-brace-format
 msgid ""
-"Saw SOA time parameter set (REFRESH={refresh}, RETRY={retry}, EXPIRE={expire}, "
-"MINIMUM={minimum}) on following nameserver set : {ns_list}."
+"Saw SOA time parameter set (REFRESH={refresh}, RETRY={retry}, "
+"EXPIRE={expire}, MINIMUM={minimum}) on following nameserver set : {ns_list}."
 msgstr ""
 "Så dette SOA-tidsparametersæt (REFRESH={refresh}, RETRY={retry}, "
 "EXPIRE={expire}, MINIMUM={minimum}) på følgende navneservere : {ns_list}."
@@ -636,6 +718,211 @@ msgstr ""
 "DNSKEY med tag {keytag} bruger en algoritme {algo_num} ({algo_descr}) med "
 "størrelsen ({keysize}), der er større end den største tilladte værdi "
 "({keysizemax})."
+
+#. DS15_HAS_CDNSKEY_NO_CDS
+#, perl-brace-format
+msgid ""
+"CDNSKEY RRset is found on nameservers that resolve to IP addresses "
+"({ns_ip_list}), but no CDS RRset."
+msgstr ""
+"CDNSKEY RR-sæt er fundet på navneservere der refererer til IP-adresserne "
+"({ns_ip_list}), men uden CDS RR-sæt."
+
+#. DS15_HAS_CDS_AND_CDNSKEY
+#, perl-brace-format
+msgid ""
+"CDNSKEY and CDS RRsets are found on nameservers that resolve to IP addresses "
+"({ns_ip_list})."
+msgstr ""
+"CDNSKEY og CDS RR-sæt er fundet på navneservere der refererer til IP-adresserne "
+"({ns_ip_list})."
+
+#. DS15_HAS_CDS_NO_CDNSKEY
+#, perl-brace-format
+msgid ""
+"CDS RRset is found on nameservers that resolve to IP addresses "
+"({ns_ip_list}), but no CDNSKEY RRset."
+msgstr ""
+"CDS RR-sæt er fundet på navneservere der refererer til IP-adresserne "
+"({ns_ip_list}), men uden CDNSKEY RR-sæt."
+
+#. DS15_INCONSISTENT_CDNSKEY
+msgid "All servers do not have the same CDNSKEY RRset."
+msgstr "Alle navneservere har ikke det samme CDNSKEY RR-sæt."
+
+#. DS15_INCONSISTENT_CDS
+msgid "All servers do not have the same CDS RRset."
+msgstr "Alle navneservere har ikke det samme CDS RR-sæt."
+
+#. DS15_MISMATCH_CDS_CDNSKEY
+#, perl-brace-format
+msgid ""
+"Both CDS and CDNSKEY RRsets are found on nameservers that resolve to IP "
+"addresses ({ns_ip_list}) but they do not match."
+msgstr ""
+"CDNSKEY og CDS RR-sæt er fundet på navneservere der refererer til IP-adresserne "
+"({ns_ip_list}), men de matcher ikke."
+
+#. DS15_NO_CDS_CDNSKEY
+msgid "No CDS or CDNSKEY RRsets are found on any name server."
+msgstr "Intet CDS eller CDNSKEY RR-sæt blev fundet på nogen navneserver."
+
+#. DS16_CDS_INVALID_RRSIG
+#, perl-brace-format
+msgid ""
+"The CDS RRset is signed with an RRSIG with tag {keytag}, but the RRSIG does "
+"not match the DNSKEY with the same key tag. Fetched from the nameservers "
+"with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"CDS RR-sættet er signeret med en RRSIG med tag {keytag}, men "
+"RRSIG matcher ikke DNSKEY med samme key tag. Fundet på navneserverne "
+"med IP-adresserne \"{ns_ip_list}\"." 
+
+#. DS16_CDS_MATCHES_NO_DNSKEY
+#, perl-brace-format
+msgid ""
+"The CDS record with tag {keytag} does not match any DNSKEY record. Fetched "
+"from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"CDS-recorden med tag {keytag} matcher ikke nogen DNSKEY-record. "
+"Fundet på navneserverne med IP-adresserne \"{ns_ip_list}\"."
+
+#. DS16_CDS_SIGNED_BY_UNKNOWN_DNSKEY
+#, perl-brace-format
+msgid ""
+"The CDS RRset is signed by RRSIG with tag {keytag} but that is not in the "
+"DNSKEY RRset. Fetched from the nameservers with P addresses \"{ns_ip_list}\"."
+msgstr ""
+"CDS-recordsættet er signeret af RRSIG med tag {keytag}, men det er "
+"ikke DNSKEY RR-sættet. Fundet på navneserverne med IP-adresserne "
+"\"{ns_ip_list}\"."
+
+#. DS16_CDS_UNSIGNED
+#, perl-brace-format
+msgid ""
+"The CDS RRset is not signed. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"CDS RR-sættet er ikke signeret. Fundet på navneserverne med IP-adresserne "
+"\"{ns_ip_list}\"."
+
+#. DS16_CDS_WITHOUT_DNSKEY
+#, perl-brace-format
+msgid ""
+"A CDS RRset exists, but no DNSKEY record exists. Fetched from the "
+"nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"Et CDS RR-sæt eksisterer, men ingen DNSKEY-record eksisterer. "
+"Fundet på navneserverne med IP-adresserne \"{ns_ip_list}\"."
+
+#. DS16_DELETE_CDS
+#, perl-brace-format
+msgid ""
+"A single \"delete\" CDS record is found on the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"En enkelt \"delete\" CDS-record er fundet på navneserverne med IP-adresserne "
+"\"{ns_ip_list}\"."
+
+#. DS16_DNSKEY_NOT_SIGNED_BY_CDS
+#, perl-brace-format
+msgid ""
+"The DNSKEY RRset is not signed by the DNSKEY that the CDS record with tag "
+"{keytag} points to. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"DNSKEY RR-sætter er ikke signeret af den DNSKEY som CDS-recorden med "
+"{keytag} peger på. Fundet på navneserverne med IP-adresserne "
+"\"{ns_ip_list}\"."
+
+
+#. DS16_MIXED_DELETE_CDS
+#, perl-brace-format
+msgid ""
+"The CDS RRset is a mixture between \"delete\" record and other records. "
+"Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"CDS RR-sættet er et mix mellem \"delete\" record og andre records. "
+"Fundet på navneserverne med IP-adresserne \"{ns_ip_list}\"."
+
+#. DS17_CDNSKEY_INVALID_RRSIG
+#, perl-brace-format
+msgid ""
+"The CDNSKEY RRset is signed with an RRSIG with tag {keytag}, but the RRSIG "
+"does not match the DNSKEY with the same key tag. Fetched from the "
+"nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"CDNSKEY RR-sætett er signeret med en RRSIG med tag {keytag}, men "
+"RRSIG natcher ikke DNSKEY med det samme key tag. "
+"Fundet på navneserverne med IP-adresserne \"{ns_ip_list}\"."
+
+#. DS17_CDNSKEY_MATCHES_NO_DNSKEY
+#, perl-brace-format
+msgid ""
+"The CDNSKEY record with tag {keytag} does not match any DNSKEY record. "
+"Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"CDNSKEY-recorden med tag {keytag} matcher ikke nogen DNSKEY-record. "
+"Fundet på navneserverne med IP-adresserne \"{ns_ip_list}\"."
+
+#. DS17_CDNSKEY_SIGNED_BY_UNKNOWN_DNSKEY
+#, perl-brace-format
+msgid ""
+"The CDNSKEY RRset is signed by RRSIG with tag {keytag} but that is not in "
+"the DNSKEY RRset. Fetched from the nameservers with P addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"CDNSKEY RR-sættet er signeret med RRSIG med tag {keytag}, men den findes "
+"ikke i DNSKEY RR-sættet. "
+"Fundet på navneserverne med IP-adresserne \"{ns_ip_list}\"."
+
+#. DS17_CDNSKEY_UNSIGNED
+#, perl-brace-format
+msgid ""
+"The CDNSKEY RRset is not signed. Fetched from the nameservers with IP "
+"addresses \"{ns_ip_list}\"."
+msgstr ""
+"CDNSKEY RR-sættet er ikke signeret. "
+"Fundet på navneserverne med IP-adresserne \"{ns_ip_list}\"."
+
+#. DS17_CDNSKEY_WITHOUT_DNSKEY
+#, perl-brace-format
+msgid ""
+"A CDNSKEY RRset exists, but no DNSKEY record exists. Fetched from the "
+"nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"Et CDNSKEY RR-sæt eksisterer, men ingen DNSKEY-record eksisterer. "
+"Fundet på navneserverne med IP-adresserne \"{ns_ip_list}\"."
+
+#. DS17_DELETE_CDNSKEY
+#, perl-brace-format
+msgid ""
+"A single \"delete\" CDNSKEY record is found on the nameservers with IP "
+"addresses \"{ns_ip_list}\"."
+msgstr ""
+"En enkelt \"delete\" CDNSKEY-record er funder på navneserverne med "
+"IP-adresserne \"{ns_ip_list}\"."
+
+#. DS17_DNSKEY_NOT_SIGNED_BY_CDNSKEY
+#, perl-brace-format
+msgid ""
+"The DNSKEY RRset is not signed by the DNSKEY that the CDNSKEY record with "
+"tag {keytag} points to. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"DNSKEY RR-sættet er ikke signeret af den DNSKEY som CDNSKEY-recorden med "
+"tag {keytag} peger på. "
+"Fundet på navneserverne med IP-adresserne \"{ns_ip_list}\"."
+
+#. DS17_MIXED_DELETE_CDNSKEY
+#, perl-brace-format
+msgid ""
+"The CDNSKEY RRset is a mixture between \"delete\" record and other records. "
+"Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"CDNSKEY RR-sættet er et mix mellem \"delete\" record og andre records. "
+"Fundet på navneserverne med IP-adresserne \"{ns_ip_list}\"."
+
 
 #. DNSSEC:DS_ALGORITHM_NOT_DS
 #, perl-brace-format
@@ -1661,6 +1948,24 @@ msgstr ""
 "SOA RNAME maildomæne ({domain}) refererer ikke til en mailserver med en IP-"
 "adresse."
 
+#. SYNTAX:RNAME_MAIL_DOMAIN_LOCALHOST
+#, perl-brace-format
+msgid ""
+"The SOA RNAME mail domain ({domain}) resolved to a mail server with "
+"localhost ({localhost}) IP address."
+msgstr ""
+"SOA RNAME maildomæne ({domain}) refererer til en mailserver med "
+"localhost ({localhost}) IP-adresse."
+
+#. SYNTAX:RNAME_MAIL_ILLEGAL_CNAME
+#, perl-brace-format
+msgid ""
+"The SOA RNAME mail domain ({domain}) refers to an address which is an alias "
+"(CNAME)."
+msgstr ""
+"SOA 'RNAME' maildomæne ({domain}) refererer til en adresse som er "
+"et alias (CNAME)."
+
 #. SYNTAX:RNAME_MISUSED_AT_SIGN
 #, perl-brace-format
 msgid "Misused '@' character found in SOA RNAME field ({rname})."
@@ -1877,15 +2182,6 @@ msgid ""
 msgstr ""
 "SOA 'expire' værdi ({expire}) er højere end den anbefalede minimumsværdi "
 "({required_expire}) og ikke mindre end 'refresh' værdi ({refresh})."
-
-#. ZONE:WRONG_SOA
-#, perl-brace-format
-msgid ""
-"Nameserver {ns} responds with a wrong owner name ({owner} instead of {name}) "
-"on SOA queries."
-msgstr ""
-"Navneserveren {ns} returnerede et ugyldigt ejernavn ({owner} i stedet for "
-"{name}) på SOA forespørgsler."
 
 #. SYSTEM:CANNOT_CONTINUE
 #, perl-brace-format
