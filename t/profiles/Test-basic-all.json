@@ -2,6 +2,7 @@
     "test_cases": [
         "basic01",
         "basic02",
-        "basic03"
+        "basic03",
+        "basic04"
     ]
 }

@@ -11,10 +11,6 @@ chdir dirname( dirname( __FILE__ ) ) or BAIL_OUT( "chdir: $!" );
 chdir 'share' or BAIL_OUT( "chdir: $!" );
 
 my $makebin = 'make';
-if ($^O eq "freebsd") {
-    # This unit test requires GNU Make
-    $makebin = 'gmake';
-};
 
 sub make {
     my @make_args = @_;

@@ -5,11 +5,13 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare( "v1.1.33" );
+use version; our $VERSION = version->declare( "v1.1.44" );
 
 ###
 ### This test module implements DNSSEC tests.
 ###
+
+use Zonemaster::LDNS::RR;
 
 use Zonemaster::Engine;
 
@@ -267,6 +269,18 @@ sub all {
             push @results, $class->dnssec14( $zone );
         }
 
+        if ( Zonemaster::Engine::Util::should_run_test( q{dnssec15} ) ) {
+            push @results, $class->dnssec15( $zone );
+        }
+
+        if ( Zonemaster::Engine::Util::should_run_test( q{dnssec16} ) ) {
+            push @results, $class->dnssec16( $zone );
+        }
+
+        if ( Zonemaster::Engine::Util::should_run_test( q{dnssec17} ) ) {
+            push @results, $class->dnssec17( $zone );
+        }
+
     }
 
     push @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } );
@@ -453,6 +467,41 @@ sub metadata {
               TEST_CASE_START
               ),
         ],
+        dnssec15 => [
+            qw(
+              DS15_HAS_CDNSKEY_NO_CDS
+              DS15_HAS_CDS_AND_CDNSKEY
+              DS15_HAS_CDS_NO_CDNSKEY
+              DS15_INCONSISTENT_CDNSKEY
+              DS15_INCONSISTENT_CDS
+              DS15_MISMATCH_CDS_CDNSKEY
+              DS15_NO_CDS_CDNSKEY
+              ),
+        ],
+        dnssec16 => [
+            qw(
+              DS16_CDS_INVALID_RRSIG
+              DS16_CDS_MATCHES_NO_DNSKEY
+              DS16_CDS_SIGNED_BY_UNKNOWN_DNSKEY
+              DS16_CDS_UNSIGNED
+              DS16_CDS_WITHOUT_DNSKEY
+              DS16_DELETE_CDS
+              DS16_DNSKEY_NOT_SIGNED_BY_CDS
+              DS16_MIXED_DELETE_CDS
+              ),
+        ],
+        dnssec17 => [
+            qw(
+              DS17_CDNSKEY_INVALID_RRSIG
+              DS17_CDNSKEY_MATCHES_NO_DNSKEY
+              DS17_CDNSKEY_SIGNED_BY_UNKNOWN_DNSKEY
+              DS17_CDNSKEY_UNSIGNED
+              DS17_CDNSKEY_WITHOUT_DNSKEY
+              DS17_DELETE_CDNSKEY
+              DS17_DNSKEY_NOT_SIGNED_BY_CDNSKEY
+              DS17_MIXED_DELETE_CDNSKEY
+              ),
+        ],
     };
 } ## end sub metadata
 
@@ -595,6 +644,142 @@ Readonly my %TAG_DESCRIPTIONS => (
           'DNSKEY with tag {keytag} and using algorithm {algo_num} '
           . '({algo_descr}) has a size ({keysize}) larger than the maximum one '
           . '({keysizemax}).',
+          @_;
+    },
+    DS15_HAS_CDNSKEY_NO_CDS => sub {
+        __x    # DS15_HAS_CDNSKEY_NO_CDS
+          'CDNSKEY RRset is found on nameservers that resolve to IP addresses '
+          . '({ns_ip_list}), but no CDS RRset.',
+          @_;
+    },
+    DS15_HAS_CDS_AND_CDNSKEY => sub {
+        __x    # DS15_HAS_CDS_AND_CDNSKEY
+          'CDNSKEY and CDS RRsets are found on nameservers that resolve to IP addresses '
+          . '({ns_ip_list}).',
+          @_;
+    },
+    DS15_HAS_CDS_NO_CDNSKEY => sub {
+        __x    # DS15_HAS_CDS_NO_CDNSKEY
+          'CDS RRset is found on nameservers that resolve to IP addresses '
+          . '({ns_ip_list}), but no CDNSKEY RRset.',
+          @_;
+    },
+    DS15_INCONSISTENT_CDNSKEY => sub {
+        __x    # DS15_INCONSISTENT_CDNSKEY
+          'All servers do not have the same CDNSKEY RRset.', @_;
+    },
+    DS15_INCONSISTENT_CDS => sub {
+        __x    # DS15_INCONSISTENT_CDS
+          'All servers do not have the same CDS RRset.', @_;
+    },
+    DS15_MISMATCH_CDS_CDNSKEY => sub {
+        __x    # DS15_MISMATCH_CDS_CDNSKEY
+          'Both CDS and CDNSKEY RRsets are found on nameservers that resolve to IP '
+          . 'addresses ({ns_ip_list}) but they do not match.',
+          @_;
+    },
+    DS15_NO_CDS_CDNSKEY => sub {
+        __x    # DS15_NO_CDS_CDNSKEY
+          'No CDS or CDNSKEY RRsets are found on any name server.', @_;
+    },
+    DS16_CDS_INVALID_RRSIG => sub {
+        __x    # DS16_CDS_INVALID_RRSIG
+          'The CDS RRset is signed with an RRSIG with tag {keytag}, but the RRSIG does '
+          . 'not match the DNSKEY with the same key tag. Fetched from the nameservers '
+          . 'with IP addresses "{ns_ip_list}".',
+          @_;
+    },
+    DS16_CDS_MATCHES_NO_DNSKEY => sub {
+        __x    # DS16_CDS_MATCHES_NO_DNSKEY
+          'The CDS record with tag {keytag} does not match any DNSKEY record. Fetched '
+          . 'from the nameservers with IP addresses "{ns_ip_list}".',
+          @_;
+    },
+    DS16_CDS_SIGNED_BY_UNKNOWN_DNSKEY => sub {
+        __x    # DS16_CDS_SIGNED_BY_UNKNOWN_DNSKEY
+          'The CDS RRset is signed by RRSIG with tag {keytag} but that is not in the '
+          . 'DNSKEY RRset. Fetched from the nameservers with P addresses "{ns_ip_list}".',
+          @_;
+    },
+    DS16_CDS_UNSIGNED => sub {
+        __x    # DS16_CDS_UNSIGNED
+          'The CDS RRset is not signed. Fetched from the nameservers with IP addresses '
+          . '"{ns_ip_list}".',
+          @_;
+    },
+    DS16_CDS_WITHOUT_DNSKEY => sub {
+        __x    # DS16_CDS_WITHOUT_DNSKEY
+          'A CDS RRset exists, but no DNSKEY record exists. Fetched from the '
+          . 'nameservers with IP addresses "{ns_ip_list}".',
+          @_;
+    },
+    DS16_DELETE_CDS => sub {
+        __x    # DS16_DELETE_CDS
+          'A single "delete" CDS record is found on the nameservers with IP addresses '
+          . '"{ns_ip_list}".',
+          @_;
+    },
+    DS16_DNSKEY_NOT_SIGNED_BY_CDS => sub {
+        __x    # DS16_DNSKEY_NOT_SIGNED_BY_CDS
+          'The DNSKEY RRset is not signed by the DNSKEY that the CDS record with tag '
+          . '{keytag} points to. Fetched from the nameservers with IP addresses '
+          . '"{ns_ip_list}".',
+          @_;
+    },
+    DS16_MIXED_DELETE_CDS => sub {
+        __x    # DS16_MIXED_DELETE_CDS
+          'The CDS RRset is a mixture between "delete" record and other records. '
+          . 'Fetched from the nameservers with IP addresses "{ns_ip_list}".',
+          @_;
+    },
+    DS17_CDNSKEY_INVALID_RRSIG => sub {
+        __x    # DS17_CDNSKEY_INVALID_RRSIG
+          'The CDNSKEY RRset is signed with an RRSIG with tag {keytag}, but the RRSIG does '
+          . 'not match the DNSKEY with the same key tag. Fetched from the nameservers '
+          . 'with IP addresses "{ns_ip_list}".',
+          @_;
+    },
+    DS17_CDNSKEY_MATCHES_NO_DNSKEY => sub {
+        __x    # DS17_CDNSKEY_MATCHES_NO_DNSKEY
+          'The CDNSKEY record with tag {keytag} does not match any DNSKEY record. Fetched '
+          . 'from the nameservers with IP addresses "{ns_ip_list}".',
+          @_;
+    },
+    DS17_CDNSKEY_SIGNED_BY_UNKNOWN_DNSKEY => sub {
+        __x    # DS17_CDNSKEY_SIGNED_BY_UNKNOWN_DNSKEY
+          'The CDNSKEY RRset is signed by RRSIG with tag {keytag} but that is not in the '
+          . 'DNSKEY RRset. Fetched from the nameservers with P addresses "{ns_ip_list}".',
+          @_;
+    },
+    DS17_CDNSKEY_UNSIGNED => sub {
+        __x    # DS17_CDNSKEY_UNSIGNED
+          'The CDNSKEY RRset is not signed. Fetched from the nameservers with IP addresses '
+          . '"{ns_ip_list}".',
+          @_;
+    },
+    DS17_CDNSKEY_WITHOUT_DNSKEY => sub {
+        __x    # DS17_CDNSKEY_WITHOUT_DNSKEY
+          'A CDNSKEY RRset exists, but no DNSKEY record exists. Fetched from the '
+          . 'nameservers with IP addresses "{ns_ip_list}".',
+          @_;
+    },
+    DS17_DELETE_CDNSKEY => sub {
+        __x    # DS17_DELETE_CDNSKEY
+          'A single "delete" CDNSKEY record is found on the nameservers with IP addresses '
+          . '"{ns_ip_list}".',
+          @_;
+    },
+    DS17_DNSKEY_NOT_SIGNED_BY_CDNSKEY => sub {
+        __x    # DS17_DNSKEY_NOT_SIGNED_BY_CDNSKEY
+          'The DNSKEY RRset is not signed by the DNSKEY that the CDNSKEY record with tag '
+          . '{keytag} points to. Fetched from the nameservers with IP addresses '
+          . '"{ns_ip_list}".',
+          @_;
+    },
+    DS17_MIXED_DELETE_CDNSKEY => sub {
+        __x    # DS17_MIXED_DELETE_CDNSKEY
+          'The CDNSKEY RRset is a mixture between "delete" record and other records. '
+          . 'Fetched from the nameservers with IP addresses "{ns_ip_list}".',
           @_;
     },
     DS_ALGORITHM_NOT_DS => sub {
@@ -2181,6 +2366,683 @@ sub dnssec14 {
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub dnssec14
 
+sub dnssec15 {
+    my ( $class, $zone ) = @_;
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+    my @query_types = qw{CDS CDNSKEY};
+    my %cds_rrsets;
+    my %cdnskey_rrsets;
+    my %mismatch_cds_cdnskey;
+    my %has_cds_no_cdnskey;
+    my %has_cdnskey_no_cds;
+    my %has_cds_and_cdnskey;
+
+    my @nss_del   = @{ Zonemaster::Engine::TestMethods->method4( $zone ) };
+    my @nss_child = @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
+    my %nss       = map { $_->name->string . '/' . $_->address->short => $_ } @nss_del, @nss_child;
+    my %ip_already_processed;
+
+    for my $nss_key ( sort keys %nss ) {
+        my $ns = $nss{$nss_key};
+
+        next if exists $ip_already_processed{$ns->address->short};
+        $ip_already_processed{$ns->address->short} = 1;
+
+        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
+            push @results, map {
+              info(
+                IPV6_DISABLED => {
+                    ns     => $ns->string,
+                    rrtype => $_,
+                }
+              )
+            } @query_types;
+            next;
+        }
+
+        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
+            push @results, map {
+              info(
+                IPV4_DISABLED => {
+                    ns     => $ns->string,
+                    rrtype => $_,
+                }
+              )
+            } @query_types;
+            next;
+        }
+
+        my $cds_p = $ns->query( $zone->name, 'CDS', { dnssec => 1, usevc => 0 } );
+        if ( not $cds_p ) {
+            next;
+        }
+        if ( not $cds_p->aa ) {
+            next;
+        }
+        if ( $cds_p->rcode ne q{NOERROR} ) {
+            next;
+        }
+        my @cds_records = $cds_p->get_records( q{CDS}, q{answer} );
+        push @{ $cds_rrsets{ $ns->address->short } }, @cds_records;
+
+        my $cdnskey_p = $ns->query( $zone->name, 'CDNSKEY', { dnssec => 1, usevc => 0 } );
+        if ( not $cdnskey_p ) {
+            next;
+        }
+        if ( not $cdnskey_p->aa ) {
+            next;
+        }
+        if ( $cdnskey_p->rcode ne q{NOERROR} ) {
+            next;
+        }
+        my @cdnskey_records = $cdnskey_p->get_records( q{CDNSKEY}, q{answer} );
+        push @{ $cdnskey_rrsets{ $ns->address->short } }, @cdnskey_records;
+    }
+    undef %ip_already_processed;
+
+    my $no_cds_cdnskey = 1;
+    for my $ns_ip ( keys %cds_rrsets ) {
+        if ( scalar @{ $cds_rrsets{ $ns_ip } } ) {
+            $no_cds_cdnskey = 0;
+        }
+    }
+    for my $ns_ip ( keys %cdnskey_rrsets ) {
+        if ( scalar @{ $cdnskey_rrsets{ $ns_ip } } ) {
+            $no_cds_cdnskey = 0;
+        }
+    }
+
+    if ( $no_cds_cdnskey ) {
+        push @results, info( DS15_NO_CDS_CDNSKEY => {} );
+    }
+    else {
+        for my $ns_ip ( keys %cds_rrsets ) {
+
+            if ( not exists $cdnskey_rrsets{ $ns_ip } ) {
+                next;
+            }
+
+            if (
+                    scalar @{ $cds_rrsets{ $ns_ip } }
+                and not scalar @{ $cdnskey_rrsets{ $ns_ip } }
+              )
+            {
+                $has_cds_no_cdnskey{ $ns_ip } = 1;
+            }
+            elsif (
+                    scalar @{ $cdnskey_rrsets{ $ns_ip } }
+                and not scalar @{ $cds_rrsets{ $ns_ip } }
+              )
+            {
+                $has_cdnskey_no_cds{ $ns_ip } = 1;
+            }
+            elsif (
+                    scalar @{ $cds_rrsets{ $ns_ip } }
+                and scalar @{ $cdnskey_rrsets{ $ns_ip } }
+              )
+            {
+                $has_cds_and_cdnskey{ $ns_ip } = 1;
+            }
+        }
+
+        for my $ns_ip ( keys %cds_rrsets ) {
+            if (
+                    scalar @{ $cds_rrsets{ $ns_ip } }
+                and exists $cdnskey_rrsets{ $ns_ip }
+                and scalar @{ $cdnskey_rrsets{ $ns_ip } }
+              )
+            {
+                #
+                # Need a fix in Zonemaster::LDNS to prevent that trick
+                #
+                my (@ds, @dnskey);
+                foreach my $cds ( @{ $cds_rrsets{ $ns_ip } } ) {
+                    my $rr_string = $cds->string;
+                    $rr_string =~ s/\s+CDS\s+/ DS /;
+                    push @ds, Zonemaster::LDNS::RR->new( $rr_string );
+                }
+                foreach my $cdnskey ( @{ $cdnskey_rrsets{ $ns_ip } } ) {
+                    my $rr_string = $cdnskey->string;
+                    $rr_string =~ s/\s+CDNSKEY\s+/ DNSKEY /;
+                    push @dnskey, Zonemaster::LDNS::RR->new( $rr_string );
+                }
+                foreach my $ds ( @ds ) {
+                    my @matching_keys = grep { $ds->keytag == $_->keytag } @dnskey;
+                    if ( not scalar @matching_keys ) {
+                        $mismatch_cds_cdnskey{ $ns_ip } = 1;
+                    }
+                }
+                foreach my $dnskey ( @dnskey ) {
+                    my @matching_keys = grep { $dnskey->keytag == $_->keytag } @ds;
+                    if ( not scalar @matching_keys ) {
+                        $mismatch_cds_cdnskey{ $ns_ip } = 1;
+                    }
+                }
+            }
+        }
+
+        if ( scalar keys %has_cds_no_cdnskey ) {
+            push @results,
+              info(
+                DS15_HAS_CDS_NO_CDNSKEY => {
+                    ns_ip_list => join( q{;}, sort keys %has_cds_no_cdnskey )
+                }
+              );
+        }
+
+        if ( scalar keys %has_cdnskey_no_cds ) {
+            push @results,
+              info(
+                DS15_HAS_CDNSKEY_NO_CDS => {
+                    ns_ip_list => join( q{;}, sort keys %has_cdnskey_no_cds )
+                }
+              );
+        }
+
+        if ( scalar keys %has_cds_and_cdnskey ) {
+            push @results,
+              info(
+                DS15_HAS_CDS_AND_CDNSKEY => {
+                    ns_ip_list => join( q{;}, sort keys %has_cds_and_cdnskey )
+                }
+              );
+        }
+
+        my $first_rrset_string = undef;
+        for my $ns_ip ( keys %cds_rrsets ) {
+            my $rrset_string;
+            if ( scalar @{ $cds_rrsets{ $ns_ip } } ) {
+                $rrset_string = join( "\n", sort map { $_->string } @{ $cds_rrsets{ $ns_ip } } );
+            }
+            else {
+                $rrset_string = q{};
+            }
+            if ( not defined $first_rrset_string ) {
+                $first_rrset_string = $rrset_string;
+            }
+            elsif ( $rrset_string ne $first_rrset_string ) {
+                push @results, info( DS15_INCONSISTENT_CDS => {} );
+                last;
+            }
+        }
+
+        $first_rrset_string = undef;
+        for my $ns_ip ( keys %cdnskey_rrsets ) {
+            my $rrset_string;
+            if ( scalar @{ $cdnskey_rrsets{ $ns_ip } } ) {
+                $rrset_string = join( "\n", sort map { $_->string } @{ $cdnskey_rrsets{ $ns_ip } } );
+            }
+            else {
+                $rrset_string = q{};
+            }
+            if ( not defined $first_rrset_string ) {
+                $first_rrset_string = $rrset_string;
+            }
+            elsif ( $rrset_string ne $first_rrset_string ) {
+                push @results, info( DS15_INCONSISTENT_CDNSKEY => {} );
+                last;
+            }
+        }
+
+        if ( scalar keys %mismatch_cds_cdnskey ) {
+            push @results,
+              info(
+                DS15_MISMATCH_CDS_CDNSKEY => {
+                    ns_ip_list => join( q{;}, sort keys %mismatch_cds_cdnskey )
+                }
+              );
+        }
+    }
+    
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+} ## end sub dnssec15
+
+sub dnssec16 {
+    my ( $class, $zone ) = @_;
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+    my @query_types = qw{CDS DNSKEY};
+    my %cds_rrsets;
+    my %dnskey_rrsets;
+    my %mixed_delete_cds;
+    my %delete_cds;
+    my %no_dnskey_rrset;
+    my %no_match_cds_with_dnskey;
+    my %dnskey_not_signed_by_cds;
+    my %cds_not_signed;
+    my %cds_signed_by_unknown_dnskey;
+    my %cds_invalid_rrsig;
+    my @nss_del   = @{ Zonemaster::Engine::TestMethods->method4( $zone ) };
+    my @nss_child = @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
+    my %nss       = map { $_->name->string . '/' . $_->address->short => $_ } @nss_del, @nss_child;
+    my %ip_already_processed;
+
+    for my $nss_key ( sort keys %nss ) {
+        my $ns = $nss{$nss_key};
+
+        next if exists $ip_already_processed{$ns->address->short};
+        $ip_already_processed{$ns->address->short} = 1;
+
+        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
+            push @results, map {
+              info(
+                IPV6_DISABLED => {
+                    ns     => $ns->string,
+                    rrtype => $_,
+                }
+              )
+            } @query_types;
+            next;
+        }
+
+        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
+            push @results, map {
+              info(
+                IPV4_DISABLED => {
+                    ns     => $ns->string,
+                    rrtype => $_,
+                }
+              )
+            } @query_types;
+            next;
+        }
+
+        my $cds_p = $ns->query( $zone->name, q{CDS}, { dnssec => 1, usevc => 0 } );
+        if ( not $cds_p ) {
+            next;
+        }
+        if ( not $cds_p->aa ) {
+            next;
+        }
+        if ( $cds_p->rcode ne q{NOERROR} ) {
+            next;
+        }
+        my @cds_records = $cds_p->get_records( q{CDS}, q{answer} );
+        if ( not scalar @cds_records ) {
+            next;
+        }
+        my @cds_rrsig_records = $cds_p->get_records( q{RRSIG} , q{answer} );
+        push @{ $cds_rrsets{ $ns->address->short }{cds} }, @cds_records;
+        push @{ $cds_rrsets{ $ns->address->short }{rrsig} }, @cds_rrsig_records;
+        foreach my $cds ( @{ $cds_rrsets{ $ns->address->short }{cds} } ) {
+            my $rr_string = $cds->string;
+            $rr_string =~ s/\s+CDS\s+/ DS /;
+            push @{ $cds_rrsets{ $ns->address->short }{ds} }, Zonemaster::LDNS::RR->new( $rr_string );
+        }
+
+        my $dnskey_p = $ns->query( $zone->name, q{DNSKEY}, { dnssec => 1, usevc => 0 } );
+        if ( not $dnskey_p ) {
+            next;
+        }
+        if ( not $dnskey_p->aa ) {
+            next;
+        }
+        if ( $dnskey_p->rcode ne q{NOERROR} ) {
+            next;
+        }
+        my @dnskey_records = $dnskey_p->get_records( q{DNSKEY}, q{answer} );
+        if ( not scalar @dnskey_records ) {
+            next;
+        }
+        my @dnskey_rrsig_records = $dnskey_p->get_records( q{RRSIG} , q{answer} );
+        push @{ $dnskey_rrsets{ $ns->address->short }{dnskey} }, @dnskey_records;
+        push @{ $dnskey_rrsets{ $ns->address->short }{rrsig} }, @dnskey_rrsig_records;
+
+    }
+    undef %ip_already_processed;
+
+    if ( scalar keys %cds_rrsets ) {
+        for my $ns_ip ( keys %cds_rrsets ) {
+            if ( not scalar @{ $cds_rrsets{ $ns_ip }{cds} } ) {
+                next;
+            }
+            if ( scalar grep { $_->algorithm == 0 } @{ $cds_rrsets{ $ns_ip }{ds} } ) {
+                if ( scalar grep { $_->algorithm != 0 } @{ $cds_rrsets{ $ns_ip }{ds} } ) {
+                    $mixed_delete_cds{ $ns_ip } = 1;
+                }
+                else {
+                    $delete_cds{ $ns_ip } = 1;
+                }
+                next;
+            }
+            if ( not defined $dnskey_rrsets{ $ns_ip }{dnskey} or not scalar @{ $dnskey_rrsets{ $ns_ip }{dnskey} } ) {
+                $no_dnskey_rrset{ $ns_ip } = 1;
+                next;
+            }
+            foreach my $ds ( @{ $cds_rrsets{ $ns_ip }{ds} } ) {
+                if ( not scalar grep { $ds->keytag == $_->keytag } @{ $dnskey_rrsets{ $ns_ip }{dnskey} } ) {
+                    push @{ $no_match_cds_with_dnskey{ $ds->keytag } }, $ns_ip;
+                }
+                elsif ( not scalar grep { $ds->keytag == $_->keytag } @{ $dnskey_rrsets{ $ns_ip }{rrsig} } ) {
+                    push @{ $dnskey_not_signed_by_cds{ $ds->keytag } }, $ns_ip;
+                }
+            }
+            if ( not scalar @{ $cds_rrsets{ $ns_ip }{rrsig} } ) {
+                $cds_not_signed{ $ns_ip } = 1;
+            }
+            else {
+                foreach my $rrsig ( @{ $cds_rrsets{ $ns_ip }{rrsig} } ) {
+                    my @matching_dnskeys = grep { $rrsig->keytag == $_->keytag } @{ $dnskey_rrsets{ $ns_ip }{dnskey} };
+                    if ( not scalar @matching_dnskeys ) {
+                        push @{ $cds_signed_by_unknown_dnskey{ $rrsig->keytag } }, $ns_ip;
+                    }
+                    elsif ( not $rrsig->verify( $cds_rrsets{ $ns_ip }{cds} , \@matching_dnskeys) ) {
+                        push @{ $cds_invalid_rrsig{ $rrsig->keytag } }, $ns_ip;
+                    }
+                }
+            }
+        }
+
+        if ( scalar keys %no_dnskey_rrset ) {
+            push @results,
+              info(
+                DS16_CDS_WITHOUT_DNSKEY => {
+                    ns_ip_list => join( q{;}, sort keys %no_dnskey_rrset )
+                }
+              );
+        }
+
+        if ( scalar keys %mixed_delete_cds ) {
+            push @results,
+              info(
+                DS16_MIXED_DELETE_CDS => {
+                    ns_ip_list => join( q{;}, sort keys %mixed_delete_cds )
+                }
+              );
+        }
+
+        if ( scalar keys %delete_cds ) {
+            push @results,
+              info(
+                DS16_DELETE_CDS => {
+                    ns_ip_list => join( q{;}, sort keys %delete_cds )
+                }
+              );
+        }
+
+        if ( scalar keys %no_match_cds_with_dnskey ) {
+            foreach my $keytag ( keys %no_match_cds_with_dnskey ) {
+                push @results,
+                  info(
+                    DS16_CDS_MATCHES_NO_DNSKEY => {
+                        keytag     => $keytag,
+                        ns_ip_list => join( q{;}, uniq sort @{ $no_match_cds_with_dnskey{ $keytag } } )
+                    }
+                  );
+            }
+        }
+
+        if ( scalar keys %dnskey_not_signed_by_cds ) {
+            foreach my $keytag ( keys %dnskey_not_signed_by_cds ) {
+                push @results,
+                  info(
+                    DS16_DNSKEY_NOT_SIGNED_BY_CDS => {
+                        keytag     => $keytag,
+                        ns_ip_list => join( q{;}, uniq sort @{ $dnskey_not_signed_by_cds{ $keytag } } )
+                    }
+                  );
+            }
+        }
+
+        if ( scalar keys %cds_invalid_rrsig ) {
+            foreach my $keytag ( keys %cds_invalid_rrsig ) {
+                push @results,
+                  info(
+                    DS16_CDS_INVALID_RRSIG => {
+                        keytag     => $keytag,
+                        ns_ip_list => join( q{;}, uniq sort @{ $cds_invalid_rrsig{ $keytag } } )
+                    }
+                  );
+            }
+        }
+
+        if ( scalar keys %cds_not_signed ) {
+            push @results,
+              info(
+                DS16_CDS_UNSIGNED => {
+                    ns_ip_list => join( q{;}, sort keys %cds_not_signed )
+                }
+              );
+        }
+
+        if ( scalar keys %cds_signed_by_unknown_dnskey ) {
+            foreach my $keytag ( keys %cds_signed_by_unknown_dnskey ) {
+                push @results,
+                  info(
+                    DS16_CDS_SIGNED_BY_UNKNOWN_DNSKEY => {
+                        keytag     => $keytag,
+                        ns_ip_list => join( q{;}, uniq sort @{ $cds_signed_by_unknown_dnskey{ $keytag } } )
+                    }
+                  );
+            }
+        }
+    }
+
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+} ## end sub dnssec16
+
+sub dnssec17 {
+    my ( $class, $zone ) = @_;
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+    my @query_types = qw{CDNSKEY DNSKEY};
+    my %cdnskey_rrsets;
+    my %dnskey_rrsets;
+    my %mixed_delete_cdnskey;
+    my %delete_cdnskey;
+    my %no_dnskey_rrset;
+    my %no_match_cdnskey_with_dnskey;
+    my %dnskey_not_signed_by_cdnskey;
+    my %cdnskey_not_signed;
+    my %cdnskey_signed_by_unknown_dnskey;
+    my %cdnskey_invalid_rrsig;
+    my @nss_del   = @{ Zonemaster::Engine::TestMethods->method4( $zone ) };
+    my @nss_child = @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
+    my %nss       = map { $_->name->string . '/' . $_->address->short => $_ } @nss_del, @nss_child;
+    my %ip_already_processed;
+
+    for my $nss_key ( sort keys %nss ) {
+        my $ns = $nss{$nss_key};
+
+        next if exists $ip_already_processed{$ns->address->short};
+        $ip_already_processed{$ns->address->short} = 1;
+
+        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
+            push @results, map {
+              info(
+                IPV6_DISABLED => {
+                    ns     => $ns->string,
+                    rrtype => $_,
+                }
+              )
+            } @query_types;
+            next;
+        }
+
+        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
+            push @results, map {
+              info(
+                IPV4_DISABLED => {
+                    ns     => $ns->string,
+                    rrtype => $_,
+                }
+              )
+            } @query_types;
+            next;
+        }
+
+        my $cdnskey_p = $ns->query( $zone->name, q{CDNSKEY}, { dnssec => 1, usevc => 0 } );
+        if ( not $cdnskey_p ) {
+            next;
+        }
+        if ( not $cdnskey_p->aa ) {
+            next;
+        }
+        if ( $cdnskey_p->rcode ne q{NOERROR} ) {
+            next;
+        }
+        my @cdnskey_records = $cdnskey_p->get_records( q{CDNSKEY}, q{answer} );
+        if ( not scalar @cdnskey_records ) {
+            next;
+        }
+        my @cdnskey_rrsig_records = $cdnskey_p->get_records( q{RRSIG} , q{answer} );
+        push @{ $cdnskey_rrsets{ $ns->address->short }{cdnskey} }, @cdnskey_records;
+        push @{ $cdnskey_rrsets{ $ns->address->short }{rrsig} }, @cdnskey_rrsig_records;
+        foreach my $cdnskey ( @{ $cdnskey_rrsets{ $ns->address->short }{cdnskey} } ) {
+            my $rr_string = $cdnskey->string;
+            $rr_string =~ s/\s+CDNSKEY\s+/ DNSKEY /;
+            push @{ $cdnskey_rrsets{ $ns->address->short }{dnskey} }, Zonemaster::LDNS::RR->new( $rr_string );
+        }
+
+        my $dnskey_p = $ns->query( $zone->name, q{DNSKEY}, { dnssec => 1, usevc => 0 } );
+        if ( not $dnskey_p ) {
+            next;
+        }
+        if ( not $dnskey_p->aa ) {
+            next;
+        }
+        if ( $dnskey_p->rcode ne q{NOERROR} ) {
+            next;
+        }
+        my @dnskey_records = $dnskey_p->get_records( q{DNSKEY}, q{answer} );
+        if ( not scalar @dnskey_records ) {
+            next;
+        }
+        my @dnskey_rrsig_records = $dnskey_p->get_records( q{RRSIG} , q{answer} );
+        push @{ $dnskey_rrsets{ $ns->address->short }{dnskey} }, @dnskey_records;
+        push @{ $dnskey_rrsets{ $ns->address->short }{rrsig} }, @dnskey_rrsig_records;
+
+    }
+    undef %ip_already_processed;
+
+    if ( scalar keys %cdnskey_rrsets ) {
+        for my $ns_ip ( keys %cdnskey_rrsets ) {
+            if ( not scalar @{ $cdnskey_rrsets{ $ns_ip }{cdnskey} } ) {
+                next;
+            }
+            if ( scalar grep { $_->algorithm == 0 } @{ $cdnskey_rrsets{ $ns_ip }{dnskey} } ) {
+                if ( scalar grep { $_->algorithm != 0 } @{ $cdnskey_rrsets{ $ns_ip }{dnskey} } ) {
+                    $mixed_delete_cdnskey{ $ns_ip } = 1;
+                }
+                else {
+                    $delete_cdnskey{ $ns_ip } = 1;
+                }
+                next;
+            }
+            if ( not defined $dnskey_rrsets{ $ns_ip }{dnskey} or not scalar @{ $dnskey_rrsets{ $ns_ip }{dnskey} } ) {
+                $no_dnskey_rrset{ $ns_ip } = 1;
+                next;
+            }
+            foreach my $dnskey ( @{ $cdnskey_rrsets{ $ns_ip }{dnskey} } ) {
+                if ( not scalar grep { $dnskey->keytag == $_->keytag } @{ $dnskey_rrsets{ $ns_ip }{dnskey} } ) {
+                    push @{ $no_match_cdnskey_with_dnskey{ $dnskey->keytag } }, $ns_ip;
+                }
+                elsif ( not scalar grep { $dnskey->keytag == $_->keytag } @{ $dnskey_rrsets{ $ns_ip }{rrsig} } ) {
+                    push @{ $dnskey_not_signed_by_cdnskey{ $dnskey->keytag } }, $ns_ip;
+                }
+            }
+            if ( not scalar @{ $cdnskey_rrsets{ $ns_ip }{rrsig} } ) {
+                $cdnskey_not_signed{ $ns_ip } = 1;
+            }
+            else {
+                foreach my $rrsig ( @{ $cdnskey_rrsets{ $ns_ip }{rrsig} } ) {
+                    my @matching_dnskeys = grep { $rrsig->keytag == $_->keytag } @{ $dnskey_rrsets{ $ns_ip }{dnskey} };
+                    if ( not scalar @matching_dnskeys ) {
+                        push @{ $cdnskey_signed_by_unknown_dnskey{ $rrsig->keytag } }, $ns_ip;
+                    }
+                    elsif ( not $rrsig->verify( $cdnskey_rrsets{ $ns_ip }{cdnskey} , \@matching_dnskeys) ) {
+                        push @{ $cdnskey_invalid_rrsig{ $rrsig->keytag } }, $ns_ip;
+                    }
+                }
+            }
+        }
+
+        if ( scalar keys %no_dnskey_rrset ) {
+            push @results,
+              info(
+                DS17_CDNSKEY_WITHOUT_DNSKEY => {
+                    ns_ip_list => join( q{;}, sort keys %no_dnskey_rrset )
+                }
+              );
+        }
+
+        if ( scalar keys %mixed_delete_cdnskey ) {
+            push @results,
+              info(
+                DS17_MIXED_DELETE_CDNSKEY => {
+                    ns_ip_list => join( q{;}, sort keys %mixed_delete_cdnskey )
+                }
+              );
+        }
+
+        if ( scalar keys %delete_cdnskey ) {
+            push @results,
+              info(
+                DS17_DELETE_CDNSKEY => {
+                    ns_ip_list => join( q{;}, sort keys %delete_cdnskey )
+                }
+              );
+        }
+
+        if ( scalar keys %no_match_cdnskey_with_dnskey ) {
+            foreach my $keytag ( keys %no_match_cdnskey_with_dnskey ) {
+                push @results,
+                  info(
+                    DS17_CDNSKEY_MATCHES_NO_DNSKEY => {
+                        keytag     => $keytag,
+                        ns_ip_list => join( q{;}, uniq sort @{ $no_match_cdnskey_with_dnskey{ $keytag } } )
+                    }
+                  );
+            }
+        }
+
+        if ( scalar keys %dnskey_not_signed_by_cdnskey ) {
+            foreach my $keytag ( keys %dnskey_not_signed_by_cdnskey ) {
+                push @results,
+                  info(
+                    DS17_DNSKEY_NOT_SIGNED_BY_CDNSKEY => {
+                        keytag     => $keytag,
+                        ns_ip_list => join( q{;}, uniq sort @{ $dnskey_not_signed_by_cdnskey{ $keytag } } )
+                    }
+                  );
+            }
+        }
+
+        if ( scalar keys %cdnskey_invalid_rrsig ) {
+            foreach my $keytag ( keys %cdnskey_invalid_rrsig ) {
+                push @results,
+                  info(
+                    DS17_CDNSKEY_INVALID_RRSIG => {
+                        keytag     => $keytag,
+                        ns_ip_list => join( q{;}, uniq sort @{ $cdnskey_invalid_rrsig{ $keytag } } )
+                    }
+                  );
+            }
+        }
+
+        if ( scalar keys %cdnskey_not_signed ) {
+            push @results,
+              info(
+                DS17_CDNSKEY_UNSIGNED => {
+                    ns_ip_list => join( q{;}, sort keys %cdnskey_not_signed )
+                }
+              );
+        }
+
+        if ( scalar keys %cdnskey_signed_by_unknown_dnskey ) {
+            foreach my $keytag ( keys %cdnskey_signed_by_unknown_dnskey ) {
+                push @results,
+                  info(
+                    DS17_CDNSKEY_SIGNED_BY_UNKNOWN_DNSKEY => {
+                        keytag     => $keytag,
+                        ns_ip_list => join( q{;}, uniq sort @{ $cdnskey_signed_by_unknown_dnskey{ $keytag } } )
+                    }
+                  );
+            }
+        }
+    }
+
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+} ## end sub dnssec17
+
 1;
 
 =head1 NAME
@@ -2274,6 +3136,18 @@ Check that all DNSKEY algorithms are used to sign the zone.
 =item dnssec14($zone)
 
 Check for valid RSA DNSKEY key size
+
+=item dnssec15($zone)
+
+Check existence of CDS and CDNSKEY
+
+=item dnssec16($zone)
+
+Validate CDS
+
+=item dnssec17($zone)
+
+Validate CDNSKEY
 
 =back
 
