@@ -16,13 +16,14 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
 
 Zonemaster::Engine->add_fake_delegation(
     'f.delegation01.exempelvis.se' => {
-        'ns1.f.delegation01.exempelvis.se' => [ '2a02:750:12:77::97',  '46.21.97.97' ],
-        'ns2.f.delegation01.exempelvis.se' => [ '37.123.169.91' ]
+        'ns1.f.delegation01.exempelvis.se' => [ '46.21.97.97', '2a02:750:12:77::97' ],
+        'ns2.f.delegation01.exempelvis.se' => [ '194.18.226.122' ],
     }
 );
 
 my $zone = Zonemaster::Engine->zone( 'f.delegation01.exempelvis.se' );
 my %res = map { $_->tag => $_ } Zonemaster::Engine::Test::Delegation->delegation01( $zone );
+
 ok( !$res{NO_IPV6_NS_DEL},        q{should not emit NO_IPV6_NS_DEL} );
 ok( $res{NOT_ENOUGH_IPV6_NS_DEL}, q{should emit NOT_ENOUGH_IPV6_NS_DEL} );
 ok( !$res{ENOUGH_IPV6_NS_DEL},    q{should not emit ENOUGH_IPV6_NS_DEL} );

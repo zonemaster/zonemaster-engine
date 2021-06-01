@@ -1,4 +1,5 @@
 Changes
+CONTRIBUTING.md
 docs/ConfigAndPolicy.pod
 docs/Implementing_Tests.pod
 docs/Installation.md
@@ -57,10 +58,12 @@ share/modules.txt
 share/profile.json
 share/profile_example.json
 share/locale/da/LC_MESSAGES/Zonemaster-Engine.mo
+share/locale/fi/LC_MESSAGES/Zonemaster-Engine.mo
 share/locale/fr/LC_MESSAGES/Zonemaster-Engine.mo
-share/locale/sv/LC_MESSAGES/Zonemaster-Engine.mo
 share/locale/nb/LC_MESSAGES/Zonemaster-Engine.mo
+share/locale/sv/LC_MESSAGES/Zonemaster-Engine.mo
 share/Makefile
+share/GNUmakefile
 t/00-load.t
 t/asn.data
 t/asn.t
@@ -106,6 +109,9 @@ t/profiles/Test-dnssec10-only.json
 t/profiles/Test-dnssec11-only.json
 t/profiles/Test-dnssec13-only.json
 t/profiles/Test-dnssec14-only.json
+t/profiles/Test-dnssec15-only.json
+t/profiles/Test-dnssec16-only.json
+t/profiles/Test-dnssec17-only.json
 t/profiles/Test-dnssec-all.json
 t/profiles/Test-dnssec-more-all.json
 t/profiles/Test-nameserver01-only.json

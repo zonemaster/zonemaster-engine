@@ -5,6 +5,7 @@ use version; our $VERSION = version->declare("v1.0.10");
 use 5.014002;
 use warnings;
 
+use Carp;
 use Moose;
 use JSON::PP;
 use Zonemaster::Engine::Util;
@@ -14,7 +15,7 @@ use Zonemaster::Engine;
 my $seed_data;
 
 our %recurse_cache;
-our %fake_addresses_cache;
+our %_fake_addresses_cache;
 
 {
     local $/;
@@ -24,15 +25,41 @@ our %fake_addresses_cache;
 
 sub add_fake_addresses {
     my ( $self, $domain, $href ) = @_;
+    $domain = lc $domain;
 
     foreach my $name ( keys %{$href} ) {
-        push @{ $fake_addresses_cache{$domain}{$name} }, ();
-        foreach my $ip (@{ $href->{$name} }) {
-            push @{ $fake_addresses_cache{$domain}{$name} }, $ip;
+        my @ips = @{ $href->{$name} };
+        $name = lc $name;
+
+        push @{ $_fake_addresses_cache{$domain}{$name} }, ();
+        foreach my $ip ( @ips ) {
+            push @{ $_fake_addresses_cache{$domain}{$name} }, $ip;
         }
     }
 
     return;
+}
+
+sub has_fake_addresses {
+    my ( undef, $domain ) = @_;
+    $domain = lc $domain;
+
+    return !!$_fake_addresses_cache{$domain};
+}
+
+sub get_fake_addresses {
+    my ( undef, $domain, $nsname ) = @_;
+    ( defined $domain ) or croak 'Argument must be defined: $domain';
+
+    $domain = lc $domain;
+    $nsname = ( defined $nsname ) ? lc $nsname : q{};
+
+    if ( exists $_fake_addresses_cache{$domain}{$nsname} ) {
+        return @{ $_fake_addresses_cache{$domain}{$nsname} };
+    }
+    else {
+        return ();
+    }
 }
 
 sub recurse {
@@ -329,10 +356,16 @@ Zonemaster::Engine::Recursor - recursive resolver for Zonemaster
 
 Will cache result of previous queries.
 
-=item %fake_addresses_cache
+=item %_fake_addresses_cache
 
-Contains namservers IP addresses which are used in case of fake delegations 
-(pre-publication tests).
+A hash of hashrefs of arrayrefs.
+The keys of the top level hash are domain names.
+The keys of the second level hashes are name server names (normalized to lower
+case).
+The elements of the third level arrayrefs are IP addresses.
+
+The IP addresses are those of the nameservers which are used in case of fake
+delegations (pre-publication tests).
 
 =back
 
@@ -363,6 +396,15 @@ argument.
 =item add_fake_addresses($domain, $data)
 
 Class method to create fake adresses for fake delegations for a specified domain from data provided.
+
+=item has_fake_addresses($domain)
+
+Check if there is at least one fake nameserver specified for the given domain.
+
+=item get_fake_addresses($domain, $nsname)
+
+Returns a list of all cached fake addresses for the given domain and name server name.
+Returns an empty list if no data is cached for the given arguments.
 
 =item clear_cache()
 

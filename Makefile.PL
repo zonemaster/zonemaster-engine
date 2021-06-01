@@ -33,7 +33,7 @@ requires 'MooseX::Singleton'  => 0.30;
 requires 'Net::IP'            => 1.26;
 requires 'Readonly'           => 0;
 requires 'Text::CSV'          => 0;
-requires 'Zonemaster::LDNS'   => 2.001;
+requires 'Zonemaster::LDNS'   => 2.002;
 
 test_requires 'Pod::Coverage'     => 0;
 test_requires 'Test::Differences' => 0;
@@ -54,7 +54,7 @@ sub MY::postamble {
     my $text;
     if ($^O eq "freebsd") {
         # Make FreeBSD use gmake for share/Makefile
-        $text = 'GMAKE = "gmake"' . "\n"
+        $text = 'GMAKE ?= "gmake"' . "\n"
             . 'pure_all :: share/Makefile' . "\n"
             . "\t" . 'cd share && $(GMAKE) touch-po all' . "\n";
     } else {

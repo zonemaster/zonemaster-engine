@@ -18,7 +18,7 @@ Zonemaster::Engine->add_fake_delegation(
     'b.delegation02.exempelvis.se' => {
         'ns1.b.delegation02.exempelvis.se' => [ '46.21.97.97', '2a02:750:12:77::97' ],
         'ns2.b.delegation02.exempelvis.se' => [ '46.21.97.97', '2a02:750:12:77::97' ],
-    },
+    }
 );
 
 my $zone = Zonemaster::Engine->zone( q{b.delegation02.exempelvis.se} );
