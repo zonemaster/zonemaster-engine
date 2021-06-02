@@ -79,8 +79,8 @@ ids based on fuzzy matching of similar strings. This is not always desirable
 and you can disable fuzzy matching by executing one of the following
 commands instead:
 ```
-make update-po MSGMERGE_OPTS=--no-fuzzy-mathing POFILES=xx.po
-make update-po MSGMERGE_OPTS=--no-fuzzy-mathing
+make update-po MSGMERGE_OPTS=--no-fuzzy-matching POFILES=xx.po
+make update-po MSGMERGE_OPTS=--no-fuzzy-matching
 ```
 
 ## Github preparation
