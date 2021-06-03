@@ -2,14 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-16 21:56+0100\n"
-"PO-Revision-Date: 2021-02-16 21:54+0100\n"
+"POT-Creation-Date: 2021-06-02 13:12+0200\n"
+"PO-Revision-Date: 2021-06-02 13:47+0300\n"
 "Last-Translator: sami.salmensuo@traficom.fi\n"
 "Language-Team: Traficom domain team\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.0\n"
 
 #. ADDRESS:NAMESERVER_IP_WITHOUT_REVERSE
 #, perl-brace-format
@@ -83,6 +84,90 @@ msgstr "TEST_CASE_END {testcase}."
 msgid "TEST_CASE_START {testcase}."
 msgstr "TEST_CASE_START {testcase}."
 
+#. BASIC:A_QUERY_NO_RESPONSES
+msgid "Nameservers did not respond to A query."
+msgstr "Nimipalvelimet eivät vastanneet A-kyselyyn."
+
+#. BASIC:B04_MISSING_NS_RECORD
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} reponds to a NS query with no NS records in the answer "
+"section."
+msgstr "Nimipalvelimen {ns} vastauksesta NS-kyselyyn puuttui NS-tietueet."
+
+#. BASIC:B04_MISSING_SOA_RECORD
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} reponds to a SOA query with no SOA records in the answer "
+"section."
+msgstr "Nimipalvelimen {ns} vastauksessa SOA kyselyyn puuttui SOA-tietue."
+
+#. BASIC:B04_NO_RESPONSE
+#, perl-brace-format
+msgid "Nameserver {ns} does not respond over neither UDP nor TCP."
+msgstr "Nimipalvelin {ns} ei vastaa UDP:llä eikä TCP:llä."
+
+#. BASIC:B04_NO_RESPONSE_NS_QUERY
+#, perl-brace-format
+msgid "Nameserver {ns} does not respond to NS queries."
+msgstr "Nimipalvelin {ns} ei vastannut NS-kyselyyn."
+
+#. BASIC:B04_NO_RESPONSE_SOA_QUERY
+#, perl-brace-format
+msgid "Nameserver {ns} does not respond to SOA queries."
+msgstr "Nimipalvelin {ns} ei vastannut SOA-kyselyyn."
+
+#. BASIC:B04_NS_RECORD_NOT_AA
+#, perl-brace-format
+msgid "Nameserver {ns} does not give an authoritative response on an NS query."
+msgstr "Nimipalvelin {ns} ei vastannut NS-kyselyyn autoritatiivisesti."
+
+#. BASIC:B04_RESPONSE_TCP_NOT_UDP
+#, perl-brace-format
+msgid "Nameserver {ns} does not respond over UDP."
+msgstr "Nimipalvelin {ns} ei vastannut UDP:llä."
+
+#. BASIC:B04_SOA_RECORD_NOT_AA
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} does not give an authoritative response on an SOA query."
+msgstr "Nimipalvelin {ns} ei vastannut autoritatiivisesti SOA-kyselyyn."
+
+#. BASIC:B04_UNEXPECTED_RCODE_NS_QUERY
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responds with an unexpected RCODE ({rcode}) on an NS query."
+msgstr ""
+"Nimipalvelin {ns} antoi vastaukseksi odottamattoman RCODE ({rcode}) NS-"
+"kyselyyn."
+
+#. BASIC:B04_UNEXPECTED_RCODE_SOA_QUERY
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responds with an unexpected RCODE ({rcode}) on an SOA query."
+msgstr ""
+"Nimipalvelin {ns} antoi vastaukseksi odottamattoman RCODE ({rcode}) SOA-"
+"kyselyyn."
+
+#. BASIC:B04_WRONG_NS_RECORD
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responds with a wrong owner name ({owner} instead of {name}) "
+"on NS queries."
+msgstr ""
+"Nimipalvelin {ns} vastaa NS-kyselyyn väärällä omistajan nimellä ({owner}, ei "
+"{name})."
+
+#. BASIC:B04_WRONG_SOA_RECORD
+#. ZONE:WRONG_SOA
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responds with a wrong owner name ({owner} instead of {name}) "
+"on SOA queries."
+msgstr ""
+"Nimipalvelin {ns} vastaa SOA-kyselyihin väärällä omistajan nimellä ({owner}, "
+"ei {name})."
+
 #. BASIC:DOMAIN_NAME_LABEL_TOO_LONG
 #, perl-brace-format
 msgid ""
@@ -90,24 +175,15 @@ msgid ""
 msgstr ""
 "Verkkotunnuksen ({domain}) osa ({dlabel}) on liian pitkä ({dlength}/{max})."
 
-#. BASIC:DOMAIN_NAME_ZERO_LENGTH_LABEL
-#, perl-brace-format
-msgid "Domain name ({domain}) has a zero-length label."
-msgstr "Verkkotunnuksen ({domain}) osan pituus on nolla."
-
 #. BASIC:DOMAIN_NAME_TOO_LONG
 #, perl-brace-format
 msgid "Domain name is too long ({fqdnlength}/{max})."
 msgstr "Verkkotunnus on liian pitkä ({fqdnlength}/{max})."
 
-#. BASIC:NO_PARENT
-msgid "No parent domain could be found for the domain under test."
-msgstr "Testattavalle verkkotunnukselle ei löytynyt ylemmän tason tunnusta."
-
-#. BASIC:HAS_PARENT
+#. BASIC:DOMAIN_NAME_ZERO_LENGTH_LABEL
 #, perl-brace-format
-msgid "Parent domain '{pname}' was found for the tested domain."
-msgstr "Testattavalle verkkotunnukselle löytyi ylemmän tason tunnus '{pname}'."
+msgid "Domain name ({domain}) has a zero-length label."
+msgstr "Verkkotunnuksen ({domain}) osan pituus on nolla."
 
 #. BASIC:HAS_A_RECORDS
 #, perl-brace-format
@@ -116,41 +192,21 @@ msgstr ""
 "Nimipalvelin {ns} palautti yhden tai useamman ”A”-tietueen kohteelle "
 "{domain}."
 
-#. BASIC:NO_A_RECORDS
+#. BASIC:HAS_NAMESERVER_NO_WWW_A_TEST
 #, perl-brace-format
-msgid "Nameserver {ns} did not return \"A\" record(s) for {domain}."
-msgstr "Nimipalvelin {ns} ei palauttanut \"A”-tietueita kohteelle {domain}."
+msgid "Functional nameserver found. \"A\" query for www.{zname} test skipped."
+msgstr ""
+"Toimiva nimipalvelin löytyi. ”A”-kysely www.{zname} testiä varten ohitettiin."
 
 #. BASIC:HAS_NAMESERVERS
 #, perl-brace-format
 msgid "Nameserver {ns} listed these servers as glue: {nsnlist}."
 msgstr "Nimipalvelin {ns} listasi seuraavat palvelimet liimana: {nsnlist}."
 
-#. BASIC:NO_GLUE_PREVENTS_NAMESERVER_TESTS
-msgid "No NS records for tested zone from parent. NS tests skipped."
-msgstr ""
-"Ylätasolta ei löytynyt testattavaa vyöhykettä koskevia NS-tietueita. NS-"
-"testit ohitettu."
-
-#. BASIC:NS_FAILED
+#. BASIC:HAS_PARENT
 #, perl-brace-format
-msgid "Nameserver {ns} did not return NS records. RCODE was {rcode}."
-msgstr "Nimipalvelin {ns} ei palauttanut NS-tietueita. RCODE oli {rcode}."
-
-#. BASIC:NS_NO_RESPONSE
-#, perl-brace-format
-msgid "Nameserver {ns} did not respond to NS query."
-msgstr "Nimipalvelin {ns} ei vastannut NS-kyselyyn."
-
-#. BASIC:A_QUERY_NO_RESPONSES
-msgid "Nameservers did not respond to A query."
-msgstr "Nimipalvelimet eivät vastanneet A-kyselyyn."
-
-#. BASIC:HAS_NAMESERVER_NO_WWW_A_TEST
-#, perl-brace-format
-msgid "Functional nameserver found. \"A\" query for www.{zname} test skipped."
-msgstr ""
-"Toimiva nimipalvelin löytyi. ”A”-kysely www.{zname} testiä varten ohitettiin."
+msgid "Parent domain '{pname}' was found for the tested domain."
+msgstr "Testattavalle verkkotunnukselle löytyi ylemmän tason tunnus '{pname}'."
 
 #. BASIC:IPV4_DISABLED
 #. CONNECTIVITY:IPV4_DISABLED
@@ -183,6 +239,31 @@ msgstr "IPv6 ei ole käytössä, ei lähetä kyselyä \"{rrtype}\" kohteelle {ns
 #, perl-brace-format
 msgid "IPv6 is enabled, can send \"{rrtype}\" query to {ns}."
 msgstr "IPv6 on käytössä ja voi lähettää kyselyn \"{rrtype}\" kohteelle {ns}."
+
+#. BASIC:NO_A_RECORDS
+#, perl-brace-format
+msgid "Nameserver {ns} did not return \"A\" record(s) for {domain}."
+msgstr "Nimipalvelin {ns} ei palauttanut \"A”-tietueita kohteelle {domain}."
+
+#. BASIC:NO_GLUE_PREVENTS_NAMESERVER_TESTS
+msgid "No NS records for tested zone from parent. NS tests skipped."
+msgstr ""
+"Ylätasolta ei löytynyt testattavaa vyöhykettä koskevia NS-tietueita. NS-"
+"testit ohitettu."
+
+#. BASIC:NO_PARENT
+msgid "No parent domain could be found for the domain under test."
+msgstr "Testattavalle verkkotunnukselle ei löytynyt ylemmän tason tunnusta."
+
+#. BASIC:NS_FAILED
+#, perl-brace-format
+msgid "Nameserver {ns} did not return NS records. RCODE was {rcode}."
+msgstr "Nimipalvelin {ns} ei palauttanut NS-tietueita. RCODE oli {rcode}."
+
+#. BASIC:NS_NO_RESPONSE
+#, perl-brace-format
+msgid "Nameserver {ns} did not respond to NS query."
+msgstr "Nimipalvelin {ns} ei vastannut NS-kyselyyn."
 
 #. CONNECTIVITY:ERROR_ASN_DATABASE
 #, perl-brace-format
@@ -658,6 +739,210 @@ msgstr ""
 "DNSKEY, jolla on tunniste {keytag} ja joka käyttää algoritmia {algo_num} "
 "({algo_descr}), on kooltaan ({keysize}) suurempi kuin enimmäiskoko "
 "({keysizemax})."
+
+#. DS15_HAS_CDNSKEY_NO_CDS
+#, perl-brace-format
+msgid ""
+"CDNSKEY RRset is found on nameservers that resolve to IP addresses "
+"({ns_ip_list}), but no CDS RRset."
+msgstr ""
+"CDNSKEY RRset löytyy nimipalvelimilta IP-osoitteista ({ns_ip_list}), mutta "
+"ei CDS RRset asetuksia."
+
+#. DS15_HAS_CDS_AND_CDNSKEY
+#, perl-brace-format
+msgid ""
+"CDNSKEY and CDS RRsets are found on nameservers that resolve to IP addresses "
+"({ns_ip_list})."
+msgstr ""
+"CDNSKEY ja CDS RRsets löytyvät nimipalvelimilta IP-osoitteista "
+"({ns_ip_list})."
+
+#. DS15_HAS_CDS_NO_CDNSKEY
+#, perl-brace-format
+msgid ""
+"CDS RRset is found on nameservers that resolve to IP addresses "
+"({ns_ip_list}), but no CDNSKEY RRset."
+msgstr ""
+"CDS RRset löytyy nimipalvelimilta IP-osoitteista ({ns_ip_list}), mutta ei "
+"CDNSKEY RRset asetuksia."
+
+#. DS15_INCONSISTENT_CDNSKEY
+msgid "All servers do not have the same CDNSKEY RRset."
+msgstr "Kaikilla nimipalvelimilla ei ole sama CDNSKEY RRset."
+
+#. DS15_INCONSISTENT_CDS
+msgid "All servers do not have the same CDS RRset."
+msgstr "Kaikilla nimipalvelimilla ei ole sama CDS RRset."
+
+#. DS15_MISMATCH_CDS_CDNSKEY
+#, perl-brace-format
+msgid ""
+"Both CDS and CDNSKEY RRsets are found on nameservers that resolve to IP "
+"addresses ({ns_ip_list}) but they do not match."
+msgstr ""
+"CDS ja CDNSKEY RRsets löytyvät nimipalvelimilta IP-osoitteista "
+"({ns_ip_list}), mutta ne eivät täsmää."
+
+#. DS15_NO_CDS_CDNSKEY
+msgid "No CDS or CDNSKEY RRsets are found on any name server."
+msgstr "CDS tai CDNSKEY RR eivät löydy yhdeltäkään nimipalvelimista."
+
+#. DS16_CDS_INVALID_RRSIG
+#, perl-brace-format
+msgid ""
+"The CDS RRset is signed with an RRSIG with tag {keytag}, but the RRSIG does "
+"not match the DNSKEY with the same key tag. Fetched from the nameservers "
+"with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"CDS RRset on allekirjoitettu RRSIG:llä {keytag}, mutta RRSIG ei täsmää "
+"DNSKEY:n samalla tunnisteella. Tiedot haettu nimipalvelimilta joiden IP-"
+"osoitteet ovat \"{ns_ip_list}\"."
+
+#. DS16_CDS_MATCHES_NO_DNSKEY
+#, perl-brace-format
+msgid ""
+"The CDS record with tag {keytag} does not match any DNSKEY record. Fetched "
+"from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"CDS tietue {keytag} ei täsmää DNSKEY tietueeseen. Tiedot haettu "
+"nimipalvelimilta joiden IP-osoitteet ovat \"{ns_ip_list}\"."
+
+#. DS16_CDS_SIGNED_BY_UNKNOWN_DNSKEY
+#, perl-brace-format
+msgid ""
+"The CDS RRset is signed by RRSIG with tag {keytag} but that is not in the "
+"DNSKEY RRset. Fetched from the nameservers with P addresses \"{ns_ip_list}\"."
+msgstr ""
+"CDS RRset on allekirjoitettu RRSIG:llä {keytag} mutta se ei ole DNSKEY RRset:"
+"stä. Tiedot haettu nimipalvelimilta joiden IP-osoitteet ovat "
+"\"{ns_ip_list}\"."
+
+#. DS16_CDS_UNSIGNED
+#, perl-brace-format
+msgid ""
+"The CDS RRset is not signed. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"CDS RRset ei ole allekirjoitettu. Tiedot haettu nimipalvelimilta joiden IP-"
+"osoitteet ovat \"{ns_ip_list}\"."
+
+#. DS16_CDS_WITHOUT_DNSKEY
+#, perl-brace-format
+msgid ""
+"A CDS RRset exists, but no DNSKEY record exists. Fetched from the "
+"nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"CDS RRset on olemassa, mutta DNSKEY tietuetta ei löydy. Tiedot haettu "
+"nimipalvelimilta joiden IP-osoitteet ovat \"{ns_ip_list}\"."
+
+#. DS16_DELETE_CDS
+#, perl-brace-format
+msgid ""
+"A single \"delete\" CDS record is found on the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"Yksittäinen \"delete\" CDS-tietue löytyi nimipalvelimilta joiden IP-"
+"osoitteet ovat \"{ns_ip_list}"
+
+#. DS16_DNSKEY_NOT_SIGNED_BY_CDS
+#, perl-brace-format
+msgid ""
+"The DNSKEY RRset is not signed by the DNSKEY that the CDS record with tag "
+"{keytag} points to. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"DNSKEY RRset ei ole allekirjoitettu DNSKEY:llä johon CDS-tietue tunnisteella "
+"{keytag} osoittaa. Tiedot haettu nimipalvelimilta joiden IP-osoitteet ovat "
+"\"{ns_ip_list}\"."
+
+#. DS16_MIXED_DELETE_CDS
+#, perl-brace-format
+msgid ""
+"The CDS RRset is a mixture between \"delete\" record and other records. "
+"Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"CDS RRset on sekoitus \"delete\" tietuetta ja muita tietueita. Tiedot haettu "
+"nimipalvelimilta joiden IP-osoitteet ovat \"{ns_ip_list}\"."
+
+#. DS17_CDNSKEY_INVALID_RRSIG
+#, perl-brace-format
+msgid ""
+"The CDNSKEY RRset is signed with an RRSIG with tag {keytag}, but the RRSIG "
+"does not match the DNSKEY with the same key tag. Fetched from the "
+"nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"CDNSKEY RRset on allekirjoitettu RRSIG:llä jonka tunniste on {keytag}, mutta "
+"RRSIG ei täsmää DNSKEY:n samalla tunnisteella. Tiedot haettu "
+"nimipalvelimilta joiden IP-osoitteet ovat \"{ns_ip_list}\"."
+
+#. DS17_CDNSKEY_MATCHES_NO_DNSKEY
+#, perl-brace-format
+msgid ""
+"The CDNSKEY record with tag {keytag} does not match any DNSKEY record. "
+"Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"CDNSKEY-tietue tunnisteella {keytag} ei täsmää yhteenkään DNSKEY "
+"tietueeseen. Tiedot haettu nimipalvelimilta joiden IP-osoitteet ovat "
+"\"{ns_ip_list}\"."
+
+#. DS17_CDNSKEY_SIGNED_BY_UNKNOWN_DNSKEY
+#, perl-brace-format
+msgid ""
+"The CDNSKEY RRset is signed by RRSIG with tag {keytag} but that is not in "
+"the DNSKEY RRset. Fetched from the nameservers with P addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"CDNSKEY RRset on allekirjoitettu RRSIG:llä jonka tunniste on {keytag} mutta "
+"se ei löydy DNSKEY RRset:stä. Tiedot haettu nimipalvelimilta joiden IP-"
+"osoitteet ovat \"{ns_ip_list}\"."
+
+#. DS17_CDNSKEY_UNSIGNED
+#, perl-brace-format
+msgid ""
+"The CDNSKEY RRset is not signed. Fetched from the nameservers with IP "
+"addresses \"{ns_ip_list}\"."
+msgstr ""
+"CDNSKEY RRset ei ole allekirjoitettu. Tiedot haettu nimipalvelimilta joiden "
+"IP-osoitteet ovat \"{ns_ip_list}\"."
+
+#. DS17_CDNSKEY_WITHOUT_DNSKEY
+#, perl-brace-format
+msgid ""
+"A CDNSKEY RRset exists, but no DNSKEY record exists. Fetched from the "
+"nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"CDNSKEY RRset on olemassa, mutta DNSKEY tietuetta ei löydy. Tiedot haettu "
+"nimipalvelimilta joiden IP-osoitteet ovat \"{ns_ip_list}\"."
+
+#. DS17_DELETE_CDNSKEY
+#, perl-brace-format
+msgid ""
+"A single \"delete\" CDNSKEY record is found on the nameservers with IP "
+"addresses \"{ns_ip_list}\"."
+msgstr ""
+"Yksittäinen \"delete\" CDNSKEY tietue löytyy nimipalvelimilta joiden IP-"
+"osoitteet ovat \"{ns_ip_list}\"."
+
+#. DS17_DNSKEY_NOT_SIGNED_BY_CDNSKEY
+#, perl-brace-format
+msgid ""
+"The DNSKEY RRset is not signed by the DNSKEY that the CDNSKEY record with "
+"tag {keytag} points to. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"DNSKEY RRset ei ole allekirjoitettu DNSKEY:llä johon CDNSKEY tietue "
+"tunnisteella {keytag} osoittaa. Tiedot haettu nimipalvelimilta joiden IP-"
+"osoitteet ovat \"{ns_ip_list}\"."
+
+#. DS17_MIXED_DELETE_CDNSKEY
+#, perl-brace-format
+msgid ""
+"The CDNSKEY RRset is a mixture between \"delete\" record and other records. "
+"Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"CDNSKEY RRset on sekoitus \"delete\" tietuetta ja muita tietueita. Tiedot "
+"haettu nimipalvelimilta joiden IP-osoitteet ovat \"{ns_ip_list}\"."
 
 #. DNSSEC:DS_ALGORITHM_NOT_DS
 #, perl-brace-format
@@ -1866,7 +2151,7 @@ msgstr ""
 
 #. ZONE:MNAME_RECORD_DOES_NOT_EXIST
 msgid "SOA 'mname' field does not exist"
-msgstr "SOA 'mname' -kenttää ei ole olemassa."
+msgstr "SOA 'mname' -kenttää ei ole olemassa"
 
 #. ZONE:EXPIRE_MINIMUM_VALUE_LOWER
 #, perl-brace-format
@@ -1947,15 +2232,6 @@ msgid ""
 msgstr ""
 "SOA 'expire' -arvo ({expire}) on suurempi kuin pienin suositeltu arvo "
 "({required_expire}), muttei pienempi kuin 'refresh' -arvo ({refresh})."
-
-#. ZONE:WRONG_SOA
-#, perl-brace-format
-msgid ""
-"Nameserver {ns} responds with a wrong owner name ({owner} instead of {name}) "
-"on SOA queries."
-msgstr ""
-"Nimipalvelin {ns} vastaa SOA-kyselyihin väärällä omistajan nimellä ({owner}, "
-"ei {name})."
 
 #. SYSTEM:CANNOT_CONTINUE
 #, perl-brace-format
