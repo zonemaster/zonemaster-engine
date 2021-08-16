@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-21 14:22+0200\n"
-"PO-Revision-Date: 2021-08-12 15:19+0200\n"
+"PO-Revision-Date: 2021-08-16 13:17+0200\n"
 "Last-Translator: richard.persson@norid.no\n"
 "Language-Team: Zonemaster Team\n"
 "Language: nb\n"
@@ -640,15 +640,12 @@ msgstr "Delegeringen fra foreldresone til underordnet sone er korrekt signert."
 #. DNSSEC:DNSKEY_AND_DS
 #, perl-brace-format
 msgid "{parent} sent a DS record, and {child} a DNSKEY record."
-msgstr ""
-"{parent} sendte en DS-post, og underdomenet {child} sendte en DNSKEY-post."
+msgstr "{parent} svarte med en DS-post, og {child} sendte en DNSKEY-post."
 
 #. DNSSEC:DNSKEY_BUT_NOT_DS
 #, perl-brace-format
 msgid "{child} sent a DNSKEY record, but {parent} did not send a DS record."
-msgstr ""
-"Underdomene {child} svarte med en DNSKEY-post, men overordnet domene "
-"{parent} sendte ikke noen DS-post."
+msgstr "{child} svarte med en DNSKEY-post, men {parent} sendte ikke noen DS-post."
 
 #. DNSSEC:DNSKEY_KSK_NOT_SEP
 #, perl-brace-format
