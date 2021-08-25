@@ -668,8 +668,8 @@ sub basic04 {
                       );
                 }
                 else {
-                    my ( $ns ) = $p_ns_udp->get_records( q{NS}, q{answer} );
-                    if ( not $ns ) {
+                    my ( $ns_in_answer ) = $p_ns_udp->get_records( q{NS}, q{answer} );
+                    if ( not $ns_in_answer ) {
                         push @results,
                           info(
                             B04_MISSING_NS_RECORD => {
@@ -678,12 +678,12 @@ sub basic04 {
                           );
                     }
                     else {
-                        if ( lc($ns->owner) ne lc($name->fqdn) ) {
+                        if ( lc($ns_in_answer->owner) ne lc($name->fqdn) ) {
                             push @results,
                               info(
                                 B04_WRONG_NS_RECORD => {
                                     ns    => $ns->string,
-                                    owner => lc($ns->owner),
+                                    owner => lc($ns_in_answer->owner),
                                     name  => lc($name->fqdn)
                                 }
                               );
