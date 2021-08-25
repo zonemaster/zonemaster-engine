@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare("v1.0.17");
+use version; our $VERSION = version->declare("v1.0.18");
 
 use Zonemaster::Engine;
 
