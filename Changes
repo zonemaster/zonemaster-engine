@@ -1,5 +1,11 @@
 Release history for Zonemaster component Zonemaster-Engine
 
+v4.2.3 2021-09-15 (public fix version)
+
+ [Fixes]
+ - Fixes fatal error in output for Basic04 test. (#952)
+
+
 v4.2.2 2021-07-23 (public fix version)
 
  [Fixes]
