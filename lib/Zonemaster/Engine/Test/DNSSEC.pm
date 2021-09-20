@@ -2615,6 +2615,7 @@ sub dnssec16 {
     my @nss_child = @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
     my %nss       = map { $_->name->string . '/' . $_->address->short => $_ } @nss_del, @nss_child;
     my %ip_already_processed;
+    my $testing_time = time;
 
     for my $nss_key ( sort keys %nss ) {
         my $ns = $nss{$nss_key};
@@ -2686,6 +2687,7 @@ sub dnssec16 {
         my @dnskey_rrsig_records = $dnskey_p->get_records( q{RRSIG} , q{answer} );
         push @{ $dnskey_rrsets{ $ns->address->short }{dnskey} }, @dnskey_records;
         push @{ $dnskey_rrsets{ $ns->address->short }{rrsig} }, @dnskey_rrsig_records;
+        $testing_time = $dnskey_p->timestamp;
 
     }
     undef %ip_already_processed;
@@ -2721,11 +2723,12 @@ sub dnssec16 {
             }
             else {
                 foreach my $rrsig ( @{ $cds_rrsets{ $ns_ip }{rrsig} } ) {
+                    my $msg = q{};
                     my @matching_dnskeys = grep { $rrsig->keytag == $_->keytag } @{ $dnskey_rrsets{ $ns_ip }{dnskey} };
                     if ( not scalar @matching_dnskeys ) {
                         push @{ $cds_signed_by_unknown_dnskey{ $rrsig->keytag } }, $ns_ip;
                     }
-                    elsif ( not $rrsig->verify( $cds_rrsets{ $ns_ip }{cds} , \@matching_dnskeys) ) {
+                    elsif ( not $rrsig->verify_time( $cds_rrsets{ $ns_ip }{cds} , \@matching_dnskeys, $testing_time, $msg) ) {
                         push @{ $cds_invalid_rrsig{ $rrsig->keytag } }, $ns_ip;
                     }
                 }
@@ -2838,6 +2841,7 @@ sub dnssec17 {
     my @nss_child = @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
     my %nss       = map { $_->name->string . '/' . $_->address->short => $_ } @nss_del, @nss_child;
     my %ip_already_processed;
+    my $testing_time = time;
 
     for my $nss_key ( sort keys %nss ) {
         my $ns = $nss{$nss_key};
@@ -2909,6 +2913,7 @@ sub dnssec17 {
         my @dnskey_rrsig_records = $dnskey_p->get_records( q{RRSIG} , q{answer} );
         push @{ $dnskey_rrsets{ $ns->address->short }{dnskey} }, @dnskey_records;
         push @{ $dnskey_rrsets{ $ns->address->short }{rrsig} }, @dnskey_rrsig_records;
+        $testing_time = $dnskey_p->timestamp;
 
     }
     undef %ip_already_processed;
@@ -2944,11 +2949,12 @@ sub dnssec17 {
             }
             else {
                 foreach my $rrsig ( @{ $cdnskey_rrsets{ $ns_ip }{rrsig} } ) {
+                    my $msg = q{};
                     my @matching_dnskeys = grep { $rrsig->keytag == $_->keytag } @{ $dnskey_rrsets{ $ns_ip }{dnskey} };
                     if ( not scalar @matching_dnskeys ) {
                         push @{ $cdnskey_signed_by_unknown_dnskey{ $rrsig->keytag } }, $ns_ip;
                     }
-                    elsif ( not $rrsig->verify( $cdnskey_rrsets{ $ns_ip }{cdnskey} , \@matching_dnskeys) ) {
+                    elsif ( not $rrsig->verify_time( $cdnskey_rrsets{ $ns_ip }{cdnskey} , \@matching_dnskeys, $testing_time, $msg) ) {
                         push @{ $cdnskey_invalid_rrsig{ $rrsig->keytag } }, $ns_ip;
                     }
                 }
