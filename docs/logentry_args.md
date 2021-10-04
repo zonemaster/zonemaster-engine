@@ -9,14 +9,16 @@
 | algo_num    | Non-negative integer | The numeric value for a [DNSSEC algorithm].                 |
 | domain      | Domain name          | A domain name. If nsname is also applicable, use that one instead. |
 | keytag      | Non-negative integer | A keytag for a DNSKEY record or a keytag used in a DS or RRSIG record. |
+| mailtarget  | Domain name          | The domain name of the mailserver in an MX RDATA.           |
+| mailtarget_list|List of domain names|A list of name servers, as specified by "mailtarget", separated by ";". |
 | module      | A Zonemaster test module, or `all` | The name of a Zonemaster test module.         |
 | module_list | List of Zonemaster test modules | A list of Zonemaster test modules, separated by ":". |
-| nsname      | Domain name          | The domain name of a name server.                           |
-| ns_ip       | IP address           | The IP address of a name server.                            |
 | ns          | Domain name and IP address pair | The name and IP address of a name server, separated by "/". |
-| nsname_list | List of domain names | A list of name servers, as specified by "nsname", separated by ";". |
+| ns_ip       | IP address           | The IP address of a name server.                            |
 | ns_ip_list  | List of IP addresses | A list of name servers, as specified by "ns_ip", separated by ";". |
 | ns_list     | List of domain name and IP address pairs | A list of name servers, as specified by "ns", separated by ";". |
+| nsname      | Domain name          | The domain name of a name server.                           |
+| nsname_list | List of domain names | A list of name servers, as specified by "nsname", separated by ";". |
 | testcase    | A Zonemaster test case, or `all` | A test case identifier.                         |
 || AS number| An Autonomous Space number for an IP address.|
 || Address record type (A or AAAA)| Used to tell the difference between IPv4 and IPv6.|
