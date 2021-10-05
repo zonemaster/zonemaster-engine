@@ -2507,13 +2507,13 @@ sub dnssec15 {
                     push @dnskey, Zonemaster::LDNS::RR->new( $rr_string );
                 }
                 foreach my $ds ( @ds ) {
-                    my @matching_keys = grep { $ds->keytag == $_->keytag } @dnskey;
+                    my @matching_keys = grep { $ds->keytag == $_->keytag or ($ds->algorithm == 0 and $_->algorithm == 0)} @dnskey;
                     if ( not scalar @matching_keys ) {
                         $mismatch_cds_cdnskey{ $ns_ip } = 1;
                     }
                 }
                 foreach my $dnskey ( @dnskey ) {
-                    my @matching_keys = grep { $dnskey->keytag == $_->keytag } @ds;
+                    my @matching_keys = grep { $dnskey->keytag == $_->keytag or ($dnskey->algorithm == 0 and $_->algorithm == 0)} @ds;
                     if ( not scalar @matching_keys ) {
                         $mismatch_cds_cdnskey{ $ns_ip } = 1;
                     }
