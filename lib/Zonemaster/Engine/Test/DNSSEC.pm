@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare( "v1.1.44" );
+use version; our $VERSION = version->declare( "v1.1.45" );
 
 ###
 ### This test module implements DNSSEC tests.
