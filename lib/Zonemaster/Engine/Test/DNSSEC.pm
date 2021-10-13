@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare( "v1.1.45" );
+use version; our $VERSION = version->declare( "v1.1.46" );
 
 ###
 ### This test module implements DNSSEC tests.
@@ -442,15 +442,9 @@ sub metadata {
         ],
         dnssec13 => [
             qw(
-              ALGO_NOT_SIGNED_RRSET
-              ALL_ALGO_SIGNED
-              NO_RESPONSE
-              NO_RESPONSE_RRSET
-              RRSET_NOT_SIGNED
-              RRSIG_BROKEN
-              RRSIG_NOT_MATCH_DNSKEY
-              TEST_CASE_END
-              TEST_CASE_START
+              DS13_ALGO_NOT_SIGNED_DNSKEY
+              DS13_ALGO_NOT_SIGNED_NS
+              DS13_ALGO_NOT_SIGNED_SOA
               ),
         ],
         dnssec14 => [
@@ -552,16 +546,6 @@ Readonly my %TAG_DESCRIPTIONS => (
           . '{algo_num} ({algo_descr}).',
           @_;
     },
-    ALGO_NOT_SIGNED_RRSET => sub {
-        __x    # DNSSEC:ALGO_NOT_SIGNED_RRSET
-          'Nameserver {ns} responded with no RRSIG for RRset {rrtype} created '
-          . 'by the algorithm {algo_num}.',
-          @_;
-    },
-    ALL_ALGO_SIGNED => sub {
-        __x    # DNSSEC:ALL_ALGO_SIGNED
-          'All the tested RRset (SOA/DNSKEY/NS) are signed by each algorithm present in the DNSKEY RRset.', @_;
-    },
     BROKEN_DNSSEC => sub {
         __x    # DNSSEC:BROKEN_DNSSEC
           'All nameservers for zone {domain} responds with neither NSEC nor NSEC3 records when such '
@@ -644,6 +628,27 @@ Readonly my %TAG_DESCRIPTIONS => (
           'DNSKEY with tag {keytag} and using algorithm {algo_num} '
           . '({algo_descr}) has a size ({keysize}) larger than the maximum one '
           . '({keysizemax}).',
+          @_;
+    },
+    DS13_ALGO_NOT_SIGNED_DNSKEY => sub {
+        __x    # DNSSEC:DS13_ALGO_NOT_SIGNED_DNSKEY
+          'DNSKEY RRset found on nameservers that resolve to IP addresses '
+          . '({ns_ip_list}) is not signed with algorithm {algo_num} ({algo_mnemo}) '
+          . 'present in the DNSKEY RRset.',
+          @_;
+    },
+    DS13_ALGO_NOT_SIGNED_NS => sub {
+        __x    # DNSSEC:DS13_ALGO_NOT_SIGNED_NS
+          'NS RRset found on nameservers that resolve to IP addresses '
+          . '({ns_ip_list}) is not signed with algorithm {algo_num} ({algo_mnemo}) '
+          . 'present in the DNSKEY RRset.',
+          @_;
+    },
+    DS13_ALGO_NOT_SIGNED_SOA => sub {
+        __x    # DNSSEC:DS13_ALGO_NOT_SIGNED_SOA
+          'SOA RRset found on nameservers that resolve to IP addresses '
+          . '({ns_ip_list}) is not signed with algorithm {algo_num} ({algo_mnemo}) '
+          . 'present in the DNSKEY RRset.',
           @_;
     },
     DS15_HAS_CDNSKEY_NO_CDS => sub {
@@ -951,10 +956,6 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # DNSSEC:NO_RESPONSE_DS
           '{ns} returned no DS records for {domain}.', @_;
     },
-    NO_RESPONSE_RRSET => sub {
-        __x    # DNSSEC:NO_RESPONSE_RRSET
-          'Nameserver {ns} responded with no {rrtype} record(s).', @_;
-    },
     NO_RESPONSE => sub {
         __x    # DNSSEC:NO_RESPONSE
           'Nameserver {ns} did not respond.', @_;
@@ -1007,25 +1008,11 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # DNSSEC:RRSIG_EXPIRATION
           'RRSIG with keytag {keytag} and covering type(s) {types} expires at ' . ': {date}.', @_;
     },
-    RRSET_NOT_SIGNED => sub {
-        __x    # DNSSEC:RRSET_NOT_SIGNED
-          'Nameserver {ns} responded with no RRSIG for {rrtype} RRset.', @_;
-    },
-    RRSIG_BROKEN => sub {
-        __x    # DNSSEC:RRSIG_BROKEN
-          'Nameserver {ns} responded with an RRSIG which can not be verified with '
-          . 'corresponding DNSKEY (with keytag {keytag}).',
-          @_;
-    },
     RRSIG_EXPIRED => sub {
         __x    # DNSSEC:RRSIG_EXPIRED
           'RRSIG with keytag {keytag} and covering type(s) {types} has already '
           . 'expired (expiration is: {expiration}).',
           @_;
-    },
-    RRSIG_NOT_MATCH_DNSKEY => sub {
-        __x    # DNSSEC:RRSIG_NOT_MATCH_DNSKEY
-          'Nameserver {ns} responded with an RRSIG with unknown keytag {keytag}.', @_;
     },
     SOA_NOT_SIGNED => sub {
         __x    # DNSSEC:SOA_NOT_SIGNED
@@ -2163,112 +2150,89 @@ sub dnssec11 {
 sub dnssec13 {
     my ( $class, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
-    my @dnskey_rrs;
-    my $all_algo_signed = 1;
-    my $DNSKEY_algorithm_exists = 0;
-
+    my @query_types = qw{DNSKEY SOA NS};
+    my %algo_not_signed;
     my @nss_del   = @{ Zonemaster::Engine::TestMethods->method4( $zone ) };
     my @nss_child = @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
     my %nss       = map { $_->name->string . '/' . $_->address->short => $_ } @nss_del, @nss_child;
+    my %ip_already_processed;
 
     for my $nss_key ( sort keys %nss ) {
         my $ns = $nss{$nss_key};
 
+        next if exists $ip_already_processed{$ns->address->short};
+        $ip_already_processed{$ns->address->short} = 1;
+
         if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
-            push @results,
+            push @results, map {
               info(
                 IPV6_DISABLED => {
                     ns     => $ns->string,
-                    rrtype => q{DNSKEY},
+                    rrtype => $_,
                 }
               );
+            } @query_types;
             next;
         }
 
         if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
-            push @results,
+            push @results, map {
               info(
                 IPV4_DISABLED => {
                     ns     => $ns->string,
-                    rrtype => q{DNSKEY},
+                    rrtype => $_,
                 }
-              );
+              )
+            } @query_types;
             next;
         }
 
-        my %keytags;
-        my @algorithms;
-        foreach my $query_type ( qw{DNSKEY SOA NS} ) {
+        my %dnskey_algorithm;
+        foreach my $query_type ( @query_types ) {
 
             my $p = $ns->query( $zone->name, $query_type, { dnssec => 1, usevc => 0 } );
             if ( not $p ) {
-                push @results, info( NO_RESPONSE => { ns => $ns->string } );
                 next;
             }
-
-            my $ns_args = {
-                ns     => $ns->string,
-                rrtype => $query_type,
-            };
-            my @rrs = $p->get_records( $query_type, q{answer} );
-            if ( not scalar @rrs ) {
-                $all_algo_signed = 0;
-                push @results, info( NO_RESPONSE_RRSET => $ns_args );
+            if ( $p->rcode ne q{NOERROR} ) {
+                next;
+            }
+            if ( not $p->aa ) {
+                next;
+            }
+            my @type_records = $p->get_records( $query_type, q{answer} );
+            if ( not scalar @type_records ) {
+                next;
+            }
+            my @rrsig_records = $p->get_records( q{RRSIG} , q{answer} );
+            if ( not scalar @rrsig_records ) {
                 next;
             }
 
             if ( $query_type eq q{DNSKEY} ) {
-                %keytags = map { $_->keytag => $_ } @rrs;                
-                @algorithms = uniq map { $_->algorithm } @rrs;
-                if ( scalar @algorithms ) {
-                    $DNSKEY_algorithm_exists = 1;
+                %dnskey_algorithm = map { $_->algorithm => 1 } @type_records;
+            }
+            foreach my $algorithm ( keys %dnskey_algorithm ) {
+                if ( not scalar grep { $_->algorithm == $algorithm } @rrsig_records ) {
+                    push @{ $algo_not_signed{ lc($query_type) }{$algorithm} }, $ns->address->short;
                 }
             }
-
-            my @sigs = $p->get_records( q{RRSIG},  q{answer} );
-            if ( not scalar @sigs ) {
-                $all_algo_signed = 0;
-                push @results, info( RRSET_NOT_SIGNED => $ns_args );
-                next;
-            }
-
-            foreach my $algorithm ( @algorithms ) {
-                if ( not scalar grep { $_->algorithm == $algorithm } @sigs ) {
-                    $all_algo_signed = 0;
-                    $ns_args->{algo_num} = $algorithm;
-                    push @results, info( ALGO_NOT_SIGNED_RRSET => $ns_args );
-                }
-            }
-
-            foreach my $sig ( @sigs ) {
-                my @keys = ($keytags{$sig->keytag});
-                if ( @keys ) {
-                    my @ks;
-                    foreach my $k (@keys) {
-                        push @ks, $k if $k; # Skip any empty elements
-                    }
-                    @keys = @ks;
-                }
-
-                my $msg  = q{};
-                my $time = $p->timestamp;
-                if ( not scalar @keys ) {
-                    $all_algo_signed = 0;
-                    $ns_args->{keytag} = $sig->keytag;
-                    push @results, info( RRSIG_NOT_MATCH_DNSKEY => $ns_args );
-                }
-                elsif ( not $sig->verify_time( \@rrs, \@keys, $time, $msg ) ) {
-                    $all_algo_signed = 0;
-                    $ns_args->{keytag} = $sig->keytag;
-                    push @results, info( RRSIG_BROKEN => $ns_args );
-                }
-            }
-
         }
     }
 
-    if ( $DNSKEY_algorithm_exists and $all_algo_signed ) {
-        push @results, info( ALL_ALGO_SIGNED => {} );
+    foreach my $query_type ( @query_types ) {
+        if ( exists $algo_not_signed{ lc($query_type) } ) {
+            foreach my $algorithm ( keys %{ $algo_not_signed{ lc($query_type) } } ) {
+                push @results,
+                  info(
+                    "DS13_ALGO_NOT_SIGNED_${query_type}" => {
+                        ns_ip_list => join( q{;}, uniq sort @{ $algo_not_signed{ lc($query_type) }{$algorithm} }),
+                        algo_num   => $algorithm,
+                        algo_mnemo => $algo_properties{$algorithm}{mnemonic}
+                    }
+                  );
+            }
+        }
     }
 
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
