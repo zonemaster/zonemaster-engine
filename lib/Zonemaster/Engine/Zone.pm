@@ -14,7 +14,7 @@ use Zonemaster::Engine::DNSName;
 use Zonemaster::Engine::Recursor;
 use Zonemaster::Engine::NSArray;
 
-has 'name' => ( is => 'ro', isa => 'Zonemaster::Engine::DNSName', required => 1, coerce => 1 );
+has 'name' => ( is => 'ro', isa => 'Zonemaster::Engine::DNSName', required => 1 );
 has 'parent' => ( is => 'ro', isa => 'Maybe[Zonemaster::Engine::Zone]', lazy_build => 1 );
 has [ 'ns', 'glue' ] => ( is => 'ro', isa => 'ArrayRef', lazy_build => 1 );
 has [ 'ns_names', 'glue_names' ] => ( is => 'ro', isa => 'ArrayRef[Zonemaster::Engine::DNSName]', lazy_build => 1 );

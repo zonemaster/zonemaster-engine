@@ -3,8 +3,7 @@ package Zonemaster::Engine::Nameserver;
 use version; our $VERSION = version->declare("v1.1.16");
 
 use 5.014002;
-use Moose;
-use Moose::Util::TypeConstraints;
+use Class::Accessor qw[ antlers ];
 
 use Zonemaster::Engine::DNSName;
 use Zonemaster::Engine;
@@ -12,7 +11,6 @@ use Zonemaster::Engine::Packet;
 use Zonemaster::Engine::Nameserver::Cache;
 use Zonemaster::Engine::Recursor;
 use Zonemaster::Engine::Constants ':misc';
-
 use Zonemaster::LDNS;
 
 use Zonemaster::Engine::Net::IP;
@@ -20,43 +18,31 @@ use Time::HiRes qw[time];
 use JSON::PP;
 use MIME::Base64;
 use Module::Find qw[useall];
-use Carp;
+use Carp qw( confess croak );
 use List::Util qw[max min sum];
 use Digest::MD5;
 use POSIX ();
+use Scalar::Util qw[ blessed ];
+
+our @ISA = qw (Class::Accessor);
 
 use overload
   '""'  => \&string,
   'cmp' => \&compare;
 
-coerce 'Zonemaster::Engine::Net::IP', from 'Str', via { Zonemaster::Engine::Net::IP->new( $_ ) };
+has 'name'    => ( is => 'ro' );
+has 'address' => ( is => 'ro' );
 
-has 'name'    => ( is => 'ro', isa => 'Zonemaster::Engine::DNSName', coerce => 1, required => 0 );
-has 'address' => ( is => 'ro', isa => 'Zonemaster::Engine::Net::IP', coerce => 1, required => 1 );
+has 'dns'   => ( is => 'ro' );
+has 'cache' => ( is => 'ro' );
+has 'times' => ( is => 'ro' );
 
-has 'dns'   => ( is => 'ro', isa => 'Zonemaster::LDNS',                     lazy_build => 1 );
-has 'cache' => ( is => 'ro', isa => 'Zonemaster::Engine::Nameserver::Cache', lazy_build => 1 );
-has 'times' => ( is => 'ro', isa => 'ArrayRef',                      default    => sub { [] } );
+has 'source_address' => ( is => 'ro' );
 
-has 'source_address' => (
-    is      => 'ro',
-    isa     => 'Maybe[Str]',
-    lazy    => 1,
-    default => sub {
-        my $value = Zonemaster::Engine::Profile->effective->get( q{resolver.source} );
-        if ( $value eq $RESOLVER_SOURCE_OS_DEFAULT ) {
-            return;
-        }
-        else {
-            return $value;
-        }
-    }
-);
+has 'fake_delegations' => ( is => 'ro' );
+has 'fake_ds'          => ( is => 'ro' );
 
-has 'fake_delegations' => ( is => 'ro', isa => 'HashRef', default => sub { {} } );
-has 'fake_ds'          => ( is => 'ro', isa => 'HashRef', default => sub { {} } );
-
-has 'blacklisted' => ( is => 'rw', isa => 'HashRef', default => sub { {} }, required => 1 );
+has 'blacklisted' => ( is => 'rw' );
 
 ###
 ### Variables
@@ -68,11 +54,66 @@ our %object_cache;
 ### Build methods for attributes
 ###
 
-around 'new' => sub {
-    my $orig = shift;
-    my $self = shift;
+sub new {
+    my $proto = shift;
+    my $class = ref $proto || $proto;
+    my $attrs = shift;
 
-    my $obj  = $self->$orig( @_ );
+    my %lazy_attrs;
+    $lazy_attrs{source_address} = delete $attrs->{source_address} if exists $attrs->{source_address};
+    $lazy_attrs{dns}            = delete $attrs->{dns}            if exists $attrs->{dns};
+    $lazy_attrs{cache}          = delete $attrs->{cache}          if exists $attrs->{cache};
+
+    # Required arguments
+    confess "Attribute \(address\) is required"
+      if !exists $attrs->{address};
+
+    # Type coercions
+    $attrs->{name} = Zonemaster::Engine::DNSName->from_string( $attrs->{name} )
+      if !blessed $attrs->{name} || !$attrs->{name}->isa( 'Zonemaster::Engine::DNSName' );
+    $attrs->{address} = Zonemaster::Engine::Net::IP->new( $attrs->{address} )
+      if exists $attrs->{address}
+      && ( !blessed $attrs->{address} || !$attrs->{address}->isa( 'Zonemaster::Engine::Net::IP' ) );
+
+    # Type constraints
+    confess "Argument must be coercible into a Zonemaster::Engine::DNSName: name"
+      if !$attrs->{name}->isa( 'Zonemaster::Engine::DNSName' );
+    confess "Argument must be coercible into a Zonemaster::Engine::Net::IP: address"
+      if exists $attrs->{address}
+      && !$attrs->{address}->isa( 'Zonemaster::Engine::Net::IP' );
+    confess "Argument must be an ARRAYREF: times"
+      if exists $attrs->{times}
+      && ref $attrs->{times} ne 'ARRAY';
+    confess "Argument must be a HASHREF: fake_delegations"
+      if exists $attrs->{fake_delegations}
+      && ref $attrs->{fake_delegations} ne 'HASH';
+    confess "Argument must be a HASHREF: fake_ds"
+      if exists $attrs->{fake_ds}
+      && ref $attrs->{fake_ds} ne 'HASH';
+    confess "Argument must be a HASHREF: blacklisted"
+      if exists $attrs->{blacklisted}
+      && ref $attrs->{blacklisted} ne 'HASH';
+    confess "Argument must be a string or undef: source_address"
+      if exists $lazy_attrs{source_address}
+      && ref $lazy_attrs{source_address} ne '';
+    confess "Argument must be a Zonemaster::LDNS: dns"
+      if exists $lazy_attrs{dns}
+      && ( !blessed $lazy_attrs{dns} || !$lazy_attrs{dns}->isa( 'Zonemaster::LDNS' ) );
+    confess "Argument must be a Zonemaster::Engine::Nameserver::Cache: cache"
+      if exists $lazy_attrs{cache}
+      && ( !blessed $lazy_attrs{cache} || !$lazy_attrs{cache}->isa( 'Zonemaster::Engine::Nameserver::Cache' ) );
+
+    # Default values
+    $attrs->{blacklisted}      //= {};
+    $attrs->{fake_delegations} //= {};
+    $attrs->{fake_ds}          //= {};
+    $attrs->{times}            //= [];
+
+    my $obj = Class::Accessor::new( $class, $attrs );
+    $obj->{_source_address} = $lazy_attrs{source_address} if exists $lazy_attrs{source_address};
+    $obj->{_dns}            = $lazy_attrs{dns}            if exists $lazy_attrs{dns};
+    $obj->{_cache}          = $lazy_attrs{cache}          if exists $lazy_attrs{cache};
+
     my $name = lc( q{} . $obj->name );
     $name = '$$$NONAME' unless $name;
     if ( not exists $object_cache{$name}{ $obj->address->ip } ) {
@@ -81,7 +122,46 @@ around 'new' => sub {
     }
 
     return $object_cache{$name}{ $obj->address->ip };
-};
+}
+
+sub source_address {
+    my $self = shift;
+
+    # Lazy default value
+    if ( !exists $self->{_source_address} ) {
+        my $value = Zonemaster::Engine::Profile->effective->get( q{resolver.source} );
+        if ( $value eq $RESOLVER_SOURCE_OS_DEFAULT ) {
+            $self->{_source_address} = undef;
+        }
+        else {
+            $self->{_source_address} = $value;
+        }
+    }
+
+    return $self->{_source_address};
+}
+
+sub dns {
+    my $self = shift;
+
+    # Lazy default value
+    if ( !exists $self->{_dns} ) {
+        $self->{_dns} = $self->_build_dns();
+    }
+
+    return $self->{_dns};
+}
+
+sub cache {
+    my $self = shift;
+
+    # Lazy default value
+    if ( !exists $self->{_cache} ) {
+        $self->{_cache} = $self->_build_cache();
+    }
+
+    return $self->{_cache};
+}
 
 sub _build_dns {
     my ( $self ) = @_;
@@ -594,9 +674,6 @@ sub empty_cache {
     return;
 }
 
-no Moose;
-__PACKAGE__->meta->make_immutable( inline_constructor => 0 );
-
 1;
 
 =head1 NAME
@@ -641,6 +718,10 @@ The L<Zonemaster::LDNS> object used to actually send and recieve DNS queries.
 
 A reference to a L<Zonemaster::Engine::Nameserver::Cache> object holding the cache of sent queries. Not meant for external use.
 
+=item source_address
+
+The source address all resolver objects should use when sending queries.
+
 =item times
 
 A reference to a list with elapsed time values for the queries made through this nameserver.
@@ -650,6 +731,10 @@ A reference to a list with elapsed time values for the queries made through this
 =head1 CLASS METHODS
 
 =over
+
+=item new
+
+Construct a new object.
 
 =item save($filename)
 

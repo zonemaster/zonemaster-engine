@@ -19,6 +19,7 @@ configure_requires 'Locale::Msgfmt' => 0.15;
 # "2.1.0" could be declared as "2.001" but not as "2.1"
 # (see Zonemaster::LDNS below)
 
+requires 'Class::Accessor'    => 0;
 requires 'Clone'              => 0;
 requires 'Email::Valid'       => 0;
 requires 'File::ShareDir'     => 1.00;

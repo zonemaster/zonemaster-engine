@@ -5,7 +5,7 @@ use version; our $VERSION = version->declare("v1.0.3");
 use 5.014002;
 use warnings;
 
-use Moose;
+use Class::Accessor "antlers";
 
 use overload '""' => \&string;
 
@@ -16,9 +16,6 @@ sub string {
 
     return $self->message;
 }
-
-no Moose;
-__PACKAGE__->meta->make_immutable;
 
 1;
 

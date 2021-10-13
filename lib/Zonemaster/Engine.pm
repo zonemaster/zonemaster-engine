@@ -14,7 +14,7 @@ BEGIN {
     Locale::TextDomain->import( 'Zonemaster-Engine', "$share/locale" );
 }
 
-use Moose;
+use Class::Accessor "antlers";
 use Carp;
 use Zonemaster::Engine::Nameserver;
 use Zonemaster::Engine::Logger;
@@ -44,7 +44,7 @@ sub ns {
 sub zone {
     my ( $class, $name ) = @_;
 
-    return Zonemaster::Engine::Zone->new( { name => $name } );
+    return Zonemaster::Engine::Zone->new( { name => Zonemaster::Engine::DNSName->new( $name ) } );
 }
 
 sub test_zone {
@@ -118,7 +118,7 @@ sub add_fake_delegation {
     my $incomplete_delegation;
     foreach my $name ( keys %{$href} ) {
         if ( not defined $href->{$name} or not scalar @{ $href->{$name} } ) {
-            if ( Zonemaster::Engine::Zone->new( { name => $domain } )->is_in_zone( $name ) ) {
+            if ( $class->zone( $domain )->is_in_zone( $name ) ) {
                 Zonemaster::Engine->logger->add(
                     FAKE_DELEGATION_IN_ZONE_NO_IP => { domain => $domain , nsname => $name }
                 );
@@ -383,8 +383,5 @@ The full text of the license can be found in the
 F<LICENSE> file included with this distribution.
 
 =cut
-
-no Moose;
-__PACKAGE__->meta->make_immutable;
 
 1;

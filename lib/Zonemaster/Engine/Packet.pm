@@ -79,9 +79,9 @@ sub is_redirect {
         my ( $a ) = $self->authority;
         Zonemaster::Engine::Util::info(
             IS_REDIRECT => {
-                name => Zonemaster::Engine::Util::name( $q->name ),
+                name => Zonemaster::Engine::DNSName->from_string( $q->name ),
                 type => $q->type,
-                to   => Zonemaster::Engine::Util::name( $a->name )
+                to   => Zonemaster::Engine::DNSName->from_string( $a->name )
             }
         );
 
