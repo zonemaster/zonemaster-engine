@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare( "v1.1.46" );
+use version; our $VERSION = version->declare( "v1.1.47" );
 
 ###
 ### This test module implements DNSSEC tests.
@@ -632,23 +632,23 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     DS13_ALGO_NOT_SIGNED_DNSKEY => sub {
         __x    # DNSSEC:DS13_ALGO_NOT_SIGNED_DNSKEY
-          'DNSKEY RRset found on nameservers that resolve to IP addresses '
-          . '({ns_ip_list}) is not signed with algorithm {algo_num} ({algo_mnemo}) '
-          . 'present in the DNSKEY RRset.',
+          'The DNSKEY RRset is not signed by algorithm {algo_num} ({algo_mnemo}) '
+          . 'present in the DNSKEY RRset. Fetched from the nameservers with IP '
+          . 'addresses "{ns_ip_list}".',
           @_;
     },
     DS13_ALGO_NOT_SIGNED_NS => sub {
         __x    # DNSSEC:DS13_ALGO_NOT_SIGNED_NS
-          'NS RRset found on nameservers that resolve to IP addresses '
-          . '({ns_ip_list}) is not signed with algorithm {algo_num} ({algo_mnemo}) '
-          . 'present in the DNSKEY RRset.',
+          'The NS RRset is not signed by algorithm {algo_num} ({algo_mnemo}) '
+          . 'present in the DNSKEY RRset. Fetched from the nameservers with IP '
+          . 'addresses "{ns_ip_list}".',
           @_;
     },
     DS13_ALGO_NOT_SIGNED_SOA => sub {
         __x    # DNSSEC:DS13_ALGO_NOT_SIGNED_SOA
-          'SOA RRset found on nameservers that resolve to IP addresses '
-          . '({ns_ip_list}) is not signed with algorithm {algo_num} ({algo_mnemo}) '
-          . 'present in the DNSKEY RRset.',
+          'The SOA RRset is not signed by algorithm {algo_num} ({algo_mnemo}) '
+          . 'present in the DNSKEY RRset. Fetched from the nameservers with IP '
+          . 'addresses "{ns_ip_list}".',
           @_;
     },
     DS15_HAS_CDNSKEY_NO_CDS => sub {
