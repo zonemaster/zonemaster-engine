@@ -289,21 +289,20 @@ SKIP: {
 # dnssec13
 ###########
 
-$zone = Zonemaster::Engine->zone( 'dnssec09-soa-signature-not-ok.zut-root.rd.nic.fr' );
-zone_gives( 'dnssec13', $zone, [qw{RRSIG_BROKEN}] );
-zone_gives_not('dnssec13', $zone, [qw{ALL_ALGO_SIGNED ALGO_NOT_SIGNED_RRSET RRSET_NOT_SIGNED}] );
+$zone = Zonemaster::Engine->zone( 'dnssec13-algo-not-signed-dnskey.zft-root.rd.nic.fr' );
+zone_gives( 'dnssec13', $zone, [qw{DS13_ALGO_NOT_SIGNED_DNSKEY}] );
+zone_gives_not('dnssec13', $zone, [qw{DS13_ALGO_NOT_SIGNED_NS DS13_ALGO_NOT_SIGNED_SOA}] );
 
-$zone = Zonemaster::Engine->zone( 'dnssec08-dnskey-signature-not-ok.zut-root.rd.nic.fr' );
-zone_gives( 'dnssec13', $zone, [qw{RRSIG_BROKEN}] );
-zone_gives_not('dnssec13', $zone, [qw{ALL_ALGO_SIGNED RRSET_NOT_SIGNED RRSIG_NOT_MATCH_DNSKEY ALGO_NOT_SIGNED_RRSET}] );
+$zone = Zonemaster::Engine->zone( 'dnssec13-algo-not-signed-ns.zft-root.rd.nic.fr' );
+zone_gives( 'dnssec13', $zone, [qw{DS13_ALGO_NOT_SIGNED_NS}] );
+zone_gives_not('dnssec13', $zone, [qw{DS13_ALGO_NOT_SIGNED_DNSKEY DS13_ALGO_NOT_SIGNED_SOA}] );
 
-$zone = Zonemaster::Engine->zone( 'dnssec08-dnskey-not-signed.zut-root.rd.nic.fr' );
-zone_gives( 'dnssec13', $zone, [qw{RRSET_NOT_SIGNED}] );
-zone_gives_not('dnssec13', $zone, [qw{ALL_ALGO_SIGNED RRSIG_NOT_MATCH_DNSKEY ALGO_NOT_SIGNED_RRSET}] );
+$zone = Zonemaster::Engine->zone( 'dnssec13-algo-not-signed-soa.zft-root.rd.nic.fr' );
+zone_gives( 'dnssec13', $zone, [qw{DS13_ALGO_NOT_SIGNED_SOA}] );
+zone_gives_not('dnssec13', $zone, [qw{DS13_ALGO_NOT_SIGNED_DNSKEY DS13_ALGO_NOT_SIGNED_NS}] );
 
 $zone = Zonemaster::Engine->zone( 'afnic.fr' );
-zone_gives( 'dnssec13', $zone, [qw{ALL_ALGO_SIGNED}] );
-zone_gives_not('dnssec13', $zone, [qw{ALGO_NOT_SIGNED_RRSET NO_RESPONSE NO_RESPONSE_RRSET RRSET_NOT_SIGNED RRSIG_BROKEN RRSIG_NOT_MATCH_DNSKEY}] );
+zone_gives_not('dnssec13', $zone, [qw{DS13_ALGO_NOT_SIGNED_DNSKEY DS13_ALGO_NOT_SIGNED_NS DS13_ALGO_NOT_SIGNED_SOA}] );
 
 ###########
 # dnssec15
