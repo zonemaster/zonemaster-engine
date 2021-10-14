@@ -53,32 +53,8 @@ SKIP: {
     ok( $tag{NO_RESPONSE_DS}, 'NO_RESPONSE_DS' );
 }
 
-#dnssec11
-$zone = Zonemaster::Engine->zone( 'nic.se' );
-zone_gives( 'dnssec11', $zone, ['DELEGATION_SIGNED'] );
-
-$zone = Zonemaster::Engine->zone( 'seb.se' );
-zone_gives( 'dnssec11', $zone, ['DELEGATION_NOT_SIGNED'] );
-
-$zone = Zonemaster::Engine->zone( 'dnssec07-ds-but-not-dnskey.zut-root.rd.nic.fr' );
-zone_gives( 'dnssec11', $zone, ['DELEGATION_NOT_SIGNED'] );
-
-$zone = Zonemaster::Engine->zone( 'dnssec08-no-keys-or-no-sigs-1.zut-root.rd.nic.fr.' );
-zone_gives( 'dnssec11', $zone, ['DELEGATION_NOT_SIGNED'] );
-
-SKIP: {
-    skip "Need to configure another zone for this test case.", 1;
-
-    $zone = Zonemaster::Engine->zone( 'dnssec08-dnskey-signature-not-ok.zut-root.rd.nic.fr' );
-    zone_gives( 'dnssec11', $zone, ['DELEGATION_NOT_SIGNED'] );
-}
-
 $zone = Zonemaster::Engine->zone( 'rsa4096.nxdomain.se' );
 zone_gives_not( 'dnssec03', $zone, ['TOO_MANY_ITERATIONS'] );
-
-$zone = Zonemaster::Engine->zone( 'daemonic.se' );
-zone_gives( 'dnssec11', $zone, ['DELEGATION_SIGNED']);
-zone_gives_not( 'dnssec11', $zone, ['DELEGATION_NOT_SIGNED']);
 
 # dnssec10
 SKIP: {

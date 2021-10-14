@@ -48,8 +48,9 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
 }
 
 # Find a way for dnssec06 which have a dependence...
+# Find a way for dnssec11
 my ($json, $profile_test);
-foreach my $testcase ( qw{dnssec01 dnssec02 dnssec03 dnssec04 dnssec05 dnssec07 dnssec08 dnssec09 dnssec10 dnssec11 dnssec13 dnssec14 dnssec15 dnssec16 dnssec17} ) {
+foreach my $testcase ( qw{dnssec01 dnssec02 dnssec03 dnssec04 dnssec05 dnssec07 dnssec08 dnssec09 dnssec10 dnssec13 dnssec14 dnssec15 dnssec16 dnssec17} ) {
     $json         = read_file( 't/profiles/Test-'.$testcase.'-only.json' );
     $profile_test = Zonemaster::Engine::Profile->from_json( $json );
     Zonemaster::Engine::Profile->effective->merge( $profile_test );
@@ -284,6 +285,26 @@ SKIP: {
 #ok( ( grep { $_->string =~ /error=no GOST support/s } @res ), $zone->name->string . " no GOST support" );
 #@res = Zonemaster::Engine->test_method( 'DNSSEC', 'dnssec10', $zone );
 #ok( ( grep { $_->string =~ /error=no GOST support/s } @res ), $zone->name->string . " no GOST support" );
+
+
+###########
+# dnssec11
+###########
+$zone = Zonemaster::Engine->zone( 'zone-does-not-exist.zut-root.rd.nic.fr' );
+zone_gives( 'dnssec11', $zone, [qw{DS11_UNDETERMINED_DS}] );
+zone_gives_not( 'dnssec11', $zone, [qw{DS11_INCONSISTENT_DS DS11_INCONSISTENT_SIGNED_ZONE DS11_UNDETERMINED_SIGNED_ZONE DS11_PARENT_WITHOUT_DS DS11_PARENT_WITH_DS DS11_NS_WITH_SIGNED_ZONE DS11_NS_WITH_UNSIGNED_ZONE DS11_DS_BUT_UNSIGNED_ZONE}] );
+
+$zone = Zonemaster::Engine->zone( 'dnssec11-inconsistent-ds.dnssec11-parent.zft-root.rd.nic.fr' );
+zone_gives( 'dnssec11', $zone, [qw{DS11_INCONSISTENT_DS DS11_PARENT_WITHOUT_DS DS11_PARENT_WITH_DS}] );
+zone_gives_not( 'dnssec11', $zone, [qw{DS11_INCONSISTENT_SIGNED_ZONE DS11_UNDETERMINED_DS DS11_UNDETERMINED_SIGNED_ZONE DS11_NS_WITH_SIGNED_ZONE DS11_NS_WITH_UNSIGNED_ZONE DS11_DS_BUT_UNSIGNED_ZONE}] );
+
+$zone = Zonemaster::Engine->zone( 'dnssec11-ds-but-unsigned.zft-root.rd.nic.fr' );
+zone_gives( 'dnssec11', $zone, [qw{DS11_DS_BUT_UNSIGNED_ZONE}] );
+zone_gives_not( 'dnssec11', $zone, [qw{DS11_INCONSISTENT_DS DS11_INCONSISTENT_SIGNED_ZONE DS11_UNDETERMINED_DS DS11_UNDETERMINED_SIGNED_ZONE DS11_PARENT_WITHOUT_DS DS11_PARENT_WITH_DS DS11_NS_WITH_SIGNED_ZONE DS11_NS_WITH_UNSIGNED_ZONE}] );
+
+$zone = Zonemaster::Engine->zone( 'dnssec11-inconsistent-dnskey.zft-root.rd.nic.fr' );
+zone_gives( 'dnssec11', $zone, [qw{DS11_INCONSISTENT_SIGNED_ZONE DS11_NS_WITH_UNSIGNED_ZONE DS11_NS_WITH_SIGNED_ZONE}] );
+zone_gives_not( 'dnssec11', $zone, [qw{DS11_INCONSISTENT_DS DS11_UNDETERMINED_DS DS11_UNDETERMINED_SIGNED_ZONE DS11_PARENT_WITHOUT_DS DS11_PARENT_WITH_DS DS11_DS_BUT_UNSIGNED_ZONE}] );
 
 ###########
 # dnssec13

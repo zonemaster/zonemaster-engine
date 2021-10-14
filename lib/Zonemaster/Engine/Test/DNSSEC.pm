@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare( "v1.1.47" );
+use version; our $VERSION = version->declare( "v1.1.48" );
 
 ###
 ### This test module implements DNSSEC tests.
@@ -434,10 +434,15 @@ sub metadata {
         ],
         dnssec11 => [
             qw(
-              DELEGATION_NOT_SIGNED
-              DELEGATION_SIGNED
-              TEST_CASE_END
-              TEST_CASE_START
+              DS11_INCONSISTENT_DS
+              DS11_INCONSISTENT_SIGNED_ZONE
+              DS11_UNDETERMINED_DS
+              DS11_UNDETERMINED_SIGNED_ZONE
+              DS11_PARENT_WITHOUT_DS
+              DS11_PARENT_WITH_DS
+              DS11_NS_WITH_SIGNED_ZONE
+              DS11_NS_WITH_UNSIGNED_ZONE
+              DS11_DS_BUT_UNSIGNED_ZONE
               ),
         ],
         dnssec13 => [
@@ -564,10 +569,6 @@ Readonly my %TAG_DESCRIPTIONS => (
           . 'failed to be verified with error \'{error}\' (a DS record with same tag is present in the '
           . 'parent zone).',
           @_;
-    },
-    DELEGATION_NOT_SIGNED => sub {
-        __x    # DNSSEC:DELEGATION_NOT_SIGNED
-          "Delegation from parent to child is not properly signed ({reason}).", @_;
     },
     DELEGATION_SIGNED => sub {
         __x    # DNSSEC:DELEGATION_SIGNED
@@ -2074,74 +2075,185 @@ sub dnssec10 {
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub dnssec10
 
-### The error reporting in dnssec11 is deliberately simple, since the point of
-### the test case is to give a pass/fail test for the delegation step from the
-### parent as a whole.
 sub dnssec11 {
     my ( $class, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+    my @undetermined_ds;
+    my @no_ds_record;
+    my @has_ds_record;
+    my $continue_with_child_tests = 1;
 
-    my $ds_p = $zone->parent->query_auth( $zone->name->string, 'DS' );
-    if ( not $ds_p ) {
-        push @results, info( DELEGATION_NOT_SIGNED => { keytag => 'none', reason => 'no_ds_packet' } );
-        return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
-    }
+    my $parent     = Zonemaster::Engine::TestMethods->method1( $zone );
+    my @nss_parent = @{ $parent->ns };
+    my %nss        = map { $_->name->string . '/' . $_->address->short => $_ } @nss_parent;
+    my %ip_already_processed;
 
-    my $dnskey_p = $zone->query_auth( $zone->name->string, 'DNSKEY', { dnssec => 1 } );
-    if ( not $dnskey_p ) {
-        push @results, info( DELEGATION_NOT_SIGNED => { keytag => 'none', reason => 'no_dnskey_packet' } );
-        return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
-    }
+    for my $nss_key ( sort keys %nss ) {
+        my $ns = $nss{$nss_key};
 
-    my %ds = map { $_->keytag => $_ } $ds_p->get_records_for_name( 'DS', $zone->name->string );
-    my %dnskey = map { $_->keytag => $_ } $dnskey_p->get_records_for_name( 'DNSKEY', $zone->name->string );
-    my %rrsig  = map { $_->keytag => $_ } $dnskey_p->get_records_for_name( 'RRSIG',  $zone->name->string );
+        next if exists $ip_already_processed{$ns->address->short};
+        $ip_already_processed{$ns->address->short} = 1;
 
-    my $pass = undef;
-    my @fail;
-    if ( scalar( keys %ds ) > 0 ) {
-        foreach my $tag ( keys %ds ) {
-            my $ds  = $ds{$tag};
-            my $key = $dnskey{$tag};
-            my $sig = $rrsig{$tag};
-
-            if ( $key ) {
-                if ( $ds->verify( $key ) ) {
-                    if ( $sig ) {
-                        my $msg = '';
-                        my $ok =
-                          $sig->verify_time( [ values %dnskey ], [ values %dnskey ], $dnskey_p->timestamp, $msg );
-                        if ( $ok ) {
-                            $pass = $tag;
-                        }
-                        else {
-                            if ( $sig->algorithm >= 12 and $sig->algorithm <= 16 and $msg =~ /Unknown cryptographic algorithm/ ) {
-                                $msg = q{no }. $algo_properties{$sig->algorithm}{description}. q{ support};
-                            }
-                            push @fail, "signature: $msg" ;
-                        }
-                    }
-                    else {
-                        push @fail, 'no_signature';
-                    }
+        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
+            push @results,
+              info(
+                IPV6_DISABLED => {
+                    ns     => $ns->string,
+                    rrtype => q{DS} 
                 }
-                else {
-                    push @fail, 'dnskey_no_match';
+              );
+            next;
+        }
+
+        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
+            push @results,
+              info(
+                IPV4_DISABLED => {
+                    ns     => $ns->string,
+                    rrtype => q{DS}
                 }
-            } ## end if ( $key )
-            else {
-                push @fail, 'no_dnskey';
+              );
+            next;
+        }
+
+        my $ds_p = $ns->query( $zone->name, q{DS}, { dnssec => 1, usevc => 0 } );
+        if ($ds_p->tc) {
+            $ds_p = $ns->query( $zone->name, q{DS}, { dnssec => 1, usevc => 1 } );
+        }
+
+        if ( not $ds_p or $ds_p->rcode ne q{NOERROR} or not $ds_p->aa ) {
+            push @undetermined_ds, $ns->address->short;
+            next;
+        }
+        my @ds = $ds_p->get_records_for_name( q{DS}, $zone->name->string, q{answer} );
+        if ( not scalar @ds ) {
+            push @no_ds_record, $ns->address->short;
+        }
+        else {
+            push @has_ds_record, $ns->address->short;
+        }
+    }
+    undef %ip_already_processed;
+
+    if ( scalar @undetermined_ds and not scalar @no_ds_record and not scalar @has_ds_record ) {
+        push @results, info( DS11_UNDETERMINED_DS => {} );
+        $continue_with_child_tests = 0;
+    }
+    elsif ( scalar @no_ds_record and not scalar @has_ds_record ) {
+        $continue_with_child_tests = 0;
+    }
+    elsif ( scalar @no_ds_record and scalar @has_ds_record ) {
+        push @results, info( DS11_INCONSISTENT_DS => {} );
+        push @results,
+          info(
+            DS11_PARENT_WITHOUT_DS => {
+                ns_ip_list => join( q{;}, sort @no_ds_record )
             }
-        } ## end foreach my $tag ( keys %ds )
-    } ## end if ( scalar( keys %ds ...))
-    else {
-        push @fail, 'no_ds';
+          );
+        push @results,
+          info(
+             DS11_PARENT_WITH_DS => {
+                ns_ip_list => join( q{;}, sort @has_ds_record )
+            }
+          );
     }
 
-    if ( defined $pass ) {
-        push @results, info( DELEGATION_SIGNED => { keytag => $pass } )
-    } else {
-        push @results, info( DELEGATION_NOT_SIGNED => { keytag => 'info', reason => join(';', @fail) } )
+    if ( $continue_with_child_tests ) {
+        my @query_types = qw{SOA DNSKEY};
+        my @undetermined_dnskey;
+        my @no_dnskey_record;
+        my @has_dnskey_record;
+
+        my @nss_del   = @{ Zonemaster::Engine::TestMethods->method4( $zone ) };
+        my @nss_child = @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
+        my %nss       = map { $_->name->string . '/' . $_->address->short => $_ } @nss_del, @nss_child;
+        my %ip_already_processed;
+
+        for my $nss_key ( sort keys %nss ) {
+            my $ns = $nss{$nss_key};
+
+            next if exists $ip_already_processed{$ns->address->short};
+            $ip_already_processed{$ns->address->short} = 1;
+
+            if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
+                push @results, map {
+                  info(
+                    IPV6_DISABLED => {
+                        ns     => $ns->string,
+                        rrtype => $_
+                    }
+                  )
+                } @query_types;
+                next;
+            }
+
+            if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
+                push @results, map {
+                  info(
+                    IPV4_DISABLED => {
+                        ns     => $ns->string,
+                        rrtype => $_
+                    }
+                  )
+                } @query_types;
+                next;
+            }
+
+            my $soa_p = $ns->query( $zone->name, q{SOA}, { usevc => 0 } );
+            if ( not $soa_p ) {
+                next;
+            }
+            if ( $soa_p->rcode ne q{NOERROR} ) {
+                next;
+            }
+            if ( not $soa_p->aa ) {
+                next;
+            }
+            my @soa = $soa_p->get_records_for_name( q{SOA}, $zone->name->string, q{answer} );
+            if ( not scalar @soa ) {
+                next;
+            }
+
+            my $dnskey_p = $ns->query( $zone->name, q{DNSKEY}, { usevc => 0 } );
+            if ( $dnskey_p->tc ) {
+                $dnskey_p = $ns->query( $zone->name, q{DNSKEY}, { usevc => 1 } );
+            }
+
+            if ( not $dnskey_p or $dnskey_p->rcode ne q{NOERROR} or not $dnskey_p->aa ) {
+                push @undetermined_dnskey, $ns->address->short;
+                next;
+            }
+            my @dnskey = $dnskey_p->get_records_for_name( q{DNSKEY}, $zone->name->string, q{answer} );
+            if ( not scalar @dnskey ) {
+                push @no_dnskey_record, $ns->address->short;
+            }
+            else {
+                push @has_dnskey_record, $ns->address->short;
+            }
+        }
+        undef %ip_already_processed;
+
+        if ( scalar @undetermined_dnskey and not scalar @no_dnskey_record and not scalar @has_dnskey_record ) {
+            push @results, info( DS11_UNDETERMINED_SIGNED_ZONE => {} );
+        }
+        elsif ( scalar @no_dnskey_record and not scalar @has_dnskey_record ) {
+            push @results, info( DS11_DS_BUT_UNSIGNED_ZONE => {} );
+        }
+        elsif ( scalar @no_dnskey_record and scalar @has_dnskey_record ) {
+            push @results, info( DS11_INCONSISTENT_SIGNED_ZONE => {} );
+            push @results,
+              info(
+                DS11_NS_WITH_UNSIGNED_ZONE => {
+                    ns_ip_list => join( q{;}, sort @no_dnskey_record )
+                }
+              );
+            push @results,
+              info(
+                  DS11_NS_WITH_SIGNED_ZONE => {
+                    ns_ip_list => join( q{;}, sort @has_dnskey_record )
+                }
+              );
+        }
     }
 
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
