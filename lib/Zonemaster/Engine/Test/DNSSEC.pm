@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare( "v1.1.48" );
+use version; our $VERSION = version->declare( "v1.1.49" );
 
 ###
 ### This test module implements DNSSEC tests.
@@ -570,10 +570,6 @@ Readonly my %TAG_DESCRIPTIONS => (
           . 'parent zone).',
           @_;
     },
-    DELEGATION_SIGNED => sub {
-        __x    # DNSSEC:DELEGATION_SIGNED
-          'Delegation from parent to child is properly signed.', @_;
-    },
     DNSKEY_AND_DS => sub {
         __x    # DNSSEC:DNSKEY_AND_DS
           '{parent} sent a DS record, and {child} a DNSKEY record.', @_;
@@ -629,6 +625,57 @@ Readonly my %TAG_DESCRIPTIONS => (
           'DNSKEY with tag {keytag} and using algorithm {algo_num} '
           . '({algo_descr}) has a size ({keysize}) larger than the maximum one '
           . '({keysizemax}).',
+          @_;
+    },
+    DS11_INCONSISTENT_DS => sub {
+        __x    # DNSSEC:DS11_INCONSISTENT_DS
+          'Parent name servers are inconsistent on the existence of DS.',
+          @_;
+    },
+    DS11_INCONSISTENT_SIGNED_ZONE => sub {
+        __x    # DNSSEC:DS11_INCONSISTENT_SIGNED_ZONE
+          'Name servers for the child zone are inconsistent on whether the '
+          . 'zone is signed or not.',
+          @_;
+    },
+    DS11_UNDETERMINED_DS => sub {
+        __x    # DNSSEC:DS11_UNDETERMINED_DS
+          'It cannot be determined if the parent zone has DS for the child '
+          . 'zone or not.',
+          @_;
+    },
+    DS11_UNDETERMINED_SIGNED_ZONE => sub {
+        __x    # DNSSEC:DS11_UNDETERMINED_SIGNED_ZONE
+          'It cannot be determined if the child zone is signed or not.',
+          @_;
+    },
+    DS11_PARENT_WITHOUT_DS => sub {
+        __x    # DNSSEC:DS11_PARENT_WITHOUT_DS
+          'No DS record for the child zone found on nameservers with IP '
+          . 'addresses "{ns_ip_list}".',
+          @_;
+    },
+    DS11_PARENT_WITH_DS => sub {
+        __x    # DNSSEC:DS11_PARENT_WITH_DS
+          'DS record for the child zone found on nameservers with IP addresses '
+          . '"{ns_ip_list}".',
+          @_;
+    },
+    DS11_NS_WITH_SIGNED_ZONE => sub {
+        __x    # DNSSEC:DS11_NS_WITH_SIGNED_ZONE
+          'Signed child zone found on nameservers with IP addresses '
+          . '"{ns_ip_list}".',
+          @_;
+    },
+    DS11_NS_WITH_UNSIGNED_ZONE => sub {
+        __x    # DNSSEC:DS11_NS_WITH_UNSIGNED_ZONE
+          'Unigned child zone found on nameservers with IP addresses '
+          . '"{ns_ip_list}".',
+          @_;
+    },
+    DS11_DS_BUT_UNSIGNED_ZONE => sub {
+        __x    # DNSSEC:DS11_DS_BUT_UNSIGNED_ZONE
+          'The child zone is unsigned, but the parent zone has DS record.',
           @_;
     },
     DS13_ALGO_NOT_SIGNED_DNSKEY => sub {
