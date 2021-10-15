@@ -95,8 +95,6 @@ zone_gives( 'dnssec06', $zone, [q{EXTRA_PROCESSING_OK}] );
 zone_gives( 'dnssec07', $zone, [q{DNSKEY_AND_DS}] );
 zone_gives_not( 'dnssec07', $zone, [qw{NEITHER_DNSKEY_NOR_DS DNSKEY_BUT_NOT_DS DS_BUT_NOT_DNSKEY}] );
 
-zone_gives( 'dnssec08', $zone, [qw{DNSKEY_SIGNATURE_OK DNSKEY_SIGNED}] );
-
 zone_gives( 'dnssec09', $zone, [qw{SOA_SIGNATURE_OK SOA_SIGNED}] );
 
 zone_gives( 'dnssec10', $zone, [qw{HAS_NSEC}] );
@@ -246,23 +244,33 @@ zone_gives_not( 'dnssec07', $zone, [qw{NEITHER_DNSKEY_NOR_DS DNSKEY_BUT_NOT_DS D
 # dnssec08
 ###########
 $zone = Zonemaster::Engine->zone( 'dnssec08-dnskey-signature-not-ok-broken.zut-root.rd.nic.fr' );
-zone_gives( 'dnssec08', $zone, [qw{DNSKEY_NOT_SIGNED DNSKEY_SIGNATURE_NOT_OK}] );
+zone_gives( 'dnssec08', $zone, [qw{DS08_DNSKEY_RRSIG_EXPIRED DS08_RRSIG_NOT_VALID_BY_DNSKEY}] );
+zone_gives_not( 'dnssec08', $zone, [qw{DS08_ALGO_NOT_SUPPORTED_BY_ZM DS08_DNSKEY_RRSIG_NOT_YET_VALID DS08_MISSING_RRSIG_IN_RESPONSE DS08_NO_MATCHING_DNSKEY}] );
 
 $zone = Zonemaster::Engine->zone( 'dnssec08-dnskey-signature-not-ok.zut-root.rd.nic.fr' );
-zone_gives( 'dnssec08', $zone, [qw{DNSKEY_SIGNED DNSKEY_SIGNATURE_NOT_OK DNSKEY_SIGNATURE_OK}] );
+zone_gives( 'dnssec08', $zone, [qw{DS08_RRSIG_NOT_VALID_BY_DNSKEY}] );
+zone_gives_not( 'dnssec08', $zone, [qw{DS08_DNSKEY_RRSIG_EXPIRED DS08_ALGO_NOT_SUPPORTED_BY_ZM DS08_DNSKEY_RRSIG_NOT_YET_VALID DS08_MISSING_RRSIG_IN_RESPONSE DS08_NO_MATCHING_DNSKEY}] );
 
-$zone = Zonemaster::Engine->zone( 'dnssec08-no-keys-or-no-sigs-1.zut-root.rd.nic.fr' );
-zone_gives( 'dnssec08', $zone, [q{NO_KEYS_OR_NO_SIGS}] );
-zone_gives( 'dnssec09', $zone, [q{NO_KEYS_OR_NO_SIGS_OR_NO_SOA}] );
+$zone = Zonemaster::Engine->zone( 'dnssec08-dnskey-not-signed.zut-root.rd.nic.fr' );
+zone_gives( 'dnssec08', $zone, [q{DS08_MISSING_RRSIG_IN_RESPONSE}] );
+zone_gives_not( 'dnssec08', $zone, [qw{DS08_ALGO_NOT_SUPPORTED_BY_ZM DS08_DNSKEY_RRSIG_EXPIRED DS08_DNSKEY_RRSIG_NOT_YET_VALID DS08_NO_MATCHING_DNSKEY DS08_RRSIG_NOT_VALID_BY_DNSKEY}] );
 
-$zone = Zonemaster::Engine->zone( 'dnssec08-no-keys-or-no-sigs-2.zut-root.rd.nic.fr' );
-zone_gives( 'dnssec08', $zone, [q{NO_KEYS_OR_NO_SIGS}] );
+$zone = Zonemaster::Engine->zone( 'dnssec08-dnskey-rrsig-not-yet-valid.zft-root.rd.nic.fr' );
+zone_gives( 'dnssec08', $zone, [q{DS08_DNSKEY_RRSIG_NOT_YET_VALID}] );
+zone_gives_not( 'dnssec08', $zone, [qw{DS08_ALGO_NOT_SUPPORTED_BY_ZM DS08_DNSKEY_RRSIG_EXPIRED DS08_MISSING_RRSIG_IN_RESPONSE DS08_NO_MATCHING_DNSKEY DS08_RRSIG_NOT_VALID_BY_DNSKEY}] );
+
+$zone = Zonemaster::Engine->zone( 'dnssec08-rrsig-no-matching-dnskey.zft-root.rd.nic.fr' );
+zone_gives( 'dnssec08', $zone, [qw{DS08_NO_MATCHING_DNSKEY DS08_RRSIG_NOT_VALID_BY_DNSKEY}] );
+zone_gives_not( 'dnssec08', $zone, [qw{DS08_ALGO_NOT_SUPPORTED_BY_ZM DS08_DNSKEY_RRSIG_EXPIRED DS08_DNSKEY_RRSIG_NOT_YET_VALID DS08_MISSING_RRSIG_IN_RESPONSE}] );
 
 ###########
 # dnssec09
 ###########
 $zone = Zonemaster::Engine->zone( 'dnssec09-soa-signature-not-ok.zut-root.rd.nic.fr' );
 zone_gives( 'dnssec09', $zone, [qw{SOA_NOT_SIGNED SOA_SIGNATURE_NOT_OK}] );
+
+$zone = Zonemaster::Engine->zone( 'dnssec08-no-keys-or-no-sigs-1.zut-root.rd.nic.fr' );
+zone_gives( 'dnssec09', $zone, [q{NO_KEYS_OR_NO_SIGS_OR_NO_SOA}] );
 
 ###########
 # dnssec10
