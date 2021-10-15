@@ -651,13 +651,13 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     DS11_PARENT_WITHOUT_DS => sub {
         __x    # DNSSEC:DS11_PARENT_WITHOUT_DS
-          'No DS record for the child zone found on nameservers with IP '
+          'No DS record for the child zone found on parent nameservers with IP '
           . 'addresses "{ns_ip_list}".',
           @_;
     },
     DS11_PARENT_WITH_DS => sub {
         __x    # DNSSEC:DS11_PARENT_WITH_DS
-          'DS record for the child zone found on nameservers with IP addresses '
+          'DS record for the child zone found on parent nameservers with IP addresses '
           . '"{ns_ip_list}".',
           @_;
     },
@@ -669,7 +669,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     DS11_NS_WITH_UNSIGNED_ZONE => sub {
         __x    # DNSSEC:DS11_NS_WITH_UNSIGNED_ZONE
-          'Unigned child zone found on nameservers with IP addresses '
+          'Unsigned child zone found on nameservers with IP addresses '
           . '"{ns_ip_list}".',
           @_;
     },
@@ -2164,7 +2164,7 @@ sub dnssec11 {
         }
 
         my $ds_p = $ns->query( $zone->name, q{DS}, { dnssec => 1, usevc => 0 } );
-        if ($ds_p->tc) {
+        if ($ds_p and $ds_p->tc) {
             $ds_p = $ns->query( $zone->name, q{DS}, { dnssec => 1, usevc => 1 } );
         }
 
