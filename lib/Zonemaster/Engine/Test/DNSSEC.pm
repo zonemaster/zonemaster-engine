@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare( "v1.1.49" );
+use version; our $VERSION = version->declare( "v1.1.50" );
 
 ###
 ### This test module implements DNSSEC tests.
@@ -390,13 +390,12 @@ sub metadata {
         ],
         dnssec08 => [
             qw(
-              DNSKEY_SIGNATURE_OK
-              DNSKEY_SIGNATURE_NOT_OK
-              DNSKEY_SIGNED
-              DNSKEY_NOT_SIGNED
-              NO_KEYS_OR_NO_SIGS
-              TEST_CASE_END
-              TEST_CASE_START
+              DS08_ALGO_NOT_SUPPORTED_BY_ZM
+              DS08_DNSKEY_RRSIG_EXPIRED
+              DS08_DNSKEY_RRSIG_NOT_YET_VALID
+              DS08_MISSING_RRSIG_IN_RESPONSE
+              DS08_NO_MATCHING_DNSKEY
+              DS08_RRSIG_NOT_VALID_BY_DNSKEY
               )
         ],
         dnssec09 => [
@@ -590,22 +589,6 @@ Readonly my %TAG_DESCRIPTIONS => (
           . 'has not ZONE bit set although DS with same tag is present in parent.',
           @_;
     },
-    DNSKEY_NOT_SIGNED => sub {
-        __x    # DNSSEC:DNSKEY_NOT_SIGNED
-          'The apex DNSKEY RRset was not correctly signed.', @_;
-    },
-    DNSKEY_SIGNATURE_NOT_OK => sub {
-        __x    # DNSSEC:DNSKEY_SIGNATURE_NOT_OK
-          'Signature for DNSKEY with tag {keytag} failed to verify with error \'{error}\'.', @_;
-    },
-    DNSKEY_SIGNATURE_OK => sub {
-        __x    # DNSSEC:DNSKEY_SIGNATURE_OK
-          'A signature for DNSKEY with tag {keytag} was correctly signed.', @_;
-    },
-    DNSKEY_SIGNED => sub {
-        __x    # DNSSEC:DNSKEY_SIGNED
-          'The apex DNSKEY RRset was correcly signed.', @_;
-    },
     DNSKEY_SMALLER_THAN_REC => sub {
         __x    # DNSSEC:DNSKEY_SMALLER_THAN_REC
           'DNSKEY with tag {keytag} and using algorithm {algo_num} '
@@ -625,6 +608,45 @@ Readonly my %TAG_DESCRIPTIONS => (
           'DNSKEY with tag {keytag} and using algorithm {algo_num} '
           . '({algo_descr}) has a size ({keysize}) larger than the maximum one '
           . '({keysizemax}).',
+          @_;
+    },
+    DS08_ALGO_NOT_SUPPORTED_BY_ZM => sub {
+        __x    # DNSSEC:DS08_ALGO_NOT_SUPPORTED_BY_ZM
+          'DNSKEY with tag {keytag} uses unsupported algorithm {algo_num} '
+          . '({algo_mnemo}) by this installation of Zonemaster. Fetched from '
+          . 'the nameservers with IP addresses "{ns_ip_list}".',
+          @_;
+    },
+    DS08_DNSKEY_RRSIG_EXPIRED => sub {
+        __x    # DNSSEC:DS08_DNSKEY_RRSIG_EXPIRED
+          'RRSIG with keytag {keytag} and covering type DNSKEY has already expired. '
+          . 'Fetched from the nameservers with IP addresses "{ns_ip_list}".',
+          @_;
+    },
+    DS08_DNSKEY_RRSIG_NOT_YET_VALID => sub {
+        __x    # DNSSEC:DS08_DNSKEY_RRSIG_NOT_YET_VALID
+          'RRSIG with keytag {keytag} and covering type DNSKEY has inception date in '
+          . 'the future. Fetched from the nameservers with IP addresses "{ns_ip_list}".',
+          @_;
+    },
+    DS08_MISSING_RRSIG_IN_RESPONSE => sub {
+        __x    # DNSSEC:DS08_MISSING_RRSIG_IN_RESPONSE
+          'The DNSKEY RRset is not signed, which is against expectation. Fetched '
+          . 'from the nameservers with IP addresses "{ns_ip_list}".',
+          @_;
+    },
+    DS08_NO_MATCHING_DNSKEY => sub {
+        __x    # DNSSEC:DS08_NO_MATCHING_DNSKEY
+          'The DNSKEY RRset is signed with an RRSIG with tag {keytag} which does '
+          . 'not match any DNSKEY record. Fetched from the nameservers with IP '
+          . 'addresses "{ns_ip_list}".',
+          @_;
+    },
+    DS08_RRSIG_NOT_VALID_BY_DNSKEY => sub {
+        __x    # DNSSEC:DS08_RRSIG_NOT_VALID_BY_DNSKEY
+          'The DNSKEY RRset is signed with an RRSIG with tag {keytag} which cannot '
+          . 'be validated by the matching DNSKEY. Fetched from the nameservers with IP '
+          . 'addresses "{ns_ip_list}".',
           @_;
     },
     DS11_INCONSISTENT_DS => sub {
@@ -962,10 +984,6 @@ Readonly my %TAG_DESCRIPTIONS => (
     NO_DNSKEY => sub {
         __x    # DNSSEC:NO_DNSKEY
           'No DNSKEYs were returned.', @_;
-    },
-    NO_KEYS_OR_NO_SIGS => sub {
-        __x    # DNSSEC:NO_KEYS_OR_NO_SIGS
-          'Cannot test DNSKEY signatures, because we got {keys} DNSKEY records and {sigs} RRSIG records.', @_;
     },
     NO_KEYS_OR_NO_SIGS_OR_NO_SOA => sub {
         __x    # DNSSEC:NO_KEYS_OR_NO_SIGS_OR_NO_SOA
@@ -1786,64 +1804,154 @@ sub dnssec07 {
 sub dnssec08 {
     my ( $self, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+    my @dnskey_without_rrsig;
+    my %dnskey_rrsig_not_yet_valid;
+    my %dnskey_rrsig_expired;
+    my %no_matching_dnskey;
+    my %rrsig_not_valid_by_dnskey;
+    my %algo_not_supported_by_zm;
 
-    my $dnskey_p = $zone->query_one( $zone->name, 'DNSKEY', { dnssec => 1 } );
-    if ( not $dnskey_p ) {
-        return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
-    }
-    my @dnskeys = $dnskey_p->get_records( 'DNSKEY', 'answer' );
-    my @sigs    = $dnskey_p->get_records( 'RRSIG',  'answer' );
+    my @nss_del   = @{ Zonemaster::Engine::TestMethods->method4( $zone ) };
+    my @nss_child = @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
+    my %nss       = map { $_->name->string . '/' . $_->address->short => $_ } @nss_del, @nss_child;
+    my %ip_already_processed;
 
-    if ( @dnskeys == 0 or @sigs == 0 ) {
-        push @results,
-          info(
-            NO_KEYS_OR_NO_SIGS => {
-                keys => scalar( @dnskeys ),
-                sigs => scalar( @sigs ),
-            }
-          );
-        return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
-    }
+    for my $nss_key ( sort keys %nss ) {
+        my $ns = $nss{$nss_key};
 
-    my $ok = undef;
-    foreach my $sig ( @sigs ) {
-        my $msg  = q{};
+        next if exists $ip_already_processed{$ns->address->short};
+        $ip_already_processed{$ns->address->short} = 1;
+
+        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
+            push @results,
+              info(
+                IPV6_DISABLED => {
+                    ns     => $ns->string,
+                    rrtype => q{DNSKEY}
+                }
+              );
+            next;
+        }
+
+        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
+            push @results,
+              info(
+                IPV4_DISABLED => {
+                    ns     => $ns->string,
+                    rrtype => q{DNSKEY}
+                }
+              );
+            next;
+        }
+
+        my $dnskey_p = $ns->query( $zone->name, q{DNSKEY}, { dnssec => 1 } );
+        if ( not $dnskey_p ) {
+            next;
+        }
+        if ( $dnskey_p->rcode ne q{NOERROR} ) {
+            next;
+        }
+        if ( not $dnskey_p->aa ) {
+            next;
+        }
+
+        my @dnskey_records = $dnskey_p->get_records_for_name( q{DNSKEY}, $zone->name->string, q{answer} );
+        if ( not scalar @dnskey_records ) {
+            next;
+        }
+        @dnskey_records = $dnskey_p->get_records( q{DNSKEY},  q{answer} );
+        my @rrsig_records = $dnskey_p->get_records( q{RRSIG},  q{answer} );
+
+        if ( not scalar @rrsig_records ) {
+            push @dnskey_without_rrsig, $ns->address->short;
+            next;
+        }
+
         my $time = $dnskey_p->timestamp;
-        if ( $sig->verify_time( \@dnskeys, \@dnskeys, $time, $msg ) ) {
-            push @results,
-              info(
-                DNSKEY_SIGNATURE_OK => {
-                    keytag => $sig->keytag,
-                }
-              );
-            $ok = $sig->keytag;
-        }
-        else {
-            if ( $sig->algorithm >= 12 and $sig->algorithm <= 16 and $msg =~ /Unknown cryptographic algorithm/ ) {
-                $msg = q{no }. $algo_properties{$sig->algorithm}{description}. q{ support};
+        foreach my $rrsig_record ( @rrsig_records ) {
+            if ( $rrsig_record->inception > $time ) {
+                push @{ $dnskey_rrsig_not_yet_valid{$rrsig_record->keytag} }, $ns->address->short;
             }
-            push @results,
-              info(
-                DNSKEY_SIGNATURE_NOT_OK => {
-                    keytag => $sig->keytag,
-                    error  => $msg,
-                    time   => $time,
+            elsif ( $rrsig_record->expiration < $time ) {
+                push @{ $dnskey_rrsig_expired{$rrsig_record->keytag} }, $ns->address->short;
+            }
+            else {
+                my $msg = q{};
+                my $validate = $rrsig_record->verify_time( \@dnskey_records, \@dnskey_records, $time, $msg );
+                # Ajouter dans %algo_not_supported_by_zm 
+                if ( not $validate and $msg =~ /Unknown cryptographic algorithm/ ) {
+                    push @{ $algo_not_supported_by_zm{$rrsig_record->keytag}{$rrsig_record->algorithm} }, $ns->address->short;
                 }
-              );
+                elsif ( not scalar grep { $_->keytag == $rrsig_record->keytag } @dnskey_records ) {
+                    push @{ $no_matching_dnskey{$rrsig_record->keytag} }, $ns->address->short;
+                }
+                elsif ( not $validate ) {
+                    push @{ $rrsig_not_valid_by_dnskey{$rrsig_record->keytag} }, $ns->address->short;
+                }
+            }
         }
-    } ## end foreach my $sig ( @sigs )
-
-    if ( defined $ok ) {
+    }
+    if ( scalar @dnskey_without_rrsig ) {
         push @results,
           info(
-            DNSKEY_SIGNED => {
-                keytag => $ok,
+            DS08_MISSING_RRSIG_IN_RESPONSE => {
+                ns_ip_list => join( q{;}, uniq sort @dnskey_without_rrsig )
             }
           );
     }
-    else {
-        push @results,
-          info( DNSKEY_NOT_SIGNED => {} );
+    if ( scalar keys %dnskey_rrsig_not_yet_valid ) {
+        push @results, map {
+          info(
+            DS08_DNSKEY_RRSIG_NOT_YET_VALID => {
+                keytag     => $_,
+                ns_ip_list => join( q{;}, uniq sort @{ $dnskey_rrsig_not_yet_valid{$_} } )
+            }
+          )
+        } keys %dnskey_rrsig_not_yet_valid;
+    }
+    if ( scalar keys %dnskey_rrsig_expired ) {
+        push @results, map {
+          info(
+            DS08_DNSKEY_RRSIG_EXPIRED => {
+                keytag     => $_,
+                ns_ip_list => join( q{;}, uniq sort @{ $dnskey_rrsig_expired{$_} } )
+            }
+          )
+        } keys %dnskey_rrsig_expired;
+    }
+    if ( scalar keys %no_matching_dnskey ) {
+        push @results, map {
+          info(
+            DS08_NO_MATCHING_DNSKEY => {
+                keytag     => $_,
+                ns_ip_list => join( q{;}, uniq sort @{ $no_matching_dnskey{$_} } )
+            }
+          )
+        } keys %no_matching_dnskey;
+    }
+    if ( scalar keys %rrsig_not_valid_by_dnskey ) {
+        push @results, map {
+          info(
+            DS08_RRSIG_NOT_VALID_BY_DNSKEY => {
+                keytag     => $_,
+                ns_ip_list => join( q{;}, uniq sort @{ $rrsig_not_valid_by_dnskey{$_} } )
+            }
+          )
+        } keys %rrsig_not_valid_by_dnskey;
+    }
+    if ( scalar keys %algo_not_supported_by_zm ) {
+        foreach my $keytag ( keys %algo_not_supported_by_zm ) {
+            push @results, map {
+              info(
+                DS08_ALGO_NOT_SUPPORTED_BY_ZM => {
+                    keytag     => $keytag,
+                    algo_num   => $_,
+                    algo_mnemo => $algo_properties{$_}{mnemonic},
+                    ns_ip_list => join( q{;}, uniq sort @{ $algo_not_supported_by_zm{$keytag}{$_} } )
+                }
+              )
+            } keys %{ $algo_not_supported_by_zm{$keytag} }
+        }
     }
 
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
