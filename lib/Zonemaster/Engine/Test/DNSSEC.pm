@@ -631,7 +631,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     DS08_MISSING_RRSIG_IN_RESPONSE => sub {
         __x    # DNSSEC:DS08_MISSING_RRSIG_IN_RESPONSE
-          'The DNSKEY RRset is not signed, which is against expectation. Fetched ',
+          'The DNSKEY RRset is not signed, which is against expectation. Fetched '
           . 'from the nameservers with IP addresses "{ns_ip_list}".',
           @_;
     },
