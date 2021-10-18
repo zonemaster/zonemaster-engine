@@ -2067,7 +2067,6 @@ sub dnssec09 {
             else {
                 my $msg = q{};
                 my $validate = $rrsig_record->verify_time( \@soa_records, \@dnskey_records, $time, $msg );
-                # Ajouter dans %algo_not_supported_by_zm 
                 if ( not $validate and $msg =~ /Unknown cryptographic algorithm/ ) {
                     push @{ $algo_not_supported_by_zm{$rrsig_record->keytag}{$rrsig_record->algorithm} }, $ns->address->short;
                 }
