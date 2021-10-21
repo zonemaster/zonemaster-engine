@@ -1342,7 +1342,15 @@ sub dnssec02 {
             next;
         }
         foreach my $tmp_ds_record ( @tmp_ds_records ) {
-            if ( not grep { $tmp_ds_record->keytag == $_->keytag and $tmp_ds_record->digtype == $_->digtype and $tmp_ds_record->algorithm == $_->algorithm and $tmp_ds_record->hexdigest eq $_->hexdigest } @ds_record ) {
+            if (
+                not grep {
+                          $tmp_ds_record->keytag == $_->keytag
+                      and $tmp_ds_record->digtype == $_->digtype
+                      and $tmp_ds_record->algorithm == $_->algorithm
+                      and $tmp_ds_record->hexdigest eq $_->hexdigest
+                } @ds_record
+              )
+            {
                 push @ds_record, $tmp_ds_record;
             }
         }
