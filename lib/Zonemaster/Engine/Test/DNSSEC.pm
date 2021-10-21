@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare( "v1.1.52" );
+use version; our $VERSION = version->declare( "v1.1.53" );
 
 ###
 ### This test module implements DNSSEC tests.
@@ -2112,7 +2112,6 @@ sub dnssec09 {
         if ( not scalar @dnskey_records ) {
             next;
         }
-        @dnskey_records = $dnskey_p->get_records( q{DNSKEY},  q{answer} );
 
         my $soa_p = $ns->query( $zone->name, q{SOA}, { dnssec => 1, usevc => 0 } );
         if ( not $soa_p ) {
@@ -2129,7 +2128,6 @@ sub dnssec09 {
         if ( not scalar @soa_records ) {
             next;
         }
-        @soa_records = $soa_p->get_records( q{SOA}, q{answer} );
         my @rrsig_records = $soa_p->get_records( q{RRSIG},  q{answer} );
 
         if ( not scalar @rrsig_records ) {
