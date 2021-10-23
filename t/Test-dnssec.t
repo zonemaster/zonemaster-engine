@@ -389,6 +389,10 @@ $zone = Zonemaster::Engine->zone( 'dnssec15-inconsistent-cdnskey-04.zft-root.rd.
 zone_gives( 'dnssec15', $zone, [qw{DS15_HAS_CDNSKEY_NO_CDS DS15_INCONSISTENT_CDNSKEY}] );
 zone_gives_not('dnssec15', $zone, [qw{DS15_HAS_CDS_AND_CDNSKEY DS15_HAS_CDS_NO_CDNSKEY DS15_INCONSISTENT_CDS DS15_MISMATCH_CDS_CDNSKEY DS15_NO_CDS_CDNSKEY}] );
 
+$zone = Zonemaster::Engine->zone( 'dnssec15-mismatch-cds-cdnskey.zft-root.rd.nic.fr' );
+zone_gives( 'dnssec15', $zone, [qw{DS15_HAS_CDS_AND_CDNSKEY DS15_MISMATCH_CDS_CDNSKEY}] );
+zone_gives_not('dnssec15', $zone, [qw{DS15_HAS_CDNSKEY_NO_CDS DS15_HAS_CDS_NO_CDNSKEY DS15_INCONSISTENT_CDNSKEY DS15_INCONSISTENT_CDS DS15_NO_CDS_CDNSKEY}] );
+
 ###########
 # dnssec16
 ###########
