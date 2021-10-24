@@ -2882,7 +2882,7 @@ sub dnssec15 {
             next;
         }
 
-        my $cds_p = $ns->query( $zone->name, 'CDS', { dnssec => 1, usevc => 0 } );
+        my $cds_p = $ns->query( $zone->name, q{CDS}, { dnssec => 1, usevc => 0 } );
         if ( not $cds_p ) {
             next;
         }
@@ -2895,7 +2895,7 @@ sub dnssec15 {
         my @cds_records = $cds_p->get_records( q{CDS}, q{answer} );
         push @{ $cds_rrsets{ $ns->address->short } }, @cds_records;
 
-        my $cdnskey_p = $ns->query( $zone->name, 'CDNSKEY', { dnssec => 1, usevc => 0 } );
+        my $cdnskey_p = $ns->query( $zone->name, q{CDNSKEY}, { dnssec => 1, usevc => 0 } );
         if ( not $cdnskey_p ) {
             next;
         }
