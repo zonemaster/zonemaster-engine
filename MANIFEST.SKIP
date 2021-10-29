@@ -8,6 +8,7 @@
 ^util/
 ^share/Zonemaster-Engine.pot$
 ^t/po-files.t$            # PO files are excluded from dist, so we cannot test them
+^Dockerfile$
 
 #!start included /usr/share/perl/5.20/ExtUtils/MANIFEST.SKIP
 # Avoid version control files.
