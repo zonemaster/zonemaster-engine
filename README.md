@@ -49,6 +49,12 @@ Tag the local base image as the latest version:
 make docker-tag-latest
 ```
 
+Perform smoke test on the local base image:
+
+```sh
+sudo docker run --entrypoint=perl zonemaster/engine:local -MZonemaster::Engine -E 'say join "\n", Zonemaster::Engine->test_module("BASIC", "zonemaster.net")'
+```
+
 ## Documentation
 
 There is full POD coverage of the Perl code. The documentation can be
