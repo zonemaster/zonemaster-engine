@@ -13,6 +13,7 @@ RUN apk add --no-cache \
     perl-io-socket-inet6 \
     perl-list-moreutils \
     perl-locale-msgfmt \
+    perl-lwp-protocol-https \
     perl-module-install \
     perl-moose \
     perl-net-ip \
@@ -22,7 +23,7 @@ RUN apk add --no-cache \
     perl-test-fatal \
     perl-test-pod \
     perl-text-csv \
- && cpanm --no-wget \
+ && cpanm --no-wget --from=https://cpan.metacpan.org/ \
     Email::Valid \
     Locale::TextDomain \
     JSON::PP \
