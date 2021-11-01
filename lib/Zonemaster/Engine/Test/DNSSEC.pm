@@ -2300,7 +2300,7 @@ sub dnssec10 {
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
     # This name use for "Non-Existent Query Name" is not defined as in the specifications
     # If it is not a fixed name, the cache does not work for unit tests
-    my $non_existent_domain_name = $zone->name->prepend( q{xx--test-test-test} );
+    my $non_existent_domain_name = $zone->name->prepend( q{xx--oplk4f3fgh9lksdfhu7h--xx} );
     my @query_types = qw{DNSKEY A};
     my %unsigned_answer;
     my %answer_verify_error;
