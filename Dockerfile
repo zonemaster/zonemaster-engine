@@ -1,7 +1,5 @@
 FROM zonemaster/ldns:local as build
 
-ARG version
-
 RUN apk add --no-cache \
     # Only needed for Readonly::XS
     build-base \
@@ -31,6 +29,8 @@ RUN apk add --no-cache \
     Module::Find \
     MooseX::Singleton \
     Readonly::XS
+
+ARG version
 
 COPY ./Zonemaster-Engine-${version}.tar.gz ./Zonemaster-Engine-${version}.tar.gz
 
