@@ -42,6 +42,7 @@ FROM zonemaster/ldns:local
 
 # Include all the Perl modules we built
 COPY --from=build /usr/local/lib/perl5/site_perl /usr/local/lib/perl5/site_perl
+COPY --from=build /usr/local/share/perl5/site_perl /usr/local/share/perl5/site_perl
 
 RUN apk add --no-cache \
     # All the locales we need and more
