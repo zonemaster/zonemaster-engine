@@ -727,72 +727,89 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     DS10_ANSWER_VERIFY_ERROR => sub {
         __x    # DNSSEC:DS10_ANSWER_VERIFY_ERROR
-          '',
+          'The name "{domain}" of RR type "{rrtype}" is signed by RRSIG, but the signature '
+          . 'or signatures cannot be verified. Fetched from the nameservers with '
+          . 'IP addresses "{ns_ip_list}".',
           @_;
     },
     DS10_HAS_NSEC => sub {
         __x    # DNSSEC:DS10_HAS_NSEC
-          '',
+          'The zone has NSEC records. Fetched from the nameservers with IP '
+          . 'addresses "{ns_ip_list}".',
           @_;
     },
     DS10_HAS_NSEC3 => sub {
         __x    # DNSSEC:DS10_HAS_NSEC3
-          '',
+          'The zone has NSEC3 records. Fetched from the nameservers with IP '
+          . 'addresses "{ns_ip_list}".',
           @_;
     },
     DS10_INCONSISTENT_NSEC_NSEC3 => sub {
         __x    # DNSSEC:DS10_INCONSISTENT_NSEC_NSEC3
-          '',
+          'The zone is inconsistent on NSEC and NSEC3. NSEC is fetched from nameservers '
+          . 'with IP addresses "{ns_ip_list_nsec}". NSEC3 is fetched from nameservers '
+          . 'with IP addresses "{ns_ip_list_nsec3}".',
           @_;
     },
     DS10_MISSING_NSEC_NSEC3 => sub {
         __x    # DNSSEC:DS10_MISSING_NSEC_NSEC3
-          '',
+          'NSEC or NSEC3 is expected but is missing. Fetched from the nameservers with '
+          . 'IP addresses "{ns_ip_list}".',
           @_;
     },
     DS10_MIXED_NSEC_NSEC3 => sub {
         __x    # DNSSEC:DS10_MIXED_NSEC_NSEC3
-          '',
+          'Unexpectedly both NSEC and NSEC3 are reported. Fetched from the nameservers '
+          . 'with IP addresses "{ns_ip_list}".',
           @_;
     },
     DS10_NAME_NOT_COVERED_BY_NSEC => sub {
         __x    # DNSSEC:DS10_NAME_NOT_COVERED_BY_NSEC
-          '',
+          'A non-existent name is not correctly covered by the NSEC records. Fetched from '
+          . 'the nameservers with IP addresses "{ns_ip_list}".',
           @_;
     },
     DS10_NAME_NOT_COVERED_BY_NSEC3 => sub {
         __x    # DNSSEC:DS10_NAME_NOT_COVERED_BY_NSEC3
-          '',
+          'A non-existent name is not correctly covered by the NSEC3 records. Fetched from '
+          . 'the nameservers with IP addresses "{ns_ip_list}".',
           @_;
     },
     DS10_NON_EXISTENT_RESPONSE_ERROR => sub {
         __x    # DNSSEC:DS10_NON_EXISTENT_RESPONSE_ERROR
-          '',
+          'No response or error in response on an expected non-existent name. Fetched from '
+          . 'the nameservers with IP addresses "{ns_ip_list}".',
           @_;
     },
     DS10_NSEC3_MISSING_SIGNATURE => sub {
         __x    # DNSSEC:DS10_NSEC3_MISSING_SIGNATURE
-          '',
+          'Missing signatures (RRSIG) for the NSEC3 record or records. Fetched from the '
+          . 'nameservers with IP addresses "{ns_ip_list}".',
           @_;
     },
     DS10_NSEC3_RRSIG_VERIFY_ERROR => sub {
         __x    # DNSSEC:DS10_NSEC3_RRSIG_VERIFY_ERROR
-          '',
+          'The signatures (RRSIG) for the NSEC3 record or records cannot be verified. '
+          . 'Fetched from the nameservers with IP addresses "{ns_ip_list}".',
           @_;
     },
     DS10_NSEC_MISSING_SIGNATURE => sub {
         __x    # DNSSEC:DS10_NSEC_MISSING_SIGNATURE
-          '',
+          'Missing signatures (RRSIG) for the NSEC record or records. Fetched from the '
+          . 'nameservers with IP addresses "{ns_ip_list}".',
           @_;
     },
     DS10_NSEC_RRSIG_VERIFY_ERROR => sub {
         __x    # DNSSEC:DS10_NSEC_RRSIG_VERIFY_ERROR
-          '',
+          'The signatures (RRSIG) for the NSEC record or records cannot be verified. '
+          . 'Fetched from the nameservers with IP addresses "{ns_ip_list}".',
           @_;
     },
     DS10_UNSIGNED_ANSWER => sub {
         __x    # DNSSEC:DS10_UNSIGNED_ANSWER
-          '',
+          'The name "{domain}" of RR type "{rrtype}" in the answer section of the '
+          . 'response is not signed by any RRSIG. Fetched from the nameservers with '
+          . 'IP addresses "{ns_ip_list}".',
           @_;
     },
     DS11_INCONSISTENT_DS => sub {
@@ -2705,8 +2722,8 @@ sub dnssec10 {
         push @results,
           info(
             DS10_INCONSISTENT_NSEC_NSEC3 => {
-                ns_ip_list => join( q{;}, sort keys %has_nsec ),
-                ns_ip_list => join( q{;}, sort keys %has_nsec3 )
+                ns_ip_list_nsec  => join( q{;}, sort keys %has_nsec ),
+                ns_ip_list_nsec3 => join( q{;}, sort keys %has_nsec3 )
             }
           );
     }
