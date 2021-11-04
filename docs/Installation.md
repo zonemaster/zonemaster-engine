@@ -17,10 +17,8 @@ Zonemaster::Engine, see the [declaration of prerequisites].
 This instruction covers the following operating systems:
 
  * [Installation on Rocky Linux]
- * [Installation on Debian]
+ * [Installation on Debian and Ubuntu]
  * [Installation on FreeBSD]
- * [Installation on Ubuntu]
-
 
 ### Installation on Rocky Linux
 
@@ -54,7 +52,7 @@ This instruction covers the following operating systems:
      sudo cpanm Zonemaster::LDNS Zonemaster::Engine
      ```
 
-### Installation on Debian
+### Installation on Debian and Ubuntu
 
 1) Upgrade to latest patch level
 
@@ -126,11 +124,6 @@ This instruction covers the following operating systems:
    ```
 
 
-### Installation on Ubuntu
-
-Use the procedure for [installation on Debian].
-
-
 ## Post-installation sanity check
 
 Make sure Zonemaster::Engine is properly installed.
@@ -153,7 +146,7 @@ The command is expected to take a few seconds and print some results about the d
 [Declaration of prerequisites]: https://github.com/zonemaster/zonemaster#prerequisites
 [EPEL]: https://fedoraproject.org/wiki/EPEL
 [Installation on Rocky Linux]: #installation-on-rocky-linux
-[Installation on Debian]: #installation-on-debian
+[Installation on Debian and Ubuntu]: #installation-on-debian-and-ubuntu
 [Installation on FreeBSD]: #installation-on-freebsd
 [Installation on Ubuntu]: #installation-on-ubuntu
 [JSON-RPC API]: https://github.com/zonemaster/zonemaster-backend/blob/master/docs/API.md
