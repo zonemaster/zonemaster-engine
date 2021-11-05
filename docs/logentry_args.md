@@ -1,25 +1,74 @@
-# Types of information in Zonemaster log objects
+# Argument names for test case messages
 
-## Aggregate list
 
-| Argument    | Type of value        | Description and formatting                                  |
-|-------------|----------------------|-------------------------------------------------------------|
-| algo_descr  | Text                 | The human readable description of a [DNSSEC algorithm].     |
-| algo_mnemo  | Text                 | The mnemonic of a [DNSSEC algorithm].                       |
-| algo_num    | Non-negative integer | The numeric value for a [DNSSEC algorithm].                 |
-| domain      | Domain name          | A domain name. If nsname is also applicable, use that one instead. |
-| keytag      | Non-negative integer | A keytag for a DNSKEY record or a keytag used in a DS or RRSIG record. |
-| mailtarget  | Domain name          | The domain name of the mailserver in an MX RDATA.           |
-| mailtarget_list|List of domain names|A list of name servers, as specified by "mailtarget", separated by ";". |
-| module      | A Zonemaster test module, or `all` | The name of a Zonemaster test module.         |
-| module_list | List of Zonemaster test modules | A list of Zonemaster test modules, separated by ":". |
-| ns          | Domain name and IP address pair | The name and IP address of a name server, separated by "/". |
-| ns_ip       | IP address           | The IP address of a name server.                            |
-| ns_ip_list  | List of IP addresses | A list of name servers, as specified by "ns_ip", separated by ";". |
-| ns_list     | List of domain name and IP address pairs | A list of name servers, as specified by "ns", separated by ";". |
-| nsname      | Domain name          | The domain name of a name server.                           |
-| nsname_list | List of domain names | A list of name servers, as specified by "nsname", separated by ";". |
-| testcase    | A Zonemaster test case, or `all` | A test case identifier.                         |
+## Introduction
+
+This document defines arguments names, and their type of value, for the
+Zonemaster messages. The messages are defined in the Perl modules for the test
+cases, e.g. [Basic.pm], and translated in the PO files, e.g. [fr.po] and [sv.po].
+The arguments are used in the messages, and are there put within curly brackets,
+e.g. as `{ns}`.
+
+When a message is created or updated only argument names defined in this document
+should be used. If there is defined argument name that can be used for the
+message then a new argument name must be defined and this document is to be
+updated.
+
+## Multiple argument of the same type
+
+In the same message an argument name can only be used once. In a case that more
+than one is needed the name can be extended in the following way without adding
+the extended name to this document. The extension is done by adding "_" plus some
+relevant string in lower case "a-z0-9".
+
+As an example, if two arguments of type "List of IP addresses" are to be used in
+a message, then both argument base names should `ns_ip_list`. Let us say that one
+is connected to the NSEC record type and the other to the NSEC3 record type. The
+two argument names could then be `ns_ip_list_nsec` and `ns_ip_list_nsec3`,
+respectively.
+
+Example of use:
+
+> The zone is inconsistent on NSEC and NSEC3. NSEC is fetched from nameservers
+> with IP addresses "{ns_ip_list_nsec}". NSEC3 is fetched from nameservers
+> with IP addresses "{ns_ip_list_nsec3}".
+
+
+
+
+## Defined argument names
+
+When a suitable name and type of value is found in this list, it should also be
+used in new and updated messages.
+
+| Argument name  | Type of value                      | Description and formatting                                  |
+|--------------- |------------------------------------|-------------------------------------------------------------|
+| algo_descr     | Text                               | The human readable description of a [DNSSEC algorithm].     |
+| algo_mnemo     | Text                               | The mnemonic of a [DNSSEC algorithm].                       |
+| algo_num       | Non-negative integer               | The numeric value for a [DNSSEC algorithm].                 |
+| domain         | Domain name                        | A domain name. If nsname is also applicable, use that one instead.|
+| keytag         | Non-negative integer               | A keytag for a DNSKEY record or a keytag used in a DS or RRSIG record.|
+| mailtarget     | Domain name                        | The domain name of the mailserver in an MX RDATA.           |
+| mailtarget_list| List of domain names               |A list of name servers, as specified by "mailtarget", separated by ";".|
+| module         | A Zonemaster test module, or `all` | The name of a Zonemaster test module.                       |
+| module_list    | List of Zonemaster test modules    | A list of Zonemaster test modules, separated by ":".        |
+| ns             | Domain name and IP address pair    | The name and IP address of a name server, separated by "/". |
+| ns_ip          | IP address                         | The IP address of a name server.                            |
+| ns_ip_list     | List of IP addresses               | A list of name servers, as specified by "ns_ip", separated by ";".|
+| ns_list        | List of domain name and IP address pairs | A list of name servers, as specified by "ns", separated by ";".|
+| nsname         | Domain name                        | The domain name of a name server.                           |
+| nsname_list    | List of domain names               | A list of name servers, as specified by "nsname", separated by ";".|
+| testcase       | A Zonemaster test case, or `all`   | A test case identifier.                                     |
+
+
+## Preliminary or proposed names or types
+
+The names in in this are not fully defined. If used it should follow the pattern
+of defined argument names, be fully defined and moved to the list of defined
+argument names.
+
+| Argument name  | Type of value                      | Description and formatting                                  |
+|--------------- |------------------------------------|-------------------------------------------------------------|
 || AS number| An Autonomous Space number for an IP address.|
 || Address record type (A or AAAA)| Used to tell the difference between IPv4 and IPv6.|
 || Count of different SOA RNAMEs.| Total number of different SOA RNAME fields seen.|
@@ -83,235 +132,7 @@
 Message names maked with a question mark should not be considered stable.
 
 
-## List by test module
-
-### Basic
-
-* Domain name
-
-* Domain name label
-
-* Domain name label length
-
-* FQDN
-
-* FQDN length
-
-* Zone name
-
-* Parent zone name
-
-* NS names from parent
-
-* RCODE
-
-* Nameserver name/IP pair
-
-* NS names from child
-
-* RR type
-
-### Address
-
-* Nameserver name
-
-* Nameserver IP
-
-* IP reserved range description
-
-* RFC reference
-
-* IP range
-
-* PTR query name
-
-* List of domain names
-
-### Connectivity
-
-* Nameserver name/IP pair
-
-* RR type
-
-* Nameserver name
-
-* Nameserver IP
-
-* List of AS numbers
-
-* AS number
-
-### Consistency
-
-* Nameserver name/IP pair
-
-* RR type
-
-* Nameserver name
-
-* Nameserver IP
-
-* SOA serial number
-
-* Count of different SOA serial numbers
-
-* List of SOA serial numbers
-
-* Smallest SOA serial number seen
-
-* Largest SOA serial number seen
-
-* SOA RNAME
-
-* Count of different SOA RNAMEs.
-
-* List of SOA RNAMEs.
-
-* SOA refresh
-
-* SOA retry
-
-* SOA expire
-
-* SOA minimum
-
-* Count of different time parameter sets seen
-
-* List of domain names
-
-* List of nameserver name/IP pairs.
-
-* Count of different sets of NS name/IP seen.
-
-### Delegation
-
-* Count of nameservers
-
-* List of domain names
-
-* IP address
-
-* List of IP addresses
-
-* DNS packet size
-
-* Nameserver name/IP pair
-
-* RR type
-
-* Domain name
-
-* Protocol (UDP or TCP)
-
-* Address record type (A or AAAA)
-
-* Count of domain names
-
-### DNSSEC
-
-* Zone name
-
-* IP address
-
-* DS/DNSKEY/RRSIG keytag
-
-* DS digest type
-
-* List of DS/DNSKEY/RRSIG keytags
-
-* List of DS keytags
-
-* List of DNSKEY keytags
-
-* IP address or nothing
-
-* NSEC3 iteration count
-
-* DNSKEY key length
-
-* RRSIG Expiration date
-
-* List of RR types
-
-* Duration in seconds
-
-* DNSKEY algorithm number
-
-* DNSKEY algorithm name
-
-* Number of DNSKEY RRs in packet
-
-* Number of RRSIG RRs in packet
-
-* time_t value when RRSIG validation was attempted
-
-* RRSIG validation error message
-
-* Number of SOA RRs in packet
-
-* RCODE
-
-* DNSSEC delegation verification failure reason
-
-### Nameserver
-
-* Nameserver name
-
-* Nameserver IP
-
-* Domain name
-
-* List of nameserver names
-
-* List of nameserver name/IP pairs
-
-* RR type
-
-* Nameserver name/IP pair
-
-* RCODE
-
-### Syntax
-
-* Domain name
-
-* Domain name label
-
-* SOA RNAME
-
-* TLD
-
-### Zone
-
-* SOA MNAME
-
-* Nameserver IP
-
-* Nameserver name
-
-* Zone name
-
-* List of nameserver name/IP pairs
-
-* SOA refresh
-
-* SOA refresh minimum value
-
-* SOA retry
-
-* SOA retry minimum value
-
-* SOA expire
-
-* SOA expire minimum value
-
-* SOA minimum
-
-* SOA minimum maximum value
-
-* SOA minimum minimum value
-
-* List of MX domain names
-
-
-[DNSSEC algorithm]: https://www.iana.org/assignments/dns-sec-alg-numbers/dns-sec-alg-numbers.xhtml
+[Basic.pm]:                                  ../lib/Zonemaster/Engine/Test/Basic.pm
+[DNSSEC algorithm]:                          https://www.iana.org/assignments/dns-sec-alg-numbers/dns-sec-alg-numbers.xhtml
+[fr.po]:                                     ../share/fr.po
+[sv.po]:                                     ../share/fr.po
