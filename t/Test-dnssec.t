@@ -48,15 +48,14 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
 }
 
 # Find a way for dnssec06 which have a dependence...
-# Find a way for dnssec11
 my ($json, $profile_test);
-foreach my $testcase ( qw{dnssec01 dnssec02 dnssec03 dnssec04 dnssec05 dnssec07 dnssec08 dnssec09 dnssec10 dnssec13 dnssec14 dnssec15 dnssec16 dnssec17 dnssec18} ) {
+foreach my $testcase ( qw{dnssec01 dnssec02 dnssec03 dnssec04 dnssec05 dnssec07 dnssec08 dnssec09 dnssec10 dnssec11 dnssec13 dnssec14 dnssec15 dnssec16 dnssec17 dnssec18} ) {
     $json         = read_file( 't/profiles/Test-'.$testcase.'-only.json' );
     $profile_test = Zonemaster::Engine::Profile->from_json( $json );
     Zonemaster::Engine::Profile->effective->merge( $profile_test );
     my @testcases;
     Zonemaster::Engine->logger->clear_history();
-    foreach my $result ( Zonemaster::Engine->test_module( q{dnssec}, q{nic.se} ) ) {
+    foreach my $result ( Zonemaster::Engine->test_module( q{dnssec}, q{se} ) ) {
         foreach my $trace (@{$result->trace}) {
             push @testcases, grep /Zonemaster::Engine::Test::DNSSEC::dnssec/, @$trace;
         }
@@ -94,12 +93,6 @@ zone_gives( 'dnssec06', $zone, [q{EXTRA_PROCESSING_OK}] );
 
 zone_gives( 'dnssec07', $zone, [q{DNSKEY_AND_DS}] );
 zone_gives_not( 'dnssec07', $zone, [qw{NEITHER_DNSKEY_NOR_DS DNSKEY_BUT_NOT_DS DS_BUT_NOT_DNSKEY}] );
-
-zone_gives( 'dnssec10', $zone, [qw{HAS_NSEC}] );
-zone_gives_not( 'dnssec10', $zone, [qw{BROKEN_DNSSEC HAS_NSEC3 INCONSISTENT_DNSSEC INCONSISTENT_NSEC_NSEC3 MIXED_NSEC_NSEC3 NO_NSEC_NSEC3 NSEC3_COVERS_NOT NSEC3_NOT_SIGNED NSEC3_SIG_VERIFY_ERROR NSEC_COVERS_NOT NSEC_NOT_SIGNED NSEC_SIG_VERIFY_ERROR TEST_ABORTED}] );
-
-zone_gives( 'dnssec10', $zone3, [qw{HAS_NSEC3}] );
-zone_gives_not( 'dnssec10', $zone3, [qw{BROKEN_DNSSEC HAS_NSEC INCONSISTENT_DNSSEC INCONSISTENT_NSEC_NSEC3 MIXED_NSEC_NSEC3 NO_NSEC_NSEC3 NSEC3_COVERS_NOT NSEC3_NOT_SIGNED NSEC3_SIG_VERIFY_ERROR NSEC_COVERS_NOT NSEC_NOT_SIGNED NSEC_SIG_VERIFY_ERROR TEST_ABORTED}] );
 
 ###########
 # dnssec01
@@ -271,15 +264,38 @@ zone_gives_not( 'dnssec09', $zone, [qw{DS09_ALGO_NOT_SUPPORTED_BY_ZM DS09_MISSIN
 ###########
 # dnssec10
 ###########
-SKIP: {
-    skip "Opt-out was tested in former dnssec10 version. Is it somethong we want to test again ?", 2;
+$zone = Zonemaster::Engine->zone( 'dnssec10-non-existent-domain-name-exists-01.zft-root.rd.nic.fr' );
+zone_gives_not( 'dnssec10', $zone, [qw{DS10_ALGO_NOT_SUPPORTED_BY_ZM DS10_ANSWER_VERIFY_ERROR DS10_HAS_NSEC DS10_HAS_NSEC3 DS10_INCONSISTENT_NSEC_NSEC3 DS10_MISSING_NSEC_NSEC3 DS10_MIXED_NSEC_NSEC3 DS10_NAME_NOT_COVERED_BY_NSEC DS10_NAME_NOT_COVERED_BY_NSEC3 DS10_NON_EXISTENT_RESPONSE_ERROR DS10_NSEC3_MISSING_SIGNATURE DS10_NSEC3_RRSIG_VERIFY_ERROR DS10_NSEC_MISSING_SIGNATURE DS10_NSEC_RRSIG_VERIFY_ERROR DS10_UNSIGNED_ANSWER}] );
 
-    $zone = Zonemaster::Engine->zone( 'fr'  );
-    zone_gives( 'dnssec10', $zone, ['HAS_NSEC3_OPTOUT'] );
+$zone = Zonemaster::Engine->zone( 'dnssec10-non-existent-domain-name-exists-02.zft-root.rd.nic.fr' );
+zone_gives_not( 'dnssec10', $zone, [qw{DS10_ALGO_NOT_SUPPORTED_BY_ZM DS10_ANSWER_VERIFY_ERROR DS10_HAS_NSEC DS10_HAS_NSEC3 DS10_INCONSISTENT_NSEC_NSEC3 DS10_MISSING_NSEC_NSEC3 DS10_MIXED_NSEC_NSEC3 DS10_NAME_NOT_COVERED_BY_NSEC DS10_NAME_NOT_COVERED_BY_NSEC3 DS10_NON_EXISTENT_RESPONSE_ERROR DS10_NSEC3_MISSING_SIGNATURE DS10_NSEC3_RRSIG_VERIFY_ERROR DS10_NSEC_MISSING_SIGNATURE DS10_NSEC_RRSIG_VERIFY_ERROR DS10_UNSIGNED_ANSWER}] );
 
-    $zone = Zonemaster::Engine->zone( 'ma'  );
-    zone_gives_not( 'dnssec10', $zone, ['HAS_NSEC3_OPTOUT'] );
-}
+$zone = Zonemaster::Engine->zone( 'dnssec10-non-existent-domain-name-exists-03.zft-root.rd.nic.fr' );
+zone_gives( 'dnssec10', $zone, [qw{DS10_HAS_NSEC DS10_NAME_NOT_COVERED_BY_NSEC}] );
+zone_gives_not( 'dnssec10', $zone, [qw{DS10_ALGO_NOT_SUPPORTED_BY_ZM DS10_ANSWER_VERIFY_ERROR DS10_HAS_NSEC3 DS10_INCONSISTENT_NSEC_NSEC3 DS10_MISSING_NSEC_NSEC3 DS10_MIXED_NSEC_NSEC3 DS10_NAME_NOT_COVERED_BY_NSEC3 DS10_NON_EXISTENT_RESPONSE_ERROR DS10_NSEC3_MISSING_SIGNATURE DS10_NSEC3_RRSIG_VERIFY_ERROR DS10_NSEC_MISSING_SIGNATURE DS10_NSEC_RRSIG_VERIFY_ERROR DS10_UNSIGNED_ANSWER}] );
+
+$zone = Zonemaster::Engine->zone( 'dnssec10-non-existent-domain-name-exists-04.zft-root.rd.nic.fr' );
+zone_gives_not( 'dnssec10', $zone, [qw{DS10_ALGO_NOT_SUPPORTED_BY_ZM DS10_ANSWER_VERIFY_ERROR DS10_HAS_NSEC DS10_HAS_NSEC3 DS10_INCONSISTENT_NSEC_NSEC3 DS10_MISSING_NSEC_NSEC3 DS10_MIXED_NSEC_NSEC3 DS10_NAME_NOT_COVERED_BY_NSEC DS10_NAME_NOT_COVERED_BY_NSEC3 DS10_NON_EXISTENT_RESPONSE_ERROR DS10_NSEC3_MISSING_SIGNATURE DS10_NSEC3_RRSIG_VERIFY_ERROR DS10_NSEC_MISSING_SIGNATURE DS10_NSEC_RRSIG_VERIFY_ERROR DS10_UNSIGNED_ANSWER}] );
+
+$zone = Zonemaster::Engine->zone( 'dnssec10-non-existent-domain-name-exists-05.zft-root.rd.nic.fr' );
+zone_gives( 'dnssec10', $zone, [q{DS10_ANSWER_VERIFY_ERROR}] );
+zone_gives_not( 'dnssec10', $zone, [qw{DS10_ALGO_NOT_SUPPORTED_BY_ZM DS10_HAS_NSEC DS10_HAS_NSEC3 DS10_INCONSISTENT_NSEC_NSEC3 DS10_MISSING_NSEC_NSEC3 DS10_MIXED_NSEC_NSEC3 DS10_NAME_NOT_COVERED_BY_NSEC DS10_NAME_NOT_COVERED_BY_NSEC3 DS10_NON_EXISTENT_RESPONSE_ERROR DS10_NSEC3_MISSING_SIGNATURE DS10_NSEC3_RRSIG_VERIFY_ERROR DS10_NSEC_MISSING_SIGNATURE DS10_NSEC_RRSIG_VERIFY_ERROR DS10_UNSIGNED_ANSWER}] );
+
+$zone = Zonemaster::Engine->zone( 'dnssec11-inconsistent-dnskey.zft-root.rd.nic.fr' );
+zone_gives( 'dnssec10', $zone, [q{DS10_MISSING_NSEC_NSEC3}] );
+zone_gives_not( 'dnssec10', $zone, [qw{DS10_ALGO_NOT_SUPPORTED_BY_ZM DS10_ANSWER_VERIFY_ERROR DS10_HAS_NSEC DS10_HAS_NSEC3 DS10_INCONSISTENT_NSEC_NSEC3 DS10_MIXED_NSEC_NSEC3 DS10_NAME_NOT_COVERED_BY_NSEC DS10_NAME_NOT_COVERED_BY_NSEC3 DS10_NON_EXISTENT_RESPONSE_ERROR DS10_NSEC3_MISSING_SIGNATURE DS10_NSEC3_RRSIG_VERIFY_ERROR DS10_NSEC_MISSING_SIGNATURE DS10_NSEC_RRSIG_VERIFY_ERROR DS10_UNSIGNED_ANSWER}] );
+
+$zone = Zonemaster::Engine->zone( 'dnssec10-inconsistent-nsec-nsec3.zft-root.rd.nic.fr' );
+zone_gives( 'dnssec10', $zone, [q{DS10_INCONSISTENT_NSEC_NSEC3}] );
+zone_gives_not( 'dnssec10', $zone, [qw{DS10_ALGO_NOT_SUPPORTED_BY_ZM DS10_ANSWER_VERIFY_ERROR DS10_HAS_NSEC DS10_HAS_NSEC3 DS10_MISSING_NSEC_NSEC3 DS10_MIXED_NSEC_NSEC3 DS10_NAME_NOT_COVERED_BY_NSEC DS10_NAME_NOT_COVERED_BY_NSEC3 DS10_NON_EXISTENT_RESPONSE_ERROR DS10_NSEC3_MISSING_SIGNATURE DS10_NSEC3_RRSIG_VERIFY_ERROR DS10_NSEC_MISSING_SIGNATURE DS10_NSEC_RRSIG_VERIFY_ERROR DS10_UNSIGNED_ANSWER}] );
+
+$zone = Zonemaster::Engine->zone( 'se' );
+zone_gives( 'dnssec10', $zone, [q{DS10_HAS_NSEC}] );
+zone_gives_not( 'dnssec10', $zone, [qw{DS10_ALGO_NOT_SUPPORTED_BY_ZM DS10_ANSWER_VERIFY_ERROR DS10_HAS_NSEC3 DS10_INCONSISTENT_NSEC_NSEC3 DS10_MISSING_NSEC_NSEC3 DS10_MIXED_NSEC_NSEC3 DS10_NAME_NOT_COVERED_BY_NSEC DS10_NAME_NOT_COVERED_BY_NSEC3 DS10_NON_EXISTENT_RESPONSE_ERROR DS10_NSEC3_MISSING_SIGNATURE DS10_NSEC3_RRSIG_VERIFY_ERROR DS10_NSEC_MISSING_SIGNATURE DS10_NSEC_RRSIG_VERIFY_ERROR DS10_UNSIGNED_ANSWER}] );
+
+$zone = Zonemaster::Engine->zone( 'zonemaster.fr' );
+zone_gives( 'dnssec10', $zone, [q{DS10_HAS_NSEC3}] );
+zone_gives_not( 'dnssec10', $zone, [qw{DS10_ALGO_NOT_SUPPORTED_BY_ZM DS10_ANSWER_VERIFY_ERROR DS10_HAS_NSEC DS10_INCONSISTENT_NSEC_NSEC3 DS10_MISSING_NSEC_NSEC3 DS10_MIXED_NSEC_NSEC3 DS10_NAME_NOT_COVERED_BY_NSEC DS10_NAME_NOT_COVERED_BY_NSEC3 DS10_NON_EXISTENT_RESPONSE_ERROR DS10_NSEC3_MISSING_SIGNATURE DS10_NSEC3_RRSIG_VERIFY_ERROR DS10_NSEC_MISSING_SIGNATURE DS10_NSEC_RRSIG_VERIFY_ERROR DS10_UNSIGNED_ANSWER}] );
 
 # GOST
 #$zone = Zonemaster::Engine->zone( 'caint.su' );
@@ -512,11 +528,6 @@ TODO: {
     ok( $tag{EXTRA_PROCESSING_BROKEN}, q{EXTRA_PROCESSING_BROKEN} );
     # dnssec07 (need complete analyze with broken zone)
     ok( $tag{ADDITIONAL_DNSKEY_SKIPPED}, q{ADDITIONAL_DNSKEY_SKIPPED} );
-    # dnssec10
-    ok( $tag{NSEC_COVERS_NOT},        q{NSEC_COVERS_NOT} );
-    ok( $tag{NSEC_SIG_VERIFY_ERROR},  q{NSEC_SIG_VERIFY_ERROR} );
-    ok( $tag{NSEC_NOT_SIGNED},        q{NSEC_NOT_SIGNED} );
-    ok( $tag{NSEC3_NOT_SIGNED},       q{NSEC3_NOT_SIGNED} );
 }
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
