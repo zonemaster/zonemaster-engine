@@ -40,6 +40,7 @@ test_requires 'Pod::Coverage'     => 0;
 test_requires 'Test::Differences' => 0;
 test_requires 'Test::Exception'   => 0;
 test_requires 'Test::Fatal'       => 0;
+test_requires 'Test::NoWarnings'  => 0;
 test_requires 'Test::Pod'         => 1.22;
 
 # Make all platforms include inc/Module/Install/External.pm
