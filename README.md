@@ -52,7 +52,7 @@ make docker-tag-latest
 Perform smoke test on the local base image:
 
 ```sh
-sudo docker run --entrypoint=perl zonemaster/engine:local -MZonemaster::Engine -E 'say join "\n", Zonemaster::Engine->test_module("BASIC", "zonemaster.net")'
+docker run --rm zonemaster/engine:local perl -MZonemaster::Engine -E 'say join "\n", Zonemaster::Engine->test_module("BASIC", "zonemaster.net")'
 ```
 
 ## Documentation
