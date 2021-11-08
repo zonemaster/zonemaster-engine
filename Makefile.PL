@@ -67,10 +67,10 @@ sub MY::postamble {
 docker-build: dist
 	sudo docker build --tag zonemaster/engine:local --build-arg version=$(VERSION) .
 
-docker-tag-version: docker-build
+docker-tag-version:
 	sudo docker tag zonemaster/engine:local zonemaster/engine:$(VERSION)
 
-docker-tag-latest: docker-build
+docker-tag-latest:
 	sudo docker tag zonemaster/engine:local zonemaster/engine:latest
 
 END_DOCKER
