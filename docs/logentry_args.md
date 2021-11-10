@@ -1,45 +1,48 @@
-# Argument names for test case messages
+# Arguments for test case messages
 
 
 ## Introduction
 
-This document defines arguments names, and their type of value, for the
-Zonemaster messages. The messages are defined in the Perl modules for the test
-cases, e.g. [Basic.pm], and translated in the PO files, e.g. [fr.po] and [sv.po].
-The arguments are used in the messages, and are there put within curly brackets,
-e.g. as `{ns}`.
+This document defines *arguments*. An *argument* is defined with its name, its
+type of value and its usage and formatting. The *arguments* are used in a
+Zonemaster-Engine message. The messages, in the form of *msgid* strings, are
+primarily defined in the Perl modules for the test cases, e.g. [Basic.pm]. The
+*arguments* are also used in the translated messages, in the form of *msgstr*
+strings, in the PO files, e.g. [fr.po] and [sv.po]. When an *arguments* is used
+in a message (*msgid* or *msgstr*) it is represented by its name which is put
+within curly brackets, e.g. as `{ns}`.
 
-When a message is created or updated only argument names defined in this document
-should be used. If there is defined argument name that can be used for the
-message then a new argument name must be defined and this document is to be
-updated.
+When a message is created or updated only *arguments* defined in this document
+should be used. If there is not a defined *argument* that can be used for the
+message then a new *argument* must be defined and this document is to be updated.
 
-## Multiple argument of the same type
 
-In the same message an argument name can only be used once. In a case that more
-than one is needed the name can be extended in the following way without adding
-the extended name to this document. The extension is done by adding "_" plus some
-relevant string in lower case "a-z0-9".
+## Multiple instances of the same argument
+
+In a message the same *argument* can only be used once. In case a message needs
+more than one instance of an *argument*, the instances need to be disambiguated.
+This is done by adding different suffixes to the argument's name. The suffix is
+an underscore ("_") followed by a descriptive string of lower case "a-z0-9". The
+suffixed *argument name* is not to be listed in this document, it is just an
+instance of the *argument name* without the specific suffix.
 
 As an example, if two arguments of type "List of IP addresses" are to be used in
-a message, then both argument base names should `ns_ip_list`. Let us say that one
+a message, then both *argument names* should `ns_ip_list`. Let us say that one
 is connected to the NSEC record type and the other to the NSEC3 record type. The
-two argument names could then be `ns_ip_list_nsec` and `ns_ip_list_nsec3`,
-respectively.
+two resulting argument names could then be `ns_ip_list_nsec` and
+`ns_ip_list_nsec3`, respectively.
 
-Example of use:
+Example of a message (*msgid* in this case) where this is in use:
 
 > The zone is inconsistent on NSEC and NSEC3. NSEC is fetched from nameservers
-> with IP addresses "{ns_ip_list_nsec}". NSEC3 is fetched from nameservers
-> with IP addresses "{ns_ip_list_nsec3}".
+> with IP addresses "{ns_ip_list_nsec}". NSEC3 is fetched from nameservers with
+> IP addresses "{ns_ip_list_nsec3}".
 
 
+## Defined arguments
 
-
-## Defined argument names
-
-When a suitable name and type of value is found in this list, it should also be
-used in new and updated messages.
+When a suitable *argument* is found in this list, it should also be used in new
+and updated messages (*msgids* and *msgstr*).
 
 | Argument name  | Type of value                      | Description and formatting                                  |
 |--------------- |------------------------------------|-------------------------------------------------------------|
@@ -61,11 +64,11 @@ used in new and updated messages.
 | testcase       | A Zonemaster test case, or `all`   | A test case identifier.                                     |
 
 
-## Preliminary or proposed names or types
+## Preliminary or proposed arguments
 
-The names in in this are not fully defined. If used it should follow the pattern
-of defined argument names, be fully defined and moved to the list of defined
-argument names.
+The *arguments* in in this table are not fully defined. If used it should follow
+the pattern of defined *arguments*, be fully defined and moved to the list of
+defined *arguments*.
 
 | Argument name  | Type of value                      | Description and formatting                                  |
 |--------------- |------------------------------------|-------------------------------------------------------------|
