@@ -53,17 +53,31 @@ recommends 'Readonly::XS' => 0;
 recommends 'Net::IP::XS'  => 0;
 
 sub MY::postamble {
-    my $text;
+    my $pure_all;
     if ($^O eq "freebsd") {
         # Make FreeBSD use gmake for share/Makefile
-        $text = 'GMAKE ?= "gmake"' . "\n"
+        $pure_all = 'GMAKE ?= "gmake"' . "\n"
             . 'pure_all :: share/Makefile' . "\n"
             . "\t" . 'cd share && $(GMAKE) all' . "\n";
     } else {
-        $text = 'pure_all :: share/Makefile' . "\n"
+        $pure_all = 'pure_all :: share/Makefile' . "\n"
             . "\t" . 'cd share && $(MAKE) all' . "\n";
-    };
-    return $text;
+    }
+
+    my $docker = <<'END_DOCKER';
+
+docker-build:
+	docker build --tag zonemaster/engine:local --build-arg version=$(VERSION) .
+
+docker-tag-version:
+	docker tag zonemaster/engine:local zonemaster/engine:$(VERSION)
+
+docker-tag-latest:
+	docker tag zonemaster/engine:local zonemaster/engine:latest
+
+END_DOCKER
+
+    return $pure_all . $docker;
 };
 
 install_share;
