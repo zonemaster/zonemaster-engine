@@ -64,6 +64,7 @@ jobs:
           git clone --branch=develop --depth=1 https://github.com/zonemaster/zonemaster-ldns.git
           perl Makefile.PL  # Generate MYMETA.yml to appease cpanm .
           ( cd zonemaster-ldns ; cpanm --notest . )
+          rm -rf zonemaster-ldns
 
       - name: Install remaining dependencies
         run: |

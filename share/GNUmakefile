@@ -9,10 +9,6 @@ PMFILES := $(shell find ../lib -type f -name '*.pm' | sort)
 TESTMODULEFILES := $(shell find ../lib/Zonemaster/Engine/Test -type f -name '*.pm' | sort)
 
 all: $(MOFILES) modules.txt
-	@echo
-	@echo Remember to make sure all of the above names are in the
-	@echo MANIFEST file, or they will not be installed.
-	@echo
 
 # Tidy the formatting of all PO files
 tidy-po:
