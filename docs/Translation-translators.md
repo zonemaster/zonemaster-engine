@@ -24,7 +24,7 @@ but you will have to find instructions elsewhere.
 
   Install the following:
   ```
-  yum install git make perl-App-cpanminus perl-Try-Tiny
+  dnf install git make perl-App-cpanminus perl-Try-Tiny
   cpanm Locale::PO
   ```
 
