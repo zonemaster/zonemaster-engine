@@ -14,8 +14,6 @@ bugtracker 'https://github.com/zonemaster/zonemaster-engine/issues';
 
 all_from 'lib/Zonemaster/Engine.pm';
 
-configure_requires 'Locale::Msgfmt' => 0.15;
-
 # "2.1.0" could be declared as "2.001" but not as "2.1"
 # (see Zonemaster::LDNS below)
 
