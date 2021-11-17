@@ -17,14 +17,14 @@ translation.
 ## Software preparation
 
 For the steps below you need to work on a computer with Git, Perl and Gettext.
-Select what OS you want to work on from the list below. Other OSs will also work, 
+Select what OS you want to work on from the list below. Other OSs will also work,
 but you will have to find instructions elsewhere.
 
-* CentOS
+* Rocky Linux
 
   Install the following:
   ```
-  yum install git make perl-App-cpanminus perl-Try-Tiny
+  dnf install git make perl-App-cpanminus perl-Try-Tiny
   cpanm Locale::PO
   ```
 
@@ -52,11 +52,11 @@ but you will have to find instructions elsewhere.
 ##  Background
 
 The first step in updating the translations is to generate a new template file
-("Zonemaster-Engine.pot"). In practice you rarely need to think about generating 
+("Zonemaster-Engine.pot"). In practice you rarely need to think about generating
 it as it is generally performed as an implicit intermediate step.
 If you do want to generate it, the command is `make extract-pot`.
 
-The translated strings are maintained in files named "<LANG-CODE>.po". 
+The translated strings are maintained in files named "<LANG-CODE>.po".
 Currently there are the following files (and languages):
 * da.po (Danish)
 * fr.po (French)
@@ -68,14 +68,14 @@ Execute `./update-po xx.po` to update the *PO* file for language
 Choose the language code for the language that you want to update.
 The command will update the *PO* file with new message ids (*msgid*) from the
 source code.
-This should only be strictly necessary to do when a module has been added, 
+This should only be strictly necessary to do when a module has been added,
 changed or removed, but it it recommended to do this step every time.
 
 Execute `make update-po` to update all the *PO*
 files with new message ids from the source code.
 
-By default the updated *PO* file will suggested translations for new message 
-ids based on fuzzy matching of similar strings. This is not always desirable 
+By default the updated *PO* file will suggested translations for new message
+ids based on fuzzy matching of similar strings. This is not always desirable
 and you can disable fuzzy matching by executing one of the following
 commands instead:
 ```
@@ -91,7 +91,7 @@ can easily create one at [Github]. If you are not prepared to
 create one, contact the Zonemaster work group for instructions by sending
 an email to "zonemaster@zonemaster.net".
 
-To create a fork of *Zonemaster-Engine*: 
+To create a fork of *Zonemaster-Engine*:
 1. Go to [Zonemaster-Engine repository].
 2. Make sure you are logged in at Github.
 3. Press the "Fork" button.
@@ -102,14 +102,14 @@ private key is available on the computer you are going to work from.
 
 ## Tools
 
-The *PO* file can be edited with a plain text editor, but then it is 
+The *PO* file can be edited with a plain text editor, but then it is
 important to keep the database structure of the file. There are tools that
 makes editing of the *PO* files easier. When using those, the *PO* file is
 handled as a database instead of as a plain file.
 
-* There is an [add-on to Emacs][emacs PO-mode], which makes updating 
+* There is an [add-on to Emacs][emacs PO-mode], which makes updating
   and searching in the ".po" file easier and more robust.
-* There is also "[GNOME Translation Editor]", a graphical PO editor 
+* There is also "[GNOME Translation Editor]", a graphical PO editor
   available for at least Windows and Linux.
 * There are more tools available, either cloud services or programs
   for download, and they could be found by searching for "po editor".
@@ -163,8 +163,8 @@ welcome comments on these.
   git checkout -b translation-update
   ```
 
-* Go to the *share* directory and run the update command for the *PO* file 
-  for the language you are going to work with. Replace "xx" with the 
+* Go to the *share* directory and run the update command for the *PO* file
+  for the language you are going to work with. Replace "xx" with the
   language code in question. This should be done every time.
   ```
   cd share
@@ -178,13 +178,13 @@ welcome comments on these.
   the *PO* file to another computer, edit it there, and then copy it back to
   your Zonemaster-Engine clone.
 
-* When doing the update, do not change the *msgid*, only the *msgstr*. The 
+* When doing the update, do not change the *msgid*, only the *msgstr*. The
   *msgid* cannot and must not be be update in this process. They are the
   links between the Perl module and the *PO* file.
 
-* If you find a *msgid* that needs an update, create an [issue][new issue] 
-  or a pull request to have the message updated in the Perl module. If you 
-  create an issue, always include module and message tag, e.g. 
+* If you find a *msgid* that needs an update, create an [issue][new issue]
+  or a pull request to have the message updated in the Perl module. If you
+  create an issue, always include module and message tag, e.g.
   "BASIC:NO_PARENT". And make a suggestion of the new *msgid*.
 
 * Inspect every *fuzzy entry* (tagged with "fuzzy"). Update *msgstr*
@@ -195,10 +195,10 @@ welcome comments on these.
   (lines starting with "#~") and those could have matching translations,
   especially of the *msgid* has been changed.
 
-* Any remaining *obsolete entries* (lines at the end of the file starting 
+* Any remaining *obsolete entries* (lines at the end of the file starting
   with "#~") could be removed. They serve no purpose anymore.
 
-* Check that the messages arguments in all *msgstr* strings match up with 
+* Check that the messages arguments in all *msgstr* strings match up with
   those in the *msgid* strings.
   ```
   ../util/check-msg-args xx.po
@@ -228,8 +228,8 @@ welcome comments on these.
   rm FILE-NAME
   ```
 
-* Now push the local branch you created to your fork at Github. 
-  "translation-update" is name of the branch you created above and 
+* Now push the local branch you created to your fork at Github.
+  "translation-update" is name of the branch you created above and
   have committed the updates to. Use your Github user name instead of
   "xxxx".
   ```
@@ -255,13 +255,13 @@ welcome comments on these.
 * If you go back to your own computer and just keep the clone as it is, you
   can easily update the pull request if needed with more changes to the same
   *PO* file. When the pull request has been merged by the Zonemaster work group,
-  you can delete the local clone and on your Github fork you can remove the 
+  you can delete the local clone and on your Github fork you can remove the
   branch. Or keep them for next time.
 
 
 ## Adding a new language
 
-If you want to add a new language, then follow the steps above with some 
+If you want to add a new language, then follow the steps above with some
 modifications. Before you add a language contact the Zonemaster project
 to discuss timeplan and other aspects of the new language. Every language must
 be update each time a message is added or changed.
@@ -325,11 +325,3 @@ of an existing file.
 [Translation steps]:                 #translation-steps
 [Zonemaster-Engine repository]:      https://github.com/zonemaster/zonemaster-engine
 [new issue]:                         https://github.com/zonemaster/zonemaster-engine/issues/new
-
-
-
-
-
-
-
-
