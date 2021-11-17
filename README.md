@@ -26,6 +26,35 @@ Installation instructions for the Engine is provided in the
 
 This repository does not need any specific configuration.
 
+## Docker
+
+To build a local base image for Zonemaster Engine you need a [local Zonemaster
+LDNS base image].
+
+Build a new local base image:
+
+```sh
+make all dist docker-build
+```
+
+Tag the local base image with the current version number:
+
+```sh
+make docker-tag-version
+```
+
+Tag the local base image as the latest version:
+
+```sh
+make docker-tag-latest
+```
+
+Perform smoke test on the local base image:
+
+```sh
+docker run --rm zonemaster/engine:local perl -MZonemaster::Engine -E 'say join "\n", Zonemaster::Engine->test_module("BASIC", "zonemaster.net")'
+```
+
 ## Documentation
 
 There is full POD coverage of the Perl code. The documentation can be
@@ -47,3 +76,4 @@ The software is released under the 2-clause BSD license. See separate LICENSE fi
 
 
 
+[Local Zonemaster LDNS base image]: https://github.com/zonemaster/zonemaster-ldns/blob/master/README.md#docker
