@@ -999,13 +999,13 @@ Readonly my %TAG_DESCRIPTIONS => (
     DS17_CDNSKEY_IS_NON_SEP => sub {
         __x    # DNSSEC:DS17_CDNSKEY_IS_NON_SEP
           'The CDNSKEY record with tag {keytag} has the SEP bit (bit 15) unset. Fetched '
-          . 'rom the nameservers with IP addresses "{ns_ip_list}".',
+          . 'from the nameservers with IP addresses "{ns_ip_list}".',
           @_;
     },
     DS17_CDNSKEY_IS_NON_ZONE => sub {
         __x    # DNSSEC:DS17_CDNSKEY_IS_NON_ZONE
           'The CDNSKEY record with tag {keytag} has the zone bit (bit 7) unset. Fetched '
-          . 'rom the nameservers with IP addresses "{ns_ip_list}".',
+          . 'from the nameservers with IP addresses "{ns_ip_list}".',
           @_;
     },
     DS17_CDNSKEY_MATCHES_NO_DNSKEY => sub {
