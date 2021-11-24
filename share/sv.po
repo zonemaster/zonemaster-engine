@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-24 14:45+0100\n"
-"PO-Revision-Date: 2021-11-24 15:06+0100\n"
+"POT-Creation-Date: 2021-11-24 18:48+0100\n"
+"PO-Revision-Date: 2021-11-24 18:48+0100\n"
 "Last-Translator: mats.dufberg@iis.se\n"
 "Language-Team: Zonemaster Project\n"
 "Language: sv\n"
@@ -616,9 +616,9 @@ msgid ""
 "DNSKEY with tag {keytag} and using algorithm {algo_num} ({algo_descr}) has a "
 "size ({keysize}) smaller than the minimum one ({keysizemin})."
 msgstr ""
-"DNSKEY-posten med \"key tag\" {keytag}, som används med algoritm {algo_num} "
-"({algo_descr}), har en nyckelstorlek ({keysize}) som är mindre än den minsta "
-"tillåtna storleken ({keysizemin}) för den algoritmen."
+"DNSKEY-posten med \"key tag\" {keytag}, som används med kryptoalgoritm "
+"{algo_num} ({algo_descr}), har en nyckelstorlek ({keysize}) som är mindre än "
+"den minsta tillåtna storleken ({keysizemin}) för den algoritmen."
 
 #. DNSSEC:DNSKEY_TOO_LARGE_FOR_ALGO
 #, perl-brace-format
@@ -986,7 +986,9 @@ msgstr ""
 #, perl-brace-format
 msgid ""
 "Unsigned child zone found on nameservers with IP addresses \"{ns_ip_list}\"."
-msgstr "Osignerad dotterzon hittades på namnservrarna med IP-adresserna \"{ns_ip_list}\"."
+msgstr ""
+"Osignerad dotterzon hittades på namnservrarna med IP-adresserna "
+"\"{ns_ip_list}\"."
 
 #. DNSSEC:DS11_DS_BUT_UNSIGNED_ZONE
 msgid "The child zone is unsigned, but the parent zone has DS record."
@@ -1356,8 +1358,8 @@ msgid ""
 "DNSKEY record with keytag {keytag} in zone {domain}."
 msgstr ""
 "Namnserver {ns} svarade med en DS-post skapad med hashalgoritm {algo_num} "
-"som inte är tilldelad någon hashalgoritm, vilket inte är OK. DS-posten "
-"gäller DNSKEY-posten med \"key tag\" {keytag} i zonen {domain}."
+"som inte är tilldelad någon algoritm, vilket inte är OK. DS-posten gäller "
+"DNSKEY-posten med \"key tag\" {keytag} i zonen {domain}."
 
 #. DNSSEC:DS_ALGO_SHA1_DEPRECATED
 #, perl-brace-format
