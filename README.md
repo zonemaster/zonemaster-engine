@@ -39,8 +39,8 @@ There is full POD coverage of the Perl code. The documentation can be
 read on the [CPAN site].
 
 More documentations regarding translating the output to another language,
-implementing a new test and the log entries under the directory are found under
-the [docs] directory.
+implementing a new test and the log entries are found under the [docs] directory.
+
 
 ## Participation, Contact and Bug reporting
 
