@@ -748,7 +748,7 @@ msgid ""
 msgstr ""
 "L'enregistrement de type \"DNSKEY\" avec le tag {keytag} auquel "
 "l'enregistrement de type \"DS\" fait référence n'a pas été trouvé dans "
-"l'ensemble de clés retournées.Information retournée par les serveurs de noms "
+"l'ensemble de clés retournées. Information retournée par les serveurs de noms "
 "ayant une des adresses IP suivantes \"{ns_ip_list}\"."
 
 #. DNSSEC:DS02_NO_MATCHING_DNSKEY_RRSIG
