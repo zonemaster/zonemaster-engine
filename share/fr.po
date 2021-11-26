@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-18 14:21+0100\n"
+"POT-Creation-Date: 2021-11-26 22:03+0100\n"
 "PO-Revision-Date: 2020-09-07\n"
 "Last-Translator: vincent.levigneron@afnic.fr\n"
 "Language-Team: Zonemaster Team\n"
@@ -711,8 +711,8 @@ msgid ""
 msgstr ""
 "La clé (DNSKEY) avec le tag {keytag} utilise un algorithme {algo_num} "
 "({algo_mnemo}) non supporté par cette version installée de Zonemaster. "
-"Information retournée par les serveurs de noms ayant une des adresses "
-"IP suivantes \"{ns_ip_list}\"."
+"Information retournée par les serveurs de noms ayant une des adresses IP "
+"suivantes \"{ns_ip_list}\"."
 
 #. DNSSEC:DS02_DNSKEY_NOT_FOR_ZONE_SIGNING
 #, perl-brace-format
@@ -724,7 +724,8 @@ msgstr ""
 "Le champ \"flags\" de l'enregistrement de type \"DNSKEY\" avec le tag "
 "{keytag} n'a pas le bit ZONE positionné alors qu'un enregistrement de type "
 "\"DS\" avec le même tag existe dans la zone parente. Information retournée "
-"par les serveurs de noms ayant une des adresses IP suivantes \"{ns_ip_list}\"."
+"par les serveurs de noms ayant une des adresses IP suivantes "
+"\"{ns_ip_list}\"."
 
 #. DNSSEC:DS02_DNSKEY_NOT_SEP
 #, perl-brace-format
@@ -736,7 +737,8 @@ msgstr ""
 "Le champ \"flags\" de l'enregistrement de type \"DNSKEY\" avec le tag "
 "{keytag} n'a pas le bit SEP positionné alors qu'un enregistrement de type "
 "\"DS\" avec le même tag existe dans la zone parente. Information retournée "
-"par les serveurs de noms ayant une des adresses IP suivantes \"{ns_ip_list}\"."
+"par les serveurs de noms ayant une des adresses IP suivantes "
+"\"{ns_ip_list}\"."
 
 #. DNSSEC:DS02_NO_DNSKEY_FOR_DS
 #, perl-brace-format
@@ -744,10 +746,10 @@ msgid ""
 "The DNSKEY record with tag {keytag} that the DS refers to does not exist in "
 "the DNSKEY RRset. Fetched from the nameservers with IP \"{ns_ip_list}\"."
 msgstr ""
-"L'enregistrement de type \"DNSKEY\" avec le tag {keytag} auquel l'enregistrement "
-"de type \"DS\" fait référence n'a pas été trouvé dans l'ensemble de clés retournées."
-"Information retournée par les serveurs de noms ayant une des adresses IP suivantes "
-"\"{ns_ip_list}\"."
+"L'enregistrement de type \"DNSKEY\" avec le tag {keytag} auquel "
+"l'enregistrement de type \"DS\" fait référence n'a pas été trouvé dans "
+"l'ensemble de clés retournées.Information retournée par les serveurs de noms "
+"ayant une des adresses IP suivantes \"{ns_ip_list}\"."
 
 #. DNSSEC:DS02_NO_MATCHING_DNSKEY_RRSIG
 #, perl-brace-format
@@ -756,9 +758,9 @@ msgid ""
 "DS record refers to. Fetched from the nameservers with IP \"{ns_ip_list}\"."
 msgstr ""
 "L'ensemble d'enregistrements de type \"DNSKEY\" n'est pas signé par la clé "
-"correspondant au tag {keytag} à laquelle l'enregistrement de type \"DS\" fait "
-"référence. Information retournée par les serveurs de noms ayant une des adresses "
-"IP suivantes \"{ns_ip_list}\"."
+"correspondant au tag {keytag} à laquelle l'enregistrement de type \"DS\" "
+"fait référence. Information retournée par les serveurs de noms ayant une des "
+"adresses IP suivantes \"{ns_ip_list}\"."
 
 #. DNSSEC:DS02_NO_MATCH_DS_DNSKEY
 #, perl-brace-format
@@ -766,9 +768,10 @@ msgid ""
 "The DS record does not match the DNSKEY with tag {keytag} by algorithm or "
 "digest. Fetched from the nameservers with IP \"{ns_ip_list}\"."
 msgstr ""
-"Les enregistrements de type \"DS\" et de type \"DNSKEY\" partageant le même tag {keytag} "
-"ne sont pas cohérents au niveau de l'algorithme ou du condensat. Information retournée "
-"par les serveurs de noms ayant une des adresses IP suivantes \"{ns_ip_list}\"."
+"Les enregistrements de type \"DS\" et de type \"DNSKEY\" partageant le même "
+"tag {keytag} ne sont pas cohérents au niveau de l'algorithme ou du "
+"condensat. Information retournée par les serveurs de noms ayant une des "
+"adresses IP suivantes \"{ns_ip_list}\"."
 
 #. DNSSEC:DS02_RRSIG_NOT_VALID_BY_DNSKEY
 #. DNSSEC:DS08_RRSIG_NOT_VALID_BY_DNSKEY
@@ -778,9 +781,10 @@ msgid ""
 "validated by the matching DNSKEY. Fetched from the nameservers with IP "
 "addresses \"{ns_ip_list}\"."
 msgstr ""
-"La signature (RRSIG) de l'ensemble d'enregistrements de type \"DNSKEY\" ayant pour tag "
-"{keytag} n'a pas pu être validé par la clé (DNSKEY) correspondante. Information "
-"retournée par les serveurs de noms ayant une des adresses IP suivantes \"{ns_ip_list}\"."
+"La signature (RRSIG) de l'ensemble d'enregistrements de type \"DNSKEY\" "
+"ayant pour tag {keytag} n'a pas pu être validée par la clé (DNSKEY) "
+"correspondante. Information retournée par les serveurs de noms ayant une des "
+"adresses IP suivantes \"{ns_ip_list}\"."
 
 #. DNSSEC:DS08_DNSKEY_RRSIG_EXPIRED
 #, perl-brace-format
@@ -788,9 +792,9 @@ msgid ""
 "RRSIG with keytag {keytag} and covering type DNSKEY has already expired. "
 "Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"La signature (RRSIG) avec la clé de tag {keytag} et couvrant les enregistrements "
-"de type \"DNSKEY\" a expiré. Information retournée par les serveurs de noms ayant "
-"une des adresses IP suivantes \"{ns_ip_list}\"."
+"La signature (RRSIG) avec la clé de tag {keytag} et couvrant les "
+"enregistrements de type \"DNSKEY\" a expiré. Information retournée par les "
+"serveurs de noms ayant une des adresses IP suivantes \"{ns_ip_list}\"."
 
 #. DNSSEC:DS08_DNSKEY_RRSIG_NOT_YET_VALID
 #, perl-brace-format
@@ -798,9 +802,10 @@ msgid ""
 "RRSIG with keytag {keytag} and covering type DNSKEY has inception date in "
 "the future. Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"La signature (RRSIG) avec la clé de tag {keytag} et couvrant les enregistrements "
-"de type \"DNSKEY\" a une date de mise en service dans le futur. Information retournée "
-"par les serveurs de noms ayant une des adresses IP suivantes \"{ns_ip_list}\"."
+"La signature (RRSIG) avec la clé de tag {keytag} et couvrant les "
+"enregistrements de type \"DNSKEY\" a une date de mise en service dans le "
+"futur. Information retournée par les serveurs de noms ayant une des adresses "
+"IP suivantes \"{ns_ip_list}\"."
 
 #. DNSSEC:DS08_MISSING_RRSIG_IN_RESPONSE
 #, perl-brace-format
@@ -808,9 +813,9 @@ msgid ""
 "The DNSKEY RRset is not signed, which is against expectation. Fetched from "
 "the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"Contre toute attente, l'ensemble d'enregistrements de type \"DNSKEY\" n'est pas "
-"signé. Information retournée par les serveurs de noms ayant une des adresses IP "
-"suivantes \"{ns_ip_list}\"."
+"Contre toute attente, l'ensemble d'enregistrements de type \"DNSKEY\" n'est "
+"pas signé. Information retournée par les serveurs de noms ayant une des "
+"adresses IP suivantes \"{ns_ip_list}\"."
 
 #. DNSSEC:DS08_NO_MATCHING_DNSKEY
 #, perl-brace-format
@@ -819,9 +824,10 @@ msgid ""
 "match any DNSKEY record. Fetched from the nameservers with IP addresses "
 "\"{ns_ip_list}\"."
 msgstr ""
-"La signature (RRSIG) de l'ensemble d'enregistrements de type \"DNSKEY\" ayant pour tag "
-"{keytag} ne correspond à aucune clé (DNSKEY). Information retournée par les "
-"serveurs de noms ayant une des adresses IP suivantes \"{ns_ip_list}\"."
+"La signature (RRSIG) de l'ensemble d'enregistrements de type \"DNSKEY\" "
+"ayant pour tag {keytag} ne correspond à aucune clé (DNSKEY). Information "
+"retournée par les serveurs de noms ayant une des adresses IP suivantes "
+"\"{ns_ip_list}\"."
 
 #. DNSSEC:DS09_MISSING_RRSIG_IN_RESPONSE
 #, perl-brace-format
@@ -830,8 +836,8 @@ msgid ""
 "nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
 "Contre toute attente, l'ensemble d'enregistrements de type \"SOA\" n'est pas "
-"signé. Information retournée par les serveurs de noms ayant une des adresses IP "
-"suivantes \"{ns_ip_list}\"."
+"signé. Information retournée par les serveurs de noms ayant une des adresses "
+"IP suivantes \"{ns_ip_list}\"."
 
 #. DNSSEC:DS09_NO_MATCHING_DNSKEY
 #, perl-brace-format
@@ -840,9 +846,10 @@ msgid ""
 "any DNSKEY record. Fetched from the nameservers with IP addresses "
 "\"{ns_ip_list}\"."
 msgstr ""
-"La signature (RRSIG) de l'ensemble d'enregistrements de type \"SOA\" ayant pour tag "
-"{keytag} ne correspond à aucune clé (DNSKEY). Information retournée par les "
-"serveurs de noms ayant une des adresses IP suivantes \"{ns_ip_list}\"."
+"La signature (RRSIG) de l'ensemble d'enregistrements de type \"SOA\" ayant "
+"pour tag {keytag} ne correspond à aucune clé (DNSKEY). Information retournée "
+"par les serveurs de noms ayant une des adresses IP suivantes "
+"\"{ns_ip_list}\"."
 
 #. DNSSEC:DS09_RRSIG_NOT_VALID_BY_DNSKEY
 #, perl-brace-format
@@ -851,9 +858,10 @@ msgid ""
 "validated by the matching DNSKEY. Fetched from the nameservers with IP "
 "addresses \"{ns_ip_list}\"."
 msgstr ""
-"La signature (RRSIG) de l'ensemble d'enregistrements de type \"SOA\" ayant pour tag "
-"{keytag} n'a pas pu être validé par la clé (DNSKEY) correspondante. Information "
-"retournée par les serveurs de noms ayant une des adresses IP suivantes \"{ns_ip_list}\"."
+"La signature (RRSIG) de l'ensemble d'enregistrements de type \"SOA\" ayant "
+"pour tag {keytag} n'a pas pu être validée par la clé (DNSKEY) "
+"correspondante. Information retournée par les serveurs de noms ayant une des "
+"adresses IP suivantes \"{ns_ip_list}\"."
 
 #. DNSSEC:DS09_SOA_RRSIG_EXPIRED
 #, perl-brace-format
@@ -861,9 +869,9 @@ msgid ""
 "RRSIG with keytag {keytag} and covering type SOA has already expired. "
 "Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"La signature (RRSIG) avec la clé de tag {keytag} et couvrant les enregistrements "
-"de type \"SOA\" a expiré. Information retournée par les serveurs de noms ayant "
-"une des adresses IP suivantes \"{ns_ip_list}\"."
+"La signature (RRSIG) avec la clé de tag {keytag} et couvrant les "
+"enregistrements de type \"SOA\" a expiré. Information retournée par les "
+"serveurs de noms ayant une des adresses IP suivantes \"{ns_ip_list}\"."
 
 #. DNSSEC:DS09_SOA_RRSIG_NOT_YET_VALID
 #, perl-brace-format
@@ -871,9 +879,10 @@ msgid ""
 "RRSIG with keytag {keytag} and covering type SOA has inception date in the "
 "future. Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"La signature (RRSIG) avec la clé de tag {keytag} et couvrant les enregistrements "
-"de type \"SOA\" a une date de mise en service dans le futur. Information retournée "
-"par les serveurs de noms ayant une des adresses IP suivantes \"{ns_ip_list}\"."
+"La signature (RRSIG) avec la clé de tag {keytag} et couvrant les "
+"enregistrements de type \"SOA\" a une date de mise en service dans le futur. "
+"Information retournée par les serveurs de noms ayant une des adresses IP "
+"suivantes \"{ns_ip_list}\"."
 
 #. DNSSEC:DS10_ANSWER_VERIFY_ERROR
 #, perl-brace-format
@@ -882,9 +891,10 @@ msgid ""
 "signature or signatures cannot be verified. Fetched from the nameservers "
 "with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"L'enregistrement de type \"{rrtype}\" pour le nom \"{domain}\" est signé (RRSIG) "
-"mais les signatures ne peuvent pas être vérifiées. Information retournée par les "
-"serveurs de noms ayant une des adresses IP suivantes \"{ns_ip_list}\"."
+"L'enregistrement de type \"{rrtype}\" pour le nom \"{domain}\" est signé "
+"(RRSIG) mais les signatures ne peuvent pas être vérifiées. Information "
+"retournée par les serveurs de noms ayant une des adresses IP suivantes "
+"\"{ns_ip_list}\"."
 
 #. DNSSEC:DS10_HAS_NSEC
 #, perl-brace-format
@@ -893,7 +903,8 @@ msgid ""
 "\"{ns_ip_list}\"."
 msgstr ""
 "La zone contient des enregistrements de type \"NSEC\". Information retournée "
-"par les serveurs de noms ayant une des adresses IP suivantes \"{ns_ip_list}\"."
+"par les serveurs de noms ayant une des adresses IP suivantes "
+"\"{ns_ip_list}\"."
 
 #. DNSSEC:DS10_HAS_NSEC3
 #, perl-brace-format
@@ -901,8 +912,9 @@ msgid ""
 "The zone has NSEC3 records. Fetched from the nameservers with IP addresses "
 "\"{ns_ip_list}\"."
 msgstr ""
-"La zone contient des enregistrements de type \"NSEC3\". Information retournée "
-"par les serveurs de noms ayant une des adresses IP suivantes \"{ns_ip_list}\"."
+"La zone contient des enregistrements de type \"NSEC3\". Information "
+"retournée par les serveurs de noms ayant une des adresses IP suivantes "
+"\"{ns_ip_list}\"."
 
 #. DNSSEC:DS10_INCONSISTENT_NSEC_NSEC3
 #, perl-brace-format
@@ -911,10 +923,11 @@ msgid ""
 "with IP addresses \"{ns_ip_list_nsec}\". NSEC3 is fetched from nameservers "
 "with IP addresses \"{ns_ip_list_nsec3}\"."
 msgstr ""
-"Inconsistence au niveau des enregistrements de type \"NSEC\" et \"NSEC3\". Les "
-"serveurs de noms ayant une des adresses IP suivantes \"{ns_ip_list_nsec}\" retournent "
-"des enregistrements de type \"NSEC\". Les serveurs de noms ayant une des adresses "
-"IP suivantes \"{ns_ip_list_nsec3}\" retournent des enregistrements de type \"NSEC\"."
+"Inconsistence au niveau des enregistrements de type \"NSEC\" et \"NSEC3\". "
+"Les serveurs de noms ayant une des adresses IP suivantes "
+"\"{ns_ip_list_nsec}\" retournent des enregistrements de type \"NSEC\". Les "
+"serveurs de noms ayant une des adresses IP suivantes \"{ns_ip_list_nsec3}\" "
+"retournent des enregistrements de type \"NSEC\"."
 
 #. DNSSEC:DS10_MISSING_NSEC_NSEC3
 #, perl-brace-format
@@ -922,9 +935,9 @@ msgid ""
 "NSEC or NSEC3 is expected but is missing. Fetched from the nameservers with "
 "IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"Des enregistrements de type \"NSEC\" ou \"NSEC3\" sont attendus mais absents. "
-"Information retournée par les serveurs de noms ayant une des adresses IP suivantes "
-"\"{ns_ip_list}\"."
+"Des enregistrements de type \"NSEC\" ou \"NSEC3\" sont attendus mais "
+"absents. Information retournée par les serveurs de noms ayant une des "
+"adresses IP suivantes \"{ns_ip_list}\"."
 
 #. DNSSEC:DS10_MIXED_NSEC_NSEC3
 #, perl-brace-format
@@ -943,8 +956,8 @@ msgid ""
 "from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
 "Un nom de domaine qui n'est pas censé exister n'est pas correctement couvert "
-"par les enregistrements de type \"NSEC\". Information retournée par les serveurs "
-"de noms ayant une des adresses IP suivantes \"{ns_ip_list}\"."
+"par les enregistrements de type \"NSEC\". Information retournée par les "
+"serveurs de noms ayant une des adresses IP suivantes \"{ns_ip_list}\"."
 
 #. DNSSEC:DS10_NAME_NOT_COVERED_BY_NSEC3
 #, perl-brace-format
@@ -953,8 +966,8 @@ msgid ""
 "from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
 "Un nom de domaine qui n'est pas censé exister n'est pas correctement couvert "
-"par les enregistrements de type \"NSEC3\". Information retournée par les serveurs "
-"de noms ayant une des adresses IP suivantes \"{ns_ip_list}\"."
+"par les enregistrements de type \"NSEC3\". Information retournée par les "
+"serveurs de noms ayant une des adresses IP suivantes \"{ns_ip_list}\"."
 
 #. DNSSEC:DS10_NON_EXISTENT_RESPONSE_ERROR
 #, perl-brace-format
@@ -972,9 +985,9 @@ msgid ""
 "Missing signatures (RRSIG) for the NSEC3 record or records. Fetched from the "
 "nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"Signatures (RRSIG) manquantes pour les enregistrements de type \"NSEC3\". Information"
-"retournée par les serveurs de noms ayant une des adresses IP suivantes "
-"\"{ns_ip_list}\"."
+"Signatures (RRSIG) manquantes pour les enregistrements de type \"NSEC3\". "
+"Informationretournée par les serveurs de noms ayant une des adresses IP "
+"suivantes \"{ns_ip_list}\"."
 
 #. DNSSEC:DS10_NSEC3_RRSIG_VERIFY_ERROR
 #, perl-brace-format
@@ -992,9 +1005,9 @@ msgid ""
 "Missing signatures (RRSIG) for the NSEC record or records. Fetched from the "
 "nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"Signatures (RRSIG) manquantes pour les enregistrements de type \"NSEC\". Information"
-"retournée par les serveurs de noms ayant une des adresses IP suivantes "
-"\"{ns_ip_list}\"."
+"Signatures (RRSIG) manquantes pour les enregistrements de type \"NSEC\". "
+"Informationretournée par les serveurs de noms ayant une des adresses IP "
+"suivantes \"{ns_ip_list}\"."
 
 #. DNSSEC:DS10_NSEC_RRSIG_VERIFY_ERROR
 #, perl-brace-format
@@ -1013,9 +1026,10 @@ msgid ""
 "response is not signed by any RRSIG. Fetched from the nameservers with IP "
 "addresses \"{ns_ip_list}\"."
 msgstr ""
-"L'enregistrement de type \"{rrtype}\" pour le nom \"{domain}\" trouvé dans la "
-"section \"answer\" de la réponse n'est pas signé (RRSIG). Information retournée "
-"(RRSIG) par les serveurs de noms ayant une des adresses IP suivantes \"{ns_ip_list}\"."
+"L'enregistrement de type \"{rrtype}\" pour le nom \"{domain}\" trouvé dans "
+"la section \"answer\" de la réponse n'est pas signé (RRSIG). Information "
+"retournée (RRSIG) par les serveurs de noms ayant une des adresses IP "
+"suivantes \"{ns_ip_list}\"."
 
 #. DNSSEC:DS11_INCONSISTENT_DS
 msgid "Parent name servers are inconsistent on the existence of DS."
@@ -1028,8 +1042,8 @@ msgid ""
 "Name servers for the child zone are inconsistent on whether the zone is "
 "signed or not."
 msgstr ""
-"Les serveurs de noms de la zone testée ne sont pas consistants ce qui empêche "
-"de déterminer si elle est signée ou non."
+"Les serveurs de noms de la zone testée ne sont pas consistants ce qui "
+"empêche de déterminer si elle est signée ou non."
 
 #. DNSSEC:DS11_UNDETERMINED_DS
 msgid ""
@@ -1058,30 +1072,30 @@ msgid ""
 "DS record for the child zone found on parent nameservers with IP addresses "
 "\"{ns_ip_list}\"."
 msgstr ""
-"Enregistrement de type \"DS\" pour la zone testée trouvé sur les serveurs de noms "
-"ayant une des adresses IP suivantes \"{ns_ip_list}\"."
+"Enregistrement de type \"DS\" pour la zone testée trouvé sur les serveurs de "
+"noms ayant une des adresses IP suivantes \"{ns_ip_list}\"."
 
 #. DNSSEC:DS11_NS_WITH_SIGNED_ZONE
 #, perl-brace-format
 msgid ""
 "Signed child zone found on nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"Zone signée trouvée sur les serveurs de noms ayant une des adresses IP suivantes "
-"\"{ns_ip_list}\"."
+"Zone signée trouvée sur les serveurs de noms ayant une des adresses IP "
+"suivantes \"{ns_ip_list}\"."
 
 #. DNSSEC:DS11_NS_WITH_UNSIGNED_ZONE
 #, perl-brace-format
 msgid ""
 "Unsigned child zone found on nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"Zone non signée trouvée sur les serveurs de noms ayant une des adresses IP suivantes "
-"\"{ns_ip_list}\"."
+"Zone non signée trouvée sur les serveurs de noms ayant une des adresses IP "
+"suivantes \"{ns_ip_list}\"."
 
 #. DNSSEC:DS11_DS_BUT_UNSIGNED_ZONE
 msgid "The child zone is unsigned, but the parent zone has DS record."
 msgstr ""
-"La zone testée n'est pas signée mais la zone parente publie un enregistrement "
-"de type \"DS\"."
+"La zone testée n'est pas signée mais la zone parente publie un "
+"enregistrement de type \"DS\"."
 
 #. DNSSEC:DS13_ALGO_NOT_SIGNED_DNSKEY
 #, perl-brace-format
@@ -1091,9 +1105,9 @@ msgid ""
 "\"{ns_ip_list}\"."
 msgstr ""
 "L'ensemble d'enregistrements de type \"DNSKEY\" n'est pas signé en utilisant "
-"l'algorithme {algo_num}/{algo_mnemo} pourtant utilisé par une des clés (DNSKEY). "
-"Information retournée par les serveurs de noms ayant une des adresses IP "
-"suivantes \"{ns_ip_list}\"."
+"l'algorithme {algo_num}/{algo_mnemo} pourtant utilisé par une des clés "
+"(DNSKEY). Information retournée par les serveurs de noms ayant une des "
+"adresses IP suivantes \"{ns_ip_list}\"."
 
 #. DNSSEC:DS13_ALGO_NOT_SIGNED_NS
 #, perl-brace-format
@@ -1103,9 +1117,9 @@ msgid ""
 "\"{ns_ip_list}\"."
 msgstr ""
 "L'ensemble d'enregistrements de type \"NS\" n'est pas signé en utilisant "
-"l'algorithme {algo_num}/{algo_mnemo} pourtant utilisé par une des clés (DNSKEY). "
-"Information retournée par les serveurs de noms ayant une des adresses IP "
-"suivantes \"{ns_ip_list}\"."
+"l'algorithme {algo_num}/{algo_mnemo} pourtant utilisé par une des clés "
+"(DNSKEY). Information retournée par les serveurs de noms ayant une des "
+"adresses IP suivantes \"{ns_ip_list}\"."
 
 #. DNSSEC:DS13_ALGO_NOT_SIGNED_SOA
 #, perl-brace-format
@@ -1115,9 +1129,9 @@ msgid ""
 "\"{ns_ip_list}\"."
 msgstr ""
 "L'ensemble d'enregistrements de type \"SOA\" n'est pas signé en utilisant "
-"l'algorithme {algo_num}/{algo_mnemo} pourtant utilisé par une des clés (DNSKEY). "
-"Information retournée par les serveurs de noms ayant une des adresses IP "
-"suivantes \"{ns_ip_list}\"."
+"l'algorithme {algo_num}/{algo_mnemo} pourtant utilisé par une des clés "
+"(DNSKEY). Information retournée par les serveurs de noms ayant une des "
+"adresses IP suivantes \"{ns_ip_list}\"."
 
 #. DNSSEC:DS15_HAS_CDNSKEY_NO_CDS
 #, perl-brace-format
@@ -1196,9 +1210,9 @@ msgid ""
 "15) unset. Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
 "L'enregistrement de type \"CDS\" avec le tag {keytag} correspond à un "
-"enregistrement de type \"DNSKEY\" qui n'a pas le bit SEP positionné (bit 15). "
-"Information retournée par les serveurs de noms ayant une des adresses IP suivantes "
-"\"{ns_ip_list}\"."
+"enregistrement de type \"DNSKEY\" qui n'a pas le bit SEP positionné (bit "
+"15). Information retournée par les serveurs de noms ayant une des adresses "
+"IP suivantes \"{ns_ip_list}\"."
 
 #. DNSSEC:DS16_CDS_MATCHES_NON_ZONE_DNSKEY
 #, perl-brace-format
@@ -1207,9 +1221,9 @@ msgid ""
 "7) unset. Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
 "L'enregistrement de type \"CDS\" avec le tag {keytag} correspond à un "
-"enregistrement de type \"DNSKEY\" qui n'a pas le bit ZONE positionné (bit 7). "
-"Information retournée par les serveurs de noms ayant une des adresses IP suivantes "
-"\"{ns_ip_list}\"."
+"enregistrement de type \"DNSKEY\" qui n'a pas le bit ZONE positionné (bit "
+"7). Information retournée par les serveurs de noms ayant une des adresses IP "
+"suivantes \"{ns_ip_list}\"."
 
 #. DNSSEC:DS16_CDS_MATCHES_NO_DNSKEY
 #, perl-brace-format
@@ -1315,8 +1329,8 @@ msgid ""
 "rom the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
 "L'enregistrement de type \"CDNSKEY\" avec le tag {keytag} n'a pas le bit SEP "
-"positionné (bit 15).Information retournée par les serveurs de noms ayant une "
-"des adresses IP suivantes \"{ns_ip_list}\"."
+"positionné (bit 15). Information retournée par les serveurs de noms ayant "
+"une des adresses IP suivantes \"{ns_ip_list}\"."
 
 #. DNSSEC:DS17_CDNSKEY_IS_NON_ZONE
 #, perl-brace-format
@@ -1324,9 +1338,9 @@ msgid ""
 "The CDNSKEY record with tag {keytag} has the zone bit (bit 7) unset. Fetched "
 "rom the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"L'enregistrement de type \"CDNSKEY\" avec le tag {keytag} n'a pas le bit ZONE "
-"positionné (bit 7).Information retournée par les serveurs de noms ayant une "
-"des adresses IP suivantes \"{ns_ip_list}\"."
+"L'enregistrement de type \"CDNSKEY\" avec le tag {keytag} n'a pas le bit "
+"ZONE positionné (bit 7). Information retournée par les serveurs de noms "
+"ayant une des adresses IP suivantes \"{ns_ip_list}\"."
 
 #. DNSSEC:DS17_CDNSKEY_MATCHES_NO_DNSKEY
 #, perl-brace-format
@@ -1346,8 +1360,8 @@ msgid ""
 "\"{ns_ip_list}\"."
 msgstr ""
 "L'ensemble d'enregistrements de type \"CDNSKEY\" n'est pas signé par la clé "
-"(DNSKEY) correspondant au tag {keytag} de l'enregistrement de type \"CDNSKEY\". "
-"Information retournée par les serveurs de noms ayant une des adresses IP "
+"(DNSKEY) correspondant au tag {keytag} de l'enregistrement de type \"CDNSKEY"
+"\". Information retournée par les serveurs de noms ayant une des adresses IP "
 "suivantes \"{ns_ip_list}\"."
 
 #. DNSSEC:DS17_CDNSKEY_SIGNED_BY_UNKNOWN_DNSKEY
@@ -2752,4 +2766,3 @@ msgid "Big packet size ({size}) (try with \"{command}\")."
 msgstr ""
 "La taille du paquet ({size} octets) est trop importante (tester avec la "
 "commande \"{command}\")."
-
