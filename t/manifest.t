@@ -15,6 +15,8 @@ my $makebin = 'make';
 sub make {
     my @make_args = @_;
 
+    undef $ENV{MAKEFLAGS};
+
     my $command = join( ' ', $makebin, '-s', @make_args );
     my $output = `$command 2>&1`;
 
