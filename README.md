@@ -38,8 +38,7 @@ To build your own Docker image, see the [Docker Image Creation] documentation.
 There is full POD coverage of the Perl code. The documentation can be
 read on the [CPAN site].
 
-More documentations regarding translating the output to another language,
-implementing a new test and the log entries are found under the [docs] directory.
+Documentation on Zonemaster-Engine is also found under the [docs] directory.
 
 
 ## Participation, Contact and Bug reporting
