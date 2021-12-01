@@ -623,7 +623,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     DS02_NO_MATCHING_DNSKEY_RRSIG => sub {
         __x    # DNSSEC:DS02_NO_MATCHING_DNSKEY_RRSIG
           'The DNSKEY RRset is not signed by the DNSKEY with tag {keytag} that '
-          . 'the the DS record refers to. Fetched from the nameservers with IP '
+          . 'the DS record refers to. Fetched from the nameservers with IP '
           . '"{ns_ip_list}".',
           @_;
     },
