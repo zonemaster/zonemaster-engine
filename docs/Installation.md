@@ -7,7 +7,8 @@
 * [Prerequisites](#Prerequisites)
 * [Local installation](#Local-installation)
   * [Installation on Rocky Linux]
-  * [Installation on Debian and Ubuntu]
+  * [Installation on Debian]
+  * [Installation on Ubuntu]
   * [Installation on FreeBSD]
 * [Post-installation sanity check](#Post-installation-sanity-check)
 * [What to do next](#What-to-do-next)
@@ -73,7 +74,29 @@ Zonemaster::Engine, see the [declaration of prerequisites].
      sudo cpanm Zonemaster::LDNS Zonemaster::Engine
      ```
 
-### Installation on Debian and Ubuntu
+### Installation on Debian
+
+Using pre-built packages is the preferred method for Debian. If you prefer to
+install from CPAN instead, follow the steps for Ubuntu.
+
+1) Upgrade to latest patch level
+
+   ```sh
+   sudo apt update && sudo apt upgrade
+   ```
+
+2) Add Zonemaster packages repository to repository list
+   ```sh
+   curl -LOs https://package.zonemaster.net/setup.sh
+   sudo sh setup.sh
+   ```
+
+3) Install Zonemaster CLI
+   ```sh
+   sudo apt install libzonemaster-engine-perl
+   ```
+
+### Installation on Ubuntu
 
 1) Upgrade to latest patch level
 
@@ -169,7 +192,8 @@ The command is expected to take a few seconds and print some results about the d
 [Docker Hub]:                                        https://hub.docker.com/u/zonemaster
 [Docker Image Creation]:                             https://github.com/zonemaster/zonemaster/blob/master/docs/internal-documentation/maintenance/ReleaseProcess-create-docker-image.md
 [EPEL]:                                              https://fedoraproject.org/wiki/EPEL
-[Installation on Debian and Ubuntu]:                 #installation-on-debian-and-ubuntu
+[Installation on Debian]:                            #installation-on-debian
+[Installation on Ubuntu]:                            #installation-on-ubuntu
 [Installation on FreeBSD]:                           #installation-on-freebsd
 [Installation on Rocky Linux]:                       #installation-on-rocky-linux
 [JSON-RPC API]:                                      https://github.com/zonemaster/zonemaster-backend/blob/master/docs/API.md
@@ -179,5 +203,3 @@ The command is expected to take a few seconds and print some results about the d
 [Zonemaster::CLI installation]:                      https://github.com/zonemaster/zonemaster-cli/blob/master/docs/Installation.md
 [Zonemaster::Engine API]:                            http://search.cpan.org/~znmstr/Zonemaster-Engine/lib/Zonemaster/Engine/Overview.pod
 [Zonemaster::GUI installation]:                      https://github.com/zonemaster/zonemaster-gui/blob/master/docs/Installation.md
-
-
