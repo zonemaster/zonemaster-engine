@@ -73,3 +73,7 @@
 
 # For Github action
 ^\.github/
+
+# Debian packaging
+^debian/
+^.pc/
