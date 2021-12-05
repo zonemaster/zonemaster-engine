@@ -1,12 +1,10 @@
 # Zonemaster Engine
-[![Build Status](https://travis-ci.org/zonemaster/zonemaster-engine.svg?branch=master)](https://travis-ci.org/zonemaster/zonemaster-engine)
-[![CPAN version](https://badge.fury.io/pl/Zonemaster-Engine.svg)](https://badge.fury.io/pl/Zonemaster-Engine)
 
 ## Purpose
 
 This repository holds one of the components of the Zonemaster product. For an
 overview of the Zonemaster software, please see the
-[Zonemaster main repository](https://github.com/zonemaster/zonemaster).
+[Zonemaster main repository].
 
 This Git repository contains the *Zonemaster Engine testing framework*,
 and contains all code needed to perform the full suite of Zonemaster
@@ -14,26 +12,34 @@ tests.
 
 ## Prerequisites
 
-For supported processor architectures, operating systems and Perl versions see 
-[Zonemaster/README.md](https://github.com/zonemaster/zonemaster/blob/master/README.md).
+For supported processor architectures, operating systems and Perl versions see
+[Zonemaster/README.md].
 
 ## Installation
 
 Installation instructions for the Engine is provided in the
-[installation](docs/Installation.md) document.
+[installation] document.
 
-## Configuration 
+## Configuration
 
 This repository does not need any specific configuration.
+
+## Docker
+
+Zonemaster-CLI is available on [Docker Hub], and can be conveniently downloaded
+and run without any installation. See [USING] Zonemaster-CLI for how to run
+Zonemaster-CLI on Docker.
+
+To build your own Docker image, see the [Docker Image Creation] documentation.
+
 
 ## Documentation
 
 There is full POD coverage of the Perl code. The documentation can be
-read on the [CPAN site](https://metacpan.org/pod/Zonemaster::Engine).
+read on the [CPAN site].
 
-For a curious user, there are documentations regarding translating the output to
-a new language, implementing a new test and the log entries under the directory
-[docs](docs/). 
+Documentation on Zonemaster-Engine is also found under the [docs] directory.
+
 
 ## Participation, Contact and Bug reporting
 
@@ -41,9 +47,14 @@ For participation, contact and bug reporting, please see
 [Zonemaster/README.md](https://github.com/zonemaster/zonemaster/blob/master/README.md).
 
 
-## License
-
-The software is released under the 2-clause BSD license. See separate LICENSE file.
+[CPAN site]:                                      https://metacpan.org/pod/Zonemaster::Engine
+[Docker Hub]:                                     https://hub.docker.com/u/zonemaster
+[Docker Image Creation]:                          https://github.com/zonemaster/zonemaster/blob/master/docs/internal-documentation/maintenance/ReleaseProcess-create-docker-image.md
+[Docs]:                                           docs/
+[Installation]:                                   docs/Installation.md
+[USING]:                                          https://github.com/zonemaster/zonemaster-cli/blob/master/USING.md
+[Zonemaster main repository]:                     https://github.com/zonemaster/zonemaster
+[Zonemaster/README.md]:                           https://github.com/zonemaster/zonemaster/blob/master/README.md
 
 
 

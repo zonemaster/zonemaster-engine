@@ -4,38 +4,80 @@ use version; our $VERSION = version->declare("v1.0.3");
 
 use 5.014002;
 use warnings;
+use Carp;
+use Scalar::Util qw( blessed );
 
-use Moose;
-use Moose::Util::TypeConstraints;
-
-coerce 'Zonemaster::Engine::DNSName', from 'Str', via { Zonemaster::Engine::DNSName->new( $_ ) };
+use Class::Accessor "antlers";
 
 use overload
   '""'  => \&string,
   'cmp' => \&str_cmp;
 
-has 'labels' => ( is => 'ro', isa => 'ArrayRef[Str]', required => 1 );
+has 'labels' => ( is => 'ro' );
 
-around BUILDARGS => sub {
-    my $orig  = shift;
-    my $class = shift;
+sub from_string {
+    my ( $class, $domain ) = @_;
 
-    if ( @_ == 1 && !ref $_[0] ) {
-        my $name = shift;
-        $name = q{} if not defined( $name );
-        my @labels = split( /[.]/x, $name );
-        return $class->$orig( labels => \@labels );
+    confess 'Argument must be a string: $domain'
+      if !defined $domain || ref $domain ne '';
+
+    return $class->_new( { labels => [ split( /[.]/x, $domain ) ] } );
+}
+
+sub new {
+    my $proto = shift;
+    confess "must be called with a single argument"
+      if scalar( @_ ) != 1;
+    my $input = shift;
+
+    my $attrs = {};
+    if ( !defined $input ) {
+        $attrs->{labels} = [];
     }
-    elsif ( ref( $_[0] ) and ref( $_[0] ) eq __PACKAGE__ ) {
-        return $_[0];
+    elsif ( blessed $input && $input->isa( 'Zonemaster::Engine::DNSName' ) ) {
+        $attrs->{labels} = \@{ $input->labels };
     }
-    elsif ( ref( $_[0] ) and ref( $_[0] ) eq 'Zonemaster::Engine::Zone' ) {
-        return $_[0]->name;
+    elsif ( blessed $input && $input->isa( 'Zonemaster::Engine::Zone' ) ) {
+        $attrs->{labels} = [ split( /[.]/x, $input->name ) ];
+    }
+    elsif ( ref $input eq '' ) {
+        $attrs->{labels} = [ split( /[.]/x, $input ) ];
+    }
+    elsif ( ref $input eq 'HASH' ) {
+        confess "Attribute \(labels\) is required"
+          if !exists $input->{labels};
+
+        confess "Argument must be an ARRAYREF: labels"
+          if exists $input->{labels}
+          && ref $input->{labels} ne 'ARRAY';
+
+        $attrs->{labels} = $input->{labels};
     }
     else {
-        return $class->$orig( @_ );
+        my $what =
+          ( blessed $input )
+          ? "blessed(" . blessed $input . ")"
+          : "ref(" . ref $input . ")";
+        confess "Unrecognized argument: " . $what;
     }
-};
+
+    # Type constraints
+    confess "Argument must be an ARRAYREF: labels"
+      if exists $attrs->{labels}
+      && ref $attrs->{labels} ne 'ARRAY';
+
+    my $class = ref $proto || $proto;
+    return $class->_new( $attrs );
+}
+
+sub _new {
+    my $class = shift;
+    my $attrs = shift;
+
+    my $obj = Class::Accessor::new( $class, $attrs );
+
+    return $obj;
+}
 
 sub string {
     my $self = shift;
@@ -66,7 +108,7 @@ sub next_higher {
     my @l    = @{ $self->labels };
     if ( @l ) {
         shift @l;
-        return Zonemaster::Engine::DNSName->new( labels => \@l );
+        return Zonemaster::Engine::DNSName->new({ labels => \@l });
     }
     else {
         return;
@@ -114,10 +156,6 @@ sub TO_JSON {
     return $self->string;
 }
 
-## no critic (Modules::RequireExplicitInclusion)
-no Moose;
-__PACKAGE__->meta->make_immutable;
-
 1;
 
 =head1 NAME
@@ -159,6 +197,10 @@ If it's a L<Zonemaster::Engine::DNSName> object it will simply be returned.
 
 If it's a L<Zonemaster::Engine::Zone> object, the value of its C<name> attribute will
 be returned.
+
+=item from_string($domain)
+
+A specialized constructor that must be called with a string.
 
 =item string()
 

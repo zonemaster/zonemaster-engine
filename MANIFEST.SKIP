@@ -6,8 +6,10 @@
 ^\.perltidyrc$
 ^\.travis\.yml$
 ^util/
+^share/update-po$         # PO files are exluded from dist, which makes this script meaningless in dist
 ^share/Zonemaster-Engine.pot$
 ^t/po-files.t$            # PO files are excluded from dist, so we cannot test them
+^Dockerfile$
 
 #!start included /usr/share/perl/5.20/ExtUtils/MANIFEST.SKIP
 # Avoid version control files.
@@ -71,3 +73,7 @@
 
 # For Github action
 ^\.github/
+
+# Debian packaging
+^debian/
+^.pc/

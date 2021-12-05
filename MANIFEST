@@ -1,6 +1,5 @@
 Changes
 CONTRIBUTING.md
-docs/ConfigAndPolicy.pod
 docs/Implementing_Tests.pod
 docs/Installation.md
 docs/logentry_args.md
@@ -69,6 +68,7 @@ t/asn.data
 t/asn.t
 t/dnsname.t
 t/logger.t
+t/manifest.t
 t/nameserver-axfr.data
 t/nameserver-axfr.t
 t/nameserver.data
@@ -112,6 +112,7 @@ t/profiles/Test-dnssec14-only.json
 t/profiles/Test-dnssec15-only.json
 t/profiles/Test-dnssec16-only.json
 t/profiles/Test-dnssec17-only.json
+t/profiles/Test-dnssec18-only.json
 t/profiles/Test-dnssec-all.json
 t/profiles/Test-dnssec-more-all.json
 t/profiles/Test-nameserver01-only.json
