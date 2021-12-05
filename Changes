@@ -1,5 +1,33 @@
 Release history for Zonemaster component Zonemaster-Engine
 
+v4.3.0 2021-12-03 (public release version)
+
+ [Features]
+ - Deb packages are available for Debian (#1021)
+ - Adds support for Docker (#1002, #1012, #991)
+ - Replaces CentOS with Rocky Linux (#996)
+ - Updates test case DNSSEC10 from updated specification (#995, #992, #772)
+ - Adds test case DNSSEC18 (#990, #987)
+ - Updates test cases DNSSEC15, DNSSEC16 and DNSSEC17 from update
+   specification (#989, #988, 907, #896)
+ - Updates test case DNSSEC09 from updated specification (#986, #985, #983, #980)
+ - Updates test case DNSSEC02 from updated specification (#984, #982)
+ - Updates test case DNSSEC08 from updated specification (#981, #978)
+ - Updates test case DNSSEC11 from updated specification (#979, #977)
+ - Updates test case DNSSEC13 from updated specification (#976, #975)
+
+ [Fixes]
+ - Updates French translation (#1015, #1004)
+ - Cleanup in documentation (#1018, #1009)
+ - Adds missing test case description (#1020, #1001)
+ - Updates documentation for developers and translators (#997)
+ - Updates dependency list (#999)
+ - Updates msgid in Zone09 (#968, #967)
+ - Improves code performance (#566)
+ - Improves output in CLI (#971, #970)
+ - Corrects the handling of "delete" CDS and CDNSKEY in test case
+   DNSSEC15 (#969, #964)
+
 v4.2.3 2021-09-17 (public fix version)
 
  [Fixes]
