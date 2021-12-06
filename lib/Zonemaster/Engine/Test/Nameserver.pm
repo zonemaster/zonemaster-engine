@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare("v1.0.26");
+use version; our $VERSION = version->declare( "v1.0.27" );
 
 use Zonemaster::Engine;
 
@@ -1279,19 +1279,19 @@ Check whether authoritative name servers return same results for equivalent name
 
 =item nameserver10($zone)
 
-WIP
+Check whether authoritative name servers respond correctly to queries with undefined EDNS version.
 
 =item nameserver11($zone)
 
-WIP
+Check whether authoritative name servers responses doe not include unknown EDNS OPTION-CODE used in query.
 
 =item nameserver12($zone)
 
-WIP
+Check whether authoritative name servers responses has "Z" bits cleared even if they are set in the query.
 
 =item nameserver13($zone)
 
-WIP
+This Test Case will try to verify that if the response to a query with an OPT record is truncated, then the response will contain an OPT record.
 
 =back
 

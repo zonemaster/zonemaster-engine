@@ -17,12 +17,12 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
 
 BEGIN { use_ok( 'Zonemaster::Engine::Zone' ) }
 
-my $zone = new_ok( 'Zonemaster::Engine::Zone' => [ { name => 'iis.se' } ] );
+my $zone = Zonemaster::Engine->zone( 'iis.se' );
 
 isa_ok( $zone->parent, 'Zonemaster::Engine::Zone' );
 is( $zone->parent->name, 'se' );
 
-my $root = new_ok( 'Zonemaster::Engine::Zone' => [ { name => '.' } ] );
+my $root = Zonemaster::Engine->zone( '.' );
 is( $root->parent, $root );
 
 isa_ok( $zone->glue_names, 'ARRAY' );
@@ -123,9 +123,9 @@ foreach my $p ( @$ary ) {
 ok( $zone->is_in_zone( 'www.iis.se', 'www.iis.se is in zone iis.se' ) );
 ok( not $zone->is_in_zone( 'www.google.se', 'www.google.se is not in zone iis.se' ) );
 
-my $net = Zonemaster::Engine::Zone->new( { name => 'net' } );
+my $net = Zonemaster::Engine->zone( 'net' );
 ok( not( $net->is_in_zone( 'k.gtld-servers.net.' ) ), 'k.gtld-servers.net is not in zone' );
-ok( Zonemaster::Engine::Zone->new( { name => 'gtld-servers.net' } )->is_in_zone( 'k.gtld-servers.net.' ),
+ok( Zonemaster::Engine->zone( 'gtld-servers.net' )->is_in_zone( 'k.gtld-servers.net.' ),
     'k.gtld-servers.net is in zone' );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {

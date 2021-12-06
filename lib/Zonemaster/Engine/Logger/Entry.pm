@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare("v1.1.7");
+use version; our $VERSION = version->declare("v1.1.8");
 
 use Time::HiRes qw[time];
 use JSON::PP;
@@ -72,10 +72,9 @@ sub _build_testcase {
     my ( $self ) = @_;
 
     foreach my $e ( @{ $self->trace } ) {
-        if (    $e->[0] =~ /^(Zonemaster::Engine::Test::)([^:]+)$/
-            and $e->[1] =~ /^$1$2::($2[0-9]+)$/i )
+        if ( $e->[1] =~ /^Zonemaster::Engine::Test::([^:]+)::(\1[0-9]+)$/i )
         {
-            return uc $1;
+            return uc $2;
         }
     }
 

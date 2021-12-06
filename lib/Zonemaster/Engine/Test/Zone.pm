@@ -188,7 +188,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     MX_RECORD_EXISTS => sub {
         __x    # ZONE:MX_RECORD_EXISTS
-          'Target ({info}) found to deliver e-mail for the domain name.', @_;
+          'MX with mail target ({mailtarget_list}) exists for the domain name.', @_;
     },
     REFRESH_MINIMUM_VALUE_LOWER => sub {
         __x    # ZONE:REFRESH_MINIMUM_VALUE_LOWER
@@ -666,15 +666,15 @@ sub zone09 {
         else {
             my @mx = $p->get_records_for_name( q{MX}, $zone->name );
             for my $mx ( @mx ) {
-                my $tmp = q{MX=};
-                $tmp .= $mx->exchange;
+                my $tmp = $mx->exchange;
                 $tmp =~ s/[.]\z//smx;
-                $info .= $tmp . q{/};
+                $info .= $tmp . q{;};
             }
             chop $info;
         }
+
         if ( not grep { $_->tag ne q{TEST_CASE_START} } @results ) {
-            push @results, info( MX_RECORD_EXISTS => { info => $info } );
+            push @results, info( MX_RECORD_EXISTS => { mailtarget_list => $info } );
         }
     } ## end if ( $p )
     else {

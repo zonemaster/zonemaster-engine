@@ -14,11 +14,10 @@ bugtracker 'https://github.com/zonemaster/zonemaster-engine/issues';
 
 all_from 'lib/Zonemaster/Engine.pm';
 
-configure_requires 'Locale::Msgfmt' => 0.15;
-
 # "2.1.0" could be declared as "2.001" but not as "2.1"
 # (see Zonemaster::LDNS below)
 
+requires 'Class::Accessor'    => 0;
 requires 'Clone'              => 0;
 requires 'Email::Valid'       => 0;
 requires 'File::ShareDir'     => 1.00;
@@ -39,6 +38,7 @@ test_requires 'Pod::Coverage'     => 0;
 test_requires 'Test::Differences' => 0;
 test_requires 'Test::Exception'   => 0;
 test_requires 'Test::Fatal'       => 0;
+test_requires 'Test::NoWarnings'  => 0;
 test_requires 'Test::Pod'         => 1.22;
 
 # Make all platforms include inc/Module/Install/External.pm
@@ -51,17 +51,31 @@ recommends 'Readonly::XS' => 0;
 recommends 'Net::IP::XS'  => 0;
 
 sub MY::postamble {
-    my $text;
+    my $pure_all;
     if ($^O eq "freebsd") {
         # Make FreeBSD use gmake for share/Makefile
-        $text = 'GMAKE ?= "gmake"' . "\n"
+        $pure_all = 'GMAKE ?= "gmake"' . "\n"
             . 'pure_all :: share/Makefile' . "\n"
-            . "\t" . 'cd share && $(GMAKE) touch-po all' . "\n";
+            . "\t" . 'cd share && $(GMAKE) all' . "\n";
     } else {
-        $text = 'pure_all :: share/Makefile' . "\n"
-            . "\t" . 'cd share && $(MAKE) touch-po all' . "\n";
-    };
-    return $text;
+        $pure_all = 'pure_all :: share/Makefile' . "\n"
+            . "\t" . 'cd share && $(MAKE) all' . "\n";
+    }
+
+    my $docker = <<'END_DOCKER';
+
+docker-build:
+	docker build --tag zonemaster/engine:local --build-arg version=$(VERSION) .
+
+docker-tag-version:
+	docker tag zonemaster/engine:local zonemaster/engine:$(VERSION)
+
+docker-tag-latest:
+	docker tag zonemaster/engine:local zonemaster/engine:latest
+
+END_DOCKER
+
+    return $pure_all . $docker;
 };
 
 install_share;

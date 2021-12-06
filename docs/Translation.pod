@@ -14,7 +14,7 @@ executed from that directory.
 =head2 For translators
 
 Instructions for translators can be found in
-L<https://github.com/zonemaster/zonemaster-engine/blob/develop/docs/Translation-translators.md>
+L<https://github.com/zonemaster/zonemaster/blob/develop/docs/internal-documentation/maintenance/Instructions-for-translators.md>
 
 =head2 For developers of Zonemaster test modules
 
