@@ -1236,7 +1236,7 @@ msgid ""
 "The CDS RRset is not signed with a DNSKEY record that a DS record points to. "
 "Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"CDNSKEY RR-sættet er ikke signeret af en DNSKEY-record som en DS-record peger på. "
+"CDS RR-sættet er ikke signeret af en DNSKEY-record som en DS-record peger på. "
 "Fundet på navneserverne med IP-adresserne \"{ns_ip_list}\"."
 
 #. DNSSEC:DS18_NO_MATCH_CDNSKEY_RRSIG_DS
