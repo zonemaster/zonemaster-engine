@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-16 12:16+0100\n"
-"PO-Revision-Date: 2021-12-08 13:13+0100\n"
+"PO-Revision-Date: 2021-12-09 08:49+0100\n"
 "Last-Translator: richard.persson@norid.no\n"
 "Language-Team: Zonemaster Team\n"
 "Language: nb\n"
@@ -647,9 +647,9 @@ msgid ""
 "DS with same tag is present in parent. Fetched from the nameservers with IP "
 "addresses \"{ns_ip_list}\"."
 msgstr ""
-"Flagg-feltet for denne DNSKEY-posten med \"key tag\" {keytag}, "
-"indikerer at det er en ZSK men DS-post med samme \"key tag\" finnes i "
-"foreldre-zonen. Hentet fra navnetjenere med IP-adressene ({ns_ip_list})."
+"Flagg-feltet for denne DNSKEY-posten med \"key tag\" {keytag} har ikke "
+"ZONE-bit satt, men en DS-post med samme \"key tag\" finnes i foreldre-zonen. "
+"Hentet fra navnetjenere med IP-adressene ({ns_ip_list})."
 
 #. DNSSEC:DS02_DNSKEY_NOT_SEP
 #, perl-brace-format
@@ -658,9 +658,9 @@ msgid ""
 "DS with same tag is present in parent. Fetched from the nameservers with IP "
 "addresses \"{ns_ip_list}\"."
 msgstr ""
-"Flagg-feltet for NSKEY-posten med \"key tag\" {keytag}, har ikke SEP-bit "
-"satt men DS-post med samme \"key tag\" finnes i foreldre-zonen. Hentet fra "
-"navnetjenere med IP-adressene ({ns_ip_list})."
+"Flagg-feltet for NSKEY-posten med \"key tag\" {keytag} har ikke "
+"SEP-bit satt, men DS-post med samme \"key tag\" finnes i foreldre-zonen. "
+"Hentet fra navnetjenere med IP-adressene ({ns_ip_list})."
 
 #. DNSSEC:DS02_NO_DNSKEY_FOR_DS
 #, perl-brace-format
@@ -931,7 +931,7 @@ msgid ""
 "signed or not."
 msgstr ""
 "Navnetjenerne for sonen svarer inkonsekvent på om sonen er signert eller "
-"ikke.<"
+"ikke."
 
 #. DNSSEC:DS11_UNDETERMINED_DS
 msgid ""
