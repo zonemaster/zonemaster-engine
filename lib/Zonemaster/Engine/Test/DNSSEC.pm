@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare( "v1.1.56" );
+use version; our $VERSION = version->declare( "v1.1.57" );
 
 ###
 ### This test module implements DNSSEC tests.
@@ -2867,7 +2867,7 @@ sub dnssec11 {
         }
 
         my $ds_p = $ns->query( $zone->name, q{DS}, { dnssec => 1, usevc => 0 } );
-        if ($ds_p and $ds_p->tc) {
+        if ( $ds_p and $ds_p->tc ) {
             $ds_p = $ns->query( $zone->name, q{DS}, { dnssec => 1, usevc => 1 } );
         }
 
@@ -2965,7 +2965,7 @@ sub dnssec11 {
             }
 
             my $dnskey_p = $ns->query( $zone->name, q{DNSKEY}, { usevc => 0 } );
-            if ( $dnskey_p->tc ) {
+            if ( $dnskey_p and $dnskey_p->tc ) {
                 $dnskey_p = $ns->query( $zone->name, q{DNSKEY}, { usevc => 1 } );
             }
 
