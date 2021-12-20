@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-28 07:16+0000\n"
-"PO-Revision-Date: 2020-11-03 16:56+0100\n"
+"POT-Creation-Date: 2021-12-07 11:27+0000\n"
+"PO-Revision-Date: 2021-12-07 11:27+0000\n"
 "Last-Translator: Niels Haarbo <haarbo@dk-hostmaster.dk>\n"
 "Language-Team: Zonemaster Team\n"
 "Language: da\n"
@@ -89,8 +89,8 @@ msgid ""
 "Nameserver {ns} reponds to a NS query with no NS records in the answer "
 "section."
 msgstr ""
-"Navneserveren {ns} svarede på en NS-forespørgsel, men svaret indeholder "
-"ikke nogle NS-records"
+"Navneserveren {ns} svarede på en NS-forespørgsel, men svaret indeholder ikke "
+"nogle NS-records"
 
 #. BASIC:B04_MISSING_SOA_RECORD
 #, perl-brace-format
@@ -137,14 +137,16 @@ msgstr "Navneserveren {ns} svarede ikke autoritativt på en SOA-forespørgsel."
 msgid ""
 "Nameserver {ns} responds with an unexpected RCODE ({rcode}) on an NS query."
 msgstr ""
-"Navneserveren {ns} besvarede en NS-forespørgsel med en uventet RCODE ({rcode})."
+"Navneserveren {ns} besvarede en NS-forespørgsel med en uventet RCODE "
+"({rcode})."
 
 #. BASIC:B04_UNEXPECTED_RCODE_SOA_QUERY
 #, perl-brace-format
 msgid ""
 "Nameserver {ns} responds with an unexpected RCODE ({rcode}) on an SOA query."
 msgstr ""
-"Navneserveren {ns} besvarede en SOA-forespørgsel med en uventet RCODE ({rcode})."
+"Navneserveren {ns} besvarede en SOA-forespørgsel med en uventet RCODE "
+"({rcode})."
 
 #. BASIC:B04_WRONG_NS_RECORD
 #, perl-brace-format
@@ -579,62 +581,6 @@ msgstr ""
 "DNSKEY-recorden med tag {keytag} anvender en ikke tildelt algoritme med "
 "nummer {algo_num}/({algo_descr})."
 
-#. DNSSEC:ALGO_NOT_SIGNED_RRSET
-#, perl-brace-format
-msgid ""
-"Nameserver {ns} responded with no RRSIG for RRset {rrtype} created by the "
-"algorithm {algo_num}."
-msgstr ""
-"Navneserveren {ns} returnerede ikke nogle RRSIG for RRset {rrtype} oprettet "
-"med algoritmen {algo_num}."
-
-#. DNSSEC:ALL_ALGO_SIGNED
-msgid ""
-"All the tested RRset (SOA/DNSKEY/NS) are signed by each algorithm present in "
-"the DNSKEY RRset."
-msgstr ""
-"Alle de testede RRset (SOA/DNSKEY/NS) er signeret af alle algoritmer fundet "
-"i DNSKEY RRset-svaret."
-
-#. DNSSEC:BROKEN_DNSSEC
-#, perl-brace-format
-msgid ""
-"All nameservers for zone {domain} responds with neither NSEC nor NSEC3 "
-"records when such records are expected."
-msgstr ""
-"Alle navneservere for zonen {domain} svarede hverken NSEC- eller NSEC3-"
-"records, selvom de var forventede."
-
-#. DNSSEC:BROKEN_DS
-#, perl-brace-format
-msgid ""
-"DNSKEY record with tag {keytag} returned by nameserver {ns} does not match "
-"the algorithm and hash values in a DS record with same tag in parent zone."
-msgstr ""
-"DNSKEY record med tag {keytag} returneret af navneserver {ns} matcher ikke "
-"algoritmen og hashværdien i en DS record med samme tag i forældrezonen."
-
-#. DNSSEC:BROKEN_RRSIG
-#, perl-brace-format
-msgid ""
-"The RRSIG of the DNSKEY RRset created by tag {keytag} returned by nameserver "
-"{ns} failed to be verified with error '{error}' (a DS record with same tag "
-"is present in the parent zone)."
-msgstr ""
-"RRSIG bag DNSKEY RR-sæt oprettet af tag {keytag} returneret af navneserveren "
-"{ns} fejlede verifikation med fejlen '{error}' (en DS record med samme tag "
-"er til stede i forældrezonen)."
-
-#. DNSSEC:DELEGATION_NOT_SIGNED
-#, perl-brace-format
-msgid "Delegation from parent to child is not properly signed ({reason})."
-msgstr ""
-"Delegeringen fra forælder- til børnezone er ikke korrekt signeret ({reason})."
-
-#. DNSSEC:DELEGATION_SIGNED
-msgid "Delegation from parent to child is properly signed."
-msgstr "Delegeringen fra forælder- til børnezonen er korrekt signeret."
-
 #. DNSSEC:DNSKEY_AND_DS
 #, perl-brace-format
 msgid "{parent} sent a DS record, and {child} a DNSKEY record."
@@ -646,48 +592,6 @@ msgid "{child} sent a DNSKEY record, but {parent} did not send a DS record."
 msgstr ""
 "{child} returnerede en DNSKEY-record, men {parent} returnerede ikke en DS-"
 "record."
-
-#. DNSSEC:DNSKEY_KSK_NOT_SEP
-#, perl-brace-format
-msgid ""
-"Flags field of DNSKEY record with tag {keytag} returned by nameserver {ns} "
-"has not SEP bit set although DS with same tag is present in parent."
-msgstr ""
-"Feltet flag bag DNSKEY record med tag {keytag} returneret af navneserver "
-"{ns} har ikke SEP bit sat på trods af, at DS med samme tag er til stede hos "
-"forælderen."
-
-#. DNSSEC:DNSKEY_NOT_ZONE_SIGN
-#, perl-brace-format
-msgid ""
-"Flags field of DNSKEY record with tag {keytag} returned by nameserver {ns} "
-"has not ZONE bit set although DS with same tag is present in parent."
-msgstr ""
-"Feltet flag bag DNSKEY record med tag {keytag} returneret af navneserver "
-"{ns} har ikke ZONE bit sat på trods af, at DS med samme tag er til stede hos "
-"forælderen."
-
-#. DNSSEC:DNSKEY_NOT_SIGNED
-msgid "The apex DNSKEY RRset was not correctly signed."
-msgstr "DNSKEY RRset i zonetoppen var ikke korrekt signeret."
-
-#. DNSSEC:DNSKEY_SIGNATURE_NOT_OK
-#, perl-brace-format
-msgid ""
-"Signature for DNSKEY with tag {keytag} failed to verify with error '{error}'."
-msgstr ""
-"Verificering af signaturen for DNSKEY-recorden med keytag {keytag} fejlede "
-"med fejlmeddelelsen '{error}'."
-
-#. DNSSEC:DNSKEY_SIGNATURE_OK
-#, perl-brace-format
-msgid "A signature for DNSKEY with tag {keytag} was correctly signed."
-msgstr ""
-"Verificering af en signatur for DNSKEY-recorden med keytag {keytag} lykkedes."
-
-#. DNSSEC:DNSKEY_SIGNED
-msgid "The apex DNSKEY RRset was correcly signed."
-msgstr "DNSKEY RRset i zonetoppen var korrekt signeret."
 
 #. DNSSEC:DNSKEY_SMALLER_THAN_REC
 #, perl-brace-format
@@ -719,7 +623,361 @@ msgstr ""
 "størrelsen ({keysize}), der er større end den største tilladte værdi "
 "({keysizemax})."
 
-#. DS15_HAS_CDNSKEY_NO_CDS
+#. DNSSEC:DS02_ALGO_NOT_SUPPORTED_BY_ZM
+#. DNSSEC:DS08_ALGO_NOT_SUPPORTED_BY_ZM
+#. DNSSEC:DS09_ALGO_NOT_SUPPORTED_BY_ZM
+#. DNSSEC:DS10_ALGO_NOT_SUPPORTED_BY_ZM
+msgid ""
+"DNSKEY with tag {keytag} uses unsupported algorithm {algo_num} "
+"({algo_mnemo}) by this installation of Zonemaster. Fetched from the "
+"nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"DNSKEY-recorden med tag {keytag} bruger usupporteret algoritme {algo_num} "
+"({algo_mnemo}) på denne installation af Zonemaster. Fundet "
+"på navneserverne med IP-adresserne \"{ns_ip_list}\"."
+
+#. DNSSEC:DS02_DNSKEY_NOT_FOR_ZONE_SIGNING
+msgid ""
+"Flags field of DNSKEY record with tag {keytag} has not ZONE bit set although "
+"DS with same tag is present in parent. Fetched from the nameservers with IP "
+"addresses \"{ns_ip_list}\"."
+msgstr ""
+"Feltet flag af DNSKEY-recorden med tag {keytag} har ikke ZONE bit sat på "
+"trods af, at DS med samme tag er tilstede hos forælderen. Fundet "
+"på navneserverne med IP-adresserne \"{ns_ip_list}\"."
+
+#. DNSSEC:DS02_DNSKEY_NOT_SEP
+msgid ""
+"Flags field of DNSKEY record with tag {keytag} has not SEP bit set although "
+"DS with same tag is present in parent. Fetched from the nameservers with IP "
+"addresses \"{ns_ip_list}\"."
+msgstr ""
+"Feltet flag af DNSKEY-recorden med tag {keytag} har ikke SEP bit sat på "
+"trods af, at DS med samme tag er tilstede hos forælderen. Fundet "
+"på navneserverne med IP-adresserne \"{ns_ip_list}\"."
+
+#. DNSSEC:DS02_NO_DNSKEY_FOR_DS
+msgid ""
+"The DNSKEY record with tag {keytag} that the DS refers to does not exist in "
+"the DNSKEY RRset. Fetched from the nameservers with IP \"{ns_ip_list}\"."
+msgstr ""
+"DNSKEY-recorden med tag {keytag} som DS refererer til, eksisterer ikke i "
+"DNSKEY-sættet. Fundet på navneserverne med IP-adresserne \"{ns_ip_list}\"."
+
+#. DNSSEC:DS02_NO_MATCHING_DNSKEY_RRSIG
+msgid ""
+"The DNSKEY RRset is not signed by the DNSKEY with tag {keytag} that the the "
+"DS record refers to. Fetched from the nameservers with IP \"{ns_ip_list}\"."
+msgstr ""
+"DNSKEY RR-sættet er ikke signeret af DNSKEY med den tag {keytag} som "
+"DS-recorden refererer til. Fundet på navneserverne med IP-adresserne "
+"\"{ns_ip_list}\"."
+
+#. DNSSEC:DS02_NO_MATCH_DS_DNSKEY
+msgid ""
+"The DS record does not match the DNSKEY with tag {keytag} by algorithm or "
+"digest. Fetched from the nameservers with IP \"{ns_ip_list}\"."
+msgstr ""
+"DS-recorden matcher ikke nogen DNSKEY-record med tag {keytag}. Fundet på "
+"navneserverne med IP-adresserne \"{ns_ip_list}\"."
+
+#. DNSSEC:DS02_RRSIG_NOT_VALID_BY_DNSKEY
+#. DNSSEC:DS08_RRSIG_NOT_VALID_BY_DNSKEY
+msgid ""
+"The DNSKEY RRset is signed with an RRSIG with tag {keytag} which cannot be "
+"validated by the matching DNSKEY. Fetched from the nameservers with IP "
+"addresses \"{ns_ip_list}\"."
+msgstr ""
+"DNSKEY RR-sættet er signeret med RRSIG med tag {keytag} som ikke eksiterer "
+"i den matchende DNSKEY. Fundet på navneserverne med IP-adresserne "
+"\"{ns_ip_list}\"."
+
+#. DNSSEC:DS08_DNSKEY_RRSIG_EXPIRED
+msgid ""
+"RRSIG with keytag {keytag} and covering type DNSKEY has already expired. "
+"Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"RRSIG med tag {keytag}, der dækker typen DNSKEY, er allerede udløbet. Fundet på "
+"navneserverne med IP-adresserne \"{ns_ip_list}\"."
+
+#. DNSSEC:DS08_DNSKEY_RRSIG_NOT_YET_VALID
+msgid ""
+"RRSIG with keytag {keytag} and covering type DNSKEY has inception date in "
+"the future. Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"RRSIG med tag {keytag}, der dækker typen DNSKEY, har startdato i fremtiden. "
+"Fundet på navneserverne med IP-adresserne \"{ns_ip_list}\"."
+
+#. DNSSEC:DS08_MISSING_RRSIG_IN_RESPONSE
+msgid ""
+"The DNSKEY RRset is not signed, which is against expectation. Fetched from "
+"the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"DNSKEY RR-sættet er ikke signeret, hvilket er uventet. "
+"Fundet på navneserverne med IP-adresserne \"{ns_ip_list}\"."
+
+#. DNSSEC:DS08_NO_MATCHING_DNSKEY
+msgid ""
+"The DNSKEY RRset is signed with an RRSIG with tag {keytag} which does not "
+"match any DNSKEY record. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"DNSKEY RR-sættet er signeret med en RRSIG med tag {keytag}, der ikke "
+"matcher nogen DNSKEY-record. Fundet på navneserverne med "
+"IP-adresserne \"{ns_ip_list}\"."
+
+#. DNSSEC:DS09_MISSING_RRSIG_IN_RESPONSE
+msgid ""
+"The SOA RRset is not signed, which is against expectation. Fetched from the "
+"nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"SOA RR-sættet er ikke signeret, hvilket er uventet. Fundet på navneserverne "
+"med IP-adresserne \"{ns_ip_list}\"."
+
+#. DNSSEC:DS09_NO_MATCHING_DNSKEY
+msgid ""
+"The SOA RRset is signed with an RRSIG with tag {keytag} which does not match "
+"any DNSKEY record. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"SOA RR-sættet er signeret med en RRSIG med tag {keytag}, der ikke matcher "
+"nogen DNSKEY-record. Fundet på navneserverne med IP-adresserne \"{ns_ip_list}\"."
+
+#. DNSSEC:DS09_RRSIG_NOT_VALID_BY_DNSKEY
+msgid ""
+"The SOA RRset is signed with an RRSIG with tag {keytag} which cannot be "
+"validated by the matching DNSKEY. Fetched from the nameservers with IP "
+"addresses \"{ns_ip_list}\"."
+msgstr ""
+"SOA RR-sættet er signeret af RRSIG med tag {keytag} som ikke kan verificeres "
+"med den matchende DNSKEY. Fundet på navneserverne med IP-adresserne "
+"\"{ns_ip_list}\"."
+
+#. DNSSEC:DS09_SOA_RRSIG_EXPIRED
+msgid ""
+"RRSIG with keytag {keytag} and covering type SOA has already expired. "
+"Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"RRSIG med tag {keytag}, der dækker typen SOA, er allerede udløbet. "
+"Fundet på navneserverne med IP-adresserne \"{ns_ip_list}\"."
+
+#. DNSSEC:DS09_SOA_RRSIG_NOT_YET_VALID
+msgid ""
+"RRSIG with keytag {keytag} and covering type SOA has inception date in the "
+"future. Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"RRSIG med tag {keytag}, der dækker typen SOA,  har startdato i fremtiden. "
+"Fundet på navneserverne med IP-adresserne \"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_ANSWER_VERIFY_ERROR
+msgid ""
+"The name \"{domain}\" of RR type \"{rrtype}\" is signed by RRSIG, but the "
+"signature or signatures cannot be verified. Fetched from the nameservers "
+"with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"Navnet \"{domain}\" af RR-type \"{rrtype}\" er signeret af RRSIG, men "
+"signaturen eller signaturerne kan ikke verificeres. "
+"Fundet på navneserverne med IP-adresserne \"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_HAS_NSEC
+msgid ""
+"The zone has NSEC records. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"Zonen har NSEC-records. "
+"Fundet på navneserverne med IP-adresserne \"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_HAS_NSEC3
+msgid ""
+"The zone has NSEC3 records. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"Zonen har NSEC3 records. Fundet på navneserverne med IP-adresserne "
+"\"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_INCONSISTENT_NSEC_NSEC3
+#, perl-brace-format
+msgid ""
+"The zone is inconsistent on NSEC and NSEC3. NSEC is fetched from nameservers "
+"with IP addresses \"{ns_ip_list_nsec}\". NSEC3 is fetched from nameservers "
+"with IP addresses \"{ns_ip_list_nsec3}\"."
+msgstr ""
+"Zonen er inkonsistent i forhold til NSEC og NSEC3. NSEC er fundet på navneserverne "
+"med IP-adresserne \"{ns_ip_list_nsec}\". NSEC3 er fundet på navneserverne med "
+"IP-adresserne \"{ns_ip_list_nsec3}\"."
+
+#. DNSSEC:DS10_MISSING_NSEC_NSEC3
+msgid ""
+"NSEC or NSEC3 is expected but is missing. Fetched from the nameservers with "
+"IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"NSEC eller NSEC3 er forventet, men mangler. Fundet på navneserverne med IP-"
+"adresserne \"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_MIXED_NSEC_NSEC3
+msgid ""
+"Unexpectedly both NSEC and NSEC3 are reported. Fetched from the nameservers "
+"with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"Både NSEC og NSEC3 er fundet, hvilket er uventet. Fundet på navneserverne med IP-"
+"adresserne \"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_NAME_NOT_COVERED_BY_NSEC
+msgid ""
+"A non-existent name is not correctly covered by the NSEC records. Fetched "
+"from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"Et ikke-eksisterende navn er ikke korrekt dækket af NSEC-records. Fundet på "
+"navneserverne med IP-adresserne \"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_NAME_NOT_COVERED_BY_NSEC3
+msgid ""
+"A non-existent name is not correctly covered by the NSEC3 records. Fetched "
+"from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"Et ikke-eksisterende navn er ikke korrekt dækket af NSEC3-records. Fundet på "
+"navneserverne med IP-adresserne \"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_NON_EXISTENT_RESPONSE_ERROR
+msgid ""
+"No response or error in response on an expected non-existent name. Fetched "
+"from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"Hverken svar eller fejlkode fundet i svaret på et ikke-eksisterende navn. "
+"Fundet på navneserverne med IP-adresserne \"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_NSEC3_MISSING_SIGNATURE
+msgid ""
+"Missing signatures (RRSIG) for the NSEC3 record or records. Fetched from the "
+"nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"Manglende signaturer (RRSIG) for NSEC3-records. Fundet på "
+"navneserverne med IP-adresserne \"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_NSEC3_RRSIG_VERIFY_ERROR
+msgid ""
+"The signatures (RRSIG) for the NSEC3 record or records cannot be verified. "
+"Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"Signaturerne (RRSIG) for NSEC3-records kan ikke verificeres. Fundet på "
+"navneserverne med IP-adresserne \"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_NSEC_MISSING_SIGNATURE
+msgid ""
+"Missing signatures (RRSIG) for the NSEC record or records. Fetched from the "
+"nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"Signaturer (RRSIG) mangler for NSEC-records. Fundet på "
+"navneserverne med IP-adresserne \"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_NSEC_RRSIG_VERIFY_ERROR
+msgid ""
+"The signatures (RRSIG) for the NSEC record or records cannot be verified. "
+"Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"Signaturerne (RRSIG), der dækker NSEC-records, kan ikke verificeres. "
+"Fundet på navneserverne med IP-adresserne \"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_UNSIGNED_ANSWER
+msgid ""
+"The name \"{domain}\" of RR type \"{rrtype}\" in the answer section of the "
+"response is not signed by any RRSIG. Fetched from the nameservers with IP "
+"addresses \"{ns_ip_list}\"."
+msgstr ""
+"Navnet \"{domain}\" af RR-type \"{rrtype}\" i svarsektionen af svaret er "
+"ikke signeret af nogen RRSIG. Fundet på navneserverne med IP-adresserne "
+"\"{ns_ip_list}\"."
+
+#. DNSSEC:DS11_INCONSISTENT_DS
+msgid "Parent name servers are inconsistent on the existence of DS."
+msgstr ""
+"Forældrenavneserverne er inkonsikvente i forhold til eksistensen "
+"af DS"
+
+#. DNSSEC:DS11_INCONSISTENT_SIGNED_ZONE
+msgid ""
+"Name servers for the child zone are inconsistent on whether the zone is "
+"signed or not."
+msgstr ""
+"Navneserverne for barnezonen er inkonsekvente i forhold til, om zonen "
+"er signeret eller ej."
+
+#. DNSSEC:DS11_UNDETERMINED_DS
+msgid ""
+"It cannot be determined if the parent zone has DS for the child zone or not."
+msgstr ""
+"Det kan ikke afgøres, om forældrezonen har DS for barnezonen eller ej."
+
+#. DNSSEC:DS11_UNDETERMINED_SIGNED_ZONE
+msgid "It cannot be determined if the child zone is signed or not."
+msgstr "Det kan ikke afgøres, om barnezonen er signeret eller ej."
+
+#. DNSSEC:DS11_PARENT_WITHOUT_DS
+msgid ""
+"No DS record for the child zone found on parent nameservers with IP "
+"addresses \"{ns_ip_list}\"."
+msgstr ""
+"Ingen DS-record for barnezonen er fundet på forældrenavneserverne med "
+"IP-adresserne \"{ns_ip_list}\"."
+
+#. DNSSEC:DS11_PARENT_WITH_DS
+msgid ""
+"DS record for the child zone found on parent nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"DS-record for barnezonen er fundet på forældrenavneserverne med IP-adresserne "
+"\"{ns_ip_list}\"."
+
+#. DNSSEC:DS11_NS_WITH_SIGNED_ZONE
+msgid ""
+"Signed child zone found on nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"En signeret barnezone er fundet på navneserverne med IP-adresserne "
+"\"{ns_ip_list}\"."
+
+#. DNSSEC:DS11_NS_WITH_UNSIGNED_ZONE
+msgid ""
+"Unsigned child zone found on nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"En usigneret barnezone er fundet på navneserverne med IP-adresserne "
+"\"{ns_ip_list}\"."
+
+#. DNSSEC:DS11_DS_BUT_UNSIGNED_ZONE
+msgid "The child zone is unsigned, but the parent zone has DS record."
+msgstr ""
+"Barnezonen er usigneret, men forældrezonen har en DS-record."
+
+#. DNSSEC:DS13_ALGO_NOT_SIGNED_DNSKEY
+msgid ""
+"The DNSKEY RRset is not signed by algorithm {algo_num} ({algo_mnemo}) "
+"present in the DNSKEY RRset. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"DNSKEY RR-sættet er ikke signeret med en algoritme {algo_num} ({algo_mnemo}), "
+"der findes i DNSKEY RR-sættet. Fundet på navneserverne med IP-adresserne "
+"\"{ns_ip_list}\"."
+
+#. DNSSEC:DS13_ALGO_NOT_SIGNED_NS
+msgid ""
+"The NS RRset is not signed by algorithm {algo_num} ({algo_mnemo}) present in "
+"the DNSKEY RRset. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"NS RR-sættet er ikke signeret med en algoritme {algo_num} ({algo_mnemo}), "
+"der findes i DNSKEY RR-sættet. Fundet på navneserverne med IP-adresserne "
+"\"{ns_ip_list}\"."
+
+#. DNSSEC:DS13_ALGO_NOT_SIGNED_SOA
+msgid ""
+"The SOA RRset is not signed by algorithm {algo_num} ({algo_mnemo}) present "
+"in the DNSKEY RRset. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"SOA RR-sættet er ikke signeret med en algoritme {algo_num} ({algo_mnemo}), "
+"der findes i DNSKEY RR-sættet. Fundet på navneserverne med IP-adresserne "
+"\"{ns_ip_list}\"."
+
+#. DNSSEC:DS15_HAS_CDNSKEY_NO_CDS
 #, perl-brace-format
 msgid ""
 "CDNSKEY RRset is found on nameservers that resolve to IP addresses "
@@ -728,16 +986,16 @@ msgstr ""
 "CDNSKEY RR-sæt er fundet på navneservere der refererer til IP-adresserne "
 "({ns_ip_list}), men uden CDS RR-sæt."
 
-#. DS15_HAS_CDS_AND_CDNSKEY
+#. DNSSEC:DS15_HAS_CDS_AND_CDNSKEY
 #, perl-brace-format
 msgid ""
 "CDNSKEY and CDS RRsets are found on nameservers that resolve to IP addresses "
 "({ns_ip_list})."
 msgstr ""
-"CDNSKEY og CDS RR-sæt er fundet på navneservere der refererer til IP-adresserne "
-"({ns_ip_list})."
+"CDNSKEY og CDS RR-sæt er fundet på navneservere der refererer til IP-"
+"adresserne ({ns_ip_list})."
 
-#. DS15_HAS_CDS_NO_CDNSKEY
+#. DNSSEC:DS15_HAS_CDS_NO_CDNSKEY
 #, perl-brace-format
 msgid ""
 "CDS RRset is found on nameservers that resolve to IP addresses "
@@ -746,58 +1004,83 @@ msgstr ""
 "CDS RR-sæt er fundet på navneservere der refererer til IP-adresserne "
 "({ns_ip_list}), men uden CDNSKEY RR-sæt."
 
-#. DS15_INCONSISTENT_CDNSKEY
+#. DNSSEC:DS15_INCONSISTENT_CDNSKEY
 msgid "All servers do not have the same CDNSKEY RRset."
 msgstr "Alle navneservere har ikke det samme CDNSKEY RR-sæt."
 
-#. DS15_INCONSISTENT_CDS
+#. DNSSEC:DS15_INCONSISTENT_CDS
 msgid "All servers do not have the same CDS RRset."
 msgstr "Alle navneservere har ikke det samme CDS RR-sæt."
 
-#. DS15_MISMATCH_CDS_CDNSKEY
+#. DNSSEC:DS15_MISMATCH_CDS_CDNSKEY
 #, perl-brace-format
 msgid ""
 "Both CDS and CDNSKEY RRsets are found on nameservers that resolve to IP "
 "addresses ({ns_ip_list}) but they do not match."
 msgstr ""
-"CDNSKEY og CDS RR-sæt er fundet på navneservere der refererer til IP-adresserne "
-"({ns_ip_list}), men de matcher ikke."
+"CDNSKEY og CDS RR-sæt er fundet på navneservere der refererer til IP-"
+"adresserne ({ns_ip_list}), men de matcher ikke."
 
-#. DS15_NO_CDS_CDNSKEY
+#. DNSSEC:DS15_NO_CDS_CDNSKEY
 msgid "No CDS or CDNSKEY RRsets are found on any name server."
 msgstr "Intet CDS eller CDNSKEY RR-sæt blev fundet på nogen navneserver."
 
-#. DS16_CDS_INVALID_RRSIG
+#. DNSSEC:DS16_CDS_INVALID_RRSIG
 #, perl-brace-format
 msgid ""
 "The CDS RRset is signed with an RRSIG with tag {keytag}, but the RRSIG does "
 "not match the DNSKEY with the same key tag. Fetched from the nameservers "
 "with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"CDS RR-sættet er signeret med en RRSIG med tag {keytag}, men "
-"RRSIG matcher ikke DNSKEY med samme key tag. Fundet på navneserverne "
-"med IP-adresserne \"{ns_ip_list}\"." 
+"CDS RR-sættet er signeret med en RRSIG med tag {keytag}, men RRSIG matcher "
+"ikke DNSKEY med samme key tag. Fundet på navneserverne med IP-adresserne "
+"\"{ns_ip_list}\"."
 
-#. DS16_CDS_MATCHES_NO_DNSKEY
+#. DNSSEC:DS16_CDS_MATCHES_NON_SEP_DNSKEY
+msgid ""
+"The CDS record with tag {keytag} matches a DNSKEY record with SEP bit (bit "
+"15) unset. Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"CDS-recorden med tag {keytag} matcher en DNSKEY-record, hvor SEP bit (bit 15) "
+"ikke er sat. Fundet på navneserverne med IP-adresserne \"{ns_ip_list}\"."
+
+#. DNSSEC:DS16_CDS_MATCHES_NON_ZONE_DNSKEY
+msgid ""
+"The CDS record with tag {keytag} matches a DNSKEY record with zone bit (bit "
+"7) unset. Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"CDS-recorden med tag {keytag} matcher en DNSKEY-record, hvor SEP bit (bit 7) "
+"ikke er sat. Fundet på navneserverne med IP-adresserne \"{ns_ip_list}\"."
+
+#. DNSSEC:DS16_CDS_MATCHES_NO_DNSKEY
 #, perl-brace-format
 msgid ""
 "The CDS record with tag {keytag} does not match any DNSKEY record. Fetched "
 "from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"CDS-recorden med tag {keytag} matcher ikke nogen DNSKEY-record. "
-"Fundet på navneserverne med IP-adresserne \"{ns_ip_list}\"."
+"CDS-recorden med tag {keytag} matcher ikke nogen DNSKEY-record. Fundet på "
+"navneserverne med IP-adresserne \"{ns_ip_list}\"."
 
-#. DS16_CDS_SIGNED_BY_UNKNOWN_DNSKEY
+#. DNSSEC:DS16_CDS_NOT_SIGNED_BY_CDS
+msgid ""
+"The CDS RRset is not signed by the DNSKEY that the CDS record with tag "
+"{keytag} points to. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"CDS RR-sættet er ikke signeret af den DNSKEY som CDS-recorden med "
+"{keytag} peger på. Fundet på navneserverne med IP-adresserne "
+"\"{ns_ip_list}\"."
+
+#. DNSSEC:DS16_CDS_SIGNED_BY_UNKNOWN_DNSKEY
 #, perl-brace-format
 msgid ""
 "The CDS RRset is signed by RRSIG with tag {keytag} but that is not in the "
 "DNSKEY RRset. Fetched from the nameservers with P addresses \"{ns_ip_list}\"."
 msgstr ""
-"CDS-recordsættet er signeret af RRSIG med tag {keytag}, men det er "
-"ikke DNSKEY RR-sættet. Fundet på navneserverne med IP-adresserne "
-"\"{ns_ip_list}\"."
+"CDS-recordsættet er signeret af RRSIG med tag {keytag}, men det er ikke "
+"DNSKEY RR-sættet. Fundet på navneserverne med IP-adresserne \"{ns_ip_list}\"."
 
-#. DS16_CDS_UNSIGNED
+#. DNSSEC:DS16_CDS_UNSIGNED
 #, perl-brace-format
 msgid ""
 "The CDS RRset is not signed. Fetched from the nameservers with IP addresses "
@@ -806,16 +1089,16 @@ msgstr ""
 "CDS RR-sættet er ikke signeret. Fundet på navneserverne med IP-adresserne "
 "\"{ns_ip_list}\"."
 
-#. DS16_CDS_WITHOUT_DNSKEY
+#. DNSSEC:DS16_CDS_WITHOUT_DNSKEY
 #, perl-brace-format
 msgid ""
 "A CDS RRset exists, but no DNSKEY record exists. Fetched from the "
 "nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"Et CDS RR-sæt eksisterer, men ingen DNSKEY-record eksisterer. "
-"Fundet på navneserverne med IP-adresserne \"{ns_ip_list}\"."
+"Et CDS RR-sæt eksisterer, men ingen DNSKEY-record eksisterer. Fundet på "
+"navneserverne med IP-adresserne \"{ns_ip_list}\"."
 
-#. DS16_DELETE_CDS
+#. DNSSEC:DS16_DELETE_CDS
 #, perl-brace-format
 msgid ""
 "A single \"delete\" CDS record is found on the nameservers with IP addresses "
@@ -824,7 +1107,7 @@ msgstr ""
 "En enkelt \"delete\" CDS-record er fundet på navneserverne med IP-adresserne "
 "\"{ns_ip_list}\"."
 
-#. DS16_DNSKEY_NOT_SIGNED_BY_CDS
+#. DNSSEC:DS16_DNSKEY_NOT_SIGNED_BY_CDS
 #, perl-brace-format
 msgid ""
 "The DNSKEY RRset is not signed by the DNSKEY that the CDS record with tag "
@@ -835,37 +1118,62 @@ msgstr ""
 "{keytag} peger på. Fundet på navneserverne med IP-adresserne "
 "\"{ns_ip_list}\"."
 
-
-#. DS16_MIXED_DELETE_CDS
+#. DNSSEC:DS16_MIXED_DELETE_CDS
 #, perl-brace-format
 msgid ""
 "The CDS RRset is a mixture between \"delete\" record and other records. "
 "Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"CDS RR-sættet er et mix mellem \"delete\" record og andre records. "
-"Fundet på navneserverne med IP-adresserne \"{ns_ip_list}\"."
+"CDS RR-sættet er et mix mellem \"delete\" record og andre records. Fundet på "
+"navneserverne med IP-adresserne \"{ns_ip_list}\"."
 
-#. DS17_CDNSKEY_INVALID_RRSIG
+#. DNSSEC:DS17_CDNSKEY_INVALID_RRSIG
 #, perl-brace-format
 msgid ""
 "The CDNSKEY RRset is signed with an RRSIG with tag {keytag}, but the RRSIG "
 "does not match the DNSKEY with the same key tag. Fetched from the "
 "nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"CDNSKEY RR-sætett er signeret med en RRSIG med tag {keytag}, men "
-"RRSIG natcher ikke DNSKEY med det samme key tag. "
-"Fundet på navneserverne med IP-adresserne \"{ns_ip_list}\"."
+"CDNSKEY RR-sætett er signeret med en RRSIG med tag {keytag}, men RRSIG "
+"natcher ikke DNSKEY med det samme key tag. Fundet på navneserverne med IP-"
+"adresserne \"{ns_ip_list}\"."
 
-#. DS17_CDNSKEY_MATCHES_NO_DNSKEY
+#. DNSSEC:DS17_CDNSKEY_IS_NON_SEP
+msgid ""
+"The CDNSKEY record with tag {keytag} has the SEP bit (bit 15) unset. Fetched "
+"rom the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"CDNSKEY-recorden med tag {keytag} har SEP bit (bit 15) deaktiveret. Fundet "
+"på navneserverne med IP-adresserne \"{ns_ip_list}\"."
+
+#. DNSSEC:DS17_CDNSKEY_IS_NON_ZONE
+msgid ""
+"The CDNSKEY record with tag {keytag} has the zone bit (bit 7) unset. Fetched "
+"rom the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"CDNSKEY-recorden med tag {keytag} har zone-bit (bit 7) deaktiveret. Fundet "
+"på navneserverne med IP-adresserne \"{ns_ip_list}\"."
+
+#. DNSSEC:DS17_CDNSKEY_MATCHES_NO_DNSKEY
 #, perl-brace-format
 msgid ""
 "The CDNSKEY record with tag {keytag} does not match any DNSKEY record. "
 "Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"CDNSKEY-recorden med tag {keytag} matcher ikke nogen DNSKEY-record. "
-"Fundet på navneserverne med IP-adresserne \"{ns_ip_list}\"."
+"CDNSKEY-recorden med tag {keytag} matcher ikke nogen DNSKEY-record. Fundet "
+"på navneserverne med IP-adresserne \"{ns_ip_list}\"."
 
-#. DS17_CDNSKEY_SIGNED_BY_UNKNOWN_DNSKEY
+#. DNSSEC:DS17_CDNSKEY_NOT_SIGNED_BY_CDNSKEY
+msgid ""
+"The CDNSKEY RRset is not signed by the DNSKEY that the CDNSKEY record with "
+"tag {keytag} points to. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"CDNSKEY RR-sættet er ikke signeret af den DNSKEY som CDNSKEY-recorden med tag "
+"{keytag} peger på. Fundet på navneserverne med IP-adresserne "
+"\"{ns_ip_list}\"."
+
+#. DNSSEC:DS17_CDNSKEY_SIGNED_BY_UNKNOWN_DNSKEY
 #, perl-brace-format
 msgid ""
 "The CDNSKEY RRset is signed by RRSIG with tag {keytag} but that is not in "
@@ -873,48 +1181,48 @@ msgid ""
 "\"{ns_ip_list}\"."
 msgstr ""
 "CDNSKEY RR-sættet er signeret med RRSIG med tag {keytag}, men den findes "
-"ikke i DNSKEY RR-sættet. "
-"Fundet på navneserverne med IP-adresserne \"{ns_ip_list}\"."
+"ikke i DNSKEY RR-sættet. Fundet på navneserverne med IP-adresserne "
+"\"{ns_ip_list}\"."
 
-#. DS17_CDNSKEY_UNSIGNED
+#. DNSSEC:DS17_CDNSKEY_UNSIGNED
 #, perl-brace-format
 msgid ""
 "The CDNSKEY RRset is not signed. Fetched from the nameservers with IP "
 "addresses \"{ns_ip_list}\"."
 msgstr ""
-"CDNSKEY RR-sættet er ikke signeret. "
-"Fundet på navneserverne med IP-adresserne \"{ns_ip_list}\"."
+"CDNSKEY RR-sættet er ikke signeret. Fundet på navneserverne med IP-"
+"adresserne \"{ns_ip_list}\"."
 
-#. DS17_CDNSKEY_WITHOUT_DNSKEY
+#. DNSSEC:DS17_CDNSKEY_WITHOUT_DNSKEY
 #, perl-brace-format
 msgid ""
 "A CDNSKEY RRset exists, but no DNSKEY record exists. Fetched from the "
 "nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"Et CDNSKEY RR-sæt eksisterer, men ingen DNSKEY-record eksisterer. "
-"Fundet på navneserverne med IP-adresserne \"{ns_ip_list}\"."
+"Et CDNSKEY RR-sæt eksisterer, men ingen DNSKEY-record eksisterer. Fundet på "
+"navneserverne med IP-adresserne \"{ns_ip_list}\"."
 
-#. DS17_DELETE_CDNSKEY
+#. DNSSEC:DS17_DELETE_CDNSKEY
 #, perl-brace-format
 msgid ""
 "A single \"delete\" CDNSKEY record is found on the nameservers with IP "
 "addresses \"{ns_ip_list}\"."
 msgstr ""
-"En enkelt \"delete\" CDNSKEY-record er funder på navneserverne med "
-"IP-adresserne \"{ns_ip_list}\"."
+"En enkelt \"delete\" CDNSKEY-record er funder på navneserverne med IP-"
+"adresserne \"{ns_ip_list}\"."
 
-#. DS17_DNSKEY_NOT_SIGNED_BY_CDNSKEY
+#. DNSSEC:DS17_DNSKEY_NOT_SIGNED_BY_CDNSKEY
 #, perl-brace-format
 msgid ""
 "The DNSKEY RRset is not signed by the DNSKEY that the CDNSKEY record with "
 "tag {keytag} points to. Fetched from the nameservers with IP addresses "
 "\"{ns_ip_list}\"."
 msgstr ""
-"DNSKEY RR-sættet er ikke signeret af den DNSKEY som CDNSKEY-recorden med "
-"tag {keytag} peger på. "
-"Fundet på navneserverne med IP-adresserne \"{ns_ip_list}\"."
+"DNSKEY RR-sættet er ikke signeret af den DNSKEY som CDNSKEY-recorden med tag "
+"{keytag} peger på. Fundet på navneserverne med IP-adresserne "
+"\"{ns_ip_list}\"."
 
-#. DS17_MIXED_DELETE_CDNSKEY
+#. DNSSEC:DS17_MIXED_DELETE_CDNSKEY
 #, perl-brace-format
 msgid ""
 "The CDNSKEY RRset is a mixture between \"delete\" record and other records. "
@@ -923,6 +1231,22 @@ msgstr ""
 "CDNSKEY RR-sættet er et mix mellem \"delete\" record og andre records. "
 "Fundet på navneserverne med IP-adresserne \"{ns_ip_list}\"."
 
+#. DNSSEC:DS18_NO_MATCH_CDS_RRSIG_DS
+msgid ""
+"The CDS RRset is not signed with a DNSKEY record that a DS record points to. "
+"Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"CDS RR-sættet er ikke signeret af en DNSKEY-record som en DS-record peger på. "
+"Fundet på navneserverne med IP-adresserne \"{ns_ip_list}\"."
+
+#. DNSSEC:DS18_NO_MATCH_CDNSKEY_RRSIG_DS
+msgid ""
+"The CDNSKEY RRset is not signed with a DNSKEY record that a DS record points "
+"to. Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"CDNSKEY RR-sætter er ikke signeret af en DNSKEY-record som en DS-record "
+"peger på. Fundet på navneserverne med IP-adresserne "
+"\"{ns_ip_list}\"."
 
 #. DNSSEC:DS_ALGORITHM_NOT_DS
 #, perl-brace-format
@@ -995,11 +1319,6 @@ msgstr ""
 "{parent} returnerede en DS-record, men {child} returnerede ingen DNSKEY-"
 "record."
 
-#. DNSSEC:DS_MATCHES
-msgid ""
-"The DS records in the parent zone match DNSKEY records in the child zone."
-msgstr "DS-records i forældrezonen matcher DNSKEY-records i børnezonen."
-
 #. DNSSEC:DURATION_LONG
 #, perl-brace-format
 msgid ""
@@ -1033,32 +1352,6 @@ msgstr ""
 "Navneserveren {server} returnerede {keys} DNSKEY-records, og {sigs} RRSIG-"
 "records."
 
-#. DNSSEC:HAS_NSEC3
-msgid "The zone has NSEC3 records."
-msgstr "Zonen indeholder NSEC3-records."
-
-#. DNSSEC:HAS_NSEC
-msgid "The zone has NSEC records."
-msgstr "Zonen indeholder NSEC-records."
-
-#. DNSSEC:INCONSISTENT_DNSSEC
-#, perl-brace-format
-msgid ""
-"Some, but not all, nameservers for zone {domain} respond with neither NSEC "
-"nor NSEC3 records when such records are expected."
-msgstr ""
-"Nogle, men ikke alle, navneservere for zonen {domain} svarede hverken NSEC- "
-"eller NSEC3-records selvom disse records er forventet i svaret."
-
-#. DNSSEC:INCONSISTENT_NSEC_NSEC3
-#, perl-brace-format
-msgid ""
-"Some nameservers for zone {domain} respond with NSEC records and others "
-"respond with NSEC3 records. Consistency is expected."
-msgstr ""
-"Nogle af navneserverne for zonen {domain} returnerede NSEC-records og andre "
-"returnerede NSEC3-records. Konsistens forventes."
-
 #. DNSSEC:ITERATIONS_OK
 #, perl-brace-format
 msgid "The number of NSEC3 iterations is {count}, which is OK."
@@ -1082,15 +1375,6 @@ msgstr "Alle nøgler i DNSKEY RRset har den rigtige størrelse."
 msgid "The number of NSEC3 iterations is {count}, which is on the high side."
 msgstr "Antallet af NSEC3-iterationer er {count}, hvilket er relativt højt."
 
-#. DNSSEC:MIXED_NSEC_NSEC3
-#, perl-brace-format
-msgid ""
-"Nameserver {ns} for zone {domain} responds with both NSEC and NSEC3 records "
-"when only one record type is expected."
-msgstr ""
-"Navneserveren {ns} for zonen {domain} svarede både NSEC- og NSEC3-records på "
-"trods af, at kun en recordtype er forventet i svaret."
-
 #. DNSSEC:NEITHER_DNSKEY_NOR_DS
 msgid "There are neither DS nor DNSKEY records for the zone."
 msgstr "Zonen indeholder hverken DS- eller DNSKEY-records."
@@ -1099,57 +1383,10 @@ msgstr "Zonen indeholder hverken DS- eller DNSKEY-records."
 msgid "No DNSKEYs were returned."
 msgstr "Ingen DNSKEY-records blev returneret."
 
-#. DNSSEC:NO_KEYS_OR_NO_SIGS
-#, perl-brace-format
-msgid ""
-"Cannot test DNSKEY signatures, because we got {keys} DNSKEY records and "
-"{sigs} RRSIG records."
-msgstr ""
-"Kan ikke teste DNSKEY-signaturer på baggrund af {keys} DNSKEY-records og "
-"{sigs} RRSIG-records."
-
-#. DNSSEC:NO_KEYS_OR_NO_SIGS_OR_NO_SOA
-#, perl-brace-format
-msgid ""
-"Cannot test SOA signatures, because we got {keys} DNSKEY records, {sigs} "
-"RRSIG records and {soas} SOA records."
-msgstr ""
-"Kan ikke teste SOA-signaturer på baggrund af {keys} DNSKEY-records, {sigs} "
-"RRSIG-records og {soas} SOA-records."
-
-#. DNSSEC:NO_MATCHING_DNSKEY
-#, perl-brace-format
-msgid ""
-"Nameserver {ns} returned no DNSKEY record matching the DS record with tag "
-"{keytag} found in the parent zone."
-msgstr ""
-"Navneserveren {ns} returnerede ingen DNSKEY record, der matcher DS record "
-"med tag {keytag} fundet i foræderzonen."
-
-#. DNSSEC:NO_MATCHING_RRSIG
-#, perl-brace-format
-msgid ""
-"Nameserver {ns} returned no signature on the DNSKEY RRset that corresponds "
-"to the DNSKEY with tag {keytag} even though there is a DS record in the "
-"parent zone for that DNSKEY record."
-msgstr ""
-"Navneserveren {ns} returnerede ingen signatur på DNSKEY RR-sættet, der "
-"svarer til DNSKEY med tag {keytag} på trods af, at der er en DS record i "
-"forældrezonen for den DNSKEY record."
-
 #. DNSSEC:NO_NSEC3PARAM
 #, perl-brace-format
 msgid "{server} returned no NSEC3PARAM records."
 msgstr "{server} returnerede ingen NSEC3PARAM-records."
-
-#. DNSSEC:NO_NSEC_NSEC3
-#, perl-brace-format
-msgid ""
-"Nameserver {ns} for zone {domain} responds with neither NSEC nor NSEC3 "
-"record when when such records are expected."
-msgstr ""
-"Navneserveren {ns} for zonen {domain} svarede hverken NSEC- eller NSEC3-"
-"records selvom disse records er forventet i svaret."
 
 #. DNSSEC:NO_RESPONSE_DNSKEY
 #, perl-brace-format
@@ -1161,53 +1398,9 @@ msgstr "Navneserveren {ns} returnerede ingen DNSKEY record(s)."
 msgid "{ns} returned no DS records for {domain}."
 msgstr "{ns} returnerede ingen DS-records for {domain}."
 
-#. DNSSEC:NO_RESPONSE_RRSET
-#, perl-brace-format
-msgid "Nameserver {ns} responded with no {rrtype} record(s)."
-msgstr "Navneserveren {ns} returnerede ingen {rrtype} record(s)."
-
-#. DNSSEC:NO_RRSIG_DNSKEY
-#, perl-brace-format
-msgid ""
-"Nameserver {ns} responded with no RRSIG record(s) covering the DNSKEY RRset."
-msgstr ""
-"Navneserveren {ns} returnerede ingen RRSIG, der dækker DNSKEY RR-sættet."
-
 #. DNSSEC:NOT_SIGNED
 msgid "The zone is not signed with DNSSEC."
 msgstr "Zonen er ikke signeret med DNSSEC."
-
-#. DNSSEC:NSEC3_COVERS_NOT
-#, perl-brace-format
-msgid "NSEC3 record does not cover {domain}."
-msgstr "NSEC3-record dækker ikke {domain}."
-
-#. DNSSEC:NSEC3_NOT_SIGNED
-msgid "No signature correctly signed the NSEC3 RRset."
-msgstr "Ingen signatur signerede NSEC3 RRset korrekt."
-
-#. DNSSEC:NSEC3_SIG_VERIFY_ERROR
-#, perl-brace-format
-msgid "Trying to verify NSEC3 RRset with RRSIG {keytag} gave error '{error}'."
-msgstr ""
-"Forsøg på at verificere NSEC3 RRset med RRSIG {keytag} returnerede fejlen "
-"'{error}'."
-
-#. DNSSEC:NSEC_COVERS_NOT
-#, perl-brace-format
-msgid "NSEC does not cover {domain}."
-msgstr "NSEC dækker ikke {domain}."
-
-#. DNSSEC:NSEC_NOT_SIGNED
-msgid "No signature correctly signed the NSEC RRset."
-msgstr "Ingen signatur signerede NSEC RRset korrekt."
-
-#. DNSSEC:NSEC_SIG_VERIFY_ERROR
-#, perl-brace-format
-msgid "Trying to verify NSEC RRset with RRSIG {keytag} gave error '{error}'."
-msgstr ""
-"Forsøg på at verificere NSEC RRset med RRSIG {keytag} returnerede fejlen "
-"'{error}'."
 
 #. DNSSEC:REMAINING_LONG
 #, perl-brace-format
@@ -1233,20 +1426,6 @@ msgid ""
 "RRSIG with keytag {keytag} and covering type(s) {types} expires at : {date}."
 msgstr "RRSIG med keytag {keytag} dækkende typerne {types} udløber : {date}."
 
-#. DNSSEC:RRSET_NOT_SIGNED
-#, perl-brace-format
-msgid "Nameserver {ns} responded with no RRSIG for {rrtype} RRset."
-msgstr "Navneserveren {ns} returnerede ingen RRSIG for {rrtype} RRset."
-
-#. DNSSEC:RRSIG_BROKEN
-#, perl-brace-format
-msgid ""
-"Nameserver {ns} responded with an RRSIG which can not be verified with "
-"corresponding DNSKEY (with keytag {keytag})."
-msgstr ""
-"Navneserver {ns} returnerede en RRSIG som ikke kan verificeres med den "
-"tilhørende DNSKEY (med keytag {keytag})."
-
 #. DNSSEC:RRSIG_EXPIRED
 #, perl-brace-format
 msgid ""
@@ -1255,44 +1434,6 @@ msgid ""
 msgstr ""
 "RRSIG-recorden med {keytag}, dækkende typerne {types}, er allerede udløbet "
 "(udløbsdato er: {expiration})."
-
-#. DNSSEC:RRSIG_NOT_MATCH_DNSKEY
-#, perl-brace-format
-msgid "Nameserver {ns} responded with an RRSIG with unknown keytag {keytag}."
-msgstr ""
-"Navneserveren {ns} returnerede en RRSIG med et ukendt keytag ({keytag})."
-
-#. DNSSEC:SOA_NOT_SIGNED
-msgid "No RRSIG correctly signed the SOA RRset."
-msgstr "Ingen RRSIG signerede SOA RRset korrekt."
-
-#. DNSSEC:SOA_SIGNATURE_NOT_OK
-#, perl-brace-format
-msgid ""
-"Trying to verify SOA RRset with signature {keytag} gave error '{error}'."
-msgstr ""
-"Forsøg på at verificere SOA RRset med signatur {keytag} returnerede fejlen "
-"'{error}'."
-
-#. DNSSEC:SOA_SIGNATURE_OK
-#, perl-brace-format
-msgid "RRSIG {keytag} correctly signs SOA RRset."
-msgstr "RRSIG {keytag} signerer SOA RRset korrekt."
-
-#. DNSSEC:SOA_SIGNED
-msgid "At least one RRSIG correctly signs the SOA RRset."
-msgstr "Mindst en RRSIG-record signerer SOA RRset korrekt."
-
-#. DNSSEC:TEST_ABORTED
-#, perl-brace-format
-msgid ""
-"Nameserver {ns} for zone {domain} responds with RCODE \"NOERROR\" on a query "
-"that is expected to give response with RCODE \"NXDOMAIN\". Test for NSEC and "
-"NSEC3 is aborted for this nameserver."
-msgstr ""
-"Navneserveren {ns} bag zonen {domain} svarer RCODE \"NOERROR\" på en "
-"forespørgsel som forventes at give svaret RCODE \"NXDOMAIN\". Test af NSEC "
-"and NSEC3 er afbrudt for denne navneserver."
 
 #. DNSSEC:TOO_MANY_ITERATIONS
 #, perl-brace-format
@@ -1954,8 +2095,8 @@ msgid ""
 "The SOA RNAME mail domain ({domain}) resolved to a mail server with "
 "localhost ({localhost}) IP address."
 msgstr ""
-"SOA RNAME maildomæne ({domain}) refererer til en mailserver med "
-"localhost ({localhost}) IP-adresse."
+"SOA RNAME maildomæne ({domain}) refererer til en mailserver med localhost "
+"({localhost}) IP-adresse."
 
 #. SYNTAX:RNAME_MAIL_ILLEGAL_CNAME
 #, perl-brace-format
@@ -1963,8 +2104,8 @@ msgid ""
 "The SOA RNAME mail domain ({domain}) refers to an address which is an alias "
 "(CNAME)."
 msgstr ""
-"SOA 'RNAME' maildomæne ({domain}) refererer til en adresse som er "
-"et alias (CNAME)."
+"SOA 'RNAME' maildomæne ({domain}) refererer til en adresse som er et alias "
+"(CNAME)."
 
 #. SYNTAX:RNAME_MISUSED_AT_SIGN
 #, perl-brace-format
@@ -2035,8 +2176,8 @@ msgstr ""
 
 #. ZONE:MX_RECORD_EXISTS
 #, perl-brace-format
-msgid "Target ({info}) found to deliver e-mail for the domain name."
-msgstr "Adressen ({info}) modtager e-mail for domænenavnet."
+msgid "MX with mail target ({mailtarget_list}) exists for the domain name."
+msgstr "MX med serverne ({mailtarget_list}) findes for domænenavnet."
 
 #. ZONE:REFRESH_MINIMUM_VALUE_LOWER
 #, perl-brace-format
@@ -2296,3 +2437,4 @@ msgstr ""
 #, perl-brace-format
 msgid "Big packet size ({size}) (try with \"{command}\")."
 msgstr "Stor pakkestørrelse ({size}) (prøv med \"{command}\")."
+
