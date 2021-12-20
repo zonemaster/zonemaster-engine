@@ -1,5 +1,16 @@
 Release history for Zonemaster component Zonemaster-Engine
 
+v4.4.0 2021-12-20 (public fix version)
+ [Features]
+ - Adds translation to Spanish language (#994)
+
+ [Fixes]
+ - Updates Danish translation (#1025, #1005)
+ - Updates Norwegian translation (#1026, #1006)
+ - Fixes bug where TC flag was checked on non-response (#1029, #1028)
+ - Updates Swedish translation (#1011, #1007)
+
+
 v4.3.0 2021-12-03 (public release version)
 
  [Features]
