@@ -16,7 +16,7 @@ use Data::Dumper;
 
 use Zonemaster::Engine;
 use Zonemaster::Engine::Net::IP;
-use Zonemaster::Engine::Constants qw( $RESOLVER_SOURCE_OS_DEFAULT $DURATION_12_HOURS_IN_SECONDS $DURATION_180_DAYS_IN_SECONDS );
+use Zonemaster::Engine::Constants qw( $RESOLVER_SOURCE_OS_DEFAULT $DURATION_5_MINUTES_IN_SECONDS $DURATION_1_HOUR_IN_SECONDS $DURATION_4_HOURS_IN_SECONDS $DURATION_12_HOURS_IN_SECONDS $DURATION_1_DAY_IN_SECONDS $DURATION_1_WEEK_IN_SECONDS $DURATION_180_DAYS_IN_SECONDS );
 
 my %profile_properties_details = (
     q{resolver.defaults.debug} => {
@@ -146,27 +146,27 @@ my %profile_properties_details = (
     q{test_cases_vars.zone.SOA_DEFAULT_TTL_MAXIMUM_VALUE} => {
         type    => q{Num},
         min     => 1,
-        default => 86400
+        default => $DURATION_1_DAY_IN_SECONDS
     },
     q{test_cases_vars.zone.SOA_DEFAULT_TTL_MINIMUM_VALUE} => {
         type    => q{Num},
         min     => 1,
-        default => 300
+        default => $DURATION_5_MINUTES_IN_SECONDS
     },
     q{test_cases_vars.zone.SOA_EXPIRE_MINIMUM_VALUE} => {
         type    => q{Num},
         min     => 1,
-        default => 604800
+        default => $DURATION_1_WEEK_IN_SECONDS
     },
     q{test_cases_vars.zone.SOA_REFRESH_MINIMUM_VALUE} => {
         type    => q{Num},
         min     => 1,
-        default => 14400
+        default => $DURATION_4_HOURS_IN_SECONDS
     },
     q{test_cases_vars.zone.SOA_RETRY_MINIMUM_VALUE} => {
         type    => q{Num},
         min     => 1,
-        default => 3600
+        default => $DURATION_1_HOUR_IN_SECONDS
     }
 );
 
