@@ -551,6 +551,13 @@
             "DURATION_LONG" : 26179200,
             "REMAINING_LONG" : 26179200,
             "REMAINING_SHORT" : 43200
+        },
+        "zone" : {
+            "SOA_DEFAULT_TTL_MAXIMUM_VALUE" : 86400,
+            "SOA_DEFAULT_TTL_MINIMUM_VALUE" : 300,
+            "SOA_EXPIRE_MINIMUM_VALUE"      : 604800,
+            "SOA_REFRESH_MINIMUM_VALUE"     : 14400,
+            "SOA_RETRY_MINIMUM_VALUE"       : 3600
         }
     }
 }
