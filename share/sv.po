@@ -2,10 +2,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-24 11:01+0200\n"
-"PO-Revision-Date: 2021-05-24 10:59+0200\n"
+"POT-Creation-Date: 2021-11-30 18:18+0100\n"
+"PO-Revision-Date: 2021-11-30 18:16+0100\n"
 "Last-Translator: mats.dufberg@iis.se\n"
-"Language-Team: Zonemaster Team\n"
+"Language-Team: Zonemaster Project\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -529,8 +529,8 @@ msgid ""
 "The DNSKEY with tag {keytag} uses deprecated algorithm number {algo_num} "
 "({algo_descr})."
 msgstr ""
-"DNSKEY-posten med 'tag' {keytag} använder en utfasad algoritm med "
-"algoritmnummer {algo_num} ({algo_descr})."
+"DNSKEY-posten med \"key tag\" {keytag} används med den utfasade "
+"kryptoalgoritmen {algo_num} ({algo_descr})."
 
 #. DNSSEC:ALGORITHM_NOT_RECOMMENDED
 #, perl-brace-format
@@ -538,9 +538,8 @@ msgid ""
 "The DNSKEY with tag {keytag} uses an algorithm number {algo_num} "
 "({algo_descr}) which is not recommended to be used."
 msgstr ""
-"DNSKEY-posten med 'tag' {keytag} använder en algoritm med algoritmnumret "
-"{algo_num} ({algo_descr}), som rekommenderas att inte användas för "
-"zonsignering."
+"DNSKEY-posten med \"key tag\" {keytag} används med kryptoalgoritm {algo_num} "
+"({algo_descr}), som inte rekommenderas för zonsignering."
 
 #. DNSSEC:ALGORITHM_NOT_ZONE_SIGN
 #, perl-brace-format
@@ -548,8 +547,8 @@ msgid ""
 "The DNSKEY with tag {keytag} uses algorithm number not meant for zone "
 "signing, algorithm number {algo_num} ({algo_descr})."
 msgstr ""
-"DNSKEY-posten med 'tag' {keytag} använder en algoritm med algoritmnumret "
-"{algo_num} ({algo_descr}), som inte är avsett för zonsignering."
+"DNSKEY-posten med \"key tag\" {keytag} används med kryptoalgoritm {algo_num} "
+"({algo_descr}), som inte är avsedd för zonsignering."
 
 #. DNSSEC:ALGORITHM_OK
 #, perl-brace-format
@@ -557,7 +556,7 @@ msgid ""
 "The DNSKEY with tag {keytag} uses algorithm number {algo_num} "
 "({algo_descr}), which is OK."
 msgstr ""
-"DNSKEY-posten med 'tag' {keytag} använder algoritm numret {algo_num} "
+"DNSKEY-posten med \"key tag\" {keytag} används med kryptoalgoritm {algo_num} "
 "({algo_descr}), vilket är OK."
 
 #. DNSSEC:ALGORITHM_PRIVATE
@@ -566,8 +565,8 @@ msgid ""
 "The DNSKEY with tag {keytag} uses private algorithm number {algo_num} "
 "({algo_descr})."
 msgstr ""
-"DNSKEY-posten med 'tag' {keytag} använder en algoritm med det privata "
-"algoritmnumret {algo_num} ({algo_descr})."
+"DNSKEY-posten med \"key tag\" {keytag} används med den privata "
+"kryptoalgoritmen {algo_num} ({algo_descr})."
 
 #. DNSSEC:ALGORITHM_RESERVED
 #, perl-brace-format
@@ -575,8 +574,8 @@ msgid ""
 "The DNSKEY with tag {keytag} uses reserved algorithm number {algo_num} "
 "({algo_descr})."
 msgstr ""
-"DNSKEY-posten med 'tag' {keytag} använder en algoritm med det reserverade "
-"algoritmnumret {algo_num} ({algo_descr})."
+"DNSKEY-posten med \"key tag\" {keytag} används med kryptoalgoritm {algo_num} "
+"({algo_descr}). Algoritmnumret är undanlagt för framtida behov."
 
 #. DNSSEC:ALGORITHM_UNASSIGNED
 #, perl-brace-format
@@ -584,69 +583,8 @@ msgid ""
 "The DNSKEY with tag {keytag} uses unassigned algorithm number {algo_num} "
 "({algo_descr})."
 msgstr ""
-"DNSKEY-posten med 'tag' {keytag} använder en algoritm med det otilldelade "
-"algoritmnumret {algo_num} ({algo_descr})."
-
-#. DNSSEC:ALGO_NOT_SIGNED_RRSET
-#, perl-brace-format
-msgid ""
-"Nameserver {ns} responded with no RRSIG for RRset {rrtype} created by the "
-"algorithm {algo_num}."
-msgstr ""
-"Namnserver {ns} skickade ett svarspaket utan RRSIG-post skapad av algoritm "
-"{algo_num} för 'RRset' av typen {rrtype}."
-
-#. DNSSEC:ALL_ALGO_SIGNED
-msgid ""
-"All the tested RRset (SOA/DNSKEY/NS) are signed by each algorithm present in "
-"the DNSKEY RRset."
-msgstr ""
-"Alla testade RRset (SOA, DNSKEY, NS) är signerade med varje algoritm som "
-"representerad i 'DNSKEY RRset'."
-
-#. DNSSEC:BROKEN_DNSSEC
-#, perl-brace-format
-msgid ""
-"All nameservers for zone {domain} responds with neither NSEC nor NSEC3 "
-"records when such records are expected."
-msgstr ""
-"Inga namnservrar för zonen {domain} svarade med varken NSEC- eller NSEC3-"
-"poster trots att endera är förväntat."
-
-#. DNSSEC:BROKEN_DS
-#, perl-brace-format
-msgid ""
-"DNSKEY record with tag {keytag} returned by nameserver {ns} does not match "
-"the algorithm and hash values in a DS record with same tag in parent zone."
-msgstr ""
-"DNSKEY-posten med \"keytag\" {keytag} som kom från namnservern {ns} har "
-"algoritm och hashvärde som inte stämmer överens med DS-posten från "
-"moderzonen med samma \"keytag\"."
-
-#. DNSSEC:BROKEN_RRSIG
-#, perl-brace-format
-msgid ""
-"The RRSIG of the DNSKEY RRset created by tag {keytag} returned by nameserver "
-"{ns} failed to be verified with error '{error}' (a DS record with same tag "
-"is present in the parent zone)."
-msgstr ""
-"Den kryptografiska signaturen (\"RRSIG\") för DNSKEY-uppsättningen (\"RRSET"
-"\") skapad av DNSKEY med \"keytag\" {keytag} och som kom från namnserver "
-"{ns} kunde inte verifieras utan gav felmeddelandet \"{error}\" (en DNS post "
-"som refererar till samma \"keytag\" finns i moderzonen)."
-
-#. DNSSEC:DELEGATION_NOT_SIGNED
-#, perl-brace-format
-msgid "Delegation from parent to child is not properly signed ({reason})."
-msgstr ""
-"Delegeringen från moderzonen till dotterzonens namnservrar är inte korrekt "
-"signerad ({reason})."
-
-#. DNSSEC:DELEGATION_SIGNED
-msgid "Delegation from parent to child is properly signed."
-msgstr ""
-"Delegeringen från moderzonen till dotterzonens namnservrar är korrekt "
-"signerad."
+"DNSKEY-posten med \"key tag\" {keytag} används med kryptoalgoritm {algo_num} "
+"({algo_descr}). Algoritmnumret är inte tilldelat någon algoritm."
 
 #. DNSSEC:DNSKEY_AND_DS
 #, perl-brace-format
@@ -662,57 +600,15 @@ msgstr ""
 "Dotterzonen '{child}' skickade en DNSKEY-post, men moderzonen '{parent}' "
 "skickade inte någon DS-post."
 
-#. DNSSEC:DNSKEY_KSK_NOT_SEP
-#, perl-brace-format
-msgid ""
-"Flags field of DNSKEY record with tag {keytag} returned by nameserver {ns} "
-"has not SEP bit set although DS with same tag is present in parent."
-msgstr ""
-"Namnserver {ns} skickade en DNSKEY-post med \"keytag\" {keytag} i vilken SEP-"
-"flaggan inte är satt trots att det finns en DS-post som refererar till samma "
-"\"keytag\" i moderzonen."
-
-#. DNSSEC:DNSKEY_NOT_ZONE_SIGN
-#, perl-brace-format
-msgid ""
-"Flags field of DNSKEY record with tag {keytag} returned by nameserver {ns} "
-"has not ZONE bit set although DS with same tag is present in parent."
-msgstr ""
-"Namnserver {ns} skickade en DNSKEY-post med \"keytag\" {keytag} i vilken "
-"ZONE-flaggan inte är satt trots att det finns en DS-post som refererar till "
-"samma \"keytag i moderzonen."
-
-#. DNSSEC:DNSKEY_NOT_SIGNED
-msgid "The apex DNSKEY RRset was not correctly signed."
-msgstr "DNSKEY-posterna i zontoppen var inte korrekt signerad."
-
-#. DNSSEC:DNSKEY_SIGNATURE_NOT_OK
-#, perl-brace-format
-msgid ""
-"Signature for DNSKEY with tag {keytag} failed to verify with error '{error}'."
-msgstr ""
-"Verifiering av signaturen för DNSKEY-posten med 'keytag' {keytag} "
-"misslyckades med felmeddelandet '{error}'."
-
-#. DNSSEC:DNSKEY_SIGNATURE_OK
-#, perl-brace-format
-msgid "A signature for DNSKEY with tag {keytag} was correctly signed."
-msgstr ""
-"Verifiering av en signatur för DNSKEY-posten med 'keytag' {keytag} lyckades."
-
-#. DNSSEC:DNSKEY_SIGNED
-msgid "The apex DNSKEY RRset was correcly signed."
-msgstr "DNSKEY-posterna i zontoppen var korrekt signerad."
-
 #. DNSSEC:DNSKEY_SMALLER_THAN_REC
 #, perl-brace-format
 msgid ""
 "DNSKEY with tag {keytag} and using algorithm {algo_num} ({algo_descr}) has a "
 "size ({keysize}) smaller than the recommended one ({keysizerec})."
 msgstr ""
-"DNSKEY-posten med 'keytag' {keytag} som bygger på algorithm {algo_num} "
-"({algo_descr}) har en nyckelstorlek ({keysize}) som är mindre än den minsta "
-"rekommenderade storleken ({keysizerec}) för den algoritmen."
+"DNSKEY-posten med \"key tag\" {keytag}, som används med kryptoalgoritm "
+"{algo_num} ({algo_descr}), har en nyckelstorlek ({keysize}) som är mindre än "
+"den minsta rekommenderade storleken ({keysizerec}) för den algoritmen."
 
 #. DNSSEC:DNSKEY_TOO_SMALL_FOR_ALGO
 #, perl-brace-format
@@ -720,9 +616,9 @@ msgid ""
 "DNSKEY with tag {keytag} and using algorithm {algo_num} ({algo_descr}) has a "
 "size ({keysize}) smaller than the minimum one ({keysizemin})."
 msgstr ""
-"DNSKEY-posten med 'keytag' {keytag} som bygger på algorithm {algo_num} "
-"({algo_descr}) har en nyckelstorlek ({keysize}) som är mindre än den minsta "
-"tillåtna storleken ({keysizemin}) för den algoritmen."
+"DNSKEY-posten med \"key tag\" {keytag}, som används med kryptoalgoritm "
+"{algo_num} ({algo_descr}), har en nyckelstorlek ({keysize}) som är mindre än "
+"den minsta tillåtna storleken ({keysizemin}) för den algoritmen."
 
 #. DNSSEC:DNSKEY_TOO_LARGE_FOR_ALGO
 #, perl-brace-format
@@ -730,11 +626,408 @@ msgid ""
 "DNSKEY with tag {keytag} and using algorithm {algo_num} ({algo_descr}) has a "
 "size ({keysize}) larger than the maximum one ({keysizemax})."
 msgstr ""
-"DNSKEY-posten med 'keytag' {keytag} som bygger på algorithm {algo_num} "
-"({algo_descr}) har en nyckelstorlek ({keysize}) som är större än den "
-"maximala storleken ({keysizemax}) för den algoritmen."
+"DNSKEY-posten med \"key tag\" {keytag}, som används med kryptoalgoritm "
+"{algo_num} ({algo_descr}), har en nyckelstorlek ({keysize}) som är större än "
+"den maximala storleken ({keysizemax}) för den algoritmen."
 
-#. DS15_HAS_CDNSKEY_NO_CDS
+#. DNSSEC:DS02_ALGO_NOT_SUPPORTED_BY_ZM
+#. DNSSEC:DS08_ALGO_NOT_SUPPORTED_BY_ZM
+#. DNSSEC:DS09_ALGO_NOT_SUPPORTED_BY_ZM
+#. DNSSEC:DS10_ALGO_NOT_SUPPORTED_BY_ZM
+#, perl-brace-format
+msgid ""
+"DNSKEY with tag {keytag} uses unsupported algorithm {algo_num} "
+"({algo_mnemo}) by this installation of Zonemaster. Fetched from the "
+"nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"DNSKEY-posten med \"key tag\" {keytag} används med kryptoalgoritm {algo_num} "
+"({algo_mnemo}) som inte stöds av denna installation av Zonemaster. Hämtad "
+"från namnservrarna med IP-adresserna \"{ns_ip_list}\". "
+
+#. DNSSEC:DS02_DNSKEY_NOT_FOR_ZONE_SIGNING
+#, perl-brace-format
+msgid ""
+"Flags field of DNSKEY record with tag {keytag} has not ZONE bit set although "
+"DS with same tag is present in parent. Fetched from the nameservers with IP "
+"addresses \"{ns_ip_list}\"."
+msgstr ""
+"Flaggfältet i DNSKEY-posten med \"key tag\" {keytag} har inte \"Zone Key\"-"
+"flaggan satt trots att det finns en DS-post med samma \"key tag\" i "
+"moderzonen. Hämtad från namnservrarna med IP-adresserna \"{ns_ip_list}\"."
+
+#. DNSSEC:DS02_DNSKEY_NOT_SEP
+#, perl-brace-format
+msgid ""
+"Flags field of DNSKEY record with tag {keytag} has not SEP bit set although "
+"DS with same tag is present in parent. Fetched from the nameservers with IP "
+"addresses \"{ns_ip_list}\"."
+msgstr ""
+"Flaggfältet som hör till DNSKEY-posten med \"key tag\" {keytag} har inte SEP-"
+"flaggan satt trots att det finns en DS-post med samma \"key tag\" i "
+"moderzonen. Hämtad från namnservrarna med IP-adresserna \"{ns_ip_list}\"."
+
+#. DNSSEC:DS02_NO_DNSKEY_FOR_DS
+#, perl-brace-format
+msgid ""
+"The DNSKEY record with tag {keytag} that the DS refers to does not exist in "
+"the DNSKEY RRset. Fetched from the nameservers with IP \"{ns_ip_list}\"."
+msgstr ""
+"DNSKEY-posten med \"key tag\" {keytag} som DS-posten refererar till finns "
+"inte i DNSKEY RRset. Hämtad från namnservrarna med IP-adresserna "
+"\"{ns_ip_list}\"."
+
+#. DNSSEC:DS02_NO_MATCHING_DNSKEY_RRSIG
+#, perl-brace-format
+msgid ""
+"The DNSKEY RRset is not signed by the DNSKEY with tag {keytag} that the the "
+"DS record refers to. Fetched from the nameservers with IP \"{ns_ip_list}\"."
+msgstr ""
+"DNSKEY RRset är inte signerat av DNSKEY-posten med \"key tag\" {keytag} som "
+"DS-posten refererar till. Hämtad från namnservrarna med IP-adresserna "
+"\"{ns_ip_list}\"."
+
+#. DNSSEC:DS02_NO_MATCH_DS_DNSKEY
+#, perl-brace-format
+msgid ""
+"The DS record does not match the DNSKEY with tag {keytag} by algorithm or "
+"digest. Fetched from the nameservers with IP \"{ns_ip_list}\"."
+msgstr ""
+"DS-posten stämmer inte med DNSKEY-posten med samma \"key tag\" {keytag} när "
+"det gäller kryptoalgoritm eller \"digest\". Hämtad från namnservrarna med IP-"
+"adresserna \"{ns_ip_list}\"."
+
+#. DNSSEC:DS02_RRSIG_NOT_VALID_BY_DNSKEY
+#. DNSSEC:DS08_RRSIG_NOT_VALID_BY_DNSKEY
+#, perl-brace-format
+msgid ""
+"The DNSKEY RRset is signed with an RRSIG with tag {keytag} which cannot be "
+"validated by the matching DNSKEY. Fetched from the nameservers with IP "
+"addresses \"{ns_ip_list}\"."
+msgstr ""
+"DNSKEY RRset är signerat med en RRSIG-post med \"key tag\" {keytag} som inte "
+"kan valideras med motsvarande DNSKEY-post. Hämtad från namnservrarna med IP-"
+"adresserna \"{ns_ip_list}\"."
+
+#. DNSSEC:DS08_DNSKEY_RRSIG_EXPIRED
+#, perl-brace-format
+msgid ""
+"RRSIG with keytag {keytag} and covering type DNSKEY has already expired. "
+"Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"Giltighetstiden för RRSIG-posten med \"key tag\" {keytag} och som gäller "
+"posttypen DNSKEY har löpt ut. Hämtad från namnservrarna med IP-adresserna "
+"\"{ns_ip_list}\"."
+
+#. DNSSEC:DS08_DNSKEY_RRSIG_NOT_YET_VALID
+#, perl-brace-format
+msgid ""
+"RRSIG with keytag {keytag} and covering type DNSKEY has inception date in "
+"the future. Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"Giltighetstiden för RRSIG-posten med \"key tag\" {keytag} och som gäller "
+"posttypen DNSKEY har inte börjat gälla. Hämtad från namnservrarna med IP-"
+"adresserna \"{ns_ip_list}\"."
+
+#. DNSSEC:DS08_MISSING_RRSIG_IN_RESPONSE
+#, perl-brace-format
+msgid ""
+"The DNSKEY RRset is not signed, which is against expectation. Fetched from "
+"the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"DNSKEY RRset är inte signerat, vilket är oväntat. Hämtad från namnservrarna "
+"med IP-adresserna \"{ns_ip_list}\"."
+
+#. DNSSEC:DS08_NO_MATCHING_DNSKEY
+#, perl-brace-format
+msgid ""
+"The DNSKEY RRset is signed with an RRSIG with tag {keytag} which does not "
+"match any DNSKEY record. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"DNSKEY RRset är signerat med en RRSIG-post med \"key tag\" {keytag} som inte "
+"stämmer med någon DNSKEY-post. Hämtad från namnservrarna med IP-adresserna "
+"\"{ns_ip_list}\"."
+
+#. DNSSEC:DS09_MISSING_RRSIG_IN_RESPONSE
+#, perl-brace-format
+msgid ""
+"The SOA RRset is not signed, which is against expectation. Fetched from the "
+"nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"SOA RRset är inte signerat, vilket är oväntat. Hämtad från namnservrarna med "
+"IP-adresserna \"{ns_ip_list}\"."
+
+#. DNSSEC:DS09_NO_MATCHING_DNSKEY
+#, perl-brace-format
+msgid ""
+"The SOA RRset is signed with an RRSIG with tag {keytag} which does not match "
+"any DNSKEY record. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"SOA RRset är signerat med en RRSIG-post med \"key tag\" {keytag} som inte "
+"stämmer med någon DNSKEY-post. Hämtad från namnservrarna med IP-adresserna "
+"\"{ns_ip_list}\"."
+
+#. DNSSEC:DS09_RRSIG_NOT_VALID_BY_DNSKEY
+#, perl-brace-format
+msgid ""
+"The SOA RRset is signed with an RRSIG with tag {keytag} which cannot be "
+"validated by the matching DNSKEY. Fetched from the nameservers with IP "
+"addresses \"{ns_ip_list}\"."
+msgstr ""
+"SOA RRset är signerat med en RRSIG-post med \"key tag\" {keytag} som inte "
+"kan valideras med motsvarande DNSKEY-post. Hämtad från namnservrarna med IP-"
+"adresserna \"{ns_ip_list}\"."
+
+#. DNSSEC:DS09_SOA_RRSIG_EXPIRED
+#, perl-brace-format
+msgid ""
+"RRSIG with keytag {keytag} and covering type SOA has already expired. "
+"Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"Giltighetstiden för RRSIG-posten med \"key tag\" {keytag} och som gäller "
+"posttypen SOA har löpt ut. Hämtad från namnservrarna med IP-adresserna "
+"\"{ns_ip_list}\"."
+
+#. DNSSEC:DS09_SOA_RRSIG_NOT_YET_VALID
+#, perl-brace-format
+msgid ""
+"RRSIG with keytag {keytag} and covering type SOA has inception date in the "
+"future. Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"Giltighetstiden för RRSIG-posten med \"key tag\" {keytag} och som gäller "
+"posttypen SOA har inte börjat gälla. Hämtad från namnservrarna med IP-"
+"adresserna \"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_ANSWER_VERIFY_ERROR
+#, perl-brace-format
+msgid ""
+"The name \"{domain}\" of RR type \"{rrtype}\" is signed by RRSIG, but the "
+"signature or signatures cannot be verified. Fetched from the nameservers "
+"with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"DNS-posten med namnet \"{domain}\" och av RR-typ \"{rrtype}\" är signerad "
+"med en RRSIG-post, men signaturen eller signaturerna kan inte valideras. "
+"Hämtad från namnservrarna med IP-adresserna \"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_HAS_NSEC
+#, perl-brace-format
+msgid ""
+"The zone has NSEC records. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"Zonen har NSEC-poster. Hämtad från namnservrarna med IP-adresserna "
+"\"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_HAS_NSEC3
+#, perl-brace-format
+msgid ""
+"The zone has NSEC3 records. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"Zonen har NSEC3-poster. Hämtad från namnservrarna med IP-adresserna "
+"\"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_INCONSISTENT_NSEC_NSEC3
+#, perl-brace-format
+msgid ""
+"The zone is inconsistent on NSEC and NSEC3. NSEC is fetched from nameservers "
+"with IP addresses \"{ns_ip_list_nsec}\". NSEC3 is fetched from nameservers "
+"with IP addresses \"{ns_ip_list_nsec3}\"."
+msgstr ""
+"Zonen är inkonsekvent när det gäller NSEC och NSEC3. NSEC-poster kommer från "
+"namnservrarna med med IP-adresserna \"{ns_ip_list_nsec}\". NSEC3-poster "
+"kommer från namnservrarna med med IP-adresserna \"{ns_ip_list_nsec3}\"."
+
+#. DNSSEC:DS10_MISSING_NSEC_NSEC3
+#, perl-brace-format
+msgid ""
+"NSEC or NSEC3 is expected but is missing. Fetched from the nameservers with "
+"IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"Antingen NSEC- eller NSEC3-post är förväntad, men båda saknas. Hämtad från "
+"namnservrarna med IP-adresserna \"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_MIXED_NSEC_NSEC3
+#, perl-brace-format
+msgid ""
+"Unexpectedly both NSEC and NSEC3 are reported. Fetched from the nameservers "
+"with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"Mot förväntan är både NSEC- och NSEC3-post rapporterade. Hämtad från "
+"namnservrarna med IP-adresserna \"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_NAME_NOT_COVERED_BY_NSEC
+#, perl-brace-format
+msgid ""
+"A non-existent name is not correctly covered by the NSEC records. Fetched "
+"from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"Ett icke-existerande namn täcks inte av NSEC-poster på korrekt sätt. Hämtad "
+"från namnservrarna med IP-adresserna \"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_NAME_NOT_COVERED_BY_NSEC3
+#, perl-brace-format
+msgid ""
+"A non-existent name is not correctly covered by the NSEC3 records. Fetched "
+"from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"Ett icke-existerande namn täcks inte av NSEC3-poster på korrekt sätt. Hämtad "
+"från namnservrarna med IP-adresserna \"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_NON_EXISTENT_RESPONSE_ERROR
+#, perl-brace-format
+msgid ""
+"No response or error in response on an expected non-existent name. Fetched "
+"from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"Inget svar eller felaktigheter i svarsposten på en fråga om ett förväntat "
+"icke-existerande namn. Hämtad från namnservrarna med IP-adresserna "
+"\"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_NSEC3_MISSING_SIGNATURE
+#, perl-brace-format
+msgid ""
+"Missing signatures (RRSIG) for the NSEC3 record or records. Fetched from the "
+"nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"Det saknas signaturer (RRSIG-poster) för NSEC3-posten eller -posterna. "
+"Hämtad från namnservrarna med IP-adresserna \"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_NSEC3_RRSIG_VERIFY_ERROR
+#, perl-brace-format
+msgid ""
+"The signatures (RRSIG) for the NSEC3 record or records cannot be verified. "
+"Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"Signaturerna (RRSIG-poster) för NSEC3-posten eller -posterna kan inte "
+"valideras. Hämtad från namnservrarna med IP-adresserna \"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_NSEC_MISSING_SIGNATURE
+#, perl-brace-format
+msgid ""
+"Missing signatures (RRSIG) for the NSEC record or records. Fetched from the "
+"nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"Det saknas signaturer (RRSIG-poster) för NSEC-posten eller -posterna. Hämtad "
+"från namnservrarna med IP-adresserna \"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_NSEC_RRSIG_VERIFY_ERROR
+#, perl-brace-format
+msgid ""
+"The signatures (RRSIG) for the NSEC record or records cannot be verified. "
+"Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"Signaturerna (RRSIG-poster) för NSEC-posten eller -posterna kan inte "
+"valideras. Hämtad från namnservrarna med IP-adresserna \"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_UNSIGNED_ANSWER
+#, perl-brace-format
+msgid ""
+"The name \"{domain}\" of RR type \"{rrtype}\" in the answer section of the "
+"response is not signed by any RRSIG. Fetched from the nameservers with IP "
+"addresses \"{ns_ip_list}\"."
+msgstr ""
+"DNS-posten med namnet \"{domain}\" och med posttypen \"{rrtype}\" i "
+"svarsavsnittet (\"answer section\") i DNS-svaret är inte signerat med någon "
+"RRSIG-post. Hämtad från namnservrarna med IP-adresserna \"{ns_ip_list}\"."
+
+#. DNSSEC:DS11_INCONSISTENT_DS
+msgid "Parent name servers are inconsistent on the existence of DS."
+msgstr ""
+"Moderzonens namnservrarna är inkonsekventa när det gäller existensen av DS."
+
+#. DNSSEC:DS11_INCONSISTENT_SIGNED_ZONE
+msgid ""
+"Name servers for the child zone are inconsistent on whether the zone is "
+"signed or not."
+msgstr ""
+"Dotterzonens namnservrar är inkonsekventa när det gäller ifall zonen är "
+"signerad eller inte."
+
+#. DNSSEC:DS11_UNDETERMINED_DS
+msgid ""
+"It cannot be determined if the parent zone has DS for the child zone or not."
+msgstr ""
+"Det går inte att fastställas om moderzonen har DS-poster för dotterzonen "
+"eller inte."
+
+#. DNSSEC:DS11_UNDETERMINED_SIGNED_ZONE
+msgid "It cannot be determined if the child zone is signed or not."
+msgstr "Det kan inte fastställas ifall dotterzonen är signerad eller inte."
+
+#. DNSSEC:DS11_PARENT_WITHOUT_DS
+#, perl-brace-format
+msgid ""
+"No DS record for the child zone found on parent nameservers with IP "
+"addresses \"{ns_ip_list}\"."
+msgstr ""
+"Det finns inga DS-poster för dotterzonen i moderzonens namnservrar med IP-"
+"adresserna \"{ns_ip_list}\"."
+
+#. DNSSEC:DS11_PARENT_WITH_DS
+#, perl-brace-format
+msgid ""
+"DS record for the child zone found on parent nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"Det finns DS-post för dotterzonen i moderzonens namnservrar med IP-"
+"adresserna \"{ns_ip_list}\"."
+
+#. DNSSEC:DS11_NS_WITH_SIGNED_ZONE
+#, perl-brace-format
+msgid ""
+"Signed child zone found on nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"Signerad dotterzon hittades på namnservrarna med IP-adresserna "
+"\"{ns_ip_list}\"."
+
+#. DNSSEC:DS11_NS_WITH_UNSIGNED_ZONE
+#, perl-brace-format
+msgid ""
+"Unsigned child zone found on nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"Osignerad dotterzon hittades på namnservrarna med IP-adresserna "
+"\"{ns_ip_list}\"."
+
+#. DNSSEC:DS11_DS_BUT_UNSIGNED_ZONE
+msgid "The child zone is unsigned, but the parent zone has DS record."
+msgstr "Dotterzonen är osignerad, men moderzonen har DS-poster."
+
+#. DNSSEC:DS13_ALGO_NOT_SIGNED_DNSKEY
+#, perl-brace-format
+msgid ""
+"The DNSKEY RRset is not signed by algorithm {algo_num} ({algo_mnemo}) "
+"present in the DNSKEY RRset. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"DNSKEY RRset är inte signerat av kryptoalgoritm {algo_num} ({algo_mnemo}) "
+"som finns med i DNSKEY RRset. Hämtad från namnservrarna med IP-adresserna "
+"\"{ns_ip_list}\"."
+
+#. DNSSEC:DS13_ALGO_NOT_SIGNED_NS
+#, perl-brace-format
+msgid ""
+"The NS RRset is not signed by algorithm {algo_num} ({algo_mnemo}) present in "
+"the DNSKEY RRset. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"NS RRset är inte signerat av kryptoalgoritm {algo_num} ({algo_mnemo}) som "
+"finns med i DNSKEY RRset. Hämtad från namnservrarna med IP-adresserna "
+"\"{ns_ip_list}\"."
+
+#. DNSSEC:DS13_ALGO_NOT_SIGNED_SOA
+#, perl-brace-format
+msgid ""
+"The SOA RRset is not signed by algorithm {algo_num} ({algo_mnemo}) present "
+"in the DNSKEY RRset. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"SOA RRset är inte signerat av kryptoalgoritm {algo_num} ({algo_mnemo}) som "
+"finns med i DNSKEY RRset. Hämtad från namnservrarna med IP-adresserna "
+"\"{ns_ip_list}\"."
+
+#. DNSSEC:DS15_HAS_CDNSKEY_NO_CDS
 #, perl-brace-format
 msgid ""
 "CDNSKEY RRset is found on nameservers that resolve to IP addresses "
@@ -743,7 +1036,7 @@ msgstr ""
 "CDNSKEY RRset finns på namnservrarna med IP-adresserna \"{ns_ip_list}\", men "
 "inget CDS RRset."
 
-#. DS15_HAS_CDS_AND_CDNSKEY
+#. DNSSEC:DS15_HAS_CDS_AND_CDNSKEY
 #, perl-brace-format
 msgid ""
 "CDNSKEY and CDS RRsets are found on nameservers that resolve to IP addresses "
@@ -752,7 +1045,7 @@ msgstr ""
 "CDNSKEY och CDS RRsets finns på namnservrarna med IP-adresseserna "
 "\"{ns_ip_list}\"."
 
-#. DS15_HAS_CDS_NO_CDNSKEY
+#. DNSSEC:DS15_HAS_CDS_NO_CDNSKEY
 #, perl-brace-format
 msgid ""
 "CDS RRset is found on nameservers that resolve to IP addresses "
@@ -761,15 +1054,15 @@ msgstr ""
 "CDS RRset finns på namnservrarna med IP-adresserna \"{ns_ip_list}\", men "
 "inget CDNSKEY RRset."
 
-#. DS15_INCONSISTENT_CDNSKEY
+#. DNSSEC:DS15_INCONSISTENT_CDNSKEY
 msgid "All servers do not have the same CDNSKEY RRset."
 msgstr "Alla servrar har inte samma CDNSKEY RRset."
 
-#. DS15_INCONSISTENT_CDS
+#. DNSSEC:DS15_INCONSISTENT_CDS
 msgid "All servers do not have the same CDS RRset."
 msgstr "Alla servrar har inte samma CDS RRset."
 
-#. DS15_MISMATCH_CDS_CDNSKEY
+#. DNSSEC:DS15_MISMATCH_CDS_CDNSKEY
 #, perl-brace-format
 msgid ""
 "Both CDS and CDNSKEY RRsets are found on nameservers that resolve to IP "
@@ -778,22 +1071,42 @@ msgstr ""
 "Både CDS och CDNSKEY RRsets finns på namnservrar med IP-adresser "
 "\"{ns_ip_list}\", med de stämmer inte med varandra."
 
-#. DS15_NO_CDS_CDNSKEY
+#. DNSSEC:DS15_NO_CDS_CDNSKEY
 msgid "No CDS or CDNSKEY RRsets are found on any name server."
 msgstr "Det finns inga CDS eller CDNSKEY RRset i någon namnserver."
 
-#. DS16_CDS_INVALID_RRSIG
+#. DNSSEC:DS16_CDS_INVALID_RRSIG
 #, perl-brace-format
 msgid ""
 "The CDS RRset is signed with an RRSIG with tag {keytag}, but the RRSIG does "
 "not match the DNSKEY with the same key tag. Fetched from the nameservers "
 "with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"CDS RRset är signerat av en RRSIG med \"key tag\" {keytag}, men den RRSIG "
-"stämmer inte med den DNSKEY som har samma \"key tag\". Hämtad från "
+"CDS RRset är signerat med en RRSIG-post med \"key tag\" {keytag}, men den "
+"stämmer inte med den DNSKEY-posten som har samma \"key tag\". Hämtad från "
 "namnservrarna med IP-adresserna \"{ns_ip_list}\"."
 
-#. DS16_CDS_MATCHES_NO_DNSKEY
+#. DNSSEC:DS16_CDS_MATCHES_NON_SEP_DNSKEY
+#, perl-brace-format
+msgid ""
+"The CDS record with tag {keytag} matches a DNSKEY record with SEP bit (bit "
+"15) unset. Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"CDS-posten med \"key tag\" {keytag} motsvarar en DNSKEY-post som inte har "
+"SEP-flaggan (bit 15) satt. Hämtad från namnservrarna med IP-adresserna "
+"\"{ns_ip_list}\"."
+
+#. DNSSEC:DS16_CDS_MATCHES_NON_ZONE_DNSKEY
+#, perl-brace-format
+msgid ""
+"The CDS record with tag {keytag} matches a DNSKEY record with zone bit (bit "
+"7) unset. Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"CDS-posten med \"key tag\" {keytag} motsvarar en DNSKEY-post som inte har "
+"\"Zone Key\"-flaggan (bit 7) satt. Hämtad från namnservrarna med IP-"
+"adresserna \"{ns_ip_list}\"."
+
+#. DNSSEC:DS16_CDS_MATCHES_NO_DNSKEY
 #, perl-brace-format
 msgid ""
 "The CDS record with tag {keytag} does not match any DNSKEY record. Fetched "
@@ -802,17 +1115,28 @@ msgstr ""
 "CDS-posten med \"key tag\" {keytag} stämmer inte med någon DNSKEY-post. "
 "Hämtad från namnservrarna med IP-adresserna \"{ns_ip_list}\"."
 
-#. DS16_CDS_SIGNED_BY_UNKNOWN_DNSKEY
+#. DNSSEC:DS16_CDS_NOT_SIGNED_BY_CDS
+#, perl-brace-format
+msgid ""
+"The CDS RRset is not signed by the DNSKEY that the CDS record with tag "
+"{keytag} points to. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"CDS RRset har inte signerats av den DNSKEY-post som CDS-posten med \"key tag"
+"\" {keytag} refererar till. Hämtat från namnservrarna med IP-adresserna "
+"\"{ns_ip_list}\"."
+
+#. DNSSEC:DS16_CDS_SIGNED_BY_UNKNOWN_DNSKEY
 #, perl-brace-format
 msgid ""
 "The CDS RRset is signed by RRSIG with tag {keytag} but that is not in the "
 "DNSKEY RRset. Fetched from the nameservers with P addresses \"{ns_ip_list}\"."
 msgstr ""
-"CDS RRset är signerad av RRSIG med \"key tag\" {keytag} men den stämmer inte "
-"med någon DNSKEY-post. Hämtad från namnservrarna med IP-adresserna "
-"\"{ns_ip_list}\"."
+"CDS RRset är signerad av en RRSIG-post med \"key tag\" {keytag} men den "
+"stämmer inte med någon DNSKEY-post. Hämtad från namnservrarna med IP-"
+"adresserna \"{ns_ip_list}\"."
 
-#. DS16_CDS_UNSIGNED
+#. DNSSEC:DS16_CDS_UNSIGNED
 #, perl-brace-format
 msgid ""
 "The CDS RRset is not signed. Fetched from the nameservers with IP addresses "
@@ -821,7 +1145,7 @@ msgstr ""
 "CDS RRset är inte signerad. Hämtad från namnservrarna med IP-adresserna "
 "\"{ns_ip_list}\"."
 
-#. DS16_CDS_WITHOUT_DNSKEY
+#. DNSSEC:DS16_CDS_WITHOUT_DNSKEY
 #, perl-brace-format
 msgid ""
 "A CDS RRset exists, but no DNSKEY record exists. Fetched from the "
@@ -830,7 +1154,7 @@ msgstr ""
 "Det finns ett CDS RRset, men det finns inga DNSKEY-poster. Hämtat från "
 "namnservrarna med IP-adresserna \"{ns_ip_list}\"."
 
-#. DS16_DELETE_CDS
+#. DNSSEC:DS16_DELETE_CDS
 #, perl-brace-format
 msgid ""
 "A single \"delete\" CDS record is found on the nameservers with IP addresses "
@@ -839,7 +1163,7 @@ msgstr ""
 "Exakt en CDS-post av typen \"delete\" finns på namnservrarna med IP-"
 "adresserna \"{ns_ip_list}\"."
 
-#. DS16_DNSKEY_NOT_SIGNED_BY_CDS
+#. DNSSEC:DS16_DNSKEY_NOT_SIGNED_BY_CDS
 #, perl-brace-format
 msgid ""
 "The DNSKEY RRset is not signed by the DNSKEY that the CDS record with tag "
@@ -850,7 +1174,7 @@ msgstr ""
 "tag\" {keytag} refererar till. Hämtat från namnservrarna med IP-adresserna "
 "\"{ns_ip_list}\"."
 
-#. DS16_MIXED_DELETE_CDS
+#. DNSSEC:DS16_MIXED_DELETE_CDS
 #, perl-brace-format
 msgid ""
 "The CDS RRset is a mixture between \"delete\" record and other records. "
@@ -859,18 +1183,36 @@ msgstr ""
 "CDS RRset är en blandning av poster av typen \"delete\" och andra poster. "
 "Hämtat från namnservrarna med IP-adresserna \"{ns_ip_list}\"."
 
-#. DS17_CDNSKEY_INVALID_RRSIG
+#. DNSSEC:DS17_CDNSKEY_INVALID_RRSIG
 #, perl-brace-format
 msgid ""
 "The CDNSKEY RRset is signed with an RRSIG with tag {keytag}, but the RRSIG "
 "does not match the DNSKEY with the same key tag. Fetched from the "
 "nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"CDNSKEY RRset är signerat av en RRSIG med \"key tag\" {keytag}, men den "
-"RRSIG stämmer inte med den DNSKEY som har samma \"key tag\". Hämtad från "
+"CDNSKEY RRset är signerat av en RRSIG-post med \"key tag\" {keytag}, men den "
+"stämmer inte med den DNSKEY-post som har samma \"key tag\". Hämtad från "
 "namnservrarna med IP-adresserna \"{ns_ip_list}\"."
 
-#. DS17_CDNSKEY_MATCHES_NO_DNSKEY
+#. DNSSEC:DS17_CDNSKEY_IS_NON_SEP
+#, perl-brace-format
+msgid ""
+"The CDNSKEY record with tag {keytag} has the SEP bit (bit 15) unset. Fetched "
+"rom the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"CDNSKEY-posten med \"key tag\" {keytag} har inte SEP-flaggan (bit 15) satt. "
+"Hämtad från namnservrarna med IP-adresserna \"{ns_ip_list}\""
+
+#. DNSSEC:DS17_CDNSKEY_IS_NON_ZONE
+#, perl-brace-format
+msgid ""
+"The CDNSKEY record with tag {keytag} has the zone bit (bit 7) unset. Fetched "
+"rom the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"CDNSKEY-posten med \"key tag\" {keytag} har inte \"Zone Key\"-flaggan (bit "
+"7) satt. Hämtad från namnservrarna med IP-adresserna \"{ns_ip_list}."
+
+#. DNSSEC:DS17_CDNSKEY_MATCHES_NO_DNSKEY
 #, perl-brace-format
 msgid ""
 "The CDNSKEY record with tag {keytag} does not match any DNSKEY record. "
@@ -879,18 +1221,29 @@ msgstr ""
 "CDNSKEY-posten med \"key tag\" {keytag} stämmer inte med någon DNSKEY-post. "
 "Hämtad från namnservrarna med IP-adresserna \"{ns_ip_list}\""
 
-#. DS17_CDNSKEY_SIGNED_BY_UNKNOWN_DNSKEY
+#. DNSSEC:DS17_CDNSKEY_NOT_SIGNED_BY_CDNSKEY
+#, perl-brace-format
+msgid ""
+"The CDNSKEY RRset is not signed by the DNSKEY that the CDNSKEY record with "
+"tag {keytag} points to. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"CDNSKEY RRset har inte signerats av den DNSKEY-post som CDNSKEY-posten med "
+"\"key tag\" {keytag} refererar till. Hämtat från namnservrarna med IP-"
+"adresserna \"{ns_ip_list}\"."
+
+#. DNSSEC:DS17_CDNSKEY_SIGNED_BY_UNKNOWN_DNSKEY
 #, perl-brace-format
 msgid ""
 "The CDNSKEY RRset is signed by RRSIG with tag {keytag} but that is not in "
 "the DNSKEY RRset. Fetched from the nameservers with P addresses "
 "\"{ns_ip_list}\"."
 msgstr ""
-"CDNSKEY RRset är signerad av RRSIG med \"key tag\" {keytag} men den stämmer "
-"inte med någon DNSKEY-post. Hämtad från namnservrarna med IP-adresserna "
-"\"{ns_ip_list}\"."
+"CDNSKEY RRset är signerad av RRSIG-post med \"key tag\" {keytag} men den "
+"stämmer inte med någon DNSKEY-post. Hämtad från namnservrarna med IP-"
+"adresserna \"{ns_ip_list}\"."
 
-#. DS17_CDNSKEY_UNSIGNED
+#. DNSSEC:DS17_CDNSKEY_UNSIGNED
 #, perl-brace-format
 msgid ""
 "The CDNSKEY RRset is not signed. Fetched from the nameservers with IP "
@@ -899,7 +1252,7 @@ msgstr ""
 "CDNSKEY RRset är inte signerad. Hämtad från namnservrarna med IP-adresserna "
 "\"{ns_ip_list}\"."
 
-#. DS17_CDNSKEY_WITHOUT_DNSKEY
+#. DNSSEC:DS17_CDNSKEY_WITHOUT_DNSKEY
 #, perl-brace-format
 msgid ""
 "A CDNSKEY RRset exists, but no DNSKEY record exists. Fetched from the "
@@ -908,7 +1261,7 @@ msgstr ""
 "Det finns ett CDNSKEY RRset, men det finns inga DNSKEY-poster. Hämtat från "
 "namnservrarna med IP-adresserna \"{ns_ip_list}\"."
 
-#. DS17_DELETE_CDNSKEY
+#. DNSSEC:DS17_DELETE_CDNSKEY
 #, perl-brace-format
 msgid ""
 "A single \"delete\" CDNSKEY record is found on the nameservers with IP "
@@ -917,7 +1270,7 @@ msgstr ""
 "Exakt en CDNSKEY-post av typen \"delete\" finns på namnservrarna med IP-"
 "adresserna \"{ns_ip_list}\"."
 
-#. DS17_DNSKEY_NOT_SIGNED_BY_CDNSKEY
+#. DNSSEC:DS17_DNSKEY_NOT_SIGNED_BY_CDNSKEY
 #, perl-brace-format
 msgid ""
 "The DNSKEY RRset is not signed by the DNSKEY that the CDNSKEY record with "
@@ -928,7 +1281,7 @@ msgstr ""
 "\"key tag\" {keytag} refererar till. Hämtat från namnservrarna med IP-"
 "adresserna \"{ns_ip_list}\"."
 
-#. DS17_MIXED_DELETE_CDNSKEY
+#. DNSSEC:DS17_MIXED_DELETE_CDNSKEY
 #, perl-brace-format
 msgid ""
 "The CDNSKEY RRset is a mixture between \"delete\" record and other records. "
@@ -937,6 +1290,24 @@ msgstr ""
 "CDNSKEY RRset är en blandning av poster av typen \"delete\" och andra "
 "poster. Hämtat från namnservrarna med IP-adresserna \"{ns_ip_list}\"."
 
+#. DNSSEC:DS18_NO_MATCH_CDS_RRSIG_DS
+#, perl-brace-format
+msgid ""
+"The CDS RRset is not signed with a DNSKEY record that a DS record points to. "
+"Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"CDS RRset har inte signerats av en DNSKEY-post som någon DS-post refererar "
+"till. Hämtat från namnservrarna med IP-adresserna \"{ns_ip_list}\"."
+
+#. DNSSEC:DS18_NO_MATCH_CDNSKEY_RRSIG_DS
+#, perl-brace-format
+msgid ""
+"The CDNSKEY RRset is not signed with a DNSKEY record that a DS record points "
+"to. Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"CDNSKEY RRset har inte signerats av en DNSKEY-post som någon DS-post "
+"refererar till. Hämtat från namnservrarna med IP-adresserna \"{ns_ip_list}\"."
+
 #. DNSSEC:DS_ALGORITHM_NOT_DS
 #, perl-brace-format
 msgid ""
@@ -944,9 +1315,9 @@ msgid ""
 "which is not meant for DS. The DS record is for the DNSKEY record with "
 "keytag {keytag} in zone {domain}."
 msgstr ""
-"Namnserver {ns} svarade med en DS-post skapad med hash-algoritm {algo_num} "
+"Namnserver {ns} svarade med en DS-post skapad med hashalgoritm {algo_num} "
 "({algo_mnemo}) som inte är avsedd för DS. DS-posten gäller DNSKEY-posten med "
-"'keytag' {keytag} i zonen {domain}."
+"\"key tag\" {keytag} i zonen {domain}."
 
 #. DNSSEC:DS_ALGORITHM_DEPRECATED
 #, perl-brace-format
@@ -955,9 +1326,9 @@ msgid ""
 "which is deprecated. The DS record is for the DNSKEY record with keytag "
 "{keytag} in zone {domain}."
 msgstr ""
-"Namnserver {ns} svarade med en DS-post skapad med hash-algoritm {algo_num} "
-"({algo_mnemo}) som är föråldrad. DS-posten gäller DNSKEY-posten med "
-"'keytag' {keytag} i zonen {domain}."
+"Namnserver {ns} svarade med en DS-post skapad med hashalgoritm {algo_num} "
+"({algo_mnemo}) som är föråldrad. DS-posten gäller DNSKEY-posten med \"key tag"
+"\" {keytag} i zonen {domain}."
 
 #. DNSSEC:DS_ALGORITHM_MISSING
 #, perl-brace-format
@@ -965,7 +1336,7 @@ msgid ""
 "{ns} returned no DS record created by algorithm {algo_num} ({algo_mnemo}) "
 "for zone {domain}, which is required."
 msgstr ""
-"Namnserver {ns} svarade inte med någon DS-post skapad med hash-algoritm "
+"Namnserver {ns} svarade inte med någon DS-post skapad med hashalgoritm "
 "{algo_num} ({algo_mnemo}) för zonen {domain}, vilket är ett krav att den gör."
 
 #. DNSSEC:DS_ALGORITHM_OK
@@ -975,9 +1346,9 @@ msgid ""
 "which is OK. The DS record is for the DNSKEY record with keytag {keytag} in "
 "zone {domain}."
 msgstr ""
-"Namnserver {ns} svarade med en DS-post skapad med hash-algoritm {algo_num} "
-"({algo_mnemo}), vilken är OK. DS-posten gäller DNSKEY-posten med "
-"'keytag' {keytag} i zonen {domain}."
+"Namnserver {ns} svarade med en DS-post skapad med hashalgoritm {algo_num} "
+"({algo_mnemo}), vilken är OK. DS-posten gäller DNSKEY-posten med \"key tag"
+"\" {keytag} i zonen {domain}."
 
 #. DNSSEC:DS_ALGORITHM_RESERVED
 #, perl-brace-format
@@ -986,9 +1357,9 @@ msgid ""
 "(algorithm number {algo_num}), which is not OK. The DS record is for the "
 "DNSKEY record with keytag {keytag} in zone {domain}."
 msgstr ""
-"Namnserver {ns} svarade med en DS-post skapad med hash-algoritm {algo_num} "
-"som inte är satt till någon hash-algoritm, vilket inte är OK. DS-posten "
-"gäller DNSKEY-posten med 'keytag' {keytag} i zonen {domain}."
+"Namnserver {ns} svarade med en DS-post skapad med hashalgoritmnummer "
+"{algo_num}, vilken inte är tilldelad någon algoritm. Detta är inte OK. DS-"
+"posten gäller DNSKEY-posten med \"key tag\" {keytag} i zonen {domain}."
 
 #. DNSSEC:DS_ALGO_SHA1_DEPRECATED
 #, perl-brace-format
@@ -997,9 +1368,9 @@ msgid ""
 "({algo_mnemo}) which is deprecated, while it is still widely used. The DS "
 "record is for the DNSKEY record with keytag {keytag} in zone {domain}."
 msgstr ""
-"Namnserver {ns} svarade med en DS-post skapad med hash-algoritm {algo_num} "
-"({algo_mnemo}) som är föråldrad, men fortfarande allmänt använd. DS-posten "
-"gäller DNSKEY-posten med 'keytag' {keytag} i zonen {domain}."
+"Namnserver {ns} svarade med en DS-post skapad med hashalgoritm {algo_num} "
+"({algo_mnemo}) som är föråldrad, men som fortfarande är allmänt använd. DS-"
+"posten gäller DNSKEY-posten med \"key tag\" {keytag} i zonen {domain}."
 
 #. DNSSEC:DS_BUT_NOT_DNSKEY
 #, perl-brace-format
@@ -1008,19 +1379,14 @@ msgstr ""
 "Moderzonen '{parent}' skickade en DS-post, men dotterzonen '{child}' "
 "skickade ingen DNSKEY-post."
 
-#. DNSSEC:DS_MATCHES
-msgid ""
-"The DS records in the parent zone match DNSKEY records in the child zone."
-msgstr "DS-posterna i moderzonen stämmer med DNSKEY-poster i dotterzonen."
-
 #. DNSSEC:DURATION_LONG
 #, perl-brace-format
 msgid ""
 "RRSIG with keytag {keytag} and covering type(s) {types} has a duration of "
 "{duration} seconds, which is too long."
 msgstr ""
-"RRSIG-posten med 'keytag' {keytag} och som täcker posttyp(er) {types} har en "
-"livslängd på {duration} sekunder, vilket är för lång tid."
+"RRSIG-posten med \"key tag\" {keytag} och som täcker posttyp(er) {types} har "
+"en livslängd på {duration} sekunder, vilket är för lång tid."
 
 #. DNSSEC:DURATION_OK
 #, perl-brace-format
@@ -1028,8 +1394,8 @@ msgid ""
 "RRSIG with keytag {keytag} and covering type(s) {types} has a duration of "
 "{duration} seconds, which is just fine."
 msgstr ""
-"RRSIG-posten med 'keytag' {keytag} och som täcker posttyp(er) {types} har en "
-"livslängd på {duration} sekunder (acceptabel livslängd)."
+"RRSIG-posten med \"key tag\" {keytag} och som täcker posttyp(er) {types} har "
+"en livslängd på {duration} sekunder (acceptabel livslängd)."
 
 #. DNSSEC:EXTRA_PROCESSING_BROKEN
 #, perl-brace-format
@@ -1045,32 +1411,6 @@ msgid "Server at {server} sent {keys} DNSKEY records and {sigs} RRSIG records."
 msgstr ""
 "Namnservern '{server}' skickade {keys} DNSKEY-poster och {sigs} RRSIG-poster."
 
-#. DNSSEC:HAS_NSEC3
-msgid "The zone has NSEC3 records."
-msgstr "Zonen har NSEC3-poster."
-
-#. DNSSEC:HAS_NSEC
-msgid "The zone has NSEC records."
-msgstr "Zonen har NSEC-poster."
-
-#. DNSSEC:INCONSISTENT_DNSSEC
-#, perl-brace-format
-msgid ""
-"Some, but not all, nameservers for zone {domain} respond with neither NSEC "
-"nor NSEC3 records when such records are expected."
-msgstr ""
-"Några av namnservrarna för zonen {domain} svarar med varken NSEC- eller "
-"NSEC3-post trots att endera förväntas."
-
-#. DNSSEC:INCONSISTENT_NSEC_NSEC3
-#, perl-brace-format
-msgid ""
-"Some nameservers for zone {domain} respond with NSEC records and others "
-"respond with NSEC3 records. Consistency is expected."
-msgstr ""
-"Några av namnservrarna för zonen {domain} svarar med NSEC-poster och andra "
-"med NSEC3-poster. Det förväntade är att alla namnservrar ger samma posttyp."
-
 #. DNSSEC:ITERATIONS_OK
 #, perl-brace-format
 msgid "The number of NSEC3 iterations is {count}, which is OK."
@@ -1082,7 +1422,7 @@ msgid ""
 "Key with keytag {keytag} details : Size = {keysize}, Flags ({sep}, "
 "{rfc5011})."
 msgstr ""
-"Nyckel med 'keytag' {keytag}. Detaljer: storlek = {keysize}, Flaggor = "
+"Nyckel med \"key tag\" {keytag}. Detaljer: storlek = {keysize}, Flaggor = "
 "({sep} {rfc5011})."
 
 #. DNSSEC:KEY_SIZE_OK
@@ -1094,15 +1434,6 @@ msgstr "Alla nycklar i DNSKEY RR-uppsättningen har rätt storlek."
 msgid "The number of NSEC3 iterations is {count}, which is on the high side."
 msgstr "Antalet NSEC3-iterationer är {count}, vilket är högt."
 
-#. DNSSEC:MIXED_NSEC_NSEC3
-#, perl-brace-format
-msgid ""
-"Nameserver {ns} for zone {domain} responds with both NSEC and NSEC3 records "
-"when only one record type is expected."
-msgstr ""
-"Namnservern {ns} för zonen '{domain}' svarade med både NSEC och NSEC3 poster "
-"när bara den ena posttypen är förväntad."
-
 #. DNSSEC:NEITHER_DNSKEY_NOR_DS
 msgid "There are neither DS nor DNSKEY records for the zone."
 msgstr "Zonen har varken DS- eller DNSKEY-poster."
@@ -1111,57 +1442,10 @@ msgstr "Zonen har varken DS- eller DNSKEY-poster."
 msgid "No DNSKEYs were returned."
 msgstr "Inga DNSKEY-poster returnerades."
 
-#. DNSSEC:NO_KEYS_OR_NO_SIGS
-#, perl-brace-format
-msgid ""
-"Cannot test DNSKEY signatures, because we got {keys} DNSKEY records and "
-"{sigs} RRSIG records."
-msgstr ""
-"Kan inte testa DNSKEY-signaturer, eftersom vi fick {keys} DNSKEY-poster och "
-"{sigs} RRSIG-poster."
-
-#. DNSSEC:NO_KEYS_OR_NO_SIGS_OR_NO_SOA
-#, perl-brace-format
-msgid ""
-"Cannot test SOA signatures, because we got {keys} DNSKEY records, {sigs} "
-"RRSIG records and {soas} SOA records."
-msgstr ""
-"Kan inte testa DNSSEC-signaturer för SOA-posten, eftersom vi fick {keys} "
-"DNSKEY-poster, {sigs} RRSIG-poster och {soas} SOA-poster."
-
-#. DNSSEC:NO_MATCHING_DNSKEY
-#, perl-brace-format
-msgid ""
-"Nameserver {ns} returned no DNSKEY record matching the DS record with tag "
-"{keytag} found in the parent zone."
-msgstr ""
-"Namnserver {ns} inkluderade ingen DNSKEY i svaret som motsvarar DS-posten "
-"med \"keytag\" {keytag} som fanns i moderzonen."
-
-#. DNSSEC:NO_MATCHING_RRSIG
-#, perl-brace-format
-msgid ""
-"Nameserver {ns} returned no signature on the DNSKEY RRset that corresponds "
-"to the DNSKEY with tag {keytag} even though there is a DS record in the "
-"parent zone for that DNSKEY record."
-msgstr ""
-"Namnserver {ns} inkluderade ingen kryptografisk signatur på DNSKEY-"
-"uppsättningen (\"RRset\") från DNSKEY-posten med \"keytag\" {keytag} trots "
-"att det finns en DS-post i moderzonen som motsvarar den DNSKEY-posten."
-
 #. DNSSEC:NO_NSEC3PARAM
 #, perl-brace-format
 msgid "{server} returned no NSEC3PARAM records."
 msgstr "'{server}' gav inga NSEC3PARAM-poster i svaret."
-
-#. DNSSEC:NO_NSEC_NSEC3
-#, perl-brace-format
-msgid ""
-"Nameserver {ns} for zone {domain} responds with neither NSEC nor NSEC3 "
-"record when when such records are expected."
-msgstr ""
-"Nameservern {ns} för zonen {domain} svarar varken med NSEC- eller NSEC3-"
-"poster trots att sådana var förväntade."
 
 #. DNSSEC:NO_RESPONSE_DNSKEY
 #, perl-brace-format
@@ -1173,53 +1457,9 @@ msgstr "Svarspaketet från namnservern {ns} har ingen DNSKEY-post."
 msgid "{ns} returned no DS records for {domain}."
 msgstr "Namnserver {ns} returnerade inga DS-poster för zonen '{domain}'."
 
-#. DNSSEC:NO_RESPONSE_RRSET
-#, perl-brace-format
-msgid "Nameserver {ns} responded with no {rrtype} record(s)."
-msgstr ""
-"Namnserver {ns} skickade ett svarspaket utan DNS-post av typen {rrtype}."
-
-#. DNSSEC:NO_RRSIG_DNSKEY
-#, perl-brace-format
-msgid ""
-"Nameserver {ns} responded with no RRSIG record(s) covering the DNSKEY RRset."
-msgstr ""
-"Namnserver {ns} skickade ett svarspaket utan RRSIG-post för DNSKEY-"
-"uppsättningen (RRset)."
-
 #. DNSSEC:NOT_SIGNED
 msgid "The zone is not signed with DNSSEC."
 msgstr "Zonen är inte signerad med DNSSEC."
-
-#. DNSSEC:NSEC3_COVERS_NOT
-#, perl-brace-format
-msgid "NSEC3 record does not cover {domain}."
-msgstr "Det finns ingen NSEC3-post som täcker '{domain}'."
-
-#. DNSSEC:NSEC3_NOT_SIGNED
-msgid "No signature correctly signed the NSEC3 RRset."
-msgstr "Ingen signatur signerade NSEC3-posterna korrekt."
-
-#. DNSSEC:NSEC3_SIG_VERIFY_ERROR
-#, perl-brace-format
-msgid "Trying to verify NSEC3 RRset with RRSIG {keytag} gave error '{error}'."
-msgstr ""
-"Försöket att verifiera NSEC3-posterna med RRSIG {keytag} gav felet '{error}'."
-
-#. DNSSEC:NSEC_COVERS_NOT
-#, perl-brace-format
-msgid "NSEC does not cover {domain}."
-msgstr "NSEC täcker inte '{domain}'."
-
-#. DNSSEC:NSEC_NOT_SIGNED
-msgid "No signature correctly signed the NSEC RRset."
-msgstr "Ingen signatur har korrekt signerat NSEC-posterna."
-
-#. DNSSEC:NSEC_SIG_VERIFY_ERROR
-#, perl-brace-format
-msgid "Trying to verify NSEC RRset with RRSIG {keytag} gave error '{error}'."
-msgstr ""
-"Försöket att verifiera NSEC-posterna med RRSIG {keytag} gav felet '{error}'."
 
 #. DNSSEC:REMAINING_LONG
 #, perl-brace-format
@@ -1227,8 +1467,8 @@ msgid ""
 "RRSIG with keytag {keytag} and covering type(s) {types} has a remaining "
 "validity of {duration} seconds, which is too long."
 msgstr ""
-"RRSIG-posten med 'keytag' {keytag} och som täcker posttyp(er) {types} har en "
-"kvarvarande livslängd på {duration} sekunder, vilket är för lång tid."
+"RRSIG-posten med \"key tag\" {keytag} och som täcker posttyp(er) {types} har "
+"en kvarvarande livslängd på {duration} sekunder, vilket är för lång tid."
 
 #. DNSSEC:REMAINING_SHORT
 #, perl-brace-format
@@ -1236,31 +1476,16 @@ msgid ""
 "RRSIG with keytag {keytag} and covering type(s) {types} has a remaining "
 "validity of {duration} seconds, which is too short."
 msgstr ""
-"RRSIG-posten med 'keytag' {keytag} och som täcker posttyp(er) {types} har en "
-"kvarvarande livslängd på {duration} sekunder, vilket är för kort tid."
+"RRSIG-posten med \"key tag\" {keytag} och som täcker posttyp(er) {types} har "
+"en kvarvarande livslängd på {duration} sekunder, vilket är för kort tid."
 
 #. DNSSEC:RRSIG_EXPIRATION
 #, perl-brace-format
 msgid ""
 "RRSIG with keytag {keytag} and covering type(s) {types} expires at : {date}."
 msgstr ""
-"RRSIG med 'keytag' {keytag} som täcker posttyp(er) {types} löper ut {date}."
-
-#. DNSSEC:RRSET_NOT_SIGNED
-#, perl-brace-format
-msgid "Nameserver {ns} responded with no RRSIG for {rrtype} RRset."
-msgstr ""
-"Namnserver {ns} skickade ett svarspaket utan RRSIG-post for RRset av typen "
-"{rrtype}."
-
-#. DNSSEC:RRSIG_BROKEN
-#, perl-brace-format
-msgid ""
-"Nameserver {ns} responded with an RRSIG which can not be verified with "
-"corresponding DNSKEY (with keytag {keytag})."
-msgstr ""
-"Namnserver {ns} svarade med en RRSIG-post som inte kan verifieras med "
-"motsvarande DNSKEY-post med 'keytag' {keytag}."
+"RRSIG-post med \"key tag\" {keytag} som täcker posttyp(er) {types} löper ut "
+"{date}."
 
 #. DNSSEC:RRSIG_EXPIRED
 #, perl-brace-format
@@ -1268,46 +1493,8 @@ msgid ""
 "RRSIG with keytag {keytag} and covering type(s) {types} has already expired "
 "(expiration is: {expiration})."
 msgstr ""
-"RRSIG-posten med 'keytag' {keytag} och som täcker posttyp(er) {types} har "
-"redan löpt ut (utgångstiden är: {expiration})."
-
-#. DNSSEC:RRSIG_NOT_MATCH_DNSKEY
-#, perl-brace-format
-msgid "Nameserver {ns} responded with an RRSIG with unknown keytag {keytag}."
-msgstr ""
-"Namnserver {ns} skickade ett svarspaket med en RRSIG-post med okänd "
-"'keytag' ({keytag})."
-
-#. DNSSEC:SOA_NOT_SIGNED
-msgid "No RRSIG correctly signed the SOA RRset."
-msgstr "Det finns ingen RRSIG som ger korrekt signering av SOA-posten."
-
-#. DNSSEC:SOA_SIGNATURE_NOT_OK
-#, perl-brace-format
-msgid ""
-"Trying to verify SOA RRset with signature {keytag} gave error '{error}'."
-msgstr ""
-"Försöket att verifiera SOA-mängden med signatur {keytag} gav felet '{error}'."
-
-#. DNSSEC:SOA_SIGNATURE_OK
-#, perl-brace-format
-msgid "RRSIG {keytag} correctly signs SOA RRset."
-msgstr "RRSIG '{keytag}' är en korrekt signatur för SOA-posten."
-
-#. DNSSEC:SOA_SIGNED
-msgid "At least one RRSIG correctly signs the SOA RRset."
-msgstr "Det finns minst en RRSIG-post som korrekt signerar SOA-posten."
-
-#. DNSSEC:TEST_ABORTED
-#, perl-brace-format
-msgid ""
-"Nameserver {ns} for zone {domain} responds with RCODE \"NOERROR\" on a query "
-"that is expected to give response with RCODE \"NXDOMAIN\". Test for NSEC and "
-"NSEC3 is aborted for this nameserver."
-msgstr ""
-"Namnservern {ns} för zonen {domain} svarade med statuskod (RCODE) 'NOERROR' "
-"på en förfrågan som förväntades ge statuskoden (RCODE) 'NXDOMAIN'. Test av "
-"NSEC och NSEC3 avbröts för denna namnserver."
+"Giltighetstiden för RRSIG-posten med \"key tag\" {keytag} och som täcker "
+"posttyp(er) {types} har löpt ut (utgångstiden är: {expiration})."
 
 #. DNSSEC:TOO_MANY_ITERATIONS
 #, perl-brace-format
@@ -2069,8 +2256,9 @@ msgstr ""
 
 #. ZONE:MX_RECORD_EXISTS
 #, perl-brace-format
-msgid "Target ({info}) found to deliver e-mail for the domain name."
-msgstr "Adressen ({info}) är angiven som mål för mail-leverans till domänen."
+msgid "MX with mail target ({mailtarget_list}) exists for the domain name."
+msgstr ""
+"Det finns ett MX RRset med mailservernamn ({mailtarget_list}) för domänen."
 
 #. ZONE:REFRESH_MINIMUM_VALUE_LOWER
 #, perl-brace-format
