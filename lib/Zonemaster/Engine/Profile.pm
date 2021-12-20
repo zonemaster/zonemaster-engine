@@ -142,6 +142,31 @@ my %profile_properties_details = (
         type    => q{Num},
         min     => 1,
         default => $DURATION_180_DAYS_IN_SECONDS
+    },
+    q{test_cases_vars.zone.SOA_DEFAULT_TTL_MAXIMUM_VALUE} => {
+        type    => q{Num},
+        min     => 1,
+        default => 86400
+    },
+    q{test_cases_vars.zone.SOA_DEFAULT_TTL_MINIMUM_VALUE} => {
+        type    => q{Num},
+        min     => 1,
+        default => 300
+    },
+    q{test_cases_vars.zone.SOA_EXPIRE_MINIMUM_VALUE} => {
+        type    => q{Num},
+        min     => 1,
+        default => 604800
+    },
+    q{test_cases_vars.zone.SOA_REFRESH_MINIMUM_VALUE} => {
+        type    => q{Num},
+        min     => 1,
+        default => 14400
+    },
+    q{test_cases_vars.zone.SOA_RETRY_MINIMUM_VALUE} => {
+        type    => q{Num},
+        min     => 1,
+        default => 3600
     }
 );
 
