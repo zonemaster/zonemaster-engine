@@ -812,6 +812,43 @@ Returns DURATION_LONG message tag in case signature lifetime is more
 than test_cases_vars.dnssec04.DURATION_LONG (in seconds).
 Default C<15552000> (180 days in seconds).
 
+=head2 test_cases_vars.zone.SOA_REFRESH_MINIMUM_VALUE
+
+A positive integer value.
+Returns REFRESH_MINIMUM_VALUE_LOWER message tag in case the SOA refresh value
+is less than test_cases_vars.zone.SOA_REFRESH_MINIMUM_VALUE (in seconds).
+Default C<14400> (4 hours in seconds).
+
+=head2 test_cases_vars.zone.SOA_RETRY_MINIMUM_VALUE
+
+A positive integer value.
+Returns RETRY_MINIMUM_VALUE_LOWER message tag in case the SOA retry value is
+less than test_cases_vars.zone.SOA_RETRY_MINIMUM_VALUE (in seconds).
+Default C<3600> (1 hour in seconds).
+
+=head2 test_cases_vars.zone.SOA_EXPIRE_MINIMUM_VALUE
+
+A positive integer value.
+Returns EXPIRE_MINIMUM_VALUE_LOWER message tag if the SOA expire value is less
+than test_cases_vars.zone.SOA_EXPIRE_MINIMUM_VALUE (in seconds).
+Default C<604800> (1 week in seconds).
+
+=head2 test_cases_vars.zone.SOA_DEFAULT_TTL_MINIMUM_VALUE
+
+A positive integer value.
+Returns SOA_DEFAULT_TTL_MAXIMUM_VALUE_LOWER message tag if the SOA minimum
+value is less than test_cases_vars.zone.SOA_DEFAULT_TTL_MINIMUM_VALUE (in
+seconds).
+Default C<300> (5 minutes in seconds).
+
+=head2 test_cases_vars.zone.SOA_DEFAULT_TTL_MAXIMUM_VALUE
+
+A positive integer value.
+Returns SOA_DEFAULT_TTL_MAXIMUM_VALUE_HIGHER message tag if the SOA minimum
+value is greater than test_cases_vars.zone.SOA_DEFAULT_TTL_MAXIMUM_VALUE (in
+seconds).
+Default C<86400> (1 day in seconds).
+
 =head1 JSON REPRESENTATION
 
 Property names in L</PROFILE PROPERTIES> section correspond to paths in
