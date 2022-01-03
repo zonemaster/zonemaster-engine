@@ -74,7 +74,7 @@ sub all {
         push @results, $class->nameserver13( $zone );
     }
     if ( Zonemaster::Engine::Util::should_run_test( q{nameserver14} ) ) {
-        push @results, $class->nameserver13( $zone );
+        push @results, $class->nameserver14( $zone );
     }
 
     return @results;
