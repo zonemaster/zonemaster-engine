@@ -1261,7 +1261,7 @@ sub nameserver14 {
             elsif ( $p->rcode eq q{NOERROR} and not $p->edns_rcode and defined $p->edns_data ) {
                 push @results, info( UNKNOWN_OPTION_CODE => { ns => $ns->string } );
             }
-            elsif ( $p->rcode eq q{BADVERS} and not $p->edns_rcode and $p->edns_version == 0 and not defined $p->edns_data and not scalar $p->answer ) {
+            elsif ( ($p->rcode eq q{NOERROR} and $p->edns_rcode == 1) and $p->edns_version == 0 and not defined $p->edns_data and not scalar $p->answer ) {
                 next;
             }
             else {
