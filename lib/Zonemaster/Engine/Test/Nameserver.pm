@@ -1373,7 +1373,7 @@ This Test Case will try to verify that if the response to a query with an OPT re
 
 =item nameserver14($zone)
 
-Test for unknown version with unknown OPTION-CODE
+Check whether authoritative name servers respond correctly for unknown EDNS version with unknown OPTION-CODE.
 
 =back
 
