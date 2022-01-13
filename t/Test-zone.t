@@ -77,17 +77,17 @@ subtest 'user defined SOA values' => sub {
     $zone = Zonemaster::Engine->zone( q{zone02.zut-root.rd.nic.fr} );
 
     subtest 'SOA retry, refresh, expire' => sub {
-        my $new_retry   = 7200;
         my $new_refresh = 86400;
+        my $new_retry   = 7200;
         my $new_expire  = 86400;
 
-        Zonemaster::Engine::Profile->effective->set( q{test_cases_vars.zone04.SOA_RETRY_MINIMUM_VALUE}, $new_retry );
         Zonemaster::Engine::Profile->effective->set( q{test_cases_vars.zone02.SOA_REFRESH_MINIMUM_VALUE}, $new_refresh );
+        Zonemaster::Engine::Profile->effective->set( q{test_cases_vars.zone04.SOA_RETRY_MINIMUM_VALUE}, $new_retry );
         Zonemaster::Engine::Profile->effective->set( q{test_cases_vars.zone05.SOA_EXPIRE_MINIMUM_VALUE}, $new_expire );
 
         %res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{Zone}, $zone );
-        ok( $res{RETRY_MINIMUM_VALUE_LOWER}, q{SOA 'retry' value is lower than the minimum user defined value} );
         ok( $res{REFRESH_MINIMUM_VALUE_LOWER}, q{SOA 'refresh' value is lower than the minimum user defined value} );
+        ok( $res{RETRY_MINIMUM_VALUE_LOWER}, q{SOA 'retry' value is lower than the minimum user defined value} );
         ok( $res{EXPIRE_MINIMUM_VALUE_LOWER}, q{SOA 'expire' value is lower than the minimum user defined value} );
     };
 

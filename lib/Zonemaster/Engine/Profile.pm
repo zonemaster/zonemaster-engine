@@ -143,21 +143,6 @@ my %profile_properties_details = (
         min     => 1,
         default => $DURATION_180_DAYS_IN_SECONDS
     },
-    q{test_cases_vars.zone06.SOA_DEFAULT_TTL_MAXIMUM_VALUE} => {
-        type    => q{Num},
-        min     => 1,
-        default => $DURATION_1_DAY_IN_SECONDS
-    },
-    q{test_cases_vars.zone06.SOA_DEFAULT_TTL_MINIMUM_VALUE} => {
-        type    => q{Num},
-        min     => 1,
-        default => $DURATION_5_MINUTES_IN_SECONDS
-    },
-    q{test_cases_vars.zone05.SOA_EXPIRE_MINIMUM_VALUE} => {
-        type    => q{Num},
-        min     => 1,
-        default => $DURATION_1_WEEK_IN_SECONDS
-    },
     q{test_cases_vars.zone02.SOA_REFRESH_MINIMUM_VALUE} => {
         type    => q{Num},
         min     => 1,
@@ -167,6 +152,21 @@ my %profile_properties_details = (
         type    => q{Num},
         min     => 1,
         default => $DURATION_1_HOUR_IN_SECONDS
+    },
+    q{test_cases_vars.zone05.SOA_EXPIRE_MINIMUM_VALUE} => {
+        type    => q{Num},
+        min     => 1,
+        default => $DURATION_1_WEEK_IN_SECONDS
+    },
+    q{test_cases_vars.zone06.SOA_DEFAULT_TTL_MAXIMUM_VALUE} => {
+        type    => q{Num},
+        min     => 1,
+        default => $DURATION_1_DAY_IN_SECONDS
+    },
+    q{test_cases_vars.zone06.SOA_DEFAULT_TTL_MINIMUM_VALUE} => {
+        type    => q{Num},
+        min     => 1,
+        default => $DURATION_5_MINUTES_IN_SECONDS
     }
 );
 
