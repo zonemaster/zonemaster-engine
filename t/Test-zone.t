@@ -76,12 +76,6 @@ ok( $res{SOA_DEFAULT_TTL_MAXIMUM_VALUE_OK}, q{SOA 'minimum' value is between the
 subtest 'user defined SOA values' => sub {
     $zone = Zonemaster::Engine->zone( q{zone02.zut-root.rd.nic.fr} );
 
-    my $old_retry = Zonemaster::Engine::Profile->effective->get( q{test_cases_vars.zone.SOA_RETRY_MINIMUM_VALUE} );
-    my $old_refresh = Zonemaster::Engine::Profile->effective->get( q{test_cases_vars.zone.SOA_REFRESH_MINIMUM_VALUE} );
-    my $old_expire = Zonemaster::Engine::Profile->effective->get( q{test_cases_vars.zone.SOA_EXPIRE_MINIMUM_VALUE} );
-    my $old_ttl_min = Zonemaster::Engine::Profile->effective->get( q{test_cases_vars.zone.SOA_DEFAULT_TTL_MINIMUM_VALUE} );
-    my $old_ttl_max = Zonemaster::Engine::Profile->effective->get( q{test_cases_vars.zone.SOA_DEFAULT_TTL_MAXIMUM_VALUE} );
-
     subtest 'SOA retry, refresh, expire' => sub {
         my $new_retry   = 7200;
         my $new_refresh = 86400;
@@ -111,11 +105,7 @@ subtest 'user defined SOA values' => sub {
     };
 
     # reset the profile
-    Zonemaster::Engine::Profile->effective->set( q{test_cases_vars.zone.SOA_RETRY_MINIMUM_VALUE}, $old_retry );
-    Zonemaster::Engine::Profile->effective->set( q{test_cases_vars.zone.SOA_REFRESH_MINIMUM_VALUE}, $old_refresh );
-    Zonemaster::Engine::Profile->effective->set( q{test_cases_vars.zone.SOA_EXPIRE_MINIMUM_VALUE}, $old_expire );
-    Zonemaster::Engine::Profile->effective->set( q{test_cases_vars.zone.SOA_DEFAULT_TTL_MINIMUM_VALUE}, $old_ttl_min );
-    Zonemaster::Engine::Profile->effective->set( q{test_cases_vars.zone.SOA_DEFAULT_TTL_MAXIMUM_VALUE}, $old_ttl_max );
+    Zonemaster::Engine::Profile->effective->merge( Zonemaster::Engine::Profile->default );
 };
 
 
