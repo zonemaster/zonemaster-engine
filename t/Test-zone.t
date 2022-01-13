@@ -81,9 +81,9 @@ subtest 'user defined SOA values' => sub {
         my $new_refresh = 86400;
         my $new_expire  = 86400;
 
-        Zonemaster::Engine::Profile->effective->set( q{test_cases_vars.zone.SOA_RETRY_MINIMUM_VALUE}, $new_retry );
-        Zonemaster::Engine::Profile->effective->set( q{test_cases_vars.zone.SOA_REFRESH_MINIMUM_VALUE}, $new_refresh );
-        Zonemaster::Engine::Profile->effective->set( q{test_cases_vars.zone.SOA_EXPIRE_MINIMUM_VALUE}, $new_expire );
+        Zonemaster::Engine::Profile->effective->set( q{test_cases_vars.zone04.SOA_RETRY_MINIMUM_VALUE}, $new_retry );
+        Zonemaster::Engine::Profile->effective->set( q{test_cases_vars.zone02.SOA_REFRESH_MINIMUM_VALUE}, $new_refresh );
+        Zonemaster::Engine::Profile->effective->set( q{test_cases_vars.zone05.SOA_EXPIRE_MINIMUM_VALUE}, $new_expire );
 
         %res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{Zone}, $zone );
         ok( $res{RETRY_MINIMUM_VALUE_LOWER}, q{SOA 'retry' value is lower than the minimum user defined value} );
@@ -95,11 +95,11 @@ subtest 'user defined SOA values' => sub {
         my $new_ttl_min = 7200;
         my $new_ttl_max = 3600;
 
-        Zonemaster::Engine::Profile->effective->set( q{test_cases_vars.zone.SOA_DEFAULT_TTL_MINIMUM_VALUE}, $new_ttl_min );
+        Zonemaster::Engine::Profile->effective->set( q{test_cases_vars.zone06.SOA_DEFAULT_TTL_MINIMUM_VALUE}, $new_ttl_min );
         %res = map { $_->tag => 1 } Zonemaster::Engine->test_method( q{Zone}, q{zone06}, $zone );
         ok( $res{SOA_DEFAULT_TTL_MAXIMUM_VALUE_LOWER}, q{SOA 'minimum' value is too low} );
 
-        Zonemaster::Engine::Profile->effective->set( q{test_cases_vars.zone.SOA_DEFAULT_TTL_MAXIMUM_VALUE}, $new_ttl_max );
+        Zonemaster::Engine::Profile->effective->set( q{test_cases_vars.zone06.SOA_DEFAULT_TTL_MAXIMUM_VALUE}, $new_ttl_max );
         %res = map { $_->tag => 1 } Zonemaster::Engine->test_method( q{Zone}, q{zone06}, $zone );
         ok( $res{SOA_DEFAULT_TTL_MAXIMUM_VALUE_HIGHER}, q{SOA 'minimum' value is too high} );
     };

@@ -376,7 +376,7 @@ sub zone02 {
 
     my $p = _retrieve_record_from_zone( $zone, $zone->name, q{SOA} );
 
-    my $soa_refresh_minimum_value = Zonemaster::Engine::Profile->effective->get( q{test_cases_vars.zone.SOA_REFRESH_MINIMUM_VALUE} );
+    my $soa_refresh_minimum_value = Zonemaster::Engine::Profile->effective->get( q{test_cases_vars.zone02.SOA_REFRESH_MINIMUM_VALUE} );
 
     if ( $p and my ( $soa ) = $p->get_records( q{SOA}, q{answer} ) ) {
         my $soa_refresh = $soa->refresh;
@@ -447,7 +447,7 @@ sub zone04 {
 
     my $p = _retrieve_record_from_zone( $zone, $zone->name, q{SOA} );
 
-    my $soa_retry_minimum_value = Zonemaster::Engine::Profile->effective->get( q{test_cases_vars.zone.SOA_RETRY_MINIMUM_VALUE} );
+    my $soa_retry_minimum_value = Zonemaster::Engine::Profile->effective->get( q{test_cases_vars.zone04.SOA_RETRY_MINIMUM_VALUE} );
 
     if ( $p and my ( $soa ) = $p->get_records( q{SOA}, q{answer} ) ) {
         my $soa_retry = $soa->retry;
@@ -483,7 +483,7 @@ sub zone05 {
 
     my $p = _retrieve_record_from_zone( $zone, $zone->name, q{SOA} );
 
-    my $soa_expire_minimum_value = Zonemaster::Engine::Profile->effective->get( q{test_cases_vars.zone.SOA_EXPIRE_MINIMUM_VALUE} );
+    my $soa_expire_minimum_value = Zonemaster::Engine::Profile->effective->get( q{test_cases_vars.zone05.SOA_EXPIRE_MINIMUM_VALUE} );
 
     if ( $p and my ( $soa ) = $p->get_records( q{SOA}, q{answer} ) ) {
         my $soa_expire  = $soa->expire;
@@ -530,8 +530,8 @@ sub zone06 {
 
     my $p = _retrieve_record_from_zone( $zone, $zone->name, q{SOA} );
 
-    my $soa_default_ttl_maximum_value = Zonemaster::Engine::Profile->effective->get( q{test_cases_vars.zone.SOA_DEFAULT_TTL_MAXIMUM_VALUE} );
-    my $soa_default_ttl_minimum_value = Zonemaster::Engine::Profile->effective->get( q{test_cases_vars.zone.SOA_DEFAULT_TTL_MINIMUM_VALUE} );
+    my $soa_default_ttl_maximum_value = Zonemaster::Engine::Profile->effective->get( q{test_cases_vars.zone06.SOA_DEFAULT_TTL_MAXIMUM_VALUE} );
+    my $soa_default_ttl_minimum_value = Zonemaster::Engine::Profile->effective->get( q{test_cases_vars.zone06.SOA_DEFAULT_TTL_MINIMUM_VALUE} );
 
     if ( $p and my ( $soa ) = $p->get_records( q{SOA}, q{answer} ) ) {
         my $soa_minimum = $soa->minimum;
