@@ -2,15 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-02 13:12+0200\n"
-"PO-Revision-Date: 2021-06-02 13:47+0300\n"
+"POT-Creation-Date: 2022-01-25 18:35+0100\n"
+"PO-Revision-Date: 2021-12-23 13:33+0200\n"
 "Last-Translator: sami.salmensuo@traficom.fi\n"
 "Language-Team: Traficom domain team\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.0\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #. ADDRESS:NAMESERVER_IP_WITHOUT_REVERSE
 #, perl-brace-format
@@ -598,64 +598,6 @@ msgstr ""
 "DNSKEY, jolla on tunniste {keytag}, käyttää asettamatonta algoritmin numeroa "
 "{algo_num} ({algo_descr})."
 
-#. DNSSEC:ALGO_NOT_SIGNED_RRSET
-#, perl-brace-format
-msgid ""
-"Nameserver {ns} responded with no RRSIG for RRset {rrtype} created by the "
-"algorithm {algo_num}."
-msgstr ""
-"Nimipalvelimen {ns} vastauksessa ei ollut RRSIG-tietuetta RRset-joukolle "
-"{rrtype}, jonka oli luonut algoritmi {algo_num}."
-
-#. DNSSEC:ALL_ALGO_SIGNED
-msgid ""
-"All the tested RRset (SOA/DNSKEY/NS) are signed by each algorithm present in "
-"the DNSKEY RRset."
-msgstr ""
-"Kaikki testatut RRset (SOA/DNSKEY/NS) -joukot on allekirjoittanut jokainen "
-"algoritmi, joka löytyy DNSKEY RRset -joukosta."
-
-#. DNSSEC:BROKEN_DNSSEC
-#, perl-brace-format
-msgid ""
-"All nameservers for zone {domain} responds with neither NSEC nor NSEC3 "
-"records when such records are expected."
-msgstr ""
-"Mikään nimipalvelin vyöhykkeelle {domain} ei anna vastaukseksi NSEC- tai "
-"NSEC3 -tietuetta, vaikka näitä tietueita odotetaan."
-
-#. DNSSEC:BROKEN_DS
-#, perl-brace-format
-msgid ""
-"DNSKEY record with tag {keytag} returned by nameserver {ns} does not match "
-"the algorithm and hash values in a DS record with same tag in parent zone."
-msgstr ""
-"DNSKEY-tietue, jolla on tunniste {keytag}, jonka palautti nimipalvelin {ns}, "
-"ei vastaa sitä algoritmia ja tiivistettä, jotka löytyvät ylemmän vyöhykkeen "
-"DS-tietueesta, jolla on sama tunniste."
-
-#. DNSSEC:BROKEN_RRSIG
-#, perl-brace-format
-msgid ""
-"The RRSIG of the DNSKEY RRset created by tag {keytag} returned by nameserver "
-"{ns} failed to be verified with error '{error}' (a DS record with same tag "
-"is present in the parent zone)."
-msgstr ""
-"DNSKEY RRset-joukon RRSIG-tietuetta, jonka on luonut tunniste {keytag}, "
-"jonka palautti nimipalvelin {ns}, ei voitu todentaa, mistä seurasi virhe "
-"'{error}' (ylemmällä vyöhykkeellä on DS-tietue, jolla on sama tunniste)."
-
-#. DNSSEC:DELEGATION_NOT_SIGNED
-#, perl-brace-format
-msgid "Delegation from parent to child is not properly signed ({reason})."
-msgstr ""
-"Delegointia ylemmältä tasolta alemmalle ei ole allekirjoitettu oikein "
-"({reason})."
-
-#. DNSSEC:DELEGATION_SIGNED
-msgid "Delegation from parent to child is properly signed."
-msgstr "Delegointi ylemmältä tasolta alemmalle on allekirjoitettu oikein."
-
 #. DNSSEC:DNSKEY_AND_DS
 #, perl-brace-format
 msgid "{parent} sent a DS record, and {child} a DNSKEY record."
@@ -666,49 +608,6 @@ msgstr "{parent} lähetti DS-tietueen ja {child} DNSKEY-tietueen."
 msgid "{child} sent a DNSKEY record, but {parent} did not send a DS record."
 msgstr ""
 "{child} lähetti DNSKEY-tietueen, mutta {parent} ei lähettänyt DS-tietuetta."
-
-#. DNSSEC:DNSKEY_KSK_NOT_SEP
-#, perl-brace-format
-msgid ""
-"Flags field of DNSKEY record with tag {keytag} returned by nameserver {ns} "
-"has not SEP bit set although DS with same tag is present in parent."
-msgstr ""
-"Lippukentälle, joka kuuluu DNSKEY-tietueelle, jolla on tunniste {keytag}, "
-"jonka palautti nimipalvelin {ns}, ei ole asetettu SEP-bittiä vaikka "
-"ylätasolla on DS, jolla on sama tunniste."
-
-#. DNSSEC:DNSKEY_NOT_ZONE_SIGN
-#, perl-brace-format
-msgid ""
-"Flags field of DNSKEY record with tag {keytag} returned by nameserver {ns} "
-"has not ZONE bit set although DS with same tag is present in parent."
-msgstr ""
-"Lippukentälle, joka kuuluu DNSKEY-tietueelle, jolla on tunniste {keytag}, "
-"jonka palautti nimipalvelin {ns}, ei ole asetettu ZONE-bittiä vaikka "
-"ylätasolla on DS, jolla on sama tunniste."
-
-#. DNSSEC:DNSKEY_NOT_SIGNED
-msgid "The apex DNSKEY RRset was not correctly signed."
-msgstr "Ylintä DNSKEY RRset -joukkoa ei ollut allekirjoitettu oikein."
-
-#. DNSSEC:DNSKEY_SIGNATURE_NOT_OK
-#, perl-brace-format
-msgid ""
-"Signature for DNSKEY with tag {keytag} failed to verify with error '{error}'."
-msgstr ""
-"Allekirjoitusta, joka kuuluu DNSKEY-tietueelle, jolla on tunniste {keytag}, "
-"ei voitu todentaa, mistä seurasi virhe '{error}'."
-
-#. DNSSEC:DNSKEY_SIGNATURE_OK
-#, perl-brace-format
-msgid "A signature for DNSKEY with tag {keytag} was correctly signed."
-msgstr ""
-"Allekirjoitus, joka kuuluu DNSKEY-tietueelle, jolla on tunniste {keytag}, "
-"oli allekirjoitettu oikein."
-
-#. DNSSEC:DNSKEY_SIGNED
-msgid "The apex DNSKEY RRset was correcly signed."
-msgstr "Ylin DNSKEY RRset -joukko oli allekirjoitettu oikein."
 
 #. DNSSEC:DNSKEY_SMALLER_THAN_REC
 #, perl-brace-format
@@ -740,7 +639,404 @@ msgstr ""
 "({algo_descr}), on kooltaan ({keysize}) suurempi kuin enimmäiskoko "
 "({keysizemax})."
 
-#. DS15_HAS_CDNSKEY_NO_CDS
+#. DNSSEC:DS02_ALGO_NOT_SUPPORTED_BY_ZM
+#. DNSSEC:DS08_ALGO_NOT_SUPPORTED_BY_ZM
+#. DNSSEC:DS09_ALGO_NOT_SUPPORTED_BY_ZM
+#. DNSSEC:DS10_ALGO_NOT_SUPPORTED_BY_ZM
+#, perl-brace-format
+msgid ""
+"DNSKEY with tag {keytag} uses unsupported algorithm {algo_num} "
+"({algo_mnemo}) by this installation of Zonemaster. Fetched from the "
+"nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"DNSKEY-tietue tunnisteella {keytag} käyttää algoritmia {algo_num} "
+"({algo_mnemo}) jota Zonemaster ei tue. Tiedot haettu nimipalvelimilta joiden "
+"IP-osoitteet ovat \"{ns_ip_list}\"."
+
+#. DNSSEC:DS02_DNSKEY_NOT_FOR_ZONE_SIGNING
+#, perl-brace-format
+msgid ""
+"Flags field of DNSKEY record with tag {keytag} has not ZONE bit set although "
+"DS with same tag is present in parent. Fetched from the nameservers with IP "
+"addresses \"{ns_ip_list}\"."
+msgstr ""
+"DNSKEY-tietueen lippu kenttä  tunnisteella {keytag} ei ole ZONE bit asetettu "
+"vaikka DS-tietue samalla tunnisteella löytyy ylemmältä tasolta. Tiedot "
+"haettu nimipalvelimilta joiden IP-osoitteet ovat \"{ns_ip_list}\"."
+
+#. DNSSEC:DS02_DNSKEY_NOT_SEP
+#, perl-brace-format
+msgid ""
+"Flags field of DNSKEY record with tag {keytag} has not SEP bit set although "
+"DS with same tag is present in parent. Fetched from the nameservers with IP "
+"addresses \"{ns_ip_list}\"."
+msgstr ""
+"DNSKEY-tietueen tunnisteella {keytag} lippu kentälle ei ole asetettu SEP "
+"bittiä vaikka samalla tunnisteella DS-tietue on asetettu ylätasolle. Tiedot "
+"haettu nimipalvelimilta joiden IP-osoitteet ovat \"{ns_ip_list}\"."
+
+#. DNSSEC:DS02_NO_DNSKEY_FOR_DS
+#, perl-brace-format
+msgid ""
+"The DNSKEY record with tag {keytag} that the DS refers to does not exist in "
+"the DNSKEY RRset. Fetched from the nameservers with IP \"{ns_ip_list}\"."
+msgstr ""
+"DNSKEY-tietue tunnisteella {keytag}  johon DS-tietue osoittaa ei ole "
+"olemassa DNSSKEY RRsetissä.. Tiedot haettu nimipalvelimilta joiden IP-"
+"osoitteet ovat \"{ns_ip_list}\"."
+
+#. DNSSEC:DS02_NO_MATCHING_DNSKEY_RRSIG
+#, perl-brace-format
+msgid ""
+"The DNSKEY RRset is not signed by the DNSKEY with tag {keytag} that the the "
+"DS record refers to. Fetched from the nameservers with IP \"{ns_ip_list}\"."
+msgstr ""
+"DNSKEY RRset ei ole allekirjoitettu DNSKEY:llä jonka avaimen tunniste on "
+"{keytag} ja johon DS-tietue osoittaa. Tiedot haettu nimipalvelimilta joiden "
+"IP-osoitteet ovat \"{ns_ip_list}\"."
+
+#. DNSSEC:DS02_NO_MATCH_DS_DNSKEY
+#, perl-brace-format
+msgid ""
+"The DS record does not match the DNSKEY with tag {keytag} by algorithm or "
+"digest. Fetched from the nameservers with IP \"{ns_ip_list}\"."
+msgstr ""
+"DS tietue {keytag} ei täsmää DNSKEY:n  tunnisteella {keytag} algoritmin tai "
+"tiivisteen osalta.. Tiedot haettu nimipalvelimilta joiden IP-osoitteet ovat "
+"\"{ns_ip_list}\"."
+
+#. DNSSEC:DS02_RRSIG_NOT_VALID_BY_DNSKEY
+#. DNSSEC:DS08_RRSIG_NOT_VALID_BY_DNSKEY
+#, perl-brace-format
+msgid ""
+"The DNSKEY RRset is signed with an RRSIG with tag {keytag} which cannot be "
+"validated by the matching DNSKEY. Fetched from the nameservers with IP "
+"addresses \"{ns_ip_list}\"."
+msgstr ""
+"DNSKEY RRset on allekirjoitettu RRSIG:llä jonka tunniste on {keytag} mutta "
+"sitä ei voi validoida DNSKEY:llä. Tiedot haettu nimipalvelimilta joiden IP-"
+"osoitteet ovat \"{ns_ip_list}\"."
+
+#. DNSSEC:DS08_DNSKEY_RRSIG_EXPIRED
+#, perl-brace-format
+msgid ""
+"RRSIG with keytag {keytag} and covering type DNSKEY has already expired. "
+"Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"RRSIG tunnisteella {keytag} ja DNSKEY on jo vanhentunut. Tiedot haettu "
+"nimipalvelimilta joiden IP-osoitteet ovat \"{ns_ip_list}\"."
+
+#. DNSSEC:DS08_DNSKEY_RRSIG_NOT_YET_VALID
+#, perl-brace-format
+msgid ""
+"RRSIG with keytag {keytag} and covering type DNSKEY has inception date in "
+"the future. Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"RRSIG tunnisteella {keytag} joka kattaa DNSKEY:n on voimassaolon alkupäivä "
+"tulevaisuudessa. Tiedot haettu nimipalvelimilta joiden IP-osoitteet ovat "
+"\"{ns_ip_list}\"."
+
+#. DNSSEC:DS08_MISSING_RRSIG_IN_RESPONSE
+#, perl-brace-format
+msgid ""
+"The DNSKEY RRset is not signed, which is against expectation. Fetched from "
+"the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"DNSKEY RRset ei ole allekirjoitettu. Tiedot haettu nimipalvelimilta joiden "
+"IP-osoitteet ovat \"{ns_ip_list}\"."
+
+#. DNSSEC:DS08_NO_MATCHING_DNSKEY
+#, perl-brace-format
+msgid ""
+"The DNSKEY RRset is signed with an RRSIG with tag {keytag} which does not "
+"match any DNSKEY record. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"DNSKEY RRset on allekirjoitettu RRSIG:llä tunnisteella {keytag} ei täsmää "
+"yhteenkään DNSKEY tietueeseen. Tiedot haettu nimipalvelimilta joiden IP-"
+"osoitteet ovat \"{ns_ip_list}\"."
+
+#. DNSSEC:DS09_MISSING_RRSIG_IN_RESPONSE
+#, perl-brace-format
+msgid ""
+"The SOA RRset is not signed, which is against expectation. Fetched from the "
+"nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"SOA RRset ei ole allekirjoitettu. Tiedot haettu nimipalvelimilta joiden IP-"
+"osoitteet ovat \"{ns_ip_list}\"."
+
+#. DNSSEC:DS09_NO_MATCHING_DNSKEY
+#, perl-brace-format
+msgid ""
+"The SOA RRset is signed with an RRSIG with tag {keytag} which does not match "
+"any DNSKEY record. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"SOA RRset on allekirjoitettu RRSIG:llä tunnisteella {keytag} mikä ei täsmää "
+"yhteenkään DNSKEY tietueeseen. Tiedot haettu nimipalvelimilta joiden IP-"
+"osoitteet ovat \"{ns_ip_list}\"."
+
+#. DNSSEC:DS09_RRSIG_NOT_VALID_BY_DNSKEY
+#, perl-brace-format
+msgid ""
+"The SOA RRset is signed with an RRSIG with tag {keytag} which cannot be "
+"validated by the matching DNSKEY. Fetched from the nameservers with IP "
+"addresses \"{ns_ip_list}\"."
+msgstr ""
+"SOA RRset on allekirjoitettu RRSIG:llä tunnisteella {keytag} mutta sitä ei "
+"voida validoida vastaavalla DNSKEY RRset:llä. Tiedot haettu nimipalvelimilta "
+"joiden IP-osoitteet ovat \"{ns_ip_list}\"."
+
+#. DNSSEC:DS09_SOA_RRSIG_EXPIRED
+#, perl-brace-format
+msgid ""
+"RRSIG with keytag {keytag} and covering type SOA has already expired. "
+"Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"RRSIG tietue {keytag} ei täsmää DNSKEY tietueeseen. Tiedot haettu "
+"nimipalvelimilta joiden IP-osoitteet ovat \"{ns_ip_list}\"."
+
+#. DNSSEC:DS09_SOA_RRSIG_NOT_YET_VALID
+#, perl-brace-format
+msgid ""
+"RRSIG with keytag {keytag} and covering type SOA has inception date in the "
+"future. Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"SOA-tietueen RRSIG tietueen {keytag} voimassaolon voimassaolon alku pvm pvm "
+"on tulevaisuudessa. Tiedot haettu nimipalvelimilta joiden IP-osoitteet ovat "
+"\"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_ANSWER_VERIFY_ERROR
+#, perl-brace-format
+msgid ""
+"The name \"{domain}\" of RR type \"{rrtype}\" is signed by RRSIG, but the "
+"signature or signatures cannot be verified. Fetched from the nameservers "
+"with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"Nimi \"{domain}\"  RR type \"{rrtype}\" on allekirjoitettu RRSIG:llä, mutta "
+"allekirjoitusta tai allekirjoituksia ei pystytä varmistamaan. Tiedot haettu "
+"nimipalvelimilta joiden IP-osoitteet ovat \"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_HAS_NSEC
+#, perl-brace-format
+msgid ""
+"The zone has NSEC records. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"Zonella on NSEC tietueita. Tiedot haettu nimipalvelimilta joiden IP-"
+"osoitteet ovat \"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_HAS_NSEC3
+#, perl-brace-format
+msgid ""
+"The zone has NSEC3 records. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"Zonella on NSEC3 tietueita. Tiedot haettu nimipalvelimilta joiden IP-"
+"osoitteet ovat \"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_INCONSISTENT_NSEC_NSEC3
+#, perl-brace-format
+msgid ""
+"The zone is inconsistent on NSEC and NSEC3. NSEC is fetched from nameservers "
+"with IP addresses \"{ns_ip_list_nsec}\". NSEC3 is fetched from nameservers "
+"with IP addresses \"{ns_ip_list_nsec3}\"."
+msgstr ""
+"Zone on epäjohdonmukainen NSEC ja NSEC3 osalta. NSEC on haettu "
+"nimipalvelimilta joiden IP-osoitteet ovat \"{ns_ip_list_nsec}\". NSEC3 on "
+"haettu nimipalvelimilta joiden IP-osoitteet ovat \"{ns_ip_list_nsec3}\"."
+
+#. DNSSEC:DS10_MISSING_NSEC_NSEC3
+#, perl-brace-format
+msgid ""
+"NSEC or NSEC3 is expected but is missing. Fetched from the nameservers with "
+"IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"NSEC tai NSEC3 puuttuu. Tiedot haettu nimipalvelimilta joiden IP-osoitteet "
+"ovat \"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_MIXED_NSEC_NSEC3
+#, perl-brace-format
+msgid ""
+"Unexpectedly both NSEC and NSEC3 are reported. Fetched from the nameservers "
+"with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"Sekä NSEC että NSEC3 raportoidaan. Tiedot haettu nimipalvelimilta joiden IP-"
+"osoitteet ovat \"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_NAME_NOT_COVERED_BY_NSEC
+#, perl-brace-format
+msgid ""
+"A non-existent name is not correctly covered by the NSEC records. Fetched "
+"from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"NSEC tietueet eivät kata olematonta nimeä niin kuin pitäisi. Tiedot haettu "
+"nimipalvelimilta joiden IP-osoitteet ovat \"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_NAME_NOT_COVERED_BY_NSEC3
+#, perl-brace-format
+msgid ""
+"A non-existent name is not correctly covered by the NSEC3 records. Fetched "
+"from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"NSEC3 tietueet eivät kata olematonta nimeä niin kuin pitäisi. Tiedot haettu "
+"nimipalvelimilta joiden IP-osoitteet ovat \"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_NON_EXISTENT_RESPONSE_ERROR
+#, perl-brace-format
+msgid ""
+"No response or error in response on an expected non-existent name. Fetched "
+"from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"Ei vastausta tai virhe vastauksessa olemattomaan verkkotunnukseen "
+"liittyvässä kyselyssä. Tiedot haettu nimipalvelimilta joiden IP-osoitteet "
+"ovat \"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_NSEC3_MISSING_SIGNATURE
+#, perl-brace-format
+msgid ""
+"Missing signatures (RRSIG) for the NSEC3 record or records. Fetched from the "
+"nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"Allekirjoitukset (RRSIG) puuttuvat NSEC3 tietueelta tai tietueilta. Tiedot "
+"haettu nimipalvelimilta joiden IP-osoitteet ovat \"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_NSEC3_RRSIG_VERIFY_ERROR
+#, perl-brace-format
+msgid ""
+"The signatures (RRSIG) for the NSEC3 record or records cannot be verified. "
+"Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"Allekirjoituksia (RRSIG) NSEC3 tietueen osalta ei pystytä varmistamaan. "
+"Tiedot haettu nimipalvelimilta joiden IP-osoitteet ovat \"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_NSEC_MISSING_SIGNATURE
+#, perl-brace-format
+msgid ""
+"Missing signatures (RRSIG) for the NSEC record or records. Fetched from the "
+"nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"Allekirjoitukset (RRSIG) puuttuvat NSEC3 tietueen tai tietueiden osalta. "
+"Tiedot haettu nimipalvelimilta joiden IP-osoitteet ovat \"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_NSEC_RRSIG_VERIFY_ERROR
+#, perl-brace-format
+msgid ""
+"The signatures (RRSIG) for the NSEC record or records cannot be verified. "
+"Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"Allekirjoituksia (RRSIG) NSEC tietueelle tai tietueille ei pystytä "
+"varmentamaan. Tiedot haettu nimipalvelimilta joiden IP-osoitteet ovat "
+"\"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_UNSIGNED_ANSWER
+#, perl-brace-format
+msgid ""
+"The name \"{domain}\" of RR type \"{rrtype}\" in the answer section of the "
+"response is not signed by any RRSIG. Fetched from the nameservers with IP "
+"addresses \"{ns_ip_list}\"."
+msgstr ""
+"Nimi \"{domain}\" RR typen \"{rrtype}\" vastauksen \"answer osio\" ei ole "
+"allekirjoitettu RRSIGllä. Tiedot haettu nimipalvelimilta joiden IP-osoitteet "
+"ovat \"{ns_ip_list}\"."
+
+#. DNSSEC:DS11_INCONSISTENT_DS
+msgid "Parent name servers are inconsistent on the existence of DS."
+msgstr "Päänimipalvelimien tiedot ovat epäjohdonmukaiset DS-tietueen osalta."
+
+#. DNSSEC:DS11_INCONSISTENT_SIGNED_ZONE
+msgid ""
+"Name servers for the child zone are inconsistent on whether the zone is "
+"signed or not."
+msgstr ""
+"Alemman vyöhykkeen nimipalvelimet palauttavat ristiriitaista tietoa siitä "
+"onko vyöhyke (zone) allekirjoitettu vai ei."
+
+#. DNSSEC:DS11_UNDETERMINED_DS
+msgid ""
+"It cannot be determined if the parent zone has DS for the child zone or not."
+msgstr ""
+"Ei pystytä päättelemään onko ylemmällä vyöhykkeellä DS-tietue alemmalle "
+"vyöhykkeelle."
+
+#. DNSSEC:DS11_UNDETERMINED_SIGNED_ZONE
+msgid "It cannot be determined if the child zone is signed or not."
+msgstr "Ei pystytä päättelemään onko alempi vyöhyke allekirjoitettu vai ei."
+
+#. DNSSEC:DS11_PARENT_WITHOUT_DS
+#, perl-brace-format
+msgid ""
+"No DS record for the child zone found on parent nameservers with IP "
+"addresses \"{ns_ip_list}\"."
+msgstr ""
+"Alemmalle vyöhykkeelle (child zone) ei löydy DS-tietueita ylemmän vyöhykkeen "
+"nimipalvelimilta joiden IP-osoitteet ovat \"{ns_ip_list}\"."
+
+#. DNSSEC:DS11_PARENT_WITH_DS
+#, perl-brace-format
+msgid ""
+"DS record for the child zone found on parent nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"Alemman vyöhykkeen DS-tietue löytyi ylemmän vyöhykkeen nimipalvelimilta "
+"joiden IP-osoitteet ovat \"{ns_ip_list}\"."
+
+#. DNSSEC:DS11_NS_WITH_SIGNED_ZONE
+#, perl-brace-format
+msgid ""
+"Signed child zone found on nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"Allekirjoitettu alempi vyöhyke löytyi nimipalvelimilta joiden IP-osoitteet "
+"ovat \"{ns_ip_list}\"."
+
+#. DNSSEC:DS11_NS_WITH_UNSIGNED_ZONE
+#, perl-brace-format
+msgid ""
+"Unsigned child zone found on nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"Allekirjoittamaton alempi vyöhyke (child zone) löytyi nimipalvelimilta "
+"joiden IP-osoitteet ovat \"{ns_ip_list}"
+
+#. DNSSEC:DS11_DS_BUT_UNSIGNED_ZONE
+msgid "The child zone is unsigned, but the parent zone has DS record."
+msgstr ""
+"Alempi vyöhyke (child zone) on allekirjoittamaton, mutta ylemmällä "
+"vyöhykkeellä (parent) on DS-tietue."
+
+#. DNSSEC:DS13_ALGO_NOT_SIGNED_DNSKEY
+#, perl-brace-format
+msgid ""
+"The DNSKEY RRset is not signed by algorithm {algo_num} ({algo_mnemo}) "
+"present in the DNSKEY RRset. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"DNSKEY RRset ei ole allekirjoitettu algoritmilla {algo_num} ({algo_mnemo}) "
+"joka löytyy DNSKEY RRset:stä. Tiedot haettu nimipalvelimilta joiden IP-"
+"osoitteet ovat \"{ns_ip_list}\"."
+
+#. DNSSEC:DS13_ALGO_NOT_SIGNED_NS
+#, perl-brace-format
+msgid ""
+"The NS RRset is not signed by algorithm {algo_num} ({algo_mnemo}) present in "
+"the DNSKEY RRset. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"NS RRset ei ole allekirjoitettu algoritmilla {algo_num} ({algo_mnemo}) joka "
+"löytyy DNSKEY RRset:stä Tiedot haettu nimipalvelimilta joiden IP-osoitteet "
+"ovat \"{ns_ip_list}\"."
+
+#. DNSSEC:DS13_ALGO_NOT_SIGNED_SOA
+#, perl-brace-format
+msgid ""
+"The SOA RRset is not signed by algorithm {algo_num} ({algo_mnemo}) present "
+"in the DNSKEY RRset. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"SOA RRset ei ole allekirjoitettu algoritmilla {algo_num} ({algo_mnemo}) joka "
+"löytyy DNSKEY RRset:stä. Tiedot haettu nimipalvelimilta joiden IP-osoitteet "
+"ovat \"{ns_ip_list}\"."
+
+#. DNSSEC:DS15_HAS_CDNSKEY_NO_CDS
 #, perl-brace-format
 msgid ""
 "CDNSKEY RRset is found on nameservers that resolve to IP addresses "
@@ -749,7 +1045,7 @@ msgstr ""
 "CDNSKEY RRset löytyy nimipalvelimilta IP-osoitteista ({ns_ip_list}), mutta "
 "ei CDS RRset asetuksia."
 
-#. DS15_HAS_CDS_AND_CDNSKEY
+#. DNSSEC:DS15_HAS_CDS_AND_CDNSKEY
 #, perl-brace-format
 msgid ""
 "CDNSKEY and CDS RRsets are found on nameservers that resolve to IP addresses "
@@ -758,7 +1054,7 @@ msgstr ""
 "CDNSKEY ja CDS RRsets löytyvät nimipalvelimilta IP-osoitteista "
 "({ns_ip_list})."
 
-#. DS15_HAS_CDS_NO_CDNSKEY
+#. DNSSEC:DS15_HAS_CDS_NO_CDNSKEY
 #, perl-brace-format
 msgid ""
 "CDS RRset is found on nameservers that resolve to IP addresses "
@@ -767,15 +1063,15 @@ msgstr ""
 "CDS RRset löytyy nimipalvelimilta IP-osoitteista ({ns_ip_list}), mutta ei "
 "CDNSKEY RRset asetuksia."
 
-#. DS15_INCONSISTENT_CDNSKEY
+#. DNSSEC:DS15_INCONSISTENT_CDNSKEY
 msgid "All servers do not have the same CDNSKEY RRset."
 msgstr "Kaikilla nimipalvelimilla ei ole sama CDNSKEY RRset."
 
-#. DS15_INCONSISTENT_CDS
+#. DNSSEC:DS15_INCONSISTENT_CDS
 msgid "All servers do not have the same CDS RRset."
 msgstr "Kaikilla nimipalvelimilla ei ole sama CDS RRset."
 
-#. DS15_MISMATCH_CDS_CDNSKEY
+#. DNSSEC:DS15_MISMATCH_CDS_CDNSKEY
 #, perl-brace-format
 msgid ""
 "Both CDS and CDNSKEY RRsets are found on nameservers that resolve to IP "
@@ -784,11 +1080,11 @@ msgstr ""
 "CDS ja CDNSKEY RRsets löytyvät nimipalvelimilta IP-osoitteista "
 "({ns_ip_list}), mutta ne eivät täsmää."
 
-#. DS15_NO_CDS_CDNSKEY
+#. DNSSEC:DS15_NO_CDS_CDNSKEY
 msgid "No CDS or CDNSKEY RRsets are found on any name server."
 msgstr "CDS tai CDNSKEY RR eivät löydy yhdeltäkään nimipalvelimista."
 
-#. DS16_CDS_INVALID_RRSIG
+#. DNSSEC:DS16_CDS_INVALID_RRSIG
 #, perl-brace-format
 msgid ""
 "The CDS RRset is signed with an RRSIG with tag {keytag}, but the RRSIG does "
@@ -799,26 +1095,57 @@ msgstr ""
 "DNSKEY:n samalla tunnisteella. Tiedot haettu nimipalvelimilta joiden IP-"
 "osoitteet ovat \"{ns_ip_list}\"."
 
-#. DS16_CDS_MATCHES_NO_DNSKEY
+#. DNSSEC:DS16_CDS_MATCHES_NON_SEP_DNSKEY
+#, perl-brace-format
+msgid ""
+"The CDS record with tag {keytag} matches a DNSKEY record with SEP bit (bit "
+"15) unset. Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"CDS tietue {keytag} täsmää DNSKEY tietueeseen jolla SEP bit (bit 15) pois "
+"päältä. Tiedot haettu nimipalvelimilta joiden IP-osoitteet ovat "
+"\"{ns_ip_list}\"."
+
+#. DNSSEC:DS16_CDS_MATCHES_NON_ZONE_DNSKEY
+#, perl-brace-format
+msgid ""
+"The CDS record with tag {keytag} matches a DNSKEY record with zone bit (bit "
+"7) unset. Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"CDS tietue {keytag} täsmää DNSKEY tietueeseen jolla zone bit (bit 7) pois "
+"päältä. Tiedot haettu nimipalvelimilta joiden IP-osoitteet ovat "
+"\"{ns_ip_list}\"."
+
+#. DNSSEC:DS16_CDS_MATCHES_NO_DNSKEY
 #, perl-brace-format
 msgid ""
 "The CDS record with tag {keytag} does not match any DNSKEY record. Fetched "
 "from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"CDS tietue {keytag} ei täsmää DNSKEY tietueeseen. Tiedot haettu "
+"CDS tietue {keytag} ei täsmää yhteenkään DNSKEY tietueeseen. Tiedot haettu "
 "nimipalvelimilta joiden IP-osoitteet ovat \"{ns_ip_list}\"."
 
-#. DS16_CDS_SIGNED_BY_UNKNOWN_DNSKEY
+#. DNSSEC:DS16_CDS_NOT_SIGNED_BY_CDS
+#, perl-brace-format
+msgid ""
+"The CDS RRset is not signed by the DNSKEY that the CDS record with tag "
+"{keytag} points to. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"CDS RRset ei ole allekirjoitettu DNSKEY:llä johon CDS-tietue tunnisteella "
+"{keytag} osoittaa. Tiedot haettu nimipalvelimilta joiden IP-osoitteet ovat "
+"\"{ns_ip_list}\"."
+
+#. DNSSEC:DS16_CDS_SIGNED_BY_UNKNOWN_DNSKEY
 #, perl-brace-format
 msgid ""
 "The CDS RRset is signed by RRSIG with tag {keytag} but that is not in the "
 "DNSKEY RRset. Fetched from the nameservers with P addresses \"{ns_ip_list}\"."
 msgstr ""
 "CDS RRset on allekirjoitettu RRSIG:llä {keytag} mutta se ei ole DNSKEY RRset:"
-"stä. Tiedot haettu nimipalvelimilta joiden IP-osoitteet ovat "
+"ssä. Tiedot haettu nimipalvelimilta joiden IP-osoitteet ovat "
 "\"{ns_ip_list}\"."
 
-#. DS16_CDS_UNSIGNED
+#. DNSSEC:DS16_CDS_UNSIGNED
 #, perl-brace-format
 msgid ""
 "The CDS RRset is not signed. Fetched from the nameservers with IP addresses "
@@ -827,7 +1154,7 @@ msgstr ""
 "CDS RRset ei ole allekirjoitettu. Tiedot haettu nimipalvelimilta joiden IP-"
 "osoitteet ovat \"{ns_ip_list}\"."
 
-#. DS16_CDS_WITHOUT_DNSKEY
+#. DNSSEC:DS16_CDS_WITHOUT_DNSKEY
 #, perl-brace-format
 msgid ""
 "A CDS RRset exists, but no DNSKEY record exists. Fetched from the "
@@ -836,7 +1163,7 @@ msgstr ""
 "CDS RRset on olemassa, mutta DNSKEY tietuetta ei löydy. Tiedot haettu "
 "nimipalvelimilta joiden IP-osoitteet ovat \"{ns_ip_list}\"."
 
-#. DS16_DELETE_CDS
+#. DNSSEC:DS16_DELETE_CDS
 #, perl-brace-format
 msgid ""
 "A single \"delete\" CDS record is found on the nameservers with IP addresses "
@@ -845,7 +1172,7 @@ msgstr ""
 "Yksittäinen \"delete\" CDS-tietue löytyi nimipalvelimilta joiden IP-"
 "osoitteet ovat \"{ns_ip_list}"
 
-#. DS16_DNSKEY_NOT_SIGNED_BY_CDS
+#. DNSSEC:DS16_DNSKEY_NOT_SIGNED_BY_CDS
 #, perl-brace-format
 msgid ""
 "The DNSKEY RRset is not signed by the DNSKEY that the CDS record with tag "
@@ -856,7 +1183,7 @@ msgstr ""
 "{keytag} osoittaa. Tiedot haettu nimipalvelimilta joiden IP-osoitteet ovat "
 "\"{ns_ip_list}\"."
 
-#. DS16_MIXED_DELETE_CDS
+#. DNSSEC:DS16_MIXED_DELETE_CDS
 #, perl-brace-format
 msgid ""
 "The CDS RRset is a mixture between \"delete\" record and other records. "
@@ -865,7 +1192,7 @@ msgstr ""
 "CDS RRset on sekoitus \"delete\" tietuetta ja muita tietueita. Tiedot haettu "
 "nimipalvelimilta joiden IP-osoitteet ovat \"{ns_ip_list}\"."
 
-#. DS17_CDNSKEY_INVALID_RRSIG
+#. DNSSEC:DS17_CDNSKEY_INVALID_RRSIG
 #, perl-brace-format
 msgid ""
 "The CDNSKEY RRset is signed with an RRSIG with tag {keytag}, but the RRSIG "
@@ -876,7 +1203,25 @@ msgstr ""
 "RRSIG ei täsmää DNSKEY:n samalla tunnisteella. Tiedot haettu "
 "nimipalvelimilta joiden IP-osoitteet ovat \"{ns_ip_list}\"."
 
-#. DS17_CDNSKEY_MATCHES_NO_DNSKEY
+#. DNSSEC:DS17_CDNSKEY_IS_NON_SEP
+#, perl-brace-format
+msgid ""
+"The CDNSKEY record with tag {keytag} has the SEP bit (bit 15) unset. Fetched "
+"rom the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"CDNSKEY tietue tunnisteella {keytag} on SEP bit (bit 15) asettamatta. Tiedot "
+"haettu nimipalvelimilta joiden IP-osoitteet ovat \"{ns_ip_list}\"."
+
+#. DNSSEC:DS17_CDNSKEY_IS_NON_ZONE
+#, perl-brace-format
+msgid ""
+"The CDNSKEY record with tag {keytag} has the zone bit (bit 7) unset. Fetched "
+"rom the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"CDNSKEY-tietueella tunnisteella {keytag} on zone bit (bit 7) asettamatta. "
+"Tiedot haettu nimipalvelimilta joiden IP-osoitteet ovat \"{ns_ip_list}\"."
+
+#. DNSSEC:DS17_CDNSKEY_MATCHES_NO_DNSKEY
 #, perl-brace-format
 msgid ""
 "The CDNSKEY record with tag {keytag} does not match any DNSKEY record. "
@@ -886,7 +1231,18 @@ msgstr ""
 "tietueeseen. Tiedot haettu nimipalvelimilta joiden IP-osoitteet ovat "
 "\"{ns_ip_list}\"."
 
-#. DS17_CDNSKEY_SIGNED_BY_UNKNOWN_DNSKEY
+#. DNSSEC:DS17_CDNSKEY_NOT_SIGNED_BY_CDNSKEY
+#, perl-brace-format
+msgid ""
+"The CDNSKEY RRset is not signed by the DNSKEY that the CDNSKEY record with "
+"tag {keytag} points to. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"CDNSKEY RRset ei ole allekirjoitettu DNSKEY:llä johon CDNSKEY tietue "
+"tunnisteella {keytag} osoittaa. Tiedot haettu nimipalvelimilta joiden IP-"
+"osoitteet ovat \"{ns_ip_list}\"."
+
+#. DNSSEC:DS17_CDNSKEY_SIGNED_BY_UNKNOWN_DNSKEY
 #, perl-brace-format
 msgid ""
 "The CDNSKEY RRset is signed by RRSIG with tag {keytag} but that is not in "
@@ -897,7 +1253,7 @@ msgstr ""
 "se ei löydy DNSKEY RRset:stä. Tiedot haettu nimipalvelimilta joiden IP-"
 "osoitteet ovat \"{ns_ip_list}\"."
 
-#. DS17_CDNSKEY_UNSIGNED
+#. DNSSEC:DS17_CDNSKEY_UNSIGNED
 #, perl-brace-format
 msgid ""
 "The CDNSKEY RRset is not signed. Fetched from the nameservers with IP "
@@ -906,7 +1262,7 @@ msgstr ""
 "CDNSKEY RRset ei ole allekirjoitettu. Tiedot haettu nimipalvelimilta joiden "
 "IP-osoitteet ovat \"{ns_ip_list}\"."
 
-#. DS17_CDNSKEY_WITHOUT_DNSKEY
+#. DNSSEC:DS17_CDNSKEY_WITHOUT_DNSKEY
 #, perl-brace-format
 msgid ""
 "A CDNSKEY RRset exists, but no DNSKEY record exists. Fetched from the "
@@ -915,7 +1271,7 @@ msgstr ""
 "CDNSKEY RRset on olemassa, mutta DNSKEY tietuetta ei löydy. Tiedot haettu "
 "nimipalvelimilta joiden IP-osoitteet ovat \"{ns_ip_list}\"."
 
-#. DS17_DELETE_CDNSKEY
+#. DNSSEC:DS17_DELETE_CDNSKEY
 #, perl-brace-format
 msgid ""
 "A single \"delete\" CDNSKEY record is found on the nameservers with IP "
@@ -924,7 +1280,7 @@ msgstr ""
 "Yksittäinen \"delete\" CDNSKEY tietue löytyy nimipalvelimilta joiden IP-"
 "osoitteet ovat \"{ns_ip_list}\"."
 
-#. DS17_DNSKEY_NOT_SIGNED_BY_CDNSKEY
+#. DNSSEC:DS17_DNSKEY_NOT_SIGNED_BY_CDNSKEY
 #, perl-brace-format
 msgid ""
 "The DNSKEY RRset is not signed by the DNSKEY that the CDNSKEY record with "
@@ -935,7 +1291,7 @@ msgstr ""
 "tunnisteella {keytag} osoittaa. Tiedot haettu nimipalvelimilta joiden IP-"
 "osoitteet ovat \"{ns_ip_list}\"."
 
-#. DS17_MIXED_DELETE_CDNSKEY
+#. DNSSEC:DS17_MIXED_DELETE_CDNSKEY
 #, perl-brace-format
 msgid ""
 "The CDNSKEY RRset is a mixture between \"delete\" record and other records. "
@@ -943,6 +1299,24 @@ msgid ""
 msgstr ""
 "CDNSKEY RRset on sekoitus \"delete\" tietuetta ja muita tietueita. Tiedot "
 "haettu nimipalvelimilta joiden IP-osoitteet ovat \"{ns_ip_list}\"."
+
+#. DNSSEC:DS18_NO_MATCH_CDS_RRSIG_DS
+#, perl-brace-format
+msgid ""
+"The CDS RRset is not signed with a DNSKEY record that a DS record points to. "
+"Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"CDS RRset ei ole allekirjoitettu DNSKEY tietueella johon DS-tietue osoittaa. "
+"Tiedot haettu nimipalvelimilta joiden IP-osoitteet ovat \"{ns_ip_list}\"."
+
+#. DNSSEC:DS18_NO_MATCH_CDNSKEY_RRSIG_DS
+#, perl-brace-format
+msgid ""
+"The CDNSKEY RRset is not signed with a DNSKEY record that a DS record points "
+"to. Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"CDNSKEY RRset ei ole allekirjoitettu DNSKEY:llä johon DS-tietue osoittaa. "
+"Tiedot haettu nimipalvelimilta joiden IP-osoitteet ovat \"{ns_ip_list}\"."
 
 #. DNSSEC:DS_ALGORITHM_NOT_DS
 #, perl-brace-format
@@ -1015,12 +1389,6 @@ msgid "{parent} sent a DS record, but {child} did not send a DNSKEY record."
 msgstr ""
 "{parent} lähetti DS-tietueen, mutta {child} ei lähettänyt DNSKEY-tietuetta."
 
-#. DNSSEC:DS_MATCHES
-msgid ""
-"The DS records in the parent zone match DNSKEY records in the child zone."
-msgstr ""
-"Ylemmän vyöhykkeen DS-tietueet vastaavat alemman vyöhykkeen DNSKEY-tietueita."
-
 #. DNSSEC:DURATION_LONG
 #, perl-brace-format
 msgid ""
@@ -1054,32 +1422,6 @@ msgstr ""
 "Palvelin kohteessa {server} lähetti {keys} DNSKEY-tietueet ja {sigs} RRSIG-"
 "tietueet."
 
-#. DNSSEC:HAS_NSEC3
-msgid "The zone has NSEC3 records."
-msgstr "Vyöhykkeellä on NSEC3-tietueita."
-
-#. DNSSEC:HAS_NSEC
-msgid "The zone has NSEC records."
-msgstr "Vyöhykkeellä on NSEC-tietueita."
-
-#. DNSSEC:INCONSISTENT_DNSSEC
-#, perl-brace-format
-msgid ""
-"Some, but not all, nameservers for zone {domain} respond with neither NSEC "
-"nor NSEC3 records when such records are expected."
-msgstr ""
-"Jotkut, mutta ei kaikki vyöhykkeen {domain} nimipalvelimet eivät vastaa "
-"NSEC- eikä NSEC3-tietueilla, vaikka näitä tietueita odotetaan."
-
-#. DNSSEC:INCONSISTENT_NSEC_NSEC3
-#, perl-brace-format
-msgid ""
-"Some nameservers for zone {domain} respond with NSEC records and others "
-"respond with NSEC3 records. Consistency is expected."
-msgstr ""
-"Jotkut {domain} vyöhykkeen nimipalvelimista vastaavat NSEC-tietueilla ja "
-"toiset NSEC3-tietueilla. Yhdenmukaisuutta odotetaan."
-
 #. DNSSEC:ITERATIONS_OK
 #, perl-brace-format
 msgid "The number of NSEC3 iterations is {count}, which is OK."
@@ -1103,15 +1445,6 @@ msgstr "Kaikki DNSKEY RRset -joukon avaimet ovat oikean kokoisia."
 msgid "The number of NSEC3 iterations is {count}, which is on the high side."
 msgstr "NSEC3-toistojen lukumäärä on {count}, joka on suhteellisen suuri."
 
-#. DNSSEC:MIXED_NSEC_NSEC3
-#, perl-brace-format
-msgid ""
-"Nameserver {ns} for zone {domain} responds with both NSEC and NSEC3 records "
-"when only one record type is expected."
-msgstr ""
-"Nimipalvelin {ns} vyöhykkeelle {domain} vastaa sekä NSEC- että NSEC3-"
-"tietueilla, kun odotetaan vain yhtä tietuetyyppiä."
-
 #. DNSSEC:NEITHER_DNSKEY_NOR_DS
 msgid "There are neither DS nor DNSKEY records for the zone."
 msgstr "Vyöhykkeellä ei ole DS- eikä DNSKEY-tietueita."
@@ -1120,57 +1453,10 @@ msgstr "Vyöhykkeellä ei ole DS- eikä DNSKEY-tietueita."
 msgid "No DNSKEYs were returned."
 msgstr "DNSKEY-tietueita ei palautettu."
 
-#. DNSSEC:NO_KEYS_OR_NO_SIGS
-#, perl-brace-format
-msgid ""
-"Cannot test DNSKEY signatures, because we got {keys} DNSKEY records and "
-"{sigs} RRSIG records."
-msgstr ""
-"DNSKEY-allekirjoituksia ei voi testata, koska saimme sekä {keys} DNSKEY-"
-"tietueita että {sigs} RRSIG-tietueita."
-
-#. DNSSEC:NO_KEYS_OR_NO_SIGS_OR_NO_SOA
-#, perl-brace-format
-msgid ""
-"Cannot test SOA signatures, because we got {keys} DNSKEY records, {sigs} "
-"RRSIG records and {soas} SOA records."
-msgstr ""
-"SOA-allekirjoituksia ei voi testata, koska saimme sekä {keys} DNSKEY-"
-"tietueita että {sigs} RRSIG-tietueita ja {soas} SOA-tietueita."
-
-#. DNSSEC:NO_MATCHING_DNSKEY
-#, perl-brace-format
-msgid ""
-"Nameserver {ns} returned no DNSKEY record matching the DS record with tag "
-"{keytag} found in the parent zone."
-msgstr ""
-"Nimipalvelin {ns} ei palauttanut mitään DNSKEY-tietuetta, joka olisi "
-"vastannut ylemmän vyöhykkeen DS-tietuetta, jolla on tunniste {keytag}."
-
-#. DNSSEC:NO_MATCHING_RRSIG
-#, perl-brace-format
-msgid ""
-"Nameserver {ns} returned no signature on the DNSKEY RRset that corresponds "
-"to the DNSKEY with tag {keytag} even though there is a DS record in the "
-"parent zone for that DNSKEY record."
-msgstr ""
-"Nimipalvelin {ns} ei palauttanut allekirjoitusta sille DNSKEY RRset -"
-"joukolle, joka vastaa DNSKEY-tietuetta, jolla on tunniste {keytag}, vaikka "
-"tälle DNSKEY-tietueelle on olemassa DS-tietue ylemmällä vyöhykkeellä."
-
 #. DNSSEC:NO_NSEC3PARAM
 #, perl-brace-format
 msgid "{server} returned no NSEC3PARAM records."
 msgstr "{server} ei palauttanut NSEC3PARAM-tietueita."
-
-#. DNSSEC:NO_NSEC_NSEC3
-#, perl-brace-format
-msgid ""
-"Nameserver {ns} for zone {domain} responds with neither NSEC nor NSEC3 "
-"record when when such records are expected."
-msgstr ""
-"Nimipalvelin {ns} vyöhykkeelle {domain} ei vastaa NSEC- eikä NSEC3-"
-"tietueella, vaikka tällaisia tietueita odotetaan."
 
 #. DNSSEC:NO_RESPONSE_DNSKEY
 #, perl-brace-format
@@ -1182,54 +1468,9 @@ msgstr "Nimipalvelimen {ns} vastauksessa ei ollut DNSKEY-tietueita."
 msgid "{ns} returned no DS records for {domain}."
 msgstr "{ns} ei palauttanut DS-tietueita kohteelle {domain}."
 
-#. DNSSEC:NO_RESPONSE_RRSET
-#, perl-brace-format
-msgid "Nameserver {ns} responded with no {rrtype} record(s)."
-msgstr "Nimipalvelimen {ns} vastauksessa ei ollut {rrtype}-tietueita."
-
-#. DNSSEC:NO_RRSIG_DNSKEY
-#, perl-brace-format
-msgid ""
-"Nameserver {ns} responded with no RRSIG record(s) covering the DNSKEY RRset."
-msgstr ""
-"Nimipalvelimen {ns} vastauksessa ei ollut DNSKEY RRset -joukon kattavia "
-"RRSIG-tietueita."
-
 #. DNSSEC:NOT_SIGNED
 msgid "The zone is not signed with DNSSEC."
 msgstr "Vyöhykkeellä ei ole DNSSEC-allekirjoitusta."
-
-#. DNSSEC:NSEC3_COVERS_NOT
-#, perl-brace-format
-msgid "NSEC3 record does not cover {domain}."
-msgstr "NSEC3-tietue ei kata kohdetta {domain}."
-
-#. DNSSEC:NSEC3_NOT_SIGNED
-msgid "No signature correctly signed the NSEC3 RRset."
-msgstr "NSEC3 RRset -joukkoa ei ole allekirjoitettu oikein."
-
-#. DNSSEC:NSEC3_SIG_VERIFY_ERROR
-#, perl-brace-format
-msgid "Trying to verify NSEC3 RRset with RRSIG {keytag} gave error '{error}'."
-msgstr ""
-"Yrityksestä todentaa NSEC3 RRset -joukko käyttäen RRSIG-tietuetta {keytag} "
-"seurasi virhe '{error}'."
-
-#. DNSSEC:NSEC_COVERS_NOT
-#, perl-brace-format
-msgid "NSEC does not cover {domain}."
-msgstr "NSEC ei kata kohdetta {domain}."
-
-#. DNSSEC:NSEC_NOT_SIGNED
-msgid "No signature correctly signed the NSEC RRset."
-msgstr "NSEC RRset -joukkoa ei ole allekirjoitettu oikein."
-
-#. DNSSEC:NSEC_SIG_VERIFY_ERROR
-#, perl-brace-format
-msgid "Trying to verify NSEC RRset with RRSIG {keytag} gave error '{error}'."
-msgstr ""
-"Yrityksestä todentaa NSEC RRset -joukko käyttäen RRSIG-tietuetta {keytag} "
-"seurasi virhe '{error}'."
 
 #. DNSSEC:REMAINING_LONG
 #, perl-brace-format
@@ -1257,22 +1498,6 @@ msgstr ""
 "RRSIG-tietueen, jolla on avaintunniste {keytag} ja joka kattaa tyypin/tyypit "
 "{types}, voimassaolo päättyy: {date}."
 
-#. DNSSEC:RRSET_NOT_SIGNED
-#, perl-brace-format
-msgid "Nameserver {ns} responded with no RRSIG for {rrtype} RRset."
-msgstr ""
-"Nimipalvelimen {ns} vastauksessa ei ollut RRSIG-tietuetta {rrtype} RRset-"
-"joukolle."
-
-#. DNSSEC:RRSIG_BROKEN
-#, perl-brace-format
-msgid ""
-"Nameserver {ns} responded with an RRSIG which can not be verified with "
-"corresponding DNSKEY (with keytag {keytag})."
-msgstr ""
-"Nimipalvelin {ns} antoi vastaukseksi RRSIG-tietueen, jota ei voi todentaa "
-"vastaavalla DNSKEY-tietueella (jolla on avaintunniste {keytag})."
-
 #. DNSSEC:RRSIG_EXPIRED
 #, perl-brace-format
 msgid ""
@@ -1282,46 +1507,6 @@ msgstr ""
 "RRSIG-tietueen, jolla on avaintunniste {keytag} ja joka kattaa tyypin/tyypit "
 "{types}, voimassaolo on jo päättynyt (voimassaolon päättymisaika: "
 "{expiration})."
-
-#. DNSSEC:RRSIG_NOT_MATCH_DNSKEY
-#, perl-brace-format
-msgid "Nameserver {ns} responded with an RRSIG with unknown keytag {keytag}."
-msgstr ""
-"Nimipalvelin {ns} antoi vastaukseksi RRSIG-tietueen, jolla on tuntematon "
-"avaintunniste {keytag}."
-
-#. DNSSEC:SOA_NOT_SIGNED
-msgid "No RRSIG correctly signed the SOA RRset."
-msgstr "Mikään RRSIG-tietue ei ole allekirjoittanut SOA RRset -joukkoa oikein."
-
-#. DNSSEC:SOA_SIGNATURE_NOT_OK
-#, perl-brace-format
-msgid ""
-"Trying to verify SOA RRset with signature {keytag} gave error '{error}'."
-msgstr ""
-"Yrityksestä todentaa SOA RRset -joukko allekirjoituksella {keytag} seurasi "
-"virhe '{error}'."
-
-#. DNSSEC:SOA_SIGNATURE_OK
-#, perl-brace-format
-msgid "RRSIG {keytag} correctly signs SOA RRset."
-msgstr "RRSIG-tietue {keytag} on allekirjoittanut SOA RRset -joukon oikein."
-
-#. DNSSEC:SOA_SIGNED
-msgid "At least one RRSIG correctly signs the SOA RRset."
-msgstr ""
-"Ainakin yksi RRSIG-tietue on allekirjoittanut SOA RRset -joukon oikein."
-
-#. DNSSEC:TEST_ABORTED
-#, perl-brace-format
-msgid ""
-"Nameserver {ns} for zone {domain} responds with RCODE \"NOERROR\" on a query "
-"that is expected to give response with RCODE \"NXDOMAIN\". Test for NSEC and "
-"NSEC3 is aborted for this nameserver."
-msgstr ""
-"Nimipalvelin {ns} vyöhykkeelle {domain} antaa vastaukseksi RCODE \"NOERROR\" "
-"kyselyyn, johon odotetaan vastaukseksi RCODE \"NXDOMAIN\". NSEC- ja NSEC3-"
-"testi keskeytetään tällä nimipalvelimella."
 
 #. DNSSEC:TOO_MANY_ITERATIONS
 #, perl-brace-format
@@ -2087,8 +2272,8 @@ msgstr ""
 
 #. ZONE:MX_RECORD_EXISTS
 #, perl-brace-format
-msgid "Target ({info}) found to deliver e-mail for the domain name."
-msgstr "Kohde ({info}) löydetty sähköpostin lähettämiseen verkkotunnukselle."
+msgid "MX with mail target ({mailtarget_list}) exists for the domain name."
+msgstr ""
 
 #. ZONE:REFRESH_MINIMUM_VALUE_LOWER
 #, perl-brace-format
