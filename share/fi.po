@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-01-25 18:35+0100\n"
-"PO-Revision-Date: 2021-12-23 13:33+0200\n"
+"PO-Revision-Date: 2022-01-31 11:07+0100\n"
 "Last-Translator: sami.salmensuo@traficom.fi\n"
 "Language-Team: Traficom domain team\n"
 "Language: fi\n"
@@ -2273,7 +2273,7 @@ msgstr ""
 #. ZONE:MX_RECORD_EXISTS
 #, perl-brace-format
 msgid "MX with mail target ({mailtarget_list}) exists for the domain name."
-msgstr ""
+msgstr "MX-tietue ({mailtarget_list}) on jo olemassa verkkotunnuksella."
 
 #. ZONE:REFRESH_MINIMUM_VALUE_LOWER
 #, perl-brace-format
