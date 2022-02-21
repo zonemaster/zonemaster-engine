@@ -103,3 +103,5 @@ subtest 'Bad domains' => sub {
         }
     }
 };
+
+done_testing;
