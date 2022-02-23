@@ -46,7 +46,6 @@ if ($^O eq "freebsd") {
     requires_external_bin 'gmake';
 };
 
-recommends 'Readonly::XS' => 0;
 recommends 'Net::IP::XS'  => 0;
 
 sub MY::postamble {

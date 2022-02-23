@@ -1,10 +1,11 @@
 FROM zonemaster/ldns:local as build
 
 RUN apk add --no-cache \
-    # Only needed for Readonly::XS
-    build-base \
+    # Only needed for CPAN deps
     make \
-    perl-dev \
+    # Transitive deps included to improve build speed
+    perl-mailtools \
+    perl-module-build-tiny \
     # Compile-time dependencies
     perl-app-cpanminus \
     perl-clone \
@@ -27,8 +28,7 @@ RUN apk add --no-cache \
     Email::Valid \
     Locale::TextDomain \
     Module::Find \
-    MooseX::Singleton \
-    Readonly::XS
+    MooseX::Singleton
 
 ARG version
 

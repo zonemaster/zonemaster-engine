@@ -153,7 +153,7 @@ install from CPAN instead, follow the steps for Ubuntu.
 5) Install dependencies from binary packages:
 
    ```sh
-   pkg install devel/gmake libidn p5-App-cpanminus p5-Class-Accessor p5-Clone p5-Devel-CheckLib p5-Email-Valid p5-File-ShareDir p5-File-Slurp p5-IO-Socket-INET6 p5-JSON-PP p5-List-MoreUtils p5-Locale-libintl p5-Module-Find p5-Module-Install p5-Module-Install-XSUtil p5-Moose p5-MooseX-Singleton p5-Net-IP-XS p5-Pod-Coverage p5-Readonly-XS p5-Test-Differences p5-Test-Exception p5-Test-Fatal p5-Test-NoWarnings p5-Test-Pod p5-Text-CSV net-mgmt/p5-Net-IP dns/ldns
+   pkg install devel/gmake libidn p5-App-cpanminus p5-Class-Accessor p5-Clone p5-Devel-CheckLib p5-Email-Valid p5-File-ShareDir p5-File-Slurp p5-IO-Socket-INET6 p5-JSON-PP p5-List-MoreUtils p5-Locale-libintl p5-Module-Find p5-Module-Install p5-Module-Install-XSUtil p5-Moose p5-MooseX-Singleton p5-Net-IP-XS p5-Pod-Coverage p5-Test-Differences p5-Test-Exception p5-Test-Fatal p5-Test-NoWarnings p5-Test-Pod p5-Text-CSV net-mgmt/p5-Net-IP dns/ldns
    ```
 
 6) Install Zonemaster::LDNS:
