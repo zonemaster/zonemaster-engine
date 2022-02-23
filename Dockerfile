@@ -26,7 +26,6 @@ RUN apk add --no-cache \
  && cpanm --no-wget --from=https://cpan.metacpan.org/ \
     Email::Valid \
     Locale::TextDomain \
-    JSON::PP \
     Module::Find \
     MooseX::Singleton \
     Readonly::XS
