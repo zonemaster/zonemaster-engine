@@ -7,8 +7,8 @@ use warnings;
 
 use Class::Accessor "antlers";
 
-extends(qw/Zonemaster::Engine::Exception/);
 use Zonemaster::Engine::Exception;
+extends(qw/Zonemaster::Engine::Exception/);
 
 
 has 'type' => ( is => 'ro', isa => 'Str' );
