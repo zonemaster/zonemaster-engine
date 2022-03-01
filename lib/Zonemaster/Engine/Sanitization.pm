@@ -6,16 +6,16 @@ use strict;
 use warnings;
 
 use Encode;
-use Data::Dumper;
+use Readonly;
 use Zonemaster::LDNS;
 
 use Zonemaster::Engine::Sanitization::Errors;
 
-my $VALID_ASCII = q/^[A-Za-z0-9\/\-_]+$/;
-my $FULL_STOP = q/\x{002E}/;
+Readonly my $VALID_ASCII => q/^[A-Za-z0-9\/\-_]+$/;
+Readonly my $FULL_STOP => q/\x{002E}/;
 
 sub sanitize_label {
-    my ($label) = shift @_;
+    my ( $label ) = @_;
 
     my $alabel = eval {
         Encode::encode('ascii', $label, Encode::FB_CROAK);
@@ -44,7 +44,7 @@ sub sanitize_label {
 }
 
 sub sanitize_name {
-    my ($name) = shift @_;
+    my ( $name ) = @_;
 
     # TODO: Allow for different encoding?
     my $uname = eval {
