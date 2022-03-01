@@ -44,16 +44,7 @@ sub sanitize_label {
 }
 
 sub sanitize_name {
-    my ( $name ) = @_;
-
-    # TODO: Allow for different encoding?
-    my $uname = eval {
-        Encode::decode('UTF-8', $name, Encode::FB_CROAK);
-    };
-
-    if ($@) {
-        die Zonemaster::Engine::Exception::DomainSanitization::InvalidEncoding->new();
-    }
+    my ( $uname ) = @_;
 
     if (length($uname) == 0) {
         die Zonemaster::Engine::Exception::DomainSanitization::EmptyDomainName->new();

@@ -3,6 +3,8 @@ use Test::Exception;
 
 use Data::Dumper;
 
+use utf8;
+
 BEGIN { use_ok( 'Zonemaster::Engine::Sanitization' ); }
 
 subtest 'Valid domains' => sub {
@@ -68,9 +70,6 @@ subtest 'Valid domains' => sub {
 
 subtest 'Bad domains' => sub {
     my %input_domains = (
-        # Bad UTF-8, taken from the examples listed at https://www.cl.cam.ac.uk/~mgk25/ucs/examples/UTF-8-test.txt
-        "\xfc\x80\x80\x80\x80\xaf" => 'Zonemaster::Engine::Exception::DomainSanitization::InvalidEncoding',
-
         # Empty labels
         '.。．' => 'Zonemaster::Engine::Exception::DomainSanitization::InitialDot',
         'example。.com.' => 'Zonemaster::Engine::Exception::DomainSanitization::RepeatedDots',

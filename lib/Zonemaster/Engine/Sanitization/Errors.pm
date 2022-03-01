@@ -90,30 +90,6 @@ sub new {
     return bless $obj, $class;
 }
 
-package Zonemaster::Engine::Exception::DomainSanitization::InvalidEncoding;
-use 5.014002;
-
-use strict;
-use warnings;
-
-use Class::Accessor "antlers";
-
-extends(qw/Zonemaster::Engine::Exception::DomainSanitizationError/);
-
-has 'dlabel' => ( is => 'ro', isa => 'Str' );
-
-sub new {
-    my $proto = shift;
-    my $params = shift;
-
-    $params->{tag} = 'INVALID_ENCODING';
-    $params->{message} = 'Domain name has characters that can not be decoded';
-
-    my $class = ref $proto || $proto;
-    my $obj = __PACKAGE__->SUPER::new($params);
-    return bless $obj, $class;
-}
-
 package Zonemaster::Engine::Exception::DomainSanitization::InvalidULabel;
 use 5.014002;
 
