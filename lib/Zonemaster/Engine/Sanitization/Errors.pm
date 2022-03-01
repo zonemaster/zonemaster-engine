@@ -5,13 +5,12 @@ use 5.014002;
 use strict;
 use warnings;
 
-use Class::Accessor "antlers";
-
 use Zonemaster::Engine::Exception;
-extends(qw/Zonemaster::Engine::Exception/);
+use base qw(Class::Accessor Zonemaster::Engine::Exception);
 
+__PACKAGE__->follow_best_practice;
+__PACKAGE__->mk_ro_accessors(qw(type));
 
-has 'type' => ( is => 'ro', isa => 'Str' );
 
 sub new {
     my $proto = shift;
@@ -26,9 +25,8 @@ use 5.014002;
 use strict;
 use warnings;
 
-use Class::Accessor "antlers";
-
-extends(qw/Zonemaster::Engine::Exception::DomainSanitizationError/);
+use base qw(Class::Accessor Zonemaster::Engine::Exception::DomainSanitizationError);
+__PACKAGE__->follow_best_practice;
 
 
 sub new {
@@ -49,9 +47,9 @@ use 5.014002;
 use strict;
 use warnings;
 
-use Class::Accessor "antlers";
+use base qw(Class::Accessor Zonemaster::Engine::Exception::DomainSanitizationError);
 
-extends(qw/Zonemaster::Engine::Exception::DomainSanitizationError/);
+__PACKAGE__->follow_best_practice;
 
 
 sub new {
@@ -72,11 +70,11 @@ use 5.014002;
 use strict;
 use warnings;
 
-use Class::Accessor "antlers";
+use base qw(Class::Accessor Zonemaster::Engine::Exception::DomainSanitizationError);
 
-extends(qw/Zonemaster::Engine::Exception::DomainSanitizationError/);
+__PACKAGE__->follow_best_practice;
+__PACKAGE__->mk_ro_accessors(qw(dlabel));
 
-has 'dlabel' => ( is => 'ro', isa => 'Str' );
 
 sub new {
     my $proto = shift;
@@ -96,11 +94,11 @@ use 5.014002;
 use strict;
 use warnings;
 
-use Class::Accessor "antlers";
+use base qw(Class::Accessor Zonemaster::Engine::Exception::DomainSanitizationError);
 
-extends(qw/Zonemaster::Engine::Exception::DomainSanitizationError/);
+__PACKAGE__->follow_best_practice;
+__PACKAGE__->mk_ro_accessors(qw(dlabel));
 
-has 'dlabel' => ( is => 'ro', isa => 'Str' );
 
 sub new {
     my $proto = shift;
@@ -120,11 +118,11 @@ use 5.014002;
 use strict;
 use warnings;
 
-use Class::Accessor "antlers";
+use base qw(Class::Accessor Zonemaster::Engine::Exception::DomainSanitizationError);
 
-extends(qw/Zonemaster::Engine::Exception::DomainSanitizationError/);
+__PACKAGE__->follow_best_practice;
+__PACKAGE__->mk_ro_accessors(qw(dlabel));
 
-has 'dlabel' => ( is => 'ro', isa => 'Str' );
 
 sub new {
     my $proto = shift;
@@ -144,9 +142,9 @@ use 5.014002;
 use strict;
 use warnings;
 
-use Class::Accessor "antlers";
+use base qw(Class::Accessor Zonemaster::Engine::Exception::DomainSanitizationError);
 
-extends(qw/Zonemaster::Engine::Exception::DomainSanitizationError/);
+__PACKAGE__->follow_best_practice;
 
 
 sub new {
@@ -167,9 +165,9 @@ use 5.014002;
 use strict;
 use warnings;
 
-use Class::Accessor "antlers";
+use base qw(Class::Accessor Zonemaster::Engine::Exception::DomainSanitizationError);
 
-extends(qw/Zonemaster::Engine::Exception::DomainSanitizationError/);
+__PACKAGE__->follow_best_practice;
 
 
 sub new {
