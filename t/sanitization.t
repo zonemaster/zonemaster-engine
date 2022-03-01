@@ -1,8 +1,6 @@
 use Test::More;
 use Test::Exception;
 
-use Data::Dumper;
-
 use utf8;
 
 BEGIN { use_ok( 'Zonemaster::Engine::Sanitization' ); }
@@ -97,8 +95,6 @@ subtest 'Bad domains' => sub {
             throws_ok (sub {
                 Zonemaster::Engine::Sanitization::sanitize_name($domain);
             }, $error, 'invalid domain should throw' );
-
-            print Dumper "$@", $@->{dlabel};
         }
     }
 };
