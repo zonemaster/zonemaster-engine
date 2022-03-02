@@ -5,36 +5,36 @@ use 5.014002;
 use strict;
 use warnings;
 
+use Carp;
 use Encode;
 use Readonly;
+use Try::Tiny;
 use Zonemaster::LDNS;
+use Data::Dumper;
 
 use Zonemaster::Engine::Sanitization::Errors;
 
-Readonly my $VALID_ASCII => q/^[A-Za-z0-9\/\-_]+$/;
-Readonly my $FULL_STOP => q/\x{002E}/;
+Readonly my $ASCII => qr/^[[:ascii:]]+$/;
+Readonly my $VALID_ASCII => qr/^[A-Za-z0-9\/\-_]+$/;
+Readonly my $FULL_STOP => qr/\x{002E}/;
 
 sub sanitize_label {
     my ( $label ) = @_;
 
-    my $alabel = eval {
-        Encode::encode('ascii', $label, Encode::FB_CROAK);
-    };
+    my $alabel = "";
 
-    # Not ascii string, assume u-label
-    if ($@) {
-        $alabel = eval {
-            Zonemaster::LDNS::to_idn($label)
-        };
-        # TODO: handle when libidn not installed?
-        if ($@) {
+    if ( $label =~ $VALID_ASCII ) {
+        $alabel = lc $label;
+    } elsif ( $label =~ $ASCII ) {
+        die Zonemaster::Engine::Exception::DomainSanitization::InvalidAscii->new({ dlabel => $label });
+    } elsif (Zonemaster::LDNS::has_idn) {
+        try {
+            $alabel = Zonemaster::LDNS::to_idn($label);
+        } catch {
             die Zonemaster::Engine::Exception::DomainSanitization::InvalidULabel->new({ dlabel => Encode::encode_utf8($label) });
         }
     } else {
-        if ( $alabel !~ $VALID_ASCII) {
-            die Zonemaster::Engine::Exception::DomainSanitization::InvalidAscii->new({ dlabel => $alabel });
-        }
-        $alabel = lc $alabel;
+        croak 'The domain name contains non-ascii characters and IDNA is not installed';
     }
 
     if ( length($alabel) > 63) {
