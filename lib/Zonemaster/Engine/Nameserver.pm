@@ -67,10 +67,24 @@ sub new {
     # Required arguments
     confess "Attribute \(address\) is required"
       if !exists $attrs->{address};
+    my $address = $attrs->{address};
 
     # Type coercions
     $attrs->{name} = Zonemaster::Engine::DNSName->from_string( $attrs->{name} )
       if !blessed $attrs->{name} || !$attrs->{name}->isa( 'Zonemaster::Engine::DNSName' );
+
+    my $name = lc( q{} . $attrs->{name} );
+    $name = '$$$NONAME' unless $name;
+
+    if (blessed $address && $address->isa( 'Zonemaster::Engine::Net::IP' )) {
+        $address = $address->short;
+    }
+
+    if ( exists $object_cache{$name}{$address} ) {
+        return $object_cache{$name}{$address};
+    }
+
+    # Remaining type coercions (don't parse IP unless it is needed)
     $attrs->{address} = Zonemaster::Engine::Net::IP->new( $attrs->{address} )
       if exists $attrs->{address}
       && ( !blessed $attrs->{address} || !$attrs->{address}->isa( 'Zonemaster::Engine::Net::IP' ) );
@@ -114,14 +128,10 @@ sub new {
     $obj->{_dns}            = $lazy_attrs{dns}            if exists $lazy_attrs{dns};
     $obj->{_cache}          = $lazy_attrs{cache}          if exists $lazy_attrs{cache};
 
-    my $name = lc( q{} . $obj->name );
-    $name = '$$$NONAME' unless $name;
-    if ( not exists $object_cache{$name}{ $obj->address->ip } ) {
-        Zonemaster::Engine->logger->add( NS_CREATED => { name => $name, ip => $obj->address->ip } );
-        $object_cache{$name}{ $obj->address->ip } = $obj;
-    }
+    Zonemaster::Engine->logger->add( NS_CREATED => { name => $name, ip => $obj->address->ip } );
+    $object_cache{$name}{$address} = $obj;
 
-    return $object_cache{$name}{ $obj->address->ip };
+    return $obj;
 }
 
 sub source_address {
@@ -568,7 +578,7 @@ sub restore {
         my $ns  = Zonemaster::Engine::Nameserver->new(
             {
                 name    => $name,
-                address => $addr,
+                address => Zonemaster::Engine::Net::IP->new($addr),
                 cache   => Zonemaster::Engine::Nameserver::Cache->new( { data => $ref, address => Zonemaster::Engine::Net::IP->new( $addr ) } )
             }
         );
