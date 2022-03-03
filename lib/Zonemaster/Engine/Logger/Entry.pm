@@ -7,11 +7,14 @@ use warnings;
 
 use version; our $VERSION = version->declare("v1.1.8");
 
+use Carp qw( confess );
 use Time::HiRes qw[time];
 use JSON::PP;
-use Moose;
+use Class::Accessor;
 use Zonemaster::Engine;
 use Zonemaster::Engine::Profile;
+
+use base qw(Class::Accessor);
 
 use overload '""' => \&string;
 
@@ -30,16 +33,63 @@ our $start_time = time();
 
 my $json = JSON::PP->new->allow_blessed->convert_blessed->canonical;
 
-has 'module'    => ( is => 'ro', isa => 'Str',                lazy_build => 1 );
-has 'testcase'  => ( is => 'ro', isa => 'Str',                lazy_build => 1 );
-has 'tag'       => ( is => 'ro', isa => 'Str',                required   => 1 );
-has 'args'      => ( is => 'ro', isa => 'Maybe[HashRef]',     required   => 0 );
-has 'timestamp' => ( is => 'ro', isa => 'Num',                default    => sub { my $time = time() - $start_time; $time =~ s/,/\./; $time; } );
-has 'trace'     => ( is => 'ro', isa => 'ArrayRef[ArrayRef]', builder    => '_build_trace' );
-has 'level'     => ( is => 'ro', isa => 'Str',                lazy_build => 1, writer => '_set_level' );
+__PACKAGE__->mk_ro_accessors(qw(tag args timestamp trace));
+
+
+sub new {
+    my ( $proto, $attrs ) = @_;
+    # tag required, args optional, other built
+
+    confess "Attribute \(tag\) is required"
+      if !exists $attrs->{tag};
+
+    confess "Argument must be a HASHREF: args"
+      if exists $attrs->{args}
+      && ref $attrs->{args} ne 'HASH';
+
+    my $time = time() - $start_time;
+    $time =~ s/,/\./;
+    $attrs->{timestamp} = $time;
+    $attrs->{trace} = _build_trace();
+
+    my $class = ref $proto || $proto;
+    return Class::Accessor::new( $class, $attrs );
+}
+
+sub module {
+    my $self = shift;
+
+    # Lazy default value
+    if ( !exists $self->{_module} ) {
+        $self->{_module} = $self->_build_module();
+    }
+
+    return $self->{_module}
+}
+
+sub level {
+    my $self = shift;
+
+    # Lazy default value
+    if ( !exists $self->{_level} ) {
+        $self->{_level} = $self->_build_level();
+    }
+
+    return $self->{_level}
+}
+
+sub testcase {
+    my $self = shift;
+
+    # Lazy default value
+    if ( !exists $self->{_testcase} ) {
+        $self->{_testcase} = $self->_build_testcase();
+    }
+
+    return $self->{_testcase}
+}
 
 sub _build_trace {
-    my ( $self ) = @_;
     my @trace;
 
     my $i = 0;
@@ -100,6 +150,13 @@ sub _build_level {
     }
 }
 
+sub _set_level {
+    my ( $self, $level ) = @_;
+
+    $self->{_level} = $level
+}
+
+
 sub numeric_level {
     my ( $self ) = @_;
 
@@ -157,9 +214,6 @@ sub start_time_now {
     return;
 }
 
-no Moose;
-__PACKAGE__->meta->make_immutable;
-
 1;
 
 =head1 NAME
@@ -211,7 +265,7 @@ The argument hash reference that was provided when the entry was created.
 =item timestamp
 
 The time after the current program started running when this entry was created. This is a floating-point value with the precision provided by
-L<Time::HiRes>. 
+L<Time::HiRes>.
 
 =item trace
 
