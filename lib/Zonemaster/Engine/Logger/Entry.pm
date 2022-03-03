@@ -32,6 +32,7 @@ our %numeric = (
 our $start_time = time();
 
 my $json = JSON::PP->new->allow_blessed->convert_blessed->canonical;
+my $test_levels_config;
 
 __PACKAGE__->mk_ro_accessors(qw(tag args timestamp trace));
 
@@ -140,8 +141,12 @@ sub _build_level {
     my ( $self ) = @_;
     my $string;
 
-    if ( Zonemaster::Engine::Profile->effective->get( q{test_levels} )->{ $self->module }{ $self->tag } ) {
-        $string = uc Zonemaster::Engine::Profile->effective->get( q{test_levels} )->{ $self->module }{ $self->tag };
+    if ( !defined $test_levels_config ) {
+        $test_levels_config = Zonemaster::Engine::Profile->effective->get( q{test_levels} );
+    }
+
+    if ( exists $test_levels_config->{ $self->module }{ $self->tag } ) {
+        $string = uc $test_levels_config->{ $self->module }{ $self->tag };
     }
     else {
         $string = 'DEBUG';
@@ -219,6 +224,11 @@ sub start_time_now {
     return;
 }
 
+sub reset_config {
+    undef $test_levels_config;
+    return;
+}
+
 1;
 
 =head1 NAME
@@ -246,6 +256,10 @@ Returns a hash where the keys are log levels as strings and the corresponding va
 =item start_time_now()
 
 Set the logger's start time to the current time.
+
+=item reset_config()
+
+Clear the test level cached configuration.
 
 =back
 
