@@ -8,7 +8,6 @@ use warnings;
 use Zonemaster::Engine::Exception;
 use base qw(Class::Accessor Zonemaster::Engine::Exception);
 
-__PACKAGE__->follow_best_practice;
 __PACKAGE__->mk_ro_accessors(qw(type));
 
 
@@ -26,7 +25,6 @@ use strict;
 use warnings;
 
 use base qw(Class::Accessor Zonemaster::Engine::Exception::DomainSanitizationError);
-__PACKAGE__->follow_best_practice;
 
 
 sub new {
@@ -49,8 +47,6 @@ use warnings;
 
 use base qw(Class::Accessor Zonemaster::Engine::Exception::DomainSanitizationError);
 
-__PACKAGE__->follow_best_practice;
-
 
 sub new {
     my $proto = shift;
@@ -72,7 +68,6 @@ use warnings;
 
 use base qw(Class::Accessor Zonemaster::Engine::Exception::DomainSanitizationError);
 
-__PACKAGE__->follow_best_practice;
 __PACKAGE__->mk_ro_accessors(qw(dlabel));
 
 
@@ -96,7 +91,6 @@ use warnings;
 
 use base qw(Class::Accessor Zonemaster::Engine::Exception::DomainSanitizationError);
 
-__PACKAGE__->follow_best_practice;
 __PACKAGE__->mk_ro_accessors(qw(dlabel));
 
 
@@ -120,7 +114,6 @@ use warnings;
 
 use base qw(Class::Accessor Zonemaster::Engine::Exception::DomainSanitizationError);
 
-__PACKAGE__->follow_best_practice;
 __PACKAGE__->mk_ro_accessors(qw(dlabel));
 
 
@@ -144,8 +137,6 @@ use warnings;
 
 use base qw(Class::Accessor Zonemaster::Engine::Exception::DomainSanitizationError);
 
-__PACKAGE__->follow_best_practice;
-
 
 sub new {
     my $proto = shift;
@@ -166,8 +157,6 @@ use strict;
 use warnings;
 
 use base qw(Class::Accessor Zonemaster::Engine::Exception::DomainSanitizationError);
-
-__PACKAGE__->follow_best_practice;
 
 
 sub new {
