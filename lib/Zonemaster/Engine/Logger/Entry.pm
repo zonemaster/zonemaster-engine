@@ -52,6 +52,11 @@ sub new {
     $attrs->{timestamp} = $time;
     $attrs->{trace} = _build_trace();
 
+    # lazy attributes
+    $attrs->{_module} = delete $attrs->{module} if exists $attrs->{module};
+    $attrs->{_level} = delete $attrs->{level} if exists $attrs->{level};
+    $attrs->{_testcase} = delete $attrs->{testcase} if exists $attrs->{testcase};
+
     my $class = ref $proto || $proto;
     return Class::Accessor::new( $class, $attrs );
 }
@@ -230,6 +235,10 @@ There should never be a need to create a log entry object in isolation. They sho
 
 =over
 
+=item new
+
+Construct a new object.
+
 =item levels
 
 Returns a hash where the keys are log levels as strings and the corresponding values their numeric value.
@@ -270,6 +279,10 @@ L<Time::HiRes>.
 =item trace
 
 A partial stack trace for the call that created the entry. Used to create the module tag. Almost certainly not useful for anything else.
+
+=item level
+
+The log level associated to this log entry.
 
 =back
 
