@@ -23,7 +23,6 @@ requires 'Email::Valid'       => 0;
 requires 'File::ShareDir'     => 1.00;
 requires 'File::Slurp'        => 0;
 requires 'IO::Socket::INET6'  => 2.69;
-requires 'JSON::PP'           => 0;
 requires 'List::MoreUtils'    => 0;
 requires 'Locale::TextDomain' => 1.20;
 requires 'Module::Find'       => 0.10;
@@ -47,7 +46,6 @@ if ($^O eq "freebsd") {
     requires_external_bin 'gmake';
 };
 
-recommends 'Readonly::XS' => 0;
 recommends 'Net::IP::XS'  => 0;
 
 sub MY::postamble {
