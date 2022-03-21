@@ -309,11 +309,25 @@ Returns a list of the loaded test modules. Exactly the same as L<Zonemaster::Eng
 
 =item add_fake_delegation($domain, $data)
 
-This method adds some fake delegation information to the system. The arguments are a domain name, and a reference to a hash with delegation
-information. The keys in the hash must be nameserver names, and the values references to lists of IP addresses (which can be left empty) for
-the corresponding nameserver. If IP addresses are not provided for nameservers, the engine will perform queries to find them, except for
-in-bailiwick nameservers. All IP addresses found/provided are then used to initialize %Zonemaster::Engine::Recursor::fake_addresses_cache
-for later usage. If all servers can be associated to IP addresses, add_fake_delegation method returns 1, 'undef' otherwise.
+This method adds some fake delegation information to the system.
+
+The arguments are a domain name, and a hashref with delegation information.
+The keys in the hash are nameserver names, and the values are arrayrefs of IP
+addresses for their corresponding nameserver.
+
+Before adding the given C<$data> to the system, this method updates it filling
+in some glue.
+Specifically glue addresses are looked up and filled in for any nameserver names
+that are out of bailiwick of the given C<$domain> and that comes with an empty
+list of addresses.
+
+For each given nameserver with an empty list of addresses (after it's been
+filled in), either a C<FAKE_DELEGATION_NO_IP> or a
+C<FAKE_DELEGATION_IN_ZONE_NO_IP> message is emitted.
+
+This method returns `1` if all name servers in C<$data> have non-empty lists of
+glue (after they've been filled in).
+Otherwise it returns `undef`.
 
 Example:
 
