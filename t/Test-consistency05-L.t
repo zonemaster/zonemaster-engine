@@ -14,7 +14,7 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
 }
 
 Zonemaster::Engine->profile->set( q{net.ipv6}, 0 );
-Zonemaster::Engine->add_fake_delegation(
+Zonemaster::Engine->add_fake_delegation_raw(
     'no' => {
         'a.nic.no' => [ '46.21.96.58',  '2a02:750:12::53' ],
         'b.nic.no' => [ '212.85.74.18', '2001:470:28:5a0::53' ],

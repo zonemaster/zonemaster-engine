@@ -14,7 +14,7 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine->profile->set( q{no_network}, 1 );
 }
 
-Zonemaster::Engine->add_fake_delegation(
+Zonemaster::Engine->add_fake_delegation_raw(
     'f.delegation01.exempelvis.se' => {
         'ns1.f.delegation01.exempelvis.se' => [ '46.21.97.97', '2a02:750:12:77::97' ],
         'ns2.f.delegation01.exempelvis.se' => [ '194.18.226.122' ],

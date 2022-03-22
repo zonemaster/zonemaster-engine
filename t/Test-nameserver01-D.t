@@ -14,7 +14,7 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine->profile->set( q{no_network}, 1 );
 }
 
-Zonemaster::Engine->add_fake_delegation(
+Zonemaster::Engine->add_fake_delegation_raw(
     'd.nameserver01.exempelvis.se' => {
         'resolver1.exempelvis.se' => ['8.8.8.8'],
         'resolver2.exempelvis.se' => ['9.9.9.9'],

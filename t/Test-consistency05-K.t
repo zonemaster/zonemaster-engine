@@ -14,7 +14,7 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
 }
 
 Zonemaster::Engine->profile->set( q{net.ipv6}, 0 );
-Zonemaster::Engine->add_fake_delegation(
+Zonemaster::Engine->add_fake_delegation_raw(
     'fi' => {
         'a.fi' => [ '193.166.4.1', '2001:708:10:53::53' ],
         'b.fi' => [ '194.146.106.26', '2001:67c:1010:6::53' ],
