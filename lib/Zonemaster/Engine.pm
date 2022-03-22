@@ -119,20 +119,13 @@ sub add_fake_delegation {
     # Check fake delegation
     my $incomplete_delegation;
     foreach my $name ( keys %{$href} ) {
-        if ( not scalar @{ $href->{$name} } ) {
-            if ( $class->zone( $domain )->is_in_zone( $name ) ) {
-                push @{ $href->{$name} }, ();
-                $incomplete_delegation = 1;
-            }
-            else {
+        if ( !@{ $href->{$name} } ) {
+            if ( !$class->zone( $domain )->is_in_zone( $name ) ) {
                 my @ips = Zonemaster::LDNS->new->name2addr($name);
-                if ( @ips ) {
-                    push @{ $href->{$name} }, @ips;
-                }
-                else {
-                    push @{ $href->{$name} }, ();
-                    $incomplete_delegation = 1;
-                }
+                push @{ $href->{$name} }, @ips;
+            }
+            if ( !@{ $href->{$name} } ) {
+                $incomplete_delegation = 1;
             }
         }
     }
