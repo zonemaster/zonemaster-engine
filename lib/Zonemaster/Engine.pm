@@ -112,12 +112,14 @@ sub add_fake_delegation {
     foreach my $name ( keys %{$href} ) {
         $name =~ /[^.]$|^\.$/
           or croak 'Each key of argument $href must omit the trailing dot, or it must be a single dot';
+        ref $href->{ $name } eq 'ARRAY'
+          or croak 'Each value of argument $href must be an arrayref';
     }
 
     # Check fake delegation
     my $incomplete_delegation;
     foreach my $name ( keys %{$href} ) {
-        if ( not defined $href->{$name} or not scalar @{ $href->{$name} } ) {
+        if ( not scalar @{ $href->{$name} } ) {
             if ( $class->zone( $domain )->is_in_zone( $name ) ) {
                 Zonemaster::Engine->logger->add(
                     FAKE_DELEGATION_IN_ZONE_NO_IP => { domain => $domain , nsname => $name }
