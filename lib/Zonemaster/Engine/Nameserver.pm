@@ -49,6 +49,8 @@ has 'blacklisted' => ( is => 'rw' );
 ###
 
 our %object_cache;
+our %address_object_cache;
+our %address_repr_cache;
 
 ###
 ### Build methods for attributes
@@ -67,7 +69,6 @@ sub new {
     # Required arguments
     confess "Attribute \(address\) is required"
       if !exists $attrs->{address};
-    my $address = $attrs->{address};
 
     # Type coercions
     $attrs->{name} = Zonemaster::Engine::DNSName->from_string( $attrs->{name} )
@@ -76,18 +77,25 @@ sub new {
     my $name = lc( q{} . $attrs->{name} );
     $name = '$$$NONAME' unless $name;
 
-    if (blessed $address && $address->isa( 'Zonemaster::Engine::Net::IP' )) {
-        $address = $address->short;
+    my $address;
+
+    # Use a object cache for IP type coercion (don't parse IP unless it is needed)
+    if (!blessed $attrs->{address} || !$attrs->{address}->isa( 'Zonemaster::Engine::Net::IP' )) {
+        if (!exists $address_object_cache{$attrs->{address}}) {
+            $address_object_cache{$attrs->{address}} = Zonemaster::Engine::Net::IP->new($attrs->{address});
+            $address_repr_cache{$attrs->{address}} = $address_object_cache{$attrs->{address}}->ip;
+        }
+        # Fetch IP object from the address cache (avoid object creation and method call)
+        $address = $address_repr_cache{$attrs->{address}};
+        $attrs->{address} = $address_object_cache{$attrs->{address}};
+    } else {
+        $address = $attrs->{address}->ip;
     }
 
+    # Return Nameserver object as soon as possible
     if ( exists $object_cache{$name}{$address} ) {
         return $object_cache{$name}{$address};
     }
-
-    # Remaining type coercions (don't parse IP unless it is needed)
-    $attrs->{address} = Zonemaster::Engine::Net::IP->new( $attrs->{address} )
-      if exists $attrs->{address}
-      && ( !blessed $attrs->{address} || !$attrs->{address}->isa( 'Zonemaster::Engine::Net::IP' ) );
 
     # Type constraints
     confess "Argument must be coercible into a Zonemaster::Engine::DNSName: name"
@@ -678,6 +686,8 @@ sub axfr {
 
 sub empty_cache {
     %object_cache = ();
+    %address_object_cache = ();
+    %address_repr_cache = ();
 
     Zonemaster::Engine::Nameserver::Cache::empty_cache();
 
