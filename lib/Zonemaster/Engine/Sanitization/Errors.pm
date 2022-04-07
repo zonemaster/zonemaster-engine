@@ -76,7 +76,7 @@ sub new {
     my $params = shift;
 
     $params->{tag} = 'INVALID_ASCII';
-    $params->{message} = 'Domain name has an ASCII label with a character not permitted.';
+    $params->{message} = 'Domain name has an ASCII label with an ASCII character not permitted.';
 
     my $class = ref $proto || $proto;
     my $obj = __PACKAGE__->SUPER::new($params);

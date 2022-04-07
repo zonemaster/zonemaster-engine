@@ -34,7 +34,7 @@ sub sanitize_label {
             die Zonemaster::Engine::Exception::DomainSanitization::InvalidULabel->new({ dlabel => Encode::encode_utf8($label) });
         }
     } else {
-        croak 'The domain name contains non-ascii characters and IDNA is not installed';
+        croak 'The domain name contains at least one non-ASCII character and this installation of Zonemaster has no support for IDNA.';
     }
 
     if ( length($alabel) > 63) {
