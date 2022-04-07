@@ -794,59 +794,73 @@ can be tested at all.
 =head2 test_cases_vars.dnssec04.REMAINING_SHORT
 
 A positive integer value.
-If the remaining validity time of the signature is less than test_cases_vars.dnssec04.REMAINING_SHORT (in seconds) 
-this test case returns the REMAINING_SHORT message tag.
+Recommended lower bound for signatures' remaining validity time (in seconds) in
+test case L<DNSSEC04|
+https://github.com/zonemaster/zonemaster/blob/master/docs/specifications/tests/DNSSEC-TP/dnssec04.md>.
+Related to the REMAINING_SHORT message tag from this test case.
 Default C<43200> (12 hours in seconds).
 
 =head2 test_cases_vars.dnssec04.REMAINING_LONG
 
 A positive integer value.
-If the remaining validity time of the signature is more than test_cases_vars.dnssec04.REMAINING_LONG (in seconds)
-this test case returns the REMAINING_LONG message tag.
+Recommended upper bound for signatures' remaining validity time (in seconds) in
+test case L<DNSSEC04|
+https://github.com/zonemaster/zonemaster/blob/master/docs/specifications/tests/DNSSEC-TP/dnssec04.md>.
+Related to the REMAINING_LONG message tag from this test case.
 Default C<15552000> (180 days in seconds).
 
 =head2 test_cases_vars.dnssec04.DURATION_LONG
 
 A positive integer value.
-Returns DURATION_LONG message tag in case signature lifetime is more
-than test_cases_vars.dnssec04.DURATION_LONG (in seconds).
+Recommended upper bound for signatures' lifetime (in seconds) in the test case
+L<DNSSEC04|
+https://github.com/zonemaster/zonemaster/blob/master/docs/specifications/tests/DNSSEC-TP/dnssec04.md>.
+Related to the DURATION_LONG message tag from this test case.
 Default C<15552000> (180 days in seconds).
 
 =head2 test_cases_vars.zone02.SOA_REFRESH_MINIMUM_VALUE
 
 A positive integer value.
-Returns REFRESH_MINIMUM_VALUE_LOWER message tag in case the SOA refresh value
-is less than test_cases_vars.zone02.SOA_REFRESH_MINIMUM_VALUE (in seconds).
+Recommended lower bound for SOA refresh values (in seconds) in test case
+L<ZONE02|
+https://github.com/zonemaster/zonemaster/blob/master/docs/specifications/tests/Zone-TP/zone02.md>.
+Related to the REFRESH_MINIMUM_VALUE_LOWER message tag from this test case.
 Default C<14400> (4 hours in seconds).
 
 =head2 test_cases_vars04.zone.SOA_RETRY_MINIMUM_VALUE
 
 A positive integer value.
-Returns RETRY_MINIMUM_VALUE_LOWER message tag in case the SOA retry value is
-less than test_cases_vars.zone04.SOA_RETRY_MINIMUM_VALUE (in seconds).
+Recommended lower bound for SOA retry values (in seconds) in test case
+L<ZONE04|
+https://github.com/zonemaster/zonemaster/blob/master/docs/specifications/tests/Zone-TP/zone04.md>.
+Related to the RETRY_MINIMUM_VALUE_LOWER message tag from this test case.
 Default C<3600> (1 hour in seconds).
 
 =head2 test_cases_vars.zone05.SOA_EXPIRE_MINIMUM_VALUE
 
 A positive integer value.
-Returns EXPIRE_MINIMUM_VALUE_LOWER message tag if the SOA expire value is less
-than test_cases_vars.zone05.SOA_EXPIRE_MINIMUM_VALUE (in seconds).
+Recommended lower bound for SOA expire values (in seconds) in test case
+L<ZONE05|
+https://github.com/zonemaster/zonemaster/blob/master/docs/specifications/tests/Zone-TP/zone05.md>.
+Related to the EXPIRE_MINIMUM_VALUE_LOWER message tag from this test case.
 Default C<604800> (1 week in seconds).
 
 =head2 test_cases_vars.zone06.SOA_DEFAULT_TTL_MINIMUM_VALUE
 
 A positive integer value.
-Returns SOA_DEFAULT_TTL_MAXIMUM_VALUE_LOWER message tag if the SOA minimum
-value is less than test_cases_vars.zone06.SOA_DEFAULT_TTL_MINIMUM_VALUE (in
-seconds).
+Recommended lower bound for SOA minimum values (in seconds) in test case
+L<ZONE06|
+https://github.com/zonemaster/zonemaster/blob/master/docs/specifications/tests/Zone-TP/zone06.md>.
+Related to the SOA_DEFAULT_TTL_MAXIMUM_VALUE_LOWER message tag from this test case.
 Default C<300> (5 minutes in seconds).
 
 =head2 test_cases_vars.zone06.SOA_DEFAULT_TTL_MAXIMUM_VALUE
 
 A positive integer value.
-Returns SOA_DEFAULT_TTL_MAXIMUM_VALUE_HIGHER message tag if the SOA minimum
-value is greater than test_cases_vars.zone06.SOA_DEFAULT_TTL_MAXIMUM_VALUE (in
-seconds).
+Recommended upper bound for SOA minimum values (in seconds) in test case
+L<ZONE06|
+https://github.com/zonemaster/zonemaster/blob/master/docs/specifications/tests/Zone-TP/zone06.md>.
+Related to the SOA_DEFAULT_TTL_MAXIMUM_VALUE_HIGHER message tag from this test case.
 Default C<86400> (1 day in seconds).
 
 =head1 JSON REPRESENTATION
