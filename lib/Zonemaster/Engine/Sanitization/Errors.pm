@@ -9,7 +9,7 @@ use warnings;
 use Zonemaster::Engine::Exception;
 use base qw(Class::Accessor Zonemaster::Engine::Exception);
 
-__PACKAGE__->mk_ro_accessors(qw(type));
+__PACKAGE__->mk_ro_accessors(qw(tag));
 
 
 sub new {
