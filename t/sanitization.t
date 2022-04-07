@@ -34,7 +34,6 @@ subtest 'Valid domains' => sub {
         # Domains with uppercase unicode
         'CafÉ.example.com' => 'xn--caf-dma.example.com',
         'ΑβΓΔε.example.com' => 'xn--mxacdef.example.com',
-        # TODO: special I case
 
         # All ascii domains (lowercase)
         'example.com' => 'example.com',

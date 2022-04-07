@@ -2,6 +2,7 @@ package Zonemaster::Engine::Sanitization;
 
 use 5.014002;
 
+use utf8;
 use strict;
 use warnings;
 
