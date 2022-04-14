@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare( "v1.1.57" );
+use version; our $VERSION = version->declare( "v1.1.58" );
 
 ###
 ### This test module implements DNSSEC tests.
@@ -2578,14 +2578,20 @@ sub dnssec10 {
                 foreach my $rrsig_record ( grep { $_->typecovered eq $rr->type } $a_p->get_records_for_name( q{RRSIG}, $rr->owner, q{answer} ) ) {
                     my $msg = q{};
                     my @matching_dnskeys = grep { $rrsig_record->keytag == $_->keytag } @dnskey_records;
-                    my $validate = $rrsig_record->verify_time( [ $rr ], \@matching_dnskeys, $testing_time, $msg);
-                    if ( not $validate and $msg =~ /Unknown cryptographic algorithm/ ) {
-                        push @{ $algo_not_supported_by_zm{$rrsig_record->keytag}{$rrsig_record->algorithm} }, $ns->address->short;
-                        $step_c = 0;
-                    }
-                    elsif ( not @matching_dnskeys or not $validate ) {
+                    if ( not scalar @matching_dnskeys ) {
                         push @{ $answer_verify_error{$rr->owner}{$rr->type} }, $ns->address->short;
                         $step_c = 0;
+                    }
+                    else {
+                        my $validate = $rrsig_record->verify_time( [ $rr ], \@matching_dnskeys, $testing_time, $msg);
+                        if ( not $validate and $msg =~ /Unknown cryptographic algorithm/ ) {
+                            push @{ $algo_not_supported_by_zm{$rrsig_record->keytag}{$rrsig_record->algorithm} }, $ns->address->short;
+                            $step_c = 0;
+                        }
+                        elsif ( not $validate ) {
+                            push @{ $answer_verify_error{$rr->owner}{$rr->type} }, $ns->address->short;
+                            $step_c = 0;
+                        }
                     }
                 }
             }
@@ -2624,12 +2630,17 @@ sub dnssec10 {
             foreach my $rrsig_record ( @rrsig_records ) {
                 my $msg = q{};
                 my @matching_dnskeys = grep { $rrsig_record->keytag == $_->keytag } @dnskey_records;
-                my $validate = $rrsig_record->verify_time( [grep { name( $_->name ) eq name( $rrsig_record->name ) } @nsec_records], \@matching_dnskeys, $testing_time, $msg);
-                if ( not $validate and $msg =~ /Unknown cryptographic algorithm/ ) {
-                    push @{ $algo_not_supported_by_zm{$rrsig_record->keytag}{$rrsig_record->algorithm} }, $ns->address->short;
-                }
-                elsif ( not @matching_dnskeys or not $validate ) {
+                if ( not scalar @matching_dnskeys ) {
                     $nsec_rrsig_verify_error{ $ns->address->short } = 1;
+                }
+                else {
+                    my $validate = $rrsig_record->verify_time( [grep { name( $_->name ) eq name( $rrsig_record->name ) } @nsec_records], \@matching_dnskeys, $testing_time, $msg);
+                    if ( not $validate and $msg =~ /Unknown cryptographic algorithm/ ) {
+                        push @{ $algo_not_supported_by_zm{$rrsig_record->keytag}{$rrsig_record->algorithm} }, $ns->address->short;
+                    }
+                    elsif ( not $validate ) {
+                        $nsec_rrsig_verify_error{ $ns->address->short } = 1;
+                    }
                 }
             }
         }
@@ -2658,12 +2669,17 @@ sub dnssec10 {
             foreach my $rrsig_record ( @rrsig_records ) {
                 my $msg = q{};
                 my @matching_dnskeys = grep { $rrsig_record->keytag == $_->keytag } @dnskey_records;
-                my $validate = $rrsig_record->verify_time( [grep { name( $_->name ) eq name( $rrsig_record->name ) } @nsec3_records], \@matching_dnskeys, $testing_time, $msg);
-                if ( not $validate and $msg =~ /Unknown cryptographic algorithm/ ) {
-                    push @{ $algo_not_supported_by_zm{$rrsig_record->keytag}{$rrsig_record->algorithm} }, $ns->address->short;
-                }
-                elsif ( not @matching_dnskeys or not $validate ) {
+                if ( not scalar @matching_dnskeys ) {
                     $nsec3_rrsig_verify_error{ $ns->address->short } = 1;
+                }
+                else {
+                    my $validate = $rrsig_record->verify_time( [grep { name( $_->name ) eq name( $rrsig_record->name ) } @nsec3_records], \@matching_dnskeys, $testing_time, $msg);
+                    if ( not $validate and $msg =~ /Unknown cryptographic algorithm/ ) {
+                        push @{ $algo_not_supported_by_zm{$rrsig_record->keytag}{$rrsig_record->algorithm} }, $ns->address->short;
+                    }
+                    elsif ( not $validate ) {
+                        $nsec3_rrsig_verify_error{ $ns->address->short } = 1;
+                    }
                 }
             }
         }
