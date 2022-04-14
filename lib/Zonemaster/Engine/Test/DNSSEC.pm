@@ -1422,7 +1422,7 @@ sub dnssec02 {
             next;
         }
         my $ds_p = $ns->query( $zone->name, q{DS}, { dnssec => 1 } );
-        if ( not $ds_p or $ds_p->rcode ne q{NOERROR} or not $ds_p->aa ) {
+        if ( not $ds_p or $ds_p->rcode ne q{NOERROR} or not $ds_p->has_edns or not $ds_p->do or not $ds_p->aa) {
             next;
         }
         my @tmp_ds_records = $ds_p->get_records_for_name( q{DS}, $zone->name->string, q{answer} );
@@ -1485,7 +1485,7 @@ sub dnssec02 {
             }
 
             my $dnskey_p = $ns->query( $zone->name, q{DNSKEY}, { dnssec => 1, usevc => 0 } );
-            if ( not $dnskey_p or $dnskey_p->rcode ne q{NOERROR} or not $dnskey_p->aa ) {
+            if ( not $dnskey_p or $dnskey_p->rcode ne q{NOERROR} or not $dnskey_p->has_edns or not $dnskey_p->do or not $dnskey_p->aa ) {
                 next;
             }
             my @dnskey_rrs = $dnskey_p->get_records_for_name( q{DNSKEY}, $zone->name->string, q{answer} );
