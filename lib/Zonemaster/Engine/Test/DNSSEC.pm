@@ -1494,6 +1494,7 @@ sub dnssec02 {
             }
             my @dnskey_rrsig = $dnskey_p->get_records_for_name( q{RRSIG}, $zone->name->string, q{answer} );
 
+            OUTER:
             foreach my $ds ( @ds_record ) {
                 my $matching_dnskey = undef;
                 my @matching_keytag_dnskeys = grep { $ds->keytag == $_->keytag } @dnskey_rrs;
@@ -1501,7 +1502,10 @@ sub dnssec02 {
                 foreach my $matching_keytag_dnskey ( @matching_keytag_dnskeys ) {
                     if ( exists $LDNS_digest_algorithms_supported{$ds->digtype()} ) {
                         my $tmp_ds = $matching_keytag_dnskey->ds($LDNS_digest_algorithms_supported{$ds->digtype()});
-                        if ( $tmp_ds and $tmp_ds->hexdigest() eq $ds->hexdigest() ) {
+
+                        next OUTER if ( not $tmp_ds );
+
+                        if ( $tmp_ds->hexdigest() eq $ds->hexdigest() ) {
                             $matching_dnskey = $matching_keytag_dnskey;
                             $match_ds_dnskey = 1;
                             last;
