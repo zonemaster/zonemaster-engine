@@ -8,7 +8,6 @@ use warnings;
 
 use List::MoreUtils qw[uniq];
 
-use Zonemaster::Engine;
 use Zonemaster::Engine::Util;
 
 sub method1 {

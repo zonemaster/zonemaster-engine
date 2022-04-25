@@ -14,7 +14,6 @@ use File::Slurp;
 use Clone qw(clone);
 use Data::Dumper;
 
-use Zonemaster::Engine;
 use Zonemaster::Engine::Net::IP;
 use Zonemaster::Engine::Constants qw( $RESOLVER_SOURCE_OS_DEFAULT $DURATION_5_MINUTES_IN_SECONDS $DURATION_1_HOUR_IN_SECONDS $DURATION_4_HOURS_IN_SECONDS $DURATION_12_HOURS_IN_SECONDS $DURATION_1_DAY_IN_SECONDS $DURATION_1_WEEK_IN_SECONDS $DURATION_180_DAYS_IN_SECONDS );
 

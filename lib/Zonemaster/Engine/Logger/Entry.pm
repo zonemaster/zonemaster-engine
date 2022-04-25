@@ -11,7 +11,7 @@ use Carp qw( confess );
 use Time::HiRes qw[time];
 use JSON::PP;
 use Class::Accessor;
-use Zonemaster::Engine;
+
 use Zonemaster::Engine::Profile;
 
 use base qw(Class::Accessor);
