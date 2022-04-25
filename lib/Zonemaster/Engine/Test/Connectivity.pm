@@ -7,12 +7,11 @@ use warnings;
 
 use version; our $VERSION = version->declare("v1.0.17");
 
-use Zonemaster::Engine;
-
 use Carp;
 use List::MoreUtils qw[uniq];
 use Locale::TextDomain qw[Zonemaster-Engine];
 use Readonly;
+
 use Zonemaster::Engine::Profile;
 use Zonemaster::Engine::ASNLookup;
 use Zonemaster::Engine::Constants qw[:ip];

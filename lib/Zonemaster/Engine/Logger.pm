@@ -9,12 +9,12 @@ use version; our $VERSION = version->declare("v1.0.8");
 
 use Moose;
 
-use Zonemaster::Engine::Profile;
-use Zonemaster::Engine::Logger::Entry;
-use Zonemaster::Engine;
 use List::MoreUtils qw[none any];
 use Scalar::Util qw[blessed];
 use JSON::PP;
+
+use Zonemaster::Engine::Profile;
+use Zonemaster::Engine::Logger::Entry;
 
 has 'entries' => (
     is      => 'ro',
