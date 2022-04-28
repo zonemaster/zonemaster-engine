@@ -309,14 +309,12 @@ sub metadata {
     return {
         dnssec01 => [
             qw(
-              DS_ALGORITHM_DEPRECATED
-              DS_ALGORITHM_MISSING
-              DS_ALGORITHM_NOT_DS
-              DS_ALGORITHM_OK
-              DS_ALGORITHM_RESERVED
-              DS_ALGO_SHA1_DEPRECATED
-              NO_RESPONSE_DS
-              UNEXPECTED_RESPONSE_DS
+              DS01_DIGEST_NOT_SUPPORTED_BY_ZM
+              DS01_DS_ALGO_DEPRECATED
+              DS01_DS_ALGO_2_MISSING
+              DS01_DS_ALGO_NOT_DS
+              DS01_DS_ALGO_RESERVED
+              DS01_DS_ALGO_SHA1_DEPRECATED
               TEST_CASE_END
               TEST_CASE_START
               )
@@ -591,6 +589,46 @@ Readonly my %TAG_DESCRIPTIONS => (
           . '({algo_descr}) has a size ({keysize}) larger than the maximum one '
           . '({keysizemax}).',
           @_;
+    },
+    DS01_DIGEST_NOT_SUPPORTED_BY_ZM => sub {
+        __x    # DNSSEC:DS01_DIGEST_NOT_SUPPORTED_BY_ZM
+          'Nameserver {ns} returned a DS record created by algorithm {algo_num} '
+          . '({algo_mnemo}) which digest cannot be validated by this installation of Zonemaster. '
+          . 'The DS record is for the DNSKEY record with keytag {keytag} in zone {domain}.',
+          @_;
+    },
+    DS01_DS_ALGO_DEPRECATED => sub {
+        __x    # DNSSEC:DS01_DS_ALGO_DEPRECATED
+          'Nameserver {ns} returned a DS record created by algorithm {algo_num} '
+          . '({algo_mnemo}), which is deprecated. The DS record is for the '
+          . 'DNSKEY record with keytag {keytag} in zone {domain}.',
+        @_;
+    },
+    DS01_DS_ALGO_2_MISSING => sub {
+        __x    # DNSSEC:DS01_DS_ALGO_2_MISSING
+           'Algo 2 (SHA-256) is expected but missing.',
+        @_;
+    },
+    DS01_DS_ALGO_NOT_DS => sub {
+        __x    # DNSSEC:DS01_DS_ALGO_NOT_DS
+          'Nameserver {ns} returned a DS record created by algorithm {algo_num} '
+          . '({algo_mnemo}) which is not meant for DS. The DS record is for the '
+          . 'DNSKEY record with keytag {keytag} in zone {domain}.',
+        @_;
+    },
+    DS01_DS_ALGO_RESERVED => sub {
+        __x    # DNSSEC:DS01_DS_ALGO_RESERVED
+          'Nameserver {ns} returned a DS record created with an unassigned algorithm '
+          . '(algorithm number {algo_num}). The DS record is for the '
+          . 'DNSKEY record with keytag {keytag} in zone {domain}.',
+        @_;
+    },
+    DS01_DS_ALGO_SHA1_DEPRECATED => sub {
+        __x    # DNSSEC:DS01_DS_ALGO_SHA1_DEPRECATED          
+          'Nameserver {ns} returned a DS record created by algorithm '
+          . '{algo_num} ({algo_mnemo}). While still being widely used, it is deprecated. '
+          . 'The DS record is for the DNSKEY record with keytag {keytag} in zone {domain}.',
+        @_;
     },
     DS02_ALGO_NOT_SUPPORTED_BY_ZM => sub {
         __x    # DNSSEC:DS02_ALGO_NOT_SUPPORTED_BY_ZM
@@ -1070,48 +1108,6 @@ Readonly my %TAG_DESCRIPTIONS => (
           . 'Fetched from the nameservers with IP addresses "{ns_ip_list}".',
           @_;
     },
-    DS_ALGORITHM_NOT_DS => sub {
-        __x    # DNSSEC:DS_ALGORITHM_NOT_DS
-          '{ns} returned a DS record created by algorithm {algo_num} '
-          . '({algo_mnemo}) which is not meant for DS. The DS record is for '
-          . 'the DNSKEY record with keytag {keytag} in zone {domain}.',
-          @_;
-    },
-    DS_ALGORITHM_DEPRECATED => sub {
-        __x    # DNSSEC:DS_ALGORITHM_DEPRECATED
-          '{ns} returned a DS record created by algorithm {algo_num} '
-          . '({algo_mnemo}), which is deprecated. The DS record is for the '
-          . 'DNSKEY record with keytag {keytag} in zone {domain}.',
-          @_;
-    },
-    DS_ALGORITHM_MISSING => sub {
-        __x    # DNSSEC:DS_ALGORITHM_MISSING
-          '{ns} returned no DS record created by algorithm {algo_num} '
-          . '({algo_mnemo}) for zone {domain}, which is required.',
-          @_;
-    },
-    DS_ALGORITHM_OK => sub {
-        __x    # DNSSEC:DS_ALGORITHM_OK
-          '{ns} returned a DS record created by algorithm {algo_num} '
-          . '({algo_mnemo}), which is OK. The DS record is for the DNSKEY '
-          . 'record with keytag {keytag} in zone {domain}.',
-          @_;
-    },
-    DS_ALGORITHM_RESERVED => sub {
-        __x    # DNSSEC:DS_ALGORITHM_RESERVED
-          '{ns} returned a DS record created by with an algorithm not assigned '
-          . '(algorithm number {algo_num}), which is not OK. The DS record is '
-          . 'for the DNSKEY record with keytag {keytag} in zone {domain}.',
-          @_;
-    },
-    DS_ALGO_SHA1_DEPRECATED => sub {
-        __x    # DNSSEC:DS_ALGO_SHA1_DEPRECATED
-          'Nameserver {ns} returned a DS record created by algorithm '
-          . '{algo_num} ({algo_mnemo}) which is deprecated, while it is still '
-          . 'widely used. The DS record is for the DNSKEY record with keytag '
-          . '{keytag} in zone {domain}.',
-          @_;
-    },
     DS_BUT_NOT_DNSKEY => sub {
         __x    # DNSSEC:DS_BUT_NOT_DNSKEY
           '{parent} sent a DS record, but {child} did not send a DNSKEY record.', @_;
@@ -1176,10 +1172,6 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # DNSSEC:NO_RESPONSE_DNSKEY
           'Nameserver {ns} responded with no DNSKEY record(s).', @_;
     },
-    NO_RESPONSE_DS => sub {
-        __x    # DNSSEC:NO_RESPONSE_DS
-          '{ns} returned no DS records for {domain}.', @_;
-    },
     NO_RESPONSE => sub {
         __x    # DNSSEC:NO_RESPONSE
           'Nameserver {ns} did not respond.', @_;
@@ -1221,10 +1213,6 @@ Readonly my %TAG_DESCRIPTIONS => (
     TOO_MANY_ITERATIONS => sub {
         __x    # DNSSEC:TOO_MANY_ITERATIONS
           'The number of NSEC3 iterations is {count}, which is too high for key length {keylength}.', @_;
-    },
-    UNEXPECTED_RESPONSE_DS => sub {
-        __x    # DNSSEC:UNEXPECTED_RESPONSE_DS
-          'Nameserver {ns} responded with an unexpected rcode ({rcode}) on a DS query for zone {domain}.', @_;
     },
 );
 
