@@ -47,7 +47,7 @@ jobs:
             automake \
             build-essential \
             gettext \
-            libidn11-dev \
+            libidn2-dev \
             libssl-dev \
             libtool \
             m4 \
