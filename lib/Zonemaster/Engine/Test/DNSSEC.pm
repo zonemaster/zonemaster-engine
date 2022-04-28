@@ -1304,7 +1304,7 @@ sub dnssec01 {
                 elsif ( $ds->digtype == 1 ) {
                     push @results,
                       info(
-                        DS_ALGO_SHA1_DEPRECATED => {
+                        DS01_DS_ALGO_SHA1_DEPRECATED => {
                             ns         => $ns_name,
                             domain     => q{} . $zone->name,
                             keytag     => $ds->keytag,
@@ -1333,7 +1333,6 @@ sub dnssec01 {
                             domain     => q{} . $zone->name,
                             keytag     => $ds->keytag,
                             algo_num   => $ds->digtype,
-                            algo_mnemo => $mnemonic,
                         }
                       );
                 }
