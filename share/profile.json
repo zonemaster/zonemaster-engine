@@ -284,7 +284,7 @@
             "RRSIG_EXPIRED" : "ERROR",
             "TEST_CASE_END" : "DEBUG",
             "TEST_CASE_START" : "DEBUG",
-            "TOO_MANY_ITERATIONS" : "WARNING",
+            "TOO_MANY_ITERATIONS" : "WARNING"
         },
         "NAMESERVER" : {
             "AAAA_BAD_RDATA" : "ERROR",

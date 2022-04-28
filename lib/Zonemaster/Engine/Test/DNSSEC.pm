@@ -606,7 +606,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     DS01_DS_ALGO_2_MISSING => sub {
         __x    # DNSSEC:DS01_DS_ALGO_2_MISSING
-           'Algo 2 (SHA-256) is expected but missing.',
+           'Algo 2 (SHA-256) is expected but missing for zone {domain}.',
         @_;
     },
     DS01_DS_ALGO_NOT_DS => sub {
@@ -1232,8 +1232,22 @@ sub dnssec01 {
     my ( $class, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
+    if ( $zone->name eq '.' ){
+        return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+    }
+
     if ( my $parent = $zone->parent ) {
+        my $algorithm2 = 0;
+
         foreach my $ns ( @{ $parent->ns } ) {
+            my $ns_name = $ns->string;
+
+            if ( Zonemaster::Engine::Recursor->has_fake_addresses( $zone->name->string ) ){
+                if ( scalar %{$ns->fake_ds} == 0 ){
+                    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+                }
+                $ns_name = "-";                
+            }
 
             if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
                 push @results,
@@ -1258,106 +1272,121 @@ sub dnssec01 {
             }
 
             my $ds_p = $ns->query( $zone->name, q{DS}, { usevc => 0, dnssec => 1 } );
-            if ( not $ds_p ) {
-                push @results,
-                  info(
-                    NO_RESPONSE_DS => {
-                        ns     => $ns->string,
-                        domain => q{} . $zone->name,
-                    }
-                  );
+
+            if ( not $ds_p or $ds_p->rcode ne q{NOERROR} or not $ds_p->has_edns or not $ds_p->do or not $ds_p->aa ) {
                 next;
             }
-            elsif ($ds_p->rcode ne q{NOERROR} ) {
-                push @results,
-                  info(
-                    UNEXPECTED_RESPONSE_DS => {
-                        ns     => $ns->string,
-                        domain => q{} . $zone->name,
-                        rcode  => $ds_p->rcode,
-                    }
-                  );
-                next;
-            }
-            else {
-                my $algorithm2 = 0;
-                my @dss = $ds_p->get_records( q{DS}, q{answer} );
-                foreach my $ds (@dss) {
-                    my $mnemonic = $digest_algorithms{ $ds->digtype };
-                    if ( $ds->digtype == 0 ) {
-                        push @results,
-                          info(
-                            DS_ALGORITHM_NOT_DS => {
-                                ns         => $ns->string,
-                                domain     => q{} . $zone->name,
-                                keytag     => $ds->keytag,
-                                algo_num   => $ds->digtype,
-                                algo_mnemo => $mnemonic,
-                            }
-                          );
-                    }
-                    elsif ( $ds->digtype == 1 ) {
-                        push @results,
-                          info(
-                            DS_ALGO_SHA1_DEPRECATED => {
-                                ns         => $ns->string,
-                                domain     => q{} . $zone->name,
-                                keytag     => $ds->keytag,
-                                algo_num   => $ds->digtype,
-                                algo_mnemo => $mnemonic,
-                            }
-                          );
-                    }
-                    elsif ( $ds->digtype == 3 ) {
-                        push @results,
-                          info(
-                            DS_ALGORITHM_DEPRECATED => {
-                                ns         => $ns->string,
-                                domain     => q{} . $zone->name,
-                                keytag     => $ds->keytag,
-                                algo_num   => $ds->digtype,
-                                algo_mnemo => $mnemonic,
-                            }
-                          );
-                    }
-                    elsif ( $ds->digtype >= 5 and $ds->digtype <= 255 ) {
-                        push @results,
-                          info(
-                            DS_ALGORITHM_RESERVED => {
-                                ns         => $ns->string,
-                                domain     => q{} . $zone->name,
-                                keytag     => $ds->keytag,
-                                algo_num   => $ds->digtype,
-                                algo_mnemo => $mnemonic,
-                            }
-                          );
-                    }
-                    else {
-                        $algorithm2++ if $ds->digtype == 2;
-                        push @results,
-                          info(
-                            DS_ALGORITHM_OK => {
-                                ns         => $ns->string,
-                                domain     => q{} . $zone->name,
-                                keytag     => $ds->keytag,
-                                algo_num   => $ds->digtype,
-                                algo_mnemo => $mnemonic,
-                            }
-                          );
-                    }
+                
+            my @dss = $ds_p->get_records( q{DS}, q{answer} );
+
+            my $can_continue = 0;
+            foreach my $ds (@dss) {
+                if ( $ds->owner eq $zone->name->fqdn ){
+                    $can_continue = 1;
+                    last;
                 }
-                if ( not $algorithm2 ) {
+            }
+
+            foreach my $ds (@dss) {
+                my $mnemonic = $digest_algorithms{ $ds->digtype };
+                if ( $ds->digtype == 0 ) {
                     push @results,
                       info(
-                        DS_ALGORITHM_MISSING => {
-                            ns         => $ns->string,
+                        DS01_DS_ALGO_NOT_DS => {
+                            ns         => $ns_name,
                             domain     => q{} . $zone->name,
-                            algo_num   => 2,
-                            algo_mnemo => $digest_algorithms{2},
+                            keytag     => $ds->keytag,
+                            algo_num   => $ds->digtype,
+                            algo_mnemo => $mnemonic,
                         }
                       );
                 }
-            }    
+                elsif ( $ds->digtype == 1 ) {
+                    push @results,
+                      info(
+                        DS_ALGO_SHA1_DEPRECATED => {
+                            ns         => $ns_name,
+                            domain     => q{} . $zone->name,
+                            keytag     => $ds->keytag,
+                            algo_num   => $ds->digtype,
+                            algo_mnemo => $mnemonic,
+                        }
+                      );
+                }
+                elsif ( $ds->digtype == 3 ) {
+                    push @results,
+                      info(
+                        DS01_DS_ALGO_DEPRECATED => {
+                            ns         => $ns_name,
+                            domain     => q{} . $zone->name,
+                            keytag     => $ds->keytag,
+                            algo_num   => $ds->digtype,
+                            algo_mnemo => $mnemonic,
+                        }
+                      );
+                }
+                elsif ( $ds->digtype >= 5 and $ds->digtype <= 255 ) {
+                    push @results,
+                      info(
+                        DS01_DS_ALGO_RESERVED => {
+                            ns         => $ns_name,
+                            domain     => q{} . $zone->name,
+                            keytag     => $ds->keytag,
+                            algo_num   => $ds->digtype,
+                            algo_mnemo => $mnemonic,
+                        }
+                      );
+                }
+                else {
+                    $algorithm2++ if $ds->digtype == 2;
+                }
+
+                if ( not exists $LDNS_digest_algorithms_supported{$ds->digtype()} ){
+                    push @results,
+                      info(
+                        DS01_DIGEST_NOT_SUPPORTED_BY_ZM => {
+                            ns         => $ns_name,
+                            domain     => q{} . $zone->name,
+                            keytag     => $ds->keytag,
+                            algo_num   => $ds->digtype,
+                            algo_mnemo => $mnemonic,
+                        }
+                       );
+                }
+                else{
+                    my $dnskey_p = $ns->query( $zone->name, q{DNSKEY}, { dnssec => 1, usevc => 0 } );
+                    if ( $dnskey_p and $dnskey_p->rcode eq q{NOERROR} ){
+                        my @dnskey_rrs = $dnskey_p->get_records_for_name( q{DNSKEY}, $zone->name->string, q{answer} );
+                        if ( scalar @dnskey_rrs ){
+                            my @matching_keytag_dnskeys = grep { $ds->keytag == $_->keytag } @dnskey_rrs;
+                            if ( scalar @matching_keytag_dnskeys ){
+                                my $tmp_ds = $matching_keytag_dnskeys[0]->ds($LDNS_digest_algorithms_supported{$ds->digtype()});
+                                if ( not $tmp_ds ){
+                                    push @results,
+                                      info(
+                                        DS01_DIGEST_NOT_SUPPORTED_BY_ZM => {
+                                            ns         => $ns_name,
+                                            domain     => q{} . $zone->name,
+                                            keytag     => $ds->keytag,
+                                            algo_num   => $ds->digtype,
+                                            algo_mnemo => $mnemonic,
+                                        }
+                                    );
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if ( not $algorithm2 ) {
+            push @results,
+              info(
+                DS01_DS_ALGO_2_MISSING => {
+                    domain     => q{} . $zone->name,
+                }
+              );
         }
     }
 
