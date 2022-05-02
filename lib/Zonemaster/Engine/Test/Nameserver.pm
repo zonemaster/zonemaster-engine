@@ -1039,7 +1039,7 @@ sub nameserver10 {
                 if ( $p2->rcode ne q{BADVERS} ) {
                     push @{ $unexpected_rcode{$p->rcode} }, $ns->address->short;
                 }
-                elsif ( $p2->rcode eq q{BADVERS} and $p2->edns_version == 0 and not scalar $p2->answer){
+                elsif ( ($p2->rcode eq q{NOERROR} and $p2->edns_rcode == 1) and $p2->edns_version == 0 and not scalar $p2->answer){
                     next;
                 }
                 else {
