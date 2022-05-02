@@ -1036,7 +1036,7 @@ sub nameserver10 {
             my $p2 = $ns->query( $zone->name, q{SOA}, { edns_details => { version => 1 } } );
             
             if ( $p2 ) {
-                if ( $p2->rcode ne q{BADVERS} ) {
+                if ( ($p2->rcode ne q{NOERROR} and $p2->edns_rcode != 1) ) {
                     push @{ $unexpected_rcode{$p->rcode} }, $ns->address->short;
                 }
                 elsif ( ($p2->rcode eq q{NOERROR} and $p2->edns_rcode == 1) and $p2->edns_version == 0 and not scalar $p2->answer){
