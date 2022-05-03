@@ -353,15 +353,15 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     N10_NO_RESPONSE_EDNS1_QUERY => sub {
         __x    # N10_NO_RESPONSE_EDNS1_QUERY
-          'No response to a query with EDNS version 1 from the following nameservers: {ns_ip_list} ', @_;
+          'No response to an EDNS version 1 query. Fetched from the nameservers with IP addresses {ns_ip_list}', @_;
     },
     N10_UNEXPECTED_RCODE => sub {
         __x    # N10_UNEXPECTED_RCODE
-          'Erroneous response with RCODE "{rcode}" (expected "BADVERS") from the following nameservers: {ns_ip_list}', @_;
+          'Erroneous RCODE ("{rcode}") in response to an EDNS version 1 query. Fetched from the nameservers with IP addresses {ns_ip_list}', @_;
     },
     N10_EDNS_RESPONSE_ERROR => sub {
         __x    # N10_EDNS_RESPONSE_ERROR
-          'Expected RCODE ("BADVERS") but received erroneous response from the following nameservers: {ns_ip_list}', @_;
+          'Expected RCODE but received erroneous response to an EDNS version 1 query. Fetched from the nameservers with IP addresses {ns_ip_list}', @_;
     },
     QNAME_CASE_INSENSITIVE => sub {
         __x    # NAMESERVER:QNAME_CASE_INSENSITIVE
