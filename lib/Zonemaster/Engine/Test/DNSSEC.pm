@@ -1509,9 +1509,14 @@ sub dnssec02 {
                             last;
                         }
                     }
+                    else{
+                        $matching_dnskey = $matching_keytag_dnskey;
+                        $match_ds_dnskey = 1;
+                        last;
+                    }
                 }
 
-                if ( scalar @matching_keytag_dnskeys == 1 and not $match_ds_dnskey) {
+                if ( scalar @matching_keytag_dnskeys >= 1 and not $match_ds_dnskey) {
                     $matching_dnskey = shift @matching_keytag_dnskeys;
                 }
 
