@@ -456,8 +456,6 @@ sub syntax06 {
         @nss = sort values %nss;
     }
 
-    my $resolver = Zonemaster::Engine->ns( 'google-public-dns-a.google.com', '8.8.8.8' );
-
     my %seen_rnames;
     for my $ns ( @nss ) {
 
@@ -520,7 +518,7 @@ sub syntax06 {
         }
 
         my $domain = ( $rname =~ s/.*@//r );
-        my $p_mx = $resolver->query( $domain, q{MX}, { recurse => 1 } );
+        my $p_mx = Zonemaster::Engine::Recursor->recurse( $domain, q{MX} );
         if ( not $p_mx or $p_mx->rcode ne 'NOERROR' ) {
             push @results, info( RNAME_MAIL_DOMAIN_INVALID => { domain => $domain } );
             next;
@@ -547,7 +545,7 @@ sub syntax06 {
             my $exchange_valid = 0;
 
             # Lookup IPv4 address for mail server
-            my $p_a = $resolver->query( $mail_domain, q{A}, { recurse => 1 } );
+            my $p_a = Zonemaster::Engine::Recursor->recurse( $mail_domain, q{A} );
             if ( $p_a ) {
                 if ( $p_a->get_records( q{CNAME}, q{answer} ) ) {
                     push @results, info( RNAME_MAIL_ILLEGAL_CNAME => { domain => $mail_domain } );
@@ -565,7 +563,7 @@ sub syntax06 {
             }
 
             # Lookup IPv6 address for mail domain
-            my $p_aaaa = $resolver->query( $mail_domain, q{AAAA}, { recurse => 1 } );
+            my $p_aaaa = Zonemaster::Engine::Recursor->recurse( $mail_domain, q{AAAA} );
             if ( $p_aaaa ) {
                 if ( $p_aaaa->get_records( q{CNAME}, q{answer} ) ) {
                     push @results, info( RNAME_MAIL_ILLEGAL_CNAME => { domain => $mail_domain } );
