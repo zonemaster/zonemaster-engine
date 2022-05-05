@@ -1450,76 +1450,74 @@ msgstr ""
 "Information retournée par les serveurs de noms ayant une des adresses IP "
 "suivantes \"{ns_ip_list}\"."
 
-#. DNSSEC:DS_ALGORITHM_NOT_DS
+#. DNSSEC:DS01_DIGEST_NOT_SUPPORTED_BY_ZM
 #, perl-brace-format
 msgid ""
-"{ns} returned a DS record created by algorithm {algo_num} ({algo_mnemo}) "
-"which is not meant for DS. The DS record is for the DNSKEY record with "
-"keytag {keytag} in zone {domain}."
+"DS record for zone {domain} with keytag {keytag} was created by digest algorithm {ds_algo_num} "
+"({ds_algo_mnemo}) which cannot be validated by this installation of Zonemaster. "
+"Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"Le serveur de noms {ns} retourne un enregistrement de type \"DS\" créé à "
-"partir d'un algorithme ({algo_num}/{algo_mnemo}) qui n'est pas destiné à la "
-"signature. Cet enregistrement de type \"DS\" correspond à la clé (DNSKEY) "
-"avec le tag {keytag} dans la zone {domain}."
+"Un enregistrement de type \"DS\" dans la zone {domain} avec le tag {keytag} a été créé à "
+"partir d'un algorithme de condensé ({ds_algo_num}/{ds_algo_mnemo}) qui ne peut pas être "
+"validé par cette installation de Zonemaster. "
+"Information retournée par les serveurs de noms ayant une des adresses IP "
+"suivantes \"{ns_ip_list}\"."
 
-#. DNSSEC:DS_ALGORITHM_DEPRECATED
+#. DNSSEC:DS01_DS_ALGO_NOT_DS
 #, perl-brace-format
 msgid ""
-"{ns} returned a DS record created by algorithm {algo_num} ({algo_mnemo}), "
-"which is deprecated. The DS record is for the DNSKEY record with keytag "
-"{keytag} in zone {domain}."
+"DS record for zone {domain} with keytag {keytag} was created by digest algorithm {ds_algo_num} "
+"({ds_algo_mnemo}) which is not meant for DS. "
+"Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"Le serveur de noms {ns} retourne un enregistrement de type \"DS\" créé à "
-"partir d'un algorithme obsolète ({algo_num}/{algo_mnemo}), ce qui est "
-"incorrect. Cet enregistrement de type \"DS\" correspond à la clé (DNSKEY) "
-"avec le tag {keytag} dans la zone {domain}."
+"Un enregistrement de type \"DS\" dans la zone {domain} avec le tag {keytag} a été créé à "
+"partir d'un algorithme de condensé ({ds_algo_num}/{ds_algo_mnemo}) qui n'est pas destiné à la signature. "
+"Information retournée par les serveurs de noms ayant une des adresses IP "
+"suivantes \"{ns_ip_list}\"."
 
-#. DNSSEC:DS_ALGORITHM_MISSING
+#. DNSSEC:DS01_DS_ALGO_DEPRECATED
 #, perl-brace-format
 msgid ""
-"{ns} returned no DS record created by algorithm {algo_num} ({algo_mnemo}) "
-"for zone {domain}, which is required."
+"DS record for zone {domain} with keytag {keytag} was created by digest algorithm {ds_algo_num} "
+"({ds_algo_mnemo}) which is deprecated. "
+"Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"Le serveur de noms {ns} ne retourne aucun enregistrement de type \"DS\" créé "
-"à partir de l'algorithme {algo_num}/{algo_mnemo} pour la zone {domain}, "
-"alors que c'est nécessaire."
+"Un enregistrement de type \"DS\" dans la zone {domain} avec le tag {keytag} a été créé à "
+"partir d'un algorithme de condensé obsolète ({ds_algo_num}/{ds_algo_mnemo}). "
+"Information retournée par les serveurs de noms ayant une des adresses IP "
+"suivantes \"{ns_ip_list}\"."
 
-#. DNSSEC:DS_ALGORITHM_OK
+#. DNSSEC:DS01_DS_ALGO_2_MISSING
 #, perl-brace-format
 msgid ""
-"{ns} returned a DS record created by algorithm {algo_num} ({algo_mnemo}), "
-"which is OK. The DS record is for the DNSKEY record with keytag {keytag} in "
-"zone {domain}."
+"Digest algorithm 2 (SHA-256) is expected but missing for zone {domain}."
 msgstr ""
-"Le serveur de noms {ns} retourne un enregistrement de type \"DS\" créé à "
-"partir de l'algorithme ({algo_num}/{algo_mnemo}), ce qui est correct. Cet "
-"enregistrement de type \"DS\" correspond à la clé (DNSKEY) avec le tag "
-"{keytag} dans la zone {domain}."
+"L'algorithme de condensé 2 (SHA-256) est attendu mais manquant pour la zone {domain}."
 
-#. DNSSEC:DS_ALGORITHM_RESERVED
+#. DNSSEC:DS01_DS_ALGO_RESERVED
 #, perl-brace-format
 msgid ""
-"{ns} returned a DS record created by with an algorithm not assigned "
-"(algorithm number {algo_num}), which is not OK. The DS record is for the "
-"DNSKEY record with keytag {keytag} in zone {domain}."
+"DS record for zone {domain} with keytag {keytag} was created with an unassigned digest algorithm "
+"(algorithm number {ds_algo_num}). "
+"Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"Le serveur de noms {ns} retourne un enregistrement de type \"DS\" créé à "
-"partir d'un algorithme non assigné ({algo_num}), ce qui est incorrect. Cet "
-"enregistrement de type \"DS\" correspond à la clé (DNSKEY) avec le tag "
-"{keytag} dans la zone {domain}."
+"Un enregistrement de type \"DS\" dans la zone {domain} avec le tag {keytag} a été créé à "
+"partir d'un algorithme de condensé non assigné ({ds_algo_num}). "
+"Information retournée par les serveurs de noms ayant une des adresses IP "
+"suivantes \"{ns_ip_list}\"."
 
-#. DNSSEC:DS_ALGO_SHA1_DEPRECATED
+#. DNSSEC:DS01_DS_ALGO_SHA1_DEPRECATED
 #, perl-brace-format
 msgid ""
-"Nameserver {ns} returned a DS record created by algorithm {algo_num} "
-"({algo_mnemo}) which is deprecated, while it is still widely used. The DS "
-"record is for the DNSKEY record with keytag {keytag} in zone {domain}."
+"DS record for zone {domain} with keytag {keytag} was created by digest algorithm {ds_algo_num} "
+"({ds_algo_mnemo}). While still being widely in use, it is deprecated. "
+"Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"Le serveur de noms {ns} retourne un enregistrement de type \"DS\" créé à "
-"partir d'un algorithme obsolète ({algo_num}/{algo_mnemo}), ce qui est "
-"incorrect (bien que cet algorithme soit encore très largement utilisé). Cet "
-"enregistrement de type \"DS\" correspond à la clé (DNSKEY) avec le tag "
-"{keytag} dans la zone {domain}."
+"Un enregistrement de type \"DS\" dans la zone {domain} avec le tag {keytag} a été créé à "
+"partir de l'algorithme de condensé {ds_algo_num} ({ds_algo_mnemo}). "
+"Bien que celui-ci soit encore très largement utilisé, il est obsolète. "
+"Information retournée par les serveurs de noms ayant une des adresses IP "
+"suivantes \"{ns_ip_list}\"."
 
 #. DNSSEC:DS_BUT_NOT_DNSKEY
 #, perl-brace-format
@@ -1613,13 +1611,6 @@ msgstr ""
 "Le serveur de noms {ns} répond mais ne renvoie aucun enregistrement de type "
 "\"DNSKEY\"."
 
-#. DNSSEC:NO_RESPONSE_DS
-#, perl-brace-format
-msgid "{ns} returned no DS records for {domain}."
-msgstr ""
-"Le serveur de noms {ns} ne retourne aucun enregistrement de type \"DS\" pour "
-"la zone '{domain}'."
-
 #. DNSSEC:NOT_SIGNED
 msgid "The zone is not signed with DNSSEC."
 msgstr "La zone n'est pas signée avec DNSSEC."
@@ -1670,15 +1661,6 @@ msgid ""
 msgstr ""
 "Le nombre d'itérations pour \"NSEC3\" est de {count}, ce qui est trop élevé "
 "pour une clé de cette taille {keylength}."
-
-#. DNSSEC:UNEXPECTED_RESPONSE_DS
-#, perl-brace-format
-msgid ""
-"Nameserver {ns} responded with an unexpected rcode ({rcode}) on a DS query "
-"for zone {domain}."
-msgstr ""
-"Le serveur de noms {ns} a répondu à une requête de type \"AAAA\" avec un "
-"code retour inattendu ({rcode}) pour la zone '{domain}'."
 
 #. DELEGATION:ARE_AUTHORITATIVE
 #, perl-brace-format
