@@ -590,43 +590,43 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     DS01_DIGEST_NOT_SUPPORTED_BY_ZM => sub {
         __x    # DNSSEC:DS01_DIGEST_NOT_SUPPORTED_BY_ZM
-          'Nameserver(s) {ns_ip_list} returned a DS record created by algorithm {algo_num} '
-          . '({algo_mnemo}) which digest cannot be validated by this installation of Zonemaster. '
-          . 'The DS record is for the DNSKEY record with keytag {keytag} in zone {domain}.',
+          'DS record for zone {domain} with keytag {keytag} was created by digest algorithm {ds_algo_num} '
+          . '({ds_algo_mnemo}) which cannot be validated by this installation of Zonemaster. '
+          . 'Fetched from the nameservers with IP addresses "{ns_ip_list}".',
           @_;
     },
     DS01_DS_ALGO_DEPRECATED => sub {
         __x    # DNSSEC:DS01_DS_ALGO_DEPRECATED
-          'Nameserver(s) {ns_ip_list} returned a DS record created by algorithm {algo_num} '
-          . '({algo_mnemo}), which is deprecated. The DS record is for the '
-          . 'DNSKEY record with keytag {keytag} in zone {domain}.',
-        @_;
+          'DS record for zone {domain} with keytag {keytag} was created by digest algorithm {ds_algo_num} '
+          . '({ds_algo_mnemo}) which is deprecated. '
+          . 'Fetched from the nameservers with IP addresses "{ns_ip_list}".',
+          @_;
     },
     DS01_DS_ALGO_2_MISSING => sub {
         __x    # DNSSEC:DS01_DS_ALGO_2_MISSING
-           'Algo 2 (SHA-256) is expected but missing for zone {domain}.',
+           'Digest algorithm 2 (SHA-256) is expected but missing for zone {domain}.',
         @_;
     },
     DS01_DS_ALGO_NOT_DS => sub {
         __x    # DNSSEC:DS01_DS_ALGO_NOT_DS
-          'Nameserver(s) {ns_ip_list} returned a DS record created by algorithm {algo_num} '
-          . '({algo_mnemo}) which is not meant for DS. The DS record is for the '
-          . 'DNSKEY record with keytag {keytag} in zone {domain}.',
-        @_;
+          'DS record for zone {domain} with keytag {keytag} was created by digest algorithm {ds_algo_num} '
+          . '({ds_algo_mnemo}) which is not meant for DS. '
+          . 'Fetched from the nameservers with IP addresses "{ns_ip_list}".',
+          @_;
     },
     DS01_DS_ALGO_RESERVED => sub {
         __x    # DNSSEC:DS01_DS_ALGO_RESERVED
-          'Nameserver(s) {ns_ip_list} returned a DS record created with an unassigned algorithm '
-          . '(algorithm number {algo_num}). The DS record is for the '
-          . 'DNSKEY record with keytag {keytag} in zone {domain}.',
-        @_;
+          'DS record for zone {domain} with keytag {keytag} was created with an unassigned digest algorithm '
+          . '(algorithm number {ds_algo_num}). '
+          . 'Fetched from the nameservers with IP addresses "{ns_ip_list}".',
+          @_;
     },
     DS01_DS_ALGO_SHA1_DEPRECATED => sub {
-        __x    # DNSSEC:DS01_DS_ALGO_SHA1_DEPRECATED          
-          'Nameserver(s) {ns_ip_list} returned a DS record created by algorithm '
-          . '{algo_num} ({algo_mnemo}). While still being widely used, it is deprecated. '
-          . 'The DS record is for the DNSKEY record with keytag {keytag} in zone {domain}.',
-        @_;
+        __x    # DNSSEC:DS01_DS_ALGO_SHA1_DEPRECATED
+          'DS record for zone {domain} with keytag {keytag} was created by digest algorithm {ds_algo_num} '
+          . '({ds_algo_mnemo}). While still being widely in use, it is deprecated. '
+          . 'Fetched from the nameservers with IP addresses "{ns_ip_list}".',
+          @_;
     },
     DS02_ALGO_NOT_SUPPORTED_BY_ZM => sub {
         __x    # DNSSEC:DS02_ALGO_NOT_SUPPORTED_BY_ZM
@@ -1305,11 +1305,11 @@ sub dnssec01 {
                         push @results,
                           info(
                             DS01_DS_ALGO_NOT_DS => {
-                                ns_ip_list => join( q{;}, uniq sort @{ $ds_records{$ds_digtype}->{$ds_keytag} } ),
-                                domain     => q{} . $zone->name,
-                                keytag     => $ds_keytag,
-                                algo_num   => $ds_digtype,
-                                algo_mnemo => $mnemonic,
+                                ns_ip_list    => join( q{;}, uniq sort @{ $ds_records{$ds_digtype}->{$ds_keytag} } ),
+                                domain        => q{} . $zone->name,
+                                keytag        => $ds_keytag,
+                                ds_algo_num   => $ds_digtype,
+                                ds_algo_mnemo => $mnemonic,
                             }
                           );
                     }
@@ -1317,11 +1317,11 @@ sub dnssec01 {
                         push @results,
                           info(
                             DS01_DS_ALGO_SHA1_DEPRECATED => {
-                                ns_ip_list => join( q{;}, uniq sort @{ $ds_records{$ds_digtype}->{$ds_keytag} } ),
-                                domain     => q{} . $zone->name,
-                                keytag     => $ds_keytag,
-                                algo_num   => $ds_digtype,
-                                algo_mnemo => $mnemonic,
+                                ns_ip_list    => join( q{;}, uniq sort @{ $ds_records{$ds_digtype}->{$ds_keytag} } ),
+                                domain        => q{} . $zone->name,
+                                keytag        => $ds_keytag,
+                                ds_algo_num   => $ds_digtype,
+                                ds_algo_mnemo => $mnemonic,
                             }
                           );
                     }
@@ -1332,8 +1332,8 @@ sub dnssec01 {
                                 ns_ip_list => join( q{;}, uniq sort @{ $ds_records{$ds_digtype}->{$ds_keytag} } ),
                                 domain     => q{} . $zone->name,
                                 keytag     => $ds_keytag,
-                                algo_num   => $ds_digtype,
-                                algo_mnemo => $mnemonic,
+                                ds_algo_num   => $ds_digtype,
+                                ds_algo_mnemo => $mnemonic,
                             }
                           );
                     }
@@ -1341,10 +1341,10 @@ sub dnssec01 {
                         push @results,
                           info(
                             DS01_DS_ALGO_RESERVED => {
-                                ns_ip_list => join( q{;}, uniq sort @{ $ds_records{$ds_digtype}->{$ds_keytag} } ),
-                                domain     => q{} . $zone->name,
-                                keytag     => $ds_keytag,
-                                algo_num   => $ds_digtype,
+                                ns_ip_list    => join( q{;}, uniq sort @{ $ds_records{$ds_digtype}->{$ds_keytag} } ),
+                                domain        => q{} . $zone->name,
+                                keytag        => $ds_keytag,
+                                ds_algo_num   => $ds_digtype,
                             }
                           );
                     }
@@ -1356,11 +1356,11 @@ sub dnssec01 {
                         push @results,
                           info(
                             DS01_DIGEST_NOT_SUPPORTED_BY_ZM => {
-                                ns_ip_list => join( q{;}, uniq sort @{ $ds_records{$ds_digtype}->{$ds_keytag} } ),
-                                domain     => q{} . $zone->name,
-                                keytag     => $ds_keytag,
-                                algo_num   => $ds_digtype,
-                                algo_mnemo => $mnemonic,
+                                ns_ip_list    => join( q{;}, uniq sort @{ $ds_records{$ds_digtype}->{$ds_keytag} } ),
+                                domain        => q{} . $zone->name,
+                                keytag        => $ds_keytag,
+                                ds_algo_num   => $ds_digtype,
+                                ds_algo_mnemo => $mnemonic,
                             }
                            );
                     }
@@ -1372,11 +1372,11 @@ sub dnssec01 {
                             push @results,
                               info(
                                 DS01_DIGEST_NOT_SUPPORTED_BY_ZM => {
-                                    ns_ip_list => join( q{;}, uniq sort @{ $ds_records{$ds_digtype}->{$ds_keytag} } ),
-                                    domain     => q{} . $zone->name,
-                                    keytag     => $ds_keytag,
-                                    algo_num   => $ds_digtype,
-                                    algo_mnemo => $mnemonic,
+                                    ns_ip_list    => join( q{;}, uniq sort @{ $ds_records{$ds_digtype}->{$ds_keytag} } ),
+                                    domain        => q{} . $zone->name,
+                                    keytag        => $ds_keytag,
+                                    ds_algo_num   => $ds_digtype,
+                                    ds_algo_mnemo => $mnemonic,
                                 }
                             );
                         }
