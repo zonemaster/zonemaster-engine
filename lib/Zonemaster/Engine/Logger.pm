@@ -90,6 +90,11 @@ sub start_time_now {
     return;
 }
 
+sub reset_config {
+    Zonemaster::Engine::Logger::Entry->reset_config();
+    return;
+}
+
 sub clear_history {
     my ( $self ) = @_;
 
@@ -210,6 +215,10 @@ Set the logger's start time to the current time.
 =item clear_history()
 
 Remove all known log entries.
+
+=item reset_config()
+
+Clear the test level cached configuration.
 
 =back
 

@@ -171,7 +171,7 @@ sub can_continue {
     my ( $class ) = @_;
 
     return 1;
-    
+
 }
 
 sub save_cache {
@@ -203,6 +203,7 @@ sub start_time_now {
 
 sub reset {
     Zonemaster::Engine::Logger->start_time_now();
+    Zonemaster::Engine::Logger->reset_config();
     Zonemaster::Engine::Nameserver->empty_cache();
     $logger->clear_history() if $logger;
     Zonemaster::Engine::Recursor->clear_cache();
