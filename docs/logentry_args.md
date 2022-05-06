@@ -27,10 +27,10 @@ suffixed *argument name* is not to be listed in this document, it is just an
 instance of the *argument name* without the specific suffix.
 
 As an example, if two arguments of type "List of IP addresses" are to be used in
-a message, then both *argument names* should `ns_ip_list`. Let us say that one
-is connected to the NSEC record type and the other to the NSEC3 record type. The
-two resulting argument names could then be `ns_ip_list_nsec` and
-`ns_ip_list_nsec3`, respectively.
+a message, then both *argument names* should be `ns_ip_list` following the list
+of defined arguments below. Let us say that one is connected to the NSEC record
+type and the other to the NSEC3 record type. The two resulting argument names
+could then be `ns_ip_list_nsec` and `ns_ip_list_nsec3`, respectively.
 
 Example of a message (*msgid* in this case) where this is in use:
 
