@@ -64,6 +64,7 @@ and updated messages (*msgids* and *msgstr*).
 | ns_list        | List of domain name and IP address pairs | A list of name servers, as specified by "ns", separated by ";".         |
 | nsname         | Domain name                              | The domain name of a name server.                                       |
 | nsname_list    | List of domain names                     | A list of name servers, as specified by "nsname", separated by ";".     |
+| rcode          | An RCODE Name                            | An RCODE Name (not numeric code) from [DNS RCODEs].                     |
 | testcase       | A Zonemaster test case, or `all`         | A test case identifier.                                                 |
 
 
@@ -114,7 +115,6 @@ defined *arguments*.
 || Number of RRSIG RRs in packet| The number of RRSIG records found in a packet.|
 || Number of SOA RRs in packet| The number of SOA records found in a packet.|
 || Protocol (UDP or TCP)| The protocol used for a query.|
-| rcode (?) | RCODE| An RCODE from a DNS packet.|
 || RFC reference| A reference to an RFC.|
 | rrtype (?) | RR type| The type of RR the message pertains to.|
 || RRSIG Expiration date| The time when a signature expires.|
@@ -139,6 +139,7 @@ Message names maked with a question mark should not be considered stable.
 
 
 [Basic.pm]:                                  ../lib/Zonemaster/Engine/Test/Basic.pm
+[DNS RCODEs]:                                https://www.iana.org/assignments/dns-parameters/dns-parameters.xhtml#dns-parameters-6
 [DNSSEC algorithm]:                          https://www.iana.org/assignments/dns-sec-alg-numbers/dns-sec-alg-numbers.xhtml
 [DS Digest algorithm]:                       https://www.iana.org/assignments/ds-rr-types/ds-rr-types.xhtml
 [fr.po]:                                     ../share/fr.po
