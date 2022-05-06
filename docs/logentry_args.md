@@ -50,6 +50,9 @@ and updated messages (*msgids* and *msgstr*).
 | algo_mnemo     | Text                               | The mnemonic of a [DNSSEC algorithm].                       |
 | algo_num       | Non-negative integer               | The numeric value for a [DNSSEC algorithm].                 |
 | domain         | Domain name                        | A domain name. If nsname is also applicable, use that one instead.|
+| ds_algo_descr  | Text                               | The human readable description of a [DS Digest algorithm].  |
+| ds_algo_mnemo  | Text                               | The mnemonic of a [DS Digest algorithm].                    |
+| ds_algo_num    | Non-negative integer               | The numeric value for a [DS Digest algorithm].              |
 | keytag         | Non-negative integer               | A keytag for a DNSKEY record or a keytag used in a DS or RRSIG record.|
 | mailtarget     | Domain name                        | The domain name of the mailserver in an MX RDATA.           |
 | mailtarget_list| List of domain names               |A list of name servers, as specified by "mailtarget", separated by ";".|
@@ -137,5 +140,7 @@ Message names maked with a question mark should not be considered stable.
 
 [Basic.pm]:                                  ../lib/Zonemaster/Engine/Test/Basic.pm
 [DNSSEC algorithm]:                          https://www.iana.org/assignments/dns-sec-alg-numbers/dns-sec-alg-numbers.xhtml
+[DS Digest algorithm]:                       https://www.iana.org/assignments/ds-rr-types/ds-rr-types.xhtml
 [fr.po]:                                     ../share/fr.po
 [sv.po]:                                     ../share/fr.po
+
