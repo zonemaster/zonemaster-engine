@@ -87,7 +87,6 @@ defined *arguments*.
 || DNS packet size| The size in octets of a DNS packets.|
 || DNSKEY key length| The key length for a DNSKEY. The interpretation of this value various quite a bit with the algorithm. Be careful when using it for algorithms that aren't RSA-based.|
 || DNSSEC delegation verification failure reason| A somewhat human-readable reason why the delegation step between the tested zone and its parent is not secure.|
-|| DS digest type| The digest type used in a DS record.|
 | dlabel (?) | Domain name label| A single label from a domain name.|
 | dlength (?) | Domain name label length| The length of a domain name label.|
 || Duration in seconds| An integer number of seconds.|
