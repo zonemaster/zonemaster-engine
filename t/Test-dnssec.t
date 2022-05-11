@@ -74,10 +74,6 @@ my @res;
 my %tag;
 
 $zone = Zonemaster::Engine->zone( 'nic.se' );
-zone_gives_not( 'dnssec01', $zone, [qw{DS01_DS_ALGO_DEPRECATED DS01_DS_ALGO_SHA1_DEPRECATED DS01_DS_ALGO_RESERVED DS01_DS_ALGO_NOT_DS DS01_DS_ALGO_2_MISSING DS01_DIGEST_NOT_SUPPORTED_BY_ZM}] );
-
-my $zone2 = Zonemaster::Engine->zone( 'seb.se' );
-is( zone_gives( 'dnssec01', $zone2, [q{DS01_DS_ALGO_2_MISSING}] ), 22, 'Only one (useful) message' );
 
 my $zone3 = Zonemaster::Engine->zone( 'com' );
 is( zone_gives( 'dnssec03', $zone3, [q{ITERATIONS_OK}] ), 3, 'Only one (useful) message' );
