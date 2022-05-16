@@ -26,13 +26,16 @@ an underscore ("_") followed by a descriptive string of lower case "a-z0-9". The
 suffixed *argument name* is not to be listed in this document, it is just an
 instance of the *argument name* without the specific suffix.
 
-As an example, if two arguments of type "List of IP addresses" are to be used in
-a message, then both *argument names* should be `ns_ip_list` following the list
-of defined arguments below. Let us say that one is connected to the NSEC record
-type and the other to the NSEC3 record type. The two resulting argument names
-could then be `ns_ip_list_nsec` and `ns_ip_list_nsec3`, respectively.
+### Example of multiple instances
 
-Example of a message (*msgid* in this case) where this is in use:
+If two arguments of type "List of IP addresses" are to be used in a message, then
+both *argument names* should be `ns_ip_list` following the list of defined
+arguments below. If the relevant suffixes for those are "nsec" (connected to an
+NSEC record type) and "nsec3" (connected to an NSEC3 record type) then two
+resulting argument names should be `ns_ip_list_nsec` and `ns_ip_list_nsec3`,
+respectively.
+
+The following is a message (*msgid* in this case) where this is in use:
 
 > The zone is inconsistent on NSEC and NSEC3. NSEC is fetched from nameservers
 > with IP addresses "{ns_ip_list_nsec}". NSEC3 is fetched from nameservers with
