@@ -14,11 +14,12 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine->profile->set( q{no_network}, 1 );
 }
 
-Zonemaster::Engine->add_fake_delegation_raw(
+Zonemaster::Engine->add_fake_delegation(
     'f.consistency05.exempelvis.se' => {
         'ns1.f.consistency05.exempelvis.se' => [ '192.0.2.1', '2001:db8::1' ],
         'ns2.f.consistency05.exempelvis.se' => [ '192.0.2.2', '2001:db8::2' ],
-    }
+    },
+    fill_in_empty_ib => 0,
 );
 
 my $zone = Zonemaster::Engine->zone( q{f.consistency05.exempelvis.se} );

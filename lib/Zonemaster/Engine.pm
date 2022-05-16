@@ -104,7 +104,11 @@ sub recurse {
 }
 
 sub add_fake_delegation {
-    my ( $class, $domain, $href ) = @_;
+    my ( $class, $domain, $href, %flags ) = @_;
+    my $fill_in_empty_ib = delete $flags{fill_in_empty_ib} ? 1 : 0;
+    croak 'Unrecognized flags: ' . join( ', ', keys %flags )
+      if %flags;
+    undef %flags;
 
     # Validate arguments
     $domain =~ /[^.]$|^\.$/
@@ -118,40 +122,19 @@ sub add_fake_delegation {
 
     # Check fake delegation
     my $incomplete_delegation;
-    foreach my $name ( keys %{$href} ) {
-        if ( !@{ $href->{$name} } ) {
-            if ( !$class->zone( $domain )->is_in_zone( $name ) ) {
-                my @ips = Zonemaster::LDNS->new->name2addr($name);
-                push @{ $href->{$name} }, @ips;
-            }
+    if ( $fill_in_empty_ib ) {
+        foreach my $name ( keys %{$href} ) {
             if ( !@{ $href->{$name} } ) {
-                $incomplete_delegation = 1;
+                if ( !$class->zone( $domain )->is_in_zone( $name ) ) {
+                    my @ips = Zonemaster::LDNS->new->name2addr($name);
+                    push @{ $href->{$name} }, @ips;
+                }
+                if ( !@{ $href->{$name} } ) {
+                    $incomplete_delegation = 1;
+                }
             }
         }
     }
-
-    $class->add_fake_delegation_raw( $domain, $href );
-
-    if ( $incomplete_delegation ) {
-        return;
-    }
-    return 1;
-}
-
-sub add_fake_delegation_raw {
-    my ( $class, $domain, $href ) = @_;
-
-    # Validate arguments
-    $domain =~ /[^.]$|^\.$/
-      or croak 'Argument $domain must omit the trailing dot, or it must be a single dot';
-    foreach my $name ( keys %{$href} ) {
-        $name =~ /[^.]$|^\.$/
-          or croak 'Each key of argument $href must omit the trailing dot, or it must be a single dot';
-        ref $href->{$name} eq 'ARRAY'
-          or croak 'Each value of argument $href must be an arrayref';
-    }
-
-    # Check fake delegation
     foreach my $name ( keys %{$href} ) {
         if ( not @{ $href->{$name} } ) {
             if ( $class->zone( $domain )->is_in_zone( $name ) ) {
@@ -173,7 +156,10 @@ sub add_fake_delegation_raw {
         $ns->add_fake_delegation( $domain => $href );
     }
 
-    return;
+    if ( $incomplete_delegation ) {
+        return;
+    }
+    return 1;
 }
 
 sub add_fake_ds {
@@ -329,50 +315,7 @@ If called in scalar context, only the AS number.
 
 Returns a list of the loaded test modules. Exactly the same as L<Zonemaster::Engine::Test/modules>.
 
-=item add_fake_delegation($domain, $data)
-
-This method wraps L<add_fake_delegation_raw($domain, $data)> and adds some extra
-functionality.
-
-The arguments are a domain name, and a hashref with delegation information.
-The keys in the hash are nameserver names, and the values are arrayrefs of IP
-addresses for their corresponding nameserver.
-
-Before propagating the given C<$data> to L<add_fake_delegation_raw($domain, $data)>,
-this method updates it filling in some glue.
-Specifically glue addresses are looked up and filled in for any nameserver names
-that are out of bailiwick of the given C<$domain> and that comes with an empty
-list of addresses.
-
-This method returns `1` if all name servers in C<$data> have non-empty lists of
-glue (after they've been filled in).
-Otherwise it returns `undef`.
-
-Example:
-
-    Zonemaster::Engine->add_fake_delegation(
-        'lysator.liu.se' => {
-            'ns1.nic.fr' => [ ],
-            'ns.nic.se'  => [ '212.247.7.228',  '2a00:801:f0:53::53' ],
-            'i.ns.se'    => [ '194.146.106.22', '2001:67c:1010:5::53' ],
-            'ns3.nic.se' => [ '212.247.8.152',  '2a00:801:f0:211::152' ]
-        }
-    );
-
-will return 1.
-
-    Zonemaster::Engine->add_fake_delegation(
-        'lysator.liu.se' => {
-            'ns1.lysator.liu.se' => [ ],
-            'ns.nic.se'  => [ '212.247.7.228',  '2a00:801:f0:53::53' ],
-            'i.ns.se'    => [ '194.146.106.22', '2001:67c:1010:5::53' ],
-            'ns3.nic.se' => [ '212.247.8.152',  '2a00:801:f0:211::152' ]
-        }
-    );
-
-will return 'undef' (missing address for ns1.lysator.liu.se).
-
-=item add_fake_delegation_raw($domain, $data)
+=item add_fake_delegation($domain, $data, %flags)
 
 This method adds some fake delegation information to the system.
 
@@ -384,16 +327,55 @@ For each provided nameserver with an empty list of addresses, either a
 C<FAKE_DELEGATION_NO_IP> or a C<FAKE_DELEGATION_IN_ZONE_NO_IP> message is
 emitted.
 
-Example:
+The only recognized flag is C<fill_in_empty_ib>.
+This flag is boolean and defaults to true.
+If this flag is true, this method updates the given C<$data> by looking up and
+filling in some glue addresses.
+Specifically the glue addresses for any nameserver name that are out of
+bailiwick of the given C<$domain> and that comes with an empty list of
+addresses.
 
-    Zonemaster::Engine->add_fake_delegation_raw(
+Returns `1` if all name servers in C<$data> have non-empty lists of
+glue (after they've been filled in) or if `fill_in_empty_ib` is false.
+Otherwise it returns `undef`.
+
+Examples:
+
+    Zonemaster::Engine->add_fake_delegation(
         'lysator.liu.se' => {
             'ns1.nic.fr' => [ ],
             'ns.nic.se'  => [ '212.247.7.228',  '2a00:801:f0:53::53' ],
             'i.ns.se'    => [ '194.146.106.22', '2001:67c:1010:5::53' ],
             'ns3.nic.se' => [ '212.247.8.152',  '2a00:801:f0:211::152' ]
+        },
+    );
+
+returns 1.
+
+    Zonemaster::Engine->add_fake_delegation(
+        'lysator.liu.se' => {
+            'ns1.lysator.liu.se' => [ ],
+            'ns.nic.se'  => [ '212.247.7.228',  '2a00:801:f0:53::53' ],
+            'i.ns.se'    => [ '194.146.106.22', '2001:67c:1010:5::53' ],
+            'ns3.nic.se' => [ '212.247.8.152',  '2a00:801:f0:211::152' ]
         }
     );
+
+returns C<undef> (signalling that fake delegation with empty glue was added to
+the system).
+
+    Zonemaster::Engine->add_fake_delegation(
+        'lysator.liu.se' => {
+            'ns1.lysator.liu.se' => [ ],
+            'ns.nic.se'  => [ '212.247.7.228',  '2a00:801:f0:53::53' ],
+            'i.ns.se'    => [ '194.146.106.22', '2001:67c:1010:5::53' ],
+            'ns3.nic.se' => [ '212.247.8.152',  '2a00:801:f0:211::152' ]
+        },
+        fill_in_empty_ib => 0,
+    );
+
+returns 1 (does not signal that incomplete glue was added to the system).
+Moreover it does not even attempt to fill in glue for ns1.lysator.liu.se.
 
 =item add_fake_ds($domain, $data)
 
