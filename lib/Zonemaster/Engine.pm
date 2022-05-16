@@ -331,8 +331,8 @@ The only recognized flag is C<fill_in_empty_oob_glue>.
 This flag is boolean and defaults to true.
 If this flag is true, this method updates the given C<$data> by looking up and
 filling in some glue addresses.
-Specifically the glue addresses for any nameserver name that are out of
-bailiwick of the given C<$domain> and that comes with an empty list of
+Specifically the glue addresses for any nameserver name that are
+out-of-bailiwick of the given C<$domain> and that comes with an empty list of
 addresses.
 
 Returns `1` if all name servers in C<$data> have non-empty lists of
