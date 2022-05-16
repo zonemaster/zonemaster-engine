@@ -19,7 +19,7 @@ Zonemaster::Engine->add_fake_delegation(
         'resolver1.exempelvis.se' => ['8.8.8.8'],
         'resolver2.exempelvis.se' => ['9.9.9.9'],
     },
-    fill_in_empty_ib => 0,
+    fill_in_empty_oob_glue => 0,
 );
 
 my $zone = Zonemaster::Engine->zone( q{d.nameserver01.exempelvis.se} );

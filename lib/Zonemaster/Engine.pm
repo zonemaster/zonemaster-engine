@@ -105,7 +105,7 @@ sub recurse {
 
 sub add_fake_delegation {
     my ( $class, $domain, $href, %flags ) = @_;
-    my $fill_in_empty_ib = delete $flags{fill_in_empty_ib} ? 1 : 0;
+    my $fill_in_empty_oob_glue = delete $flags{fill_in_empty_oob_glue} ? 1 : 0;
     croak 'Unrecognized flags: ' . join( ', ', keys %flags )
       if %flags;
     undef %flags;
@@ -122,7 +122,7 @@ sub add_fake_delegation {
 
     # Check fake delegation
     my $incomplete_delegation;
-    if ( $fill_in_empty_ib ) {
+    if ( $fill_in_empty_oob_glue ) {
         foreach my $name ( keys %{$href} ) {
             if ( !@{ $href->{$name} } ) {
                 if ( !$class->zone( $domain )->is_in_zone( $name ) ) {
@@ -327,7 +327,7 @@ For each provided nameserver with an empty list of addresses, either a
 C<FAKE_DELEGATION_NO_IP> or a C<FAKE_DELEGATION_IN_ZONE_NO_IP> message is
 emitted.
 
-The only recognized flag is C<fill_in_empty_ib>.
+The only recognized flag is C<fill_in_empty_oob_glue>.
 This flag is boolean and defaults to true.
 If this flag is true, this method updates the given C<$data> by looking up and
 filling in some glue addresses.
@@ -336,7 +336,7 @@ bailiwick of the given C<$domain> and that comes with an empty list of
 addresses.
 
 Returns `1` if all name servers in C<$data> have non-empty lists of
-glue (after they've been filled in) or if `fill_in_empty_ib` is false.
+glue (after they've been filled in) or if `fill_in_empty_oob_glue` is false.
 Otherwise it returns `undef`.
 
 Examples:
@@ -366,16 +366,15 @@ the system).
 
     Zonemaster::Engine->add_fake_delegation(
         'lysator.liu.se' => {
-            'ns1.lysator.liu.se' => [ ],
+            'ns1.nic.fr' => [ ],
             'ns.nic.se'  => [ '212.247.7.228',  '2a00:801:f0:53::53' ],
             'i.ns.se'    => [ '194.146.106.22', '2001:67c:1010:5::53' ],
             'ns3.nic.se' => [ '212.247.8.152',  '2a00:801:f0:211::152' ]
         },
-        fill_in_empty_ib => 0,
+        fill_in_empty_oob_glue => 0,
     );
 
-returns 1 (does not signal that incomplete glue was added to the system).
-Moreover it does not even attempt to fill in glue for ns1.lysator.liu.se.
+returns 1. It does not even attempt to fill in glue for ns1.nic.fr.
 
 =item add_fake_ds($domain, $data)
 

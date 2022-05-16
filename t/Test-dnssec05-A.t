@@ -19,7 +19,7 @@ Zonemaster::Engine->add_fake_delegation(
         'drip.ip.se' => ['192.0.2.1'],
         'drop.ip.se' => ['192.0.2.2'],
     },
-    fill_in_empty_ib => 0,
+    fill_in_empty_oob_glue => 0,
 );
 
 my $zone = Zonemaster::Engine->zone( q{a.dnssec05.exempelvis.se} );

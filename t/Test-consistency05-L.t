@@ -19,7 +19,7 @@ Zonemaster::Engine->add_fake_delegation(
         'a.nic.no' => [ '46.21.96.58',  '2a02:750:12::53' ],
         'b.nic.no' => [ '212.85.74.18', '2001:470:28:5a0::53' ],
     },
-    fill_in_empty_ib => 0,
+    fill_in_empty_oob_glue => 0,
 );
 
 my $zone = Zonemaster::Engine->zone( 'no' );

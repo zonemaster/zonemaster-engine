@@ -25,7 +25,7 @@ Zonemaster::Engine->add_fake_delegation(
 'abcdefghijklmnopqrstuvwxyz.abcdefghijklmnopqrstuvwxyz.abcdefghijklmnopqrstuvwxyz.abcdefghijklmnopqrstuvwxyz.ns4.exempelvis.se'
           => [],
     },
-    fill_in_empty_ib => 0,
+    fill_in_empty_oob_glue => 0,
 );
 
 my $zone = Zonemaster::Engine->zone( q{c.delegation03.exempelvis.se} );

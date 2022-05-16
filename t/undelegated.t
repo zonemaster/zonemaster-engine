@@ -26,7 +26,7 @@ Zonemaster::Engine->add_fake_delegation(
         'ns-slave-1.ifm.liu.se'    => [ '130.236.160.2',  '2001:6b0:17:f180::1001' ],
         'ns-slave-2.ifm.liu.se'    => [ '130.236.160.3',  '2001:6b0:17:f180::1002' ]
     },
-    fill_in_empty_ib => 0,
+    fill_in_empty_oob_glue => 0,
 );
 
 my $fake_happened = 0;
@@ -61,7 +61,7 @@ Zonemaster::Engine->add_fake_delegation(
         'i.ns.se'    => [ '194.146.106.22', '2001:67c:1010:5::53' ],
         'ns3.nic.se' => [ '212.247.8.152',  '2a00:801:f0:211::152' ]
     },
-    fill_in_empty_ib => 0,
+    fill_in_empty_oob_glue => 0,
 );
 ok( !!( grep { $_->tag eq 'FAKE_DELEGATION_TO_SELF' } @{ Zonemaster::Engine->logger->entries } ),
     'Refused adding circular fake delegation.' );
@@ -73,7 +73,7 @@ Zonemaster::Engine->add_fake_delegation(
         'i.ns.se'        => [ '194.146.106.22', '2001:67c:1010:5::53' ],
         'ns3.nic.se'     => [ '212.247.8.152',  '2a00:801:f0:211::152' ]
     },
-    fill_in_empty_ib => 0,
+    fill_in_empty_oob_glue => 0,
 );
 
 ok( !!( grep { $_->tag eq 'FAKE_DELEGATION_NO_IP' } @{ Zonemaster::Engine->logger->entries } ),
@@ -87,7 +87,7 @@ Zonemaster::Engine->add_fake_delegation(
         'ns3.nic.se' => [ '212.247.8.152',  '2a00:801:f0:211::152' ],
         'ns4.nic.se' => [ ]
     },
-    fill_in_empty_ib => 0,
+    fill_in_empty_oob_glue => 0,
 );
 
 ok( !!( grep { $_->tag eq 'FAKE_DELEGATION_IN_ZONE_NO_IP' } @{ Zonemaster::Engine->logger->entries } ),
