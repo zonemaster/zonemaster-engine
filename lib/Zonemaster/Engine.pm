@@ -116,8 +116,9 @@ sub add_fake_delegation {
     foreach my $name ( keys %{$href} ) {
         $name =~ /[^.]$|^\.$/
           or croak 'Each key of argument $href must omit the trailing dot, or it must be a single dot';
-        ref $href->{ $name } eq 'ARRAY'
-          or croak 'Each value of argument $href must be an arrayref';
+        ( !defined $href->{$name} or ref $href->{$name} eq 'ARRAY' )
+          or croak 'Each value of argument $href must be an arrayref or undef';
+        $href->{$name} //= []; # normalize undef to empty arrayref
     }
 
     # Check fake delegation
@@ -323,6 +324,8 @@ This method adds some fake delegation information to the system.
 The arguments are a domain name, and a hashref with delegation information.
 The keys in the hash are nameserver names, and the values are arrayrefs of IP
 addresses for their corresponding nameserver.
+Alternatively the IP addresses may be specified as an `undef` which is handled
+the same as an empty arrayref.
 
 For each provided nameserver with an empty list of addresses, either a
 C<FAKE_DELEGATION_NO_IP> or a C<FAKE_DELEGATION_IN_ZONE_NO_IP> message is
