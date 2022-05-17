@@ -124,12 +124,12 @@ sub add_fake_delegation {
     my $incomplete_delegation;
     if ( $fill_in_empty_oob_glue ) {
         foreach my $name ( keys %{$href} ) {
-            if ( !@{ $href->{$name} } ) {
-                if ( !$class->zone( $domain )->is_in_zone( $name ) ) {
-                    my @ips = Zonemaster::LDNS->new->name2addr($name);
-                    push @{ $href->{$name} }, @ips;
-                }
-                if ( !@{ $href->{$name} } ) {
+            if (   !@{ $href->{$name} }
+                && !$class->zone( $domain )->is_in_zone( $name ) )
+            {
+                my @ips = Zonemaster::LDNS->new->name2addr( $name );
+                push @{ $href->{$name} }, @ips;
+                if ( !@ips ) {
                     $incomplete_delegation = 1;
                 }
             }
