@@ -18,7 +18,8 @@ Zonemaster::Engine->add_fake_delegation(
     'f.consistency05.exempelvis.se' => {
         'ns1.f.consistency05.exempelvis.se' => [ '192.0.2.1', '2001:db8::1' ],
         'ns2.f.consistency05.exempelvis.se' => [ '192.0.2.2', '2001:db8::2' ],
-    }
+    },
+    fill_in_empty_oob_glue => 0,
 );
 
 my $zone = Zonemaster::Engine->zone( q{f.consistency05.exempelvis.se} );

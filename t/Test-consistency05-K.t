@@ -26,6 +26,7 @@ Zonemaster::Engine->add_fake_delegation(
         'h.fi' => [ '87.239.120.11', '2001:678:a0::aaaa' ],
         'i.fi' => [ '194.0.25.30', '2001:678:20::30' ],
     },
+    fill_in_empty_oob_glue => 0,
 );
 
 my $zone = Zonemaster::Engine->zone( 'fi' );
