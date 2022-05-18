@@ -21,7 +21,8 @@
             "recurse" : false,
             "retrans" : 3,
             "retry" : 2,
-            "usevc" : false
+            "usevc" : false,
+            "timeout": 5
         },
         "source": "os_default"
     },
