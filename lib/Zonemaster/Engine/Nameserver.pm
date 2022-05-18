@@ -429,6 +429,7 @@ sub _query {
     $flags{q{fallback}}  = $href->{q{fallback}}  // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.fallback} );
     $flags{q{recurse}}   = $href->{q{recurse}}   // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.recurse} );
     $flags{q{edns_size}} = $href->{q{edns_size}} // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.edns_size} );
+    $flags{q{timeout}}   = $href->{q{timeout}}   // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.timeout} );
     if ( defined $href->{edns_details} and $href->{edns_details}{udp_size} ) {
         $flags{q{edns_size}} = $href->{edns_details}{udp_size};
     }
@@ -811,13 +812,9 @@ Set the debug flag in the resolver, producing output on STDERR as the query proc
 
 Set the RD flag in the query.
 
-=item udp_timeout
+=item timeout
 
-Set the UDP timeout for the outgoing UDP socket. May or may not be observed by the underlying network stack.
-
-=item tcp_timeout
-
-Set the TCP timeout for the outgoing TCP socket. May or may not be observed by the underlying network stack.
+Set the timeout for the outgoing sockets. May or may not be observed by the underlying network stack.
 
 =item retry
 

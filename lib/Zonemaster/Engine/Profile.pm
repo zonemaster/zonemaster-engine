@@ -49,6 +49,9 @@ my %profile_properties_details = (
     q{resolver.defaults.usevc} => {
         type    => q{Bool}
     },
+    q{resolver.defaults.timeout} => {
+        type    => q{Num}
+    },
     q{resolver.source} => {
         type    => q{Str},
         test    => sub {
@@ -225,7 +228,7 @@ sub _set_value_to_nested_hash {
     my ( $hash_ref, $value, @path ) = @_;
 
     my $key = shift @path;
-    
+
     if (  ! exists $hash_ref->{$key} ) {
         $hash_ref->{$key} = {};
     }
@@ -612,7 +615,7 @@ flag set will be automatically resent over TCP. Default false.
 =head2 resolver.defaults.fallback
 
 A boolean. If true, UDP queries that get responses with the C<TC>
-flag set will be automatically resent over TCP or using EDNS. Default 
+flag set will be automatically resent over TCP or using EDNS. Default
 true.
 
 In ldns-1.7.0 (NLnet Labs), in case of truncated answer when UDP is used,
@@ -663,7 +666,7 @@ Default C<"Cymru">.
 
 An arrayref of domain names when asn_db.style is set to C<"Cymru"> or whois
 servers when asn_db.style is set to C<"RIPE">. Normally only the first item
-in the list will be used, the rest are backups in case the earlier ones don't 
+in the list will be used, the rest are backups in case the earlier ones don't
 work.
 Default C<"asnlookup.zonemaster.net">.
 
@@ -689,10 +692,10 @@ The data under the C<logfilter> key should be structured like this:
              "set"
                 Severity level to set if all conditions match
 
-The hash with conditions should have keys matching the attributes of 
-the log entry that's being filtered (check the translation files to see 
-what they are). The values for the keys should be either a single value 
-that the attribute should be, or an array of values any one of which the 
+The hash with conditions should have keys matching the attributes of
+the log entry that's being filtered (check the translation files to see
+what they are). The values for the keys should be either a single value
+that the attribute should be, or an array of values any one of which the
 attribute should be.
 
 A complete logfilter structure might look like this:
@@ -780,8 +783,8 @@ L<test case specifications|
 https://github.com/zonemaster/zonemaster/tree/master/docs/specifications/tests/ImplementedTestCases.md>.
 Default is an arrayref listing all the test cases.
 
-Specifies which test cases to consider when a test module is asked 
-to run of all of its test cases. 
+Specifies which test cases to consider when a test module is asked
+to run of all of its test cases.
 
 Test cases not included here can still be run individually.
 
