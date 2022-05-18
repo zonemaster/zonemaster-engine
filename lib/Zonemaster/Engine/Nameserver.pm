@@ -195,6 +195,7 @@ sub _build_dns {
     $res->recurse( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.recurse} ) );
     $res->debug( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.debug} ) );
     $res->edns_size( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.edns_size} ) );
+    $res->timeout( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.timeout} ) );
 
     if ( $self->source_address ) {
         $res->source( $self->source_address );
