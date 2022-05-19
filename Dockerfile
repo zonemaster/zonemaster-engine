@@ -53,6 +53,7 @@ RUN apk add --no-cache \
     perl-io-socket-inet6 \
     perl-list-moreutils \
     perl-locale-msgfmt \
+    perl-mailtools \
     perl-module-install \
     perl-moose \
     perl-net-ip \
