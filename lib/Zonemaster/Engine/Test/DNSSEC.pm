@@ -603,7 +603,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     DS01_DS_ALGO_2_MISSING => sub {
         __x    # DNSSEC:DS01_DS_ALGO_2_MISSING
-           'Digest algorithm 2 (SHA-256) is expected but missing for zone {domain}.',
+           'DS record created by digest algorithm 2 (SHA-256) is missing for zone {domain}.',
         @_;
     },
     DS01_DS_ALGO_NOT_DS => sub {
