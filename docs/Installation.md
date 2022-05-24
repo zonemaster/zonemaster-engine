@@ -7,8 +7,7 @@
 * [Prerequisites](#Prerequisites)
 * [Local installation](#Local-installation)
   * [Installation on Rocky Linux]
-  * [Installation on Debian]
-  * [Installation on Ubuntu]
+  * [Installation on Debian and Ubuntu]
   * [Installation on FreeBSD]
   * [Installation on CentOS 7]
 * [Post-installation sanity check](#Post-installation-sanity-check)
@@ -75,10 +74,11 @@ Zonemaster::Engine, see the [declaration of prerequisites].
      sudo cpanm Zonemaster::LDNS Zonemaster::Engine
      ```
 
-### Installation on Debian
+### Installation on Debian and Ubuntu
 
-Using pre-built packages is the preferred method for Debian. If you prefer to
-install from CPAN instead, follow the steps for Ubuntu.
+Using pre-built packages is the preferred method for Debian and Ubuntu.
+
+#### Installation from pre-built packages
 
 1) Upgrade to latest patch level
 
@@ -92,12 +92,12 @@ install from CPAN instead, follow the steps for Ubuntu.
    sudo sh setup.sh
    ```
 
-3) Install Zonemaster CLI
+3) Install Zonemaster Engine
    ```sh
    sudo apt install libzonemaster-engine-perl
    ```
 
-### Installation on Ubuntu
+#### Installation from CPAN
 
 1) Upgrade to latest patch level
 
@@ -232,8 +232,7 @@ The command is expected to take a few seconds and print some results about the d
 [Docker Hub]:                                        https://hub.docker.com/u/zonemaster
 [Docker Image Creation]:                             https://github.com/zonemaster/zonemaster/blob/master/docs/internal-documentation/maintenance/ReleaseProcess-create-docker-image.md
 [EPEL]:                                              https://fedoraproject.org/wiki/EPEL
-[Installation on Debian]:                            #installation-on-debian
-[Installation on Ubuntu]:                            #installation-on-ubuntu
+[Installation on Debian and Ubuntu]:                 #installation-on-debian-and-ubuntu
 [Installation on FreeBSD]:                           #installation-on-freebsd
 [Installation on Rocky Linux]:                       #installation-on-rocky-linux
 [Installation on CentOS 7]:                          #installation-on-centos-7
