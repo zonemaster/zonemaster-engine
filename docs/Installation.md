@@ -171,6 +171,13 @@ install from CPAN instead, follow the steps for Ubuntu.
 
 ### Installation on CentOS 7
 
+> **Please note!** CentOS 7 will only be supported until the release of
+> v2023.1, which is expected to happen during the spring of 2023. Consider
+> [Rocky Linux][Installation on Rocky Linux] for an alternative Red Hat Linux
+> derivative.
+> If you like you could [reach out to let us know to which OS you
+> migrated][Mailing list zonemaster-users].
+
 1) Install the [EPEL] repository:
 
    ```sh
@@ -189,7 +196,7 @@ install from CPAN instead, follow the steps for Ubuntu.
    sudo cpanm Module::Install::XSUtil MooseX::Singleton
    ```
 
-4) Install Zonemaster::LDNS with DNSSEC 15 and 16 support:
+4) Install Zonemaster::LDNS with support for DNSSEC algorithms 15 and 16:
 
      ```sh
      sudo cpanm --configure-args="--openssl-lib=/usr/lib64/openssl11 --openssl-inc=/usr/include/openssl11" Zonemaster::LDNS
@@ -231,6 +238,7 @@ The command is expected to take a few seconds and print some results about the d
 [Installation on Rocky Linux]:                       #installation-on-rocky-linux
 [Installation on CentOS 7]:                          #installation-on-centos-7
 [JSON-RPC API]:                                      https://github.com/zonemaster/zonemaster-backend/blob/master/docs/API.md
+[Mailing list zonemaster-users]:                     https://github.com/zonemaster/zonemaster/blob/master/docs/contact-and-mailing-lists.md#zonemaster-users
 [Main Zonemaster Repository]:                        https://github.com/zonemaster/zonemaster
 [USING]:                                             https://github.com/zonemaster/zonemaster-cli/blob/master/USING.md
 [Zonemaster::Backend installation]:                  https://github.com/zonemaster/zonemaster-backend/blob/master/docs/Installation.md
