@@ -2,9 +2,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-02 00:20+0100\n"
-"PO-Revision-Date: 2020-09-07\n"
-"Last-Translator: vincent.levigneron@afnic.fr\n"
+"POT-Creation-Date: 2022-05-24 06:04+0000\n"
+"PO-Revision-Date: 2022-05-24 08:50+0200\n"
+"Last-Translator: marc.vanderwal@afnic.fr\n"
 "Language-Team: Zonemaster Team\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -754,8 +754,8 @@ msgstr ""
 #. DNSSEC:DS02_NO_MATCHING_DNSKEY_RRSIG
 #, perl-brace-format
 msgid ""
-"The DNSKEY RRset is not signed by the DNSKEY with tag {keytag} that the the "
-"DS record refers to. Fetched from the nameservers with IP \"{ns_ip_list}\"."
+"The DNSKEY RRset is not signed by the DNSKEY with tag {keytag} that the DS "
+"record refers to. Fetched from the nameservers with IP \"{ns_ip_list}\"."
 msgstr ""
 "L'ensemble d'enregistrements de type \"DNSKEY\" n'est pas signé par la clé "
 "correspondant au tag {keytag} à laquelle l'enregistrement de type \"DS\" "
@@ -1326,7 +1326,7 @@ msgstr ""
 #, perl-brace-format
 msgid ""
 "The CDNSKEY record with tag {keytag} has the SEP bit (bit 15) unset. Fetched "
-"rom the nameservers with IP addresses \"{ns_ip_list}\"."
+"from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
 "L'enregistrement de type \"CDNSKEY\" avec le tag {keytag} n'a pas le bit SEP "
 "positionné (bit 15). Information retournée par les serveurs de noms ayant "
@@ -1336,7 +1336,7 @@ msgstr ""
 #, perl-brace-format
 msgid ""
 "The CDNSKEY record with tag {keytag} has the zone bit (bit 7) unset. Fetched "
-"rom the nameservers with IP addresses \"{ns_ip_list}\"."
+"from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
 "L'enregistrement de type \"CDNSKEY\" avec le tag {keytag} n'a pas le bit "
 "ZONE positionné (bit 7). Information retournée par les serveurs de noms "
@@ -1453,71 +1453,75 @@ msgstr ""
 #. DNSSEC:DS01_DIGEST_NOT_SUPPORTED_BY_ZM
 #, perl-brace-format
 msgid ""
-"DS record for zone {domain} with keytag {keytag} was created by digest algorithm {ds_algo_num} "
-"({ds_algo_mnemo}) which cannot be validated by this installation of Zonemaster. "
-"Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+"DS record for zone {domain} with keytag {keytag} was created by digest "
+"algorithm {ds_algo_num} ({ds_algo_mnemo}) which cannot be validated by this "
+"installation of Zonemaster. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
 msgstr ""
-"Un enregistrement de type \"DS\" dans la zone {domain} avec le tag {keytag} a été créé à "
-"partir d'un algorithme de condensé ({ds_algo_num}/{ds_algo_mnemo}) qui ne peut pas être "
-"validé par cette installation de Zonemaster. "
-"Information retournée par les serveurs de noms ayant une des adresses IP "
-"suivantes \"{ns_ip_list}\"."
+"Un enregistrement de type \"DS\" dans la zone {domain} avec le tag {keytag} "
+"a été créé à partir d'un algorithme de condensé ({ds_algo_num}/"
+"{ds_algo_mnemo}) qui ne peut pas être validé par cette installation de "
+"Zonemaster. Information retournée par les serveurs de noms ayant une des "
+"adresses IP suivantes \"{ns_ip_list}\"."
 
 #. DNSSEC:DS01_DS_ALGO_NOT_DS
 #, perl-brace-format
 msgid ""
-"DS record for zone {domain} with keytag {keytag} was created by digest algorithm {ds_algo_num} "
-"({ds_algo_mnemo}) which is not meant for DS. "
-"Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+"DS record for zone {domain} with keytag {keytag} was created by digest "
+"algorithm {ds_algo_num} ({ds_algo_mnemo}) which is not meant for DS. Fetched "
+"from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"Un enregistrement de type \"DS\" dans la zone {domain} avec le tag {keytag} a été créé à "
-"partir d'un algorithme de condensé ({ds_algo_num}/{ds_algo_mnemo}) qui n'est pas destiné à la signature. "
-"Information retournée par les serveurs de noms ayant une des adresses IP "
-"suivantes \"{ns_ip_list}\"."
+"Un enregistrement de type \"DS\" dans la zone {domain} avec le tag {keytag} "
+"a été créé à partir d'un algorithme de condensé ({ds_algo_num}/"
+"{ds_algo_mnemo}) qui n'est pas destiné à la signature. Information retournée "
+"par les serveurs de noms ayant une des adresses IP suivantes "
+"\"{ns_ip_list}\"."
 
 #. DNSSEC:DS01_DS_ALGO_DEPRECATED
 #, perl-brace-format
 msgid ""
-"DS record for zone {domain} with keytag {keytag} was created by digest algorithm {ds_algo_num} "
-"({ds_algo_mnemo}) which is deprecated. "
-"Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+"DS record for zone {domain} with keytag {keytag} was created by digest "
+"algorithm {ds_algo_num} ({ds_algo_mnemo}) which is deprecated. Fetched from "
+"the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"Un enregistrement de type \"DS\" dans la zone {domain} avec le tag {keytag} a été créé à "
-"partir d'un algorithme de condensé obsolète ({ds_algo_num}/{ds_algo_mnemo}). "
-"Information retournée par les serveurs de noms ayant une des adresses IP "
-"suivantes \"{ns_ip_list}\"."
+"Un enregistrement de type \"DS\" dans la zone {domain} avec le tag {keytag} "
+"a été créé à partir d'un algorithme de condensé obsolète ({ds_algo_num}/"
+"{ds_algo_mnemo}). Information retournée par les serveurs de noms ayant une "
+"des adresses IP suivantes \"{ns_ip_list}\"."
 
 #. DNSSEC:DS01_DS_ALGO_2_MISSING
 #, perl-brace-format
 msgid ""
 "Digest algorithm 2 (SHA-256) is expected but missing for zone {domain}."
 msgstr ""
-"L'algorithme de condensé 2 (SHA-256) est attendu mais manquant pour la zone {domain}."
+"L'algorithme de condensé 2 (SHA-256) est attendu mais manquant pour la zone "
+"{domain}."
 
 #. DNSSEC:DS01_DS_ALGO_RESERVED
 #, perl-brace-format
 msgid ""
-"DS record for zone {domain} with keytag {keytag} was created with an unassigned digest algorithm "
-"(algorithm number {ds_algo_num}). "
-"Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+"DS record for zone {domain} with keytag {keytag} was created with an "
+"unassigned digest algorithm (algorithm number {ds_algo_num}). Fetched from "
+"the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"Un enregistrement de type \"DS\" dans la zone {domain} avec le tag {keytag} a été créé à "
-"partir d'un algorithme de condensé non assigné ({ds_algo_num}). "
+"Un enregistrement de type \"DS\" dans la zone {domain} avec le tag {keytag} "
+"a été créé à partir d'un algorithme de condensé non assigné ({ds_algo_num}). "
 "Information retournée par les serveurs de noms ayant une des adresses IP "
 "suivantes \"{ns_ip_list}\"."
 
 #. DNSSEC:DS01_DS_ALGO_SHA1_DEPRECATED
 #, perl-brace-format
 msgid ""
-"DS record for zone {domain} with keytag {keytag} was created by digest algorithm {ds_algo_num} "
-"({ds_algo_mnemo}). While still being widely in use, it is deprecated. "
-"Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+"DS record for zone {domain} with keytag {keytag} was created by digest "
+"algorithm {ds_algo_num} ({ds_algo_mnemo}). While still being widely in use, "
+"it is deprecated. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
 msgstr ""
-"Un enregistrement de type \"DS\" dans la zone {domain} avec le tag {keytag} a été créé à "
-"partir de l'algorithme de condensé {ds_algo_num} ({ds_algo_mnemo}). "
-"Bien que celui-ci soit encore très largement utilisé, il est obsolète. "
-"Information retournée par les serveurs de noms ayant une des adresses IP "
-"suivantes \"{ns_ip_list}\"."
+"Un enregistrement de type \"DS\" dans la zone {domain} avec le tag {keytag} "
+"a été créé à partir de l'algorithme de condensé {ds_algo_num} "
+"({ds_algo_mnemo}). Bien que celui-ci soit encore très largement utilisé, il "
+"est obsolète. Information retournée par les serveurs de noms ayant une des "
+"adresses IP suivantes \"{ns_ip_list}\"."
 
 #. DNSSEC:DS_BUT_NOT_DNSKEY
 #, perl-brace-format
@@ -2167,6 +2171,35 @@ msgstr ""
 msgid "Erroneous response from nameserver {ns}."
 msgstr "Le serveur de noms {ns} n'a pas répondu aux requêtes de type \"NS\"."
 
+#. N10_NO_RESPONSE_EDNS1_QUERY
+#, perl-brace-format
+msgid ""
+"No response to an EDNS version 1 query. Fetched from the nameservers with IP "
+"addresses {ns_ip_list}"
+msgstr ""
+"Pas de réponse à une requête EDNS version 1. Information retournée par les "
+"serveurs de noms ayant une des adresses IP suivantes \"{ns_ip_list}\"."
+
+#. N10_UNEXPECTED_RCODE
+#, perl-brace-format
+msgid ""
+"Erroneous RCODE (\"{rcode}\") in response to an EDNS version 1 query. "
+"Fetched from the nameservers with IP addresses {ns_ip_list}"
+msgstr ""
+"RCODE erroné (\"{rcode}\") reçu en réponse à une requête EDNS version 1. "
+"Information retournée par les serveurs de noms ayant une des adresses IP "
+"suivantes \"{ns_ip_list}\"."
+
+#. N10_EDNS_RESPONSE_ERROR
+#, perl-brace-format
+msgid ""
+"Expected RCODE but received erroneous response to an EDNS version 1 query. "
+"Fetched from the nameservers with IP addresses {ns_ip_list}"
+msgstr ""
+"RCODE attendu, mais réponse erronée reçue à une requête EDNS version 1. "
+"Information retournée par les serveurs de noms ayant une des adresses IP "
+"suivantes \"{ns_ip_list}\"."
+
 #. NAMESERVER:QNAME_CASE_INSENSITIVE
 #, perl-brace-format
 msgid ""
@@ -2193,11 +2226,6 @@ msgstr ""
 #, perl-brace-format
 msgid "Nameserver {ns} responds with an unknown ENDS OPTION-CODE."
 msgstr "Le serveur de noms {ns} répond avec un code d'option EDNS inconnu."
-
-#. NAMESERVER:UNSUPPORTED_EDNS_VER
-#, perl-brace-format
-msgid "Nameserver {ns} accepts an unsupported EDNS version."
-msgstr "Le serveur de noms {ns} accepte une version non supportée de EDNS."
 
 #. NAMESERVER:UPWARD_REFERRAL
 #, perl-brace-format
