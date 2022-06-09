@@ -7,11 +7,14 @@ use warnings;
 
 use version; our $VERSION = version->declare("v1.1.8");
 
+use Carp qw( confess );
 use Time::HiRes qw[time];
 use JSON::PP;
-use Moose;
-use Zonemaster::Engine;
+use Class::Accessor;
+
 use Zonemaster::Engine::Profile;
+
+use base qw(Class::Accessor);
 
 use overload '""' => \&string;
 
@@ -29,17 +32,70 @@ our %numeric = (
 our $start_time = time();
 
 my $json = JSON::PP->new->allow_blessed->convert_blessed->canonical;
+my $test_levels_config;
 
-has 'module'    => ( is => 'ro', isa => 'Str',                lazy_build => 1 );
-has 'testcase'  => ( is => 'ro', isa => 'Str',                lazy_build => 1 );
-has 'tag'       => ( is => 'ro', isa => 'Str',                required   => 1 );
-has 'args'      => ( is => 'ro', isa => 'Maybe[HashRef]',     required   => 0 );
-has 'timestamp' => ( is => 'ro', isa => 'Num',                default    => sub { my $time = time() - $start_time; $time =~ s/,/\./; $time; } );
-has 'trace'     => ( is => 'ro', isa => 'ArrayRef[ArrayRef]', builder    => '_build_trace' );
-has 'level'     => ( is => 'ro', isa => 'Str',                lazy_build => 1, writer => '_set_level' );
+__PACKAGE__->mk_ro_accessors(qw(tag args timestamp trace));
+
+
+sub new {
+    my ( $proto, $attrs ) = @_;
+    # tag required, args optional, other built
+
+    confess "Attribute \(tag\) is required"
+      if !exists $attrs->{tag};
+
+    confess "Argument must be a HASHREF: args"
+      if exists $attrs->{args}
+      && ref $attrs->{args} ne 'HASH';
+
+    my $time = time() - $start_time;
+    $time =~ s/,/\./;
+    $attrs->{timestamp} = $time;
+    $attrs->{trace} = _build_trace();
+
+    # lazy attributes
+    $attrs->{_module} = delete $attrs->{module} if exists $attrs->{module};
+    $attrs->{_level} = delete $attrs->{level} if exists $attrs->{level};
+    $attrs->{_testcase} = delete $attrs->{testcase} if exists $attrs->{testcase};
+
+    my $class = ref $proto || $proto;
+    return Class::Accessor::new( $class, $attrs );
+}
+
+sub module {
+    my $self = shift;
+
+    # Lazy default value
+    if ( !exists $self->{_module} ) {
+        $self->{_module} = $self->_build_module();
+    }
+
+    return $self->{_module}
+}
+
+sub level {
+    my $self = shift;
+
+    # Lazy default value
+    if ( !exists $self->{_level} ) {
+        $self->{_level} = $self->_build_level();
+    }
+
+    return $self->{_level}
+}
+
+sub testcase {
+    my $self = shift;
+
+    # Lazy default value
+    if ( !exists $self->{_testcase} ) {
+        $self->{_testcase} = $self->_build_testcase();
+    }
+
+    return $self->{_testcase}
+}
 
 sub _build_trace {
-    my ( $self ) = @_;
     my @trace;
 
     my $i = 0;
@@ -85,8 +141,12 @@ sub _build_level {
     my ( $self ) = @_;
     my $string;
 
-    if ( Zonemaster::Engine::Profile->effective->get( q{test_levels} )->{ $self->module }{ $self->tag } ) {
-        $string = uc Zonemaster::Engine::Profile->effective->get( q{test_levels} )->{ $self->module }{ $self->tag };
+    if ( !defined $test_levels_config ) {
+        $test_levels_config = Zonemaster::Engine::Profile->effective->get( q{test_levels} );
+    }
+
+    if ( exists $test_levels_config->{ $self->module }{ $self->tag } ) {
+        $string = uc $test_levels_config->{ $self->module }{ $self->tag };
     }
     else {
         $string = 'DEBUG';
@@ -99,6 +159,13 @@ sub _build_level {
         die "Unknown level string: $string";
     }
 }
+
+sub _set_level {
+    my ( $self, $level ) = @_;
+
+    $self->{_level} = $level
+}
+
 
 sub numeric_level {
     my ( $self ) = @_;
@@ -157,8 +224,10 @@ sub start_time_now {
     return;
 }
 
-no Moose;
-__PACKAGE__->meta->make_immutable;
+sub reset_config {
+    undef $test_levels_config;
+    return;
+}
 
 1;
 
@@ -176,6 +245,10 @@ There should never be a need to create a log entry object in isolation. They sho
 
 =over
 
+=item new
+
+Construct a new object.
+
 =item levels
 
 Returns a hash where the keys are log levels as strings and the corresponding values their numeric value.
@@ -183,6 +256,10 @@ Returns a hash where the keys are log levels as strings and the corresponding va
 =item start_time_now()
 
 Set the logger's start time to the current time.
+
+=item reset_config()
+
+Clear the test level cached configuration.
 
 =back
 
@@ -211,11 +288,15 @@ The argument hash reference that was provided when the entry was created.
 =item timestamp
 
 The time after the current program started running when this entry was created. This is a floating-point value with the precision provided by
-L<Time::HiRes>. 
+L<Time::HiRes>.
 
 =item trace
 
 A partial stack trace for the call that created the entry. Used to create the module tag. Almost certainly not useful for anything else.
+
+=item level
+
+The log level associated to this log entry.
 
 =back
 

@@ -18,7 +18,7 @@ jobs:
       matrix:
         compatibility:
           - develop
-          - latest
+          #- latest
         perl:
           - '5.32'
           - '5.26'
@@ -47,7 +47,7 @@ jobs:
             automake \
             build-essential \
             gettext \
-            libidn11-dev \
+            libidn2-dev \
             libssl-dev \
             libtool \
             m4 \

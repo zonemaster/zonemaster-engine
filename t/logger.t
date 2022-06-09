@@ -69,6 +69,7 @@ isa_ok( $err, 'Zonemaster::Engine::Exception' );
 is( "$err", 'canary' );
 $log->clear_callback;
 
+Zonemaster::Engine::Logger->reset_config();
 $json = read_file( "t/profile.json" );
 $profile_test  = Zonemaster::Engine::Profile->from_json( $json );
 ok( Zonemaster::Engine::Profile->effective->merge( $profile_test ), 'profile loaded' );
@@ -98,6 +99,7 @@ qr[[{"args":{"exception":"in callback at t/logger.t line 47, <DATA> line 1.\n"},
     'JSON looks OK'
 );
 
+Zonemaster::Engine::Logger->reset_config();
 Zonemaster::Engine::Profile->effective->set( q{test_levels}, {"BASIC" => {"NS_FAILED" => "GURKSALLAD" }}); #->{BASIC}{NS_FAILED} = 'GURKSALLAD';
 my $fail = Zonemaster::Engine::Logger::Entry->new( { module => 'BASIC', tag => 'NS_FAILED' } );
 like( exception { $fail->level }, qr/Unknown level string: GURKSALLAD/, 'Dies on unknown level string' );

@@ -16,9 +16,10 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
 
 Zonemaster::Engine->add_fake_delegation(
     'b.consistency06.exempelvis.se' => {
-        'drip.ip.se' => [],
-        'drop.ip.se' => [],
-    }
+        'drip.ip.se' => ['192.0.2.1'],
+        'drop.ip.se' => ['192.0.2.2'],
+    },
+    fill_in_empty_oob_glue => 0,
 );
 
 my $zone = Zonemaster::Engine->zone( q{b.consistency06.exempelvis.se} );

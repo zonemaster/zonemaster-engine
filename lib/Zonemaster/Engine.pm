@@ -1,6 +1,6 @@
 package Zonemaster::Engine;
 
-use version; our $VERSION = version->declare("v4.4.0");
+use version; our $VERSION = version->declare("v4.5.0");
 
 use 5.014002;
 
@@ -104,7 +104,11 @@ sub recurse {
 }
 
 sub add_fake_delegation {
-    my ( $class, $domain, $href ) = @_;
+    my ( $class, $domain, $href, %flags ) = @_;
+    my $fill_in_empty_oob_glue = delete $flags{fill_in_empty_oob_glue} ? 1 : 0;
+    croak 'Unrecognized flags: ' . join( ', ', keys %flags )
+      if %flags;
+    undef %flags;
 
     # Validate arguments
     $domain =~ /[^.]$|^\.$/
@@ -112,35 +116,42 @@ sub add_fake_delegation {
     foreach my $name ( keys %{$href} ) {
         $name =~ /[^.]$|^\.$/
           or croak 'Each key of argument $href must omit the trailing dot, or it must be a single dot';
+        ( !defined $href->{$name} or ref $href->{$name} eq 'ARRAY' )
+          or croak 'Each value of argument $href must be an arrayref or undef';
+        $href->{$name} //= []; # normalize undef to empty arrayref
     }
 
     # Check fake delegation
     my $incomplete_delegation;
-    foreach my $name ( keys %{$href} ) {
-        if ( not defined $href->{$name} or not scalar @{ $href->{$name} } ) {
-            if ( $class->zone( $domain )->is_in_zone( $name ) ) {
-                Zonemaster::Engine->logger->add(
-                    FAKE_DELEGATION_IN_ZONE_NO_IP => { domain => $domain , nsname => $name }
-                );
-                push @{ $href->{$name} }, ();
-                $incomplete_delegation = 1;
-            }
-            else {
-                my @ips = Zonemaster::LDNS->new->name2addr($name);
-                if ( @ips ) {
-                    push @{ $href->{$name} }, @ips;
-                }
-                else {
-                    Zonemaster::Engine->logger->add(
-                        FAKE_DELEGATION_NO_IP => { domain => $domain , nsname => $name  }
-                    );
-                    push @{ $href->{$name} }, ();
+    if ( $fill_in_empty_oob_glue ) {
+        foreach my $name ( keys %{$href} ) {
+            if (   !@{ $href->{$name} }
+                && !$class->zone( $domain )->is_in_zone( $name ) )
+            {
+                my @ips = Zonemaster::LDNS->new->name2addr( $name );
+                push @{ $href->{$name} }, @ips;
+                if ( !@ips ) {
                     $incomplete_delegation = 1;
                 }
             }
         }
     }
-    $recursor->add_fake_addresses($domain, $href);
+    foreach my $name ( keys %{$href} ) {
+        if ( not @{ $href->{$name} } ) {
+            if ( $class->zone( $domain )->is_in_zone( $name ) ) {
+                Zonemaster::Engine->logger->add(    #
+                    FAKE_DELEGATION_IN_ZONE_NO_IP => { domain => $domain, nsname => $name }
+                );
+            }
+            else {
+                Zonemaster::Engine->logger->add(    #
+                    FAKE_DELEGATION_NO_IP => { domain => $domain, nsname => $name }
+                );
+            }
+        }
+    }
+
+    $recursor->add_fake_addresses( $domain, $href );
     my $parent = $class->zone( $recursor->parent( $domain ) );
     foreach my $ns ( @{ $parent->ns } ) {
         $ns->add_fake_delegation( $domain => $href );
@@ -171,7 +182,7 @@ sub can_continue {
     my ( $class ) = @_;
 
     return 1;
-    
+
 }
 
 sub save_cache {
@@ -203,6 +214,7 @@ sub start_time_now {
 
 sub reset {
     Zonemaster::Engine::Logger->start_time_now();
+    Zonemaster::Engine::Logger->reset_config();
     Zonemaster::Engine::Nameserver->empty_cache();
     $logger->clear_history() if $logger;
     Zonemaster::Engine::Recursor->clear_cache();
@@ -305,15 +317,33 @@ If called in scalar context, only the AS number.
 
 Returns a list of the loaded test modules. Exactly the same as L<Zonemaster::Engine::Test/modules>.
 
-=item add_fake_delegation($domain, $data)
+=item add_fake_delegation($domain, $data, %flags)
 
-This method adds some fake delegation information to the system. The arguments are a domain name, and a reference to a hash with delegation
-information. The keys in the hash must be nameserver names, and the values references to lists of IP addresses (which can be left empty) for
-the corresponding nameserver. If IP addresses are not provided for nameservers, the engine will perform queries to find them, except for
-in-bailiwick nameservers. All IP addresses found/provided are then used to initialize %Zonemaster::Engine::Recursor::fake_addresses_cache
-for later usage. If all servers can be associated to IP addresses, add_fake_delegation method returns 1, 'undef' otherwise.
+This method adds some fake delegation information to the system.
 
-Example:
+The arguments are a domain name, and a hashref with delegation information.
+The keys in the hash are nameserver names, and the values are arrayrefs of IP
+addresses for their corresponding nameserver.
+Alternatively the IP addresses may be specified as an `undef` which is handled
+the same as an empty arrayref.
+
+For each provided nameserver with an empty list of addresses, either a
+C<FAKE_DELEGATION_NO_IP> or a C<FAKE_DELEGATION_IN_ZONE_NO_IP> message is
+emitted.
+
+The only recognized flag is C<fill_in_empty_oob_glue>.
+This flag is boolean and defaults to true.
+If this flag is true, this method updates the given C<$data> by looking up and
+filling in some glue addresses.
+Specifically the glue addresses for any nameserver name that are
+out-of-bailiwick of the given C<$domain> and that comes with an empty list of
+addresses.
+
+Returns `1` if all name servers in C<$data> have non-empty lists of
+glue (after they've been filled in) or if `fill_in_empty_oob_glue` is false.
+Otherwise it returns `undef`.
+
+Examples:
 
     Zonemaster::Engine->add_fake_delegation(
         'lysator.liu.se' => {
@@ -321,10 +351,10 @@ Example:
             'ns.nic.se'  => [ '212.247.7.228',  '2a00:801:f0:53::53' ],
             'i.ns.se'    => [ '194.146.106.22', '2001:67c:1010:5::53' ],
             'ns3.nic.se' => [ '212.247.8.152',  '2a00:801:f0:211::152' ]
-        }
+        },
     );
 
-will return 1.
+returns 1.
 
     Zonemaster::Engine->add_fake_delegation(
         'lysator.liu.se' => {
@@ -335,7 +365,20 @@ will return 1.
         }
     );
 
-will return 'undef' (missing address for ns1.lysator.liu.se).
+returns C<undef> (signalling that fake delegation with empty glue was added to
+the system).
+
+    Zonemaster::Engine->add_fake_delegation(
+        'lysator.liu.se' => {
+            'ns1.nic.fr' => [ ],
+            'ns.nic.se'  => [ '212.247.7.228',  '2a00:801:f0:53::53' ],
+            'i.ns.se'    => [ '194.146.106.22', '2001:67c:1010:5::53' ],
+            'ns3.nic.se' => [ '212.247.8.152',  '2a00:801:f0:211::152' ]
+        },
+        fill_in_empty_oob_glue => 0,
+    );
+
+returns 1. It does not even attempt to fill in glue for ns1.nic.fr.
 
 =item add_fake_ds($domain, $data)
 

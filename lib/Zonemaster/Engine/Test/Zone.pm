@@ -376,14 +376,16 @@ sub zone02 {
 
     my $p = _retrieve_record_from_zone( $zone, $zone->name, q{SOA} );
 
+    my $soa_refresh_minimum_value = Zonemaster::Engine::Profile->effective->get( q{test_cases_vars.zone02.SOA_REFRESH_MINIMUM_VALUE} );
+
     if ( $p and my ( $soa ) = $p->get_records( q{SOA}, q{answer} ) ) {
         my $soa_refresh = $soa->refresh;
-        if ( $soa_refresh < $SOA_REFRESH_MINIMUM_VALUE ) {
+        if ( $soa_refresh < $soa_refresh_minimum_value ) {
             push @results,
               info(
                 REFRESH_MINIMUM_VALUE_LOWER => {
                     refresh          => $soa_refresh,
-                    required_refresh => $SOA_REFRESH_MINIMUM_VALUE,
+                    required_refresh => $soa_refresh_minimum_value,
                 }
               );
         }
@@ -392,7 +394,7 @@ sub zone02 {
               info(
                 REFRESH_MINIMUM_VALUE_OK => {
                     refresh          => $soa_refresh,
-                    required_refresh => $SOA_REFRESH_MINIMUM_VALUE,
+                    required_refresh => $soa_refresh_minimum_value,
                 }
               );
         }
@@ -445,14 +447,16 @@ sub zone04 {
 
     my $p = _retrieve_record_from_zone( $zone, $zone->name, q{SOA} );
 
+    my $soa_retry_minimum_value = Zonemaster::Engine::Profile->effective->get( q{test_cases_vars.zone04.SOA_RETRY_MINIMUM_VALUE} );
+
     if ( $p and my ( $soa ) = $p->get_records( q{SOA}, q{answer} ) ) {
         my $soa_retry = $soa->retry;
-        if ( $soa_retry < $SOA_RETRY_MINIMUM_VALUE ) {
+        if ( $soa_retry < $soa_retry_minimum_value ) {
             push @results,
               info(
                 RETRY_MINIMUM_VALUE_LOWER => {
                     retry          => $soa_retry,
-                    required_retry => $SOA_RETRY_MINIMUM_VALUE,
+                    required_retry => $soa_retry_minimum_value,
                 }
               );
         }
@@ -461,7 +465,7 @@ sub zone04 {
               info(
                 RETRY_MINIMUM_VALUE_OK => {
                     retry          => $soa_retry,
-                    required_retry => $SOA_RETRY_MINIMUM_VALUE,
+                    required_retry => $soa_retry_minimum_value,
                 }
               );
         }
@@ -479,15 +483,17 @@ sub zone05 {
 
     my $p = _retrieve_record_from_zone( $zone, $zone->name, q{SOA} );
 
+    my $soa_expire_minimum_value = Zonemaster::Engine::Profile->effective->get( q{test_cases_vars.zone05.SOA_EXPIRE_MINIMUM_VALUE} );
+
     if ( $p and my ( $soa ) = $p->get_records( q{SOA}, q{answer} ) ) {
         my $soa_expire  = $soa->expire;
         my $soa_refresh = $soa->refresh;
-        if ( $soa_expire < $SOA_EXPIRE_MINIMUM_VALUE ) {
+        if ( $soa_expire < $soa_expire_minimum_value ) {
             push @results,
               info(
                 EXPIRE_MINIMUM_VALUE_LOWER => {
                     expire          => $soa_expire,
-                    required_expire => $SOA_EXPIRE_MINIMUM_VALUE,
+                    required_expire => $soa_expire_minimum_value,
                 }
               );
         }
@@ -506,7 +512,7 @@ sub zone05 {
                 EXPIRE_MINIMUM_VALUE_OK => {
                     expire          => $soa_expire,
                     refresh         => $soa_refresh,
-                    required_expire => $SOA_EXPIRE_MINIMUM_VALUE,
+                    required_expire => $soa_expire_minimum_value,
                 }
               );
         }
@@ -524,23 +530,26 @@ sub zone06 {
 
     my $p = _retrieve_record_from_zone( $zone, $zone->name, q{SOA} );
 
+    my $soa_default_ttl_maximum_value = Zonemaster::Engine::Profile->effective->get( q{test_cases_vars.zone06.SOA_DEFAULT_TTL_MAXIMUM_VALUE} );
+    my $soa_default_ttl_minimum_value = Zonemaster::Engine::Profile->effective->get( q{test_cases_vars.zone06.SOA_DEFAULT_TTL_MINIMUM_VALUE} );
+
     if ( $p and my ( $soa ) = $p->get_records( q{SOA}, q{answer} ) ) {
         my $soa_minimum = $soa->minimum;
-        if ( $soa_minimum > $SOA_DEFAULT_TTL_MAXIMUM_VALUE ) {
+        if ( $soa_minimum > $soa_default_ttl_maximum_value ) {
             push @results,
               info(
                 SOA_DEFAULT_TTL_MAXIMUM_VALUE_HIGHER => {
                     minimum         => $soa_minimum,
-                    highest_minimum => $SOA_DEFAULT_TTL_MAXIMUM_VALUE,
+                    highest_minimum => $soa_default_ttl_maximum_value,
                 }
               );
         }
-        elsif ( $soa_minimum < $SOA_DEFAULT_TTL_MINIMUM_VALUE ) {
+        elsif ( $soa_minimum < $soa_default_ttl_minimum_value ) {
             push @results,
               info(
                 SOA_DEFAULT_TTL_MAXIMUM_VALUE_LOWER => {
                     minimum        => $soa_minimum,
-                    lowest_minimum => $SOA_DEFAULT_TTL_MINIMUM_VALUE,
+                    lowest_minimum => $soa_default_ttl_minimum_value,
                 }
               );
         }
@@ -549,8 +558,8 @@ sub zone06 {
               info(
                 SOA_DEFAULT_TTL_MAXIMUM_VALUE_OK => {
                     minimum         => $soa_minimum,
-                    highest_minimum => $SOA_DEFAULT_TTL_MAXIMUM_VALUE,
-                    lowest_minimum  => $SOA_DEFAULT_TTL_MINIMUM_VALUE,
+                    highest_minimum => $soa_default_ttl_maximum_value,
+                    lowest_minimum  => $soa_default_ttl_minimum_value,
                 }
               );
         }
