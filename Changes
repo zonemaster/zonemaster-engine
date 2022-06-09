@@ -1,5 +1,29 @@
 Release history for Zonemaster component Zonemaster-Engine
 
+v4.5.0 2022-06-09 (public release version)
+
+[Features]
+ - Use pre-built packages for ubuntu (#1079)
+ - Updates implementation of test case Nameserver10 (#1061, #1060)
+ - Updates implementation of test case DNSSEC02 (#1051, #1049, #1036)
+ - Updates implementation of test case DNSSEC01 (#1059, #1057)
+ - Makes query timeout configurable in profile (#1069)
+ - Makes SOA values configurable in profile (#1032, #945)
+
+ [Fixes]
+ - Updates installation procedure (#1084, #1080)
+ - Updates translation (#1073, #1075, #1081, #1077, #1082, #1038)
+ - Updates to Docker image (#1066)
+ - Makes installation test true network independent (#1045, #888, #1068)
+ - Updates message argument document (#1064)
+ - Improves caching of test results (#1044, #1043, #1042)
+ - Updates to use libidn2 instead of libidn (#1056 )
+ - Updates messages (#1010, #1047)
+ - Fixes test case DNSSEC10 case when DNSKEY is empty (#1037, #1036)
+ - Fixes test case order in profile.json (#1027)
+ - Cleans up dependencies and imports (#1041, #1054)
+
+
 v4.4.0 2021-12-20 (public fix version)
  [Features]
  - Adds translation to Spanish language (#994)
@@ -228,7 +252,7 @@ v3.1.0 2020-04-30
  - Cleaned up obsolete whitelist mechanism (#649, #597)
  - Fixed French translation (#644, #599, #551, #607)
  - Fixed DNSSEC14 missing messages (#645)
- - Remove non-determinism in file generation (#639, #638) 
+ - Remove non-determinism in file generation (#639, #638)
  - Update of en.po (#637, #609)
  - Updated and corrected sv.po (#623, #605, #598)
  - Fixed missing msgid in Zone.pm (#613, #614)
@@ -254,7 +278,7 @@ v3.0.3 2019-05-22 (public release version)
  [Fixes]
  - Added instructions for preparation of packages for FreeBSD (#544)
  - Removed example entry from default profile (#536)
- - Corrected incorrect consistency verification for IP addresses between 
+ - Corrected incorrect consistency verification for IP addresses between
    the child and the parent (#532, #535)
  - Corrected message (#523, #533)
  - Corrected truncated msgid (#528)
@@ -320,9 +344,9 @@ v3.0.0 2019-01-25 (pre-release version)
      - Deleted iana-profile.json #465
      - Updated profile.json files; removed unused messages and added
        missing messages #464
-     - Update resolver.source default value to match 
+     - Update resolver.source default value to match
        documentation #473
-     - Align tests and impl for boolean properties with 
+     - Align tests and impl for boolean properties with
        documentation #474
      - Various #478
    - Added support to test EDNS features
@@ -330,7 +354,7 @@ v3.0.0 2019-01-25 (pre-release version)
        ..11, ..12 and ..13; ..14 excluded) #460
      - Test against develop version of Zonemaster LDNS with EDNS
        support #462
-     - Various #481, #485 
+     - Various #481, #485
  - Fixes
    - Uppdated formatting of msgid tables #402
    - Fixed broken tests #412
@@ -339,33 +363,33 @@ v3.0.0 2019-01-25 (pre-release version)
    - Updated manifest #422
    - Updated travis conf to match supported perl versions (#426, #463)
    - Removed List::Util::all (only supported in Perl 5.20 and higher) #432
-   - Added missing message in Delegation.pm #415 
+   - Added missing message in Delegation.pm #415
    - Added missing message in DNSSEC.pm #416
    - Added missing message in Nameserver.pm #417
    - Removed unused message and added used message in Basic.pm #413
    - Various #487
-   
+
 
 v2.0.7 2018-06-25
 
 - Fixed
-  - Update Installation.md. Add installation of Test::More from 
-    CPAN to get the newest version. (#371) 
+  - Update Installation.md. Add installation of Test::More from
+    CPAN to get the newest version. (#371)
   - Minor updates (#374, #386, #375, #377)
   - Restore unit tests (#378)
   - Better report when Cymru reports no ASN (#272, #385)
   - More checks in get_iana_address_spaces_infos.pl (#300, #387)
   - Fixed bug in Nameserver.pm (#384, #389)
   - Update install instructions for debian and centos (#393)
-  - Updated installation instructions for FreeBSD. Now using 
-    cpanm instead of cpan. (#403) 
+  - Updated installation instructions for FreeBSD. Now using
+    cpanm instead of cpan. (#403)
 
 
 v2.0.6 2018-01-12
 
 - Natural Language support
   - Added support for Danish language (#351, #354)
-  
+
 - Patches
   - Fixed installation instruction (#342)
   - Update distribution description (#339)
@@ -455,18 +479,18 @@ v1.0.14 2016-06-15
 
  - Make it possible to run tests without network (pull request #166)
  - Error in status message (Zone category) issue #175
- - Fixed Swedish translation, issue #176 
- - no public symbols defined for Zonemaster::NSArray issue #446 
+ - Fixed Swedish translation, issue #176
+ - no public symbols defined for Zonemaster::NSArray issue #446
  - uninitialized value $tld (issue #179)
- - Would be nice to add a count of name servers #453  
- - Partly resolved "JSON/JSON::XS usage and requirement", see issue #165 
- - nameserver03 test should not perform network requests, issue #168 
+ - Would be nice to add a count of name servers #453
+ - Partly resolved "JSON/JSON::XS usage and requirement", see issue #165
+ - nameserver03 test should not perform network requests, issue #168
  - Locale files are not generated nor installed #173
- - ASN test should only look at authoritative nameservers at the child, issue #441 
+ - ASN test should only look at authoritative nameservers at the child, issue #441
  - Modify the "Notice" information when DNSSEC not signed, issue #193
  - Implement updated test case dnssec02, issue #187
  - Log issues (pull request #203)
- - Delegation::ARE_AUTHORITATIVE display too many name servers + translation, issue #186 
+ - Delegation::ARE_AUTHORITATIVE display too many name servers + translation, issue #186
  - False positive on open recursive name server, issue #171
 
 v1.0.13 2016-01-27
