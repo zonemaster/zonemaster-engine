@@ -7,12 +7,11 @@ use warnings;
 
 use version; our $VERSION = version->declare( "v1.0.27" );
 
-use Zonemaster::Engine;
-
 use List::MoreUtils qw[uniq none];
 use Locale::TextDomain qw[Zonemaster-Engine];
 use Readonly;
 use JSON::PP;
+
 use Zonemaster::Engine::Profile;
 use Zonemaster::Engine::Constants qw[:ip];
 use Zonemaster::Engine::Test::Address;
@@ -178,10 +177,9 @@ sub metadata {
         ],
         nameserver10 => [
             qw(
-              NO_RESPONSE
-              NO_EDNS_SUPPORT
-              UNSUPPORTED_EDNS_VER
-              NS_ERROR
+              N10_NO_RESPONSE_EDNS1_QUERY
+              N10_UNEXPECTED_RCODE
+              N10_EDNS_RESPONSE_ERROR
               TEST_CASE_END
               TEST_CASE_START
               )
@@ -353,6 +351,18 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # NAMESERVER:NS_ERROR
           'Erroneous response from nameserver {ns}.', @_;
     },
+    N10_NO_RESPONSE_EDNS1_QUERY => sub {
+        __x    # N10_NO_RESPONSE_EDNS1_QUERY
+          'No response to an EDNS version 1 query. Fetched from the nameservers with IP addresses {ns_ip_list}', @_;
+    },
+    N10_UNEXPECTED_RCODE => sub {
+        __x    # N10_UNEXPECTED_RCODE
+          'Erroneous RCODE ("{rcode}") in response to an EDNS version 1 query. Fetched from the nameservers with IP addresses {ns_ip_list}', @_;
+    },
+    N10_EDNS_RESPONSE_ERROR => sub {
+        __x    # N10_EDNS_RESPONSE_ERROR
+          'Expected RCODE but received erroneous response to an EDNS version 1 query. Fetched from the nameservers with IP addresses {ns_ip_list}', @_;
+    },
     QNAME_CASE_INSENSITIVE => sub {
         __x    # NAMESERVER:QNAME_CASE_INSENSITIVE
           'Nameserver {ns} does not preserve original case of the queried name ({domain}).', @_;
@@ -376,10 +386,6 @@ Readonly my %TAG_DESCRIPTIONS => (
     UNKNOWN_OPTION_CODE => sub {
         __x    # NAMESERVER:UNKNOWN_OPTION_CODE
           'Nameserver {ns} responds with an unknown ENDS OPTION-CODE.', @_;
-    },
-    UNSUPPORTED_EDNS_VER => sub {
-        __x    # NAMESERVER:UNSUPPORTED_EDNS_VER
-          'Nameserver {ns} accepts an unsupported EDNS version.', @_;
     },
     UPWARD_REFERRAL => sub {
         __x    # NAMESERVER:UPWARD_REFERRAL
@@ -1004,6 +1010,10 @@ sub nameserver10 {
     my ( $class, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
+    my @no_response_edns1;
+    my %unexpected_rcode;
+    my @edns_response_error;
+
     my @nss;
     {
         my %nss = map { $_->string => $_ }
@@ -1020,30 +1030,55 @@ sub nameserver10 {
     }
 
     for my $ns ( @nss ) {
-        my $p = $ns->query( $zone->name, q{SOA}, { edns_details => { version => 1 } } );
-        if ( $p ) {
-            if ( $p->rcode eq q{FORMERR} and not $p->edns_rcode ) {
-                push @results, info( NO_EDNS_SUPPORT => { ns => $ns->string } );
-            }
-            elsif ( $p->rcode eq q{NOERROR} and not $p->edns_rcode ) {
-                push @results, info( UNSUPPORTED_EDNS_VER => { ns => $ns->string } );
-            }
-            elsif ( ($p->rcode eq q{NOERROR} and $p->edns_rcode == 1) and $p->edns_version == 0 and not scalar $p->answer) {
-                next;
+        my $p = $ns->query( $zone->name, q{SOA}, { edns_details => { version => 0 } } );
+        
+        if ( $p and $p->rcode eq q{NOERROR} ){
+            my $p2 = $ns->query( $zone->name, q{SOA}, { edns_details => { version => 1 } } );
+            
+            if ( $p2 ) {
+                if ( ($p2->rcode ne q{NOERROR} and $p2->edns_rcode != 1) ) {
+                    push @{ $unexpected_rcode{$p->rcode} }, $ns->address->short;
+                }
+                elsif ( ($p2->rcode eq q{NOERROR} and $p2->edns_rcode == 1) and $p2->edns_version == 0 and not scalar $p2->answer){
+                    next;
+                }
+                else {
+                    push @edns_response_error, $ns->address->short;
+                }
             }
             else {
-                push @results, info( NS_ERROR => { ns => $ns->string } );
+                push @no_response_edns1, $ns->address->short;
             }
         }
-        else {
-            push @results,
-              info(
-                NO_RESPONSE => {
-                    ns     => $ns->string,
-                    domain => $zone->name,
+    }
+
+    if ( scalar @no_response_edns1 ){
+        push @results,
+            info(
+                N10_NO_RESPONSE_EDNS1_QUERY => {
+                    ns_ip_list => join ( q{;}, uniq sort @no_response_edns1 )
                 }
-              );
-        }
+            );
+    }
+
+    if ( scalar keys %unexpected_rcode ){
+        push @results, map {
+            info(
+                N10_UNEXPECTED_RCODE => {
+                    rcode     => $_,
+                    ns_ip_list => join( q{;}, uniq sort @{ $unexpected_rcode{$_} } )
+                }
+            )
+        } keys %unexpected_rcode;
+    }
+
+    if ( scalar @edns_response_error ){
+        push @results,
+            info(
+                N10_EDNS_RESPONSE_ERROR => {
+                    ns_ip_list => join ( q{;}, uniq sort @edns_response_error )
+                }
+            );
     }
 
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );

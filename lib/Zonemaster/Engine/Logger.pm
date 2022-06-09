@@ -9,12 +9,12 @@ use version; our $VERSION = version->declare("v1.0.8");
 
 use Moose;
 
-use Zonemaster::Engine::Profile;
-use Zonemaster::Engine::Logger::Entry;
-use Zonemaster::Engine;
 use List::MoreUtils qw[none any];
 use Scalar::Util qw[blessed];
 use JSON::PP;
+
+use Zonemaster::Engine::Profile;
+use Zonemaster::Engine::Logger::Entry;
 
 has 'entries' => (
     is      => 'ro',
@@ -87,6 +87,11 @@ sub _check_filter {
 
 sub start_time_now {
     Zonemaster::Engine::Logger::Entry->start_time_now();
+    return;
+}
+
+sub reset_config {
+    Zonemaster::Engine::Logger::Entry->reset_config();
     return;
 }
 
@@ -210,6 +215,10 @@ Set the logger's start time to the current time.
 =item clear_history()
 
 Remove all known log entries.
+
+=item reset_config()
+
+Clear the test level cached configuration.
 
 =back
 

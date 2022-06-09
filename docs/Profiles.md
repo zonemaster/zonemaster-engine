@@ -11,7 +11,7 @@ always loaded by Zonemaster-Engine.
 ## Creating profiles
 
 Some properties are empty by default such as `logfilter` and
-`test_case_vars`. These properties are not present in the default
+`test_cases_vars`. These properties are not present in the default
 profile. For an example of their usage, refer to the example file,
 [profile_example.json].
 

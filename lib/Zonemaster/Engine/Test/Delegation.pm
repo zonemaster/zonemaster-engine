@@ -7,11 +7,10 @@ use warnings;
 
 use version; our $VERSION = version->declare("v1.0.20");
 
-use Zonemaster::Engine;
-
 use List::MoreUtils qw[uniq];
 use Locale::TextDomain qw[Zonemaster-Engine];
 use Readonly;
+
 use Zonemaster::Engine::Profile;
 use Zonemaster::Engine::Recursor;
 use Zonemaster::Engine::Constants ':all';
@@ -755,7 +754,7 @@ sub delegation06 {
         my $p = $local_ns->query( $zone->name, $query_type );
         if ( $p and $p->rcode eq q{NOERROR} ) {
             if ( not $p->get_records( $query_type, q{answer} ) ) {
-                push @results, info( SOA_NOT_EXISTS => { nsname => $local_ns->string } );
+                push @results, info( SOA_NOT_EXISTS => { ns => $local_ns->string } );
             }
         }
 

@@ -21,7 +21,8 @@
             "recurse" : false,
             "retrans" : 3,
             "retry" : 2,
-            "usevc" : false
+            "usevc" : false,
+            "timeout": 5
         },
         "source": "os_default"
     },
@@ -495,8 +496,8 @@
         "dnssec03",
         "dnssec04",
         "dnssec05",
-        "dnssec07",
         "dnssec06",
+        "dnssec07",
         "dnssec08",
         "dnssec09",
         "dnssec10",
@@ -551,6 +552,19 @@
             "DURATION_LONG" : 26179200,
             "REMAINING_LONG" : 26179200,
             "REMAINING_SHORT" : 43200
+        },
+        "zone02" : {
+            "SOA_REFRESH_MINIMUM_VALUE" : 14400
+        },
+        "zone04" : {
+            "SOA_RETRY_MINIMUM_VALUE" : 3600
+        },
+        "zone05" : {
+            "SOA_EXPIRE_MINIMUM_VALUE" : 604800
+        },
+        "zone06" : {
+            "SOA_DEFAULT_TTL_MAXIMUM_VALUE" : 86400,
+            "SOA_DEFAULT_TTL_MINIMUM_VALUE" : 300
         }
     }
 }

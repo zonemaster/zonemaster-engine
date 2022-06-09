@@ -14,9 +14,8 @@ use File::Slurp;
 use Clone qw(clone);
 use Data::Dumper;
 
-use Zonemaster::Engine;
 use Zonemaster::Engine::Net::IP;
-use Zonemaster::Engine::Constants qw( $RESOLVER_SOURCE_OS_DEFAULT $DURATION_12_HOURS_IN_SECONDS $DURATION_180_DAYS_IN_SECONDS );
+use Zonemaster::Engine::Constants qw( $RESOLVER_SOURCE_OS_DEFAULT $DURATION_5_MINUTES_IN_SECONDS $DURATION_1_HOUR_IN_SECONDS $DURATION_4_HOURS_IN_SECONDS $DURATION_12_HOURS_IN_SECONDS $DURATION_1_DAY_IN_SECONDS $DURATION_1_WEEK_IN_SECONDS $DURATION_180_DAYS_IN_SECONDS );
 
 my %profile_properties_details = (
     q{resolver.defaults.debug} => {
@@ -49,6 +48,9 @@ my %profile_properties_details = (
     },
     q{resolver.defaults.usevc} => {
         type    => q{Bool}
+    },
+    q{resolver.defaults.timeout} => {
+        type    => q{Num}
     },
     q{resolver.source} => {
         type    => q{Str},
@@ -142,6 +144,31 @@ my %profile_properties_details = (
         type    => q{Num},
         min     => 1,
         default => $DURATION_180_DAYS_IN_SECONDS
+    },
+    q{test_cases_vars.zone02.SOA_REFRESH_MINIMUM_VALUE} => {
+        type    => q{Num},
+        min     => 1,
+        default => $DURATION_4_HOURS_IN_SECONDS
+    },
+    q{test_cases_vars.zone04.SOA_RETRY_MINIMUM_VALUE} => {
+        type    => q{Num},
+        min     => 1,
+        default => $DURATION_1_HOUR_IN_SECONDS
+    },
+    q{test_cases_vars.zone05.SOA_EXPIRE_MINIMUM_VALUE} => {
+        type    => q{Num},
+        min     => 1,
+        default => $DURATION_1_WEEK_IN_SECONDS
+    },
+    q{test_cases_vars.zone06.SOA_DEFAULT_TTL_MAXIMUM_VALUE} => {
+        type    => q{Num},
+        min     => 1,
+        default => $DURATION_1_DAY_IN_SECONDS
+    },
+    q{test_cases_vars.zone06.SOA_DEFAULT_TTL_MINIMUM_VALUE} => {
+        type    => q{Num},
+        min     => 1,
+        default => $DURATION_5_MINUTES_IN_SECONDS
     }
 );
 
@@ -201,7 +228,7 @@ sub _set_value_to_nested_hash {
     my ( $hash_ref, $value, @path ) = @_;
 
     my $key = shift @path;
-    
+
     if (  ! exists $hash_ref->{$key} ) {
         $hash_ref->{$key} = {};
     }
@@ -588,7 +615,7 @@ flag set will be automatically resent over TCP. Default false.
 =head2 resolver.defaults.fallback
 
 A boolean. If true, UDP queries that get responses with the C<TC>
-flag set will be automatically resent over TCP or using EDNS. Default 
+flag set will be automatically resent over TCP or using EDNS. Default
 true.
 
 In ldns-1.7.0 (NLnet Labs), in case of truncated answer when UDP is used,
@@ -639,7 +666,7 @@ Default C<"Cymru">.
 
 An arrayref of domain names when asn_db.style is set to C<"Cymru"> or whois
 servers when asn_db.style is set to C<"RIPE">. Normally only the first item
-in the list will be used, the rest are backups in case the earlier ones don't 
+in the list will be used, the rest are backups in case the earlier ones don't
 work.
 Default C<"asnlookup.zonemaster.net">.
 
@@ -665,10 +692,10 @@ The data under the C<logfilter> key should be structured like this:
              "set"
                 Severity level to set if all conditions match
 
-The hash with conditions should have keys matching the attributes of 
-the log entry that's being filtered (check the translation files to see 
-what they are). The values for the keys should be either a single value 
-that the attribute should be, or an array of values any one of which the 
+The hash with conditions should have keys matching the attributes of
+the log entry that's being filtered (check the translation files to see
+what they are). The values for the keys should be either a single value
+that the attribute should be, or an array of values any one of which the
 attribute should be.
 
 A complete logfilter structure might look like this:
@@ -756,8 +783,8 @@ L<test case specifications|
 https://github.com/zonemaster/zonemaster/tree/master/docs/specifications/tests/ImplementedTestCases.md>.
 Default is an arrayref listing all the test cases.
 
-Specifies which test cases to consider when a test module is asked 
-to run of all of its test cases. 
+Specifies which test cases to consider when a test module is asked
+to run of all of its test cases.
 
 Test cases not included here can still be run individually.
 
@@ -769,23 +796,74 @@ can be tested at all.
 =head2 test_cases_vars.dnssec04.REMAINING_SHORT
 
 A positive integer value.
-If the remaining validity time of the signature is less than test_cases_vars.dnssec04.REMAINING_SHORT (in seconds) 
-this test case returns the REMAINING_SHORT message tag.
+Recommended lower bound for signatures' remaining validity time (in seconds) in
+test case L<DNSSEC04|
+https://github.com/zonemaster/zonemaster/blob/master/docs/specifications/tests/DNSSEC-TP/dnssec04.md>.
+Related to the REMAINING_SHORT message tag from this test case.
 Default C<43200> (12 hours in seconds).
 
 =head2 test_cases_vars.dnssec04.REMAINING_LONG
 
 A positive integer value.
-If the remaining validity time of the signature is more than test_cases_vars.dnssec04.REMAINING_LONG (in seconds)
-this test case returns the REMAINING_LONG message tag.
+Recommended upper bound for signatures' remaining validity time (in seconds) in
+test case L<DNSSEC04|
+https://github.com/zonemaster/zonemaster/blob/master/docs/specifications/tests/DNSSEC-TP/dnssec04.md>.
+Related to the REMAINING_LONG message tag from this test case.
 Default C<15552000> (180 days in seconds).
 
 =head2 test_cases_vars.dnssec04.DURATION_LONG
 
 A positive integer value.
-Returns DURATION_LONG message tag in case signature lifetime is more
-than test_cases_vars.dnssec04.DURATION_LONG (in seconds).
+Recommended upper bound for signatures' lifetime (in seconds) in the test case
+L<DNSSEC04|
+https://github.com/zonemaster/zonemaster/blob/master/docs/specifications/tests/DNSSEC-TP/dnssec04.md>.
+Related to the DURATION_LONG message tag from this test case.
 Default C<15552000> (180 days in seconds).
+
+=head2 test_cases_vars.zone02.SOA_REFRESH_MINIMUM_VALUE
+
+A positive integer value.
+Recommended lower bound for SOA refresh values (in seconds) in test case
+L<ZONE02|
+https://github.com/zonemaster/zonemaster/blob/master/docs/specifications/tests/Zone-TP/zone02.md>.
+Related to the REFRESH_MINIMUM_VALUE_LOWER message tag from this test case.
+Default C<14400> (4 hours in seconds).
+
+=head2 test_cases_vars04.zone.SOA_RETRY_MINIMUM_VALUE
+
+A positive integer value.
+Recommended lower bound for SOA retry values (in seconds) in test case
+L<ZONE04|
+https://github.com/zonemaster/zonemaster/blob/master/docs/specifications/tests/Zone-TP/zone04.md>.
+Related to the RETRY_MINIMUM_VALUE_LOWER message tag from this test case.
+Default C<3600> (1 hour in seconds).
+
+=head2 test_cases_vars.zone05.SOA_EXPIRE_MINIMUM_VALUE
+
+A positive integer value.
+Recommended lower bound for SOA expire values (in seconds) in test case
+L<ZONE05|
+https://github.com/zonemaster/zonemaster/blob/master/docs/specifications/tests/Zone-TP/zone05.md>.
+Related to the EXPIRE_MINIMUM_VALUE_LOWER message tag from this test case.
+Default C<604800> (1 week in seconds).
+
+=head2 test_cases_vars.zone06.SOA_DEFAULT_TTL_MINIMUM_VALUE
+
+A positive integer value.
+Recommended lower bound for SOA minimum values (in seconds) in test case
+L<ZONE06|
+https://github.com/zonemaster/zonemaster/blob/master/docs/specifications/tests/Zone-TP/zone06.md>.
+Related to the SOA_DEFAULT_TTL_MAXIMUM_VALUE_LOWER message tag from this test case.
+Default C<300> (5 minutes in seconds).
+
+=head2 test_cases_vars.zone06.SOA_DEFAULT_TTL_MAXIMUM_VALUE
+
+A positive integer value.
+Recommended upper bound for SOA minimum values (in seconds) in test case
+L<ZONE06|
+https://github.com/zonemaster/zonemaster/blob/master/docs/specifications/tests/Zone-TP/zone06.md>.
+Related to the SOA_DEFAULT_TTL_MAXIMUM_VALUE_HIGHER message tag from this test case.
+Default C<86400> (1 day in seconds).
 
 =head1 JSON REPRESENTATION
 

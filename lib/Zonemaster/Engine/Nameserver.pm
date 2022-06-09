@@ -49,6 +49,8 @@ has 'blacklisted' => ( is => 'rw' );
 ###
 
 our %object_cache;
+our %address_object_cache;
+our %address_repr_cache;
 
 ###
 ### Build methods for attributes
@@ -71,9 +73,29 @@ sub new {
     # Type coercions
     $attrs->{name} = Zonemaster::Engine::DNSName->from_string( $attrs->{name} )
       if !blessed $attrs->{name} || !$attrs->{name}->isa( 'Zonemaster::Engine::DNSName' );
-    $attrs->{address} = Zonemaster::Engine::Net::IP->new( $attrs->{address} )
-      if exists $attrs->{address}
-      && ( !blessed $attrs->{address} || !$attrs->{address}->isa( 'Zonemaster::Engine::Net::IP' ) );
+
+    my $name = lc( q{} . $attrs->{name} );
+    $name = '$$$NONAME' unless $name;
+
+    my $address;
+
+    # Use a object cache for IP type coercion (don't parse IP unless it is needed)
+    if (!blessed $attrs->{address} || !$attrs->{address}->isa( 'Zonemaster::Engine::Net::IP' )) {
+        if (!exists $address_object_cache{$attrs->{address}}) {
+            $address_object_cache{$attrs->{address}} = Zonemaster::Engine::Net::IP->new($attrs->{address});
+            $address_repr_cache{$attrs->{address}} = $address_object_cache{$attrs->{address}}->ip;
+        }
+        # Fetch IP object from the address cache (avoid object creation and method call)
+        $address = $address_repr_cache{$attrs->{address}};
+        $attrs->{address} = $address_object_cache{$attrs->{address}};
+    } else {
+        $address = $attrs->{address}->ip;
+    }
+
+    # Return Nameserver object as soon as possible
+    if ( exists $object_cache{$name}{$address} ) {
+        return $object_cache{$name}{$address};
+    }
 
     # Type constraints
     confess "Argument must be coercible into a Zonemaster::Engine::DNSName: name"
@@ -114,14 +136,10 @@ sub new {
     $obj->{_dns}            = $lazy_attrs{dns}            if exists $lazy_attrs{dns};
     $obj->{_cache}          = $lazy_attrs{cache}          if exists $lazy_attrs{cache};
 
-    my $name = lc( q{} . $obj->name );
-    $name = '$$$NONAME' unless $name;
-    if ( not exists $object_cache{$name}{ $obj->address->ip } ) {
-        Zonemaster::Engine->logger->add( NS_CREATED => { name => $name, ip => $obj->address->ip } );
-        $object_cache{$name}{ $obj->address->ip } = $obj;
-    }
+    Zonemaster::Engine->logger->add( NS_CREATED => { name => $name, ip => $obj->address->ip } );
+    $object_cache{$name}{$address} = $obj;
 
-    return $object_cache{$name}{ $obj->address->ip };
+    return $obj;
 }
 
 sub source_address {
@@ -177,6 +195,7 @@ sub _build_dns {
     $res->recurse( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.recurse} ) );
     $res->debug( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.debug} ) );
     $res->edns_size( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.edns_size} ) );
+    $res->timeout( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.timeout} ) );
 
     if ( $self->source_address ) {
         $res->source( $self->source_address );
@@ -411,6 +430,7 @@ sub _query {
     $flags{q{fallback}}  = $href->{q{fallback}}  // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.fallback} );
     $flags{q{recurse}}   = $href->{q{recurse}}   // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.recurse} );
     $flags{q{edns_size}} = $href->{q{edns_size}} // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.edns_size} );
+    $flags{q{timeout}}   = $href->{q{timeout}}   // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.timeout} );
     if ( defined $href->{edns_details} and $href->{edns_details}{udp_size} ) {
         $flags{q{edns_size}} = $href->{edns_details}{udp_size};
     }
@@ -568,7 +588,7 @@ sub restore {
         my $ns  = Zonemaster::Engine::Nameserver->new(
             {
                 name    => $name,
-                address => $addr,
+                address => Zonemaster::Engine::Net::IP->new($addr),
                 cache   => Zonemaster::Engine::Nameserver::Cache->new( { data => $ref, address => Zonemaster::Engine::Net::IP->new( $addr ) } )
             }
         );
@@ -668,6 +688,8 @@ sub axfr {
 
 sub empty_cache {
     %object_cache = ();
+    %address_object_cache = ();
+    %address_repr_cache = ();
 
     Zonemaster::Engine::Nameserver::Cache::empty_cache();
 
@@ -791,13 +813,9 @@ Set the debug flag in the resolver, producing output on STDERR as the query proc
 
 Set the RD flag in the query.
 
-=item udp_timeout
+=item timeout
 
-Set the UDP timeout for the outgoing UDP socket. May or may not be observed by the underlying network stack.
-
-=item tcp_timeout
-
-Set the TCP timeout for the outgoing TCP socket. May or may not be observed by the underlying network stack.
+Set the timeout for the outgoing sockets. May or may not be observed by the underlying network stack.
 
 =item retry
 

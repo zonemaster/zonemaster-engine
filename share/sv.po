@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-30 18:18+0100\n"
-"PO-Revision-Date: 2021-11-30 18:16+0100\n"
+"POT-Creation-Date: 2022-05-30 14:16+0000\n"
+"PO-Revision-Date: 2022-05-30 14:16+0000\n"
 "Last-Translator: mats.dufberg@iis.se\n"
 "Language-Team: Zonemaster Project\n"
 "Language: sv\n"
@@ -57,8 +57,8 @@ msgstr "Inget svar från namnservern på PTR-fråga ({domain})."
 #. BASIC:TEST_CASE_END
 #. CONNECTIVITY:TEST_CASE_END
 #. CONSISTENCY:TEST_CASE_END
-#. DELEGATION:TEST_CASE_END
 #. DNSSEC:TEST_CASE_END
+#. DELEGATION:TEST_CASE_END
 #. NAMESERVER:TEST_CASE_END
 #. SYNTAX:TEST_CASE_END
 #. ZONE:TEST_CASE_END
@@ -70,8 +70,8 @@ msgstr "TEST_CASE_END {testcase}."
 #. BASIC:TEST_CASE_START
 #. CONNECTIVITY:TEST_CASE_START
 #. CONSISTENCY:TEST_CASE_START
-#. DELEGATION:TEST_CASE_START
 #. DNSSEC:TEST_CASE_START
+#. DELEGATION:TEST_CASE_START
 #. NAMESERVER:TEST_CASE_START
 #. SYNTAX:TEST_CASE_START
 #. ZONE:TEST_CASE_START
@@ -205,8 +205,8 @@ msgstr "Moderdomänen '{pname}' till den testade domänen har identifierats."
 #. BASIC:IPV4_DISABLED
 #. CONNECTIVITY:IPV4_DISABLED
 #. CONSISTENCY:IPV4_DISABLED
-#. DELEGATION:IPV4_DISABLED
 #. DNSSEC:IPV4_DISABLED
+#. DELEGATION:IPV4_DISABLED
 #. NAMESERVER:IPV4_DISABLED
 #. SYNTAX:IPV4_DISABLED
 #, perl-brace-format
@@ -221,8 +221,8 @@ msgstr "IPv4 är aktiverat. Skickar fråga om '{rrtype}' till {ns}."
 #. BASIC:IPV6_DISABLED
 #. CONNECTIVITY:IPV6_DISABLED
 #. CONSISTENCY:IPV6_DISABLED
-#. DELEGATION:IPV6_DISABLED
 #. DNSSEC:IPV6_DISABLED
+#. DELEGATION:IPV6_DISABLED
 #. NAMESERVER:IPV6_DISABLED
 #. SYNTAX:IPV6_DISABLED
 #, perl-brace-format
@@ -424,8 +424,8 @@ msgid "Found {count} SOA time parameter set(s)."
 msgstr "{count} olika uppsättningar med SOA-tidsparametrar hittades."
 
 #. CONSISTENCY:NO_RESPONSE
-#. DELEGATION:NO_RESPONSE
 #. DNSSEC:NO_RESPONSE
+#. DELEGATION:NO_RESPONSE
 #. ZONE:NO_RESPONSE
 #, perl-brace-format
 msgid "Nameserver {ns} did not respond."
@@ -630,6 +630,74 @@ msgstr ""
 "{algo_num} ({algo_descr}), har en nyckelstorlek ({keysize}) som är större än "
 "den maximala storleken ({keysizemax}) för den algoritmen."
 
+#. DNSSEC:DS01_DIGEST_NOT_SUPPORTED_BY_ZM
+#, perl-brace-format
+msgid ""
+"DS record for zone {domain} with keytag {keytag} was created by digest "
+"algorithm {ds_algo_num} ({ds_algo_mnemo}) which cannot be validated by this "
+"installation of Zonemaster. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"DS-posten för zonen {domain} med \"key tag\" {keytag} skapades med "
+"hashfunktionen (\"digest algorithm\") {ds_algo_num} ({ds_algo_mnemo}) som "
+"inte kan valideras av denna Zonemasterinstallation. Hämtad från "
+"namnservrarna med IP-adresserna \"{ns_ip_list}\"."
+
+#. DNSSEC:DS01_DS_ALGO_DEPRECATED
+#, perl-brace-format
+msgid ""
+"DS record for zone {domain} with keytag {keytag} was created by digest "
+"algorithm {ds_algo_num} ({ds_algo_mnemo}) which is deprecated. Fetched from "
+"the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"DS-posten för zonen {domain} med \"key tag\" {keytag} skapades med "
+"hashfunktionen (\"digest algorithm\") {ds_algo_num} ({ds_algo_mnemo}) som är "
+"utfasad. Hämtad från namnservrarna med IP-adresserna \"{ns_ip_list}\"."
+
+#. DNSSEC:DS01_DS_ALGO_2_MISSING
+#, perl-brace-format
+msgid "Digest algorithm 2 (SHA-256) is expected but missing for zone {domain}."
+msgstr ""
+"DS-post skapad med hashfunktionen (\"digest algorithm\") 2 (SHA-256) är "
+"förväntad men saknas för zonen {domain}."
+
+#. DNSSEC:DS01_DS_ALGO_NOT_DS
+#, perl-brace-format
+msgid ""
+"DS record for zone {domain} with keytag {keytag} was created by digest "
+"algorithm {ds_algo_num} ({ds_algo_mnemo}) which is not meant for DS. Fetched "
+"from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"DS-posten för zonen {domain} med \"key tag\" {keytag} skapades med "
+"hashfunktionen (\"digest algorithm\") {ds_algo_num} ({ds_algo_mnemo}) som "
+"inte är avsedd för en DS-post. Hämtad från namnservrarna med IP-adresserna "
+"\"{ns_ip_list}\"."
+
+#. DNSSEC:DS01_DS_ALGO_RESERVED
+#, perl-brace-format
+msgid ""
+"DS record for zone {domain} with keytag {keytag} was created with an "
+"unassigned digest algorithm (algorithm number {ds_algo_num}). Fetched from "
+"the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"DS-posten för zonen {domain} med \"key tag\" {keytag} skapades med en "
+"hashfunktion (\"digest algorithm\") med algoritmnummer {ds_algo_num}. "
+"Algoritmnumret är inte tilldelat någon hashfunktion. Hämtad från "
+"namnservrarna med IP-adresserna \"{ns_ip_list}\"."
+
+#. DNSSEC:DS01_DS_ALGO_SHA1_DEPRECATED
+#, perl-brace-format
+msgid ""
+"DS record for zone {domain} with keytag {keytag} was created by digest "
+"algorithm {ds_algo_num} ({ds_algo_mnemo}). While still being widely in use, "
+"it is deprecated. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"DS-posten för zonen {domain} med \"key tag\" {keytag} skapades med "
+"hashfunktionen (\"digest algorithm\") {ds_algo_num} ({ds_algo_mnemo}). "
+"Hashfunktionen är föråldrad, men är fortfarande allmänt använd. Hämtad från "
+"namnservrarna med IP-adresserna \"{ns_ip_list}\"."
+
 #. DNSSEC:DS02_ALGO_NOT_SUPPORTED_BY_ZM
 #. DNSSEC:DS08_ALGO_NOT_SUPPORTED_BY_ZM
 #. DNSSEC:DS09_ALGO_NOT_SUPPORTED_BY_ZM
@@ -679,8 +747,8 @@ msgstr ""
 #. DNSSEC:DS02_NO_MATCHING_DNSKEY_RRSIG
 #, perl-brace-format
 msgid ""
-"The DNSKEY RRset is not signed by the DNSKEY with tag {keytag} that the the "
-"DS record refers to. Fetched from the nameservers with IP \"{ns_ip_list}\"."
+"The DNSKEY RRset is not signed by the DNSKEY with tag {keytag} that the DS "
+"record refers to. Fetched from the nameservers with IP \"{ns_ip_list}\"."
 msgstr ""
 "DNSKEY RRset är inte signerat av DNSKEY-posten med \"key tag\" {keytag} som "
 "DS-posten refererar till. Hämtad från namnservrarna med IP-adresserna "
@@ -1198,7 +1266,7 @@ msgstr ""
 #, perl-brace-format
 msgid ""
 "The CDNSKEY record with tag {keytag} has the SEP bit (bit 15) unset. Fetched "
-"rom the nameservers with IP addresses \"{ns_ip_list}\"."
+"from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
 "CDNSKEY-posten med \"key tag\" {keytag} har inte SEP-flaggan (bit 15) satt. "
 "Hämtad från namnservrarna med IP-adresserna \"{ns_ip_list}\""
@@ -1207,7 +1275,7 @@ msgstr ""
 #, perl-brace-format
 msgid ""
 "The CDNSKEY record with tag {keytag} has the zone bit (bit 7) unset. Fetched "
-"rom the nameservers with IP addresses \"{ns_ip_list}\"."
+"from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
 "CDNSKEY-posten med \"key tag\" {keytag} har inte \"Zone Key\"-flaggan (bit "
 "7) satt. Hämtad från namnservrarna med IP-adresserna \"{ns_ip_list}."
@@ -1308,70 +1376,6 @@ msgstr ""
 "CDNSKEY RRset har inte signerats av en DNSKEY-post som någon DS-post "
 "refererar till. Hämtat från namnservrarna med IP-adresserna \"{ns_ip_list}\"."
 
-#. DNSSEC:DS_ALGORITHM_NOT_DS
-#, perl-brace-format
-msgid ""
-"{ns} returned a DS record created by algorithm {algo_num} ({algo_mnemo}) "
-"which is not meant for DS. The DS record is for the DNSKEY record with "
-"keytag {keytag} in zone {domain}."
-msgstr ""
-"Namnserver {ns} svarade med en DS-post skapad med hashalgoritm {algo_num} "
-"({algo_mnemo}) som inte är avsedd för DS. DS-posten gäller DNSKEY-posten med "
-"\"key tag\" {keytag} i zonen {domain}."
-
-#. DNSSEC:DS_ALGORITHM_DEPRECATED
-#, perl-brace-format
-msgid ""
-"{ns} returned a DS record created by algorithm {algo_num} ({algo_mnemo}), "
-"which is deprecated. The DS record is for the DNSKEY record with keytag "
-"{keytag} in zone {domain}."
-msgstr ""
-"Namnserver {ns} svarade med en DS-post skapad med hashalgoritm {algo_num} "
-"({algo_mnemo}) som är föråldrad. DS-posten gäller DNSKEY-posten med \"key tag"
-"\" {keytag} i zonen {domain}."
-
-#. DNSSEC:DS_ALGORITHM_MISSING
-#, perl-brace-format
-msgid ""
-"{ns} returned no DS record created by algorithm {algo_num} ({algo_mnemo}) "
-"for zone {domain}, which is required."
-msgstr ""
-"Namnserver {ns} svarade inte med någon DS-post skapad med hashalgoritm "
-"{algo_num} ({algo_mnemo}) för zonen {domain}, vilket är ett krav att den gör."
-
-#. DNSSEC:DS_ALGORITHM_OK
-#, perl-brace-format
-msgid ""
-"{ns} returned a DS record created by algorithm {algo_num} ({algo_mnemo}), "
-"which is OK. The DS record is for the DNSKEY record with keytag {keytag} in "
-"zone {domain}."
-msgstr ""
-"Namnserver {ns} svarade med en DS-post skapad med hashalgoritm {algo_num} "
-"({algo_mnemo}), vilken är OK. DS-posten gäller DNSKEY-posten med \"key tag"
-"\" {keytag} i zonen {domain}."
-
-#. DNSSEC:DS_ALGORITHM_RESERVED
-#, perl-brace-format
-msgid ""
-"{ns} returned a DS record created by with an algorithm not assigned "
-"(algorithm number {algo_num}), which is not OK. The DS record is for the "
-"DNSKEY record with keytag {keytag} in zone {domain}."
-msgstr ""
-"Namnserver {ns} svarade med en DS-post skapad med hashalgoritmnummer "
-"{algo_num}, vilken inte är tilldelad någon algoritm. Detta är inte OK. DS-"
-"posten gäller DNSKEY-posten med \"key tag\" {keytag} i zonen {domain}."
-
-#. DNSSEC:DS_ALGO_SHA1_DEPRECATED
-#, perl-brace-format
-msgid ""
-"Nameserver {ns} returned a DS record created by algorithm {algo_num} "
-"({algo_mnemo}) which is deprecated, while it is still widely used. The DS "
-"record is for the DNSKEY record with keytag {keytag} in zone {domain}."
-msgstr ""
-"Namnserver {ns} svarade med en DS-post skapad med hashalgoritm {algo_num} "
-"({algo_mnemo}) som är föråldrad, men som fortfarande är allmänt använd. DS-"
-"posten gäller DNSKEY-posten med \"key tag\" {keytag} i zonen {domain}."
-
 #. DNSSEC:DS_BUT_NOT_DNSKEY
 #, perl-brace-format
 msgid "{parent} sent a DS record, but {child} did not send a DNSKEY record."
@@ -1452,11 +1456,6 @@ msgstr "'{server}' gav inga NSEC3PARAM-poster i svaret."
 msgid "Nameserver {ns} responded with no DNSKEY record(s)."
 msgstr "Svarspaketet från namnservern {ns} har ingen DNSKEY-post."
 
-#. DNSSEC:NO_RESPONSE_DS
-#, perl-brace-format
-msgid "{ns} returned no DS records for {domain}."
-msgstr "Namnserver {ns} returnerade inga DS-poster för zonen '{domain}'."
-
 #. DNSSEC:NOT_SIGNED
 msgid "The zone is not signed with DNSSEC."
 msgstr "Zonen är inte signerad med DNSSEC."
@@ -1504,15 +1503,6 @@ msgid ""
 msgstr ""
 "Antalet NSEC3-iterationer är {count}, vilket är för många för nyckellängden "
 "{keylength}."
-
-#. DNSSEC:UNEXPECTED_RESPONSE_DS
-#, perl-brace-format
-msgid ""
-"Nameserver {ns} responded with an unexpected rcode ({rcode}) on a DS query "
-"for zone {domain}."
-msgstr ""
-"Namnserver {ns} besvarade en DS-fråga för zonen {domain} med den icke-"
-"väntade svarskoden \"{rcode}\"."
 
 #. DELEGATION:ARE_AUTHORITATIVE
 #, perl-brace-format
@@ -1986,6 +1976,33 @@ msgstr ""
 msgid "Erroneous response from nameserver {ns}."
 msgstr "Felaktigt svar från namnserver {ns}."
 
+#. N10_NO_RESPONSE_EDNS1_QUERY
+#, perl-brace-format
+msgid ""
+"No response to an EDNS version 1 query. Fetched from the nameservers with IP "
+"addresses {ns_ip_list}"
+msgstr ""
+"Inget svar på en fråga med EDNS version 1. Hämtad från namnservrarna med IP-"
+"adresserna \"{ns_ip_list}\"."
+
+#. N10_UNEXPECTED_RCODE
+#, perl-brace-format
+msgid ""
+"Erroneous RCODE (\"{rcode}\") in response to an EDNS version 1 query. "
+"Fetched from the nameservers with IP addresses {ns_ip_list}"
+msgstr ""
+"Felaktig RCODE (\"{rcode}\") i svaret på en fråga med EDNS version 1. Hämtat "
+"från namnservrarna med IP-adresserna \"{ns_ip_list}\"."
+
+#. N10_EDNS_RESPONSE_ERROR
+#, perl-brace-format
+msgid ""
+"Expected RCODE but received erroneous response to an EDNS version 1 query. "
+"Fetched from the nameservers with IP addresses {ns_ip_list}"
+msgstr ""
+"Förväntad RCODE men felaktigt svar på en fråga med EDNS version 1. Hämtad "
+"från namnservrarna med IP-adresserna \"{ns_ip_list}\"."
+
 #. NAMESERVER:QNAME_CASE_INSENSITIVE
 #, perl-brace-format
 msgid ""
@@ -2011,11 +2028,6 @@ msgid "Nameserver {ns} responds with an unknown ENDS OPTION-CODE."
 msgstr ""
 "Svarspaketet från namnservern {ns} innehåller 'EDNS OPTION-CODE' som är "
 "odenfinierad."
-
-#. NAMESERVER:UNSUPPORTED_EDNS_VER
-#, perl-brace-format
-msgid "Nameserver {ns} accepts an unsupported EDNS version."
-msgstr "Namnserver {ns} accepterar en EDNS-version som inte stöds i DNS."
 
 #. NAMESERVER:UPWARD_REFERRAL
 #, perl-brace-format
