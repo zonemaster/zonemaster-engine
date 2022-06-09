@@ -1,6 +1,6 @@
 Release history for Zonemaster component Zonemaster-Engine
 
-v4.5.0 2022-06-09 (public fix version)
+v4.5.0 2022-06-09 (public release version)
 
 [Features]
  - Use pre-built packages for ubuntu (#1079)
@@ -21,7 +21,7 @@ v4.5.0 2022-06-09 (public fix version)
  - Updates messages (#1010, #1047)
  - Fixes test case DNSSEC10 case when DNSKEY is empty (#1037, #1036)
  - Fixes test case order in profile.json (#1027)
- - Cleans up dependencies (#1041)
+ - Cleans up dependencies and imports (#1041, #1054)
 
 
 v4.4.0 2021-12-20 (public fix version)
