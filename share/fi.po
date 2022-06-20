@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-20 15:41+0000\n"
-"PO-Revision-Date: 2022-01-31 11:07+0100\n"
+"POT-Creation-Date: 2022-05-30 18:31+0000\n"
+"PO-Revision-Date: 2022-06-20 16:59+0300\n"
 "Last-Translator: sami.salmensuo@traficom.fi\n"
 "Language-Team: Traficom domain team\n"
 "Language: fi\n"
@@ -640,66 +640,72 @@ msgstr ""
 "({keysizemax})."
 
 #. DNSSEC:DS01_DIGEST_NOT_SUPPORTED_BY_ZM
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "DS record for zone {domain} with keytag {keytag} was created by digest "
 "algorithm {ds_algo_num} ({ds_algo_mnemo}) which cannot be validated by this "
 "installation of Zonemaster. Fetched from the nameservers with IP addresses "
 "\"{ns_ip_list}\"."
 msgstr ""
-"DNSKEY-tietue tunnisteella {keytag} käyttää algoritmia {algo_num} "
-"({algo_mnemo}) jota Zonemaster ei tue. Tiedot haettu nimipalvelimilta joiden "
-"IP-osoitteet ovat \"{ns_ip_list}\"."
+"Zonen {domain} DS-tietue jonka tunniste (keytag) on {keytag} on luotu "
+"tiivistealgoritmilla {ds_algo_num} ({ds_algo_mnemo}) jota tämä zonemasterin "
+"versio ei pysty validoimaan. Tiedot on haettu nimipalvelimilta joiden IP-"
+"osoitteet ovat \"{ns_ip_list}\"."
 
 #. DNSSEC:DS01_DS_ALGO_DEPRECATED
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "DS record for zone {domain} with keytag {keytag} was created by digest "
 "algorithm {ds_algo_num} ({ds_algo_mnemo}) which is deprecated. Fetched from "
 "the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"DNSKEY-tietue tunnisteella {keytag} käyttää algoritmia {algo_num} "
-"({algo_mnemo}) jota Zonemaster ei tue. Tiedot haettu nimipalvelimilta joiden "
-"IP-osoitteet ovat \"{ns_ip_list}\"."
+"Zonen {domain} DS-tietue jonka tunniste (keytag) on {keytag} on luotu "
+"tiivistealgoritmilla {ds_algo_num} ({ds_algo_mnemo}) joka on poistunut "
+"käytöstä. Tiedot on haettu nimipalvelimilta joiden IP-osoitteet ovat "
+"\"{ns_ip_list}\"."
 
 #. DNSSEC:DS01_DS_ALGO_2_MISSING
 #, perl-brace-format
 msgid "Digest algorithm 2 (SHA-256) is expected but missing for zone {domain}."
 msgstr ""
+"Tiiviste algoritmi 2 (SHA-256) pitäisi olla käytössä mutta se puuttuu "
+"zonelta {domain}."
 
 #. DNSSEC:DS01_DS_ALGO_NOT_DS
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "DS record for zone {domain} with keytag {keytag} was created by digest "
 "algorithm {ds_algo_num} ({ds_algo_mnemo}) which is not meant for DS. Fetched "
 "from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"DNSKEY-tietue tunnisteella {keytag} käyttää algoritmia {algo_num} "
-"({algo_mnemo}) jota Zonemaster ei tue. Tiedot haettu nimipalvelimilta joiden "
-"IP-osoitteet ovat \"{ns_ip_list}\"."
+"Zonen {domain} DS-tietue jonka tunniste (keytag) on {keytag} on luotu "
+"tiivistealgoritmilla {ds_algo_num} ({ds_algo_mnemo}) jota ei ole tarkoitettu "
+"DS-tietueelle. Tiedot on haettu nimipalvelimilta joiden IP-osoitteet ovat "
+"\"{ns_ip_list}\"."
 
 #. DNSSEC:DS01_DS_ALGO_RESERVED
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "DS record for zone {domain} with keytag {keytag} was created with an "
 "unassigned digest algorithm (algorithm number {ds_algo_num}). Fetched from "
 "the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"CDS tietue {keytag} täsmää DNSKEY tietueeseen jolla zone bit (bit 7) pois "
-"päältä. Tiedot haettu nimipalvelimilta joiden IP-osoitteet ovat "
-"\"{ns_ip_list}\"."
+"Zonen {domain} DS-tietue jonka tunniste (keytag) on {keytag} on luotu "
+"määrittämättömällä tiivistealgoritmilla {ds_algo_num} ({ds_algo_mnemo}). "
+"Tiedot on haettu nimipalvelimilta joiden IP-osoitteet ovat \"{ns_ip_list}\"."
 
 #. DNSSEC:DS01_DS_ALGO_SHA1_DEPRECATED
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "DS record for zone {domain} with keytag {keytag} was created by digest "
 "algorithm {ds_algo_num} ({ds_algo_mnemo}). While still being widely in use, "
 "it is deprecated. Fetched from the nameservers with IP addresses "
 "\"{ns_ip_list}\"."
 msgstr ""
-"DNSKEY-tietue tunnisteella {keytag} käyttää algoritmia {algo_num} "
-"({algo_mnemo}) jota Zonemaster ei tue. Tiedot haettu nimipalvelimilta joiden "
-"IP-osoitteet ovat \"{ns_ip_list}\"."
+"Zonen {domain} DS-tietue jonka tunniste (keytag) on {keytag} on luotu "
+"tiivistealgoritmilla {ds_algo_num} ({ds_algo_mnemo}) joka vaikkakin on yhä "
+"laajasti käytössä, on kuitenkin poistumassa käytöstä. Tiedot on haettu "
+"nimipalvelimilta joiden IP-osoitteet ovat \"{ns_ip_list}\"."
 
 #. DNSSEC:DS02_ALGO_NOT_SUPPORTED_BY_ZM
 #. DNSSEC:DS08_ALGO_NOT_SUPPORTED_BY_ZM
@@ -748,14 +754,14 @@ msgstr ""
 "osoitteet ovat \"{ns_ip_list}\"."
 
 #. DNSSEC:DS02_NO_MATCHING_DNSKEY_RRSIG
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "The DNSKEY RRset is not signed by the DNSKEY with tag {keytag} that the DS "
 "record refers to. Fetched from the nameservers with IP \"{ns_ip_list}\"."
 msgstr ""
-"DNSKEY RRset ei ole allekirjoitettu DNSKEY:llä jonka avaimen tunniste on "
-"{keytag} ja johon DS-tietue osoittaa. Tiedot haettu nimipalvelimilta joiden "
-"IP-osoitteet ovat \"{ns_ip_list}\"."
+"DNSKEY RRset ei ole allekirjoitettu DNSKEYllä jonka avaimen tunniste "
+"(keytag) on {keytag} ja johon DS-tietue viittaa. Tiedot haettu "
+"nimipalvelimilta joiden IP-osoitteet ovat \"{ns_ip_list}\"."
 
 #. DNSSEC:DS02_NO_MATCH_DS_DNSKEY
 #, perl-brace-format
@@ -1266,22 +1272,24 @@ msgstr ""
 "nimipalvelimilta joiden IP-osoitteet ovat \"{ns_ip_list}\"."
 
 #. DNSSEC:DS17_CDNSKEY_IS_NON_SEP
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "The CDNSKEY record with tag {keytag} has the SEP bit (bit 15) unset. Fetched "
 "from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"CDNSKEY tietue tunnisteella {keytag} on SEP bit (bit 15) asettamatta. Tiedot "
-"haettu nimipalvelimilta joiden IP-osoitteet ovat \"{ns_ip_list}\"."
+"CDNSKEY tietue tunnisteella (keytag) {keytag} on SEP bit (bit 15) "
+"asettamatta. Tiedot haettu nimipalvelimilta joiden IP-osoitteet ovat "
+"\"{ns_ip_list}\"."
 
 #. DNSSEC:DS17_CDNSKEY_IS_NON_ZONE
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "The CDNSKEY record with tag {keytag} has the zone bit (bit 7) unset. Fetched "
 "from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"CDNSKEY-tietueella tunnisteella {keytag} on zone bit (bit 7) asettamatta. "
-"Tiedot haettu nimipalvelimilta joiden IP-osoitteet ovat \"{ns_ip_list}\"."
+"CDNSKEY-tietueella tunnisteella (keytag) {keytag} on zone bit (bit 7) "
+"asettamatta. Tiedot haettu nimipalvelimilta joiden IP-osoitteet ovat "
+"\"{ns_ip_list}\"."
 
 #. DNSSEC:DS17_CDNSKEY_MATCHES_NO_DNSKEY
 #, perl-brace-format
@@ -1979,33 +1987,33 @@ msgid "Erroneous response from nameserver {ns}."
 msgstr "Virheellinen vastaus nimipalvelimelta {ns}."
 
 #. N10_NO_RESPONSE_EDNS1_QUERY
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "No response to an EDNS version 1 query. Fetched from the nameservers with IP "
 "addresses {ns_ip_list}"
 msgstr ""
-"Zonella on NSEC tietueita. Tiedot haettu nimipalvelimilta joiden IP-"
-"osoitteet ovat \"{ns_ip_list}\"."
+"Ei saatu vastausta EDNS versiolla 1 tehtyyn kyselyyn. Tiedot haettu "
+"nimipalvelimilta joiden IP-osoitteet ovat \"{ns_ip_list}\"."
 
 #. N10_UNEXPECTED_RCODE
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Erroneous RCODE (\"{rcode}\") in response to an EDNS version 1 query. "
 "Fetched from the nameservers with IP addresses {ns_ip_list}"
 msgstr ""
-"Ei vastausta tai virhe vastauksessa olemattomaan verkkotunnukseen "
-"liittyvässä kyselyssä. Tiedot haettu nimipalvelimilta joiden IP-osoitteet "
-"ovat \"{ns_ip_list}\"."
+"Saatiin virheellinen RCODE (\"{rcode}\") vastauksena EDNS versiolla 1 "
+"tehtyyn kyselyyn. Tiedot haettu nimipalvelimilta joiden IP-osoitteet ovat "
+"\"{ns_ip_list}"
 
 #. N10_EDNS_RESPONSE_ERROR
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Expected RCODE but received erroneous response to an EDNS version 1 query. "
 "Fetched from the nameservers with IP addresses {ns_ip_list}"
 msgstr ""
-"Ei vastausta tai virhe vastauksessa olemattomaan verkkotunnukseen "
-"liittyvässä kyselyssä. Tiedot haettu nimipalvelimilta joiden IP-osoitteet "
-"ovat \"{ns_ip_list}\"."
+"Odotettiin vastauksessa RCODEa mutta saatiin virheellinen vastaus EDNS "
+"version 1 kyselyyn. Tiedot haettu nimipalvelimilta joiden IP-osoitteet ovat "
+"\"{ns_ip_list}\"."
 
 #. NAMESERVER:QNAME_CASE_INSENSITIVE
 #, perl-brace-format
