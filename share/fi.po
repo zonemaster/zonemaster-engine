@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-30 18:31+0000\n"
-"PO-Revision-Date: 2022-06-20 16:59+0300\n"
+"POT-Creation-Date: 2022-06-20 16:00+0000\n"
+"PO-Revision-Date: 2022-06-20 16:00+0000\n"
 "Last-Translator: sami.salmensuo@traficom.fi\n"
 "Language-Team: Traficom domain team\n"
 "Language: fi\n"
@@ -691,8 +691,8 @@ msgid ""
 "the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
 "Zonen {domain} DS-tietue jonka tunniste (keytag) on {keytag} on luotu "
-"määrittämättömällä tiivistealgoritmilla {ds_algo_num} ({ds_algo_mnemo}). "
-"Tiedot on haettu nimipalvelimilta joiden IP-osoitteet ovat \"{ns_ip_list}\"."
+"määrittämättömällä tiivistealgoritmilla {ds_algo_num}. Tiedot on haettu "
+"nimipalvelimilta joiden IP-osoitteet ovat \"{ns_ip_list}\"."
 
 #. DNSSEC:DS01_DS_ALGO_SHA1_DEPRECATED
 #, perl-brace-format
@@ -2544,4 +2544,3 @@ msgstr ""
 #, perl-brace-format
 msgid "Big packet size ({size}) (try with \"{command}\")."
 msgstr "Suurikokoinen paketti ({size}) (yritä käyttää komentoa \"{command}\")."
-
