@@ -1,6 +1,6 @@
 package Zonemaster::Engine;
 
-use version; our $VERSION = version->declare("v4.5.0");
+use version; our $VERSION = version->declare("v4.5.1");
 
 use 5.014002;
 
@@ -105,7 +105,7 @@ sub recurse {
 
 sub add_fake_delegation {
     my ( $class, $domain, $href, %flags ) = @_;
-    my $fill_in_empty_oob_glue = delete $flags{fill_in_empty_oob_glue} ? 1 : 0;
+    my $fill_in_empty_oob_glue = exists $flags{fill_in_empty_oob_glue} ? delete $flags{fill_in_empty_oob_glue} : 1;
     croak 'Unrecognized flags: ' . join( ', ', keys %flags )
       if %flags;
     undef %flags;

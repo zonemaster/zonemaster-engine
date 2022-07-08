@@ -1,5 +1,14 @@
 Release history for Zonemaster component Zonemaster-Engine
 
+v4.5.1 2022-07-08 (public fix version)
+
+ [Fixes]
+ - Fixes a bug from previous release that prevented out-of-bailiwick nameservers
+   to be resolved to IP address (no IP address was provided) in undelegated
+   tests (#1090, #1089)
+ - Updates Norwegian, Finnish and Danish translations (#1083, #1086, #1092)
+
+
 v4.5.0 2022-06-09 (public release version)
 
 [Features]
