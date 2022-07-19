@@ -1221,6 +1221,35 @@ sub version {
     return "$Zonemaster::Engine::Test::DNSSEC::VERSION";
 }
 
+sub _ip_disabled_message {
+    my ( $results_array, $ns, @rrtypes ) = @_;
+
+    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
+        push @$results_array, map {
+          info(
+            IPV6_DISABLED => {
+                ns     => $ns->string,
+                rrtype => $_
+            }
+          )
+        } @rrtypes;
+        return 1;
+    }
+
+    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
+        push @$results_array, map {
+          info(
+            IPV4_DISABLED => {
+                ns     => $ns->string,
+                rrtype => $_,
+            }
+          )
+        } @rrtypes;
+        return 1;
+    }
+    return 0;
+}
+
 ###
 ### Tests
 ###
@@ -1248,25 +1277,7 @@ sub dnssec01 {
                 $ns_ip = $ns->address->short;
             }
 
-            if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
-                push @results,
-                  info(
-                    IPV6_DISABLED => {
-                        ns     => $ns->string,
-                        rrtype => q{DS},
-                    }
-                  );
-                next;
-            }
-
-            if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
-                push @results,
-                  info(
-                    IPV4_DISABLED => {
-                        ns     => $ns->string,
-                        rrtype => q{DS},
-                    }
-                  );
+            if ( _ip_disabled_message( \@results, $ns, q{DS} ) ) {
                 next;
             }
 
@@ -1421,27 +1432,10 @@ sub dnssec02 {
         next if exists $ip_already_processed{$ns->address->short};
         $ip_already_processed{$ns->address->short} = 1;
 
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
-            push @results,
-              info(
-                IPV6_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => q{DS}
-                }
-              );
+        if ( _ip_disabled_message( \@results, $ns, q{DS} ) ) {
             next;
         }
 
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
-            push @results,
-              info(
-                IPV4_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => q{DS}
-                }
-              );
-            next;
-        }
         my $ds_p = $ns->query( $zone->name, q{DS}, { dnssec => 1 } );
         if ( not $ds_p or $ds_p->rcode ne q{NOERROR} or not $ds_p->has_edns or not $ds_p->do or not $ds_p->aa) {
             next;
@@ -1483,25 +1477,7 @@ sub dnssec02 {
             next if exists $ip_already_processed{$ns->address->short};
             $ip_already_processed{$ns->address->short} = 1;
 
-            if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
-                push @results,
-                  info(
-                    IPV6_DISABLED => {
-                        ns     => $ns->string,
-                        rrtype => q{DNSKEY}
-                    }
-                  );
-                next;
-            }
-
-            if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
-                push @results,
-                  info(
-                    IPV4_DISABLED => {
-                        ns     => $ns->string,
-                        rrtype => q{DNSKEY}
-                    }
-                  );
+            if ( _ip_disabled_message( \@results, $ns, q{DNSKEY} ) ) {
                 next;
             }
 
@@ -1839,25 +1815,7 @@ sub dnssec05 {
     for my $key ( sort keys %nss ) {
         my $ns = $nss{$key};
 
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
-            push @results,
-              info(
-                IPV6_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => q{DNSKEY},
-                }
-              );
-            next;
-        }
-
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
-            push @results,
-              info(
-                IPV4_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => q{DNSKEY},
-                }
-              );
+        if ( _ip_disabled_message( \@results, $ns, q{DNSKEY} ) ) {
             next;
         }
 
@@ -2037,25 +1995,7 @@ sub dnssec08 {
         next if exists $ip_already_processed{$ns->address->short};
         $ip_already_processed{$ns->address->short} = 1;
 
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
-            push @results,
-              info(
-                IPV6_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => q{DNSKEY}
-                }
-              );
-            next;
-        }
-
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
-            push @results,
-              info(
-                IPV4_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => q{DNSKEY}
-                }
-              );
+        if ( _ip_disabled_message( \@results, $ns, q{DNSKEY} ) ) {
             next;
         }
 
@@ -2192,25 +2132,7 @@ sub dnssec09 {
         next if exists $ip_already_processed{$ns->address->short};
         $ip_already_processed{$ns->address->short} = 1;
 
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
-            push @results,
-              info(
-                IPV6_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => q{DNSKEY}
-                }
-              );
-            next;
-        }
-
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
-            push @results,
-              info(
-                IPV4_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => q{DNSKEY}
-                }
-              );
+        if ( _ip_disabled_message( \@results, $ns, q{DNSKEY} ) ) {
             next;
         }
 
@@ -2372,27 +2294,7 @@ sub dnssec10 {
         next if exists $ip_already_processed{$ns->address->short};
         $ip_already_processed{$ns->address->short} = 1;
 
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
-            push @results, map {
-              info( 
-                IPV6_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => $_
-                }
-              )
-            } @query_types;
-            next;
-        }   
-
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
-            push @results, map {
-              info( 
-                IPV4_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => $_
-                }       
-              )
-            } @query_types;
+        if ( _ip_disabled_message( \@results, $ns, @query_types ) ) {
             next;
         }
 
@@ -2889,25 +2791,7 @@ sub dnssec11 {
         next if exists $ip_already_processed{$ns->address->short};
         $ip_already_processed{$ns->address->short} = 1;
 
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
-            push @results,
-              info(
-                IPV6_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => q{DS} 
-                }
-              );
-            next;
-        }
-
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
-            push @results,
-              info(
-                IPV4_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => q{DS}
-                }
-              );
+        if ( _ip_disabled_message( \@results, $ns, q{DS} ) ) {
             next;
         }
 
@@ -2970,27 +2854,7 @@ sub dnssec11 {
             next if exists $ip_already_processed{$ns->address->short};
             $ip_already_processed{$ns->address->short} = 1;
 
-            if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
-                push @results, map {
-                  info(
-                    IPV6_DISABLED => {
-                        ns     => $ns->string,
-                        rrtype => $_
-                    }
-                  )
-                } @query_types;
-                next;
-            }
-
-            if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
-                push @results, map {
-                  info(
-                    IPV4_DISABLED => {
-                        ns     => $ns->string,
-                        rrtype => $_
-                    }
-                  )
-                } @query_types;
+            if ( _ip_disabled_message( \@results, $ns, @query_types ) ) {
                 next;
             }
 
@@ -3070,27 +2934,7 @@ sub dnssec13 {
         next if exists $ip_already_processed{$ns->address->short};
         $ip_already_processed{$ns->address->short} = 1;
 
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
-            push @results, map {
-              info(
-                IPV6_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => $_,
-                }
-              );
-            } @query_types;
-            next;
-        }
-
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
-            push @results, map {
-              info(
-                IPV4_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => $_,
-                }
-              )
-            } @query_types;
+        if ( _ip_disabled_message( \@results, $ns, @query_types ) ) {
             next;
         }
 
@@ -3157,25 +3001,7 @@ sub dnssec14 {
     for my $nss_key ( sort keys %nss ) {
         my $ns = $nss{$nss_key};
 
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
-            push @results,
-              info(
-                IPV6_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => q{DNSKEY},
-                }
-              );
-            next;
-        }
-
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
-            push @results,
-              info(
-                IPV4_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => q{DNSKEY},
-                }
-              );
+        if ( _ip_disabled_message( \@results, $ns, q{DNSKEY} ) ) {
             next;
         }
 
@@ -3259,27 +3085,7 @@ sub dnssec15 {
         next if exists $ip_already_processed{$ns->address->short};
         $ip_already_processed{$ns->address->short} = 1;
 
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
-            push @results, map {
-              info(
-                IPV6_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => $_,
-                }
-              )
-            } @query_types;
-            next;
-        }
-
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
-            push @results, map {
-              info(
-                IPV4_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => $_,
-                }
-              )
-            } @query_types;
+        if ( _ip_disabled_message( \@results, $ns, @query_types ) ) {
             next;
         }
 
@@ -3497,27 +3303,7 @@ sub dnssec16 {
         next if exists $ip_already_processed{$ns->address->short};
         $ip_already_processed{$ns->address->short} = 1;
 
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
-            push @results, map {
-              info(
-                IPV6_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => $_,
-                }
-              )
-            } @query_types;
-            next;
-        }
-
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
-            push @results, map {
-              info(
-                IPV4_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => $_,
-                }
-              )
-            } @query_types;
+        if ( _ip_disabled_message( \@results, $ns, @query_types ) ) {
             next;
         }
 
@@ -3767,27 +3553,7 @@ sub dnssec17 {
         next if exists $ip_already_processed{$ns->address->short};
         $ip_already_processed{$ns->address->short} = 1;
 
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
-            push @results, map {
-              info(
-                IPV6_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => $_,
-                }
-              )
-            } @query_types;
-            next;
-        }
-
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
-            push @results, map {
-              info(
-                IPV4_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => $_,
-                }
-              )
-            } @query_types;
+        if ( _ip_disabled_message( \@results, $ns, @query_types ) ) {
             next;
         }
 
@@ -4029,29 +3795,11 @@ sub dnssec18 {
 
     for my $nss_key ( sort keys %nss ) {
         my $ns = $nss{$nss_key};
-    
+
         next if exists $ip_already_processed{$ns->address->short};
         $ip_already_processed{$ns->address->short} = 1;
 
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
-            push @results,
-              info(
-                IPV6_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => q{DS}
-                }
-              );
-            next;
-        }
-
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
-            push @results,
-              info(
-                IPV4_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => q{DS}
-                }
-              );
+        if ( _ip_disabled_message( \@results, $ns, q{DS} ) ) {
             next;
         }
 
@@ -4097,27 +3845,7 @@ sub dnssec18 {
             next if exists $ip_already_processed{$ns->address->short};
             $ip_already_processed{$ns->address->short} = 1;
 
-            if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
-                push @results, map {
-                  info(
-                    IPV6_DISABLED => {
-                        ns     => $ns->string,
-                        rrtype => $_
-                    }
-                  )
-                } @query_types;
-                next;
-            }
-
-            if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
-                push @results, map {
-                  info(
-                    IPV4_DISABLED => {
-                        ns     => $ns->string,
-                        rrtype => $_
-                    }
-                  )
-                } @query_types;
+            if ( _ip_disabled_message( \@results, $ns, @query_types ) ) {
                 next;
             }
 
