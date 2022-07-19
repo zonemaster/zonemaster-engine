@@ -238,7 +238,7 @@ sub all {
         if ( Zonemaster::Engine::Util::should_run_test( q{dnssec05} ) ) {
             push @results, $class->dnssec05( $zone );
         }
-    
+
         if ( grep { $_->tag eq q{DNSKEY_BUT_NOT_DS} or $_->tag eq q{DNSKEY_AND_DS} } @results ) {
             if ( Zonemaster::Engine::Util::should_run_test( q{dnssec06} ) ) {
                 push @results, $class->dnssec06( $zone );
@@ -1275,7 +1275,7 @@ sub dnssec01 {
             if ( not $ds_p or $ds_p->rcode ne q{NOERROR} or not $ds_p->has_edns or not $ds_p->do or not $ds_p->aa ) {
                 next;
             }
-                
+
             my @dss = $ds_p->get_records( q{DS}, q{answer} );
 
             my $can_continue = 0;
@@ -1366,7 +1366,7 @@ sub dnssec01 {
                     else{
                         my $tmp_dnskey = Zonemaster::LDNS::RR->new( sprintf( '%s IN DNSKEY 256 3 13 gpqeIK2jbErZDUYZplEVOOo86PWm0KEkHtA4uZ1LSLGLJbzG7VTUcuVt dkDeIz/5+I5gtZMU0z5YW5a5r+KBRw==', $zone->name ) );
                         my $tmp_ds = $tmp_dnskey->ds( $LDNS_digest_algorithms_supported{$ds_digtype} );
-                        
+
                         if ( not $tmp_ds ){
                             push @results,
                               info(
@@ -1417,7 +1417,7 @@ sub dnssec02 {
 
     for my $nss_key ( sort keys %nss ) {
         my $ns = $nss{$nss_key};
-    
+
         next if exists $ip_already_processed{$ns->address->short};
         $ip_already_processed{$ns->address->short} = 1;
 
@@ -1720,7 +1720,7 @@ sub dnssec03 {
                       );
                 }
             } ## end if ( $iter > 100 )
-            elsif ( $min_len > 0 ) 
+            elsif ( $min_len > 0 )
             {
                 push @results,
                   info(
@@ -2430,11 +2430,11 @@ sub dnssec10 {
         #       a. The "A" RRset has the same owner name as the query name, or
         #       b. There are one or more record of RR type "CNAME" chaining from
         #          the query name to the owner name of the "A" RRset.
-        #    c. The answer section has RRsig record or records in the answer 
+        #    c. The answer section has RRsig record or records in the answer
         #       section meeting the following criteria:
-        #       a. There is at least one RRsig for the "A" RRset in the answer 
+        #       a. There is at least one RRsig for the "A" RRset in the answer
         #          section.
-        #       b. If there are CNAME records in the answer section, then there 
+        #       b. If there are CNAME records in the answer section, then there
         #          is at least one RRsig for each CNAME record.
         #       c. None of the RRsig records are for a wildcard.
         #
@@ -2500,7 +2500,7 @@ sub dnssec10 {
         #    a. The The RCODE of response is "NoError".
         #    b. The answer section has one or more record of RR type "CNAME" in
         #       a chain where first record has the owner name matching the query name.
-        #    c. The answer section has RRsig record or records in the answer section 
+        #    c. The answer section has RRsig record or records in the answer section
         #       meeting the following criteria:
         #       a. There is at least one RRsig for each CNAME record.
         #       b. None of the RRsig records are for a wildcard.
@@ -2535,7 +2535,7 @@ sub dnssec10 {
             my $step_c = 0;
             if ( scalar @cname_records ) {
                 $step_c = 1;
-                my $cname_records_rrsig_ok = 0;    
+                my $cname_records_rrsig_ok = 0;
                 shift @owners;
                 foreach my $owner ( @owners ) {
                     if ( scalar grep { $_->typecovered eq q{CNAME} } $a_p->get_records_for_name( q{RRSIG}, $owner, q{answer} ) ) {
@@ -2563,17 +2563,17 @@ sub dnssec10 {
         }
         #----------------------------------------------------------------------
         # viii. If the answer section has any RRset of RR type "A" or "CNAME" do ("RRset"):
-        #    a. For each RRset in "RRset" add name server IP, RR type and owner name to the 
+        #    a. For each RRset in "RRset" add name server IP, RR type and owner name to the
         #       Unsigned Answer set if both criteria are true:
         #       a. There is no RRSIG record covering the owner name of the RRset.
-        #       b. There is no RRSIG record covering a wild card record whose owner name 
+        #       b. There is no RRSIG record covering a wild card record whose owner name
         #          covers the owner name of the RRset.
-        #    b. Go to next name server IP if any data was added to the Unsigned Answer set 
+        #    b. Go to next name server IP if any data was added to the Unsigned Answer set
         #       in the loop above.
-        #    c. For each RRset in RRset add name server IP, RR type and owner name to the 
-        #       Answer Verify Error set if its RRSIG cannot be verified by the corresponding 
+        #    c. For each RRset in RRset add name server IP, RR type and owner name to the
+        #       Answer Verify Error set if its RRSIG cannot be verified by the corresponding
         #       DNSKEY or DNSKEY is missing.
-        #    d. Go to next name server IP if any data was added to the Answer Verify Error 
+        #    d. Go to next name server IP if any data was added to the Answer Verify Error
         #       set in the loop above.
         #
         # Testing zones :
@@ -2855,7 +2855,7 @@ sub dnssec10 {
     if ( scalar keys %algo_not_supported_by_zm ) {
         foreach my $keytag ( keys %algo_not_supported_by_zm ) {
             push @results, map {
-              info( 
+              info(
                 DS10_ALGO_NOT_SUPPORTED_BY_ZM => {
                     keytag     => $keytag,
                     algo_num   => $_,
@@ -3196,7 +3196,7 @@ sub dnssec14 {
 
     my %investigated_keys;
     foreach my $key ( @dnskey_rrs ) {
-        my $algo = $key->algorithm;  
+        my $algo = $key->algorithm;
 
         next if not exists $rsa_key_size_details{$algo};
 
@@ -3464,7 +3464,7 @@ sub dnssec15 {
               );
         }
     }
-    
+
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub dnssec15
 
