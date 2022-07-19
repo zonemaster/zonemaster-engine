@@ -769,12 +769,12 @@ sub _is_ip_version_disabled {
     my $ns = shift;
 
     if ( not Zonemaster::Engine::Profile->effective->get( q{net.ipv4} ) and $ns->address->version == $IP_VERSION_4 ) {
-        Zonemaster::Engine->logger->add( SKIP_IPV4_DISABLED => { ns => "$ns" } );
+        Zonemaster::Engine->logger->add( SKIP_IPV4_DISABLED => { ns_list => "$ns" } );
         return 1;
     }
 
     if ( not Zonemaster::Engine::Profile->effective->get( q{net.ipv6} ) and $ns->address->version == $IP_VERSION_6 ) {
-        Zonemaster::Engine->logger->add( SKIP_IPV6_DISABLED => { ns => "$ns" } );
+        Zonemaster::Engine->logger->add( SKIP_IPV6_DISABLED => { ns_list => "$ns" } );
         return 1;
     }
 
