@@ -2889,7 +2889,7 @@ sub dnssec11 {
         my $ns = $nss{$nss_key};
 
         if ( $is_undelegated ){
-            if ( not scalar %{$ns->fake_ds} ){
+            if ( not $ns->fake_ds->{$zone->name->string} ){
                 return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
             }
             last;
