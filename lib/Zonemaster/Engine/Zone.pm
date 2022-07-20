@@ -180,7 +180,7 @@ sub query_all {
 
     if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) ) {
         my @nope = grep { $_->address->version == 4 } @servers;
-        @servers = grep { $_->address->version != 4 } @servers;
+        @servers = grep { $_->address->version == 6 } @servers;
         map {
             Zonemaster::Engine->logger->add(
                SKIP_IPV4_DISABLED => {
@@ -193,7 +193,7 @@ sub query_all {
 
     if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) ) {
         my @nope = grep { $_->address->version == 6 } @servers;
-        @servers = grep { $_->address->version != 6 } @servers;
+        @servers = grep { $_->address->version == 4 } @servers;
         map {
             Zonemaster::Engine->logger->add(
                 SKIP_IPV6_DISABLED => {
