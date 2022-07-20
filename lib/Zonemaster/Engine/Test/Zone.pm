@@ -771,8 +771,8 @@ sub _is_ip_version_disabled {
     if ( not Zonemaster::Engine::Profile->effective->get( q{net.ipv4} ) and $ns->address->version == $IP_VERSION_4 ) {
         Zonemaster::Engine->logger->add(
             SKIP_IPV4_DISABLED => {
-                ns_list => $ns->string,
-                rrtype  => $type
+                ns     => $ns->string,
+                rrtype => $type
             }
         );
         return 1;
@@ -781,8 +781,8 @@ sub _is_ip_version_disabled {
     if ( not Zonemaster::Engine::Profile->effective->get( q{net.ipv6} ) and $ns->address->version == $IP_VERSION_6 ) {
         Zonemaster::Engine->logger->add(
             SKIP_IPV6_DISABLED => {
-                ns_list => $ns->string,
-                rrtype  => $type
+                ns     => $ns->string,
+                rrtype => $type
             }
         );
         return 1;
