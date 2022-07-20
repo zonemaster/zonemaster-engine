@@ -68,6 +68,7 @@ and updated messages (*msgids* and *msgstr*).
 | nsname         | Domain name                              | The domain name of a name server.                                       |
 | nsname_list    | List of domain names                     | A list of name servers, as specified by "nsname", separated by ";".     |
 | rcode          | An RCODE Name                            | An RCODE Name (not numeric code) from [DNS RCODEs].                     |
+| rrtype         | A Resource Record TYPE Name              | A Resource Record TYPE Name (not numeric code) from [DNS RR TYPEs].     |
 | testcase       | A Zonemaster test case, or `all`         | A test case identifier.                                                 |
 
 
@@ -141,6 +142,7 @@ Message names maked with a question mark should not be considered stable.
 
 
 [Basic.pm]:                                  ../lib/Zonemaster/Engine/Test/Basic.pm
+[DNS RR TYPEs]:                              https://www.iana.org/assignments/dns-parameters/dns-parameters.xhtml#dns-parameters-4
 [DNS RCODEs]:                                https://www.iana.org/assignments/dns-parameters/dns-parameters.xhtml#dns-parameters-6
 [DNSSEC algorithm]:                          https://www.iana.org/assignments/dns-sec-alg-numbers/dns-sec-alg-numbers.xhtml
 [DS Digest algorithm]:                       https://www.iana.org/assignments/ds-rr-types/ds-rr-types.xhtml
