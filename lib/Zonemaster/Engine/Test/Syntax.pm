@@ -301,6 +301,35 @@ sub version {
     return "$Zonemaster::Engine::Test::Syntax::VERSION";
 }
 
+sub _ip_disabled_message {
+    my ( $results_array, $ns, @rrtypes ) = @_;
+
+    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
+        push @$results_array, map {
+          info(
+            IPV6_DISABLED => {
+                ns     => $ns->string,
+                rrtype => $_
+            }
+          )
+        } @rrtypes;
+        return 1;
+    }
+
+    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
+        push @$results_array, map {
+          info(
+            IPV4_DISABLED => {
+                ns     => $ns->string,
+                rrtype => $_,
+            }
+          )
+        } @rrtypes;
+        return 1;
+    }
+    return 0;
+}
+
 ###
 ### Tests
 ###
@@ -461,27 +490,7 @@ sub syntax06 {
     my %seen_rnames;
     for my $ns ( @nss ) {
 
-        if ( not Zonemaster::Engine::Profile->effective->get( q{net.ipv6} ) and $ns->address->version == $IP_VERSION_6 )
-        {
-            push @results,
-              info(
-                IPV6_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => q{SOA},
-                }
-              );
-            next;
-        }
-
-        if ( not Zonemaster::Engine::Profile->effective->get( q{net.ipv4} ) and $ns->address->version == $IP_VERSION_4 )
-        {
-            push @results,
-              info(
-                IPV4_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => q{SOA},
-                }
-              );
+        if ( _ip_disabled_message( \@results, $ns, q{SOA} ) ) {
             next;
         }
 

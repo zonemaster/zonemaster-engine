@@ -409,6 +409,35 @@ sub version {
     return "$Zonemaster::Engine::Test::Nameserver::VERSION";
 }
 
+sub _ip_disabled_message {
+    my ( $results_array, $ns, @rrtypes ) = @_;
+
+    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
+        push @$results_array, map {
+          info(
+            IPV6_DISABLED => {
+                ns     => $ns->string,
+                rrtype => $_
+            }
+          )
+        } @rrtypes;
+        return 1;
+    }
+
+    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
+        push @$results_array, map {
+          info(
+            IPV4_DISABLED => {
+                ns     => $ns->string,
+                rrtype => $_,
+            }
+          )
+        } @rrtypes;
+        return 1;
+    }
+    return 0;
+}
+
 sub nameserver01 {
     my ( $class, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
@@ -641,25 +670,7 @@ sub nameserver05 {
 
         next if $nsnames_and_ip{ $ns->name->string . q{/} . $ns->address->short };
 
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
-            push @results,
-              info(
-                IPV6_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => q{A},
-                }
-              );
-            next;
-        }
-
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
-            push @results,
-              info(
-                IPV4_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => q{A},
-                }
-              );
+        if ( _ip_disabled_message( \@results, $ns, q{A} ) ) {
             next;
         }
 

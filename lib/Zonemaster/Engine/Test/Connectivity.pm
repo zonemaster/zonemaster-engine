@@ -188,6 +188,35 @@ sub version {
     return "$Zonemaster::Engine::Test::Connectivity::VERSION";
 }
 
+sub _ip_disabled_message {
+    my ( $results_array, $ns, @rrtypes ) = @_;
+
+    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
+        push @$results_array, map {
+          info(
+            IPV6_DISABLED => {
+                ns     => $ns->string,
+                rrtype => $_
+            }
+          )
+        } @rrtypes;
+        return 1;
+    }
+
+    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
+        push @$results_array, map {
+          info(
+            IPV4_DISABLED => {
+                ns     => $ns->string,
+                rrtype => $_,
+            }
+          )
+        } @rrtypes;
+        return 1;
+    }
+    return 0;
+}
+
 ###
 ### Tests
 ###
@@ -203,25 +232,7 @@ sub connectivity01 {
       my $local_ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) }, @{ Zonemaster::Engine::TestMethods->method5( $zone ) } )
     {
 
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $local_ns->address->version == $IP_VERSION_6 ) {
-            push @results,
-              info(
-                IPV6_DISABLED => {
-                    ns     => $local_ns->string,
-                    rrtype => $query_type,
-                }
-              );
-            next;
-        }
-
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $local_ns->address->version == $IP_VERSION_4 ) {
-            push @results,
-              info(
-                IPV4_DISABLED => {
-                    ns     => $local_ns->string,
-                    rrtype => $query_type,
-                }
-              );
+        if ( _ip_disabled_message( \@results, $local_ns, $query_type ) ) {
             next;
         }
 
@@ -253,25 +264,7 @@ sub connectivity02 {
       my $local_ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) }, @{ Zonemaster::Engine::TestMethods->method5( $zone ) } )
     {
 
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $local_ns->address->version == $IP_VERSION_6 ) {
-            push @results,
-              info(
-                IPV6_DISABLED => {
-                    ns     => $local_ns->string,
-                    rrtype => $query_type,
-                }
-              );
-            next;
-        }
-
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $local_ns->address->version == $IP_VERSION_4 ) {
-            push @results,
-              info(
-                IPV4_DISABLED => {
-                    ns     => $local_ns->string,
-                    rrtype => $query_type,
-                }
-              );
+        if ( _ip_disabled_message( \@results, $local_ns, $query_type ) ) {
             next;
         }
 
