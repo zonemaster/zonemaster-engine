@@ -13,6 +13,7 @@ use List::MoreUtils qw[uniq];
 use Zonemaster::Engine::DNSName;
 use Zonemaster::Engine::Recursor;
 use Zonemaster::Engine::NSArray;
+use Zonemaster::Engine::Constants qw[:ip];
 
 has 'name' => ( is => 'ro', isa => 'Zonemaster::Engine::DNSName', required => 1 );
 has 'parent' => ( is => 'ro', isa => 'Maybe[Zonemaster::Engine::Zone]', lazy_build => 1 );
@@ -126,7 +127,7 @@ sub _build_glue_addresses {
 sub _is_ip_version_disabled {
     my ( $ns, $type ) = @_;
 
-    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == 4 ) {
+    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
         Zonemaster::Engine->logger->add(
             SKIP_IPV4_DISABLED => {
                 ns     => $ns->string,
@@ -136,7 +137,7 @@ sub _is_ip_version_disabled {
         return 1;
     }
 
-    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == 6 ) {
+    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
         Zonemaster::Engine->logger->add(
             SKIP_IPV6_DISABLED => {
                 ns     => $ns->string,
@@ -179,8 +180,8 @@ sub query_all {
     my @servers = @{ $self->ns };
 
     if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) ) {
-        my @nope = grep { $_->address->version == 4 } @servers;
-        @servers = grep { $_->address->version == 6 } @servers;
+        my @nope = grep { $_->address->version == $IP_VERSION_4 } @servers;
+        @servers = grep { $_->address->version == $IP_VERSION_6 } @servers;
         map {
             Zonemaster::Engine->logger->add(
                SKIP_IPV4_DISABLED => {
@@ -192,8 +193,8 @@ sub query_all {
         }
 
     if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) ) {
-        my @nope = grep { $_->address->version == 6 } @servers;
-        @servers = grep { $_->address->version == 4 } @servers;
+        my @nope = grep { $_->address->version == $IP_VERSION_6 } @servers;
+        @servers = grep { $_->address->version == $IP_VERSION_4 } @servers;
         map {
             Zonemaster::Engine->logger->add(
                 SKIP_IPV6_DISABLED => {
