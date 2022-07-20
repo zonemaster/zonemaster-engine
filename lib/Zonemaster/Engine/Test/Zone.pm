@@ -323,7 +323,7 @@ sub zone01 {
 
                 my $ns = Zonemaster::Engine::Nameserver->new( { name => $soa_mname, address => $ip_address->short } );
 
-                if ( _is_ip_version_disabled( $ns ) ) {
+                if ( _is_ip_version_disabled( $ns, q{SOA} ) ) {
                     next;
                 }
 
@@ -700,7 +700,7 @@ sub zone10 {
 
     foreach my $ns ( @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) } ) {
 
-        if ( _is_ip_version_disabled( $ns ) ) {
+        if ( _is_ip_version_disabled( $ns, q{SOA} ) ) {
             next;
         }
 
@@ -751,7 +751,7 @@ sub _retrieve_record_from_zone {
     # Return response from the first authoritative server that gives one
     foreach my $ns ( @{ Zonemaster::Engine::TestMethods->method5( $zone ) } ) {
 
-        if ( _is_ip_version_disabled( $ns ) ) {
+        if ( _is_ip_version_disabled( $ns, $type ) ) {
             next;
         }
 
@@ -766,15 +766,25 @@ sub _retrieve_record_from_zone {
 }
 
 sub _is_ip_version_disabled {
-    my $ns = shift;
+    my ( $ns, $type ) = @_;
 
     if ( not Zonemaster::Engine::Profile->effective->get( q{net.ipv4} ) and $ns->address->version == $IP_VERSION_4 ) {
-        Zonemaster::Engine->logger->add( SKIP_IPV4_DISABLED => { ns_list => "$ns" } );
+        Zonemaster::Engine->logger->add(
+            SKIP_IPV4_DISABLED => {
+                ns_list => $ns->string,
+                rrtype  => $type
+            }
+        );
         return 1;
     }
 
     if ( not Zonemaster::Engine::Profile->effective->get( q{net.ipv6} ) and $ns->address->version == $IP_VERSION_6 ) {
-        Zonemaster::Engine->logger->add( SKIP_IPV6_DISABLED => { ns_list => "$ns" } );
+        Zonemaster::Engine->logger->add(
+            SKIP_IPV6_DISABLED => {
+                ns_list => $ns->string,
+                rrtype  => $type
+            }
+        );
         return 1;
     }
 

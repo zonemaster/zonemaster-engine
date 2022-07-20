@@ -124,18 +124,24 @@ sub _build_glue_addresses {
 }
 
 sub _is_ip_version_disabled {
-    my ( $ns ) = @_;
+    my ( $ns, $type ) = @_;
 
     if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == 4 ) {
         Zonemaster::Engine->logger->add(
-            SKIP_IPV4_DISABLED => { ns_list => $ns->string }
+            SKIP_IPV4_DISABLED => {
+                ns_list => $ns->string,
+                rrtype  => $type
+            }
         );
         return 1;
     }
 
     if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == 6 ) {
         Zonemaster::Engine->logger->add(
-            SKIP_IPV6_DISABLED => { ns_list => $ns->string }
+            SKIP_IPV6_DISABLED => {
+                ns_list => $ns->string,
+                rrtype  => $type
+            }
         );
         return 1;
     }
@@ -153,7 +159,7 @@ sub query_one {
     # Return response from the first server that gives one
     my $i = 0;
     while ( my $ns = $self->ns->[$i] ) {
-        if ( _is_ip_version_disabled( $ns ) ) {
+        if ( _is_ip_version_disabled( $ns, $type ) ) {
             next;
         }
 
@@ -177,17 +183,23 @@ sub query_all {
         @servers = grep { $_->address->version != 4 } @servers;
         map {
             Zonemaster::Engine->logger->add(
-               SKIP_IPV4_DISABLED => { ns_list => $_->string }
+               SKIP_IPV4_DISABLED => {
+                   ns_list => $_->string,
+                   rrtype  => $type
+               }
             )
-        } @nope;
-    }
+            } @nope;
+        }
 
     if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) ) {
         my @nope = grep { $_->address->version == 6 } @servers;
         @servers = grep { $_->address->version != 6 } @servers;
         map {
             Zonemaster::Engine->logger->add(
-                SKIP_IPV6_DISABLED => { ns_list => $_->string }
+                SKIP_IPV6_DISABLED => {
+                    ns_list => $_->string,
+                    rrtype  => $type
+                }
             )
         } @nope;
     }
@@ -201,7 +213,7 @@ sub query_auth {
     # Return response from the first server that replies with AA set
     my $i = 0;
     while ( my $ns = $self->ns->[$i] ) {
-        if ( _is_ip_version_disabled( $ns ) ) {
+        if ( _is_ip_version_disabled( $ns, $type ) ) {
             next;
         }
 
@@ -223,7 +235,7 @@ sub query_persistent {
     # Return response from the first server that has a record like the one asked for
     my $i = 0;
     while ( my $ns = $self->ns->[$i] ) {
-        if ( _is_ip_version_disabled( $ns ) ) {
+        if ( _is_ip_version_disabled( $ns, $type ) ) {
             next;
         }
 
