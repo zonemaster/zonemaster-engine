@@ -442,13 +442,7 @@ sub nameserver01 {
     my ( $class, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
-    my @nss;
-    {
-        my %nss = map { $_->string => $_ }
-          @{ Zonemaster::Engine::TestMethods->method4( $zone ) },
-          @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
-        @nss = values %nss;
-    }
+    my @nss =  @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) };
 
     for my $ns ( @nss ) {
 
@@ -503,9 +497,9 @@ sub nameserver02 {
     my %nsnames_and_ip;
     my $n_error = 0;
 
-    foreach
-      my $local_ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) }, @{ Zonemaster::Engine::TestMethods->method5( $zone ) } )
-    {
+    my @nss =  @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) };
+
+    foreach my $local_ns ( @nss ) {
         next if ( _ip_disabled_message( \@results, $local_ns, q{SOA} ) );
 
         next if $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short };
@@ -589,9 +583,9 @@ sub nameserver03 {
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
     my %nsnames_and_ip;
 
-    foreach
-      my $local_ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) }, @{ Zonemaster::Engine::TestMethods->method5( $zone ) } )
-    {
+    my @nss =  @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) };
+
+    foreach my $local_ns ( @nss ) {
 
         next if ( _ip_disabled_message( \@results, $local_ns, q{AXFR} ) );
 
@@ -621,9 +615,9 @@ sub nameserver04 {
     my %nsnames_and_ip;
     my $n_error = 0;
 
-    foreach
-      my $local_ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) }, @{ Zonemaster::Engine::TestMethods->method5( $zone ) } )
-    {
+    my @nss =  @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) };
+
+    foreach my $local_ns ( @nss ) {
 
         next if ( _ip_disabled_message( \@results, $local_ns, q{SOA} ) );
 
@@ -664,11 +658,13 @@ sub nameserver05 {
     my $aaaa_issue = 0;
     my @aaaa_ok;
 
-    foreach my $ns ( @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) } ) {
+    my @nss =  @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) };
 
-        next if $nsnames_and_ip{ $ns->name->string . q{/} . $ns->address->short };
+    foreach my $ns ( @nss ) {
 
         next if ( _ip_disabled_message( \@results, $ns, q{A} ) );
+
+        next if $nsnames_and_ip{ $ns->name->string . q{/} . $ns->address->short };
 
         $nsnames_and_ip{ $ns->name->string . q{/} . $ns->address->short }++;
 
@@ -747,8 +743,7 @@ sub nameserver06 {
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
     my @all_nsnames = uniq map { lc( $_->string ) } @{ Zonemaster::Engine::TestMethods->method2( $zone ) },
       @{ Zonemaster::Engine::TestMethods->method3( $zone ) };
-    my @all_nsnames_with_ip = uniq map { lc( $_->name->string ) } @{ Zonemaster::Engine::TestMethods->method4( $zone ) },
-      @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
+    my @all_nsnames_with_ip = uniq map { lc( $_->name->string ) } @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) };
     my @all_nsnames_without_ip;
     my %diff;
 
@@ -790,9 +785,8 @@ sub nameserver07 {
         push @results, info( UPWARD_REFERRAL_IRRELEVANT => {} );
     }
     else {
-        foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) },
-            @{ Zonemaster::Engine::TestMethods->method5( $zone ) } )
-        {
+        my @nss =  @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) };
+        foreach my $local_ns ( @nss ) {
             next if ( _ip_disabled_message( \@results, $local_ns, q{NS} ) );
 
             next if $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short };
@@ -836,9 +830,10 @@ sub nameserver08 {
         $randomized_uc_name = scramble_case $original_name;
     } while ( $randomized_uc_name eq $original_name );
 
-    foreach
-      my $local_ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) }, @{ Zonemaster::Engine::TestMethods->method5( $zone ) } )
-    {
+    my @nss =  @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) };
+
+    foreach my $local_ns ( @nss ) {
+
         next if ( _ip_disabled_message( \@results, $local_ns, q{SOA} ) );
 
         next if $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short };
@@ -893,9 +888,10 @@ sub nameserver09 {
         $randomized_uc_name2 = scramble_case $original_name;
     } while ( $randomized_uc_name2 eq $original_name or $randomized_uc_name2 eq $randomized_uc_name1 );
 
-    foreach
-      my $local_ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) }, @{ Zonemaster::Engine::TestMethods->method5( $zone ) } )
-    {
+    my @nss =  @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) };
+
+    foreach my $local_ns ( @nss ) {
+
         next if ( _ip_disabled_message( \@results, $local_ns, $record_type ) );
 
         next if $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short };
@@ -1017,13 +1013,7 @@ sub nameserver10 {
     my %unexpected_rcode;
     my @edns_response_error;
 
-    my @nss;
-    {
-        my %nss = map { $_->string => $_ }
-          @{ Zonemaster::Engine::TestMethods->method4( $zone ) },
-          @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
-        @nss = values %nss;
-    }
+    my @nss =  @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) };
 
     for my $ns ( @nss ) {
 
@@ -1087,20 +1077,14 @@ sub nameserver11 {
     my ( $class, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
-    my @nss;
-    {
-        my %nss = map { $_->string => $_ }
-          @{ Zonemaster::Engine::TestMethods->method4( $zone ) },
-          @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
-        @nss = values %nss;
-    }
-
     # Choose an unassigned EDNS0 Option Codes
     # values 15-26945 are Unassigned. Let's say we use 137 ???
     my $opt_code = 137;
     my $opt_data = q{};
     my $opt_length = length($opt_data);
     my $rdata = $opt_code*65536 + $opt_length;
+
+    my @nss =  @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) };
 
     for my $ns ( @nss ) {
 
@@ -1140,13 +1124,7 @@ sub nameserver12 {
     my ( $class, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
-    my @nss;
-    {
-        my %nss = map { $_->string => $_ }
-          @{ Zonemaster::Engine::TestMethods->method4( $zone ) },
-          @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
-        @nss = values %nss;
-    }
+    my @nss =  @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) };
 
     for my $ns ( @nss ) {
 
@@ -1185,13 +1163,7 @@ sub nameserver13 {
     my ( $class, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
-    my @nss;
-    {
-        my %nss = map { $_->string => $_ }
-          @{ Zonemaster::Engine::TestMethods->method4( $zone ) },
-          @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
-        @nss = values %nss;
-    }
+    my @nss =  @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) };
 
     for my $ns ( @nss ) {
 
