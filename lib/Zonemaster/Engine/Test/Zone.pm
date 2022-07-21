@@ -140,9 +140,19 @@ sub metadata {
         ],
         zone09 => [
             qw(
-              NO_MX_RECORD
-              MX_RECORD_EXISTS
-              NO_RESPONSE_MX_QUERY
+              Z09_INCONSISTENT_MX
+              Z09_INCONSISTENT_MX_DATA
+              Z09_MISSING_MAIL_TARGET
+              Z09_MX_DATA
+              Z09_MX_FOUND
+              Z09_NON_AUTH_MX_RESPONSE
+              Z09_NO_MX_FOUND
+              Z09_NO_RESPONSE_MX_QUERY
+              Z09_NULL_MX_NON_ZERO_PREF
+              Z09_NULL_MX_WITH_OTHER_MX
+              Z09_ROOT_EMAIL_DOMAIN
+              Z09_TLD_EMAIL_DOMAIN
+              Z09_UNEXPECTED_RCODE_MX
               TEST_CASE_END
               TEST_CASE_START
               )
@@ -181,14 +191,6 @@ Readonly my %TAG_DESCRIPTIONS => (
     MNAME_IS_NOT_CNAME => sub {
         __x    # ZONE:MNAME_IS_NOT_CNAME
           'SOA \'mname\' value ({mname}) refers to a NS which is not an alias (CNAME).', @_;
-    },
-    NO_MX_RECORD => sub {
-        __x    # ZONE:NO_MX_RECORD
-          'No target (MX, A or AAAA record) to deliver e-mail for the domain name.', @_;
-    },
-    MX_RECORD_EXISTS => sub {
-        __x    # ZONE:MX_RECORD_EXISTS
-          'MX with mail target ({mailtarget_list}) exists for the domain name.', @_;
     },
     REFRESH_MINIMUM_VALUE_LOWER => sub {
         __x    # ZONE:REFRESH_MINIMUM_VALUE_LOWER
@@ -295,6 +297,58 @@ Readonly my %TAG_DESCRIPTIONS => (
     WRONG_SOA => sub {
         __x    # ZONE:WRONG_SOA
           'Nameserver {ns} responds with a wrong owner name ({owner} instead of {name}) on SOA queries.', @_;
+    },
+    Z09_INCONSISTENT_MX => sub {
+        __x    # ZONE:Z09_INCONSISTENT_MX
+          'Some name servers return an MX RRset while others return none.', @_;
+    },
+    Z09_INCONSISTENT_MX_DATA => sub {
+        __x    # ZONE:Z09_INCONSISTENT_MX_DATA
+          'The MX RRset data is inconsistent between the name servers.', @_;
+    },
+    Z09_MISSING_MAIL_TARGET => sub {
+        __x    # ZONE:Z09_MISSING_MAIL_TARGET
+          'The child zone has no mail target (no MX).', @_;
+    },
+    Z09_MX_DATA => sub {
+        __x    # ZONE:Z09_MX_DATA
+          'The mail targets in the MX RRset, "{domain_list}", as returned by name servers "{ns_ip_list}".', @_;
+    },
+    Z09_MX_FOUND => sub {
+        __x    # ZONE:Z09_MX_FOUND
+          'MX RRset was returned by name servers "{ns_ip_list}".', @_;
+    },
+    Z09_NON_AUTH_MX_RESPONSE => sub {
+        __x    # ZONE:Z09_NON_AUTH_MX_RESPONSE
+          'Non-authoritative response on MX query from name servers "{ns_ip_list}".', @_;
+    },
+    Z09_NO_MX_FOUND => sub {
+        __x    # ZONE:Z09_NO_MX_FOUND
+          'No MX RRset was returned by name servers "{ns_ip_list}".', @_;
+    },
+    Z09_NO_RESPONSE_MX_QUERY => sub {
+        __x    # ZONE:Z09_NO_RESPONSE_MX_QUERY
+          'No response on MX query from name servers "{ns_ip_list}".', @_;
+    },
+    Z09_NULL_MX_NON_ZERO_PREF => sub {
+        __x    # ZONE:Z09_NULL_MX_NON_ZERO_PREF
+          'The zone has a Null MX with non-zero preference.', @_;
+    },
+    Z09_NULL_MX_WITH_OTHER_MX => sub {
+        __x    # ZONE:Z09_NULL_MX_WITH_OTHER_MX
+          'The zone has a Null MX mixed with other MX records.', @_;
+    },
+    Z09_ROOT_EMAIL_DOMAIN => sub {
+        __x    # ZONE:Z09_ROOT_EMAIL_DOMAIN
+          'Root zone with an unexpected MX RRset (non-Null MX).', @_;
+    },
+    Z09_TLD_EMAIL_DOMAIN => sub {
+        __x    # ZONE:Z09_TLD_EMAIL_DOMAIN
+          'The zone is a TLD and has an unexpected MX RRset (non-Null MX).', @_;
+    },
+    Z09_UNEXPECTED_RCODE_MX => sub {
+        __x    # ZONE:Z09_UNEXPECTED_RCODE_MX
+          'Unexpected RCODE value on the MX query from name servers "{ns_ip_list}".', @_;
     },
 );
 
