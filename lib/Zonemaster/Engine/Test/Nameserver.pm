@@ -501,6 +501,7 @@ sub nameserver02 {
     my ( $class, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
     my %nsnames_and_ip;
+    my $n_error = 0;
 
     foreach
       my $local_ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) }, @{ Zonemaster::Engine::TestMethods->method5( $zone ) } )
@@ -513,6 +514,7 @@ sub nameserver02 {
         if ( $p ) {
             if ( $p->rcode eq q{FORMERR} and not $p->has_edns) {
                 push @results, info( NO_EDNS_SUPPORT => { ns => $local_ns->string } );
+                $n_error++;
             }
             elsif ( $p->rcode eq q{NOERROR} and not $p->edns_rcode and $p->get_records( q{SOA}, q{answer} ) and $p->edns_version == 0 ) {
                 $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short }++;
@@ -526,6 +528,7 @@ sub nameserver02 {
                         domain => $zone->name,
                     }
                   );
+                $n_error++;
             }
             elsif ( $p->rcode eq q{NOERROR} and $p->has_edns and $p->edns_version != 0 ) {
                 push @results,
@@ -535,9 +538,11 @@ sub nameserver02 {
                         domain => $zone->name,
                     }
                   );
+                $n_error++;
             }
             else {
                 push @results, info( NS_ERROR => { ns => $local_ns->string } );
+                $n_error++;
             }
         }
         else {
@@ -550,6 +555,7 @@ sub nameserver02 {
                         domain => $zone->name,
                     }
                   );
+                $n_error++;
             }
             else {
                 push @results,
@@ -559,13 +565,14 @@ sub nameserver02 {
                         domain => $zone->name,
                     }
                   );
+                $n_error++;
             }
         }
 
         $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short }++;
     } ## end foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods...})
 
-    if ( scalar keys %nsnames_and_ip and not grep { $_->tag ne q{TEST_CASE_START} } @results ) {
+    if ( scalar keys %nsnames_and_ip and not $n_error ) {
         push @results,
           info(
             EDNS0_SUPPORT => {
@@ -612,6 +619,7 @@ sub nameserver04 {
     my ( $class, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
     my %nsnames_and_ip;
+    my $n_error = 0;
 
     foreach
       my $local_ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) }, @{ Zonemaster::Engine::TestMethods->method5( $zone ) } )
@@ -631,12 +639,13 @@ sub nameserver04 {
                         source => $p->answerfrom,
                     }
                   );
+                $n_error++;
             }
         }
         $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short }++;
     } ## end foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods...})
 
-    if ( scalar keys %nsnames_and_ip and not grep { $_->tag ne q{TEST_CASE_START} } @results ) {
+    if ( scalar keys %nsnames_and_ip and not $n_error) {
         push @results,
           info(
             SAME_SOURCE_IP => {
@@ -775,6 +784,7 @@ sub nameserver07 {
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
     my %nsnames_and_ip;
     my %nsnames;
+    my $n_error = 0;
 
     if ( $zone->name eq q{.} ) {
         push @results, info( UPWARD_REFERRAL_IRRELEVANT => {} );
@@ -793,13 +803,14 @@ sub nameserver07 {
 
                 if ( @ns ) {
                     push @results, info( UPWARD_REFERRAL => { ns => $local_ns->string } );
+                    $n_error++;
                 }
             }
             $nsnames{ $local_ns->name }++;
             $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short }++;
         } ## end foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods...})
 
-        if ( scalar keys %nsnames_and_ip and not grep { $_->tag ne q{TEST_CASE_START} } @results ) {
+        if ( scalar keys %nsnames_and_ip and not $n_error ) {
             push @results,
               info(
                 NO_UPWARD_REFERRAL => {
