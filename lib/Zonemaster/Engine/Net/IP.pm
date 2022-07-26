@@ -61,6 +61,12 @@ sub print {
 
 sub reverse_ip {
     my $self = shift;
+    my $addr = $self->{_inner}->short;
+    # Work around for IPv4 address due to a bug in Net::IP when the last octet is "0"
+    # https://github.com/zonemaster/zonemaster-engine/issues/1107
+    if ($addr =~ /^\d{1,3}\.\d{1,3}\.\d{1,3}\.0$/) { # IPv4 x.x.x.0
+        return join ('.', reverse (split (/\./, $addr))) . '.in-addr.arpa.';
+    };
     return $self->{_inner}->reverse_ip();
 }
 
