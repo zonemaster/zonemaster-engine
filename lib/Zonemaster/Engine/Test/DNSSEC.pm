@@ -2785,8 +2785,17 @@ sub dnssec11 {
     my %nss        = map { $_->name->string . '/' . $_->address->short => $_ } @nss_parent;
     my %ip_already_processed;
 
+    my $is_undelegated = Zonemaster::Engine::Recursor->has_fake_addresses( $zone->name->string );
+
     for my $nss_key ( sort keys %nss ) {
         my $ns = $nss{$nss_key};
+
+        if ( $is_undelegated ){
+            if ( not $ns->fake_ds->{$zone->name->string} ){
+                return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+            }
+            last;
+        }
 
         next if exists $ip_already_processed{$ns->address->short};
         $ip_already_processed{$ns->address->short} = 1;
