@@ -442,22 +442,11 @@ sub nameserver01 {
     my ( $class, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
-    my @nss;
-    {
-        my %nss = map { $_->string => $_ }
-          @{ Zonemaster::Engine::TestMethods->method4( $zone ) },
-          @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
-        @nss = values %nss;
-    }
-
-    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) ) {
-        @nss = grep { $_->address->version != $IP_VERSION_6 } @nss;
-    }
-    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) ) {
-        @nss = grep { $_->address->version != $IP_VERSION_4 } @nss;
-    }
+    my @nss =  @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) };
 
     for my $ns ( @nss ) {
+
+        next if ( _ip_disabled_message( \@results, $ns, q{A} ) );
 
         my $response_count = 0;
         my $nxdomain_count = 0;
@@ -506,13 +495,12 @@ sub nameserver02 {
     my ( $class, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
     my %nsnames_and_ip;
+    my $n_error = 0;
 
-    foreach
-      my $local_ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) }, @{ Zonemaster::Engine::TestMethods->method5( $zone ) } )
-    {
-        next if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $local_ns->address->version == $IP_VERSION_6 );
+    my @nss =  @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) };
 
-        next if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $local_ns->address->version == $IP_VERSION_4 );
+    foreach my $local_ns ( @nss ) {
+        next if ( _ip_disabled_message( \@results, $local_ns, q{SOA} ) );
 
         next if $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short };
 
@@ -520,6 +508,7 @@ sub nameserver02 {
         if ( $p ) {
             if ( $p->rcode eq q{FORMERR} and not $p->has_edns) {
                 push @results, info( NO_EDNS_SUPPORT => { ns => $local_ns->string } );
+                $n_error++;
             }
             elsif ( $p->rcode eq q{NOERROR} and not $p->edns_rcode and $p->get_records( q{SOA}, q{answer} ) and $p->edns_version == 0 ) {
                 $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short }++;
@@ -533,6 +522,7 @@ sub nameserver02 {
                         domain => $zone->name,
                     }
                   );
+                $n_error++;
             }
             elsif ( $p->rcode eq q{NOERROR} and $p->has_edns and $p->edns_version != 0 ) {
                 push @results,
@@ -542,9 +532,11 @@ sub nameserver02 {
                         domain => $zone->name,
                     }
                   );
+                $n_error++;
             }
             else {
                 push @results, info( NS_ERROR => { ns => $local_ns->string } );
+                $n_error++;
             }
         }
         else {
@@ -557,6 +549,7 @@ sub nameserver02 {
                         domain => $zone->name,
                     }
                   );
+                $n_error++;
             }
             else {
                 push @results,
@@ -566,13 +559,14 @@ sub nameserver02 {
                         domain => $zone->name,
                     }
                   );
+                $n_error++;
             }
         }
 
         $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short }++;
     } ## end foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods...})
 
-    if ( scalar keys %nsnames_and_ip and not grep { $_->tag ne q{TEST_CASE_START} } @results ) {
+    if ( scalar keys %nsnames_and_ip and not $n_error ) {
         push @results,
           info(
             EDNS0_SUPPORT => {
@@ -589,13 +583,11 @@ sub nameserver03 {
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
     my %nsnames_and_ip;
 
-    foreach
-      my $local_ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) }, @{ Zonemaster::Engine::TestMethods->method5( $zone ) } )
-    {
+    my @nss =  @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) };
 
-        next if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $local_ns->address->version == $IP_VERSION_6 );
+    foreach my $local_ns ( @nss ) {
 
-        next if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $local_ns->address->version == $IP_VERSION_4 );
+        next if ( _ip_disabled_message( \@results, $local_ns, q{AXFR} ) );
 
         next if $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short };
 
@@ -621,14 +613,13 @@ sub nameserver04 {
     my ( $class, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
     my %nsnames_and_ip;
+    my $n_error = 0;
 
-    foreach
-      my $local_ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) }, @{ Zonemaster::Engine::TestMethods->method5( $zone ) } )
-    {
+    my @nss =  @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) };
 
-        next if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $local_ns->address->version == $IP_VERSION_6 );
+    foreach my $local_ns ( @nss ) {
 
-        next if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $local_ns->address->version == $IP_VERSION_4 );
+        next if ( _ip_disabled_message( \@results, $local_ns, q{SOA} ) );
 
         next if $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short };
 
@@ -642,12 +633,13 @@ sub nameserver04 {
                         source => $p->answerfrom,
                     }
                   );
+                $n_error++;
             }
         }
         $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short }++;
     } ## end foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods...})
 
-    if ( scalar keys %nsnames_and_ip and not grep { $_->tag ne q{TEST_CASE_START} } @results ) {
+    if ( scalar keys %nsnames_and_ip and not $n_error) {
         push @results,
           info(
             SAME_SOURCE_IP => {
@@ -666,13 +658,13 @@ sub nameserver05 {
     my $aaaa_issue = 0;
     my @aaaa_ok;
 
-    foreach my $ns ( @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) } ) {
+    my @nss =  @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) };
+
+    foreach my $ns ( @nss ) {
+
+        next if ( _ip_disabled_message( \@results, $ns, q{A} ) );
 
         next if $nsnames_and_ip{ $ns->name->string . q{/} . $ns->address->short };
-
-        if ( _ip_disabled_message( \@results, $ns, q{A} ) ) {
-            next;
-        }
 
         $nsnames_and_ip{ $ns->name->string . q{/} . $ns->address->short }++;
 
@@ -751,8 +743,7 @@ sub nameserver06 {
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
     my @all_nsnames = uniq map { lc( $_->string ) } @{ Zonemaster::Engine::TestMethods->method2( $zone ) },
       @{ Zonemaster::Engine::TestMethods->method3( $zone ) };
-    my @all_nsnames_with_ip = uniq map { lc( $_->name->string ) } @{ Zonemaster::Engine::TestMethods->method4( $zone ) },
-      @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
+    my @all_nsnames_with_ip = uniq map { lc( $_->name->string ) } @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) };
     my @all_nsnames_without_ip;
     my %diff;
 
@@ -788,17 +779,15 @@ sub nameserver07 {
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
     my %nsnames_and_ip;
     my %nsnames;
+    my $n_error = 0;
 
     if ( $zone->name eq q{.} ) {
         push @results, info( UPWARD_REFERRAL_IRRELEVANT => {} );
     }
     else {
-        foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) },
-            @{ Zonemaster::Engine::TestMethods->method5( $zone ) } )
-        {
-            next if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $local_ns->address->version == $IP_VERSION_6 );
-
-            next if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $local_ns->address->version == $IP_VERSION_4 );
+        my @nss =  @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) };
+        foreach my $local_ns ( @nss ) {
+            next if ( _ip_disabled_message( \@results, $local_ns, q{NS} ) );
 
             next if $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short };
 
@@ -808,13 +797,14 @@ sub nameserver07 {
 
                 if ( @ns ) {
                     push @results, info( UPWARD_REFERRAL => { ns => $local_ns->string } );
+                    $n_error++;
                 }
             }
             $nsnames{ $local_ns->name }++;
             $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short }++;
         } ## end foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods...})
 
-        if ( scalar keys %nsnames_and_ip and not grep { $_->tag ne q{TEST_CASE_START} } @results ) {
+        if ( scalar keys %nsnames_and_ip and not $n_error ) {
             push @results,
               info(
                 NO_UPWARD_REFERRAL => {
@@ -840,12 +830,11 @@ sub nameserver08 {
         $randomized_uc_name = scramble_case $original_name;
     } while ( $randomized_uc_name eq $original_name );
 
-    foreach
-      my $local_ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) }, @{ Zonemaster::Engine::TestMethods->method5( $zone ) } )
-    {
-        next if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $local_ns->address->version == $IP_VERSION_6 );
+    my @nss =  @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) };
 
-        next if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $local_ns->address->version == $IP_VERSION_4 );
+    foreach my $local_ns ( @nss ) {
+
+        next if ( _ip_disabled_message( \@results, $local_ns, q{SOA} ) );
 
         next if $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short };
 
@@ -899,12 +888,11 @@ sub nameserver09 {
         $randomized_uc_name2 = scramble_case $original_name;
     } while ( $randomized_uc_name2 eq $original_name or $randomized_uc_name2 eq $randomized_uc_name1 );
 
-    foreach
-      my $local_ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) }, @{ Zonemaster::Engine::TestMethods->method5( $zone ) } )
-    {
-        next if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $local_ns->address->version == $IP_VERSION_6 );
+    my @nss =  @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) };
 
-        next if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $local_ns->address->version == $IP_VERSION_4 );
+    foreach my $local_ns ( @nss ) {
+
+        next if ( _ip_disabled_message( \@results, $local_ns, $record_type ) );
 
         next if $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short };
 
@@ -1025,27 +1013,17 @@ sub nameserver10 {
     my %unexpected_rcode;
     my @edns_response_error;
 
-    my @nss;
-    {
-        my %nss = map { $_->string => $_ }
-          @{ Zonemaster::Engine::TestMethods->method4( $zone ) },
-          @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
-        @nss = values %nss;
-    }
-
-    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) ) {
-        @nss = grep { $_->address->version != $IP_VERSION_6 } @nss;
-    }
-    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) ) {
-        @nss = grep { $_->address->version != $IP_VERSION_4 } @nss;
-    }
+    my @nss =  @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) };
 
     for my $ns ( @nss ) {
+
+        next if ( _ip_disabled_message( \@results, $ns, q{SOA} ) );
+
         my $p = $ns->query( $zone->name, q{SOA}, { edns_details => { version => 0 } } );
-        
+
         if ( $p and $p->rcode eq q{NOERROR} ){
             my $p2 = $ns->query( $zone->name, q{SOA}, { edns_details => { version => 1 } } );
-            
+
             if ( $p2 ) {
                 if ( ($p2->rcode ne q{NOERROR} and $p2->edns_rcode != 1) ) {
                     push @{ $unexpected_rcode{$p->rcode} }, $ns->address->short;
@@ -1099,21 +1077,6 @@ sub nameserver11 {
     my ( $class, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
-    my @nss;
-    {
-        my %nss = map { $_->string => $_ }
-          @{ Zonemaster::Engine::TestMethods->method4( $zone ) },
-          @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
-        @nss = values %nss;
-    }
-
-    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) ) {
-        @nss = grep { $_->address->version != $IP_VERSION_6 } @nss;
-    }
-    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) ) {
-        @nss = grep { $_->address->version != $IP_VERSION_4 } @nss;
-    }
-
     # Choose an unassigned EDNS0 Option Codes
     # values 15-26945 are Unassigned. Let's say we use 137 ???
     my $opt_code = 137;
@@ -1121,7 +1084,12 @@ sub nameserver11 {
     my $opt_length = length($opt_data);
     my $rdata = $opt_code*65536 + $opt_length;
 
+    my @nss =  @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) };
+
     for my $ns ( @nss ) {
+
+        next if ( _ip_disabled_message( \@results, $ns, q{SOA} ) );
+
         my $p = $ns->query( $zone->name, q{SOA}, { edns_details => { data => $rdata } } );
         if ( $p ) {
             if ( $p->rcode eq q{FORMERR} and not $p->edns_rcode ) {
@@ -1156,22 +1124,12 @@ sub nameserver12 {
     my ( $class, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
-    my @nss;
-    {
-        my %nss = map { $_->string => $_ }
-          @{ Zonemaster::Engine::TestMethods->method4( $zone ) },
-          @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
-        @nss = values %nss;
-    }
-
-    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) ) {
-        @nss = grep { $_->address->version != $IP_VERSION_6 } @nss;
-    }
-    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) ) {
-        @nss = grep { $_->address->version != $IP_VERSION_4 } @nss;
-    }
+    my @nss =  @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) };
 
     for my $ns ( @nss ) {
+
+        next if ( _ip_disabled_message( \@results, $ns, q{SOA} ) );
+
         my $p = $ns->query( $zone->name, q{SOA}, { edns_details => { z => 3 } } );
         if ( $p ) {
             if ( $p->rcode eq q{FORMERR} and not $p->edns_rcode ) {
@@ -1205,22 +1163,12 @@ sub nameserver13 {
     my ( $class, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
-    my @nss;
-    {
-        my %nss = map { $_->string => $_ }
-          @{ Zonemaster::Engine::TestMethods->method4( $zone ) },
-          @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
-        @nss = values %nss;
-    }
-
-    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) ) {
-        @nss = grep { $_->address->version != $IP_VERSION_6 } @nss;
-    }
-    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) ) {
-        @nss = grep { $_->address->version != $IP_VERSION_4 } @nss;
-    }
+    my @nss =  @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) };
 
     for my $ns ( @nss ) {
+
+        next if ( _ip_disabled_message( \@results, $ns, q{SOA} ) );
+
         my $p = $ns->query( $zone->name, q{SOA}, { usevc => 0, fallback => 0, edns_details => { do => 1, udp_size => 512  } } );
         if ( $p ) {
             if ( $p->rcode eq q{FORMERR} and not $p->edns_rcode ) {
