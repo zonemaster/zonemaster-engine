@@ -17,7 +17,6 @@ RUN apk add --no-cache \
     perl-lwp-protocol-https \
     perl-module-install \
     perl-moose \
-    perl-net-ip \
     perl-pod-coverage \
     perl-test-differences \
     perl-test-exception \
