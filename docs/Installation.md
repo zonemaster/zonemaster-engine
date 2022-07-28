@@ -65,7 +65,7 @@ Zonemaster::Engine, see the [declaration of prerequisites].
 4) Install packages from CPAN:
 
    ```sh
-   sudo cpanm Module::Install::XSUtil MooseX::Singleton Net::IP::XS
+   sudo cpanm Module::Install::XSUtil MooseX::Singleton
    ```
 
 5) Install Zonemaster::LDNS and Zonemaster::Engine:
@@ -193,7 +193,7 @@ Using pre-built packages is the preferred method for Debian and Ubuntu.
 3) Install packages from CPAN:
 
    ```sh
-   sudo cpanm Module::Install::XSUtil MooseX::Singleton Net::IP::XS
+   sudo cpanm Module::Install::XSUtil MooseX::Singleton
    ```
 
 4) Install Zonemaster::LDNS with support for DNSSEC algorithms 15 and 16:
