@@ -730,7 +730,22 @@ sub zone09 {
             next;
         }
 
-        my $p2 = $ns->query( $zone->name, q{MX}, { fallback => 1 } );
+        my $p2;
+        my $p2_udp = $ns->query( $zone->name, q{MX}, { fallback => 0, usevc => 0 } );
+
+        if ( $p2_udp and not $p2_udp->tc ){
+            $p2 = $p2_udp;
+        }
+        else{
+            my $p2_tcp = $ns->query( $zone->name, q{MX}, { fallback => 0, usevc => 1 } );
+            
+            if ( $p2_tcp ){
+                $p2 = $p2_tcp;
+            }
+            else{
+                $p2 = $p2_udp;
+            }
+        }
 
         if ( not $p2 ){
             push @no_response_mx, $ns->address->short;
