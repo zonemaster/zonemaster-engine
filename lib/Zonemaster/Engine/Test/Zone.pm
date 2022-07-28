@@ -730,7 +730,11 @@ sub zone09 {
             next;
         }
 
-        my $p2 = $ns->query( $zone->name, q{MX} );
+        my $p2 = $ns->query( $zone->name, q{MX}, { usevc => 0 } );
+
+        if ( not $p2 ){
+            $p2 = $ns->query( $zone->name, q{MX}, { usevc => 1 });
+        }
 
         if ( not $p2 ){
             push @no_response_mx, $ns->address->short;
