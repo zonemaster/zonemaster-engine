@@ -314,7 +314,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     Z09_MX_DATA => sub {
         __x    # ZONE:Z09_MX_DATA
-          'The mail targets in the MX RRset, "{domain_list}", as returned by name servers "{ns_ip_list}".', @_;
+          'Mail targets in the MX RRset "{domain_list}" returned from name servers "{ns_ip_list}".', @_;
     },
     Z09_MX_FOUND => sub {
         __x    # ZONE:Z09_MX_FOUND
@@ -778,7 +778,7 @@ sub zone09 {
     }
 
     if ( scalar %mx_set ){
-        my $data_json = q{};
+        my $data_json;
         my $json = JSON::PP->new->canonical->pretty;
         my $first = 1;
 
@@ -793,35 +793,37 @@ sub zone09 {
                 if ( $json->encode( \@next_data ) ne $data_json ){
                     push @results, info( Z09_INCONSISTENT_MX_DATA => {} );
                     
-                    foreach my $ns ( keys %mx_set ){
-                        push @results, info( Z09_MX_DATA => { 
-                            domain_list  => join( q{;}, map { $_->exchange } sort @{ $mx_set{$ns} } ),
-                            ns_ip_list => $ns
-                            }
-                        )
-                    }
-
+                    push @results, info( Z09_MX_DATA => { 
+                        domain_list  => join( q{;}, map { $_->exchange } map { @{ $mx_set{$_} } } keys %mx_set ),
+                        ns_ip_list => join ( q{;}, map { $_ } sort keys %mx_set )
+                        }
+                    );
+                    
                     last;
                 }
             }
-            
-            foreach my $rr ( @{$mx_set{$ns}} ){
-                if ( $rr->exchange eq '.' ){
-                    if ( scalar @{$mx_set{$ns}} > 1 ){
-                        push @results, info( Z09_NULL_MX_WITH_OTHER_MX => {} );
+        }
+
+        unless ( grep{$_->tag eq 'Z09_INCONSISTENT_MX_DATA'} @results ){
+            foreach my $ns ( keys %mx_set ){
+                foreach my $rr ( @{$mx_set{$ns}} ){
+                    if ( $rr->exchange eq '.' ){
+                        if ( scalar @{$mx_set{$ns}} > 1 ){
+                            push @results, info( Z09_NULL_MX_WITH_OTHER_MX => {} ) unless grep{$_->tag eq 'Z09_NULL_MX_WITH_OTHER_MX'} @results;
+                        }
+                    
+                        if ( $rr->preference > 0 ){
+                            push @results, info( Z09_NULL_MX_NON_ZERO_PREF => {} ) unless grep{$_->tag eq 'Z09_NULL_MX_NON_ZERO_PREF'} @results;
+                        }
                     }
-                
-                    if ( $rr->preference > 0 ){
-                        push @results, info( Z09_NULL_MX_NON_ZERO_PREF => {} );
+
+                    elsif ( $zone->name->string eq '.' ){
+                        push @results, info( Z09_ROOT_EMAIL_DOMAIN => {} ) unless grep{$_->tag eq 'Z09_ROOT_EMAIL_DOMAIN'} @results;
                     }
-                }
-                
-                if ( $zone->name->next_higher() eq '.' and $rr->exchange ne '.' ){
-                    push @results, info( Z09_TLD_EMAIL_DOMAIN => {} );
-                }                
-                
-                if ( $zone->name->string eq '.' and $rr->exchange ne '.' ){
-                    push @results, info( Z09_ROOT_EMAIL_DOMAIN => {} );
+                    
+                    elsif ( $zone->name->next_higher() eq '.' ){
+                        push @results, info( Z09_TLD_EMAIL_DOMAIN => {} ) unless grep{$_->tag eq 'Z09_TLD_EMAIL_DOMAIN'} @results;
+                    }                
                 }
             }
         }
