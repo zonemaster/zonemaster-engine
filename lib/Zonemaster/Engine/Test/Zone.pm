@@ -794,7 +794,7 @@ sub zone09 {
                     push @results, info( Z09_INCONSISTENT_MX_DATA => {} );
                     
                     push @results, info( Z09_MX_DATA => { 
-                        domain_list  => join( q{;}, map { $_->exchange } map { @{ $mx_set{$_} } } keys %mx_set ),
+                        domain_list  => join( q{;}, map { $_->exchange } map { @{ $mx_set{$_} } } sort keys %mx_set ),
                         ns_ip_list => join ( q{;}, map { $_ } sort keys %mx_set )
                         }
                     );
