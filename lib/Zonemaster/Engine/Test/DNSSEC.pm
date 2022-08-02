@@ -311,7 +311,6 @@ sub metadata {
               DS01_DS_ALGO_2_MISSING
               DS01_DS_ALGO_NOT_DS
               DS01_DS_ALGO_RESERVED
-              DS01_DS_ALGO_SHA1_DEPRECATED
               TEST_CASE_END
               TEST_CASE_START
               )
@@ -617,13 +616,6 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # DNSSEC:DS01_DS_ALGO_RESERVED
           'DS record for zone {domain} with keytag {keytag} was created with an unassigned digest algorithm '
           . '(algorithm number {ds_algo_num}). '
-          . 'Fetched from the nameservers with IP addresses "{ns_ip_list}".',
-          @_;
-    },
-    DS01_DS_ALGO_SHA1_DEPRECATED => sub {
-        __x    # DNSSEC:DS01_DS_ALGO_SHA1_DEPRECATED
-          'DS record for zone {domain} with keytag {keytag} was created by digest algorithm {ds_algo_num} '
-          . '({ds_algo_mnemo}). While still being widely in use, it is deprecated. '
           . 'Fetched from the nameservers with IP addresses "{ns_ip_list}".',
           @_;
     },
@@ -1323,19 +1315,7 @@ sub dnssec01 {
                             }
                           );
                     }
-                    elsif ( $ds_digtype == 1 ) {
-                        push @results,
-                          info(
-                            DS01_DS_ALGO_SHA1_DEPRECATED => {
-                                ns_ip_list    => join( q{;}, uniq sort @{ $ds_records{$ds_digtype}->{$ds_keytag} } ),
-                                domain        => q{} . $zone->name,
-                                keytag        => $ds_keytag,
-                                ds_algo_num   => $ds_digtype,
-                                ds_algo_mnemo => $mnemonic,
-                            }
-                          );
-                    }
-                    elsif ( $ds_digtype == 3 ) {
+                    elsif ( $ds_digtype == 1 or $ds_digtype == 3 ) {
                         push @results,
                           info(
                             DS01_DS_ALGO_DEPRECATED => {

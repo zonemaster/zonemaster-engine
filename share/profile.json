@@ -182,7 +182,6 @@
             "DS01_DS_ALGO_2_MISSING" : "NOTICE",
             "DS01_DS_ALGO_NOT_DS" : "ERROR",
             "DS01_DS_ALGO_RESERVED" : "ERROR",
-            "DS01_DS_ALGO_SHA1_DEPRECATED" : "WARNING",
             "DS02_ALGO_NOT_SUPPORTED_BY_ZM" : "NOTICE",
             "DS02_DNSKEY_NOT_FOR_ZONE_SIGNING" : "ERROR",
             "DS02_DNSKEY_NOT_SEP" : "NOTICE",
