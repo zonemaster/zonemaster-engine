@@ -514,6 +514,15 @@ sub basic04 {
     my @query_types = qw{SOA NS};
     my @ns = @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) };
 
+    if ( not scalar @ns ){
+        push @results,
+            info(
+               B04_NO_RESPONSE => {
+                   ns => ''
+                }
+            );
+    }
+
     foreach my $ns ( @ns ) {
         if ( _ip_disabled_message( \@results, $ns, @query_types ) ) {
             next;
