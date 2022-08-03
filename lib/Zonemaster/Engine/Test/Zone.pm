@@ -715,7 +715,9 @@ sub zone09 {
     my @no_mx_set;
     my %mx_set;
 
-    foreach my $ns ( @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) } ) {
+    my %all_ns;
+
+    foreach my $ns ( @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) } ){
         
         next if exists $ip_already_processed{$ns->address->short};
         $ip_already_processed{$ns->address->short} = 1;
@@ -751,6 +753,8 @@ sub zone09 {
         else{
             push @{ $mx_set{$ns->address->short} }, $p2->get_records_for_name(q{MX}, $zone->name, q{answer});
         }
+
+        push @{ $all_ns{$ns->name->string} }, $ns->address->short;
     }
 
     if ( scalar @no_response_mx ){
@@ -793,11 +797,13 @@ sub zone09 {
                 if ( $json->encode( \@next_data ) ne $data_json ){
                     push @results, info( Z09_INCONSISTENT_MX_DATA => {} );
                     
-                    push @results, info( Z09_MX_DATA => { 
-                        domain_list  => join( q{;}, map { $_->exchange } map { @{ $mx_set{$_} } } sort keys %mx_set ),
-                        ns_ip_list => join ( q{;}, map { $_ } sort keys %mx_set )
-                        }
-                    );
+                    foreach my $ns_name ( keys %all_ns ){
+                        push @results, info( Z09_MX_DATA => {
+                            domain_list  => join( q{;}, map { $_->exchange } @{ $mx_set{@{$all_ns{$ns_name}}[0]} } ),
+                            ns_ip_list => join( q{;}, @{ $all_ns{$ns_name} } )
+                            }
+                        )
+                    }
                     
                     last;
                 }
@@ -823,7 +829,7 @@ sub zone09 {
                     
                     elsif ( $zone->name->next_higher() eq '.' ){
                         push @results, info( Z09_TLD_EMAIL_DOMAIN => {} ) unless grep{$_->tag eq 'Z09_TLD_EMAIL_DOMAIN'} @results;
-                    }                
+                    }
                 }
             }
         }
