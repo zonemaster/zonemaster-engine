@@ -213,14 +213,14 @@ Zonemaster::Engine::ASNLookup - do lookups of ASNs for IP addresses
 
 =item get($addr)
 
-Takes a string (or a L<Net::IP> object) with a single IP address, does a lookup
+Takes a string (or a L<Net::IP::XS> object) with a single IP address, does a lookup
 in a Cymru-style DNS zone and returns a list of AS numbers for the address, if
 any can be found.
 
 =item get_with_prefix($addr)
 
 As L<get()>, except it returns a list of a reference to a list with the AS
-numbers, and a Net::IP object representing the prefix of the AS.
+numbers, and a Net::IP::XS object representing the prefix of the AS.
 
 =back
 
