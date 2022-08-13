@@ -5,6 +5,7 @@ use version; our $VERSION = version->declare("v0.0.6");
 use strict;
 use warnings;
 use Net::IP::XS;
+my $p_class = q{Net::IP::XS};
 
 sub new {
     my ( $class, @args ) = @_;
