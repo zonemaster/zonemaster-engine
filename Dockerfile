@@ -27,7 +27,8 @@ RUN apk add --no-cache \
     Email::Valid \
     Locale::TextDomain \
     Module::Find \
-    MooseX::Singleton
+    MooseX::Singleton \
+    Net::IP::XS
 
 ARG version
 
