@@ -4,6 +4,7 @@ BEGIN {
     use_ok( q{Zonemaster::Engine} );
     use_ok( q{Zonemaster::Engine::Test::Consistency} );
     use_ok( q{Zonemaster::Engine::Util} );
+    use_ok( q{Net::IP::XS} );
 }
 
 my $datafile = q{t/Test-consistency05-A.data};
