@@ -17,8 +17,41 @@ use Zonemaster::Engine::Sanitization::Errors;
 
 Readonly my $ASCII => qr/^[[:ascii:]]+$/;
 Readonly my $VALID_ASCII => qr/^[A-Za-z0-9\/\-_]+$/;
-Readonly my $FULL_STOP => qr/\x{002E}/;
 
+Readonly my $ASCII_FULL_STOP => "\x{002E}";
+Readonly my $ASCII_FULL_STOP_RE => qr/\x{002E}/;
+Readonly my %FULL_STOPS => (
+    FULLWIDTH_FULL_STOP             => q/\x{FF0E}/,
+    IDEOGRAPHIC_FULL_STOP           => q/\x{3002}/,
+    HALFWIDTH_IDEOGRAPHIC_FULL_STOP => q/\x{FF61}/
+);
+Readonly my $FULL_STOPS_RE => (sub {
+    my $re = '[' . (join '', values %FULL_STOPS) . ']';
+    return qr/$re/;
+})->();
+Readonly my %WHITE_SPACES => (
+    SPACE                     => q/\x{0020}/,
+    CHARACTER_TABULATION      => q/\x{0009}/,
+    NO_BREAK_SPACE            => q/\x{00A0}/,
+    EN_QUAD                   => q/\x{2000}/,
+    EM_QUAD                   => q/\x{2001}/,
+    EN_SPACE                  => q/\x{2002}/,
+    EM_SPACE                  => q/\x{2003}/,
+    THREE_PER_EM_SPACE        => q/\x{2004}/,
+    FOUR_PER_EM_SPACE         => q/\x{2005}/,
+    SIX_PER_EM_SPACE          => q/\x{2006}/,
+    FIGURE_SPACE              => q/\x{2007}/,
+    PUNCTUATION_SPACE         => q/\x{2008}/,
+    THIN_SPACE                => q/\x{2009}/,
+    HAIR_SPACE                => q/\x{200A}/,
+    MEDIUM_MATHEMATICAL_SPACE => q/\x{205F}/,
+    IDEOGRAPHIC_SPACE         => q/\x{3000}/,
+    OGHAM_SPACE_MARK          => q/\x{1680}/,
+);
+Readonly my $WHITE_SPACES_RE => (sub {
+    my $re = '[' . (join '', values %WHITE_SPACES) . ']';
+    return qr/$re/;
+})->();
 
 sub sanitize_label {
     my ( $label ) = @_;
@@ -56,31 +89,33 @@ sub sanitize_name {
     my ( $uname ) = @_;
     my @messages;
 
+    $uname =~ s/^${$WHITE_SPACES_RE}+//;
+    $uname =~ s/${WHITE_SPACES_RE}+$//;
+
     if (length($uname) == 0) {
         push @messages, Zonemaster::Engine::Sanitization::Errors->new('EMPTY_DOMAIN_NAME');
         return \@messages, undef;
     }
 
-    # Replace fullwidth full stop, ideographic full stop and halfwidth ideographic full stop with full stop
-    $uname =~ s/[\x{FF0E}\x{3002}\x{FF61}]/\x{002E}/g;
+    $uname =~ s/${FULL_STOPS_RE}/${ASCII_FULL_STOP}/g;
 
     if ( $uname eq '.' ) {
         return \@messages, $uname;
     }
 
-    if ($uname =~ /^${FULL_STOP}/) {
+    if ($uname =~ m/^${ASCII_FULL_STOP_RE}/) {
         push @messages, Zonemaster::Engine::Sanitization::Errors->new('INITIAL_DOT');
         return \@messages, undef;
     }
 
-    if ($uname =~ /${FULL_STOP}{2,}/ ) {
+    if ($uname =~ m/${ASCII_FULL_STOP_RE}{2,}/ ) {
         push @messages, Zonemaster::Engine::Sanitization::Errors->new('REPEATED_DOTS');
         return \@messages, undef;
     }
 
-    $uname =~ s/${FULL_STOP}$//g;
+    $uname =~ s/${ASCII_FULL_STOP_RE}$//g;
 
-    my @labels = split $FULL_STOP, $uname;
+    my @labels = split $ASCII_FULL_STOP_RE, $uname;
     my @label_results = map { [ sanitize_label($_) ] } @labels;
     my @label_errors = map { @{$_->[0]} } @label_results;
 

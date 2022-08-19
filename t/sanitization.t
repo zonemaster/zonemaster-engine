@@ -14,7 +14,7 @@ subtest 'Valid domains' => sub {
         '｡' => '.',  # Halfwidth ideographic full stop
 
         # Trailing and leading white spaces
-        #'  example.com.  ' => 'example.com',
+        " \x{205F} example.com.  \x{0009}" => 'example.com',
 
         # Mixed dots with trailing dot
         'example。com.' => 'example.com',
@@ -95,6 +95,7 @@ subtest 'Bad domains' => sub {
 
         # Empty domain
         '' => 'EMPTY_DOMAIN_NAME',
+        '    ' => 'EMPTY_DOMAIN_NAME',
     );
 
     while (($domain, $error) = each (%input_domains)) {
