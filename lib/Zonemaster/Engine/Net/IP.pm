@@ -8,16 +8,13 @@ use warnings;
 my $p_class = eval {
     require Net::IP::XS;
     return q{Net::IP::XS};
-} || eval {
-    require Net::IP;
-    return q{Net::IP};
 };
 
 if ( $p_class ) {
     $p_class->import;
 }
 else {
-    die "Both Net::IP and Net::IP::XS missing?\n";
+    die "Net::IP::XS is missing?\n";
 }
 
 sub new {
@@ -74,7 +71,7 @@ sub ip_is_ipv4 {
         return Net::IP::XS::ip_is_ipv4( @_ );
     }
     else {
-        return Net::IP::ip_is_ipv4( @_ );
+        die "Net::IP::XS is missing?\n";
     }
 }
 
@@ -83,7 +80,7 @@ sub ip_is_ipv6 {
         return Net::IP::XS::ip_is_ipv6( @_ );
     }
     else {
-        return Net::IP::ip_is_ipv6( @_ );
+        die "Net::IP::XS is missing?\n";
     }
 }
 
@@ -92,7 +89,7 @@ sub Error {
         return Net::IP::XS::Error();
     }
     else {
-        return Net::IP::Error();
+        die "Net::IP::XS is missing?\n";
     }
 }
 
@@ -100,7 +97,7 @@ sub Error {
 
 =head1 NAME
 
-Zonemaster::Engine::Net::IP - Net::IP/Net::IP::XS Wrapper (STILL EXPERIMENTAL)
+Zonemaster::Engine::Net::IP - Net::IP::XS Wrapper (STILL EXPERIMENTAL)
 
 =head1 SYNOPSIS
 
