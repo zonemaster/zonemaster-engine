@@ -1,175 +1,79 @@
-package Zonemaster::Engine::Exception::DomainSanitizationError;
+package Zonemaster::Engine::Sanitization::Errors;
 
-use 5.014002;
-
-use utf8;
 use strict;
 use warnings;
 
-use Zonemaster::Engine::Exception;
-use base qw(Class::Accessor Zonemaster::Engine::Exception);
+use Carp;
+use Readonly;
+use Locale::TextDomain qw[Zonemaster-Engine];
 
-__PACKAGE__->mk_ro_accessors(qw(tag));
+use overload '""' => \&string;
 
+
+Readonly my %ERRORS => (
+    EMPTY_DOMAIN_NAME => {
+        message => N__ 'Domain name is empty.'
+    },
+    INITIAL_DOT => {
+        message => N__ 'Domain name starts with dot.'
+    },
+    REPEATED_DOTS => {
+        message => N__ 'Domain name has repeated dots.'
+    },
+    INVALID_ASCII => {
+        message => N__ 'Domain name has an ASCII label ("{dlabel}") with a character not permitted.',
+        arguments => [ 'dlabel' ]
+    },
+    INVALID_U_LABEL => {
+        message => N__ 'Domain name has a non-ASCII label ("{dlabel}") which is not a valid U-label.',
+        arguments => [ 'dlabel' ]
+    },
+    LABEL_TOO_LONG => {
+        message => N__ 'Domain name has a label that is too long (more than 63 characters), "{dlabel}".',
+        arguments => [ 'dlabel' ]
+    },
+    DOMAIN_NAME_TOO_LONG => {
+        message => N__ 'Domain name is too long (more than 253 characters with no final dot).',
+    },
+);
 
 sub new {
-    my $proto = shift;
-    my $obj = __PACKAGE__->SUPER::new(@_);
+    my ( $proto, $tag, $params ) = @_;
     my $class = ref $proto || $proto;
+
+    if (!exists $ERRORS{$tag}) {
+        croak 'Unknown error tag.';
+    }
+
+    my $obj = { tag => $tag, params => {} };
+
+    if (exists $ERRORS{$tag}->{arguments}) {
+        foreach my $arg ( @{$ERRORS{$tag}->{arguments}} ) {
+            if (!exists $params->{$arg} ) {
+                croak "Missing arguments $arg.";
+            }
+            $obj->{params}->{$arg} = $params->{$arg};
+        }
+    }
+
     return bless $obj, $class;
 }
 
-package Zonemaster::Engine::Exception::DomainSanitization::InitialDot;
-use 5.014002;
-
-use strict;
-use warnings;
-
-use base qw(Class::Accessor Zonemaster::Engine::Exception::DomainSanitizationError);
-
-
-sub new {
-    my $proto = shift;
-    my $params = shift;
-
-    $params->{tag} = 'INITIAL_DOT';
-    $params->{message} = 'Domain name starts with dot.';
-
-    my $class = ref $proto || $proto;
-    my $obj = __PACKAGE__->SUPER::new($params);
-    return bless $obj, $class;
+sub message {
+    my ( $self ) = @_;
+    return __x $ERRORS{$self->{tag}}->{message}, %{$self->{params}};
 }
 
-package Zonemaster::Engine::Exception::DomainSanitization::RepeatedDots;
-use 5.014002;
+sub tag {
+    my ( $self ) = @_;
 
-use strict;
-use warnings;
-
-use base qw(Class::Accessor Zonemaster::Engine::Exception::DomainSanitizationError);
-
-
-sub new {
-    my $proto = shift;
-    my $params = shift;
-
-    $params->{tag} = 'REPEATED_DOTS';
-    $params->{message} = 'Domain name has repeated dots.';
-
-    my $class = ref $proto || $proto;
-    my $obj = __PACKAGE__->SUPER::new($params);
-    return bless $obj, $class;
+    return $self->{tag};
 }
 
-package Zonemaster::Engine::Exception::DomainSanitization::InvalidAscii;
-use 5.014002;
+sub string {
+    my ( $self ) = @_;
 
-use strict;
-use warnings;
-
-use base qw(Class::Accessor Zonemaster::Engine::Exception::DomainSanitizationError);
-
-__PACKAGE__->mk_ro_accessors(qw(dlabel));
-
-
-sub new {
-    my $proto = shift;
-    my $params = shift;
-
-    $params->{tag} = 'INVALID_ASCII';
-    $params->{message} = 'Domain name has an ASCII label with an ASCII character not permitted.';
-
-    my $class = ref $proto || $proto;
-    my $obj = __PACKAGE__->SUPER::new($params);
-    return bless $obj, $class;
-}
-
-package Zonemaster::Engine::Exception::DomainSanitization::InvalidULabel;
-use 5.014002;
-
-use strict;
-use warnings;
-
-use base qw(Class::Accessor Zonemaster::Engine::Exception::DomainSanitizationError);
-
-__PACKAGE__->mk_ro_accessors(qw(dlabel));
-
-
-sub new {
-    my $proto = shift;
-    my $params = shift;
-
-    $params->{tag} = 'INVALID_U_LABEL';
-    $params->{message} = 'Domain name has a non-ASCII label which is not a valid U-label.';
-
-    my $class = ref $proto || $proto;
-    my $obj = __PACKAGE__->SUPER::new($params);
-    return bless $obj, $class;
-}
-
-package Zonemaster::Engine::Exception::DomainSanitization::LabelTooLong;
-use 5.014002;
-
-use strict;
-use warnings;
-
-use base qw(Class::Accessor Zonemaster::Engine::Exception::DomainSanitizationError);
-
-__PACKAGE__->mk_ro_accessors(qw(dlabel));
-
-
-sub new {
-    my $proto = shift;
-    my $params = shift;
-
-    $params->{tag} = 'LABEL_TOO_LONG';
-    $params->{message} = 'Domain name has a label that is too long (more than 63 characters).';
-
-    my $class = ref $proto || $proto;
-    my $obj = __PACKAGE__->SUPER::new($params);
-    return bless $obj, $class;
-}
-
-package Zonemaster::Engine::Exception::DomainSanitization::DomainNameTooLong;
-use 5.014002;
-
-use strict;
-use warnings;
-
-use base qw(Class::Accessor Zonemaster::Engine::Exception::DomainSanitizationError);
-
-
-sub new {
-    my $proto = shift;
-    my $params = shift;
-
-    $params->{tag} = 'DOMAIN_NAME_TOO_LONG';
-    $params->{message} = 'Domain name is too long (more than 253 characters with no final dot).';
-
-    my $class = ref $proto || $proto;
-    my $obj = __PACKAGE__->SUPER::new($params);
-    return bless $obj, $class;
-}
-
-package Zonemaster::Engine::Exception::DomainSanitization::EmptyDomainName;
-use 5.014002;
-
-use strict;
-use warnings;
-
-use base qw(Class::Accessor Zonemaster::Engine::Exception::DomainSanitizationError);
-
-
-sub new {
-    my $proto = shift;
-    my $params = shift;
-
-    $params->{tag} = 'EMPTY_DOMAIN_NAME';
-    $params->{message} = 'Domain name is empty.';
-
-    my $class = ref $proto || $proto;
-    my $obj = __PACKAGE__->SUPER::new($params);
-    return bless $obj, $class;
+    return $self->message;
 }
 
 1;

@@ -19,65 +19,87 @@ Readonly my $ASCII => qr/^[[:ascii:]]+$/;
 Readonly my $VALID_ASCII => qr/^[A-Za-z0-9\/\-_]+$/;
 Readonly my $FULL_STOP => qr/\x{002E}/;
 
+
 sub sanitize_label {
     my ( $label ) = @_;
+    my @messages;
 
     my $alabel = "";
 
     if ( $label =~ $VALID_ASCII ) {
         $alabel = lc $label;
     } elsif ( $label =~ $ASCII ) {
-        die Zonemaster::Engine::Exception::DomainSanitization::InvalidAscii->new({ dlabel => $label });
+        push @messages, Zonemaster::Engine::Sanitization::Errors->new('INVALID_ASCII' => {dlabel => $label});
+
+        return \@messages, undef;
     } elsif (Zonemaster::LDNS::has_idn) {
         try {
             $alabel = Zonemaster::LDNS::to_idn($label);
         } catch {
-            die Zonemaster::Engine::Exception::DomainSanitization::InvalidULabel->new({ dlabel => Encode::encode_utf8($label) });
+            push @messages, Zonemaster::Engine::Sanitization::Errors->new('INVALID_U_LABEL' => {dlabel => $label});
+
+            return \@messages, undef;
         }
     } else {
         croak 'The domain name contains at least one non-ASCII character and this installation of Zonemaster has no support for IDNA.';
     }
 
     if ( length($alabel) > 63) {
-        die Zonemaster::Engine::Exception::DomainSanitization::LabelTooLong->new({ dlabel => $alabel });
+        push @messages, Zonemaster::Engine::Sanitization::Errors->new('LABEL_TOO_LONG' => {dlabel => $label});
+        return \@messages, undef;
     }
-    return $alabel;
+
+    return \@messages, $alabel;
 }
 
 sub sanitize_name {
     my ( $uname ) = @_;
+    my @messages;
 
     if (length($uname) == 0) {
-        die Zonemaster::Engine::Exception::DomainSanitization::EmptyDomainName->new();
+        push @messages, Zonemaster::Engine::Sanitization::Errors->new('EMPTY_DOMAIN_NAME');
+        return \@messages, undef;
     }
 
     # Replace fullwidth full stop, ideographic full stop and halfwidth ideographic full stop with full stop
     $uname =~ s/[\x{FF0E}\x{3002}\x{FF61}]/\x{002E}/g;
 
     if ( $uname eq '.' ) {
-        return $uname;
+        return \@messages, $uname;
     }
 
     if ($uname =~ /^${FULL_STOP}/) {
-        die Zonemaster::Engine::Exception::DomainSanitization::InitialDot->new();
+        push @messages, Zonemaster::Engine::Sanitization::Errors->new('INITIAL_DOT');
+        return \@messages, undef;
     }
 
     if ($uname =~ /${FULL_STOP}{2,}/ ) {
-        die Zonemaster::Engine::Exception::DomainSanitization::RepeatedDots->new();
+        push @messages, Zonemaster::Engine::Sanitization::Errors->new('REPEATED_DOTS');
+        return \@messages, undef;
     }
 
     $uname =~ s/${FULL_STOP}$//g;
 
     my @labels = split $FULL_STOP, $uname;
-    @labels = map { sanitize_label($_) } @labels;
+    my @label_results = map { [ sanitize_label($_) ] } @labels;
+    my @label_errors = map { @{$_->[0]} } @label_results;
 
-    my $final_name = join '.', @labels;
+    push @messages, @label_errors;
 
-    if (length($final_name) > 253) {
-        die Zonemaster::Engine::Exception::DomainSanitization::DomainNameTooLong->new();
+    if ( @messages ) {
+        return \@messages, undef;
     }
 
-    return $final_name;
+    my @label_ok = map { $_->[1] } @label_results;
+
+    my $final_name = join '.', @label_ok;
+
+    if (length($final_name) > 253) {
+        push @messages, Zonemaster::Engine::Sanitization::Errors->new('DOMAIN_NAME_TOO_LONG');
+        return \@messages, undef;
+    }
+
+    return \@messages, $final_name;
 }
 
 1;

@@ -13,6 +13,9 @@ subtest 'Valid domains' => sub {
         '。' => '.', # Ideographic full stop
         '｡' => '.',  # Halfwidth ideographic full stop
 
+        # Trailing and leading white spaces
+        #'  example.com.  ' => 'example.com',
+
         # Mixed dots with trailing dot
         'example。com.' => 'example.com',
         'example｡com．' => 'example.com',
@@ -28,7 +31,6 @@ subtest 'Valid domains' => sub {
         # Domains with U-Labels
         'café.example.com' => 'xn--caf-dma.example.com',
         'エグザンプル｡example｡com' => 'xn--ickqs6k2dyb.example.com',
-        '🦈．example．com' => 'xn--7s9h.example.com',
         'αβγδε.example.com' => 'xn--mxacdef.example.com',
 
         # Domains with uppercase unicode
@@ -52,15 +54,19 @@ subtest 'Valid domains' => sub {
         "a" x 63 . ".example.com" => "a" x 63 . ".example.com",
         # this is 253 characters
         ("a" x 15 . ".") x 15 . "b" . ".example.com" => ("a" x 15 . ".") x 15 . "b" . ".example.com",
+
+        # Special I case
+        #'İ.example.com' => 'i.example.com',
     );
 
     while (($domain, $expected_output) = each (%input_domains)) {
-        subtest 'Domain: ' . $domain => sub {
-            my $output;
+        subtest "Domain: '$domain'" => sub {
+            my $errors, $final_domain;
             lives_ok(sub {
-                $output = Zonemaster::Engine::Sanitization::sanitize_name($domain);
+                ($errors, $final_domain) = Zonemaster::Engine::Sanitization::sanitize_name($domain);
             }, 'correct domain should live');
-            is($output, $expected_output, 'Match expected domain') or diag($output);
+            is(scalar @{$errors}, 0, 'No error returned') or diag(@{$errors});
+            is($final_domain, $expected_output, 'Match expected domain') or diag($final_domain);
         }
     }
 };
@@ -68,33 +74,39 @@ subtest 'Valid domains' => sub {
 subtest 'Bad domains' => sub {
     my %input_domains = (
         # Empty labels
-        '.。．' => 'Zonemaster::Engine::Exception::DomainSanitization::InitialDot',
-        'example。.com.' => 'Zonemaster::Engine::Exception::DomainSanitization::RepeatedDots',
-        'example。com.｡' => 'Zonemaster::Engine::Exception::DomainSanitization::RepeatedDots',
-        '．.example｡com' => 'Zonemaster::Engine::Exception::DomainSanitization::InitialDot',
+        '.。．' => 'INITIAL_DOT',
+        'example。.com.' => 'REPEATED_DOTS',
+        'example。com.｡' => 'REPEATED_DOTS',
+        '．.example｡com' => 'INITIAL_DOT',
 
         # Bad ascii
-        'bad:%;!$.example.com.' => 'Zonemaster::Engine::Exception::DomainSanitization::InvalidAscii',
+        'bad:%;!$.example.com.' => 'INVALID_ASCII',
 
         # Label to long
-        "a" x 64 . ".example.com" => 'Zonemaster::Engine::Exception::DomainSanitization::LabelTooLong',
+        "a" x 64 . ".example.com" => 'LABEL_TOO_LONG',
         # Length too long after idn conversion (libidn fails)
-        'チョコレート' x 8 . 'a' . '.example.com' => 'Zonemaster::Engine::Exception::DomainSanitization::InvalidULabel',
+        'チョコレート' x 8 . 'a' . '.example.com' => 'INVALID_U_LABEL',
+        # Emoji in names are invalid as per IDNA2008
+        '🦈．example．com' => 'INVALID_U_LABEL',
 
         # Domain to long
         # this is 254 characters
-        ("a" x 15 . ".") x 15 . "bc" . ".example.com" => 'Zonemaster::Engine::Exception::DomainSanitization::DomainNameTooLong',
+        ("a" x 15 . ".") x 15 . "bc" . ".example.com" => 'DOMAIN_NAME_TOO_LONG',
 
         # Empty domain
-        '' => 'Zonemaster::Engine::Exception::DomainSanitization::EmptyDomainName',
+        '' => 'EMPTY_DOMAIN_NAME',
     );
 
     while (($domain, $error) = each (%input_domains)) {
-        subtest "Domain: $domain ($error)" => sub {
-            throws_ok (sub {
-                Zonemaster::Engine::Sanitization::sanitize_name($domain);
-            }, $error, 'invalid domain should throw' );
-            note "$@";
+        subtest "Domain: '$domain' ($error)" => sub {
+            my $output, $messages, $domain;
+            lives_ok(sub {
+                ($errors, $final_domain) = Zonemaster::Engine::Sanitization::sanitize_name($domain);
+            }, 'incorrect domain should live');
+
+            is($final_domain, undef, 'No domain returned') or diag($final_domain);
+            is($errors->[0]->tag, $error, 'Correct error is returned') or diag($errors[0]);
+            note($errors->[0])
         }
     }
 };
