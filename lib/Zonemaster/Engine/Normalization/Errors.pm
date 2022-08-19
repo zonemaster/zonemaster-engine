@@ -1,4 +1,4 @@
-package Zonemaster::Engine::Sanitization::Errors;
+package Zonemaster::Engine::Normalization::Errors;
 
 use strict;
 use warnings;

@@ -3,7 +3,7 @@ use Test::Exception;
 
 use utf8;
 
-BEGIN { use_ok( 'Zonemaster::Engine::Sanitization' ); }
+BEGIN { use_ok( 'Zonemaster::Engine::Normalization' ); }
 
 subtest 'Valid domains' => sub {
     my %input_domains = (
@@ -63,7 +63,7 @@ subtest 'Valid domains' => sub {
         subtest "Domain: '$domain'" => sub {
             my $errors, $final_domain;
             lives_ok(sub {
-                ($errors, $final_domain) = Zonemaster::Engine::Sanitization::sanitize_name($domain);
+                ($errors, $final_domain) = Zonemaster::Engine::Normalization::normalize_name($domain);
             }, 'correct domain should live');
             is(scalar @{$errors}, 0, 'No error returned') or diag(@{$errors});
             is($final_domain, $expected_output, 'Match expected domain') or diag($final_domain);
@@ -102,7 +102,7 @@ subtest 'Bad domains' => sub {
         subtest "Domain: '$domain' ($error)" => sub {
             my $output, $messages, $domain;
             lives_ok(sub {
-                ($errors, $final_domain) = Zonemaster::Engine::Sanitization::sanitize_name($domain);
+                ($errors, $final_domain) = Zonemaster::Engine::Normalization::normalize_name($domain);
             }, 'incorrect domain should live');
 
             is($final_domain, undef, 'No domain returned') or diag($final_domain);

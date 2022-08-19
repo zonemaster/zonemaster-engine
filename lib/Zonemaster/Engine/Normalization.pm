@@ -1,4 +1,4 @@
-package Zonemaster::Engine::Sanitization;
+package Zonemaster::Engine::Normalization;
 
 use 5.014002;
 
@@ -13,7 +13,7 @@ use Try::Tiny;
 use Zonemaster::LDNS;
 use Data::Dumper;
 
-use Zonemaster::Engine::Sanitization::Errors;
+use Zonemaster::Engine::Normalization::Errors;
 
 Readonly my $ASCII => qr/^[[:ascii:]]+$/;
 Readonly my $VALID_ASCII => qr/^[A-Za-z0-9\/\-_]+$/;
@@ -53,7 +53,7 @@ Readonly my $WHITE_SPACES_RE => (sub {
     return qr/$re/;
 })->();
 
-sub sanitize_label {
+sub normalize_label {
     my ( $label ) = @_;
     my @messages;
 
@@ -62,14 +62,14 @@ sub sanitize_label {
     if ( $label =~ $VALID_ASCII ) {
         $alabel = lc $label;
     } elsif ( $label =~ $ASCII ) {
-        push @messages, Zonemaster::Engine::Sanitization::Errors->new('INVALID_ASCII' => {dlabel => $label});
+        push @messages, Zonemaster::Engine::Normalization::Errors->new('INVALID_ASCII' => {dlabel => $label});
 
         return \@messages, undef;
     } elsif (Zonemaster::LDNS::has_idn) {
         try {
             $alabel = Zonemaster::LDNS::to_idn($label);
         } catch {
-            push @messages, Zonemaster::Engine::Sanitization::Errors->new('INVALID_U_LABEL' => {dlabel => $label});
+            push @messages, Zonemaster::Engine::Normalization::Errors->new('INVALID_U_LABEL' => {dlabel => $label});
 
             return \@messages, undef;
         }
@@ -78,14 +78,14 @@ sub sanitize_label {
     }
 
     if ( length($alabel) > 63) {
-        push @messages, Zonemaster::Engine::Sanitization::Errors->new('LABEL_TOO_LONG' => {dlabel => $label});
+        push @messages, Zonemaster::Engine::Normalization::Errors->new('LABEL_TOO_LONG' => {dlabel => $label});
         return \@messages, undef;
     }
 
     return \@messages, $alabel;
 }
 
-sub sanitize_name {
+sub normalize_name {
     my ( $uname ) = @_;
     my @messages;
 
@@ -93,7 +93,7 @@ sub sanitize_name {
     $uname =~ s/${WHITE_SPACES_RE}+$//;
 
     if (length($uname) == 0) {
-        push @messages, Zonemaster::Engine::Sanitization::Errors->new('EMPTY_DOMAIN_NAME');
+        push @messages, Zonemaster::Engine::Normalization::Errors->new('EMPTY_DOMAIN_NAME');
         return \@messages, undef;
     }
 
@@ -104,19 +104,19 @@ sub sanitize_name {
     }
 
     if ($uname =~ m/^${ASCII_FULL_STOP_RE}/) {
-        push @messages, Zonemaster::Engine::Sanitization::Errors->new('INITIAL_DOT');
+        push @messages, Zonemaster::Engine::Normalization::Errors->new('INITIAL_DOT');
         return \@messages, undef;
     }
 
     if ($uname =~ m/${ASCII_FULL_STOP_RE}{2,}/ ) {
-        push @messages, Zonemaster::Engine::Sanitization::Errors->new('REPEATED_DOTS');
+        push @messages, Zonemaster::Engine::Normalization::Errors->new('REPEATED_DOTS');
         return \@messages, undef;
     }
 
     $uname =~ s/${ASCII_FULL_STOP_RE}$//g;
 
     my @labels = split $ASCII_FULL_STOP_RE, $uname;
-    my @label_results = map { [ sanitize_label($_) ] } @labels;
+    my @label_results = map { [ normalize_label($_) ] } @labels;
     my @label_errors = map { @{$_->[0]} } @label_results;
 
     push @messages, @label_errors;
@@ -130,7 +130,7 @@ sub sanitize_name {
     my $final_name = join '.', @label_ok;
 
     if (length($final_name) > 253) {
-        push @messages, Zonemaster::Engine::Sanitization::Errors->new('DOMAIN_NAME_TOO_LONG');
+        push @messages, Zonemaster::Engine::Normalization::Errors->new('DOMAIN_NAME_TOO_LONG');
         return \@messages, undef;
     }
 
