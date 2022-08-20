@@ -14,7 +14,7 @@ if ( $p_class ) {
     $p_class->import;
 }
 else {
-    die "Net::IP::XS is missing?\n";
+    die "Net::IP::XS is not loaded\n";
 }
 
 sub new {
@@ -67,37 +67,22 @@ sub version {
 }
 
 sub ip_is_ipv4 {
-    if ( $p_class eq 'Net::IP::XS' ) {
-        return Net::IP::XS::ip_is_ipv4( @_ );
-    }
-    else {
-        die "Net::IP::XS is missing?\n";
-    }
+    return Net::IP::XS::ip_is_ipv4( @_ );
 }
 
 sub ip_is_ipv6 {
-    if ( $p_class eq 'Net::IP::XS' ) {
-        return Net::IP::XS::ip_is_ipv6( @_ );
-    }
-    else {
-        die "Net::IP::XS is missing?\n";
-    }
+    return Net::IP::XS::ip_is_ipv6( @_ );
 }
 
 sub Error {
-    if ( $p_class eq 'Net::IP::XS' ) {
-        return Net::IP::XS::Error();
-    }
-    else {
-        die "Net::IP::XS is missing?\n";
-    }
+    return Net::IP::XS::Error();
 }
 
 1;
 
 =head1 NAME
 
-Zonemaster::Engine::Net::IP - Net::IP::XS Wrapper (STILL EXPERIMENTAL)
+Zonemaster::Engine::Net::IP - Net::IP::XS Wrapper
 
 =head1 SYNOPSIS
 
