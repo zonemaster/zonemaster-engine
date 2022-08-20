@@ -4,8 +4,18 @@ use version; our $VERSION = version->declare("v0.0.6");
 
 use strict;
 use warnings;
-use Net::IP::XS;
-my $p_class = q{Net::IP::XS};
+
+my $p_class = eval {
+    require Net::IP::XS;
+    return q{Net::IP::XS};
+};
+
+if ( $p_class ) {
+    $p_class->import;
+}
+else {
+    die "Net::IP::XS is not loaded\n";
+}
 
 sub new {
     my ( $class, @args ) = @_;
