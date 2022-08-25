@@ -17,7 +17,7 @@ profile. For an example of their usage, refer to the additional file,
 
 The content of the two files, as-is or modified, can be merged into a custom
 profile file that can be loaded by Zonemaster-Engine. Both Zonemaster-CLI and
-Zonemaster-Backend has direct options for loading a custom profile file.
+Zonemaster-Backend have direct options for loading a custom profile file.
 
 A custom profile file only has to contain those properties that are changed
 in comparison to the default profile file.
