@@ -57,6 +57,7 @@ and updated messages (*msgids* and *msgstr*).
 | ds_algo_mnemo  | Text                                     | The mnemonic of a [DS Digest algorithm].                                |
 | ds_algo_num    | Non-negative integer                     | The numeric value for a [DS Digest algorithm].                          |
 | keytag         | Non-negative integer                     | A keytag for a DNSKEY record or a keytag used in a DS or RRSIG record.  |
+| label          | Domain name label                        | A single label, i.e. the string between the dots, from a domain name.   |
 | mailtarget     | Domain name                              | The domain name of the mailserver in an MX RDATA.                       |
 | mailtarget_list| List of domain names                     | A list of name servers, as specified by "mailtarget", separated by ";". |
 | module         | A Zonemaster test module, or `all`       | The name of a Zonemaster test module.                                   |
@@ -91,7 +92,6 @@ defined *arguments*.
 || DNS packet size| The size in octets of a DNS packets.|
 || DNSKEY key length| The key length for a DNSKEY. The interpretation of this value various quite a bit with the algorithm. Be careful when using it for algorithms that aren't RSA-based.|
 || DNSSEC delegation verification failure reason| A somewhat human-readable reason why the delegation step between the tested zone and its parent is not secure.|
-| dlabel (?) | Domain name label| A single label from a domain name.|
 | dlength (?) | Domain name label length| The length of a domain name label.|
 || Duration in seconds| An integer number of seconds.|
 | fqdn (?) | FQDN| A fully qualified domain name (with terminating dot).|
