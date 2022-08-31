@@ -359,6 +359,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     N10_EDNS_RESPONSE_ERROR => sub {
         __x    # N10_EDNS_RESPONSE_ERROR
           'Expected RCODE but received erroneous response to an EDNS version 1 query. Fetched from the nameservers with IP addresses {ns_ip_list}', @_;
+    },
     NS11_UNKNOWN_OPTION_CODE => sub {
         __x    # NS11_UNKNOWN_OPTION_CODE
           'The DNS response contains an unknown EDNS option-code. Returned from name servers "{ns_ip_list}".', @_;
@@ -1077,6 +1078,8 @@ sub nameserver11 {
     my ( $class, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
+    my @unknown_opt_code;
+
     # Choose an unassigned EDNS0 Option Codes
     # values 15-26945 are Unassigned. Let's say we use 137 ???
     my $opt_code = 137;
@@ -1084,37 +1087,21 @@ sub nameserver11 {
     my $opt_length = length($opt_data);
     my $rdata = $opt_code*65536 + $opt_length;
 
-    my @nss =  @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) };
-
-    for my $ns ( @nss ) {
+    foreach my $ns ( @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) } ) {
 
         next if ( _ip_disabled_message( \@results, $ns, q{SOA} ) );
 
         my $p = $ns->query( $zone->name, q{SOA}, { edns_details => { data => $rdata } } );
-        if ( $p ) {
-            if ( $p->rcode eq q{FORMERR} and not $p->edns_rcode ) {
-                push @results, info( NO_EDNS_SUPPORT => { ns => $ns->string } );
-            }
-            elsif ( defined $p->edns_data ) {
-                push @results, info( UNKNOWN_OPTION_CODE => { ns => $ns->string } );
-            }
-            elsif ( $p->rcode eq q{NOERROR} and not $p->edns_rcode and $p->edns_version == 0 and not defined $p->edns_data and $p->get_records( q{SOA}, q{answer} ) ) {
-                next;
-            }
-            else {
-                push @results, info( NS_ERROR => { ns => $ns->string, } );
-            }
-        }
-        else {
-            push @results,
-              info(
-                NO_RESPONSE => {
-                    ns     => $ns->string,
-                    domain => $zone->name,
-                }
-              );
-        }
 
+        if ( $p and $p->rcode ne q{FORMERR} ) {
+            if ( defined $p->edns_data ) {
+                push @unknown_opt_code, $ns->address->short;
+            }
+        }
+    }
+
+    if ( scalar @unknown_opt_code ){
+        push @results, info( NS11_UNKNOWN_OPTION_CODE => { ns => join( q{;}, uniq sort @unknown_opt_code ) } );
     }
 
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
