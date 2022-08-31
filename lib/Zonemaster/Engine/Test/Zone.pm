@@ -13,6 +13,8 @@ use Carp;
 use List::MoreUtils qw[none];
 use Locale::TextDomain qw[Zonemaster-Engine];
 use Readonly;
+use JSON::PP;
+
 use Zonemaster::Engine::Profile;
 use Zonemaster::Engine::Constants qw[:soa :ip];
 use Zonemaster::Engine::Recursor;
@@ -140,9 +142,19 @@ sub metadata {
         ],
         zone09 => [
             qw(
-              NO_MX_RECORD
-              MX_RECORD_EXISTS
-              NO_RESPONSE_MX_QUERY
+              Z09_INCONSISTENT_MX
+              Z09_INCONSISTENT_MX_DATA
+              Z09_MISSING_MAIL_TARGET
+              Z09_MX_DATA
+              Z09_MX_FOUND
+              Z09_NON_AUTH_MX_RESPONSE
+              Z09_NO_MX_FOUND
+              Z09_NO_RESPONSE_MX_QUERY
+              Z09_NULL_MX_NON_ZERO_PREF
+              Z09_NULL_MX_WITH_OTHER_MX
+              Z09_ROOT_EMAIL_DOMAIN
+              Z09_TLD_EMAIL_DOMAIN
+              Z09_UNEXPECTED_RCODE_MX
               TEST_CASE_END
               TEST_CASE_START
               )
@@ -181,14 +193,6 @@ Readonly my %TAG_DESCRIPTIONS => (
     MNAME_IS_NOT_CNAME => sub {
         __x    # ZONE:MNAME_IS_NOT_CNAME
           'SOA \'mname\' value ({mname}) refers to a NS which is not an alias (CNAME).', @_;
-    },
-    NO_MX_RECORD => sub {
-        __x    # ZONE:NO_MX_RECORD
-          'No target (MX, A or AAAA record) to deliver e-mail for the domain name.', @_;
-    },
-    MX_RECORD_EXISTS => sub {
-        __x    # ZONE:MX_RECORD_EXISTS
-          'MX with mail target ({mailtarget_list}) exists for the domain name.', @_;
     },
     REFRESH_MINIMUM_VALUE_LOWER => sub {
         __x    # ZONE:REFRESH_MINIMUM_VALUE_LOWER
@@ -295,6 +299,58 @@ Readonly my %TAG_DESCRIPTIONS => (
     WRONG_SOA => sub {
         __x    # ZONE:WRONG_SOA
           'Nameserver {ns} responds with a wrong owner name ({owner} instead of {name}) on SOA queries.', @_;
+    },
+    Z09_INCONSISTENT_MX => sub {
+        __x    # ZONE:Z09_INCONSISTENT_MX
+          'Some name servers return an MX RRset while others return none.', @_;
+    },
+    Z09_INCONSISTENT_MX_DATA => sub {
+        __x    # ZONE:Z09_INCONSISTENT_MX_DATA
+          'The MX RRset data is inconsistent between the name servers.', @_;
+    },
+    Z09_MISSING_MAIL_TARGET => sub {
+        __x    # ZONE:Z09_MISSING_MAIL_TARGET
+          'The child zone has no mail target (no MX).', @_;
+    },
+    Z09_MX_DATA => sub {
+        __x    # ZONE:Z09_MX_DATA
+          'Mail targets in the MX RRset "{domain_list}" returned from name servers "{ns_ip_list}".', @_;
+    },
+    Z09_MX_FOUND => sub {
+        __x    # ZONE:Z09_MX_FOUND
+          'MX RRset was returned by name servers "{ns_ip_list}".', @_;
+    },
+    Z09_NON_AUTH_MX_RESPONSE => sub {
+        __x    # ZONE:Z09_NON_AUTH_MX_RESPONSE
+          'Non-authoritative response on MX query from name servers "{ns_ip_list}".', @_;
+    },
+    Z09_NO_MX_FOUND => sub {
+        __x    # ZONE:Z09_NO_MX_FOUND
+          'No MX RRset was returned by name servers "{ns_ip_list}".', @_;
+    },
+    Z09_NO_RESPONSE_MX_QUERY => sub {
+        __x    # ZONE:Z09_NO_RESPONSE_MX_QUERY
+          'No response on MX query from name servers "{ns_ip_list}".', @_;
+    },
+    Z09_NULL_MX_NON_ZERO_PREF => sub {
+        __x    # ZONE:Z09_NULL_MX_NON_ZERO_PREF
+          'The zone has a Null MX with non-zero preference.', @_;
+    },
+    Z09_NULL_MX_WITH_OTHER_MX => sub {
+        __x    # ZONE:Z09_NULL_MX_WITH_OTHER_MX
+          'The zone has a Null MX mixed with other MX records.', @_;
+    },
+    Z09_ROOT_EMAIL_DOMAIN => sub {
+        __x    # ZONE:Z09_ROOT_EMAIL_DOMAIN
+          'Root zone with an unexpected MX RRset (non-Null MX).', @_;
+    },
+    Z09_TLD_EMAIL_DOMAIN => sub {
+        __x    # ZONE:Z09_TLD_EMAIL_DOMAIN
+          'The zone is a TLD and has an unexpected MX RRset (non-Null MX).', @_;
+    },
+    Z09_UNEXPECTED_RCODE_MX => sub {
+        __x    # ZONE:Z09_UNEXPECTED_RCODE_MX
+          'Unexpected RCODE value on the MX query from name servers "{ns_ip_list}".', @_;
     },
 );
 
@@ -650,44 +706,139 @@ sub zone08 {
 sub zone09 {
     my ( $class, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
-    my $info;
 
-    my $p = $zone->query_auth( $zone->name, q{MX} );
+    my %ip_already_processed;
+    
+    my @no_response_mx;
+    my %unexpected_rcode_mx;
+    my @non_authoritative_mx;
+    my @no_mx_set;
+    my %mx_set;
 
-    if ( $p ) {
-        if ( not $p->has_rrs_of_type_for_name( q{MX}, $zone->name ) ) {
-            my $p_a    = _retrieve_record_from_zone( $zone, $zone->name, q{A} );
-            my $p_aaaa = _retrieve_record_from_zone( $zone, $zone->name, q{AAAA} );
-            if (
-                ( not defined $p_a and not defined $p_aaaa )
-                or (    ( not defined $p_a or not $p_a->has_rrs_of_type_for_name( q{A}, $zone->name ) )
-                    and ( not defined $p_aaaa or not $p_aaaa->has_rrs_of_type_for_name( q{AAAA}, $zone->name ) ) )
-              )
-            {
-                push @results, info( NO_MX_RECORD => {} );
-            }
-            else {
-                my @as = defined $p_a ? $p_a->get_records_for_name( q{A}, $zone->name ) : ();
-                my @aaas = defined $p_aaaa ? $p_aaaa->get_records_for_name( q{AAAA}, $zone->name ) : ();
-                $info = join q{/}, map { $_ =~ /:/smx ? q{AAAA=} . $_->address : q{A=} . $_->address } ( @as, @aaas );
-            }
-        }
-        else {
-            my @mx = $p->get_records_for_name( q{MX}, $zone->name );
-            for my $mx ( @mx ) {
-                my $tmp = $mx->exchange;
-                $tmp =~ s/[.]\z//smx;
-                $info .= $tmp . q{;};
-            }
-            chop $info;
+    my %all_ns;
+
+    foreach my $ns ( @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) } ){
+        
+        next if exists $ip_already_processed{$ns->address->short};
+        $ip_already_processed{$ns->address->short} = 1;
+
+        if ( _is_ip_version_disabled( $ns ) ) {
+            next;
         }
 
-        if ( not grep { $_->tag ne q{TEST_CASE_START} } @results ) {
-            push @results, info( MX_RECORD_EXISTS => { mailtarget_list => $info } );
+        my $p1 = $ns->query( $zone->name, q{SOA} );
+
+        if ( not $p1 or $p1->rcode ne q{NOERROR} or not $p1->aa or not $p1->has_rrs_of_type_for_name(q{SOA}, $zone->name) ){
+            next;
         }
-    } ## end if ( $p )
-    else {
-        push @results, info( NO_RESPONSE_MX_QUERY => {} );
+
+        my $p2 = $ns->query( $zone->name, q{MX}, { fallback => 0, usevc => 0 } );
+
+        if ( $p2 and $p2->tc ){
+            $p2 = $ns->query( $zone->name, q{MX}, { fallback => 0, usevc => 1 } );
+        }
+
+        if ( not $p2 ){
+            push @no_response_mx, $ns->address->short;
+        }
+        elsif ( $p2->rcode ne q{NOERROR} ){
+            push @{ $unexpected_rcode_mx{$p2->rcode} }, $ns->address->short;
+        }
+        elsif ( not $p2->aa ){
+            push @non_authoritative_mx, $ns->address->short;
+        }
+        elsif ( not scalar grep { $_->owner eq $zone->name } $p2->get_records_for_name(q{MX}, $zone->name, q{answer}) ){
+            push @no_mx_set, $ns->address->short;
+        }
+        else{
+            push @{ $mx_set{$ns->address->short} }, $p2->get_records_for_name(q{MX}, $zone->name, q{answer});
+        }
+
+        push @{ $all_ns{$ns->name->string} }, $ns->address->short;
+    }
+
+    if ( scalar @no_response_mx ){
+        push @results, info( Z09_NO_RESPONSE_MX_QUERY => { ns_ip_list => join( q{;}, sort @no_response_mx) } );
+    }
+
+    if ( scalar %unexpected_rcode_mx ){
+        foreach my $rcode ( keys %unexpected_rcode_mx ){
+            push @results, info( Z09_UNEXPECTED_RCODE_MX => {
+                rcode => $rcode,
+                ns_ip_list => join( q{;}, sort $unexpected_rcode_mx{$rcode} )
+                }
+            );
+        }
+    }
+
+    if ( scalar @non_authoritative_mx ){
+        push @results, info( Z09_NON_AUTH_MX_RESPONSE => { ns_ip_list => join( q{;}, sort @no_response_mx) } );
+    }
+
+    if ( scalar @no_mx_set and scalar %mx_set ){
+        push @results, info( Z09_INCONSISTENT_MX => {} );
+        push @results, info( Z09_NO_MX_FOUND => { ns_ip_list => join( q{;}, sort @no_mx_set) } );
+        push @results, info( Z09_MX_FOUND => { ns_ip_list => join( q{;}, sort keys %mx_set) } );
+    }
+
+    if ( scalar %mx_set ){
+        my $data_json;
+        my $json = JSON::PP->new->canonical->pretty;
+        my $first = 1;
+
+        foreach my $ns ( keys %mx_set ){
+            if ( $first ){
+                my @data = map { lc $_->string } sort @{ $mx_set{$ns} };
+                $data_json = $json->encode( \@data );
+                $first = 0;
+            }
+            else{
+                my @next_data = map { lc $_->string } sort @{ $mx_set{$ns} };
+                if ( $json->encode( \@next_data ) ne $data_json ){
+                    push @results, info( Z09_INCONSISTENT_MX_DATA => {} );
+                    
+                    foreach my $ns_name ( keys %all_ns ){
+                        push @results, info( Z09_MX_DATA => {
+                            domain_list  => join( q{;}, map { $_->exchange } @{ $mx_set{@{$all_ns{$ns_name}}[0]} } ),
+                            ns_ip_list => join( q{;}, @{ $all_ns{$ns_name} } )
+                            }
+                        )
+                    }
+                    
+                    last;
+                }
+            }
+        }
+
+        unless ( grep{$_->tag eq 'Z09_INCONSISTENT_MX_DATA'} @results ){
+            foreach my $ns ( keys %mx_set ){
+                foreach my $rr ( @{$mx_set{$ns}} ){
+                    if ( $rr->exchange eq '.' ){
+                        if ( scalar @{$mx_set{$ns}} > 1 ){
+                            push @results, info( Z09_NULL_MX_WITH_OTHER_MX => {} ) unless grep{$_->tag eq 'Z09_NULL_MX_WITH_OTHER_MX'} @results;
+                        }
+                    
+                        if ( $rr->preference > 0 ){
+                            push @results, info( Z09_NULL_MX_NON_ZERO_PREF => {} ) unless grep{$_->tag eq 'Z09_NULL_MX_NON_ZERO_PREF'} @results;
+                        }
+                    }
+
+                    elsif ( $zone->name->string eq '.' ){
+                        push @results, info( Z09_ROOT_EMAIL_DOMAIN => {} ) unless grep{$_->tag eq 'Z09_ROOT_EMAIL_DOMAIN'} @results;
+                    }
+                    
+                    elsif ( $zone->name->next_higher() eq '.' ){
+                        push @results, info( Z09_TLD_EMAIL_DOMAIN => {} ) unless grep{$_->tag eq 'Z09_TLD_EMAIL_DOMAIN'} @results;
+                    }
+                }
+            }
+        }
+    }
+
+    if ( scalar @no_mx_set ){
+        unless ( $zone->name eq '.' or $zone->name->next_higher() eq '.' or $zone->name =~ /\.arpa/ ){
+            push @results, info( Z09_MISSING_MAIL_TARGET => {} );
+        }
     }
 
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) )

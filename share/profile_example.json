@@ -453,10 +453,8 @@
             "MNAME_NO_RESPONSE" : "NOTICE",
             "MNAME_RECORD_DOES_NOT_EXIST" : "WARNING",
             "MULTIPLE_SOA" : "ERROR",
-            "MX_RECORD_EXISTS" : "INFO",
             "MX_RECORD_IS_CNAME" : "INFO",
             "MX_RECORD_IS_NOT_CNAME" : "INFO",
-            "NO_MX_RECORD" : "NOTICE",
             "NO_RESPONSE" : "DEBUG",
             "NO_RESPONSE_MX_QUERY" : "DEBUG",
             "NO_RESPONSE_SOA_QUERY" : "DEBUG",
@@ -473,7 +471,20 @@
             "SOA_DEFAULT_TTL_MAXIMUM_VALUE_OK" : "INFO",
             "TEST_CASE_END" : "DEBUG",
             "TEST_CASE_START" : "DEBUG",
-            "WRONG_SOA" : "DEBUG"
+            "WRONG_SOA" : "DEBUG",
+            "Z09_INCONSISTENT_MX" : "WARNING",
+            "Z09_INCONSISTENT_MX_DATA" : "WARNING",
+            "Z09_MISSING_MAIL_TARGET" : "NOTICE",
+            "Z09_MX_DATA" : "INFO",
+            "Z09_MX_FOUND" : "INFO",
+            "Z09_NON_AUTH_MX_RESPONSE" : "WARNING",
+            "Z09_NO_MX_FOUND" : "INFO",
+            "Z09_NO_RESPONSE_MX_QUERY" : "WARNING",
+            "Z09_NULL_MX_NON_ZERO_PREF" : "NOTICE",
+            "Z09_NULL_MX_WITH_OTHER_MX" : "WARNING",
+            "Z09_ROOT_EMAIL_DOMAIN" : "NOTICE",
+            "Z09_TLD_EMAIL_DOMAIN" : "WARNING",
+            "Z09_UNEXPECTED_RCODE_MX" : "WARNING"
         }
     },
     "test_cases": [

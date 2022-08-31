@@ -23,7 +23,6 @@ my %res;
 my $zone;
 
 %res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{Zone}, q{afnic.fr} );
-ok( $res{MX_RECORD_EXISTS},            q{Target found to deliver e-mail for the domain name} );
 ok( $res{RETRY_MINIMUM_VALUE_LOWER},   q{SOA 'Retry' vakue is too low} );
 ok( $res{REFRESH_MINIMUM_VALUE_LOWER}, q{SOA 'Refresh' value is too low} );
 ok( $res{MNAME_NO_RESPONSE},           q{SOA 'mname' nameserver does not respond} );
@@ -45,7 +44,7 @@ ok( $res{SOA_DEFAULT_TTL_MAXIMUM_VALUE_LOWER}, q{SOA 'minimum' value is too low}
 
 $zone = Zonemaster::Engine->zone( q{zone05.zut-root.rd.nic.fr} );
 %res = map { $_->tag => 1 } Zonemaster::Engine->test_method( q{Zone}, q{zone09}, $zone );
-ok( $res{NO_MX_RECORD}, q{No MX records} );
+ok( $res{Z09_MISSING_MAIL_TARGET}, q{No MX records} );
 
 #
 # zone08
@@ -147,7 +146,7 @@ ok( $res{NO_RESPONSE_SOA_QUERY}, q{No response from nameserver(s) on SOA queries
 Zonemaster::Engine::Profile->effective->set( q{net.ipv4}, 1 );
 Zonemaster::Engine::Profile->effective->set( q{net.ipv6}, 0 );
 
-$zone = Zonemaster::Engine->zone( q{trasigdnssec.se} );
+$zone = Zonemaster::Engine->zone( q{zonemaster.net} );
 %res = map { $_->tag => 1 } Zonemaster::Engine->test_method( q{Zone}, q{zone01}, $zone );
 ok( !$res{MNAME_NO_RESPONSE}, q{SOA 'mname' found with IPv4 only} );
 
