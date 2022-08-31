@@ -206,7 +206,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     DOMAIN_NAME_LABEL_TOO_LONG => sub {
         __x    # BASIC:DOMAIN_NAME_LABEL_TOO_LONG
-          'Domain name ({domain}) has a label ({dlabel}) too long ({dlength}/{max}).', @_;
+          'Domain name ({domain}) has a label ({label}) too long ({dlength}/{max}).', @_;
     },
     DOMAIN_NAME_TOO_LONG => sub {
         __x    # BASIC:DOMAIN_NAME_TOO_LONG
@@ -356,7 +356,7 @@ sub basic00 {
               info(
                 q{DOMAIN_NAME_LABEL_TOO_LONG} => {
                     domain  => "$name",
-                    dlabel  => $local_label,
+                    label  => $local_label,
                     dlength => length( $local_label ),
                     max     => $LABEL_MAX_LENGTH,
                 }
