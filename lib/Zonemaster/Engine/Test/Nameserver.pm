@@ -186,7 +186,7 @@ sub metadata {
         ],
         nameserver11 => [
             qw(
-              NS11_UNKNOWN_OPTION_CODE
+              N11_UNKNOWN_OPTION_CODE
               TEST_CASE_END
               TEST_CASE_START
               )
@@ -360,8 +360,8 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # N10_EDNS_RESPONSE_ERROR
           'Expected RCODE but received erroneous response to an EDNS version 1 query. Fetched from the nameservers with IP addresses {ns_ip_list}', @_;
     },
-    NS11_UNKNOWN_OPTION_CODE => sub {
-        __x    # NS11_UNKNOWN_OPTION_CODE
+    N11_UNKNOWN_OPTION_CODE => sub {
+        __x    # N11_UNKNOWN_OPTION_CODE
           'The DNS response contains an unknown EDNS option-code. Returned from name servers "{ns_ip_list}".', @_;
     },
     QNAME_CASE_INSENSITIVE => sub {
@@ -1101,7 +1101,7 @@ sub nameserver11 {
     }
 
     if ( scalar @unknown_opt_code ){
-        push @results, info( NS11_UNKNOWN_OPTION_CODE => { ns_ip_list => join( q{;}, uniq sort @unknown_opt_code ) } );
+        push @results, info( N11_UNKNOWN_OPTION_CODE => { ns_ip_list => join( q{;}, uniq sort @unknown_opt_code ) } );
     }
 
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
