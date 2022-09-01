@@ -2,16 +2,16 @@
 
 ## Table of contents
 
-* [Overview](#Overview)
-* [Docker](#Docker)
-* [Prerequisites](#Prerequisites)
-* [Local installation](#Local-installation)
+* [Overview](#overview)
+* [Docker](#docker)
+* [Prerequisites](#prerequisites)
+* [Local installation](#local-installation)
   * [Installation on Rocky Linux]
   * [Installation on Debian and Ubuntu]
   * [Installation on FreeBSD]
   * [Installation on CentOS 7]
-* [Post-installation sanity check](#Post-installation-sanity-check)
-* [What to do next](#What-to-do-next)
+* [Post-installation sanity check](#post-installation-sanity-check)
+* [What to do next](#what-to-do-next)
 
 
 ## Overview
