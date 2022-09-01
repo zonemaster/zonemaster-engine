@@ -1101,7 +1101,7 @@ sub nameserver11 {
     }
 
     if ( scalar @unknown_opt_code ){
-        push @results, info( NS11_UNKNOWN_OPTION_CODE => { ns => join( q{;}, uniq sort @unknown_opt_code ) } );
+        push @results, info( NS11_UNKNOWN_OPTION_CODE => { ns_ip_list => join( q{;}, uniq sort @unknown_opt_code ) } );
     }
 
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
