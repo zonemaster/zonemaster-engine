@@ -71,7 +71,7 @@ and updated messages (*msgids* and *msgstr*).
 | rcode          | An RCODE Name                            | An RCODE Name (not numeric code) from [DNS RCODEs].                     |
 | rrtype         | A Resource Record TYPE Name              | A Resource Record TYPE Name (not numeric code) from [DNS RR TYPEs].     |
 | testcase       | A Zonemaster test case, or `all`         | A test case identifier.                                                 |
-
+| unicode_name   | Unicode name of a code point             | The name is a string in ASCII only and in upper case, e.g. "LATIN SMALL LETTER A"|
 
 ## Preliminary or proposed arguments
 
