@@ -11,29 +11,33 @@ use overload '""' => \&string;
 
 
 Readonly my %ERRORS => (
+    AMBIGUOUS_DOWNCASING => {
+        message => N__ 'Ambiguous downcaseing of character "{unicode_name}" in the domain name. Use all lower case instead.',
+        arguments => [ 'unicode_name' ]
+    },
+    DOMAIN_NAME_TOO_LONG => {
+        message => N__ 'Domain name is too long (more than 253 characters with no final dot).',
+    },
     EMPTY_DOMAIN_NAME => {
         message => N__ 'Domain name is empty.'
     },
     INITIAL_DOT => {
         message => N__ 'Domain name starts with dot.'
     },
+    INVALID_ASCII => {
+        message => N__ 'Domain name has an ASCII label ("{label}") with a character not permitted.',
+        arguments => [ 'label' ]
+    },
+    INVALID_U_LABEL => {
+        message => N__ 'Domain name has a non-ASCII label ("{label}") which is not a valid U-label.',
+        arguments => [ 'label' ]
+    },
     REPEATED_DOTS => {
         message => N__ 'Domain name has repeated dots.'
     },
-    INVALID_ASCII => {
-        message => N__ 'Domain name has an ASCII label ("{dlabel}") with a character not permitted.',
-        arguments => [ 'dlabel' ]
-    },
-    INVALID_U_LABEL => {
-        message => N__ 'Domain name has a non-ASCII label ("{dlabel}") which is not a valid U-label.',
-        arguments => [ 'dlabel' ]
-    },
     LABEL_TOO_LONG => {
-        message => N__ 'Domain name has a label that is too long (more than 63 characters), "{dlabel}".',
-        arguments => [ 'dlabel' ]
-    },
-    DOMAIN_NAME_TOO_LONG => {
-        message => N__ 'Domain name is too long (more than 253 characters with no final dot).',
+        message => N__ 'Domain name has a label that is too long (more than 63 characters), "{label}".',
+        arguments => [ 'label' ]
     },
 );
 

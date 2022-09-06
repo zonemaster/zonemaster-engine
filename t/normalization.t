@@ -54,9 +54,6 @@ subtest 'Valid domains' => sub {
         "a" x 63 . ".example.com" => "a" x 63 . ".example.com",
         # this is 253 characters
         ("a" x 15 . ".") x 15 . "b" . ".example.com" => ("a" x 15 . ".") x 15 . "b" . ".example.com",
-
-        # Special I case
-        #'İ.example.com' => 'i.example.com',
     );
 
     while (($domain, $expected_output) = each (%input_domains)) {
@@ -87,7 +84,7 @@ subtest 'Bad domains' => sub {
         # Length too long after idn conversion (libidn fails)
         'チョコレート' x 8 . 'a' . '.example.com' => 'INVALID_U_LABEL',
         # Emoji in names are invalid as per IDNA2008
-        '🦈．example．com' => 'INVALID_U_LABEL',
+        '❤️．example．com' => 'INVALID_U_LABEL',
 
         # Domain to long
         # this is 254 characters
@@ -96,6 +93,9 @@ subtest 'Bad domains' => sub {
         # Empty domain
         '' => 'EMPTY_DOMAIN_NAME',
         '    ' => 'EMPTY_DOMAIN_NAME',
+
+        # Ambiguous downcasing
+        'İ.example.com' => 'AMBIGUOUS_DOWNCASING',
     );
 
     while (($domain, $error) = each (%input_domains)) {

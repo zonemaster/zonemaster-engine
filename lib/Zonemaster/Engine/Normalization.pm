@@ -52,6 +52,9 @@ Readonly my $WHITE_SPACES_RE => (sub {
     my $re = '[' . (join '', values %WHITE_SPACES) . ']';
     return qr/$re/;
 })->();
+Readonly my %AMBIGUOUS_CHARACTERS => (
+    "LATIN CAPITAL LETTER I WITH DOT ABOVE" => q/\x{0130}/,
+);
 
 sub normalize_label {
     my ( $label ) = @_;
@@ -62,14 +65,14 @@ sub normalize_label {
     if ( $label =~ $VALID_ASCII ) {
         $alabel = lc $label;
     } elsif ( $label =~ $ASCII ) {
-        push @messages, Zonemaster::Engine::Normalization::Errors->new('INVALID_ASCII' => {dlabel => $label});
+        push @messages, Zonemaster::Engine::Normalization::Errors->new('INVALID_ASCII' => {label => $label});
 
         return \@messages, undef;
     } elsif (Zonemaster::LDNS::has_idn) {
         try {
             $alabel = Zonemaster::LDNS::to_idn($label);
         } catch {
-            push @messages, Zonemaster::Engine::Normalization::Errors->new('INVALID_U_LABEL' => {dlabel => $label});
+            push @messages, Zonemaster::Engine::Normalization::Errors->new('INVALID_U_LABEL' => {label => $label});
 
             return \@messages, undef;
         }
@@ -78,7 +81,7 @@ sub normalize_label {
     }
 
     if ( length($alabel) > 63) {
-        push @messages, Zonemaster::Engine::Normalization::Errors->new('LABEL_TOO_LONG' => {dlabel => $label});
+        push @messages, Zonemaster::Engine::Normalization::Errors->new('LABEL_TOO_LONG' => {label => $label});
         return \@messages, undef;
     }
 
@@ -94,6 +97,17 @@ sub normalize_name {
 
     if (length($uname) == 0) {
         push @messages, Zonemaster::Engine::Normalization::Errors->new('EMPTY_DOMAIN_NAME');
+        return \@messages, undef;
+    }
+
+    foreach my $char_name (keys %AMBIGUOUS_CHARACTERS) {
+        my $char = $AMBIGUOUS_CHARACTERS{$char_name};
+        if ($uname =~ m/${char}/) {
+            push @messages, Zonemaster::Engine::Normalization::Errors->new(AMBIGUOUS_DOWNCASING => { unicode_name => $char_name });
+        }
+    }
+
+    if ( @messages ) {
         return \@messages, undef;
     }
 
