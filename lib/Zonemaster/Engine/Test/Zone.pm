@@ -180,7 +180,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     RETRY_MINIMUM_VALUE_OK => sub {
         __x    # ZONE:RETRY_MINIMUM_VALUE_OK
-          'SOA \'retry\' value ({retry}) is more or equal than the minimum recommended value ({required_retry}).', @_;
+          'SOA \'retry\' value ({retry}) is at least equal to the minimum recommended value ({required_retry}).', @_;
     },
     MNAME_NO_RESPONSE => sub {
         __x    # ZONE:MNAME_NO_RESPONSE
@@ -200,7 +200,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     REFRESH_MINIMUM_VALUE_OK => sub {
         __x    # ZONE:REFRESH_MINIMUM_VALUE_OK
-          'SOA \'refresh\' value ({refresh}) is higher or equal than the minimum recommended value ({required_refresh}).', @_;
+          'SOA \'refresh\' value ({refresh}) is at least equal to the minimum recommended value ({required_refresh}).', @_;
     },
     EXPIRE_LOWER_THAN_REFRESH => sub {
         __x    # ZONE:EXPIRE_LOWER_THAN_REFRESH
