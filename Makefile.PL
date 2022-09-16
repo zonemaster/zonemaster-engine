@@ -28,7 +28,7 @@ requires 'Locale::TextDomain' => 1.20;
 requires 'Module::Find'       => 0.10;
 requires 'Moose'              => 2.0401;
 requires 'MooseX::Singleton'  => 0.30;
-requires 'Net::IP'            => 1.26;
+requires 'Net::IP::XS'        => 0.21;
 requires 'Readonly'           => 0;
 requires 'Text::CSV'          => 0;
 requires 'Zonemaster::LDNS'   => 2.002002;
@@ -45,8 +45,6 @@ requires_external_bin 'find';
 if ($^O eq "freebsd") {
     requires_external_bin 'gmake';
 };
-
-recommends 'Net::IP::XS'  => 0;
 
 sub MY::postamble {
     my $pure_all;

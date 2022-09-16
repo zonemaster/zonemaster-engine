@@ -17,7 +17,6 @@ RUN apk add --no-cache \
     perl-lwp-protocol-https \
     perl-module-install \
     perl-moose \
-    perl-net-ip \
     perl-pod-coverage \
     perl-test-differences \
     perl-test-exception \
@@ -28,7 +27,8 @@ RUN apk add --no-cache \
     Email::Valid \
     Locale::TextDomain \
     Module::Find \
-    MooseX::Singleton
+    MooseX::Singleton \
+    Net::IP::XS
 
 ARG version
 
