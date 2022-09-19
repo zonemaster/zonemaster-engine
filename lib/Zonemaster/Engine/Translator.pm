@@ -73,11 +73,11 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     SKIP_IPV4_DISABLED => sub {
         __x    # SYSTEM:SKIP_IPV4_DISABLED
-          "IPv4 is disabled, not sending query to {ns_list}.", @_;
+          "IPv4 is disabled, not sending \"{rrtype}\" query to {ns}.", @_;
     },
     SKIP_IPV6_DISABLED => sub {
         __x    # SYSTEM:SKIP_IPV6_DISABLED
-          "IPv6 is disabled, not sending query to {ns_list}.", @_;
+          "IPv6 is disabled, not sending \"{rrtype}\" query to {ns}.", @_;
     },
     FAKE_DELEGATION => sub {
         __x    # SYSTEM:FAKE_DELEGATION
