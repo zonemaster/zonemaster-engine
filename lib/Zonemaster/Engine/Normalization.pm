@@ -65,14 +65,14 @@ sub normalize_label {
     if ( $label =~ $VALID_ASCII ) {
         $alabel = lc $label;
     } elsif ( $label =~ $ASCII ) {
-        push @messages, Zonemaster::Engine::Normalization::Errors->new('INVALID_ASCII' => {label => $label});
+        push @messages, Zonemaster::Engine::Normalization::Errors->new(INVALID_ASCII => {label => $label});
 
         return \@messages, undef;
     } elsif (Zonemaster::LDNS::has_idn) {
         try {
             $alabel = Zonemaster::LDNS::to_idn($label);
         } catch {
-            push @messages, Zonemaster::Engine::Normalization::Errors->new('INVALID_U_LABEL' => {label => $label});
+            push @messages, Zonemaster::Engine::Normalization::Errors->new(INVALID_U_LABEL => {label => $label});
 
             return \@messages, undef;
         }
@@ -81,7 +81,7 @@ sub normalize_label {
     }
 
     if ( length($alabel) > 63) {
-        push @messages, Zonemaster::Engine::Normalization::Errors->new('LABEL_TOO_LONG' => {label => $label});
+        push @messages, Zonemaster::Engine::Normalization::Errors->new(LABEL_TOO_LONG => {label => $label});
         return \@messages, undef;
     }
 
@@ -96,7 +96,7 @@ sub normalize_name {
     $uname =~ s/${WHITE_SPACES_RE}+$//;
 
     if (length($uname) == 0) {
-        push @messages, Zonemaster::Engine::Normalization::Errors->new('EMPTY_DOMAIN_NAME');
+        push @messages, Zonemaster::Engine::Normalization::Errors->new(EMPTY_DOMAIN_NAME => {});
         return \@messages, undef;
     }
 
@@ -113,17 +113,17 @@ sub normalize_name {
 
     $uname =~ s/${FULL_STOPS_RE}/${ASCII_FULL_STOP}/g;
 
-    if ( $uname eq '.' ) {
+    if ( $uname eq $ASCII_FULL_STOP ) {
         return \@messages, $uname;
     }
 
     if ($uname =~ m/^${ASCII_FULL_STOP_RE}/) {
-        push @messages, Zonemaster::Engine::Normalization::Errors->new('INITIAL_DOT');
+        push @messages, Zonemaster::Engine::Normalization::Errors->new(INITIAL_DOT => {});
         return \@messages, undef;
     }
 
     if ($uname =~ m/${ASCII_FULL_STOP_RE}{2,}/ ) {
-        push @messages, Zonemaster::Engine::Normalization::Errors->new('REPEATED_DOTS');
+        push @messages, Zonemaster::Engine::Normalization::Errors->new(REPEATED_DOTS => {});
         return \@messages, undef;
     }
 
@@ -144,7 +144,7 @@ sub normalize_name {
     my $final_name = join '.', @label_ok;
 
     if (length($final_name) > 253) {
-        push @messages, Zonemaster::Engine::Normalization::Errors->new('DOMAIN_NAME_TOO_LONG');
+        push @messages, Zonemaster::Engine::Normalization::Errors->new(DOMAIN_NAME_TOO_LONG => {});
         return \@messages, undef;
     }
 
