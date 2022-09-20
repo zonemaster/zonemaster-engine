@@ -16,7 +16,7 @@ use Data::Dumper;
 use Zonemaster::Engine::Normalization::Errors;
 
 Readonly my $ASCII => qr/^[[:ascii:]]+$/;
-Readonly my $VALID_ASCII => qr/^[A-Za-z0-9\/\-_]+$/;
+Readonly my $VALID_ASCII => qr(^[A-Za-z0-9/_-]+$);
 
 Readonly my $ASCII_FULL_STOP => "\x{002E}";
 Readonly my $ASCII_FULL_STOP_RE => qr/\x{002E}/;
