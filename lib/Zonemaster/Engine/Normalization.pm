@@ -6,6 +6,8 @@ use utf8;
 use strict;
 use warnings;
 
+use parent 'Exporter';
+
 use Carp;
 use Encode;
 use Readonly;
@@ -14,6 +16,27 @@ use Zonemaster::LDNS;
 use Data::Dumper;
 
 use Zonemaster::Engine::Normalization::Errors;
+
+
+=head1 NAME
+
+Zonemaster::Engine::Normalization - utility functions for names normalization
+
+
+=head1 SYNOPSIS
+
+    use Zonemaster::Engine::Normalization;
+
+    my ($errors, $final_domain) = normalize_name($domain);
+
+=head1 EXPORTED FUNCTIONS
+
+=over
+=cut
+
+
+our @EXPORT      = qw[ normalize_name ];
+our @EXPORT_OK   = qw[ normalize_name normalize_label ];
 
 Readonly my $ASCII => qr/^[[:ascii:]]+$/;
 Readonly my $VALID_ASCII => qr(^[A-Za-z0-9/_-]+$);
@@ -56,6 +79,22 @@ Readonly my %AMBIGUOUS_CHARACTERS => (
     "LATIN CAPITAL LETTER I WITH DOT ABOVE" => q/\x{0130}/,
 );
 
+
+
+=item normalize_label($label)
+
+Normalize a single label from a DNS name.
+
+If the label is ASCII only, it is untouched, else it is converted according to IDNA2008.
+
+The downcasing, unicode normalization and conversion is performed by libidn2 using L<Zonemaster::LDNS/to_idn($name, ...)>.
+
+Returns a tuple C<($errors: ArrayRef[Zonemaster::Engine::Normalization::Errors], $alabel: String)>.
+
+In case of errors, the returned label will be undefined. If the method succeeded an empty error array is returned.
+
+=cut
+
 sub normalize_label {
     my ( $label ) = @_;
     my @messages;
@@ -87,6 +126,19 @@ sub normalize_label {
 
     return \@messages, $alabel;
 }
+
+=item normalize_name($name)
+
+Normalize a DNS name.
+
+
+The normalization process is detailed in the L<normalization document|https://github.com/zonemaster/zonemaster/blob/master/docs/specifications/tests/RequirementsAndNormalizationOfDomainNames.md>.
+
+Returns a tuple C<($errors: ArrayRef[Zonemaster::Engine::Normalization::Errors], $name: String)>.
+
+In case of errors, the returned name will be undefined. If the method succeeded an empty error array is returned.
+
+=cut
 
 sub normalize_name {
     my ( $uname ) = @_;
@@ -150,5 +202,9 @@ sub normalize_name {
 
     return \@messages, $final_name;
 }
+
+
+=back
+=cut
 
 1;

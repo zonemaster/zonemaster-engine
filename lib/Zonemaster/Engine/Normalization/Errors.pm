@@ -10,6 +10,20 @@ use Locale::TextDomain qw[Zonemaster-Engine];
 use overload '""' => \&string;
 
 
+=head1 NAME
+
+Zonemaster::Engine::Normalization::Errors - normalization error class
+
+
+=head1 SYNOPSIS
+
+    use Zonemaster::Engine::Normalization::Errors;
+
+    my $error = Zonemaster::Engine::Normalization::Errors->new(LABEL_TOO_LONG => {label => $label});
+
+=cut
+
+
 Readonly my %ERRORS => (
     AMBIGUOUS_DOWNCASING => {
         message => N__ 'Ambiguous downcaseing of character "{unicode_name}" in the domain name. Use all lower case instead.',
@@ -41,6 +55,31 @@ Readonly my %ERRORS => (
     },
 );
 
+=head1 ATTRIBUTES
+
+=over
+
+=item tag
+
+The message tag asscociated to the error.
+
+=item params
+
+The error message parameters to use in the message string.
+
+=back
+
+=head1 METHODS
+
+=over
+
+=item new($tag, $params)
+
+Creates and returns a new error object.
+This function will croak if there is a missing parameter for the given tag.
+
+=cut
+
 sub new {
     my ( $proto, $tag, $params ) = @_;
     my $class = ref $proto || $proto;
@@ -63,10 +102,24 @@ sub new {
     return bless $obj, $class;
 }
 
+
+=item message
+
+Returns the transated error message using the parameters given when creating the object.
+
+=cut
+
 sub message {
     my ( $self ) = @_;
     return __x $ERRORS{$self->{tag}}->{message}, %{$self->{params}};
 }
+
+
+=item tag
+
+Returns the message tag asscociated to the error.
+
+=cut
 
 sub tag {
     my ( $self ) = @_;
@@ -74,10 +127,22 @@ sub tag {
     return $self->{tag};
 }
 
+
+=item string
+
+Returns a string representation of the error object, equivalent to message.
+
+=cut
+
 sub string {
     my ( $self ) = @_;
 
     return $self->message;
 }
+
+
+=back
+
+=cut
 
 1;
