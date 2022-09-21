@@ -26,6 +26,8 @@ lib/Zonemaster/Engine/Logger.pm
 lib/Zonemaster/Engine/Logger/Entry.pm
 lib/Zonemaster/Engine/Nameserver.pm
 lib/Zonemaster/Engine/Nameserver/Cache.pm
+lib/Zonemaster/Engine/Normalization.pm
+lib/Zonemaster/Engine/Normalization/Errors.pm
 lib/Zonemaster/Engine/Net/IP.pm
 lib/Zonemaster/Engine/NSArray.pm
 lib/Zonemaster/Engine/Overview.pod
@@ -74,6 +76,7 @@ t/nameserver-axfr.data
 t/nameserver-axfr.t
 t/nameserver.data
 t/nameserver.t
+t/normalization.t
 t/old-bugs.data
 t/old-bugs.t
 t/pod-coverage.t
