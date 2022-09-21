@@ -54,6 +54,16 @@ subtest 'Valid domains' => sub {
         "a" x 63 . ".example.com" => "a" x 63 . ".example.com",
         # this is 253 characters
         ("a" x 15 . ".") x 15 . "b" . ".example.com" => ("a" x 15 . ".") x 15 . "b" . ".example.com",
+
+        # NFC conversion (for each group first is non-NFC, second is equivalent NFC)
+        "d\x{006F}\x{0308}d" => 'xn--dd-fka',
+        'död' => 'xn--dd-fka',
+
+        "aq\x{0307}\x{0323}a" => 'xn--aqa-9dc3l',
+        "aq\x{0323}\x{0307}a" => 'xn--aqa-9dc3l',
+
+        "aḋ\x{0323}a" => 'xn--aa-rub587y',
+        "aḍ\x{0307}a" => 'xn--aa-rub587y',
     );
 
     while (($domain, $expected_output) = each (%input_domains)) {
