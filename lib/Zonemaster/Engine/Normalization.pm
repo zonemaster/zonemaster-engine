@@ -83,15 +83,19 @@ Readonly my %AMBIGUOUS_CHARACTERS => (
 
 =item normalize_label($label)
 
-Normalize a single label from a DNS name.
+Normalize a single label from a domain name.
 
-If the label is ASCII only, it is untouched, else it is converted according to IDNA2008.
+If the label is ASCII only, it is down cased, else it is converted according
+to IDNA2008.
 
-The downcasing, unicode normalization and conversion is performed by libidn2 using L<Zonemaster::LDNS/to_idn($name, ...)>.
+Downcasing of upper case non-ASCII characters, normalization to the Unicode
+NFC format and conversion from U-label to A-label is performed by libidn2
+using L<Zonemaster::LDNS/to_idn($name, ...)>.
 
 Returns a tuple C<($errors: ArrayRef[Zonemaster::Engine::Normalization::Errors], $alabel: String)>.
 
-In case of errors, the returned label will be undefined. If the method succeeded an empty error array is returned.
+In case of errors, the returned label will be undefined. If the method
+succeeded an empty error array is returned.
 
 =cut
 
@@ -129,14 +133,15 @@ sub normalize_label {
 
 =item normalize_name($name)
 
-Normalize a DNS name.
+Normalize a domain name.
 
 
 The normalization process is detailed in the L<normalization document|https://github.com/zonemaster/zonemaster/blob/master/docs/specifications/tests/RequirementsAndNormalizationOfDomainNames.md>.
 
 Returns a tuple C<($errors: ArrayRef[Zonemaster::Engine::Normalization::Errors], $name: String)>.
 
-In case of errors, the returned name will be undefined. If the method succeeded an empty error array is returned.
+In case of errors, the returned name will be undefined. If the method succeeded
+an empty error array is returned.
 
 =cut
 

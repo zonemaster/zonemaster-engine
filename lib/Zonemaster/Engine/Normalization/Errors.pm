@@ -105,7 +105,7 @@ sub new {
 
 =item message
 
-Returns the transated error message using the parameters given when creating the object.
+Returns the translated error message using the parameters given when creating the object.
 
 =cut
 
@@ -126,7 +126,6 @@ sub tag {
 
     return $self->{tag};
 }
-
 
 =item string
 
