@@ -55,7 +55,7 @@ share/iana-ipv4-special-registry.csv
 share/iana-ipv6-special-registry.csv
 share/modules.txt
 share/profile.json
-share/profile_example.json
+share/profile_additional_properties.json
 share/locale/da/LC_MESSAGES/Zonemaster-Engine.mo
 share/locale/es/LC_MESSAGES/Zonemaster-Engine.mo
 share/locale/fi/LC_MESSAGES/Zonemaster-Engine.mo
