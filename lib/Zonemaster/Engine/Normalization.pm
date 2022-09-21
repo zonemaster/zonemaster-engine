@@ -15,7 +15,7 @@ use Try::Tiny;
 use Zonemaster::LDNS;
 use Data::Dumper;
 
-use Zonemaster::Engine::Normalization::Errors;
+use Zonemaster::Engine::Normalization::Error;
 
 
 =head1 NAME
@@ -92,7 +92,7 @@ Downcasing of upper case non-ASCII characters, normalization to the Unicode
 NFC format and conversion from U-label to A-label is performed by libidn2
 using L<Zonemaster::LDNS/to_idn($name, ...)>.
 
-Returns a tuple C<($errors: ArrayRef[Zonemaster::Engine::Normalization::Errors], $alabel: String)>.
+Returns a tuple C<($errors: ArrayRef[Zonemaster::Engine::Normalization::Error], $alabel: String)>.
 
 In case of errors, the returned label will be undefined. If the method
 succeeded an empty error array is returned.
@@ -108,14 +108,14 @@ sub normalize_label {
     if ( $label =~ $VALID_ASCII ) {
         $alabel = lc $label;
     } elsif ( $label =~ $ASCII ) {
-        push @messages, Zonemaster::Engine::Normalization::Errors->new(INVALID_ASCII => {label => $label});
+        push @messages, Zonemaster::Engine::Normalization::Error->new(INVALID_ASCII => {label => $label});
 
         return \@messages, undef;
     } elsif (Zonemaster::LDNS::has_idn) {
         try {
             $alabel = Zonemaster::LDNS::to_idn($label);
         } catch {
-            push @messages, Zonemaster::Engine::Normalization::Errors->new(INVALID_U_LABEL => {label => $label});
+            push @messages, Zonemaster::Engine::Normalization::Error->new(INVALID_U_LABEL => {label => $label});
 
             return \@messages, undef;
         }
@@ -124,7 +124,7 @@ sub normalize_label {
     }
 
     if ( length($alabel) > 63) {
-        push @messages, Zonemaster::Engine::Normalization::Errors->new(LABEL_TOO_LONG => {label => $label});
+        push @messages, Zonemaster::Engine::Normalization::Error->new(LABEL_TOO_LONG => {label => $label});
         return \@messages, undef;
     }
 
@@ -138,7 +138,7 @@ Normalize a domain name.
 
 The normalization process is detailed in the L<normalization document|https://github.com/zonemaster/zonemaster/blob/master/docs/specifications/tests/RequirementsAndNormalizationOfDomainNames.md>.
 
-Returns a tuple C<($errors: ArrayRef[Zonemaster::Engine::Normalization::Errors], $name: String)>.
+Returns a tuple C<($errors: ArrayRef[Zonemaster::Engine::Normalization::Error], $name: String)>.
 
 In case of errors, the returned name will be undefined. If the method succeeded
 an empty error array is returned.
@@ -153,14 +153,14 @@ sub normalize_name {
     $uname =~ s/${WHITE_SPACES_RE}+$//;
 
     if (length($uname) == 0) {
-        push @messages, Zonemaster::Engine::Normalization::Errors->new(EMPTY_DOMAIN_NAME => {});
+        push @messages, Zonemaster::Engine::Normalization::Error->new(EMPTY_DOMAIN_NAME => {});
         return \@messages, undef;
     }
 
     foreach my $char_name (keys %AMBIGUOUS_CHARACTERS) {
         my $char = $AMBIGUOUS_CHARACTERS{$char_name};
         if ($uname =~ m/${char}/) {
-            push @messages, Zonemaster::Engine::Normalization::Errors->new(AMBIGUOUS_DOWNCASING => { unicode_name => $char_name });
+            push @messages, Zonemaster::Engine::Normalization::Error->new(AMBIGUOUS_DOWNCASING => { unicode_name => $char_name });
         }
     }
 
@@ -175,12 +175,12 @@ sub normalize_name {
     }
 
     if ($uname =~ m/^${ASCII_FULL_STOP_RE}/) {
-        push @messages, Zonemaster::Engine::Normalization::Errors->new(INITIAL_DOT => {});
+        push @messages, Zonemaster::Engine::Normalization::Error->new(INITIAL_DOT => {});
         return \@messages, undef;
     }
 
     if ($uname =~ m/${ASCII_FULL_STOP_RE}{2,}/ ) {
-        push @messages, Zonemaster::Engine::Normalization::Errors->new(REPEATED_DOTS => {});
+        push @messages, Zonemaster::Engine::Normalization::Error->new(REPEATED_DOTS => {});
         return \@messages, undef;
     }
 
@@ -201,7 +201,7 @@ sub normalize_name {
     my $final_name = join '.', @label_ok;
 
     if (length($final_name) > 253) {
-        push @messages, Zonemaster::Engine::Normalization::Errors->new(DOMAIN_NAME_TOO_LONG => {});
+        push @messages, Zonemaster::Engine::Normalization::Error->new(DOMAIN_NAME_TOO_LONG => {});
         return \@messages, undef;
     }
 

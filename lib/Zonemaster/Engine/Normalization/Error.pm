@@ -1,4 +1,4 @@
-package Zonemaster::Engine::Normalization::Errors;
+package Zonemaster::Engine::Normalization::Error;
 
 use strict;
 use warnings;
@@ -12,14 +12,14 @@ use overload '""' => \&string;
 
 =head1 NAME
 
-Zonemaster::Engine::Normalization::Errors - normalization error class
+Zonemaster::Engine::Normalization::Error - normalization error class
 
 
 =head1 SYNOPSIS
 
-    use Zonemaster::Engine::Normalization::Errors;
+    use Zonemaster::Engine::Normalization::Error;
 
-    my $error = Zonemaster::Engine::Normalization::Errors->new(LABEL_TOO_LONG => {label => $label});
+    my $error = Zonemaster::Engine::Normalization::Error->new(LABEL_TOO_LONG => {label => $label});
 
 =cut
 
