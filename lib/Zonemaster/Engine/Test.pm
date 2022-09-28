@@ -42,6 +42,7 @@ BEGIN {
 sub _log_versions {
     info( GLOBAL_VERSION => { version => Zonemaster::Engine->VERSION } );
 
+    info( DEPENDENCY_VERSION => { name => 'libldns',               version => Zonemaster::LDNS::lib_version() } );
     info( DEPENDENCY_VERSION => { name => 'Zonemaster::LDNS',      version => $Zonemaster::LDNS::VERSION } );
     info( DEPENDENCY_VERSION => { name => 'IO::Socket::INET6',     version => $IO::Socket::INET6::VERSION } );
     info( DEPENDENCY_VERSION => { name => 'Moose',                 version => $Moose::VERSION } );
