@@ -483,6 +483,8 @@ sub _query {
             }
         }
 
+        eval { $pkt->nsid; };
+
         $res = eval { $self->dns->query_with_pkt( $pkt ) };
 
         if ( $@ ) {
