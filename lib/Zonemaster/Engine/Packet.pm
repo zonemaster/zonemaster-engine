@@ -18,7 +18,7 @@ has 'packet' => (
           rcode
           aa
           ra
-	  tc
+          tc
           question
           answer
           authority

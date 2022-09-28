@@ -461,19 +461,19 @@ sub _query {
                 $pkt->set_edns_present();
                 $pkt->edns_version($href->{edns_details}{version});
             }
-	    if ( defined $href->{edns_details} and defined $href->{edns_details}{z} ) {
+            if ( defined $href->{edns_details} and defined $href->{edns_details}{z} ) {
                 $pkt->set_edns_present();
                 $pkt->edns_z($href->{edns_details}{z});
             }
-	    if ( defined $href->{edns_details} and defined $href->{edns_details}{do} ) {
+            if ( defined $href->{edns_details} and defined $href->{edns_details}{do} ) {
                 $pkt->set_edns_present();
                 $pkt->do($href->{edns_details}{do});
             }
-	    if ( defined $href->{edns_details} and defined $href->{edns_details}{udp_size} ) {
+            if ( defined $href->{edns_details} and defined $href->{edns_details}{udp_size} ) {
                 $pkt->set_edns_present();
                 $pkt->edns_size($href->{edns_details}{udp_size});
             }
-	    if ( defined $href->{edns_details} and defined $href->{edns_details}{extended_rcode} ) {
+            if ( defined $href->{edns_details} and defined $href->{edns_details}{extended_rcode} ) {
                 $pkt->set_edns_present();
                 $pkt->edns_rcode($href->{edns_details}{extended_rcode});
             }
@@ -481,7 +481,7 @@ sub _query {
                 $pkt->set_edns_present();
                 $pkt->edns_data($href->{edns_details}{data});
             }
-	    $res = eval { $self->dns->query_with_pkt( $pkt ) };
+            $res = eval { $self->dns->query_with_pkt( $pkt ) };
         }
         else {
             $res = eval { $self->dns->query( "$name", $type, $href->{class} ) };
