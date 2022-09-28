@@ -362,13 +362,11 @@ Zonemaster::Engine::Recursor - recursive resolver for Zonemaster
 
 =head1 CLASS VARIABLES
 
-=over
-
-=item %recurse_cache
+=head2 %recurse_cache
 
 Will cache result of previous queries.
 
-=item %_fake_addresses_cache
+=head2 %_fake_addresses_cache
 
 A hash of hashrefs of arrayrefs.
 The keys of the top level hash are domain names.
@@ -378,8 +376,6 @@ The elements of the third level arrayrefs are IP addresses.
 
 The IP addresses are those of the nameservers which are used in case of fake
 delegations (pre-publication tests).
-
-=back
 
 =head1 METHODS
 
@@ -399,7 +395,7 @@ The following checks are made in order:
 
 =item $ZONEMASTER_ENGINE_ROOT_HINTS_FILE
 
-If this environment variable is set ot a truthy value, that path is returned.
+If this environment variable is set to a non-empty string, that path is returned.
 
 =item /etc/zonemaster/root-hints.json
 
@@ -407,7 +403,7 @@ If a file exists at this path, it is returned.
 
 =item /usr/local/etc/zonemaster/root-hints.json
 
-If a file exists at such a path, it is returned.
+If a file exists at this path, it is returned.
 
 =item DIST_DIR/root-hints.json
 
@@ -416,52 +412,46 @@ DIST_DIR is wherever File::ShareDir installs the Zonemaster-Engine dist.
 
 =back
 
-=head2 Other mothods
-
-=over
-
-=item recurse($name, $type, $class)
+=head2 recurse($name, $type, $class)
 
 Does a recursive resolution from the root servers down for the given triplet.
 
-=item parent($name)
+=head2 parent($name)
 
 Does a recursive resolution from the root down for the given name (using type C<SOA> and class C<IN>). If the resolution is successful, it returns
 the domain name of the second-to-last step. If the resolution is unsuccessful, it returns the domain name of the last step.
 
-=item get_ns_from($packet, $state)
+=head2 get_ns_from($packet, $state)
 
 Internal method. Takes a packet and a recursion state and returns a list of ns objects. Used to follow redirections.
 
-=item get_addresses_for($name[, $state])
+=head2 get_addresses_for($name[, $state])
 
 Takes a name and returns a (possibly empty) list of IP addresses for
 that name (in the form of L<Zonemaster::Engine::Net::IP> objects). When used
 internally by the recursor it's passed a recursion state as its second
 argument.
 
-=item add_fake_addresses($domain, $data)
+=head2 add_fake_addresses($domain, $data)
 
 Class method to create fake adresses for fake delegations for a specified domain from data provided.
 
-=item has_fake_addresses($domain)
+=head2 has_fake_addresses($domain)
 
 Check if there is at least one fake nameserver specified for the given domain.
 
-=item get_fake_addresses($domain, $nsname)
+=head2 get_fake_addresses($domain, $nsname)
 
 Returns a list of all cached fake addresses for the given domain and name server name.
 Returns an empty list if no data is cached for the given arguments.
 
-=item clear_cache()
+=head2 clear_cache()
 
 Class method to empty the cache of responses to recursive queries (but not the ones for fake delegations).
 
-=item root_servers()
+=head2 root_servers()
 
 Returns a list of ns objects representing the root servers. The list of root servers is found in an external
 file.
-
-=back
 
 =cut
