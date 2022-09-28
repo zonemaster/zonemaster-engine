@@ -32,6 +32,7 @@ use overload
 
 has 'name'    => ( is => 'ro' );
 has 'address' => ( is => 'ro' );
+has 'nsid'    => ( is => 'rw' );
 
 has 'dns'   => ( is => 'ro' );
 has 'cache' => ( is => 'ro' );
@@ -340,6 +341,8 @@ sub query {
 
     Zonemaster::Engine->logger->add( CACHED_RETURN => { packet => ( $p ? $p->string : 'undef' ) } );
 
+    eval { $self->{nsid} = $p->get_nsid(); };
+
     return $p;
 } ## end sub query
 
@@ -531,6 +534,9 @@ sub _query {
 sub string {
     my ( $self ) = @_;
 
+    if ( defined $self->nsid ) {
+        return $self->name->string . q{/} . $self->address->short . q{/} . $self->nsid;
+    }
     return $self->name->string . q{/} . $self->address->short;
 }
 

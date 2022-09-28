@@ -39,6 +39,7 @@ has 'packet' => (
           querytime
           do
           opcode
+          get_nsid
           )
     ]
 );
