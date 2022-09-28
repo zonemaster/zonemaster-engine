@@ -22,7 +22,7 @@ our %_fake_addresses_cache;
 
 sub get_default_path {
     state $path =
-        $ENV{ZONEMASTER_ENGINE_ROOT_HINTS_FILE}              ? $ENV{ZONEMASTER_ENGINE_ROOT_HINTS_FILE}
+        length( $ENV{ZONEMASTER_ENGINE_ROOT_HINTS_FILE} )    ? $ENV{ZONEMASTER_ENGINE_ROOT_HINTS_FILE}
       : -e '/etc/zonemaster/root-hints.json'                 ? '/etc/zonemaster/root-hints.json'
       : -e '/usr/local/etc/zonemaster/root-hints.json'       ? '/usr/local/etc/zonemaster/root-hints.json'
       :                                                        eval { dist_file( 'Zonemaster-Engine', 'root-hints.json' ) };
@@ -460,7 +460,7 @@ Class method to empty the cache of responses to recursive queries (but not the o
 =item root_servers()
 
 Returns a list of ns objects representing the root servers. The list of root servers is found in an external
-file..
+file.
 
 =back
 
