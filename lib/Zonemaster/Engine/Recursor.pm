@@ -7,6 +7,8 @@ use warnings;
 
 use Carp;
 use Class::Accessor "antlers";
+use File::ShareDir qw[dist_file];
+use File::Slurp qw( read_file );
 use JSON::PP;
 use Zonemaster::Engine::Util;
 use Zonemaster::Engine::Net::IP;
@@ -17,10 +19,14 @@ my $seed_data;
 our %recurse_cache;
 our %_fake_addresses_cache;
 
-{
-    local $/;
-    my $json = <DATA>;
-    $seed_data = decode_json $json;
+
+sub get_default_path {
+    state $path =
+        $ENV{ZONEMASTER_ENGINE_ROOT_HINTS_FILE}              ? $ENV{ZONEMASTER_ENGINE_ROOT_HINTS_FILE}
+      : -e '/etc/zonemaster/root-hints.json'                 ? '/etc/zonemaster/root-hints.json'
+      : -e '/usr/local/etc/zonemaster/root-hints.json'       ? '/usr/local/etc/zonemaster/root-hints.json'
+      :                                                        eval { dist_file( 'Zonemaster-Engine', 'root-hints.json' ) };
+    return $path // croak "File not found: root-hints.json\n";
 }
 
 sub add_fake_addresses {
@@ -330,6 +336,15 @@ sub clear_cache {
 }
 
 sub root_servers {
+    my $path = get_default_path();
+    my $json = read_file $path;
+    {
+        local $/;
+        $seed_data = decode_json $json;
+    }
+
+    return croak "File not valid: $path\n" unless $seed_data;
+
     return map { Zonemaster::Engine::Util::ns( $_->{name}, $_->{address} ) }
       sort { $a->{name} cmp $b->{name} } @{ $seed_data->{'.'} };
 }
@@ -367,6 +382,41 @@ delegations (pre-publication tests).
 =back
 
 =head1 METHODS
+
+=head2 get_default_path
+
+Determine the path for the default root-hints.json file.
+A list of values and locations are checked and the first match is returned.
+If all places are checked and no file is found, an exception is thrown.
+
+This procedure is idempotent - i.e. if you call this procedure multiple times
+the same value is returned no matter if environment variables or the file system
+have changed.
+
+The following checks are made in order:
+
+=over 4
+
+=item $ZONEMASTER_ENGINE_ROOT_HINTS_FILE
+
+If this environment variable is set ot a truthy value, that path is returned.
+
+=item /etc/zonemaster/root-hints.json
+
+If a file exists at this path, it is returned.
+
+=item /usr/local/etc/zonemaster/root-hints.json
+
+If a file exists at such a path, it is returned.
+
+=item DIST_DIR/root-hints.json
+
+If a file exists at this path, it is returned.
+DIST_DIR is wherever File::ShareDir installs the Zonemaster-Engine dist.
+
+=back
+
+=head2 Other mothods
 
 =over
 
@@ -409,118 +459,9 @@ Class method to empty the cache of responses to recursive queries (but not the o
 
 =item root_servers()
 
-Returns a list of ns objects representing the root servers. The list of root servers is hardcoded into this module.
+Returns a list of ns objects representing the root servers. The list of root servers is found in an external
+file..
 
 =back
 
 =cut
-
-__DATA__
-{
-   "." : [
-      {
-         "name" : "a.root-servers.net",
-         "address" : "198.41.0.4"
-      },
-      {
-         "name" : "a.root-servers.net",
-         "address" : "2001:503:ba3e::2:30"
-      },
-      {
-         "name" : "b.root-servers.net",
-         "address" : "199.9.14.201"
-      },
-      {
-         "name" : "b.root-servers.net",
-         "address" : "2001:500:200::b"
-      },
-      {
-         "name" : "c.root-servers.net",
-         "address" : "192.33.4.12"
-      },
-      {
-         "name" : "c.root-servers.net",
-         "address" : "2001:500:2::c"
-      },
-      {
-         "name" : "d.root-servers.net",
-         "address" : "199.7.91.13"
-      },
-      {
-         "name" : "d.root-servers.net",
-         "address" : "2001:500:2d::d"
-      },
-      {
-         "name" : "e.root-servers.net",
-         "address" : "192.203.230.10"
-      },
-      {
-         "name" : "e.root-servers.net",
-         "address" : "2001:500:a8::e"
-      },
-      {
-         "name" : "f.root-servers.net",
-         "address" : "192.5.5.241"
-      },
-      {
-         "name" : "f.root-servers.net",
-         "address" : "2001:500:2f::f"
-      },
-      {
-         "name" : "g.root-servers.net",
-         "address" : "192.112.36.4"
-      },
-      {
-         "name" : "g.root-servers.net",
-         "address" : "2001:500:12::d0d"
-      },
-      {
-         "name" : "h.root-servers.net",
-         "address" : "198.97.190.53"
-      },
-      {
-         "name" : "h.root-servers.net",
-         "address" : "2001:500:1::53"
-      },
-      {
-         "name" : "i.root-servers.net",
-         "address" : "192.36.148.17"
-      },
-      {
-         "name" : "i.root-servers.net",
-         "address" : "2001:7fe::53"
-      },
-      {
-         "name" : "j.root-servers.net",
-         "address" : "192.58.128.30"
-      },
-      {
-         "name" : "j.root-servers.net",
-         "address" : "2001:503:c27::2:30"
-      },
-      {
-         "name" : "k.root-servers.net",
-         "address" : "193.0.14.129"
-      },
-      {
-         "name" : "k.root-servers.net",
-         "address" : "2001:7fd::1"
-      },
-      {
-         "name" : "l.root-servers.net",
-         "address" : "199.7.83.42"
-      },
-      {
-         "name" : "l.root-servers.net",
-         "address" : "2001:500:9f::42"
-      },
-      {
-         "name" : "m.root-servers.net",
-         "address" : "202.12.27.33"
-      },
-      {
-         "name" : "m.root-servers.net",
-         "address" : "2001:dc3::35"
-      }
-   ]
-}
