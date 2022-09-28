@@ -455,8 +455,8 @@ sub _query {
         );
     }
     else {
+        my $pkt = Zonemaster::LDNS::Packet->new("$name", $type, $href->{class} );
         if ( $edns_special_case ) {
-            my $pkt = Zonemaster::LDNS::Packet->new("$name", $type, $href->{class} );
             if ( defined $href->{edns_details} and defined $href->{edns_details}{version} and $href->{edns_details}{version} != 0 ) {
                 $pkt->set_edns_present();
                 $pkt->edns_version($href->{edns_details}{version});
@@ -481,11 +481,10 @@ sub _query {
                 $pkt->set_edns_present();
                 $pkt->edns_data($href->{edns_details}{data});
             }
-            $res = eval { $self->dns->query_with_pkt( $pkt ) };
         }
-        else {
-            $res = eval { $self->dns->query( "$name", $type, $href->{class} ) };
-        }
+
+        $res = eval { $self->dns->query_with_pkt( $pkt ) };
+
         if ( $@ ) {
             my $msg = "$@";
             my $trailing_info = " at ".__FILE__;
