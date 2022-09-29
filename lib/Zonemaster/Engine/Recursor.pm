@@ -19,6 +19,11 @@ my $seed_data;
 our %recurse_cache;
 our %_fake_addresses_cache;
 
+{
+    my $path = get_default_path();
+    my $json = read_file $path;
+    $seed_data = decode_json $json;
+}
 
 sub get_default_path {
     state $path =
@@ -336,15 +341,6 @@ sub clear_cache {
 }
 
 sub root_servers {
-    my $path = get_default_path();
-    my $json = read_file $path;
-    {
-        local $/;
-        $seed_data = decode_json $json;
-    }
-
-    return croak "File not valid: $path\n" unless $seed_data;
-
     return map { Zonemaster::Engine::Util::ns( $_->{name}, $_->{address} ) }
       sort { $a->{name} cmp $b->{name} } @{ $seed_data->{'.'} };
 }
