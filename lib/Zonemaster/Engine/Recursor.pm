@@ -20,18 +20,9 @@ our %recurse_cache;
 our %_fake_addresses_cache;
 
 {
-    my $path = get_default_path();
+    my $path = dist_file( 'Zonemaster-Engine', 'root-hints.json' );
     my $json = read_file $path;
     $seed_data = decode_json $json;
-}
-
-sub get_default_path {
-    state $path =
-        length( $ENV{ZONEMASTER_ENGINE_ROOT_HINTS_FILE} )    ? $ENV{ZONEMASTER_ENGINE_ROOT_HINTS_FILE}
-      : -e '/etc/zonemaster/root-hints.json'                 ? '/etc/zonemaster/root-hints.json'
-      : -e '/usr/local/etc/zonemaster/root-hints.json'       ? '/usr/local/etc/zonemaster/root-hints.json'
-      :                                                        eval { dist_file( 'Zonemaster-Engine', 'root-hints.json' ) };
-    return $path // croak "File not found: root-hints.json\n";
 }
 
 sub add_fake_addresses {
@@ -374,39 +365,6 @@ The IP addresses are those of the nameservers which are used in case of fake
 delegations (pre-publication tests).
 
 =head1 METHODS
-
-=head2 get_default_path
-
-Determine the path for the default root-hints.json file.
-A list of values and locations are checked and the first match is returned.
-If all places are checked and no file is found, an exception is thrown.
-
-This procedure is idempotent - i.e. if you call this procedure multiple times
-the same value is returned no matter if environment variables or the file system
-have changed.
-
-The following checks are made in order:
-
-=over 4
-
-=item $ZONEMASTER_ENGINE_ROOT_HINTS_FILE
-
-If this environment variable is set to a non-empty string, that path is returned.
-
-=item /etc/zonemaster/root-hints.json
-
-If a file exists at this path, it is returned.
-
-=item /usr/local/etc/zonemaster/root-hints.json
-
-If a file exists at this path, it is returned.
-
-=item DIST_DIR/root-hints.json
-
-If a file exists at this path, it is returned.
-DIST_DIR is wherever File::ShareDir installs the Zonemaster-Engine dist.
-
-=back
 
 =head2 recurse($name, $type, $class)
 
