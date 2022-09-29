@@ -65,20 +65,20 @@ sub get_fake_addresses {
 }
 
 sub recurse {
-    my ( $self, $name, $type, $class ) = @_;
+    my ( $self, $name, $type, $dns_class ) = @_;
     $name = name( $name );
-    $type  //= 'A';
-    $class //= 'IN';
+    $type      //= 'A';
+    $dns_class //= 'IN';
 
-    Zonemaster::Engine->logger->add( RECURSE => { name => $name, type => $type, class => $class } );
-    if ( exists $recurse_cache{$name}{$type}{$class} ) {
-        return $recurse_cache{$name}{$type}{$class};
+    Zonemaster::Engine->logger->add( RECURSE => { name => $name, type => $type, class => $dns_class } );
+    if ( exists $recurse_cache{$name}{$type}{$dns_class} ) {
+        return $recurse_cache{$name}{$type}{$dns_class};
     }
 
     my ( $p, $state ) =
-      $self->_recurse( $name, $type, $class,
+      $self->_recurse( $name, $type, $dns_class,
         { ns => [ root_servers() ], count => 0, common => 0, seen => {}, glue => {} } );
-    $recurse_cache{$name}{$type}{$class} = $p;
+    $recurse_cache{$name}{$type}{$dns_class} = $p;
 
     return $p;
 }
@@ -132,7 +132,7 @@ sub parent {
 } ## end sub parent
 
 sub _recurse {
-    my ( $self, $name, $type, $class, $state ) = @_;
+    my ( $self, $name, $type, $dns_class, $state ) = @_;
     $name = q{} . name( $name );
 
     if ( $state->{in_progress}{$name}{$type} ) {
@@ -150,10 +150,10 @@ sub _recurse {
                 address => $nsaddress,
                 name    => $name,
                 type    => $type,
-                class   => $class
+                class   => $dns_class,
             }
         );
-        my $p = $self->_do_query( $ns, $name, $type, { class => $class }, $state );
+        my $p = $self->_do_query( $ns, $name, $type, { class => $dns_class }, $state );
 
         next if not $p;    # Ask next server if no response
 
@@ -344,8 +344,8 @@ Zonemaster::Engine::Recursor - recursive resolver for Zonemaster
 
 =head1 SYNOPSIS
 
-    my $packet = Zonemaster::Engine::Recursor->recurse($name, $type, $class);
-    my $pname = Zonemaster::Engine::Recursor->parent('example.org');
+    my $packet = Zonemaster::Engine::Recursor->recurse( $name, $type, $dns_class );
+    my $pname  = Zonemaster::Engine::Recursor->parent( 'example.org' );
 
 =head1 CLASS VARIABLES
 
