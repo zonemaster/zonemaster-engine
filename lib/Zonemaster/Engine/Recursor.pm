@@ -14,18 +14,40 @@ use Zonemaster::Engine::Util;
 use Zonemaster::Engine::Net::IP;
 use Zonemaster::Engine;
 
-my $seed_data;
-
 our %recurse_cache;
 our %_fake_addresses_cache;
 
 {
-    my $path = dist_file( 'Zonemaster-Engine', 'root-hints.json' );
-    my $json = read_file $path;
-    $seed_data = decode_json $json;
+    my $path      = dist_file( 'Zonemaster-Engine', 'root-hints.json' );
+    my $json      = read_file $path;
+    my $seed_data = decode_json $json;
+
+    for my $domain ( keys %{$seed_data} ) {
+        my %fake_data;
+        for my $ns ( @{ $seed_data->{$domain} } ) {
+            push @{ $fake_data{ $ns->{name} } }, $ns->{address};
+        }
+        Zonemaster::Engine::Recursor->_add_fake_addresses( $domain, \%fake_data );
+    }
 }
 
 sub add_fake_addresses {
+    my ( $class, $domain, $href ) = @_;
+
+    # Fake addresses for the root zone used to be implicitly ignored. To
+    # preserve this behavior after a refactoring we need to ignore it
+    # explicitly. This is done purely for the sake of correcness, not because it
+    # is a meaningful behavior.
+    if ( $domain eq '.' ) {
+        return;
+    }
+
+    _add_fake_addresses( $domain, $href );
+
+    return;
+}
+
+sub _add_fake_addresses {
     my ( $class, $domain, $href ) = @_;
     $domain = lc $domain;
 
@@ -332,8 +354,16 @@ sub clear_cache {
 }
 
 sub root_servers {
-    return map { Zonemaster::Engine::Util::ns( $_->{name}, $_->{address} ) }
-      sort { $a->{name} cmp $b->{name} } @{ $seed_data->{'.'} };
+    my $root_addresses = $_fake_addresses_cache{'.'};
+
+    my @servers;
+    for my $name ( sort keys %{ $root_addresses } ) {
+        for my $address ( @{ $root_addresses->{$name} } ) {
+            push @servers, Zonemaster::Engine::Util::ns( $name, $address );
+        }
+    }
+
+    return @servers;
 }
 
 1;
