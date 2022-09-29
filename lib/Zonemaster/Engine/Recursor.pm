@@ -27,27 +27,11 @@ our %_fake_addresses_cache;
         for my $ns ( @{ $seed_data->{$domain} } ) {
             push @{ $fake_data{ $ns->{name} } }, $ns->{address};
         }
-        Zonemaster::Engine::Recursor->_add_fake_addresses( $domain, \%fake_data );
+        Zonemaster::Engine::Recursor->add_fake_addresses( $domain, \%fake_data );
     }
 }
 
 sub add_fake_addresses {
-    my ( $class, $domain, $href ) = @_;
-
-    # Fake addresses for the root zone used to be implicitly ignored. To
-    # preserve this behavior after a refactoring we need to ignore it
-    # explicitly. This is done purely for the sake of correcness, not because it
-    # is a meaningful behavior.
-    if ( $domain eq '.' ) {
-        return;
-    }
-
-    _add_fake_addresses( $domain, $href );
-
-    return;
-}
-
-sub _add_fake_addresses {
     my ( $class, $domain, $href ) = @_;
     $domain = lc $domain;
 
@@ -84,6 +68,15 @@ sub get_fake_addresses {
     else {
         return ();
     }
+}
+
+sub remove_fake_addresses {
+    my ( $class, $domain ) = @_;
+    $domain = lc $domain;
+
+    delete $_fake_addresses_cache{$domain};
+
+    return;
 }
 
 sub recurse {
@@ -429,13 +422,32 @@ Check if there is at least one fake nameserver specified for the given domain.
 Returns a list of all cached fake addresses for the given domain and name server name.
 Returns an empty list if no data is cached for the given arguments.
 
+=head2 remove_fake_addresses($domain)
+
+Remove fake delegation data for a specified domain.
+
 =head2 clear_cache()
 
 Class method to empty the cache of responses to recursive queries (but not the ones for fake delegations).
 
+N.B. This method does not affect fake delegation data.
+
 =head2 root_servers()
 
-Returns a list of ns objects representing the root servers. The list of root servers is found in an external
-file.
+Returns a list of ns objects representing the root servers.
+
+    my @name_servers = Zonemaster::Engine::Recursor->root_servers();
+
+The default list of root servers is read from a file installed in the shared data directory.
+This list can be replaced like so:
+
+    Zonemaster::Engine::Recursor->remove_fake_addresses( '.' );
+    Zonemaster::Engine::Recursor->add_fake_addresses(
+        '.',
+        {
+            'ns1.example' => ['192.0.2.1'],
+            'ns2.example' => ['192.0.2.2'],
+        }
+    );
 
 =cut
