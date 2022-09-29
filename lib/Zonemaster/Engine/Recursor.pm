@@ -26,7 +26,7 @@ our %_fake_addresses_cache;
 }
 
 sub add_fake_addresses {
-    my ( $self, $domain, $href ) = @_;
+    my ( $class, $domain, $href ) = @_;
     $domain = lc $domain;
 
     foreach my $name ( keys %{$href} ) {
@@ -43,14 +43,14 @@ sub add_fake_addresses {
 }
 
 sub has_fake_addresses {
-    my ( undef, $domain ) = @_;
+    my ( $class, $domain ) = @_;
     $domain = lc $domain;
 
     return !!$_fake_addresses_cache{$domain};
 }
 
 sub get_fake_addresses {
-    my ( undef, $domain, $nsname ) = @_;
+    my ( $class, $domain, $nsname ) = @_;
     ( defined $domain ) or croak 'Argument must be defined: $domain';
 
     $domain = lc $domain;
@@ -65,7 +65,7 @@ sub get_fake_addresses {
 }
 
 sub recurse {
-    my ( $self, $name, $type, $dns_class ) = @_;
+    my ( $class, $name, $type, $dns_class ) = @_;
     $name = name( $name );
     $type      //= 'A';
     $dns_class //= 'IN';
@@ -76,7 +76,7 @@ sub recurse {
     }
 
     my ( $p, $state ) =
-      $self->_recurse( $name, $type, $dns_class,
+      $class->_recurse( $name, $type, $dns_class,
         { ns => [ root_servers() ], count => 0, common => 0, seen => {}, glue => {} } );
     $recurse_cache{$name}{$type}{$dns_class} = $p;
 
@@ -84,11 +84,11 @@ sub recurse {
 }
 
 sub parent {
-    my ( $self, $name ) = @_;
+    my ( $class, $name ) = @_;
     $name = name( $name );
 
     my ( $p, $state ) =
-      $self->_recurse( $name, 'SOA', 'IN',
+      $class->_recurse( $name, 'SOA', 'IN',
         { ns => [ root_servers() ], count => 0, common => 0, seen => {}, glue => {} } );
 
     my $pname;
@@ -132,7 +132,7 @@ sub parent {
 } ## end sub parent
 
 sub _recurse {
-    my ( $self, $name, $type, $dns_class, $state ) = @_;
+    my ( $class, $name, $type, $dns_class, $state ) = @_;
     $name = q{} . name( $name );
 
     if ( $state->{in_progress}{$name}{$type} ) {
@@ -153,7 +153,7 @@ sub _recurse {
                 class   => $dns_class,
             }
         );
-        my $p = $self->_do_query( $ns, $name, $type, { class => $dns_class }, $state );
+        my $p = $class->_do_query( $ns, $name, $type, { class => $dns_class }, $state );
 
         next if not $p;    # Ask next server if no response
 
@@ -171,7 +171,7 @@ sub _recurse {
             return ( $p, $state );
         }
 
-        if ( $self->_is_answer( $p ) ) {    # Return answer
+        if ( $class->_is_answer( $p ) ) {    # Return answer
             return ( $p, $state );
         }
 
@@ -191,9 +191,9 @@ sub _recurse {
               if $common < $state->{common};    # Redirect going up the hierarchy is not OK
 
             $state->{common} = $common;
-            $state->{ns} = $self->get_ns_from( $p, $state );    # Follow redirect
+            $state->{ns}     = $class->get_ns_from( $p, $state );    # Follow redirect
             $state->{count} += 1;
-            return ( undef, $state ) if $state->{count} > 20;    # Loop protection
+            return ( undef, $state ) if $state->{count} > 20;        # Loop protection
             unshift @{ $state->{trace} }, [ $zname, $ns, $p->answerfrom ];
 
             next;
@@ -205,7 +205,7 @@ sub _recurse {
 } ## end sub _recurse
 
 sub _do_query {
-    my ( $self, $ns, $name, $type, $opts, $state ) = @_;
+    my ( $class, $ns, $name, $type, $opts, $state ) = @_;
 
     if ( ref( $ns ) and $ns->can( 'query' ) ) {
         my $p = $ns->query( $name, $type, $opts );
@@ -220,7 +220,7 @@ sub _do_query {
     elsif ( my $href = $state->{glue}{ lc( name( $ns ) ) } ) {
         foreach my $addr ( keys %$href ) {
             my $realns = ns( $ns, $addr );
-            my $p = $self->_do_query( $realns, $name, $type, $opts, $state );
+            my $p      = $class->_do_query( $realns, $name, $type, $opts, $state );
             if ( $p ) {
                 return $p;
             }
@@ -228,7 +228,7 @@ sub _do_query {
     }
     else {
         $state->{glue}{ lc( name( $ns ) ) } = {};
-        my @addr = $self->get_addresses_for( $ns, $state );
+        my @addr = $class->get_addresses_for( $ns, $state );
         if ( @addr > 0 ) {
             foreach my $addr ( @addr ) {
                 $state->{glue}{ lc( name( $ns ) ) }{ $addr->short } = 1;
@@ -244,7 +244,7 @@ sub _do_query {
 } ## end sub _do_query
 
 sub get_ns_from {
-    my ( $self, $p, $state ) = @_;
+    my ( $class, $p, $state ) = @_;
     my ( @new, @extra );
 
     my @names = sort map { Zonemaster::Engine::DNSName->from_string( lc( $_->nsdname ) ) } $p->get_records( 'ns' );
@@ -270,12 +270,12 @@ sub get_ns_from {
 } ## end sub get_ns_from
 
 sub get_addresses_for {
-    my ( $self, $name, $state ) = @_;
+    my ( $class, $name, $state ) = @_;
     my @res;
     $state //=
       { ns => [ root_servers() ], count => 0, common => 0, seen => {} };
 
-    my ( $pa ) = $self->_recurse(
+    my ( $pa ) = $class->_recurse(
         "$name", 'A', 'IN',
         {
             ns          => [ root_servers() ],
@@ -291,7 +291,7 @@ sub get_addresses_for {
         return;
     }
 
-    my ( $paaaa ) = $self->_recurse(
+    my ( $paaaa ) = $class->_recurse(
         "$name", 'AAAA', 'IN',
         {
             ns          => [ root_servers() ],
@@ -322,7 +322,7 @@ sub get_addresses_for {
 } ## end sub get_addresses_for
 
 sub _is_answer {
-    my ( $self, $packet ) = @_;
+    my ( $class, $packet ) = @_;
 
     return ( $packet->type eq 'answer' );
 }
@@ -364,7 +364,7 @@ The elements of the third level arrayrefs are IP addresses.
 The IP addresses are those of the nameservers which are used in case of fake
 delegations (pre-publication tests).
 
-=head1 METHODS
+=head1 CLASS METHODS
 
 =head2 recurse($name, $type, $class)
 
