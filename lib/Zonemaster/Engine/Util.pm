@@ -179,10 +179,6 @@ is also added to the global logger object's list of entries.
 
 Creates and returns a nameserver object with the given name and address.
 
-=item policy()
-
-Returns a reference to the global policy hash.
-
 =item name($string_name_or_zone)
 
 Creates and returns a L<Zonemaster::Engine::DNSName> object for the given argument.
