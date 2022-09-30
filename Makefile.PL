@@ -28,6 +28,7 @@ requires 'Locale::TextDomain' => 1.20;
 requires 'Module::Find'       => 0.10;
 requires 'Moose'              => 2.0401;
 requires 'MooseX::Singleton'  => 0.30;
+requires 'Net::DNS'           => 0;
 requires 'Net::IP::XS'        => 0.21;
 requires 'Readonly'           => 0;
 requires 'Text::CSV'          => 0;

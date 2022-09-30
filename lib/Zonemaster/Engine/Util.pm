@@ -14,6 +14,7 @@ BEGIN {
       ipversion_ok
       name
       ns
+      parse_hints
       pod_extract_for
       should_run_test
       scramble_case
@@ -25,7 +26,7 @@ BEGIN {
     our @EXPORT = qw[ ns info name pod_extract_for scramble_case ];
 }
 
-
+use Net::DNS::ZoneFile;
 use Pod::Simple::SimpleTree;
 
 use Zonemaster::Engine;
@@ -166,6 +167,26 @@ sub scramble_case {
     return $newstring;
 }    # end sub scramble_case
 
+sub parse_hints {
+    my $string = shift;
+
+    my $rrs = Net::DNS::ZoneFile->parse( \$string );
+    if ( !defined $rrs ) {
+        die "Unable to parse root hints\n";
+    }
+
+    # TODO validate @rr
+
+    my %addr;
+    for my $rr ( @{ $rrs } ) {
+        if ( $rr->type eq 'A' or $rr->type eq 'AAAA' ) {
+            push @{ $addr{$rr->owner} }, $rr->address;
+        }
+    }
+
+    return \%addr;
+}
+
 1;
 
 =head1 NAME
@@ -195,6 +216,16 @@ Creates and returns a nameserver object with the given name and address.
 =item name($string_name_or_zone)
 
 Creates and returns a L<Zonemaster::Engine::DNSName> object for the given argument.
+
+=item parse_hints($string)
+
+Parses a string in the root hints format into the format expected by
+Zonemaster::Engine::Resolver->add_fake_addresses()
+
+Returns a hashref with domain names as keys and arrayrefs to IP addresses as
+values.
+
+Throws an exception if the inputs is not valid root hints data.
 
 =item pod_extract_for($testname)
 
