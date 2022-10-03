@@ -7,7 +7,24 @@ use warnings;
 
 use version; our $VERSION = version->declare("v1.1.13");
 
-use parent 'Exporter';
+use Exporter 'import';
+BEGIN {
+    our @EXPORT_OK = qw[
+      info
+      ipversion_ok
+      name
+      ns
+      pod_extract_for
+      should_run_test
+      scramble_case
+      test_levels
+    ];
+    our %EXPORT_TAGS = ( all => \@EXPORT_OK );
+
+    ## no critic (Modules::ProhibitAutomaticExportation)
+    our @EXPORT = qw[ ns info name pod_extract_for scramble_case ];
+}
+
 
 use Pod::Simple::SimpleTree;
 
@@ -15,11 +32,6 @@ use Zonemaster::Engine;
 use Zonemaster::Engine::Constants qw[:ip];
 use Zonemaster::Engine::DNSName;
 use Zonemaster::Engine::Profile;
-
-## no critic (Modules::ProhibitAutomaticExportation)
-our @EXPORT      = qw[ ns info name pod_extract_for scramble_case ];
-our @EXPORT_OK   = qw[ ns info name pod_extract_for test_levels should_run_test scramble_case ipversion_ok ];
-our %EXPORT_TAGS = ( all => \@EXPORT_OK );
 
 ## no critic (Subroutines::RequireArgUnpacking)
 sub ns {
