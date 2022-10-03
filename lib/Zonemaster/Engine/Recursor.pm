@@ -346,7 +346,7 @@ sub root_servers {
     my @servers;
     for my $name ( sort keys %{ $root_addresses } ) {
         for my $address ( @{ $root_addresses->{$name} } ) {
-            push @servers, Zonemaster::Engine::Util::ns( $name, $address );
+            push @servers, ns( $name, $address );
         }
     }
 

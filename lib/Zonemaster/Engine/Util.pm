@@ -220,12 +220,12 @@ Creates and returns a L<Zonemaster::Engine::DNSName> object for the given argume
 =item parse_hints($string)
 
 Parses a string in the root hints format into the format expected by
-Zonemaster::Engine::Resolver->add_fake_addresses()
+Zonemaster::Engine::Resolver->add_fake_addresses().
 
 Returns a hashref with domain names as keys and arrayrefs to IP addresses as
 values.
 
-Throws an exception if the inputs is not valid root hints data.
+Throws an exception if the inputs is not valid root hints text.
 
 =item pod_extract_for($testname)
 
