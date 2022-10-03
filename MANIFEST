@@ -62,9 +62,9 @@ share/locale/nb/LC_MESSAGES/Zonemaster-Engine.mo
 share/locale/sv/LC_MESSAGES/Zonemaster-Engine.mo
 share/Makefile
 share/modules.txt
+share/named.root
 share/profile.json
 share/profile_additional_properties.json
-share/root-hints.json
 t/00-load.t
 t/asn.data
 t/asn.t

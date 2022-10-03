@@ -10,25 +10,19 @@ use Class::Accessor "antlers";
 use File::ShareDir qw[dist_file];
 use File::Slurp qw( read_file );
 use JSON::PP;
-use Zonemaster::Engine::Util;
-use Zonemaster::Engine::Net::IP;
+
 use Zonemaster::Engine;
+use Zonemaster::Engine::Net::IP;
+use Zonemaster::Engine::Util qw( name ns parse_hints );
 
 our %recurse_cache;
 our %_fake_addresses_cache;
 
-{
-    my $path      = dist_file( 'Zonemaster-Engine', 'root-hints.json' );
-    my $json      = read_file $path;
-    my $seed_data = decode_json $json;
-
-    for my $domain ( keys %{$seed_data} ) {
-        my %fake_data;
-        for my $ns ( @{ $seed_data->{$domain} } ) {
-            push @{ $fake_data{ $ns->{name} } }, $ns->{address};
-        }
-        Zonemaster::Engine::Recursor->add_fake_addresses( $domain, \%fake_data );
-    }
+INIT {
+    my $hints_path = dist_file( 'Zonemaster-Engine', 'named.root' );
+    my $hints_text = read_file( $hints_path );
+    my $hints_data = parse_hints( $hints_text );
+    Zonemaster::Engine::Recursor->add_fake_addresses( '.', $hints_data );
 }
 
 sub add_fake_addresses {
