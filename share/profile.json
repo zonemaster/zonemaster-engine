@@ -11,6 +11,7 @@
         "ipv6" : true
     },
     "no_network" : false,
+    "nsid": true,
     "resolver" : {
         "defaults" : {
             "debug" : false,

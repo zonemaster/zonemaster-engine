@@ -341,7 +341,9 @@ sub query {
 
     Zonemaster::Engine->logger->add( CACHED_RETURN => { packet => ( $p ? $p->string : 'undef' ) } );
 
-    eval { $self->{nsid} = $p->get_nsid(); };
+    if ( Zonemaster::Engine::Profile->effective->get( q{nsid} ) ) {
+        eval { $self->{nsid} = $p->get_nsid(); };
+    }
 
     return $p;
 } ## end sub query
@@ -486,7 +488,9 @@ sub _query {
             }
         }
 
-        eval { $pkt->nsid; };
+        if ( Zonemaster::Engine::Profile->effective->get( q{nsid} ) ) {
+            eval { $pkt->nsid; };
+        }
 
         $res = eval { $self->dns->query_with_pkt( $pkt ) };
 

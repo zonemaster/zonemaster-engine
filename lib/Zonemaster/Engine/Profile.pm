@@ -72,6 +72,9 @@ my %profile_properties_details = (
     q{no_network} => {
         type    => q{Bool}
     },
+    q{nsid} => {
+        type    => q{Bool}
+    },
     q{asnroots} => {
         type    => q{ArrayRef},
         test    => sub {
@@ -646,6 +649,10 @@ A boolean. If true, network traffic is forbidden. Default false.
 
 Use when you want to be sure that any data is only taken from a preloaded
 cache.
+
+=head2 nsid
+
+A boolean. If true, sets the EDNS option NSID in queries. Default false.
 
 =head2 asnroots (DEPRECATED)
 
