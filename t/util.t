@@ -2,7 +2,7 @@ use Test::More;
 use Test::Differences;
 use Test::Exception;
 
-BEGIN { use_ok( 'Zonemaster::Engine::Util' ) }
+BEGIN { use_ok( 'Zonemaster::Engine::Util', qw( info name ns parse_hints pod_extract_for ) ) }
 
 isa_ok( ns( 'name', '::1' ), 'Zonemaster::Engine::Nameserver' );
 isa_ok( info( 'TAG', {} ), 'Zonemaster::Engine::Logger::Entry' );
@@ -38,20 +38,83 @@ EOF
             },
         },
         {
-            name => 'Syntax error',
+            name  => 'Syntax error',
             hints => '(>_<)',
             error => qr/Unable to parse root hints/,
+        },
+        {
+            name  => 'Forbidden $TTL',
+            hints => "\n\$TTL 3600",
+            error => qr/Forbidden directive \$TTL/,
+        },
+        {
+            name  => 'Forbidden $INCLUDE',
+            hints => "\n\$INCLUDE /etc/motd",
+            error => qr/Forbidden directive \$INCLUDE/,
+        },
+        {
+            name  => 'Forbidden $ORIGIN',
+            hints => "\n\$ORIGIN NET.",
+            error => qr/Forbidden directive \$ORIGIN/,
+        },
+        {
+            name  => 'Forbidden CH class',
+            hints => '.                        CH 3600000      NS    A.ROOT-SERVERS.NET.',
+            error => qr/Forbidden RR class CH/,
+        },
+        {
+            name  => 'Forbidden RR type SOA',
+            hints => <<EOF,
+.                        86400 SOA    a.root-servers.net. nstld.verisign-grs.com. (
+                                      2022093000 ; serial
+                                      1800       ; refresh (30 minutes)
+                                      900        ; retry (15 minutes)
+                                      604800     ; expire (1 week)
+                                      86400      ; minimum (1 day)
+                                      )
+EOF
+            error => qr/Forbidden RR type SOA/,
+        },
+        {
+            name  => 'Forbidden RR type TXT',
+            hints => '.                        3600000      TXT    "B.ROOT-SERVERS.NET"',
+            error => qr/Forbidden RR type TXT/,
+        },
+        {
+            name  => 'Wrong owner name',
+            hints => 'NET.                     3600000      NS    A.ROOT-SERVERS.NET.',
+            error => qr/Owner name for NS record must be "\."/,
+        },
+        {
+            name  => 'Missing address record',
+            hints => '.                        3600000      NS    A.ROOT-SERVERS.NET.',
+            error => qr/No address record found for NS A\.ROOT-SERVERS\.NET/,
+        },
+        {
+            name  => 'Orphan A record',
+            hints => 'B.ROOT-SERVERS.NET.      3600000      A     199.9.14.201',
+            error => qr/Ownername of A record does not match any NS RDATA/,
+        },
+        {
+            name  => 'Orphan AAAA record',
+            hints => 'B.ROOT-SERVERS.NET.      3600000      AAAA  2001:500:200::b',
+            error => qr/Ownername of AAAA record does not match any NS RDATA/,
+        },
+        {
+            name  => 'Missing NS',
+            hints => '',
+            error => qr/No NS record found/,
         },
     );
 
     for my $case ( @cases ) {
         if ( exists $case->{expected} ) {
-            my $actual = Zonemaster::Engine::Util::parse_hints( $case->{hints} );
+            my $actual = parse_hints( $case->{hints} );
             eq_or_diff $actual, $case->{expected}, $case->{name};
         }
         else {
             throws_ok {
-                Zonemaster::Engine::Util::parse_hints( $case->{hints} )
+                parse_hints( $case->{hints} )
             } $case->{error}, $case->{name};
         }
     }
