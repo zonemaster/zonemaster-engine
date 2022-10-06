@@ -52,7 +52,7 @@ and updated messages (*msgids* and *msgstr*).
 | algo_descr     | Text                                     | The human readable description of a [DNSSEC algorithm].                 |
 | algo_mnemo     | Text                                     | The mnemonic of a [DNSSEC algorithm].                                   |
 | algo_num       | Non-negative integer                     | The numeric value for a [DNSSEC algorithm].                             |
-| domain         | Domain name                              | A domain name. If nsname is also applicable, use that one instead.      |
+| domain         | Domain name                              | A domain name. If "nsname" or "mailtarget" is also applicable, use that one instead.      |
 | ds_algo_descr  | Text                                     | The human readable description of a [DS Digest algorithm].              |
 | ds_algo_mnemo  | Text                                     | The mnemonic of a [DS Digest algorithm].                                |
 | ds_algo_num    | Non-negative integer                     | The numeric value for a [DS Digest algorithm].                          |
