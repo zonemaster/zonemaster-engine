@@ -50,7 +50,7 @@ EOF
         {
             name  => 'Forbidden $INCLUDE',
             hints => "\n\$INCLUDE /etc/motd",
-            error => qr/Forbidden directive \$INCLUDE/,
+            error => qr//,
         },
         {
             name  => 'Forbidden $ORIGIN',
