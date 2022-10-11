@@ -1,9 +1,9 @@
 package Zonemaster::Engine::Recursor;
+use strict;
+use warnings;
+use 5.014002;
 
 use version; our $VERSION = version->declare("v1.0.10");
-
-use 5.014002;
-use warnings;
 
 use Carp;
 use Class::Accessor "antlers";
@@ -12,6 +12,7 @@ use File::Slurp qw( read_file );
 use JSON::PP;
 
 use Zonemaster::Engine;
+use Zonemaster::Engine::DNSName;
 use Zonemaster::Engine::Net::IP;
 use Zonemaster::Engine::Util qw( name ns parse_hints );
 
@@ -234,6 +235,7 @@ sub _do_query {
                 return $p;
             }
         }
+        return;
     }
     else {
         $state->{glue}{ lc( name( $ns ) ) } = {};
@@ -245,6 +247,7 @@ sub _do_query {
                 my $p = $new->query( $name, $type, $opts );
                 return $p if $p;
             }
+            return;
         }
         else {
             return;
@@ -338,6 +341,7 @@ sub _is_answer {
 
 sub clear_cache {
     %recurse_cache = ();
+    return;
 }
 
 sub root_servers {
