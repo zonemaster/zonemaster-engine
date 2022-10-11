@@ -177,7 +177,7 @@ sub parse_hints {
 
     # Reject anything that is forbidden in hints files but allowed in zone files
     # in general.
-    if ( $string =~ /^\$(TTL|INCLUDE|ORIGIN)/m ) {
+    if ( $string =~ /^\$(TTL|INCLUDE|ORIGIN|GENERATE)/m ) {
         die "Forbidden directive \$$1\n";
     }
 
@@ -286,7 +286,7 @@ the root hints format:
 =over
 
 =item *
-The file must not contain any $TTL, $ORIGIN or $INCLUDE directives.
+The file must not contain any $TTL, $ORIGIN, $INCLUDE or $GENERATE directives.
 
 =item *
 The class field of all records must be "IN" or absent. If class is absent, IN is

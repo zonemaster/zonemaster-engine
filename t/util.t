@@ -58,6 +58,11 @@ EOF
             error => qr/Forbidden directive \$ORIGIN/,
         },
         {
+            name  => 'Forbidden $GENERATE',
+            hints => "\n\$GENERATE 65-126 $ CNAME \$.64/26",
+            error => qr//,
+        },
+        {
             name  => 'Forbidden CH class',
             hints => '.                        CH 3600000      NS    A.ROOT-SERVERS.NET.',
             error => qr/Forbidden RR class CH/,
