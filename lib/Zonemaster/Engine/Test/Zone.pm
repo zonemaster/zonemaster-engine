@@ -180,7 +180,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     RETRY_MINIMUM_VALUE_OK => sub {
         __x    # ZONE:RETRY_MINIMUM_VALUE_OK
-          'SOA \'retry\' value ({retry}) is more than the minimum recommended value ({required_retry}).', @_;
+          'SOA \'retry\' value ({retry}) is at least equal to the minimum recommended value ({required_retry}).', @_;
     },
     MNAME_NO_RESPONSE => sub {
         __x    # ZONE:MNAME_NO_RESPONSE
@@ -200,7 +200,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     REFRESH_MINIMUM_VALUE_OK => sub {
         __x    # ZONE:REFRESH_MINIMUM_VALUE_OK
-          'SOA \'refresh\' value ({refresh}) is higher than the minimum recommended value ({required_refresh}).', @_;
+          'SOA \'refresh\' value ({refresh}) is at least equal to the minimum recommended value ({required_refresh}).', @_;
     },
     EXPIRE_LOWER_THAN_REFRESH => sub {
         __x    # ZONE:EXPIRE_LOWER_THAN_REFRESH
@@ -708,7 +708,7 @@ sub zone09 {
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
     my %ip_already_processed;
-    
+
     my @no_response_mx;
     my %unexpected_rcode_mx;
     my @non_authoritative_mx;
@@ -718,7 +718,7 @@ sub zone09 {
     my %all_ns;
 
     foreach my $ns ( @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) } ){
-        
+
         next if exists $ip_already_processed{$ns->address->short};
         $ip_already_processed{$ns->address->short} = 1;
 
@@ -796,7 +796,7 @@ sub zone09 {
                 my @next_data = map { lc $_->string } sort @{ $mx_set{$ns} };
                 if ( $json->encode( \@next_data ) ne $data_json ){
                     push @results, info( Z09_INCONSISTENT_MX_DATA => {} );
-                    
+
                     foreach my $ns_name ( keys %all_ns ){
                         push @results, info( Z09_MX_DATA => {
                             domain_list  => join( q{;}, map { $_->exchange } @{ $mx_set{@{$all_ns{$ns_name}}[0]} } ),
@@ -804,7 +804,7 @@ sub zone09 {
                             }
                         )
                     }
-                    
+
                     last;
                 }
             }
@@ -817,7 +817,7 @@ sub zone09 {
                         if ( scalar @{$mx_set{$ns}} > 1 ){
                             push @results, info( Z09_NULL_MX_WITH_OTHER_MX => {} ) unless grep{$_->tag eq 'Z09_NULL_MX_WITH_OTHER_MX'} @results;
                         }
-                    
+
                         if ( $rr->preference > 0 ){
                             push @results, info( Z09_NULL_MX_NON_ZERO_PREF => {} ) unless grep{$_->tag eq 'Z09_NULL_MX_NON_ZERO_PREF'} @results;
                         }
@@ -826,7 +826,7 @@ sub zone09 {
                     elsif ( $zone->name->string eq '.' ){
                         push @results, info( Z09_ROOT_EMAIL_DOMAIN => {} ) unless grep{$_->tag eq 'Z09_ROOT_EMAIL_DOMAIN'} @results;
                     }
-                    
+
                     elsif ( $zone->name->next_higher() eq '.' ){
                         push @results, info( Z09_TLD_EMAIL_DOMAIN => {} ) unless grep{$_->tag eq 'Z09_TLD_EMAIL_DOMAIN'} @results;
                     }
