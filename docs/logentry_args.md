@@ -70,8 +70,8 @@ and updated messages (*msgids* and *msgstr*).
 | nsname_list    | List of domain names                     | A list of name servers, as specified by "nsname", separated by ";".     |
 | rcode          | An RCODE Name                            | An RCODE Name (not numeric code) from [DNS RCODEs].                     |
 | rrtype         | A Resource Record TYPE Name              | A Resource Record TYPE Name (not numeric code) from [DNS RR TYPEs].     |
-| soaserial      | Non-zero positive integer                | The numeric value for the SERIAL field in an SOA record.                |
-| soaserial_list | Non-zero positive integers               | A list of numeric values, as specified by "soaserial", separated by ";".|
+| soaserial      | Non-negative integer                     | The numeric value for the SERIAL field in an SOA record.                |
+| soaserial_list | Non-negative integers                    | A list of non-negative integers, as specified by "soaserial", separated by ";".|
 | testcase       | A Zonemaster test case, or `all`         | A test case identifier.                                                 |
 | unicode_name   | Unicode name of a code point             | The name is a string in ASCII only and in upper case, e.g. "LATIN SMALL LETTER A"|
 
