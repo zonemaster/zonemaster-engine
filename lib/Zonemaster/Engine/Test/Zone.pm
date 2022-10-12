@@ -314,7 +314,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     Z09_MX_DATA => sub {
         __x    # ZONE:Z09_MX_DATA
-          'Mail targets in the MX RRset "{domain_list}" returned from name servers "{ns_ip_list}".', @_;
+          'Mail targets in the MX RRset "{mailtarget_list}" returned from name servers "{ns_ip_list}".', @_;
     },
     Z09_MX_FOUND => sub {
         __x    # ZONE:Z09_MX_FOUND
@@ -799,7 +799,7 @@ sub zone09 {
 
                     foreach my $ns_name ( keys %all_ns ){
                         push @results, info( Z09_MX_DATA => {
-                            domain_list  => join( q{;}, map { $_->exchange } @{ $mx_set{@{$all_ns{$ns_name}}[0]} } ),
+                            mailtarget_list  => join( q{;}, map { $_->exchange } @{ $mx_set{@{$all_ns{$ns_name}}[0]} } ),
                             ns_ip_list => join( q{;}, @{ $all_ns{$ns_name} } )
                             }
                         )
