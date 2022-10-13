@@ -30,7 +30,7 @@ ok( $res{Z09_INCONSISTENT_MX},          q{should emit Z09_INCONSISTENT_MX} );
 ok( !$res{Z09_INCONSISTENT_MX_DATA},    q{should not emit Z09_INCONSISTENT_MX_DATA} );
 ok( !$res{Z09_MISSING_MAIL_TARGET},     q{should not emit Z09_MISSING_MAIL_TARGET} );
 ok( !$res{Z09_MX_DATA},                 q{should not emit Z09_MX_DATA} );
-ok( $res{Z09_MX_FOUND},                 q{should emit Z09_NO_MX_FOUND} );
+ok( $res{Z09_MX_FOUND},                 q{should emit Z09_MX_FOUND} );
 ok( !$res{Z09_NON_AUTH_MX_RESPONSE},    q{should not emit Z09_NON_AUTH_MX_RESPONSE} );
 ok( $res{Z09_NO_MX_FOUND},              q{should emit Z09_NO_MX_FOUND} );
 ok( !$res{Z09_NO_RESPONSE_MX_QUERY},    q{should not emit Z09_NO_RESPONSE_MX_QUERY} );
