@@ -102,7 +102,6 @@ sub _cymru_asn_lookup {
                 my $str;
                 foreach my $rr ( @rr ) {
                     my $_str = $rr->txtdata;
-                    $_str =~ s/"([^"]+)"/$1/x;
                     my @_fields = split( /[ ][|][ ]?/x, $_str );
                     my @_asns   = split( /\s+/x,        $_fields[0] );
                     my $_prefix_length = ($_fields[1] =~ m!^.*[/](.*)!x)[0];
