@@ -38,7 +38,7 @@ like(
 my $untranslated = Zonemaster::Engine::Logger::Entry->new(
     {
         module => 'SYSTEM',
-        tag    => 'QUERY',
+        tag    => 'START_TIME',
         args   => { some => 'data' }
     }
 );
