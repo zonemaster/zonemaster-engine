@@ -362,6 +362,7 @@
             "TEST_CASE_START" : "DEBUG"
         },
         "SYSTEM" : {
+            "ADDED_FAKE_DELEGATION" : "DEBUG",
             "CACHE_CREATED" : "DEBUG2",
             "CACHE_FETCHED" : "DEBUG2",
             "CACHED_RETURN" : "DEBUG3",
@@ -373,6 +374,7 @@
             "FAKE_DELEGATION" : "DEBUG2",
             "FAKE_DELEGATION_IN_ZONE_NO_IP" : "ERROR",
             "FAKE_DELEGATION_NO_IP" : "ERROR",
+            "FAKE_DELEGATION_TO_SELF" : "DEBUG",
             "GLOBAL_VERSION" : "INFO",
             "IPV4_BLOCKED" : "DEBUG2",
             "IPV6_BLOCKED" : "DEBUG2",
