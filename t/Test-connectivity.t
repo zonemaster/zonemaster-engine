@@ -41,15 +41,38 @@ my @res;
 my %res;
 
 %res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{connectivity}, q{afnic.fr} );
-ok( !$res{MODULE_ERROR},                q{Test module completes normally} );
-ok( $res{NAMESERVER_HAS_UDP_53},        q{Nameserver has UDP port 53 reachable} );
-ok( $res{NAMESERVER_HAS_TCP_53},        q{Nameserver has TCP port 53 reachable} );
-ok( $res{IPV4_DIFFERENT_ASN},           q{IPv4 Nameservers with multiple AS} );
-ok( !$res{IPV4_ONE_ASN},                q{IPv4 Nameservers with multiple AS (double check)} );
-ok( !$res{IPV4_SAME_ASN},               q{IPv4 Nameservers with multiple AS (triple check)} );
-ok( $res{IPV6_DIFFERENT_ASN},           q{IPv6 Nameservers with multiple AS} );
-ok( !$res{IPV6_ONE_ASN},                q{IPv6 Nameservers with multiple AS (double check)} );
-ok( !$res{IPV6_SAME_ASN},               q{IPv6 Nameservers with multiple AS (triple check)} );
+ok( !$res{MODULE_ERROR},                        q{Test module completes normally} );
+# Connectivity01
+ok( !$res{CN01_MISSING_NS_RECORD_UDP},          q{Should not emit CN01_MISSING_NS_RECORD_UDP} );
+ok( !$res{CN01_MISSING_SOA_RECORD_UDP},         q{Should not emit CN01_MISSING_SOA_RECORD_UDP} );
+ok( !$res{CN01_NO_RESPONSE_NS_QUERY_UDP},       q{Should not emit CN01_NO_RESPONSE_NS_QUERY_UDP} );
+ok( !$res{CN01_NO_RESPONSE_SOA_QUERY_UDP},      q{Should not emit CN01_NO_RESPONSE_SOA_QUERY_UDP} );
+ok( !$res{CN01_NO_RESPONSE_UDP},                q{Should not emit CN01_NO_RESPONSE_UDP} );
+ok( !$res{CN01_NS_RECORD_NOT_AA_UDP},           q{Should not emit CN01_NS_RECORD_NOT_AA_UDP} );
+ok( !$res{CN01_SOA_RECORD_NOT_AA_UDP},          q{Should not emit CN01_SOA_RECORD_NOT_AA_UDP} );
+ok( !$res{CN01_UNEXPECTED_RCODE_NS_QUERY_UDP},  q{Should not emit CN01_UNEXPECTED_RCODE_NS_QUERY_UDP} );
+ok( !$res{CN01_UNEXPECTED_RCODE_SOA_QUERY_UDP}, q{Should not emit CN01_UNEXPECTED_RCODE_SOA_QUERY_UDP} );
+ok( !$res{CN01_WRONG_NS_RECORD_UDP},            q{Should not emit CN01_WRONG_NS_RECORD_UDP} );
+ok( !$res{CN01_WRONG_SOA_RECORD_UDP},           q{Should not emit CN01_WRONG_SOA_RECORD_UDP} );
+# Connectivity02
+ok( !$res{CN02_MISSING_NS_RECORD_UDP},          q{Should not emit CN02_MISSING_NS_RECORD_UDP} );
+ok( !$res{CN02_MISSING_SOA_RECORD_UDP},         q{Should not emit CN02_MISSING_SOA_RECORD_UDP} );
+ok( !$res{CN02_NO_RESPONSE_NS_QUERY_UDP},       q{Should not emit CN02_NO_RESPONSE_NS_QUERY_UDP} );
+ok( !$res{CN02_NO_RESPONSE_SOA_QUERY_UDP},      q{Should not emit CN02_NO_RESPONSE_SOA_QUERY_UDP} );
+ok( !$res{CN02_NO_RESPONSE_UDP},                q{Should not emit CN02_NO_RESPONSE_UDP} );
+ok( !$res{CN02_NS_RECORD_NOT_AA_UDP},           q{Should not emit CN02_NS_RECORD_NOT_AA_UDP} );
+ok( !$res{CN02_SOA_RECORD_NOT_AA_UDP},          q{Should not emit CN02_SOA_RECORD_NOT_AA_UDP} );
+ok( !$res{CN02_UNEXPECTED_RCODE_NS_QUERY_UDP},  q{Should not emit CN02_UNEXPECTED_RCODE_NS_QUERY_UDP} );
+ok( !$res{CN02_UNEXPECTED_RCODE_SOA_QUERY_UDP}, q{Should not emit CN02_UNEXPECTED_RCODE_SOA_QUERY_UDP} );
+ok( !$res{CN02_WRONG_NS_RECORD_UDP},            q{Should not emit CN02_WRONG_NS_RECORD_UDP} );
+ok( !$res{CN02_WRONG_SOA_RECORD_UDP},           q{Should not emit CN02_WRONG_SOA_RECORD_UDP} );
+# Connectivity03
+ok( $res{IPV4_DIFFERENT_ASN},                   q{IPv4 Nameservers with multiple AS} );
+ok( !$res{IPV4_ONE_ASN},                        q{IPv4 Nameservers with multiple AS (double check)} );
+ok( !$res{IPV4_SAME_ASN},                       q{IPv4 Nameservers with multiple AS (triple check)} );
+ok( $res{IPV6_DIFFERENT_ASN},                   q{IPv6 Nameservers with multiple AS} );
+ok( !$res{IPV6_ONE_ASN},                        q{IPv6 Nameservers with multiple AS (double check)} );
+ok( !$res{IPV6_SAME_ASN},                       q{IPv6 Nameservers with multiple AS (triple check)} );
 
 %res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{connectivity}, q{001.tf} );
 ok( $res{IPV6_ONE_ASN}, q{Nameservers IPv6 with Uniq AS} );
