@@ -811,6 +811,7 @@ sub zone09 {
         }
 
         unless ( grep{$_->tag eq 'Z09_INCONSISTENT_MX_DATA'} @results ){
+            my $show_mx_data = 0;
             foreach my $ns ( keys %mx_set ){
                 foreach my $rr ( @{$mx_set{$ns}} ){
                     if ( $rr->exchange eq '.' ){
@@ -830,7 +831,20 @@ sub zone09 {
                     elsif ( $zone->name->next_higher() eq '.' ){
                         push @results, info( Z09_TLD_EMAIL_DOMAIN => {} ) unless grep{$_->tag eq 'Z09_TLD_EMAIL_DOMAIN'} @results;
                     }
+
+                    else {
+                        $show_mx_data = 1;
+                        last;
+                    }
                 }
+            }
+
+            if ( $show_mx_data ) {
+                push @results, info( Z09_MX_DATA => {
+                        ns_ip_list => join( q{;}, keys %mx_set ),
+                        mailtarget_list => join( q{;}, map { map { $_->exchange } @$_ } $mx_set{ (keys %mx_set)[0] } )
+                    }
+                );
             }
         }
     }

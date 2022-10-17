@@ -284,6 +284,8 @@ t/Test-zone09-D.data
 t/Test-zone09-D.t
 t/Test-zone09-E.data
 t/Test-zone09-E.t
+t/Test-zone09-F.data
+t/Test-zone09-F.t
 t/translator.t
 t/undelegated.data
 t/undelegated.t
