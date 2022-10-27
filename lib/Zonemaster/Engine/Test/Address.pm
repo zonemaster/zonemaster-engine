@@ -80,7 +80,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     ADDRESS02 => sub {
         __x    # ADDRESS:ADDRESS02
-          'Name server address must be globally routable', @_;
+          'Reverse DNS entry exists for name server IP address', @_;
     },
     ADDRESS03 => sub {
         __x    # ADDRESS:ADDRESS03
