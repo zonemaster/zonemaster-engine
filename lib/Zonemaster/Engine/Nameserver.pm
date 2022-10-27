@@ -68,7 +68,7 @@ sub new {
 
     # Required arguments
     confess "Attribute \(address\) is required"
-      if !exists $attrs->{address};
+      if !defined $attrs->{address};
 
     # Type coercions
     $attrs->{name} = Zonemaster::Engine::DNSName->from_string( $attrs->{name} )
