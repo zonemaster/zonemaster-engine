@@ -363,6 +363,10 @@ entry.
 
 Takes a L<Zonemaster::Engine::Logger::Entry> object as its argument and returns a translation of its tag and arguments.
 
+=item test_case_description
+
+Returns the translated test case description for a given test case ID.
+
 =item BUILD
 
 Internal method that's only mentioned here to placate L<Pod::Coverage>.
