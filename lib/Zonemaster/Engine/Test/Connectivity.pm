@@ -110,6 +110,19 @@ sub metadata {
 } ## end sub metadata
 
 Readonly my %TAG_DESCRIPTIONS => (
+    CONNECTIVITY01 => sub {
+        __x    # CONNECTIVITY:CONNECTIVITY01
+          'UDP connectivity', @_;
+    },
+    CONNECTIVITY02 => sub {
+        __x    # CONNECTIVITY:CONNECTIVITY02
+          'TCP connectivity', @_;
+    },
+    CONNECTIVITY03 => sub {
+        __x    # CONNECTIVITY:CONNECTIVITY03
+          'AS Diversity', @_;
+    },
+
     CN01_IPV4_DISABLED => sub {
         __x    # CONNECTIVITY:CN01_IPV4_DISABLED
           'IPv4 is disabled. No DNS queries are sent to these name servers: "{ns_list}".', @_;

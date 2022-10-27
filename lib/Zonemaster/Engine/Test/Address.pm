@@ -74,6 +74,18 @@ sub metadata {
 } ## end sub metadata
 
 Readonly my %TAG_DESCRIPTIONS => (
+    ADDRESS01 => sub {
+        __x    # ADDRESS:ADDRESS01
+          'Name server address must be globally routable', @_;
+    },
+    ADDRESS02 => sub {
+        __x    # ADDRESS:ADDRESS02
+          'Name server address must be globally routable', @_;
+    },
+    ADDRESS03 => sub {
+        __x    # ADDRESS:ADDRESS03
+          'Reverse DNS entry matches name server name', @_;
+    },
     NAMESERVER_IP_WITHOUT_REVERSE => sub {
         __x    # ADDRESS:NAMESERVER_IP_WITHOUT_REVERSE
           'Nameserver {nsname} has an IP address ({ns_ip}) without PTR configured.', @_;
@@ -360,4 +372,3 @@ Verify that an address (Net::IP::XS) given is a special (private, reserved, ...)
 =back
 
 =cut
-

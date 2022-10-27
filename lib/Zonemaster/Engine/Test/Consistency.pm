@@ -136,6 +136,30 @@ sub metadata {
 } ## end sub metadata
 
 Readonly my %TAG_DESCRIPTIONS => (
+    CONSISTENCY01 => sub {
+        __x    # CONSISTENCY:CONSISTENCY01
+          'SOA serial number consistency', @_;
+    },
+    CONSISTENCY02 => sub {
+        __x    # CONSISTENCY:CONSISTENCY02
+          'SOA RNAME consistency', @_;
+    },
+    CONSISTENCY03 => sub {
+        __x    # CONSISTENCY:CONSISTENCY03
+          'SOA timers consistency', @_;
+    },
+    CONSISTENCY04 => sub {
+        __x    # CONSISTENCY:CONSISTENCY04
+          'Name server NS consistency', @_;
+    },
+    CONSISTENCY05 => sub {
+        __x    # CONSISTENCY:CONSISTENCY05
+          'Consistency between glue and authoritative data', @_;
+    },
+    CONSISTENCY06 => sub {
+        __x    # CONSISTENCY:CONSISTENCY06
+          'SOA MNAME consistency', @_;
+    },
     ADDRESSES_MATCH => sub {
         __x    # CONSISTENCY:ADDRESSES_MATCH
           'Glue records are consistent between glue and authoritative data.', @_;

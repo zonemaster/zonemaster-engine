@@ -234,6 +234,17 @@ sub translate_tag {
     return $self->_translate_tag( $entry->module, $entry->tag, $entry->printable_args ) // $entry->string;
 }
 
+
+sub test_case_description {
+    my ( $self, $test_name ) = @_;
+
+    $test_name = uc $test_name;
+    my $module = $test_name;
+    $module =~ s/\d+$//;
+
+    return $self->_translate_tag( $module, $test_name, {} ) // $test_name;
+}
+
 sub _translate_tag {
     my ( $self, $module, $tag, $args ) = @_;
 
