@@ -50,7 +50,7 @@ EOF
         {
             name  => 'Forbidden $INCLUDE',
             hints => "\n\$INCLUDE /etc/motd",
-            error => qr//,
+            error => qr/Forbidden directive \$INCLUDE/,
         },
         {
             name  => 'Forbidden $ORIGIN',
@@ -60,7 +60,7 @@ EOF
         {
             name  => 'Forbidden $GENERATE',
             hints => "\n\$GENERATE 65-126 $ CNAME \$.64/26",
-            error => qr//,
+            error => qr/Forbidden directive \$GENERATE/,
         },
         {
             name  => 'Forbidden CH class',

@@ -170,15 +170,15 @@ sub scramble_case {
 sub parse_hints {
     my $string = shift;
 
-    my $rrs = Net::DNS::ZoneFile->parse( \$string );
-    if ( !defined $rrs ) {
-        die "Unable to parse root hints\n";
-    }
-
     # Reject anything that is forbidden in hints files but allowed in zone files
     # in general.
     if ( $string =~ /^\$(TTL|INCLUDE|ORIGIN|GENERATE)/m ) {
         die "Forbidden directive \$$1\n";
+    }
+
+    my $rrs = Net::DNS::ZoneFile->parse( \$string );
+    if ( !defined $rrs ) {
+        die "Unable to parse root hints\n";
     }
 
     my %ns;
