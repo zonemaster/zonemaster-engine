@@ -51,11 +51,9 @@ Makefile.PL
 MANIFEST			This list of files
 META.yml
 README.md
+share/GNUmakefile
 share/iana-ipv4-special-registry.csv
 share/iana-ipv6-special-registry.csv
-share/modules.txt
-share/profile.json
-share/profile_additional_properties.json
 share/locale/da/LC_MESSAGES/Zonemaster-Engine.mo
 share/locale/es/LC_MESSAGES/Zonemaster-Engine.mo
 share/locale/fi/LC_MESSAGES/Zonemaster-Engine.mo
@@ -63,7 +61,10 @@ share/locale/fr/LC_MESSAGES/Zonemaster-Engine.mo
 share/locale/nb/LC_MESSAGES/Zonemaster-Engine.mo
 share/locale/sv/LC_MESSAGES/Zonemaster-Engine.mo
 share/Makefile
-share/GNUmakefile
+share/modules.txt
+share/named.root
+share/profile.json
+share/profile_additional_properties.json
 t/00-load.t
 t/asn.data
 t/asn.t

@@ -1,30 +1,33 @@
 package Zonemaster::Engine::Recursor;
+use strict;
+use warnings;
+use 5.014002;
 
 use version; our $VERSION = version->declare("v1.0.10");
 
-use 5.014002;
-use warnings;
-
 use Carp;
 use Class::Accessor "antlers";
+use File::ShareDir qw[dist_file];
+use File::Slurp qw( read_file );
 use JSON::PP;
-use Zonemaster::Engine::Util;
-use Zonemaster::Engine::Net::IP;
-use Zonemaster::Engine;
 
-my $seed_data;
+use Zonemaster::Engine;
+use Zonemaster::Engine::DNSName;
+use Zonemaster::Engine::Net::IP;
+use Zonemaster::Engine::Util qw( name ns parse_hints );
 
 our %recurse_cache;
 our %_fake_addresses_cache;
 
-{
-    local $/;
-    my $json = <DATA>;
-    $seed_data = decode_json $json;
+INIT {
+    my $hints_path = dist_file( 'Zonemaster-Engine', 'named.root' );
+    my $hints_text = read_file( $hints_path );
+    my $hints_data = parse_hints( $hints_text );
+    Zonemaster::Engine::Recursor->add_fake_addresses( '.', $hints_data );
 }
 
 sub add_fake_addresses {
-    my ( $self, $domain, $href ) = @_;
+    my ( $class, $domain, $href ) = @_;
     $domain = lc $domain;
 
     foreach my $name ( keys %{$href} ) {
@@ -41,14 +44,14 @@ sub add_fake_addresses {
 }
 
 sub has_fake_addresses {
-    my ( undef, $domain ) = @_;
+    my ( $class, $domain ) = @_;
     $domain = lc $domain;
 
     return !!$_fake_addresses_cache{$domain};
 }
 
 sub get_fake_addresses {
-    my ( undef, $domain, $nsname ) = @_;
+    my ( $class, $domain, $nsname ) = @_;
     ( defined $domain ) or croak 'Argument must be defined: $domain';
 
     $domain = lc $domain;
@@ -62,31 +65,40 @@ sub get_fake_addresses {
     }
 }
 
-sub recurse {
-    my ( $self, $name, $type, $class ) = @_;
-    $name = name( $name );
-    $type  //= 'A';
-    $class //= 'IN';
+sub remove_fake_addresses {
+    my ( $class, $domain ) = @_;
+    $domain = lc $domain;
 
-    Zonemaster::Engine->logger->add( RECURSE => { name => $name, type => $type, class => $class } );
-    if ( exists $recurse_cache{$name}{$type}{$class} ) {
-        return $recurse_cache{$name}{$type}{$class};
+    delete $_fake_addresses_cache{$domain};
+
+    return;
+}
+
+sub recurse {
+    my ( $class, $name, $type, $dns_class ) = @_;
+    $name = name( $name );
+    $type      //= 'A';
+    $dns_class //= 'IN';
+
+    Zonemaster::Engine->logger->add( RECURSE => { name => $name, type => $type, class => $dns_class } );
+    if ( exists $recurse_cache{$name}{$type}{$dns_class} ) {
+        return $recurse_cache{$name}{$type}{$dns_class};
     }
 
     my ( $p, $state ) =
-      $self->_recurse( $name, $type, $class,
+      $class->_recurse( $name, $type, $dns_class,
         { ns => [ root_servers() ], count => 0, common => 0, seen => {}, glue => {} } );
-    $recurse_cache{$name}{$type}{$class} = $p;
+    $recurse_cache{$name}{$type}{$dns_class} = $p;
 
     return $p;
 }
 
 sub parent {
-    my ( $self, $name ) = @_;
+    my ( $class, $name ) = @_;
     $name = name( $name );
 
     my ( $p, $state ) =
-      $self->_recurse( $name, 'SOA', 'IN',
+      $class->_recurse( $name, 'SOA', 'IN',
         { ns => [ root_servers() ], count => 0, common => 0, seen => {}, glue => {} } );
 
     my $pname;
@@ -130,7 +142,7 @@ sub parent {
 } ## end sub parent
 
 sub _recurse {
-    my ( $self, $name, $type, $class, $state ) = @_;
+    my ( $class, $name, $type, $dns_class, $state ) = @_;
     $name = q{} . name( $name );
 
     if ( $state->{in_progress}{$name}{$type} ) {
@@ -148,10 +160,10 @@ sub _recurse {
                 address => $nsaddress,
                 name    => $name,
                 type    => $type,
-                class   => $class
+                class   => $dns_class,
             }
         );
-        my $p = $self->_do_query( $ns, $name, $type, { class => $class }, $state );
+        my $p = $class->_do_query( $ns, $name, $type, { class => $dns_class }, $state );
 
         next if not $p;    # Ask next server if no response
 
@@ -169,7 +181,7 @@ sub _recurse {
             return ( $p, $state );
         }
 
-        if ( $self->_is_answer( $p ) ) {    # Return answer
+        if ( $class->_is_answer( $p ) ) {    # Return answer
             return ( $p, $state );
         }
 
@@ -189,9 +201,9 @@ sub _recurse {
               if $common < $state->{common};    # Redirect going up the hierarchy is not OK
 
             $state->{common} = $common;
-            $state->{ns} = $self->get_ns_from( $p, $state );    # Follow redirect
+            $state->{ns}     = $class->get_ns_from( $p, $state );    # Follow redirect
             $state->{count} += 1;
-            return ( undef, $state ) if $state->{count} > 20;    # Loop protection
+            return ( undef, $state ) if $state->{count} > 20;        # Loop protection
             unshift @{ $state->{trace} }, [ $zname, $ns, $p->answerfrom ];
 
             next;
@@ -203,7 +215,7 @@ sub _recurse {
 } ## end sub _recurse
 
 sub _do_query {
-    my ( $self, $ns, $name, $type, $opts, $state ) = @_;
+    my ( $class, $ns, $name, $type, $opts, $state ) = @_;
 
     if ( ref( $ns ) and $ns->can( 'query' ) ) {
         my $p = $ns->query( $name, $type, $opts );
@@ -218,15 +230,16 @@ sub _do_query {
     elsif ( my $href = $state->{glue}{ lc( name( $ns ) ) } ) {
         foreach my $addr ( keys %$href ) {
             my $realns = ns( $ns, $addr );
-            my $p = $self->_do_query( $realns, $name, $type, $opts, $state );
+            my $p      = $class->_do_query( $realns, $name, $type, $opts, $state );
             if ( $p ) {
                 return $p;
             }
         }
+        return;
     }
     else {
         $state->{glue}{ lc( name( $ns ) ) } = {};
-        my @addr = $self->get_addresses_for( $ns, $state );
+        my @addr = $class->get_addresses_for( $ns, $state );
         if ( @addr > 0 ) {
             foreach my $addr ( @addr ) {
                 $state->{glue}{ lc( name( $ns ) ) }{ $addr->short } = 1;
@@ -234,6 +247,7 @@ sub _do_query {
                 my $p = $new->query( $name, $type, $opts );
                 return $p if $p;
             }
+            return;
         }
         else {
             return;
@@ -242,7 +256,7 @@ sub _do_query {
 } ## end sub _do_query
 
 sub get_ns_from {
-    my ( $self, $p, $state ) = @_;
+    my ( $class, $p, $state ) = @_;
     my ( @new, @extra );
 
     my @names = sort map { Zonemaster::Engine::DNSName->from_string( lc( $_->nsdname ) ) } $p->get_records( 'ns' );
@@ -268,12 +282,12 @@ sub get_ns_from {
 } ## end sub get_ns_from
 
 sub get_addresses_for {
-    my ( $self, $name, $state ) = @_;
+    my ( $class, $name, $state ) = @_;
     my @res;
     $state //=
       { ns => [ root_servers() ], count => 0, common => 0, seen => {} };
 
-    my ( $pa ) = $self->_recurse(
+    my ( $pa ) = $class->_recurse(
         "$name", 'A', 'IN',
         {
             ns          => [ root_servers() ],
@@ -289,7 +303,7 @@ sub get_addresses_for {
         return;
     }
 
-    my ( $paaaa ) = $self->_recurse(
+    my ( $paaaa ) = $class->_recurse(
         "$name", 'AAAA', 'IN',
         {
             ns          => [ root_servers() ],
@@ -320,18 +334,27 @@ sub get_addresses_for {
 } ## end sub get_addresses_for
 
 sub _is_answer {
-    my ( $self, $packet ) = @_;
+    my ( $class, $packet ) = @_;
 
     return ( $packet->type eq 'answer' );
 }
 
 sub clear_cache {
     %recurse_cache = ();
+    return;
 }
 
 sub root_servers {
-    return map { Zonemaster::Engine::Util::ns( $_->{name}, $_->{address} ) }
-      sort { $a->{name} cmp $b->{name} } @{ $seed_data->{'.'} };
+    my $root_addresses = $_fake_addresses_cache{'.'};
+
+    my @servers;
+    for my $name ( sort keys %{ $root_addresses } ) {
+        for my $address ( @{ $root_addresses->{$name} } ) {
+            push @servers, ns( $name, $address );
+        }
+    }
+
+    return @servers;
 }
 
 1;
@@ -342,18 +365,16 @@ Zonemaster::Engine::Recursor - recursive resolver for Zonemaster
 
 =head1 SYNOPSIS
 
-    my $packet = Zonemaster::Engine::Recursor->recurse($name, $type, $class);
-    my $pname = Zonemaster::Engine::Recursor->parent('example.org');
+    my $packet = Zonemaster::Engine::Recursor->recurse( $name, $type, $dns_class );
+    my $pname  = Zonemaster::Engine::Recursor->parent( 'example.org' );
 
 =head1 CLASS VARIABLES
 
-=over
-
-=item %recurse_cache
+=head2 %recurse_cache
 
 Will cache result of previous queries.
 
-=item %_fake_addresses_cache
+=head2 %_fake_addresses_cache
 
 A hash of hashrefs of arrayrefs.
 The keys of the top level hash are domain names.
@@ -364,163 +385,67 @@ The elements of the third level arrayrefs are IP addresses.
 The IP addresses are those of the nameservers which are used in case of fake
 delegations (pre-publication tests).
 
-=back
+=head1 CLASS METHODS
 
-=head1 METHODS
-
-=over
-
-=item recurse($name, $type, $class)
+=head2 recurse($name, $type, $class)
 
 Does a recursive resolution from the root servers down for the given triplet.
 
-=item parent($name)
+=head2 parent($name)
 
 Does a recursive resolution from the root down for the given name (using type C<SOA> and class C<IN>). If the resolution is successful, it returns
 the domain name of the second-to-last step. If the resolution is unsuccessful, it returns the domain name of the last step.
 
-=item get_ns_from($packet, $state)
+=head2 get_ns_from($packet, $state)
 
 Internal method. Takes a packet and a recursion state and returns a list of ns objects. Used to follow redirections.
 
-=item get_addresses_for($name[, $state])
+=head2 get_addresses_for($name[, $state])
 
 Takes a name and returns a (possibly empty) list of IP addresses for
 that name (in the form of L<Zonemaster::Engine::Net::IP> objects). When used
 internally by the recursor it's passed a recursion state as its second
 argument.
 
-=item add_fake_addresses($domain, $data)
+=head2 add_fake_addresses($domain, $data)
 
 Class method to create fake adresses for fake delegations for a specified domain from data provided.
 
-=item has_fake_addresses($domain)
+=head2 has_fake_addresses($domain)
 
 Check if there is at least one fake nameserver specified for the given domain.
 
-=item get_fake_addresses($domain, $nsname)
+=head2 get_fake_addresses($domain, $nsname)
 
 Returns a list of all cached fake addresses for the given domain and name server name.
 Returns an empty list if no data is cached for the given arguments.
 
-=item clear_cache()
+=head2 remove_fake_addresses($domain)
+
+Remove fake delegation data for a specified domain.
+
+=head2 clear_cache()
 
 Class method to empty the cache of responses to recursive queries (but not the ones for fake delegations).
 
-=item root_servers()
+N.B. This method does not affect fake delegation data.
 
-Returns a list of ns objects representing the root servers. The list of root servers is hardcoded into this module.
+=head2 root_servers()
 
-=back
+Returns a list of ns objects representing the root servers.
+
+    my @name_servers = Zonemaster::Engine::Recursor->root_servers();
+
+The default list of root servers is read from a file installed in the shared data directory.
+This list can be replaced like so:
+
+    Zonemaster::Engine::Recursor->remove_fake_addresses( '.' );
+    Zonemaster::Engine::Recursor->add_fake_addresses(
+        '.',
+        {
+            'ns1.example' => ['192.0.2.1'],
+            'ns2.example' => ['192.0.2.2'],
+        }
+    );
 
 =cut
-
-__DATA__
-{
-   "." : [
-      {
-         "name" : "a.root-servers.net",
-         "address" : "198.41.0.4"
-      },
-      {
-         "name" : "a.root-servers.net",
-         "address" : "2001:503:ba3e::2:30"
-      },
-      {
-         "name" : "b.root-servers.net",
-         "address" : "199.9.14.201"
-      },
-      {
-         "name" : "b.root-servers.net",
-         "address" : "2001:500:200::b"
-      },
-      {
-         "name" : "c.root-servers.net",
-         "address" : "192.33.4.12"
-      },
-      {
-         "name" : "c.root-servers.net",
-         "address" : "2001:500:2::c"
-      },
-      {
-         "name" : "d.root-servers.net",
-         "address" : "199.7.91.13"
-      },
-      {
-         "name" : "d.root-servers.net",
-         "address" : "2001:500:2d::d"
-      },
-      {
-         "name" : "e.root-servers.net",
-         "address" : "192.203.230.10"
-      },
-      {
-         "name" : "e.root-servers.net",
-         "address" : "2001:500:a8::e"
-      },
-      {
-         "name" : "f.root-servers.net",
-         "address" : "192.5.5.241"
-      },
-      {
-         "name" : "f.root-servers.net",
-         "address" : "2001:500:2f::f"
-      },
-      {
-         "name" : "g.root-servers.net",
-         "address" : "192.112.36.4"
-      },
-      {
-         "name" : "g.root-servers.net",
-         "address" : "2001:500:12::d0d"
-      },
-      {
-         "name" : "h.root-servers.net",
-         "address" : "198.97.190.53"
-      },
-      {
-         "name" : "h.root-servers.net",
-         "address" : "2001:500:1::53"
-      },
-      {
-         "name" : "i.root-servers.net",
-         "address" : "192.36.148.17"
-      },
-      {
-         "name" : "i.root-servers.net",
-         "address" : "2001:7fe::53"
-      },
-      {
-         "name" : "j.root-servers.net",
-         "address" : "192.58.128.30"
-      },
-      {
-         "name" : "j.root-servers.net",
-         "address" : "2001:503:c27::2:30"
-      },
-      {
-         "name" : "k.root-servers.net",
-         "address" : "193.0.14.129"
-      },
-      {
-         "name" : "k.root-servers.net",
-         "address" : "2001:7fd::1"
-      },
-      {
-         "name" : "l.root-servers.net",
-         "address" : "199.7.83.42"
-      },
-      {
-         "name" : "l.root-servers.net",
-         "address" : "2001:500:9f::42"
-      },
-      {
-         "name" : "m.root-servers.net",
-         "address" : "202.12.27.33"
-      },
-      {
-         "name" : "m.root-servers.net",
-         "address" : "2001:dc3::35"
-      }
-   ]
-}
