@@ -301,6 +301,8 @@ t/Test-zone09-1.data
 t/Test-zone09-1.t
 t/Test-zone09.data
 t/Test-zone09.t
+t/Test-zone11.data
+t/Test-zone11.t
 t/translator.t
 t/undelegated.data
 t/undelegated.t

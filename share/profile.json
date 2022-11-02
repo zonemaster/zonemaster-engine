@@ -511,7 +511,14 @@
             "Z09_NULL_MX_WITH_OTHER_MX" : "WARNING",
             "Z09_ROOT_EMAIL_DOMAIN" : "NOTICE",
             "Z09_TLD_EMAIL_DOMAIN" : "WARNING",
-            "Z09_UNEXPECTED_RCODE_MX" : "WARNING"
+            "Z09_UNEXPECTED_RCODE_MX" : "WARNING",
+            "Z11_INCONSISTENT_SPF_POLICIES": "WARNING",
+            "Z11_DIFFERENT_SPF_POLICIES_FOUND": "NOTICE",
+            "Z11_NO_SPF_FOUND": "NOTICE",
+            "Z11_SPF1_MULTIPLE_RECORDS": "ERROR",
+            "Z11_SPF1_SYNTAX_ERROR": "ERROR",
+            "Z11_SPF1_SYNTAX_OK": "INFO",
+            "Z11_UNABLE_TO_CHECK_FOR_SPF": "ERROR"
         }
     },
     "test_cases": [
@@ -584,6 +591,7 @@
         "zone07",
         "zone08",
         "zone09",
-        "zone10"
+        "zone10",
+        "zone11"
     ]
 }

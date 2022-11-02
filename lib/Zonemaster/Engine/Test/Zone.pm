@@ -15,6 +15,8 @@ use List::Util qw[max];
 use Locale::TextDomain qw[Zonemaster-Engine];
 use Readonly;
 use JSON::PP;
+use Mail::SPF::v1::Record;
+use Try::Tiny;
 
 use Zonemaster::Engine::Profile;
 use Zonemaster::Engine::Constants qw[:soa :ip];
@@ -71,6 +73,7 @@ sub all {
 
     if ( none { $_->tag eq q{NO_RESPONSE_SOA_QUERY} } @results ) {
         push @results, $class->zone10( $zone ) if Zonemaster::Engine::Util::should_run_test( q{zone10} );
+        push @results, $class->zone11( $zone ) if Zonemaster::Engine::Util::should_run_test( q{zone11} );
     }
 
     return @results;
@@ -206,6 +209,17 @@ sub metadata {
               TEST_CASE_START
               )
         ],
+        zone11 => [
+            qw(
+              Z11_INCONSISTENT_SPF_POLICIES
+              Z11_DIFFERENT_SPF_POLICIES_FOUND
+              Z11_NO_SPF_FOUND
+              Z11_SPF1_MULTIPLE_RECORDS
+              Z11_SPF1_SYNTAX_ERROR
+              Z11_SPF1_SYNTAX_OK
+              Z11_UNABLE_TO_CHECK_FOR_SPF
+              )
+        ],
     };
 } ## end sub metadata
 
@@ -249,6 +263,10 @@ Readonly my %TAG_DESCRIPTIONS => (
     ZONE10 => sub {
         __x    # ZONE:ZONE10
           'No multiple SOA records';
+    },
+    ZONE11 => sub {
+        __x    # ZONE:ZONE11
+          'SPF policy validation', @_;
     },
     RETRY_MINIMUM_VALUE_LOWER => sub {
         __x    # ZONE:RETRY_MINIMUM_VALUE_LOWER
@@ -459,6 +477,34 @@ Readonly my %TAG_DESCRIPTIONS => (
     Z09_UNEXPECTED_RCODE_MX => sub {
         __x    # ZONE:Z09_UNEXPECTED_RCODE_MX
           'Unexpected RCODE value ({rcode}) on the MX query from name servers "{ns_ip_list}".', @_;
+    },
+    Z11_INCONSISTENT_SPF_POLICIES => sub {
+        __x    # ZONE:Z11_INCONSISTENT_SPF_POLICIES
+          'The zone publishes different SPF policies on different name servers.', @_;
+    },
+    Z11_DIFFERENT_SPF_POLICIES_FOUND => sub {
+        __x    # ZONE:Z11_DIFFERENT_SPF_POLICIES_FOUND
+          'The following name servers returned the same SPF version 1 policy, but other name servers returned a different policy. Name servers: {ns_ip_list}.', @_;
+    },
+    Z11_NO_SPF_FOUND => sub {
+        __x    # ZONE:Z11_NO_SPF_FOUND
+          'The zone does not publish an SPF policy.', @_;
+    },
+    Z11_SPF1_MULTIPLE_RECORDS => sub {
+        __x    # ZONE:Z11_SPF1_MULTIPLE_RECORDS
+          'The following name servers returned more than one SPF version 1 policy. Name servers: {ns_ip_list}.', @_;
+    },
+    Z11_SPF1_SYNTAX_ERROR => sub {
+        __x    # ZONE:Z11_SPF1_SYNTAX_ERROR
+          'The SPF version 1 policy has a syntax error. Policy retrieved from the following nameservers: {ns_ip_list}.', @_;
+    },
+    Z11_SPF1_SYNTAX_OK => sub {
+        __x    # ZONE:Z11_SPF1_SYNTAX_OK
+          'The SPF version 1 policy has correct syntax.', @_;
+    },
+    Z11_UNABLE_TO_CHECK_FOR_SPF => sub {
+        __x    # ZONE:Z11_UNABLE_TO_CHECK_FOR_SPF
+          'None of the name servers responded with an authoritative response to queries for SPF policies.', @_;
     },
 );
 
@@ -1396,5 +1442,100 @@ sub zone10 {
 
     return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) )
 } ## end sub zone10
+
+=over
+
+=item zone11()
+
+    my @logentry_array = zone11( $zone );
+
+Runs the L<Zone11 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Zone-TP/zone11.md>.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
+
+sub zone11 {
+    my ( $class, $zone ) = @_;
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+
+    # This hash maps nameserver IP addresses to arrayrefs of TXT resource
+    # record data matching the signature for SPF policies. These arrays
+    # usually contain at most one string.
+    my %ns_spf = ();
+
+    foreach my $ns ( @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) } ) {
+        if ( _ip_disabled_message( \@results, $ns, q{TXT} ) ) {
+            next;
+        }
+
+        my $p = $ns->query( $zone->name, q{TXT} );
+
+        if ( $p and $p->rcode eq q{NOERROR} and $p->aa ) {
+            my @txt_rrs = $p->get_records_for_name( q{TXT}, $zone->name );
+            my @txt_rdata = map { lc $_->txtdata() } @txt_rrs;
+            my @spf1_policies = grep /\Av=spf1(?:\Z|\s+)/, @txt_rdata;
+
+            $ns_spf{$ns->address->short} = \@spf1_policies;
+        }
+    }
+
+    # At this point, the values of %ns_spf contain *lists* of SPF policies.
+    # There should be at most one item in each of those lists, but zones may
+    # mistakenly publish more than one policy.
+    #
+    # We can’t use a list of strings directly as a hash key; we need flat
+    # strings and a conversion method that can disambiguate between
+    # [qw(a b c)] and [qw(ab c)]. The best method is to prefix each string in
+    # the list with its length, then concatenate all of these strings
+    # together. Hence, [qw(a b c)] becomes "<1>a<1>b<1>c" and [qw(ab c)]
+    # becomes "<2>ab<1>c".
+    my %spf_ns = ();
+    for my $ns ( keys %ns_spf ) {
+        my $mangled_spfs = join '', map { sprintf '<%d>%s', length $_, $_ } sort @{$ns_spf{$ns}};
+        push @{$spf_ns{$mangled_spfs}}, $ns;
+    }
+
+    if ( not scalar %ns_spf ) {
+        push @results, info( Z11_UNABLE_TO_CHECK_FOR_SPF => {} );
+    }
+    elsif ( List::MoreUtils::all { $_ eq '' } keys %spf_ns ) {
+        push @results, info( Z11_NO_SPF_FOUND => {} );
+    }
+    elsif ( scalar keys %spf_ns > 1 ) {
+        push @results, info( Z11_INCONSISTENT_SPF_POLICIES => {} );
+
+        for my $ns ( values %spf_ns ) {
+            push @results, info( Z11_DIFFERENT_SPF_POLICIES_FOUND => { ns_ip_list => join( q{;}, sort @$ns ) } );
+        }
+    }
+    elsif ( my @bad_ns = grep { scalar @{$ns_spf{$_}} > 1 } keys %ns_spf ) {
+        push @results, info( Z11_SPF1_MULTIPLE_RECORDS => { ns_ip_list => join( q{;}, sort @bad_ns ) } );
+    }
+    else {
+        my $spf_text = (values %ns_spf)[0][0];
+
+        if ( _spf_syntax_ok($spf_text) ) {
+            push @results, info( Z11_SPF1_SYNTAX_OK => {} );
+        }
+        else {
+            push @results, info( Z11_SPF1_SYNTAX_ERROR => { ns_ip_list => join( q{;}, sort (keys %ns_spf) ) } );
+        }
+    }
+
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) )
+} ## end sub zone11
+
+sub _spf_syntax_ok {
+    my $spf = shift;
+
+    try {
+        Mail::SPF::v1::Record->new_from_string($spf);
+    }
+}
 
 1;
