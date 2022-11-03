@@ -40,8 +40,6 @@ sub all {
     {
         push @results, $class->basic01( $zone );
 
-        push @results, $class->basic04( $zone );
-
         push @results, $class->basic02( $zone );
 
         # Perform BASIC3 if BASIC2 failed
@@ -122,28 +120,6 @@ sub metadata {
               IPV6_DISABLED
               IPV6_ENABLED
               NO_A_RECORDS
-              TEST_CASE_END
-              TEST_CASE_START
-              )
-        ],
-        basic04 => [
-            qw(
-              B04_MISSING_NS_RECORD
-              B04_MISSING_SOA_RECORD
-              B04_NO_RESPONSE
-              B04_NO_RESPONSE_NS_QUERY
-              B04_NO_RESPONSE_SOA_QUERY
-              B04_NS_RECORD_NOT_AA
-              B04_RESPONSE_TCP_NOT_UDP
-              B04_SOA_RECORD_NOT_AA
-              B04_UNEXPECTED_RCODE_NS_QUERY
-              B04_UNEXPECTED_RCODE_SOA_QUERY
-              B04_WRONG_NS_RECORD
-              B04_WRONG_SOA_RECORD
-              IPV4_DISABLED
-              IPV4_ENABLED
-              IPV6_DISABLED
-              IPV6_ENABLED
               TEST_CASE_END
               TEST_CASE_START
               )
@@ -507,157 +483,6 @@ sub basic03 {
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub basic03
 
-sub basic04 {
-    my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
-    my $name = name( $zone );
-    my @query_types = qw{SOA NS};
-    my @ns = @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) };
-
-    if ( not scalar @ns ){
-        push @results,
-            info(
-               B04_NO_RESPONSE => {
-                   ns => ''
-                }
-            );
-    }
-
-    foreach my $ns ( @ns ) {
-        if ( _ip_disabled_message( \@results, $ns, @query_types ) ) {
-            next;
-        }
-        _ip_enabled_message( \@results, $ns, @query_types );
-
-        my $p_soa_udp = $ns->query( $name, q{SOA}, { usevc => 0 } );
-        my $p_ns_udp  = $ns->query( $name, q{NS}, { usevc => 0 } );
-
-        if ( not $p_soa_udp and not $p_ns_udp ) {
-            my $p_soa_tcp = $ns->query( $name, q{SOA}, { usevc => 1 } );
-            if ( not $p_soa_tcp ) {
-                push @results,
-                  info(
-                    B04_NO_RESPONSE => {
-                        ns => $ns->string
-                    }
-                  );
-            }
-            else {
-                push @results,
-                  info(
-                    B04_RESPONSE_TCP_NOT_UDP => {
-                        ns => $ns->string
-                    }
-                  );
-            }
-        }
-        else {
-            if ( not $p_soa_udp ) {
-                push @results,
-                  info(
-                    B04_NO_RESPONSE_SOA_QUERY => {
-                        ns => $ns->string
-                    }
-                  );
-            }
-            else {
-                if ( $p_soa_udp->rcode ne q{NOERROR} ) {
-                    push @results,
-                      info(
-                        B04_UNEXPECTED_RCODE_SOA_QUERY => {
-                            ns => $ns->string,
-                            rcode => $p_soa_udp->rcode
-                        }
-                      );
-                }
-                else {
-                    my ( $soa ) = $p_soa_udp->get_records( q{SOA}, q{answer} );
-                    if ( not $soa ) {
-                        push @results,
-                          info(
-                            B04_MISSING_SOA_RECORD => {
-                                ns => $ns->string
-                            }
-                          );
-                    }
-                    else {
-                        if ( lc($soa->owner) ne lc($name->fqdn) ) {
-                            push @results,
-                              info(
-                                B04_WRONG_SOA_RECORD => {
-                                    ns    => $ns->string,
-                                    owner => lc($soa->owner),
-                                    name  => lc($name->fqdn)
-                                }
-                              );
-                        }
-                        elsif ( not $p_soa_udp->aa ) {
-                            push @results,
-                              info(
-                                B04_SOA_RECORD_NOT_AA => {
-                                    ns => $ns->string
-                                }
-                              );
-                        }
-                    }
-                }
-            }
-            if ( not $p_ns_udp ) {
-                push @results,
-                  info(
-                    B04_NO_RESPONSE_NS_QUERY => {
-                        ns => $ns->string
-                    }
-                  );
-            }
-            else {
-                if ( $p_ns_udp->rcode ne q{NOERROR} ) {
-                    push @results,
-                      info(
-                        B04_UNEXPECTED_RCODE_NS_QUERY => {
-                            ns    => $ns->string,
-                            rcode => $p_ns_udp->rcode
-                        }
-                      );
-                }
-                else {
-                    my ( $ns_in_answer ) = $p_ns_udp->get_records( q{NS}, q{answer} );
-                    if ( not $ns_in_answer ) {
-                        push @results,
-                          info(
-                            B04_MISSING_NS_RECORD => {
-                                ns => $ns->string
-                            }
-                          );
-                    }
-                    else {
-                        if ( lc($ns_in_answer->owner) ne lc($name->fqdn) ) {
-                            push @results,
-                              info(
-                                B04_WRONG_NS_RECORD => {
-                                    ns    => $ns->string,
-                                    owner => lc($ns_in_answer->owner),
-                                    name  => lc($name->fqdn)
-                                }
-                              );
-                        }
-                        elsif ( not $p_ns_udp->aa ) {
-                            push @results,
-                              info(
-                                B04_NS_RECORD_NOT_AA => {
-                                    ns => $ns->string
-                                }
-                              );
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
-} ## end sub basic04
-
 1;
 
 =head1 NAME
@@ -718,11 +543,6 @@ responds sensibly to an NS query for the tested zone.
 Checks if at least one of the nameservers pointed out by the parent zone gives a useful response when sent an A query for the C<www> label in the
 tested zone (that is, if we're testing C<example.org> this test will as for A records for C<www.example.org>). This test is only run if the
 L<basic02> test has I<failed>.
-
-=item basic04
-
-Query all nameservers pointed out by the parent zone or found in delegation for NS and/or SOA records. Previously done in several
-test cases, these tests should be done only here.
 
 =back
 
