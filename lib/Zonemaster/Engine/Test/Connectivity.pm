@@ -323,6 +323,65 @@ sub _ip_disabled_message {
 ### Tests
 ###
 
+sub _connectivity_loop {
+    my ( $testcase, $name, $ns_list, $results ) = @_;
+
+    my ( $testcase_prefix, $use_tcp, $protocol );
+    if ( $testcase eq 'connectivity01' ) {
+        ( $testcase_prefix, $use_tcp, $protocol ) = ( "CN01", 0, "UDP" );
+    } elsif ( $testcase eq 'connectivity02' ) {
+        ( $testcase_prefix, $use_tcp, $protocol ) = ( "CN02", 1, "TCP" );
+    }
+
+    foreach my $ns ( @$ns_list ) {
+        if ( _ip_disabled_message( $results, $ns, qw{SOA NS} ) ) {
+            next;
+        }
+
+        my %packets = (
+            'SOA' => $ns->query( $name, q{SOA}, { usevc => $use_tcp } ),
+            'NS'  => $ns->query( $name, q{NS}, { usevc => $use_tcp } )
+        );
+
+        if ( not $packets{SOA} and not $packets{NS} ) {
+            push @$results, info( "${testcase_prefix}_NO_RESPONSE_${protocol}" => { ns => $ns->string } );
+            next;
+        }
+
+        foreach my $qtype ( qw{SOA NS} ) {
+            my $pkt = $packets{$qtype};
+
+            if ( not $pkt ) {
+                push @$results, info( "${testcase_prefix}_NO_RESPONSE_${qtype}_QUERY_${protocol}" => { ns => $ns->string } );
+            }
+            elsif ( $pkt->rcode ne q{NOERROR} ) {
+                push @$results, info( "${testcase_prefix}_UNEXPECTED_RCODE_${qtype}_QUERY_${protocol}" => {
+                        ns    => $ns->string,
+                        rcode => $pkt->rcode
+                    }
+                );
+            }
+            else {
+                my ( $rr ) = $pkt->get_records( $qtype, q{answer} );
+                if ( not $rr ) {
+                    push @$results, info( "${testcase_prefix}_MISSING_${qtype}_RECORD_${protocol}" => { ns => $ns->string } );
+                }
+                elsif ( lc($rr->owner) ne lc($name->fqdn) ) {
+                    push @$results, info( "${testcase_prefix}_WRONG_${qtype}_RECORD_${protocol}" => {
+                            ns              => $ns->string,
+                            domain_found    => lc($rr->owner),
+                            domain_expected => lc($name->fqdn)
+                        }
+                    );
+                }
+                elsif ( not $pkt->aa ) {
+                    push @$results, info( "${testcase_prefix}_${qtype}_RECORD_NOT_AA_${protocol}" => { ns => $ns->string } );
+                }
+            }
+        }
+    }
+}
+
 sub connectivity01 {
     my ( $class, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
@@ -346,53 +405,7 @@ sub connectivity01 {
         push @results, info( "CN01_IPV6_DISABLED" => { ns_list => join( ';', @ns_ipv6 ) } );
     }
 
-    foreach my $ns ( @ns_list ) {
-        if ( _ip_disabled_message( \@results, $ns, qw{SOA NS} ) ) {
-            next;
-        }
-
-        my %pkts_udp = (
-            'SOA' => $ns->query( $name, q{SOA}, { usevc => 0 } ),
-            'NS'  => $ns->query( $name, q{NS}, { usevc => 0 } )
-        );
-
-        if ( not $pkts_udp{SOA} and not $pkts_udp{NS} ) {
-            push @results, info( CN01_NO_RESPONSE_UDP => { ns => $ns->string } );
-            next;
-        }
-
-        foreach my $qtype ( qw{SOA NS} ) {
-            my $pkt = $pkts_udp{$qtype};
-
-            if ( not $pkt ) {
-                push @results, info( "CN01_NO_RESPONSE_${qtype}_QUERY_UDP" => { ns => $ns->string } );
-            }
-            elsif ( $pkt->rcode ne q{NOERROR} ) {
-                push @results, info( "CN01_UNEXPECTED_RCODE_${qtype}_QUERY_UDP" => {
-                        ns    => $ns->string,
-                        rcode => $pkt->rcode
-                    }
-                );
-            }
-            else {
-                my ( $rr ) = $pkt->get_records( $qtype, q{answer} );
-                if ( not $rr ) {
-                    push @results, info( "CN01_MISSING_${qtype}_RECORD_UDP" => { ns => $ns->string } );
-                }
-                elsif ( lc($rr->owner) ne lc($name->fqdn) ) {
-                    push @results, info( "CN01_WRONG_${qtype}_RECORD_UDP" => {
-                            ns              => $ns->string,
-                            domain_found    => lc($rr->owner),
-                            domain_expected => lc($name->fqdn)
-                        }
-                    );
-                }
-                elsif ( not $pkt->aa ) {
-                    push @results, info( "CN01_${qtype}_RECORD_NOT_AA_UDP" => { ns => $ns->string } );
-                }
-            }
-        }
-    }
+    _connectivity_loop("connectivity01", $name, \@ns_list, \@results);
 
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub connectivity01
@@ -403,53 +416,7 @@ sub connectivity02 {
     my $name = name( $zone );
     my @ns_list = @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) };
 
-    foreach my $ns ( @ns_list ) {
-        if ( _ip_disabled_message( \@results, $ns, qw{SOA NS} ) ) {
-            next;
-        }
-
-        my %pkts_tcp = (
-            'SOA' => $ns->query( $name, q{SOA}, { usevc => 1 } ),
-            'NS'  => $ns->query( $name, q{NS}, { usevc => 1 } )
-        );
-
-        if ( not $pkts_tcp{SOA} and not $pkts_tcp{NS} ) {
-            push @results, info( CN02_NO_RESPONSE_TCP => { ns => $ns->string } );
-            next;
-        }
-
-        foreach my $qtype ( qw{SOA NS} ) {
-            my $pkt = $pkts_tcp{$qtype};
-
-            if ( not $pkt ) {
-                push @results, info( "CN02_NO_RESPONSE_${qtype}_QUERY_TCP" => { ns => $ns->string } );
-            }
-            elsif ( $pkt->rcode ne q{NOERROR} ) {
-                push @results, info( "CN02_UNEXPECTED_RCODE_${qtype}_QUERY_TCP" => {
-                        ns    => $ns->string,
-                        rcode => $pkt->rcode
-                    }
-                );
-            }
-            else {
-                my ( $rr ) = $pkt->get_records( $qtype, q{answer} );
-                if ( not $rr ) {
-                    push @results, info( "CN02_MISSING_${qtype}_RECORD_TCP" => { ns => $ns->string } );
-                }
-                elsif ( lc($rr->owner) ne lc($name->fqdn) ) {
-                    push @results, info( "CN02_WRONG_${qtype}_RECORD_TCP" => {
-                            ns              => $ns->string,
-                            domain_found    => lc($rr->owner),
-                            domain_expected => lc($name->fqdn)
-                        }
-                    );
-                }
-                elsif ( not $pkt->aa ) {
-                    push @results, info( "CN02_${qtype}_RECORD_NOT_AA_TCP" => { ns => $ns->string } );
-                }
-            }
-        }
-    }
+    _connectivity_loop("connectivity02", $name, \@ns_list, \@results);
 
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub connectivity02
