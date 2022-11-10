@@ -49,23 +49,43 @@ sub metadata {
     return {
         connectivity01 => [
             qw(
-              NAMESERVER_HAS_UDP_53
-              NAMESERVER_NO_UDP_53
+              CN01_IPV4_DISABLED
+              CN01_IPV6_DISABLED
+              CN01_MISSING_NS_RECORD_UDP
+              CN01_MISSING_SOA_RECORD_UDP
+              CN01_NO_RESPONSE_NS_QUERY_UDP
+              CN01_NO_RESPONSE_SOA_QUERY_UDP
+              CN01_NO_RESPONSE_UDP
+              CN01_NS_RECORD_NOT_AA_UDP
+              CN01_SOA_RECORD_NOT_AA_UDP
+              CN01_UNEXPECTED_RCODE_NS_QUERY_UDP
+              CN01_UNEXPECTED_RCODE_SOA_QUERY_UDP
+              CN01_WRONG_NS_RECORD_UDP
+              CN01_WRONG_SOA_RECORD_UDP
               IPV4_DISABLED
               IPV6_DISABLED
               TEST_CASE_END
               TEST_CASE_START
-              )
+            )
         ],
         connectivity02 => [
             qw(
-              NAMESERVER_HAS_TCP_53
-              NAMESERVER_NO_TCP_53
+              CN02_MISSING_NS_RECORD_TCP
+              CN02_MISSING_SOA_RECORD_TCP
+              CN02_NO_RESPONSE_NS_QUERY_TCP
+              CN02_NO_RESPONSE_SOA_QUERY_TCP
+              CN02_NO_RESPONSE_TCP
+              CN02_NS_RECORD_NOT_AA_TCP
+              CN02_SOA_RECORD_NOT_AA_TCP
+              CN02_UNEXPECTED_RCODE_NS_QUERY_TCP
+              CN02_UNEXPECTED_RCODE_SOA_QUERY_TCP
+              CN02_WRONG_NS_RECORD_TCP
+              CN02_WRONG_SOA_RECORD_TCP
               IPV4_DISABLED
               IPV6_DISABLED
               TEST_CASE_END
               TEST_CASE_START
-              )
+            )
         ],
         connectivity03 => [
             qw(
@@ -90,6 +110,104 @@ sub metadata {
 } ## end sub metadata
 
 Readonly my %TAG_DESCRIPTIONS => (
+    CN01_IPV4_DISABLED => sub {
+        __x    # CONNECTIVITY:CN01_IPV4_DISABLED
+          'IPv4 is disabled. No DNS queries are sent to these name servers: "{ns_list}".', @_;
+      },
+    CN01_IPV6_DISABLED => sub {
+        __x    # CONNECTIVITY:CN01_IPV6_DISABLED
+          'IPv6 is disabled. No DNS queries are sent to these name servers: "{ns_list}".', @_;
+      },
+    CN01_MISSING_NS_RECORD_UDP => sub {
+        __x    # CONNECTIVITY:CN01_MISSING_NS_RECORD_UDP
+          'Nameserver {ns} responds to a NS query with no NS records in the answer section over UDP.', @_;
+      },
+    CN01_MISSING_SOA_RECORD_UDP => sub {
+        __x    # CONNECTIVITY:CN01_MISSING_SOA_RECORD_UDP
+          'Nameserver {ns} responds to a SOA query with no SOA records in the answer section over UDP.', @_;
+      },
+    CN01_NO_RESPONSE_NS_QUERY_UDP => sub {
+        __x    # CONNECTIVITY:CN01_NO_RESPONSE_NS_QUERY_UDP
+          'Nameserver {ns} does not respond to NS queries over UDP.', @_;
+      },
+    CN01_NO_RESPONSE_SOA_QUERY_UDP => sub {
+        __x    # CONNECTIVITY:CN01_NO_RESPONSE_SOA_QUERY_UDP
+          'Nameserver {ns} does not respond to SOA queries over UDP.', @_;
+      },
+    CN01_NO_RESPONSE_UDP => sub {
+        __x    # CONNECTIVITY:CN01_NO_RESPONSE_UDP
+          'Nameserver {ns} does not respond to any queries over UDP.', @_;
+      },
+    CN01_NS_RECORD_NOT_AA_UDP => sub {
+        __x    # CONNECTIVITY:CN01_NS_RECORD_NOT_AA_UDP
+          'Nameserver {ns} does not give an authoritative response on an NS query over UDP.', @_;
+      },
+    CN01_SOA_RECORD_NOT_AA_UDP => sub {
+        __x    # CONNECTIVITY:CN01_SOA_RECORD_NOT_AA_UDP
+          'Nameserver {ns} does not give an authoritative response on an SOA query over UDP.', @_;
+      },
+    CN01_UNEXPECTED_RCODE_NS_QUERY_UDP => sub {
+        __x    # CONNECTIVITY:CN01_UNEXPECTED_RCODE_NS_QUERY_UDP
+          'Nameserver {ns} responds with an unexpected RCODE ({rcode}) on an NS query over UDP.', @_;
+      },
+    CN01_UNEXPECTED_RCODE_SOA_QUERY_UDP => sub {
+        __x    # CONNECTIVITY:CN01_UNEXPECTED_RCODE_SOA_QUERY_UDP
+          'Nameserver {ns} responds with an unexpected RCODE ({rcode}) on an SOA query over UDP.', @_;
+      },
+    CN01_WRONG_NS_RECORD_UDP => sub {
+        __x    # CONNECTIVITY:CN01_WRONG_NS_RECORD_UDP
+          'Nameserver {ns} responds with a wrong owner name ({domain_found} instead of {domain_expected}) on NS queries over UDP.', @_;
+      },
+    CN01_WRONG_SOA_RECORD_UDP => sub {
+        __x    # CONNECTIVITY:CN01_WRONG_SOA_RECORD_UDP
+          'Nameserver {ns} responds with a wrong owner name ({domain_found} instead of {domain_expected}) on SOA queries over UDP.', @_;
+      },
+
+    CN02_MISSING_NS_RECORD_TCP => sub {
+        __x    # CONNECTIVITY:CN02_MISSING_NS_RECORD_TCP
+          'Nameserver {ns} responds to a NS query with no NS records in the answer section over TCP.', @_;
+      },
+    CN02_MISSING_SOA_RECORD_TCP => sub {
+        __x    # CONNECTIVITY:CN02_MISSING_SOA_RECORD_TCP
+          'Nameserver {ns} responds to a SOA query with no SOA records in the answer section over TCP.', @_;
+      },
+    CN02_NO_RESPONSE_NS_QUERY_TCP => sub {
+        __x    # CONNECTIVITY:CN02_NO_RESPONSE_NS_QUERY_TCP
+          'Nameserver {ns} does not respond to NS queries over TCP.', @_;
+      },
+    CN02_NO_RESPONSE_SOA_QUERY_TCP => sub {
+        __x    # CONNECTIVITY:CN02_NO_RESPONSE_SOA_QUERY_TCP
+          'Nameserver {ns} does not respond to SOA queries over TCP.', @_;
+      },
+    CN02_NO_RESPONSE_TCP => sub {
+        __x    # CONNECTIVITY:CN02_NO_RESPONSE_TCP
+          'Nameserver {ns} does not respond to any queries over TCP.', @_;
+      },
+    CN02_NS_RECORD_NOT_AA_TCP => sub {
+        __x    # CONNECTIVITY:CN02_NS_RECORD_NOT_AA_TCP
+          'Nameserver {ns} does not give an authoritative response on an NS query over TCP.', @_;
+      },
+    CN02_SOA_RECORD_NOT_AA_TCP => sub {
+        __x    # CONNECTIVITY:CN02_SOA_RECORD_NOT_AA_TCP
+          'Nameserver {ns} does not give an authoritative response on an SOA query over TCP.', @_;
+      },
+    CN02_UNEXPECTED_RCODE_NS_QUERY_TCP => sub {
+        __x    # CONNECTIVITY:CN02_UNEXPECTED_RCODE_NS_QUERY_TCP
+          'Nameserver {ns} responds with an unexpected RCODE ({rcode}) on an NS query over TCP.', @_;
+      },
+    CN02_UNEXPECTED_RCODE_SOA_QUERY_TCP => sub {
+        __x    # CONNECTIVITY:CN02_UNEXPECTED_RCODE_SOA_QUERY_TCP
+          'Nameserver {ns} responds with an unexpected RCODE ({rcode}) on an SOA query over TCP.', @_;
+      },
+    CN02_WRONG_NS_RECORD_TCP => sub {
+        __x    # CONNECTIVITY:CN02_WRONG_NS_RECORD_TCP
+          'Nameserver {ns} responds with a wrong owner name ({domain_found} instead of {domain_expected}) on NS queries over TCP.', @_;
+      },
+    CN02_WRONG_SOA_RECORD_TCP => sub {
+        __x    # CONNECTIVITY:CN02_WRONG_SOA_RECORD_TCP
+          'Nameserver {ns} responds with a wrong owner name ({domain_found} instead of {domain_expected}) on SOA queries over TCP.', @_;
+      },
+
     ERROR_ASN_DATABASE => sub {
         __x    # CONNECTIVITY:ERROR_ASN_DATABASE
           'ASN Database error. No data to analyze for {ns_ip}.', @_;
@@ -125,22 +243,6 @@ Readonly my %TAG_DESCRIPTIONS => (
           'At least two IPv6 addresses of the authoritative nameservers are announce by different AS sets. '
           . 'A merged list of all AS: ({asn_list}).',
           @_;
-    },
-    NAMESERVER_HAS_TCP_53 => sub {
-        __x    # CONNECTIVITY:NAMESERVER_HAS_TCP_53
-          'Nameserver {ns} accessible over TCP on port 53.', @_;
-    },
-    NAMESERVER_HAS_UDP_53 => sub {
-        __x    # CONNECTIVITY:NAMESERVER_HAS_UDP_53
-          'Nameserver {ns} accessible over UDP on port 53.', @_;
-    },
-    NAMESERVER_NO_TCP_53 => sub {
-        __x    # CONNECTIVITY:NAMESERVER_NO_TCP_53
-          'Nameserver {ns} not accessible over TCP on port 53.', @_;
-    },
-    NAMESERVER_NO_UDP_53 => sub {
-        __x    # CONNECTIVITY:NAMESERVER_NO_UDP_53
-          'Nameserver {ns} not accessible over UDP on port 53.', @_;
     },
     IPV4_DISABLED => sub {
         __x    # CONNECTIVITY:IPV4_DISABLED
@@ -221,35 +323,89 @@ sub _ip_disabled_message {
 ### Tests
 ###
 
-sub connectivity01 {
-    my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
-    my $query_type = q{SOA};
+sub _connectivity_loop {
+    my ( $testcase, $name, $ns_list, $results ) = @_;
 
-    my %ips;
+    my ( $testcase_prefix, $use_tcp, $protocol );
+    if ( $testcase eq 'connectivity01' ) {
+        ( $testcase_prefix, $use_tcp, $protocol ) = ( "CN01", 0, "UDP" );
+    } elsif ( $testcase eq 'connectivity02' ) {
+        ( $testcase_prefix, $use_tcp, $protocol ) = ( "CN02", 1, "TCP" );
+    }
 
-    foreach
-      my $local_ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) }, @{ Zonemaster::Engine::TestMethods->method5( $zone ) } )
-    {
-
-        if ( _ip_disabled_message( \@results, $local_ns, $query_type ) ) {
+    foreach my $ns ( @$ns_list ) {
+        if ( _ip_disabled_message( $results, $ns, qw{SOA NS} ) ) {
             next;
         }
 
-        next if $ips{ $local_ns->address->short };
+        my %packets = (
+            'SOA' => $ns->query( $name, q{SOA}, { usevc => $use_tcp } ),
+            'NS'  => $ns->query( $name, q{NS}, { usevc => $use_tcp } )
+        );
 
-        my $p = $local_ns->query( $zone->name, $query_type, { usevc => 0 } );
-
-        if ( $p ) {
-            push @results, info( NAMESERVER_HAS_UDP_53 => { ns => $local_ns->string } );
+        if ( not $packets{SOA} and not $packets{NS} ) {
+            push @$results, info( "${testcase_prefix}_NO_RESPONSE_${protocol}" => { ns => $ns->string } );
+            next;
         }
-        else {
-            push @results, info( NAMESERVER_NO_UDP_53 => { ns => $local_ns->string } );
+
+        foreach my $qtype ( qw{SOA NS} ) {
+            my $pkt = $packets{$qtype};
+
+            if ( not $pkt ) {
+                push @$results, info( "${testcase_prefix}_NO_RESPONSE_${qtype}_QUERY_${protocol}" => { ns => $ns->string } );
+            }
+            elsif ( $pkt->rcode ne q{NOERROR} ) {
+                push @$results, info( "${testcase_prefix}_UNEXPECTED_RCODE_${qtype}_QUERY_${protocol}" => {
+                        ns    => $ns->string,
+                        rcode => $pkt->rcode
+                    }
+                );
+            }
+            else {
+                my ( $rr ) = $pkt->get_records( $qtype, q{answer} );
+                if ( not $rr ) {
+                    push @$results, info( "${testcase_prefix}_MISSING_${qtype}_RECORD_${protocol}" => { ns => $ns->string } );
+                }
+                elsif ( lc($rr->owner) ne lc($name->fqdn) ) {
+                    push @$results, info( "${testcase_prefix}_WRONG_${qtype}_RECORD_${protocol}" => {
+                            ns              => $ns->string,
+                            domain_found    => lc($rr->owner),
+                            domain_expected => lc($name->fqdn)
+                        }
+                    );
+                }
+                elsif ( not $pkt->aa ) {
+                    push @$results, info( "${testcase_prefix}_${qtype}_RECORD_NOT_AA_${protocol}" => { ns => $ns->string } );
+                }
+            }
         }
+    }
+}
 
-        $ips{ $local_ns->address->short }++;
+sub connectivity01 {
+    my ( $class, $zone ) = @_;
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+    my $name = name( $zone );
+    my @ns_list = @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) };
 
-    } ## end foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods...})
+    my @ns_ipv4 = ();
+    my @ns_ipv6 = ();
+    foreach my $ns ( @ns_list ) {
+        if ( $ns->address->version == $IP_VERSION_4 and not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) ) {
+            push @ns_ipv4, $ns;
+        }
+        elsif ( $ns->address->version == $IP_VERSION_6 and not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) ) {
+            push @ns_ipv6, $ns;
+        }
+    }
+    if ( @ns_ipv4 ) {
+        push @results, info( "CN01_IPV4_DISABLED" => { ns_list => join( ';', @ns_ipv4 ) } );
+    }
+    if ( @ns_ipv6 ) {
+        push @results, info( "CN01_IPV6_DISABLED" => { ns_list => join( ';', @ns_ipv6 ) } );
+    }
+
+    _connectivity_loop("connectivity01", $name, \@ns_list, \@results);
 
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub connectivity01
@@ -257,31 +413,10 @@ sub connectivity01 {
 sub connectivity02 {
     my ( $class, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
-    my %ips;
-    my $query_type = q{SOA};
+    my $name = name( $zone );
+    my @ns_list = @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) };
 
-    foreach
-      my $local_ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) }, @{ Zonemaster::Engine::TestMethods->method5( $zone ) } )
-    {
-
-        if ( _ip_disabled_message( \@results, $local_ns, $query_type ) ) {
-            next;
-        }
-
-        next if $ips{ $local_ns->address->short };
-
-        my $p = $local_ns->query( $zone->name, $query_type, { usevc => 1 } );
-
-        if ( $p ) {
-            push @results, info( NAMESERVER_HAS_TCP_53 => { ns => $local_ns->string } );
-        }
-        else {
-            push @results, info( NAMESERVER_NO_TCP_53 => { ns => $local_ns->string } );
-        }
-
-        $ips{ $local_ns->address->short }++;
-
-    } ## end foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods...})
+    _connectivity_loop("connectivity02", $name, \@ns_list, \@results);
 
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub connectivity02
