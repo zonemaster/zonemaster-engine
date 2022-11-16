@@ -667,6 +667,10 @@ Default 3.
 
 A boolean. If true, sets the DO flag in queries. Default false.
 
+=head2 resolver.defaults.edns_size
+
+An integer. The EDNS0 UDP size used in EDNS queries. Default 512.
+
 =head2 resolver.defaults.recurse
 
 A boolean. If true, sets the RD flag in queries. Default false.

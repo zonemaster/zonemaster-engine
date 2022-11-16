@@ -582,7 +582,7 @@ sub nameserver02 {
 
         next if $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short };
 
-        my $p = $local_ns->query( $zone->name, q{SOA}, { edns_size => 512 } );
+        my $p = $local_ns->query( $zone->name, q{SOA}, { edns_details => { version => 0 } } );
         if ( $p ) {
             if ( $p->rcode eq q{FORMERR} and not $p->has_edns) {
                 push @results, info( NO_EDNS_SUPPORT => { ns => $local_ns->string } );
@@ -1272,6 +1272,7 @@ sub nameserver12 {
         next if ( _ip_disabled_message( \@results, $ns, q{SOA} ) );
 
         my $p = $ns->query( $zone->name, q{SOA}, { edns_details => { z => 3 } } );
+        
         if ( $p ) {
             if ( $p->rcode eq q{FORMERR} and not $p->edns_rcode ) {
                 push @results, info( NO_EDNS_SUPPORT => { ns => $ns->string } );
@@ -1311,6 +1312,7 @@ sub nameserver13 {
         next if ( _ip_disabled_message( \@results, $ns, q{SOA} ) );
 
         my $p = $ns->query( $zone->name, q{SOA}, { usevc => 0, fallback => 0, edns_details => { do => 1, udp_size => 512 } } );
+        
         if ( $p ) {
             if ( $p->rcode eq q{FORMERR} and not $p->edns_rcode ) {
                 push @results, info( NO_EDNS_SUPPORT => { ns => $ns->string, } );
