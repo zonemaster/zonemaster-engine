@@ -410,12 +410,13 @@ sub zone01 {
         }
 
         foreach my $soa_rr ( $p->get_records_for_name( q{SOA}, $zone->name ) ){
-            my $soa_mname = $soa_rr->mname;
+            my $soa_mname = lc($soa_rr->mname);
+            $soa_mname =~ s/[.]\z//smx;
 
-            if ( lc($soa_mname) eq 'localhost' ){
+            if ( $soa_mname eq 'localhost' ){
                 push @mname_localhost, $ns->address->short;
             }
-            elsif ( $soa_mname eq '.' ){
+            elsif ( not $soa_mname ){
                 push @mname_dot, $ns->address->short;
             }
             else{
