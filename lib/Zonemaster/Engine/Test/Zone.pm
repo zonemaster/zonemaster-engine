@@ -183,10 +183,6 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # ZONE:RETRY_MINIMUM_VALUE_OK
           'SOA \'retry\' value ({retry}) is at least equal to the minimum recommended value ({required_retry}).', @_;
     },
-    MNAME_NO_RESPONSE => sub {
-        __x    # ZONE:MNAME_NO_RESPONSE
-          'SOA \'mname\' nameserver {ns} does not respond.', @_;
-    },
     MNAME_IS_CNAME => sub {
         __x    # ZONE:MNAME_IS_CNAME
           'SOA \'mname\' value ({mname}) refers to a NS which is an alias (CNAME).', @_;
@@ -219,21 +215,9 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # ZONE:SOA_DEFAULT_TTL_MAXIMUM_VALUE_OK
           'SOA \'minimum\' value ({minimum}) is between the recommended ones ({lowest_minimum}/{highest_minimum}).', @_;
     },
-    MNAME_NOT_AUTHORITATIVE => sub {
-        __x    # ZONE:MNAME_NOT_AUTHORITATIVE
-          'SOA \'mname\' nameserver {ns} is not authoritative for \'{zone}\' zone.', @_;
-    },
-    MNAME_RECORD_DOES_NOT_EXIST => sub {
-        __x    # ZONE:MNAME_RECORD_DOES_NOT_EXIST
-          'SOA \'mname\' field does not exist', @_;
-    },
     EXPIRE_MINIMUM_VALUE_LOWER => sub {
         __x    # ZONE:EXPIRE_MINIMUM_VALUE_LOWER
           'SOA \'expire\' value ({expire}) is less than the recommended one ({required_expire}).', @_;
-    },
-    MNAME_NOT_IN_GLUE => sub {
-        __x    # ZONE:MNAME_NOT_IN_GLUE
-          'SOA \'mname\' nameserver ({mname}) is not listed in "parent" NS records for tested zone ({ns_list}).', @_;
     },
     REFRESH_LOWER_THAN_RETRY => sub {
         __x    # ZONE:REFRESH_LOWER_THAN_RETRY
@@ -250,10 +234,6 @@ Readonly my %TAG_DESCRIPTIONS => (
     MX_RECORD_IS_NOT_CNAME => sub {
         __x    # ZONE:MX_RECORD_IS_NOT_CNAME
           'MX record for the domain is not pointing to a CNAME.', @_;
-    },
-    MNAME_IS_AUTHORITATIVE => sub {
-        __x    # ZONE:MNAME_IS_AUTHORITATIVE
-          'SOA \'mname\' nameserver ({mname}) is authoritative for \'{zone}\' zone.', @_;
     },
     MULTIPLE_SOA => sub {
         __x    # ZONE:MULTIPLE_SOA
