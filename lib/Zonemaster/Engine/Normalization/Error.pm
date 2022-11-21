@@ -84,15 +84,15 @@ sub new {
     my ( $proto, $tag, $params ) = @_;
     my $class = ref $proto || $proto;
 
-    if (!exists $ERRORS{$tag}) {
+    if ( !exists $ERRORS{$tag} ) {
         croak 'Unknown error tag.';
     }
 
     my $obj = { tag => $tag, params => {} };
 
-    if (exists $ERRORS{$tag}->{arguments}) {
+    if ( exists $ERRORS{$tag}->{arguments} ) {
         foreach my $arg ( @{$ERRORS{$tag}->{arguments}} ) {
-            if (!exists $params->{$arg} ) {
+            if ( !exists $params->{$arg} ) {
                 croak "Missing arguments $arg.";
             }
             $obj->{params}->{$arg} = $params->{$arg};
