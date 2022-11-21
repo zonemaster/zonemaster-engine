@@ -61,7 +61,7 @@ Readonly my %ERRORS => (
 
 =item tag
 
-The message tag asscociated to the error.
+The message tag associated to the error.
 
 =item params
 
@@ -129,7 +129,7 @@ sub tag {
 
 =item string
 
-Returns a string representation of the error object, equivalent to message.
+Returns a string representation of the error object. Euivalent to message().
 
 =cut
 
