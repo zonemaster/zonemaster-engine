@@ -511,6 +511,78 @@ sub metadata {
 } ## end sub metadata
 
 Readonly my %TAG_DESCRIPTIONS => (
+    DNSSEC01 => sub {
+        __x    # DNSSEC:DNSSEC01
+          "Legal values for the DS hash digest algorithm", @_;
+    },
+    DNSSEC02 => sub {
+        __x    # DNSSEC:DNSSEC02
+          "DS must match a valid DNSKEY in the child zone", @_;
+    },
+    DNSSEC03 => sub {
+        __x    # DNSSEC:DNSSEC03
+          "Check for too many NSEC3 iterations", @_;
+    },
+    DNSSEC04 => sub {
+        __x    # DNSSEC:DNSSEC04
+          "Check for too short or too long RRSIG lifetimes", @_;
+    },
+    DNSSEC05 => sub {
+        __x    # DNSSEC:DNSSEC05
+          "Check for invalid DNSKEY algorithms", @_;
+    },
+    DNSSEC06 => sub {
+        __x    # DNSSEC:DNSSEC06
+          "Verify DNSSEC additional processing", @_;
+    },
+    DNSSEC07 => sub {
+        __x    # DNSSEC:DNSSEC07
+          "If DNSKEY at child, parent should have DS", @_;
+    },
+    DNSSEC08 => sub {
+        __x    # DNSSEC:DNSSEC08
+          "Valid RRSIG for DNSKEY", @_;
+    },
+    DNSSEC09 => sub {
+        __x    # DNSSEC:DNSSEC09
+          "RRSIG(SOA) must be valid and created by a valid DNSKEY", @_;
+    },
+    DNSSEC10 => sub {
+        __x    # DNSSEC:DNSSEC10
+          "Zone contains NSEC or NSEC3 records", @_;
+    },
+    DNSSEC11 => sub {
+        __x    # DNSSEC:DNSSEC11
+          "DS in delegation requires signed zone", @_;
+    },
+    DNSSEC12 => sub {
+        __x    # DNSSEC:DNSSEC12
+          "Test for DNSSEC Algorithm Completeness", @_;
+    },
+    DNSSEC13 => sub {
+        __x    # DNSSEC:DNSSEC13
+          "All DNSKEY algorithms used to sign the zone", @_;
+    },
+    DNSSEC14 => sub {
+        __x    # DNSSEC:DNSSEC14
+          "Check for valid RSA DNSKEY key size", @_;
+    },
+    DNSSEC15 => sub {
+        __x    # DNSSEC:DNSSEC15
+          "Existence of CDS and CDNSKEY", @_;
+    },
+    DNSSEC16 => sub {
+        __x    # DNSSEC:DNSSEC16
+          "Validate CDS", @_;
+    },
+    DNSSEC17 => sub {
+        __x    # DNSSEC:DNSSEC17
+          "Validate CDNSKEY", @_;
+    },
+    DNSSEC18 => sub {
+        __x    # DNSSEC:DNSSEC18
+          "Validate trust from DS to CDS and CDNSKEY ", @_;
+    },
     ADDITIONAL_DNSKEY_SKIPPED => sub {
         __x    # DNSSEC:ADDITIONAL_DNSKEY_SKIPPED
           'No DNSKEYs found. Additional tests skipped.', @_;

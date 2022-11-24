@@ -174,6 +174,46 @@ sub metadata {
 } ## end sub metadata
 
 Readonly my %TAG_DESCRIPTIONS => (
+    ZONE01 => sub {
+        __x    # ZONE:ZONE01
+          'Fully qualified master nameserver in SOA', @_;
+    },
+    ZONE02 => sub {
+        __x    # ZONE:ZONE02
+          'SOA \'refresh\' minimum value', @_;
+    },
+    ZONE03 => sub {
+        __x    # ZONE:ZONE03
+          'SOA \'retry\' lower than \'refresh\'', @_;
+    },
+    ZONE04 => sub {
+        __x    # ZONE:ZONE04
+          'SOA \'retry\' at least 1 hour', @_;
+    },
+    ZONE05 => sub {
+        __x    # ZONE:ZONE05
+          'SOA \'expire\' minimum value', @_;
+    },
+    ZONE06 => sub {
+        __x    # ZONE:ZONE06
+          'SOA \'minimum\' maximum value', @_;
+    },
+    ZONE07 => sub {
+        __x    # ZONE:ZONE07
+          'SOA master is not an alias', @_;
+    },
+    ZONE08 => sub {
+        __x    # ZONE:ZONE08
+          'MX is not an alias', @_;
+    },
+    ZONE09 => sub {
+        __x    # ZONE:ZONE09
+          'MX record present', @_;
+    },
+    ZONE10 => sub {
+        __x    # ZONE:ZONE10
+          'No multiple SOA records', @_;
+    },
     RETRY_MINIMUM_VALUE_LOWER => sub {
         __x    # ZONE:RETRY_MINIMUM_VALUE_LOWER
           'SOA \'retry\' value ({retry}) is less than the recommended one ({required_retry}).', @_;

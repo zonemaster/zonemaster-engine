@@ -234,6 +234,17 @@ sub translate_tag {
     return $self->_translate_tag( $entry->module, $entry->tag, $entry->printable_args ) // $entry->string;
 }
 
+
+sub test_case_description {
+    my ( $self, $test_name ) = @_;
+
+    $test_name = uc $test_name;
+    my $module = $test_name;
+    $module =~ s/\d+$//;
+
+    return $self->_translate_tag( $module, $test_name, {} ) // $test_name;
+}
+
 sub _translate_tag {
     my ( $self, $module, $tag, $args ) = @_;
 
@@ -351,6 +362,10 @@ entry.
 =item translate_tag
 
 Takes a L<Zonemaster::Engine::Logger::Entry> object as its argument and returns a translation of its tag and arguments.
+
+=item test_case_description
+
+Returns the translated test case description for a given test case ID.
 
 =item BUILD
 

@@ -128,6 +128,26 @@ sub metadata {
 } ## end sub metadata
 
 Readonly my %TAG_DESCRIPTIONS => (
+    BASIC00 => sub {
+        __x    # BASIC:BASIC00
+          'Domain name must be valid', @_;
+    },
+    BASIC01 => sub {
+        __x    # BASIC:BASIC01
+          'The domain must have a parent domain', @_;
+    },
+    BASIC02 => sub {
+        __x    # BASIC:BASIC02
+          'The domain must have at least one working name server', @_;
+    },
+    BASIC03 => sub {
+        __x    # BASIC:BASIC03
+          'The Broken but functional test', @_;
+    },
+    BASIC04 => sub {
+        __x    # BASIC:BASIC04
+          'Test of basic nameserver and zone functionality', @_;
+    },
     A_QUERY_NO_RESPONSES => sub {
         __x    # BASIC:A_QUERY_NO_RESPONSES
           'Nameservers did not respond to A query.';

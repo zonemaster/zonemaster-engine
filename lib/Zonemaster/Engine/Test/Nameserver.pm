@@ -218,6 +218,62 @@ sub metadata {
 } ## end sub metadata
 
 Readonly my %TAG_DESCRIPTIONS => (
+    NAMESERVER01 => sub {
+        __x    # NAMESERVER:NAMESERVER01
+            'A name server should not be a recursor', @_;
+    },
+    NAMESERVER02 => sub {
+        __x    # NAMESERVER:NAMESERVER02
+            'Test of EDNS0 support', @_;
+    },
+    NAMESERVER03 => sub {
+        __x    # NAMESERVER:NAMESERVER03
+            'Test availability of zone transfer (AXFR)', @_;
+    },
+    NAMESERVER04 => sub {
+        __x    # NAMESERVER:NAMESERVER04
+            'Same source address', @_;
+    },
+    NAMESERVER05 => sub {
+        __x    # NAMESERVER:NAMESERVER05
+            'Behaviour against AAAA query', @_;
+    },
+    NAMESERVER06 => sub {
+        __x    # NAMESERVER:NAMESERVER06
+            'NS can be resolved', @_;
+    },
+    NAMESERVER07 => sub {
+        __x    # NAMESERVER:NAMESERVER07
+            'To check whether authoritative name servers return an upward referral', @_;
+    },
+    NAMESERVER08 => sub {
+        __x    # NAMESERVER:NAMESERVER08
+            'Testing QNAME case insensitivity', @_;
+    },
+    NAMESERVER09 => sub {
+        __x    # NAMESERVER:NAMESERVER09
+            'Testing QNAME case sensitivity', @_;
+    },
+    NAMESERVER10 => sub {
+        __x    # NAMESERVER:NAMESERVER10
+            'Test for undefined EDNS version', @_;
+    },
+    NAMESERVER11 => sub {
+        __x    # NAMESERVER:NAMESERVER11
+            'Test for unknown EDNS OPTION-CODE', @_;
+    },
+    NAMESERVER12 => sub {
+        __x    # NAMESERVER:NAMESERVER12
+            'Test for unknown EDNS flags', @_;
+    },
+    NAMESERVER13 => sub {
+        __x    # NAMESERVER:NAMESERVER13
+            'Test for truncated response on EDNS query', @_;
+    },
+    NAMESERVER14 => sub {
+        __x    # NAMESERVER:NAMESERVER14
+            'Test for unknown version with unknown OPTION-CODE', @_;
+    },
     AAAA_BAD_RDATA => sub {
         __x    # NAMESERVER:AAAA_BAD_RDATA
             'Nameserver {ns} answered AAAA query with an unexpected RDATA length ({length} instead of 16).', @_;
@@ -719,7 +775,7 @@ sub nameserver05 {
                         $aaaa_issue++;
                     }
                     else {
-                        push @aaaa_ok, $rr->address;    
+                        push @aaaa_ok, $rr->address;
                     }
                 }
             }

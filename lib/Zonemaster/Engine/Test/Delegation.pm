@@ -104,7 +104,7 @@ sub metadata {
         delegation05 => [
             qw(
               NO_NS_CNAME
-              NO_RESPONSE    
+              NO_RESPONSE
               NS_IS_CNAME
               UNEXPECTED_RCODE
               TEST_CASE_END
@@ -135,6 +135,34 @@ sub metadata {
 } ## end sub metadata
 
 Readonly my %TAG_DESCRIPTIONS => (
+    DELEGATION01 => sub {
+        __x    # DELEGATION:DELEGATION01
+          "Minimum number of name servers", @_;
+    },
+    DELEGATION02 => sub {
+        __x    # DELEGATION:DELEGATION02
+          "Name servers must have distinct IP addresses", @_;
+    },
+    DELEGATION03 => sub {
+        __x    # DELEGATION:DELEGATION03
+          "No truncation of referrals", @_;
+    },
+    DELEGATION04 => sub {
+        __x    # DELEGATION:DELEGATION04
+          "Name server is authoritative", @_;
+    },
+    DELEGATION05 => sub {
+        __x    # DELEGATION:DELEGATION05
+          "Name server must not point at CNAME alias", @_;
+    },
+    DELEGATION06 => sub {
+        __x    # DELEGATION:DELEGATION06
+          "Existence of SOA", @_;
+    },
+    DELEGATION07 => sub {
+        __x    # DELEGATION:DELEGATION07
+          "Parent glue name records present in child", @_;
+    },
     ARE_AUTHORITATIVE => sub {
         __x    # DELEGATION:ARE_AUTHORITATIVE
           "All these nameservers are confirmed to be authoritative : {nsname_list}.", @_;
