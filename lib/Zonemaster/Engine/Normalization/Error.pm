@@ -129,7 +129,7 @@ sub tag {
 
 =item string
 
-Returns a string representation of the error object. Euivalent to message().
+Returns a string representation of the error object. Equivalent to message().
 
 =cut
 
