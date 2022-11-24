@@ -19,7 +19,7 @@ use Zonemaster::Engine::Util qw( name ns parse_hints );
 our %recurse_cache;
 our %_fake_addresses_cache;
 
-INIT {
+sub init_recursor {
     my $hints_path = dist_file( 'Zonemaster-Engine', 'named.root' );
     my $hints_text = read_file( $hints_path );
     my $hints_data = parse_hints( $hints_text );
@@ -386,6 +386,11 @@ The IP addresses are those of the nameservers which are used in case of fake
 delegations (pre-publication tests).
 
 =head1 CLASS METHODS
+
+
+=head2 init_recursor()
+
+Initialize the recursor by loading the root hints.
 
 =head2 recurse($name, $type, $class)
 
