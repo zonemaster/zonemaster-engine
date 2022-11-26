@@ -418,12 +418,8 @@ Calle Dybedahl <calle at init.se>
 
 =head1 LICENSE
 
-This is free software, licensed under:
-
-The (three-clause) BSD License
-
-The full text of the license can be found in the
-F<LICENSE> file included with this distribution.
+This is free software. The full text of the license can
+be found in the F<LICENSE> file included with this distribution.
 
 =cut
 
