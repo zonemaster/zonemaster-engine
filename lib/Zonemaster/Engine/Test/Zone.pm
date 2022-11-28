@@ -10,7 +10,7 @@ use version; our $VERSION = version->declare( "v1.0.14" );
 use Zonemaster::Engine;
 
 use Carp;
-use List::MoreUtils qw[none];
+use List::MoreUtils qw[uniq none];
 use Locale::TextDomain qw[Zonemaster-Engine];
 use Readonly;
 use JSON::PP;
