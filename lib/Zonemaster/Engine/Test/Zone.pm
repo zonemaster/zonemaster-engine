@@ -473,9 +473,8 @@ sub zone01 {
                             }
                             else {
                                 $found_serial++;
-                                foreach my $rr ( $p->get_records_for_name( q{SOA}, $zone->name, q{answer} ) ){
-                                    $mname_ns{$mname}{$ip} = $rr->serial;
-                                }
+                                my ( $rr ) = $p->get_records_for_name( q{SOA}, $zone->name, q{answer} );
+                                $mname_ns{$mname}{$ip} = $rr->serial;
                             }
                         }
                         elsif ( $p->rcode ne q{NOERROR} ){
@@ -504,15 +503,11 @@ sub zone01 {
                 my $mname_serial = $mname_ns{$mname}{$mname_ip};
                 my $continue = 1;
 
-                if ( not $mname_serial ){
+                if ( not defined($mname_serial) ){
                     next;
                 }
 
-                foreach my $serial ( @serial_ns ){
-                    if ( not $serial ){
-                        next;
-                    }
-
+                foreach my $serial ( uniq @serial_ns ){
                     if ( $serial > $mname_serial and ( ($serial - $mname_serial) < 2**($serial_bits - 1) ) ){
                         $mname_not_master{$mname}{$mname_ip} = $mname_serial;
                         $continue = 0;
