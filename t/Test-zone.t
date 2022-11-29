@@ -150,6 +150,17 @@ $zone = Zonemaster::Engine->zone( q{zonemaster.net} );
 %res = map { $_->tag => 1 } Zonemaster::Engine->test_method( q{Zone}, q{zone01}, $zone );
 ok( $res{Z01_MNAME_IS_MASTER}, q{SOA 'mname' is authoritative master nameserver} );
 
+TODO: {
+    local $TODO = "Need to find/create zones with that error";
+    
+    # zone01
+    ok( $tag{Z01_MNAME_HAS_LOCALHOST_ADDR}, q{Z01_MNAME_HAS_LOCALHOST_ADDR} );
+    ok( $tag{Z01_MNAME_IS_LOCALHOST}, q{Z01_MNAME_IS_LOCALHOST} );
+    ok( $tag{Z01_MNAME_NOT_AUTHORITATIVE}, q{Z01_MNAME_NOT_AUTHORITATIVE} );
+    ok( $tag{Z01_MNAME_NOT_MASTER}, q{Z01_MNAME_NOT_MASTER} );
+    ok( $tag{Z01_MNAME_UNEXPECTED_RCODE}, q{Z01_MNAME_UNEXPECTED_RCODE} );
+}
+
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Nameserver->save( $datafile );
 }
