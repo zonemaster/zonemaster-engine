@@ -5,6 +5,23 @@ use utf8;
 
 BEGIN { use_ok( 'Zonemaster::Engine::Normalization' ); }
 
+sub char_to_hex_esc {
+    my ($char) = @_;
+    my $ord = ord($char);
+    if ($ord >= 32 && $ord <= 127) {
+        return $char;
+    } elsif ($ord <= 255) {
+        return sprintf('\x%02X', $ord);
+    } else {
+        return sprintf('\x{%04X}', $ord);
+    }
+}
+
+sub to_hex_esc {
+    my ($str) = @_;
+    return join('', map({ char_to_hex_esc($_) } (split //, $str)));
+}
+
 subtest 'Valid domains' => sub {
     my %input_domains = (
         # Roots
@@ -67,7 +84,8 @@ subtest 'Valid domains' => sub {
     );
 
     while (($domain, $expected_output) = each (%input_domains)) {
-        subtest "Domain: '$domain'" => sub {
+        my $safe_domain = to_hex_esc($domain);
+        subtest "Domain: '$safe_domain'" => sub {
             my $errors, $final_domain;
             lives_ok(sub {
                 ($errors, $final_domain) = normalize_name($domain);
@@ -109,7 +127,8 @@ subtest 'Bad domains' => sub {
     );
 
     while (($domain, $error) = each (%input_domains)) {
-        subtest "Domain: '$domain' ($error)" => sub {
+        my $safe_domain = to_hex_esc($domain);
+        subtest "Domain: '$safe_domain' ($error)" => sub {
             my $output, $messages, $domain;
             lives_ok(sub {
                 ($errors, $final_domain) = normalize_name($domain);
@@ -117,7 +136,7 @@ subtest 'Bad domains' => sub {
 
             is($final_domain, undef, 'No domain returned') or diag($final_domain);
             is($errors->[0]->tag, $error, 'Correct error is returned') or diag($errors[0]);
-            note($errors->[0])
+            note(to_hex_esc($errors->[0]))
         }
     }
 };
