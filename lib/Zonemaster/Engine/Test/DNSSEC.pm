@@ -320,9 +320,11 @@ sub metadata {
               DS02_ALGO_NOT_SUPPORTED_BY_ZM
               DS02_DNSKEY_NOT_FOR_ZONE_SIGNING
               DS02_DNSKEY_NOT_SEP
+              DS02_DNSKEY_NOT_SIGNED_BY_ANY_DS
               DS02_NO_DNSKEY_FOR_DS
               DS02_NO_MATCHING_DNSKEY_RRSIG
               DS02_NO_MATCH_DS_DNSKEY
+              DS02_NO_VALID_DNSKEY_FOR_ANY_DS
               DS02_RRSIG_NOT_VALID_BY_DNSKEY
               )
         ],
@@ -712,6 +714,12 @@ Readonly my %TAG_DESCRIPTIONS => (
           . 'the nameservers with IP addresses "{ns_ip_list}".',
           @_;
     },
+    DS02_DNSKEY_NOT_SIGNED_BY_ANY_DS => sub {
+        __x    # DNSSEC:DS02_DNSKEY_NOT_SIGNED_BY_ANY_DS
+          'The DNSKEY RRset has not been signed by any DNSKEY matched by a DS record. '
+          . 'Fetched from the nameservers with IP addresses "{ns_ip_list}".',
+          @_;
+    },
     DS02_NO_DNSKEY_FOR_DS => sub {
         __x    # DNSSEC:DS02_NO_DNSKEY_FOR_DS
           'The DNSKEY record with tag {keytag} that the DS refers to does not '
@@ -729,7 +737,13 @@ Readonly my %TAG_DESCRIPTIONS => (
     DS02_NO_MATCH_DS_DNSKEY => sub {
         __x    # DNSSEC:DS02_NO_MATCH_DS_DNSKEY
           'The DS record does not match the DNSKEY with tag {keytag} by algorithm '
-           . 'or digest. Fetched from the nameservers with IP "{ns_ip_list}".',
+          . 'or digest. Fetched from the nameservers with IP "{ns_ip_list}".',
+          @_;
+    },
+    DS02_NO_VALID_DNSKEY_FOR_ANY_DS => sub {
+        __x    # DNSSEC:DS02_NO_VALID_DNSKEY_FOR_ANY_DS
+          'There is no valid DNSKEY matched by any of the DS records. '
+          . 'Fetched from the nameservers with IP addresses "{ns_ip_list}".',
           @_;
     },
     DS02_RRSIG_NOT_VALID_BY_DNSKEY => sub {
@@ -1463,6 +1477,7 @@ sub dnssec01 {
 sub dnssec02 {
     my ( $self, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+    
     my @ds_record;
     my %no_dnskey_for_ds;
     my %no_match_ds_dnskey;
@@ -1471,6 +1486,12 @@ sub dnssec02 {
     my %no_matching_dnskey_rrsig;
     my %algo_not_supported_by_zm;
     my %rrsig_not_valid_by_dnskey;
+    my %responding_child_ns;
+    my %dnskey_matching_ds;
+    my %has_dnskey_match_ds;
+    my %has_rrsig_match_ds;
+    my @common_ns_dnskey;
+    my @common_ns_rrsig;
     my $continue_with_child_tests = 1;
 
     my $parent     = Zonemaster::Engine::TestMethods->method1( $zone );
@@ -1541,7 +1562,12 @@ sub dnssec02 {
             if ( not scalar @dnskey_rrs ) {
                 next;
             }
+
+            $responding_child_ns{$ns->address->short} = 1;
+
             my @dnskey_rrsig = $dnskey_p->get_records_for_name( q{RRSIG}, $zone->name->string, q{answer} );
+
+            %dnskey_matching_ds = ();
 
             foreach my $ds ( @ds_record ) {
                 my $matching_dnskey = undef;
@@ -1578,16 +1604,20 @@ sub dnssec02 {
                     }
                     if ( not $matching_dnskey->flags & 256 ) { # Bit 7 (ZONE)
                         push @{ $dnskey_not_for_zone_signing{$ds->keytag} }, $ns->address->short;
+                        next;
                     }
                     if ( not $matching_dnskey->flags & 1 ) { # Bit 15 (SEP)
                         push @{ $dnskey_not_sep{$ds->keytag} }, $ns->address->short;
                     }
-                    my @matching_keytag_rrsigs = grep { $ds->keytag == $_->keytag } @dnskey_rrsig;
-                    if ( not scalar @matching_keytag_rrsigs ) {
-                        push @{ $no_matching_dnskey_rrsig{$ds->keytag} }, $ns->address->short;
-                    }
-                    else {
+
+                    $dnskey_matching_ds{$matching_dnskey} = $matching_dnskey->keytag;
+                    $has_dnskey_match_ds{$ns->address->short} = 1;
+
+                    foreach my $dnskey ( keys %dnskey_matching_ds ) {
+                        my @matching_keytag_rrsigs = grep { $dnskey_matching_ds{$dnskey} == $_->keytag } @dnskey_rrsig;
                         my $time = $dnskey_p->timestamp;
+                        my $found_match = 0;
+
                         foreach my $rrsig_record ( @matching_keytag_rrsigs ) {
                             my $msg = q{};
                             # Does not work if we have a list with just a DNSKEY
@@ -1600,12 +1630,23 @@ sub dnssec02 {
                             elsif ( not $validate ) {
                                 push @{ $rrsig_not_valid_by_dnskey{$rrsig_record->keytag} }, $ns->address->short;
                             }
+                            else {
+                                $found_match++;                                
+                            }
+                        }
+
+                        if ( not scalar @matching_keytag_rrsigs or not $found_match ) {
+                            push @{ $no_matching_dnskey_rrsig{$dnskey_matching_ds{$dnskey}} }, $ns->address->short;
+                        }
+                        else {
+                            $has_rrsig_match_ds{$ns->address->short} = 1;
                         }
                     }
                 }
             }
         }
     }
+
     if ( scalar keys %no_dnskey_for_ds ) {
         push @results, map {
           info(
@@ -1679,6 +1720,30 @@ sub dnssec02 {
             }
           )
         } keys %rrsig_not_valid_by_dnskey;
+    }
+
+    foreach my $ns_ip ( keys %responding_child_ns ) {
+        push @common_ns_dnskey, $ns_ip if not exists $has_dnskey_match_ds{$ns_ip};
+        push @common_ns_rrsig, $ns_ip if not exists $has_rrsig_match_ds{$ns_ip};
+    }
+
+    if ( scalar @common_ns_dnskey ) {
+        push @results, 
+            info(
+              DS02_NO_VALID_DNSKEY_FOR_ANY_DS => {
+                ns_ip_list => join( q{;}, sort @common_ns_dnskey )
+              }
+            )
+    }
+    else {
+        if ( scalar @common_ns_rrsig ) {
+            push @results,
+              info(
+                DS02_DNSKEY_NOT_SIGNED_BY_ANY_DS => {
+                    ns_ip_list => join( q{;}, sort @common_ns_rrsig )
+                }
+              )
+        }
     }
 
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
