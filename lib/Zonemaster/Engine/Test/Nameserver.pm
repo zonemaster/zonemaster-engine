@@ -186,10 +186,12 @@ sub metadata {
         ],
         nameserver11 => [
             qw(
-              NO_RESPONSE
-              NO_EDNS_SUPPORT
-              UNKNOWN_OPTION_CODE
-              NS_ERROR
+              N11_NO_EDNS
+              N11_NO_RESPONSE
+              N11_RETURNS_UNKNOWN_OPTION_CODE
+              N11_UNEXPECTED_ANSWER_SECTION
+              N11_UNEXPECTED_RCODE
+              N11_UNSET_AA
               TEST_CASE_END
               TEST_CASE_START
               )
@@ -407,17 +409,41 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # NAMESERVER:NS_ERROR
           'Erroneous response from nameserver {ns}.', @_;
     },
+    N10_EDNS_RESPONSE_ERROR => sub {
+        __x    # NAMESERVER:N10_EDNS_RESPONSE_ERROR
+          'Expected RCODE but received erroneous response to an EDNS version 1 query. Fetched from the nameservers with IP addresses {ns_ip_list}', @_;
+    },
     N10_NO_RESPONSE_EDNS1_QUERY => sub {
-        __x    # N10_NO_RESPONSE_EDNS1_QUERY
+        __x    # NAMESERVER:N10_NO_RESPONSE_EDNS1_QUERY
           'No response to an EDNS version 1 query. Fetched from the nameservers with IP addresses {ns_ip_list}', @_;
     },
     N10_UNEXPECTED_RCODE => sub {
-        __x    # N10_UNEXPECTED_RCODE
+        __x    # NAMESERVER:N10_UNEXPECTED_RCODE
           'Erroneous RCODE ("{rcode}") in response to an EDNS version 1 query. Fetched from the nameservers with IP addresses {ns_ip_list}', @_;
     },
-    N10_EDNS_RESPONSE_ERROR => sub {
-        __x    # N10_EDNS_RESPONSE_ERROR
-          'Expected RCODE but received erroneous response to an EDNS version 1 query. Fetched from the nameservers with IP addresses {ns_ip_list}', @_;
+    N11_NO_EDNS => sub {
+        __x    # NAMESERVER:N11_N11_NO_EDNS
+          'The DNS response, on query with unknown EDNS option-code, does not contain any EDNS from name servers "{ns_ip_list}".', @_;
+    },
+    N11_NO_RESPONSE => sub {
+        __x    # NAMESERVER:N11_NO_RESPONSE
+          'There is no response on query with unknown EDNS option-code from name servers "{ns_ip_list}".', @_;
+    },
+    N11_RETURNS_UNKNOWN_OPTION_CODE => sub {
+        __x    # NAMESERVER:N11_RETURNS_UNKNOWN_OPTION_CODE
+          'The DNS response contains an unknown EDNS option-code. Returned from name servers "{ns_ip_list}".', @_;
+    },
+    N11_UNEXPECTED_ANSWER_SECTION => sub {
+        __x    # NAMESERVER:N11_UNEXPECTED_ANSWER_SECTION
+          'The DNS response, on query with unknown EDNS option-code, does not contain the expected SOA record in the answer section from name servers "{ns_ip_list}".', @_;
+    },
+    N11_UNEXPECTED_RCODE => sub {
+        __x    # NAMESERVER:N11_UNEXPECTED_RCODE
+          'The DNS response, on query with unknown EDNS option-code, has unexpected RCODE name "{rcode}" from name servers "{ns_ip_list}".', @_;
+    },
+    N11_UNSET_AA => sub {
+        __x    # NAMESERVER:N11_UNSET_AA
+          'The DNS response, on query with unknown EDNS option-code, is unexpectedly not authoritative from name servers "{ns_ip_list}".', @_;
     },
     QNAME_CASE_INSENSITIVE => sub {
         __x    # NAMESERVER:QNAME_CASE_INSENSITIVE
@@ -1133,6 +1159,13 @@ sub nameserver11 {
     my ( $class, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
+    my @no_response;
+    my %unexpected_rcode;
+    my @no_edns;
+    my @unexpected_answer;
+    my @unset_aa;
+    my @unknown_opt_code;
+
     # Choose an unassigned EDNS0 Option Codes
     # values 15-26945 are Unassigned. Let's say we use 137 ???
     my $opt_code = 137;
@@ -1140,37 +1173,75 @@ sub nameserver11 {
     my $opt_length = length($opt_data);
     my $rdata = $opt_code*65536 + $opt_length;
 
-    my @nss =  @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) };
-
-    for my $ns ( @nss ) {
+    foreach my $ns ( @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) } ) {
 
         next if ( _ip_disabled_message( \@results, $ns, q{SOA} ) );
 
-        my $p = $ns->query( $zone->name, q{SOA}, { edns_details => { data => $rdata } } );
-        if ( $p ) {
-            if ( $p->rcode eq q{FORMERR} and not $p->edns_rcode ) {
-                push @results, info( NO_EDNS_SUPPORT => { ns => $ns->string } );
-            }
-            elsif ( defined $p->edns_data ) {
-                push @results, info( UNKNOWN_OPTION_CODE => { ns => $ns->string } );
-            }
-            elsif ( $p->rcode eq q{NOERROR} and not $p->edns_rcode and $p->edns_version == 0 and not defined $p->edns_data and $p->get_records( q{SOA}, q{answer} ) ) {
-                next;
-            }
-            else {
-                push @results, info( NS_ERROR => { ns => $ns->string, } );
-            }
-        }
-        else {
-            push @results,
-              info(
-                NO_RESPONSE => {
-                    ns     => $ns->string,
-                    domain => $zone->name,
-                }
-              );
-        }
+        #To be changed to '$ns->query( $zone->name, q{SOA}, { edns_details => { version => 0 } } );' when PR#1147 is merged.
+        my $p = $ns->query( $zone->name, q{SOA}, { edns_details => { udp_size => 512 } } );
 
+        if ( not $p or not $p->has_edns or $p->rcode ne q{NOERROR} or not $p->aa or not $p->get_records_for_name(q{SOA}, $zone->name, q{answer}) ){
+            next;
+        }
+        
+        #To be changed to '$ns->query( $zone->name, q{SOA}, { edns_details => { data => $rdata } } );' when PR#1147 is merged.
+        $p = $ns->query( $zone->name, q{SOA}, { edns_details => { data => $rdata, udp_size => 512 } } );
+
+        if ( $p ) {
+            if ( $p->rcode ne q{NOERROR} ){
+                push @{ $unexpected_rcode{$p->rcode} }, $ns->address->short;
+            }
+            
+            elsif ( not $p->has_edns ){
+                push @no_edns, $ns->address->short;
+            }
+            
+            elsif ( not $p->get_records_for_name(q{SOA}, $zone->name, q{answer}) ){
+                push @unexpected_answer, $ns->address->short;
+            }
+            
+            elsif ( not $p->aa ){
+                push @unset_aa, $ns->address->short;
+            }
+            
+            elsif ( defined $p->edns_data ) {
+                push @unknown_opt_code, $ns->address->short;
+            }
+        }
+        else{
+            push @no_response, $ns->address->short;
+        }
+    }
+
+    if ( scalar @no_response ){
+        push @results, info( N11_NO_RESPONSE => { ns_ip_list => join( q{;}, uniq sort @no_response ) } );
+    }
+
+    if ( scalar keys %unexpected_rcode ){
+        push @results, map {
+          info(
+            N11_UNEXPECTED_RCODE => {
+                rcode     => $_,
+                ns_ip_list => join( q{;}, uniq sort @{ $unexpected_rcode{$_} } )
+            }
+          )
+        } keys %unexpected_rcode;
+    }
+
+    if ( scalar @no_edns ){
+        push @results, info( N11_NO_EDNS => { ns_ip_list => join( q{;}, uniq sort @no_edns ) } );
+    }
+
+    if ( scalar @unexpected_answer ){
+        push @results, info( N11_UNEXPECTED_ANSWER_SECTION => { ns_ip_list => join( q{;}, uniq sort @unexpected_answer ) } );
+    }
+
+    if ( scalar @unset_aa ){
+        push @results, info( N11_UNSET_AA => { ns_ip_list => join( q{;}, uniq sort @unset_aa ) } );
+    }
+
+    if ( scalar @unknown_opt_code ){
+        push @results, info( N11_RETURNS_UNKNOWN_OPTION_CODE => { ns_ip_list => join( q{;}, uniq sort @unknown_opt_code ) } );
     }
 
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
@@ -1225,7 +1296,7 @@ sub nameserver13 {
 
         next if ( _ip_disabled_message( \@results, $ns, q{SOA} ) );
 
-        my $p = $ns->query( $zone->name, q{SOA}, { usevc => 0, fallback => 0, edns_details => { do => 1, udp_size => 512  } } );
+        my $p = $ns->query( $zone->name, q{SOA}, { usevc => 0, fallback => 0, edns_details => { do => 1, udp_size => 512 } } );
         if ( $p ) {
             if ( $p->rcode eq q{FORMERR} and not $p->edns_rcode ) {
                 push @results, info( NO_EDNS_SUPPORT => { ns => $ns->string, } );
