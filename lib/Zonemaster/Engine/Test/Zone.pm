@@ -10,7 +10,7 @@ use version; our $VERSION = version->declare( "v1.0.14" );
 use Zonemaster::Engine;
 
 use Carp;
-use List::MoreUtils qw[none];
+use List::MoreUtils qw[uniq none];
 use Locale::TextDomain qw[Zonemaster-Engine];
 use Readonly;
 use JSON::PP;
@@ -32,22 +32,18 @@ sub all {
     my @results;
 
     push @results, $class->zone01( $zone ) if Zonemaster::Engine::Util::should_run_test( q{zone01} );
-    if ( none { $_->tag eq q{NO_RESPONSE_SOA_QUERY} } @results ) {
-        push @results, $class->zone02( $zone ) if Zonemaster::Engine::Util::should_run_test( q{zone02} );
-        push @results, $class->zone03( $zone ) if Zonemaster::Engine::Util::should_run_test( q{zone03} );
-        push @results, $class->zone04( $zone ) if Zonemaster::Engine::Util::should_run_test( q{zone04} );
-        push @results, $class->zone05( $zone ) if Zonemaster::Engine::Util::should_run_test( q{zone05} );
-        push @results, $class->zone06( $zone ) if Zonemaster::Engine::Util::should_run_test( q{zone06} );
-        if ( none { $_->tag eq q{MNAME_RECORD_DOES_NOT_EXIST} } @results ) {
-            push @results, $class->zone07( $zone ) if Zonemaster::Engine::Util::should_run_test( q{zone07} );
-        }
+    push @results, $class->zone02( $zone ) if Zonemaster::Engine::Util::should_run_test( q{zone02} );
+    push @results, $class->zone03( $zone ) if Zonemaster::Engine::Util::should_run_test( q{zone03} );
+    push @results, $class->zone04( $zone ) if Zonemaster::Engine::Util::should_run_test( q{zone04} );
+    push @results, $class->zone05( $zone ) if Zonemaster::Engine::Util::should_run_test( q{zone05} );
+    push @results, $class->zone06( $zone ) if Zonemaster::Engine::Util::should_run_test( q{zone06} );
+    push @results, $class->zone07( $zone ) if Zonemaster::Engine::Util::should_run_test( q{zone07} );
+    push @results, $class->zone08( $zone ) if Zonemaster::Engine::Util::should_run_test( q{zone08} );
+    
+    if ( none { $_->tag eq q{NO_RESPONSE_MX_QUERY} } @results ) {
+        push @results, $class->zone09( $zone ) if Zonemaster::Engine::Util::should_run_test( q{zone09} );
     }
-    if ( none { $_->tag eq q{MNAME_RECORD_DOES_NOT_EXIST} } @results ) {
-        push @results, $class->zone08( $zone ) if Zonemaster::Engine::Util::should_run_test( q{zone08} );
-        if ( none { $_->tag eq q{NO_RESPONSE_MX_QUERY} } @results ) {
-            push @results, $class->zone09( $zone ) if Zonemaster::Engine::Util::should_run_test( q{zone09} );
-        }
-    }
+
     if ( none { $_->tag eq q{NO_RESPONSE_SOA_QUERY} } @results ) {
         push @results, $class->zone10( $zone ) if Zonemaster::Engine::Util::should_run_test( q{zone10} );
     }
@@ -64,12 +60,17 @@ sub metadata {
     return {
         zone01 => [
             qw(
-              MNAME_RECORD_DOES_NOT_EXIST
-              MNAME_NOT_AUTHORITATIVE
-              MNAME_NO_RESPONSE
-              MNAME_NOT_IN_GLUE
-              MNAME_IS_AUTHORITATIVE
-              NO_RESPONSE_SOA_QUERY
+              Z01_MNAME_HAS_LOCALHOST_ADDR
+              Z01_MNAME_IS_DOT
+              Z01_MNAME_IS_LOCALHOST
+              Z01_MNAME_IS_MASTER
+              Z01_MNAME_MISSING_SOA_RECORD
+              Z01_MNAME_NO_RESPONSE
+              Z01_MNAME_NOT_AUTHORITATIVE
+              Z01_MNAME_NOT_IN_NS_LIST
+              Z01_MNAME_NOT_MASTER
+              Z01_MNAME_NOT_RESOLVE
+              Z01_MNAME_UNEXPECTED_RCODE
               TEST_CASE_END
               TEST_CASE_START
               )
@@ -222,10 +223,6 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # ZONE:RETRY_MINIMUM_VALUE_OK
           'SOA \'retry\' value ({retry}) is at least equal to the minimum recommended value ({required_retry}).', @_;
     },
-    MNAME_NO_RESPONSE => sub {
-        __x    # ZONE:MNAME_NO_RESPONSE
-          'SOA \'mname\' nameserver {ns} does not respond.', @_;
-    },
     MNAME_IS_CNAME => sub {
         __x    # ZONE:MNAME_IS_CNAME
           'SOA \'mname\' value ({mname}) refers to a NS which is an alias (CNAME).', @_;
@@ -258,21 +255,9 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # ZONE:SOA_DEFAULT_TTL_MAXIMUM_VALUE_OK
           'SOA \'minimum\' value ({minimum}) is between the recommended ones ({lowest_minimum}/{highest_minimum}).', @_;
     },
-    MNAME_NOT_AUTHORITATIVE => sub {
-        __x    # ZONE:MNAME_NOT_AUTHORITATIVE
-          'SOA \'mname\' nameserver {ns} is not authoritative for \'{zone}\' zone.', @_;
-    },
-    MNAME_RECORD_DOES_NOT_EXIST => sub {
-        __x    # ZONE:MNAME_RECORD_DOES_NOT_EXIST
-          'SOA \'mname\' field does not exist', @_;
-    },
     EXPIRE_MINIMUM_VALUE_LOWER => sub {
         __x    # ZONE:EXPIRE_MINIMUM_VALUE_LOWER
           'SOA \'expire\' value ({expire}) is less than the recommended one ({required_expire}).', @_;
-    },
-    MNAME_NOT_IN_GLUE => sub {
-        __x    # ZONE:MNAME_NOT_IN_GLUE
-          'SOA \'mname\' nameserver ({mname}) is not listed in "parent" NS records for tested zone ({ns_list}).', @_;
     },
     REFRESH_LOWER_THAN_RETRY => sub {
         __x    # ZONE:REFRESH_LOWER_THAN_RETRY
@@ -289,10 +274,6 @@ Readonly my %TAG_DESCRIPTIONS => (
     MX_RECORD_IS_NOT_CNAME => sub {
         __x    # ZONE:MX_RECORD_IS_NOT_CNAME
           'MX record for the domain is not pointing to a CNAME.', @_;
-    },
-    MNAME_IS_AUTHORITATIVE => sub {
-        __x    # ZONE:MNAME_IS_AUTHORITATIVE
-          'SOA \'mname\' nameserver ({mname}) is authoritative for \'{zone}\' zone.', @_;
     },
     MULTIPLE_SOA => sub {
         __x    # ZONE:MULTIPLE_SOA
@@ -339,6 +320,50 @@ Readonly my %TAG_DESCRIPTIONS => (
     WRONG_SOA => sub {
         __x    # ZONE:WRONG_SOA
           'Nameserver {ns} responds with a wrong owner name ({owner} instead of {name}) on SOA queries.', @_;
+    },
+    Z01_MNAME_HAS_LOCALHOST_ADDR => sub {
+        __x    # ZONE:Z01_MNAME_HAS_LOCALHOST_ADDR
+          'SOA MNAME name server "{nsname}" resolves to a localhost IP address ({ns_ip}).', @_;
+    },
+    Z01_MNAME_IS_DOT => sub {
+        __x    # ZONE:Z01_MNAME_IS_DOT
+          'SOA MNAME is specified as "." which usually means "no server". Fetched from name servers "{ns_ip_list}".', @_;
+    },
+    Z01_MNAME_IS_LOCALHOST => sub {
+        __x    # ZONE:Z01_MNAME_IS_LOCALHOST
+          'SOA MNAME name server is "localhost", which is invalid. Fetched from name servers "{ns_ip_list}".', @_;
+    },
+    Z01_MNAME_IS_MASTER => sub {
+        __x    # ZONE:Z01_MNAME_IS_MASTER
+          'SOA MNAME name server(s) "{ns_list}" appears to be master.', @_;
+    },
+    Z01_MNAME_MISSING_SOA_RECORD => sub {
+        __x    # ZONE:Z01_MNAME_MISSING_SOA_RECORD
+          'SOA MNAME name server "{ns}" reponds to an SOA query with no SOA records in the answer section.', @_;
+    },
+    Z01_MNAME_NO_RESPONSE => sub {
+        __x    # ZONE:Z01_MNAME_NO_RESPONSE
+          'SOA MNAME name server "{ns}" does not respond to an SOA query.', @_;
+    },
+    Z01_MNAME_NOT_AUTHORITATIVE => sub {
+        __x    # ZONE:Z01_MNAME_NOT_AUTHORITATIVE
+          'SOA MNAME name server "{ns}" is not authoritative for the zone.', @_;
+    },
+    Z01_MNAME_NOT_IN_NS_LIST => sub {
+        __x    # ZONE:Z01_MNAME_NOT_IN_NS_LIST
+          'SOA MNAME name server "{nsname}" is not listed as NS record for the zone.', @_;
+    },
+    Z01_MNAME_NOT_MASTER => sub {
+        __x    # ZONE:Z01_MNAME_NOT_MASTER
+          'SOA MNAME name server(s) "{ns_list}" do not have the highest SOA SERIAL (expected "{soaserial}" but got "{soaserial_list}")', @_;
+    },
+    Z01_MNAME_NOT_RESOLVE => sub {
+        __x    # ZONE:Z01_MNAME_NOT_RESOLVE
+          'SOA MNAME name server "{nsname}" cannot be resolved into an IP address.', @_;
+    },
+    Z01_MNAME_UNEXPECTED_RCODE => sub {
+        __x    # ZONE:Z01_MNAME_UNEXPECTED_RCODE
+          'SOA MNAME name server "{ns}" gives unexpected RCODE name ("{rcode}") in response to an SOA query.', @_;
     },
     Z09_INCONSISTENT_MX => sub {
         __x    # ZONE:Z09_INCONSISTENT_MX
@@ -406,61 +431,147 @@ sub zone01 {
     my ( $class, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
-    my $p = _retrieve_record_from_zone( $zone, $zone->name, q{SOA} );
+    my %mname_ns;
+    my @serial_ns;
+    my %mname_not_master;
+    my @mname_master;
+    my @mname_localhost;
+    my @mname_dot;
 
-    if ( $p and my ( $soa ) = $p->get_records( q{SOA}, q{answer} ) ) {
-        my $soa_mname = $soa->mname;
-        $soa_mname =~ s/[.]\z//smx;
-        if ( not $soa_mname ) {
-            push @results, info( MNAME_RECORD_DOES_NOT_EXIST => {} );
+    foreach my $ns ( @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) } ){
+        if ( _is_ip_version_disabled( $ns, q{SOA} ) ){
+            next;
         }
-        else {
-            foreach my $ip_address ( Zonemaster::Engine::Recursor->get_addresses_for( $soa_mname ) ) {
 
-                my $ns = Zonemaster::Engine::Nameserver->new( { name => $soa_mname, address => $ip_address->short } );
+        my $p = $ns->query( $zone->name, q{SOA} );
 
-                if ( _is_ip_version_disabled( $ns, q{SOA} ) ) {
+        if ( not $p or $p->rcode ne q{NOERROR} or not $p->aa or not $p->get_records_for_name( q{SOA}, $zone->name ) ){
+            next;
+        }
+
+        foreach my $soa_rr ( $p->get_records_for_name( q{SOA}, $zone->name ) ){
+            my $soa_mname = lc($soa_rr->mname);
+            $soa_mname =~ s/[.]\z//smx;
+
+            if ( $soa_mname eq 'localhost' ){
+                push @mname_localhost, $ns->address->short;
+            }
+            elsif ( not $soa_mname ){
+                push @mname_dot, $ns->address->short;
+            }
+            else{
+                $mname_ns{$soa_mname} = undef;
+            }
+
+            push @serial_ns, $soa_rr->serial;
+        }
+    }
+
+    if ( scalar @mname_localhost ){
+        push @results, info( Z01_MNAME_IS_LOCALHOST => { ns_ip_list => join( q{;}, @mname_localhost ) } );
+    }
+
+    if ( scalar @mname_dot ){
+        push @results, info( Z01_MNAME_IS_DOT => { ns_ip_list => join( q{;}, @mname_dot ) } );
+    }
+
+    my $found_ip = 0;
+    my $found_serial = 0;
+    
+    foreach my $mname ( keys %mname_ns ){
+        if ( none { $_ eq $mname } @{ Zonemaster::Engine::TestMethods->method3( $zone ) } ){
+            push @results, info( Z01_MNAME_NOT_IN_NS_LIST => { nsname => $mname } );
+        }
+
+        foreach my $ip ( Zonemaster::Engine::Recursor->get_addresses_for( $mname ) ){
+            $found_ip++;
+            $mname_ns{$mname}{$ip->short} = undef;
+        }
+
+        if ( $found_ip ){
+            foreach my $ip ( keys %{ $mname_ns{$mname} } ){
+                if ( $ip eq ( '127.0.0.1' or '::1' ) ){
+                    push @results, info( Z01_MNAME_HAS_LOCALHOST_ADDR => { nsname => $mname, ns_ip => $ip } );
+                }
+                else{
+                    my $ns = Zonemaster::Engine::Nameserver->new( { name => $mname, address => $ip } );
+                    
+                    if ( _is_ip_version_disabled( $ns, q{SOA} ) ){
+                       next;
+                    }
+
+                    my $p = $ns->query( $zone->name, q{SOA} );
+
+                    if ( $p ){
+                        if ( $p->rcode eq q{NOERROR} and $p->get_records_for_name( q{SOA}, $zone->name, q{answer} ) ){
+                            if ( not $p->aa ){
+                                push @results, info( Z01_MNAME_NOT_AUTHORITATIVE => { ns => $ns->string } );
+                            }
+                            else {
+                                $found_serial++;
+                                my ( $rr ) = $p->get_records_for_name( q{SOA}, $zone->name, q{answer} );
+                                $mname_ns{$mname}{$ip} = $rr->serial;
+                            }
+                        }
+                        elsif ( $p->rcode ne q{NOERROR} ){
+                            push @results, info( Z01_MNAME_UNEXPECTED_RCODE => { ns => $ns->string, rcode => $p->rcode } );
+                        }
+                        elsif ( not $p->get_records_for_name( q{SOA}, $zone->name, q{answer} ) ){
+                            push @results, info( Z01_MNAME_MISSING_SOA_RECORD => { ns => $ns->string } );
+                        }
+                    }
+                    else {
+                        push @results, info( Z01_MNAME_NO_RESPONSE => { ns => $ns->string } );
+                    }
+                }
+            }
+        }
+        else{
+            push @results, info( Z01_MNAME_NOT_RESOLVE => { nsname => $mname } );
+        }
+    }
+
+    if ( $found_serial ){
+        my $serial_bits = 32;
+
+        foreach my $mname ( keys %mname_ns ){
+            MNAME_IP: foreach my $mname_ip ( keys %{ $mname_ns{$mname} } ){
+                my $mname_serial = $mname_ns{$mname}{$mname_ip};
+
+                if ( not defined($mname_serial) ){
                     next;
                 }
 
-                my $p_soa = $ns->query( $zone->name, q{SOA} );
-                if ( $p_soa and $p_soa->rcode eq q{NOERROR} ) {
-                    if ( not $p_soa->aa ) {
-                        push @results,
-                          info(
-                            MNAME_NOT_AUTHORITATIVE => {
-                                ns   => $ns->string,
-                                zone => $zone->name,
-                            }
-                          );
+                foreach my $serial ( uniq @serial_ns ){
+                    if ( $serial > $mname_serial and ( ($serial - $mname_serial) < 2**($serial_bits - 1) ) ){
+                        $mname_not_master{$mname}{$mname_ip} = $mname_serial;
+                        next MNAME_IP;
                     }
                 }
-                else {
-                    push @results, info( MNAME_NO_RESPONSE => { ns => $ns->string } );
-                }
-            } ## end foreach my $ip_address ( Zonemaster::Engine::Recursor...)
-            if ( none { $_ eq $soa_mname } @{ Zonemaster::Engine::TestMethods->method2( $zone ) } ) {
-                push @results,
-                  info(
-                    MNAME_NOT_IN_GLUE => {
-                        mname   => $soa_mname,
-                        ns_list => join( q{;}, @{ Zonemaster::Engine::TestMethods->method2( $zone ) } ),
-                    }
-                  );
+
+                push @mname_master, $mname . '/' . $mname_ip ;
             }
-        } ## end else [ if ( not $soa_mname ) ]
-        if ( not grep { $_->tag ne q{TEST_CASE_START} } @results ) {
-            push @results,
-              info(
-                MNAME_IS_AUTHORITATIVE => {
-                    mname => $soa_mname,
-                    zone  => $zone->name,
-                }
-              );
         }
-    } ## end if ( $p and my ( $soa ...))
-    else {
-        push @results, info( NO_RESPONSE_SOA_QUERY => {} );
+
+        if ( %mname_not_master ){
+            push @results, 
+                info( 
+                    Z01_MNAME_NOT_MASTER => {
+                        ns_list  => join( q{;}, sort map { $_ . '/' . %{ $mname_not_master{$_} } } keys %mname_not_master ),
+                        soaserial => max( map { $mname_not_master{$_} } keys %mname_not_master ),
+                        soaserial_list => join( q{;}, uniq @serial_ns )
+                    }
+                );
+        }
+
+        if ( @mname_master ){
+            push @results, 
+                info( 
+                    Z01_MNAME_IS_MASTER => {
+                        ns_list  => join( q{;}, sort @mname_master )
+                    }
+                );
+        }
     }
 
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) )
