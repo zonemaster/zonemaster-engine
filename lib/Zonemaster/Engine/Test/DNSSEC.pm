@@ -1490,8 +1490,8 @@ sub dnssec02 {
     my %dnskey_matching_ds;
     my %has_dnskey_match_ds;
     my %has_rrsig_match_ds;
-    my @common_ns_dnskey;
-    my @common_ns_rrsig;
+    my @ns_dnskey;
+    my @ns_rrsig;
     my $continue_with_child_tests = 1;
 
     my $parent     = Zonemaster::Engine::TestMethods->method1( $zone );
@@ -1723,24 +1723,24 @@ sub dnssec02 {
     }
 
     foreach my $ns_ip ( keys %responding_child_ns ) {
-        push @common_ns_dnskey, $ns_ip if not exists $has_dnskey_match_ds{$ns_ip};
-        push @common_ns_rrsig, $ns_ip if not exists $has_rrsig_match_ds{$ns_ip};
+        push @ns_dnskey, $ns_ip if not exists $has_dnskey_match_ds{$ns_ip};
+        push @ns_rrsig, $ns_ip if not exists $has_rrsig_match_ds{$ns_ip};
     }
 
-    if ( scalar @common_ns_dnskey ) {
+    if ( scalar @ns_dnskey ) {
         push @results, 
             info(
               DS02_NO_VALID_DNSKEY_FOR_ANY_DS => {
-                ns_ip_list => join( q{;}, sort @common_ns_dnskey )
+                ns_ip_list => join( q{;}, sort @ns_dnskey )
               }
             )
     }
     else {
-        if ( scalar @common_ns_rrsig ) {
+        if ( scalar @ns_rrsig ) {
             push @results,
               info(
                 DS02_DNSKEY_NOT_SIGNED_BY_ANY_DS => {
-                    ns_ip_list => join( q{;}, sort @common_ns_rrsig )
+                    ns_ip_list => join( q{;}, sort @ns_rrsig )
                 }
               )
         }
