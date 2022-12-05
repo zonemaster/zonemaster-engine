@@ -2,7 +2,10 @@ FROM zonemaster/ldns:local as build
 
 RUN apk add --no-cache \
     # Only needed for CPAN deps
+    gcc \
     make \
+    musl-dev \
+    perl-dev \
     # Transitive deps included to improve build speed
     perl-mailtools \
     perl-module-build-tiny \
