@@ -24,8 +24,6 @@ use Digest::MD5;
 use POSIX ();
 use Scalar::Util qw[ blessed ];
 
-use Data::Dumper;
-
 our @ISA = qw (Class::Accessor);
 
 use overload
