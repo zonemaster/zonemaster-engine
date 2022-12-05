@@ -435,10 +435,6 @@ sub zone01 {
         push @results, info( Z01_MNAME_IS_DOT => { ns_ip_list => join( q{;}, @mname_dot ) } );
     }
 
-    if ( not %mname_ns ){
-        return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
-    }
-
     my $found_ip = 0;
     my $found_serial = 0;
     
@@ -499,9 +495,8 @@ sub zone01 {
         my $serial_bits = 32;
 
         foreach my $mname ( keys %mname_ns ){
-            foreach my $mname_ip ( keys %{ $mname_ns{$mname} } ){
+            MNAME_IP: foreach my $mname_ip ( keys %{ $mname_ns{$mname} } ){
                 my $mname_serial = $mname_ns{$mname}{$mname_ip};
-                my $continue = 1;
 
                 if ( not defined($mname_serial) ){
                     next;
@@ -510,16 +505,11 @@ sub zone01 {
                 foreach my $serial ( uniq @serial_ns ){
                     if ( $serial > $mname_serial and ( ($serial - $mname_serial) < 2**($serial_bits - 1) ) ){
                         $mname_not_master{$mname}{$mname_ip} = $mname_serial;
-                        $continue = 0;
-                        last;
+                        next MNAME_IP;
                     }
-
-                    $continue++;
                 }
 
-                if ( $continue > 1 ){
-                    push @mname_master, $mname . '/' . $mname_ip ;
-                }
+                push @mname_master, $mname . '/' . $mname_ip ;
             }
         }
 
@@ -529,7 +519,7 @@ sub zone01 {
                     Z01_MNAME_NOT_MASTER => {
                         ns_list  => join( q{;}, sort map { $_ . '/' . %{ $mname_not_master{$_} } } keys %mname_not_master ),
                         soaserial => max( map { $mname_not_master{$_} } keys %mname_not_master ),
-                        soaserial_list => join( q{;}, @serial_ns )
+                        soaserial_list => join( q{;}, uniq @serial_ns )
                     }
                 );
         }
