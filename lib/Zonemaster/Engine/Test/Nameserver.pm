@@ -1101,7 +1101,8 @@ sub nameserver10 {
 
         next if ( _ip_disabled_message( \@results, $ns, q{SOA} ) );
 
-        my $p = $ns->query( $zone->name, q{SOA}, { edns_details => { version => 0 } } );
+        #To be changed to '$ns->query( $zone->name, q{SOA}, { edns_details => { version => 0 } } );' when PR#1147 is merged.
+        my $p = $ns->query( $zone->name, q{SOA}, { edns_details => { udp_size => 512 } } );
 
         if ( $p and $p->rcode eq q{NOERROR} ){
             my $p2 = $ns->query( $zone->name, q{SOA}, { edns_details => { version => 1 } } );
