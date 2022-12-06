@@ -45,35 +45,48 @@ Zonemaster::Engine, see the [declaration of prerequisites].
 
 ### Installation on Rocky Linux
 
-1) Enable PowerTools:
+1) Enable DNSSEC algorithm 5:
 
+   Only on Rocky Linux 9:
+   ```sh
+   sudo update-crypto-policies --set DEFAULT:SHA1
+   ```
+
+2) Enable the Code Ready Builder repository:
+
+   Only on Rocky Linux 8:
    ```sh
    sudo dnf config-manager --set-enabled powertools
    ```
 
-2) Install the [EPEL] repository:
-
+   Only on Rocky Linux 9:
    ```sh
-   sudo dnf --assumeyes --enablerepo=extras install epel-release
+   sudo dnf config-manager --set-enabled crb
    ```
 
-3) Install binary packages:
+3) Install the [EPEL] repository:
 
    ```sh
-   sudo dnf --assumeyes install cpanminus gcc libidn2-devel openssl-devel perl-Class-Accessor perl-Clone perl-core perl-Devel-CheckLib perl-Email-Valid perl-File-ShareDir perl-File-Slurp perl-libintl perl-IO-Socket-INET6 perl-List-MoreUtils perl-Locale-PO perl-Log-Any perl-Module-Find perl-Module-Install perl-Moose perl-Net-DNS perl-Pod-Coverage perl-Readonly perl-Test-Differences perl-Test-Exception perl-Test-Fatal perl-Test-NoWarnings perl-Test-Pod perl-Text-CSV perl-Test-Simple perl-YAML
+   sudo dnf install epel-release
    ```
 
-4) Install packages from CPAN:
+4) Install binary packages:
 
    ```sh
-   sudo cpanm --notest Module::Install::XSUtil MooseX::Singleton Net::IP::XS
+   sudo dnf --assumeyes install cpanminus gcc libidn2-devel openssl-devel perl-Class-Accessor perl-Clone perl-core perl-Devel-CheckLib perl-Email-Valid perl-File-ShareDir perl-File-Slurp perl-libintl perl-IO-Socket-INET6 perl-List-MoreUtils perl-Module-Find perl-Module-Install perl-Moose perl-Net-DNS perl-Pod-Coverage perl-Readonly perl-Test-Differences perl-Test-Exception perl-Test-Fatal perl-Test-NoWarnings perl-Test-Pod perl-Text-CSV perl-Test-Simple perl-YAML
    ```
 
-5) Install Zonemaster::LDNS and Zonemaster::Engine:
+5) Install packages from CPAN:
 
-     ```sh
-     sudo cpanm --notest Zonemaster::LDNS Zonemaster::Engine
-     ```
+   ```sh
+   sudo cpanm --notest Locale::PO Log::Any Module::Install::XSUtil MooseX::Singleton Net::IP::XS
+   ```
+
+6) Install Zonemaster::LDNS and Zonemaster::Engine:
+
+   ```sh
+   sudo cpanm --notest Zonemaster::LDNS Zonemaster::Engine
+   ```
 
 ### Installation on Debian and Ubuntu
 
