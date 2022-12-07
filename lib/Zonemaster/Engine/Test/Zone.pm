@@ -490,7 +490,7 @@ sub zone01 {
 
         if ( $found_ip ){
             foreach my $ip ( keys %{ $mname_ns{$mname} } ){
-                if ( $ip eq ( '127.0.0.1' or '::1' ) ){
+                if ( $ip eq '127.0.0.1' or $ip eq '::1' ){
                     push @results, info( Z01_MNAME_HAS_LOCALHOST_ADDR => { nsname => $mname, ns_ip => $ip } );
                 }
                 else{
