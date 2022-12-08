@@ -229,7 +229,7 @@ sub query {
     }
 
     Zonemaster::Engine->logger->add(
-        'query',
+        'QUERY',
         {
             name  => "$name",
             type  => $type,
@@ -247,16 +247,16 @@ sub query {
     # Fake a DS answer
     if ( $type eq 'DS' and $class eq 'IN' and $self->fake_ds->{ lc( $name ) } ) {
         my $p = Zonemaster::LDNS::Packet->new( $name, $type, $class );
-        
+
         $p->qr( 1 );
         $p->aa( 1 );
         $p->do( $dnssec );
         $p->rd( $recurse );
-        
+
         foreach my $rr ( @{ $self->fake_ds->{ lc( $name ) } } ) {
             $p->unique_push( 'answer', $rr );
         }
-        
+
         my $res = Zonemaster::Engine::Packet->new( { packet => $p } );
         Zonemaster::Engine->logger->add( FAKE_DS_RETURNED => { name => "$name", from => "$self" } );
         return $res;
@@ -281,7 +281,7 @@ sub query {
                     $p->unique_push( $section, $_ ) for @{$aref};
                 }
             }
-            
+
             $p->aa( 0 ) unless ( $type eq 'DS' );
             $p->qr( 1 );
             $p->do( $dnssec );
