@@ -869,7 +869,6 @@ sub zone09 {
     my %all_ns;
 
     foreach my $ns ( @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) } ){
-
         next if exists $ip_already_processed{$ns->address->short};
         $ip_already_processed{$ns->address->short} = 1;
 
@@ -909,7 +908,7 @@ sub zone09 {
     }
 
     if ( scalar @no_response_mx ){
-        push @results, info( Z09_NO_RESPONSE_MX_QUERY => { ns_ip_list => join( q{;}, sort @no_response_mx) } );
+        push @results, info( Z09_NO_RESPONSE_MX_QUERY => { ns_ip_list => join( q{;}, sort @no_response_mx ) } );
     }
 
     if ( scalar %unexpected_rcode_mx ){
@@ -923,13 +922,13 @@ sub zone09 {
     }
 
     if ( scalar @non_authoritative_mx ){
-        push @results, info( Z09_NON_AUTH_MX_RESPONSE => { ns_ip_list => join( q{;}, sort @no_response_mx) } );
+        push @results, info( Z09_NON_AUTH_MX_RESPONSE => { ns_ip_list => join( q{;}, sort @no_response_mx ) } );
     }
 
     if ( scalar @no_mx_set and scalar %mx_set ){
         push @results, info( Z09_INCONSISTENT_MX => {} );
-        push @results, info( Z09_NO_MX_FOUND => { ns_ip_list => join( q{;}, sort @no_mx_set) } );
-        push @results, info( Z09_MX_FOUND => { ns_ip_list => join( q{;}, sort keys %mx_set) } );
+        push @results, info( Z09_NO_MX_FOUND => { ns_ip_list => join( q{;}, sort @no_mx_set ) } );
+        push @results, info( Z09_MX_FOUND => { ns_ip_list => join( q{;}, sort keys %mx_set ) } );
     }
 
     if ( scalar %mx_set ){
@@ -984,7 +983,7 @@ sub zone09 {
                     push @results, info( Z09_ROOT_EMAIL_DOMAIN => {} );
                 }
 
-                elsif ( $zone->name->next_higher() eq '.' ){
+                elsif ( $zone->name->next_higher eq '.' ){
                     push @results, info( Z09_TLD_EMAIL_DOMAIN => {} );
                 }
 
@@ -999,8 +998,8 @@ sub zone09 {
         }
     }
 
-    if ( scalar @no_mx_set ){
-        unless ( $zone->name eq '.' or $zone->name->next_higher() eq '.' or $zone->name =~ /\.arpa/ ){
+    elsif ( scalar @no_mx_set ){
+        unless ( $zone->name eq '.' or $zone->name->next_higher eq '.' or $zone->name =~ /\.arpa$/ ){
             push @results, info( Z09_MISSING_MAIL_TARGET => {} );
         }
     }
