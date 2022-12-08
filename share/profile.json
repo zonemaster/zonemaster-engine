@@ -422,6 +422,7 @@
             "NO_SUCH_RECORD" : "DEBUG2",
             "NS_CREATED" : "DEBUG2",
             "PACKET_BIG" : "DEBUG",
+            "QUERY" : "DEBUG2",
             "RECURSE" : "DEBUG2",
             "RECURSE_QUERY" : "DEBUG2",
             "RESTORED_NS_CACHE" : "DEBUG2",

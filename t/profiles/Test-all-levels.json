@@ -199,6 +199,7 @@
             "NO_SUCH_NAME" : "DEBUG2",
             "NO_SUCH_RECORD" : "DEBUG2",
             "NS_CREATED" : "DEBUG2",
+            "QUERY" : "DEBUG2",
             "RECURSE" : "DEBUG2",
             "RECURSE_QUERY" : "DEBUG2",
             "RESTORED_NS_CACHE" : "DEBUG2",
