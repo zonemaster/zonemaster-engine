@@ -869,7 +869,6 @@ sub zone09 {
     my %all_ns;
 
     foreach my $ns ( @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) } ){
-
         next if exists $ip_already_processed{$ns->address->short};
         $ip_already_processed{$ns->address->short} = 1;
 
@@ -909,7 +908,7 @@ sub zone09 {
     }
 
     if ( scalar @no_response_mx ){
-        push @results, info( Z09_NO_RESPONSE_MX_QUERY => { ns_ip_list => join( q{;}, sort @no_response_mx) } );
+        push @results, info( Z09_NO_RESPONSE_MX_QUERY => { ns_ip_list => join( q{;}, sort @no_response_mx ) } );
     }
 
     if ( scalar %unexpected_rcode_mx ){
@@ -923,13 +922,13 @@ sub zone09 {
     }
 
     if ( scalar @non_authoritative_mx ){
-        push @results, info( Z09_NON_AUTH_MX_RESPONSE => { ns_ip_list => join( q{;}, sort @no_response_mx) } );
+        push @results, info( Z09_NON_AUTH_MX_RESPONSE => { ns_ip_list => join( q{;}, sort @no_response_mx ) } );
     }
 
     if ( scalar @no_mx_set and scalar %mx_set ){
         push @results, info( Z09_INCONSISTENT_MX => {} );
-        push @results, info( Z09_NO_MX_FOUND => { ns_ip_list => join( q{;}, sort @no_mx_set) } );
-        push @results, info( Z09_MX_FOUND => { ns_ip_list => join( q{;}, sort keys %mx_set) } );
+        push @results, info( Z09_NO_MX_FOUND => { ns_ip_list => join( q{;}, sort @no_mx_set ) } );
+        push @results, info( Z09_MX_FOUND => { ns_ip_list => join( q{;}, sort keys %mx_set ) } );
     }
 
     if ( scalar %mx_set ){
@@ -962,46 +961,45 @@ sub zone09 {
         }
 
         unless ( grep{$_->tag eq 'Z09_INCONSISTENT_MX_DATA'} @results ){
-            my $show_mx_data = 0;
-            foreach my $ns ( keys %mx_set ){
-                foreach my $rr ( @{$mx_set{$ns}} ){
-                    if ( $rr->exchange eq '.' ){
-                        if ( scalar @{$mx_set{$ns}} > 1 ){
-                            push @results, info( Z09_NULL_MX_WITH_OTHER_MX => {} ) unless grep{$_->tag eq 'Z09_NULL_MX_WITH_OTHER_MX'} @results;
-                        }
+            my $has_null_mx = 0;
+            my ( $ns ) = keys %mx_set;
 
-                        if ( $rr->preference > 0 ){
-                            push @results, info( Z09_NULL_MX_NON_ZERO_PREF => {} ) unless grep{$_->tag eq 'Z09_NULL_MX_NON_ZERO_PREF'} @results;
-                        }
+            foreach my $rr ( @{$mx_set{$ns}} ){
+                if ( $rr->exchange eq '.' ){
+                    if ( scalar @{$mx_set{$ns}} > 1 ){
+                        push @results, info( Z09_NULL_MX_WITH_OTHER_MX => {} ) unless grep{$_->tag eq 'Z09_NULL_MX_WITH_OTHER_MX'} @results;
                     }
 
-                    elsif ( $zone->name->string eq '.' ){
-                        push @results, info( Z09_ROOT_EMAIL_DOMAIN => {} ) unless grep{$_->tag eq 'Z09_ROOT_EMAIL_DOMAIN'} @results;
+                    if ( $rr->preference > 0 ){
+                        push @results, info( Z09_NULL_MX_NON_ZERO_PREF => {} ) unless grep{$_->tag eq 'Z09_NULL_MX_NON_ZERO_PREF'} @results;
                     }
 
-                    elsif ( $zone->name->next_higher() eq '.' ){
-                        push @results, info( Z09_TLD_EMAIL_DOMAIN => {} ) unless grep{$_->tag eq 'Z09_TLD_EMAIL_DOMAIN'} @results;
-                    }
-
-                    else {
-                        $show_mx_data = 1;
-                        last;
-                    }
+                    $has_null_mx = 1;
                 }
             }
 
-            if ( $show_mx_data ) {
-                push @results, info( Z09_MX_DATA => {
+            if ( not $has_null_mx ){
+                if ( $zone->name->string eq '.' ){
+                    push @results, info( Z09_ROOT_EMAIL_DOMAIN => {} );
+                }
+
+                elsif ( $zone->name->next_higher eq '.' ){
+                    push @results, info( Z09_TLD_EMAIL_DOMAIN => {} );
+                }
+
+                else {
+                    push @results, info( Z09_MX_DATA => {
                         ns_ip_list => join( q{;}, keys %mx_set ),
                         mailtarget_list => join( q{;}, map { map { $_->exchange } @$_ } $mx_set{ (keys %mx_set)[0] } )
-                    }
-                );
+                        }
+                    );
+                }
             }
         }
     }
 
-    if ( scalar @no_mx_set ){
-        unless ( $zone->name eq '.' or $zone->name->next_higher() eq '.' or $zone->name =~ /\.arpa/ ){
+    elsif ( scalar @no_mx_set ){
+        unless ( $zone->name eq '.' or $zone->name->next_higher eq '.' or $zone->name =~ /\.arpa$/ ){
             push @results, info( Z09_MISSING_MAIL_TARGET => {} );
         }
     }
