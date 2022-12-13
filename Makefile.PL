@@ -32,7 +32,7 @@ requires 'Net::DNS'           => 0;
 requires 'Net::IP::XS'        => 0.21;
 requires 'Readonly'           => 0;
 requires 'Text::CSV'          => 0;
-requires 'Zonemaster::LDNS'   => 2.002002;
+requires 'Zonemaster::LDNS'   => 3.000000;
 
 test_requires 'Pod::Coverage'     => 0;
 test_requires 'Test::Differences' => 0;
