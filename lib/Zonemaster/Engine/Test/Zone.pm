@@ -339,7 +339,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     Z01_MNAME_MISSING_SOA_RECORD => sub {
         __x    # ZONE:Z01_MNAME_MISSING_SOA_RECORD
-          'SOA MNAME name server "{ns}" reponds to an SOA query with no SOA records in the answer section.', @_;
+          'SOA MNAME name server "{ns}" responds to an SOA query with no SOA records in the answer section.', @_;
     },
     Z01_MNAME_NO_RESPONSE => sub {
         __x    # ZONE:Z01_MNAME_NO_RESPONSE

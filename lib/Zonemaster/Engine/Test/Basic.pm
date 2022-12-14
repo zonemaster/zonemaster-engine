@@ -154,11 +154,11 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     B04_MISSING_NS_RECORD => sub {
         __x    # BASIC:B04_MISSING_NS_RECORD
-          'Nameserver {ns} reponds to a NS query with no NS records in the answer section.', @_;
+          'Nameserver {ns} responds to a NS query with no NS records in the answer section.', @_;
     },
     B04_MISSING_SOA_RECORD => sub {
         __x    # BASIC:B04_MISSING_SOA_RECORD
-          'Nameserver {ns} reponds to a SOA query with no SOA records in the answer section.', @_;
+          'Nameserver {ns} responds to a SOA query with no SOA records in the answer section.', @_;
     },
     B04_NO_RESPONSE => sub {
         __x    # BASIC:B04_NO_RESPONSE
