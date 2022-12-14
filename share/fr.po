@@ -21,7 +21,8 @@ msgstr ""
 "le nom de domaine. Utiliser plutôt seulement des minuscules."
 
 msgid "Domain name is too long (more than 253 characters with no final dot)."
-msgstr "Le nom de domaine est trop long (plus de 253 sans le point final)."
+msgstr ""
+"Le nom de domaine est trop long (plus de 253 caractères sans le point final)."
 
 msgid "Domain name is empty."
 msgstr "Le nom de domaine est vide."
@@ -889,7 +890,7 @@ msgstr "Vérification pour un trop grand nombre d'itérations NSEC3"
 #. DNSSEC:DNSSEC04
 msgid "Check for too short or too long RRSIG lifetimes"
 msgstr ""
-"Vérification pour des durée de vie des RRSIG trop courtes ou trop longues"
+"Vérification pour des durées de vie des RRSIG trop courtes ou trop longues"
 
 #. DNSSEC:DNSSEC05
 msgid "Check for invalid DNSKEY algorithms"
@@ -902,7 +903,7 @@ msgstr "Vérification du traitement des données additionnelles DNSSEC"
 #. DNSSEC:DNSSEC07
 msgid "If DNSKEY at child, parent should have DS"
 msgstr ""
-"Si un enregistrement DNSKEY est présent dans la zone enfant, la zone parent "
+"Si un enregistrement DNSKEY est présent dans la zone enfant, la zone parente "
 "doit avoir un DS"
 
 #. DNSSEC:DNSSEC08
@@ -931,7 +932,7 @@ msgstr "Tous les algorithmes des DNSKEY sont utilisés pour signer la zone"
 
 #. DNSSEC:DNSSEC14
 msgid "Check for valid RSA DNSKEY key size"
-msgstr "Vérification du la validité de la taille de la clé RSA dans les DNSKEY"
+msgstr "Vérification de la validité de la taille de la clé RSA dans les DNSKEY"
 
 #. DNSSEC:DNSSEC15
 msgid "Existence of CDS and CDNSKEY"
@@ -2380,7 +2381,7 @@ msgstr "Les NS peuvent être résolus"
 #. NAMESERVER:NAMESERVER07
 msgid "To check whether authoritative name servers return an upward referral"
 msgstr ""
-"Vérifier si les serveurs de noms faisant autorité répondent aux requête de "
+"Vérifier si les serveurs de noms faisant autorité répondent aux requêtes de "
 "type \"NS\" sur la racine '.' (upward referral)."
 
 #. NAMESERVER:NAMESERVER08
@@ -2771,7 +2772,7 @@ msgstr "Le nom de domaine ne contient aucun caractère interdit."
 
 #. SYNTAX:SYNTAX02
 msgid "No hyphen ('-') at the start or end of the domain name"
-msgstr "Aucun de tiret ('-') au début ou à la fin du nom de domaine"
+msgstr "Aucun tiret ('-') au début ou à la fin du nom de domaine"
 
 #. SYNTAX:SYNTAX03
 msgid ""
@@ -3237,8 +3238,8 @@ msgstr ""
 #, perl-brace-format
 msgid "SOA MNAME name server(s) \"{ns_list}\" appears to be master."
 msgstr ""
-"Le(s) serveur(s) de noms {ns_list} du MNAME du SOA semblent être les "
-"serveurs maître."
+"Le(s) serveur(s) de noms \"{ns_list}\" du MNAME du SOA semblent être les "
+"serveurs maîtres."
 
 #. ZONE:Z01_MNAME_MISSING_SOA_RECORD
 #, perl-brace-format
@@ -3254,14 +3255,14 @@ msgstr ""
 #, perl-brace-format
 msgid "SOA MNAME name server \"{ns}\" does not respond to an SOA query."
 msgstr ""
-"Le serveur de noms du MNAME du SOA {ns} ne répond pas aux requêtes de type "
-"\"SOA\"."
+"Le serveur de noms du MNAME du SOA \"{ns}\" ne répond pas aux requêtes de "
+"type \"SOA\"."
 
 #. ZONE:Z01_MNAME_NOT_AUTHORITATIVE
 #, perl-brace-format
 msgid "SOA MNAME name server \"{ns}\" is not authoritative for the zone."
 msgstr ""
-"Le serveur maître défini dans le SOA, 'mname' {ns}, ne fait pas autorité "
+"Le serveur maître défini dans le SOA, 'mname' \"{ns}\", ne fait pas autorité "
 "pour la zone."
 
 #. ZONE:Z01_MNAME_NOT_IN_NS_LIST
@@ -3278,9 +3279,9 @@ msgid ""
 "SOA MNAME name server(s) \"{ns_list}\" do not have the highest SOA SERIAL "
 "(expected \"{soaserial}\" but got \"{soaserial_list}\")"
 msgstr ""
-"Le(s) serveur(s) {ns_list} du MNAME du SOA n’ont pas le numéro de série SOA "
-"le plus élevé (numéro de série attendu : \"{soaserial}\" ; numéros de série "
-"obtenus : \"{soaserial_list}\")."
+"Le(s) serveur(s) \"{ns_list}\" du MNAME du SOA n’ont pas le numéro de série "
+"SOA le plus élevé (numéro de série attendu : \"{soaserial}\" ; numéros de "
+"série obtenus : \"{soaserial_list}\")."
 
 #. ZONE:Z01_MNAME_NOT_RESOLVE
 #, perl-brace-format
@@ -3296,8 +3297,8 @@ msgid ""
 "SOA MNAME name server \"{ns}\" gives unexpected RCODE name (\"{rcode}\") in "
 "response to an SOA query."
 msgstr ""
-"Le serveur de noms du MNAME du SOA {ns} a répondu à une requête de type \"SOA"
-"\" avec un code retour inattendu ({rcode})."
+"Le serveur de noms du MNAME du SOA \"{ns}\" a répondu à une requête de type "
+"\"SOA\" avec un code de retour inattendu ({rcode})."
 
 #. ZONE:Z09_INCONSISTENT_MX
 msgid "Some name servers return an MX RRset while others return none."
@@ -3329,7 +3330,7 @@ msgstr ""
 msgid "MX RRset was returned by name servers \"{ns_ip_list}\"."
 msgstr ""
 "Un ensemble d’enregistrements MX a été obtenu des serveurs de noms "
-"{ns_ip_list}."
+"\"{ns_ip_list}\"."
 
 #. ZONE:Z09_NON_AUTH_MX_RESPONSE
 #, perl-brace-format
