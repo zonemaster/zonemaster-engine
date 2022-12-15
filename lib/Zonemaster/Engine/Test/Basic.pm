@@ -152,54 +152,6 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # BASIC:A_QUERY_NO_RESPONSES
           'Nameservers did not respond to A query.';
     },
-    B04_MISSING_NS_RECORD => sub {
-        __x    # BASIC:B04_MISSING_NS_RECORD
-          'Nameserver {ns} responds to a NS query with no NS records in the answer section.', @_;
-    },
-    B04_MISSING_SOA_RECORD => sub {
-        __x    # BASIC:B04_MISSING_SOA_RECORD
-          'Nameserver {ns} responds to a SOA query with no SOA records in the answer section.', @_;
-    },
-    B04_NO_RESPONSE => sub {
-        __x    # BASIC:B04_NO_RESPONSE
-          'Nameserver {ns} does not respond over neither UDP nor TCP.', @_;
-    },
-    B04_NO_RESPONSE_NS_QUERY => sub {
-        __x    # BASIC:B04_NO_RESPONSE_NS_QUERY
-          'Nameserver {ns} does not respond to NS queries.', @_;
-    },
-    B04_NO_RESPONSE_SOA_QUERY => sub {
-        __x    # BASIC:B04_NO_RESPONSE_SOA_QUERY
-          'Nameserver {ns} does not respond to SOA queries.', @_;
-    },
-    B04_NS_RECORD_NOT_AA => sub {
-        __x    # BASIC:B04_NS_RECORD_NOT_AA
-          'Nameserver {ns} does not give an authoritative response on an NS query.', @_;
-    },
-    B04_RESPONSE_TCP_NOT_UDP => sub {
-        __x    # BASIC:B04_RESPONSE_TCP_NOT_UDP
-          'Nameserver {ns} does not respond over UDP.', @_;
-    },
-    B04_SOA_RECORD_NOT_AA => sub {
-        __x    # BASIC:B04_SOA_RECORD_NOT_AA
-          'Nameserver {ns} does not give an authoritative response on an SOA query.', @_;
-    },
-    B04_UNEXPECTED_RCODE_NS_QUERY => sub {
-        __x    # BASIC:B04_UNEXPECTED_RCODE_NS_QUERY
-          'Nameserver {ns} responds with an unexpected RCODE ({rcode}) on an NS query.', @_;
-    },
-    B04_UNEXPECTED_RCODE_SOA_QUERY => sub {
-        __x    # BASIC:B04_UNEXPECTED_RCODE_SOA_QUERY
-          'Nameserver {ns} responds with an unexpected RCODE ({rcode}) on an SOA query.', @_;
-    },
-    B04_WRONG_NS_RECORD => sub {
-        __x    # BASIC:B04_WRONG_NS_RECORD
-          'Nameserver {ns} responds with a wrong owner name ({owner} instead of {name}) on NS queries.', @_;
-    },
-    B04_WRONG_SOA_RECORD => sub {
-        __x    # BASIC:B04_WRONG_SOA_RECORD
-          'Nameserver {ns} responds with a wrong owner name ({owner} instead of {name}) on SOA queries.', @_;
-    },
     DOMAIN_NAME_LABEL_TOO_LONG => sub {
         __x    # BASIC:DOMAIN_NAME_LABEL_TOO_LONG
           'Domain name ({domain}) has a label ({label}) too long ({dlength}/{max}).', @_;
