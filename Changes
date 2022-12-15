@@ -22,6 +22,7 @@ v4.6.0 2022-12-19 (public release version)
    DEBUG level (#1102, #1117)
 
  [Fixes]
+ - Fixes typo in message and removes zombie messages for Basic04 (#1168)
  - Updates installation instructions (#1162, #1130)
  - Cleanup system messages (#1142, #1164)
  - Fixes Nameserver10 EDNS query (#1160)
