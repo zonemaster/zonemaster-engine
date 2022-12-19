@@ -180,9 +180,9 @@ msgstr ""
 #. BASIC:DOMAIN_NAME_LABEL_TOO_LONG
 #, perl-brace-format
 msgid ""
-"Domain name ({domain}) has a label ({dlabel}) too long ({dlength}/{max})."
+"Domain name ({domain}) has a label ({label}) too long ({dlength}/{max})."
 msgstr ""
-"Le nom de domaine '{domain}' a un label ({dlabel}) trop long ({dlength}/"
+"Le nom de domaine '{domain}' a un label ({label}) trop long ({dlength}/"
 "{max})."
 
 #. BASIC:DOMAIN_NAME_TOO_LONG
@@ -2459,10 +2459,10 @@ msgstr ""
 #. ZONE:RETRY_MINIMUM_VALUE_OK
 #, perl-brace-format
 msgid ""
-"SOA 'retry' value ({retry}) is more than the minimum recommended value "
-"({required_retry})."
+"SOA 'retry' value ({retry}) is at least equal to the minimum recommended "
+"value ({required_retry})."
 msgstr ""
-"Dans le SOA, la valeur du champ 'retry' ({retry}) est plus grande que la "
+"Dans le SOA, la valeur du champ 'retry' ({retry}) est au moins égale à la "
 "valeur minimale recommandée ({required_retry})."
 
 #. ZONE:MNAME_NO_RESPONSE
@@ -2509,11 +2509,11 @@ msgstr ""
 #. ZONE:REFRESH_MINIMUM_VALUE_OK
 #, perl-brace-format
 msgid ""
-"SOA 'refresh' value ({refresh}) is higher than the minimum recommended value "
-"({required_refresh})."
+"SOA 'refresh' value ({refresh}) is at least equal to the minimum recommended "
+"value ({required_refresh})."
 msgstr ""
-"Dans le SOA, la valeur du champ 'refresh' ({refresh}) est plus grande que la "
-"valeur minimale recommandée ({required_refresh})."
+"Dans le SOA, la valeur du champ 'refresh' ({refresh}) est au moins égale à "
+"la valeur minimale recommandée ({required_refresh})."
 
 #. ZONE:EXPIRE_LOWER_THAN_REFRESH
 #, perl-brace-format

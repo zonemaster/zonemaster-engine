@@ -23,6 +23,7 @@ Zonemaster-*.tar.gz
 # Backup files from editor, by unknown and Emacs, respectively
 *.bak
 *~
+.*.swp
 
 # Unknown
 dev.pl

@@ -149,6 +149,38 @@ sub metadata {
 } ## end sub metadata
 
 Readonly my %TAG_DESCRIPTIONS => (
+    SYNTAX01 => sub {
+        __x    # SYNTAX:SYNTAX01
+          'No illegal characters in the domain name', @_;
+    },
+    SYNTAX02 => sub {
+        __x    # SYNTAX:SYNTAX02
+          'No hyphen (\'-\') at the start or end of the domain name', @_;
+    },
+    SYNTAX03 => sub {
+        __x    # SYNTAX:SYNTAX03
+          'There must be no double hyphen (\'--\') in position 3 and 4 of the domain name', @_;
+    },
+    SYNTAX04 => sub {
+        __x    # SYNTAX:SYNTAX04
+          'The NS name must have a valid domain/hostname', @_;
+    },
+    SYNTAX05 => sub {
+        __x    # SYNTAX:SYNTAX05
+          'Misuse of \'@\' character in the SOA RNAME field', @_;
+    },
+    SYNTAX06 => sub {
+        __x    # SYNTAX:SYNTAX06
+          'No illegal characters in the SOA RNAME field', @_;
+    },
+    SYNTAX07 => sub {
+        __x    # SYNTAX:SYNTAX07
+          'No illegal characters in the SOA MNAME field', @_;
+    },
+    SYNTAX08 => sub {
+        __x    # SYNTAX:SYNTAX08
+          'MX name must have a valid hostname', @_;
+    },
     DISCOURAGED_DOUBLE_DASH => sub {
         __x    # SYNTAX:DISCOURAGED_DOUBLE_DASH
           'Domain name ({domain}) has a label ({label}) with a double hyphen (\'--\') '
@@ -299,6 +331,35 @@ sub tag_descriptions {
 
 sub version {
     return "$Zonemaster::Engine::Test::Syntax::VERSION";
+}
+
+sub _ip_disabled_message {
+    my ( $results_array, $ns, @rrtypes ) = @_;
+
+    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
+        push @$results_array, map {
+          info(
+            IPV6_DISABLED => {
+                ns     => $ns->string,
+                rrtype => $_
+            }
+          )
+        } @rrtypes;
+        return 1;
+    }
+
+    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
+        push @$results_array, map {
+          info(
+            IPV4_DISABLED => {
+                ns     => $ns->string,
+                rrtype => $_,
+            }
+          )
+        } @rrtypes;
+        return 1;
+    }
+    return 0;
 }
 
 ###
@@ -456,32 +517,10 @@ sub syntax06 {
         @nss = sort values %nss;
     }
 
-    my $resolver = Zonemaster::Engine->ns( 'google-public-dns-a.google.com', '8.8.8.8' );
-
     my %seen_rnames;
     for my $ns ( @nss ) {
 
-        if ( not Zonemaster::Engine::Profile->effective->get( q{net.ipv6} ) and $ns->address->version == $IP_VERSION_6 )
-        {
-            push @results,
-              info(
-                IPV6_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => q{SOA},
-                }
-              );
-            next;
-        }
-
-        if ( not Zonemaster::Engine::Profile->effective->get( q{net.ipv4} ) and $ns->address->version == $IP_VERSION_4 )
-        {
-            push @results,
-              info(
-                IPV4_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => q{SOA},
-                }
-              );
+        if ( _ip_disabled_message( \@results, $ns, q{SOA} ) ) {
             next;
         }
 
@@ -520,7 +559,7 @@ sub syntax06 {
         }
 
         my $domain = ( $rname =~ s/.*@//r );
-        my $p_mx = $resolver->query( $domain, q{MX}, { recurse => 1 } );
+        my $p_mx = Zonemaster::Engine::Recursor->recurse( $domain, q{MX} );
         if ( not $p_mx or $p_mx->rcode ne 'NOERROR' ) {
             push @results, info( RNAME_MAIL_DOMAIN_INVALID => { domain => $domain } );
             next;
@@ -547,7 +586,7 @@ sub syntax06 {
             my $exchange_valid = 0;
 
             # Lookup IPv4 address for mail server
-            my $p_a = $resolver->query( $mail_domain, q{A}, { recurse => 1 } );
+            my $p_a = Zonemaster::Engine::Recursor->recurse( $mail_domain, q{A} );
             if ( $p_a ) {
                 if ( $p_a->get_records( q{CNAME}, q{answer} ) ) {
                     push @results, info( RNAME_MAIL_ILLEGAL_CNAME => { domain => $mail_domain } );
@@ -565,7 +604,7 @@ sub syntax06 {
             }
 
             # Lookup IPv6 address for mail domain
-            my $p_aaaa = $resolver->query( $mail_domain, q{AAAA}, { recurse => 1 } );
+            my $p_aaaa = Zonemaster::Engine::Recursor->recurse( $mail_domain, q{AAAA} );
             if ( $p_aaaa ) {
                 if ( $p_aaaa->get_records( q{CNAME}, q{answer} ) ) {
                     push @results, info( RNAME_MAIL_ILLEGAL_CNAME => { domain => $mail_domain } );

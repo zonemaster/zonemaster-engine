@@ -238,7 +238,7 @@ sub all {
         if ( Zonemaster::Engine::Util::should_run_test( q{dnssec05} ) ) {
             push @results, $class->dnssec05( $zone );
         }
-    
+
         if ( grep { $_->tag eq q{DNSKEY_BUT_NOT_DS} or $_->tag eq q{DNSKEY_AND_DS} } @results ) {
             if ( Zonemaster::Engine::Util::should_run_test( q{dnssec06} ) ) {
                 push @results, $class->dnssec06( $zone );
@@ -311,7 +311,6 @@ sub metadata {
               DS01_DS_ALGO_2_MISSING
               DS01_DS_ALGO_NOT_DS
               DS01_DS_ALGO_RESERVED
-              DS01_DS_ALGO_SHA1_DEPRECATED
               TEST_CASE_END
               TEST_CASE_START
               )
@@ -321,9 +320,11 @@ sub metadata {
               DS02_ALGO_NOT_SUPPORTED_BY_ZM
               DS02_DNSKEY_NOT_FOR_ZONE_SIGNING
               DS02_DNSKEY_NOT_SEP
+              DS02_DNSKEY_NOT_SIGNED_BY_ANY_DS
               DS02_NO_DNSKEY_FOR_DS
               DS02_NO_MATCHING_DNSKEY_RRSIG
               DS02_NO_MATCH_DS_DNSKEY
+              DS02_NO_VALID_DNSKEY_FOR_ANY_DS
               DS02_RRSIG_NOT_VALID_BY_DNSKEY
               )
         ],
@@ -512,6 +513,78 @@ sub metadata {
 } ## end sub metadata
 
 Readonly my %TAG_DESCRIPTIONS => (
+    DNSSEC01 => sub {
+        __x    # DNSSEC:DNSSEC01
+          "Legal values for the DS hash digest algorithm", @_;
+    },
+    DNSSEC02 => sub {
+        __x    # DNSSEC:DNSSEC02
+          "DS must match a valid DNSKEY in the child zone", @_;
+    },
+    DNSSEC03 => sub {
+        __x    # DNSSEC:DNSSEC03
+          "Check for too many NSEC3 iterations", @_;
+    },
+    DNSSEC04 => sub {
+        __x    # DNSSEC:DNSSEC04
+          "Check for too short or too long RRSIG lifetimes", @_;
+    },
+    DNSSEC05 => sub {
+        __x    # DNSSEC:DNSSEC05
+          "Check for invalid DNSKEY algorithms", @_;
+    },
+    DNSSEC06 => sub {
+        __x    # DNSSEC:DNSSEC06
+          "Verify DNSSEC additional processing", @_;
+    },
+    DNSSEC07 => sub {
+        __x    # DNSSEC:DNSSEC07
+          "If DNSKEY at child, parent should have DS", @_;
+    },
+    DNSSEC08 => sub {
+        __x    # DNSSEC:DNSSEC08
+          "Valid RRSIG for DNSKEY", @_;
+    },
+    DNSSEC09 => sub {
+        __x    # DNSSEC:DNSSEC09
+          "RRSIG(SOA) must be valid and created by a valid DNSKEY", @_;
+    },
+    DNSSEC10 => sub {
+        __x    # DNSSEC:DNSSEC10
+          "Zone contains NSEC or NSEC3 records", @_;
+    },
+    DNSSEC11 => sub {
+        __x    # DNSSEC:DNSSEC11
+          "DS in delegation requires signed zone", @_;
+    },
+    DNSSEC12 => sub {
+        __x    # DNSSEC:DNSSEC12
+          "Test for DNSSEC Algorithm Completeness", @_;
+    },
+    DNSSEC13 => sub {
+        __x    # DNSSEC:DNSSEC13
+          "All DNSKEY algorithms used to sign the zone", @_;
+    },
+    DNSSEC14 => sub {
+        __x    # DNSSEC:DNSSEC14
+          "Check for valid RSA DNSKEY key size", @_;
+    },
+    DNSSEC15 => sub {
+        __x    # DNSSEC:DNSSEC15
+          "Existence of CDS and CDNSKEY", @_;
+    },
+    DNSSEC16 => sub {
+        __x    # DNSSEC:DNSSEC16
+          "Validate CDS", @_;
+    },
+    DNSSEC17 => sub {
+        __x    # DNSSEC:DNSSEC17
+          "Validate CDNSKEY", @_;
+    },
+    DNSSEC18 => sub {
+        __x    # DNSSEC:DNSSEC18
+          "Validate trust from DS to CDS and CDNSKEY ", @_;
+    },
     ADDITIONAL_DNSKEY_SKIPPED => sub {
         __x    # DNSSEC:ADDITIONAL_DNSKEY_SKIPPED
           'No DNSKEYs found. Additional tests skipped.', @_;
@@ -603,7 +676,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     DS01_DS_ALGO_2_MISSING => sub {
         __x    # DNSSEC:DS01_DS_ALGO_2_MISSING
-           'Digest algorithm 2 (SHA-256) is expected but missing for zone {domain}.',
+           'No DS record created by digest algorithm 2 (SHA-256) is present for zone {domain}.',
         @_;
     },
     DS01_DS_ALGO_NOT_DS => sub {
@@ -617,13 +690,6 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # DNSSEC:DS01_DS_ALGO_RESERVED
           'DS record for zone {domain} with keytag {keytag} was created with an unassigned digest algorithm '
           . '(algorithm number {ds_algo_num}). '
-          . 'Fetched from the nameservers with IP addresses "{ns_ip_list}".',
-          @_;
-    },
-    DS01_DS_ALGO_SHA1_DEPRECATED => sub {
-        __x    # DNSSEC:DS01_DS_ALGO_SHA1_DEPRECATED
-          'DS record for zone {domain} with keytag {keytag} was created by digest algorithm {ds_algo_num} '
-          . '({ds_algo_mnemo}). While still being widely in use, it is deprecated. '
           . 'Fetched from the nameservers with IP addresses "{ns_ip_list}".',
           @_;
     },
@@ -648,6 +714,12 @@ Readonly my %TAG_DESCRIPTIONS => (
           . 'the nameservers with IP addresses "{ns_ip_list}".',
           @_;
     },
+    DS02_DNSKEY_NOT_SIGNED_BY_ANY_DS => sub {
+        __x    # DNSSEC:DS02_DNSKEY_NOT_SIGNED_BY_ANY_DS
+          'The DNSKEY RRset has not been signed by any DNSKEY matched by a DS record. '
+          . 'Fetched from the nameservers with IP addresses "{ns_ip_list}".',
+          @_;
+    },
     DS02_NO_DNSKEY_FOR_DS => sub {
         __x    # DNSSEC:DS02_NO_DNSKEY_FOR_DS
           'The DNSKEY record with tag {keytag} that the DS refers to does not '
@@ -665,7 +737,13 @@ Readonly my %TAG_DESCRIPTIONS => (
     DS02_NO_MATCH_DS_DNSKEY => sub {
         __x    # DNSSEC:DS02_NO_MATCH_DS_DNSKEY
           'The DS record does not match the DNSKEY with tag {keytag} by algorithm '
-           . 'or digest. Fetched from the nameservers with IP "{ns_ip_list}".',
+          . 'or digest. Fetched from the nameservers with IP "{ns_ip_list}".',
+          @_;
+    },
+    DS02_NO_VALID_DNSKEY_FOR_ANY_DS => sub {
+        __x    # DNSSEC:DS02_NO_VALID_DNSKEY_FOR_ANY_DS
+          'There is no valid DNSKEY matched by any of the DS records. '
+          . 'Fetched from the nameservers with IP addresses "{ns_ip_list}".',
           @_;
     },
     DS02_RRSIG_NOT_VALID_BY_DNSKEY => sub {
@@ -1221,6 +1299,35 @@ sub version {
     return "$Zonemaster::Engine::Test::DNSSEC::VERSION";
 }
 
+sub _ip_disabled_message {
+    my ( $results_array, $ns, @rrtypes ) = @_;
+
+    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
+        push @$results_array, map {
+          info(
+            IPV6_DISABLED => {
+                ns     => $ns->string,
+                rrtype => $_
+            }
+          )
+        } @rrtypes;
+        return 1;
+    }
+
+    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
+        push @$results_array, map {
+          info(
+            IPV4_DISABLED => {
+                ns     => $ns->string,
+                rrtype => $_,
+            }
+          )
+        } @rrtypes;
+        return 1;
+    }
+    return 0;
+}
+
 ###
 ### Tests
 ###
@@ -1248,25 +1355,7 @@ sub dnssec01 {
                 $ns_ip = $ns->address->short;
             }
 
-            if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
-                push @results,
-                  info(
-                    IPV6_DISABLED => {
-                        ns     => $ns->string,
-                        rrtype => q{DS},
-                    }
-                  );
-                next;
-            }
-
-            if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
-                push @results,
-                  info(
-                    IPV4_DISABLED => {
-                        ns     => $ns->string,
-                        rrtype => q{DS},
-                    }
-                  );
+            if ( _ip_disabled_message( \@results, $ns, q{DS} ) ) {
                 next;
             }
 
@@ -1275,7 +1364,7 @@ sub dnssec01 {
             if ( not $ds_p or $ds_p->rcode ne q{NOERROR} or not $ds_p->has_edns or not $ds_p->do or not $ds_p->aa ) {
                 next;
             }
-                
+
             my @dss = $ds_p->get_records( q{DS}, q{answer} );
 
             my $can_continue = 0;
@@ -1312,19 +1401,7 @@ sub dnssec01 {
                             }
                           );
                     }
-                    elsif ( $ds_digtype == 1 ) {
-                        push @results,
-                          info(
-                            DS01_DS_ALGO_SHA1_DEPRECATED => {
-                                ns_ip_list    => join( q{;}, uniq sort @{ $ds_records{$ds_digtype}->{$ds_keytag} } ),
-                                domain        => q{} . $zone->name,
-                                keytag        => $ds_keytag,
-                                ds_algo_num   => $ds_digtype,
-                                ds_algo_mnemo => $mnemonic,
-                            }
-                          );
-                    }
-                    elsif ( $ds_digtype == 3 ) {
+                    elsif ( $ds_digtype == 1 or $ds_digtype == 3 ) {
                         push @results,
                           info(
                             DS01_DS_ALGO_DEPRECATED => {
@@ -1366,7 +1443,7 @@ sub dnssec01 {
                     else{
                         my $tmp_dnskey = Zonemaster::LDNS::RR->new( sprintf( '%s IN DNSKEY 256 3 13 gpqeIK2jbErZDUYZplEVOOo86PWm0KEkHtA4uZ1LSLGLJbzG7VTUcuVt dkDeIz/5+I5gtZMU0z5YW5a5r+KBRw==', $zone->name ) );
                         my $tmp_ds = $tmp_dnskey->ds( $LDNS_digest_algorithms_supported{$ds_digtype} );
-                        
+
                         if ( not $tmp_ds ){
                             push @results,
                               info(
@@ -1400,6 +1477,7 @@ sub dnssec01 {
 sub dnssec02 {
     my ( $self, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+    
     my @ds_record;
     my %no_dnskey_for_ds;
     my %no_match_ds_dnskey;
@@ -1408,6 +1486,12 @@ sub dnssec02 {
     my %no_matching_dnskey_rrsig;
     my %algo_not_supported_by_zm;
     my %rrsig_not_valid_by_dnskey;
+    my %responding_child_ns;
+    my %dnskey_matching_ds;
+    my %has_dnskey_match_ds;
+    my %has_rrsig_match_ds;
+    my @ns_dnskey;
+    my @ns_rrsig;
     my $continue_with_child_tests = 1;
 
     my $parent     = Zonemaster::Engine::TestMethods->method1( $zone );
@@ -1417,31 +1501,14 @@ sub dnssec02 {
 
     for my $nss_key ( sort keys %nss ) {
         my $ns = $nss{$nss_key};
-    
+
         next if exists $ip_already_processed{$ns->address->short};
         $ip_already_processed{$ns->address->short} = 1;
 
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
-            push @results,
-              info(
-                IPV6_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => q{DS}
-                }
-              );
+        if ( _ip_disabled_message( \@results, $ns, q{DS} ) ) {
             next;
         }
 
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
-            push @results,
-              info(
-                IPV4_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => q{DS}
-                }
-              );
-            next;
-        }
         my $ds_p = $ns->query( $zone->name, q{DS}, { dnssec => 1 } );
         if ( not $ds_p or $ds_p->rcode ne q{NOERROR} or not $ds_p->has_edns or not $ds_p->do or not $ds_p->aa) {
             next;
@@ -1483,25 +1550,7 @@ sub dnssec02 {
             next if exists $ip_already_processed{$ns->address->short};
             $ip_already_processed{$ns->address->short} = 1;
 
-            if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
-                push @results,
-                  info(
-                    IPV6_DISABLED => {
-                        ns     => $ns->string,
-                        rrtype => q{DNSKEY}
-                    }
-                  );
-                next;
-            }
-
-            if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
-                push @results,
-                  info(
-                    IPV4_DISABLED => {
-                        ns     => $ns->string,
-                        rrtype => q{DNSKEY}
-                    }
-                  );
+            if ( _ip_disabled_message( \@results, $ns, q{DNSKEY} ) ) {
                 next;
             }
 
@@ -1513,7 +1562,12 @@ sub dnssec02 {
             if ( not scalar @dnskey_rrs ) {
                 next;
             }
+
+            $responding_child_ns{$ns->address->short} = 1;
+
             my @dnskey_rrsig = $dnskey_p->get_records_for_name( q{RRSIG}, $zone->name->string, q{answer} );
+
+            %dnskey_matching_ds = ();
 
             foreach my $ds ( @ds_record ) {
                 my $matching_dnskey = undef;
@@ -1550,16 +1604,20 @@ sub dnssec02 {
                     }
                     if ( not $matching_dnskey->flags & 256 ) { # Bit 7 (ZONE)
                         push @{ $dnskey_not_for_zone_signing{$ds->keytag} }, $ns->address->short;
+                        next;
                     }
                     if ( not $matching_dnskey->flags & 1 ) { # Bit 15 (SEP)
                         push @{ $dnskey_not_sep{$ds->keytag} }, $ns->address->short;
                     }
-                    my @matching_keytag_rrsigs = grep { $ds->keytag == $_->keytag } @dnskey_rrsig;
-                    if ( not scalar @matching_keytag_rrsigs ) {
-                        push @{ $no_matching_dnskey_rrsig{$ds->keytag} }, $ns->address->short;
-                    }
-                    else {
+
+                    $dnskey_matching_ds{$matching_dnskey} = $matching_dnskey->keytag;
+                    $has_dnskey_match_ds{$ns->address->short} = 1;
+
+                    foreach my $dnskey ( keys %dnskey_matching_ds ) {
+                        my @matching_keytag_rrsigs = grep { $dnskey_matching_ds{$dnskey} == $_->keytag } @dnskey_rrsig;
                         my $time = $dnskey_p->timestamp;
+                        my $found_match = 0;
+
                         foreach my $rrsig_record ( @matching_keytag_rrsigs ) {
                             my $msg = q{};
                             # Does not work if we have a list with just a DNSKEY
@@ -1572,12 +1630,23 @@ sub dnssec02 {
                             elsif ( not $validate ) {
                                 push @{ $rrsig_not_valid_by_dnskey{$rrsig_record->keytag} }, $ns->address->short;
                             }
+                            else {
+                                $found_match++;                                
+                            }
+                        }
+
+                        if ( not scalar @matching_keytag_rrsigs or not $found_match ) {
+                            push @{ $no_matching_dnskey_rrsig{$dnskey_matching_ds{$dnskey}} }, $ns->address->short;
+                        }
+                        else {
+                            $has_rrsig_match_ds{$ns->address->short} = 1;
                         }
                     }
                 }
             }
         }
     }
+
     if ( scalar keys %no_dnskey_for_ds ) {
         push @results, map {
           info(
@@ -1653,6 +1722,30 @@ sub dnssec02 {
         } keys %rrsig_not_valid_by_dnskey;
     }
 
+    foreach my $ns_ip ( keys %responding_child_ns ) {
+        push @ns_dnskey, $ns_ip if not exists $has_dnskey_match_ds{$ns_ip};
+        push @ns_rrsig, $ns_ip if not exists $has_rrsig_match_ds{$ns_ip};
+    }
+
+    if ( scalar @ns_dnskey ) {
+        push @results, 
+            info(
+              DS02_NO_VALID_DNSKEY_FOR_ANY_DS => {
+                ns_ip_list => join( q{;}, sort @ns_dnskey )
+              }
+            )
+    }
+    else {
+        if ( scalar @ns_rrsig ) {
+            push @results,
+              info(
+                DS02_DNSKEY_NOT_SIGNED_BY_ANY_DS => {
+                    ns_ip_list => join( q{;}, sort @ns_rrsig )
+                }
+              )
+        }
+    }
+
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub dnssec02
 
@@ -1720,7 +1813,7 @@ sub dnssec03 {
                       );
                 }
             } ## end if ( $iter > 100 )
-            elsif ( $min_len > 0 ) 
+            elsif ( $min_len > 0 )
             {
                 push @results,
                   info(
@@ -1839,25 +1932,7 @@ sub dnssec05 {
     for my $key ( sort keys %nss ) {
         my $ns = $nss{$key};
 
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
-            push @results,
-              info(
-                IPV6_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => q{DNSKEY},
-                }
-              );
-            next;
-        }
-
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
-            push @results,
-              info(
-                IPV4_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => q{DNSKEY},
-                }
-              );
+        if ( _ip_disabled_message( \@results, $ns, q{DNSKEY} ) ) {
             next;
         }
 
@@ -2037,25 +2112,7 @@ sub dnssec08 {
         next if exists $ip_already_processed{$ns->address->short};
         $ip_already_processed{$ns->address->short} = 1;
 
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
-            push @results,
-              info(
-                IPV6_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => q{DNSKEY}
-                }
-              );
-            next;
-        }
-
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
-            push @results,
-              info(
-                IPV4_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => q{DNSKEY}
-                }
-              );
+        if ( _ip_disabled_message( \@results, $ns, q{DNSKEY} ) ) {
             next;
         }
 
@@ -2192,25 +2249,7 @@ sub dnssec09 {
         next if exists $ip_already_processed{$ns->address->short};
         $ip_already_processed{$ns->address->short} = 1;
 
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
-            push @results,
-              info(
-                IPV6_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => q{DNSKEY}
-                }
-              );
-            next;
-        }
-
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
-            push @results,
-              info(
-                IPV4_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => q{DNSKEY}
-                }
-              );
+        if ( _ip_disabled_message( \@results, $ns, q{DNSKEY} ) ) {
             next;
         }
 
@@ -2372,27 +2411,7 @@ sub dnssec10 {
         next if exists $ip_already_processed{$ns->address->short};
         $ip_already_processed{$ns->address->short} = 1;
 
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
-            push @results, map {
-              info( 
-                IPV6_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => $_
-                }
-              )
-            } @query_types;
-            next;
-        }   
-
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
-            push @results, map {
-              info( 
-                IPV4_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => $_
-                }       
-              )
-            } @query_types;
+        if ( _ip_disabled_message( \@results, $ns, @query_types ) ) {
             next;
         }
 
@@ -2430,11 +2449,11 @@ sub dnssec10 {
         #       a. The "A" RRset has the same owner name as the query name, or
         #       b. There are one or more record of RR type "CNAME" chaining from
         #          the query name to the owner name of the "A" RRset.
-        #    c. The answer section has RRsig record or records in the answer 
+        #    c. The answer section has RRsig record or records in the answer
         #       section meeting the following criteria:
-        #       a. There is at least one RRsig for the "A" RRset in the answer 
+        #       a. There is at least one RRsig for the "A" RRset in the answer
         #          section.
-        #       b. If there are CNAME records in the answer section, then there 
+        #       b. If there are CNAME records in the answer section, then there
         #          is at least one RRsig for each CNAME record.
         #       c. None of the RRsig records are for a wildcard.
         #
@@ -2500,7 +2519,7 @@ sub dnssec10 {
         #    a. The The RCODE of response is "NoError".
         #    b. The answer section has one or more record of RR type "CNAME" in
         #       a chain where first record has the owner name matching the query name.
-        #    c. The answer section has RRsig record or records in the answer section 
+        #    c. The answer section has RRsig record or records in the answer section
         #       meeting the following criteria:
         #       a. There is at least one RRsig for each CNAME record.
         #       b. None of the RRsig records are for a wildcard.
@@ -2535,7 +2554,7 @@ sub dnssec10 {
             my $step_c = 0;
             if ( scalar @cname_records ) {
                 $step_c = 1;
-                my $cname_records_rrsig_ok = 0;    
+                my $cname_records_rrsig_ok = 0;
                 shift @owners;
                 foreach my $owner ( @owners ) {
                     if ( scalar grep { $_->typecovered eq q{CNAME} } $a_p->get_records_for_name( q{RRSIG}, $owner, q{answer} ) ) {
@@ -2563,17 +2582,17 @@ sub dnssec10 {
         }
         #----------------------------------------------------------------------
         # viii. If the answer section has any RRset of RR type "A" or "CNAME" do ("RRset"):
-        #    a. For each RRset in "RRset" add name server IP, RR type and owner name to the 
+        #    a. For each RRset in "RRset" add name server IP, RR type and owner name to the
         #       Unsigned Answer set if both criteria are true:
         #       a. There is no RRSIG record covering the owner name of the RRset.
-        #       b. There is no RRSIG record covering a wild card record whose owner name 
+        #       b. There is no RRSIG record covering a wild card record whose owner name
         #          covers the owner name of the RRset.
-        #    b. Go to next name server IP if any data was added to the Unsigned Answer set 
+        #    b. Go to next name server IP if any data was added to the Unsigned Answer set
         #       in the loop above.
-        #    c. For each RRset in RRset add name server IP, RR type and owner name to the 
-        #       Answer Verify Error set if its RRSIG cannot be verified by the corresponding 
+        #    c. For each RRset in RRset add name server IP, RR type and owner name to the
+        #       Answer Verify Error set if its RRSIG cannot be verified by the corresponding
         #       DNSKEY or DNSKEY is missing.
-        #    d. Go to next name server IP if any data was added to the Answer Verify Error 
+        #    d. Go to next name server IP if any data was added to the Answer Verify Error
         #       set in the loop above.
         #
         # Testing zones :
@@ -2855,7 +2874,7 @@ sub dnssec10 {
     if ( scalar keys %algo_not_supported_by_zm ) {
         foreach my $keytag ( keys %algo_not_supported_by_zm ) {
             push @results, map {
-              info( 
+              info(
                 DS10_ALGO_NOT_SUPPORTED_BY_ZM => {
                     keytag     => $keytag,
                     algo_num   => $_,
@@ -2883,31 +2902,22 @@ sub dnssec11 {
     my %nss        = map { $_->name->string . '/' . $_->address->short => $_ } @nss_parent;
     my %ip_already_processed;
 
+    my $is_undelegated = Zonemaster::Engine::Recursor->has_fake_addresses( $zone->name->string );
+
     for my $nss_key ( sort keys %nss ) {
         my $ns = $nss{$nss_key};
+
+        if ( $is_undelegated ){
+            if ( not $ns->fake_ds->{$zone->name->string} ){
+                return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+            }
+            last;
+        }
 
         next if exists $ip_already_processed{$ns->address->short};
         $ip_already_processed{$ns->address->short} = 1;
 
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
-            push @results,
-              info(
-                IPV6_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => q{DS} 
-                }
-              );
-            next;
-        }
-
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
-            push @results,
-              info(
-                IPV4_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => q{DS}
-                }
-              );
+        if ( _ip_disabled_message( \@results, $ns, q{DS} ) ) {
             next;
         }
 
@@ -2970,27 +2980,7 @@ sub dnssec11 {
             next if exists $ip_already_processed{$ns->address->short};
             $ip_already_processed{$ns->address->short} = 1;
 
-            if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
-                push @results, map {
-                  info(
-                    IPV6_DISABLED => {
-                        ns     => $ns->string,
-                        rrtype => $_
-                    }
-                  )
-                } @query_types;
-                next;
-            }
-
-            if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
-                push @results, map {
-                  info(
-                    IPV4_DISABLED => {
-                        ns     => $ns->string,
-                        rrtype => $_
-                    }
-                  )
-                } @query_types;
+            if ( _ip_disabled_message( \@results, $ns, @query_types ) ) {
                 next;
             }
 
@@ -3070,27 +3060,7 @@ sub dnssec13 {
         next if exists $ip_already_processed{$ns->address->short};
         $ip_already_processed{$ns->address->short} = 1;
 
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
-            push @results, map {
-              info(
-                IPV6_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => $_,
-                }
-              );
-            } @query_types;
-            next;
-        }
-
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
-            push @results, map {
-              info(
-                IPV4_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => $_,
-                }
-              )
-            } @query_types;
+        if ( _ip_disabled_message( \@results, $ns, @query_types ) ) {
             next;
         }
 
@@ -3157,25 +3127,7 @@ sub dnssec14 {
     for my $nss_key ( sort keys %nss ) {
         my $ns = $nss{$nss_key};
 
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
-            push @results,
-              info(
-                IPV6_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => q{DNSKEY},
-                }
-              );
-            next;
-        }
-
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
-            push @results,
-              info(
-                IPV4_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => q{DNSKEY},
-                }
-              );
+        if ( _ip_disabled_message( \@results, $ns, q{DNSKEY} ) ) {
             next;
         }
 
@@ -3196,7 +3148,7 @@ sub dnssec14 {
 
     my %investigated_keys;
     foreach my $key ( @dnskey_rrs ) {
-        my $algo = $key->algorithm;  
+        my $algo = $key->algorithm;
 
         next if not exists $rsa_key_size_details{$algo};
 
@@ -3259,27 +3211,7 @@ sub dnssec15 {
         next if exists $ip_already_processed{$ns->address->short};
         $ip_already_processed{$ns->address->short} = 1;
 
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
-            push @results, map {
-              info(
-                IPV6_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => $_,
-                }
-              )
-            } @query_types;
-            next;
-        }
-
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
-            push @results, map {
-              info(
-                IPV4_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => $_,
-                }
-              )
-            } @query_types;
+        if ( _ip_disabled_message( \@results, $ns, @query_types ) ) {
             next;
         }
 
@@ -3464,7 +3396,7 @@ sub dnssec15 {
               );
         }
     }
-    
+
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub dnssec15
 
@@ -3497,27 +3429,7 @@ sub dnssec16 {
         next if exists $ip_already_processed{$ns->address->short};
         $ip_already_processed{$ns->address->short} = 1;
 
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
-            push @results, map {
-              info(
-                IPV6_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => $_,
-                }
-              )
-            } @query_types;
-            next;
-        }
-
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
-            push @results, map {
-              info(
-                IPV4_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => $_,
-                }
-              )
-            } @query_types;
+        if ( _ip_disabled_message( \@results, $ns, @query_types ) ) {
             next;
         }
 
@@ -3767,27 +3679,7 @@ sub dnssec17 {
         next if exists $ip_already_processed{$ns->address->short};
         $ip_already_processed{$ns->address->short} = 1;
 
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
-            push @results, map {
-              info(
-                IPV6_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => $_,
-                }
-              )
-            } @query_types;
-            next;
-        }
-
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
-            push @results, map {
-              info(
-                IPV4_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => $_,
-                }
-              )
-            } @query_types;
+        if ( _ip_disabled_message( \@results, $ns, @query_types ) ) {
             next;
         }
 
@@ -4029,29 +3921,11 @@ sub dnssec18 {
 
     for my $nss_key ( sort keys %nss ) {
         my $ns = $nss{$nss_key};
-    
+
         next if exists $ip_already_processed{$ns->address->short};
         $ip_already_processed{$ns->address->short} = 1;
 
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
-            push @results,
-              info(
-                IPV6_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => q{DS}
-                }
-              );
-            next;
-        }
-
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
-            push @results,
-              info(
-                IPV4_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => q{DS}
-                }
-              );
+        if ( _ip_disabled_message( \@results, $ns, q{DS} ) ) {
             next;
         }
 
@@ -4097,27 +3971,7 @@ sub dnssec18 {
             next if exists $ip_already_processed{$ns->address->short};
             $ip_already_processed{$ns->address->short} = 1;
 
-            if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
-                push @results, map {
-                  info(
-                    IPV6_DISABLED => {
-                        ns     => $ns->string,
-                        rrtype => $_
-                    }
-                  )
-                } @query_types;
-                next;
-            }
-
-            if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
-                push @results, map {
-                  info(
-                    IPV4_DISABLED => {
-                        ns     => $ns->string,
-                        rrtype => $_
-                    }
-                  )
-                } @query_types;
+            if ( _ip_disabled_message( \@results, $ns, @query_types ) ) {
                 next;
             }
 

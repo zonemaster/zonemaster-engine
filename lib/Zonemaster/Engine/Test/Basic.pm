@@ -40,8 +40,6 @@ sub all {
     {
         push @results, $class->basic01( $zone );
 
-        push @results, $class->basic04( $zone );
-
         push @results, $class->basic02( $zone );
 
         # Perform BASIC3 if BASIC2 failed
@@ -126,87 +124,37 @@ sub metadata {
               TEST_CASE_START
               )
         ],
-        basic04 => [
-            qw(
-              B04_MISSING_NS_RECORD
-              B04_MISSING_SOA_RECORD
-              B04_NO_RESPONSE
-              B04_NO_RESPONSE_NS_QUERY
-              B04_NO_RESPONSE_SOA_QUERY
-              B04_NS_RECORD_NOT_AA
-              B04_RESPONSE_TCP_NOT_UDP
-              B04_SOA_RECORD_NOT_AA
-              B04_UNEXPECTED_RCODE_NS_QUERY
-              B04_UNEXPECTED_RCODE_SOA_QUERY
-              B04_WRONG_NS_RECORD
-              B04_WRONG_SOA_RECORD
-              IPV4_DISABLED
-              IPV4_ENABLED
-              IPV6_DISABLED
-              IPV6_ENABLED
-              TEST_CASE_END
-              TEST_CASE_START
-              )
-        ],
     };
 } ## end sub metadata
 
 Readonly my %TAG_DESCRIPTIONS => (
+    BASIC00 => sub {
+        __x    # BASIC:BASIC00
+          'Domain name must be valid', @_;
+    },
+    BASIC01 => sub {
+        __x    # BASIC:BASIC01
+          'The domain must have a parent domain', @_;
+    },
+    BASIC02 => sub {
+        __x    # BASIC:BASIC02
+          'The domain must have at least one working name server', @_;
+    },
+    BASIC03 => sub {
+        __x    # BASIC:BASIC03
+          'The Broken but functional test', @_;
+    },
+    BASIC04 => sub {
+        __x    # BASIC:BASIC04
+          'Test of basic nameserver and zone functionality', @_;
+    },
     A_QUERY_NO_RESPONSES => sub {
         __x    # BASIC:A_QUERY_NO_RESPONSES
           'Nameservers did not respond to A query.';
     },
-    B04_MISSING_NS_RECORD => sub {
-        __x    # BASIC:B04_MISSING_NS_RECORD
-          'Nameserver {ns} reponds to a NS query with no NS records in the answer section.', @_;
-    },
-    B04_MISSING_SOA_RECORD => sub {
-        __x    # BASIC:B04_MISSING_SOA_RECORD
-          'Nameserver {ns} reponds to a SOA query with no SOA records in the answer section.', @_;
-    },
-    B04_NO_RESPONSE => sub {
-        __x    # BASIC:B04_NO_RESPONSE
-          'Nameserver {ns} does not respond over neither UDP nor TCP.', @_;
-    },
-    B04_NO_RESPONSE_NS_QUERY => sub {
-        __x    # BASIC:B04_NO_RESPONSE_NS_QUERY
-          'Nameserver {ns} does not respond to NS queries.', @_;
-    },
-    B04_NO_RESPONSE_SOA_QUERY => sub {
-        __x    # BASIC:B04_NO_RESPONSE_SOA_QUERY
-          'Nameserver {ns} does not respond to SOA queries.', @_;
-    },
-    B04_NS_RECORD_NOT_AA => sub {
-        __x    # BASIC:B04_NS_RECORD_NOT_AA
-          'Nameserver {ns} does not give an authoritative response on an NS query.', @_;
-    },
-    B04_RESPONSE_TCP_NOT_UDP => sub {
-        __x    # BASIC:B04_RESPONSE_TCP_NOT_UDP
-          'Nameserver {ns} does not respond over UDP.', @_;
-    },
-    B04_SOA_RECORD_NOT_AA => sub {
-        __x    # BASIC:B04_SOA_RECORD_NOT_AA
-          'Nameserver {ns} does not give an authoritative response on an SOA query.', @_;
-    },
-    B04_UNEXPECTED_RCODE_NS_QUERY => sub {
-        __x    # BASIC:B04_UNEXPECTED_RCODE_NS_QUERY
-          'Nameserver {ns} responds with an unexpected RCODE ({rcode}) on an NS query.', @_;
-    },
-    B04_UNEXPECTED_RCODE_SOA_QUERY => sub {
-        __x    # BASIC:B04_UNEXPECTED_RCODE_SOA_QUERY
-          'Nameserver {ns} responds with an unexpected RCODE ({rcode}) on an SOA query.', @_;
-    },
-    B04_WRONG_NS_RECORD => sub {
-        __x    # BASIC:B04_WRONG_NS_RECORD
-          'Nameserver {ns} responds with a wrong owner name ({owner} instead of {name}) on NS queries.', @_;
-    },
-    B04_WRONG_SOA_RECORD => sub {
-        __x    # BASIC:B04_WRONG_SOA_RECORD
-          'Nameserver {ns} responds with a wrong owner name ({owner} instead of {name}) on SOA queries.', @_;
-    },
     DOMAIN_NAME_LABEL_TOO_LONG => sub {
         __x    # BASIC:DOMAIN_NAME_LABEL_TOO_LONG
-          'Domain name ({domain}) has a label ({dlabel}) too long ({dlength}/{max}).', @_;
+          'Domain name ({domain}) has a label ({label}) too long ({dlength}/{max}).', @_;
     },
     DOMAIN_NAME_TOO_LONG => sub {
         __x    # BASIC:DOMAIN_NAME_TOO_LONG
@@ -286,6 +234,61 @@ sub version {
     return "$Zonemaster::Engine::Test::Basic::VERSION";
 }
 
+sub _ip_disabled_message {
+    my ( $results_array, $ns, @rrtypes ) = @_;
+
+    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
+        push @$results_array, map {
+          info(
+            IPV4_DISABLED => {
+                ns     => $ns->string,
+                rrtype => $_,
+            }
+          )
+        } @rrtypes;
+        return 1;
+    }
+
+    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
+        push @$results_array, map {
+          info(
+            IPV6_DISABLED => {
+                ns     => $ns->string,
+                rrtype => $_,
+            }
+          )
+        } @rrtypes;
+        return 1;
+    }
+    return 0;
+}
+
+sub _ip_enabled_message {
+    my ( $results_array, $ns, @rrtypes ) = @_;
+
+    if ( Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
+        push @$results_array, map {
+          info(
+            IPV4_ENABLED => {
+                ns     => $ns->string,
+                rrtype => $_,
+            }
+          )
+        } @rrtypes;
+    }
+
+    if ( Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
+        push @$results_array, map {
+          info(
+            IPV6_ENABLED => {
+                ns     => $ns->string,
+                rrtype => $_,
+            }
+          )
+        } @rrtypes;
+    }
+}
+
 ###
 ### Tests
 ###
@@ -301,7 +304,7 @@ sub basic00 {
               info(
                 q{DOMAIN_NAME_LABEL_TOO_LONG} => {
                     domain  => "$name",
-                    dlabel  => $local_label,
+                    label  => $local_label,
                     dlength => length( $local_label ),
                     max     => $LABEL_MAX_LENGTH,
                 }
@@ -373,45 +376,10 @@ sub basic02 {
     }
 
     foreach my $ns ( @ns ) {
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
-            push @results,
-              info(
-                IPV4_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => $query_type,
-                }
-              );
+        if ( _ip_disabled_message( \@results, $ns, $query_type ) ) {
             next;
         }
-        elsif ( Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
-            push @results,
-              info(
-                IPV4_ENABLED => {
-                    ns     => $ns->string,
-                    rrtype => $query_type,
-                }
-              );
-        }
-
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
-            push @results,
-              info(
-                IPV6_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => $query_type,
-                }
-              );
-            next;
-        }
-        elsif ( Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
-            push @results,
-              info(
-                IPV6_ENABLED => {
-                    ns     => $ns->string,
-                    rrtype => $query_type,
-                }
-              );
-        }
+        _ip_enabled_message( \@results, $ns, $query_type );
 
         my $p = $ns->query( $zone->name, $query_type );
 
@@ -452,45 +420,10 @@ sub basic03 {
     my $name        = q{www.} . $zone->name;
     my $response_nb = 0;
     foreach my $ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) } ) {
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
-            push @results,
-              info(
-                IPV4_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => $query_type,
-                }
-              );
+        if ( _ip_disabled_message( \@results, $ns, $query_type ) ) {
             next;
         }
-        elsif ( Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
-            push @results,
-              info(
-                IPV4_ENABLED => {
-                    ns     => $ns->string,
-                    rrtype => $query_type,
-                }
-              );
-        }
-
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
-            push @results,
-              info(
-                IPV6_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => $query_type,
-                }
-              );
-            next;
-        }
-        elsif ( Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
-            push @results,
-              info(
-                IPV6_ENABLED => {
-                    ns     => $ns->string,
-                    rrtype => $query_type,
-                }
-              );
-        }
+        _ip_enabled_message( \@results, $ns, $query_type );
 
         my $p = $ns->query( $name, $query_type );
         next if not $p;
@@ -521,188 +454,6 @@ sub basic03 {
 
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub basic03
-
-sub basic04 {
-    my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
-    my $name = name( $zone );
-    my @query_types = qw{SOA NS};
-    my @ns = @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) };
-
-    foreach my $ns ( @ns ) {
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
-            push @results, map {
-              info(
-                IPV4_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => $_,
-                }
-              )
-            } @query_types;
-            next;
-        }
-        elsif ( Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
-            push @results, map {
-              info(
-                IPV4_ENABLED => {
-                    ns     => $ns->string,
-                    rrtype => $_,
-                }
-              )
-            } @query_types;
-        }
-
-
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
-            push @results, map {
-              info(
-                IPV6_DISABLED => {
-                    ns     => $ns->string,
-                    rrtype => $_,
-                }
-              )
-            } @query_types;
-            next;
-        }
-        elsif ( Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
-            push @results, map {
-              info(
-                IPV6_ENABLED => {
-                    ns     => $ns->string,
-                    rrtype => $_,
-                }
-              )
-            } @query_types;
-        }
-
-        my $p_soa_udp = $ns->query( $name, q{SOA}, { usevc => 0 } );
-        my $p_ns_udp  = $ns->query( $name, q{NS}, { usevc => 0 } );
-
-        if ( not $p_soa_udp and not $p_ns_udp ) {
-            my $p_soa_tcp = $ns->query( $name, q{SOA}, { usevc => 1 } );
-            if ( not $p_soa_tcp ) {
-                push @results,
-                  info(
-                    B04_NO_RESPONSE => {
-                        ns => $ns->string
-                    }
-                  );
-            }
-            else {
-                push @results,
-                  info(
-                    B04_RESPONSE_TCP_NOT_UDP => {
-                        ns => $ns->string
-                    }
-                  );
-            }
-        }
-        else {
-            if ( not $p_soa_udp ) {
-                push @results,
-                  info(
-                    B04_NO_RESPONSE_SOA_QUERY => {
-                        ns => $ns->string
-                    }
-                  );
-            }
-            else {
-                if ( $p_soa_udp->rcode ne q{NOERROR} ) {
-                    push @results,
-                      info(
-                        B04_UNEXPECTED_RCODE_SOA_QUERY => {
-                            ns => $ns->string,
-                            rcode => $p_soa_udp->rcode
-                        }
-                      );
-                }
-                else {
-                    my ( $soa ) = $p_soa_udp->get_records( q{SOA}, q{answer} );
-                    if ( not $soa ) {
-                        push @results,
-                          info(
-                            B04_MISSING_SOA_RECORD => {
-                                ns => $ns->string
-                            }
-                          );
-                    }
-                    else {
-                        if ( lc($soa->owner) ne lc($name->fqdn) ) {
-                            push @results,
-                              info(
-                                B04_WRONG_SOA_RECORD => {
-                                    ns    => $ns->string,
-                                    owner => lc($soa->owner),
-                                    name  => lc($name->fqdn)
-                                }
-                              );
-                        }
-                        elsif ( not $p_soa_udp->aa ) {
-                            push @results,
-                              info(
-                                B04_SOA_RECORD_NOT_AA => {
-                                    ns => $ns->string
-                                }
-                              );
-                        }
-                    }
-                }
-            }
-            if ( not $p_ns_udp ) {
-                push @results,
-                  info(
-                    B04_NO_RESPONSE_NS_QUERY => {
-                        ns => $ns->string
-                    }
-                  );
-            }
-            else {
-                if ( $p_ns_udp->rcode ne q{NOERROR} ) {
-                    push @results,
-                      info(
-                        B04_UNEXPECTED_RCODE_NS_QUERY => {
-                            ns    => $ns->string,
-                            rcode => $p_ns_udp->rcode
-                        }
-                      );
-                }
-                else {
-                    my ( $ns_in_answer ) = $p_ns_udp->get_records( q{NS}, q{answer} );
-                    if ( not $ns_in_answer ) {
-                        push @results,
-                          info(
-                            B04_MISSING_NS_RECORD => {
-                                ns => $ns->string
-                            }
-                          );
-                    }
-                    else {
-                        if ( lc($ns_in_answer->owner) ne lc($name->fqdn) ) {
-                            push @results,
-                              info(
-                                B04_WRONG_NS_RECORD => {
-                                    ns    => $ns->string,
-                                    owner => lc($ns_in_answer->owner),
-                                    name  => lc($name->fqdn)
-                                }
-                              );
-                        }
-                        elsif ( not $p_ns_udp->aa ) {
-                            push @results,
-                              info(
-                                B04_NS_RECORD_NOT_AA => {
-                                    ns => $ns->string
-                                }
-                              );
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
-} ## end sub basic04
 
 1;
 
@@ -764,11 +515,6 @@ responds sensibly to an NS query for the tested zone.
 Checks if at least one of the nameservers pointed out by the parent zone gives a useful response when sent an A query for the C<www> label in the
 tested zone (that is, if we're testing C<example.org> this test will as for A records for C<www.example.org>). This test is only run if the
 L<basic02> test has I<failed>.
-
-=item basic04
-
-Query all nameservers pointed out by the parent zone or found in delegation for NS and/or SOA records. Previously done in several
-test cases, these tests should be done only here.
 
 =back
 
