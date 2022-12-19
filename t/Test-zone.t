@@ -1,5 +1,6 @@
 use Test::More;
 use File::Slurp;
+use Data::Dumper;
 
 BEGIN {
     use_ok( q{Zonemaster::Engine} );
@@ -23,12 +24,11 @@ my %res;
 my $zone;
 
 %res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{Zone}, q{afnic.fr} );
-ok( $res{MX_RECORD_EXISTS},            q{Target found to deliver e-mail for the domain name} );
-ok( $res{RETRY_MINIMUM_VALUE_LOWER},   q{SOA 'Retry' vakue is too low} );
+ok( $res{RETRY_MINIMUM_VALUE_LOWER},   q{SOA 'Retry' value is too low} );
 ok( $res{REFRESH_MINIMUM_VALUE_LOWER}, q{SOA 'Refresh' value is too low} );
-ok( $res{MNAME_NO_RESPONSE},           q{SOA 'mname' nameserver does not respond} );
+ok( $res{Z01_MNAME_NO_RESPONSE},           q{SOA 'mname' nameserver does not respond} );
 ok( $res{MNAME_IS_NOT_CNAME},          q{SOA 'mname' value refers to a NS which is not an alias} );
-ok( $res{MNAME_NOT_IN_GLUE},           q{SOA 'mname' nameserver is not listed in "parent" NS records for tested zone} );
+ok( $res{Z01_MNAME_NOT_IN_NS_LIST},         q{SOA 'mname' nameserver is not listed in "parent" NS records for tested zone} );
 ok( $res{SOA_DEFAULT_TTL_MAXIMUM_VALUE_OK}, q{SOA 'minimum' value is between the recommended ones} );
 ok( $res{REFRESH_HIGHER_THAN_RETRY},        q{SOA 'refresh' value is higher than the SOA 'retry' value} );
 ok( $res{EXPIRE_MINIMUM_VALUE_OK},
@@ -38,14 +38,14 @@ ok( $res{ONE_SOA} , q{Unique SOA returned} );
 
 $zone = Zonemaster::Engine->zone( q{zone01.zut-root.rd.nic.fr} );
 %res = map { $_->tag => 1 } Zonemaster::Engine->test_method( q{Zone}, q{zone01}, $zone );
-ok( $res{MNAME_RECORD_DOES_NOT_EXIST}, q{SOA 'mname' field does not exist} );
+ok( $res{Z01_MNAME_IS_DOT}, q{SOA 'mname' is dot ('.')} );
 
 %res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{Zone}, q{zone07.zut-root.rd.nic.fr} );
 ok( $res{SOA_DEFAULT_TTL_MAXIMUM_VALUE_LOWER}, q{SOA 'minimum' value is too low} );
 
 $zone = Zonemaster::Engine->zone( q{zone05.zut-root.rd.nic.fr} );
 %res = map { $_->tag => 1 } Zonemaster::Engine->test_method( q{Zone}, q{zone09}, $zone );
-ok( $res{NO_MX_RECORD}, q{No MX records} );
+ok( $res{Z09_MISSING_MAIL_TARGET}, q{No MX records} );
 
 #
 # zone08
@@ -66,7 +66,7 @@ ok( $res{MX_RECORD_IS_CNAME}, q{mixed MX records are partially CNAME} );
 ok( $res{MX_RECORD_IS_NOT_CNAME}, q{mixed MX records are partially NOT CNAME} );
 
 %res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{Zone}, q{zone02.zut-root.rd.nic.fr} );
-ok( $res{MNAME_NOT_AUTHORITATIVE},    q{SOA 'mname' nameserver is not authoritative for zone} );
+ok( $res{Z01_MNAME_MISSING_SOA_RECORD},    q{SOA 'mname' nameserver is not authoritative for zone} );
 ok( $res{RETRY_MINIMUM_VALUE_OK},     q{SOA 'retry' value is more than the minimum recommended value} );
 ok( $res{REFRESH_MINIMUM_VALUE_OK},   q{SOA 'refresh' value is higher than the minimum recommended value} );
 ok( $res{EXPIRE_LOWER_THAN_REFRESH},  q{SOA 'expire' value is lower than the SOA 'refresh' value} );
@@ -115,10 +115,11 @@ ok( $res{REFRESH_LOWER_THAN_RETRY}, q{SOA 'refresh' value is lower than the SOA 
 
 %res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{Zone}, q{google.tf} );
 ok( $res{SOA_DEFAULT_TTL_MAXIMUM_VALUE_HIGHER}, q{SOA 'minimum' value is too high} );
-ok( $res{MNAME_IS_AUTHORITATIVE},               q{SOA 'mname' nameserver is authoritative zone} );
+ok( $res{Z01_MNAME_IS_MASTER},               q{SOA 'mname' is authoritative master nameserver} );
 
 %res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{Zone}, q{zone04.zut-root.rd.nic.fr} );
 ok( $res{MNAME_HAS_NO_ADDRESS}, q{No IP address found for SOA 'mname' nameserver} );
+ok( $res{Z01_MNAME_NOT_RESOLVE}, q{No IP address found for SOA 'mname' nameserver} );
 
 # $zone = Zonemaster::Engine->zone( 'alcatel.se' );
 # %res = map { $_->tag => 1 } Zonemaster::Engine->test_method( q{Zone}, q{zone07}, $zone );
@@ -129,8 +130,6 @@ ok( $res{MNAME_HAS_NO_ADDRESS}, q{No IP address found for SOA 'mname' nameserver
 # ok( $res{NO_RESPONSE_MX_QUERY}, q{No response from nameserver(s) on MX queries} );
 
 $zone = Zonemaster::Engine->zone( 'name.doesnotexist' );
-%res = map { $_->tag => 1 } Zonemaster::Engine->test_method( q{Zone}, q{zone01}, $zone );
-ok( $res{NO_RESPONSE_SOA_QUERY}, q{No response from nameserver(s) on SOA queries} );
 %res = map { $_->tag => 1 } Zonemaster::Engine->test_method( q{Zone}, q{zone02}, $zone );
 ok( $res{NO_RESPONSE_SOA_QUERY}, q{No response from nameserver(s) on SOA queries} );
 %res = map { $_->tag => 1 } Zonemaster::Engine->test_method( q{Zone}, q{zone03}, $zone );
@@ -147,9 +146,20 @@ ok( $res{NO_RESPONSE_SOA_QUERY}, q{No response from nameserver(s) on SOA queries
 Zonemaster::Engine::Profile->effective->set( q{net.ipv4}, 1 );
 Zonemaster::Engine::Profile->effective->set( q{net.ipv6}, 0 );
 
-$zone = Zonemaster::Engine->zone( q{trasigdnssec.se} );
+$zone = Zonemaster::Engine->zone( q{zonemaster.net} );
 %res = map { $_->tag => 1 } Zonemaster::Engine->test_method( q{Zone}, q{zone01}, $zone );
-ok( !$res{MNAME_NO_RESPONSE}, q{SOA 'mname' found with IPv4 only} );
+ok( $res{Z01_MNAME_IS_MASTER}, q{SOA 'mname' is authoritative master nameserver} );
+
+TODO: {
+    local $TODO = "Need to find/create zones with that error";
+    
+    # zone01
+    ok( $tag{Z01_MNAME_HAS_LOCALHOST_ADDR}, q{Z01_MNAME_HAS_LOCALHOST_ADDR} );
+    ok( $tag{Z01_MNAME_IS_LOCALHOST}, q{Z01_MNAME_IS_LOCALHOST} );
+    ok( $tag{Z01_MNAME_NOT_AUTHORITATIVE}, q{Z01_MNAME_NOT_AUTHORITATIVE} );
+    ok( $tag{Z01_MNAME_NOT_MASTER}, q{Z01_MNAME_NOT_MASTER} );
+    ok( $tag{Z01_MNAME_UNEXPECTED_RCODE}, q{Z01_MNAME_UNEXPECTED_RCODE} );
+}
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Nameserver->save( $datafile );

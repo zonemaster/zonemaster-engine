@@ -165,9 +165,9 @@ msgstr ""
 #. BASIC:DOMAIN_NAME_LABEL_TOO_LONG
 #, perl-brace-format
 msgid ""
-"Domain name ({domain}) has a label ({dlabel}) too long ({dlength}/{max})."
+"Domain name ({domain}) has a label ({label}) too long ({dlength}/{max})."
 msgstr ""
-"Domändelen '{dlabel}' i domännamnet {domain} är för lång ({dlength}). "
+"Domändelen '{label}' i domännamnet {domain} är för lång ({dlength}). "
 "Maximal längd är {max}."
 
 #. BASIC:DOMAIN_NAME_TOO_LONG

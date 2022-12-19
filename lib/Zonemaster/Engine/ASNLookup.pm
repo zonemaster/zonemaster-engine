@@ -102,7 +102,6 @@ sub _cymru_asn_lookup {
                 my $str;
                 foreach my $rr ( @rr ) {
                     my $_str = $rr->txtdata;
-                    $_str =~ s/"([^"]+)"/$1/x;
                     my @_fields = split( /[ ][|][ ]?/x, $_str );
                     my @_asns   = split( /\s+/x,        $_fields[0] );
                     my $_prefix_length = ($_fields[1] =~ m!^.*[/](.*)!x)[0];
@@ -213,14 +212,14 @@ Zonemaster::Engine::ASNLookup - do lookups of ASNs for IP addresses
 
 =item get($addr)
 
-Takes a string (or a L<Net::IP> object) with a single IP address, does a lookup
+Takes a string (or a L<Net::IP::XS> object) with a single IP address, does a lookup
 in a Cymru-style DNS zone and returns a list of AS numbers for the address, if
 any can be found.
 
 =item get_with_prefix($addr)
 
 As L<get()>, except it returns a list of a reference to a list with the AS
-numbers, and a Net::IP object representing the prefix of the AS.
+numbers, and a Net::IP::XS object representing the prefix of the AS.
 
 =back
 

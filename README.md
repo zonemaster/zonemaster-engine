@@ -47,6 +47,12 @@ For participation, contact and bug reporting, please see
 [Zonemaster/README.md](https://github.com/zonemaster/zonemaster/blob/master/README.md).
 
 
+## License
+
+This is free software under a 2-clause BSD license. The full text of the license can
+be found in the [LICENSE](LICENSE) file included in this respository.
+
+
 [CPAN site]:                                      https://metacpan.org/pod/Zonemaster::Engine
 [Docker Hub]:                                     https://hub.docker.com/u/zonemaster
 [Docker Image Creation]:                          https://github.com/zonemaster/zonemaster/blob/master/docs/internal-documentation/maintenance/ReleaseProcess-create-docker-image.md

@@ -94,53 +94,49 @@ zone_gives_not( 'dnssec07', $zone, [qw{NEITHER_DNSKEY_NOR_DS DNSKEY_BUT_NOT_DS D
 # dnssec01
 ###########
 $zone = Zonemaster::Engine->zone( 'dnssec01-ds-algorithm-ok.zut-root.rd.nic.fr' );
-zone_gives_not( 'dnssec01', $zone, [qw{DS01_DS_ALGO_DEPRECATED DS01_DS_ALGO_SHA1_DEPRECATED DS01_DS_ALGO_RESERVED DS01_DS_ALGO_NOT_DS DS01_DS_ALGO_2_MISSING DS01_DIGEST_NOT_SUPPORTED_BY_ZM}] );
+zone_gives_not( 'dnssec01', $zone, [qw{DS01_DS_ALGO_DEPRECATED DS01_DS_ALGO_RESERVED DS01_DS_ALGO_NOT_DS DS01_DS_ALGO_2_MISSING DS01_DIGEST_NOT_SUPPORTED_BY_ZM}] );
 
 $zone = Zonemaster::Engine->zone( 'dnssec01-nxdomain.zut-root.rd.nic.fr' );
-zone_gives_not( 'dnssec01', $zone, [qw{DS01_DS_ALGO_DEPRECATED DS01_DS_ALGO_SHA1_DEPRECATED DS01_DS_ALGO_RESERVED DS01_DS_ALGO_NOT_DS DS01_DS_ALGO_2_MISSING DS01_DIGEST_NOT_SUPPORTED_BY_ZM}] );
+zone_gives_not( 'dnssec01', $zone, [qw{DS01_DS_ALGO_DEPRECATED DS01_DS_ALGO_RESERVED DS01_DS_ALGO_NOT_DS DS01_DS_ALGO_2_MISSING DS01_DIGEST_NOT_SUPPORTED_BY_ZM}] );
 
 $zone = Zonemaster::Engine->zone( 'dnssec01-ds-algorithm-not-ds.zut-root.rd.nic.fr' );
 zone_gives( 'dnssec01', $zone, [qw{DS01_DS_ALGO_NOT_DS DS01_DS_ALGO_2_MISSING DS01_DIGEST_NOT_SUPPORTED_BY_ZM}] );
-zone_gives_not( 'dnssec01', $zone, [qw{DS01_DS_ALGO_DEPRECATED DS01_DS_ALGO_SHA1_DEPRECATED DS01_DS_ALGO_RESERVED}] );
+zone_gives_not( 'dnssec01', $zone, [qw{DS01_DS_ALGO_DEPRECATED DS01_DS_ALGO_RESERVED}] );
 
 $zone = Zonemaster::Engine->zone( 'dnssec01-ds-algorithm-deprecated1.zut-root.rd.nic.fr' );
-zone_gives( 'dnssec01', $zone, [qw{DS01_DS_ALGO_SHA1_DEPRECATED DS01_DS_ALGO_2_MISSING}] );
-zone_gives_not( 'dnssec01', $zone, [qw{DS01_DS_ALGO_DEPRECATED DS01_DS_ALGO_NOT_DS DS01_DS_ALGO_RESERVED DS01_DIGEST_NOT_SUPPORTED_BY_ZM}] );
+zone_gives( 'dnssec01', $zone, [qw{DS01_DS_ALGO_DEPRECATED DS01_DS_ALGO_2_MISSING}] );
+zone_gives_not( 'dnssec01', $zone, [qw{DS01_DS_ALGO_NOT_DS DS01_DS_ALGO_RESERVED DS01_DIGEST_NOT_SUPPORTED_BY_ZM}] );
 
 $zone = Zonemaster::Engine->zone( 'dnssec01-ds-algorithm-deprecated3.zut-root.rd.nic.fr' );
 zone_gives( 'dnssec01', $zone, [qw{DS01_DS_ALGO_DEPRECATED DS01_DS_ALGO_2_MISSING DS01_DIGEST_NOT_SUPPORTED_BY_ZM}] );
-zone_gives_not( 'dnssec01', $zone, [qw{DS01_DS_ALGO_NOT_DS DS01_DS_ALGO_SHA1_DEPRECATED DS01_DS_ALGO_RESERVED}] );
+zone_gives_not( 'dnssec01', $zone, [qw{DS01_DS_ALGO_NOT_DS DS01_DS_ALGO_RESERVED}] );
 
 $zone = Zonemaster::Engine->zone( 'dnssec01-ds-algorithm-reserved.zut-root.rd.nic.fr' );
 zone_gives( 'dnssec01', $zone, [qw{DS01_DS_ALGO_RESERVED DS01_DS_ALGO_2_MISSING DS01_DIGEST_NOT_SUPPORTED_BY_ZM}] );
-zone_gives_not( 'dnssec01', $zone, [qw{DS01_DS_ALGO_DEPRECATED DS01_DS_ALGO_SHA1_DEPRECATED DS01_DS_ALGO_NOT_DS}] );
+zone_gives_not( 'dnssec01', $zone, [qw{DS01_DS_ALGO_DEPRECATED DS01_DS_ALGO_NOT_DS}] );
 
 ###########
 # dnssec02
 ###########
 $zone = Zonemaster::Engine->zone( 'dnssec02-dnskey-ksk-not-sep.zut-root.rd.nic.fr' );
 zone_gives( 'dnssec02', $zone, [qw{DS02_DNSKEY_NOT_SEP}] );
-zone_gives_not( 'dnssec02', $zone, [qw{DS02_ALGO_NOT_SUPPORTED_BY_ZM DS02_DNSKEY_NOT_FOR_ZONE_SIGNING DS02_NO_DNSKEY_FOR_DS DS02_NO_MATCHING_DNSKEY_RRSIG DS02_NO_MATCH_DS_DNSKEY DS02_RRSIG_NOT_VALID_BY_DNSKEY}] );
+zone_gives_not( 'dnssec02', $zone, [qw{DS02_ALGO_NOT_SUPPORTED_BY_ZM DS02_DNSKEY_NOT_FOR_ZONE_SIGNING DS02_NO_DNSKEY_FOR_DS DS02_NO_MATCHING_DNSKEY_RRSIG DS02_NO_MATCH_DS_DNSKEY DS02_RRSIG_NOT_VALID_BY_DNSKEY DS02_NO_VALID_DNSKEY_FOR_ANY_DS DS02_DNSKEY_NOT_SIGNED_BY_ANY_DS}] );
 
 $zone = Zonemaster::Engine->zone( 'dnssec02-no-common-keytags.zut-root.rd.nic.fr' );
-zone_gives( 'dnssec02', $zone, [qw{DS02_NO_DNSKEY_FOR_DS}] );
-zone_gives_not( 'dnssec02', $zone, [qw{DS02_ALGO_NOT_SUPPORTED_BY_ZM DS02_DNSKEY_NOT_FOR_ZONE_SIGNING DS02_DNSKEY_NOT_SEP DS02_NO_MATCHING_DNSKEY_RRSIG DS02_NO_MATCH_DS_DNSKEY DS02_RRSIG_NOT_VALID_BY_DNSKEY}] );
+zone_gives( 'dnssec02', $zone, [qw{DS02_NO_DNSKEY_FOR_DS DS02_NO_VALID_DNSKEY_FOR_ANY_DS}] );
+zone_gives_not( 'dnssec02', $zone, [qw{DS02_ALGO_NOT_SUPPORTED_BY_ZM DS02_DNSKEY_NOT_FOR_ZONE_SIGNING DS02_DNSKEY_NOT_SEP DS02_NO_MATCHING_DNSKEY_RRSIG DS02_NO_MATCH_DS_DNSKEY DS02_RRSIG_NOT_VALID_BY_DNSKEY DS02_DNSKEY_NOT_SIGNED_BY_ANY_DS}] );
 
 $zone = Zonemaster::Engine->zone( 'dnssec08-dnskey-not-signed.zut-root.rd.nic.fr' );
-zone_gives( 'dnssec02', $zone, [qw{DS02_NO_MATCHING_DNSKEY_RRSIG}] );
-zone_gives_not( 'dnssec02', $zone, [qw{DS02_ALGO_NOT_SUPPORTED_BY_ZM DS02_DNSKEY_NOT_FOR_ZONE_SIGNING DS02_DNSKEY_NOT_SEP DS02_NO_DNSKEY_FOR_DS DS02_NO_MATCH_DS_DNSKEY DS02_RRSIG_NOT_VALID_BY_DNSKEY}] );
+zone_gives( 'dnssec02', $zone, [qw{DS02_NO_MATCHING_DNSKEY_RRSIG DS02_DNSKEY_NOT_SIGNED_BY_ANY_DS}] );
+zone_gives_not( 'dnssec02', $zone, [qw{DS02_ALGO_NOT_SUPPORTED_BY_ZM DS02_DNSKEY_NOT_FOR_ZONE_SIGNING DS02_DNSKEY_NOT_SEP DS02_NO_DNSKEY_FOR_DS DS02_NO_MATCH_DS_DNSKEY DS02_RRSIG_NOT_VALID_BY_DNSKEY DS02_NO_VALID_DNSKEY_FOR_ANY_DS}] );
 
 $zone = Zonemaster::Engine->zone( 'dnssec02-ds-does-not-match-dnskey.zut-root.rd.nic.fr' );
 zone_gives( 'dnssec02', $zone, [qw{DS02_NO_MATCH_DS_DNSKEY}] );
-zone_gives_not( 'dnssec02', $zone, [qw{DS02_ALGO_NOT_SUPPORTED_BY_ZM DS02_DNSKEY_NOT_FOR_ZONE_SIGNING DS02_DNSKEY_NOT_SEP DS02_NO_DNSKEY_FOR_DS DS02_NO_MATCHING_DNSKEY_RRSIG DS02_RRSIG_NOT_VALID_BY_DNSKEY}] );
+zone_gives_not( 'dnssec02', $zone, [qw{DS02_ALGO_NOT_SUPPORTED_BY_ZM DS02_DNSKEY_NOT_FOR_ZONE_SIGNING DS02_DNSKEY_NOT_SEP DS02_NO_DNSKEY_FOR_DS DS02_NO_MATCHING_DNSKEY_RRSIG DS02_RRSIG_NOT_VALID_BY_DNSKEY DS02_NO_VALID_DNSKEY_FOR_ANY_DS DS02_DNSKEY_NOT_SIGNED_BY_ANY_DS}] );
 
 $zone = Zonemaster::Engine->zone( 'dnssec08-dnskey-signature-not-ok-broken.zut-root.rd.nic.fr' );
-zone_gives( 'dnssec02', $zone, [qw{DS02_RRSIG_NOT_VALID_BY_DNSKEY}] );
-zone_gives_not( 'dnssec02', $zone, [qw{DS02_ALGO_NOT_SUPPORTED_BY_ZM DS02_DNSKEY_NOT_FOR_ZONE_SIGNING DS02_DNSKEY_NOT_SEP DS02_NO_DNSKEY_FOR_DS DS02_NO_MATCHING_DNSKEY_RRSIG DS02_NO_MATCH_DS_DNSKEY}] );
-
-# 2 cases missing
-# DS02_ALGO_NOT_SUPPORTED_BY_ZM
-# DS02_DNSKEY_NOT_FOR_ZONE_SIGNING
+zone_gives( 'dnssec02', $zone, [qw{DS02_RRSIG_NOT_VALID_BY_DNSKEY DS02_NO_MATCHING_DNSKEY_RRSIG DS02_DNSKEY_NOT_SIGNED_BY_ANY_DS}] );
+zone_gives_not( 'dnssec02', $zone, [qw{DS02_ALGO_NOT_SUPPORTED_BY_ZM DS02_DNSKEY_NOT_FOR_ZONE_SIGNING DS02_DNSKEY_NOT_SEP DS02_NO_DNSKEY_FOR_DS DS02_NO_MATCH_DS_DNSKEY DS02_NO_VALID_DNSKEY_FOR_ANY_DS}] );
 
 ###########
 # dnssec03
@@ -517,6 +513,9 @@ zone_gives_not( 'dnssec18', $zone, [q{DS18_NO_MATCH_CDS_RRSIG_DS}]);
 TODO: {
     local $TODO = "Need to find/create zones with that error";
 
+    # dnssec02
+    ok( $tag{DS02_ALGO_NOT_SUPPORTED_BY_ZM}, q{DS02_ALGO_NOT_SUPPORTED_BY_ZM} );
+    ok( $tag{DS02_DNSKEY_NOT_FOR_ZONE_SIGNING}, q{DS02_DNSKEY_NOT_FOR_ZONE_SIGNING} );
     # dnssec05 (can not exist in a live domain...)
     ok( $tag{ALGORITHM_UNKNOWN}, q{ALGORITHM_UNKNOWN} );
     # dnssec06

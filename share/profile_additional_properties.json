@@ -1,0 +1,58 @@
+{
+    "logfilter" : {
+        "BASIC" : {
+            "IPV6_ENABLED" : [
+                {
+                    "when" : {
+                        "rrtype" : "NS",
+                        "ns" : "f.ext.nic.fr",
+                        "address" : "2001:67c:1010:11::53"
+                    },
+                    "set" : "WARNING"
+                },
+                {
+                    "when" : {
+                        "ns" : "h.ext.nic.fr"
+                    },
+                    "set" : "ERROR"
+                }
+            ]
+        },
+        "CONNECTIVITY" : {
+            "NAMESERVER_HAS_TCP_53" : [
+                {
+                    "when" : {
+                        "ns" : [ "ns1.nic.fr", "ns2.nic.fr" ]
+                    },
+                    "set" : "WARNING"
+                },
+                {
+                    "when" : {
+                        "address" : "2001:620:0:ff::2f"
+                    },
+                    "set" : "ERROR"
+                }
+            ]
+        }
+    },
+    "test_cases_vars": {
+        "dnssec04" : {
+            "DURATION_LONG" : 26179200,
+            "REMAINING_LONG" : 26179200,
+            "REMAINING_SHORT" : 43200
+        },
+        "zone02" : {
+            "SOA_REFRESH_MINIMUM_VALUE" : 14400
+        },
+        "zone04" : {
+            "SOA_RETRY_MINIMUM_VALUE" : 3600
+        },
+        "zone05" : {
+            "SOA_EXPIRE_MINIMUM_VALUE" : 604800
+        },
+        "zone06" : {
+            "SOA_DEFAULT_TTL_MAXIMUM_VALUE" : 86400,
+            "SOA_DEFAULT_TTL_MINIMUM_VALUE" : 300
+        }
+    }
+}

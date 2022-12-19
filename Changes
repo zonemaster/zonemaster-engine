@@ -1,5 +1,49 @@
 Release history for Zonemaster component Zonemaster-Engine
 
+
+v4.6.0 2022-12-19 (public release version)
+
+ [Features]
+ - Updates implementation of test case Zone09 (#1109, #1163, #1103,
+   #1140, #1139)
+ - Updates implementation of test case Zone01 (#1035, #1161)
+ - Updates implementation of test case DNSSEC02 (#1158)
+ - Adds new implementation of test case Nameserver11 (#1034)
+ - Adds implementation of normalization specification replacing test
+   case Basic00 (#1040, #1157)
+ - Adds method for accessing translatable test case description (#1144)
+ - Rewrites implementation of test cases Connectivity01 and
+   Connectivity02 (#1143, #1136, #1137)
+ - Removes test case Basic04, replaced by updated test cases Connectivity01
+   and Connectivity02 (#1143)
+ - Makes root hints configurable (#1134, #850)
+ - Removes special treatment of SHA-1 in test case DNSSEC01 (#1116, #1115)
+ - Makes IPV4_DISABLED/IPV6_DISABLED tags being consistently outputted in
+   DEBUG level (#1102, #1117)
+
+ [Fixes]
+ - Fixes typo in message and removes zombie messages for Basic04 (#1168)
+ - Updates installation instructions (#1162, #1130)
+ - Cleanup system messages (#1142, #1164)
+ - Fixes Nameserver10 EDNS query (#1160)
+ - Fixes queries and response packets content for undelegated tests (#1150)
+ - Corrects the license statement in Engine.pm (#1152)
+ - Exposes the init methods (#1151)
+ - Updates logentry arguments (#1138, #1128, #1135, #1126)
+ - Removes need for double quotes for ASN Lookup (#1141)
+ - Limits old profile_example.json to only properties not used in
+   default profile and rename it (#1120)
+ - Fixes missing update of ns args in SYSTEM messages (#1097)
+ - Remove dependency on Net::IP, and use Net::IP::XS everywhere (#1119,
+   #1107, #1159)
+ - Use lowercase fragments to refer to internal headings in markdown
+   documents (#1127)
+ - Removes the use of a public resolver for test case Syntax06 (#1063)
+ - Adds check for undelegated test in DNSSEC11 (#1101, #1099)
+ - Refactors to avoid code duplication (#1098)
+ - Adds editorial update of msgid for test case DNSSEC01 (#1072)
+
+
 v4.5.1 2022-07-08 (public fix version)
 
  [Fixes]
@@ -11,7 +55,7 @@ v4.5.1 2022-07-08 (public fix version)
 
 v4.5.0 2022-06-09 (public release version)
 
-[Features]
+ [Features]
  - Use pre-built packages for ubuntu (#1079)
  - Updates implementation of test case Nameserver10 (#1061, #1060)
  - Updates implementation of test case DNSSEC02 (#1051, #1049, #1036)

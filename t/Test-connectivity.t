@@ -39,79 +39,116 @@ Zonemaster::Engine::Profile->effective->merge( $profile_test );
 
 my @res;
 my %res;
+my %should_emit;
 
-%res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{connectivity}, q{afnic.fr} );
-ok( !$res{MODULE_ERROR},                q{Test module completes normally} );
-ok( $res{NAMESERVER_HAS_UDP_53},        q{Nameserver has UDP port 53 reachable} );
-ok( $res{NAMESERVER_HAS_TCP_53},        q{Nameserver has TCP port 53 reachable} );
-ok( $res{IPV4_DIFFERENT_ASN},           q{IPv4 Nameservers with multiple AS} );
-ok( !$res{IPV4_ONE_ASN},                q{IPv4 Nameservers with multiple AS (double check)} );
-ok( !$res{IPV4_SAME_ASN},               q{IPv4 Nameservers with multiple AS (triple check)} );
-ok( $res{IPV6_DIFFERENT_ASN},           q{IPv6 Nameservers with multiple AS} );
-ok( !$res{IPV6_ONE_ASN},                q{IPv6 Nameservers with multiple AS (double check)} );
-ok( !$res{IPV6_SAME_ASN},               q{IPv6 Nameservers with multiple AS (triple check)} );
+my $metadata = Zonemaster::Engine::Test::Connectivity->metadata();
+my $test_levels = Zonemaster::Engine::Profile->effective->{profile}->{test_levels}->{CONNECTIVITY};
 
-%res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{connectivity}, q{001.tf} );
-ok( $res{IPV6_ONE_ASN}, q{Nameservers IPv6 with Uniq AS} );
+sub check_output_connectivity_testcase {
+    my ( $testcase, $res, $should_emit ) = @_;
 
-%res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{connectivity}, q{go.tf} );
-ok( $res{IPV4_ONE_ASN},      q{IPv4 Nameservers with Uniq AS} );
-ok( !$res{IPV4_DIFFERENT_ASN}, q{IPv4 Nameservers with Uniq AS (double check)} );
+    return if ( $testcase !~ q/connectivity0[1-3]/ );
 
-%res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{connectivity}, q{iphones.se} );
-ok( $res{NAMESERVER_NO_UDP_53}, q{Nameserver UDP port 53 unreachable} );
-ok( $res{NAMESERVER_NO_TCP_53}, q{Nameserver TCP port 53 unreachable} );
+    for my $key ( @{ $metadata->{$testcase} } ) {
+        next if ( $test_levels->{$key} =~ q/DEBUG/ );
+        if ( $should_emit->{$key} ) {
+            ok( $res->{$key}, "Should emit $key" );
+        } else {
+            ok( !$res->{$key}, "Should NOT emit $key" );
+        }
+    }
+}
 
-%res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{connectivity}, q{zut-root.rd.nic.fr} );
-ok( $res{IPV4_ONE_ASN},      q{Nameservers with Uniq AS} );
+sub check_output_connectivity_all {
+    my ( $res, $should_emit ) = @_;
+
+    check_output_connectivity_testcase( 'connectivity01', $res, $should_emit );
+    check_output_connectivity_testcase( 'connectivity02', $res, $should_emit );
+    check_output_connectivity_testcase( 'connectivity03', $res, $should_emit );
+}
+
+subtest 'All good' => sub {
+    %res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{connectivity}, q{afnic.fr} );
+    ok( !$res{MODULE_ERROR}, q{Test module completes normally} );
+    %should_emit = (
+        IPV4_DIFFERENT_ASN => 1,
+        IPV6_DIFFERENT_ASN => 1
+    );
+    check_output_connectivity_all( \%res, \%should_emit );
+};
+
+subtest 'Nameservers with Uniq AS (IPv4 and IPv6)' => sub {
+    %should_emit = (
+        IPV4_ONE_ASN => 1,
+        IPV6_ONE_ASN => 1,
+    );
+    %res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{connectivity}, q{001.tf} );
+    check_output_connectivity_testcase( 'connectivity03', \%res, \%should_emit );
+};
+
+subtest 'Nameservers with Uniq AS (IPv4 only)' => sub {
+    %should_emit = (
+        IPV4_ONE_ASN => 1
+    );
+    %res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{connectivity}, q{zut-root.rd.nic.fr} );
+    check_output_connectivity_testcase( 'connectivity03', \%res, \%should_emit );
+};
+
+subtest 'No IPv6 (profile with IPv4 only)' => sub {
+    Zonemaster::Engine::Profile->effective->set( q{net.ipv4}, 1 );
+    Zonemaster::Engine::Profile->effective->set( q{net.ipv6}, 0 );
+
+    %res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{connectivity}, q{afnic.fr} );
+
+    subtest 'UDP' => sub {
+        %should_emit = (
+            CN01_IPV6_DISABLED => 1
+        );
+        check_output_connectivity_testcase( 'connectivity01', \%res, \%should_emit );
+    };
+
+    subtest 'TCP (no messages)' => sub {
+        %should_emit = ();
+        check_output_connectivity_testcase( 'connectivity02', \%res, \%should_emit );
+    };
+
+    Zonemaster::Engine::Profile->effective->set( q{net.ipv6}, 1 );
+};
+
+subtest 'No IPv4 (profile with IPv6 only)' => sub {
+    Zonemaster::Engine::Profile->effective->set( q{net.ipv4}, 0 );
+    Zonemaster::Engine::Profile->effective->set( q{net.ipv6}, 1 );
+
+    %res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{connectivity}, q{afnic.fr} );
+
+    subtest 'UDP' => sub {
+        %should_emit = (
+            CN01_IPV4_DISABLED => 1
+        );
+        check_output_connectivity_testcase( 'connectivity01', \%res, \%should_emit );
+    };
+
+    subtest 'TCP (no messages)' => sub {
+        %should_emit = ();
+        check_output_connectivity_testcase( 'connectivity02', \%res, \%should_emit );
+    };
+
+    Zonemaster::Engine::Profile->effective->set( q{net.ipv4}, 1 );
+};
+
+subtest 'No network' => sub {
+    Zonemaster::Engine::Profile->effective->set( q{net.ipv4}, 0 );
+    Zonemaster::Engine::Profile->effective->set( q{net.ipv6}, 0 );
+
+    %res = map{ $_->tag => 1 } Zonemaster::Engine->test_module( q{connectivity}, q{afnic.fr} );
+    ok( $res{NO_NETWORK}, 'IPv6 and IPv4 disabled' );
+
+    Zonemaster::Engine::Profile->effective->set( q{net.ipv4}, 1 );
+    Zonemaster::Engine::Profile->effective->set( q{net.ipv6}, 1 );
+};
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Nameserver->save( $datafile );
 }
-
-Zonemaster::Engine::Profile->effective->set( q{no_network}, 0 );
-Zonemaster::Engine::Profile->effective->set( q{net.ipv4}, 0 );
-Zonemaster::Engine::Profile->effective->set( q{net.ipv6}, 0 );
-@res = Zonemaster::Engine->test_method( 'Connectivity', 'connectivity01', Zonemaster::Engine->zone( q{afnic.fr} ) );
-ok( ( any { $_->tag eq 'NO_NETWORK' } @res ), 'IPv6 and IPv4 disabled' );
-ok( ( none { $_->tag eq 'IPV6_DISABLED' } @res ), 'No network' );
-ok( ( none { $_->tag eq 'IPV4_DISABLED' } @res ), 'No network' );
-@res = Zonemaster::Engine->test_method( 'Connectivity', 'connectivity02', Zonemaster::Engine->zone( q{afnic.fr} ) );
-ok( ( any { $_->tag eq 'NO_NETWORK' } @res ), 'IPv6 and IPv4 disabled' );
-ok( ( none { $_->tag eq 'IPV6_DISABLED' } @res ), 'No network' );
-ok( ( none { $_->tag eq 'IPV4_DISABLED' } @res ), 'No network' );
-
-#Zonemaster::Engine::Profile->effective->set( q{net.ipv4}, 1 );
-#Zonemaster::Engine::Profile->effective->set( q{net.ipv6}, 0 );
-#@res = Zonemaster::Engine->test_method( 'Connectivity', 'connectivity01', Zonemaster::Engine->zone( q{afnic.fr} ) );
-#ok( ( any { $_->tag eq 'IPV6_DISABLED' } @res ), 'IPv6 disabled' );
-#ok( ( none { $_->tag eq 'IPV4_DISABLED' } @res ), 'IPv4 not disabled' );
-#@res = Zonemaster::Engine->test_method( 'Connectivity', 'connectivity02', Zonemaster::Engine->zone( q{afnic.fr} ) );
-#ok( ( any { $_->tag eq 'IPV6_DISABLED' } @res ), 'IPv6 disabled' );
-#ok( ( none { $_->tag eq 'IPV4_DISABLED' } @res ), 'IPv4 not disabled' );
-#
-#if ( Zonemaster::Engine::Util::supports_ipv6() ) {
-#
-#    Zonemaster::Engine::Profile->effective->set( q{net.ipv6}, 1 );
-#    Zonemaster::Engine::Profile->effective->set( q{net.ipv4}, 0 );
-#    @res = Zonemaster::Engine->test_method( 'Connectivity', 'connectivity01', Zonemaster::Engine->zone( q{afnic.fr} ) );
-#    ok( ( none { $_->tag eq 'IPV6_DISABLED' } @res ), 'IPv6 not disabled' );
-#    ok( ( any { $_->tag eq 'IPV4_DISABLED' } @res ), 'IPv4 disabled' );
-#    @res = Zonemaster::Engine->test_method( 'Connectivity', 'connectivity02', Zonemaster::Engine->zone( q{afnic.fr} ) );
-#    ok( ( none { $_->tag eq 'IPV6_DISABLED' } @res ), 'IPv6 not disabled' );
-#    ok( ( any { $_->tag eq 'IPV4_DISABLED' } @res ), 'IPv4 disabled' );
-#
-#    Zonemaster::Engine::Profile->effective->set( q{net.ipv4}, 1 );
-#    Zonemaster::Engine::Profile->effective->set( q{net.ipv6}, 1 );
-#    @res = Zonemaster::Engine->test_method( 'Connectivity', 'connectivity01', Zonemaster::Engine->zone( q{afnic.fr} ) );
-#    ok( ( none { $_->tag eq 'IPV6_DISABLED' } @res ), 'IPv6 not disabled' );
-#    ok( ( none { $_->tag eq 'IPV4_DISABLED' } @res ), 'IPv4 not disabled' );
-#    @res = Zonemaster::Engine->test_method( 'Connectivity', 'connectivity02', Zonemaster::Engine->zone( q{afnic.fr} ) );
-#    ok( ( none { $_->tag eq 'IPV6_DISABLED' } @res ), 'IPv6 not disabled' );
-#    ok( ( none { $_->tag eq 'IPV4_DISABLED' } @res ), 'IPv4 not disabled' );
-#
-#}
-
-Zonemaster::Engine::Profile->effective->set( q{no_network}, 1 );
 
 done_testing;

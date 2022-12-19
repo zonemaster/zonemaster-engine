@@ -13,6 +13,7 @@ use List::MoreUtils qw[uniq];
 use Zonemaster::Engine::DNSName;
 use Zonemaster::Engine::Recursor;
 use Zonemaster::Engine::NSArray;
+use Zonemaster::Engine::Constants qw[:ip];
 
 has 'name' => ( is => 'ro', isa => 'Zonemaster::Engine::DNSName', required => 1 );
 has 'parent' => ( is => 'ro', isa => 'Maybe[Zonemaster::Engine::Zone]', lazy_build => 1 );
@@ -123,6 +124,32 @@ sub _build_glue_addresses {
     return [ $p->get_records( 'a' ), $p->get_records( 'aaaa' ) ];
 }
 
+sub _is_ip_version_disabled {
+    my ( $ns, $type ) = @_;
+
+    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
+        Zonemaster::Engine->logger->add(
+            SKIP_IPV4_DISABLED => {
+                ns     => $ns->string,
+                rrtype => $type
+            }
+        );
+        return 1;
+    }
+
+    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
+        Zonemaster::Engine->logger->add(
+            SKIP_IPV6_DISABLED => {
+                ns     => $ns->string,
+                rrtype => $type
+            }
+        );
+        return 1;
+    }
+
+    return 0;
+}
+
 ###
 ### Public Methods
 ###
@@ -133,13 +160,7 @@ sub query_one {
     # Return response from the first server that gives one
     my $i = 0;
     while ( my $ns = $self->ns->[$i] ) {
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == 4 ) {
-            Zonemaster::Engine->logger->add( SKIP_IPV4_DISABLED => { ns_list => "$ns" } );
-            next;
-        }
-
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == 6 ) {
-            Zonemaster::Engine->logger->add( SKIP_IPV6_DISABLED => { ns_list => "$ns" } );
+        if ( _is_ip_version_disabled( $ns, $type ) ) {
             next;
         }
 
@@ -159,15 +180,29 @@ sub query_all {
     my @servers = @{ $self->ns };
 
     if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) ) {
-        my @nope = grep { $_->address->version == 4 } @servers;
-        @servers = grep { $_->address->version != 4 } @servers;
-        Zonemaster::Engine->logger->add( SKIP_IPV4_DISABLED => { ns_list => ( join ';', map { "$_" } @nope ) } );
-    }
+        my @nope = grep { $_->address->version == $IP_VERSION_4 } @servers;
+        @servers = grep { $_->address->version == $IP_VERSION_6 } @servers;
+        map {
+            Zonemaster::Engine->logger->add(
+               SKIP_IPV4_DISABLED => {
+                   ns     => $_->string,
+                   rrtype => $type
+               }
+            )
+            } @nope;
+        }
 
     if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) ) {
-        my @nope = grep { $_->address->version == 6 } @servers;
-        @servers = grep { $_->address->version != 6 } @servers;
-        Zonemaster::Engine->logger->add( SKIP_IPV6_DISABLED => { ns_list => ( join ';', map { "$_" } @nope ) } );
+        my @nope = grep { $_->address->version == $IP_VERSION_6 } @servers;
+        @servers = grep { $_->address->version == $IP_VERSION_4 } @servers;
+        map {
+            Zonemaster::Engine->logger->add(
+                SKIP_IPV6_DISABLED => {
+                    ns     => $_->string,
+                    rrtype => $type
+                }
+            )
+        } @nope;
     }
 
     return [ map { $_->query( $name, $type, $flags ) } @servers ];
@@ -179,13 +214,7 @@ sub query_auth {
     # Return response from the first server that replies with AA set
     my $i = 0;
     while ( my $ns = $self->ns->[$i] ) {
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == 4 ) {
-            Zonemaster::Engine->logger->add( SKIP_IPV4_DISABLED => { ns_list => "$ns" } );
-            next;
-        }
-
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == 6 ) {
-            Zonemaster::Engine->logger->add( SKIP_IPV6_DISABLED => { ns_list => "$ns" } );
+        if ( _is_ip_version_disabled( $ns, $type ) ) {
             next;
         }
 
@@ -207,13 +236,7 @@ sub query_persistent {
     # Return response from the first server that has a record like the one asked for
     my $i = 0;
     while ( my $ns = $self->ns->[$i] ) {
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == 4 ) {
-            Zonemaster::Engine->logger->add( SKIP_IPV4_DISABLED => { ns_list => "$ns" } );
-            next;
-        }
-
-        if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == 6 ) {
-            Zonemaster::Engine->logger->add( SKIP_IPV6_DISABLED => { ns_list => "$ns" } );
+        if ( _is_ip_version_disabled( $ns, $type ) ) {
             next;
         }
 

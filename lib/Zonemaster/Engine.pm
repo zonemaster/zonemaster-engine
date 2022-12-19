@@ -1,6 +1,6 @@
 package Zonemaster::Engine;
 
-use version; our $VERSION = version->declare("v4.5.1");
+use version; our $VERSION = version->declare("v4.6.0");
 
 use 5.014002;
 
@@ -24,8 +24,19 @@ use Zonemaster::Engine::Test;
 use Zonemaster::Engine::Recursor;
 use Zonemaster::Engine::ASNLookup;
 
+INIT {
+    init_engine();
+}
+
 our $logger;
 our $recursor = Zonemaster::Engine::Recursor->new;
+
+my $init_done = 0;
+
+sub init_engine {
+    return if $init_done++;
+    Zonemaster::Engine::Recursor::init_recursor;
+}
 
 sub logger {
     return $logger //= Zonemaster::Engine::Logger->new;
@@ -237,6 +248,10 @@ This manual describes the main L<Zonemaster::Engine> module. If what you're afte
 
 =over
 
+=item init_engine()
+
+Run the inititalization tasks if they have not been run already. This method is called automatically in INIT block.
+
 =item test_zone($name)
 
 Runs all available tests and returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
@@ -418,12 +433,8 @@ Calle Dybedahl <calle at init.se>
 
 =head1 LICENSE
 
-This is free software, licensed under:
-
-The (three-clause) BSD License
-
-The full text of the license can be found in the
-F<LICENSE> file included with this distribution.
+This is free software under a 2-clause BSD license. The full text of the license can
+be found in the F<LICENSE> file included with this distribution.
 
 =cut
 

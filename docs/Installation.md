@@ -2,16 +2,16 @@
 
 ## Table of contents
 
-* [Overview](#Overview)
-* [Docker](#Docker)
-* [Prerequisites](#Prerequisites)
-* [Local installation](#Local-installation)
+* [Overview](#overview)
+* [Docker](#docker)
+* [Prerequisites](#prerequisites)
+* [Local installation](#local-installation)
   * [Installation on Rocky Linux]
   * [Installation on Debian and Ubuntu]
   * [Installation on FreeBSD]
   * [Installation on CentOS 7]
-* [Post-installation sanity check](#Post-installation-sanity-check)
-* [What to do next](#What-to-do-next)
+* [Post-installation sanity check](#post-installation-sanity-check)
+* [What to do next](#what-to-do-next)
 
 
 ## Overview
@@ -59,13 +59,13 @@ Zonemaster::Engine, see the [declaration of prerequisites].
 3) Install binary packages:
 
    ```sh
-   sudo dnf --assumeyes install cpanminus gcc libidn2-devel openssl-devel perl-Class-Accessor perl-Clone perl-core perl-Devel-CheckLib perl-Email-Valid perl-File-ShareDir perl-File-Slurp perl-libintl perl-IO-Socket-INET6 perl-List-MoreUtils perl-Module-Find perl-Module-Install perl-Moose perl-Net-IP perl-Pod-Coverage perl-Readonly perl-Test-Differences perl-Test-Exception perl-Test-Fatal perl-Test-NoWarnings perl-Test-Pod perl-Text-CSV perl-Test-Simple perl-YAML
+   sudo dnf --assumeyes install cpanminus gcc libidn2-devel openssl-devel perl-Class-Accessor perl-Clone perl-core perl-Devel-CheckLib perl-Email-Valid perl-File-ShareDir perl-File-Slurp perl-libintl perl-IO-Socket-INET6 perl-List-MoreUtils perl-Module-Find perl-Module-Install perl-Moose perl-Net-DNS perl-Pod-Coverage perl-Readonly perl-Test-Differences perl-Test-Exception perl-Test-Fatal perl-Test-NoWarnings perl-Test-Pod perl-Text-CSV perl-Test-Simple perl-YAML
    ```
 
 4) Install packages from CPAN:
 
    ```sh
-   sudo cpanm Module::Install::XSUtil MooseX::Singleton
+   sudo cpanm Module::Install::XSUtil MooseX::Singleton Net::IP::XS
    ```
 
 5) Install Zonemaster::LDNS and Zonemaster::Engine:
@@ -108,13 +108,13 @@ Using pre-built packages is the preferred method for Debian and Ubuntu.
 2) Install dependencies from binary packages:
 
    ```sh
-   sudo apt install autoconf automake build-essential cpanminus libclass-accessor-perl libclone-perl libdevel-checklib-perl libemail-valid-perl libfile-sharedir-perl libfile-slurp-perl libidn2-dev libintl-perl libio-socket-inet6-perl liblist-moreutils-perl libmodule-find-perl libmodule-install-perl libmodule-install-xsutil-perl libmoose-perl libmoosex-singleton-perl libnet-ip-perl libpod-coverage-perl libreadonly-perl libssl-dev libldns3 libldns-dev libtest-differences-perl libtest-exception-perl libtest-fatal-perl libtest-nowarnings-perl libtest-pod-perl libtext-csv-perl libtool m4
+   sudo apt install autoconf automake build-essential cpanminus libclass-accessor-perl libclone-perl libdevel-checklib-perl libemail-valid-perl libfile-sharedir-perl libfile-slurp-perl libidn2-dev libintl-perl libio-socket-inet6-perl liblist-moreutils-perl libmodule-find-perl libmodule-install-perl libmodule-install-xsutil-perl libmoose-perl libmoosex-singleton-perl libnet-dns-perl libnet-ip-xs-perl libpod-coverage-perl libreadonly-perl libssl-dev libldns3 libtest-differences-perl libtest-exception-perl libtest-fatal-perl libtest-nowarnings-perl libtest-pod-perl libtext-csv-perl libtool m4
    ```
 
 3) Install Zonemaster::LDNS and Zonemaster::Engine.
 
    ```sh
-   sudo cpanm --configure-args="--no-internal-ldns" Zonemaster::LDNS Zonemaster::Engine
+   sudo cpanm Zonemaster::LDNS Zonemaster::Engine
    ```
 
 ### Installation on FreeBSD
@@ -154,7 +154,7 @@ Using pre-built packages is the preferred method for Debian and Ubuntu.
 5) Install dependencies from binary packages:
 
    ```sh
-   pkg install devel/gmake libidn2 p5-App-cpanminus p5-Class-Accessor p5-Clone p5-Devel-CheckLib p5-Email-Valid p5-File-ShareDir p5-File-Slurp p5-IO-Socket-INET6 p5-List-MoreUtils p5-Locale-libintl p5-Module-Find p5-Module-Install p5-Module-Install-XSUtil p5-Moose p5-MooseX-Singleton p5-Net-IP-XS p5-Pod-Coverage p5-Readonly p5-Test-Differences p5-Test-Exception p5-Test-Fatal p5-Test-NoWarnings p5-Test-Pod p5-Text-CSV net-mgmt/p5-Net-IP dns/ldns
+   pkg install devel/gmake libidn2 p5-App-cpanminus p5-Class-Accessor p5-Clone p5-Devel-CheckLib p5-Email-Valid p5-File-ShareDir p5-File-Slurp p5-IO-Socket-INET6 p5-List-MoreUtils p5-Locale-libintl p5-Module-Find p5-Module-Install p5-Module-Install-XSUtil p5-Moose p5-MooseX-Singleton p5-Net-DNS p5-Net-IP-XS p5-Pod-Coverage p5-Readonly p5-Test-Differences p5-Test-Exception p5-Test-Fatal p5-Test-NoWarnings p5-Test-Pod p5-Text-CSV dns/ldns
    ```
 
 6) Install Zonemaster::LDNS:
@@ -187,13 +187,13 @@ Using pre-built packages is the preferred method for Debian and Ubuntu.
 2) Install binary packages:
 
    ```sh
-   sudo yum --assumeyes install cpanminus gcc libidn2-devel openssl-devel openssl11-devel perl-Class-Accessor perl-Clone perl-core perl-Devel-CheckLib perl-Email-Valid perl-File-ShareDir perl-File-Slurp perl-libintl perl-IO-Socket-INET6 perl-List-MoreUtils perl-Module-Find perl-Module-Install perl-Moose perl-Net-IP perl-Pod-Coverage perl-Readonly perl-Test-Differences perl-Test-Exception perl-Test-Fatal perl-Test-NoWarnings perl-Test-Pod perl-Text-CSV perl-Test-Simple perl-YAML
+   sudo yum --assumeyes install cpanminus gcc libidn2-devel openssl-devel openssl11-devel perl-Class-Accessor perl-Clone perl-core perl-Devel-CheckLib perl-Email-Valid perl-File-ShareDir perl-File-Slurp perl-libintl perl-IO-Socket-INET6 perl-List-MoreUtils perl-Module-Find perl-Module-Install perl-Moose perl-Net-DNS perl-Pod-Coverage perl-Readonly perl-Test-Differences perl-Test-Exception perl-Test-Fatal perl-Test-NoWarnings perl-Test-Pod perl-Text-CSV perl-Test-Simple perl-YAML
    ```
 
 3) Install packages from CPAN:
 
    ```sh
-   sudo cpanm Module::Install::XSUtil MooseX::Singleton
+   sudo cpanm Module::Install::XSUtil MooseX::Singleton Net::IP::XS
    ```
 
 4) Install Zonemaster::LDNS with support for DNSSEC algorithms 15 and 16:

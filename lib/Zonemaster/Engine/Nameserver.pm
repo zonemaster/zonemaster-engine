@@ -68,7 +68,7 @@ sub new {
 
     # Required arguments
     confess "Attribute \(address\) is required"
-      if !exists $attrs->{address};
+      if !defined $attrs->{address};
 
     # Type coercions
     $attrs->{name} = Zonemaster::Engine::DNSName->from_string( $attrs->{name} )
@@ -229,7 +229,7 @@ sub query {
     }
 
     Zonemaster::Engine->logger->add(
-        'query',
+        'QUERY',
         {
             name  => "$name",
             type  => $type,
@@ -247,12 +247,16 @@ sub query {
     # Fake a DS answer
     if ( $type eq 'DS' and $class eq 'IN' and $self->fake_ds->{ lc( $name ) } ) {
         my $p = Zonemaster::LDNS::Packet->new( $name, $type, $class );
+
+        $p->qr( 1 );
         $p->aa( 1 );
         $p->do( $dnssec );
         $p->rd( $recurse );
+
         foreach my $rr ( @{ $self->fake_ds->{ lc( $name ) } } ) {
             $p->unique_push( 'answer', $rr );
         }
+
         my $res = Zonemaster::Engine::Packet->new( { packet => $p } );
         Zonemaster::Engine->logger->add( FAKE_DS_RETURNED => { name => "$name", from => "$self" } );
         return $res;
@@ -269,16 +273,21 @@ sub query {
                 $p->unique_push( 'answer',     $_ ) for @{$name};
                 $p->unique_push( 'additional', $_ ) for @{$addr};
             }
+            elsif ( $type eq 'DS' ) {
+                $p->aa( 1 );
+            }
             else {
                 while ( my ( $section, $aref ) = each %{ $self->fake_delegations->{$fname} } ) {
                     $p->unique_push( $section, $_ ) for @{$aref};
                 }
             }
 
-            $p->aa( 0 );
+            $p->aa( 0 ) unless ( $type eq 'DS' );
+            $p->qr( 1 );
             $p->do( $dnssec );
             $p->rd( $recurse );
             $p->answerfrom( $self->address->ip );
+
             Zonemaster::Engine->logger->add(
                 'FAKE_DELEGATION',
                 {
