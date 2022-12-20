@@ -467,7 +467,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     UNKNOWN_OPTION_CODE => sub {
         __x    # NAMESERVER:UNKNOWN_OPTION_CODE
-          'Nameserver {ns} responds with an unknown ENDS OPTION-CODE.', @_;
+          'Nameserver {ns} responds with an unknown EDNS OPTION-CODE.', @_;
     },
     UPWARD_REFERRAL => sub {
         __x    # NAMESERVER:UPWARD_REFERRAL
