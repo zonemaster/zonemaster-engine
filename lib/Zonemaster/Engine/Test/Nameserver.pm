@@ -465,10 +465,6 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # NAMESERVER:TEST_CASE_START
           'TEST_CASE_START {testcase}.', @_;
     },
-    UNKNOWN_OPTION_CODE => sub {
-        __x    # NAMESERVER:UNKNOWN_OPTION_CODE
-          'Nameserver {ns} responds with an unknown EDNS OPTION-CODE.', @_;
-    },
     UPWARD_REFERRAL => sub {
         __x    # NAMESERVER:UPWARD_REFERRAL
           'Nameserver {ns} returns an upward referral.', @_;
