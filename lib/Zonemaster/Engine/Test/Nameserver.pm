@@ -465,10 +465,6 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # NAMESERVER:TEST_CASE_START
           'TEST_CASE_START {testcase}.', @_;
     },
-    UNKNOWN_OPTION_CODE => sub {
-        __x    # NAMESERVER:UNKNOWN_OPTION_CODE
-          'Nameserver {ns} responds with an unknown ENDS OPTION-CODE.', @_;
-    },
     UPWARD_REFERRAL => sub {
         __x    # NAMESERVER:UPWARD_REFERRAL
           'Nameserver {ns} returns an upward referral.', @_;
@@ -1184,7 +1180,7 @@ sub nameserver11 {
         if ( not $p or not $p->has_edns or $p->rcode ne q{NOERROR} or not $p->aa or not $p->get_records_for_name(q{SOA}, $zone->name, q{answer}) ){
             next;
         }
-        
+
         #To be changed to '$ns->query( $zone->name, q{SOA}, { edns_details => { data => $rdata } } );' when PR#1147 is merged.
         $p = $ns->query( $zone->name, q{SOA}, { edns_details => { data => $rdata, udp_size => 512 } } );
 
@@ -1192,19 +1188,19 @@ sub nameserver11 {
             if ( $p->rcode ne q{NOERROR} ){
                 push @{ $unexpected_rcode{$p->rcode} }, $ns->address->short;
             }
-            
+
             elsif ( not $p->has_edns ){
                 push @no_edns, $ns->address->short;
             }
-            
+
             elsif ( not $p->get_records_for_name(q{SOA}, $zone->name, q{answer}) ){
                 push @unexpected_answer, $ns->address->short;
             }
-            
+
             elsif ( not $p->aa ){
                 push @unset_aa, $ns->address->short;
             }
-            
+
             elsif ( defined $p->edns_data ) {
                 push @unknown_opt_code, $ns->address->short;
             }
