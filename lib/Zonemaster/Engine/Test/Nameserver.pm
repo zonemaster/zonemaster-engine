@@ -1097,8 +1097,7 @@ sub nameserver10 {
 
         next if ( _ip_disabled_message( \@results, $ns, q{SOA} ) );
 
-        #To be changed to '$ns->query( $zone->name, q{SOA}, { edns_details => { version => 0 } } );' when PR#1147 is merged.
-        my $p = $ns->query( $zone->name, q{SOA}, { edns_details => { udp_size => 512 } } );
+        my $p = $ns->query( $zone->name, q{SOA}, { edns_details => { version => 0 } } );
 
         if ( $p and $p->rcode eq q{NOERROR} ){
             my $p2 = $ns->query( $zone->name, q{SOA}, { edns_details => { version => 1 } } );
@@ -1174,15 +1173,13 @@ sub nameserver11 {
 
         next if ( _ip_disabled_message( \@results, $ns, q{SOA} ) );
 
-        #To be changed to '$ns->query( $zone->name, q{SOA}, { edns_details => { version => 0 } } );' when PR#1147 is merged.
-        my $p = $ns->query( $zone->name, q{SOA}, { edns_details => { udp_size => 512 } } );
+        my $p = $ns->query( $zone->name, q{SOA}, { edns_details => { version => 0 } } );
 
         if ( not $p or not $p->has_edns or $p->rcode ne q{NOERROR} or not $p->aa or not $p->get_records_for_name(q{SOA}, $zone->name, q{answer}) ) {
             next;
         }
 
-        #To be changed to '$ns->query( $zone->name, q{SOA}, { edns_details => { data => $rdata } } );' when PR#1147 is merged.
-        $p = $ns->query( $zone->name, q{SOA}, { edns_details => { data => $rdata, udp_size => 512 } } );
+        $p = $ns->query( $zone->name, q{SOA}, { edns_details => { version => 0, data => $rdata } } );
 
         if ( $p ) {
             if ( $p->rcode ne q{NOERROR} ) {
@@ -1271,7 +1268,7 @@ sub nameserver12 {
 
         next if ( _ip_disabled_message( \@results, $ns, q{SOA} ) );
 
-        my $p = $ns->query( $zone->name, q{SOA}, { edns_details => { z => 3 } } );
+        my $p = $ns->query( $zone->name, q{SOA}, { edns_details => { version => 0, z => 3 } } );
         
         if ( $p ) {
             if ( $p->rcode eq q{FORMERR} and not $p->edns_rcode ) {
@@ -1311,7 +1308,7 @@ sub nameserver13 {
 
         next if ( _ip_disabled_message( \@results, $ns, q{SOA} ) );
 
-        my $p = $ns->query( $zone->name, q{SOA}, { usevc => 0, fallback => 0, edns_details => { do => 1, udp_size => 512 } } );
+        my $p = $ns->query( $zone->name, q{SOA}, { usevc => 0, fallback => 0, edns_details => { version => 0, do => 1, size => 512 } } );
         
         if ( $p ) {
             if ( $p->rcode eq q{FORMERR} and not $p->edns_rcode ) {

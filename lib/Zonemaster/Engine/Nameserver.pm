@@ -340,7 +340,7 @@ sub query {
     $md5->add( q{TYPE}    , "\U$type" );
     $md5->add( q{CLASS}   , "\U$class" );
 
-    if ( defined $href->{edns_details} and defined $href->{edns_details}{do} ) {
+    if ( exists $href->{edns_details} and exists $href->{edns_details}{do} ) {
         $md5->add( q{DNSSEC} , $href->{edns_details}{do} );
     }
     else {
@@ -350,12 +350,12 @@ sub query {
     $md5->add( q{USEVC}   , $usevc );
     $md5->add( q{RECURSE} , $recurse );
 
-    if ( defined $href->{edns_details} ) {
-        $md5->add( q{EDNS_VERSION}        , defined( $href->{edns_details}{version} ) ? $href->{edns_details}{version} : 0 );
-        $md5->add( q{EDNS_Z}              , defined( $href->{edns_details}{z} ) ? $href->{edns_details}{z} : 0 );
-        $md5->add( q{EDNS_EXTENDED_RCODE} , defined( $href->{edns_details}{extended_rcode} ) ? $href->{edns_details}{extended_rcode} : 0 );
-        $md5->add( q{EDNS_DATA}           , defined( $href->{edns_details}{data} ) ? $href->{edns_details}{data} : q{} );
-        $md5->add( q{EDNS_UDP_SIZE}       , defined( $href->{edns_details}{udp_size} ) ? $href->{edns_details}{udp_size} : $edns_size );
+    if ( exists $href->{edns_details} ) {
+        $md5->add( q{EDNS_VERSION}        , $href->{edns_details}{version} // 0 );
+        $md5->add( q{EDNS_Z}              , $href->{edns_details}{z} // 0 );
+        $md5->add( q{EDNS_EXTENDED_RCODE} , $href->{edns_details}{rcode} // 0 );
+        $md5->add( q{EDNS_DATA}           , $href->{edns_details}{data} // q{} );
+        $md5->add( q{EDNS_UDP_SIZE}       , $href->{edns_details}{size} // $edns_size );
     }
     else {
         $md5->add( q{EDNS_UDP_SIZE} , 0);
@@ -460,9 +460,9 @@ sub _query {
     $flags{q{recurse}}   = $href->{q{recurse}}   // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.recurse} );
     $flags{q{timeout}}   = $href->{q{timeout}}   // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.timeout} );
 
-    if ( defined $href->{edns_details} ) {
+    if ( exists $href->{edns_details} ) {
         $flags{q{dnssec}}    = $href->{edns_details}{do} // $flags{q{dnssec}};
-        $flags{q{edns_size}} = $href->{edns_details}{udp_size} // $href->{q{edns_size}} // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.edns_size} );
+        $flags{q{edns_size}} = $href->{edns_details}{size} // $href->{q{edns_size}} // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.edns_size} );
     }
     else {
         $flags{q{edns_size}} = 0;
@@ -489,26 +489,26 @@ sub _query {
         );
     }
     else {
-        if ( defined $href->{edns_details} ) {
+        if ( exists $href->{edns_details} ) {
             my $pkt = Zonemaster::LDNS::Packet->new("$name", $type, $href->{class} );
             $pkt->set_edns_present();
 
-            if ( defined $href->{edns_details}{version} ) {
+            if ( exists $href->{edns_details}{version} ) {
                 $pkt->edns_version($href->{edns_details}{version});
             }
-    	    if ( defined $href->{edns_details}{z} ) {
+    	    if ( exists $href->{edns_details}{z} ) {
                 $pkt->edns_z($href->{edns_details}{z});
             }
-    	    if ( defined $href->{edns_details}{do} ) {
+    	    if ( exists $href->{edns_details}{do} ) {
                 $pkt->do($href->{edns_details}{do});
             }
-    	    if ( defined $href->{edns_details}{udp_size} ) {
-                $pkt->edns_size($href->{edns_details}{udp_size});
+    	    if ( exists $href->{edns_details}{size} ) {
+                $pkt->edns_size($href->{edns_details}{size});
             }
-    	    if ( defined $href->{edns_details}{extended_rcode} ) {
-                $pkt->edns_rcode($href->{edns_details}{extended_rcode});
+    	    if ( exists $href->{edns_details}{rcode} ) {
+                $pkt->edns_rcode($href->{edns_details}{rcode});
             }
-            if ( defined $href->{edns_details}{data} ) {
+            if ( exists $href->{edns_details}{data} ) {
                 $pkt->edns_data($href->{edns_details}{data});
             }
 
@@ -846,11 +846,10 @@ The retransmission interval.
 
 =item dnssec
 
-Set the DO flag in the query.
+Set the DO flag in the query. Defaults to resolver.defaults.dnssec.
 
-Value overridden by 'edns_details->do' (if also given).
-Enables the query to be an EDNS query, unless 'edns_details->do' is set to 0.
-More details in 'edns_details' below.
+Enables the query to be an EDNS query if set to true.
+Value overridden by 'edns_details->do' (if also given). More details in 'edns_details' below.
 
 =item debug
 
@@ -882,20 +881,22 @@ If set to true, prevents a server to be black-listed on a query in case there is
 
 =item edns_size
 
-Set the EDNS0 UDP maximum size.
+Set the EDNS0 UDP maximum size. Defaults to resolver.defaults.edns_size.
 
-Does not enable on its own the query to be an EDNS query. Value discarded if 'edns_details' is not provided.
-Value overridden by 'edns_details->udp_size' (if also given). More details in 'edns_details' below.
+Used only when the query is an EDNS query. Does not enable on its own the query to be an EDNS query.
+Value overridden by 'edns_details->size' (if also given). More details in 'edns_details' below.
 
 =item edns_details
 
-A hash. The currently supported keys for this flag are 'version', 'z', 'do', 'extended_rcode', 'udp_size' and 'data'.
-If any of these are set the query will be an EDNS query, constructed with the values (if any) for each of these keys.
-See L<Zonemaster::LDNS::Packet> for more details (key names prefixed with 'edns_'; note that 'udp_size' is abbreviated
-to 'size' and 'extended_rcode' to 'rcode').
-Note that a profile flag 'edns_size' also exists (see above) and has the same effect as 'edns_details->udp_size', although the value of the 
-latter will take precedence if both are given. Solely setting 'edns_size' will not enable the query as an EDNS query.
-Similarly, note that a profile flag 'dnssec' also exists (see above) and has the same effect as 'edns_details->do', although the value of the
+A hash. An empty hash or a hash with any keys below will enable the query to be an EDNS query.
+
+The currently supported keys are 'version', 'z', 'do', 'rcode', 'size' and 'data'.
+See L<Zonemaster::LDNS::Packet> for more details (key names prefixed with 'edns_').
+
+Note that flag 'edns_size' also exists (see above) and has the same effect as 'edns_details->size', although the value of the 
+latter will take precedence if both are given.
+
+Similarly, note that flag 'dnssec' also exists (see above) and has the same effect as 'edns_details->do', although the value of the
 latter will take precedence if both are given.
 
 =back

@@ -321,7 +321,6 @@ zone_gives_not( 'dnssec11', $zone, [qw{DS11_INCONSISTENT_DS DS11_UNDETERMINED_DS
 ###########
 
 $zone = Zonemaster::Engine->zone( 'dnssec13-algo-not-signed-dnskey.zft-root.rd.nic.fr' );
-#zone_gives( 'dnssec13', $zone, [qw{DS13_ALGO_NOT_SIGNED_DNSKEY}] );
 zone_gives_not('dnssec13', $zone, [qw{DS13_ALGO_NOT_SIGNED_NS DS13_ALGO_NOT_SIGNED_SOA}] );
 
 $zone = Zonemaster::Engine->zone( 'dnssec13-algo-not-signed-ns.zft-root.rd.nic.fr' );
@@ -479,7 +478,6 @@ zone_gives( 'dnssec17', $zone, [q{DS17_CDNSKEY_WITHOUT_DNSKEY}]);
 zone_gives_not('dnssec17', $zone, [qw{DS17_CDNSKEY_INVALID_RRSIG DS17_CDNSKEY_IS_NON_SEP DS17_CDNSKEY_IS_NON_ZONE DS17_CDNSKEY_MATCHES_NO_DNSKEY DS17_CDNSKEY_NOT_SIGNED_BY_CDNSKEY DS17_CDNSKEY_SIGNED_BY_UNKNOWN_DNSKEY DS17_CDNSKEY_UNSIGNED DS17_DELETE_CDNSKEY DS17_DNSKEY_NOT_SIGNED_BY_CDNSKEY DS17_MIXED_DELETE_CDNSKEY}] );
 
 $zone = Zonemaster::Engine->zone( 'dnssec17-cdnskey-signed-by-unknown-dnskey.zft-root.rd.nic.fr' );
-#zone_gives( 'dnssec17', $zone, [qw{DS17_CDNSKEY_IS_NON_SEP DS17_CDNSKEY_SIGNED_BY_UNKNOWN_DNSKEY}]);
 zone_gives_not('dnssec17', $zone, [qw{DS17_CDNSKEY_INVALID_RRSIG DS17_CDNSKEY_IS_NON_ZONE DS17_CDNSKEY_MATCHES_NO_DNSKEY DS17_CDNSKEY_NOT_SIGNED_BY_CDNSKEY DS17_CDNSKEY_UNSIGNED DS17_CDNSKEY_WITHOUT_DNSKEY DS17_DELETE_CDNSKEY DS17_DNSKEY_NOT_SIGNED_BY_CDNSKEY DS17_MIXED_DELETE_CDNSKEY}] );
 
 $zone = Zonemaster::Engine->zone( 'dnssec17-cdnskey-matches-no-dnskey.zft-root.rd.nic.fr' );
@@ -524,13 +522,24 @@ TODO: {
 
     local $TODO = "Need to check these zones with that error";
 
-    # dnssec08
+    # dnssec08: dnssec08-dnskey-signature-not-ok.zut-root.rd.nic.fr
     # Commented out for now because zone doesn't give this message tag anymore. Reason unknown, investigation required. See https://github.com/zonemaster/zonemaster-engine/pull/1147#issuecomment-1318896623
     ok( $tag{DS08_RRSIG_NOT_VALID_BY_DNSKEY}, q{DS08_RRSIG_NOT_VALID_BY_DNSKEY});
 
-    # dnssec10
+    # dnssec10: dnssec10-inconsistent-nsec-nsec3.zft-root.rd.nic.fr
     # Removed 'DS10_NSEC3_RRSIG_VERIFY_ERROR' from 'zone_gives_not' below because zone now gives this message tag. Reason unknown, investigation required. See https://github.com/zonemaster/zonemaster-engine/pull/1147#issuecomment-1318896623
     ok( $tag{DS10_NSEC3_RRSIG_VERIFY_ERROR}, q{DS10_NSEC3_RRSIG_VERIFY_ERROR} );
+
+    # dnssec13: dnssec13-algo-not-signed-dnskey.zft-root.rd.nic.fr
+    # Commented out for now because zone doesn't give this message tag anymore. Reason unknown, investigation required. See https://github.com/zonemaster/zonemaster-engine/pull/1147#issuecomment-1318896623
+    ok( $tag{DS13_ALGO_NOT_SIGNED_DNSKEY}, q{DS13_ALGO_NOT_SIGNED_DNSKEY} );
+
+    # dnssec17: dnssec17-cdnskey-signed-by-unknown-dnskey.zft-root.rd.nic.fr
+    # Commented out for now because zone doesn't give these message tags anymore. Reason unknown, investigation required. See https://github.com/zonemaster/zonemaster-engine/pull/1147#issuecomment-1318896623
+    ok( $tag{DS17_CDNSKEY_IS_NON_SEP}, q{DS17_CDNSKEY_IS_NON_SEP} );
+    ok( $tag{DS17_CDNSKEY_SIGNED_BY_UNKNOWN_DNSKEY}, q{DS17_CDNSKEY_SIGNED_BY_UNKNOWN_DNSKEY} );
+
+
 }
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
