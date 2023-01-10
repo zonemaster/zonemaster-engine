@@ -1202,7 +1202,11 @@ sub nameserver11 {
             }
 
             elsif ( defined $p->edns_data ) {
-                push @unknown_opt_code, $ns->address->short;
+                my $p_opt_code = unpack("S>", $p->edns_data);
+
+                if ( $p_opt_code == $opt_code ){
+                    push @unknown_opt_code, $ns->address->short;
+                }
             }
         }
         else{
