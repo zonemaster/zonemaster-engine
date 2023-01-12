@@ -236,6 +236,12 @@ sub parse_hints {
     return \%hints;
 }
 
+sub serial_gt {
+    my ( $sa, $sb ) = @_;
+
+    return ( $sa > $sb and ( ($sa - $sb) < 2**(32 - 1) ) );
+}
+
 1;
 
 =head1 NAME
@@ -324,6 +330,11 @@ values the documentation strings.
 This method blindly assumes that the structure of the POD is exactly
 like that in the Basic test module.
 If it's not, the results are undefined.
+
+=item serial_gt($serial_a, $serial_b)
+Checks if serial_a is greater than serial_b, according to serial number arithemtic defined in RFC1982.
+
+Return a boolean.
 
 =item scramble_case
 
