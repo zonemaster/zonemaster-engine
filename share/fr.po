@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-14 17:22+0100\n"
+"POT-Creation-Date: 2023-01-12 10:36+0100\n"
 "PO-Revision-Date: 2022-12-14 17:22+0100\n"
 "Last-Translator: marc.vanderwal@afnic.fr\n"
 "Language-Team: Zonemaster Team\n"
@@ -118,8 +118,8 @@ msgstr ""
 #. BASIC:TEST_CASE_END
 #. CONNECTIVITY:TEST_CASE_END
 #. CONSISTENCY:TEST_CASE_END
-#. DNSSEC:TEST_CASE_END
 #. DELEGATION:TEST_CASE_END
+#. DNSSEC:TEST_CASE_END
 #. NAMESERVER:TEST_CASE_END
 #. SYNTAX:TEST_CASE_END
 #. ZONE:TEST_CASE_END
@@ -131,8 +131,8 @@ msgstr "TEST_CASE_END {testcase}."
 #. BASIC:TEST_CASE_START
 #. CONNECTIVITY:TEST_CASE_START
 #. CONSISTENCY:TEST_CASE_START
-#. DNSSEC:TEST_CASE_START
 #. DELEGATION:TEST_CASE_START
+#. DNSSEC:TEST_CASE_START
 #. NAMESERVER:TEST_CASE_START
 #. SYNTAX:TEST_CASE_START
 #. ZONE:TEST_CASE_START
@@ -163,94 +163,6 @@ msgstr "Test du fonctionnement basique du serveur de nom et de la zone"
 #. BASIC:A_QUERY_NO_RESPONSES
 msgid "Nameservers did not respond to A query."
 msgstr "Aucune réponse des serveurs de noms sur une requête de type \"A\"."
-
-#. BASIC:B04_MISSING_NS_RECORD
-#, perl-brace-format
-msgid ""
-"Nameserver {ns} reponds to a NS query with no NS records in the answer "
-"section."
-msgstr ""
-"Le serveur de noms {ns} ne retourne aucun enregistrement de type \"NS\" dans "
-"la section \"answer\" de la réponse à une requête de type \"NS\"."
-
-#. BASIC:B04_MISSING_SOA_RECORD
-#, perl-brace-format
-msgid ""
-"Nameserver {ns} reponds to a SOA query with no SOA records in the answer "
-"section."
-msgstr ""
-"Le serveur de noms {ns} ne retourne aucun enregistrement de type \"SOA\" "
-"dans la section \"answer\" de la réponse à une requête de type \"SOA\"."
-
-#. BASIC:B04_NO_RESPONSE
-#, perl-brace-format
-msgid "Nameserver {ns} does not respond over neither UDP nor TCP."
-msgstr "Le serveur de noms {ns} ne répond ni en UDP, ni en TCP."
-
-#. BASIC:B04_NO_RESPONSE_NS_QUERY
-#, perl-brace-format
-msgid "Nameserver {ns} does not respond to NS queries."
-msgstr "Le serveur de noms {ns} ne répond pas à une requête de type \"NS\"."
-
-#. BASIC:B04_NO_RESPONSE_SOA_QUERY
-#, perl-brace-format
-msgid "Nameserver {ns} does not respond to SOA queries."
-msgstr "Le serveur de noms {ns} ne répond pas à une requête de type \"SOA\"."
-
-#. BASIC:B04_NS_RECORD_NOT_AA
-#, perl-brace-format
-msgid "Nameserver {ns} does not give an authoritative response on an NS query."
-msgstr ""
-"La réponse du serveur de noms {ns} à une requête de type \"NS\" ne fait pas "
-"autorité."
-
-#. BASIC:B04_RESPONSE_TCP_NOT_UDP
-#, perl-brace-format
-msgid "Nameserver {ns} does not respond over UDP."
-msgstr "Le serveur de noms {ns} ne répond pas en UDP."
-
-#. BASIC:B04_SOA_RECORD_NOT_AA
-#, perl-brace-format
-msgid ""
-"Nameserver {ns} does not give an authoritative response on an SOA query."
-msgstr ""
-"La réponse du serveur de noms {ns} à une requête de type \"SOA\" ne fait pas "
-"autorité."
-
-#. BASIC:B04_UNEXPECTED_RCODE_NS_QUERY
-#, perl-brace-format
-msgid ""
-"Nameserver {ns} responds with an unexpected RCODE ({rcode}) on an NS query."
-msgstr ""
-"Le serveur de noms {ns} a répondu à une requête de type \"NS\" avec un code "
-"retour inattendu ({rcode})."
-
-#. BASIC:B04_UNEXPECTED_RCODE_SOA_QUERY
-#, perl-brace-format
-msgid ""
-"Nameserver {ns} responds with an unexpected RCODE ({rcode}) on an SOA query."
-msgstr ""
-"Le serveur de noms {ns} a répondu à une requête de type \"SOA\" avec un code "
-"retour inattendu ({rcode})."
-
-#. BASIC:B04_WRONG_NS_RECORD
-#, perl-brace-format
-msgid ""
-"Nameserver {ns} responds with a wrong owner name ({owner} instead of {name}) "
-"on NS queries."
-msgstr ""
-"Le serveur de noms {ns} répond aux requêtes de type \"NS\" avec un nom de "
-"domaine erroné ({owner} à la place de {name})."
-
-#. BASIC:B04_WRONG_SOA_RECORD
-#. ZONE:WRONG_SOA
-#, perl-brace-format
-msgid ""
-"Nameserver {ns} responds with a wrong owner name ({owner} instead of {name}) "
-"on SOA queries."
-msgstr ""
-"Le serveur de noms {ns} répond aux requêtes de type \"SOA\" avec un nom de "
-"domaine erroné ({owner} à la place de {name})."
 
 #. BASIC:DOMAIN_NAME_LABEL_TOO_LONG
 #, perl-brace-format
@@ -300,8 +212,8 @@ msgstr ""
 #. BASIC:IPV4_DISABLED
 #. CONNECTIVITY:IPV4_DISABLED
 #. CONSISTENCY:IPV4_DISABLED
-#. DNSSEC:IPV4_DISABLED
 #. DELEGATION:IPV4_DISABLED
+#. DNSSEC:IPV4_DISABLED
 #. NAMESERVER:IPV4_DISABLED
 #. SYNTAX:IPV4_DISABLED
 #. SYSTEM:SKIP_IPV4_DISABLED
@@ -321,8 +233,8 @@ msgstr ""
 #. BASIC:IPV6_DISABLED
 #. CONNECTIVITY:IPV6_DISABLED
 #. CONSISTENCY:IPV6_DISABLED
-#. DNSSEC:IPV6_DISABLED
 #. DELEGATION:IPV6_DISABLED
+#. DNSSEC:IPV6_DISABLED
 #. NAMESERVER:IPV6_DISABLED
 #. SYNTAX:IPV6_DISABLED
 #. SYSTEM:SKIP_IPV6_DISABLED
@@ -769,8 +681,8 @@ msgstr ""
 "les différents SOA."
 
 #. CONSISTENCY:NO_RESPONSE
-#. DNSSEC:NO_RESPONSE
 #. DELEGATION:NO_RESPONSE
+#. DNSSEC:NO_RESPONSE
 #. ZONE:NO_RESPONSE
 #, perl-brace-format
 msgid "Nameserver {ns} did not respond."
@@ -2742,11 +2654,6 @@ msgstr ""
 "Tous les serveurs de noms répondent avec la même adresse IP que celle "
 "utilisée lors de leur requêtage."
 
-#. NAMESERVER:UNKNOWN_OPTION_CODE
-#, perl-brace-format
-msgid "Nameserver {ns} responds with an unknown ENDS OPTION-CODE."
-msgstr "Le serveur de noms {ns} répond avec un code d'option EDNS inconnu."
-
 #. NAMESERVER:UPWARD_REFERRAL
 #, perl-brace-format
 msgid "Nameserver {ns} returns an upward referral."
@@ -3205,6 +3112,15 @@ msgstr ""
 "valeur minimale recommandée ({required_expire}) et pas plus petite que la "
 "valeur du champ 'refresh' ({refresh})."
 
+#. ZONE:WRONG_SOA
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responds with a wrong owner name ({owner} instead of {name}) "
+"on SOA queries."
+msgstr ""
+"Le serveur de noms {ns} répond aux requêtes de type \"SOA\" avec un nom de "
+"domaine erroné ({owner} à la place de {name})."
+
 #. ZONE:Z01_MNAME_HAS_LOCALHOST_ADDR
 #, perl-brace-format
 msgid ""
@@ -3244,12 +3160,12 @@ msgstr ""
 #. ZONE:Z01_MNAME_MISSING_SOA_RECORD
 #, perl-brace-format
 msgid ""
-"SOA MNAME name server \"{ns}\" reponds to an SOA query with no SOA records "
+"SOA MNAME name server \"{ns}\" responds to an SOA query with no SOA records "
 "in the answer section."
 msgstr ""
-"Le serveur de noms du MNAME du SOA {ns} ne retourne aucun enregistrement de "
-"type \"SOA\" dans la section \"answer\" de la réponse à une requête de type "
-"\"SOA\"."
+"Le serveur de noms du MNAME du SOA \"{ns}\" ne retourne aucun enregistrement "
+"de type \"SOA\" dans la section \"answer\" de la réponse à une requête de "
+"type \"SOA\"."
 
 #. ZONE:Z01_MNAME_NO_RESPONSE
 #, perl-brace-format
