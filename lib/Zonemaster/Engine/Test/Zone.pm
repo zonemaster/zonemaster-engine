@@ -533,8 +533,6 @@ sub zone01 {
     }
 
     if ( $found_serial ){
-        my $serial_bits = 32;
-
         foreach my $mname ( keys %mname_ns ){
             MNAME_IP: foreach my $mname_ip ( keys %{ $mname_ns{$mname} } ){
                 my $mname_serial = $mname_ns{$mname}{$mname_ip};
