@@ -30,7 +30,7 @@ use Net::DNS::ZoneFile;
 use Pod::Simple::SimpleTree;
 
 use Zonemaster::Engine;
-use Zonemaster::Engine::Constants qw[:ip];
+use Zonemaster::Engine::Constants qw[:ip :soa];
 use Zonemaster::Engine::DNSName;
 use Zonemaster::Engine::Profile;
 
@@ -239,7 +239,8 @@ sub parse_hints {
 sub serial_gt {
     my ( $sa, $sb ) = @_;
 
-    return ( $sa > $sb and ( ($sa - $sb) < 2**(32 - 1) ) );
+    return ( ( $sa < $sb and ( ($sb - $sa) > 2**( $SERIAL_BITS - 1 ) ) ) or
+           ( $sa > $sb and ( ($sa - $sb) < 2**( $SERIAL_BITS - 1 ) ) ) );
 }
 
 1;
@@ -332,7 +333,8 @@ like that in the Basic test module.
 If it's not, the results are undefined.
 
 =item serial_gt($serial_a, $serial_b)
-Checks if serial_a is greater than serial_b, according to serial number arithemtic defined in RFC1982.
+Checks if serial_a is greater than serial_b, according to
+serial number arithmetic as defined in RFC1982, section 3.2.
 
 Return a boolean.
 
