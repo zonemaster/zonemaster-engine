@@ -1202,11 +1202,22 @@ sub nameserver11 {
             }
 
             elsif ( defined $p->edns_data ) {
-                my $p_edns_rdata = $p->edns_data;
-                my $p_opt_code = unpack("S>", $p_edns_rdata);
+                my $p_opt = $p->edns_data;
 
-                if ( $p_opt_code == $opt_code ){
-                    push @unknown_opt_code, $ns->address->short;
+                # Unpack the bytes string:
+                # - OPTION-CODE as unsigned short (16-bit) in "network" (big-endian) order, and
+                # - OPTION-DATA as a sequence of bytes of length specified by a prefixed unsigned short (16-bit)
+                #   in "network" (big-endian) order (OPTION-LENGTH)
+                # - Remaining data, if any (i.e., other OPTIONS)
+
+                my @unpacked_opt = unpack("(n n/a)*", $p_opt);
+                
+                while ( my ( $p_opt_code, $p_opt_data, @next_data ) = @unpacked_opt ) {
+                    if ( $p_opt_code == $opt_code ){
+                        push @unknown_opt_code, $ns->address->short;
+                        last;
+                    }
+                    @unpacked_opt = @next_data;
                 }
             }
         }
