@@ -240,7 +240,8 @@ sub serial_gt {
     my ( $sa, $sb ) = @_;
 
     return ( ( $sa < $sb and ( ($sb - $sa) > 2**( $SERIAL_BITS - 1 ) ) ) or
-           ( $sa > $sb and ( ($sa - $sb) < 2**( $SERIAL_BITS - 1 ) ) ) );
+             ( $sa > $sb and ( ($sa - $sb) < 2**( $SERIAL_BITS - 1 ) ) )
+           );
 }
 
 1;

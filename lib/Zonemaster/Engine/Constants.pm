@@ -266,6 +266,8 @@ C<$IP_VERSION_6>
 
 C<$SERIAL_BITS>
 
+An integer, used to define the size of the serial number space, as defined in RFC1982, section 2.
+
 =item *
 
 C<$SERIAL_MAX_VARIATION>
