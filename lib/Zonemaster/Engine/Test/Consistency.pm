@@ -386,13 +386,13 @@ sub consistency01 {
                 count => scalar( keys %serials ),
             }
           );
-        if ( $serial_numbers[-1] - $serial_numbers[0] > $MAX_SERIAL_VARIATION ) {
+        if ( $serial_numbers[-1] - $serial_numbers[0] > $SERIAL_MAX_VARIATION ) {
             push @results,
               info(
                 SOA_SERIAL_VARIATION => {
                     serial_min    => $serial_numbers[0],
                     serial_max    => $serial_numbers[-1],
-                    max_variation => $MAX_SERIAL_VARIATION,
+                    max_variation => $SERIAL_MAX_VARIATION,
                 }
               );
         }
