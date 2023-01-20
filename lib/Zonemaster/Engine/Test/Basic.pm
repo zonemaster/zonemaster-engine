@@ -144,10 +144,6 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # BASIC:BASIC03
           'The Broken but functional test', @_;
     },
-    BASIC04 => sub {
-        __x    # BASIC:BASIC04
-          'Test of basic nameserver and zone functionality', @_;
-    },
     A_QUERY_NO_RESPONSES => sub {
         __x    # BASIC:A_QUERY_NO_RESPONSES
           'Nameservers did not respond to A query.';
