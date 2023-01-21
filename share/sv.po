@@ -3002,7 +3002,7 @@ msgstr "Följande namnservrar gav inget MX RRset: \"{ns_ip_list}\"."
 #. ZONE:Z09_NO_RESPONSE_MX_QUERY
 #, perl-brace-format
 msgid "No response on MX query from name servers \"{ns_ip_list}\"."
-msgstr "Inget svar på MX-förfrågan från namnservrar \"{ns_ip_list}\".\n"
+msgstr "Inget svar på MX-förfrågan från namnservrar \"{ns_ip_list}\"."
 
 #. ZONE:Z09_NULL_MX_NON_ZERO_PREF
 msgid "The zone has a Null MX with non-zero preference."
