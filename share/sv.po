@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-21 17:37+0000\n"
-"PO-Revision-Date: 2023-01-21 17:38+0000\n"
+"POT-Creation-Date: 2023-01-24 13:17+0000\n"
+"PO-Revision-Date: 2023-01-24 13:16+0000\n"
 "Last-Translator: mats.dufberg@iis.se\n"
 "Language-Team: Zonemaster Project\n"
 "Language: sv\n"
@@ -16,9 +16,9 @@ msgid ""
 "Ambiguous downcaseing of character \"{unicode_name}\" in the domain name. "
 "Use all lower case instead."
 msgstr ""
-"Omvandlingen av den versala (stora) bokstaven \"{unicode_name}\" till "
-"motsvarande gemen (lilla) bokstaven är oklar. Använd bara gemener (små "
-"bokstäver) istället."
+"Domännamnet innehåller den versala (stora) bokstaven \"{unicode_name}\". Det "
+"är oklart hur den ska omvandlas till den motsvarande gemen (lilla) "
+"bokstaven. Använd bara gemener (små bokstäver) istället."
 
 msgid "Domain name is too long (more than 253 characters with no final dot)."
 msgstr "Domännamnet är för långt (mer än 253 tecken utan slutpunkt)."
@@ -57,21 +57,21 @@ msgstr ""
 
 #. ADDRESS:ADDRESS01
 msgid "Name server address must be globally routable"
-msgstr "Namnserverns adress måste vara globalt routbart"
+msgstr "Namnserverns adress måste vara globalt routbar."
 
 #. ADDRESS:ADDRESS02
 msgid "Reverse DNS entry exists for name server IP address"
-msgstr "Bakåtuppslagning (PTR) finns för namnserververns IP-adress"
+msgstr "Bakåtuppslagning (PTR) finns för namnserverns IP-adress."
 
 #. ADDRESS:ADDRESS03
 msgid "Reverse DNS entry matches name server name"
-msgstr "Nakåtuppslagningen (PTR) stämmer med namnservernamnet"
+msgstr "Bakåtuppslagningen (PTR) stämmer med namnservernamnet."
 
 #. ADDRESS:NAMESERVER_IP_WITHOUT_REVERSE
 #, perl-brace-format
 msgid "Nameserver {nsname} has an IP address ({ns_ip}) without PTR configured."
 msgstr ""
-"Namnserver {nsname} har en IP-adress ({ns_ip}) utan bakåtuppslagning (PTR)."
+"Namnservern {nsname} har en IP-adress ({ns_ip}) utan bakåtuppslagning (PTR)."
 
 #. ADDRESS:NAMESERVER_IP_PTR_MISMATCH
 #, perl-brace-format
@@ -180,7 +180,7 @@ msgstr "Domännamnet '{domain}' har en domändel med längden noll."
 #. BASIC:HAS_A_RECORDS
 #, perl-brace-format
 msgid "Nameserver {ns} returned \"A\" record(s) for {domain}."
-msgstr "Namnserver {ns} svarade med A-poster för '{domain}'."
+msgstr "Namnservern {ns} svarade med A-poster för '{domain}'."
 
 #. BASIC:HAS_NAMESERVER_NO_WWW_A_TEST
 #, perl-brace-format
@@ -192,7 +192,7 @@ msgstr ""
 #. BASIC:HAS_NAMESERVERS
 #, perl-brace-format
 msgid "Nameserver {ns} listed these servers as glue: {nsnlist}."
-msgstr "Namnserver {ns} gav dessa servrar som 'glue': {nsnlist}."
+msgstr "Namnservern {ns} gav dessa servrar som 'glue': {nsnlist}."
 
 #. BASIC:HAS_PARENT
 #, perl-brace-format
@@ -236,7 +236,7 @@ msgstr "IPv6 är aktiverat. Skickar fråga om '{rrtype}' till {ns}."
 #. BASIC:NO_A_RECORDS
 #, perl-brace-format
 msgid "Nameserver {ns} did not return \"A\" record(s) for {domain}."
-msgstr "Namnserver {ns} svarade inte med några A-poster för '{domain}'."
+msgstr "Namnservern {ns} svarade inte med några A-poster för '{domain}'."
 
 #. BASIC:NO_GLUE_PREVENTS_NAMESERVER_TESTS
 msgid "No NS records for tested zone from parent. NS tests skipped."
@@ -252,13 +252,13 @@ msgstr "Ingen moderdomän kunde hittas för den testade domänen."
 #, perl-brace-format
 msgid "Nameserver {ns} did not return NS records. RCODE was {rcode}."
 msgstr ""
-"Namnserver {ns} svarade inte med några NS-poster. Svarskoden (RCODE) var "
+"Namnservern {ns} svarade inte med några NS-poster. Svarskoden (RCODE) var "
 "\"{rcode}\"."
 
 #. BASIC:NS_NO_RESPONSE
 #, perl-brace-format
 msgid "Nameserver {ns} did not respond to NS query."
-msgstr "Namnserver {ns} svarade inte på frågan om 'NS'."
+msgstr "Namnservern {ns} svarade inte på frågan om 'NS'."
 
 #. CONNECTIVITY:CONNECTIVITY01
 msgid "UDP connectivity"
@@ -270,7 +270,7 @@ msgstr "Nätåtkomst över TCP"
 
 #. CONNECTIVITY:CONNECTIVITY03
 msgid "AS Diversity"
-msgstr "AS-spridning"
+msgstr "AS-redundans"
 
 #. CONNECTIVITY:CN01_IPV4_DISABLED
 #, perl-brace-format
@@ -292,7 +292,7 @@ msgid ""
 "Nameserver {ns} responds to a NS query with no NS records in the answer "
 "section over UDP."
 msgstr ""
-"Namnserver {ns} svarar på en NS-fråga över UDP utan att inkludera NS-poster "
+"Namnservern {ns} svarar på en NS-fråga över UDP utan att inkludera NS-poster "
 "i svarssektionen."
 
 #. CONNECTIVITY:CN01_MISSING_SOA_RECORD_UDP
@@ -301,37 +301,37 @@ msgid ""
 "Nameserver {ns} responds to a SOA query with no SOA records in the answer "
 "section over UDP."
 msgstr ""
-"Namnserver {ns} svarar på en SOA-fråga över UDP utan att inkludera SOA-"
+"Namnservern {ns} svarar på en SOA-fråga över UDP utan att inkludera SOA-"
 "poster i svarssektionen."
 
 #. CONNECTIVITY:CN01_NO_RESPONSE_NS_QUERY_UDP
 #, perl-brace-format
 msgid "Nameserver {ns} does not respond to NS queries over UDP."
-msgstr "Namnserver {ns} svarar inte på NS-frågor över UDP."
+msgstr "Namnservern {ns} svarar inte på NS-frågor över UDP."
 
 #. CONNECTIVITY:CN01_NO_RESPONSE_SOA_QUERY_UDP
 #, perl-brace-format
 msgid "Nameserver {ns} does not respond to SOA queries over UDP."
-msgstr "Namnserver {ns} svarar inte på SOA-frågor över UDP."
+msgstr "Namnservern {ns} svarar inte på SOA-frågor över UDP."
 
 #. CONNECTIVITY:CN01_NO_RESPONSE_UDP
 #, perl-brace-format
 msgid "Nameserver {ns} does not respond to any queries over UDP."
-msgstr "Namnserver {ns} svarar inte på några DNS-frågor över UDP."
+msgstr "Namnservern {ns} svarar inte på några DNS-frågor över UDP."
 
 #. CONNECTIVITY:CN01_NS_RECORD_NOT_AA_UDP
 #, perl-brace-format
 msgid ""
 "Nameserver {ns} does not give an authoritative response on an NS query over "
 "UDP."
-msgstr "Namnserver {ns} svarar inte auktoritativt på en NS-fråga över UDP."
+msgstr "Namnservern {ns} svarar inte auktoritativt på en NS-fråga över UDP."
 
 #. CONNECTIVITY:CN01_SOA_RECORD_NOT_AA_UDP
 #, perl-brace-format
 msgid ""
 "Nameserver {ns} does not give an authoritative response on an SOA query over "
 "UDP."
-msgstr "Namnserver {ns} svarar inte auktoritativt på en SOA-fråga över UDP."
+msgstr "Namnservern {ns} svarar inte auktoritativt på en SOA-fråga över UDP."
 
 #. CONNECTIVITY:CN01_UNEXPECTED_RCODE_NS_QUERY_UDP
 #, perl-brace-format
@@ -339,8 +339,8 @@ msgid ""
 "Nameserver {ns} responds with an unexpected RCODE ({rcode}) on an NS query "
 "over UDP."
 msgstr ""
-"Namnserver {ns} svarar med den oväntade svarskoden (RCODE) \"{rcode}\" på en "
-"NS-fråga över UDP."
+"Namnservern {ns} svarar med den oväntade svarskoden (RCODE) \"{rcode}\" på "
+"en NS-fråga över UDP."
 
 #. CONNECTIVITY:CN01_UNEXPECTED_RCODE_SOA_QUERY_UDP
 #, perl-brace-format
@@ -348,8 +348,8 @@ msgid ""
 "Nameserver {ns} responds with an unexpected RCODE ({rcode}) on an SOA query "
 "over UDP."
 msgstr ""
-"Namnserver {ns} svarar med den oväntade svarskoden (RCODE) \"{rcode}\" på en "
-"SOA-fråga över UDP."
+"Namnservern {ns} svarar med den oväntade svarskoden (RCODE) \"{rcode}\" på "
+"en SOA-fråga över UDP."
 
 #. CONNECTIVITY:CN01_WRONG_NS_RECORD_UDP
 #, perl-brace-format
@@ -357,7 +357,7 @@ msgid ""
 "Nameserver {ns} responds with a wrong owner name ({domain_found} instead of "
 "{domain_expected}) on NS queries over UDP."
 msgstr ""
-"Nameserver {ns} svarar med fel domännamn (\"owner name\") -- {domain_found} "
+"Namnservern {ns} svarar med fel domännamn (\"owner name\") -- {domain_found} "
 "istället för {domain_expected} -- på en NS-fråga över UDP."
 
 #. CONNECTIVITY:CN01_WRONG_SOA_RECORD_UDP
@@ -366,7 +366,7 @@ msgid ""
 "Nameserver {ns} responds with a wrong owner name ({domain_found} instead of "
 "{domain_expected}) on SOA queries over UDP."
 msgstr ""
-"Nameserver {ns} svarar med fel domännamn (\"owner name\") -- {domain_found} "
+"Namnservern {ns} svarar med fel domännamn (\"owner name\") -- {domain_found} "
 "istället för {domain_expected} -- på en SOA-fråga över UDP."
 
 #. CONNECTIVITY:CN02_MISSING_NS_RECORD_TCP
@@ -375,7 +375,7 @@ msgid ""
 "Nameserver {ns} responds to a NS query with no NS records in the answer "
 "section over TCP."
 msgstr ""
-"Namnserver {ns} svarar på en NS-fråga över TCP utan att inkludera NS-poster "
+"Namnservern {ns} svarar på en NS-fråga över TCP utan att inkludera NS-poster "
 "i svarssektionen."
 
 #. CONNECTIVITY:CN02_MISSING_SOA_RECORD_TCP
@@ -384,37 +384,37 @@ msgid ""
 "Nameserver {ns} responds to a SOA query with no SOA records in the answer "
 "section over TCP."
 msgstr ""
-"Namnserver {ns} svarar på en SOA-fråga över TCP utan att inkludera SOA-"
+"Namnservern {ns} svarar på en SOA-fråga över TCP utan att inkludera SOA-"
 "poster i svarssektionen."
 
 #. CONNECTIVITY:CN02_NO_RESPONSE_NS_QUERY_TCP
 #, perl-brace-format
 msgid "Nameserver {ns} does not respond to NS queries over TCP."
-msgstr "Namnserver {ns} svarar inte på NS-frågor öve TCP."
+msgstr "Namnservern {ns} svarar inte på NS-frågor över TCP."
 
 #. CONNECTIVITY:CN02_NO_RESPONSE_SOA_QUERY_TCP
 #, perl-brace-format
 msgid "Nameserver {ns} does not respond to SOA queries over TCP."
-msgstr "Namnserver {ns} svarar inte på SOA-frågor över TCP."
+msgstr "Namnservern {ns} svarar inte på SOA-frågor över TCP."
 
 #. CONNECTIVITY:CN02_NO_RESPONSE_TCP
 #, perl-brace-format
 msgid "Nameserver {ns} does not respond to any queries over TCP."
-msgstr "Namnserver {ns} svarar inte på några DNS-frågor över TCP."
+msgstr "Namnservern {ns} svarar inte på några DNS-frågor över TCP."
 
 #. CONNECTIVITY:CN02_NS_RECORD_NOT_AA_TCP
 #, perl-brace-format
 msgid ""
 "Nameserver {ns} does not give an authoritative response on an NS query over "
 "TCP."
-msgstr "Namnserver {ns} svarar inte auktoritativt på en NS-fråga över TCP."
+msgstr "Namnservern {ns} svarar inte auktoritativt på en NS-fråga över TCP."
 
 #. CONNECTIVITY:CN02_SOA_RECORD_NOT_AA_TCP
 #, perl-brace-format
 msgid ""
 "Nameserver {ns} does not give an authoritative response on an SOA query over "
 "TCP."
-msgstr "Namnserver {ns} svarar inte auktoritativt på en SOA-fråga över TCP."
+msgstr "Namnservern {ns} svarar inte auktoritativt på en SOA-fråga över TCP."
 
 #. CONNECTIVITY:CN02_UNEXPECTED_RCODE_NS_QUERY_TCP
 #, perl-brace-format
@@ -422,8 +422,8 @@ msgid ""
 "Nameserver {ns} responds with an unexpected RCODE ({rcode}) on an NS query "
 "over TCP."
 msgstr ""
-"Namnserver {ns} svarar med den oväntade svarskoden (RCODE) \"{rcode}\" på en "
-"NS-fråga över TCP."
+"Namnservern {ns} svarar med den oväntade svarskoden (RCODE) \"{rcode}\" på "
+"en NS-fråga över TCP."
 
 #. CONNECTIVITY:CN02_UNEXPECTED_RCODE_SOA_QUERY_TCP
 #, perl-brace-format
@@ -431,8 +431,8 @@ msgid ""
 "Nameserver {ns} responds with an unexpected RCODE ({rcode}) on an SOA query "
 "over TCP."
 msgstr ""
-"Namnserver {ns} svarar med den oväntade svarskoden (RCODE) \"{rcode}\" på en "
-"SOA-fråga över TCP."
+"Namnservern {ns} svarar med den oväntade svarskoden (RCODE) \"{rcode}\" på "
+"en SOA-fråga över TCP."
 
 #. CONNECTIVITY:CN02_WRONG_NS_RECORD_TCP
 #, perl-brace-format
@@ -440,7 +440,7 @@ msgid ""
 "Nameserver {ns} responds with a wrong owner name ({domain_found} instead of "
 "{domain_expected}) on NS queries over TCP."
 msgstr ""
-"Nameserver {ns} svarar med fel domännamn (\"owner name\") -- {domain_found} "
+"Namnservern {ns} svarar med fel domännamn (\"owner name\") -- {domain_found} "
 "istället för {domain_expected} -- på en NS-fråga över TCP."
 
 #. CONNECTIVITY:CN02_WRONG_SOA_RECORD_TCP
@@ -449,7 +449,7 @@ msgid ""
 "Nameserver {ns} responds with a wrong owner name ({domain_found} instead of "
 "{domain_expected}) on SOA queries over TCP."
 msgstr ""
-"Nameserver {ns} svarar med fel domännamn (\"owner name\") -- {domain_found} "
+"Namnservern {ns} svarar med fel domännamn (\"owner name\") -- {domain_found} "
 "istället för {domain_expected} -- på en SOA-fråga över TCP."
 
 #. CONNECTIVITY:ERROR_ASN_DATABASE
@@ -539,27 +539,27 @@ msgstr "Namnserver-IP-adressen \"{ns_ip}\" tillhör prefixet \"{prefix}\"."
 
 #. CONSISTENCY:CONSISTENCY01
 msgid "SOA serial number consistency"
-msgstr "Konsekvent SOA Serial"
+msgstr "Samma SOA Serial överallt"
 
 #. CONSISTENCY:CONSISTENCY02
 msgid "SOA RNAME consistency"
-msgstr "Konsekvent SOA RNAME"
+msgstr "Samma SOA RNAME överallt"
 
 #. CONSISTENCY:CONSISTENCY03
 msgid "SOA timers consistency"
-msgstr "Konsekventa tidsinställningar i SOA"
+msgstr "Samma tidsinställningar i SOA överallt"
 
 #. CONSISTENCY:CONSISTENCY04
 msgid "Name server NS consistency"
-msgstr "Konsekvent uppsättning namnservrar i NS-posterna"
+msgstr "Samma uppsättning NS-poster överallt"
 
 #. CONSISTENCY:CONSISTENCY05
 msgid "Consistency between glue and authoritative data"
-msgstr "Konsekvent mellan glue-poster och auktoritativa adressposter"
+msgstr "Glue-poster återfinns som auktoritativa adressposter"
 
 #. CONSISTENCY:CONSISTENCY06
 msgid "SOA MNAME consistency"
-msgstr "Konsekvent SOA MNAME"
+msgstr "Samma SOA MNAME överallt"
 
 #. CONSISTENCY:ADDRESSES_MATCH
 msgid "Glue records are consistent between glue and authoritative data."
@@ -626,7 +626,7 @@ msgstr "{count} olika uppsättningar med SOA-tidsparametrar hittades."
 #. ZONE:NO_RESPONSE
 #, perl-brace-format
 msgid "Nameserver {ns} did not respond."
-msgstr "Inget svar från namnserver {ns}."
+msgstr "Inget svar från namnservern {ns}."
 
 #. CONSISTENCY:NO_RESPONSE_NS_QUERY
 #, perl-brace-format
@@ -1001,7 +1001,7 @@ msgid ""
 "The DNSKEY RRset has not been signed by any DNSKEY matched by a DS record. "
 "Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"DNSKEY \"RRset\" har inte signerats någon DNSKEY-post som någon DS-post "
+"DNSKEY \"RRset\" har inte signerats med någon DNSKEY-post som någon DS-post "
 "refererar till. Hämtat från namnservrarna med IP-adresserna \"{ns_ip_list}\"."
 
 #. DNSSEC:DS02_NO_DNSKEY_FOR_DS
@@ -2068,8 +2068,8 @@ msgstr "Alla namnservrar har en SOA-post."
 #, perl-brace-format
 msgid "Empty NOERROR response to SOA query was received from {ns}."
 msgstr ""
-"En SOA-fråga fick ett svar med svaraskoden (RCODE) \"NOERROR\" från {ns}, "
-"men svaret var tomt."
+"En SOA-fråga fick ett svar med svarskoden (RCODE) \"NOERROR\" från {ns}, men "
+"svaret var tomt."
 
 #. DELEGATION:TOTAL_NAME_MISMATCH
 msgid "None of the nameservers listed at the parent are listed at the child."
@@ -2081,7 +2081,7 @@ msgstr ""
 #, perl-brace-format
 msgid "Nameserver {ns} answered query with an unexpected rcode ({rcode})."
 msgstr ""
-"Namnserver {ns} besvarade en fråga med den oväntade svarskoden (RCODE) "
+"Namnservern {ns} besvarade en fråga med den oväntade svarskoden (RCODE) "
 "\"{rcode}\"."
 
 #. NAMESERVER:NAMESERVER01
@@ -2123,7 +2123,7 @@ msgstr "Test att skiftläge i QNAME ignoreras för frågan"
 
 #. NAMESERVER:NAMESERVER10
 msgid "Test for undefined EDNS version"
-msgstr "Test med odefiniera EDNS-version"
+msgstr "Test med odefinierad EDNS-version"
 
 #. NAMESERVER:NAMESERVER11
 msgid "Test for unknown EDNS OPTION-CODE"
@@ -2148,19 +2148,19 @@ msgid ""
 "Nameserver {ns} answered AAAA query with an unexpected RDATA length "
 "({length} instead of 16)."
 msgstr ""
-"Namnserver {ns} besvarade en AAAA-fråga med den icke-väntade längden på "
+"Namnservern {ns} besvarade en AAAA-fråga med den icke-väntade längden på "
 "'RDATA' om '{length}' oktetter istället för förväntade 16 oktetter."
 
 #. NAMESERVER:AAAA_QUERY_DROPPED
 #, perl-brace-format
 msgid "Nameserver {ns} dropped AAAA query."
-msgstr "Namnserver {ns} besvarade inte AAAA-frågan."
+msgstr "Namnservern {ns} besvarade inte AAAA-frågan."
 
 #. NAMESERVER:AAAA_UNEXPECTED_RCODE
 #, perl-brace-format
 msgid "Nameserver {ns} answered AAAA query with an unexpected rcode ({rcode})."
 msgstr ""
-"Namnserver {ns} besvarade en AAAA-fråga med den oväntade svarskoden (RCODE) "
+"Namnservern {ns} besvarade en AAAA-fråga med den oväntade svarskoden (RCODE) "
 "\"{rcode}\"."
 
 #. NAMESERVER:AAAA_WELL_PROCESSED
@@ -2173,18 +2173,18 @@ msgstr "Följande namnservrar svarade problemfritt på AAAA-frågor : {ns_list}.
 #, perl-brace-format
 msgid "Nameserver {ns} answered A query with an unexpected rcode ({rcode})."
 msgstr ""
-"Namnserver {ns} besvarade en A-fråga med den oväntade svarskoden (RCODE) "
+"Namnservern {ns} besvarade en A-fråga med den oväntade svarskoden (RCODE) "
 "\"{rcode}\"."
 
 #. NAMESERVER:AXFR_AVAILABLE
 #, perl-brace-format
 msgid "Nameserver {ns} allow zone transfer using AXFR."
-msgstr "Namnserver {ns} tillåter zonöverföringar med AXFR."
+msgstr "Namnservern {ns} tillåter zonöverföringar med AXFR."
 
 #. NAMESERVER:AXFR_FAILURE
 #, perl-brace-format
 msgid "AXFR not available on nameserver {ns}."
-msgstr "AXFR är inte tillgänglig från namnserver {ns}."
+msgstr "AXFR är inte tillgänglig från namnservern {ns}."
 
 #. NAMESERVER:BREAKS_ON_EDNS
 #, perl-brace-format
@@ -2227,8 +2227,8 @@ msgid ""
 "When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver "
 "{ns} returns different answers."
 msgstr ""
-"Namnserver {ns} ger olika svar när frågan är '{query1}' resp. '{query2}' för "
-"posttypen '{type}'."
+"Namnservern {ns} ger olika svar när frågan är '{query1}' resp. '{query2}' "
+"för posttypen '{type}'."
 
 #. NAMESERVER:CASE_QUERY_DIFFERENT_RC
 #, perl-brace-format
@@ -2236,7 +2236,7 @@ msgid ""
 "When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver "
 "{ns} returns different RCODE (\"{rcode1}\" vs \"{rcode2}\")."
 msgstr ""
-"Namnserver {ns} ger olika svarskoder (RCODE) -- \"{rcode1}\" resp. "
+"Namnservern {ns} ger olika svarskoder (RCODE) -- \"{rcode1}\" resp. "
 "\"{rcode2}\" -- när frågedomänen är {query1} resp. {query2} för posttypen "
 "\"{type}\"."
 
@@ -2246,7 +2246,7 @@ msgid ""
 "When asked for {type} records on \"{domain}\", nameserver {ns} returns "
 "nothing."
 msgstr ""
-"Nameserver {ns} svarar ingenting när den får frågan om '{domain}' med "
+"Namnservern {ns} svarar ingenting när den får frågan om '{domain}' med "
 "posttypen '{type}'."
 
 #. NAMESERVER:CASE_QUERY_SAME_ANSWER
@@ -2255,8 +2255,8 @@ msgid ""
 "When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver "
 "{ns} returns same answers."
 msgstr ""
-"Namnserver {ns} ger samma svar när frågan är '{query1}' resp. '{query2}' för "
-"posttypen '{type}'."
+"Namnservern {ns} ger samma svar när frågan är '{query1}' resp. '{query2}' "
+"för posttypen '{type}'."
 
 #. NAMESERVER:CASE_QUERY_SAME_RC
 #, perl-brace-format
@@ -2264,8 +2264,8 @@ msgid ""
 "When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver "
 "{ns} returns same RCODE \"{rcode}\"."
 msgstr ""
-"Namnserver {ns} ger samma svarskod (RCODE), \"{rcode}\", när frågedomänen är "
-"{query1} resp. {query2} för posttypen \"{type}\"."
+"Namnservern {ns} ger samma svarskod (RCODE), \"{rcode}\", när frågedomänen "
+"är {query1} resp. {query2} för posttypen \"{type}\"."
 
 #. NAMESERVER:DIFFERENT_SOURCE_IP
 #, perl-brace-format
@@ -2273,7 +2273,7 @@ msgid ""
 "Nameserver {ns} replies on a SOA query with a different source address "
 "({source})."
 msgstr ""
-"Namnserver {ns} besvarade en SOA-fråga från en annan källadress ({source})."
+"Namnservern {ns} besvarade en SOA-fråga från en annan källadress ({source})."
 
 #. NAMESERVER:EDNS_RESPONSE_WITHOUT_EDNS
 #, perl-brace-format
@@ -2299,7 +2299,7 @@ msgstr "Följande namnservrar stöder EDNS0: {ns_list}."
 #. NAMESERVER:IS_A_RECURSOR
 #, perl-brace-format
 msgid "Nameserver {ns} is a recursor."
-msgstr "Namnserver {ns} är en rekursiv resolver."
+msgstr "Namnservern {ns} är en rekursiv resolver."
 
 #. NAMESERVER:MISSING_OPT_IN_TRUNCATED
 #, perl-brace-format
@@ -2307,18 +2307,18 @@ msgid ""
 "Nameserver {ns} replies on an EDNS query with a truncated response without "
 "EDNS."
 msgstr ""
-"Namnserver {ns} besvarade en förfrågan med EDNS med ett trunkerat svarspaket "
-"utan EDNS."
+"Namnservern {ns} besvarade en förfrågan med EDNS med ett trunkerat "
+"svarspaket utan EDNS."
 
 #. NAMESERVER:NO_EDNS_SUPPORT
 #, perl-brace-format
 msgid "Nameserver {ns} does not support EDNS0 (replies with FORMERR)."
-msgstr "Namnserver {ns} stöder inte EDNS0 (svarar med 'FORMERR')."
+msgstr "Namnservern {ns} stöder inte EDNS0 (svarar med 'FORMERR')."
 
 #. NAMESERVER:NO_RECURSOR
 #, perl-brace-format
 msgid "Nameserver {ns} is not a recursor."
-msgstr "Namnserver {ns} är ingen rekursiv resolver."
+msgstr "Namnservern {ns} är ingen rekursiv resolver."
 
 #. NAMESERVER:NO_RESOLUTION
 msgid "No nameserver was successfully resolved to an IP address."
@@ -2341,7 +2341,7 @@ msgstr ""
 #. NAMESERVER:NS_ERROR
 #, perl-brace-format
 msgid "Erroneous response from nameserver {ns}."
-msgstr "Felaktigt svar från namnserver {ns}."
+msgstr "Felaktigt svar från namnservern {ns}."
 
 #. NAMESERVER:N10_EDNS_RESPONSE_ERROR
 #, perl-brace-format
@@ -2367,7 +2367,7 @@ msgid ""
 "Erroneous RCODE (\"{rcode}\") in response to an EDNS version 1 query. "
 "Fetched from the nameservers with IP addresses {ns_ip_list}"
 msgstr ""
-"Den felaktiga svaraskoden (RCODE) \"{rcode}\" i svaret på en fråga med EDNS "
+"Den felaktiga svarskoden (RCODE) \"{rcode}\" i svaret på en fråga med EDNS "
 "version 1. Hämtat från namnservrarna med IP-adresserna \"{ns_ip_list}\"."
 
 #. NAMESERVER:N11_N11_NO_EDNS
@@ -2432,13 +2432,13 @@ msgid ""
 "Nameserver {ns} does not preserve original case of the queried name "
 "({domain})."
 msgstr ""
-"Nameserver {ns} bevarar inte skillnaden mellan versaler och gemener från "
+"Namnservern {ns} bevarar inte skillnaden mellan versaler och gemener från "
 "frågan ({domain})."
 
 #. NAMESERVER:QNAME_CASE_SENSITIVE
 #, perl-brace-format
 msgid "Nameserver {ns} preserves original case of queried names ({domain})."
-msgstr "Namnserver {ns} bevarade versaler och gemener från frågan ({domain})."
+msgstr "Namnservern {ns} bevarade versaler och gemener från frågan ({domain})."
 
 #. NAMESERVER:SAME_SOURCE_IP
 msgid "All nameservers reply with same IP used to query them."
@@ -2448,7 +2448,7 @@ msgstr ""
 #. NAMESERVER:UPWARD_REFERRAL
 #, perl-brace-format
 msgid "Nameserver {ns} returns an upward referral."
-msgstr "Nameserver {ns} skickade en hänvisning till moderzonen."
+msgstr "Namnservern {ns} skickade en hänvisning till moderzonen."
 
 #. NAMESERVER:UPWARD_REFERRAL_IRRELEVANT
 msgid "Upward referral tests skipped for root zone."
@@ -2484,7 +2484,7 @@ msgstr "En NS-post måste ha ett giltigt namn (\"hostname\")"
 
 #. SYNTAX:SYNTAX05
 msgid "Misuse of '@' character in the SOA RNAME field"
-msgstr "Felaktigt använt @-tecken i SOA RNAME-fältet"
+msgstr "Otillåten användning av @-tecken i SOA RNAME-fältet"
 
 #. SYNTAX:SYNTAX06
 msgid "No illegal characters in the SOA RNAME field"
@@ -2652,12 +2652,12 @@ msgstr ""
 #. SYNTAX:RNAME_MISUSED_AT_SIGN
 #, perl-brace-format
 msgid "Misused '@' character found in SOA RNAME field ({rname})."
-msgstr "Felaktigt använt '@'-tecken finns i SOA RNAME ({rname})."
+msgstr "Otillåtet @-tecken i SOA RNAME ({rname})."
 
 #. SYNTAX:RNAME_NO_AT_SIGN
 #, perl-brace-format
 msgid "There is no misused '@' character in the SOA RNAME field ({rname})."
-msgstr "Inga felanvända @-tecken hittades i SOA RNAME ({rname})."
+msgstr "Inga otillåtna @-tecken hittades i SOA RNAME ({rname})."
 
 #. SYNTAX:RNAME_RFC822_INVALID
 #, perl-brace-format
@@ -2840,7 +2840,7 @@ msgstr "MX-post för domänen pekar inte på ett CNAME."
 msgid ""
 "Nameserver {ns} responds with multiple ({count}) SOA records on SOA queries."
 msgstr ""
-"Namnserver {ns} svarade med multipla ({count}) SOA-poster på SOA-frågor."
+"Namnservern {ns} svarade med multipla ({count}) SOA-poster på SOA-frågor."
 
 #. ZONE:NO_SOA_IN_RESPONSE
 #, perl-brace-format
@@ -2874,7 +2874,7 @@ msgid ""
 "Nameserver {ns} responds with a wrong owner name ({owner} instead of {name}) "
 "on SOA queries."
 msgstr ""
-"Nameserver {ns} ger fel 'owner name' i svaret ({owner} istället för {name}) "
+"Namnservern {ns} ger fel 'owner name' i svaret ({owner} istället för {name}) "
 "på SOA-fråga."
 
 #. ZONE:Z01_MNAME_HAS_LOCALHOST_ADDR
@@ -2883,7 +2883,7 @@ msgid ""
 "SOA MNAME name server \"{nsname}\" resolves to a localhost IP address "
 "({ns_ip})."
 msgstr ""
-"Namnservern \"{nsname}\" angiven SOA MNAME slås upp till IP-adress för "
+"Namnservern \"{nsname}\" angiven i SOA MNAME slås upp till IP-adress för "
 "\"localhost ({ns_ip})."
 
 #. ZONE:Z01_MNAME_IS_DOT
@@ -2892,7 +2892,7 @@ msgid ""
 "SOA MNAME is specified as \".\" which usually means \"no server\". Fetched "
 "from name servers \"{ns_ip_list}\"."
 msgstr ""
-"Namnservernamnet i SOA MNAME är \".\", vilket normal betyder \"ingen server"
+"Namnservernamnet i SOA MNAME är \".\", vilket normalt betyder \"ingen server"
 "\". Hämtad från namnservrarna med IP-adresserna \"{ns_ip_list}\"."
 
 #. ZONE:Z01_MNAME_IS_LOCALHOST
@@ -3006,7 +3006,7 @@ msgstr "Inget svar på MX-förfrågan från namnservrar \"{ns_ip_list}\"."
 
 #. ZONE:Z09_NULL_MX_NON_ZERO_PREF
 msgid "The zone has a Null MX with non-zero preference."
-msgstr "Zonen har en \"Null MX\" med ett preferensvärde som är icke-noll."
+msgstr "Zonen har en \"Null MX\" med ett prioritet som är icke-noll."
 
 #. ZONE:Z09_NULL_MX_WITH_OTHER_MX
 msgid "The zone has a Null MX mixed with other MX records."
