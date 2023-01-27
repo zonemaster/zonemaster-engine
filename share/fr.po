@@ -34,7 +34,8 @@ msgstr "Le nom de domaine commence par un point."
 msgid ""
 "Domain name has an ASCII label (\"{label}\") with a character not permitted."
 msgstr ""
-"Le nom de domaine contient un label ({label}) avec des caractères interdits."
+"Le nom de domaine contient un label (\"{label}\") avec des caractères "
+"interdits."
 
 #, perl-brace-format
 msgid ""
@@ -479,7 +480,7 @@ msgid ""
 "{domain_expected}) on NS queries over TCP."
 msgstr ""
 "Le serveur de noms {ns} répond aux requêtes de type \"NS\" en TCP avec un "
-"nom de domaine erroné ({domain_expected} à la place de {domain_found})."
+"nom de domaine erroné ({domain_found} à la place de {domain_expected})."
 
 #. CONNECTIVITY:CN02_WRONG_SOA_RECORD_TCP
 #, perl-brace-format
@@ -488,7 +489,7 @@ msgid ""
 "{domain_expected}) on SOA queries over TCP."
 msgstr ""
 "Le serveur de noms {ns} répond aux requêtes de type \"SOA\" en TCP avec un "
-"nom de domaine erroné ({domain_expected} à la place de {domain_found})."
+"nom de domaine erroné ({domain_found} à la place de {domain_expected})."
 
 #. CONNECTIVITY:ERROR_ASN_DATABASE
 #, perl-brace-format
@@ -789,7 +790,7 @@ msgstr ""
 
 #. DNSSEC:DNSSEC01
 msgid "Legal values for the DS hash digest algorithm"
-msgstr "Valeurs légales pour l'algorithme de calcul de condensat du DS"
+msgstr "Valeurs autorisées pour l'algorithme de calcul de condensat du DS"
 
 #. DNSSEC:DNSSEC02
 msgid "DS must match a valid DNSKEY in the child zone"
@@ -797,16 +798,16 @@ msgstr "Le DS doit avoir un enregistrement DNSKEY valide dans la zone enfant"
 
 #. DNSSEC:DNSSEC03
 msgid "Check for too many NSEC3 iterations"
-msgstr "Vérification pour un trop grand nombre d'itérations NSEC3"
+msgstr "Recherche d'un nombre d'itérations NSEC3 trop grand"
 
 #. DNSSEC:DNSSEC04
 msgid "Check for too short or too long RRSIG lifetimes"
 msgstr ""
-"Vérification pour des durées de vie des RRSIG trop courtes ou trop longues"
+"Recherche de durées de vie de RRSIG trop courtes ou trop longues"
 
 #. DNSSEC:DNSSEC05
 msgid "Check for invalid DNSKEY algorithms"
-msgstr "Vérification pour des algorithmes des DNSKEY incorrects"
+msgstr "Recherche d’algorithmes DNSKEY non valables"
 
 #. DNSSEC:DNSSEC06
 msgid "Verify DNSSEC additional processing"
@@ -986,7 +987,7 @@ msgid ""
 "\"{ns_ip_list}\"."
 msgstr ""
 "Un enregistrement de type \"DS\" dans la zone {domain} avec le tag {keytag} "
-"a été créé à partir d'un algorithme de condensé ({ds_algo_num}/"
+"a été créé à partir d'un algorithme de condensat ({ds_algo_num}/"
 "{ds_algo_mnemo}) qui ne peut pas être validé par cette installation de "
 "Zonemaster. Information retournée par les serveurs de noms ayant une des "
 "adresses IP suivantes \"{ns_ip_list}\"."
@@ -1086,8 +1087,8 @@ msgid ""
 msgstr ""
 "L'ensemble d'enregistrements de type \"DNSKEY\" n'est pas signé par la clé "
 "(DNSKEY) correspondant au tag de l'enregistrement de type \"DS\". "
-"Information retournée par les serveurs de noms dont les adresses IP sont "
-"\"{ns_ip_list}\"."
+"Information retournée par les serveurs de noms ayant une des adresses IP "
+"suivantes \"{ns_ip_list}\"."
 
 #. DNSSEC:DS02_NO_DNSKEY_FOR_DS
 #, perl-brace-format
@@ -2284,7 +2285,7 @@ msgstr "Adresse source identique"
 
 #. NAMESERVER:NAMESERVER05
 msgid "Behaviour against AAAA query"
-msgstr "Comportement vis à vis des requêtes AAAA"
+msgstr "Comportement vis-à-vis des requêtes AAAA"
 
 #. NAMESERVER:NAMESERVER06
 msgid "NS can be resolved"
@@ -2685,7 +2686,8 @@ msgstr "Aucun tiret ('-') au début ou à la fin du nom de domaine"
 msgid ""
 "There must be no double hyphen ('--') in position 3 and 4 of the domain name"
 msgstr ""
-"Il n'y a pas de double tiret ('--') aux positions 3 et 4 du nom de domaine"
+"Le double tiret ('--') ne doit pas apparaitre aux positions 3 et 4 du nom de "
+"domaine"
 
 #. SYNTAX:SYNTAX04
 msgid "The NS name must have a valid domain/hostname"
@@ -2730,9 +2732,9 @@ msgid ""
 "SOA MNAME ({domain}) has a label ({label}) with a double hyphen ('--') in "
 "position 3 and 4 (with a prefix which is not 'xn--')."
 msgstr ""
-"Le serveur maître défini dans le SOA, 'mname' ({domain}), contient un label "
-"({label}) avec un double tiret ('--') en positions 3 et 4 (avec un préfixe "
-"différent de 'xn--')."
+"Le serveur maître défini dans le champ MNAME du SOA ({domain}) contient un "
+"label ({label}) avec un double tiret ('--') en positions 3 et 4 (avec un "
+"préfixe différent de 'xn--')."
 
 #. SYNTAX:MNAME_NON_ALLOWED_CHARS
 #, perl-brace-format
@@ -3195,9 +3197,9 @@ msgid ""
 "SOA MNAME name server(s) \"{ns_list}\" do not have the highest SOA SERIAL "
 "(expected \"{soaserial}\" but got \"{soaserial_list}\")"
 msgstr ""
-"Le(s) serveur(s) \"{ns_list}\" du MNAME du SOA n’ont pas le numéro de série "
-"SOA le plus élevé (numéro de série attendu : \"{soaserial}\" ; numéros de "
-"série obtenus : \"{soaserial_list}\")."
+"Le(s) serveur(s) de noms \"{ns_list}\" du MNAME du SOA n’ont pas le numéro de "
+"série SOA le plus élevé (numéro de série attendu : \"{soaserial}\" ; numéros "
+"de série obtenus : \"{soaserial_list}\")."
 
 #. ZONE:Z01_MNAME_NOT_RESOLVE
 #, perl-brace-format
@@ -3213,8 +3215,8 @@ msgid ""
 "SOA MNAME name server \"{ns}\" gives unexpected RCODE name (\"{rcode}\") in "
 "response to an SOA query."
 msgstr ""
-"Le serveur de noms du MNAME du SOA \"{ns}\" a répondu à une requête de type "
-"\"SOA\" avec un code de retour inattendu ({rcode})."
+"Le serveur de noms du champ MNAME du SOA \"{ns}\" a répondu à une requête de "
+"type \"SOA\" avec un code de retour inattendu ({rcode})."
 
 #. ZONE:Z09_INCONSISTENT_MX
 msgid "Some name servers return an MX RRset while others return none."
