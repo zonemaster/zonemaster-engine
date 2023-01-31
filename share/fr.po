@@ -2,9 +2,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-31 09:59+0100\n"
-"PO-Revision-Date: 2023-01-31 09:57+0100\n"
-"Last-Translator: marc.vanderwal@afnic.fr\n"
+"POT-Creation-Date: 2023-01-31 10:37+0100\n"
+"PO-Revision-Date: 2023-01-31 10:37+0100\n"
+"Last-Translator: thomas.green@afnic.fr\n"
 "Language-Team: Zonemaster Team\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -61,11 +61,11 @@ msgstr "L'adresse du serveur de nom doit être routable globalement"
 #. ADDRESS:ADDRESS02
 msgid "Reverse DNS entry exists for name server IP address"
 msgstr ""
-"Un enregistrement DNS inverse existe pour l’adresse IP du serveur de noms."
+"Un enregistrement DNS inverse existe pour l’adresse IP du serveur de noms"
 
 #. ADDRESS:ADDRESS03
 msgid "Reverse DNS entry matches name server name"
-msgstr "L’enregistrement DNS inverse correspond au nom du serveur de noms."
+msgstr "L’enregistrement DNS inverse correspond au nom du serveur de noms"
 
 #. ADDRESS:NAMESERVER_IP_WITHOUT_REVERSE
 #, perl-brace-format
@@ -603,11 +603,11 @@ msgstr "Cohérence des intervalles du SOA"
 
 #. CONSISTENCY:CONSISTENCY04
 msgid "Name server NS consistency"
-msgstr "Cohérence des entrées NS des serveurs de noms."
+msgstr "Cohérence des entrées NS des serveurs de noms"
 
 #. CONSISTENCY:CONSISTENCY05
 msgid "Consistency between glue and authoritative data"
-msgstr "Cohérence entre la colle et les données des serveurs faisant autorité."
+msgstr "Cohérence entre la colle et les données des serveurs faisant autorité"
 
 #. CONSISTENCY:CONSISTENCY06
 msgid "SOA MNAME consistency"
@@ -717,7 +717,7 @@ msgstr ""
 #, perl-brace-format
 msgid "A single SOA mname value was seen ({mname})."
 msgstr ""
-"Un unique serveur maître a été trouvée dans les enregistrements de type \"SOA"
+"Un unique serveur maître a été trouvé dans les enregistrements de type \"SOA"
 "\" de la zone testée ({mname})."
 
 #. CONSISTENCY:ONE_SOA_RNAME
@@ -1956,7 +1956,7 @@ msgstr "Nombre minimal de serveurs de noms"
 
 #. DELEGATION:DELEGATION02
 msgid "Name servers must have distinct IP addresses"
-msgstr "Les serveurs de noms doivent avoir des adresses IP distinctes."
+msgstr "Les serveurs de noms doivent avoir des adresses IP distinctes"
 
 #. DELEGATION:DELEGATION03
 msgid "No truncation of referrals"
@@ -1968,7 +1968,7 @@ msgstr "Le serveur de noms fait autorité."
 
 #. DELEGATION:DELEGATION05
 msgid "Name server must not point at CNAME alias"
-msgstr "Le serveur de noms ne doit pas pointer sur un alias (CNAME)."
+msgstr "Le serveur de noms ne doit pas pointer sur un alias (CNAME)"
 
 #. DELEGATION:DELEGATION06
 msgid "Existence of SOA"
@@ -2267,7 +2267,7 @@ msgstr ""
 
 #. NAMESERVER:NAMESERVER01
 msgid "A name server should not be a recursor"
-msgstr "Un serveur de noms ne doit pas être un récurseur."
+msgstr "Un serveur de noms ne doit pas être un récurseur"
 
 #. NAMESERVER:NAMESERVER02
 msgid "Test of EDNS0 support"
@@ -2293,7 +2293,7 @@ msgstr "Les NS peuvent être résolus"
 msgid "To check whether authoritative name servers return an upward referral"
 msgstr ""
 "Vérifier si les serveurs de noms faisant autorité répondent aux requêtes de "
-"type \"NS\" sur la racine '.' (upward referral)."
+"type \"NS\" sur la racine '.' (upward referral)"
 
 #. NAMESERVER:NAMESERVER08
 msgid "Testing QNAME case insensitivity"
@@ -2321,7 +2321,7 @@ msgstr "Test d'une réponse tronquée pour une requête EDNS"
 
 #. NAMESERVER:NAMESERVER14
 msgid "Test for unknown version with unknown OPTION-CODE"
-msgstr "Test de numéro de version inconnue avec code d’option inconnu."
+msgstr "Test de numéro de version inconnue avec code d’option inconnu"
 
 #. NAMESERVER:AAAA_BAD_RDATA
 #, perl-brace-format
@@ -2674,7 +2674,7 @@ msgstr ""
 
 #. SYNTAX:SYNTAX01
 msgid "No illegal characters in the domain name"
-msgstr "Le nom de domaine ne contient aucun caractère interdit."
+msgstr "Le nom de domaine ne contient aucun caractère interdit"
 
 #. SYNTAX:SYNTAX02
 msgid "No hyphen ('-') at the start or end of the domain name"
@@ -3127,7 +3127,7 @@ msgid ""
 "SOA MNAME name server \"{nsname}\" resolves to a localhost IP address "
 "({ns_ip})."
 msgstr ""
-"La résolution du nom du serveur de noms du MNAME du SOA \"{nsname}\" donne "
+"La résolution du nom du serveur de noms du SOA MNAME \"{nsname}\" donne "
 "une adresse localhost ({ns_ip})."
 
 #. ZONE:Z01_MNAME_IS_DOT
@@ -3136,7 +3136,7 @@ msgid ""
 "SOA MNAME is specified as \".\" which usually means \"no server\". Fetched "
 "from name servers \"{ns_ip_list}\"."
 msgstr ""
-"Le nom du serveur de noms du MNAME du SOA est \".\", ce qui signifie en "
+"Le nom du serveur de noms du SOA MNAME est \".\", ce qui signifie en "
 "général \"aucun serveur\". Information retournée par les serveurs de noms "
 "dont les adresses IP sont \"{ns_ip_list}\"."
 
@@ -3154,7 +3154,7 @@ msgstr ""
 #, perl-brace-format
 msgid "SOA MNAME name server(s) \"{ns_list}\" appears to be master."
 msgstr ""
-"Le(s) serveur(s) de noms \"{ns_list}\" du MNAME du SOA semblent être les "
+"Le(s) serveur(s) de noms \"{ns_list}\" du SOA MNAME semblent être les "
 "serveurs maîtres."
 
 #. ZONE:Z01_MNAME_MISSING_SOA_RECORD
@@ -3163,7 +3163,7 @@ msgid ""
 "SOA MNAME name server \"{ns}\" responds to an SOA query with no SOA records "
 "in the answer section."
 msgstr ""
-"Le serveur de noms du MNAME du SOA \"{ns}\" ne retourne aucun enregistrement "
+"Le serveur de noms du SOA MNAME \"{ns}\" ne retourne aucun enregistrement "
 "de type \"SOA\" dans la section \"answer\" de la réponse à une requête de "
 "type \"SOA\"."
 
@@ -3171,14 +3171,14 @@ msgstr ""
 #, perl-brace-format
 msgid "SOA MNAME name server \"{ns}\" does not respond to an SOA query."
 msgstr ""
-"Le serveur de noms du MNAME du SOA \"{ns}\" ne répond pas aux requêtes de "
+"Le serveur de noms du SOA MNAME \"{ns}\" ne répond pas aux requêtes de "
 "type \"SOA\"."
 
 #. ZONE:Z01_MNAME_NOT_AUTHORITATIVE
 #, perl-brace-format
 msgid "SOA MNAME name server \"{ns}\" is not authoritative for the zone."
 msgstr ""
-"Le serveur de noms maître défini dans le SOA, MNAME \"{ns}\", ne fait pas "
+"Le serveur de noms maître défini dans le SOA MNAME, \"{ns}\", ne fait pas "
 "autorité pour la zone."
 
 #. ZONE:Z01_MNAME_NOT_IN_NS_LIST
@@ -3186,7 +3186,7 @@ msgstr ""
 msgid ""
 "SOA MNAME name server \"{nsname}\" is not listed as NS record for the zone."
 msgstr ""
-"Le serveur maître défini dans le SOA, MNAME ({nsname}), ne fait pas partie "
+"Le serveur maître défini dans le SOA MNAME, ({nsname}), ne fait pas partie "
 "des enregistrements de type \"NS\" listés par la zone."
 
 #. ZONE:Z01_MNAME_NOT_MASTER
@@ -3195,7 +3195,7 @@ msgid ""
 "SOA MNAME name server(s) \"{ns_list}\" do not have the highest SOA SERIAL "
 "(expected \"{soaserial}\" but got \"{soaserial_list}\")"
 msgstr ""
-"Le(s) serveur(s) de noms \"{ns_list}\" du MNAME du SOA n’ont pas le numéro "
+"Le(s) serveur(s) de noms \"{ns_list}\" du SOA MNAME n’ont pas le numéro "
 "de série SOA le plus élevé (numéro de série attendu : \"{soaserial}\" ; "
 "numéros de série obtenus : \"{soaserial_list}\")."
 
