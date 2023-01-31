@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-12 10:36+0100\n"
-"PO-Revision-Date: 2022-12-14 17:22+0100\n"
+"POT-Creation-Date: 2023-01-31 09:59+0100\n"
+"PO-Revision-Date: 2023-01-31 09:57+0100\n"
 "Last-Translator: marc.vanderwal@afnic.fr\n"
 "Language-Team: Zonemaster Team\n"
 "Language: fr\n"
@@ -802,8 +802,7 @@ msgstr "Recherche d'un nombre d'itérations NSEC3 trop grand"
 
 #. DNSSEC:DNSSEC04
 msgid "Check for too short or too long RRSIG lifetimes"
-msgstr ""
-"Recherche de durées de vie de RRSIG trop courtes ou trop longues"
+msgstr "Recherche de durées de vie de RRSIG trop courtes ou trop longues"
 
 #. DNSSEC:DNSSEC05
 msgid "Check for invalid DNSKEY algorithms"
@@ -1000,7 +999,7 @@ msgid ""
 "the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
 "Un enregistrement de type \"DS\" dans la zone {domain} avec le tag {keytag} "
-"a été créé à partir d'un algorithme de condensé obsolète ({ds_algo_num}/"
+"a été créé à partir d'un algorithme de condensat obsolète ({ds_algo_num}/"
 "{ds_algo_mnemo}). Information retournée par les serveurs de noms ayant une "
 "des adresses IP suivantes \"{ns_ip_list}\"."
 
@@ -1021,7 +1020,7 @@ msgid ""
 "from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
 "Un enregistrement de type \"DS\" dans la zone {domain} avec le tag {keytag} "
-"a été créé à partir d'un algorithme de condensé ({ds_algo_num}/"
+"a été créé à partir d'un algorithme de condensat ({ds_algo_num}/"
 "{ds_algo_mnemo}) qui n'est pas destiné à la signature. Information retournée "
 "par les serveurs de noms ayant une des adresses IP suivantes "
 "\"{ns_ip_list}\"."
@@ -1034,9 +1033,9 @@ msgid ""
 "the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
 "Un enregistrement de type \"DS\" dans la zone {domain} avec le tag {keytag} "
-"a été créé à partir d'un algorithme de condensé non assigné ({ds_algo_num}). "
-"Information retournée par les serveurs de noms ayant une des adresses IP "
-"suivantes \"{ns_ip_list}\"."
+"a été créé à partir d'un algorithme de condensat non assigné "
+"({ds_algo_num}). Information retournée par les serveurs de noms ayant une "
+"des adresses IP suivantes \"{ns_ip_list}\"."
 
 #. DNSSEC:DS02_ALGO_NOT_SUPPORTED_BY_ZM
 #. DNSSEC:DS08_ALGO_NOT_SUPPORTED_BY_ZM
@@ -1085,10 +1084,10 @@ msgid ""
 "The DNSKEY RRset has not been signed by any DNSKEY matched by a DS record. "
 "Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"L'ensemble d'enregistrements de type \"DNSKEY\" n'est pas signé par la clé "
-"(DNSKEY) correspondant au tag de l'enregistrement de type \"DS\". "
-"Information retournée par les serveurs de noms ayant une des adresses IP "
-"suivantes \"{ns_ip_list}\"."
+"L'ensemble d'enregistrements de type \"DNSKEY\" n'est signé par aucune des "
+"clés (DNSKEY) correspondant à un enregistrement de type \"DS\". Information "
+"retournée par les serveurs de noms ayant une des adresses IP suivantes "
+"\"{ns_ip_list}\"."
 
 #. DNSSEC:DS02_NO_DNSKEY_FOR_DS
 #, perl-brace-format
@@ -1643,7 +1642,7 @@ msgid ""
 "A single \"delete\" CDS record is found on the nameservers with IP addresses "
 "\"{ns_ip_list}\"."
 msgstr ""
-"Un unique enregitrement de type \"delete CDS\" a été retourné par les "
+"Un unique enregistrement de type \"delete CDS\" a été retourné par les "
 "serveurs de noms ayant une des adresses IP suivantes ({ns_ip_list})."
 
 #. DNSSEC:DS16_DNSKEY_NOT_SIGNED_BY_CDS
@@ -1761,7 +1760,7 @@ msgid ""
 "A single \"delete\" CDNSKEY record is found on the nameservers with IP "
 "addresses \"{ns_ip_list}\"."
 msgstr ""
-"Un unique enregitrement de type \"delete CDNSKEY\" a été retourné par les "
+"Un unique enregistrement CDNSKEY de type \"delete\" a été retourné par les "
 "serveurs de noms ayant une des adresses IP suivantes \"{ns_ip_list}\"."
 
 #. DNSSEC:DS17_DNSKEY_NOT_SIGNED_BY_CDNSKEY
@@ -1782,10 +1781,9 @@ msgid ""
 "The CDNSKEY RRset is a mixture between \"delete\" record and other records. "
 "Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"Lorsqu'il est présent, l'enregistrement de type \"delete CDNSKEY\" ne peut "
-"pas être combiné avec d'autres enregistrements de type \"CDNSKEY\". "
-"Information retournée par les serveurs de noms ayant une des adresses IP "
-"suivantes \"{ns_ip_list}\"."
+"Le jeu d'enregistrements CDNSKEY même un enregistrement de type \"delete\" "
+"et d'autres enregistrements. Information retournée par les serveurs de noms "
+"ayant une des adresses IP suivantes \"{ns_ip_list}\"."
 
 #. DNSSEC:DS18_NO_MATCH_CDS_RRSIG_DS
 #, perl-brace-format
@@ -1793,7 +1791,7 @@ msgid ""
 "The CDS RRset is not signed with a DNSKEY record that a DS record points to. "
 "Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"L'ensemble d'enregistrements de type \"CDS\" n'est pas signé par la clé "
+"L'ensemble d'enregistrements de type \"CDS\" n'est pas signé par une clé "
 "(DNSKEY) correspondant au tag de l'enregistrement de type \"DS\". "
 "Information retournée par les serveurs de noms ayant une des adresses IP "
 "suivantes \"{ns_ip_list}\"."
@@ -1804,7 +1802,7 @@ msgid ""
 "The CDNSKEY RRset is not signed with a DNSKEY record that a DS record points "
 "to. Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"L'ensemble d'enregistrements de type \"CDNSKEY\" n'est pas signé par la clé "
+"L'ensemble d'enregistrements de type \"CDNSKEY\" n'est pas signé par une clé "
 "(DNSKEY) correspondant au tag de l'enregistrement de type \"DS\". "
 "Information retournée par les serveurs de noms ayant une des adresses IP "
 "suivantes \"{ns_ip_list}\"."
@@ -2580,7 +2578,7 @@ msgid ""
 "any EDNS from name servers \"{ns_ip_list}\"."
 msgstr ""
 "La réponse DNS, suite à une requête avec un code d'option EDNS inconnu, ne "
-"contient pas d'EDNS depuis les serveurs \"{ns_ip_list}\"."
+"contient pas d'EDNS depuis les serveurs de noms \"{ns_ip_list}\"."
 
 #. NAMESERVER:N11_NO_RESPONSE
 #, perl-brace-format
@@ -2912,7 +2910,7 @@ msgstr ""
 
 #. ZONE:ZONE01
 msgid "Fully qualified master nameserver in SOA"
-msgstr "Le serveur du nom principal est pleinement qualifié dans le SOA"
+msgstr "Le serveur de noms principal est pleinement qualifié dans le SOA"
 
 #. ZONE:ZONE02
 msgid "SOA 'refresh' minimum value"
@@ -2920,11 +2918,11 @@ msgstr "Valeur minimale du champ 'refresh' du SOA"
 
 #. ZONE:ZONE03
 msgid "SOA 'retry' lower than 'refresh'"
-msgstr "Champ 'retry' du SOA inférieure au champ 'refresh'"
+msgstr "Champ 'retry' du SOA inférieur au champ 'refresh'"
 
 #. ZONE:ZONE04
 msgid "SOA 'retry' at least 1 hour"
-msgstr "Champ 'retry' du SOA supérieure à 1 heure"
+msgstr "Champ 'retry' du SOA supérieur à 1 heure"
 
 #. ZONE:ZONE05
 msgid "SOA 'expire' minimum value"
@@ -3121,7 +3119,7 @@ msgid ""
 "on SOA queries."
 msgstr ""
 "Le serveur de noms {ns} répond aux requêtes de type \"SOA\" avec un nom de "
-"domaine erroné ({owner} à la place de {name})."
+"domaine erroné ({owner} au lieu de {name})."
 
 #. ZONE:Z01_MNAME_HAS_LOCALHOST_ADDR
 #, perl-brace-format
@@ -3180,15 +3178,15 @@ msgstr ""
 #, perl-brace-format
 msgid "SOA MNAME name server \"{ns}\" is not authoritative for the zone."
 msgstr ""
-"Le serveur maître défini dans le SOA, 'mname' \"{ns}\", ne fait pas autorité "
-"pour la zone."
+"Le serveur de noms maître défini dans le SOA, MNAME \"{ns}\", ne fait pas "
+"autorité pour la zone."
 
 #. ZONE:Z01_MNAME_NOT_IN_NS_LIST
 #, perl-brace-format
 msgid ""
 "SOA MNAME name server \"{nsname}\" is not listed as NS record for the zone."
 msgstr ""
-"Le serveur maître défini dans le SOA, 'mname' ({nsname}), ne fait pas partie "
+"Le serveur maître défini dans le SOA, MNAME ({nsname}), ne fait pas partie "
 "des enregistrements de type \"NS\" listés par la zone."
 
 #. ZONE:Z01_MNAME_NOT_MASTER
@@ -3197,17 +3195,17 @@ msgid ""
 "SOA MNAME name server(s) \"{ns_list}\" do not have the highest SOA SERIAL "
 "(expected \"{soaserial}\" but got \"{soaserial_list}\")"
 msgstr ""
-"Le(s) serveur(s) de noms \"{ns_list}\" du MNAME du SOA n’ont pas le numéro de "
-"série SOA le plus élevé (numéro de série attendu : \"{soaserial}\" ; numéros "
-"de série obtenus : \"{soaserial_list}\")."
+"Le(s) serveur(s) de noms \"{ns_list}\" du MNAME du SOA n’ont pas le numéro "
+"de série SOA le plus élevé (numéro de série attendu : \"{soaserial}\" ; "
+"numéros de série obtenus : \"{soaserial_list}\")."
 
 #. ZONE:Z01_MNAME_NOT_RESOLVE
 #, perl-brace-format
 msgid ""
 "SOA MNAME name server \"{nsname}\" cannot be resolved into an IP address."
 msgstr ""
-"Impossible d’obtenir l’adresse IP associée au champ MNAME du SOA "
-"\"{nsname}\"."
+"Le serveurs de noms maître du SOA MNAME \"{nsname}\" ne peut pas être résolu "
+"en une adresse IP."
 
 #. ZONE:Z01_MNAME_UNEXPECTED_RCODE
 #, perl-brace-format
@@ -3215,8 +3213,8 @@ msgid ""
 "SOA MNAME name server \"{ns}\" gives unexpected RCODE name (\"{rcode}\") in "
 "response to an SOA query."
 msgstr ""
-"Le serveur de noms du champ MNAME du SOA \"{ns}\" a répondu à une requête de "
-"type \"SOA\" avec un code de retour inattendu ({rcode})."
+"Le serveur de noms du SOA MNAME \"{ns}\" a répondu à une requête de type "
+"\"SOA\" avec un code de retour inattendu ({rcode})."
 
 #. ZONE:Z09_INCONSISTENT_MX
 msgid "Some name servers return an MX RRset while others return none."
