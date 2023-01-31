@@ -11,6 +11,7 @@ use Zonemaster::Engine;
 
 use Carp;
 use List::MoreUtils qw[uniq none];
+use List::Util qw[max];
 use Locale::TextDomain qw[Zonemaster-Engine];
 use Readonly;
 use JSON::PP;
@@ -532,8 +533,6 @@ sub zone01 {
     }
 
     if ( $found_serial ){
-        my $serial_bits = 32;
-
         foreach my $mname ( keys %mname_ns ){
             MNAME_IP: foreach my $mname_ip ( keys %{ $mname_ns{$mname} } ){
                 my $mname_serial = $mname_ns{$mname}{$mname_ip};
@@ -543,7 +542,7 @@ sub zone01 {
                 }
 
                 foreach my $serial ( uniq @serial_ns ){
-                    if ( $serial > $mname_serial and ( ($serial - $mname_serial) < 2**($serial_bits - 1) ) ){
+                    if ( Zonemaster::Engine::Util::serial_gt( $serial, $mname_serial ) ){
                         $mname_not_master{$mname}{$mname_ip} = $mname_serial;
                         next MNAME_IP;
                     }
@@ -557,8 +556,14 @@ sub zone01 {
             push @results, 
                 info( 
                     Z01_MNAME_NOT_MASTER => {
-                        ns_list  => join( q{;}, sort map { $_ . '/' . %{ $mname_not_master{$_} } } keys %mname_not_master ),
-                        soaserial => max( map { $mname_not_master{$_} } keys %mname_not_master ),
+                        ns_list => join( q{;}, sort map
+                                        {
+                                            my $mname = $_;
+                                            map { "$mname/$_" } keys %{ $mname_not_master{$_} }
+                                        }
+                                        keys %mname_not_master
+                                   ),
+                        soaserial => max( uniq map { values %{ $mname_not_master{$_} } } keys %mname_not_master ),
                         soaserial_list => join( q{;}, uniq @serial_ns )
                     }
                 );

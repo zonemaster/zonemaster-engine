@@ -173,7 +173,7 @@ sub address01 {
                 NAMESERVER_IP_PRIVATE_NETWORK => {
                     nsname    => $local_ns->name->string,
                     ns_ip     => $local_ns->address->short,
-                    prefix    => ${$ip_details_ref}{ip}->print,
+                    prefix    => ${$ip_details_ref}{ip}->short . '/' . ${$ip_details_ref}{ip}->prefixlen,
                     name      => ${$ip_details_ref}{name},
                     reference => ${$ip_details_ref}{reference},
                 }

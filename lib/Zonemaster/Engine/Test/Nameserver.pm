@@ -465,10 +465,6 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # NAMESERVER:TEST_CASE_START
           'TEST_CASE_START {testcase}.', @_;
     },
-    UNKNOWN_OPTION_CODE => sub {
-        __x    # NAMESERVER:UNKNOWN_OPTION_CODE
-          'Nameserver {ns} responds with an unknown ENDS OPTION-CODE.', @_;
-    },
     UPWARD_REFERRAL => sub {
         __x    # NAMESERVER:UPWARD_REFERRAL
           'Nameserver {ns} returns an upward referral.', @_;
@@ -1181,32 +1177,49 @@ sub nameserver11 {
         #To be changed to '$ns->query( $zone->name, q{SOA}, { edns_details => { version => 0 } } );' when PR#1147 is merged.
         my $p = $ns->query( $zone->name, q{SOA}, { edns_details => { udp_size => 512 } } );
 
-        if ( not $p or not $p->has_edns or $p->rcode ne q{NOERROR} or not $p->aa or not $p->get_records_for_name(q{SOA}, $zone->name, q{answer}) ){
+        if ( not $p or not $p->has_edns or $p->rcode ne q{NOERROR} or not $p->aa or not $p->get_records_for_name(q{SOA}, $zone->name, q{answer}) ) {
             next;
         }
-        
+
         #To be changed to '$ns->query( $zone->name, q{SOA}, { edns_details => { data => $rdata } } );' when PR#1147 is merged.
         $p = $ns->query( $zone->name, q{SOA}, { edns_details => { data => $rdata, udp_size => 512 } } );
 
         if ( $p ) {
-            if ( $p->rcode ne q{NOERROR} ){
+            if ( $p->rcode ne q{NOERROR} ) {
                 push @{ $unexpected_rcode{$p->rcode} }, $ns->address->short;
             }
-            
-            elsif ( not $p->has_edns ){
+
+            elsif ( not $p->has_edns ) {
                 push @no_edns, $ns->address->short;
             }
-            
-            elsif ( not $p->get_records_for_name(q{SOA}, $zone->name, q{answer}) ){
+
+            elsif ( not $p->get_records_for_name(q{SOA}, $zone->name, q{answer}) ) {
                 push @unexpected_answer, $ns->address->short;
             }
-            
-            elsif ( not $p->aa ){
+
+            elsif ( not $p->aa ) {
                 push @unset_aa, $ns->address->short;
             }
-            
+
             elsif ( defined $p->edns_data ) {
-                push @unknown_opt_code, $ns->address->short;
+                my $p_opt = $p->edns_data;
+
+                # Unpack the bytes string:
+                # - OPTION-CODE as unsigned short (16-bit) in "network" (big-endian) order, and
+                # - OPTION-DATA as a sequence of bytes of length specified by a prefixed unsigned short (16-bit)
+                #   in "network" (big-endian) order (OPTION-LENGTH), and
+                # - Remaining data, if any (i.e., other OPTIONS)
+
+                my @unpacked_opt = eval { unpack("(n n/a)*", $p_opt) };
+                
+                while ( my ( $p_opt_code, $p_opt_data, @next_data ) = @unpacked_opt ) {
+                    if ( $p_opt_code == $opt_code ) {
+                        push @unknown_opt_code, $ns->address->short;
+                        last;
+                    }
+
+                    @unpacked_opt = @next_data;
+                }
             }
         }
         else{
@@ -1214,11 +1227,11 @@ sub nameserver11 {
         }
     }
 
-    if ( scalar @no_response ){
+    if ( scalar @no_response ) {
         push @results, info( N11_NO_RESPONSE => { ns_ip_list => join( q{;}, uniq sort @no_response ) } );
     }
 
-    if ( scalar keys %unexpected_rcode ){
+    if ( scalar keys %unexpected_rcode ) {
         push @results, map {
           info(
             N11_UNEXPECTED_RCODE => {
@@ -1229,19 +1242,19 @@ sub nameserver11 {
         } keys %unexpected_rcode;
     }
 
-    if ( scalar @no_edns ){
+    if ( scalar @no_edns ) {
         push @results, info( N11_NO_EDNS => { ns_ip_list => join( q{;}, uniq sort @no_edns ) } );
     }
 
-    if ( scalar @unexpected_answer ){
+    if ( scalar @unexpected_answer ) {
         push @results, info( N11_UNEXPECTED_ANSWER_SECTION => { ns_ip_list => join( q{;}, uniq sort @unexpected_answer ) } );
     }
 
-    if ( scalar @unset_aa ){
+    if ( scalar @unset_aa ) {
         push @results, info( N11_UNSET_AA => { ns_ip_list => join( q{;}, uniq sort @unset_aa ) } );
     }
 
-    if ( scalar @unknown_opt_code ){
+    if ( scalar @unknown_opt_code ) {
         push @results, info( N11_RETURNS_UNKNOWN_OPTION_CODE => { ns_ip_list => join( q{;}, uniq sort @unknown_opt_code ) } );
     }
 
