@@ -25,8 +25,11 @@ extract-pot:
 $(POTFILE): extract-pot
 
 # Create a new empty PO file with basename provided with the POLANG variable
+# Update the Language field in the header
 new-po: extract-pot
-	@[ -n "$(POLANG)" ] && cp $(POTFILE) $(POLANG).po || echo "Usage: make POLANG=xx new-po"
+	@[ -n "$(POLANG)" ] || ( echo "Usage: make POLANG=xx new-po" && exit 1 )
+	@cp $(POTFILE) $(POLANG).po
+	@sed -i 's/^"Language: /&$(POLANG)/' $(POLANG).po
 
 .po.mo:
 	@msgfmt -o $@ $<
