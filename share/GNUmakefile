@@ -24,6 +24,10 @@ extract-pot:
 
 $(POTFILE): extract-pot
 
+# Create a new empty PO file with basename provided with the POLANG variable
+new-po: extract-pot
+	@[ -n "$(POLANG)" ] && cp $(POTFILE) $(POLANG).po || echo "Usage: make POLANG=xx new-po"
+
 .po.mo:
 	@msgfmt -o $@ $<
 	@mkdir -p locale/`basename $@ .mo`/LC_MESSAGES
