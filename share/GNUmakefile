@@ -1,6 +1,6 @@
 .POSIX:
 .SUFFIXES: .po .mo
-.PHONY: all check-msg-args dist extract-pot tidy-po show-fuzzy update-po
+.PHONY: all check-msg-args dist extract-pot tidy-po show-fuzzy update-po new-po
 
 POFILES := $(shell find . -maxdepth 1 -type f -name '*.po' -exec basename {} \;)
 MOFILES := $(POFILES:%.po=%.mo)
