@@ -29,7 +29,7 @@ $(POTFILE): extract-pot
 new-po: extract-pot
 	@[ -n "$(POLANG)" ] || ( echo "Usage: make POLANG=xx new-po" && exit 1 )
 	@cp $(POTFILE) $(POLANG).po
-	@sed -i 's/^"Language: /&$(POLANG)/' $(POLANG).po
+	@perl -pi -e 's/^"Language: /$$&$(POLANG)/' $(POLANG).po
 
 .po.mo:
 	@msgfmt -o $@ $<
