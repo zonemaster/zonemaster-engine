@@ -33,6 +33,7 @@ new-po: extract-pot
 		-e 's/^("Language-Team:) .+(\\n)/$$1 Zonemaster Team$$2/;' \
 		-e 's/^"Language: /$$&$(POLANG)/;' \
 		-e 's/^("Content-Type:.+charset=)CHARSET/$${1}UTF-8/;' $(POLANG).po
+	@perl -ni -e 'print unless /^#( |$$)/' $(POLANG).po
 
 .po.mo:
 	@msgfmt -o $@ $<
