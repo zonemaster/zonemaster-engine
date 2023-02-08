@@ -29,7 +29,10 @@ $(POTFILE): extract-pot
 new-po: extract-pot
 	@[ -n "$(POLANG)" ] || ( echo "Usage: make POLANG=xx new-po" && exit 1 )
 	@cp $(POTFILE) $(POLANG).po
-	@perl -pi -e 's/^"Language: /$$&$(POLANG)/' $(POLANG).po
+	@perl -pi -e 's/^("Project-Id-Version:) .+(\\n)/$$1 1.0.0$$2/;' \
+		-e 's/^("Language-Team:) .+(\\n)/$$1 Zonemaster Team$$2/;' \
+		-e 's/^"Language: /$$&$(POLANG)/;' \
+		-e 's/^("Content-Type:.+charset=)CHARSET/$${1}UTF-8/;' $(POLANG).po
 
 .po.mo:
 	@msgfmt -o $@ $<
