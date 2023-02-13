@@ -51,6 +51,21 @@ sub new {
     return $obj;
 }
 
+sub set_key {
+     my ($self, $idx, $packet) = @_;
+     $self->data->{$idx} = $packet;
+}
+
+sub get_key {
+    my ( $self, $idx ) = @_;
+
+    if ( exists $self->data->{$idx} ) {
+        # cache hit
+        return ( 1, $self->data->{$idx} );
+    }
+    return ( 0, undef );
+}
+
 sub empty_cache {
     %object_cache = ();
 
@@ -92,6 +107,14 @@ Construct a new Cache object.
 =item empty_cache()
 
 Clear the cache.
+
+=item set_key($idx, $packet)
+
+Store packet with index idx.
+
+=item get_key($idx)
+
+Retrieve packet (data) at key idx.
 
 =back
 

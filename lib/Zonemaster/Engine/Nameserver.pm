@@ -361,12 +361,14 @@ sub query {
     else {
         $md5->add( q{EDNS_UDP_SIZE} , 0);
     }
-    
+
     my $idx = $md5->b64digest();
-    if ( not exists( $self->cache->data->{$idx} ) ) {
-        $self->cache->data->{$idx} = $self->_query( $name, $type, $href );
+
+    my ( $in_cache, $p) = $self->cache->get_key( $idx );
+    if ( not $in_cache ) {
+        $p = $self->_query( $name, $type, $href );
+        $self->cache->set_key( $idx, $p );
     }
-    $p = $self->cache->data->{$idx};
 
     Zonemaster::Engine->logger->add( CACHED_RETURN => { packet => ( $p ? $p->string : 'undef' ) } );
 
