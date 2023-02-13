@@ -24,6 +24,7 @@ lib/Zonemaster/Engine/Logger.pm
 lib/Zonemaster/Engine/Logger/Entry.pm
 lib/Zonemaster/Engine/Nameserver.pm
 lib/Zonemaster/Engine/Nameserver/Cache.pm
+lib/Zonemaster/Engine/Nameserver/Cache/LocalCache.pm
 lib/Zonemaster/Engine/Normalization.pm
 lib/Zonemaster/Engine/Normalization/Error.pm
 lib/Zonemaster/Engine/Net/IP.pm

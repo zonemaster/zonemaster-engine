@@ -6,64 +6,35 @@ use 5.014002;
 use warnings;
 
 use Class::Accessor "antlers";
-use Carp qw( confess );
-use Scalar::Util qw( blessed );
-
-use Zonemaster::Engine;
 
 our %object_cache;
 
 has 'data' => ( is => 'ro' );
 has 'address' => ( is => 'ro' );
 
-sub new {
-    my $proto = shift;
-    my $class = ref $proto || $proto;
-    my $attrs = shift;
+sub check_cache {
+    my ( $self, $cache ) = @_;
 
-    confess "Attribute \(address\) is required"
-        if !exists $attrs->{address};
-
-    # Type coercions
-    $attrs->{address} = Net::IP::XS->new( $attrs->{address} )
-        if !blessed $attrs->{address} || !$attrs->{address}->isa( 'Net::IP::XS' );
-
-    # Type constraint
-    confess "Argument must be coercible into a Net::IP::XS: address"
-        if !$attrs->{address}->isa( 'Net::IP::XS' );
-    confess "Argument must be a HASHREF: data"
-        if exists $attrs->{data} && ref $attrs->{data} ne 'HASH';
-
-    # Default value
-    $attrs->{data} //= {};
-
-    my $ip = $attrs->{address}->ip;
-    if ( exists $object_cache{ $ip } ) {
-        Zonemaster::Engine->logger->add( CACHE_FETCHED => { ip => $ip } );
-        return $object_cache{ $ip };
+    if ( $cache !~ /^LocalCache$/ ) {
+        warn "Unknown cache format '$cache', using default 'LocalCache'";
     }
-
-    my $obj = Class::Accessor::new( $class, $attrs );
-
-    Zonemaster::Engine->logger->add( CACHE_CREATED => { ip => $ip } );
-    $object_cache{ $ip } = $obj;
-
-    return $obj;
+    return "LocalCache";
 }
 
-sub set_key {
-     my ($self, $idx, $packet) = @_;
-     $self->data->{$idx} = $packet;
+sub get_cache_type {
+    my ( $class, $profile ) = @_;
+    return 'LocalCache';
 }
 
-sub get_key {
-    my ( $self, $idx ) = @_;
+sub get_cache_class {
+    my ( $class, $cache_type ) = @_;
 
-    if ( exists $self->data->{$idx} ) {
-        # cache hit
-        return ( 1, $self->data->{$idx} );
-    }
-    return ( 0, undef );
+    my $cache_class = "Zonemaster::Engine::Nameserver::Cache::$cache_type";
+
+    require ( "$cache_class.pm" =~ s{::}{/}gr );
+    $cache_class->import();
+
+    return $cache_class;
 }
 
 sub empty_cache {
@@ -100,21 +71,24 @@ A reference to a hash holding the cache of sent queries. Not meant for external 
 
 =over
 
-=item new
+=item check_cache($cache)
 
-Construct a new Cache object.
+Returns a normalized string based on the supported cache format.
+Emits a warning and retun "LocalCache" if the value is not LocalCache.
+
+=item get_cache_type()
+
+Get the cache type value, i.e. the name of the cache module to use.
+
+=item get_cache_class()
+
+Get the cache adapter class for the given database type.
+
+Throws and exception if the cache adapter class cannot be loaded.
 
 =item empty_cache()
 
 Clear the cache.
-
-=item set_key($idx, $packet)
-
-Store packet with index idx.
-
-=item get_key($idx)
-
-Retrieve packet (data) at key idx.
 
 =back
 

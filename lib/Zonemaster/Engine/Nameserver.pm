@@ -237,7 +237,10 @@ sub _build_dns {
 sub _build_cache {
     my ( $self ) = @_;
 
-    Zonemaster::Engine::Nameserver::Cache->new( { address => $self->address } );
+    my $cache_type = Zonemaster::Engine::Nameserver::Cache->get_cache_type( Zonemaster::Engine::Profile->effective );
+    my $cache_class = Zonemaster::Engine::Nameserver::Cache->get_cache_class( $cache_type );
+
+    $cache_class->new( { address => $self->address } );
 }
 
 ###
@@ -614,6 +617,9 @@ sub restore {
         }
       );
 
+    my $cache_type = Zonemaster::Engine::Nameserver::Cache->get_cache_type( Zonemaster::Engine::Profile->effective );
+    my $cache_class = Zonemaster::Engine::Nameserver::Cache->get_cache_class( $cache_type );
+
     open my $fh, '<', $filename or die "Failed to open restore data file: $!\n";
     while ( my $line = <$fh> ) {
         my ( $name, $addr, $data ) = split( / /, $line, 3 );
@@ -622,7 +628,7 @@ sub restore {
             {
                 name    => $name,
                 address => Net::IP::XS->new($addr),
-                cache   => Zonemaster::Engine::Nameserver::Cache->new( { data => $ref, address => Net::IP::XS->new( $addr ) } )
+                cache   => $cache_class->new( { data => $ref, address => Net::IP::XS->new( $addr ) } )
             }
         );
     }
