@@ -665,10 +665,12 @@ Default 3.
 
 =head2 resolver.defaults.dnssec
 
+*DEPRECATED as of 2023.1. Planned for removal in 2023.2*
 A boolean. If true, sets the DO flag in queries. Default false.
 
 =head2 resolver.defaults.edns_size
 
+*DEPRECATED as of 2023.1. Planned for removal in 2023.2*
 An integer. The EDNS0 UDP size used in EDNS queries. Default 512.
 
 =head2 resolver.defaults.recurse

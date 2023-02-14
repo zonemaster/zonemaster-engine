@@ -212,16 +212,17 @@ sub _build_dns {
     my ( $self ) = @_;
 
     my $res = Zonemaster::LDNS->new( $self->address->ip );
+    
     $res->recurse( 0 );
+    $res->dnssec( 0 );
+    $res->edns_size( $UDP_EDNS_QUERY_DEFAULT );
 
     $res->retry( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.retry} ) );
     $res->retrans( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.retrans} ) );
-    $res->dnssec( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.dnssec} ) );
     $res->usevc( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.usevc} ) );
     $res->igntc( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.igntc} ) );
     $res->recurse( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.recurse} ) );
     $res->debug( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.debug} ) );
-    $res->edns_size( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.edns_size} ) );
     $res->timeout( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.timeout} ) );
 
     my $ip_version = Net::IP::XS::ip_get_version( $self->address->ip );
@@ -268,10 +269,10 @@ sub query {
     );
 
     my $class     = $href->{class}     // 'IN';
-    my $dnssec    = $href->{dnssec}    // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.dnssec} );
+    my $dnssec    = $href->{dnssec}    // 0;
     my $usevc     = $href->{usevc}     // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.usevc} );
     my $recurse   = $href->{recurse}   // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.recurse} );
-    my $edns_size = $href->{edns_size} // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.edns_size} );
+    my $edns_size = $href->{edns_size} // $UDP_EDNS_QUERY_DEFAULT;
 
     # Fake a DS answer
     if ( $type eq 'DS' and $class eq 'IN' and $self->fake_ds->{ lc( $name ) } ) {
@@ -453,19 +454,17 @@ sub _query {
     # Make sure we have a value for each flag
     $flags{q{retry}}     = $href->{q{retry}}     // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.retry} );
     $flags{q{retrans}}   = $href->{q{retrans}}   // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.retrans} );
-    $flags{q{dnssec}}    = $href->{q{dnssec}}    // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.dnssec} );
+    $flags{q{dnssec}}    = $href->{q{dnssec}}    // 0;
     $flags{q{usevc}}     = $href->{q{usevc}}     // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.usevc} );
     $flags{q{igntc}}     = $href->{q{igntc}}     // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.igntc} );
     $flags{q{fallback}}  = $href->{q{fallback}}  // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.fallback} );
     $flags{q{recurse}}   = $href->{q{recurse}}   // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.recurse} );
     $flags{q{timeout}}   = $href->{q{timeout}}   // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.timeout} );
+    $flags{q{edns_size}} = $href->{q{edns_size}} // $UDP_EDNS_QUERY_DEFAULT;
 
     if ( exists $href->{edns_details} ) {
         $flags{q{dnssec}}    = $href->{edns_details}{do} // $flags{q{dnssec}};
-        $flags{q{edns_size}} = $href->{edns_details}{size} // $href->{q{edns_size}} // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.edns_size} );
-    }
-    else {
-        $flags{q{edns_size}} = 0;
+        $flags{q{edns_size}} = $href->{edns_details}{size} // $flags{q{edns_size}};
     }
 
     # Set flags for this query
@@ -846,9 +845,9 @@ The retransmission interval.
 
 =item dnssec
 
-Set the DO flag in the query. Defaults to resolver.defaults.dnssec.
+Set the DO flag in the query. Defaults to false.
 
-Enables the query to be an EDNS query if set to true.
+If set to true, it becomes an EDNS query.
 Value overridden by 'edns_details->do' (if also given). More details in 'edns_details' below.
 
 =item debug
@@ -881,7 +880,7 @@ If set to true, prevents a server to be black-listed on a query in case there is
 
 =item edns_size
 
-Set the EDNS0 UDP maximum size. Defaults to resolver.defaults.edns_size.
+Set the EDNS0 UDP maximum size. Defaults to 512.
 
 Used only when the query is an EDNS query. Does not enable on its own the query to be an EDNS query.
 Value overridden by 'edns_details->size' (if also given). More details in 'edns_details' below.
