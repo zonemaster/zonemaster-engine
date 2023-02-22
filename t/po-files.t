@@ -42,6 +42,11 @@ subtest "check po files" => sub {
     is $output, "", $makebin . ' check-po gives empty output';
 };
 
+subtest "check msg args" => sub {
+    my ( $output, $_ ) = make "check-msg-args";
+    is $output, "", $makebin . ' check-msg-args gives empty output';
+};
+
 subtest "tidy po files" => sub {
     SKIP: {
         my ( $output, $status );
