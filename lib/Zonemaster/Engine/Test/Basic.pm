@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare("v1.0.18");
+use version; our $VERSION = version->declare("v1.0.19");
 
 use Carp;
 use List::MoreUtils qw[any none];
@@ -43,7 +43,7 @@ sub all {
         push @results, $class->basic02( $zone );
 
         # Perform BASIC3 if BASIC2 failed
-        if ( none { $_->tag eq q{HAS_NAMESERVERS} } @results ) {
+        if ( none { $_->tag eq q{B02_AUTH_RESPONSE_SOA} } @results ) {
             push @results, $class->basic03( $zone ) if Zonemaster::Engine::Util::should_run_test( q{basic03} );
         }
         else {
@@ -64,7 +64,7 @@ sub can_continue {
     my ( $class, @results ) = @_;
     my %tag = map { $_->tag => 1 } @results;
 
-    if ( not $tag{NO_GLUE_PREVENTS_NAMESERVER_TESTS} and $tag{HAS_NAMESERVERS} ) {
+    if ( not $tag{B02_NO_DELEGATION} and $tag{B02_AUTH_RESPONSE_SOA} ) {
         return 1;
     }
     else {
@@ -99,10 +99,14 @@ sub metadata {
         ],
         basic02 => [
             qw(
-              NO_GLUE_PREVENTS_NAMESERVER_TESTS
-              NS_FAILED
-              NS_NO_RESPONSE
-              HAS_NAMESERVERS
+              B02_AUTH_RESPONSE_SOA
+              B02_NO_DELEGATION
+              B02_NO_WORKING_NS
+              B02_NS_BROKEN
+              B02_NS_NOT_AUTH
+              B02_NS_NO_IP_ADDR
+              B02_NS_NO_RESPONSE
+              B02_UNEXPECTED_RCODE
               IPV4_DISABLED
               IPV6_DISABLED
               IPV4_ENABLED
@@ -152,6 +156,38 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # BASIC:A_QUERY_NO_RESPONSES
           'Nameservers did not respond to A query.';
     },
+    B02_AUTH_RESPONSE_SOA => sub {
+        __x    # BASIC:B02_AUTH_RESPONSE_SOA
+          'Authoritative answer on SOA query for "{domain}" is returned by name servers "{ns_list}".', @_;
+    },
+    B02_NO_DELEGATION => sub {
+        __x    # BASIC:B02_NO_DELEGATION
+          'There is no delegation (name servers) for "{domain}" which means it does not exist as a zone.', @_;
+    },
+    B02_NO_WORKING_NS => sub {
+        __x    # BASIC:B02_NO_WORKING_NS
+          'There is no working name server for "{domain}" so it is unreachable.', @_;
+    },
+    B02_NS_BROKEN => sub {
+        __x    # BASIC:B02_NS_BROKEN
+          'Broken response from name server "{ns}" on an SOA query.', @_;
+    },
+    B02_NS_NOT_AUTH => sub {
+        __x    # BASIC:B02_NS_NOT_AUTH
+          'Name server "{ns}" does not give an authoritative answer on an SOA query.', @_;
+    },
+    B02_NS_NO_IP_ADDR => sub {
+        __x    # BASIC:B02_NS_NO_IP_ADDR
+          'Name server "{nsname}" cannot be resolved into an IP address.', @_;
+    },
+    B02_NS_NO_RESPONSE => sub {
+        __x    # BASIC:B02_NS_NO_RESPONSE
+          'Name server "{ns}" does not respond to an SOA query.', @_;
+    },
+    B02_UNEXPECTED_RCODE => sub {
+        __x    # BASIC:B02_UNEXPECTED_RCODE
+          'Name server "{ns}" responds with an unexpected RCODE name ("{rcode}") on an SOA query.', @_;
+    },
     DOMAIN_NAME_LABEL_TOO_LONG => sub {
         __x    # BASIC:DOMAIN_NAME_LABEL_TOO_LONG
           'Domain name ({domain}) has a label ({label}) too long ({dlength}/{max}).', @_;
@@ -171,10 +207,6 @@ Readonly my %TAG_DESCRIPTIONS => (
     HAS_NAMESERVER_NO_WWW_A_TEST => sub {
         __x    # BASIC:HAS_NAMESERVER_NO_WWW_A_TEST
           'Functional nameserver found. "A" query for www.{zname} test skipped.', @_;
-    },
-    HAS_NAMESERVERS => sub {
-        __x    # BASIC:HAS_NAMESERVERS
-          'Nameserver {ns} listed these servers as glue: {nsnlist}.', @_;
     },
     HAS_PARENT => sub {
         __x    # BASIC:HAS_PARENT
@@ -200,21 +232,9 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # BASIC:NO_A_RECORDS
           'Nameserver {ns} did not return "A" record(s) for {domain}.', @_;
     },
-    NO_GLUE_PREVENTS_NAMESERVER_TESTS => sub {
-        __x    # BASIC:NO_GLUE_PREVENTS_NAMESERVER_TESTS
-          'No NS records for tested zone from parent. NS tests skipped.', @_;
-    },
     NO_PARENT => sub {
         __x    # BASIC:NO_PARENT
           'No parent domain could be found for the domain under test.', @_;
-    },
-    NS_FAILED => sub {
-        __x    # BASIC:NS_FAILED
-          'Nameserver {ns} did not return NS records. RCODE was {rcode}.', @_;
-    },
-    NS_NO_RESPONSE => sub {
-        __x    # BASIC:NS_NO_RESPONSE
-          'Nameserver {ns} did not respond to NS query.', @_;
     },
     TEST_CASE_END => sub {
         __x    # BASIC:TEST_CASE_END
@@ -365,14 +385,27 @@ sub basic01 {
 sub basic02 {
     my ( $class, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
-    my $query_type = q{NS};
+    
+    my $query_type = q{SOA};
+
+    my %auth_response_soa;
+    my %ns_broken;
+    my %ns_not_auth;
+    my %ns_cant_resolve;
+    my %ns_no_response;
+    my %unexpected_rcode;
+
     my @ns = @{ Zonemaster::Engine::TestMethods->method4( $zone ) };
 
     if ( not scalar @ns ) {
         push @results,
-          info(
-            NO_GLUE_PREVENTS_NAMESERVER_TESTS => {}
-          );
+            info(
+                B02_NO_DELEGATION => {
+                    domain => $zone->name
+                }
+            );
+            
+        return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
     }
 
     foreach my $ns ( @ns ) {
@@ -381,33 +414,104 @@ sub basic02 {
         }
         _ip_enabled_message( \@results, $ns, $query_type );
 
+        # This is not a realistical conditional check considering the current implementation of Engine::Nameserver.
+        # Any Engine::Nameserver object created will (must) have an IP address. So it is here as a placeholder.
+        if ( not $ns->address ) {
+            $ns_cant_resolve{$ns->name} = 1;
+            next;
+        }
+
         my $p = $ns->query( $zone->name, $query_type );
 
         if ( $p ) {
-            if ( $p->has_rrs_of_type_for_name( $query_type, $zone->name ) ) {
-                push @results,
-                  info(
-                    HAS_NAMESERVERS => {
-                        nsnlist =>
-                          join( q{,}, sort map { $_->nsdname } $p->get_records_for_name( $query_type, $zone->name ) ),
-                        ns => $ns->string,
-                    }
-                  );
+            if ( not $p->aa ) {
+                $ns_not_auth{$ns->string} = 1;
+            }
+            elsif ( $p->rcode ne 'NOERROR' ) {
+                $unexpected_rcode{$ns->string} = $p->rcode;
             }
             else {
-                push @results,
-                  info(
-                    NS_FAILED => {
-                        ns    => $ns->string,
-                        rcode => $p->rcode,
-                    }
-                  );
+                if ( $p->get_records_for_name( $query_type, $zone->name, q{answer} ) ) {
+                    $auth_response_soa{$ns->string} = 1;
+                }
+                else {
+                    $ns_broken{$ns->string} = 1;
+                }
             }
-        } ## end if ( $p )
-        else {
-            push @results, info( NS_NO_RESPONSE => { ns => $ns->string } );
         }
-    } ## end foreach my $ns ( @{ Zonemaster::Engine::TestMethods...})
+        else {
+            $ns_no_response{$ns->string} = 1;
+        }
+    }
+
+    if ( scalar keys %auth_response_soa ) {
+        push @results,
+            info(
+                B02_AUTH_RESPONSE_SOA => {
+                    domain => $zone->name,
+                    ns_list => join( q{;}, sort keys %auth_response_soa )
+                }
+            );
+    }
+    else {
+        push @results,
+            info(
+                B02_NO_WORKING_NS => {
+                    domain => $zone->name
+                }
+            );
+
+        if ( scalar keys %ns_broken ) {
+            push @results, map {
+                info(
+                    B02_NS_BROKEN => {
+                        ns => $_
+                    }
+                )
+            } keys %ns_broken;
+        }
+
+        if ( scalar keys %ns_not_auth ) {
+            push @results, map {
+                info(
+                    B02_NS_NOT_AUTH => {
+                        ns => $_
+                    }
+                )
+            } keys %ns_not_auth;
+        }
+
+        if ( scalar keys %ns_cant_resolve ) {
+            push @results, map {
+                info(
+                    B02_NS_NO_IP_ADDR => {
+                        nsname => $_
+                    }
+                )
+            } keys %ns_cant_resolve;
+        }
+
+        if ( scalar keys %ns_no_response ) {
+            push @results, map {
+                info(
+                    B02_NS_NO_RESPONSE => {
+                        ns => $_
+                    }
+                )
+            } keys %ns_no_response;
+        }
+
+        if ( scalar keys %unexpected_rcode ) {
+            push @results, map {
+                info(
+                    B02_UNEXPECTED_RCODE => {
+                        rcode => $unexpected_rcode{$_},
+                        ns => $_
+                    }
+                )
+            } keys %unexpected_rcode;
+        }
+    }
 
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub basic02

@@ -4,7 +4,7 @@
             "EXAMPLE_TAG": "WARNING"
         },
         "BASIC": {
-            "NS_FAILED": "ERROR"
+            "B02_NS_BROKEN": "ERROR"
         },
         "SYSTEM": {
             "LOGGER_CALLBACK_ERROR": "ERROR"
