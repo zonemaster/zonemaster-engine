@@ -23,7 +23,13 @@ sub check_cache {
 
 sub get_cache_type {
     my ( $class, $profile ) = @_;
-    return 'LocalCache';
+    my $cache_type = 'LocalCache';
+
+    if ( $profile->get( 'redis' ) ) {
+        $cache_type = 'RedisCache';
+    }
+
+    return $cache_type;
 }
 
 sub get_cache_class {

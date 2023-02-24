@@ -22,6 +22,9 @@ $YAML::XS::Boolean = "JSON::PP";
 use Zonemaster::Engine::Constants qw( $RESOLVER_SOURCE_OS_DEFAULT $DURATION_5_MINUTES_IN_SECONDS $DURATION_1_HOUR_IN_SECONDS $DURATION_4_HOURS_IN_SECONDS $DURATION_12_HOURS_IN_SECONDS $DURATION_1_DAY_IN_SECONDS $DURATION_1_WEEK_IN_SECONDS $DURATION_180_DAYS_IN_SECONDS );
 
 my %profile_properties_details = (
+    q{redis} => {
+        type    => q{HashRef},
+    },
     q{resolver.defaults.debug} => {
         type    => q{Bool}
     },
