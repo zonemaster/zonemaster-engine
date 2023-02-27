@@ -11,7 +11,7 @@ use Zonemaster::Engine;
 our %object_cache;
 
 has 'data' => ( is => 'ro', isa => 'HashRef[Maybe[Zonemaster::Engine::Packet]]', default => sub { {} } );
-has 'address' => ( is => 'ro', isa => 'Zonemaster::Engine::Net::IP', required => 1 );
+has 'address' => ( is => 'ro', isa => 'Net::IP::XS', required => 1 );
 
 around 'new' => sub {
     my $orig = shift;
@@ -53,7 +53,7 @@ Zonemaster::Engine::Nameserver::Cache - shared caches for nameserver objects
 
 =item address
 
-A L<Zonemaster::Engine::Net::IP> object holding the nameserver's address.
+A L<Net::IP::XS> object holding the nameserver's address.
 
 =item data
 

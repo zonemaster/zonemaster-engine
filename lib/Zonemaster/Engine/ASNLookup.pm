@@ -7,12 +7,12 @@ use warnings;
 use version; our $VERSION = version->declare( "v1.0.10" );
 
 use Zonemaster::Engine;
-use Zonemaster::Engine::Net::IP;
 use Zonemaster::Engine::Nameserver;
 use Zonemaster::Engine::Profile;
 
 use IO::Socket;
 use IO::Socket::INET;
+use Net::IP::XS;
 
 our @db_sources;
 our $db_style;
@@ -40,8 +40,8 @@ sub get_with_prefix {
         }
     }
 
-    if ( not ref( $ip ) or not $ip->isa( 'Zonemaster::Engine::Net::IP' ) ) {
-        $ip = Zonemaster::Engine::Net::IP->new( $ip );
+    if ( not ref( $ip ) or not $ip->isa( 'Net::IP::XS' ) ) {
+        $ip = Net::IP::XS->new( $ip );
     }
 
     if ( not @db_sources ) {
@@ -113,7 +113,7 @@ sub _cymru_asn_lookup {
                     }
                 }
                 if ( scalar @rr ) {
-                    return \@asns, Zonemaster::Engine::Net::IP->new( $fields[1] ), $str, q{AS_FOUND};
+                    return \@asns, Net::IP::XS->new( $fields[1] ), $str, q{AS_FOUND};
                 }
                 else {
                     if ( $db_source_nb == scalar @db_sources ) {
@@ -173,7 +173,7 @@ sub _ripe_asn_lookup {
         elsif ( $str )  {
             my @fields = split( /\s+/x, $str );
             @asns = ( $fields[0] );
-            return \@asns, Zonemaster::Engine::Net::IP->new( $fields[1] ), $str, q{AS_FOUND};
+            return \@asns, Net::IP::XS->new( $fields[1] ), $str, q{AS_FOUND};
         }
         else {
             return \@asns, undef, q{}, q{EMPTY_ASN_SET};

@@ -11,13 +11,13 @@ use List::MoreUtils qw[uniq none];
 use Locale::TextDomain qw[Zonemaster-Engine];
 use Readonly;
 use JSON::PP;
+use Net::IP::XS;
 
 use Zonemaster::Engine::Profile;
 use Zonemaster::Engine::Constants qw[:ip];
 use Zonemaster::Engine::Test::Address;
 use Zonemaster::Engine::Util;
 use Zonemaster::Engine::TestMethods;
-use Zonemaster::Engine::Net::IP;
 
 Readonly my @NONEXISTENT_NAMES => qw{
   xn--nameservertest.iis.se
@@ -703,7 +703,7 @@ sub nameserver04 {
 
         my $p = $local_ns->query( $zone->name, q{SOA} );
         if ( $p ) {
-            if ( $p->answerfrom and ( $local_ns->address->short ne Zonemaster::Engine::Net::IP->new( $p->answerfrom )->short ) ) {
+            if ( $p->answerfrom and ( $local_ns->address->short ne Net::IP::XS->new( $p->answerfrom )->short ) ) {
                 push @results,
                   info(
                     DIFFERENT_SOURCE_IP => {
@@ -1211,7 +1211,7 @@ sub nameserver11 {
                 # - Remaining data, if any (i.e., other OPTIONS)
 
                 my @unpacked_opt = eval { unpack("(n n/a)*", $p_opt) };
-                
+
                 while ( my ( $p_opt_code, $p_opt_data, @next_data ) = @unpacked_opt ) {
                     if ( $p_opt_code == $opt_code ) {
                         push @unknown_opt_code, $ns->address->short;
