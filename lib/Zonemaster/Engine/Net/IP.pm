@@ -86,6 +86,9 @@ Zonemaster::Engine::Net::IP - Net::IP::XS Wrapper
 
 =head1 SYNOPSIS
 
+Deprecated module. This module will be removed in v2023.2. Use L<Net::IP::XS>
+instead.
+
     my $ip = Zonemaster::Engine::Net::IP->new( q{0.0.0.0/8} );
 
 =head1 PROCEDURAL INTERFACE

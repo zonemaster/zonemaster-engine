@@ -13,8 +13,8 @@ use Scalar::Util qw(reftype);
 use File::Slurp;
 use Clone qw(clone);
 use Data::Dumper;
+use Net::IP::XS;
 
-use Zonemaster::Engine::Net::IP;
 use Zonemaster::Engine::Constants qw( $RESOLVER_SOURCE_OS_DEFAULT $DURATION_5_MINUTES_IN_SECONDS $DURATION_1_HOUR_IN_SECONDS $DURATION_4_HOURS_IN_SECONDS $DURATION_12_HOURS_IN_SECONDS $DURATION_1_DAY_IN_SECONDS $DURATION_1_WEEK_IN_SECONDS $DURATION_180_DAYS_IN_SECONDS );
 
 my %profile_properties_details = (
@@ -56,10 +56,7 @@ my %profile_properties_details = (
         type    => q{Str},
         test    => sub {
             if ( $_[0] ne $RESOLVER_SOURCE_OS_DEFAULT ) {
-                eval { Zonemaster::Engine::Net::IP->new( $_[0] ) };
-                if ( $@ ) {
-                    die "Property resolver.source must be an IP address or the exact string $RESOLVER_SOURCE_OS_DEFAULT";
-                }
+                Net::IP::XS->new( $_[0] ) || die "Property resolver.source must be an IP address or the exact string $RESOLVER_SOURCE_OS_DEFAULT";
             }
         }
     },

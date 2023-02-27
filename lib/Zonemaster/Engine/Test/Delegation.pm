@@ -14,7 +14,6 @@ use Readonly;
 use Zonemaster::Engine::Profile;
 use Zonemaster::Engine::Recursor;
 use Zonemaster::Engine::Constants ':all';
-use Zonemaster::Engine::Net::IP;
 use Zonemaster::Engine::Test::Address;
 use Zonemaster::Engine::Test::Syntax;
 use Zonemaster::Engine::TestMethods;

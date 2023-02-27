@@ -10,10 +10,10 @@ use Class::Accessor "antlers";
 use File::ShareDir qw[dist_file];
 use File::Slurp qw( read_file );
 use JSON::PP;
+use Net::IP::XS;
 
 use Zonemaster::Engine;
 use Zonemaster::Engine::DNSName;
-use Zonemaster::Engine::Net::IP;
 use Zonemaster::Engine::Util qw( name ns parse_hints );
 
 our %recurse_cache;
@@ -327,7 +327,7 @@ sub get_addresses_for {
 
     foreach my $rr ( sort { $a->address cmp $b->address } @rrs ) {
         if ( name( $rr->name ) eq $name or $cname{ $rr->name } ) {
-            push @res, Zonemaster::Engine::Net::IP->new( $rr->address );
+            push @res, Net::IP::XS->new( $rr->address );
         }
     }
     return @res;
@@ -408,7 +408,7 @@ Internal method. Takes a packet and a recursion state and returns a list of ns o
 =head2 get_addresses_for($name[, $state])
 
 Takes a name and returns a (possibly empty) list of IP addresses for
-that name (in the form of L<Zonemaster::Engine::Net::IP> objects). When used
+that name (in the form of L<Net::IP::XS> objects). When used
 internally by the recursor it's passed a recursion state as its second
 argument.
 

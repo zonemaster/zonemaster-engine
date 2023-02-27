@@ -13,7 +13,7 @@ use Zonemaster::Engine::Recursor;
 use Zonemaster::Engine::Constants ':misc';
 use Zonemaster::LDNS;
 
-use Zonemaster::Engine::Net::IP;
+use Net::IP::XS;
 use Time::HiRes qw[time];
 use JSON::PP;
 use MIME::Base64;
@@ -80,9 +80,9 @@ sub new {
     my $address;
 
     # Use a object cache for IP type coercion (don't parse IP unless it is needed)
-    if (!blessed $attrs->{address} || !$attrs->{address}->isa( 'Zonemaster::Engine::Net::IP' )) {
+    if (!blessed $attrs->{address} || !$attrs->{address}->isa( 'Net::IP::XS' )) {
         if (!exists $address_object_cache{$attrs->{address}}) {
-            $address_object_cache{$attrs->{address}} = Zonemaster::Engine::Net::IP->new($attrs->{address});
+            $address_object_cache{$attrs->{address}} = Net::IP::XS->new($attrs->{address});
             $address_repr_cache{$attrs->{address}} = $address_object_cache{$attrs->{address}}->ip;
         }
         # Fetch IP object from the address cache (avoid object creation and method call)
@@ -100,9 +100,9 @@ sub new {
     # Type constraints
     confess "Argument must be coercible into a Zonemaster::Engine::DNSName: name"
       if !$attrs->{name}->isa( 'Zonemaster::Engine::DNSName' );
-    confess "Argument must be coercible into a Zonemaster::Engine::Net::IP: address"
+    confess "Argument must be coercible into a Net::IP::XS: address"
       if exists $attrs->{address}
-      && !$attrs->{address}->isa( 'Zonemaster::Engine::Net::IP' );
+      && !$attrs->{address}->isa( 'Net::IP::XS' );
     confess "Argument must be an ARRAYREF: times"
       if exists $attrs->{times}
       && ref $attrs->{times} ne 'ARRAY';
@@ -360,14 +360,14 @@ sub add_fake_delegation {
     foreach my $name ( keys %{$href} ) {
         push @{ $delegation{authority} }, Zonemaster::LDNS::RR->new( sprintf( '%s IN NS %s', $domain, $name ) );
         foreach my $ip ( @{ $href->{$name} } ) {
-            if ( Zonemaster::Engine::Net::IP->new( $ip )->ip eq $self->address->ip ) {
+            if ( Net::IP::XS->new( $ip )->ip eq $self->address->ip ) {
                 Zonemaster::Engine->logger->add(
                     FAKE_DELEGATION_TO_SELF => { ns => "$self", domain => $domain, data => $href } );
                 return;
             }
 
             push @{ $delegation{additional} },
-              Zonemaster::LDNS::RR->new( sprintf( '%s IN %s %s', $name, ( Zonemaster::Engine::Net::IP::ip_is_ipv6( $ip ) ? 'AAAA' : 'A' ), $ip ) );
+              Zonemaster::LDNS::RR->new( sprintf( '%s IN %s %s', $name, ( Net::IP::XS::ip_is_ipv6( $ip ) ? 'AAAA' : 'A' ), $ip ) );
         }
     }
 
@@ -597,8 +597,8 @@ sub restore {
         my $ns  = Zonemaster::Engine::Nameserver->new(
             {
                 name    => $name,
-                address => Zonemaster::Engine::Net::IP->new($addr),
-                cache   => Zonemaster::Engine::Nameserver::Cache->new( { data => $ref, address => Zonemaster::Engine::Net::IP->new( $addr ) } )
+                address => Net::IP::XS->new($addr),
+                cache   => Zonemaster::Engine::Nameserver::Cache->new( { data => $ref, address => Net::IP::XS->new( $addr ) } )
             }
         );
     }
@@ -739,7 +739,7 @@ A L<Zonemaster::Engine::DNSName> object holding the nameserver's name.
 
 =item address
 
-A L<Zonemaster::Engine::Net::IP> object holding the nameserver's address.
+A L<Net::IP::XS> object holding the nameserver's address.
 
 =item dns
 
