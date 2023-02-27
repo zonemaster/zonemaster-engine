@@ -228,4 +228,15 @@ Clear the test level cached configuration.
 
 =back
 
+=head1 SUBROUTINES
+
+=over
+
+=item _check_filter($entry)
+
+Apply the C<logfilter> defined rules to the entry. See
+L<Zonemaster::Engine::Profile/"logfilter">.
+
+=back
+
 =cut
