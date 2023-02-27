@@ -1,4 +1,7 @@
 {
+    "resolver" : {
+        "source6": "2001:db8::42"
+    },
     "logfilter" : {
         "BASIC" : {
             "IPV6_ENABLED" : [

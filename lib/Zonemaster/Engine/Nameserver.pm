@@ -10,7 +10,7 @@ use Zonemaster::Engine;
 use Zonemaster::Engine::Packet;
 use Zonemaster::Engine::Nameserver::Cache;
 use Zonemaster::Engine::Recursor;
-use Zonemaster::Engine::Constants ':misc';
+use Zonemaster::Engine::Constants qw( :ip :misc );
 use Zonemaster::LDNS;
 
 use Net::IP::XS;
@@ -37,7 +37,8 @@ has 'dns'   => ( is => 'ro' );
 has 'cache' => ( is => 'ro' );
 has 'times' => ( is => 'ro' );
 
-has 'source_address' => ( is => 'ro' );
+has 'source_address'  => ( is => 'ro' );
+has 'source_address6' => ( is => 'ro' );
 
 has 'fake_delegations' => ( is => 'ro' );
 has 'fake_ds'          => ( is => 'ro' );
@@ -62,9 +63,10 @@ sub new {
     my $attrs = shift;
 
     my %lazy_attrs;
-    $lazy_attrs{source_address} = delete $attrs->{source_address} if exists $attrs->{source_address};
-    $lazy_attrs{dns}            = delete $attrs->{dns}            if exists $attrs->{dns};
-    $lazy_attrs{cache}          = delete $attrs->{cache}          if exists $attrs->{cache};
+    $lazy_attrs{source_address}  = delete $attrs->{source_address}  if exists $attrs->{source_address};
+    $lazy_attrs{source_address6} = delete $attrs->{source_address6} if exists $attrs->{source_address6};
+    $lazy_attrs{dns}             = delete $attrs->{dns}             if exists $attrs->{dns};
+    $lazy_attrs{cache}           = delete $attrs->{cache}           if exists $attrs->{cache};
 
     # Required arguments
     confess "Attribute \(address\) is required"
@@ -118,6 +120,9 @@ sub new {
     confess "Argument must be a string or undef: source_address"
       if exists $lazy_attrs{source_address}
       && ref $lazy_attrs{source_address} ne '';
+    confess "Argument must be a string or undef: source_address6"
+      if exists $lazy_attrs{source_address6}
+      && ref $lazy_attrs{source_address6} ne '';
     confess "Argument must be a Zonemaster::LDNS: dns"
       if exists $lazy_attrs{dns}
       && ( !blessed $lazy_attrs{dns} || !$lazy_attrs{dns}->isa( 'Zonemaster::LDNS' ) );
@@ -132,9 +137,10 @@ sub new {
     $attrs->{times}            //= [];
 
     my $obj = Class::Accessor::new( $class, $attrs );
-    $obj->{_source_address} = $lazy_attrs{source_address} if exists $lazy_attrs{source_address};
-    $obj->{_dns}            = $lazy_attrs{dns}            if exists $lazy_attrs{dns};
-    $obj->{_cache}          = $lazy_attrs{cache}          if exists $lazy_attrs{cache};
+    $obj->{_source_address}  = $lazy_attrs{source_address}  if exists $lazy_attrs{source_address};
+    $obj->{_source_address6} = $lazy_attrs{source_address6} if exists $lazy_attrs{source_address6};
+    $obj->{_dns}             = $lazy_attrs{dns}             if exists $lazy_attrs{dns};
+    $obj->{_cache}           = $lazy_attrs{cache}           if exists $lazy_attrs{cache};
 
     Zonemaster::Engine->logger->add( NS_CREATED => { name => $name, ip => $obj->address->ip } );
     $object_cache{$name}{$address} = $obj;
@@ -143,9 +149,9 @@ sub new {
 }
 
 sub source_address {
-    my $self = shift;
+    my ( $self, $ip_version ) = @_;
 
-    # Lazy default value
+    # Lazy default values
     if ( !exists $self->{_source_address} ) {
         my $value = Zonemaster::Engine::Profile->effective->get( q{resolver.source} );
         if ( $value eq $RESOLVER_SOURCE_OS_DEFAULT ) {
@@ -154,6 +160,19 @@ sub source_address {
         else {
             $self->{_source_address} = $value;
         }
+    }
+    if ( !exists $self->{_source_address6} ) {
+        my $value = Zonemaster::Engine::Profile->effective->get( q{resolver.source6} );
+        if ( $value eq '' ) {
+            $self->{_source_address6} = undef;
+        }
+        else {
+            $self->{_source_address6} = $value;
+        }
+    }
+
+    if ( $ip_version == $IP_VERSION_6 and $self->{_source_address6} ) {
+        return $self->{_source_address6};
     }
 
     return $self->{_source_address};
@@ -197,8 +216,10 @@ sub _build_dns {
     $res->edns_size( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.edns_size} ) );
     $res->timeout( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.timeout} ) );
 
-    if ( $self->source_address ) {
-        $res->source( $self->source_address );
+    my $ip_version = Net::IP::XS::ip_get_version( $self->address->ip );
+    my $source_address = $self->source_address( $ip_version );
+    if ( $source_address ) {
+        $res->source( $source_address );
     }
 
     return $res;
@@ -752,6 +773,12 @@ A reference to a L<Zonemaster::Engine::Nameserver::Cache> object holding the cac
 =item source_address
 
 The source address all resolver objects should use when sending queries.
+Depends on the IP version used to send the queries.
+
+=item source_address6
+
+The IPv6 source address all resolver objects should use when sending queries
+over IPv6.
 
 =item times
 

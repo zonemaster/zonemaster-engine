@@ -60,6 +60,16 @@ my %profile_properties_details = (
             }
         }
     },
+    q{resolver.source6} => {
+        type    => q{Str},
+        default => "",
+        test    => sub {
+            if ( $_[0] ne '' and not Net::IP::XS::ip_is_ipv6( $_[0] ) ) {
+                die "Property resolver.source6 must be an IPv6 address or the empty string";
+            }
+            Net::IP::XS->new( $_[0] );
+        }
+    },
     q{net.ipv4} => {
         type    => q{Bool}
     },
@@ -626,6 +636,13 @@ A string that is either an IP address or the exact string C<"os_default">.
 The source address all resolver objects should use when sending queries.
 If C<"os_default">, the OS default address is used.
 Default C<"os_default">.
+
+=head2 resolver.source6
+
+A string that is an IPv6 address or the empty string or undefined.
+The source address all resolver objects should use when sending queries over IPv6.
+If the empty string of undefinded, use the OS default IPv6 address if available.
+Default "" (empty string).
 
 =head2 net.ipv4
 
