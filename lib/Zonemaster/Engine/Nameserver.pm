@@ -38,6 +38,7 @@ has 'cache' => ( is => 'ro' );
 has 'times' => ( is => 'ro' );
 
 has 'source_address'  => ( is => 'ro' );
+has 'source_address4' => ( is => 'ro' );
 has 'source_address6' => ( is => 'ro' );
 
 has 'fake_delegations' => ( is => 'ro' );
@@ -64,6 +65,7 @@ sub new {
 
     my %lazy_attrs;
     $lazy_attrs{source_address}  = delete $attrs->{source_address}  if exists $attrs->{source_address};
+    $lazy_attrs{source_address4} = delete $attrs->{source_address4} if exists $attrs->{source_address4};
     $lazy_attrs{source_address6} = delete $attrs->{source_address6} if exists $attrs->{source_address6};
     $lazy_attrs{dns}             = delete $attrs->{dns}             if exists $attrs->{dns};
     $lazy_attrs{cache}           = delete $attrs->{cache}           if exists $attrs->{cache};
@@ -120,6 +122,9 @@ sub new {
     confess "Argument must be a string or undef: source_address"
       if exists $lazy_attrs{source_address}
       && ref $lazy_attrs{source_address} ne '';
+    confess "Argument must be a string or undef: source_address4"
+      if exists $lazy_attrs{source_address4}
+      && ref $lazy_attrs{source_address4} ne '';
     confess "Argument must be a string or undef: source_address6"
       if exists $lazy_attrs{source_address6}
       && ref $lazy_attrs{source_address6} ne '';
@@ -138,6 +143,7 @@ sub new {
 
     my $obj = Class::Accessor::new( $class, $attrs );
     $obj->{_source_address}  = $lazy_attrs{source_address}  if exists $lazy_attrs{source_address};
+    $obj->{_source_address4} = $lazy_attrs{source_address4} if exists $lazy_attrs{source_address4};
     $obj->{_source_address6} = $lazy_attrs{source_address6} if exists $lazy_attrs{source_address6};
     $obj->{_dns}             = $lazy_attrs{dns}             if exists $lazy_attrs{dns};
     $obj->{_cache}           = $lazy_attrs{cache}           if exists $lazy_attrs{cache};
@@ -161,16 +167,18 @@ sub source_address {
             $self->{_source_address} = $value;
         }
     }
+    if ( !exists $self->{_source_address4} ) {
+        my $value = Zonemaster::Engine::Profile->effective->get( q{resolver.source4} );
+        $self->{_source_address4} = $value eq '' ? undef : $value;
+    }
     if ( !exists $self->{_source_address6} ) {
         my $value = Zonemaster::Engine::Profile->effective->get( q{resolver.source6} );
-        if ( $value eq '' ) {
-            $self->{_source_address6} = undef;
-        }
-        else {
-            $self->{_source_address6} = $value;
-        }
+        $self->{_source_address6} = $value eq '' ? undef : $value;
     }
 
+    if ( $ip_version == $IP_VERSION_4 and $self->{_source_address4} ) {
+        return $self->{_source_address4};
+    }
     if ( $ip_version == $IP_VERSION_6 and $self->{_source_address6} ) {
         return $self->{_source_address6};
     }
@@ -774,6 +782,11 @@ A reference to a L<Zonemaster::Engine::Nameserver::Cache> object holding the cac
 
 The source address all resolver objects should use when sending queries.
 Depends on the IP version used to send the queries.
+
+=item source_address4
+
+The IPv4 source address all resolver objects should use when sending queries
+over IPv4.
 
 =item source_address6
 

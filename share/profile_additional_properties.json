@@ -1,5 +1,6 @@
 {
     "resolver" : {
+        "source4": "192.0.2.53",
         "source6": "2001:db8::42"
     },
     "logfilter" : {
