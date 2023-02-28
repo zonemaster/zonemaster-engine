@@ -54,6 +54,7 @@ my %profile_properties_details = (
     },
     q{resolver.source} => {
         type    => q{Str},
+        default => "$RESOLVER_SOURCE_OS_DEFAULT",
         test    => sub {
             if ( $_[0] ne $RESOLVER_SOURCE_OS_DEFAULT ) {
                 Net::IP::XS->new( $_[0] ) || die "Property resolver.source must be an IP address or the exact string $RESOLVER_SOURCE_OS_DEFAULT";
@@ -642,6 +643,8 @@ replay, set this flag to false.
 
 =head2 resolver.source
 
+Deprecated (planned removal: v2024.1).
+Use L</resolver.source4> and L</resolver.source6>.
 A string that is either an IP address or the exact string C<"os_default">.
 The source address all resolver objects should use when sending queries.
 If C<"os_default">, the OS default address is used.
