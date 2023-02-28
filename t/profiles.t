@@ -245,42 +245,27 @@ subtest 'from_json() dies on illegal paths' => sub {
 };
 
 subtest 'from_json() dies on illegal values' => sub {
-    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"usevc":0}}}' ); }
-    "checks type of resolver.defaults.usevc";
-    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"dnssec":1}}}' ); }
-    "checks type of resolver.defaults.dnssec";
-    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"recurse":0}}}' ); }
-    "checks type of resolver.defaults.recurse";
-    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"igntc":1}}}' ); }
-    "checks type of resolver.defaults.igntc";
-    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"fallback":0}}}' ); }
-    "checks type of resolver.defaults.fallback";
-    dies_ok { Zonemaster::Engine::Profile->from_json( '{"net":{"ipv4":1}}' ); } "checks type of net.ipv4";
-    dies_ok { Zonemaster::Engine::Profile->from_json( '{"net":{"ipv6":0}}' ); } "checks type of net.ipv6";
-    dies_ok { Zonemaster::Engine::Profile->from_json( '{"no_network":1}' ); } "checks type of no_network";
-    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"retry":0}}}' ); }
-    "checks lower bound of resolver.defaults.retry";
-    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"retry":256}}}' ); }
-    "checks upper bound of resolver.defaults.retry";
-    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"retry":1.5}}}' ); }
-    "checks type of resolver.defaults.retry";
-    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"retrans":0}}}' ); }
-    "checks lower bound of resolver.defaults.retrans";
-    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"retrans":256}}}' ); }
-    "checks upper bound of resolver.defaults.retrans";
-    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"retrans":1.5}}}' ); }
-    "checks type of resolver.defaults.retrans";
-    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"source":"example.com"}}' ); }
-    "checks type of resolver.source";
-    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"source6":"example.com"}}' ); }
-    "checks type of resolver.source6";
-    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"source6":"192.0.2.53"}}' ); }
-    "checks type of resolver.source6 (only IPv6)";
-    dies_ok { Zonemaster::Engine::Profile->from_json( '{"asnroots":["noreply@example.com"]}' ); }
-    "checks type of asnroots";
-    dies_ok { Zonemaster::Engine::Profile->from_json( '{"logfilter":[]}' ); } "checks type of logfilter";
-    dies_ok { Zonemaster::Engine::Profile->from_json( '{"test_levels":[]}' ); } "checks type of test_levels";
-    dies_ok { Zonemaster::Engine::Profile->from_json( '{"test_cases":{}}' ); } "checks type of test_cases";
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"usevc":0}}}' ); }     "checks type of resolver.defaults.usevc";
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"dnssec":1}}}' ); }    "checks type of resolver.defaults.dnssec";
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"recurse":0}}}' ); }   "checks type of resolver.defaults.recurse";
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"igntc":1}}}' ); }     "checks type of resolver.defaults.igntc";
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"fallback":0}}}' ); }  "checks type of resolver.defaults.fallback";
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"net":{"ipv4":1}}' ); }                        "checks type of net.ipv4";
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"net":{"ipv6":0}}' ); }                        "checks type of net.ipv6";
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"no_network":1}' ); }                          "checks type of no_network";
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"retry":0}}}' ); }     "checks lower bound of resolver.defaults.retry";
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"retry":256}}}' ); }   "checks upper bound of resolver.defaults.retry";
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"retry":1.5}}}' ); }   "checks type of resolver.defaults.retry";
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"retrans":0}}}' ); }   "checks lower bound of resolver.defaults.retrans";
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"retrans":256}}}' ); } "checks upper bound of resolver.defaults.retrans";
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"retrans":1.5}}}' ); } "checks type of resolver.defaults.retrans";
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"source":"example.com"}}' ); }     "checks type of resolver.source";
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"source6":"example.com"}}' ); }    "checks type of resolver.source6";
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"source6":"192.0.2.53"}}' ); }     "checks type of resolver.source6 (only IPv6)";
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"asnroots":["noreply@example.com"]}' ); }      "checks type of asnroots";
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"logfilter":[]}' ); }                          "checks type of logfilter";
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"test_levels":[]}' ); }                        "checks type of test_levels";
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"test_cases":{}}' ); }                         "checks type of test_cases";
 };
 
 subtest 'get() returns 1 for true' => sub {
