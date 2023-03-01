@@ -2,15 +2,74 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-23 16:18-0400\n"
-"PO-Revision-Date: 2022-05-23 15:16-0400\n"
+"POT-Creation-Date: 2023-02-15 11:18-0300\n"
+"PO-Revision-Date: 2023-02-15 18:30-0300\n"
 "Last-Translator: hsalgado@nic.cl\n"
 "Language-Team: Zonemaster Team\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.0\n"
+"X-Generator: Poedit 3.0.1\n"
+
+#, perl-brace-format
+msgid ""
+"Ambiguous downcaseing of character \"{unicode_name}\" in the domain name. "
+"Use all lower case instead."
+msgstr ""
+"La transformación a minúscula del carácter \"{unicode_name}\" es ambigua en "
+"el nombre de dominio. Mejor utilice todos los caracteres en minúscula."
+
+msgid "Domain name is too long (more than 253 characters with no final dot)."
+msgstr ""
+"El nombre de dominio es demasiado largo (más de 253 caracteres sin el punto "
+"final)."
+
+msgid "Domain name is empty."
+msgstr "El nombre de dominio está vacío."
+
+msgid "Domain name starts with dot."
+msgstr "El nombre de dominio comienza con un punto."
+
+#, perl-brace-format
+msgid ""
+"Domain name has an ASCII label (\"{label}\") with a character not permitted."
+msgstr ""
+"El nombre de dominio tiene una etiqueta ASCII (\"{label}\") con un carácter "
+"que no está permitido."
+
+#, perl-brace-format
+msgid ""
+"Domain name has a non-ASCII label (\"{label}\") which is not a valid U-label."
+msgstr ""
+"El nombre de dominio tiene una etiqueta no-ASCII (\"{label}\") que no es una "
+"etiqueta unicode (U-label) válida."
+
+msgid "Domain name has repeated dots."
+msgstr "El nombre de dominio tiene puntos repetidos."
+
+#, perl-brace-format
+msgid ""
+"Domain name has a label that is too long (more than 63 characters), "
+"\"{label}\"."
+msgstr ""
+"El nombre de dominio tiene una etiqueta que es demasiado larga (más de 63 "
+"caracteres), \"{label}\"."
+
+#. ADDRESS:ADDRESS01
+msgid "Name server address must be globally routable"
+msgstr "La dirección del servidor de nombres debe ser ruteable globalmente"
+
+#. ADDRESS:ADDRESS02
+msgid "Reverse DNS entry exists for name server IP address"
+msgstr ""
+"Existe un registro DNS reverso para la dirección IP del servidor de nombres"
+
+#. ADDRESS:ADDRESS03
+msgid "Reverse DNS entry matches name server name"
+msgstr ""
+"Existe un registro DNS reverso que calza con el nombre del servidor de "
+"nombres"
 
 #. ADDRESS:NAMESERVER_IP_WITHOUT_REVERSE
 #, perl-brace-format
@@ -86,105 +145,37 @@ msgstr "FIN_DE_PRUEBA {testcase}."
 msgid "TEST_CASE_START {testcase}."
 msgstr "COMIENZO_DE_PRUEBA {testcase}."
 
+#. BASIC:BASIC00
+msgid "Domain name must be valid"
+msgstr "El nombre de dominio debe ser válido"
+
+#. BASIC:BASIC01
+msgid "The domain must have a parent domain"
+msgstr "El dominio debe tener un dominio padre"
+
+#. BASIC:BASIC02
+msgid "The domain must have at least one working name server"
+msgstr "El dominio debe tener al menos un servidor de nombres funcionando"
+
+#. BASIC:BASIC03
+msgid "The Broken but functional test"
+msgstr "La prueba Arruinado pero funcional"
+
+#. BASIC:BASIC04
+msgid "Test of basic nameserver and zone functionality"
+msgstr "Prueba de funcionalidad básica del servidor de nombres y zona"
+
 #. BASIC:A_QUERY_NO_RESPONSES
 msgid "Nameservers did not respond to A query."
 msgstr "Los servidores de nombres no respondieron a consultas A."
-
-#. BASIC:B04_MISSING_NS_RECORD
-#, perl-brace-format
-msgid ""
-"Nameserver {ns} reponds to a NS query with no NS records in the answer "
-"section."
-msgstr ""
-"El servidor de nombres {ns} responde sin registros NS en la sección de "
-"respuesta frente a una consulta NS."
-
-#. BASIC:B04_MISSING_SOA_RECORD
-#, perl-brace-format
-msgid ""
-"Nameserver {ns} reponds to a SOA query with no SOA records in the answer "
-"section."
-msgstr ""
-"El servidor de nombres {ns} responde sin registros SOA en la sección de "
-"respuesta frente a una consulta SOA."
-
-#. BASIC:B04_NO_RESPONSE
-#, perl-brace-format
-msgid "Nameserver {ns} does not respond over neither UDP nor TCP."
-msgstr "El servidor de nombres {ns} no responde por UDP ni por TCP."
-
-#. BASIC:B04_NO_RESPONSE_NS_QUERY
-#, perl-brace-format
-msgid "Nameserver {ns} does not respond to NS queries."
-msgstr "El servidor de nombres {ns} no responde a consultas NS."
-
-#. BASIC:B04_NO_RESPONSE_SOA_QUERY
-#, perl-brace-format
-msgid "Nameserver {ns} does not respond to SOA queries."
-msgstr "El servidor de nombres {ns} no responde a consultas SOA."
-
-#. BASIC:B04_NS_RECORD_NOT_AA
-#, perl-brace-format
-msgid "Nameserver {ns} does not give an authoritative response on an NS query."
-msgstr ""
-"El servidor de nombres {ns} no entrega una respuesta autoritativa a una "
-"consulta NS."
-
-#. BASIC:B04_RESPONSE_TCP_NOT_UDP
-#, perl-brace-format
-msgid "Nameserver {ns} does not respond over UDP."
-msgstr "El servidor de nombres {ns} no responde por UDP."
-
-#. BASIC:B04_SOA_RECORD_NOT_AA
-#, perl-brace-format
-msgid ""
-"Nameserver {ns} does not give an authoritative response on an SOA query."
-msgstr ""
-"El servidor de nombres {ns} no entrega una respuesta autoritativa a una "
-"consulta SOA."
-
-#. BASIC:B04_UNEXPECTED_RCODE_NS_QUERY
-#, perl-brace-format
-msgid ""
-"Nameserver {ns} responds with an unexpected RCODE ({rcode}) on an NS query."
-msgstr ""
-"El servidor de nombres{ns} responde con un código RCODE inesperado ({rcode}) "
-"a una consulta NS."
-
-#. BASIC:B04_UNEXPECTED_RCODE_SOA_QUERY
-#, perl-brace-format
-msgid ""
-"Nameserver {ns} responds with an unexpected RCODE ({rcode}) on an SOA query."
-msgstr ""
-"El servidor de nombres {ns} responde con un código RCODE inesperado "
-"({rcode}) a una consulta SOA."
-
-#. BASIC:B04_WRONG_NS_RECORD
-#, perl-brace-format
-msgid ""
-"Nameserver {ns} responds with a wrong owner name ({owner} instead of {name}) "
-"on NS queries."
-msgstr ""
-"El servidor de nombres {ns} responde con un nombre \"owner\" incorrecto "
-"({owner} en vez de {name}) a una consulta NS."
-
-#. BASIC:B04_WRONG_SOA_RECORD
-#. ZONE:WRONG_SOA
-#, perl-brace-format
-msgid ""
-"Nameserver {ns} responds with a wrong owner name ({owner} instead of {name}) "
-"on SOA queries."
-msgstr ""
-"El servidor de nombres {ns} responde con un nombre \"owner\" incorrecto "
-"({owner} en vez de {name}) a una consulta SOA."
 
 #. BASIC:DOMAIN_NAME_LABEL_TOO_LONG
 #, perl-brace-format
 msgid ""
 "Domain name ({domain}) has a label ({label}) too long ({dlength}/{max})."
 msgstr ""
-"El nombre de dominio ({domain}) tiene una etiqueta ({label}) demasiado "
-"larga ({dlength}/{max})."
+"El nombre de dominio ({domain}) tiene una etiqueta ({label}) demasiado larga "
+"({dlength}/{max})."
 
 #. BASIC:DOMAIN_NAME_TOO_LONG
 #, perl-brace-format
@@ -227,6 +218,7 @@ msgstr "Se encontró el dominio padre '{pname}' para el dominio en prueba."
 #. DNSSEC:IPV4_DISABLED
 #. NAMESERVER:IPV4_DISABLED
 #. SYNTAX:IPV4_DISABLED
+#. SYSTEM:SKIP_IPV4_DISABLED
 #, perl-brace-format
 msgid "IPv4 is disabled, not sending \"{rrtype}\" query to {ns}."
 msgstr "Desactivado IPv4, no se enviará la consulta \"{rrtype}\" hacia {ns}."
@@ -243,6 +235,7 @@ msgstr "Activado IPv4, se puede enviar la consulta \"{rrtype}\" hacia {ns}."
 #. DNSSEC:IPV6_DISABLED
 #. NAMESERVER:IPV6_DISABLED
 #. SYNTAX:IPV6_DISABLED
+#. SYSTEM:SKIP_IPV6_DISABLED
 #, perl-brace-format
 msgid "IPv6 is disabled, not sending \"{rrtype}\" query to {ns}."
 msgstr "Desactivado IPv6, no se enviará la consulta \"{rrtype}\" hacia {ns}."
@@ -279,6 +272,211 @@ msgstr ""
 #, perl-brace-format
 msgid "Nameserver {ns} did not respond to NS query."
 msgstr "El servidor de nombres {ns} no respondió a consultas NS."
+
+#. CONNECTIVITY:CONNECTIVITY01
+msgid "UDP connectivity"
+msgstr "Conectividad UDP"
+
+#. CONNECTIVITY:CONNECTIVITY02
+msgid "TCP connectivity"
+msgstr "Conectividad TCP"
+
+#. CONNECTIVITY:CONNECTIVITY03
+msgid "AS Diversity"
+msgstr "Diversidad de AS"
+
+#. CONNECTIVITY:CN01_IPV4_DISABLED
+#, perl-brace-format
+msgid ""
+"IPv4 is disabled. No DNS queries are sent to these name servers: "
+"\"{ns_list}\"."
+msgstr ""
+"IPv4 está desactivado. No se enviarán consultas DNS a estos servidores de "
+"nombres: \"{ns_list}\"."
+
+#. CONNECTIVITY:CN01_IPV6_DISABLED
+#, perl-brace-format
+msgid ""
+"IPv6 is disabled. No DNS queries are sent to these name servers: "
+"\"{ns_list}\"."
+msgstr ""
+"IPv6 está desactivado. No se enviarán consultas DNS a estos servidores de "
+"nombres: \"{ns_list}\"."
+
+#. CONNECTIVITY:CN01_MISSING_NS_RECORD_UDP
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responds to a NS query with no NS records in the answer "
+"section over UDP."
+msgstr ""
+"El servidor de nombres {ns} responde sin registros NS en la sección de "
+"respuesta, ante una consulta NS sobre UDP."
+
+#. CONNECTIVITY:CN01_MISSING_SOA_RECORD_UDP
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responds to a SOA query with no SOA records in the answer "
+"section over UDP."
+msgstr ""
+"El servidor de nombres {ns} responde sin registros SOA en la sección de "
+"respuesta, ante una consulta SOA sobre UDP."
+
+#. CONNECTIVITY:CN01_NO_RESPONSE_NS_QUERY_UDP
+#, perl-brace-format
+msgid "Nameserver {ns} does not respond to NS queries over UDP."
+msgstr "El servidor de nombres {ns} no responde a consultas NS usando UDP."
+
+#. CONNECTIVITY:CN01_NO_RESPONSE_SOA_QUERY_UDP
+#, perl-brace-format
+msgid "Nameserver {ns} does not respond to SOA queries over UDP."
+msgstr "El servidor de nombres {ns} no responde a consultas SOA usando UDP."
+
+#. CONNECTIVITY:CN01_NO_RESPONSE_UDP
+#, perl-brace-format
+msgid "Nameserver {ns} does not respond to any queries over UDP."
+msgstr "El servidor de nombres {ns} no responde a ninguna consulta usando UDP."
+
+#. CONNECTIVITY:CN01_NS_RECORD_NOT_AA_UDP
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} does not give an authoritative response on an NS query over "
+"UDP."
+msgstr ""
+"El servidor de nombres {ns} no entrega una respuesta autoritativa a una "
+"consulta NS usando UDP."
+
+#. CONNECTIVITY:CN01_SOA_RECORD_NOT_AA_UDP
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} does not give an authoritative response on an SOA query over "
+"UDP."
+msgstr ""
+"El servidor de nombres {ns} no entrega una respuesta autoritativa a una "
+"consulta SOA usando UDP."
+
+#. CONNECTIVITY:CN01_UNEXPECTED_RCODE_NS_QUERY_UDP
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responds with an unexpected RCODE ({rcode}) on an NS query "
+"over UDP."
+msgstr ""
+"El servidor de nombres{ns} responde con un código RCODE inesperado ({rcode}) "
+"a una consulta NS usando UDP."
+
+#. CONNECTIVITY:CN01_UNEXPECTED_RCODE_SOA_QUERY_UDP
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responds with an unexpected RCODE ({rcode}) on an SOA query "
+"over UDP."
+msgstr ""
+"El servidor de nombres {ns} responde con un código RCODE inesperado "
+"({rcode}) a una consulta SOA usando UDP."
+
+#. CONNECTIVITY:CN01_WRONG_NS_RECORD_UDP
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responds with a wrong owner name ({domain_found} instead of "
+"{domain_expected}) on NS queries over UDP."
+msgstr ""
+"El servidor de nombres {ns} responde con un nombre \"owner\" incorrecto "
+"({domain_found} en vez de {domain_expected}) a consultas NS usando UDP."
+
+#. CONNECTIVITY:CN01_WRONG_SOA_RECORD_UDP
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responds with a wrong owner name ({domain_found} instead of "
+"{domain_expected}) on SOA queries over UDP."
+msgstr ""
+"El servidor de nombres {ns} responde con un nombre \"owner\" incorrecto "
+"({domain_found} en vez de {domain_expected}) a consultas SOA usando UDP."
+
+#. CONNECTIVITY:CN02_MISSING_NS_RECORD_TCP
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responds to a NS query with no NS records in the answer "
+"section over TCP."
+msgstr ""
+"El servidor de nombres {ns} responde sin registros NS en la sección de "
+"respuesta frente a una consulta NS usando TCP."
+
+#. CONNECTIVITY:CN02_MISSING_SOA_RECORD_TCP
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responds to a SOA query with no SOA records in the answer "
+"section over TCP."
+msgstr ""
+"El servidor de nombres {ns} responde sin registros SOA en la sección de "
+"respuesta frente a una consulta SOA usando TCP."
+
+#. CONNECTIVITY:CN02_NO_RESPONSE_NS_QUERY_TCP
+#, perl-brace-format
+msgid "Nameserver {ns} does not respond to NS queries over TCP."
+msgstr "El servidor de nombres {ns} no responde a consultas NS usando TCP."
+
+#. CONNECTIVITY:CN02_NO_RESPONSE_SOA_QUERY_TCP
+#, perl-brace-format
+msgid "Nameserver {ns} does not respond to SOA queries over TCP."
+msgstr "El servidor de nombres {ns} no responde a consultas SOA usando TCP."
+
+#. CONNECTIVITY:CN02_NO_RESPONSE_TCP
+#, perl-brace-format
+msgid "Nameserver {ns} does not respond to any queries over TCP."
+msgstr ""
+"El servidor de nombres {ns} no responde a ninguna consultas usando TCP."
+
+#. CONNECTIVITY:CN02_NS_RECORD_NOT_AA_TCP
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} does not give an authoritative response on an NS query over "
+"TCP."
+msgstr ""
+"El servidor de nombres {ns} no entrega una respuesta autoritativa a una "
+"consulta NS usando TCP."
+
+#. CONNECTIVITY:CN02_SOA_RECORD_NOT_AA_TCP
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} does not give an authoritative response on an SOA query over "
+"TCP."
+msgstr ""
+"El servidor de nombres {ns} no entrega una respuesta autoritativa a una "
+"consulta SOA usando TCP."
+
+#. CONNECTIVITY:CN02_UNEXPECTED_RCODE_NS_QUERY_TCP
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responds with an unexpected RCODE ({rcode}) on an NS query "
+"over TCP."
+msgstr ""
+"El servidor de nombres{ns} responde con un código RCODE inesperado ({rcode}) "
+"a una consulta NS usando TCP."
+
+#. CONNECTIVITY:CN02_UNEXPECTED_RCODE_SOA_QUERY_TCP
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responds with an unexpected RCODE ({rcode}) on an SOA query "
+"over TCP."
+msgstr ""
+"El servidor de nombres {ns} responde con un código RCODE inesperado "
+"({rcode}) a una consulta SOA usando TCP."
+
+#. CONNECTIVITY:CN02_WRONG_NS_RECORD_TCP
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responds with a wrong owner name ({domain_found} instead of "
+"{domain_expected}) on NS queries over TCP."
+msgstr ""
+"El servidor de nombres {ns} responde con un nombre \"owner\" incorrecto "
+"({domain_found} en vez de {domain_expected}) a una consulta NS usando TCP."
+
+#. CONNECTIVITY:CN02_WRONG_SOA_RECORD_TCP
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responds with a wrong owner name ({domain_found} instead of "
+"{domain_expected}) on SOA queries over TCP."
+msgstr ""
+"El servidor de nombres {ns} responde con un nombre \"owner\" incorrecto "
+"({domain_found} en vez de {domain_expected}) a una consulta SOA usando TCP."
 
 #. CONNECTIVITY:ERROR_ASN_DATABASE
 #, perl-brace-format
@@ -348,28 +546,6 @@ msgstr ""
 "anunciadas por grupos de AS distintos. Una lista combinada de todos los AS: "
 "({asn_list})."
 
-#. CONNECTIVITY:NAMESERVER_HAS_TCP_53
-#, perl-brace-format
-msgid "Nameserver {ns} accessible over TCP on port 53."
-msgstr "El servidor de nombres {ns} es alcanzable usando TCP en el puerto 53."
-
-#. CONNECTIVITY:NAMESERVER_HAS_UDP_53
-#, perl-brace-format
-msgid "Nameserver {ns} accessible over UDP on port 53."
-msgstr "El servidor de nombres {ns} es alcanzable usando UDP en el puerto 53."
-
-#. CONNECTIVITY:NAMESERVER_NO_TCP_53
-#, perl-brace-format
-msgid "Nameserver {ns} not accessible over TCP on port 53."
-msgstr ""
-"El servidor de nombres {ns} no es alcanzable usando TCP en el puerto 53."
-
-#. CONNECTIVITY:NAMESERVER_NO_UDP_53
-#, perl-brace-format
-msgid "Nameserver {ns} not accessible over UDP on port 53."
-msgstr ""
-"El servidor de nombres {ns} no es alcanzable usando UDP en el puerto 53."
-
 #. CONNECTIVITY:IPV4_ASN
 #, perl-brace-format
 msgid "Name servers have IPv4 addresses in the following ASs: {asn}."
@@ -404,6 +580,30 @@ msgid "Name server IP address \"{ns_ip}\" is announced in prefix \"{prefix}\"."
 msgstr ""
 "El servidor de nombres con la dirección IP \"{ns_ip}\" es anunciado en el "
 "prefijo \"{prefix}\"."
+
+#. CONSISTENCY:CONSISTENCY01
+msgid "SOA serial number consistency"
+msgstr "El número serial del SOA es consistente"
+
+#. CONSISTENCY:CONSISTENCY02
+msgid "SOA RNAME consistency"
+msgstr "El RNAME del SOA es consistente"
+
+#. CONSISTENCY:CONSISTENCY03
+msgid "SOA timers consistency"
+msgstr "Los temporizadores del SOA son consistentes"
+
+#. CONSISTENCY:CONSISTENCY04
+msgid "Name server NS consistency"
+msgstr "Los NS del servidor de nombres son consistentes"
+
+#. CONSISTENCY:CONSISTENCY05
+msgid "Consistency between glue and authoritative data"
+msgstr "Hay consistencia entre los datos \"glue\" y los autoritativos"
+
+#. CONSISTENCY:CONSISTENCY06
+msgid "SOA MNAME consistency"
+msgstr "El MNAME del SOA es consistente"
 
 #. CONSISTENCY:ADDRESSES_MATCH
 msgid "Glue records are consistent between glue and authoritative data."
@@ -565,6 +765,78 @@ msgstr ""
 "RETRY={retry}, EXPIRE={expire}, MINIMUM={minimum}\" en el siguiente grupo de "
 "servidores de nombres : {ns_list}."
 
+#. DNSSEC:DNSSEC01
+msgid "Legal values for the DS hash digest algorithm"
+msgstr "Valores legítimos para el algoritmo de resumen del \"hash\" del DS"
+
+#. DNSSEC:DNSSEC02
+msgid "DS must match a valid DNSKEY in the child zone"
+msgstr "El DS debe calzar con un DNSKEY válido en la zona hija"
+
+#. DNSSEC:DNSSEC03
+msgid "Check for too many NSEC3 iterations"
+msgstr "Revisando exceso de iteraciones NSEC3"
+
+#. DNSSEC:DNSSEC04
+msgid "Check for too short or too long RRSIG lifetimes"
+msgstr "Revisando tiempos de vida muy cortos o muy largos para RRSIG"
+
+#. DNSSEC:DNSSEC05
+msgid "Check for invalid DNSKEY algorithms"
+msgstr "Revisando algoritmos inválidos para DNSKEY"
+
+#. DNSSEC:DNSSEC06
+msgid "Verify DNSSEC additional processing"
+msgstr "Verifica procesamiento adicional de DNSSEC"
+
+#. DNSSEC:DNSSEC07
+msgid "If DNSKEY at child, parent should have DS"
+msgstr "Si hay DNSKEY en el hijo, el padre debería tener DS"
+
+#. DNSSEC:DNSSEC08
+msgid "Valid RRSIG for DNSKEY"
+msgstr "RRSIG válido para el DNSKEY"
+
+#. DNSSEC:DNSSEC09
+msgid "RRSIG(SOA) must be valid and created by a valid DNSKEY"
+msgstr "El RRSIG(SOA) debe ser válido y creado por un DNSKEY válido"
+
+#. DNSSEC:DNSSEC10
+msgid "Zone contains NSEC or NSEC3 records"
+msgstr "La zona tiene registros NSEC o NSEC3"
+
+#. DNSSEC:DNSSEC11
+msgid "DS in delegation requires signed zone"
+msgstr "El DS en la delegación requiere una zona firmada"
+
+#. DNSSEC:DNSSEC12
+msgid "Test for DNSSEC Algorithm Completeness"
+msgstr "Prueba de Completitud en Algoritmos DNSSEC"
+
+#. DNSSEC:DNSSEC13
+msgid "All DNSKEY algorithms used to sign the zone"
+msgstr "Todos los algoritmos DNSKEY se usan para firmar la zona"
+
+#. DNSSEC:DNSSEC14
+msgid "Check for valid RSA DNSKEY key size"
+msgstr "Revisando tamaños válidos de llaves RSA en DNSKEY"
+
+#. DNSSEC:DNSSEC15
+msgid "Existence of CDS and CDNSKEY"
+msgstr "Existencia de CDS y DNSKEY"
+
+#. DNSSEC:DNSSEC16
+msgid "Validate CDS"
+msgstr "Validar CDS"
+
+#. DNSSEC:DNSSEC17
+msgid "Validate CDNSKEY"
+msgstr "Validar CDNSKEY"
+
+#. DNSSEC:DNSSEC18
+msgid "Validate trust from DS to CDS and CDNSKEY "
+msgstr "Validar confianza desde el DS al CDS y CDNSKEY "
+
 #. DNSSEC:ADDITIONAL_DNSKEY_SKIPPED
 msgid "No DNSKEYs found. Additional tests skipped."
 msgstr "No se encontraron DNSKEYs. Se omiten pruebas adicionales."
@@ -705,10 +977,12 @@ msgstr ""
 
 #. DNSSEC:DS01_DS_ALGO_2_MISSING
 #, perl-brace-format
-msgid "Digest algorithm 2 (SHA-256) is expected but missing for zone {domain}."
+msgid ""
+"No DS record created by digest algorithm 2 (SHA-256) is present for zone "
+"{domain}."
 msgstr ""
-"Se espera un algoritmo de resumen (\"digest\") número 2 (SHA-256) para la "
-"zona {domain}, pero no se encuentra."
+"No existe registro DS creado por el algoritmo de resumen 2 (SHA-256) para la "
+"zona {domain}."
 
 #. DNSSEC:DS01_DS_ALGO_NOT_DS
 #, perl-brace-format
@@ -733,19 +1007,6 @@ msgstr ""
 "algoritmo de resumen (\"digest\") (número de algoritmo {ds_algo_num} que no "
 "está asignado. Obtenido de los servidores de nombres con direcciones IP "
 "\"{ns_ip_list}\"."
-
-#. DNSSEC:DS01_DS_ALGO_SHA1_DEPRECATED
-#, perl-brace-format
-msgid ""
-"DS record for zone {domain} with keytag {keytag} was created by digest "
-"algorithm {ds_algo_num} ({ds_algo_mnemo}). While still being widely in use, "
-"it is deprecated. Fetched from the nameservers with IP addresses "
-"\"{ns_ip_list}\"."
-msgstr ""
-"El registro DS para la zona {domain} con tag {keytag} fue creado por el "
-"algoritmo de resumen (\"digest\") {ds_algo_num} ({ds_algo_mnemo}), que pese "
-"a ser todavía ampliamente utilizado, está obsoleto. Obtenido de los "
-"servidores de nombres con direcciones IP \"{ns_ip_list}\"."
 
 #. DNSSEC:DS02_ALGO_NOT_SUPPORTED_BY_ZM
 #. DNSSEC:DS08_ALGO_NOT_SUPPORTED_BY_ZM
@@ -783,6 +1044,16 @@ msgstr ""
 "bit SEP, pese a que hay un DS con el mismo tag en el padre. Obtenido de los "
 "servidores de nombres con direcciones IP \"{ns_ip_list}\"."
 
+#. DNSSEC:DS02_DNSKEY_NOT_SIGNED_BY_ANY_DS
+#, perl-brace-format
+msgid ""
+"The DNSKEY RRset has not been signed by any DNSKEY matched by a DS record. "
+"Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"El grupo de registros (RRset) DNSKEY no está firmado por algún registro "
+"DNSKEY que calce con un registro DS. Obtenido de los servidores de nombres "
+"con direcciones IP \"{ns_ip_list}\"."
+
 #. DNSSEC:DS02_NO_DNSKEY_FOR_DS
 #, perl-brace-format
 msgid ""
@@ -812,6 +1083,15 @@ msgstr ""
 "El registro DS no calza con la DNSKEY con tag {keytag}, por algoritmo o "
 "resumen (digest). Obtenido de los servidores de nombres con direcciones IP "
 "\"{ns_ip_list}\"."
+
+#. DNSSEC:DS02_NO_VALID_DNSKEY_FOR_ANY_DS
+#, perl-brace-format
+msgid ""
+"There is no valid DNSKEY matched by any of the DS records. Fetched from the "
+"nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"No hay DNSKEY válido que calce con alguno de los registros DS. Obtenido de "
+"los servidores de nombres con direcciones IP \"{ns_ip_list}\"."
 
 #. DNSSEC:DS02_RRSIG_NOT_VALID_BY_DNSKEY
 #. DNSSEC:DS08_RRSIG_NOT_VALID_BY_DNSKEY
@@ -1559,6 +1839,34 @@ msgstr ""
 "El número de iteraciones NSEC3 es {count}, que es demasiado alto para el "
 "largo de llave {keylength}."
 
+#. DELEGATION:DELEGATION01
+msgid "Minimum number of name servers"
+msgstr "Número mínimo de servidores de nombres"
+
+#. DELEGATION:DELEGATION02
+msgid "Name servers must have distinct IP addresses"
+msgstr "Los servidores de nombres deben tener distintas direcciones IP"
+
+#. DELEGATION:DELEGATION03
+msgid "No truncation of referrals"
+msgstr "No hay truncamiento de referencias (\"referrals\")"
+
+#. DELEGATION:DELEGATION04
+msgid "Name server is authoritative"
+msgstr "El servidor de nombres es autoritativo"
+
+#. DELEGATION:DELEGATION05
+msgid "Name server must not point at CNAME alias"
+msgstr "El servidor de nombres no debe apuntar a un alias CNAME"
+
+#. DELEGATION:DELEGATION06
+msgid "Existence of SOA"
+msgstr "Existencia de SOA"
+
+#. DELEGATION:DELEGATION07
+msgid "Parent glue name records present in child"
+msgstr "Los registros de nombre \"glue\" del padre están presentes en el hijo"
+
 #. DELEGATION:ARE_AUTHORITATIVE
 #, perl-brace-format
 msgid ""
@@ -1833,6 +2141,66 @@ msgstr ""
 "El servidor de nombres {ns} respondió a una consulta con un código rcode "
 "inesperado ({rcode})."
 
+#. NAMESERVER:NAMESERVER01
+msgid "A name server should not be a recursor"
+msgstr "Un servidor de nombres no debería ser recursor"
+
+#. NAMESERVER:NAMESERVER02
+msgid "Test of EDNS0 support"
+msgstr "Prueba de soporte EDNS0"
+
+#. NAMESERVER:NAMESERVER03
+msgid "Test availability of zone transfer (AXFR)"
+msgstr "Prueba de disponibilidad de transferencia de zona (AXFR)"
+
+#. NAMESERVER:NAMESERVER04
+msgid "Same source address"
+msgstr "La misma dirección de origen"
+
+#. NAMESERVER:NAMESERVER05
+msgid "Behaviour against AAAA query"
+msgstr "Comportamiento en contra de consulta AAAA"
+
+#. NAMESERVER:NAMESERVER06
+msgid "NS can be resolved"
+msgstr "El NS puede ser resuelto"
+
+#. NAMESERVER:NAMESERVER07
+msgid "To check whether authoritative name servers return an upward referral"
+msgstr ""
+"Revisar si los servidores de nombres autoritativos retornan una redirección "
+"superior (upward referral)"
+
+#. NAMESERVER:NAMESERVER08
+msgid "Testing QNAME case insensitivity"
+msgstr "Revisando independencia de QNAME ante mayúsculas/minúsculas"
+
+#. NAMESERVER:NAMESERVER09
+msgid "Testing QNAME case sensitivity"
+msgstr "Revisando dependencia de QNAME ante mayúsculas/minúsculas"
+
+#. NAMESERVER:NAMESERVER10
+msgid "Test for undefined EDNS version"
+msgstr "Prueba de versión de EDNS indefinida"
+
+#. NAMESERVER:NAMESERVER11
+msgid "Test for unknown EDNS OPTION-CODE"
+msgstr "Prueba de código de opción EDNS (OPTION-CODE) desconocida"
+
+#. NAMESERVER:NAMESERVER12
+msgid "Test for unknown EDNS flags"
+msgstr "Prueba de banderas (\"flags\") EDNS desconocidas"
+
+#. NAMESERVER:NAMESERVER13
+msgid "Test for truncated response on EDNS query"
+msgstr "Prueba de respuesta truncada ante consulta EDNS"
+
+#. NAMESERVER:NAMESERVER14
+msgid "Test for unknown version with unknown OPTION-CODE"
+msgstr ""
+"Prueba de versión desconocida con un código de opción EDNS (OPTION-CODE) "
+"desconocido"
+
 #. NAMESERVER:AAAA_BAD_RDATA
 #, perl-brace-format
 msgid ""
@@ -2048,7 +2416,17 @@ msgstr ""
 msgid "Erroneous response from nameserver {ns}."
 msgstr "El servidor de nombres {ns} responde incorrectamente."
 
-#. N10_NO_RESPONSE_EDNS1_QUERY
+#. NAMESERVER:N10_EDNS_RESPONSE_ERROR
+#, perl-brace-format
+msgid ""
+"Expected RCODE but received erroneous response to an EDNS version 1 query. "
+"Fetched from the nameservers with IP addresses {ns_ip_list}"
+msgstr ""
+"Se espera un RCODE pero se recibe una respuesta errónea a una consulta con "
+"EDNS versión 1. Obtenido de los servidores de nombres con direcciones IP "
+"\"{ns_ip_list}\"."
+
+#. NAMESERVER:N10_NO_RESPONSE_EDNS1_QUERY
 #, perl-brace-format
 msgid ""
 "No response to an EDNS version 1 query. Fetched from the nameservers with IP "
@@ -2057,7 +2435,7 @@ msgstr ""
 "No hay respuesta a una consulta con EDNS versión 1. Obtenido de los "
 "servidores de nombres con direcciones IP \"{ns_ip_list}\"."
 
-#. N10_UNEXPECTED_RCODE
+#. NAMESERVER:N10_UNEXPECTED_RCODE
 #, perl-brace-format
 msgid ""
 "Erroneous RCODE (\"{rcode}\") in response to an EDNS version 1 query. "
@@ -2067,15 +2445,64 @@ msgstr ""
 "EDNS versión 1. Obtenido de los servidores de nombres con direcciones IP "
 "\"{ns_ip_list}\"."
 
-#. N10_EDNS_RESPONSE_ERROR
+#. NAMESERVER:N11_N11_NO_EDNS
 #, perl-brace-format
 msgid ""
-"Expected RCODE but received erroneous response to an EDNS version 1 query. "
-"Fetched from the nameservers with IP addresses {ns_ip_list}"
+"The DNS response, on query with unknown EDNS option-code, does not contain "
+"any EDNS from name servers \"{ns_ip_list}\"."
 msgstr ""
-"Se espera un RCODE pero se recibe una respuesta errónea a una consulta con "
-"EDNS versión 1. Obtenido de los servidores de nombres con direcciones IP "
+"La respuesta DNS, ante una pregunta con un código de opción EDNS "
+"desconocido, no contiene ningún EDNS desde los servidores de nombre "
 "\"{ns_ip_list}\"."
+
+#. NAMESERVER:N11_NO_RESPONSE
+#, perl-brace-format
+msgid ""
+"There is no response on query with unknown EDNS option-code from name "
+"servers \"{ns_ip_list}\"."
+msgstr ""
+"No existe respuesta ante una pregunta con una opción de código EDNS "
+"desconocida desde los servidores de nombres \"{ns_ip_list}\"."
+
+#. NAMESERVER:N11_RETURNS_UNKNOWN_OPTION_CODE
+#, perl-brace-format
+msgid ""
+"The DNS response contains an unknown EDNS option-code. Returned from name "
+"servers \"{ns_ip_list}\"."
+msgstr ""
+"La respuesta DNS contiene un código de opción EDNS desconocido. Obtenido de "
+"los servidores de nombres \"{ns_ip_list}\"."
+
+#. NAMESERVER:N11_UNEXPECTED_ANSWER_SECTION
+#, perl-brace-format
+msgid ""
+"The DNS response, on query with unknown EDNS option-code, does not contain "
+"the expected SOA record in the answer section from name servers "
+"\"{ns_ip_list}\"."
+msgstr ""
+"La respuesta DNS, ante una consulta con un código de opción EDNS "
+"desconocido, no contiene el registro SOA esperable en la sección de "
+"respuesta desde los servidores de nombre \"{ns_ip_list}\"."
+
+#. NAMESERVER:N11_UNEXPECTED_RCODE
+#, perl-brace-format
+msgid ""
+"The DNS response, on query with unknown EDNS option-code, has unexpected "
+"RCODE name \"{rcode}\" from name servers \"{ns_ip_list}\"."
+msgstr ""
+"La respuesta DNS, ante una consulta con un código de opción EDNS "
+"desconocido, tiene un nombre RCODE \"{rcode}\" inesperado desde los "
+"servidores de nombre \"{ns_ip_list}\"."
+
+#. NAMESERVER:N11_UNSET_AA
+#, perl-brace-format
+msgid ""
+"The DNS response, on query with unknown EDNS option-code, is unexpectedly "
+"not authoritative from name servers \"{ns_ip_list}\"."
+msgstr ""
+"La respuesta DNS, ante una consulta con un código de opción EDNS "
+"desconocido, es inesperadamente no autoritativa desde los servidores de "
+"nombre \"{ns_ip_list}\"."
 
 #. NAMESERVER:QNAME_CASE_INSENSITIVE
 #, perl-brace-format
@@ -2099,13 +2526,6 @@ msgstr ""
 "Todos los servidores de nombres responden con la misma IP usada para las "
 "consultas."
 
-#. NAMESERVER:UNKNOWN_OPTION_CODE
-#, perl-brace-format
-msgid "Nameserver {ns} responds with an unknown ENDS OPTION-CODE."
-msgstr ""
-"El servidor de nombres {ns} responde con una opción EDNS (OPTION-CODE) "
-"desconocida."
-
 #. NAMESERVER:UPWARD_REFERRAL
 #, perl-brace-format
 msgid "Nameserver {ns} returns an upward referral."
@@ -2125,6 +2545,41 @@ msgid "Nameserver {ns} has one or more unknown EDNS Z flag bits set."
 msgstr ""
 "El servidor de nombres {ns} tiene encendidos uno o más flags \"Z\" "
 "desconocidos en EDNS."
+
+#. SYNTAX:SYNTAX01
+msgid "No illegal characters in the domain name"
+msgstr "No existen caracteres ilegales en el nombre de dominio"
+
+#. SYNTAX:SYNTAX02
+msgid "No hyphen ('-') at the start or end of the domain name"
+msgstr "No existe un guión ('-') al comienzo ni al fin del nombre de dominio"
+
+#. SYNTAX:SYNTAX03
+msgid ""
+"There must be no double hyphen ('--') in position 3 and 4 of the domain name"
+msgstr ""
+"No debe existir un doble guión ('--') en las posiciones 3 y 4 del nombre de "
+"dominio"
+
+#. SYNTAX:SYNTAX04
+msgid "The NS name must have a valid domain/hostname"
+msgstr "El nombre NS debe tener un dominio o nombre de host válido"
+
+#. SYNTAX:SYNTAX05
+msgid "Misuse of '@' character in the SOA RNAME field"
+msgstr "Incorrecto uso del carácter '@' en el campo RNAME del registro SOA"
+
+#. SYNTAX:SYNTAX06
+msgid "No illegal characters in the SOA RNAME field"
+msgstr "No existen caracteres ilegales en el campo RNAME del SOA"
+
+#. SYNTAX:SYNTAX07
+msgid "No illegal characters in the SOA MNAME field"
+msgstr "No existen caracteres ilegales en el campo MNAME del SOA"
+
+#. SYNTAX:SYNTAX08
+msgid "MX name must have a valid hostname"
+msgstr "El nombre MX debe tener un nombre de host válido"
 
 #. SYNTAX:DISCOURAGED_DOUBLE_DASH
 #, perl-brace-format
@@ -2319,6 +2774,48 @@ msgstr ""
 "El nombre de dominio '{domain}' tiene una etiqueta ({label}) que termina con "
 "guión ('-')."
 
+#. ZONE:ZONE01
+msgid "Fully qualified master nameserver in SOA"
+msgstr "El servidor de nombres maestro en el SOA está completamente calificado"
+
+#. ZONE:ZONE02
+msgid "SOA 'refresh' minimum value"
+msgstr "Valor mínimo del refresco ('refresh') del SOA"
+
+#. ZONE:ZONE03
+msgid "SOA 'retry' lower than 'refresh'"
+msgstr ""
+"El valor de reintento ('retry') es más bajo que el de refresco ('refresh') "
+"del SOA"
+
+#. ZONE:ZONE04
+msgid "SOA 'retry' at least 1 hour"
+msgstr "El reintento ('retry') del SOA al menos 1 hora"
+
+#. ZONE:ZONE05
+msgid "SOA 'expire' minimum value"
+msgstr "Valor mínimo de la expiración ('expire') del SOA"
+
+#. ZONE:ZONE06
+msgid "SOA 'minimum' maximum value"
+msgstr "Valor máximo del mínimo ('minimum') del SOA"
+
+#. ZONE:ZONE07
+msgid "SOA master is not an alias"
+msgstr "El maestro del SOA no es un alias"
+
+#. ZONE:ZONE08
+msgid "MX is not an alias"
+msgstr "El MX no es un alias"
+
+#. ZONE:ZONE09
+msgid "MX record present"
+msgstr "Registro MX presente"
+
+#. ZONE:ZONE10
+msgid "No multiple SOA records"
+msgstr "No hay múltiples registros SOA"
+
 #. ZONE:RETRY_MINIMUM_VALUE_LOWER
 #, perl-brace-format
 msgid ""
@@ -2331,18 +2828,11 @@ msgstr ""
 #. ZONE:RETRY_MINIMUM_VALUE_OK
 #, perl-brace-format
 msgid ""
-"SOA 'retry' value ({retry}) is more than the minimum recommended value "
-"({required_retry})."
+"SOA 'retry' value ({retry}) is at least equal to the minimum recommended "
+"value ({required_retry})."
 msgstr ""
-"El valor 'retry' del registro SOA ({retry}) es mayor que el mínimo "
-"recomendable ({required_retry})."
-
-#. ZONE:MNAME_NO_RESPONSE
-#, perl-brace-format
-msgid "SOA 'mname' nameserver {ns} does not respond."
-msgstr ""
-"El servidor de nombres definido en el campo 'mname' del SOA ({ns}) no "
-"responde."
+"El valor de reintento ('retry') del SOA ({retry}) es al menos igual al valor "
+"mínimo recomendado ({required_retry})."
 
 #. ZONE:MNAME_IS_CNAME
 #, perl-brace-format
@@ -2359,19 +2849,6 @@ msgstr ""
 "El valor del campo 'mname' del SOA ({mname}) refiere a un NS que no es un "
 "alias (CNAME)."
 
-#. ZONE:NO_MX_RECORD
-msgid "No target (MX, A or AAAA record) to deliver e-mail for the domain name."
-msgstr ""
-"No hay destinos (registros MX, A o AAAA) que permitan despachar e-mail para "
-"el nombre de dominio."
-
-#. ZONE:MX_RECORD_EXISTS
-#, perl-brace-format
-msgid "MX with mail target ({mailtarget_list}) exists for the domain name."
-msgstr ""
-"Existe un registro MX con destino de correo ({mailtarget_list}) para el "
-"nombre de dominio."
-
 #. ZONE:REFRESH_MINIMUM_VALUE_LOWER
 #, perl-brace-format
 msgid ""
@@ -2384,11 +2861,11 @@ msgstr ""
 #. ZONE:REFRESH_MINIMUM_VALUE_OK
 #, perl-brace-format
 msgid ""
-"SOA 'refresh' value ({refresh}) is higher than the minimum recommended value "
-"({required_refresh})."
+"SOA 'refresh' value ({refresh}) is at least equal to the minimum recommended "
+"value ({required_refresh})."
 msgstr ""
-"El valor 'refresh' del registro SOA ({refresh}) es mayor que el mínimo "
-"recomendable ({required_refresh})."
+"El valor de refresco ('refresh') del SOA ({refresh}) es al menos igual al "
+"valor mínimo recomendado ({required_refresh})."
 
 #. ZONE:EXPIRE_LOWER_THAN_REFRESH
 #, perl-brace-format
@@ -2426,17 +2903,6 @@ msgstr ""
 "El valor 'minimum' del registro SOA ({minimum}) está dentro de los valores "
 "recomendables ({lowest_minimum} - {highest_minimum})."
 
-#. ZONE:MNAME_NOT_AUTHORITATIVE
-#, perl-brace-format
-msgid "SOA 'mname' nameserver {ns} is not authoritative for '{zone}' zone."
-msgstr ""
-"Le serveur maître défini dans le SOA, 'mname' {ns}, ne fait pas autorité "
-"pour la zone '{zone}'."
-
-#. ZONE:MNAME_RECORD_DOES_NOT_EXIST
-msgid "SOA 'mname' field does not exist"
-msgstr "El campo 'mname' del registro SOA no existe"
-
 #. ZONE:EXPIRE_MINIMUM_VALUE_LOWER
 #, perl-brace-format
 msgid ""
@@ -2445,15 +2911,6 @@ msgid ""
 msgstr ""
 "El valor 'expire' del registro SOA ({expire}) es menor que el recomendable "
 "({required_expire})."
-
-#. ZONE:MNAME_NOT_IN_GLUE
-#, perl-brace-format
-msgid ""
-"SOA 'mname' nameserver ({mname}) is not listed in \"parent\" NS records for "
-"tested zone ({ns_list})."
-msgstr ""
-"El servidor de nombres 'mname' del registro SOA ({mname}) no está dentro de "
-"los registros NS del padre para la zona ({ns_list})."
 
 #. ZONE:REFRESH_LOWER_THAN_RETRY
 #, perl-brace-format
@@ -2480,13 +2937,6 @@ msgstr "El registro MX del dominio apunta a un alias CNAME."
 #. ZONE:MX_RECORD_IS_NOT_CNAME
 msgid "MX record for the domain is not pointing to a CNAME."
 msgstr "El registro MX del dominio no apunta a un alias CNAME."
-
-#. ZONE:MNAME_IS_AUTHORITATIVE
-#, perl-brace-format
-msgid "SOA 'mname' nameserver ({mname}) is authoritative for '{zone}' zone."
-msgstr ""
-"El servidor de nombres 'mname' del registro SOA ({mname}) es autoritativo "
-"para la zona '{zone}'."
 
 #. ZONE:MULTIPLE_SOA
 #, perl-brace-format
@@ -2526,6 +2976,183 @@ msgstr ""
 "El valor 'expire' del registro SOA ({expire}) es mayor que el mínimo "
 "recomendable ({required_expire}) y no es menor que el valor "
 "'refresh' ({refresh})."
+
+#. ZONE:WRONG_SOA
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responds with a wrong owner name ({owner} instead of {name}) "
+"on SOA queries."
+msgstr ""
+"El servidor de nombres {ns} responde con un nombre \"owner\" incorrecto "
+"({owner} en vez de {name}) a una consulta SOA."
+
+#. ZONE:Z01_MNAME_HAS_LOCALHOST_ADDR
+#, perl-brace-format
+msgid ""
+"SOA MNAME name server \"{nsname}\" resolves to a localhost IP address "
+"({ns_ip})."
+msgstr ""
+"El servidor de nombres del MNAME del SOA \"{nsname}\" resuelve a una "
+"dirección IP de localhost ({ns_ip})."
+
+#. ZONE:Z01_MNAME_IS_DOT
+#, perl-brace-format
+msgid ""
+"SOA MNAME is specified as \".\" which usually means \"no server\". Fetched "
+"from name servers \"{ns_ip_list}\"."
+msgstr ""
+"El MNAME del SOA está definido como \".\", lo que usualmente significa \"no "
+"hay servidor\". Obtenido desde los servidores de nombres \"{ns_ip_list}\"."
+
+#. ZONE:Z01_MNAME_IS_LOCALHOST
+#, perl-brace-format
+msgid ""
+"SOA MNAME name server is \"localhost\", which is invalid. Fetched from name "
+"servers \"{ns_ip_list}\"."
+msgstr ""
+"El servidor de nombres MNAME del SOA es \"localhost\", lo que es inválido. "
+"Obtenido desde los servidores de nombres \"{ns_ip_list}\"."
+
+#. ZONE:Z01_MNAME_IS_MASTER
+#, perl-brace-format
+msgid "SOA MNAME name server(s) \"{ns_list}\" appears to be master."
+msgstr ""
+"El(los) servidor(es) de nombres del MNAME del SOA \"{ns_list}\" parecen ser "
+"maestros."
+
+#. ZONE:Z01_MNAME_MISSING_SOA_RECORD
+#, perl-brace-format
+msgid ""
+"SOA MNAME name server \"{ns}\" responds to an SOA query with no SOA records "
+"in the answer section."
+msgstr ""
+"El servidor de nombres del MNAME del SOA \"{ns}\" responde sin registros SOA "
+"en la sección de respuesta frente a una consulta SOA."
+
+#. ZONE:Z01_MNAME_NO_RESPONSE
+#, perl-brace-format
+msgid "SOA MNAME name server \"{ns}\" does not respond to an SOA query."
+msgstr ""
+"El servidor de nombres del MNAME del SOA \"{ns}\" no responde a una consulta "
+"SOA."
+
+#. ZONE:Z01_MNAME_NOT_AUTHORITATIVE
+#, perl-brace-format
+msgid "SOA MNAME name server \"{ns}\" is not authoritative for the zone."
+msgstr ""
+"El servidor de nombres del MNAME del SOA \"{ns}\" no es autoritativo para la "
+"zona."
+
+#. ZONE:Z01_MNAME_NOT_IN_NS_LIST
+#, perl-brace-format
+msgid ""
+"SOA MNAME name server \"{nsname}\" is not listed as NS record for the zone."
+msgstr ""
+"El servidor de nombres del MNAME del SOA \"{nsname}\" no está listado como "
+"registro NS para la zona."
+
+#. ZONE:Z01_MNAME_NOT_MASTER
+#, perl-brace-format
+msgid ""
+"SOA MNAME name server(s) \"{ns_list}\" do not have the highest SOA SERIAL "
+"(expected \"{soaserial}\" but got \"{soaserial_list}\")"
+msgstr ""
+"El(los) servidor(es) de nombres del MNAME del SOA \"{ns_list}\" no tiene(n) "
+"el SERIAL de SOA más alto (esperado \"{soaserial}\" pero obtenido "
+"\"{soaserial_list}\")"
+
+#. ZONE:Z01_MNAME_NOT_RESOLVE
+#, perl-brace-format
+msgid ""
+"SOA MNAME name server \"{nsname}\" cannot be resolved into an IP address."
+msgstr ""
+"El servidor de nombres del MNAME del SOA \"{nsname}\" no puede resolverse a "
+"una dirección IP."
+
+#. ZONE:Z01_MNAME_UNEXPECTED_RCODE
+#, perl-brace-format
+msgid ""
+"SOA MNAME name server \"{ns}\" gives unexpected RCODE name (\"{rcode}\") in "
+"response to an SOA query."
+msgstr ""
+"El servidor de nombres del MNAME del SOA \"{ns}\" entrega un nombre RCODE "
+"inesperado (\"{rcode}\") en respuesta a una consulta SOA."
+
+#. ZONE:Z09_INCONSISTENT_MX
+msgid "Some name servers return an MX RRset while others return none."
+msgstr ""
+"Algunos servidores de nombres entregan un conjunto de registros (\"RRset\") "
+"para MX, pero otros no entregan nada."
+
+#. ZONE:Z09_INCONSISTENT_MX_DATA
+msgid "The MX RRset data is inconsistent between the name servers."
+msgstr ""
+"El conjunto de registros (\"RRset\") para MX es inconsistente entre los "
+"servidores de nombres."
+
+#. ZONE:Z09_MISSING_MAIL_TARGET
+msgid "The child zone has no mail target (no MX)."
+msgstr "La zona hija no tiene destino de correo (no existe MX)."
+
+#. ZONE:Z09_MX_DATA
+#, perl-brace-format
+msgid ""
+"Mail targets in the MX RRset \"{mailtarget_list}\" returned from name "
+"servers \"{ns_ip_list}\"."
+msgstr ""
+"Se obtienen los destinos de correo \"{mailtarget_list}\" en el RRset de MX, "
+"desde los servidores de nombres \"{ns_ip_list}\"."
+
+#. ZONE:Z09_MX_FOUND
+#, perl-brace-format
+msgid "MX RRset was returned by name servers \"{ns_ip_list}\"."
+msgstr ""
+"El RRset del MX fue entregado por los servidores de nombres \"{ns_ip_list}\"."
+
+#. ZONE:Z09_NON_AUTH_MX_RESPONSE
+#, perl-brace-format
+msgid ""
+"Non-authoritative response on MX query from name servers \"{ns_ip_list}\"."
+msgstr ""
+"Hay una respuesta no-autoritativa para la consulta MX desde los servidores "
+"de nombres \"{ns_ip_list}\"."
+
+#. ZONE:Z09_NO_MX_FOUND
+#, perl-brace-format
+msgid "No MX RRset was returned by name servers \"{ns_ip_list}\"."
+msgstr ""
+"No se entregó RRset MX desde los servidores de nombres \"{ns_ip_list}\"."
+
+#. ZONE:Z09_NO_RESPONSE_MX_QUERY
+#, perl-brace-format
+msgid "No response on MX query from name servers \"{ns_ip_list}\"."
+msgstr ""
+"No hay respuesta ante una consulta MX desde los servidores de nombres "
+"\"{ns_ip_list}\"."
+
+#. ZONE:Z09_NULL_MX_NON_ZERO_PREF
+msgid "The zone has a Null MX with non-zero preference."
+msgstr "La zona tiene un MX nulo con preferencia no-cero."
+
+#. ZONE:Z09_NULL_MX_WITH_OTHER_MX
+msgid "The zone has a Null MX mixed with other MX records."
+msgstr "La zona tiene un MX nulo mezclado con otros registros MX."
+
+#. ZONE:Z09_ROOT_EMAIL_DOMAIN
+msgid "Root zone with an unexpected MX RRset (non-Null MX)."
+msgstr "Zona raíz con un RRset MX inesperado (MX no-nulo)."
+
+#. ZONE:Z09_TLD_EMAIL_DOMAIN
+msgid "The zone is a TLD and has an unexpected MX RRset (non-Null MX)."
+msgstr "La zona es un TLD y tiene un RRset MX inesperado (MX no-nulo)."
+
+#. ZONE:Z09_UNEXPECTED_RCODE_MX
+#, perl-brace-format
+msgid ""
+"Unexpected RCODE value on the MX query from name servers \"{ns_ip_list}\"."
+msgstr ""
+"Valor de RCODE inesperado ante una consulta MX desde los servidores de "
+"nombre \"{ns_ip_list}\"."
 
 #. SYSTEM:CANNOT_CONTINUE
 #, perl-brace-format
@@ -2591,16 +3218,6 @@ msgstr ""
 "Solicitud de ejecutar {testcase} en un módulo desconocido {module}. Módulos "
 "conocidosL: {module_list}."
 
-#. SYSTEM:SKIP_IPV4_DISABLED
-#, perl-brace-format
-msgid "IPv4 is disabled, not sending query to {ns_list}."
-msgstr "IPv4 está desactivado, no se enviarán consultas a {ns_list}."
-
-#. SYSTEM:SKIP_IPV6_DISABLED
-#, perl-brace-format
-msgid "IPv6 is disabled, not sending query to {ns_list}."
-msgstr "IPv6 está desactivado, no se enviarán consultas a {ns_list}."
-
 #. SYSTEM:FAKE_DELEGATION
 msgid "Followed a fake delegation."
 msgstr "Se siguió una delegación falsa."
@@ -2645,6 +3262,73 @@ msgid "Big packet size ({size}) (try with \"{command}\")."
 msgstr ""
 "El tamaño del paquete es demasiado grande ({size}) (intente con el comando "
 "\"{command}\")."
+
+#, perl-brace-format
+#~ msgid "Nameserver {ns} does not respond over neither UDP nor TCP."
+#~ msgstr "El servidor de nombres {ns} no responde por UDP ni por TCP."
+
+#, perl-brace-format
+#~ msgid "Nameserver {ns} does not respond over UDP."
+#~ msgstr "El servidor de nombres {ns} no responde por UDP."
+
+#, perl-brace-format
+#~ msgid "Nameserver {ns} accessible over TCP on port 53."
+#~ msgstr ""
+#~ "El servidor de nombres {ns} es alcanzable usando TCP en el puerto 53."
+
+#, perl-brace-format
+#~ msgid "Nameserver {ns} accessible over UDP on port 53."
+#~ msgstr ""
+#~ "El servidor de nombres {ns} es alcanzable usando UDP en el puerto 53."
+
+#, perl-brace-format
+#~ msgid "Nameserver {ns} not accessible over TCP on port 53."
+#~ msgstr ""
+#~ "El servidor de nombres {ns} no es alcanzable usando TCP en el puerto 53."
+
+#, perl-brace-format
+#~ msgid "Nameserver {ns} not accessible over UDP on port 53."
+#~ msgstr ""
+#~ "El servidor de nombres {ns} no es alcanzable usando UDP en el puerto 53."
+
+#, perl-brace-format
+#~ msgid ""
+#~ "DS record for zone {domain} with keytag {keytag} was created by digest "
+#~ "algorithm {ds_algo_num} ({ds_algo_mnemo}). While still being widely in "
+#~ "use, it is deprecated. Fetched from the nameservers with IP addresses "
+#~ "\"{ns_ip_list}\"."
+#~ msgstr ""
+#~ "El registro DS para la zona {domain} con tag {keytag} fue creado por el "
+#~ "algoritmo de resumen (\"digest\") {ds_algo_num} ({ds_algo_mnemo}), que "
+#~ "pese a ser todavía ampliamente utilizado, está obsoleto. Obtenido de los "
+#~ "servidores de nombres con direcciones IP \"{ns_ip_list}\"."
+
+#, perl-brace-format
+#~ msgid "SOA 'mname' nameserver {ns} does not respond."
+#~ msgstr ""
+#~ "El servidor de nombres definido en el campo 'mname' del SOA ({ns}) no "
+#~ "responde."
+
+#~ msgid ""
+#~ "No target (MX, A or AAAA record) to deliver e-mail for the domain name."
+#~ msgstr ""
+#~ "No hay destinos (registros MX, A o AAAA) que permitan despachar e-mail "
+#~ "para el nombre de dominio."
+
+#, perl-brace-format
+#~ msgid "MX with mail target ({mailtarget_list}) exists for the domain name."
+#~ msgstr ""
+#~ "Existe un registro MX con destino de correo ({mailtarget_list}) para el "
+#~ "nombre de dominio."
+
+#~ msgid "SOA 'mname' field does not exist"
+#~ msgstr "El campo 'mname' del registro SOA no existe"
+
+#, perl-brace-format
+#~ msgid "SOA 'mname' nameserver ({mname}) is authoritative for '{zone}' zone."
+#~ msgstr ""
+#~ "El servidor de nombres 'mname' del registro SOA ({mname}) es autoritativo "
+#~ "para la zona '{zone}'."
 
 #, perl-brace-format
 #~ msgid ""
@@ -2809,9 +3493,6 @@ msgstr ""
 
 #~ msgid "The apex DNSKEY RRset was correcly signed."
 #~ msgstr "El registro DNSKEY del \"apex\" fue firmado correctamente."
-
-#~ msgid "The zone has NSEC3 records."
-#~ msgstr "La zona tiene registros NSEC3."
 
 #~ msgid "The zone has NSEC records."
 #~ msgstr "La zona tiene registros NSEC."
