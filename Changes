@@ -1,5 +1,11 @@
 Release history for Zonemaster component Zonemaster-Engine
 
+v4.6.2 2023-03-01 (public fix version)
+
+ [Fixes]
+ - Updates translations to Spanish and Norwegian (#1199, #1196)
+
+
 v4.6.1 2023-01-31 (public fix version)
 
  [Fixes]
