@@ -34,6 +34,7 @@ requires 'Readonly'           => 0;
 requires 'Text::CSV'          => 0;
 requires 'Zonemaster::LDNS'   => 3.001000;
 
+test_requires 'Locale::PO'        => 0;
 test_requires 'Pod::Coverage'     => 0;
 test_requires 'Test::Differences' => 0;
 test_requires 'Test::Exception'   => 0;

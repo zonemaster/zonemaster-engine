@@ -3127,8 +3127,8 @@ msgid ""
 "SOA MNAME name server \"{nsname}\" resolves to a localhost IP address "
 "({ns_ip})."
 msgstr ""
-"La résolution du nom du serveur de noms du SOA MNAME \"{nsname}\" donne "
-"une adresse localhost ({ns_ip})."
+"La résolution du nom du serveur de noms du SOA MNAME \"{nsname}\" donne une "
+"adresse localhost ({ns_ip})."
 
 #. ZONE:Z01_MNAME_IS_DOT
 #, perl-brace-format
@@ -3136,9 +3136,9 @@ msgid ""
 "SOA MNAME is specified as \".\" which usually means \"no server\". Fetched "
 "from name servers \"{ns_ip_list}\"."
 msgstr ""
-"Le nom du serveur de noms du SOA MNAME est \".\", ce qui signifie en "
-"général \"aucun serveur\". Information retournée par les serveurs de noms "
-"dont les adresses IP sont \"{ns_ip_list}\"."
+"Le nom du serveur de noms du SOA MNAME est \".\", ce qui signifie en général "
+"\"aucun serveur\". Information retournée par les serveurs de noms dont les "
+"adresses IP sont \"{ns_ip_list}\"."
 
 #. ZONE:Z01_MNAME_IS_LOCALHOST
 #, perl-brace-format
@@ -3163,16 +3163,16 @@ msgid ""
 "SOA MNAME name server \"{ns}\" responds to an SOA query with no SOA records "
 "in the answer section."
 msgstr ""
-"Le serveur de noms du SOA MNAME \"{ns}\" ne retourne aucun enregistrement "
-"de type \"SOA\" dans la section \"answer\" de la réponse à une requête de "
-"type \"SOA\"."
+"Le serveur de noms du SOA MNAME \"{ns}\" ne retourne aucun enregistrement de "
+"type \"SOA\" dans la section \"answer\" de la réponse à une requête de type "
+"\"SOA\"."
 
 #. ZONE:Z01_MNAME_NO_RESPONSE
 #, perl-brace-format
 msgid "SOA MNAME name server \"{ns}\" does not respond to an SOA query."
 msgstr ""
-"Le serveur de noms du SOA MNAME \"{ns}\" ne répond pas aux requêtes de "
-"type \"SOA\"."
+"Le serveur de noms du SOA MNAME \"{ns}\" ne répond pas aux requêtes de type "
+"\"SOA\"."
 
 #. ZONE:Z01_MNAME_NOT_AUTHORITATIVE
 #, perl-brace-format
@@ -3195,9 +3195,9 @@ msgid ""
 "SOA MNAME name server(s) \"{ns_list}\" do not have the highest SOA SERIAL "
 "(expected \"{soaserial}\" but got \"{soaserial_list}\")"
 msgstr ""
-"Le(s) serveur(s) de noms \"{ns_list}\" du SOA MNAME n’ont pas le numéro "
-"de série SOA le plus élevé (numéro de série attendu : \"{soaserial}\" ; "
-"numéros de série obtenus : \"{soaserial_list}\")."
+"Le(s) serveur(s) de noms \"{ns_list}\" du SOA MNAME n’ont pas le numéro de "
+"série SOA le plus élevé (numéro de série attendu : \"{soaserial}\" ; numéros "
+"de série obtenus : \"{soaserial_list}\")."
 
 #. ZONE:Z01_MNAME_NOT_RESOLVE
 #, perl-brace-format

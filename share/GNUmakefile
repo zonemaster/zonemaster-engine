@@ -1,6 +1,6 @@
 .POSIX:
 .SUFFIXES: .po .mo
-.PHONY: all check-msg-args dist extract-pot tidy-po show-fuzzy update-po new-po
+.PHONY: all check-msg-args dist extract-pot tidy-po show-fuzzy update-po new-po check-po
 
 POFILES := $(shell find . -maxdepth 1 -type f -name '*.po' -exec basename {} \;)
 MOFILES := $(POFILES:%.po=%.mo)
@@ -34,6 +34,9 @@ new-po: extract-pot
 		-e 's/^"Language: /$$&$(POLANG)/;' \
 		-e 's/^("Content-Type:.+charset=)CHARSET/$${1}UTF-8/;' $(POLANG).po
 	@perl -ni -e 'print unless /^#( |$$)/' $(POLANG).po
+
+check-po:
+	@for f in $(POFILES) ; do msgfmt -c $$f ; done
 
 .po.mo:
 	@msgfmt -o $@ $<
