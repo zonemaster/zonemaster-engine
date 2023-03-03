@@ -13,6 +13,7 @@ use Zonemaster::Engine::Profile;
 use IO::Socket;
 use IO::Socket::INET;
 use Net::IP::XS;
+use Scalar::Util qw( looks_like_number );
 
 our @db_sources;
 our $db_style;
@@ -48,11 +49,12 @@ sub get_with_prefix {
         die "ASN database sources undefined";
     }
 
+    my ( $asnref, $prefix, $raw );
     if ( $db_style eq q{cymru} ) {
-        return _cymru_asn_lookup($ip);
+        ( $asnref, $prefix, $raw ) = _cymru_asn_lookup($ip);
     }
     elsif ( $db_style eq q{ripe} ) {
-        return _ripe_asn_lookup($ip);
+        ( $asnref, $prefix, $raw ) = _ripe_asn_lookup($ip);
     }
     else {
         if ( not $db_style ) {
@@ -62,6 +64,8 @@ sub get_with_prefix {
             die "ASN database style value [$db_style] is illegal";
         }
     }
+    map { looks_like_number( $_ ) || die "ASN lookup value isn't numeric: '$_'" } @$asnref;
+    return ( $asnref, $prefix, $raw );
 
 } ## end sub get_with_prefix
 
@@ -172,7 +176,7 @@ sub _ripe_asn_lookup {
         }
         elsif ( $str )  {
             my @fields = split( /\s+/x, $str );
-            @asns = ( $fields[0] );
+            my @asns   = split( '/',  $fields[0] );
             return \@asns, Net::IP::XS->new( $fields[1] ), $str, q{AS_FOUND};
         }
         else {
