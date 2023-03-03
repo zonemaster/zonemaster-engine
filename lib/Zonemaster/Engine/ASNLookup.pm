@@ -172,7 +172,7 @@ sub _ripe_asn_lookup {
         }
         elsif ( $str )  {
             my @fields = split( /\s+/x, $str );
-            @asns = ( $fields[0] );
+            my @asns   = split( '/',  $fields[0] );
             return \@asns, Net::IP::XS->new( $fields[1] ), $str, q{AS_FOUND};
         }
         else {
