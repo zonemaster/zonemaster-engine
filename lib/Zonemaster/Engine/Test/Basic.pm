@@ -395,9 +395,10 @@ sub basic02 {
     my %ns_no_response;
     my %unexpected_rcode;
 
+    my @ns_names = @{ Zonemaster::Engine::TestMethods->method2( $zone ) };
     my @ns = @{ Zonemaster::Engine::TestMethods->method4( $zone ) };
-
-    if ( not scalar @ns ) {
+    
+    if ( not scalar @ns_names ) {
         push @results,
             info(
                 B02_NO_DELEGATION => {
@@ -408,18 +409,33 @@ sub basic02 {
         return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
     }
 
+    if ( not scalar @ns ) {
+        my %found_ip;
+        my @ns_ips = @{ $zone->glue_addresses };
+
+        foreach my $ns_name ( @ns_names ) {
+            $found_ip{$ns_name->string} = 0;
+            
+            foreach my $rr ( @ns_ips ) {
+                if ( $rr->owner eq $ns_name ) {
+                    $found_ip{$ns_name->string} = 1;
+                    push @ns, Zonemaster::Engine::Nameserver->new({ name => $ns_name, address => $rr->address });
+                }
+            }
+        }
+
+        foreach my $ns_name ( keys %found_ip ) {
+            if ( $found_ip{$ns_name} == 0 ) {
+                $ns_cant_resolve{$ns_name} = 1;
+            }
+        }
+    }
+
     foreach my $ns ( @ns ) {
         if ( _ip_disabled_message( \@results, $ns, $query_type ) ) {
             next;
         }
         _ip_enabled_message( \@results, $ns, $query_type );
-
-        # This is not a realistical conditional check considering the current implementation of Engine::Nameserver.
-        # Any Engine::Nameserver object created will (must) have an IP address. So it is here as a placeholder.
-        if ( not $ns->address ) {
-            $ns_cant_resolve{$ns->name} = 1;
-            next;
-        }
 
         my $p = $ns->query( $zone->name, $query_type );
 
