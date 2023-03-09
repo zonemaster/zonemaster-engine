@@ -40,7 +40,7 @@
         },
         "BASIC" : {
             "A_QUERY_NO_RESPONSES" : "INFO",
-            "B02_AUTH_RESPONSE_SOA" : "DEBUG",
+            "B02_AUTH_RESPONSE_SOA" : "INFO",
             "B02_NO_DELEGATION" : "CRITICAL",
             "B02_NO_WORKING_NS" : "CRITICAL",
             "B02_NS_BROKEN" : "ERROR",

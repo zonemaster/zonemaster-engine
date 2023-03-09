@@ -440,11 +440,11 @@ sub basic02 {
         my $p = $ns->query( $zone->name, $query_type );
 
         if ( $p ) {
-            if ( not $p->aa ) {
-                $ns_not_auth{$ns->string} = 1;
-            }
-            elsif ( $p->rcode ne 'NOERROR' ) {
+            if ( $p->rcode ne 'NOERROR' ) {
                 $unexpected_rcode{$ns->string} = $p->rcode;
+            }
+            elsif ( not $p->aa ) {
+                $ns_not_auth{$ns->string} = 1;
             }
             else {
                 if ( $p->get_records_for_name( $query_type, $zone->name, q{answer} ) ) {

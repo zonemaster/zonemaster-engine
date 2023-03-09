@@ -102,10 +102,36 @@ ok( $res{HAS_NAMESERVER_NO_WWW_A_TEST}, q{HAS_NAMESERVER_NO_WWW_A_TEST} );
 %res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{basic}, q{birgerjarlhotel.se} );
 ok( $res{A_QUERY_NO_RESPONSES}, q{A_QUERY_NO_RESPONSES} );
 
-$zone = Zonemaster::Engine->zone( q{exampledomain.fake} );
+###########
+# basic02
+###########
+$zone = Zonemaster::Engine->zone( 'exampledomain.fake' );
 zone_gives('basic02', $zone, [qw{B02_NO_DELEGATION}] );
+zone_gives_not( 'basic02', $zone, [qw{B02_AUTH_RESPONSE_SOA B02_NO_WORKING_NS B02_NS_BROKEN B02_NS_NOT_AUTH B02_NS_NO_IP_ADDR B02_NS_NO_RESPONSE B02_UNEXPECTED_RCODE}] );
 
-$zone = Zonemaster::Engine->zone( q{afnic.fr} );
+$zone = Zonemaster::Engine->zone( 'lame-ns-no-name.dufberg.se' );
+zone_gives('basic02', $zone, [qw{B02_NO_WORKING_NS B02_NS_NO_IP_ADDR}] );
+zone_gives_not( 'basic02', $zone, [qw{B02_AUTH_RESPONSE_SOA B02_NO_DELEGATION B02_NS_BROKEN B02_NS_NOT_AUTH B02_NS_NO_RESPONSE B02_UNEXPECTED_RCODE}] );
+
+$zone = Zonemaster::Engine->zone( 'lame-ns-no-addr.dufberg.se' );
+zone_gives('basic02', $zone, [qw{B02_NO_WORKING_NS B02_NS_NO_IP_ADDR}] );
+zone_gives_not( 'basic02', $zone, [qw{B02_AUTH_RESPONSE_SOA B02_NO_DELEGATION B02_NS_BROKEN B02_NS_NOT_AUTH B02_NS_NO_RESPONSE B02_UNEXPECTED_RCODE}] );
+
+$zone = Zonemaster::Engine->zone( 'lame-ns-no-glue.dufberg.se' );
+zone_gives('basic02', $zone, [qw{B02_NO_WORKING_NS B02_NS_NO_IP_ADDR}] );
+zone_gives_not( 'basic02', $zone, [qw{B02_AUTH_RESPONSE_SOA B02_NO_DELEGATION B02_NS_BROKEN B02_NS_NOT_AUTH B02_NS_NO_RESPONSE B02_UNEXPECTED_RCODE}] );
+
+$zone = Zonemaster::Engine->zone( 'lame-ns-no-response.dufberg.se' );
+zone_gives('basic02', $zone, [qw{B02_NO_WORKING_NS B02_NS_NO_RESPONSE}] );
+zone_gives_not( 'basic02', $zone, [qw{B02_AUTH_RESPONSE_SOA B02_NO_DELEGATION B02_NS_BROKEN B02_NS_NOT_AUTH B02_NS_NO_IP_ADDR B02_UNEXPECTED_RCODE}] );
+
+$zone = Zonemaster::Engine->zone( 'lame-ns-refused.dufberg.se' );
+zone_gives('basic02', $zone, [qw{B02_NO_WORKING_NS B02_UNEXPECTED_RCODE}] );
+zone_gives_not( 'basic02', $zone, [qw{B02_AUTH_RESPONSE_SOA B02_NO_DELEGATION B02_NS_BROKEN B02_NS_NOT_AUTH B02_NS_NO_RESPONSE B02_NS_NO_IP_ADDR}] );
+
+$zone = Zonemaster::Engine->zone( 'lame-ns-servfail.dufberg.se' );
+zone_gives('basic02', $zone, [qw{B02_NO_WORKING_NS B02_UNEXPECTED_RCODE}] );
+zone_gives_not( 'basic02', $zone, [qw{B02_AUTH_RESPONSE_SOA B02_NO_DELEGATION B02_NS_BROKEN B02_NS_NOT_AUTH B02_NS_NO_RESPONSE B02_NS_NO_IP_ADDR}] );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Nameserver->save( $datafile );
@@ -114,6 +140,8 @@ if ( $ENV{ZONEMASTER_RECORD} ) {
 Zonemaster::Engine::Profile->effective->set( q{no_network}, 0 );
 Zonemaster::Engine::Profile->effective->set( q{net.ipv4}, 0 );
 Zonemaster::Engine::Profile->effective->set( q{net.ipv6}, 0 );
+
+$zone = Zonemaster::Engine->zone( q{afnic.fr} );
 zone_gives( q{basic02}, $zone, [qw{NO_NETWORK}] );
 zone_gives_not( q{basic02}, $zone, [qw{IPV4_ENABLED}] );
 zone_gives_not( q{basic02}, $zone, [qw{IPV6_ENABLED}] );
@@ -131,13 +159,8 @@ TODO: {
     local $TODO = "Need to find/create zones with that error";
 
     # basic02
-    ok( $res{B02_NO_WORKING_NS},    q{B02_NO_WORKING_NS} );
     ok( $tag{B02_NS_BROKEN},        q{B02_NS_BROKEN} );
     ok( $tag{B02_NS_NOT_AUTH},      q{B02_NS_NOT_AUTH} );
-    ok( $tag{B02_NS_NO_IP_ADDR},    q{B02_NS_NO_IP_ADDR} );
-    ok( $tag{B02_NS_NO_RESPONSE},   q{B02_NS_NO_RESPONSE} );
-    ok( $tag{B02_UNEXPECTED_RCODE}, q{B02_UNEXPECTED_RCODE} );
 }
 
 done_testing;
-
