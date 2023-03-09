@@ -15,6 +15,9 @@ use Clone qw(clone);
 use Data::Dumper;
 use Net::IP::XS;
 use Log::Any qw( $log );
+use YAML::XS qw();
+
+$YAML::XS::Boolean = "JSON::PP";
 
 use Zonemaster::Engine::Constants qw( $RESOLVER_SOURCE_OS_DEFAULT $DURATION_5_MINUTES_IN_SECONDS $DURATION_1_HOUR_IN_SECONDS $DURATION_4_HOURS_IN_SECONDS $DURATION_12_HOURS_IN_SECONDS $DURATION_1_DAY_IN_SECONDS $DURATION_1_WEEK_IN_SECONDS $DURATION_180_DAYS_IN_SECONDS );
 
@@ -411,6 +414,18 @@ sub to_json {
     my ( $self ) = @_;
 
     return encode_json( $self->{q{profile}} );
+}
+
+sub from_yaml {
+    my ( $class, $yaml ) = @_;
+    my $data = YAML::XS::Load( $yaml );
+    return $class->from_json( encode_json( $data ) );
+}
+
+sub to_yaml {
+    my ( $self ) = @_;
+
+    return YAML::XS::Dump( $self->{q{profile}} );
 }
 
 sub effective {

@@ -56,6 +56,7 @@ README.md
 share/GNUmakefile
 share/iana-ipv4-special-registry.csv
 share/iana-ipv6-special-registry.csv
+share/json2yaml.pl
 share/locale/da/LC_MESSAGES/Zonemaster-Engine.mo
 share/locale/es/LC_MESSAGES/Zonemaster-Engine.mo
 share/locale/fi/LC_MESSAGES/Zonemaster-Engine.mo
@@ -66,6 +67,7 @@ share/Makefile
 share/modules.txt
 share/named.root
 share/profile.json
+share/profile.yaml
 share/profile_additional_properties.json
 t/00-load.t
 t/asn.data

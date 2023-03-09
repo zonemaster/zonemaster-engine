@@ -33,6 +33,7 @@ requires 'Net::DNS'           => 0;
 requires 'Net::IP::XS'        => 0.21;
 requires 'Readonly'           => 0;
 requires 'Text::CSV'          => 0;
+requires 'YAML::XS'           => 0;
 requires 'Zonemaster::LDNS'   => 3.001000;
 
 test_requires 'Locale::PO'        => 0;
