@@ -1,12 +1,14 @@
 use 5.006;
 use strict;
 use warnings FATAL   => 'all';
-use Test::More tests => 29;
+use Test::More tests => 30;
+use Log::Any::Test;    # Must come before use Log::Any
 
 use JSON::PP;
 use Readonly;
 use Test::Differences;
 use Test::Exception;
+use Log::Any qw( $log );
 
 BEGIN {
     use_ok 'Zonemaster::Engine::Profile';
@@ -265,15 +267,24 @@ subtest 'from_json() dies on illegal values' => sub {
     dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"retrans":0}}}' ); }   "checks lower bound of resolver.defaults.retrans";
     dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"retrans":256}}}' ); } "checks upper bound of resolver.defaults.retrans";
     dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"retrans":1.5}}}' ); } "checks type of resolver.defaults.retrans";
-    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"source":"example.com"}}' ); }     "checks type of resolver.source";
-    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"source4":"example.com"}}' ); }    "checks type of resolver.source4";
-    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"source4":"2001:db8::42"}}' ); }   "checks type of resolver.source4 (only IPv4)";
-    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"source6":"example.com"}}' ); }    "checks type of resolver.source6";
-    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"source6":"192.0.2.53"}}' ); }     "checks type of resolver.source6 (only IPv6)";
     dies_ok { Zonemaster::Engine::Profile->from_json( '{"asnroots":["noreply@example.com"]}' ); }      "checks type of asnroots";
     dies_ok { Zonemaster::Engine::Profile->from_json( '{"logfilter":[]}' ); }                          "checks type of logfilter";
     dies_ok { Zonemaster::Engine::Profile->from_json( '{"test_levels":[]}' ); }                        "checks type of test_levels";
     dies_ok { Zonemaster::Engine::Profile->from_json( '{"test_cases":{}}' ); }                         "checks type of test_cases";
+};
+
+subtest 'from_json() emits warning on illegal values' => sub {
+    sub _from_json_illegal_value {
+        my ( $json, $regex, $test_name ) = @_;
+        $log->clear();
+        Zonemaster::Engine::Profile->from_json( $json );
+        $log->contains_ok( $regex, $test_name );
+    }
+    _from_json_illegal_value( '{"resolver":{"source":"example.com"}}',   qr/^Property.*IP address.*/,   "checks type of resolver.source" );
+    _from_json_illegal_value( '{"resolver":{"source4":"example.com"}}',  qr/^Property.*IPv4 address.*/, "checks type of resolver.source4" );
+    _from_json_illegal_value( '{"resolver":{"source4":"2001:db8::42"}}', qr/^Property.*IPv4 address.*/, "checks type of resolver.source4 (only IPv4)" );
+    _from_json_illegal_value( '{"resolver":{"source6":"example.com"}}',  qr/^Property.*IPv6 address.*/, "checks type of resolver.source6" );
+    _from_json_illegal_value( '{"resolver":{"source6":"192.0.2.53"}}',   qr/^Property.*IPv6 address.*/, "checks type of resolver.source6 (only IPv6)" );
 };
 
 subtest 'get() returns 1 for true' => sub {

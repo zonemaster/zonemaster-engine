@@ -14,6 +14,7 @@ use File::Slurp;
 use Clone qw(clone);
 use Data::Dumper;
 use Net::IP::XS;
+use Log::Any qw( $log );
 
 use Zonemaster::Engine::Constants qw( $RESOLVER_SOURCE_OS_DEFAULT $DURATION_5_MINUTES_IN_SECONDS $DURATION_1_HOUR_IN_SECONDS $DURATION_4_HOURS_IN_SECONDS $DURATION_12_HOURS_IN_SECONDS $DURATION_1_DAY_IN_SECONDS $DURATION_1_WEEK_IN_SECONDS $DURATION_180_DAYS_IN_SECONDS );
 
@@ -57,7 +58,7 @@ my %profile_properties_details = (
         default => "$RESOLVER_SOURCE_OS_DEFAULT",
         test    => sub {
             if ( $_[0] ne $RESOLVER_SOURCE_OS_DEFAULT ) {
-                Net::IP::XS->new( $_[0] ) || die "Property resolver.source must be an IP address or the exact string $RESOLVER_SOURCE_OS_DEFAULT";
+                Net::IP::XS->new( $_[0] ) || $log->warning( "Property resolver.source must be an IP address or the exact string $RESOLVER_SOURCE_OS_DEFAULT" );
             }
         }
     },
@@ -66,7 +67,7 @@ my %profile_properties_details = (
         default => "",
         test    => sub {
             if ( $_[0] ne '' and not Net::IP::XS::ip_is_ipv4( $_[0] ) ) {
-                die "Property resolver.source4 must be an IPv4 address or the empty string";
+                $log->warning( "Property resolver.source4 must be an IPv4 address or the empty string" );
             }
             Net::IP::XS->new( $_[0] );
         }
@@ -76,7 +77,7 @@ my %profile_properties_details = (
         default => "",
         test    => sub {
             if ( $_[0] ne '' and not Net::IP::XS::ip_is_ipv6( $_[0] ) ) {
-                die "Property resolver.source6 must be an IPv6 address or the empty string";
+                $log->warning( "Property resolver.source6 must be an IPv6 address or the empty string" );
             }
             Net::IP::XS->new( $_[0] );
         }
