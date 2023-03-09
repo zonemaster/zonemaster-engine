@@ -55,7 +55,6 @@ my %profile_properties_details = (
     },
     q{resolver.source} => {
         type    => q{Str},
-        default => "$RESOLVER_SOURCE_OS_DEFAULT",
         test    => sub {
             if ( $_[0] ne $RESOLVER_SOURCE_OS_DEFAULT ) {
                 Net::IP::XS->new( $_[0] ) || $log->warning( "Property resolver.source must be an IP address or the exact string $RESOLVER_SOURCE_OS_DEFAULT" );
@@ -64,20 +63,18 @@ my %profile_properties_details = (
     },
     q{resolver.source4} => {
         type    => q{Str},
-        default => "",
         test    => sub {
-            if ( $_[0] ne '' and not Net::IP::XS::ip_is_ipv4( $_[0] ) ) {
-                $log->warning( "Property resolver.source4 must be an IPv4 address or the empty string" );
+            if ( $_[0] and $_[0] ne '' and not Net::IP::XS::ip_is_ipv4( $_[0] ) ) {
+                $log->warning( "Property resolver.source4 must be an IPv4 address, the empty string or undefined" );
             }
             Net::IP::XS->new( $_[0] );
         }
     },
     q{resolver.source6} => {
         type    => q{Str},
-        default => "",
         test    => sub {
-            if ( $_[0] ne '' and not Net::IP::XS::ip_is_ipv6( $_[0] ) ) {
-                $log->warning( "Property resolver.source6 must be an IPv6 address or the empty string" );
+            if ( $_[0] and $_[0] ne '' and not Net::IP::XS::ip_is_ipv6( $_[0] ) ) {
+                $log->warning( "Property resolver.source6 must be an IPv6 address, the empty string or undefined" );
             }
             Net::IP::XS->new( $_[0] );
         }
@@ -279,7 +276,16 @@ sub default {
             $new->set( $property_name, $profile_properties_details{$property_name}{default} );
         }
     }
+    $new->check_validity;
     return $new;
+}
+
+sub check_validity {
+    my ( $self ) = @_;
+    my $resolver = $self->{profile}{resolver};
+    if ( exists $resolver->{source} and ( exists $resolver->{source4} or exists $resolver->{source6} ) ) {
+        $log->warning( "Error in profile: 'resolver.source' (deprecated) can't be used in combination with 'resolver.source4' or 'resolver.source6'." );
+    }
 }
 
 sub get {
@@ -381,6 +387,7 @@ sub merge {
             $self->_set( q{JSON}, $property_name, _get_value_from_nested_hash( $other_profile->{q{profile}}, split /[.]/, $property_name ) );
         }
     }
+    $self->check_validity;
     return $other_profile->{q{profile}};
 }
 
@@ -396,6 +403,7 @@ sub from_json {
         }
     }
 
+    $new->check_validity;
     return $new;
 }
 
@@ -515,6 +523,10 @@ section or if the property values are illegal according to the L</PROFILE
 PROPERTIES> section.
 
 =head1 INSTANCE METHODS
+
+=head2 check_validity
+
+Verify that the profile does not allow confusing combinations.
 
 =head2 get
 

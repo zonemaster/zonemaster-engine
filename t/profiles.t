@@ -1,7 +1,7 @@
 use 5.006;
 use strict;
 use warnings FATAL   => 'all';
-use Test::More tests => 30;
+use Test::More tests => 31;
 use Log::Any::Test;    # Must come before use Log::Any
 
 use JSON::PP;
@@ -140,9 +140,6 @@ subtest 'new() returns a profile with all properties unset' => sub {
     is $profile->get( 'resolver.defaults.retry' ),    undef, 'resolver.defaults.retry is unset';
     is $profile->get( 'resolver.defaults.igntc' ),    undef, 'resolver.defaults.igntc is unset';
     is $profile->get( 'resolver.defaults.fallback' ), undef, 'resolver.defaults.fallback is unset';
-    is $profile->get( 'resolver.source' ),            undef, 'resolver.source is unset';
-    is $profile->get( 'resolver.source4' ),           undef, 'resolver.source4 is unset';
-    is $profile->get( 'resolver.source6' ),           undef, 'resolver.source6 is unset';
     is $profile->get( 'net.ipv4' ),                   undef, 'net.ipv4 is unset';
     is $profile->get( 'net.ipv6' ),                   undef, 'net.ipv6 is unset';
     is $profile->get( 'no_network' ),                 undef, 'no_network is unset';
@@ -175,9 +172,6 @@ subtest 'default() returns a profile with all properties set' => sub {
     ok defined( $profile->get( 'no_network' ) ),                 'no_network is set';
     ok defined( $profile->get( 'resolver.defaults.retry' ) ),    'resolver.defaults.retry is set';
     ok defined( $profile->get( 'resolver.defaults.retrans' ) ),  'resolver.defaults.retrans is set';
-    ok defined( $profile->get( 'resolver.source' ) ),            'resolver.source is set';
-    ok defined( $profile->get( 'resolver.source4' ) ),           'resolver.source4 is set';
-    ok defined( $profile->get( 'resolver.source6' ) ),           'resolver.source6 is set';
     ok defined( $profile->get( 'logfilter' ) ),                  'logfilter is set';
     ok defined( $profile->get( 'test_levels' ) ),                'test_levels is set';
     ok defined( $profile->get( 'test_cases' ) ),                 'test_cases is set';
@@ -241,6 +235,12 @@ subtest 'from_json() parses sentinel values from a string' => sub {
     my $profile = Zonemaster::Engine::Profile->from_json( $EXAMPLE_PROFILE_3 );
 
     is $profile->get( 'resolver.source' ), $RESOLVER_SOURCE_OS_DEFAULT, 'resolver.source was parsed from JSON';
+};
+
+subtest 'from_json() emits warnings on profile validity' => sub {
+    $log->clear();
+    my $profile = Zonemaster::Engine::Profile->from_json( $EXAMPLE_PROFILE_1 );
+    $log->contains_ok( qr/resolver\.source.*can't be used/, 'warning with confusing configuration' );
 };
 
 subtest 'from_json() dies on illegal paths' => sub {
