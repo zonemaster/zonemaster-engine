@@ -920,7 +920,7 @@ sub zone09 {
         foreach my $rcode ( keys %unexpected_rcode_mx ){
             push @results, info( Z09_UNEXPECTED_RCODE_MX => {
                 rcode => $rcode,
-                ns_ip_list => join( q{;}, sort $unexpected_rcode_mx{$rcode} )
+                ns_ip_list => join( q{;}, sort @{ $unexpected_rcode_mx{$rcode} } )
                 }
             );
         }
