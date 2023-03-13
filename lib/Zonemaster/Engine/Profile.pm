@@ -461,7 +461,7 @@ section.
 Here is an example for updating the effective profile with values from
 a given file and setting all properties not mentioned in the file to
 default values.
-For details on the file format see the L</JSON REPRESENTATION> section.
+For details on the file format see the L</REPRESENTATIONS> section.
 
     use Zonemaster::Engine::Profile;
 
@@ -537,6 +537,23 @@ Dies if the given string is illegal according to the L</JSON REPRESENTATION>
 section or if the property values are illegal according to the L</PROFILE
 PROPERTIES> section.
 
+=head2 from_yaml
+
+A constructor that returns a new profile with values parsed from a YAML string.
+
+    my $profile = Zonemaster::Engine::Profile->from_yaml( <<EOF
+    no_network: true
+    EOF
+    );
+
+The returned profile has set values for all properties specified in the
+given string.
+The remaining properties are unset.
+
+Dies if the given string is illegal according to the L</YAML REPRESENTATION>
+section or if the property values are illegal according to the L</PROFILE
+PROPERTIES> section.
+
 =head1 INSTANCE METHODS
 
 =head2 check_validity
@@ -586,6 +603,14 @@ The other profile object remains unmodified.
 Serialize the profile to the L</JSON REPRESENTATION> format.
 
     my $string = $profile->to_json();
+
+Returns a string.
+
+=head2 to_yaml
+
+Serialize the profile to the L</JSON REPRESENTATION> format.
+
+    my $string = $profile->to_yaml();
 
 Returns a string.
 
@@ -927,7 +952,9 @@ https://github.com/zonemaster/zonemaster/blob/master/docs/specifications/tests/Z
 Related to the SOA_DEFAULT_TTL_MAXIMUM_VALUE_HIGHER message tag from this test case.
 Default C<86400> (1 day in seconds).
 
-=head1 JSON REPRESENTATION
+=head1 REPRESENTATIONS
+
+=head2 JSON REPRESENTATION
 
 Property names in L</PROFILE PROPERTIES> section correspond to paths in
 a datastructure of nested JSON objects.
@@ -949,6 +976,10 @@ C<net.ipv6> = true has this JSON representation:
             "ipv6": true
         }
     }
+
+=head2 YAML REPRESENTATION
+
+Similar to the L</JSON REPRESENTATION> but uses a YAML format.
 
 =over
 
