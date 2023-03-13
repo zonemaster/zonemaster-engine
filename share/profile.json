@@ -23,8 +23,7 @@
             "retry" : 2,
             "usevc" : false,
             "timeout": 5
-        },
-        "source": "os_default"
+        }
     },
     "test_levels" : {
         "ADDRESS" : {
