@@ -1,7 +1,7 @@
 use 5.006;
 use strict;
 use warnings FATAL   => 'all';
-use Test::More tests => 31;
+use Test::More tests => 32;
 use Log::Any::Test;    # Must come before use Log::Any
 
 use JSON::PP;
@@ -14,6 +14,40 @@ BEGIN {
     use_ok 'Zonemaster::Engine::Profile';
     use_ok 'Zonemaster::Engine::Constants', qw( $RESOLVER_SOURCE_OS_DEFAULT );
 }
+
+# YAML representation of an example profile with all properties set
+Readonly my $EXAMPLE_PROFILE_1_YAML => q(
+---
+resolver:
+  defaults:
+    dnssec: false
+    fallback: true
+    igntc: false
+    recurse: true
+    retrans: 234
+    retry: 123
+    usevc: true
+  source: 192.0.2.53
+  source4: 192.0.2.53
+  source6: 2001:db8::42
+net:
+  ipv4: true
+  ipv6: false
+no_network: true
+asnroots:
+  - example.com
+logfilter:
+  Zone:
+    TAG:
+      - set: WARNING
+        when:
+          bananas: 0
+test_levels:
+  Zone:
+    TAG: INFO
+test_cases:
+  - Zone01
+);
 
 # JSON representation of an example profile with all properties set
 Readonly my $EXAMPLE_PROFILE_1 => q(
@@ -285,6 +319,12 @@ subtest 'from_json() emits warning on illegal values' => sub {
     _from_json_illegal_value( '{"resolver":{"source4":"2001:db8::42"}}', qr/^Property.*IPv4 address.*/, "checks type of resolver.source4 (only IPv4)" );
     _from_json_illegal_value( '{"resolver":{"source6":"example.com"}}',  qr/^Property.*IPv6 address.*/, "checks type of resolver.source6" );
     _from_json_illegal_value( '{"resolver":{"source6":"192.0.2.53"}}',   qr/^Property.*IPv6 address.*/, "checks type of resolver.source6 (only IPv6)" );
+};
+
+subtest 'from_yaml() equals from_json() for a similar profile' => sub {
+    my $profile_json = Zonemaster::Engine::Profile->from_json( $EXAMPLE_PROFILE_1 );
+    my $profile_yaml = Zonemaster::Engine::Profile->from_yaml( $EXAMPLE_PROFILE_1_YAML );
+    is_deeply( $profile_yaml, $profile_json, 'same JSON and YAML profile' );
 };
 
 subtest 'get() returns 1 for true' => sub {
