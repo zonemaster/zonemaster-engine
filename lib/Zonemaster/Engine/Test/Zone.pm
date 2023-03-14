@@ -416,7 +416,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     Z09_UNEXPECTED_RCODE_MX => sub {
         __x    # ZONE:Z09_UNEXPECTED_RCODE_MX
-          'Unexpected RCODE value on the MX query from name servers "{ns_ip_list}".', @_;
+          'Unexpected RCODE value ({rcode}) on the MX query from name servers "{ns_ip_list}".', @_;
     },
 );
 
