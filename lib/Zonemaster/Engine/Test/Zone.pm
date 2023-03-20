@@ -416,7 +416,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     Z09_UNEXPECTED_RCODE_MX => sub {
         __x    # ZONE:Z09_UNEXPECTED_RCODE_MX
-          'Unexpected RCODE value on the MX query from name servers "{ns_ip_list}".', @_;
+          'Unexpected RCODE value ({rcode}) on the MX query from name servers "{ns_ip_list}".', @_;
     },
 );
 
@@ -920,7 +920,7 @@ sub zone09 {
         foreach my $rcode ( keys %unexpected_rcode_mx ){
             push @results, info( Z09_UNEXPECTED_RCODE_MX => {
                 rcode => $rcode,
-                ns_ip_list => join( q{;}, sort $unexpected_rcode_mx{$rcode} )
+                ns_ip_list => join( q{;}, sort @{ $unexpected_rcode_mx{$rcode} } )
                 }
             );
         }
