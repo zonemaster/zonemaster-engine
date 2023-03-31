@@ -9,6 +9,7 @@ use warnings;
 
 use Class::Accessor "antlers";
 use Time::HiRes qw[gettimeofday tv_interval];
+use List::Util qw( min );
 
 use Zonemaster::LDNS::Packet;
 use Zonemaster::Engine::Packet;
@@ -64,6 +65,8 @@ sub set_key {
     my ( $self, $hash, $packet ) = @_;
     my $key = "ns:" . $self->address . ":" . $hash;
 
+    my $ttl = $REDIS_EXPIRE;
+
     $self->data->{$hash} = $packet;
     if ( defined $packet ) {
         my $msg = $mp->pack({
@@ -72,9 +75,14 @@ sub set_key {
             timestamp  => $packet->timestamp,
             querytime  => $packet->querytime,
         });
-        $self->redis->set( $key, $msg, 'EX', $REDIS_EXPIRE );
+        if ( $packet->answer ) {
+            my @rr = $packet->answer;
+            $ttl = min( map { $_->ttl } @rr );
+            $ttl = $ttl < $REDIS_EXPIRE ? $ttl : $REDIS_EXPIRE;
+        }
+        $self->redis->set( $key, $msg, 'EX', $ttl );
     } else {
-        $self->redis->set( $key, '', 'EX', $REDIS_EXPIRE );
+        $self->redis->set( $key, '', 'EX', $ttl );
     }
 }
 
