@@ -16,13 +16,13 @@ $profile_tmp = Zonemaster::Engine::Profile->from_json( $json );
 Zonemaster::Engine::Profile->effective->merge( $profile_tmp );
 
 my $trans = new_ok( 'Zonemaster::Engine::Translator' => [ { locale => 'C' } ] );
-ok( exists $trans->data->{BASIC}{HAS_PARENT},       'expected key from file exists' );
+ok( exists $trans->data->{BASIC}{B01_PARENT_FOUND},       'expected key from file exists' );
 ok( exists $trans->data->{DNSSEC}{ALGORITHM_OK}, 'expected key from module exists' );
 
 my $entry = Zonemaster::Engine::Logger::Entry->new(
     {
         module => 'BASIC',
-        tag    => 'HAS_PARENT',
+        tag    => 'B01_PARENT_FOUND',
         args   => { pname => 'nothing.nowhere' }
     }
 );
