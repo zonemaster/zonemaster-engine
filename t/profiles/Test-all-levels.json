@@ -11,11 +11,18 @@
         },
         "BASIC" : {
             "A_QUERY_NO_RESPONSES" : "INFO",
+            "B02_AUTH_RESPONSE_SOA" : "INFO",
+            "B02_NO_DELEGATION" : "CRITICAL",
+            "B02_NO_WORKING_NS" : "CRITICAL",
+            "B02_NS_BROKEN" : "ERROR",
+            "B02_NS_NOT_AUTH" : "ERROR",
+            "B02_NS_NO_IP_ADDR" : "ERROR",
+            "B02_NS_NO_RESPONSE" : "WARNING",
+            "B02_UNEXPECTED_RCODE" : "ERROR",
             "DOMAIN_NAME_LABEL_TOO_LONG" : "CRITICAL",
             "DOMAIN_NAME_ZERO_LENGTH_LABEL" : "CRITICAL",
             "DOMAIN_NAME_TOO_LONG" : "CRITICAL",
             "HAS_A_RECORDS" : "ERROR",
-            "HAS_NAMESERVERS" : "INFO",
             "HAS_NAMESERVER_NO_WWW_A_TEST" : "INFO",
             "HAS_PARENT" : "INFO",
             "IPV4_DISABLED" : "INFO",
@@ -23,9 +30,7 @@
             "IPV6_DISABLED" : "INFO",
             "IPV6_ENABLED" : "INFO",
             "NO_GLUE_PREVENTS_NAMESERVER_TESTS" : "CRITICAL",
-            "NO_PARENT" : "CRITICAL",
-            "NS_FAILED" : "ERROR",
-            "NS_NO_RESPONSE" : "NOTICE"
+            "NO_PARENT" : "CRITICAL"
         },
         "CONNECTIVITY" : {
             "ASN_INFOS_ANNOUNCE_BY" : "DEBUG",

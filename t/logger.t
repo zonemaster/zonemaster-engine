@@ -36,7 +36,7 @@ ok( scalar( @{ Zonemaster::Engine->logger->entries } ) >= 2, 'expected number of
 like( "$entry", qr/SYSTEM:UNSPECIFIED:TEST an=argument/, 'stringification overload' );
 
 is( $entry->level, 'DEBUG', 'right level' );
-my $example = Zonemaster::Engine::Logger::Entry->new( { module => 'BASIC', tag => 'NS_FAILED' } );
+my $example = Zonemaster::Engine::Logger::Entry->new( { module => 'BASIC', tag => 'B02_NS_BROKEN' } );
 is( $example->level,         'ERROR', 'expected level' );
 is( $example->numeric_level, 4,       'expected numeric level' );
 
@@ -100,8 +100,8 @@ qr[[{"args":{"exception":"in callback at t/logger.t line 47, <DATA> line 1.\n"},
 );
 
 Zonemaster::Engine::Logger->reset_config();
-Zonemaster::Engine::Profile->effective->set( q{test_levels}, {"BASIC" => {"NS_FAILED" => "GURKSALLAD" }}); #->{BASIC}{NS_FAILED} = 'GURKSALLAD';
-my $fail = Zonemaster::Engine::Logger::Entry->new( { module => 'BASIC', tag => 'NS_FAILED' } );
+Zonemaster::Engine::Profile->effective->set( q{test_levels}, {"BASIC" => {"B02_NS_BROKEN" => "GURKSALLAD" }});
+my $fail = Zonemaster::Engine::Logger::Entry->new( { module => 'BASIC', tag => 'B02_NS_BROKEN' } );
 like( exception { $fail->level }, qr/Unknown level string: GURKSALLAD/, 'Dies on unknown level string' );
 
 done_testing;
