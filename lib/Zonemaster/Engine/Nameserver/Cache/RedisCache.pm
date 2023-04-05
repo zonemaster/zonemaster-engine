@@ -81,12 +81,11 @@ sub set_key {
         }
         elsif ( $packet->authority ) {
             my @rr = $packet->authority;
-            my $rcode = $packet->rcode;
-            if ( $rcode eq 'NXDOMAIN' ) {
-                $ttl = min( map { $_->minimum } @rr );
-            }
-            elsif ( $rcode eq 'NOERROR' ) {
-                $ttl = min( map { $_->ttl } @rr );
+            foreach my $r (@rr) {
+                if ( $r->type eq 'SOA' ) {
+                    $ttl = $r->ttl;
+                    last;
+                }
             }
         }
         $ttl = $ttl < $REDIS_EXPIRE ? $ttl : $REDIS_EXPIRE;
