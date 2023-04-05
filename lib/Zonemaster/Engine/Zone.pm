@@ -3,7 +3,7 @@ package Zonemaster::Engine::Zone;
 use v5.16.0;
 use warnings;
 
-use version; our $VERSION = version->declare("v1.1.9");
+use version; our $VERSION = version->declare("v1.2.0");
 
 use Carp qw( confess croak );
 use List::MoreUtils qw[uniq];
@@ -11,7 +11,7 @@ use List::MoreUtils qw[uniq];
 use Zonemaster::Engine::DNSName;
 use Zonemaster::Engine::Recursor;
 use Zonemaster::Engine::NSArray;
-use Zonemaster::Engine::Constants qw[:ip];
+use Zonemaster::Engine::Constants qw[:ip :dname];
 
 sub new {
     my ( $class, $attrs ) = @_;
@@ -44,6 +44,16 @@ sub parent {
     }
 
     return $self->{_parent};
+}
+
+sub dname {
+    my ( $self ) = @_;
+
+    if ( !exists $self->{_dname} ) {
+        $self->{_dname} = $self->_build_dname;
+    }
+
+    return $self->{_dname};
 }
 
 sub glue_names {
@@ -96,6 +106,7 @@ sub glue_addresses {
     return $self->{_glue_addresses};
 }
 
+
 ###
 ### Builders
 ###
@@ -113,25 +124,108 @@ sub _build_parent {
     return __PACKAGE__->new( { name => $pname } );
 }
 
+sub _build_dname {
+    my ( $self ) = @_;
+
+    if ( $self->name eq '.' or not $self->parent ) {
+        return undef;
+    }
+
+    my $p = $self->parent->query_persistent( $self->name, 'DNAME' );
+
+    return undef unless $p;
+
+    Zonemaster::Engine->logger->add( DNAME_FOUND => { name => $self->name } );
+
+    my @dname_rrs = $p->get_records( 'DNAME' );
+
+    # Remove duplicate DNAME RRs
+    my ( %duplicate_dname_rrs, @original_rrs );
+    for my $rr ( @dname_rrs ) {
+        my $rr_hash = $rr->class . '/DNAME/' . lc($rr->owner) . '/' . lc($rr->dname);
+
+        if ( exists $duplicate_dname_rrs{$rr_hash} ) {
+            $duplicate_dname_rrs{$rr_hash}++;
+        }
+        else {
+            $duplicate_dname_rrs{$rr_hash} = 0;
+            push @original_rrs, $rr;
+        }
+    }
+
+    unless ( scalar @original_rrs == scalar @dname_rrs ) {
+        @dname_rrs = @original_rrs;
+    }
+
+    # Break if there are too many records
+    if ( scalar @dname_rrs > $DNAME_MAX_RECORDS ) {
+        return undef;
+    }
+
+    my ( %dnames, %seen_targets, %forbidden_targets );
+    for my $rr ( @dname_rrs ) {
+        my $rr_owner = Zonemaster::Engine::DNSName->new( lc( $rr->owner) );
+        my $rr_target = Zonemaster::Engine::DNSName->new( lc( $rr->dname ) );
+
+        # Multiple DNAME records with same owner name
+        if ( exists $forbidden_targets{$rr_owner} ) {
+            return undef;
+        }
+
+        # DNAME owner name is target, or target has already been seen in this response, or owner name cannot be a target
+        if ( $rr_owner eq $rr_target or exists $seen_targets{$rr_target} or grep { $_ eq $rr_target } ( keys %forbidden_targets ) ) {
+            return undef;
+        }
+
+        $seen_targets{$rr_target} = 1;
+        $forbidden_targets{$rr_owner} = 1;
+        $dnames{$rr_owner} = $rr_target;
+    }
+
+    # Get final DNAME target
+    my $target = $self->name;
+    my $dname_counter = 0;
+    while ( $dnames{$target} ) {
+        return undef if $dname_counter > $DNAME_MAX_RECORDS; # Loop protection (for good measure only - data in %dnames is sanitized already)
+        $target = $dnames{$target};
+        $dname_counter++;
+    }
+
+    # Make sure that the DNAME chain from the RRs is not broken
+    if ( $dname_counter != scalar @dname_rrs ) {
+        return undef;
+    }
+
+    return __PACKAGE__->new( { name => Zonemaster::Engine::DNSName->new( $target ) } );
+}
+
 sub _build_glue_names {
     my ( $self ) = @_;
+    my $zname = $self->name;
+    my $p;
 
     if ( not $self->parent ) {
         return [];
     }
 
-    my $p = $self->parent->query_persistent( $self->name, 'NS' );
+    if ( $self->dname ) {
+        $zname = $self->dname->name;
+        $p = $self->dname->parent->query_persistent( $zname, 'NS' );
+    }
+    else {
+        $p = $self->parent->query_persistent( $zname, 'NS' );
+    }
 
     return [] if not defined $p;
 
     return [ uniq sort map { Zonemaster::Engine::DNSName->new( lc( $_->nsdname ) ) }
-          $p->get_records_for_name( 'ns', $self->name->string ) ];
+          $p->get_records_for_name( 'ns', $zname->string ) ];
 }
 
 sub _build_glue {
     my ( $self ) = @_;
-    my @glue_names = @{ $self->glue_names };
     my $zname = $self->name->string;
+    my @glue_names = @{$self->glue_names};
 
     if ( Zonemaster::Engine::Recursor->has_fake_addresses( $zname ) ) {
         my @ns_list;
@@ -153,6 +247,10 @@ sub _build_glue {
 
 sub _build_ns_names {
     my ( $self ) = @_;
+    my $zname = $self->name;
+    my $servers;
+    my $p;
+    my $i = 0;
 
     if ( $self->name eq '.' ) {
         my %u;
@@ -160,17 +258,23 @@ sub _build_ns_names {
         return [ sort values %u ];
     }
 
-    my $p;
-    my $i = 0;
-    while ( my $s = $self->glue->[$i] ) {
-        $p = $s->query( $self->name, 'NS' );
+    if ( $self->dname ) {
+        $zname = $self->dname->name;
+        $servers = $self->dname->glue;
+    }
+    else {
+        $servers = $self->glue;
+    }
+
+    while ( my $s = $servers->[$i] ) {
+        $p = $s->query( $zname, 'NS' );
         last if ( defined( $p ) and ( $p->type eq 'answer' ) and ( $p->rcode eq 'NOERROR' ) );
         $i += 1;
     }
     return [] if not defined $p;
 
     return [ uniq sort map { Zonemaster::Engine::DNSName->new( lc( $_->nsdname ) ) }
-          $p->get_records_for_name( 'ns', $self->name->string ) ];
+          $p->get_records_for_name( 'ns', $zname ) ];
 } ## end sub _build_ns_names
 
 sub _build_ns {
@@ -188,12 +292,21 @@ sub _build_ns {
 
 sub _build_glue_addresses {
     my ( $self ) = @_;
+    my $zname = $self->name;
+    my $p;
 
     if ( not $self->parent ) {
         return [];
     }
 
-    my $p = $self->parent->query_one( $self->name, 'NS' );
+    if ( $self->dname ) {
+        $zname = $self->dname->name;
+        $p = $self->dname->parent->query_one( $zname, 'NS' );
+    }
+    else {
+        $p = $self->parent->query_one( $zname, 'NS' );
+    }
+
     croak "Failed to get glue addresses" if not defined( $p );
 
     return [ $p->get_records( 'a' ), $p->get_records( 'aaaa' ) ];
@@ -405,6 +518,10 @@ A L<Zonemaster::Engine::DNSName> object representing the name of the zone.
 A L<Zonemaster::Engine::Zone> object for this domain's parent domain. As a
 special case, the root zone is considered to be its own parent (so
 look for that if you recurse up the tree).
+
+=item dname
+
+A L<Zonemaster::Engine::Zone> object which is this zone's DNAME target, if any.
 
 =item ns_names
 
