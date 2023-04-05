@@ -78,8 +78,18 @@ sub set_key {
         if ( $packet->answer ) {
             my @rr = $packet->answer;
             $ttl = min( map { $_->ttl } @rr );
-            $ttl = $ttl < $REDIS_EXPIRE ? $ttl : $REDIS_EXPIRE;
         }
+        elsif ( $packet->authority ) {
+            my @rr = $packet->authority;
+            my $rcode = $packet->rcode;
+            if ( $rcode eq 'NXDOMAIN' ) {
+                $ttl = min( map { $_->minimum } @rr );
+            }
+            elsif ( $rcode eq 'NOERROR' ) {
+                $ttl = min( map { $_->ttl } @rr );
+            }
+        }
+        $ttl = $ttl < $REDIS_EXPIRE ? $ttl : $REDIS_EXPIRE;
         $self->redis->set( $key, $msg, 'EX', $ttl );
     } else {
         $self->redis->set( $key, '', 'EX', $ttl );
