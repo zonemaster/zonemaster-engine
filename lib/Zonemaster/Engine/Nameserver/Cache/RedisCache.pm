@@ -116,3 +116,35 @@ sub get_key {
 }
 
 1;
+
+=head1 NAME
+
+Zonemaster::Engine::Nameserver::Cache::RedisCache - global shared caches for nameserver objects
+
+=head1 SYNOPSIS
+
+    This is an EXPERIMENTAL caching layer and might change in the future.
+
+=head1 ATTRIBUTES
+
+Subclass of L<Zonemaster::Engine::Nameserver::Cache>.
+
+=head1 CLASS METHODS
+
+=over
+
+=item new
+
+Construct a new Cache object.
+
+=item set_key($idx, $packet)
+
+Store packet with index idx.
+
+=item get_key($idx)
+
+Retrieve packet (data) at key idx.
+
+=back
+
+=cut
