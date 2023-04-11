@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use 5.014002;
 
-use version; our $VERSION = version->declare("v1.0.10");
+use version; our $VERSION = version->declare("v1.1.0");
 
 use Carp;
 use Class::Accessor "antlers";
@@ -59,6 +59,18 @@ sub get_fake_addresses {
 
     if ( exists $_fake_addresses_cache{$domain}{$nsname} ) {
         return @{ $_fake_addresses_cache{$domain}{$nsname} };
+    }
+    else {
+        return ();
+    }
+}
+
+sub get_fake_names {
+    my ( $class, $domain ) = @_;
+    $domain = lc $domain;
+
+    if ( exists $_fake_addresses_cache{$domain} ) {
+        return keys %{$_fake_addresses_cache{$domain}};
     }
     else {
         return ();
@@ -424,6 +436,11 @@ Check if there is at least one fake nameserver specified for the given domain.
 
 Returns a list of all cached fake addresses for the given domain and name server name.
 Returns an empty list if no data is cached for the given arguments.
+
+=head2 get_fake_names($domain)
+
+Returns a list of all cached fake name server names for the given domain.
+Returns an empty list if no data is cached for the given argument.
 
 =head2 remove_fake_addresses($domain)
 
