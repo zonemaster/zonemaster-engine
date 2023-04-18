@@ -23,13 +23,13 @@ my $entry = Zonemaster::Engine::Logger::Entry->new(
     {
         module => 'BASIC',
         tag    => 'B01_PARENT_FOUND',
-        args   => { pname => 'nothing.nowhere' }
+        args   => { domain => 'nothing.nowhere', ns_ip_list => 'ns1.nothing.nowhere/1.1.1.1' }
     }
 );
 
 like(
     $trans->to_string( $entry ),
-    qr'   \d+.\d\d INFO      Parent domain \'nothing.nowhere\' was found for the tested domain.',
+    qr'   \d+.\d\d INFO      The parent zone is "nothing.nowhere" as returned from name servers "ns1.nothing.nowhere/1.1.1.1".',
     'string to_stringd as expected'
 );
 
