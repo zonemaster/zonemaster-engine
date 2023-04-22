@@ -117,7 +117,6 @@ t/profiles/Test-dnssec11-only.json
 t/profiles/Test-dnssec13-only.json
 t/profiles/Test-dnssec14-only.json
 t/profiles/Test-dnssec15-only.json
-t/profiles/Test-dnssec16-only.json
 t/profiles/Test-dnssec17-only.json
 t/profiles/Test-dnssec18-only.json
 t/profiles/Test-dnssec-all.json
@@ -244,6 +243,8 @@ t/Test-dnssec05-I.data
 t/Test-dnssec05-I.t
 t/Test-dnssec05-J.data
 t/Test-dnssec05-J.t
+t/Test-dnssec16.data
+t/Test-dnssec16.t
 t/Test-nameserver.data
 t/Test-nameserver.t
 t/Test-nameserver01-A.data
