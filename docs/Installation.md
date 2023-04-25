@@ -37,7 +37,7 @@ Zonemaster-Engine, not relevant for running Zonemaster-CLI on Docker.
 
 ## Prerequisites
 
-For details on supported operating system versions and Perl verisons for
+For details on supported operating system versions and Perl versions for
 Zonemaster::Engine, see the [declaration of prerequisites].
 
 
