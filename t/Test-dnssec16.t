@@ -8,8 +8,6 @@ BEGIN {
     use_ok( q{Zonemaster::Engine} );
     use_ok( q{Zonemaster::Engine::Nameserver} );
     use_ok( q{Zonemaster::Engine::Test::DNSSEC} );
-    use_ok( q{Zonemaster::Engine::Util} );
-    use_ok( q{Zonemaster::Engine::Util} );
     use_ok( q{Zonemaster::Engine::Util}, qw( parse_hints ) );
 }
 
@@ -127,7 +125,6 @@ Zonemaster::Engine::Profile->effective->set( q{net.ipv6}, 0 );
 
 TODO: {
     local $TODO = "Nothing";
-    # warn $TODO, "\n";;
 }
 
 done_testing;
@@ -200,4 +197,4 @@ valid-cds.dnssec16.xa
 (none)
 DS16_CDS_INVALID_RRSIG, DS16_CDS_MATCHES_NON_SEP_DNSKEY, DS16_CDS_MATCHES_NON_ZONE_DNSKEY, DS16_CDS_MATCHES_NO_DNSKEY, DS16_CDS_NOT_SIGNED_BY_CDS, DS16_CDS_SIGNED_BY_UNKNOWN_DNSKEY, DS16_CDS_UNSIGNED, DS16_CDS_WITHOUT_DNSKEY, DS16_DELETE_CDS, DS16_DNSKEY_NOT_SIGNED_BY_CDS, DS16_MIXED_DELETE_CDS
 
-# Always an emapty line after the last block
+# Always an empty line after the last block
