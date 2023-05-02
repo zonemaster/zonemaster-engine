@@ -49,12 +49,13 @@ sub get_with_prefix {
         die "ASN database sources undefined";
     }
 
-    my ( $asnref, $prefix, $raw );
+    my ( $asnref, $prefix, $raw, $ret_code );
+    $ret_code = ''; # Make it defined.
     if ( $db_style eq q{cymru} ) {
-        ( $asnref, $prefix, $raw ) = _cymru_asn_lookup($ip);
+        ( $asnref, $prefix, $raw, $ret_code ) = _cymru_asn_lookup($ip);
     }
     elsif ( $db_style eq q{ripe} ) {
-        ( $asnref, $prefix, $raw ) = _ripe_asn_lookup($ip);
+        ( $asnref, $prefix, $raw, $ret_code ) = _ripe_asn_lookup($ip);
     }
     else {
         if ( not $db_style ) {
@@ -64,8 +65,14 @@ sub get_with_prefix {
             die "ASN database style value [$db_style] is illegal";
         }
     }
-    map { looks_like_number( $_ ) || die "ASN lookup value isn't numeric: '$_'" } @$asnref;
-    return ( $asnref, $prefix, $raw );
+
+    if ( $ret_code ne q{ERROR_ASN_DATABASE} and $ret_code ne q{EMPTY_ASN_SET} ) {
+        foreach my $asn (@$asnref) {
+            $ret_code = q{ERROR_ASN_DATABASE} unless looks_like_number( $asn );
+        }
+    }
+
+    return ( $asnref, $prefix, $raw, $ret_code );
 
 } ## end sub get_with_prefix
 
