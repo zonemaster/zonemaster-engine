@@ -212,16 +212,17 @@ sub _build_dns {
     my ( $self ) = @_;
 
     my $res = Zonemaster::LDNS->new( $self->address->ip );
+    
     $res->recurse( 0 );
+    $res->dnssec( 0 );
+    $res->edns_size( $UDP_EDNS_QUERY_DEFAULT );
 
     $res->retry( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.retry} ) );
     $res->retrans( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.retrans} ) );
-    $res->dnssec( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.dnssec} ) );
     $res->usevc( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.usevc} ) );
     $res->igntc( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.igntc} ) );
     $res->recurse( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.recurse} ) );
     $res->debug( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.debug} ) );
-    $res->edns_size( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.edns_size} ) );
     $res->timeout( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.timeout} ) );
 
     my $ip_version = Net::IP::XS::ip_get_version( $self->address->ip );
@@ -268,10 +269,10 @@ sub query {
     );
 
     my $class     = $href->{class}     // 'IN';
-    my $dnssec    = $href->{dnssec}    // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.dnssec} );
+    my $dnssec    = $href->{dnssec}    // 0;
     my $usevc     = $href->{usevc}     // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.usevc} );
     my $recurse   = $href->{recurse}   // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.recurse} );
-    my $edns_size = $href->{edns_size} // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.edns_size} );
+    my $edns_size = $href->{edns_size} // $UDP_EDNS_QUERY_DEFAULT;
 
     # Fake a DS answer
     if ( $type eq 'DS' and $class eq 'IN' and $self->fake_ds->{ lc( $name ) } ) {
@@ -335,44 +336,35 @@ sub query {
 
     my $p;
     my $md5 = Digest::MD5->new;
-    my $edns_special_case = 0;
-    if ( defined $href->{edns_details} ) {
-        if ( defined $href->{edns_details}{version} and $href->{edns_details}{version} != 0 ) {
-            $edns_special_case = 1;
-        }
-        elsif ( defined $href->{edns_details}{z} ) {
-            $edns_special_case = 1;
-        }
-        elsif ( defined $href->{edns_details}{extended_rcode} ) {
-            $edns_special_case = 1;
-        }
-        elsif ( defined $href->{edns_details}{data} ) {
-            $edns_special_case = 1;
-        }
-        elsif ( defined $href->{edns_details}{udp_size} ) {
-            $edns_size = $href->{edns_details}{udp_size};
-        }
-    }
 
     $md5->add( q{NAME}    , $name );
     $md5->add( q{TYPE}    , "\U$type" );
     $md5->add( q{CLASS}   , "\U$class" );
-    $md5->add( q{DNSSEC}  , $dnssec );
-    $md5->add( q{USEVC}   , $usevc );
-    $md5->add( q{RECURSE} , $recurse );
-    if ( $edns_special_case ) {
-        $md5->add( q{EDNS_VERSION}        , $href->{edns_details}{version} ? $href->{edns_details}{version} : 0 );
-        $md5->add( q{EDNS_Z}              , $href->{edns_details}{z} ? $href->{edns_details}{z} : 0 );
-        $md5->add( q{EDNS_EXTENDED_RCODE} , $href->{edns_details}{extended_rcode} ? $href->{edns_details}{extended_rcode} : 0 );
-        $md5->add( q{EDNS_DATA}           , $href->{edns_details}{data} ? $href->{edns_details}{data} : q{} );
-        $md5->add( q{EDNS_UDP_SIZE}       , $href->{edns_details}{udp_size} ? $href->{edns_details}{udp_size} : 0 );
+
+    if ( exists $href->{edns_details} and exists $href->{edns_details}{do} ) {
+        $md5->add( q{DNSSEC} , $href->{edns_details}{do} );
     }
     else {
-        $md5->add( q{EDNS_UDP_SIZE}       , $edns_size);
+        $md5->add( q{DNSSEC} , $dnssec );
     }
+
+    $md5->add( q{USEVC}   , $usevc );
+    $md5->add( q{RECURSE} , $recurse );
+
+    if ( exists $href->{edns_details} ) {
+        $md5->add( q{EDNS_VERSION}        , $href->{edns_details}{version} // 0 );
+        $md5->add( q{EDNS_Z}              , $href->{edns_details}{z} // 0 );
+        $md5->add( q{EDNS_EXTENDED_RCODE} , $href->{edns_details}{rcode} // 0 );
+        $md5->add( q{EDNS_DATA}           , $href->{edns_details}{data} // q{} );
+        $md5->add( q{EDNS_UDP_SIZE}       , $href->{edns_details}{size} // $edns_size );
+    }
+    else {
+        $md5->add( q{EDNS_UDP_SIZE} , 0);
+    }
+    
     my $idx = $md5->b64digest();
     if ( not exists( $self->cache->data->{$idx} ) ) {
-        $self->cache->data->{$idx} = $self->_query( $name, $type, $href, $edns_special_case );
+        $self->cache->data->{$idx} = $self->_query( $name, $type, $href );
     }
     $p = $self->cache->data->{$idx};
 
@@ -437,7 +429,7 @@ sub add_fake_ds {
 } ## end sub add_fake_ds
 
 sub _query {
-    my ( $self, $name, $type, $href, $edns_special_case ) = @_;
+    my ( $self, $name, $type, $href ) = @_;
     my %flags;
 
     $type //= 'A';
@@ -462,16 +454,19 @@ sub _query {
     # Make sure we have a value for each flag
     $flags{q{retry}}     = $href->{q{retry}}     // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.retry} );
     $flags{q{retrans}}   = $href->{q{retrans}}   // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.retrans} );
-    $flags{q{dnssec}}    = $href->{q{dnssec}}    // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.dnssec} );
+    $flags{q{dnssec}}    = $href->{q{dnssec}}    // 0;
     $flags{q{usevc}}     = $href->{q{usevc}}     // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.usevc} );
     $flags{q{igntc}}     = $href->{q{igntc}}     // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.igntc} );
     $flags{q{fallback}}  = $href->{q{fallback}}  // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.fallback} );
     $flags{q{recurse}}   = $href->{q{recurse}}   // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.recurse} );
-    $flags{q{edns_size}} = $href->{q{edns_size}} // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.edns_size} );
     $flags{q{timeout}}   = $href->{q{timeout}}   // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.timeout} );
-    if ( defined $href->{edns_details} and $href->{edns_details}{udp_size} ) {
-        $flags{q{edns_size}} = $href->{edns_details}{udp_size};
+    $flags{q{edns_size}} = $href->{q{edns_size}} // $UDP_EDNS_QUERY_DEFAULT;
+
+    if ( exists $href->{edns_details} ) {
+        $flags{q{dnssec}}    = $href->{edns_details}{do} // $flags{q{dnssec}};
+        $flags{q{edns_size}} = $href->{edns_details}{size} // $flags{q{edns_size}};
     }
+
     # Set flags for this query
     foreach my $flag ( keys %flags ) {
         $self->dns->$flag( $flags{$flag} );
@@ -493,37 +488,35 @@ sub _query {
         );
     }
     else {
-        if ( $edns_special_case ) {
+        if ( exists $href->{edns_details} ) {
             my $pkt = Zonemaster::LDNS::Packet->new("$name", $type, $href->{class} );
-            if ( defined $href->{edns_details} and defined $href->{edns_details}{version} and $href->{edns_details}{version} != 0 ) {
-                $pkt->set_edns_present();
+            $pkt->set_edns_present();
+
+            if ( exists $href->{edns_details}{version} ) {
                 $pkt->edns_version($href->{edns_details}{version});
             }
-	    if ( defined $href->{edns_details} and defined $href->{edns_details}{z} ) {
-                $pkt->set_edns_present();
+    	    if ( exists $href->{edns_details}{z} ) {
                 $pkt->edns_z($href->{edns_details}{z});
             }
-	    if ( defined $href->{edns_details} and defined $href->{edns_details}{do} ) {
-                $pkt->set_edns_present();
+    	    if ( exists $href->{edns_details}{do} ) {
                 $pkt->do($href->{edns_details}{do});
             }
-	    if ( defined $href->{edns_details} and defined $href->{edns_details}{udp_size} ) {
-                $pkt->set_edns_present();
-                $pkt->edns_size($href->{edns_details}{udp_size});
+    	    if ( exists $href->{edns_details}{size} ) {
+                $pkt->edns_size($href->{edns_details}{size});
             }
-	    if ( defined $href->{edns_details} and defined $href->{edns_details}{extended_rcode} ) {
-                $pkt->set_edns_present();
-                $pkt->edns_rcode($href->{edns_details}{extended_rcode});
+    	    if ( exists $href->{edns_details}{rcode} ) {
+                $pkt->edns_rcode($href->{edns_details}{rcode});
             }
-            if ( defined $href->{edns_details} and defined $href->{edns_details}{data} ) {
-                $pkt->set_edns_present();
+            if ( exists $href->{edns_details}{data} ) {
                 $pkt->edns_data($href->{edns_details}{data});
             }
-	    $res = eval { $self->dns->query_with_pkt( $pkt ) };
+
+    	    $res = eval { $self->dns->query_with_pkt( $pkt ) };
         }
         else {
             $res = eval { $self->dns->query( "$name", $type, $href->{class} ) };
         }
+
         if ( $@ ) {
             my $msg = "$@";
             my $trailing_info = " at ".__FILE__;
@@ -834,7 +827,7 @@ Remove all cached nameserver objects and queries.
 
 Send a DNS query to the nameserver the object represents. C<$name> and C<$type> are the name and type that will be queried for (C<$type> defaults
 to 'A' if it's left undefined). C<$flagref> is a reference to a hash, the keys of which are flags and the values are their corresponding values.
-The available flags are as follows. All but the first directly correspond to methods in the L<Zonemaster::LDNS::Resolver> object.
+The available flags are as follows. All but 'class' and 'edns_details' directly correspond to methods in the L<Zonemaster::LDNS::Resolver> object.
 
 =over
 
@@ -848,11 +841,14 @@ Send the query via TCP (only).
 
 =item retrans
 
-The retransmission interval
+The retransmission interval.
 
 =item dnssec
 
-Set the DO flag in the query.
+Set the DO flag in the query. Defaults to false.
+
+If set to true, it becomes an EDNS query.
+Value overridden by 'edns_details->do' (if also given). More details in 'edns_details' below.
 
 =item debug
 
@@ -881,6 +877,26 @@ If set to true, incoming response packets with the TC flag set fall back to EDNS
 =item blacklisting_disabled
 
 If set to true, prevents a server to be black-listed on a query in case there is no answer OR rcode is REFUSED.
+
+=item edns_size
+
+Set the EDNS0 UDP maximum size. Defaults to 512.
+
+Used only when the query is an EDNS query. Does not enable on its own the query to be an EDNS query.
+Value overridden by 'edns_details->size' (if also given). More details in 'edns_details' below.
+
+=item edns_details
+
+A hash. An empty hash or a hash with any keys below will enable the query to be an EDNS query.
+
+The currently supported keys are 'version', 'z', 'do', 'rcode', 'size' and 'data'.
+See L<Zonemaster::LDNS::Packet> for more details (key names prefixed with 'edns_').
+
+Note that flag 'edns_size' also exists (see above) and has the same effect as 'edns_details->size', although the value of the 
+latter will take precedence if both are given.
+
+Similarly, note that flag 'dnssec' also exists (see above) and has the same effect as 'edns_details->do', although the value of the
+latter will take precedence if both are given.
 
 =back
 
