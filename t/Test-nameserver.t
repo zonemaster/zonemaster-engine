@@ -117,6 +117,8 @@ $zone = Zonemaster::Engine->zone( 'bemacom.se' );
 zone_gives( 'nameserver11', $zone, [q{N11_UNEXPECTED_RCODE}] );
 zone_gives_not( 'nameserver11', $zone, [qw{N11_NO_EDNS N11_NO_RESPONSE N11_RETURNS_UNKNOWN_OPTION_CODE N11_UNEXPECTED_ANSWER_SECTION N11_UNSET_AA}] );
 
+# nameserver15 -- see t/Test-nameserver15.t instead.
+
 SKIP: {
     skip "Zone does not actually have tested problem", 1,
     $zone = Zonemaster::Engine->zone( 'escargot.se' );

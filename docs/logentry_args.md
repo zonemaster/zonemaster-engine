@@ -68,10 +68,12 @@ and updated messages (*msgids* and *msgstr*).
 | ns_list        | List of domain name and IP address pairs | A list of name servers, as specified by "ns", separated by ";".         |
 | nsname         | Domain name                              | The domain name of a name server.                                       |
 | nsname_list    | List of domain names                     | A list of name servers, as specified by "nsname", separated by ";".     |
+| query_name     | Text                                     | A query domain name (QNAME), as defined in [RFC1035, section 4.1.2].    |
 | rcode          | An RCODE Name                            | An RCODE Name (not numeric code) from [DNS RCODEs].                     |
 | rrtype         | A Resource Record TYPE Name              | A Resource Record TYPE Name (not numeric code) from [DNS RR TYPEs].     |
 | soaserial      | Non-negative integer                     | The numeric value for the SERIAL field in an SOA record. Integer in range 0-4,294,967,295 |
 | soaserial_list | List of non-negative integers            | A list of non-negative integers, as specified by "soaserial", separated by ";". |
+| string         | Text                                     | The content of the RDATA of a TXT ressource record.                     |
 | testcase       | A Zonemaster test case, or `all`         | A test case identifier.                                                 |
 | unicode_name   | Unicode name of a code point             | The name is a string in ASCII only and in upper case, e.g. "LATIN SMALL LETTER A"|
 
@@ -149,5 +151,6 @@ Message names maked with a question mark should not be considered stable.
 [DNSSEC algorithm]:                          https://www.iana.org/assignments/dns-sec-alg-numbers/dns-sec-alg-numbers.xhtml
 [DS Digest algorithm]:                       https://www.iana.org/assignments/ds-rr-types/ds-rr-types.xhtml
 [fr.po]:                                     ../share/fr.po
+[RFC1035, section 4.1.2]:                    https://datatracker.ietf.org/doc/html/rfc1035#section-4.1.2
 [sv.po]:                                     ../share/fr.po
 
