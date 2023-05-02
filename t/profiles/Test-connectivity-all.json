@@ -2,6 +2,7 @@
     "test_cases": [
         "connectivity01",
         "connectivity02",
-        "connectivity03" 
+        "connectivity03",
+        "connectivity04"
     ]
 }

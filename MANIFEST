@@ -94,6 +94,7 @@ t/profiles/Test-basic-all.json
 t/profiles/Test-connectivity01-only.json
 t/profiles/Test-connectivity02-only.json
 t/profiles/Test-connectivity03-only.json
+t/profiles/Test-connectivity04-only.json
 t/profiles/Test-connectivity-all.json
 t/profiles/Test-consistency01-only.json
 t/profiles/Test-consistency02-only.json
