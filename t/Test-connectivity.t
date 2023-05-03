@@ -10,8 +10,6 @@ BEGIN {
     use_ok( q{Zonemaster::Engine::Util} );
 }
 
-my $checking_module = q{Connectivity};
-
 my $datafile = q{t/Test-connectivity.data};
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die q{Stored data file missing} if not -r $datafile;
@@ -45,28 +43,6 @@ my %should_emit;
 
 my $metadata = Zonemaster::Engine::Test::Connectivity->metadata();
 my $test_levels = Zonemaster::Engine::Profile->effective->{profile}->{test_levels}->{CONNECTIVITY};
-
-sub zone_gives {
-    my ( $test, $zone, $gives_ref ) = @_;
-
-    Zonemaster::Engine->logger->clear_history();
-    my @res = grep { $_->tag !~ /^TEST_CASE_(END|START)$/ } Zonemaster::Engine->test_method( $checking_module, $test, $zone );
-    foreach my $gives ( @{$gives_ref} ) {
-        ok( ( grep { $_->tag eq $gives } @res ), $zone->name->string . " gives $gives" );
-    }
-    return scalar( @res );
-}
-
-sub zone_gives_not {
-    my ( $test, $zone, $gives_ref ) = @_;
-
-    Zonemaster::Engine->logger->clear_history();
-    my @res = grep { $_->tag !~ /^TEST_CASE_(END|START)$/ } Zonemaster::Engine->test_method( $checking_module, $test, $zone );
-    foreach my $gives ( @{$gives_ref} ) {
-        ok( !( grep { $_->tag eq $gives } @res ), $zone->name->string . " does not give $gives" );
-    }
-    return scalar( @res );
-}
 
 sub check_output_connectivity_testcase {
     my ( $testcase, $res, $should_emit ) = @_;
@@ -104,31 +80,6 @@ subtest 'All good' => sub {
     check_output_connectivity_all( \%res, \%should_emit );
 };
 
-my $zone;
-
-################
-# Connectivity03
-################
-$zone = Zonemaster::Engine->zone( '001.tf' );
-zone_gives('connectivity03', $zone, [qw{IPV4_ONE_ASN IPV6_ONE_ASN}] );
-zone_gives_not( 'connectivity03', $zone, [qw{EMPTY_ASN_SET ERROR_ASN_DATABASE IPV4_DIFFERENT_ASN IPV4_SAME_ASN IPV6_DIFFERENT_ASN IPV6_SAME_ASN}] );
-
-$zone = Zonemaster::Engine->zone( 'zut-root.rd.nic.fr' );
-zone_gives('connectivity03', $zone, [qw{IPV4_ONE_ASN}] );
-zone_gives_not( 'connectivity03', $zone, [qw{EMPTY_ASN_SET ERROR_ASN_DATABASE IPV4_DIFFERENT_ASN IPV4_SAME_ASN IPV6_DIFFERENT_ASN IPV6_ONE_ASN IPV6_SAME_ASN}] );
-
-################
-# Connectivity04
-################
-$zone = Zonemaster::Engine->zone( '001.tf' );
-zone_gives('connectivity04', $zone, [qw{CN04_IPV4_DIFFERENT_PREFIX CN04_IPV6_DIFFERENT_PREFIX CN04_IPV6_SAME_PREFIX}] );
-zone_gives_not( 'connectivity04', $zone, [qw{CN04_IPV4_SAME_PREFIX CN04_EMPTY_PREFIX_SET CN04_ERROR_PREFIX_DATABASE}] );
-
-$zone = Zonemaster::Engine->zone( 'zut-root.rd.nic.fr' );
-zone_gives('connectivity04', $zone, [qw{CN04_IPV4_SAME_PREFIX}] );
-zone_gives_not( 'connectivity04', $zone, [qw{CN04_IPV4_DIFFERENT_PREFIX CN04_IPV6_DIFFERENT_PREFIX CN04_IPV6_SAME_PREFIX CN04_EMPTY_PREFIX_SET CN04_ERROR_PREFIX_DATABASE}] );
-
-################
 subtest 'No IPv6 (profile with IPv4 only)' => sub {
     Zonemaster::Engine::Profile->effective->set( q{net.ipv4}, 1 );
     Zonemaster::Engine::Profile->effective->set( q{net.ipv6}, 0 );
@@ -182,21 +133,9 @@ subtest 'No network' => sub {
     Zonemaster::Engine::Profile->effective->set( q{net.ipv6}, 1 );
 };
 
-TODO: {
-    local $TODO = "Need to find/create zones with that error";
+# connectivity03 -- See t/Test-connectivity03.t instead.
 
-    # connectivity03
-    ok( $tag{EMPTY_ASN_SET}, q{EMPTY_ASN_SET} );
-    ok( $tag{ERROR_ASN_DATABASE}, q{ERROR_ASN_DATABASE} );
-    ok( $tag{IPV4_DIFFERENT_ASN}, q{IPV4_DIFFERENT_ASN} );
-    ok( $tag{IPV4_SAME_ASN}, q{IPV4_SAME_ASN} );
-    ok( $tag{IPV6_DIFFERENT_ASN}, q{IPV6_DIFFERENT_ASN} );
-    ok( $tag{IPV6_SAME_ASN}, q{IPV6_SAME_ASN} );
-
-    # connectivity04
-    ok( $tag{CN04_EMPTY_PREFIX_SET}, q{CN04_EMPTY_PREFIX_SET} );
-    ok( $tag{CN04_ERROR_PREFIX_DATABASE}, q{CN04_ERROR_PREFIX_DATABASE} );
-}
+# connectivity04 -- See t/Test-connectivity04.t instead.
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Nameserver->save( $datafile );

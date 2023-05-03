@@ -248,19 +248,19 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     CN04_IPV4_SAME_PREFIX => sub {
         __x    # CONNECTIVITY:CN04_IPV4_SAME_PREFIX
-          'The following name server(s) are announced in the same IPv4 prefix ({ip_prefix}): "{ns_ip_list}"', @_;
+          'The following name server(s) are announced in the same IPv4 prefix ({ip_prefix}): "{ns_list}"', @_;
     },
     CN04_IPV4_DIFFERENT_PREFIX => sub {
         __x    # CONNECTIVITY:CN04_IPV4_DIFFERENT_PREFIX
-          'The following name server(s) are announced in unique IPv4 prefix(es): "{ns_ip_list}"', @_;
+          'The following name server(s) are announced in unique IPv4 prefix(es): "{ns_list}"', @_;
     },
     CN04_IPV6_SAME_PREFIX => sub {
         __x    # CONNECTIVITY:CN04_IPV6_SAME_PREFIX
-          'The following name server(s) are announced in the same IPv6 prefix ({ip_prefix}): "{ns_ip_list}"', @_;
+          'The following name server(s) are announced in the same IPv6 prefix ({ip_prefix}): "{ns_list}"', @_;
     },
     CN04_IPV6_DIFFERENT_PREFIX => sub {
         __x    # CONNECTIVITY:CN04_IPV6_DIFFERENT_PREFIX
-          'The following name server(s) are announced in unique IPv6 prefix(es): "{ns_ip_list}"', @_;
+          'The following name server(s) are announced in unique IPv6 prefix(es): "{ns_list}"', @_;
     },
     ERROR_ASN_DATABASE => sub {
         __x    # CONNECTIVITY:ERROR_ASN_DATABASE
@@ -480,7 +480,7 @@ sub connectivity03 {
 
     my %ips = ( $IP_VERSION_4 => {}, $IP_VERSION_6 => {} );
 
-    foreach my $ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) } ) {
+    foreach my $ns ( @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) } ) {
         my $addr = $ns->address;
         $ips{ $addr->version }{ $addr->ip } = $addr;
     }
@@ -609,18 +609,19 @@ sub connectivity04 {
 
     my %ips = ( $IP_VERSION_4 => {}, $IP_VERSION_6 => {} );
 
-    foreach my $ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) } ) {
+    foreach my $ns ( @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) } ) {
         my $addr = $ns->address;
-        $ips{ $addr->version }{ $addr->ip } = $addr;
+        $ips{ $addr->version }{ $ns->string } = $addr;
     }
 
-    my @v4ips = values %{ $ips{$IP_VERSION_4} };
-    my @v6ips = values %{ $ips{$IP_VERSION_6} };
+    my %v4ips = %{ $ips{$IP_VERSION_4} };
+    my %v6ips = %{ $ips{$IP_VERSION_6} };
 
     my %v4prefixes;
     my %v6prefixes;
 
-    foreach my $v4ip ( @v4ips ) {
+    foreach my $ns ( keys %v4ips ) {
+        my $v4ip = $v4ips{$ns};
         my ( $asnref, $prefix, $raw, $ret_code ) = Zonemaster::Engine::ASNLookup->get_with_prefix( $v4ip );
 
         if ( defined $ret_code and ( $ret_code eq q{ERROR_ASN_DATABASE} or $ret_code eq q{EMPTY_ASN_SET} ) ) {
@@ -653,12 +654,13 @@ sub connectivity04 {
                     }
                   );
 
-                push @{ $v4prefixes{$prefix->prefix} }, $v4ip->short;
+                push @{ $v4prefixes{$prefix->prefix} }, $ns;
             }
         }
     }
 
-    foreach my $v6ip ( @v6ips ) {
+    foreach my $ns ( keys %v6ips ) {
+        my $v6ip = $v6ips{$ns};
         my ( $asnref, $prefix, $raw, $ret_code ) = Zonemaster::Engine::ASNLookup->get_with_prefix( $v6ip );
 
         if ( defined $ret_code and ( $ret_code eq q{ERROR_ASN_DATABASE} or $ret_code eq q{EMPTY_ASN_SET} ) ) {
@@ -691,7 +693,7 @@ sub connectivity04 {
                     }
                   );
 
-                push @{ $v6prefixes{$prefix->short . '/' . $prefix->prefixlen} }, $v6ip->short;
+                push @{ $v6prefixes{$prefix->short . '/' . $prefix->prefixlen} }, $ns;
             }
         }
     }
@@ -707,7 +709,7 @@ sub connectivity04 {
                   info(
                     CN04_IPV4_SAME_PREFIX => {
                         ip_prefix => $prefix,
-                        ns_ip_list => join( q{;}, sort @{ $v4prefixes{$prefix} } )
+                        ns_list => join( q{;}, sort @{ $v4prefixes{$prefix} } )
                     }
                   );
             }
@@ -717,7 +719,7 @@ sub connectivity04 {
             push @results,
               info(
                 CN04_IPV4_DIFFERENT_PREFIX => {
-                    ns_ip_list => join( q{;}, sort @combined_ns )
+                    ns_list => join( q{;}, sort @combined_ns )
                 }
               );
         }
@@ -734,7 +736,7 @@ sub connectivity04 {
                   info(
                     CN04_IPV6_SAME_PREFIX => {
                         ip_prefix => $prefix,
-                        ns_ip_list => join( q{;}, sort @{ $v6prefixes{$prefix} } )
+                        ns_list => join( q{;}, sort @{ $v6prefixes{$prefix} } )
                     }
                   );
             }
@@ -744,7 +746,7 @@ sub connectivity04 {
             push @results,
               info(
                 CN04_IPV6_DIFFERENT_PREFIX => {
-                    ns_ip_list => join( q{;}, sort @combined_ns )
+                    ns_list => join( q{;}, sort @combined_ns )
                 }
               );
         }
