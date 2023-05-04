@@ -238,6 +238,14 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # CONNECTIVITY:CN02_WRONG_SOA_RECORD_TCP
           'Nameserver {ns} responds with a wrong owner name ({domain_found} instead of {domain_expected}) on SOA queries over TCP.', @_;
     },
+    CN04_ASN_INFOS_ANNOUNCE_IN => sub {
+        __x    # CONNECTIVITY:ASN_INFOS_ANNOUNCE_IN
+          'Name server IP address "{ns_ip}" is announced in prefix "{prefix}".', @_;
+    },
+    CN04_ASN_INFOS_RAW => sub {
+        __x    # CONNECTIVITY:ASN_INFOS_RAW
+          'The ASN data for name server IP address "{ns_ip}" is "{data}".', @_;
+    },
     CN04_EMPTY_PREFIX_SET => sub {
         __x    # CONNECTIVITY:CN04_EMPTY_PREFIX_SET
           'Prefix database returned no information for IP address {ns_ip}.', @_;
@@ -599,7 +607,6 @@ sub connectivity03 {
         }
     }
 
-
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub connectivity03
 
@@ -607,22 +614,11 @@ sub connectivity04 {
     my ( $class, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
-    my %ips = ( $IP_VERSION_4 => {}, $IP_VERSION_6 => {} );
+    my %prefixes;
 
     foreach my $ns ( @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) } ) {
-        my $addr = $ns->address;
-        $ips{ $addr->version }{ $ns->string } = $addr;
-    }
-
-    my %v4ips = %{ $ips{$IP_VERSION_4} };
-    my %v6ips = %{ $ips{$IP_VERSION_6} };
-
-    my %v4prefixes;
-    my %v6prefixes;
-
-    foreach my $ns ( keys %v4ips ) {
-        my $v4ip = $v4ips{$ns};
-        my ( $asnref, $prefix, $raw, $ret_code ) = Zonemaster::Engine::ASNLookup->get_with_prefix( $v4ip );
+        my $ip = $ns->address;
+        my ( $asnref, $prefix, $raw, $ret_code ) = Zonemaster::Engine::ASNLookup->get_with_prefix( $ip );
 
         if ( defined $ret_code and ( $ret_code eq q{ERROR_ASN_DATABASE} or $ret_code eq q{EMPTY_ASN_SET} ) ) {
             if ( $ret_code eq 'ERROR_ASN_DATABASE' ) {
@@ -632,111 +628,58 @@ sub connectivity04 {
                 $ret_code = 'CN04_EMPTY_PREFIX_SET';
             }
 
-            push @results, info( $ret_code => { ns_ip => $v4ip->short } );
+            push @results, info( $ret_code => { ns_ip => $ip->short } );
         }
         else {
             if ( $raw ) {
                 push @results,
                   info(
-                    ASN_INFOS_RAW => {
-                        ns_ip => $v4ip->short,
+                    CN04_ASN_INFOS_RAW => {
+                        ns_ip => $ip->short,
                         data  => $raw,
                     }
                   );
             }
 
             if ( $prefix ) {
-                push @results,
-                  info(
-                    ASN_INFOS_ANNOUNCE_IN => {
-                        ns_ip  => $v4ip->short,
-                        prefix => sprintf "%s", $prefix->prefix,
-                    }
-                  );
+                my $prefix_str;
 
-                push @{ $v4prefixes{$prefix->prefix} }, $ns;
-            }
-        }
-    }
-
-    foreach my $ns ( keys %v6ips ) {
-        my $v6ip = $v6ips{$ns};
-        my ( $asnref, $prefix, $raw, $ret_code ) = Zonemaster::Engine::ASNLookup->get_with_prefix( $v6ip );
-
-        if ( defined $ret_code and ( $ret_code eq q{ERROR_ASN_DATABASE} or $ret_code eq q{EMPTY_ASN_SET} ) ) {
-            if ( $ret_code eq 'ERROR_ASN_DATABASE' ) {
-                $ret_code = 'CN04_ERROR_PREFIX_DATABASE';
-            }
-            elsif ( $ret_code eq 'EMPTY_ASN_SET' ) {
-                $ret_code = 'CN04_EMPTY_PREFIX_SET';
-            }
-
-            push @results, info( $ret_code => { ns_ip => $v6ip->short } );
-        }
-        else {
-            if ( $raw ) {
-                push @results,
-                  info(
-                    ASN_INFOS_RAW => {
-                        ns_ip => $v6ip->short,
-                        data  => $raw,
-                    }
-                  );
-            }
-
-            if ( $prefix ) {
-                push @results,
-                  info(
-                    ASN_INFOS_ANNOUNCE_IN => {
-                        ns_ip  => $v6ip->short,
-                        prefix => sprintf "%s/%d", $prefix->short, $prefix->prefixlen,
-                    }
-                  );
-
-                push @{ $v6prefixes{$prefix->short . '/' . $prefix->prefixlen} }, $ns;
-            }
-        }
-    }
-
-    my @combined_ns;
-    if ( scalar keys %v4prefixes ) {
-        foreach my $prefix ( keys %v4prefixes ) {
-            if ( scalar @{ $v4prefixes{$prefix} } == 1 ) {
-                push @combined_ns, @{ $v4prefixes{$prefix} };
-            }
-            elsif ( scalar @{ $v4prefixes{$prefix} } >= 2 ) {
-                push @results,
-                  info(
-                    CN04_IPV4_SAME_PREFIX => {
-                        ip_prefix => $prefix,
-                        ns_list => join( q{;}, sort @{ $v4prefixes{$prefix} } )
-                    }
-                  );
-            }
-        }
-
-        if ( scalar @combined_ns ) {
-            push @results,
-              info(
-                CN04_IPV4_DIFFERENT_PREFIX => {
-                    ns_list => join( q{;}, sort @combined_ns )
+                if ( $prefix->version == 4 ) {
+                    $prefix_str = $prefix->prefix;
                 }
-              );
+                elsif ( $prefix->version == 6 ) {
+                    $prefix_str = $prefix->short . '/' . $prefix->prefixlen;
+                }
+                else {
+                    next;
+                }
+
+                push @results,
+                  info(
+                    CN04_ASN_INFOS_ANNOUNCE_IN => {
+                        ns_ip  => $ip->short,
+                        prefix => sprintf "%s", $prefix_str,
+                    }
+                  );
+
+                push @{ $prefixes{$prefix->version}{$prefix_str} }, $ns;
+            }
         }
     }
 
-    @combined_ns = ();
-    if ( scalar keys %v6prefixes ) {
-        foreach my $prefix ( keys %v6prefixes ) {
-            if ( scalar @{ $v6prefixes{$prefix} } == 1 ) {
-                push @combined_ns, @{ $v6prefixes{$prefix} };
+    foreach my $ip_version ( sort keys %prefixes ) {
+        my @combined_ns;
+
+        foreach my $prefix ( keys %{ $prefixes{$ip_version} } ) {
+            if ( scalar @{ $prefixes{$ip_version}{$prefix} } == 1 ) {
+                push @combined_ns, @{ $prefixes{$ip_version}{$prefix} };
             }
-            elsif ( scalar @{ $v6prefixes{$prefix} } >= 2 ) {
+            elsif ( scalar @{ $prefixes{$ip_version}{$prefix} } >= 2 ) {
                 push @results,
                   info(
-                    CN04_IPV6_SAME_PREFIX => {
+                    "CN04_IPV${ip_version}_SAME_PREFIX" => {
                         ip_prefix => $prefix,
-                        ns_list => join( q{;}, sort @{ $v6prefixes{$prefix} } )
+                        ns_list => join( q{;}, sort @{ $prefixes{$ip_version}{$prefix} } )
                     }
                   );
             }
@@ -745,7 +688,7 @@ sub connectivity04 {
         if ( scalar @combined_ns ) {
             push @results,
               info(
-                CN04_IPV6_DIFFERENT_PREFIX => {
+                "CN04_IPV${ip_version}_DIFFERENT_PREFIX" => {
                     ns_list => join( q{;}, sort @combined_ns )
                 }
               );
