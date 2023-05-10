@@ -5,7 +5,7 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare( "v1.0.27" );
+use version; our $VERSION = version->declare( "v1.1.0" );
 
 use List::MoreUtils qw[uniq none];
 use Locale::TextDomain qw[Zonemaster-Engine];
@@ -71,6 +71,9 @@ sub all {
     }
     if ( Zonemaster::Engine::Util::should_run_test( q{nameserver13} ) ) {
         push @results, $class->nameserver13( $zone );
+    }
+    if ( Zonemaster::Engine::Util::should_run_test( q{nameserver15} ) ) {
+        push @results, $class->nameserver15( $zone );
     }
 
     return @results;
@@ -212,6 +215,14 @@ sub metadata {
               NO_EDNS_SUPPORT
               NS_ERROR
               MISSING_OPT_IN_TRUNCATED
+              TEST_CASE_END
+              TEST_CASE_START
+              )
+        ],
+        nameserver15 => [
+            qw(
+              N15_NO_VERSION
+              N15_SOFTWARE_VERSION
               TEST_CASE_END
               TEST_CASE_START
               )
@@ -444,6 +455,14 @@ Readonly my %TAG_DESCRIPTIONS => (
     N11_UNSET_AA => sub {
         __x    # NAMESERVER:N11_UNSET_AA
           'The DNS response, on query with unknown EDNS option-code, is unexpectedly not authoritative from name servers "{ns_ip_list}".', @_;
+    },
+    N15_NO_VERSION => sub {
+        __x    # NAMESERVER:N15_NO_VERSION
+          'The following name server(s) do not respond to software version queries. Returned from name servers: "{ns_ip_list}"', @_;
+    },
+    N15_SOFTWARE_VERSION => sub {
+        __x    # NAMESERVER:N15_SOFTWARE_VERSION
+          'The following name server(s) respond to software version query "{query_name}" with string "{string}". Returned from name servers: "{ns_ip_list}"', @_;
     },
     QNAME_CASE_INSENSITIVE => sub {
         __x    # NAMESERVER:QNAME_CASE_INSENSITIVE
@@ -1338,6 +1357,65 @@ sub nameserver13 {
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub nameserver13
 
+sub nameserver15 {
+    my ( $class, $zone ) = @_;
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+
+    my %txt_data;
+    my @no_version;
+
+    foreach my $ns ( @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) } ) {
+
+        next if ( _ip_disabled_message( \@results, $ns, q{TXT} ) );
+
+        my $found_string = 0;
+
+        foreach my $query_name ( q{version.bind}, q{version.server} ) {
+            my $p = $ns->query( $query_name, q{TXT}, { class => q{CH} } );
+
+            if ( $p and $p->rcode eq q{NOERROR} and scalar $p->get_records_for_name( q{TXT}, $query_name, q{answer} ) ) {
+                foreach my $rr ( $p->get_records_for_name(q{TXT}, $query_name, q{answer} ) ) {
+                    my $string = $rr->txtdata;
+
+                    if ( $string and $string ne "") {
+                        $found_string = 1;
+                        push @{ $txt_data{$string}{$query_name} }, $ns->string;
+                    }
+                }
+            }
+        }
+
+        if ( not $found_string ) {
+            push @no_version, $ns->string;
+        }
+    }
+
+    if ( scalar keys %txt_data ) {
+        foreach my $string ( keys %txt_data ) {
+            push @results, map {
+              info(
+                N15_SOFTWARE_VERSION => {
+                   string => $string,
+                   query_name => $_,
+                   ns_ip_list => join( q{;}, uniq sort @{ $txt_data{$string}{$_} } )
+                }
+              )
+            } keys %{ $txt_data{$string} };
+        }
+    }
+
+    if ( scalar @no_version ) {
+        push @results,
+          info(
+            N15_NO_VERSION => {
+               ns_ip_list => join( q{;}, uniq sort @no_version )
+            }
+          );
+    }
+
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+} ## end sub nameserver15
+
 1;
 
 =head1 NAME
@@ -1426,6 +1504,10 @@ Check whether authoritative name servers responses has "Z" bits cleared even if 
 =item nameserver13($zone)
 
 This Test Case will try to verify that if the response to a query with an OPT record is truncated, then the response will contain an OPT record.
+
+=item nameserver15($zone)
+
+Verifies if a name server responds to certain TXT queries in the CHAOS class, specifically about its software version.
 
 =back
 

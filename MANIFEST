@@ -256,6 +256,8 @@ t/Test-nameserver01-C.data
 t/Test-nameserver01-C.t
 t/Test-nameserver01-D.data
 t/Test-nameserver01-D.t
+t/Test-nameserver15.data
+t/Test-nameserver15.t
 t/Test-syntax.data
 t/Test-syntax.t
 t/Test-syntax06-A.data
