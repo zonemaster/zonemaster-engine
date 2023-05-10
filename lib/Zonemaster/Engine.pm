@@ -310,23 +310,7 @@ L</save_cache()>.
 
 =item asn_lookup($ip)
 
-Takes a single IP address and returns one of three things:
-
-=over
-
-=item
-
-Nothing, if the IP address is not in any AS.
-
-=item
-
-If called in list context, a list of AS number and a L<Net::IP::XS> object representing the prefix it's in.
-
-=item
-
-If called in scalar context, only the AS number.
-
-=back
+Takes a single IP address (string or L<Net::IP::XS> object) and returns a list of AS numbers, if any.
 
 =item modules()
 

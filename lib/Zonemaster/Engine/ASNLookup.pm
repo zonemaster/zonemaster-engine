@@ -4,7 +4,7 @@ use 5.014002;
 
 use warnings;
 
-use version; our $VERSION = version->declare( "v1.0.10" );
+use version; our $VERSION = version->declare( "v1.0.11" );
 
 use Zonemaster::Engine;
 use Zonemaster::Engine::Nameserver;
@@ -49,12 +49,13 @@ sub get_with_prefix {
         die "ASN database sources undefined";
     }
 
-    my ( $asnref, $prefix, $raw );
+    my ( $asnref, $prefix, $raw, $ret_code );
+
     if ( $db_style eq q{cymru} ) {
-        ( $asnref, $prefix, $raw ) = _cymru_asn_lookup($ip);
+        ( $asnref, $prefix, $raw, $ret_code ) = _cymru_asn_lookup($ip);
     }
     elsif ( $db_style eq q{ripe} ) {
-        ( $asnref, $prefix, $raw ) = _ripe_asn_lookup($ip);
+        ( $asnref, $prefix, $raw, $ret_code ) = _ripe_asn_lookup($ip);
     }
     else {
         if ( not $db_style ) {
@@ -64,8 +65,10 @@ sub get_with_prefix {
             die "ASN database style value [$db_style] is illegal";
         }
     }
+
     map { looks_like_number( $_ ) || die "ASN lookup value isn't numeric: '$_'" } @$asnref;
-    return ( $asnref, $prefix, $raw );
+
+    return ( $asnref, $prefix, $raw, $ret_code );
 
 } ## end sub get_with_prefix
 
@@ -189,7 +192,7 @@ sub _ripe_asn_lookup {
 sub get {
     my ( $class, $ip ) = @_;
 
-    my ( $asnref, $prefix, $raw ) = $class->get_with_prefix( $ip );
+    my ( $asnref, $prefix, $raw, $ret_code ) = $class->get_with_prefix( $ip );
 
     if ( $asnref ) {
         return @{$asnref};
@@ -207,7 +210,7 @@ Zonemaster::Engine::ASNLookup - do lookups of ASNs for IP addresses
 
 =head1 SYNOPSIS
 
-   my ($asnref, $prefix) = Zonemaster::Engine::ASNLookup->get_with_prefix( '8.8.4.4' );
+   my ( $asnref, $prefix, $raw, $ret_code ) = Zonemaster::Engine::ASNLookup->get_with_prefix( '8.8.4.4' );
    my $asnref = Zonemaster::Engine::ASNLookup->get( '192.168.0.1' );
 
 =head1 FUNCTION
@@ -216,14 +219,18 @@ Zonemaster::Engine::ASNLookup - do lookups of ASNs for IP addresses
 
 =item get($addr)
 
-Takes a string (or a L<Net::IP::XS> object) with a single IP address, does a lookup
-in a Cymru-style DNS zone and returns a list of AS numbers for the address, if
-any can be found.
+As L<get_with_prefix()>, except it returns only the list of AS numbers
+for the address, if any.
 
 =item get_with_prefix($addr)
 
-As L<get()>, except it returns a list of a reference to a list with the AS
-numbers, and a Net::IP::XS object representing the prefix of the AS.
+Takes a string (or a L<Net::IP::XS> object) with a single IP address, and
+does a lookup in either: a) Cymru-style DNS zone or b) RIPE whois server,
+depending on L<Zonemaster::Engine::Profile> setting "asn_db{style}".
+
+Returns a list of a reference to a list of AS numbers, a Net::IP::XS object
+of the covering prefix for that AS, a string of the raw query, and a string
+of the return code for that query.
 
 =back
 
