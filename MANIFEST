@@ -45,6 +45,7 @@ lib/Zonemaster/Engine/Test/Nameserver.pm
 lib/Zonemaster/Engine/Test/Syntax.pm
 lib/Zonemaster/Engine/Test/Zone.pm
 lib/Zonemaster/Engine/TestMethods.pm
+lib/Zonemaster/Engine/TestMethodsV2.pm
 lib/Zonemaster/Engine/Translator.pm
 lib/Zonemaster/Engine/Util.pm
 lib/Zonemaster/Engine/Zone.pm
