@@ -287,6 +287,10 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # NAMESERVER:NAMESERVER14
             'Test for unknown version with unknown OPTION-CODE', @_;
     },
+    NAMESERVER15 => sub {
+        __x    # NAMESERVER:NAMESERVER15
+            'Checking for revealed software version', @_;
+    },
     AAAA_BAD_RDATA => sub {
         __x    # NAMESERVER:AAAA_BAD_RDATA
             'Nameserver {ns} answered AAAA query with an unexpected RDATA length ({length} instead of 16).', @_;
