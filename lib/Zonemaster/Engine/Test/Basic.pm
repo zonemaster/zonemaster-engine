@@ -134,19 +134,19 @@ sub metadata {
 Readonly my %TAG_DESCRIPTIONS => (
     BASIC00 => sub {
         __x    # BASIC:BASIC00
-          'Domain name must be valid', @_;
+          'Domain name must be valid';
     },
     BASIC01 => sub {
         __x    # BASIC:BASIC01
-          'The domain must have a parent domain', @_;
+          'The domain must have a parent domain';
     },
     BASIC02 => sub {
         __x    # BASIC:BASIC02
-          'The domain must have at least one working name server', @_;
+          'The domain must have at least one working name server';
     },
     BASIC03 => sub {
         __x    # BASIC:BASIC03
-          'The Broken but functional test', @_;
+          'The Broken but functional test';
     },
     A_QUERY_NO_RESPONSES => sub {
         __x    # BASIC:A_QUERY_NO_RESPONSES

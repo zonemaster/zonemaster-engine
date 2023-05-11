@@ -76,15 +76,15 @@ sub metadata {
 Readonly my %TAG_DESCRIPTIONS => (
     ADDRESS01 => sub {
         __x    # ADDRESS:ADDRESS01
-          'Name server address must be globally routable', @_;
+          'Name server address must be globally routable';
     },
     ADDRESS02 => sub {
         __x    # ADDRESS:ADDRESS02
-          'Reverse DNS entry exists for name server IP address', @_;
+          'Reverse DNS entry exists for name server IP address';
     },
     ADDRESS03 => sub {
         __x    # ADDRESS:ADDRESS03
-          'Reverse DNS entry matches name server name', @_;
+          'Reverse DNS entry matches name server name';
     },
     NAMESERVER_IP_WITHOUT_REVERSE => sub {
         __x    # ADDRESS:NAMESERVER_IP_WITHOUT_REVERSE

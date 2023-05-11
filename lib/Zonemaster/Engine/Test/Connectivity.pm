@@ -127,21 +127,20 @@ sub metadata {
 Readonly my %TAG_DESCRIPTIONS => (
     CONNECTIVITY01 => sub {
         __x    # CONNECTIVITY:CONNECTIVITY01
-          'UDP connectivity', @_;
+          'UDP connectivity';
     },
     CONNECTIVITY02 => sub {
         __x    # CONNECTIVITY:CONNECTIVITY02
-          'TCP connectivity', @_;
+          'TCP connectivity';
     },
     CONNECTIVITY03 => sub {
         __x    # CONNECTIVITY:CONNECTIVITY03
-          'AS Diversity', @_;
+          'AS Diversity';
     },
     CONNECTIVITY04 => sub {
         __x    # CONNECTIVITY:CONNECTIVITY04
-          'IP Prefix Diversity', @_;
+          'IP Prefix Diversity';
     },
-
     CN01_IPV4_DISABLED => sub {
         __x    # CONNECTIVITY:CN01_IPV4_DISABLED
           'IPv4 is disabled. No DNS queries are sent to these name servers: "{ns_list}".', @_;
@@ -332,7 +331,6 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # CONNECTIVITY:ASN_INFOS_ANNOUNCE_IN
           'Name server IP address "{ns_ip}" is announced in prefix "{prefix}".', @_;
     },
-
     TEST_CASE_END => sub {
         __x    # CONNECTIVITY:TEST_CASE_END
           'TEST_CASE_END {testcase}.', @_;
