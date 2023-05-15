@@ -46,7 +46,7 @@ test_cases:
   - dnssec07
   - dnssec08
   - dnssec09
-  - dnssec10
+#  - dnssec10 # Temporarily disabled due to https://github.com/zonemaster/zonemaster/issues/1153
   - dnssec11
   - dnssec13
   - dnssec14
