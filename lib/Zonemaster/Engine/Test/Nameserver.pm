@@ -233,63 +233,63 @@ sub metadata {
 Readonly my %TAG_DESCRIPTIONS => (
     NAMESERVER01 => sub {
         __x    # NAMESERVER:NAMESERVER01
-            'A name server should not be a recursor', @_;
+            'A name server should not be a recursor';
     },
     NAMESERVER02 => sub {
         __x    # NAMESERVER:NAMESERVER02
-            'Test of EDNS0 support', @_;
+            'Test of EDNS0 support';
     },
     NAMESERVER03 => sub {
         __x    # NAMESERVER:NAMESERVER03
-            'Test availability of zone transfer (AXFR)', @_;
+            'Test availability of zone transfer (AXFR)';
     },
     NAMESERVER04 => sub {
         __x    # NAMESERVER:NAMESERVER04
-            'Same source address', @_;
+            'Same source address';
     },
     NAMESERVER05 => sub {
         __x    # NAMESERVER:NAMESERVER05
-            'Behaviour against AAAA query', @_;
+            'Behaviour against AAAA query';
     },
     NAMESERVER06 => sub {
         __x    # NAMESERVER:NAMESERVER06
-            'NS can be resolved', @_;
+            'NS can be resolved';
     },
     NAMESERVER07 => sub {
         __x    # NAMESERVER:NAMESERVER07
-            'To check whether authoritative name servers return an upward referral', @_;
+            'To check whether authoritative name servers return an upward referral';
     },
     NAMESERVER08 => sub {
         __x    # NAMESERVER:NAMESERVER08
-            'Testing QNAME case insensitivity', @_;
+            'Testing QNAME case insensitivity';
     },
     NAMESERVER09 => sub {
         __x    # NAMESERVER:NAMESERVER09
-            'Testing QNAME case sensitivity', @_;
+            'Testing QNAME case sensitivity';
     },
     NAMESERVER10 => sub {
         __x    # NAMESERVER:NAMESERVER10
-            'Test for undefined EDNS version', @_;
+            'Test for undefined EDNS version';
     },
     NAMESERVER11 => sub {
         __x    # NAMESERVER:NAMESERVER11
-            'Test for unknown EDNS OPTION-CODE', @_;
+            'Test for unknown EDNS OPTION-CODE';
     },
     NAMESERVER12 => sub {
         __x    # NAMESERVER:NAMESERVER12
-            'Test for unknown EDNS flags', @_;
+            'Test for unknown EDNS flags';
     },
     NAMESERVER13 => sub {
         __x    # NAMESERVER:NAMESERVER13
-            'Test for truncated response on EDNS query', @_;
+            'Test for truncated response on EDNS query';
     },
     NAMESERVER14 => sub {
         __x    # NAMESERVER:NAMESERVER14
-            'Test for unknown version with unknown OPTION-CODE', @_;
+            'Test for unknown version with unknown OPTION-CODE';
     },
     NAMESERVER15 => sub {
         __x    # NAMESERVER:NAMESERVER15
-            'Checking for revealed software version', @_;
+            'Checking for revealed software version';
     },
     AAAA_BAD_RDATA => sub {
         __x    # NAMESERVER:AAAA_BAD_RDATA

@@ -33,8 +33,6 @@ like(
     'string to_stringd as expected'
 );
 
-
-
 my $untranslated = Zonemaster::Engine::Logger::Entry->new(
     {
         module => 'SYSTEM',
@@ -44,5 +42,13 @@ my $untranslated = Zonemaster::Engine::Logger::Entry->new(
 );
 
 ok( $trans->translate_tag( $untranslated ), 'Untranslated tag gets output' );
+
+my %methods = Zonemaster::Engine->all_methods();
+
+foreach my $module ( keys %methods ) {
+    foreach my $testmethod ( @{ $methods{$module } } ) {
+        ok( $trans->_translate_tag( uc( $module ), uc( $testmethod ), {}), 'Test method '. uc( $testmethod ) . ' has message tag with description');
+    }
+}
 
 done_testing;

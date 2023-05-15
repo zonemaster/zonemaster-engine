@@ -515,75 +515,75 @@ sub metadata {
 Readonly my %TAG_DESCRIPTIONS => (
     DNSSEC01 => sub {
         __x    # DNSSEC:DNSSEC01
-          "Legal values for the DS hash digest algorithm", @_;
+          "Legal values for the DS hash digest algorithm";
     },
     DNSSEC02 => sub {
         __x    # DNSSEC:DNSSEC02
-          "DS must match a valid DNSKEY in the child zone", @_;
+          "DS must match a valid DNSKEY in the child zone";
     },
     DNSSEC03 => sub {
         __x    # DNSSEC:DNSSEC03
-          "Check for too many NSEC3 iterations", @_;
+          "Check for too many NSEC3 iterations";
     },
     DNSSEC04 => sub {
         __x    # DNSSEC:DNSSEC04
-          "Check for too short or too long RRSIG lifetimes", @_;
+          "Check for too short or too long RRSIG lifetimes";
     },
     DNSSEC05 => sub {
         __x    # DNSSEC:DNSSEC05
-          "Check for invalid DNSKEY algorithms", @_;
+          "Check for invalid DNSKEY algorithms";
     },
     DNSSEC06 => sub {
         __x    # DNSSEC:DNSSEC06
-          "Verify DNSSEC additional processing", @_;
+          "Verify DNSSEC additional processing";
     },
     DNSSEC07 => sub {
         __x    # DNSSEC:DNSSEC07
-          "If DNSKEY at child, parent should have DS", @_;
+          "If DNSKEY at child, parent should have DS";
     },
     DNSSEC08 => sub {
         __x    # DNSSEC:DNSSEC08
-          "Valid RRSIG for DNSKEY", @_;
+          "Valid RRSIG for DNSKEY";
     },
     DNSSEC09 => sub {
         __x    # DNSSEC:DNSSEC09
-          "RRSIG(SOA) must be valid and created by a valid DNSKEY", @_;
+          "RRSIG(SOA) must be valid and created by a valid DNSKEY";
     },
     DNSSEC10 => sub {
         __x    # DNSSEC:DNSSEC10
-          "Zone contains NSEC or NSEC3 records", @_;
+          "Zone contains NSEC or NSEC3 records";
     },
     DNSSEC11 => sub {
         __x    # DNSSEC:DNSSEC11
-          "DS in delegation requires signed zone", @_;
+          "DS in delegation requires signed zone";
     },
     DNSSEC12 => sub {
         __x    # DNSSEC:DNSSEC12
-          "Test for DNSSEC Algorithm Completeness", @_;
+          "Test for DNSSEC Algorithm Completeness";
     },
     DNSSEC13 => sub {
         __x    # DNSSEC:DNSSEC13
-          "All DNSKEY algorithms used to sign the zone", @_;
+          "All DNSKEY algorithms used to sign the zone";
     },
     DNSSEC14 => sub {
         __x    # DNSSEC:DNSSEC14
-          "Check for valid RSA DNSKEY key size", @_;
+          "Check for valid RSA DNSKEY key size";
     },
     DNSSEC15 => sub {
         __x    # DNSSEC:DNSSEC15
-          "Existence of CDS and CDNSKEY", @_;
+          "Existence of CDS and CDNSKEY";
     },
     DNSSEC16 => sub {
         __x    # DNSSEC:DNSSEC16
-          "Validate CDS", @_;
+          "Validate CDS";
     },
     DNSSEC17 => sub {
         __x    # DNSSEC:DNSSEC17
-          "Validate CDNSKEY", @_;
+          "Validate CDNSKEY";
     },
     DNSSEC18 => sub {
         __x    # DNSSEC:DNSSEC18
-          "Validate trust from DS to CDS and CDNSKEY ", @_;
+          "Validate trust from DS to CDS and CDNSKEY";
     },
     ADDITIONAL_DNSKEY_SKIPPED => sub {
         __x    # DNSSEC:ADDITIONAL_DNSKEY_SKIPPED
