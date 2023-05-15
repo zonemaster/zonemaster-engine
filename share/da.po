@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-08 13:50+0000\n"
+"POT-Creation-Date: 2023-05-15 11:47+0000\n"
 "PO-Revision-Date: 2022-06-08 13:13+0000\n"
 "Last-Translator: Niels Haarbo <haarbo@dk-hostmaster.dk>\n"
 "Language-Team: Zonemaster Team\n"
@@ -10,6 +10,58 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#, perl-brace-format
+msgid ""
+"Ambiguous downcaseing of character \"{unicode_name}\" in the domain name. "
+"Use all lower case instead."
+msgstr ""
+"Tvetydig ændring af stort til lille bogstav \"{unicode_name}\" i "
+"domænenavnet. Brug udelukkende små bogstaver i stedet for."
+
+msgid "Domain name is too long (more than 253 characters with no final dot)."
+msgstr "Domænenavnet er for langt (mere end 253 tegn uden sidste punktum)."
+
+msgid "Domain name is empty."
+msgstr "Domænenavn mangler."
+
+msgid "Domain name starts with dot."
+msgstr "Domænenavn begynder med et punktum."
+
+#, perl-brace-format
+msgid ""
+"Domain name has an ASCII label (\"{label}\") with a character not permitted."
+msgstr "Domænenavnet indeholder en ugyldig ASCII label (\"{label}\")."
+
+#, perl-brace-format
+msgid ""
+"Domain name has a non-ASCII label (\"{label}\") which is not a valid U-label."
+msgstr ""
+"Domænenavnet indeholder en ikke-ASCII label (\"{label}\") som er en ugyldig "
+"U-label."
+
+msgid "Domain name has repeated dots."
+msgstr "Domænenavnet har gentagne punktummer."
+
+#, perl-brace-format
+msgid ""
+"Domain name has a label that is too long (more than 63 characters), "
+"\"{label}\"."
+msgstr ""
+"Domænenavnet indeholder en label, der er for lang (mere end 63 tegn), "
+"\"{label}\"."
+
+#. ADDRESS:ADDRESS01
+msgid "Name server address must be globally routable"
+msgstr "Navneserveradresse skal være globalt routebar"
+
+#. ADDRESS:ADDRESS02
+msgid "Reverse DNS entry exists for name server IP address"
+msgstr "Reverse DNS eksisterer for navneserverens IP-adresse"
+
+#. ADDRESS:ADDRESS03
+msgid "Reverse DNS entry matches name server name"
+msgstr "Reverse DNS matcher navneserverennavn"
 
 #. ADDRESS:NAMESERVER_IP_WITHOUT_REVERSE
 #, perl-brace-format
@@ -79,93 +131,81 @@ msgstr "TEST_CASE_END {testcase}."
 msgid "TEST_CASE_START {testcase}."
 msgstr "TEST_CASE_START {testcase}."
 
+#. BASIC:BASIC00
+msgid "Domain name must be valid"
+msgstr "Domænenavnet skal være gyldigt."
+
+#. BASIC:BASIC01
+msgid "The domain must have a parent domain"
+msgstr "Domænenavnet skal have et forældredomænenavn"
+
+#. BASIC:BASIC02
+msgid "The domain must have at least one working name server"
+msgstr "Domænenavnet skal have mindst en fungerende navneserver"
+
+#. BASIC:BASIC03
+msgid "The Broken but functional test"
+msgstr "Den ødelagte, men funktionelle test"
+
 #. BASIC:A_QUERY_NO_RESPONSES
 msgid "Nameservers did not respond to A query."
 msgstr "Navneserverne svarede ikke på en A-forespørgsel."
 
-#. BASIC:B04_MISSING_NS_RECORD
+#. BASIC:B02_AUTH_RESPONSE_SOA
 #, perl-brace-format
 msgid ""
-"Nameserver {ns} reponds to a NS query with no NS records in the answer "
-"section."
+"Authoritative answer on SOA query for \"{domain}\" is returned by name "
+"servers \"{ns_list}\"."
 msgstr ""
-"Navneserveren {ns} svarede på en NS-forespørgsel, men svaret indeholder ikke "
-"nogle NS-records"
+"Autoritative svar på SOA forespørgsel for \"{domain}\" gives på serverne "
+"\"{ns_list}\"."
 
-#. BASIC:B04_MISSING_SOA_RECORD
+#. BASIC:B02_NO_DELEGATION
 #, perl-brace-format
 msgid ""
-"Nameserver {ns} reponds to a SOA query with no SOA records in the answer "
-"section."
+"There is no delegation (name servers) for \"{domain}\" which means it does "
+"not exist as a zone."
 msgstr ""
-"Navneserveren {ns} svarede på en SOA-forespørgsel, men svaret indeholder "
-"ikke nogle SOA-records"
+"Der findes ikke nogen delegering (navneserver) for \"{domain}\", hvilket "
+"betyder, at det ikke eksisterer som en zone."
 
-#. BASIC:B04_NO_RESPONSE
+#. BASIC:B02_NO_WORKING_NS
 #, perl-brace-format
-msgid "Nameserver {ns} does not respond over neither UDP nor TCP."
-msgstr "Navneserveren {ns} svarede ikke over hverken UDP eller TCP."
-
-#. BASIC:B04_NO_RESPONSE_NS_QUERY
-#, perl-brace-format
-msgid "Nameserver {ns} does not respond to NS queries."
-msgstr "Navneserveren {ns} svarede ikke på NS-forespørgsler."
-
-#. BASIC:B04_NO_RESPONSE_SOA_QUERY
-#, perl-brace-format
-msgid "Nameserver {ns} does not respond to SOA queries."
-msgstr "Navneserveren {ns} svarede ikke på SOA-forespørgsler."
-
-#. BASIC:B04_NS_RECORD_NOT_AA
-#, perl-brace-format
-msgid "Nameserver {ns} does not give an authoritative response on an NS query."
-msgstr "Navneserveren {ns} svarede ikke autoritativt på en NS-forespørgsel."
-
-#. BASIC:B04_RESPONSE_TCP_NOT_UDP
-#, perl-brace-format
-msgid "Nameserver {ns} does not respond over UDP."
-msgstr "Navneserveren {ns} svarede ikke over UDP."
-
-#. BASIC:B04_SOA_RECORD_NOT_AA
-#, perl-brace-format
-msgid ""
-"Nameserver {ns} does not give an authoritative response on an SOA query."
-msgstr "Navneserveren {ns} svarede ikke autoritativt på en SOA-forespørgsel."
-
-#. BASIC:B04_UNEXPECTED_RCODE_NS_QUERY
-#, perl-brace-format
-msgid ""
-"Nameserver {ns} responds with an unexpected RCODE ({rcode}) on an NS query."
+msgid "There is no working name server for \"{domain}\" so it is unreachable."
 msgstr ""
-"Navneserveren {ns} besvarede en NS-forespørgsel med en uventet RCODE "
-"({rcode})."
+"Der er ikke nogen fungerende navneserver for \"{domain}\" derfor er det "
+"utilgængeligt."
 
-#. BASIC:B04_UNEXPECTED_RCODE_SOA_QUERY
+#. BASIC:B02_NS_BROKEN
+#, perl-brace-format
+msgid "Broken response from name server \"{ns}\" on an SOA query."
+msgstr "Ugyldigt svar fra navneserveren \"{ns}\" på SOA forespørgsel."
+
+#. BASIC:B02_NS_NOT_AUTH
 #, perl-brace-format
 msgid ""
-"Nameserver {ns} responds with an unexpected RCODE ({rcode}) on an SOA query."
+"Name server \"{ns}\" does not give an authoritative answer on an SOA query."
 msgstr ""
-"Navneserveren {ns} besvarede en SOA-forespørgsel med en uventet RCODE "
-"({rcode})."
+"Navneserveren \"{ns}\" svarede ikke autoritativt på en SOA-forespørgsel."
 
-#. BASIC:B04_WRONG_NS_RECORD
+#. BASIC:B02_NS_NO_IP_ADDR
+#, perl-brace-format
+msgid "Name server \"{nsname}\" cannot be resolved into an IP address."
+msgstr "Navneserveren \"{nsname}\" kan ikke oversættes til en IP-adresse."
+
+#. BASIC:B02_NS_NO_RESPONSE
+#, perl-brace-format
+msgid "Name server \"{ns}\" does not respond to an SOA query."
+msgstr "Navneserveren \"{ns}\" svarede ikke på SOA-forespørgsler."
+
+#. BASIC:B02_UNEXPECTED_RCODE
 #, perl-brace-format
 msgid ""
-"Nameserver {ns} responds with a wrong owner name ({owner} instead of {name}) "
-"on NS queries."
+"Name server \"{ns}\" responds with an unexpected RCODE name (\"{rcode}\") on "
+"an SOA query."
 msgstr ""
-"Navneserveren {ns} returnerede et ugyldigt ejernavn ({owner} i stedet for "
-"{name}) på NS-forespørgsler."
-
-#. BASIC:B04_WRONG_SOA_RECORD
-#. ZONE:WRONG_SOA
-#, perl-brace-format
-msgid ""
-"Nameserver {ns} responds with a wrong owner name ({owner} instead of {name}) "
-"on SOA queries."
-msgstr ""
-"Navneserveren {ns} returnerede et ugyldigt ejernavn ({owner} i stedet for "
-"{name}) på SOA forespørgsler."
+"Navneserveren \"{ns}\" besvarede en SOA-forespørgsel med en uventet RCODE "
+"(\"{rcode}\")."
 
 #. BASIC:DOMAIN_NAME_LABEL_TOO_LONG
 #, perl-brace-format
@@ -197,11 +237,6 @@ msgstr ""
 "Fungerende navneserver fundet. Test på A-forespørgsel for www.{zname} "
 "spunget over."
 
-#. BASIC:HAS_NAMESERVERS
-#, perl-brace-format
-msgid "Nameserver {ns} listed these servers as glue: {nsnlist}."
-msgstr "Navneserveren {ns} returnerede følgende servere som glues: {nsnlist}."
-
 #. BASIC:HAS_PARENT
 #, perl-brace-format
 msgid "Parent domain '{pname}' was found for the tested domain."
@@ -214,6 +249,7 @@ msgstr "Forælder-domænet '{pname}' blev fundet for det testede domæne."
 #. DNSSEC:IPV4_DISABLED
 #. NAMESERVER:IPV4_DISABLED
 #. SYNTAX:IPV4_DISABLED
+#. SYSTEM:SKIP_IPV4_DISABLED
 #, perl-brace-format
 msgid "IPv4 is disabled, not sending \"{rrtype}\" query to {ns}."
 msgstr "IPv4 er deaktiveret, udfører ikke \"{rrtype}\"-forespørgsel til {ns}."
@@ -230,6 +266,7 @@ msgstr "IPv4 er aktiveret, kan udføre \"{rrtype}\"-forespørgsel til {ns}."
 #. DNSSEC:IPV6_DISABLED
 #. NAMESERVER:IPV6_DISABLED
 #. SYNTAX:IPV6_DISABLED
+#. SYSTEM:SKIP_IPV6_DISABLED
 #, perl-brace-format
 msgid "IPv6 is disabled, not sending \"{rrtype}\" query to {ns}."
 msgstr "IPv6 er deaktiveret, udfører ikke \"{rrtype}\"-forespørgsel til {ns}."
@@ -244,24 +281,270 @@ msgstr "IPv6 er aktiveret, kan udføre \"{rrtype}\"-forespørgsel til {ns}."
 msgid "Nameserver {ns} did not return \"A\" record(s) for {domain}."
 msgstr "Navneserveren {ns} returnerede ikke nogle A-records for {domain}."
 
-#. BASIC:NO_GLUE_PREVENTS_NAMESERVER_TESTS
-msgid "No NS records for tested zone from parent. NS tests skipped."
-msgstr ""
-"Ingen NS-records for den testede zone fra forælderzonen. NS-test afbrydes."
-
 #. BASIC:NO_PARENT
 msgid "No parent domain could be found for the domain under test."
 msgstr "Ikke muligt at finde forælder-domænet for det testede domæne."
 
-#. BASIC:NS_FAILED
-#, perl-brace-format
-msgid "Nameserver {ns} did not return NS records. RCODE was {rcode}."
-msgstr "Navneserveren {ns} returnerede ikke NS-records. RCODE var {rcode}."
+#. CONNECTIVITY:CONNECTIVITY01
+msgid "UDP connectivity"
+msgstr "UDP forbindelse"
 
-#. BASIC:NS_NO_RESPONSE
+#. CONNECTIVITY:CONNECTIVITY02
+msgid "TCP connectivity"
+msgstr "TCP forbindelse"
+
+#. CONNECTIVITY:CONNECTIVITY03
+msgid "AS Diversity"
+msgstr "AS Diversitet"
+
+#. CONNECTIVITY:CONNECTIVITY04
+msgid "IP Prefix Diversity"
+msgstr "IP Prefix Diversitet"
+
+#. CONNECTIVITY:CN01_IPV4_DISABLED
 #, perl-brace-format
-msgid "Nameserver {ns} did not respond to NS query."
-msgstr "Navneserveren {ns} svarede ikke på en NS-forespørgsel."
+msgid ""
+"IPv4 is disabled. No DNS queries are sent to these name servers: "
+"\"{ns_list}\"."
+msgstr ""
+"IPv4 er deaktiveret. Ingen forespørgsler sendes til følgende navneserver: "
+"\"{ns_list}\"."
+
+#. CONNECTIVITY:CN01_IPV6_DISABLED
+#, perl-brace-format
+msgid ""
+"IPv6 is disabled. No DNS queries are sent to these name servers: "
+"\"{ns_list}\"."
+msgstr ""
+"IPv6 er deaktiveret. Ingen forespørgsler sendes til følgende navneserver: "
+"\"{ns_list}\"."
+
+#. CONNECTIVITY:CN01_MISSING_NS_RECORD_UDP
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responds to a NS query with no NS records in the answer "
+"section over UDP."
+msgstr ""
+"Navneserveren {ns} svarer på en NS-forespørgsel over UDP, men svaret "
+"indeholder ikke nogle NS-records."
+
+#. CONNECTIVITY:CN01_MISSING_SOA_RECORD_UDP
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responds to a SOA query with no SOA records in the answer "
+"section over UDP."
+msgstr ""
+"Navneserveren {ns} svarer på en SOA-forespørgsel over UDP, men svaret "
+"indeholder ikke nogle SOA-records."
+
+#. CONNECTIVITY:CN01_NO_RESPONSE_NS_QUERY_UDP
+#, perl-brace-format
+msgid "Nameserver {ns} does not respond to NS queries over UDP."
+msgstr "Navneserveren {ns} svarer ikke på NS-forespørgsler over UDP."
+
+#. CONNECTIVITY:CN01_NO_RESPONSE_SOA_QUERY_UDP
+#, perl-brace-format
+msgid "Nameserver {ns} does not respond to SOA queries over UDP."
+msgstr "Navneserveren {ns} svarer ikke på SOA-forespørgsler over UDP."
+
+#. CONNECTIVITY:CN01_NO_RESPONSE_UDP
+#, perl-brace-format
+msgid "Nameserver {ns} does not respond to any queries over UDP."
+msgstr "Navneserveren {ns} svarer ikke på ANY-forespørgsler over UDP."
+
+#. CONNECTIVITY:CN01_NS_RECORD_NOT_AA_UDP
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} does not give an authoritative response on an NS query over "
+"UDP."
+msgstr ""
+"Navneserveren {ns} returnerer ikke et autoritativt svar på en NS-forepørgsel "
+"over UDP."
+
+#. CONNECTIVITY:CN01_SOA_RECORD_NOT_AA_UDP
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} does not give an authoritative response on an SOA query over "
+"UDP."
+msgstr ""
+"Navneserveren {ns} returnerer ikke et autoritativt svar på en SOA-"
+"forepørgsel over UDP."
+
+#. CONNECTIVITY:CN01_UNEXPECTED_RCODE_NS_QUERY_UDP
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responds with an unexpected RCODE ({rcode}) on an NS query "
+"over UDP."
+msgstr ""
+"Navneserveren {ns} besvarede en NS-forespørgsel over UDP med en uventet "
+"RCODE ({rcode})."
+
+#. CONNECTIVITY:CN01_UNEXPECTED_RCODE_SOA_QUERY_UDP
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responds with an unexpected RCODE ({rcode}) on an SOA query "
+"over UDP."
+msgstr ""
+"Navneserveren {ns} besvarede en SOA-forespørgsel over UDP med en uventet "
+"RCODE ({rcode})."
+
+#. CONNECTIVITY:CN01_WRONG_NS_RECORD_UDP
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responds with a wrong owner name ({domain_found} instead of "
+"{domain_expected}) on NS queries over UDP."
+msgstr ""
+"Navneserveren {ns} svarede med et ugyldigt ejernavn ({domain_found} i stedet "
+"for {domain_expected}) på en NS-forespørgsel over UDP."
+
+#. CONNECTIVITY:CN01_WRONG_SOA_RECORD_UDP
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responds with a wrong owner name ({domain_found} instead of "
+"{domain_expected}) on SOA queries over UDP."
+msgstr ""
+"Navneserveren {ns} returnerede et ugyldigt ejernavn ({domain_found} i stedet "
+"for {domain_expected}) på en SOA-forespørgsel over UDP."
+
+#. CONNECTIVITY:CN02_MISSING_NS_RECORD_TCP
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responds to a NS query with no NS records in the answer "
+"section over TCP."
+msgstr ""
+"Navneserveren {ns} svarer på en NS-forespørgsel over TCP, men svaret "
+"indeholder ikke nogle NS-records."
+
+#. CONNECTIVITY:CN02_MISSING_SOA_RECORD_TCP
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responds to a SOA query with no SOA records in the answer "
+"section over TCP."
+msgstr ""
+"Navneserveren {ns} svarer på en SOA-forespørgsel over TCP, men svaret "
+"indeholder ikke nogle SOA-records."
+
+#. CONNECTIVITY:CN02_NO_RESPONSE_NS_QUERY_TCP
+#, perl-brace-format
+msgid "Nameserver {ns} does not respond to NS queries over TCP."
+msgstr "Navneserveren {ns} svarede ikke på NS-forespørgsler over TCP."
+
+#. CONNECTIVITY:CN02_NO_RESPONSE_SOA_QUERY_TCP
+#, perl-brace-format
+msgid "Nameserver {ns} does not respond to SOA queries over TCP."
+msgstr "Navneserveren {ns} svarede ikke på SOA-forespørgsler over TCP."
+
+#. CONNECTIVITY:CN02_NO_RESPONSE_TCP
+#, perl-brace-format
+msgid "Nameserver {ns} does not respond to any queries over TCP."
+msgstr "Navneserveren {ns} svarede ikke på ANY-forespørgsler over TCP."
+
+#. CONNECTIVITY:CN02_NS_RECORD_NOT_AA_TCP
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} does not give an authoritative response on an NS query over "
+"TCP."
+msgstr ""
+"Navneserveren {ns} svarede ikke autoritativt på en NS-forespørgsel over TCP"
+
+#. CONNECTIVITY:CN02_SOA_RECORD_NOT_AA_TCP
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} does not give an authoritative response on an SOA query over "
+"TCP."
+msgstr ""
+"Navneserveren {ns} svarede ikke autoritativt på en SOA-forespørgsel over TCP."
+
+#. CONNECTIVITY:CN02_UNEXPECTED_RCODE_NS_QUERY_TCP
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responds with an unexpected RCODE ({rcode}) on an NS query "
+"over TCP."
+msgstr ""
+"Navneserveren {ns} besvarede en NS-forespørgsel over TCP med en uventet "
+"RCODE ({rcode})."
+
+#. CONNECTIVITY:CN02_UNEXPECTED_RCODE_SOA_QUERY_TCP
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responds with an unexpected RCODE ({rcode}) on an SOA query "
+"over TCP."
+msgstr ""
+"Navneserveren {ns} besvarede en SOA-forespørgsel over TCP med en uventet "
+"RCODE ({rcode})."
+
+#. CONNECTIVITY:CN02_WRONG_NS_RECORD_TCP
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responds with a wrong owner name ({domain_found} instead of "
+"{domain_expected}) on NS queries over TCP."
+msgstr ""
+"Navneserveren {ns} svarede med et ugyldigt ejernavn ({domain_found} i stedet "
+"for {domain_expected}) på en NS-forespørgsel over TCP."
+
+#. CONNECTIVITY:CN02_WRONG_SOA_RECORD_TCP
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responds with a wrong owner name ({domain_found} instead of "
+"{domain_expected}) on SOA queries over TCP."
+msgstr ""
+"Navneserveren {ns} svarede med et ugyldigt ejernavn ({domain_found} i stedet "
+"for {domain_expected}) på en SOA-forespørgsel over TCP."
+
+#. CONNECTIVITY:ASN_INFOS_ANNOUNCE_IN
+#, perl-brace-format
+msgid "Name server IP address \"{ns_ip}\" is announced in prefix \"{prefix}\"."
+msgstr "Navneserver IP-adresse \"{ns_ip}\" annonceres i præfiks \"{prefix}\"."
+
+#. CONNECTIVITY:ASN_INFOS_RAW
+#, perl-brace-format
+msgid "The ASN data for name server IP address \"{ns_ip}\" is \"{data}\"."
+msgstr "ASN data for navneserveren med IP-adressen \"{ns_ip}\" is \"{data}\"."
+
+#. CONNECTIVITY:CN04_EMPTY_PREFIX_SET
+#, perl-brace-format
+msgid "Prefix database returned no information for IP address {ns_ip}."
+msgstr ""
+"Prefix database returnerede ingen informationer om IP-adressen {ns_ip}."
+
+#. CONNECTIVITY:CN04_ERROR_PREFIX_DATABASE
+#, perl-brace-format
+msgid "Prefix database error. No data to analyze for IP address {ns_ip}."
+msgstr "Prefix database fejl. Ingen data at analysere for {ns_ip}."
+
+#. CONNECTIVITY:CN04_IPV4_SAME_PREFIX
+#, perl-brace-format
+msgid ""
+"The following name server(s) are announced in the same IPv4 prefix "
+"({ip_prefix}): \"{ns_list}\""
+msgstr ""
+"De følgende navneservere er annonceret i samme IPv4 prefix  ({ip_prefix}): "
+"\"{ns_list}\""
+
+#. CONNECTIVITY:CN04_IPV4_DIFFERENT_PREFIX
+#, perl-brace-format
+msgid ""
+"The following name server(s) are announced in unique IPv4 prefix(es): "
+"\"{ns_list}\""
+msgstr ""
+"De følgende navneservere er annonceret i unikke IPv4 prefixer: \"{ns_list}\""
+
+#. CONNECTIVITY:CN04_IPV6_SAME_PREFIX
+#, perl-brace-format
+msgid ""
+"The following name server(s) are announced in the same IPv6 prefix "
+"({ip_prefix}): \"{ns_list}\""
+msgstr ""
+"De følgende navneservere er annonceret i samme IPv6 prefix  ({ip_prefix}): "
+"\"{ns_list}\""
+
+#. CONNECTIVITY:CN04_IPV6_DIFFERENT_PREFIX
+#, perl-brace-format
+msgid ""
+"The following name server(s) are announced in unique IPv6 prefix(es): "
+"\"{ns_list}\""
+msgstr ""
+"De følgende navneservere er annonceret i unikke IPv6 prefixer: \"{ns_list}\""
 
 #. CONNECTIVITY:ERROR_ASN_DATABASE
 #, perl-brace-format
@@ -276,22 +559,26 @@ msgstr "AS database returnerede ingen informationer om IP-adressen {ns_ip}."
 #. CONNECTIVITY:IPV4_SAME_ASN
 #, perl-brace-format
 msgid ""
-"All authoritative nameservers have the IPv4 addresses in the same AS set "
+"All authoritative nameservers have their IPv4 addresses in the same AS set "
 "({asn_list})."
 msgstr ""
-"Alle autoritative navneservere har IPv4-adresser i samme AS sæt ({asn_list})."
+"Alle autoritative navneservere har deres IPv4-adresser i samme AS sæt "
+"({asn_list})."
 
 #. CONNECTIVITY:IPV4_ONE_ASN
 #, perl-brace-format
 msgid ""
-"All authoritative nameservers have the IPv4 addresses in the same AS ({asn})."
-msgstr "Alle autoritative navneservere har IPv4-adresser i samme AS ({asn})."
+"All authoritative nameservers have their IPv4 addresses in the same AS "
+"({asn})."
+msgstr ""
+"Alle autoritative navneservere har deres IPv4-adresser i det samme AS "
+"({asn})."
 
 #. CONNECTIVITY:IPV4_DIFFERENT_ASN
 #, perl-brace-format
 msgid ""
-"At least two IPv4 addresses of the authoritative nameservers are announce by "
-"different AS sets. A merged list of all AS: ({asn_list})."
+"At least two IPv4 addresses of the authoritative nameservers are announced "
+"by different AS sets. A merged list of all AS: ({asn_list})."
 msgstr ""
 "Mindst to IPv4-adresser bag den autoritative navneserver annonceres af "
 "forskellige AS sæt. En kombineret liste af alle AS'er: ({asn_list})."
@@ -299,45 +586,28 @@ msgstr ""
 #. CONNECTIVITY:IPV6_SAME_ASN
 #, perl-brace-format
 msgid ""
-"All authoritative nameservers have the IPv6 addresses in the same AS set "
+"All authoritative nameservers have their IPv6 addresses in the same AS set "
 "({asn_list})."
 msgstr ""
-"Alle autoritative navneservere har IPv6-adresser samme AS sæt ({asn_list})."
+"Alle autoritative navneservere har IPv6-adresser i det samme AS sæt "
+"({asn_list})."
 
 #. CONNECTIVITY:IPV6_ONE_ASN
 #, perl-brace-format
 msgid ""
-"All authoritative nameservers have the IPv6 addresses in the same AS ({asn})."
-msgstr "Alle autoritative navneservere har IPv6-adresser i samme AS ({asn})."
+"All authoritative nameservers have their IPv6 addresses in the same AS "
+"({asn})."
+msgstr ""
+"Alle autoritative navneservere har IPv6-adresser i det samme AS ({asn})."
 
 #. CONNECTIVITY:IPV6_DIFFERENT_ASN
 #, perl-brace-format
 msgid ""
-"At least two IPv6 addresses of the authoritative nameservers are announce by "
-"different AS sets. A merged list of all AS: ({asn_list})."
+"At least two IPv6 addresses of the authoritative nameservers are announced "
+"by different AS sets. A merged list of all AS: ({asn_list})."
 msgstr ""
 "Mindst to IPv6-adresser bag den autoritative navneserver annonceres af "
 "forskellige AS sæt. En kombineret liste af alle AS'er: ({asn_list})."
-
-#. CONNECTIVITY:NAMESERVER_HAS_TCP_53
-#, perl-brace-format
-msgid "Nameserver {ns} accessible over TCP on port 53."
-msgstr "Navneserveren {ns} er tilgængelig over TCP port 53."
-
-#. CONNECTIVITY:NAMESERVER_HAS_UDP_53
-#, perl-brace-format
-msgid "Nameserver {ns} accessible over UDP on port 53."
-msgstr "Navneserveren {ns} er tilgængelig over UDP port 53."
-
-#. CONNECTIVITY:NAMESERVER_NO_TCP_53
-#, perl-brace-format
-msgid "Nameserver {ns} not accessible over TCP on port 53."
-msgstr "Navneserveren {ns} er ikke tilgængelig over TCP port 53."
-
-#. CONNECTIVITY:NAMESERVER_NO_UDP_53
-#, perl-brace-format
-msgid "Nameserver {ns} not accessible over UDP on port 53."
-msgstr "Navneserveren {ns} er ikke tilgængelig over UDP port 53."
 
 #. CONNECTIVITY:IPV4_ASN
 #, perl-brace-format
@@ -349,24 +619,38 @@ msgstr "Navneserverne har IPv4-adresser i følgende AS'er: {asn}."
 msgid "Name servers have IPv6 addresses in the following ASs: {asn}."
 msgstr "Navneserverne har IPv6-adresser i følgende AS: {asn}."
 
-#. CONNECTIVITY:ASN_INFOS_RAW
-#, perl-brace-format
-msgid "The ASN data for name server IP address \"{ns_ip}\" is \"{data}\"."
-msgstr "ASN data for navneserveren med IP-adressen \"{ns_ip}\" is \"{data}\"."
-
 #. CONNECTIVITY:ASN_INFOS_ANNOUNCE_BY
 #, perl-brace-format
 msgid "Name server IP address \"{ns_ip}\" is announced by ASN {asn}."
 msgstr "Navneserver IP-adresse \"{ns_ip}\" annonceres af AS {asn}."
 
-#. CONNECTIVITY:ASN_INFOS_ANNOUNCE_IN
-#, perl-brace-format
-msgid "Name server IP address \"{ns_ip}\" is announced in prefix \"{prefix}\"."
-msgstr "Navneserver IP-adresse \"{ns_ip}\" annonceres i præfiks \"{prefix}\"."
+#. CONSISTENCY:CONSISTENCY01
+msgid "SOA serial number consistency"
+msgstr "SOA serienummer konsistens"
+
+#. CONSISTENCY:CONSISTENCY02
+msgid "SOA RNAME consistency"
+msgstr "SOA RNAME konsistens"
+
+#. CONSISTENCY:CONSISTENCY03
+msgid "SOA timers consistency"
+msgstr "SOA timere konsistens"
+
+#. CONSISTENCY:CONSISTENCY04
+msgid "Name server NS consistency"
+msgstr "Navneserver NS konsistens"
+
+#. CONSISTENCY:CONSISTENCY05
+msgid "Consistency between glue and authoritative data"
+msgstr "Konsistens mellem glue-record og autoritativ data"
+
+#. CONSISTENCY:CONSISTENCY06
+msgid "SOA MNAME consistency"
+msgstr "SOA MNAME konsistens"
 
 #. CONSISTENCY:ADDRESSES_MATCH
 msgid "Glue records are consistent between glue and authoritative data."
-msgstr "Glue-records er konsistente mellem forælder og barn."
+msgstr "Glue-record-konsistens mellem glue-record og autoritativ data."
 
 #. CONSISTENCY:CHILD_NS_FAILED
 #, perl-brace-format
@@ -514,6 +798,78 @@ msgstr ""
 "Så dette SOA-tidsparametersæt (REFRESH={refresh}, RETRY={retry}, "
 "EXPIRE={expire}, MINIMUM={minimum}) på følgende navneservere : {ns_list}."
 
+#. DNSSEC:DNSSEC01
+msgid "Legal values for the DS hash digest algorithm"
+msgstr "Lovlige værdier for DS hash digest algoritme"
+
+#. DNSSEC:DNSSEC02
+msgid "DS must match a valid DNSKEY in the child zone"
+msgstr "DS skal matche en gyldig DNSKEY i børnezonen"
+
+#. DNSSEC:DNSSEC03
+msgid "Check for too many NSEC3 iterations"
+msgstr "Undersøg om der er for mange NSEC3 iterationer"
+
+#. DNSSEC:DNSSEC04
+msgid "Check for too short or too long RRSIG lifetimes"
+msgstr "Undersøg om RRSIG levetider er for korte eller lange"
+
+#. DNSSEC:DNSSEC05
+msgid "Check for invalid DNSKEY algorithms"
+msgstr "Undersøg om DNSKEY algoritmer er ulovlige"
+
+#. DNSSEC:DNSSEC06
+msgid "Verify DNSSEC additional processing"
+msgstr "Valider yderligere DNSSEC behandling"
+
+#. DNSSEC:DNSSEC07
+msgid "If DNSKEY at child, parent should have DS"
+msgstr "Hvis DNSKEY hos barnet, skal forælderen have en DS"
+
+#. DNSSEC:DNSSEC08
+msgid "Valid RRSIG for DNSKEY"
+msgstr "Valider RRSIG for DNSKEY"
+
+#. DNSSEC:DNSSEC09
+msgid "RRSIG(SOA) must be valid and created by a valid DNSKEY"
+msgstr "RRSIG(SOA) skal være gyldig og oprettet af en gyldig DNSKEY"
+
+#. DNSSEC:DNSSEC10
+msgid "Zone contains NSEC or NSEC3 records"
+msgstr "Zonen indeholder NSEC eller NSEC3 records"
+
+#. DNSSEC:DNSSEC11
+msgid "DS in delegation requires signed zone"
+msgstr "DS i delegation kræver en signeret zone"
+
+#. DNSSEC:DNSSEC12
+msgid "Test for DNSSEC Algorithm Completeness"
+msgstr "Test af DNSSEC-algoritmens fuldstændighed"
+
+#. DNSSEC:DNSSEC13
+msgid "All DNSKEY algorithms used to sign the zone"
+msgstr "Alle DNSKEY algoritmer brugt til at signere zonen"
+
+#. DNSSEC:DNSSEC14
+msgid "Check for valid RSA DNSKEY key size"
+msgstr "Undersøg om RSA DNSKEY nøglestørrelse er gyldig"
+
+#. DNSSEC:DNSSEC15
+msgid "Existence of CDS and CDNSKEY"
+msgstr "Eksistens af CDS og CDNSKEY"
+
+#. DNSSEC:DNSSEC16
+msgid "Validate CDS"
+msgstr "Valider CDS"
+
+#. DNSSEC:DNSSEC17
+msgid "Validate CDNSKEY"
+msgstr "Valider CDNSKEY"
+
+#. DNSSEC:DNSSEC18
+msgid "Validate trust from DS to CDS and CDNSKEY "
+msgstr "Valider tillid fra DS to CDS and CDNSKEY "
+
 #. DNSSEC:ADDITIONAL_DNSKEY_SKIPPED
 msgid "No DNSKEYs found. Additional tests skipped."
 msgstr "Ingen DNSKEY-records fundet. Yderligere tests ignoreret."
@@ -648,9 +1004,12 @@ msgstr ""
 
 #. DNSSEC:DS01_DS_ALGO_2_MISSING
 #, perl-brace-format
-msgid "Digest algorithm 2 (SHA-256) is expected but missing for zone {domain}."
+msgid ""
+"No DS record created by digest algorithm 2 (SHA-256) is present for zone "
+"{domain}."
 msgstr ""
-"Digest algoritme 2 (SHA-256) er forventet, men mangler for zonen {domain}."
+"Ingen DS-record oprettet af digest algoritme 2 (SHA-256) er tilstede for "
+"zonen {domain}."
 
 #. DNSSEC:DS01_DS_ALGO_NOT_DS
 #, perl-brace-format
@@ -673,18 +1032,6 @@ msgstr ""
 "DS-recorden for zonen {domain} med tag {keytag} benytter en ikke tildelt "
 "digest algoritme (algoritme nummer {ds_algo_num}). Fundet på navneserverne "
 "med IP-adresserne \"{ns_ip_list}\"."
-
-#. DNSSEC:DS01_DS_ALGO_SHA1_DEPRECATED
-#, perl-brace-format
-msgid ""
-"DS record for zone {domain} with keytag {keytag} was created by digest "
-"algorithm {ds_algo_num} ({ds_algo_mnemo}). While still being widely in use, "
-"it is deprecated. Fetched from the nameservers with IP addresses "
-"\"{ns_ip_list}\"."
-msgstr ""
-"DS-recorden for zonen {domain} med tag {keytag} benytter algoritmen "
-"{ds_algo_num} ({ds_algo_mnemo}), der er meget benyttet, men forældet. Fundet "
-"på navneserverne med IP-adresserne \"{ns_ip_list}\"."
 
 #. DNSSEC:DS02_ALGO_NOT_SUPPORTED_BY_ZM
 #. DNSSEC:DS08_ALGO_NOT_SUPPORTED_BY_ZM
@@ -722,6 +1069,15 @@ msgstr ""
 "trods af, at DS med samme tag er tilstede hos forælderen. Fundet på "
 "navneserverne med IP-adresserne \"{ns_ip_list}\"."
 
+#. DNSSEC:DS02_DNSKEY_NOT_SIGNED_BY_ANY_DS
+#, perl-brace-format
+msgid ""
+"The DNSKEY RRset has not been signed by any DNSKEY matched by a DS record. "
+"Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"DNSKEY RR-sættet er ikke signeret af en DNSKEY-record, der matches af en DS-"
+"record. Fundet på navneserverne med IP-adresserne \"{ns_ip_list}\"."
+
 #. DNSSEC:DS02_NO_DNSKEY_FOR_DS
 #, perl-brace-format
 msgid ""
@@ -748,6 +1104,15 @@ msgid ""
 "digest. Fetched from the nameservers with IP \"{ns_ip_list}\"."
 msgstr ""
 "DS-recorden matcher ikke nogen DNSKEY-record med tag {keytag}. Fundet på "
+"navneserverne med IP-adresserne \"{ns_ip_list}\"."
+
+#. DNSSEC:DS02_NO_VALID_DNSKEY_FOR_ANY_DS
+#, perl-brace-format
+msgid ""
+"There is no valid DNSKEY matched by any of the DS records. Fetched from the "
+"nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"Der findes ikke nogen gyldig DNSKEY, der matches af en DS-records. Fundet på "
 "navneserverne med IP-adresserne \"{ns_ip_list}\"."
 
 #. DNSSEC:DS02_RRSIG_NOT_VALID_BY_DNSKEY
@@ -1477,6 +1842,34 @@ msgstr ""
 "Antallet af NSEC3-iterationer er {count}, hvilket er for højt for "
 "nøglelængden {keylength}."
 
+#. DELEGATION:DELEGATION01
+msgid "Minimum number of name servers"
+msgstr "Minimum antal navneservere"
+
+#. DELEGATION:DELEGATION02
+msgid "Name servers must have distinct IP addresses"
+msgstr "Navneserverne skal have distinkte IP-adresser"
+
+#. DELEGATION:DELEGATION03
+msgid "No truncation of referrals"
+msgstr "Ingen afkortning af henvisninger"
+
+#. DELEGATION:DELEGATION04
+msgid "Name server is authoritative"
+msgstr "Navneserveren er autoritativ."
+
+#. DELEGATION:DELEGATION05
+msgid "Name server must not point at CNAME alias"
+msgstr "Navneserveren må ikke pege på et CNAME-alias."
+
+#. DELEGATION:DELEGATION06
+msgid "Existence of SOA"
+msgstr "Eksistens af SOA"
+
+#. DELEGATION:DELEGATION07
+msgid "Parent glue name records present in child"
+msgstr "Glue-record navn hos forælderen findes hos barnet"
+
 #. DELEGATION:ARE_AUTHORITATIVE
 #, perl-brace-format
 msgid ""
@@ -1734,6 +2127,67 @@ msgid "Nameserver {ns} answered query with an unexpected rcode ({rcode})."
 msgstr ""
 "Navneserveren {ns} besvarede A-forespørgsel med en uventet RCODE ({rcode})."
 
+#. NAMESERVER:NAMESERVER01
+msgid "A name server should not be a recursor"
+msgstr "En navneserver bør ikke være rekursiv."
+
+#. NAMESERVER:NAMESERVER02
+msgid "Test of EDNS0 support"
+msgstr "Test af EDNS0 support"
+
+#. NAMESERVER:NAMESERVER03
+msgid "Test availability of zone transfer (AXFR)"
+msgstr "Test af tilgængelighed af zoneoverførsler (AXFR)"
+
+#. NAMESERVER:NAMESERVER04
+msgid "Same source address"
+msgstr "Samme kildeadresse"
+
+#. NAMESERVER:NAMESERVER05
+msgid "Behaviour against AAAA query"
+msgstr "Opførsel imod AAAA-forespørgsel"
+
+#. NAMESERVER:NAMESERVER06
+msgid "NS can be resolved"
+msgstr "NS kan ikke opløses"
+
+#. NAMESERVER:NAMESERVER07
+msgid "To check whether authoritative name servers return an upward referral"
+msgstr ""
+"Undersøg om de autoritative navneservere returnerede en opadgående henvisning"
+
+#. NAMESERVER:NAMESERVER08
+msgid "Testing QNAME case insensitivity"
+msgstr "Tester QNAME-ufølsomhed overfor store og små bogstaver"
+
+#. NAMESERVER:NAMESERVER09
+msgid "Testing QNAME case sensitivity"
+msgstr "Tester QNAME-følsomhed overfor store og små bogstaver"
+
+#. NAMESERVER:NAMESERVER10
+msgid "Test for undefined EDNS version"
+msgstr "Undersøger for udefineret EDNS version"
+
+#. NAMESERVER:NAMESERVER11
+msgid "Test for unknown EDNS OPTION-CODE"
+msgstr "Undersøger for udefineret ENDS OPTION-CODE."
+
+#. NAMESERVER:NAMESERVER12
+msgid "Test for unknown EDNS flags"
+msgstr "Undersøger for ukendt EDNS-flag"
+
+#. NAMESERVER:NAMESERVER13
+msgid "Test for truncated response on EDNS query"
+msgstr "Undersøger for afkortet svar på EDNS-forespørgsel"
+
+#. NAMESERVER:NAMESERVER14
+msgid "Test for unknown version with unknown OPTION-CODE"
+msgstr "Tester for ukendt version med ukendt OPTION-CODE."
+
+#. NAMESERVER:NAMESERVER15
+msgid "Checking for revealed software version"
+msgstr "Kontrollerer for afsløret softwareversion"
+
 #. NAMESERVER:AAAA_BAD_RDATA
 #, perl-brace-format
 msgid ""
@@ -1935,7 +2389,16 @@ msgstr ""
 msgid "Erroneous response from nameserver {ns}."
 msgstr "Fejlagtigt svar fra navneserver {ns}."
 
-#. N10_NO_RESPONSE_EDNS1_QUERY
+#. NAMESERVER:N10_EDNS_RESPONSE_ERROR
+#, perl-brace-format
+msgid ""
+"Expected RCODE but received erroneous response to an EDNS version 1 query. "
+"Fetched from the nameservers with IP addresses {ns_ip_list}"
+msgstr ""
+"RCODE forventet, men modtog fejlbehæftet svar på EDNS version 1 "
+"forespørgsel. Fundet på navneserverne med IP-adresserne \"{ns_ip_list}\"."
+
+#. NAMESERVER:N10_NO_RESPONSE_EDNS1_QUERY
 #, perl-brace-format
 msgid ""
 "No response to an EDNS version 1 query. Fetched from the nameservers with IP "
@@ -1944,7 +2407,7 @@ msgstr ""
 "Manglende svar på EDNS version 1 forespørgsel. Fundet på navneserverne med "
 "IP-adresserne \"{ns_ip_list}\"."
 
-#. N10_UNEXPECTED_RCODE
+#. NAMESERVER:N10_UNEXPECTED_RCODE
 #, perl-brace-format
 msgid ""
 "Erroneous RCODE (\"{rcode}\") in response to an EDNS version 1 query. "
@@ -1953,14 +2416,80 @@ msgstr ""
 "Fejlbehæftet RCODE (\"{rcode}\") på EDNS version 1 forespørgsel. Fundet på "
 "navneserverne med IP-adresserne \"{ns_ip_list}\"."
 
-#. N10_EDNS_RESPONSE_ERROR
+#. NAMESERVER:N11_N11_NO_EDNS
 #, perl-brace-format
 msgid ""
-"Expected RCODE but received erroneous response to an EDNS version 1 query. "
-"Fetched from the nameservers with IP addresses {ns_ip_list}"
+"The DNS response, on query with unknown EDNS option-code, does not contain "
+"any EDNS from name servers \"{ns_ip_list}\"."
 msgstr ""
-"RCODE forventet, men modtog fejlbehæftet svar på EDNS version 1 "
-"forespørgsel. Fundet på navneserverne med IP-adresserne \"{ns_ip_list}\"."
+"Svaret på DNS-forespørgsel på ukendt EDNS option-code, indeholder ikke nogen "
+"EDNS fra navneserverne \"{ns_ip_list}\"."
+
+#. NAMESERVER:N11_NO_RESPONSE
+#, perl-brace-format
+msgid ""
+"There is no response on query with unknown EDNS option-code from name "
+"servers \"{ns_ip_list}\"."
+msgstr ""
+"Intet svar på DNS-forespørgsel på ukendt EDNS option-code, fra navneserverne "
+"\"{ns_ip_list}\"."
+
+#. NAMESERVER:N11_RETURNS_UNKNOWN_OPTION_CODE
+#, perl-brace-format
+msgid ""
+"The DNS response contains an unknown EDNS option-code. Returned from name "
+"servers \"{ns_ip_list}\"."
+msgstr ""
+"Svaret på DNS-forespøgslen indeholder ukendt EDNS option-code. Fundet på "
+"navneserverne \"{ns_ip_list}\"."
+
+#. NAMESERVER:N11_UNEXPECTED_ANSWER_SECTION
+#, perl-brace-format
+msgid ""
+"The DNS response, on query with unknown EDNS option-code, does not contain "
+"the expected SOA record in the answer section from name servers "
+"\"{ns_ip_list}\"."
+msgstr ""
+"Svaret på DNS-forespøgslen med ukendt EDNS option-code indeholder ikke den "
+"forventede SOA-record i svarsektionen fra navneserverne \"{ns_ip_list}\"."
+
+#. NAMESERVER:N11_UNEXPECTED_RCODE
+#, perl-brace-format
+msgid ""
+"The DNS response, on query with unknown EDNS option-code, has unexpected "
+"RCODE name \"{rcode}\" from name servers \"{ns_ip_list}\"."
+msgstr ""
+"Svaret på DNS-forespøgslen med ukendt EDNS option-code har uventet RCODE-"
+"navn \"{rcode}\" from navneserverne \"{ns_ip_list}\"."
+
+#. NAMESERVER:N11_UNSET_AA
+#, perl-brace-format
+msgid ""
+"The DNS response, on query with unknown EDNS option-code, is unexpectedly "
+"not authoritative from name servers \"{ns_ip_list}\"."
+msgstr ""
+"Svaret på DNS-forespøgslen med ukendt EDNS option-code er ikke som forventet "
+"autoritativt fra navneserverne \"{ns_ip_list}\"."
+
+#. NAMESERVER:N15_NO_VERSION
+#, perl-brace-format
+msgid ""
+"The following name server(s) do not respond to software version queries. "
+"Returned from name servers: \"{ns_ip_list}\""
+msgstr ""
+"De følgende navneservere svarer ikke på forespørgsler om software-version. "
+"Returneret fra navneserverne: \"{ns_ip_list}\""
+
+#. NAMESERVER:N15_SOFTWARE_VERSION
+#, perl-brace-format
+msgid ""
+"The following name server(s) respond to software version query "
+"\"{query_name}\" with string \"{string}\". Returned from name servers: "
+"\"{ns_ip_list}\""
+msgstr ""
+"De følgende navneservere svare på forespørgsel om software-version "
+"\"{query_name}\" med strengen \"{string}\". Returneret fra navneserverne: "
+"\"{ns_ip_list}\""
 
 #. NAMESERVER:QNAME_CASE_INSENSITIVE
 #, perl-brace-format
@@ -1982,11 +2511,6 @@ msgstr ""
 msgid "All nameservers reply with same IP used to query them."
 msgstr "Alle navneservere svarede fra samme IP-adresse som de blev spurgt på."
 
-#. NAMESERVER:UNKNOWN_OPTION_CODE
-#, perl-brace-format
-msgid "Nameserver {ns} responds with an unknown ENDS OPTION-CODE."
-msgstr "Navneserveren {ns} returnerede en ukendt ENDS OPTION-CODE."
-
 #. NAMESERVER:UPWARD_REFERRAL
 #, perl-brace-format
 msgid "Nameserver {ns} returns an upward referral."
@@ -2000,6 +2524,40 @@ msgstr "Opadgående test af henvisninger springes over for root-zonen."
 #, perl-brace-format
 msgid "Nameserver {ns} has one or more unknown EDNS Z flag bits set."
 msgstr "Navneserveren {ns} har et eller flere EDNS Z flag bits sat."
+
+#. SYNTAX:SYNTAX01
+msgid "No illegal characters in the domain name"
+msgstr "Ingen ulovlige tegn i domænenavnet"
+
+#. SYNTAX:SYNTAX02
+msgid "No hyphen ('-') at the start or end of the domain name"
+msgstr "Ingen bindestreg ('-') i begyndelsen eller slutningen af domænenavnet"
+
+#. SYNTAX:SYNTAX03
+msgid ""
+"There must be no double hyphen ('--') in position 3 and 4 of the domain name"
+msgstr ""
+"Der må ikke være to bindestreger ('--') i position 3 og 4 i domænenavnet"
+
+#. SYNTAX:SYNTAX04
+msgid "The NS name must have a valid domain/hostname"
+msgstr "NS-navnet skal have et gyldigt domæne/hostnavn"
+
+#. SYNTAX:SYNTAX05
+msgid "Misuse of '@' character in the SOA RNAME field"
+msgstr "Misbrug af '@'-tegnet i SOA RNAME feltet."
+
+#. SYNTAX:SYNTAX06
+msgid "No illegal characters in the SOA RNAME field"
+msgstr "Ingen ulovlige tegn i SOA RNAME feltet."
+
+#. SYNTAX:SYNTAX07
+msgid "No illegal characters in the SOA MNAME field"
+msgstr "Ingen ulovlige tegn i SOA MNAME feltet."
+
+#. SYNTAX:SYNTAX08
+msgid "MX name must have a valid hostname"
+msgstr "MX-navnet skal have et gyldigt hostnavn"
 
 #. SYNTAX:DISCOURAGED_DOUBLE_DASH
 #, perl-brace-format
@@ -2180,6 +2738,46 @@ msgid ""
 msgstr ""
 "Domænenavnet ({domain}) har en label ({label}) som slutter med en bindestreg."
 
+#. ZONE:ZONE01
+msgid "Fully qualified master nameserver in SOA"
+msgstr "Fuldt kvalificeret primær navneserver i SOA"
+
+#. ZONE:ZONE02
+msgid "SOA 'refresh' minimum value"
+msgstr "SOA 'refresh' minimumsværdi"
+
+#. ZONE:ZONE03
+msgid "SOA 'retry' lower than 'refresh'"
+msgstr "SOA 'retry' mindre end 'refresh'"
+
+#. ZONE:ZONE04
+msgid "SOA 'retry' at least 1 hour"
+msgstr "SOA 'retry' mindst 1 time"
+
+#. ZONE:ZONE05
+msgid "SOA 'expire' minimum value"
+msgstr "SOA 'expire' minimumsværdi"
+
+#. ZONE:ZONE06
+msgid "SOA 'minimum' maximum value"
+msgstr "SOA 'minimum' maksimumsværdi"
+
+#. ZONE:ZONE07
+msgid "SOA master is not an alias"
+msgstr "SOA primær er ikke et alias"
+
+#. ZONE:ZONE08
+msgid "MX is not an alias"
+msgstr "MX er ikke et alias"
+
+#. ZONE:ZONE09
+msgid "MX record present"
+msgstr "MX-record tilstede"
+
+#. ZONE:ZONE10
+msgid "No multiple SOA records"
+msgstr "Ingen multiple SOA-records"
+
 #. ZONE:RETRY_MINIMUM_VALUE_LOWER
 #, perl-brace-format
 msgid ""
@@ -2192,16 +2790,11 @@ msgstr ""
 #. ZONE:RETRY_MINIMUM_VALUE_OK
 #, perl-brace-format
 msgid ""
-"SOA 'retry' value ({retry}) is more than the minimum recommended value "
-"({required_retry})."
+"SOA 'retry' value ({retry}) is at least equal to the minimum recommended "
+"value ({required_retry})."
 msgstr ""
 "SOA 'retry'-værdi ({retry}) er større end den anbefalede minimumsværdi "
 "({required_retry})."
-
-#. ZONE:MNAME_NO_RESPONSE
-#, perl-brace-format
-msgid "SOA 'mname' nameserver {ns} does not respond."
-msgstr "Navneserveren i SOA 'MNAME' ({ns}) svarer ikke."
 
 #. ZONE:MNAME_IS_CNAME
 #, perl-brace-format
@@ -2215,16 +2808,6 @@ msgid ""
 "SOA 'mname' value ({mname}) refers to a NS which is not an alias (CNAME)."
 msgstr "SOA MNAME {mname} refererer ikke til et alias (CNAME)."
 
-#. ZONE:NO_MX_RECORD
-msgid "No target (MX, A or AAAA record) to deliver e-mail for the domain name."
-msgstr ""
-"Manglende RR til levering af e-mail (MX-, A- eller AAAA-record) for domænet."
-
-#. ZONE:MX_RECORD_EXISTS
-#, perl-brace-format
-msgid "MX with mail target ({mailtarget_list}) exists for the domain name."
-msgstr "MX med serverne ({mailtarget_list}) findes for domænenavnet."
-
 #. ZONE:REFRESH_MINIMUM_VALUE_LOWER
 #, perl-brace-format
 msgid ""
@@ -2237,11 +2820,11 @@ msgstr ""
 #. ZONE:REFRESH_MINIMUM_VALUE_OK
 #, perl-brace-format
 msgid ""
-"SOA 'refresh' value ({refresh}) is higher than the minimum recommended value "
-"({required_refresh})."
+"SOA 'refresh' value ({refresh}) is at least equal to the minimum recommended "
+"value ({required_refresh})."
 msgstr ""
-"SOA 'refresh'-værdi ({refresh}) er større end den anbefalede minimumsværdi "
-"({required_refresh})."
+"SOA 'refresh'-værdi ({refresh}) er større end eller lig den anbefalede "
+"minimumsværdi ({required_refresh})."
 
 #. ZONE:EXPIRE_LOWER_THAN_REFRESH
 #, perl-brace-format
@@ -2279,15 +2862,6 @@ msgstr ""
 "SOA 'minimum' værdi ({minimum}) er i det anbefalede område ({lowest_minimum}/"
 "{highest_minimum})."
 
-#. ZONE:MNAME_NOT_AUTHORITATIVE
-#, perl-brace-format
-msgid "SOA 'mname' nameserver {ns} is not authoritative for '{zone}' zone."
-msgstr "SOA 'MNAME' ({ns}) er ikke autoritativ for zonen '{zone}'."
-
-#. ZONE:MNAME_RECORD_DOES_NOT_EXIST
-msgid "SOA 'mname' field does not exist"
-msgstr "'MNAME'-feltet i SOA-recorden er tomt."
-
 #. ZONE:EXPIRE_MINIMUM_VALUE_LOWER
 #, perl-brace-format
 msgid ""
@@ -2296,15 +2870,6 @@ msgid ""
 msgstr ""
 "Værdien for SOA 'expire' ({expire}) er mindre end anbefalet "
 "({required_expire})."
-
-#. ZONE:MNAME_NOT_IN_GLUE
-#, perl-brace-format
-msgid ""
-"SOA 'mname' nameserver ({mname}) is not listed in \"parent\" NS records for "
-"tested zone ({ns_list})."
-msgstr ""
-"SOA 'MNAME' navneserver ({mname}) er ikke returneret i \"forældre\" NS "
-"records for den testede zone ({ns_list})."
 
 #. ZONE:REFRESH_LOWER_THAN_RETRY
 #, perl-brace-format
@@ -2330,11 +2895,6 @@ msgstr "Domænets MX-record refererer til et alias (CNAME)."
 #. ZONE:MX_RECORD_IS_NOT_CNAME
 msgid "MX record for the domain is not pointing to a CNAME."
 msgstr "MX-record for domænenavnet peger ikke på et alias (CNAME)."
-
-#. ZONE:MNAME_IS_AUTHORITATIVE
-#, perl-brace-format
-msgid "SOA 'mname' nameserver ({mname}) is authoritative for '{zone}' zone."
-msgstr "SOA 'MNAME'-navneserveren ({mname}) er autoritativ for zonen '{zone}'."
 
 #. ZONE:MULTIPLE_SOA
 #, perl-brace-format
@@ -2369,6 +2929,169 @@ msgid ""
 msgstr ""
 "SOA 'expire' værdi ({expire}) er højere end den anbefalede minimumsværdi "
 "({required_expire}) og ikke mindre end 'refresh' værdi ({refresh})."
+
+#. ZONE:WRONG_SOA
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responds with a wrong owner name ({owner} instead of {name}) "
+"on SOA queries."
+msgstr ""
+"Navneserveren {ns} returnerede et ugyldigt ejernavn ({owner} i stedet for "
+"{name}) på SOA forespørgsler."
+
+#. ZONE:Z01_MNAME_HAS_LOCALHOST_ADDR
+#, perl-brace-format
+msgid ""
+"SOA MNAME name server \"{nsname}\" resolves to a localhost IP address "
+"({ns_ip})."
+msgstr ""
+"SOA MNAME navneserver \"{nsname}\" opløses til en localhost IP-adresse "
+"({ns_ip})."
+
+#. ZONE:Z01_MNAME_IS_DOT
+#, perl-brace-format
+msgid ""
+"SOA MNAME is specified as \".\" which usually means \"no server\". Fetched "
+"from name servers \"{ns_ip_list}\"."
+msgstr ""
+"SOA MNAME er specificeret som \".\" hvilket normalt betyder \"no server\". "
+"Fundet på navneserverne \"{ns_ip_list}\"."
+
+#. ZONE:Z01_MNAME_IS_LOCALHOST
+#, perl-brace-format
+msgid ""
+"SOA MNAME name server is \"localhost\", which is invalid. Fetched from name "
+"servers \"{ns_ip_list}\"."
+msgstr ""
+"SOA MNAME navneserver er \"localhost\", hvilket er ygyldigt. Fundet på "
+"navneserverne \"{ns_ip_list}\"."
+
+#. ZONE:Z01_MNAME_IS_MASTER
+#, perl-brace-format
+msgid "SOA MNAME name server(s) \"{ns_list}\" appears to be master."
+msgstr "SOA MNAME navneserverne \"{ns_list}\" ser ud til at være primær(e)."
+
+#. ZONE:Z01_MNAME_MISSING_SOA_RECORD
+#, perl-brace-format
+msgid ""
+"SOA MNAME name server \"{ns}\" responds to an SOA query with no SOA records "
+"in the answer section."
+msgstr ""
+"SOA MNAME navneserver \"{ns}\" svarer ikke nogle SOA-records i svarsektionen "
+"på en SOA-forespørgsel."
+
+#. ZONE:Z01_MNAME_NO_RESPONSE
+#, perl-brace-format
+msgid "SOA MNAME name server \"{ns}\" does not respond to an SOA query."
+msgstr "SOA MNAME navneserver \"{ns}\" svarer ikke på SOA-forespørgsel."
+
+#. ZONE:Z01_MNAME_NOT_AUTHORITATIVE
+#, perl-brace-format
+msgid "SOA MNAME name server \"{ns}\" is not authoritative for the zone."
+msgstr "SOA MNAME navneserver \"{ns}\" er ikke autoritativ for zonen."
+
+#. ZONE:Z01_MNAME_NOT_IN_NS_LIST
+#, perl-brace-format
+msgid ""
+"SOA MNAME name server \"{nsname}\" is not listed as NS record for the zone."
+msgstr ""
+"SOA MNAME navneserver \"{nsname}\" er ikke med på listen over NS-records for "
+"zonen."
+
+#. ZONE:Z01_MNAME_NOT_MASTER
+#, perl-brace-format
+msgid ""
+"SOA MNAME name server(s) \"{ns_list}\" do not have the highest SOA SERIAL "
+"(expected \"{soaserial}\" but got \"{soaserial_list}\")"
+msgstr ""
+"SOA MNAME navneserverne \"{ns_list}\" har ikke den højeste SOA-serial "
+"(expected \"{soaserial}\" men fik \"{soaserial_list}\")"
+
+#. ZONE:Z01_MNAME_NOT_RESOLVE
+#, perl-brace-format
+msgid ""
+"SOA MNAME name server \"{nsname}\" cannot be resolved into an IP address."
+msgstr ""
+"SOA MNAME navneserver \"{nsname}\" kan ikke oversættes til en IP-adresse."
+
+#. ZONE:Z01_MNAME_UNEXPECTED_RCODE
+#, perl-brace-format
+msgid ""
+"SOA MNAME name server \"{ns}\" gives unexpected RCODE name (\"{rcode}\") in "
+"response to an SOA query."
+msgstr ""
+"SOA MNAME navneserver \"{ns}\" returnerer uventet RCODE-navn (\"{rcode}\") "
+"på på svarer på en SOA-forespørgsel."
+
+#. ZONE:Z09_INCONSISTENT_MX
+msgid "Some name servers return an MX RRset while others return none."
+msgstr ""
+"Enkelte navneservere returnerede et MX-RR-sæt, mens andre ikke returnerede "
+"noget."
+
+#. ZONE:Z09_INCONSISTENT_MX_DATA
+msgid "The MX RRset data is inconsistent between the name servers."
+msgstr "MX-RR-sættet er inkonsistent mellem navneserverne."
+
+#. ZONE:Z09_MISSING_MAIL_TARGET
+msgid "The child zone has no mail target (no MX)."
+msgstr "Barnezonen har ikke nogen mailserver (ingen MX)"
+
+#. ZONE:Z09_MX_DATA
+#, perl-brace-format
+msgid ""
+"Mail targets in the MX RRset \"{mailtarget_list}\" returned from name "
+"servers \"{ns_ip_list}\"."
+msgstr ""
+"Mailservere i MX-RR-sættet \"{mailtarget_list}\" returneret fra "
+"navneserverne \"{ns_ip_list}\"."
+
+#. ZONE:Z09_MX_FOUND
+#, perl-brace-format
+msgid "MX RRset was returned by name servers \"{ns_ip_list}\"."
+msgstr "MX-RR-sæt blev returneret fra navneserverne \"{ns_ip_list}\"."
+
+#. ZONE:Z09_NON_AUTH_MX_RESPONSE
+#, perl-brace-format
+msgid ""
+"Non-authoritative response on MX query from name servers \"{ns_ip_list}\"."
+msgstr ""
+"Ikke autoritativt svar på MX-forespørgsel fra navneserverne \"{ns_ip_list}\"."
+
+#. ZONE:Z09_NO_MX_FOUND
+#, perl-brace-format
+msgid "No MX RRset was returned by name servers \"{ns_ip_list}\"."
+msgstr "Intet MX-RR-sæt blev returneret fra navneserverne \"{ns_ip_list}\"."
+
+#. ZONE:Z09_NO_RESPONSE_MX_QUERY
+#, perl-brace-format
+msgid "No response on MX query from name servers \"{ns_ip_list}\"."
+msgstr "Intet svar på MX-forespørgsel fra navneserverne \"{ns_ip_list}\"."
+
+#. ZONE:Z09_NULL_MX_NON_ZERO_PREF
+msgid "The zone has a Null MX with non-zero preference."
+msgstr "Zonen har en Null MX med ikke-nul præference."
+
+#. ZONE:Z09_NULL_MX_WITH_OTHER_MX
+msgid "The zone has a Null MX mixed with other MX records."
+msgstr "Zonen har en Null MX blandet med andre MX-records."
+
+#. ZONE:Z09_ROOT_EMAIL_DOMAIN
+msgid "Root zone with an unexpected MX RRset (non-Null MX)."
+msgstr "Rodzone med et uventet MX-RR-sæt (non-Null MX)."
+
+#. ZONE:Z09_TLD_EMAIL_DOMAIN
+msgid "The zone is a TLD and has an unexpected MX RRset (non-Null MX)."
+msgstr "Zonen er et TLD og har et uventet MX-RR-sæt (non-Null MX)."
+
+#. ZONE:Z09_UNEXPECTED_RCODE_MX
+#, perl-brace-format
+msgid ""
+"Unexpected RCODE value ({rcode}) on the MX query from name servers "
+"\"{ns_ip_list}\"."
+msgstr ""
+"Uventet RCODE-værdi ({rcode}) på MX-forespørgsel fra navneserverne "
+"\"{ns_ip_list}\"."
 
 #. SYSTEM:CANNOT_CONTINUE
 #, perl-brace-format
@@ -2434,16 +3157,6 @@ msgid ""
 msgstr ""
 "Anmodning om at afvikle metoden {testcase} i det ukendte modul {module}. "
 "Kendte moduler: {module_list}."
-
-#. SYSTEM:SKIP_IPV4_DISABLED
-#, perl-brace-format
-msgid "IPv4 is disabled, not sending query to {ns_list}."
-msgstr "IPv4 er deaktiveret, sender ingen forespørgsel til {ns_list}."
-
-#. SYSTEM:SKIP_IPV6_DISABLED
-#, perl-brace-format
-msgid "IPv6 is disabled, not sending query to {ns_list}."
-msgstr "IPv6 er deaktiveret, sender ingen forespørgsel til {ns_list}."
 
 #. SYSTEM:FAKE_DELEGATION
 msgid "Followed a fake delegation."
