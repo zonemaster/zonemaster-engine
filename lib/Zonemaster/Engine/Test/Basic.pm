@@ -422,6 +422,9 @@ sub basic01 {
 
     my %rrs_ns;
     my @remaining_servers = keys %all_servers;
+    my $type_soa = q{SOA};
+    my $type_ns = q{NS};
+    my $type_dname = q{DNAME};
 
     while ( @remaining_servers ) {
         my $ns_string = shift @remaining_servers;
@@ -430,14 +433,13 @@ sub basic01 {
 
         my $ns = ns( $ns_labels[0], $ns_labels[1] );
         my $zone_name = $all_servers{$ns_string};
-        my $query_type = q{SOA};
 
-        if ( _ip_disabled_message( \@results, $ns, $query_type ) ) {
+        if ( _ip_disabled_message( \@results, $ns, $type_soa ) ) {
             next;
         }
-        _ip_enabled_message( \@results, $ns, $query_type );
+        _ip_enabled_message( \@results, $ns, $type_soa );
 
-        my $p = $ns->query( $zone->name->string, $query_type );
+        my $p = $ns->query( $zone->name->string, $type_soa );
 
         unless ( $p and ( $p->rcode eq 'NOERROR' or $p->rcode eq 'NXDOMAIN' ) ) {
             next;
@@ -454,7 +456,6 @@ sub basic01 {
 
         if ( $p->is_redirect and index( $zone->name->fqdn, name( lc( ( $p->get_records( 'NS' ) )[0]->owner ) ) ) > 0 ) {
             $rrs_ns{$_->nsdname}{'referral'} = $_->owner for $p->get_records( 'NS' );
-
             $rrs_ns{$_->owner}{'addresses'}{$_->address} = 1 for ( $p->get_records( q{A} ), $p->get_records( 'AAAA' ) );
 
             foreach my $ns_name ( keys %rrs_ns ) {
@@ -509,18 +510,17 @@ sub basic01 {
         push @handled_servers, $ns_labels[1];
 
         my $ns = ns( $ns_labels[0], $ns_labels[1] );
-        my $query_type = q{NS};
 
         foreach my $zone_name ( keys %{ $parent_information{$ns_string} } ) {
-            if ( _ip_disabled_message( \@results, $ns, $query_type ) ) {
+            if ( _ip_disabled_message( \@results, $ns, $type_ns ) ) {
                 next;
             }
-            _ip_enabled_message( \@results, $ns, $query_type );
+            _ip_enabled_message( \@results, $ns, $type_ns );
 
-            my $p = $ns->query( $zone_name, $query_type );
+            my $p = $ns->query( $zone_name, $type_ns );
 
-            if ( $p and $p->get_records_for_name( 'NS', $zone_name, q{answer} ) ) {
-                foreach my $rr ( $p->get_records_for_name( 'NS', $zone_name, q{answer} ) ) {
+            if ( $p and $p->get_records_for_name( $type_ns, $zone_name, q{answer} ) ) {
+                foreach my $rr ( $p->get_records_for_name( $type_ns, $zone_name, q{answer} ) ) {
                     my @ips;
                     my $p_a = Zonemaster::Engine::Recursor->recurse( $rr->nsdname, q{A} );
 
@@ -530,26 +530,24 @@ sub basic01 {
 
                     my $p_aaaa = Zonemaster::Engine::Recursor->recurse( $rr->nsdname, q{AAAA} );
 
-                    if ( $p_aaaa ){
+                    if ( $p_aaaa ) {
                         push @ips, $_->address for $p_aaaa->get_records_for_name( q{AAAA}, $rr->nsdname, q{answer} );
                     }
-
-                    $query_type = q{SOA};
 
                     foreach my $ip ( uniq @ips ) {
                         my $new_ns = ns( $rr->nsdname, $ip );
 
                         if ( not exists $parent_information{$new_ns->string} ) {
-                            if ( _ip_disabled_message( \@results, $new_ns, $query_type ) ) {
+                            if ( _ip_disabled_message( \@results, $new_ns, $type_soa ) ) {
                                 next;
                             }
-                            _ip_enabled_message( \@results, $new_ns, $query_type );
+                            _ip_enabled_message( \@results, $new_ns, $type_soa );
 
-                            my $new_p = $new_ns->query( $zone->name->string, $query_type );
+                            my $new_p = $new_ns->query( $zone->name->string, $type_soa );
                             my $pass = 0;
 
                             if ( $new_p ) {
-                                if ( $new_p->is_redirect and scalar $new_p->get_records_for_name( 'NS', $zone->name->fqdn, q{authority} ) ) {
+                                if ( $new_p->is_redirect and scalar $new_p->get_records_for_name( 'NS', $zone->name->string, q{authority} ) ) {
                                     $pass += 1;
                                 }
 
@@ -602,19 +600,22 @@ sub basic01 {
 
                 if ( $p->aa and $p->no_such_record ) {
                     my @ns_labels = split( '/', $ns_string );
-                    my $new_ns = ns( $ns_labels[0], $ns_labels[1] );
-                    my $query_type = 'DNAME';
+                    my $ns = ns( $ns_labels[0], $ns_labels[1] );
 
-                    if ( _ip_disabled_message( \@results, $new_ns, $query_type ) ) {
+                    if ( _ip_disabled_message( \@results, $ns, $type_dname ) ) {
                         next;
                     }
-                    _ip_enabled_message( \@results, $new_ns, $query_type );
+                    _ip_enabled_message( \@results, $ns, $type_dname );
 
-                    my $new_p = $new_ns->query( $zone->name->string, $query_type );
+                    my $new_p = $ns->query( $zone->name->string, $type_dname );
 
-                    if ( $new_p and $new_p->aa and $new_p->rcode eq 'NOERROR' and scalar $new_p->get_records_for_name( 'DNAME', $zone->name->string, q{answer} ) ) {
+                    if ( $new_p and $new_p->aa and $new_p->rcode eq 'NOERROR'
+                        and scalar $new_p->get_records_for_name( $type_dname, $zone->name->string, q{answer} ) ) {
+
+                        for ( $new_p->get_records_for_name( $type_dname, $zone->name->string, q{answer} ) ) {
+                            push @{ $aa_dname{$_->dname}{$zone_name} }, $ns_string;
+                        }
                         push @{ $parent_found{$zone_name} }, $ns_string;
-                        push @{ $aa_dname{( $new_p->get_records_for_name( 'DNAME', $zone->name->fqdn, q{answer} ) )[0]->dname}{$zone_name} }, $ns_string;
                     }
                     else {
                         push @{ $parent_found{$zone_name} }, $ns_string;
