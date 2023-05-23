@@ -16,20 +16,20 @@ $profile_tmp = Zonemaster::Engine::Profile->from_json( $json );
 Zonemaster::Engine::Profile->effective->merge( $profile_tmp );
 
 my $trans = new_ok( 'Zonemaster::Engine::Translator' => [ { locale => 'C' } ] );
-ok( exists $trans->data->{BASIC}{HAS_PARENT},       'expected key from file exists' );
+ok( exists $trans->data->{BASIC}{B01_PARENT_FOUND},       'expected key from file exists' );
 ok( exists $trans->data->{DNSSEC}{ALGORITHM_OK}, 'expected key from module exists' );
 
 my $entry = Zonemaster::Engine::Logger::Entry->new(
     {
         module => 'BASIC',
-        tag    => 'HAS_PARENT',
-        args   => { pname => 'nothing.nowhere' }
+        tag    => 'B01_PARENT_FOUND',
+        args   => { domain => 'nothing.nowhere', ns_ip_list => 'ns1.nothing.nowhere/1.1.1.1' }
     }
 );
 
 like(
     $trans->to_string( $entry ),
-    qr'   \d+.\d\d INFO      Parent domain \'nothing.nowhere\' was found for the tested domain.',
+    qr'   \d+.\d\d INFO      The parent zone is "nothing.nowhere" as returned from name servers "ns1.nothing.nowhere/1.1.1.1".',
     'string to_stringd as expected'
 );
 

@@ -8,7 +8,7 @@ use warnings;
 use version; our $VERSION = version->declare("v1.0.19");
 
 use Carp;
-use List::MoreUtils qw[any none];
+use List::MoreUtils qw[any none uniq];
 use Locale::TextDomain qw[Zonemaster-Engine];
 use Readonly;
 
@@ -91,8 +91,15 @@ sub metadata {
         ],
         basic01 => [
             qw(
-              NO_PARENT
-              HAS_PARENT
+              B01_CHILD_IS_ALIAS
+              B01_CHILD_FOUND
+              B01_CHILD_NOT_EXIST
+              B01_INCONSISTENT_ALIAS
+              B01_INCONSISTENT_DELEGATION
+              B01_NO_CHILD
+              B01_PARENT_FOUND
+              B01_PARENT_UNDETERMINED
+              B01_UNEXPECTED_NS_RESPONSE
               TEST_CASE_END
               TEST_CASE_START
               )
@@ -152,6 +159,45 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # BASIC:A_QUERY_NO_RESPONSES
           'Nameservers did not respond to A query.';
     },
+    B01_CHILD_IS_ALIAS => sub {
+        __x    # BASIC:B01_CHILD_IS_ALIAS
+          '"{domain_child}" is not a zone. It is an alias for "{domain_target}". Run a test for "{domain_target}" instead. '
+          . 'Returned from name servers "{ns_ip_list}.', @_;
+    },
+    B01_CHILD_FOUND => sub {
+        __x    # BASIC:B01_CHILD_FOUND
+          'The zone "{domain}" is found.', @_;
+    },
+    B01_CHILD_NOT_EXIST => sub {
+        __x    # BASIC:B01_CHILD_NOT_EXIST
+          '"{domain}" does not exist as it is not delegated.', @_;
+    },
+    B01_INCONSISTENT_ALIAS => sub {
+        __x    # BASIC:B01_INCONSISTENT_ALIAS
+          'The alias for "{domain}" is inconsistent between name servers.', @_;
+    },
+    B01_INCONSISTENT_DELEGATION => sub {
+        __x    # BASIC:B01_INCONSISTENT_DELEGATION
+          'The name servers for parent zone "{domain_parent}" give inconsistent delegation of "{domain_child}". '
+          . 'Returned from name servers "{ns_ip_list}".', @_;
+    },
+    B01_NO_CHILD => sub {
+        __x    # BASIC:B01_NO_CHILD
+          '"{domain_child}" does not exist as a DNS zone. Try to test "{domain_super}" instead.', @_;
+    },
+    B01_PARENT_FOUND => sub {
+        __x    # BASIC:B01_PARENT_FOUND
+          'The parent zone is "{domain}" as returned from name servers "{ns_ip_list}".', @_;
+    },
+    B01_PARENT_UNDETERMINED => sub {
+        __x    # BASIC:B01_PARENT_UNDETERMINED
+          'The parent zone cannot be determined on name servers "{ns_ip_list}".', @_;
+    },
+    B01_UNEXPECTED_NS_RESPONSE => sub {
+        __x    # BASIC:B01_UNEXPECTED_NS_RESPONSE
+          'Name servers for parent domain "{domain_parent}" give an incorrect response on SOA query for "{domain_child}". '
+          . 'Returned from name servers "{ns_ip_list}".', @_;
+    },
     B02_AUTH_RESPONSE_SOA => sub {
         __x    # BASIC:B02_AUTH_RESPONSE_SOA
           'Authoritative answer on SOA query for "{domain}" is returned by name servers "{ns_list}".', @_;
@@ -204,10 +250,6 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # BASIC:HAS_NAMESERVER_NO_WWW_A_TEST
           'Functional nameserver found. "A" query for www.{zname} test skipped.', @_;
     },
-    HAS_PARENT => sub {
-        __x    # BASIC:HAS_PARENT
-          'Parent domain \'{pname}\' was found for the tested domain.', @_;
-    },
     IPV4_DISABLED => sub {
         __x    # BASIC:IPV4_DISABLED
           'IPv4 is disabled, not sending "{rrtype}" query to {ns}.', @_;
@@ -227,10 +269,6 @@ Readonly my %TAG_DESCRIPTIONS => (
     NO_A_RECORDS => sub {
         __x    # BASIC:NO_A_RECORDS
           'Nameserver {ns} did not return "A" record(s) for {domain}.', @_;
-    },
-    NO_PARENT => sub {
-        __x    # BASIC:NO_PARENT
-          'No parent domain could be found for the domain under test.', @_;
     },
     TEST_CASE_END => sub {
         __x    # BASIC:TEST_CASE_END
@@ -355,24 +393,362 @@ sub basic00 {
 sub basic01 {
     my ( $class, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
-    my $parent = $zone->parent;
 
-    if ( not $parent ) {
+    if ( $zone->name eq '.' ) {
         push @results,
           info(
-            NO_PARENT => {
-                zone => $zone->name->string,
+             B01_CHILD_FOUND => {
+                domain => $zone->name
+             }
+          );
+        
+        return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+    }
+
+    my %all_servers;
+    my @handled_servers;
+    my %parent_information;
+    my %parent_found;
+    my %delegation_found;
+    my %non_aa_non_delegation;
+    my %aa_nxdomain;
+    my %aa_soa;
+    my %aa_cname;
+    my %cname_with_referral;
+    my %aa_dname;
+    my %aa_nodata;
+
+    $all_servers{$_} = name( '.' ) for Zonemaster::Engine::Recursor->root_servers;
+
+    my %rrs_ns;
+    my @remaining_servers = keys %all_servers;
+    my $type_soa = q{SOA};
+    my $type_ns = q{NS};
+    my $type_dname = q{DNAME};
+
+    while ( @remaining_servers ) {
+        my $ns_string = shift @remaining_servers;
+        my @ns_labels = split( '/', $ns_string );
+        push @handled_servers, $ns_labels[1];
+
+        my $ns = ns( $ns_labels[0], $ns_labels[1] );
+        my $zone_name = $all_servers{$ns_string};
+
+        if ( _ip_disabled_message( \@results, $ns, $type_soa ) ) {
+            next;
+        }
+        _ip_enabled_message( \@results, $ns, $type_soa );
+
+        my $p = $ns->query( $zone->name->string, $type_soa );
+
+        unless ( $p and ( $p->rcode eq 'NOERROR' or $p->rcode eq 'NXDOMAIN' ) ) {
+            next;
+        }
+
+        if ( not $p->is_redirect and not $p->aa ) {
+            push @{$non_aa_non_delegation{$zone->name->string}}, $ns_string;
+        }
+
+        if ( $p->is_redirect and index( $zone_name, name( lc( ( $p->get_records( 'NS' ) )[0]->owner ) ) ) == -1 
+            and index( $zone->name->fqdn, name( lc( ( $p->get_records( 'NS' ) )[0]->owner ) ) ) == -1 ) {
+            next;
+        }
+
+        if ( $p->is_redirect and index( $zone->name->fqdn, name( lc( ( $p->get_records( 'NS' ) )[0]->owner ) ) ) > 0 ) {
+            $rrs_ns{$_->nsdname}{'referral'} = $_->owner for $p->get_records( 'NS' );
+            $rrs_ns{$_->owner}{'addresses'}{$_->address} = 1 for ( $p->get_records( q{A} ), $p->get_records( 'AAAA' ) );
+
+            foreach my $ns_name ( keys %rrs_ns ) {
+                unless ( exists $rrs_ns{$ns_name}{'addresses'} and scalar keys %{ $rrs_ns{$ns_name}{'addresses'} } > 0 ) {
+                    my $p_a = Zonemaster::Engine::Recursor->recurse( $ns_name, q{A} );
+
+                    if ( $p_a and $p_a->rcode eq 'NOERROR' ) {
+                        $rrs_ns{$ns_name}{'addresses'}{$_->address} = 1 for $p->get_records_for_name( 'A', $ns_name );
+                    }
+
+                    my $p_aaaa = Zonemaster::Engine::Recursor->recurse( $ns_name, q{AAAA} );
+
+                    if ( $p_aaaa and $p_aaaa->rcode eq 'NOERROR' ) {
+                        $rrs_ns{$ns_name}{'addresses'}{$_->address} = 1 for $p->get_records_for_name( 'AAAA', $ns_name );
+                    }
+                }
+
+                foreach my $ns_ip ( keys %{ $rrs_ns{$ns_name}{'addresses'} } ) {
+                    unless ( grep { $_ eq $ns_ip } @handled_servers ) {
+                        $all_servers{$ns_name . '/' . $ns_ip} = $rrs_ns{$ns_name}{'referral'};
+                        push @remaining_servers, $ns_name . '/' . $ns_ip;
+                        push @handled_servers, $ns_ip;
+                    }
+                }
             }
+        }
+
+        my $pass = 0;
+        if ( $p->is_redirect and scalar $p->get_records_for_name( 'NS', $zone->name->string ) ) {
+            $pass += 1;
+        }
+
+        if ( $p->is_redirect and scalar $p->get_records_for_name( 'CNAME', $zone->name->string, q{answer} ) ) {
+            $pass += 1;
+        }
+
+        if ( $p->aa ) {
+            $pass += 1;
+        }
+
+        if ( $pass == 1 ) {
+            $parent_information{$ns->string}{$zone_name} = $p;
+        }
+    }
+
+    @handled_servers = ();
+    @remaining_servers = keys %parent_information;
+
+    while ( @remaining_servers ) {
+        my $ns_string = shift @remaining_servers;
+        my @ns_labels = split( '/', $ns_string );
+        push @handled_servers, $ns_labels[1];
+
+        my $ns = ns( $ns_labels[0], $ns_labels[1] );
+
+        foreach my $zone_name ( keys %{ $parent_information{$ns_string} } ) {
+            if ( _ip_disabled_message( \@results, $ns, $type_ns ) ) {
+                next;
+            }
+            _ip_enabled_message( \@results, $ns, $type_ns );
+
+            my $p = $ns->query( $zone_name, $type_ns );
+
+            if ( $p and $p->get_records_for_name( $type_ns, $zone_name, q{answer} ) ) {
+                foreach my $rr ( $p->get_records_for_name( $type_ns, $zone_name, q{answer} ) ) {
+                    my @ips;
+                    my $p_a = Zonemaster::Engine::Recursor->recurse( $rr->nsdname, q{A} );
+
+                    if ( $p_a ) {
+                        push @ips, $_->address for $p_a->get_records_for_name( q{A}, $rr->nsdname, q{answer} );
+                    }
+
+                    my $p_aaaa = Zonemaster::Engine::Recursor->recurse( $rr->nsdname, q{AAAA} );
+
+                    if ( $p_aaaa ) {
+                        push @ips, $_->address for $p_aaaa->get_records_for_name( q{AAAA}, $rr->nsdname, q{answer} );
+                    }
+
+                    foreach my $ip ( uniq @ips ) {
+                        my $new_ns = ns( $rr->nsdname, $ip );
+
+                        if ( not exists $parent_information{$new_ns->string} ) {
+                            if ( _ip_disabled_message( \@results, $new_ns, $type_soa ) ) {
+                                next;
+                            }
+                            _ip_enabled_message( \@results, $new_ns, $type_soa );
+
+                            my $new_p = $new_ns->query( $zone->name->string, $type_soa );
+                            my $pass = 0;
+
+                            if ( $new_p ) {
+                                if ( $new_p->is_redirect and scalar $new_p->get_records_for_name( 'NS', $zone->name->string, q{authority} ) ) {
+                                    $pass += 1;
+                                }
+
+                                if ( $new_p->aa and $new_p->rcode eq q{NOERROR} ) {
+                                    $pass += 1;
+                                }
+
+                                if ( $pass == 1 ) {
+                                    $parent_information{$new_ns->string}{$zone_name} = $new_p;
+                                    push @remaining_servers, $new_ns->string;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    foreach my $ns_string ( keys %parent_information ) {
+        foreach my $zone_name ( keys %{ $parent_information{$ns_string} } ) {
+            my $p = $parent_information{$ns_string}{$zone_name};
+            
+            if ( $p ) {
+                if ( $p->is_redirect ) {
+                    push @{ $parent_found{$zone_name} }, $ns_string;
+                    push @{ $delegation_found{$zone_name} }, $ns_string;
+                }
+
+                if ( $p->aa and $p->rcode eq 'NXDOMAIN' ) {
+                    push @{ $parent_found{$zone_name} }, $ns_string;
+                    push @{ $aa_nxdomain{$zone_name} }, $ns_string;
+                }
+
+                if ( $p->aa and scalar $p->get_records_for_name( 'SOA', $zone->name->string, q{answer} ) ) {
+                    if ( $zone->name->next_higher eq $zone_name ) {
+                        push @{ $aa_soa{$zone_name} }, $ns_string;
+                    }
+                }
+
+                if ( $p->aa and scalar $p->get_records_for_name( 'CNAME', $zone->name->string, q{answer} ) ) {
+                    push @{ $parent_found{$zone_name} }, $ns_string;
+                    push @{ $aa_cname{$zone_name} }, $ns_string;
+                }
+
+                if ( $p->is_redirect and scalar $p->get_records_for_name( 'CNAME', $zone->name->string, q{answer} ) ) {
+                    push @{ $parent_found{$zone_name} }, $ns_string;
+                    push @{ $cname_with_referral{$zone_name} }, $ns_string;
+                }
+
+                if ( $p->aa and $p->no_such_record ) {
+                    my @ns_labels = split( '/', $ns_string );
+                    my $ns = ns( $ns_labels[0], $ns_labels[1] );
+
+                    if ( _ip_disabled_message( \@results, $ns, $type_dname ) ) {
+                        next;
+                    }
+                    _ip_enabled_message( \@results, $ns, $type_dname );
+
+                    my $new_p = $ns->query( $zone->name->string, $type_dname );
+
+                    if ( $new_p and $new_p->aa and $new_p->rcode eq 'NOERROR'
+                        and scalar $new_p->get_records_for_name( $type_dname, $zone->name->string, q{answer} ) ) {
+
+                        for ( $new_p->get_records_for_name( $type_dname, $zone->name->string, q{answer} ) ) {
+                            push @{ $aa_dname{$_->dname}{$zone_name} }, $ns_string;
+                        }
+                        push @{ $parent_found{$zone_name} }, $ns_string;
+                    }
+                    else {
+                        push @{ $parent_found{$zone_name} }, $ns_string;
+                        push @{ $aa_nodata{$zone_name} }, $ns_string;
+                    }
+                }
+            }
+        }
+    }
+
+    if ( scalar keys %parent_found ) {
+        push @results, map {
+          info(
+              B01_PARENT_FOUND => {
+                domain => $_,
+                ns_ip_list => join( q{;}, uniq sort @{ $parent_found{$_} } )
+              }
+          )
+        } keys %parent_found;
+
+        if ( scalar keys %parent_found > 1 ) {
+          push @results,
+            info(
+                B01_PARENT_UNDETERMINED => {
+                  ns_ip_list => join( q{;}, uniq sort map { @{ $parent_found{$_} } } keys %parent_found )
+                }
+            );
+        }
+    }
+
+    if ( not scalar keys %parent_found and not scalar keys %aa_soa ) {
+        push @results,
+          info(
+              B01_PARENT_UNDETERMINED => {
+                ns_ip_list => join( q{;}, sort keys %parent_information )
+              }
           );
     }
-    else {
+
+    if ( scalar keys %delegation_found or scalar keys %aa_soa ) {
         push @results,
           info(
-            HAS_PARENT => {
-                zone  => $zone->name->string,
-                pname => $parent->name->string,
+              B01_CHILD_FOUND => {
+                domain => $zone->name->string
+              }
+           );
+
+        if ( scalar keys %aa_nxdomain or scalar keys %aa_cname or scalar keys %cname_with_referral or scalar keys %aa_dname or scalar keys %aa_nodata ) {            
+            push @results, map {
+              info(
+                  B01_INCONSISTENT_DELEGATION => {
+                    domain_parent => $_,
+                    domain_child => $zone->name->string,
+                    ns_ip_list => join( q{;}, sort keys %parent_information )
+                  }
+               )
+            } uniq ( keys %aa_nxdomain, keys %aa_cname, keys %cname_with_referral, keys %aa_dname, keys %aa_nodata );
+        }
+        elsif ( not scalar keys %delegation_found ) {
+            foreach my $zone_name ( keys %aa_soa ) {
+                if ( not $zone->name->next_higher eq $zone_name ) {
+                    push @results,
+                      info(
+                          B01_PARENT_FOUND => {
+                            domain => $zone_name,
+                            ns_ip_list => join( q{;}, uniq sort @{ $aa_soa{$zone_name} } )
+                          }
+                      );
+                }
             }
-          );
+
+            if ( scalar keys %aa_soa > 1 ) {
+                push @results,
+                  info(
+                      B01_PARENT_UNDETERMINED => {
+                        ns_ip_list => join( q{;}, uniq sort map { @{ $aa_soa{$_} } } keys %aa_soa )
+                      }
+                  );
+            }
+        }
+    }
+
+    if ( not scalar keys %delegation_found and not scalar keys %aa_soa ) {
+        if ( Zonemaster::Engine::Recursor->has_fake_addresses( $zone->name->string ) ) {
+            push @results,
+              info(
+                  B01_CHILD_NOT_EXIST => {
+                    domain => $zone->name->string
+                  }
+              );
+        }
+        else {
+            push @results,
+              info(
+                  B01_NO_CHILD => {
+                    domain_child => $zone->name->string,
+                    domain_super => $zone->name->next_higher
+                  }
+              );
+        }
+    }
+
+    if ( scalar keys %aa_dname ) {
+        push @results, map { my $target = $_;
+          info(
+              B01_CHILD_IS_ALIAS => {
+                domain_child => $zone->name->string,
+                domain_target => $target,
+                ns_ip_list => join( q{;}, uniq sort map { @{ $aa_dname{$target}{$_} } } keys %{ $aa_dname{$target} } )
+              }
+          )
+        } keys %aa_dname;
+
+        if ( scalar keys %aa_dname > 1 ) {
+            push @results,
+              info(
+                  B01_INCONSISTENT_ALIAS => {
+                    domain => $zone->name->string
+                  }
+              );
+        }
+    }
+
+    if ( scalar keys %non_aa_non_delegation ) {
+        push @results, map {
+          info(
+              B01_UNEXPECTED_NS_RESPONSE => {
+                domain_child => $zone->name->string,
+                domain_parent => $_,
+                ns_ip_list => join( q{;}, uniq sort @{ $non_aa_non_delegation{$_} } )
+              }
+          )
+        } keys %non_aa_non_delegation;
     }
 
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );

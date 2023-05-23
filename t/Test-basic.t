@@ -103,6 +103,17 @@ ok( $res{HAS_NAMESERVER_NO_WWW_A_TEST}, q{HAS_NAMESERVER_NO_WWW_A_TEST} );
 ok( $res{A_QUERY_NO_RESPONSES}, q{A_QUERY_NO_RESPONSES} );
 
 ###########
+# basic01
+###########
+$zone = Zonemaster::Engine->zone( 'exampledomain.fake' );
+zone_gives('basic01', $zone, [qw{B01_PARENT_FOUND B01_NO_CHILD}] );
+zone_gives_not( 'basic01', $zone, [qw{B01_CHILD_IS_ALIAS B01_CHILD_FOUND B01_CHILD_NOT_EXIST B01_INCONSISTENT_ALIAS B01_INCONSISTENT_DELEGATION B01_PARENT_UNDETERMINED B01_UNEXPECTED_NS_RESPONSE}] );
+
+$zone = Zonemaster::Engine->zone( 'afnic.fr' );
+zone_gives('basic01', $zone, [qw{B01_PARENT_FOUND B01_CHILD_FOUND}] );
+zone_gives_not( 'basic01', $zone, [qw{B01_CHILD_IS_ALIAS B01_CHILD_NOT_EXIST B01_INCONSISTENT_ALIAS B01_INCONSISTENT_DELEGATION B01_NO_CHILD B01_PARENT_UNDETERMINED B01_UNEXPECTED_NS_RESPONSE}] );
+
+###########
 # basic02
 ###########
 $zone = Zonemaster::Engine->zone( 'exampledomain.fake' );
@@ -180,6 +191,14 @@ Zonemaster::Engine::Profile->effective->set( q{no_network}, 1 );
 
 TODO: {
     local $TODO = "Need to find/create zones with that error";
+
+    # basic01
+    ok( $tag{B01_CHILD_IS_ALIAS}, q{B01_CHILD_IS_ALIAS} );
+    ok( $tag{B01_CHILD_NOT_EXIST}, q{B01_CHILD_NOT_EXIST} );
+    ok( $tag{B01_INCONSISTENT_ALIAS}, q{B01_INCONSISTENT_ALIAS} );
+    ok( $tag{B01_INCONSISTENT_DELEGATION}, q{B01_INCONSISTENT_DELEGATION} );
+    ok( $tag{B01_PARENT_UNDETERMINED}, q{B01_PARENT_UNDETERMINED} );
+    ok( $tag{B01_UNEXPECTED_NS_RESPONSE}, q{B01_UNEXPECTED_NS_RESPONSE} );
 }
 
 done_testing;
