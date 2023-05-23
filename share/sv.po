@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-22 15:38+0000\n"
-"PO-Revision-Date: 2023-05-22 15:37+0000\n"
+"POT-Creation-Date: 2023-05-23 11:24+0000\n"
+"PO-Revision-Date: 2023-05-23 11:23+0000\n"
 "Last-Translator: mats.dufberg@iis.se\n"
 "Language-Team: Zonemaster Team\n"
 "Language: sv\n"
@@ -155,6 +155,77 @@ msgstr "Funktionell test av otestbart namn"
 msgid "Nameservers did not respond to A query."
 msgstr "Namnservern svarade inte på en A-fråga."
 
+#. BASIC:B01_CHILD_IS_ALIAS
+#, perl-brace-format
+msgid ""
+"\"{domain_child}\" is not a zone. It is an alias for \"{domain_target}\". "
+"Run a test for \"{domain_target}\" instead. Returned from name servers "
+"\"{ns_ip_list}."
+msgstr ""
+"\"{domain_child}\" är inte en DNS-zon. Det är ett alias för "
+"\"{domain_target}\". Överväg att testa \"{domain_target}\" istället. "
+"Information från namnservrarna \"{ns_ip_list}\"."
+
+#. BASIC:B01_CHILD_FOUND
+#, perl-brace-format
+msgid "The zone \"{domain}\" is found."
+msgstr "Testet visar att zonen \"{domain}\" finns."
+
+#. BASIC:B01_CHILD_NOT_EXIST
+#, perl-brace-format
+msgid "\"{domain}\" does not exist as it is not delegated."
+msgstr "\"{domain}\" finns inte i och med att den inte är delegerad."
+
+#. BASIC:B01_INCONSISTENT_ALIAS
+#, perl-brace-format
+msgid "The alias for \"{domain}\" is inconsistent between name servers."
+msgstr "Aliaset för \"{domain}\" är inte konsekvent mellan olika namnservrar."
+
+#. BASIC:B01_INCONSISTENT_DELEGATION
+#, perl-brace-format
+msgid ""
+"The name servers for parent zone \"{domain_parent}\" give inconsistent "
+"delegation of \"{domain_child}\". Returned from name servers "
+"\"{ns_ip_list}\"."
+msgstr ""
+"Namnservrarna för moderzonen \"{domain_parent}\" ger inte konsekvent "
+"delegering av \"{domain_child}\". Information från namnservrarna "
+"\"{ns_ip_list}\"."
+
+#. BASIC:B01_NO_CHILD
+#, perl-brace-format
+msgid ""
+"\"{domain_child}\" does not exist as a DNS zone. Try to test "
+"\"{domain_super}\" instead."
+msgstr ""
+"\"{domain_child}\" finns inte som DNS-zon. Överväg att testa "
+"\"{domain_super}\" istället."
+
+#. BASIC:B01_PARENT_FOUND
+#, perl-brace-format
+msgid ""
+"The parent zone is \"{domain}\" as returned from name servers "
+"\"{ns_ip_list}\"."
+msgstr ""
+"Moderzonen är \"{domain}\" vilket har bekräftats av namnservrarna "
+"\"{ns_ip_list}\"."
+
+#. BASIC:B01_PARENT_UNDETERMINED
+#, perl-brace-format
+msgid "The parent zone cannot be determined on name servers \"{ns_ip_list}\"."
+msgstr "Moderzonen kan inte fastställas av namnservrarna \"{ns_ip_list}\"."
+
+#. BASIC:B01_UNEXPECTED_NS_RESPONSE
+#, perl-brace-format
+msgid ""
+"Name servers for parent domain \"{domain_parent}\" give an incorrect "
+"response on SOA query for \"{domain_child}\". Returned from name servers "
+"\"{ns_ip_list}\"."
+msgstr ""
+"Namnservrarna för moderzonen \"{domain_parent}\" ger ett felaktigt svar på "
+"förfrågan om SOA-posten för \"{domain_child}\". Gäller namnservrarna "
+"\"{ns_ip_list}\"."
+
 #. BASIC:B02_AUTH_RESPONSE_SOA
 #, perl-brace-format
 msgid ""
@@ -240,11 +311,6 @@ msgstr ""
 "En fungerande namnserver hittades. Skickade ingen fråga om 'A' för 'www."
 "{zname}' (behövdes inte)."
 
-#. BASIC:HAS_PARENT
-#, perl-brace-format
-msgid "Parent domain '{pname}' was found for the tested domain."
-msgstr "Moderdomänen '{pname}' till den testade domänen har identifierats."
-
 #. BASIC:IPV4_DISABLED
 #. CONNECTIVITY:IPV4_DISABLED
 #. CONSISTENCY:IPV4_DISABLED
@@ -283,10 +349,6 @@ msgstr "IPv6 är aktiverat. Skickar fråga om '{rrtype}' till {ns}."
 #, perl-brace-format
 msgid "Nameserver {ns} did not return \"A\" record(s) for {domain}."
 msgstr "Namnservern {ns} svarade inte med några A-poster för '{domain}'."
-
-#. BASIC:NO_PARENT
-msgid "No parent domain could be found for the domain under test."
-msgstr "Ingen moderdomän kunde hittas för den testade domänen."
 
 #. CONNECTIVITY:CONNECTIVITY01
 msgid "UDP connectivity"
