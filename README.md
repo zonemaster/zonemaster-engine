@@ -57,7 +57,7 @@ be found in the [LICENSE](LICENSE) file included in this respository.
 [Docker Hub]:                                     https://hub.docker.com/u/zonemaster
 [Docker Image Creation]:                          https://github.com/zonemaster/zonemaster/blob/master/docs/internal-documentation/maintenance/ReleaseProcess-create-docker-image.md
 [Docs]:                                           docs/
-[Installation]:                                   docs/Installation.md
+[Installation]:                                   https://github.com/zonemaster/zonemaster/blob/master/docs/public/installation/zonemaster-engine.md
 [USING]:                                          https://github.com/zonemaster/zonemaster-cli/blob/master/USING.md
 [Zonemaster main repository]:                     https://github.com/zonemaster/zonemaster
 [Zonemaster/README.md]:                           https://github.com/zonemaster/zonemaster/blob/master/README.md
