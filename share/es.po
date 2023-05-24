@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-15 11:18-0300\n"
-"PO-Revision-Date: 2023-02-15 18:30-0300\n"
+"POT-Creation-Date: 2023-05-24 11:14-0400\n"
+"PO-Revision-Date: 2023-05-24 11:37-0400\n"
 "Last-Translator: hsalgado@nic.cl\n"
 "Language-Team: Zonemaster Team\n"
 "Language: es\n"
@@ -161,13 +161,142 @@ msgstr "El dominio debe tener al menos un servidor de nombres funcionando"
 msgid "The Broken but functional test"
 msgstr "La prueba Arruinado pero funcional"
 
-#. BASIC:BASIC04
-msgid "Test of basic nameserver and zone functionality"
-msgstr "Prueba de funcionalidad básica del servidor de nombres y zona"
-
 #. BASIC:A_QUERY_NO_RESPONSES
 msgid "Nameservers did not respond to A query."
 msgstr "Los servidores de nombres no respondieron a consultas A."
+
+#. BASIC:B01_CHILD_IS_ALIAS
+#, perl-brace-format
+msgid ""
+"\"{domain_child}\" is not a zone. It is an alias for \"{domain_target}\". "
+"Run a test for \"{domain_target}\" instead. Returned from name servers "
+"\"{ns_ip_list}."
+msgstr ""
+"\"{domain_child}\" no es una zona. Es un alias de \"{domain_target}\". Por "
+"esto, realice las pruebas en \"{domain_target}\". Obtenido de los servidores "
+"de nombres \"{ns_ip_list}\"."
+
+#. BASIC:B01_CHILD_FOUND
+#, perl-brace-format
+msgid "The zone \"{domain}\" is found."
+msgstr "Se encontró la zona \"{domain}\"."
+
+#. BASIC:B01_CHILD_NOT_EXIST
+#, perl-brace-format
+msgid "\"{domain}\" does not exist as it is not delegated."
+msgstr "\"{domain}\" no existe, ya que no está delegada."
+
+#. BASIC:B01_INCONSISTENT_ALIAS
+#, perl-brace-format
+msgid "The alias for \"{domain}\" is inconsistent between name servers."
+msgstr ""
+"El alias para \"{domain}\" es inconsistente entre los servidores de nombres."
+
+#. BASIC:B01_INCONSISTENT_DELEGATION
+#, perl-brace-format
+msgid ""
+"The name servers for parent zone \"{domain_parent}\" give inconsistent "
+"delegation of \"{domain_child}\". Returned from name servers "
+"\"{ns_ip_list}\"."
+msgstr ""
+"Los servidores de nombres para la zona padre \"{domain_parent}\" dan una "
+"delegación inconsistente de \"{domain_child}\". Obtenido de los servidores "
+"de nombres \"{ns_ip_list}\"."
+
+#. BASIC:B01_NO_CHILD
+#, perl-brace-format
+msgid ""
+"\"{domain_child}\" does not exist as a DNS zone. Try to test "
+"\"{domain_super}\" instead."
+msgstr ""
+"\"{domain_child}\" no existe como una zona DNS. Alternativamente, intente "
+"probar \"{domain_super}\"."
+
+#. BASIC:B01_PARENT_FOUND
+#, perl-brace-format
+msgid ""
+"The parent zone is \"{domain}\" as returned from name servers "
+"\"{ns_ip_list}\"."
+msgstr ""
+"La zona padre es \"{domain}\" según lo obtenido de los servidores de nombres "
+"\"{ns_ip_list}\"."
+
+#. BASIC:B01_PARENT_UNDETERMINED
+#, perl-brace-format
+msgid "The parent zone cannot be determined on name servers \"{ns_ip_list}\"."
+msgstr ""
+"La zona padre no puede ser determinada en los servidores de nombres "
+"\"{ns_ip_list}\"."
+
+#. BASIC:B01_UNEXPECTED_NS_RESPONSE
+#, perl-brace-format
+msgid ""
+"Name servers for parent domain \"{domain_parent}\" give an incorrect "
+"response on SOA query for \"{domain_child}\". Returned from name servers "
+"\"{ns_ip_list}\"."
+msgstr ""
+"Los servidores de nombres para el dominio padre \"{domain_parent}\" dan una "
+"respuesta incorrecta ante una consulta SOA por \"{domain_child}\". Obtenido "
+"desde los servidores de nombres \"{ns_ip_list}\"."
+
+#. BASIC:B02_AUTH_RESPONSE_SOA
+#, perl-brace-format
+msgid ""
+"Authoritative answer on SOA query for \"{domain}\" is returned by name "
+"servers \"{ns_list}\"."
+msgstr ""
+"Hay una respuesta autoritativa para la consulta SOA por \"{domain}\" desde "
+"los servidores de nombres \"{ns_list}\"."
+
+#. BASIC:B02_NO_DELEGATION
+#, perl-brace-format
+msgid ""
+"There is no delegation (name servers) for \"{domain}\" which means it does "
+"not exist as a zone."
+msgstr ""
+"No existe delegación (servidores de nombre) para \"{domain}\", lo que "
+"significa que no existe como zona."
+
+#. BASIC:B02_NO_WORKING_NS
+#, perl-brace-format
+msgid "There is no working name server for \"{domain}\" so it is unreachable."
+msgstr ""
+"No existen servidores de nombre funcionando para \"{domain}\", así que es "
+"inalcanzable."
+
+#. BASIC:B02_NS_BROKEN
+#, perl-brace-format
+msgid "Broken response from name server \"{ns}\" on an SOA query."
+msgstr ""
+"Respuesta inválida desde el servidor de nombres \"{ns}\" a una consulta SOA."
+
+#. BASIC:B02_NS_NOT_AUTH
+#, perl-brace-format
+msgid ""
+"Name server \"{ns}\" does not give an authoritative answer on an SOA query."
+msgstr ""
+"El servidor de nombres \"{ns}\" no entrega una respuesta autoritativa a una "
+"consulta SOA."
+
+#. BASIC:B02_NS_NO_IP_ADDR
+#, perl-brace-format
+msgid "Name server \"{nsname}\" cannot be resolved into an IP address."
+msgstr ""
+"El servidor de nombres \"{nsname}\" no puede resolverse a una dirección IP."
+
+#. BASIC:B02_NS_NO_RESPONSE
+#, perl-brace-format
+msgid "Name server \"{ns}\" does not respond to an SOA query."
+msgstr "El servidor de nombres \"{ns}\" no responde a una consulta SOA."
+
+#. BASIC:B02_UNEXPECTED_RCODE
+#, perl-brace-format
+msgid ""
+"Name server \"{ns}\" responds with an unexpected RCODE name (\"{rcode}\") on "
+"an SOA query."
+msgstr ""
+"El servidor de nombres \"{ns}\" responde con un código RCODE inesperado "
+"(\"{rcode}\") a una consulta SOA."
 
 #. BASIC:DOMAIN_NAME_LABEL_TOO_LONG
 #, perl-brace-format
@@ -198,18 +327,6 @@ msgid "Functional nameserver found. \"A\" query for www.{zname} test skipped."
 msgstr ""
 "Se encontró un servidor de nombres en funcionamiento. La prueba de consulta "
 "\"A\" para www.{zname} será omitida."
-
-#. BASIC:HAS_NAMESERVERS
-#, perl-brace-format
-msgid "Nameserver {ns} listed these servers as glue: {nsnlist}."
-msgstr ""
-"El servidor de nombres {ns} entrega los siguientes servidores como \"glue\": "
-"{nsnlist}."
-
-#. BASIC:HAS_PARENT
-#, perl-brace-format
-msgid "Parent domain '{pname}' was found for the tested domain."
-msgstr "Se encontró el dominio padre '{pname}' para el dominio en prueba."
 
 #. BASIC:IPV4_DISABLED
 #. CONNECTIVITY:IPV4_DISABLED
@@ -251,28 +368,6 @@ msgid "Nameserver {ns} did not return \"A\" record(s) for {domain}."
 msgstr ""
 "El servidor de nombres {ns} no entregó registro(s) \"A\" para {domain}."
 
-#. BASIC:NO_GLUE_PREVENTS_NAMESERVER_TESTS
-msgid "No NS records for tested zone from parent. NS tests skipped."
-msgstr ""
-"No existen registros NS en el padre para la zona en prueba. Las pruebas NS "
-"serán omitidas."
-
-#. BASIC:NO_PARENT
-msgid "No parent domain could be found for the domain under test."
-msgstr "No puedo encontrarse un dominio padre para el dominio en pruebas."
-
-#. BASIC:NS_FAILED
-#, perl-brace-format
-msgid "Nameserver {ns} did not return NS records. RCODE was {rcode}."
-msgstr ""
-"El servidor de nombres {ns} no entregó registros NS. El código RCODE fue "
-"{rcode}."
-
-#. BASIC:NS_NO_RESPONSE
-#, perl-brace-format
-msgid "Nameserver {ns} did not respond to NS query."
-msgstr "El servidor de nombres {ns} no respondió a consultas NS."
-
 #. CONNECTIVITY:CONNECTIVITY01
 msgid "UDP connectivity"
 msgstr "Conectividad UDP"
@@ -284,6 +379,10 @@ msgstr "Conectividad TCP"
 #. CONNECTIVITY:CONNECTIVITY03
 msgid "AS Diversity"
 msgstr "Diversidad de AS"
+
+#. CONNECTIVITY:CONNECTIVITY04
+msgid "IP Prefix Diversity"
+msgstr "Diversidad de prefijos IP"
 
 #. CONNECTIVITY:CN01_IPV4_DISABLED
 #, perl-brace-format
@@ -478,6 +577,70 @@ msgstr ""
 "El servidor de nombres {ns} responde con un nombre \"owner\" incorrecto "
 "({domain_found} en vez de {domain_expected}) a una consulta SOA usando TCP."
 
+#. CONNECTIVITY:ASN_INFOS_ANNOUNCE_IN
+#, perl-brace-format
+msgid "Name server IP address \"{ns_ip}\" is announced in prefix \"{prefix}\"."
+msgstr ""
+"El servidor de nombres con la dirección IP \"{ns_ip}\" es anunciado en el "
+"prefijo \"{prefix}\"."
+
+#. CONNECTIVITY:ASN_INFOS_RAW
+#, perl-brace-format
+msgid "The ASN data for name server IP address \"{ns_ip}\" is \"{data}\"."
+msgstr ""
+"Los datos de ASN para el servidor de nombres con la dirección IP \"{ns_ip}\" "
+"son \"{data}\"."
+
+#. CONNECTIVITY:CN04_EMPTY_PREFIX_SET
+#, perl-brace-format
+msgid "Prefix database returned no information for IP address {ns_ip}."
+msgstr ""
+"La base de datos de prefijos no tiene información para la dirección IP "
+"{ns_ip}."
+
+#. CONNECTIVITY:CN04_ERROR_PREFIX_DATABASE
+#, perl-brace-format
+msgid "Prefix database error. No data to analyze for IP address {ns_ip}."
+msgstr ""
+"Error con la base de datos de prefijos. No hay datos para analizar la "
+"dirección IP {ns_ip}."
+
+#. CONNECTIVITY:CN04_IPV4_SAME_PREFIX
+#, perl-brace-format
+msgid ""
+"The following name server(s) are announced in the same IPv4 prefix "
+"({ip_prefix}): \"{ns_list}\""
+msgstr ""
+"Los siguientes servidores de nombres son anunciados en el mismo prefijo IPv4 "
+"({ip_prefix}): \"{ns_list}\""
+
+#. CONNECTIVITY:CN04_IPV4_DIFFERENT_PREFIX
+#, perl-brace-format
+msgid ""
+"The following name server(s) are announced in unique IPv4 prefix(es): "
+"\"{ns_list}\""
+msgstr ""
+"Los siguientes servidores de nombres son anunciados en un(os) prefijo(s) "
+"IPv4 único: \"{ns_list}\""
+
+#. CONNECTIVITY:CN04_IPV6_SAME_PREFIX
+#, perl-brace-format
+msgid ""
+"The following name server(s) are announced in the same IPv6 prefix "
+"({ip_prefix}): \"{ns_list}\""
+msgstr ""
+"Los siguientes servidores de nombres son anunciados en el mismo prefijo IPv6 "
+"({ip_prefix}): \"{ns_list}\""
+
+#. CONNECTIVITY:CN04_IPV6_DIFFERENT_PREFIX
+#, perl-brace-format
+msgid ""
+"The following name server(s) are announced in unique IPv6 prefix(es): "
+"\"{ns_list}\""
+msgstr ""
+"Los siguientes servidores de nombres son anunciados en un(os) prefijo(s) "
+"IPv6 único: \"{ns_list}\""
+
 #. CONNECTIVITY:ERROR_ASN_DATABASE
 #, perl-brace-format
 msgid "ASN Database error. No data to analyze for {ns_ip}."
@@ -495,25 +658,26 @@ msgstr ""
 #. CONNECTIVITY:IPV4_SAME_ASN
 #, perl-brace-format
 msgid ""
-"All authoritative nameservers have the IPv4 addresses in the same AS set "
+"All authoritative nameservers have their IPv4 addresses in the same AS set "
 "({asn_list})."
 msgstr ""
-"Todos los servidores de nombres autoritativos tienen direcciones IPv4 en el "
-"mismo grupo de AS ({asn_list})."
+"Todos los servidores de nombres autoritativos tienen sus direcciones IPv4 en "
+"el mismo grupo de AS ({asn_list})."
 
 #. CONNECTIVITY:IPV4_ONE_ASN
 #, perl-brace-format
 msgid ""
-"All authoritative nameservers have the IPv4 addresses in the same AS ({asn})."
+"All authoritative nameservers have their IPv4 addresses in the same AS "
+"({asn})."
 msgstr ""
-"Todos los servidores de nombres autoritativos tienen direcciones IPv4 en el "
-"mismo AS ({asn})."
+"Todos los servidores de nombres autoritativos tienen sus direcciones IPv4 en "
+"el mismo AS ({asn})."
 
 #. CONNECTIVITY:IPV4_DIFFERENT_ASN
 #, perl-brace-format
 msgid ""
-"At least two IPv4 addresses of the authoritative nameservers are announce by "
-"different AS sets. A merged list of all AS: ({asn_list})."
+"At least two IPv4 addresses of the authoritative nameservers are announced "
+"by different AS sets. A merged list of all AS: ({asn_list})."
 msgstr ""
 "Al menos dos direcciones IPv4 de los servidores de nombres autoritativos son "
 "anunciadas por grupos de AS distintos. Una lista combinada de todos los AS: "
@@ -522,25 +686,26 @@ msgstr ""
 #. CONNECTIVITY:IPV6_SAME_ASN
 #, perl-brace-format
 msgid ""
-"All authoritative nameservers have the IPv6 addresses in the same AS set "
+"All authoritative nameservers have their IPv6 addresses in the same AS set "
 "({asn_list})."
 msgstr ""
-"Todos los servidores de nombres autoritativos tienen direcciones IPv6 en el "
-"mismo grupo de AS ({asn_list})."
+"Todos los servidores de nombres autoritativos tienen sus direcciones IPv6 en "
+"el mismo grupo de AS ({asn_list})."
 
 #. CONNECTIVITY:IPV6_ONE_ASN
 #, perl-brace-format
 msgid ""
-"All authoritative nameservers have the IPv6 addresses in the same AS ({asn})."
+"All authoritative nameservers have their IPv6 addresses in the same AS "
+"({asn})."
 msgstr ""
-"Todos los servidores de nombres autoritativos tienen direcciones IPv6 en el "
-"mismo AS ({asn})."
+"Todos los servidores de nombres autoritativos tienen sus direcciones IPv6 en "
+"el mismo AS ({asn})."
 
 #. CONNECTIVITY:IPV6_DIFFERENT_ASN
 #, perl-brace-format
 msgid ""
-"At least two IPv6 addresses of the authoritative nameservers are announce by "
-"different AS sets. A merged list of all AS: ({asn_list})."
+"At least two IPv6 addresses of the authoritative nameservers are announced "
+"by different AS sets. A merged list of all AS: ({asn_list})."
 msgstr ""
 "Al menos dos direcciones IPv6 de los servidores de nombres autoritativos son "
 "anunciadas por grupos de AS distintos. Una lista combinada de todos los AS: "
@@ -560,26 +725,12 @@ msgstr ""
 "Los servidores de nombres tienen direcciones IPv6 en los siguientes ASs: "
 "{asn}."
 
-#. CONNECTIVITY:ASN_INFOS_RAW
-#, perl-brace-format
-msgid "The ASN data for name server IP address \"{ns_ip}\" is \"{data}\"."
-msgstr ""
-"Los datos de ASN para el servidor de nombres con la dirección IP \"{ns_ip}\" "
-"son \"{data}\"."
-
 #. CONNECTIVITY:ASN_INFOS_ANNOUNCE_BY
 #, perl-brace-format
 msgid "Name server IP address \"{ns_ip}\" is announced by ASN {asn}."
 msgstr ""
 "El servidor de nombres con la dirección IP \"{ns_ip}\" es anunciado por el "
 "ASN {asn}."
-
-#. CONNECTIVITY:ASN_INFOS_ANNOUNCE_IN
-#, perl-brace-format
-msgid "Name server IP address \"{ns_ip}\" is announced in prefix \"{prefix}\"."
-msgstr ""
-"El servidor de nombres con la dirección IP \"{ns_ip}\" es anunciado en el "
-"prefijo \"{prefix}\"."
 
 #. CONSISTENCY:CONSISTENCY01
 msgid "SOA serial number consistency"
@@ -834,8 +985,8 @@ msgid "Validate CDNSKEY"
 msgstr "Validar CDNSKEY"
 
 #. DNSSEC:DNSSEC18
-msgid "Validate trust from DS to CDS and CDNSKEY "
-msgstr "Validar confianza desde el DS al CDS y CDNSKEY "
+msgid "Validate trust from DS to CDS and CDNSKEY"
+msgstr "Validar confianza desde el DS al CDS y CDNSKEY"
 
 #. DNSSEC:ADDITIONAL_DNSKEY_SKIPPED
 msgid "No DNSKEYs found. Additional tests skipped."
@@ -2201,6 +2352,10 @@ msgstr ""
 "Prueba de versión desconocida con un código de opción EDNS (OPTION-CODE) "
 "desconocido"
 
+#. NAMESERVER:NAMESERVER15
+msgid "Checking for revealed software version"
+msgstr "Revisando la versión de software declarada"
+
 #. NAMESERVER:AAAA_BAD_RDATA
 #, perl-brace-format
 msgid ""
@@ -2503,6 +2658,26 @@ msgstr ""
 "La respuesta DNS, ante una consulta con un código de opción EDNS "
 "desconocido, es inesperadamente no autoritativa desde los servidores de "
 "nombre \"{ns_ip_list}\"."
+
+#. NAMESERVER:N15_NO_VERSION
+#, perl-brace-format
+msgid ""
+"The following name server(s) do not respond to software version queries. "
+"Returned from name servers: \"{ns_ip_list}\""
+msgstr ""
+"Los siguientes servidores de nombres no responden a consultas sobre su "
+"versión de software. Obtenido de los servidores de nombres: \"{ns_ip_list}\""
+
+#. NAMESERVER:N15_SOFTWARE_VERSION
+#, perl-brace-format
+msgid ""
+"The following name server(s) respond to software version query "
+"\"{query_name}\" with string \"{string}\". Returned from name servers: "
+"\"{ns_ip_list}\""
+msgstr ""
+"Los siguientes servidores de nombres responden a una consulta de versión de "
+"software \"{query_name}\" con la cadena de caracteres \"{string}\". Obtenido "
+"de los servidores de nombres: \"{ns_ip_list}\""
 
 #. NAMESERVER:QNAME_CASE_INSENSITIVE
 #, perl-brace-format
@@ -3149,10 +3324,11 @@ msgstr "La zona es un TLD y tiene un RRset MX inesperado (MX no-nulo)."
 #. ZONE:Z09_UNEXPECTED_RCODE_MX
 #, perl-brace-format
 msgid ""
-"Unexpected RCODE value on the MX query from name servers \"{ns_ip_list}\"."
+"Unexpected RCODE value ({rcode}) on the MX query from name servers "
+"\"{ns_ip_list}\"."
 msgstr ""
-"Valor de RCODE inesperado ante una consulta MX desde los servidores de "
-"nombre \"{ns_ip_list}\"."
+"Valor de RCODE inesperado ({rcode}) ante una consulta MX desde los "
+"servidores de nombre \"{ns_ip_list}\"."
 
 #. SYSTEM:CANNOT_CONTINUE
 #, perl-brace-format
@@ -3262,3 +3438,34 @@ msgid "Big packet size ({size}) (try with \"{command}\")."
 msgstr ""
 "El tamaño del paquete es demasiado grande ({size}) (intente con el comando "
 "\"{command}\")."
+
+#~ msgid "Test of basic nameserver and zone functionality"
+#~ msgstr "Prueba de funcionalidad básica del servidor de nombres y zona"
+
+#, perl-brace-format
+#~ msgid "Nameserver {ns} listed these servers as glue: {nsnlist}."
+#~ msgstr ""
+#~ "El servidor de nombres {ns} entrega los siguientes servidores como "
+#~ "\"glue\": {nsnlist}."
+
+#, perl-brace-format
+#~ msgid "Parent domain '{pname}' was found for the tested domain."
+#~ msgstr "Se encontró el dominio padre '{pname}' para el dominio en prueba."
+
+#~ msgid "No NS records for tested zone from parent. NS tests skipped."
+#~ msgstr ""
+#~ "No existen registros NS en el padre para la zona en prueba. Las pruebas "
+#~ "NS serán omitidas."
+
+#~ msgid "No parent domain could be found for the domain under test."
+#~ msgstr "No puedo encontrarse un dominio padre para el dominio en pruebas."
+
+#, perl-brace-format
+#~ msgid "Nameserver {ns} did not return NS records. RCODE was {rcode}."
+#~ msgstr ""
+#~ "El servidor de nombres {ns} no entregó registros NS. El código RCODE fue "
+#~ "{rcode}."
+
+#, perl-brace-format
+#~ msgid "Nameserver {ns} did not respond to NS query."
+#~ msgstr "El servidor de nombres {ns} no respondió a consultas NS."
