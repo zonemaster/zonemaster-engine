@@ -17,7 +17,6 @@ RUN apk add --no-cache \
     perl-io-socket-inet6 \
     perl-list-moreutils \
     perl-locale-msgfmt \
-    perl-locale-po \
     perl-lwp-protocol-https \
     perl-module-install \
     perl-moose \
@@ -29,6 +28,7 @@ RUN apk add --no-cache \
     perl-text-csv \
  && cpanm --no-wget --from=https://cpan.metacpan.org/ \
     Email::Valid \
+    Locale::PO \
     Locale::TextDomain \
     Module::Find \
     MooseX::Singleton \
