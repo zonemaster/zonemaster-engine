@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-24 11:14-0400\n"
+"POT-Creation-Date: 2023-05-25 14:42+0000\n"
 "PO-Revision-Date: 2023-05-24 11:37-0400\n"
 "Last-Translator: hsalgado@nic.cl\n"
 "Language-Team: Zonemaster Team\n"
@@ -123,8 +123,8 @@ msgstr "Los servidores de nombre no responden a las consultas PTR ({domain})."
 #. BASIC:TEST_CASE_END
 #. CONNECTIVITY:TEST_CASE_END
 #. CONSISTENCY:TEST_CASE_END
-#. DELEGATION:TEST_CASE_END
 #. DNSSEC:TEST_CASE_END
+#. DELEGATION:TEST_CASE_END
 #. NAMESERVER:TEST_CASE_END
 #. SYNTAX:TEST_CASE_END
 #. ZONE:TEST_CASE_END
@@ -136,8 +136,8 @@ msgstr "FIN_DE_PRUEBA {testcase}."
 #. BASIC:TEST_CASE_START
 #. CONNECTIVITY:TEST_CASE_START
 #. CONSISTENCY:TEST_CASE_START
-#. DELEGATION:TEST_CASE_START
 #. DNSSEC:TEST_CASE_START
+#. DELEGATION:TEST_CASE_START
 #. NAMESERVER:TEST_CASE_START
 #. SYNTAX:TEST_CASE_START
 #. ZONE:TEST_CASE_START
@@ -331,8 +331,8 @@ msgstr ""
 #. BASIC:IPV4_DISABLED
 #. CONNECTIVITY:IPV4_DISABLED
 #. CONSISTENCY:IPV4_DISABLED
-#. DELEGATION:IPV4_DISABLED
 #. DNSSEC:IPV4_DISABLED
+#. DELEGATION:IPV4_DISABLED
 #. NAMESERVER:IPV4_DISABLED
 #. SYNTAX:IPV4_DISABLED
 #. SYSTEM:SKIP_IPV4_DISABLED
@@ -348,8 +348,8 @@ msgstr "Activado IPv4, se puede enviar la consulta \"{rrtype}\" hacia {ns}."
 #. BASIC:IPV6_DISABLED
 #. CONNECTIVITY:IPV6_DISABLED
 #. CONSISTENCY:IPV6_DISABLED
-#. DELEGATION:IPV6_DISABLED
 #. DNSSEC:IPV6_DISABLED
+#. DELEGATION:IPV6_DISABLED
 #. NAMESERVER:IPV6_DISABLED
 #. SYNTAX:IPV6_DISABLED
 #. SYSTEM:SKIP_IPV6_DISABLED
@@ -817,8 +817,8 @@ msgid "Found {count} SOA time parameter set(s)."
 msgstr "Se encontraron {count} grupos de parámetros de tiempo en el SOA."
 
 #. CONSISTENCY:NO_RESPONSE
-#. DELEGATION:NO_RESPONSE
 #. DNSSEC:NO_RESPONSE
+#. DELEGATION:NO_RESPONSE
 #. ZONE:NO_RESPONSE
 #, perl-brace-format
 msgid "Nameserver {ns} did not respond."
@@ -3445,8 +3445,8 @@ msgstr ""
 #, perl-brace-format
 #~ msgid "Nameserver {ns} listed these servers as glue: {nsnlist}."
 #~ msgstr ""
-#~ "El servidor de nombres {ns} entrega los siguientes servidores como "
-#~ "\"glue\": {nsnlist}."
+#~ "El servidor de nombres {ns} entrega los siguientes servidores como \"glue"
+#~ "\": {nsnlist}."
 
 #, perl-brace-format
 #~ msgid "Parent domain '{pname}' was found for the tested domain."
