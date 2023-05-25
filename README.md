@@ -55,10 +55,10 @@ be found in the [LICENSE](LICENSE) file included in this respository.
 
 [CPAN site]:                                      https://metacpan.org/pod/Zonemaster::Engine
 [Docker Hub]:                                     https://hub.docker.com/u/zonemaster
-[Docker Image Creation]:                          https://github.com/zonemaster/zonemaster/blob/master/docs/internal-documentation/maintenance/ReleaseProcess-create-docker-image.md
+[Docker Image Creation]:                          https://github.com/zonemaster/zonemaster/blob/master/docs/internal/maintenance/ReleaseProcess-create-docker-image.md
 [Docs]:                                           docs/
 [Installation]:                                   https://github.com/zonemaster/zonemaster/blob/master/docs/public/installation/zonemaster-engine.md
-[USING]:                                          https://github.com/zonemaster/zonemaster-cli/blob/master/USING.md
+[USING]:                                          https://github.com/zonemaster/zonemaster/blob/master/docs/public/using/cli.md
 [Zonemaster main repository]:                     https://github.com/zonemaster/zonemaster
 [Zonemaster/README.md]:                           https://github.com/zonemaster/zonemaster/blob/master/README.md
 
