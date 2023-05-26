@@ -47,7 +47,7 @@ subtest "check msg args" => sub {
     is $output, "", $makebin . ' check-msg-args gives empty output';
 };
 
-subtest "tidy po files" => sub {
+# subtest "tidy po files" => sub {
     # TODO: {
     #     my ( $output, $status );
 
@@ -62,6 +62,6 @@ subtest "tidy po files" => sub {
     #     $output = `git diff --numstat`;
     #     is $output, "", 'all files are tidied (if not run "make tidy-po")';
     # }
-};
+# };
 
 done_testing();
