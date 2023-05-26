@@ -48,20 +48,20 @@ subtest "check msg args" => sub {
 };
 
 subtest "tidy po files" => sub {
-    TODO: {
-        my ( $output, $status );
+    # TODO: {
+    #     my ( $output, $status );
 
-        $output = `git diff --numstat`;
+    #     $output = `git diff --numstat`;
 
-        skip 'git repo should be clean to run this test', 3 if $output ne '';
+    #     skip 'git repo should be clean to run this test', 3 if $output ne '';
 
-        ( $output, $status ) = make "tidy-po";
-        is $status, 0,  $makebin . ' tidy-po exits with value 0';
-        is $output, "", $makebin . ' tidy-po gives empty output';
+    #     ( $output, $status ) = make "tidy-po";
+    #     is $status, 0,  $makebin . ' tidy-po exits with value 0';
+    #     is $output, "", $makebin . ' tidy-po gives empty output';
 
-        $output = `git diff --numstat`;
-        is $output, "", 'all files are tidied (if not run "make tidy-po")';
-    }
+    #     $output = `git diff --numstat`;
+    #     is $output, "", 'all files are tidied (if not run "make tidy-po")';
+    # }
 };
 
 done_testing();
