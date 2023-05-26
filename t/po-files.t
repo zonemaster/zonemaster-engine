@@ -48,7 +48,7 @@ subtest "check msg args" => sub {
 };
 
 subtest "tidy po files" => sub {
-    SKIP: {
+    TODO: {
         my ( $output, $status );
 
         $output = `git diff --numstat`;
