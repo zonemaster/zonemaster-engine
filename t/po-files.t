@@ -43,7 +43,7 @@ subtest "check po files" => sub {
 };
 
 subtest "check msg args" => sub {
-    my ( $output, $_ ) = make "check-msg-args";
+    my ( $output ) = make "check-msg-args";
     is $output, "", $makebin . ' check-msg-args gives empty output';
 };
 
