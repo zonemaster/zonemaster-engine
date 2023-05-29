@@ -3438,34 +3438,3 @@ msgid "Big packet size ({size}) (try with \"{command}\")."
 msgstr ""
 "El tamaño del paquete es demasiado grande ({size}) (intente con el comando "
 "\"{command}\")."
-
-#~ msgid "Test of basic nameserver and zone functionality"
-#~ msgstr "Prueba de funcionalidad básica del servidor de nombres y zona"
-
-#, perl-brace-format
-#~ msgid "Nameserver {ns} listed these servers as glue: {nsnlist}."
-#~ msgstr ""
-#~ "El servidor de nombres {ns} entrega los siguientes servidores como \"glue"
-#~ "\": {nsnlist}."
-
-#, perl-brace-format
-#~ msgid "Parent domain '{pname}' was found for the tested domain."
-#~ msgstr "Se encontró el dominio padre '{pname}' para el dominio en prueba."
-
-#~ msgid "No NS records for tested zone from parent. NS tests skipped."
-#~ msgstr ""
-#~ "No existen registros NS en el padre para la zona en prueba. Las pruebas "
-#~ "NS serán omitidas."
-
-#~ msgid "No parent domain could be found for the domain under test."
-#~ msgstr "No puedo encontrarse un dominio padre para el dominio en pruebas."
-
-#, perl-brace-format
-#~ msgid "Nameserver {ns} did not return NS records. RCODE was {rcode}."
-#~ msgstr ""
-#~ "El servidor de nombres {ns} no entregó registros NS. El código RCODE fue "
-#~ "{rcode}."
-
-#, perl-brace-format
-#~ msgid "Nameserver {ns} did not respond to NS query."
-#~ msgstr "El servidor de nombres {ns} no respondió a consultas NS."
