@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-23 11:24+0000\n"
-"PO-Revision-Date: 2023-05-23 11:23+0000\n"
+"POT-Creation-Date: 2023-05-31 08:53+0000\n"
+"PO-Revision-Date: 2023-05-31 08:53+0000\n"
 "Last-Translator: mats.dufberg@iis.se\n"
 "Language-Team: Zonemaster Team\n"
 "Language: sv\n"
@@ -248,8 +248,8 @@ msgstr ""
 #, perl-brace-format
 msgid "There is no working name server for \"{domain}\" so it is unreachable."
 msgstr ""
-"Det finns inga åtkomliga namnservrar för \"{domain}\" vilket betyder att den "
-"inte kan nås."
+"Det finns inga åtkomliga namnservrar för \"{domain}\" vilket betyder att "
+"domänen (zonen) inte kan nås."
 
 #. BASIC:B02_NS_BROKEN
 #, perl-brace-format
@@ -360,11 +360,11 @@ msgstr "Nätåtkomst över TCP"
 
 #. CONNECTIVITY:CONNECTIVITY03
 msgid "AS Diversity"
-msgstr "AS-redundans"
+msgstr "AS-spridning"
 
 #. CONNECTIVITY:CONNECTIVITY04
 msgid "IP Prefix Diversity"
-msgstr "Redundans i IP-prefix"
+msgstr "IP-prefix-spridning"
 
 #. CONNECTIVITY:CN01_IPV4_DISABLED
 #, perl-brace-format
@@ -2287,7 +2287,7 @@ msgstr ""
 
 #. NAMESERVER:NAMESERVER15
 msgid "Checking for revealed software version"
-msgstr "Kontrollera för avslöjad version av programvara"
+msgstr "Kontroll av rapporterad version av programvara"
 
 #. NAMESERVER:AAAA_BAD_RDATA
 #, perl-brace-format
