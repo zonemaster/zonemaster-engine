@@ -2,15 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-18 20:43+0000\n"
-"PO-Revision-Date: 2023-05-22 12:27+0300\n"
+"POT-Creation-Date: 2023-06-19 09:11+0000\n"
+"PO-Revision-Date: 2023-06-19 08:22+0300\n"
 "Last-Translator: sami.salmensuo@traficom.fi\n"
 "Language-Team: Traficom domain team\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.3.1\n"
 
 #, perl-brace-format
 msgid ""
@@ -3122,7 +3122,7 @@ msgid ""
 "(expected \"{soaserial}\" but got \"{soaserial_list}\")"
 msgstr ""
 "SOA MNAME -nimipalvelimilla \"{ns_list}\" ei ole korkeinta SOA sarjanumeroa "
-"(odotettu \"{soaserial}\", mutta sai \"{soaserial_list}\")"
+"(odotettu \"{soaserial}\", mutta saatiin \"{soaserial_list}\")"
 
 #. ZONE:Z01_MNAME_NOT_RESOLVE
 #, perl-brace-format
