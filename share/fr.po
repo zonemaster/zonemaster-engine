@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-23 18:26+0200\n"
-"PO-Revision-Date: 2023-05-30 10:08+0200\n"
+"POT-Creation-Date: 2023-06-19 08:00+0200\n"
+"PO-Revision-Date: 2023-06-19 08:14+0200\n"
 "Last-Translator: thomas.green@afnic.fr\n"
 "Language-Team: Zonemaster Team\n"
 "Language: fr\n"
@@ -119,8 +119,8 @@ msgstr ""
 #. BASIC:TEST_CASE_END
 #. CONNECTIVITY:TEST_CASE_END
 #. CONSISTENCY:TEST_CASE_END
-#. DELEGATION:TEST_CASE_END
 #. DNSSEC:TEST_CASE_END
+#. DELEGATION:TEST_CASE_END
 #. NAMESERVER:TEST_CASE_END
 #. SYNTAX:TEST_CASE_END
 #. ZONE:TEST_CASE_END
@@ -132,8 +132,8 @@ msgstr "TEST_CASE_END {testcase}."
 #. BASIC:TEST_CASE_START
 #. CONNECTIVITY:TEST_CASE_START
 #. CONSISTENCY:TEST_CASE_START
-#. DELEGATION:TEST_CASE_START
 #. DNSSEC:TEST_CASE_START
+#. DELEGATION:TEST_CASE_START
 #. NAMESERVER:TEST_CASE_START
 #. SYNTAX:TEST_CASE_START
 #. ZONE:TEST_CASE_START
@@ -160,6 +160,81 @@ msgstr "Le test \"cassé mais fonctionnel\""
 #. BASIC:A_QUERY_NO_RESPONSES
 msgid "Nameservers did not respond to A query."
 msgstr "Aucune réponse des serveurs de noms sur une requête de type \"A\"."
+
+#. BASIC:B01_CHILD_IS_ALIAS
+#, perl-brace-format
+msgid ""
+"\"{domain_child}\" is not a zone. It is an alias for \"{domain_target}\". "
+"Run a test for \"{domain_target}\" instead. Returned from name servers "
+"\"{ns_ip_list}."
+msgstr ""
+"\"{domain_child}\" n’est pas une zone. C’est un alias pour "
+"\"{domain_target}\". Lancez plutôt un test de \"{domain_target}\". Données "
+"obtenues des serveurs de noms \"{ns_ip_list}\"."
+
+#. BASIC:B01_CHILD_FOUND
+#, perl-brace-format
+msgid "The zone \"{domain}\" is found."
+msgstr "La zone \"{domain}\" a été trouvée."
+
+#. BASIC:B01_CHILD_NOT_EXIST
+#, perl-brace-format
+msgid "\"{domain}\" does not exist as it is not delegated."
+msgstr "\"{domain}\" n’existe pas car il n’est pas délégué."
+
+#. BASIC:B01_INCONSISTENT_ALIAS
+#, perl-brace-format
+msgid "The alias for \"{domain}\" is inconsistent between name servers."
+msgstr ""
+"Les alias pour \"{domain}\" renvoyés par les serveurs de noms ne sont pas "
+"cohérents entre eux."
+
+#. BASIC:B01_INCONSISTENT_DELEGATION
+#, perl-brace-format
+msgid ""
+"The name servers for parent zone \"{domain_parent}\" give inconsistent "
+"delegation of \"{domain_child}\". Returned from name servers "
+"\"{ns_ip_list}\"."
+msgstr ""
+"Les serveurs de noms de la zone parente \"{domain_parent}\" renvoient des "
+"délégations pour \"{domain_child}\" qui ne sont pas cohérentes entre elles. "
+"Données obtenues des serveurs de noms \"{ns_ip_list}\"."
+
+#. BASIC:B01_NO_CHILD
+#, perl-brace-format
+msgid ""
+"\"{domain_child}\" does not exist as a DNS zone. Try to test "
+"\"{domain_super}\" instead."
+msgstr ""
+"\"{domain_child}\" n’existe pas en tant que zone DNS. Essayez plutôt de "
+"tester \"{domain_super}\"."
+
+#. BASIC:B01_PARENT_FOUND
+#, perl-brace-format
+msgid ""
+"The parent zone is \"{domain}\" as returned from name servers "
+"\"{ns_ip_list}\"."
+msgstr ""
+"La zone parente est \"{domain}\", d’après les serveurs de noms "
+"\"{ns_ip_list}\"."
+
+#. BASIC:B01_PARENT_UNDETERMINED
+#, perl-brace-format
+msgid "The parent zone cannot be determined on name servers \"{ns_ip_list}\"."
+msgstr ""
+"La zone parente ne peut pas être déterminée auprès des serveurs de noms "
+"\"{ns_ip_list}\"."
+
+#. BASIC:B01_UNEXPECTED_NS_RESPONSE
+#, perl-brace-format
+msgid ""
+"Name servers for parent domain \"{domain_parent}\" give an incorrect "
+"response on SOA query for \"{domain_child}\". Returned from name servers "
+"\"{ns_ip_list}\"."
+msgstr ""
+"Les serveurs de noms du domaine parent \"{domain_parent}\" donnent une "
+"réponse incorrecte à une requête de type SOA pour \"{domain_child}\". "
+"Données obtenues des serveurs de noms \"{ns_ip_list}\"."
 
 #. BASIC:B02_AUTH_RESPONSE_SOA
 #, perl-brace-format
@@ -251,17 +326,11 @@ msgstr ""
 "Un serveur de noms fonctionnel a été trouvé. Inutile de réaliser une requête "
 "de type \"A\" sur www.{zname}."
 
-#. BASIC:HAS_PARENT
-#, perl-brace-format
-msgid "Parent domain '{pname}' was found for the tested domain."
-msgstr ""
-"Une zone parente '{pname}' a pu être trouvée pour le nom de domaine testé."
-
 #. BASIC:IPV4_DISABLED
 #. CONNECTIVITY:IPV4_DISABLED
 #. CONSISTENCY:IPV4_DISABLED
-#. DELEGATION:IPV4_DISABLED
 #. DNSSEC:IPV4_DISABLED
+#. DELEGATION:IPV4_DISABLED
 #. NAMESERVER:IPV4_DISABLED
 #. SYNTAX:IPV4_DISABLED
 #. SYSTEM:SKIP_IPV4_DISABLED
@@ -281,8 +350,8 @@ msgstr ""
 #. BASIC:IPV6_DISABLED
 #. CONNECTIVITY:IPV6_DISABLED
 #. CONSISTENCY:IPV6_DISABLED
-#. DELEGATION:IPV6_DISABLED
 #. DNSSEC:IPV6_DISABLED
+#. DELEGATION:IPV6_DISABLED
 #. NAMESERVER:IPV6_DISABLED
 #. SYNTAX:IPV6_DISABLED
 #. SYSTEM:SKIP_IPV6_DISABLED
@@ -305,10 +374,6 @@ msgid "Nameserver {ns} did not return \"A\" record(s) for {domain}."
 msgstr ""
 "Le serveur de noms {ns} ne renvoie pas d'enregistrement de type \"A\" en "
 "réponse à une requête pour '{domain}'."
-
-#. BASIC:NO_PARENT
-msgid "No parent domain could be found for the domain under test."
-msgstr "Aucune zone parente n'a pu être trouvée pour le nom de domaine testé."
 
 #. CONNECTIVITY:CONNECTIVITY01
 msgid "UDP connectivity"
@@ -767,8 +832,8 @@ msgstr ""
 "les différents SOA."
 
 #. CONSISTENCY:NO_RESPONSE
-#. DELEGATION:NO_RESPONSE
 #. DNSSEC:NO_RESPONSE
+#. DELEGATION:NO_RESPONSE
 #. ZONE:NO_RESPONSE
 #, perl-brace-format
 msgid "Nameserver {ns} did not respond."
