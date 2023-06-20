@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-19 09:11+0000\n"
-"PO-Revision-Date: 2023-06-19 08:22+0300\n"
+"POT-Creation-Date: 2023-06-20 11:38+0000\n"
+"PO-Revision-Date: 2023-06-20 12:34+0300\n"
 "Last-Translator: sami.salmensuo@traficom.fi\n"
 "Language-Team: Traficom domain team\n"
 "Language: fi\n"
@@ -161,39 +161,42 @@ msgid "Nameservers did not respond to A query."
 msgstr "Nimipalvelimet eivät vastanneet A-tietue kyselyyn."
 
 #. BASIC:B01_CHILD_IS_ALIAS
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "\"{domain_child}\" is not a zone. It is an alias for \"{domain_target}\". "
 "Run a test for \"{domain_target}\" instead. Returned from name servers "
 "\"{ns_ip_list}."
 msgstr ""
-"Postikohteet MX RRsetissä \"{mailtarget_list}\" palautettiin "
-"nimipalvelimista \"{ns_ip_list}\"."
+"\"{domain_child}\" ei ole vyöhyke. Se on alias verkkotunnukselle "
+"\"{domain_target}\". Suorita sen sijaan testi verkkotunnukselle "
+"{domain_target}. Vastaus nimipalvelimilta \"{ns_ip_list}\"."
 
 #. BASIC:B01_CHILD_FOUND
 #, perl-brace-format
 msgid "The zone \"{domain}\" is found."
-msgstr ""
+msgstr "Vyöhyke \"{domain}\" löytyy."
 
 #. BASIC:B01_CHILD_NOT_EXIST
 #, perl-brace-format
 msgid "\"{domain}\" does not exist as it is not delegated."
-msgstr ""
+msgstr "\"{domain}\" ei ole olemassa, sillä sitä ei ole delegoitu."
 
 #. BASIC:B01_INCONSISTENT_ALIAS
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "The alias for \"{domain}\" is inconsistent between name servers."
-msgstr "MX RRset -tiedot ovat ristiriidassa nimipalvelimien välillä."
+msgstr ""
+"Verkkotunnuksen \"{domain}\" alias on epäjohdonmukainen nimipalvelimien "
+"välillä."
 
 #. BASIC:B01_INCONSISTENT_DELEGATION
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "The name servers for parent zone \"{domain_parent}\" give inconsistent "
 "delegation of \"{domain_child}\". Returned from name servers "
 "\"{ns_ip_list}\"."
 msgstr ""
-"Seuraavat nimipalvelimet vastaavat ohjelmistoversiokyselyyn \"{query_name}\" "
-"merkkijonolla \"{string}\". Palautettu nimipalvelimista: \"{ns_ip_list}\""
+"Päävyöhykkeen \"{domain_parent}\" nimipalvelimet antavat epäjohdonmukaisen "
+"delegoinnin \"{domain_child}\". Vastaus nimipalvelimilta \"{ns_ip_list}\"."
 
 #. BASIC:B01_NO_CHILD
 #, perl-brace-format
@@ -201,30 +204,32 @@ msgid ""
 "\"{domain_child}\" does not exist as a DNS zone. Try to test "
 "\"{domain_super}\" instead."
 msgstr ""
+"\"{domain_child}\" ei ole olemassa DNS-vyöhykkeenä. Kokeile sen sijaan "
+"testata verkkotunnusta \"{domain_super}\"."
 
 #. BASIC:B01_PARENT_FOUND
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "The parent zone is \"{domain}\" as returned from name servers "
 "\"{ns_ip_list}\"."
 msgstr ""
-"Postikohteet MX RRsetissä \"{mailtarget_list}\" palautettiin "
-"nimipalvelimista \"{ns_ip_list}\"."
+"Päävyöhyke on \"{domain}\", joka palautui nimipalvelimilta \"{ns_ip_list}\"."
 
 #. BASIC:B01_PARENT_UNDETERMINED
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid "The parent zone cannot be determined on name servers \"{ns_ip_list}\"."
-msgstr "Nimipalvelimet \"{ns_ip_list}\" palauttivat MX RRsetin."
+msgstr "Päävyöhykettä ei voida määrittää nimipalvelimilla \"{ns_ip_list}\"."
 
 #. BASIC:B01_UNEXPECTED_NS_RESPONSE
-#, fuzzy, perl-brace-format
+#, perl-brace-format
 msgid ""
 "Name servers for parent domain \"{domain_parent}\" give an incorrect "
 "response on SOA query for \"{domain_child}\". Returned from name servers "
 "\"{ns_ip_list}\"."
 msgstr ""
-"Autoritatiivinen vastaus SOA-tietue kyselyyn verkkotunnukselle \"{domain}\" "
-"palautuu nimipalvelimilta \"{ns_list}\"."
+"Pääverkkotunnuksen \"{domain_parent}\" nimipalvelimet antavat virheellisen "
+"vastauksen SOA-kyselyyn \"{domain_child}\". Vastaus nimipalvelimilta "
+"\"{ns_ip_list}\"."
 
 #. BASIC:B02_AUTH_RESPONSE_SOA
 #, perl-brace-format
@@ -3311,87 +3316,3 @@ msgstr ""
 #, perl-brace-format
 msgid "Big packet size ({size}) (try with \"{command}\")."
 msgstr "Suurikokoinen paketti ({size}) (yritä käyttää komentoa \"{command}\")."
-
-#, perl-brace-format
-#~ msgid "Parent domain '{pname}' was found for the tested domain."
-#~ msgstr ""
-#~ "Testattavalle verkkotunnukselle löytyi ylemmän tason tunnus '{pname}'."
-
-#~ msgid "No parent domain could be found for the domain under test."
-#~ msgstr "Testattavalle verkkotunnukselle ei löytynyt ylemmän tason tunnusta."
-
-#, perl-brace-format
-#~ msgid "Nameserver {ns} does not respond over neither UDP nor TCP."
-#~ msgstr "Nimipalvelin {ns} ei vastaa UDP:llä eikä TCP:llä."
-
-#, perl-brace-format
-#~ msgid "Nameserver {ns} does not respond over UDP."
-#~ msgstr "Nimipalvelin {ns} ei vastannut UDP:llä."
-
-#, perl-brace-format
-#~ msgid "Nameserver {ns} listed these servers as glue: {nsnlist}."
-#~ msgstr "Nimipalvelin {ns} listasi seuraavat palvelimet liimana: {nsnlist}."
-
-#~ msgid "No NS records for tested zone from parent. NS tests skipped."
-#~ msgstr ""
-#~ "Ylätasolta ei löytynyt testattavaa vyöhykettä koskevia NS-tietueita. NS-"
-#~ "testit ohitettu."
-
-#, perl-brace-format
-#~ msgid "Nameserver {ns} did not return NS records. RCODE was {rcode}."
-#~ msgstr "Nimipalvelin {ns} ei palauttanut NS-tietueita. RCODE oli {rcode}."
-
-#, perl-brace-format
-#~ msgid "Nameserver {ns} did not respond to NS query."
-#~ msgstr "Nimipalvelin {ns} ei vastannut NS-kyselyyn."
-
-#, perl-brace-format
-#~ msgid "Nameserver {ns} accessible over TCP on port 53."
-#~ msgstr "Nimipalvelin {ns} on käytettävissä TCP:n kautta portissa 53."
-
-#, perl-brace-format
-#~ msgid "Nameserver {ns} accessible over UDP on port 53."
-#~ msgstr "Nimipalvelin {ns} on käytettävissä UDP:n kautta portissa 53."
-
-#, perl-brace-format
-#~ msgid "Nameserver {ns} not accessible over TCP on port 53."
-#~ msgstr "Nimipalvelin {ns} ei ole käytettävissä TCP:n kautta portissa 53."
-
-#, perl-brace-format
-#~ msgid "Nameserver {ns} not accessible over UDP on port 53."
-#~ msgstr "Nimipalvelin {ns} ei ole käytettävissä UDP:n kautta portissa 53."
-
-#, perl-brace-format
-#~ msgid ""
-#~ "DS record for zone {domain} with keytag {keytag} was created by digest "
-#~ "algorithm {ds_algo_num} ({ds_algo_mnemo}). While still being widely in "
-#~ "use, it is deprecated. Fetched from the nameservers with IP addresses "
-#~ "\"{ns_ip_list}\"."
-#~ msgstr ""
-#~ "Zonen {domain} DS-tietue jonka tunniste (keytag) on {keytag} on luotu "
-#~ "tiivistealgoritmilla {ds_algo_num} ({ds_algo_mnemo}) joka vaikkakin on "
-#~ "yhä laajasti käytössä, on kuitenkin poistumassa käytöstä. Tiedot on "
-#~ "haettu nimipalvelimilta joiden IP-osoitteet ovat \"{ns_ip_list}\"."
-
-#, perl-brace-format
-#~ msgid "SOA 'mname' nameserver {ns} does not respond."
-#~ msgstr "SOA 'mname' -nimipalvelin {ns} ei vastaa."
-
-#~ msgid ""
-#~ "No target (MX, A or AAAA record) to deliver e-mail for the domain name."
-#~ msgstr ""
-#~ "Ei kohdetta (MX, A tai AAAA-tietue), jonne voi lähettää sähköpostia "
-#~ "verkkotunnukselle."
-
-#, perl-brace-format
-#~ msgid "MX with mail target ({mailtarget_list}) exists for the domain name."
-#~ msgstr "MX-tietue ({mailtarget_list}) on jo olemassa verkkotunnuksella."
-
-#~ msgid "SOA 'mname' field does not exist"
-#~ msgstr "SOA 'mname' -kenttää ei ole olemassa"
-
-#, perl-brace-format
-#~ msgid "SOA 'mname' nameserver ({mname}) is authoritative for '{zone}' zone."
-#~ msgstr ""
-#~ "SOA 'mname' -nimipalvelin ({mname}) on autoritäärinen vyöhykkeelle "
-#~ "'{zone}'."
