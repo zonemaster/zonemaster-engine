@@ -34,7 +34,7 @@ requires 'Net::IP::XS'        => 0.21;
 requires 'Readonly'           => 0;
 requires 'Text::CSV'          => 0;
 requires 'YAML::XS'           => 0;
-requires 'Zonemaster::LDNS'   => 3.001000;
+requires 'Zonemaster::LDNS'   => 3.002000; # For v3.2.0
 
 test_requires 'Locale::PO'        => 0;
 test_requires 'Pod::Coverage'     => 0;
