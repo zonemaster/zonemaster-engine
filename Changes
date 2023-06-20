@@ -1,5 +1,41 @@
 Release history for Zonemaster component Zonemaster-Engine
 
+
+v4.7.0 2023-06-21 (public release version)
+
+ [Features]
+ - Updates implementation of test case BASIC01 (#1212)
+ - Adds implementation of test case CONNECTIVITY04 and cleans-up
+   implementation of test case CONNECTIVITY03 (#1219)
+ - Adds implementation of test case NAMESERVER15 (#1218)
+ - Adds implementation of MethodsV2 (#1050)
+ - Updates implementation of test case BASIC02 (#1197)
+ - Updates to accept YAML input for profile (#1209)
+ - Adds new "resolver.source4" and "resolver.source6"
+   properties to profile (#1203)
+
+ [Fixes]
+ - Updates translations (#1238, #1239, #1237, #1226, #1234, #1231)
+ - Removes documentation moved to the zonemaster/zonemaster
+   repository (#1235)
+ - Docker: install Locale::PO through CPAN (#1232)
+ - Lowers problematic tag in DNSSEC10 to DEBUG (#1225)
+ - Updates for the usage of Zonemaster::Engine::Translator (#1221)
+ - Updates implementation of NAMESERVER15 (#1220)
+ - Updates unit tests for test case DNSSEC16 (#1216)
+ - Updates unit tests for test case ZONE09 (#1215)
+ - Disables default testing in installation instructions (#1217)
+ - Fixes EDNS behavior for queries (#1147)
+ - Removes Basic04 completely (#1179)
+ - Adds method to get name server names from undelegated data
+   cache (#1214)
+ - Updates to avoid unnecessary calls to Profile::get in
+   logger (#1200)
+ - Updates implementation of ZONE09 (#1211)
+ - Fixes RIPE ASN lookup results parsing (#1207)
+ - Adds check PO file function (#1195)
+
+
 v4.6.2 2023-03-01 (public fix version)
 
  [Fixes]
