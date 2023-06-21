@@ -5,19 +5,19 @@ use 5.014002;
 use strict;
 use warnings;
 
-use version; our $VERSION = version->declare( "v1.0.27" );
+use version; our $VERSION = version->declare( "v1.1.0" );
 
 use List::MoreUtils qw[uniq none];
 use Locale::TextDomain qw[Zonemaster-Engine];
 use Readonly;
 use JSON::PP;
+use Net::IP::XS;
 
 use Zonemaster::Engine::Profile;
 use Zonemaster::Engine::Constants qw[:ip];
 use Zonemaster::Engine::Test::Address;
 use Zonemaster::Engine::Util;
 use Zonemaster::Engine::TestMethods;
-use Zonemaster::Engine::Net::IP;
 
 Readonly my @NONEXISTENT_NAMES => qw{
   xn--nameservertest.iis.se
@@ -71,6 +71,9 @@ sub all {
     }
     if ( Zonemaster::Engine::Util::should_run_test( q{nameserver13} ) ) {
         push @results, $class->nameserver13( $zone );
+    }
+    if ( Zonemaster::Engine::Util::should_run_test( q{nameserver15} ) ) {
+        push @results, $class->nameserver15( $zone );
     }
 
     return @results;
@@ -216,65 +219,77 @@ sub metadata {
               TEST_CASE_START
               )
         ],
+        nameserver15 => [
+            qw(
+              N15_NO_VERSION
+              N15_SOFTWARE_VERSION
+              TEST_CASE_END
+              TEST_CASE_START
+              )
+        ],
     };
 } ## end sub metadata
 
 Readonly my %TAG_DESCRIPTIONS => (
     NAMESERVER01 => sub {
         __x    # NAMESERVER:NAMESERVER01
-            'A name server should not be a recursor', @_;
+            'A name server should not be a recursor';
     },
     NAMESERVER02 => sub {
         __x    # NAMESERVER:NAMESERVER02
-            'Test of EDNS0 support', @_;
+            'Test of EDNS0 support';
     },
     NAMESERVER03 => sub {
         __x    # NAMESERVER:NAMESERVER03
-            'Test availability of zone transfer (AXFR)', @_;
+            'Test availability of zone transfer (AXFR)';
     },
     NAMESERVER04 => sub {
         __x    # NAMESERVER:NAMESERVER04
-            'Same source address', @_;
+            'Same source address';
     },
     NAMESERVER05 => sub {
         __x    # NAMESERVER:NAMESERVER05
-            'Behaviour against AAAA query', @_;
+            'Behaviour against AAAA query';
     },
     NAMESERVER06 => sub {
         __x    # NAMESERVER:NAMESERVER06
-            'NS can be resolved', @_;
+            'NS can be resolved';
     },
     NAMESERVER07 => sub {
         __x    # NAMESERVER:NAMESERVER07
-            'To check whether authoritative name servers return an upward referral', @_;
+            'To check whether authoritative name servers return an upward referral';
     },
     NAMESERVER08 => sub {
         __x    # NAMESERVER:NAMESERVER08
-            'Testing QNAME case insensitivity', @_;
+            'Testing QNAME case insensitivity';
     },
     NAMESERVER09 => sub {
         __x    # NAMESERVER:NAMESERVER09
-            'Testing QNAME case sensitivity', @_;
+            'Testing QNAME case sensitivity';
     },
     NAMESERVER10 => sub {
         __x    # NAMESERVER:NAMESERVER10
-            'Test for undefined EDNS version', @_;
+            'Test for undefined EDNS version';
     },
     NAMESERVER11 => sub {
         __x    # NAMESERVER:NAMESERVER11
-            'Test for unknown EDNS OPTION-CODE', @_;
+            'Test for unknown EDNS OPTION-CODE';
     },
     NAMESERVER12 => sub {
         __x    # NAMESERVER:NAMESERVER12
-            'Test for unknown EDNS flags', @_;
+            'Test for unknown EDNS flags';
     },
     NAMESERVER13 => sub {
         __x    # NAMESERVER:NAMESERVER13
-            'Test for truncated response on EDNS query', @_;
+            'Test for truncated response on EDNS query';
     },
     NAMESERVER14 => sub {
         __x    # NAMESERVER:NAMESERVER14
-            'Test for unknown version with unknown OPTION-CODE', @_;
+            'Test for unknown version with unknown OPTION-CODE';
+    },
+    NAMESERVER15 => sub {
+        __x    # NAMESERVER:NAMESERVER15
+            'Checking for revealed software version';
     },
     AAAA_BAD_RDATA => sub {
         __x    # NAMESERVER:AAAA_BAD_RDATA
@@ -445,6 +460,14 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # NAMESERVER:N11_UNSET_AA
           'The DNS response, on query with unknown EDNS option-code, is unexpectedly not authoritative from name servers "{ns_ip_list}".', @_;
     },
+    N15_NO_VERSION => sub {
+        __x    # NAMESERVER:N15_NO_VERSION
+          'The following name server(s) do not respond to software version queries. Returned from name servers: "{ns_ip_list}"', @_;
+    },
+    N15_SOFTWARE_VERSION => sub {
+        __x    # NAMESERVER:N15_SOFTWARE_VERSION
+          'The following name server(s) respond to software version query "{query_name}" with string "{string}". Returned from name servers: "{ns_ip_list}"', @_;
+    },
     QNAME_CASE_INSENSITIVE => sub {
         __x    # NAMESERVER:QNAME_CASE_INSENSITIVE
           'Nameserver {ns} does not preserve original case of the queried name ({domain}).', @_;
@@ -582,7 +605,7 @@ sub nameserver02 {
 
         next if $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short };
 
-        my $p = $local_ns->query( $zone->name, q{SOA}, { edns_size => 512 } );
+        my $p = $local_ns->query( $zone->name, q{SOA}, { edns_details => { version => 0 } } );
         if ( $p ) {
             if ( $p->rcode eq q{FORMERR} and not $p->has_edns) {
                 push @results, info( NO_EDNS_SUPPORT => { ns => $local_ns->string } );
@@ -703,7 +726,7 @@ sub nameserver04 {
 
         my $p = $local_ns->query( $zone->name, q{SOA} );
         if ( $p ) {
-            if ( $p->answerfrom and ( $local_ns->address->short ne Zonemaster::Engine::Net::IP->new( $p->answerfrom )->short ) ) {
+            if ( $p->answerfrom and ( $local_ns->address->short ne Net::IP::XS->new( $p->answerfrom )->short ) ) {
                 push @results,
                   info(
                     DIFFERENT_SOURCE_IP => {
@@ -1097,8 +1120,7 @@ sub nameserver10 {
 
         next if ( _ip_disabled_message( \@results, $ns, q{SOA} ) );
 
-        #To be changed to '$ns->query( $zone->name, q{SOA}, { edns_details => { version => 0 } } );' when PR#1147 is merged.
-        my $p = $ns->query( $zone->name, q{SOA}, { edns_details => { udp_size => 512 } } );
+        my $p = $ns->query( $zone->name, q{SOA}, { edns_details => { version => 0 } } );
 
         if ( $p and $p->rcode eq q{NOERROR} ){
             my $p2 = $ns->query( $zone->name, q{SOA}, { edns_details => { version => 1 } } );
@@ -1174,15 +1196,13 @@ sub nameserver11 {
 
         next if ( _ip_disabled_message( \@results, $ns, q{SOA} ) );
 
-        #To be changed to '$ns->query( $zone->name, q{SOA}, { edns_details => { version => 0 } } );' when PR#1147 is merged.
-        my $p = $ns->query( $zone->name, q{SOA}, { edns_details => { udp_size => 512 } } );
+        my $p = $ns->query( $zone->name, q{SOA}, { edns_details => { version => 0 } } );
 
         if ( not $p or not $p->has_edns or $p->rcode ne q{NOERROR} or not $p->aa or not $p->get_records_for_name(q{SOA}, $zone->name, q{answer}) ) {
             next;
         }
 
-        #To be changed to '$ns->query( $zone->name, q{SOA}, { edns_details => { data => $rdata } } );' when PR#1147 is merged.
-        $p = $ns->query( $zone->name, q{SOA}, { edns_details => { data => $rdata, udp_size => 512 } } );
+        $p = $ns->query( $zone->name, q{SOA}, { edns_details => { version => 0, data => $rdata } } );
 
         if ( $p ) {
             if ( $p->rcode ne q{NOERROR} ) {
@@ -1211,7 +1231,7 @@ sub nameserver11 {
                 # - Remaining data, if any (i.e., other OPTIONS)
 
                 my @unpacked_opt = eval { unpack("(n n/a)*", $p_opt) };
-                
+
                 while ( my ( $p_opt_code, $p_opt_data, @next_data ) = @unpacked_opt ) {
                     if ( $p_opt_code == $opt_code ) {
                         push @unknown_opt_code, $ns->address->short;
@@ -1271,7 +1291,8 @@ sub nameserver12 {
 
         next if ( _ip_disabled_message( \@results, $ns, q{SOA} ) );
 
-        my $p = $ns->query( $zone->name, q{SOA}, { edns_details => { z => 3 } } );
+        my $p = $ns->query( $zone->name, q{SOA}, { edns_details => { version => 0, z => 3 } } );
+        
         if ( $p ) {
             if ( $p->rcode eq q{FORMERR} and not $p->edns_rcode ) {
                 push @results, info( NO_EDNS_SUPPORT => { ns => $ns->string } );
@@ -1310,7 +1331,8 @@ sub nameserver13 {
 
         next if ( _ip_disabled_message( \@results, $ns, q{SOA} ) );
 
-        my $p = $ns->query( $zone->name, q{SOA}, { usevc => 0, fallback => 0, edns_details => { do => 1, udp_size => 512 } } );
+        my $p = $ns->query( $zone->name, q{SOA}, { usevc => 0, fallback => 0, edns_details => { version => 0, do => 1, size => 512 } } );
+        
         if ( $p ) {
             if ( $p->rcode eq q{FORMERR} and not $p->edns_rcode ) {
                 push @results, info( NO_EDNS_SUPPORT => { ns => $ns->string, } );
@@ -1338,6 +1360,65 @@ sub nameserver13 {
 
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub nameserver13
+
+sub nameserver15 {
+    my ( $class, $zone ) = @_;
+    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+
+    my %txt_data;
+    my @no_version;
+
+    foreach my $ns ( @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) } ) {
+
+        next if ( _ip_disabled_message( \@results, $ns, q{TXT} ) );
+
+        my $found_string = 0;
+
+        foreach my $query_name ( q{version.bind}, q{version.server} ) {
+            my $p = $ns->query( $query_name, q{TXT}, { class => q{CH} } );
+
+            if ( $p and $p->rcode eq q{NOERROR} and scalar $p->get_records_for_name( q{TXT}, $query_name, q{answer} ) ) {
+                foreach my $rr ( $p->get_records_for_name(q{TXT}, $query_name, q{answer} ) ) {
+                    my $string = $rr->txtdata;
+
+                    if ( $string and $string ne "") {
+                        $found_string = 1;
+                        push @{ $txt_data{$string}{$query_name} }, $ns->string;
+                    }
+                }
+            }
+        }
+
+        if ( not $found_string ) {
+            push @no_version, $ns->string;
+        }
+    }
+
+    if ( scalar keys %txt_data ) {
+        foreach my $string ( keys %txt_data ) {
+            push @results, map {
+              info(
+                N15_SOFTWARE_VERSION => {
+                   string => $string,
+                   query_name => $_,
+                   ns_ip_list => join( q{;}, uniq sort @{ $txt_data{$string}{$_} } )
+                }
+              )
+            } keys %{ $txt_data{$string} };
+        }
+    }
+
+    if ( scalar @no_version ) {
+        push @results,
+          info(
+            N15_NO_VERSION => {
+               ns_ip_list => join( q{;}, uniq sort @no_version )
+            }
+          );
+    }
+
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+} ## end sub nameserver15
 
 1;
 
@@ -1427,6 +1508,10 @@ Check whether authoritative name servers responses has "Z" bits cleared even if 
 =item nameserver13($zone)
 
 This Test Case will try to verify that if the response to a query with an OPT record is truncated, then the response will contain an OPT record.
+
+=item nameserver15($zone)
+
+Verifies if a name server responds to certain TXT queries in the CHAOS class, specifically about its software version.
 
 =back
 

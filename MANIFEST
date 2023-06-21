@@ -1,9 +1,7 @@
 Changes
 CONTRIBUTING.md
 docs/Implementing_Tests.pod
-docs/Installation.md
 docs/logentry_args.md
-docs/Profiles.md
 docs/Translation.pod
 docs/Translation-translators.md
 inc/Module/Install.pm
@@ -45,6 +43,7 @@ lib/Zonemaster/Engine/Test/Nameserver.pm
 lib/Zonemaster/Engine/Test/Syntax.pm
 lib/Zonemaster/Engine/Test/Zone.pm
 lib/Zonemaster/Engine/TestMethods.pm
+lib/Zonemaster/Engine/TestMethodsV2.pm
 lib/Zonemaster/Engine/Translator.pm
 lib/Zonemaster/Engine/Util.pm
 lib/Zonemaster/Engine/Zone.pm
@@ -56,6 +55,7 @@ README.md
 share/GNUmakefile
 share/iana-ipv4-special-registry.csv
 share/iana-ipv6-special-registry.csv
+share/json2yaml.pl
 share/locale/da/LC_MESSAGES/Zonemaster-Engine.mo
 share/locale/es/LC_MESSAGES/Zonemaster-Engine.mo
 share/locale/fi/LC_MESSAGES/Zonemaster-Engine.mo
@@ -66,6 +66,7 @@ share/Makefile
 share/modules.txt
 share/named.root
 share/profile.json
+share/profile.yaml
 share/profile_additional_properties.json
 t/00-load.t
 t/asn.data
@@ -92,6 +93,7 @@ t/profiles/Test-basic-all.json
 t/profiles/Test-connectivity01-only.json
 t/profiles/Test-connectivity02-only.json
 t/profiles/Test-connectivity03-only.json
+t/profiles/Test-connectivity04-only.json
 t/profiles/Test-connectivity-all.json
 t/profiles/Test-consistency01-only.json
 t/profiles/Test-consistency02-only.json
@@ -115,7 +117,6 @@ t/profiles/Test-dnssec11-only.json
 t/profiles/Test-dnssec13-only.json
 t/profiles/Test-dnssec14-only.json
 t/profiles/Test-dnssec15-only.json
-t/profiles/Test-dnssec16-only.json
 t/profiles/Test-dnssec17-only.json
 t/profiles/Test-dnssec18-only.json
 t/profiles/Test-dnssec-all.json
@@ -148,6 +149,10 @@ t/Test-basic.data
 t/Test-basic.t
 t/Test-connectivity.data
 t/Test-connectivity.t
+t/Test-connectivity03.data
+t/Test-connectivity03.t
+t/Test-connectivity04.data
+t/Test-connectivity04.t
 t/Test-consistency.data
 t/Test-consistency.t
 t/Test-consistency05-A.data
@@ -242,6 +247,8 @@ t/Test-dnssec05-I.data
 t/Test-dnssec05-I.t
 t/Test-dnssec05-J.data
 t/Test-dnssec05-J.t
+t/Test-dnssec16.data
+t/Test-dnssec16.t
 t/Test-nameserver.data
 t/Test-nameserver.t
 t/Test-nameserver01-A.data
@@ -252,6 +259,8 @@ t/Test-nameserver01-C.data
 t/Test-nameserver01-C.t
 t/Test-nameserver01-D.data
 t/Test-nameserver01-D.t
+t/Test-nameserver15.data
+t/Test-nameserver15.t
 t/Test-syntax.data
 t/Test-syntax.t
 t/Test-syntax06-A.data
@@ -282,18 +291,10 @@ t/Test-zone01-A.t
 t/Test-zone01-A.data
 t/Test-zone01-B.t
 t/Test-zone01-B.data
-t/Test-zone09-A.data
-t/Test-zone09-A.t
-t/Test-zone09-B.data
-t/Test-zone09-B.t
-t/Test-zone09-C.data
-t/Test-zone09-C.t
-t/Test-zone09-D.data
-t/Test-zone09-D.t
-t/Test-zone09-E.data
-t/Test-zone09-E.t
-t/Test-zone09-F.data
-t/Test-zone09-F.t
+t/Test-zone09-1.data
+t/Test-zone09-1.t
+t/Test-zone09.data
+t/Test-zone09.t
 t/translator.t
 t/undelegated.data
 t/undelegated.t

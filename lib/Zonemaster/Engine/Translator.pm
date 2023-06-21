@@ -273,7 +273,7 @@ Zonemaster::Engine::Translator - translation support for Zonemaster
 
 =head1 SYNOPSIS
 
-    Zonemaster::Engine::Translator->initialize({ locale => 'sv_SE.UTF-8' });
+    Zonemaster::Engine::Translator->initialize( { locale => 'sv_SE.UTF-8' } );
 
     my $trans = Zonemaster::Engine::Translator->instance;
     say $trans->to_string($entry);
@@ -326,7 +326,7 @@ end-users.
 
 Provide initial values for the single instance of this class.
 
-    Zonemaster::Engine::Translator->initialize( locale => 'sv_SE.UTF-8' );
+    Zonemaster::Engine::Translator->initialize( { locale => 'sv_SE.UTF-8' } );
 
 This method must be called at most once and before the first call to instance().
 
@@ -359,13 +359,13 @@ setlocale( LC_MESSAGES, "" ).
 Takes a L<Zonemaster::Engine::Logger::Entry> object as its argument and returns a translated string with the timestamp, level, message and arguments in the
 entry.
 
-=item translate_tag
+=item translate_tag($entry)
 
 Takes a L<Zonemaster::Engine::Logger::Entry> object as its argument and returns a translation of its tag and arguments.
 
-=item test_case_description
+=item test_case_description($testcase)
 
-Returns the translated test case description for a given test case ID.
+Takes a string (test case ID) and returns the translated test case description.
 
 =item BUILD
 

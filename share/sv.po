@@ -2,10 +2,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-24 13:17+0000\n"
-"PO-Revision-Date: 2023-01-24 13:16+0000\n"
+"POT-Creation-Date: 2023-05-31 08:53+0000\n"
+"PO-Revision-Date: 2023-05-31 08:53+0000\n"
 "Last-Translator: mats.dufberg@iis.se\n"
-"Language-Team: Zonemaster Project\n"
+"Language-Team: Zonemaster Team\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -151,13 +151,135 @@ msgstr "Domännamnet måste ha åtminstone en fungerande namnserver"
 msgid "The Broken but functional test"
 msgstr "Funktionell test av otestbart namn"
 
-#. BASIC:BASIC04
-msgid "Test of basic nameserver and zone functionality"
-msgstr "Test av grundläggande namnserver- och zonfunktionalitet"
-
 #. BASIC:A_QUERY_NO_RESPONSES
 msgid "Nameservers did not respond to A query."
 msgstr "Namnservern svarade inte på en A-fråga."
+
+#. BASIC:B01_CHILD_IS_ALIAS
+#, perl-brace-format
+msgid ""
+"\"{domain_child}\" is not a zone. It is an alias for \"{domain_target}\". "
+"Run a test for \"{domain_target}\" instead. Returned from name servers "
+"\"{ns_ip_list}."
+msgstr ""
+"\"{domain_child}\" är inte en DNS-zon. Det är ett alias för "
+"\"{domain_target}\". Överväg att testa \"{domain_target}\" istället. "
+"Information från namnservrarna \"{ns_ip_list}\"."
+
+#. BASIC:B01_CHILD_FOUND
+#, perl-brace-format
+msgid "The zone \"{domain}\" is found."
+msgstr "Testet visar att zonen \"{domain}\" finns."
+
+#. BASIC:B01_CHILD_NOT_EXIST
+#, perl-brace-format
+msgid "\"{domain}\" does not exist as it is not delegated."
+msgstr "\"{domain}\" finns inte i och med att den inte är delegerad."
+
+#. BASIC:B01_INCONSISTENT_ALIAS
+#, perl-brace-format
+msgid "The alias for \"{domain}\" is inconsistent between name servers."
+msgstr "Aliaset för \"{domain}\" är inte konsekvent mellan olika namnservrar."
+
+#. BASIC:B01_INCONSISTENT_DELEGATION
+#, perl-brace-format
+msgid ""
+"The name servers for parent zone \"{domain_parent}\" give inconsistent "
+"delegation of \"{domain_child}\". Returned from name servers "
+"\"{ns_ip_list}\"."
+msgstr ""
+"Namnservrarna för moderzonen \"{domain_parent}\" ger inte konsekvent "
+"delegering av \"{domain_child}\". Information från namnservrarna "
+"\"{ns_ip_list}\"."
+
+#. BASIC:B01_NO_CHILD
+#, perl-brace-format
+msgid ""
+"\"{domain_child}\" does not exist as a DNS zone. Try to test "
+"\"{domain_super}\" instead."
+msgstr ""
+"\"{domain_child}\" finns inte som DNS-zon. Överväg att testa "
+"\"{domain_super}\" istället."
+
+#. BASIC:B01_PARENT_FOUND
+#, perl-brace-format
+msgid ""
+"The parent zone is \"{domain}\" as returned from name servers "
+"\"{ns_ip_list}\"."
+msgstr ""
+"Moderzonen är \"{domain}\" vilket har bekräftats av namnservrarna "
+"\"{ns_ip_list}\"."
+
+#. BASIC:B01_PARENT_UNDETERMINED
+#, perl-brace-format
+msgid "The parent zone cannot be determined on name servers \"{ns_ip_list}\"."
+msgstr "Moderzonen kan inte fastställas av namnservrarna \"{ns_ip_list}\"."
+
+#. BASIC:B01_UNEXPECTED_NS_RESPONSE
+#, perl-brace-format
+msgid ""
+"Name servers for parent domain \"{domain_parent}\" give an incorrect "
+"response on SOA query for \"{domain_child}\". Returned from name servers "
+"\"{ns_ip_list}\"."
+msgstr ""
+"Namnservrarna för moderzonen \"{domain_parent}\" ger ett felaktigt svar på "
+"förfrågan om SOA-posten för \"{domain_child}\". Gäller namnservrarna "
+"\"{ns_ip_list}\"."
+
+#. BASIC:B02_AUTH_RESPONSE_SOA
+#, perl-brace-format
+msgid ""
+"Authoritative answer on SOA query for \"{domain}\" is returned by name "
+"servers \"{ns_list}\"."
+msgstr ""
+"Auktoritativt svar på SOA-fråga för \"{domain}\" ges av namnservrarna "
+"\"{ns_list}\"."
+
+#. BASIC:B02_NO_DELEGATION
+#, perl-brace-format
+msgid ""
+"There is no delegation (name servers) for \"{domain}\" which means it does "
+"not exist as a zone."
+msgstr ""
+"Det finns ingen delegering (inga namnservrar) för \"{domain}\" vilket "
+"betyder att den inte finns som DNS-zon."
+
+#. BASIC:B02_NO_WORKING_NS
+#, perl-brace-format
+msgid "There is no working name server for \"{domain}\" so it is unreachable."
+msgstr ""
+"Det finns inga åtkomliga namnservrar för \"{domain}\" vilket betyder att "
+"domänen (zonen) inte kan nås."
+
+#. BASIC:B02_NS_BROKEN
+#, perl-brace-format
+msgid "Broken response from name server \"{ns}\" on an SOA query."
+msgstr "Felaktigt svar från namnservern {ns} på fråga efter SOA-post."
+
+#. BASIC:B02_NS_NOT_AUTH
+#, perl-brace-format
+msgid ""
+"Name server \"{ns}\" does not give an authoritative answer on an SOA query."
+msgstr "Namnservern {ns} svarar inte auktoritativt på en SOA-fråga."
+
+#. BASIC:B02_NS_NO_IP_ADDR
+#, perl-brace-format
+msgid "Name server \"{nsname}\" cannot be resolved into an IP address."
+msgstr "Namnservern {nsname} kan inte slås upp till en IP-adress."
+
+#. BASIC:B02_NS_NO_RESPONSE
+#, perl-brace-format
+msgid "Name server \"{ns}\" does not respond to an SOA query."
+msgstr "Namnservern {ns} besvarar inte en SOA-fråga."
+
+#. BASIC:B02_UNEXPECTED_RCODE
+#, perl-brace-format
+msgid ""
+"Name server \"{ns}\" responds with an unexpected RCODE name (\"{rcode}\") on "
+"an SOA query."
+msgstr ""
+"Namnservern {ns} svarar med den oväntade svarskoden (RCODE) \"{rcode}\" på "
+"en SOA-fråga."
 
 #. BASIC:DOMAIN_NAME_LABEL_TOO_LONG
 #, perl-brace-format
@@ -188,16 +310,6 @@ msgid "Functional nameserver found. \"A\" query for www.{zname} test skipped."
 msgstr ""
 "En fungerande namnserver hittades. Skickade ingen fråga om 'A' för 'www."
 "{zname}' (behövdes inte)."
-
-#. BASIC:HAS_NAMESERVERS
-#, perl-brace-format
-msgid "Nameserver {ns} listed these servers as glue: {nsnlist}."
-msgstr "Namnservern {ns} gav dessa servrar som 'glue': {nsnlist}."
-
-#. BASIC:HAS_PARENT
-#, perl-brace-format
-msgid "Parent domain '{pname}' was found for the tested domain."
-msgstr "Moderdomänen '{pname}' till den testade domänen har identifierats."
 
 #. BASIC:IPV4_DISABLED
 #. CONNECTIVITY:IPV4_DISABLED
@@ -238,28 +350,6 @@ msgstr "IPv6 är aktiverat. Skickar fråga om '{rrtype}' till {ns}."
 msgid "Nameserver {ns} did not return \"A\" record(s) for {domain}."
 msgstr "Namnservern {ns} svarade inte med några A-poster för '{domain}'."
 
-#. BASIC:NO_GLUE_PREVENTS_NAMESERVER_TESTS
-msgid "No NS records for tested zone from parent. NS tests skipped."
-msgstr ""
-"Det finns inga NS-poster för den testade zonen från föräldern. NS-tester "
-"hoppas över."
-
-#. BASIC:NO_PARENT
-msgid "No parent domain could be found for the domain under test."
-msgstr "Ingen moderdomän kunde hittas för den testade domänen."
-
-#. BASIC:NS_FAILED
-#, perl-brace-format
-msgid "Nameserver {ns} did not return NS records. RCODE was {rcode}."
-msgstr ""
-"Namnservern {ns} svarade inte med några NS-poster. Svarskoden (RCODE) var "
-"\"{rcode}\"."
-
-#. BASIC:NS_NO_RESPONSE
-#, perl-brace-format
-msgid "Nameserver {ns} did not respond to NS query."
-msgstr "Namnservern {ns} svarade inte på frågan om 'NS'."
-
 #. CONNECTIVITY:CONNECTIVITY01
 msgid "UDP connectivity"
 msgstr "Nätåtkomst över UDP"
@@ -270,7 +360,11 @@ msgstr "Nätåtkomst över TCP"
 
 #. CONNECTIVITY:CONNECTIVITY03
 msgid "AS Diversity"
-msgstr "AS-redundans"
+msgstr "AS-spridning"
+
+#. CONNECTIVITY:CONNECTIVITY04
+msgid "IP Prefix Diversity"
+msgstr "IP-prefix-spridning"
 
 #. CONNECTIVITY:CN01_IPV4_DISABLED
 #, perl-brace-format
@@ -452,6 +546,63 @@ msgstr ""
 "Namnservern {ns} svarar med fel domännamn (\"owner name\") -- {domain_found} "
 "istället för {domain_expected} -- på en SOA-fråga över TCP."
 
+#. CONNECTIVITY:ASN_INFOS_ANNOUNCE_IN
+#, perl-brace-format
+msgid "Name server IP address \"{ns_ip}\" is announced in prefix \"{prefix}\"."
+msgstr "Namnserver-IP-adressen \"{ns_ip}\" tillhör prefixet \"{prefix}\"."
+
+#. CONNECTIVITY:ASN_INFOS_RAW
+#, perl-brace-format
+msgid "The ASN data for name server IP address \"{ns_ip}\" is \"{data}\"."
+msgstr "AS-informationen för IP-adress \"{ns_ip}\" är \"{data}\"."
+
+#. CONNECTIVITY:CN04_EMPTY_PREFIX_SET
+#, perl-brace-format
+msgid "Prefix database returned no information for IP address {ns_ip}."
+msgstr ""
+"Databasen över IP-prefix gav ingen information för IP-adressen {ns_ip}."
+
+#. CONNECTIVITY:CN04_ERROR_PREFIX_DATABASE
+#, perl-brace-format
+msgid "Prefix database error. No data to analyze for IP address {ns_ip}."
+msgstr ""
+"Fel på databasen över IP-prefix. Det finns ingen data att analysera för "
+"{ns_ip}."
+
+#. CONNECTIVITY:CN04_IPV4_SAME_PREFIX
+#, perl-brace-format
+msgid ""
+"The following name server(s) are announced in the same IPv4 prefix "
+"({ip_prefix}): \"{ns_list}\""
+msgstr ""
+"Följande namnservrar tillhör samma IPv4-prefix ({ip_prefix}): \"{ns_list}\"."
+
+#. CONNECTIVITY:CN04_IPV4_DIFFERENT_PREFIX
+#, perl-brace-format
+msgid ""
+"The following name server(s) are announced in unique IPv4 prefix(es): "
+"\"{ns_list}\""
+msgstr ""
+"Följande namnserver eller namnservrar tillhör egna IPv4-prefix: "
+"\"{ns_list}\"."
+
+#. CONNECTIVITY:CN04_IPV6_SAME_PREFIX
+#, perl-brace-format
+msgid ""
+"The following name server(s) are announced in the same IPv6 prefix "
+"({ip_prefix}): \"{ns_list}\""
+msgstr ""
+"Följande namnservrar tillhör samma IPv6-prefix ({ip_prefix}): \"{ns_list}\"."
+
+#. CONNECTIVITY:CN04_IPV6_DIFFERENT_PREFIX
+#, perl-brace-format
+msgid ""
+"The following name server(s) are announced in unique IPv6 prefix(es): "
+"\"{ns_list}\""
+msgstr ""
+"Följande namnserver eller namnservrar tillhör egna IPv6-prefix: "
+"\"{ns_list}\"."
+
 #. CONNECTIVITY:ERROR_ASN_DATABASE
 #, perl-brace-format
 msgid "ASN Database error. No data to analyze for {ns_ip}."
@@ -465,7 +616,7 @@ msgstr "AS-databasen gav ingen information för IP-adressen {ns_ip}."
 #. CONNECTIVITY:IPV4_SAME_ASN
 #, perl-brace-format
 msgid ""
-"All authoritative nameservers have the IPv4 addresses in the same AS set "
+"All authoritative nameservers have their IPv4 addresses in the same AS set "
 "({asn_list})."
 msgstr ""
 "IPv4-adresserna för alla auktoritativa namnservrar tillhör samma uppsättning "
@@ -474,15 +625,16 @@ msgstr ""
 #. CONNECTIVITY:IPV4_ONE_ASN
 #, perl-brace-format
 msgid ""
-"All authoritative nameservers have the IPv4 addresses in the same AS ({asn})."
+"All authoritative nameservers have their IPv4 addresses in the same AS "
+"({asn})."
 msgstr ""
 "IPv4-adresserna för alla auktoritativa namnservrar tillhör samma AS ({asn})."
 
 #. CONNECTIVITY:IPV4_DIFFERENT_ASN
 #, perl-brace-format
 msgid ""
-"At least two IPv4 addresses of the authoritative nameservers are announce by "
-"different AS sets. A merged list of all AS: ({asn_list})."
+"At least two IPv4 addresses of the authoritative nameservers are announced "
+"by different AS sets. A merged list of all AS: ({asn_list})."
 msgstr ""
 "Minst två IPv4-adresser för de auktoritativa namnservrarna tillhör två olika "
 "AS-uppsättningar. En ihopslagen lista över alla AS: {asn_list}."
@@ -490,7 +642,7 @@ msgstr ""
 #. CONNECTIVITY:IPV6_SAME_ASN
 #, perl-brace-format
 msgid ""
-"All authoritative nameservers have the IPv6 addresses in the same AS set "
+"All authoritative nameservers have their IPv6 addresses in the same AS set "
 "({asn_list})."
 msgstr ""
 "IPv6-adresserna för alla auktoritativa namnservrar tillhör samma uppsättning "
@@ -499,15 +651,16 @@ msgstr ""
 #. CONNECTIVITY:IPV6_ONE_ASN
 #, perl-brace-format
 msgid ""
-"All authoritative nameservers have the IPv6 addresses in the same AS ({asn})."
+"All authoritative nameservers have their IPv6 addresses in the same AS "
+"({asn})."
 msgstr ""
 "IPv6-adresserna för alla auktoritativa namnservrar tillhör samma AS ({asn})."
 
 #. CONNECTIVITY:IPV6_DIFFERENT_ASN
 #, perl-brace-format
 msgid ""
-"At least two IPv6 addresses of the authoritative nameservers are announce by "
-"different AS sets. A merged list of all AS: ({asn_list})."
+"At least two IPv6 addresses of the authoritative nameservers are announced "
+"by different AS sets. A merged list of all AS: ({asn_list})."
 msgstr ""
 "Minst två IPv6-adresser för de auktoritativa namnservrarna tillhör två olika "
 "AS-uppsättningar. En ihopslagen lista över alla AS: {asn_list}."
@@ -522,20 +675,10 @@ msgstr "Namnservrarna har IPv4-adresser i följande AS: {asn}."
 msgid "Name servers have IPv6 addresses in the following ASs: {asn}."
 msgstr "Namnservrarna har IPv6-adresser i följande AS: {asn}."
 
-#. CONNECTIVITY:ASN_INFOS_RAW
-#, perl-brace-format
-msgid "The ASN data for name server IP address \"{ns_ip}\" is \"{data}\"."
-msgstr "AS-informationen för IP-adress \"{ns_ip}\" är \"{data}\"."
-
 #. CONNECTIVITY:ASN_INFOS_ANNOUNCE_BY
 #, perl-brace-format
 msgid "Name server IP address \"{ns_ip}\" is announced by ASN {asn}."
 msgstr "Namnserver-IP-adressen \"{ns_ip}\" tillhör AS {asn}."
-
-#. CONNECTIVITY:ASN_INFOS_ANNOUNCE_IN
-#, perl-brace-format
-msgid "Name server IP address \"{ns_ip}\" is announced in prefix \"{prefix}\"."
-msgstr "Namnserver-IP-adressen \"{ns_ip}\" tillhör prefixet \"{prefix}\"."
 
 #. CONSISTENCY:CONSISTENCY01
 msgid "SOA serial number consistency"
@@ -788,7 +931,7 @@ msgid "Validate CDNSKEY"
 msgstr "Validera CDNSKEY-poster"
 
 #. DNSSEC:DNSSEC18
-msgid "Validate trust from DS to CDS and CDNSKEY "
+msgid "Validate trust from DS to CDS and CDNSKEY"
 msgstr "Validera tillit från DS-poster till CDS- och CDNSKEY-poster"
 
 #. DNSSEC:ADDITIONAL_DNSKEY_SKIPPED
@@ -2142,6 +2285,10 @@ msgid "Test for unknown version with unknown OPTION-CODE"
 msgstr ""
 "Test med odefinierad EDNS version och med odefinierad OPTION-CODE i EDNS"
 
+#. NAMESERVER:NAMESERVER15
+msgid "Checking for revealed software version"
+msgstr "Kontroll av rapporterad version av programvara"
+
 #. NAMESERVER:AAAA_BAD_RDATA
 #, perl-brace-format
 msgid ""
@@ -2425,6 +2572,25 @@ msgid ""
 msgstr ""
 "DNS-svaret, på en DNS-fråga med odefinierad OPTION-CODE i EDNS, är oväntat "
 "icke-auktoritativt från namnservrarna \"{ns_ip_list}\"."
+
+#. NAMESERVER:N15_NO_VERSION
+#, perl-brace-format
+msgid ""
+"The following name server(s) do not respond to software version queries. "
+"Returned from name servers: \"{ns_ip_list}\""
+msgstr ""
+"Följande namnserver eller namnservrar svarar inte på förfrågan om "
+"programvaruversion: \"{ns_ip_list}\"."
+
+#. NAMESERVER:N15_SOFTWARE_VERSION
+#, perl-brace-format
+msgid ""
+"The following name server(s) respond to software version query "
+"\"{query_name}\" with string \"{string}\". Returned from name servers: "
+"\"{ns_ip_list}\""
+msgstr ""
+"Följande namnservrar svarar på förfrågan om programvaruversion "
+"(\"{query_name}\") med sträng \"{string}\". Namnservrar: \"{ns_ip_list}\""
 
 #. NAMESERVER:QNAME_CASE_INSENSITIVE
 #, perl-brace-format
@@ -3024,9 +3190,10 @@ msgstr ""
 #. ZONE:Z09_UNEXPECTED_RCODE_MX
 #, perl-brace-format
 msgid ""
-"Unexpected RCODE value on the MX query from name servers \"{ns_ip_list}\"."
+"Unexpected RCODE value ({rcode}) on the MX query from name servers "
+"\"{ns_ip_list}\"."
 msgstr ""
-"Oväntat värde på svarskoden (RCODE) i svar på MX-fråga. Svar från "
+"Oväntat värde, \"{rcode}\", på svarskoden (RCODE) i svar på MX-fråga till "
 "namnservrar \"{ns_ip_list}\"."
 
 #. SYSTEM:CANNOT_CONTINUE

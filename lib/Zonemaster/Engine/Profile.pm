@@ -13,8 +13,12 @@ use Scalar::Util qw(reftype);
 use File::Slurp;
 use Clone qw(clone);
 use Data::Dumper;
+use Net::IP::XS;
+use Log::Any qw( $log );
+use YAML::XS qw();
 
-use Zonemaster::Engine::Net::IP;
+$YAML::XS::Boolean = "JSON::PP";
+
 use Zonemaster::Engine::Constants qw( $RESOLVER_SOURCE_OS_DEFAULT $DURATION_5_MINUTES_IN_SECONDS $DURATION_1_HOUR_IN_SECONDS $DURATION_4_HOURS_IN_SECONDS $DURATION_12_HOURS_IN_SECONDS $DURATION_1_DAY_IN_SECONDS $DURATION_1_WEEK_IN_SECONDS $DURATION_180_DAYS_IN_SECONDS );
 
 my %profile_properties_details = (
@@ -56,11 +60,26 @@ my %profile_properties_details = (
         type    => q{Str},
         test    => sub {
             if ( $_[0] ne $RESOLVER_SOURCE_OS_DEFAULT ) {
-                eval { Zonemaster::Engine::Net::IP->new( $_[0] ) };
-                if ( $@ ) {
-                    die "Property resolver.source must be an IP address or the exact string $RESOLVER_SOURCE_OS_DEFAULT";
-                }
+                Net::IP::XS->new( $_[0] ) || $log->warning( "Property resolver.source must be an IP address or the exact string $RESOLVER_SOURCE_OS_DEFAULT" );
             }
+        }
+    },
+    q{resolver.source4} => {
+        type    => q{Str},
+        test    => sub {
+            if ( $_[0] and $_[0] ne '' and not Net::IP::XS::ip_is_ipv4( $_[0] ) ) {
+                $log->warning( "Property resolver.source4 must be an IPv4 address, the empty string or undefined" );
+            }
+            Net::IP::XS->new( $_[0] );
+        }
+    },
+    q{resolver.source6} => {
+        type    => q{Str},
+        test    => sub {
+            if ( $_[0] and $_[0] ne '' and not Net::IP::XS::ip_is_ipv6( $_[0] ) ) {
+                $log->warning( "Property resolver.source6 must be an IPv6 address, the empty string or undefined" );
+            }
+            Net::IP::XS->new( $_[0] );
         }
     },
     q{net.ipv4} => {
@@ -260,7 +279,16 @@ sub default {
             $new->set( $property_name, $profile_properties_details{$property_name}{default} );
         }
     }
+    $new->check_validity;
     return $new;
+}
+
+sub check_validity {
+    my ( $self ) = @_;
+    my $resolver = $self->{profile}{resolver};
+    if ( exists $resolver->{source} and ( exists $resolver->{source4} or exists $resolver->{source6} ) ) {
+        $log->warning( "Error in profile: 'resolver.source' (deprecated) can't be used in combination with 'resolver.source4' or 'resolver.source6'." );
+    }
 }
 
 sub get {
@@ -362,6 +390,7 @@ sub merge {
             $self->_set( q{JSON}, $property_name, _get_value_from_nested_hash( $other_profile->{q{profile}}, split /[.]/, $property_name ) );
         }
     }
+    $self->check_validity;
     return $other_profile->{q{profile}};
 }
 
@@ -377,6 +406,7 @@ sub from_json {
         }
     }
 
+    $new->check_validity;
     return $new;
 }
 
@@ -384,6 +414,18 @@ sub to_json {
     my ( $self ) = @_;
 
     return encode_json( $self->{q{profile}} );
+}
+
+sub from_yaml {
+    my ( $class, $yaml ) = @_;
+    my $data = YAML::XS::Load( $yaml );
+    return $class->from_json( encode_json( $data ) );
+}
+
+sub to_yaml {
+    my ( $self ) = @_;
+
+    return YAML::XS::Dump( $self->{q{profile}} );
 }
 
 sub effective {
@@ -419,7 +461,7 @@ section.
 Here is an example for updating the effective profile with values from
 a given file and setting all properties not mentioned in the file to
 default values.
-For details on the file format see the L</JSON REPRESENTATION> section.
+For details on the file format see the L</REPRESENTATIONS> section.
 
     use Zonemaster::Engine::Profile;
 
@@ -495,7 +537,28 @@ Dies if the given string is illegal according to the L</JSON REPRESENTATION>
 section or if the property values are illegal according to the L</PROFILE
 PROPERTIES> section.
 
+=head2 from_yaml
+
+A constructor that returns a new profile with values parsed from a YAML string.
+
+    my $profile = Zonemaster::Engine::Profile->from_yaml( <<EOF
+    no_network: true
+    EOF
+    );
+
+The returned profile has set values for all properties specified in the
+given string.
+The remaining properties are unset.
+
+Dies if the given string is illegal according to the L</YAML REPRESENTATION>
+section or if the property values are illegal according to the L</PROFILE
+PROPERTIES> section.
+
 =head1 INSTANCE METHODS
+
+=head2 check_validity
+
+Verify that the profile does not allow confusing combinations.
 
 =head2 get
 
@@ -540,6 +603,14 @@ The other profile object remains unmodified.
 Serialize the profile to the L</JSON REPRESENTATION> format.
 
     my $string = $profile->to_json();
+
+Returns a string.
+
+=head2 to_yaml
+
+Serialize the profile to the L</JSON REPRESENTATION> format.
+
+    my $string = $profile->to_yaml();
 
 Returns a string.
 
@@ -594,7 +665,13 @@ Default 3.
 
 =head2 resolver.defaults.dnssec
 
+*DEPRECATED as of 2023.1. Planned for removal in 2023.2*
 A boolean. If true, sets the DO flag in queries. Default false.
+
+=head2 resolver.defaults.edns_size
+
+*DEPRECATED as of 2023.1. Planned for removal in 2023.2*
+An integer. The EDNS0 UDP size used in EDNS queries. Default 512.
 
 =head2 resolver.defaults.recurse
 
@@ -625,10 +702,26 @@ replay, set this flag to false.
 
 =head2 resolver.source
 
+Deprecated (planned removal: v2024.1).
+Use L</resolver.source4> and L</resolver.source6>.
 A string that is either an IP address or the exact string C<"os_default">.
 The source address all resolver objects should use when sending queries.
 If C<"os_default">, the OS default address is used.
 Default C<"os_default">.
+
+=head2 resolver.source4
+
+A string that is an IPv4 address or the empty string or undefined.
+The source address all resolver objects should use when sending queries over IPv4.
+If the empty string or undefined, use the OS default IPv4 address if available.
+Default "" (empty string).
+
+=head2 resolver.source6
+
+A string that is an IPv6 address or the empty string or undefined.
+The source address all resolver objects should use when sending queries over IPv6.
+If the empty string or undefined, use the OS default IPv6 address if available.
+Default "" (empty string).
 
 =head2 net.ipv4
 
@@ -865,7 +958,9 @@ https://github.com/zonemaster/zonemaster/blob/master/docs/specifications/tests/Z
 Related to the SOA_DEFAULT_TTL_MAXIMUM_VALUE_HIGHER message tag from this test case.
 Default C<86400> (1 day in seconds).
 
-=head1 JSON REPRESENTATION
+=head1 REPRESENTATIONS
+
+=head2 JSON REPRESENTATION
 
 Property names in L</PROFILE PROPERTIES> section correspond to paths in
 a datastructure of nested JSON objects.
@@ -887,6 +982,10 @@ C<net.ipv6> = true has this JSON representation:
             "ipv6": true
         }
     }
+
+=head2 YAML REPRESENTATION
+
+Similar to the L</JSON REPRESENTATION> but uses a YAML format.
 
 =over
 

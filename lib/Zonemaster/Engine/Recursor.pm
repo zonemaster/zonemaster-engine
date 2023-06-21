@@ -3,17 +3,17 @@ use strict;
 use warnings;
 use 5.014002;
 
-use version; our $VERSION = version->declare("v1.0.10");
+use version; our $VERSION = version->declare("v1.1.0");
 
 use Carp;
 use Class::Accessor "antlers";
 use File::ShareDir qw[dist_file];
 use File::Slurp qw( read_file );
 use JSON::PP;
+use Net::IP::XS;
 
 use Zonemaster::Engine;
 use Zonemaster::Engine::DNSName;
-use Zonemaster::Engine::Net::IP;
 use Zonemaster::Engine::Util qw( name ns parse_hints );
 
 our %recurse_cache;
@@ -59,6 +59,18 @@ sub get_fake_addresses {
 
     if ( exists $_fake_addresses_cache{$domain}{$nsname} ) {
         return @{ $_fake_addresses_cache{$domain}{$nsname} };
+    }
+    else {
+        return ();
+    }
+}
+
+sub get_fake_names {
+    my ( $class, $domain ) = @_;
+    $domain = lc $domain;
+
+    if ( exists $_fake_addresses_cache{$domain} ) {
+        return keys %{$_fake_addresses_cache{$domain}};
     }
     else {
         return ();
@@ -327,7 +339,7 @@ sub get_addresses_for {
 
     foreach my $rr ( sort { $a->address cmp $b->address } @rrs ) {
         if ( name( $rr->name ) eq $name or $cname{ $rr->name } ) {
-            push @res, Zonemaster::Engine::Net::IP->new( $rr->address );
+            push @res, Net::IP::XS->new( $rr->address );
         }
     }
     return @res;
@@ -408,7 +420,7 @@ Internal method. Takes a packet and a recursion state and returns a list of ns o
 =head2 get_addresses_for($name[, $state])
 
 Takes a name and returns a (possibly empty) list of IP addresses for
-that name (in the form of L<Zonemaster::Engine::Net::IP> objects). When used
+that name (in the form of L<Net::IP::XS> objects). When used
 internally by the recursor it's passed a recursion state as its second
 argument.
 
@@ -424,6 +436,11 @@ Check if there is at least one fake nameserver specified for the given domain.
 
 Returns a list of all cached fake addresses for the given domain and name server name.
 Returns an empty list if no data is cached for the given arguments.
+
+=head2 get_fake_names($domain)
+
+Returns a list of all cached fake name server names for the given domain.
+Returns an empty list if no data is cached for the given argument.
 
 =head2 remove_fake_addresses($domain)
 

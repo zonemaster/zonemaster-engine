@@ -41,7 +41,7 @@ my %methods = Zonemaster::Engine->all_methods;
 ok( exists( $methods{Basic} ), 'all_methods' );
 
 my @tags = Zonemaster::Engine->all_tags;
-ok( ( grep { /BASIC:HAS_NAMESERVERS/ } @tags ), 'all_tags' );
+ok( ( grep { /BASIC:B02_AUTH_RESPONSE_SOA/ } @tags ), 'all_tags' );
 
 my $dependency_version = 0;
 my $global_version     = 0;

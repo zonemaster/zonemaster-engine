@@ -151,35 +151,35 @@ sub metadata {
 Readonly my %TAG_DESCRIPTIONS => (
     SYNTAX01 => sub {
         __x    # SYNTAX:SYNTAX01
-          'No illegal characters in the domain name', @_;
+          'No illegal characters in the domain name';
     },
     SYNTAX02 => sub {
         __x    # SYNTAX:SYNTAX02
-          'No hyphen (\'-\') at the start or end of the domain name', @_;
+          'No hyphen (\'-\') at the start or end of the domain name';
     },
     SYNTAX03 => sub {
         __x    # SYNTAX:SYNTAX03
-          'There must be no double hyphen (\'--\') in position 3 and 4 of the domain name', @_;
+          'There must be no double hyphen (\'--\') in position 3 and 4 of the domain name';
     },
     SYNTAX04 => sub {
         __x    # SYNTAX:SYNTAX04
-          'The NS name must have a valid domain/hostname', @_;
+          'The NS name must have a valid domain/hostname';
     },
     SYNTAX05 => sub {
         __x    # SYNTAX:SYNTAX05
-          'Misuse of \'@\' character in the SOA RNAME field', @_;
+          'Misuse of \'@\' character in the SOA RNAME field';
     },
     SYNTAX06 => sub {
         __x    # SYNTAX:SYNTAX06
-          'No illegal characters in the SOA RNAME field', @_;
+          'No illegal characters in the SOA RNAME field';
     },
     SYNTAX07 => sub {
         __x    # SYNTAX:SYNTAX07
-          'No illegal characters in the SOA MNAME field', @_;
+          'No illegal characters in the SOA MNAME field';
     },
     SYNTAX08 => sub {
         __x    # SYNTAX:SYNTAX08
-          'MX name must have a valid hostname', @_;
+          'MX name must have a valid hostname';
     },
     DISCOURAGED_DOUBLE_DASH => sub {
         __x    # SYNTAX:DISCOURAGED_DOUBLE_DASH

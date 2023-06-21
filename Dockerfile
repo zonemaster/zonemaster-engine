@@ -28,6 +28,7 @@ RUN apk add --no-cache \
     perl-text-csv \
  && cpanm --no-wget --from=https://cpan.metacpan.org/ \
     Email::Valid \
+    Locale::PO \
     Locale::TextDomain \
     Module::Find \
     MooseX::Singleton \

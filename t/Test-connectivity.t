@@ -18,7 +18,7 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
 }
 
 my ($json, $profile_test);
-foreach my $testcase ( qw{connectivity01 connectivity02 connectivity03} ) {
+foreach my $testcase ( qw{connectivity01 connectivity02 connectivity03 connectivity04} ) {
     $json          = read_file( 't/profiles/Test-'.$testcase.'-only.json' );
     $profile_test  = Zonemaster::Engine::Profile->from_json( $json );
     Zonemaster::Engine::Profile->effective->merge( $profile_test );
@@ -47,7 +47,7 @@ my $test_levels = Zonemaster::Engine::Profile->effective->{profile}->{test_level
 sub check_output_connectivity_testcase {
     my ( $testcase, $res, $should_emit ) = @_;
 
-    return if ( $testcase !~ q/connectivity0[1-3]/ );
+    return if ( $testcase !~ q/connectivity0[1-4]/ );
 
     for my $key ( @{ $metadata->{$testcase} } ) {
         next if ( $test_levels->{$key} =~ q/DEBUG/ );
@@ -65,6 +65,7 @@ sub check_output_connectivity_all {
     check_output_connectivity_testcase( 'connectivity01', $res, $should_emit );
     check_output_connectivity_testcase( 'connectivity02', $res, $should_emit );
     check_output_connectivity_testcase( 'connectivity03', $res, $should_emit );
+    check_output_connectivity_testcase( 'connectivity04', $res, $should_emit );
 }
 
 subtest 'All good' => sub {
@@ -72,26 +73,11 @@ subtest 'All good' => sub {
     ok( !$res{MODULE_ERROR}, q{Test module completes normally} );
     %should_emit = (
         IPV4_DIFFERENT_ASN => 1,
-        IPV6_DIFFERENT_ASN => 1
+        IPV6_DIFFERENT_ASN => 1,
+        CN04_IPV4_DIFFERENT_PREFIX => 1,
+        CN04_IPV6_DIFFERENT_PREFIX => 1
     );
     check_output_connectivity_all( \%res, \%should_emit );
-};
-
-subtest 'Nameservers with Uniq AS (IPv4 and IPv6)' => sub {
-    %should_emit = (
-        IPV4_ONE_ASN => 1,
-        IPV6_ONE_ASN => 1,
-    );
-    %res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{connectivity}, q{001.tf} );
-    check_output_connectivity_testcase( 'connectivity03', \%res, \%should_emit );
-};
-
-subtest 'Nameservers with Uniq AS (IPv4 only)' => sub {
-    %should_emit = (
-        IPV4_ONE_ASN => 1
-    );
-    %res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{connectivity}, q{zut-root.rd.nic.fr} );
-    check_output_connectivity_testcase( 'connectivity03', \%res, \%should_emit );
 };
 
 subtest 'No IPv6 (profile with IPv4 only)' => sub {
@@ -146,6 +132,10 @@ subtest 'No network' => sub {
     Zonemaster::Engine::Profile->effective->set( q{net.ipv4}, 1 );
     Zonemaster::Engine::Profile->effective->set( q{net.ipv6}, 1 );
 };
+
+# connectivity03 -- See t/Test-connectivity03.t instead.
+
+# connectivity04 -- See t/Test-connectivity04.t instead.
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Nameserver->save( $datafile );

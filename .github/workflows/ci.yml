@@ -48,6 +48,7 @@ jobs:
             build-essential \
             gettext \
             libidn2-dev \
+            liblog-any-perl \
             libssl-dev \
             libtool \
             m4 \

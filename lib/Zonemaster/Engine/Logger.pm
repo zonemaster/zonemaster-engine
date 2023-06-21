@@ -23,6 +23,8 @@ has 'entries' => (
 );
 has 'callback' => ( is => 'rw', isa => 'CodeRef', required => 0, clearer => 'clear_callback' );
 
+my $logfilter;
+
 sub add {
     my ( $self, $tag, $argref ) = @_;
 
@@ -50,12 +52,15 @@ sub add {
 
 sub _check_filter {
     my ( $self, $entry ) = @_;
-    my $config = Zonemaster::Engine::Profile->effective->get(q{logfilter});
 
-    if ( $config ) {
-        if ( $config->{ $entry->module } ) {
+    if ( ! defined $logfilter ) {
+        $logfilter = Zonemaster::Engine::Profile->effective->get(q{logfilter});
+    }
+
+    if ( $logfilter ) {
+        if ( $logfilter->{ $entry->module } ) {
             my $match = 0;
-            foreach my $rule ( @{$config->{ $entry->module }{ $entry->tag }} ) {
+            foreach my $rule ( @{$logfilter->{ $entry->module }{ $entry->tag }} ) {
                 foreach my $key ( keys %{ $rule->{when} } ) {
                     my $cond = $rule->{when}{$key};
                     if ( ref( $cond ) and ref( $cond ) eq 'ARRAY' ) {
@@ -80,8 +85,8 @@ sub _check_filter {
                     last;
                 }
             }
-        } ## end if ( $config->{ $entry...})
-    } ## end if ( $config )
+        }
+    }
     return;
 } ## end sub _check_filter
 
@@ -91,6 +96,7 @@ sub start_time_now {
 }
 
 sub reset_config {
+    $logfilter = undef;
     Zonemaster::Engine::Logger::Entry->reset_config();
     return;
 }
@@ -219,6 +225,17 @@ Remove all known log entries.
 =item reset_config()
 
 Clear the test level cached configuration.
+
+=back
+
+=head1 SUBROUTINES
+
+=over
+
+=item _check_filter($entry)
+
+Apply the C<logfilter> defined rules to the entry. See
+L<Zonemaster::Engine::Profile/"logfilter">.
 
 =back
 
