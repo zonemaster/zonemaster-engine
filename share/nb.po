@@ -2,15 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-16 12:16+0100\n"
-"PO-Revision-Date: 2021-12-09 08:49+0100\n"
+"POT-Creation-Date: 2023-06-27 13:17+0200\n"
+"PO-Revision-Date: 2023-06-27 13:46+0200\n"
 "Last-Translator: richard.persson@norid.no\n"
 "Language-Team: Zonemaster Team\n"
 "Language: nb\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.1\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #. ADDRESS:NAMESERVER_IP_WITHOUT_REVERSE
 #, perl-brace-format
@@ -487,7 +487,7 @@ msgid ""
 msgstr ""
 "Limposter hos en eller flere navnetjenere som er \"out-of-bailiwick\" hos "
 "foreldredomenet ({parent_addresses}) samsvarer ikke med tilsvarende "
-"adresseposter i autoritativ sone  ({zone_addresses})."
+"adresseposter i autoritativ sone ({zone_addresses})."
 
 #. CONSISTENCY:SOA_RNAME
 #, perl-brace-format
@@ -583,7 +583,7 @@ msgid ""
 "({algo_descr})."
 msgstr ""
 "DNSKEY-posten med \"key tag\" {keytag} bruker en algoritme med "
-"algoritmenummer {algo_num} ({algo_descr}),  som ikke er tildelt."
+"algoritmenummer {algo_num} ({algo_descr}), som ikke er tildelt."
 
 #. DNSSEC:DNSKEY_AND_DS
 #, perl-brace-format
@@ -626,6 +626,69 @@ msgstr ""
 "({algo_descr}) har en nøkkelstørrelse ({keysize}) som er større enn den "
 "maksimale størrelsen ({keysizemax}) for denne algoritmen."
 
+#. DNSSEC:DS01_DIGEST_NOT_SUPPORTED_BY_ZM
+#, perl-brace-format
+msgid ""
+"DS record for zone {domain} with keytag {keytag} was created by digest "
+"algorithm {ds_algo_num} ({ds_algo_mnemo}) which cannot be validated by this "
+"installation of Zonemaster. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"DS-posten for sone {domain} med \"key tag\" {keytag}, bruker en algoritme "
+"{ds_algo_num} ({ds_algo_mnemo}) som ikke er støttet av denne installasjonen. "
+"Hentet fra navnetjenere med IP-adressene ({ns_ip_list})."
+
+#. DNSSEC:DS01_DS_ALGO_DEPRECATED
+#, perl-brace-format
+msgid ""
+"DS record for zone {domain} with keytag {keytag} was created by digest "
+"algorithm {ds_algo_num} ({ds_algo_mnemo}) which is deprecated. Fetched from "
+"the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"DS-posten for sone {domain} med \"key tag\" {keytag}, bruker en algoritme "
+"{ds_algo_num} ({ds_algo_mnemo}) som ikke er støttet av denne installasjonen. "
+"Hentet fra navnetjenere med IP-adressene ({ns_ip_list})."
+
+#. DNSSEC:DS01_DS_ALGO_2_MISSING
+#, perl-brace-format
+msgid "Digest algorithm 2 (SHA-256) is expected but missing for zone {domain}."
+msgstr ""
+"Digest-algoritm 2 (SHA-256) er forventet men mangler for sone {domain}."
+
+#. DNSSEC:DS01_DS_ALGO_NOT_DS
+#, perl-brace-format
+msgid ""
+"DS record for zone {domain} with keytag {keytag} was created by digest "
+"algorithm {ds_algo_num} ({ds_algo_mnemo}) which is not meant for DS. Fetched "
+"from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"DS-posten for sone {domain} med \"key tag\" {keytag}, bruker en algoritme "
+"{ds_algo_num} ({ds_algo_mnemo}) som ikke er støttet av denne installasjonen. "
+"Hentet fra navnetjenere med IP-adressene ({ns_ip_list})."
+
+#. DNSSEC:DS01_DS_ALGO_RESERVED
+#, perl-brace-format
+msgid ""
+"DS record for zone {domain} with keytag {keytag} was created with an "
+"unassigned digest algorithm (algorithm number {ds_algo_num}). Fetched from "
+"the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"DS-posten for sone {domain} med \"key tag\" {keytag} ble opprettet med en "
+"ikke-tilornet digest-algoritme (algoritmenummer {ds_algo_num}). Hentet fra "
+"navnetjenere med IP-adressene ({ns_ip_list})."
+
+#. DNSSEC:DS01_DS_ALGO_SHA1_DEPRECATED
+#, perl-brace-format
+msgid ""
+"DS record for zone {domain} with keytag {keytag} was created by digest "
+"algorithm {ds_algo_num} ({ds_algo_mnemo}). While still being widely in use, "
+"it is deprecated. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"DS-posten for sone {domain} med \"key tag\" {keytag}, ble opprettet av en "
+"digest-algoritme {ds_algo_num} ({ds_algo_mnemo}) som er foreldet. Hentet fra "
+"navnetjenere med IP-adressene ({ns_ip_list})."
+
 #. DNSSEC:DS02_ALGO_NOT_SUPPORTED_BY_ZM
 #. DNSSEC:DS08_ALGO_NOT_SUPPORTED_BY_ZM
 #. DNSSEC:DS09_ALGO_NOT_SUPPORTED_BY_ZM
@@ -647,8 +710,8 @@ msgid ""
 "DS with same tag is present in parent. Fetched from the nameservers with IP "
 "addresses \"{ns_ip_list}\"."
 msgstr ""
-"Flagg-feltet for denne DNSKEY-posten med \"key tag\" {keytag} har ikke "
-"ZONE-bit satt, men en DS-post med samme \"key tag\" finnes i foreldre-zonen. "
+"Flagg-feltet for denne DNSKEY-posten med \"key tag\" {keytag} har ikke ZONE-"
+"bit satt, men en DS-post med samme \"key tag\" finnes i foreldre-zonen. "
 "Hentet fra navnetjenere med IP-adressene ({ns_ip_list})."
 
 #. DNSSEC:DS02_DNSKEY_NOT_SEP
@@ -658,9 +721,9 @@ msgid ""
 "DS with same tag is present in parent. Fetched from the nameservers with IP "
 "addresses \"{ns_ip_list}\"."
 msgstr ""
-"Flagg-feltet for NSKEY-posten med \"key tag\" {keytag} har ikke "
-"SEP-bit satt, men DS-post med samme \"key tag\" finnes i foreldre-zonen. "
-"Hentet fra navnetjenere med IP-adressene ({ns_ip_list})."
+"Flagg-feltet for NSKEY-posten med \"key tag\" {keytag} har ikke SEP-bit "
+"satt, men DS-post med samme \"key tag\" finnes i foreldre-zonen. Hentet fra "
+"navnetjenere med IP-adressene ({ns_ip_list})."
 
 #. DNSSEC:DS02_NO_DNSKEY_FOR_DS
 #, perl-brace-format
@@ -675,11 +738,11 @@ msgstr ""
 #. DNSSEC:DS02_NO_MATCHING_DNSKEY_RRSIG
 #, perl-brace-format
 msgid ""
-"The DNSKEY RRset is not signed by the DNSKEY with tag {keytag} that the the "
-"DS record refers to. Fetched from the nameservers with IP \"{ns_ip_list}\"."
+"The DNSKEY RRset is not signed by the DNSKEY with tag {keytag} that the DS "
+"record refers to. Fetched from the nameservers with IP \"{ns_ip_list}\"."
 msgstr ""
-"DNSKEY-postene er ikke signert av DNSKEY med \"key tag\" {keytag} som "
-"DS-posten refererer til. Hentet fra navnetjenere med IP-adressene "
+"DNSKEY-postene er ikke signert av DNSKEY med \"key tag\" {keytag} som DS-"
+"posten refererer til. Hentet fra navnetjenere med IP-adressene "
 "({ns_ip_list})."
 
 #. DNSSEC:DS02_NO_MATCH_DS_DNSKEY
@@ -688,8 +751,8 @@ msgid ""
 "The DS record does not match the DNSKEY with tag {keytag} by algorithm or "
 "digest. Fetched from the nameservers with IP \"{ns_ip_list}\"."
 msgstr ""
-"DS-posten matcher ingen DNSKEY-post med \"key tag\" {keytag}. Hentet "
-"fra navnetjenere med IP-adressene ({ns_ip_list})."
+"DS-posten matcher ingen DNSKEY-post med \"key tag\" {keytag}. Hentet fra "
+"navnetjenere med IP-adressene ({ns_ip_list})."
 
 #. DNSSEC:DS02_RRSIG_NOT_VALID_BY_DNSKEY
 #. DNSSEC:DS08_RRSIG_NOT_VALID_BY_DNSKEY
@@ -699,9 +762,9 @@ msgid ""
 "validated by the matching DNSKEY. Fetched from the nameservers with IP "
 "addresses \"{ns_ip_list}\"."
 msgstr ""
-"DNSKEY-postene er signert med en RRSIG med \"key tag\" {keytag}, men "
-"den kan ikke valideres med en DNSKEY som matcher. Hentet fra navnetjenere "
-"med IP-adressene ({ns_ip_list})."
+"DNSKEY-postene er signert med en RRSIG med \"key tag\" {keytag}, men den kan "
+"ikke valideres med en DNSKEY som matcher. Hentet fra navnetjenere med IP-"
+"adressene ({ns_ip_list})."
 
 #. DNSSEC:DS08_DNSKEY_RRSIG_EXPIRED
 #, perl-brace-format
@@ -737,8 +800,8 @@ msgid ""
 "match any DNSKEY record. Fetched from the nameservers with IP addresses "
 "\"{ns_ip_list}\"."
 msgstr ""
-"DNSKEY-postene er signert med en RRSIG med \"key tag\" {keytag}, som "
-"ikke matcher noen DNSKEY-poster. Hentet fra navnetjenere med IP-adressene "
+"DNSKEY-postene er signert med en RRSIG med \"key tag\" {keytag}, som ikke "
+"matcher noen DNSKEY-poster. Hentet fra navnetjenere med IP-adressene "
 "({ns_ip_list})."
 
 #. DNSSEC:DS09_MISSING_RRSIG_IN_RESPONSE
@@ -757,9 +820,8 @@ msgid ""
 "any DNSKEY record. Fetched from the nameservers with IP addresses "
 "\"{ns_ip_list}\"."
 msgstr ""
-"SOA-posten er signert med en RRSIG med \"key tag\" {keytag} som ikke "
-"matcher noen DNSKEY-post. Hentet fra navnetjenere med IP-adressene "
-"({ns_ip_list})."
+"SOA-posten er signert med en RRSIG med \"key tag\" {keytag} som ikke matcher "
+"noen DNSKEY-post. Hentet fra navnetjenere med IP-adressene ({ns_ip_list})."
 
 #. DNSSEC:DS09_RRSIG_NOT_VALID_BY_DNSKEY
 #, perl-brace-format
@@ -826,9 +888,9 @@ msgid ""
 "with IP addresses \"{ns_ip_list_nsec}\". NSEC3 is fetched from nameservers "
 "with IP addresses \"{ns_ip_list_nsec3}\"."
 msgstr ""
-"Sonen er inkonsistent mellom NSEC og NSEC3. NSEC hentet fra navnetjenere "
-"med IP-adressene ({ns_ip_list_nsec}). NSEC3 hentet fra navnetjenere med "
-"IP-adressene ({ns_ip_list_nsec3})."
+"Sonen er inkonsistent mellom NSEC og NSEC3. NSEC hentet fra navnetjenere med "
+"IP-adressene ({ns_ip_list_nsec}). NSEC3 hentet fra navnetjenere med IP-"
+"adressene ({ns_ip_list_nsec3})."
 
 #. DNSSEC:DS10_MISSING_NSEC_NSEC3
 #, perl-brace-format
@@ -845,8 +907,8 @@ msgid ""
 "Unexpectedly both NSEC and NSEC3 are reported. Fetched from the nameservers "
 "with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"Både NSEC- og NSEC3-poster ble returnert. Hentet fra navnetjenere med "
-"IP-adressene ({ns_ip_list})."
+"Både NSEC- og NSEC3-poster ble returnert. Hentet fra navnetjenere med IP-"
+"adressene ({ns_ip_list})."
 
 #. DNSSEC:DS10_NAME_NOT_COVERED_BY_NSEC
 #, perl-brace-format
@@ -863,8 +925,8 @@ msgid ""
 "A non-existent name is not correctly covered by the NSEC3 records. Fetched "
 "from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"Et ikke-eksisterende navn er ikke korrekt håndtert NSEC3-postene. Hentet "
-"fra navnetjenere med IP-adressene ({ns_ip_list})."
+"Et ikke-eksisterende navn er ikke korrekt håndtert NSEC3-postene. Hentet fra "
+"navnetjenere med IP-adressene ({ns_ip_list})."
 
 #. DNSSEC:DS10_NON_EXISTENT_RESPONSE_ERROR
 #, perl-brace-format
@@ -908,8 +970,8 @@ msgid ""
 "The signatures (RRSIG) for the NSEC record or records cannot be verified. "
 "Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"RRSIG for NSEC-posten(e) kan ikke verifieres. Hentet fra navnetjenere med "
-"IP-adressene ({ns_ip_list})."
+"RRSIG for NSEC-posten(e) kan ikke verifieres. Hentet fra navnetjenere med IP-"
+"adressene ({ns_ip_list})."
 
 #. DNSSEC:DS10_UNSIGNED_ANSWER
 #, perl-brace-format
@@ -1078,8 +1140,8 @@ msgid ""
 "The CDS record with tag {keytag} matches a DNSKEY record with SEP bit (bit "
 "15) unset. Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"CDS-posten med \"key tag\" {keytag} matcher en DNSKEY-post uten SEP bit "
-"(bit 15) satt. Hentet fra navnetjenere med IP-adressene ({ns_ip_list})."
+"CDS-posten med \"key tag\" {keytag} matcher en DNSKEY-post uten SEP bit (bit "
+"15) satt. Hentet fra navnetjenere med IP-adressene ({ns_ip_list})."
 
 #. DNSSEC:DS16_CDS_MATCHES_NON_ZONE_DNSKEY
 #, perl-brace-format
@@ -1087,8 +1149,8 @@ msgid ""
 "The CDS record with tag {keytag} matches a DNSKEY record with zone bit (bit "
 "7) unset. Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"CDS-posten med \"key tag\" {keytag} matcher en DNSKEY-post uten \"zone bit\" "
-"(bit 7) satt. Hentet fra navnetjenere med IP-adressene ({ns_ip_list})."
+"CDS-posten med \"key tag\" {keytag} matcher en DNSKEY-post uten \"zone bit"
+"\" (bit 7) satt. Hentet fra navnetjenere med IP-adressene ({ns_ip_list})."
 
 #. DNSSEC:DS16_CDS_MATCHES_NO_DNSKEY
 #, perl-brace-format
@@ -1106,8 +1168,8 @@ msgid ""
 "{keytag} points to. Fetched from the nameservers with IP addresses "
 "\"{ns_ip_list}\"."
 msgstr ""
-"CDS-posten er ikke signert av DNSKEY referert av CDS-posten med \"key tag\" "
-"{keytag}. Hentet fra navnetjenere med IP-adressene ({ns_ip_list})."
+"CDS-posten er ikke signert av DNSKEY referert av CDS-posten med \"key tag"
+"\" {keytag}. Hentet fra navnetjenere med IP-adressene ({ns_ip_list})."
 
 #. DNSSEC:DS16_CDS_SIGNED_BY_UNKNOWN_DNSKEY
 #, perl-brace-format
@@ -1179,7 +1241,7 @@ msgstr ""
 #, perl-brace-format
 msgid ""
 "The CDNSKEY record with tag {keytag} has the SEP bit (bit 15) unset. Fetched "
-"rom the nameservers with IP addresses \"{ns_ip_list}\"."
+"from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
 "CDNSKEY-posten med \"key tag\" {keytag} har ikke SEP bit (bit 15) satt. "
 "Hentet fra navnetjenere med IP-adressene ({ns_ip_list})."
@@ -1188,7 +1250,7 @@ msgstr ""
 #, perl-brace-format
 msgid ""
 "The CDNSKEY record with tag {keytag} has the zone bit (bit 7) unset. Fetched "
-"rom the nameservers with IP addresses \"{ns_ip_list}\"."
+"from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
 "CDNSKEY-posten med \"key tag\" {keytag} har ikke \"zone bit\" (bit 7) satt. "
 "Hentet fra navnetjenere med IP-adressene ({ns_ip_list})."
@@ -1209,8 +1271,8 @@ msgid ""
 "tag {keytag} points to. Fetched from the nameservers with IP addresses "
 "\"{ns_ip_list}\"."
 msgstr ""
-"CDNSKEY-posten er ikke signert av den DNSKEY som CDNSKEY-posten med "
-"\"key tag\" {keytag} refererer til. Hentet fra navnetjenere med IP-adressene "
+"CDNSKEY-posten er ikke signert av den DNSKEY som CDNSKEY-posten med \"key tag"
+"\" {keytag} refererer til. Hentet fra navnetjenere med IP-adressene "
 "({ns_ip_list})."
 
 #. DNSSEC:DS17_CDNSKEY_SIGNED_BY_UNKNOWN_DNSKEY
@@ -1286,72 +1348,8 @@ msgid ""
 "The CDNSKEY RRset is not signed with a DNSKEY record that a DS record points "
 "to. Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"CDNSKEY-posten er ikke signert av DNSKEY referert av DS-posten. Hentet "
-"fra navnetjenere med IP-adressene ({ns_ip_list})."
-
-#. DNSSEC:DS_ALGORITHM_NOT_DS
-#, perl-brace-format
-msgid ""
-"{ns} returned a DS record created by algorithm {algo_num} ({algo_mnemo}) "
-"which is not meant for DS. The DS record is for the DNSKEY record with "
-"keytag {keytag} in zone {domain}."
-msgstr ""
-"Navnetjener {ns} svarte med en DS-post som er laget med algoritme {algo_num} "
-"({algo_mnemo}), som ikke er ment for DS. DS-posten gjelder DNSKEY-posten med "
-"\"key tag\" {keytag} i sonen {domain}."
-
-#. DNSSEC:DS_ALGORITHM_DEPRECATED
-#, perl-brace-format
-msgid ""
-"{ns} returned a DS record created by algorithm {algo_num} ({algo_mnemo}), "
-"which is deprecated. The DS record is for the DNSKEY record with keytag "
-"{keytag} in zone {domain}."
-msgstr ""
-"Navnetjener {ns} svarte med en DS-post som er laget med algoritme {algo_num} "
-"({algo_mnemo}), som er foreldet. DS-posten gjelder for DNSKEY-posten med "
-"\"key tag\" {keytag} i sonen {domain}."
-
-#. DNSSEC:DS_ALGORITHM_MISSING
-#, perl-brace-format
-msgid ""
-"{ns} returned no DS record created by algorithm {algo_num} ({algo_mnemo}) "
-"for zone {domain}, which is required."
-msgstr ""
-"Navnetjener {ns} svarte ikke med en DS-post som er laget med algoritme "
-"{algo_num} ({algo_mnemo}) for sonen {domain}, noe som er et krav."
-
-#. DNSSEC:DS_ALGORITHM_OK
-#, perl-brace-format
-msgid ""
-"{ns} returned a DS record created by algorithm {algo_num} ({algo_mnemo}), "
-"which is OK. The DS record is for the DNSKEY record with keytag {keytag} in "
-"zone {domain}."
-msgstr ""
-"Navnetjener {ns} svarte med en DS-post som er laget med algoritme {algo_num} "
-"({algo_mnemo}), som er OK. DS-posten gjelder for DNSKEY-posten med \"key tag"
-"\" {keytag} i sonen {domain}."
-
-#. DNSSEC:DS_ALGORITHM_RESERVED
-#, perl-brace-format
-msgid ""
-"{ns} returned a DS record created by with an algorithm not assigned "
-"(algorithm number {algo_num}), which is not OK. The DS record is for the "
-"DNSKEY record with keytag {keytag} in zone {domain}."
-msgstr ""
-"Navnetjener {ns} svarte med en DS-post som er laget med algoritme {algo_num} "
-"som ikke er i bruk. DS-posten gjelder for DNSKEY-posten med \"key tag"
-"\" {keytag} i sonen {domain}."
-
-#. DNSSEC:DS_ALGO_SHA1_DEPRECATED
-#, perl-brace-format
-msgid ""
-"Nameserver {ns} returned a DS record created by algorithm {algo_num} "
-"({algo_mnemo}) which is deprecated, while it is still widely used. The DS "
-"record is for the DNSKEY record with keytag {keytag} in zone {domain}."
-msgstr ""
-"Navnetjener {ns} svarte med en DS-post som er laget med algoritme {algo_num} "
-"({algo_mnemo}), som er foreldet, men fortsatt i bruk. DS-posten gjelder "
-"DNSKEY-posten med \"key tag\" {keytag} i sonen {domain}."
+"CDNSKEY-posten er ikke signert av DNSKEY referert av DS-posten. Hentet fra "
+"navnetjenere med IP-adressene ({ns_ip_list})."
 
 #. DNSSEC:DS_BUT_NOT_DNSKEY
 #, perl-brace-format
@@ -1430,11 +1428,6 @@ msgstr "{server} returnerte ingen NSEC3PARAM-poster."
 msgid "Nameserver {ns} responded with no DNSKEY record(s)."
 msgstr "Navnetjener {ns} svarte ikke med noen DNSKEY-post."
 
-#. DNSSEC:NO_RESPONSE_DS
-#, perl-brace-format
-msgid "{ns} returned no DS records for {domain}."
-msgstr "Navnetjener {ns} returnerte ingen DS-poster for sonen {domain}."
-
 #. DNSSEC:NOT_SIGNED
 msgid "The zone is not signed with DNSSEC."
 msgstr "Sonen er ikke signert med DNSSEC."
@@ -1481,15 +1474,6 @@ msgid ""
 msgstr ""
 "Antall NSEC3-iterasjoner er {count}, som er for mange for nøkkellengde "
 "{keylength}."
-
-#. DNSSEC:UNEXPECTED_RESPONSE_DS
-#, perl-brace-format
-msgid ""
-"Nameserver {ns} responded with an unexpected rcode ({rcode}) on a DS query "
-"for zone {domain}."
-msgstr ""
-"Navnetjener {ns} svarte på en DS-spørring for sonen {domain} med svarkoden "
-"({rcode}), som ikke var forventet."
 
 #. DELEGATION:ARE_AUTHORITATIVE
 #, perl-brace-format
@@ -1950,6 +1934,33 @@ msgstr "Ingen av følgende navnetjenere peker på foreldresonen: {nsname_list}."
 msgid "Erroneous response from nameserver {ns}."
 msgstr "Feil svar fra navnetjener {ns}."
 
+#. N10_NO_RESPONSE_EDNS1_QUERY
+#, perl-brace-format
+msgid ""
+"No response to an EDNS version 1 query. Fetched from the nameservers with IP "
+"addresses {ns_ip_list}"
+msgstr ""
+"Ingen svar på en EDNS-versjon-1-spørring. Hentet fra navnetjenere med IP-"
+"adressene ({ns_ip_list})."
+
+#. N10_UNEXPECTED_RCODE
+#, perl-brace-format
+msgid ""
+"Erroneous RCODE (\"{rcode}\") in response to an EDNS version 1 query. "
+"Fetched from the nameservers with IP addresses {ns_ip_list}"
+msgstr ""
+"Ingen eller feilaktig svar RCODE (\"{rcode}\") på spørring om en EDNS "
+"versjon 1-spørring. Hentet fra navnetjenere med IP-adressene ({ns_ip_list})."
+
+#. N10_EDNS_RESPONSE_ERROR
+#, perl-brace-format
+msgid ""
+"Expected RCODE but received erroneous response to an EDNS version 1 query. "
+"Fetched from the nameservers with IP addresses {ns_ip_list}"
+msgstr ""
+"Forventet RCODE men mottok feilsval på en EDNS-versjon-1-spørring. Hentet "
+"fra navnetjenere med IP-adressene ({ns_ip_list})."
+
 #. NAMESERVER:QNAME_CASE_INSENSITIVE
 #, perl-brace-format
 msgid ""
@@ -1974,11 +1985,6 @@ msgstr "Alle navnetjenere svarer fra samme IP som ble brukt ved spørringen."
 #, perl-brace-format
 msgid "Nameserver {ns} responds with an unknown ENDS OPTION-CODE."
 msgstr "Navnetjener {ns} svarte med en udefinert \"EDNS OPTION-CODE\"."
-
-#. NAMESERVER:UNSUPPORTED_EDNS_VER
-#, perl-brace-format
-msgid "Nameserver {ns} accepts an unsupported EDNS version."
-msgstr "Navnetjener {ns} aksepterer en EDNS-versjon som ikke har støtte i DNS."
 
 #. NAMESERVER:UPWARD_REFERRAL
 #, perl-brace-format
