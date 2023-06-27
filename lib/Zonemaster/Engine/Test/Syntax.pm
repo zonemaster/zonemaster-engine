@@ -906,9 +906,10 @@ sub syntax06 {
         @nss = sort values %nss;
     }
 
-    my %seen_rnames;
+    my %rname_candidates;
+    my %seen_mail_domains;
+    my $invalid_exchanges = undef;
     for my $ns ( @nss ) {
-
         if ( _ip_disabled_message( \@results, $ns, q{SOA} ) ) {
             next;
         }
@@ -932,6 +933,8 @@ sub syntax06 {
             push @results, _emit_log( NO_RESPONSE_SOA_QUERY => {} );
             next;
         }
+
+        $invalid_exchanges = 0 unless defined $invalid_exchanges;
 
         my $rname = $soa->rname;
         $rname =~ s/([^\\])[.]/$1@/smx;    # Replace first non-escaped dot with an at-sign
@@ -970,11 +973,12 @@ sub syntax06 {
         }
 
         for my $mail_domain ( @mail_domains ) {
+            next if $seen_mail_domains{$mail_domain};
 
             # Assume mail domain is invalid until we see an actual IP address
             my $exchange_valid = 0;
 
-            # Lookup IPv4 address for mail server
+            # Lookup IPv4 address for mail domain
             my $p_a = Zonemaster::Engine::Recursor->recurse( $mail_domain, q{A} );
             if ( $p_a ) {
                 if ( $p_a->get_records( q{CNAME}, q{answer} ) ) {
@@ -1012,24 +1016,29 @@ sub syntax06 {
 
             # Emit verdict for mail domain
             if ( $exchange_valid ) {
-                if ( !exists $seen_rnames{$rname} ) {
-                    $seen_rnames{$rname} = 1;
-                    push @results,
-                      _emit_log(
-                        RNAME_RFC822_VALID => {
-                            rname => $rname,
-                        }
-                      );
-                }
+                $rname_candidates{$rname} = 1;
             }
             else {
-                push @results, _emit_log( RNAME_MAIL_DOMAIN_INVALID => { domain => $mail_domain } );
+                push @results, _emit_log( RNAME_MAIL_DOMAIN_INVALID => { domain => $mail_domain } ) unless $seen_mail_domains{$mail_domain};
+                delete $rname_candidates{$rname};
+                $invalid_exchanges += 1;
             }
+
+            $seen_mail_domains{$mail_domain} = 1;
         } ## end for my $mail_domain ( @mail_domains)
 
     } ## end for my $ns ( @nss )
 
-    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
+    if ( defined $invalid_exchanges and $invalid_exchanges == 0 ) {
+        push @results,
+          _emit_log(
+            RNAME_RFC822_VALID => {
+                rname => $_,
+            }
+          ) for keys %rname_candidates;
+    }
+
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub syntax06
 
 =over
