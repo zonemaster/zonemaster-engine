@@ -907,7 +907,7 @@ sub syntax06 {
     }
 
     my %rname_candidates;
-    my %seen_mail_domains;
+    my %seen_mail_servers;
     my $invalid_exchanges = undef;
     for my $ns ( @nss ) {
         if ( _ip_disabled_message( \@results, $ns, q{SOA} ) ) {
@@ -933,8 +933,6 @@ sub syntax06 {
             push @results, _emit_log( NO_RESPONSE_SOA_QUERY => {} );
             next;
         }
-
-        $invalid_exchanges = 0 unless defined $invalid_exchanges;
 
         my $rname = $soa->rname;
         $rname =~ s/([^\\])[.]/$1@/smx;    # Replace first non-escaped dot with an at-sign
@@ -963,32 +961,34 @@ sub syntax06 {
         $domain .= q{.};    # Add back final dot
         $domain = $cnames{$domain} while $cnames{$domain};
 
-        # Determine mail domain(s)
-        my @mail_domains;
+        # Determine mail server(s)
+        my @mail_servers;
         if ( my @mxs = $p_mx->get_records_for_name( q{MX}, $domain ) ) {
-            @mail_domains = map { $_->exchange } @mxs;
+            @mail_servers = map { $_->exchange } @mxs;
         }
         else {
-            @mail_domains = ( $domain );
+            @mail_servers = ( $domain );
         }
 
-        for my $mail_domain ( @mail_domains ) {
-            next if $seen_mail_domains{$mail_domain};
+        for my $mail_server ( @mail_servers ) {
+            next if $seen_mail_servers{$mail_server};
+            $seen_mail_servers{$mail_server} = 1;
 
-            # Assume mail domain is invalid until we see an actual IP address
+            # Assume mail server is invalid until we see an actual IP address
             my $exchange_valid = 0;
+            $invalid_exchanges = 0 unless defined $invalid_exchanges;
 
-            # Lookup IPv4 address for mail domain
-            my $p_a = Zonemaster::Engine::Recursor->recurse( $mail_domain, q{A} );
+            # Lookup IPv4 address for mail server
+            my $p_a = Zonemaster::Engine::Recursor->recurse( $mail_server, q{A} );
             if ( $p_a ) {
                 if ( $p_a->get_records( q{CNAME}, q{answer} ) ) {
-                    push @results, _emit_log( RNAME_MAIL_ILLEGAL_CNAME => { domain => $mail_domain } );
+                    push @results, _emit_log( RNAME_MAIL_ILLEGAL_CNAME => { domain => $mail_server } );
                 }
                 else {
-                    my @rrs_a = grep { $_->owner eq $mail_domain } $p_a->get_records( q{A}, q{answer} );
+                    my @rrs_a = grep { $_->owner eq $mail_server } $p_a->get_records( q{A}, q{answer} );
 
                     if ( grep { $_->address eq q{127.0.0.1} } @rrs_a ) {
-                        push @results, _emit_log( RNAME_MAIL_DOMAIN_LOCALHOST => { domain => $mail_domain, localhost => q{127.0.0.1} } );
+                        push @results, _emit_log( RNAME_MAIL_DOMAIN_LOCALHOST => { domain => $mail_server, localhost => q{127.0.0.1} } );
                     }
                     elsif ( @rrs_a ) {
                         $exchange_valid = 1;
@@ -996,17 +996,17 @@ sub syntax06 {
                 }
             }
 
-            # Lookup IPv6 address for mail domain
-            my $p_aaaa = Zonemaster::Engine::Recursor->recurse( $mail_domain, q{AAAA} );
+            # Lookup IPv6 address for mail server
+            my $p_aaaa = Zonemaster::Engine::Recursor->recurse( $mail_server, q{AAAA} );
             if ( $p_aaaa ) {
                 if ( $p_aaaa->get_records( q{CNAME}, q{answer} ) ) {
-                    push @results, _emit_log( RNAME_MAIL_ILLEGAL_CNAME => { domain => $mail_domain } );
+                    push @results, _emit_log( RNAME_MAIL_ILLEGAL_CNAME => { domain => $mail_server } );
                 }
                 else {
-                    my @rrs_aaaa = grep { $_->owner eq $mail_domain } $p_aaaa->get_records( q{AAAA}, q{answer} );
+                    my @rrs_aaaa = grep { $_->owner eq $mail_server } $p_aaaa->get_records( q{AAAA}, q{answer} );
 
                     if ( grep { $_->address eq q{::1} } @rrs_aaaa) {
-                        push @results, _emit_log( RNAME_MAIL_DOMAIN_LOCALHOST => { domain => $mail_domain, localhost => q{::1} } );
+                        push @results, _emit_log( RNAME_MAIL_DOMAIN_LOCALHOST => { domain => $mail_server, localhost => q{::1} } );
                     }
                     elsif ( @rrs_aaaa ) {
                         $exchange_valid = 1;
@@ -1014,18 +1014,16 @@ sub syntax06 {
                 }
             }
 
-            # Emit verdict for mail domain
+            # Emit verdict for mail server
             if ( $exchange_valid ) {
                 $rname_candidates{$rname} = 1;
             }
             else {
-                push @results, _emit_log( RNAME_MAIL_DOMAIN_INVALID => { domain => $mail_domain } ) unless $seen_mail_domains{$mail_domain};
+                push @results, _emit_log( RNAME_MAIL_DOMAIN_INVALID => { domain => $mail_server } );
                 delete $rname_candidates{$rname};
                 $invalid_exchanges += 1;
             }
-
-            $seen_mail_domains{$mail_domain} = 1;
-        } ## end for my $mail_domain ( @mail_domains)
+        } ## end for my $mail_server ( @mail_servers)
 
     } ## end for my $ns ( @nss )
 
