@@ -964,7 +964,7 @@ sub syntax06 {
         # Determine mail server(s)
         my @mail_servers;
         if ( my @mxs = $p_mx->get_records_for_name( q{MX}, $domain ) ) {
-            @mail_servers = map { $_->exchange } @mxs;
+            @mail_servers = uniq( map { $_->exchange } @mxs );
         }
         else {
             @mail_servers = ( $domain );
@@ -1021,7 +1021,7 @@ sub syntax06 {
             else {
                 push @results, _emit_log( RNAME_MAIL_DOMAIN_INVALID => { domain => $mail_server } );
                 delete $rname_candidates{$rname};
-                $invalid_exchanges += 1;
+                $invalid_exchanges++;
             }
         } ## end for my $mail_server ( @mail_servers)
 
