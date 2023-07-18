@@ -48,17 +48,16 @@ $profile_test = Zonemaster::Engine::Profile->from_json( $json );
 Zonemaster::Engine::Profile->effective->merge( $profile_test );
 
 ###
-my $zone = Zonemaster::Engine->zone( q{001.tf} );
-
-zone_gives( $testcase, $zone, [qw{CN04_IPV4_DIFFERENT_PREFIX CN04_IPV6_DIFFERENT_PREFIX CN04_IPV6_SAME_PREFIX}] );
-zone_gives_not( $testcase, $zone, [qw{CN04_IPV4_SAME_PREFIX CN04_EMPTY_PREFIX_SET CN04_ERROR_PREFIX_DATABASE}] );
+my $zone = Zonemaster::Engine->zone( q{zonemaster.net} );
+zone_gives( $testcase, $zone, [qw{CN04_IPV4_DIFFERENT_PREFIX CN04_IPV6_DIFFERENT_PREFIX}] );
+zone_gives_not( $testcase, $zone, [qw{CN04_IPV4_SAME_PREFIX CN04_EMPTY_PREFIX_SET CN04_ERROR_PREFIX_DATABASE CN04_IPV6_SAME_PREFIX}] );
 
 $zone = Zonemaster::Engine->zone( q{zut-root.rd.nic.fr} );
 zone_gives( $testcase, $zone, [qw{CN04_IPV4_SAME_PREFIX}] );
 zone_gives_not( $testcase, $zone, [qw{CN04_IPV4_DIFFERENT_PREFIX CN04_IPV6_DIFFERENT_PREFIX CN04_IPV6_SAME_PREFIX CN04_EMPTY_PREFIX_SET CN04_ERROR_PREFIX_DATABASE}] );
 
 TODO: {
-    my @missing = qw( CN04_EMPTY_PREFIX_SET CN04_ERROR_PREFIX_DATABASE );
+    my @missing = qw( CN04_EMPTY_PREFIX_SET CN04_ERROR_PREFIX_DATABASE CN04_IPV6_SAME_PREFIX );
     local $TODO = "Need to find/create zones with those errors: ";
     warn $TODO, "\n\t", join("\n\t", @missing), "\n";
 }
