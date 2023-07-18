@@ -7,6 +7,7 @@ use warnings;
 use version; our $VERSION = version->declare( "v1.0.11" );
 
 use Zonemaster::Engine;
+use Zonemaster::Engine::Util qw( name );
 use Zonemaster::Engine::Nameserver;
 use Zonemaster::Engine::Profile;
 
@@ -28,7 +29,7 @@ sub get_with_prefix {
         # 
         my @roots;
         if ( Zonemaster::Engine::Profile->effective->get( q{asnroots} ) ) {
-            @roots = map { Zonemaster::Engine->zone( $_ ) } @{ Zonemaster::Engine::Profile->effective->get( q{asnroots} ) };
+            @roots = map { name( $_ ) } @{ Zonemaster::Engine::Profile->effective->get( q{asnroots} ) };
         }
         if ( scalar @roots ) {
             @db_sources = @roots;
@@ -37,7 +38,7 @@ sub get_with_prefix {
         else {
             $db_style = Zonemaster::Engine::Profile->effective->get( q{asn_db.style} );
             my %db_sources = %{ Zonemaster::Engine::Profile->effective->get( q{asn_db.sources} ) };
-            @db_sources = map { Zonemaster::Engine->zone( $_ ) } @{ $db_sources{ $db_style } };
+            @db_sources = map { name( $_ ) } @{ $db_sources{ $db_style } };
         }
     }
 
@@ -79,7 +80,7 @@ sub _cymru_asn_lookup {
     my $reverse = $ip->reverse_ip;
     my $db_source_nb = 0;
     foreach my $db_source ( @db_sources ) {
-        my $domain = $db_source->name->string;
+        my $domain = $db_source->string;
         my $pair   = {
             'in-addr.arpa.' => "origin.$domain",
             'ip6.arpa.'     => "origin6.$domain",
@@ -87,7 +88,7 @@ sub _cymru_asn_lookup {
         $db_source_nb++;
         foreach my $root ( keys %{$pair} ) {
             if ( $reverse =~ s/$root/$pair->{$root}/ix ) {
-                my $p = $db_source->query_persistent( $reverse, 'TXT' );
+                my $p = Zonemaster::Engine->recurse( $reverse, 'TXT' );
                 my @rr;
                 if ( $p ) {
                     @rr = $p->get_records( 'TXT' );
@@ -143,7 +144,7 @@ sub _ripe_asn_lookup {
     my $db_source_nb = 0;
     foreach my $db_source ( @db_sources ) {
         $db_source_nb++;
-        my $socket = IO::Socket::INET->new( PeerAddr => $db_source->name->string, 
+        my $socket = IO::Socket::INET->new( PeerAddr => $db_source->string,
                                             PeerPort => q{43}, 
                                             Proto => q{tcp} );
         unless ( $socket ) { 
