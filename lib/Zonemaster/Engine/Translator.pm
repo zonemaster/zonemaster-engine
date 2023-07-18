@@ -79,12 +79,12 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # SYSTEM:SKIP_IPV6_DISABLED
           "IPv6 is disabled, not sending \"{rrtype}\" query to {ns}.", @_;
     },
-    FAKE_DELEGATION => sub {
-        __x    # SYSTEM:FAKE_DELEGATION
+    FAKE_DELEGATION_RETURNED => sub {
+        __x    # SYSTEM:FAKE_DELEGATION_RETURNED
           "Followed a fake delegation.";
     },
-    ADDED_FAKE_DELEGATION => sub {
-        __x    # SYSTEM:ADDED_FAKE_DELEGATION
+    FAKE_DELEGATION_ADDED => sub {
+        __x    # SYSTEM:FAKE_DELEGATION_ADDED
           "Added a fake delegation for domain {domain} to name server {ns}.", @_;
     },
     FAKE_DELEGATION_TO_SELF => sub {
@@ -102,6 +102,14 @@ Readonly my %TAG_DESCRIPTIONS => (
           "The fake delegation of domain {domain} includes a name server {nsname} "
           . "that cannot be resolved to any IP address.",
           @_;
+    },
+    FAKE_DS_ADDED => sub {
+        __x    # SYSTEM:FAKE_DS_ADDED
+          "Added a fake DS for domain {domain} to name server {ns}.", @_;
+    },
+    FAKE_DS_RETURNED => sub {
+        __x    # SYSTEM:FAKE_DS_RETURNED
+          "Returned a fake DS.";
     },
     PACKET_BIG => sub {
         __x    # SYSTEM:PACKET_BIG

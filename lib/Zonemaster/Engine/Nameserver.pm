@@ -288,7 +288,8 @@ sub query {
         }
 
         my $res = Zonemaster::Engine::Packet->new( { packet => $p } );
-        Zonemaster::Engine->logger->add( FAKE_DS_RETURNED => { name => "$name", from => "$self" } );
+        Zonemaster::Engine->logger->add( FAKE_DS_RETURNED => { name => "$name", type  => $type, class => $class, from => "$self" } );
+        Zonemaster::Engine->logger->add( FAKED_RETURN => { packet => $res->string } );
         return $res;
     }
 
@@ -318,15 +319,7 @@ sub query {
             $p->rd( $recurse );
             $p->answerfrom( $self->address->ip );
 
-            Zonemaster::Engine->logger->add(
-                'FAKE_DELEGATION',
-                {
-                    name  => "$name",
-                    type  => $type,
-                    class => $class,
-                    from  => "$self",
-                }
-            );
+            Zonemaster::Engine->logger->add( FAKE_DELEGATION_RETURNED => { name  => "$name", type  => $type, class => $class, from  => "$self" } );
 
             my $res = Zonemaster::Engine::Packet->new( { packet => $p } );
             Zonemaster::Engine->logger->add( FAKED_RETURN => { packet => $res->string } );
@@ -382,8 +375,7 @@ sub add_fake_delegation {
         push @{ $delegation{authority} }, Zonemaster::LDNS::RR->new( sprintf( '%s IN NS %s', $domain, $name ) );
         foreach my $ip ( @{ $href->{$name} } ) {
             if ( Net::IP::XS->new( $ip )->ip eq $self->address->ip ) {
-                Zonemaster::Engine->logger->add(
-                    FAKE_DELEGATION_TO_SELF => { ns => "$self", domain => $domain, data => $href } );
+                Zonemaster::Engine->logger->add( FAKE_DELEGATION_TO_SELF => { ns => "$self", domain => $domain, data => $href } );
                 return;
             }
 
@@ -393,7 +385,7 @@ sub add_fake_delegation {
     }
 
     $self->fake_delegations->{$domain} = \%delegation;
-    Zonemaster::Engine->logger->add( ADDED_FAKE_DELEGATION => { ns => "$self", domain => $domain, data => $href } );
+    Zonemaster::Engine->logger->add( FAKE_DELEGATION_ADDED => { ns => "$self", domain => $domain, data => $href } );
 
     # We're changing the world, so the cache can't be trusted
     Zonemaster::Engine::Recursor->clear_cache;
@@ -409,7 +401,6 @@ sub add_fake_ds {
         $domain = Zonemaster::Engine::DNSName->new( $domain );
     }
 
-    Zonemaster::Engine->logger->add( FAKE_DS => { domain => lc( "$domain" ), data => $aref, ns => "$self" } );
     foreach my $href ( @{$aref} ) {
         push @ds,
           Zonemaster::LDNS::RR->new(
@@ -421,6 +412,7 @@ sub add_fake_ds {
     }
 
     $self->fake_ds->{ lc( "$domain" ) } = \@ds;
+    Zonemaster::Engine->logger->add( FAKE_DS_ADDED => { domain => lc( "$domain" ), data => $aref, ns => "$self" } );
 
     # We're changing the world, so the cache can't be trusted
     Zonemaster::Engine::Recursor->clear_cache;
