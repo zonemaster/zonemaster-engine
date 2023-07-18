@@ -165,7 +165,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     B01_CHILD_IS_ALIAS => sub {
         __x    # BASIC:B01_CHILD_IS_ALIAS
           '"{domain_child}" is not a zone. It is an alias for "{domain_target}". Run a test for "{domain_target}" instead. '
-          . 'Returned from name servers "{ns_ip_list}.', @_;
+          . 'Returned from name servers "{ns_ip_list}".', @_;
     },
     B01_CHILD_FOUND => sub {
         __x    # BASIC:B01_CHILD_FOUND
