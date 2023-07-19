@@ -736,18 +736,28 @@ A boolean. If true, network traffic is forbidden. Default false.
 Use when you want to be sure that any data is only taken from a preloaded
 cache.
 
+=head2 asn_db
+
+A hash of hashes. The currently supported keys are C<"style"> and C<"sources">.
+
+See more information in L<asn_db.style> and L<asn_db.sources>.
+
 =head2 asn_db.style
 
-A string that is either C<"Cymru"> or C<"RIPE">. Defines which method will
-be used for AS lookup zones.
+A string that is either C<"Cymru"> or C<"RIPE"> (case-insensitive).
+
+Defines which service will be used for AS lookup zones.
+
 Default C<"Cymru">.
 
 =head2 asn_db.sources
 
-An arrayref of domain names when asn_db.style is set to C<"Cymru"> or whois
-servers when asn_db.style is set to C<"RIPE">. Only the first item
-in the list will be used.
-Default C<"asnlookup.zonemaster.net">.
+A hash of arrayrefs of strings. The currently supported keys are C<"Cymru"> or C<"RIPE"> (case-insensitive).
+
+For C<"Cymru">, the strings are domain names. For C<"RIPE">, they are whois servers. Normally only the first
+item in the list will be used, the rest are backups in case the previous ones didn't work.
+
+Default C<{Cymru: [ "asnlookup.zonemaster.net", "asn.cymru.com" ], RIPE: [ "riswhois.ripe.net" ]}>.
 
 =head2 cache (EXPERIMENTAL)
 
