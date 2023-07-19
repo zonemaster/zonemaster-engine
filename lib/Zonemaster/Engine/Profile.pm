@@ -116,19 +116,6 @@ my %profile_properties_details = (
     q{no_network} => {
         type    => q{Bool}
     },
-    q{asnroots} => {
-        type    => q{ArrayRef},
-        test    => sub {
-            foreach my $ndd ( @{$_[0]} ) {
-                die "Property asnroots has a NULL item" if not defined $ndd;
-                die "Property asnroots has a non scalar item" if not defined ref($ndd);
-                die "Property asnroots has an item too long" if length($ndd) > 255;
-                foreach my $label ( split /[.]/, $ndd ) {
-                    die "Property asnroots has a non domain name item" if $label !~ /^[a-z0-9](?:[-a-z0-9]{0,61}[a-z0-9])?$/;
-                }
-            }
-        }
-    },
     q{asn_db.style} => {
         type    => q{Str},
         test    => sub {
@@ -748,13 +735,6 @@ A boolean. If true, network traffic is forbidden. Default false.
 
 Use when you want to be sure that any data is only taken from a preloaded
 cache.
-
-=head2 asnroots (DEPRECATED)
-
-An arrayref of domain names. Default C<["asnlookup.zonemaster.net"]>.
-
-The domains will be assumed to be Cymru-style AS lookup zones.
-Only the first name in the list will be used.
 
 =head2 asn_db.style
 
