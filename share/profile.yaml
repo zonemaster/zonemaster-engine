@@ -20,7 +20,7 @@ resolver:
     igntc: false
     recurse: false
     retrans: 3
-    retry: 2
+    retry: 1
     timeout: 5
     usevc: false
 test_cases:

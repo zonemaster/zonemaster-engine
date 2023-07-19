@@ -217,7 +217,7 @@ sub _build_dns {
     $res->dnssec( 0 );
     $res->edns_size( $UDP_EDNS_QUERY_DEFAULT );
 
-    $res->retry( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.retry} ) );
+    $res->retry( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.retry} ) + 1 );
     $res->retrans( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.retrans} ) );
     $res->usevc( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.usevc} ) );
     $res->igntc( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.igntc} ) );
@@ -452,7 +452,7 @@ sub _query {
     );
 
     # Make sure we have a value for each flag
-    $flags{q{retry}}     = $href->{q{retry}}     // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.retry} );
+    $flags{q{retry}}     = $href->{q{retry}} + 1 // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.retry} ) + 1;
     $flags{q{retrans}}   = $href->{q{retrans}}   // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.retrans} );
     $flags{q{dnssec}}    = $href->{q{dnssec}}    // 0;
     $flags{q{usevc}}     = $href->{q{usevc}}     // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.usevc} );
@@ -537,7 +537,12 @@ sub _query {
     # Reset to defaults
 
     foreach my $flag ( keys %flags ) {
-        $self->dns->$flag( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.}.$flag ) );
+        if ( $flag eq 'retry' ) {
+            $self->dns->$flag( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.}.$flag ) + 1 );
+        }
+        else {
+            $self->dns->$flag( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.}.$flag ) );
+        }
     }
 
     if ( $res ) {
@@ -864,7 +869,7 @@ Set the timeout for the outgoing sockets. May or may not be observed by the unde
 
 =item retry
 
-Set the number of times the query is tried.
+Set the number of times a query is re-tried. This does not include the initial query.
 
 =item igntc
 

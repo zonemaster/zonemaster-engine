@@ -47,8 +47,8 @@ my %profile_properties_details = (
     },
     q{resolver.defaults.retry} => {
         type    => q{Num},
-        min     => 1,
-        max     => 255
+        min     => 0,
+        max     => 254
     },
     q{resolver.defaults.usevc} => {
         type    => q{Bool}
@@ -681,8 +681,9 @@ This should almost certainly be kept false.
 
 =head2 resolver.defaults.retry
 
-An integer between 1 and 255 inclusive.
-The number of times a query is sent before we give up. Default 2.
+An integer between 0 and 254.
+The number of times a query is re-sent before giving up. This does not include the initial query.
+Default 1.
 
 =head2 resolver.defaults.igntc
 

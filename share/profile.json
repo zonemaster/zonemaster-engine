@@ -20,7 +20,7 @@
             "fallback" : true,
             "recurse" : false,
             "retrans" : 3,
-            "retry" : 2,
+            "retry" : 1,
             "usevc" : false,
             "timeout": 5
         }
