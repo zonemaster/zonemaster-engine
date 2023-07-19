@@ -23,23 +23,9 @@ sub get_with_prefix {
     my ( $class, $ip ) = @_;
 
     if ( not @db_sources ) {
-        # 
-        # Backward compatibility in case asnroots is still configured in profile
-        # but we prefer new model if present
-        # 
-        my @roots;
-        if ( Zonemaster::Engine::Profile->effective->get( q{asnroots} ) ) {
-            @roots = map { name( $_ ) } @{ Zonemaster::Engine::Profile->effective->get( q{asnroots} ) };
-        }
-        if ( scalar @roots ) {
-            @db_sources = @roots;
-            $db_style = q{cymru};
-        }
-        else {
-            $db_style = Zonemaster::Engine::Profile->effective->get( q{asn_db.style} );
-            my %db_sources = %{ Zonemaster::Engine::Profile->effective->get( q{asn_db.sources} ) };
-            @db_sources = map { name( $_ ) } @{ $db_sources{ $db_style } };
-        }
+        $db_style = Zonemaster::Engine::Profile->effective->get( q{asn_db.style} );
+        my %db_sources = %{ Zonemaster::Engine::Profile->effective->get( q{asn_db.sources} ) };
+        @db_sources = map { name( $_ ) } @{ $db_sources{ $db_style } };
     }
 
     if ( not ref( $ip ) or not $ip->isa( 'Net::IP::XS' ) ) {

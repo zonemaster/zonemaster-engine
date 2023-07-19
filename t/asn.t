@@ -10,7 +10,8 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Profile->effective->set( q{no_network}, 1 );
 }
 
-Zonemaster::Engine::Profile->effective->set(q{asnroots}, [ "asnlookup.zonemaster.net", "asnlookup.iis.se", "asn.cymru.com" ]);
+Zonemaster::Engine::Profile->effective->set(q{asn_db.style}, "cymru" );
+Zonemaster::Engine::Profile->effective->set(q{asn_db.sources}, { cymru => [ "asnlookup.zonemaster.net", "asn.cymru.com" ] });
 
 my ( $asn1, $prefix1 ) = Zonemaster::Engine::ASNLookup->get_with_prefix( '8.8.8.8' );
 is $asn1->[0], 15169, '8.8.8.8 is in AS15169';
@@ -25,7 +26,7 @@ is( scalar( @asn3 ), 1, 'Only one result' );
 ok $asn3[0] >= 390000, '2001:503:ba3e::2:30 is in AS' . $asn3[0];
 
 my ( $asn4, $prefix4 ) = Zonemaster::Engine::ASNLookup->get_with_prefix( '192.168.0.1' );
-ok( scalar @{$asn4} == 0, 'RFC1918 address is in no AS' );
+ok( scalar @{$asn4} == 0, '192.168.0.1 (RFC1918 address) is in no AS' );
 
 Zonemaster::Engine::Profile->effective->set(q{asn_db.sources}, { cymru => [ "asnlookup.dufberg.se" ] });
 
