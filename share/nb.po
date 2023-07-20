@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-28 10:40+0200\n"
+"POT-Creation-Date: 2023-07-20 14:18+0000\n"
 "PO-Revision-Date: 2023-06-28 12:55+0200\n"
 "Last-Translator: richard.persson@norid.no\n"
 "Language-Team: Zonemaster Team\n"
@@ -108,8 +108,8 @@ msgstr "Ikke svar fra navnetjener på PTR-spørring ({domain})."
 #. BASIC:TEST_CASE_END
 #. CONNECTIVITY:TEST_CASE_END
 #. CONSISTENCY:TEST_CASE_END
-#. DELEGATION:TEST_CASE_END
 #. DNSSEC:TEST_CASE_END
+#. DELEGATION:TEST_CASE_END
 #. NAMESERVER:TEST_CASE_END
 #. SYNTAX:TEST_CASE_END
 #. ZONE:TEST_CASE_END
@@ -121,8 +121,8 @@ msgstr "TEST_CASE_END {testcase}."
 #. BASIC:TEST_CASE_START
 #. CONNECTIVITY:TEST_CASE_START
 #. CONSISTENCY:TEST_CASE_START
-#. DELEGATION:TEST_CASE_START
 #. DNSSEC:TEST_CASE_START
+#. DELEGATION:TEST_CASE_START
 #. NAMESERVER:TEST_CASE_START
 #. SYNTAX:TEST_CASE_START
 #. ZONE:TEST_CASE_START
@@ -310,8 +310,8 @@ msgstr ""
 #. BASIC:IPV4_DISABLED
 #. CONNECTIVITY:IPV4_DISABLED
 #. CONSISTENCY:IPV4_DISABLED
-#. DELEGATION:IPV4_DISABLED
 #. DNSSEC:IPV4_DISABLED
+#. DELEGATION:IPV4_DISABLED
 #. NAMESERVER:IPV4_DISABLED
 #. SYNTAX:IPV4_DISABLED
 #. SYSTEM:SKIP_IPV4_DISABLED
@@ -327,8 +327,8 @@ msgstr "IPv4 er aktivert, sender {rrtype}-spørring til {ns}."
 #. BASIC:IPV6_DISABLED
 #. CONNECTIVITY:IPV6_DISABLED
 #. CONSISTENCY:IPV6_DISABLED
-#. DELEGATION:IPV6_DISABLED
 #. DNSSEC:IPV6_DISABLED
+#. DELEGATION:IPV6_DISABLED
 #. NAMESERVER:IPV6_DISABLED
 #. SYNTAX:IPV6_DISABLED
 #. SYSTEM:SKIP_IPV6_DISABLED
@@ -752,8 +752,8 @@ msgid "Found {count} SOA time parameter set(s)."
 msgstr "Fant {count} SOA-tidparametervarianter."
 
 #. CONSISTENCY:NO_RESPONSE
-#. DELEGATION:NO_RESPONSE
 #. DNSSEC:NO_RESPONSE
+#. DELEGATION:NO_RESPONSE
 #. ZONE:NO_RESPONSE
 #, perl-brace-format
 msgid "Nameserver {ns} did not respond."
@@ -3237,26 +3237,3 @@ msgstr ""
 #, perl-brace-format
 msgid "Big packet size ({size}) (try with \"{command}\")."
 msgstr "Stor pakkestørrelse ({size}) (prøv med \"{command}\")."
-
-#~ msgid "Test of basic nameserver and zone functionality"
-#~ msgstr "Test av grunnleggende navnetjener og sonefunksjonalitet"
-
-#~ msgid "Nameserver {ns} listed these servers as glue: {nsnlist}."
-#~ msgstr "Navnetjener {ns} returnerte følgende limposter: {nsnlist}."
-
-#~ msgid "Parent domain '{pname}' was found for the tested domain."
-#~ msgstr "Foreldredomene ({pname}) funnet for domenet som testes."
-
-#~ msgid "No NS records for tested zone from parent. NS tests skipped."
-#~ msgstr ""
-#~ "Ingen limposter funnet i foreldredomenet for sonen som testes. Hoppet "
-#~ "over NS-tester."
-
-#~ msgid "No parent domain could be found for the domain under test."
-#~ msgstr "Ingen foldredomene funnet for det domenet som testes."
-
-#~ msgid "Nameserver {ns} did not return NS records. RCODE was {rcode}."
-#~ msgstr "Navnetjener {ns} svarte ikke med NS-poster. RCODE var {rcode}."
-
-#~ msgid "Nameserver {ns} did not respond to NS query."
-#~ msgstr "Navnetjener {ns} svarte ikke på NS-spørring."
