@@ -147,6 +147,10 @@ t/Test-address.data
 t/Test-address.t
 t/Test-basic.data
 t/Test-basic.t
+t/Test-basic02-A.data
+t/Test-basic02-A.t
+t/Test-basic02-B.data
+t/Test-basic02-B.t
 t/Test-connectivity.data
 t/Test-connectivity.t
 t/Test-connectivity03.data

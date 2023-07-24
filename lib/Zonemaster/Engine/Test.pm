@@ -83,7 +83,7 @@ sub run_all_for {
     push @results, Zonemaster::Engine::Test::Basic->all( $zone );
     info( MODULE_END => { module => 'Zonemaster::Engine::Test::Basic' } );
 
-    if ( Zonemaster::Engine::Test::Basic->can_continue( @results ) and Zonemaster::Engine->can_continue() ) {
+    if ( Zonemaster::Engine::Test::Basic->can_continue( $zone, @results ) and Zonemaster::Engine->can_continue() ) {
         foreach my $mod ( __PACKAGE__->modules ) {
 
             my $module = "Zonemaster::Engine::Test::$mod";

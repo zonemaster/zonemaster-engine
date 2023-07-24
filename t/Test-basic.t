@@ -144,29 +144,6 @@ $zone = Zonemaster::Engine->zone( 'lame-ns-servfail.dufberg.se' );
 zone_gives('basic02', $zone, [qw{B02_NO_WORKING_NS B02_UNEXPECTED_RCODE}] );
 zone_gives_not( 'basic02', $zone, [qw{B02_AUTH_RESPONSE_SOA B02_NO_DELEGATION B02_NS_BROKEN B02_NS_NOT_AUTH B02_NS_NO_RESPONSE B02_NS_NO_IP_ADDR}] );
 
-Zonemaster::Engine->add_fake_delegation(
-    'www.zonemaster.net' => {
-        'nsa.dnsnode.net' => [ ]
-    },
-    fill_in_empty_oob_glue => 1,
-);
-
-$zone = Zonemaster::Engine->zone( 'www.zonemaster.net' );
-zone_gives('basic02', $zone, [qw{B02_NO_WORKING_NS B02_NS_BROKEN}] );
-zone_gives_not( 'basic02', $zone, [qw{B02_AUTH_RESPONSE_SOA B02_NO_DELEGATION B02_NS_NOT_AUTH B02_NS_NO_RESPONSE B02_NS_NO_IP_ADDR B02_UNEXPECTED_RCODE}] );
-
-Zonemaster::Engine->add_fake_delegation(
-    'zonemaster.net' => {
-        'g.root-servers.net' => [ ],
-        'a.root-servers.net' => [ ]
-    },
-    fill_in_empty_oob_glue => 1,
-);
-
-$zone = Zonemaster::Engine->zone( 'zonemaster.net' );
-zone_gives('basic02', $zone, [qw{B02_NO_WORKING_NS B02_NS_NOT_AUTH}] );
-zone_gives_not( 'basic02', $zone, [qw{B02_AUTH_RESPONSE_SOA B02_NO_DELEGATION B02_NS_BROKEN B02_NS_NO_RESPONSE B02_NS_NO_IP_ADDR B02_UNEXPECTED_RCODE}] );
-
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Nameserver->save( $datafile );
 }
