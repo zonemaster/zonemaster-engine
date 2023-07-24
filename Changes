@@ -1,5 +1,13 @@
 Release history for Zonemaster component Zonemaster-Engine
 
+v4.7.1 2023-07-24 (public fix version)
+
+ [Fixes]
+ - Fixes typo in the B01_CHILD_IS_ALIAS msgid for test case BASIC01
+   (#1240, #1262)
+ - Updates the translation to Norwegian (#1246)
+ - Fixes bug in test case BASIC01 (#1249)
+
 
 v4.7.0 2023-06-21 (public release version)
 
