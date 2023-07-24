@@ -40,7 +40,9 @@ sub all {
     {
         push @results, $class->basic01( $zone );
 
-        push @results, $class->basic02( $zone );
+        if ( grep { $_->tag eq q{B01_CHILD_FOUND} } @results ) {
+           push @results, $class->basic02( $zone );
+        }
 
         # Perform BASIC3 if BASIC2 failed
         if ( none { $_->tag eq q{B02_AUTH_RESPONSE_SOA} } @results ) {
@@ -61,14 +63,15 @@ sub all {
 } ## end sub all
 
 sub can_continue {
-    my ( $class, @results ) = @_;
+    my ( $class, $zone, @results ) = @_;
     my %tag = map { $_->tag => 1 } @results;
+    my $is_undelegated = Zonemaster::Engine::Recursor->has_fake_addresses( $zone->name->string );
 
     if ( not $tag{B02_NO_DELEGATION} and $tag{B02_AUTH_RESPONSE_SOA} ) {
         return 1;
     }
     else {
-        return;
+        return $is_undelegated;
     }
 }
 
@@ -162,7 +165,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     B01_CHILD_IS_ALIAS => sub {
         __x    # BASIC:B01_CHILD_IS_ALIAS
           '"{domain_child}" is not a zone. It is an alias for "{domain_target}". Run a test for "{domain_target}" instead. '
-          . 'Returned from name servers "{ns_ip_list}.', @_;
+          . 'Returned from name servers "{ns_ip_list}".', @_;
     },
     B01_CHILD_FOUND => sub {
         __x    # BASIC:B01_CHILD_FOUND
@@ -450,11 +453,11 @@ sub basic01 {
         }
 
         if ( $p->is_redirect and index( $zone_name, name( lc( ( $p->get_records( 'NS' ) )[0]->owner ) ) ) == -1 
-            and index( $zone->name->fqdn, name( lc( ( $p->get_records( 'NS' ) )[0]->owner ) ) ) == -1 ) {
+            and index( $zone->name, name( lc( ( $p->get_records( 'NS' ) )[0]->owner ) ) ) == -1 ) {
             next;
         }
 
-        if ( $p->is_redirect and index( $zone->name->fqdn, name( lc( ( $p->get_records( 'NS' ) )[0]->owner ) ) ) > 0 ) {
+        if ( $p->is_redirect and index( $zone->name, name( lc( ( $p->get_records( 'NS' ) )[0]->owner ) ) ) > 0 ) {
             $rrs_ns{$_->nsdname}{'referral'} = $_->owner for $p->get_records( 'NS' );
             $rrs_ns{$_->owner}{'addresses'}{$_->address} = 1 for ( $p->get_records( q{A} ), $p->get_records( 'AAAA' ) );
 
@@ -475,7 +478,7 @@ sub basic01 {
 
                 foreach my $ns_ip ( keys %{ $rrs_ns{$ns_name}{'addresses'} } ) {
                     unless ( grep { $_ eq $ns_ip } @handled_servers ) {
-                        $all_servers{$ns_name . '/' . $ns_ip} = $rrs_ns{$ns_name}{'referral'};
+                        $all_servers{$ns_name . '/' . $ns_ip} = name( $rrs_ns{$ns_name}{'referral'} );
                         push @remaining_servers, $ns_name . '/' . $ns_ip;
                         push @handled_servers, $ns_ip;
                     }
@@ -584,8 +587,9 @@ sub basic01 {
 
                 if ( $p->aa and scalar $p->get_records_for_name( 'SOA', $zone->name->string, q{answer} ) ) {
                     if ( $zone->name->next_higher eq $zone_name ) {
-                        push @{ $aa_soa{$zone_name} }, $ns_string;
+                        push @{ $parent_found{$zone_name} }, $ns_string;
                     }
+                    push @{ $aa_soa{$zone_name} }, $ns_string;
                 }
 
                 if ( $p->aa and scalar $p->get_records_for_name( 'CNAME', $zone->name->string, q{answer} ) ) {
