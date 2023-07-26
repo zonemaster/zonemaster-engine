@@ -289,7 +289,7 @@ sub query {
 
         my $res = Zonemaster::Engine::Packet->new( { packet => $p } );
         Zonemaster::Engine->logger->add( FAKE_DS_RETURNED => { name => "$name", type  => $type, class => $class, from => "$self" } );
-        Zonemaster::Engine->logger->add( FAKED_RETURN => { packet => $res->string } );
+        Zonemaster::Engine->logger->add( FAKE_PACKET_RETURNED => { packet => $res->string } );
         return $res;
     }
 
@@ -322,7 +322,7 @@ sub query {
             Zonemaster::Engine->logger->add( FAKE_DELEGATION_RETURNED => { name  => "$name", type  => $type, class => $class, from  => "$self" } );
 
             my $res = Zonemaster::Engine::Packet->new( { packet => $p } );
-            Zonemaster::Engine->logger->add( FAKED_RETURN => { packet => $res->string } );
+            Zonemaster::Engine->logger->add( FAKE_PACKET_RETURNED => { packet => $res->string } );
             return $res;
         } ## end if ( $name =~ m/([.]|\A)\Q$fname\E\z/xi)
     } ## end foreach my $fname ( sort keys...)

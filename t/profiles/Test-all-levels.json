@@ -200,7 +200,7 @@
             "FAKE_DELEGATION_TO_SELF" : "DEBUG",
             "FAKE_DS_ADDED" : "DEBUG",
             "FAKE_DS_RETURNED" : "DEBUG2",
-            "FAKED_RETURN" : "DEBUG2",
+            "FAKE_PACKET_RETURNED" : "DEBUG2",
             "GLOBAL_VERSION" : "INFO",
             "IPV4_BLOCKED" : "DEBUG2",
             "IPV6_BLOCKED" : "DEBUG2",
