@@ -18,9 +18,29 @@ use Zonemaster::Engine::Test::Address;
 use Zonemaster::Engine::Util;
 use Zonemaster::Engine::TestMethods;
 
-###
-### Entry points
-###
+=head1 NAME
+
+Zonemaster::Engine::Test::Consistency - Module implementing tests focused on name servers responses consistency
+
+=head1 SYNOPSIS
+
+    my @results = Zonemaster::Engine::Test::Consistency->all($zone);
+
+=head1 METHODS
+
+=over
+
+=item all()
+
+Runs the default set of tests for that module, i.e. L<six tests|/TESTS>.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns an array of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
 
 sub all {
     my ( $class, $zone ) = @_;
@@ -48,9 +68,16 @@ sub all {
     return @results;
 }
 
-###
-### Metadata Exposure
-###
+=over
+
+=item metadata()
+
+Returns a reference to a hash, the keys of which are the names of all Test Cases in the module, and the corresponding values are references to
+an array containing all the message tags that the Test Case can use in L<log entries|Zonemaster::Engine::Logger::Entry>.
+
+=back
+
+=cut
 
 sub metadata {
     my ( $class ) = @_;
@@ -282,13 +309,51 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
 );
 
+=over
+
+=item tag_descriptions()
+
+Used by the L<built-in translation system|Zonemaster::Engine::Translator>.
+
+Returns a reference to a hash, the keys of which are the message tags and the corresponding values are strings (message ids).
+
+=back
+
+=cut
+
 sub tag_descriptions {
     return \%TAG_DESCRIPTIONS;
 }
 
+=over
+
+=item version()
+
+Returns a string containing the version of the current module.
+
+=back
+
+=cut
+
 sub version {
     return "$Zonemaster::Engine::Test::Consistency::VERSION";
 }
+
+=head1 INTERNAL METHODS
+
+=over
+
+=item _ip_disabled_message()
+
+Checks if the IP version of a given name server is allowed to be queried. If not, it adds a logging message and returns true. Else, it returns false.
+
+Takes a reference to an array of L<Zonemaster::Engine::Logger::Entry> objects, a L<Zonemaster::Engine::Nameserver> object and an array of strings (query type).
+
+Returns a boolean.
+
+=back
+
+=cut
 
 sub _ip_disabled_message {
     my ( $results_array, $ns, @rrtypes ) = @_;
@@ -319,9 +384,60 @@ sub _ip_disabled_message {
     return 0;
 }
 
-###
-### Tests
-###
+=over
+
+=item _get_addr_rrs()
+
+Queries a given name server for resource records of the given type. Used as an helper function for Test Case L<Consistency05|/consistency05()>.
+
+Takes a L<Zonemaster::Engine::Nameserver> object, a L<Zonemaster::Engine::DNSName> object and a string (query type).
+
+Returns either a L<Zonemaster::Engine::Logger::Entry> object, a list containing C<undef>, or a list containing C<undef> and an array of L<Zonemaster::LDNS::RR> objects.
+
+=back
+
+=cut
+
+sub _get_addr_rrs {
+    my ( $class, $ns, $name, $qtype ) = @_;
+    my $p = $ns->query( $name, $qtype, { recurse => 0 } );
+    if ( !$p ) {
+        return info( NO_RESPONSE => { ns => $ns->string } );
+    }
+    elsif ($p->is_redirect) {
+        my $p = Zonemaster::Engine->recurse( $name, $qtype, q{IN} );
+        if ( $p ) {
+            return ( undef, $p->get_records_for_name( $qtype, $name, 'answer' ) );
+        } else {
+            return ( undef );
+        }
+    }
+    elsif ( $p->aa and $p->rcode eq 'NOERROR' ) {
+        return ( undef, $p->get_records_for_name( $qtype, $name, 'answer' ) );
+    }
+    elsif (not ($p->aa and $p->rcode eq 'NXDOMAIN')) {
+        return info( CHILD_NS_FAILED => { ns => $ns->string } );
+    }
+    return ( undef );
+}
+
+=head1 TESTS
+
+=over
+
+=item consistency01()
+
+Test Case that checks for consistent SOA SERIAL number across name servers.
+
+See L<Consistency01 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Consistency-TP/consistency01.md> for more details.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+
+=back
+
+=cut
 
 sub consistency01 {
     my ( $class, $zone ) = @_;
@@ -401,6 +517,22 @@ sub consistency01 {
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub consistency01
 
+=over
+
+=item consistency02()
+
+Test Case that checks for consistent SOA RNAME across name servers.
+
+See L<Consistency02 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Consistency-TP/consistency02.md> for more details.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+
+=back
+
+=cut
+
 sub consistency02 {
     my ( $class, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
@@ -465,6 +597,22 @@ sub consistency02 {
 
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub consistency02
+
+=over
+
+=item consistency03()
+
+Test Case that checks for consistent SOA time parameters (REFRESH/RETRY/EXPIRE/MINIMUM) across name servers.
+
+See L<Consistency03 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Consistency-TP/consistency03.md> for more details.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+
+=back
+
+=cut
 
 sub consistency03 {
     my ( $class, $zone ) = @_;
@@ -542,6 +690,22 @@ sub consistency03 {
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub consistency03
 
+=over
+
+=item consistency04()
+
+Test Case that checks for consistent NS set across name servers.
+
+See L<Consistency04 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Consistency-TP/consistency04.md> for more details.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+
+=back
+
+=cut
+
 sub consistency04 {
     my ( $class, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
@@ -602,28 +766,21 @@ sub consistency04 {
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub consistency04
 
-sub _get_addr_rrs {
-    my ( $class, $ns, $name, $qtype ) = @_;
-    my $p = $ns->query( $name, $qtype, { recurse => 0 } );
-    if ( !$p ) {
-        return info( NO_RESPONSE => { ns => $ns->string } );
-    }
-    elsif ($p->is_redirect) {
-        my $p = Zonemaster::Engine->recurse( $name, $qtype, q{IN} );
-        if ( $p ) {
-            return ( undef, $p->get_records_for_name( $qtype, $name, 'answer' ) );
-        } else {
-            return ( undef );
-        }
-    }
-    elsif ( $p->aa and $p->rcode eq 'NOERROR' ) {
-        return ( undef, $p->get_records_for_name( $qtype, $name, 'answer' ) );
-    }
-    elsif (not ($p->aa and $p->rcode eq 'NXDOMAIN')) {
-        return info( CHILD_NS_FAILED => { ns => $ns->string } );
-    }
-    return ( undef );
-}
+=over
+
+=item consistency05()
+
+Test Case that checks for consistent glue records between glue and authoritative data.
+
+See L<Consistency05 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Consistency-TP/consistency05.md> for more details.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+
+=back
+
+=cut
 
 sub consistency05 {
     my ( $class, $zone ) = @_;
@@ -763,6 +920,22 @@ sub consistency05 {
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub consistency05
 
+=over
+
+=item consistency06()
+
+Test Case that checks for consistent SOA MNAME across name servers.
+
+See L<Consistency06 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Consistency-TP/consistency06.md> for more details.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+
+=back
+
+=cut
+
 sub consistency06 {
     my ( $class, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
@@ -829,66 +1002,3 @@ sub consistency06 {
 } ## end sub consistency06
 
 1;
-
-=head1 NAME
-
-Zonemaster::Engine::Test::Consistency - Consistency module showing the expected structure of Zonemaster test modules
-
-=head1 SYNOPSIS
-
-    my @results = Zonemaster::Engine::Test::Consistency->all($zone);
-
-=head1 METHODS
-
-=over
-
-=item all($zone)
-
-Runs the default set of tests and returns a list of log entries made by the tests.
-
-=item metadata()
-
-Returns a reference to a hash, the keys of which are the names of all test methods in the module, and the corresponding values are references to
-lists with all the tags that the method can use in log entries.
-
-=item tag_descriptions()
-
-Returns a refernce to a hash with translation functions. Used by the builtin translation system.
-
-=item version()
-
-Returns a version string for the module.
-
-=back
-
-=head1 TESTS
-
-=over
-
-=item consistency01($zone)
-
-Query all nameservers for SOA, and see that they all have the same SOA serial number.
-
-=item consistency02($zone)
-
-Query all nameservers for SOA, and see that they all have the same SOA rname.
-
-=item consistency03($zone)
-
-Query all nameservers for SOA, and see that they all have the same time parameters (REFRESH/RETRY/EXPIRE/MINIMUM).
-
-=item consistency04($zone)
-
-Query all nameservers for NS set, and see that they have all the same content.
-
-=item consistency05($zone)
-
-Verify that the glue records are consistent between glue and authoritative data.
-
-=item consistency06($zone)
-
-Query all nameservers for SOA, and see that they all have the same SOA mname.
-
-=back
-
-=cut
