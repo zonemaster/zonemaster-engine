@@ -18,9 +18,29 @@ use Zonemaster::Engine::Constants qw[:ip];
 use Zonemaster::Engine::TestMethods;
 use Zonemaster::Engine::Util;
 
-###
-### Entry Points
-###
+=head1 NAME
+
+Zonemaster::Engine::Test::Connectivity - Module implementing tests focused on name servers reachability
+
+=head1 SYNOPSIS
+
+    my @results = Zonemaster::Engine::Test::Connectivity->all($zone);
+
+=head1 METHODS
+
+=over
+
+=item all()
+
+Runs the default set of tests for that module, i.e. L<four tests|/TESTS>.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns an array of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
 
 sub all {
     my ( $class, $zone ) = @_;
@@ -42,9 +62,16 @@ sub all {
     return @results;
 }
 
-###
-### Metadata Exposure
-###
+=over
+
+=item metadata()
+
+Returns a reference to a hash, the keys of which are the names of all Test Cases in the module, and the corresponding values are references to
+an array containing all the message tags that the Test Case can use in L<log entries|Zonemaster::Engine::Logger::Entry>.
+
+=back
+
+=cut
 
 sub metadata {
     my ( $class ) = @_;
@@ -341,13 +368,51 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
 );
 
+=over
+
+=item tag_descriptions()
+
+Used by the L<built-in translation system|Zonemaster::Engine::Translator>.
+
+Returns a reference to a hash, the keys of which are the message tags and the corresponding values are strings (message ids).
+
+=back
+
+=cut
+
 sub tag_descriptions {
     return \%TAG_DESCRIPTIONS;
 }
 
+=over
+
+=item version()
+
+Returns a string containing the version of the current module.
+
+=back
+
+=cut
+
 sub version {
     return "$Zonemaster::Engine::Test::Connectivity::VERSION";
 }
+
+=head1 INTERNAL METHODS
+
+=over
+
+=item _ip_disabled_message()
+
+Checks if the IP version of a given name server is allowed to be queried. If not, it adds a logging message and returns true. Else, it returns false.
+
+Takes a reference to an array of L<Zonemaster::Engine::Logger::Entry> objects, a L<Zonemaster::Engine::Nameserver> object and an array of strings (query type).
+
+Returns a boolean.
+
+=back
+
+=cut
 
 sub _ip_disabled_message {
     my ( $results_array, $ns, @rrtypes ) = @_;
@@ -378,9 +443,21 @@ sub _ip_disabled_message {
     return 0;
 }
 
-###
-### Tests
-###
+=over
+
+=item _connectivity_loop()
+
+Verifies name servers reachability. Used as an helper function for Test Cases L<Connectivity01/connectivity01()>
+and L<Connectivity02/connectivity02()>.
+
+Takes a string (test case identifier), a L<Zonemaster::Engine::DNSName> object, a reference to an array of L<Zonemaster::Engine::Nameserver>
+objects and a reference to an array of L<Zonemaster::Engine::Logger::Entry> objects.
+
+Returns nothing.
+
+=back
+
+=cut
 
 sub _connectivity_loop {
     my ( $testcase, $name, $ns_list, $results ) = @_;
@@ -441,6 +518,24 @@ sub _connectivity_loop {
     }
 }
 
+=head1 TESTS
+
+=over
+
+=item connectivity01()
+
+Test Case that verifies name servers UDP port 53 reachability.
+
+See L<Connectivity01 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Connectivity-TP/connectivity01.md> for more details.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+
+=back
+
+=cut
+
 sub connectivity01 {
     my ( $class, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
@@ -469,6 +564,22 @@ sub connectivity01 {
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub connectivity01
 
+=over
+
+=item connectivity02()
+
+Test Case that verifies name servers TCP port 53 reachability.
+
+See L<Connectivity02 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Connectivity-TP/connectivity02.md> for more details.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+
+=back
+
+=cut
+
 sub connectivity02 {
     my ( $class, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
@@ -479,6 +590,22 @@ sub connectivity02 {
 
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub connectivity02
+
+=over
+
+=item connectivity03()
+
+Test Case that verifies if all name servers do not belong to the same AS.
+
+See L<Connectivity03 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Connectivity-TP/connectivity03.md> for more details.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+
+=back
+
+=cut
 
 sub connectivity03 {
     my ( $class, $zone ) = @_;
@@ -608,6 +735,22 @@ sub connectivity03 {
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub connectivity03
 
+=over
+
+=item connectivity04()
+
+Test Case that verifies if name servers are not announced in the same IP prefix.
+
+See L<Connectivity04 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Connectivity-TP/connectivity04.md> for more details.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+
+=back
+
+=cut
+
 sub connectivity04 {
     my ( $class, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
@@ -697,58 +840,3 @@ sub connectivity04 {
 } ## end sub connectivity04
 
 1;
-
-=head1 NAME
-
-Zonemaster::Engine::Test::Connectivity - module implementing tests of nameservers reachability
-
-=head1 SYNOPSIS
-
-    my @results = Zonemaster::Engine::Test::Connectivity->all($zone);
-
-=head1 METHODS
-
-=over
-
-=item all($zone)
-
-Runs the default set of tests and returns a list of log entries made by the tests
-
-=item metadata()
-
-Returns a reference to a hash, the keys of which are the names of all test methods in the module, and the corresponding values are references to
-lists with all the tags that the method can use in log entries.
-
-=item tag_descriptions()
-
-Returns a refernce to a hash with translation functions. Used by the builtin translation system.
-
-=item version()
-
-Returns a version string for the module.
-
-=back
-
-=head1 TESTS
-
-=over
-
-=item connectivity01($zone)
-
-Verify nameservers UDP port 53 reachability.
-
-=item connectivity02($zone)
-
-Verify nameservers TCP port 53 reachability.
-
-=item connectivity03($zone)
-
-Verify that all nameservers do not belong to the same AS.
-
-=item connectivity04($zone)
-
-Verify that name servers are not announced in the same IP prefix.
-
-=back
-
-=cut
