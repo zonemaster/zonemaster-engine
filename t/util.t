@@ -11,7 +11,7 @@ isa_ok( name( "foo.bar.com" ), 'Zonemaster::Engine::DNSName' );
 my $dref = pod_extract_for( 'DNSSEC' );
 isa_ok( $dref, 'HASH' );
 ok( scalar( keys %$dref ) > 3, 'At least four keys' );
-like( $dref->{dnssec01}, qr/Verifies that all DS records have digest types registered with IANA/, 'Expected content.' );
+like( $dref->{dnssec01}, qr/Test Case that verifies if all DS records have digest types registered with IANA/, 'Expected content.' );
 
 subtest 'parse_hints()' => sub {
     my @cases = (
