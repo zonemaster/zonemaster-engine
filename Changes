@@ -6,7 +6,8 @@ v4.7.2 2023-08-07 (public fix version)
  [Fixes]
  - Fixes bug in test case BASIC01 that made all tests of zone names
    that starts with the same letters as the whole first label of the
-   parent zone fail, e.g. "NOrid.NO" and "FRance.FR" (#1270)
+   parent zone fail, e.g. "NOrid.NO" and "FRance.FR". The bug was
+   introduced in version v4.7.1 in release v2023.1.1. (#1270)
 
 
 v4.7.1 2023-07-24 (public fix version)
