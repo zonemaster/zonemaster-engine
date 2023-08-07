@@ -21,9 +21,29 @@ use Zonemaster::Engine::Util;
 use Zonemaster::LDNS::Packet;
 use Zonemaster::LDNS::RR;
 
-###
-### Entry points
-###
+=head1 NAME
+
+Zonemaster::Engine::Test::Delegation - Module implementing tests focused on zone delegation
+
+=head1 SYNOPSIS
+
+    my @results = Zonemaster::Engine::Test::Delegation->all($zone);
+
+=head1 METHODS
+
+=over
+
+=item all()
+
+Runs the default set of tests for that module, i.e. L<seven tests|/TESTS>.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns an array of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
 
 sub all {
     my ( $class, $zone ) = @_;
@@ -40,9 +60,16 @@ sub all {
     return @results;
 }
 
-###
-### Metadata Exposure
-###
+=over
+
+=item metadata()
+
+Returns a reference to a hash, the keys of which are the names of all Test Cases in the module, and the corresponding values are references to
+an array containing all the message tags that the Test Case can use in L<log entries|Zonemaster::Engine::Logger::Entry>.
+
+=back
+
+=cut
 
 sub metadata {
     my ( $class ) = @_;
@@ -349,13 +376,51 @@ Readonly my %TAG_DESCRIPTIONS => (
 
 );
 
+=over
+
+=item tag_descriptions()
+
+Used by the L<built-in translation system|Zonemaster::Engine::Translator>.
+
+Returns a reference to a hash, the keys of which are the message tags and the corresponding values are strings (message ids).
+
+=back
+
+=cut
+
 sub tag_descriptions {
     return \%TAG_DESCRIPTIONS;
 }
 
+=over
+
+=item version()
+
+Returns a string containing the version of the current module.
+
+=back
+
+=cut
+
 sub version {
     return "$Zonemaster::Engine::Test::Delegation::VERSION";
 }
+
+=head1 INTERNAL METHODS
+
+=over
+
+=item _ip_disabled_message()
+
+Checks if the IP version of a given name server is allowed to be queried. If not, it adds a logging message and returns true. Else, it returns false.
+
+Takes a reference to an array of L<Zonemaster::Engine::Logger::Entry> objects, a L<Zonemaster::Engine::Nameserver> object and an array of strings (query type).
+
+Returns a boolean.
+
+=back
+
+=cut
 
 sub _ip_disabled_message {
     my ( $results_array, $ns, @rrtypes ) = @_;
@@ -386,9 +451,107 @@ sub _ip_disabled_message {
     return 0;
 }
 
-###
-### Tests
-###
+=over
+
+=item _max_length_name_for()
+
+Makes up a name of maximum length in the given domain name. Used as an helper function for Test Case L<Delegation03|/delegation03()>.
+
+Takes a L<Zonemaster::Engine::DNSName> object.
+
+Returns a string.
+
+
+=back
+
+=cut
+
+sub _max_length_name_for {
+    my ( $top ) = @_;
+    my @chars = q{A} .. q{Z};
+
+    my $name = name( $top )->fqdn;
+    $name = q{} if $name eq q{.};    # Special case for root zone
+
+    while ( length( $name ) < $FQDN_MAX_LENGTH - 1 ) {
+        my $len = $FQDN_MAX_LENGTH - length( $name ) - 1;
+        $len = $LABEL_MAX_LENGTH if $len > $LABEL_MAX_LENGTH;
+        $name = join( q{}, map { $chars[ rand @chars ] } 1 .. $len ) . q{.} . $name;
+    }
+
+    return $name;
+}
+
+=over
+
+=item _find_dup_ns()
+
+Checks if given name servers have distinct IP addresses. Used as an helper function for Test Case L<Delegation02|/delegation02()>.
+
+Takes a hash - the keys of which are C<duplicate_tag>, C<distinct_tag> and C<ns_list>, and their corresponding values are a string,
+a string and a reference to an array of L<Zonemaster::Engine::Nameserver> objects, respectively.
+
+Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+
+=back
+
+=cut
+
+sub _find_dup_ns {
+    my %args          = @_;
+    my $duplicate_tag = $args{duplicate_tag};
+    my $distinct_tag  = $args{distinct_tag};
+    my @nss           = @{ $args{ns_list} };
+
+    my %nsnames_and_ip;
+    my %ips;
+    foreach my $local_ns ( @nss ) {
+
+        next if $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short };
+
+        push @{ $ips{ $local_ns->address->short } }, $local_ns->name->string;
+
+        $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short }++;
+
+    }
+
+    my @results;
+    foreach my $local_ip ( sort keys %ips ) {
+        if ( scalar @{ $ips{$local_ip} } > 1 ) {
+            push @results,
+              info(
+                $duplicate_tag => {
+                    nsname_list => join( q{;}, @{ $ips{$local_ip} } ),
+                    ns_ip       => $local_ip,
+                }
+              );
+        }
+    }
+
+    if ( @nss && !@results ) {
+        push @results, info( $distinct_tag => {} );
+    }
+
+    return @results;
+}
+
+=head1 TESTS
+
+=over
+
+=item delegation01()
+
+Test Case that verifies if there is a mininum number of name servers.
+
+See L<Delegation01 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Delegation-TP/delegation01.md> for more details.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+
+=back
+
+=cut
 
 sub delegation01 {
     my ( $class, $zone ) = @_;
@@ -509,43 +672,21 @@ sub delegation01 {
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub delegation01
 
-sub _find_dup_ns {
-    my %args          = @_;
-    my $duplicate_tag = $args{duplicate_tag};
-    my $distinct_tag  = $args{distinct_tag};
-    my @nss           = @{ $args{ns_list} };
+=over
 
-    my %nsnames_and_ip;
-    my %ips;
-    foreach my $local_ns ( @nss ) {
+=item delegation02()
 
-        next if $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short };
+Test Case that verifies if name servers have distinct IP addresses.
 
-        push @{ $ips{ $local_ns->address->short } }, $local_ns->name->string;
+See L<Delegation02 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Delegation-TP/delegation02.md> for more details.
 
-        $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short }++;
+Takes a L<Zonemaster::Engine::Zone> object.
 
-    }
+Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
 
-    my @results;
-    foreach my $local_ip ( sort keys %ips ) {
-        if ( scalar @{ $ips{$local_ip} } > 1 ) {
-            push @results,
-              info(
-                $duplicate_tag => {
-                    nsname_list => join( q{;}, @{ $ips{$local_ip} } ),
-                    ns_ip       => $local_ip,
-                }
-              );
-        }
-    }
+=back
 
-    if ( @nss && !@results ) {
-        push @results, info( $distinct_tag => {} );
-    }
-
-    return @results;
-}
+=cut
 
 sub delegation02 {
     my ( $class, $zone ) = @_;
@@ -577,6 +718,22 @@ sub delegation02 {
 
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub delegation02
+
+=over
+
+=item delegation03()
+
+Test Case that verifies if there is no truncation on referrals.
+
+See L<Delegation03 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Delegation-TP/delegation03.md> for more details.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+
+=back
+
+=cut
 
 sub delegation03 {
     my ( $class, $zone ) = @_;
@@ -629,6 +786,22 @@ sub delegation03 {
 
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub delegation03
+
+=over
+
+=item delegation04()
+
+Test Case that verifies if name servers are authoritative.
+
+See L<Delegation04 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Delegation-TP/delegation04.md> for more details.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+
+=back
+
+=cut
 
 sub delegation04 {
     my ( $class, $zone ) = @_;
@@ -687,6 +860,22 @@ sub delegation04 {
 
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub delegation04
+
+=over
+
+=item delegation05()
+
+Test Case that verifies if NS RRs do not point to a CNAME alias.
+
+See L<Delegation05 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Delegation-TP/delegation05.md> for more details.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+
+=back
+
+=cut
 
 sub delegation05 {
     my ( $class, $zone ) = @_;
@@ -749,6 +938,22 @@ sub delegation05 {
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub delegation05
 
+=over
+
+=item delegation06()
+
+Test Case that verifies the existence of a SOA RR.
+
+See L<Delegation06 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Delegation-TP/delegation06.md> for more details.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+
+=back
+
+=cut
+
 sub delegation06 {
     my ( $class, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
@@ -788,6 +993,22 @@ sub delegation06 {
 
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub delegation06
+
+=over
+
+=item delegation07()
+
+Test Case that verifies if parent's zone glue name records are present in child zone.
+
+See L<Delegation07 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Delegation-TP/delegation07.md> for more details.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+
+=back
+
+=cut
 
 sub delegation07 {
     my ( $class, $zone ) = @_;
@@ -845,92 +1066,4 @@ sub delegation07 {
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub delegation07
 
-###
-### Helper functions
-###
-
-# Make up a name of maximum length in the given domain
-sub _max_length_name_for {
-    my ( $top ) = @_;
-    my @chars = q{A} .. q{Z};
-
-    my $name = name( $top )->fqdn;
-    $name = q{} if $name eq q{.};    # Special case for root zone
-
-    while ( length( $name ) < $FQDN_MAX_LENGTH - 1 ) {
-        my $len = $FQDN_MAX_LENGTH - length( $name ) - 1;
-        $len = $LABEL_MAX_LENGTH if $len > $LABEL_MAX_LENGTH;
-        $name = join( q{}, map { $chars[ rand @chars ] } 1 .. $len ) . q{.} . $name;
-    }
-
-    return $name;
-}
-
 1;
-
-=head1 NAME
-
-Zonemaster::Engine::Test::Delegation - Tests regarding delegation details
-
-=head1 SYNOPSIS
-
-    my @results = Zonemaster::Engine::Test::Delegation->all($zone);
-
-=head1 METHODS
-
-=over
-
-=item all($zone)
-
-Runs the default set of tests and returns a list of log entries made by the tests.
-
-=item tag_descriptions()
-
-Returns a refernce to a hash with translation functions. Used by the builtin translation system.
-
-=item metadata()
-
-Returns a reference to a hash, the keys of which are the names of all test methods in the module, and the corresponding values are references to
-lists with all the tags that the method can use in log entries.
-
-=item version()
-
-Returns a version string for the module.
-
-=back
-
-=head1 TESTS
-
-=over
-
-=item delegation01($zone)
-
-Verify that there is more than two nameserver.
-
-=item delegation02($zone)
-
-Verify that name servers have distinct IP addresses.
-
-=item delegation03($zone)
-
-Verify that there is no truncation on referrals.
-
-=item delegation04($zone)
-
-Verify that nameservers are authoritative.
-
-=item delegation05($zone)
-
-Verify that NS RRs do not points to CNAME alias.
-
-=item delegation06($zone)
-
-Verify existence of SOA.
-
-=item delegation07($zone)
-
-Verify that parent glue name records are present in child.
-
-=back
-
-=cut
