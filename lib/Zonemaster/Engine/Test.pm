@@ -28,6 +28,68 @@ use File::Slurp qw[read_file];
 use Scalar::Util qw[blessed];
 use POSIX qw[strftime];
 
+=head1 NAME
+
+Zonemaster::Engine::Test - Module implementing methods to find, load and execute all Test modules
+
+=head1 SYNOPSIS
+
+    my @results = Zonemaster::Engine::Test->run_all_for($zone);
+    my @results = Zonemaster::Engine::Test->run_module('DNSSEC', $zone);
+    my @results = Zonemaster::Engine::Test->run_one('DNSSEC', 'dnssec01', $zone);
+
+=head1 TEST MODULES
+
+Test modules are defined as modules with names starting with C<Zonemaster::Engine::Test::>.
+They are expected to provide at least the following class methods:
+
+=over
+
+=item all()
+
+This will be given a L<Zonemaster::Engine::Zone> object as its only argument, and, after running the
+Test Cases for that Test module, is expected to return a list of L<Zonemaster::Engine::Logger::Entry> objects.
+This is the entry point used by the L<run_all_for()> and L<run_module()> methods of this class.
+
+=back
+
+=cut
+
+=over
+
+=item version()
+
+This must return the version of the Test module.
+
+=back
+
+=cut
+
+=over
+
+=item metadata()
+
+This must return a reference to a hash, the keys of which are the names of all Test Cases in
+the module, and the corresponding values are references to an array containing all the message
+tags that the Test Case can use in L<log entries|Zonemaster::Engine::Logger::Entry>.
+
+=back
+
+=cut
+
+=over
+
+=item tag_descriptions()
+
+This must return a reference to a hash, the keys of which are the message tags and the corresponding values
+are strings (message ids) corresponding to user-friendly English translations of those message tags.
+Keep in mind that the message ids will be used as keys to look up translations into other languages,
+so think twice before editing them.
+
+=back
+
+=cut
+
 my @all_test_modules;
 
 BEGIN {
@@ -38,6 +100,18 @@ BEGIN {
         "Zonemaster::Engine::Test::$name"->import();
     }
 }
+
+=head1 INTERNAL METHODS
+
+=over
+
+=item _log_versions()
+
+Adds logging messages regarding the current version of some modules, specifically for L<Zonemaster::Engine> and other dependency modules (e.g. L<Zonemaster::LDNS>).
+
+=back
+
+=cut
 
 sub _log_versions {
     info( GLOBAL_VERSION => { version => Zonemaster::Engine->VERSION } );
@@ -56,9 +130,42 @@ sub _log_versions {
     return;
 } ## end sub _log_versions
 
+=head1 METHODS
+
+=over
+
+=item modules()
+
+Returns a list with the names of all available Test modules except
+L<Zonemaster::Engine::Test::Basic> (since that one is a bit special).
+
+=back
+
+=cut
+
 sub modules {
     return @all_test_modules;
 }
+
+=over
+
+=item run_all_for()
+
+Runs all Tests Cases in all Test modules found.
+
+The order in which the Test modules found will be executed is not defined,
+except for L<Zonemaster::Engine::Test::Basic> that is always executed first.
+If the L<Basic tests|Zonemaster::Engine::Test::Basic/TESTS> fail to indicate
+an extremely minimal level of function (it must have a parent domain, and it must
+have at least one functional name server) for the zone, no further tests will be executed.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns an array of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
 
 sub run_all_for {
     my ( $class, $zone ) = @_;
@@ -110,6 +217,22 @@ sub run_all_for {
     return @results;
 } ## end sub run_all_for
 
+=over
+
+=item run_module()
+
+Runs all default Test Cases of the given Test module for the given zone.
+The requested Test module must be in the list of actively loaded modules
+(that is, not a module disabled by the current profile)
+
+Takes a string (module name) and a L<Zonemaster::Engine::Zone> object.
+
+Returns an array of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
+
 sub run_module {
     my ( $class, $requested, $zone ) = @_;
     my @res;
@@ -152,6 +275,23 @@ sub run_module {
     return;
 } ## end sub run_module
 
+=over
+
+=item run_one()
+
+Runs the given Test method of the given Test module for the given zone.
+The requested Test module must be in the list of actively loaded modules
+(that is, not a module disabled by the current profile), and the Test method
+must be listed in the L<metadata|/metadata()> of the Test module exports.
+
+Takes a string (module name), a string (test method name) and an array of L<Zonemaster::Engine::Zone> objects.
+
+Returns an array of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
+
 sub run_one {
     my ( $class, $requested, $test, @arguments ) = @_;
     my @res;
@@ -163,6 +303,7 @@ sub run_one {
     push @res,
       info( TEST_ARGS => { module => $requested, testcase => $test, args => join( ';', map { "$_" } @arguments ) } );
     _log_versions();
+    
     if ( not( Zonemaster::Engine::Profile->effective->get( q{net.ipv4} ) or Zonemaster::Engine::Profile->effective->get( q{net.ipv6} ) ) ) {
         return info( NO_NETWORK => {} );
     }
@@ -207,94 +348,3 @@ sub run_one {
 } ## end sub run_one
 
 1;
-
-=head1 NAME
-
-Zonemaster::Engine::Test - module to find, load and execute all test modules
-
-=head1 SYNOPSIS
-
-    my @results = Zonemaster::Engine::Test->run_all_for($zone);
-    my @results = Zonemaster::Engine::Test->run_module('DNSSEC', $zone);
-
-
-=head1 TEST MODULES
-
-Test modules are defined as modules with names starting with
-"Zonemaster::Engine::Test::". They are expected to provide at least four
-class methods, and optionally a fifth one.
-
-=over
-
-=item all($zone)
-
-C<all> will be given a zone object as its only argument, and is
-epected to return a list of L<Zonemaster::Engine::Logger::Entry> objects. This
-is the entry point used by the C<run_all_for> and C<run_module>
-methods.
-
-=item version()
-
-This must return the version of the test module.
-
-=item metadata()
-
-This must return a reference to a hash where the keys are the names of
-callable methods implementing tests, and the values are references to
-arrays with the tags of the messages the test methods can generate.
-
-=item translation()
-
-This must return a reference to a hash where the keys are all the
-message tags the test module can produce, and the corresponing keys
-are the english translations of those messages. The translation
-strings will be used as keys to look up translations into other
-languages, so think twice before editing them.
-
-=item policy()
-
-Optionally, a test module can implement this method, which if
-implemented should return a reference to a hash where the keys are all
-the message tags the module can produce and the correspondning values
-are their recommended default log levels.
-
-=back
-
-=head1 CLASS METHODS
-
-=over
-
-=item modules()
-
-Returns a list with the names of all available test modules except
-L<Zonemaster::Engine::Test::Basic> (since that one is a bit special).
-
-=item run_all_for($zone)
-
-Runs all (default) tests in all test modules found, and returns a list
-of the log entry objects they returned.
-
-The order in which the test modules found will be executed is not
-defined, except that L<Zonemaster::Engine::Test::Basic> is always executed
-first. If the Basic tests fail to indicate a very basic level of
-function (it must have a parent domain, and it must have at least one
-functional nameserver) for the zone, no further tests will be
-executed.
-
-=item run_module($module, $zone)
-
-Runs all default tests in the named module for the given zone.
-
-=item run_one($module, $method, @arguments)
-
-Run one particular test method in one particular module. The requested
-module must be in the list of active loaded modules (that is, not a
-module disabled by the current policy), and the method must be listed
-in the metadata the module exports. If those requirements are
-fulfilled, the method will be called with the provided arguments. No
-attempt is made to check that the provided arguments make sense for
-the particular method called. That is left entirely to the user.
-
-=back
-
-=cut
