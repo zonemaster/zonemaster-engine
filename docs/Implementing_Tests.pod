@@ -69,7 +69,7 @@ The return value from this method is expected to be a list of L<Zonemaster::Engi
 example test module has one possible implementation of this.
 
 In the case where one test module wants to use a test in another, the top-level L<Zonemaster::Engine> module has a method C<test_method()> to request that.
-This method will call the other test, if it is available and the current policy allows its execution. It's up to the caller to know what arguments
+This method will call the other test, if it is available and the current profile allows its execution. It's up to the caller to know what arguments
 the other test needs, and what it returns.
 
 =cut

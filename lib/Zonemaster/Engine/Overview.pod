@@ -12,7 +12,7 @@ The system as a whole consists of the test engine and, as distributed by the pro
 
 =head2 Brief overview
 
-Conceptually, the test engine consists of a number of test implementation modules surrounded by a support framework. Anyone wanting to use Zonemaster to perform tests communicates with the framework from the "outside", and all modules implementing tests see the world entirely through the framework. Doing things this way lets us have features like the ability to test domains before they are published, to record entire test runs for later analysis and to make sure that test restults are (as far as reality allows) predictable and repeatable.
+Conceptually, the test engine consists of a number of test implementation modules surrounded by a support framework. Anyone wanting to use Zonemaster to perform tests communicates with the framework from the "outside", and all modules implementing tests see the world entirely through the framework. Doing things this way lets us have features like the ability to test domains before they are published, to record entire test runs for later analysis and to make sure that test results are (as far as reality allows) predictable and repeatable.
 
 =head2 For users of Zonemaster
 
@@ -20,14 +20,14 @@ If all you want to do is run tests, you need to care about four or five modules.
 
 There are two ways that you can get the results of a test you've requested: the simple-but-inflexible way and the flexible-but-complex way.
 
-The simple-but-inflexible way is that all the methods in L<Zonemaster::Engine> that run tests return lists of L<Zonemaster::Engine::Logger::Entry> objects. Those lists incude all the results that the writer of the test module(s) considered important enough to return by default. The advantage of this method is that it is extremely easy to use. The following is a functional (if not very useful) way to run a full test and print the results from a command line prompt:
+The simple-but-inflexible way is that all the methods in L<Zonemaster::Engine> that run tests return lists of L<Zonemaster::Engine::Logger::Entry> objects. Those lists incude all the results that the writer of the test module(s) considered important enough to return by default. The advantage of this method is that it is extremely easy to use. The following is a functional (if not very useful) way to run a full test and print the results from a command-line prompt:
 
  perl -MZonemaster::Engine -E 'say "$_" for Zonemaster::Engine->new->test_zone("example.org")'
 
 The main drawbacks of this method are that there is no choice about what
 messages to see, and it's entirely synchronous.
 The code that started the test does not get a chance to do anything at
-all until the whole test has finished, which may be several minutes later.
+all until the whole test suite has finished, which may be several minutes later.
 
 To get around those drawbacks there is the flexible-but-complex way,
 which consists of installing a callback that gets executed every time
@@ -39,17 +39,17 @@ The following example does roughly the same thing as the one above:
 
 If you try running those, you'll notice two main differences. First, the second variant prints results as they are generated. Second, it generates a B<lot> more output. On my machine right now, the first example gives me 94 lines of output. The second example gives me 17684.
 
-You can do pretty much whatever you want with the message objects in the callback (including modifying them, although we don't promise that behavior will stay around). If the callback code throws an exception, and that exception is not a subcless of L<Zonemaster::Engine::Exception>, the callback will be removed. Note also that while the callback is running, the test engine itself is not. So think twice before you do potentially time-consuming tasks (like sticking the message in a database) in the callback. After waiting for responses from remote name servers (which usually stands for more than 90% of the time used), the result logging is the single most time-consuming task in a Zonemaster test run.
+You can do pretty much whatever you want with the message objects in the callback (including modifying them, although we don't promise that behavior will stay around). If the callback code throws an exception, and that exception is not a subclass of L<Zonemaster::Engine::Exception>, the callback will be removed. Note also that while the callback is running, the test engine itself is not. So think twice before you do potentially time-consuming tasks (like sticking the message in a database) in the callback. After waiting for responses from remote name servers (which usually stands for more than 90% of the time used), the result logging is the single most time-consuming task in a Zonemaster test run.
 
-From here, you probably want to look at the documentation for L<Zonemaster::Engine>, L<Zonemaster::Engine::Logger>, L<Zonemaster::Engine::Logger::Entry>, L<Zonemaster::Engine::Config> and L<Zonemaster::Engine::Translator>.
+From here, you probably want to look at the documentation for L<Zonemaster::Engine>, L<Zonemaster::Engine::Logger>, L<Zonemaster::Engine::Logger::Entry>, L<Zonemaster::Engine::Profile> and L<Zonemaster::Engine::Translator>.
 
 =head2 For developers of Zonemaster Test Modules
 
 If you want to develop a test module of your own, the standard set of modules serve as examples.
 
-As an entry point to the "inside" of the Zonemaster framework, you want to read L<Zonemaster::Engine::Zone> and follow references from there. Of particular interest after the zone class should be the L<Zonemaster::Engine::Nameserver> and possibly L<Zonemaster::Engine::Recursor> classes.
+As an entry point to the "inside" of the Zonemaster framework, you want to read L<Zonemaster::Engine::Zone> and follow references from there. Of particular interest after the L<Zone|Zonemaster::Engine::Zone> class should be the L<Zonemaster::Engine::Nameserver> and possibly L<Zonemaster::Engine::Recursor> classes.
 
-If you do write your own test module, I would very much appreciate feedback on which parts were tricky to figure out, because I'm honestly not sure what I need to explain here. So please, if there's somethat that you think really needs to be written about, add an issue about at L<https://github.com/zonemaster/zonemaster-engine/issues>.
+If you do write your own test module, I would very much appreciate feedback on which parts were tricky to figure out, because I'm honestly not sure what I need to explain here. So please, if there's something that you think really needs to be written about, make an issue at L<https://github.com/zonemaster/zonemaster-engine/issues>.
 
 =head2 For developers of the Zonemaster Test Framework
 
@@ -67,7 +67,7 @@ Don't forget that starting with Perl version 5.18, the order in which you get th
 
 =item
 
-If two (or more) test implementation modules implement the same (or very similar) thing, it should probably be extracted into the framework.
+If two (or more) test modules implement the same (or very similar) thing, it should probably be extracted into the framework.
 
 =item
 
@@ -79,7 +79,7 @@ The translation strings returned from a test module are used as keys in the GNU 
 
 =item
 
-Adding a new message tag is more work than it first looks, since it needs to be added to the test module metadata, the default policy and the translation system in order to be fully functional.
+Adding a new message tag is more work than it first looks, since it needs to be added to the test module metadata, the default profile and the translation system in order to be fully functional.
 
 =back
 

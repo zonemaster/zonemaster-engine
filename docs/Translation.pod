@@ -13,8 +13,8 @@ executed from that directory.
 
 =head2 For translators
 
-Instructions for translators can be found in
-L<https://github.com/zonemaster/zonemaster/blob/develop/docs/internal-documentation/maintenance/Instructions-for-translators.md>
+Instructions for translators can be found at
+L<https://github.com/zonemaster/zonemaster/blob/develop/docs/internal/maintenance/Instructions-for-translators.md>
 
 =head2 For developers of Zonemaster test modules
 
@@ -46,7 +46,7 @@ calls are used by the gettext tooling when updating the PO files with new
 message ids and old message strings.
 
 Every time you add, remove or modify a tag or its message id, re-run
-C<make update-po> as descibed in the next section.
+C<make update-po> as described in the next section.
 Make sure the message tag comments are properly added and up to date.
 
 =head2 For Zonemaster package maintainers
