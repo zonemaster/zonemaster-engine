@@ -436,6 +436,7 @@ sub basic01 {
 
         my $ns = ns( $ns_labels[0], $ns_labels[1] );
         my $zone_name = $all_servers{$ns_string};
+        my $pass = 0;
 
         if ( _ip_disabled_message( \@results, $ns, $type_soa ) ) {
             next;
@@ -449,50 +450,56 @@ sub basic01 {
         }
 
         if ( not $p->is_redirect and not $p->aa ) {
-            push @{$non_aa_non_delegation{$zone->name->string}}, $ns_string;
+            push @{ $non_aa_non_delegation{$zone->name->string} }, $ns_string;
         }
 
-        if ( $p->is_redirect and index( $zone_name, name( lc( ( $p->get_records( 'NS' ) )[0]->owner ) ) ) == -1 
-            and index( $zone->name, name( lc( ( $p->get_records( 'NS' ) )[0]->owner ) ) ) == -1 ) {
-            next;
-        }
+        if ( $p->is_redirect ) {
+            my $rr_owner = name( lc( ( $p->get_records( 'NS' ) )[0]->owner ) );
+            my $rr_owner_labels_count = scalar @{ $rr_owner->labels };
+            my $zone_labels_count = scalar @{ $zone->name->labels };
+            my $common_labels_count = $zone->name->common( $rr_owner );
 
-        if ( $p->is_redirect and index( $zone->name, name( lc( ( $p->get_records( 'NS' ) )[0]->owner ) ) ) > 0 ) {
-            $rrs_ns{$_->nsdname}{'referral'} = $_->owner for $p->get_records( 'NS' );
-            $rrs_ns{$_->owner}{'addresses'}{$_->address} = 1 for ( $p->get_records( q{A} ), $p->get_records( 'AAAA' ) );
+            unless ( $zone_name->is_in_bailiwick( $rr_owner ) and $rr_owner_labels_count <= $common_labels_count
+                and $common_labels_count <= $zone_labels_count ) {
+                next;
+            }
 
-            foreach my $ns_name ( keys %rrs_ns ) {
-                unless ( exists $rrs_ns{$ns_name}{'addresses'} and scalar keys %{ $rrs_ns{$ns_name}{'addresses'} } > 0 ) {
-                    my $p_a = Zonemaster::Engine::Recursor->recurse( $ns_name, q{A} );
+            if ( $rr_owner_labels_count <= $common_labels_count and $common_labels_count < $zone_labels_count ) {
+                $rrs_ns{$_->nsdname}{'referral'} = $_->owner for $p->get_records( 'NS' );
+                $rrs_ns{$_->owner}{'addresses'}{$_->address} = 1 for ( $p->get_records( q{A} ), $p->get_records( 'AAAA' ) );
 
-                    if ( $p_a and $p_a->rcode eq 'NOERROR' ) {
-                        $rrs_ns{$ns_name}{'addresses'}{$_->address} = 1 for $p->get_records_for_name( 'A', $ns_name );
+                foreach my $ns_name ( keys %rrs_ns ) {
+                    unless ( exists $rrs_ns{$ns_name}{'addresses'} and scalar keys %{ $rrs_ns{$ns_name}{'addresses'} } > 0 ) {
+                        my $p_a = Zonemaster::Engine::Recursor->recurse( $ns_name, q{A} );
+
+                        if ( $p_a and $p_a->rcode eq 'NOERROR' ) {
+                            $rrs_ns{$ns_name}{'addresses'}{$_->address} = 1 for $p->get_records_for_name( 'A', $ns_name );
+                        }
+
+                        my $p_aaaa = Zonemaster::Engine::Recursor->recurse( $ns_name, q{AAAA} );
+
+                        if ( $p_aaaa and $p_aaaa->rcode eq 'NOERROR' ) {
+                            $rrs_ns{$ns_name}{'addresses'}{$_->address} = 1 for $p->get_records_for_name( 'AAAA', $ns_name );
+                        }
                     }
 
-                    my $p_aaaa = Zonemaster::Engine::Recursor->recurse( $ns_name, q{AAAA} );
-
-                    if ( $p_aaaa and $p_aaaa->rcode eq 'NOERROR' ) {
-                        $rrs_ns{$ns_name}{'addresses'}{$_->address} = 1 for $p->get_records_for_name( 'AAAA', $ns_name );
-                    }
-                }
-
-                foreach my $ns_ip ( keys %{ $rrs_ns{$ns_name}{'addresses'} } ) {
-                    unless ( grep { $_ eq $ns_ip } @handled_servers ) {
-                        $all_servers{$ns_name . '/' . $ns_ip} = name( $rrs_ns{$ns_name}{'referral'} );
-                        push @remaining_servers, $ns_name . '/' . $ns_ip;
-                        push @handled_servers, $ns_ip;
+                    foreach my $ns_ip ( keys %{ $rrs_ns{$ns_name}{'addresses'} } ) {
+                        unless ( grep { $_ eq $ns_ip } @handled_servers ) {
+                            $all_servers{$ns_name . '/' . $ns_ip} = name( $rrs_ns{$ns_name}{'referral'} );
+                            push @remaining_servers, $ns_name . '/' . $ns_ip;
+                            push @handled_servers, $ns_ip;
+                        }
                     }
                 }
             }
-        }
 
-        my $pass = 0;
-        if ( $p->is_redirect and scalar $p->get_records_for_name( 'NS', $zone->name->string ) ) {
-            $pass += 1;
-        }
+            if ( scalar $p->get_records_for_name( 'NS', $zone->name->string ) ) {
+                $pass += 1;
+            }
 
-        if ( $p->is_redirect and scalar $p->get_records_for_name( 'CNAME', $zone->name->string, q{answer} ) ) {
-            $pass += 1;
+            if ( scalar $p->get_records_for_name( 'CNAME', $zone->name->string, q{answer} ) ) {
+                $pass += 1;
+            }
         }
 
         if ( $p->aa ) {
