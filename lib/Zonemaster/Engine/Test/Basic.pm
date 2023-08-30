@@ -25,7 +25,7 @@ Zonemaster::Engine::Test::Basic - Module implementing tests focused on basic zon
 
 =head1 SYNOPSIS
 
-    my @results = Zonemaster::Engine::Test::Basic->all($zone);
+    my @results = Zonemaster::Engine::Test::Basic->all( $zone );
 
 =head1 METHODS
 
@@ -33,13 +33,15 @@ Zonemaster::Engine::Test::Basic - Module implementing tests focused on basic zon
 
 =item all()
 
+    my @logentry_array = all( $zone );
+
 Runs the default set of tests for that module, i.e. between L<one and four tests|/TESTS> depending on the tested zone.
 If L<BASIC00|/basic00()> passes, L<BASIC01|/basic01()> is run. If L<BASIC01|/basic01()> passes, L<BASIC02|/basic02()> is run.
 If L<BASIC02|/basic02()> fails, L<BASIC03|/basic03()> is run.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns an array of L<Zonemaster::Engine::Logger::Entry> objects.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -88,7 +90,9 @@ sub all {
 
 =item can_continue()
 
-Looks at the provided log entries and determines if further evaluation of the tested zone is possible.
+    my $bool = can_continue( $zone, @logentry_array );
+
+Determines if further evaluation of the given zone is possible based on the results from the Basic Test Cases.
 
 Takes a L<Zonemaster::Engine::Zone> object and an array of L<Zonemaster::Engine::Logger::Entry> objects.
 
@@ -114,6 +118,8 @@ sub can_continue {
 =over
 
 =item metadata()
+
+    my $hash_ref = metadata();
 
 Returns a reference to a hash, the keys of which are the names of all Test Cases in the module, and the corresponding values are references to
 an array containing all the message tags that the Test Case can use in L<log entries|Zonemaster::Engine::Logger::Entry>.
@@ -330,9 +336,11 @@ Readonly my %TAG_DESCRIPTIONS => (
 
 =item tag_descriptions()
 
+    my $hash_ref = tag_descriptions();
+
 Used by the L<built-in translation system|Zonemaster::Engine::Translator>.
 
-Returns a reference to a hash, the keys of which are the message tags and the corresponding values are strings (message ids).
+Returns a reference to a hash, the keys of which are the message tags and the corresponding values are strings (message IDs).
 
 =back
 
@@ -345,6 +353,8 @@ sub tag_descriptions {
 =over
 
 =item version()
+
+    my $version_string = version();
 
 Returns a string containing the version of the current module.
 
@@ -361,6 +371,8 @@ sub version {
 =over
 
 =item _ip_disabled_message()
+
+    my $bool = _ip_disabled_message( $logentry_array_ref, $ns, @query_type_array );
 
 Checks if the IP version of a given name server is allowed to be queried. If not, it adds a logging message and returns true. Else, it returns false.
 Used in Test Cases in combination with L<_ip_enabled_message()>.
@@ -406,12 +418,12 @@ sub _ip_disabled_message {
 
 =item _ip_enabled_message()
 
+    _ip_enabled_message( $array_ref, $ns, @query_type_array );
+
 Adds a logging message if the IP version of a given name server is allowed to be queried.
 Used in Test Cases in combination with L<_ip_disabled_message()>.
 
-Takes a reference to an array of L<Zonemaster::Engine::Logger::Entry> objects, a L<Zonemaster::Engine::Nameserver> object and an array of strings.
-
-Returns nothing.
+Takes a reference to an array of L<Zonemaster::Engine::Logger::Entry> objects, a L<Zonemaster::Engine::Nameserver> object and an array of strings (query type).
 
 =back
 
@@ -449,13 +461,13 @@ sub _ip_enabled_message {
 
 =item basic00()
 
-Test Case that checks if the domain name to be tested is valid. Not all syntax tests are done here, it "just" checks domain name total length and labels length.
+    my @logentry_array = basic00( $zone );
 
-See L<Basic00 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Basic-TP/basic00.md> for more details.
+Runs the L<Basic00 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Basic-TP/basic00.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -508,13 +520,13 @@ sub basic00 {
 
 =item basic01()
 
-Test Case that checks if we can find the zone we are testing and its parent zone.
+    my @logentry_array = basic01( $zone );
 
-See L<Basic01 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Basic-TP/basic01.md> for more details.
+Runs the L<Basic01 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Basic-TP/basic01.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -896,14 +908,13 @@ sub basic01 {
 
 =item basic02()
 
-Test Case that checks if the nameservers of the parent zone return NS records for the tested zone, and that at least one of
-those nameservers respond sensibly to an NS query for the tested zone.
+    my @logentry_array = basic02( $zone );
 
-See L<Basic02 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Basic-TP/basic02.md> for more details.
+Runs the L<Basic02 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Basic-TP/basic02.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -1063,14 +1074,13 @@ sub basic02 {
 
 =item basic03()
 
-Test Case that checks if at least one of the nameservers of the parent zone gives an useful response when sent an A query for the C<www> label in the
-tested zone (that is, if we're testing C<example.org> this test will ask for A records for C<www.example.org>).
+    my @logentry_array = basic03( $zone );
 
-See L<Basic03 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Basic-TP/basic03.md> for more details.
+Runs the L<Basic03 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Basic-TP/basic03.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 

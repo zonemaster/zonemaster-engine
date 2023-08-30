@@ -45,10 +45,6 @@ The format strings themselves, the comments and the line numbers of the __x
 calls are used by the gettext tooling when updating the PO files with new
 message ids and old message strings.
 
-Every time you add, remove or modify a tag or its message id, re-run
-C<make update-po> as described in the next section.
-Make sure the message tag comments are properly added and up to date.
-
 =head2 For Zonemaster package maintainers
 
 In order to make a new translation usable, it must be compiled to C<mo> format

@@ -23,7 +23,7 @@ Zonemaster::Engine::Test::Address - Module implementing tests focused on IP addr
 
 =head1 SYNOPSIS
 
-    my @results = Zonemaster::Engine::Test::Address->all($zone);
+    my @results = Zonemaster::Engine::Test::Address->all( $zone );
 
 =head1 METHODS
 
@@ -31,12 +31,14 @@ Zonemaster::Engine::Test::Address - Module implementing tests focused on IP addr
 
 =item all()
 
+    my @logentry_array = all( $zone );
+
 Runs the default set of tests for that module, i.e. between L<two and three tests|/TESTS> depending on the tested zone.
 If L<ADDRESS02|/address02()> passes, L<ADDRESS03|/address03()> is run.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns an array of L<Zonemaster::Engine::Logger::Entry> objects.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -59,6 +61,8 @@ sub all {
 =over
 
 =item metadata()
+
+    my $hash_ref = metadata();
 
 Returns a reference to a hash, the keys of which are the names of all Test Cases in the module, and the corresponding values are references to
 an array containing all the message tags that the Test Case can use in L<log entries|Zonemaster::Engine::Logger::Entry>.
@@ -158,9 +162,11 @@ Readonly my %TAG_DESCRIPTIONS => (
 
 =item tag_descriptions()
 
+    my $hash_ref = tag_descriptions();
+
 Used by the L<built-in translation system|Zonemaster::Engine::Translator>.
 
-Returns a reference to a hash, the keys of which are the message tags and the corresponding values are strings (message ids).
+Returns a reference to a hash, the keys of which are the message tags and the corresponding values are strings (message IDs).
 
 =back
 
@@ -173,6 +179,8 @@ sub tag_descriptions {
 =over
 
 =item version()
+
+    my $version_string = version();
 
 Returns a string containing the version of the current module.
 
@@ -187,6 +195,8 @@ sub version {
 =over
 
 =item find_special_address()
+
+    my $hash_ref = find_special_address( $ip );
 
 Verifies if an IP address is a special (private, reserved, ...) one.
 
@@ -224,13 +234,13 @@ sub find_special_address {
 
 =item address01()
 
-Test Case that verifies if IP addresses are not in private networks.
+    my @logentry_array = address01( $zone );
 
-See L<Address01 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Address-TP/address01.md> for more details.
+Runs the L<Address01 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Address-TP/address01.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -277,13 +287,13 @@ sub address01 {
 
 =item address02()
 
-Test Case that verifies if reverse DNS entries exist for each name server IP addresses.
+    my @logentry_array = address02( $zone );
 
-See L<Address02 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Address-TP/address02.md> for more details.
+Runs the L<Address02 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Address-TP/address02.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -350,13 +360,13 @@ sub address02 {
 
 =item address03()
 
-Test Case that verifies if reverse DNS entries match name server names.
+    my @logentry_array = address03( $zone );
 
-See L<Address03 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Address-TP/address03.md> for more details.
+Runs the L<Address03 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Address-TP/address03.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 

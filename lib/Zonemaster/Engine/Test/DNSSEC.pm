@@ -25,7 +25,7 @@ Zonemaster::Engine::Test::DNSSEC - Module implementing tests focused on DNSSEC
 
 =head1 SYNOPSIS
 
-    my @results = Zonemaster::Engine::Test::DNSSEC->all($zone);
+    my @results = Zonemaster::Engine::Test::DNSSEC->all( $zone );
 
 =cut
 
@@ -208,12 +208,14 @@ Readonly::Hash our %LDNS_digest_algorithms_supported => (
 
 =item all()
 
+    my @logentry_array = all( $zone );
+
 Runs the default set of tests for that module, i.e. between L<one and seventeen tests|/TESTS> depending on the tested zone.
 If L<DNSSEC07|/dnssec07()> finds no DNSKEY nor DS RRs, no other test is run. If L<DNSSEC07|/dnssec07()> finds a DNSKEY RR, L<DNSSEC06|/dnssec06()> is run.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns an array of L<Zonemaster::Engine::Logger::Entry> objects.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -317,6 +319,8 @@ sub all {
 =over
 
 =item metadata()
+
+    my $hash_ref = metadata();
 
 Returns a reference to a hash, the keys of which are the names of all Test Cases in the module, and the corresponding values are references to
 an array containing all the message tags that the Test Case can use in L<log entries|Zonemaster::Engine::Logger::Entry>.
@@ -1320,9 +1324,11 @@ Readonly my %TAG_DESCRIPTIONS => (
 
 =item tag_descriptions()
 
+    my $hash_ref = tag_descriptions();
+
 Used by the L<built-in translation system|Zonemaster::Engine::Translator>.
 
-Returns a reference to a hash, the keys of which are the message tags and the corresponding values are strings (message ids).
+Returns a reference to a hash, the keys of which are the message tags and the corresponding values are strings (message IDs).
 
 =back
 
@@ -1335,6 +1341,8 @@ sub tag_descriptions {
 =over
 
 =item version()
+
+    my $version_string = version();
 
 Returns a string containing the version of the current module.
 
@@ -1351,6 +1359,8 @@ sub version {
 =over
 
 =item _ip_disabled_message()
+
+    my $bool = _ip_disabled_message( $logentry_array_ref, $ns, @query_type_array );
 
 Checks if the IP version of a given name server is allowed to be queried. If not, it adds a logging message and returns true. Else, it returns false.
 
@@ -1397,13 +1407,13 @@ sub _ip_disabled_message {
 
 =item dnssec01()
 
-Test Case that verifies if all DS records have digest types registered with IANA.
+    my @logentry_array = dnssec01( $zone );
 
-See L<DNSSEC01 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec01.md> for more details.
+Runs the L<DNSSEC01 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec01.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -1555,13 +1565,13 @@ sub dnssec01 {
 
 =item dnssec02()
 
-Test Case that verifies if all DS records have a matching DNSKEY.
+    my @logentry_array = dnssec02( $zone );
 
-See L<DNSSEC02 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec02.md> for more details.
+Runs the L<DNSSEC02 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec02.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -1846,13 +1856,13 @@ sub dnssec02 {
 
 =item dnssec03()
 
-Test Case that checks iteration counts for NSEC3.
+    my @logentry_array = dnssec03( $zone );
 
-See L<DNSSEC03 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec03.md> for more details.
+Runs the L<DNSSEC03 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec03.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -1941,13 +1951,13 @@ sub dnssec03 {
 
 =item dnssec04()
 
-Test Case that checks the durations of the signatures for the DNSKEY and SOA RRsets.
+    my @logentry_array = dnssec04( $zone );
 
-See L<DNSSEC04 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec04.md> for more details.
+Runs the L<DNSSEC04 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec04.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -2050,13 +2060,13 @@ sub dnssec04 {
 
 =item dnssec05()
 
-Test Case that checks DNSKEY algorithms.
+    my @logentry_array = dnssec05( $zone );
 
-See L<DNSSEC05 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec05.md> for more details.
+Runs the L<DNSSEC05 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec05.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -2142,13 +2152,13 @@ sub dnssec05 {
 
 =item dnssec06()
 
-Test Case that checks for DNSSEC extra processing at child name servers.
+    my @logentry_array = dnssec06( $zone );
 
-See L<DNSSEC06 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec06.md> for more details.
+Runs the L<DNSSEC06 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec06.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -2193,13 +2203,13 @@ sub dnssec06 {
 
 =item dnssec07()
 
-Test Case that checks if both DS and DNSKEY RRs are present.
+    my @logentry_array = dnssec07( $zone );
 
-See L<DNSSEC07 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec07.md> for more details.
+Runs the L<DNSSEC07 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec07.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -2268,13 +2278,13 @@ sub dnssec07 {
 
 =item dnssec08()
 
-Test Case that checks if the DNSKEY RRset is signed.
+    my @logentry_array = dnssec08( $zone );
 
-See L<DNSSEC08 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec08.md> for more details.
+Runs the L<DNSSEC08 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec08.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -2421,13 +2431,13 @@ sub dnssec08 {
 
 =item dnssec09()
 
-Test Case that checks if the SOA RRset is signed.
+    my @logentry_array = dnssec09( $zone );
 
-See L<DNSSEC09 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec09.md> for more details.
+Runs the L<DNSSEC09 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec09.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -2589,13 +2599,13 @@ sub dnssec09 {
 
 =item dnssec10()
 
-Test Case that checks for the presence of either NSEC or NSEC3 RRs, with proper coverage and signatures.
+    my @logentry_array = dnssec10( $zone );
 
-See L<DNSSEC10 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec10.md> for more details.
+Runs the L<DNSSEC10 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec10.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -3114,13 +3124,13 @@ sub dnssec10 {
 
 =item dnssec11()
 
-Test Case that checks if the delegation step from parent is properly signed.
+    my @logentry_array = dnssec11( $zone );
 
-See L<DNSSEC11 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec11.md> for more details.
+Runs the L<DNSSEC11 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec11.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -3285,13 +3295,13 @@ sub dnssec11 {
 
 =item dnssec13()
 
-Test Case that checks if all DNSKEY algorithms are used to sign the zone.
+    my @logentry_array = dnssec13( $zone );
 
-See L<DNSSEC13 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec13.md> for more details.
+Runs the L<DNSSEC13 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec13.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -3372,13 +3382,13 @@ sub dnssec13 {
 
 =item dnssec14()
 
-Test Case that checks for valid RSA DNSKEY key size.
+    my @logentry_array = dnssec14( $zone );
 
-See L<DNSSEC14 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec14.md> for more details.
+Runs the L<DNSSEC14 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec14.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -3462,13 +3472,13 @@ sub dnssec14 {
 
 =item dnssec15()
 
-Test Case that checks the existence of CDS and CDNSKEY RRs.
+    my @logentry_array = dnssec15( $zone );
 
-See L<DNSSEC15 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec15.md> for more details.
+Runs the L<DNSSEC15 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec15.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -3689,13 +3699,13 @@ sub dnssec15 {
 
 =item dnssec16()
 
-Test Case that validates CDS.
+    my @logentry_array = dnssec16( $zone );
 
-See L<DNSSEC16 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec16.md> for more details.
+Runs the L<DNSSEC16 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec16.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -3955,13 +3965,13 @@ sub dnssec16 {
 
 =item dnssec17()
 
-Test Case that validates CDNSKEY.
+    my @logentry_array = dnssec17( $zone );
 
-See L<DNSSEC17 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec17.md> for more details.
+Runs the L<DNSSEC17 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec17.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -4224,13 +4234,13 @@ sub dnssec17 {
 
 =item dnssec18()
 
-Test Case that validates trust from DS to CDS and CDNSKEY.
+    my @logentry_array = dnssec18( $zone );
 
-See L<DNSSEC18 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec18.md> for more details.
+Runs the L<DNSSEC18 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec18.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 

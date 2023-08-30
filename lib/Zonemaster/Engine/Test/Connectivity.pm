@@ -24,7 +24,7 @@ Zonemaster::Engine::Test::Connectivity - Module implementing tests focused on na
 
 =head1 SYNOPSIS
 
-    my @results = Zonemaster::Engine::Test::Connectivity->all($zone);
+    my @results = Zonemaster::Engine::Test::Connectivity->all( $zone );
 
 =head1 METHODS
 
@@ -32,11 +32,13 @@ Zonemaster::Engine::Test::Connectivity - Module implementing tests focused on na
 
 =item all()
 
+    my @array = all( $zone );
+
 Runs the default set of tests for that module, i.e. L<four tests|/TESTS>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns an array of L<Zonemaster::Engine::Logger::Entry> objects.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -65,6 +67,8 @@ sub all {
 =over
 
 =item metadata()
+
+    my $hash_ref = metadata();
 
 Returns a reference to a hash, the keys of which are the names of all Test Cases in the module, and the corresponding values are references to
 an array containing all the message tags that the Test Case can use in L<log entries|Zonemaster::Engine::Logger::Entry>.
@@ -372,6 +376,8 @@ Readonly my %TAG_DESCRIPTIONS => (
 
 =item tag_descriptions()
 
+    my $hash_ref = tag_descriptions();
+
 Used by the L<built-in translation system|Zonemaster::Engine::Translator>.
 
 Returns a reference to a hash, the keys of which are the message tags and the corresponding values are strings (message ids).
@@ -388,6 +394,8 @@ sub tag_descriptions {
 
 =item version()
 
+    my $string = version();
+
 Returns a string containing the version of the current module.
 
 =back
@@ -403,6 +411,8 @@ sub version {
 =over
 
 =item _ip_disabled_message()
+
+    my $bool = _ip_disabled_message( $logentry_array_ref, $ns, @query_type_array );
 
 Checks if the IP version of a given name server is allowed to be queried. If not, it adds a logging message and returns true. Else, it returns false.
 
@@ -447,13 +457,13 @@ sub _ip_disabled_message {
 
 =item _connectivity_loop()
 
+    _connectivity_loop( $testcase_string, $zone_name, $ns_array_ref, $logentry_array_ref );
+
 Verifies name servers reachability. Used as an helper function for Test Cases L<Connectivity01/connectivity01()>
 and L<Connectivity02/connectivity02()>.
 
 Takes a string (test case identifier), a L<Zonemaster::Engine::DNSName> object, a reference to an array of L<Zonemaster::Engine::Nameserver>
 objects and a reference to an array of L<Zonemaster::Engine::Logger::Entry> objects.
-
-Returns nothing.
 
 =back
 
@@ -524,13 +534,13 @@ sub _connectivity_loop {
 
 =item connectivity01()
 
-Test Case that verifies name servers UDP port 53 reachability.
+    my @logentry_array = connectivity01( $zone );
 
-See L<Connectivity01 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Connectivity-TP/connectivity01.md> for more details.
+Runs the L<Connectivity01 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Connectivity-TP/connectivity01.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -568,13 +578,13 @@ sub connectivity01 {
 
 =item connectivity02()
 
-Test Case that verifies name servers TCP port 53 reachability.
+    my @logentry_array = connectivity02( $zone );
 
-See L<Connectivity02 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Connectivity-TP/connectivity02.md> for more details.
+Runs the L<Connectivity02 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Connectivity-TP/connectivity02.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -595,13 +605,13 @@ sub connectivity02 {
 
 =item connectivity03()
 
-Test Case that verifies if all name servers do not belong to the same AS.
+    my @logentry_array = connectivity03( $zone );
 
-See L<Connectivity03 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Connectivity-TP/connectivity03.md> for more details.
+Runs the L<Connectivity03 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Connectivity-TP/connectivity03.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -739,13 +749,13 @@ sub connectivity03 {
 
 =item connectivity04()
 
-Test Case that verifies if name servers are not announced in the same IP prefix.
+    my @logentry_array = connectivity04( $zone );
 
-See L<Connectivity04 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Connectivity-TP/connectivity04.md> for more details.
+Runs the L<Connectivity04 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Connectivity-TP/connectivity04.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 

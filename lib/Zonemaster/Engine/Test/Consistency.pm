@@ -24,7 +24,7 @@ Zonemaster::Engine::Test::Consistency - Module implementing tests focused on nam
 
 =head1 SYNOPSIS
 
-    my @results = Zonemaster::Engine::Test::Consistency->all($zone);
+    my @results = Zonemaster::Engine::Test::Consistency->all( $zone );
 
 =head1 METHODS
 
@@ -32,11 +32,13 @@ Zonemaster::Engine::Test::Consistency - Module implementing tests focused on nam
 
 =item all()
 
+    my @logentry_array = all( $zone );
+
 Runs the default set of tests for that module, i.e. L<six tests|/TESTS>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns an array of L<Zonemaster::Engine::Logger::Entry> objects.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -71,6 +73,8 @@ sub all {
 =over
 
 =item metadata()
+
+    my $hash_ref = metadata();
 
 Returns a reference to a hash, the keys of which are the names of all Test Cases in the module, and the corresponding values are references to
 an array containing all the message tags that the Test Case can use in L<log entries|Zonemaster::Engine::Logger::Entry>.
@@ -313,6 +317,8 @@ Readonly my %TAG_DESCRIPTIONS => (
 
 =item tag_descriptions()
 
+    my $hash_ref = tag_descriptions();
+
 Used by the L<built-in translation system|Zonemaster::Engine::Translator>.
 
 Returns a reference to a hash, the keys of which are the message tags and the corresponding values are strings (message ids).
@@ -329,6 +335,8 @@ sub tag_descriptions {
 
 =item version()
 
+    my $version_string = version();
+
 Returns a string containing the version of the current module.
 
 =back
@@ -344,6 +352,8 @@ sub version {
 =over
 
 =item _ip_disabled_message()
+
+    my $bool = _ip_disabled_message( $logentry_array_ref, $ns, @query_type_array );
 
 Checks if the IP version of a given name server is allowed to be queried. If not, it adds a logging message and returns true. Else, it returns false.
 
@@ -388,11 +398,13 @@ sub _ip_disabled_message {
 
 =item _get_addr_rrs()
 
+    my ( $logentry, @rrs_array ) = _get_addr_rrs( $ns, $zone_name, $query_type_string );
+
 Queries a given name server for resource records of the given type. Used as an helper function for Test Case L<Consistency05|/consistency05()>.
 
 Takes a L<Zonemaster::Engine::Nameserver> object, a L<Zonemaster::Engine::DNSName> object and a string (query type).
 
-Returns either a L<Zonemaster::Engine::Logger::Entry> object, a list containing C<undef>, or a list containing C<undef> and an array of L<Zonemaster::LDNS::RR> objects.
+Returns a L<Zonemaster::Engine::Logger::entry> object (which could be C<undef>) and an optional list of L<Zonemaster::LDNS::RR> objects.
 
 =back
 
@@ -427,13 +439,13 @@ sub _get_addr_rrs {
 
 =item consistency01()
 
-Test Case that checks for consistent SOA SERIAL number across name servers.
+    my @logentry_array = consistency01( $zone );
 
-See L<Consistency01 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Consistency-TP/consistency01.md> for more details.
+Runs the L<Consistency01 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Consistency-TP/consistency01.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -521,13 +533,13 @@ sub consistency01 {
 
 =item consistency02()
 
-Test Case that checks for consistent SOA RNAME across name servers.
+    my @logentry_array = consistency02( $zone );
 
-See L<Consistency02 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Consistency-TP/consistency02.md> for more details.
+Runs the L<Consistency02 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Consistency-TP/consistency02.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -602,13 +614,13 @@ sub consistency02 {
 
 =item consistency03()
 
-Test Case that checks for consistent SOA time parameters (REFRESH/RETRY/EXPIRE/MINIMUM) across name servers.
+    my @logentry_array = consistency03( $zone );
 
-See L<Consistency03 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Consistency-TP/consistency03.md> for more details.
+Runs the L<Consistency03 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Consistency-TP/consistency03.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -694,13 +706,13 @@ sub consistency03 {
 
 =item consistency04()
 
-Test Case that checks for consistent NS set across name servers.
+    my @logentry_array = consistency04( $zone );
 
-See L<Consistency04 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Consistency-TP/consistency04.md> for more details.
+Runs the L<Consistency04 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Consistency-TP/consistency04.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -770,13 +782,13 @@ sub consistency04 {
 
 =item consistency05()
 
-Test Case that checks for consistent glue records between glue and authoritative data.
+    my @logentry_array = consistency05( $zone );
 
-See L<Consistency05 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Consistency-TP/consistency05.md> for more details.
+Runs the L<Consistency05 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Consistency-TP/consistency05.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -924,13 +936,13 @@ sub consistency05 {
 
 =item consistency06()
 
-Test Case that checks for consistent SOA MNAME across name servers.
+    my @logentry_array = consistency06( $zone );
 
-See L<Consistency06 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Consistency-TP/consistency06.md> for more details.
+Runs the L<Consistency06 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Consistency-TP/consistency06.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 

@@ -20,7 +20,7 @@ If all you want to do is run tests, you need to care about four or five modules.
 
 There are two ways that you can get the results of a test you've requested: the simple-but-inflexible way and the flexible-but-complex way.
 
-The simple-but-inflexible way is that all the methods in L<Zonemaster::Engine> that run tests return lists of L<Zonemaster::Engine::Logger::Entry> objects. Those lists incude all the results that the writer of the test module(s) considered important enough to return by default. The advantage of this method is that it is extremely easy to use. The following is a functional (if not very useful) way to run a full test and print the results from a command-line prompt:
+The simple-but-inflexible way is that all the methods in L<Zonemaster::Engine> that run tests return lists of L<Zonemaster::Engine::Logger::Entry> objects. Those lists include all the results that the writer of the test module(s) considered important enough to return by default. The advantage of this method is that it is extremely easy to use. The following is a functional (if not very useful) way to run a full test and print the results from a command-line prompt:
 
  perl -MZonemaster::Engine -E 'say "$_" for Zonemaster::Engine->new->test_zone("example.org")'
 
@@ -49,7 +49,7 @@ If you want to develop a test module of your own, the standard set of modules se
 
 As an entry point to the "inside" of the Zonemaster framework, you want to read L<Zonemaster::Engine::Zone> and follow references from there. Of particular interest after the L<Zone|Zonemaster::Engine::Zone> class should be the L<Zonemaster::Engine::Nameserver> and possibly L<Zonemaster::Engine::Recursor> classes.
 
-If you do write your own test module, I would very much appreciate feedback on which parts were tricky to figure out, because I'm honestly not sure what I need to explain here. So please, if there's something that you think really needs to be written about, make an issue at L<https://github.com/zonemaster/zonemaster-engine/issues>.
+If you do write your own test module, I would very much appreciate feedback on which parts were tricky to figure out, because I'm honestly not sure what I need to explain here. So please, if there's something that you think really needs to be written about, create an issue at L<https://github.com/zonemaster/zonemaster-engine/issues>.
 
 =head2 For developers of the Zonemaster Test Framework
 

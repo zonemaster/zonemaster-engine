@@ -49,7 +49,7 @@ They are expected to provide at least the following class methods:
 
 This will be given a L<Zonemaster::Engine::Zone> object as its only argument, and, after running the
 Test Cases for that Test module, is expected to return a list of L<Zonemaster::Engine::Logger::Entry> objects.
-This is the entry point used by the L<run_all_for()> and L<run_module()> methods of this class.
+This is the entry point used by the L</run_all_for()> and L</run_module()> methods of this class.
 
 =back
 
@@ -82,7 +82,7 @@ tags that the Test Case can use in L<log entries|Zonemaster::Engine::Logger::Ent
 =item tag_descriptions()
 
 This must return a reference to a hash, the keys of which are the message tags and the corresponding values
-are strings (message ids) corresponding to user-friendly English translations of those message tags.
+are strings (message IDs) corresponding to user-friendly English translations of those message tags.
 Keep in mind that the message ids will be used as keys to look up translations into other languages,
 so think twice before editing them.
 
@@ -106,6 +106,8 @@ BEGIN {
 =over
 
 =item _log_versions()
+
+    _log_versions();
 
 Adds logging messages regarding the current version of some modules, specifically for L<Zonemaster::Engine> and other dependency modules (e.g. L<Zonemaster::LDNS>).
 
@@ -136,8 +138,11 @@ sub _log_versions {
 
 =item modules()
 
-Returns a list with the names of all available Test modules except
-L<Zonemaster::Engine::Test::Basic> (since that one is a bit special).
+    my @modules_array = modules();
+
+Returns a list of strings containing the names of all available Test modules, with the
+exception of L<Zonemaster::Engine::Test::Basic> (since that one is a bit special),
+based on the content of the B<share/modules.txt> file.
 
 =back
 
@@ -151,17 +156,23 @@ sub modules {
 
 =item run_all_for()
 
-Runs all Tests Cases in all Test modules found.
+    my @logentry_array = run_all_for( $zone );
 
-The order in which the Test modules found will be executed is not defined,
-except for L<Zonemaster::Engine::Test::Basic> that is always executed first.
-If the L<Basic tests|Zonemaster::Engine::Test::Basic/TESTS> fail to indicate
-an extremely minimal level of function (it must have a parent domain, and it must
-have at least one functional name server) for the zone, no further tests will be executed.
+Runs the L<default set of tests|/all()> of L<all Test modules found|/modules()> for the given zone.
+
+This method always starts with the execution of the L<Basic Test module|Zonemaster::Engine::Test::Basic>.
+If the L<Basic tests|Zonemaster::Engine::Test::Basic/TESTS> fail to indicate an extremely minimal
+level of function for the zone (e.g., it must have a parent domain, and it must have at least one
+functional name server), the testing suite is aborted. See L<Zonemaster::Engine::Test::Basic/can_continue()>
+for more details.
+Otherwise, other Test modules are L<looked up and loaded|/modules()> from the B<share/modules.txt> file,
+and executed in the order in which they appear in the file.
+The default set of tests (Test Cases) is specified in the L</all()> method of each Test module. They
+can be individually disabled by the L<profile|Zonemaster::Engine::Profile/test_cases>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns an array of L<Zonemaster::Engine::Logger::Entry> objects.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -221,13 +232,18 @@ sub run_all_for {
 
 =item run_module()
 
-Runs all default Test Cases of the given Test module for the given zone.
-The requested Test module must be in the list of actively loaded modules
-(that is, not a module disabled by the current profile)
+    my @logentry_array = run_module( $module, $zone );
+
+Runs the L<default set of tests|/all()> of the given Test module for the given zone.
+
+The Test module must be in the list of actively loaded modules (that is,
+a module defined in the B<share/modules.txt> file).
+The default set of tests (Test Cases) is specified in the L</all()> method of each Test module.
+They can be individually disabled by the L<profile|Zonemaster::Engine::Profile/test_cases>.
 
 Takes a string (module name) and a L<Zonemaster::Engine::Zone> object.
 
-Returns an array of L<Zonemaster::Engine::Logger::Entry> objects.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -279,14 +295,17 @@ sub run_module {
 
 =item run_one()
 
-Runs the given Test method of the given Test module for the given zone.
-The requested Test module must be in the list of actively loaded modules
-(that is, not a module disabled by the current profile), and the Test method
+    my @logentry_array = run_one( $module, $test_case, $zone );
+
+Runs the given Test Case of the given Test module for the given zone.
+
+The Test module must be in the list of actively loaded modules (that is,
+a module defined in the B<share/modules.txt> file), and the Test Case
 must be listed in the L<metadata|/metadata()> of the Test module exports.
 
-Takes a string (module name), a string (test method name) and an array of L<Zonemaster::Engine::Zone> objects.
+Takes a string (module name), a string (test case name) and an array of L<Zonemaster::Engine::Zone> objects.
 
-Returns an array of L<Zonemaster::Engine::Logger::Entry> objects.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 

@@ -29,7 +29,7 @@ Zonemaster::Engine::Test::Syntax - Module implementing tests focused on validati
 
 =head1 SYNOPSIS
 
-    my @results = Zonemaster::Engine::Test::Syntax->all($zone);
+    my @results = Zonemaster::Engine::Test::Syntax->all( $zone );
 
 =head1 METHODS
 
@@ -37,12 +37,14 @@ Zonemaster::Engine::Test::Syntax - Module implementing tests focused on validati
 
 =item all()
 
+    my @logentry_array = all( $zone );
+
 Runs the default set of tests for that module, i.e. between L<three and eight tests|/TESTS> depending on the tested zone.
 If L<Syntax01|/syntax01()> passes, the remaining tests are run.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns an array of L<Zonemaster::Engine::Logger::Entry> objects.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -82,6 +84,8 @@ sub all {
 =over
 
 =item metadata()
+
+    my $hash_ref = metadata();
 
 Returns a reference to a hash, the keys of which are the names of all Test Cases in the module, and the corresponding values are references to
 an array containing all the message tags that the Test Case can use in L<log entries|Zonemaster::Engine::Logger::Entry>.
@@ -357,9 +361,11 @@ Readonly my %TAG_DESCRIPTIONS => (
 
 =item tag_descriptions()
 
+    my $hash_ref = tag_descriptions();
+
 Used by the L<built-in translation system|Zonemaster::Engine::Translator>.
 
-Returns a reference to a hash, the keys of which are the message tags and the corresponding values are strings (message ids).
+Returns a reference to a hash, the keys of which are the message tags and the corresponding values are strings (message IDs).
 
 =back
 
@@ -372,6 +378,8 @@ sub tag_descriptions {
 =over
 
 =item version()
+
+    my $version_string = version();
 
 Returns a string containing the version of the current module.
 
@@ -388,6 +396,8 @@ sub version {
 =over
 
 =item _ip_disabled_message()
+
+    my $bool = _ip_disabled_message( $logentry_array_ref, $ns, @query_type_array );
 
 Checks if the IP version of a given name server is allowed to be queried. If not, it adds a logging message and returns true. Else, it returns false.
 
@@ -432,6 +442,8 @@ sub _ip_disabled_message {
 
 =item _name_has_only_legal_characters()
 
+    my $bool = _name_has_only_legal_characters( $name );
+
 Checks if a given name contains only allowed characters.
 
 Takes a L<Zonemaster::Engine::DNSName> object.
@@ -456,6 +468,8 @@ sub _name_has_only_legal_characters {
 =over
 
 =item _label_starts_with_hyphen()
+
+    my $bool = _label_starts_with_hyphen( $name );
 
 Checks if a given name starts with an hyphen ('-').
 
@@ -484,6 +498,8 @@ sub _label_starts_with_hyphen {
 
 =item _label_ends_with_hyphen()
 
+    my $bool = _label_ends_with_hyphen( $name );
+
 Checks if a given name ends with an hyphen ('-').
 
 Takes a L<Zonemaster::Engine::DNSName> object.
@@ -511,6 +527,8 @@ sub _label_ends_with_hyphen {
 
 =item _label_not_ace_has_double_hyphen_in_position_3_and_4()
 
+    my $bool = _label_not_ace_has_double_hyphen_in_position_3_and_4( $name );
+
 Checks if a given name does not contain a double hyphen ('--'), with the exception of 'xn--'.
 
 Takes a L<Zonemaster::Engine::DNSName> object.
@@ -537,6 +555,8 @@ sub _label_not_ace_has_double_hyphen_in_position_3_and_4 {
 =over
 
 =item _get_name()
+
+    my $name = _get_name( $item );
 
 Converts a given argument to a L<Zonemaster::Engine::DNSName> object. Used as an helper function for Test Cases L<Syntax01|/syntax01()> to L<Syntax04|/syntax04()>.
 
@@ -569,12 +589,14 @@ sub _get_name {
 
 =item _check_name_syntax()
 
+    my @logentry_array = _check_name_syntax( $label_prefix_string, $item );
+
 Checks the syntax of a given name. Makes use of L</_name_has_only_legal_characters()> and L</_label_not_ace_has_double_hyphen_in_position_3_and_4()>.
 Used as an helper function for Test Cases L<Syntax04|/syntax04()>, L<Syntax07|/syntax07()> and L<Syntax08|/syntax08()>.
 
 Takes a string (label prefix) and either a string (name), a L<Zonemaster::Engine::DNSName> object, or a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object. 
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects. 
 
 =back
 
@@ -643,13 +665,13 @@ sub _check_name_syntax {
 
 =item syntax01()
 
-Test Case that verifies if a name contains only allowed characters.
+    my @logentry_array = syntax01( $item );
 
-See L<Syntax01 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Syntax-TP/syntax01.md> for more details.
+Runs the L<Syntax01 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Syntax-TP/syntax01.md>.
 
 Takes either a string (name), a L<Zonemaster::Engine::DNSName> object or a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -685,13 +707,13 @@ sub syntax01 {
 
 =item syntax02()
 
-Test Case that verifies if a name does not start or end with a hyphen ('-').
+    my @logentry_array = syntax02( $item );
 
-See L<Syntax02 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Syntax-TP/syntax02.md> for more details.
+Runs the L<Syntax02 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Syntax-TP/syntax02.md>.
 
 Takes either a string (name), a L<Zonemaster::Engine::DNSName> object or a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -740,13 +762,13 @@ sub syntax02 {
 
 =item syntax03()
 
-Test Case that verifies if a name does not contain a hyphen in 3rd and 4th position (with the exception of 'xn--').
+    my @logentry_array = syntax03( $item );
 
-See L<Syntax03 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Syntax-TP/syntax03.md> for more details.
+Runs the L<Syntax03 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Syntax-TP/syntax03.md>.
 
 Takes either a string (name), a L<Zonemaster::Engine::DNSName> object or a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -786,14 +808,13 @@ sub syntax03 {
 
 =item syntax04()
 
-Test Case that verifies if a name server is conform to previous syntax rules (L<Syntax01|/syntax01()>, L<Syntax03|/syntax03()>).
-It also verifies if its top-level domain contains only numeric characters.
+    my @logentry_array = syntax04( $item );
 
-See L<Syntax04 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Syntax-TP/syntax04.md> for more details.
+Runs the L<Syntax04 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Syntax-TP/syntax01.md>.
 
 Takes either a string (name), a L<Zonemaster::Engine::DNSName> object or a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -814,13 +835,13 @@ sub syntax04 {
 
 =item syntax05()
 
-Test Case that verifies if a SOA RNAME has a conform usage of at sign ('@').
+    my @logentry_array = syntax05( $zone );
 
-See L<Syntax05 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Syntax-TP/syntax05.md> for more details.
+Runs the L<Syntax05 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Syntax-TP/syntax05.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -863,13 +884,13 @@ sub syntax05 {
 
 =item syntax06()
 
-Test Case that verifies if a SOA RNAME is RFC822 compliant.
+    my @logentry_array = syntax06( $zone );
 
-See L<Syntax06 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Syntax-TP/syntax06.md> for more details.
+Runs the L<Syntax06 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Syntax-TP/syntax06.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -1017,14 +1038,13 @@ sub syntax06 {
 
 =item syntax07()
 
-Test Case that verifies if SOA MNAME is conform to previous syntax rules (L<Syntax01|/syntax01()>, L<Syntax03|/syntax03()>).
-It also verifies if its top-level domain contains only numeric characters.
+    my @logentry_array = syntax07( $zone );
 
-See L<Syntax07 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Syntax-TP/syntax07.md> for more details.
+Runs the L<Syntax07 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Syntax-TP/syntax07.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -1052,14 +1072,13 @@ sub syntax07 {
 
 =item syntax08()
 
-Test Case that verifies if MX name is conform to previous syntax rules (L<Syntax01|/syntax01()>, L<Syntax03|/syntax03()>).
-It also verifies if its top-level domain contains only numeric characters.
+    my @logentry_array = syntax08( $zone );
 
-See L<Syntax08 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Syntax-TP/syntax08.md> for more details.
+Runs the L<Syntax08 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Syntax-TP/syntax08.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 

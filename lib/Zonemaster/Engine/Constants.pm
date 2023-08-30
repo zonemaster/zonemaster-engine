@@ -160,7 +160,7 @@ An integer, used to define the size of the serial number space, as defined in RF
 
 An integer, used to define the EDNS0 UDP packet size in EDNS queries.
 
-=item * C<UDP_COMMON_EDNS_LIMIT>
+=item * C<$UDP_COMMON_EDNS_LIMIT>
 
 =item * C<@IPV4_SPECIAL_ADDRESSES>
 
@@ -216,11 +216,13 @@ Readonly::Array our @IPV6_SPECIAL_ADDRESSES => _extract_iana_ip_blocks($IP_VERSI
 
 =item _extract_iana_ip_blocks()
 
+    my @array = _extract_iana_ip_blocks( $ip_version );
+
 Internal method that is used to extract IP blocks details from IANA files for a given IP version (i.e. 4 or 6).
 
 Takes an integer (IP version).
 
-Returns an array of hashes - the keys of which are C<ip> (L<Net::IP::XS> object), C<name> (string) and C<reference> (string).
+Returns a list of hashes - the keys of which are C<ip> (L<Net::IP::XS> object), C<name> (string) and C<reference> (string).
 
 =back
 

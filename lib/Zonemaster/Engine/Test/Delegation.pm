@@ -27,7 +27,7 @@ Zonemaster::Engine::Test::Delegation - Module implementing tests focused on zone
 
 =head1 SYNOPSIS
 
-    my @results = Zonemaster::Engine::Test::Delegation->all($zone);
+    my @results = Zonemaster::Engine::Test::Delegation->all( $zone );
 
 =head1 METHODS
 
@@ -35,11 +35,13 @@ Zonemaster::Engine::Test::Delegation - Module implementing tests focused on zone
 
 =item all()
 
+    my @logentry_array = all( $zone );
+
 Runs the default set of tests for that module, i.e. L<seven tests|/TESTS>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns an array of L<Zonemaster::Engine::Logger::Entry> objects.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -63,6 +65,8 @@ sub all {
 =over
 
 =item metadata()
+
+    my $hash_ref = metadata();
 
 Returns a reference to a hash, the keys of which are the names of all Test Cases in the module, and the corresponding values are references to
 an array containing all the message tags that the Test Case can use in L<log entries|Zonemaster::Engine::Logger::Entry>.
@@ -380,9 +384,11 @@ Readonly my %TAG_DESCRIPTIONS => (
 
 =item tag_descriptions()
 
+    my $hash_ref = tag_descriptions();
+
 Used by the L<built-in translation system|Zonemaster::Engine::Translator>.
 
-Returns a reference to a hash, the keys of which are the message tags and the corresponding values are strings (message ids).
+Returns a reference to a hash, the keys of which are the message tags and the corresponding values are strings (message IDs).
 
 =back
 
@@ -395,6 +401,8 @@ sub tag_descriptions {
 =over
 
 =item version()
+
+    my $version_string = version();
 
 Returns a string containing the version of the current module.
 
@@ -411,6 +419,8 @@ sub version {
 =over
 
 =item _ip_disabled_message()
+
+    my $bool = _ip_disabled_message( $logentry_array_ref, $ns, @query_type_array );
 
 Checks if the IP version of a given name server is allowed to be queried. If not, it adds a logging message and returns true. Else, it returns false.
 
@@ -455,12 +465,13 @@ sub _ip_disabled_message {
 
 =item _max_length_name_for()
 
+    my $name_string = _max_length_name_for( $name );
+
 Makes up a name of maximum length in the given domain name. Used as an helper function for Test Case L<Delegation03|/delegation03()>.
 
 Takes a L<Zonemaster::Engine::DNSName> object.
 
 Returns a string.
-
 
 =back
 
@@ -486,12 +497,14 @@ sub _max_length_name_for {
 
 =item _find_dup_ns()
 
+    my @logentry_array = _find_dup_ns( %hash );
+
 Checks if given name servers have distinct IP addresses. Used as an helper function for Test Case L<Delegation02|/delegation02()>.
 
 Takes a hash - the keys of which are C<duplicate_tag>, C<distinct_tag> and C<ns_list>, and their corresponding values are a string,
 a string and a reference to an array of L<Zonemaster::Engine::Nameserver> objects, respectively.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -541,13 +554,13 @@ sub _find_dup_ns {
 
 =item delegation01()
 
-Test Case that verifies if there is a mininum number of name servers.
+    my @logentry_array = delegation01( $zone );
 
-See L<Delegation01 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Delegation-TP/delegation01.md> for more details.
+Runs the L<Delegation01 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Delegation-TP/delegation01.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -676,13 +689,13 @@ sub delegation01 {
 
 =item delegation02()
 
-Test Case that verifies if name servers have distinct IP addresses.
+    my @logentry_array = delegation02( $zone );
 
-See L<Delegation02 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Delegation-TP/delegation02.md> for more details.
+Runs the L<Delegation02 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Delegation-TP/delegation02.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -723,13 +736,13 @@ sub delegation02 {
 
 =item delegation03()
 
-Test Case that verifies if there is no truncation on referrals.
+    my @logentry_array = delegation03( $zone );
 
-See L<Delegation03 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Delegation-TP/delegation03.md> for more details.
+Runs the L<Delegation03 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Delegation-TP/delegation03.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -791,13 +804,13 @@ sub delegation03 {
 
 =item delegation04()
 
-Test Case that verifies if name servers are authoritative.
+    my @logentry_array = delegation04( $zone );
 
-See L<Delegation04 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Delegation-TP/delegation04.md> for more details.
+Runs the L<Delegation04 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Delegation-TP/delegation04.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -865,13 +878,13 @@ sub delegation04 {
 
 =item delegation05()
 
-Test Case that verifies if NS RRs do not point to a CNAME alias.
+    my @logentry_array = delegation05( $zone );
 
-See L<Delegation05 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Delegation-TP/delegation05.md> for more details.
+Runs the L<Delegation05 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Delegation-TP/delegation05.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -942,13 +955,13 @@ sub delegation05 {
 
 =item delegation06()
 
-Test Case that verifies the existence of a SOA RR.
+    my @logentry_array = delegation06( $zone );
 
-See L<Delegation06 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Delegation-TP/delegation06.md> for more details.
+Runs the L<Delegation06 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Delegation-TP/delegation06.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -998,13 +1011,13 @@ sub delegation06 {
 
 =item delegation07()
 
-Test Case that verifies if parent's zone glue name records are present in child zone.
+    my @logentry_array = delegation07( $zone );
 
-See L<Delegation07 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Delegation-TP/delegation07.md> for more details.
+Runs the L<Delegation07 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Delegation-TP/delegation07.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 

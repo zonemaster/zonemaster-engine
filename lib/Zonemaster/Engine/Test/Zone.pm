@@ -30,7 +30,7 @@ Zonemaster::Engine::Test::Zone - Module implementing tests focused on the DNS zo
 
 =head1 SYNOPSIS
 
-    my @results = Zonemaster::Engine::Test::Zone->all($zone);
+    my @results = Zonemaster::Engine::Test::Zone->all( $zone );
 
 =head1 METHODS
 
@@ -38,11 +38,13 @@ Zonemaster::Engine::Test::Zone - Module implementing tests focused on the DNS zo
 
 =item all()
 
+    my @logentry_array = all( $zone );
+
 Runs the default set of tests for that module, i.e. between L<eight and ten tests|/TESTS> depending on the tested zone.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns an array of L<Zonemaster::Engine::Logger::Entry> objects.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -75,6 +77,8 @@ sub all {
 =over
 
 =item metadata()
+
+    my $hash_ref = metadata();
 
 Returns a reference to a hash, the keys of which are the names of all Test Cases in the module, and the corresponding values are references to
 an array containing all the message tags that the Test Case can use in L<log entries|Zonemaster::Engine::Logger::Entry>.
@@ -452,9 +456,11 @@ Readonly my %TAG_DESCRIPTIONS => (
 
 =item tag_descriptions()
 
+    my $hash_ref = tag_descriptions();
+
 Used by the L<built-in translation system|Zonemaster::Engine::Translator>.
 
-Returns a reference to a hash, the keys of which are the message tags and the corresponding values are strings (message ids).
+Returns a reference to a hash, the keys of which are the message tags and the corresponding values are strings (message IDs).
 
 =back
 
@@ -467,6 +473,8 @@ sub tag_descriptions {
 =over
 
 =item version()
+
+    my $version_string = version();
 
 Returns a string containing the version of the current module.
 
@@ -483,6 +491,8 @@ sub version {
 =over
 
 =item _is_ip_version_disabled()
+
+    my $bool = _is_ip_version_disabled( $ns, $query_type_string );
 
 Checks if the IP version of a given name server is allowed to be queried. If not, it adds a logging message and returns true. Else, it returns false.
 
@@ -524,6 +534,8 @@ sub _is_ip_version_disabled {
 
 =item _retrieve_record_from_zone()
 
+    my $packet = _retrieve_record_from_zone( $zone, $name, $query_type_string );
+
 Retrieves resource records of given type for the given name from the response of the first authoritative server of the given zone that has at least one.
 Used as an helper function for Test Cases L<Zone02|/zone02()> to L<Zone07|/zone07()>.
 
@@ -560,13 +572,13 @@ sub _retrieve_record_from_zone {
 
 =item zone01()
 
-Test Case that checks if master name server in SOA is fully qualified.
+    my @logentry_array = zone01( $zone );
 
-See L<Zone01 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Zone-TP/zone01.md> for more details.
+Runs the L<Zone01 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Zone-TP/zone01.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -730,13 +742,13 @@ sub zone01 {
 
 =item zone02()
 
-Test Case that verifies SOA 'refresh' minimum value.
+    my @logentry_array = zone02( $zone );
 
-See L<Zone02 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Zone-TP/zone02.md> for more details.
+Runs the L<Zone02 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Zone-TP/zone02.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -782,13 +794,13 @@ sub zone02 {
 
 =item zone03()
 
-Test Case that verifies if SOA 'retry' value is lower than SOA 'refresh' value.
+    my @logentry_array = zone03( $zone );
 
-See L<Zone03 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Zone-TP/zone03.md> for more details.
+Runs the L<Zone03 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Zone-TP/zone03.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -833,13 +845,13 @@ sub zone03 {
 
 =item zone04()
 
-Test Case that verifies SOA 'retry' minimum value.
+    my @logentry_array = zone04( $zone );
 
-See L<Zone04 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Zone-TP/zone04.md> for more details.
+Runs the L<Zone04 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Zone-TP/zone04.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -885,13 +897,13 @@ sub zone04 {
 
 =item zone05()
 
-Test Case that verifies SOA 'expire' minimum value.
+    my @logentry_array = zone05( $zone );
 
-See L<Zone05 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Zone-TP/zone05.md> for more details.
+Runs the L<Zone05 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Zone-TP/zone05.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -948,13 +960,13 @@ sub zone05 {
 
 =item zone06()
 
-Test Case that verifies SOA 'minimum' (default TTL) value.
+    my @logentry_array = zone06( $zone );
 
-See L<Zone06 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Zone-TP/zone06.md> for more details.
+Runs the L<Zone06 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Zone-TP/zone06.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -1011,13 +1023,13 @@ sub zone06 {
 
 =item zone07()
 
-Test Case that checks if SOA master is not an alias (CNAME).
+    my @logentry_array = zone07( $zone );
 
-See L<Zone07 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Zone-TP/zone07.md> for more details.
+Runs the L<Zone07 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Zone-TP/zone07.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -1077,13 +1089,13 @@ sub zone07 {
 
 =item zone08()
 
-Test Case that checks if MX records do not resolve to a CNAME.
+    my @logentry_array = zone08( $zone );
 
-See L<Zone08 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Zone-TP/zone08.md> for more details.
+Runs the L<Zone08 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Zone-TP/zone08.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -1119,13 +1131,13 @@ sub zone08 {
 
 =item zone09()
 
-Test Case that checks if there is a target host (MX, A or AAAA) to deliver e-mail for the domain name.
+    my @logentry_array = zone09( $zone );
 
-See L<Zone09 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Zone-TP/zone09.md> for more details.
+Runs the L<Zone09 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Zone-TP/zone09.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -1288,13 +1300,13 @@ sub zone09 {
 
 =item zone10()
 
-Test Case that checks if a zone return exactly one SOA record.
+    my @logentry_array = zone10( $zone );
 
-See L<Zone10 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Zone-TP/zone10.md> for more details.
+Runs the L<Zone10 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Zone-TP/zone10.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 

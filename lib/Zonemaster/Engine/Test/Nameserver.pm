@@ -25,9 +25,7 @@ Zonemaster::Engine::Test::Nameserver - Module implementing tests focused on the 
 
 =head1 SYNOPSIS
 
-    my @results = Zonemaster::Engine::Test::Nameserver->all($zone);
-
-=head1 METHODS
+    my @results = Zonemaster::Engine::Test::Nameserver->all( $zone );
 
 =cut
 
@@ -37,15 +35,19 @@ Readonly my @NONEXISTENT_NAMES => qw{
   xn--nameservertest.ripe.net
 };
 
+=head1 METHODS
+
 =over
 
 =item all()
+
+    my @logentry_array = all( $zone );
 
 Runs the default set of tests for that module, i.e. L<fourteen tests|/TESTS>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns an array of L<Zonemaster::Engine::Logger::Entry> objects.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -104,6 +106,8 @@ sub all {
 =over
 
 =item metadata()
+
+    my $hash_ref = metadata();
 
 Returns a reference to a hash, the keys of which are the names of all Test Cases in the module, and the corresponding values are references to
 an array containing all the message tags that the Test Case can use in L<log entries|Zonemaster::Engine::Logger::Entry>.
@@ -535,9 +539,11 @@ Readonly my %TAG_DESCRIPTIONS => (
 
 =item tag_descriptions()
 
+    my $hash_ref = tag_descriptions();
+
 Used by the L<built-in translation system|Zonemaster::Engine::Translator>.
 
-Returns a reference to a hash, the keys of which are the message tags and the corresponding values are strings (message ids).
+Returns a reference to a hash, the keys of which are the message tags and the corresponding values are strings (message IDs).
 
 =back
 
@@ -550,6 +556,8 @@ sub tag_descriptions {
 =over
 
 =item version()
+
+    my $version_string = version();
 
 Returns a string containing the version of the current module.
 
@@ -566,6 +574,8 @@ sub version {
 =over
 
 =item _ip_disabled_message()
+
+    my $bool = _ip_disabled_message( $logentry_array_ref, $ns, @query_type_array );
 
 Checks if the IP version of a given name server is allowed to be queried. If not, it adds a logging message and returns true. Else, it returns false.
 
@@ -612,13 +622,13 @@ sub _ip_disabled_message {
 
 =item nameserver01()
 
-Test Case that verifies if a name server is not recursive.
+    my @logentry_array = nameserver01( $zone );
 
-See L<Nameserver01 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Nameserver-TP/nameserver01.md> for more details.
+Runs the L<Nameserver01 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Nameserver-TP/nameserver01.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -681,13 +691,13 @@ sub nameserver01 {
 
 =item nameserver02()
 
-Test Case that verifies EDNS0 support.
+    my @logentry_array = nameserver02( $zone );
 
-See L<Nameserver02 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Nameserver-TP/nameserver02.md> for more details.
+Runs the L<Nameserver02 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Nameserver-TP/nameserver02.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -784,13 +794,13 @@ sub nameserver02 {
 
 =item nameserver03()
 
-Test Case that verifies zone transfer (AXFR) availability.
+    my @logentry_array = nameserver03( $zone );
 
-See L<Nameserver03 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Nameserver-TP/nameserver03.md> for more details.
+Runs the L<Nameserver03 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Nameserver-TP/nameserver03.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -831,13 +841,13 @@ sub nameserver03 {
 
 =item nameserver04()
 
-Test Case that verifies if replies from a name server come from its expected IP address.
+    my @logentry_array = nameserver04( $zone );
 
-See L<Nameserver04 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Nameserver-TP/nameserver04.md> for more details.
+Runs the L<Nameserver04 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Nameserver-TP/nameserver04.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -889,13 +899,13 @@ sub nameserver04 {
 
 =item nameserver05()
 
-Test Case that verifies behaviour on AAAA queries.
+    my @logentry_array = nameserver05( $zone );
 
-See L<Nameserver05 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Nameserver-TP/nameserver05.md> for more details.
+Runs the L<Nameserver05 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Nameserver-TP/nameserver05.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -992,13 +1002,13 @@ sub nameserver05 {
 
 =item nameserver06()
 
-Test Case that verifies if a name server can be resolved to an IP address.
+    my @logentry_array = nameserver06( $zone );
 
-See L<Nameserver06 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Nameserver-TP/nameserver06.md> for more details.
+Runs the L<Nameserver06 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Nameserver-TP/nameserver06.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -1044,13 +1054,13 @@ sub nameserver06 {
 
 =item nameserver07()
 
-Test Case that checks if authoritative name servers return an upward referral.
+    my @logentry_array = nameserver07( $zone );
 
-See L<Nameserver07 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Nameserver-TP/nameserver07.md> for more details.
+Runs the L<Nameserver07 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Nameserver-TP/nameserver07.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -1103,13 +1113,13 @@ sub nameserver07 {
 
 =item nameserver08()
 
-Test Case that checks if authoritative name servers responses match the case of every letter in QNAME.
+    my @logentry_array = nameserver08( $zone );
 
-See L<Nameserver08 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Nameserver-TP/nameserver08.md> for more details.
+Runs the L<Nameserver08 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Nameserver-TP/nameserver08.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -1170,13 +1180,13 @@ sub nameserver08 {
 
 =item nameserver09()
 
-Test Case that checks if authoritative name servers return consistent responses for equivalent names with different cases in the query.
+    my @logentry_array = nameserver09( $zone );
 
-See L<Nameserver09 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Nameserver-TP/nameserver09.md> for more details.
+Runs the L<Nameserver09 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Nameserver-TP/nameserver09.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -1323,13 +1333,13 @@ sub nameserver09 {
 
 =item nameserver10()
 
-Test Case that checks if authoritative name servers respond correctly to queries with undefined EDNS VERSION.
+    my @logentry_array = nameserver10( $zone );
 
-See L<Nameserver10 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Nameserver-TP/nameserver10.md> for more details.
+Runs the L<Nameserver10 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Nameserver-TP/nameserver10.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -1407,13 +1417,13 @@ sub nameserver10 {
 
 =item nameserver11()
 
-Test Case that checks if authoritative name servers responses do not include unknown EDNS OPTION-CODE.
+    my @logentry_array = nameserver11( $zone );
 
-See L<Nameserver11 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Nameserver-TP/nameserver11.md> for more details.
+Runs the L<Nameserver11 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Nameserver-TP/nameserver11.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -1530,13 +1540,13 @@ sub nameserver11 {
 
 =item nameserver12()
 
-Test Case that checks if authoritative name servers responses have the "Z" bit cleared, even if set in the query.
+    my @logentry_array = nameserver12( $zone );
 
-See L<Nameserver12 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Nameserver-TP/nameserver12.md> for more details.
+Runs the L<Nameserver12 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Nameserver-TP/nameserver12.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -1586,13 +1596,13 @@ sub nameserver12 {
 
 =item nameserver13()
 
-Test Case that checks for the presence of a OPT pseudo-RR in a truncated response to a EDNS query.
+    my @logentry_array = nameserver13( $zone );
 
-See L<Nameserver13 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Nameserver-TP/nameserver13.md> for more details.
+Runs the L<Nameserver13 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Nameserver-TP/nameserver13.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -1642,13 +1652,13 @@ sub nameserver13 {
 
 =item nameserver15()
 
-Test Case that verifies if a name server responds to certain TXT queries in the CHAOS class, specifically about its software version.
+    my @logentry_array = nameserver15( $zone );
 
-See L<Nameserver15 specification|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Nameserver-TP/nameserver15.md> for more details.
+Runs the L<Nameserver15 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Nameserver-TP/nameserver15.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns a list of an array of L<Zonemaster::Engine::Logger::Entry> objects and a L<Zonemaster::Engine::Logger::Entry> object.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
