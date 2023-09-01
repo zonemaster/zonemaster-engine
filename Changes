@@ -1,6 +1,15 @@
 Release history for Zonemaster component Zonemaster-Engine
 
 
+v4.7.3 2023-08-07 (public fix version)
+
+ [Fixes]
+ - Fixes bug (regression) in test case BASIC01 that make tests of zones
+   fail if the delegation to the zone has no glue record, which is as
+   expected if the zone has no in-bailiwick NS. The bug was introduced
+   in version v4.7.2 in release v2023.1.2. (#1282) 
+
+
 v4.7.2 2023-08-07 (public fix version)
 
  [Fixes]
