@@ -473,13 +473,13 @@ sub basic01 {
                         my $p_a = Zonemaster::Engine::Recursor->recurse( $ns_name, q{A} );
 
                         if ( $p_a and $p_a->rcode eq 'NOERROR' ) {
-                            $rrs_ns{$ns_name}{'addresses'}{$_->address} = 1 for $p->get_records_for_name( 'A', $ns_name );
+                            $rrs_ns{$ns_name}{'addresses'}{$_->address} = 1 for $p_a->get_records_for_name( 'A', $ns_name );
                         }
 
                         my $p_aaaa = Zonemaster::Engine::Recursor->recurse( $ns_name, q{AAAA} );
 
                         if ( $p_aaaa and $p_aaaa->rcode eq 'NOERROR' ) {
-                            $rrs_ns{$ns_name}{'addresses'}{$_->address} = 1 for $p->get_records_for_name( 'AAAA', $ns_name );
+                            $rrs_ns{$ns_name}{'addresses'}{$_->address} = 1 for $p_aaaa->get_records_for_name( 'AAAA', $ns_name );
                         }
                     }
 
