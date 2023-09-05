@@ -1,10 +1,10 @@
 Release history for Zonemaster component Zonemaster-Engine
 
 
-v4.7.3 2023-08-07 (public fix version)
+v4.7.3 2023-09-05 (public fix version)
 
  [Fixes]
-- Fixes a bug (regression) in test case BASIC01 that made tests of zones
+- Fixes a bug in test case BASIC01 that made tests of zones
   fail if, while walking the chain of delegations from the root to the
   zone under test, a name server returns a referral pointing to name
   servers for an intermediate zone which are all out-of-bailiwick and
