@@ -99,7 +99,7 @@ sub recurse {
 
     my ( $p, $state ) =
       $class->_recurse( $name, $type, $dns_class,
-        { ns => [ root_servers() ], count => 0, common => 0, seen => {}, glue => {} } );
+        { ns => [ root_servers() ], count => 0, common => 0, seen => {}, cseen => {}, glue => {} } );
     $recurse_cache{$name}{$type}{$dns_class} = $p;
 
     return $p;
@@ -111,7 +111,7 @@ sub parent {
 
     my ( $p, $state ) =
       $class->_recurse( $name, 'SOA', 'IN',
-        { ns => [ root_servers() ], count => 0, common => 0, seen => {}, glue => {} } );
+        { ns => [ root_servers() ], count => 0, common => 0, seen => {}, cseen => {}, glue => {} } );
 
     my $pname;
     if ( name( $state->{trace}[0][0] ) eq name( $name ) ) {
@@ -193,8 +193,65 @@ sub _recurse {
             return ( $p, $state );
         }
 
-        if ( $class->_is_answer( $p ) ) {    # Return answer
-            return ( $p, $state );
+        if ( $class->_is_answer( $p ) ) {    # Return answer, or follow CNAME
+            if ( not $p->has_rrs_of_type_for_name( $type, $name ) and $p->has_rrs_of_type_for_name( 'CNAME', $name ) ) {
+                if ( scalar $p->get_records_for_name( 'CNAME', $name, 'answer') > 1 ) { # Multiple CNAME records with QNAME as owner name
+                    Zonemaster::Engine->logger->add( CNAME_MULTIPLE_FOR_NAME => { name => $name } );
+                    return ( undef, $state );
+                }
+                else {
+                    my ( %cnames, %tseen );
+
+                    for my $rr ( $p->get_records( 'CNAME', 'answer' ) ) {
+                        my $rr_owner = name( $rr->owner );
+                        my $rr_target = name( $rr->cname );
+
+                        if ( scalar $p->get_records_for_name( 'CNAME', $rr_owner, 'answer' ) > 1 ) { # Multiple CNAME records with same owner name
+                            Zonemaster::Engine->logger->add( CNAME_MULTIPLE_FOR_NAME => { name => $rr_owner->string } );
+                            return ( undef, $state );
+                        }
+
+                        if ( lc( $rr_owner ) eq lc( $rr_target ) or exists $tseen{lc( $rr_target )} ) { # CNAME owner name is target, or target has already been seen in this response
+                            Zonemaster::Engine->logger->add( CNAME_LOOP_INNER => { name => $rr_owner->string, target => $rr_target->string } );
+                            return ( undef, $state );
+                        }
+
+                        $tseen{lc( $rr_target )} = 1;
+                        $cnames{$rr_owner} = $rr_target;
+                    }
+
+                    my $target = $name;
+                    $target = $cnames{$target} while $cnames{$target};
+
+                    if ( $state->{cseen}{lc( $target )}  ) { # CNAME target has already been followed (outer loop)
+                        Zonemaster::Engine->logger->add( CNAME_LOOP_OUTER => { name => $name, target => $target, cnames => join( ';', keys %{ $state->{cseen} } ) } );
+                        return ( undef, $state );
+                    }
+
+                    $state->{cseen}{lc( $target )} = 1;
+
+                    if ( lc( $target ) eq lc( $name ) ) { # CNAME target is QNAME (inner loop)
+                        Zonemaster::Engine->logger->add( CNAME_LOOP_INNER => { name => $name, target => $target } );
+                        return ( undef, $state );
+                    }
+
+                    $state->{count} += 1;
+                    return ( undef, $state ) if $state->{count} > 100; # Loop protection
+
+                    if ( $p->has_rrs_of_type_for_name( $type, $target ) ) { # RR for CNAME target is in response
+                        return ( $p, $state );
+                    }
+
+                    # Otherwise, make a new recursive query for CNAME target
+                    ( $p, $state ) = $class->_recurse( $target, $type, $dns_class,
+                        { ns => [ root_servers() ], count => $state->{count}, common => 0, seen => {}, cseen => $state->{cseen}, glue => {} });
+
+                    return ( $p, $state );
+                }
+            }
+            else {
+                return ( $p, $state );
+            }
         }
 
         # So it's not an error, not an empty response and not an answer
@@ -297,7 +354,7 @@ sub get_addresses_for {
     my ( $class, $name, $state ) = @_;
     my @res;
     $state //=
-      { ns => [ root_servers() ], count => 0, common => 0, seen => {} };
+      { ns => [ root_servers() ], count => 0, common => 0, seen => {}, cseen => {} };
 
     my ( $pa ) = $class->_recurse(
         "$name", 'A', 'IN',

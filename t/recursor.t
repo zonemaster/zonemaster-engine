@@ -24,7 +24,7 @@ is( name( $rr->name ), 'www.iis.se', 'RR name ok' );
 
 my $p2 = Zonemaster::Engine::Recursor->recurse( 'www.wiccainfo.se' );
 isa_ok( $p2, 'Zonemaster::Engine::Packet' );
-is( scalar( $p2->answer ), 2, 'answer records' );
+is( scalar( $p2->answer ), 1, 'answer records' );
 
 is_parent( 'iis.se',                                                                   'se' );
 is_parent( 'www.iis.se',                                                               'iis.se' );

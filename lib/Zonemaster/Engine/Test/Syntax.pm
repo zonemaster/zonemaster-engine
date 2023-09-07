@@ -968,16 +968,15 @@ sub syntax06 {
 
         my $domain = ( $rname =~ s/.*@//r );
         my $p_mx = Zonemaster::Engine::Recursor->recurse( $domain, q{MX} );
+
         if ( not $p_mx or $p_mx->rcode ne 'NOERROR' ) {
             push @results, _emit_log( RNAME_MAIL_DOMAIN_INVALID => { domain => $domain } );
             next;
         }
 
-        # Follow CNAMEs in the MX response
-        my %cnames =
-          map { $_->owner => $_->cname } $p_mx->get_records( q{CNAME}, q{answer} );
-        $domain .= q{.};    # Add back final dot
-        $domain = $cnames{$domain} while $cnames{$domain};
+        # Retrieve followed CNAME, if any
+        my @p_question_sec = $p_mx->question;
+        $domain = $p_question_sec[0]->owner;
 
         # Determine mail server(s)
         my @mail_servers;
