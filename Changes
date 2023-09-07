@@ -9,7 +9,9 @@ v4.7.3 2023-09-08 (public fix version)
   zone under test, a name server returns a referral pointing to name
   servers for an intermediate zone which are all out-of-bailiwick and
   lacking glue. The bug was introduced in version v4.7.0 in release
-  v2023.1.
+  v2023.1. (#1282)
+- Disable blacklisting for queries by NAMESERVER15 to prevent false
+  errors and warnings (#1285)
 
 
 v4.7.2 2023-08-07 (public fix version)
