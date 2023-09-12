@@ -2,16 +2,11 @@ use Test::More;
 use Test::Differences;
 use Test::Exception;
 
-BEGIN { use_ok( 'Zonemaster::Engine::Util', qw( info name ns parse_hints pod_extract_for ) ) }
+BEGIN { use_ok( 'Zonemaster::Engine::Util', qw( info name ns parse_hints ) ) }
 
 isa_ok( ns( 'name', '::1' ), 'Zonemaster::Engine::Nameserver' );
 isa_ok( info( 'TAG', {} ), 'Zonemaster::Engine::Logger::Entry' );
 isa_ok( name( "foo.bar.com" ), 'Zonemaster::Engine::DNSName' );
-
-my $dref = pod_extract_for( 'DNSSEC' );
-isa_ok( $dref, 'HASH' );
-ok( scalar( keys %$dref ) > 3, 'At least four keys' );
-like( $dref->{dnssec01}, qr/    my \@logentry_array = dnssec01\( \$zone \);/, 'Expected content.' );
 
 subtest 'parse_hints()' => sub {
     my @cases = (
