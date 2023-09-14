@@ -1375,7 +1375,7 @@ sub nameserver15 {
         my $found_string = 0;
 
         foreach my $query_name ( q{version.bind}, q{version.server} ) {
-            my $p = $ns->query( $query_name, q{TXT}, { class => q{CH} } );
+            my $p = $ns->query( $query_name, q{TXT}, { class => q{CH}, blacklisting_disabled => 1 } );
 
             if ( $p and $p->rcode eq q{NOERROR} and scalar $p->get_records_for_name( q{TXT}, $query_name, q{answer} ) ) {
                 foreach my $rr ( $p->get_records_for_name(q{TXT}, $query_name, q{answer} ) ) {
