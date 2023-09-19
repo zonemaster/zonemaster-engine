@@ -922,7 +922,7 @@ https://github.com/zonemaster/zonemaster/blob/master/docs/specifications/tests/Z
 Related to the REFRESH_MINIMUM_VALUE_LOWER message tag from this test case.
 Default C<14400> (4 hours in seconds).
 
-=head2 test_cases_vars04.zone.SOA_RETRY_MINIMUM_VALUE
+=head2 test_cases_vars.zone04.SOA_RETRY_MINIMUM_VALUE
 
 A positive integer value.
 Recommended lower bound for SOA retry values (in seconds) in test case
@@ -986,9 +986,5 @@ C<net.ipv6> = true has this JSON representation:
 =head2 YAML REPRESENTATION
 
 Similar to the L</JSON REPRESENTATION> but uses a YAML format.
-
-=over
-
-=back
 
 =cut

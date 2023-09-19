@@ -24,9 +24,31 @@ use Zonemaster::Engine::Test::Address;
 use Zonemaster::Engine::TestMethods;
 use Zonemaster::Engine::Util;
 
-###
-### Entry Points
-###
+=head1 NAME
+
+Zonemaster::Engine::Test::Zone - Module implementing tests focused on the DNS zone content, such as SOA and MX records
+
+=head1 SYNOPSIS
+
+    my @results = Zonemaster::Engine::Test::Zone->all( $zone );
+
+=head1 METHODS
+
+=over
+
+=item all()
+
+    my @logentry_array = all( $zone );
+
+Runs the default set of tests for that module, i.e. between L<eight and ten tests|/TESTS> depending on the tested zone.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
 
 sub all {
     my ( $class, $zone ) = @_;
@@ -48,12 +70,22 @@ sub all {
     if ( none { $_->tag eq q{NO_RESPONSE_SOA_QUERY} } @results ) {
         push @results, $class->zone10( $zone ) if Zonemaster::Engine::Util::should_run_test( q{zone10} );
     }
+
     return @results;
 } ## end sub all
 
-###
-### Metadata Exposure
-###
+=over
+
+=item metadata()
+
+    my $hash_ref = metadata();
+
+Returns a reference to a hash, the keys of which are the names of all Test Cases in the module, and the corresponding values are references to
+an array containing all the message tags that the Test Case can use in L<log entries|Zonemaster::Engine::Logger::Entry>.
+
+=back
+
+=cut
 
 sub metadata {
     my ( $class ) = @_;
@@ -420,13 +452,137 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
 );
 
+=over
+
+=item tag_descriptions()
+
+    my $hash_ref = tag_descriptions();
+
+Used by the L<built-in translation system|Zonemaster::Engine::Translator>.
+
+Returns a reference to a hash, the keys of which are the message tags and the corresponding values are strings (message IDs).
+
+=back
+
+=cut
+
 sub tag_descriptions {
     return \%TAG_DESCRIPTIONS;
 }
 
+=over
+
+=item version()
+
+    my $version_string = version();
+
+Returns a string containing the version of the current module.
+
+=back
+
+=cut
+
 sub version {
     return "$Zonemaster::Engine::Test::Zone::VERSION";
 }
+
+=head1 INTERNAL METHODS
+
+=over
+
+=item _is_ip_version_disabled()
+
+    my $bool = _is_ip_version_disabled( $ns, $query_type_string );
+
+Checks if the IP version of a given name server is allowed to be queried. If not, it adds a logging message and returns true. Else, it returns false.
+
+Takes a L<Zonemaster::Engine::Nameserver> object and a string (query type).
+
+Returns a boolean.
+
+=back
+
+=cut
+
+sub _is_ip_version_disabled {
+    my ( $ns, $type ) = @_;
+
+    if ( not Zonemaster::Engine::Profile->effective->get( q{net.ipv4} ) and $ns->address->version == $IP_VERSION_4 ) {
+        Zonemaster::Engine->logger->add(
+            SKIP_IPV4_DISABLED => {
+                ns     => $ns->string,
+                rrtype => $type
+            }
+        );
+        return 1;
+    }
+
+    if ( not Zonemaster::Engine::Profile->effective->get( q{net.ipv6} ) and $ns->address->version == $IP_VERSION_6 ) {
+        Zonemaster::Engine->logger->add(
+            SKIP_IPV6_DISABLED => {
+                ns     => $ns->string,
+                rrtype => $type
+            }
+        );
+        return 1;
+    }
+
+    return;
+}
+
+=over
+
+=item _retrieve_record_from_zone()
+
+    my $packet = _retrieve_record_from_zone( $zone, $name, $query_type_string );
+
+Retrieves resource records of given type for the given name from the response of the first authoritative server of the given zone that has at least one.
+Used as an helper function for Test Cases L<Zone02|/zone02()> to L<Zone07|/zone07()>.
+
+Takes a L<Zonemaster::Engine::Zone> object, a L<Zonemaster::Engine::DNSName> object and a string (query type).
+
+Returns a L<Zonemaster::Engine::Packet> object, or C<undef>.
+
+=back
+
+=cut
+
+sub _retrieve_record_from_zone {
+    my ( $zone, $name, $type ) = @_;
+
+    foreach my $ns ( @{ Zonemaster::Engine::TestMethods->method5( $zone ) } ) {
+
+        if ( _is_ip_version_disabled( $ns, $type ) ) {
+            next;
+        }
+
+        my $p = $ns->query( $name, $type );
+
+        if ( defined $p and scalar $p->get_records( $type, q{answer} ) > 0 ) {
+            return $p if $p->aa;
+        }
+    }
+
+    return;
+}
+
+=head1 TESTS
+
+=over
+
+=item zone01()
+
+    my @logentry_array = zone01( $zone );
+
+Runs the L<Zone01 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Zone-TP/zone01.md>.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
 
 sub zone01 {
     my ( $class, $zone ) = @_;
@@ -582,6 +738,22 @@ sub zone01 {
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) )
 } ## end sub zone01
 
+=over
+
+=item zone02()
+
+    my @logentry_array = zone02( $zone );
+
+Runs the L<Zone02 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Zone-TP/zone02.md>.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
+
 sub zone02 {
     my ( $class, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
@@ -618,6 +790,22 @@ sub zone02 {
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) )
 } ## end sub zone02
 
+=over
+
+=item zone03()
+
+    my @logentry_array = zone03( $zone );
+
+Runs the L<Zone03 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Zone-TP/zone03.md>.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
+
 sub zone03 {
     my ( $class, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
@@ -652,6 +840,22 @@ sub zone03 {
 
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) )
 } ## end sub zone03
+
+=over
+
+=item zone04()
+
+    my @logentry_array = zone04( $zone );
+
+Runs the L<Zone04 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Zone-TP/zone04.md>.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
 
 sub zone04 {
     my ( $class, $zone ) = @_;
@@ -688,6 +892,22 @@ sub zone04 {
 
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) )
 } ## end sub zone04
+
+=over
+
+=item zone05()
+
+    my @logentry_array = zone05( $zone );
+
+Runs the L<Zone05 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Zone-TP/zone05.md>.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
 
 sub zone05 {
     my ( $class, $zone ) = @_;
@@ -736,6 +956,22 @@ sub zone05 {
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) )
 } ## end sub zone05
 
+=over
+
+=item zone06()
+
+    my @logentry_array = zone06( $zone );
+
+Runs the L<Zone06 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Zone-TP/zone06.md>.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
+
 sub zone06 {
     my ( $class, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
@@ -782,6 +1018,22 @@ sub zone06 {
 
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) )
 } ## end sub zone06
+
+=over
+
+=item zone07()
+
+    my @logentry_array = zone07( $zone );
+
+Runs the L<Zone07 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Zone-TP/zone07.md>.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
 
 sub zone07 {
     my ( $class, $zone ) = @_;
@@ -833,6 +1085,22 @@ sub zone07 {
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) )
 } ## end sub zone07
 
+=over
+
+=item zone08()
+
+    my @logentry_array = zone08( $zone );
+
+Runs the L<Zone08 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Zone-TP/zone08.md>.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
+
 sub zone08 {
     my ( $class, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
@@ -858,6 +1126,22 @@ sub zone08 {
 
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) )
 } ## end sub zone08
+
+=over
+
+=item zone09()
+
+    my @logentry_array = zone09( $zone );
+
+Runs the L<Zone09 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Zone-TP/zone09.md>.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
 
 sub zone09 {
     my ( $class, $zone ) = @_;
@@ -1012,6 +1296,22 @@ sub zone09 {
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) )
 } ## end sub zone09
 
+=over
+
+=item zone10()
+
+    my @logentry_array = zone10( $zone );
+
+Runs the L<Zone10 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Zone-TP/zone10.md>.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
+
 sub zone10 {
     my ( $class, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
@@ -1064,129 +1364,4 @@ sub zone10 {
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) )
 } ## end sub zone10
 
-sub _retrieve_record_from_zone {
-    my ( $zone, $name, $type ) = @_;
-
-    # Return response from the first authoritative server that gives one
-    foreach my $ns ( @{ Zonemaster::Engine::TestMethods->method5( $zone ) } ) {
-
-        if ( _is_ip_version_disabled( $ns, $type ) ) {
-            next;
-        }
-
-        my $p = $ns->query( $name, $type );
-
-        if ( defined $p and scalar $p->get_records( $type, q{answer} ) > 0 ) {
-            return $p if $p->aa;
-        }
-    }
-
-    return;
-}
-
-sub _is_ip_version_disabled {
-    my ( $ns, $type ) = @_;
-
-    if ( not Zonemaster::Engine::Profile->effective->get( q{net.ipv4} ) and $ns->address->version == $IP_VERSION_4 ) {
-        Zonemaster::Engine->logger->add(
-            SKIP_IPV4_DISABLED => {
-                ns     => $ns->string,
-                rrtype => $type
-            }
-        );
-        return 1;
-    }
-
-    if ( not Zonemaster::Engine::Profile->effective->get( q{net.ipv6} ) and $ns->address->version == $IP_VERSION_6 ) {
-        Zonemaster::Engine->logger->add(
-            SKIP_IPV6_DISABLED => {
-                ns     => $ns->string,
-                rrtype => $type
-            }
-        );
-        return 1;
-    }
-
-    return;
-}
-
 1;
-
-=head1 NAME
-
-Zonemaster::Engine::Test::Zone - module implementing tests of the zone content in DNS, such as SOA and MX records
-
-=head1 SYNOPSIS
-
-    my @results = Zonemaster::Engine::Test::Zone->all($zone);
-
-=head1 METHODS
-
-=over
-
-=item all($zone)
-
-Runs the default set of tests and returns a list of log entries made by the tests
-
-=item tag_descriptions()
-
-Returns a refernce to a hash with translation functions. Used by the builtin translation system.
-
-=item metadata()
-
-Returns a reference to a hash, the keys of which are the names of all test methods in the module, and the corresponding values are references to
-lists with all the tags that the method can use in log entries.
-
-=item version()
-
-Returns a version string for the module.
-
-=back
-
-=head1 TESTS
-
-=over
-
-=item zone01($zone)
-
-Check that master nameserver in SOA is fully qualified.
-
-=item zone02($zone)
-
-Verify SOA 'refresh' minimum value.
-
-=item zone03($zone)
-
-Verify SOA 'retry' value  is lower than SOA 'refresh' value.
-
-=item zone04($zone)
-
-Verify SOA 'retry' minimum value.
-
-=item zone05($zone)
-
-Verify SOA 'expire' minimum value.
-
-=item zone06($zone)
-
-Verify SOA 'minimum' (default TTL) value.
-
-=item zone07($zone)
-
-Verify that SOA master is not an alias (CNAME).
-
-=item zone08($zone)
-
-Verify that MX records does not resolve to a CNAME.
-
-=item zone09($zone)
-
-Verify that there is a target host (MX, A or AAAA) to deliver e-mail for the domain name.
-
-=item zone10($zone)
-
-Verify that the zone of the domain to be tested return exactly one SOA record.
-
-=back
-
-=cut

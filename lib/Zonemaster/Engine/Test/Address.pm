@@ -17,9 +17,32 @@ use Zonemaster::Engine::Constants qw[:addresses :ip];
 use Zonemaster::Engine::TestMethods;
 use Zonemaster::Engine::Util;
 
-###
-### Entry Points
-###
+=head1 NAME
+
+Zonemaster::Engine::Test::Address - Module implementing tests focused on IP addresses of name servers
+
+=head1 SYNOPSIS
+
+    my @results = Zonemaster::Engine::Test::Address->all( $zone );
+
+=head1 METHODS
+
+=over
+
+=item all()
+
+    my @logentry_array = all( $zone );
+
+Runs the default set of tests for that module, i.e. between L<two and three tests|/TESTS> depending on the tested zone.
+If L<ADDRESS02|/address02()> passes, L<ADDRESS03|/address03()> is run.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
 
 sub all {
     my ( $class, $zone ) = @_;
@@ -35,9 +58,18 @@ sub all {
     return @results;
 }
 
-###
-### Metadata Exposure
-###
+=over
+
+=item metadata()
+
+    my $hash_ref = metadata();
+
+Returns a reference to a hash, the keys of which are the names of all Test Cases in the module, and the corresponding values are references to
+an array containing all the message tags that the Test Case can use in L<log entries|Zonemaster::Engine::Logger::Entry>.
+
+=back
+
+=cut
 
 sub metadata {
     my ( $class ) = @_;
@@ -126,13 +158,55 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
 );
 
+=over
+
+=item tag_descriptions()
+
+    my $hash_ref = tag_descriptions();
+
+Used by the L<built-in translation system|Zonemaster::Engine::Translator>.
+
+Returns a reference to a hash, the keys of which are the message tags and the corresponding values are strings (message IDs).
+
+=back
+
+=cut
+
 sub tag_descriptions {
     return \%TAG_DESCRIPTIONS;
 }
 
+=over
+
+=item version()
+
+    my $version_string = version();
+
+Returns a string containing the version of the current module.
+
+=back
+
+=cut
+
 sub version {
     return "$Zonemaster::Engine::Test::Address::VERSION";
 }
+
+=over
+
+=item find_special_address()
+
+    my $hash_ref = find_special_address( $ip );
+
+Verifies if an IP address is a special (private, reserved, ...) one.
+
+Takes a L<Net::IP::XS> object.
+
+Returns a reference to a hash if true (see L<Zonemaster::Engine::Constants/_extract_iana_ip_blocks()>), or C<undef> if false.
+
+=back
+
+=cut
 
 sub find_special_address {
     my ( $class, $ip ) = @_;
@@ -153,6 +227,24 @@ sub find_special_address {
 
     return;
 }
+
+=head1 TESTS
+
+=over
+
+=item address01()
+
+    my @logentry_array = address01( $zone );
+
+Runs the L<Address01 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Address-TP/address01.md>.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
 
 sub address01 {
     my ( $class, $zone ) = @_;
@@ -190,6 +282,22 @@ sub address01 {
 
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub address01
+
+=over
+
+=item address02()
+
+    my @logentry_array = address02( $zone );
+
+Runs the L<Address02 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Address-TP/address02.md>.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
 
 sub address02 {
     my ( $class, $zone ) = @_;
@@ -247,6 +355,22 @@ sub address02 {
 
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub address02
+
+=over
+
+=item address03()
+
+    my @logentry_array = address03( $zone );
+
+Runs the L<Address03 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Address-TP/address03.md>.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
 
 sub address03 {
     my ( $class, $zone ) = @_;
@@ -317,58 +441,3 @@ sub address03 {
 } ## end sub address03
 
 1;
-
-=head1 NAME
-
-Zonemaster::Engine::Test::Address - module implementing tests focused on the Address specific test cases of the DNS tests
-
-=head1 SYNOPSIS
-
-    my @results = Zonemaster::Engine::Test::Address->all($zone);
-
-=head1 METHODS
-
-=over
-
-=item all($zone)
-
-Runs the default set of tests and returns a list of log entries made by the tests
-
-=item metadata()
-
-Returns a reference to a hash, the keys of which are the names of all test methods in the module, and the corresponding values are references to
-lists with all the tags that the method can use in log entries.
-
-=item tag_descriptions()
-
-Returns a refernce to a hash with translation functions. Used by the builtin translation system.
-
-=item version()
-
-Returns a version string for the module.
-
-=back
-
-=head1 TESTS
-
-=over
-
-=item address01($zone)
-
-Verify that IPv4 addresse are not in private networks.
-
-=item address02($zone)
-
-Verify reverse DNS entries exist for nameservers IP addresses.
-
-=item address03($zone)
-
-Verify that reverse DNS entries match nameservers names.
-
-=item find_special_address($ip)
-
-Verify that an address (Net::IP::XS) given is a special (private, reserved, ...) one.
-
-=back
-
-=cut

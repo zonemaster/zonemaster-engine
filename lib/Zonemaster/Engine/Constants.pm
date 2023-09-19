@@ -16,6 +16,50 @@ use File::ShareDir qw[dist_dir dist_file];
 
 use Readonly;
 
+=head1 NAME
+
+Zonemaster::Engine::Constants - module holding constants used in Test modules
+
+=head1 SYNOPSIS
+
+   use Zonemaster::Engine::Constants ':all';
+
+=head1 EXPORTED GROUPS
+
+=over
+
+=item all
+
+All exportable names.
+
+=item algo
+
+DNSSEC algorithms.
+
+=item name
+
+Label and name lengths.
+
+=item ip
+
+IP version constants.
+
+=item soa
+
+SOA values limits.
+
+=item misc
+
+Other, uncategorized export names, e.g. UDP payload limit and minimum number of name servers per zone.
+
+=item addresses
+
+Address classes for IPv4 and IPv6.
+
+=back
+
+=cut
+
 our @EXPORT_OK = qw[
   $ALGO_STATUS_DEPRECATED
   $ALGO_STATUS_PRIVATE
@@ -62,6 +106,70 @@ our %EXPORT_TAGS = (
     addresses => [qw(@IPV4_SPECIAL_ADDRESSES @IPV6_SPECIAL_ADDRESSES)],
 );
 
+=head1 EXPORTED NAMES
+
+=over
+
+=item * C<$ALGO_STATUS_DEPRECATED>
+
+=item * C<$ALGO_STATUS_PRIVATE>
+
+=item * C<$ALGO_STATUS_RESERVED>
+
+=item * C<$ALGO_STATUS_UNASSIGNED>
+
+=item * C<$ALGO_STATUS_OTHER>
+
+=item * C<$ALGO_STATUS_NOT_RECOMMENDED>
+
+=item * C<$ALGO_STATUS_NOT_ZONE_SIGN>
+
+=item * C<$DURATION_5_MINUTES_IN_SECONDS>
+
+=item * C<$DURATION_1_HOUR_IN_SECONDS>
+
+=item * C<$DURATION_4_HOURS_IN_SECONDS>
+
+=item * C<$DURATION_12_HOURS_IN_SECONDS>
+
+=item * C<$DURATION_1_DAY_IN_SECONDS>
+
+=item * C<$DURATION_1_WEEK_IN_SECONDS>
+
+=item * C<$DURATION_180_DAYS_IN_SECONDS>
+
+=item * C<$FQDN_MAX_LENGTH>
+
+=item * C<$LABEL_MAX_LENGTH>
+
+=item * C<$IP_VERSION_4>
+
+=item * C<$IP_VERSION_6>
+
+=item * C<$SERIAL_BITS>
+
+An integer, used to define the size of the serial number space, as defined in RFC1982, section 2.
+
+=item * C<$SERIAL_MAX_VARIATION>
+
+=item * C<$MINIMUM_NUMBER_OF_NAMESERVERS>
+
+=item * C<$UDP_PAYLOAD_LIMIT>
+
+=item * C<$UDP_EDNS_QUERY_DEFAULT>
+
+An integer, used to define the EDNS0 UDP packet size in EDNS queries.
+
+=item * C<$UDP_COMMON_EDNS_LIMIT>
+
+=item * C<@IPV4_SPECIAL_ADDRESSES>
+
+=item * C<@IPV6_SPECIAL_ADDRESSES>
+
+=back
+
+=cut
+
 Readonly our $ALGO_STATUS_DEPRECATED      => 1;
 Readonly our $ALGO_STATUS_PRIVATE         => 4;
 Readonly our $ALGO_STATUS_RESERVED        => 2;
@@ -102,6 +210,24 @@ Readonly::Array our @IPV4_SPECIAL_ADDRESSES => _extract_iana_ip_blocks($IP_VERSI
 
 Readonly::Array our @IPV6_SPECIAL_ADDRESSES => _extract_iana_ip_blocks($IP_VERSION_6);
 
+=head1 METHODS
+
+=over
+
+=item _extract_iana_ip_blocks()
+
+    my @array = _extract_iana_ip_blocks( $ip_version );
+
+Internal method that is used to extract IP blocks details from IANA files for a given IP version (i.e. 4 or 6).
+
+Takes an integer (IP version).
+
+Returns a list of hashes - the keys of which are C<ip> (L<Net::IP::XS> object), C<name> (string) and C<reference> (string).
+
+=back
+
+=cut
+
 sub _extract_iana_ip_blocks {
     my $ip_version = shift;
     my @list = ();
@@ -141,165 +267,3 @@ sub _extract_iana_ip_blocks {
 } ## end sub _extract_iana_ip_blocks
 
 1;
-
-=head1 NAME
-
-Zonemaster::Engine::Constants - module holding constants used in test modules
-
-=head1 SYNOPSIS
-
-   use Zonemaster::Engine::Constants ':all';
-
-=head1 EXPORTED GROUPS
-
-=over
-
-=item all
-
-All exportable names.
-
-=item algo
-
-DNSSEC algorithms.
-
-=item name
-
-Label and name lengths.
-
-=item ip
-
-IP version constants.
-
-=item soa
-
-SOA value limits.
-
-=item misc
-
-UDP payload limit and minimum number of nameservers per zone.
-
-=item addresses
-
-Address classes for IPv4 and IPv6.
-
-=item extract_iana_ip_blocks($ip_version)
-
-Will extract IPs details from IANA files.
-
-=back
-
-=head1 EXPORTED NAMES
-
-=over
-
-=item *
-
-C<$ALGO_STATUS_DEPRECATED>
-
-=item *
-
-C<$ALGO_STATUS_PRIVATE>
-
-=item *
-
-C<$ALGO_STATUS_RESERVED>
-
-=item *
-
-C<$ALGO_STATUS_UNASSIGNED>
-
-=item *
-
-C<$ALGO_STATUS_OTHER>
-
-=item *
-
-C<$ALGO_STATUS_NOT_RECOMMENDED>
-
-=item *
-
-C<$ALGO_STATUS_NOT_ZONE_SIGN>
-
-=item *
-
-C<$DURATION_5_MINUTES_IN_SECONDS>
-
-=item *
-
-C<$DURATION_1_HOUR_IN_SECONDS>
-
-=item *
-
-C<$DURATION_4_HOURS_IN_SECONDS>
-
-=item *
-
-C<$DURATION_12_HOURS_IN_SECONDS>
-
-=item *
-
-C<$DURATION_1_DAY_IN_SECONDS>
-
-=item *
-
-C<$DURATION_1_WEEK_IN_SECONDS>
-
-=item *
-
-C<$DURATION_180_DAYS_IN_SECONDS>
-
-=item *
-
-C<$FQDN_MAX_LENGTH>
-
-=item *
-
-C<$LABEL_MAX_LENGTH>
-
-=item *
-
-C<$IP_VERSION_4>
-
-=item *
-
-C<$IP_VERSION_6>
-
-=item *
-
-C<$SERIAL_BITS>
-
-An integer, used to define the size of the serial number space, as defined in RFC1982, section 2.
-
-=item *
-
-C<$SERIAL_MAX_VARIATION>
-
-=item *
-
-C<$MINIMUM_NUMBER_OF_NAMESERVERS>
-
-=item *
-
-C<$UDP_PAYLOAD_LIMIT>
-
-=item *
-
-C<$UDP_EDNS_QUERY_DEFAULT>
-
-An integer, used to define the EDNS0 UDP packet size in EDNS queries.
-
-=item *
-
-C<UDP_COMMON_EDNS_LIMIT>
-
-=item *
-
-C<@IPV4_SPECIAL_ADDRESSES>
-
-=item *
-
-C<@IPV6_SPECIAL_ADDRESSES>
-
-=back
-
-=cut

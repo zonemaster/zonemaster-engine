@@ -7,22 +7,27 @@ use warnings;
 
 use version; our $VERSION = version->declare( "v1.1.58" );
 
-###
-### This test module implements DNSSEC tests.
-###
-
-use Zonemaster::LDNS::RR;
-
 use Carp;
 use List::MoreUtils qw[uniq none];
 use List::Util qw[min];
 use Locale::TextDomain qw[Zonemaster-Engine];
 use Readonly;
 
+use Zonemaster::LDNS::RR;
 use Zonemaster::Engine::Profile;
 use Zonemaster::Engine::Constants qw[:algo :soa :ip];
 use Zonemaster::Engine::Util;
 use Zonemaster::Engine::TestMethods;
+
+=head1 NAME
+
+Zonemaster::Engine::Test::DNSSEC - Module implementing tests focused on DNSSEC
+
+=head1 SYNOPSIS
+
+    my @results = Zonemaster::Engine::Test::DNSSEC->all( $zone );
+
+=cut
 
 ### Table fetched from IANA on 2017-03-09
 Readonly::Hash our %algo_properties => (
@@ -197,9 +202,24 @@ Readonly::Hash our %LDNS_digest_algorithms_supported => (
     4 => q{sha384},
 );
 
-###
-### Entry points
-###
+=head1 METHODS
+
+=over
+
+=item all()
+
+    my @logentry_array = all( $zone );
+
+Runs the default set of tests for that module, i.e. between L<one and seventeen tests|/TESTS> depending on the tested zone.
+If L<DNSSEC07|/dnssec07()> finds no DNSKEY nor DS RRs, no other test is run. If L<DNSSEC07|/dnssec07()> finds a DNSKEY RR, L<DNSSEC06|/dnssec06()> is run.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
 
 sub all {
     my ( $class, $zone ) = @_;
@@ -296,9 +316,18 @@ sub all {
     return @results;
 } ## end sub all
 
-###
-### Metadata Exposure
-###
+=over
+
+=item metadata()
+
+    my $hash_ref = metadata();
+
+Returns a reference to a hash, the keys of which are the names of all Test Cases in the module, and the corresponding values are references to
+an array containing all the message tags that the Test Case can use in L<log entries|Zonemaster::Engine::Logger::Entry>.
+
+=back
+
+=cut
 
 sub metadata {
     my ( $class ) = @_;
@@ -1291,13 +1320,57 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
 );
 
+=over
+
+=item tag_descriptions()
+
+    my $hash_ref = tag_descriptions();
+
+Used by the L<built-in translation system|Zonemaster::Engine::Translator>.
+
+Returns a reference to a hash, the keys of which are the message tags and the corresponding values are strings (message IDs).
+
+=back
+
+=cut
+
 sub tag_descriptions {
     return \%TAG_DESCRIPTIONS;
 }
 
+=over
+
+=item version()
+
+    my $version_string = version();
+
+Returns a string containing the version of the current module.
+
+=back
+
+=cut
+
 sub version {
     return "$Zonemaster::Engine::Test::DNSSEC::VERSION";
 }
+
+=head1 INTERNAL METHODS
+
+=over
+
+=item _ip_disabled_message()
+
+    my $bool = _ip_disabled_message( $logentry_array_ref, $ns, @query_type_array );
+
+Checks if the IP version of a given name server is allowed to be queried. If not, it adds a logging message and returns true. Else, it returns false.
+
+Takes a reference to an array of L<Zonemaster::Engine::Logger::Entry> objects, a L<Zonemaster::Engine::Nameserver> object and an array of strings (query type).
+
+Returns a boolean.
+
+=back
+
+=cut
 
 sub _ip_disabled_message {
     my ( $results_array, $ns, @rrtypes ) = @_;
@@ -1328,9 +1401,23 @@ sub _ip_disabled_message {
     return 0;
 }
 
-###
-### Tests
-###
+=head1 TESTS
+
+=over
+
+=item dnssec01()
+
+    my @logentry_array = dnssec01( $zone );
+
+Runs the L<DNSSEC01 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec01.md>.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
 
 sub dnssec01 {
     my ( $class, $zone ) = @_;
@@ -1473,6 +1560,22 @@ sub dnssec01 {
 
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub dnssec01
+
+=over
+
+=item dnssec02()
+
+    my @logentry_array = dnssec02( $zone );
+
+Runs the L<DNSSEC02 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec02.md>.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
 
 sub dnssec02 {
     my ( $self, $zone ) = @_;
@@ -1749,6 +1852,22 @@ sub dnssec02 {
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub dnssec02
 
+=over
+
+=item dnssec03()
+
+    my @logentry_array = dnssec03( $zone );
+
+Runs the L<DNSSEC03 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec03.md>.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
+
 sub dnssec03 {
     my ( $self, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
@@ -1827,6 +1946,22 @@ sub dnssec03 {
 
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub dnssec03
+
+=over
+
+=item dnssec04()
+
+    my @logentry_array = dnssec04( $zone );
+
+Runs the L<DNSSEC04 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec04.md>.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
 
 sub dnssec04 {
     my ( $self, $zone ) = @_;
@@ -1921,6 +2056,22 @@ sub dnssec04 {
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub dnssec04
 
+=over
+
+=item dnssec05()
+
+    my @logentry_array = dnssec05( $zone );
+
+Runs the L<DNSSEC05 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec05.md>.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
+
 sub dnssec05 {
     my ( $self, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
@@ -1997,6 +2148,22 @@ sub dnssec05 {
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub dnssec05
 
+=over
+
+=item dnssec06()
+
+    my @logentry_array = dnssec06( $zone );
+
+Runs the L<DNSSEC06 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec06.md>.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
+
 sub dnssec06 {
     my ( $self, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
@@ -2031,6 +2198,22 @@ sub dnssec06 {
 
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub dnssec06
+
+=over
+
+=item dnssec07()
+
+    my @logentry_array = dnssec07( $zone );
+
+Runs the L<DNSSEC07 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec07.md>.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
 
 sub dnssec07 {
     my ( $self, $zone ) = @_;
@@ -2090,6 +2273,22 @@ sub dnssec07 {
 
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub dnssec07
+
+=over
+
+=item dnssec08()
+
+    my @logentry_array = dnssec08( $zone );
+
+Runs the L<DNSSEC08 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec08.md>.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
 
 sub dnssec08 {
     my ( $self, $zone ) = @_;
@@ -2227,6 +2426,22 @@ sub dnssec08 {
 
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub dnssec08
+
+=over
+
+=item dnssec09()
+
+    my @logentry_array = dnssec09( $zone );
+
+Runs the L<DNSSEC09 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec09.md>.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
 
 sub dnssec09 {
     my ( $self, $zone ) = @_;
@@ -2379,6 +2594,22 @@ sub dnssec09 {
 
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub dnssec09
+
+=over
+
+=item dnssec10()
+
+    my @logentry_array = dnssec10( $zone );
+
+Runs the L<DNSSEC10 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec10.md>.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
 
 sub dnssec10 {
     my ( $class, $zone ) = @_;
@@ -2889,6 +3120,22 @@ sub dnssec10 {
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub dnssec10
 
+=over
+
+=item dnssec11()
+
+    my @logentry_array = dnssec11( $zone );
+
+Runs the L<DNSSEC11 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec11.md>.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
+
 sub dnssec11 {
     my ( $class, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
@@ -3044,6 +3291,22 @@ sub dnssec11 {
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub dnssec11
 
+=over
+
+=item dnssec13()
+
+    my @logentry_array = dnssec13( $zone );
+
+Runs the L<DNSSEC13 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec13.md>.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
+
 sub dnssec13 {
     my ( $class, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
@@ -3114,6 +3377,22 @@ sub dnssec13 {
 
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub dnssec13
+
+=over
+
+=item dnssec14()
+
+    my @logentry_array = dnssec14( $zone );
+
+Runs the L<DNSSEC14 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec14.md>.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
 
 sub dnssec14 {
     my ( $class, $zone ) = @_;
@@ -3188,6 +3467,22 @@ sub dnssec14 {
 
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub dnssec14
+
+=over
+
+=item dnssec15()
+
+    my @logentry_array = dnssec15( $zone );
+
+Runs the L<DNSSEC15 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec15.md>.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
 
 sub dnssec15 {
     my ( $class, $zone ) = @_;
@@ -3399,6 +3694,22 @@ sub dnssec15 {
 
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub dnssec15
+
+=over
+
+=item dnssec16()
+
+    my @logentry_array = dnssec16( $zone );
+
+Runs the L<DNSSEC16 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec16.md>.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
 
 sub dnssec16 {
     my ( $class, $zone ) = @_;
@@ -3649,6 +3960,22 @@ sub dnssec16 {
 
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub dnssec16
+
+=over
+
+=item dnssec17()
+
+    my @logentry_array = dnssec17( $zone );
+
+Runs the L<DNSSEC17 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec17.md>.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
 
 sub dnssec17 {
     my ( $class, $zone ) = @_;
@@ -3903,6 +4230,22 @@ sub dnssec17 {
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub dnssec17
 
+=over
+
+=item dnssec18()
+
+    my @logentry_array = dnssec18( $zone );
+
+Runs the L<DNSSEC18 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec18.md>.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
+
 sub dnssec18 {
     my ( $class, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
@@ -4080,115 +4423,3 @@ sub dnssec18 {
 } ## end sub dnssec18
 
 1;
-
-=head1 NAME
-
-Zonemaster::Engine::Test::DNSSEC - dnssec module showing the expected structure of Zonemaster test modules
-
-=head1 SYNOPSIS
-
-    my @results = Zonemaster::Engine::Test::DNSSEC->all($zone);
-
-=head1 METHODS
-
-=over
-
-=item all($zone)
-
-Runs the default set of tests and returns a list of log entries made by the tests.
-
-=item metadata()
-
-Returns a reference to a hash, the keys of which are the names of all test methods in the module, and the corresponding values are references to
-lists with all the tags that the method can use in log entries.
-
-=item tag_descriptions()
-
-Returns a refernce to a hash with translation functions. Used by the builtin translation system.
-
-=item policy()
-
-Returns a reference to a hash with the default policy for the module. The keys
-are message tags, and the corresponding values are their default log levels.
-
-=item version()
-
-Returns a version string for the module.
-
-=back
-
-=head1 TESTS
-
-=over
-
-=item dnssec01($zone)
-
-Verifies that all DS records have digest types registered with IANA.
-
-=item dnssec02($zone)
-
-Verifies that all DS records have a matching DNSKEY.
-
-=item dnssec03($zone)
-
-Check iteration counts for NSEC3.
-
-=item dnssec04($zone)
-
-Checks the durations of the signatures for the DNSKEY and SOA RRsets.
-
-=item dnssec05($zone)
-
-Check DNSKEY algorithms.
-
-=item dnssec06($zone)
-
-Check for DNSSEC extra processing at child nameservers.
-
-=item dnssec07($zone)
-
-Check that both DS and DNSKEY are present.
-
-=item dnssec08($zone)
-
-Check that the DNSKEY RRset is signed.
-
-=item dnssec09($zone)
-
-Check that the SOA RRset is signed.
-
-=item dnssec10($zone)
-
-Check for the presence of either NSEC or NSEC3, with proper coverage and signatures.
-
-=item dnssec11($zone)
-
-Check that the delegation step from parent is properly signed.
-
-=item dnssec13($zone)
-
-Check that all DNSKEY algorithms are used to sign the zone.
-
-=item dnssec14($zone)
-
-Check for valid RSA DNSKEY key size
-
-=item dnssec15($zone)
-
-Check existence of CDS and CDNSKEY
-
-=item dnssec16($zone)
-
-Validate CDS
-
-=item dnssec17($zone)
-
-Validate CDNSKEY
-
-=item dnssec18($zone)
-
-Validate trust from DS to CDS and CDNSKEY
-
-=back
-
-=cut

@@ -15,7 +15,6 @@ BEGIN {
       name
       ns
       parse_hints
-      pod_extract_for
       should_run_test
       scramble_case
       test_levels
@@ -23,7 +22,7 @@ BEGIN {
     our %EXPORT_TAGS = ( all => \@EXPORT_OK );
 
     ## no critic (Modules::ProhibitAutomaticExportation)
-    our @EXPORT = qw[ ns info name pod_extract_for scramble_case ];
+    our @EXPORT = qw[ ns info name scramble_case ];
 }
 
 use Net::DNS::ZoneFile;
@@ -75,69 +74,6 @@ sub name {
     my ( $name ) = @_;
 
     return Zonemaster::Engine::DNSName->new( $name );
-}
-
-# Functions for extracting POD documentation from test modules
-
-sub _pod_process_tree {
-    my ( $node, $flags ) = @_;
-    my ( $name, $ahash, @subnodes ) = @{$node};
-    my @res;
-
-    $flags //= {};
-
-    foreach my $node ( @subnodes ) {
-        if ( ref( $node ) ne 'ARRAY' ) {
-            $flags->{tests} = 1 if $name eq 'head1' and $node eq 'TESTS';
-            if ( $name eq 'item-text' and $flags->{tests} ) {
-                $node =~ s/\A(\w+).*\z/$1/x;
-                $flags->{item} = $node;
-                push @res, $node;
-            }
-        }
-        else {
-            if ( $flags->{item} ) {
-                push @res, _pod_extract_text( $node );
-            }
-            else {
-                push @res, _pod_process_tree( $node, $flags );
-            }
-        }
-    }
-
-    return @res;
-} ## end sub _pod_process_tree
-
-sub _pod_extract_text {
-    my ( $node ) = @_;
-    my ( $name, $ahash, @subnodes ) = @{$node};
-    my $res = q{};
-
-    foreach my $node ( @subnodes ) {
-        if ( $name eq q{item-text} ) {
-            $node =~ s/\A(\w+).*\z/$1/x;
-        }
-
-        if ( ref( $node ) eq q{ARRAY} ) {
-            $res .= _pod_extract_text( $node );
-        }
-        else {
-            $res .= $node;
-        }
-    }
-
-    return $res;
-} ## end sub _pod_extract_text
-
-sub pod_extract_for {
-    my ( $name ) = @_;
-
-    my $parser = Pod::Simple::SimpleTree->new;
-    $parser->no_whining( 1 );
-
-    my %desc = eval { _pod_process_tree( $parser->parse_file( $INC{"Zonemaster/Engine/Test/$name.pm"} )->root ) };
-
-    return \%desc;
 }
 
 # Function from CPAN package Text::Capitalize that causes
@@ -321,17 +257,6 @@ All address records (A or AAAA) must have an owner name that is identical to the
 domain name in the RDATA of some NS record in the zone.
 
 =back
-
-=item pod_extract_for($testname)
-
-Will attempt to extract the POD documentation for the test methods in
-the test module for which the name is given. If it can, it returns a
-reference to a hash where the keys are the test method names and the
-values the documentation strings.
-
-This method blindly assumes that the structure of the POD is exactly
-like that in the Basic test module.
-If it's not, the results are undefined.
 
 =item serial_gt($serial_a, $serial_b)
 Checks if serial_a is greater than serial_b, according to

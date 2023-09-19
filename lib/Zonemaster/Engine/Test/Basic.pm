@@ -19,9 +19,33 @@ use Zonemaster::Engine::Test::Syntax;
 use Zonemaster::Engine::TestMethods;
 use Zonemaster::Engine::Util;
 
-###
-### Entry Points
-###
+=head1 NAME
+
+Zonemaster::Engine::Test::Basic - Module implementing tests focused on basic zone functionality
+
+=head1 SYNOPSIS
+
+    my @results = Zonemaster::Engine::Test::Basic->all( $zone );
+
+=head1 METHODS
+
+=over
+
+=item all()
+
+    my @logentry_array = all( $zone );
+
+Runs the default set of tests for that module, i.e. between L<one and four tests|/TESTS> depending on the tested zone.
+If L<BASIC00|/basic00()> passes, L<BASIC01|/basic01()> is run. If L<BASIC01|/basic01()> passes, L<BASIC02|/basic02()> is run.
+If L<BASIC02|/basic02()> fails, L<BASIC03|/basic03()> is run.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
 
 sub all {
     my ( $class, $zone ) = @_;
@@ -62,6 +86,22 @@ sub all {
     return @results;
 } ## end sub all
 
+=over
+
+=item can_continue()
+
+    my $bool = can_continue( $zone, @logentry_array );
+
+Determines if further evaluation of the given zone is possible based on the results from the Basic Test Cases.
+
+Takes a L<Zonemaster::Engine::Zone> object and an array of L<Zonemaster::Engine::Logger::Entry> objects.
+
+Returns a boolean.
+
+=back
+
+=cut
+
 sub can_continue {
     my ( $class, $zone, @results ) = @_;
     my %tag = map { $_->tag => 1 } @results;
@@ -75,9 +115,18 @@ sub can_continue {
     }
 }
 
-###
-### Metadata Exposure
-###
+=over
+
+=item metadata()
+
+    my $hash_ref = metadata();
+
+Returns a reference to a hash, the keys of which are the names of all Test Cases in the module, and the corresponding values are references to
+an array containing all the message tags that the Test Case can use in L<log entries|Zonemaster::Engine::Logger::Entry>.
+
+=back
+
+=cut
 
 sub metadata {
     my ( $class ) = @_;
@@ -283,13 +332,58 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
 );
 
+=over
+
+=item tag_descriptions()
+
+    my $hash_ref = tag_descriptions();
+
+Used by the L<built-in translation system|Zonemaster::Engine::Translator>.
+
+Returns a reference to a hash, the keys of which are the message tags and the corresponding values are strings (message IDs).
+
+=back
+
+=cut
+
 sub tag_descriptions {
     return \%TAG_DESCRIPTIONS;
 }
 
+=over
+
+=item version()
+
+    my $version_string = version();
+
+Returns a string containing the version of the current module.
+
+=back
+
+=cut
+
 sub version {
     return "$Zonemaster::Engine::Test::Basic::VERSION";
 }
+
+=head1 INTERNAL METHODS
+
+=over
+
+=item _ip_disabled_message()
+
+    my $bool = _ip_disabled_message( $logentry_array_ref, $ns, @query_type_array );
+
+Checks if the IP version of a given name server is allowed to be queried. If not, it adds a logging message and returns true. Else, it returns false.
+Used in Test Cases in combination with L<_ip_enabled_message()>.
+
+Takes a reference to an array of L<Zonemaster::Engine::Logger::Entry> objects, a L<Zonemaster::Engine::Nameserver> object and an array of strings (query type).
+
+Returns a boolean.
+
+=back
+
+=cut
 
 sub _ip_disabled_message {
     my ( $results_array, $ns, @rrtypes ) = @_;
@@ -320,6 +414,21 @@ sub _ip_disabled_message {
     return 0;
 }
 
+=over
+
+=item _ip_enabled_message()
+
+    _ip_enabled_message( $array_ref, $ns, @query_type_array );
+
+Adds a logging message if the IP version of a given name server is allowed to be queried.
+Used in Test Cases in combination with L<_ip_disabled_message()>.
+
+Takes a reference to an array of L<Zonemaster::Engine::Logger::Entry> objects, a L<Zonemaster::Engine::Nameserver> object and an array of strings (query type).
+
+=back
+
+=cut
+
 sub _ip_enabled_message {
     my ( $results_array, $ns, @rrtypes ) = @_;
 
@@ -346,9 +455,23 @@ sub _ip_enabled_message {
     }
 }
 
-###
-### Tests
-###
+=head1 TESTS
+
+=over
+
+=item basic00()
+
+    my @logentry_array = basic00( $zone );
+
+Runs the L<Basic00 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Basic-TP/basic00.md>.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
 
 sub basic00 {
     my ( $class, $zone ) = @_;
@@ -392,6 +515,22 @@ sub basic00 {
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 
 } ## end sub basic00
+
+=over
+
+=item basic01()
+
+    my @logentry_array = basic01( $zone );
+
+Runs the L<Basic01 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Basic-TP/basic01.md>.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
 
 sub basic01 {
     my ( $class, $zone ) = @_;
@@ -765,6 +904,22 @@ sub basic01 {
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub basic01
 
+=over
+
+=item basic02()
+
+    my @logentry_array = basic02( $zone );
+
+Runs the L<Basic02 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Basic-TP/basic02.md>.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
+
 sub basic02 {
     my ( $class, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
@@ -915,6 +1070,22 @@ sub basic02 {
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 } ## end sub basic02
 
+=over
+
+=item basic03()
+
+    my @logentry_array = basic03( $zone );
+
+Runs the L<Basic03 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Basic-TP/basic03.md>.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
+
 sub basic03 {
     my ( $class, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
@@ -959,66 +1130,3 @@ sub basic03 {
 } ## end sub basic03
 
 1;
-
-=head1 NAME
-
-Zonemaster::Engine::Test::Basic - module implementing test for very basic domain functionality
-
-=head1 SYNOPSIS
-
-    my @results = Zonemaster::Engine::Test::Basic->all($zone);
-
-=head1 METHODS
-
-=over
-
-=item all($zone)
-
-Runs between one and three tests, depending on the zone. If L<basic01> passes, L<basic02> is run. If L<basic02> fails, L<basic03> is run.
-
-=item metadata()
-
-Returns a reference to a hash, the keys of which are the names of all test methods in the module, and the corresponding values are references to
-lists with all the tags that the method can use in log entries.
-
-=item tag_descriptions()
-
-Returns a refernce to a hash with translation functions. Used by the builtin translation system.
-
-=item version()
-
-Returns a version string for the module.
-
-=item can_continue(@results)
-
-Looks at the provided log entries and returns true if they indicate that further testing of the relevant zone is possible.
-
-=back
-
-=head1 TESTS
-
-=over
-
-=item basic00
-
-Checks if the domain name to be tested is valid. Not all syntax tests are done here, it "just" checks domain name total length and labels length.
-In case of failure, all other tests are aborted.
-
-=item basic01
-
-Checks that we can find a parent zone for the zone we're testing. If we can't, no further testing is done.
-
-=item basic02
-
-Checks that the nameservers for the parent zone returns NS records for the tested zone, and that at least one of the nameservers thus pointed out
-responds sensibly to an NS query for the tested zone.
-
-=item basic03
-
-Checks if at least one of the nameservers pointed out by the parent zone gives a useful response when sent an A query for the C<www> label in the
-tested zone (that is, if we're testing C<example.org> this test will as for A records for C<www.example.org>). This test is only run if the
-L<basic02> test has I<failed>.
-
-=back
-
-=cut
