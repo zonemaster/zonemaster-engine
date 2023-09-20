@@ -223,7 +223,6 @@
             "SKIP_IPV6_DISABLED": "DEBUG",
             "START_TIME": "DEBUG",
             "TEST_TARGET": "DEBUG",
-            "TEST_ARGS": "DEBUG",
             "UNKNOWN_METHOD" : "CRITICAL",
             "UNKNOWN_MODULE" : "CRITICAL",
             "IS_BLACKLISTED" : "DEBUG",
