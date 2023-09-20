@@ -451,7 +451,7 @@
             "MNAME_IS_CNAME" : "NOTICE",
             "MNAME_IS_NOT_CNAME" : "INFO",
             "MULTIPLE_SOA" : "ERROR",
-            "MX_RECORD_IS_CNAME" : "INFO",
+            "MX_RECORD_IS_CNAME" : "ERROR",
             "MX_RECORD_IS_NOT_CNAME" : "INFO",
             "NO_RESPONSE" : "DEBUG",
             "NO_RESPONSE_MX_QUERY" : "DEBUG",
