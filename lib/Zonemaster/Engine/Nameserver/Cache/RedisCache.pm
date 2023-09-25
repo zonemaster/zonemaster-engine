@@ -29,11 +29,13 @@ if ( $@ ) {
 }
 
 my $redis;
+my $config;
 our $object_cache = \%Zonemaster::Engine::Nameserver::Cache::object_cache;
 
-my $REDIS_EXPIRE = 3600; # seconds
+my $REDIS_EXPIRE = 5; # seconds
 
 has 'redis' => ( is => 'ro' );
+has 'config' => ( is => 'ro' );
 
 my $mp = Data::MessagePack->new();
 
@@ -47,10 +49,13 @@ sub new {
     } else {
         if (! defined $redis) {
             my $redis_config = Zonemaster::Engine::Profile->effective->get( q{redis} );
-            $redis = Redis->new(%{$redis_config});
+            $redis = Redis->new(server => $redis_config->{server});
+            $config = $redis_config;
         }
         $params->{redis} //= $redis;
         $params->{data} //= {};
+        $params->{config} //= $config;
+        $config->{expire} //= $REDIS_EXPIRE;
         my $class = ref $proto || $proto;
         my $obj = Class::Accessor::new( $class, $params );
 
@@ -65,7 +70,8 @@ sub set_key {
     my ( $self, $hash, $packet ) = @_;
     my $key = "ns:" . $self->address . ":" . $hash;
 
-    my $ttl = $REDIS_EXPIRE;
+    my $redis_expire = $self->{config}->{expire};
+    my $ttl = $redis_expire;
 
     $self->data->{$hash} = $packet;
     if ( defined $packet ) {
@@ -88,7 +94,7 @@ sub set_key {
                 }
             }
         }
-        $ttl = $ttl < $REDIS_EXPIRE ? $ttl : $REDIS_EXPIRE;
+        $ttl = $ttl < $redis_expire ? $ttl : $redis_expire;
         $self->redis->set( $key, $msg, 'EX', $ttl );
     } else {
         $self->redis->set( $key, '', 'EX', $ttl );
