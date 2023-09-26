@@ -12,15 +12,6 @@ our %object_cache;
 has 'data' => ( is => 'ro' );
 has 'address' => ( is => 'ro' );
 
-sub check_cache {
-    my ( $self, $cache ) = @_;
-
-    if ( $cache !~ /^LocalCache$/ ) {
-        warn "Unknown cache format '$cache', using default 'LocalCache'";
-    }
-    return "LocalCache";
-}
-
 sub get_cache_type {
     my ( $class, $profile ) = @_;
     my $cache_type = 'LocalCache';
@@ -76,11 +67,6 @@ A reference to a hash holding the cache of sent queries. Not meant for external 
 =head1 CLASS METHODS
 
 =over
-
-=item check_cache($cache)
-
-Returns a normalized string based on the supported cache format.
-Emits a warning and retun "LocalCache" if the value is not LocalCache.
 
 =item get_cache_type()
 
