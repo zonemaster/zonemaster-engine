@@ -188,35 +188,35 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     ENOUGH_IPV4_NS_CHILD => sub {
         __x    # DELEGATION:ENOUGH_IPV4_NS_CHILD
-          "Child lists enough ({count}) nameservers ({ns_list}) "
-          . "that resolve to IPv4 addresses. Lower limit set to {minimum}.",
+          "Child lists enough ({count}) nameservers that resolve to IPv4 "
+          . "addresses. Lower limit set to {minimum}. Name servers: {ns_list}",
           @_;
     },
     ENOUGH_IPV4_NS_DEL => sub {
         __x    # DELEGATION:ENOUGH_IPV4_NS_DEL
-          "Delegation lists enough ({count}) nameservers ({ns_list}) "
-          . "that resolve to IPv4 addresses. Lower limit set to {minimum}.",
+          "Delegation lists enough ({count}) nameservers that resolve to IPv4 "
+          . "addresses. Lower limit set to {minimum}. Name servers: {ns_list}",
           @_;
     },
     ENOUGH_IPV6_NS_CHILD => sub {
         __x    # DELEGATION:ENOUGH_IPV6_NS_CHILD
-          "Child lists enough ({count}) nameservers ({ns_list}) "
-          . "that resolve to IPv6 addresses. Lower limit set to {minimum}.",
+          "Child lists enough ({count}) nameservers that resolve to IPv6 "
+          . "addresses. Lower limit set to {minimum}. Name servers: {ns_list}",
           @_;
     },
     ENOUGH_IPV6_NS_DEL => sub {
         __x    # DELEGATION:ENOUGH_IPV6_NS_DEL
-          "Delegation lists enough ({count}) nameservers ({ns_list}) "
-          . "that resolve to IPv6 addresses. Lower limit set to {minimum}.",
+          "Delegation lists enough ({count}) nameservers that resolve to IPv6 "
+          . "addresses. Lower limit set to {minimum}. Name servers: {ns_list}",
           @_;
     },
     ENOUGH_NS_CHILD => sub {
         __x    # DELEGATION:ENOUGH_NS_CHILD
-          "Child lists enough ({count}) nameservers ({nsname_list}). Lower limit set to {minimum}.", @_;
+          "Child lists enough ({count}) nameservers. Lower limit set to {minimum}. Name servers: {nsname_list}", @_;
     },
     ENOUGH_NS_DEL => sub {
         __x    # DELEGATION:ENOUGH_NS_DEL
-          "Parent lists enough ({count}) nameservers ({nsname_list}). Lower limit set to {minimum}.", @_;
+          "Parent lists enough ({count}) nameservers. Lower limit set to {minimum}. Name servers: {nsname_list}", @_;
     },
     EXTRA_NAME_CHILD => sub {
         __x    # DELEGATION:EXTRA_NAME_CHILD
@@ -248,35 +248,35 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     NOT_ENOUGH_IPV4_NS_CHILD => sub {
         __x    # DELEGATION:NOT_ENOUGH_IPV4_NS_CHILD
-          "Child does not list enough ({count}) nameservers ({ns_list}) "
-          . "that resolve to IPv4 addresses. Lower limit set to {minimum}.",
+          "Child does not list enough ({count}) nameservers that resolve to IPv4 "
+          . "addresses. Lower limit set to {minimum}. Name servers: {ns_list}",
           @_;
     },
     NOT_ENOUGH_IPV4_NS_DEL => sub {
         __x    # DELEGATION:NOT_ENOUGH_IPV4_NS_DEL
-          "Delegation does not list enough ({count}) nameservers ({ns_list}) "
-          . "that resolve to IPv4 addresses. Lower limit set to {minimum}.",
+          "Delegation does not list enough ({count}) nameservers that resolve to IPv4 "
+          . "addresses. Lower limit set to {minimum}. Name servers: {ns_list}",
           @_;
     },
     NOT_ENOUGH_IPV6_NS_CHILD => sub {
         __x    # DELEGATION:NOT_ENOUGH_IPV6_NS_CHILD
-          "Child does not list enough ({count}) nameservers ({ns_list}) "
-          . "that resolve to IPv6 addresses. Lower limit set to {minimum}.",
+          "Child does not list enough ({count}) nameservers that resolve to IPv6 "
+          . "addresses. Lower limit set to {minimum}. Name servers: {ns_list}",
           @_;
     },
     NOT_ENOUGH_IPV6_NS_DEL => sub {
         __x    # DELEGATION:NOT_ENOUGH_IPV6_NS_DEL
-          "Delegation does not list enough ({count}) nameservers ({ns_list}) "
-          . "that resolve to IPv6 addresses. Lower limit set to {minimum}.",
+          "Delegation does not list enough ({count}) nameservers that resolve to IPv6 "
+          . "addresses. Lower limit set to {minimum}. Name servers: {ns_list}",
           @_;
     },
     NOT_ENOUGH_NS_CHILD => sub {
         __x    # DELEGATION:NOT_ENOUGH_NS_CHILD
-          "Child does not list enough ({count}) nameservers ({nsname_list}). Lower limit set to {minimum}.", @_;
+          "Child does not list enough ({count}) nameservers. Lower limit set to {minimum}. Name servers: {nsname_list}", @_;
     },
     NOT_ENOUGH_NS_DEL => sub {
         __x    # DELEGATION:NOT_ENOUGH_NS_DEL
-          "Parent does not list enough ({count}) nameservers ({nsname_list}). Lower limit set to {minimum}.", @_;
+          "Parent does not list enough ({count}) nameservers. Lower limit set to {minimum}. Name servers: {nsname_list}", @_;
     },
     NO_IPV4_NS_CHILD => sub {
         __x    # DELEGATION:NO_IPV4_NS_CHILD
