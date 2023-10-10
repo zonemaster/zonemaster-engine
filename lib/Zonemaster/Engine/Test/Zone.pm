@@ -342,6 +342,14 @@ Readonly my %TAG_DESCRIPTIONS => (
           . 'and not lower than the \'refresh\' value ({refresh}).',
           @_;
     },
+    IPV4_DISABLED => sub {
+        __x    # ZONE:IPV4_DISABLED
+          'IPv4 is disabled, not sending "{rrtype}" query to {ns}.', @_;
+    },
+    IPV6_DISABLED => sub {
+        __x    # ZONE:IPV6_DISABLED
+          'IPv6 is disabled, not sending "{rrtype}" query to {ns}.', @_;
+    },
     TEST_CASE_END => sub {
         __x    # ZONE:TEST_CASE_END
           'TEST_CASE_END {testcase}.', @_;
@@ -490,13 +498,13 @@ sub version {
 
 =over
 
-=item _is_ip_version_disabled()
+=item _ip_disabled_message()
 
-    my $bool = _is_ip_version_disabled( $ns, $query_type_string );
+    my $bool = _ip_disabled_message( $logentry_array_ref, $ns, @query_type_string );
 
 Checks if the IP version of a given name server is allowed to be queried. If not, it adds a logging message and returns true. Else, it returns false.
 
-Takes a L<Zonemaster::Engine::Nameserver> object and a string (query type).
+Takes a reference to an array of L<Zonemaster::Engine::Logger::Entry> objects, a L<Zonemaster::Engine::Nameserver> object and an array of strings (query type).
 
 Returns a boolean.
 
@@ -504,42 +512,45 @@ Returns a boolean.
 
 =cut
 
-sub _is_ip_version_disabled {
-    my ( $ns, $type ) = @_;
+sub _ip_disabled_message {
+    my ( $results_array, $ns, @rrtypes ) = @_;
 
-    if ( not Zonemaster::Engine::Profile->effective->get( q{net.ipv4} ) and $ns->address->version == $IP_VERSION_4 ) {
-        Zonemaster::Engine->logger->add(
-            SKIP_IPV4_DISABLED => {
+    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
+        push @$results_array, map {
+          info(
+            IPV6_DISABLED => {
                 ns     => $ns->string,
-                rrtype => $type
+                rrtype => $_
             }
-        );
+          )
+        } @rrtypes;
         return 1;
     }
 
-    if ( not Zonemaster::Engine::Profile->effective->get( q{net.ipv6} ) and $ns->address->version == $IP_VERSION_6 ) {
-        Zonemaster::Engine->logger->add(
-            SKIP_IPV6_DISABLED => {
+    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
+        push @$results_array, map {
+          info(
+            IPV4_DISABLED => {
                 ns     => $ns->string,
-                rrtype => $type
+                rrtype => $_,
             }
-        );
+          )
+        } @rrtypes;
         return 1;
     }
-
-    return;
+    return 0;
 }
 
 =over
 
 =item _retrieve_record_from_zone()
 
-    my $packet = _retrieve_record_from_zone( $zone, $name, $query_type_string );
+    my $packet = _retrieve_record_from_zone( $logentry_array_ref, $zone, $name, $query_type_string );
 
 Retrieves resource records of given type for the given name from the response of the first authoritative server of the given zone that has at least one.
 Used as an helper function for Test Cases L<Zone02|/zone02()> to L<Zone07|/zone07()>.
 
-Takes a L<Zonemaster::Engine::Zone> object, a L<Zonemaster::Engine::DNSName> object and a string (query type).
+Takes a reference to an array of L<Zonemaster::Engine::Logger::Entry> objects, a L<Zonemaster::Engine::Zone> object, a L<Zonemaster::Engine::DNSName> object and a string (query type).
 
 Returns a L<Zonemaster::Engine::Packet> object, or C<undef>.
 
@@ -548,11 +559,11 @@ Returns a L<Zonemaster::Engine::Packet> object, or C<undef>.
 =cut
 
 sub _retrieve_record_from_zone {
-    my ( $zone, $name, $type ) = @_;
+    my ( $results_array, $zone, $name, $type ) = @_;
 
     foreach my $ns ( @{ Zonemaster::Engine::TestMethods->method5( $zone ) } ) {
 
-        if ( _is_ip_version_disabled( $ns, $type ) ) {
+        if ( _ip_disabled_message( $results_array, $ns, $type ) ) {
             next;
         }
 
@@ -596,7 +607,7 @@ sub zone01 {
     my @mname_dot;
 
     foreach my $ns ( @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) } ){
-        if ( _is_ip_version_disabled( $ns, q{SOA} ) ){
+        if ( _ip_disabled_message( \@results, $ns, q{SOA} ) ){
             next;
         }
 
@@ -653,7 +664,7 @@ sub zone01 {
                 else{
                     my $ns = Zonemaster::Engine::Nameserver->new( { name => $mname, address => $ip } );
                     
-                    if ( _is_ip_version_disabled( $ns, q{SOA} ) ){
+                    if ( _ip_disabled_message( \@results, $ns, q{SOA} ) ){
                        next;
                     }
 
@@ -758,7 +769,7 @@ sub zone02 {
     my ( $class, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
-    my $p = _retrieve_record_from_zone( $zone, $zone->name, q{SOA} );
+    my $p = _retrieve_record_from_zone( \@results, $zone, $zone->name, q{SOA} );
 
     my $soa_refresh_minimum_value = Zonemaster::Engine::Profile->effective->get( q{test_cases_vars.zone02.SOA_REFRESH_MINIMUM_VALUE} );
 
@@ -810,7 +821,7 @@ sub zone03 {
     my ( $class, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
-    my $p = _retrieve_record_from_zone( $zone, $zone->name, q{SOA} );
+    my $p = _retrieve_record_from_zone( \@results, $zone, $zone->name, q{SOA} );
 
     if ( $p and my ( $soa ) = $p->get_records( q{SOA}, q{answer} ) ) {
         my $soa_retry   = $soa->retry;
@@ -861,7 +872,7 @@ sub zone04 {
     my ( $class, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
-    my $p = _retrieve_record_from_zone( $zone, $zone->name, q{SOA} );
+    my $p = _retrieve_record_from_zone( \@results, $zone, $zone->name, q{SOA} );
 
     my $soa_retry_minimum_value = Zonemaster::Engine::Profile->effective->get( q{test_cases_vars.zone04.SOA_RETRY_MINIMUM_VALUE} );
 
@@ -913,7 +924,7 @@ sub zone05 {
     my ( $class, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
-    my $p = _retrieve_record_from_zone( $zone, $zone->name, q{SOA} );
+    my $p = _retrieve_record_from_zone( \@results, $zone, $zone->name, q{SOA} );
 
     my $soa_expire_minimum_value = Zonemaster::Engine::Profile->effective->get( q{test_cases_vars.zone05.SOA_EXPIRE_MINIMUM_VALUE} );
 
@@ -976,7 +987,7 @@ sub zone06 {
     my ( $class, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
-    my $p = _retrieve_record_from_zone( $zone, $zone->name, q{SOA} );
+    my $p = _retrieve_record_from_zone( \@results, $zone, $zone->name, q{SOA} );
 
     my $soa_default_ttl_maximum_value = Zonemaster::Engine::Profile->effective->get( q{test_cases_vars.zone06.SOA_DEFAULT_TTL_MAXIMUM_VALUE} );
     my $soa_default_ttl_minimum_value = Zonemaster::Engine::Profile->effective->get( q{test_cases_vars.zone06.SOA_DEFAULT_TTL_MINIMUM_VALUE} );
@@ -1039,7 +1050,7 @@ sub zone07 {
     my ( $class, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
-    my $p = _retrieve_record_from_zone( $zone, $zone->name, q{SOA} );
+    my $p = _retrieve_record_from_zone( \@results, $zone, $zone->name, q{SOA} );
 
     if ( $p and my ( $soa ) = $p->get_records( q{SOA}, q{answer} ) ) {
         my $soa_mname = $soa->mname;
@@ -1161,7 +1172,7 @@ sub zone09 {
         next if exists $ip_already_processed{$ns->address->short};
         $ip_already_processed{$ns->address->short} = 1;
 
-        if ( _is_ip_version_disabled( $ns ) ) {
+        if ( _ip_disabled_message( \@results, $ns, qw{SOA MX} ) ) {
             next;
         }
 
@@ -1319,7 +1330,7 @@ sub zone10 {
 
     foreach my $ns ( @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) } ) {
 
-        if ( _is_ip_version_disabled( $ns, q{SOA} ) ) {
+        if ( _ip_disabled_message( \@results, $ns, q{SOA} ) ) {
             next;
         }
 
