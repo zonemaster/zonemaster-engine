@@ -238,7 +238,7 @@
             "MNAME_NO_RESPONSE" : "NOTICE",
             "MNAME_RECORD_DOES_NOT_EXIST" : "WARNING",
             "MX_RECORD_EXISTS" : "INFO",
-            "MX_RECORD_IS_CNAME" : "INFO",
+            "MX_RECORD_IS_CNAME" : "ERROR",
             "MX_RECORD_IS_NOT_CNAME" : "INFO",
             "NO_MX_RECORD" : "NOTICE",
             "NO_RESPONSE_SOA_QUERY" : "DEBUG",
