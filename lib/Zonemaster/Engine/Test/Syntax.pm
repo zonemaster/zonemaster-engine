@@ -54,16 +54,16 @@ sub all {
     my ( $class, $zone ) = @_;
     my @results;
 
-    push @results, $class->syntax01( $zone->name ) if Zonemaster::Engine::Util::should_run_test( q{syntax01} );
-    push @results, $class->syntax02( $zone->name ) if Zonemaster::Engine::Util::should_run_test( q{syntax02} );
-    push @results, $class->syntax03( $zone->name ) if Zonemaster::Engine::Util::should_run_test( q{syntax03} );
+    push @results, $class->syntax01( $zone ) if Zonemaster::Engine::Util::should_run_test( q{syntax01} );
+    push @results, $class->syntax02( $zone ) if Zonemaster::Engine::Util::should_run_test( q{syntax02} );
+    push @results, $class->syntax03( $zone ) if Zonemaster::Engine::Util::should_run_test( q{syntax03} );
 
     if ( any { $_->tag eq q{ONLY_ALLOWED_CHARS} } @results ) {
 
-        foreach my $local_nsname ( uniq map { $_->string } @{ Zonemaster::Engine::TestMethods->method2( $zone ) },
+        foreach my $local_nsname ( uniq map { $_ } @{ Zonemaster::Engine::TestMethods->method2( $zone ) },
             @{ Zonemaster::Engine::TestMethods->method3( $zone ) } )
         {
-            push @results, $class->syntax04( $local_nsname )
+            push @results, $class->syntax04( Zonemaster::Engine->zone( $local_nsname ) )
               if Zonemaster::Engine::Util::should_run_test( q{syntax04} );
         }
 
@@ -554,49 +554,16 @@ sub _label_not_ace_has_double_hyphen_in_position_3_and_4 {
 
 =over
 
-=item _get_name()
-
-    my $name = _get_name( $item );
-
-Converts a given argument to a L<Zonemaster::Engine::DNSName> object. Used as an helper function for Test Cases L<Syntax01|/syntax01()> to L<Syntax04|/syntax04()>.
-
-Takes a string (name), or a L<Zonemaster::Engine::DNSName> object, or a L<Zonemaster::Engine::Zone> object.
-
-Returns a L<Zonemaster::Engine::DNSName> object.
-
-=back
-
-=cut
-
-sub _get_name {
-    my ( $item ) = @_;
-    my $name;
-
-    if ( not ref $item ) {
-        $name = name( $item );
-    }
-    elsif ( ref( $item ) eq q{Zonemaster::Engine::Zone} ) {
-        $name = $item->name;
-    }
-    elsif ( ref( $item ) eq q{Zonemaster::Engine::DNSName} ) {
-        $name = $item;
-    }
-
-    return $name;
-}
-
-=over
-
 =item _check_name_syntax()
 
-    my @logentry_array = _check_name_syntax( $label_prefix_string, $item );
+    my @logentry_array = _check_name_syntax( $label_prefix_string, $name );
 
 Checks the syntax of a given name. Makes use of L</_name_has_only_legal_characters()> and L</_label_not_ace_has_double_hyphen_in_position_3_and_4()>.
 Used as an helper function for Test Cases L<Syntax04|/syntax04()>, L<Syntax07|/syntax07()> and L<Syntax08|/syntax08()>.
 
-Takes a string (label prefix) and either a string (name), a L<Zonemaster::Engine::DNSName> object, or a L<Zonemaster::Engine::Zone> object.
+Takes a string (label prefix) and either a string (name) or a L<Zonemaster::Engine::DNSName> object.
 
-Returns a list of L<Zonemaster::Engine::Logger::Entry> objects. 
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
@@ -606,7 +573,7 @@ sub _check_name_syntax {
     my ( $info_label_prefix, $name ) = @_;
     my @results;
 
-    $name = _get_name( $name );
+    $name = Zonemaster::Engine::Util::name( $name );
 
     if ( not _name_has_only_legal_characters( $name ) ) {
         push @results,
@@ -665,11 +632,11 @@ sub _check_name_syntax {
 
 =item syntax01()
 
-    my @logentry_array = syntax01( $item );
+    my @logentry_array = syntax01( $zone );
 
 Runs the L<Syntax01 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Syntax-TP/syntax01.md>.
 
-Takes either a string (name), a L<Zonemaster::Engine::DNSName> object or a L<Zonemaster::Engine::Zone> object.
+Takes a L<Zonemaster::Engine::Zone> object.
 
 Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
@@ -678,10 +645,10 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 =cut
 
 sub syntax01 {
-    my ( $class, $item ) = @_;
+    my ( $class, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
-    my $name = _get_name( $item );
+    my $name = $zone->name;
 
     if ( _name_has_only_legal_characters( $name ) ) {
         push @results,
@@ -707,11 +674,11 @@ sub syntax01 {
 
 =item syntax02()
 
-    my @logentry_array = syntax02( $item );
+    my @logentry_array = syntax02( $zone );
 
 Runs the L<Syntax02 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Syntax-TP/syntax02.md>.
 
-Takes either a string (name), a L<Zonemaster::Engine::DNSName> object or a L<Zonemaster::Engine::Zone> object.
+Takes a L<Zonemaster::Engine::Zone> object.
 
 Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
@@ -720,10 +687,10 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 =cut
 
 sub syntax02 {
-    my ( $class, $item ) = @_;
+    my ( $class, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
-    my $name = _get_name( $item );
+    my $name = $zone->name;
 
     foreach my $local_label ( @{ $name->labels } ) {
         if ( _label_starts_with_hyphen( $local_label ) ) {
@@ -762,11 +729,11 @@ sub syntax02 {
 
 =item syntax03()
 
-    my @logentry_array = syntax03( $item );
+    my @logentry_array = syntax03( $zone );
 
 Runs the L<Syntax03 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Syntax-TP/syntax03.md>.
 
-Takes either a string (name), a L<Zonemaster::Engine::DNSName> object or a L<Zonemaster::Engine::Zone> object.
+Takes a L<Zonemaster::Engine::Zone> object.
 
 Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
@@ -775,10 +742,10 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 =cut
 
 sub syntax03 {
-    my ( $class, $item ) = @_;
+    my ( $class, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
-    my $name = _get_name( $item );
+    my $name = $zone->name;
 
     foreach my $local_label ( @{ $name->labels } ) {
         if ( _label_not_ace_has_double_hyphen_in_position_3_and_4( $local_label ) ) {
@@ -808,11 +775,11 @@ sub syntax03 {
 
 =item syntax04()
 
-    my @logentry_array = syntax04( $item );
+    my @logentry_array = syntax04( $zone );
 
-Runs the L<Syntax04 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Syntax-TP/syntax01.md>.
+Runs the L<Syntax04 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Syntax-TP/syntax04.md>.
 
-Takes either a string (name), a L<Zonemaster::Engine::DNSName> object or a L<Zonemaster::Engine::Zone> object.
+Takes a L<Zonemaster::Engine::Zone> object.
 
 Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
@@ -821,10 +788,10 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 =cut
 
 sub syntax04 {
-    my ( $class, $item ) = @_;
+    my ( $class, $zone ) = @_;
     push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
 
-    my $name = _get_name( $item );
+    my $name = $zone->name;
 
     push @results, _check_name_syntax( q{NAMESERVER}, $name );
 
@@ -1100,7 +1067,7 @@ sub syntax08 {
         push @results, info( NO_RESPONSE_MX_QUERY => {} );
     }
 
-    return @results;
+    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
 }
 
 1;

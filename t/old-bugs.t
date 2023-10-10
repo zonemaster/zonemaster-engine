@@ -36,7 +36,7 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Profile->effective->set( q{no_network}, 1 );
 }
 
-my @res = Zonemaster::Engine->test_method( 'Syntax', 'syntax03', 'XN--MGBERP4A5D4AR' );
+my @res = Zonemaster::Engine->test_method( 'Syntax', 'syntax03', Zonemaster::Engine->zone( 'XN--MGBERP4A5D4AR' ) );
 is( $res[3]->tag, q{NO_DOUBLE_DASH}, 'No complaint for XN--MGBERP4A5D4AR' );
 
 my $zft_zone = Zonemaster::Engine->zone( 'zft.rd.nic.fr' );
