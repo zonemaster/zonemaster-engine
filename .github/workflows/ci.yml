@@ -53,6 +53,12 @@ jobs:
             libtool \
             m4 \
 
+        # Work around bug in Mail::SPF preventing normal installation with cpanm
+        # (see https://rt.cpan.org/Public/Bug/Display.html?id=34768)
+      - name: Install Mail::SPF (latest)
+        run: |
+          cpanm --notest --install-args="--install_path sbin=$HOME/.local/sbin" Mail::SPF
+
       - name: Install Zonemaster::LDNS (latest)
         if: ${{ matrix.compatibility == 'latest' }}
         run: |
