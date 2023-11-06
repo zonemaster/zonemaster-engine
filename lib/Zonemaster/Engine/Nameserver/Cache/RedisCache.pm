@@ -17,22 +17,21 @@ use Zonemaster::Engine::Profile;
 
 use base qw( Zonemaster::Engine::Nameserver::Cache );
 
-eval( <<EOS
+eval {
     use Data::MessagePack;
     use Redis;
-EOS
-);
+};
 
 
 if ( $@ ) {
-    die "Cant' use the Redis cache. Make sure the Data::MessagePack and Redis module are installed.\n";
+    die "Can't use the Redis cache. Make sure the Data::MessagePack and Redis modules are installed.\n";
 }
 
 my $redis;
 my $config;
 our $object_cache = \%Zonemaster::Engine::Nameserver::Cache::object_cache;
 
-my $REDIS_EXPIRE = 5; # seconds
+my $REDIS_EXPIRE_DEFAULT = 5; # seconds
 
 has 'redis' => ( is => 'ro' );
 has 'config' => ( is => 'ro' );
@@ -55,7 +54,7 @@ sub new {
         $params->{redis} //= $redis;
         $params->{data} //= {};
         $params->{config} //= $config;
-        $config->{expire} //= $REDIS_EXPIRE;
+        $config->{expire} //= $REDIS_EXPIRE_DEFAULT;
         my $class = ref $proto || $proto;
         my $obj = Class::Accessor::new( $class, $params );
 
