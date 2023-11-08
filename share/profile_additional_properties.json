@@ -3,9 +3,11 @@
         "source4": "192.0.2.53",
         "source6": "2001:db8::42"
     },
-    "redis": {
-        "server": "127.0.0.1:6379",
-        "expire": 5
+    "cache": {
+        "redis": {
+            "server": "127.0.0.1:6379",
+            "expire": 5
+        }
     },
     "logfilter" : {
         "BASIC" : {

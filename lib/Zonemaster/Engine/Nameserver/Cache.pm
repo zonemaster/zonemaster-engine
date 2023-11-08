@@ -16,7 +16,7 @@ sub get_cache_type {
     my ( $class, $profile ) = @_;
     my $cache_type = 'LocalCache';
 
-    if ( $profile->get( 'redis' ) ) {
+    if ( $profile->get( 'cache.redis' ) ) {
         $cache_type = 'RedisCache';
     }
 

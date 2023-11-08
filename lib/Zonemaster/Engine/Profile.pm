@@ -22,7 +22,7 @@ $YAML::XS::Boolean = "JSON::PP";
 use Zonemaster::Engine::Constants qw( $RESOLVER_SOURCE_OS_DEFAULT $DURATION_5_MINUTES_IN_SECONDS $DURATION_1_HOUR_IN_SECONDS $DURATION_4_HOURS_IN_SECONDS $DURATION_12_HOURS_IN_SECONDS $DURATION_1_DAY_IN_SECONDS $DURATION_1_WEEK_IN_SECONDS $DURATION_180_DAYS_IN_SECONDS );
 
 my %profile_properties_details = (
-    q{redis} => {
+    q{cache.redis} => {
         type    => q{HashRef},
     },
     q{resolver.defaults.debug} => {
@@ -765,6 +765,17 @@ servers when asn_db.style is set to C<"RIPE">. Normally only the first item
 in the list will be used, the rest are backups in case the earlier ones don't
 work.
 Default C<"asnlookup.zonemaster.net">.
+
+=head2 cache.redis (EXPERIMENTAL)
+
+A hashref. Undefined by default.
+
+Specifies the address of the Redis server used to perform
+global caching (C<cache.redis.server>) and an optional expire time which
+defaults to 5 seconds (C<cache.redis.expire>).
+
+C<cache.redis.server> is a string in the form C<host:port>.
+C<cache.redis.exire> is an integer and defines a time in second.
 
 =head2 logfilter
 
