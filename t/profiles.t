@@ -34,6 +34,10 @@ net:
   ipv4: true
   ipv6: false
 no_network: true
+cache:
+  redis:
+    server: 127.0.0.1:6379
+    expire: 3600
 asnroots:
   - example.com
 logfilter:
@@ -71,6 +75,12 @@ Readonly my $EXAMPLE_PROFILE_1 => q(
     "ipv6": false
   },
   "no_network": true,
+  "cache": {
+    "redis": {
+      "server": "127.0.0.1:6379",
+      "expire": 3600
+    }
+  },
   "asnroots": [
     "example.com"
   ],
@@ -181,6 +191,7 @@ subtest 'new() returns a profile with all properties unset' => sub {
     is $profile->get( 'logfilter' ),                  undef, 'logfilter is unset';
     is $profile->get( 'test_levels' ),                undef, 'test_levels is unset';
     is $profile->get( 'test_cases' ),                 undef, 'test_cases is unset';
+    is $profile->get( 'cache.redis' ),                undef, 'cache.redis is unset';
 };
 
 subtest 'default() returns a new profile every time' => sub {
@@ -240,6 +251,7 @@ subtest 'from_json("{}") returns a profile with all properties unset' => sub {
     is $profile->get( 'logfilter' ),                  undef, 'logfilter is unset';
     is $profile->get( 'test_levels' ),                undef, 'test_levels is unset';
     is $profile->get( 'test_cases' ),                 undef, 'test_cases is unset';
+    is $profile->get( 'cache.redis' ),                undef, 'cache_redis is unset';
 };
 
 subtest 'from_json() parses values from a string' => sub {
@@ -263,6 +275,7 @@ subtest 'from_json() parses values from a string' => sub {
       'logfilter was parsed from JSON';
     eq_or_diff $profile->get( 'test_levels' ), { Zone => { TAG => 'INFO' } }, 'test_levels was parsed from JSON';
     eq_or_diff $profile->get( 'test_cases' ), ['Zone01'], 'test_cases was parsed from JSON';
+    eq_or_diff $profile->get( 'cache.redis' ), { server => '127.0.0.1:6379', expire => 3600 }, 'cache.redis was parsed from JSON';
 };
 
 subtest 'from_json() parses sentinel values from a string' => sub {
