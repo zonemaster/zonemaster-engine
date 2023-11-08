@@ -27,7 +27,6 @@ sub new {
     $attrs->{address} = Net::IP::XS->new( $attrs->{address} )
         if !blessed $attrs->{address} || !$attrs->{address}->isa( 'Net::IP::XS' );
 
-    use Data::Dumper;
     # Type constraint
     confess "Argument must be coercible into a Net::IP::XS: address"
         if !$attrs->{address}->isa( 'Net::IP::XS' );
@@ -52,7 +51,7 @@ sub new {
 }
 
 sub set_key {
-     my ($self, $idx, $packet) = @_;
+     my ( $self, $idx, $packet ) = @_;
      $self->data->{$idx} = $packet;
 }
 
@@ -90,11 +89,11 @@ Construct a new Cache object.
 
 =item set_key($idx, $packet)
 
-Store packet with index idx.
+Store C<$packet> (data) with key C<$idx>.
 
 =item get_key($idx)
 
-Retrieve packet (data) at key idx.
+Retrieve C<$packet> (data) at key C<$idx>.
 
 =back
 

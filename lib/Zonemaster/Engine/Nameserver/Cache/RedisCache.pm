@@ -22,7 +22,6 @@ eval {
     use Redis;
 };
 
-
 if ( $@ ) {
     die "Can't use the Redis cache. Make sure the Data::MessagePack and Redis modules are installed.\n";
 }
@@ -106,9 +105,8 @@ sub get_key {
 
     if ( exists $self->data->{$hash} ) {
         #Zonemaster::Engine->logger->add( MEMORY_CACHE_HIT => { } );
-
-        return (1, $self->data->{$hash});
-    } elsif ($self->redis->exists($key)) {
+        return ( 1, $self->data->{$hash} );
+    } elsif ( $self->redis->exists($key) ) {
         my $fetch_start_time = [ gettimeofday ];
         my $data = $self->redis->get( $key );
         #Zonemaster::Engine->logger->add( REDIS_CACHE_HIT => { } );
@@ -153,11 +151,11 @@ Construct a new Cache object.
 
 =item set_key($idx, $packet)
 
-Store packet with index idx.
+Store C<$packet> with key C<$idx>.
 
 =item get_key($idx)
 
-Retrieve packet (data) at key idx.
+Retrieve C<$packet> (data) at key C<$idx>.
 
 =back
 

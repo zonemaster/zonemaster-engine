@@ -70,13 +70,23 @@ A reference to a hash holding the cache of sent queries. Not meant for external 
 
 =item get_cache_type()
 
-Get the cache type value, i.e. the name of the cache module to use.
+    my $cache_type = get_cache_type( Zonemaster::Engine::Profile->effective );
+
+Get the cache type value from the profile, i.e. the name of the cache module to use.
+
+Takes a L<Zonemaster::Engine::Profile> object.
+
+Returns a string.
 
 =item get_cache_class()
 
+    my $cache_class = get_cache_class( 'LocalCache' );
+
 Get the cache adapter class for the given database type.
 
-Throws and exception if the cache adapter class cannot be loaded.
+Takes a string (cache database type).
+
+Returns a string, or throws an exception if the cache adapter class cannot be loaded.
 
 =item empty_cache()
 
