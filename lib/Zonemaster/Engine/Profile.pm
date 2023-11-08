@@ -22,8 +22,26 @@ $YAML::XS::Boolean = "JSON::PP";
 use Zonemaster::Engine::Constants qw( $RESOLVER_SOURCE_OS_DEFAULT $DURATION_5_MINUTES_IN_SECONDS $DURATION_1_HOUR_IN_SECONDS $DURATION_4_HOURS_IN_SECONDS $DURATION_12_HOURS_IN_SECONDS $DURATION_1_DAY_IN_SECONDS $DURATION_1_WEEK_IN_SECONDS $DURATION_180_DAYS_IN_SECONDS );
 
 my %profile_properties_details = (
-    q{cache.redis} => {
+    q{cache} => {
         type    => q{HashRef},
+        test    => sub {
+            my @allowed_keys = ( 'redis' );
+            foreach my $cache_database ( keys %{$_[0]} ) {
+                if ( not grep( /^$cache_database$/, @allowed_keys ) ) {
+                    die "Property cache keys have " . scalar @allowed_keys . " possible values : " . join(", ", @allowed_keys);
+                }
+
+                if ( not scalar keys %{ $_[0]->{$cache_database} } ) {
+                    die "Property cache.$cache_database has no items";
+                }
+                else {
+                    foreach my $key ( keys %{ $_[0]->{$cache_database} } ) {
+                        die "Property cache.$cache_database.$key has a NULL or empty item" if not $_[0]->{$cache_database}->{$key};
+                        die "Property cache.$cache_database.$key has a negative value" if ( $key eq 'expire' and scalar $_[0]->{$cache_database}->{$key} < 0 ) ;
+                    }
+                }
+            }
+        }
     },
     q{resolver.defaults.debug} => {
         type    => q{Bool}
@@ -766,16 +784,23 @@ in the list will be used, the rest are backups in case the earlier ones don't
 work.
 Default C<"asnlookup.zonemaster.net">.
 
+=head2 cache (EXPERIMENTAL)
+
+A hash of hashes. The currently supported keys are C<"redis">.
+
+See more information in L<cache.redis>.
+
+Undefined by default.
+
 =head2 cache.redis (EXPERIMENTAL)
 
-A hashref. Undefined by default.
+A hashref. The currently supported keys are C<"server"> and C<"expire">.
 
-Specifies the address of the Redis server used to perform
-global caching (C<cache.redis.server>) and an optional expire time which
-defaults to 5 seconds (C<cache.redis.expire>).
+Specifies the address of the Redis server used to perform global caching
+(C<cache.redis.server>) and an optional expire time (C<cache.redis.expire>).
 
-C<cache.redis.server> is a string in the form C<host:port>.
-C<cache.redis.exire> is an integer and defines a time in second.
+C<cache.redis.server> must be a string in the form C<host:port>.
+C<cache.redis.expire> must be a non-negative integer and defines a time in seconds. Default 5 seconds.
 
 =head2 logfilter
 

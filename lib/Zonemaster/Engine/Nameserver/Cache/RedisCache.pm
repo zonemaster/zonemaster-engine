@@ -46,7 +46,7 @@ sub new {
         return $object_cache->{ $params->{address} };
     } else {
         if (! defined $redis) {
-            my $redis_config = Zonemaster::Engine::Profile->effective->get( q{cache.redis} );
+            my $redis_config = Zonemaster::Engine::Profile->effective->get( q{cache} )->{'redis'};
             $redis = Redis->new(server => $redis_config->{server});
             $config = $redis_config;
         }
