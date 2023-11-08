@@ -104,12 +104,12 @@ sub get_key {
     my $key = "ns:" . $self->address . ":" . $hash;
 
     if ( exists $self->data->{$hash} ) {
-        #Zonemaster::Engine->logger->add( MEMORY_CACHE_HIT => { } );
+        Zonemaster::Engine->logger->add( MEMORY_CACHE_HIT => { hash => $hash } );
         return ( 1, $self->data->{$hash} );
     } elsif ( $self->redis->exists($key) ) {
         my $fetch_start_time = [ gettimeofday ];
         my $data = $self->redis->get( $key );
-        #Zonemaster::Engine->logger->add( REDIS_CACHE_HIT => { } );
+        Zonemaster::Engine->logger->add( REDIS_CACHE_HIT => { key => $key } );
         if ( not length($data) ) {
             $self->data->{$hash} = undef;
         } else {
@@ -123,7 +123,7 @@ sub get_key {
         }
         return ( 1, $self->data->{$hash} );
     }
-    #Zonemaster::Engine->logger->add( CACHE_MISS => { } );
+    Zonemaster::Engine->logger->add( CACHE_MISS => { key => $key } );
     return ( 0, undef )
 }
 
