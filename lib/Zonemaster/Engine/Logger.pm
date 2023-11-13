@@ -63,9 +63,9 @@ sub _check_filter {
     }
 
     if ( $logfilter ) {
-        if ( $logfilter->{ $entry->module } ) {
+        if ( $logfilter->{ uc $entry->module } ) {
             my $match = 0;
-            foreach my $rule ( @{$logfilter->{ $entry->module }{ $entry->tag }} ) {
+            foreach my $rule ( @{$logfilter->{ uc $entry->module }{ $entry->tag }} ) {
                 foreach my $key ( keys %{ $rule->{when} } ) {
                     my $cond = $rule->{when}{$key};
                     if ( ref( $cond ) and ref( $cond ) eq 'ARRAY' ) {
