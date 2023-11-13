@@ -16,6 +16,7 @@ use Data::Dumper;
 use Net::IP::XS;
 use Log::Any qw( $log );
 use YAML::XS qw();
+use Scalar::Util qw( looks_like_number );
 
 $YAML::XS::Boolean = "JSON::PP";
 
@@ -28,16 +29,25 @@ my %profile_properties_details = (
             my @allowed_keys = ( 'redis' );
             foreach my $cache_database ( keys %{$_[0]} ) {
                 if ( not grep( /^$cache_database$/, @allowed_keys ) ) {
-                    die "Property cache keys have " . scalar @allowed_keys . " possible values : " . join(", ", @allowed_keys);
+                    die "Property cache keys have " . scalar @allowed_keys . " possible values: " . join(", ", @allowed_keys);
                 }
 
                 if ( not scalar keys %{ $_[0]->{$cache_database} } ) {
                     die "Property cache.$cache_database has no items";
                 }
                 else {
+                    my @allowed_subkeys;
+                    if ( $cache_database eq 'redis' ) {
+                        @allowed_subkeys = ( 'server', 'expire' );
+                    }
+
                     foreach my $key ( keys %{ $_[0]->{$cache_database} } ) {
+                        if ( not grep( /^$key$/, @allowed_subkeys ) ) {
+                            die "Property cache.$cache_database subkeys have " . scalar @allowed_subkeys . " possible values: " . join(", ", @allowed_subkeys);
+                        }
+
                         die "Property cache.$cache_database.$key has a NULL or empty item" if not $_[0]->{$cache_database}->{$key};
-                        die "Property cache.$cache_database.$key has a negative value" if ( $key eq 'expire' and scalar $_[0]->{$cache_database}->{$key} < 0 ) ;
+                        die "Property cache.$cache_database.$key has a negative value" if ( looks_like_number( $_[0]->{$cache_database}->{$key} ) and $_[0]->{$cache_database}->{$key} < 0 ) ;
                     }
                 }
             }
