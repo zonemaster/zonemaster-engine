@@ -17,6 +17,8 @@ use Zonemaster::Engine::Constants qw[:addresses :ip];
 use Zonemaster::Engine::TestMethods;
 use Zonemaster::Engine::Util;
 
+sub emit_log { Zonemaster::Engine->logger->add( @_, 'Address' ) }
+
 =head1 NAME
 
 Zonemaster::Engine::Test::Address - Module implementing tests focused on IP addresses of name servers
@@ -250,7 +252,7 @@ sub address01 {
     my ( $class, $zone ) = @_;
 
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Address01';
-    push my @results, info( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+    push my @results, emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
     my %ips;
 
     foreach
@@ -263,7 +265,7 @@ sub address01 {
 
         if ( $ip_details_ref ) {
             push @results,
-              info(
+              emit_log(
                 NAMESERVER_IP_PRIVATE_NETWORK => {
                     nsname    => $local_ns->name->string,
                     ns_ip     => $local_ns->address->short,
@@ -279,10 +281,10 @@ sub address01 {
     } ## end foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods...})
 
     if ( scalar keys %ips and not grep { $_->tag ne q{TEST_CASE_START} } @results ) {
-        push @results, info( NO_IP_PRIVATE_NETWORK => {} );
+        push @results, emit_log( NO_IP_PRIVATE_NETWORK => {} );
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
+    return ( @results, emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub address01
 
 =over
@@ -305,7 +307,7 @@ sub address02 {
     my ( $class, $zone ) = @_;
 
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Address02';
-    push my @results, info( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+    push my @results, emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     my %ips;
     my $ptr_query;
@@ -332,7 +334,7 @@ sub address02 {
         if ( $p ) {
             if ( $p->rcode ne q{NOERROR} or not $p->get_records( q{PTR}, q{answer} ) ) {
                 push @results,
-                  info(
+                  emit_log(
                     NAMESERVER_IP_WITHOUT_REVERSE => {
                         nsname => $local_ns->name->string,
                         ns_ip  => $local_ns->address->short,
@@ -342,7 +344,7 @@ sub address02 {
         }
         else {
             push @results,
-              info(
+              emit_log(
                 NO_RESPONSE_PTR_QUERY => {
                     domain => $ptr_query,
                 }
@@ -354,10 +356,10 @@ sub address02 {
     } ## end foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods...})
 
     if ( scalar keys %ips and not grep { $_->tag ne q{TEST_CASE_START} } @results ) {
-        push @results, info( NAMESERVERS_IP_WITH_REVERSE => {} );
+        push @results, emit_log( NAMESERVERS_IP_WITH_REVERSE => {} );
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
+    return ( @results, emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub address02
 
 =over
@@ -380,7 +382,7 @@ sub address03 {
     my ( $class, $zone ) = @_;
 
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Address03';
-    push my @results, info( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+    push my @results, emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
     my $ptr_query;
 
     my %ips;
@@ -407,7 +409,7 @@ sub address03 {
             if ( $p->rcode eq q{NOERROR} and scalar @ptr ) {
                 if ( none { name( $_->ptrdname ) eq $local_ns->name->string . q{.} } @ptr ) {
                     push @results,
-                      info(
+                      emit_log(
                         NAMESERVER_IP_PTR_MISMATCH => {
                             nsname => $local_ns->name->string,
                             ns_ip  => $local_ns->address->short,
@@ -418,7 +420,7 @@ sub address03 {
             }
             else {
                 push @results,
-                  info(
+                  emit_log(
                     NAMESERVER_IP_WITHOUT_REVERSE => {
                         nsname => $local_ns->name->string,
                         ns_ip  => $local_ns->address->short,
@@ -428,7 +430,7 @@ sub address03 {
         } ## end if ( $p )
         else {
             push @results,
-              info(
+              emit_log(
                 NO_RESPONSE_PTR_QUERY => {
                     domain => $ptr_query,
                 }
@@ -440,10 +442,10 @@ sub address03 {
     } ## end foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods...})
 
     if ( scalar keys %ips and not grep { $_->tag ne q{TEST_CASE_START} } @results ) {
-        push @results, info( NAMESERVER_IP_PTR_MATCH => {} );
+        push @results, emit_log( NAMESERVER_IP_PTR_MATCH => {} );
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
+    return ( @results, emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub address03
 
 1;

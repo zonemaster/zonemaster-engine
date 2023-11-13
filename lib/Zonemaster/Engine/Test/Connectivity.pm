@@ -18,6 +18,8 @@ use Zonemaster::Engine::Constants qw[:ip];
 use Zonemaster::Engine::TestMethods;
 use Zonemaster::Engine::Util;
 
+sub emit_log { Zonemaster::Engine->logger->add( @_, 'Connectivity' ) }
+
 =head1 NAME
 
 Zonemaster::Engine::Test::Connectivity - Module implementing tests focused on name servers reachability
@@ -429,7 +431,7 @@ sub _ip_disabled_message {
 
     if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
         push @$results_array, map {
-          info(
+          emit_log(
             IPV6_DISABLED => {
                 ns     => $ns->string,
                 rrtype => $_
@@ -441,7 +443,7 @@ sub _ip_disabled_message {
 
     if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
         push @$results_array, map {
-          info(
+          emit_log(
             IPV4_DISABLED => {
                 ns     => $ns->string,
                 rrtype => $_,
@@ -490,7 +492,7 @@ sub _connectivity_loop {
         );
 
         if ( not $packets{SOA} and not $packets{NS} ) {
-            push @$results, info( "${testcase_prefix}_NO_RESPONSE_${protocol}" => { ns => $ns->string } );
+            push @$results, emit_log( "${testcase_prefix}_NO_RESPONSE_${protocol}" => { ns => $ns->string } );
             next;
         }
 
@@ -498,10 +500,10 @@ sub _connectivity_loop {
             my $pkt = $packets{$qtype};
 
             if ( not $pkt ) {
-                push @$results, info( "${testcase_prefix}_NO_RESPONSE_${qtype}_QUERY_${protocol}" => { ns => $ns->string } );
+                push @$results, emit_log( "${testcase_prefix}_NO_RESPONSE_${qtype}_QUERY_${protocol}" => { ns => $ns->string } );
             }
             elsif ( $pkt->rcode ne q{NOERROR} ) {
-                push @$results, info( "${testcase_prefix}_UNEXPECTED_RCODE_${qtype}_QUERY_${protocol}" => {
+                push @$results, emit_log( "${testcase_prefix}_UNEXPECTED_RCODE_${qtype}_QUERY_${protocol}" => {
                         ns    => $ns->string,
                         rcode => $pkt->rcode
                     }
@@ -510,10 +512,10 @@ sub _connectivity_loop {
             else {
                 my ( $rr ) = $pkt->get_records( $qtype, q{answer} );
                 if ( not $rr ) {
-                    push @$results, info( "${testcase_prefix}_MISSING_${qtype}_RECORD_${protocol}" => { ns => $ns->string } );
+                    push @$results, emit_log( "${testcase_prefix}_MISSING_${qtype}_RECORD_${protocol}" => { ns => $ns->string } );
                 }
                 elsif ( lc($rr->owner) ne lc($name->fqdn) ) {
-                    push @$results, info( "${testcase_prefix}_WRONG_${qtype}_RECORD_${protocol}" => {
+                    push @$results, emit_log( "${testcase_prefix}_WRONG_${qtype}_RECORD_${protocol}" => {
                             ns              => $ns->string,
                             domain_found    => lc($rr->owner),
                             domain_expected => lc($name->fqdn)
@@ -521,7 +523,7 @@ sub _connectivity_loop {
                     );
                 }
                 elsif ( not $pkt->aa ) {
-                    push @$results, info( "${testcase_prefix}_${qtype}_RECORD_NOT_AA_${protocol}" => { ns => $ns->string } );
+                    push @$results, emit_log( "${testcase_prefix}_${qtype}_RECORD_NOT_AA_${protocol}" => { ns => $ns->string } );
                 }
             }
         }
@@ -550,7 +552,7 @@ sub connectivity01 {
     my ( $class, $zone ) = @_;
 
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Connectivity01';
-    push my @results, info( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+    push my @results, emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
     my $name = name( $zone );
     my @ns_list = @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) };
 
@@ -565,15 +567,15 @@ sub connectivity01 {
         }
     }
     if ( @ns_ipv4 ) {
-        push @results, info( "CN01_IPV4_DISABLED" => { ns_list => join( ';', @ns_ipv4 ) } );
+        push @results, emit_log( "CN01_IPV4_DISABLED" => { ns_list => join( ';', @ns_ipv4 ) } );
     }
     if ( @ns_ipv6 ) {
-        push @results, info( "CN01_IPV6_DISABLED" => { ns_list => join( ';', @ns_ipv6 ) } );
+        push @results, emit_log( "CN01_IPV6_DISABLED" => { ns_list => join( ';', @ns_ipv6 ) } );
     }
 
     _connectivity_loop("connectivity01", $name, \@ns_list, \@results);
 
-    return ( @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
+    return ( @results, emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub connectivity01
 
 =over
@@ -596,13 +598,13 @@ sub connectivity02 {
     my ( $class, $zone ) = @_;
 
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Connectivity02';
-    push my @results, info( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+    push my @results, emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
     my $name = name( $zone );
     my @ns_list = @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) };
 
     _connectivity_loop("connectivity02", $name, \@ns_list, \@results);
 
-    return ( @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
+    return ( @results, emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub connectivity02
 
 =over
@@ -625,7 +627,7 @@ sub connectivity03 {
     my ( $class, $zone ) = @_;
 
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Connectivity03';
-    push my @results, info( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+    push my @results, emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     my %ips = ( $IP_VERSION_4 => {}, $IP_VERSION_6 => {} );
 
@@ -645,12 +647,12 @@ sub connectivity03 {
     foreach my $v4ip ( @v4ips ) {
         my ( $asnref, $prefix, $raw, $ret_code ) = Zonemaster::Engine::ASNLookup->get_with_prefix( $v4ip );
         if ( defined $ret_code and ( $ret_code eq q{ERROR_ASN_DATABASE} or $ret_code eq q{EMPTY_ASN_SET} ) ) {
-            push @results, info( $ret_code => { ns_ip => $v4ip->short } );
+            push @results, emit_log( $ret_code => { ns_ip => $v4ip->short } );
         }
         else {
             if ( $raw ) {
                 push @results,
-                  info(
+                  emit_log(
                     ASN_INFOS_RAW => {
                         ns_ip => $v4ip->short,
                         data  => $raw,
@@ -659,7 +661,7 @@ sub connectivity03 {
             }
             if ( $asnref ) {
                 push @results,
-                  info(
+                  emit_log(
                     ASN_INFOS_ANNOUNCE_BY => {
                         ns_ip => $v4ip->short,
                         asn   => join( q{,}, sort @{$asnref} ),
@@ -670,7 +672,7 @@ sub connectivity03 {
             }
             if ( $prefix ) {
                 push @results,
-                  info(
+                  emit_log(
                     ASN_INFOS_ANNOUNCE_IN => {
                         ns_ip  => $v4ip->short,
                         prefix => sprintf "%s/%d",
@@ -683,12 +685,12 @@ sub connectivity03 {
     foreach my $v6ip ( @v6ips ) {
         my ( $asnref, $prefix, $raw, $ret_code ) = Zonemaster::Engine::ASNLookup->get_with_prefix( $v6ip );
         if ( defined $ret_code and ( $ret_code eq q{ERROR_ASN_DATABASE} or $ret_code eq q{EMPTY_ASN_SET} ) ) {
-            push @results, info( $ret_code => { ns_ip => $v6ip->short } );
+            push @results, emit_log( $ret_code => { ns_ip => $v6ip->short } );
         }
         else {
             if ( $raw ) {
                 push @results,
-                  info(
+                  emit_log(
                     ASN_INFOS_RAW => {
                         ns_ip => $v6ip->short,
                         data  => $raw,
@@ -697,7 +699,7 @@ sub connectivity03 {
             }
             if ( $asnref ) {
                 push @results,
-                  info(
+                  emit_log(
                     ASN_INFOS_ANNOUNCE_BY => {
                         ns_ip => $v6ip->short,
                         asn   => join( q{,}, sort @{$asnref} ),
@@ -708,7 +710,7 @@ sub connectivity03 {
             }
             if ( $prefix ) {
                 push @results,
-                  info(
+                  emit_log(
                     ASN_INFOS_ANNOUNCE_IN => {
                         ns_ip  => $v6ip->short,
                         prefix => sprintf "%s/%d",
@@ -726,29 +728,29 @@ sub connectivity03 {
 
     if ( scalar @v4asns ) {
         if ( @v4asns == 1 ) {
-            push @results, info( IPV4_ONE_ASN => { asn => $v4asns[0] } );
+            push @results, emit_log( IPV4_ONE_ASN => { asn => $v4asns[0] } );
         }
         elsif ( @v4asnsets == 1 ) {
-            push @results, info( IPV4_SAME_ASN => { asn_list => $v4asnsets[0] } );
+            push @results, emit_log( IPV4_SAME_ASN => { asn_list => $v4asnsets[0] } );
         }
         else {
-            push @results, info( IPV4_DIFFERENT_ASN => { asn_list => join( q{,}, @v4asns ) } );
+            push @results, emit_log( IPV4_DIFFERENT_ASN => { asn_list => join( q{,}, @v4asns ) } );
         }
     }
 
     if ( scalar @v6asns ) {
         if ( @v6asns == 1 ) {
-            push @results, info( IPV6_ONE_ASN => { asn => $v6asns[0] } );
+            push @results, emit_log( IPV6_ONE_ASN => { asn => $v6asns[0] } );
         }
         elsif ( @v6asnsets == 1 ) {
-            push @results, info( IPV6_SAME_ASN => { asn_list => $v6asnsets[0] } );
+            push @results, emit_log( IPV6_SAME_ASN => { asn_list => $v6asnsets[0] } );
         }
         else {
-            push @results, info( IPV6_DIFFERENT_ASN => { asn_list => join( q{,}, @v6asns ) } );
+            push @results, emit_log( IPV6_DIFFERENT_ASN => { asn_list => join( q{,}, @v6asns ) } );
         }
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
+    return ( @results, emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub connectivity03
 
 =over
@@ -771,7 +773,7 @@ sub connectivity04 {
     my ( $class, $zone ) = @_;
 
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Connectivity04';
-    push my @results, info( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+    push my @results, emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     my %prefixes;
 
@@ -787,12 +789,12 @@ sub connectivity04 {
                 $ret_code = 'CN04_EMPTY_PREFIX_SET';
             }
 
-            push @results, info( $ret_code => { ns_ip => $ip->short } );
+            push @results, emit_log( $ret_code => { ns_ip => $ip->short } );
         }
         else {
             if ( $raw ) {
                 push @results,
-                  info(
+                  emit_log(
                     CN04_ASN_INFOS_RAW => {
                         ns_ip => $ip->short,
                         data  => $raw,
@@ -814,7 +816,7 @@ sub connectivity04 {
                 }
 
                 push @results,
-                  info(
+                  emit_log(
                     CN04_ASN_INFOS_ANNOUNCE_IN => {
                         ns_ip  => $ip->short,
                         prefix => sprintf "%s", $prefix_str,
@@ -835,7 +837,7 @@ sub connectivity04 {
             }
             elsif ( scalar @{ $prefixes{$ip_version}{$prefix} } >= 2 ) {
                 push @results,
-                  info(
+                  emit_log(
                     "CN04_IPV${ip_version}_SAME_PREFIX" => {
                         ip_prefix => $prefix,
                         ns_list => join( q{;}, sort @{ $prefixes{$ip_version}{$prefix} } )
@@ -846,7 +848,7 @@ sub connectivity04 {
 
         if ( scalar @combined_ns ) {
             push @results,
-              info(
+              emit_log(
                 "CN04_IPV${ip_version}_DIFFERENT_PREFIX" => {
                     ns_list => join( q{;}, sort @combined_ns )
                 }
@@ -854,7 +856,7 @@ sub connectivity04 {
         }
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
+    return ( @results, emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub connectivity04
 
 1;

@@ -231,7 +231,7 @@ sub to_string {
 sub translate_tag {
     my ( $self, $entry ) = @_;
 
-    return $self->_translate_tag( $entry->module, $entry->tag, $entry->printable_args ) // $entry->string;
+    return $self->_translate_tag( uc $entry->module, $entry->tag, $entry->printable_args ) // $entry->string;
 }
 
 
