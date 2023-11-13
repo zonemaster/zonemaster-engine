@@ -248,7 +248,9 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 sub address01 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Address01';
+    push my @results, info( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
     my %ips;
 
     foreach
@@ -280,7 +282,7 @@ sub address01 {
         push @results, info( NO_IP_PRIVATE_NETWORK => {} );
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub address01
 
 =over
@@ -301,7 +303,9 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 sub address02 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Address02';
+    push my @results, info( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     my %ips;
     my $ptr_query;
@@ -353,7 +357,7 @@ sub address02 {
         push @results, info( NAMESERVERS_IP_WITH_REVERSE => {} );
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub address02
 
 =over
@@ -374,7 +378,9 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 sub address03 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Address03';
+    push my @results, info( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
     my $ptr_query;
 
     my %ips;
@@ -437,7 +443,7 @@ sub address03 {
         push @results, info( NAMESERVER_IP_PTR_MATCH => {} );
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub address03
 
 1;

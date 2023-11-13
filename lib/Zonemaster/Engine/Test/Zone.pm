@@ -62,7 +62,7 @@ sub all {
     push @results, $class->zone06( $zone ) if Zonemaster::Engine::Util::should_run_test( q{zone06} );
     push @results, $class->zone07( $zone ) if Zonemaster::Engine::Util::should_run_test( q{zone07} );
     push @results, $class->zone08( $zone ) if Zonemaster::Engine::Util::should_run_test( q{zone08} );
-    
+
     if ( none { $_->tag eq q{NO_RESPONSE_MX_QUERY} } @results ) {
         push @results, $class->zone09( $zone ) if Zonemaster::Engine::Util::should_run_test( q{zone09} );
     }
@@ -597,7 +597,9 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 sub zone01 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Zone01';
+    push my @results, info( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     my %mname_ns;
     my @serial_ns;
@@ -645,7 +647,7 @@ sub zone01 {
 
     my $found_ip = 0;
     my $found_serial = 0;
-    
+
     foreach my $mname ( keys %mname_ns ){
         if ( none { $_ eq $mname } @{ Zonemaster::Engine::TestMethods->method3( $zone ) } ){
             push @results, info( Z01_MNAME_NOT_IN_NS_LIST => { nsname => $mname } );
@@ -663,7 +665,7 @@ sub zone01 {
                 }
                 else{
                     my $ns = Zonemaster::Engine::Nameserver->new( { name => $mname, address => $ip } );
-                    
+
                     if ( _ip_disabled_message( \@results, $ns, q{SOA} ) ){
                        next;
                     }
@@ -720,8 +722,8 @@ sub zone01 {
         }
 
         if ( %mname_not_master ){
-            push @results, 
-                info( 
+            push @results,
+                info(
                     Z01_MNAME_NOT_MASTER => {
                         ns_list => join( q{;}, sort map
                                         {
@@ -737,8 +739,8 @@ sub zone01 {
         }
 
         if ( @mname_master ){
-            push @results, 
-                info( 
+            push @results,
+                info(
                     Z01_MNAME_IS_MASTER => {
                         ns_list  => join( q{;}, sort @mname_master )
                     }
@@ -746,7 +748,7 @@ sub zone01 {
         }
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) )
+    return ( @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) )
 } ## end sub zone01
 
 =over
@@ -767,7 +769,9 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 sub zone02 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Zone02';
+    push my @results, info( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     my $p = _retrieve_record_from_zone( \@results, $zone, $zone->name, q{SOA} );
 
@@ -798,7 +802,7 @@ sub zone02 {
         push @results, info( NO_RESPONSE_SOA_QUERY => {} );
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) )
+    return ( @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) )
 } ## end sub zone02
 
 =over
@@ -819,7 +823,9 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 sub zone03 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Zone03';
+    push my @results, info( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     my $p = _retrieve_record_from_zone( \@results, $zone, $zone->name, q{SOA} );
 
@@ -849,7 +855,7 @@ sub zone03 {
         push @results, info( NO_RESPONSE_SOA_QUERY => {} );
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) )
+    return ( @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) )
 } ## end sub zone03
 
 =over
@@ -870,7 +876,9 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 sub zone04 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Zone04';
+    push my @results, info( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     my $p = _retrieve_record_from_zone( \@results, $zone, $zone->name, q{SOA} );
 
@@ -901,7 +909,7 @@ sub zone04 {
         push @results, info( NO_RESPONSE_SOA_QUERY => {} );
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) )
+    return ( @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) )
 } ## end sub zone04
 
 =over
@@ -922,7 +930,9 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 sub zone05 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Zone05';
+    push my @results, info( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     my $p = _retrieve_record_from_zone( \@results, $zone, $zone->name, q{SOA} );
 
@@ -964,7 +974,7 @@ sub zone05 {
         push @results, info( NO_RESPONSE_SOA_QUERY => {} );
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) )
+    return ( @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) )
 } ## end sub zone05
 
 =over
@@ -985,7 +995,9 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 sub zone06 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Zone06';
+    push my @results, info( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     my $p = _retrieve_record_from_zone( \@results, $zone, $zone->name, q{SOA} );
 
@@ -1027,7 +1039,7 @@ sub zone06 {
         push @results, info( NO_RESPONSE_SOA_QUERY => {} );
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) )
+    return ( @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) )
 } ## end sub zone06
 
 =over
@@ -1048,7 +1060,9 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 sub zone07 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Zone07';
+    push my @results, info( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     my $p = _retrieve_record_from_zone( \@results, $zone, $zone->name, q{SOA} );
 
@@ -1093,7 +1107,7 @@ sub zone07 {
         push @results, info( NO_RESPONSE_SOA_QUERY => {} );
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) )
+    return ( @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) )
 } ## end sub zone07
 
 =over
@@ -1114,7 +1128,9 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 sub zone08 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Zone08';
+    push my @results, info( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     my $p = $zone->query_auth( $zone->name, q{MX} );
     if ( $p ) {
@@ -1135,7 +1151,7 @@ sub zone08 {
         push @results, info( NO_RESPONSE_MX_QUERY => {} );
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) )
+    return ( @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) )
 } ## end sub zone08
 
 =over
@@ -1156,7 +1172,9 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 sub zone09 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Zone09';
+    push my @results, info( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     my %ip_already_processed;
 
@@ -1304,7 +1322,7 @@ sub zone09 {
         }
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) )
+    return ( @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) )
 } ## end sub zone09
 
 =over
@@ -1325,7 +1343,9 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 sub zone10 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Zone10';
+    push my @results, info( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
     my $name = name( $zone );
 
     foreach my $ns ( @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) } ) {
@@ -1372,7 +1392,7 @@ sub zone10 {
         push @results, info( ONE_SOA => {} );
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) )
+    return ( @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) )
 } ## end sub zone10
 
 1;

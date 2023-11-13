@@ -34,7 +34,7 @@ our $start_time = time();
 my $json = JSON::PP->new->allow_blessed->convert_blessed->canonical;
 my $test_levels_config;
 
-__PACKAGE__->mk_ro_accessors(qw(tag args timestamp trace));
+__PACKAGE__->mk_ro_accessors(qw(tag args timestamp trace testcase));
 
 
 sub new {
@@ -43,6 +43,9 @@ sub new {
 
     confess "Attribute \(tag\) is required"
       if !exists $attrs->{tag};
+
+    confess "Attribute \(testcase\) is required"
+      if !exists $attrs->{testcase};
 
     confess "Argument must be a HASHREF: args"
       if exists $attrs->{args}
@@ -56,7 +59,6 @@ sub new {
     # lazy attributes
     $attrs->{_module} = delete $attrs->{module} if exists $attrs->{module};
     $attrs->{_level} = delete $attrs->{level} if exists $attrs->{level};
-    $attrs->{_testcase} = delete $attrs->{testcase} if exists $attrs->{testcase};
 
     my $class = ref $proto || $proto;
     return Class::Accessor::new( $class, $attrs );
@@ -82,17 +84,6 @@ sub level {
     }
 
     return $self->{_level}
-}
-
-sub testcase {
-    my $self = shift;
-
-    # Lazy default value
-    if ( !exists $self->{_testcase} ) {
-        $self->{_testcase} = $self->_build_testcase();
-    }
-
-    return $self->{_testcase}
 }
 
 sub _build_trace {

@@ -548,7 +548,9 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 sub connectivity01 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Connectivity01';
+    push my @results, info( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
     my $name = name( $zone );
     my @ns_list = @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) };
 
@@ -571,7 +573,7 @@ sub connectivity01 {
 
     _connectivity_loop("connectivity01", $name, \@ns_list, \@results);
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub connectivity01
 
 =over
@@ -592,13 +594,15 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 sub connectivity02 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Connectivity02';
+    push my @results, info( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
     my $name = name( $zone );
     my @ns_list = @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) };
 
     _connectivity_loop("connectivity02", $name, \@ns_list, \@results);
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub connectivity02
 
 =over
@@ -619,7 +623,9 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 sub connectivity03 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Connectivity03';
+    push my @results, info( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     my %ips = ( $IP_VERSION_4 => {}, $IP_VERSION_6 => {} );
 
@@ -742,7 +748,7 @@ sub connectivity03 {
         }
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub connectivity03
 
 =over
@@ -763,7 +769,9 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 sub connectivity04 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Connectivity04';
+    push my @results, info( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     my %prefixes;
 
@@ -846,7 +854,7 @@ sub connectivity04 {
         }
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub connectivity04
 
 1;

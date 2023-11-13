@@ -16,6 +16,8 @@ use JSON::PP;
 use Zonemaster::Engine::Profile;
 use Zonemaster::Engine::Logger::Entry;
 
+our $TEST_CASE_NAME = 'Unspecified';
+
 has 'entries' => (
     is      => 'ro',
     isa     => 'ArrayRef[Zonemaster::Engine::Logger::Entry]',
@@ -29,7 +31,7 @@ sub add {
     my ( $self, $tag, $argref ) = @_;
 
     my $new =
-      Zonemaster::Engine::Logger::Entry->new( { tag => uc( $tag ), args => $argref } );
+      Zonemaster::Engine::Logger::Entry->new( { tag => uc( $tag ), args => $argref, testcase => $TEST_CASE_NAME } );
     $self->_check_filter( $new );
     push @{ $self->entries }, $new;
 

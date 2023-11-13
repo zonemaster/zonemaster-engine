@@ -475,7 +475,9 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 sub basic00 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Basic00';
+
+    push my @results, info( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
     my $name = name( $zone );
 
     foreach my $local_label ( @{ $name->labels } ) {
@@ -512,7 +514,7 @@ sub basic00 {
           );
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 
 } ## end sub basic00
 
@@ -534,7 +536,9 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 sub basic01 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Basic01';
+
+    push my @results, info( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     if ( $zone->name eq '.' ) {
         push @results,
@@ -543,8 +547,8 @@ sub basic01 {
                 domain => $zone->name
              }
           );
-        
-        return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+
+        return ( @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
     }
 
     my %all_servers;
@@ -719,7 +723,7 @@ sub basic01 {
     foreach my $ns_string ( keys %parent_information ) {
         foreach my $zone_name ( keys %{ $parent_information{$ns_string} } ) {
             my $p = $parent_information{$ns_string}{$zone_name};
-            
+
             if ( $p ) {
                 if ( $p->is_redirect ) {
                     push @{ $parent_found{$zone_name} }, $ns_string;
@@ -813,7 +817,7 @@ sub basic01 {
               }
            );
 
-        if ( scalar keys %aa_nxdomain or scalar keys %aa_cname or scalar keys %cname_with_referral or scalar keys %aa_dname or scalar keys %aa_nodata ) {            
+        if ( scalar keys %aa_nxdomain or scalar keys %aa_cname or scalar keys %cname_with_referral or scalar keys %aa_dname or scalar keys %aa_nodata ) {
             push @results, map {
               info(
                   B01_INCONSISTENT_DELEGATION => {
@@ -901,7 +905,7 @@ sub basic01 {
         } keys %non_aa_non_delegation;
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub basic01
 
 =over
@@ -922,8 +926,10 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 sub basic02 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
-    
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Basic02';
+
+    push my @results, info( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+
     my $query_type = q{SOA};
 
     my %auth_response_soa;
@@ -935,7 +941,7 @@ sub basic02 {
 
     my @ns_names = @{ Zonemaster::Engine::TestMethods->method2( $zone ) };
     my @ns = @{ Zonemaster::Engine::TestMethods->method4( $zone ) };
-    
+
     if ( not scalar @ns_names ) {
         push @results,
             info(
@@ -943,8 +949,8 @@ sub basic02 {
                     domain => $zone->name
                 }
             );
-            
-        return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+
+        return ( @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
     }
 
     if ( not scalar @ns ) {
@@ -953,7 +959,7 @@ sub basic02 {
 
         foreach my $ns_name ( @ns_names ) {
             $found_ip{$ns_name->string} = 0;
-            
+
             foreach my $rr ( @ns_ips ) {
                 if ( $rr->owner eq $ns_name ) {
                     $found_ip{$ns_name->string} = 1;
@@ -1067,7 +1073,7 @@ sub basic02 {
         }
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub basic02
 
 =over
@@ -1088,7 +1094,9 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 sub basic03 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Basic03';
+
+    push my @results, info( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
     my $query_type = q{A};
 
     my $name        = q{www.} . $zone->name;
@@ -1126,7 +1134,7 @@ sub basic03 {
         push @results, info( A_QUERY_NO_RESPONSES => {} );
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub basic03
 
 1;

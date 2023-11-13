@@ -311,7 +311,7 @@ sub all {
 
     }
 
-    push @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } );
+    push @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     return @results;
 } ## end sub all
@@ -1421,10 +1421,12 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 sub dnssec01 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'DNSSEC01';
+    push my @results, info( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     if ( $zone->name eq '.' and not Zonemaster::Engine::Recursor->has_fake_addresses( $zone->name->string ) ){
-        return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+        return ( @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
     }
 
     my %ds_records;
@@ -1434,7 +1436,7 @@ sub dnssec01 {
 
             if ( Zonemaster::Engine::Recursor->has_fake_addresses( $zone->name->string ) ){
                 if ( scalar %{$ns->fake_ds} == 0 ){
-                    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+                    return ( @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
                 }
                 $ns_ip = "-";
             }
@@ -1558,7 +1560,7 @@ sub dnssec01 {
         }
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub dnssec01
 
 =over
@@ -1579,8 +1581,10 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 sub dnssec02 {
     my ( $self, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
-    
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'DNSSEC02';
+    push my @results, info( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+
     my @ds_record;
     my %no_dnskey_for_ds;
     my %no_match_ds_dnskey;
@@ -1734,7 +1738,7 @@ sub dnssec02 {
                                 push @{ $rrsig_not_valid_by_dnskey{$rrsig_record->keytag} }, $ns->address->short;
                             }
                             else {
-                                $found_match++;                                
+                                $found_match++;
                             }
                         }
 
@@ -1831,7 +1835,7 @@ sub dnssec02 {
     }
 
     if ( scalar @ns_dnskey ) {
-        push @results, 
+        push @results,
             info(
               DS02_NO_VALID_DNSKEY_FOR_ANY_DS => {
                 ns_ip_list => join( q{;}, sort @ns_dnskey )
@@ -1849,7 +1853,7 @@ sub dnssec02 {
         }
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub dnssec02
 
 =over
@@ -1870,7 +1874,9 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 sub dnssec03 {
     my ( $self, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'DNSSEC03';
+    push my @results, info( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     my $param_p = $zone->query_one( $zone->name, 'NSEC3PARAM', { dnssec => 1 } );
 
@@ -1944,7 +1950,7 @@ sub dnssec03 {
         } ## end foreach my $n3p ( @nsec3params)
     } ## end else [ if ( @nsec3params == 0)]
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub dnssec03
 
 =over
@@ -1965,18 +1971,20 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 sub dnssec04 {
     my ( $self, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'DNSSEC04';
+    push my @results, info( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     my $dnskey_p = $zone->query_one( $zone->name, 'DNSKEY', { dnssec => 1 } );
     if ( not $dnskey_p ) {
-        return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+        return ( @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
     }
     my @keys     = $dnskey_p->get_records( 'DNSKEY', 'answer' );
     my @key_sigs = $dnskey_p->get_records( 'RRSIG',  'answer' );
 
     my $soa_p = $zone->query_one( $zone->name, 'SOA', { dnssec => 1 } );
     if ( not $soa_p ) {
-        return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+        return ( @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
     }
     my @soas     = $soa_p->get_records( 'SOA',   'answer' );
     my @soa_sigs = $soa_p->get_records( 'RRSIG', 'answer' );
@@ -2053,7 +2061,7 @@ sub dnssec04 {
         }
     } ## end foreach my $sig ( @key_sigs...)
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub dnssec04
 
 =over
@@ -2074,7 +2082,9 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 sub dnssec05 {
     my ( $self, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'DNSSEC05';
+    push my @results, info( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     my @nss_del   = @{ Zonemaster::Engine::TestMethods->method4( $zone ) };
     my @nss_child = @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
@@ -2145,7 +2155,7 @@ sub dnssec05 {
         } ## end foreach my $key ( @keys )
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub dnssec05
 
 =over
@@ -2166,7 +2176,9 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 sub dnssec06 {
     my ( $self, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'DNSSEC06';
+    push my @results, info( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     my $dnskey_aref = $zone->query_all( $zone->name, 'DNSKEY', { dnssec => 1 } );
     foreach my $dnskey_p ( @{$dnskey_aref} ) {
@@ -2196,7 +2208,7 @@ sub dnssec06 {
         }
     } ## end foreach my $dnskey_p ( @{$dnskey_aref...})
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub dnssec06
 
 =over
@@ -2217,20 +2229,22 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 sub dnssec07 {
     my ( $self, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'DNSSEC07';
+    push my @results, info( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     if ( not $zone->parent ) {
-        return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+        return ( @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
     }
     my $dnskey_p = $zone->query_one( $zone->name, 'DNSKEY', { dnssec => 1 } );
     if ( not $dnskey_p ) {
-        return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+        return ( @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
     }
     my ( $dnskey ) = $dnskey_p->get_records( 'DNSKEY', 'answer' );
 
     my $ds_p = $zone->parent->query_one( $zone->name, 'DS', { dnssec => 1 } );
     if ( not $ds_p ) {
-        return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+        return ( @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
     }
     my ( $ds ) = $ds_p->get_records( 'DS', 'answer' );
 
@@ -2271,7 +2285,7 @@ sub dnssec07 {
           );
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub dnssec07
 
 =over
@@ -2292,7 +2306,9 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 sub dnssec08 {
     my ( $self, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'DNSSEC08';
+    push my @results, info( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
     my @dnskey_without_rrsig;
     my %dnskey_rrsig_not_yet_valid;
     my %dnskey_rrsig_expired;
@@ -2424,7 +2440,7 @@ sub dnssec08 {
         }
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub dnssec08
 
 =over
@@ -2445,7 +2461,9 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 sub dnssec09 {
     my ( $self, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'DNSSEC09';
+    push my @results, info( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
     my @soa_without_rrsig;
     my %soa_rrsig_not_yet_valid;
     my %soa_rrsig_expired;
@@ -2592,7 +2610,7 @@ sub dnssec09 {
         }
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub dnssec09
 
 =over
@@ -2613,7 +2631,9 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 sub dnssec10 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'DNSSEC10';
+    push my @results, info( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
     my $non_existent_domain_name = $zone->name->prepend( q{xx--oplk4f3fgh9lksdfhu7h--xx} );
     my @query_types = qw{DNSKEY A};
     my %unsigned_answer;
@@ -3117,7 +3137,7 @@ sub dnssec10 {
         }
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub dnssec10
 
 =over
@@ -3138,7 +3158,9 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 sub dnssec11 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'DNSSEC11';
+    push my @results, info( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
     my @undetermined_ds;
     my @no_ds_record;
     my @has_ds_record;
@@ -3156,7 +3178,7 @@ sub dnssec11 {
 
         if ( $is_undelegated ){
             if ( not $ns->fake_ds->{$zone->name->string} ){
-                return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+                return ( @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
             }
             last;
         }
@@ -3288,7 +3310,7 @@ sub dnssec11 {
         }
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub dnssec11
 
 =over
@@ -3309,7 +3331,9 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 sub dnssec13 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'DNSSEC13';
+    push my @results, info( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
     my @query_types = qw{DNSKEY SOA NS};
     my %algo_not_signed;
     my @nss_del   = @{ Zonemaster::Engine::TestMethods->method4( $zone ) };
@@ -3375,7 +3399,7 @@ sub dnssec13 {
         }
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub dnssec13
 
 =over
@@ -3396,7 +3420,9 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 sub dnssec14 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'DNSSEC14';
+    push my @results, info( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
     my @dnskey_rrs;
 
     my @nss_del   = @{ Zonemaster::Engine::TestMethods->method4( $zone ) };
@@ -3465,7 +3491,7 @@ sub dnssec14 {
         push @results, info( KEY_SIZE_OK => {} );
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub dnssec14
 
 =over
@@ -3486,7 +3512,9 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 sub dnssec15 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'DNSSEC15';
+    push my @results, info( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
     my @query_types = qw{CDS CDNSKEY};
     my %cds_rrsets;
     my %cdnskey_rrsets;
@@ -3692,7 +3720,7 @@ sub dnssec15 {
         }
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub dnssec15
 
 =over
@@ -3713,7 +3741,9 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 sub dnssec16 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'DNSSEC16';
+    push my @results, info( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
     my @query_types = qw{CDS DNSKEY};
     my %cds_rrsets;
     my %dnskey_rrsets;
@@ -3958,7 +3988,7 @@ sub dnssec16 {
         }
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub dnssec16
 
 =over
@@ -3979,7 +4009,9 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 sub dnssec17 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'DNSSEC17';
+    push my @results, info( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
     my @query_types = qw{CDNSKEY DNSKEY};
     my %cdnskey_rrsets;
     my %dnskey_rrsets;
@@ -4227,7 +4259,7 @@ sub dnssec17 {
         }
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub dnssec17
 
 =over
@@ -4248,7 +4280,9 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 sub dnssec18 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'DNSSEC18';
+    push my @results, info( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
     my %cds_rrsets;
     my %cdnskey_rrsets;
     my %dnskey_rrsets;
@@ -4419,7 +4453,7 @@ sub dnssec18 {
         }
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+    return ( @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub dnssec18
 
 1;
