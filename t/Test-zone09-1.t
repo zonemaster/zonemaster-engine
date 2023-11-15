@@ -27,13 +27,14 @@ Zonemaster::Engine::Recursor->add_fake_addresses( '.',
 );
 
 # Test zone scenarios
+# Format: { SCENARIO_NAME => [ zone_name, [ MANDATORY_MESSAGE_TAGS ], [ FORBIDDEN_MESSAGE_TAGS ], testable ] }
 my %subtests = (
-    'ROOT-EMAIL-DOMAIN' => {
-        zone => q(.),
-        mandatory => [ qw(Z09_ROOT_EMAIL_DOMAIN) ],
-        forbidden => [ qw(Z09_INCONSISTENT_MX_DATA Z09_MX_DATA Z09_MISSING_MAIL_TARGET Z09_TLD_EMAIL_DOMAIN Z09_NULL_MX_WITH_OTHER_MX Z09_NULL_MX_NON_ZERO_PREF) ],
-        testable => 1
-    }
+    'ROOT-EMAIL-DOMAIN' => [
+        q(.),
+        [ qw(Z09_ROOT_EMAIL_DOMAIN) ],
+        [ qw(Z09_INCONSISTENT_MX_DATA Z09_MX_DATA Z09_MISSING_MAIL_TARGET Z09_TLD_EMAIL_DOMAIN Z09_NULL_MX_WITH_OTHER_MX Z09_NULL_MX_NON_ZERO_PREF) ],
+        1
+    ]
 );
 ###########
 

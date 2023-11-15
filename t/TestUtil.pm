@@ -52,25 +52,56 @@ and their corresponding values are a string (zone name), an array of strings (me
 sub perform_testcase_testing {
     my ( $test_case, $test_module, %subtests ) = @_;
 
-    my @mandatory_keys = ( 'zone', 'mandatory', 'forbidden', 'testable' );
     my @untested_scenarios = ();
 
     for my $scenario ( sort ( keys %subtests ) ) {
-        for my $key ( @mandatory_keys ) {
-            unless ( exists $subtests{$scenario}{$key} ) {
-                diag("Key '$key' is missing in hash");
-                fail("Subtests hash contains all mandatory keys");
-                return;
-            }
+        if ( ref( $scenario ) ne '' or $scenario ne uc($scenario) ) {
+            diag("Scenario $scenario: Key must (i) not be a reference and (ii) be in all uppercase");
+            fail("Hash contains valid keys");
+            next;
         }
 
-        if ( not $subtests{$scenario}{testable} ) {
+        if ( scalar @{ $subtests{$scenario} } != 4 ) {
+            diag("Scenario $scenario: Incorrect number of values. " .
+                 "Correct format is: { SCENARIO_NAME => [ zone_name, [ MANDATORY_MESSAGE_TAGS ], [ FORBIDDEN_MESSAGE_TAGS ], testable ] }"
+            );
+            fail("Hash contains valid values");
+            next;
+        }
+
+        my ( $zone_name, $mandatory_message_tags, $forbidden_message_tags, $testable ) = @{ $subtests{$scenario} };
+
+        if ( ref( $zone_name ) ne '' ) {
+            diag("Scenario $scenario: Type of zone name must not be a reference");
+            fail("Zone name is of the correct type");
+            next;
+        }
+
+        if ( ref( $mandatory_message_tags ) ne 'ARRAY' ) {
+            diag("Scenario $scenario: Incorrect reference type of mandatory message tags. Expected: ARRAY");
+            fail("Mandatory message tags are of the correct type");
+            next;
+        }
+
+        if ( ref( $forbidden_message_tags ) ne 'ARRAY' ) {
+            diag("Scenario $scenario: Incorrect reference type of forbidden message tags. Expected: ARRAY");
+            fail("Forbidden message tags are of the correct type");
+            next;
+        }
+
+        if ( ref( $testable ) ne '' ) {
+            diag("Scenario $scenario: Type of testable must not be a reference");
+            fail("Testable is of the correct type");
+            next;
+        }
+
+        if ( not $testable ) {
             push @untested_scenarios, $scenario;
             next;
         }
 
         subtest $scenario => sub {
-            my @messages = Zonemaster::Engine->test_method( $test_module, $test_case, Zonemaster::Engine->zone( $subtests{$scenario}{zone} ) );
+            my @messages = Zonemaster::Engine->test_method( $test_module, $test_case, Zonemaster::Engine->zone( $zone_name ) );
             my %res = map { $_->tag => 1 } @messages;
 
             if ( my ( $error ) = grep { $_->tag eq 'MODULE_ERROR' } @messages ) {
@@ -78,18 +109,13 @@ sub perform_testcase_testing {
                 fail("Test case executes properly");
             }
             else {
-                for my $tag ( @{$subtests{$scenario}{mandatory}} ) {
+                for my $tag ( @{ $mandatory_message_tags } ) {
                     ok( exists $res{$tag}, "Tag $tag is outputted" )
                         or diag "Tag '$tag' should have been outputted, but wasn't";
                 }
-                for my $tag ( @{$subtests{$scenario}{forbidden}} ) {
+                for my $tag ( @{ $forbidden_message_tags } ) {
                     ok( !exists $res{$tag}, "Tag $tag is not outputted" )
                         or diag "Tag '$tag' was not supposed to be outputted, but it was";
-                }
-
-                # Call function callback for extra tests if such a function is defined
-                if ( exists $subtests{$scenario}{extra} ) {
-                    $subtests{$scenario}{extra}->(\@messages);
                 }
             }
         };

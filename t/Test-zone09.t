@@ -27,85 +27,86 @@ Zonemaster::Engine::Recursor->add_fake_addresses( '.',
 );
 
 # Test zone scenarios
+# Format: { SCENARIO_NAME => [ zone_name, [ MANDATORY_MESSAGE_TAGS ], [ FORBIDDEN_MESSAGE_TAGS ], testable ] }
 my %subtests = (
-    'NO-RESPONSE-MX-QUERY' => {
-        zone => q(no-response-mx-query.zone09.xa),
-        mandatory => [ qw(Z09_NO_RESPONSE_MX_QUERY) ],
-        forbidden => [],
-        testable => 1
-    },
-    'UNEXPECTED-RCODE-MX' => {
-        zone => q(unexpected-rcode-mx.zone09.xa),
-        mandatory => [ qw(Z09_UNEXPECTED_RCODE_MX) ],
-        forbidden => [],
-        testable => 1
-    },
-    'NON-AUTH-MX-RESPONSE' => {
-        zone => q(non-auth-mx-response.zone09.xa),
-        mandatory => [ qw(Z09_NON_AUTH_MX_RESPONSE) ],
-        forbidden => [],
-        testable => 0
-    },
-    'INCONSISTENT-MX' => {
-        zone => q(inconsistent-mx.zone09.xa),
-        mandatory => [ qw(Z09_INCONSISTENT_MX Z09_MX_FOUND Z09_NO_MX_FOUND Z09_MX_DATA) ],
-        forbidden => [ qw(Z09_MISSING_MAIL_TARGET) ],
-        testable => 1
-    },
-    'INCONSISTENT-MX-DATA' => {
-        zone => q(inconsistent-mx-data.zone09.xa),
-        mandatory => [ qw(Z09_INCONSISTENT_MX_DATA Z09_MX_DATA) ],
-        forbidden => [ qw(Z09_MISSING_MAIL_TARGET Z09_NULL_MX_NON_ZERO_PREF Z09_NULL_MX_WITH_OTHER_MX Z09_ROOT_EMAIL_DOMAIN Z09_TLD_EMAIL_DOMAIN) ],
-        testable => 1
-    },
-    'NULL-MX-WITH-OTHER-MX' => {
-        zone => q(null-mx-with-other-mx.zone09.xa),
-        mandatory => [ qw(Z09_NULL_MX_WITH_OTHER_MX) ],
-        forbidden => [ qw(Z09_INCONSISTENT_MX_DATA Z09_MX_DATA Z09_MISSING_MAIL_TARGET Z09_ROOT_EMAIL_DOMAIN Z09_TLD_EMAIL_DOMAIN) ],
-        testable => 1
-    },
-    'NULL-MX-NON-ZERO-PREF' => {
-        zone => q(null-mx-non-zero-pref.zone09.xa),
-        mandatory => [ qw(Z09_NULL_MX_NON_ZERO_PREF) ],
-        forbidden => [ qw(Z09_INCONSISTENT_MX_DATA Z09_MX_DATA Z09_MISSING_MAIL_TARGET Z09_ROOT_EMAIL_DOMAIN Z09_TLD_EMAIL_DOMAIN) ],
-        testable => 1
-    },
-    'TLD-EMAIL-DOMAIN' => {
-        zone => q(tld-email-domain-zone09),
-        mandatory => [ qw(Z09_TLD_EMAIL_DOMAIN) ],
-        forbidden => [ qw(Z09_INCONSISTENT_MX_DATA Z09_MX_DATA Z09_MISSING_MAIL_TARGET Z09_ROOT_EMAIL_DOMAIN Z09_NULL_MX_WITH_OTHER_MX Z09_NULL_MX_NON_ZERO_PREF) ],
-        testable => 1
-    },
-    'MX-DATA' => {
-        zone => q(mx-data.zone09.xa),
-        mandatory => [ qw(Z09_MX_DATA) ],
-        forbidden => [ qw(Z09_INCONSISTENT_MX_DATA Z09_MISSING_MAIL_TARGET Z09_TLD_EMAIL_DOMAIN Z09_ROOT_EMAIL_DOMAIN Z09_NULL_MX_WITH_OTHER_MX Z09_NULL_MX_NON_ZERO_PREF) ],
-        testable => 1
-    },
-    'NULL-MX' => {
-        zone => q(null-mx.zone09.xa),
-        mandatory => [],
-        forbidden => [ qw(Z09_INCONSISTENT_MX_DATA Z09_MX_DATA Z09_MISSING_MAIL_TARGET Z09_TLD_EMAIL_DOMAIN Z09_ROOT_EMAIL_DOMAIN Z09_NULL_MX_WITH_OTHER_MX Z09_NULL_MX_NON_ZERO_PREF) ],
-        testable => 1
-    },
-    'NO-MX-SLD' => {
-        zone => q(no-mx-sld.zone09.xa),
-        mandatory => [ qw(Z09_MISSING_MAIL_TARGET) ],
-        forbidden => [ qw(Z09_INCONSISTENT_MX_DATA Z09_MX_DATA Z09_TLD_EMAIL_DOMAIN Z09_ROOT_EMAIL_DOMAIN Z09_NULL_MX_WITH_OTHER_MX Z09_NULL_MX_NON_ZERO_PREF) ],
-        testable => 1
-    },
-    'NO-MX-TLD' => {
-        zone => q(no-mx-tld-zone09),
-        mandatory => [],
-        forbidden => [ qw(Z09_INCONSISTENT_MX_DATA Z09_MX_DATA Z09_MISSING_MAIL_TARGET Z09_TLD_EMAIL_DOMAIN Z09_ROOT_EMAIL_DOMAIN Z09_NULL_MX_WITH_OTHER_MX Z09_NULL_MX_NON_ZERO_PREF) ],
-        testable => 1
-    },
-    'NO-MX-ARPA'  => {
-        zone => q(no-mx-arpa.zone09.arpa),
-        mandatory => [],
-        forbidden => [ qw(Z09_INCONSISTENT_MX_DATA Z09_MX_DATA Z09_MISSING_MAIL_TARGET Z09_TLD_EMAIL_DOMAIN Z09_ROOT_EMAIL_DOMAIN Z09_NULL_MX_WITH_OTHER_MX Z09_NULL_MX_NON_ZERO_PREF) ],
-        testable => 1
-    }
+    'NO-RESPONSE-MX-QUERY' => [
+        q(no-response-mx-query.zone09.xa),
+        [ qw(Z09_NO_RESPONSE_MX_QUERY) ],
+        [],
+        1
+    ],
+    'UNEXPECTED-RCODE-MX' => [
+        q(unexpected-rcode-mx.zone09.xa),
+        [ qw(Z09_UNEXPECTED_RCODE_MX) ],
+        [],
+        1
+    ],
+    'NON-AUTH-MX-RESPONSE' => [
+        q(non-auth-mx-response.zone09.xa),
+        [ qw(Z09_NON_AUTH_MX_RESPONSE) ],
+        [],
+        0
+    ],
+    'INCONSISTENT-MX' => [
+        q(inconsistent-mx.zone09.xa),
+        [ qw(Z09_INCONSISTENT_MX Z09_MX_FOUND Z09_NO_MX_FOUND Z09_MX_DATA) ],
+        [ qw(Z09_MISSING_MAIL_TARGET) ],
+        1
+    ],
+    'INCONSISTENT-MX-DATA' => [
+        q(inconsistent-mx-data.zone09.xa),
+        [ qw(Z09_INCONSISTENT_MX_DATA Z09_MX_DATA) ],
+        [ qw(Z09_MISSING_MAIL_TARGET Z09_NULL_MX_NON_ZERO_PREF Z09_NULL_MX_WITH_OTHER_MX Z09_ROOT_EMAIL_DOMAIN Z09_TLD_EMAIL_DOMAIN) ],
+        1
+    ],
+    'NULL-MX-WITH-OTHER-MX' => [
+        q(null-mx-with-other-mx.zone09.xa),
+        [ qw(Z09_NULL_MX_WITH_OTHER_MX) ],
+        [ qw(Z09_INCONSISTENT_MX_DATA Z09_MX_DATA Z09_MISSING_MAIL_TARGET Z09_ROOT_EMAIL_DOMAIN Z09_TLD_EMAIL_DOMAIN) ],
+        1
+    ],
+    'NULL-MX-NON-ZERO-PREF' => [
+        q(null-mx-non-zero-pref.zone09.xa),
+        [ qw(Z09_NULL_MX_NON_ZERO_PREF) ],
+        [ qw(Z09_INCONSISTENT_MX_DATA Z09_MX_DATA Z09_MISSING_MAIL_TARGET Z09_ROOT_EMAIL_DOMAIN Z09_TLD_EMAIL_DOMAIN) ],
+        1
+    ],
+    'TLD-EMAIL-DOMAIN' => [
+        q(tld-email-domain-zone09),
+        [ qw(Z09_TLD_EMAIL_DOMAIN) ],
+        [ qw(Z09_INCONSISTENT_MX_DATA Z09_MX_DATA Z09_MISSING_MAIL_TARGET Z09_ROOT_EMAIL_DOMAIN Z09_NULL_MX_WITH_OTHER_MX Z09_NULL_MX_NON_ZERO_PREF) ],
+        1
+    ],
+    'MX-DATA' => [
+        q(mx-data.zone09.xa),
+        [ qw(Z09_MX_DATA) ],
+        [ qw(Z09_INCONSISTENT_MX_DATA Z09_MISSING_MAIL_TARGET Z09_TLD_EMAIL_DOMAIN Z09_ROOT_EMAIL_DOMAIN Z09_NULL_MX_WITH_OTHER_MX Z09_NULL_MX_NON_ZERO_PREF) ],
+        1
+    ],
+    'NULL-MX' => [
+        q(null-mx.zone09.xa),
+        [],
+        [ qw(Z09_INCONSISTENT_MX_DATA Z09_MX_DATA Z09_MISSING_MAIL_TARGET Z09_TLD_EMAIL_DOMAIN Z09_ROOT_EMAIL_DOMAIN Z09_NULL_MX_WITH_OTHER_MX Z09_NULL_MX_NON_ZERO_PREF) ],
+        1
+    ],
+    'NO-MX-SLD' => [
+        q(no-mx-sld.zone09.xa),
+        [ qw(Z09_MISSING_MAIL_TARGET) ],
+        [ qw(Z09_INCONSISTENT_MX_DATA Z09_MX_DATA Z09_TLD_EMAIL_DOMAIN Z09_ROOT_EMAIL_DOMAIN Z09_NULL_MX_WITH_OTHER_MX Z09_NULL_MX_NON_ZERO_PREF) ],
+        1
+    ],
+    'NO-MX-TLD' => [
+        q(no-mx-tld-zone09),
+        [],
+        [ qw(Z09_INCONSISTENT_MX_DATA Z09_MX_DATA Z09_MISSING_MAIL_TARGET Z09_TLD_EMAIL_DOMAIN Z09_ROOT_EMAIL_DOMAIN Z09_NULL_MX_WITH_OTHER_MX Z09_NULL_MX_NON_ZERO_PREF) ],
+        1
+    ],
+    'NO-MX-ARPA'  => [
+        q(no-mx-arpa.zone09.arpa),
+        [],
+        [ qw(Z09_INCONSISTENT_MX_DATA Z09_MX_DATA Z09_MISSING_MAIL_TARGET Z09_TLD_EMAIL_DOMAIN Z09_ROOT_EMAIL_DOMAIN Z09_NULL_MX_WITH_OTHER_MX Z09_NULL_MX_NON_ZERO_PREF) ],
+        1
+    ]
 );
 ###########
 
