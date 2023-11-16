@@ -289,6 +289,7 @@ t/Test-syntax06-K.data
 t/Test-syntax06-K.t
 t/Test-syntax06-L.data
 t/Test-syntax06-L.t
+t/TestUtil.pm
 t/Test-zone.data
 t/Test-zone.t
 t/Test-zone01-A.t
