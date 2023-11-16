@@ -112,8 +112,8 @@ msgstr "Tous les enregistrements PTR correspondent aux serveurs de noms."
 #, perl-brace-format
 msgid "No response from nameserver(s) on PTR query ({domain})."
 msgstr ""
-"Aucune réponse des serveurs de noms sur une requête de type \"PTR"
-"\" ({domain})."
+"Aucune réponse des serveurs de noms sur une requête de type "
+"\"PTR\" ({domain})."
 
 #. ADDRESS:TEST_CASE_END
 #. BASIC:TEST_CASE_END
@@ -867,22 +867,22 @@ msgstr ""
 #, perl-brace-format
 msgid "A single SOA mname value was seen ({mname})."
 msgstr ""
-"Un unique serveur maître a été trouvé dans les enregistrements de type \"SOA"
-"\" de la zone testée ({mname})."
+"Un unique serveur maître a été trouvé dans les enregistrements de type "
+"\"SOA\" de la zone testée ({mname})."
 
 #. CONSISTENCY:ONE_SOA_RNAME
 #, perl-brace-format
 msgid "A single SOA rname value was found ({rname})."
 msgstr ""
-"Une unique adresse mail a été trouvée dans les enregistrements de type \"SOA"
-"\" de la zone testée ({rname})."
+"Une unique adresse mail a été trouvée dans les enregistrements de type "
+"\"SOA\" de la zone testée ({rname})."
 
 #. CONSISTENCY:ONE_SOA_SERIAL
 #, perl-brace-format
 msgid "A single SOA serial number was found ({serial})."
 msgstr ""
-"Un unique numéro de série a été trouvé dans les enregistrements de type \"SOA"
-"\" de la zone testée ({serial})."
+"Un unique numéro de série a été trouvé dans les enregistrements de type "
+"\"SOA\" de la zone testée ({serial})."
 
 #. CONSISTENCY:ONE_SOA_TIME_PARAMETER_SET
 #, perl-brace-format
@@ -1658,8 +1658,8 @@ msgid ""
 "({ns_ip_list})."
 msgstr ""
 "Les serveurs de noms ayant une des adresses IP suivantes \"{ns_ip_list}\" "
-"retournent un ensemble d'enregistrements de type \"CDNSKEY\" et de type \"CDS"
-"\"."
+"retournent un ensemble d'enregistrements de type \"CDNSKEY\" et de type "
+"\"CDS\"."
 
 #. DNSSEC:DS15_HAS_CDS_NO_CDNSKEY
 #, perl-brace-format
@@ -1690,14 +1690,14 @@ msgid ""
 "addresses ({ns_ip_list}) but they do not match."
 msgstr ""
 "Les serveurs de noms ayant une des adresses IP suivantes \"{ns_ip_list}\" "
-"retournent un ensemble d'enregistrements de type \"CDNSKEY\" et de type \"CDS"
-"\" mais ceux-ci ne correspondent pas."
+"retournent un ensemble d'enregistrements de type \"CDNSKEY\" et de type "
+"\"CDS\" mais ceux-ci ne correspondent pas."
 
 #. DNSSEC:DS15_NO_CDS_CDNSKEY
 msgid "No CDS or CDNSKEY RRsets are found on any name server."
 msgstr ""
-"Aucun des serveurs de noms ne retourne d'enregistrements de type \"CDNSKEY"
-"\"  ou de type \"CDS\"."
+"Aucun des serveurs de noms ne retourne d'enregistrements de type \"CDNSKEY\" "
+"ou de type \"CDS\"."
 
 #. DNSSEC:DS16_CDS_INVALID_RRSIG
 #, perl-brace-format
@@ -1868,9 +1868,9 @@ msgid ""
 "\"{ns_ip_list}\"."
 msgstr ""
 "L'ensemble d'enregistrements de type \"CDNSKEY\" n'est pas signé par la clé "
-"(DNSKEY) correspondant au tag {keytag} de l'enregistrement de type \"CDNSKEY"
-"\". Information retournée par les serveurs de noms ayant une des adresses IP "
-"suivantes \"{ns_ip_list}\"."
+"(DNSKEY) correspondant au tag {keytag} de l'enregistrement de type "
+"\"CDNSKEY\". Information retournée par les serveurs de noms ayant une des "
+"adresses IP suivantes \"{ns_ip_list}\"."
 
 #. DNSSEC:DS17_CDNSKEY_SIGNED_BY_UNKNOWN_DNSKEY
 #, perl-brace-format
@@ -2399,8 +2399,8 @@ msgstr ""
 msgid "Empty NOERROR response to SOA query was received from {ns}."
 msgstr ""
 "Une réponse à une requête pour un enregistrement de type \"SOA\" sur le "
-"serveur de noms {ns} a été reçue vide alors que le code retour est \"NOERROR"
-"\"."
+"serveur de noms {ns} a été reçue vide alors que le code retour est "
+"\"NOERROR\"."
 
 #. DELEGATION:TOTAL_NAME_MISMATCH
 msgid "None of the nameservers listed at the parent are listed at the child."
@@ -2490,8 +2490,8 @@ msgstr ""
 #, perl-brace-format
 msgid "Nameserver {ns} dropped AAAA query."
 msgstr ""
-"Le serveur de noms {ns} ne répond pas aux requêtes portant sur le type \"AAAA"
-"\"."
+"Le serveur de noms {ns} ne répond pas aux requêtes portant sur le type "
+"\"AAAA\"."
 
 #. NAMESERVER:AAAA_UNEXPECTED_RCODE
 #, perl-brace-format
@@ -2843,8 +2843,8 @@ msgstr ""
 #, perl-brace-format
 msgid "Nameserver {ns} has one or more unknown EDNS Z flag bits set."
 msgstr ""
-"Le serveur de noms {ns} répond à une requête avec a un ou plusieurs bits \"Z"
-"\" (EDNS) positionnés."
+"Le serveur de noms {ns} répond à une requête avec un ou plusieurs bits "
+"\"Z\" (EDNS) positionnés."
 
 #. SYNTAX:SYNTAX01
 msgid "No illegal characters in the domain name"
@@ -3427,8 +3427,8 @@ msgstr ""
 msgid ""
 "Non-authoritative response on MX query from name servers \"{ns_ip_list}\"."
 msgstr ""
-"La réponse des serveurs de noms \"{ns_ip_list}\" à une requête de type \"MX"
-"\" ne fait pas autorité."
+"La réponse des serveurs de noms \"{ns_ip_list}\" à une requête de type "
+"\"MX\" ne fait pas autorité."
 
 #. ZONE:Z09_NO_MX_FOUND
 #, perl-brace-format
