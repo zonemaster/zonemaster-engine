@@ -14,7 +14,7 @@ BEGIN {
 }
 
 ###########
-# dnssec03
+# dnssec03 - https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/test-zones/DNSSEC-TP/dnssec03.md
 my $test_module = q{DNSSEC};
 my $test_case = 'dnssec03';
 
@@ -27,7 +27,8 @@ Zonemaster::Engine::Recursor->add_fake_addresses( '.',
 );
 
 # Test zone scenarios
-# Format: { SCENARIO_NAME => [ zone_name, [ MANDATORY_MESSAGE_TAGS ], [ FORBIDDEN_MESSAGE_TAGS ], testable ] }
+# - Documentation: L<TestUtil/perform_testcase_testing()>
+# - Format: { SCENARIO_NAME => [ zone_name, [ MANDATORY_MESSAGE_TAGS ], [ FORBIDDEN_MESSAGE_TAGS ], testable ] }
 my %subtests = (
     'NO-DNSSEC-SUPPORT' => [
         q(no-dnssec-support.dnssec03.xa),
@@ -88,7 +89,7 @@ my %subtests = (
         [ qw(DS03_UNASSIGNED_FLAG_USED) ],
         [ qw(DS03_ERR_MULT_NSEC3 DS03_ILLEGAL_HASH_ALGO DS03_ILLEGAL_ITERATION_VALUE DS03_ILLEGAL_SALT_LENGTH DS03_INCONSISTENT_HASH_ALGO DS03_INCONSISTENT_ITERATION DS03_INCONSISTENT_NSEC3_FLAGS DS03_INCONSISTENT_SALT_LENGTH DS03_LEGAL_EMPTY_SALT DS03_LEGAL_HASH_ALGO DS03_LEGAL_ITERATION_VALUE DS03_NO_DNSSEC_SUPPORT DS03_NO_NSEC3 DS03_NSEC3_OPT_OUT_DISABLED DS03_NSEC3_OPT_OUT_ENABLED_NON_TLD DS03_NSEC3_OPT_OUT_ENABLED_TLD DS03_SERVER_NO_DNSSEC_SUPPORT DS03_SERVER_NO_NSEC3) ],
         1
-    ],
+    ]
 );
 ###########
 
