@@ -39,11 +39,13 @@ unknown to the include path @INC, it can be including using the following code:
 
     perform_testcase_testing( $test_case, $test_module, %subtests );
 
-This method loads unit test data (test case name, test module name and test scenarios), runs the specified test case, and checks for the presence
-(or absence) of specific message tags for each specified test scenario.
+This method loads unit test data (test case name, test module name and test scenarios) and, after some data checks
+and if the test scenario is testable, it runs the specified test case and checks for the presence (or absence) of
+specific message tags for each specified test scenario.
 
-Takes a string (test case name), a string (test module name) and a hash - the keys of which are: C<zone>, C<mandatory>, C<forbidden>, C<testable>,
-and their corresponding values are a string (zone name), an array of strings (message tags), an array of strings (message tags) and a boolean.
+Takes a string (test case name), a string (test module name) and a hash - the keys of which are scenario names
+(in all uppercase), and their corresponding values are an array of: a string (zone name), an array of strings
+(mandatory message tags), an array of strings (forbidden message tags) and a boolean (testable).
 
 =back
 

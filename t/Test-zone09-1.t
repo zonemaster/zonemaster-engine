@@ -14,7 +14,7 @@ BEGIN {
 }
 
 ###########
-# zone09
+# zone09 - https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/test-zones/Zone-TP/zone09.md
 my $test_module = q{Zone};
 my $test_case = 'zone09';
 
@@ -27,7 +27,8 @@ Zonemaster::Engine::Recursor->add_fake_addresses( '.',
 );
 
 # Test zone scenarios
-# Format: { SCENARIO_NAME => [ zone_name, [ MANDATORY_MESSAGE_TAGS ], [ FORBIDDEN_MESSAGE_TAGS ], testable ] }
+# - Documentation: L<TestUtil/perform_testcase_testing()>
+# - Format: { SCENARIO_NAME => [ zone_name, [ MANDATORY_MESSAGE_TAGS ], [ FORBIDDEN_MESSAGE_TAGS ], testable ] }
 my %subtests = (
     'ROOT-EMAIL-DOMAIN' => [
         q(.),
