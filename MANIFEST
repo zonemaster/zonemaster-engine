@@ -1,7 +1,6 @@
 Changes
 CONTRIBUTING.md
 docs/Implementing_Tests.pod
-docs/logentry_args.md
 docs/Translation.pod
 docs/Translation-translators.md
 inc/Module/Install.pm
