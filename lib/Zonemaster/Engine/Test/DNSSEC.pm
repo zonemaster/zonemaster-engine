@@ -2032,7 +2032,7 @@ sub dnssec03 {
             push @{ $nsec3_iterations{$rr->iterations} }, $ns if defined $rr->iterations;
 
             if ( defined $rr->salt ) {
-                push @{ $nsec3_salt_length{$rr->salt} }, $ns;
+                push @{ $nsec3_salt_length{length unpack('H*', $rr->salt)} }, $ns;
             }
             else {
                 push @{ $nsec3_salt_length{0} }, $ns;
