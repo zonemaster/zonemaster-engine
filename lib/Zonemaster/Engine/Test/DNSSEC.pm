@@ -564,7 +564,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     DNSSEC03 => sub {
         __x    # DNSSEC:DNSSEC03
-          "Check for too many NSEC3 iterations";
+          "Verify NSEC3 parameters";
     },
     DNSSEC04 => sub {
         __x    # DNSSEC:DNSSEC04
