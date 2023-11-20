@@ -2123,15 +2123,7 @@ sub dnssec03 {
         }
 
         foreach my $flag ( keys %nsec3_flags ) {
-            if ( $flag eq '0' ) {
-                push @results,
-                    info(
-                      DS03_NSEC3_OPT_OUT_DISABLED => {
-                        ns_list => join( q{;}, sort @{ $nsec3_flags{$flag} } )
-                      }
-                    );
-            }
-            elsif ( $flag eq '1' ) {
+            if ( $flag eq '1' ) {
                 # Note below that the Public Suffix List check is not yet implemented.
                 if ( $zone->name eq '.' or $zone->name->next_higher eq '.' ) {
                     push @results,
@@ -2153,11 +2145,20 @@ sub dnssec03 {
             else {
                 push @results,
                     info(
-                      DS03_UNASSIGNED_FLAG_USED => {
-                        ns_list => join( q{;}, sort @{ $nsec3_flags{$flag} } ),
-                        int => $flag
+                      DS03_NSEC3_OPT_OUT_DISABLED => {
+                        ns_list => join( q{;}, sort @{ $nsec3_flags{$flag} } )
                       }
                     );
+
+                if ( $flag ne '0' ) {
+                    push @results,
+                        info(
+                          DS03_UNASSIGNED_FLAG_USED => {
+                            ns_list => join( q{;}, sort @{ $nsec3_flags{$flag} } ),
+                            int => $flag
+                          }
+                        );
+                }
             }
         }
     }
