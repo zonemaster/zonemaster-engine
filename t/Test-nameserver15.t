@@ -68,14 +68,14 @@ my %subtests = (
     ],
     'ERROR-ON-VERSION-QUERY-1' => [
         q(error-on-version-query-1.nameserver15.xa),
-        [ qw(N15_ERROR_ON_VERSION_QUERY) ],
-        [ qw(N15_NO_VERSION_REVEALED N15_SOFTWARE_VERSION N15_WRONG_CLASS) ],
+        [ qw(N15_ERROR_ON_VERSION_QUERY N15_NO_VERSION_REVEALED) ],
+        [ qw(N15_SOFTWARE_VERSION N15_WRONG_CLASS) ],
         1
     ],
     'ERROR-ON-VERSION-QUERY-2' => [
         q(error-on-version-query-2.nameserver15.xa),
-        [ qw(N15_ERROR_ON_VERSION_QUERY) ],
-        [ qw(N15_NO_VERSION_REVEALED N15_SOFTWARE_VERSION N15_WRONG_CLASS) ],
+        [ qw(N15_ERROR_ON_VERSION_QUERY N15_NO_VERSION_REVEALED) ],
+        [ qw(N15_SOFTWARE_VERSION N15_WRONG_CLASS) ],
         1
     ],
     'SOFTWARE-VERSION-1' => [
