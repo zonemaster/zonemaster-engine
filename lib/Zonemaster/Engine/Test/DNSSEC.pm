@@ -2123,7 +2123,20 @@ sub dnssec03 {
         }
 
         foreach my $flag ( keys %nsec3_flags ) {
-            if ( $flag eq '1' ) {
+            # Makes a list of bit positions corresponding to flags that are set, where the most-significant bit is 0.
+            my @bit_positions = grep { $flag & (1 << ( 7 - $_ ) ) } (0..7);
+
+            foreach my $bit ( grep { $_ >= 0 and $_ <= 6 } @bit_positions ) {
+                push @results,
+                    info(
+                      DS03_UNASSIGNED_FLAG_USED => {
+                        ns_list => join( q{;}, sort @{ $nsec3_flags{$flag} } ),
+                        int => $bit
+                      }
+                    );
+            }
+
+            if ( grep { $_ == 7 } @bit_positions ) {
                 # Note below that the Public Suffix List check is not yet implemented.
                 if ( $zone->name eq '.' or $zone->name->next_higher eq '.' ) {
                     push @results,
@@ -2148,17 +2161,7 @@ sub dnssec03 {
                       DS03_NSEC3_OPT_OUT_DISABLED => {
                         ns_list => join( q{;}, sort @{ $nsec3_flags{$flag} } )
                       }
-                    );
-
-                if ( $flag ne '0' ) {
-                    push @results,
-                        info(
-                          DS03_UNASSIGNED_FLAG_USED => {
-                            ns_list => join( q{;}, sort @{ $nsec3_flags{$flag} } ),
-                            int => $flag
-                          }
-                        );
-                }
+                );
             }
         }
     }
