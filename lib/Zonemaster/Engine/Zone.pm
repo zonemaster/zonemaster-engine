@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Zone;
 
-use version; our $VERSION = version->declare("v1.1.9");
+use version; our $VERSION = version->declare("v2.0.0");
 
 use 5.014002;
 use strict;
@@ -17,6 +17,7 @@ use Zonemaster::Engine::Constants qw[:ip];
 
 has 'name' => ( is => 'ro', isa => 'Zonemaster::Engine::DNSName', required => 1 );
 has 'parent' => ( is => 'ro', isa => 'Maybe[Zonemaster::Engine::Zone]', lazy_build => 1 );
+has 'dname' => ( is => 'ro', isa => 'ArrayRef[Zonemaster::Engine::Zone]', lazy_build => 1 );
 has [ 'ns', 'glue' ] => ( is => 'ro', isa => 'ArrayRef', lazy_build => 1 );
 has [ 'ns_names', 'glue_names' ] => ( is => 'ro', isa => 'ArrayRef[Zonemaster::Engine::DNSName]', lazy_build => 1 );
 has 'glue_addresses' => ( is => 'ro', isa => 'ArrayRef[Zonemaster::LDNS::RR]', lazy_build => 1 );
@@ -38,25 +39,63 @@ sub _build_parent {
     return __PACKAGE__->new( { name => $pname } );
 }
 
+sub _build_dname {
+    my ( $self ) = @_;
+
+    if ( $self->name eq '.' or not $self->parent ) {
+        return [];
+    }
+
+    my $p = $self->parent->query_persistent( $self->name, 'DNAME' );
+
+    return [] if not defined $p;
+
+    my @name_labels = @{$self->name->labels};
+    my $dname;
+    my $owner;
+    my @dnames;
+
+    foreach my $rr ( $p->get_records( 'DNAME', q{answer} ) ) {
+        if ( index( $self->name->fqdn, lc($rr->owner) ) != -1 ) {
+            $dname = Zonemaster::Engine::DNSName->new( lc($rr->dname) );
+            $owner = Zonemaster::Engine::DNSName->new( lc($rr->owner) );
+
+            splice @name_labels, scalar @name_labels - scalar @{$owner->labels}, scalar @name_labels, @{$dname->labels};
+
+            push @dnames, Zonemaster::Engine::DNSName->new( lc( join( q{.}, @name_labels ) ) );
+        }
+    }
+
+    return [ map { __PACKAGE__->new( { name => $_ } ) } @dnames ];
+}
+
 sub _build_glue_names {
     my ( $self ) = @_;
+    my $zname = $self->name;
+    my $p;
 
     if ( not $self->parent ) {
         return [];
     }
 
-    my $p = $self->parent->query_persistent( $self->name, 'NS' );
+    if ( scalar @{$self->dname} ) {
+        $zname = @{$self->dname}[0]->name;
+        $p = @{$self->dname}[0]->parent->query_persistent( $zname, 'NS' );
+    }
+    else {
+        $p = $self->parent->query_persistent( $zname, 'NS' );
+    }
 
     return [] if not defined $p;
 
     return [ uniq sort map { Zonemaster::Engine::DNSName->new( lc( $_->nsdname ) ) }
-          $p->get_records_for_name( 'ns', $self->name->string ) ];
+          $p->get_records_for_name( 'ns', $zname->string ) ];
 }
 
 sub _build_glue {
     my ( $self ) = @_;
-    my @glue_names = @{ $self->glue_names };
     my $zname = $self->name->string;
+    my @glue_names = @{$self->glue_names};
 
     if ( Zonemaster::Engine::Recursor->has_fake_addresses( $zname ) ) {
         my @ns_list;
@@ -78,6 +117,10 @@ sub _build_glue {
 
 sub _build_ns_names {
     my ( $self ) = @_;
+    my $zname = $self->name;
+    my $servers;
+    my $p;
+    my $i = 0;
 
     if ( $self->name eq '.' ) {
         my %u;
@@ -85,17 +128,23 @@ sub _build_ns_names {
         return [ sort values %u ];
     }
 
-    my $p;
-    my $i = 0;
-    while ( my $s = $self->glue->[$i] ) {
-        $p = $s->query( $self->name, 'NS' );
+    if ( scalar @{$self->dname} ) {
+        $zname = @{$self->dname}[0]->name;
+        $servers = @{$self->dname}[0]->glue;
+    }
+    else {
+        $servers = $self->glue;
+    }
+
+    while ( my $s = $servers->[$i] ) {
+        $p = $s->query( $zname, 'NS' );
         last if ( defined( $p ) and ( $p->type eq 'answer' ) and ( $p->rcode eq 'NOERROR' ) );
         $i += 1;
     }
     return [] if not defined $p;
 
     return [ uniq sort map { Zonemaster::Engine::DNSName->new( lc( $_->nsdname ) ) }
-          $p->get_records_for_name( 'ns', $self->name->string ) ];
+          $p->get_records_for_name( 'ns', $zname ) ];
 } ## end sub _build_ns_names
 
 sub _build_ns {
@@ -113,12 +162,21 @@ sub _build_ns {
 
 sub _build_glue_addresses {
     my ( $self ) = @_;
+    my $zname = $self->name;
+    my $p;
 
     if ( not $self->parent ) {
         return [];
     }
 
-    my $p = $self->parent->query_one( $self->name, 'NS' );
+    if ( scalar @{$self->dname} ) {
+        $zname = @{$self->dname}[0]->name;
+        $p = @{$self->dname}[0]->parent->query_one( $zname, 'NS' );
+    }
+    else {
+        $p = $self->parent->query_one( $zname, 'NS' );
+    }
+
     croak "Failed to get glue addresses" if not defined( $p );
 
     return [ $p->get_records( 'a' ), $p->get_records( 'aaaa' ) ];
