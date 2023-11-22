@@ -794,6 +794,10 @@ Readonly my %TAG_DESCRIPTIONS => (
           . 'addresses "{ns_ip_list}".',
           @_;
     },
+    DS03_ERROR_RESPONSE_NSEC_QUERY => sub {
+        __x    # DNSSEC:DS03_ERROR_RESPONSE_NSEC_QUERY
+          'The following servers give erroneous response to NSEC query. Fetched from name servers "{ns_list}".', @_;
+    },
     DS03_ERR_MULT_NSEC3 => sub {
         __x    # DNSSEC:DS03_ERR_MULT_NSEC3
           'Multiple NSEC3 records when one is expected. Fetched from name servers "{ns_list}".', @_;
@@ -864,6 +868,10 @@ Readonly my %TAG_DESCRIPTIONS => (
           . 'Fetched from name servers "{ns_list}".',
           @_;
     },
+    DS03_NO_RESPONSE_NSEC_QUERY => sub {
+        __x    # DNSSEC:DS03_NO_RESPONSE_NSEC_QUERY
+        'The following servers do not respond to NSEC query. Fetched from name servers "{ns_list}".', @_;
+    },
     DS03_NSEC3_OPT_OUT_DISABLED => sub {
         __x    # DNSSEC:DS03_NSEC3_OPT_OUT_DISABLED
           'The following servers respond with NSEC3 opt-out disabled (as recommended). '
@@ -899,7 +907,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     DS03_UNASSIGNED_FLAG_USED => sub {
         __x    # DNSSEC:DS03_UNASSIGNED_FLAG_USED
-          'The following servers respond with an NSEC3 record where an unassigned flag is used (flag {int}). '
+          'The following servers respond with an NSEC3 record where an unassigned flag is used (bit {int}). '
           . 'Fetched from name servers "{ns_list}".',
           @_;
     },
@@ -1982,6 +1990,8 @@ sub dnssec03 {
     my %nsec3_flags;
     my %nsec3_iterations;
     my %nsec3_salt_length;
+    my @no_response_nsec_query;
+    my @error_response_nsec_query;
 
     my %ip_already_processed;
 
@@ -2008,11 +2018,17 @@ sub dnssec03 {
 
         my $p2 = $ns->query( $zone->name, q{NSEC}, { dnssec => 1 } );
 
-        # if ( not $p2 or $p2->rcode ne q{NOERROR} or not $p2->aa ) {
-        #     next;
-        # }
+        if ( not $p2 ) {
+            push @no_response_nsec_query, $ns;
+            next;
+        }
 
-        my @nsec3_rrs = $p2->get_records( q{NSEC3}, q{authority} ) if $p2;
+        if ( $p2->rcode ne q{NOERROR} or not $p2->aa ) {
+            push @error_response_nsec_query, $ns;
+            next;
+        }
+
+        my @nsec3_rrs = $p2->get_records( q{NSEC3}, q{authority} );
 
         if ( not scalar @nsec3_rrs ) {
             push @responds_without_nsec3, $ns;
@@ -2222,6 +2238,24 @@ sub dnssec03 {
                     );
             }
         }
+    }
+
+    if ( scalar @no_response_nsec_query ) {
+        push @results,
+            info(
+              DS03_NO_RESPONSE_NSEC_QUERY => {
+                ns_list => join( q{;}, sort @no_response_nsec_query )
+              }
+            );
+    }
+
+    if ( scalar @error_response_nsec_query ) {
+        push @results,
+            info(
+              DS03_ERROR_RESPONSE_NSEC_QUERY => {
+                ns_list => join( q{;}, sort @error_response_nsec_query )
+              }
+            );
     }
 
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
