@@ -230,6 +230,8 @@ t/Test-dnssec-more.data
 t/Test-dnssec-more.t
 t/Test-dnssec.data
 t/Test-dnssec.t
+t/Test-dnssec03.data
+t/Test-dnssec03.t
 t/Test-dnssec05-A.data
 t/Test-dnssec05-A.t
 t/Test-dnssec05-B.data
