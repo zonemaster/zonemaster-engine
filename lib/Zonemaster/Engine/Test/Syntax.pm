@@ -23,7 +23,7 @@ use Zonemaster::Engine::TestMethods;
 use Zonemaster::Engine::Util;
 use Zonemaster::LDNS;
 
-sub emit_log { Zonemaster::Engine->logger->add( @_, 'Syntax' ) }
+sub _emit_log { Zonemaster::Engine->logger->add( @_, 'Syntax' ) }
 
 =head1 NAME
 
@@ -416,7 +416,7 @@ sub _ip_disabled_message {
 
     if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
         push @$results_array, map {
-          emit_log(
+          _emit_log(
             IPV6_DISABLED => {
                 ns     => $ns->string,
                 rrtype => $_
@@ -428,7 +428,7 @@ sub _ip_disabled_message {
 
     if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
         push @$results_array, map {
-          emit_log(
+          _emit_log(
             IPV4_DISABLED => {
                 ns     => $ns->string,
                 rrtype => $_,
@@ -579,7 +579,7 @@ sub _check_name_syntax {
 
     if ( not _name_has_only_legal_characters( $name ) ) {
         push @results,
-          emit_log(
+          _emit_log(
             $info_label_prefix
               . q{_NON_ALLOWED_CHARS} => {
                 domain => $name,
@@ -591,7 +591,7 @@ sub _check_name_syntax {
         foreach my $local_label ( @{ $name->labels } ) {
             if ( _label_not_ace_has_double_hyphen_in_position_3_and_4( $local_label ) ) {
                 push @results,
-                  emit_log(
+                  _emit_log(
                     $info_label_prefix
                       . q{_DISCOURAGED_DOUBLE_DASH} => {
                         label  => $local_label,
@@ -604,7 +604,7 @@ sub _check_name_syntax {
         my $tld = @{ $name->labels }[-1];
         if ( $tld =~ /\A\d+\z/smgx ) {
             push @results,
-              emit_log(
+              _emit_log(
                 $info_label_prefix
                   . q{_NUMERIC_TLD} => {
                     domain => "$name",
@@ -617,7 +617,7 @@ sub _check_name_syntax {
 
     if ( not grep { $_->tag ne q{TEST_CASE_START} } @results ) {
         push @results,
-          emit_log(
+          _emit_log(
             $info_label_prefix
               . q{_SYNTAX_OK} => {
                 domain => "$name",
@@ -650,13 +650,13 @@ sub syntax01 {
     my ( $class, $zone ) = @_;
 
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Syntax01';
-    push my @results, emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     my $name = $zone->name;
 
     if ( _name_has_only_legal_characters( $name ) ) {
         push @results,
-          emit_log(
+          _emit_log(
             ONLY_ALLOWED_CHARS => {
                 domain => $name,
             }
@@ -664,14 +664,14 @@ sub syntax01 {
     }
     else {
         push @results,
-          emit_log(
+          _emit_log(
             NON_ALLOWED_CHARS => {
                 domain => $name,
             }
           );
     }
 
-    return ( @results, emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub syntax01
 
 =over
@@ -694,14 +694,14 @@ sub syntax02 {
     my ( $class, $zone ) = @_;
 
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Syntax02';
-    push my @results, emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     my $name = $zone->name;
 
     foreach my $local_label ( @{ $name->labels } ) {
         if ( _label_starts_with_hyphen( $local_label ) ) {
             push @results,
-              emit_log(
+              _emit_log(
                 INITIAL_HYPHEN => {
                     label  => $local_label,
                     domain => $name,
@@ -710,7 +710,7 @@ sub syntax02 {
         }
         if ( _label_ends_with_hyphen( $local_label ) ) {
             push @results,
-              emit_log(
+              _emit_log(
                 TERMINAL_HYPHEN => {
                     label  => $local_label,
                     domain => $name,
@@ -721,14 +721,14 @@ sub syntax02 {
 
     if ( scalar @{ $name->labels } and not grep { $_->tag ne q{TEST_CASE_START} } @results ) {
         push @results,
-          emit_log(
+          _emit_log(
             NO_ENDING_HYPHENS => {
                 domain => $name,
             }
           );
     }
 
-    return ( @results, emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub syntax02
 
 =over
@@ -751,14 +751,14 @@ sub syntax03 {
     my ( $class, $zone ) = @_;
 
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Syntax03';
-    push my @results, emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     my $name = $zone->name;
 
     foreach my $local_label ( @{ $name->labels } ) {
         if ( _label_not_ace_has_double_hyphen_in_position_3_and_4( $local_label ) ) {
             push @results,
-              emit_log(
+              _emit_log(
                 DISCOURAGED_DOUBLE_DASH => {
                     label  => $local_label,
                     domain => $name,
@@ -769,14 +769,14 @@ sub syntax03 {
 
     if ( scalar @{ $name->labels } and not grep { $_->tag ne q{TEST_CASE_START} } @results ) {
         push @results,
-          emit_log(
+          _emit_log(
             NO_DOUBLE_DASH => {
                 domain => $name,
             }
           );
     }
 
-    return ( @results, emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub syntax03
 
 =over
@@ -799,13 +799,13 @@ sub syntax04 {
     my ( $class, $zone ) = @_;
 
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Syntax04';
-    push my @results, emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     my $name = $zone->name;
 
     push @results, _check_name_syntax( q{NAMESERVER}, $name );
 
-    return ( @results, emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 }
 
 =over
@@ -828,7 +828,7 @@ sub syntax05 {
     my ( $class, $zone ) = @_;
 
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Syntax05';
-    push my @results, emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     my $p = $zone->query_one( $zone->name, q{SOA} );
 
@@ -837,7 +837,7 @@ sub syntax05 {
         $rname =~ s/\\./\./smgx;
         if ( index( $rname, q{@} ) != -1 ) {
             push @results,
-              emit_log(
+              _emit_log(
                 RNAME_MISUSED_AT_SIGN => {
                     rname => $soa->rname,
                 }
@@ -845,7 +845,7 @@ sub syntax05 {
         }
         else {
             push @results,
-              emit_log(
+              _emit_log(
                 RNAME_NO_AT_SIGN => {
                     rname => $soa->rname,
                 }
@@ -853,10 +853,10 @@ sub syntax05 {
         }
     } ## end if ( $p and my ( $soa ...))
     else {
-        push @results, emit_log( NO_RESPONSE_SOA_QUERY => {} );
+        push @results, _emit_log( NO_RESPONSE_SOA_QUERY => {} );
     }
 
-    return ( @results, emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub syntax05
 
 =over
@@ -879,7 +879,7 @@ sub syntax06 {
     my ( $class, $zone ) = @_;
 
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Syntax06';
-    push my @results, emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     my @nss;
     {
@@ -900,7 +900,7 @@ sub syntax06 {
 
         if ( not $p ) {
             push @results,
-              emit_log(
+              _emit_log(
                 NO_RESPONSE => {
                     ns     => $ns->string,
                     domain => $zone->name,
@@ -912,7 +912,7 @@ sub syntax06 {
         my ( $soa ) = $p->get_records( q{SOA}, q{answer} );
 
         if ( not $soa ) {
-            push @results, emit_log( NO_RESPONSE_SOA_QUERY => {} );
+            push @results, _emit_log( NO_RESPONSE_SOA_QUERY => {} );
             next;
         }
 
@@ -922,7 +922,7 @@ sub syntax06 {
         $rname =~ s/[.]\z//smgx;           # Validator does not like final dots
         if ( not Email::Valid->address( $rname ) ) {
             push @results,
-              emit_log(
+              _emit_log(
                 RNAME_RFC822_INVALID => {
                     rname => $rname,
                 }
@@ -933,7 +933,7 @@ sub syntax06 {
         my $domain = ( $rname =~ s/.*@//r );
         my $p_mx = Zonemaster::Engine::Recursor->recurse( $domain, q{MX} );
         if ( not $p_mx or $p_mx->rcode ne 'NOERROR' ) {
-            push @results, emit_log( RNAME_MAIL_DOMAIN_INVALID => { domain => $domain } );
+            push @results, _emit_log( RNAME_MAIL_DOMAIN_INVALID => { domain => $domain } );
             next;
         }
 
@@ -961,13 +961,13 @@ sub syntax06 {
             my $p_a = Zonemaster::Engine::Recursor->recurse( $mail_domain, q{A} );
             if ( $p_a ) {
                 if ( $p_a->get_records( q{CNAME}, q{answer} ) ) {
-                    push @results, emit_log( RNAME_MAIL_ILLEGAL_CNAME => { domain => $mail_domain } );
+                    push @results, _emit_log( RNAME_MAIL_ILLEGAL_CNAME => { domain => $mail_domain } );
                 }
                 else {
                     my @rrs_a = grep { $_->owner eq $mail_domain } $p_a->get_records( q{A}, q{answer} );
 
                     if ( grep { $_->address eq q{127.0.0.1} } @rrs_a ) {
-                        push @results, emit_log( RNAME_MAIL_DOMAIN_LOCALHOST => { domain => $mail_domain, localhost => q{127.0.0.1} } );
+                        push @results, _emit_log( RNAME_MAIL_DOMAIN_LOCALHOST => { domain => $mail_domain, localhost => q{127.0.0.1} } );
                     }
                     elsif ( @rrs_a ) {
                         $exchange_valid = 1;
@@ -979,13 +979,13 @@ sub syntax06 {
             my $p_aaaa = Zonemaster::Engine::Recursor->recurse( $mail_domain, q{AAAA} );
             if ( $p_aaaa ) {
                 if ( $p_aaaa->get_records( q{CNAME}, q{answer} ) ) {
-                    push @results, emit_log( RNAME_MAIL_ILLEGAL_CNAME => { domain => $mail_domain } );
+                    push @results, _emit_log( RNAME_MAIL_ILLEGAL_CNAME => { domain => $mail_domain } );
                 }
                 else {
                     my @rrs_aaaa = grep { $_->owner eq $mail_domain } $p_aaaa->get_records( q{AAAA}, q{answer} );
 
                     if ( grep { $_->address eq q{::1} } @rrs_aaaa) {
-                        push @results, emit_log( RNAME_MAIL_DOMAIN_LOCALHOST => { domain => $mail_domain, localhost => q{::1} } );
+                        push @results, _emit_log( RNAME_MAIL_DOMAIN_LOCALHOST => { domain => $mail_domain, localhost => q{::1} } );
                     }
                     elsif ( @rrs_aaaa ) {
                         $exchange_valid = 1;
@@ -998,7 +998,7 @@ sub syntax06 {
                 if ( !exists $seen_rnames{$rname} ) {
                     $seen_rnames{$rname} = 1;
                     push @results,
-                      emit_log(
+                      _emit_log(
                         RNAME_RFC822_VALID => {
                             rname => $rname,
                         }
@@ -1006,13 +1006,13 @@ sub syntax06 {
                 }
             }
             else {
-                push @results, emit_log( RNAME_MAIL_DOMAIN_INVALID => { domain => $mail_domain } );
+                push @results, _emit_log( RNAME_MAIL_DOMAIN_INVALID => { domain => $mail_domain } );
             }
         } ## end for my $mail_domain ( @mail_domains)
 
     } ## end for my $ns ( @nss )
 
-    return ( @results, emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub syntax06
 
 =over
@@ -1035,7 +1035,7 @@ sub syntax07 {
     my ( $class, $zone ) = @_;
 
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Syntax07';
-    push my @results, emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     my $p = $zone->query_one( $zone->name, q{SOA} );
 
@@ -1045,10 +1045,10 @@ sub syntax07 {
         push @results, _check_name_syntax( q{MNAME}, $mname );
     }
     else {
-        push @results, emit_log( NO_RESPONSE_SOA_QUERY => {} );
+        push @results, _emit_log( NO_RESPONSE_SOA_QUERY => {} );
     }
 
-    return ( @results, emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 }
 
 =over
@@ -1071,7 +1071,7 @@ sub syntax08 {
     my ( $class, $zone ) = @_;
 
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Syntax08';
-    push my @results, emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     my $p = $zone->query_one( $zone->name, q{MX} );
 
@@ -1082,10 +1082,10 @@ sub syntax08 {
         }
     }
     else {
-        push @results, emit_log( NO_RESPONSE_MX_QUERY => {} );
+        push @results, _emit_log( NO_RESPONSE_MX_QUERY => {} );
     }
 
-    return ( @results, emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 }
 
 1;

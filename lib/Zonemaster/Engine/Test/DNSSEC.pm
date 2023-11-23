@@ -19,7 +19,7 @@ use Zonemaster::Engine::Constants qw[:algo :soa :ip];
 use Zonemaster::Engine::Util;
 use Zonemaster::Engine::TestMethods;
 
-sub emit_log { Zonemaster::Engine->logger->add( @_, 'DNSSEC' ) }
+sub _emit_log { Zonemaster::Engine->logger->add( @_, 'DNSSEC' ) }
 
 =head1 NAME
 
@@ -233,7 +233,7 @@ sub all {
 
     if ( Zonemaster::Engine::Util::should_run_test( q{dnssec07} ) and grep { $_->tag eq 'NEITHER_DNSKEY_NOR_DS' } @results ) {
         push @results,
-          emit_log(
+          _emit_log(
             NOT_SIGNED => {
                 zone => q{} . $zone->name
             }
@@ -268,7 +268,7 @@ sub all {
         }
         else {
             push @results,
-              emit_log( ADDITIONAL_DNSKEY_SKIPPED => {} );
+              _emit_log( ADDITIONAL_DNSKEY_SKIPPED => {} );
         }
 
         if ( Zonemaster::Engine::Util::should_run_test( q{dnssec08} ) ) {
@@ -313,7 +313,7 @@ sub all {
 
     }
 
-    push @results, emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+    push @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     return @results;
 } ## end sub all
@@ -1379,7 +1379,7 @@ sub _ip_disabled_message {
 
     if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
         push @$results_array, map {
-          emit_log(
+          _emit_log(
             IPV6_DISABLED => {
                 ns     => $ns->string,
                 rrtype => $_
@@ -1391,7 +1391,7 @@ sub _ip_disabled_message {
 
     if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
         push @$results_array, map {
-          emit_log(
+          _emit_log(
             IPV4_DISABLED => {
                 ns     => $ns->string,
                 rrtype => $_,
@@ -1425,10 +1425,10 @@ sub dnssec01 {
     my ( $class, $zone ) = @_;
 
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'DNSSEC01';
-    push my @results, emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     if ( $zone->name eq '.' and not Zonemaster::Engine::Recursor->has_fake_addresses( $zone->name->string ) ){
-        return ( @results, emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
+        return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
     }
 
     my %ds_records;
@@ -1438,7 +1438,7 @@ sub dnssec01 {
 
             if ( Zonemaster::Engine::Recursor->has_fake_addresses( $zone->name->string ) ){
                 if ( scalar %{$ns->fake_ds} == 0 ){
-                    return ( @results, emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
+                    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
                 }
                 $ns_ip = "-";
             }
@@ -1482,7 +1482,7 @@ sub dnssec01 {
                     my $mnemonic = $digest_algorithms{ $ds_digtype };
                     if ( $ds_digtype == 0 ) {
                         push @results,
-                          emit_log(
+                          _emit_log(
                             DS01_DS_ALGO_NOT_DS => {
                                 ns_ip_list    => join( q{;}, uniq sort @{ $ds_records{$ds_digtype}->{$ds_keytag} } ),
                                 domain        => q{} . $zone->name,
@@ -1494,7 +1494,7 @@ sub dnssec01 {
                     }
                     elsif ( $ds_digtype == 1 or $ds_digtype == 3 ) {
                         push @results,
-                          emit_log(
+                          _emit_log(
                             DS01_DS_ALGO_DEPRECATED => {
                                 ns_ip_list => join( q{;}, uniq sort @{ $ds_records{$ds_digtype}->{$ds_keytag} } ),
                                 domain     => q{} . $zone->name,
@@ -1506,7 +1506,7 @@ sub dnssec01 {
                     }
                     elsif ( $ds_digtype >= 5 and $ds_digtype <= 255 ) {
                         push @results,
-                          emit_log(
+                          _emit_log(
                             DS01_DS_ALGO_RESERVED => {
                                 ns_ip_list    => join( q{;}, uniq sort @{ $ds_records{$ds_digtype}->{$ds_keytag} } ),
                                 domain        => q{} . $zone->name,
@@ -1521,7 +1521,7 @@ sub dnssec01 {
 
                     if ( not exists $LDNS_digest_algorithms_supported{$ds_digtype} ){
                         push @results,
-                          emit_log(
+                          _emit_log(
                             DS01_DIGEST_NOT_SUPPORTED_BY_ZM => {
                                 ns_ip_list    => join( q{;}, uniq sort @{ $ds_records{$ds_digtype}->{$ds_keytag} } ),
                                 domain        => q{} . $zone->name,
@@ -1537,7 +1537,7 @@ sub dnssec01 {
 
                         if ( not $tmp_ds ){
                             push @results,
-                              emit_log(
+                              _emit_log(
                                 DS01_DIGEST_NOT_SUPPORTED_BY_ZM => {
                                     ns_ip_list    => join( q{;}, uniq sort @{ $ds_records{$ds_digtype}->{$ds_keytag} } ),
                                     domain        => q{} . $zone->name,
@@ -1553,7 +1553,7 @@ sub dnssec01 {
 
             if ( not $algorithm2 ) {
                 push @results,
-                  emit_log(
+                  _emit_log(
                     DS01_DS_ALGO_2_MISSING => {
                         domain     => q{} . $zone->name,
                     }
@@ -1562,7 +1562,7 @@ sub dnssec01 {
         }
     }
 
-    return ( @results, emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub dnssec01
 
 =over
@@ -1585,7 +1585,7 @@ sub dnssec02 {
     my ( $self, $zone ) = @_;
 
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'DNSSEC02';
-    push my @results, emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     my @ds_record;
     my %no_dnskey_for_ds;
@@ -1758,7 +1758,7 @@ sub dnssec02 {
 
     if ( scalar keys %no_dnskey_for_ds ) {
         push @results, map {
-          emit_log(
+          _emit_log(
             DS02_NO_DNSKEY_FOR_DS => {
                 keytag     => $_,
                 ns_ip_list => join( q{;}, uniq sort @{ $no_dnskey_for_ds{$_} } )
@@ -1768,7 +1768,7 @@ sub dnssec02 {
     }
     if ( scalar keys %no_match_ds_dnskey ) {
         push @results, map {
-          emit_log(
+          _emit_log(
             DS02_NO_MATCH_DS_DNSKEY => {
                 keytag     => $_,
                 ns_ip_list => join( q{;}, uniq sort @{ $no_match_ds_dnskey{$_} } )
@@ -1778,7 +1778,7 @@ sub dnssec02 {
     }
     if ( scalar keys %dnskey_not_for_zone_signing ) {
         push @results, map {
-          emit_log(
+          _emit_log(
             DS02_DNSKEY_NOT_FOR_ZONE_SIGNING => {
                 keytag     => $_,
                 ns_ip_list => join( q{;}, uniq sort @{ $dnskey_not_for_zone_signing{$_} } )
@@ -1788,7 +1788,7 @@ sub dnssec02 {
     }
     if ( scalar keys %dnskey_not_sep ) {
         push @results, map {
-          emit_log(
+          _emit_log(
             DS02_DNSKEY_NOT_SEP => {
                 keytag     => $_,
                 ns_ip_list => join( q{;}, uniq sort @{ $dnskey_not_sep{$_} } )
@@ -1798,7 +1798,7 @@ sub dnssec02 {
     }
     if ( scalar keys %no_matching_dnskey_rrsig ) {
         push @results, map {
-          emit_log(
+          _emit_log(
             DS02_NO_MATCHING_DNSKEY_RRSIG => {
                 keytag     => $_,
                 ns_ip_list => join( q{;}, uniq sort @{ $no_matching_dnskey_rrsig{$_} } )
@@ -1809,7 +1809,7 @@ sub dnssec02 {
     if ( scalar keys %algo_not_supported_by_zm ) {
         foreach my $keytag ( keys %algo_not_supported_by_zm ) {
             push @results, map {
-              emit_log(
+              _emit_log(
                 DS02_ALGO_NOT_SUPPORTED_BY_ZM => {
                     keytag     => $keytag,
                     algo_num   => $_,
@@ -1822,7 +1822,7 @@ sub dnssec02 {
     }
     if ( scalar keys %rrsig_not_valid_by_dnskey ) {
         push @results, map {
-          emit_log(
+          _emit_log(
             DS02_RRSIG_NOT_VALID_BY_DNSKEY => {
                 keytag     => $_,
                 ns_ip_list => join( q{;}, uniq sort @{ $rrsig_not_valid_by_dnskey{$_} } )
@@ -1838,7 +1838,7 @@ sub dnssec02 {
 
     if ( scalar @ns_dnskey ) {
         push @results,
-            emit_log(
+            _emit_log(
               DS02_NO_VALID_DNSKEY_FOR_ANY_DS => {
                 ns_ip_list => join( q{;}, sort @ns_dnskey )
               }
@@ -1847,7 +1847,7 @@ sub dnssec02 {
     else {
         if ( scalar @ns_rrsig ) {
             push @results,
-              emit_log(
+              _emit_log(
                 DS02_DNSKEY_NOT_SIGNED_BY_ANY_DS => {
                     ns_ip_list => join( q{;}, sort @ns_rrsig )
                 }
@@ -1855,7 +1855,7 @@ sub dnssec02 {
         }
     }
 
-    return ( @results, emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub dnssec02
 
 =over
@@ -1878,7 +1878,7 @@ sub dnssec03 {
     my ( $self, $zone ) = @_;
 
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'DNSSEC03';
-    push my @results, emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     my $param_p = $zone->query_one( $zone->name, 'NSEC3PARAM', { dnssec => 1 } );
 
@@ -1887,7 +1887,7 @@ sub dnssec03 {
 
     if ( @nsec3params == 0 ) {
         push @results,
-          emit_log(
+          _emit_log(
             NO_NSEC3PARAM => {
                 server => ( $param_p ? $param_p->answerfrom : '<no response>' ),
             }
@@ -1915,14 +1915,14 @@ sub dnssec03 {
         }
         else {
             push @results,
-              emit_log( NO_DNSKEY => {} );
+              _emit_log( NO_DNSKEY => {} );
         }
 
         foreach my $n3p ( @nsec3params ) {
             my $iter = $n3p->iterations;
             if ( $iter > 100 ) {
                 push @results,
-                  emit_log(
+                  _emit_log(
                     MANY_ITERATIONS => {
                         count => $iter,
                     }
@@ -1932,7 +1932,7 @@ sub dnssec03 {
                     or ( $min_len < 2048 and $min_len >= 1024 and $iter > 150  ) )
                 {
                     push @results,
-                      emit_log(
+                      _emit_log(
                         TOO_MANY_ITERATIONS => {
                             count     => $iter,
                             keylength => $min_len,
@@ -1943,7 +1943,7 @@ sub dnssec03 {
             elsif ( $min_len > 0 )
             {
                 push @results,
-                  emit_log(
+                  _emit_log(
                     ITERATIONS_OK => {
                         count => $iter,
                     }
@@ -1952,7 +1952,7 @@ sub dnssec03 {
         } ## end foreach my $n3p ( @nsec3params)
     } ## end else [ if ( @nsec3params == 0)]
 
-    return ( @results, emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub dnssec03
 
 =over
@@ -1975,25 +1975,25 @@ sub dnssec04 {
     my ( $self, $zone ) = @_;
 
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'DNSSEC04';
-    push my @results, emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     my $dnskey_p = $zone->query_one( $zone->name, 'DNSKEY', { dnssec => 1 } );
     if ( not $dnskey_p ) {
-        return ( @results, emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
+        return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
     }
     my @keys     = $dnskey_p->get_records( 'DNSKEY', 'answer' );
     my @key_sigs = $dnskey_p->get_records( 'RRSIG',  'answer' );
 
     my $soa_p = $zone->query_one( $zone->name, 'SOA', { dnssec => 1 } );
     if ( not $soa_p ) {
-        return ( @results, emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
+        return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
     }
     my @soas     = $soa_p->get_records( 'SOA',   'answer' );
     my @soa_sigs = $soa_p->get_records( 'RRSIG', 'answer' );
 
     foreach my $sig ( @key_sigs, @soa_sigs ) {
         push @results,
-          emit_log(
+          _emit_log(
             RRSIG_EXPIRATION => {
                 date   => scalar( gmtime($sig->expiration) ),
                 keytag => $sig->keytag,
@@ -2008,7 +2008,7 @@ sub dnssec04 {
         my $duration_long_limit   = Zonemaster::Engine::Profile->effective->get( q{test_cases_vars.dnssec04.DURATION_LONG} );
 
         if ( $remaining < 0 ) {    # already expired
-            $result_remaining = emit_log(
+            $result_remaining = _emit_log(
                 RRSIG_EXPIRED => {
                     expiration => $sig->expiration,
                     keytag     => $sig->keytag,
@@ -2017,7 +2017,7 @@ sub dnssec04 {
             );
         }
         elsif ( $remaining < ( $remaining_short_limit ) ) {
-            $result_remaining = emit_log(
+            $result_remaining = _emit_log(
                 REMAINING_SHORT => {
                     duration => $remaining,
                     keytag   => $sig->keytag,
@@ -2026,7 +2026,7 @@ sub dnssec04 {
             );
         }
         elsif ( $remaining > ( $remaining_long_limit ) ) {
-            $result_remaining = emit_log(
+            $result_remaining = _emit_log(
                 REMAINING_LONG => {
                     duration => $remaining,
                     keytag   => $sig->keytag,
@@ -2038,7 +2038,7 @@ sub dnssec04 {
         my $duration = $sig->expiration - $sig->inception;
         my $result_duration;
         if ( $duration > ( $duration_long_limit ) ) {
-            $result_duration = emit_log(
+            $result_duration = _emit_log(
                 DURATION_LONG => {
                     duration => $duration,
                     keytag   => $sig->keytag,
@@ -2053,7 +2053,7 @@ sub dnssec04 {
         }
         else {
             push @results,
-              emit_log(
+              _emit_log(
                 DURATION_OK => {
                     duration => $duration,
                     keytag   => $sig->keytag,
@@ -2063,7 +2063,7 @@ sub dnssec04 {
         }
     } ## end foreach my $sig ( @key_sigs...)
 
-    return ( @results, emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub dnssec04
 
 =over
@@ -2086,7 +2086,7 @@ sub dnssec05 {
     my ( $self, $zone ) = @_;
 
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'DNSSEC05';
-    push my @results, emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     my @nss_del   = @{ Zonemaster::Engine::TestMethods->method4( $zone ) };
     my @nss_child = @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
@@ -2101,13 +2101,13 @@ sub dnssec05 {
 
         my $dnskey_p = $ns->query( $zone->name, 'DNSKEY', { dnssec => 1 } );
         if ( not $dnskey_p ) {
-            push @results, emit_log( NO_RESPONSE => { ns => $ns->string } );
+            push @results, _emit_log( NO_RESPONSE => { ns => $ns->string } );
             next;
         }
 
         my @keys = $dnskey_p->get_records( 'DNSKEY', 'answer' );
         if ( not @keys ) {
-            push @results, emit_log( NO_RESPONSE_DNSKEY => { ns => $ns->string } );
+            push @results, _emit_log( NO_RESPONSE_DNSKEY => { ns => $ns->string } );
             next;
         }
 
@@ -2120,28 +2120,28 @@ sub dnssec05 {
             };
 
             if ( $algo_properties{$algo}{status} == $ALGO_STATUS_DEPRECATED ) {
-                push @results, emit_log( ALGORITHM_DEPRECATED => $algo_args );
+                push @results, _emit_log( ALGORITHM_DEPRECATED => $algo_args );
             }
             elsif ( $algo_properties{$algo}{status} == $ALGO_STATUS_RESERVED ) {
-                push @results, emit_log( ALGORITHM_RESERVED => $algo_args );
+                push @results, _emit_log( ALGORITHM_RESERVED => $algo_args );
             }
             elsif ( $algo_properties{$algo}{status} == $ALGO_STATUS_UNASSIGNED ) {
-                push @results, emit_log( ALGORITHM_UNASSIGNED => $algo_args );
+                push @results, _emit_log( ALGORITHM_UNASSIGNED => $algo_args );
             }
             elsif ( $algo_properties{$algo}{status} == $ALGO_STATUS_PRIVATE ) {
-                push @results, emit_log( ALGORITHM_PRIVATE => $algo_args );
+                push @results, _emit_log( ALGORITHM_PRIVATE => $algo_args );
             }
             elsif ( $algo_properties{$algo}{status} == $ALGO_STATUS_NOT_ZONE_SIGN ) {
-                push @results, emit_log( ALGORITHM_NOT_ZONE_SIGN => $algo_args );
+                push @results, _emit_log( ALGORITHM_NOT_ZONE_SIGN => $algo_args );
             }
             elsif ( $algo_properties{$algo}{status} == $ALGO_STATUS_NOT_RECOMMENDED ) {
-                push @results, emit_log( ALGORITHM_NOT_RECOMMENDED => $algo_args );
+                push @results, _emit_log( ALGORITHM_NOT_RECOMMENDED => $algo_args );
             }
             else {
-                push @results, emit_log( ALGORITHM_OK => $algo_args );
+                push @results, _emit_log( ALGORITHM_OK => $algo_args );
                 if ( $key->flags & 256 ) {    # This is a Key
                     push @results,
-                      emit_log(
+                      _emit_log(
                         KEY_DETAILS => {
                             keytag  => $key->keytag,
                             keysize => $key->keysize,
@@ -2157,7 +2157,7 @@ sub dnssec05 {
         } ## end foreach my $key ( @keys )
     }
 
-    return ( @results, emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub dnssec05
 
 =over
@@ -2180,7 +2180,7 @@ sub dnssec06 {
     my ( $self, $zone ) = @_;
 
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'DNSSEC06';
-    push my @results, emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     my $dnskey_aref = $zone->query_all( $zone->name, 'DNSKEY', { dnssec => 1 } );
     foreach my $dnskey_p ( @{$dnskey_aref} ) {
@@ -2190,7 +2190,7 @@ sub dnssec06 {
         my @sigs = $dnskey_p->get_records( 'RRSIG',  'answer' );
         if ( @sigs > 0 and @keys > 0 ) {
             push @results,
-              emit_log(
+              _emit_log(
                 EXTRA_PROCESSING_OK => {
                     server => $dnskey_p->answerfrom,
                     keys   => scalar( @keys ),
@@ -2200,7 +2200,7 @@ sub dnssec06 {
         }
         elsif ( $dnskey_p->rcode eq q{NOERROR} and ( @sigs == 0 or @keys == 0 ) ) {
             push @results,
-              emit_log(
+              _emit_log(
                 EXTRA_PROCESSING_BROKEN => {
                     server => $dnskey_p->answerfrom,
                     keys   => scalar( @keys ),
@@ -2210,7 +2210,7 @@ sub dnssec06 {
         }
     } ## end foreach my $dnskey_p ( @{$dnskey_aref...})
 
-    return ( @results, emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub dnssec06
 
 =over
@@ -2233,26 +2233,26 @@ sub dnssec07 {
     my ( $self, $zone ) = @_;
 
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'DNSSEC07';
-    push my @results, emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     if ( not $zone->parent ) {
-        return ( @results, emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
+        return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
     }
     my $dnskey_p = $zone->query_one( $zone->name, 'DNSKEY', { dnssec => 1 } );
     if ( not $dnskey_p ) {
-        return ( @results, emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
+        return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
     }
     my ( $dnskey ) = $dnskey_p->get_records( 'DNSKEY', 'answer' );
 
     my $ds_p = $zone->parent->query_one( $zone->name, 'DS', { dnssec => 1 } );
     if ( not $ds_p ) {
-        return ( @results, emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
+        return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
     }
     my ( $ds ) = $ds_p->get_records( 'DS', 'answer' );
 
     if ( $dnskey and not $ds ) {
         push @results,
-          emit_log(
+          _emit_log(
             DNSKEY_BUT_NOT_DS => {
                 child  => $dnskey_p->answerfrom,
                 parent => $ds_p->answerfrom,
@@ -2261,7 +2261,7 @@ sub dnssec07 {
     }
     elsif ( $dnskey and $ds ) {
         push @results,
-          emit_log(
+          _emit_log(
             DNSKEY_AND_DS => {
                 child  => $dnskey_p->answerfrom,
                 parent => $ds_p->answerfrom,
@@ -2270,7 +2270,7 @@ sub dnssec07 {
     }
     elsif ( not $dnskey and $ds ) {
         push @results,
-          emit_log(
+          _emit_log(
             DS_BUT_NOT_DNSKEY => {
                 child  => $dnskey_p->answerfrom,
                 parent => $ds_p->answerfrom,
@@ -2279,7 +2279,7 @@ sub dnssec07 {
     }
     else {
         push @results,
-          emit_log(
+          _emit_log(
             NEITHER_DNSKEY_NOR_DS => {
                 child  => $dnskey_p->answerfrom,
                 parent => $ds_p->answerfrom,
@@ -2287,7 +2287,7 @@ sub dnssec07 {
           );
     }
 
-    return ( @results, emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub dnssec07
 
 =over
@@ -2310,7 +2310,7 @@ sub dnssec08 {
     my ( $self, $zone ) = @_;
 
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'DNSSEC08';
-    push my @results, emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
     my @dnskey_without_rrsig;
     my %dnskey_rrsig_not_yet_valid;
     my %dnskey_rrsig_expired;
@@ -2381,7 +2381,7 @@ sub dnssec08 {
     }
     if ( scalar @dnskey_without_rrsig ) {
         push @results,
-          emit_log(
+          _emit_log(
             DS08_MISSING_RRSIG_IN_RESPONSE => {
                 ns_ip_list => join( q{;}, uniq sort @dnskey_without_rrsig )
             }
@@ -2389,7 +2389,7 @@ sub dnssec08 {
     }
     if ( scalar keys %dnskey_rrsig_not_yet_valid ) {
         push @results, map {
-          emit_log(
+          _emit_log(
             DS08_DNSKEY_RRSIG_NOT_YET_VALID => {
                 keytag     => $_,
                 ns_ip_list => join( q{;}, uniq sort @{ $dnskey_rrsig_not_yet_valid{$_} } )
@@ -2399,7 +2399,7 @@ sub dnssec08 {
     }
     if ( scalar keys %dnskey_rrsig_expired ) {
         push @results, map {
-          emit_log(
+          _emit_log(
             DS08_DNSKEY_RRSIG_EXPIRED => {
                 keytag     => $_,
                 ns_ip_list => join( q{;}, uniq sort @{ $dnskey_rrsig_expired{$_} } )
@@ -2409,7 +2409,7 @@ sub dnssec08 {
     }
     if ( scalar keys %no_matching_dnskey ) {
         push @results, map {
-          emit_log(
+          _emit_log(
             DS08_NO_MATCHING_DNSKEY => {
                 keytag     => $_,
                 ns_ip_list => join( q{;}, uniq sort @{ $no_matching_dnskey{$_} } )
@@ -2419,7 +2419,7 @@ sub dnssec08 {
     }
     if ( scalar keys %rrsig_not_valid_by_dnskey ) {
         push @results, map {
-          emit_log(
+          _emit_log(
             DS08_RRSIG_NOT_VALID_BY_DNSKEY => {
                 keytag     => $_,
                 ns_ip_list => join( q{;}, uniq sort @{ $rrsig_not_valid_by_dnskey{$_} } )
@@ -2430,7 +2430,7 @@ sub dnssec08 {
     if ( scalar keys %algo_not_supported_by_zm ) {
         foreach my $keytag ( keys %algo_not_supported_by_zm ) {
             push @results, map {
-              emit_log(
+              _emit_log(
                 DS08_ALGO_NOT_SUPPORTED_BY_ZM => {
                     keytag     => $keytag,
                     algo_num   => $_,
@@ -2442,7 +2442,7 @@ sub dnssec08 {
         }
     }
 
-    return ( @results, emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub dnssec08
 
 =over
@@ -2465,7 +2465,7 @@ sub dnssec09 {
     my ( $self, $zone ) = @_;
 
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'DNSSEC09';
-    push my @results, emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
     my @soa_without_rrsig;
     my %soa_rrsig_not_yet_valid;
     my %soa_rrsig_expired;
@@ -2551,7 +2551,7 @@ sub dnssec09 {
     }
     if ( scalar @soa_without_rrsig ) {
         push @results,
-          emit_log(
+          _emit_log(
             DS09_MISSING_RRSIG_IN_RESPONSE => {
                 ns_ip_list => join( q{;}, uniq sort @soa_without_rrsig )
             }
@@ -2559,7 +2559,7 @@ sub dnssec09 {
     }
     if ( scalar keys %soa_rrsig_not_yet_valid ) {
         push @results, map {
-          emit_log(
+          _emit_log(
             DS09_SOA_RRSIG_NOT_YET_VALID => {
                 keytag     => $_,
                 ns_ip_list => join( q{;}, uniq sort @{ $soa_rrsig_not_yet_valid{$_} } )
@@ -2569,7 +2569,7 @@ sub dnssec09 {
     }
     if ( scalar keys %soa_rrsig_expired ) {
         push @results, map {
-          emit_log(
+          _emit_log(
             DS09_SOA_RRSIG_EXPIRED => {
                 keytag     => $_,
                 ns_ip_list => join( q{;}, uniq sort @{ $soa_rrsig_expired{$_} } )
@@ -2579,7 +2579,7 @@ sub dnssec09 {
     }
     if ( scalar keys %no_matching_dnskey ) {
         push @results, map {
-          emit_log(
+          _emit_log(
             DS09_NO_MATCHING_DNSKEY => {
                 keytag     => $_,
                 ns_ip_list => join( q{;}, uniq sort @{ $no_matching_dnskey{$_} } )
@@ -2589,7 +2589,7 @@ sub dnssec09 {
     }
     if ( scalar keys %rrsig_not_valid_by_dnskey ) {
         push @results, map {
-          emit_log(
+          _emit_log(
             DS09_RRSIG_NOT_VALID_BY_DNSKEY => {
                 keytag     => $_,
                 ns_ip_list => join( q{;}, uniq sort @{ $rrsig_not_valid_by_dnskey{$_} } )
@@ -2600,7 +2600,7 @@ sub dnssec09 {
     if ( scalar keys %algo_not_supported_by_zm ) {
         foreach my $keytag ( keys %algo_not_supported_by_zm ) {
             push @results, map {
-              emit_log(
+              _emit_log(
                 DS09_ALGO_NOT_SUPPORTED_BY_ZM => {
                     keytag     => $keytag,
                     algo_num   => $_,
@@ -2612,7 +2612,7 @@ sub dnssec09 {
         }
     }
 
-    return ( @results, emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub dnssec09
 
 =over
@@ -2635,7 +2635,7 @@ sub dnssec10 {
     my ( $class, $zone ) = @_;
 
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'DNSSEC10';
-    push my @results, emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
     my $non_existent_domain_name = $zone->name->prepend( q{xx--oplk4f3fgh9lksdfhu7h--xx} );
     my @query_types = qw{DNSKEY A};
     my %unsigned_answer;
@@ -2989,7 +2989,7 @@ sub dnssec10 {
 
     if ( scalar keys %non_existent_response_error ) {
         push @results,
-          emit_log(
+          _emit_log(
             DS10_NON_EXISTENT_RESPONSE_ERROR => {
                 ns_ip_list => join( q{;}, sort keys %non_existent_response_error )
             }
@@ -2999,7 +2999,7 @@ sub dnssec10 {
     if ( scalar keys %unsigned_answer ) {
         foreach my $domain ( keys %unsigned_answer ) {
             push @results, map {
-              emit_log(
+              _emit_log(
                 DS10_UNSIGNED_ANSWER => {
                     domain => $domain,
                     rrtype => $_,
@@ -3013,7 +3013,7 @@ sub dnssec10 {
     if ( scalar keys %answer_verify_error ) {
         foreach my $domain ( keys %answer_verify_error ) {
             push @results, map {
-              emit_log(
+              _emit_log(
                 DS10_ANSWER_VERIFY_ERROR => {
                     domain => $domain,
                     rrtype => $_,
@@ -3026,7 +3026,7 @@ sub dnssec10 {
 
     if ( scalar keys %no_nsec_or_nsec3 ) {
         push @results,
-          emit_log(
+          _emit_log(
             DS10_MISSING_NSEC_NSEC3 => {
                 ns_ip_list => join( q{;}, sort keys %no_nsec_or_nsec3 )
             }
@@ -3035,7 +3035,7 @@ sub dnssec10 {
 
     if ( scalar keys %has_nsec and scalar keys %has_nsec3 ) {
         push @results,
-          emit_log(
+          _emit_log(
             DS10_INCONSISTENT_NSEC_NSEC3 => {
                 ns_ip_list_nsec  => join( q{;}, sort keys %has_nsec ),
                 ns_ip_list_nsec3 => join( q{;}, sort keys %has_nsec3 )
@@ -3045,7 +3045,7 @@ sub dnssec10 {
 
     if ( scalar keys %mixed_nsec_nsec3 ) {
         push @results,
-          emit_log(
+          _emit_log(
             DS10_MIXED_NSEC_NSEC3 => {
                 ns_ip_list => join( q{;}, sort keys %mixed_nsec_nsec3 )
             }
@@ -3054,7 +3054,7 @@ sub dnssec10 {
 
     if ( scalar keys %has_nsec and not scalar keys %no_nsec_or_nsec3 and not scalar %has_nsec3 and not scalar %mixed_nsec_nsec3 ) {
         push @results,
-          emit_log(
+          _emit_log(
             DS10_HAS_NSEC => {
                 ns_ip_list => join( q{;}, sort keys %has_nsec )
             }
@@ -3063,7 +3063,7 @@ sub dnssec10 {
 
     if ( scalar keys %has_nsec3 and not scalar keys %no_nsec_or_nsec3 and not scalar %has_nsec and not scalar %mixed_nsec_nsec3 ) {
         push @results,
-          emit_log(
+          _emit_log(
             DS10_HAS_NSEC3 => {
                 ns_ip_list => join( q{;}, sort keys %has_nsec3 )
             }
@@ -3072,7 +3072,7 @@ sub dnssec10 {
 
     if ( scalar keys %name_not_covered_by_nsec ) {
         push @results,
-          emit_log(
+          _emit_log(
             DS10_NAME_NOT_COVERED_BY_NSEC => {
                 ns_ip_list => join( q{;}, sort keys %name_not_covered_by_nsec )
             }
@@ -3081,7 +3081,7 @@ sub dnssec10 {
 
     if ( scalar keys %name_not_covered_by_nsec3 ) {
         push @results,
-          emit_log(
+          _emit_log(
             DS10_NAME_NOT_COVERED_BY_NSEC3 => {
                 ns_ip_list => join( q{;}, sort keys %name_not_covered_by_nsec3 )
             }
@@ -3090,7 +3090,7 @@ sub dnssec10 {
 
     if ( scalar keys %nsec_missing_signature ) {
         push @results,
-          emit_log(
+          _emit_log(
             DS10_NSEC_MISSING_SIGNATURE => {
                 ns_ip_list => join( q{;}, sort keys %nsec_missing_signature )
             }
@@ -3099,7 +3099,7 @@ sub dnssec10 {
 
     if ( scalar keys %nsec3_missing_signature ) {
         push @results,
-          emit_log(
+          _emit_log(
             DS10_NSEC3_MISSING_SIGNATURE => {
                 ns_ip_list => join( q{;}, sort keys %nsec3_missing_signature )
             }
@@ -3108,7 +3108,7 @@ sub dnssec10 {
 
     if ( scalar keys %nsec_rrsig_verify_error ) {
         push @results,
-          emit_log(
+          _emit_log(
             DS10_NSEC_RRSIG_VERIFY_ERROR => {
                 ns_ip_list => join( q{;}, sort keys %nsec_rrsig_verify_error )
             }
@@ -3117,7 +3117,7 @@ sub dnssec10 {
 
     if ( scalar keys %nsec3_rrsig_verify_error ) {
         push @results,
-          emit_log(
+          _emit_log(
             DS10_NSEC3_RRSIG_VERIFY_ERROR => {
                 ns_ip_list => join( q{;}, sort keys %nsec3_rrsig_verify_error )
             }
@@ -3127,7 +3127,7 @@ sub dnssec10 {
     if ( scalar keys %algo_not_supported_by_zm ) {
         foreach my $keytag ( keys %algo_not_supported_by_zm ) {
             push @results, map {
-              emit_log(
+              _emit_log(
                 DS10_ALGO_NOT_SUPPORTED_BY_ZM => {
                     keytag     => $keytag,
                     algo_num   => $_,
@@ -3139,7 +3139,7 @@ sub dnssec10 {
         }
     }
 
-    return ( @results, emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub dnssec10
 
 =over
@@ -3162,7 +3162,7 @@ sub dnssec11 {
     my ( $class, $zone ) = @_;
 
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'DNSSEC11';
-    push my @results, emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
     my @undetermined_ds;
     my @no_ds_record;
     my @has_ds_record;
@@ -3180,7 +3180,7 @@ sub dnssec11 {
 
         if ( $is_undelegated ){
             if ( not $ns->fake_ds->{$zone->name->string} ){
-                return ( @results, emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
+                return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
             }
             last;
         }
@@ -3212,22 +3212,22 @@ sub dnssec11 {
     undef %ip_already_processed;
 
     if ( scalar @undetermined_ds and not scalar @no_ds_record and not scalar @has_ds_record ) {
-        push @results, emit_log( DS11_UNDETERMINED_DS => {} );
+        push @results, _emit_log( DS11_UNDETERMINED_DS => {} );
         $continue_with_child_tests = 0;
     }
     elsif ( scalar @no_ds_record and not scalar @has_ds_record ) {
         $continue_with_child_tests = 0;
     }
     elsif ( scalar @no_ds_record and scalar @has_ds_record ) {
-        push @results, emit_log( DS11_INCONSISTENT_DS => {} );
+        push @results, _emit_log( DS11_INCONSISTENT_DS => {} );
         push @results,
-          emit_log(
+          _emit_log(
             DS11_PARENT_WITHOUT_DS => {
                 ns_ip_list => join( q{;}, sort @no_ds_record )
             }
           );
         push @results,
-          emit_log(
+          _emit_log(
              DS11_PARENT_WITH_DS => {
                 ns_ip_list => join( q{;}, sort @has_ds_record )
             }
@@ -3290,21 +3290,21 @@ sub dnssec11 {
         undef %ip_already_processed;
 
         if ( scalar @undetermined_dnskey and not scalar @no_dnskey_record and not scalar @has_dnskey_record ) {
-            push @results, emit_log( DS11_UNDETERMINED_SIGNED_ZONE => {} );
+            push @results, _emit_log( DS11_UNDETERMINED_SIGNED_ZONE => {} );
         }
         elsif ( scalar @no_dnskey_record and not scalar @has_dnskey_record ) {
-            push @results, emit_log( DS11_DS_BUT_UNSIGNED_ZONE => {} );
+            push @results, _emit_log( DS11_DS_BUT_UNSIGNED_ZONE => {} );
         }
         elsif ( scalar @no_dnskey_record and scalar @has_dnskey_record ) {
-            push @results, emit_log( DS11_INCONSISTENT_SIGNED_ZONE => {} );
+            push @results, _emit_log( DS11_INCONSISTENT_SIGNED_ZONE => {} );
             push @results,
-              emit_log(
+              _emit_log(
                 DS11_NS_WITH_UNSIGNED_ZONE => {
                     ns_ip_list => join( q{;}, sort @no_dnskey_record )
                 }
               );
             push @results,
-              emit_log(
+              _emit_log(
                   DS11_NS_WITH_SIGNED_ZONE => {
                     ns_ip_list => join( q{;}, sort @has_dnskey_record )
                 }
@@ -3312,7 +3312,7 @@ sub dnssec11 {
         }
     }
 
-    return ( @results, emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub dnssec11
 
 =over
@@ -3335,7 +3335,7 @@ sub dnssec13 {
     my ( $class, $zone ) = @_;
 
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'DNSSEC13';
-    push my @results, emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
     my @query_types = qw{DNSKEY SOA NS};
     my %algo_not_signed;
     my @nss_del   = @{ Zonemaster::Engine::TestMethods->method4( $zone ) };
@@ -3390,7 +3390,7 @@ sub dnssec13 {
         if ( exists $algo_not_signed{ lc($query_type) } ) {
             foreach my $algorithm ( keys %{ $algo_not_signed{ lc($query_type) } } ) {
                 push @results,
-                  emit_log(
+                  _emit_log(
                     "DS13_ALGO_NOT_SIGNED_${query_type}" => {
                         ns_ip_list => join( q{;}, uniq sort @{ $algo_not_signed{ lc($query_type) }{$algorithm} }),
                         algo_num   => $algorithm,
@@ -3401,7 +3401,7 @@ sub dnssec13 {
         }
     }
 
-    return ( @results, emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub dnssec13
 
 =over
@@ -3424,7 +3424,7 @@ sub dnssec14 {
     my ( $class, $zone ) = @_;
 
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'DNSSEC14';
-    push my @results, emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
     my @dnskey_rrs;
 
     my @nss_del   = @{ Zonemaster::Engine::TestMethods->method4( $zone ) };
@@ -3440,13 +3440,13 @@ sub dnssec14 {
 
         my $dnskey_p = $ns->query( $zone->name, 'DNSKEY', { dnssec => 1, usevc => 0 } );
         if ( not $dnskey_p ) {
-            push @results, emit_log( NO_RESPONSE => { ns => $ns->string } );
+            push @results, _emit_log( NO_RESPONSE => { ns => $ns->string } );
             next;
         }
 
         my @keys = $dnskey_p->get_records( 'DNSKEY', 'answer' );
         if ( not @keys ) {
-            push @results, emit_log( NO_RESPONSE_DNSKEY => { ns => $ns->string } );
+            push @results, _emit_log( NO_RESPONSE_DNSKEY => { ns => $ns->string } );
             next;
         } else {
             push @dnskey_rrs, @keys;
@@ -3474,15 +3474,15 @@ sub dnssec14 {
         };
 
         if ( $key->keysize < $rsa_key_size_details{$algo}{min_size} ) {
-            push @results, emit_log( DNSKEY_TOO_SMALL_FOR_ALGO => $algo_args );
+            push @results, _emit_log( DNSKEY_TOO_SMALL_FOR_ALGO => $algo_args );
         }
 
         if ( $key->keysize < $rsa_key_size_details{$algo}{rec_size} ) {
-            push @results, emit_log( DNSKEY_SMALLER_THAN_REC => $algo_args );
+            push @results, _emit_log( DNSKEY_SMALLER_THAN_REC => $algo_args );
         }
 
         if ( $key->keysize > $rsa_key_size_details{$algo}{max_size} ) {
-            push @results, emit_log( DNSKEY_TOO_LARGE_FOR_ALGO => $algo_args );
+            push @results, _emit_log( DNSKEY_TOO_LARGE_FOR_ALGO => $algo_args );
         }
 
         $investigated_keys{$key_ref} = 1;
@@ -3490,10 +3490,10 @@ sub dnssec14 {
     } ## end foreach my $key ( @keys )
 
     if ( scalar @dnskey_rrs and scalar @results == scalar grep { $_->tag eq 'NO_RESPONSE' } @results) {
-        push @results, emit_log( KEY_SIZE_OK => {} );
+        push @results, _emit_log( KEY_SIZE_OK => {} );
     }
 
-    return ( @results, emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub dnssec14
 
 =over
@@ -3516,7 +3516,7 @@ sub dnssec15 {
     my ( $class, $zone ) = @_;
 
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'DNSSEC15';
-    push my @results, emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
     my @query_types = qw{CDS CDNSKEY};
     my %cds_rrsets;
     my %cdnskey_rrsets;
@@ -3581,7 +3581,7 @@ sub dnssec15 {
     }
 
     if ( $no_cds_cdnskey ) {
-        push @results, emit_log( DS15_NO_CDS_CDNSKEY => {} );
+        push @results, _emit_log( DS15_NO_CDS_CDNSKEY => {} );
     }
     else {
         for my $ns_ip ( keys %cds_rrsets ) {
@@ -3651,7 +3651,7 @@ sub dnssec15 {
 
         if ( scalar keys %has_cds_no_cdnskey ) {
             push @results,
-              emit_log(
+              _emit_log(
                 DS15_HAS_CDS_NO_CDNSKEY => {
                     ns_ip_list => join( q{;}, sort keys %has_cds_no_cdnskey )
                 }
@@ -3660,7 +3660,7 @@ sub dnssec15 {
 
         if ( scalar keys %has_cdnskey_no_cds ) {
             push @results,
-              emit_log(
+              _emit_log(
                 DS15_HAS_CDNSKEY_NO_CDS => {
                     ns_ip_list => join( q{;}, sort keys %has_cdnskey_no_cds )
                 }
@@ -3669,7 +3669,7 @@ sub dnssec15 {
 
         if ( scalar keys %has_cds_and_cdnskey ) {
             push @results,
-              emit_log(
+              _emit_log(
                 DS15_HAS_CDS_AND_CDNSKEY => {
                     ns_ip_list => join( q{;}, sort keys %has_cds_and_cdnskey )
                 }
@@ -3689,7 +3689,7 @@ sub dnssec15 {
                 $first_rrset_string = $rrset_string;
             }
             elsif ( $rrset_string ne $first_rrset_string ) {
-                push @results, emit_log( DS15_INCONSISTENT_CDS => {} );
+                push @results, _emit_log( DS15_INCONSISTENT_CDS => {} );
                 last;
             }
         }
@@ -3707,14 +3707,14 @@ sub dnssec15 {
                 $first_rrset_string = $rrset_string;
             }
             elsif ( $rrset_string ne $first_rrset_string ) {
-                push @results, emit_log( DS15_INCONSISTENT_CDNSKEY => {} );
+                push @results, _emit_log( DS15_INCONSISTENT_CDNSKEY => {} );
                 last;
             }
         }
 
         if ( scalar keys %mismatch_cds_cdnskey ) {
             push @results,
-              emit_log(
+              _emit_log(
                 DS15_MISMATCH_CDS_CDNSKEY => {
                     ns_ip_list => join( q{;}, sort keys %mismatch_cds_cdnskey )
                 }
@@ -3722,7 +3722,7 @@ sub dnssec15 {
         }
     }
 
-    return ( @results, emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub dnssec15
 
 =over
@@ -3745,7 +3745,7 @@ sub dnssec16 {
     my ( $class, $zone ) = @_;
 
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'DNSSEC16';
-    push my @results, emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
     my @query_types = qw{CDS DNSKEY};
     my %cds_rrsets;
     my %dnskey_rrsets;
@@ -3878,7 +3878,7 @@ sub dnssec16 {
 
         if ( scalar keys %no_dnskey_rrset ) {
             push @results,
-              emit_log(
+              _emit_log(
                 DS16_CDS_WITHOUT_DNSKEY => {
                     ns_ip_list => join( q{;}, sort keys %no_dnskey_rrset )
                 }
@@ -3887,7 +3887,7 @@ sub dnssec16 {
 
         if ( scalar keys %mixed_delete_cds ) {
             push @results,
-              emit_log(
+              _emit_log(
                 DS16_MIXED_DELETE_CDS => {
                     ns_ip_list => join( q{;}, sort keys %mixed_delete_cds )
                 }
@@ -3896,7 +3896,7 @@ sub dnssec16 {
 
         if ( scalar keys %delete_cds ) {
             push @results,
-              emit_log(
+              _emit_log(
                 DS16_DELETE_CDS => {
                     ns_ip_list => join( q{;}, sort keys %delete_cds )
                 }
@@ -3905,7 +3905,7 @@ sub dnssec16 {
 
         if ( scalar keys %no_match_cds_with_dnskey ) {
             push @results, map {
-              emit_log(
+              _emit_log(
                 DS16_CDS_MATCHES_NO_DNSKEY => {
                     keytag     => $_,
                     ns_ip_list => join( q{;}, uniq sort @{ $no_match_cds_with_dnskey{ $_ } } )
@@ -3916,7 +3916,7 @@ sub dnssec16 {
 
         if ( scalar keys %cds_points_to_non_zone_dnskey ) {
             push @results, map {
-              emit_log(
+              _emit_log(
                 DS16_CDS_MATCHES_NON_ZONE_DNSKEY => {
                     keytag     => $_,
                     ns_ip_list => join( q{;}, uniq sort @{ $cds_points_to_non_zone_dnskey{ $_ } } )
@@ -3927,7 +3927,7 @@ sub dnssec16 {
 
         if ( scalar keys %cds_points_to_non_sep_dnskey ) {
             push @results, map {
-              emit_log(
+              _emit_log(
                 DS16_CDS_MATCHES_NON_SEP_DNSKEY => {
                     keytag     => $_,
                     ns_ip_list => join( q{;}, uniq sort @{ $cds_points_to_non_sep_dnskey{ $_ } } )
@@ -3938,7 +3938,7 @@ sub dnssec16 {
 
         if ( scalar keys %dnskey_not_signed_by_cds ) {
             push @results, map {
-              emit_log(
+              _emit_log(
                 DS16_DNSKEY_NOT_SIGNED_BY_CDS => {
                     keytag     => $_,
                     ns_ip_list => join( q{;}, uniq sort @{ $dnskey_not_signed_by_cds{ $_ } } )
@@ -3949,7 +3949,7 @@ sub dnssec16 {
 
         if ( scalar keys %cds_not_signed_by_cds ) {
             push @results, map {
-              emit_log(
+              _emit_log(
                 DS16_CDS_NOT_SIGNED_BY_CDS => {
                     keytag     => $_,
                     ns_ip_list => join( q{;}, uniq sort @{ $cds_not_signed_by_cds{ $_ } } )
@@ -3960,7 +3960,7 @@ sub dnssec16 {
 
         if ( scalar keys %cds_invalid_rrsig ) {
             push @results, map {
-              emit_log(
+              _emit_log(
                 DS16_CDS_INVALID_RRSIG => {
                     keytag     => $_,
                     ns_ip_list => join( q{;}, uniq sort @{ $cds_invalid_rrsig{ $_ } } )
@@ -3971,7 +3971,7 @@ sub dnssec16 {
 
         if ( scalar keys %cds_not_signed ) {
             push @results,
-              emit_log(
+              _emit_log(
                 DS16_CDS_UNSIGNED => {
                     ns_ip_list => join( q{;}, sort keys %cds_not_signed )
                 }
@@ -3980,7 +3980,7 @@ sub dnssec16 {
 
         if ( scalar keys %cds_signed_by_unknown_dnskey ) {
             push @results, map {
-              emit_log(
+              _emit_log(
                 DS16_CDS_SIGNED_BY_UNKNOWN_DNSKEY => {
                     keytag     => $_,
                     ns_ip_list => join( q{;}, uniq sort @{ $cds_signed_by_unknown_dnskey{ $_ } } )
@@ -3990,7 +3990,7 @@ sub dnssec16 {
         }
     }
 
-    return ( @results, emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub dnssec16
 
 =over
@@ -4013,7 +4013,7 @@ sub dnssec17 {
     my ( $class, $zone ) = @_;
 
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'DNSSEC17';
-    push my @results, emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
     my @query_types = qw{CDNSKEY DNSKEY};
     my %cdnskey_rrsets;
     my %dnskey_rrsets;
@@ -4148,7 +4148,7 @@ sub dnssec17 {
 
         if ( scalar keys %no_dnskey_rrset ) {
             push @results,
-              emit_log(
+              _emit_log(
                 DS17_CDNSKEY_WITHOUT_DNSKEY => {
                     ns_ip_list => join( q{;}, sort keys %no_dnskey_rrset )
                 }
@@ -4157,7 +4157,7 @@ sub dnssec17 {
 
         if ( scalar keys %mixed_delete_cdnskey ) {
             push @results,
-              emit_log(
+              _emit_log(
                 DS17_MIXED_DELETE_CDNSKEY => {
                     ns_ip_list => join( q{;}, sort keys %mixed_delete_cdnskey )
                 }
@@ -4166,7 +4166,7 @@ sub dnssec17 {
 
         if ( scalar keys %delete_cdnskey ) {
             push @results,
-              emit_log(
+              _emit_log(
                 DS17_DELETE_CDNSKEY => {
                     ns_ip_list => join( q{;}, sort keys %delete_cdnskey )
                 }
@@ -4175,7 +4175,7 @@ sub dnssec17 {
 
         if ( scalar keys %no_match_cdnskey_with_dnskey ) {
             push @results, map {
-              emit_log(
+              _emit_log(
                 DS17_CDNSKEY_MATCHES_NO_DNSKEY => {
                     keytag     => $_,
                     ns_ip_list => join( q{;}, uniq sort @{ $no_match_cdnskey_with_dnskey{ $_ } } )
@@ -4186,7 +4186,7 @@ sub dnssec17 {
 
         if ( scalar keys %cdnskey_is_non_zone_key ) {
             push @results, map {
-              emit_log(
+              _emit_log(
                 DS17_CDNSKEY_IS_NON_ZONE => {
                     keytag     => $_,
                     ns_ip_list => join( q{;}, uniq sort @{ $cdnskey_is_non_zone_key{ $_ } } )
@@ -4198,7 +4198,7 @@ sub dnssec17 {
 
         if ( scalar keys %cdnskey_is_non_sep_key ) {
             push @results, map {
-              emit_log(
+              _emit_log(
                 DS17_CDNSKEY_IS_NON_SEP => {
                     keytag     => $_,
                     ns_ip_list => join( q{;}, uniq sort @{ $cdnskey_is_non_sep_key{ $_ } } )
@@ -4209,7 +4209,7 @@ sub dnssec17 {
 
         if ( scalar keys %dnskey_not_signed_by_cdnskey ) {
             push @results, map {
-              emit_log(
+              _emit_log(
                 DS17_DNSKEY_NOT_SIGNED_BY_CDNSKEY => {
                     keytag     => $_,
                     ns_ip_list => join( q{;}, uniq sort @{ $dnskey_not_signed_by_cdnskey{ $_ } } )
@@ -4220,7 +4220,7 @@ sub dnssec17 {
 
         if ( scalar keys %cdnskey_not_signed_by_cdnskey ) {
             push @results, map {
-              emit_log(
+              _emit_log(
                 DS17_CDNSKEY_NOT_SIGNED_BY_CDNSKEY => {
                     keytag     => $_,
                     ns_ip_list => join( q{;}, uniq sort @{ $cdnskey_not_signed_by_cdnskey{ $_ } } )
@@ -4231,7 +4231,7 @@ sub dnssec17 {
 
         if ( scalar keys %cdnskey_invalid_rrsig ) {
             push @results, map {
-              emit_log(
+              _emit_log(
                 DS17_CDNSKEY_INVALID_RRSIG => {
                     keytag     => $_,
                     ns_ip_list => join( q{;}, uniq sort @{ $cdnskey_invalid_rrsig{ $_ } } )
@@ -4242,7 +4242,7 @@ sub dnssec17 {
 
         if ( scalar keys %cdnskey_not_signed ) {
             push @results,
-              emit_log(
+              _emit_log(
                 DS17_CDNSKEY_UNSIGNED => {
                     ns_ip_list => join( q{;}, sort keys %cdnskey_not_signed )
                 }
@@ -4251,7 +4251,7 @@ sub dnssec17 {
 
         if ( scalar keys %cdnskey_signed_by_unknown_dnskey ) {
             push @results, map {
-              emit_log(
+              _emit_log(
                 DS17_CDNSKEY_SIGNED_BY_UNKNOWN_DNSKEY => {
                     keytag     => $_,
                     ns_ip_list => join( q{;}, uniq sort @{ $cdnskey_signed_by_unknown_dnskey{ $_ } } )
@@ -4261,7 +4261,7 @@ sub dnssec17 {
         }
     }
 
-    return ( @results, emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub dnssec17
 
 =over
@@ -4284,7 +4284,7 @@ sub dnssec18 {
     my ( $class, $zone ) = @_;
 
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'DNSSEC18';
-    push my @results, emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
     my %cds_rrsets;
     my %cdnskey_rrsets;
     my %dnskey_rrsets;
@@ -4438,7 +4438,7 @@ sub dnssec18 {
             }
             if ( scalar keys %ds_no_match_cds_rrsig ) {
                 push @results,
-                  emit_log(
+                  _emit_log(
                      DS18_NO_MATCH_CDS_RRSIG_DS => {
                         ns_ip_list => join( q{;}, sort keys %ds_no_match_cds_rrsig )
                     }
@@ -4446,7 +4446,7 @@ sub dnssec18 {
             }
             if ( scalar keys %ds_no_match_cdnskey_rrsig ) {
                 push @results,
-                  emit_log(
+                  _emit_log(
                      DS18_NO_MATCH_CDNSKEY_RRSIG_DS => {
                         ns_ip_list => join( q{;}, sort keys %ds_no_match_cdnskey_rrsig )
                     }
@@ -4455,7 +4455,7 @@ sub dnssec18 {
         }
     }
 
-    return ( @results, emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub dnssec18
 
 1;

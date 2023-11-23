@@ -24,7 +24,7 @@ use Zonemaster::Engine::Test::Address;
 use Zonemaster::Engine::TestMethods;
 use Zonemaster::Engine::Util;
 
-sub emit_log { Zonemaster::Engine->logger->add( @_, 'Zone' ) }
+sub _emit_log { Zonemaster::Engine->logger->add( @_, 'Zone' ) }
 
 =head1 NAME
 
@@ -519,7 +519,7 @@ sub _ip_disabled_message {
 
     if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
         push @$results_array, map {
-          emit_log(
+          _emit_log(
             IPV6_DISABLED => {
                 ns     => $ns->string,
                 rrtype => $_
@@ -531,7 +531,7 @@ sub _ip_disabled_message {
 
     if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
         push @$results_array, map {
-          emit_log(
+          _emit_log(
             IPV4_DISABLED => {
                 ns     => $ns->string,
                 rrtype => $_,
@@ -601,7 +601,7 @@ sub zone01 {
     my ( $class, $zone ) = @_;
 
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Zone01';
-    push my @results, emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     my %mname_ns;
     my @serial_ns;
@@ -640,11 +640,11 @@ sub zone01 {
     }
 
     if ( scalar @mname_localhost ){
-        push @results, emit_log( Z01_MNAME_IS_LOCALHOST => { ns_ip_list => join( q{;}, @mname_localhost ) } );
+        push @results, _emit_log( Z01_MNAME_IS_LOCALHOST => { ns_ip_list => join( q{;}, @mname_localhost ) } );
     }
 
     if ( scalar @mname_dot ){
-        push @results, emit_log( Z01_MNAME_IS_DOT => { ns_ip_list => join( q{;}, @mname_dot ) } );
+        push @results, _emit_log( Z01_MNAME_IS_DOT => { ns_ip_list => join( q{;}, @mname_dot ) } );
     }
 
     my $found_ip = 0;
@@ -652,7 +652,7 @@ sub zone01 {
 
     foreach my $mname ( keys %mname_ns ){
         if ( none { $_ eq $mname } @{ Zonemaster::Engine::TestMethods->method3( $zone ) } ){
-            push @results, emit_log( Z01_MNAME_NOT_IN_NS_LIST => { nsname => $mname } );
+            push @results, _emit_log( Z01_MNAME_NOT_IN_NS_LIST => { nsname => $mname } );
         }
 
         foreach my $ip ( Zonemaster::Engine::Recursor->get_addresses_for( $mname ) ){
@@ -663,7 +663,7 @@ sub zone01 {
         if ( $found_ip ){
             foreach my $ip ( keys %{ $mname_ns{$mname} } ){
                 if ( $ip eq '127.0.0.1' or $ip eq '::1' ){
-                    push @results, emit_log( Z01_MNAME_HAS_LOCALHOST_ADDR => { nsname => $mname, ns_ip => $ip } );
+                    push @results, _emit_log( Z01_MNAME_HAS_LOCALHOST_ADDR => { nsname => $mname, ns_ip => $ip } );
                 }
                 else{
                     my $ns = Zonemaster::Engine::Nameserver->new( { name => $mname, address => $ip } );
@@ -677,7 +677,7 @@ sub zone01 {
                     if ( $p ){
                         if ( $p->rcode eq q{NOERROR} and $p->get_records_for_name( q{SOA}, $zone->name, q{answer} ) ){
                             if ( not $p->aa ){
-                                push @results, emit_log( Z01_MNAME_NOT_AUTHORITATIVE => { ns => $ns->string } );
+                                push @results, _emit_log( Z01_MNAME_NOT_AUTHORITATIVE => { ns => $ns->string } );
                             }
                             else {
                                 $found_serial++;
@@ -686,20 +686,20 @@ sub zone01 {
                             }
                         }
                         elsif ( $p->rcode ne q{NOERROR} ){
-                            push @results, emit_log( Z01_MNAME_UNEXPECTED_RCODE => { ns => $ns->string, rcode => $p->rcode } );
+                            push @results, _emit_log( Z01_MNAME_UNEXPECTED_RCODE => { ns => $ns->string, rcode => $p->rcode } );
                         }
                         elsif ( not $p->get_records_for_name( q{SOA}, $zone->name, q{answer} ) ){
-                            push @results, emit_log( Z01_MNAME_MISSING_SOA_RECORD => { ns => $ns->string } );
+                            push @results, _emit_log( Z01_MNAME_MISSING_SOA_RECORD => { ns => $ns->string } );
                         }
                     }
                     else {
-                        push @results, emit_log( Z01_MNAME_NO_RESPONSE => { ns => $ns->string } );
+                        push @results, _emit_log( Z01_MNAME_NO_RESPONSE => { ns => $ns->string } );
                     }
                 }
             }
         }
         else{
-            push @results, emit_log( Z01_MNAME_NOT_RESOLVE => { nsname => $mname } );
+            push @results, _emit_log( Z01_MNAME_NOT_RESOLVE => { nsname => $mname } );
         }
     }
 
@@ -725,7 +725,7 @@ sub zone01 {
 
         if ( %mname_not_master ){
             push @results,
-                emit_log(
+                _emit_log(
                     Z01_MNAME_NOT_MASTER => {
                         ns_list => join( q{;}, sort map
                                         {
@@ -742,7 +742,7 @@ sub zone01 {
 
         if ( @mname_master ){
             push @results,
-                emit_log(
+                _emit_log(
                     Z01_MNAME_IS_MASTER => {
                         ns_list  => join( q{;}, sort @mname_master )
                     }
@@ -750,7 +750,7 @@ sub zone01 {
         }
     }
 
-    return ( @results, emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) )
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) )
 } ## end sub zone01
 
 =over
@@ -773,7 +773,7 @@ sub zone02 {
     my ( $class, $zone ) = @_;
 
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Zone02';
-    push my @results, emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     my $p = _retrieve_record_from_zone( \@results, $zone, $zone->name, q{SOA} );
 
@@ -783,7 +783,7 @@ sub zone02 {
         my $soa_refresh = $soa->refresh;
         if ( $soa_refresh < $soa_refresh_minimum_value ) {
             push @results,
-              emit_log(
+              _emit_log(
                 REFRESH_MINIMUM_VALUE_LOWER => {
                     refresh          => $soa_refresh,
                     required_refresh => $soa_refresh_minimum_value,
@@ -792,7 +792,7 @@ sub zone02 {
         }
         else {
             push @results,
-              emit_log(
+              _emit_log(
                 REFRESH_MINIMUM_VALUE_OK => {
                     refresh          => $soa_refresh,
                     required_refresh => $soa_refresh_minimum_value,
@@ -801,10 +801,10 @@ sub zone02 {
         }
     } ## end if ( $p and my ( $soa ...))
     else {
-        push @results, emit_log( NO_RESPONSE_SOA_QUERY => {} );
+        push @results, _emit_log( NO_RESPONSE_SOA_QUERY => {} );
     }
 
-    return ( @results, emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) )
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) )
 } ## end sub zone02
 
 =over
@@ -827,7 +827,7 @@ sub zone03 {
     my ( $class, $zone ) = @_;
 
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Zone03';
-    push my @results, emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     my $p = _retrieve_record_from_zone( \@results, $zone, $zone->name, q{SOA} );
 
@@ -836,7 +836,7 @@ sub zone03 {
         my $soa_refresh = $soa->refresh;
         if ( $soa_retry >= $soa_refresh ) {
             push @results,
-              emit_log(
+              _emit_log(
                 REFRESH_LOWER_THAN_RETRY => {
                     retry   => $soa_retry,
                     refresh => $soa_refresh,
@@ -845,7 +845,7 @@ sub zone03 {
         }
         else {
             push @results,
-              emit_log(
+              _emit_log(
                 REFRESH_HIGHER_THAN_RETRY => {
                     retry   => $soa_retry,
                     refresh => $soa_refresh,
@@ -854,10 +854,10 @@ sub zone03 {
         }
     } ## end if ( $p and my ( $soa ...))
     else {
-        push @results, emit_log( NO_RESPONSE_SOA_QUERY => {} );
+        push @results, _emit_log( NO_RESPONSE_SOA_QUERY => {} );
     }
 
-    return ( @results, emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) )
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) )
 } ## end sub zone03
 
 =over
@@ -880,7 +880,7 @@ sub zone04 {
     my ( $class, $zone ) = @_;
 
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Zone04';
-    push my @results, emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     my $p = _retrieve_record_from_zone( \@results, $zone, $zone->name, q{SOA} );
 
@@ -890,7 +890,7 @@ sub zone04 {
         my $soa_retry = $soa->retry;
         if ( $soa_retry < $soa_retry_minimum_value ) {
             push @results,
-              emit_log(
+              _emit_log(
                 RETRY_MINIMUM_VALUE_LOWER => {
                     retry          => $soa_retry,
                     required_retry => $soa_retry_minimum_value,
@@ -899,7 +899,7 @@ sub zone04 {
         }
         else {
             push @results,
-              emit_log(
+              _emit_log(
                 RETRY_MINIMUM_VALUE_OK => {
                     retry          => $soa_retry,
                     required_retry => $soa_retry_minimum_value,
@@ -908,10 +908,10 @@ sub zone04 {
         }
     } ## end if ( $p and my ( $soa ...))
     else {
-        push @results, emit_log( NO_RESPONSE_SOA_QUERY => {} );
+        push @results, _emit_log( NO_RESPONSE_SOA_QUERY => {} );
     }
 
-    return ( @results, emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) )
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) )
 } ## end sub zone04
 
 =over
@@ -934,7 +934,7 @@ sub zone05 {
     my ( $class, $zone ) = @_;
 
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Zone05';
-    push my @results, emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     my $p = _retrieve_record_from_zone( \@results, $zone, $zone->name, q{SOA} );
 
@@ -945,7 +945,7 @@ sub zone05 {
         my $soa_refresh = $soa->refresh;
         if ( $soa_expire < $soa_expire_minimum_value ) {
             push @results,
-              emit_log(
+              _emit_log(
                 EXPIRE_MINIMUM_VALUE_LOWER => {
                     expire          => $soa_expire,
                     required_expire => $soa_expire_minimum_value,
@@ -954,7 +954,7 @@ sub zone05 {
         }
         if ( $soa_expire < $soa_refresh ) {
             push @results,
-              emit_log(
+              _emit_log(
                 EXPIRE_LOWER_THAN_REFRESH => {
                     expire  => $soa_expire,
                     refresh => $soa_refresh,
@@ -963,7 +963,7 @@ sub zone05 {
         }
         if ( not grep { $_->tag ne q{TEST_CASE_START} } @results ) {
             push @results,
-              emit_log(
+              _emit_log(
                 EXPIRE_MINIMUM_VALUE_OK => {
                     expire          => $soa_expire,
                     refresh         => $soa_refresh,
@@ -973,10 +973,10 @@ sub zone05 {
         }
     } ## end if ( $p and my ( $soa ...))
     else {
-        push @results, emit_log( NO_RESPONSE_SOA_QUERY => {} );
+        push @results, _emit_log( NO_RESPONSE_SOA_QUERY => {} );
     }
 
-    return ( @results, emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) )
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) )
 } ## end sub zone05
 
 =over
@@ -999,7 +999,7 @@ sub zone06 {
     my ( $class, $zone ) = @_;
 
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Zone06';
-    push my @results, emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     my $p = _retrieve_record_from_zone( \@results, $zone, $zone->name, q{SOA} );
 
@@ -1010,7 +1010,7 @@ sub zone06 {
         my $soa_minimum = $soa->minimum;
         if ( $soa_minimum > $soa_default_ttl_maximum_value ) {
             push @results,
-              emit_log(
+              _emit_log(
                 SOA_DEFAULT_TTL_MAXIMUM_VALUE_HIGHER => {
                     minimum         => $soa_minimum,
                     highest_minimum => $soa_default_ttl_maximum_value,
@@ -1019,7 +1019,7 @@ sub zone06 {
         }
         elsif ( $soa_minimum < $soa_default_ttl_minimum_value ) {
             push @results,
-              emit_log(
+              _emit_log(
                 SOA_DEFAULT_TTL_MAXIMUM_VALUE_LOWER => {
                     minimum        => $soa_minimum,
                     lowest_minimum => $soa_default_ttl_minimum_value,
@@ -1028,7 +1028,7 @@ sub zone06 {
         }
         else {
             push @results,
-              emit_log(
+              _emit_log(
                 SOA_DEFAULT_TTL_MAXIMUM_VALUE_OK => {
                     minimum         => $soa_minimum,
                     highest_minimum => $soa_default_ttl_maximum_value,
@@ -1038,10 +1038,10 @@ sub zone06 {
         }
     } ## end if ( $p and my ( $soa ...))
     else {
-        push @results, emit_log( NO_RESPONSE_SOA_QUERY => {} );
+        push @results, _emit_log( NO_RESPONSE_SOA_QUERY => {} );
     }
 
-    return ( @results, emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) )
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) )
 } ## end sub zone06
 
 =over
@@ -1064,7 +1064,7 @@ sub zone07 {
     my ( $class, $zone ) = @_;
 
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Zone07';
-    push my @results, emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     my $p = _retrieve_record_from_zone( \@results, $zone, $zone->name, q{SOA} );
 
@@ -1080,7 +1080,7 @@ sub zone07 {
                 }
                 if ( $p_mname->has_rrs_of_type_for_name( q{CNAME}, $soa_mname ) ) {
                     push @results,
-                      emit_log(
+                      _emit_log(
                         MNAME_IS_CNAME => {
                             mname => $soa_mname,
                         }
@@ -1088,7 +1088,7 @@ sub zone07 {
                 }
                 else {
                     push @results,
-                      emit_log(
+                      _emit_log(
                         MNAME_IS_NOT_CNAME => {
                             mname => $soa_mname,
                         }
@@ -1098,7 +1098,7 @@ sub zone07 {
         } ## end foreach my $address_type ( ...)
         if ( not $addresses_nb ) {
             push @results,
-              emit_log(
+              _emit_log(
                 MNAME_HAS_NO_ADDRESS => {
                     mname => $soa_mname,
                 }
@@ -1106,10 +1106,10 @@ sub zone07 {
         }
     } ## end if ( $p and my ( $soa ...))
     else {
-        push @results, emit_log( NO_RESPONSE_SOA_QUERY => {} );
+        push @results, _emit_log( NO_RESPONSE_SOA_QUERY => {} );
     }
 
-    return ( @results, emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) )
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) )
 } ## end sub zone07
 
 =over
@@ -1132,7 +1132,7 @@ sub zone08 {
     my ( $class, $zone ) = @_;
 
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Zone08';
-    push my @results, emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     my $p = $zone->query_auth( $zone->name, q{MX} );
     if ( $p ) {
@@ -1141,19 +1141,19 @@ sub zone08 {
             my $p2 = $zone->query_auth( $mx->exchange, q{CNAME} );
             if ( $p2 ) {
                 if ( $p2->has_rrs_of_type_for_name( q{CNAME}, $mx->exchange ) ) {
-                    push @results, emit_log( MX_RECORD_IS_CNAME => {} );
+                    push @results, _emit_log( MX_RECORD_IS_CNAME => {} );
                 }
                 else {
-                    push @results, emit_log( MX_RECORD_IS_NOT_CNAME => {} );
+                    push @results, _emit_log( MX_RECORD_IS_NOT_CNAME => {} );
                 }
             }
         }
     }
     else {
-        push @results, emit_log( NO_RESPONSE_MX_QUERY => {} );
+        push @results, _emit_log( NO_RESPONSE_MX_QUERY => {} );
     }
 
-    return ( @results, emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) )
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) )
 } ## end sub zone08
 
 =over
@@ -1176,7 +1176,7 @@ sub zone09 {
     my ( $class, $zone ) = @_;
 
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Zone09';
-    push my @results, emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     my %ip_already_processed;
 
@@ -1228,12 +1228,12 @@ sub zone09 {
     }
 
     if ( scalar @no_response_mx ){
-        push @results, emit_log( Z09_NO_RESPONSE_MX_QUERY => { ns_ip_list => join( q{;}, sort @no_response_mx ) } );
+        push @results, _emit_log( Z09_NO_RESPONSE_MX_QUERY => { ns_ip_list => join( q{;}, sort @no_response_mx ) } );
     }
 
     if ( scalar %unexpected_rcode_mx ){
         foreach my $rcode ( keys %unexpected_rcode_mx ){
-            push @results, emit_log( Z09_UNEXPECTED_RCODE_MX => {
+            push @results, _emit_log( Z09_UNEXPECTED_RCODE_MX => {
                 rcode => $rcode,
                 ns_ip_list => join( q{;}, sort @{ $unexpected_rcode_mx{$rcode} } )
                 }
@@ -1242,13 +1242,13 @@ sub zone09 {
     }
 
     if ( scalar @non_authoritative_mx ){
-        push @results, emit_log( Z09_NON_AUTH_MX_RESPONSE => { ns_ip_list => join( q{;}, sort @no_response_mx ) } );
+        push @results, _emit_log( Z09_NON_AUTH_MX_RESPONSE => { ns_ip_list => join( q{;}, sort @no_response_mx ) } );
     }
 
     if ( scalar @no_mx_set and scalar %mx_set ){
-        push @results, emit_log( Z09_INCONSISTENT_MX => {} );
-        push @results, emit_log( Z09_NO_MX_FOUND => { ns_ip_list => join( q{;}, sort @no_mx_set ) } );
-        push @results, emit_log( Z09_MX_FOUND => { ns_ip_list => join( q{;}, sort keys %mx_set ) } );
+        push @results, _emit_log( Z09_INCONSISTENT_MX => {} );
+        push @results, _emit_log( Z09_NO_MX_FOUND => { ns_ip_list => join( q{;}, sort @no_mx_set ) } );
+        push @results, _emit_log( Z09_MX_FOUND => { ns_ip_list => join( q{;}, sort keys %mx_set ) } );
     }
 
     if ( scalar %mx_set ){
@@ -1265,10 +1265,10 @@ sub zone09 {
             else{
                 my @next_data = map { lc $_->string } sort @{ $mx_set{$ns} };
                 if ( $json->encode( \@next_data ) ne $data_json ){
-                    push @results, emit_log( Z09_INCONSISTENT_MX_DATA => {} );
+                    push @results, _emit_log( Z09_INCONSISTENT_MX_DATA => {} );
 
                     foreach my $ns_name ( keys %all_ns ){
-                        push @results, emit_log( Z09_MX_DATA => {
+                        push @results, _emit_log( Z09_MX_DATA => {
                             mailtarget_list  => join( q{;}, map { $_->exchange } @{ $mx_set{@{$all_ns{$ns_name}}[0]} } ),
                             ns_ip_list => join( q{;}, @{ $all_ns{$ns_name} } )
                             }
@@ -1287,11 +1287,11 @@ sub zone09 {
             foreach my $rr ( @{$mx_set{$ns}} ){
                 if ( $rr->exchange eq '.' ){
                     if ( scalar @{$mx_set{$ns}} > 1 ){
-                        push @results, emit_log( Z09_NULL_MX_WITH_OTHER_MX => {} ) unless grep{$_->tag eq 'Z09_NULL_MX_WITH_OTHER_MX'} @results;
+                        push @results, _emit_log( Z09_NULL_MX_WITH_OTHER_MX => {} ) unless grep{$_->tag eq 'Z09_NULL_MX_WITH_OTHER_MX'} @results;
                     }
 
                     if ( $rr->preference > 0 ){
-                        push @results, emit_log( Z09_NULL_MX_NON_ZERO_PREF => {} ) unless grep{$_->tag eq 'Z09_NULL_MX_NON_ZERO_PREF'} @results;
+                        push @results, _emit_log( Z09_NULL_MX_NON_ZERO_PREF => {} ) unless grep{$_->tag eq 'Z09_NULL_MX_NON_ZERO_PREF'} @results;
                     }
 
                     $has_null_mx = 1;
@@ -1300,15 +1300,15 @@ sub zone09 {
 
             if ( not $has_null_mx ){
                 if ( $zone->name->string eq '.' ){
-                    push @results, emit_log( Z09_ROOT_EMAIL_DOMAIN => {} );
+                    push @results, _emit_log( Z09_ROOT_EMAIL_DOMAIN => {} );
                 }
 
                 elsif ( $zone->name->next_higher eq '.' ){
-                    push @results, emit_log( Z09_TLD_EMAIL_DOMAIN => {} );
+                    push @results, _emit_log( Z09_TLD_EMAIL_DOMAIN => {} );
                 }
 
                 else {
-                    push @results, emit_log( Z09_MX_DATA => {
+                    push @results, _emit_log( Z09_MX_DATA => {
                         ns_ip_list => join( q{;}, keys %mx_set ),
                         mailtarget_list => join( q{;}, map { map { $_->exchange } @$_ } $mx_set{ (keys %mx_set)[0] } )
                         }
@@ -1320,11 +1320,11 @@ sub zone09 {
 
     elsif ( scalar @no_mx_set ){
         unless ( $zone->name eq '.' or $zone->name->next_higher eq '.' or $zone->name =~ /\.arpa$/ ){
-            push @results, emit_log( Z09_MISSING_MAIL_TARGET => {} );
+            push @results, _emit_log( Z09_MISSING_MAIL_TARGET => {} );
         }
     }
 
-    return ( @results, emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) )
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) )
 } ## end sub zone09
 
 =over
@@ -1347,7 +1347,7 @@ sub zone10 {
     my ( $class, $zone ) = @_;
 
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Zone10';
-    push my @results, emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
     my $name = name( $zone );
 
     foreach my $ns ( @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) } ) {
@@ -1359,7 +1359,7 @@ sub zone10 {
         my $p = $ns->query( $name, q{SOA} );
 
         if ( not $p ) {
-            push @results, emit_log( NO_RESPONSE => { ns => $ns->string } );
+            push @results, _emit_log( NO_RESPONSE => { ns => $ns->string } );
             next;
         }
         else {
@@ -1367,7 +1367,7 @@ sub zone10 {
             if ( scalar @soa ) {
                 if ( scalar @soa > 1 ) {
                     push @results,
-                      emit_log(
+                      _emit_log(
                         MULTIPLE_SOA => {
                             ns    => $ns->string,
                             count => scalar @soa,
@@ -1376,7 +1376,7 @@ sub zone10 {
                 }
                 elsif ( lc( $soa[0]->owner ) ne lc( $name->fqdn ) ) {
                     push @results,
-                      emit_log(
+                      _emit_log(
                         WRONG_SOA => {
                             ns    => $ns->string,
                             owner => lc( $soa[0]->owner ),
@@ -1386,15 +1386,15 @@ sub zone10 {
                 }
             } ## end if ( scalar @soa )
             else {
-                push @results, emit_log( NO_SOA_IN_RESPONSE => { ns => $ns->string } );
+                push @results, _emit_log( NO_SOA_IN_RESPONSE => { ns => $ns->string } );
             }
         } ## end else [ if ( not $p ) ]
     } ## end foreach my $ns ( @{ Zonemaster::Engine::TestMethods...})
     if ( not grep { $_->tag ne q{TEST_CASE_START} } @results ) {
-        push @results, emit_log( ONE_SOA => {} );
+        push @results, _emit_log( ONE_SOA => {} );
     }
 
-    return ( @results, emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) )
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) )
 } ## end sub zone10
 
 1;

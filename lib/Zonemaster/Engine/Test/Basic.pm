@@ -19,7 +19,7 @@ use Zonemaster::Engine::Test::Syntax;
 use Zonemaster::Engine::TestMethods;
 use Zonemaster::Engine::Util;
 
-sub emit_log { Zonemaster::Engine->logger->add( @_, 'Basic' ) }
+sub _emit_log { Zonemaster::Engine->logger->add( @_, 'Basic' ) }
 
 =head1 NAME
 
@@ -76,7 +76,7 @@ sub all {
         }
         else {
             push @results,
-              emit_log(
+              _emit_log(
                 HAS_NAMESERVER_NO_WWW_A_TEST => {
                     zname => $zone->name,
                 }
@@ -392,7 +392,7 @@ sub _ip_disabled_message {
 
     if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
         push @$results_array, map {
-          emit_log(
+          _emit_log(
             IPV4_DISABLED => {
                 ns     => $ns->string,
                 rrtype => $_,
@@ -404,7 +404,7 @@ sub _ip_disabled_message {
 
     if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
         push @$results_array, map {
-          emit_log(
+          _emit_log(
             IPV6_DISABLED => {
                 ns     => $ns->string,
                 rrtype => $_,
@@ -436,7 +436,7 @@ sub _ip_enabled_message {
 
     if ( Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
         push @$results_array, map {
-          emit_log(
+          _emit_log(
             IPV4_ENABLED => {
                 ns     => $ns->string,
                 rrtype => $_,
@@ -447,7 +447,7 @@ sub _ip_enabled_message {
 
     if ( Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
         push @$results_array, map {
-          emit_log(
+          _emit_log(
             IPV6_ENABLED => {
                 ns     => $ns->string,
                 rrtype => $_,
@@ -479,13 +479,13 @@ sub basic00 {
     my ( $class, $zone ) = @_;
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Basic00';
 
-    push my @results, emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
     my $name = name( $zone );
 
     foreach my $local_label ( @{ $name->labels } ) {
         if ( length $local_label > $LABEL_MAX_LENGTH ) {
             push @results,
-              emit_log(
+              _emit_log(
                 q{DOMAIN_NAME_LABEL_TOO_LONG} => {
                     domain  => "$name",
                     label  => $local_label,
@@ -496,7 +496,7 @@ sub basic00 {
         }
         elsif ( length $local_label == 0 ) {
             push @results,
-              emit_log(
+              _emit_log(
                 q{DOMAIN_NAME_ZERO_LENGTH_LABEL} => {
                     domain => "$name",
                 }
@@ -507,7 +507,7 @@ sub basic00 {
     my $fqdn = $name->fqdn;
     if ( length( $fqdn ) > $FQDN_MAX_LENGTH ) {
         push @results,
-          emit_log(
+          _emit_log(
             q{DOMAIN_NAME_TOO_LONG} => {
                 fqdn       => $fqdn,
                 fqdnlength => length( $fqdn ),
@@ -516,7 +516,7 @@ sub basic00 {
           );
     }
 
-    return ( @results, emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 
 } ## end sub basic00
 
@@ -540,17 +540,17 @@ sub basic01 {
     my ( $class, $zone ) = @_;
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Basic01';
 
-    push my @results, emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     if ( $zone->name eq '.' ) {
         push @results,
-          emit_log(
+          _emit_log(
              B01_CHILD_FOUND => {
                 domain => $zone->name
              }
           );
 
-        return ( @results, emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
+        return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
     }
 
     my %all_servers;
@@ -784,7 +784,7 @@ sub basic01 {
 
     if ( scalar keys %parent_found ) {
         push @results, map {
-          emit_log(
+          _emit_log(
               B01_PARENT_FOUND => {
                 domain => $_,
                 ns_ip_list => join( q{;}, uniq sort @{ $parent_found{$_} } )
@@ -794,7 +794,7 @@ sub basic01 {
 
         if ( scalar keys %parent_found > 1 ) {
           push @results,
-            emit_log(
+            _emit_log(
                 B01_PARENT_UNDETERMINED => {
                   ns_ip_list => join( q{;}, uniq sort map { @{ $parent_found{$_} } } keys %parent_found )
                 }
@@ -804,7 +804,7 @@ sub basic01 {
 
     if ( not scalar keys %parent_found and not scalar keys %aa_soa ) {
         push @results,
-          emit_log(
+          _emit_log(
               B01_PARENT_UNDETERMINED => {
                 ns_ip_list => join( q{;}, sort keys %parent_information )
               }
@@ -813,7 +813,7 @@ sub basic01 {
 
     if ( scalar keys %delegation_found or scalar keys %aa_soa ) {
         push @results,
-          emit_log(
+          _emit_log(
               B01_CHILD_FOUND => {
                 domain => $zone->name->string
               }
@@ -821,7 +821,7 @@ sub basic01 {
 
         if ( scalar keys %aa_nxdomain or scalar keys %aa_cname or scalar keys %cname_with_referral or scalar keys %aa_dname or scalar keys %aa_nodata ) {
             push @results, map {
-              emit_log(
+              _emit_log(
                   B01_INCONSISTENT_DELEGATION => {
                     domain_parent => $_,
                     domain_child => $zone->name->string,
@@ -834,7 +834,7 @@ sub basic01 {
             foreach my $zone_name ( keys %aa_soa ) {
                 if ( not $zone->name->next_higher eq $zone_name ) {
                     push @results,
-                      emit_log(
+                      _emit_log(
                           B01_PARENT_FOUND => {
                             domain => $zone_name,
                             ns_ip_list => join( q{;}, uniq sort @{ $aa_soa{$zone_name} } )
@@ -845,7 +845,7 @@ sub basic01 {
 
             if ( scalar keys %aa_soa > 1 ) {
                 push @results,
-                  emit_log(
+                  _emit_log(
                       B01_PARENT_UNDETERMINED => {
                         ns_ip_list => join( q{;}, uniq sort map { @{ $aa_soa{$_} } } keys %aa_soa )
                       }
@@ -857,7 +857,7 @@ sub basic01 {
     if ( not scalar keys %delegation_found and not scalar keys %aa_soa ) {
         if ( Zonemaster::Engine::Recursor->has_fake_addresses( $zone->name->string ) ) {
             push @results,
-              emit_log(
+              _emit_log(
                   B01_CHILD_NOT_EXIST => {
                     domain => $zone->name->string
                   }
@@ -865,7 +865,7 @@ sub basic01 {
         }
         else {
             push @results,
-              emit_log(
+              _emit_log(
                   B01_NO_CHILD => {
                     domain_child => $zone->name->string,
                     domain_super => $zone->name->next_higher
@@ -876,7 +876,7 @@ sub basic01 {
 
     if ( scalar keys %aa_dname ) {
         push @results, map { my $target = $_;
-          emit_log(
+          _emit_log(
               B01_CHILD_IS_ALIAS => {
                 domain_child => $zone->name->string,
                 domain_target => $target,
@@ -887,7 +887,7 @@ sub basic01 {
 
         if ( scalar keys %aa_dname > 1 ) {
             push @results,
-              emit_log(
+              _emit_log(
                   B01_INCONSISTENT_ALIAS => {
                     domain => $zone->name->string
                   }
@@ -897,7 +897,7 @@ sub basic01 {
 
     if ( scalar keys %non_aa_non_delegation ) {
         push @results, map {
-          emit_log(
+          _emit_log(
               B01_UNEXPECTED_NS_RESPONSE => {
                 domain_child => $zone->name->string,
                 domain_parent => $_,
@@ -907,7 +907,7 @@ sub basic01 {
         } keys %non_aa_non_delegation;
     }
 
-    return ( @results, emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub basic01
 
 =over
@@ -930,7 +930,7 @@ sub basic02 {
     my ( $class, $zone ) = @_;
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Basic02';
 
-    push my @results, emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     my $query_type = q{SOA};
 
@@ -946,13 +946,13 @@ sub basic02 {
 
     if ( not scalar @ns_names ) {
         push @results,
-            emit_log(
+            _emit_log(
                 B02_NO_DELEGATION => {
                     domain => $zone->name
                 }
             );
 
-        return ( @results, emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
+        return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
     }
 
     if ( not scalar @ns ) {
@@ -1008,7 +1008,7 @@ sub basic02 {
 
     if ( scalar keys %auth_response_soa ) {
         push @results,
-            emit_log(
+            _emit_log(
                 B02_AUTH_RESPONSE_SOA => {
                     domain => $zone->name,
                     ns_list => join( q{;}, sort keys %auth_response_soa )
@@ -1017,7 +1017,7 @@ sub basic02 {
     }
     else {
         push @results,
-            emit_log(
+            _emit_log(
                 B02_NO_WORKING_NS => {
                     domain => $zone->name
                 }
@@ -1025,7 +1025,7 @@ sub basic02 {
 
         if ( scalar keys %ns_broken ) {
             push @results, map {
-                emit_log(
+                _emit_log(
                     B02_NS_BROKEN => {
                         ns => $_
                     }
@@ -1035,7 +1035,7 @@ sub basic02 {
 
         if ( scalar keys %ns_not_auth ) {
             push @results, map {
-                emit_log(
+                _emit_log(
                     B02_NS_NOT_AUTH => {
                         ns => $_
                     }
@@ -1045,7 +1045,7 @@ sub basic02 {
 
         if ( scalar keys %ns_cant_resolve ) {
             push @results, map {
-                emit_log(
+                _emit_log(
                     B02_NS_NO_IP_ADDR => {
                         nsname => $_
                     }
@@ -1055,7 +1055,7 @@ sub basic02 {
 
         if ( scalar keys %ns_no_response ) {
             push @results, map {
-                emit_log(
+                _emit_log(
                     B02_NS_NO_RESPONSE => {
                         ns => $_
                     }
@@ -1065,7 +1065,7 @@ sub basic02 {
 
         if ( scalar keys %unexpected_rcode ) {
             push @results, map {
-                emit_log(
+                _emit_log(
                     B02_UNEXPECTED_RCODE => {
                         rcode => $unexpected_rcode{$_},
                         ns => $_
@@ -1075,7 +1075,7 @@ sub basic02 {
         }
     }
 
-    return ( @results, emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub basic02
 
 =over
@@ -1098,7 +1098,7 @@ sub basic03 {
     my ( $class, $zone ) = @_;
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Basic03';
 
-    push my @results, emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
     my $query_type = q{A};
 
     my $name        = q{www.} . $zone->name;
@@ -1114,7 +1114,7 @@ sub basic03 {
         $response_nb++;
         if ( $p->has_rrs_of_type_for_name( $query_type, $name ) ) {
             push @results,
-              emit_log(
+              _emit_log(
                 HAS_A_RECORDS => {
                     ns     => $ns->string,
                     domain => $name,
@@ -1123,7 +1123,7 @@ sub basic03 {
         }
         else {
             push @results,
-              emit_log(
+              _emit_log(
                 NO_A_RECORDS => {
                     ns     => $ns->string,
                     domain => $name,
@@ -1133,10 +1133,10 @@ sub basic03 {
     } ## end foreach my $ns ( @{ Zonemaster::Engine::TestMethods...})
 
     if ( scalar( @{ Zonemaster::Engine::TestMethods->method4( $zone ) } ) and not $response_nb ) {
-        push @results, emit_log( A_QUERY_NO_RESPONSES => {} );
+        push @results, _emit_log( A_QUERY_NO_RESPONSES => {} );
     }
 
-    return ( @results, emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub basic03
 
 1;
