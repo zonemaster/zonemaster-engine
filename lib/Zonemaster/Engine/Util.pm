@@ -202,13 +202,6 @@ Zonemaster::Engine::Util - utility functions for other Zonemaster modules
 Creates and returns a L<Zonemaster::Engine::Logger::Entry> object. The object
 is also added to the global logger object's list of entries.
 
-
-=item get_logger($module)
-
-Returns a reference to a method similar to L<Zonemaster::Engine::Util::info>
-to create L<Zonemaster::Engine::Logger::Entry> objects with the module set to
-C<$module>.
-
 =item ns($name, $address)
 
 Creates and returns a nameserver object with the given name and address.

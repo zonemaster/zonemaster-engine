@@ -208,8 +208,7 @@ C<$Zonemaster::Engine::Logger::MODULE_NAME> if not set.
 
 The variables C<$Zonemaster::Engine::Logger::MODULE_NAME> and
 C<$Zonemaster::Engine::Logger::TEST_CASE_NAME> can be dynamically set to
-change the default the default module ("System") or test case
-name ("Unspecified").
+change the default module ("System") or test case name ("Unspecified").
 
 =item json([$level])
 
