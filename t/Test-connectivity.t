@@ -22,15 +22,15 @@ foreach my $testcase ( qw{connectivity01 connectivity02 connectivity03 connectiv
     $json          = read_file( 't/profiles/Test-'.$testcase.'-only.json' );
     $profile_test  = Zonemaster::Engine::Profile->from_json( $json );
     Zonemaster::Engine::Profile->effective->merge( $profile_test );
-    my @testcases;
+    my %testcases;
     foreach my $result ( Zonemaster::Engine->test_module( q{connectivity}, q{afnic.fr} ) ) {
-        foreach my $trace (@{$result->trace}) {
-            push @testcases, grep /Zonemaster::Engine::Test::Connectivity::connectivity/, @$trace;
+        if ( $result->testcase && ! ($result->testcase eq 'Unspecified') ) {
+            $testcases{$result->testcase} = 1;
         }
     }
-    @testcases = uniq sort @testcases;
-    is( scalar( @testcases ), 1, 'only one test-case ('.$testcase.')' );
-    is( $testcases[0], 'Zonemaster::Engine::Test::Connectivity::'.$testcase, 'expected test-case ('.$testcases[0].')' );
+    is( scalar( %testcases ), 1, 'only one test-case ('.$testcase.')' );
+    my ( $actual_testcase ) = keys %testcases;
+    is( lc $actual_testcase, $testcase, 'expected test-case ('. $testcase .')' );
 }
 
 $json         = read_file( 't/profiles/Test-connectivity-all.json' );
