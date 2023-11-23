@@ -118,6 +118,13 @@ sub levels {
 
 sub string {
     my ( $self ) = @_;
+
+    return sprintf( '%s%s:%s %s', $self->module, $self->testcase ? q{:} . $self->testcase : q{}, $self->tag, $self->argstr );
+}
+
+sub argstr {
+    my ( $self ) = @_;
+
     my $argstr = q{};
     ## no critic (TestingAndDebugging::ProhibitNoWarnings)
     no warnings 'uninitialized';
@@ -129,7 +136,7 @@ sub string {
             sort keys %{$p_args} );
     }
 
-    return sprintf( '%s%s:%s %s', $self->module, $self->testcase ? q{:} . $self->testcase : q{}, $self->tag, $argstr );
+    return $argstr;
 }
 
 sub printable_args {
@@ -240,6 +247,10 @@ The log level associated to this log entry.
 =item string
 
 Simple method to generate a string representation of the log entry. Overloaded to the stringification operator.
+
+=item argstr
+
+Returns the string representation of the message arguments.
 
 =item printable_args
 
