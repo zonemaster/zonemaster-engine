@@ -174,10 +174,10 @@ sub _load_data {
 sub _build_all_tag_descriptions {
     my %all_tag_descriptions;
 
-    $all_tag_descriptions{SYSTEM} = \%TAG_DESCRIPTIONS;
+    $all_tag_descriptions{System} = \%TAG_DESCRIPTIONS;
     foreach my $mod ( 'Basic', Zonemaster::Engine->modules ) {
         my $module = 'Zonemaster::Engine::Test::' . $mod;
-        $all_tag_descriptions{ uc( $mod ) } = $module->tag_descriptions;
+        $all_tag_descriptions{ $mod } = $module->tag_descriptions;
     }
 
     return \%all_tag_descriptions;
@@ -231,7 +231,7 @@ sub to_string {
 sub translate_tag {
     my ( $self, $entry ) = @_;
 
-    return $self->_translate_tag( uc $entry->module, $entry->tag, $entry->printable_args ) // $entry->string;
+    return $self->_translate_tag( $entry->module, $entry->tag, $entry->printable_args ) // $entry->string;
 }
 
 
