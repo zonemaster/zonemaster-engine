@@ -256,10 +256,10 @@ sub metadata {
         ],
         nameserver15 => [
             qw(
-              N15_NO_VERSION
+              N15_ERROR_ON_VERSION_QUERY
+              N15_NO_VERSION_REVEALED
               N15_SOFTWARE_VERSION
-              TEST_CASE_END
-              TEST_CASE_START
+              N15_WRONG_CLASS
               )
         ],
     };
@@ -495,13 +495,21 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # NAMESERVER:N11_UNSET_AA
           'The DNS response, on query with unknown EDNS option-code, is unexpectedly not authoritative from name servers "{ns_ip_list}".', @_;
     },
-    N15_NO_VERSION => sub {
-        __x    # NAMESERVER:N15_NO_VERSION
-          'The following name server(s) do not respond to software version queries. Returned from name servers: "{ns_ip_list}"', @_;
+    N15_ERROR_ON_VERSION_QUERY => sub {
+        __x    # NAMESERVER:N15_ERROR_ON_VERSION_QUERY
+          'The following name server(s) do not respond or respond with SERVFAIL to software version query "{query_name}". Returned from name servers: "{ns_list}"', @_;
+    },
+    N15_NO_VERSION_REVEALED => sub {
+        __x    # NAMESERVER:N15_NO_VERSION_REVEALED
+          'The following name server(s) do not reveal the software version. Returned from name servers: "{ns_list}"', @_;
     },
     N15_SOFTWARE_VERSION => sub {
         __x    # NAMESERVER:N15_SOFTWARE_VERSION
-          'The following name server(s) respond to software version query "{query_name}" with string "{string}". Returned from name servers: "{ns_ip_list}"', @_;
+          'The following name server(s) respond to software version query "{query_name}" with string "{string}". Returned from name servers: "{ns_list}"', @_;
+    },
+    N15_WRONG_CLASS => sub {
+        __x    # NAMESERVER:N15_WRONG_CLASS
+          'The following name server(s) do not return CH class record(s) on CH class query. Returned from name servers: "{ns_list}"', @_;
     },
     QNAME_CASE_INSENSITIVE => sub {
         __x    # NAMESERVER:QNAME_CASE_INSENSITIVE
@@ -1699,31 +1707,44 @@ sub nameserver15 {
     push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     my %txt_data;
-    my @no_version;
+    my %error_on_version_query;
+    my %sending_version_query;
+    my @wrong_record_class;
 
     foreach my $ns ( @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) } ) {
+        next if ( _ip_disabled_message( \@results, $ns, q{SOA TXT} ) );
 
-        next if ( _ip_disabled_message( \@results, $ns, q{TXT} ) );
+        my $p_soa = $ns->query( $zone->name, q{SOA} );
 
-        my $found_string = 0;
+        next if not $p_soa;
+
+        $sending_version_query{$ns} = 1;
 
         foreach my $query_name ( q{version.bind}, q{version.server} ) {
-            my $p = $ns->query( $query_name, q{TXT}, { class => q{CH}, blacklisting_disabled => 1 } );
+            my $p_txt = $ns->query( $query_name, q{TXT}, { class => q{CH}, blacklisting_disabled => 1 } );
 
-            if ( $p and $p->rcode eq q{NOERROR} and scalar $p->get_records_for_name( q{TXT}, $query_name, q{answer} ) ) {
-                foreach my $rr ( $p->get_records_for_name(q{TXT}, $query_name, q{answer} ) ) {
+            if ( not $p_txt or $p_txt->rcode eq q{SERVFAIL} ) {
+                push @{ $error_on_version_query{$query_name} }, $ns;
+                next;
+            }
+
+            my @rrs_txt = $p_txt->get_records_for_name(q{TXT}, $query_name, q{answer});
+
+            if ( scalar @rrs_txt ) {
+                foreach my $rr ( @rrs_txt ) {
+                    if ( $rr->class ne q{CH} ) {
+                        push @wrong_record_class, $ns;
+                    }
+
                     my $string = $rr->txtdata;
+                    $string =~ s/^\s+|\s+$//g; # Remove leading and trailing spaces
 
                     if ( $string and $string ne "") {
-                        $found_string = 1;
-                        push @{ $txt_data{$string}{$query_name} }, $ns->string;
+                        push @{ $txt_data{$string}{$query_name} }, $ns;
+                        delete $sending_version_query{$ns};
                     }
                 }
             }
-        }
-
-        if ( not $found_string ) {
-            push @no_version, $ns->string;
         }
     }
 
@@ -1734,18 +1755,38 @@ sub nameserver15 {
                 N15_SOFTWARE_VERSION => {
                    string => $string,
                    query_name => $_,
-                   ns_ip_list => join( q{;}, uniq sort @{ $txt_data{$string}{$_} } )
+                   ns_list => join( q{;}, sort @{ $txt_data{$string}{$_} } )
                 }
               )
             } keys %{ $txt_data{$string} };
         }
     }
 
-    if ( scalar @no_version ) {
+    if ( scalar keys %error_on_version_query ) {
+        push @results, map {
+          _emit_log(
+            N15_ERROR_ON_VERSION_QUERY => {
+               query_name => $_,
+               ns_list => join( q{;}, sort @{ $error_on_version_query{$_} } )
+            }
+          )
+        } keys %error_on_version_query;
+    }
+
+    if ( scalar keys %sending_version_query ) {
         push @results,
           _emit_log(
-            N15_NO_VERSION => {
-               ns_ip_list => join( q{;}, uniq sort @no_version )
+            N15_NO_VERSION_REVEALED => {
+               ns_list => join( q{;}, sort keys %sending_version_query )
+            }
+          );
+    }
+
+    if ( scalar @wrong_record_class ) {
+        push @results,
+          _emit_log(
+            N15_WRONG_CLASS => {
+               ns_list => join( q{;}, sort @wrong_record_class )
             }
           );
     }

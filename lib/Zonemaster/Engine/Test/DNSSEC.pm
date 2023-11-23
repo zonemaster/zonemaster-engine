@@ -361,13 +361,25 @@ sub metadata {
         ],
         dnssec03 => [
             qw(
-              NO_NSEC3PARAM
-              NO_DNSKEY
-              MANY_ITERATIONS
-              TOO_MANY_ITERATIONS
-              ITERATIONS_OK
-              TEST_CASE_END
-              TEST_CASE_START
+              DS03_ERR_MULT_NSEC3
+              DS03_ILLEGAL_HASH_ALGO
+              DS03_ILLEGAL_ITERATION_VALUE
+              DS03_ILLEGAL_SALT_LENGTH
+              DS03_INCONSISTENT_HASH_ALGO
+              DS03_INCONSISTENT_ITERATION
+              DS03_INCONSISTENT_NSEC3_FLAGS
+              DS03_INCONSISTENT_SALT_LENGTH
+              DS03_LEGAL_EMPTY_SALT
+              DS03_LEGAL_HASH_ALGO
+              DS03_LEGAL_ITERATION_VALUE
+              DS03_NO_DNSSEC_SUPPORT
+              DS03_NO_NSEC3
+              DS03_NSEC3_OPT_OUT_DISABLED
+              DS03_NSEC3_OPT_OUT_ENABLED_NON_TLD
+              DS03_NSEC3_OPT_OUT_ENABLED_TLD
+              DS03_SERVER_NO_DNSSEC_SUPPORT
+              DS03_SERVER_NO_NSEC3
+              DS03_UNASSIGNED_FLAG_USED
               )
         ],
         dnssec04 => [
@@ -554,7 +566,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     DNSSEC03 => sub {
         __x    # DNSSEC:DNSSEC03
-          "Check for too many NSEC3 iterations";
+          "Verify NSEC3 parameters";
     },
     DNSSEC04 => sub {
         __x    # DNSSEC:DNSSEC04
@@ -782,6 +794,123 @@ Readonly my %TAG_DESCRIPTIONS => (
           'The DNSKEY RRset is signed with an RRSIG with tag {keytag} which cannot '
           . 'be validated by the matching DNSKEY. Fetched from the nameservers with IP '
           . 'addresses "{ns_ip_list}".',
+          @_;
+    },
+    DS03_ERROR_RESPONSE_NSEC_QUERY => sub {
+        __x    # DNSSEC:DS03_ERROR_RESPONSE_NSEC_QUERY
+          'The following servers give erroneous response to NSEC query. Fetched from name servers "{ns_list}".', @_;
+    },
+    DS03_ERR_MULT_NSEC3 => sub {
+        __x    # DNSSEC:DS03_ERR_MULT_NSEC3
+          'Multiple NSEC3 records when one is expected. Fetched from name servers "{ns_list}".', @_;
+    },
+    DS03_ILLEGAL_HASH_ALGO => sub {
+        __x    # DNSSEC:DS03_ILLEGAL_HASH_ALGO
+          'The following servers respond with an illegal hash algorithm for NSEC3 ({algo_num}). '
+          . 'Fetched from name servers "{ns_list}".',
+          @_;
+    },
+    DS03_ILLEGAL_ITERATION_VALUE => sub {
+        __x    # DNSSEC:DS03_ILLEGAL_ITERATION_VALUE
+          'The following servers respond with the NSEC3 iteration value {int}. '
+          . 'The recommended practice is to set this value to 0. '
+          . 'Fetched from name servers "{ns_list}".',
+          @_;
+    },
+    DS03_ILLEGAL_SALT_LENGTH => sub {
+        __x    # DNSSEC:DS03_ILLEGAL_SALT_LENGTH
+          'The following servers respond with a non-empty salt in NSEC3 ({int} octets). '
+          . 'The recommended practice is to use an empty salt. '
+          . 'Fetched from name servers "{ns_list}".',
+          @_;
+    },
+    DS03_INCONSISTENT_HASH_ALGO => sub {
+        __x    # DNSSEC:DS03_INCONSISTENT_HASH_ALGO
+          'Inconsistent hash algorithm in NSEC3 in responses for the child zone from different name servers.', @_;
+    },
+    DS03_INCONSISTENT_ITERATION => sub {
+        __x    # DNSSEC:DS03_INCONSISTENT_ITERATION
+          'Inconsistent NSEC3 iteration value in responses for the child zone from different name servers.', @_;
+    },
+    DS03_INCONSISTENT_NSEC3_FLAGS => sub {
+        __x    # DNSSEC:DS03_INCONSISTENT_NSEC3_FLAGS
+          'Inconsistent NSEC3 flag list in responses for the child zone from different name servers.', @_;
+    },
+    DS03_INCONSISTENT_SALT_LENGTH => sub {
+        __x    # DNSSEC:DS03_INCONSISTENT_SALT_LENGTH
+          'Inconsistent salt length in NSEC3 in responses for the child zone from different name servers.', @_;
+    },
+    DS03_LEGAL_EMPTY_SALT => sub {
+        __x    # DNSSEC:DS03_LEGAL_EMPTY_SALT
+          'The following servers respond with a legal empty salt in NSEC3. '
+          . 'Fetched from name servers "{ns_list}".',
+          @_;
+    },
+    DS03_LEGAL_HASH_ALGO => sub {
+        __x    # DNSSEC:DS03_LEGAL_HASH_ALGO
+          'The following servers respond with a legal hash algorithm in NSEC3. '
+          . 'Fetched from name servers "{ns_list}".',
+          @_;
+    },
+    DS03_LEGAL_ITERATION_VALUE => sub {
+        __x    # DNSSEC:DS03_LEGAL_ITERATION_VALUE
+          'The following servers respond with NSEC3 iteration value set to zero (as recommended). '
+          . 'Fetched from name servers "{ns_list}".',
+          @_;
+    },
+    DS03_NO_DNSSEC_SUPPORT => sub {
+        __x    # DNSSEC:DS03_NO_DNSSEC_SUPPORT
+          'The zone is not DNSSEC signed or not properly DNSSEC signed. Testing for NSEC3 has been skipped. '
+          . 'Fetched from name servers "{ns_list}".',
+          @_;
+    },
+    DS03_NO_NSEC3 => sub {
+        __x    # DNSSEC:DS03_NO_NSEC3
+          'The zone does not use NSEC3. Testing for NSEC3 has been skipped. '
+          . 'Fetched from name servers "{ns_list}".',
+          @_;
+    },
+    DS03_NO_RESPONSE_NSEC_QUERY => sub {
+        __x    # DNSSEC:DS03_NO_RESPONSE_NSEC_QUERY
+        'The following servers do not respond to NSEC query. Fetched from name servers "{ns_list}".', @_;
+    },
+    DS03_NSEC3_OPT_OUT_DISABLED => sub {
+        __x    # DNSSEC:DS03_NSEC3_OPT_OUT_DISABLED
+          'The following servers respond with NSEC3 opt-out disabled (as recommended). '
+          . 'Fetched from name servers "{ns_list}".',
+          @_;
+    },
+    DS03_NSEC3_OPT_OUT_ENABLED_NON_TLD => sub {
+        __x    # DNSSEC:DS03_NSEC3_OPT_OUT_ENABLED_NON_TLD
+          'The following servers respond with NSEC3 opt-out enabled. '
+          . 'The recommended practice is to disable opt-out. '
+          . 'Fetched from name servers "{ns_list}".',
+          @_;
+    },
+    DS03_NSEC3_OPT_OUT_ENABLED_TLD => sub {
+        __x    # DNSSEC:DS03_NSEC3_OPT_OUT_ENABLED_TLD
+          'The following servers respond with NSEC3 opt-out enabled. '
+          . 'Fetched from name servers "{ns_list}".',
+          @_;
+    },
+    DS03_SERVER_NO_DNSSEC_SUPPORT => sub {
+        __x    # DNSSEC:DS03_SERVER_NO_DNSSEC_SUPPORT
+          'The following name servers do not support DNSSEC or have not been properly configured. '
+          . 'Testing for NSEC3 has been skipped on those servers. '
+          . 'Fetched from name servers "{ns_list}".',
+          @_;
+    },
+    DS03_SERVER_NO_NSEC3 => sub {
+        __x    # DNSSEC:DS03_SERVER_NO_NSEC3
+          'The following name servers do not use NSEC3, but others do. '
+          . 'Testing for NSEC3 has been skipped on the following servers. '
+          . 'Fetched from name servers "{ns_list}".',
+          @_;
+    },
+    DS03_UNASSIGNED_FLAG_USED => sub {
+        __x    # DNSSEC:DS03_UNASSIGNED_FLAG_USED
+          'The following servers respond with an NSEC3 record where an unassigned flag is used (bit {int}). '
+          . 'Fetched from name servers "{ns_list}".',
           @_;
     },
     DS08_ALGO_NOT_SUPPORTED_BY_ZM => sub {
@@ -1246,10 +1375,6 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # DNSSEC:IPV6_DISABLED
           'IPv6 is disabled, not sending "{rrtype}" query to {ns}.', @_;
     },
-    ITERATIONS_OK => sub {
-        __x    # DNSSEC:ITERATIONS_OK
-          'The number of NSEC3 iterations is {count}, which is OK.', @_;
-    },
     KEY_DETAILS => sub {
         __x    # DNSSEC:KEY_DETAILS
           'Key with keytag {keytag} details : Size = {keysize}, Flags ({sep}, {rfc5011}).', @_;
@@ -1258,21 +1383,9 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # DNSSEC:KEY_SIZE_OK
           'All keys from the DNSKEY RRset have the correct size.', @_;
     },
-    MANY_ITERATIONS => sub {
-        __x    # DNSSEC:MANY_ITERATIONS
-          'The number of NSEC3 iterations is {count}, which is on the high side.', @_;
-    },
     NEITHER_DNSKEY_NOR_DS => sub {
         __x    # DNSSEC:NEITHER_DNSKEY_NOR_DS
           'There are neither DS nor DNSKEY records for the zone.', @_;
-    },
-    NO_DNSKEY => sub {
-        __x    # DNSSEC:NO_DNSKEY
-          'No DNSKEYs were returned.', @_;
-    },
-    NO_NSEC3PARAM => sub {
-        __x    # DNSSEC:NO_NSEC3PARAM
-          '{server} returned no NSEC3PARAM records.', @_;
     },
     NO_RESPONSE_DNSKEY => sub {
         __x    # DNSSEC:NO_RESPONSE_DNSKEY
@@ -1315,11 +1428,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     TEST_CASE_START => sub {
         __x    # DNSSEC:TEST_CASE_START
           'TEST_CASE_START {testcase}.', @_;
-    },
-    TOO_MANY_ITERATIONS => sub {
-        __x    # DNSSEC:TOO_MANY_ITERATIONS
-          'The number of NSEC3 iterations is {count}, which is too high for key length {keylength}.', @_;
-    },
+    }
 );
 
 =over
@@ -1880,77 +1989,282 @@ sub dnssec03 {
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'DNSSEC03';
     push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
-    my $param_p = $zone->query_one( $zone->name, 'NSEC3PARAM', { dnssec => 1 } );
+    my @responds_without_dnskey;
+    my @responds_with_dnskey;
+    my @responds_without_nsec3;
+    my @responds_with_nsec3;
+    my @multiple_nsec3;
+    my %hash_algorithm;
+    my %nsec3_flags;
+    my %nsec3_iterations;
+    my %nsec3_salt_length;
+    my @no_response_nsec_query;
+    my @error_response_nsec_query;
 
-    my @nsec3params;
-    @nsec3params = $param_p->get_records( 'NSEC3PARAM', 'answer' ) if $param_p;
+    my %ip_already_processed;
 
-    if ( @nsec3params == 0 ) {
-        push @results,
-          _emit_log(
-            NO_NSEC3PARAM => {
-                server => ( $param_p ? $param_p->answerfrom : '<no response>' ),
-            }
-          );
-    }
-    else {
-        my $dk_p = $zone->query_one( $zone->name, 'DNSKEY', { dnssec => 1 } );
+    foreach my $ns ( @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) } ){
+        next if exists $ip_already_processed{$ns->address->short};
+        $ip_already_processed{$ns->address->short} = 1;
 
-        my @dnskey;
-        @dnskey = $dk_p->get_records( 'DNSKEY', 'answer' ) if $dk_p;
+        if ( _ip_disabled_message( \@results, $ns, qw{DNSKEY NSEC} ) ) {
+            next;
+        }
 
-        my $min_len = 0;
-        if ( @dnskey ) {
-            $min_len = min map { $_->keysize } @dnskey;
-            # Do rounding as per RFC5155 section 10.3
-            if ($min_len > 2048) {
-                $min_len = 4096;
-            }
-            elsif ($min_len > 1024) {
-                $min_len = 2048;
-            }
-            else {
-                $min_len = 1024;
-            }
+        my $p1 = $ns->query( $zone->name, q{DNSKEY}, { dnssec => 1 } );
+
+        if ( not $p1 or $p1->rcode ne q{NOERROR} or not $p1->aa ) {
+            next;
+        }
+
+        if ( not scalar $p1->get_records_for_name( q{DNSKEY}, $zone->name, q{answer} ) ) {
+            push @responds_without_dnskey, $ns;
+            next;
+        }
+
+        push @responds_with_dnskey, $ns;
+
+        my $p2 = $ns->query( $zone->name, q{NSEC}, { dnssec => 1 } );
+
+        if ( not $p2 ) {
+            push @no_response_nsec_query, $ns;
+            next;
+        }
+
+        if ( $p2->rcode ne q{NOERROR} or not $p2->aa ) {
+            push @error_response_nsec_query, $ns;
+            next;
+        }
+
+        my @nsec3_rrs = $p2->get_records( q{NSEC3}, q{authority} );
+
+        if ( not scalar @nsec3_rrs ) {
+            push @responds_without_nsec3, $ns;
+            next;
         }
         else {
+            push @responds_with_nsec3, $ns;
+
+            if ( scalar @nsec3_rrs > 1 ) {
+                push @multiple_nsec3, $ns;
+            }
+
+            my $rr = ( @nsec3_rrs )[0];
+
+            push @{ $hash_algorithm{$rr->algorithm} }, $ns if defined $rr->algorithm;
+            push @{ $nsec3_flags{$rr->flags} }, $ns if defined $rr->flags;
+            push @{ $nsec3_iterations{$rr->iterations} }, $ns if defined $rr->iterations;
+
+            if ( defined $rr->salt ) {
+                push @{ $nsec3_salt_length{length unpack('H*', $rr->salt)} }, $ns;
+            }
+            else {
+                push @{ $nsec3_salt_length{0} }, $ns;
+            }
+        }
+    }
+
+    if ( not scalar @responds_with_dnskey and scalar @responds_without_dnskey ) {
+        push @results,
+            _emit_log(
+              DS03_NO_DNSSEC_SUPPORT => {
+                ns_list => join( q{;}, sort @responds_without_dnskey )
+              }
+            );
+    }
+
+    if ( scalar @responds_with_dnskey and scalar @responds_without_dnskey ) {
+        push @results,
+            _emit_log(
+              DS03_SERVER_NO_DNSSEC_SUPPORT => {
+                ns_list => join( q{;}, sort @responds_without_dnskey )
+              }
+            );
+    }
+
+    if ( not scalar @responds_with_nsec3 and scalar @responds_without_nsec3 ) {
+        push @results,
+            _emit_log(
+              DS03_NO_NSEC3 => {
+                ns_list => join( q{;}, sort @responds_without_nsec3 )
+              }
+            );
+    }
+
+    if ( scalar @responds_with_nsec3 and scalar @responds_without_nsec3 ) {
+        push @results,
+            _emit_log(
+              DS03_SERVER_NO_NSEC3 => {
+                ns_list => join( q{;}, sort @responds_without_nsec3 )
+              }
+            );
+    }
+
+    if ( scalar @multiple_nsec3 ) {
+        push @results,
+            _emit_log(
+              DS03_ERR_MULT_NSEC3 => {
+                ns_list => join( q{;}, sort @multiple_nsec3 )
+              }
+            );
+    }
+
+    if ( scalar keys %hash_algorithm ) {
+        if ( scalar keys %hash_algorithm > 1 ) {
             push @results,
-              _emit_log( NO_DNSKEY => {} );
+                _emit_log(
+                  DS03_INCONSISTENT_HASH_ALGO => {}
+                );
         }
 
-        foreach my $n3p ( @nsec3params ) {
-            my $iter = $n3p->iterations;
-            if ( $iter > 100 ) {
+        foreach my $algo ( keys %hash_algorithm ) {
+            if ( $algo eq '1' ) {
                 push @results,
-                  _emit_log(
-                    MANY_ITERATIONS => {
-                        count => $iter,
-                    }
-                  );
-                if (   (                     $min_len >= 4096 and $iter > 2500 )
-                    or ( $min_len < 4096 and $min_len >= 2048 and $iter > 500  )
-                    or ( $min_len < 2048 and $min_len >= 1024 and $iter > 150  ) )
-                {
-                    push @results,
-                      _emit_log(
-                        TOO_MANY_ITERATIONS => {
-                            count     => $iter,
-                            keylength => $min_len,
-                        }
-                      );
-                }
-            } ## end if ( $iter > 100 )
-            elsif ( $min_len > 0 )
-            {
-                push @results,
-                  _emit_log(
-                    ITERATIONS_OK => {
-                        count => $iter,
-                    }
-                  );
+                    _emit_log(
+                      DS03_LEGAL_HASH_ALGO => {
+                        ns_list => join( q{;}, sort @{ $hash_algorithm{$algo} } )
+                      }
+                    );
             }
-        } ## end foreach my $n3p ( @nsec3params)
-    } ## end else [ if ( @nsec3params == 0)]
+            else {
+                push @results,
+                    _emit_log(
+                      DS03_ILLEGAL_HASH_ALGO => {
+                        ns_list => join( q{;}, sort @{ $hash_algorithm{$algo} } ),
+                        algo_num => $algo
+                      }
+                    );
+            }
+        }
+    }
+
+    if ( scalar keys %nsec3_flags ) {
+        if ( scalar keys %nsec3_flags > 1 ) {
+            push @results,
+                _emit_log(
+                  DS03_INCONSISTENT_NSEC3_FLAGS => {}
+                );
+        }
+
+        foreach my $flag ( keys %nsec3_flags ) {
+            # Makes a list of bit positions corresponding to flags that are set, where the most-significant bit is 0.
+            my @bit_positions = grep { $flag & (1 << ( 7 - $_ ) ) } (0..7);
+
+            foreach my $bit ( grep { $_ >= 0 and $_ <= 6 } @bit_positions ) {
+                push @results,
+                    _emit_log(
+                      DS03_UNASSIGNED_FLAG_USED => {
+                        ns_list => join( q{;}, sort @{ $nsec3_flags{$flag} } ),
+                        int => $bit
+                      }
+                    );
+            }
+
+            if ( grep { $_ == 7 } @bit_positions ) {
+                # Note below that the Public Suffix List check is not yet implemented.
+                if ( $zone->name eq '.' or $zone->name->next_higher eq '.' ) {
+                    push @results,
+                        _emit_log(
+                          DS03_NSEC3_OPT_OUT_ENABLED_TLD => {
+                            ns_list => join( q{;}, sort @{ $nsec3_flags{$flag} } )
+                          }
+                        );
+                }
+                else {
+                    push @results,
+                        _emit_log(
+                          DS03_NSEC3_OPT_OUT_ENABLED_NON_TLD => {
+                            ns_list => join( q{;}, sort @{ $nsec3_flags{$flag} } )
+                          }
+                        );
+                }
+            }
+            else {
+                push @results,
+                    _emit_log(
+                      DS03_NSEC3_OPT_OUT_DISABLED => {
+                        ns_list => join( q{;}, sort @{ $nsec3_flags{$flag} } )
+                      }
+                );
+            }
+        }
+    }
+
+    if ( scalar keys %nsec3_iterations ) {
+        if ( scalar keys %nsec3_iterations > 1 ) {
+            push @results,
+                _emit_log(
+                  DS03_INCONSISTENT_ITERATION => {}
+                );
+        }
+
+        foreach my $iter ( keys %nsec3_iterations ) {
+            if ( $iter eq '0' ) {
+                push @results,
+                    _emit_log(
+                      DS03_LEGAL_ITERATION_VALUE => {
+                        ns_list => join( q{;}, sort @{ $nsec3_iterations{$iter} } )
+                      }
+                    );
+            }
+            else {
+                push @results,
+                    _emit_log(
+                      DS03_ILLEGAL_ITERATION_VALUE => {
+                        ns_list => join( q{;}, sort @{ $nsec3_iterations{$iter} } ),
+                        int => $iter
+                      }
+                    );
+            }
+        }
+    }
+
+    if ( scalar keys %nsec3_salt_length ) {
+        if ( scalar keys %nsec3_salt_length > 1 ) {
+            push @results,
+                _emit_log(
+                  DS03_INCONSISTENT_SALT_LENGTH => {}
+                );
+        }
+
+        foreach my $salt ( keys %nsec3_salt_length ) {
+            if ( $salt eq '0' ) {
+                push @results,
+                    _emit_log(
+                      DS03_LEGAL_EMPTY_SALT => {
+                        ns_list => join( q{;}, sort @{ $nsec3_salt_length{$salt} } )
+                      }
+                    );
+            }
+            else {
+                push @results,
+                    _emit_log(
+                      DS03_ILLEGAL_SALT_LENGTH => {
+                        ns_list => join( q{;}, sort @{ $nsec3_salt_length{$salt} } ),
+                        int => $salt
+                      }
+                    );
+            }
+        }
+    }
+
+    if ( scalar @no_response_nsec_query ) {
+        push @results,
+            _emit_log(
+              DS03_NO_RESPONSE_NSEC_QUERY => {
+                ns_list => join( q{;}, sort @no_response_nsec_query )
+              }
+            );
+    }
+
+    if ( scalar @error_response_nsec_query ) {
+        push @results,
+            _emit_log(
+              DS03_ERROR_RESPONSE_NSEC_QUERY => {
+                ns_list => join( q{;}, sort @error_response_nsec_query )
+              }
+            );
+    }
 
     return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub dnssec03

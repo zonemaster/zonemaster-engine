@@ -1612,8 +1612,8 @@ msgid ""
 "{keytag} points to. Fetched from the nameservers with IP addresses "
 "\"{ns_ip_list}\"."
 msgstr ""
-"CDS RRset har inte signerats av den DNSKEY-post som CDS-posten med \"key tag"
-"\" {keytag} refererar till. Hämtat från namnservrarna med IP-adresserna "
+"CDS RRset har inte signerats av den DNSKEY-post som CDS-posten med \"key "
+"tag\" {keytag} refererar till. Hämtat från namnservrarna med IP-adresserna "
 "\"{ns_ip_list}\"."
 
 #. DNSSEC:DS16_CDS_SIGNED_BY_UNKNOWN_DNSKEY
@@ -3058,8 +3058,8 @@ msgid ""
 "SOA MNAME is specified as \".\" which usually means \"no server\". Fetched "
 "from name servers \"{ns_ip_list}\"."
 msgstr ""
-"Namnservernamnet i SOA MNAME är \".\", vilket normalt betyder \"ingen server"
-"\". Hämtad från namnservrarna med IP-adresserna \"{ns_ip_list}\"."
+"Namnservernamnet i SOA MNAME är \".\", vilket normalt betyder \"ingen "
+"server\". Hämtad från namnservrarna med IP-adresserna \"{ns_ip_list}\"."
 
 #. ZONE:Z01_MNAME_IS_LOCALHOST
 #, perl-brace-format

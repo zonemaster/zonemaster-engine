@@ -60,7 +60,8 @@ subtest "tidy po files" => sub {
         is $output, "", $makebin . ' tidy-po gives empty output';
 
         $output = `git diff --numstat`;
-        is $output, "", 'all files are tidied (if not run "make tidy-po")';
+        is $output, "", 'all files are tidied (if not run "make tidy-po")'
+            or diag `git diff`;
     }
 };
 
