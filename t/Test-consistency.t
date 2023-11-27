@@ -1,4 +1,5 @@
 use Test::More;
+use Test::Differences;
 use File::Slurp;
 
 use List::MoreUtils qw[uniq none any];
@@ -24,13 +25,11 @@ foreach my $testcase ( qw{consistency01 consistency02 consistency03 consistency0
     my %testcases;
     Zonemaster::Engine->logger->clear_history();
     foreach my $result ( Zonemaster::Engine->test_module( q{consistency}, q{afnic.fr} ) ) {
-        if ( $result->testcase && ! ($result->testcase eq 'Unspecified') ) {
+        if ( $result->testcase && $result->testcase ne 'Unspecified' ) {
             $testcases{$result->testcase} = 1;
         }
     }
-    is( scalar( %testcases ), 1, 'only one test-case ('.$testcase.')' );
-    my ( $actual_testcase ) = keys %testcases;
-    is( lc $actual_testcase, $testcase, 'expected test-case ('. $testcase .')' );
+    eq_or_diff( [ map { lc $_ } keys %testcases ], [ $testcase ], 'expected test-case ('. $testcase .')' );
 }
 
 $json         = read_file( 't/profiles/Test-consistency-all.json' );

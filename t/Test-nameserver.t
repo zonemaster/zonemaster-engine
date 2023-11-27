@@ -1,4 +1,5 @@
 use Test::More;
+use Test::Differences;
 use File::Slurp;
 
 use List::MoreUtils qw[uniq none any];
@@ -50,13 +51,11 @@ foreach my $testcase ( qw{nameserver01 nameserver02 nameserver03 nameserver04 na
     my %testcases;
     Zonemaster::Engine->logger->clear_history();
     foreach my $result ( Zonemaster::Engine->test_module( q{nameserver}, q{afnic.fr} ) ) {
-        if ( $result->testcase && ! ($result->testcase eq 'Unspecified') ) {
+        if ( $result->testcase && $result->testcase ne 'Unspecified' ) {
             $testcases{$result->testcase} = 1;
         }
     }
-    is( scalar( %testcases ), 1, 'only one test-case ('.$testcase.')' );
-    my ( $actual_testcase ) = keys %testcases;
-    is( lc $actual_testcase, $testcase, 'expected test-case ('. $testcase .')' );
+    eq_or_diff( [ map { lc $_ } keys %testcases ], [ $testcase ], 'expected test-case ('. $testcase .')' );
 }
 
 $json         = read_file( 't/profiles/Test-nameserver-all.json' );
