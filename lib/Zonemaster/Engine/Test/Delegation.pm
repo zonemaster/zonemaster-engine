@@ -21,7 +21,7 @@ use Zonemaster::Engine::Util;
 use Zonemaster::LDNS::Packet;
 use Zonemaster::LDNS::RR;
 
-sub _emit_log { Zonemaster::Engine->logger->add( @_, 'Delegation' ) }
+sub _emit_log { my ( $tag, $argref ) = @_; return Zonemaster::Engine->logger->add( $tag, $argref, 'Delegation' ); }
 
 =head1 NAME
 

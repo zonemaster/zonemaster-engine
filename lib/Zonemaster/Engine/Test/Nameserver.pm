@@ -19,7 +19,7 @@ use Zonemaster::Engine::Test::Address;
 use Zonemaster::Engine::Util;
 use Zonemaster::Engine::TestMethods;
 
-sub _emit_log { Zonemaster::Engine->logger->add( @_, 'Nameserver' ) }
+sub _emit_log { my ( $tag, $argref ) = @_; return Zonemaster::Engine->logger->add( $tag, $argref, 'Nameserver' ); }
 
 =head1 NAME
 

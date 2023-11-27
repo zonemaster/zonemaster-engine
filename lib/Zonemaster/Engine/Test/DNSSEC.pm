@@ -19,7 +19,7 @@ use Zonemaster::Engine::Constants qw[:algo :soa :ip];
 use Zonemaster::Engine::Util;
 use Zonemaster::Engine::TestMethods;
 
-sub _emit_log { Zonemaster::Engine->logger->add( @_, 'DNSSEC' ) }
+sub _emit_log { my ( $tag, $argref ) = @_; return Zonemaster::Engine->logger->add( $tag, $argref, 'DNSSEC' ); }
 
 =head1 NAME
 

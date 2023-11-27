@@ -29,12 +29,13 @@ has 'callback' => ( is => 'rw', isa => 'CodeRef', required => 0, clearer => 'cle
 my $logfilter;
 
 sub add {
-    my ( $self, $tag, $argref, $module ) = @_;
+    my ( $self, $tag, $argref, $module, $testcase ) = @_;
 
     $module //= $MODULE_NAME;
+    $testcase //= $TEST_CASE_NAME;
 
     my $new =
-      Zonemaster::Engine::Logger::Entry->new( { tag => uc( $tag ), args => $argref, testcase => $TEST_CASE_NAME, module => $module } );
+      Zonemaster::Engine::Logger::Entry->new( { tag => uc( $tag ), args => $argref, testcase => $testcase, module => $module } );
     $self->_check_filter( $new );
     push @{ $self->entries }, $new;
 
@@ -199,12 +200,15 @@ test run that logged the message.
 
 =over
 
-=item add($tag, $argref, $module)
+=item add($tag, $argref, $module, $testcase)
 
 Adds an entry with the given tag and arguments to the logger object.
 
 C<$module> is optional and will default to
 C<$Zonemaster::Engine::Logger::MODULE_NAME> if not set.
+
+C<$testcase> is optional and will default to
+C<$Zonemaster::Engine::Logger::TEST_CASE_NAME> if not set.
 
 The variables C<$Zonemaster::Engine::Logger::MODULE_NAME> and
 C<$Zonemaster::Engine::Logger::TEST_CASE_NAME> can be dynamically set to

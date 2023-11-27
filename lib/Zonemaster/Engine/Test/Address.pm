@@ -17,7 +17,7 @@ use Zonemaster::Engine::Constants qw[:addresses :ip];
 use Zonemaster::Engine::TestMethods;
 use Zonemaster::Engine::Util;
 
-sub _emit_log { Zonemaster::Engine->logger->add( @_, 'Address' ) }
+sub _emit_log { my ( $tag, $argref ) = @_; return Zonemaster::Engine->logger->add( $tag, $argref, 'Address' ); }
 
 =head1 NAME
 
