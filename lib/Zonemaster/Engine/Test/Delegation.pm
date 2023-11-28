@@ -221,35 +221,35 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     ENOUGH_IPV4_NS_CHILD => sub {
         __x    # DELEGATION:ENOUGH_IPV4_NS_CHILD
-          "Child lists enough ({count}) nameservers ({nsname_list}) "
-          . "that resolve to IPv4 addresses ({ns_ip_list}). Lower limit set to {minimum}.",
+          "Child lists enough ({count}) nameservers that resolve to IPv4 "
+          . "addresses. Lower limit set to {minimum}. Name servers: {ns_list}",
           @_;
     },
     ENOUGH_IPV4_NS_DEL => sub {
         __x    # DELEGATION:ENOUGH_IPV4_NS_DEL
-          "Delegation lists enough ({count}) nameservers ({nsname_list}) "
-          . "that resolve to IPv4 addresses ({ns_ip_list}). Lower limit set to {minimum}.",
+          "Delegation lists enough ({count}) nameservers that resolve to IPv4 "
+          . "addresses. Lower limit set to {minimum}. Name servers: {ns_list}",
           @_;
     },
     ENOUGH_IPV6_NS_CHILD => sub {
         __x    # DELEGATION:ENOUGH_IPV6_NS_CHILD
-          "Child lists enough ({count}) nameservers ({nsname_list}) "
-          . "that resolve to IPv6 addresses ({ns_ip_list}). Lower limit set to {minimum}.",
+          "Child lists enough ({count}) nameservers that resolve to IPv6 "
+          . "addresses. Lower limit set to {minimum}. Name servers: {ns_list}",
           @_;
     },
     ENOUGH_IPV6_NS_DEL => sub {
         __x    # DELEGATION:ENOUGH_IPV6_NS_DEL
-          "Delegation lists enough ({count}) nameservers ({nsname_list}) "
-          . "that resolve to IPv6 addresses ({ns_ip_list}). Lower limit set to {minimum}.",
+          "Delegation lists enough ({count}) nameservers that resolve to IPv6 "
+          . "addresses. Lower limit set to {minimum}. Name servers: {ns_list}",
           @_;
     },
     ENOUGH_NS_CHILD => sub {
         __x    # DELEGATION:ENOUGH_NS_CHILD
-          "Child lists enough ({count}) nameservers ({nsname_list}). Lower limit set to {minimum}.", @_;
+          "Child lists enough ({count}) nameservers. Lower limit set to {minimum}. Name servers: {nsname_list}", @_;
     },
     ENOUGH_NS_DEL => sub {
         __x    # DELEGATION:ENOUGH_NS_DEL
-          "Parent lists enough ({count}) nameservers ({nsname_list}). Lower limit set to {minimum}.", @_;
+          "Delegation lists enough ({count}) nameservers. Lower limit set to {minimum}. Name servers: {nsname_list}", @_;
     },
     EXTRA_NAME_CHILD => sub {
         __x    # DELEGATION:EXTRA_NAME_CHILD
@@ -281,35 +281,35 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     NOT_ENOUGH_IPV4_NS_CHILD => sub {
         __x    # DELEGATION:NOT_ENOUGH_IPV4_NS_CHILD
-          "Child does not list enough ({count}) nameservers ({nsname_list}) "
-          . "that resolve to IPv4 addresses ({ns_ip_list}). Lower limit set to {minimum}.",
+          "Child does not list enough ({count}) nameservers that resolve to IPv4 "
+          . "addresses. Lower limit set to {minimum}. Name servers: {ns_list}",
           @_;
     },
     NOT_ENOUGH_IPV4_NS_DEL => sub {
         __x    # DELEGATION:NOT_ENOUGH_IPV4_NS_DEL
-          "Delegation does not list enough ({count}) nameservers ({nsname_list}) "
-          . "that resolve to IPv4 addresses ({ns_ip_list}). Lower limit set to {minimum}.",
+          "Delegation does not list enough ({count}) nameservers that resolve to IPv4 "
+          . "addresses. Lower limit set to {minimum}. Name servers: {ns_list}",
           @_;
     },
     NOT_ENOUGH_IPV6_NS_CHILD => sub {
         __x    # DELEGATION:NOT_ENOUGH_IPV6_NS_CHILD
-          "Child does not list enough ({count}) nameservers ({nsname_list}) "
-          . "that resolve to IPv6 addresses ({ns_ip_list}). Lower limit set to {minimum}.",
+          "Child does not list enough ({count}) nameservers that resolve to IPv6 "
+          . "addresses. Lower limit set to {minimum}. Name servers: {ns_list}",
           @_;
     },
     NOT_ENOUGH_IPV6_NS_DEL => sub {
         __x    # DELEGATION:NOT_ENOUGH_IPV6_NS_DEL
-          "Delegation does not list enough ({count}) nameservers ({nsname_list}) "
-          . "that resolve to IPv6 addresses ({ns_ip_list}). Lower limit set to {minimum}.",
+          "Delegation does not list enough ({count}) nameservers that resolve to IPv6 "
+          . "addresses. Lower limit set to {minimum}. Name servers: {ns_list}",
           @_;
     },
     NOT_ENOUGH_NS_CHILD => sub {
         __x    # DELEGATION:NOT_ENOUGH_NS_CHILD
-          "Child does not list enough ({count}) nameservers ({nsname_list}). Lower limit set to {minimum}.", @_;
+          "Child does not list enough ({count}) nameservers. Lower limit set to {minimum}. Name servers: {nsname_list}", @_;
     },
     NOT_ENOUGH_NS_DEL => sub {
         __x    # DELEGATION:NOT_ENOUGH_NS_DEL
-          "Parent does not list enough ({count}) nameservers ({nsname_list}). Lower limit set to {minimum}.", @_;
+          "Delegation does not list enough ({count}) nameservers. Lower limit set to {minimum}. Name servers: {nsname_list}", @_;
     },
     NO_IPV4_NS_CHILD => sub {
         __x    # DELEGATION:NO_IPV4_NS_CHILD
@@ -608,38 +608,34 @@ sub delegation01 {
 
     # Determine child NS names with addresses
     my @child_ns = @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
-    my @child_ns_ipv4 = uniq map { $_->name->string } grep { $_->address->version == 4 } @child_ns;
-    my @child_ns_ipv6 = uniq map { $_->name->string } grep { $_->address->version == 6 } @child_ns;
-    my @child_ns_ipv4_addrs = uniq map { $_->address->ip } grep { $_->address->version == 4 } @child_ns;
-    my @child_ns_ipv6_addrs = uniq map { $_->address->short } grep { $_->address->version == 6 } @child_ns;
+    my @child_ns_ipv4 = map { $_ } grep { $_->address->version == 4 } @child_ns;
+    my @child_ns_ipv6 = map { $_ } grep { $_->address->version == 6 } @child_ns;
 
     my $child_ns_ipv4_args = {
-        count       => scalar( @child_ns_ipv4 ),
+        count       => scalar( uniq map { $_->name->string } @child_ns_ipv4 ),
         minimum     => $MINIMUM_NUMBER_OF_NAMESERVERS,
-        nsname_list => join( q{;}, sort @child_ns_ipv4 ),
-        ns_ip_list  => join( q{;}, sort @child_ns_ipv4_addrs ),
+        ns_list => join( q{;}, sort map { $_->string } @child_ns_ipv4 ),
     };
     my $child_ns_ipv6_args = {
-        count       => scalar( @child_ns_ipv6 ),
+        count       => scalar( uniq map { $_->name->string } @child_ns_ipv6 ),
         minimum     => $MINIMUM_NUMBER_OF_NAMESERVERS,
-        nsname_list => join( q{;}, sort @child_ns_ipv6 ),
-        ns_ip_list  => join( q{;}, sort @child_ns_ipv6_addrs ),
+        ns_list => join( q{;}, sort map { $_->string } @child_ns_ipv6 ),
     };
 
-    if ( scalar( @child_ns_ipv4 ) >= $MINIMUM_NUMBER_OF_NAMESERVERS ) {
+    if ( scalar( uniq map { $_->name->string } @child_ns_ipv4 ) >= $MINIMUM_NUMBER_OF_NAMESERVERS ) {
         push @results, _emit_log( ENOUGH_IPV4_NS_CHILD => $child_ns_ipv4_args );
     }
-    elsif ( scalar( @child_ns_ipv4 ) > 0 ) {
+    elsif ( scalar( uniq map { $_->name->string } @child_ns_ipv4 ) > 0 ) {
         push @results, _emit_log( NOT_ENOUGH_IPV4_NS_CHILD => $child_ns_ipv4_args );
     }
     else {
         push @results, _emit_log( NO_IPV4_NS_CHILD => $child_ns_ipv4_args );
     }
 
-    if ( scalar( @child_ns_ipv6 ) >= $MINIMUM_NUMBER_OF_NAMESERVERS ) {
+    if ( scalar( uniq map { $_->name->string } @child_ns_ipv6 ) >= $MINIMUM_NUMBER_OF_NAMESERVERS ) {
         push @results, _emit_log( ENOUGH_IPV6_NS_CHILD => $child_ns_ipv6_args );
     }
-    elsif ( scalar( @child_ns_ipv6 ) > 0 ) {
+    elsif ( scalar( uniq map { $_->name->string } @child_ns_ipv6 ) > 0 ) {
         push @results, _emit_log( NOT_ENOUGH_IPV6_NS_CHILD => $child_ns_ipv6_args );
     }
     else {
@@ -648,38 +644,34 @@ sub delegation01 {
 
     # Determine delegation NS names with addresses
     my @del_ns = @{ Zonemaster::Engine::TestMethods->method4( $zone ) };
-    my @del_ns_ipv4 = uniq map { $_->name->string } grep { $_->address->version == 4 } @del_ns;
-    my @del_ns_ipv6 = uniq map { $_->name->string } grep { $_->address->version == 6 } @del_ns;
-    my @del_ns_ipv4_addrs = uniq map { $_->address->ip } grep { $_->address->version == 4 } @del_ns;
-    my @del_ns_ipv6_addrs = uniq map { $_->address->short } grep { $_->address->version == 6 } @del_ns;
+    my @del_ns_ipv4 = map { $_ } grep { $_->address->version == 4 } @del_ns;
+    my @del_ns_ipv6 = map { $_ } grep { $_->address->version == 6 } @del_ns;
 
     my $del_ns_ipv4_args = {
-        count       => scalar( @del_ns_ipv4 ),
+        count       => scalar( uniq map { $_->name->string } @del_ns_ipv4 ),
         minimum     => $MINIMUM_NUMBER_OF_NAMESERVERS,
-        nsname_list => join( q{;}, sort @del_ns_ipv4 ),
-        ns_ip_list  => join( q{;}, sort @del_ns_ipv4_addrs ),
+        ns_list => join( q{;}, sort map { $_->string } @del_ns_ipv4 ),
     };
     my $del_ns_ipv6_args = {
-        count       => scalar( @del_ns_ipv6 ),
+        count       => scalar( uniq map { $_->name->string } @del_ns_ipv6 ),
         minimum     => $MINIMUM_NUMBER_OF_NAMESERVERS,
-        nsname_list => join( q{;}, sort @del_ns_ipv6 ),
-        ns_ip_list  => join( q{;}, sort @del_ns_ipv6_addrs ),
+        ns_list => join( q{;}, sort map { $_->string } @del_ns_ipv6 ),
     };
 
-    if ( scalar( @del_ns_ipv4 ) >= $MINIMUM_NUMBER_OF_NAMESERVERS ) {
+    if ( scalar( uniq map { $_->name->string } @del_ns_ipv4 ) >= $MINIMUM_NUMBER_OF_NAMESERVERS ) {
         push @results, _emit_log( ENOUGH_IPV4_NS_DEL => $del_ns_ipv4_args );
     }
-    elsif ( scalar( @del_ns_ipv4 ) > 0 ) {
+    elsif ( scalar( uniq map { $_->name->string } @del_ns_ipv4 ) > 0 ) {
         push @results, _emit_log( NOT_ENOUGH_IPV4_NS_DEL => $del_ns_ipv4_args );
     }
     else {
         push @results, _emit_log( NO_IPV4_NS_DEL => $del_ns_ipv4_args );
     }
 
-    if ( scalar( @del_ns_ipv6 ) >= $MINIMUM_NUMBER_OF_NAMESERVERS ) {
+    if ( scalar( uniq map { $_->name->string } @del_ns_ipv6 ) >= $MINIMUM_NUMBER_OF_NAMESERVERS ) {
         push @results, _emit_log( ENOUGH_IPV6_NS_DEL => $del_ns_ipv6_args );
     }
-    elsif ( scalar( @del_ns_ipv6 ) > 0 ) {
+    elsif ( scalar( uniq map { $_->name->string } @del_ns_ipv6 ) > 0 ) {
         push @results, _emit_log( NOT_ENOUGH_IPV6_NS_DEL => $del_ns_ipv6_args );
     }
     else {
