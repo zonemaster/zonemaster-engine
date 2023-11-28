@@ -1,4 +1,5 @@
 use Test::More;
+use Test::Differences;
 use File::Slurp;
 
 use List::MoreUtils qw[uniq none any];
@@ -38,15 +39,13 @@ foreach my $testcase ( qw{syntax01 syntax02 syntax03} ) {
     $json         = read_file( 't/profiles/Test-'.$testcase.'-only.json' );
     $profile_test = Zonemaster::Engine::Profile->from_json( $json );
     Zonemaster::Engine::Profile->effective->merge( $profile_test );
-    my @testcases;
+    my %testcases;
     foreach my $result ( Zonemaster::Engine->test_module( q{syntax}, q{afnic.fr} ) ) {
-        foreach my $trace (@{$result->trace}) {
-            push @testcases, grep /Zonemaster::Engine::Test::Syntax::syntax/, @$trace;
+        if ( $result->testcase && $result->testcase ne 'Unspecified' ) {
+            $testcases{$result->testcase} = 1;
         }
     }
-    @testcases = uniq sort @testcases;
-    is( scalar( @testcases ), 1, 'only one test-case' );
-    is( $testcases[0], 'Zonemaster::Engine::Test::Syntax::'.$testcase, 'expected test-case ('.$testcases[0].')' );
+    eq_or_diff( [ map { lc $_ } keys %testcases ], [ $testcase ], 'expected test-case ('. $testcase .')' );
 }
 
 $json         = read_file( 't/profiles/Test-syntax-all.json' );

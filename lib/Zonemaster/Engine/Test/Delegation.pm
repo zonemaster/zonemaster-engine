@@ -21,6 +21,8 @@ use Zonemaster::Engine::Util;
 use Zonemaster::LDNS::Packet;
 use Zonemaster::LDNS::RR;
 
+sub _emit_log { my ( $tag, $argref ) = @_; return Zonemaster::Engine->logger->add( $tag, $argref, 'Delegation' ); }
+
 =head1 NAME
 
 Zonemaster::Engine::Test::Delegation - Module implementing tests focused on zone delegation
@@ -437,7 +439,7 @@ sub _ip_disabled_message {
 
     if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
         push @$results_array, map {
-          info(
+          _emit_log(
             IPV6_DISABLED => {
                 ns     => $ns->string,
                 rrtype => $_
@@ -449,7 +451,7 @@ sub _ip_disabled_message {
 
     if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
         push @$results_array, map {
-          info(
+          _emit_log(
             IPV4_DISABLED => {
                 ns     => $ns->string,
                 rrtype => $_,
@@ -532,7 +534,7 @@ sub _find_dup_ns {
     foreach my $local_ip ( sort keys %ips ) {
         if ( scalar @{ $ips{$local_ip} } > 1 ) {
             push @results,
-              info(
+              _emit_log(
                 $duplicate_tag => {
                     nsname_list => join( q{;}, @{ $ips{$local_ip} } ),
                     ns_ip       => $local_ip,
@@ -542,7 +544,7 @@ sub _find_dup_ns {
     }
 
     if ( @nss && !@results ) {
-        push @results, info( $distinct_tag => {} );
+        push @results, _emit_log( $distinct_tag => {} );
     }
 
     return @results;
@@ -568,7 +570,9 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 sub delegation01 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Delegation01';
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     # Determine delegation NS names
     my @del_nsnames = map { $_->string } @{ Zonemaster::Engine::TestMethods->method2( $zone ) };
@@ -580,10 +584,10 @@ sub delegation01 {
 
     # Check delegation NS names
     if ( scalar( @del_nsnames ) >= $MINIMUM_NUMBER_OF_NAMESERVERS ) {
-        push @results, info( ENOUGH_NS_DEL => $del_nsnames_args );
+        push @results, _emit_log( ENOUGH_NS_DEL => $del_nsnames_args );
     }
     else {
-        push @results, info( NOT_ENOUGH_NS_DEL => $del_nsnames_args );
+        push @results, _emit_log( NOT_ENOUGH_NS_DEL => $del_nsnames_args );
     }
 
     # Determine child NS names
@@ -596,10 +600,10 @@ sub delegation01 {
 
     # Check child NS names
     if ( scalar( @child_nsnames ) >= $MINIMUM_NUMBER_OF_NAMESERVERS ) {
-        push @results, info( ENOUGH_NS_CHILD => $child_nsnames_args );
+        push @results, _emit_log( ENOUGH_NS_CHILD => $child_nsnames_args );
     }
     else {
-        push @results, info( NOT_ENOUGH_NS_CHILD => $child_nsnames_args );
+        push @results, _emit_log( NOT_ENOUGH_NS_CHILD => $child_nsnames_args );
     }
 
     # Determine child NS names with addresses
@@ -619,23 +623,23 @@ sub delegation01 {
     };
 
     if ( scalar( uniq map { $_->name->string } @child_ns_ipv4 ) >= $MINIMUM_NUMBER_OF_NAMESERVERS ) {
-        push @results, info( ENOUGH_IPV4_NS_CHILD => $child_ns_ipv4_args );
+        push @results, _emit_log( ENOUGH_IPV4_NS_CHILD => $child_ns_ipv4_args );
     }
     elsif ( scalar( uniq map { $_->name->string } @child_ns_ipv4 ) > 0 ) {
-        push @results, info( NOT_ENOUGH_IPV4_NS_CHILD => $child_ns_ipv4_args );
+        push @results, _emit_log( NOT_ENOUGH_IPV4_NS_CHILD => $child_ns_ipv4_args );
     }
     else {
-        push @results, info( NO_IPV4_NS_CHILD => $child_ns_ipv4_args );
+        push @results, _emit_log( NO_IPV4_NS_CHILD => $child_ns_ipv4_args );
     }
 
     if ( scalar( uniq map { $_->name->string } @child_ns_ipv6 ) >= $MINIMUM_NUMBER_OF_NAMESERVERS ) {
-        push @results, info( ENOUGH_IPV6_NS_CHILD => $child_ns_ipv6_args );
+        push @results, _emit_log( ENOUGH_IPV6_NS_CHILD => $child_ns_ipv6_args );
     }
     elsif ( scalar( uniq map { $_->name->string } @child_ns_ipv6 ) > 0 ) {
-        push @results, info( NOT_ENOUGH_IPV6_NS_CHILD => $child_ns_ipv6_args );
+        push @results, _emit_log( NOT_ENOUGH_IPV6_NS_CHILD => $child_ns_ipv6_args );
     }
     else {
-        push @results, info( NO_IPV6_NS_CHILD => $child_ns_ipv6_args );
+        push @results, _emit_log( NO_IPV6_NS_CHILD => $child_ns_ipv6_args );
     }
 
     # Determine delegation NS names with addresses
@@ -655,26 +659,26 @@ sub delegation01 {
     };
 
     if ( scalar( uniq map { $_->name->string } @del_ns_ipv4 ) >= $MINIMUM_NUMBER_OF_NAMESERVERS ) {
-        push @results, info( ENOUGH_IPV4_NS_DEL => $del_ns_ipv4_args );
+        push @results, _emit_log( ENOUGH_IPV4_NS_DEL => $del_ns_ipv4_args );
     }
     elsif ( scalar( uniq map { $_->name->string } @del_ns_ipv4 ) > 0 ) {
-        push @results, info( NOT_ENOUGH_IPV4_NS_DEL => $del_ns_ipv4_args );
+        push @results, _emit_log( NOT_ENOUGH_IPV4_NS_DEL => $del_ns_ipv4_args );
     }
     else {
-        push @results, info( NO_IPV4_NS_DEL => $del_ns_ipv4_args );
+        push @results, _emit_log( NO_IPV4_NS_DEL => $del_ns_ipv4_args );
     }
 
     if ( scalar( uniq map { $_->name->string } @del_ns_ipv6 ) >= $MINIMUM_NUMBER_OF_NAMESERVERS ) {
-        push @results, info( ENOUGH_IPV6_NS_DEL => $del_ns_ipv6_args );
+        push @results, _emit_log( ENOUGH_IPV6_NS_DEL => $del_ns_ipv6_args );
     }
     elsif ( scalar( uniq map { $_->name->string } @del_ns_ipv6 ) > 0 ) {
-        push @results, info( NOT_ENOUGH_IPV6_NS_DEL => $del_ns_ipv6_args );
+        push @results, _emit_log( NOT_ENOUGH_IPV6_NS_DEL => $del_ns_ipv6_args );
     }
     else {
-        push @results, info( NO_IPV6_NS_DEL => $del_ns_ipv6_args );
+        push @results, _emit_log( NO_IPV6_NS_DEL => $del_ns_ipv6_args );
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub delegation01
 
 =over
@@ -695,7 +699,9 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 sub delegation02 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Delegation02';
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     my @nss_del   = @{ Zonemaster::Engine::TestMethods->method4( $zone ) };
     my @nss_child = @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
@@ -721,7 +727,7 @@ sub delegation02 {
         ns_list       => [ @nss_del, @nss_child ],
       );
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub delegation02
 
 =over
@@ -742,7 +748,9 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 sub delegation03 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Delegation03';
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     my $long_name = _max_length_name_for( $zone->name );
     my @nsnames   = map { $_->string } @{ Zonemaster::Engine::TestMethods->method2( $zone ) };
@@ -774,7 +782,7 @@ sub delegation03 {
     my $size = length( $p->data );
     if ( $size > $UDP_PAYLOAD_LIMIT ) {
         push @results,
-          info(
+          _emit_log(
             REFERRAL_SIZE_TOO_LARGE => {
                 size => $size,
             }
@@ -782,14 +790,14 @@ sub delegation03 {
     }
     else {
         push @results,
-          info(
+          _emit_log(
             REFERRAL_SIZE_OK => {
                 size => $size,
             }
           );
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub delegation03
 
 =over
@@ -810,7 +818,9 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 sub delegation04 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Delegation04';
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
     my %nsnames;
     my @authoritatives;
     my $query_type = q{SOA};
@@ -830,7 +840,7 @@ sub delegation04 {
             if ( $p ) {
                 if ( not $p->aa ) {
                     push @results,
-                      info(
+                      _emit_log(
                         IS_NOT_AUTHORITATIVE => {
                             ns    => $local_ns->string,
                             proto => $usevc ? q{TCP} : q{UDP},
@@ -856,14 +866,14 @@ sub delegation04 {
       )
     {
         push @results,
-          info(
+          _emit_log(
             ARE_AUTHORITATIVE => {
                 nsname_list => join( q{;}, uniq sort @authoritatives ),
             }
           );
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub delegation04
 
 =over
@@ -884,7 +894,9 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 sub delegation05 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Delegation05';
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     my @nsnames = @{ Zonemaster::Engine::TestMethods->method2and3( $zone ) };
 
@@ -908,22 +920,22 @@ sub delegation05 {
 
                 my $p = $ns->query( $local_nsname, q{A}, { recurse => 0 } );
                 if ( not $p ) {
-                    push @results, info( NO_RESPONSE => $ns_args );
+                    push @results, _emit_log( NO_RESPONSE => $ns_args );
                     next;
                 }
                 elsif ($p->rcode ne q{NOERROR} ) {
                     $ns_args->{rcode} = $p->rcode;
-                    push @results, info( UNEXPECTED_RCODE => $ns_args );
+                    push @results, _emit_log( UNEXPECTED_RCODE => $ns_args );
                     next;
                 }
                 elsif ( scalar $p->get_records( q{CNAME}, q{answer} ) > 0 ) {
-                    push @results, info( NS_IS_CNAME => { nsname => $local_nsname } );
+                    push @results, _emit_log( NS_IS_CNAME => { nsname => $local_nsname } );
                     next;
                 }
                 elsif ($p->is_redirect) {
                     my $p = $ns->query( $local_nsname, q{A}, { recurse => 1 } );
                     if ( defined $p and scalar $p->get_records( q{CNAME}, q{answer} ) > 0 ) {
-                        push @results, info( NS_IS_CNAME => { nsname => $local_nsname } );
+                        push @results, _emit_log( NS_IS_CNAME => { nsname => $local_nsname } );
                     }
                 }
             }
@@ -931,16 +943,16 @@ sub delegation05 {
         else {
             my $p = Zonemaster::Engine::Recursor->recurse( $local_nsname, q{A} );
             if ( defined $p and scalar $p->get_records( q{CNAME}, q{answer} ) > 0 ) {
-                push @results, info( NS_IS_CNAME => { nsname => $local_nsname } );
+                push @results, _emit_log( NS_IS_CNAME => { nsname => $local_nsname } );
             }
         }
     }
 
     if ( not grep { $_->tag eq q{NS_IS_CNAME} } @results ) {
-        push @results, info( NO_NS_CNAME => {} );
+        push @results, _emit_log( NO_NS_CNAME => {} );
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub delegation05
 
 =over
@@ -961,7 +973,9 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 sub delegation06 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Delegation06';
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
     my %nsnames;
     my $query_type = q{SOA};
 
@@ -978,7 +992,7 @@ sub delegation06 {
         my $p = $local_ns->query( $zone->name, $query_type );
         if ( $p and $p->rcode eq q{NOERROR} ) {
             if ( not $p->get_records( $query_type, q{answer} ) ) {
-                push @results, info( SOA_NOT_EXISTS => { ns => $local_ns->string } );
+                push @results, _emit_log( SOA_NOT_EXISTS => { ns => $local_ns->string } );
             }
         }
 
@@ -993,10 +1007,10 @@ sub delegation06 {
         and not grep { $_->tag ne q{TEST_CASE_START} } @results
       )
     {
-        push @results, info( SOA_EXISTS => {} );
+        push @results, _emit_log( SOA_EXISTS => {} );
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub delegation06
 
 =over
@@ -1017,7 +1031,9 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 sub delegation07 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Delegation07';
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     my %names;
     foreach my $name ( @{ Zonemaster::Engine::TestMethods->method2( $zone ) } ) {
@@ -1033,7 +1049,7 @@ sub delegation07 {
 
     if ( @extra_name_parent ) {
         push @results,
-          info(
+          _emit_log(
             EXTRA_NAME_PARENT => {
                 extra => join( q{;}, sort @extra_name_parent ),
             }
@@ -1042,7 +1058,7 @@ sub delegation07 {
 
     if ( @extra_name_child ) {
         push @results,
-          info(
+          _emit_log(
             EXTRA_NAME_CHILD => {
                 extra => join( q{;}, sort @extra_name_child ),
             }
@@ -1051,7 +1067,7 @@ sub delegation07 {
 
     if ( @extra_name_parent == 0 and @extra_name_child == 0 ) {
         push @results,
-          info(
+          _emit_log(
             NAMES_MATCH => {
                 names => join( q{;}, sort @same_name ),
             }
@@ -1060,7 +1076,7 @@ sub delegation07 {
 
     if ( scalar( @same_name ) == 0 ) {
         push @results,
-          info(
+          _emit_log(
             TOTAL_NAME_MISMATCH => {
                 glue  => join( q{;}, sort @extra_name_parent ),
                 child => join( q{;}, sort @extra_name_child ),
@@ -1068,7 +1084,7 @@ sub delegation07 {
           );
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub delegation07
 
 1;

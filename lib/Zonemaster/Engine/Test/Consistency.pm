@@ -18,6 +18,8 @@ use Zonemaster::Engine::Test::Address;
 use Zonemaster::Engine::Util;
 use Zonemaster::Engine::TestMethods;
 
+sub _emit_log { my ( $tag, $argref ) = @_; return Zonemaster::Engine->logger->add( $tag, $argref, 'Consistency' ); }
+
 =head1 NAME
 
 Zonemaster::Engine::Test::Consistency - Module implementing tests focused on name servers responses consistency
@@ -370,7 +372,7 @@ sub _ip_disabled_message {
 
     if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
         push @$results_array, map {
-          info(
+          _emit_log(
             IPV6_DISABLED => {
                 ns     => $ns->string,
                 rrtype => $_
@@ -382,7 +384,7 @@ sub _ip_disabled_message {
 
     if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
         push @$results_array, map {
-          info(
+          _emit_log(
             IPV4_DISABLED => {
                 ns     => $ns->string,
                 rrtype => $_,
@@ -414,7 +416,7 @@ sub _get_addr_rrs {
     my ( $class, $ns, $name, $qtype ) = @_;
     my $p = $ns->query( $name, $qtype, { recurse => 0 } );
     if ( !$p ) {
-        return info( NO_RESPONSE => { ns => $ns->string } );
+        return _emit_log( NO_RESPONSE => { ns => $ns->string } );
     }
     elsif ($p->is_redirect) {
         my $p = Zonemaster::Engine->recurse( $name, $qtype, q{IN} );
@@ -428,7 +430,7 @@ sub _get_addr_rrs {
         return ( undef, $p->get_records_for_name( $qtype, $name, 'answer' ) );
     }
     elsif (not ($p->aa and $p->rcode eq 'NXDOMAIN')) {
-        return info( CHILD_NS_FAILED => { ns => $ns->string } );
+        return _emit_log( CHILD_NS_FAILED => { ns => $ns->string } );
     }
     return ( undef );
 }
@@ -453,7 +455,9 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 sub consistency01 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Consistency01';
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
     my %nsnames_and_ip;
     my %serials;
     my $query_type = q{SOA};
@@ -471,14 +475,14 @@ sub consistency01 {
         my $p = $local_ns->query( $zone->name, $query_type );
 
         if ( not $p ) {
-            push @results, info( NO_RESPONSE => { ns => $local_ns->string } );
+            push @results, _emit_log( NO_RESPONSE => { ns => $local_ns->string } );
             next;
         }
 
         my ( $soa ) = $p->get_records_for_name( $query_type, $zone->name );
 
         if ( not $soa ) {
-            push @results, info( NO_RESPONSE_SOA_QUERY => { ns => $local_ns->string } );
+            push @results, _emit_log( NO_RESPONSE_SOA_QUERY => { ns => $local_ns->string } );
             next;
         }
         else {
@@ -491,7 +495,7 @@ sub consistency01 {
 
     foreach my $serial ( @serial_numbers ) {
         push @results,
-          info(
+          _emit_log(
             SOA_SERIAL => {
                 serial  => $serial,
                 ns_list => join( q{;}, sort @{ $serials{$serial} } ),
@@ -501,7 +505,7 @@ sub consistency01 {
 
     if ( scalar( @serial_numbers ) == 1 ) {
         push @results,
-          info(
+          _emit_log(
             ONE_SOA_SERIAL => {
                 serial => ( keys %serials )[0],
             }
@@ -509,14 +513,14 @@ sub consistency01 {
     }
     elsif ( scalar @serial_numbers ) {
         push @results,
-          info(
+          _emit_log(
             MULTIPLE_SOA_SERIALS => {
                 count => scalar( keys %serials ),
             }
           );
         if ( $serial_numbers[-1] - $serial_numbers[0] > $SERIAL_MAX_VARIATION ) {
             push @results,
-              info(
+              _emit_log(
                 SOA_SERIAL_VARIATION => {
                     serial_min    => $serial_numbers[0],
                     serial_max    => $serial_numbers[-1],
@@ -526,7 +530,7 @@ sub consistency01 {
         }
     } ## end elsif ( scalar @serial_numbers)
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub consistency01
 
 =over
@@ -547,7 +551,9 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 sub consistency02 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Consistency02';
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
     my %nsnames_and_ip;
     my %rnames;
     my $query_type = q{SOA};
@@ -565,14 +571,14 @@ sub consistency02 {
         my $p = $local_ns->query( $zone->name, $query_type );
 
         if ( not $p ) {
-            push @results, info( NO_RESPONSE => { ns => $local_ns->string } );
+            push @results, _emit_log( NO_RESPONSE => { ns => $local_ns->string } );
             next;
         }
 
         my ( $soa ) = $p->get_records_for_name( $query_type, $zone->name );
 
         if ( not $soa ) {
-            push @results, info( NO_RESPONSE_SOA_QUERY => { ns => $local_ns->string } );
+            push @results, _emit_log( NO_RESPONSE_SOA_QUERY => { ns => $local_ns->string } );
             next;
         }
         else {
@@ -583,7 +589,7 @@ sub consistency02 {
 
     if ( scalar( keys %rnames ) == 1 ) {
         push @results,
-          info(
+          _emit_log(
             ONE_SOA_RNAME => {
                 rname => ( keys %rnames )[0],
             }
@@ -591,14 +597,14 @@ sub consistency02 {
     }
     elsif ( scalar( keys %rnames ) ) {
         push @results,
-          info(
+          _emit_log(
             MULTIPLE_SOA_RNAMES => {
                 count => scalar( keys %rnames ),
             }
           );
         foreach my $rname ( keys %rnames ) {
             push @results,
-              info(
+              _emit_log(
                 SOA_RNAME => {
                     rname   => $rname,
                     ns_list => join( q{;}, @{ $rnames{$rname} } ),
@@ -607,7 +613,7 @@ sub consistency02 {
         }
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub consistency02
 
 =over
@@ -628,7 +634,9 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 sub consistency03 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Consistency03';
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
     my %nsnames_and_ip;
     my %time_parameter_sets;
     my $query_type = q{SOA};
@@ -646,14 +654,14 @@ sub consistency03 {
         my $p = $local_ns->query( $zone->name, $query_type );
 
         if ( not $p ) {
-            push @results, info( NO_RESPONSE => { ns => $local_ns->string } );
+            push @results, _emit_log( NO_RESPONSE => { ns => $local_ns->string } );
             next;
         }
 
         my ( $soa ) = $p->get_records_for_name( $query_type, $zone->name );
 
         if ( not $soa ) {
-            push @results, info( NO_RESPONSE_SOA_QUERY => { ns => $local_ns->string } );
+            push @results, _emit_log( NO_RESPONSE_SOA_QUERY => { ns => $local_ns->string } );
             next;
         }
         else {
@@ -668,7 +676,7 @@ sub consistency03 {
     if ( scalar( keys %time_parameter_sets ) == 1 ) {
         my ( $refresh, $retry, $expire, $minimum ) = split /;/sxm, ( keys %time_parameter_sets )[0];
         push @results,
-          info(
+          _emit_log(
             ONE_SOA_TIME_PARAMETER_SET => {
                 refresh => $refresh,
                 retry   => $retry,
@@ -679,7 +687,7 @@ sub consistency03 {
     }
     elsif ( scalar( keys %time_parameter_sets ) ) {
         push @results,
-          info(
+          _emit_log(
             MULTIPLE_SOA_TIME_PARAMETER_SET => {
                 count => scalar( keys %time_parameter_sets ),
             }
@@ -687,7 +695,7 @@ sub consistency03 {
         foreach my $time_parameter_set ( keys %time_parameter_sets ) {
             my ( $refresh, $retry, $expire, $minimum ) = split /;/sxm, $time_parameter_set;
             push @results,
-              info(
+              _emit_log(
                 SOA_TIME_PARAMETER_SET => {
                     refresh => $refresh,
                     retry   => $retry,
@@ -699,7 +707,7 @@ sub consistency03 {
         }
     } ## end elsif ( scalar( keys %time_parameter_sets...))
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub consistency03
 
 =over
@@ -720,7 +728,9 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 sub consistency04 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Consistency04';
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
     my %nsnames_and_ip;
     my %ns_sets;
     my $query_type = q{NS};
@@ -738,14 +748,14 @@ sub consistency04 {
         my $p = $local_ns->query( $zone->name, $query_type );
 
         if ( not $p ) {
-            push @results, info( NO_RESPONSE => { ns => $local_ns->string } );
+            push @results, _emit_log( NO_RESPONSE => { ns => $local_ns->string } );
             next;
         }
 
         my ( @ns ) = sort map { lc( $_->nsdname ) } $p->get_records_for_name( $query_type, $zone->name );
 
         if ( not scalar( @ns ) ) {
-            push @results, info( NO_RESPONSE_NS_QUERY => { ns => $local_ns->string } );
+            push @results, _emit_log( NO_RESPONSE_NS_QUERY => { ns => $local_ns->string } );
             next;
         }
         else {
@@ -755,18 +765,18 @@ sub consistency04 {
     } ## end foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods...})
 
     if ( scalar( keys %ns_sets ) == 1 ) {
-        push @results, info( ONE_NS_SET => { nsname_list => ( keys %ns_sets )[0] });
+        push @results, _emit_log( ONE_NS_SET => { nsname_list => ( keys %ns_sets )[0] });
     }
     elsif ( scalar( keys %ns_sets ) ) {
         push @results,
-          info(
+          _emit_log(
             MULTIPLE_NS_SET => {
                 count => scalar( keys %ns_sets ),
             }
           );
         foreach my $ns_set ( keys %ns_sets ) {
             push @results,
-              info(
+              _emit_log(
                 NS_SET => {
                     nsname_list => $ns_set,
                     servers     => join( q{;}, @{ $ns_sets{$ns_set} } ),
@@ -775,7 +785,7 @@ sub consistency04 {
         }
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub consistency04
 
 =over
@@ -796,7 +806,9 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 sub consistency05 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Consistency05';
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
     my %strict_glue;
     my %extended_glue;
 
@@ -864,8 +876,8 @@ sub consistency05 {
         }
 
         if ( $is_lame ) {
-            push @results, info( CHILD_ZONE_LAME => {} );
-            return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+            push @results, _emit_log( CHILD_ZONE_LAME => {} );
+            return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
         }
     } ## end for my $ib_nsname ( @ib_nsnames)
 
@@ -875,7 +887,7 @@ sub consistency05 {
 
     if ( scalar @ib_mismatch ) {
         push @results,
-          info(
+          _emit_log(
             IN_BAILIWICK_ADDR_MISMATCH => {
                 parent_addresses => join( q{;}, sort keys %strict_glue ),
                 zone_addresses => join( q{;}, sort keys %child_ib_strings ),
@@ -884,7 +896,7 @@ sub consistency05 {
     }
     if ( scalar @ib_extra_child ) {
         push @results,
-          info(
+          _emit_log(
             EXTRA_ADDRESS_CHILD => {
                 ns_ip_list => join( q{;}, sort @ib_extra_child ),
             }
@@ -916,7 +928,7 @@ sub consistency05 {
         push @oob_mismatch, grep { !exists $child_oob_strings{$_} } @glue_strings;
         if ( grep { !exists $child_oob_strings{$_} } @glue_strings ) {
             push @results,
-              info(
+              _emit_log(
                 OUT_OF_BAILIWICK_ADDR_MISMATCH => {
                     parent_addresses => join( q{;}, sort @glue_strings ),
                     zone_addresses => join( q{;}, sort keys %child_oob_strings ),
@@ -926,10 +938,10 @@ sub consistency05 {
     } ## end for my $glue_name ( keys...)
 
     if ( !@ib_extra_child && !@ib_mismatch && !@oob_mismatch ) {
-        push @results, info( ADDRESSES_MATCH => {} );
+        push @results, _emit_log( ADDRESSES_MATCH => {} );
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub consistency05
 
 =over
@@ -950,7 +962,9 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 sub consistency06 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Consistency06';
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
     my %nsnames_and_ip;
     my %mnames;
     my $query_type = q{SOA};
@@ -968,14 +982,14 @@ sub consistency06 {
         my $p = $local_ns->query( $zone->name, $query_type );
 
         if ( not $p ) {
-            push @results, info( NO_RESPONSE => { ns => $local_ns->string } );
+            push @results, _emit_log( NO_RESPONSE => { ns => $local_ns->string } );
             next;
         }
 
         my ( $soa ) = $p->get_records_for_name( $query_type, $zone->name );
 
         if ( not $soa ) {
-            push @results, info( NO_RESPONSE_SOA_QUERY => { ns => $local_ns->string } );
+            push @results, _emit_log( NO_RESPONSE_SOA_QUERY => { ns => $local_ns->string } );
             next;
         }
         else {
@@ -986,7 +1000,7 @@ sub consistency06 {
 
     if ( scalar( keys %mnames ) == 1 ) {
         push @results,
-          info(
+          _emit_log(
             ONE_SOA_MNAME => {
                 mname => ( keys %mnames )[0],
             }
@@ -994,14 +1008,14 @@ sub consistency06 {
     }
     elsif ( scalar( keys %mnames ) ) {
         push @results,
-          info(
+          _emit_log(
             MULTIPLE_SOA_MNAMES => {
                 count => scalar( keys %mnames ),
             }
           );
         foreach my $mname ( keys %mnames ) {
             push @results,
-              info(
+              _emit_log(
                 SOA_MNAME => {
                     mname   => $mname,
                     ns_list => join( q{;}, @{ $mnames{$mname} } ),
@@ -1010,7 +1024,7 @@ sub consistency06 {
         }
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub consistency06
 
 1;
