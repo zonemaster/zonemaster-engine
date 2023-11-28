@@ -30,7 +30,7 @@ my $redis;
 my $config;
 our $object_cache = \%Zonemaster::Engine::Nameserver::Cache::object_cache;
 
-my $REDIS_EXPIRE_DEFAULT = 5; # seconds
+my $REDIS_EXPIRE_DEFAULT = 300; # seconds
 
 has 'redis' => ( is => 'ro' );
 has 'config' => ( is => 'ro' );
