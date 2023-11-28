@@ -49,16 +49,19 @@ Zonemaster::Engine::Profile->effective->merge( $profile_test );
 
 ###
 my $zone = Zonemaster::Engine->zone( q{001.tf} );
-
 zone_gives( $testcase, $zone, [qw{IPV4_ONE_ASN IPV6_ONE_ASN}] );
 zone_gives_not( $testcase, $zone, [qw{EMPTY_ASN_SET ERROR_ASN_DATABASE IPV4_DIFFERENT_ASN IPV4_SAME_ASN IPV6_DIFFERENT_ASN IPV6_SAME_ASN}] );
+
+$zone = Zonemaster::Engine->zone( q{zonemaster.net} );
+zone_gives( $testcase, $zone, [qw{IPV4_DIFFERENT_ASN IPV6_DIFFERENT_ASN}] );
+zone_gives_not( $testcase, $zone, [qw{EMPTY_ASN_SET ERROR_ASN_DATABASE IPV4_SAME_ASN IPV6_SAME_ASN IPV4_ONE_ASN IPV6_ONE_ASN}] );
 
 $zone = Zonemaster::Engine->zone( q{zut-root.rd.nic.fr} );
 zone_gives( $testcase, $zone, [qw{IPV4_ONE_ASN}] );
 zone_gives_not( $testcase, $zone, [qw{EMPTY_ASN_SET ERROR_ASN_DATABASE IPV4_DIFFERENT_ASN IPV4_SAME_ASN IPV6_DIFFERENT_ASN IPV6_ONE_ASN IPV6_SAME_ASN}] );
 
 TODO: {
-    my @missing = qw( EMPTY_ASN_SET ERROR_ASN_DATABASE IPV4_DIFFERENT_ASN IPV4_SAME_ASN IPV6_DIFFERENT_ASN IPV6_SAME_ASN );
+    my @missing = qw( EMPTY_ASN_SET ERROR_ASN_DATABASE IPV4_SAME_ASN IPV6_SAME_ASN );
     local $TODO = "Need to find/create zones with those errors: ";
     warn $TODO, "\n\t", join("\n\t", @missing), "\n";
 }

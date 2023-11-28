@@ -142,6 +142,8 @@ t/profiles/Test-syntax-all.json
 t/profiles/Test-zone-all.json
 t/recursor.data
 t/recursor.t
+t/recursor-A.data
+t/recursor-A.t
 t/Test-address.data
 t/Test-address.t
 t/Test-basic.data
