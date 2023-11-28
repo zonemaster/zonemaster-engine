@@ -625,6 +625,28 @@ sub _retrieve_record_from_zone {
     return;
 }
 
+=over
+
+=item _spf_syntax_ok()
+
+    _spf_syntax_ok( $spf_string );
+
+Attempts to run L<Mail::SPF::v1::Record/new_from_string($text, %options)> on the provided string.
+
+Takes a string (SPF text).
+
+=back
+
+=cut
+
+sub _spf_syntax_ok {
+    my $spf = shift;
+
+    try {
+        Mail::SPF::v1::Record->new_from_string($spf);
+    }
+}
+
 =head1 TESTS
 
 =over
@@ -1529,13 +1551,5 @@ sub zone11 {
 
     return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) )
 } ## end sub zone11
-
-sub _spf_syntax_ok {
-    my $spf = shift;
-
-    try {
-        Mail::SPF::v1::Record->new_from_string($spf);
-    }
-}
 
 1;
