@@ -295,7 +295,8 @@ Runs the given Test Case of the given Test module for the given zone.
 
 The Test module must be in the list of actively loaded modules (that is,
 a module defined in the B<share/modules.txt> file), and the Test Case
-must be listed in the L<metadata|/metadata()> of the Test module exports.
+must be listed both in the L<metadata|/metadata()> of the Test module
+exports and in the L<profile|Zonemaster::Engine::Profile/test_cases>.
 
 Takes a string (module name), a string (test case name) and an array of L<Zonemaster::Engine::Zone> objects.
 
