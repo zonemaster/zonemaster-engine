@@ -1483,7 +1483,9 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 sub zone11 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Zone11';
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     # This hash maps nameserver IP addresses to arrayrefs of TXT resource
     # record data matching the signature for SPF policies. These arrays
@@ -1523,33 +1525,33 @@ sub zone11 {
     }
 
     if ( not scalar %ns_spf ) {
-        push @results, info( Z11_UNABLE_TO_CHECK_FOR_SPF => {} );
+        push @results, _emit_log( Z11_UNABLE_TO_CHECK_FOR_SPF => {} );
     }
     elsif ( List::MoreUtils::all { $_ eq '' } keys %spf_ns ) {
-        push @results, info( Z11_NO_SPF_FOUND => {} );
+        push @results, _emit_log( Z11_NO_SPF_FOUND => {} );
     }
     elsif ( scalar keys %spf_ns > 1 ) {
-        push @results, info( Z11_INCONSISTENT_SPF_POLICIES => {} );
+        push @results, _emit_log( Z11_INCONSISTENT_SPF_POLICIES => {} );
 
         for my $ns ( values %spf_ns ) {
-            push @results, info( Z11_DIFFERENT_SPF_POLICIES_FOUND => { ns_ip_list => join( q{;}, sort @$ns ) } );
+            push @results, _emit_log( Z11_DIFFERENT_SPF_POLICIES_FOUND => { ns_ip_list => join( q{;}, sort @$ns ) } );
         }
     }
     elsif ( my @bad_ns = grep { scalar @{$ns_spf{$_}} > 1 } keys %ns_spf ) {
-        push @results, info( Z11_SPF1_MULTIPLE_RECORDS => { ns_ip_list => join( q{;}, sort @bad_ns ) } );
+        push @results, _emit_log( Z11_SPF1_MULTIPLE_RECORDS => { ns_ip_list => join( q{;}, sort @bad_ns ) } );
     }
     else {
         my $spf_text = (values %ns_spf)[0][0];
 
         if ( _spf_syntax_ok($spf_text) ) {
-            push @results, info( Z11_SPF1_SYNTAX_OK => {} );
+            push @results, _emit_log( Z11_SPF1_SYNTAX_OK => {} );
         }
         else {
-            push @results, info( Z11_SPF1_SYNTAX_ERROR => { ns_ip_list => join( q{;}, sort (keys %ns_spf) ) } );
+            push @results, _emit_log( Z11_SPF1_SYNTAX_ERROR => { ns_ip_list => join( q{;}, sort (keys %ns_spf) ) } );
         }
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) )
+    return ( @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) )
 } ## end sub zone11
 
 1;
