@@ -25,6 +25,8 @@ test_cases:
   - address01
   - address02
   - address03
+  - basic01
+  - basic02
   - basic03
   - connectivity01
   - connectivity02
