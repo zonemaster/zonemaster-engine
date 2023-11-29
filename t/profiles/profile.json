@@ -7,7 +7,6 @@
    "resolver" : {
       "defaults" : {
          "debug" : false,
-         "dnssec" : false,
          "igntc" : false,
          "recurse" : false,
          "retrans" : 3,

@@ -16,7 +16,7 @@ isa_ok( $log, 'Zonemaster::Engine::Logger' );
 $log->add( 'TAG', { seventeen => 17 } );
 
 # Make sure all our "policy" comes from our "policy" file.
-my $json         = read_file( "t/policy.json" );
+my $json         = read_file( "t/profiles/policy.json" );
 my $profile_test = Zonemaster::Engine::Profile->from_json( $json );
 my $profile      = Zonemaster::Engine::Profile->default;
 $profile->merge( $profile_test );
@@ -70,7 +70,7 @@ is( "$err", 'canary' );
 $log->clear_callback;
 
 Zonemaster::Engine::Logger->reset_config();
-$json = read_file( "t/profile.json" );
+$json = read_file( "t/profiles/profile.json" );
 $profile_test  = Zonemaster::Engine::Profile->from_json( $json );
 ok( Zonemaster::Engine::Profile->effective->merge( $profile_test ), 'profile loaded' );
 $log->add( FILTER_THIS => { when => 1, and => 'this' } );

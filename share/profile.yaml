@@ -14,8 +14,6 @@ no_network: false
 resolver:
   defaults:
     debug: false
-    dnssec: false
-    edns_size: 0
     fallback: true
     igntc: false
     recurse: false
