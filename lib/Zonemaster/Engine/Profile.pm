@@ -881,8 +881,8 @@ to run of all of its test cases.
 
 Test cases not included here can still be run individually.
 
-The test cases C<basic00>, C<basic01> and C<basic02> are always considered no
-matter if they're excluded from this property.
+When running the full testing suite, the test cases C<basic01> and C<basic02>
+are always considered no matter if they're excluded from this property.
 This is because part of their function is to verify that the given domain name
 can be tested at all.
 

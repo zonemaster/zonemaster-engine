@@ -38,8 +38,7 @@ Zonemaster::Engine::Test::Basic - Module implementing tests focused on basic zon
     my @logentry_array = all( $zone );
 
 Runs the default set of tests for that module, i.e. between L<one and four tests|/TESTS> depending on the tested zone.
-If L<BASIC00|/basic00()> passes, L<BASIC01|/basic01()> is run. If L<BASIC01|/basic01()> passes, L<BASIC02|/basic02()> is run.
-If L<BASIC02|/basic02()> fails, L<BASIC03|/basic03()> is run.
+If L<BASIC01|/basic01()> passes, L<BASIC02|/basic02()> is run. If L<BASIC02|/basic02()> fails, L<BASIC03|/basic03()> is run.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -53,37 +52,24 @@ sub all {
     my ( $class, $zone ) = @_;
     my @results;
 
-    push @results, $class->basic00( $zone );
+    push @results, $class->basic01( $zone );
 
-    if (
-        none {
-            $_->tag eq q{DOMAIN_NAME_LABEL_TOO_LONG}
-              or $_->tag eq q{DOMAIN_NAME_ZERO_LENGTH_LABEL}
-              or $_->tag eq q{DOMAIN_NAME_TOO_LONG}
-        }
-        @results
-      )
-    {
-        push @results, $class->basic01( $zone );
+    if ( grep { $_->tag eq q{B01_CHILD_FOUND} } @results ) {
+       push @results, $class->basic02( $zone );
+    }
 
-        if ( grep { $_->tag eq q{B01_CHILD_FOUND} } @results ) {
-           push @results, $class->basic02( $zone );
-        }
-
-        # Perform BASIC3 if BASIC2 failed
-        if ( none { $_->tag eq q{B02_AUTH_RESPONSE_SOA} } @results ) {
-            push @results, $class->basic03( $zone ) if Zonemaster::Engine::Util::should_run_test( q{basic03} );
-        }
-        else {
-            push @results,
-              _emit_log(
-                HAS_NAMESERVER_NO_WWW_A_TEST => {
-                    zname => $zone->name,
-                }
-              );
-        }
-
-    } ## end if ( none { $_->tag eq...})
+    # Perform BASIC3 if BASIC2 failed
+    if ( none { $_->tag eq q{B02_AUTH_RESPONSE_SOA} } @results ) {
+        push @results, $class->basic03( $zone ) if Zonemaster::Engine::Util::should_run_test( q{basic03} );
+    }
+    else {
+        push @results,
+          _emit_log(
+            HAS_NAMESERVER_NO_WWW_A_TEST => {
+                zname => $zone->name,
+            }
+          );
+    }
 
     return @results;
 } ## end sub all
@@ -134,15 +120,6 @@ sub metadata {
     my ( $class ) = @_;
 
     return {
-        basic00 => [
-            qw(
-              DOMAIN_NAME_LABEL_TOO_LONG
-              DOMAIN_NAME_ZERO_LENGTH_LABEL
-              DOMAIN_NAME_TOO_LONG
-              TEST_CASE_END
-              TEST_CASE_START
-              )
-        ],
         basic01 => [
             qw(
               B01_CHILD_IS_ALIAS
@@ -193,10 +170,6 @@ sub metadata {
 } ## end sub metadata
 
 Readonly my %TAG_DESCRIPTIONS => (
-    BASIC00 => sub {
-        __x    # BASIC:BASIC00
-          'Domain name must be valid';
-    },
     BASIC01 => sub {
         __x    # BASIC:BASIC01
           'The domain must have a parent domain';
@@ -458,67 +431,6 @@ sub _ip_enabled_message {
 }
 
 =head1 TESTS
-
-=over
-
-=item basic00()
-
-    my @logentry_array = basic00( $zone );
-
-Runs the L<Basic00 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Basic-TP/basic00.md>.
-
-Takes a L<Zonemaster::Engine::Zone> object.
-
-Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
-
-=back
-
-=cut
-
-sub basic00 {
-    my ( $class, $zone ) = @_;
-    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Basic00';
-
-    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
-    my $name = name( $zone );
-
-    foreach my $local_label ( @{ $name->labels } ) {
-        if ( length $local_label > $LABEL_MAX_LENGTH ) {
-            push @results,
-              _emit_log(
-                q{DOMAIN_NAME_LABEL_TOO_LONG} => {
-                    domain  => "$name",
-                    label  => $local_label,
-                    dlength => length( $local_label ),
-                    max     => $LABEL_MAX_LENGTH,
-                }
-              );
-        }
-        elsif ( length $local_label == 0 ) {
-            push @results,
-              _emit_log(
-                q{DOMAIN_NAME_ZERO_LENGTH_LABEL} => {
-                    domain => "$name",
-                }
-              );
-        }
-    } ## end foreach my $local_label ( @...)
-
-    my $fqdn = $name->fqdn;
-    if ( length( $fqdn ) > $FQDN_MAX_LENGTH ) {
-        push @results,
-          _emit_log(
-            q{DOMAIN_NAME_TOO_LONG} => {
-                fqdn       => $fqdn,
-                fqdnlength => length( $fqdn ),
-                max        => $FQDN_MAX_LENGTH,
-            }
-          );
-    }
-
-    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
-
-} ## end sub basic00
 
 =over
 
