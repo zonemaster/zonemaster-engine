@@ -34,6 +34,10 @@ net:
   ipv4: true
   ipv6: false
 no_network: true
+cache:
+  redis:
+    server: 127.0.0.1:6379
+    expire: 3600
 asnroots:
   - example.com
 logfilter:
@@ -71,6 +75,12 @@ Readonly my $EXAMPLE_PROFILE_1 => q(
     "ipv6": false
   },
   "no_network": true,
+  "cache": {
+    "redis": {
+      "server": "127.0.0.1:6379",
+      "expire": 3600
+    }
+  },
   "asnroots": [
     "example.com"
   ],
@@ -120,6 +130,12 @@ Readonly my $EXAMPLE_PROFILE_2 => q(
     "ipv6": true
   },
   "no_network": false,
+  "cache": {
+    "redis": {
+      "server": "127.0.0.2:6379",
+      "expire": 7200
+    }
+  },
   "asnroots": [
     "asn1.example.com", "asn2.example.com"
   ],
@@ -181,6 +197,7 @@ subtest 'new() returns a profile with all properties unset' => sub {
     is $profile->get( 'logfilter' ),                  undef, 'logfilter is unset';
     is $profile->get( 'test_levels' ),                undef, 'test_levels is unset';
     is $profile->get( 'test_cases' ),                 undef, 'test_cases is unset';
+    is $profile->get( 'cache' ),                      undef, 'cache is unset';
 };
 
 subtest 'default() returns a new profile every time' => sub {
@@ -240,6 +257,7 @@ subtest 'from_json("{}") returns a profile with all properties unset' => sub {
     is $profile->get( 'logfilter' ),                  undef, 'logfilter is unset';
     is $profile->get( 'test_levels' ),                undef, 'test_levels is unset';
     is $profile->get( 'test_cases' ),                 undef, 'test_cases is unset';
+    is $profile->get( 'cache' ),                      undef, 'cache is unset';
 };
 
 subtest 'from_json() parses values from a string' => sub {
@@ -263,6 +281,7 @@ subtest 'from_json() parses values from a string' => sub {
       'logfilter was parsed from JSON';
     eq_or_diff $profile->get( 'test_levels' ), { Zone => { TAG => 'INFO' } }, 'test_levels was parsed from JSON';
     eq_or_diff $profile->get( 'test_cases' ), ['Zone01'], 'test_cases was parsed from JSON';
+    eq_or_diff $profile->get( 'cache' ), { redis => { server => '127.0.0.1:6379', expire => 3600 } }, 'cache was parsed from JSON';
 };
 
 subtest 'from_json() parses sentinel values from a string' => sub {
@@ -305,6 +324,7 @@ subtest 'from_json() dies on illegal values' => sub {
     dies_ok { Zonemaster::Engine::Profile->from_json( '{"logfilter":[]}' ); }                          "checks type of logfilter";
     dies_ok { Zonemaster::Engine::Profile->from_json( '{"test_levels":[]}' ); }                        "checks type of test_levels";
     dies_ok { Zonemaster::Engine::Profile->from_json( '{"test_cases":{}}' ); }                         "checks type of test_cases";
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"cache":[]}' ); }                              "checks type of cache";
 };
 
 subtest 'from_json() emits warning on illegal values' => sub {
@@ -393,16 +413,19 @@ subtest 'get() returns deep copies of properties with complex types' => sub {
     $profile->set( 'logfilter',   {} );
     $profile->set( 'test_levels', {} );
     $profile->set( 'test_cases', [] );
+    $profile->set( 'cache',   {} );
 
     push @{ $profile->get( 'asnroots' ) },   'asn2.example.com';
     push @{ $profile->get( 'test_cases' ) }, 'Zone01';
     $profile->get( 'logfilter' )->{Zone} = {};
     $profile->get( 'test_levels' )->{Zone}{TAG} = 'INFO';
+    $profile->get( 'cache' )->{redis}{server} = '127.0.0.1:6379';
 
     eq_or_diff $profile->get( 'asnroots' ), ['asn1.example.com'], 'get(asnroots) returns a deep copy';
     eq_or_diff $profile->get( 'logfilter' ),   {}, 'get(logfilter) returns a deep copy';
     eq_or_diff $profile->get( 'test_levels' ), {}, 'get(test_levels) returns a deep copy';
     eq_or_diff $profile->get( 'test_cases' ), [], 'get(test_cases) returns a deep copy';
+    eq_or_diff $profile->get( 'cache' ),   {}, 'get(cache) returns a deep copy';
 };
 
 subtest 'get() dies if the given property name is invalid' => sub {
@@ -411,6 +434,7 @@ subtest 'get() dies if the given property name is invalid' => sub {
     $profile->set( 'logfilter', { Zone => {} } );
     $profile->set( 'test_levels', { Zone => { TAG => 'INFO' } } );
     $profile->set( 'test_cases', ['Zone01'] );
+    $profile->set( 'cache', { redis => { server => '127.0.0.1:6379' } } );
 
     throws_ok { $profile->get( 'net' ) }               qr/^.*Unknown property .*/, 'net';
     throws_ok { $profile->get( 'net.foobar' ) }        qr/^.*Unknown property .*/, 'net.foobar';
@@ -420,6 +444,7 @@ subtest 'get() dies if the given property name is invalid' => sub {
     throws_ok { $profile->get( 'logfilter.Zone' ) }    qr/^.*Unknown property .*/, 'logfilter.Zone';
     throws_ok { $profile->get( 'test_levels.Zone' ) }  qr/^.*Unknown property .*/, 'test_levels.Zone';
     throws_ok { $profile->get( 'test_cases.Zone01' ) } qr/^.*Unknown property .*/, 'test_cases.Zone01';
+    throws_ok { $profile->get( 'cache.redis' ) }       qr/^.*Unknown property .*/, 'cache.redis';
 };
 
 subtest 'set() inserts values for unset properties' => sub {
@@ -442,6 +467,7 @@ subtest 'set() inserts values for unset properties' => sub {
     $profile->set( 'logfilter', { Zone => { TAG => [ { when => { bananas => 0 }, set => 'WARNING' } ] } } );
     $profile->set( 'test_levels', { Zone => { TAG => 'INFO' } } );
     $profile->set( 'test_cases', ['Zone01'] );
+    $profile->set( 'cache', { redis => { server => '127.0.0.1:6379', expire => 3600 } } );
 
     is $profile->get( 'resolver.defaults.usevc' ),    1,   'resolver.defaults.usevc can be given a value when unset';
     is $profile->get( 'resolver.defaults.dnssec' ),   0,   'resolver.defaults.dnssec can be given a value when unset';
@@ -462,6 +488,8 @@ subtest 'set() inserts values for unset properties' => sub {
     eq_or_diff $profile->get( 'test_levels' ), { Zone => { TAG => 'INFO' } },
       'test_levels can be given a value when unset';
     eq_or_diff $profile->get( 'test_cases' ), ['Zone01'], 'test_cases can be given a value when unset';
+    eq_or_diff $profile->get( 'cache' ), { redis => { server => '127.0.0.1:6379', expire => 3600 } },
+      'cache can be given a value when unset';
 };
 
 subtest 'set() updates values for set properties' => sub {
@@ -484,6 +512,7 @@ subtest 'set() updates values for set properties' => sub {
     $profile->set( 'logfilter', { Nameserver => { OTHER_TAG => [ { when => { apples => 1 }, set => 'INFO' } ] } } );
     $profile->set( 'test_levels', { Nameserver => { OTHER_TAG => 'ERROR' } } );
     $profile->set( 'test_cases', ['Zone02'] );
+    $profile->set( 'cache', { redis => { server => '127.0.0.2:6379', expire => 7200 } } );
 
     is $profile->get( 'resolver.defaults.usevc' ),   0,               'resolver.defaults.usevc was updated';
     is $profile->get( 'resolver.defaults.dnssec' ),  1,               'resolver.defaults.dnssec was updated';
@@ -502,6 +531,8 @@ subtest 'set() updates values for set properties' => sub {
       { Nameserver => { OTHER_TAG => [ { when => { apples => 1 }, set => 'INFO' } ] } }, 'logfilter was updated';
     eq_or_diff $profile->get( 'test_levels' ), { Nameserver => { OTHER_TAG => 'ERROR' } }, 'test_levels was updated';
     eq_or_diff $profile->get( 'test_cases' ), ['Zone02'], 'test_cases was updated';
+    eq_or_diff $profile->get( 'cache' ), { redis => { server => '127.0.0.2:6379', expire => 7200 } },
+    'cache was updated';
 };
 
 subtest 'set() dies on attempts to unset properties' => sub {
@@ -524,6 +555,7 @@ subtest 'set() dies on attempts to unset properties' => sub {
     throws_ok { $profile->set( 'logfilter',                  undef ); } qr/^.* can not be undef/, 'dies on attempt to unset logfilter';
     throws_ok { $profile->set( 'test_levels',                undef ); } qr/^.* can not be undef/, 'dies on attempt to unset test_levels';
     throws_ok { $profile->set( 'test_cases',                 undef ); } qr/^.* can not be undef/, 'dies on attempt to unset test_cases';
+    throws_ok { $profile->set( 'cache',                      undef ); } qr/^.* can not be undef/, 'dies on attempt to unset cache';
 };
 
 subtest 'set() dies if the given property name is invalid' => sub {
@@ -532,6 +564,7 @@ subtest 'set() dies if the given property name is invalid' => sub {
     $profile->set( 'logfilter',   { Zone => {} } );
     $profile->set( 'test_levels', { Zone => {} } );
     $profile->set( 'test_cases', ['Zone01'] );
+    $profile->set( 'cache', { redis => { server => '127.0.0.1:6379' } } );
 
     throws_ok { $profile->set( 'net',               1 ) } qr/^.*Unknown property .*/, 'dies on attempt to set a value for net';
     throws_ok { $profile->set( 'net.foobar',        1 ) } qr/^.*Unknown property .*/, 'dies on attempt to set a value for net.foobar';
@@ -541,6 +574,7 @@ subtest 'set() dies if the given property name is invalid' => sub {
     throws_ok { $profile->set( 'logfilter.Zone',    1 ) } qr/^.*Unknown property .*/, 'dies on attempt to set a value for logfilter.Zone';
     throws_ok { $profile->set( 'test_levels.Zone',  1 ) } qr/^.*Unknown property .*/, 'dies on attempt to set a value for test_levels.Zone';
     throws_ok { $profile->set( 'test_cases.Zone01', 1 ) } qr/^.*Unknown property .*/, 'dies on attempt to set a value for test_cases.Zone01';
+    throws_ok { $profile->set( 'cache.redis',       1 ) } qr/^.*Unknown property .*/, 'dies on attempt to set a value for cache.redis';
 };
 
 subtest 'set() dies on illegal value' => sub {
@@ -558,7 +592,8 @@ subtest 'set() dies on illegal value' => sub {
     dies_ok { $profile->set( 'asnroots',        ['noreply@example.com'] ); } 'checks type of asnroots';
     dies_ok { $profile->set( 'logfilter',       [] ); } 'checks type of logfilter';
     dies_ok { $profile->set( 'test_levels',     [] ); } 'checks type of test_levels';
-    dies_ok { $profile->set( 'test_cases', {} ); } 'checks type of test_cases';
+    dies_ok { $profile->set( 'test_cases',      {} ); } 'checks type of test_cases';
+    dies_ok { $profile->set( 'cache',           [] ); } 'checks type of cache';
 };
 
 subtest 'set() accepts sentinel values' => sub {
@@ -631,8 +666,9 @@ subtest 'merge() with a profile with all properties unset' => sub {
     eq_or_diff $profile1->get( 'asnroots' ), ['example.com'], 'keeps value of asnroots';
     eq_or_diff $profile1->get( 'logfilter' ), { Zone => { TAG => [ { when => { bananas => 0 }, set => 'WARNING' } ] } },
       'keeps value of logfilter';
-    eq_or_diff $profile1->get( 'test_levels' ), { Zone => { TAG => 'INFO' } }, 'test_levels';
+    eq_or_diff $profile1->get( 'test_levels' ), { Zone => { TAG => 'INFO' } }, 'keeps value of test_levels';
     eq_or_diff $profile1->get( 'test_cases' ), ['Zone01'], 'keeps value of test_cases';
+    eq_or_diff $profile1->get( 'cache' ), { redis => { server => '127.0.0.1:6379', expire => 3600 } }, 'keeps value of cache';
 };
 
 subtest 'merge() with a profile with all properties set' => sub {
@@ -659,6 +695,7 @@ subtest 'merge() with a profile with all properties set' => sub {
       { Nameserver => { OTHER_TAG => [ { when => { apples => 1 }, set => 'INFO' } ] } }, 'updates logfilter';
     eq_or_diff $profile1->get( 'test_levels' ), { Nameserver => { OTHER_TAG => 'ERROR' } }, 'updates test_levels';
     eq_or_diff $profile1->get( 'test_cases' ), ['Zone02'], 'updates test_cases';
+    eq_or_diff $profile1->get( 'cache' ), { redis => { server => '127.0.0.2:6379', expire => 7200 } }, 'updates cache';
 };
 
 subtest 'merge() does not update the other profile' => sub {
@@ -684,6 +721,7 @@ subtest 'merge() does not update the other profile' => sub {
     is $profile2->get( 'logfilter' ),                  undef, 'logfilter was untouched in other';
     is $profile2->get( 'test_levels' ),                undef, 'test_levels was untouched in other';
     is $profile2->get( 'test_cases' ),                 undef, 'test_cases was untouched in other';
+    is $profile2->get( 'cache' ),                      undef, 'cache was untouched in other';
 };
 
 subtest 'to_json() serializes each property' => sub {
@@ -867,6 +905,16 @@ subtest 'to_json() serializes each property' => sub {
 
         eq_or_diff decode_json( $json ),
           decode_json( '{"logfilter":{"Zone":{"TAG":[{"when":{"bananas":0},"set":"WARNING"}]}}}' );
+    };
+
+    subtest 'cache' => sub {
+        my $profile = Zonemaster::Engine::Profile->new;
+        $profile->set( 'cache', { redis => { server => '127.0.0.1:6379', expire => 3600 } } );
+
+        my $json = $profile->to_json;
+
+        eq_or_diff decode_json( $json ),
+          decode_json( '{"cache":{"redis":{"server":"127.0.0.1:6379","expire":3600}}}' );
     };
 };
 

@@ -5,37 +5,44 @@ use version; our $VERSION = version->declare("v1.0.4");
 use 5.014002;
 use warnings;
 
-use Moose;
-use Zonemaster::Engine;
+use Class::Accessor "antlers";
 
 our %object_cache;
 
-has 'data' => ( is => 'ro', isa => 'HashRef[Maybe[Zonemaster::Engine::Packet]]', default => sub { {} } );
-has 'address' => ( is => 'ro', isa => 'Net::IP::XS', required => 1 );
+has 'data' => ( is => 'ro' );
+has 'address' => ( is => 'ro' );
 
-around 'new' => sub {
-    my $orig = shift;
-    my $self = shift;
+sub get_cache_type {
+    my ( $class, $profile ) = @_;
+    my $cache_type = 'LocalCache';
 
-    my $obj = $self->$orig( @_ );
+    if ( $profile->get( 'cache' ) ) {
+        my %cache_config = %{ $profile->get( 'cache' ) };
 
-    if ( not exists $object_cache{ $obj->address->ip } ) {
-        Zonemaster::Engine->logger->add( CACHE_CREATED => { ip => $obj->address->ip } );
-        $object_cache{ $obj->address->ip } = $obj;
+        if ( exists $cache_config{'redis'} ) {
+            $cache_type = 'RedisCache';
+        }
     }
 
-    Zonemaster::Engine->logger->add( CACHE_FETCHED => { ip => $obj->address->ip } );
-    return $object_cache{ $obj->address->ip };
-};
+    return $cache_type;
+}
+
+sub get_cache_class {
+    my ( $class, $cache_type ) = @_;
+
+    my $cache_class = "Zonemaster::Engine::Nameserver::Cache::$cache_type";
+
+    require ( "$cache_class.pm" =~ s{::}{/}gr );
+    $cache_class->import();
+
+    return $cache_class;
+}
 
 sub empty_cache {
     %object_cache = ();
 
     return;
 }
-
-no Moose;
-__PACKAGE__->meta->make_immutable( inline_constructor => 0 );
 
 1;
 
@@ -64,6 +71,26 @@ A reference to a hash holding the cache of sent queries. Not meant for external 
 =head1 CLASS METHODS
 
 =over
+
+=item get_cache_type()
+
+    my $cache_type = get_cache_type( Zonemaster::Engine::Profile->effective );
+
+Get the cache type value from the profile, i.e. the name of the cache module to use.
+
+Takes a L<Zonemaster::Engine::Profile> object.
+
+Returns a string.
+
+=item get_cache_class()
+
+    my $cache_class = get_cache_class( 'LocalCache' );
+
+Get the cache adapter class for the given database type.
+
+Takes a string (cache database type).
+
+Returns a string, or throws an exception if the cache adapter class cannot be loaded.
 
 =item empty_cache()
 
