@@ -99,7 +99,7 @@ sub recurse {
 
     my ( $p, $state ) =
       $class->_recurse( $name, $type, $dns_class,
-        { ns => [ root_servers() ], count => 0, common => 0, seen => {}, cseen => {}, glue => {} } );
+        { ns => [ root_servers() ], count => 0, common => 0, seen => {}, glue => {} } );
     $recurse_cache{$name}{$type}{$dns_class} = $p;
 
     return $p;
@@ -111,7 +111,7 @@ sub parent {
 
     my ( $p, $state ) =
       $class->_recurse( $name, 'SOA', 'IN',
-        { ns => [ root_servers() ], count => 0, common => 0, seen => {}, cseen => {}, glue => {} } );
+        { ns => [ root_servers() ], count => 0, common => 0, seen => {}, glue => {} } );
 
     my $pname;
     if ( name( $state->{trace}[0][0] ) eq name( $name ) ) {
@@ -153,6 +153,54 @@ sub parent {
     }
 } ## end sub parent
 
+sub _resolve_cname {
+    my ( $class, $name, $type, $dns_class, $p, $state ) = @_;
+
+    my ( %cnames, %seen_targets, %forbidden_targets );
+
+    for my $rr ( my @cname_rrs = $p->get_records( 'CNAME', 'answer' ) ) {
+        my $rr_owner = name( $rr->owner );
+        my $rr_target = name( $rr->cname );
+
+        if ( scalar $p->get_records_for_name( 'CNAME', $rr_owner, 'answer' ) > 1 ) { # Multiple CNAME records with same owner name
+            Zonemaster::Engine->logger->add( CNAME_MULTIPLE_FOR_NAME => { name => join( ';', map { $_->owner } @cname_rrs ) } );
+            return ( undef, $state );
+        }
+
+        if ( lc( $rr_owner ) eq lc( $rr_target ) or exists $seen_targets{lc( $rr_target )} or exists $forbidden_targets{lc( $rr_owner)} ) { # CNAME owner name is target, or target has already been seen in this response, or owner name cannot be a target
+            Zonemaster::Engine->logger->add( CNAME_LOOP_INNER => { name => join( ';', map { $_->owner } @cname_rrs ), target => join( ';', map { $_->cname } @cname_rrs ) } );
+            return ( undef, $state );
+        }
+
+        $seen_targets{lc( $rr_target )} = 1;
+        $forbidden_targets{lc( $rr_owner )} = 1;
+        $cnames{$rr_owner} = $rr_target;
+    }
+
+    my $target = $name;
+    $target = $cnames{$target} while $cnames{$target}; # Get final CNAME target
+
+    if ( $p->has_rrs_of_type_for_name( $type, $target ) ) { # RR of type QTYPE for CNAME target is already in response; no need to recurse
+        return ( $p, $state );
+    }
+
+    if ( $state->{tseen}{lc( $target )}  ) { # CNAME target has already been followed (outer loop); no need to recurse.
+        Zonemaster::Engine->logger->add( CNAME_LOOP_OUTER => { name => $name, target => $target, targets_seen => join( ';', keys %{ $state->{tseen} } ) } );
+        return ( undef, $state );
+    }
+
+    $state->{tseen}{lc( $target )} = 1;
+    $state->{tcount} += 1;
+
+    return ( undef, $state ) if $state->{tcount} > 100; # Safe-guard against anormaly long CNAME chains; no need to recurse
+
+    # Otherwise, make a new recursive lookup for CNAME target
+    ( $p, $state ) = $class->_recurse( $target, $type, $dns_class,
+        { ns => [ root_servers() ], count => 0, common => 0, seen => {}, tseen => $state->{tseen}, tcount => $state->{tcount}, glue => {} });
+
+    return ( $p, $state );
+}
+
 sub _recurse {
     my ( $class, $name, $type, $dns_class, $state ) = @_;
     $name = q{} . name( $name );
@@ -193,65 +241,12 @@ sub _recurse {
             return ( $p, $state );
         }
 
-        if ( $class->_is_answer( $p ) ) {    # Return answer, or follow CNAME
-            if ( not $p->has_rrs_of_type_for_name( $type, $name ) and $p->has_rrs_of_type_for_name( 'CNAME', $name ) ) {
-                if ( scalar $p->get_records_for_name( 'CNAME', $name, 'answer') > 1 ) { # Multiple CNAME records with QNAME as owner name
-                    Zonemaster::Engine->logger->add( CNAME_MULTIPLE_FOR_NAME => { name => $name } );
-                    return ( undef, $state );
-                }
-                else {
-                    my ( %cnames, %tseen );
-
-                    for my $rr ( $p->get_records( 'CNAME', 'answer' ) ) {
-                        my $rr_owner = name( $rr->owner );
-                        my $rr_target = name( $rr->cname );
-
-                        if ( scalar $p->get_records_for_name( 'CNAME', $rr_owner, 'answer' ) > 1 ) { # Multiple CNAME records with same owner name
-                            Zonemaster::Engine->logger->add( CNAME_MULTIPLE_FOR_NAME => { name => $rr_owner->string } );
-                            return ( undef, $state );
-                        }
-
-                        if ( lc( $rr_owner ) eq lc( $rr_target ) or exists $tseen{lc( $rr_target )} ) { # CNAME owner name is target, or target has already been seen in this response
-                            Zonemaster::Engine->logger->add( CNAME_LOOP_INNER => { name => $rr_owner->string, target => $rr_target->string } );
-                            return ( undef, $state );
-                        }
-
-                        $tseen{lc( $rr_target )} = 1;
-                        $cnames{$rr_owner} = $rr_target;
-                    }
-
-                    my $target = $name;
-                    $target = $cnames{$target} while $cnames{$target};
-
-                    if ( $state->{cseen}{lc( $target )}  ) { # CNAME target has already been followed (outer loop)
-                        Zonemaster::Engine->logger->add( CNAME_LOOP_OUTER => { name => $name, target => $target, cnames => join( ';', keys %{ $state->{cseen} } ) } );
-                        return ( undef, $state );
-                    }
-
-                    $state->{cseen}{lc( $target )} = 1;
-
-                    if ( lc( $target ) eq lc( $name ) ) { # CNAME target is QNAME (inner loop)
-                        Zonemaster::Engine->logger->add( CNAME_LOOP_INNER => { name => $name, target => $target } );
-                        return ( undef, $state );
-                    }
-
-                    $state->{count} += 1;
-                    return ( undef, $state ) if $state->{count} > 100; # Loop protection
-
-                    if ( $p->has_rrs_of_type_for_name( $type, $target ) ) { # RR for CNAME target is in response
-                        return ( $p, $state );
-                    }
-
-                    # Otherwise, make a new recursive query for CNAME target
-                    ( $p, $state ) = $class->_recurse( $target, $type, $dns_class,
-                        { ns => [ root_servers() ], count => $state->{count}, common => 0, seen => {}, cseen => $state->{cseen}, glue => {} });
-
-                    return ( $p, $state );
-                }
+        if ( $class->_is_answer( $p ) ) {    # Return answer, or resolve CNAME
+            if ( not $p->has_rrs_of_type_for_name( $type, $name ) and scalar $p->get_records_for_name( 'CNAME', $name, 'answer' ) ) {
+                ( $p, $state ) = $class->_resolve_cname( $name, $type, $dns_class, $p, $state );
             }
-            else {
-                return ( $p, $state );
-            }
+
+            return ( $p, $state );
         }
 
         # So it's not an error, not an empty response and not an answer
@@ -354,7 +349,7 @@ sub get_addresses_for {
     my ( $class, $name, $state ) = @_;
     my @res;
     $state //=
-      { ns => [ root_servers() ], count => 0, common => 0, seen => {}, cseen => {} };
+      { ns => [ root_servers() ], count => 0, common => 0, seen => {} };
 
     my ( $pa ) = $class->_recurse(
         "$name", 'A', 'IN',
@@ -456,7 +451,6 @@ delegations (pre-publication tests).
 
 =head1 CLASS METHODS
 
-
 =head2 init_recursor()
 
 Initialize the recursor by loading the root hints.
@@ -526,5 +520,29 @@ This list can be replaced like so:
             'ns2.example' => ['192.0.2.2'],
         }
     );
+
+=head1 INTERNAL METHODS
+
+=head2 _recurse()
+
+    my ( $p, $state_hash ) = _recurse( $name, $type_string, $dns_class_string, $p, $state_hash );
+
+Performs a recursive lookup resolution for the given arguments. Used by the L<recursive lookup|/recurse($name, $type, $class)> method in this module.
+
+Takes a L<Zonemaster::Engine::DNSName> object, a string (query type), a string (DNS class), a L<Zonemaster::Engine::Packet>, and a reference to a hash.
+
+Returns a L<Zonemaster::Engine::Packet> (or C<undef>) and a hash.
+
+=head2 _resolve_cname()
+
+    my ( $p, $state_hash ) = _resolve_cname( $name, $type_string, $dns_class_string, $p, $state_hash );
+
+Performs CNAME resolution for the given arguments. Used by the L<recursive lookup|/_recurse()> helper method in this module.
+Note that CNAME records are also validated and, in case of an error, an empty (undefined) L<packet|Zonemaster::Engine::Packet>
+is returned and one of the following message tags will be logged: CNAME_MULTIPLE_FOR_NAME, CNAME_LOOP_INNER, CNAME_LOOP_OUTER.
+
+Takes a L<Zonemaster::Engine::DNSName> object, a string (query type), a string (DNS class), a L<Zonemaster::Engine::Packet>, and a reference to a hash.
+
+Returns a L<Zonemaster::Engine::Packet> (or C<undef>) and a reference to a hash.
 
 =cut
