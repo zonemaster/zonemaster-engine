@@ -966,7 +966,7 @@ sub syntax06 {
             next;
         }
 
-        my $domain = ( $rname =~ s/.*@//r );
+        my $domain = name( ( $rname =~ s/.*@//r ) );
         my $p_mx = Zonemaster::Engine::Recursor->recurse( $domain, q{MX} );
 
         if ( not $p_mx or $p_mx->rcode ne 'NOERROR' ) {
@@ -975,8 +975,13 @@ sub syntax06 {
         }
 
         # Retrieve followed CNAME, if any
-        my @p_question_sec = $p_mx->question;
-        $domain = $p_question_sec[0]->owner;
+        if ( $domain ne ($p_mx->question)[0]->owner ) { # CNAME was followed in a new recursive query
+            $domain = name( ($p_mx->question)[0]->owner );
+        }
+        elsif ( scalar $p_mx->get_records( q{CNAME}, q{answer} ) ) { # CNAME was followed in the same query
+            my %cnames = map { name( $_->owner ) => name( $_->cname ) } $p_mx->get_records( q{CNAME}, q{answer} );
+            $domain = $cnames{$domain} while $cnames{$domain};
+        }
 
         # Determine mail server(s)
         my @mail_servers;
