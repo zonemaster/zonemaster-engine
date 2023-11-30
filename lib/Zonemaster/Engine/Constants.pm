@@ -36,6 +36,10 @@ All exportable names.
 
 DNSSEC algorithms.
 
+=item cname
+
+CNAME records.
+
 =item name
 
 Label and name lengths.
@@ -69,6 +73,8 @@ our @EXPORT_OK = qw[
   $ALGO_STATUS_NOT_RECOMMENDED
   $ALGO_STATUS_NOT_ZONE_SIGN
   $BLACKLISTING_ENABLED
+  $CNAME_MAX_CHAIN_LENGTH
+  $CNAME_MAX_RECORDS
   $DURATION_5_MINUTES_IN_SECONDS
   $DURATION_1_HOUR_IN_SECONDS
   $DURATION_4_HOURS_IN_SECONDS
@@ -96,6 +102,7 @@ our %EXPORT_TAGS = (
     algo => [
         qw($ALGO_STATUS_DEPRECATED $ALGO_STATUS_PRIVATE $ALGO_STATUS_RESERVED $ALGO_STATUS_UNASSIGNED $ALGO_STATUS_OTHER $ALGO_STATUS_NOT_ZONE_SIGN $ALGO_STATUS_NOT_RECOMMENDED)
     ],
+    cname => [ qw($CNAME_MAX_CHAIN_LENGTH $CNAME_MAX_RECORDS) ],
     name => [qw($FQDN_MAX_LENGTH $LABEL_MAX_LENGTH)],
     ip   => [qw($IP_VERSION_4 $IP_VERSION_6)],
     soa  => [
@@ -123,6 +130,14 @@ our %EXPORT_TAGS = (
 =item * C<$ALGO_STATUS_NOT_RECOMMENDED>
 
 =item * C<$ALGO_STATUS_NOT_ZONE_SIGN>
+
+=item * C<$CNAME_MAX_CHAIN_LENGTH>
+
+An integer, used to define the maximum length of a CNAME chain when doing consecutive recursive lookups.
+
+=item * C<$CNAME_MAX_RECORDS>
+
+An integer, used to define the maximum number of CNAME records in a response.
 
 =item * C<$DURATION_5_MINUTES_IN_SECONDS>
 
@@ -180,6 +195,9 @@ Readonly our $ALGO_STATUS_NOT_RECOMMENDED => 9;
 
 Readonly our $BLACKLISTING_ENABLED     => 1;
 
+Readonly our $CNAME_MAX_CHAIN_LENGTH      => 10;
+Readonly our $CNAME_MAX_RECORDS           => 10;
+
 Readonly our $DURATION_5_MINUTES_IN_SECONDS  =>             5 * 60;
 Readonly our $DURATION_1_HOUR_IN_SECONDS     =>            60 * 60;
 Readonly our $DURATION_4_HOURS_IN_SECONDS    =>        4 * 60 * 60;
@@ -207,7 +225,6 @@ Readonly our $UDP_EDNS_QUERY_DEFAULT => 512;
 Readonly our $UDP_COMMON_EDNS_LIMIT  => 4_096;
 
 Readonly::Array our @IPV4_SPECIAL_ADDRESSES => _extract_iana_ip_blocks($IP_VERSION_4);
-
 Readonly::Array our @IPV6_SPECIAL_ADDRESSES => _extract_iana_ip_blocks($IP_VERSION_6);
 
 =head1 METHODS
