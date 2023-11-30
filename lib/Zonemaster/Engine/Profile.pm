@@ -871,20 +871,17 @@ level for the tag.
 
 =head2 test_cases
 
-An arrayref of names of implemented test cases as listed in the
-L<test case specifications|
-https://github.com/zonemaster/zonemaster/tree/master/docs/specifications/tests/ImplementedTestCases.md>.
+An arrayref of names of implemented test cases (in all lower-case) as listed in the
+L<test case specifications|https://github.com/zonemaster/zonemaster/tree/master/docs/specifications/tests/ImplementedTestCases.md>.
 Default is an arrayref listing all the test cases.
 
-Specifies which test cases to consider when a test module is asked
-to run of all of its test cases.
+Specifies which test cases can be run by the testing suite.
 
-Test cases not included here can still be run individually.
-
-When running the full testing suite, the test cases C<basic01> and C<basic02>
-are always considered no matter if they're excluded from this property.
-This is because part of their function is to verify that the given domain name
-can be tested at all.
+Note that an exception applies to test cases C<basic01> and C<basic02>:
+when running either the full testing suite or just the Basic test module,
+these test cases are always run no matter if they're excluded from this
+property. This is because their primary goal is to verify that the given
+domain name can be tested at all.
 
 =head2 test_cases_vars.dnssec04.REMAINING_SHORT
 
