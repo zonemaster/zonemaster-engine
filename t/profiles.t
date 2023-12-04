@@ -314,8 +314,8 @@ subtest 'from_json() dies on illegal values' => sub {
     dies_ok { Zonemaster::Engine::Profile->from_json( '{"net":{"ipv4":1}}' ); }                        "checks type of net.ipv4";
     dies_ok { Zonemaster::Engine::Profile->from_json( '{"net":{"ipv6":0}}' ); }                        "checks type of net.ipv6";
     dies_ok { Zonemaster::Engine::Profile->from_json( '{"no_network":1}' ); }                          "checks type of no_network";
-    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"retry":0}}}' ); }     "checks lower bound of resolver.defaults.retry";
-    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"retry":256}}}' ); }   "checks upper bound of resolver.defaults.retry";
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"retry":-1}}}' ); }    "checks lower bound of resolver.defaults.retry";
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"retry":255}}}' ); }   "checks upper bound of resolver.defaults.retry";
     dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"retry":1.5}}}' ); }   "checks type of resolver.defaults.retry";
     dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"retrans":0}}}' ); }   "checks lower bound of resolver.defaults.retrans";
     dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"retrans":256}}}' ); } "checks upper bound of resolver.defaults.retrans";
@@ -580,8 +580,8 @@ subtest 'set() dies if the given property name is invalid' => sub {
 subtest 'set() dies on illegal value' => sub {
     my $profile = Zonemaster::Engine::Profile->new;
 
-    dies_ok { $profile->set( 'resolver.defaults.retry',   0 ); } 'checks lower bound of resolver.defaults.retry';
-    dies_ok { $profile->set( 'resolver.defaults.retry',   256 ); } 'checks upper bound of resolver.defaults.retry';
+    dies_ok { $profile->set( 'resolver.defaults.retry',   -1 ); } 'checks lower bound of resolver.defaults.retry';
+    dies_ok { $profile->set( 'resolver.defaults.retry',   255 ); } 'checks upper bound of resolver.defaults.retry';
     dies_ok { $profile->set( 'resolver.defaults.retry',   1.5 ); } 'checks type of resolver.defaults.retry';
     dies_ok { $profile->set( 'resolver.defaults.retrans', 0 ); } 'checks lower bound of resolver.defaults.retrans';
     dies_ok { $profile->set( 'resolver.defaults.retrans', 256 ); } 'checks upper bound of resolver.defaults.retrans';
