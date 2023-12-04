@@ -79,14 +79,6 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # SYSTEM:SKIP_IPV6_DISABLED
           "IPv6 is disabled, not sending \"{rrtype}\" query to {ns}.", @_;
     },
-    FAKE_DELEGATION => sub {
-        __x    # SYSTEM:FAKE_DELEGATION
-          "Followed a fake delegation.";
-    },
-    ADDED_FAKE_DELEGATION => sub {
-        __x    # SYSTEM:ADDED_FAKE_DELEGATION
-          "Added a fake delegation for domain {domain} to name server {ns}.", @_;
-    },
     FAKE_DELEGATION_TO_SELF => sub {
         __x    # SYSTEM:FAKE_DELEGATION_TO_SELF
           "Name server {ns} not adding fake delegation for domain {domain} to itself.", @_;
