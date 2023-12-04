@@ -532,9 +532,11 @@ sub _query {
     push @{ $self->times }, ( time() - $before );
 
     # Reset to defaults
-
     foreach my $flag ( keys %flags ) {
-        $self->dns->$flag( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.}.$flag ) );
+        # Except for any flag that is not configurable in the profile
+        unless ( grep( /^$flag$/, ( 'dnssec', 'edns_size' ) ) ) {
+            $self->dns->$flag( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.}.$flag ) );
+        }
     }
 
     if ( $res ) {

@@ -20,7 +20,6 @@ Readonly my $EXAMPLE_PROFILE_1_YAML => q(
 ---
 resolver:
   defaults:
-    dnssec: false
     fallback: true
     igntc: false
     recurse: true
@@ -59,7 +58,6 @@ Readonly my $EXAMPLE_PROFILE_1 => q(
   "resolver": {
     "defaults": {
       "usevc": true,
-      "dnssec": false,
       "recurse": true,
       "igntc": false,
       "fallback": true,
@@ -114,7 +112,6 @@ Readonly my $EXAMPLE_PROFILE_2 => q(
   "resolver": {
     "defaults": {
       "usevc": false,
-      "dnssec": true,
       "recurse": false,
       "igntc": true,
       "fallback": false,
@@ -185,7 +182,6 @@ subtest 'new() returns a profile with all properties unset' => sub {
 
     is $profile->get( 'resolver.defaults.usevc' ),    undef, 'resolver.defaults.usevc is unset';
     is $profile->get( 'resolver.defaults.retrans' ),  undef, 'resolver.defaults.retrans is unset';
-    is $profile->get( 'resolver.defaults.dnssec' ),   undef, 'resolver.defaults.dnssec is unset';
     is $profile->get( 'resolver.defaults.recurse' ),  undef, 'resolver.defaults.recurse is unset';
     is $profile->get( 'resolver.defaults.retry' ),    undef, 'resolver.defaults.retry is unset';
     is $profile->get( 'resolver.defaults.igntc' ),    undef, 'resolver.defaults.igntc is unset';
@@ -214,7 +210,6 @@ subtest 'default() returns a profile with all properties set' => sub {
     my $profile = Zonemaster::Engine::Profile->default;
 
     ok defined( $profile->get( 'resolver.defaults.usevc' ) ),    'resolver.defaults.usevc is set';
-    ok defined( $profile->get( 'resolver.defaults.dnssec' ) ),   'resolver.defaults.dnssec is set';
     ok defined( $profile->get( 'resolver.defaults.recurse' ) ),  'resolver.defaults.recurse is set';
     ok defined( $profile->get( 'resolver.defaults.igntc' ) ),    'resolver.defaults.igntc is set';
     ok defined( $profile->get( 'resolver.defaults.fallback' ) ), 'resolver.defaults.fallback is set';
@@ -241,7 +236,6 @@ subtest 'from_json("{}") returns a profile with all properties unset' => sub {
     my $profile = Zonemaster::Engine::Profile->from_json( "{}" );
 
     is $profile->get( 'resolver.defaults.usevc' ),    undef, 'resolver.defaults.usevc is unset';
-    is $profile->get( 'resolver.defaults.dnssec' ),   undef, 'resolver.defaults.dnssec is unset';
     is $profile->get( 'resolver.defaults.recurse' ),  undef, 'resolver.defaults.recurse is unset';
     is $profile->get( 'resolver.defaults.igntc' ),    undef, 'resolver.defaults.igntc is unset';
     is $profile->get( 'resolver.defaults.fallback' ), undef, 'resolver.defaults.fallback is unset';
@@ -264,7 +258,6 @@ subtest 'from_json() parses values from a string' => sub {
     my $profile = Zonemaster::Engine::Profile->from_json( $EXAMPLE_PROFILE_1 );
 
     is $profile->get( 'resolver.defaults.usevc' ),    1,            'resolver.defaults.usevc was parsed from JSON';
-    is $profile->get( 'resolver.defaults.dnssec' ),   0,            'resolver.defaults.dnssec was parsed from JSON';
     is $profile->get( 'resolver.defaults.recurse' ),  1,            'resolver.defaults.recurse was parsed from JSON';
     is $profile->get( 'resolver.defaults.igntc' ),    0,            'resolver.defaults.igntc was parsed from JSON';
     is $profile->get( 'resolver.defaults.fallback' ), 1,            'resolver.defaults.fallback was parsed from JSON';
@@ -297,17 +290,18 @@ subtest 'from_json() emits warnings on profile validity' => sub {
 };
 
 subtest 'from_json() dies on illegal paths' => sub {
-    throws_ok { Zonemaster::Engine::Profile->from_json( '{"foobar":1}' ) }                           qr/^.*Unknown property .*/, 'foobar';
-    throws_ok { Zonemaster::Engine::Profile->from_json( '{"net":1}' ) }                              qr/^.*Unknown property .*/, 'net';
-    throws_ok { Zonemaster::Engine::Profile->from_json( '{"net":{"foobar":1}}' ) }                   qr/^.*Unknown property .*/, 'net.foobar';
-    throws_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":1}' ) }                         qr/^.*Unknown property .*/, 'resolver';
-    throws_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":1}}' ) }            qr/^.*Unknown property .*/, 'resolver.defaults';
-    throws_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"foobar":1}}}' ) } qr/^.*Unknown property .*/, 'resolver.defaults.foobar';
+    throws_ok { Zonemaster::Engine::Profile->from_json( '{"foobar":1}' ) }                               qr/^.*Unknown property .*/, 'foobar';
+    throws_ok { Zonemaster::Engine::Profile->from_json( '{"net":1}' ) }                                  qr/^.*Unknown property .*/, 'net';
+    throws_ok { Zonemaster::Engine::Profile->from_json( '{"net":{"foobar":1}}' ) }                       qr/^.*Unknown property .*/, 'net.foobar';
+    throws_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":1}' ) }                             qr/^.*Unknown property .*/, 'resolver';
+    throws_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":1}}' ) }                qr/^.*Unknown property .*/, 'resolver.defaults';
+    throws_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"foobar":1}}}' ) }     qr/^.*Unknown property .*/, 'resolver.defaults.foobar';
+    throws_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"dnssec":1}}}' ); }    qr/^.*Unknown property .*/, 'resolver.defaults.dnssec';
+    throws_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"edns_size":1}}}' ); } qr/^.*Unknown property .*/, 'resolver.defaults.edns_size';
 };
 
 subtest 'from_json() dies on illegal values' => sub {
     dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"usevc":0}}}' ); }     "checks type of resolver.defaults.usevc";
-    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"dnssec":1}}}' ); }    "checks type of resolver.defaults.dnssec";
     dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"recurse":0}}}' ); }   "checks type of resolver.defaults.recurse";
     dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"igntc":1}}}' ); }     "checks type of resolver.defaults.igntc";
     dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"fallback":0}}}' ); }  "checks type of resolver.defaults.fallback";
@@ -353,7 +347,6 @@ subtest 'get() returns 1 for true' => sub {
             "resolver": {
                 "defaults": {
                     "usevc": true,
-                    "dnssec": true,
                     "recurse": true,
                     "igntc": true,
                     "fallback": true
@@ -368,7 +361,6 @@ subtest 'get() returns 1 for true' => sub {
     );
 
     is $profile->get( 'resolver.defaults.usevc' ),    1, "returns 1 for true resolver.defaults.usevc";
-    is $profile->get( 'resolver.defaults.dnssec' ),   1, "returns 1 for true resolver.defaults.dnssec";
     is $profile->get( 'resolver.defaults.recurse' ),  1, "returns 1 for true resolver.defaults.recurse";
     is $profile->get( 'resolver.defaults.igntc' ),    1, "returns 1 for true resolver.defaults.igntc";
     is $profile->get( 'resolver.defaults.fallback' ), 1, "returns 1 for true resolver.defaults.fallback";
@@ -383,7 +375,6 @@ subtest 'get() returns 0 for false' => sub {
             "resolver": {
                 "defaults": {
                     "usevc": false,
-                    "dnssec": false,
                     "recurse": false,
                     "igntc": false,
                     "fallback": false
@@ -398,7 +389,6 @@ subtest 'get() returns 0 for false' => sub {
     );
 
     is $profile->get( 'resolver.defaults.usevc' ),    0, "returns 0 for false resolver.defaults.usevc";
-    is $profile->get( 'resolver.defaults.dnssec' ),   0, "returns 0 for false resolver.defaults.dnssec";
     is $profile->get( 'resolver.defaults.recurse' ),  0, "returns 0 for false resolver.defaults.recurse";
     is $profile->get( 'resolver.defaults.igntc' ),    0, "returns 0 for false resolver.defaults.igntc";
     is $profile->get( 'resolver.defaults.fallback' ), 0, "returns 0 for false resolver.defaults.fallback";
@@ -445,13 +435,14 @@ subtest 'get() dies if the given property name is invalid' => sub {
     throws_ok { $profile->get( 'test_levels.Zone' ) }  qr/^.*Unknown property .*/, 'test_levels.Zone';
     throws_ok { $profile->get( 'test_cases.Zone01' ) } qr/^.*Unknown property .*/, 'test_cases.Zone01';
     throws_ok { $profile->get( 'cache.redis' ) }       qr/^.*Unknown property .*/, 'cache.redis';
+    throws_ok { $profile->get( 'resolver.defaults.dnssec' ) }    qr/^.*Unknown property .*/, 'resolver.defaults.dnssec';
+    throws_ok { $profile->get( 'resolver.defaults.edns_size' ) } qr/^.*Unknown property .*/, 'resolver.defaults.edns_size';
 };
 
 subtest 'set() inserts values for unset properties' => sub {
     my $profile = Zonemaster::Engine::Profile->new;
 
     $profile->set( 'resolver.defaults.usevc',    1 );
-    $profile->set( 'resolver.defaults.dnssec',   0 );
     $profile->set( 'resolver.defaults.recurse',  1 );
     $profile->set( 'resolver.defaults.igntc',    0 );
     $profile->set( 'resolver.defaults.fallback', 1 );
@@ -470,7 +461,6 @@ subtest 'set() inserts values for unset properties' => sub {
     $profile->set( 'cache', { redis => { server => '127.0.0.1:6379', expire => 3600 } } );
 
     is $profile->get( 'resolver.defaults.usevc' ),    1,   'resolver.defaults.usevc can be given a value when unset';
-    is $profile->get( 'resolver.defaults.dnssec' ),   0,   'resolver.defaults.dnssec can be given a value when unset';
     is $profile->get( 'resolver.defaults.recurse' ),  1,   'resolver.defaults.recurse can be given a value when unset';
     is $profile->get( 'resolver.defaults.igntc' ),    0,   'resolver.defaults.igntc can be given a value when unset';
     is $profile->get( 'resolver.defaults.fallback' ), 1,   'resolver.defaults.fallback can be given a value when unset';
@@ -496,7 +486,6 @@ subtest 'set() updates values for set properties' => sub {
     my $profile = Zonemaster::Engine::Profile->from_json( $EXAMPLE_PROFILE_1 );
 
     $profile->set( 'resolver.defaults.usevc',    0 );
-    $profile->set( 'resolver.defaults.dnssec',   1 );
     $profile->set( 'resolver.defaults.recurse',  0 );
     $profile->set( 'resolver.defaults.igntc',    1 );
     $profile->set( 'resolver.defaults.fallback', 0 );
@@ -515,7 +504,6 @@ subtest 'set() updates values for set properties' => sub {
     $profile->set( 'cache', { redis => { server => '127.0.0.2:6379', expire => 7200 } } );
 
     is $profile->get( 'resolver.defaults.usevc' ),   0,               'resolver.defaults.usevc was updated';
-    is $profile->get( 'resolver.defaults.dnssec' ),  1,               'resolver.defaults.dnssec was updated';
     is $profile->get( 'resolver.defaults.recurse' ), 0,               'resolver.defaults.recurse was updated';
     is $profile->get( 'resolver.defaults.igntc' ),   1,               'resolver.defaults.igntc was updated';
     is $profile->get( 'net.ipv4' ),                  0,               'net.ipv4 was updated';
@@ -539,7 +527,6 @@ subtest 'set() dies on attempts to unset properties' => sub {
     my $profile = Zonemaster::Engine::Profile->from_json( $EXAMPLE_PROFILE_1 );
 
     throws_ok { $profile->set( 'resolver.defaults.usevc',    undef ); } qr/^.* can not be undef/, 'dies on attempt to unset resolver.defaults.usevc';
-    throws_ok { $profile->set( 'resolver.defaults.dnssec',   undef ); } qr/^.* can not be undef/, 'dies on attempt to unset resolver.defaults.dnssec';
     throws_ok { $profile->set( 'resolver.defaults.recurse',  undef ); } qr/^.* can not be undef/, 'dies on attempt to unset resolver.defaults.recurse';
     throws_ok { $profile->set( 'resolver.defaults.igntc',    undef ); } qr/^.* can not be undef/, 'dies on attempt to unset resolver.defaults.igntc';
     throws_ok { $profile->set( 'resolver.defaults.fallback', undef ); } qr/^.* can not be undef/, 'dies on attempt to unset resolver.defaults.fallback';
@@ -575,6 +562,8 @@ subtest 'set() dies if the given property name is invalid' => sub {
     throws_ok { $profile->set( 'test_levels.Zone',  1 ) } qr/^.*Unknown property .*/, 'dies on attempt to set a value for test_levels.Zone';
     throws_ok { $profile->set( 'test_cases.Zone01', 1 ) } qr/^.*Unknown property .*/, 'dies on attempt to set a value for test_cases.Zone01';
     throws_ok { $profile->set( 'cache.redis',       1 ) } qr/^.*Unknown property .*/, 'dies on attempt to set a value for cache.redis';
+    throws_ok { $profile->set( 'resolver.defaults.dnssec', 1 ) }    qr/^.*Unknown property .*/, 'dies on attempt to set a value for resolver.defaults.dnssec';
+    throws_ok { $profile->set( 'resolver.defaults.edns_size', 1 ) } qr/^.*Unknown property .*/, 'dies on attempt to set a value for resolver.defaults.edns_size';
 };
 
 subtest 'set() dies on illegal value' => sub {
@@ -651,7 +640,6 @@ subtest 'merge() with a profile with all properties unset' => sub {
     $profile1->merge( $profile2 );
 
     is $profile1->get( 'resolver.defaults.usevc' ),    1,            'keeps value of resolver.defaults.usevc';
-    is $profile1->get( 'resolver.defaults.dnssec' ),   0,            'keeps value of resolver.defaults.dnssec';
     is $profile1->get( 'resolver.defaults.recurse' ),  1,            'keeps value of resolver.defaults.recurse';
     is $profile1->get( 'resolver.defaults.igntc' ),    0,            'keeps value of resolver.defaults.igntc';
     is $profile1->get( 'resolver.defaults.fallback' ), 1,            'keeps value of resolver.defaults.fallback';
@@ -678,7 +666,6 @@ subtest 'merge() with a profile with all properties set' => sub {
     $profile1->merge( $profile2 );
 
     is $profile1->get( 'resolver.defaults.usevc' ),    0,               'updates resolver.defaults.usevc';
-    is $profile1->get( 'resolver.defaults.dnssec' ),   1,               'updates resolver.defaults.dnssec';
     is $profile1->get( 'resolver.defaults.recurse' ),  0,               'updates resolver.defaults.recurse';
     is $profile1->get( 'resolver.defaults.igntc' ),    1,               'updates resolver.defaults.igntc';
     is $profile1->get( 'resolver.defaults.fallback' ), 0,               'updates resolver.defaults.fallback';
@@ -706,7 +693,6 @@ subtest 'merge() does not update the other profile' => sub {
 
     is $profile2->get( 'resolver.defaults.usevc' ),    undef, 'resolver.defaults.usevc was untouched in other';
     is $profile2->get( 'resolver.defaults.retrans' ),  undef, 'resolver.defaults.retrans was untouched in other';
-    is $profile2->get( 'resolver.defaults.dnssec' ),   undef, 'resolver.defaults.dnssec was untouched in other';
     is $profile2->get( 'resolver.defaults.recurse' ),  undef, 'resolver.defaults.recurse was untouched in other';
     is $profile2->get( 'resolver.defaults.retry' ),    undef, 'resolver.defaults.retry was untouched in other';
     is $profile2->get( 'resolver.defaults.igntc' ),    undef, 'resolver.defaults.igntc was untouched in other';
@@ -732,15 +718,6 @@ subtest 'to_json() serializes each property' => sub {
         my $json = $profile->to_json;
 
         eq_or_diff decode_json( $json ), decode_json( '{"resolver":{"defaults":{"usevc":true}}}' );
-    };
-
-    subtest 'resolver.defaults.dnssec' => sub {
-        my $profile = Zonemaster::Engine::Profile->new;
-        $profile->set( 'resolver.defaults.dnssec', 0 );
-
-        my $json = $profile->to_json;
-
-        eq_or_diff decode_json( $json ), decode_json( '{"resolver":{"defaults":{"dnssec":false}}}' );
     };
 
     subtest 'resolver.defaults.recurse' => sub {

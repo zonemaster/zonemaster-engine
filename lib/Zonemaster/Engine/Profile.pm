@@ -56,12 +56,6 @@ my %profile_properties_details = (
     q{resolver.defaults.debug} => {
         type    => q{Bool}
     },
-    q{resolver.defaults.dnssec} => {
-        type    => q{Bool}
-    },
-    q{resolver.defaults.edns_size} => {
-        type    => q{Num}
-    },
     q{resolver.defaults.igntc} => {
         type    => q{Bool}
     },
@@ -693,16 +687,6 @@ A boolean. If true, only use TCP. Default false.
 
 An integer between 1 and 255 inclusive. The number of seconds between retries.
 Default 3.
-
-=head2 resolver.defaults.dnssec
-
-*DEPRECATED as of 2023.1. Planned for removal in 2023.2*
-A boolean. If true, sets the DO flag in queries. Default false.
-
-=head2 resolver.defaults.edns_size
-
-*DEPRECATED as of 2023.1. Planned for removal in 2023.2*
-An integer. The EDNS0 UDP size used in EDNS queries. Default 512.
 
 =head2 resolver.defaults.recurse
 
