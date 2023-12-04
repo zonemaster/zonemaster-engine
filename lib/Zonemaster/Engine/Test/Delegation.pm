@@ -21,8 +21,6 @@ use Zonemaster::Engine::Util;
 use Zonemaster::LDNS::Packet;
 use Zonemaster::LDNS::RR;
 
-sub _emit_log { my ( $tag, $argref ) = @_; return Zonemaster::Engine->logger->add( $tag, $argref, 'Delegation' ); }
-
 =head1 NAME
 
 Zonemaster::Engine::Test::Delegation - Module implementing tests focused on zone delegation
@@ -417,6 +415,25 @@ sub version {
 }
 
 =head1 INTERNAL METHODS
+
+=over
+
+=item _emit_log()
+
+    my $log_entry = _emit_log( $message_tag_string, $hash_ref );
+
+Adds a message to the L<logger|Zonemaster::Engine::Logger> for this module.
+See L<Zonemaster::Engine::Logger::Entry/add($tag, $argref, $module, $testcase)> for more details.
+
+Takes a string (message tag) and a reference to a hash (arguments).
+
+Returns a L<Zonemaster::Engine::Logger::Entry> object.
+
+=back
+
+=cut
+
+sub _emit_log { my ( $tag, $argref ) = @_; return Zonemaster::Engine->logger->add( $tag, $argref, 'Delegation' ); }
 
 =over
 

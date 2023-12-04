@@ -17,8 +17,6 @@ use Zonemaster::Engine::Constants qw[:addresses :ip];
 use Zonemaster::Engine::TestMethods;
 use Zonemaster::Engine::Util;
 
-sub _emit_log { my ( $tag, $argref ) = @_; return Zonemaster::Engine->logger->add( $tag, $argref, 'Address' ); }
-
 =head1 NAME
 
 Zonemaster::Engine::Test::Address - Module implementing tests focused on IP addresses of name servers
@@ -194,11 +192,32 @@ sub version {
     return "$Zonemaster::Engine::Test::Address::VERSION";
 }
 
+=head1 INTERNAL METHODS
+
 =over
 
-=item find_special_address()
+=item _emit_log()
 
-    my $hash_ref = find_special_address( $ip );
+    my $log_entry = _emit_log( $message_tag_string, $hash_ref );
+
+Adds a message to the L<logger|Zonemaster::Engine::Logger> for this module.
+See L<Zonemaster::Engine::Logger::Entry/add($tag, $argref, $module, $testcase)> for more details.
+
+Takes a string (message tag) and a reference to a hash (arguments).
+
+Returns a L<Zonemaster::Engine::Logger::Entry> object.
+
+=back
+
+=cut
+
+sub _emit_log { my ( $tag, $argref ) = @_; return Zonemaster::Engine->logger->add( $tag, $argref, 'Address' ); }
+
+=over
+
+=item _find_special_address()
+
+    my $hash_ref = _find_special_address( $ip );
 
 Verifies if an IP address is a special (private, reserved, ...) one.
 
@@ -210,7 +229,7 @@ Returns a reference to a hash if true (see L<Zonemaster::Engine::Constants/_extr
 
 =cut
 
-sub find_special_address {
+sub _find_special_address {
     my ( $class, $ip ) = @_;
     my @special_addresses;
 
@@ -261,7 +280,7 @@ sub address01 {
 
         next if $ips{ $local_ns->address->short };
 
-        my $ip_details_ref = $class->find_special_address( $local_ns->address );
+        my $ip_details_ref = $class->_find_special_address( $local_ns->address );
 
         if ( $ip_details_ref ) {
             push @results,
