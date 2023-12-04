@@ -31,6 +31,8 @@ ok( !$res{NO_RESPONSE_SOA_QUERY},     q{should not emit NO_RESPONSE_SOA_QUERY} )
 ok( !$res{RNAME_RFC822_INVALID},      q{should not emit RNAME_RFC822_INVALID} );
 ok( !$res{RNAME_MAIL_DOMAIN_INVALID}, q{should not emit RNAME_MAIL_DOMAIN_INVALID} );
 ok( !$res{RNAME_RFC822_VALID},        q{should not emit RNAME_RFC822_VALID} );
+ok( !$res{RNAME_MAIL_ILLEGAL_CNAME},    q{should not emit RNAME_MAIL_ILLEGAL_CNAME} );
+ok( !$res{RNAME_MAIL_DOMAIN_LOCALHOST}, q{should not emit RNAME_MAIL_DOMAIN_LOCALHOST} );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Nameserver->save( $datafile );
