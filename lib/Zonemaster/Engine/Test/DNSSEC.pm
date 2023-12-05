@@ -263,14 +263,13 @@ sub all {
         push @results, $class->dnssec05( $zone );
     }
 
-    if ( $has_dnskey ) {
-        if ( should_run_test( q{dnssec06} ) ) {
+    if ( should_run_test( q{dnssec06} ) ) {
+        if ( $has_dnskey ) {
             push @results, $class->dnssec06( $zone );
         }
-    }
-    else {
-        push @results,
-          _emit_log( ADDITIONAL_DNSKEY_SKIPPED => {} );
+        else {
+            push @results, _emit_log( ADDITIONAL_DNSKEY_SKIPPED => {} );
+        }
     }
 
     if ( should_run_test( q{dnssec08} ) ) {

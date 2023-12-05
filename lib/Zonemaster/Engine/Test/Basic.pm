@@ -17,7 +17,7 @@ use Zonemaster::Engine::Constants qw[:ip :name];
 use Zonemaster::Engine::Test::Address;
 use Zonemaster::Engine::Test::Syntax;
 use Zonemaster::Engine::TestMethods;
-use Zonemaster::Engine::Util;
+use Zonemaster::Engine::Util qw[info name ns should_run_test];
 
 =head1 NAME
 
@@ -59,17 +59,19 @@ sub all {
     push @results, $class->basic02( $zone );
     my $auth_response_soa = any { $_->tag eq q{B02_AUTH_RESPONSE_SOA} } @results;
 
-    # Perform BASIC3 if BASIC2 failed
-    if ( $auth_response_soa ) {
-        push @results,
-          _emit_log(
-            HAS_NAMESERVER_NO_WWW_A_TEST => {
-                zname => $zone->name,
-            }
-          );
-    }
-    else {
-        push @results, $class->basic03( $zone ) if Zonemaster::Engine::Util::should_run_test( q{basic03} );
+    if ( should_run_test( q{basic03} ) ) {
+        # Perform BASIC3 if BASIC2 failed
+        if ( $auth_response_soa ) {
+            push @results,
+              _emit_log(
+                HAS_NAMESERVER_NO_WWW_A_TEST => {
+                    zname => $zone->name,
+                }
+              );
+        }
+        else {
+            push @results, $class->basic03( $zone );
+        }
     }
 
     return @results;
