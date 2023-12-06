@@ -48,25 +48,28 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 sub all {
     my ( $class, $zone ) = @_;
+
     my @results;
 
     push @results, $class->basic01( $zone );
-
-    if ( grep { $_->tag eq q{B01_CHILD_FOUND} } @results ) {
-       push @results, $class->basic02( $zone );
+    if ( none { $_->tag eq q{B01_CHILD_FOUND} } @results ) {
+        return @results;
     }
+
+    push @results, $class->basic02( $zone );
+    my $auth_response_soa = any { $_->tag eq q{B02_AUTH_RESPONSE_SOA} } @results;
 
     # Perform BASIC3 if BASIC2 failed
-    if ( none { $_->tag eq q{B02_AUTH_RESPONSE_SOA} } @results ) {
-        push @results, $class->basic03( $zone ) if Zonemaster::Engine::Util::should_run_test( q{basic03} );
-    }
-    else {
+    if ( $auth_response_soa ) {
         push @results,
           _emit_log(
             HAS_NAMESERVER_NO_WWW_A_TEST => {
                 zname => $zone->name,
             }
           );
+    }
+    else {
+        push @results, $class->basic03( $zone ) if Zonemaster::Engine::Util::should_run_test( q{basic03} );
     }
 
     return @results;
