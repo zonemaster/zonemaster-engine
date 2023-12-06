@@ -3,7 +3,6 @@ asn_db:
   sources:
     cymru:
       - asnlookup.zonemaster.net
-      - asn.cymru.com
     ripe:
       - riswhois.ripe.net
   style: cymru
