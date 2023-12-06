@@ -55,7 +55,7 @@ sub all {
 
     my @results;
 
-    my $only_allowed_chars = 0;
+    my $only_allowed_chars = 1;
     if ( should_run_test( q{syntax01} ) ) {
         push @results, $class->syntax01( $zone );
         $only_allowed_chars = any { $_->tag eq q{ONLY_ALLOWED_CHARS} } @results;
