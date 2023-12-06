@@ -225,7 +225,7 @@ sub all {
     my ( $class, $zone ) = @_;
     my @results;
 
-    my $has_dnskey = 0;
+    my $has_dnskey = 1;
     if ( should_run_test( q{dnssec07} ) ) {
         push @results, $class->dnssec07( $zone );
 
