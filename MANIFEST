@@ -284,6 +284,8 @@ t/Test-zone09.data
 t/Test-zone09.t
 t/Test-zone11.data
 t/Test-zone11.t
+t/Test.data
+t/Test.t
 t/TestUtil.pm
 t/translator.t
 t/undelegated.data
