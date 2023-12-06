@@ -311,8 +311,6 @@ sub all {
 
     }
 
-    push @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
-
     return @results;
 } ## end sub all
 
