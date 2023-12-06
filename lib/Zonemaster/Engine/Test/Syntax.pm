@@ -20,7 +20,7 @@ use Zonemaster::Engine::Constants qw[:name :ip];
 use Zonemaster::Engine::DNSName;
 use Zonemaster::Engine::Packet;
 use Zonemaster::Engine::TestMethods;
-use Zonemaster::Engine::Util;
+use Zonemaster::Engine::Util qw[should_run_test];
 use Zonemaster::LDNS;
 
 =head1 NAME
@@ -52,27 +52,43 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 sub all {
     my ( $class, $zone ) = @_;
+
     my @results;
 
-    push @results, $class->syntax01( $zone ) if Zonemaster::Engine::Util::should_run_test( q{syntax01} );
-    push @results, $class->syntax02( $zone ) if Zonemaster::Engine::Util::should_run_test( q{syntax02} );
-    push @results, $class->syntax03( $zone ) if Zonemaster::Engine::Util::should_run_test( q{syntax03} );
-
-    if ( any { $_->tag eq q{ONLY_ALLOWED_CHARS} } @results ) {
-
-        push @results, $class->syntax04( Zonemaster::Engine->zone( $zone ) )
-          if Zonemaster::Engine::Util::should_run_test( q{syntax04} );
-
-        push @results, $class->syntax05( $zone ) if Zonemaster::Engine::Util::should_run_test( q{syntax05} );
-
-        if ( none { $_->tag eq q{NO_RESPONSE_SOA_QUERY} } @results ) {
-            push @results, $class->syntax06( $zone ) if Zonemaster::Engine::Util::should_run_test( q{syntax06} );
-            push @results, $class->syntax07( $zone ) if Zonemaster::Engine::Util::should_run_test( q{syntax07} );
-        }
-
-        push @results, $class->syntax08( $zone ) if Zonemaster::Engine::Util::should_run_test( q{syntax08} );
-
+    my $only_allowed_chars = 0;
+    if ( should_run_test( q{syntax01} ) ) {
+        push @results, $class->syntax01( $zone );
+        $only_allowed_chars = any { $_->tag eq q{ONLY_ALLOWED_CHARS} } @results;
     }
+
+    push @results, $class->syntax02( $zone )
+      if should_run_test( q{syntax02} );
+
+    push @results, $class->syntax03( $zone )
+      if should_run_test( q{syntax03} );
+
+    return @results
+      if !$only_allowed_chars;
+
+    push @results, $class->syntax04( Zonemaster::Engine->zone( $zone ) )
+      if Zonemaster::Engine::Util::should_run_test( q{syntax04} );
+
+    my $all_soa_responses = 1;
+    if ( should_run_test( q{syntax05} ) ) {
+        push @results, $class->syntax05( $zone );
+        $all_soa_responses = none { $_->tag eq q{NO_RESPONSE_SOA_QUERY} } @results;
+    }
+
+    if ( $all_soa_responses ) {
+        push @results, $class->syntax06( $zone )
+          if should_run_test( q{syntax06} );
+
+        push @results, $class->syntax07( $zone )
+          if should_run_test( q{syntax07} );
+    }
+
+    push @results, $class->syntax08( $zone )
+      if should_run_test( q{syntax08} );
 
     return @results;
 } ## end sub all
