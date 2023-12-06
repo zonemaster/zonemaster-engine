@@ -907,12 +907,6 @@ Default is an arrayref listing all the test cases.
 
 Specifies which test cases can be run by the testing suite.
 
-Note that an exception applies to test cases C<basic01> and C<basic02>:
-when running either the full testing suite or just the Basic test module,
-these test cases are always run no matter if they're excluded from this
-property. This is because their primary goal is to verify that the given
-domain name can be tested at all.
-
 =head2 test_cases_vars.dnssec04.REMAINING_SHORT
 
 A positive integer value.
