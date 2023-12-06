@@ -106,6 +106,7 @@ subtest 'user defined SOA values' => sub {
 
     # reset the profile
     Zonemaster::Engine::Profile->effective->merge( Zonemaster::Engine::Profile->default );
+    Zonemaster::Engine::Profile->effective->merge( $profile_test );
 };
 
 

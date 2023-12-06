@@ -185,25 +185,18 @@ sub run_all_for {
     Zonemaster::Engine->start_time_now();
     push @results, info( START_TIME => { time_t => time(), string => strftime( "%F %T %z", ( localtime() ) ) } );
     push @results, info( TEST_TARGET => { zone => $zone->name->string, module => 'all' } );
-
-    info(
-        MODULE_VERSION => {
-            module  => 'Zonemaster::Engine::Test::Basic',
-            version => Zonemaster::Engine::Test::Basic->version
-        }
-    );
     _log_versions();
 
     if ( not( Zonemaster::Engine::Profile->effective->get( q{net.ipv4} ) or Zonemaster::Engine::Profile->effective->get( q{net.ipv6} ) ) ) {
         return info( NO_NETWORK => {} );
     }
 
+    info( MODULE_VERSION => { module  => 'Zonemaster::Engine::Test::Basic', version => Zonemaster::Engine::Test::Basic->version } );
     push @results, Zonemaster::Engine::Test::Basic->all( $zone );
     info( MODULE_END => { module => 'Zonemaster::Engine::Test::Basic' } );
 
     if ( Zonemaster::Engine::Test::Basic->can_continue( $zone, @results ) and Zonemaster::Engine->can_continue() ) {
         foreach my $mod ( __PACKAGE__->modules ) {
-
             my $module = "Zonemaster::Engine::Test::$mod";
             info( MODULE_VERSION => { module => $module, version => $module->version } );
             my @res = eval { $module->all( $zone ) };
@@ -219,8 +212,8 @@ sub run_all_for {
             info( MODULE_END => { module => $module } );
 
             push @results, @res;
-        } ## end foreach my $mod ( __PACKAGE__...)
-    } ## end if ( Zonemaster::Engine::Test::Basic...)
+        }
+    }
     else {
         push @results, info( CANNOT_CONTINUE => { domain => $zone->name->string } );
     }
@@ -259,6 +252,7 @@ sub run_module {
     push @res, info( START_TIME => { time_t => time(), string => strftime( "%F %T %z", ( localtime() ) ) } );
     push @res, info( TEST_TARGET => { zone => $zone->name->string, module => $requested } );
     _log_versions();
+
     if ( not( Zonemaster::Engine::Profile->effective->get( q{net.ipv4} ) or Zonemaster::Engine::Profile->effective->get( q{net.ipv6} ) ) ) {
         return info( NO_NETWORK => {} );
     }
@@ -301,7 +295,8 @@ Runs the given Test Case of the given Test module for the given zone.
 
 The Test module must be in the list of actively loaded modules (that is,
 a module defined in the B<share/modules.txt> file), and the Test Case
-must be listed in the L<metadata|/metadata()> of the Test module exports.
+must be listed both in the L<metadata|/metadata()> of the Test module
+exports and in the L<profile|Zonemaster::Engine::Profile/test_cases>.
 
 Takes a string (module name), a string (test case name) and an array of L<Zonemaster::Engine::Zone> objects.
 
@@ -312,15 +307,14 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 =cut
 
 sub run_one {
-    my ( $class, $requested, $test, @arguments ) = @_;
+    my ( $class, $requested, $test, $zone ) = @_;
     my @res;
     my ( $module ) = grep { lc( $requested ) eq lc( $_ ) } $class->modules;
     $module = 'Basic' if ( not $module and lc( $requested ) eq 'basic' );
 
     Zonemaster::Engine->start_time_now();
     push @res, info( START_TIME => { time_t => time(), string => strftime( "%F %T %z", ( localtime() ) ) } );
-    push @res,
-      info( TEST_ARGS => { module => $requested, testcase => $test, args => join( ';', map { "$_" } @arguments ) } );
+    push @res, info( TEST_TARGET => { zone => $zone->name->string, module => $requested, testcase => $test } );
     _log_versions();
     
     if ( not( Zonemaster::Engine::Profile->effective->get( q{net.ipv4} ) or Zonemaster::Engine::Profile->effective->get( q{net.ipv6} ) ) ) {
@@ -330,9 +324,9 @@ sub run_one {
     if ( Zonemaster::Engine->can_continue() ) {
         if ( $module ) {
             my $m = "Zonemaster::Engine::Test::$module";
-            if ( $m->metadata->{$test} ) {
+            if ( $m->metadata->{$test} and Zonemaster::Engine::Util::should_run_test( $test ) ) {
                 info( MODULE_VERSION => { module => $m, version => $m->version } );
-                push @res, eval { $m->$test( @arguments ) };
+                push @res, eval { $m->$test( $zone ) };
                 if ( $@ ) {
                     my $err = $@;
                     if ( blessed $err and $err->isa( 'Zonemaster::Engine::Exception' ) ) {
@@ -348,19 +342,13 @@ sub run_one {
             else {
                 info( UNKNOWN_METHOD => { module => $m, testcase => $test } );
             }
-        } ## end if ( $module )
+        }
         else {
             info( UNKNOWN_MODULE => { module => $requested, testcase => $test, module_list => join( ':', sort $class->modules ) } );
         }
     }
     else {
-        my $zname = q{};
-        foreach my $arg ( @arguments ) {
-            if ( ref($arg) eq q{Zonemaster::Engine::Zone} ) {
-                $zname = $arg->name;
-            }
-        }
-        info( CANNOT_CONTINUE => { domain => $zname } );
+        info( CANNOT_CONTINUE => { domain => $zone->name->string } );
     }
 
     return;
