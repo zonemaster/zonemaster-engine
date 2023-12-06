@@ -50,4 +50,5 @@ check-msg-args:
 	@for f in $(POFILES) ; do ../util/check-msg-args $$f ; done
 
 modules.txt: $(TESTMODULEFILES)
-	@echo $(TESTMODULEFILES) | xargs basename -s .pm -a | grep -vE '^Basic$$' | sort > modules.txt
+	@echo Basic > modules.txt
+	@echo $(TESTMODULEFILES) | xargs basename -s .pm -a | grep -vE '^Basic$$' | sort >> modules.txt
