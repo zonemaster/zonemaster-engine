@@ -155,16 +155,15 @@ subtest 'MULT-CNAME' => sub {
     ok( $res{CNAME_RECORDS_MULTIPLE_FOR_NAME}, q{should emit CNAME_RECORDS_MULTIPLE_FOR_NAME} );
 };
 
-# Untestable for now --> https://github.com/zonemaster/zonemaster/pull/1220#discussion_r1409260618
-# subtest 'LOOPED-CNAME-IN-ZONE-1' => sub {
-#     Zonemaster::Engine->logger->clear_history;
-#     my $p = Zonemaster::Engine->recurse( 'looped-cname-in-zone-1.cname.recursor.engine.xa' );
-#     is( $p, undef, "undefined as expected");
-#    
-#     %res = map { $_->tag => $_ } @{ Zonemaster::Engine->logger->entries };
-#     ok( $res{CNAME_START}, q{should emit CNAME_START} );
-#     ok( $res{CNAME_LOOP_INNER}, q{should emit CNAME_LOOP_INNER} );
-# };
+subtest 'LOOPED-CNAME-IN-ZONE-1' => sub {
+    Zonemaster::Engine->logger->clear_history;
+    my $p = Zonemaster::Engine->recurse( 'looped-cname-in-zone-1.cname.recursor.engine.xa' );
+    is( $p, undef, "undefined as expected");
+   
+    my %res = map { $_->tag => $_ } @{ Zonemaster::Engine->logger->entries };
+    ok( $res{CNAME_START}, q{should emit CNAME_START} );
+    ok( $res{CNAME_LOOP_INNER}, q{should emit CNAME_LOOP_INNER} );
+};
 
 subtest 'LOOPED-CNAME-IN-ZONE-2' => sub {
     Zonemaster::Engine->logger->clear_history;
@@ -176,16 +175,15 @@ subtest 'LOOPED-CNAME-IN-ZONE-2' => sub {
     ok( $res{CNAME_LOOP_INNER}, q{should emit CNAME_LOOP_INNER} );
 };
 
-# Untestable for now --> https://github.com/zonemaster/zonemaster/pull/1220#discussion_r1409260618
-# subtest 'LOOPED-CNAME-IN-ZONE-3' => sub {
-#     Zonemaster::Engine->logger->clear_history;
-#     my $p = Zonemaster::Engine->recurse( 'looped-cname-in-zone-3.cname.recursor.engine.xa' );
-#     is( $p, undef, "undefined as expected");
-#
-#     my %res = map { $_->tag => $_ } @{ Zonemaster::Engine->logger->entries };
-#     ok( $res{CNAME_START}, q{should emit CNAME_START} );
-#     ok( $res{CNAME_LOOP_INNER}, q{should emit CNAME_LOOP_INNER} );
-# };
+subtest 'LOOPED-CNAME-IN-ZONE-3' => sub {
+    Zonemaster::Engine->logger->clear_history;
+    my $p = Zonemaster::Engine->recurse( 'looped-cname-in-zone-3.cname.recursor.engine.xa' );
+    is( $p, undef, "undefined as expected");
+
+    my %res = map { $_->tag => $_ } @{ Zonemaster::Engine->logger->entries };
+    ok( $res{CNAME_START}, q{should emit CNAME_START} );
+    ok( $res{CNAME_LOOP_INNER}, q{should emit CNAME_LOOP_INNER} );
+};
 
 subtest 'LOOPED-CNAME-OUT-OF-ZONE' => sub { 
     Zonemaster::Engine->logger->clear_history;
@@ -197,16 +195,15 @@ subtest 'LOOPED-CNAME-OUT-OF-ZONE' => sub {
     ok( $res{CNAME_LOOP_OUTER}, q{should emit CNAME_LOOP_OUTER} );
 };
 
-# Fails for now because there are only 10 records and the current check for CNAME_RECORDS_TOO_MANY is inclusive (> 10);
-# subtest 'TOO-LONG-CNAME-CHAIN' => sub {
-#     Zonemaster::Engine->logger->clear_history;
-#     my $p = Zonemaster::Engine->recurse( 'too-long-cname-chain.cname.recursor.engine.xa' );
-#     is( $p, undef, "undefined as expected");
-#
-#     my %res = map { $_->tag => $_ } @{ Zonemaster::Engine->logger->entries };
-#     ok( $res{CNAME_START}, q{should emit CNAME_START} );
-#     ok( $res{CNAME_RECORDS_TOO_MANY}, q{should emit CNAME_RECORDS_TOO_MANY} );
-# };
+subtest 'TOO-LONG-CNAME-CHAIN' => sub {
+    Zonemaster::Engine->logger->clear_history;
+    my $p = Zonemaster::Engine->recurse( 'too-long-cname-chain.cname.recursor.engine.xa' );
+    is( $p, undef, "undefined as expected");
+
+    my %res = map { $_->tag => $_ } @{ Zonemaster::Engine->logger->entries };
+    ok( $res{CNAME_START}, q{should emit CNAME_START} );
+    ok( $res{CNAME_RECORDS_TOO_MANY}, q{should emit CNAME_RECORDS_TOO_MANY} );
+};
 
 subtest 'TARGET-NO-MATCH-CNAME' => sub {
     Zonemaster::Engine->logger->clear_history;

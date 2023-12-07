@@ -196,7 +196,7 @@ Readonly our $ALGO_STATUS_NOT_RECOMMENDED => 9;
 Readonly our $BLACKLISTING_ENABLED     => 1;
 
 Readonly our $CNAME_MAX_CHAIN_LENGTH      => 10;
-Readonly our $CNAME_MAX_RECORDS           => 10;
+Readonly our $CNAME_MAX_RECORDS           => 9;
 
 Readonly our $DURATION_5_MINUTES_IN_SECONDS  =>             5 * 60;
 Readonly our $DURATION_1_HOUR_IN_SECONDS     =>            60 * 60;
