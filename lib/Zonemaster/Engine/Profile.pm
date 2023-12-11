@@ -757,12 +757,10 @@ cache.
 
 =head2 asnroots (DEPRECATED)
 
-An arrayref of domain names. Default C<["asnlookup.zonemaster.net",
-"asnlookup.iis.se", "asn.cymru.com"]>.
+An arrayref of domain names. Default C<["asnlookup.zonemaster.net"]>.
 
 The domains will be assumed to be Cymru-style AS lookup zones.
-Normally only the first name in the list will be used, the rest are
-backups in case the earlier ones don't work.
+Only the first name in the list will be used.
 
 =head2 asn_db.style
 
@@ -773,9 +771,8 @@ Default C<"Cymru">.
 =head2 asn_db.sources
 
 An arrayref of domain names when asn_db.style is set to C<"Cymru"> or whois
-servers when asn_db.style is set to C<"RIPE">. Normally only the first item
-in the list will be used, the rest are backups in case the earlier ones don't
-work.
+servers when asn_db.style is set to C<"RIPE">. Only the first item
+in the list will be used.
 Default C<"asnlookup.zonemaster.net">.
 
 =head2 cache (EXPERIMENTAL)
