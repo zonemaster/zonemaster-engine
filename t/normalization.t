@@ -1,9 +1,11 @@
-use Test::More;
-use Test::Exception;
-
+#!perl
+use strict;
 use utf8;
+use warnings;
+use Test::More;
 
-BEGIN { use_ok( 'Zonemaster::Engine::Normalization' ); }
+use Test::Exception;
+use Zonemaster::Engine::Normalization qw( normalize_name );
 
 sub char_to_hex_esc {
     my ($char) = @_;
@@ -83,10 +85,11 @@ subtest 'Valid domains' => sub {
         "aḍ\x{0307}a" => 'xn--aa-rub587y',
     );
 
-    while (($domain, $expected_output) = each (%input_domains)) {
+    for my $domain ( sort keys %input_domains ) {
+        my $expected_output = $input_domains{$domain};
         my $safe_domain = to_hex_esc($domain);
         subtest "Domain: '$safe_domain'" => sub {
-            my $errors, $final_domain;
+            my ( $errors, $final_domain );
             lives_ok(sub {
                 ($errors, $final_domain) = normalize_name($domain);
             }, 'correct domain should live');
@@ -126,16 +129,17 @@ subtest 'Bad domains' => sub {
         'İ.example.com' => 'AMBIGUOUS_DOWNCASING',
     );
 
-    while (($domain, $error) = each (%input_domains)) {
+    for my $domain ( sort keys %input_domains ) {
+        my $error = $input_domains{$domain};
         my $safe_domain = to_hex_esc($domain);
         subtest "Domain: '$safe_domain' ($error)" => sub {
-            my $output, $messages, $domain;
+            my ( $errors, $final_domain );
             lives_ok(sub {
                 ($errors, $final_domain) = normalize_name($domain);
             }, 'incorrect domain should live');
 
             is($final_domain, undef, 'No domain returned') or diag($final_domain);
-            is($errors->[0]->tag, $error, 'Correct error is returned') or diag($errors[0]);
+            is($errors->[0]->tag, $error, 'Correct error is returned') or diag($errors->[0]);
             note(to_hex_esc($errors->[0]))
         }
     }
