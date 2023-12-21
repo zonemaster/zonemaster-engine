@@ -6,7 +6,7 @@ use Test::More;
 
 use Test::Differences;
 use Test::Exception;
-use Zonemaster::Engine::Normalization qw( normalize_name );
+use Zonemaster::Engine::Normalization qw( normalize_name trim_space );
 
 sub char_to_hex_esc {
     my ($char) = @_;
@@ -32,9 +32,6 @@ subtest 'Valid domains' => sub {
         '．' => '.', # Fullwidth full stop
         '。' => '.', # Ideographic full stop
         '｡' => '.',  # Halfwidth ideographic full stop
-
-        # Trailing and leading white spaces
-        " \x{205F} example.com.  \x{0009}" => 'example.com',
 
         # Mixed dots with trailing dot
         'example。com.' => 'example.com',
@@ -112,7 +109,9 @@ subtest 'Bad domains' => sub {
         '．.example｡com' => ['INITIAL_DOT'],
 
         # Bad ascii
-        'bad:%;!$.example.com.' => ['INVALID_ASCII'],
+        'bad:%;!$.example.com.'            => ['INVALID_ASCII'],
+        " \x{205F} example.com.  \x{0009}" => ['INVALID_ASCII'],
+        '    '                             => ['INVALID_ASCII'],
 
         # Label to long
         "a" x 64 . ".example.com" => ['LABEL_TOO_LONG'],
@@ -126,8 +125,7 @@ subtest 'Bad domains' => sub {
         ( "a" x 15 . "." ) x 15 . "bc" . ".example.com" => ['DOMAIN_NAME_TOO_LONG'],
 
         # Empty domain
-        ''     => ['EMPTY_DOMAIN_NAME'],
-        '    ' => ['EMPTY_DOMAIN_NAME'],
+        '' => ['EMPTY_DOMAIN_NAME'],
 
         # Ambiguous downcasing
         'İ.example.com' => ['AMBIGUOUS_DOWNCASING'],
@@ -152,6 +150,25 @@ subtest 'Bad domains' => sub {
             };
 
             eq_or_diff $actual, $expected;
+        }
+    }
+};
+
+subtest 'Trimming space' => sub {
+    my %cases = (
+        "example."                     => 'example.',
+        "exam   ."                     => 'exam   .',
+        " \x{205F} example.  \x{0009}" => 'example.',
+    );
+
+    for my $str ( sort keys %cases ) {
+        my $expected = $cases{$str};
+
+        my $safe_str = to_hex_esc($str);
+        subtest "Domain: '$safe_str'" => sub {
+            my $actual = trim_space( $str );
+
+            is $actual, $expected, 'Match expected string';
         }
     }
 };
