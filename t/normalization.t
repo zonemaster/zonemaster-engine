@@ -4,6 +4,7 @@ use utf8;
 use warnings;
 use Test::More;
 
+use Test::Differences;
 use Test::Exception;
 use Zonemaster::Engine::Normalization qw( normalize_name );
 
@@ -93,8 +94,11 @@ subtest 'Valid domains' => sub {
             lives_ok(sub {
                 ($errors, $final_domain) = normalize_name($domain);
             }, 'correct domain should live');
-            is(scalar @{$errors}, 0, 'No error returned') or diag(@{$errors});
-            is($final_domain, $expected_output, 'Match expected domain') or diag($final_domain);
+
+            my $actual   = { domain => $final_domain,    errors => $errors };
+            my $expected = { domain => $expected_output, errors => [] };
+
+            eq_or_diff $actual, $expected;
         }
     }
 };
@@ -102,45 +106,52 @@ subtest 'Valid domains' => sub {
 subtest 'Bad domains' => sub {
     my %input_domains = (
         # Empty labels
-        '.。．' => 'INITIAL_DOT',
-        'example。.com.' => 'REPEATED_DOTS',
-        'example。com.｡' => 'REPEATED_DOTS',
-        '．.example｡com' => 'INITIAL_DOT',
+        '.。．'           => ['INITIAL_DOT'],
+        'example。.com.' => ['REPEATED_DOTS'],
+        'example。com.｡' => ['REPEATED_DOTS'],
+        '．.example｡com' => ['INITIAL_DOT'],
 
         # Bad ascii
-        'bad:%;!$.example.com.' => 'INVALID_ASCII',
+        'bad:%;!$.example.com.' => ['INVALID_ASCII'],
 
         # Label to long
-        "a" x 64 . ".example.com" => 'LABEL_TOO_LONG',
+        "a" x 64 . ".example.com" => ['LABEL_TOO_LONG'],
         # Length too long after idn conversion (libidn fails)
-        'チョコレート' x 8 . 'a' . '.example.com' => 'INVALID_U_LABEL',
+        'チョコレート' x 8 . 'a' . '.example.com' => ['INVALID_U_LABEL'],
         # Emoji in names are invalid as per IDNA2008
-        '❤️．example．com' => 'INVALID_U_LABEL',
+        '❤️．example．com' => ['INVALID_U_LABEL'],
 
         # Domain to long
         # this is 254 characters
-        ("a" x 15 . ".") x 15 . "bc" . ".example.com" => 'DOMAIN_NAME_TOO_LONG',
+        ( "a" x 15 . "." ) x 15 . "bc" . ".example.com" => ['DOMAIN_NAME_TOO_LONG'],
 
         # Empty domain
-        '' => 'EMPTY_DOMAIN_NAME',
-        '    ' => 'EMPTY_DOMAIN_NAME',
+        ''     => ['EMPTY_DOMAIN_NAME'],
+        '    ' => ['EMPTY_DOMAIN_NAME'],
 
         # Ambiguous downcasing
-        'İ.example.com' => 'AMBIGUOUS_DOWNCASING',
+        'İ.example.com' => ['AMBIGUOUS_DOWNCASING'],
     );
 
     for my $domain ( sort keys %input_domains ) {
-        my $error = $input_domains{$domain};
-        my $safe_domain = to_hex_esc($domain);
-        subtest "Domain: '$safe_domain' ($error)" => sub {
+        my $expected_errors = $input_domains{$domain};
+        my $safe_domain = to_hex_esc( $domain );
+        subtest "Domain: '$safe_domain'" => sub {
             my ( $errors, $final_domain );
             lives_ok(sub {
                 ($errors, $final_domain) = normalize_name($domain);
             }, 'incorrect domain should live');
 
-            is($final_domain, undef, 'No domain returned') or diag($final_domain);
-            is($errors->[0]->tag, $error, 'Correct error is returned') or diag($errors->[0]);
-            note(to_hex_esc($errors->[0]))
+            my $actual = {
+                domain => $final_domain,
+                errors => [ map { $_->tag } @$errors ]
+            };
+            my $expected = {
+                domain => undef,
+                errors => $expected_errors
+            };
+
+            eq_or_diff $actual, $expected;
         }
     }
 };
