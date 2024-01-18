@@ -7,12 +7,13 @@ use warnings;
 
 use version; our $VERSION = version->declare("v1.0.8");
 
-use Moose;
+use Class::Accessor "antlers";
 
+use Carp qw( confess );
+use Data::Dumper;
+use JSON::PP;
 use List::MoreUtils qw[none any];
 use Scalar::Util qw[blessed];
-use JSON::PP;
-
 use Zonemaster::Engine::Profile;
 use Zonemaster::Engine::Logger::Entry;
 
@@ -20,13 +21,24 @@ our $TEST_CASE_NAME = 'Unspecified';
 our $MODULE_NAME = 'System';
 
 has 'entries' => (
-    is      => 'ro',
-    isa     => 'ArrayRef[Zonemaster::Engine::Logger::Entry]',
-    default => sub { [] }
+    is  => 'ro',
+    isa => 'ArrayRef[Zonemaster::Engine::Logger::Entry]',
 );
-has 'callback' => ( is => 'rw', isa => 'CodeRef', required => 0, clearer => 'clear_callback' );
+has 'callback' => (
+    is  => 'rw',
+    isa => 'CodeRef',
+);
 
 my $logfilter;
+
+sub new {
+    my $proto = shift;
+    confess "must be called without arguments"
+      if scalar( @_ ) != 0;
+
+    my $class = ref $proto || $proto;
+    return Class::Accessor::new( $class, { entries => [] } );
+}
 
 sub add {
     my ( $self, $tag, $argref, $module, $testcase ) = @_;
@@ -47,7 +59,7 @@ sub add {
                 die $err;
             }
             else {
-                $self->clear_callback;
+                $self->callback( undef );
                 $self->add( LOGGER_CALLBACK_ERROR => { exception => $err } );
             }
         }
@@ -157,9 +169,6 @@ sub json {
     return $json->encode( \@out );
 } ## end sub json
 
-no Moose;
-__PACKAGE__->meta->make_immutable;
-
 1;
 
 =head1 NAME
@@ -170,6 +179,18 @@ Zonemaster::Engine::Logger - class that holds L<Zonemaster::Engine::Logger::Entr
 
     my $logger = Zonemaster::Engine::Logger->new;
     $logger->add( TAG => {some => 'arguments'});
+
+=head1 CONSTRUCTORS
+
+=over
+
+=item new
+
+Construct a new object.
+
+    my $logger = Zonemaster::Engine::Logger->new;
+
+=back
 
 =head1 ATTRIBUTES
 
@@ -226,7 +247,7 @@ Returns the maximum log level from the entire log as the level string.
 
 =back
 
-=head1 CLASS METHOD
+=head1 CLASS METHODS
 
 =over
 
