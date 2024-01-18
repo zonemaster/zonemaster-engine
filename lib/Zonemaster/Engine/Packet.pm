@@ -1,47 +1,145 @@
 package Zonemaster::Engine::Packet;
-
-use version; our $VERSION = version->declare("v1.0.5");
-
 use 5.014002;
 use warnings;
+use version; our $VERSION = version->declare("v1.0.5");
 
-use Moose;
+use Class::Accessor 'antlers';
+
+use Carp qw( confess );
 use Zonemaster::Engine::Util;
 
 has 'packet' => (
-    is       => 'ro',
-    isa      => 'Zonemaster::LDNS::Packet',
-    required => 1,
-    handles  => [
-        qw(
-          data
-          rcode
-          aa
-          ra
-	  tc
-          question
-          answer
-          authority
-          additional
-          print
-          string
-          answersize
-          unique_push
-          timestamp
-          type
-          edns_size
-          edns_rcode
-          edns_version
-          edns_z
-          edns_data
-          has_edns
-          id
-          querytime
-          do
-          opcode
-          )
-    ]
+    is  => 'ro',
+    isa => 'Zonemaster::LDNS::Packet',
 );
+
+sub new {
+    my $proto = shift;
+    my $class = ref $proto || $proto;
+    my $attrs = shift;
+
+    my $packet = delete $attrs->{packet};
+    if ( %$attrs ) {
+        confess "unexpected arguments: " . join ', ', sort keys %$attrs;
+    }
+
+    return Class::Accessor::new( $class, { packet => $packet } );
+}
+
+sub timestamp {
+    my ( $self, $time ) = @_;
+    return $self->packet->timestamp( defined $time ? $time : () );
+}
+
+sub querytime {
+    my ( $self, $value ) = @_;
+    return $self->packet->querytime( defined $value ? $value : () );
+}
+
+sub type {
+    my ( $self ) = @_;
+    return $self->packet->type;
+}
+
+sub string {
+    my ( $self ) = @_;
+    return $self->packet->string;
+}
+
+sub data {
+    my ( $self ) = @_;
+    return $self->packet->data;
+}
+
+sub id {
+    my ( $self, $id ) = @_;
+    return $self->packet->id( defined $id ? $id : () );
+}
+
+sub opcode {
+    my ( $self, $string ) = @_;
+    return $self->packet->opcode( defined $string ? $string : () );
+}
+
+sub rcode {
+    my ( $self, $string ) = @_;
+    return $self->packet->rcode( defined $string ? $string : () );
+}
+
+sub aa {
+    my ( $self ) = @_;
+    return $self->packet->aa;
+}
+
+sub ra {
+    my ( $self ) = @_;
+    return $self->packet->ra;
+}
+
+sub tc {
+    my ( $self ) = @_;
+    return $self->packet->tc;
+}
+
+sub do {
+    my ( $self ) = @_;
+    return $self->packet->do;
+}
+
+sub question {
+    my ( $self ) = @_;
+    return $self->packet->question;
+}
+
+sub answer {
+    my ( $self ) = @_;
+    return $self->packet->answer;
+}
+
+sub authority {
+    my ( $self ) = @_;
+    return $self->packet->authority;
+}
+
+sub additional {
+    my ( $self ) = @_;
+    return $self->packet->additional;
+}
+
+sub unique_push {
+    my ( $self, $section, $rr ) = @_;
+    return $self->packet->unique_push( $section, $rr );
+}
+
+sub edns_size {
+    my ( $self ) = @_;
+    return $self->packet->edns_size;
+}
+
+sub edns_rcode {
+    my ( $self ) = @_;
+    return $self->packet->edns_rcode;
+}
+
+sub edns_version {
+    my ( $self, $version ) = @_;
+    return $self->packet->edns_version( defined $version ? $version : () );
+}
+
+sub edns_z {
+    my ( $self ) = @_;
+    return $self->packet->edns_z;
+}
+
+sub edns_data {
+    my ( $self ) = @_;
+    return $self->packet->edns_data;
+}
+
+sub has_edns {
+    my ( $self ) = @_;
+    return $self->packet->has_edns;
+}
 
 sub no_such_record {
     my ( $self ) = @_;
@@ -148,9 +246,6 @@ sub TO_JSON {
     return { 'Zonemaster::Engine::Packet' => $self->packet };
 }
 
-no Moose;
-__PACKAGE__->meta->make_immutable;
-
 1;
 
 =head1 NAME
@@ -169,6 +264,16 @@ Zonemaster::Engine::Packet - wrapping object for L<Zonemaster::LDNS::Packet> obj
 =item packet
 
 Holds the L<Zonemaster::LDNS::Packet> the object is wrapping.
+
+=back
+
+=head1 CONSTRUCTORS
+
+=over
+
+=item new
+
+Construct a new instance.
 
 =back
 
@@ -220,104 +325,50 @@ These methods are passed through transparently to the underlying L<Zonemaster::L
 
 =over
 
-=item *
+=item data
 
-data
+=item rcode
 
-=item *
+=item aa
 
-rcode
+=item ra
 
-=item *
+=item tc
 
-aa
+=item question
 
-=item *
+=item answer
 
-ra
+=item authority
 
-=item *
+=item additional
 
-tc
+=item string
 
-=item *
+=item unique_push
 
-question
+=item timestamp
 
-=item *
+=item type
 
-answer
+=item edns_size
 
-=item *
+=item edns_rcode
 
-authority
+=item edns_version
 
-=item *
+=item edns_z
 
-additional
+=item edns_data
 
-=item *
+=item has_edns
 
-print
+=item id
 
-=item *
+=item querytime
 
-string
+=item do
 
-=item *
-
-answersize
-
-=item *
-
-unique_push
-
-=item *
-
-timestamp
-
-=item *
-
-type
-
-=item *
-
-edns_size
-
-=item *
-
-edns_rcode
-
-=item *
-
-edns_version
-
-=item *
-
-edns_z
-
-=item *
-
-edns_data
-
-=item *
-
-has_edns
-
-=item *
-
-id
-
-=item *
-
-querytime
-
-=item *
-
-do
-
-=item *
-
-opcode
+=item opcode
 
 =back
