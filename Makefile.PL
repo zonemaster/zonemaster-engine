@@ -39,6 +39,7 @@ requires 'Zonemaster::LDNS'   => 3.002000; # For v3.2.0
 
 test_requires 'Locale::PO'        => 0;
 test_requires 'Pod::Coverage'     => 0;
+test_requires 'Sub::Override'     => 0;
 test_requires 'Test::Differences' => 0;
 test_requires 'Test::Exception'   => 0;
 test_requires 'Test::Fatal'       => 0;

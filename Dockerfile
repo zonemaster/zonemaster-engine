@@ -22,6 +22,7 @@ RUN apk add --no-cache \
     perl-module-install \
     perl-moose \
     perl-pod-coverage \
+    perl-sub-override \
     perl-test-differences \
     perl-test-exception \
     perl-test-fatal \
