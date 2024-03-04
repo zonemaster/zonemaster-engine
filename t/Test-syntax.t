@@ -80,13 +80,23 @@ zone_gives_not( q{syntax03}, $dn_idn_ok, q{DISCOURAGED_DOUBLE_DASH} );
 zone_gives( q{syntax03}, $dn_ok,     q{NO_DOUBLE_DASH} );
 zone_gives( q{syntax03}, $dn_idn_ok, q{NO_DOUBLE_DASH} );
 
-my $ns_double_dash = Zonemaster::Engine->zone( q{ns1.ns--nic.fr} );
-zone_gives( q{syntax04}, $ns_double_dash, q{NAMESERVER_DISCOURAGED_DOUBLE_DASH} );
+my $zone_double_dash = Zonemaster::Engine->zone( q{ns1.ns--nic.fr} );
 zone_gives_not( q{syntax04}, $ns_ok, q{NAMESERVER_DISCOURAGED_DOUBLE_DASH} );
+zone_gives_not( q{syntax04}, $zone_double_dash, q{NAMESERVER_DISCOURAGED_DOUBLE_DASH} );
+SKIP: {
+    skip "need test zone", 1;
+    my $ns_num_tld; # TODO specify test zone
+    zone_gives( q{syntax04}, $ns_num_tld, q{NAMESERVER_NUMERIC_TLD} );
+}
 
-my $ns_num_tld = Zonemaster::Engine->zone( q{ns1.nic.47} );
-zone_gives( q{syntax04}, $ns_num_tld, q{NAMESERVER_NUMERIC_TLD} );
+my $zone_num_tld = Zonemaster::Engine->zone( q{ns1.nic.47} );
 zone_gives_not( q{syntax04}, $ns_ok, q{NAMESERVER_NUMERIC_TLD} );
+zone_gives_not( q{syntax04}, $zone_num_tld, q{NAMESERVER_NUMERIC_TLD} );
+SKIP: {
+    skip "need test zone", 1;
+    my $ns_double_dash; # TODO specify test zone
+    zone_gives( q{syntax04}, $ns_double_dash, q{NAMESERVER_DISCOURAGED_DOUBLE_DASH} );
+}
 
 my %res;
 my $zone;
