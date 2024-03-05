@@ -27,6 +27,8 @@ use File::ShareDir qw[dist_file];
 use File::Slurp qw[read_file];
 use Scalar::Util qw[blessed];
 use POSIX qw[strftime];
+use Carp;
+use List::Util qw(any);
 
 =head1 NAME
 
@@ -154,14 +156,25 @@ module.
 sub install_custom_test_module {
     my ( $class, $module ) = @_;
 
-    push @all_test_modules, $module;
-
     $module->import();
+
+    # get list of cases to be added
+    my @cases = keys( %{$module->metadata} );
 
     my $profile = Zonemaster::Engine::Profile->effective;
 
-    my @cases = keys(%{$module->metadata});
+    # check there isn't a collission between one of the new cases and an
+    # existing case
+    foreach my $case ( @cases ) {
+        if ( any { $_ eq $case } @{$profile->{profile}->{test_cases}} ) {
+            carp( sprintf "case '%s' already exists", $case );
+        }
+    }
 
+    # add the module
+    push @all_test_modules, $module;
+
+    # append cases to the profile
     push @{$profile->{profile}->{test_cases}}, @cases;
 
     return;
