@@ -167,7 +167,8 @@ sub install_custom_test_module {
     # existing case
     foreach my $case ( @cases ) {
         if ( any { $_ eq $case } @{$profile->{profile}->{test_cases}} ) {
-            carp( sprintf "case '%s' already exists", $case );
+            carp sprintf "case '%s' already exists", $case ;
+            return undef;
         }
     }
 
@@ -177,7 +178,7 @@ sub install_custom_test_module {
     # append cases to the profile
     push @{$profile->{profile}->{test_cases}}, @cases;
 
-    return;
+    return 1;
 }
 
 =pod
