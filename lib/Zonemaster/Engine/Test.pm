@@ -28,7 +28,7 @@ use File::Slurp qw[read_file];
 use Scalar::Util qw[blessed];
 use POSIX qw[strftime];
 use Carp;
-use List::Util qw(any);
+use List::MoreUtils qw(any);
 
 =head1 NAME
 
