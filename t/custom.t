@@ -22,7 +22,7 @@ require_ok $modfile;
 
 $module->import();
 
-Zonemaster::Engine::Test->install( $module );
+Zonemaster::Engine::Test->install_custom_test_module( $module );
 
 ok any { $_ eq $module } Zonemaster::Engine::Test->modules();
 

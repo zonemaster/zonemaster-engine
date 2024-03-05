@@ -138,7 +138,7 @@ sub _log_versions {
 
 =item install()
 
-    Zonemaster::Engine::Test->install('My::Module');
+    Zonemaster::Engine::Test->install_custom_test_module('My::Module');
 
 Installs a custom module outside of the C<Zonemaster::Engine::Test::> namespace.
 This module must be a modules that implements the same interface as the modules
@@ -151,7 +151,7 @@ module.
 
 =cut
 
-sub install {
+sub install_custom_test_module {
     my ( $class, $module ) = @_;
 
     push @all_test_modules, $module;
