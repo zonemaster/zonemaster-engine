@@ -28,7 +28,7 @@ sub new {
 
 sub timestamp {
     my ( $self, $time ) = @_;
-    return $self->packet->timestamp( defined $time ? $time : () );
+    return $self->packet->timestamp( $time // () );
 }
 
 sub querytime {
