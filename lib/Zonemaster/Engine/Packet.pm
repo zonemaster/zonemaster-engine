@@ -33,7 +33,7 @@ sub timestamp {
 
 sub querytime {
     my ( $self, $value ) = @_;
-    return $self->packet->querytime( defined $value ? $value : () );
+    return $self->packet->querytime( $value // () );
 }
 
 sub type {
@@ -53,17 +53,17 @@ sub data {
 
 sub id {
     my ( $self, $id ) = @_;
-    return $self->packet->id( defined $id ? $id : () );
+    return $self->packet->id( $id // () );
 }
 
 sub opcode {
     my ( $self, $string ) = @_;
-    return $self->packet->opcode( defined $string ? $string : () );
+    return $self->packet->opcode( $string // () );
 }
 
 sub rcode {
     my ( $self, $string ) = @_;
-    return $self->packet->rcode( defined $string ? $string : () );
+    return $self->packet->rcode( $string // () );
 }
 
 sub aa {
@@ -123,7 +123,7 @@ sub edns_rcode {
 
 sub edns_version {
     my ( $self, $version ) = @_;
-    return $self->packet->edns_version( defined $version ? $version : () );
+    return $self->packet->edns_version( $version // () );
 }
 
 sub edns_z {
