@@ -26,119 +26,33 @@ sub new {
     return Class::Accessor::new( $class, { packet => $packet } );
 }
 
-sub timestamp {
-    my ( $self, $time ) = @_;
-    return $self->packet->timestamp( $time // () );
-}
+sub timestamp    { my ( $self, $time )    = @_; return $self->packet->timestamp( $time       // () ); }
+sub querytime    { my ( $self, $value )   = @_; return $self->packet->querytime( $value      // () ); }
+sub id           { my ( $self, $id )      = @_; return $self->packet->id( $id                // () ); }
+sub opcode       { my ( $self, $string )  = @_; return $self->packet->opcode( $string        // () ); }
+sub rcode        { my ( $self, $string )  = @_; return $self->packet->rcode( $string         // () ); }
+sub edns_version { my ( $self, $version ) = @_; return $self->packet->edns_version( $version // () ); }
 
-sub querytime {
-    my ( $self, $value ) = @_;
-    return $self->packet->querytime( $value // () );
-}
-
-sub type {
-    my ( $self ) = @_;
-    return $self->packet->type;
-}
-
-sub string {
-    my ( $self ) = @_;
-    return $self->packet->string;
-}
-
-sub data {
-    my ( $self ) = @_;
-    return $self->packet->data;
-}
-
-sub id {
-    my ( $self, $id ) = @_;
-    return $self->packet->id( $id // () );
-}
-
-sub opcode {
-    my ( $self, $string ) = @_;
-    return $self->packet->opcode( $string // () );
-}
-
-sub rcode {
-    my ( $self, $string ) = @_;
-    return $self->packet->rcode( $string // () );
-}
-
-sub aa {
-    my ( $self ) = @_;
-    return $self->packet->aa;
-}
-
-sub ra {
-    my ( $self ) = @_;
-    return $self->packet->ra;
-}
-
-sub tc {
-    my ( $self ) = @_;
-    return $self->packet->tc;
-}
-
-sub do {
-    my ( $self ) = @_;
-    return $self->packet->do;
-}
-
-sub question {
-    my ( $self ) = @_;
-    return $self->packet->question;
-}
-
-sub answer {
-    my ( $self ) = @_;
-    return $self->packet->answer;
-}
-
-sub authority {
-    my ( $self ) = @_;
-    return $self->packet->authority;
-}
-
-sub additional {
-    my ( $self ) = @_;
-    return $self->packet->additional;
-}
+sub type       { my ( $self ) = @_; return $self->packet->type; }
+sub string     { my ( $self ) = @_; return $self->packet->string; }
+sub data       { my ( $self ) = @_; return $self->packet->data; }
+sub aa         { my ( $self ) = @_; return $self->packet->aa; }
+sub do         { my ( $self ) = @_; return $self->packet->do; }
+sub ra         { my ( $self ) = @_; return $self->packet->ra; }
+sub tc         { my ( $self ) = @_; return $self->packet->tc; }
+sub question   { my ( $self ) = @_; return $self->packet->question; }
+sub authority  { my ( $self ) = @_; return $self->packet->authority; }
+sub answer     { my ( $self ) = @_; return $self->packet->answer; }
+sub additional { my ( $self ) = @_; return $self->packet->additional; }
+sub edns_size  { my ( $self ) = @_; return $self->packet->edns_size; }
+sub edns_rcode { my ( $self ) = @_; return $self->packet->edns_rcode; }
+sub edns_data  { my ( $self ) = @_; return $self->packet->edns_data; }
+sub edns_z     { my ( $self ) = @_; return $self->packet->edns_z; }
+sub has_edns   { my ( $self ) = @_; return $self->packet->has_edns; }
 
 sub unique_push {
     my ( $self, $section, $rr ) = @_;
     return $self->packet->unique_push( $section, $rr );
-}
-
-sub edns_size {
-    my ( $self ) = @_;
-    return $self->packet->edns_size;
-}
-
-sub edns_rcode {
-    my ( $self ) = @_;
-    return $self->packet->edns_rcode;
-}
-
-sub edns_version {
-    my ( $self, $version ) = @_;
-    return $self->packet->edns_version( $version // () );
-}
-
-sub edns_z {
-    my ( $self ) = @_;
-    return $self->packet->edns_z;
-}
-
-sub edns_data {
-    my ( $self ) = @_;
-    return $self->packet->edns_data;
-}
-
-sub has_edns {
-    my ( $self ) = @_;
-    return $self->packet->has_edns;
 }
 
 sub no_such_record {
