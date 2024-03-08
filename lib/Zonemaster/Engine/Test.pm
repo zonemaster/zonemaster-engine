@@ -39,52 +39,7 @@ Zonemaster::Engine::Test - Module implementing methods to find, load and execute
 =head1 TEST MODULES
 
 Test modules are defined as modules with names starting with C<Zonemaster::Engine::Test::>.
-They are expected to provide at least the following class methods:
-
-=over
-
-=item all()
-
-This will be given a L<Zonemaster::Engine::Zone> object as its only argument, and, after running the
-Test Cases for that Test module, is expected to return a list of L<Zonemaster::Engine::Logger::Entry> objects.
-This is the entry point used by the L</run_all_for()> and L</run_module()> methods of this class.
-
-=back
-
-=cut
-
-=over
-
-=item version()
-
-This must return the version of the Test module.
-
-=back
-
-=cut
-
-=over
-
-=item metadata()
-
-This must return a reference to a hash, the keys of which are the names of all Test Cases in
-the module, and the corresponding values are references to an array containing all the message
-tags that the Test Case can use in L<log entries|Zonemaster::Engine::Logger::Entry>.
-
-=back
-
-=cut
-
-=over
-
-=item tag_descriptions()
-
-This must return a reference to a hash, the keys of which are the message tags and the corresponding values
-are strings (message IDs) corresponding to user-friendly English translations of those message tags.
-Keep in mind that the message ids will be used as keys to look up translations into other languages,
-so think twice before editing them.
-
-=back
+They are expected to implement the L<Zonemaster::Engine::TestModuleInterface>.
 
 =cut
 
