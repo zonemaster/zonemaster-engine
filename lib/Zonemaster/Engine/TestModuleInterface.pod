@@ -1,0 +1,169 @@
+=head1 NAME
+
+Zonemaster::Engine::TestModuleInterface - On the test module interface.
+
+=head1 BACKGROUND
+
+The Zonemaster system provides a harness for running DNS tests and facilities for
+implementing them.
+
+The harness requires that the tests are organized into test modules and further
+into test cases.
+It loads all built-in test modules and exposes APIs to run their constituent
+test cases.
+
+The facilities for implementing DNS tests include APIs to examine a DNS zone, to
+access configuration information on how the tests should be performed and to
+emit examination results.
+
+The examination results are structured as a list of log entries with message
+tags and named arguments.
+The message tags are used for determining the severity of the entry, for
+translation to human language and to make the examination results easily used by
+other software.
+
+=head1 RULES AND RECOMMENDATIONS
+
+=head2 Accessing the outside world
+
+Only access the outside world via the framework APIs.
+The framework is built to make test results traceable, repeatable and
+understandable.
+If the test code itself goes around the framework and accesses things on its
+own, all those attributes are lost.
+If the test you're writing needs something the framework doesn't provide,
+request that it be added to the framework.
+
+=head2 Make few assumptions
+
+Make as few assumptions as possible when implementing test modules.
+When the entry method in a test module is called, it can only rely on a handful
+of things about the testing process so far:
+
+=over
+
+=item
+
+The zone object it's given has a parent.
+
+=item
+
+The zone object it's given has glue records.
+
+=item
+
+The zone object it's given has nameservers.
+
+=back
+
+=head2 Code clarity over performance
+
+Strive to make the test code as easily understandable as possible.
+Ideally, it should be possible for a person with only a basic understanding of
+Perl to read the code and verify that it correctly implements the corresponding
+Test Case specifications.
+
+=head2 Internationalization
+
+The Zonemaster system provides tooling for rendering message tags to human
+language.
+For this tooling to find the message tags the source code needs to be structured
+in a certain way.
+Each test module should contain a hash with one entry like this for each
+message tag that should be renderable to human language, where C<MESSAGE_TAG> is
+a message, C<TEST_MODULE> is the name of a test module tag and C<"Hello,
+{name}!"> is a message ID.
+
+    MESSAGE_TAG => sub {
+        __x    # TEST_MODULE:MESSAGE_TAG
+          "Hello, {name}!", @_;
+    },
+
+A number of things are important here.
+The coderefs call L<Locale::TextDomain::__x|Locale::TextDomain/EXPORTED
+FUNCTIONS> with a Perl brace format string (a.k.a. message ID) and propagates
+its own C<@_>).
+The coderefs propagate the return value from __x.
+The line immediately before the format string contains a comment consisting of
+the module name, a colon and the message tag.
+
+The message IDs should be expressed in user-friendly English translations of
+their corresponding message tags.
+Keep in mind that the message ids will be used as keys to look up translations
+into other languages, so think twice before editing them.
+
+The format strings themselves, the comments and the line numbers of the __x
+calls are used by the gettext tooling when updating the PO files with new
+message IDs and old message strings.
+
+See also L<Zonemaster::Engine::Localization>.
+
+=head1 TEST MODULE INTERFACE
+
+A test module is a Perl module that implements the interface described here.
+
+The name of the test module is the last component of the package of the Perl
+module. E.g. L<Zonemaster::Engine::Test::Syntax> implements a test module named
+C<Syntax>.
+
+=head2 CLASS METHODS
+
+=head3 all()
+
+Runs the subset of the L</test case methods> that are configured in the
+L<test_cases property|Zonemaster::Engine::Profile/test_cases> of the
+L<effective profile|Zonemaster::Engine::Profile/effective>.
+
+Accepts a L<Zonemaster::Engine::Zone> instance representing the zone to test.
+
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
+The objects are an aggregate of what is returned by the test case methods.
+all() may optionally include additional entries of its own.
+
+In case there are dependencies between the test cases, all() may skip one test
+case method dependning on what log entries were emitted from another.
+
+=head3 metadata()
+
+Returns a hashref mapping test case names to arrayrefs of message tags.
+
+The set of hash keys declares the set of test cases implemented by this test
+module.
+Each hash value should be an arrayref listing all the possible message tags
+emitted by the corresponding L<test case method|TEST CASE METHODS>.
+
+The name of each test case must be the name of the test module in lowercase
+followed by one or more digits. The message tags must be strings in
+SCREAMING_SNAKE_CASE.
+
+=head3 tag_descriptions()
+
+Returns a hashref mapping message tags to translation function coderefs.
+
+The hash keys should be a subset of message tags that could be returned by
+L</all()>.
+Message tags omitted from this hash will not be rendered to human language.
+
+Each translation function accepts a hash of named arguments, namely the
+ones emitted by the test module for the respective message tag.
+Each translation function returns a human readable string.
+
+See L</Internationalization> for additional requirements on the implementation.
+
+=head3 version()
+
+Returns a string representing the current version of the test module.
+The version information will be emitted in a C<SYSTEM> log entry, but otherwise
+not used.
+
+=head4 TEST CASE METHODS
+
+For each test case declared by L</metadata()> there must be a corresponding
+class method.
+This is the set of test case methods.
+
+Test case methods must accept a L<Zonemaster::Engine::Zone> object representing
+the zone to test, and they return their examination results as a list of
+L<Zonemaster::Engine::Logger::Entry> objects.
+
+=cut
