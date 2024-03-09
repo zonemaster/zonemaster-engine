@@ -58,7 +58,7 @@ sub all {
         $ns_with_reverse = any { $_->tag eq q{NAMESERVERS_IP_WITH_REVERSE} } @results;
     }
 
-    # Perform ADDRESS03 if ADDRESS02 passed
+    # Perform ADDRESS03 if ADDRESS02 passed or was skipped
     if ( $ns_with_reverse ) {
         push @results, $class->address03( $zone )
           if should_run_test( q{address03} );
