@@ -887,7 +887,7 @@ msgstr "Verifiera hantering av RRSIG-poster i \"Additional Section\""
 
 #. DNSSEC:DNSSEC07
 msgid "If DNSKEY at child, parent should have DS"
-msgstr "Om dotterzonen är DNSSEC-signerad så ska moderzonen ha DS-post for den"
+msgstr "Om dotterzonen är DNSSEC-signerad så ska moderzonen ha DS-post för den"
 
 #. DNSSEC:DNSSEC08
 msgid "Valid RRSIG for DNSKEY"
