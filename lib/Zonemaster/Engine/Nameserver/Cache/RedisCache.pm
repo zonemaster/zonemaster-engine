@@ -93,6 +93,8 @@ sub set_key {
             }
         }
         $ttl = $ttl < $redis_expire ? $ttl : $redis_expire;
+        # Redis requires cache time to be greater than 0.
+        $ttl = 1 if $ttl == 0;
         $self->redis->set( $key, $msg, 'EX', $ttl );
     } else {
         $self->redis->set( $key, '', 'EX', $ttl );
