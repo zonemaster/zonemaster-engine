@@ -17,9 +17,32 @@ use Zonemaster::Engine::Constants qw[:addresses :ip];
 use Zonemaster::Engine::TestMethods;
 use Zonemaster::Engine::Util;
 
-###
-### Entry Points
-###
+=head1 NAME
+
+Zonemaster::Engine::Test::Address - Module implementing tests focused on IP addresses of name servers
+
+=head1 SYNOPSIS
+
+    my @results = Zonemaster::Engine::Test::Address->all( $zone );
+
+=head1 METHODS
+
+=over
+
+=item all()
+
+    my @logentry_array = all( $zone );
+
+Runs the default set of tests for that module, i.e. between L<two and three tests|/TESTS> depending on the tested zone.
+If L<ADDRESS02|/address02()> passes, L<ADDRESS03|/address03()> is run.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
 
 sub all {
     my ( $class, $zone ) = @_;
@@ -35,9 +58,18 @@ sub all {
     return @results;
 }
 
-###
-### Metadata Exposure
-###
+=over
+
+=item metadata()
+
+    my $hash_ref = metadata();
+
+Returns a reference to a hash, the keys of which are the names of all Test Cases in the module, and the corresponding values are references to
+an array containing all the message tags that the Test Case can use in L<log entries|Zonemaster::Engine::Logger::Entry>.
+
+=back
+
+=cut
 
 sub metadata {
     my ( $class ) = @_;
@@ -126,15 +158,78 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
 );
 
+=over
+
+=item tag_descriptions()
+
+    my $hash_ref = tag_descriptions();
+
+Used by the L<built-in translation system|Zonemaster::Engine::Translator>.
+
+Returns a reference to a hash, the keys of which are the message tags and the corresponding values are strings (message IDs).
+
+=back
+
+=cut
+
 sub tag_descriptions {
     return \%TAG_DESCRIPTIONS;
 }
+
+=over
+
+=item version()
+
+    my $version_string = version();
+
+Returns a string containing the version of the current module.
+
+=back
+
+=cut
 
 sub version {
     return "$Zonemaster::Engine::Test::Address::VERSION";
 }
 
-sub find_special_address {
+=head1 INTERNAL METHODS
+
+=over
+
+=item _emit_log()
+
+    my $log_entry = _emit_log( $message_tag_string, $hash_ref );
+
+Adds a message to the L<logger|Zonemaster::Engine::Logger> for this module.
+See L<Zonemaster::Engine::Logger::Entry/add($tag, $argref, $module, $testcase)> for more details.
+
+Takes a string (message tag) and a reference to a hash (arguments).
+
+Returns a L<Zonemaster::Engine::Logger::Entry> object.
+
+=back
+
+=cut
+
+sub _emit_log { my ( $tag, $argref ) = @_; return Zonemaster::Engine->logger->add( $tag, $argref, 'Address' ); }
+
+=over
+
+=item _find_special_address()
+
+    my $hash_ref = _find_special_address( $ip );
+
+Verifies if an IP address is a special (private, reserved, ...) one.
+
+Takes a L<Net::IP::XS> object.
+
+Returns a reference to a hash if true (see L<Zonemaster::Engine::Constants/_extract_iana_ip_blocks()>), or C<undef> if false.
+
+=back
+
+=cut
+
+sub _find_special_address {
     my ( $class, $ip ) = @_;
     my @special_addresses;
 
@@ -154,9 +249,29 @@ sub find_special_address {
     return;
 }
 
+=head1 TESTS
+
+=over
+
+=item address01()
+
+    my @logentry_array = address01( $zone );
+
+Runs the L<Address01 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Address-TP/address01.md>.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
+
 sub address01 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Address01';
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
     my %ips;
 
     foreach
@@ -165,11 +280,11 @@ sub address01 {
 
         next if $ips{ $local_ns->address->short };
 
-        my $ip_details_ref = $class->find_special_address( $local_ns->address );
+        my $ip_details_ref = $class->_find_special_address( $local_ns->address );
 
         if ( $ip_details_ref ) {
             push @results,
-              info(
+              _emit_log(
                 NAMESERVER_IP_PRIVATE_NETWORK => {
                     nsname    => $local_ns->name->string,
                     ns_ip     => $local_ns->address->short,
@@ -185,15 +300,33 @@ sub address01 {
     } ## end foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods...})
 
     if ( scalar keys %ips and not grep { $_->tag ne q{TEST_CASE_START} } @results ) {
-        push @results, info( NO_IP_PRIVATE_NETWORK => {} );
+        push @results, _emit_log( NO_IP_PRIVATE_NETWORK => {} );
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub address01
+
+=over
+
+=item address02()
+
+    my @logentry_array = address02( $zone );
+
+Runs the L<Address02 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Address-TP/address02.md>.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
 
 sub address02 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Address02';
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     my %ips;
     my $ptr_query;
@@ -220,7 +353,7 @@ sub address02 {
         if ( $p ) {
             if ( $p->rcode ne q{NOERROR} or not $p->get_records( q{PTR}, q{answer} ) ) {
                 push @results,
-                  info(
+                  _emit_log(
                     NAMESERVER_IP_WITHOUT_REVERSE => {
                         nsname => $local_ns->name->string,
                         ns_ip  => $local_ns->address->short,
@@ -230,7 +363,7 @@ sub address02 {
         }
         else {
             push @results,
-              info(
+              _emit_log(
                 NO_RESPONSE_PTR_QUERY => {
                     domain => $ptr_query,
                 }
@@ -242,15 +375,33 @@ sub address02 {
     } ## end foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods...})
 
     if ( scalar keys %ips and not grep { $_->tag ne q{TEST_CASE_START} } @results ) {
-        push @results, info( NAMESERVERS_IP_WITH_REVERSE => {} );
+        push @results, _emit_log( NAMESERVERS_IP_WITH_REVERSE => {} );
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub address02
+
+=over
+
+=item address03()
+
+    my @logentry_array = address03( $zone );
+
+Runs the L<Address03 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Address-TP/address03.md>.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
 
 sub address03 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Address03';
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
     my $ptr_query;
 
     my %ips;
@@ -277,7 +428,7 @@ sub address03 {
             if ( $p->rcode eq q{NOERROR} and scalar @ptr ) {
                 if ( none { name( $_->ptrdname ) eq $local_ns->name->string . q{.} } @ptr ) {
                     push @results,
-                      info(
+                      _emit_log(
                         NAMESERVER_IP_PTR_MISMATCH => {
                             nsname => $local_ns->name->string,
                             ns_ip  => $local_ns->address->short,
@@ -288,7 +439,7 @@ sub address03 {
             }
             else {
                 push @results,
-                  info(
+                  _emit_log(
                     NAMESERVER_IP_WITHOUT_REVERSE => {
                         nsname => $local_ns->name->string,
                         ns_ip  => $local_ns->address->short,
@@ -298,7 +449,7 @@ sub address03 {
         } ## end if ( $p )
         else {
             push @results,
-              info(
+              _emit_log(
                 NO_RESPONSE_PTR_QUERY => {
                     domain => $ptr_query,
                 }
@@ -310,65 +461,10 @@ sub address03 {
     } ## end foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods...})
 
     if ( scalar keys %ips and not grep { $_->tag ne q{TEST_CASE_START} } @results ) {
-        push @results, info( NAMESERVER_IP_PTR_MATCH => {} );
+        push @results, _emit_log( NAMESERVER_IP_PTR_MATCH => {} );
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub address03
 
 1;
-
-=head1 NAME
-
-Zonemaster::Engine::Test::Address - module implementing tests focused on the Address specific test cases of the DNS tests
-
-=head1 SYNOPSIS
-
-    my @results = Zonemaster::Engine::Test::Address->all($zone);
-
-=head1 METHODS
-
-=over
-
-=item all($zone)
-
-Runs the default set of tests and returns a list of log entries made by the tests
-
-=item metadata()
-
-Returns a reference to a hash, the keys of which are the names of all test methods in the module, and the corresponding values are references to
-lists with all the tags that the method can use in log entries.
-
-=item tag_descriptions()
-
-Returns a refernce to a hash with translation functions. Used by the builtin translation system.
-
-=item version()
-
-Returns a version string for the module.
-
-=back
-
-=head1 TESTS
-
-=over
-
-=item address01($zone)
-
-Verify that IPv4 addresse are not in private networks.
-
-=item address02($zone)
-
-Verify reverse DNS entries exist for nameservers IP addresses.
-
-=item address03($zone)
-
-Verify that reverse DNS entries match nameservers names.
-
-=item find_special_address($ip)
-
-Verify that an address (Net::IP::XS) given is a special (private, reserved, ...) one.
-
-=back
-
-=cut

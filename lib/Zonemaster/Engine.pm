@@ -1,6 +1,6 @@
 package Zonemaster::Engine;
 
-use version; our $VERSION = version->declare("v4.7.3");
+use version; our $VERSION = version->declare("v5.0.0");
 
 use 5.014002;
 
@@ -71,9 +71,9 @@ sub test_module {
 }
 
 sub test_method {
-    my ( $class, $module, $method, @arguments ) = @_;
+    my ( $class, $module, $method, $zname ) = @_;
 
-    return Zonemaster::Engine::Test->run_one( $module, $method, @arguments );
+    return Zonemaster::Engine::Test->run_one( $module, $method, $class->zone( $zname ) );
 }
 
 sub all_tags {
@@ -260,10 +260,10 @@ Runs all available tests and returns a list of L<Zonemaster::Engine::Logger::Ent
 
 Runs all available tests for the zone with the given name in the specified module.
 
-=item test_method($module, $method, @arguments)
+=item test_method($module, $method, $name)
 
-Run one particular test method in one particular module. The requested module must be in the list of active loaded modules (that is, not the Basic
-module and not a module disabled by the current policy), and the method must be listed in the metadata the module exports. If those requirements
+Run one particular test method in one particular module for one particular zone. The requested module must be in the list of active loaded modules (that is, not the Basic
+module and not a module disabled by the current profile), and the method must be listed in the metadata the module exports. If those requirements
 are fulfilled, the method will be called with the provided arguments.
 
 =item zone($name)

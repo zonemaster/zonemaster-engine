@@ -18,6 +18,7 @@ RUN apk add --no-cache \
     perl-list-moreutils \
     perl-locale-msgfmt \
     perl-lwp-protocol-https \
+    perl-mail-spf \
     perl-module-install \
     perl-moose \
     perl-pod-coverage \
@@ -57,6 +58,7 @@ RUN apk add --no-cache \
     perl-io-socket-inet6 \
     perl-list-moreutils \
     perl-locale-msgfmt \
+    perl-mail-spf \
     perl-mailtools \
     perl-module-install \
     perl-moose \

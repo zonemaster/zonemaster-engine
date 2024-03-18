@@ -237,7 +237,10 @@ sub _build_dns {
 sub _build_cache {
     my ( $self ) = @_;
 
-    Zonemaster::Engine::Nameserver::Cache->new( { address => $self->address } );
+    my $cache_type = Zonemaster::Engine::Nameserver::Cache->get_cache_type( Zonemaster::Engine::Profile->effective );
+    my $cache_class = Zonemaster::Engine::Nameserver::Cache->get_cache_class( $cache_type );
+
+    $cache_class->new( { address => $self->address } );
 }
 
 ###
@@ -288,7 +291,8 @@ sub query {
         }
 
         my $res = Zonemaster::Engine::Packet->new( { packet => $p } );
-        Zonemaster::Engine->logger->add( FAKE_DS_RETURNED => { name => "$name", from => "$self" } );
+        Zonemaster::Engine->logger->add( FAKE_DS_RETURNED => { name => "$name", type  => $type, class => $class, from => "$self" } );
+        Zonemaster::Engine->logger->add( FAKE_PACKET_RETURNED => { packet => $res->string } );
         return $res;
     }
 
@@ -318,18 +322,10 @@ sub query {
             $p->rd( $recurse );
             $p->answerfrom( $self->address->ip );
 
-            Zonemaster::Engine->logger->add(
-                'FAKE_DELEGATION',
-                {
-                    name  => "$name",
-                    type  => $type,
-                    class => $class,
-                    from  => "$self",
-                }
-            );
+            Zonemaster::Engine->logger->add( FAKE_DELEGATION_RETURNED => { name  => "$name", type  => $type, class => $class, from  => "$self" } );
 
             my $res = Zonemaster::Engine::Packet->new( { packet => $p } );
-            Zonemaster::Engine->logger->add( FAKED_RETURN => { packet => $res->string } );
+            Zonemaster::Engine->logger->add( FAKE_PACKET_RETURNED => { packet => $res->string } );
             return $res;
         } ## end if ( $name =~ m/([.]|\A)\Q$fname\E\z/xi)
     } ## end foreach my $fname ( sort keys...)
@@ -361,12 +357,14 @@ sub query {
     else {
         $md5->add( q{EDNS_UDP_SIZE} , 0);
     }
-    
+
     my $idx = $md5->b64digest();
-    if ( not exists( $self->cache->data->{$idx} ) ) {
-        $self->cache->data->{$idx} = $self->_query( $name, $type, $href );
+
+    my ( $in_cache, $p) = $self->cache->get_key( $idx );
+    if ( not $in_cache ) {
+        $p = $self->_query( $name, $type, $href );
+        $self->cache->set_key( $idx, $p );
     }
-    $p = $self->cache->data->{$idx};
 
     Zonemaster::Engine->logger->add( CACHED_RETURN => { packet => ( $p ? $p->string : 'undef' ) } );
 
@@ -382,8 +380,7 @@ sub add_fake_delegation {
         push @{ $delegation{authority} }, Zonemaster::LDNS::RR->new( sprintf( '%s IN NS %s', $domain, $name ) );
         foreach my $ip ( @{ $href->{$name} } ) {
             if ( Net::IP::XS->new( $ip )->ip eq $self->address->ip ) {
-                Zonemaster::Engine->logger->add(
-                    FAKE_DELEGATION_TO_SELF => { ns => "$self", domain => $domain, data => $href } );
+                Zonemaster::Engine->logger->add( FAKE_DELEGATION_TO_SELF => { ns => "$self", domain => $domain, data => $href } );
                 return;
             }
 
@@ -393,7 +390,7 @@ sub add_fake_delegation {
     }
 
     $self->fake_delegations->{$domain} = \%delegation;
-    Zonemaster::Engine->logger->add( ADDED_FAKE_DELEGATION => { ns => "$self", domain => $domain, data => $href } );
+    Zonemaster::Engine->logger->add( FAKE_DELEGATION_ADDED => { ns => "$self", domain => $domain, data => $href } );
 
     # We're changing the world, so the cache can't be trusted
     Zonemaster::Engine::Recursor->clear_cache;
@@ -409,7 +406,6 @@ sub add_fake_ds {
         $domain = Zonemaster::Engine::DNSName->new( $domain );
     }
 
-    Zonemaster::Engine->logger->add( FAKE_DS => { domain => lc( "$domain" ), data => $aref, ns => "$self" } );
     foreach my $href ( @{$aref} ) {
         push @ds,
           Zonemaster::LDNS::RR->new(
@@ -421,6 +417,7 @@ sub add_fake_ds {
     }
 
     $self->fake_ds->{ lc( "$domain" ) } = \@ds;
+    Zonemaster::Engine->logger->add( FAKE_DS_ADDED => { domain => lc( "$domain" ), data => $aref, ns => "$self" } );
 
     # We're changing the world, so the cache can't be trusted
     Zonemaster::Engine::Recursor->clear_cache;
@@ -535,9 +532,11 @@ sub _query {
     push @{ $self->times }, ( time() - $before );
 
     # Reset to defaults
-
     foreach my $flag ( keys %flags ) {
-        $self->dns->$flag( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.}.$flag ) );
+        # Except for any flag that is not configurable in the profile
+        unless ( grep( /^$flag$/, ( 'dnssec', 'edns_size' ) ) ) {
+            $self->dns->$flag( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.}.$flag ) );
+        }
     }
 
     if ( $res ) {
@@ -612,6 +611,9 @@ sub restore {
         }
       );
 
+    my $cache_type = Zonemaster::Engine::Nameserver::Cache->get_cache_type( Zonemaster::Engine::Profile->effective );
+    my $cache_class = Zonemaster::Engine::Nameserver::Cache->get_cache_class( $cache_type );
+
     open my $fh, '<', $filename or die "Failed to open restore data file: $!\n";
     while ( my $line = <$fh> ) {
         my ( $name, $addr, $data ) = split( / /, $line, 3 );
@@ -620,7 +622,7 @@ sub restore {
             {
                 name    => $name,
                 address => Net::IP::XS->new($addr),
-                cache   => Zonemaster::Engine::Nameserver::Cache->new( { data => $ref, address => Net::IP::XS->new( $addr ) } )
+                cache   => $cache_class->new( { data => $ref, address => Net::IP::XS->new( $addr ) } )
             }
         );
     }

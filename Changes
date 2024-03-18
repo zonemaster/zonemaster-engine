@@ -1,6 +1,36 @@
 Release history for Zonemaster component Zonemaster-Engine
 
 
+v5.0.0 2024-03-18 (public release version)
+
+ [Release information]
+ - Translations have not been fully updated in this release. They will
+   be updated in an upcoming fix release.
+
+ [Breaking change]
+ - Removes deprecated features (#1309)
+
+ [Features]
+ - Adds global cache based on Redis (experimental) (#1201, #1327)
+ - Adds implementation of test case Zone11 (SPF test) (#1287)
+ - Removes implementation of Basic00 (#1308)
+
+ [Fixes]
+ - Updates implementation of test case Syntax06 (#1245)
+ - Refactors code (#1256, #1294, #1293, #1296, #1297, #1302)
+ - Improves documentation in Test modules (#1277)
+ - Updates implementation of test case Delegation01 (#1290)
+ - Fixes message tag log level for test case Zone08 (#1295)
+ - Updates unit tests for test cases Consistency05 and Consistency06
+   (#1303)
+ - Updates implementation of test case DNSSEC03 (#1304)
+ - Updates implementation of test case Nameserver15 (#1306)
+ - Documents and updates method '_emit_log()' in all Test modules #1310)
+ - Corrects ASN lookup sources (#1311)
+ - Adds Mail::SPF in 2nd stage in Dockerfile (#1317)
+ - Updates translations (#1324)
+
+
 v4.7.3 2023-09-08 (public fix version)
 
  [Fixes]

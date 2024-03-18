@@ -1,4 +1,5 @@
 use Test::More;
+use Test::Differences;
 use File::Slurp;
 
 use List::MoreUtils qw[uniq none any];
@@ -47,39 +48,30 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine->profile->set( q{no_network}, 1 );
 }
 
-# Find a way for dnssec06 which have a dependence...
+# Find a way for dnssec06 which has a dependence...
 my ($json, $profile_test);
-foreach my $testcase ( qw{dnssec01 dnssec02 dnssec03 dnssec04 dnssec05 dnssec07 dnssec08 dnssec09 dnssec10 dnssec11 dnssec13 dnssec14 dnssec15 dnssec17 dnssec18} ) {
+foreach my $testcase ( qw{dnssec01 dnssec02 dnssec04 dnssec05 dnssec07 dnssec08 dnssec09 dnssec10 dnssec11 dnssec13 dnssec14 dnssec15 dnssec17 dnssec18} ) {
     $json         = read_file( 't/profiles/Test-'.$testcase.'-only.json' );
     $profile_test = Zonemaster::Engine::Profile->from_json( $json );
     Zonemaster::Engine::Profile->effective->merge( $profile_test );
-    my @testcases;
+    my %testcases;
     Zonemaster::Engine->logger->clear_history();
     foreach my $result ( Zonemaster::Engine->test_module( q{dnssec}, q{se} ) ) {
-        foreach my $trace (@{$result->trace}) {
-            push @testcases, grep /Zonemaster::Engine::Test::DNSSEC::dnssec/, @$trace;
+        if ( $result->testcase && $result->testcase ne 'Unspecified' ) {
+            $testcases{$result->testcase} = 1;
         }
     }
-    @testcases = uniq sort @testcases;
-    is( scalar( @testcases ), 1, 'only one test-case ('.$testcase.')' );
-    is( $testcases[0], 'Zonemaster::Engine::Test::DNSSEC::'.$testcase, 'expected test-case ('.$testcases[0].')' );
+    eq_or_diff( [ map { lc $_ } keys %testcases ], [ $testcase ], 'expected test-case ('. $testcase .')' );
 }
 
 $json         = read_file( 't/profiles/Test-dnssec-all.json' );
 $profile_test = Zonemaster::Engine::Profile->from_json( $json );
 Zonemaster::Engine::Profile->effective->merge( $profile_test );
 
-my $zone;
-my @res;
-my %tag;
+my $zone = Zonemaster::Engine->zone( 'nic.se' );
 
-$zone = Zonemaster::Engine->zone( 'nic.se' );
-
-my $zone3 = Zonemaster::Engine->zone( 'com' );
-is( zone_gives( 'dnssec03', $zone3, [q{ITERATIONS_OK}] ), 3, 'Only one (useful) message' );
-
-@res = Zonemaster::Engine->test_method( 'DNSSEC', 'dnssec04', $zone );
-%tag = map { $_->tag => 1 } @res;
+my @res = Zonemaster::Engine->test_method( 'DNSSEC', 'dnssec04', $zone );
+my %tag = map { $_->tag => 1 } @res;
 ok( ( $tag{DURATION_OK} || $tag{REMAINING_SHORT} || $tag{RRSIG_EXPIRED} ), 'DURATION_OK (sort of)' );
 
 my $zone4 = Zonemaster::Engine->zone( 'nic.fr' );
@@ -137,18 +129,6 @@ zone_gives_not( 'dnssec02', $zone, [qw{DS02_ALGO_NOT_SUPPORTED_BY_ZM DS02_DNSKEY
 $zone = Zonemaster::Engine->zone( 'dnssec08-dnskey-signature-not-ok-broken.zut-root.rd.nic.fr' );
 zone_gives( 'dnssec02', $zone, [qw{DS02_RRSIG_NOT_VALID_BY_DNSKEY DS02_NO_MATCHING_DNSKEY_RRSIG DS02_DNSKEY_NOT_SIGNED_BY_ANY_DS}] );
 zone_gives_not( 'dnssec02', $zone, [qw{DS02_ALGO_NOT_SUPPORTED_BY_ZM DS02_DNSKEY_NOT_FOR_ZONE_SIGNING DS02_DNSKEY_NOT_SEP DS02_NO_DNSKEY_FOR_DS DS02_NO_MATCH_DS_DNSKEY DS02_NO_VALID_DNSKEY_FOR_ANY_DS}] );
-
-###########
-# dnssec03
-###########
-$zone = Zonemaster::Engine->zone( 'dnssec03-many-iterations.zut-root.rd.nic.fr' );
-zone_gives( 'dnssec03', $zone, [q{MANY_ITERATIONS}] );
-
-$zone = Zonemaster::Engine->zone( 'dnssec03-no-nsec3param.zut-root.rd.nic.fr' );
-zone_gives( 'dnssec03', $zone, [q{NO_NSEC3PARAM}] );
-
-$zone = Zonemaster::Engine->zone( 'dnssec03-too-many-iterations.zut-root.rd.nic.fr' );
-zone_gives( 'dnssec03', $zone, [q{TOO_MANY_ITERATIONS}] );
 
 ###########
 # dnssec04

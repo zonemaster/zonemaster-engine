@@ -79,14 +79,6 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # SYSTEM:SKIP_IPV6_DISABLED
           "IPv6 is disabled, not sending \"{rrtype}\" query to {ns}.", @_;
     },
-    FAKE_DELEGATION => sub {
-        __x    # SYSTEM:FAKE_DELEGATION
-          "Followed a fake delegation.";
-    },
-    ADDED_FAKE_DELEGATION => sub {
-        __x    # SYSTEM:ADDED_FAKE_DELEGATION
-          "Added a fake delegation for domain {domain} to name server {ns}.", @_;
-    },
     FAKE_DELEGATION_TO_SELF => sub {
         __x    # SYSTEM:FAKE_DELEGATION_TO_SELF
           "Name server {ns} not adding fake delegation for domain {domain} to itself.", @_;
@@ -174,10 +166,10 @@ sub _load_data {
 sub _build_all_tag_descriptions {
     my %all_tag_descriptions;
 
-    $all_tag_descriptions{SYSTEM} = \%TAG_DESCRIPTIONS;
+    $all_tag_descriptions{System} = \%TAG_DESCRIPTIONS;
     foreach my $mod ( 'Basic', Zonemaster::Engine->modules ) {
         my $module = 'Zonemaster::Engine::Test::' . $mod;
-        $all_tag_descriptions{ uc( $mod ) } = $module->tag_descriptions;
+        $all_tag_descriptions{ $mod } = $module->tag_descriptions;
     }
 
     return \%all_tag_descriptions;
@@ -238,11 +230,10 @@ sub translate_tag {
 sub test_case_description {
     my ( $self, $test_name ) = @_;
 
-    $test_name = uc $test_name;
     my $module = $test_name;
     $module =~ s/\d+$//;
 
-    return $self->_translate_tag( $module, $test_name, {} ) // $test_name;
+    return $self->_translate_tag( $module, uc $test_name, {} ) // $test_name;
 }
 
 sub _translate_tag {

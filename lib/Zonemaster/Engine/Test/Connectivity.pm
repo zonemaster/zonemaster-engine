@@ -18,9 +18,31 @@ use Zonemaster::Engine::Constants qw[:ip];
 use Zonemaster::Engine::TestMethods;
 use Zonemaster::Engine::Util;
 
-###
-### Entry Points
-###
+=head1 NAME
+
+Zonemaster::Engine::Test::Connectivity - Module implementing tests focused on name servers reachability
+
+=head1 SYNOPSIS
+
+    my @results = Zonemaster::Engine::Test::Connectivity->all( $zone );
+
+=head1 METHODS
+
+=over
+
+=item all()
+
+    my @array = all( $zone );
+
+Runs the default set of tests for that module, i.e. L<four tests|/TESTS>.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
 
 sub all {
     my ( $class, $zone ) = @_;
@@ -42,9 +64,18 @@ sub all {
     return @results;
 }
 
-###
-### Metadata Exposure
-###
+=over
+
+=item metadata()
+
+    my $hash_ref = metadata();
+
+Returns a reference to a hash, the keys of which are the names of all Test Cases in the module, and the corresponding values are references to
+an array containing all the message tags that the Test Case can use in L<log entries|Zonemaster::Engine::Logger::Entry>.
+
+=back
+
+=cut
 
 sub metadata {
     my ( $class ) = @_;
@@ -341,20 +372,83 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
 );
 
+=over
+
+=item tag_descriptions()
+
+    my $hash_ref = tag_descriptions();
+
+Used by the L<built-in translation system|Zonemaster::Engine::Translator>.
+
+Returns a reference to a hash, the keys of which are the message tags and the corresponding values are strings (message ids).
+
+=back
+
+=cut
+
 sub tag_descriptions {
     return \%TAG_DESCRIPTIONS;
 }
 
+=over
+
+=item version()
+
+    my $string = version();
+
+Returns a string containing the version of the current module.
+
+=back
+
+=cut
+
 sub version {
     return "$Zonemaster::Engine::Test::Connectivity::VERSION";
 }
+
+=head1 INTERNAL METHODS
+
+=over
+
+=item _emit_log()
+
+    my $log_entry = _emit_log( $message_tag_string, $hash_ref );
+
+Adds a message to the L<logger|Zonemaster::Engine::Logger> for this module.
+See L<Zonemaster::Engine::Logger::Entry/add($tag, $argref, $module, $testcase)> for more details.
+
+Takes a string (message tag) and a reference to a hash (arguments).
+
+Returns a L<Zonemaster::Engine::Logger::Entry> object.
+
+=back
+
+=cut
+
+sub _emit_log { my ( $tag, $argref ) = @_; return Zonemaster::Engine->logger->add( $tag, $argref, 'Connectivity' ); }
+
+=over
+
+=item _ip_disabled_message()
+
+    my $bool = _ip_disabled_message( $logentry_array_ref, $ns, @query_type_array );
+
+Checks if the IP version of a given name server is allowed to be queried. If not, it adds a logging message and returns true. Else, it returns false.
+
+Takes a reference to an array of L<Zonemaster::Engine::Logger::Entry> objects, a L<Zonemaster::Engine::Nameserver> object and an array of strings (query type).
+
+Returns a boolean.
+
+=back
+
+=cut
 
 sub _ip_disabled_message {
     my ( $results_array, $ns, @rrtypes ) = @_;
 
     if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
         push @$results_array, map {
-          info(
+          _emit_log(
             IPV6_DISABLED => {
                 ns     => $ns->string,
                 rrtype => $_
@@ -366,7 +460,7 @@ sub _ip_disabled_message {
 
     if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
         push @$results_array, map {
-          info(
+          _emit_log(
             IPV4_DISABLED => {
                 ns     => $ns->string,
                 rrtype => $_,
@@ -378,9 +472,21 @@ sub _ip_disabled_message {
     return 0;
 }
 
-###
-### Tests
-###
+=over
+
+=item _connectivity_loop()
+
+    _connectivity_loop( $testcase_string, $zone_name, $ns_array_ref, $logentry_array_ref );
+
+Verifies name servers reachability. Used as an helper function for Test Cases L<Connectivity01/connectivity01()>
+and L<Connectivity02/connectivity02()>.
+
+Takes a string (test case identifier), a L<Zonemaster::Engine::DNSName> object, a reference to an array of L<Zonemaster::Engine::Nameserver>
+objects and a reference to an array of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
 
 sub _connectivity_loop {
     my ( $testcase, $name, $ns_list, $results ) = @_;
@@ -403,7 +509,7 @@ sub _connectivity_loop {
         );
 
         if ( not $packets{SOA} and not $packets{NS} ) {
-            push @$results, info( "${testcase_prefix}_NO_RESPONSE_${protocol}" => { ns => $ns->string } );
+            push @$results, _emit_log( "${testcase_prefix}_NO_RESPONSE_${protocol}" => { ns => $ns->string } );
             next;
         }
 
@@ -411,10 +517,10 @@ sub _connectivity_loop {
             my $pkt = $packets{$qtype};
 
             if ( not $pkt ) {
-                push @$results, info( "${testcase_prefix}_NO_RESPONSE_${qtype}_QUERY_${protocol}" => { ns => $ns->string } );
+                push @$results, _emit_log( "${testcase_prefix}_NO_RESPONSE_${qtype}_QUERY_${protocol}" => { ns => $ns->string } );
             }
             elsif ( $pkt->rcode ne q{NOERROR} ) {
-                push @$results, info( "${testcase_prefix}_UNEXPECTED_RCODE_${qtype}_QUERY_${protocol}" => {
+                push @$results, _emit_log( "${testcase_prefix}_UNEXPECTED_RCODE_${qtype}_QUERY_${protocol}" => {
                         ns    => $ns->string,
                         rcode => $pkt->rcode
                     }
@@ -423,10 +529,10 @@ sub _connectivity_loop {
             else {
                 my ( $rr ) = $pkt->get_records( $qtype, q{answer} );
                 if ( not $rr ) {
-                    push @$results, info( "${testcase_prefix}_MISSING_${qtype}_RECORD_${protocol}" => { ns => $ns->string } );
+                    push @$results, _emit_log( "${testcase_prefix}_MISSING_${qtype}_RECORD_${protocol}" => { ns => $ns->string } );
                 }
                 elsif ( lc($rr->owner) ne lc($name->fqdn) ) {
-                    push @$results, info( "${testcase_prefix}_WRONG_${qtype}_RECORD_${protocol}" => {
+                    push @$results, _emit_log( "${testcase_prefix}_WRONG_${qtype}_RECORD_${protocol}" => {
                             ns              => $ns->string,
                             domain_found    => lc($rr->owner),
                             domain_expected => lc($name->fqdn)
@@ -434,16 +540,36 @@ sub _connectivity_loop {
                     );
                 }
                 elsif ( not $pkt->aa ) {
-                    push @$results, info( "${testcase_prefix}_${qtype}_RECORD_NOT_AA_${protocol}" => { ns => $ns->string } );
+                    push @$results, _emit_log( "${testcase_prefix}_${qtype}_RECORD_NOT_AA_${protocol}" => { ns => $ns->string } );
                 }
             }
         }
     }
 }
 
+=head1 TESTS
+
+=over
+
+=item connectivity01()
+
+    my @logentry_array = connectivity01( $zone );
+
+Runs the L<Connectivity01 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Connectivity-TP/connectivity01.md>.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
+
 sub connectivity01 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Connectivity01';
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
     my $name = name( $zone );
     my @ns_list = @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) };
 
@@ -458,31 +584,67 @@ sub connectivity01 {
         }
     }
     if ( @ns_ipv4 ) {
-        push @results, info( "CN01_IPV4_DISABLED" => { ns_list => join( ';', @ns_ipv4 ) } );
+        push @results, _emit_log( "CN01_IPV4_DISABLED" => { ns_list => join( ';', @ns_ipv4 ) } );
     }
     if ( @ns_ipv6 ) {
-        push @results, info( "CN01_IPV6_DISABLED" => { ns_list => join( ';', @ns_ipv6 ) } );
+        push @results, _emit_log( "CN01_IPV6_DISABLED" => { ns_list => join( ';', @ns_ipv6 ) } );
     }
 
     _connectivity_loop("connectivity01", $name, \@ns_list, \@results);
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub connectivity01
+
+=over
+
+=item connectivity02()
+
+    my @logentry_array = connectivity02( $zone );
+
+Runs the L<Connectivity02 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Connectivity-TP/connectivity02.md>.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
 
 sub connectivity02 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Connectivity02';
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
     my $name = name( $zone );
     my @ns_list = @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) };
 
     _connectivity_loop("connectivity02", $name, \@ns_list, \@results);
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub connectivity02
+
+=over
+
+=item connectivity03()
+
+    my @logentry_array = connectivity03( $zone );
+
+Runs the L<Connectivity03 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Connectivity-TP/connectivity03.md>.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
 
 sub connectivity03 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Connectivity03';
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     my %ips = ( $IP_VERSION_4 => {}, $IP_VERSION_6 => {} );
 
@@ -502,12 +664,12 @@ sub connectivity03 {
     foreach my $v4ip ( @v4ips ) {
         my ( $asnref, $prefix, $raw, $ret_code ) = Zonemaster::Engine::ASNLookup->get_with_prefix( $v4ip );
         if ( defined $ret_code and ( $ret_code eq q{ERROR_ASN_DATABASE} or $ret_code eq q{EMPTY_ASN_SET} ) ) {
-            push @results, info( $ret_code => { ns_ip => $v4ip->short } );
+            push @results, _emit_log( $ret_code => { ns_ip => $v4ip->short } );
         }
         else {
             if ( $raw ) {
                 push @results,
-                  info(
+                  _emit_log(
                     ASN_INFOS_RAW => {
                         ns_ip => $v4ip->short,
                         data  => $raw,
@@ -516,7 +678,7 @@ sub connectivity03 {
             }
             if ( $asnref ) {
                 push @results,
-                  info(
+                  _emit_log(
                     ASN_INFOS_ANNOUNCE_BY => {
                         ns_ip => $v4ip->short,
                         asn   => join( q{,}, sort @{$asnref} ),
@@ -527,7 +689,7 @@ sub connectivity03 {
             }
             if ( $prefix ) {
                 push @results,
-                  info(
+                  _emit_log(
                     ASN_INFOS_ANNOUNCE_IN => {
                         ns_ip  => $v4ip->short,
                         prefix => sprintf "%s/%d",
@@ -540,12 +702,12 @@ sub connectivity03 {
     foreach my $v6ip ( @v6ips ) {
         my ( $asnref, $prefix, $raw, $ret_code ) = Zonemaster::Engine::ASNLookup->get_with_prefix( $v6ip );
         if ( defined $ret_code and ( $ret_code eq q{ERROR_ASN_DATABASE} or $ret_code eq q{EMPTY_ASN_SET} ) ) {
-            push @results, info( $ret_code => { ns_ip => $v6ip->short } );
+            push @results, _emit_log( $ret_code => { ns_ip => $v6ip->short } );
         }
         else {
             if ( $raw ) {
                 push @results,
-                  info(
+                  _emit_log(
                     ASN_INFOS_RAW => {
                         ns_ip => $v6ip->short,
                         data  => $raw,
@@ -554,7 +716,7 @@ sub connectivity03 {
             }
             if ( $asnref ) {
                 push @results,
-                  info(
+                  _emit_log(
                     ASN_INFOS_ANNOUNCE_BY => {
                         ns_ip => $v6ip->short,
                         asn   => join( q{,}, sort @{$asnref} ),
@@ -565,7 +727,7 @@ sub connectivity03 {
             }
             if ( $prefix ) {
                 push @results,
-                  info(
+                  _emit_log(
                     ASN_INFOS_ANNOUNCE_IN => {
                         ns_ip  => $v6ip->short,
                         prefix => sprintf "%s/%d",
@@ -583,34 +745,52 @@ sub connectivity03 {
 
     if ( scalar @v4asns ) {
         if ( @v4asns == 1 ) {
-            push @results, info( IPV4_ONE_ASN => { asn => $v4asns[0] } );
+            push @results, _emit_log( IPV4_ONE_ASN => { asn => $v4asns[0] } );
         }
         elsif ( @v4asnsets == 1 ) {
-            push @results, info( IPV4_SAME_ASN => { asn_list => $v4asnsets[0] } );
+            push @results, _emit_log( IPV4_SAME_ASN => { asn_list => $v4asnsets[0] } );
         }
         else {
-            push @results, info( IPV4_DIFFERENT_ASN => { asn_list => join( q{,}, @v4asns ) } );
+            push @results, _emit_log( IPV4_DIFFERENT_ASN => { asn_list => join( q{,}, @v4asns ) } );
         }
     }
 
     if ( scalar @v6asns ) {
         if ( @v6asns == 1 ) {
-            push @results, info( IPV6_ONE_ASN => { asn => $v6asns[0] } );
+            push @results, _emit_log( IPV6_ONE_ASN => { asn => $v6asns[0] } );
         }
         elsif ( @v6asnsets == 1 ) {
-            push @results, info( IPV6_SAME_ASN => { asn_list => $v6asnsets[0] } );
+            push @results, _emit_log( IPV6_SAME_ASN => { asn_list => $v6asnsets[0] } );
         }
         else {
-            push @results, info( IPV6_DIFFERENT_ASN => { asn_list => join( q{,}, @v6asns ) } );
+            push @results, _emit_log( IPV6_DIFFERENT_ASN => { asn_list => join( q{,}, @v6asns ) } );
         }
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub connectivity03
+
+=over
+
+=item connectivity04()
+
+    my @logentry_array = connectivity04( $zone );
+
+Runs the L<Connectivity04 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Connectivity-TP/connectivity04.md>.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
 
 sub connectivity04 {
     my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Connectivity04';
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     my %prefixes;
 
@@ -626,12 +806,12 @@ sub connectivity04 {
                 $ret_code = 'CN04_EMPTY_PREFIX_SET';
             }
 
-            push @results, info( $ret_code => { ns_ip => $ip->short } );
+            push @results, _emit_log( $ret_code => { ns_ip => $ip->short } );
         }
         else {
             if ( $raw ) {
                 push @results,
-                  info(
+                  _emit_log(
                     CN04_ASN_INFOS_RAW => {
                         ns_ip => $ip->short,
                         data  => $raw,
@@ -653,7 +833,7 @@ sub connectivity04 {
                 }
 
                 push @results,
-                  info(
+                  _emit_log(
                     CN04_ASN_INFOS_ANNOUNCE_IN => {
                         ns_ip  => $ip->short,
                         prefix => sprintf "%s", $prefix_str,
@@ -674,7 +854,7 @@ sub connectivity04 {
             }
             elsif ( scalar @{ $prefixes{$ip_version}{$prefix} } >= 2 ) {
                 push @results,
-                  info(
+                  _emit_log(
                     "CN04_IPV${ip_version}_SAME_PREFIX" => {
                         ip_prefix => $prefix,
                         ns_list => join( q{;}, sort @{ $prefixes{$ip_version}{$prefix} } )
@@ -685,7 +865,7 @@ sub connectivity04 {
 
         if ( scalar @combined_ns ) {
             push @results,
-              info(
+              _emit_log(
                 "CN04_IPV${ip_version}_DIFFERENT_PREFIX" => {
                     ns_list => join( q{;}, sort @combined_ns )
                 }
@@ -693,62 +873,7 @@ sub connectivity04 {
         }
     }
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub connectivity04
 
 1;
-
-=head1 NAME
-
-Zonemaster::Engine::Test::Connectivity - module implementing tests of nameservers reachability
-
-=head1 SYNOPSIS
-
-    my @results = Zonemaster::Engine::Test::Connectivity->all($zone);
-
-=head1 METHODS
-
-=over
-
-=item all($zone)
-
-Runs the default set of tests and returns a list of log entries made by the tests
-
-=item metadata()
-
-Returns a reference to a hash, the keys of which are the names of all test methods in the module, and the corresponding values are references to
-lists with all the tags that the method can use in log entries.
-
-=item tag_descriptions()
-
-Returns a refernce to a hash with translation functions. Used by the builtin translation system.
-
-=item version()
-
-Returns a version string for the module.
-
-=back
-
-=head1 TESTS
-
-=over
-
-=item connectivity01($zone)
-
-Verify nameservers UDP port 53 reachability.
-
-=item connectivity02($zone)
-
-Verify nameservers TCP port 53 reachability.
-
-=item connectivity03($zone)
-
-Verify that all nameservers do not belong to the same AS.
-
-=item connectivity04($zone)
-
-Verify that name servers are not announced in the same IP prefix.
-
-=back
-
-=cut

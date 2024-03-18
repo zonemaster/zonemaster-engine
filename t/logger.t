@@ -16,7 +16,7 @@ isa_ok( $log, 'Zonemaster::Engine::Logger' );
 $log->add( 'TAG', { seventeen => 17 } );
 
 # Make sure all our "policy" comes from our "policy" file.
-my $json         = read_file( "t/policy.json" );
+my $json         = read_file( "t/profiles/policy.json" );
 my $profile_test = Zonemaster::Engine::Profile->from_json( $json );
 my $profile      = Zonemaster::Engine::Profile->default;
 $profile->merge( $profile_test );
@@ -24,7 +24,7 @@ Zonemaster::Engine::Profile->effective->merge( $profile );
 
 my $e = $log->entries->[-1];
 isa_ok( $e, 'Zonemaster::Engine::Logger::Entry' );
-is( $e->module, 'SYSTEM', 'module ok' );
+is( $e->module, 'System', 'module ok' );
 is( $e->tag,    'TAG',    'tag ok' );
 is_deeply( $e->args, { seventeen => 17 }, 'args ok' );
 
@@ -33,10 +33,10 @@ isa_ok( $entry, 'Zonemaster::Engine::Logger::Entry' );
 
 ok( scalar( @{ Zonemaster::Engine->logger->entries } ) >= 2, 'expected number of entries' );
 
-like( "$entry", qr/SYSTEM:UNSPECIFIED:TEST an=argument/, 'stringification overload' );
+like( "$entry", qr/System:Unspecified:TEST an=argument/, 'stringification overload' );
 
 is( $entry->level, 'DEBUG', 'right level' );
-my $example = Zonemaster::Engine::Logger::Entry->new( { module => 'BASIC', tag => 'B02_NS_BROKEN' } );
+my $example = Zonemaster::Engine::Logger::Entry->new({ module => 'Basic', tag => 'B02_NS_BROKEN', testcase => 'Basic02' } );
 is( $example->level,         'ERROR', 'expected level' );
 is( $example->numeric_level, 4,       'expected numeric level' );
 
@@ -70,7 +70,7 @@ is( "$err", 'canary' );
 $log->clear_callback;
 
 Zonemaster::Engine::Logger->reset_config();
-$json = read_file( "t/profile.json" );
+$json = read_file( "t/profiles/profile.json" );
 $profile_test  = Zonemaster::Engine::Profile->from_json( $json );
 ok( Zonemaster::Engine::Profile->effective->merge( $profile_test ), 'profile loaded' );
 $log->add( FILTER_THIS => { when => 1, and => 'this' } );
@@ -101,7 +101,7 @@ qr[[{"args":{"exception":"in callback at t/logger.t line 47, <DATA> line 1.\n"},
 
 Zonemaster::Engine::Logger->reset_config();
 Zonemaster::Engine::Profile->effective->set( q{test_levels}, {"BASIC" => {"B02_NS_BROKEN" => "GURKSALLAD" }});
-my $fail = Zonemaster::Engine::Logger::Entry->new( { module => 'BASIC', tag => 'B02_NS_BROKEN' } );
+my $fail = Zonemaster::Engine::Logger::Entry->new( { module => 'Basic', tag => 'B02_NS_BROKEN', testcase => 'Basic02' } );
 like( exception { $fail->level }, qr/Unknown level string: GURKSALLAD/, 'Dies on unknown level string' );
 
 done_testing;

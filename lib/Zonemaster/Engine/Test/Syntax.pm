@@ -23,24 +23,47 @@ use Zonemaster::Engine::TestMethods;
 use Zonemaster::Engine::Util;
 use Zonemaster::LDNS;
 
-###
-### Entry points
-###
+=head1 NAME
+
+Zonemaster::Engine::Test::Syntax - Module implementing tests focused on validating the syntax of host names and other data
+
+=head1 SYNOPSIS
+
+    my @results = Zonemaster::Engine::Test::Syntax->all( $zone );
+
+=head1 METHODS
+
+=over
+
+=item all()
+
+    my @logentry_array = all( $zone );
+
+Runs the default set of tests for that module, i.e. between L<three and eight tests|/TESTS> depending on the tested zone.
+If L<Syntax01|/syntax01()> passes, the remaining tests are run.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
 
 sub all {
     my ( $class, $zone ) = @_;
     my @results;
 
-    push @results, $class->syntax01( $zone->name ) if Zonemaster::Engine::Util::should_run_test( q{syntax01} );
-    push @results, $class->syntax02( $zone->name ) if Zonemaster::Engine::Util::should_run_test( q{syntax02} );
-    push @results, $class->syntax03( $zone->name ) if Zonemaster::Engine::Util::should_run_test( q{syntax03} );
+    push @results, $class->syntax01( $zone ) if Zonemaster::Engine::Util::should_run_test( q{syntax01} );
+    push @results, $class->syntax02( $zone ) if Zonemaster::Engine::Util::should_run_test( q{syntax02} );
+    push @results, $class->syntax03( $zone ) if Zonemaster::Engine::Util::should_run_test( q{syntax03} );
 
     if ( any { $_->tag eq q{ONLY_ALLOWED_CHARS} } @results ) {
 
-        foreach my $local_nsname ( uniq map { $_->string } @{ Zonemaster::Engine::TestMethods->method2( $zone ) },
+        foreach my $local_nsname ( uniq map { $_ } @{ Zonemaster::Engine::TestMethods->method2( $zone ) },
             @{ Zonemaster::Engine::TestMethods->method3( $zone ) } )
         {
-            push @results, $class->syntax04( $local_nsname )
+            push @results, $class->syntax04( Zonemaster::Engine->zone( $local_nsname ) )
               if Zonemaster::Engine::Util::should_run_test( q{syntax04} );
         }
 
@@ -58,9 +81,18 @@ sub all {
     return @results;
 } ## end sub all
 
-###
-### Metadata Exposure
-###
+=over
+
+=item metadata()
+
+    my $hash_ref = metadata();
+
+Returns a reference to a hash, the keys of which are the names of all Test Cases in the module, and the corresponding values are references to
+an array containing all the message tags that the Test Case can use in L<log entries|Zonemaster::Engine::Logger::Entry>.
+
+=back
+
+=cut
 
 sub metadata {
     my ( $class ) = @_;
@@ -325,20 +357,83 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
 );
 
+=over
+
+=item tag_descriptions()
+
+    my $hash_ref = tag_descriptions();
+
+Used by the L<built-in translation system|Zonemaster::Engine::Translator>.
+
+Returns a reference to a hash, the keys of which are the message tags and the corresponding values are strings (message IDs).
+
+=back
+
+=cut
+
 sub tag_descriptions {
     return \%TAG_DESCRIPTIONS;
 }
 
+=over
+
+=item version()
+
+    my $version_string = version();
+
+Returns a string containing the version of the current module.
+
+=back
+
+=cut
+
 sub version {
     return "$Zonemaster::Engine::Test::Syntax::VERSION";
 }
+
+=head1 INTERNAL METHODS
+
+=over
+
+=item _emit_log()
+
+    my $log_entry = _emit_log( $message_tag_string, $hash_ref );
+
+Adds a message to the L<logger|Zonemaster::Engine::Logger> for this module.
+See L<Zonemaster::Engine::Logger::Entry/add($tag, $argref, $module, $testcase)> for more details.
+
+Takes a string (message tag) and a reference to a hash (arguments).
+
+Returns a L<Zonemaster::Engine::Logger::Entry> object.
+
+=back
+
+=cut
+
+sub _emit_log { my ( $tag, $argref ) = @_; return Zonemaster::Engine->logger->add( $tag, $argref, 'Syntax' ); }
+
+=over
+
+=item _ip_disabled_message()
+
+    my $bool = _ip_disabled_message( $logentry_array_ref, $ns, @query_type_array );
+
+Checks if the IP version of a given name server is allowed to be queried. If not, it adds a logging message and returns true. Else, it returns false.
+
+Takes a reference to an array of L<Zonemaster::Engine::Logger::Entry> objects, a L<Zonemaster::Engine::Nameserver> object and an array of strings (query type).
+
+Returns a boolean.
+
+=back
+
+=cut
 
 sub _ip_disabled_message {
     my ( $results_array, $ns, @rrtypes ) = @_;
 
     if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
         push @$results_array, map {
-          info(
+          _emit_log(
             IPV6_DISABLED => {
                 ns     => $ns->string,
                 rrtype => $_
@@ -350,7 +445,7 @@ sub _ip_disabled_message {
 
     if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
         push @$results_array, map {
-          info(
+          _emit_log(
             IPV4_DISABLED => {
                 ns     => $ns->string,
                 rrtype => $_,
@@ -362,327 +457,21 @@ sub _ip_disabled_message {
     return 0;
 }
 
-###
-### Tests
-###
+=over
 
-sub syntax01 {
-    my ( $class, $item ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+=item _name_has_only_legal_characters()
 
-    my $name = get_name( $item );
+    my $bool = _name_has_only_legal_characters( $name );
 
-    if ( _name_has_only_legal_characters( $name ) ) {
-        push @results,
-          info(
-            ONLY_ALLOWED_CHARS => {
-                domain => $name,
-            }
-          );
-    }
-    else {
-        push @results,
-          info(
-            NON_ALLOWED_CHARS => {
-                domain => $name,
-            }
-          );
-    }
+Checks if a given name contains only allowed characters.
 
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
-} ## end sub syntax01
+Takes a L<Zonemaster::Engine::DNSName> object.
 
-sub syntax02 {
-    my ( $class, $item ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
+Returns a boolean.
 
-    my $name = get_name( $item );
+=back
 
-    foreach my $local_label ( @{ $name->labels } ) {
-        if ( _label_starts_with_hyphen( $local_label ) ) {
-            push @results,
-              info(
-                INITIAL_HYPHEN => {
-                    label  => $local_label,
-                    domain => $name,
-                }
-              );
-        }
-        if ( _label_ends_with_hyphen( $local_label ) ) {
-            push @results,
-              info(
-                TERMINAL_HYPHEN => {
-                    label  => $local_label,
-                    domain => $name,
-                }
-              );
-        }
-    } ## end foreach my $local_label ( @...)
-
-    if ( scalar @{ $name->labels } and not grep { $_->tag ne q{TEST_CASE_START} } @results ) {
-        push @results,
-          info(
-            NO_ENDING_HYPHENS => {
-                domain => $name,
-            }
-          );
-    }
-
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
-} ## end sub syntax02
-
-sub syntax03 {
-    my ( $class, $item ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
-
-    my $name = get_name( $item );
-
-    foreach my $local_label ( @{ $name->labels } ) {
-        if ( _label_not_ace_has_double_hyphen_in_position_3_and_4( $local_label ) ) {
-            push @results,
-              info(
-                DISCOURAGED_DOUBLE_DASH => {
-                    label  => $local_label,
-                    domain => $name,
-                }
-              );
-        }
-    }
-
-    if ( scalar @{ $name->labels } and not grep { $_->tag ne q{TEST_CASE_START} } @results ) {
-        push @results,
-          info(
-            NO_DOUBLE_DASH => {
-                domain => $name,
-            }
-          );
-    }
-
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
-} ## end sub syntax03
-
-sub syntax04 {
-    my ( $class, $item ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
-
-    my $name = get_name( $item );
-
-    push @results, check_name_syntax( q{NAMESERVER}, $name );
-
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
-}
-
-sub syntax05 {
-    my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
-
-    my $p = $zone->query_one( $zone->name, q{SOA} );
-
-    if ( $p and my ( $soa ) = $p->get_records( q{SOA}, q{answer} ) ) {
-        my $rname = $soa->rname;
-        $rname =~ s/\\./\./smgx;
-        if ( index( $rname, q{@} ) != -1 ) {
-            push @results,
-              info(
-                RNAME_MISUSED_AT_SIGN => {
-                    rname => $soa->rname,
-                }
-              );
-        }
-        else {
-            push @results,
-              info(
-                RNAME_NO_AT_SIGN => {
-                    rname => $soa->rname,
-                }
-              );
-        }
-    } ## end if ( $p and my ( $soa ...))
-    else {
-        push @results, info( NO_RESPONSE_SOA_QUERY => {} );
-    }
-
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
-} ## end sub syntax05
-
-sub syntax06 {
-    my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
-
-    my @nss;
-    {
-        my %nss = map { $_->string => $_ }
-          @{ Zonemaster::Engine::TestMethods->method4( $zone ) },
-          @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
-        @nss = sort values %nss;
-    }
-
-    my %seen_rnames;
-    for my $ns ( @nss ) {
-
-        if ( _ip_disabled_message( \@results, $ns, q{SOA} ) ) {
-            next;
-        }
-
-        my $p = $ns->query( $zone->name, q{SOA}, { recurse => 0, usevc => 0 } );
-
-        if ( not $p ) {
-            push @results,
-              info(
-                NO_RESPONSE => {
-                    ns     => $ns->string,
-                    domain => $zone->name,
-                }
-              );
-            next;
-        }
-
-        my ( $soa ) = $p->get_records( q{SOA}, q{answer} );
-
-        if ( not $soa ) {
-            push @results, info( NO_RESPONSE_SOA_QUERY => {} );
-            next;
-        }
-
-        my $rname = $soa->rname;
-        $rname =~ s/([^\\])[.]/$1@/smx;    # Replace first non-escaped dot with an at-sign
-        $rname =~ s/[\\][.]/./smgx;        # Un-escape dots
-        $rname =~ s/[.]\z//smgx;           # Validator does not like final dots
-        if ( not Email::Valid->address( $rname ) ) {
-            push @results,
-              info(
-                RNAME_RFC822_INVALID => {
-                    rname => $rname,
-                }
-              );
-            next;
-        }
-
-        my $domain = ( $rname =~ s/.*@//r );
-        my $p_mx = Zonemaster::Engine::Recursor->recurse( $domain, q{MX} );
-        if ( not $p_mx or $p_mx->rcode ne 'NOERROR' ) {
-            push @results, info( RNAME_MAIL_DOMAIN_INVALID => { domain => $domain } );
-            next;
-        }
-
-        # Follow CNAMEs in the MX response
-        my %cnames =
-          map { $_->owner => $_->cname } $p_mx->get_records( q{CNAME}, q{answer} );
-        $domain .= q{.};    # Add back final dot
-        $domain = $cnames{$domain} while $cnames{$domain};
-
-        # Determine mail domain(s)
-        my @mail_domains;
-        if ( my @mxs = $p_mx->get_records_for_name( q{MX}, $domain ) ) {
-            @mail_domains = map { $_->exchange } @mxs;
-        }
-        else {
-            @mail_domains = ( $domain );
-        }
-
-        for my $mail_domain ( @mail_domains ) {
-
-            # Assume mail domain is invalid until we see an actual IP address
-            my $exchange_valid = 0;
-
-            # Lookup IPv4 address for mail server
-            my $p_a = Zonemaster::Engine::Recursor->recurse( $mail_domain, q{A} );
-            if ( $p_a ) {
-                if ( $p_a->get_records( q{CNAME}, q{answer} ) ) {
-                    push @results, info( RNAME_MAIL_ILLEGAL_CNAME => { domain => $mail_domain } );
-                }
-                else {
-                    my @rrs_a = grep { $_->owner eq $mail_domain } $p_a->get_records( q{A}, q{answer} );
-
-                    if ( grep { $_->address eq q{127.0.0.1} } @rrs_a ) {
-                        push @results, info( RNAME_MAIL_DOMAIN_LOCALHOST => { domain => $mail_domain, localhost => q{127.0.0.1} } );
-                    }
-                    elsif ( @rrs_a ) {
-                        $exchange_valid = 1;
-                    }
-                }
-            }
-
-            # Lookup IPv6 address for mail domain
-            my $p_aaaa = Zonemaster::Engine::Recursor->recurse( $mail_domain, q{AAAA} );
-            if ( $p_aaaa ) {
-                if ( $p_aaaa->get_records( q{CNAME}, q{answer} ) ) {
-                    push @results, info( RNAME_MAIL_ILLEGAL_CNAME => { domain => $mail_domain } );
-                }
-                else {
-                    my @rrs_aaaa = grep { $_->owner eq $mail_domain } $p_aaaa->get_records( q{AAAA}, q{answer} );
-
-                    if ( grep { $_->address eq q{::1} } @rrs_aaaa) {
-                        push @results, info( RNAME_MAIL_DOMAIN_LOCALHOST => { domain => $mail_domain, localhost => q{::1} } );
-                    }
-                    elsif ( @rrs_aaaa ) {
-                        $exchange_valid = 1;
-                    }
-                }
-            }
-
-            # Emit verdict for mail domain
-            if ( $exchange_valid ) {
-                if ( !exists $seen_rnames{$rname} ) {
-                    $seen_rnames{$rname} = 1;
-                    push @results,
-                      info(
-                        RNAME_RFC822_VALID => {
-                            rname => $rname,
-                        }
-                      );
-                }
-            }
-            else {
-                push @results, info( RNAME_MAIL_DOMAIN_INVALID => { domain => $mail_domain } );
-            }
-        } ## end for my $mail_domain ( @mail_domains)
-
-    } ## end for my $ns ( @nss )
-
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
-} ## end sub syntax06
-
-sub syntax07 {
-    my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
-
-    my $p = $zone->query_one( $zone->name, q{SOA} );
-
-    if ( $p and my ( $soa ) = $p->get_records( q{SOA}, q{answer} ) ) {
-        my $mname = $soa->mname;
-
-        push @results, check_name_syntax( q{MNAME}, $mname );
-    }
-    else {
-        push @results, info( NO_RESPONSE_SOA_QUERY => {} );
-    }
-
-    return ( @results, info( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
-}
-
-sub syntax08 {
-    my ( $class, $zone ) = @_;
-    push my @results, info( TEST_CASE_START => { testcase => (split /::/, (caller(0))[3])[-1] } );
-
-    my $p = $zone->query_one( $zone->name, q{MX} );
-
-    if ( $p ) {
-        my %mx = map { $_->exchange => 1 } $p->get_records( q{MX}, q{answer} );
-        foreach my $mx ( sort keys %mx ) {
-            push @results, check_name_syntax( q{MX}, $mx );
-        }
-    }
-    else {
-        push @results, info( NO_RESPONSE_MX_QUERY => {} );
-    }
-
-    return @results;
-}
-
-###
-### Internal Tests with Boolean (0|1) return value.
-###
+=cut
 
 sub _name_has_only_legal_characters {
     my ( $name ) = @_;
@@ -694,6 +483,22 @@ sub _name_has_only_legal_characters {
         return 0;
     }
 }
+
+=over
+
+=item _label_starts_with_hyphen()
+
+    my $bool = _label_starts_with_hyphen( $name );
+
+Checks if a given name starts with an hyphen ('-').
+
+Takes a L<Zonemaster::Engine::DNSName> object.
+
+Returns a boolean.
+
+=back
+
+=cut
 
 sub _label_starts_with_hyphen {
     my ( $label ) = @_;
@@ -708,6 +513,22 @@ sub _label_starts_with_hyphen {
     }
 }
 
+=over
+
+=item _label_ends_with_hyphen()
+
+    my $bool = _label_ends_with_hyphen( $name );
+
+Checks if a given name ends with an hyphen ('-').
+
+Takes a L<Zonemaster::Engine::DNSName> object.
+
+Returns a boolean.
+
+=back
+
+=cut
+
 sub _label_ends_with_hyphen {
     my ( $label ) = @_;
 
@@ -720,6 +541,22 @@ sub _label_ends_with_hyphen {
         return 0;
     }
 }
+
+=over
+
+=item _label_not_ace_has_double_hyphen_in_position_3_and_4()
+
+    my $bool = _label_not_ace_has_double_hyphen_in_position_3_and_4( $name );
+
+Checks if a given name does not contain a double hyphen ('--'), with the exception of 'xn--'.
+
+Takes a L<Zonemaster::Engine::DNSName> object.
+
+Returns a boolean.
+
+=back
+
+=cut
 
 sub _label_not_ace_has_double_hyphen_in_position_3_and_4 {
     my ( $label ) = @_;
@@ -734,36 +571,32 @@ sub _label_not_ace_has_double_hyphen_in_position_3_and_4 {
     }
 }
 
-###
-### Common part for syntax04, syntax07 and syntax08
-###
+=over
 
-sub get_name {
-    my ( $item ) = @_;
-    my $name;
+=item _check_name_syntax()
 
-    if ( not ref $item ) {
-        $name = name( $item );
-    }
-    elsif ( ref( $item ) eq q{Zonemaster::Engine::Zone} ) {
-        $name = $item->name;
-    }
-    elsif ( ref( $item ) eq q{Zonemaster::Engine::DNSName} ) {
-        $name = $item;
-    }
+    my @logentry_array = _check_name_syntax( $label_prefix_string, $name );
 
-    return $name;
-}
+Checks the syntax of a given name. Makes use of L</_name_has_only_legal_characters()> and L</_label_not_ace_has_double_hyphen_in_position_3_and_4()>.
+Used as an helper function for Test Cases L<Syntax04|/syntax04()>, L<Syntax07|/syntax07()> and L<Syntax08|/syntax08()>.
 
-sub check_name_syntax {
+Takes a string (label prefix) and either a string (name) or a L<Zonemaster::Engine::DNSName> object.
+
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
+
+sub _check_name_syntax {
     my ( $info_label_prefix, $name ) = @_;
     my @results;
 
-    $name = get_name( $name );
+    $name = Zonemaster::Engine::Util::name( $name );
 
     if ( not _name_has_only_legal_characters( $name ) ) {
         push @results,
-          info(
+          _emit_log(
             $info_label_prefix
               . q{_NON_ALLOWED_CHARS} => {
                 domain => $name,
@@ -772,11 +605,10 @@ sub check_name_syntax {
     }
 
     if ( $name ne q{.} ) {
-
         foreach my $local_label ( @{ $name->labels } ) {
             if ( _label_not_ace_has_double_hyphen_in_position_3_and_4( $local_label ) ) {
                 push @results,
-                  info(
+                  _emit_log(
                     $info_label_prefix
                       . q{_DISCOURAGED_DOUBLE_DASH} => {
                         label  => $local_label,
@@ -789,7 +621,7 @@ sub check_name_syntax {
         my $tld = @{ $name->labels }[-1];
         if ( $tld =~ /\A\d+\z/smgx ) {
             push @results,
-              info(
+              _emit_log(
                 $info_label_prefix
                   . q{_NUMERIC_TLD} => {
                     domain => "$name",
@@ -802,7 +634,7 @@ sub check_name_syntax {
 
     if ( not grep { $_->tag ne q{TEST_CASE_START} } @results ) {
         push @results,
-          info(
+          _emit_log(
             $info_label_prefix
               . q{_SYNTAX_OK} => {
                 domain => "$name",
@@ -811,91 +643,473 @@ sub check_name_syntax {
     }
 
     return @results;
-} ## end sub check_name_syntax
-
-1;
-
-=head1 NAME
-
-Zonemaster::Engine::Test::Syntax - test validating the syntax of host names and other data
-
-=head1 SYNOPSIS
-
-    my @results = Zonemaster::Engine::Test::Syntax->all($zone);
-
-=head1 METHODS
-
-=over
-
-=item all($zone)
-
-Runs the default set of tests and returns a list of log entries made by the tests.
-
-=item tag_descriptions()
-
-Returns a refernce to a hash with translation functions. Used by the builtin translation system.
-
-=item metadata()
-
-Returns a reference to a hash, the keys of which are the names of all test methods in the module, and the corresponding values are references to
-lists with all the tags that the method can use in log entries.
-
-=item version()
-
-Returns a version string for the module.
-
-=back
+} ## end sub _check_name_syntax
 
 =head1 TESTS
 
 =over
 
-=item syntax01($name)
+=item syntax01()
 
-Verifies that the name (Zonemaster::Engine::DNSName) given contains only allowed characters.
+    my @logentry_array = syntax01( $zone );
 
-=item syntax02($name)
+Runs the L<Syntax01 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Syntax-TP/syntax01.md>.
 
-Verifies that the name (Zonemaster::Engine::DNSName) given does not start or end with a hyphen ('-').
+Takes a L<Zonemaster::Engine::Zone> object.
 
-=item syntax03($name)
-
-Verifies that the name (Zonemaster::Engine::DNSName) given does not contain a hyphen in 3rd and 4th position (in the exception of 'xn--').
-
-=item syntax04($name)
-
-Verify that a nameserver (Zonemaster::Engine::DNSName) given is conform to previous syntax rules. It also verify name total length as well as labels.
-
-=item syntax05($zone)
-
-Verify that a SOA rname (Zonemaster::Engine::DNSName) given has a conform usage of at sign (@).
-
-=item syntax06($zone)
-
-Verify that a SOA rname (Zonemaster::Engine::DNSName) given is RFC822 compliant.
-
-=item syntax07($zone)
-
-Verify that SOA mname of zone given is conform to previous syntax rules (syntax01, syntax02, syntax03). It also verify name total length as well as labels.
-
-=item syntax08(@mx_names)
-
-Verify that MX name (Zonemaster::Engine::DNSName) given is conform to previous syntax rules (syntax01, syntax02, syntax03). It also verify name total length as well as labels.
-
-=back
-
-=head1 INTERNAL METHODS
-
-=over
-
-=item get_name($item)
-
-Converts argument to a L<Zonemaster::Engine::DNSName> object.
-
-=item check_name_syntax
-
-Implementation of some tests that are used on several kinds of input.
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 =back
 
 =cut
+
+sub syntax01 {
+    my ( $class, $zone ) = @_;
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Syntax01';
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+
+    my $name = $zone->name;
+
+    if ( _name_has_only_legal_characters( $name ) ) {
+        push @results,
+          _emit_log(
+            ONLY_ALLOWED_CHARS => {
+                domain => $name,
+            }
+          );
+    }
+    else {
+        push @results,
+          _emit_log(
+            NON_ALLOWED_CHARS => {
+                domain => $name,
+            }
+          );
+    }
+
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
+} ## end sub syntax01
+
+=over
+
+=item syntax02()
+
+    my @logentry_array = syntax02( $zone );
+
+Runs the L<Syntax02 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Syntax-TP/syntax02.md>.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
+
+sub syntax02 {
+    my ( $class, $zone ) = @_;
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Syntax02';
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+
+    my $name = $zone->name;
+
+    foreach my $local_label ( @{ $name->labels } ) {
+        if ( _label_starts_with_hyphen( $local_label ) ) {
+            push @results,
+              _emit_log(
+                INITIAL_HYPHEN => {
+                    label  => $local_label,
+                    domain => $name,
+                }
+              );
+        }
+        if ( _label_ends_with_hyphen( $local_label ) ) {
+            push @results,
+              _emit_log(
+                TERMINAL_HYPHEN => {
+                    label  => $local_label,
+                    domain => $name,
+                }
+              );
+        }
+    } ## end foreach my $local_label ( @...)
+
+    if ( scalar @{ $name->labels } and not grep { $_->tag ne q{TEST_CASE_START} } @results ) {
+        push @results,
+          _emit_log(
+            NO_ENDING_HYPHENS => {
+                domain => $name,
+            }
+          );
+    }
+
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
+} ## end sub syntax02
+
+=over
+
+=item syntax03()
+
+    my @logentry_array = syntax03( $zone );
+
+Runs the L<Syntax03 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Syntax-TP/syntax03.md>.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
+
+sub syntax03 {
+    my ( $class, $zone ) = @_;
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Syntax03';
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+
+    my $name = $zone->name;
+
+    foreach my $local_label ( @{ $name->labels } ) {
+        if ( _label_not_ace_has_double_hyphen_in_position_3_and_4( $local_label ) ) {
+            push @results,
+              _emit_log(
+                DISCOURAGED_DOUBLE_DASH => {
+                    label  => $local_label,
+                    domain => $name,
+                }
+              );
+        }
+    }
+
+    if ( scalar @{ $name->labels } and not grep { $_->tag ne q{TEST_CASE_START} } @results ) {
+        push @results,
+          _emit_log(
+            NO_DOUBLE_DASH => {
+                domain => $name,
+            }
+          );
+    }
+
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
+} ## end sub syntax03
+
+=over
+
+=item syntax04()
+
+    my @logentry_array = syntax04( $zone );
+
+Runs the L<Syntax04 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Syntax-TP/syntax04.md>.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
+
+sub syntax04 {
+    my ( $class, $zone ) = @_;
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Syntax04';
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+
+    my $name = $zone->name;
+
+    push @results, _check_name_syntax( q{NAMESERVER}, $name );
+
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
+}
+
+=over
+
+=item syntax05()
+
+    my @logentry_array = syntax05( $zone );
+
+Runs the L<Syntax05 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Syntax-TP/syntax05.md>.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
+
+sub syntax05 {
+    my ( $class, $zone ) = @_;
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Syntax05';
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+
+    my $p = $zone->query_one( $zone->name, q{SOA} );
+
+    if ( $p and my ( $soa ) = $p->get_records( q{SOA}, q{answer} ) ) {
+        my $rname = $soa->rname;
+        $rname =~ s/\\./\./smgx;
+        if ( index( $rname, q{@} ) != -1 ) {
+            push @results,
+              _emit_log(
+                RNAME_MISUSED_AT_SIGN => {
+                    rname => $soa->rname,
+                }
+              );
+        }
+        else {
+            push @results,
+              _emit_log(
+                RNAME_NO_AT_SIGN => {
+                    rname => $soa->rname,
+                }
+              );
+        }
+    } ## end if ( $p and my ( $soa ...))
+    else {
+        push @results, _emit_log( NO_RESPONSE_SOA_QUERY => {} );
+    }
+
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
+} ## end sub syntax05
+
+=over
+
+=item syntax06()
+
+    my @logentry_array = syntax06( $zone );
+
+Runs the L<Syntax06 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Syntax-TP/syntax06.md>.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
+
+sub syntax06 {
+    my ( $class, $zone ) = @_;
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Syntax06';
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+
+    my @nss;
+    {
+        my %nss = map { $_->string => $_ }
+          @{ Zonemaster::Engine::TestMethods->method4( $zone ) },
+          @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
+        @nss = sort values %nss;
+    }
+
+    my %rname_candidates;
+    my %seen_mail_servers;
+    my $invalid_exchanges = undef;
+    for my $ns ( @nss ) {
+        if ( _ip_disabled_message( \@results, $ns, q{SOA} ) ) {
+            next;
+        }
+
+        my $p = $ns->query( $zone->name, q{SOA}, { recurse => 0, usevc => 0 } );
+
+        if ( not $p ) {
+            push @results,
+              _emit_log(
+                NO_RESPONSE => {
+                    ns     => $ns->string,
+                    domain => $zone->name,
+                }
+              );
+            next;
+        }
+
+        my ( $soa ) = $p->get_records( q{SOA}, q{answer} );
+
+        if ( not $soa ) {
+            push @results, _emit_log( NO_RESPONSE_SOA_QUERY => {} );
+            next;
+        }
+
+        my $rname = $soa->rname;
+        $rname =~ s/([^\\])[.]/$1@/smx;    # Replace first non-escaped dot with an at-sign
+        $rname =~ s/[\\][.]/./smgx;        # Un-escape dots
+        $rname =~ s/[.]\z//smgx;           # Validator does not like final dots
+        if ( not Email::Valid->address( $rname ) ) {
+            push @results,
+              _emit_log(
+                RNAME_RFC822_INVALID => {
+                    rname => $rname,
+                }
+              );
+            next;
+        }
+
+        my $domain = ( $rname =~ s/.*@//r );
+        my $p_mx = Zonemaster::Engine::Recursor->recurse( $domain, q{MX} );
+        if ( not $p_mx or $p_mx->rcode ne 'NOERROR' ) {
+            push @results, _emit_log( RNAME_MAIL_DOMAIN_INVALID => { domain => $domain } );
+            next;
+        }
+
+        # Follow CNAMEs in the MX response
+        my %cnames =
+          map { $_->owner => $_->cname } $p_mx->get_records( q{CNAME}, q{answer} );
+        $domain .= q{.};    # Add back final dot
+        $domain = $cnames{$domain} while $cnames{$domain};
+
+        # Determine mail server(s)
+        my @mail_servers;
+        if ( my @mxs = $p_mx->get_records_for_name( q{MX}, $domain ) ) {
+            @mail_servers = uniq( map { $_->exchange } @mxs );
+        }
+        else {
+            @mail_servers = ( $domain );
+        }
+
+        for my $mail_server ( @mail_servers ) {
+            next if $seen_mail_servers{$mail_server};
+            $seen_mail_servers{$mail_server} = 1;
+
+            # Assume mail server is invalid until we see an actual IP address
+            my $exchange_valid = 0;
+            $invalid_exchanges = 0 unless defined $invalid_exchanges;
+
+            # Lookup IPv4 address for mail server
+            my $p_a = Zonemaster::Engine::Recursor->recurse( $mail_server, q{A} );
+            if ( $p_a ) {
+                if ( $p_a->get_records( q{CNAME}, q{answer} ) ) {
+                    push @results, _emit_log( RNAME_MAIL_ILLEGAL_CNAME => { domain => $mail_server } );
+                }
+                else {
+                    my @rrs_a = grep { $_->owner eq $mail_server } $p_a->get_records( q{A}, q{answer} );
+
+                    if ( grep { $_->address eq q{127.0.0.1} } @rrs_a ) {
+                        push @results, _emit_log( RNAME_MAIL_DOMAIN_LOCALHOST => { domain => $mail_server, localhost => q{127.0.0.1} } );
+                    }
+                    elsif ( @rrs_a ) {
+                        $exchange_valid = 1;
+                    }
+                }
+            }
+
+            # Lookup IPv6 address for mail server
+            my $p_aaaa = Zonemaster::Engine::Recursor->recurse( $mail_server, q{AAAA} );
+            if ( $p_aaaa ) {
+                if ( $p_aaaa->get_records( q{CNAME}, q{answer} ) ) {
+                    push @results, _emit_log( RNAME_MAIL_ILLEGAL_CNAME => { domain => $mail_server } );
+                }
+                else {
+                    my @rrs_aaaa = grep { $_->owner eq $mail_server } $p_aaaa->get_records( q{AAAA}, q{answer} );
+
+                    if ( grep { $_->address eq q{::1} } @rrs_aaaa) {
+                        push @results, _emit_log( RNAME_MAIL_DOMAIN_LOCALHOST => { domain => $mail_server, localhost => q{::1} } );
+                    }
+                    elsif ( @rrs_aaaa ) {
+                        $exchange_valid = 1;
+                    }
+                }
+            }
+
+            # Emit verdict for mail server
+            if ( $exchange_valid ) {
+                $rname_candidates{$rname} = 1;
+            }
+            else {
+                push @results, _emit_log( RNAME_MAIL_DOMAIN_INVALID => { domain => $mail_server } );
+                delete $rname_candidates{$rname};
+                $invalid_exchanges++;
+            }
+        } ## end for my $mail_server ( @mail_servers)
+
+    } ## end for my $ns ( @nss )
+
+    if ( defined $invalid_exchanges and $invalid_exchanges == 0 ) {
+        push @results,
+          _emit_log(
+            RNAME_RFC822_VALID => {
+                rname => $_,
+            }
+          ) for keys %rname_candidates;
+    }
+
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+} ## end sub syntax06
+
+=over
+
+=item syntax07()
+
+    my @logentry_array = syntax07( $zone );
+
+Runs the L<Syntax07 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Syntax-TP/syntax07.md>.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
+
+sub syntax07 {
+    my ( $class, $zone ) = @_;
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Syntax07';
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+
+    my $p = $zone->query_one( $zone->name, q{SOA} );
+
+    if ( $p and my ( $soa ) = $p->get_records( q{SOA}, q{answer} ) ) {
+        my $mname = $soa->mname;
+
+        push @results, _check_name_syntax( q{MNAME}, $mname );
+    }
+    else {
+        push @results, _emit_log( NO_RESPONSE_SOA_QUERY => {} );
+    }
+
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
+}
+
+=over
+
+=item syntax08()
+
+    my @logentry_array = syntax08( $zone );
+
+Runs the L<Syntax08 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Syntax-TP/syntax08.md>.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
+
+=back
+
+=cut
+
+sub syntax08 {
+    my ( $class, $zone ) = @_;
+
+    local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Syntax08';
+    push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+
+    my $p = $zone->query_one( $zone->name, q{MX} );
+
+    if ( $p ) {
+        my %mx = map { $_->exchange => 1 } $p->get_records( q{MX}, q{answer} );
+        foreach my $mx ( sort keys %mx ) {
+            push @results, _check_name_syntax( q{MX}, $mx );
+        }
+    }
+    else {
+        push @results, _emit_log( NO_RESPONSE_MX_QUERY => {} );
+    }
+
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
+}
+
+1;

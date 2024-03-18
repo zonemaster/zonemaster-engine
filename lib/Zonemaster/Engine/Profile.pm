@@ -16,20 +16,45 @@ use Data::Dumper;
 use Net::IP::XS;
 use Log::Any qw( $log );
 use YAML::XS qw();
+use Scalar::Util qw( looks_like_number );
 
 $YAML::XS::Boolean = "JSON::PP";
 
 use Zonemaster::Engine::Constants qw( $RESOLVER_SOURCE_OS_DEFAULT $DURATION_5_MINUTES_IN_SECONDS $DURATION_1_HOUR_IN_SECONDS $DURATION_4_HOURS_IN_SECONDS $DURATION_12_HOURS_IN_SECONDS $DURATION_1_DAY_IN_SECONDS $DURATION_1_WEEK_IN_SECONDS $DURATION_180_DAYS_IN_SECONDS );
 
 my %profile_properties_details = (
+    q{cache} => {
+        type    => q{HashRef},
+        test    => sub {
+            my @allowed_keys = ( 'redis' );
+            foreach my $cache_database ( keys %{$_[0]} ) {
+                if ( not grep( /^$cache_database$/, @allowed_keys ) ) {
+                    die "Property cache keys have " . scalar @allowed_keys . " possible values: " . join(", ", @allowed_keys);
+                }
+
+                if ( not scalar keys %{ $_[0]->{$cache_database} } ) {
+                    die "Property cache.$cache_database has no items";
+                }
+                else {
+                    my @allowed_subkeys;
+                    if ( $cache_database eq 'redis' ) {
+                        @allowed_subkeys = ( 'server', 'expire' );
+                    }
+
+                    foreach my $key ( keys %{ $_[0]->{$cache_database} } ) {
+                        if ( not grep( /^$key$/, @allowed_subkeys ) ) {
+                            die "Property cache.$cache_database subkeys have " . scalar @allowed_subkeys . " possible values: " . join(", ", @allowed_subkeys);
+                        }
+
+                        die "Property cache.$cache_database.$key has a NULL or empty item" if not $_[0]->{$cache_database}->{$key};
+                        die "Property cache.$cache_database.$key has a negative value" if ( looks_like_number( $_[0]->{$cache_database}->{$key} ) and $_[0]->{$cache_database}->{$key} < 0 ) ;
+                    }
+                }
+            }
+        }
+    },
     q{resolver.defaults.debug} => {
         type    => q{Bool}
-    },
-    q{resolver.defaults.dnssec} => {
-        type    => q{Bool}
-    },
-    q{resolver.defaults.edns_size} => {
-        type    => q{Num}
     },
     q{resolver.defaults.igntc} => {
         type    => q{Bool}
@@ -663,16 +688,6 @@ A boolean. If true, only use TCP. Default false.
 An integer between 1 and 255 inclusive. The number of seconds between retries.
 Default 3.
 
-=head2 resolver.defaults.dnssec
-
-*DEPRECATED as of 2023.1. Planned for removal in 2023.2*
-A boolean. If true, sets the DO flag in queries. Default false.
-
-=head2 resolver.defaults.edns_size
-
-*DEPRECATED as of 2023.1. Planned for removal in 2023.2*
-An integer. The EDNS0 UDP size used in EDNS queries. Default 512.
-
 =head2 resolver.defaults.recurse
 
 A boolean. If true, sets the RD flag in queries. Default false.
@@ -742,12 +757,10 @@ cache.
 
 =head2 asnroots (DEPRECATED)
 
-An arrayref of domain names. Default C<["asnlookup.zonemaster.net",
-"asnlookup.iis.se", "asn.cymru.com"]>.
+An arrayref of domain names. Default C<["asnlookup.zonemaster.net"]>.
 
 The domains will be assumed to be Cymru-style AS lookup zones.
-Normally only the first name in the list will be used, the rest are
-backups in case the earlier ones don't work.
+Only the first name in the list will be used.
 
 =head2 asn_db.style
 
@@ -758,10 +771,27 @@ Default C<"Cymru">.
 =head2 asn_db.sources
 
 An arrayref of domain names when asn_db.style is set to C<"Cymru"> or whois
-servers when asn_db.style is set to C<"RIPE">. Normally only the first item
-in the list will be used, the rest are backups in case the earlier ones don't
-work.
+servers when asn_db.style is set to C<"RIPE">. Only the first item
+in the list will be used.
 Default C<"asnlookup.zonemaster.net">.
+
+=head2 cache (EXPERIMENTAL)
+
+A hash of hashes. The currently supported keys are C<"redis">.
+
+See more information in L<cache.redis>.
+
+Undefined by default.
+
+=head2 cache.redis (EXPERIMENTAL)
+
+A hashref. The currently supported keys are C<"server"> and C<"expire">.
+
+Specifies the address of the Redis server used to perform global caching
+(C<cache.redis.server>) and an optional expire time (C<cache.redis.expire>).
+
+C<cache.redis.server> must be a string in the form C<host:port>.
+C<cache.redis.expire> must be a non-negative integer and defines a time in seconds. Default 5 seconds.
 
 =head2 logfilter
 
@@ -871,20 +901,17 @@ level for the tag.
 
 =head2 test_cases
 
-An arrayref of names of implemented test cases as listed in the
-L<test case specifications|
-https://github.com/zonemaster/zonemaster/tree/master/docs/specifications/tests/ImplementedTestCases.md>.
+An arrayref of names of implemented test cases (in all lower-case) as listed in the
+L<test case specifications|https://github.com/zonemaster/zonemaster/tree/master/docs/specifications/tests/ImplementedTestCases.md>.
 Default is an arrayref listing all the test cases.
 
-Specifies which test cases to consider when a test module is asked
-to run of all of its test cases.
+Specifies which test cases can be run by the testing suite.
 
-Test cases not included here can still be run individually.
-
-The test cases C<basic00>, C<basic01> and C<basic02> are always considered no
-matter if they're excluded from this property.
-This is because part of their function is to verify that the given domain name
-can be tested at all.
+Note that an exception applies to test cases C<basic01> and C<basic02>:
+when running either the full testing suite or just the Basic test module,
+these test cases are always run no matter if they're excluded from this
+property. This is because their primary goal is to verify that the given
+domain name can be tested at all.
 
 =head2 test_cases_vars.dnssec04.REMAINING_SHORT
 
@@ -922,7 +949,7 @@ https://github.com/zonemaster/zonemaster/blob/master/docs/specifications/tests/Z
 Related to the REFRESH_MINIMUM_VALUE_LOWER message tag from this test case.
 Default C<14400> (4 hours in seconds).
 
-=head2 test_cases_vars04.zone.SOA_RETRY_MINIMUM_VALUE
+=head2 test_cases_vars.zone04.SOA_RETRY_MINIMUM_VALUE
 
 A positive integer value.
 Recommended lower bound for SOA retry values (in seconds) in test case
@@ -986,9 +1013,5 @@ C<net.ipv6> = true has this JSON representation:
 =head2 YAML REPRESENTATION
 
 Similar to the L</JSON REPRESENTATION> but uses a YAML format.
-
-=over
-
-=back
 
 =cut

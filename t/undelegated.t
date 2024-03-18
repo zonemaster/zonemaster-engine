@@ -32,7 +32,7 @@ Zonemaster::Engine->add_fake_delegation(
 my $fake_happened = 0;
 Zonemaster::Engine->logger->callback(
     sub {
-        $fake_happened = 1 if $_[0]->tag eq 'FAKE_DELEGATION';
+        $fake_happened = 1 if $_[0]->tag eq 'FAKE_DELEGATION_RETURNED';
     }
 );
 
