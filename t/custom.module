@@ -1,0 +1,63 @@
+package My::Module;
+use strict;
+use vars qw($VERSION %TAG_DESCRIPTIONS);
+use Zonemaster::Engine::Util;
+use Locale::TextDomain qw(Zonemaster-Engine);
+use warnings;
+
+$VERSION = q{1.0.0};
+
+%TAG_DESCRIPTIONS = (
+    TEST_CASE_START => sub { __x('TEST_CASE_START {testcase}.', @_) },
+    TEST_CASE_END   => sub { __x('TEST_CASE_END {testcase}.', @_) },
+    THIS_IS_A_TEST  => sub { __x('THIS IS A TEST.', @_) },
+);
+
+sub version {
+    return $VERSION;
+}
+
+sub metadata {
+    my ( $class ) = @_;
+    return {
+        test01 => [qw(
+            TEST_CASE_START
+            TEST_CASE_END
+            THIS_IS_A_TEST
+        )],
+    };
+}
+
+sub tag_descriptions {
+    return \%TAG_DESCRIPTIONS;
+}
+
+sub all {
+    my ( $class, $zone ) = @_;
+
+    my @results;
+
+    push @results, $class->test01( $zone ) if Zonemaster::Engine::Util::should_run_test(q{test01});
+
+    return @results;
+}
+
+sub test01 {
+    my ( $class, $zone ) = @_;
+
+    my @results;
+
+    push(@results, _emit_log(TEST_CASE_START => {testcase => q{test01}}));
+
+    push(@results, _emit_log(THIS_IS_A_TEST => {}));
+
+    push(@results, _emit_log(TEST_CASE_END => {testcase => q{test01}}));
+
+    return @results;
+}
+
+sub _emit_log {
+    return Zonemaster::Engine->logger->add(@_[0..1], __PACKAGE__);
+}
+
+1;
