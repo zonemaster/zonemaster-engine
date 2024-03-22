@@ -28,8 +28,6 @@ requires 'Locale::TextDomain' => 1.20;
 requires 'Log::Any'           => 0;
 requires 'Mail::SPF'          => 0;
 requires 'Module::Find'       => 0.10;
-requires 'Moose'              => 2.0401;
-requires 'MooseX::Singleton'  => 0.30;
 requires 'Net::DNS'           => 0;
 requires 'Net::IP::XS'        => 0.21;
 requires 'Readonly'           => 0;
@@ -39,6 +37,7 @@ requires 'Zonemaster::LDNS'   => 4.000000; # For v4.0.0
 
 test_requires 'Locale::PO'        => 0;
 test_requires 'Pod::Coverage'     => 0;
+test_requires 'Sub::Override'     => 0;
 test_requires 'Test::Differences' => 0;
 test_requires 'Test::Exception'   => 0;
 test_requires 'Test::Fatal'       => 0;

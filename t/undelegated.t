@@ -42,7 +42,7 @@ ok( $fake_p,        'Got answer' );
 if ( $fake_p ) {
     is( $fake_p->rcode, 'NOERROR', 'expected RCODE' );
 }
-Zonemaster::Engine->logger->clear_callback;
+Zonemaster::Engine->logger->callback( undef );
 
 Zonemaster::Engine->add_fake_ds( 'lysator.liu.se' => [ { keytag => 4711, algorithm => 17, type => 42, digest => 'FACEB00C' } ],
 );

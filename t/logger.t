@@ -67,7 +67,7 @@ ok( $res{DO_NOT_CRASH}, 'DO_NOT_CRASH got logged' );
 ok( $log->callback,     'Callback still there' );
 isa_ok( $err, 'Zonemaster::Engine::Exception' );
 is( "$err", 'canary' );
-$log->clear_callback;
+$log->callback( undef );
 
 Zonemaster::Engine::Logger->reset_config();
 $json = read_file( "t/profiles/profile.json" );

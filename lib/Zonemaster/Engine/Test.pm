@@ -7,8 +7,6 @@ use warnings;
 
 use version; our $VERSION = version->declare( "v1.1.12" );
 
-use Moose;
-
 use Readonly;
 use Module::Find;
 use Net::IP::XS;
@@ -120,7 +118,6 @@ sub _log_versions {
 
     info( DEPENDENCY_VERSION => { name => 'Zonemaster::LDNS',      version => $Zonemaster::LDNS::VERSION } );
     info( DEPENDENCY_VERSION => { name => 'IO::Socket::INET6',     version => $IO::Socket::INET6::VERSION } );
-    info( DEPENDENCY_VERSION => { name => 'Moose',                 version => $Moose::VERSION } );
     info( DEPENDENCY_VERSION => { name => 'Module::Find',          version => $Module::Find::VERSION } );
     info( DEPENDENCY_VERSION => { name => 'File::ShareDir',        version => $File::ShareDir::VERSION } );
     info( DEPENDENCY_VERSION => { name => 'File::Slurp',           version => $File::Slurp::VERSION } );

@@ -126,7 +126,7 @@ Zonemaster::Engine->logger->callback(
 isa_ok( exception { Zonemaster::Engine->test_zone( 'nic.se' ) }, 'Zonemaster::Engine::Exception' );
 isa_ok( exception { Zonemaster::Engine->test_module( 'SyNtAx', 'nic.se' ) }, 'Zonemaster::Engine::Exception' );
 isa_ok( exception { Zonemaster::Engine->test_method( 'Syntax', 'syntax01', 'nic.se' ) }, 'Zonemaster::Engine::Exception' );
-Zonemaster::Engine->logger->clear_callback;
+Zonemaster::Engine->logger->callback( undef );
 
 Zonemaster::Engine::Profile->effective->set( q{net.ipv4}, 0 );
 Zonemaster::Engine::Profile->effective->set( q{net.ipv6}, 0 );

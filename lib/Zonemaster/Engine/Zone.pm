@@ -1,25 +1,97 @@
 package Zonemaster::Engine::Zone;
-
+use 5.014002;
+use warnings;
 use version; our $VERSION = version->declare("v1.1.9");
 
-use 5.014002;
-use strict;
-use warnings;
-
-use Moose;
-use Carp;
+use Carp qw( confess croak );
 use List::MoreUtils qw[uniq];
-
 use Zonemaster::Engine::DNSName;
 use Zonemaster::Engine::Recursor;
 use Zonemaster::Engine::NSArray;
 use Zonemaster::Engine::Constants qw[:ip];
 
-has 'name' => ( is => 'ro', isa => 'Zonemaster::Engine::DNSName', required => 1 );
-has 'parent' => ( is => 'ro', isa => 'Maybe[Zonemaster::Engine::Zone]', lazy_build => 1 );
-has [ 'ns', 'glue' ] => ( is => 'ro', isa => 'ArrayRef', lazy_build => 1 );
-has [ 'ns_names', 'glue_names' ] => ( is => 'ro', isa => 'ArrayRef[Zonemaster::Engine::DNSName]', lazy_build => 1 );
-has 'glue_addresses' => ( is => 'ro', isa => 'ArrayRef[Zonemaster::LDNS::RR]', lazy_build => 1 );
+sub new {
+    my ( $class, $attrs ) = @_;
+
+    my $name = delete $attrs->{name} // confess "required argument 'name' not found";
+    if ( %$attrs ) {
+        confess "unexpected arguments: " . join ', ', sort keys %$attrs;
+    }
+
+    if ( blessed $name ne 'Zonemaster::Engine::DNSName' ) {
+        confess "argument 'name' must be a Zonemaster::Engine::DNSName";
+    }
+
+    my $obj = { _name => $name };
+
+    return bless $obj, $class;
+}
+
+sub name {
+    my ( $self ) = @_;
+
+    return $self->{_name};
+}
+
+sub parent {
+    my ( $self ) = @_;
+
+    if ( !exists $self->{_parent} ) {
+        $self->{_parent} = $self->_build_parent;
+    }
+
+    return $self->{_parent};
+}
+
+sub glue_names {
+    my ( $self ) = @_;
+
+    if ( !exists $self->{_glue_names} ) {
+        $self->{_glue_names} = $self->_build_glue_names;
+    }
+
+    return $self->{_glue_names};
+}
+
+sub glue {
+    my ( $self ) = @_;
+
+    if ( !exists $self->{_glue} ) {
+        $self->{_glue} = $self->_build_glue;
+    }
+
+    return $self->{_glue};
+}
+
+sub ns_names {
+    my ( $self ) = @_;
+
+    if ( !exists $self->{_ns_names} ) {
+        $self->{_ns_names} = $self->_build_ns_names;
+    }
+
+    return $self->{_ns_names};
+}
+
+sub ns {
+    my ( $self ) = @_;
+
+    if ( !exists $self->{_ns} ) {
+        $self->{_ns} = $self->_build_ns;
+    }
+
+    return $self->{_ns};
+}
+
+sub glue_addresses {
+    my ( $self ) = @_;
+
+    if ( !exists $self->{_glue_addresses} ) {
+        $self->{_glue_addresses} = $self->_build_glue_addresses;
+    }
+
+    return $self->{_glue_addresses};
+}
 
 ###
 ### Builders
@@ -286,9 +358,6 @@ sub is_in_zone {
     }
 } ## end sub is_in_zone
 
-no Moose;
-__PACKAGE__->meta->make_immutable;
-
 1;
 
 =head1 NAME
@@ -309,6 +378,16 @@ objects. Doing so will provide lazy-loading of the information,
 well-defined methods in which the information is fetched, logging and
 the ability to do things like testing zones that have not yet been
 delegated.
+
+=head1 CONSTRUCTORS
+
+=over
+
+=item new
+
+Construct a new instance.
+
+=back
 
 =head1 ATTRIBUTES
 

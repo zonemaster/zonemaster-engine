@@ -1,16 +1,18 @@
-use Test::More;
-use Test::Fatal;
-
+#!perl
 use 5.14.2;
-use strict;
 use warnings;
+use Test::More;
 
-BEGIN { use_ok( 'Zonemaster::Engine::Nameserver' ); }
+use Test::Fatal;
 use Zonemaster::Engine::Util;
+use Zonemaster::Engine::Nameserver;
 use Zonemaster::LDNS;
+use Sub::Override;
 
 my $datafile = 't/nameserver-axfr.data';
 my %saved_axfr;
+my $override = Sub::Override->new();
+
 
 setup( $datafile );
 
@@ -48,8 +50,6 @@ done_testing;
 
 sub setup {
     my ( $datafile ) = @_;
-    my $meta = Class::MOP::Class->initialize( 'Zonemaster::Engine::Nameserver' );
-    $meta->make_mutable;
     if ( not $ENV{ZONEMASTER_RECORD} ) {
 
         # Replay
@@ -71,10 +71,11 @@ sub setup {
             }
         }
         Zonemaster::Engine::Profile->effective->set( q{no_network}, 1 );
-        $meta->add_around_method_modifier(
-            'axfr',
+
+        $override->override(
+            'Zonemaster::Engine::Nameserver::axfr',
             sub {
-                my ( $method, $self, $domain, $callback, $class ) = @_;
+                my ( $self, $domain, $callback, $class ) = @_;
                 if ( exists $saved_axfr{$domain} ) {
                     if ( ref( $saved_axfr{$domain} ) ) {
                         while ( my $rr = pop @{ $saved_axfr{$domain} } ) {
@@ -93,16 +94,16 @@ sub setup {
     } ## end if ( not $ENV{ZONEMASTER_RECORD...})
     else {
         # Record
-        $meta->add_around_method_modifier(
-            'axfr',
+        $override->wrap(
+            'Zonemaster::Engine::Nameserver::axfr',
             sub {
-                my ( $method, $self, $domain, $callback, $class ) = @_;
+                my ( $old_axfr, $self, $domain, $callback, $class ) = @_;
                 my @rrs;
                 my $new_cb = sub {
                     push @rrs, $_[0];
                     $callback->( $_[0] );
                 };
-                my $result = eval { $method->( $self, $domain, $new_cb, $class ) };
+                my $result = eval { $old_axfr->( $self, $domain, $new_cb, $class ) };
                 if ( $@ ) {
                     $saved_axfr{$domain} = "$@";
                     die $@;
