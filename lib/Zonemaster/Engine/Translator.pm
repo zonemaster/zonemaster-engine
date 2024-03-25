@@ -167,7 +167,7 @@ sub _build_all_tag_descriptions {
     my %all_tag_descriptions;
 
     $all_tag_descriptions{System} = \%TAG_DESCRIPTIONS;
-    foreach my $mod ( 'Basic', Zonemaster::Engine->modules ) {
+    foreach my $mod ( Zonemaster::Engine->modules ) {
         my $module = 'Zonemaster::Engine::Test::' . $mod;
         $all_tag_descriptions{ $mod } = $module->tag_descriptions;
     }
