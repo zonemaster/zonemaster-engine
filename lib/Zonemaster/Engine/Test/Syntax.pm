@@ -60,12 +60,8 @@ sub all {
 
     if ( any { $_->tag eq q{ONLY_ALLOWED_CHARS} } @results ) {
 
-        foreach my $local_nsname ( uniq map { $_ } @{ Zonemaster::Engine::TestMethods->method2( $zone ) },
-            @{ Zonemaster::Engine::TestMethods->method3( $zone ) } )
-        {
-            push @results, $class->syntax04( Zonemaster::Engine->zone( $local_nsname ) )
-              if Zonemaster::Engine::Util::should_run_test( q{syntax04} );
-        }
+        push @results, $class->syntax04( Zonemaster::Engine->zone( $zone ) )
+          if Zonemaster::Engine::Util::should_run_test( q{syntax04} );
 
         push @results, $class->syntax05( $zone ) if Zonemaster::Engine::Util::should_run_test( q{syntax05} );
 
@@ -818,9 +814,15 @@ sub syntax04 {
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Syntax04';
     push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
-    my $name = $zone->name;
-
-    push @results, _check_name_syntax( q{NAMESERVER}, $name );
+    foreach my $local_nsname (
+        uniq(
+            @{ Zonemaster::Engine::TestMethods->method2( $zone ) },
+            @{ Zonemaster::Engine::TestMethods->method3( $zone ) }
+        )
+      )
+    {
+        push @results, _check_name_syntax( q{NAMESERVER}, $zone->name );
+    }
 
     return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 }
