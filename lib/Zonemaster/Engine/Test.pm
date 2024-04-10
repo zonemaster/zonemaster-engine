@@ -25,6 +25,8 @@ use File::ShareDir qw[dist_file];
 use File::Slurp qw[read_file];
 use Scalar::Util qw[blessed];
 use POSIX qw[strftime];
+use Carp;
+use List::MoreUtils qw(any);
 
 =head1 NAME
 
@@ -133,6 +135,53 @@ sub _log_versions {
 
 =over
 
+=item install()
+
+    Zonemaster::Engine::Test->install_custom_test_module('My::Module');
+
+Installs a custom module outside of the C<Zonemaster::Engine::Test::> namespace.
+This module must be a modules that implements the same interface as the modules
+in that namespace (ie. C<version()> C<all()> etc).
+
+The effective profile will be updated to include all test cases from the custom
+module.
+
+=back
+
+=cut
+
+sub install_custom_test_module {
+    my ( $class, $module ) = @_;
+
+    $module->import();
+
+    # get list of cases to be added
+    my @cases = keys( %{$module->metadata} );
+
+    my $profile = Zonemaster::Engine::Profile->effective;
+
+    # check there isn't a collission between one of the new cases and an
+    # existing case
+    foreach my $case ( @cases ) {
+        if ( any { $_ eq $case } @{$profile->{profile}->{test_cases}} ) {
+            carp sprintf "case '%s' already exists", $case ;
+            return undef;
+        }
+    }
+
+    # add the module
+    push @all_test_modules, $module;
+
+    # append cases to the profile
+    push @{$profile->{profile}->{test_cases}}, @cases;
+
+    return 1;
+}
+
+=pod
+
+=over
+
 =item modules()
 
     my @modules_array = modules();
@@ -194,7 +243,7 @@ sub run_all_for {
 
     if ( Zonemaster::Engine::Test::Basic->can_continue( $zone, @results ) and Zonemaster::Engine->can_continue() ) {
         foreach my $mod ( __PACKAGE__->modules ) {
-            my $module = "Zonemaster::Engine::Test::$mod";
+            my $module = ( $mod =~ /::/ ? $mod : "Zonemaster::Engine::Test::$mod" );
             info( MODULE_VERSION => { module => $module, version => $module->version } );
             my @res = eval { $module->all( $zone ) };
             if ( $@ ) {
@@ -256,7 +305,7 @@ sub run_module {
 
     if ( Zonemaster::Engine->can_continue() ) {
         if ( $module ) {
-            my $m = "Zonemaster::Engine::Test::$module";
+            my $m = ( $module =~ /::/ ? $module : "Zonemaster::Engine::Test::$module" );
             info( MODULE_VERSION => { module => $m, version => $m->version } );
             push @res, eval { $m->all( $zone ) };
             if ( $@ ) {
@@ -320,7 +369,7 @@ sub run_one {
 
     if ( Zonemaster::Engine->can_continue() ) {
         if ( $module ) {
-            my $m = "Zonemaster::Engine::Test::$module";
+            my $m = ( $module =~ /::/ ? $module : "Zonemaster::Engine::Test::$module" );
             if ( $m->metadata->{$test} and Zonemaster::Engine::Util::should_run_test( $test ) ) {
                 info( MODULE_VERSION => { module => $m, version => $m->version } );
                 push @res, eval { $m->$test( $zone ) };
