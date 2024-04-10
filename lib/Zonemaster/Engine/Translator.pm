@@ -1,26 +1,14 @@
 package Zonemaster::Engine::Translator;
-
+use 5.014002;
+use warnings;
 use version; our $VERSION = version->declare("v1.0.8");
 
-use 5.014002;
-use strict;
-use warnings;
-
-use Zonemaster::Engine;
-
-use Carp;
+use Carp qw[confess croak];
 use Locale::Messages qw[textdomain];
 use Locale::TextDomain qw[Zonemaster-Engine];
 use POSIX qw[setlocale LC_MESSAGES];
 use Readonly;
-
-use Moose;
-use MooseX::Singleton;
-
-has 'locale'               => ( is => 'rw', isa => 'Str' );
-has 'data'                 => ( is => 'ro', isa => 'HashRef', lazy => 1, builder => '_load_data' );
-has 'all_tag_descriptions' => ( is => 'ro', isa => 'HashRef', builder => '_build_all_tag_descriptions' );
-has '_last_language'       => ( is => 'rw', isa => 'Str', builder => '_build_last_language' );
+use Zonemaster::Engine::Test;
 
 ###
 ### Tag descriptions
@@ -102,16 +90,59 @@ Readonly my %TAG_DESCRIPTIONS => (
 );
 
 ###
-### Builder Methods
+### Construction
 ###
 
-around 'BUILDARGS' => sub {
-    my ( $orig, $class, $args ) = @_;
+my $instance;
 
-    $args->{locale} //= _init_locale();
+sub new {
+    my ( $class, %attrs ) = @_;
 
-    return $class->$orig( $args );
-};
+    $class->initialize( %attrs );
+
+    return $class->instance;
+}
+
+sub instance {
+    my ( $class ) = @_;
+
+    if ( !defined $instance ) {
+        $instance = $class->initialize();
+    }
+
+    return $instance;
+}
+
+sub initialize {
+    my ( $class, %attrs ) = @_;
+
+    if ( defined $instance ) {
+        confess "already initialized";
+    }
+
+    my $locale;
+    if ( exists $attrs{locale} ) {
+        $locale = delete $attrs{locale};
+
+        if ( !defined $locale || ref $locale ne '' ) {
+            confess "argument 'locale' must not be a defined scalar";
+        }
+    }
+
+    my $obj = {
+        _locale               => $locale // _init_locale(),
+        _all_tag_descriptions => _build_all_tag_descriptions(),
+        _last_language        => _build_last_language(),
+    };
+
+    $instance = bless $obj, __PACKAGE__;
+
+    return;
+}
+
+###
+### Builder Methods
+###
 
 # Get the program's underlying LC_MESSAGES and make sure it can be effectively
 # updated down the line.
@@ -167,7 +198,7 @@ sub _build_all_tag_descriptions {
     my %all_tag_descriptions;
 
     $all_tag_descriptions{System} = \%TAG_DESCRIPTIONS;
-    foreach my $mod ( 'Basic', Zonemaster::Engine->modules ) {
+    foreach my $mod ( 'Basic', Zonemaster::Engine::Test->modules ) {
         my $module = 'Zonemaster::Engine::Test::' . $mod;
         $all_tag_descriptions{ $mod } = $module->tag_descriptions;
     }
@@ -180,39 +211,54 @@ sub _build_last_language {
 }
 
 ###
-### Method modifiers
+### Instance methods
 ###
 
-around 'locale' => sub {
-    my $next = shift;
+sub data {
+    my ( $self ) = @_;
+
+    if ( !exists $self->{_data} ) {
+        $self->{_data} = $self->_load_data;
+    }
+
+    return $self->{_data};
+}
+
+sub all_tag_descriptions {
+    my ( $self ) = @_;
+
+    return $self->{_all_tag_descriptions};
+}
+
+sub locale {
     my ( $self, @args ) = @_;
 
-    return $self->$next()
-      unless @args;
+    if ( @args ) {
+        my $new_locale = shift @args;
 
-    my $new_locale = shift @args;
+        # On some systems gettext takes its locale from setlocale().
+        if ( !defined setlocale( LC_MESSAGES, $new_locale ) ) {
+            return;
+        }
 
-    # On some systems gettext takes its locale from setlocale().
-    defined setlocale( LC_MESSAGES, $new_locale )
-      or return;
+        $self->_last_language( $ENV{LANGUAGE} // '' );
 
-    $self->_last_language( $ENV{LANGUAGE} // '' );
+        # On some systems gettext takes its locale from %ENV.
+        $ENV{LC_MESSAGES} = $new_locale;
 
-    # On some systems gettext takes its locale from %ENV.
-    $ENV{LC_MESSAGES} = $new_locale;
+        # On some systems gettext refuses to switch over to another locale unless
+        # the textdomain is reset.
+        textdomain( 'Zonemaster-Engine' );
 
-    # On some systems gettext refuses to switch over to another locale unless
-    # the textdomain is reset.
-    textdomain( 'Zonemaster-Engine' );
+        if ( !defined $new_locale || ref $new_locale ne '' ) {
+            croak "locale must be a defined scalar";
+        }
 
-    $self->$next( $new_locale );
+        $self->{_locale} = $new_locale;
+    } ## end if ( @args )
 
-    return $new_locale;
+    return $self->{_locale};
 };
-
-###
-### Working methods
-###
 
 sub to_string {
     my ( $self, $entry ) = @_;
@@ -236,6 +282,20 @@ sub test_case_description {
     return $self->_translate_tag( $module, uc $test_name, {} ) // $test_name;
 }
 
+sub _last_language {
+    my $self = shift;
+
+    if ( @_ ) {
+        my $last_language = shift;
+        if ( !defined $last_language || ref $last_language ne '' ) {
+            croak "_last_language must be a defined scalar";
+        }
+        $self->{_last_language} = $last_language;
+    }
+
+    return $self->{_last_language};
+}
+
 sub _translate_tag {
     my ( $self, $module, $tag, $args ) = @_;
 
@@ -252,9 +312,6 @@ sub _translate_tag {
         return undef;
     }
 }
-
-no Moose;
-__PACKAGE__->meta->make_immutable;
 
 1;
 
@@ -306,6 +363,8 @@ is reset.
 
 A reference to a hash with translation data. This is unlikely to be useful to
 end-users.
+
+=item all_tag_descriptions
 
 =back
 
