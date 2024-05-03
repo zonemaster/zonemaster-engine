@@ -1,6 +1,6 @@
 =head1 NAME
 
-Zonemaster::Engine::Localization - On localization.
+Zonemaster::Engine::Localization - On L<localization|https://en.wikipedia.org/wiki/Internationalization_and_localization>.
 
 =head1 DESCRIPTION
 
