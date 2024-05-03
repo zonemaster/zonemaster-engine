@@ -164,7 +164,7 @@ can be individually disabled by the L<profile|Zonemaster::Engine::Profile/test_c
 A test module may implement a C<can_continue()> method to indicate lack of an
 extremely minimal level of function for the zone (e.g., it must have a parent
 domain, and it must have at least one functional name server).
-If lack of such minimal function is indicated, the testing suite is aborted.
+If lack of such minimal function is indicated, the testing harness is aborted.
 See L<Zonemaster::Engine::Test::Basic/can_continue()> for an example.
 
 Takes a L<Zonemaster::Engine::Zone> object.
