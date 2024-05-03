@@ -17,7 +17,7 @@ use Zonemaster::Engine::Constants qw[:ip :name];
 use Zonemaster::Engine::Test::Address;
 use Zonemaster::Engine::Test::Syntax;
 use Zonemaster::Engine::TestMethods;
-use Zonemaster::Engine::Util;
+use Zonemaster::Engine::Util qw[info name ns should_run_test];
 
 =head1 NAME
 
@@ -33,10 +33,12 @@ Zonemaster::Engine::Test::Basic - Module implementing tests focused on basic zon
 
 =item all()
 
-    my @logentry_array = all( $zone );
+    my @logentries = Zonamester::Engine::Test::Basic->all( $zone );
 
-Runs the default set of tests for that module, i.e. between L<one and four tests|/TESTS> depending on the tested zone.
-If L<BASIC01|/basic01()> passes, L<BASIC02|/basic02()> is run. If L<BASIC02|/basic02()> fails, L<BASIC03|/basic03()> is run.
+Runs the test cases in the Basic test module.
+A test is skipped if it is not included in
+L<Zonemaster::Engine::Profile/"test_cases"> or if a previous test case has found
+a condition that renders it superfluous.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -48,25 +50,35 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 sub all {
     my ( $class, $zone ) = @_;
+
     my @results;
 
-    push @results, $class->basic01( $zone );
-
-    if ( grep { $_->tag eq q{B01_CHILD_FOUND} } @results ) {
-       push @results, $class->basic02( $zone );
+    if ( should_run_test( q{basic01} ) ) {
+        push @results, $class->basic01( $zone );
+        if ( none { $_->tag eq q{B01_CHILD_FOUND} } @results ) {
+            return @results;
+        }
     }
 
-    # Perform BASIC3 if BASIC2 failed
-    if ( none { $_->tag eq q{B02_AUTH_RESPONSE_SOA} } @results ) {
-        push @results, $class->basic03( $zone ) if Zonemaster::Engine::Util::should_run_test( q{basic03} );
+    my $auth_response_soa = 0;
+    if ( should_run_test( q{basic02} ) ) {
+        push @results, $class->basic02( $zone );
+        $auth_response_soa = any { $_->tag eq q{B02_AUTH_RESPONSE_SOA} } @results;
     }
-    else {
-        push @results,
-          _emit_log(
-            HAS_NAMESERVER_NO_WWW_A_TEST => {
-                zname => $zone->name,
-            }
-          );
+
+    if ( should_run_test( q{basic03} ) ) {
+        # Perform BASIC3 if BASIC2 failed
+        if ( $auth_response_soa ) {
+            push @results,
+              _emit_log(
+                HAS_NAMESERVER_NO_WWW_A_TEST => {
+                    zname => $zone->name,
+                }
+              );
+        }
+        else {
+            push @results, $class->basic03( $zone );
+        }
     }
 
     return @results;
@@ -90,15 +102,18 @@ Returns a boolean.
 
 sub can_continue {
     my ( $class, $zone, @results ) = @_;
-    my %tag = map { $_->tag => 1 } @results;
-    my $is_undelegated = Zonemaster::Engine::Recursor->has_fake_addresses( $zone->name->string );
 
-    if ( not $tag{B02_NO_DELEGATION} and $tag{B02_AUTH_RESPONSE_SOA} ) {
+    my $is_undelegated = Zonemaster::Engine::Recursor->has_fake_addresses( $zone->name->string );
+    if ( $is_undelegated ) {
         return 1;
     }
-    else {
-        return $is_undelegated;
+
+    if ( should_run_test( 'basic02' ) ) {
+        my %tag = map { $_->tag => 1 } @results;
+        return !$tag{B02_NO_DELEGATION} && $tag{B02_AUTH_RESPONSE_SOA};
     }
+
+    return 1;
 }
 
 =over
