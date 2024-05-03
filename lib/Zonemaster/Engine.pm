@@ -265,7 +265,7 @@ Runs all available tests for the zone with the given name in the specified modul
 Run one particular test method in one particular module for one particular zone.
 The requested module must be in the list of currently enabled modules (that is,
 not a module disabled by the current profile), and the method must be listed in
-the metadata the module exports.
+the metadata of the module exports.
 If those requirements are fulfilled, the method will be called with the provided
 arguments.
 
