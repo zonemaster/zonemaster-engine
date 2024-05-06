@@ -152,6 +152,20 @@ sub perform_testcase_testing {
             next;
         }
 
+        foreach my $tag ( @$mandatory_message_tags ) {
+            unless ( grep( /^$tag$/, @$all_test_case_tags ) ) {
+                diag("Scenario $scenario: Message tag $tag i 'mandatory message tags' is missing in 'all tags'");
+                fail("List of all test case tags is complete");
+            }
+        }
+
+        foreach my $tag ( @$forbidden_message_tags ) {
+            unless ( grep( /^$tag$/, @$all_test_case_tags ) ) {
+                diag("Scenario $scenario: Message tag $tag i 'forbidden message tags' is missing in 'all tags'");
+                fail("List of all test case tags is complete");
+            }
+        }
+
         if ( ! defined( $mandatory_message_tags ) ) {
             my @tags;
             foreach my $t ( @$all_test_case_tags ) {
