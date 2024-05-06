@@ -91,7 +91,7 @@ sub perform_testcase_testing {
             next;
         }
 
-        if ( scalar @{ $subtests{$scenario} } != 4 ) {
+        if ( scalar @{ $subtests{$scenario} } != 7 ) {
             diag("Scenario $scenario: Incorrect number of values. " .
                  "Correct format is: { SCENARIO_NAME => [" .
                  "testable " .
@@ -134,25 +134,25 @@ sub perform_testcase_testing {
             next;
         }
 
-        if ( $mandatory_message_tags == undef and $forbidden_message_tags == undef ) {
+        if ( ! defined( $mandatory_message_tags ) and !defined( $forbidden_message_tags ) ) {
             diag("Scenario $scenario: Not both array of mandatory tags and array of forbidden tags can be undefined");
             fail("Mandatory message tags or forbidden message tags or both are defined");
             next;
         }
 
-        if ( $mandatory_message_tags != undef and ref( $mandatory_message_tags ) ne 'ARRAY' ) {
+        if ( defined( $mandatory_message_tags ) and ref( $mandatory_message_tags ) ne 'ARRAY' ) {
             diag("Scenario $scenario: Incorrect reference type of mandatory message tags. Expected: ARRAY");
             fail("Mandatory message tags are of the correct type");
             next;
         }
 
-        if ( $forbidden_message_tags != undef and ref( $forbidden_message_tags ) ne 'ARRAY' ) {
+        if ( defined( $forbidden_message_tags ) and ref( $forbidden_message_tags ) ne 'ARRAY' ) {
             diag("Scenario $scenario: Incorrect reference type of forbidden message tags. Expected: ARRAY");
             fail("Forbidden message tags are of the correct type");
             next;
         }
 
-        if ( $mandatory_message_tags == undef ) {
+        if ( ! defined( $mandatory_message_tags ) ) {
             my @tags;
             foreach my $t ( @$all_test_case_tags ) {
                 push @tags, $t unless grep( /^$t$/, @$forbidden_message_tags );
@@ -160,7 +160,7 @@ sub perform_testcase_testing {
             $mandatory_message_tags = \@tags;
         }
 
-        if ( $forbidden_message_tags == undef ) {
+        if ( ! defined( $forbidden_message_tags ) ) {
             my @tags;
             foreach my $t ( @$all_test_case_tags ) {
                 push @tags, $t unless grep( /^$t$/, @$mandatory_message_tags );
