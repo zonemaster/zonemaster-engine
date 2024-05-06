@@ -49,7 +49,7 @@ Takes a string (test case name), a string (test module name) and a hash - the ke
 =over
 
 =item *
-a boolean (testable)
+a boolean (testable), 1 or 0
 
 =item *
 a string (zone name)
