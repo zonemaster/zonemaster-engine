@@ -44,8 +44,36 @@ and if the test scenario is testable, it runs the specified test case and checks
 specific message tags for each specified test scenario.
 
 Takes a string (test case name), a string (test module name) and a hash - the keys of which are scenario names
-(in all uppercase), and their corresponding values are an array of: a string (zone name), an array of strings
-(mandatory message tags), an array of strings (forbidden message tags) and a boolean (testable).
+(in all uppercase), and their corresponding values are an array of:
+
+=over
+
+=item *
+a boolean (testable)
+
+=item *
+a string (zone name)
+
+=item *
+an array of strings (all test case message tags)
+
+=item *
+an array of strings (mandatory message tags)
+
+=item *
+an array of strings (forbidden message tags)
+
+=item *
+an array of name server expressions for undelegated name servers
+
+=item *
+an array of DS expressions for "undelegated" DS
+
+=back
+
+The name server expression has the format "name-server-name/IP" or only "name-server-name". The DS expression
+has the format "keytag,algorithm,type,digest". Those two expressions have the same format as the data for
+--ns and --ds options, repectively, for zonemaster-cli.
 
 =back
 
@@ -65,13 +93,34 @@ sub perform_testcase_testing {
 
         if ( scalar @{ $subtests{$scenario} } != 4 ) {
             diag("Scenario $scenario: Incorrect number of values. " .
-                 "Correct format is: { SCENARIO_NAME => [ zone_name, [ MANDATORY_MESSAGE_TAGS ], [ FORBIDDEN_MESSAGE_TAGS ], testable ] }"
+                 "Correct format is: { SCENARIO_NAME => [" .
+                 "testable " .
+                 "zone_name, " .
+                 "[ ALL_TEST_CASE_TAGS ], " .
+                 "[ MANDATORY_MESSAGE_TAGS ], " .
+                 "[ FORBIDDEN_MESSAGE_TAGS ], " .
+                 "[ UNDELEGATED_NS ], " .
+                 "[ UNDELEGATED_DS ], " .
+                 " ] }"
             );
             fail("Hash contains valid values");
             next;
         }
 
-        my ( $zone_name, $mandatory_message_tags, $forbidden_message_tags, $testable ) = @{ $subtests{$scenario} };
+        my ( $testable,
+             $zone_name,
+             $all_test_case_tags,
+             $mandatory_message_tags,
+             $forbidden_message_tags,
+             $undelegated_ns,
+             $undelegated_ds
+            ) = @{ $subtests{$scenario} };
+
+        if ( ref( $testable ) ne '' ) {
+            diag("Scenario $scenario: Type of testable must not be a reference");
+            fail("Testable is of the correct type");
+            next;
+        }
 
         if ( ref( $zone_name ) ne '' ) {
             diag("Scenario $scenario: Type of zone name must not be a reference");
@@ -79,21 +128,55 @@ sub perform_testcase_testing {
             next;
         }
 
-        if ( ref( $mandatory_message_tags ) ne 'ARRAY' ) {
+        if ( ref( $all_test_case_tags ) ne 'ARRAY' ) {
+            diag("Scenario $scenario: Incorrect reference type of all test case tags. Expected: ARRAY");
+            fail("Mandatory message tags are of the correct type");
+            next;
+        }
+
+        if ( $mandatory_message_tags == undef and $forbidden_message_tags == undef ) {
+            diag("Scenario $scenario: Not both array of mandatory tags and array of forbidden tags can be undefined");
+            fail("Mandatory message tags or forbidden message tags or both are defined");
+            next;
+        }
+
+        if ( $mandatory_message_tags != undef and ref( $mandatory_message_tags ) ne 'ARRAY' ) {
             diag("Scenario $scenario: Incorrect reference type of mandatory message tags. Expected: ARRAY");
             fail("Mandatory message tags are of the correct type");
             next;
         }
 
-        if ( ref( $forbidden_message_tags ) ne 'ARRAY' ) {
+        if ( $forbidden_message_tags != undef and ref( $forbidden_message_tags ) ne 'ARRAY' ) {
             diag("Scenario $scenario: Incorrect reference type of forbidden message tags. Expected: ARRAY");
             fail("Forbidden message tags are of the correct type");
             next;
         }
 
-        if ( ref( $testable ) ne '' ) {
-            diag("Scenario $scenario: Type of testable must not be a reference");
-            fail("Testable is of the correct type");
+        if ( $mandatory_message_tags == undef ) {
+            my @tags;
+            foreach ( my $t ) @$all_test_case_tags {
+                push @tags $t unless grep( /^$t$/, @$forbidden_message_tags );
+            }
+            $mandatory_message_tags = \@tags;
+        }
+
+        if ( $forbidden_message_tags == undef ) {
+            my @tags;
+            foreach ( my $t ) @$all_test_case_tags {
+                push @tags $t unless grep( /^$t$/, @$mandatory_message_tags );
+            }
+            $forbidden_message_tags = \@tags;
+        }
+
+        if ( ref( $undelegated_ns ) ne 'ARRAY' ) {
+            diag("Scenario $scenario: Incorrect reference type of undelegated name servers expressions. Expected: ARRAY");
+            fail("Undelegated name server expressions are of the correct type");
+            next;
+        }
+
+        if ( ref( $undelegated_ds ) ne 'ARRAY' ) {
+            diag("Scenario $scenario: Incorrect reference type of undelegated name servers expressions. Expected: ARRAY");
+            fail("Undelegated name server expressions are of the correct type");
             next;
         }
 
@@ -103,6 +186,27 @@ sub perform_testcase_testing {
         }
 
         subtest $scenario => sub {
+
+            if ( @$undelegated_ns ) {
+                my %hash;
+                foreach my $nsexp (@$undelegated_ns) {
+                    my ($ns, $ip) = split m(/), $nsexp;
+                    $hash{$ns} = [] unless exists $hash{$ns};
+                    push @{ $hash{$ns} }, $ip if $ip;
+                }
+                Zonemaster::Engine::Recursor->remove_fake_addresses( $zone_name );
+                Zonemaster::Engine::Recursor->add_fake_addresses( $zone_name, \%hash );
+            }
+
+            if ( @$undelegated_ds ) {
+                my @data;
+                foreach my $str ( @$undelegated_ds ) {
+                    my ( $tag, $algo, $type, $digest ) = split( /,/, $str );
+                    push @data, { keytag => $tag, algorithm => $algo, type => $type, digest => $digest };
+                }
+                Zonemaster::Engine->add_fake_ds( $zone_name => \@data );
+            }
+
             my @messages = Zonemaster::Engine->test_method( $test_module, $test_case, Zonemaster::Engine->zone( $zone_name ) );
             my %res = map { $_->tag => 1 } @messages;
 
