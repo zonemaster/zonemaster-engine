@@ -17,6 +17,7 @@ BEGIN {
 # nameserver15 - https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/test-zones/Nameserver-TP/nameserver15.md
 my $test_module = 'Nameserver';
 my $test_case = 'nameserver15';
+my @all_tags = qw(N15_NO_VERSION_REVEALED N15_ERROR_ON_VERSION_QUERY N15_SOFTWARE_VERSION N15_WRONG_CLASS);
 
 # Common hint file (test-zone-data/COMMON/hintfile)
 Zonemaster::Engine::Recursor->remove_fake_addresses( '.' );
@@ -28,79 +29,126 @@ Zonemaster::Engine::Recursor->add_fake_addresses( '.',
 
 # Test zone scenarios
 # - Documentation: L<TestUtil/perform_testcase_testing()>
-# - Format: { SCENARIO_NAME => [ zone_name, [ MANDATORY_MESSAGE_TAGS ], [ FORBIDDEN_MESSAGE_TAGS ], testable ] }
+# - Format: { SCENARIO_NAME => [
+#     testable,
+#     zone_name,
+#     [ ALL_TEST_CASE_TAGS ],
+#     [ MANDATORY_MESSAGE_TAGS ],
+#     [ FORBIDDEN_MESSAGE_TAGS ],
+#     [ UNDELEGATED_NS ],
+#     [ UNDELEGATED_DS ],
+#   ] }
+#
+# - One of MANDATORY_MESSAGE_TAGS and FORBIDDEN_MESSAGE_TAGS may be undefined.
+#   See documentation for the meaning of that.
+
 my %subtests = (
     'NO-VERSION-REVEALED-1' => [
+        1,
         q(no-version-revealed-1.nameserver15.xa),
+        \@all_tags,
         [ qw(N15_NO_VERSION_REVEALED) ],
-        [ qw(N15_ERROR_ON_VERSION_QUERY N15_SOFTWARE_VERSION N15_WRONG_CLASS) ],
-        1
+        undef,
+        [],
+        []
     ],
     'NO-VERSION-REVEALED-2' => [
+        1,
         q(no-version-revealed-2.nameserver15.xa),
+        \@all_tags,
         [ qw(N15_NO_VERSION_REVEALED) ],
-        [ qw(N15_ERROR_ON_VERSION_QUERY N15_SOFTWARE_VERSION N15_WRONG_CLASS) ],
-        1
+        undef,
+        [],
+        []
     ],
     'NO-VERSION-REVEALED-3' => [
+        1,
         q(no-version-revealed-3.nameserver15.xa),
+        \@all_tags,
         [ qw(N15_NO_VERSION_REVEALED) ],
-        [ qw(N15_ERROR_ON_VERSION_QUERY N15_SOFTWARE_VERSION N15_WRONG_CLASS) ],
-        1
+        undef,
+        [],
+        []
     ],
     'NO-VERSION-REVEALED-4' => [
+        1,
         q(no-version-revealed-4.nameserver15.xa),
+        \@all_tags,
         [ qw(N15_NO_VERSION_REVEALED) ],
-        [ qw(N15_ERROR_ON_VERSION_QUERY N15_SOFTWARE_VERSION N15_WRONG_CLASS) ],
-        1
+        undef,
+        [],
+        []
     ],
     'NO-VERSION-REVEALED-5' => [
+        1,
         q(no-version-revealed-5.nameserver15.xa),
+        \@all_tags,
         [ qw(N15_NO_VERSION_REVEALED) ],
-        [ qw(N15_ERROR_ON_VERSION_QUERY N15_SOFTWARE_VERSION N15_WRONG_CLASS) ],
-        1
+        undef,        
+        [],
+        []
     ],
     'NO-VERSION-REVEALED-6' => [
+        1,
         q(no-version-revealed-6.nameserver15.xa),
+        \@all_tags,
         [ qw(N15_NO_VERSION_REVEALED) ],
-        [ qw(N15_ERROR_ON_VERSION_QUERY N15_SOFTWARE_VERSION N15_WRONG_CLASS) ],
-        1
+        undef,        
+        [],
+        []
     ],
     'ERROR-ON-VERSION-QUERY-1' => [
+        1,
         q(error-on-version-query-1.nameserver15.xa),
+        \@all_tags,
         [ qw(N15_ERROR_ON_VERSION_QUERY N15_NO_VERSION_REVEALED) ],
-        [ qw(N15_SOFTWARE_VERSION N15_WRONG_CLASS) ],
-        1
+        undef,        
+        [],
+        []
     ],
     'ERROR-ON-VERSION-QUERY-2' => [
+        1,
         q(error-on-version-query-2.nameserver15.xa),
+        \@all_tags,
         [ qw(N15_ERROR_ON_VERSION_QUERY N15_NO_VERSION_REVEALED) ],
-        [ qw(N15_SOFTWARE_VERSION N15_WRONG_CLASS) ],
-        1
+        undef,        
+        [],
+        []
     ],
     'SOFTWARE-VERSION-1' => [
+        1,
         q(software-version-1.nameserver15.xa),
+        \@all_tags,
         [ qw(N15_SOFTWARE_VERSION) ],
-        [ qw(N15_ERROR_ON_VERSION_QUERY N15_NO_VERSION_REVEALED N15_WRONG_CLASS) ],
-        1
+        undef,        
+        [],
+        []
     ],
     'SOFTWARE-VERSION-2' => [
+        1,
         q(software-version-2.nameserver15.xa),
+        \@all_tags,
         [ qw(N15_SOFTWARE_VERSION) ],
-        [ qw(N15_ERROR_ON_VERSION_QUERY N15_NO_VERSION_REVEALED N15_WRONG_CLASS) ],
-        1
+        undef,        
+        [],
+        []
     ],
     'WRONG-CLASS-1' => [
+        1,
         q(wrong-class-1.nameserver15.xa),
+        \@all_tags,
         [ qw(N15_SOFTWARE_VERSION N15_WRONG_CLASS) ],
-        [ qw(N15_ERROR_ON_VERSION_QUERY N15_NO_VERSION_REVEALED) ],
-        1
+        undef,        
+        [],
+        []
     ],
     'WRONG-CLASS-2' => [
+        1,
         q(wrong-class-2.nameserver15.xa),
         [ qw(N15_SOFTWARE_VERSION N15_WRONG_CLASS) ],
-        [ qw(N15_ERROR_ON_VERSION_QUERY N15_NO_VERSION_REVEALED) ],
-        1
+        undef,        
+        [],
+        []
     ]
 );
 ###########
