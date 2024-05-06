@@ -84,7 +84,7 @@ my %subtests = (
         q(no-version-revealed-5.nameserver15.xa),
         \@all_tags,
         [ qw(N15_NO_VERSION_REVEALED) ],
-        undef,        
+        undef,
         [],
         []
     ],
@@ -93,7 +93,7 @@ my %subtests = (
         q(no-version-revealed-6.nameserver15.xa),
         \@all_tags,
         [ qw(N15_NO_VERSION_REVEALED) ],
-        undef,        
+        undef,
         [],
         []
     ],
@@ -102,7 +102,7 @@ my %subtests = (
         q(error-on-version-query-1.nameserver15.xa),
         \@all_tags,
         [ qw(N15_ERROR_ON_VERSION_QUERY N15_NO_VERSION_REVEALED) ],
-        undef,        
+        undef,
         [],
         []
     ],
@@ -111,7 +111,7 @@ my %subtests = (
         q(error-on-version-query-2.nameserver15.xa),
         \@all_tags,
         [ qw(N15_ERROR_ON_VERSION_QUERY N15_NO_VERSION_REVEALED) ],
-        undef,        
+        undef,
         [],
         []
     ],
@@ -120,7 +120,7 @@ my %subtests = (
         q(software-version-1.nameserver15.xa),
         \@all_tags,
         [ qw(N15_SOFTWARE_VERSION) ],
-        undef,        
+        undef,
         [],
         []
     ],
@@ -129,7 +129,7 @@ my %subtests = (
         q(software-version-2.nameserver15.xa),
         \@all_tags,
         [ qw(N15_SOFTWARE_VERSION) ],
-        undef,        
+        undef,
         [],
         []
     ],
@@ -138,15 +138,16 @@ my %subtests = (
         q(wrong-class-1.nameserver15.xa),
         \@all_tags,
         [ qw(N15_SOFTWARE_VERSION N15_WRONG_CLASS) ],
-        undef,        
+        undef,
         [],
         []
     ],
     'WRONG-CLASS-2' => [
         1,
         q(wrong-class-2.nameserver15.xa),
+        \@all_tags,
         [ qw(N15_SOFTWARE_VERSION N15_WRONG_CLASS) ],
-        undef,        
+        undef,
         [],
         []
     ]
