@@ -191,7 +191,7 @@ sub perform_testcase_testing {
                 my %hash;
                 foreach my $nsexp ( @$undelegated_ns ) {
                     my ($ns, $ip) = split m(/), $nsexp;
-                    $hash{$ns} = [] unless exists $hash{$ns};
+                    $hash{$ns} //= [];
                     push @{ $hash{$ns} }, $ip if $ip;
                 }
                 Zonemaster::Engine::Recursor->remove_fake_addresses( $zone_name );
