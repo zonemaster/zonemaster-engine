@@ -154,16 +154,16 @@ sub perform_testcase_testing {
 
         if ( $mandatory_message_tags == undef ) {
             my @tags;
-            foreach ( my $t ) @$all_test_case_tags {
-                push @tags $t unless grep( /^$t$/, @$forbidden_message_tags );
+            foreach my $t ( @$all_test_case_tags ) {
+                push @tags, $t unless grep( /^$t$/, @$forbidden_message_tags );
             }
             $mandatory_message_tags = \@tags;
         }
 
         if ( $forbidden_message_tags == undef ) {
             my @tags;
-            foreach ( my $t ) @$all_test_case_tags {
-                push @tags $t unless grep( /^$t$/, @$mandatory_message_tags );
+            foreach my $t ( @$all_test_case_tags ) {
+                push @tags, $t unless grep( /^$t$/, @$mandatory_message_tags );
             }
             $forbidden_message_tags = \@tags;
         }
@@ -189,7 +189,7 @@ sub perform_testcase_testing {
 
             if ( @$undelegated_ns ) {
                 my %hash;
-                foreach my $nsexp (@$undelegated_ns) {
+                foreach my $nsexp ( @$undelegated_ns ) {
                     my ($ns, $ip) = split m(/), $nsexp;
                     $hash{$ns} = [] unless exists $hash{$ns};
                     push @{ $hash{$ns} }, $ip if $ip;
