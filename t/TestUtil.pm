@@ -71,9 +71,14 @@ an array of DS expressions for "undelegated" DS
 
 =back
 
+The array of mandatory message tags or the array of forbidden message tags, but not both, could be
+undefined. If the mandatory message tag array is undefined, then it will be generated to contain
+all message tags not included in the forbidden message tag array. The same mechanism is used if the
+forbidden message tag array is undefined.
+
 The name server expression has the format "name-server-name/IP" or only "name-server-name". The DS expression
 has the format "keytag,algorithm,type,digest". Those two expressions have the same format as the data for
---ns and --ds options, repectively, for zonemaster-cli.
+--ns and --ds options, repectively, for I<zonemaster-cli>.
 
 =back
 
