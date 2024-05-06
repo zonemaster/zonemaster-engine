@@ -121,7 +121,7 @@ The objects are an aggregate of what is returned by the test case methods.
 all() may optionally include additional entries of its own.
 
 In case there are dependencies between the test cases, all() may skip one test
-case method dependning on what log entries were emitted from another.
+case method depending on what log entries were emitted from another.
 
 =head3 metadata()
 
