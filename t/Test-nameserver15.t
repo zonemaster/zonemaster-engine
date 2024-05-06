@@ -17,7 +17,10 @@ BEGIN {
 # nameserver15 - https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/test-zones/Nameserver-TP/nameserver15.md
 my $test_module = 'Nameserver';
 my $test_case = 'nameserver15';
-my @all_tags = qw(N15_NO_VERSION_REVEALED N15_ERROR_ON_VERSION_QUERY N15_SOFTWARE_VERSION N15_WRONG_CLASS);
+my @all_tags = qw(N15_NO_VERSION_REVEALED
+                  N15_ERROR_ON_VERSION_QUERY
+                  N15_SOFTWARE_VERSION
+                  N15_WRONG_CLASS);
 
 # Common hint file (test-zone-data/COMMON/hintfile)
 Zonemaster::Engine::Recursor->remove_fake_addresses( '.' );
