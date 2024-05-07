@@ -1,10 +1,13 @@
 package Zonemaster::Engine::Packet;
+
 use 5.014002;
+
+use strict;
 use warnings;
+
 use version; our $VERSION = version->declare("v1.0.5");
 
 use Class::Accessor 'antlers';
-
 use Carp qw( confess );
 use Zonemaster::Engine::Util;
 

@@ -1,13 +1,14 @@
 package Zonemaster::Engine::Nameserver::Cache::LocalCache;
 
-use version; our $VERSION = version->declare("v1.0.4");
-
 use 5.014002;
+
+use strict;
 use warnings;
+
+use version; our $VERSION = version->declare("v1.0.4");
 
 use Carp qw( confess );
 use Scalar::Util qw( blessed );
-
 use Zonemaster::Engine;
 use Zonemaster::Engine::Nameserver::Cache;
 
