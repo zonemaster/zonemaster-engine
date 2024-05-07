@@ -118,9 +118,13 @@ isa_ok( $dsrr, 'Zonemaster::LDNS::RR::DS' );
 is( $dsrr->keytag,    16696,      'Expected keytag' );
 is( $dsrr->hexdigest, 'deadbeef', 'Expected digest data' );
 
-Zonemaster::Engine::Profile->effective->set( q{resolver.source}, q{127.0.0.1} );
+Zonemaster::Engine::Profile->effective->set( q{resolver.source4}, q{127.0.0.1} );
 my $ns_test = new_ok( 'Zonemaster::Engine::Nameserver' => [ { name => 'ns.nic.se', address => '212.247.7.228' } ] );
-is($ns_test->dns->source, '127.0.0.1', 'Source address set.');
+is($ns_test->dns->source, '127.0.0.1', 'Source IPv4 address set.');
+
+Zonemaster::Engine::Profile->effective->set( q{resolver.source6}, q{::1} );
+my $ns_test = new_ok( 'Zonemaster::Engine::Nameserver' => [ { name => 'ns.nic.se', address => '2001:67c:124c:100a::45' } ] );
+is($ns_test->dns->source, '::1', 'Source IPv6 address set.');
 
 Zonemaster::Engine::Profile->effective->set( q{no_network}, 0 );
 # Address was 127.0.0.17 (https://github.com/zonemaster/zonemaster-engine/issues/219).

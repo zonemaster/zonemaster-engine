@@ -9,18 +9,17 @@ use version; our $VERSION = version->declare( "v1.2.22" );
 
 use File::ShareDir qw[dist_file];
 use JSON::PP qw( encode_json decode_json );
-use Scalar::Util qw(reftype);
+use Scalar::Util qw(reftype looks_like_number);
 use File::Slurp;
 use Clone qw(clone);
 use Data::Dumper;
 use Net::IP::XS;
 use Log::Any qw( $log );
 use YAML::XS qw();
-use Scalar::Util qw( looks_like_number );
 
 $YAML::XS::Boolean = "JSON::PP";
 
-use Zonemaster::Engine::Constants qw( $RESOLVER_SOURCE_OS_DEFAULT $DURATION_5_MINUTES_IN_SECONDS $DURATION_1_HOUR_IN_SECONDS $DURATION_4_HOURS_IN_SECONDS $DURATION_12_HOURS_IN_SECONDS $DURATION_1_DAY_IN_SECONDS $DURATION_1_WEEK_IN_SECONDS $DURATION_180_DAYS_IN_SECONDS );
+use Zonemaster::Engine::Constants qw( $DURATION_5_MINUTES_IN_SECONDS $DURATION_1_HOUR_IN_SECONDS $DURATION_4_HOURS_IN_SECONDS $DURATION_12_HOURS_IN_SECONDS $DURATION_1_DAY_IN_SECONDS $DURATION_1_WEEK_IN_SECONDS $DURATION_180_DAYS_IN_SECONDS );
 
 my %profile_properties_details = (
     q{cache} => {
@@ -81,30 +80,36 @@ my %profile_properties_details = (
     q{resolver.defaults.timeout} => {
         type    => q{Num}
     },
-    q{resolver.source} => {
-        type    => q{Str},
-        test    => sub {
-            if ( $_[0] ne $RESOLVER_SOURCE_OS_DEFAULT ) {
-                Net::IP::XS->new( $_[0] ) || $log->warning( "Property resolver.source must be an IP address or the exact string $RESOLVER_SOURCE_OS_DEFAULT" );
-            }
-        }
-    },
     q{resolver.source4} => {
         type    => q{Str},
         test    => sub {
-            if ( $_[0] and $_[0] ne '' and not Net::IP::XS::ip_is_ipv4( $_[0] ) ) {
-                $log->warning( "Property resolver.source4 must be an IPv4 address, the empty string or undefined" );
+            if ( not defined( $_[0] ) ) {
+                die "Property resolver.source4 has a NULL item";
             }
-            Net::IP::XS->new( $_[0] );
+
+            if ( $_[0] eq '' ) {
+                die "Property resolver.source4 has an empty item";
+            }
+
+            unless ( Net::IP::XS->new( $_[0] ) and Net::IP::XS::ip_is_ipv4( $_[0] ) ) {
+                die "Property resolver.source4 must be a valid IPv4 address";
+            }
         }
     },
     q{resolver.source6} => {
         type    => q{Str},
         test    => sub {
-            if ( $_[0] and $_[0] ne '' and not Net::IP::XS::ip_is_ipv6( $_[0] ) ) {
-                $log->warning( "Property resolver.source6 must be an IPv6 address, the empty string or undefined" );
+            if ( not defined( $_[0] ) ) {
+                die "Property resolver.source6 has a NULL item";
             }
-            Net::IP::XS->new( $_[0] );
+
+            if ( $_[0] eq '' ) {
+                die "Property resolver.source6 has an empty item";
+            }
+
+            unless ( Net::IP::XS->new( $_[0] ) and Net::IP::XS::ip_is_ipv6( $_[0] ) ) {
+                die "Property resolver.source6 must be a valid IPv6 address";
+            }
         }
     },
     q{net.ipv4} => {
@@ -304,16 +309,8 @@ sub default {
             $new->set( $property_name, $profile_properties_details{$property_name}{default} );
         }
     }
-    $new->check_validity;
-    return $new;
-}
 
-sub check_validity {
-    my ( $self ) = @_;
-    my $resolver = $self->{profile}{resolver};
-    if ( exists $resolver->{source} and ( exists $resolver->{source4} or exists $resolver->{source6} ) ) {
-        $log->warning( "Error in profile: 'resolver.source' (deprecated) can't be used in combination with 'resolver.source4' or 'resolver.source6'." );
-    }
+    return $new;
 }
 
 sub get {
@@ -415,7 +412,7 @@ sub merge {
             $self->_set( q{JSON}, $property_name, _get_value_from_nested_hash( $other_profile->{q{profile}}, split /[.]/, $property_name ) );
         }
     }
-    $self->check_validity;
+
     return $other_profile->{q{profile}};
 }
 
@@ -431,7 +428,6 @@ sub from_json {
         }
     }
 
-    $new->check_validity;
     return $new;
 }
 
@@ -578,10 +574,6 @@ PROPERTIES> section.
 
 =head1 INSTANCE METHODS
 
-=head2 check_validity
-
-Verify that the profile does not allow confusing combinations.
-
 =head2 get
 
 Get the value of a property.
@@ -709,28 +701,19 @@ the same query is resent with EDNS0 and TCP (if needed). If you
 want the original answer (with TC bit set) and avoid this kind of
 replay, set this flag to false.
 
-=head2 resolver.source
-
-Deprecated (planned removal: v2024.1).
-Use L</resolver.source4> and L</resolver.source6>.
-A string that is either an IP address or the exact string C<"os_default">.
-The source address all resolver objects should use when sending queries.
-If C<"os_default">, the OS default address is used.
-Default C<"os_default">.
-
 =head2 resolver.source4
 
-A string that is an IPv4 address or the empty string or undefined.
+A string representation of an IPv4 address.
 The source address all resolver objects should use when sending queries over IPv4.
-If the empty string or undefined, use the OS default IPv4 address if available.
-Default "" (empty string).
+
+Undefined by default. Uses OS default IPv4 address.
 
 =head2 resolver.source6
 
-A string that is an IPv6 address or the empty string or undefined.
+A string representation of an IPv6 address.
 The source address all resolver objects should use when sending queries over IPv6.
-If the empty string or undefined, use the OS default IPv6 address if available.
-Default "" (empty string).
+
+Undefined by default. Uses OS default IPv6 address.
 
 =head2 net.ipv4
 
