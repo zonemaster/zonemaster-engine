@@ -528,10 +528,7 @@ Update it to change the configuration.
 The effective profile is initialized with the default values declared
 in the L</PROFILE PROPERTIES> section.
 
-For the effective profile, all properties are always set (to valid
-values).
-This is based on the assumption that F<default.profile> specifies a
-valid value for each and every property.
+All properties in the effective profile are always set (to valid values).
 
 =head1 CLASS METHODS
 
@@ -675,9 +672,6 @@ Each property has a name and is either set or unset.
 If it is set it has a value that is valid for that specific property.
 Here is a listing of all the properties and their respective sets of
 valid values.
-
-Default values are listed here as specified in the distributed default
-profile JSON file.
 
 =head2 resolver.defaults.usevc
 
@@ -888,11 +882,16 @@ https://github.com/zonemaster/zonemaster/tree/master/docs/specifications/tests/R
 define the default severity level for some of the messages.
 These specifications are the only authoritative documents on the default
 severity level for the various messages.
-For messages not defined in any of these specifications please refer to the file
-located by L<dist_file("Zonemaster-Engine", "default.profile")|
-File::ShareDir/dist_file>.
-For messages neither defined in test specifications, nor listed in
-C<default.profile>, the default severity level is C<DEBUG>.
+For messages not defined in any of these specifications you can use the
+following command to query the default severity level directly from the actual
+default profile.
+
+```sh
+perl -MZonemaster::Engine::Test -E 'say Zonemaster::Engine::Profile->default->to_json' | jq -S .test_levels
+```
+
+For messages neither defined in test specifications, nor listed in the default
+profile, the default severity level is C<DEBUG>.
 
 I<Note:> Sometimes multiple test cases within the same test module define
 messages for the same tag.
