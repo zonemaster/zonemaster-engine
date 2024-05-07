@@ -9,6 +9,8 @@ use Test::More;
 use Zonemaster::Engine;
 use Exporter 'import';
 
+use Carp qw( croak );
+
 BEGIN {
     our @EXPORT_OK = qw[ perform_testcase_testing ];
     our %EXPORT_TAGS = ( all => \@EXPORT_OK );
@@ -37,11 +39,11 @@ unknown to the include path @INC, it can be including using the following code:
 
 =item perform_testcase_testing()
 
-    perform_testcase_testing( $test_case, $test_module, %subtests );
+    perform_testcase_testing( $test_case, $test_module, $aref_alltags, %subtests );
 
-This method loads unit test data (test case name, test module name and test scenarios) and, after some data checks
-and if the test scenario is testable, it runs the specified test case and checks for the presence (or absence) of
-specific message tags for each specified test scenario.
+This method loads unit test data (test case name, test module name, array of all message tags and test scenarios) and,
+after some data checks and if the test scenario is testable, it runs the specified test case and checks for the presence
+(or absence) of specific message tags for each specified test scenario.
 
 Takes a string (test case name), a string (test module name) and a hash - the keys of which are scenario names
 (in all uppercase), and their corresponding values are an array of:
@@ -53,9 +55,6 @@ a boolean (testable), 1 or 0
 
 =item *
 a string (zone name)
-
-=item *
-an array of strings (all test case message tags)
 
 =item *
 an array of strings (mandatory message tags)
@@ -85,23 +84,28 @@ has the format "keytag,algorithm,type,digest". Those two expressions have the sa
 =cut
 
 sub perform_testcase_testing {
-    my ( $test_case, $test_module, %subtests ) = @_;
+    my ( $test_case, $test_module, $aref_alltags, %subtests ) = @_;
 
     my @untested_scenarios = ();
 
+    if ( ref( $aref_alltags ) ne 'ARRAY' ) {
+        croak 'All tags array variable must be an array ref'
+    }
+
+    foreach my $t (@$aref_alltags) {
+        croak "Invalid tag in 'all tags': '$t'" unless $t =~ /^[A-Z]+[A-Z0-9_]*[A-Z0-9]$/;
+    }
+
     for my $scenario ( sort ( keys %subtests ) ) {
         if ( ref( $scenario ) ne '' or $scenario ne uc($scenario) ) {
-            diag("Scenario $scenario: Key must (i) not be a reference and (ii) be in all uppercase");
-            fail("Hash contains valid keys");
-            next;
+            croak "Scenario $scenario: Key must (i) not be a reference and (ii) be in all uppercase";
         }
 
-        if ( scalar @{ $subtests{$scenario} } != 7 ) {
+        if ( scalar @{ $subtests{$scenario} } != 6 ) {
             diag("Scenario $scenario: Incorrect number of values. " .
                  "Correct format is: { SCENARIO_NAME => [" .
                  "testable " .
                  "zone_name, " .
-                 "[ ALL_TEST_CASE_TAGS ], " .
                  "[ MANDATORY_MESSAGE_TAGS ], " .
                  "[ FORBIDDEN_MESSAGE_TAGS ], " .
                  "[ UNDELEGATED_NS ], " .
@@ -114,7 +118,6 @@ sub perform_testcase_testing {
 
         my ( $testable,
              $zone_name,
-             $all_test_case_tags,
              $mandatory_message_tags,
              $forbidden_message_tags,
              $undelegated_ns,
@@ -122,58 +125,36 @@ sub perform_testcase_testing {
             ) = @{ $subtests{$scenario} };
 
         if ( ref( $testable ) ne '' ) {
-            diag("Scenario $scenario: Type of testable must not be a reference");
-            fail("Testable is of the correct type");
-            next;
+            croak "Scenario $scenario: Type of testable must not be a reference";
+        }
+
+        if ( $testable != 1 and $testable != 0 ) {
+            croak "Scenario $scenario: Value of testable must be 0 or 1";
         }
 
         if ( ref( $zone_name ) ne '' ) {
-            diag("Scenario $scenario: Type of zone name must not be a reference");
-            fail("Zone name is of the correct type");
-            next;
+            croak "Scenario $scenario: Type of zone name must not be a reference";
         }
 
-        if ( ref( $all_test_case_tags ) ne 'ARRAY' ) {
-            diag("Scenario $scenario: Incorrect reference type of all test case tags. Expected: ARRAY");
-            fail("Mandatory message tags are of the correct type");
-            next;
+        if ( $zone_name !~ m(^[A-Za-z0-9/_.-]+$) ) {
+            croak "Scenario $scenario: Zone name '$zone_name' is not valid";
         }
 
         if ( ! defined( $mandatory_message_tags ) and !defined( $forbidden_message_tags ) ) {
-            diag("Scenario $scenario: Not both array of mandatory tags and array of forbidden tags can be undefined");
-            fail("Mandatory message tags or forbidden message tags or both are defined");
-            next;
+            croak "Scenario $scenario: Not both array of mandatory tags and array of forbidden tags can be undefined";
         }
 
         if ( defined( $mandatory_message_tags ) and ref( $mandatory_message_tags ) ne 'ARRAY' ) {
-            diag("Scenario $scenario: Incorrect reference type of mandatory message tags. Expected: ARRAY");
-            fail("Mandatory message tags are of the correct type");
-            next;
+            croak "Scenario $scenario: Incorrect reference type of mandatory message tags. Expected: ARRAY";
         }
 
         if ( defined( $forbidden_message_tags ) and ref( $forbidden_message_tags ) ne 'ARRAY' ) {
-            diag("Scenario $scenario: Incorrect reference type of forbidden message tags. Expected: ARRAY");
-            fail("Forbidden message tags are of the correct type");
-            next;
-        }
-
-        foreach my $tag ( @$mandatory_message_tags ) {
-            unless ( grep( /^$tag$/, @$all_test_case_tags ) ) {
-                diag("Scenario $scenario: Message tag $tag i 'mandatory message tags' is missing in 'all tags'");
-                fail("List of all test case tags is complete");
-            }
-        }
-
-        foreach my $tag ( @$forbidden_message_tags ) {
-            unless ( grep( /^$tag$/, @$all_test_case_tags ) ) {
-                diag("Scenario $scenario: Message tag $tag i 'forbidden message tags' is missing in 'all tags'");
-                fail("List of all test case tags is complete");
-            }
+            croak "Scenario $scenario: Incorrect reference type of forbidden message tags. Expected: ARRAY";
         }
 
         if ( ! defined( $mandatory_message_tags ) ) {
             my @tags;
-            foreach my $t ( @$all_test_case_tags ) {
+            foreach my $t ( @$aref_alltags ) {
                 push @tags, $t unless grep( /^$t$/, @$forbidden_message_tags );
             }
             $mandatory_message_tags = \@tags;
@@ -181,22 +162,38 @@ sub perform_testcase_testing {
 
         if ( ! defined( $forbidden_message_tags ) ) {
             my @tags;
-            foreach my $t ( @$all_test_case_tags ) {
+            foreach my $t ( @$aref_alltags ) {
                 push @tags, $t unless grep( /^$t$/, @$mandatory_message_tags );
             }
             $forbidden_message_tags = \@tags;
         }
 
+        foreach my $t (@$mandatory_message_tags) {
+            croak "Scenario $scenario: Invalid tag in 'mandatory tags': '$t'" unless $t =~ /^[A-Z]+[A-Z0-9_]*[A-Z0-9]$/;
+        }
+
+        foreach my $tag ( @$mandatory_message_tags ) {
+            unless ( grep( /^$tag$/, @$aref_alltags ) ) {
+                croak "Scenario $scenario: Message tag '$tag' i 'mandatory message tags' is missing in 'all tags'";
+            }
+        }
+
+        foreach my $t (@$forbidden_message_tags) {
+            croak "Scenario $scenario: Invalid tag in 'forbidden tags': '$t'" unless $t =~ /^[A-Z]+[A-Z0-9_]*[A-Z0-9]$/;
+        }
+
+        foreach my $tag ( @$forbidden_message_tags ) {
+            unless ( grep( /^$tag$/, @$aref_alltags ) ) {
+                croak "Scenario $scenario: Message tag '$tag' i 'forbidden message tags' is missing in 'all tags'";
+            }
+        }
+
         if ( ref( $undelegated_ns ) ne 'ARRAY' ) {
-            diag("Scenario $scenario: Incorrect reference type of undelegated name servers expressions. Expected: ARRAY");
-            fail("Undelegated name server expressions are of the correct type");
-            next;
+            croak "Scenario $scenario: Incorrect reference type of undelegated name servers expressions. Expected: ARRAY";
         }
 
         if ( ref( $undelegated_ds ) ne 'ARRAY' ) {
-            diag("Scenario $scenario: Incorrect reference type of undelegated name servers expressions. Expected: ARRAY");
-            fail("Undelegated name server expressions are of the correct type");
-            next;
+            croak "Scenario $scenario: Incorrect reference type of undelegated name servers expressions. Expected: ARRAY";
         }
 
         if ( not $testable ) {
@@ -210,6 +207,16 @@ sub perform_testcase_testing {
                 my %hash;
                 foreach my $nsexp ( @$undelegated_ns ) {
                     my ($ns, $ip) = split m(/), $nsexp;
+                    croak "Scenario $scenario: Name server name '$ns' in '$nsexp' is not valid" if $ns !~ /^[A-Za-z-.]+$/;
+                    if ($ip) {
+                        croak "Scenario $scenario: IP address '$ip' in '$nsexp' is not valid" if
+                            $ip !~ /^([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])){3}$/ and
+                            $ip !~ /^((?:[0-9A-Fa-f]{1,4}:){7}[0-9A-Fa-f]{1,4}|(?:[0-9A-Fa-f]{1,4}:){1,7}:|:(?::[0-9A-Fa-f]{1,4}){1,7}|
+                                   [0-9A-Fa-f]{1,4}:(?:(?::[0-9A-Fa-f]{1,4}){1,6})|:(?:(?::[0-9A-Fa-f]{1,4}){1,7}|:)|
+                                   (?:(?:[0-9A-Fa-f]{1,4}:){1,6}:[0-9A-Fa-f]{1,4})|(?:(?:[0-9A-Fa-f]{1,4}:){1,5}:(?:[0-9A-Fa-f]{1,4}:){1,2})|
+                                   (?:(?:[0-9A-Fa-f]{1,4}:){1,4}:(?:[0-9A-Fa-f]{1,4}:){1,3})|(?:(?:[0-9A-Fa-f]{1,4}:){1,3}:(?:[0-9A-Fa-f]{1,4}:){1,4})|
+                                   (?:(?:[0-9A-Fa-f]{1,4}:){1,2}:(?:[0-9A-Fa-f]{1,4}:){1,5}))$/x; # IPv4 and IPv6, respectively
+                    }
                     $hash{$ns} //= [];
                     push @{ $hash{$ns} }, $ip if $ip;
                 }
@@ -221,6 +228,8 @@ sub perform_testcase_testing {
                 my @data;
                 foreach my $str ( @$undelegated_ds ) {
                     my ( $tag, $algo, $type, $digest ) = split( /,/, $str );
+                    croak "Scenario $scenario: DS expression '$str' is not valid" if
+                        $tag !~ /^[0-9]+$/ or $algo !~ /^[0-9]+$/ or $type !~ /^[0-9]+$/ or $digest !~ /^[0-9a-fA-F]{4,}/;
                     push @data, { keytag => $tag, algorithm => $algo, type => $type, digest => $digest };
                 }
                 Zonemaster::Engine->add_fake_ds( $zone_name => \@data );
