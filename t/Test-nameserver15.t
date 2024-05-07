@@ -35,7 +35,6 @@ Zonemaster::Engine::Recursor->add_fake_addresses( '.',
 # - Format: { SCENARIO_NAME => [
 #     testable,
 #     zone_name,
-#     [ ALL_TEST_CASE_TAGS ],
 #     [ MANDATORY_MESSAGE_TAGS ],
 #     [ FORBIDDEN_MESSAGE_TAGS ],
 #     [ UNDELEGATED_NS ],
@@ -49,7 +48,6 @@ my %subtests = (
     'NO-VERSION-REVEALED-1' => [
         1,
         q(no-version-revealed-1.nameserver15.xa),
-        \@all_tags,
         [ qw(N15_NO_VERSION_REVEALED) ],
         undef,
         [],
@@ -58,7 +56,6 @@ my %subtests = (
     'NO-VERSION-REVEALED-2' => [
         1,
         q(no-version-revealed-2.nameserver15.xa),
-        \@all_tags,
         [ qw(N15_NO_VERSION_REVEALED) ],
         undef,
         [],
@@ -67,7 +64,6 @@ my %subtests = (
     'NO-VERSION-REVEALED-3' => [
         1,
         q(no-version-revealed-3.nameserver15.xa),
-        \@all_tags,
         [ qw(N15_NO_VERSION_REVEALED) ],
         undef,
         [],
@@ -76,7 +72,6 @@ my %subtests = (
     'NO-VERSION-REVEALED-4' => [
         1,
         q(no-version-revealed-4.nameserver15.xa),
-        \@all_tags,
         [ qw(N15_NO_VERSION_REVEALED) ],
         undef,
         [],
@@ -85,7 +80,6 @@ my %subtests = (
     'NO-VERSION-REVEALED-5' => [
         1,
         q(no-version-revealed-5.nameserver15.xa),
-        \@all_tags,
         [ qw(N15_NO_VERSION_REVEALED) ],
         undef,
         [],
@@ -94,7 +88,6 @@ my %subtests = (
     'NO-VERSION-REVEALED-6' => [
         1,
         q(no-version-revealed-6.nameserver15.xa),
-        \@all_tags,
         [ qw(N15_NO_VERSION_REVEALED) ],
         undef,
         [],
@@ -103,7 +96,6 @@ my %subtests = (
     'ERROR-ON-VERSION-QUERY-1' => [
         1,
         q(error-on-version-query-1.nameserver15.xa),
-        \@all_tags,
         [ qw(N15_ERROR_ON_VERSION_QUERY N15_NO_VERSION_REVEALED) ],
         undef,
         [],
@@ -112,7 +104,6 @@ my %subtests = (
     'ERROR-ON-VERSION-QUERY-2' => [
         1,
         q(error-on-version-query-2.nameserver15.xa),
-        \@all_tags,
         [ qw(N15_ERROR_ON_VERSION_QUERY N15_NO_VERSION_REVEALED) ],
         undef,
         [],
@@ -121,7 +112,6 @@ my %subtests = (
     'SOFTWARE-VERSION-1' => [
         1,
         q(software-version-1.nameserver15.xa),
-        \@all_tags,
         [ qw(N15_SOFTWARE_VERSION) ],
         undef,
         [],
@@ -130,7 +120,6 @@ my %subtests = (
     'SOFTWARE-VERSION-2' => [
         1,
         q(software-version-2.nameserver15.xa),
-        \@all_tags,
         [ qw(N15_SOFTWARE_VERSION) ],
         undef,
         [],
@@ -139,7 +128,6 @@ my %subtests = (
     'WRONG-CLASS-1' => [
         1,
         q(wrong-class-1.nameserver15.xa),
-        \@all_tags,
         [ qw(N15_SOFTWARE_VERSION N15_WRONG_CLASS) ],
         undef,
         [],
@@ -148,7 +136,6 @@ my %subtests = (
     'WRONG-CLASS-2' => [
         1,
         q(wrong-class-2.nameserver15.xa),
-        \@all_tags,
         [ qw(N15_SOFTWARE_VERSION N15_WRONG_CLASS) ],
         undef,
         [],
@@ -167,7 +154,7 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
 
 Zonemaster::Engine::Profile->effective->merge( Zonemaster::Engine::Profile->from_json( qq({ "test_cases": [ "$test_case" ] }) ) );
 
-perform_testcase_testing( $test_case, $test_module, %subtests );
+perform_testcase_testing( $test_case, $test_module, \@all_tags, %subtests );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Nameserver->save( $datafile );
