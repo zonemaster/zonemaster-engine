@@ -102,18 +102,15 @@ sub perform_testcase_testing {
         }
 
         if ( scalar @{ $subtests{$scenario} } != 6 ) {
-            diag("Scenario $scenario: Incorrect number of values. " .
-                 "Correct format is: { SCENARIO_NAME => [" .
-                 "testable " .
-                 "zone_name, " .
-                 "[ MANDATORY_MESSAGE_TAGS ], " .
-                 "[ FORBIDDEN_MESSAGE_TAGS ], " .
-                 "[ UNDELEGATED_NS ], " .
-                 "[ UNDELEGATED_DS ], " .
-                 " ] }"
-            );
-            fail("Hash contains valid values");
-            next;
+            croak "Scenario $scenario: Incorrect number of values. " .
+                "Correct format is: { SCENARIO_NAME => [" .
+                "testable " .
+                "zone_name, " .
+                "[ MANDATORY_MESSAGE_TAGS ], " .
+                "[ FORBIDDEN_MESSAGE_TAGS ], " .
+                "[ UNDELEGATED_NS ], " .
+                "[ UNDELEGATED_DS ], " .
+                " ] }";
         }
 
         my ( $testable,
