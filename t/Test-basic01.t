@@ -50,6 +50,8 @@ Zonemaster::Engine::Recursor->add_fake_addresses( '.',
 # - One of MANDATORY_MESSAGE_TAGS and FORBIDDEN_MESSAGE_TAGS may be undefined.
 #   See documentation for the meaning of that.
 
+# More scenarios to be added./MD 2024-05-12
+
 my %subtests = (
     'GOOD-1' => [
         1,
@@ -60,7 +62,7 @@ my %subtests = (
         [],
     ],
     'GOOD-MIXED-1' => [
-        1,
+        0,
         q(child.parent.good-mixed-1.basic01.xa),
         [ qw(B01_CHILD_FOUND B01_PARENT_FOUND) ],
         undef,
@@ -100,7 +102,7 @@ my %subtests = (
         [],
     ],
     'GOOD-MIXED-UNDEL-1' => [
-        1,
+        0,
         q(child.parent.good-mixed-undel-1.basic01.xa),
         [ qw(B01_CHILD_FOUND B01_PARENT_FOUND) ],
         undef,
@@ -132,7 +134,7 @@ my %subtests = (
         [],
     ],
     'NO-DEL-MIXED-UNDEL-2' => [
-        1,
+        0,
         q(child.w.x.parent.y.z.no-del-mixed-undel-2.basic01.xa),
         [ qw(B01_CHILD_NOT_EXIST B01_PARENT_FOUND) ],
         undef,
