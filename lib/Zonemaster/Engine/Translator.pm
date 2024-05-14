@@ -135,7 +135,7 @@ sub initialize {
         _last_language        => _build_last_language(),
     };
 
-    $instance = bless $obj, __PACKAGE__;
+    $instance = bless $obj, $class;
 
     return;
 }
