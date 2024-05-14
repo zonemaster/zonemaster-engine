@@ -57,10 +57,10 @@ a boolean (testable), 1 or 0
 a string (zone name)
 
 =item *
-an array of strings (mandatory message tags)
+an array of strings (mandatory message tags) or undef
 
 =item *
-an array of strings (forbidden message tags)
+an array of strings (forbidden message tags) or undef
 
 =item *
 an array of name server expressions for undelegated name servers
@@ -190,7 +190,7 @@ sub perform_testcase_testing {
         }
 
         if ( ref( $undelegated_ds ) ne 'ARRAY' ) {
-            croak "Scenario $scenario: Incorrect reference type of undelegated name servers expressions. Expected: ARRAY";
+            croak "Scenario $scenario: Incorrect reference type of undelegated DS expressions. Expected: ARRAY";
         }
 
         if ( not $testable ) {
@@ -201,7 +201,7 @@ sub perform_testcase_testing {
         subtest $scenario => sub {
 
             if ( @$undelegated_ns ) {
-                my %hash;
+                my %undel_ns;
                 foreach my $nsexp ( @$undelegated_ns ) {
                     my ($ns, $ip) = split m(/), $nsexp;
                     croak "Scenario $scenario: Name server name '$ns' in '$nsexp' is not valid" if $ns !~ /^[0-9A-Za-z-.]+$/;
@@ -214,11 +214,11 @@ sub perform_testcase_testing {
                                    (?:(?:[0-9A-Fa-f]{1,4}:){1,4}:(?:[0-9A-Fa-f]{1,4}:){1,3})|(?:(?:[0-9A-Fa-f]{1,4}:){1,3}:(?:[0-9A-Fa-f]{1,4}:){1,4})|
                                    (?:(?:[0-9A-Fa-f]{1,4}:){1,2}:(?:[0-9A-Fa-f]{1,4}:){1,5}))$/x; # IPv4 and IPv6, respectively
                     }
-                    $hash{$ns} //= [];
-                    push @{ $hash{$ns} }, $ip if $ip;
+                    $undel_ns{$ns} //= [];
+                    push @{ $undel_ns{$ns} }, $ip if $ip;
                 }
                 Zonemaster::Engine::Recursor->remove_fake_addresses( $zone_name );
-                Zonemaster::Engine::Recursor->add_fake_addresses( $zone_name, \%hash );
+                Zonemaster::Engine::Recursor->add_fake_addresses( $zone_name, \%undel_ns );
             }
 
             if ( @$undelegated_ds ) {
