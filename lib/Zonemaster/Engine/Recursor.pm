@@ -230,7 +230,7 @@ sub _resolve_cname {
     if ( scalar $p->get_records( $type, 'answer' ) ) {
         # RR of type QTYPE for CNAME target is already in the response; no need to recurse
         if ( $p->has_rrs_of_type_for_name( $type, $target ) ) {
-            Zonemaster::Engine->logger->add( CNAME_FOLLOWED_IB => { name => $name, type => $type, target => $target } );
+            Zonemaster::Engine->logger->add( CNAME_FOLLOWED_IN_ZONE => { name => $name, type => $type, target => $target } );
             return ( $p, $state );
         }
 
@@ -256,7 +256,7 @@ sub _resolve_cname {
 
     # Make sure that the CNAME target is out of zone before making a new recursive lookup for CNAME target
     unless ( $name->is_in_bailiwick( $target ) ) {
-        Zonemaster::Engine->logger->add( CNAME_FOLLOWED_OOB => { name => $name, target => $target } );
+        Zonemaster::Engine->logger->add( CNAME_FOLLOWED_OUT_OF_ZONE => { name => $name, target => $target } );
         ( $p, $state ) = $class->_recurse( $target, $type, $dns_class,
             { ns => [ root_servers() ], count => 0, common => 0, seen => {}, tseen => $state->{tseen}, tcount => $state->{tcount}, glue => {} });
     }
@@ -607,10 +607,36 @@ Returns a L<Zonemaster::Engine::Packet> (or C<undef>) and a hash.
 
 Performs CNAME resolution for the given arguments. Used by the L<recursive lookup|/_recurse()> helper method in this module.
 If CNAMEs are successfully resolved, a L<packet|Zonemaster::Engine::Packet> (which could be C<undef>) is returned along with
-one of the following message tags: CNAME_FOLLOWED_IB, CNAME_FOLLOWED_OOB.
+one of the following message tags:
+
+=over
+
+=item CNAME_FOLLOWED_IN_ZONE
+
+=item CNAME_FOLLOWED_OUT_OF_ZONE
+
+=back
+
 Note that CNAME records are also validated and, in case of an error, an empty (C<undef>) L<packet|Zonemaster::Engine::Packet>
-is returned and one of the following message tags will be logged: CNAME_CHAIN_TOO_LONG, CNAME_LOOP_INNER, CNAME_LOOP_OUTER,
-CNAME_NO_MATCH, CNAME_RECORDS_CHAIN_BROKEN, CNAME_RECORDS_MULTIPLE_FOR_NAME, CNAME_RECORDS_TOO_MANY.
+is returned and one of the following message tags will be logged:
+
+=over
+
+=item CNAME_CHAIN_TOO_LONG
+
+=item CNAME_LOOP_INNER
+
+=item CNAME_LOOP_OUTER
+
+=item CNAME_NO_MATCH
+
+=item CNAME_RECORDS_CHAIN_BROKEN
+
+=item CNAME_RECORDS_MULTIPLE_FOR_NAME
+
+=item CNAME_RECORDS_TOO_MANY
+
+=back
 
 Takes a L<Zonemaster::Engine::DNSName> object, a string (query type), a string (DNS class), a L<Zonemaster::Engine::Packet>, and a reference to a hash.
 
