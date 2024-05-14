@@ -45,7 +45,7 @@ subtest 'GOOD-CNAME-1' => sub {
 
     my %res = map { $_->tag => $_ } @{ Zonemaster::Engine->logger->entries };
     ok( $res{CNAME_START}, q{should emit CNAME_START} );
-    ok( $res{CNAME_FOLLOWED_IB}, q{should emit CNAME_FOLLOWED_IB} );
+    ok( $res{CNAME_FOLLOWED_IN_ZONE}, q{should emit CNAME_FOLLOWED_IN_ZONE} );
 };
 
 subtest 'GOOD-CNAME-2' => sub {
@@ -68,7 +68,7 @@ subtest 'GOOD-CNAME-2' => sub {
 
     my %res = map { $_->tag => $_ } @{ Zonemaster::Engine->logger->entries };
     ok( $res{CNAME_START}, q{should emit CNAME_START} );
-    ok( $res{CNAME_FOLLOWED_IB}, q{should emit CNAME_FOLLOWED_IB} );
+    ok( $res{CNAME_FOLLOWED_IN_ZONE}, q{should emit CNAME_FOLLOWED_IN_ZONE} );
 };
 
 subtest 'GOOD-CNAME-CHAIN' => sub {
@@ -95,7 +95,7 @@ subtest 'GOOD-CNAME-CHAIN' => sub {
 
     my %res = map { $_->tag => $_ } @{ Zonemaster::Engine->logger->entries };
     ok( $res{CNAME_START}, q{should emit CNAME_START} );
-    ok( $res{CNAME_FOLLOWED_IB}, q{should emit CNAME_FOLLOWED_IB} );
+    ok( $res{CNAME_FOLLOWED_IN_ZONE}, q{should emit CNAME_FOLLOWED_IN_ZONE} );
 };
 
 subtest 'GOOD-CNAME-OUT-OF-ZONE' => sub {
@@ -110,7 +110,7 @@ subtest 'GOOD-CNAME-OUT-OF-ZONE' => sub {
 
     my %res = map { $_->tag => $_ } @{ Zonemaster::Engine->logger->entries };
     ok( $res{CNAME_START}, q{should emit CNAME_START} );
-    ok( $res{CNAME_FOLLOWED_OOB}, q{should emit CNAME_FOLLOWED_OOB} );
+    ok( $res{CNAME_FOLLOWED_OUT_OF_ZONE}, q{should emit CNAME_FOLLOWED_OUT_OF_ZONE} );
 };
 
 subtest 'NXDOMAIN-VIA-CNAME' => sub {
@@ -126,7 +126,7 @@ subtest 'NXDOMAIN-VIA-CNAME' => sub {
 
     my %res = map { $_->tag => $_ } @{ Zonemaster::Engine->logger->entries };
     ok( $res{CNAME_START}, q{should emit CNAME_START} );
-    ok( $res{CNAME_FOLLOWED_OOB}, q{should emit CNAME_FOLLOWED_OOB} );
+    ok( $res{CNAME_FOLLOWED_OUT_OF_ZONE}, q{should emit CNAME_FOLLOWED_OUT_OF_ZONE} );
 };
 
 subtest 'NODATA-VIA-CNAME' => sub {
@@ -142,7 +142,7 @@ subtest 'NODATA-VIA-CNAME' => sub {
 
     my %res = map { $_->tag => $_ } @{ Zonemaster::Engine->logger->entries };
     ok( $res{CNAME_START}, q{should emit CNAME_START} );
-    ok( $res{CNAME_FOLLOWED_OOB}, q{should emit CNAME_FOLLOWED_OOB} );
+    ok( $res{CNAME_FOLLOWED_OUT_OF_ZONE}, q{should emit CNAME_FOLLOWED_OUT_OF_ZONE} );
 };
 
 subtest 'MULT-CNAME' => sub {
