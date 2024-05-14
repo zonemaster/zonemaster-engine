@@ -1,11 +1,9 @@
 package Zonemaster::Engine::Exception;
 
-use strict;
+use v5.16.0;
 use warnings;
 
 use version; our $VERSION = version->declare("v1.0.3");
-
-use 5.014002;
 
 use Class::Accessor "antlers";
 

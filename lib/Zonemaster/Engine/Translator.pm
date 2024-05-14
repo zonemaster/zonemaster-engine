@@ -1,8 +1,6 @@
 package Zonemaster::Engine::Translator;
 
-use 5.014002;
-
-use strict;
+use v5.16.0;
 use warnings;
 
 use version; our $VERSION = version->declare("v1.0.8");
@@ -12,6 +10,7 @@ use Locale::Messages qw[textdomain];
 use Locale::TextDomain qw[Zonemaster-Engine];
 use POSIX qw[setlocale LC_MESSAGES];
 use Readonly;
+
 use Zonemaster::Engine::Test;
 
 ###

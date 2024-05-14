@@ -1,6 +1,6 @@
 package Zonemaster::Engine::Normalization::Error;
 
-use strict;
+use v5.16.0;
 use warnings;
 
 use Carp;
