@@ -77,7 +77,7 @@ forbidden message tag array is undefined.
 
 The name server expression has the format "name-server-name/IP" or only "name-server-name". The DS expression
 has the format "keytag,algorithm,type,digest". Those two expressions have the same format as the data for
---ns and --ds options, repectively, for I<zonemaster-cli>.
+--ns and --ds options, respectively, for I<zonemaster-cli>.
 
 =back
 
@@ -165,7 +165,7 @@ sub perform_testcase_testing {
             $forbidden_message_tags = \@tags;
         }
 
-        foreach my $t (@$mandatory_message_tags) {
+        foreach my $t ( @$mandatory_message_tags ) {
             croak "Scenario $scenario: Invalid tag in 'mandatory tags': '$t'" unless $t =~ /^[A-Z]+[A-Z0-9_]*[A-Z0-9]$/;
         }
 
@@ -175,7 +175,7 @@ sub perform_testcase_testing {
             }
         }
 
-        foreach my $t (@$forbidden_message_tags) {
+        foreach my $t ( @$forbidden_message_tags ) {
             croak "Scenario $scenario: Invalid tag in 'forbidden tags': '$t'" unless $t =~ /^[A-Z]+[A-Z0-9_]*[A-Z0-9]$/;
         }
 
