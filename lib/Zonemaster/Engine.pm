@@ -1,8 +1,6 @@
 package Zonemaster::Engine;
 
-use 5.014002;
-
-use strict;
+use v5.16.0;
 use warnings;
 
 use version; our $VERSION = version->declare("v5.0.0");
@@ -19,6 +17,7 @@ BEGIN {
 
 use Class::Accessor "antlers";
 use Carp;
+
 use Zonemaster::Engine::Nameserver;
 use Zonemaster::Engine::Logger;
 use Zonemaster::Engine::Profile;
