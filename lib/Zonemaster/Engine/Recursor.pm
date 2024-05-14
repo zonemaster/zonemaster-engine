@@ -606,8 +606,8 @@ Returns a L<Zonemaster::Engine::Packet> (or C<undef>) and a hash.
     my ( $p, $state_hash ) = _resolve_cname( $name, $type_string, $dns_class_string, $p, $state_hash );
 
 Performs CNAME resolution for the given arguments. Used by the L<recursive lookup|/_recurse()> helper method in this module.
-If CNAMEs are successfully resolved, a L<packet|Zonemaster::Engine::Packet> (which could be C<undef>) is returned along with
-one of the following message tags:
+If CNAMEs are successfully resolved, a L<packet|Zonemaster::Engine::Packet> (which could be C<undef>) is returned and
+one of the following message tags is logged:
 
 =over
 
