@@ -393,8 +393,6 @@ is the same as if initialize() had been called without arguments.
 
 Use of this method is deprecated.
 
-See L<MooseX::Singleton->new|MooseX::Singleton/"Singleton->new">.
-
 =over
 
 =item locale
