@@ -217,8 +217,8 @@ sub perform_testcase_testing {
                     $undel_ns{$ns} //= [];
                     push @{ $undel_ns{$ns} }, $ip if $ip;
                 }
-                Zonemaster::Engine::Recursor->remove_fake_addresses( $zone_name );
-                Zonemaster::Engine::Recursor->add_fake_addresses( $zone_name, \%undel_ns );
+
+                Zonemaster::Engine->add_fake_delegation( $zone_name => \%undel_ns, fill_in_empty_oob_glue => 0 );
             }
 
             if ( @$undelegated_ds ) {
