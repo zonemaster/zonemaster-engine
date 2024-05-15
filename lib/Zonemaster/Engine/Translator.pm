@@ -131,7 +131,7 @@ sub initialize {
 
     my $obj = {
         _locale               => $locale // _init_locale(),
-        _all_tag_descriptions => _build_all_tag_descriptions(),
+        _all_tag_descriptions => $class->_build_all_tag_descriptions(),
         _last_language        => _build_last_language(),
     };
 
@@ -195,6 +195,8 @@ sub _load_data {
 }
 
 sub _build_all_tag_descriptions {
+    my ( $class ) = @_;
+
     my %all_tag_descriptions;
 
     $all_tag_descriptions{System} = \%TAG_DESCRIPTIONS;
