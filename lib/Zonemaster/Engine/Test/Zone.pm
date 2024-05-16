@@ -482,7 +482,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     Z11_DIFFERENT_SPF_POLICIES_FOUND => sub {
         __x    # ZONE:Z11_DIFFERENT_SPF_POLICIES_FOUND
-          'The following name servers returned the same SPF version 1 policy, but other name servers returned a different policy. Name servers: {ns_ip_list}.', @_;
+          'The following name servers returned the same SPF policy, but other name servers returned a different policy. Name servers: {ns_ip_list}.', @_;
     },
     Z11_NO_SPF_FOUND => sub {
         __x    # ZONE:Z11_NO_SPF_FOUND
@@ -490,19 +490,19 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     Z11_SPF1_MULTIPLE_RECORDS => sub {
         __x    # ZONE:Z11_SPF1_MULTIPLE_RECORDS
-          'The following name servers returned more than one SPF version 1 policy. Name servers: {ns_ip_list}.', @_;
+          'The following name servers returned more than one SPF policy. Name servers: {ns_ip_list}.', @_;
     },
     Z11_SPF1_SYNTAX_ERROR => sub {
         __x    # ZONE:Z11_SPF1_SYNTAX_ERROR
-          'The SPF version 1 policy has a syntax error. Policy retrieved from the following nameservers: {ns_ip_list}.', @_;
+          'The zone’s SPF policy has a syntax error. Policy retrieved from the following nameservers: {ns_ip_list}.', @_;
     },
     Z11_SPF1_SYNTAX_OK => sub {
         __x    # ZONE:Z11_SPF1_SYNTAX_OK
-          'The SPF version 1 policy has correct syntax.', @_;
+          'The zone’s SPF policy has correct syntax.', @_;
     },
     Z11_UNABLE_TO_CHECK_FOR_SPF => sub {
         __x    # ZONE:Z11_UNABLE_TO_CHECK_FOR_SPF
-          'None of the name servers responded with an authoritative response to queries for SPF policies.', @_;
+          'None of the zone’s name servers responded with an authoritative response to queries for SPF policies.', @_;
     },
 );
 
