@@ -754,7 +754,7 @@ Default C<"Cymru">.
 
 A hash of arrayrefs of strings. The currently supported keys are C<"Cymru"> or C<"RIPE"> (case-insensitive).
 
-For C<"Cymru">, the strings are domain names. For C<"RIPE">, they are whois servers. Normally only the first
+For C<"Cymru">, the strings are domain names. For C<"RIPE">, they are WHOIS servers. Normally only the first
 item in the list will be used, the rest are backups in case the previous ones didn't work.
 
 Default C<{Cymru: [ "asnlookup.zonemaster.net", "asn.cymru.com" ], RIPE: [ "riswhois.ripe.net" ]}>.

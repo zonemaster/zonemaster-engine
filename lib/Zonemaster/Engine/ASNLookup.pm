@@ -46,10 +46,10 @@ sub get_with_prefix {
     }
     else {
         if ( not $db_style ) {
-            die "ASN database style is [UNDEFINED]";
+            die "ASN database style undefined";
         }
         else {
-            die "ASN database style value [$db_style] is illegal";
+            die "ASN database style value '$db_style' is illegal";
         }
     }
 
@@ -63,37 +63,51 @@ sub _cymru_asn_lookup {
     my $ip = shift;
     my @asns = ();
 
-    my $reverse = $ip->reverse_ip;
     my $db_source_nb = 0;
     foreach my $db_source ( @db_sources ) {
+        my $reverse = $ip->reverse_ip;
         my $domain = $db_source->string;
         my $pair   = {
             'in-addr.arpa.' => "origin.$domain",
             'ip6.arpa.'     => "origin6.$domain",
         };
         $db_source_nb++;
+
         foreach my $root ( keys %{$pair} ) {
             if ( $reverse =~ s/$root/$pair->{$root}/ix ) {
                 my $p = Zonemaster::Engine->recurse( $reverse, 'TXT' );
                 my @rr;
+
                 if ( $p ) {
-                    @rr = $p->get_records( 'TXT' );
+                    @rr = $p->get_records( 'TXT', 'answer' );
+
+                    if ( $p->rcode eq q{NOERROR} and not scalar @rr ) {
+                        return \@asns, undef, q{}, q{EMPTY_ASN_SET};
+                    }
+
+                    if ( $p->rcode eq q{NXDOMAIN} ) {
+                        if ( $p->get_records( 'SOA', 'authority' ) and scalar $p->get_records( 'SOA', 'authority' ) == 1 and ($p->get_records( 'SOA', 'authority' ))[0]->owner eq name( $db_source ) ) {
+                            return \@asns, undef, q{}, q{EMPTY_ASN_SET};
+                        }
+                        else {
+                            if ( $db_source_nb == scalar @db_sources ) {
+                                return \@asns, undef, q{}, q{ERROR_ASN_DATABASE};
+                            }
+                            last;
+                        }
+                    }
                 }
-                if ( $p and ( $p->rcode eq q{NXDOMAIN} or ( $p->rcode eq q{NOERROR} and not scalar @rr ) ) ) {
-                    return \@asns, undef, q{}, q{EMPTY_ASN_SET};
-                }
-                if ( not $p or $p->rcode ne q{NOERROR} ) {
+                else {
                     if ( $db_source_nb == scalar @db_sources ) {
                         return \@asns, undef, q{}, q{ERROR_ASN_DATABASE};
                     }
-                    else {
-                        last;
-                    }
+                    last;
                 }
 
                 my $prefix_length = 0;
                 my @fields;
                 my $str;
+
                 foreach my $rr ( @rr ) {
                     my $_str = $rr->txtdata;
                     my @_fields = split( /[ ][|][ ]?/x, $_str );
@@ -106,17 +120,8 @@ sub _cymru_asn_lookup {
                         $prefix_length = $_prefix_length;
                     }
                 }
-                if ( scalar @rr ) {
-                    return \@asns, Net::IP::XS->new( $fields[1] ), $str, q{AS_FOUND};
-                }
-                else {
-                    if ( $db_source_nb == scalar @db_sources ) {
-                        return \@asns, undef, $str, q{ERROR_ASN_DATABASE};
-                    }
-                    else {
-                        last;
-                    }
-                }
+
+                return \@asns, Net::IP::XS->new( $fields[1] ), $str, q{AS_FOUND};
             }
         }
     } ## end foreach my $db_source ( @db_sources )

@@ -28,11 +28,18 @@ ok $asn3[0] >= 390000, '2001:503:ba3e::2:30 is in AS' . $asn3[0];
 my ( $asn4, $prefix4 ) = Zonemaster::Engine::ASNLookup->get_with_prefix( '192.168.0.1' );
 ok( scalar @{$asn4} == 0, '192.168.0.1 (RFC1918 address) is in no AS' );
 
-Zonemaster::Engine::Profile->effective->set(q{asn_db.sources}, { cymru => [ "asnlookup.dufberg.se" ] });
+Zonemaster::Engine::Profile->effective->set(q{asn_db.sources}, { cymru => [ "fake.asnlookup.zonemaster.net", "asnlookup.dufberg.se" ] });
 
 my ( $asn5, $prefix5 ) = Zonemaster::Engine::ASNLookup->get_with_prefix( '3.124.111.178' );
 is $asn5->[0], 16509, '3.124.111.178 is in AS16509';
 is $prefix5->prefix, '3.124.0.0/14', '3.124.111.178 is in 3.124.0.0/14';
+
+Zonemaster::Engine::Profile->effective->set(q{asn_db.style}, "ripe" );
+Zonemaster::Engine::Profile->effective->set(q{asn_db.sources}, { ripe => [ "fake.riswhois.zonemaster.net", "riswhois.ripe.net" ] });
+
+my ( $asn6, $prefix6 ) = Zonemaster::Engine::ASNLookup->get_with_prefix( '1.1.1.1' );
+is $asn6->[0], 13335, '1.1.1.1 is in AS13335';
+is $prefix6->prefix, '1.1.1.0/24', '1.1.1.1 is in 1.1.1.0/24';
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Nameserver->save( $datafile );
