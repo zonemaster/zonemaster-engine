@@ -52,67 +52,10 @@ Zonemaster::Engine::Recursor->add_fake_addresses( '.',
 # Scenarios CHILD-ZONE-LAME-1 and IB-ADDR-MISMATCH-3 cannot be tested due to a bug in the implementation. See
 # https://github.com/zonemaster/zonemaster-engine/issues/1301
 
-
 my %subtests = (
-    'ADDRESSES-MATCH-4' => [
-        1,
-        q(addresses-match-4.consistency05.xa),
-        [ qw(ADDRESSES_MATCH CHILD_NS_FAILED) ],
-        undef,
-        [],
-        []
-    ],
-    'CHILD-ZONE-LAME-1' => [
-        0,
-        q(child-zone-lame-1.consistency05.xa),
-        [ qw(CHILD_ZONE_LAME NO_RESPONSE) ],
-        undef,
-        [],
-        []
-    ],
     'ADDRESSES-MATCH-1' => [
         1,
         q(addresses-match-1.consistency05.xa),
-        [ qw(ADDRESSES_MATCH) ],
-        undef,
-        [],
-        []
-    ],
-    'IB-ADDR-MISMATCH-2' => [
-        1,
-        q(ib-addr-mismatch-2.consistency05.xa),
-        [ qw(IN_BAILIWICK_ADDR_MISMATCH) ],
-        undef,
-        [],
-        []
-    ],
-    'ADDRESSES-MATCH-5' => [
-        1,
-        q(addresses-match-5.consistency05.xa),
-        [ qw(ADDRESSES_MATCH NO_RESPONSE) ],
-        undef,
-        [],
-        []
-    ],
-    'IB-ADDR-MISMATCH-1' => [
-        1,
-        q(ib-addr-mismatch-1.consistency05.xa),
-        [ qw(IN_BAILIWICK_ADDR_MISMATCH EXTRA_ADDRESS_CHILD) ],
-        undef,
-        [],
-        []
-    ],
-    'CHILD-ZONE-LAME-2' => [
-        1,
-        q(child-zone-lame-2.consistency05.xa),
-        [ qw(CHILD_ZONE_LAME CHILD_NS_FAILED) ],
-        undef,
-        [],
-        []
-    ],
-    'ADDRESSES-MATCH-6' => [
-        1,
-        q(child.addresses-match-6.consistency05.xa),
         [ qw(ADDRESSES_MATCH) ],
         undef,
         [],
@@ -126,10 +69,34 @@ my %subtests = (
         [],
         []
     ],
-    'IB-ADDR-MISMATCH-3' => [
-        0,
-        q(ib-addr-mismatch-3.consistency05.xa),
-        [ qw(IN_BAILIWICK_ADDR_MISMATCH NO_RESPONSE) ],
+    'ADDRESSES-MATCH-3' => [
+        1,
+        q(addresses-match-3.consistency05.xa),
+        [ qw(ADDRESSES_MATCH CHILD_NS_FAILED) ],
+        undef,
+        [],
+        []
+    ],
+    'ADDRESSES-MATCH-4' => [
+        1,
+        q(addresses-match-4.consistency05.xa),
+        [ qw(ADDRESSES_MATCH CHILD_NS_FAILED) ],
+        undef,
+        [],
+        []
+    ],
+    'ADDRESSES-MATCH-5' => [
+        1,
+        q(addresses-match-5.consistency05.xa),
+        [ qw(ADDRESSES_MATCH NO_RESPONSE) ],
+        undef,
+        [],
+        []
+    ],
+    'ADDRESSES-MATCH-6' => [
+        1,
+        q(child.addresses-match-6.consistency05.xa),
+        [ qw(ADDRESSES_MATCH) ],
         undef,
         [],
         []
@@ -142,10 +109,42 @@ my %subtests = (
         [],
         []
     ],
-    'EXTRA-ADDRESS-CHILD' => [
+    'CHILD-ZONE-LAME-1' => [
+        0,
+        q(child-zone-lame-1.consistency05.xa),
+        [ qw(CHILD_ZONE_LAME NO_RESPONSE) ],
+        undef,
+        [],
+        []
+    ],
+    'CHILD-ZONE-LAME-2' => [
         1,
-        q(extra-address-child.consistency05.xa),
-        [ qw(EXTRA_ADDRESS_CHILD) ],
+        q(child-zone-lame-2.consistency05.xa),
+        [ qw(CHILD_ZONE_LAME CHILD_NS_FAILED) ],
+        undef,
+        [],
+        []
+    ],
+    'IB-ADDR-MISMATCH-1' => [
+        1,
+        q(ib-addr-mismatch-1.consistency05.xa),
+        [ qw(IN_BAILIWICK_ADDR_MISMATCH EXTRA_ADDRESS_CHILD) ],
+        undef,
+        [],
+        []
+    ],
+    'IB-ADDR-MISMATCH-2' => [
+        1,
+        q(ib-addr-mismatch-2.consistency05.xa),
+        [ qw(IN_BAILIWICK_ADDR_MISMATCH) ],
+        undef,
+        [],
+        []
+    ],
+    'IB-ADDR-MISMATCH-3' => [
+        0,
+        q(ib-addr-mismatch-3.consistency05.xa),
+        [ qw(IN_BAILIWICK_ADDR_MISMATCH NO_RESPONSE) ],
         undef,
         [],
         []
@@ -158,14 +157,14 @@ my %subtests = (
         [],
         []
     ],
-    'ADDRESSES-MATCH-3' => [
+    'EXTRA-ADDRESS-CHILD' => [
         1,
-        q(addresses-match-3.consistency05.xa),
-        [ qw(ADDRESSES_MATCH CHILD_NS_FAILED) ],
+        q(extra-address-child.consistency05.xa),
+        [ qw(EXTRA_ADDRESS_CHILD) ],
         undef,
         [],
         []
-    ]
+    ],
 );
 
 ###########
