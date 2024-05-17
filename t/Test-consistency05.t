@@ -52,6 +52,10 @@ Zonemaster::Engine::Recursor->add_fake_addresses( '.',
 # Scenarios CHILD-ZONE-LAME-1 and IB-ADDR-MISMATCH-3 cannot be tested due to a bug in the implementation. See
 # https://github.com/zonemaster/zonemaster-engine/issues/1301
 
+# Scenario IB-ADDR-MISMATCH-4 cannot be tested, see
+# https://github.com/zonemaster/zonemaster-engine/issues/1349
+
+
 my %subtests = (
     'ADDRESSES-MATCH-1' => [
         1,
@@ -109,6 +113,38 @@ my %subtests = (
         [],
         []
     ],
+    'ADDR-MATCH-DEL-UNDEL-1' => [
+        1,
+        q(addr-match-del-undel-1.consistency05.xa),
+        [ qw(ADDRESSES_MATCH) ],
+        undef,
+        [ qw(ns3.addr-match-del-undel-1.consistency05.xa/127.14.5.33 ns3.addr-match-del-undel-1.consistency05.xa/fda1:b2:c3:0:127:14:5:33 ns4.addr-match-del-undel-1.consistency05.xa/127.14.5.34 ns4.addr-match-del-undel-1.consistency05.xa/fda1:b2:c3:0:127:14:5:34) ],
+        []
+    ],
+    'ADDR-MATCH-DEL-UNDEL-2' => [
+        1,
+        q(addr-match-del-undel-2.consistency05.xa),
+        [ qw(ADDRESSES_MATCH) ],
+        undef,
+        [ qw(ns3.addr-match-del-undel-2.consistency05.xb ns4.addr-match-del-undel-2.consistency05.xb) ],
+        []
+    ],
+    'ADDR-MATCH-NO-DEL-UNDEL-1' => [
+        1,
+        q(addr-match-no-del-undel-1.consistency05.xa),
+        [ qw(ADDRESSES_MATCH) ],
+        undef,
+        [ qw(ns1.addr-match-no-del-undel-1.consistency05.xa/127.14.5.31 ns1.addr-match-no-del-undel-1.consistency05.xa/fda1:b2:c3:0:127:14:5:31 ns2.addr-match-no-del-undel-1.consistency05.xa/127.14.5.32 ns2.addr-match-no-del-undel-1.consistency05.xa/fda1:b2:c3:0:127:14:5:32) ],
+        []
+    ],
+    'ADDR-MATCH-NO-DEL-UNDEL-2' => [
+        1,
+        q(addr-match-no-del-undel-2.consistency05.xa),
+        [ qw(ADDRESSES_MATCH) ],
+        undef,
+        [ qw(ns3.addr-match-no-del-undel-2.consistency05.xb ns4.addr-match-no-del-undel-2.consistency05.xb) ],
+        []
+    ],
     'CHILD-ZONE-LAME-1' => [
         0,
         q(child-zone-lame-1.consistency05.xa),
@@ -145,6 +181,14 @@ my %subtests = (
         0,
         q(ib-addr-mismatch-3.consistency05.xa),
         [ qw(IN_BAILIWICK_ADDR_MISMATCH NO_RESPONSE) ],
+        undef,
+        [],
+        []
+    ],
+    'IB-ADDR-MISMATCH-4' => [
+        0,
+        q(ib-addr-mismatch-4.consistency05.xa),
+        [ qw(IN_BAILIWICK_ADDR_MISMATCH) ],
         undef,
         [],
         []
