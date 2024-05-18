@@ -99,6 +99,22 @@ my %subtests = (
         [],
         []
     ],
+    'MULT-SOA-MNAMES-NO-DEL-UNDEL-1' => [
+        1,
+        q(mult-soa-mnames-no-del-undel-1.consistency06.xa),
+        [ qw(MULTIPLE_SOA_MNAMES) ],
+        undef,
+        [ qw(ns1.mult-soa-mnames-no-del-undel-1.consistency06.xa/127.14.6.31 ns1.mult-soa-mnames-no-del-undel-1.consistency06.xa/fda1:b2:c3:0:127:14:6:31 ns2.mult-soa-mnames-no-del-undel-1.consistency06.xa/127.14.6.32 ns2.mult-soa-mnames-no-del-undel-1.consistency06.xa/fda1:b2:c3:0:127:14:6:32) ],
+        []
+    ],
+    'MULT-SOA-MNAMES-NO-DEL-UNDEL-2' => [
+        0,
+        q(mult-soa-mnames-no-del-undel-2.consistency06.xa),
+        [ qw(MULTIPLE_SOA_MNAMES) ],
+        undef,
+        [ qw(ns3.mult-soa-mnames-no-del-undel-2.consistency06.xb ns3.mult-soa-mnames-no-del-undel-2.consistency06.xb) ],
+        []
+    ],
     'NO-RESPONSE' => [
         0,
         q(no-response.consistency06.xa),
