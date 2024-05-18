@@ -51,14 +51,6 @@ Zonemaster::Engine::Recursor->add_fake_addresses( '.',
 
 ###########
 my %subtests = (
-    'ONE-SOA-MNAME-2' => [
-        1,
-        q(one-soa-mname-2.consistency06.xa),
-        [ qw(ONE_SOA_MNAME NO_RESPONSE) ],
-        undef,
-        [],
-        []
-    ],
     'ONE-SOA-MNAME-1' => [
         1,
         q(one-soa-mname-1.consistency06.xa),
@@ -67,18 +59,10 @@ my %subtests = (
         [],
         []
     ],
-    'NO-RESPONSE' => [
-        0,
-        q(no-response.consistency06.xa),
-        [ qw(NO_RESPONSE) ],
-        undef,
-        [],
-        []
-    ],
-    'MULTIPLE-SOA-MNAMES-1' => [
+    'ONE-SOA-MNAME-2' => [
         1,
-        q(multiple-soa-mnames-1.consistency06.xa),
-        [ qw(MULTIPLE_SOA_MNAMES) ],
+        q(one-soa-mname-2.consistency06.xa),
+        [ qw(ONE_SOA_MNAME NO_RESPONSE) ],
         undef,
         [],
         []
@@ -99,10 +83,26 @@ my %subtests = (
         [],
         []
     ],
+    'MULTIPLE-SOA-MNAMES-1' => [
+        1,
+        q(multiple-soa-mnames-1.consistency06.xa),
+        [ qw(MULTIPLE_SOA_MNAMES) ],
+        undef,
+        [],
+        []
+    ],
     'MULTIPLE-SOA-MNAMES-2' => [
         1,
         q(multiple-soa-mnames-2.consistency06.xa),
         [ qw(MULTIPLE_SOA_MNAMES NO_RESPONSE) ],
+        undef,
+        [],
+        []
+    ],
+    'NO-RESPONSE' => [
+        0,
+        q(no-response.consistency06.xa),
+        [ qw(NO_RESPONSE) ],
         undef,
         [],
         []
