@@ -57,10 +57,10 @@ a boolean (testable), 1 or 0
 a string (zone name)
 
 =item *
-an array of strings (mandatory message tags) or undef
+an array of strings (mandatory message tags), which could be empty, or undef
 
 =item *
-an array of strings (forbidden message tags) or undef
+an array of strings (forbidden message tags), which could be empty, or undef
 
 =item *
 an array of name server expressions for undelegated name servers
@@ -165,23 +165,23 @@ sub perform_testcase_testing {
             $forbidden_message_tags = \@tags;
         }
 
-        foreach my $t ( @$mandatory_message_tags ) {
-            croak "Scenario $scenario: Invalid tag in 'mandatory tags': '$t'" unless $t =~ /^[A-Z]+[A-Z0-9_]*[A-Z0-9]$/;
+        foreach my $tag ( @$mandatory_message_tags ) {
+            croak "Scenario $scenario: Invalid message tag in 'mandatory_message_tags': '$tag'" unless $tag =~ /^[A-Z]+[A-Z0-9_]*[A-Z0-9]$/;
         }
 
         foreach my $tag ( @$mandatory_message_tags ) {
             unless ( grep( /^$tag$/, @$aref_alltags ) ) {
-                croak "Scenario $scenario: Message tag '$tag' i 'mandatory message tags' is missing in 'all tags'";
+                croak "Scenario $scenario: Message tag '$tag' in 'mandatory_message_tags' is missing in 'all_tags'";
             }
         }
 
-        foreach my $t ( @$forbidden_message_tags ) {
-            croak "Scenario $scenario: Invalid tag in 'forbidden tags': '$t'" unless $t =~ /^[A-Z]+[A-Z0-9_]*[A-Z0-9]$/;
+        foreach my $tag ( @$forbidden_message_tags ) {
+            croak "Scenario $scenario: Invalid message tag in 'forbidden_message_tags': '$tag'" unless $tag =~ /^[A-Z]+[A-Z0-9_]*[A-Z0-9]$/;
         }
 
         foreach my $tag ( @$forbidden_message_tags ) {
             unless ( grep( /^$tag$/, @$aref_alltags ) ) {
-                croak "Scenario $scenario: Message tag '$tag' i 'forbidden message tags' is missing in 'all tags'";
+                croak "Scenario $scenario: Message tag '$tag' in 'forbidden_message_tags' is missing in 'all_tags'";
             }
         }
 
