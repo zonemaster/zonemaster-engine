@@ -158,7 +158,7 @@ my %subtests = (
     'NO-CHLD-PAR-UNDETER-1' => [
         1,
         q(child.parent.no-chld-par-undeter-1.basic01.xa),
-        [ qw(B01_NO_CHILD B01_PARENT_FOUND, B01_PARENT_UNDETERMINED) ],
+        [ qw(B01_NO_CHILD B01_PARENT_FOUND B01_PARENT_UNDETERMINED) ],
         undef,
         [],
         [],
@@ -166,7 +166,7 @@ my %subtests = (
     'CHLD-FOUND-PAR-UNDET-1' => [
         1,
         q(child.parent.chld-found-par-undet-1.basic01.xa),
-        [ qw(B01_CHILD_FOUND B01_PARENT_FOUND, B01_PARENT_UNDETERMINED) ],
+        [ qw(B01_CHILD_FOUND B01_PARENT_FOUND B01_PARENT_UNDETERMINED) ],
         undef,
         [],
         [],
@@ -174,7 +174,7 @@ my %subtests = (
     'CHLD-FOUND-INCONSIST-1' => [
         1,
         q(child.parent.chld-found-inconsist-1.basic01.xa),
-        [ qw(B01_CHILD_FOUND B01_INCONSISTENT_DELEGATION, B01_PARENT_FOUND) ],
+        [ qw(B01_CHILD_FOUND B01_INCONSISTENT_DELEGATION B01_PARENT_FOUND) ],
         undef,
         [],
         [],
@@ -182,7 +182,7 @@ my %subtests = (
     'CHLD-FOUND-INCONSIST-2' => [
         1,
         q(child.parent.chld-found-inconsist-2.basic01.xa),
-        [ qw(B01_CHILD_FOUND B01_INCONSISTENT_DELEGATION, B01_PARENT_FOUND) ],
+        [ qw(B01_CHILD_FOUND B01_INCONSISTENT_DELEGATION B01_PARENT_FOUND) ],
         undef,
         [],
         [],
@@ -190,7 +190,7 @@ my %subtests = (
     'CHLD-FOUND-INCONSIST-3' => [
         1,
         q(child.parent.chld-found-inconsist-3.basic01.xa),
-        [ qw(B01_CHILD_FOUND B01_INCONSISTENT_DELEGATION, B01_PARENT_FOUND) ],
+        [ qw(B01_CHILD_FOUND B01_INCONSISTENT_DELEGATION B01_PARENT_FOUND) ],
         undef,
         [],
         [],
@@ -198,7 +198,7 @@ my %subtests = (
     'CHLD-FOUND-INCONSIST-4' => [
         1,
         q(child.parent.chld-found-inconsist-4.basic01.xa),
-        [ qw(B01_CHILD_IS_ALIAS B01_CHILD_FOUND, B01_INCONSISTENT_DELEGATION) ],
+        [ qw(B01_CHILD_IS_ALIAS B01_CHILD_FOUND B01_INCONSISTENT_DELEGATION) ],
         undef,
         [],
         [],
@@ -206,7 +206,7 @@ my %subtests = (
     'CHLD-FOUND-INCONSIST-5' => [
         1,
         q(child.parent.chld-found-inconsist-5.basic01.xa),
-        [ qw(B01_CHILD_FOUND B01_INCONSISTENT_DELEGATION, B01_PARENT_FOUND) ],
+        [ qw(B01_CHILD_FOUND B01_INCONSISTENT_DELEGATION B01_PARENT_FOUND) ],
         undef,
         [],
         [],
@@ -214,7 +214,7 @@ my %subtests = (
     'CHLD-FOUND-INCONSIST-6' => [
         1,
         q(child.parent.chld-found-inconsist-6.basic01.xa),
-        [ qw(B01_CHILD_FOUND B01_INCONSISTENT_DELEGATION, B01_PARENT_FOUND) ],
+        [ qw(B01_CHILD_FOUND B01_INCONSISTENT_DELEGATION B01_PARENT_FOUND) ],
         undef,
         [],
         [],
@@ -222,7 +222,7 @@ my %subtests = (
     'CHLD-FOUND-INCONSIST-7' => [
         1,
         q(child.parent.chld-found-inconsist-7.basic01.xa),
-        [ qw(B01_CHILD_FOUND B01_INCONSISTENT_DELEGATION, B01_PARENT_FOUND) ],
+        [ qw(B01_CHILD_FOUND B01_INCONSISTENT_DELEGATION B01_PARENT_FOUND) ],
         undef,
         [],
         [],
@@ -230,7 +230,7 @@ my %subtests = (
     'CHLD-FOUND-INCONSIST-8' => [
         1,
         q(child.parent.chld-found-inconsist-8.basic01.xa),
-        [ qw(B01_CHILD_FOUND B01_INCONSISTENT_DELEGATION, B01_PARENT_FOUND) ],
+        [ qw(B01_CHILD_FOUND B01_INCONSISTENT_DELEGATION B01_PARENT_FOUND) ],
         undef,
         [],
         [],
@@ -238,7 +238,7 @@ my %subtests = (
     'CHLD-FOUND-INCONSIST-9' => [
         1,
         q(child.parent.chld-found-inconsist-9.basic01.xa),
-        [ qw(B01_CHILD_IS_ALIAS B01_CHILD_FOUND, B01_INCONSISTENT_DELEGATION) ],
+        [ qw(B01_CHILD_IS_ALIAS B01_CHILD_FOUND B01_INCONSISTENT_DELEGATION) ],
         undef,
         [],
         [],
@@ -246,7 +246,7 @@ my %subtests = (
     'CHLD-FOUND-INCONSIST-10' => [
         1,
         q(child.parent.chld-found-inconsist-10.basic01.xa),
-        [ qw(B01_CHILD_FOUND B01_INCONSISTENT_DELEGATION, B01_PARENT_FOUND) ],
+        [ qw(B01_CHILD_FOUND B01_INCONSISTENT_DELEGATION B01_PARENT_FOUND) ],
         undef,
         [],
         [],
@@ -254,7 +254,7 @@ my %subtests = (
     'NO-DEL-UNDEL-NO-PAR-1' => [
         1,
         q(child.parent.no-del-undel-no-par-1.basic01.xa),
-        [ qw(B01_CHILD_NOT_EXIST B01_PARENT_NOT_FOUND,B01_SERVER_ZONE_ERROR) ],
+        [ qw(B01_CHILD_NOT_EXIST B01_PARENT_NOT_FOUND B01_SERVER_ZONE_ERROR) ],
         undef,
         [ qw(ns3-undelegated-child.basic01.xa ns4-undelegated-child.basic01.xa) ],
         [],
@@ -262,7 +262,7 @@ my %subtests = (
     'NO-DEL-UNDEL-PAR-UND-1' => [
         1,
         q(child.parent.no-del-undel-par-und-1.basic01.xa),
-        [ qw(B01_CHILD_NOT_EXIST B01_PARENT_FOUND, B01_PARENT_UNDETERMINED) ],
+        [ qw(B01_CHILD_NOT_EXIST B01_PARENT_FOUND B01_PARENT_UNDETERMINED) ],
         undef,
         [ qw(ns3-undelegated-child.basic01.xa ns4-undelegated-child.basic01.xa) ],
         [],
@@ -270,7 +270,7 @@ my %subtests = (
     'NO-CHLD-NO-PAR-1' => [
         1,
         q(child.parent.no-chld-no-par-1.basic01.xa),
-        [ qw(B01_NO_CHILD B01_PARENT_NOT_FOUND, B01_SERVER_ZONE_ERROR) ],
+        [ qw(B01_NO_CHILD B01_PARENT_NOT_FOUND B01_SERVER_ZONE_ERROR) ],
         undef,
         [],
         [],
@@ -278,7 +278,7 @@ my %subtests = (
     'CHILD-ALIAS-1' => [
         1,
         q(child.parent.child-alias-1.basic01.xa),
-        [ qw(B01_CHILD_IS_ALIAS B01_NO_CHILD, B01_PARENT_FOUND) ],
+        [ qw(B01_CHILD_IS_ALIAS B01_NO_CHILD B01_PARENT_FOUND) ],
         undef,
         [],
         [],
@@ -286,7 +286,7 @@ my %subtests = (
     'CHILD-ALIAS-2' => [
         1,
         q(child.parent.child-alias-2.basic01.xa),
-        [ qw(B01_CHILD_IS_ALIAS B01_NO_CHILD, B01_INCONSISTENT_ALIAS, B01_PARENT_FOUND) ],
+        [ qw(B01_CHILD_IS_ALIAS B01_NO_CHILD B01_INCONSISTENT_ALIAS B01_PARENT_FOUND) ],
         undef,
         [],
         [],
@@ -294,7 +294,7 @@ my %subtests = (
     'ZONE-ERR-GRANDPARENT-1' => [
         1,
         q(child.parent.zone-err-grandparent-1.basic01.xa),
-        [ qw(B01_CHILD_FOUND B01_PARENT_FOUND, B01_SERVER_ZONE_ERROR) ],
+        [ qw(B01_CHILD_FOUND B01_PARENT_FOUND B01_SERVER_ZONE_ERROR) ],
         undef,
         [],
         [],
@@ -302,7 +302,7 @@ my %subtests = (
     'ZONE-ERR-GRANDPARENT-2' => [
         1,
         q(child.parent.zone-err-grandparent-2.basic01.xa),
-        [ qw(B01_CHILD_FOUND B01_PARENT_FOUND, B01_SERVER_ZONE_ERROR) ],
+        [ qw(B01_CHILD_FOUND B01_PARENT_FOUND B01_SERVER_ZONE_ERROR) ],
         undef,
         [],
         [],
@@ -310,7 +310,7 @@ my %subtests = (
     'ZONE-ERR-GRANDPARENT-3' => [
         1,
         q(child.parent.zone-err-grandparent-3.basic01.xa),
-        [ qw(B01_CHILD_FOUND B01_PARENT_FOUND, B01_SERVER_ZONE_ERROR) ],
+        [ qw(B01_CHILD_FOUND B01_PARENT_FOUND B01_SERVER_ZONE_ERROR) ],
         undef,
         [],
         [],
