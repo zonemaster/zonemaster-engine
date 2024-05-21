@@ -44,33 +44,33 @@ Zonemaster::Engine::Recursor->add_fake_addresses( '.', {'ibdns.root-servers.net'
 my %subtests = (
     'NO-TXT' => [
         1,
-        q(no-txt.zone11.xa),# All tags in "@all_tags" are not defined for this scenario
+        q(no-txt.zone11.xa),
         [ qw(Z11_NO_SPF_FOUND) ],
-        [ qw(Z11_INCONSISTENT_SPF_POLICIES Z11_SPF1_MULTIPLE_RECORDS Z11_SPF1_SYNTAX_ERROR Z11_SPF1_SYNTAX_OK Z11_UNABLE_TO_CHECK_FOR_SPF) ],
+        undef,
         [],
         []
     ],
     'NO-SPF-TXT' => [
         1,
-        q(no-spf-txt.zone11.xa),# All tags in "@all_tags" are not defined for this scenario
+        q(no-spf-txt.zone11.xa),
         [ qw(Z11_NO_SPF_FOUND) ],
-        [ qw(Z11_INCONSISTENT_SPF_POLICIES Z11_SPF1_MULTIPLE_RECORDS Z11_SPF1_SYNTAX_ERROR Z11_SPF1_SYNTAX_OK Z11_UNABLE_TO_CHECK_FOR_SPF) ],
+        undef,
         [],
         []
     ],
     'NON-AUTH-TXT' => [
         1,
-        q(non-auth-txt.zone11.xa),# All tags in "@all_tags" are not defined for this scenario
+        q(non-auth-txt.zone11.xa),
         [ qw(Z11_UNABLE_TO_CHECK_FOR_SPF) ],
-        [ qw(Z11_NO_SPF_FOUND Z11_INCONSISTENT_SPF_POLICIES Z11_SPF1_SYNTAX_ERROR Z11_SPF1_SYNTAX_OK ) ],
+        undef,
         [],
         []
     ],
     'NONEXISTENT' => [
         1,
-        q(nonexistent.zone11.xa),# All tags in "@all_tags" are not defined for this scenario
+        q(nonexistent.zone11.xa),
         [ qw(Z11_UNABLE_TO_CHECK_FOR_SPF) ],
-        [ qw(Z11_NO_SPF_FOUND Z11_INCONSISTENT_SPF_POLICIES Z11_SPF1_SYNTAX_ERROR Z11_SPF1_SYNTAX_OK ) ],
+        undef,
         [],
         []
     ],
@@ -100,121 +100,121 @@ my %subtests = (
     ],
     'MULTIPLE-SPF-RECORDS' => [
         1,
-        q(multiple-spf-records.zone11.xa),# All tags in "@all_tags" are not defined for this scenario
+        q(multiple-spf-records.zone11.xa),
         [ qw(Z11_SPF1_MULTIPLE_RECORDS) ],
-        [ qw(Z11_NO_SPF_FOUND Z11_INCONSISTENT_SPF_POLICIES Z11_SPF1_SYNTAX_ERROR Z11_SPF1_SYNTAX_OK Z11_UNABLE_TO_CHECK_FOR_SPF) ],
+        undef,
         [],
         []
     ],
     'INVALID-SYNTAX' => [
         1,
-        q(invalid-syntax.zone11.xa),# All tags in "@all_tags" are not defined for this scenario
+        q(invalid-syntax.zone11.xa),
         [ qw(Z11_SPF1_SYNTAX_ERROR) ],
-        [ qw(Z11_NO_SPF_FOUND Z11_INCONSISTENT_SPF_POLICIES Z11_SPF1_MULTIPLE_RECORDS Z11_SPF1_SYNTAX_OK Z11_UNABLE_TO_CHECK_FOR_SPF) ],
+        undef,
         [],
         []
     ],
     'RANDOM-BYTES' => [
         1,
-        q(random-bytes.zone11.xa),# All tags in "@all_tags" are not defined for this scenario
+        q(random-bytes.zone11.xa),
         [ qw(Z11_SPF1_SYNTAX_ERROR) ],
-        [ qw(Z11_NO_SPF_FOUND Z11_INCONSISTENT_SPF_POLICIES Z11_SPF1_MULTIPLE_RECORDS Z11_SPF1_SYNTAX_OK Z11_UNABLE_TO_CHECK_FOR_SPF) ],
+        undef,
         [],
         []
     ],
     'TWO-REDIRECTS' => [
         1,
-        q(two-redirects.zone11.xa),# All tags in "@all_tags" are not defined for this scenario
+        q(two-redirects.zone11.xa),
         [ qw(Z11_SPF1_SYNTAX_ERROR) ],
-        [ qw(Z11_NO_SPF_FOUND Z11_INCONSISTENT_SPF_POLICIES Z11_SPF1_MULTIPLE_RECORDS Z11_SPF1_SYNTAX_OK Z11_UNABLE_TO_CHECK_FOR_SPF) ],
+        undef,
         [],
         []
     ],
     'TWO-EXPS' => [
         1,
-        q(two-exps.zone11.xa),# All tags in "@all_tags" are not defined for this scenario
+        q(two-exps.zone11.xa),
         [ qw(Z11_SPF1_SYNTAX_ERROR) ],
-        [ qw(Z11_NO_SPF_FOUND Z11_INCONSISTENT_SPF_POLICIES Z11_SPF1_MULTIPLE_RECORDS Z11_SPF1_SYNTAX_OK Z11_UNABLE_TO_CHECK_FOR_SPF) ],
+        undef,
         [],
         []
     ],
     'TRIVIAL-SPF' => [
         1,
-        q(trivial-spf.zone11.xa),# All tags in "@all_tags" are not defined for this scenario
+        q(trivial-spf.zone11.xa),
         [ qw(Z11_SPF1_SYNTAX_OK) ],
-        [ qw(Z11_NO_SPF_FOUND Z11_INCONSISTENT_SPF_POLICIES Z11_SPF1_MULTIPLE_RECORDS Z11_SPF1_SYNTAX_ERROR Z11_UNABLE_TO_CHECK_FOR_SPF) ],
+        undef,
         [],
         []
     ],
     'VALID-SPF' => [
         1,
-        q(valid-spf.zone11.xa),# All tags in "@all_tags" are not defined for this scenario
+        q(valid-spf.zone11.xa),
         [ qw(Z11_SPF1_SYNTAX_OK) ],
-        [ qw(Z11_NO_SPF_FOUND Z11_INCONSISTENT_SPF_POLICIES Z11_SPF1_MULTIPLE_RECORDS Z11_SPF1_SYNTAX_ERROR Z11_UNABLE_TO_CHECK_FOR_SPF) ],
+        undef,
         [],
         []
     ],
     'REDIRECT-NON-FINAL' => [
         1,
-        q(redirect-non-final.zone11.xa),# All tags in "@all_tags" are not defined for this scenario
+        q(redirect-non-final.zone11.xa),
         [ qw(Z11_SPF1_SYNTAX_OK) ],
-        [ qw(Z11_NO_SPF_FOUND Z11_INCONSISTENT_SPF_POLICIES Z11_SPF1_MULTIPLE_RECORDS Z11_SPF1_SYNTAX_ERROR Z11_UNABLE_TO_CHECK_FOR_SPF) ],
+        undef,
         [],
         []
     ],
     'REDIRECT-AND-ALL' => [
         1,
-        q(redirect-and-all.zone11.xa),# All tags in "@all_tags" are not defined for this scenario
+        q(redirect-and-all.zone11.xa),
         [ qw(Z11_SPF1_SYNTAX_OK) ],
-        [ qw(Z11_NO_SPF_FOUND Z11_INCONSISTENT_SPF_POLICIES Z11_SPF1_MULTIPLE_RECORDS Z11_SPF1_SYNTAX_ERROR Z11_UNABLE_TO_CHECK_FOR_SPF) ],
+        undef,
         [],
         []
     ],
     'CONTAINS-PTR' => [
         1,
-        q(contains-ptr.zone11.xa),# All tags in "@all_tags" are not defined for this scenario
+        q(contains-ptr.zone11.xa),
         [ qw(Z11_SPF1_SYNTAX_OK) ],
-        [ qw(Z11_NO_SPF_FOUND Z11_INCONSISTENT_SPF_POLICIES Z11_SPF1_MULTIPLE_RECORDS Z11_SPF1_SYNTAX_ERROR Z11_UNABLE_TO_CHECK_FOR_SPF) ],
+        undef,
         [],
         []
     ],
     'CONTAINS-P-MACRO' => [
         1,
-        q(contains-p-macro.zone11.xa),# All tags in "@all_tags" are not defined for this scenario
+        q(contains-p-macro.zone11.xa),
         [ qw(Z11_SPF1_SYNTAX_OK) ],
-        [ qw(Z11_NO_SPF_FOUND Z11_INCONSISTENT_SPF_POLICIES Z11_SPF1_MULTIPLE_RECORDS Z11_SPF1_SYNTAX_ERROR Z11_UNABLE_TO_CHECK_FOR_SPF) ],
+        undef,
         [],
         []
     ],
     'CONTAINS-PR-MACRO' => [
         1,
-        q(contains-pr-macro.zone11.xa),# All tags in "@all_tags" are not defined for this scenario
+        q(contains-pr-macro.zone11.xa),
         [ qw(Z11_SPF1_SYNTAX_OK) ],
-        [ qw(Z11_NO_SPF_FOUND Z11_INCONSISTENT_SPF_POLICIES Z11_SPF1_MULTIPLE_RECORDS Z11_SPF1_SYNTAX_ERROR Z11_UNABLE_TO_CHECK_FOR_SPF) ],
+        undef,
         [],
         []
     ],
     'TOO-COMPLEX' => [
         1,
-        q(too-complex.zone11.xa),# All tags in "@all_tags" are not defined for this scenario
+        q(too-complex.zone11.xa),
         [ qw(Z11_SPF1_SYNTAX_OK) ],
-        [ qw(Z11_NO_SPF_FOUND Z11_INCONSISTENT_SPF_POLICIES Z11_SPF1_MULTIPLE_RECORDS Z11_SPF1_SYNTAX_ERROR Z11_UNABLE_TO_CHECK_FOR_SPF) ],
+        undef,
         [],
         []
     ],
     'CONTAINS-INCLUDE' => [
         1,
-        q(contains-include.zone11.xa),# All tags in "@all_tags" are not defined for this scenario
+        q(contains-include.zone11.xa),
         [ qw(Z11_SPF1_SYNTAX_OK) ],
-        [ qw(Z11_NO_SPF_FOUND Z11_INCONSISTENT_SPF_POLICIES Z11_SPF1_MULTIPLE_RECORDS Z11_SPF1_SYNTAX_ERROR Z11_UNABLE_TO_CHECK_FOR_SPF) ],
+        undef,
         [],
         []
     ],
     'CONTAINS-REDIRECT' => [
         1,
-        q(contains-redirect.zone11.xa),# All tags in "@all_tags" are not defined for this scenario
+        q(contains-redirect.zone11.xa),
         [ qw(Z11_SPF1_SYNTAX_OK) ],
-        [ qw(Z11_NO_SPF_FOUND Z11_INCONSISTENT_SPF_POLICIES Z11_SPF1_MULTIPLE_RECORDS Z11_SPF1_SYNTAX_ERROR Z11_UNABLE_TO_CHECK_FOR_SPF) ],
+        undef,
         [],
         []
     ],
