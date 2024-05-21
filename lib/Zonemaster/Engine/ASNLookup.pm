@@ -75,31 +75,31 @@ sub _cymru_asn_lookup {
 
         foreach my $root ( keys %{$pair} ) {
             if ( $reverse =~ s/$root/$pair->{$root}/ix ) {
+                my $valid_response = 0;
                 my $p = Zonemaster::Engine->recurse( $reverse, 'TXT' );
                 my @rr;
 
                 if ( $p ) {
                     @rr = $p->get_records( 'TXT', 'answer' );
 
-                    if ( $p->rcode eq q{NOERROR} and not scalar @rr ) {
-                        return \@asns, undef, q{}, q{EMPTY_ASN_SET};
-                    }
+                    if ( $p->rcode eq q{NOERROR} or $p->rcode eq q{NXDOMAIN} ) {
+                        $valid_response = 1;
 
-                    if ( $p->rcode eq q{NXDOMAIN} ) {
-                        if ( $p->get_records( 'SOA', 'authority' ) and scalar $p->get_records( 'SOA', 'authority' ) == 1 and ($p->get_records( 'SOA', 'authority' ))[0]->owner eq name( $db_source ) ) {
+                        if ( $p->rcode eq q{NOERROR} and not scalar @rr ) {
                             return \@asns, undef, q{}, q{EMPTY_ASN_SET};
                         }
-                        else {
-                            if ( $db_source_nb == scalar @db_sources ) {
-                                return \@asns, undef, q{}, q{ERROR_ASN_DATABASE};
+
+                        if ( $p->rcode eq q{NXDOMAIN} ) {
+                            if ( $p->get_records( 'SOA', 'authority' ) and scalar $p->get_records( 'SOA', 'authority' ) == 1 and ($p->get_records( 'SOA', 'authority' ))[0]->owner eq name( $db_source ) ) {
+                                return \@asns, undef, q{}, q{EMPTY_ASN_SET};
                             }
-                            last;
                         }
                     }
                 }
-                else {
+
+                if ( not $valid_response ) {
                     if ( $db_source_nb == scalar @db_sources ) {
-                        return \@asns, undef, q{}, q{ERROR_ASN_DATABASE};
+                            return \@asns, undef, q{}, q{ERROR_ASN_DATABASE};
                     }
                     last;
                 }
