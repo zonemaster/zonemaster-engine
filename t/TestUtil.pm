@@ -70,10 +70,13 @@ an array of DS expressions for "undelegated" DS
 
 =back
 
-The array of mandatory message tags or the array of forbidden message tags, but not both, could be
-undefined. If the mandatory message tag array is undefined, then it will be generated to contain
-all message tags not included in the forbidden message tag array. The same mechanism is used if the
-forbidden message tag array is undefined.
+If the array of mandatory message tags is C<undef>, it means that any message tag
+in "alltags" not explicitly forbidden must be emitted.
+
+If the array of forbidden message tags is C<undef>, it means that any message tag
+in "alltags" not explicitly allowed must not be emitted.
+
+Both of the above arrayrefs cannot be simultaneously C<undef>.
 
 The arrays of mandatory message tags and forbidden message tags, respectively, can be empty, but not
 both. At least one of the arrays must be non-empty.
