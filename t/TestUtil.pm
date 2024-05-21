@@ -141,6 +141,10 @@ sub perform_testcase_testing {
             croak "Scenario $scenario: Not both array of mandatory tags and array of forbidden tags can be undefined";
         }
 
+        if ( not scalar @{ $mandatory_message_tags } and not scalar @{ $forbidden_message_tags } ) {
+            pass("Both message tag arrays are empty. Subtest succeeds by default.");
+        }
+        
         if ( defined( $mandatory_message_tags ) and ref( $mandatory_message_tags ) ne 'ARRAY' ) {
             croak "Scenario $scenario: Incorrect reference type of mandatory message tags. Expected: ARRAY";
         }
