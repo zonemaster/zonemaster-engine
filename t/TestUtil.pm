@@ -76,7 +76,7 @@ all message tags not included in the forbidden message tag array. The same mecha
 forbidden message tag array is undefined.
 
 The arrays of mandatory message tags and forbidden message tags, respectively, can be empty, but not
-both. At least on of the arrays must be non-empty.
+both. At least one of the arrays must be non-empty.
 
 The name server expression has the format "name-server-name/IP" or only "name-server-name". The DS expression
 has the format "keytag,algorithm,type,digest". Those two expressions have the same format as the data for
