@@ -17,6 +17,19 @@ BEGIN {
 # zone09 - https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/test-zones/Zone-TP/zone09.md
 my $test_module = q{Zone};
 my $test_case = 'zone09';
+my @all_tags = qw(Z09_INCONSISTENT_MX
+                  Z09_INCONSISTENT_MX_DATA
+                  Z09_MISSING_MAIL_TARGET
+                  Z09_MX_DATA
+                  Z09_MX_FOUND
+                  Z09_NON_AUTH_MX_RESPONSE
+                  Z09_NO_MX_FOUND
+                  Z09_NO_RESPONSE_MX_QUERY
+                  Z09_NULL_MX_NON_ZERO_PREF
+                  Z09_NULL_MX_WITH_OTHER_MX
+                  Z09_ROOT_EMAIL_DOMAIN
+                  Z09_TLD_EMAIL_DOMAIN
+                  Z09_UNEXPECTED_RCODE_MX);
 
 # Test case specific hints file (test-zone-data/Zone-TP/zone09/hintfile-root-email-domain)
 Zonemaster::Engine::Recursor->remove_fake_addresses( '.' );
@@ -28,13 +41,26 @@ Zonemaster::Engine::Recursor->add_fake_addresses( '.',
 
 # Test zone scenarios
 # - Documentation: L<TestUtil/perform_testcase_testing()>
-# - Format: { SCENARIO_NAME => [ zone_name, [ MANDATORY_MESSAGE_TAGS ], [ FORBIDDEN_MESSAGE_TAGS ], testable ] }
+# - Format: { SCENARIO_NAME => [
+#     testable,
+#     zone_name,
+#     [ MANDATORY_MESSAGE_TAGS ],
+#     [ FORBIDDEN_MESSAGE_TAGS ],
+#     [ UNDELEGATED_NS ],
+#     [ UNDELEGATED_DS ],
+#   ] }
+#
+# - One of MANDATORY_MESSAGE_TAGS and FORBIDDEN_MESSAGE_TAGS may be undefined.
+#   See documentation for the meaning of that.
+
 my %subtests = (
     'ROOT-EMAIL-DOMAIN' => [
+        1,
         q(.),
         [ qw(Z09_ROOT_EMAIL_DOMAIN) ],
-        [ qw(Z09_INCONSISTENT_MX_DATA Z09_MX_DATA Z09_MISSING_MAIL_TARGET Z09_TLD_EMAIL_DOMAIN Z09_NULL_MX_WITH_OTHER_MX Z09_NULL_MX_NON_ZERO_PREF) ],
-        1
+        undef,
+        [],
+        []
     ]
 );
 ###########
@@ -49,7 +75,7 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
 
 Zonemaster::Engine::Profile->effective->merge( Zonemaster::Engine::Profile->from_json( qq({ "test_cases": [ "$test_case" ] }) ) );
 
-perform_testcase_testing( $test_case, $test_module, %subtests );
+perform_testcase_testing( $test_case, $test_module, \@all_tags, %subtests );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Nameserver->save( $datafile );
