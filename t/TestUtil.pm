@@ -12,11 +12,11 @@ use Exporter 'import';
 use Carp qw( croak );
 
 BEGIN {
-    our @EXPORT_OK = qw[ perform_testcase_testing ];
+    our @EXPORT_OK = qw[ perform_testcase_testing perform_methodsv2_testing ];
     our %EXPORT_TAGS = ( all => \@EXPORT_OK );
 
     ## no critic (Modules::ProhibitAutomaticExportation)
-    our @EXPORT = qw[ perform_testcase_testing ];
+    our @EXPORT = qw[ perform_testcase_testing perform_methodsv2_testing ];
 }
 
 =head1 NAME
@@ -36,6 +36,12 @@ unknown to the include path @INC, it can be including using the following code:
 =head1 METHODS
 
 =over
+
+=item perform_methodsv2_testing()
+
+    perform_methodsv2_testing( );
+
+TODO
 
 =item perform_testcase_testing()
 
@@ -88,6 +94,68 @@ has the format "keytag,algorithm,type,digest". Those two expressions have the sa
 =back
 
 =cut
+
+sub perform_methodsv2_testing {
+    my ( %subtests ) = @_;
+
+    for my $scenario ( sort ( keys %subtests ) ) {
+        my ( $testable,
+             $zone_name,
+             $expected_ns_ip,
+             $undelegated_ns,
+             $undelegated_ds
+            ) = @{ $subtests{$scenario} };
+
+        subtest $scenario => sub {
+            my @all_methods_names = qw( get_parent_ns_ips
+                _get_oob_ips
+                _get_delegation
+                get_del_ns_names_and_ips
+                get_del_ns_names
+                get_del_ns_ips
+                get_zone_ns_names
+                _get_ib_addr_in_zone
+                get_zone_ns_names_and_ips
+                get_zone_ns_ips
+            );
+
+            if ( @$undelegated_ns ) {
+                my %undel_ns;
+                foreach my $nsexp ( @$undelegated_ns ) {
+                    my ( $ns, $ip ) = split m(/), $nsexp;
+                    croak "Scenario $scenario: Name server name '$ns' in '$nsexp' is not valid" if $ns !~ /^[0-9A-Za-z-.]+$/;
+                    if ( $ip ) {
+                        croak "Scenario $scenario: IP address '$ip' in '$nsexp' is not valid" if
+                            $ip !~ /^([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])){3}$/ and
+                            $ip !~ /^((?:[0-9A-Fa-f]{1,4}:){7}[0-9A-Fa-f]{1,4}|(?:[0-9A-Fa-f]{1,4}:){1,7}:|:(?::[0-9A-Fa-f]{1,4}){1,7}|
+                                   [0-9A-Fa-f]{1,4}:(?:(?::[0-9A-Fa-f]{1,4}){1,6})|:(?:(?::[0-9A-Fa-f]{1,4}){1,7}|:)|
+                                   (?:(?:[0-9A-Fa-f]{1,4}:){1,6}:[0-9A-Fa-f]{1,4})|(?:(?:[0-9A-Fa-f]{1,4}:){1,5}:(?:[0-9A-Fa-f]{1,4}:){1,2})|
+                                   (?:(?:[0-9A-Fa-f]{1,4}:){1,4}:(?:[0-9A-Fa-f]{1,4}:){1,3})|(?:(?:[0-9A-Fa-f]{1,4}:){1,3}:(?:[0-9A-Fa-f]{1,4}:){1,4})|
+                                   (?:(?:[0-9A-Fa-f]{1,4}:){1,2}:(?:[0-9A-Fa-f]{1,4}:){1,5}))$/x; # IPv4 and IPv6, respectively
+                    }
+                    $undel_ns{$ns} //= [];
+                    push @{ $undel_ns{$ns} }, $ip if $ip;
+                }
+
+                Zonemaster::Engine->add_fake_delegation( $zone_name => \%undel_ns, fill_in_empty_oob_glue => 0 );
+            }
+
+            # for my $method ( @all_methods_names ) {
+            #     my $res = Zonemaster::Engine::TestMethodsV2->$method( Zonemaster::Engine->zone( $zone_name ) );
+            # }
+
+            my $res = Zonemaster::Engine::TestMethodsV2->get_zone_ns_ips( Zonemaster::Engine->zone( $zone_name ) );
+
+            foreach my $expected_ip ( @{$expected_ns_ip} ) {
+                ok( grep( /^$expected_ip$/, @{$res} ), "IP $expected_ip is present" )
+                    or diag "IP '$expected_ip' should have been present, but wasn't";
+            }
+
+            ok( scalar @{$res} == scalar @{$expected_ns_ip} ) or diag "Number of IP addresses in both arrays does not match";
+        }
+    }
+}
+
 
 sub perform_testcase_testing {
     my ( $test_case, $test_module, $aref_alltags, %subtests ) = @_;

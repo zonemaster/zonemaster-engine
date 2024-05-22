@@ -419,7 +419,7 @@ sub _get_ib_addr_in_zone {
 
 					if ( $p and $p->aa and $p->rcode eq q{NOERROR} and $p->has_rrs_of_type_for_name( $qtype, $ns_name ) ) {
 						for my $rr ( $p->get_records_for_name( $qtype, $ns_name ) ) {
-							push @{ $ib_ns{$ns->name->string} }, $rr->address;
+							push @{ $ib_ns{$ns_name} }, $rr->address;
 						}
 					}
 				}
