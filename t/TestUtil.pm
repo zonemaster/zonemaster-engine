@@ -75,6 +75,9 @@ undefined. If the mandatory message tag array is undefined, then it will be gene
 all message tags not included in the forbidden message tag array. The same mechanism is used if the
 forbidden message tag array is undefined.
 
+The arrays of mandatory message tags and forbidden message tags, respectively, can be empty, but not
+both. At least on of the arrays must be non-empty.
+
 The name server expression has the format "name-server-name/IP" or only "name-server-name". The DS expression
 has the format "keytag,algorithm,type,digest". Those two expressions have the same format as the data for
 --ns and --ds options, respectively, for I<zonemaster-cli>.
@@ -143,7 +146,7 @@ sub perform_testcase_testing {
 
         if ( defined( $mandatory_message_tags ) and defined( $forbidden_message_tags ) and
              not scalar @{ $mandatory_message_tags } and not scalar @{ $forbidden_message_tags } ) {
-            croak "Scenario $scenario: Not both arrays of mandatory message tags and forbidden message tags can be empty";
+            croak "Scenario $scenario: Not both arrays of mandatory message tags and forbidden message tags, respectively, can be empty";
         }
 
         if ( defined( $mandatory_message_tags ) and ref( $mandatory_message_tags ) ne 'ARRAY' ) {
