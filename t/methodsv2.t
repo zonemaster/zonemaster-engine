@@ -26,9 +26,10 @@ Zonemaster::Engine::Recursor->add_fake_addresses( '.',
 # - Format: { SCENARIO_NAME => [
 #     testable,
 #     zone_name,
-#     [ EXPECTED_NS_IP ],
-#     [ UNDELEGATED_NS ],
-#     [ UNDELEGATED_DS ],
+#     [ EXPECTED_PARENT_IP ],
+#     [ EXPECTED_DEL_NS ],
+#     [ EXPECTED_ZONE_NS ],
+#     [ UNDELEGATED_NS ]
 #   ] }
 #
 
@@ -36,37 +37,42 @@ my %subtests = (
     'GOOD-1' => [
         1,
         q(child.parent.good-1.methodsv2.xa),
-        [ qw( 127.40.4.21 fda1:b2:c3:0:127:40:4:21 127.40.4.22 fda1:b2:c3:0:127:40:4:22 ) ],
-        [],
+        [ qw( 127.40.3.21 fda1:b2:c3:0:127:40:3:21 127.40.3.22 fda1:b2:c3:0:127:40:3:22 ) ],
+        [ qw( ns1.child.parent.good-1.methodsv2.xa/127.40.4.21 ns1.child.parent.good-1.methodsv2.xa/fda1:b2:c3:0:127:40:4:21 ns2.child.parent.good-1.methodsv2.xa/127.40.4.22 ns2.child.parent.good-1.methodsv2.xa/fda1:b2:c3:0:127:40:4:22 ) ],
+        [ qw( ns1.child.parent.good-1.methodsv2.xa/127.40.4.21 ns1.child.parent.good-1.methodsv2.xa/fda1:b2:c3:0:127:40:4:21 ns2.child.parent.good-1.methodsv2.xa/127.40.4.22 ns2.child.parent.good-1.methodsv2.xa/fda1:b2:c3:0:127:40:4:22 ) ],
         []
     ],
     'GOOD-2' => [
         1,
         q(child.parent.good-2.methodsv2.xa),
-        [ qw( 127.40.2.25 fda1:b2:c3:0:127:40:2:25 127.40.2.26 fda1:b2:c3:0:127:40:2:26 ) ],
-        [],
+        [ qw( 127.40.3.21 fda1:b2:c3:0:127:40:3:21 127.40.3.22 fda1:b2:c3:0:127:40:3:22 ) ],
+        [ qw( ns5.good-2.methodsv2.xa/127.40.2.25 ns5.good-2.methodsv2.xa/fda1:b2:c3:0:127:40:2:25 ns6.good-2.methodsv2.xa/127.40.2.26 ns6.good-2.methodsv2.xa/fda1:b2:c3:0:127:40:2:26 ) ],
+        [ qw( ns5.good-2.methodsv2.xa/127.40.2.25 ns5.good-2.methodsv2.xa/fda1:b2:c3:0:127:40:2:25  ns6.good-2.methodsv2.xa/127.40.2.26 ns6.good-2.methodsv2.xa/fda1:b2:c3:0:127:40:2:26 ) ],
         []
     ],
     'GOOD-3' => [
         1,
         q(child.parent.good-3.methodsv2.xa),
-        [ qw( 127.40.4.21 fda1:b2:c3:0:127:40:4:21 127.40.3.23 fda1:b2:c3:0:127:40:3:23 127.40.2.25 fda1:b2:c3:0:127:40:2:25 ) ],
-        [],
+        [ qw( 127.40.3.21 fda1:b2:c3:0:127:40:3:21 127.40.3.22 fda1:b2:c3:0:127:40:3:22 ) ],
+        [ qw( ns1.child.parent.good-3.methodsv2.xa/127.40.4.21 ns1.child.parent.good-3.methodsv2.xa/fda1:b2:c3:0:127:40:4:21 ns3.parent.good-3.methodsv2.xa/127.40.3.23 ns3.parent.good-3.methodsv2.xa/fda1:b2:c3:0:127:40:3:23 ns5.good-3.methodsv2.xa/127.40.2.25 ns5.good-3.methodsv2.xa/fda1:b2:c3:0:127:40:2:25 ) ],
+        [ qw( ns1.child.parent.good-3.methodsv2.xa/127.40.4.21 ns1.child.parent.good-3.methodsv2.xa/fda1:b2:c3:0:127:40:4:21 ns3.parent.good-3.methodsv2.xa/127.40.3.23 ns3.parent.good-3.methodsv2.xa/fda1:b2:c3:0:127:40:3:23 ns5.good-3.methodsv2.xa/127.40.2.25 ns5.good-3.methodsv2.xa/fda1:b2:c3:0:127:40:2:25 ) ],
         []
     ],
     'GOOD-UNDEL-1' => [
         1,
         q(child.parent.good-undel-1.methodsv2.xa),
-        [ qw( 127.40.3.22 fda1:b2:c3:0:127:40:3:22 127.40.3.23 fda1:b2:c3:0:127:40:3:23 127.40.2.26 fda1:b2:c3:0:127:40:2:26 ) ],
-        [ qw( ns1-2.child.parent.good-undel-1.methodsv2.xa/127.40.3.22 ns1-2.child.parent.good-undel-1.methodsv2.xa/fda1:b2:c3:0:127:40:3:22 ns3.parent.good-undel-1.methodsv2.xa/127.40.3.23 ns3.parent.good-undel-1.methodsv2.xa/fda1:b2:c3:0:127:40:3:23 ns6.good-undel-1.methodsv2.xa ) ],
-        []
+        [],
+        [ qw( ns1-2.child.parent.good-undel-1.methodsv2.xa/127.40.3.22 ns1-2.child.parent.good-undel-1.methodsv2.xa/fda1:b2:c3:0:127:40:3:22 ns3.parent.good-undel-1.methodsv2.xa/127.40.3.23 ns3.parent.good-undel-1.methodsv2.xa/fda1:b2:c3:0:127:40:3:23 ns6.good-undel-1.methodsv2.xa/127.40.2.26 ns6.good-undel-1.methodsv2.xa/fda1:b2:c3:0:127:40:2:26 ) ],
+        [ qw( ns1-2.child.parent.good-undel-1.methodsv2.xa/127.40.3.22 ns1-2.child.parent.good-undel-1.methodsv2.xa/fda1:b2:c3:0:127:40:3:22 ns3.parent.good-undel-1.methodsv2.xa/127.40.3.23 ns3.parent.good-undel-1.methodsv2.xa/fda1:b2:c3:0:127:40:3:23 ns6.good-undel-1.methodsv2.xa/127.40.2.26 ns6.good-undel-1.methodsv2.xa/fda1:b2:c3:0:127:40:2:26 ) ],
+        [ qw( ns1-2.child.parent.good-undel-1.methodsv2.xa/127.40.3.22 ns1-2.child.parent.good-undel-1.methodsv2.xa/fda1:b2:c3:0:127:40:3:22 ns3.parent.good-undel-1.methodsv2.xa/127.40.3.23 ns3.parent.good-undel-1.methodsv2.xa/fda1:b2:c3:0:127:40:3:23 ns6.good-undel-1.methodsv2.xa ) ]
     ],
     'GOOD-UNDEL-2' => [
         1,
         q(child.parent.good-undel-2.methodsv2.xa),
-        [ qw( 127.40.4.21 fda1:b2:c3:0:127:40:4:21 127.40.3.23 fda1:b2:c3:0:127:40:3:23 127.40.2.26 fda1:b2:c3:0:127:40:2:26 ) ],
-        [ qw( ns1.child.parent.good-undel-2.methodsv2.xa/127.40.4.21 ns1.child.parent.good-undel-2.methodsv2.xa/fda1:b2:c3:0:127:40:4:21 ns3.parent.good-undel-2.methodsv2.xa/127.40.3.23 ns3.parent.good-undel-2.methodsv2.xa/fda1:b2:c3:0:127:40:3:23 ns6.good-undel-2.methodsv2.xa ) ],
-        []
+        [],
+        [ qw( ns1.child.parent.good-undel-2.methodsv2.xa/127.40.4.21 ns1.child.parent.good-undel-2.methodsv2.xa/fda1:b2:c3:0:127:40:4:21 ns3.parent.good-undel-2.methodsv2.xa/127.40.3.23 ns3.parent.good-undel-2.methodsv2.xa/fda1:b2:c3:0:127:40:3:23 ns6.good-undel-2.methodsv2.xa/127.40.2.26 ns6.good-undel-2.methodsv2.xa/fda1:b2:c3:0:127:40:2:26 ) ],
+        [ qw( ns1.child.parent.good-undel-2.methodsv2.xa/127.40.4.21 ns1.child.parent.good-undel-2.methodsv2.xa/fda1:b2:c3:0:127:40:4:21 ns3.parent.good-undel-2.methodsv2.xa/127.40.3.23 ns3.parent.good-undel-2.methodsv2.xa/fda1:b2:c3:0:127:40:3:23 ns6.good-undel-2.methodsv2.xa/127.40.2.26 ns6.good-undel-2.methodsv2.xa/fda1:b2:c3:0:127:40:2:26) ],
+        [ qw( ns1.child.parent.good-undel-2.methodsv2.xa/127.40.4.21 ns1.child.parent.good-undel-2.methodsv2.xa/fda1:b2:c3:0:127:40:4:21 ns3.parent.good-undel-2.methodsv2.xa/127.40.3.23 ns3.parent.good-undel-2.methodsv2.xa/fda1:b2:c3:0:127:40:3:23 ns6.good-undel-2.methodsv2.xa ) ]
     ],
 );
 

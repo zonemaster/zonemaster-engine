@@ -8,6 +8,7 @@ use warnings;
 use Test::More;
 use Zonemaster::Engine;
 use Exporter 'import';
+use List::MoreUtils qw[ uniq ];
 
 use Carp qw( croak );
 
@@ -39,9 +40,38 @@ unknown to the include path @INC, it can be including using the following code:
 
 =item perform_methodsv2_testing()
 
-    perform_methodsv2_testing( );
+    perform_methodsv2_testing( %subtests );
 
-TODO
+This method loads unit test data (test scenarios) and, after some data checks and if the test scenario is testable,
+it runs all external L<MethodsV2|Zonemaster::Engine::Test::TestMethodsV2> methods and checks for the presence (or absence) of
+specific nameservers data for each specified test scenario.
+
+Takes a hash - the keys of which are scenario names (in all uppercase), and their corresponding values are an array of:
+
+=over
+
+=item *
+a boolean (testable), 1 or 0
+
+=item *
+a string (zone name)
+
+=item *
+an array of strings (expected parent nameserver IPs), which could be empty, or undef
+
+=item *
+an array of strings (expected delegation nameserver expressions), which could be empty, or undef
+
+=item *
+an array of strings (expected zone nameserver expressions), which could be empty, or undef
+
+=item *
+an array of name server expressions for undelegated name servers
+
+=back
+
+The name server expression has the format "name-server-name/IP" or only "name-server-name". This is the same format
+as the data for the --ns option in I<zonemaster-cli>.
 
 =item perform_testcase_testing()
 
@@ -88,8 +118,8 @@ The arrays of mandatory message tags and forbidden message tags, respectively, c
 both. At least one of the arrays must be non-empty.
 
 The name server expression has the format "name-server-name/IP" or only "name-server-name". The DS expression
-has the format "keytag,algorithm,type,digest". Those two expressions have the same format as the data for
---ns and --ds options, respectively, for I<zonemaster-cli>.
+has the format "keytag,algorithm,type,digest". Those two expressions have the same format as the data for the
+--ns and --ds options, respectively, in I<zonemaster-cli>.
 
 =back
 
@@ -98,32 +128,77 @@ has the format "keytag,algorithm,type,digest". Those two expressions have the sa
 sub perform_methodsv2_testing {
     my ( %subtests ) = @_;
 
+    my @untested_scenarios = ();
+
     for my $scenario ( sort ( keys %subtests ) ) {
+        if ( ref( $scenario ) ne '' or $scenario ne uc($scenario) ) {
+            croak "Scenario $scenario: Key must (i) not be a reference and (ii) be in all uppercase";
+        }
+
+        if ( scalar @{ $subtests{$scenario} } != 6 ) {
+            croak "Scenario $scenario: Incorrect number of values. " .
+                "Correct format is: { SCENARIO_NAME => [" .
+                "testable " .
+                "zone_name, " .
+                "[ EXPECTED_PARENT_IP ], " .
+                "[ EXPECTED_DEL_NS ], " .
+                "[ EXPECTED_ZONE_NS ], " .
+                "[ UNDELEGATED_NS ], " .
+                " ] }";
+        }
+
         my ( $testable,
              $zone_name,
-             $expected_ns_ip,
+             $expected_parent_ip,
+             $expected_del_ns,
+             $expected_zone_ns,
              $undelegated_ns,
-             $undelegated_ds
             ) = @{ $subtests{$scenario} };
 
-        subtest $scenario => sub {
-            my @all_methods_names = qw( get_parent_ns_ips
-                _get_oob_ips
-                _get_delegation
-                get_del_ns_names_and_ips
-                get_del_ns_names
-                get_del_ns_ips
-                get_zone_ns_names
-                _get_ib_addr_in_zone
-                get_zone_ns_names_and_ips
-                get_zone_ns_ips
-            );
+        if ( ref( $testable ) ne '' ) {
+            croak "Scenario $scenario: Type of testable must not be a reference";
+        }
 
+        if ( $testable != 1 and $testable != 0 ) {
+            croak "Scenario $scenario: Value of testable must be 0 or 1";
+        }
+
+        if ( ref( $zone_name ) ne '' ) {
+            croak "Scenario $scenario: Type of zone name must not be a reference";
+        }
+
+        if ( $zone_name !~ m(^[A-Za-z0-9/_.-]+$) ) {
+            croak "Scenario $scenario: Zone name '$zone_name' is not valid";
+        }
+
+        if ( defined( $expected_parent_ip ) and ref( $expected_parent_ip ) ne 'ARRAY' ) {
+            croak "Scenario $scenario: Incorrect reference type of expected parent IPs. Expected: ARRAY";
+        }
+
+        if ( defined( $expected_del_ns ) and ref( $expected_del_ns ) ne 'ARRAY' ) {
+            croak "Scenario $scenario: Incorrect reference type of expected delegation nameservers. Expected: ARRAY";
+        }
+
+        if ( defined( $expected_zone_ns ) and ref( $expected_zone_ns ) ne 'ARRAY' ) {
+            croak "Scenario $scenario: Incorrect reference type of expected zone nameservers. Expected: ARRAY";
+        }
+
+        if ( ref( $undelegated_ns ) ne 'ARRAY' ) {
+            croak "Scenario $scenario: Incorrect reference type of undelegated name servers expressions. Expected: ARRAY";
+        }
+
+        if ( not $testable ) {
+            push @untested_scenarios, $scenario;
+            next;
+        }
+
+        subtest $scenario => sub {
             if ( @$undelegated_ns ) {
                 my %undel_ns;
                 foreach my $nsexp ( @$undelegated_ns ) {
                     my ( $ns, $ip ) = split m(/), $nsexp;
                     croak "Scenario $scenario: Name server name '$ns' in '$nsexp' is not valid" if $ns !~ /^[0-9A-Za-z-.]+$/;
+
                     if ( $ip ) {
                         croak "Scenario $scenario: IP address '$ip' in '$nsexp' is not valid" if
                             $ip !~ /^([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])){3}$/ and
@@ -133,6 +208,7 @@ sub perform_methodsv2_testing {
                                    (?:(?:[0-9A-Fa-f]{1,4}:){1,4}:(?:[0-9A-Fa-f]{1,4}:){1,3})|(?:(?:[0-9A-Fa-f]{1,4}:){1,3}:(?:[0-9A-Fa-f]{1,4}:){1,4})|
                                    (?:(?:[0-9A-Fa-f]{1,4}:){1,2}:(?:[0-9A-Fa-f]{1,4}:){1,5}))$/x; # IPv4 and IPv6, respectively
                     }
+
                     $undel_ns{$ns} //= [];
                     push @{ $undel_ns{$ns} }, $ip if $ip;
                 }
@@ -140,19 +216,98 @@ sub perform_methodsv2_testing {
                 Zonemaster::Engine->add_fake_delegation( $zone_name => \%undel_ns, fill_in_empty_oob_glue => 0 );
             }
 
-            # for my $method ( @all_methods_names ) {
-            #     my $res = Zonemaster::Engine::TestMethodsV2->$method( Zonemaster::Engine->zone( $zone_name ) );
-            # }
+            # Method: get_parent_ns_ips()
+            my $method = 'get_parent_ns_ips';
+            subtest $method => sub {
+                my $res = Zonemaster::Engine::TestMethodsV2->$method( Zonemaster::Engine->zone( $zone_name ) );
+                if ( defined $expected_parent_ip ) {
+                    ok( defined $res, "Result is defined" ) or diag "Unexpected undefined result";
+                    foreach my $expected_ip ( @{ $expected_parent_ip } ) {
+                        ok( grep( /^$expected_ip$/, uniq map { $_->address->short } @{ $res } ), "IP '$expected_ip' is present" )
+                            or diag "IP '$expected_ip' should have been present, but wasn't";
+                    }
+                    ok( scalar @{ $res } == scalar @{ $expected_parent_ip } ) or diag "Number of IP addresses in both arrays does not match";
+                }
+                else {
+                    ok( ! defined $res, "Result is undefined" ) or diag "Unexpected defined result";
+                }
+            };
 
-            my $res = Zonemaster::Engine::TestMethodsV2->get_zone_ns_ips( Zonemaster::Engine->zone( $zone_name ) );
-
-            foreach my $expected_ip ( @{$expected_ns_ip} ) {
-                ok( grep( /^$expected_ip$/, @{$res} ), "IP $expected_ip is present" )
-                    or diag "IP '$expected_ip' should have been present, but wasn't";
+            # Methods: get_del_ns_names_and_ips() and get_zone_ns_names_and_ips()
+            my @method_names = qw( get_del_ns_names_and_ips get_zone_ns_names_and_ips );
+            my @expected_all_ns = ( $expected_del_ns, $expected_zone_ns );
+            foreach my $i ( 0..$#method_names ) {
+                my $method = $method_names[$i];
+                subtest $method => sub {
+                    my $expected_res = $expected_all_ns[$i];
+                    my $res = Zonemaster::Engine::TestMethodsV2->$method( Zonemaster::Engine->zone( $zone_name ) );
+                    if ( defined $expected_res ) {
+                        ok( defined $res, "Result is defined" ) or diag "Unexpected undefined result";
+                        foreach my $expected_ns ( @{ $expected_res } ) {
+                            ok( grep( /^$expected_ns$/, @{ $res } ), "Nameserver '$expected_ns' is present" )
+                                or diag "Nameserver '$expected_ns' should have been present, but wasn't";
+                        }
+                        ok( scalar @{ $res } == scalar @{ $expected_res } ) or diag "Number of nameservers in both arrays does not match";
+                    }
+                    else {
+                        ok( ! defined $res, "Result is undefined" ) or diag "Unexpected defined result";
+                    }
+                };
             }
 
-            ok( scalar @{$res} == scalar @{$expected_ns_ip} ) or diag "Number of IP addresses in both arrays does not match";
+            # Methods: get_del_ns_names() and get_zone_ns_names()
+            @method_names = qw( get_del_ns_names get_zone_ns_names );
+            my @expected_del_ns_names = uniq map { (split( m(/), $_ ))[0] } @{ $expected_del_ns };
+            my @expected_zone_ns_names = uniq map { (split( m(/), $_ ))[0] } @{ $expected_zone_ns };
+            my @expected_ns_names = ( \@expected_del_ns_names, \@expected_zone_ns_names );
+            foreach my $i ( 0..$#method_names ) {
+                my $method = $method_names[$i];
+                subtest $method => sub {
+                    my $expected_res = $expected_ns_names[$i];
+                    my $res = Zonemaster::Engine::TestMethodsV2->$method( Zonemaster::Engine->zone( $zone_name ) );
+                    if ( defined $expected_res ) {
+                        ok( defined $res, "Result is defined" ) or diag "Unexpected undefined result";
+                        foreach my $expected_name ( @{ $expected_res } ) {
+                            ok( grep( /^$expected_name$/, @{ $res } ), "Nameserver name '$expected_name' is present" )
+                                or diag "Nameserver name '$expected_name' should have been present, but wasn't";
+                        }
+                        ok( scalar @{ $res } == scalar @{ $expected_res } ) or diag "Number of nameserver names in both arrays does not match";
+                    }
+                    else {
+                        ok( ! defined $res, "Result is undefined" ) or diag "Unexpected defined result";
+                    }
+                };
+            }
+
+            # Methods: get_del_ns_ips() and get_zone_ns_ips()
+            @method_names = qw( get_del_ns_ips get_zone_ns_ips );
+            my @expected_del_ns_ips = uniq map { (split( m(/), $_ ))[1] } @{ $expected_del_ns };
+            my @expected_zone_ns_ips = uniq map { (split( m(/), $_ ))[1] } @{ $expected_zone_ns };
+            my @expected_ns_ips = ( \@expected_del_ns_ips, \@expected_zone_ns_ips );
+            foreach my $i ( 0..$#method_names ) {
+                my $method = $method_names[$i];
+                subtest $method => sub {
+                    my $expected_res = $expected_ns_ips[$i];
+                    my $res = Zonemaster::Engine::TestMethodsV2->$method( Zonemaster::Engine->zone( $zone_name ) );
+                    if ( defined $expected_res ) {
+                        ok( defined $res, "Result is defined" ) or diag "Unexpected undefined result";
+                        foreach my $expected_ip ( @{ $expected_res } ) {
+                            ok( grep( /^$expected_ip$/, @{ $res } ), "Nameserver IP '$expected_ip' is present" )
+                                or diag "Nameserver IP '$expected_ip' should have been present, but wasn't";
+                        }
+                        ok( scalar @{ $res } == scalar @{ $expected_res } ) or diag "Number of nameserver IPs in both arrays does not match";
+                    }
+                    else {
+                        ok( ! defined $res, "Result is undefined" ) or diag "Unexpected defined result";
+                    }
+                };
+            }
         }
+    }
+
+    if ( @untested_scenarios ) {
+        warn "Untested scenarios:\n";
+        warn "\tScenario $_ cannot be tested.\n" for @untested_scenarios;
     }
 }
 
@@ -166,7 +321,7 @@ sub perform_testcase_testing {
         croak 'All tags array variable must be an array ref'
     }
 
-    foreach my $t (@$aref_alltags) {
+    foreach my $t ( @$aref_alltags ) {
         croak "Invalid tag in 'all tags': '$t'" unless $t =~ /^[A-Z]+[A-Z0-9_]*[A-Z0-9]$/;
     }
 
@@ -211,7 +366,7 @@ sub perform_testcase_testing {
             croak "Scenario $scenario: Zone name '$zone_name' is not valid";
         }
 
-        if ( ! defined( $mandatory_message_tags ) and !defined( $forbidden_message_tags ) ) {
+        if ( ! defined( $mandatory_message_tags ) and ! defined( $forbidden_message_tags ) ) {
             croak "Scenario $scenario: Not both array of mandatory tags and array of forbidden tags can be undefined";
         }
 
@@ -284,6 +439,7 @@ sub perform_testcase_testing {
                 foreach my $nsexp ( @$undelegated_ns ) {
                     my ($ns, $ip) = split m(/), $nsexp;
                     croak "Scenario $scenario: Name server name '$ns' in '$nsexp' is not valid" if $ns !~ /^[0-9A-Za-z-.]+$/;
+
                     if ($ip) {
                         croak "Scenario $scenario: IP address '$ip' in '$nsexp' is not valid" if
                             $ip !~ /^([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])){3}$/ and
@@ -293,6 +449,7 @@ sub perform_testcase_testing {
                                    (?:(?:[0-9A-Fa-f]{1,4}:){1,4}:(?:[0-9A-Fa-f]{1,4}:){1,3})|(?:(?:[0-9A-Fa-f]{1,4}:){1,3}:(?:[0-9A-Fa-f]{1,4}:){1,4})|
                                    (?:(?:[0-9A-Fa-f]{1,4}:){1,2}:(?:[0-9A-Fa-f]{1,4}:){1,5}))$/x; # IPv4 and IPv6, respectively
                     }
+
                     $undel_ns{$ns} //= [];
                     push @{ $undel_ns{$ns} }, $ip if $ip;
                 }
@@ -308,6 +465,7 @@ sub perform_testcase_testing {
                         $tag !~ /^[0-9]+$/ or $algo !~ /^[0-9]+$/ or $type !~ /^[0-9]+$/ or $digest !~ /^[0-9a-fA-F]{4,}/;
                     push @data, { keytag => $tag, algorithm => $algo, type => $type, digest => $digest };
                 }
+
                 Zonemaster::Engine->add_fake_ds( $zone_name => \@data );
             }
 
