@@ -123,7 +123,62 @@ has the format "keytag,algorithm,type,digest". Those two expressions have the sa
 
 =back
 
+=head1 INTERNAL METHODS
+
+=over
+
+=item _check_ns_expressions()
+
+    _check_ns_expressions( $scenario_name, @ns_expressions );
+
+Helper method that checks if the given nameserver expression(s) are valid.
+
+Takes a string (scenario name) and a reference to an array of strings (nameserver expressions).
+
+=item _check_ds_expressions()
+
+    _check_ds_expressions( $scenario_name, @ds_expressions );
+
+Helper method that checks if the given delegation signer (DS) expression(s) are valid.
+
+Takes a string (scenario name) and a reference to an array of strings (delegation signer expressions).
+
+=back
+
 =cut
+
+sub _check_ns_expressions {
+    my ( $scenario, $ns_expressions ) = @_;
+
+    return if ! defined $ns_expressions;
+
+    foreach my $nsexp ( @{ $ns_expressions } ) {
+        my ( $ns, $ip ) = split m(/), $nsexp;
+        croak "Scenario $scenario: Name server name '$ns' in '$nsexp' is not valid" if $ns !~ /^[0-9A-Za-z-.]+$/;
+
+        if ( $ip ) {
+            croak "Scenario $scenario: IP address '$ip' in '$nsexp' is not valid" if
+                $ip !~ /^([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])){3}$/ and
+                $ip !~ /^((?:[0-9A-Fa-f]{1,4}:){7}[0-9A-Fa-f]{1,4}|(?:[0-9A-Fa-f]{1,4}:){1,7}:|:(?::[0-9A-Fa-f]{1,4}){1,7}|
+                       [0-9A-Fa-f]{1,4}:(?:(?::[0-9A-Fa-f]{1,4}){1,6})|:(?:(?::[0-9A-Fa-f]{1,4}){1,7}|:)|
+                       (?:(?:[0-9A-Fa-f]{1,4}:){1,6}:[0-9A-Fa-f]{1,4})|(?:(?:[0-9A-Fa-f]{1,4}:){1,5}:(?:[0-9A-Fa-f]{1,4}:){1,2})|
+                       (?:(?:[0-9A-Fa-f]{1,4}:){1,4}:(?:[0-9A-Fa-f]{1,4}:){1,3})|(?:(?:[0-9A-Fa-f]{1,4}:){1,3}:(?:[0-9A-Fa-f]{1,4}:){1,4})|
+                       (?:(?:[0-9A-Fa-f]{1,4}:){1,2}:(?:[0-9A-Fa-f]{1,4}:){1,5}))$/x; # IPv4 and IPv6, respectively
+        }
+    }
+}
+
+sub _check_ds_expressions {
+    my ( $scenario, $ds_expressions ) = @_;
+
+    return if ! defined $ds_expressions;
+
+    foreach my $str ( @{ $ds_expressions } ) {
+        my ( $tag, $algo, $type, $digest ) = split( /,/, $str );
+        croak "Scenario $scenario: DS expression '$str' is not valid" if
+            $tag !~ /^[0-9]+$/ or $algo !~ /^[0-9]+$/ or $type !~ /^[0-9]+$/ or $digest !~ /^[0-9a-fA-F]{4,}/;
+    }
+}
 
 sub perform_methodsv2_testing {
     my ( %subtests ) = @_;
@@ -187,6 +242,10 @@ sub perform_methodsv2_testing {
             croak "Scenario $scenario: Incorrect reference type of undelegated name servers expressions. Expected: ARRAY";
         }
 
+        _check_ns_expressions( $scenario, $expected_del_ns );
+        _check_ns_expressions( $scenario, $expected_zone_ns );
+        _check_ns_expressions( $scenario, $undelegated_ns );
+
         if ( not $testable ) {
             push @untested_scenarios, $scenario;
             next;
@@ -197,18 +256,6 @@ sub perform_methodsv2_testing {
                 my %undel_ns;
                 foreach my $nsexp ( @$undelegated_ns ) {
                     my ( $ns, $ip ) = split m(/), $nsexp;
-                    croak "Scenario $scenario: Name server name '$ns' in '$nsexp' is not valid" if $ns !~ /^[0-9A-Za-z-.]+$/;
-
-                    if ( $ip ) {
-                        croak "Scenario $scenario: IP address '$ip' in '$nsexp' is not valid" if
-                            $ip !~ /^([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])){3}$/ and
-                            $ip !~ /^((?:[0-9A-Fa-f]{1,4}:){7}[0-9A-Fa-f]{1,4}|(?:[0-9A-Fa-f]{1,4}:){1,7}:|:(?::[0-9A-Fa-f]{1,4}){1,7}|
-                                   [0-9A-Fa-f]{1,4}:(?:(?::[0-9A-Fa-f]{1,4}){1,6})|:(?:(?::[0-9A-Fa-f]{1,4}){1,7}|:)|
-                                   (?:(?:[0-9A-Fa-f]{1,4}:){1,6}:[0-9A-Fa-f]{1,4})|(?:(?:[0-9A-Fa-f]{1,4}:){1,5}:(?:[0-9A-Fa-f]{1,4}:){1,2})|
-                                   (?:(?:[0-9A-Fa-f]{1,4}:){1,4}:(?:[0-9A-Fa-f]{1,4}:){1,3})|(?:(?:[0-9A-Fa-f]{1,4}:){1,3}:(?:[0-9A-Fa-f]{1,4}:){1,4})|
-                                   (?:(?:[0-9A-Fa-f]{1,4}:){1,2}:(?:[0-9A-Fa-f]{1,4}:){1,5}))$/x; # IPv4 and IPv6, respectively
-                    }
-
                     $undel_ns{$ns} //= [];
                     push @{ $undel_ns{$ns} }, $ip if $ip;
                 }
@@ -223,10 +270,10 @@ sub perform_methodsv2_testing {
                 if ( defined $expected_parent_ip ) {
                     ok( defined $res, "Result is defined" ) or diag "Unexpected undefined result";
                     foreach my $expected_ip ( @{ $expected_parent_ip } ) {
-                        ok( grep( /^$expected_ip$/, uniq map { $_->address->short } @{ $res } ), "IP '$expected_ip' is present" )
-                            or diag "IP '$expected_ip' should have been present, but wasn't";
+                        ok( grep( /^$expected_ip$/, uniq map { $_->address->short } @{ $res } ), "Nameserver IP '$expected_ip' is present" )
+                            or diag "Nameserver IP '$expected_ip' should have been present, but wasn't";
                     }
-                    ok( scalar @{ $res } == scalar @{ $expected_parent_ip } ) or diag "Number of IP addresses in both arrays does not match";
+                    ok( scalar @{ $res } == scalar @{ $expected_parent_ip } ) or diag "Number of nameserver IP addresses in both arrays does not match";
                 }
                 else {
                     ok( ! defined $res, "Result is undefined" ) or diag "Unexpected defined result";
@@ -427,6 +474,9 @@ sub perform_testcase_testing {
             croak "Scenario $scenario: Incorrect reference type of undelegated DS expressions. Expected: ARRAY";
         }
 
+        _check_ns_expressions( $scenario, $undelegated_ns );
+        _check_ds_expressions( $scenario, $undelegated_ds );
+
         if ( not $testable ) {
             push @untested_scenarios, $scenario;
             next;
@@ -438,18 +488,6 @@ sub perform_testcase_testing {
                 my %undel_ns;
                 foreach my $nsexp ( @$undelegated_ns ) {
                     my ($ns, $ip) = split m(/), $nsexp;
-                    croak "Scenario $scenario: Name server name '$ns' in '$nsexp' is not valid" if $ns !~ /^[0-9A-Za-z-.]+$/;
-
-                    if ($ip) {
-                        croak "Scenario $scenario: IP address '$ip' in '$nsexp' is not valid" if
-                            $ip !~ /^([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])){3}$/ and
-                            $ip !~ /^((?:[0-9A-Fa-f]{1,4}:){7}[0-9A-Fa-f]{1,4}|(?:[0-9A-Fa-f]{1,4}:){1,7}:|:(?::[0-9A-Fa-f]{1,4}){1,7}|
-                                   [0-9A-Fa-f]{1,4}:(?:(?::[0-9A-Fa-f]{1,4}){1,6})|:(?:(?::[0-9A-Fa-f]{1,4}){1,7}|:)|
-                                   (?:(?:[0-9A-Fa-f]{1,4}:){1,6}:[0-9A-Fa-f]{1,4})|(?:(?:[0-9A-Fa-f]{1,4}:){1,5}:(?:[0-9A-Fa-f]{1,4}:){1,2})|
-                                   (?:(?:[0-9A-Fa-f]{1,4}:){1,4}:(?:[0-9A-Fa-f]{1,4}:){1,3})|(?:(?:[0-9A-Fa-f]{1,4}:){1,3}:(?:[0-9A-Fa-f]{1,4}:){1,4})|
-                                   (?:(?:[0-9A-Fa-f]{1,4}:){1,2}:(?:[0-9A-Fa-f]{1,4}:){1,5}))$/x; # IPv4 and IPv6, respectively
-                    }
-
                     $undel_ns{$ns} //= [];
                     push @{ $undel_ns{$ns} }, $ip if $ip;
                 }
@@ -461,8 +499,6 @@ sub perform_testcase_testing {
                 my @data;
                 foreach my $str ( @$undelegated_ds ) {
                     my ( $tag, $algo, $type, $digest ) = split( /,/, $str );
-                    croak "Scenario $scenario: DS expression '$str' is not valid" if
-                        $tag !~ /^[0-9]+$/ or $algo !~ /^[0-9]+$/ or $type !~ /^[0-9]+$/ or $digest !~ /^[0-9a-fA-F]{4,}/;
                     push @data, { keytag => $tag, algorithm => $algo, type => $type, digest => $digest };
                 }
 
