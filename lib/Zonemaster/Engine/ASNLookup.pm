@@ -65,6 +65,7 @@ sub _cymru_asn_lookup {
 
     my $db_source_nb = 0;
     foreach my $db_source ( @db_sources ) {
+        Zonemaster::Engine->logger->add( ASN_LOOKUP_SOURCE => { name => $db_source } );
         my $reverse = $ip->reverse_ip;
         my $domain = $db_source->string;
         my $pair   = {
@@ -75,18 +76,36 @@ sub _cymru_asn_lookup {
 
         foreach my $root ( keys %{$pair} ) {
             if ( $reverse =~ s/$root/$pair->{$root}/ix ) {
-                my $valid_response = 0;
                 my $p = Zonemaster::Engine->recurse( $reverse, 'TXT' );
-                my @rr;
 
                 if ( $p ) {
-                    @rr = $p->get_records( 'TXT', 'answer' );
-
                     if ( $p->rcode eq q{NOERROR} or $p->rcode eq q{NXDOMAIN} ) {
-                        $valid_response = 1;
+                        if ( $p->rcode eq q{NOERROR} ) {
+                            my @rr = $p->get_records( 'TXT', 'answer' );
 
-                        if ( $p->rcode eq q{NOERROR} and not scalar @rr ) {
-                            return \@asns, undef, q{}, q{EMPTY_ASN_SET};
+                            if ( @rr ) {
+                                my $prefix_length = 0;
+                                my @fields;
+                                my $str;
+
+                                foreach my $rr ( @rr ) {
+                                    my $_str = $rr->txtdata;
+                                    my @_fields = split( /[ ][|][ ]?/x, $_str );
+                                    my @_asns   = split( /\s+/x,        $_fields[0] );
+                                    my $_prefix_length = ($_fields[1] =~ m!^.*[/](.*)!x)[0];
+                                    if ( $_prefix_length > $prefix_length ) {
+                                        $str = $_str;
+                                        @asns = @_asns;
+                                        @fields = @_fields;
+                                        $prefix_length = $_prefix_length;
+                                    }
+                                }
+
+                                return \@asns, Net::IP::XS->new( $fields[1] ), $str, q{AS_FOUND};
+                            }
+                            else {
+                                return \@asns, undef, q{}, q{EMPTY_ASN_SET};
+                            }
                         }
 
                         if ( $p->rcode eq q{NXDOMAIN} ) {
@@ -97,31 +116,11 @@ sub _cymru_asn_lookup {
                     }
                 }
 
-                if ( not $valid_response ) {
-                    if ( $db_source_nb == scalar @db_sources ) {
-                            return \@asns, undef, q{}, q{ERROR_ASN_DATABASE};
-                    }
-                    last;
+                if ( $db_source_nb == scalar @db_sources ) {
+                        return \@asns, undef, q{}, q{ERROR_ASN_DATABASE};
                 }
 
-                my $prefix_length = 0;
-                my @fields;
-                my $str;
-
-                foreach my $rr ( @rr ) {
-                    my $_str = $rr->txtdata;
-                    my @_fields = split( /[ ][|][ ]?/x, $_str );
-                    my @_asns   = split( /\s+/x,        $_fields[0] );
-                    my $_prefix_length = ($_fields[1] =~ m!^.*[/](.*)!x)[0];
-                    if ( $_prefix_length > $prefix_length ) {
-                        $str = $_str;
-                        @asns = @_asns;
-                        @fields = @_fields;
-                        $prefix_length = $_prefix_length;
-                    }
-                }
-
-                return \@asns, Net::IP::XS->new( $fields[1] ), $str, q{AS_FOUND};
+                last;
             }
         }
     } ## end foreach my $db_source ( @db_sources )
