@@ -523,6 +523,8 @@ sub save {
 
     my $old = POSIX::setlocale( POSIX::LC_ALL, 'C' );
     my $json = JSON::PP->new->allow_blessed->convert_blessed;
+    $json = $json->canonical(1);
+
     open my $fh, '>', $filename or die "Cache save failed: $!";
     foreach my $name ( sort keys %object_cache ) {
         foreach my $addr ( sort keys %{ $object_cache{$name} } ) {
