@@ -528,6 +528,13 @@ sub save {
     open my $fh, '>', $filename or die "Cache save failed: $!";
     foreach my $name ( sort keys %object_cache ) {
         foreach my $addr ( sort keys %{ $object_cache{$name} } ) {
+
+            # set ID field of packets to 0
+            my %data = %{$object_cache{$name}{$addr}->cache->data};
+            foreach my $key ( keys %data){
+                $data{$key}->packet->id(0) if defined($data{$key});
+            }
+
             say $fh "$name $addr " . $json->encode( $object_cache{$name}{$addr}->cache->data );
         }
     }
