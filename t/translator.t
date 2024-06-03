@@ -17,8 +17,13 @@ $json        = read_file( 't/profiles/Test-all-levels.json' );
 $profile_tmp = Zonemaster::Engine::Profile->from_json( $json );
 Zonemaster::Engine::Profile->effective->merge( $profile_tmp );
 
+Zonemaster::Engine::Translator->initialize( locale => 'C' );
+
 subtest 'Everything but Test::NoWarnings' => sub {
-    my $trans = new_ok( 'Zonemaster::Engine::Translator' => [ locale => 'C' ] );
+    my $trans = Zonemaster::Engine::Translator->instance();
+    isa_ok $trans, 'Zonemaster::Engine::Translator',
+        'Zonemaster::Engine::Translator->instance()';
+
     ok( exists $trans->data->{Basic}{B01_PARENT_FOUND}, 'expected key from file exists' );
     ok( exists $trans->data->{DNSSEC}{ALGORITHM_OK},    'expected key from module exists' );
 

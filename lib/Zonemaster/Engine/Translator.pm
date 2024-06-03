@@ -107,7 +107,7 @@ sub instance {
     my ( $class ) = @_;
 
     if ( !defined $instance ) {
-        $instance = $class->initialize();
+        $class->initialize();
     }
 
     return $instance;
@@ -321,7 +321,7 @@ Zonemaster::Engine::Translator - translation support for Zonemaster
 
 =head1 SYNOPSIS
 
-    Zonemaster::Engine::Translator->initialize( { locale => 'sv_SE.UTF-8' } );
+    Zonemaster::Engine::Translator->initialize( locale => 'sv_SE.UTF-8' );
 
     my $trans = Zonemaster::Engine::Translator->instance;
     say $trans->to_string($entry);
@@ -376,7 +376,7 @@ end-users.
 
 Provide initial values for the single instance of this class.
 
-    Zonemaster::Engine::Translator->initialize( { locale => 'sv_SE.UTF-8' } );
+    Zonemaster::Engine::Translator->initialize( locale => 'sv_SE.UTF-8' );
 
 This method must be called at most once and before the first call to instance().
 
@@ -392,8 +392,6 @@ is the same as if initialize() had been called without arguments.
 =item new(%args)
 
 Use of this method is deprecated.
-
-See L<MooseX::Singleton->new|MooseX::Singleton/"Singleton->new">.
 
 =over
 
