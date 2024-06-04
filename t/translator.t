@@ -32,7 +32,7 @@ subtest 'Everything but Test::NoWarnings' => sub {
             module   => 'Basic',
             testcase => 'Basic01',
             tag      => 'B01_PARENT_FOUND',
-            args     => { domain => 'nothing.nowhere', ns_ip_list => 'ns1.nothing.nowhere/1.1.1.1' },
+            args     => { domain => 'nothing.nowhere', ns_list => 'ns1.nothing.nowhere/1.1.1.1' },
         }
     );
 
