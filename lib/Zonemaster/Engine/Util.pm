@@ -309,4 +309,14 @@ Check if IP version operations are permitted. Tests are done against Zonemaster:
 
 WIP, here to please L<Pod::Coverage>.
 
+=item validate_ip
+
+    my $ip_is_valid = validate_ip( $ip_address, $ip_version );
+
+Checks if the given IP address is valid for the given IP version.
+
+Takes a string (IP address) and a string (IP version).
+
+Returns a boolean.
+
 =back
