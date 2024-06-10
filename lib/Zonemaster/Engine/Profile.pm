@@ -703,17 +703,21 @@ replay, set this flag to false.
 
 =head2 resolver.source4
 
-A string representation of an IPv4 address.
+A string representation of an IPv4 address or the empty string.
 The source address all resolver objects should use when sending queries over IPv4.
 
-Undefined by default. Uses OS default IPv4 address.
+If set to "" (empty string), the OS default IPv4 address is used.
+
+Default: "" (empty string).
 
 =head2 resolver.source6
 
-A string representation of an IPv6 address.
+A string representation of an IPv6 address or the empty string.
 The source address all resolver objects should use when sending queries over IPv6.
 
-Undefined by default. Uses OS default IPv6 address.
+If set to "" (empty string), the OS default IPv6 address is used.
+
+Default: "" (empty string).
 
 =head2 net.ipv4
 
