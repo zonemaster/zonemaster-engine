@@ -79,6 +79,8 @@ our @EXPORT_OK = qw[
   $FQDN_MAX_LENGTH
   $IP_VERSION_4
   $IP_VERSION_6
+  $IPV4_RE
+  $IPV6_RE
   $LABEL_MAX_LENGTH
   $SERIAL_BITS
   $SERIAL_MAX_VARIATION
@@ -96,7 +98,7 @@ our %EXPORT_TAGS = (
         qw($ALGO_STATUS_DEPRECATED $ALGO_STATUS_PRIVATE $ALGO_STATUS_RESERVED $ALGO_STATUS_UNASSIGNED $ALGO_STATUS_OTHER $ALGO_STATUS_NOT_ZONE_SIGN $ALGO_STATUS_NOT_RECOMMENDED)
     ],
     name => [qw($FQDN_MAX_LENGTH $LABEL_MAX_LENGTH)],
-    ip   => [qw($IP_VERSION_4 $IP_VERSION_6)],
+    ip   => [qw($IP_VERSION_4 $IP_VERSION_6 $IPV4_RE $IPV6_RE)],
     soa  => [
         qw($DURATION_5_MINUTES_IN_SECONDS $DURATION_1_HOUR_IN_SECONDS $DURATION_4_HOURS_IN_SECONDS $DURATION_12_HOURS_IN_SECONDS $DURATION_1_DAY_IN_SECONDS $DURATION_1_WEEK_IN_SECONDS $DURATION_180_DAYS_IN_SECONDS $SERIAL_BITS $SERIAL_MAX_VARIATION)
     ],
@@ -144,6 +146,14 @@ our %EXPORT_TAGS = (
 =item * C<$IP_VERSION_4>
 
 =item * C<$IP_VERSION_6>
+
+=item * C<$IPV4_RE>
+
+A string (regex expression), used to validate the characters in the string representation of an IPv4 address.
+
+=item * C<$IPV6_RE>
+
+A string (regex expression), used to validate the characters in the string representation of an IPv6 address.
 
 =item * C<$SERIAL_BITS>
 
@@ -193,6 +203,9 @@ Readonly our $LABEL_MAX_LENGTH => 63;
 
 Readonly our $IP_VERSION_4 => 4;
 Readonly our $IP_VERSION_6 => 6;
+
+Readonly our $IPV4_RE => qr/^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$/;
+Readonly our $IPV6_RE => qr/^[0-9a-f:]*:[0-9a-f:]+(:[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})?$/i;
 
 Readonly our $MINIMUM_NUMBER_OF_NAMESERVERS => 2;
 

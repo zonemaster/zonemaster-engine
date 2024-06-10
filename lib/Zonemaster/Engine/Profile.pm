@@ -20,6 +20,7 @@ use YAML::XS qw();
 $YAML::XS::Boolean = "JSON::PP";
 
 use Zonemaster::Engine::Constants qw( $DURATION_5_MINUTES_IN_SECONDS $DURATION_1_HOUR_IN_SECONDS $DURATION_4_HOURS_IN_SECONDS $DURATION_12_HOURS_IN_SECONDS $DURATION_1_DAY_IN_SECONDS $DURATION_1_WEEK_IN_SECONDS $DURATION_180_DAYS_IN_SECONDS );
+use Zonemaster::Engine::Util qw( validate_ip );
 
 my %profile_properties_details = (
     q{cache} => {
@@ -83,15 +84,7 @@ my %profile_properties_details = (
     q{resolver.source4} => {
         type    => q{Str},
         test    => sub {
-            if ( not defined( $_[0] ) ) {
-                die "Property resolver.source4 has a NULL item";
-            }
-
-            if ( $_[0] eq '' ) {
-                die "Property resolver.source4 has an empty item";
-            }
-
-            unless ( Net::IP::XS->new( $_[0] ) and Net::IP::XS::ip_is_ipv4( $_[0] ) ) {
+            unless ( validate_ip( $_[0], 4 ) ) {
                 die "Property resolver.source4 must be a valid IPv4 address";
             }
         }
@@ -99,15 +92,7 @@ my %profile_properties_details = (
     q{resolver.source6} => {
         type    => q{Str},
         test    => sub {
-            if ( not defined( $_[0] ) ) {
-                die "Property resolver.source6 has a NULL item";
-            }
-
-            if ( $_[0] eq '' ) {
-                die "Property resolver.source6 has an empty item";
-            }
-
-            unless ( Net::IP::XS->new( $_[0] ) and Net::IP::XS::ip_is_ipv6( $_[0] ) ) {
+            unless ( validate_ip( $_[0], 6 ) ) {
                 die "Property resolver.source6 must be a valid IPv6 address";
             }
         }

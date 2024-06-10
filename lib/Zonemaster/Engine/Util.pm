@@ -18,6 +18,7 @@ BEGIN {
       should_run_test
       scramble_case
       test_levels
+      validate_ip
       zone
     ];
     our %EXPORT_TAGS = ( all => \@EXPORT_OK );
@@ -26,6 +27,7 @@ BEGIN {
     our @EXPORT = qw[ ns info name scramble_case ];
 }
 
+use Net::IP::XS;
 use Net::DNS::ZoneFile;
 use Pod::Simple::SimpleTree;
 
@@ -185,6 +187,22 @@ sub serial_gt {
     return ( ( $sa < $sb and ( ($sb - $sa) > 2**( $SERIAL_BITS - 1 ) ) ) or
              ( $sa > $sb and ( ($sa - $sb) < 2**( $SERIAL_BITS - 1 ) ) )
            );
+}
+
+sub validate_ip {
+    my ( $ip, $ip_version ) = @_;
+
+    if ( Net::IP::XS->new( $ip ) ) {
+        if ( $ip_version == $IP_VERSION_4 and Net::IP::XS::ip_is_ipv4( $ip ) and $ip =~ /($IPV4_RE)/ ) {
+            return 1;
+        }
+
+        if ( $ip_version == $IP_VERSION_6 and Net::IP::XS::ip_is_ipv6( $ip ) and $ip =~ /($IPV6_RE)/ ) {
+            return 1;
+        }
+    }
+
+    return;
 }
 
 1;
