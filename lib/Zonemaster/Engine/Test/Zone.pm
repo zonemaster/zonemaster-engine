@@ -478,7 +478,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     Z11_INCONSISTENT_SPF_POLICIES => sub {
         __x    # ZONE:Z11_INCONSISTENT_SPF_POLICIES
-          'The zone publishes different SPF policies on different name servers.', @_;
+          'One or more name servers do not publish the same SPF policy as the others.';
     },
     Z11_DIFFERENT_SPF_POLICIES_FOUND => sub {
         __x    # ZONE:Z11_DIFFERENT_SPF_POLICIES_FOUND
@@ -486,7 +486,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     Z11_NO_SPF_FOUND => sub {
         __x    # ZONE:Z11_NO_SPF_FOUND
-          'The zone does not publish an SPF policy.', @_;
+          'No SPF policy was found for {domain}.', @_;
     },
     Z11_SPF1_MULTIPLE_RECORDS => sub {
         __x    # ZONE:Z11_SPF1_MULTIPLE_RECORDS
@@ -494,15 +494,15 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     Z11_SPF1_SYNTAX_ERROR => sub {
         __x    # ZONE:Z11_SPF1_SYNTAX_ERROR
-          'The SPF version 1 policy has a syntax error. Policy retrieved from the following nameservers: {ns_ip_list}.', @_;
+          'The SPF policy of {domain} has a syntax error. Policy retrieved from the following nameservers: {ns_ip_list}.', @_;
     },
     Z11_SPF1_SYNTAX_OK => sub {
         __x    # ZONE:Z11_SPF1_SYNTAX_OK
-          'The SPF version 1 policy has correct syntax.', @_;
+          'The SPF policy of {domain} has correct syntax.', @_;
     },
     Z11_UNABLE_TO_CHECK_FOR_SPF => sub {
         __x    # ZONE:Z11_UNABLE_TO_CHECK_FOR_SPF
-          'None of the name servers responded with an authoritative response to queries for SPF policies.', @_;
+          'None of the zone’s name servers responded with an authoritative response to queries for SPF policies.';
     },
 );
 
@@ -1545,7 +1545,7 @@ sub zone11 {
         push @results, _emit_log( Z11_UNABLE_TO_CHECK_FOR_SPF => {} );
     }
     elsif ( List::MoreUtils::all { $_ eq '' } keys %spf_ns ) {
-        push @results, _emit_log( Z11_NO_SPF_FOUND => {} );
+        push @results, _emit_log( Z11_NO_SPF_FOUND => { domain => $zone->name->string } );
     }
     elsif ( scalar keys %spf_ns > 1 ) {
         push @results, _emit_log( Z11_INCONSISTENT_SPF_POLICIES => {} );
@@ -1561,10 +1561,14 @@ sub zone11 {
         my $spf_text = (values %ns_spf)[0][0];
 
         if ( _spf_syntax_ok($spf_text) ) {
-            push @results, _emit_log( Z11_SPF1_SYNTAX_OK => {} );
+            push @results, _emit_log( Z11_SPF1_SYNTAX_OK => { domain => $zone->name->string } );
         }
         else {
-            push @results, _emit_log( Z11_SPF1_SYNTAX_ERROR => { ns_ip_list => join( q{;}, sort (keys %ns_spf) ) } );
+            push @results, _emit_log( Z11_SPF1_SYNTAX_ERROR => {
+                domain => $zone->name->string,
+                ns_ip_list => join( q{;}, sort (keys %ns_spf) )
+              }
+            );
         }
     }
 
