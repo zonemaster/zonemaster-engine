@@ -18,7 +18,6 @@ BEGIN {
       should_run_test
       scramble_case
       test_levels
-      validate_ip
       zone
     ];
     our %EXPORT_TAGS = ( all => \@EXPORT_OK );
@@ -27,7 +26,6 @@ BEGIN {
     our @EXPORT = qw[ ns info name scramble_case ];
 }
 
-use Net::IP::XS;
 use Net::DNS::ZoneFile;
 use Pod::Simple::SimpleTree;
 
@@ -189,22 +187,6 @@ sub serial_gt {
            );
 }
 
-sub validate_ip {
-    my ( $ip, $ip_version ) = @_;
-
-    if ( Net::IP::XS->new( $ip ) ) {
-        if ( $ip_version == $IP_VERSION_4 and Net::IP::XS::ip_is_ipv4( $ip ) and $ip =~ /($IPV4_RE)/ ) {
-            return 1;
-        }
-
-        if ( $ip_version == $IP_VERSION_6 and Net::IP::XS::ip_is_ipv6( $ip ) and $ip =~ /($IPV6_RE)/ ) {
-            return 1;
-        }
-    }
-
-    return;
-}
-
 1;
 
 =head1 NAME
@@ -308,15 +290,5 @@ Check if IP version operations are permitted. Tests are done against Zonemaster:
 =item test_levels
 
 WIP, here to please L<Pod::Coverage>.
-
-=item validate_ip
-
-    my $ip_is_valid = validate_ip( $ip_address, $ip_version );
-
-Checks if the given IP address is valid for the given IP version.
-
-Takes a string (IP address) and a string (IP version).
-
-Returns a boolean.
 
 =back

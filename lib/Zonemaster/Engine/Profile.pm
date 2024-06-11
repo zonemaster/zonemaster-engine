@@ -19,8 +19,8 @@ use YAML::XS qw();
 
 $YAML::XS::Boolean = "JSON::PP";
 
-use Zonemaster::Engine::Constants qw( $DURATION_5_MINUTES_IN_SECONDS $DURATION_1_HOUR_IN_SECONDS $DURATION_4_HOURS_IN_SECONDS $DURATION_12_HOURS_IN_SECONDS $DURATION_1_DAY_IN_SECONDS $DURATION_1_WEEK_IN_SECONDS $DURATION_180_DAYS_IN_SECONDS );
-use Zonemaster::Engine::Util qw( validate_ip );
+use Zonemaster::Engine::Constants qw( $DURATION_5_MINUTES_IN_SECONDS $DURATION_1_HOUR_IN_SECONDS $DURATION_4_HOURS_IN_SECONDS $DURATION_12_HOURS_IN_SECONDS $DURATION_1_DAY_IN_SECONDS $DURATION_1_WEEK_IN_SECONDS $DURATION_180_DAYS_IN_SECONDS $IP_VERSION_4 $IP_VERSION_6);
+use Zonemaster::Engine::Validation qw( validate_ip_for_version );
 
 my %profile_properties_details = (
     q{cache} => {
@@ -84,7 +84,7 @@ my %profile_properties_details = (
     q{resolver.source4} => {
         type    => q{Str},
         test    => sub {
-            unless ( validate_ip( $_[0], 4 ) ) {
+            unless ( $_[0] eq '' or validate_ip_for_version( $_[0], $IP_VERSION_4 ) ) {
                 die "Property resolver.source4 must be a valid IPv4 address";
             }
         }
@@ -92,7 +92,7 @@ my %profile_properties_details = (
     q{resolver.source6} => {
         type    => q{Str},
         test    => sub {
-            unless ( validate_ip( $_[0], 6 ) ) {
+            unless ( $_[0] eq '' or validate_ip_for_version( $_[0], $IP_VERSION_6 ) ) {
                 die "Property resolver.source6 must be a valid IPv6 address";
             }
         }

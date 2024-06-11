@@ -173,6 +173,8 @@ subtest 'new() returns a profile with all properties unset' => sub {
     is $profile->get( 'resolver.defaults.retry' ),    undef, 'resolver.defaults.retry is unset';
     is $profile->get( 'resolver.defaults.igntc' ),    undef, 'resolver.defaults.igntc is unset';
     is $profile->get( 'resolver.defaults.fallback' ), undef, 'resolver.defaults.fallback is unset';
+    is $profile->get( 'resolver.source4' ),           undef, 'resolver.source4 is unset';
+    is $profile->get( 'resolver.source6' ),           undef, 'resolver.source6 is unset';
     is $profile->get( 'net.ipv4' ),                   undef, 'net.ipv4 is unset';
     is $profile->get( 'net.ipv6' ),                   undef, 'net.ipv6 is unset';
     is $profile->get( 'no_network' ),                 undef, 'no_network is unset';
@@ -292,12 +294,10 @@ subtest 'from_json() dies on illegal values' => sub {
     dies_ok { Zonemaster::Engine::Profile->from_json( '{"test_levels":[]}' ); }                        "checks type of test_levels";
     dies_ok { Zonemaster::Engine::Profile->from_json( '{"test_cases":{}}' ); }                         "checks type of test_cases";
     dies_ok { Zonemaster::Engine::Profile->from_json( '{"cache":[]}' ); }                              "checks type of cache";
-    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"source4":"example.com"}}' ); }  "checks type of resolver.source4";
-    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"source4":"2001:db8::42"}}' ); } "checks type of resolver.source4 (only IPv4)";
-    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"source4":""}}' ); }             "checks type of resolver.source4 (empty)";
-    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"source6":"example.com"}}' ); }  "checks type of resolver.source6";
-    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"source6":"192.0.2.53"}}' ); }   "checks type of resolver.source6 (only IPv6)";
-    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"source6":""}}' ); }             "checks type of resolver.source6 (empty)";
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"source4":"example.com"}}' ); }    "checks type of resolver.source4";
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"source4":"2001:db8::42"}}' ); }   "checks type of resolver.source4 (only IPv4)";
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"source6":"example.com"}}' ); }    "checks type of resolver.source6";
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"source6":"192.0.2.53"}}' ); }     "checks type of resolver.source6 (only IPv6)";
 };
 
 subtest 'from_yaml() equals from_json() for a similar profile' => sub {
@@ -536,11 +536,7 @@ subtest 'set() dies on illegal value' => sub {
     dies_ok { $profile->set( 'resolver.defaults.retrans', 256 ); } 'checks upper bound of resolver.defaults.retrans';
     dies_ok { $profile->set( 'resolver.defaults.retrans', 1.5 ); } 'checks type of resolver.defaults.retrans';
     dies_ok { $profile->set( 'resolver.source4', ['192.0.2.53'] ); } 'checks type of resolver.source4';
-    dies_ok { $profile->set( 'resolver.source4', undef ); } 'checks definess of resolver.source4';
-    dies_ok { $profile->set( 'resolver.source4', '' ); } 'checks emptiness of resolver.source4';
     dies_ok { $profile->set( 'resolver.source6', ['2001:db8::42'] ); } 'checks type of resolver.source6';
-    dies_ok { $profile->set( 'resolver.source6', undef ); } 'checks definess of resolver.source6';
-    dies_ok { $profile->set( 'resolver.source6', '' ); } 'checks emptiness of resolver.source6';
     dies_ok { $profile->set( 'asnroots',        ['noreply@example.com'] ); } 'checks type of asnroots';
     dies_ok { $profile->set( 'logfilter',       [] ); } 'checks type of logfilter';
     dies_ok { $profile->set( 'test_levels',     [] ); } 'checks type of test_levels';
