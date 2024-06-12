@@ -672,7 +672,7 @@ sub source_address {
 
     my $src_address = Zonemaster::Engine::Profile->effective->get( "resolver.source" . Net::IP::XS::ip_get_version( $self->address->ip ) );
 
-    return ( !defined($src_address) or $src_address eq '') ? undef : $src_address;
+    return $src_address eq '' ? undef : $src_address;
 }
 
 sub empty_cache {
