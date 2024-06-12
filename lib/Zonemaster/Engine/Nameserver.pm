@@ -900,8 +900,8 @@ for more details.
 
     my $src_address = source_address();
 
-Returns the IPv4 or IPv6 source address used by the underlying DNS resolver when sending queries,
-or C<undef> if the source address is either empty or undefined.
+Returns the configured IPv4 or IPv6 source address to be used by the underlying DNS resolver for sending queries,
+or C<undef> if the source address is the empty string.
 
 =item empty_cache()
 
