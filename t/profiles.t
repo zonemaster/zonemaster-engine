@@ -1,7 +1,7 @@
 use 5.006;
 use strict;
 use warnings FATAL   => 'all';
-use Test::More tests => 27;
+use Test::More tests => 29;
 use Log::Any::Test;    # Must come before use Log::Any
 
 use JSON::PP;
@@ -155,6 +155,15 @@ Readonly my $EXAMPLE_PROFILE_2 => q(
 }
 );
 
+Readonly my $EXAMPLE_PROFILE_3 => qq(
+  {
+    "resolver": {
+      "source4": "",
+      "source6": ""
+    }
+  }
+);
+
 subtest 'new() returns a new profile every time' => sub {
     my $profile1 = Zonemaster::Engine::Profile->new;
 
@@ -262,6 +271,13 @@ subtest 'from_json() parses values from a string' => sub {
     eq_or_diff $profile->get( 'test_levels' ), { Zone => { TAG => 'INFO' } }, 'test_levels was parsed from JSON';
     eq_or_diff $profile->get( 'test_cases' ), ['Zone01'], 'test_cases was parsed from JSON';
     eq_or_diff $profile->get( 'cache' ), { redis => { server => '127.0.0.1:6379', expire => 3600 } }, 'cache was parsed from JSON';
+};
+
+subtest 'from_json() parses sentinel values from a string' => sub {
+    my $profile = Zonemaster::Engine::Profile->from_json( $EXAMPLE_PROFILE_3 );
+
+    is $profile->get( 'resolver.source4' ), '', 'resolver.source4 was parsed from JSON';
+    is $profile->get( 'resolver.source6' ), '', 'resolver.source6 was parsed from JSON';
 };
 
 subtest 'from_json() dies on illegal paths' => sub {
@@ -542,6 +558,16 @@ subtest 'set() dies on illegal value' => sub {
     dies_ok { $profile->set( 'test_levels',     [] ); } 'checks type of test_levels';
     dies_ok { $profile->set( 'test_cases',      {} ); } 'checks type of test_cases';
     dies_ok { $profile->set( 'cache',           [] ); } 'checks type of cache';
+};
+
+subtest 'set() accepts sentinel values' => sub {
+    my $profile = Zonemaster::Engine::Profile->new;
+
+    $profile->set( 'resolver.source4', '' );
+    is $profile->get( 'resolver.source4' ), '', 'resolver.source4 was updated';
+
+    $profile->set( 'resolver.source6', '' );
+    is $profile->get( 'resolver.source6' ), '', 'resolver.source6 was updated';
 };
 
 subtest 'set() uses standard truthiness rules for boolean properties' => sub {
