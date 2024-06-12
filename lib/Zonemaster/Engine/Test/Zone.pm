@@ -477,8 +477,8 @@ Readonly my %TAG_DESCRIPTIONS => (
           'Unexpected RCODE value ({rcode}) on the MX query from name servers "{ns_ip_list}".', @_;
     },
     Z11_INCONSISTENT_SPF_POLICIES => sub {
-        __x    # ZONE:Z11_INCONSISTENT_SPF_POLICIES
-          'One or more name servers do not publish the same SPF policy as the others.', @_;
+        __     # ZONE:Z11_INCONSISTENT_SPF_POLICIES
+          'One or more name servers do not publish the same SPF policy as the others.';
     },
     Z11_DIFFERENT_SPF_POLICIES_FOUND => sub {
         __x    # ZONE:Z11_DIFFERENT_SPF_POLICIES_FOUND
@@ -501,8 +501,8 @@ Readonly my %TAG_DESCRIPTIONS => (
           'The SPF policy of {domain} has correct syntax.', @_;
     },
     Z11_UNABLE_TO_CHECK_FOR_SPF => sub {
-        __x    # ZONE:Z11_UNABLE_TO_CHECK_FOR_SPF
-          'None of the zone’s name servers responded with an authoritative response to queries for SPF policies.', @_;
+        __     # ZONE:Z11_UNABLE_TO_CHECK_FOR_SPF
+          'None of the zone’s name servers responded with an authoritative response to queries for SPF policies.';
     },
 );
 
