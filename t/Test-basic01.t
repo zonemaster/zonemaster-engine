@@ -316,6 +316,14 @@ my %subtests = (
         [],
         [],
     ],
+    'ROOT-ZONE' => [
+        1,
+        q(.),
+        [ qw(B01_CHILD_FOUND B01_ROOT_HAS_NO_PARENT) ],
+        undef,
+        [],
+        [],
+    ],
 );
 
 ###########
