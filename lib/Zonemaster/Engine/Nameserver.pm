@@ -39,10 +39,6 @@ has 'dns'   => ( is => 'ro' );
 has 'cache' => ( is => 'ro' );
 has 'times' => ( is => 'ro' );
 
-has 'source_address'  => ( is => 'ro' );
-has 'source_address4' => ( is => 'ro' );
-has 'source_address6' => ( is => 'ro' );
-
 has 'fake_delegations' => ( is => 'ro' );
 has 'fake_ds'          => ( is => 'ro' );
 
@@ -66,9 +62,6 @@ sub new {
     my $attrs = shift;
 
     my %lazy_attrs;
-    $lazy_attrs{source_address}  = delete $attrs->{source_address}  if exists $attrs->{source_address};
-    $lazy_attrs{source_address4} = delete $attrs->{source_address4} if exists $attrs->{source_address4};
-    $lazy_attrs{source_address6} = delete $attrs->{source_address6} if exists $attrs->{source_address6};
     $lazy_attrs{dns}             = delete $attrs->{dns}             if exists $attrs->{dns};
     $lazy_attrs{cache}           = delete $attrs->{cache}           if exists $attrs->{cache};
 
@@ -121,15 +114,6 @@ sub new {
     confess "Argument must be a HASHREF: blacklisted"
       if exists $attrs->{blacklisted}
       && ref $attrs->{blacklisted} ne 'HASH';
-    confess "Argument must be a string or undef: source_address"
-      if exists $lazy_attrs{source_address}
-      && ref $lazy_attrs{source_address} ne '';
-    confess "Argument must be a string or undef: source_address4"
-      if exists $lazy_attrs{source_address4}
-      && ref $lazy_attrs{source_address4} ne '';
-    confess "Argument must be a string or undef: source_address6"
-      if exists $lazy_attrs{source_address6}
-      && ref $lazy_attrs{source_address6} ne '';
     confess "Argument must be a Zonemaster::LDNS: dns"
       if exists $lazy_attrs{dns}
       && ( !blessed $lazy_attrs{dns} || !$lazy_attrs{dns}->isa( 'Zonemaster::LDNS' ) );
@@ -144,9 +128,6 @@ sub new {
     $attrs->{times}            //= [];
 
     my $obj = Class::Accessor::new( $class, $attrs );
-    $obj->{_source_address}  = $lazy_attrs{source_address}  if exists $lazy_attrs{source_address};
-    $obj->{_source_address4} = $lazy_attrs{source_address4} if exists $lazy_attrs{source_address4};
-    $obj->{_source_address6} = $lazy_attrs{source_address6} if exists $lazy_attrs{source_address6};
     $obj->{_dns}             = $lazy_attrs{dns}             if exists $lazy_attrs{dns};
     $obj->{_cache}           = $lazy_attrs{cache}           if exists $lazy_attrs{cache};
 
@@ -154,38 +135,6 @@ sub new {
     $object_cache{$name}{$address} = $obj;
 
     return $obj;
-}
-
-sub source_address {
-    my ( $self, $ip_version ) = @_;
-
-    # Lazy default values
-    if ( !exists $self->{_source_address} ) {
-        my $value = Zonemaster::Engine::Profile->effective->get( q{resolver.source} );
-        if ( $value eq $RESOLVER_SOURCE_OS_DEFAULT ) {
-            $self->{_source_address} = undef;
-        }
-        else {
-            $self->{_source_address} = $value;
-        }
-    }
-    if ( !exists $self->{_source_address4} ) {
-        my $value = Zonemaster::Engine::Profile->effective->get( q{resolver.source4} );
-        $self->{_source_address4} = $value eq '' ? undef : $value;
-    }
-    if ( !exists $self->{_source_address6} ) {
-        my $value = Zonemaster::Engine::Profile->effective->get( q{resolver.source6} );
-        $self->{_source_address6} = $value eq '' ? undef : $value;
-    }
-
-    if ( $ip_version == $IP_VERSION_4 and $self->{_source_address4} ) {
-        return $self->{_source_address4};
-    }
-    if ( $ip_version == $IP_VERSION_6 and $self->{_source_address6} ) {
-        return $self->{_source_address6};
-    }
-
-    return $self->{_source_address};
 }
 
 sub dns {
@@ -214,7 +163,7 @@ sub _build_dns {
     my ( $self ) = @_;
 
     my $res = Zonemaster::LDNS->new( $self->address->ip );
-    
+
     $res->recurse( 0 );
     $res->dnssec( 0 );
     $res->edns_size( $UDP_EDNS_QUERY_DEFAULT );
@@ -227,10 +176,9 @@ sub _build_dns {
     $res->debug( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.debug} ) );
     $res->timeout( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.timeout} ) );
 
-    my $ip_version = Net::IP::XS::ip_get_version( $self->address->ip );
-    my $source_address = $self->source_address( $ip_version );
-    if ( $source_address ) {
-        $res->source( $source_address );
+    my $src_address = $self->source_address();
+    if ( defined( $src_address ) ) {
+        $res->source( $src_address );
     }
 
     return $res;
@@ -720,6 +668,14 @@ sub axfr {
     return $self->dns->axfr( $domain, $callback, $class );
 } ## end sub axfr
 
+sub source_address {
+    my ( $self ) = @_;
+
+    my $src_address = Zonemaster::Engine::Profile->effective->get( "resolver.source" . Net::IP::XS::ip_get_version( $self->address->ip ) );
+
+    return $src_address eq '' ? undef : $src_address;
+}
+
 sub empty_cache {
     %object_cache = ();
     %address_object_cache = ();
@@ -773,21 +729,6 @@ The L<Zonemaster::LDNS> object used to actually send and recieve DNS queries.
 =item cache
 
 A reference to a L<Zonemaster::Engine::Nameserver::Cache> object holding the cache of sent queries. Not meant for external use.
-
-=item source_address
-
-The source address all resolver objects should use when sending queries.
-Depends on the IP version used to send the queries.
-
-=item source_address4
-
-The IPv4 source address all resolver objects should use when sending queries
-over IPv4.
-
-=item source_address6
-
-The IPv6 source address all resolver objects should use when sending queries
-over IPv6.
 
 =item times
 
@@ -955,6 +896,17 @@ function will be called once for each received RR, with that RR as its only
 argument. To continue getting more RRs, the callback must return a true value.
 If it returns a true value, the AXFR will be aborted. See L<Zonemaster::LDNS::axfr>
 for more details.
+
+=item source_address()
+
+    my $src_address = source_address();
+
+Returns the configured IPv4 or IPv6 source address to be used by the underlying DNS resolver for sending queries,
+or C<undef> if the source address is the empty string.
+
+=item empty_cache()
+
+Clears the caches of Zonemaster::Engine::Nameserver (name server names and IP addresses) and Zonemaster::Engine::Nameserver::Cache (query and response packets) objects.
 
 =back
 
