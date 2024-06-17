@@ -1,14 +1,12 @@
 package Zonemaster::Engine::Constants;
 
-use version; our $VERSION = version->declare("v1.2.5");
-
-use strict;
+use v5.16.0;
 use warnings;
 
+use version; our $VERSION = version->declare("v1.2.5");
+
 use Carp;
-
 use English qw( -no_match_vars ) ;
-
 use parent 'Exporter';
 use Net::IP::XS;
 use Text::CSV;

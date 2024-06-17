@@ -1,13 +1,12 @@
 package Zonemaster::Engine::TestMethodsV2;
 
-use version; our $VERSION = version->declare("v1.0.0");
-
-use 5.014002;
-use strict;
+use v5.16.0;
 use warnings;
 
-use List::MoreUtils qw[uniq];
+use version; our $VERSION = version->declare("v1.0.0");
+
 use Carp;
+use List::MoreUtils qw[uniq];
 
 use Zonemaster::Engine::Util;
 

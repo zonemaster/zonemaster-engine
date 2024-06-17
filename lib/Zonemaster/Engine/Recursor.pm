@@ -1,7 +1,7 @@
 package Zonemaster::Engine::Recursor;
-use strict;
+
+use v5.16.0;
 use warnings;
-use 5.014002;
 
 use version; our $VERSION = version->declare("v1.1.0");
 

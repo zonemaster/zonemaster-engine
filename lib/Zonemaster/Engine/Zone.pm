@@ -1,10 +1,13 @@
 package Zonemaster::Engine::Zone;
-use 5.014002;
+
+use v5.16.0;
 use warnings;
+
 use version; our $VERSION = version->declare("v1.1.9");
 
 use Carp qw( confess croak );
 use List::MoreUtils qw[uniq];
+
 use Zonemaster::Engine::DNSName;
 use Zonemaster::Engine::Recursor;
 use Zonemaster::Engine::NSArray;

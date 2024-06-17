@@ -1,8 +1,10 @@
 package Zonemaster::Engine::Nameserver;
 
+use v5.16.0;
+use warnings;
+
 use version; our $VERSION = version->declare("v1.1.16");
 
-use 5.014002;
 use Class::Accessor qw[ antlers ];
 
 use Zonemaster::Engine::DNSName;
@@ -330,7 +332,6 @@ sub query {
         } ## end if ( $name =~ m/([.]|\A)\Q$fname\E\z/xi)
     } ## end foreach my $fname ( sort keys...)
 
-    my $p;
     my $md5 = Digest::MD5->new;
 
     $md5->add( q{NAME}    , $name );

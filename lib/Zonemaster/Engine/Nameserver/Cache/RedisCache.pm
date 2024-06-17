@@ -1,11 +1,9 @@
 package Zonemaster::Engine::Nameserver::Cache::RedisCache;
 
-use version; our $VERSION = version->declare("v1.0.0");
-
-use 5.014002;
-
-use strict;
+use v5.16.0;
 use warnings;
+
+use version; our $VERSION = version->declare("v1.0.0");
 
 use Class::Accessor "antlers";
 use Time::HiRes qw[gettimeofday tv_interval];
