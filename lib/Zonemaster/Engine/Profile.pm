@@ -85,7 +85,8 @@ my %profile_properties_details = (
             unless ( $_[0] eq '' or validate_ipv4( $_[0] ) ) {
                 die "Property resolver.source4 must be a valid IPv4 address";
             }
-        }
+        },
+        default => q{}
     },
     q{resolver.source6} => {
         type    => q{Str},
@@ -93,7 +94,8 @@ my %profile_properties_details = (
             unless ( $_[0] eq '' or validate_ipv6( $_[0] ) ) {
                 die "Property resolver.source6 must be a valid IPv6 address";
             }
-        }
+        },
+        default => q{}
     },
     q{net.ipv4} => {
         type    => q{Bool}
