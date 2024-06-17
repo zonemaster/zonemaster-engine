@@ -1,6 +1,8 @@
 package Zonemaster::Engine::Translator;
-use 5.014002;
+
+use v5.16.0;
 use warnings;
+
 use version; our $VERSION = version->declare("v1.0.8");
 
 use Carp qw[confess croak];
@@ -8,6 +10,7 @@ use Locale::Messages qw[textdomain];
 use Locale::TextDomain qw[Zonemaster-Engine];
 use POSIX qw[setlocale LC_MESSAGES];
 use Readonly;
+
 use Zonemaster::Engine::Test;
 
 ###
@@ -107,7 +110,7 @@ sub instance {
     my ( $class ) = @_;
 
     if ( !defined $instance ) {
-        $instance = $class->initialize();
+        $class->initialize();
     }
 
     return $instance;
@@ -131,11 +134,11 @@ sub initialize {
 
     my $obj = {
         _locale               => $locale // _init_locale(),
-        _all_tag_descriptions => _build_all_tag_descriptions(),
+        _all_tag_descriptions => $class->_build_all_tag_descriptions(),
         _last_language        => _build_last_language(),
     };
 
-    $instance = bless $obj, __PACKAGE__;
+    $instance = bless $obj, $class;
 
     return;
 }
@@ -195,6 +198,8 @@ sub _load_data {
 }
 
 sub _build_all_tag_descriptions {
+    my ( $class ) = @_;
+
     my %all_tag_descriptions;
 
     $all_tag_descriptions{System} = \%TAG_DESCRIPTIONS;
@@ -321,7 +326,7 @@ Zonemaster::Engine::Translator - translation support for Zonemaster
 
 =head1 SYNOPSIS
 
-    Zonemaster::Engine::Translator->initialize( { locale => 'sv_SE.UTF-8' } );
+    Zonemaster::Engine::Translator->initialize( locale => 'sv_SE.UTF-8' );
 
     my $trans = Zonemaster::Engine::Translator->instance;
     say $trans->to_string($entry);
@@ -376,7 +381,7 @@ end-users.
 
 Provide initial values for the single instance of this class.
 
-    Zonemaster::Engine::Translator->initialize( { locale => 'sv_SE.UTF-8' } );
+    Zonemaster::Engine::Translator->initialize( locale => 'sv_SE.UTF-8' );
 
 This method must be called at most once and before the first call to instance().
 
@@ -392,8 +397,6 @@ is the same as if initialize() had been called without arguments.
 =item new(%args)
 
 Use of this method is deprecated.
-
-See L<MooseX::Singleton->new|MooseX::Singleton/"Singleton->new">.
 
 =over
 

@@ -46,6 +46,7 @@ lib/Zonemaster/Engine/TestMethods.pm
 lib/Zonemaster/Engine/TestMethodsV2.pm
 lib/Zonemaster/Engine/Translator.pm
 lib/Zonemaster/Engine/Util.pm
+lib/Zonemaster/Engine/Validation.pm
 lib/Zonemaster/Engine/Zone.pm
 LICENSE
 Makefile.PL
@@ -148,6 +149,8 @@ t/Test-address.data
 t/Test-address.t
 t/Test-basic.data
 t/Test-basic.t
+t/Test-basic01.data
+t/Test-basic01.t
 t/Test-basic02-A.data
 t/Test-basic02-A.t
 t/Test-basic02-B.data
@@ -293,6 +296,7 @@ t/translator.t
 t/undelegated.data
 t/undelegated.t
 t/util.t
+t/validation.t
 t/zone.data
 t/zone.t
 t/zonemaster.data

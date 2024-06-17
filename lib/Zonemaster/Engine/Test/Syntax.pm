@@ -1,13 +1,9 @@
 package Zonemaster::Engine::Test::Syntax;
 
-use 5.014002;
-
-use strict;
+use v5.16.0;
 use warnings;
 
 use version; our $VERSION = version->declare( "v1.0.10" );
-
-use Zonemaster::Engine;
 
 use Carp;
 use Email::Valid;
@@ -15,6 +11,7 @@ use List::MoreUtils qw[uniq none any];
 use Locale::TextDomain qw[Zonemaster-Engine];
 use Readonly;
 use Time::Local;
+
 use Zonemaster::Engine::Profile;
 use Zonemaster::Engine::Constants qw[:name :ip];
 use Zonemaster::Engine::DNSName;

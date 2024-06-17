@@ -1,8 +1,9 @@
 package Zonemaster::Engine;
 
-use version; our $VERSION = version->declare("v5.0.0");
+use v5.16.0;
+use warnings;
 
-use 5.014002;
+use version; our $VERSION = version->declare("v5.0.0");
 
 BEGIN {
     # Locale::TextDomain (<= 1.20) doesn't know about File::ShareDir so give a helping hand.
@@ -16,6 +17,7 @@ BEGIN {
 
 use Class::Accessor "antlers";
 use Carp;
+
 use Zonemaster::Engine::Nameserver;
 use Zonemaster::Engine::Logger;
 use Zonemaster::Engine::Profile;

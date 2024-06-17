@@ -1,17 +1,14 @@
 package Zonemaster::Engine::Test::Consistency;
 
-use 5.014002;
-
-use strict;
+use v5.16.0;
 use warnings;
 
 use version; our $VERSION = version->declare("v1.1.16");
 
-use Zonemaster::Engine;
-
 use List::MoreUtils qw[uniq];
 use Locale::TextDomain qw[Zonemaster-Engine];
 use Readonly;
+
 use Zonemaster::Engine::Profile;
 use Zonemaster::Engine::Constants qw[:ip :soa];
 use Zonemaster::Engine::Test::Address;

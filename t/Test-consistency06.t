@@ -19,6 +19,10 @@ BEGIN {
 
 my $test_module = q{Consistency};
 my $test_case = 'consistency06';
+my @all_tags = qw(ONE_SOA_MNAME
+                  NO_RESPONSE
+                  NO_RESPONSE_SOA_QUERY
+                  MULTIPLE_SOA_MNAMES);
 
 # Common hint file (test-zone-data/COMMON/hintfile)
 Zonemaster::Engine::Recursor->remove_fake_addresses( '.' );
@@ -28,57 +32,96 @@ Zonemaster::Engine::Recursor->add_fake_addresses( '.',
     }
 );
 
-# Test scenarios
+# Test zone scenarios
 # - Documentation: L<TestUtil/perform_testcase_testing()>
-# - Format: { SCENARIO_NAME => [ zone_name, [ MANDATORY_MESSAGE_TAGS ], [ FORBIDDEN_MESSAGE_TAGS ], testable ] }
+# - Format: { SCENARIO_NAME => [
+#     testable,
+#     zone_name,
+#     [ MANDATORY_MESSAGE_TAGS ],
+#     [ FORBIDDEN_MESSAGE_TAGS ],
+#     [ UNDELEGATED_NS ],
+#     [ UNDELEGATED_DS ],
+#   ] }
 #
+# - One of MANDATORY_MESSAGE_TAGS and FORBIDDEN_MESSAGE_TAGS may be undefined.
+#   See documentation for the meaning of that.
+
 # Scenarios ONE-SOA-MNAME-4 and NO-RESPONSE cannot be tested due to a bug in the implementation. See
 # https://github.com/zonemaster/zonemaster-engine/issues/1300
-#
 
 ###########
 my %subtests = (
-    'ONE-SOA-MNAME-2' => [
-        q(one-soa-mname-2.consistency06.xa),
-        [ qw(ONE_SOA_MNAME NO_RESPONSE) ],
-        [ qw(NO_RESPONSE_SOA_QUERY MULTIPLE_SOA_MNAMES) ],
-        1,
-    ],
     'ONE-SOA-MNAME-1' => [
+        1,
         q(one-soa-mname-1.consistency06.xa),
         [ qw(ONE_SOA_MNAME) ],
-        [ qw(NO_RESPONSE NO_RESPONSE_SOA_QUERY MULTIPLE_SOA_MNAMES) ],
-        1,
+        undef,
+        [],
+        []
     ],
-    'NO-RESPONSE' => [
-        q(no-response.consistency06.xa),
-        [ qw(NO_RESPONSE) ],
-        [ qw(NO_RESPONSE_SOA_QUERY MULTIPLE_SOA_MNAMES ONE_SOA_MNAME) ],
-        0,
-    ],
-    'MULTIPLE-SOA-MNAMES-1' => [
-        q(multiple-soa-mnames-1.consistency06.xa),
-        [ qw(MULTIPLE_SOA_MNAMES) ],
-        [ qw(NO_RESPONSE NO_RESPONSE_SOA_QUERY ONE_SOA_MNAME) ],
+    'ONE-SOA-MNAME-2' => [
         1,
+        q(one-soa-mname-2.consistency06.xa),
+        [ qw(ONE_SOA_MNAME NO_RESPONSE) ],
+        undef,
+        [],
+        []
     ],
     'ONE-SOA-MNAME-3' => [
+        1,
         q(one-soa-mname-3.consistency06.xa),
         [ qw(ONE_SOA_MNAME NO_RESPONSE_SOA_QUERY) ],
-        [ qw(NO_RESPONSE MULTIPLE_SOA_MNAMES) ],
-        1,
+        undef,
+        [],
+        []
     ],
     'ONE-SOA-MNAME-4' => [
+        0,
         q(one-soa-mname-4.consistency06.xa),
         [ qw(ONE_SOA_MNAME NO_RESPONSE) ],
-        [ qw(NO_RESPONSE_SOA_QUERY MULTIPLE_SOA_MNAMES) ],
-        0,
+        undef,
+        [],
+        []
+    ],
+    'MULTIPLE-SOA-MNAMES-1' => [
+        1,
+        q(multiple-soa-mnames-1.consistency06.xa),
+        [ qw(MULTIPLE_SOA_MNAMES) ],
+        undef,
+        [],
+        []
     ],
     'MULTIPLE-SOA-MNAMES-2' => [
+        1,
         q(multiple-soa-mnames-2.consistency06.xa),
         [ qw(MULTIPLE_SOA_MNAMES NO_RESPONSE) ],
-        [ qw(NO_RESPONSE_SOA_QUERY ONE_SOA_MNAME) ],
+        undef,
+        [],
+        []
+    ],
+    'MULT-SOA-MNAMES-NO-DEL-UNDEL-1' => [
         1,
+        q(mult-soa-mnames-no-del-undel-1.consistency06.xa),
+        [ qw(MULTIPLE_SOA_MNAMES) ],
+        undef,
+        [ qw(ns1.mult-soa-mnames-no-del-undel-1.consistency06.xa/127.14.6.31 ns1.mult-soa-mnames-no-del-undel-1.consistency06.xa/fda1:b2:c3:0:127:14:6:31 ns2.mult-soa-mnames-no-del-undel-1.consistency06.xa/127.14.6.32 ns2.mult-soa-mnames-no-del-undel-1.consistency06.xa/fda1:b2:c3:0:127:14:6:32) ],
+        []
+    ],
+    'MULT-SOA-MNAMES-NO-DEL-UNDEL-2' => [
+        0,
+        q(mult-soa-mnames-no-del-undel-2.consistency06.xa),
+        [ qw(MULTIPLE_SOA_MNAMES) ],
+        undef,
+        [ qw(ns3.mult-soa-mnames-no-del-undel-2.consistency06.xb ns3.mult-soa-mnames-no-del-undel-2.consistency06.xb) ],
+        []
+    ],
+    'NO-RESPONSE' => [
+        0,
+        q(no-response.consistency06.xa),
+        [ qw(NO_RESPONSE) ],
+        undef,
+        [],
+        []
     ],
 );
 
@@ -92,7 +135,7 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
 
 Zonemaster::Engine::Profile->effective->merge( Zonemaster::Engine::Profile->from_json( qq({ "test_cases": [ "$test_case" ] }) ) );
 
-perform_testcase_testing( $test_case, $test_module, %subtests );
+perform_testcase_testing( $test_case, $test_module, \@all_tags, %subtests );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Nameserver->save( $datafile );

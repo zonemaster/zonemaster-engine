@@ -17,6 +17,17 @@ BEGIN {
 # dnssec16 - https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/test-zones/DNSSEC-TP/dnssec16.md
 my $test_module = q{DNSSEC};
 my $test_case = 'dnssec16';
+my @all_tags = qw(DS16_CDS_INVALID_RRSIG
+                  DS16_CDS_MATCHES_NON_SEP_DNSKEY
+                  DS16_CDS_MATCHES_NON_ZONE_DNSKEY
+                  DS16_CDS_MATCHES_NO_DNSKEY
+                  DS16_CDS_NOT_SIGNED_BY_CDS
+                  DS16_CDS_SIGNED_BY_UNKNOWN_DNSKEY
+                  DS16_CDS_UNSIGNED
+                  DS16_CDS_WITHOUT_DNSKEY
+                  DS16_DELETE_CDS
+                  DS16_DNSKEY_NOT_SIGNED_BY_CDS
+                  DS16_MIXED_DELETE_CDS);
 
 # Common hint file (test-zone-data/COMMON/hintfile)
 Zonemaster::Engine::Recursor->remove_fake_addresses( '.' );
@@ -28,91 +39,130 @@ Zonemaster::Engine::Recursor->add_fake_addresses( '.',
 
 # Test zone scenarios
 # - Documentation: L<TestUtil/perform_testcase_testing()>
-# - Format: { SCENARIO_NAME => [ zone_name, [ MANDATORY_MESSAGE_TAGS ], [ FORBIDDEN_MESSAGE_TAGS ], testable ] }
+# - Format: { SCENARIO_NAME => [
+#     testable,
+#     zone_name,
+#     [ MANDATORY_MESSAGE_TAGS ],
+#     [ FORBIDDEN_MESSAGE_TAGS ],
+#     [ UNDELEGATED_NS ],
+#     [ UNDELEGATED_DS ],
+#   ] }
+#
+# - One of MANDATORY_MESSAGE_TAGS and FORBIDDEN_MESSAGE_TAGS may be undefined.
+#   See documentation for the meaning of that.
+
 my %subtests = (
     'CDS-INVALID-RRSIG' => [
+        1,
         q(cds-invalid-rrsig.dnssec16.xa),
         [ qw(DS16_CDS_INVALID_RRSIG) ],
-        [ qw(DS16_CDS_MATCHES_NON_SEP_DNSKEY DS16_CDS_MATCHES_NON_ZONE_DNSKEY DS16_CDS_MATCHES_NO_DNSKEY DS16_CDS_NOT_SIGNED_BY_CDS DS16_CDS_SIGNED_BY_UNKNOWN_DNSKEY DS16_CDS_UNSIGNED DS16_CDS_WITHOUT_DNSKEY DS16_DELETE_CDS DS16_DNSKEY_NOT_SIGNED_BY_CDS DS16_MIXED_DELETE_CD) ],
-        1,
+        undef,
+        [],
+        []
     ],
     'CDS-MATCHES-NO-DNSKEY' => [
+        1,
         q(cds-matches-no-dnskey.dnssec16.xa),
         [ qw(DS16_CDS_MATCHES_NO_DNSKEY) ],
-        [ qw(DS16_CDS_INVALID_RRSIG DS16_CDS_MATCHES_NON_SEP_DNSKEY DS16_CDS_MATCHES_NON_ZONE_DNSKEY DS16_CDS_NOT_SIGNED_BY_CDS DS16_CDS_SIGNED_BY_UNKNOWN_DNSKEY DS16_CDS_UNSIGNED DS16_CDS_WITHOUT_DNSKEY DS16_DELETE_CDS DS16_DNSKEY_NOT_SIGNED_BY_CDS DS16_MIXED_DELETE_CDS) ],
-        1,
+        undef,
+        [],
+        []
     ],
     'CDS-MATCHES-NON-SEP-DNSKEY' => [
+        1,
         q(cds-matches-non-sep-dnskey.dnssec16.xa),
         [ qw(DS16_CDS_MATCHES_NON_SEP_DNSKEY) ],
-        [ qw(DS16_CDS_INVALID_RRSIG DS16_CDS_MATCHES_NON_ZONE_DNSKEY DS16_CDS_MATCHES_NO_DNSKEY DS16_CDS_NOT_SIGNED_BY_CDS DS16_CDS_SIGNED_BY_UNKNOWN_DNSKEY DS16_CDS_UNSIGNED DS16_CDS_WITHOUT_DNSKEY DS16_DELETE_CDS DS16_DNSKEY_NOT_SIGNED_BY_CDS DS16_MIXED_DELETE_CDS) ],
-        1
+        undef,
+        [],
+        []
     ],
     'CDS-MATCHES-NON-ZONE-DNSKEY' => [
+        1,
         q(cds-matches-non-zone-dnskey.dnssec16.xa),
         [ qw(DS16_CDS_MATCHES_NON_ZONE_DNSKEY) ],
-        [ qw(DS16_CDS_INVALID_RRSIG DS16_CDS_MATCHES_NON_SEP_DNSKEY DS16_CDS_MATCHES_NO_DNSKEY DS16_CDS_NOT_SIGNED_BY_CDS DS16_CDS_SIGNED_BY_UNKNOWN_DNSKEY DS16_CDS_UNSIGNED DS16_CDS_WITHOUT_DNSKEY DS16_DELETE_CDS DS16_DNSKEY_NOT_SIGNED_BY_CDS DS16_MIXED_DELETE_CDS) ],
-        1
+        undef,
+        [],
+        []
     ],
     'CDS-NOT-SIGNED-BY-CDS' => [
+        1,
         q(cds-not-signed-by-cds.dnssec16.xa),
         [ qw(DS16_CDS_NOT_SIGNED_BY_CDS) ],
-        [ qw(DS16_CDS_INVALID_RRSIG DS16_CDS_MATCHES_NON_SEP_DNSKEY DS16_CDS_MATCHES_NON_ZONE_DNSKEY DS16_CDS_MATCHES_NO_DNSKEY DS16_CDS_SIGNED_BY_UNKNOWN_DNSKEY DS16_CDS_UNSIGNED DS16_CDS_WITHOUT_DNSKEY DS16_DELETE_CDS DS16_DNSKEY_NOT_SIGNED_BY_CDS DS16_MIXED_DELETE_CDS) ],
-        1
+        undef,
+        [],
+        []
     ],
     'CDS-SIGNED-BY-UNKNOWN-DNSKEY' => [
+        1,
         q(cds-signed-by-unknown-dnskey.dnssec16.xa),
         [ qw(DS16_CDS_SIGNED_BY_UNKNOWN_DNSKEY) ],
-        [ qw(DS16_CDS_INVALID_RRSIG DS16_CDS_MATCHES_NON_SEP_DNSKEY DS16_CDS_MATCHES_NON_ZONE_DNSKEY DS16_CDS_MATCHES_NO_DNSKEY DS16_CDS_NOT_SIGNED_BY_CDS DS16_CDS_UNSIGNED DS16_CDS_WITHOUT_DNSKEY DS16_DELETE_CDS DS16_DNSKEY_NOT_SIGNED_BY_CDS DS16_MIXED_DELETE_CDS) ],
-        1
+        undef,
+        [],
+        []
     ],
     'CDS-UNSIGNED' => [
+        1,
         q(cds-unsigned.dnssec16.xa),
         [ qw(DS16_CDS_UNSIGNED DS16_CDS_NOT_SIGNED_BY_CDS) ],
-        [ qw(DS16_CDS_INVALID_RRSIG DS16_CDS_MATCHES_NON_SEP_DNSKEY DS16_CDS_MATCHES_NON_ZONE_DNSKEY DS16_CDS_MATCHES_NO_DNSKEY DS16_CDS_SIGNED_BY_UNKNOWN_DNSKEY DS16_CDS_WITHOUT_DNSKEY DS16_DELETE_CDS DS16_DNSKEY_NOT_SIGNED_BY_CDS DS16_MIXED_DELETE_CDS) ],
-        1
+        undef,
+        [],
+        []
     ],
     'CDS-WITHOUT-DNSKEY' => [
+        1,
         q(cds-without-dnskey.dnssec16.xa),
         [ qw(DS16_CDS_WITHOUT_DNSKEY) ],
-        [ qw(DS16_CDS_INVALID_RRSIG DS16_CDS_MATCHES_NON_SEP_DNSKEY DS16_CDS_MATCHES_NON_ZONE_DNSKEY DS16_CDS_MATCHES_NO_DNSKEY DS16_CDS_NOT_SIGNED_BY_CDS DS16_CDS_SIGNED_BY_UNKNOWN_DNSKEY DS16_CDS_UNSIGNED DS16_DELETE_CDS DS16_DNSKEY_NOT_SIGNED_BY_CDS DS16_MIXED_DELETE_CDS) ],
-        1
+        undef,
+        [],
+        []
     ],
     'DELETE-CDS' => [
+        1,
         q(delete-cds.dnssec16.xa),
         [ qw(DS16_DELETE_CDS) ],
-        [ qw(DS16_CDS_INVALID_RRSIG DS16_CDS_MATCHES_NON_SEP_DNSKEY DS16_CDS_MATCHES_NON_ZONE_DNSKEY DS16_CDS_MATCHES_NO_DNSKEY DS16_CDS_NOT_SIGNED_BY_CDS DS16_CDS_SIGNED_BY_UNKNOWN_DNSKEY DS16_CDS_UNSIGNED DS16_CDS_WITHOUT_DNSKEY DS16_DNSKEY_NOT_SIGNED_BY_CDS DS16_MIXED_DELETE_CDS) ],
-        1
+        undef,
+        [],
+        []
     ],
     'DNSKEY-NOT-SIGNED-BY-CDS' => [
+        1,
         q(dnskey-not-signed-by-cds.dnssec16.xa),
         [ qw(DS16_DNSKEY_NOT_SIGNED_BY_CDS) ],
-        [ qw(DS16_CDS_INVALID_RRSIG DS16_CDS_MATCHES_NON_SEP_DNSKEY DS16_CDS_MATCHES_NON_ZONE_DNSKEY DS16_CDS_MATCHES_NO_DNSKEY DS16_CDS_NOT_SIGNED_BY_CDS DS16_CDS_SIGNED_BY_UNKNOWN_DNSKEY DS16_CDS_UNSIGNED DS16_CDS_WITHOUT_DNSKEY DS16_DELETE_CDS DS16_MIXED_DELETE_CDS) ],
-        1
+        undef,
+        [],
+        []
     ],
     'MIXED-DELETE-CDS' => [
+        1,
         q(mixed-delete-cds.dnssec16.xa),
         [ qw(DS16_MIXED_DELETE_CDS) ],
-        [ qw(DS16_CDS_INVALID_RRSIG DS16_CDS_MATCHES_NON_SEP_DNSKEY DS16_CDS_MATCHES_NON_ZONE_DNSKEY DS16_CDS_MATCHES_NO_DNSKEY DS16_CDS_NOT_SIGNED_BY_CDS DS16_CDS_SIGNED_BY_UNKNOWN_DNSKEY DS16_CDS_UNSIGNED DS16_CDS_WITHOUT_DNSKEY DS16_DELETE_CDS DS16_DNSKEY_NOT_SIGNED_BY_CDS) ],
-        1
+        undef,
+        [],
+        []
     ],
     'NO-CDS' => [
+        1,
         q(no-cds.dnssec16.xa),
         [],
-        [ qw(DS16_CDS_INVALID_RRSIG DS16_CDS_MATCHES_NON_SEP_DNSKEY DS16_CDS_MATCHES_NON_ZONE_DNSKEY DS16_CDS_MATCHES_NO_DNSKEY DS16_CDS_NOT_SIGNED_BY_CDS DS16_CDS_SIGNED_BY_UNKNOWN_DNSKEY DS16_CDS_UNSIGNED DS16_CDS_WITHOUT_DNSKEY DS16_DELETE_CDS DS16_DNSKEY_NOT_SIGNED_BY_CDS DS16_MIXED_DELETE_CDS) ],
-        1
+        undef,
+        [],
+        []
     ],
     'NOT-AA' => [
+        1,
         q(not-aa.dnssec16.xa),
         [],
-        [ qw(DS16_CDS_INVALID_RRSIG DS16_CDS_MATCHES_NON_SEP_DNSKEY DS16_CDS_MATCHES_NON_ZONE_DNSKEY DS16_CDS_MATCHES_NO_DNSKEY DS16_CDS_NOT_SIGNED_BY_CDS DS16_CDS_SIGNED_BY_UNKNOWN_DNSKEY DS16_CDS_UNSIGNED DS16_CDS_WITHOUT_DNSKEY DS16_DELETE_CDS DS16_DNSKEY_NOT_SIGNED_BY_CDS DS16_MIXED_DELETE_CDS) ],
-        1
+        undef,
+        [],
+        []
     ],
     'VALID-CDS' => [
+        1,
         q(valid-cds.dnssec16.xa),
         [],
-        [ qw(DS16_CDS_INVALID_RRSIG DS16_CDS_MATCHES_NON_SEP_DNSKEY DS16_CDS_MATCHES_NON_ZONE_DNSKEY DS16_CDS_MATCHES_NO_DNSKEY DS16_CDS_NOT_SIGNED_BY_CDS DS16_CDS_SIGNED_BY_UNKNOWN_DNSKEY DS16_CDS_UNSIGNED DS16_CDS_WITHOUT_DNSKEY DS16_DELETE_CDS DS16_DNSKEY_NOT_SIGNED_BY_CDS DS16_MIXED_DELETE_CDS) ],
-        1
+        undef,
+        [],
+        []
     ]
 );
 ###########
@@ -127,7 +177,7 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
 
 Zonemaster::Engine::Profile->effective->merge( Zonemaster::Engine::Profile->from_json( qq({ "test_cases": [ "$test_case" ] }) ) );
 
-perform_testcase_testing( $test_case, $test_module, %subtests );
+perform_testcase_testing( $test_case, $test_module, \@all_tags, %subtests );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Nameserver->save( $datafile );
