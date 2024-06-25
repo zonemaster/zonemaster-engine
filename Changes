@@ -554,7 +554,7 @@ v3.0.0 2019-01-25 (pre-release version)
        support #462
      - Various #481, #485
  - Fixes
-   - Uppdated formatting of msgid tables #402
+   - Updated formatting of msgid tables #402
    - Fixed broken tests #412
    - All link references on GitHub now to zonemaster/zonemaster instead
      of old dotse/zonemaster #406
