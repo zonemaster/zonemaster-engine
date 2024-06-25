@@ -49,7 +49,8 @@ my %profile_properties_details = (
                     }
                 }
             }
-        }
+        },
+        default => {},
     },
     q{resolver.defaults.debug} => {
         type    => q{Bool}
@@ -83,7 +84,7 @@ my %profile_properties_details = (
         type    => q{Str},
         test    => sub {
             unless ( $_[0] eq '' or validate_ipv4( $_[0] ) ) {
-                die "Property resolver.source4 must be a valid IPv4 address";
+                die "Property resolver.source4 must be an IPv4 address or the empty string";
             }
         },
         default => q{}
@@ -92,7 +93,7 @@ my %profile_properties_details = (
         type    => q{Str},
         test    => sub {
             unless ( $_[0] eq '' or validate_ipv6( $_[0] ) ) {
-                die "Property resolver.source6 must be a valid IPv6 address";
+                die "Property resolver.source6 must be a valid IPv6 address or the empty string";
             }
         },
         default => q{}
@@ -117,7 +118,8 @@ my %profile_properties_details = (
                     die "Property asnroots has a non domain name item" if $label !~ /^[a-z0-9](?:[-a-z0-9]{0,61}[a-z0-9])?$/;
                 }
             }
-        }
+        },
+        default => ["asnlookup.zonemaster.net"],
     },
     q{asn_db.style} => {
         type    => q{Str},
@@ -152,7 +154,7 @@ my %profile_properties_details = (
                 }
             }
         },
-        default => { cymru => [ "asnlookup.zonemaster.net" ] }
+        default => { cymru => [ "asnlookup.zonemaster.net" ] },
     },
     q{logfilter} => {
         type    => q{HashRef},
@@ -296,6 +298,11 @@ sub default {
     }
 
     return $new;
+}
+
+sub all_properties {
+    my ( $class ) = @_;
+    return sort keys %profile_properties_details;
 }
 
 sub get {
@@ -613,6 +620,12 @@ Serialize the profile to the L</JSON REPRESENTATION> format.
 
 Returns a string.
 
+=head2 all_properties
+
+Get the names of all properties.
+
+Returns a sorted list of strings.
+
 =head1 SUBROUTINES
 
 =head2 _get_profile_paths
@@ -744,12 +757,9 @@ Default C<"asnlookup.zonemaster.net">.
 =head2 cache (EXPERIMENTAL)
 
 A hash of hashes. The currently supported keys are C<"redis">.
+Default C<{}>.
 
-See more information in L<cache.redis>.
-
-Undefined by default.
-
-=head2 cache.redis (EXPERIMENTAL)
+=head3 redis
 
 A hashref. The currently supported keys are C<"server"> and C<"expire">.
 
