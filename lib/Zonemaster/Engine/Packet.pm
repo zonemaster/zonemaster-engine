@@ -202,7 +202,7 @@ Returns true if the packet represents an existing DNS node lacking any records o
 
 =item no_such_name
 
-Returns true if the packet represents a non-existent DNS node.
+Returns true if the packet represents a nonexistent DNS node.
 
 =item is_redirect
 

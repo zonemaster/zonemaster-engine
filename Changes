@@ -644,7 +644,7 @@ v1.1.0 2017-04-04 Public pre-release
 - Solved Duplicate tag in en.po (#252)
 - Solved Update documentation for logfilters (#221)
 - add Ed25519 (15) and Ed448 (16) algorithms (#290)
-- Solved Not-existent name server doesn't cause a failure (#278)
+- Solved Nonexistent name server doesn't cause a failure (#278)
 
 v1.0.16 2016-12-12
 
