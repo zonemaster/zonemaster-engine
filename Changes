@@ -405,7 +405,7 @@ v3.1.0 2020-04-30
  - Allow installation of new LDNS on Debian 9 (#667)
  - Add more meaningful message for unsupported algorithms in
    DNSSEC test cases (#641, #632)
- - Improved the hanling of "fuzzy" PO files (#640, #598, #600, #596)
+ - Improved the handling of "fuzzy" PO files (#640, #598, #600, #596)
  - Implementation of revised version of DNSSEC10 (#633, #618, #632)
  - Implementation of revised version of DNSSEC01 (#627, #616, #308)
  - Implementation of revised version of DELEGATION05 (#628, #617, #236)
