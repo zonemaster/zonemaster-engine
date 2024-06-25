@@ -1,7 +1,7 @@
 use 5.006;
 use strict;
-use warnings FATAL   => 'all';
-use Test::More tests => 29;
+use warnings FATAL => 'all';
+use Test::More;
 use Log::Any::Test;    # Must come before use Log::Any
 
 use JSON::PP;
@@ -844,3 +844,5 @@ subtest 'effective() returns the same profile every time' => sub {
 
     is $profile1->get( 'resolver.defaults.retry' ), 222;
 };
+
+done_testing;
