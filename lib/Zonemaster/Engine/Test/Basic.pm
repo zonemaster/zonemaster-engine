@@ -249,7 +249,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     B02_NS_NO_RESPONSE => sub {
         __x    # BASIC:B02_NS_NO_RESPONSE
-          'Name server "{ns}" does not respond to an SOA query.', @_;
+          'No response received from name server "{ns}" to SOA query.', @_;
     },
     B02_UNEXPECTED_RCODE => sub {
         __x    # BASIC:B02_UNEXPECTED_RCODE

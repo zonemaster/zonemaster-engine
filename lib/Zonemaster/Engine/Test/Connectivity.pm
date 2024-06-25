@@ -190,15 +190,15 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     CN01_NO_RESPONSE_NS_QUERY_UDP => sub {
         __x    # CONNECTIVITY:CN01_NO_RESPONSE_NS_QUERY_UDP
-          'Nameserver {ns} does not respond to NS queries over UDP.', @_;
+          'No response received from name server "{ns}" to NS queries over UDP.', @_;
     },
     CN01_NO_RESPONSE_SOA_QUERY_UDP => sub {
         __x    # CONNECTIVITY:CN01_NO_RESPONSE_SOA_QUERY_UDP
-          'Nameserver {ns} does not respond to SOA queries over UDP.', @_;
+          'No response received from name server "{ns}" to SOA queries over UDP.', @_;
     },
     CN01_NO_RESPONSE_UDP => sub {
         __x    # CONNECTIVITY:CN01_NO_RESPONSE_UDP
-          'Nameserver {ns} does not respond to any queries over UDP.', @_;
+          'No response received from name server "{ns}" to any queries over UDP.', @_;
     },
     CN01_NS_RECORD_NOT_AA_UDP => sub {
         __x    # CONNECTIVITY:CN01_NS_RECORD_NOT_AA_UDP
@@ -234,15 +234,15 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     CN02_NO_RESPONSE_NS_QUERY_TCP => sub {
         __x    # CONNECTIVITY:CN02_NO_RESPONSE_NS_QUERY_TCP
-          'Nameserver {ns} does not respond to NS queries over TCP.', @_;
+          'No response received from name server "{ns}" to NS queries over TCP.', @_;
     },
     CN02_NO_RESPONSE_SOA_QUERY_TCP => sub {
         __x    # CONNECTIVITY:CN02_NO_RESPONSE_SOA_QUERY_TCP
-          'Nameserver {ns} does not respond to SOA queries over TCP.', @_;
+          'No response received from name server "{ns}" to SOA queries over TCP.', @_;
     },
     CN02_NO_RESPONSE_TCP => sub {
         __x    # CONNECTIVITY:CN02_NO_RESPONSE_TCP
-          'Nameserver {ns} does not respond to any queries over TCP.', @_;
+          'No response received from name server "{ns}" to any queries over TCP.', @_;
     },
     CN02_NS_RECORD_NOT_AA_TCP => sub {
         __x    # CONNECTIVITY:CN02_NS_RECORD_NOT_AA_TCP
