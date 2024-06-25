@@ -549,13 +549,15 @@ subtest 'set() dies on illegal value' => sub {
     dies_ok { $profile->set( 'resolver.defaults.retrans', 0 ); } 'checks lower bound of resolver.defaults.retrans';
     dies_ok { $profile->set( 'resolver.defaults.retrans', 256 ); } 'checks upper bound of resolver.defaults.retrans';
     dies_ok { $profile->set( 'resolver.defaults.retrans', 1.5 ); } 'checks type of resolver.defaults.retrans';
-    dies_ok { $profile->set( 'resolver.source4', ['192.0.2.53'] ); } 'checks type of resolver.source4';
-    dies_ok { $profile->set( 'resolver.source6', ['2001:db8::42'] ); } 'checks type of resolver.source6';
-    dies_ok { $profile->set( 'asnroots',        ['noreply@example.com'] ); } 'checks type of asnroots';
-    dies_ok { $profile->set( 'logfilter',       [] ); } 'checks type of logfilter';
-    dies_ok { $profile->set( 'test_levels',     [] ); } 'checks type of test_levels';
-    dies_ok { $profile->set( 'test_cases',      {} ); } 'checks type of test_cases';
-    dies_ok { $profile->set( 'cache',           [] ); } 'checks type of cache';
+    dies_ok { $profile->set( 'resolver.source4', 'example.com' ); } 'resolver.source4 rejects domain name string';
+    dies_ok { $profile->set( 'resolver.source4', ['192.0.2.53'] ); } 'resolver.source4 rejects arrayref';
+    dies_ok { $profile->set( 'resolver.source6', 'example.com' ); } 'resolver.source6 rejects domain name string';
+    dies_ok { $profile->set( 'resolver.source6', ['2001:db8::42'] ); } 'resolver.source6 rejects arrayref';
+    dies_ok { $profile->set( 'asnroots',         ['noreply@example.com'] ); } 'checks type of asnroots';
+    dies_ok { $profile->set( 'logfilter',        [] ); } 'checks type of logfilter';
+    dies_ok { $profile->set( 'test_levels',      [] ); } 'checks type of test_levels';
+    dies_ok { $profile->set( 'test_cases',       {} ); } 'checks type of test_cases';
+    dies_ok { $profile->set( 'cache',            [] ); } 'checks type of cache';
 };
 
 subtest 'set() accepts sentinel values' => sub {
