@@ -55,7 +55,7 @@ if ( ! -d $dest_dir ) {
 if ( ! -w $dest_dir ) {
     print "Directory $dest_dir mode must be changed.\n";
     unless ( chmod (oct(755), $dest_dir) ) {
-        croak "Can not change directory mode.";
+        croak "Cannot change directory mode.";
     }
 }
 
@@ -64,7 +64,7 @@ foreach my $file_details ( @files_details ) {
     if ( -e $fn and ! -w $fn ) {
         print "File $fn mode must be changed.\n";
         unless ( chmod (oct(664), $fn) ) {
-            croak "Can not change file mode.";
+            croak "Cannot change file mode.";
         }
     }
 }
