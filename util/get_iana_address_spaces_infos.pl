@@ -182,7 +182,7 @@ ${_bold}DESCRIPTION${_normal}
 
         Although these files are part of Zonemaster distribution, they are subject to changes and it is important that Zonemaster use last versions in order to give more accurate tests results.
 
-        That script should be called on a regular ferquency basis to keep synchronization with IANA registries.
+        That script should be called on a regular frequency basis to keep synchronization with IANA registries.
 
 ${_bold}OPTIONS${_normal}
         --help
