@@ -724,7 +724,7 @@ A L<Net::IP::XS> object holding the nameserver's address.
 
 =item dns
 
-The L<Zonemaster::LDNS> object used to actually send and recieve DNS queries.
+The L<Zonemaster::LDNS> object used to actually send and receive DNS queries.
 
 =item cache
 
