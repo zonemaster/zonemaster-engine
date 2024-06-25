@@ -117,7 +117,7 @@ sub message {
 
 =item tag
 
-Returns the message tag asscociated to the error.
+Returns the message tag associated to the error.
 
 =cut
 
