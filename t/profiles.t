@@ -10,9 +10,7 @@ use Test::Differences;
 use Test::Exception;
 use Log::Any qw( $log );
 
-BEGIN {
-    use_ok 'Zonemaster::Engine::Profile';
-}
+use Zonemaster::Engine::Profile;
 
 # YAML representation of an example profile with all properties set
 Readonly my $EXAMPLE_PROFILE_1_YAML => q(
