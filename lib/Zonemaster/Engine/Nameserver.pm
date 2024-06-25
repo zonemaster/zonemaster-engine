@@ -701,7 +701,7 @@ Zonemaster::Engine::Nameserver - object representing a DNS nameserver
 
 This is a very central object in the L<Zonemaster::Engine> framework. All DNS
 communications with the outside world pass through here, so we can do
-things like synthezising and recording traffic. All the objects are
+things like synthesizing and recording traffic. All the objects are
 also unique per name/IP pair, and creating a new one with an already
 existing pair will return the existing object instead of creating a
 new one. Queries and their responses are cached by IP address, so that
