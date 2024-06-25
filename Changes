@@ -683,7 +683,7 @@ v1.0.14 2016-06-15
  - Would be nice to add a count of name servers #453
  - Partly resolved "JSON/JSON::XS usage and requirement", see issue #165
  - nameserver03 test should not perform network requests, issue #168
- - Locale files are not generated nor installed #173
+ - Locale files are neither generated nor installed #173
  - ASN test should only look at authoritative nameservers at the child, issue #441
  - Modify the "Notice" information when DNSSEC not signed, issue #193
  - Implement updated test case dnssec02, issue #187
