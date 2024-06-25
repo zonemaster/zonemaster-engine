@@ -762,7 +762,7 @@ v1.0.3 2015-04-07
  - Refer to overview page from Zonemaster page.
  - Fix missed corner case in parent-finding algorithm.
  - CNAME handling accidentally left outside check for packet existence.
- - Clearer message when failling signature checks because GOST support is
+ - Clearer message when failing signature checks because GOST support is
    not present.
 
 v1.0.2 2015-02-24
