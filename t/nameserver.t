@@ -48,7 +48,7 @@ ok(
 
 SKIP: {
     skip '/tmp not writable', 2 unless -w '/tmp';
-    my $name = "/tmp/namserver_test_$$";
+    my $name = "/tmp/nameserver_test_$$";
     Zonemaster::Engine::Nameserver->save( $name );
     my $count = keys %Zonemaster::Engine::Nameserver::object_cache;
     undef %Zonemaster::Engine::Nameserver::object_cache;
