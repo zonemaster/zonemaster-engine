@@ -226,7 +226,7 @@ Returns true if the packet holds any RRs of the specified type for the given nam
 
 =item answerfrom
 
-Wrapper for the underlying packet method, that replaces udnefined values with the string C<E<lt>unknownE<gt>>.
+Wrapper for the underlying packet method, that replaces undefined values with the string C<E<lt>unknownE<gt>>.
 
 =item TO_JSON
 
