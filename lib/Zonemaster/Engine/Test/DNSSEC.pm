@@ -3025,7 +3025,7 @@ sub dnssec10 {
 
         #----------------------------------------------------------------------
         # vi. If the following criteria are met go to next name server IP:
-        #    a. The The RCODE of response is "NoError".
+        #    a. The RCODE of response is "NoError".
         #    b. The answer section has an RRset with RR type "A" and either:
         #       a. The "A" RRset has the same owner name as the query name, or
         #       b. There are one or more record of RR type "CNAME" chaining from
@@ -3097,7 +3097,7 @@ sub dnssec10 {
         }
         #----------------------------------------------------------------------
         # vii. If the following criteria are met go to next name server IP:
-        #    a. The The RCODE of response is "NoError".
+        #    a. The RCODE of response is "NoError".
         #    b. The answer section has one or more record of RR type "CNAME" in
         #       a chain where first record has the owner name matching the query name.
         #    c. The answer section has RRsig record or records in the answer section
