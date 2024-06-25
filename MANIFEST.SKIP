@@ -71,7 +71,7 @@
 ^MYMETA\.
 #!end included /usr/share/perl/5.20/ExtUtils/MANIFEST.SKIP
 
-# For Github action
+# For GitHub action
 ^\.github/
 
 # Debian packaging

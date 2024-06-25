@@ -556,7 +556,7 @@ v3.0.0 2019-01-25 (pre-release version)
  - Fixes
    - Uppdated formatting of msgid tables #402
    - Fixed broken tests #412
-   - All link references on Github now to zonemaster/zonemaster instead
+   - All link references on GitHub now to zonemaster/zonemaster instead
      of old dotse/zonemaster #406
    - Updated manifest #422
    - Updated travis conf to match supported perl versions (#426, #463)
@@ -628,7 +628,7 @@ v2.0.0
   - Updated translations (#127, #196, #216, #248, #249, #291)
   - Incremented VERSION of internal packages (98868cb)
 - Other changes
-  - Fixed Commonmark rendering for Github (cc7a28a)
+  - Fixed Commonmark rendering for GitHub (cc7a28a)
   - Switch msgfmt implementation to pure Perl (#223, #224)
   - New Unit tests infrastructure. 896 tests kept, 2 removed, will be added back later (#310)
 
