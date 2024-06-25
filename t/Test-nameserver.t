@@ -144,7 +144,7 @@ SKIP: {
     # available.
     skip 'no network', 2 if not $ENV{ZONEMASTER_RECORD};
 
-    # AXFR results not well cached. Can not test cases where AXFR is avaibale
+    # AXFR results not well cached. Can not test cases where AXFR is available
     # without network, even in case of ZONEMASTER_RECORD is not set.
 #    $zone = Zonemaster::Engine->zone( 'nameserver03-axfr-available.zut-root.rd.nic.fr' );
 #    zone_gives( 'nameserver03', $zone, [q{AXFR_AVAILABLE}] );
