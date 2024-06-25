@@ -27,11 +27,11 @@ my %profile_properties_details = (
             my @allowed_keys = ( 'redis' );
             foreach my $cache_database ( keys %{$_[0]} ) {
                 if ( not grep( /^$cache_database$/, @allowed_keys ) ) {
-                    die "Property cache keys have " . scalar @allowed_keys . " possible values: " . join(", ", @allowed_keys);
+                    die "Property cache keys have " . scalar @allowed_keys . " possible values: " . join(", ", @allowed_keys) . "\n";
                 }
 
                 if ( not scalar keys %{ $_[0]->{$cache_database} } ) {
-                    die "Property cache.$cache_database has no items";
+                    die "Property cache.$cache_database has no items\n";
                 }
                 else {
                     my @allowed_subkeys;
@@ -41,11 +41,11 @@ my %profile_properties_details = (
 
                     foreach my $key ( keys %{ $_[0]->{$cache_database} } ) {
                         if ( not grep( /^$key$/, @allowed_subkeys ) ) {
-                            die "Property cache.$cache_database subkeys have " . scalar @allowed_subkeys . " possible values: " . join(", ", @allowed_subkeys);
+                            die "Property cache.$cache_database subkeys have " . scalar @allowed_subkeys . " possible values: " . join(", ", @allowed_subkeys) . "\n";
                         }
 
-                        die "Property cache.$cache_database.$key has a NULL or empty item" if not $_[0]->{$cache_database}->{$key};
-                        die "Property cache.$cache_database.$key has a negative value" if ( looks_like_number( $_[0]->{$cache_database}->{$key} ) and $_[0]->{$cache_database}->{$key} < 0 ) ;
+                        die "Property cache.$cache_database.$key has a NULL or empty item\n" if not $_[0]->{$cache_database}->{$key};
+                        die "Property cache.$cache_database.$key has a negative value\n" if ( looks_like_number( $_[0]->{$cache_database}->{$key} ) and $_[0]->{$cache_database}->{$key} < 0 ) ;
                     }
                 }
             }
@@ -84,7 +84,7 @@ my %profile_properties_details = (
         type    => q{Str},
         test    => sub {
             unless ( $_[0] eq '' or validate_ipv4( $_[0] ) ) {
-                die "Property resolver.source4 must be an IPv4 address or the empty string";
+                die "Property resolver.source4 must be an IPv4 address or the empty string\n";
             }
         },
         default => q{}
@@ -93,7 +93,7 @@ my %profile_properties_details = (
         type    => q{Str},
         test    => sub {
             unless ( $_[0] eq '' or validate_ipv6( $_[0] ) ) {
-                die "Property resolver.source6 must be a valid IPv6 address or the empty string";
+                die "Property resolver.source6 must be a valid IPv6 address or the empty string\n";
             }
         },
         default => q{}
@@ -111,11 +111,11 @@ my %profile_properties_details = (
         type    => q{ArrayRef},
         test    => sub {
             foreach my $ndd ( @{$_[0]} ) {
-                die "Property asnroots has a NULL item" if not defined $ndd;
-                die "Property asnroots has a non scalar item" if not defined ref($ndd);
-                die "Property asnroots has an item too long" if length($ndd) > 255;
+                die "Property asnroots has a NULL item\n" if not defined $ndd;
+                die "Property asnroots has a non scalar item\n" if not defined ref($ndd);
+                die "Property asnroots has an item too long\n" if length($ndd) > 255;
                 foreach my $label ( split /[.]/, $ndd ) {
-                    die "Property asnroots has a non domain name item" if $label !~ /^[a-z0-9](?:[-a-z0-9]{0,61}[a-z0-9])?$/;
+                    die "Property asnroots has a non domain name item\n" if $label !~ /^[a-z0-9](?:[-a-z0-9]{0,61}[a-z0-9])?$/;
                 }
             }
         },
@@ -125,7 +125,7 @@ my %profile_properties_details = (
         type    => q{Str},
         test    => sub {
             if ( lc($_[0]) ne q{cymru} and lc($_[0]) ne q{ripe} ) {
-                die "Property asn_db.style has 2 possible values : Cymru or RIPE (case insensitive)";
+                die "Property asn_db.style has 2 possible values : Cymru or RIPE (case insensitive)\n";
             }
             $_[0] = lc($_[0]);
         },
@@ -136,18 +136,18 @@ my %profile_properties_details = (
         test    => sub {
             foreach my $db_style ( keys %{$_[0]} ) {
                 if ( lc($db_style) ne q{cymru} and lc($db_style) ne q{ripe} ) {
-                    die "Property asn_db.sources keys have 2 possible values : Cymru or RIPE (case insensitive)";
+                    die "Property asn_db.sources keys have 2 possible values : Cymru or RIPE (case insensitive)\n";
                 }
                 if ( not scalar @{ ${$_[0]}{$db_style} } ) {
-                    die "Property asn_db.sources.$db_style has no items";
+                    die "Property asn_db.sources.$db_style has no items\n";
                 }
                 else {
                     foreach my $ndd ( @{ ${$_[0]}{$db_style} } ) {
-                        die "Property asn_db.sources.$db_style has a NULL item" if not defined $ndd;
-                        die "Property asn_db.sources.$db_style has a non scalar item" if not defined ref($ndd);
-                        die "Property asn_db.sources.$db_style has an item too long" if length($ndd) > 255;
+                        die "Property asn_db.sources.$db_style has a NULL item\n" if not defined $ndd;
+                        die "Property asn_db.sources.$db_style has a non scalar item\n" if not defined ref($ndd);
+                        die "Property asn_db.sources.$db_style has an item too long\n" if length($ndd) > 255;
                         foreach my $label ( split /[.]/, $ndd ) {
-                            die "Property asn_db.sources.$db_style has a non domain name item" if $label !~ /^[a-z0-9](?:[-a-z0-9]{0,61}[a-z0-9])?$/;
+                            die "Property asn_db.sources.$db_style has a non domain name item\n" if $label !~ /^[a-z0-9](?:[-a-z0-9]{0,61}[a-z0-9])?$/;
                         }
                     }
                     ${$_[0]}{lc($db_style)} = delete ${$_[0]}{$db_style};
@@ -308,7 +308,7 @@ sub all_properties {
 sub get {
     my ( $self, $property_name ) = @_;
 
-    die "Unknown property '$property_name'"  if not exists $profile_properties_details{$property_name};
+    die "Unknown property '$property_name'\n"  if not exists $profile_properties_details{$property_name};
 
     if ( $profile_properties_details{$property_name}->{type} eq q{ArrayRef} or $profile_properties_details{$property_name}->{type} eq q{HashRef} ) {
         return clone _get_value_from_nested_hash( $self->{q{profile}}, split /[.]/, $property_name );
@@ -328,7 +328,7 @@ sub _set {
     my $value_type = reftype($value);
     my $data_details;
 
-    die "Unknown property '$property_name'" if not exists $profile_properties_details{$property_name};
+    die "Unknown property '$property_name'\n" if not exists $profile_properties_details{$property_name};
 
     $data_details = sprintf "[TYPE=%s][FROM=%s][VALUE_TYPE=%s][VALUE=%s]\n%s",
                             exists $profile_properties_details{$property_name}->{type} ? $profile_properties_details{$property_name}->{type} : q{UNDEF},
@@ -338,7 +338,7 @@ sub _set {
                             Data::Dumper::Dumper($value);
     # $value is a Scalar
     if ( ! $value_type  or $value_type eq q{SCALAR} ) {
-        die "Property $property_name can not be undef" if not defined $value;
+        die "Property $property_name can not be undef\n" if not defined $value;
 
         # Boolean
         if ( $profile_properties_details{$property_name}->{type} eq q{Bool} ) {
@@ -355,19 +355,19 @@ sub _set {
                 $value = JSON::PP::true;
             }
             else {
-                die "Property $property_name is of type Boolean $data_details";
+                die "Property $property_name is of type Boolean $data_details\n";
             }
         }
         # Number. In our case, only non-negative integers
         elsif ( $profile_properties_details{$property_name}->{type} eq q{Num} ) {
             if ( $value !~ /^(\d+)$/ ) {
-                die "Property $property_name is of type non-negative integer $data_details";
+                die "Property $property_name is of type non-negative integer $data_details\n";
             }
             if ( exists $profile_properties_details{$property_name}->{min} and $value < $profile_properties_details{$property_name}->{min} ) {
-                die "Property $property_name value is out of limit (smaller)";
+                die "Property $property_name value is out of limit (smaller)\n";
             }
             if ( exists $profile_properties_details{$property_name}->{max} and $value > $profile_properties_details{$property_name}->{max} ) {
-                die "Property $property_name value is out of limit (bigger)";
+                die "Property $property_name value is out of limit (bigger)\n";
             }
 
             $value = 0+ $value;    # Make sure JSON::PP doesn't serialize it as a JSON string
@@ -376,14 +376,14 @@ sub _set {
     else {
         # Array
         if ( $profile_properties_details{$property_name}->{type} eq q{ArrayRef} and reftype($value) ne q{ARRAY} ) {
-            die "Property $property_name is not a ArrayRef $data_details";
+            die "Property $property_name is not a ArrayRef $data_details\n";
         }
         # Hash
         elsif ( $profile_properties_details{$property_name}->{type} eq q{HashRef} and reftype($value) ne q{HASH} ) {
-            die "Property $property_name is not a HashRef $data_details";
+            die "Property $property_name is not a HashRef $data_details\n";
         }
         elsif ( $profile_properties_details{$property_name}->{type} eq q{Bool} or $profile_properties_details{$property_name}->{type} eq q{Num} or $profile_properties_details{$property_name}->{type} eq q{Str} ) {
-            die "Property $property_name is a Scalar $data_details";
+            die "Property $property_name is a Scalar $data_details\n";
         }
     }
 
@@ -397,7 +397,7 @@ sub _set {
 sub merge {
     my ( $self, $other_profile ) = @_;
 
-    die "Merge with ", __PACKAGE__, " only" if ref($other_profile) ne __PACKAGE__;
+    die "Merge with ", __PACKAGE__, " only\n" if ref($other_profile) ne __PACKAGE__;
 
     foreach my $property_name ( keys %profile_properties_details ) {
         if ( defined _get_value_from_nested_hash( $other_profile->{q{profile}}, split /[.]/, $property_name ) ) {
