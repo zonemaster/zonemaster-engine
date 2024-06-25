@@ -388,7 +388,7 @@ v3.1.2 2020-05-22
 
 [Fixes]
  - Comparison in Zone10 on SOA owner name was done in case
-   senstive manner which created false ERRORs for some zones
+   sensitive manner which created false ERRORs for some zones
    and depending on the case of input zone name (#734, #737)
 
 
