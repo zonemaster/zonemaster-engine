@@ -1,6 +1,33 @@
 Release history for Zonemaster component Zonemaster-Engine
 
 
+v6.0.0 2024-07-01 (part of Zonemaster v2024.1 release)
+
+ [Release information]
+ - Translations have not been fully updated in this release. They will
+   be updated in an upcoming release.
+
+ [Breaking change]
+ - Removes planned deprecated 'resolver.source' profile property,
+   can break custom profiles (#1343)
+
+ [Features]
+
+ - Makes it possible to run single testcase via test_zone() (#1312)
+ - Changes supported way of extracting default profile (#1339)
+ - Updates Basic01 implementation (#1357)
+
+ [Fixes]
+
+ - Makes syntax04 take zone name instead of NS name (#1322)
+ - Removes the code dependency on Moose (#1319)
+ - Fixes Zonemaster::Engine::Translator’s instance() method (#1347)
+ - Fixes polymorphism in Translator (#1346)
+ - Adds minor changes to Zone11 msgids (#1348)
+ - Update minimum Perl version to 5.16.0 and add missing 'warnings' (#1342)
+ - Fixes undef eq comparison (#1363)
+
+
 v5.0.0 2024-03-18 (public release version)
 
  [Release information]
