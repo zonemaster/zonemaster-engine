@@ -11,10 +11,10 @@ v6.0.0 2024-07-01 (part of Zonemaster v2024.1 release)
  - Removes planned deprecated 'resolver.source' profile property.
    Breaks custom profiles using this property. Use 'resolver.source4'
    and 'resolver.source6' instead. (#1343)
- - Using 'profile.json' that comes with the Zonemaster::Engine
-   installation as a template for custom profile is no longer supported.
-   Instead, use the new supported way of extracting default profile, that
-   can be found via the pull request introduced it. (#1339)
+ - Using the 'profile.json' file that comes with the Zonemaster::Engine
+   installation as a template for custom profiles is no longer supported.
+   Instead, use the new supported way of extracting the default profile, that
+   can be found via the pull request that introduced it. (#1339)
 
  [Features]
  - Makes it possible to run single testcase via test_zone() (#1312)
