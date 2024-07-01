@@ -1,13 +1,9 @@
 package Zonemaster::Engine::Test::Syntax;
 
-use 5.014002;
-
-use strict;
+use v5.16.0;
 use warnings;
 
 use version; our $VERSION = version->declare( "v1.0.10" );
-
-use Zonemaster::Engine;
 
 use Carp;
 use Email::Valid;
@@ -15,12 +11,13 @@ use List::MoreUtils qw[uniq none any];
 use Locale::TextDomain qw[Zonemaster-Engine];
 use Readonly;
 use Time::Local;
+
 use Zonemaster::Engine::Profile;
 use Zonemaster::Engine::Constants qw[:name :ip];
 use Zonemaster::Engine::DNSName;
 use Zonemaster::Engine::Packet;
 use Zonemaster::Engine::TestMethods;
-use Zonemaster::Engine::Util;
+use Zonemaster::Engine::Util qw[should_run_test];
 use Zonemaster::LDNS;
 
 =head1 NAME
@@ -52,31 +49,43 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 sub all {
     my ( $class, $zone ) = @_;
+
     my @results;
 
-    push @results, $class->syntax01( $zone ) if Zonemaster::Engine::Util::should_run_test( q{syntax01} );
-    push @results, $class->syntax02( $zone ) if Zonemaster::Engine::Util::should_run_test( q{syntax02} );
-    push @results, $class->syntax03( $zone ) if Zonemaster::Engine::Util::should_run_test( q{syntax03} );
-
-    if ( any { $_->tag eq q{ONLY_ALLOWED_CHARS} } @results ) {
-
-        foreach my $local_nsname ( uniq map { $_ } @{ Zonemaster::Engine::TestMethods->method2( $zone ) },
-            @{ Zonemaster::Engine::TestMethods->method3( $zone ) } )
-        {
-            push @results, $class->syntax04( Zonemaster::Engine->zone( $local_nsname ) )
-              if Zonemaster::Engine::Util::should_run_test( q{syntax04} );
-        }
-
-        push @results, $class->syntax05( $zone ) if Zonemaster::Engine::Util::should_run_test( q{syntax05} );
-
-        if ( none { $_->tag eq q{NO_RESPONSE_SOA_QUERY} } @results ) {
-            push @results, $class->syntax06( $zone ) if Zonemaster::Engine::Util::should_run_test( q{syntax06} );
-            push @results, $class->syntax07( $zone ) if Zonemaster::Engine::Util::should_run_test( q{syntax07} );
-        }
-
-        push @results, $class->syntax08( $zone ) if Zonemaster::Engine::Util::should_run_test( q{syntax08} );
-
+    my $only_allowed_chars = 1;
+    if ( should_run_test( q{syntax01} ) ) {
+        push @results, $class->syntax01( $zone );
+        $only_allowed_chars = any { $_->tag eq q{ONLY_ALLOWED_CHARS} } @results;
     }
+
+    push @results, $class->syntax02( $zone )
+      if should_run_test( q{syntax02} );
+
+    push @results, $class->syntax03( $zone )
+      if should_run_test( q{syntax03} );
+
+    return @results
+      if !$only_allowed_chars;
+
+    push @results, $class->syntax04( Zonemaster::Engine->zone( $zone ) )
+      if Zonemaster::Engine::Util::should_run_test( q{syntax04} );
+
+    my $all_soa_responses = 1;
+    if ( should_run_test( q{syntax05} ) ) {
+        push @results, $class->syntax05( $zone );
+        $all_soa_responses = none { $_->tag eq q{NO_RESPONSE_SOA_QUERY} } @results;
+    }
+
+    if ( $all_soa_responses ) {
+        push @results, $class->syntax06( $zone )
+          if should_run_test( q{syntax06} );
+
+        push @results, $class->syntax07( $zone )
+          if should_run_test( q{syntax07} );
+    }
+
+    push @results, $class->syntax08( $zone )
+      if should_run_test( q{syntax08} );
 
     return @results;
 } ## end sub all
@@ -818,9 +827,15 @@ sub syntax04 {
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Syntax04';
     push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
-    my $name = $zone->name;
-
-    push @results, _check_name_syntax( q{NAMESERVER}, $name );
+    foreach my $local_nsname (
+        uniq(
+            @{ Zonemaster::Engine::TestMethods->method2( $zone ) },
+            @{ Zonemaster::Engine::TestMethods->method3( $zone ) }
+        )
+      )
+    {
+        push @results, _check_name_syntax( q{NAMESERVER}, $local_nsname );
+    }
 
     return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 }

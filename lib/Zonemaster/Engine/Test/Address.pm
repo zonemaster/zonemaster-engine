@@ -1,8 +1,6 @@
 package Zonemaster::Engine::Test::Address;
 
-use 5.014002;
-
-use strict;
+use v5.16.0;
 use warnings;
 
 use version; our $VERSION = version->declare("v1.0.8");
@@ -15,7 +13,7 @@ use Readonly;
 use Zonemaster::Engine::Recursor;
 use Zonemaster::Engine::Constants qw[:addresses :ip];
 use Zonemaster::Engine::TestMethods;
-use Zonemaster::Engine::Util;
+use Zonemaster::Engine::Util qw[name should_run_test];
 
 =head1 NAME
 
@@ -46,13 +44,22 @@ Returns a list of L<Zonemaster::Engine::Logger::Entry> objects.
 
 sub all {
     my ( $class, $zone ) = @_;
+
     my @results;
 
-    push @results, $class->address01( $zone ) if Zonemaster::Engine::Util::should_run_test( q{address01} );
-    push @results, $class->address02( $zone ) if Zonemaster::Engine::Util::should_run_test( q{address02} );
-    # Perform ADDRESS03 if ADDRESS02 passed
-    if ( any { $_->tag eq q{NAMESERVERS_IP_WITH_REVERSE} } @results ) {
-        push @results, $class->address03( $zone ) if Zonemaster::Engine::Util::should_run_test( q{address03} );
+    push @results, $class->address01( $zone )
+      if should_run_test( q{address01} );
+
+    my $ns_with_reverse = 1;
+    if ( should_run_test( q{address02} ) ) {
+        push @results, $class->address02( $zone );
+        $ns_with_reverse = any { $_->tag eq q{NAMESERVERS_IP_WITH_REVERSE} } @results;
+    }
+
+    # Perform ADDRESS03 if ADDRESS02 passed or was skipped
+    if ( $ns_with_reverse ) {
+        push @results, $class->address03( $zone )
+          if should_run_test( q{address03} );
     }
 
     return @results;

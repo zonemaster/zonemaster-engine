@@ -1,8 +1,6 @@
 package Zonemaster::Engine::Util;
 
-use 5.014002;
-
-use strict;
+use v5.16.0;
 use warnings;
 
 use version; our $VERSION = version->declare("v1.1.13");
@@ -18,6 +16,7 @@ BEGIN {
       should_run_test
       scramble_case
       test_levels
+      zone
     ];
     our %EXPORT_TAGS = ( all => \@EXPORT_OK );
 
@@ -42,6 +41,12 @@ sub info {
     my ( $tag, $argref ) = @_;
 
     return Zonemaster::Engine->logger->add( $tag, $argref );
+}
+
+sub zone {
+    my ( $name ) = @_;
+
+    return Zonemaster::Engine::Zone->new( { name => Zonemaster::Engine::DNSName->new( $name ) } );
 }
 
 sub should_run_test {
@@ -209,6 +214,10 @@ Creates and returns a nameserver object with the given name and address.
 =item name($string_name_or_zone)
 
 Creates and returns a L<Zonemaster::Engine::DNSName> object for the given argument.
+
+=item zone($name)
+
+Returns a L<Zonemaster::Engine::Zone> object for the given name.
 
 =item parse_hints($string)
 

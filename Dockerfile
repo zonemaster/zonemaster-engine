@@ -20,8 +20,8 @@ RUN apk add --no-cache \
     perl-lwp-protocol-https \
     perl-mail-spf \
     perl-module-install \
-    perl-moose \
     perl-pod-coverage \
+    perl-sub-override \
     perl-test-differences \
     perl-test-exception \
     perl-test-fatal \
@@ -32,7 +32,6 @@ RUN apk add --no-cache \
     Locale::PO \
     Locale::TextDomain \
     Module::Find \
-    MooseX::Singleton \
     Net::IP::XS
 
 ARG version
@@ -61,6 +60,5 @@ RUN apk add --no-cache \
     perl-mail-spf \
     perl-mailtools \
     perl-module-install \
-    perl-moose \
     perl-net-ip \
     perl-text-csv

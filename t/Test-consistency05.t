@@ -19,6 +19,13 @@ BEGIN {
 
 my $test_module = q{Consistency};
 my $test_case = 'consistency05';
+my @all_tags = qw(ADDRESSES_MATCH
+                  IN_BAILIWICK_ADDR_MISMATCH
+                  OUT_OF_BAILIWICK_ADDR_MISMATCH
+                  EXTRA_ADDRESS_CHILD
+                  CHILD_ZONE_LAME
+                  CHILD_NS_FAILED
+                  NO_RESPONSE);
 
 # Common hint file (test-zone-data/COMMON/hintfile)
 Zonemaster::Engine::Recursor->remove_fake_addresses( '.' );
@@ -28,97 +35,179 @@ Zonemaster::Engine::Recursor->add_fake_addresses( '.',
     }
 );
 
-# Test scenarios
+# Test zone scenarios
 # - Documentation: L<TestUtil/perform_testcase_testing()>
-# - Format: { SCENARIO_NAME => [ zone_name, [ MANDATORY_MESSAGE_TAGS ], [ FORBIDDEN_MESSAGE_TAGS ], testable ] }
+# - Format: { SCENARIO_NAME => [
+#     testable,
+#     zone_name,
+#     [ MANDATORY_MESSAGE_TAGS ],
+#     [ FORBIDDEN_MESSAGE_TAGS ],
+#     [ UNDELEGATED_NS ],
+#     [ UNDELEGATED_DS ],
+#   ] }
 #
+# - One of MANDATORY_MESSAGE_TAGS and FORBIDDEN_MESSAGE_TAGS may be undefined.
+#   See documentation for the meaning of that.
+
 # Scenarios CHILD-ZONE-LAME-1 and IB-ADDR-MISMATCH-3 cannot be tested due to a bug in the implementation. See
 # https://github.com/zonemaster/zonemaster-engine/issues/1301
-#
+
+# Scenario IB-ADDR-MISMATCH-4 cannot be tested, see
+# https://github.com/zonemaster/zonemaster-engine/issues/1349
+
+
 my %subtests = (
-    'ADDRESSES-MATCH-4' => [
-        q(addresses-match-4.consistency05.xa),
-        [ qw(ADDRESSES_MATCH CHILD_NS_FAILED) ],
-        [ qw(IN_BAILIWICK_ADDR_MISMATCH OUT_OF_BAILIWICK_ADDR_MISMATCH EXTRA_ADDRESS_CHILD CHILD_ZONE_LAME NO_RESPONSE) ],
-        1,
-    ],
-    'CHILD-ZONE-LAME-1' => [
-        q(child-zone-lame-1.consistency05.xa),
-        [ qw(CHILD_ZONE_LAME NO_RESPONSE) ],
-        [ qw(IN_BAILIWICK_ADDR_MISMATCH OUT_OF_BAILIWICK_ADDR_MISMATCH EXTRA_ADDRESS_CHILD CHILD_NS_FAILED ADDRESSES_MATCH) ],
-        0,
-    ],
     'ADDRESSES-MATCH-1' => [
+        1,
         q(addresses-match-1.consistency05.xa),
         [ qw(ADDRESSES_MATCH) ],
-        [ qw(IN_BAILIWICK_ADDR_MISMATCH OUT_OF_BAILIWICK_ADDR_MISMATCH EXTRA_ADDRESS_CHILD CHILD_ZONE_LAME CHILD_NS_FAILED NO_RESPONSE) ],
-        1,
-    ],
-    'IB-ADDR-MISMATCH-2' => [
-        q(ib-addr-mismatch-2.consistency05.xa),
-        [ qw(IN_BAILIWICK_ADDR_MISMATCH) ],
-        [ qw(OUT_OF_BAILIWICK_ADDR_MISMATCH EXTRA_ADDRESS_CHILD CHILD_ZONE_LAME CHILD_NS_FAILED NO_RESPONSE ADDRESSES_MATCH) ],
-        1,
-    ],
-    'ADDRESSES-MATCH-5' => [
-        q(addresses-match-5.consistency05.xa),
-        [ qw(ADDRESSES_MATCH NO_RESPONSE) ],
-        [ qw(IN_BAILIWICK_ADDR_MISMATCH OUT_OF_BAILIWICK_ADDR_MISMATCH EXTRA_ADDRESS_CHILD CHILD_ZONE_LAME CHILD_NS_FAILED) ],
-        1,
-    ],
-    'IB-ADDR-MISMATCH-1' => [
-        q(ib-addr-mismatch-1.consistency05.xa),
-        [ qw(IN_BAILIWICK_ADDR_MISMATCH EXTRA_ADDRESS_CHILD) ],
-        [ qw(OUT_OF_BAILIWICK_ADDR_MISMATCH CHILD_ZONE_LAME CHILD_NS_FAILED NO_RESPONSE ADDRESSES_MATCH) ],
-        1,
-    ],
-    'CHILD-ZONE-LAME-2' => [
-        q(child-zone-lame-2.consistency05.xa),
-        [ qw(CHILD_ZONE_LAME CHILD_NS_FAILED) ],
-        [ qw(IN_BAILIWICK_ADDR_MISMATCH OUT_OF_BAILIWICK_ADDR_MISMATCH EXTRA_ADDRESS_CHILD ADDRESSES_MATCH NO_RESPONSE) ],
-        1,
-    ],
-    'ADDRESSES-MATCH-6' => [
-        q(child.addresses-match-6.consistency05.xa),
-        [ qw(ADDRESSES_MATCH) ],
-        [ qw(IN_BAILIWICK_ADDR_MISMATCH OUT_OF_BAILIWICK_ADDR_MISMATCH EXTRA_ADDRESS_CHILD CHILD_ZONE_LAME CHILD_NS_FAILED NO_RESPONSE) ],
-        1,
+        undef,
+        [],
+        []
     ],
     'ADDRESSES-MATCH-2' => [
+        1,
         q(addresses-match-2.consistency05.xa),
         [ qw(ADDRESSES_MATCH) ],
-        [ qw(IN_BAILIWICK_ADDR_MISMATCH OUT_OF_BAILIWICK_ADDR_MISMATCH EXTRA_ADDRESS_CHILD CHILD_ZONE_LAME CHILD_NS_FAILED NO_RESPONSE) ],
-        1,
-    ],
-    'IB-ADDR-MISMATCH-3' => [
-        q(ib-addr-mismatch-3.consistency05.xa),
-        [ qw(IN_BAILIWICK_ADDR_MISMATCH NO_RESPONSE) ],
-        [ qw(OUT_OF_BAILIWICK_ADDR_MISMATCH EXTRA_ADDRESS_CHILD CHILD_ZONE_LAME CHILD_NS_FAILED NO_RESPONSE ADDRESSES_MATCH) ],
-        0,
-    ],
-    'ADDRESSES-MATCH-7' => [
-        q(addresses-match-7.consistency05.xa),
-        [ qw(ADDRESSES_MATCH) ],
-        [ qw(IN_BAILIWICK_ADDR_MISMATCH OUT_OF_BAILIWICK_ADDR_MISMATCH EXTRA_ADDRESS_CHILD CHILD_ZONE_LAME CHILD_NS_FAILED NO_RESPONSE) ],
-        1,
-    ],
-    'EXTRA-ADDRESS-CHILD' => [
-        q(extra-address-child.consistency05.xa),
-        [ qw(EXTRA_ADDRESS_CHILD) ],
-        [ qw(IN_BAILIWICK_ADDR_MISMATCH OUT_OF_BAILIWICK_ADDR_MISMATCH CHILD_ZONE_LAME CHILD_NS_FAILED NO_RESPONSE ADDRESSES_MATCH) ],
-        1,
-    ],
-    'OOB-ADDR-MISMATCH' => [
-        q(child.oob-addr-mismatch.consistency05.xa),
-        [ qw(OUT_OF_BAILIWICK_ADDR_MISMATCH) ],
-        [ qw(IN_BAILIWICK_ADDR_MISMATCH EXTRA_ADDRESS_CHILD CHILD_ZONE_LAME CHILD_NS_FAILED NO_RESPONSE ADDRESSES_MATCH) ],
-        1,
+        undef,
+        [],
+        []
     ],
     'ADDRESSES-MATCH-3' => [
+        1,
         q(addresses-match-3.consistency05.xa),
         [ qw(ADDRESSES_MATCH CHILD_NS_FAILED) ],
-        [ qw(IN_BAILIWICK_ADDR_MISMATCH OUT_OF_BAILIWICK_ADDR_MISMATCH EXTRA_ADDRESS_CHILD CHILD_ZONE_LAME NO_RESPONSE) ],
+        undef,
+        [],
+        []
+    ],
+    'ADDRESSES-MATCH-4' => [
         1,
+        q(addresses-match-4.consistency05.xa),
+        [ qw(ADDRESSES_MATCH CHILD_NS_FAILED) ],
+        undef,
+        [],
+        []
+    ],
+    'ADDRESSES-MATCH-5' => [
+        1,
+        q(addresses-match-5.consistency05.xa),
+        [ qw(ADDRESSES_MATCH NO_RESPONSE) ],
+        undef,
+        [],
+        []
+    ],
+    'ADDRESSES-MATCH-6' => [
+        1,
+        q(child.addresses-match-6.consistency05.xa),
+        [ qw(ADDRESSES_MATCH) ],
+        undef,
+        [],
+        []
+    ],
+    'ADDRESSES-MATCH-7' => [
+        1,
+        q(addresses-match-7.consistency05.xa),
+        [ qw(ADDRESSES_MATCH) ],
+        undef,
+        [],
+        []
+    ],
+    'ADDR-MATCH-DEL-UNDEL-1' => [
+        1,
+        q(addr-match-del-undel-1.consistency05.xa),
+        [ qw(ADDRESSES_MATCH) ],
+        undef,
+        [ qw(ns3.addr-match-del-undel-1.consistency05.xa/127.14.5.33 ns3.addr-match-del-undel-1.consistency05.xa/fda1:b2:c3:0:127:14:5:33 ns4.addr-match-del-undel-1.consistency05.xa/127.14.5.34 ns4.addr-match-del-undel-1.consistency05.xa/fda1:b2:c3:0:127:14:5:34) ],
+        []
+    ],
+    'ADDR-MATCH-DEL-UNDEL-2' => [
+        1,
+        q(addr-match-del-undel-2.consistency05.xa),
+        [ qw(ADDRESSES_MATCH) ],
+        undef,
+        [ qw(ns3.addr-match-del-undel-2.consistency05.xb ns4.addr-match-del-undel-2.consistency05.xb) ],
+        []
+    ],
+    'ADDR-MATCH-NO-DEL-UNDEL-1' => [
+        1,
+        q(addr-match-no-del-undel-1.consistency05.xa),
+        [ qw(ADDRESSES_MATCH) ],
+        undef,
+        [ qw(ns1.addr-match-no-del-undel-1.consistency05.xa/127.14.5.31 ns1.addr-match-no-del-undel-1.consistency05.xa/fda1:b2:c3:0:127:14:5:31 ns2.addr-match-no-del-undel-1.consistency05.xa/127.14.5.32 ns2.addr-match-no-del-undel-1.consistency05.xa/fda1:b2:c3:0:127:14:5:32) ],
+        []
+    ],
+    'ADDR-MATCH-NO-DEL-UNDEL-2' => [
+        1,
+        q(addr-match-no-del-undel-2.consistency05.xa),
+        [ qw(ADDRESSES_MATCH) ],
+        undef,
+        [ qw(ns3.addr-match-no-del-undel-2.consistency05.xb ns4.addr-match-no-del-undel-2.consistency05.xb) ],
+        []
+    ],
+    'CHILD-ZONE-LAME-1' => [
+        0,
+        q(child-zone-lame-1.consistency05.xa),
+        [ qw(CHILD_ZONE_LAME NO_RESPONSE) ],
+        undef,
+        [],
+        []
+    ],
+    'CHILD-ZONE-LAME-2' => [
+        1,
+        q(child-zone-lame-2.consistency05.xa),
+        [ qw(CHILD_ZONE_LAME CHILD_NS_FAILED) ],
+        undef,
+        [],
+        []
+    ],
+    'IB-ADDR-MISMATCH-1' => [
+        1,
+        q(ib-addr-mismatch-1.consistency05.xa),
+        [ qw(IN_BAILIWICK_ADDR_MISMATCH EXTRA_ADDRESS_CHILD) ],
+        undef,
+        [],
+        []
+    ],
+    'IB-ADDR-MISMATCH-2' => [
+        1,
+        q(ib-addr-mismatch-2.consistency05.xa),
+        [ qw(IN_BAILIWICK_ADDR_MISMATCH) ],
+        undef,
+        [],
+        []
+    ],
+    'IB-ADDR-MISMATCH-3' => [
+        0,
+        q(ib-addr-mismatch-3.consistency05.xa),
+        [ qw(IN_BAILIWICK_ADDR_MISMATCH NO_RESPONSE) ],
+        undef,
+        [],
+        []
+    ],
+    'IB-ADDR-MISMATCH-4' => [
+        0,
+        q(ib-addr-mismatch-4.consistency05.xa),
+        [ qw(IN_BAILIWICK_ADDR_MISMATCH) ],
+        undef,
+        [],
+        []
+    ],
+    'OOB-ADDR-MISMATCH' => [
+        1,
+        q(child.oob-addr-mismatch.consistency05.xa),
+        [ qw(OUT_OF_BAILIWICK_ADDR_MISMATCH) ],
+        undef,
+        [],
+        []
+    ],
+    'EXTRA-ADDRESS-CHILD' => [
+        1,
+        q(extra-address-child.consistency05.xa),
+        [ qw(EXTRA_ADDRESS_CHILD) ],
+        undef,
+        [],
+        []
     ],
 );
 
@@ -134,7 +223,7 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
 
 Zonemaster::Engine::Profile->effective->merge( Zonemaster::Engine::Profile->from_json( qq({ "test_cases": [ "$test_case" ] }) ) );
 
-perform_testcase_testing( $test_case, $test_module, %subtests );
+perform_testcase_testing( $test_case, $test_module, \@all_tags, %subtests );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Nameserver->save( $datafile );

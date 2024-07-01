@@ -1,26 +1,24 @@
 package Zonemaster::Engine::Profile;
 
-use 5.014002;
-
-use strict;
+use v5.16.0;
 use warnings;
 
 use version; our $VERSION = version->declare( "v1.2.22" );
 
 use File::ShareDir qw[dist_file];
 use JSON::PP qw( encode_json decode_json );
-use Scalar::Util qw(reftype);
+use Scalar::Util qw(reftype looks_like_number);
 use File::Slurp;
 use Clone qw(clone);
 use Data::Dumper;
 use Net::IP::XS;
 use Log::Any qw( $log );
 use YAML::XS qw();
-use Scalar::Util qw( looks_like_number );
 
 $YAML::XS::Boolean = "JSON::PP";
 
-use Zonemaster::Engine::Constants qw( $RESOLVER_SOURCE_OS_DEFAULT $DURATION_5_MINUTES_IN_SECONDS $DURATION_1_HOUR_IN_SECONDS $DURATION_4_HOURS_IN_SECONDS $DURATION_12_HOURS_IN_SECONDS $DURATION_1_DAY_IN_SECONDS $DURATION_1_WEEK_IN_SECONDS $DURATION_180_DAYS_IN_SECONDS );
+use Zonemaster::Engine::Constants qw( $DURATION_5_MINUTES_IN_SECONDS $DURATION_1_HOUR_IN_SECONDS $DURATION_4_HOURS_IN_SECONDS $DURATION_12_HOURS_IN_SECONDS $DURATION_1_DAY_IN_SECONDS $DURATION_1_WEEK_IN_SECONDS $DURATION_180_DAYS_IN_SECONDS );
+use Zonemaster::Engine::Validation qw( validate_ipv4 validate_ipv6 );
 
 my %profile_properties_details = (
     q{cache} => {
@@ -81,31 +79,23 @@ my %profile_properties_details = (
     q{resolver.defaults.timeout} => {
         type    => q{Num}
     },
-    q{resolver.source} => {
-        type    => q{Str},
-        test    => sub {
-            if ( $_[0] ne $RESOLVER_SOURCE_OS_DEFAULT ) {
-                Net::IP::XS->new( $_[0] ) || $log->warning( "Property resolver.source must be an IP address or the exact string $RESOLVER_SOURCE_OS_DEFAULT" );
-            }
-        }
-    },
     q{resolver.source4} => {
         type    => q{Str},
         test    => sub {
-            if ( $_[0] and $_[0] ne '' and not Net::IP::XS::ip_is_ipv4( $_[0] ) ) {
-                $log->warning( "Property resolver.source4 must be an IPv4 address, the empty string or undefined" );
+            unless ( $_[0] eq '' or validate_ipv4( $_[0] ) ) {
+                die "Property resolver.source4 must be a valid IPv4 address";
             }
-            Net::IP::XS->new( $_[0] );
-        }
+        },
+        default => q{}
     },
     q{resolver.source6} => {
         type    => q{Str},
         test    => sub {
-            if ( $_[0] and $_[0] ne '' and not Net::IP::XS::ip_is_ipv6( $_[0] ) ) {
-                $log->warning( "Property resolver.source6 must be an IPv6 address, the empty string or undefined" );
+            unless ( $_[0] eq '' or validate_ipv6( $_[0] ) ) {
+                die "Property resolver.source6 must be a valid IPv6 address";
             }
-            Net::IP::XS->new( $_[0] );
-        }
+        },
+        default => q{}
     },
     q{net.ipv4} => {
         type    => q{Bool}
@@ -304,16 +294,8 @@ sub default {
             $new->set( $property_name, $profile_properties_details{$property_name}{default} );
         }
     }
-    $new->check_validity;
-    return $new;
-}
 
-sub check_validity {
-    my ( $self ) = @_;
-    my $resolver = $self->{profile}{resolver};
-    if ( exists $resolver->{source} and ( exists $resolver->{source4} or exists $resolver->{source6} ) ) {
-        $log->warning( "Error in profile: 'resolver.source' (deprecated) can't be used in combination with 'resolver.source4' or 'resolver.source6'." );
-    }
+    return $new;
 }
 
 sub get {
@@ -415,7 +397,7 @@ sub merge {
             $self->_set( q{JSON}, $property_name, _get_value_from_nested_hash( $other_profile->{q{profile}}, split /[.]/, $property_name ) );
         }
     }
-    $self->check_validity;
+
     return $other_profile->{q{profile}};
 }
 
@@ -431,7 +413,6 @@ sub from_json {
         }
     }
 
-    $new->check_validity;
     return $new;
 }
 
@@ -528,10 +509,7 @@ Update it to change the configuration.
 The effective profile is initialized with the default values declared
 in the L</PROFILE PROPERTIES> section.
 
-For the effective profile, all properties are always set (to valid
-values).
-This is based on the assumption that F<default.profile> specifies a
-valid value for each and every property.
+All properties in the effective profile are always set (to valid values).
 
 =head1 CLASS METHODS
 
@@ -580,10 +558,6 @@ section or if the property values are illegal according to the L</PROFILE
 PROPERTIES> section.
 
 =head1 INSTANCE METHODS
-
-=head2 check_validity
-
-Verify that the profile does not allow confusing combinations.
 
 =head2 get
 
@@ -676,9 +650,6 @@ If it is set it has a value that is valid for that specific property.
 Here is a listing of all the properties and their respective sets of
 valid values.
 
-Default values are listed here as specified in the distributed default
-profile JSON file.
-
 =head2 resolver.defaults.usevc
 
 A boolean. If true, only use TCP. Default false.
@@ -715,28 +686,23 @@ the same query is resent with EDNS0 and TCP (if needed). If you
 want the original answer (with TC bit set) and avoid this kind of
 replay, set this flag to false.
 
-=head2 resolver.source
-
-Deprecated (planned removal: v2024.1).
-Use L</resolver.source4> and L</resolver.source6>.
-A string that is either an IP address or the exact string C<"os_default">.
-The source address all resolver objects should use when sending queries.
-If C<"os_default">, the OS default address is used.
-Default C<"os_default">.
-
 =head2 resolver.source4
 
-A string that is an IPv4 address or the empty string or undefined.
+A string representation of an IPv4 address or the empty string.
 The source address all resolver objects should use when sending queries over IPv4.
-If the empty string or undefined, use the OS default IPv4 address if available.
-Default "" (empty string).
+
+If set to "" (empty string), the OS default IPv4 address is used.
+
+Default: "" (empty string).
 
 =head2 resolver.source6
 
-A string that is an IPv6 address or the empty string or undefined.
+A string representation of an IPv6 address or the empty string.
 The source address all resolver objects should use when sending queries over IPv6.
-If the empty string or undefined, use the OS default IPv6 address if available.
-Default "" (empty string).
+
+If set to "" (empty string), the OS default IPv6 address is used.
+
+Default: "" (empty string).
 
 =head2 net.ipv4
 
@@ -888,11 +854,16 @@ https://github.com/zonemaster/zonemaster/tree/master/docs/specifications/tests/R
 define the default severity level for some of the messages.
 These specifications are the only authoritative documents on the default
 severity level for the various messages.
-For messages not defined in any of these specifications please refer to the file
-located by L<dist_file("Zonemaster-Engine", "default.profile")|
-File::ShareDir/dist_file>.
-For messages neither defined in test specifications, nor listed in
-C<default.profile>, the default severity level is C<DEBUG>.
+For messages not defined in any of these specifications you can use the
+following command to query the default severity level directly from the actual
+default profile.
+
+```sh
+perl -MZonemaster::Engine::Test -E 'say Zonemaster::Engine::Profile->default->to_json' | jq -S .test_levels
+```
+
+For messages neither defined in test specifications, nor listed in the default
+profile, the default severity level is C<DEBUG>.
 
 I<Note:> Sometimes multiple test cases within the same test module define
 messages for the same tag.
@@ -906,12 +877,6 @@ L<test case specifications|https://github.com/zonemaster/zonemaster/tree/master/
 Default is an arrayref listing all the test cases.
 
 Specifies which test cases can be run by the testing suite.
-
-Note that an exception applies to test cases C<basic01> and C<basic02>:
-when running either the full testing suite or just the Basic test module,
-these test cases are always run no matter if they're excluded from this
-property. This is because their primary goal is to verify that the given
-domain name can be tested at all.
 
 =head2 test_cases_vars.dnssec04.REMAINING_SHORT
 

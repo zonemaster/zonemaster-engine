@@ -1,13 +1,9 @@
 package Zonemaster::Engine::Test;
 
-use 5.014002;
-
-use strict;
+use v5.16.0;
 use warnings;
 
 use version; our $VERSION = version->declare( "v1.1.12" );
-
-use Moose;
 
 use Readonly;
 use Module::Find;
@@ -19,7 +15,6 @@ use Zonemaster::LDNS;
 use Zonemaster::Engine;
 use Zonemaster::Engine::Profile;
 use Zonemaster::Engine::Util;
-use Zonemaster::Engine::Test::Basic;
 
 use IO::Socket::INET6;    # Lazy-loads, so make sure it's here for the version logging
 
@@ -120,7 +115,6 @@ sub _log_versions {
 
     info( DEPENDENCY_VERSION => { name => 'Zonemaster::LDNS',      version => $Zonemaster::LDNS::VERSION } );
     info( DEPENDENCY_VERSION => { name => 'IO::Socket::INET6',     version => $IO::Socket::INET6::VERSION } );
-    info( DEPENDENCY_VERSION => { name => 'Moose',                 version => $Moose::VERSION } );
     info( DEPENDENCY_VERSION => { name => 'Module::Find',          version => $Module::Find::VERSION } );
     info( DEPENDENCY_VERSION => { name => 'File::ShareDir',        version => $File::ShareDir::VERSION } );
     info( DEPENDENCY_VERSION => { name => 'File::Slurp',           version => $File::Slurp::VERSION } );
@@ -140,8 +134,7 @@ sub _log_versions {
 
     my @modules_array = modules();
 
-Returns a list of strings containing the names of all available Test modules, with the
-exception of L<Zonemaster::Engine::Test::Basic> (since that one is a bit special),
+Returns a list of strings containing the names of all available Test modules,
 based on the content of the B<share/modules.txt> file.
 
 =back
@@ -160,15 +153,17 @@ sub modules {
 
 Runs the L<default set of tests|/all()> of L<all Test modules found|/modules()> for the given zone.
 
-This method always starts with the execution of the L<Basic Test module|Zonemaster::Engine::Test::Basic>.
-If the L<Basic tests|Zonemaster::Engine::Test::Basic/TESTS> fail to indicate an extremely minimal
-level of function for the zone (e.g., it must have a parent domain, and it must have at least one
-functional name server), the testing suite is aborted. See L<Zonemaster::Engine::Test::Basic/can_continue()>
-for more details.
-Otherwise, other Test modules are L<looked up and loaded|/modules()> from the B<share/modules.txt> file,
-and executed in the order in which they appear in the file.
+Test modules are L<looked up and loaded|/modules()> from the
+B<share/modules.txt> file, and executed in the order in which they appear in the
+file.
 The default set of tests (Test Cases) is specified in the L</all()> method of each Test module. They
 can be individually disabled by the L<profile|Zonemaster::Engine::Profile/test_cases>.
+
+A test module may implement a C<can_continue()> method to indicate lack of an
+extremely minimal level of function for the zone (e.g., it must have a parent
+domain, and it must have at least one functional name server).
+If lack of such minimal function is indicated, the testing harness is aborted.
+See L<Zonemaster::Engine::Test::Basic/can_continue()> for an example.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -191,31 +186,31 @@ sub run_all_for {
         return info( NO_NETWORK => {} );
     }
 
-    info( MODULE_VERSION => { module  => 'Zonemaster::Engine::Test::Basic', version => Zonemaster::Engine::Test::Basic->version } );
-    push @results, Zonemaster::Engine::Test::Basic->all( $zone );
-    info( MODULE_END => { module => 'Zonemaster::Engine::Test::Basic' } );
-
-    if ( Zonemaster::Engine::Test::Basic->can_continue( $zone, @results ) and Zonemaster::Engine->can_continue() ) {
+    if ( Zonemaster::Engine->can_continue() ) {
         foreach my $mod ( __PACKAGE__->modules ) {
             my $module = "Zonemaster::Engine::Test::$mod";
+
             info( MODULE_VERSION => { module => $module, version => $module->version } );
-            my @res = eval { $module->all( $zone ) };
+
+            my @module_results = eval { $module->all( $zone ) };
+            push @results, @module_results;
             if ( $@ ) {
                 my $err = $@;
                 if ( blessed $err and $err->isa( 'Zonemaster::Engine::Exception' ) ) {
                     die $err;    # Utility exception, pass it on
                 }
                 else {
-                    push @res, info( MODULE_ERROR => { module => $module, msg => "$err" } );
+                    push @results, info( MODULE_ERROR => { module => $module, msg => "$err" } );
                 }
             }
+
             info( MODULE_END => { module => $module } );
 
-            push @results, @res;
+            if ( $module->can( 'can_continue' ) && !$module->can_continue( $zone, @module_results ) ) {
+                push @results, info( CANNOT_CONTINUE => { domain => $zone->name->string } );
+                last;
+            }
         }
-    }
-    else {
-        push @results, info( CANNOT_CONTINUE => { domain => $zone->name->string } );
     }
 
     return @results;
@@ -246,7 +241,6 @@ sub run_module {
     my ( $class, $requested, $zone ) = @_;
     my @res;
     my ( $module ) = grep { lc( $requested ) eq lc( $_ ) } $class->modules;
-    $module = 'Basic' if ( not $module and lc( $requested ) eq 'basic' );
 
     Zonemaster::Engine->start_time_now();
     push @res, info( START_TIME => { time_t => time(), string => strftime( "%F %T %z", ( localtime() ) ) } );
@@ -310,7 +304,6 @@ sub run_one {
     my ( $class, $requested, $test, $zone ) = @_;
     my @res;
     my ( $module ) = grep { lc( $requested ) eq lc( $_ ) } $class->modules;
-    $module = 'Basic' if ( not $module and lc( $requested ) eq 'basic' );
 
     Zonemaster::Engine->start_time_now();
     push @res, info( START_TIME => { time_t => time(), string => strftime( "%F %T %z", ( localtime() ) ) } );

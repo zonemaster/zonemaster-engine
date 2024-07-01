@@ -1,13 +1,11 @@
 package Zonemaster::Engine::Normalization;
 
-use 5.014002;
-
-use utf8;
-use strict;
+use v5.16.0;
 use warnings;
 
 use parent 'Exporter';
 
+use utf8;
 use Carp;
 use Encode;
 use Readonly;

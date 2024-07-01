@@ -1,8 +1,9 @@
 package Zonemaster::Engine;
 
-use version; our $VERSION = version->declare("v5.0.0");
+use v5.16.0;
+use warnings;
 
-use 5.014002;
+use version; our $VERSION = version->declare("v6.0.0");
 
 BEGIN {
     # Locale::TextDomain (<= 1.20) doesn't know about File::ShareDir so give a helping hand.
@@ -16,6 +17,7 @@ BEGIN {
 
 use Class::Accessor "antlers";
 use Carp;
+
 use Zonemaster::Engine::Nameserver;
 use Zonemaster::Engine::Logger;
 use Zonemaster::Engine::Profile;
@@ -80,7 +82,7 @@ sub all_tags {
     my ( $class ) = @_;
     my @res;
 
-    foreach my $module ( 'Basic', sort { $a cmp $b } Zonemaster::Engine::Test->modules ) {
+    foreach my $module ( sort { $a cmp $b } Zonemaster::Engine::Test->modules ) {
         my $full = "Zonemaster::Engine::Test::$module";
         my $ref  = $full->metadata;
         foreach my $list ( values %{$ref} ) {
@@ -95,7 +97,7 @@ sub all_methods {
     my ( $class ) = @_;
     my %res;
 
-    foreach my $module ( 'Basic', Zonemaster::Engine::Test->modules ) {
+    foreach my $module ( Zonemaster::Engine::Test->modules ) {
         my $full = "Zonemaster::Engine::Test::$module";
         my $ref  = $full->metadata;
         foreach my $method ( sort { $a cmp $b } keys %{$ref} ) {
@@ -262,9 +264,12 @@ Runs all available tests for the zone with the given name in the specified modul
 
 =item test_method($module, $method, $name)
 
-Run one particular test method in one particular module for one particular zone. The requested module must be in the list of active loaded modules (that is, not the Basic
-module and not a module disabled by the current profile), and the method must be listed in the metadata the module exports. If those requirements
-are fulfilled, the method will be called with the provided arguments.
+Run one particular test method in one particular module for one particular zone.
+The requested module must be in the list of currently enabled modules (that is,
+not a module disabled by the current profile), and the method must be listed in
+the metadata of the module exports.
+If those requirements are fulfilled, the method will be called with the provided
+arguments.
 
 =item zone($name)
 

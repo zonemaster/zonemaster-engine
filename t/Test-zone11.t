@@ -15,6 +15,13 @@ BEGIN {
 
 my $test_module = q{ZONE};
 my $test_case = 'zone11';
+my @all_tags = qw(Z11_INCONSISTENT_SPF_POLICIES
+                  Z11_DIFFERENT_SPF_POLICIES_FOUND
+                  Z11_NO_SPF_FOUND
+                  Z11_SPF1_MULTIPLE_RECORDS
+                  Z11_SPF1_SYNTAX_ERROR
+                  Z11_SPF1_SYNTAX_OK
+                  Z11_UNABLE_TO_CHECK_FOR_SPF);
 
 # Root hints
 Zonemaster::Engine::Recursor->remove_fake_addresses( '.' );
@@ -22,139 +29,194 @@ Zonemaster::Engine::Recursor->add_fake_addresses( '.', {'ibdns.root-servers.net'
 
 # Test zone scenarios
 # - Documentation: L<TestUtil/perform_testcase_testing()>
-# - Format: { SCENARIO_NAME => [ zone_name, [ MANDATORY_MESSAGE_TAGS ], [ FORBIDDEN_MESSAGE_TAGS ], testable ] }
+# - Format: { SCENARIO_NAME => [
+#     testable,
+#     zone_name,
+#     [ MANDATORY_MESSAGE_TAGS ],
+#     [ FORBIDDEN_MESSAGE_TAGS ],
+#     [ UNDELEGATED_NS ],
+#     [ UNDELEGATED_DS ],
+#   ] }
+#
+# - One of MANDATORY_MESSAGE_TAGS and FORBIDDEN_MESSAGE_TAGS may be undefined.
+#   See documentation for the meaning of that.
+
 my %subtests = (
     'NO-TXT' => [
+        1,
         q(no-txt.zone11.xa),
         [ qw(Z11_NO_SPF_FOUND) ],
-        [ qw(Z11_INCONSISTENT_SPF_POLICIES Z11_SPF1_MULTIPLE_RECORDS Z11_SPF1_SYNTAX_ERROR Z11_SPF1_SYNTAX_OK Z11_UNABLE_TO_CHECK_FOR_SPF) ],
-        1
+        undef,
+        [],
+        []
     ],
     'NO-SPF-TXT' => [
+        1,
         q(no-spf-txt.zone11.xa),
         [ qw(Z11_NO_SPF_FOUND) ],
-        [ qw(Z11_INCONSISTENT_SPF_POLICIES Z11_SPF1_MULTIPLE_RECORDS Z11_SPF1_SYNTAX_ERROR Z11_SPF1_SYNTAX_OK Z11_UNABLE_TO_CHECK_FOR_SPF) ],
-        1
+        undef,
+        [],
+        []
     ],
     'NON-AUTH-TXT' => [
+        1,
         q(non-auth-txt.zone11.xa),
         [ qw(Z11_UNABLE_TO_CHECK_FOR_SPF) ],
-        [ qw(Z11_NO_SPF_FOUND Z11_INCONSISTENT_SPF_POLICIES Z11_SPF1_SYNTAX_ERROR Z11_SPF1_SYNTAX_OK Z11_SPF1_TOO_COMPLEX) ],
-        1
+        undef,
+        [],
+        []
     ],
     'NONEXISTENT' => [
+        1,
         q(nonexistent.zone11.xa),
         [ qw(Z11_UNABLE_TO_CHECK_FOR_SPF) ],
-        [ qw(Z11_NO_SPF_FOUND Z11_INCONSISTENT_SPF_POLICIES Z11_SPF1_SYNTAX_ERROR Z11_SPF1_SYNTAX_OK Z11_SPF1_TOO_COMPLEX) ],
-        1
+        undef,
+        [],
+        []
     ],
     'INCONSISTENT-SPF' => [
+        1,
         q(inconsistent-spf.zone11.xa),
         [ qw(Z11_INCONSISTENT_SPF_POLICIES Z11_DIFFERENT_SPF_POLICIES_FOUND) ],
-        [ qw(Z11_NO_SPF_FOUND Z11_SPF1_MULTIPLE_RECORDS Z11_SPF1_SYNTAX_ERROR Z11_SPF1_SYNTAX_OK Z11_UNABLE_TO_CHECK_FOR_SPF) ],
-        1
+        undef,
+        [],
+        []
     ],
     'SPF-MISSING-ON-ONE' => [
+        1,
         q(spf-missing-on-one.zone11.xa),
         [ qw(Z11_INCONSISTENT_SPF_POLICIES Z11_DIFFERENT_SPF_POLICIES_FOUND) ],
-        [ qw(Z11_NO_SPF_FOUND Z11_SPF1_MULTIPLE_RECORDS Z11_SPF1_SYNTAX_ERROR Z11_SPF1_SYNTAX_OK Z11_UNABLE_TO_CHECK_FOR_SPF) ],
-        1
+        undef,
+        [],
+        []
     ],
     'ALL-DIFFERENT-SPF' => [
+        1,
         q(all-different-spf.zone11.xa),
         [ qw(Z11_INCONSISTENT_SPF_POLICIES Z11_DIFFERENT_SPF_POLICIES_FOUND) ],
-        [ qw(Z11_NO_SPF_FOUND Z11_SPF1_MULTIPLE_RECORDS Z11_SPF1_SYNTAX_ERROR Z11_SPF1_SYNTAX_OK Z11_UNABLE_TO_CHECK_FOR_SPF) ],
-        1
+        undef,
+        [],
+        []
     ],
     'MULTIPLE-SPF-RECORDS' => [
+        1,
         q(multiple-spf-records.zone11.xa),
         [ qw(Z11_SPF1_MULTIPLE_RECORDS) ],
-        [ qw(Z11_NO_SPF_FOUND Z11_INCONSISTENT_SPF_POLICIES Z11_SPF1_SYNTAX_ERROR Z11_SPF1_SYNTAX_OK Z11_UNABLE_TO_CHECK_FOR_SPF) ],
-        1
+        undef,
+        [],
+        []
     ],
     'INVALID-SYNTAX' => [
+        1,
         q(invalid-syntax.zone11.xa),
         [ qw(Z11_SPF1_SYNTAX_ERROR) ],
-        [ qw(Z11_NO_SPF_FOUND Z11_INCONSISTENT_SPF_POLICIES Z11_SPF1_MULTIPLE_RECORDS Z11_SPF1_SYNTAX_OK Z11_UNABLE_TO_CHECK_FOR_SPF) ],
-        1
+        undef,
+        [],
+        []
     ],
     'RANDOM-BYTES' => [
+        1,
         q(random-bytes.zone11.xa),
         [ qw(Z11_SPF1_SYNTAX_ERROR) ],
-        [ qw(Z11_NO_SPF_FOUND Z11_INCONSISTENT_SPF_POLICIES Z11_SPF1_MULTIPLE_RECORDS Z11_SPF1_SYNTAX_OK Z11_UNABLE_TO_CHECK_FOR_SPF) ],
-        1
+        undef,
+        [],
+        []
     ],
     'TWO-REDIRECTS' => [
+        1,
         q(two-redirects.zone11.xa),
         [ qw(Z11_SPF1_SYNTAX_ERROR) ],
-        [ qw(Z11_NO_SPF_FOUND Z11_INCONSISTENT_SPF_POLICIES Z11_SPF1_MULTIPLE_RECORDS Z11_SPF1_SYNTAX_OK Z11_UNABLE_TO_CHECK_FOR_SPF) ],
-        1
+        undef,
+        [],
+        []
     ],
     'TWO-EXPS' => [
+        1,
         q(two-exps.zone11.xa),
         [ qw(Z11_SPF1_SYNTAX_ERROR) ],
-        [ qw(Z11_NO_SPF_FOUND Z11_INCONSISTENT_SPF_POLICIES Z11_SPF1_MULTIPLE_RECORDS Z11_SPF1_SYNTAX_OK Z11_UNABLE_TO_CHECK_FOR_SPF) ],
-        1
+        undef,
+        [],
+        []
     ],
     'TRIVIAL-SPF' => [
+        1,
         q(trivial-spf.zone11.xa),
         [ qw(Z11_SPF1_SYNTAX_OK) ],
-        [ qw(Z11_NO_SPF_FOUND Z11_INCONSISTENT_SPF_POLICIES Z11_SPF1_MULTIPLE_RECORDS Z11_SPF1_SYNTAX_ERROR Z11_UNABLE_TO_CHECK_FOR_SPF) ],
-        1
+        undef,
+        [],
+        []
     ],
     'VALID-SPF' => [
+        1,
         q(valid-spf.zone11.xa),
         [ qw(Z11_SPF1_SYNTAX_OK) ],
-        [ qw(Z11_NO_SPF_FOUND Z11_INCONSISTENT_SPF_POLICIES Z11_SPF1_MULTIPLE_RECORDS Z11_SPF1_SYNTAX_ERROR Z11_UNABLE_TO_CHECK_FOR_SPF) ],
-        1
+        undef,
+        [],
+        []
     ],
     'REDIRECT-NON-FINAL' => [
+        1,
         q(redirect-non-final.zone11.xa),
         [ qw(Z11_SPF1_SYNTAX_OK) ],
-        [ qw(Z11_NO_SPF_FOUND Z11_INCONSISTENT_SPF_POLICIES Z11_SPF1_MULTIPLE_RECORDS Z11_SPF1_SYNTAX_ERROR Z11_UNABLE_TO_CHECK_FOR_SPF) ],
-        1
+        undef,
+        [],
+        []
     ],
     'REDIRECT-AND-ALL' => [
+        1,
         q(redirect-and-all.zone11.xa),
         [ qw(Z11_SPF1_SYNTAX_OK) ],
-        [ qw(Z11_NO_SPF_FOUND Z11_INCONSISTENT_SPF_POLICIES Z11_SPF1_MULTIPLE_RECORDS Z11_SPF1_SYNTAX_ERROR Z11_UNABLE_TO_CHECK_FOR_SPF) ],
-        1
+        undef,
+        [],
+        []
     ],
     'CONTAINS-PTR' => [
+        1,
         q(contains-ptr.zone11.xa),
         [ qw(Z11_SPF1_SYNTAX_OK) ],
-        [ qw(Z11_NO_SPF_FOUND Z11_INCONSISTENT_SPF_POLICIES Z11_SPF1_MULTIPLE_RECORDS Z11_SPF1_SYNTAX_ERROR Z11_UNABLE_TO_CHECK_FOR_SPF) ],
-        1
+        undef,
+        [],
+        []
     ],
     'CONTAINS-P-MACRO' => [
+        1,
         q(contains-p-macro.zone11.xa),
         [ qw(Z11_SPF1_SYNTAX_OK) ],
-        [ qw(Z11_NO_SPF_FOUND Z11_INCONSISTENT_SPF_POLICIES Z11_SPF1_MULTIPLE_RECORDS Z11_SPF1_SYNTAX_ERROR Z11_UNABLE_TO_CHECK_FOR_SPF) ],
-        1
+        undef,
+        [],
+        []
     ],
     'CONTAINS-PR-MACRO' => [
+        1,
         q(contains-pr-macro.zone11.xa),
         [ qw(Z11_SPF1_SYNTAX_OK) ],
-        [ qw(Z11_NO_SPF_FOUND Z11_INCONSISTENT_SPF_POLICIES Z11_SPF1_MULTIPLE_RECORDS Z11_SPF1_SYNTAX_ERROR Z11_UNABLE_TO_CHECK_FOR_SPF) ],
-        1
+        undef,
+        [],
+        []
     ],
     'TOO-COMPLEX' => [
+        1,
         q(too-complex.zone11.xa),
         [ qw(Z11_SPF1_SYNTAX_OK) ],
-        [ qw(Z11_NO_SPF_FOUND Z11_INCONSISTENT_SPF_POLICIES Z11_SPF1_MULTIPLE_RECORDS Z11_SPF1_SYNTAX_ERROR Z11_UNABLE_TO_CHECK_FOR_SPF) ],
-        1
+        undef,
+        [],
+        []
     ],
     'CONTAINS-INCLUDE' => [
+        1,
         q(contains-include.zone11.xa),
         [ qw(Z11_SPF1_SYNTAX_OK) ],
-        [ qw(Z11_NO_SPF_FOUND Z11_INCONSISTENT_SPF_POLICIES Z11_SPF1_MULTIPLE_RECORDS Z11_SPF1_SYNTAX_ERROR Z11_UNABLE_TO_CHECK_FOR_SPF) ],
-        1
+        undef,
+        [],
+        []
     ],
     'CONTAINS-REDIRECT' => [
+        1,
         q(contains-redirect.zone11.xa),
         [ qw(Z11_SPF1_SYNTAX_OK) ],
-        [ qw(Z11_NO_SPF_FOUND Z11_INCONSISTENT_SPF_POLICIES Z11_SPF1_MULTIPLE_RECORDS Z11_SPF1_SYNTAX_ERROR Z11_UNABLE_TO_CHECK_FOR_SPF) ],
-        1
+        undef,
+        [],
+        []
     ],
 );
 
@@ -170,7 +232,7 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
 
 Zonemaster::Engine::Profile->effective->merge( Zonemaster::Engine::Profile->from_json( qq({ "test_cases": [ "$test_case" ] }) ) );
 
-perform_testcase_testing( $test_case, $test_module, %subtests );
+perform_testcase_testing( $test_case, $test_module, \@all_tags, %subtests );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Nameserver->save( $datafile );

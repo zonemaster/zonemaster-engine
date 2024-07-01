@@ -1,14 +1,12 @@
 package Zonemaster::Engine::Test::DNSSEC;
 
-use 5.014002;
-
-use strict;
+use v5.16.0;
 use warnings;
 
 use version; our $VERSION = version->declare( "v1.1.58" );
 
 use Carp;
-use List::MoreUtils qw[uniq none];
+use List::MoreUtils qw[any uniq];
 use List::Util qw[min];
 use Locale::TextDomain qw[Zonemaster-Engine];
 use Readonly;
@@ -16,7 +14,7 @@ use Readonly;
 use Zonemaster::LDNS::RR;
 use Zonemaster::Engine::Profile;
 use Zonemaster::Engine::Constants qw[:algo :soa :ip];
-use Zonemaster::Engine::Util;
+use Zonemaster::Engine::Util qw[name should_run_test];
 use Zonemaster::Engine::TestMethods;
 
 =head1 NAME
@@ -225,93 +223,92 @@ sub all {
     my ( $class, $zone ) = @_;
     my @results;
 
-    if ( Zonemaster::Engine::Util::should_run_test( q{dnssec07} ) ) {
+    my $has_dnskey = 1;
+    if ( should_run_test( q{dnssec07} ) ) {
         push @results, $class->dnssec07( $zone );
+
+        if ( any { $_->tag eq 'NEITHER_DNSKEY_NOR_DS' } @results ) {
+            push @results,
+              _emit_log(
+                NOT_SIGNED => {
+                    zone => q{} . $zone->name
+                }
+              );
+
+            return @results;
+        }
+
+        $has_dnskey = any { $_->tag eq q{DNSKEY_BUT_NOT_DS} || $_->tag eq q{DNSKEY_AND_DS} } @results;
     }
 
-    if ( Zonemaster::Engine::Util::should_run_test( q{dnssec07} ) and grep { $_->tag eq 'NEITHER_DNSKEY_NOR_DS' } @results ) {
-        push @results,
-          _emit_log(
-            NOT_SIGNED => {
-                zone => q{} . $zone->name
-            }
-          );
+    if ( should_run_test( q{dnssec01} ) ) {
+        push @results, $class->dnssec01( $zone );
+    }
 
-    } else {
+    if ( should_run_test( q{dnssec02} ) ) {
+        push @results, $class->dnssec02( $zone );
+    }
 
-        if ( Zonemaster::Engine::Util::should_run_test( q{dnssec01} ) ) {
-            push @results, $class->dnssec01( $zone );
-        }
+    if ( should_run_test( q{dnssec03} ) ) {
+        push @results, $class->dnssec03( $zone );
+    }
 
-        if ( Zonemaster::Engine::Util::should_run_test( q{dnssec02} ) ) {
-            push @results, $class->dnssec02( $zone );
-        }
+    if ( should_run_test( q{dnssec04} ) ) {
+        push @results, $class->dnssec04( $zone );
+    }
 
-        if ( Zonemaster::Engine::Util::should_run_test( q{dnssec03} ) ) {
-            push @results, $class->dnssec03( $zone );
-        }
+    if ( should_run_test( q{dnssec05} ) ) {
+        push @results, $class->dnssec05( $zone );
+    }
 
-        if ( Zonemaster::Engine::Util::should_run_test( q{dnssec04} ) ) {
-            push @results, $class->dnssec04( $zone );
-        }
-
-        if ( Zonemaster::Engine::Util::should_run_test( q{dnssec05} ) ) {
-            push @results, $class->dnssec05( $zone );
-        }
-
-        if ( grep { $_->tag eq q{DNSKEY_BUT_NOT_DS} or $_->tag eq q{DNSKEY_AND_DS} } @results ) {
-            if ( Zonemaster::Engine::Util::should_run_test( q{dnssec06} ) ) {
-                push @results, $class->dnssec06( $zone );
-            }
+    if ( should_run_test( q{dnssec06} ) ) {
+        if ( $has_dnskey ) {
+            push @results, $class->dnssec06( $zone );
         }
         else {
-            push @results,
-              _emit_log( ADDITIONAL_DNSKEY_SKIPPED => {} );
+            push @results, _emit_log( ADDITIONAL_DNSKEY_SKIPPED => {} );
         }
-
-        if ( Zonemaster::Engine::Util::should_run_test( q{dnssec08} ) ) {
-            push @results, $class->dnssec08( $zone );
-        }
-
-        if ( Zonemaster::Engine::Util::should_run_test( q{dnssec09} ) ) {
-            push @results, $class->dnssec09( $zone );
-        }
-
-        if ( Zonemaster::Engine::Util::should_run_test( q{dnssec10} ) ) {
-            push @results, $class->dnssec10( $zone );
-        }
-
-        if ( Zonemaster::Engine::Util::should_run_test( q{dnssec11} ) ) {
-            push @results, $class->dnssec11( $zone );
-        }
-
-        if ( Zonemaster::Engine::Util::should_run_test( q{dnssec13} ) ) {
-            push @results, $class->dnssec13( $zone );
-        }
-
-        if ( Zonemaster::Engine::Util::should_run_test( q{dnssec14} ) ) {
-            push @results, $class->dnssec14( $zone );
-        }
-
-        if ( Zonemaster::Engine::Util::should_run_test( q{dnssec15} ) ) {
-            push @results, $class->dnssec15( $zone );
-        }
-
-        if ( Zonemaster::Engine::Util::should_run_test( q{dnssec16} ) ) {
-            push @results, $class->dnssec16( $zone );
-        }
-
-        if ( Zonemaster::Engine::Util::should_run_test( q{dnssec17} ) ) {
-            push @results, $class->dnssec17( $zone );
-        }
-
-        if ( Zonemaster::Engine::Util::should_run_test( q{dnssec18} ) ) {
-            push @results, $class->dnssec18( $zone );
-        }
-
     }
 
-    push @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+    if ( should_run_test( q{dnssec08} ) ) {
+        push @results, $class->dnssec08( $zone );
+    }
+
+    if ( should_run_test( q{dnssec09} ) ) {
+        push @results, $class->dnssec09( $zone );
+    }
+
+    if ( should_run_test( q{dnssec10} ) ) {
+        push @results, $class->dnssec10( $zone );
+    }
+
+    if ( should_run_test( q{dnssec11} ) ) {
+        push @results, $class->dnssec11( $zone );
+    }
+
+    if ( should_run_test( q{dnssec13} ) ) {
+        push @results, $class->dnssec13( $zone );
+    }
+
+    if ( should_run_test( q{dnssec14} ) ) {
+        push @results, $class->dnssec14( $zone );
+    }
+
+    if ( should_run_test( q{dnssec15} ) ) {
+        push @results, $class->dnssec15( $zone );
+    }
+
+    if ( should_run_test( q{dnssec16} ) ) {
+        push @results, $class->dnssec16( $zone );
+    }
+
+    if ( should_run_test( q{dnssec17} ) ) {
+        push @results, $class->dnssec17( $zone );
+    }
+
+    if ( should_run_test( q{dnssec18} ) ) {
+        push @results, $class->dnssec18( $zone );
+    }
 
     return @results;
 } ## end sub all
