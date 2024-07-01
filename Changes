@@ -11,14 +11,17 @@ v6.0.0 2024-07-01 (part of Zonemaster v2024.1 release)
  - Removes planned deprecated 'resolver.source' profile property.
    Breaks custom profiles using this property. Use 'resolver.source4'
    and 'resolver.source6' instead. (#1343)
+ - Using 'profile.json' that comes with the Zonemaster::Engine
+   installation as a template for custom profile is no longer supported.
+   Instead, use the new supported way of extracting default profile, that
+   can be found via the pull request introduced it. (#1339)
 
  [Features]
  - Makes it possible to run single testcase via test_zone() (#1312)
- - Changes supported way of extracting default profile (#1339)
  - Updates Basic01 implementation (#1357)
 
  [Fixes]
- - Makes syntax04 take zone name instead of NS name (#1322)
+ - Makes syntax04 take zone name instead of NS name (#1322, #1369)
  - Removes the code dependency on Moose (#1319)
  - Fixes Zonemaster::Engine::Translator’s instance() method (#1347)
  - Fixes polymorphism in Translator (#1346)
