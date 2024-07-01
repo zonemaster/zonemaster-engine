@@ -834,7 +834,7 @@ sub syntax04 {
         )
       )
     {
-        push @results, _check_name_syntax( q{NAMESERVER}, $zone->name );
+        push @results, _check_name_syntax( q{NAMESERVER}, $local_nsname );
     }
 
     return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
