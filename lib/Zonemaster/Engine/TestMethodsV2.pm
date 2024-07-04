@@ -68,7 +68,7 @@ This Method will obtain the IP addresses of the Out-Of-Bailiwick name servers fo
 
 Takes a Zonemaster::Engine::Zone object (C<$zone>) and an arrayref of Zonemaster::Engine::Nameserver objects (C<$ns_names_ref>).
 
-Returns an arrayref of Zonemaster::Engine::Nameserver objects.
+Returns an arrayref of Zonemaster::Engine::Nameserver and/or Zonemaster::Engine::DNSName objects.
 
 =back
 
@@ -266,7 +266,7 @@ If the Glue Records include address records for Out-Of-Bailiwick name servers th
 
 Takes a Zonemaster::Engine::Zone object (C<$zone>).
 
-Returns an arrayref of Zonemaster::Engine::Nameserver objects, or `undef` if no parent zone was found.
+Returns an arrayref of Zonemaster::Engine::Nameserver and/or Zonemaster::Engine::DNSName objects, or `undef` if no parent zone was found.
 
 =back
 
@@ -449,7 +449,7 @@ For the In-Bailiwick name server names obtain the IP addresses from the given zo
 
 Takes a Zonemaster::Engine::Zone object (C<$zone>).
 
-Returns an arrayref of Zonemaster::Engine::Nameserver objects, or `undef` if no parent zone was found.
+Returns an arrayref of Zonemaster::Engine::Nameserver and/or Zonemaster::Engine::DNSName objects, or `undef` if no parent zone was found.
 
 =back
 
@@ -479,8 +479,11 @@ sub get_zone_ns_names_and_ips {
 		}
 		else {
 			for my $oob_ns ( @{ $oob_ns_ref } ) {
-				if ( $ns_name->string eq $oob_ns->name->string ) {
+				if ( $oob_ns->isa('Zonemaster::Engine::Nameserver') and $ns_name->string eq $oob_ns->name->string ) {
 					push @zone_ns, ns( $ns_name, $oob_ns->address->short);
+				}
+				elsif ( $oob_ns->isa('Zonemaster::Engine::DNSName') and $ns_name->string eq $oob_ns->string ) {
+					push @zone_ns, $ns_name;
 				}
 			}
 		}
