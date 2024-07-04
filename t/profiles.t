@@ -1,7 +1,7 @@
 use 5.006;
 use strict;
-use warnings FATAL   => 'all';
-use Test::More tests => 29;
+use warnings FATAL => 'all';
+use Test::More;
 use Log::Any::Test;    # Must come before use Log::Any
 
 use JSON::PP;
@@ -10,9 +10,7 @@ use Test::Differences;
 use Test::Exception;
 use Log::Any qw( $log );
 
-BEGIN {
-    use_ok 'Zonemaster::Engine::Profile';
-}
+use Zonemaster::Engine::Profile;
 
 # YAML representation of an example profile with all properties set
 Readonly my $EXAMPLE_PROFILE_1_YAML => q(
@@ -176,22 +174,9 @@ subtest 'new() returns a new profile every time' => sub {
 subtest 'new() returns a profile with all properties unset' => sub {
     my $profile = Zonemaster::Engine::Profile->new;
 
-    is $profile->get( 'resolver.defaults.usevc' ),    undef, 'resolver.defaults.usevc is unset';
-    is $profile->get( 'resolver.defaults.retrans' ),  undef, 'resolver.defaults.retrans is unset';
-    is $profile->get( 'resolver.defaults.recurse' ),  undef, 'resolver.defaults.recurse is unset';
-    is $profile->get( 'resolver.defaults.retry' ),    undef, 'resolver.defaults.retry is unset';
-    is $profile->get( 'resolver.defaults.igntc' ),    undef, 'resolver.defaults.igntc is unset';
-    is $profile->get( 'resolver.defaults.fallback' ), undef, 'resolver.defaults.fallback is unset';
-    is $profile->get( 'resolver.source4' ),           undef, 'resolver.source4 is unset';
-    is $profile->get( 'resolver.source6' ),           undef, 'resolver.source6 is unset';
-    is $profile->get( 'net.ipv4' ),                   undef, 'net.ipv4 is unset';
-    is $profile->get( 'net.ipv6' ),                   undef, 'net.ipv6 is unset';
-    is $profile->get( 'no_network' ),                 undef, 'no_network is unset';
-    is $profile->get( 'asnroots' ),                   undef, 'asnroots is unset';
-    is $profile->get( 'logfilter' ),                  undef, 'logfilter is unset';
-    is $profile->get( 'test_levels' ),                undef, 'test_levels is unset';
-    is $profile->get( 'test_cases' ),                 undef, 'test_cases is unset';
-    is $profile->get( 'cache' ),                      undef, 'cache is unset';
+    for my $property ( Zonemaster::Engine::Profile->all_properties ) {
+        is $profile->get( $property ), undef, "$property is unset";
+    }
 };
 
 subtest 'default() returns a new profile every time' => sub {
@@ -207,18 +192,9 @@ subtest 'default() returns a new profile every time' => sub {
 subtest 'default() returns a profile with all properties set' => sub {
     my $profile = Zonemaster::Engine::Profile->default;
 
-    ok defined( $profile->get( 'resolver.defaults.usevc' ) ),    'resolver.defaults.usevc is set';
-    ok defined( $profile->get( 'resolver.defaults.recurse' ) ),  'resolver.defaults.recurse is set';
-    ok defined( $profile->get( 'resolver.defaults.igntc' ) ),    'resolver.defaults.igntc is set';
-    ok defined( $profile->get( 'resolver.defaults.fallback' ) ), 'resolver.defaults.fallback is set';
-    ok defined( $profile->get( 'net.ipv4' ) ),                   'net.ipv4 is set';
-    ok defined( $profile->get( 'net.ipv6' ) ),                   'net.ipv6 is set';
-    ok defined( $profile->get( 'no_network' ) ),                 'no_network is set';
-    ok defined( $profile->get( 'resolver.defaults.retry' ) ),    'resolver.defaults.retry is set';
-    ok defined( $profile->get( 'resolver.defaults.retrans' ) ),  'resolver.defaults.retrans is set';
-    ok defined( $profile->get( 'logfilter' ) ),                  'logfilter is set';
-    ok defined( $profile->get( 'test_levels' ) ),                'test_levels is set';
-    ok defined( $profile->get( 'test_cases' ) ),                 'test_cases is set';
+    for my $property ( Zonemaster::Engine::Profile->all_properties ) {
+        ok defined( $profile->get( $property ) ), "$property is set";
+    }
 };
 
 subtest 'from_json() returns a new profile every time' => sub {
@@ -233,22 +209,9 @@ subtest 'from_json() returns a new profile every time' => sub {
 subtest 'from_json("{}") returns a profile with all properties unset' => sub {
     my $profile = Zonemaster::Engine::Profile->from_json( "{}" );
 
-    is $profile->get( 'resolver.defaults.usevc' ),    undef, 'resolver.defaults.usevc is unset';
-    is $profile->get( 'resolver.defaults.recurse' ),  undef, 'resolver.defaults.recurse is unset';
-    is $profile->get( 'resolver.defaults.igntc' ),    undef, 'resolver.defaults.igntc is unset';
-    is $profile->get( 'resolver.defaults.fallback' ), undef, 'resolver.defaults.fallback is unset';
-    is $profile->get( 'net.ipv4' ),                   undef, 'net.ipv4 is unset';
-    is $profile->get( 'net.ipv6' ),                   undef, 'net.ipv6 is unset';
-    is $profile->get( 'no_network' ),                 undef, 'no_network is unset';
-    is $profile->get( 'resolver.defaults.retry' ),    undef, 'resolver.defaults.retry is unset';
-    is $profile->get( 'resolver.defaults.retrans' ),  undef, 'resolver.defaults.retrans is unset';
-    is $profile->get( 'resolver.source4' ),           undef, 'resolver.source4 is unset';
-    is $profile->get( 'resolver.source6' ),           undef, 'resolver.source6 is unset';
-    is $profile->get( 'asnroots' ),                   undef, 'asnroots is unset';
-    is $profile->get( 'logfilter' ),                  undef, 'logfilter is unset';
-    is $profile->get( 'test_levels' ),                undef, 'test_levels is unset';
-    is $profile->get( 'test_cases' ),                 undef, 'test_cases is unset';
-    is $profile->get( 'cache' ),                      undef, 'cache is unset';
+    for my $property ( Zonemaster::Engine::Profile->all_properties ) {
+        is $profile->get( $property ), undef, "$property is unset";
+    }
 };
 
 subtest 'from_json() parses values from a string' => sub {
@@ -503,22 +466,9 @@ subtest 'set() updates values for set properties' => sub {
 subtest 'set() dies on attempts to unset properties' => sub {
     my $profile = Zonemaster::Engine::Profile->from_json( $EXAMPLE_PROFILE_1 );
 
-    throws_ok { $profile->set( 'resolver.defaults.usevc',    undef ); } qr/^.* can not be undef/, 'dies on attempt to unset resolver.defaults.usevc';
-    throws_ok { $profile->set( 'resolver.defaults.recurse',  undef ); } qr/^.* can not be undef/, 'dies on attempt to unset resolver.defaults.recurse';
-    throws_ok { $profile->set( 'resolver.defaults.igntc',    undef ); } qr/^.* can not be undef/, 'dies on attempt to unset resolver.defaults.igntc';
-    throws_ok { $profile->set( 'resolver.defaults.fallback', undef ); } qr/^.* can not be undef/, 'dies on attempt to unset resolver.defaults.fallback';
-    throws_ok { $profile->set( 'net.ipv4',                   undef ); } qr/^.* can not be undef/, 'dies on attempt to unset net.ipv4';
-    throws_ok { $profile->set( 'net.ipv6',                   undef ); } qr/^.* can not be undef/, 'dies on attempt to unset net.ipv6';
-    throws_ok { $profile->set( 'no_network',                 undef ); } qr/^.* can not be undef/, 'dies on attempt to unset no_network';
-    throws_ok { $profile->set( 'resolver.defaults.retry',    undef ); } qr/^.* can not be undef/, 'dies on attempt to unset resolver.defaults.retry';
-    throws_ok { $profile->set( 'resolver.defaults.retrans',  undef ); } qr/^.* can not be undef/, 'dies on attempt to unset resolver.defaults.retans';
-    throws_ok { $profile->set( 'resolver.source4',           undef ); } qr/^.* can not be undef/, 'dies on attempt to unset resolver.source4';
-    throws_ok { $profile->set( 'resolver.source6',           undef ); } qr/^.* can not be undef/, 'dies on attempt to unset resolver.source6';
-    throws_ok { $profile->set( 'asnroots',                   undef ); } qr/^.* can not be undef/, 'dies on attempt to unset asnroots';
-    throws_ok { $profile->set( 'logfilter',                  undef ); } qr/^.* can not be undef/, 'dies on attempt to unset logfilter';
-    throws_ok { $profile->set( 'test_levels',                undef ); } qr/^.* can not be undef/, 'dies on attempt to unset test_levels';
-    throws_ok { $profile->set( 'test_cases',                 undef ); } qr/^.* can not be undef/, 'dies on attempt to unset test_cases';
-    throws_ok { $profile->set( 'cache',                      undef ); } qr/^.* can not be undef/, 'dies on attempt to unset cache';
+    for my $property ( Zonemaster::Engine::Profile->all_properties ) {
+        throws_ok { $profile->set( $property, undef ); } qr/^.* can not be undef/, "dies on attempt to unset $property";
+    }
 };
 
 subtest 'set() dies if the given property name is invalid' => sub {
@@ -551,13 +501,15 @@ subtest 'set() dies on illegal value' => sub {
     dies_ok { $profile->set( 'resolver.defaults.retrans', 0 ); } 'checks lower bound of resolver.defaults.retrans';
     dies_ok { $profile->set( 'resolver.defaults.retrans', 256 ); } 'checks upper bound of resolver.defaults.retrans';
     dies_ok { $profile->set( 'resolver.defaults.retrans', 1.5 ); } 'checks type of resolver.defaults.retrans';
-    dies_ok { $profile->set( 'resolver.source4', ['192.0.2.53'] ); } 'checks type of resolver.source4';
-    dies_ok { $profile->set( 'resolver.source6', ['2001:db8::42'] ); } 'checks type of resolver.source6';
-    dies_ok { $profile->set( 'asnroots',        ['noreply@example.com'] ); } 'checks type of asnroots';
-    dies_ok { $profile->set( 'logfilter',       [] ); } 'checks type of logfilter';
-    dies_ok { $profile->set( 'test_levels',     [] ); } 'checks type of test_levels';
-    dies_ok { $profile->set( 'test_cases',      {} ); } 'checks type of test_cases';
-    dies_ok { $profile->set( 'cache',           [] ); } 'checks type of cache';
+    dies_ok { $profile->set( 'resolver.source4', 'example.com' ); } 'resolver.source4 rejects domain name string';
+    dies_ok { $profile->set( 'resolver.source4', ['192.0.2.53'] ); } 'resolver.source4 rejects arrayref';
+    dies_ok { $profile->set( 'resolver.source6', 'example.com' ); } 'resolver.source6 rejects domain name string';
+    dies_ok { $profile->set( 'resolver.source6', ['2001:db8::42'] ); } 'resolver.source6 rejects arrayref';
+    dies_ok { $profile->set( 'asnroots',         ['noreply@example.com'] ); } 'checks type of asnroots';
+    dies_ok { $profile->set( 'logfilter',        [] ); } 'checks type of logfilter';
+    dies_ok { $profile->set( 'test_levels',      [] ); } 'checks type of test_levels';
+    dies_ok { $profile->set( 'test_cases',       {} ); } 'checks type of test_cases';
+    dies_ok { $profile->set( 'cache',            [] ); } 'checks type of cache';
 };
 
 subtest 'set() accepts sentinel values' => sub {
@@ -844,3 +796,5 @@ subtest 'effective() returns the same profile every time' => sub {
 
     is $profile1->get( 'resolver.defaults.retry' ), 222;
 };
+
+done_testing;
