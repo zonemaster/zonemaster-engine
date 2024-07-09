@@ -90,7 +90,7 @@ my %subtests = (
         []
     ],
     'GOOD-UNDEL-1' => [
-        1,
+        0,
         q(child.parent.good-undel-1.methodsv2.xa),
         [],
         [ qw( ns1-2.child.parent.good-undel-1.methodsv2.xa/127.40.1.42
