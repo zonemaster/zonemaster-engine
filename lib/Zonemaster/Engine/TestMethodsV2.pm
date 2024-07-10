@@ -48,10 +48,214 @@ sub get_parent_ns_ips {
         return [];
     }
 
-    my $parent = $zone->parent;
+    my %handled_servers;
+    my @parent_found;
 
-    if ( $parent ) {
-        return $parent->ns;
+    my %rrs_ns;
+    my $type_soa = q{SOA};
+    my $type_ns = q{NS};
+
+    my %all_servers = ( '.' => [ Zonemaster::Engine::Recursor->root_servers ] );
+    my @all_labels = ( '.' );
+    my @remaining_labels = ( '.' );
+
+    ALL_SERVERS:
+    while ( my $zone_name = shift @remaining_labels ) {
+        my @remaining_servers = @{ $all_servers{$zone_name} };
+
+        CUR_SERVERS:
+        while ( my $ns = shift @remaining_servers ) {
+            next CUR_SERVERS if grep { $_ eq $ns->address->short } @{ $handled_servers{$zone_name} };
+            push @{ $handled_servers{$zone_name} }, $ns->address->short;
+
+            if ( ( $ns->address->version == 4 and not Zonemaster::Engine::Profile->effective->get( q{net.ipv4} ) )
+                or ( $ns->address->version == 6 and not Zonemaster::Engine::Profile->effective->get( q{net.ipv6} ) ) ) {
+                next CUR_SERVERS;
+            }
+
+            my $p_soa = $ns->query( $zone_name, $type_soa );
+
+            unless ( $p_soa and $p_soa->rcode eq 'NOERROR' and $p_soa->aa and scalar $p_soa->get_records_for_name( $type_soa, $zone_name, 'answer' ) == 1 ) {
+                next CUR_SERVERS;
+            }
+
+            my $p_ns = $ns->query( $zone_name, $type_ns );
+
+            unless ( $p_ns and $p_ns->rcode eq 'NOERROR' and $p_ns->aa and scalar $p_ns->get_records( $type_ns, 'answer' ) > 0
+                and scalar $p_ns->get_records( $type_ns, 'answer' ) == scalar $p_ns->get_records_for_name( $type_ns, $zone_name, 'answer' )
+            ) {
+                next CUR_SERVERS;
+            }
+
+            $rrs_ns{name( $_->nsdname )->string} = [] for $p_ns->get_records_for_name( $type_ns, $zone_name, 'answer' );
+
+            foreach my $rr ( $p_ns->get_records( 'A', 'additional' ), $p_ns->get_records( 'AAAA', 'additional' ) ) {
+                if ( exists $rrs_ns{name( $rr->owner )->string} ) {
+                    push @{ $rrs_ns{name( $rr->owner )->string} }, $rr->address;
+                }
+            }
+
+            foreach my $ns_name ( keys %rrs_ns ) {
+                unless ( scalar @{ $rrs_ns{$ns_name} } > 0 ) {
+                    my $p_a = Zonemaster::Engine::Recursor->recurse( $ns_name, q{A} );
+
+                    if ( $p_a and $p_a->rcode eq 'NOERROR' ) {
+                        push @{ $rrs_ns{$ns_name} }, $_->address for $p_a->get_records_for_name( 'A', $ns_name );
+                    }
+
+                    my $p_aaaa = Zonemaster::Engine::Recursor->recurse( $ns_name, q{AAAA} );
+
+                    if ( $p_aaaa and $p_aaaa->rcode eq 'NOERROR' ) {
+                        push @{ $rrs_ns{$ns_name} }, $_->address for $p_aaaa->get_records_for_name( 'AAAA', $ns_name );
+                    }
+                }
+
+                foreach my $ns_ip ( @{ $rrs_ns{$ns_name} } ) {
+                    unless ( grep { $_ eq $ns_ip } @{ $handled_servers{$zone_name} } ) {
+                        push @{ $all_servers{$zone_name} }, ns( $ns_name, $ns_ip );
+
+                        unless ( grep { $_ eq $zone_name } @all_labels ) {
+                            push @remaining_labels, $zone_name;
+                            push @all_labels, $zone_name;
+                        }
+                    }
+                }
+            }
+
+            my $intermediate_query_name = name( $zone_name );
+            my $loop_zone_name = $zone_name;
+            my $loop_counter = 0;
+
+            LOOP:
+            while() {
+                $loop_counter += 1;
+                if ( $loop_counter >= 1000 ) {
+                    Zonemaster::Engine->logger->add( LOOP_PROTECTION => {
+                        caller => 'Zonemaster::Engine::TestMethodsV2->get_parent_ns_ips',
+                        child_zone_name => $zone->name,
+                        name => $loop_zone_name,
+                        intermediate_query_name => $intermediate_query_name
+                      }
+                    );
+
+                    return undef;
+                }
+
+                last if scalar @{ $intermediate_query_name->labels } >= scalar @{ $zone->name->labels };
+                $intermediate_query_name = name( @{ $zone->name->labels }[ ( scalar @{ $zone->name->labels } - scalar @{ $intermediate_query_name->labels } ) - 1 ] . '.' . $intermediate_query_name->string );
+
+                $p_soa = $ns->query( $intermediate_query_name, $type_soa );
+
+                unless ( $p_soa ) {
+                    next CUR_SERVERS;
+                }
+
+                if ( $p_soa->rcode eq 'NOERROR' and $p_soa->aa and scalar $p_soa->get_records_for_name( $type_soa, $intermediate_query_name, 'answer' ) == 1 ) {
+                    if ( $intermediate_query_name->string eq $zone->name->string ) {
+                        push @parent_found, $ns;
+                    }
+                    else {
+                        $p_ns = $ns->query( $intermediate_query_name, $type_ns );
+
+                        unless ( $p_ns and $p_ns->rcode eq 'NOERROR' and $p_ns->aa and scalar $p_ns->get_records( $type_ns, 'answer' ) > 0
+                            and scalar $p_ns->get_records( $type_ns, 'answer' ) == scalar $p_ns->get_records_for_name( $type_ns, $intermediate_query_name, 'answer' )
+                        ) {
+                            next CUR_SERVERS;
+                        }
+
+                        my %rrs_ns_bis;
+                        $rrs_ns_bis{name( $_->nsdname )->string} = [] for $p_ns->get_records_for_name( $type_ns, $intermediate_query_name, 'answer' );
+
+                        foreach my $rr ( $p_ns->get_records( 'A', 'additional' ), $p_ns->get_records( 'AAAA', 'additional' ) ) {
+                            if ( exists $rrs_ns_bis{name( $rr->owner )->string} ) {
+                                push @{ $rrs_ns_bis{name( $rr->owner )->string} }, $rr->address;
+                            }
+                        }
+
+                        foreach my $ns_name ( keys %rrs_ns_bis ) {
+                            unless ( scalar @{ $rrs_ns_bis{$ns_name} } > 0 ) {
+                                my $p_a = Zonemaster::Engine::Recursor->recurse( $ns_name, q{A} );
+
+                                if ( $p_a and $p_a->rcode eq 'NOERROR' ) {
+                                    push @{ $rrs_ns_bis{$ns_name} }, $_->address for $p_a->get_records_for_name( 'A', $ns_name );
+                                }
+
+                                my $p_aaaa = Zonemaster::Engine::Recursor->recurse( $ns_name, q{AAAA} );
+
+                                if ( $p_aaaa and $p_aaaa->rcode eq 'NOERROR' ) {
+                                    push @{ $rrs_ns_bis{$ns_name} }, $_->address for $p_aaaa->get_records_for_name( 'AAAA', $ns_name );
+                                }
+                            }
+
+                            foreach my $ns_ip ( @{ $rrs_ns_bis{$ns_name} } ) {
+                                unless ( grep { $_ eq $ns_ip } @{ $handled_servers{$intermediate_query_name} } ) {
+                                    push @{ $all_servers{$intermediate_query_name} }, ns( $ns_name, $ns_ip );
+
+                                    unless ( grep { $_ eq $intermediate_query_name } @all_labels ) {
+                                        push @remaining_labels, $intermediate_query_name;
+                                        push @all_labels, $intermediate_query_name;
+                                    }
+                                }
+                            }
+                        }
+
+                        $loop_zone_name = $intermediate_query_name->string;
+                        next LOOP;
+                    }
+                }
+                elsif ( $p_soa->is_redirect and scalar $p_soa->get_records_for_name( $type_ns, $intermediate_query_name, 'authority' ) ) {
+                    if ( $intermediate_query_name->string eq $zone->name->string ) {
+                        push @parent_found, $ns;
+                    }
+                    else {
+                        my %rrs_ns_bis;
+                        $rrs_ns_bis{name( $_->nsdname )->string} = [] for $p_soa->get_records_for_name( $type_ns, $intermediate_query_name, 'authority' );
+
+                        foreach my $rr ( $p_soa->get_records( 'A', 'additional' ), $p_soa->get_records( 'AAAA', 'additional' ) ) {
+                            if ( exists $rrs_ns_bis{name( $rr->owner )->string} ) {
+                                push @{ $rrs_ns_bis{name( $rr->owner )->string} }, $rr->address;
+                            }
+                        }
+
+                        foreach my $ns_name ( keys %rrs_ns_bis ) {
+                            unless ( scalar @{ $rrs_ns_bis{$ns_name} } > 0 ) {
+                                my $p_a = Zonemaster::Engine::Recursor->recurse( $ns_name, q{A} );
+
+                                if ( $p_a and $p_a->rcode eq 'NOERROR' ) {
+                                    push @{ $rrs_ns_bis{$ns_name} }, $_->address for $p_a->get_records_for_name( 'A', $ns_name );
+                                }
+
+                                my $p_aaaa = Zonemaster::Engine::Recursor->recurse( $ns_name, q{AAAA} );
+
+                                if ( $p_aaaa and $p_aaaa->rcode eq 'NOERROR' ) {
+                                    push @{ $rrs_ns_bis{$ns_name} }, $_->address for $p_aaaa->get_records_for_name( 'AAAA', $ns_name );
+                                }
+                            }
+
+                            foreach my $ns_ip ( @{ $rrs_ns_bis{$ns_name} } ) {
+                                unless ( grep { $_ eq $ns_ip } @{ $handled_servers{$intermediate_query_name} } ) {
+                                    push @{ $all_servers{$intermediate_query_name} }, ns( $ns_name, $ns_ip );
+
+                                    unless ( grep { $_ eq $intermediate_query_name } @all_labels ) {
+                                        push @remaining_labels, $intermediate_query_name;
+                                        push @all_labels, $intermediate_query_name;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                elsif ( $p_soa->rcode eq 'NOERROR' and $p_soa->aa ) {
+                    next LOOP if $intermediate_query_name->string ne $zone->name->string;
+                }
+
+                next CUR_SERVERS;
+            }
+        }
+    }
+
+    if ( scalar @parent_found ) {
+        return [ uniq sort @parent_found ]
     }
     else {
         return undef;

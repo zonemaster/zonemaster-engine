@@ -327,13 +327,21 @@ sub _recurse {
             $state->{seen}{$zname} = 1;
             my $common = name( $zname )->common( name( $state->{qname} ) );
 
-            next
-              if $common < $state->{common};    # Redirect going up the hierarchy is not OK
+            next if $common < $state->{common};    # Redirect going up the hierarchy is not OK
 
             $state->{common} = $common;
             $state->{ns}     = $class->get_ns_from( $p, $state );    # Follow redirect
             $state->{count} += 1;
-            return ( undef, $state ) if $state->{count} > 20;        # Loop protection
+            if ( $state->{count} > 20 ) {       # Loop protection
+                Zonemaster::Engine->logger->add( LOOP_PROTECTION => {
+                    caller => 'Zonemaster::Engine::Recursor->_recurse',
+                    child_zone_name => $name,
+                    name => $zname
+                  }
+                );
+
+                return ( undef, $state );
+            }
             unshift @{ $state->{trace} }, [ $zname, $ns, $p->answerfrom ];
 
             next;
