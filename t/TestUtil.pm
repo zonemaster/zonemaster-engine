@@ -9,6 +9,7 @@ use Test::More;
 use Zonemaster::Engine;
 use Exporter 'import';
 use List::MoreUtils qw[ uniq ];
+use Zonemaster::Engine::Validation qw( validate_ipv4 validate_ipv6 );
 
 use Carp qw( croak );
 
@@ -40,13 +41,20 @@ unknown to the include path @INC, it can be including using the following code:
 
 =item perform_methodsv2_testing()
 
-    perform_methodsv2_testing( %subtests );
+    perform_methodsv2_testing( $href_subtests, $single_scenario );
 
 This method loads unit test data (test scenarios) and, after some data checks and if the test scenario is testable,
 it runs all external L<MethodsV2|Zonemaster::Engine::Test::TestMethodsV2> methods and checks for the presence (or absence) of
 specific nameservers data for each specified test scenario.
 
-Takes a hash - the keys of which are scenario names (in all uppercase), and their corresponding values are an array of:
+If $single_scenario has been set in the call to the name of a scenario then only that
+scenario will be run, and italways be run even if it has been set as not testable.
+
+If $disable_scenario has been set in the call to the name of a scenario or to a
+comma separated list of scenarios then that or those scenarios will be
+temporarily disabled.
+
+Takes a reference to a hash - the keys of which are scenario names (in all uppercase), and their corresponding values are an array of:
 
 =over
 
@@ -127,6 +135,14 @@ has the format "keytag,algorithm,type,digest". Those two expressions have the sa
 
 =over
 
+=item _check_ip_addresses()
+
+    _check_ip_addresses( $scenario_name, @ip_addresses );
+
+Helper method that checks if the given ip address(es) are valid.
+
+Takes a string (scenario name) and a reference to an array of strings (IP addresses).
+
 =item _check_ns_expressions()
 
     _check_ns_expressions( $scenario_name, @ns_expressions );
@@ -147,6 +163,20 @@ Takes a string (scenario name) and a reference to an array of strings (delegatio
 
 =cut
 
+sub _check_ip_addresses {
+    my ( $scenario, $ip_addresses ) = @_;
+
+    return if ! defined $ip_addresses;
+
+    foreach my $ip ( @{ $ip_addresses } ) {
+        croak "Scenario $scenario: IP address '$ip' is not valid"
+            unless validate_ipv4( $ip ) or validate_ipv6( $ip );
+    }
+}
+
+
+
+    
 sub _check_ns_expressions {
     my ( $scenario, $ns_expressions ) = @_;
 
@@ -157,13 +187,8 @@ sub _check_ns_expressions {
         croak "Scenario $scenario: Name server name '$ns' in '$nsexp' is not valid" if $ns !~ /^[0-9A-Za-z-.]+$/;
 
         if ( $ip ) {
-            croak "Scenario $scenario: IP address '$ip' in '$nsexp' is not valid" if
-                $ip !~ /^([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])){3}$/ and
-                $ip !~ /^((?:[0-9A-Fa-f]{1,4}:){7}[0-9A-Fa-f]{1,4}|(?:[0-9A-Fa-f]{1,4}:){1,7}:|:(?::[0-9A-Fa-f]{1,4}){1,7}|
-                       [0-9A-Fa-f]{1,4}:(?:(?::[0-9A-Fa-f]{1,4}){1,6})|:(?:(?::[0-9A-Fa-f]{1,4}){1,7}|:)|
-                       (?:(?:[0-9A-Fa-f]{1,4}:){1,6}:[0-9A-Fa-f]{1,4})|(?:(?:[0-9A-Fa-f]{1,4}:){1,5}:(?:[0-9A-Fa-f]{1,4}:){1,2})|
-                       (?:(?:[0-9A-Fa-f]{1,4}:){1,4}:(?:[0-9A-Fa-f]{1,4}:){1,3})|(?:(?:[0-9A-Fa-f]{1,4}:){1,3}:(?:[0-9A-Fa-f]{1,4}:){1,4})|
-                       (?:(?:[0-9A-Fa-f]{1,4}:){1,2}:(?:[0-9A-Fa-f]{1,4}:){1,5}))$/x; # IPv4 and IPv6, respectively
+            croak "Scenario $scenario: IP address '$ip' in '$nsexp' is not valid"
+                unless validate_ipv4( $ip ) or validate_ipv6( $ip );                
         }
     }
 }
@@ -181,11 +206,20 @@ sub _check_ds_expressions {
 }
 
 sub perform_methodsv2_testing {
-    my ( %subtests ) = @_;
-
+    my ( $href_subtests, $single_scenario, $disable_scenario ) = @_;
+    my %subtests = %$href_subtests;
+    # $disable_scenario can be a single scenario or a comma separated list
+    my @disable_scenario = map {uc} split(/, */, $disable_scenario) if $disable_scenario;
+    
     my @untested_scenarios = ();
 
     for my $scenario ( sort ( keys %subtests ) ) {
+        next if $single_scenario and $scenario ne uc($single_scenario);
+        if ( @disable_scenario and grep /^$scenario$/, @disable_scenario ) {
+            push @untested_scenarios, $scenario;
+            next;
+        }            
+        
         if ( ref( $scenario ) ne '' or $scenario ne uc($scenario) ) {
             croak "Scenario $scenario: Key must (i) not be a reference and (ii) be in all uppercase";
         }
@@ -218,6 +252,8 @@ sub perform_methodsv2_testing {
             croak "Scenario $scenario: Value of testable must be 0 or 1";
         }
 
+        $testable = 1 if $single_scenario and $scenario eq $single_scenario;
+
         if ( ref( $zone_name ) ne '' ) {
             croak "Scenario $scenario: Type of zone name must not be a reference";
         }
@@ -242,6 +278,7 @@ sub perform_methodsv2_testing {
             croak "Scenario $scenario: Incorrect reference type of undelegated name servers expressions. Expected: ARRAY";
         }
 
+        _check_ip_addresses( $scenario, $expected_parent_ip );
         _check_ns_expressions( $scenario, $expected_del_ns );
         _check_ns_expressions( $scenario, $expected_zone_ns );
         _check_ns_expressions( $scenario, $undelegated_ns );
@@ -271,9 +308,9 @@ sub perform_methodsv2_testing {
                     ok( defined $res, "Result is defined" ) or diag "Unexpected undefined result";
                     foreach my $expected_ip ( @{ $expected_parent_ip } ) {
                         ok( grep( /^$expected_ip$/, uniq map { $_->address->short } @{ $res } ), "Nameserver IP '$expected_ip' is present" )
-                            or diag "Nameserver IP '$expected_ip' should have been present, but wasn't";
+                            or diag "Expected but missing: $expected_ip";
                     }
-                    ok( scalar @{ $res } == scalar @{ $expected_parent_ip } ) or diag "Number of nameserver IP addresses in both arrays does not match";
+                    ok( scalar @{ $res } == scalar @{ $expected_parent_ip } ) or diag "Number of nameserver IP addresses in both arrays does not match (found ". scalar @{ $res } . ", expected " . @{ $expected_parent_ip } . ")";
                 }
                 else {
                     ok( ! defined $res, "Result is undefined" ) or diag "Unexpected defined result";
@@ -292,9 +329,13 @@ sub perform_methodsv2_testing {
                         ok( defined $res, "Result is defined" ) or diag "Unexpected undefined result";
                         foreach my $expected_ns ( @{ $expected_res } ) {
                             ok( grep( /^$expected_ns$/, @{ $res } ), "Nameserver '$expected_ns' is present" )
-                                or diag "Nameserver '$expected_ns' should have been present, but wasn't";
+                                or diag "Expected but missing: $expected_ns";
                         }
-                        ok( scalar @{ $res } == scalar @{ $expected_res } ) or diag "Number of nameservers in both arrays does not match";
+                        foreach my $ns ( @{ $res } ) {
+                            ok( grep( /^$ns$/, @{ $expected_res } ), "Nameserver '$ns' is expected" )
+                                or diag "Present but not expected: $ns";
+                        }
+                        ok( scalar @{ $res } == scalar @{ $expected_res } ) or diag "Number of nameservers in both arrays does not match (found " . scalar @{ $res } . ", expected " . scalar @{ $expected_res }.")";
                     }
                     else {
                         ok( ! defined $res, "Result is undefined" ) or diag "Unexpected defined result";
@@ -304,9 +345,11 @@ sub perform_methodsv2_testing {
 
             # Methods: get_del_ns_names() and get_zone_ns_names()
             @method_names = qw( get_del_ns_names get_zone_ns_names );
-            my @expected_del_ns_names = uniq map { (split( m(/), $_ ))[0] } @{ $expected_del_ns };
-            my @expected_zone_ns_names = uniq map { (split( m(/), $_ ))[0] } @{ $expected_zone_ns };
-            my @expected_ns_names = ( \@expected_del_ns_names, \@expected_zone_ns_names );
+            my $expected_del_ns_names = defined $expected_del_ns ?
+                [ uniq map { (split( m(/), $_ ))[0] } @{ $expected_del_ns } ] : undef;
+            my $expected_zone_ns_names = defined $expected_zone_ns ?
+                [ uniq map { (split( m(/), $_ ))[0] } @{ $expected_zone_ns } ] : undef;
+            my @expected_ns_names = ( $expected_del_ns_names, $expected_zone_ns_names );
             foreach my $i ( 0..$#method_names ) {
                 my $method = $method_names[$i];
                 subtest $method => sub {
@@ -316,9 +359,13 @@ sub perform_methodsv2_testing {
                         ok( defined $res, "Result is defined" ) or diag "Unexpected undefined result";
                         foreach my $expected_name ( @{ $expected_res } ) {
                             ok( grep( /^$expected_name$/, @{ $res } ), "Nameserver name '$expected_name' is present" )
-                                or diag "Nameserver name '$expected_name' should have been present, but wasn't";
+                                or diag "Expected but missing: $expected_name";
                         }
-                        ok( scalar @{ $res } == scalar @{ $expected_res } ) or diag "Number of nameserver names in both arrays does not match";
+                        foreach my $name ( @{ $res } ) {
+                            ok( grep( /^$name$/, @{ $expected_res } ), "Nameserver name '$name' is expected" )
+                                or diag "Present but not expected: $name";
+                        }
+                        ok( scalar @{ $res } == scalar @{ $expected_res } ) or diag "Number of nameserver names in both arrays does not match (found " . scalar @{ $res } . ", expected " . scalar @{ $expected_res }.")";
                     }
                     else {
                         ok( ! defined $res, "Result is undefined" ) or diag "Unexpected defined result";
@@ -328,9 +375,11 @@ sub perform_methodsv2_testing {
 
             # Methods: get_del_ns_ips() and get_zone_ns_ips()
             @method_names = qw( get_del_ns_ips get_zone_ns_ips );
-            my @expected_del_ns_ips = uniq map { (split( m(/), $_ ))[1] } @{ $expected_del_ns };
-            my @expected_zone_ns_ips = uniq map { (split( m(/), $_ ))[1] } @{ $expected_zone_ns };
-            my @expected_ns_ips = ( \@expected_del_ns_ips, \@expected_zone_ns_ips );
+            my $expected_del_ns_ips = defined $expected_del_ns ?
+                [ uniq map { (split( m(/), $_ ))[1] } @{ $expected_del_ns } ] : undef;
+            my $expected_zone_ns_ips = defined $expected_zone_ns ?
+                [ uniq map { (split( m(/), $_ ))[1] } @{ $expected_zone_ns } ] : undef;
+            my @expected_ns_ips = ( $expected_del_ns_ips, $expected_zone_ns_ips ); 
             foreach my $i ( 0..$#method_names ) {
                 my $method = $method_names[$i];
                 subtest $method => sub {
@@ -340,9 +389,13 @@ sub perform_methodsv2_testing {
                         ok( defined $res, "Result is defined" ) or diag "Unexpected undefined result";
                         foreach my $expected_ip ( @{ $expected_res } ) {
                             ok( grep( /^$expected_ip$/, @{ $res } ), "Nameserver IP '$expected_ip' is present" )
-                                or diag "Nameserver IP '$expected_ip' should have been present, but wasn't";
+                                or diag "Expected but missing: $expected_ip";
                         }
-                        ok( scalar @{ $res } == scalar @{ $expected_res } ) or diag "Number of nameserver IPs in both arrays does not match";
+                        foreach my $ip ( @{ $res } ) {
+                            ok( grep( /^$ip$/, @{ $expected_res } ), "Nameserver IP '$ip' is expected" )
+                                or diag "Present but not expected: $ip";
+                        }
+                        ok( scalar @{ $res } == scalar @{ $expected_res } ) or diag "Number of nameserver IPs in both arrays does not match (found " . scalar @{ $res } . ", expected " . scalar @{ $expected_res }.")";
                     }
                     else {
                         ok( ! defined $res, "Result is undefined" ) or diag "Unexpected defined result";
@@ -354,7 +407,7 @@ sub perform_methodsv2_testing {
 
     if ( @untested_scenarios ) {
         warn "Untested scenarios:\n";
-        warn "\tScenario $_ cannot be tested.\n" for @untested_scenarios;
+        warn "\tScenario $_ has been disabled from testing.\n" for @untested_scenarios;
     }
 }
 
