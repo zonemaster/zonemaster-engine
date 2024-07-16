@@ -319,7 +319,7 @@ sub _get_oob_ips {
         }
     }
 
-    return [ @oob_ns ];
+    return [ uniq sort @oob_ns ];
 }
 
 =over
@@ -361,15 +361,15 @@ sub _get_delegation {
             }
         }
 
-        return [ @ib_ns ];
+        return [ uniq sort @ib_ns ];
     }
     elsif ( $zone->name->string eq '.' ) {
-        return [ Zonemaster::Engine::Recursor->root_servers() ];
+        return [ uniq sort Zonemaster::Engine::Recursor->root_servers() ];
     }
     else {
         my $parent_ref = $class->get_parent_ns_ips( $zone );
 
-        return undef if not defined $parent_ref;
+        return undef unless defined $parent_ref;
 
         for my $ns ( @{ $parent_ref } ) {
             my $p = $ns->query( $zone->name, q{NS} );
@@ -378,7 +378,7 @@ sub _get_delegation {
             if ( $p and $p->rcode eq q{NOERROR} ) {
                 if ( $p->is_redirect ){
                     for my $rr ( $p->get_records_for_name( q{NS}, $zone->name->string, q{authority} ) ) {
-                        $delegation_ns{$rr->nsdname} = [] if not exists $delegation_ns{$rr->nsdname};
+                        $delegation_ns{$rr->nsdname} = [] unless exists $delegation_ns{$rr->nsdname};
                         push @names, $rr->nsdname;
                     }
 
@@ -390,7 +390,7 @@ sub _get_delegation {
                 }
                 elsif ( $p->aa and scalar $p->get_records_for_name( q{NS}, $zone->name->string, q{answer} ) ) {
                     for my $rr ( $p->get_records_for_name( q{NS}, $zone->name->string, q{answer} ) ) {
-                        $aa_ns{$rr->nsdname} = [] if not exists $aa_ns{$rr->nsdname};
+                        $aa_ns{$rr->nsdname} = [] unless exists $aa_ns{$rr->nsdname};
                         push @names, $rr->nsdname;
                     }
 
@@ -442,7 +442,7 @@ sub _get_delegation {
             }
         }
 
-        return [ @ib_ns ];
+        return [ uniq sort @ib_ns ];
     }
     elsif ( scalar keys %aa_ns ) {
         for my $ns_name ( keys %aa_ns ) {
@@ -457,10 +457,10 @@ sub _get_delegation {
             }
         }
 
-        return [ @ib_ns ];
+        return [ uniq sort @ib_ns ];
     }
     else {
-        return [ ];
+        return [];
     }
 }
 
@@ -488,7 +488,7 @@ sub get_del_ns_names_and_ips {
 
     my $ns_ref = $class->_get_delegation( $zone );
 
-    return undef if not defined $ns_ref;
+    return undef unless defined $ns_ref;
 
     my @ns_names = grep { $_->isa('Zonemaster::Engine::DNSName') } @{ $ns_ref };
 
@@ -496,7 +496,7 @@ sub get_del_ns_names_and_ips {
 
     @{ $ns_ref } = grep { $_->isa('Zonemaster::Engine::Nameserver') } @{ $ns_ref };
 
-    return [ sort (@{ $ns_ref }, @{ $oob_ns_ref }) ];
+    return [ uniq sort (@{ $ns_ref }, @{ $oob_ns_ref }) ];
 }
 
 =over
@@ -520,7 +520,7 @@ sub get_del_ns_names {
 
     my $ns_ref = $class->get_del_ns_names_and_ips( $zone );
 
-    return undef if not defined $ns_ref;
+    return undef unless defined $ns_ref;
 
     @{ $ns_ref } = grep { $_->isa('Zonemaster::Engine::Nameserver') } @{ $ns_ref };
 
@@ -549,7 +549,7 @@ sub get_del_ns_ips {
 
     my $ns_ref = $class->get_del_ns_names_and_ips( $zone );
 
-    return undef if not defined $ns_ref;
+    return undef unless defined $ns_ref;
 
     @{ $ns_ref } = grep { $_->isa('Zonemaster::Engine::Nameserver') } @{ $ns_ref };
 
@@ -578,15 +578,17 @@ sub get_zone_ns_names {
     # 'get_del_ns_names_and_ips' instead of 'get_del_ns_ips', because we need Zonemaster::Engine::Nameserver objects to be able to do queries.
     my $ns_ref = $class->get_del_ns_names_and_ips( $zone );
 
-    return undef if not defined $ns_ref;
+    return undef unless defined $ns_ref;
 
     my @ns_names;
 
     for my $ns ( @{ $ns_ref } ) {
-        my $p = $ns->query( $zone->name, q{NS} );
+        if ( $ns->isa('Zonemaster::Engine::Nameserver') ) {
+            my $p = $ns->query( $zone->name, q{NS} );
 
-        if ( $p and $p->aa and $p->rcode eq q{NOERROR} ) {
-            push @ns_names, $p->get_records_for_name( q{NS}, $zone->name->string, q{answer} );
+            if ( $p and $p->aa and $p->rcode eq q{NOERROR} ) {
+                push @ns_names, $p->get_records_for_name( q{NS}, $zone->name->string, q{answer} );
+            }
         }
     }
 
@@ -616,9 +618,9 @@ sub _get_ib_addr_in_zone {
     my $del_ips_ref = $class->get_del_ns_names_and_ips( $zone );
     my $ns_names_ref = $class->get_zone_ns_names( $zone );
 
-    return undef if not defined $del_ips_ref or not defined $ns_names_ref or not scalar @{ $del_ips_ref } or not scalar @{ $ns_names_ref };
+    return undef unless defined $del_ips_ref or defined $ns_names_ref or scalar @{ $del_ips_ref } or scalar @{ $ns_names_ref };
 
-    return [] if not scalar grep { $zone->name->is_in_bailiwick( $_ ) } @{ $ns_names_ref };
+    return [] unless scalar grep { $zone->name->is_in_bailiwick( $_ ) } @{ $ns_names_ref };
 
     my %ib_ns;
 
@@ -657,7 +659,7 @@ sub _get_ib_addr_in_zone {
         }
     }
 
-    return [ @ib_ns_array ];
+    return [ uniq sort @ib_ns_array ];
 }
 
 =over
@@ -683,9 +685,9 @@ sub get_zone_ns_names_and_ips {
 
     my $ns_names_ref = $class->get_zone_ns_names( $zone );
 
-    return undef if not defined $ns_names_ref;
+    return undef unless defined $ns_names_ref;
 
-    return [] if not scalar @{ $ns_names_ref };
+    return [] unless scalar @{ $ns_names_ref };
 
     my $ib_ns_ref = $class->_get_ib_addr_in_zone( $zone );
     my $oob_ns_ref = $class->_get_oob_ips( $zone, $ns_names_ref );
@@ -694,25 +696,35 @@ sub get_zone_ns_names_and_ips {
 
     for my $ns_name ( @{ $ns_names_ref } ) {
         if ( $zone->name->is_in_bailiwick( $ns_name ) ) {
-            for my $ib_ns ( @{ $ib_ns_ref } ) {
-                if ( $ns_name->string eq $ib_ns->name->string ) {
-                    push @zone_ns, ns( $ns_name, $ib_ns->address->short);
+            if ( $ib_ns_ref and scalar @{ $ib_ns_ref } ) {
+                for my $ib_ns ( @{ $ib_ns_ref } ) {
+                    if ( $ns_name->string eq $ib_ns->name->string ) {
+                        push @zone_ns, ns( $ns_name, $ib_ns->address->short);
+                    }
                 }
+            }
+            else {
+                push @zone_ns, $ns_name;
             }
         }
         else {
-            for my $oob_ns ( @{ $oob_ns_ref } ) {
-                if ( $oob_ns->isa('Zonemaster::Engine::Nameserver') and $ns_name->string eq $oob_ns->name->string ) {
-                    push @zone_ns, ns( $ns_name, $oob_ns->address->short);
+            if ( $oob_ns_ref and scalar @{ $oob_ns_ref } ) {
+                for my $oob_ns ( @{ $oob_ns_ref } ) {
+                    if ( $oob_ns->isa('Zonemaster::Engine::Nameserver') and $ns_name->string eq $oob_ns->name->string ) {
+                        push @zone_ns, ns( $ns_name, $oob_ns->address->short );
+                    }
+                    elsif ( $oob_ns->isa('Zonemaster::Engine::DNSName') and $ns_name->string eq $oob_ns->string ) {
+                        push @zone_ns, $ns_name;
+                    }
                 }
-                elsif ( $oob_ns->isa('Zonemaster::Engine::DNSName') and $ns_name->string eq $oob_ns->string ) {
-                    push @zone_ns, $ns_name;
-                }
+            }
+            else {
+                push @zone_ns, $ns_name;
             }
         }
     }
 
-    return [ @zone_ns ];
+    return [ uniq sort @zone_ns ];
 }
 
 =over
@@ -736,9 +748,14 @@ sub get_zone_ns_ips {
 
     my $ns_ref = $class->get_zone_ns_names_and_ips( $zone );
 
-    return undef if not defined $ns_ref;
+    return undef unless defined $ns_ref;
 
-    return [ map { $_->address->short } @{ $ns_ref } ];
+    my @ns_ips;
+    foreach my $ns ( @{ $ns_ref } ) {
+        push @ns_ips, $ns->address->short if $ns->isa('Zonemaster::Engine::Nameserver');
+    }
+
+    return [ uniq sort @ns_ips ];
 }
 
 1;
