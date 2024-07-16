@@ -47,10 +47,10 @@ This method loads unit test data (test scenarios) and, after some data checks an
 it runs all external L<MethodsV2|Zonemaster::Engine::Test::TestMethodsV2> methods and checks for the presence (or absence) of
 specific nameservers data for each specified test scenario.
 
-If $single_scenario has been set in the call to the name of a scenario then only that
-scenario will be run, and italways be run even if it has been set as not testable.
+If C<$single_scenario> has been set in the call to the name of a scenario then only that
+scenario will be run, and it will always be run even if it has been set as not testable.
 
-If $disable_scenario has been set in the call to the name of a scenario or to a
+If C<$disable_scenario> has been set in the call to the name of a scenario or to a
 comma separated list of scenarios then that or those scenarios will be
 temporarily disabled.
 
