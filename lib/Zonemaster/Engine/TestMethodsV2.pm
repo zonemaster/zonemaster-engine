@@ -97,16 +97,12 @@ sub get_parent_ns_ips {
 
             foreach my $ns_name ( keys %rrs_ns ) {
                 unless ( scalar @{ $rrs_ns{$ns_name} } > 0 ) {
-                    my $p_a = Zonemaster::Engine::Recursor->recurse( $ns_name, q{A} );
+                    for my $qtype ( q{A}, q{AAAA} ) {
+                        my $p = Zonemaster::Engine::Recursor->recurse( $ns_name, $qtype );
 
-                    if ( $p_a and $p_a->rcode eq 'NOERROR' ) {
-                        push @{ $rrs_ns{$ns_name} }, $_->address for $p_a->get_records_for_name( 'A', $ns_name );
-                    }
-
-                    my $p_aaaa = Zonemaster::Engine::Recursor->recurse( $ns_name, q{AAAA} );
-
-                    if ( $p_aaaa and $p_aaaa->rcode eq 'NOERROR' ) {
-                        push @{ $rrs_ns{$ns_name} }, $_->address for $p_aaaa->get_records_for_name( 'AAAA', $ns_name );
+                        if ( $p and $p->rcode eq 'NOERROR' ) {
+                            push @{ $rrs_ns{$ns_name} }, $_->address for $p->get_records_for_name( $qtype, $ns_name );
+                        }
                     }
                 }
 
@@ -174,16 +170,12 @@ sub get_parent_ns_ips {
 
                         foreach my $ns_name ( keys %rrs_ns_bis ) {
                             unless ( scalar @{ $rrs_ns_bis{$ns_name} } > 0 ) {
-                                my $p_a = Zonemaster::Engine::Recursor->recurse( $ns_name, q{A} );
+                                for my $qtype ( q{A}, q{AAAA} ) {
+                                    my $p = Zonemaster::Engine::Recursor->recurse( $ns_name, $qtype );
 
-                                if ( $p_a and $p_a->rcode eq 'NOERROR' ) {
-                                    push @{ $rrs_ns_bis{$ns_name} }, $_->address for $p_a->get_records_for_name( 'A', $ns_name );
-                                }
-
-                                my $p_aaaa = Zonemaster::Engine::Recursor->recurse( $ns_name, q{AAAA} );
-
-                                if ( $p_aaaa and $p_aaaa->rcode eq 'NOERROR' ) {
-                                    push @{ $rrs_ns_bis{$ns_name} }, $_->address for $p_aaaa->get_records_for_name( 'AAAA', $ns_name );
+                                    if ( $p and $p->rcode eq 'NOERROR' ) {
+                                        push @{ $rrs_ns_bis{$ns_name} }, $_->address for $p->get_records_for_name( $qtype, $ns_name );
+                                    }
                                 }
                             }
 
@@ -219,16 +211,12 @@ sub get_parent_ns_ips {
 
                         foreach my $ns_name ( keys %rrs_ns_bis ) {
                             unless ( scalar @{ $rrs_ns_bis{$ns_name} } > 0 ) {
-                                my $p_a = Zonemaster::Engine::Recursor->recurse( $ns_name, q{A} );
+                                for my $qtype ( q{A}, q{AAAA} ) {
+                                    my $p = Zonemaster::Engine::Recursor->recurse( $ns_name, $qtype );
 
-                                if ( $p_a and $p_a->rcode eq 'NOERROR' ) {
-                                    push @{ $rrs_ns_bis{$ns_name} }, $_->address for $p_a->get_records_for_name( 'A', $ns_name );
-                                }
-
-                                my $p_aaaa = Zonemaster::Engine::Recursor->recurse( $ns_name, q{AAAA} );
-
-                                if ( $p_aaaa and $p_aaaa->rcode eq 'NOERROR' ) {
-                                    push @{ $rrs_ns_bis{$ns_name} }, $_->address for $p_aaaa->get_records_for_name( 'AAAA', $ns_name );
+                                    if ( $p and $p->rcode eq 'NOERROR' ) {
+                                        push @{ $rrs_ns_bis{$ns_name} }, $_->address for $p->get_records_for_name( $qtype, $ns_name );
+                                    }
                                 }
                             }
 
@@ -301,21 +289,26 @@ sub _get_oob_ips {
                 }
             }
             else {
-                my $p_a = Zonemaster::Engine::Recursor->recurse( $ns_name->string, q{A} );
+                for my $qtype ( q{A}, q{AAAA} ) {
+                    my $p = Zonemaster::Engine::Recursor->recurse( $ns_name, $qtype );
 
-                if ( $p_a ) {
-                    for my $rr ( $p_a->get_records_for_name( q{A}, $ns_name->string ) ) {
-                        $found_ip = 1;
-                        push @oob_ns, ns( $ns_name->string, $rr->address );
-                    }
-                }
+                    if ( $p and $p->rcode eq q{NOERROR} ) {
+                        if ( $p->has_rrs_of_type_for_name( q{CNAME}, $ns_name, q{answer} ) ) {
+                            my %cnames = map { name( $_->owner ) => name( $_->cname ) } $p->get_records( q{CNAME}, q{answer} );
+                            my $target = $ns_name;
+                            $target = $cnames{$target} while $cnames{$target};
 
-                my $p_aaaa = Zonemaster::Engine::Recursor->recurse( $ns_name->string, q{AAAA} );
-
-                if ( $p_aaaa ) {
-                    for my $rr ( $p_aaaa->get_records_for_name( q{AAAA}, $ns_name->string ) ) {
-                        $found_ip = 1;
-                        push @oob_ns, ns( $ns_name->string, $rr->address );
+                            for my $rr ( $p->get_records_for_name( $qtype, $target ) ) {
+                                push @oob_ns, ns( $ns_name, $rr->address );
+                                $found_ip = 1;
+                            }
+                        }
+                        elsif ( $p->has_rrs_of_type_for_name( $qtype, $ns_name ) ) {
+                            for my $rr ( $p->get_records_for_name( $qtype, $ns_name ) ) {
+                                push @oob_ns, ns( $ns_name, $rr->address );
+                                $found_ip = 1;
+                            }
+                        }
                     }
                 }
             }
@@ -407,14 +400,26 @@ sub _get_delegation {
                         }
                     }
 
-                    for my $ns_key ( keys %aa_ns ) {
-                        if ( not scalar $aa_ns{$ns_key} ) {
-                            my ( $p_a, $state_a ) = Zonemaster::Engine::Recursor->_recurse( $ns_key, q{A}, q{IN}, { ns => [ $ns ], count => 0, common => 0, seen => {}, glue => {} } );
-                            my ( $p_aaaa, $state_aaaa ) = Zonemaster::Engine::Recursor->_recurse( $ns_key, q{AAAA}, q{IN}, { ns => [ $ns ], count => 0, common => 0, seen => {}, glue => {} } );
+                    for my $ns_name ( keys %aa_ns ) {
+                        if ( not scalar $aa_ns{$ns_name} ) {
+                            for my $qtype ( q{A}, q{AAAA} ) {
+                                my $p = Zonemaster::Engine::Recursor->recurse( $ns_name, $qtype );
 
-                            if ( $p_a and $p_aaaa ) {
-                                for my $rr ( $p_a->get_records_for_name( q{A}, $ns_key ), $p_aaaa->get_records_for_name( q{AAAA}, $ns_key ) ) {
-                                    push @{$aa_ns{$ns_key}}, $rr->address;
+                                if ( $p and $p->rcode eq q{NOERROR} ) {
+                                    if ( $p->has_rrs_of_type_for_name( q{CNAME}, $ns_name, q{answer} ) ) {
+                                        my %cnames = map { name( $_->owner ) => name( $_->cname ) } $p->get_records( q{CNAME}, q{answer} );
+                                        my $target = $ns_name;
+                                        $target = $cnames{$target} while $cnames{$target};
+
+                                        for my $rr ( $p->get_records_for_name( $qtype, $target ) ) {
+                                            push @{ $aa_ns{$ns_name} }, $rr->address;
+                                        }
+                                    }
+                                    elsif ( $p->has_rrs_of_type_for_name( $qtype, $ns_name ) ) {
+                                        for my $rr ( $p->get_records_for_name( $qtype, $ns_name ) ) {
+                                            push @{ $aa_ns{$ns_name} }, $rr->address;
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -425,30 +430,30 @@ sub _get_delegation {
     }
 
     if ( scalar keys %delegation_ns ) {
-        for my $ns_key ( keys %delegation_ns ) {
-            if ( scalar @{ $delegation_ns{$ns_key} } ) {
-                for my $ns_ip ( uniq @{$delegation_ns{$ns_key}} ) {
-                    push @ib_ns, ns( $ns_key, $ns_ip );
+        for my $ns_name ( keys %delegation_ns ) {
+            if ( scalar @{ $delegation_ns{$ns_name} } ) {
+                for my $ns_ip ( uniq @{$delegation_ns{$ns_name}} ) {
+                    push @ib_ns, ns( $ns_name, $ns_ip );
                 }
             }
             # Problem: Can't create an Engine::Nameserver object without an IP address... So we have to mix Engine::Nameserver and Engine::DNSName objects in the same array.
             else {
-                push @ib_ns, name( $ns_key );
+                push @ib_ns, name( $ns_name );
             }
         }
 
         return [ @ib_ns ];
     }
     elsif ( scalar keys %aa_ns ) {
-        for my $ns_key ( keys %aa_ns ) {
-            if ( scalar @{ $aa_ns{$ns_key} } ) {
-                for my $ns_ip ( uniq @{ $aa_ns{$ns_key} } ) {
-                    push @ib_ns, ns( $ns_key, $ns_ip );
+        for my $ns_name ( keys %aa_ns ) {
+            if ( scalar @{ $aa_ns{$ns_name} } ) {
+                for my $ns_ip ( uniq @{ $aa_ns{$ns_name} } ) {
+                    push @ib_ns, ns( $ns_name, $ns_ip );
                 }
             }
             # Problem: Can't create an Engine::Nameserver object without an IP address... So we have to mix Engine::Nameserver and Engine::DNSName objects in the same array.
             else {
-                push @ib_ns, name( $ns_key );
+                push @ib_ns, name( $ns_name );
             }
         }
 
@@ -621,11 +626,22 @@ sub _get_ib_addr_in_zone {
         if ( $zone->name->is_in_bailiwick( $ns_name ) ) {
             for my $ns ( @{ $del_ips_ref } ) {
                 for my $qtype ( q{A}, q{AAAA} ) {
-                    my ( $p, $state ) = Zonemaster::Engine::Recursor->_recurse( $ns_name, $qtype, q{IN}, { ns => [ $ns ], count => 0, common => 0, seen => {}, glue => {} } );
+                    my $p = Zonemaster::Engine::Recursor->recurse( $ns_name, $qtype, q{IN}, [ $ns ] );
 
-                    if ( $p and $p->aa and $p->rcode eq q{NOERROR} and $p->has_rrs_of_type_for_name( $qtype, $ns_name ) ) {
-                        for my $rr ( $p->get_records_for_name( $qtype, $ns_name ) ) {
-                            push @{ $ib_ns{$ns_name} }, $rr->address;
+                    if ( $p and $p->aa and $p->rcode eq q{NOERROR} ) {
+                        if ( $p->has_rrs_of_type_for_name( q{CNAME}, $ns_name, q{answer} ) ) {
+                            my %cnames = map { name( $_->owner ) => name( $_->cname ) } $p->get_records( q{CNAME}, q{answer} );
+                            my $target = $ns_name;
+                            $target = $cnames{$target} while $cnames{$target};
+
+                            for my $rr ( $p->get_records_for_name( $qtype, $target ) ) {
+                                push @{ $ib_ns{$ns_name} }, $rr->address;
+                            }
+                        }
+                        elsif ( $p->has_rrs_of_type_for_name( $qtype, $ns_name ) ) {
+                            for my $rr ( $p->get_records_for_name( $qtype, $ns_name ) ) {
+                                push @{ $ib_ns{$ns_name} }, $rr->address;
+                            }
                         }
                     }
                 }

@@ -88,7 +88,7 @@ sub remove_fake_addresses {
 }
 
 sub recurse {
-    my ( $class, $name, $type, $dns_class ) = @_;
+    my ( $class, $name, $type, $dns_class, $ns ) = @_;
     $name = name( $name );
     $type      //= 'A';
     $dns_class //= 'IN';
@@ -98,9 +98,13 @@ sub recurse {
         return $recurse_cache{$name}{$type}{$dns_class};
     }
 
-    my ( $p, $state ) =
-      $class->_recurse( $name, $type, $dns_class,
-        { ns => [ root_servers() ], count => 0, common => 0, seen => {}, glue => {} } );
+    my %state = ( ns => [ root_servers() ], count => 0, common => 0, seen => {}, glue => {} );
+    if ( defined $ns ) {
+        ref( $ns ) eq 'ARRAY' or croak 'Argument $ns must be an arrayref';
+        $state{ns} = $ns;
+    }
+
+    my ( $p, $state ) = $class->_recurse( $name, $type, $dns_class, \%state );
     $recurse_cache{$name}{$type}{$dns_class} = $p;
 
     return $p;
@@ -529,9 +533,15 @@ delegations (pre-publication tests).
 
 Initialize the recursor by loading the root hints.
 
-=head2 recurse($name, $type, $class)
+=head2 recurse($name[, $type, $class, $ns])
 
-Does a recursive resolution from the root servers down for the given triplet.
+Does a recursive resolution for the given name down from the root servers (or for the given name server(s), if any).
+Only the first argument is mandatory. The rest are optional and default to, respectively: 'A', 'IN', and L</root_servers()>.
+
+Takes a string or a L<Zonemaster::Engine::DNSName> object (name); and optionally a string (query type), a string (query class),
+and an arrayref of L<Zonemaster::Engine::Nameserver> objects.
+
+Returns a L<Zonemaster::Engine::Packet> object (which can be C<undef>).
 
 =head2 parent($name)
 
@@ -604,7 +614,7 @@ This list can be replaced like so:
 Performs a recursive lookup resolution for the given arguments. Used by the L<recursive lookup|/recurse($name, $type, $class)> method in this module.
 
 Takes a L<Zonemaster::Engine::DNSName> object, a string (query type), a string (DNS class), a L<Zonemaster::Engine::Packet> object, and a reference to a hash.
-The mandatory keys for that hash are 'ns' (array), 'count' (integer), 'common' (integer), 'seen' (hash), 'glue' (hash) and optional keys are 'in_progress'
+The mandatory keys for that hash are 'ns' (arrayref), 'count' (integer), 'common' (integer), 'seen' (hash), 'glue' (hash) and optional keys are 'in_progress'
 (hash), 'candidate' (L<Zonemaster::Engine::Packet> object or C<undef>), 'trace' (array), 'tseen' (hash), 'tcount' (integer).
 
 Returns a L<Zonemaster::Engine::Packet> (or C<undef>) and a hash.
