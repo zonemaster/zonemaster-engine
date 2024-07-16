@@ -245,7 +245,7 @@ my %subtests = (
         []
     ],
     'IB-NOT-IN-ZONE-1' => [
-        0,
+        1,
         q(child.parent.ib-not-in-zone-1.methodsv2.xa),
         [ qw( 127.40.1.41 
               fda1:b2:c3:0:127:40:1:41 
@@ -707,7 +707,7 @@ my %subtests = (
         [ ],
     ],
     'CHILD-NS-CNAME-1' => [
-        0,
+        1,
         q(child.parent.child-ns-cname-1.methodsv2.xa),
         [ qw( 127.40.1.41 
               fda1:b2:c3:0:127:40:1:41 
