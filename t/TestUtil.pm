@@ -206,12 +206,17 @@ sub perform_methodsv2_testing {
     my ( $href_subtests, $single_scenario, $disabled_scenarios ) = @_;
     my %subtests = %$href_subtests;
 
+    $single_scenario = uc( $single_scenario ) if $single_scenario;
     my @disabled_scenarios = map {uc} split(/, */, $disabled_scenarios) if $disabled_scenarios;
     
     my @untested_scenarios = ();
 
+    if ( $single_scenario and not grep /^$single_scenario$/, keys %subtests ) {
+        croak "Scenario $single_scenario does not exist";
+    }
+
     for my $scenario ( sort ( keys %subtests ) ) {
-        next if $single_scenario and $scenario ne uc($single_scenario);
+        next if $single_scenario and $scenario ne $single_scenario;
         if ( @disabled_scenarios and grep /^$scenario$/, @disabled_scenarios ) {
             push @untested_scenarios, $scenario;
             next;
@@ -376,19 +381,9 @@ sub perform_methodsv2_testing {
             # Methods: get_del_ns_ips() and get_zone_ns_ips()
             @method_names = qw( get_del_ns_ips get_zone_ns_ips );
             my $expected_del_ns_ips = defined $expected_del_ns ?
-                [ uniq map { (split( m(/), $_ ))[1] ? (split( m(/), $_ ))[1] : '' } @{ $expected_del_ns } ] : undef;
+                [ uniq grep { $_ ne '' } map { (split( m(/), $_ ))[1] ? (split( m(/), $_ ))[1] : '' } @{ $expected_del_ns } ] : undef;
             my $expected_zone_ns_ips = defined $expected_zone_ns ?
-                [ uniq map { (split( m(/), $_ ))[1] ? (split( m(/), $_ ))[1] : '' } @{ $expected_zone_ns } ] : undef;
-
-            my %ips = map { $_ => 1 } @{ $expected_del_ns_ips } if $expected_del_ns_ips;
-            if ( scalar keys %ips == 1 and exists $ips{''} ) {
-                $expected_del_ns_ips = [];
-            }
-
-            %ips = map { $_ => 1 } @{ $expected_zone_ns_ips } if $expected_zone_ns_ips;
-            if ( scalar keys %ips == 1 and exists $ips{''} ) {
-                $expected_zone_ns_ips = [];
-            }
+                [ uniq grep { $_ ne '' } map { (split( m(/), $_ ))[1] ? (split( m(/), $_ ))[1] : '' } @{ $expected_zone_ns } ] : undef;
 
             my @expected_ns_ips = ( $expected_del_ns_ips, $expected_zone_ns_ips ); 
             foreach my $i ( 0..$#method_names ) {

@@ -653,7 +653,7 @@ my %subtests = (
         [ ],
     ],
     'DELEG-OOB-W-ERROR-1' => [
-        0,
+        1,
         q(child.parent.deleg-oob-w-error-1.methodsv2.xa),
         [ qw( 127.40.1.41 
               fda1:b2:c3:0:127:40:1:41 
@@ -668,7 +668,7 @@ my %subtests = (
         [ ],
     ],
     'DELEG-OOB-W-ERROR-2' => [
-        0,
+        1,
         q(child.parent.deleg-oob-w-error-2.methodsv2.xa),
         [ qw( 127.40.1.41 
               fda1:b2:c3:0:127:40:1:41 
@@ -683,7 +683,7 @@ my %subtests = (
         [ ],
     ],
     'DELEG-OOB-W-ERROR-3' => [
-        0,
+        1,
         q(child.parent.deleg-oob-w-error-3.methodsv2.xa),
         [ qw( 127.40.1.41 
               fda1:b2:c3:0:127:40:1:41 
@@ -695,7 +695,7 @@ my %subtests = (
         [ ],
     ],
     'DELEG-OOB-W-ERROR-4' => [
-        0,
+        1,
         q(child.parent.deleg-oob-w-error-4.methodsv2.xa),
         [ qw( 127.40.1.41 
               fda1:b2:c3:0:127:40:1:41 
@@ -724,7 +724,7 @@ my %subtests = (
         [ ],
     ],
     'CHILD-NS-CNAME-2' => [
-        0,
+        1,
         q(child.parent.child-ns-cname-2.methodsv2.xa),
         [ qw( 127.40.1.41 
               fda1:b2:c3:0:127:40:1:41 
