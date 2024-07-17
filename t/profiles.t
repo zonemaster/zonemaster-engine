@@ -523,6 +523,8 @@ subtest 'set() dies on illegal value' => sub {
     dies_ok { $profile->set( 'resolver.source4', ['192.0.2.53'] ); } 'resolver.source4 rejects arrayref';
     dies_ok { $profile->set( 'resolver.source6', 'example.com' ); } 'resolver.source6 rejects domain name string';
     dies_ok { $profile->set( 'resolver.source6', ['2001:db8::42'] ); } 'resolver.source6 rejects arrayref';
+    dies_ok { $profile->set( 'asn_db.style',     ['noreply@example.com'] ); } 'checks type of asn_db.style';
+    dies_ok { $profile->set( 'asn_db.sources',   ['noreply@example.com'] ); } 'checks type of asn_db.sources';
     dies_ok { $profile->set( 'logfilter',        [] ); } 'checks type of logfilter';
     dies_ok { $profile->set( 'test_levels',      [] ); } 'checks type of test_levels';
     dies_ok { $profile->set( 'test_cases',       {} ); } 'checks type of test_cases';
