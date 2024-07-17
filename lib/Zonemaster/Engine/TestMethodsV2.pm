@@ -270,7 +270,7 @@ and L<Zonemaster::Engine::DNSName> objects for each name server name that could 
 sub _get_oob_ips {
     my ( $class, $zone, $ns_names_ref ) = @_;
 
-    if ( not $ns_names_ref ) {
+    unless ( defined $ns_names_ref and scalar @{ $ns_names_ref } ) {
         return [];
     }
 
@@ -281,7 +281,7 @@ sub _get_oob_ips {
     for my $ns_name ( @{ $ns_names_ref } ) {
         $found_ip = 0;
 
-        if ( not $zone->name->is_in_bailiwick( $ns_name ) ) {
+        unless ( $zone->name->is_in_bailiwick( $ns_name ) ) {
             if ( $is_undelegated and scalar Zonemaster::Engine::Recursor->get_fake_addresses( $zone->name->string, $ns_name->string ) ) {
                 for my $ip ( Zonemaster::Engine::Recursor->get_fake_addresses( $zone->name->string, $ns_name->string ) ) {
                     push @oob_ns, ns( $ns_name->string, $ip );
@@ -328,9 +328,7 @@ sub _get_oob_ips {
                 }
             }
 
-            if ( not $found_ip ) {
-                push @oob_ns, $ns_name;
-            }
+            push @oob_ns, $ns_name unless $found_ip;
         }
     }
 
@@ -411,7 +409,7 @@ sub _get_delegation {
                     }
 
                     for my $ns_name ( keys %aa_ns ) {
-                        if ( not scalar $aa_ns{$ns_name} ) {
+                        unless ( scalar $aa_ns{$ns_name} ) {
                             for my $qtype ( q{A}, q{AAAA} ) {
                                 my $p = Zonemaster::Engine::Recursor->recurse( $ns_name, $qtype );
 
