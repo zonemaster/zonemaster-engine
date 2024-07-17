@@ -544,7 +544,6 @@ sub basic01 {
     my @all_labels = ( '.' );
     my @remaining_labels = ( '.' );
 
-    ALL_SERVERS:
     while ( my $zone_name = shift @remaining_labels ) {
         my @remaining_servers = @{ $all_servers{$zone_name} };
 
@@ -599,7 +598,7 @@ sub basic01 {
             }
 
             foreach my $ns_name ( keys %rrs_ns ) {
-                unless ( scalar @{ $rrs_ns{$ns_name} } > 0 ) {
+                unless ( scalar @{ $rrs_ns{$ns_name} } ) {
                     my $p_a = Zonemaster::Engine::Recursor->recurse( $ns_name, q{A} );
 
                     if ( $p_a and $p_a->rcode eq 'NOERROR' ) {

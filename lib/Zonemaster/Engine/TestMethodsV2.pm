@@ -49,7 +49,7 @@ sub get_parent_ns_ips {
     }
 
     my %handled_servers;
-    my @parent_found;
+    my @parent_ns;
 
     my %rrs_ns;
     my $type_soa = q{SOA};
@@ -59,7 +59,6 @@ sub get_parent_ns_ips {
     my @all_labels = ( '.' );
     my @remaining_labels = ( '.' );
 
-    ALL_SERVERS:
     while ( my $zone_name = shift @remaining_labels ) {
         my @remaining_servers = @{ $all_servers{$zone_name} };
 
@@ -96,7 +95,7 @@ sub get_parent_ns_ips {
             }
 
             foreach my $ns_name ( keys %rrs_ns ) {
-                unless ( scalar @{ $rrs_ns{$ns_name} } > 0 ) {
+                unless ( scalar @{ $rrs_ns{$ns_name} } ) {
                     for my $qtype ( q{A}, q{AAAA} ) {
                         my $p = Zonemaster::Engine::Recursor->recurse( $ns_name, $qtype );
 
@@ -148,7 +147,7 @@ sub get_parent_ns_ips {
 
                 if ( $p_soa->rcode eq 'NOERROR' and $p_soa->aa and scalar $p_soa->get_records_for_name( $type_soa, $intermediate_query_name, 'answer' ) == 1 ) {
                     if ( $intermediate_query_name->string eq $zone->name->string ) {
-                        push @parent_found, $ns;
+                        push @parent_ns, $ns;
                     }
                     else {
                         $p_ns = $ns->query( $intermediate_query_name, $type_ns );
@@ -197,7 +196,7 @@ sub get_parent_ns_ips {
                 }
                 elsif ( $p_soa->is_redirect and scalar $p_soa->get_records_for_name( $type_ns, $intermediate_query_name, 'authority' ) ) {
                     if ( $intermediate_query_name->string eq $zone->name->string ) {
-                        push @parent_found, $ns;
+                        push @parent_ns, $ns;
                     }
                     else {
                         my %rrs_ns_bis;
@@ -242,8 +241,8 @@ sub get_parent_ns_ips {
         }
     }
 
-    if ( scalar @parent_found ) {
-        return [ uniq sort @parent_found ]
+    if ( scalar @parent_ns ) {
+        return [ uniq sort @parent_ns ]
     }
     else {
         return undef;

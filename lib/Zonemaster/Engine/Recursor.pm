@@ -239,7 +239,7 @@ sub _resolve_cname {
             return ( $p, $state );
         }
 
-        # There is a record of type QNAME but with different owner name than CNAME target; no need to recurse
+        # There is a record of type QTYPE but with different owner name than CNAME target; no need to recurse
         Zonemaster::Engine->logger->add( CNAME_NO_MATCH => { name => $name, type => $type, target => $target, owner_names => join( ';', map { $_->owner } $p->get_records( $type ) ) } );
         return ( undef, $state );
     }
