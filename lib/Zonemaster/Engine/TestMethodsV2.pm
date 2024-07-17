@@ -270,7 +270,7 @@ and L<Zonemaster::Engine::DNSName> objects for each name server name that could 
 sub _get_oob_ips {
     my ( $class, $zone, $ns_names_ref ) = @_;
 
-    if ( not defined $ns_names_ref or not scalar @{ $ns_names_ref } ) {
+    if ( not $ns_names_ref ) {
         return [];
     }
 
@@ -371,7 +371,6 @@ sub _get_delegation {
                 }
             }
             else {
-                # Problem: Can't create an Engine::Nameserver object without an IP address... So we have to mix Engine::Nameserver and Engine::DNSName objects in the same array.
                 push @ib_ns, name( $ns_name );
             }
         }
@@ -465,7 +464,6 @@ sub _get_delegation {
                     push @ib_ns, ns( $ns_name, $ns_ip );
                 }
             }
-            # Problem: Can't create an Engine::Nameserver object without an IP address... So we have to mix Engine::Nameserver and Engine::DNSName objects in the same array.
             else {
                 push @ib_ns, name( $ns_name );
             }
@@ -480,7 +478,6 @@ sub _get_delegation {
                     push @ib_ns, ns( $ns_name, $ns_ip );
                 }
             }
-            # Problem: Can't create an Engine::Nameserver object without an IP address... So we have to mix Engine::Nameserver and Engine::DNSName objects in the same array.
             else {
                 push @ib_ns, name( $ns_name );
             }
@@ -551,9 +548,7 @@ sub get_del_ns_names {
 
     return undef unless defined $ns_ref;
 
-    @{ $ns_ref } = grep { $_->isa('Zonemaster::Engine::Nameserver') } @{ $ns_ref };
-
-    return [ uniq sort map { $_->name->string } @{ $ns_ref } ];
+    return [ uniq sort map { $_->isa('Zonemaster::Engine::Nameserver') ? $_->name : $_ } @{ $ns_ref } ];
 }
 
 =over
