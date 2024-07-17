@@ -164,7 +164,7 @@ sub _resolve_cname {
     # Remove duplicate CNAME RRs
     my ( %duplicate_cname_rrs, @original_rrs );
     for my $rr ( @cname_rrs ) {
-        my $rr_hash = $rr->class . '/' . $rr->ttl . '/CNAME/' . $rr->owner . '/' . $rr->cname;
+        my $rr_hash = $rr->class . '/CNAME/' . lc($rr->owner) . '/' . lc($rr->cname);
 
         if ( exists $duplicate_cname_rrs{$rr_hash} ) {
             $duplicate_cname_rrs{$rr_hash}++;
@@ -201,7 +201,7 @@ sub _resolve_cname {
         }
 
         # CNAME owner name is target, or target has already been seen in this response, or owner name cannot be a target
-        if ( lc( $rr_owner ) eq lc( $rr_target ) or exists $seen_targets{lc( $rr_target )} or grep( /^$rr_target$/, keys %forbidden_targets ) ) {
+        if ( lc( $rr_owner ) eq lc( $rr_target ) or exists $seen_targets{lc( $rr_target )} or grep { $_ eq lc( $rr_target ) } ( keys %forbidden_targets ) ) {
             Zonemaster::Engine->logger->add( CNAME_LOOP_INNER => { name => join( ';', map { $_->owner } @cname_rrs ), target => join( ';', map { $_->cname } @cname_rrs ) } );
             return ( undef, $state );
         }

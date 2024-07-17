@@ -21,7 +21,7 @@ Zonemaster::Engine::TestMethodsV2 - Version 2 of Methods common to Test Specific
 =head1 METHODS
 
 For details on what these Methods implement, see the Test Specifications document
-(https://github.com/zonemaster/zonemaster/blob/v2022.2.2/docs/specifications/tests/MethodsV2.md).
+(https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/MethodsV2.md).
 
 =over
 
@@ -31,9 +31,9 @@ For details on what these Methods implement, see the Test Specifications documen
 
 This Method will obtain the name servers that serves the parent zone, i.e. the zone from which the Child Zone is delegated from.
 
-Takes a Zonemaster::Engine::Zone object (C<$zone>).
+Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns an arrayref of Zonemaster::Engine::Nameserver objects, or `undef` if no parent zone was found.
+Returns an arrayref of L<Zonemaster::Engine::Nameserver> objects, or C<undef> if no parent zone was found.
 
 =back
 
@@ -66,9 +66,10 @@ sub get_parent_ns_ips {
 
 This Method will obtain the IP addresses of the Out-Of-Bailiwick name servers for the given zone and a given set of name server names.
 
-Takes a Zonemaster::Engine::Zone object (C<$zone>) and an arrayref of Zonemaster::Engine::Nameserver objects (C<$ns_names_ref>).
+Takes a L<Zonemaster::Engine::Zone> object and an arrayref of L<Zonemaster::Engine::Nameserver> objects.
 
-Returns an arrayref of Zonemaster::Engine::Nameserver objects.
+Returns an arrayref of L<Zonemaster::Engine::Nameserver> objects for each name server name that was successfully resolved to an IP address,
+and L<Zonemaster::Engine::DNSName> objects for each name server name that could not be resolved to an IP address.
 
 =back
 
@@ -133,9 +134,9 @@ sub _get_oob_ips {
 This Method will obtain the name server names (from the NS records) and the IP addresses (from Glue records) from the delegation of the given zone from the parent zone.
 Glue Records are address records for In-Bailiwick name server names, if any.
 
-Takes a Zonemaster::Engine::Zone object (C<$zone>).
+Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns an arrayref of Zonemaster::Engine::Nameserver objects, or `undef` if no parent zone was found.
+Returns an arrayref of L<Zonemaster::Engine::Nameserver> objects, or C<undef> if no parent zone was found.
 
 =back
 
@@ -264,9 +265,10 @@ This Method will obtain the name server names (from the NS records) and the IP a
 Glue Records, if any, are address records for name server names. Also obtain the IP addresses for the Out-Of-Bailiwick name server names, if any.
 If the Glue Records include address records for Out-Of-Bailiwick name servers they will be included twice, unless identical.
 
-Takes a Zonemaster::Engine::Zone object (C<$zone>).
+Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns an arrayref of Zonemaster::Engine::Nameserver objects, or `undef` if no parent zone was found.
+Returns an arrayref of L<Zonemaster::Engine::Nameserver> objects for each name server name that was successfully resolved to an IP address,
+and L<Zonemaster::Engine::DNSName> objects for each name server name that could not be resolved to an IP address, or C<undef> if no parent zone was found.
 
 =back
 
@@ -296,9 +298,9 @@ sub get_del_ns_names_and_ips {
 
 This Method will obtain the name server names of the given zone as defined in the delegation from parent zone.
 
-Takes a Zonemaster::Engine::Zone object (C<$zone>).
+Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns an arrayref of strings, or `undef` if no parent zone was found.
+Returns an arrayref of strings, or C<undef> if no parent zone was found.
 
 =back
 
@@ -325,9 +327,9 @@ sub get_del_ns_names {
 This Method will obtain the IP addresses (from Glue Records) from the delegation of the given zone from the parent zone.
 Glue Records are address records for In-Bailiwick name server names, if any. Also obtain the IP addresses for the Out-Of-Bailiwick name server names, if any.
 
-Takes a Zonemaster::Engine::Zone object (C<$zone>).
+Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns an arrayref of strings, or `undef` if no parent zone was found.
+Returns an arrayref of strings, or C<undef> if no parent zone was found.
 
 =back
 
@@ -353,9 +355,9 @@ sub get_del_ns_ips {
 
 This Method will obtain the names of the authoritative name servers for the given zone as defined in the NS records in the zone itself.
 
-Takes a Zonemaster::Engine::Zone object (C<$zone>).
+Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns an arrayref of strings, or `undef` if no parent zone was found.
+Returns an arrayref of strings, or C<undef> if no parent zone was found.
 
 =back
 
@@ -390,9 +392,9 @@ sub get_zone_ns_names {
 
 This Method will obtain obtain the address records matching the In-Bailiwick name server names from the given zone.
 
-Takes a Zonemaster::Engine::Zone object (C<$zone>).
+Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns an arrayref of Zonemaster::Engine::Nameserver objects, or `undef` if no parent zone was found.
+Returns an arrayref of L<Zonemaster::Engine::Nameserver> objects, or C<undef> if no parent zone was found.
 
 =back
 
@@ -419,7 +421,7 @@ sub _get_ib_addr_in_zone {
 
 					if ( $p and $p->aa and $p->rcode eq q{NOERROR} and $p->has_rrs_of_type_for_name( $qtype, $ns_name ) ) {
 						for my $rr ( $p->get_records_for_name( $qtype, $ns_name ) ) {
-							push @{ $ib_ns{$ns->name->string} }, $rr->address;
+							push @{ $ib_ns{$ns_name} }, $rr->address;
 						}
 					}
 				}
@@ -447,9 +449,10 @@ sub _get_ib_addr_in_zone {
 This Method will obtain the name server names (extracted from the NS records) from the apex of the given zone.
 For the In-Bailiwick name server names obtain the IP addresses from the given zone. For the Out-Of-Bailiwick name server names obtain the IP addresses from recursive lookup.
 
-Takes a Zonemaster::Engine::Zone object (C<$zone>).
+Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns an arrayref of Zonemaster::Engine::Nameserver objects, or `undef` if no parent zone was found.
+Returns an arrayref of L<Zonemaster::Engine::Nameserver> objects for each name server name that was successfully resolved to an IP address,
+and L<Zonemaster::Engine::DNSName> objects for each name server name that could not be resolved to an IP address, or C<undef> if no parent zone was found.
 
 =back
 
@@ -479,8 +482,11 @@ sub get_zone_ns_names_and_ips {
 		}
 		else {
 			for my $oob_ns ( @{ $oob_ns_ref } ) {
-				if ( $ns_name->string eq $oob_ns->name->string ) {
+				if ( $oob_ns->isa('Zonemaster::Engine::Nameserver') and $ns_name->string eq $oob_ns->name->string ) {
 					push @zone_ns, ns( $ns_name, $oob_ns->address->short);
+				}
+				elsif ( $oob_ns->isa('Zonemaster::Engine::DNSName') and $ns_name->string eq $oob_ns->string ) {
+					push @zone_ns, $ns_name;
 				}
 			}
 		}
@@ -497,9 +503,9 @@ sub get_zone_ns_names_and_ips {
 
 This Method will obtain the IP addresses of the name servers, as extracted from the NS records of apex of the given zone.
 
-Takes a Zonemaster::Engine::Zone object (C<$zone>).
+Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns an arrayref of strings, or `undef` if no parent zone was found.
+Returns an arrayref of strings, or C<undef> if no parent zone was found.
 
 =back
 

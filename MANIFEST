@@ -75,6 +75,8 @@ t/asn.t
 t/dnsname.t
 t/logger.t
 t/manifest.t
+t/methodsv2.data
+t/methodsv2.t
 t/nameserver-axfr.data
 t/nameserver-axfr.t
 t/nameserver.data
@@ -163,12 +165,8 @@ t/Test-connectivity04.data
 t/Test-connectivity04.t
 t/Test-consistency.data
 t/Test-consistency.t
-t/Test-consistency05-F.data
-t/Test-consistency05-F.t
 t/Test-consistency05.data
 t/Test-consistency05.t
-t/Test-consistency06-B.data
-t/Test-consistency06-B.t
 t/Test-consistency06.data
 t/Test-consistency06.t
 t/Test-delegation.data
