@@ -457,7 +457,7 @@ my %subtests = (
         [ ],
     ],
     'CHLD-FOUND-INCONSIST-6' => [
-        0,
+        1,
         q(child.parent.chld-found-inconsist-6.methodsv2.xa),
         [ qw( 127.40.1.41
               fda1:b2:c3:0:127:40:1:41 ) ],
@@ -476,7 +476,7 @@ my %subtests = (
         [ ],
     ],
     'CHLD-FOUND-INCONSIST-7' => [
-        0,
+        1,
         q(child.parent.chld-found-inconsist-7.methodsv2.xa),
         [ qw( 127.40.1.41
               fda1:b2:c3:0:127:40:1:41 ) ],
@@ -495,7 +495,7 @@ my %subtests = (
         [ ],
     ],
     'CHLD-FOUND-INCONSIST-8' => [
-        0,
+        1,
         q(child.parent.chld-found-inconsist-8.methodsv2.xa),
         [ qw( 127.40.1.41
               fda1:b2:c3:0:127:40:1:41 ) ],
@@ -514,7 +514,7 @@ my %subtests = (
         [ ],
     ],
     'CHLD-FOUND-INCONSIST-9' => [
-        0,
+        1,
         q(child.parent.chld-found-inconsist-9.methodsv2.xa),
         [ qw( 127.40.1.41
               fda1:b2:c3:0:127:40:1:41 ) ],
@@ -533,7 +533,7 @@ my %subtests = (
         [ ],
     ],
     'CHLD-FOUND-INCONSIST-10' => [
-        0,
+        1,
         q(child.parent.chld-found-inconsist-10.methodsv2.xa),
         [ qw( 127.40.1.41
               fda1:b2:c3:0:127:40:1:41 ) ],
