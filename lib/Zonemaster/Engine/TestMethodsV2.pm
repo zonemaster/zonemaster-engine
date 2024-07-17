@@ -284,8 +284,8 @@ sub _get_oob_ips {
         if ( not $zone->name->is_in_bailiwick( $ns_name ) ) {
             if ( $is_undelegated and scalar Zonemaster::Engine::Recursor->get_fake_addresses( $zone->name->string, $ns_name->string ) ) {
                 for my $ip ( Zonemaster::Engine::Recursor->get_fake_addresses( $zone->name->string, $ns_name->string ) ) {
-                    $found_ip = 1;
                     push @oob_ns, ns( $ns_name->string, $ip );
+                    $found_ip = 1;
                 }
             }
             else {
@@ -297,6 +297,21 @@ sub _get_oob_ips {
                             my %cnames = map { name( $_->owner ) => name( $_->cname ) } $p->get_records( q{CNAME}, q{answer} );
                             my $target = $ns_name;
                             $target = $cnames{$target} while $cnames{$target};
+
+                            for my $rr ( $p->get_records_for_name( $qtype, $target ) ) {
+                                push @oob_ns, ns( $ns_name, $rr->address );
+                                $found_ip = 1;
+                            }
+                        }
+                        # CNAME was followed in a new recursive query
+                        elsif ( name( ($p->question)[0]->owner ) ne $ns_name and grep { $_->tag eq 'CNAME_FOLLOWED_OUT_OF_ZONE' and grep /^$ns_name$/, values %{ $_->args } } @{ Zonemaster::Engine->logger->entries } ) {
+                            my $cname_ns_name = name( ($p->question)[0]->owner );
+                            my $target = $cname_ns_name;
+
+                            if ( $p->has_rrs_of_type_for_name( q{CNAME}, $cname_ns_name, q{answer} ) ) {
+                                my %cnames = map { name( $_->owner ) => name( $_->cname ) } $p->get_records( q{CNAME}, q{answer} );
+                                $target = $cnames{$target} while $cnames{$target};
+                            }
 
                             for my $rr ( $p->get_records_for_name( $qtype, $target ) ) {
                                 push @oob_ns, ns( $ns_name, $rr->address );
@@ -410,6 +425,20 @@ sub _get_delegation {
                                         my %cnames = map { name( $_->owner ) => name( $_->cname ) } $p->get_records( q{CNAME}, q{answer} );
                                         my $target = $ns_name;
                                         $target = $cnames{$target} while $cnames{$target};
+
+                                        for my $rr ( $p->get_records_for_name( $qtype, $target ) ) {
+                                            push @{ $aa_ns{$ns_name} }, $rr->address;
+                                        }
+                                    }
+                                    # CNAME was followed in a new recursive query
+                                    elsif ( name( ($p->question)[0]->owner ) ne $ns_name and grep { $_->tag eq 'CNAME_FOLLOWED_OUT_OF_ZONE' and grep /^$ns_name$/, values %{ $_->args } } @{ Zonemaster::Engine->logger->entries } ) {
+                                        my $cname_ns_name = name( ($p->question)[0]->owner );
+                                        my $target = $cname_ns_name;
+
+                                        if ( $p->has_rrs_of_type_for_name( q{CNAME}, $cname_ns_name, q{answer} ) ) {
+                                            my %cnames = map { name( $_->owner ) => name( $_->cname ) } $p->get_records( q{CNAME}, q{answer} );
+                                            $target = $cnames{$target} while $cnames{$target};
+                                        }
 
                                         for my $rr ( $p->get_records_for_name( $qtype, $target ) ) {
                                             push @{ $aa_ns{$ns_name} }, $rr->address;
@@ -635,6 +664,20 @@ sub _get_ib_addr_in_zone {
                             my %cnames = map { name( $_->owner ) => name( $_->cname ) } $p->get_records( q{CNAME}, q{answer} );
                             my $target = $ns_name;
                             $target = $cnames{$target} while $cnames{$target};
+
+                            for my $rr ( $p->get_records_for_name( $qtype, $target ) ) {
+                                push @{ $ib_ns{$ns_name} }, $rr->address;
+                            }
+                        }
+                        # CNAME was followed in a new recursive query
+                        elsif ( name( ($p->question)[0]->owner ) ne $ns_name and grep { $_->tag eq 'CNAME_FOLLOWED_OUT_OF_ZONE' and grep /^$ns_name$/, values %{ $_->args } } @{ Zonemaster::Engine->logger->entries } ) {
+                            my $cname_ns_name = name( ($p->question)[0]->owner );
+                            my $target = $cname_ns_name;
+
+                            if ( $p->has_rrs_of_type_for_name( q{CNAME}, $cname_ns_name, q{answer} ) ) {
+                                my %cnames = map { name( $_->owner ) => name( $_->cname ) } $p->get_records( q{CNAME}, q{answer} );
+                                $target = $cnames{$target} while $cnames{$target};
+                            }
 
                             for my $rr ( $p->get_records_for_name( $qtype, $target ) ) {
                                 push @{ $ib_ns{$ns_name} }, $rr->address;
