@@ -11,6 +11,7 @@ use File::ShareDir qw[dist_file];
 use File::Slurp qw( read_file );
 use JSON::PP;
 use Net::IP::XS;
+use List::MoreUtils qw[uniq];
 
 use Zonemaster::Engine;
 use Zonemaster::Engine::DNSName;
@@ -32,7 +33,7 @@ sub add_fake_addresses {
     $domain = lc $domain;
 
     foreach my $name ( keys %{$href} ) {
-        my @ips = @{ $href->{$name} };
+        my @ips = uniq @{ $href->{$name} };
         $name = lc $name;
 
         push @{ $_fake_addresses_cache{$domain}{$name} }, ();

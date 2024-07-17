@@ -361,7 +361,6 @@ sub _get_delegation {
     my %delegation_ns;
     my %aa_ns;
     my @ib_ns;
-    my @names;
 
     if ( $is_undelegated ) {
         for my $ns_name ( Zonemaster::Engine::Recursor->get_fake_names( $zone->name->string ) ) {
@@ -387,17 +386,15 @@ sub _get_delegation {
 
         for my $ns ( @{ $parent_ref } ) {
             my $p = $ns->query( $zone->name, q{NS} );
-            @names = ();
 
             if ( $p and $p->rcode eq q{NOERROR} ) {
                 if ( $p->is_redirect ){
                     for my $rr ( $p->get_records_for_name( q{NS}, $zone->name->string, q{authority} ) ) {
                         $delegation_ns{$rr->nsdname} = [] unless exists $delegation_ns{$rr->nsdname};
-                        push @names, $rr->nsdname;
                     }
 
                     for my $rr ( $p->get_records( q{A}, q{additional} ), $p->get_records( q{AAAA}, q{additional} ) ) {
-                        if ( $zone->name->is_in_bailiwick( name( $rr->owner ) ) and scalar grep { $_ eq $rr->owner } uniq @names and exists $delegation_ns{$rr->owner} ) {
+                        if ( $zone->name->is_in_bailiwick( name( $rr->owner ) ) and scalar grep { $_ eq $rr->owner } keys %delegation_ns ) {
                             push @{ $delegation_ns{$rr->owner} }, $rr->address;
                         }
                     }
@@ -405,11 +402,10 @@ sub _get_delegation {
                 elsif ( $p->aa and scalar $p->get_records_for_name( q{NS}, $zone->name->string, q{answer} ) ) {
                     for my $rr ( $p->get_records_for_name( q{NS}, $zone->name->string, q{answer} ) ) {
                         $aa_ns{$rr->nsdname} = [] unless exists $aa_ns{$rr->nsdname};
-                        push @names, $rr->nsdname;
                     }
 
                     for my $rr ( $p->get_records( q{A}, q{additional} ), $p->get_records( q{AAAA}, q{additional} ) ) {
-                        if ( $zone->name->is_in_bailiwick( name( $rr->owner ) ) and scalar grep { $_ eq $rr->owner } uniq @names and exists $delegation_ns{$rr->owner} ) {
+                        if ( $zone->name->is_in_bailiwick( name( $rr->owner ) ) and scalar grep { $_ eq $rr->owner } keys %aa_ns ) {
                             push @{ $aa_ns{$rr->owner} }, $rr->address;
                         }
                     }
@@ -457,37 +453,29 @@ sub _get_delegation {
         }
     }
 
+    my $hash_ref;
     if ( scalar keys %delegation_ns ) {
-        for my $ns_name ( keys %delegation_ns ) {
-            if ( scalar @{ $delegation_ns{$ns_name} } ) {
-                for my $ns_ip ( uniq @{$delegation_ns{$ns_name}} ) {
-                    push @ib_ns, ns( $ns_name, $ns_ip );
-                }
-            }
-            else {
-                push @ib_ns, name( $ns_name );
-            }
-        }
-
-        return [ uniq sort @ib_ns ];
+        $hash_ref = \%delegation_ns;
     }
     elsif ( scalar keys %aa_ns ) {
-        for my $ns_name ( keys %aa_ns ) {
-            if ( scalar @{ $aa_ns{$ns_name} } ) {
-                for my $ns_ip ( uniq @{ $aa_ns{$ns_name} } ) {
-                    push @ib_ns, ns( $ns_name, $ns_ip );
-                }
-            }
-            else {
-                push @ib_ns, name( $ns_name );
-            }
-        }
-
-        return [ uniq sort @ib_ns ];
+        $hash_ref = \%aa_ns;
     }
     else {
         return [];
     }
+
+    for my $ns_name ( keys %{ $hash_ref } ) {
+        if ( scalar @{ %{ $hash_ref }{$ns_name} } ) {
+            for my $ns_ip ( uniq @{ %{ $hash_ref }{$ns_name} } ) {
+                push @ib_ns, ns( $ns_name, $ns_ip );
+            }
+        }
+        else {
+            push @ib_ns, name( $ns_name );
+        }
+    }
+
+    return [ uniq sort @ib_ns ];
 }
 
 =over
@@ -575,9 +563,7 @@ sub get_del_ns_ips {
 
     return undef unless defined $ns_ref;
 
-    @{ $ns_ref } = grep { $_->isa('Zonemaster::Engine::Nameserver') } @{ $ns_ref };
-
-    return [ uniq sort map { $_->address->short } @{ $ns_ref }];
+    return [ uniq sort map { $_->address->short } grep { $_->isa('Zonemaster::Engine::Nameserver') } @{ $ns_ref } ];
 }
 
 =over
