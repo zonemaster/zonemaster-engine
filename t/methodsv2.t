@@ -794,25 +794,6 @@ my %subtests = (
 );
 
 
-=head1 [scrap book area]
-
-=cut
-
-=head1 [template]
-
-    'X' => [
-        1,
-        q(xa),
-        [ qw( xa/127 ) ],
-        [ qw( xa/127 ) ],
-        [ qw( xa/127 ) ],
-        [ ],
-    ],
-
-=cut
-
-
-
 ###########
 
 my $datafile = 't/' . basename ($0, '.t') . '.data';
