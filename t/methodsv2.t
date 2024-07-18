@@ -829,18 +829,18 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
 
 =item Single scenario
 
-Provide one scenario name in environmental variable "ZONEMASTER_SINGLE_SCENARIO"
-to test only that scenario, even if that scenario has be disabled. Example:
+Provide one scenario name in environment variable "ZONEMASTER_SINGLE_SCENARIO"
+to test only that scenario, even if that scenario has been disabled. Example:
 
 ZONEMASTER_SINGLE_SCENARIO="GOOD-1" perl methodsv2.t
 
-=item Disble scenario
+=item Disable scenario
 
-Provide one scenario name or a comma separted list of scenario names in
-environmental variable "ZONEMASTER_DISABLE_SCENARIO" to disable that or those
+Provide one scenario name or a comma-separated list of scenario names in
+environment variable "ZONEMASTER_DISABLE_SCENARIO" to disable that or those
 scenarios for this run only. Example:
 
-ZONEMASTER_DISABLE_SCENARIO="GOOD1,GOOD-2" perl methodsv2.t
+ZONEMASTER_DISABLE_SCENARIO="GOOD-1,GOOD-2" perl methodsv2.t
 
 =back
 
