@@ -138,9 +138,9 @@ sub get_records_for_name {
 }
 
 sub has_rrs_of_type_for_name {
-    my ( $self, $type, $name ) = @_;
+    my ( $self, $type, $name, @section ) = @_;
 
-    return ( grep { name( $_->name ) eq name( $name ) } $self->get_records( $type ) ) > 0;
+    return ( grep { name( $_->name ) eq name( $name ) } $self->get_records( $type, @section ) ) > 0;
 }
 
 sub answerfrom {
@@ -220,9 +220,11 @@ Returns all L<Zonemaster::LDNS::RR> objects for the given name in the packet.
 If the optional C<@section> argument is given, and is a list of C<answer>,
 C<authority> and C<additional>, only RRs from those sections are returned.
 
-=item has_rrs_of_type_for_name($type, $name)
+=item has_rrs_of_type_for_name($type, $name[, @section])
 
 Returns true if the packet holds any RRs of the specified type for the given name.
+If the optional C<@section> argument is given, and is a list of C<answer>,
+C<authority> and C<additional>, only RRs from those sections are returned.
 
 =item answerfrom
 
