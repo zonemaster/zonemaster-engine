@@ -453,6 +453,7 @@
             "IS_REDIRECT" : "DEBUG2",
             "LOGGER_CALLBACK_ERROR" : "DEBUG",
             "LOOKUP_ERROR" : "DEBUG",
+            "LOOP_PROTECTION" : "DEBUG2",
             "MODULE_ERROR" : "CRITICAL",
             "MODULE_VERSION" : "DEBUG",
             "MODULE_END" : "DEBUG",

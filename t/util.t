@@ -93,12 +93,12 @@ EOF
         {
             name  => 'Orphan A record',
             hints => 'B.ROOT-SERVERS.NET.      3600000      A     199.9.14.201',
-            error => qr/Ownername of A record does not match any NS RDATA/,
+            error => qr/Owner name of A record does not match any NS RDATA/,
         },
         {
             name  => 'Orphan AAAA record',
             hints => 'B.ROOT-SERVERS.NET.      3600000      AAAA  2001:500:200::b',
-            error => qr/Ownername of AAAA record does not match any NS RDATA/,
+            error => qr/Owner name of AAAA record does not match any NS RDATA/,
         },
         {
             name  => 'Missing NS',
