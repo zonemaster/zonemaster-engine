@@ -78,39 +78,36 @@ sub _cymru_asn_lookup {
                 my $p = Zonemaster::Engine->recurse( $reverse, 'TXT' );
 
                 if ( $p ) {
-                    if ( $p->rcode eq q{NOERROR} or $p->rcode eq q{NXDOMAIN} ) {
-                        if ( $p->rcode eq q{NOERROR} ) {
-                            my @rr = $p->get_records( 'TXT', 'answer' );
+                    if ( $p->rcode eq q{NOERROR} ) {
+                        my @rr = $p->get_records( 'TXT', 'answer' );
 
-                            if ( @rr ) {
-                                my $prefix_length = 0;
-                                my @fields;
-                                my $str;
+                        if ( @rr ) {
+                            my $prefix_length = 0;
+                            my @fields;
+                            my $str;
 
-                                foreach my $rr ( @rr ) {
-                                    my $_str = $rr->txtdata;
-                                    my @_fields = split( /[ ][|][ ]?/x, $_str );
-                                    my @_asns   = split( /\s+/x,        $_fields[0] );
-                                    my $_prefix_length = ($_fields[1] =~ m!^.*[/](.*)!x)[0];
-                                    if ( $_prefix_length > $prefix_length ) {
-                                        $str = $_str;
-                                        @asns = @_asns;
-                                        @fields = @_fields;
-                                        $prefix_length = $_prefix_length;
-                                    }
+                            foreach my $rr ( @rr ) {
+                                my $_str = $rr->txtdata;
+                                my @_fields = split( /[ ][|][ ]?/x, $_str );
+                                my @_asns   = split( /\s+/x,        $_fields[0] );
+                                my $_prefix_length = ($_fields[1] =~ m!^.*[/](.*)!x)[0];
+                                if ( $_prefix_length > $prefix_length ) {
+                                    $str = $_str;
+                                    @asns = @_asns;
+                                    @fields = @_fields;
+                                    $prefix_length = $_prefix_length;
                                 }
+                            }
 
-                                return \@asns, Net::IP::XS->new( $fields[1] ), $str, q{AS_FOUND};
-                            }
-                            else {
-                                return \@asns, undef, q{}, q{EMPTY_ASN_SET};
-                            }
+                            return \@asns, Net::IP::XS->new( $fields[1] ), $str, q{AS_FOUND};
                         }
-
-                        if ( $p->rcode eq q{NXDOMAIN} ) {
-                            if ( $p->get_records( 'SOA', 'authority' ) and scalar $p->get_records( 'SOA', 'authority' ) == 1 and ($p->get_records( 'SOA', 'authority' ))[0]->owner eq name( $db_source ) ) {
-                                return \@asns, undef, q{}, q{EMPTY_ASN_SET};
-                            }
+                        else {
+                            return \@asns, undef, q{}, q{EMPTY_ASN_SET};
+                        }
+                    }
+                    elsif ( $p->rcode eq q{NXDOMAIN} ) {
+                        if ( $p->get_records( 'SOA', 'authority' ) and scalar $p->get_records( 'SOA', 'authority' ) == 1 and ($p->get_records( 'SOA', 'authority' ))[0]->owner eq name( $db_source ) ) {
+                            return \@asns, undef, q{}, q{EMPTY_ASN_SET};
                         }
                     }
                 }
