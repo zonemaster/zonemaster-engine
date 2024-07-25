@@ -420,6 +420,7 @@
             "TEST_CASE_START" : "DEBUG"
         },
         "SYSTEM" : {
+            "ASN_LOOKUP_SOURCE": "DEBUG",
             "CACHE_CREATED" : "DEBUG2",
             "CACHE_FETCHED" : "DEBUG2",
             "CACHED_RETURN" : "DEBUG3",
