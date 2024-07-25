@@ -720,12 +720,6 @@ A boolean. If true, network traffic is forbidden. Default false.
 Use when you want to be sure that any data is only taken from a preloaded
 cache.
 
-=head2 asn_db
-
-A hash of hashes. The currently supported keys are C<"style"> and C<"sources">.
-
-See more information in L<asn_db.style> and L<asn_db.sources>.
-
 =head2 asn_db.style
 
 A string that is either C<"Cymru"> or C<"RIPE"> (case-insensitive).
