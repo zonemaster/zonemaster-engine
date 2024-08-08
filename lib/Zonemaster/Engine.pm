@@ -37,7 +37,7 @@ my $init_done = 0;
 
 sub init_engine {
     return if $init_done++;
-    Zonemaster::Engine::Recursor::init_recursor;
+    Zonemaster::Engine::Recursor::init_recursor();
 }
 
 sub logger {
