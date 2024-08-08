@@ -426,7 +426,7 @@ argument.
 
 =head2 add_fake_addresses($domain, $data)
 
-Class method to create fake adresses for fake delegations for a specified domain from data provided.
+Class method to create fake addresses for fake delegations for a specified domain from data provided.
 
 =head2 has_fake_addresses($domain)
 
