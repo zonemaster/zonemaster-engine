@@ -221,6 +221,7 @@ sub query {
         }
     );
 
+    my $p;
     my $class     = $href->{class}     // 'IN';
     my $dnssec    = $href->{dnssec}    // 0;
     my $usevc     = $href->{usevc}     // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.usevc} );
@@ -229,7 +230,7 @@ sub query {
 
     # Fake a DS answer
     if ( $type eq 'DS' and $class eq 'IN' and $self->fake_ds->{ lc( $name ) } ) {
-        my $p = Zonemaster::LDNS::Packet->new( $name, $type, $class );
+        $p = Zonemaster::LDNS::Packet->new( $name, $type, $class );
 
         $p->qr( 1 );
         $p->aa( 1 );
@@ -249,7 +250,7 @@ sub query {
     # Fake a delegation
     foreach my $fname ( sort keys %{ $self->fake_delegations } ) {
         if ( $name =~ m/([.]|\A)\Q$fname\E\z/xi ) {
-            my $p = Zonemaster::LDNS::Packet->new( $name, $type, $class );
+            $p = Zonemaster::LDNS::Packet->new( $name, $type, $class );
 
             if ( lc( $name ) eq lc( $fname ) and $type eq 'NS' ) {
                 my $name = $self->fake_delegations->{$fname}{authority};
@@ -309,7 +310,8 @@ sub query {
 
     my $idx = $md5->b64digest();
 
-    my ( $in_cache, $p) = $self->cache->get_key( $idx );
+    my $in_cache;
+    ( $in_cache, $p ) = $self->cache->get_key( $idx );
     if ( not $in_cache ) {
         $p = $self->_query( $name, $type, $href );
         $self->cache->set_key( $idx, $p );
