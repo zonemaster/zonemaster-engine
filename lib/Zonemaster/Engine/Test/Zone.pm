@@ -398,7 +398,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     Z01_MNAME_NO_RESPONSE => sub {
         __x    # ZONE:Z01_MNAME_NO_RESPONSE
-          'SOA MNAME name server "{ns}" does not respond to an SOA query.', @_;
+          'No response received from SOA MNAME name server "{ns}" to SOA query.', @_;
     },
     Z01_MNAME_NOT_AUTHORITATIVE => sub {
         __x    # ZONE:Z01_MNAME_NOT_AUTHORITATIVE
