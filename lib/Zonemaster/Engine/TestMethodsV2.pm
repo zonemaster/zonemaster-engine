@@ -608,7 +608,7 @@ sub get_zone_ns_names {
 
 [Internal]
 
-This Method will obtain obtain the address records matching the In-Bailiwick name server names from the given zone.
+This Method will obtain the address records matching the In-Bailiwick name server names from the given zone.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 

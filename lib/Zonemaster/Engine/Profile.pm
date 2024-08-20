@@ -125,7 +125,7 @@ my %profile_properties_details = (
         type    => q{Str},
         test    => sub {
             if ( lc($_[0]) ne q{cymru} and lc($_[0]) ne q{ripe} ) {
-                die "Property asn_db.style has 2 possible values : Cymru or RIPE (case insensitive)\n";
+                die "Property asn_db.style has 2 possible values : Cymru or RIPE (case-insensitive)\n";
             }
             $_[0] = lc($_[0]);
         },
@@ -136,7 +136,7 @@ my %profile_properties_details = (
         test    => sub {
             foreach my $db_style ( keys %{$_[0]} ) {
                 if ( lc($db_style) ne q{cymru} and lc($db_style) ne q{ripe} ) {
-                    die "Property asn_db.sources keys have 2 possible values : Cymru or RIPE (case insensitive)\n";
+                    die "Property asn_db.sources keys have 2 possible values : Cymru or RIPE (case-insensitive)\n";
                 }
                 if ( not scalar @{ ${$_[0]}{$db_style} } ) {
                     die "Property asn_db.sources.$db_style has no items\n";

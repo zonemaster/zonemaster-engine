@@ -138,7 +138,7 @@ v4.6.1 2023-01-31 (public fix version)
  - Updates translations (#1180, #1167)
  - Fixes a bug that made implementation of ADDRESS01 crash (#1181)
  - Fixes a bug that made implementation of NAMESERVER11 create false error
-   when server returned legimate EDNS OPTION-CODE (#1173, #1177)
+   when server returned legitimate EDNS OPTION-CODE (#1173, #1177)
  - Removed unneeded binary dependency from installation instruction for
    Ubuntu and Debian (#1176)
  - Fixes a bug that made implementation of ZONE01 crash when more than
@@ -388,7 +388,7 @@ v3.1.2 2020-05-22
 
 [Fixes]
  - Comparison in Zone10 on SOA owner name was done in case
-   senstive manner which created false ERRORs for some zones
+   sensitive manner which created false ERRORs for some zones
    and depending on the case of input zone name (#734, #737)
 
 
@@ -405,7 +405,7 @@ v3.1.0 2020-04-30
  - Allow installation of new LDNS on Debian 9 (#667)
  - Add more meaningful message for unsupported algorithms in
    DNSSEC test cases (#641, #632)
- - Improved the hanling of "fuzzy" PO files (#640, #598, #600, #596)
+ - Improved the handling of "fuzzy" PO files (#640, #598, #600, #596)
  - Implementation of revised version of DNSSEC10 (#633, #618, #632)
  - Implementation of revised version of DNSSEC01 (#627, #616, #308)
  - Implementation of revised version of DELEGATION05 (#628, #617, #236)
@@ -554,9 +554,9 @@ v3.0.0 2019-01-25 (pre-release version)
        support #462
      - Various #481, #485
  - Fixes
-   - Uppdated formatting of msgid tables #402
+   - Updated formatting of msgid tables #402
    - Fixed broken tests #412
-   - All link references on Github now to zonemaster/zonemaster instead
+   - All link references on GitHub now to zonemaster/zonemaster instead
      of old dotse/zonemaster #406
    - Updated manifest #422
    - Updated travis conf to match supported perl versions (#426, #463)
@@ -628,7 +628,7 @@ v2.0.0
   - Updated translations (#127, #196, #216, #248, #249, #291)
   - Incremented VERSION of internal packages (98868cb)
 - Other changes
-  - Fixed Commonmark rendering for Github (cc7a28a)
+  - Fixed Commonmark rendering for GitHub (cc7a28a)
   - Switch msgfmt implementation to pure Perl (#223, #224)
   - New Unit tests infrastructure. 896 tests kept, 2 removed, will be added back later (#310)
 
@@ -644,7 +644,7 @@ v1.1.0 2017-04-04 Public pre-release
 - Solved Duplicate tag in en.po (#252)
 - Solved Update documentation for logfilters (#221)
 - add Ed25519 (15) and Ed448 (16) algorithms (#290)
-- Solved Not-existent name server doesn't cause a failure (#278)
+- Solved Nonexistent name server doesn't cause a failure (#278)
 
 v1.0.16 2016-12-12
 
@@ -683,7 +683,7 @@ v1.0.14 2016-06-15
  - Would be nice to add a count of name servers #453
  - Partly resolved "JSON/JSON::XS usage and requirement", see issue #165
  - nameserver03 test should not perform network requests, issue #168
- - Locale files are not generated nor installed #173
+ - Locale files are neither generated nor installed #173
  - ASN test should only look at authoritative nameservers at the child, issue #441
  - Modify the "Notice" information when DNSSEC not signed, issue #193
  - Implement updated test case dnssec02, issue #187
@@ -719,7 +719,7 @@ v1.0.8 2015-11-16
 
 v1.0.7 2015-10-01
  - ASN in logs are now arrays
- - Make test witout IPv6 connectivity works, fixes #121
+ - Make test without IPv6 connectivity works, fixes #121
  - Now requires Net::Socket::IP
  - Fixes malformed log messages
 
@@ -762,7 +762,7 @@ v1.0.3 2015-04-07
  - Refer to overview page from Zonemaster page.
  - Fix missed corner case in parent-finding algorithm.
  - CNAME handling accidentally left outside check for packet existence.
- - Clearer message when failling signature checks because GOST support is
+ - Clearer message when failing signature checks because GOST support is
    not present.
 
 v1.0.2 2015-02-24

@@ -55,7 +55,7 @@ if ( ! -d $dest_dir ) {
 if ( ! -w $dest_dir ) {
     print "Directory $dest_dir mode must be changed.\n";
     unless ( chmod (oct(755), $dest_dir) ) {
-        croak "Can not change directory mode.";
+        croak "Cannot change directory mode.";
     }
 }
 
@@ -64,7 +64,7 @@ foreach my $file_details ( @files_details ) {
     if ( -e $fn and ! -w $fn ) {
         print "File $fn mode must be changed.\n";
         unless ( chmod (oct(664), $fn) ) {
-            croak "Can not change file mode.";
+            croak "Cannot change file mode.";
         }
     }
 }
@@ -182,7 +182,7 @@ ${_bold}DESCRIPTION${_normal}
 
         Although these files are part of Zonemaster distribution, they are subject to changes and it is important that Zonemaster use last versions in order to give more accurate tests results.
 
-        That script should be called on a regular ferquency basis to keep synchronization with IANA registries.
+        That script should be called on a regular frequency basis to keep synchronization with IANA registries.
 
 ${_bold}OPTIONS${_normal}
         --help

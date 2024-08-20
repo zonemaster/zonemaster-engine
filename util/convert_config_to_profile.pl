@@ -62,7 +62,7 @@ if ( ! -w $dest_dir ) {
     printf "(\"%s --help\" for help)\n", $scriptName;
     print "Directory $dest_dir mode must be changed.\n";
     unless ( chmod (oct(755), $dest_dir) ) {
-        croak "Can not change directory mode.";
+        croak "Cannot change directory mode.";
     }
 }
 

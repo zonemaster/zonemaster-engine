@@ -202,7 +202,7 @@ Returns true if the packet represents an existing DNS node lacking any records o
 
 =item no_such_name
 
-Returns true if the packet represents a non-existent DNS node.
+Returns true if the packet represents a nonexistent DNS node.
 
 =item is_redirect
 
@@ -228,7 +228,7 @@ C<authority> and C<additional>, only RRs from those sections are returned.
 
 =item answerfrom
 
-Wrapper for the underlying packet method, that replaces udnefined values with the string C<E<lt>unknownE<gt>>.
+Wrapper for the underlying packet method, that replaces undefined values with the string C<E<lt>unknownE<gt>>.
 
 =item TO_JSON
 
