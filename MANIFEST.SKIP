@@ -77,3 +77,6 @@
 # Debian packaging
 ^debian/
 ^.pc/
+
+# Avoid MANIFEST test
+t/manifest.t
