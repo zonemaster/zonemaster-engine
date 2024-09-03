@@ -140,7 +140,7 @@ sub _build_dname {
     my @dname_rrs = $p->get_records( 'DNAME' );
 
     # Remove duplicate DNAME RRs
-    my ( %duplicate_dname_rrs, @original_rrs );
+    my ( %duplicate_dname_rrs, @unique_rrs );
     for my $rr ( @dname_rrs ) {
         my $rr_hash = $rr->class . '/DNAME/' . lc($rr->owner) . '/' . lc($rr->dname);
 
@@ -149,12 +149,12 @@ sub _build_dname {
         }
         else {
             $duplicate_dname_rrs{$rr_hash} = 0;
-            push @original_rrs, $rr;
+            push @unique_rrs, $rr;
         }
     }
 
-    unless ( scalar @original_rrs == scalar @dname_rrs ) {
-        @dname_rrs = @original_rrs;
+    unless ( scalar @unique_rrs == scalar @dname_rrs ) {
+        @dname_rrs = @unique_rrs;
     }
 
     # Break if there are too many records
@@ -162,23 +162,22 @@ sub _build_dname {
         return undef;
     }
 
-    my ( %dnames, %seen_targets, %forbidden_targets );
+    my ( %dnames, %seen_targets );
     for my $rr ( @dname_rrs ) {
-        my $rr_owner = Zonemaster::Engine::DNSName->new( lc( $rr->owner) );
+        my $rr_owner = Zonemaster::Engine::DNSName->new( lc( $rr->owner ) );
         my $rr_target = Zonemaster::Engine::DNSName->new( lc( $rr->dname ) );
 
         # Multiple DNAME records with same owner name
-        if ( exists $forbidden_targets{$rr_owner} ) {
+        if ( exists $dnames{$rr_owner} ) {
             return undef;
         }
 
         # DNAME owner name is target, or target has already been seen in this response, or owner name cannot be a target
-        if ( $rr_owner eq $rr_target or exists $seen_targets{$rr_target} or grep { $_ eq $rr_target } ( keys %forbidden_targets ) ) {
+        if ( $rr_owner eq $rr_target or exists $seen_targets{$rr_target} or exists $dnames{$rr_target} ) {
             return undef;
         }
 
         $seen_targets{$rr_target} = 1;
-        $forbidden_targets{$rr_owner} = 1;
         $dnames{$rr_owner} = $rr_target;
     }
 
@@ -191,8 +190,13 @@ sub _build_dname {
         $dname_counter++;
     }
 
-    # Make sure that the DNAME chain from the RRs is not broken
+    # Make sure that the DNAME chain from the pre-validated DNAME RRset is complete
     if ( $dname_counter != scalar @dname_rrs ) {
+        return undef;
+    }
+
+    # Make sure that the DNAME target is not a subdomain
+    if ( $self->name->is_in_bailiwick( $target ) ) {
         return undef;
     }
 

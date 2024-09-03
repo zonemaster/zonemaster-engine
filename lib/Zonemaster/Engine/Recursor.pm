@@ -167,7 +167,7 @@ sub _resolve_cname {
     my @cname_rrs = $p->get_records( 'CNAME', 'answer' );
 
     # Remove duplicate CNAME RRs
-    my ( %duplicate_cname_rrs, @original_rrs );
+    my ( %duplicate_cname_rrs, @unique_rrs );
     for my $rr ( @cname_rrs ) {
         my $rr_hash = $rr->class . '/CNAME/' . lc($rr->owner) . '/' . lc($rr->cname);
 
@@ -176,16 +176,16 @@ sub _resolve_cname {
         }
         else {
             $duplicate_cname_rrs{$rr_hash} = 0;
-            push @original_rrs, $rr;
+            push @unique_rrs, $rr;
         }
     }
 
-    unless ( scalar @original_rrs == scalar @cname_rrs ) {
+    unless ( scalar @unique_rrs == scalar @cname_rrs ) {
         Zonemaster::Engine->logger->add( CNAME_RECORDS_DUPLICATES => {
                 records => join(';', map { "$_ => $duplicate_cname_rrs{$_}" if $duplicate_cname_rrs{$_} > 0 } keys %duplicate_cname_rrs )
             }
         );
-        @cname_rrs = @original_rrs;
+        @cname_rrs = @unique_rrs;
     }
 
     # Break if there are too many records
@@ -206,7 +206,7 @@ sub _resolve_cname {
         }
 
         # CNAME owner name is target, or target has already been seen in this response, or owner name cannot be a target
-        if ( lc( $rr_owner ) eq lc( $rr_target ) or exists $seen_targets{lc( $rr_target )} or grep { $_ eq lc( $rr_target ) } ( keys %forbidden_targets ) ) {
+        if ( lc( $rr_owner ) eq lc( $rr_target ) or exists $seen_targets{lc( $rr_target )} or exists $forbidden_targets{lc( $rr_target )} ) {
             Zonemaster::Engine->logger->add( CNAME_LOOP_INNER => { name => join( ';', map { $_->owner } @cname_rrs ), target => join( ';', map { $_->cname } @cname_rrs ) } );
             return ( undef, $state );
         }
