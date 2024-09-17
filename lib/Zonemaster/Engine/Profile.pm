@@ -107,20 +107,6 @@ my %profile_properties_details = (
     q{no_network} => {
         type    => q{Bool}
     },
-    q{asnroots} => {
-        type    => q{ArrayRef},
-        test    => sub {
-            foreach my $ndd ( @{$_[0]} ) {
-                die "Property asnroots has a NULL item\n" if not defined $ndd;
-                die "Property asnroots has a non scalar item\n" if not defined ref($ndd);
-                die "Property asnroots has an item too long\n" if length($ndd) > 255;
-                foreach my $label ( split /[.]/, $ndd ) {
-                    die "Property asnroots has a non domain name item\n" if $label !~ /^[a-z0-9](?:[-a-z0-9]{0,61}[a-z0-9])?$/;
-                }
-            }
-        },
-        default => ["asnlookup.zonemaster.net"],
-    },
     q{asn_db.style} => {
         type    => q{Str},
         test    => sub {
@@ -734,25 +720,22 @@ A boolean. If true, network traffic is forbidden. Default false.
 Use when you want to be sure that any data is only taken from a preloaded
 cache.
 
-=head2 asnroots (DEPRECATED)
-
-An arrayref of domain names. Default C<["asnlookup.zonemaster.net"]>.
-
-The domains will be assumed to be Cymru-style AS lookup zones.
-Only the first name in the list will be used.
-
 =head2 asn_db.style
 
-A string that is either C<"Cymru"> or C<"RIPE">. Defines which method will
-be used for AS lookup zones.
+A string that is either C<"Cymru"> or C<"RIPE"> (case-insensitive).
+
+Defines which service will be used for AS lookup zones.
+
 Default C<"Cymru">.
 
 =head2 asn_db.sources
 
-An arrayref of domain names when asn_db.style is set to C<"Cymru"> or whois
-servers when asn_db.style is set to C<"RIPE">. Only the first item
-in the list will be used.
-Default C<"asnlookup.zonemaster.net">.
+A hash of arrayrefs of strings. The currently supported keys are C<"Cymru"> or C<"RIPE"> (case-insensitive).
+
+For C<"Cymru">, the strings are domain names. For C<"RIPE">, they are WHOIS servers. Normally only the first
+item in the list will be used, the rest are backups in case the previous ones didn't work.
+
+Default C<{Cymru: [ "asnlookup.zonemaster.net", "asn.cymru.com" ], RIPE: [ "riswhois.ripe.net" ]}>.
 
 =head2 cache (EXPERIMENTAL)
 

@@ -2,7 +2,7 @@
     "asn_db" : {
         "style" : "Cymru",
         "sources" : {
-            "Cymru" : [ "asnlookup.zonemaster.net" ],
+            "Cymru" : [ "asnlookup.zonemaster.net", "asn.cymru.com" ],
             "RIPE" : [ "riswhois.ripe.net" ]
         }
     },
@@ -420,6 +420,7 @@
             "TEST_CASE_START" : "DEBUG"
         },
         "SYSTEM" : {
+            "ASN_LOOKUP_SOURCE": "DEBUG",
             "CACHE_CREATED" : "DEBUG2",
             "CACHE_FETCHED" : "DEBUG2",
             "CACHED_RETURN" : "DEBUG3",
