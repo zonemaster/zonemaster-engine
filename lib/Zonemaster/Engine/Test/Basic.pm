@@ -544,7 +544,6 @@ sub basic01 {
     my @all_labels = ( '.' );
     my @remaining_labels = ( '.' );
 
-    ALL_SERVERS:
     while ( my $zone_name = shift @remaining_labels ) {
         my @remaining_servers = @{ $all_servers{$zone_name} };
 
@@ -599,7 +598,7 @@ sub basic01 {
             }
 
             foreach my $ns_name ( keys %rrs_ns ) {
-                unless ( scalar @{ $rrs_ns{$ns_name} } > 0 ) {
+                unless ( scalar @{ $rrs_ns{$ns_name} } ) {
                     my $p_a = Zonemaster::Engine::Recursor->recurse( $ns_name, q{A} );
 
                     if ( $p_a and $p_a->rcode eq 'NOERROR' ) {
@@ -627,9 +626,23 @@ sub basic01 {
 
             my $intermediate_query_name = name( $zone_name );
             my $loop_zone_name = $zone_name;
+            my $loop_counter = 0;
 
             LOOP:
             while() {
+                $loop_counter += 1;
+                if ( $loop_counter >= 1000 ) {
+                    Zonemaster::Engine->logger->add( LOOP_PROTECTION => {
+                        caller => 'Zonemaster::Engine::Test::Basic->basic01',
+                        child_zone_name => $zone->name,
+                        name => $loop_zone_name,
+                        intermediate_query_name => $intermediate_query_name
+                      }
+                    );
+
+                    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
+                }
+
                 last if scalar @{ $intermediate_query_name->labels } >= scalar @{ $zone->name->labels };
                 $intermediate_query_name = name( @{ $zone->name->labels }[ ( scalar @{ $zone->name->labels } - scalar @{ $intermediate_query_name->labels } ) - 1 ] . '.' . $intermediate_query_name->string );
 

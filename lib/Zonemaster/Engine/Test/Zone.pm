@@ -1153,13 +1153,17 @@ sub zone07 {
         my $soa_mname = $soa->mname;
         $soa_mname =~ s/[.]\z//smx;
         my $addresses_nb = 0;
+
         foreach my $address_type ( q{A}, q{AAAA} ) {
             my $p_mname = Zonemaster::Engine::Recursor->recurse( $soa_mname, $address_type );
             if ( $p_mname ) {
-                if ( $p_mname->has_rrs_of_type_for_name( $address_type, $soa_mname ) ) {
+                my $final_name = name( ($p_mname->question)[0]->owner ); # In case CNAME was followed during the recursive lookup
+
+                if ( $p_mname->has_rrs_of_type_for_name( $address_type, $soa_mname ) or $p_mname->has_rrs_of_type_for_name( $address_type, $final_name ) ) {
                     $addresses_nb++;
                 }
-                if ( $p_mname->has_rrs_of_type_for_name( q{CNAME}, $soa_mname ) ) {
+
+                if ( $p_mname->has_rrs_of_type_for_name( q{CNAME}, $soa_mname ) or $final_name ne $soa_mname ) {
                     push @results,
                       _emit_log(
                         MNAME_IS_CNAME => {
@@ -1177,6 +1181,7 @@ sub zone07 {
                 }
             } ## end if ( $p_mname )
         } ## end foreach my $address_type ( ...)
+
         if ( not $addresses_nb ) {
             push @results,
               _emit_log(

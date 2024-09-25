@@ -64,7 +64,7 @@ for my $packet ( @packets ) {
 =head1 DESCRIPTION
 
 B<data2dig> exports saved Zonemaster::Engine cache files to human readable
-format as cronologically ordered response packets in dig format.
+format as chronologically ordered response packets in dig format.
 
 
 =head1 SUBROUTINES

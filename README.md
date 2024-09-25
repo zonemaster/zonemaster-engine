@@ -50,7 +50,7 @@ For participation, contact and bug reporting, please see
 ## License
 
 This is free software under a 2-clause BSD license. The full text of the license can
-be found in the [LICENSE](LICENSE) file included in this respository.
+be found in the [LICENSE](LICENSE) file included in this repository.
 
 
 [CPAN site]:                                      https://metacpan.org/pod/Zonemaster::Engine

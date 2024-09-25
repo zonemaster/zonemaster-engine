@@ -150,7 +150,7 @@ sub initialize {
 # Get the program's underlying LC_MESSAGES and make sure it can be effectively
 # updated down the line.
 #
-# If the underlying LC_MESSAGES is invalid, it attempts to second guess Perls
+# If the underlying LC_MESSAGES is invalid, it attempts to second guess Perl's
 # fallback locale.
 #
 # Side effects:
