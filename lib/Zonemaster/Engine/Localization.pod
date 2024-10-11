@@ -1,6 +1,8 @@
-=head1 TRANSLATION
+=head1 NAME
 
-=head2 Introduction
+Zonemaster::Engine::Localization - On L<localization|https://en.wikipedia.org/wiki/Internationalization_and_localization>.
+
+=head1 DESCRIPTION
 
 The translation system in Zonemaster is a two-step process, where internal
 message tags are first replaced by English strings with argument
@@ -11,41 +13,17 @@ All translation files live in the F<share> directory in the
 L<Zonemaster::Engine> source directory and all commands described here are
 executed from that directory.
 
-=head2 For translators
+=head1 FOR TRANSLATORS
 
 Instructions for translators can be found at
 L<https://github.com/zonemaster/zonemaster/blob/develop/docs/internal/maintenance/Instructions-for-translators.md>
 
-=head2 For developers of Zonemaster test modules
+=head1 FOR DEVELOPERS
 
-The test module code should produce log messages with message tags, as documented
-elsewhere. These tags will be used for translation to human language, for
-determining the severity of the event logged and to make the events easily used
-by other software.
+Documentation for developers of Zonemaster test modules can be found at
+L<Zonemaster::Engine::TestModuleInterface/Internationalization>.
 
-Each test module must also have a method named C<tag_descriptions()>.
-This method must return a reference to a hash whose entries are expected to look
-like this, where C<MESSAGE_TAG> is a message, C<TEST_MODULE> is the name of a
-test module tag and C<"Hello, {name}!"> is a message id:
-
-    MESSAGE_TAG => sub {
-        __x    # TEST_MODULE:MESSAGE_TAG
-          "Hello, {name}!", @_;
-    },
-
-A number of things are important here.
-Keys in the hashref are message tags and values are coderefs.
-The coderef calls Locale::TextDomain::__x() with a Perl brace format string
-(a.k.a. message id) and passes along its own @_).
-The coderef propagates the return value of Locale::TextDomain::__x().
-The line immediately before the format string contains a comment consisting of
-the module name, a colon and the message tag.
-
-The format strings themselves, the comments and the line numbers of the __x
-calls are used by the gettext tooling when updating the PO files with new
-message ids and old message strings.
-
-=head2 For Zonemaster package maintainers
+=head1 FOR MAINTAINERS
 
 In order to make a new translation usable, it must be compiled to C<mo> format
 and installed. The first step needs the C<msgfmt> program from the GNU gettext

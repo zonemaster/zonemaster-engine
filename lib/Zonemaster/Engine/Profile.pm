@@ -869,7 +869,7 @@ An arrayref of names of implemented test cases (in all lower-case) as listed in 
 L<test case specifications|https://github.com/zonemaster/zonemaster/tree/master/docs/specifications/tests/ImplementedTestCases.md>.
 Default is an arrayref listing all the test cases.
 
-Specifies which test cases can be run by the testing suite.
+Specifies which test cases can be run by the test harness.
 
 =head2 test_cases_vars.dnssec04.REMAINING_SHORT
 

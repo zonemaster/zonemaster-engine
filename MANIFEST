@@ -1,8 +1,6 @@
 Changes
 CONTRIBUTING.md
-docs/Implementing_Tests.pod
 docs/Translation-translators.md
-docs/Translation.pod
 inc/Module/Install.pm
 inc/Module/Install/Base.pm
 inc/Module/Install/Can.pm
@@ -19,6 +17,7 @@ lib/Zonemaster/Engine/ASNLookup.pm
 lib/Zonemaster/Engine/Constants.pm
 lib/Zonemaster/Engine/DNSName.pm
 lib/Zonemaster/Engine/Exception.pm
+lib/Zonemaster/Engine/Localization.pod
 lib/Zonemaster/Engine/Logger.pm
 lib/Zonemaster/Engine/Logger/Entry.pm
 lib/Zonemaster/Engine/Nameserver.pm
@@ -44,6 +43,7 @@ lib/Zonemaster/Engine/Test/Syntax.pm
 lib/Zonemaster/Engine/Test/Zone.pm
 lib/Zonemaster/Engine/TestMethods.pm
 lib/Zonemaster/Engine/TestMethodsV2.pm
+lib/Zonemaster/Engine/TestModuleInterface.pod
 lib/Zonemaster/Engine/Translator.pm
 lib/Zonemaster/Engine/Util.pm
 lib/Zonemaster/Engine/Validation.pm
