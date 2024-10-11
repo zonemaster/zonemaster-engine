@@ -33,7 +33,7 @@ Zonemaster::Engine::Normalization - utility functions for names normalization
 
 
 our @EXPORT      = qw[ normalize_name ];
-our @EXPORT_OK   = qw[ normalize_name normalize_label ];
+our @EXPORT_OK   = qw[ normalize_name normalize_label trim_space ];
 
 Readonly my $ASCII => qr/^[[:ascii:]]+$/;
 Readonly my $VALID_ASCII => qr(^[A-Za-z0-9/_-]+$);
@@ -128,12 +128,28 @@ sub normalize_label {
     return \@messages, $alabel;
 }
 
+=item trim_space($str)
+
+Trim leading and trailing whitespace.
+
+Implements the space trimming part of L<normalization document|https://github.com/zonemaster/zonemaster/blob/master/docs/specifications/tests/RequirementsAndNormalizationOfDomainNames.md>.
+
+Returns a string.
+
+=cut
+
+sub trim_space {
+    my ( $str ) = @_;
+
+    return $str =~ s/^${$WHITE_SPACES_RE}+|${WHITE_SPACES_RE}+$//gr;
+}
+
 =item normalize_name($name)
 
 Normalize a domain name.
 
-
-The normalization process is detailed in the L<normalization document|https://github.com/zonemaster/zonemaster/blob/master/docs/specifications/tests/RequirementsAndNormalizationOfDomainNames.md>.
+Implements the normalization process, except the space trimming part, described
+in L<normalization document|https://github.com/zonemaster/zonemaster/blob/master/docs/specifications/tests/RequirementsAndNormalizationOfDomainNames.md>.
 
 Returns a tuple C<($errors: ArrayRef[Zonemaster::Engine::Normalization::Error], $name: String)>.
 
@@ -145,9 +161,6 @@ an empty error array is returned.
 sub normalize_name {
     my ( $uname ) = @_;
     my @messages;
-
-    $uname =~ s/^${$WHITE_SPACES_RE}+//;
-    $uname =~ s/${WHITE_SPACES_RE}+$//;
 
     if ( length($uname) == 0 ) {
         push @messages, Zonemaster::Engine::Normalization::Error->new(EMPTY_DOMAIN_NAME => {});
