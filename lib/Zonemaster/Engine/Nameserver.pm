@@ -523,9 +523,18 @@ sub save {
 
     my $old = POSIX::setlocale( POSIX::LC_ALL, 'C' );
     my $json = JSON::PP->new->allow_blessed->convert_blessed;
+    $json = $json->canonical( 1 );
+
     open my $fh, '>', $filename or die "Cache save failed: $!";
-    foreach my $name ( keys %object_cache ) {
-        foreach my $addr ( keys %{ $object_cache{$name} } ) {
+    foreach my $name ( sort keys %object_cache ) {
+        foreach my $addr ( sort keys %{ $object_cache{$name} } ) {
+
+            # set ID field of packets to 0
+            my %data = %{ $object_cache{$name}{$addr}->cache->data };
+            foreach my $key ( keys %data ){
+                $data{$key}->packet->id( 0 ) if defined( $data{$key} );
+            }
+
             say $fh "$name $addr " . $json->encode( $object_cache{$name}{$addr}->cache->data );
         }
     }
