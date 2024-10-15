@@ -141,7 +141,7 @@ sub add_fake_delegation {
             if (   !@{ $href->{$name} }
                 && !$class->zone( $domain )->is_in_zone( $name ) )
             {
-                my @ips = Zonemaster::LDNS->new->name2addr( $name );
+                my @ips = map { $_->ip } Zonemaster::Engine::Recursor->get_addresses_for( $name );
                 push @{ $href->{$name} }, @ips;
                 if ( !@ips ) {
                     $incomplete_delegation = 1;
