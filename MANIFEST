@@ -1,7 +1,6 @@
 Changes
 CONTRIBUTING.md
 docs/Implementing_Tests.pod
-docs/Translation-translators.md
 docs/Translation.pod
 inc/Module/Install.pm
 inc/Module/Install/Base.pm
