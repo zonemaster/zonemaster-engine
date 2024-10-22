@@ -273,7 +273,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     NO_RESPONSE => sub {
         __x    # DELEGATION:NO_RESPONSE
-          "Nameserver {ns} did not respond.", @_;
+          'Nameserver {ns} did not respond to a query for name {query_name} and type {rrtype}.', @_;
     },
     NOT_ENOUGH_IPV4_NS_CHILD => sub {
         __x    # DELEGATION:NOT_ENOUGH_IPV4_NS_CHILD
@@ -373,7 +373,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     UNEXPECTED_RCODE => sub {
         __x    # DELEGATION:UNEXPECTED_RCODE
-          'Nameserver {ns} answered query with an unexpected rcode ({rcode}).', @_;
+          'Nameserver {ns} answered query for name {query_name} and type {rrtype} with RCODE {rcode}.', @_;
     },
 
 );
@@ -925,8 +925,9 @@ sub delegation05 {
             for my $key ( sort keys %nss ) {
                 my $ns = $nss{$key};
                 my $ns_args = {
-                    ns     => $ns->string,
-                    rrtype => q{A},
+                    ns         => $ns->string,
+                    query_name => $local_nsname,
+                    rrtype     => q{A},
                 };
 
                 if ( _ip_disabled_message( \@results, $ns, q{A} ) ) {
