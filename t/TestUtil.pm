@@ -83,13 +83,20 @@ as the data for the --ns option in I<zonemaster-cli>.
 
 =item perform_testcase_testing()
 
-    perform_testcase_testing( $test_case, $test_module, $aref_alltags, %subtests );
+    perform_testcase_testing( $test_case, $test_module, $aref_alltags, $href_subtests, $single_scenario, $disabled_scenarios );
 
 This method loads unit test data (test case name, test module name, array of all message tags and test scenarios) and,
 after some data checks and if the test scenario is testable, it runs the specified test case and checks for the presence
 (or absence) of specific message tags for each specified test scenario.
 
-Takes a string (test case name), a string (test module name) and a hash - the keys of which are scenario names
+If C<$single_scenario> has been set in the call to the name of a scenario then only that
+scenario will be run, and it will always be run even if it has been set as not testable.
+
+If C<$disabled_scenario> has been set in the call to the name of a scenario or to a
+comma separated list of scenarios then that or those scenarios will be
+temporarily disabled.
+
+Takes a string (test case name), a string (test module name) and a reference to a hash - the keys of which are scenario names
 (in all uppercase), and their corresponding values are an array of:
 
 =over
@@ -420,9 +427,17 @@ sub perform_methodsv2_testing {
 
 
 sub perform_testcase_testing {
-    my ( $test_case, $test_module, $aref_alltags, %subtests ) = @_;
+    my ( $test_case, $test_module, $aref_alltags, $href_subtests, $single_scenario, $disabled_scenarios ) = @_;
+    my %subtests = %$href_subtests;
+
+    $single_scenario = uc( $single_scenario ) if $single_scenario;
+    my @disabled_scenarios = map {uc} split(/, */, $disabled_scenarios) if $disabled_scenarios;
 
     my @untested_scenarios = ();
+
+    if ( $single_scenario and not grep /^$single_scenario$/, keys %subtests ) {
+        croak "Scenario $single_scenario does not exist";
+    }
 
     if ( ref( $aref_alltags ) ne 'ARRAY' ) {
         croak 'All tags array variable must be an array ref'
@@ -433,6 +448,12 @@ sub perform_testcase_testing {
     }
 
     for my $scenario ( sort ( keys %subtests ) ) {
+        next if $single_scenario and $scenario ne $single_scenario;
+        if ( @disabled_scenarios and grep /^$scenario$/, @disabled_scenarios ) {
+            push @untested_scenarios, $scenario;
+            next;
+        }
+
         if ( ref( $scenario ) ne '' or $scenario ne uc($scenario) ) {
             croak "Scenario $scenario: Key must (i) not be a reference and (ii) be in all uppercase";
         }
@@ -464,6 +485,8 @@ sub perform_testcase_testing {
         if ( $testable != 1 and $testable != 0 ) {
             croak "Scenario $scenario: Value of testable must be 0 or 1";
         }
+
+        $testable = 1 if $single_scenario and $scenario eq $single_scenario;
 
         if ( ref( $zone_name ) ne '' ) {
             croak "Scenario $scenario: Type of zone name must not be a reference";
