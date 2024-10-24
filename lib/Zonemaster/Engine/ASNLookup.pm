@@ -108,14 +108,20 @@ sub _cymru_asn_lookup {
                                     }
                                 }
 
-                                return \@asns, Net::IP::XS->new( $fields[1] ), $str, q{AS_FOUND} if @fields and Net::IP::XS->new( $fields[1] )->overlaps( $ip );
+                                if ( @fields ) {
+                                    if ( Net::IP::XS->new( $fields[1] )->overlaps( $ip ) ) {
+                                        return \@asns, Net::IP::XS->new( $fields[1] ), $str, q{AS_FOUND}
+                                    }
+                                }
+                                else {
+                                    return \@asns, undef, q{}, q{EMPTY_ASN_SET};
+                                }
                             }
-                        }
-                        else {
-                            return \@asns, undef, q{}, q{EMPTY_ASN_SET};
+
+                            return \@asns, undef, q{}, q{ERROR_ASN_DATABASE};
                         }
 
-                        return \@asns, undef, q{}, q{ERROR_ASN_DATABASE};
+                        return \@asns, undef, q{}, q{EMPTY_ASN_SET};
                     }
                 }
 
