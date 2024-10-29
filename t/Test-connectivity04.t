@@ -104,14 +104,9 @@ my %subtests = (
         [],
         [],
     ],
-    'ERROR-PREFIX-DATABASE-3' => [
-        0,
-        q(error-prefix-database-3.connectivity04.xa),
-        [ qw(CN04_ERROR_PREFIX_DATABASE) ],
-        undef,
-        [],
-        [],
-    ],
+    #
+    # 'ERROR-PREFIX-DATABASE-3' defined in Test-connectivity04_2.t
+    #
     'ERROR-PREFIX-DATABASE-6' => [
         1,
         q(error-prefix-database-6.connectivity04.xa),
