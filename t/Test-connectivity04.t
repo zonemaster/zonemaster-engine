@@ -110,7 +110,7 @@ my %subtests = (
     'ERROR-PREFIX-DATABASE-6' => [
         1,
         q(error-prefix-database-6.connectivity04.xa),
-        [ qw(CN04_IPV4_DIFFERENT_PREFIX CN04_IPV6_DIFFERENT_PREFIX) ],
+        [ qw(CN04_IPV4_DIFFERENT_PREFIX CN04_IPV6_DIFFERENT_PREFIX CN04_ERROR_PREFIX_DATABASE) ],
         undef,
         [],
         [],

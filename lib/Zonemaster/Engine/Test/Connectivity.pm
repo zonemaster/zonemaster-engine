@@ -813,8 +813,8 @@ sub connectivity04 {
     foreach my $ns ( @nss ) {
         my $ip = $ns->address;
 
-        next if exists $ip_already_processed{$ip->short};
-        $ip_already_processed{$ip->short} = 1;
+        next if exists $ip_already_processed{$ip->version}{$ip->short};
+        $ip_already_processed{$ip->version}{$ip->short} = 1;
 
         my ( $asnref, $prefix, $raw, $ret_code ) = Zonemaster::Engine::ASNLookup->get_with_prefix( $ip );
 
@@ -892,7 +892,8 @@ sub connectivity04 {
               );
         }
 
-        push @results, _emit_log( "CN04_IPV${ip_version}_SINGLE_PREFIX" => {} ) if scalar keys %{ $prefixes{$ip_version} } == 1;
+        push @results, _emit_log( "CN04_IPV${ip_version}_SINGLE_PREFIX" => {} ) if scalar keys %{ $prefixes{$ip_version} } == 1
+            and scalar @{ (values %{ $prefixes{$ip_version} })[0] } == scalar keys %{ $ip_already_processed{$ip_version} };
     }
 
     return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );

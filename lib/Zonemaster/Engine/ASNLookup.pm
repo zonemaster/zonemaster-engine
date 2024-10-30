@@ -97,6 +97,7 @@ sub _cymru_asn_lookup {
                                     my @_fields = split( /[ ][|][ ]?/x, $_str );
 
                                     next if scalar @_fields <= 1;
+                                    return \@asns, undef, q{}, q{ERROR_ASN_DATABASE} unless Net::IP::XS->new( $_fields[1] )->overlaps( $ip );
 
                                     my @_asns   = split( /\s+/x,        $_fields[0] );
                                     my $_prefix_length = ($_fields[1] =~ m!^.*[/](.*)!x)[0];
