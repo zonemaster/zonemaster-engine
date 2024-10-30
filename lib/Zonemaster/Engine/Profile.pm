@@ -737,9 +737,9 @@ item in the list will be used, the rest are backups in case the previous ones di
 
 Default C<{Cymru: [ "asnlookup.zonemaster.net", "asn.cymru.com" ], RIPE: [ "riswhois.ripe.net" ]}>.
 
-=head2 cache (EXPERIMENTAL)
+=head2 cache
 
-A hash of hashes. The currently supported keys are C<"redis">.
+A hash of hashes. The currently supported key is C<"redis">.
 Default C<{}>.
 
 =head3 redis

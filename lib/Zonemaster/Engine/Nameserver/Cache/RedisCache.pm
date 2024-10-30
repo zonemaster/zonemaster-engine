@@ -135,7 +135,7 @@ Zonemaster::Engine::Nameserver::Cache::RedisCache - global shared caches for nam
 
 =head1 SYNOPSIS
 
-    This is an EXPERIMENTAL caching layer and might change in the future.
+    This is a global caching layer.
 
 =head1 ATTRIBUTES
 
