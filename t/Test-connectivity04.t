@@ -25,7 +25,7 @@ my @all_tags = qw(CN04_EMPTY_PREFIX_SET
                   CN04_IPV6_SAME_PREFIX
                   CN04_IPV6_SINGLE_PREFIX);
 
-# Specific hint file (test-zone-data/Connectivity-TP/hintfile.zone)
+# Specific hint file (https://github.com/zonemaster/zonemaster/blob/master/test-zone-data/Connectivity-TP/connectivity04/hintfile.zone)
 Zonemaster::Engine::Recursor->remove_fake_addresses( '.' );
 Zonemaster::Engine::Recursor->add_fake_addresses( '.',
     { 'root-ns1.xa' => [ '127.13.4.23', 'fda1:b2:c3::127:13:4:23' ],
