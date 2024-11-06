@@ -105,7 +105,7 @@ my %subtests = (
         [],
     ],
     #
-    # 'ERROR-PREFIX-DATABASE-3' defined in Test-connectivity04_2.t
+    # 'ERROR-PREFIX-DATABASE-3' defined in Test-connectivity04-A.t
     #
     'ERROR-PREFIX-DATABASE-6' => [
         1,
