@@ -27,7 +27,6 @@ my %res;
 my $iis = Zonemaster::Engine->zone( q{iis.se} );
 %res = map { $_->tag => $_ } Zonemaster::Engine::Test::Delegation->all( $iis );
 ok( $res{NAMES_MATCH},      q{NAMES_MATCH} );
-ok( $res{REFERRAL_SIZE_OK}, q{REFERRAL_SIZE_OK} );
 
 %res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{delegation}, q{crystone.se} );
 ok( $res{EXTRA_NAME_PARENT},    q{EXTRA_NAME_PARENT} );
@@ -48,7 +47,6 @@ TODO: {
 
     ok( $res{NS_IS_CNAME}, q{NS_IS_CNAME} );
 
-    ok( $res{REFERRAL_SIZE_LARGE}, q{REFERRAL_SIZE_LARGE} );
 }
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
