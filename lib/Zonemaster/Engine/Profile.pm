@@ -750,7 +750,8 @@ Specifies the address of the Redis server used to perform global caching
 (C<cache.redis.server>) and an optional expire time (C<cache.redis.expire>).
 
 C<cache.redis.server> must be a string in the form C<host:port>.
-C<cache.redis.expire> must be a non-negative integer and defines a time in seconds. Default 5 seconds.
+C<cache.redis.expire> must be a non-negative integer and defines a time in seconds.
+Default is 300 seconds.
 
 =head2 logfilter
 
