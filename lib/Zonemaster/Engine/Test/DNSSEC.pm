@@ -4007,14 +4007,14 @@ sub dnssec15 {
         my $inconsistent_rrset = 0;
         for my $ns_ip ( keys %cds_rrsets ) {
             if ( $first ) {
-                $first_rrlist = scalar @{ $cds_rrsets{ $ns_ip } } ? Zonemaster::LDNS::RRList->new( $cds_rrsets{ $ns_ip } ) : undef;
+                $first_rrlist = Zonemaster::LDNS::RRList->new( $cds_rrsets{ $ns_ip } );
                 $first = 0;
                 next;
             }
 
-            my $rrlist = scalar @{ $cds_rrsets{ $ns_ip } } ? Zonemaster::LDNS::RRList->new( $cds_rrsets{ $ns_ip } ) : undef;
+            my $rrlist = Zonemaster::LDNS::RRList->new( $cds_rrsets{ $ns_ip } );
 
-            if ( ( $rrlist and not $first_rrlist ) or ( not $rrlist and $first_rrlist ) or ( $rrlist and $first_rrlist and $rrlist ne $first_rrlist ) ) {
+            if ( $rrlist ne $first_rrlist ) {
                 $inconsistent_rrset = 1;
                 last;
             }
@@ -4026,14 +4026,14 @@ sub dnssec15 {
         $inconsistent_rrset = 0;
         for my $ns_ip ( keys %cdnskey_rrsets ) {
             if ( $first ) {
-                $first_rrlist = scalar @{ $cdnskey_rrsets{ $ns_ip } } ? Zonemaster::LDNS::RRList->new( $cdnskey_rrsets{ $ns_ip } ) : undef;
+                $first_rrlist = Zonemaster::LDNS::RRList->new( $cdnskey_rrsets{ $ns_ip } );
                 $first = 0;
                 next;
             }
 
-            my $rrlist = scalar @{ $cdnskey_rrsets{ $ns_ip } } ? Zonemaster::LDNS::RRList->new( $cdnskey_rrsets{ $ns_ip } ) : undef;
+            my $rrlist = Zonemaster::LDNS::RRList->new( $cdnskey_rrsets{ $ns_ip } );
 
-            if ( ( $rrlist and not $first_rrlist ) or ( not $rrlist and $first_rrlist ) or ( $rrlist and $first_rrlist and $rrlist ne $first_rrlist ) ) {
+            if ( $rrlist ne $first_rrlist ) {
                 $inconsistent_rrset = 1;
                 last;
             }
