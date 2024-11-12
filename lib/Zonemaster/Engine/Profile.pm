@@ -737,9 +737,9 @@ item in the list will be used, the rest are backups in case the previous ones di
 
 Default C<{Cymru: [ "asnlookup.zonemaster.net", "asn.cymru.com" ], RIPE: [ "riswhois.ripe.net" ]}>.
 
-=head2 cache (EXPERIMENTAL)
+=head2 cache
 
-A hash of hashes. The currently supported keys are C<"redis">.
+A hash of hashes. The currently supported key is C<"redis">.
 Default C<{}>.
 
 =head3 redis
@@ -750,7 +750,8 @@ Specifies the address of the Redis server used to perform global caching
 (C<cache.redis.server>) and an optional expire time (C<cache.redis.expire>).
 
 C<cache.redis.server> must be a string in the form C<host:port>.
-C<cache.redis.expire> must be a non-negative integer and defines a time in seconds. Default 5 seconds.
+C<cache.redis.expire> must be a non-negative integer and defines a time in seconds.
+Default is 300 seconds.
 
 =head2 logfilter
 

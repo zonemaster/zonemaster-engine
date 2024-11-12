@@ -66,8 +66,14 @@ sub set_key {
     my ( $self, $hash, $packet ) = @_;
     my $key = "ns:" . $self->address . ":" . $hash;
 
+    # Never cache with answer, NXDOMAIN or NODATA longer than this.
     my $redis_expire = $self->{config}->{expire};
-    my $ttl = $redis_expire;
+
+    # If no response or response without answer or SOA in authority,
+    # cache this many seconds (e.g. SERVFAIL or REFUSED).
+    my $ttl_no_response = 1200;
+
+    my $ttl;
 
     $self->data->{$hash} = $packet;
     if ( defined $packet ) {
@@ -90,12 +96,18 @@ sub set_key {
                 }
             }
         }
-        $ttl = $ttl < $redis_expire ? $ttl : $redis_expire;
-        # Redis requires cache time to be greater than 0.
-        $ttl = 1 if $ttl == 0;
+
+        if ( defined( $ttl ) ) {
+            $ttl = $ttl < $redis_expire ? $ttl : $redis_expire;
+        } else {
+            $ttl = $ttl_no_response;
+        }
+
+        # Redis requires cache time to be greater than 0 to be stored.
+        return if $ttl == 0;
         $self->redis->set( $key, $msg, 'EX', $ttl );
     } else {
-        $self->redis->set( $key, '', 'EX', $ttl );
+        $self->redis->set( $key, '', 'EX', $ttl_no_response );
     }
 }
 
@@ -135,7 +147,7 @@ Zonemaster::Engine::Nameserver::Cache::RedisCache - global shared caches for nam
 
 =head1 SYNOPSIS
 
-    This is an EXPERIMENTAL caching layer and might change in the future.
+    This is a global caching layer.
 
 =head1 ATTRIBUTES
 
@@ -158,5 +170,13 @@ Store C<$packet> with key C<$idx>.
 Retrieve C<$packet> (data) at key C<$idx>.
 
 =back
+
+Cache time is the shortest time of TTL in the DNS packet
+and cache.redis.expire in the profile. Default value of
+cache.redis.expire is 300 seconds.
+
+If there is no TTL value to be used in the DNS packet
+(e.g. SERVFAIL or no response), then cache time is fixed
+to 1200 seconds instead.
 
 =cut
