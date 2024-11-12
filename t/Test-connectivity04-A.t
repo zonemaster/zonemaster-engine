@@ -8,34 +8,28 @@ use lib dirname( rel2abs( $0 ) );
 
 BEGIN {
     use_ok( q{Zonemaster::Engine} );
-    use_ok( q{Zonemaster::Engine::Nameserver} );
-    use_ok( q{Zonemaster::Engine::Test::Zone} );
+    use_ok( q{Zonemaster::Engine::Test::Connectivity} );
     use_ok( q{TestUtil}, qw( perform_testcase_testing ) );
 }
 
 ###########
-# zone09 - https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/test-zones/Zone-TP/zone09.md
-my $test_module = q{Zone};
-my $test_case = 'zone09';
-my @all_tags = qw(Z09_INCONSISTENT_MX
-                  Z09_INCONSISTENT_MX_DATA
-                  Z09_MISSING_MAIL_TARGET
-                  Z09_MX_DATA
-                  Z09_MX_FOUND
-                  Z09_NON_AUTH_MX_RESPONSE
-                  Z09_NO_MX_FOUND
-                  Z09_NO_RESPONSE_MX_QUERY
-                  Z09_NULL_MX_NON_ZERO_PREF
-                  Z09_NULL_MX_WITH_OTHER_MX
-                  Z09_ROOT_EMAIL_DOMAIN
-                  Z09_TLD_EMAIL_DOMAIN
-                  Z09_UNEXPECTED_RCODE_MX);
+# connectivity04 - https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/test-zones/Connectivity-TP/connectivity04.md
+my $test_module = 'Connectivity';
+my $test_case = 'connectivity04';
+my @all_tags = qw(CN04_EMPTY_PREFIX_SET
+                  CN04_ERROR_PREFIX_DATABASE
+                  CN04_IPV4_DIFFERENT_PREFIX
+                  CN04_IPV4_SAME_PREFIX
+                  CN04_IPV4_SINGLE_PREFIX
+                  CN04_IPV6_DIFFERENT_PREFIX
+                  CN04_IPV6_SAME_PREFIX
+                  CN04_IPV6_SINGLE_PREFIX);
 
-# Test case specific hints file (test-zone-data/Zone-TP/zone09/hintfile-root-email-domain)
+# Specific hint file (test-zone-data/Connectivity-TP/hintfile.zone)
 Zonemaster::Engine::Recursor->remove_fake_addresses( '.' );
 Zonemaster::Engine::Recursor->add_fake_addresses( '.',
-    { 'ns1' => [ '127.19.9.43', 'fda1:b2:c3::127:19:9:43' ],
-      'ns2' => [ '127.19.9.44', 'fda1:b2:c3::127:19:9:44' ],
+    { 'root-ns1.xa' => [ '127.13.4.23', 'fda1:b2:c3::127:13:4:23' ],
+      'root-ns2.xa' => [ '127.13.4.24', 'fda1:b2:c3::127:13:4:24' ],
     }
 );
 
@@ -54,15 +48,16 @@ Zonemaster::Engine::Recursor->add_fake_addresses( '.',
 #   See documentation for the meaning of that.
 
 my %subtests = (
-    'ROOT-EMAIL-DOMAIN' => [
+    'ERROR-PREFIX-DATABASE-3' => [
         1,
-        q(.),
-        [ qw(Z09_ROOT_EMAIL_DOMAIN) ],
+        q(error-prefix-database-3.connectivity04.xa),
+        [ qw(CN04_ERROR_PREFIX_DATABASE) ],
         undef,
         [],
-        []
+        [],
     ]
 );
+
 ###########
 
 my $datafile = 't/' . basename ($0, '.t') . '.data';

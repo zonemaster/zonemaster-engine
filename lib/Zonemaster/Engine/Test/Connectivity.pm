@@ -14,6 +14,7 @@ use Zonemaster::Engine::Profile;
 use Zonemaster::Engine::ASNLookup;
 use Zonemaster::Engine::Constants qw[:ip];
 use Zonemaster::Engine::TestMethods;
+use Zonemaster::Engine::TestMethodsV2;
 use Zonemaster::Engine::Util;
 
 =head1 NAME
@@ -144,8 +145,10 @@ sub metadata {
               CN04_ERROR_PREFIX_DATABASE
               CN04_IPV4_DIFFERENT_PREFIX
               CN04_IPV4_SAME_PREFIX
+              CN04_IPV4_SINGLE_PREFIX
               CN04_IPV6_DIFFERENT_PREFIX
               CN04_IPV6_SAME_PREFIX
+              CN04_IPV6_SINGLE_PREFIX
               TEST_CASE_END
               TEST_CASE_START
               )
@@ -280,23 +283,31 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     CN04_ERROR_PREFIX_DATABASE => sub {
         __x    # CONNECTIVITY:CN04_ERROR_PREFIX_DATABASE
-          'Prefix database error. No data to analyze for IP address {ns_ip}.', @_;
-    },
-    CN04_IPV4_SAME_PREFIX => sub {
-        __x    # CONNECTIVITY:CN04_IPV4_SAME_PREFIX
-          'The following name server(s) are announced in the same IPv4 prefix ({ip_prefix}): "{ns_list}"', @_;
+          'Prefix database error for IP address {ns_ip}.', @_;
     },
     CN04_IPV4_DIFFERENT_PREFIX => sub {
         __x    # CONNECTIVITY:CN04_IPV4_DIFFERENT_PREFIX
           'The following name server(s) are announced in unique IPv4 prefix(es): "{ns_list}"', @_;
     },
-    CN04_IPV6_SAME_PREFIX => sub {
-        __x    # CONNECTIVITY:CN04_IPV6_SAME_PREFIX
-          'The following name server(s) are announced in the same IPv6 prefix ({ip_prefix}): "{ns_list}"', @_;
+    CN04_IPV4_SAME_PREFIX => sub {
+        __x    # CONNECTIVITY:CN04_IPV4_SAME_PREFIX
+          'The following name server(s) are announced in the same IPv4 prefix ({ip_prefix}): "{ns_list}"', @_;
+    },
+    CN04_IPV4_SINGLE_PREFIX => sub {
+        __x    # CONNECTIVITY:CN04_IPV4_SINGLE_PREFIX
+          'All name server(s) IPv4 address(es) are announced in the same IPv4 prefix.';
     },
     CN04_IPV6_DIFFERENT_PREFIX => sub {
         __x    # CONNECTIVITY:CN04_IPV6_DIFFERENT_PREFIX
           'The following name server(s) are announced in unique IPv6 prefix(es): "{ns_list}"', @_;
+    },
+    CN04_IPV6_SAME_PREFIX => sub {
+        __x    # CONNECTIVITY:CN04_IPV6_SAME_PREFIX
+          'The following name server(s) are announced in the same IPv6 prefix ({ip_prefix}): "{ns_list}"', @_;
+    },
+    CN04_IPV6_SINGLE_PREFIX => sub {
+        __x    # CONNECTIVITY:CN04_IPV6_SINGLE_PREFIX
+          'All name server(s) IPv6 address(es) are announced in the same IPv6 prefix.';
     },
     ERROR_ASN_DATABASE => sub {
         __x    # CONNECTIVITY:ERROR_ASN_DATABASE
@@ -791,9 +802,20 @@ sub connectivity04 {
     push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     my %prefixes;
+    my %ip_already_processed;
 
-    foreach my $ns ( @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) } ) {
+    my @nss = Zonemaster::Engine::TestMethodsV2->get_del_ns_names_and_ips( $zone ) ?
+                Zonemaster::Engine::TestMethodsV2->get_zone_ns_names_and_ips( $zone ) ?
+                    @{ Zonemaster::Engine::TestMethodsV2->get_zone_ns_names_and_ips( $zone ), Zonemaster::Engine::TestMethodsV2->get_del_ns_names_and_ips( $zone ) }
+                : @{ Zonemaster::Engine::TestMethodsV2->get_del_ns_names_and_ips( $zone ) }
+              : ();
+
+    foreach my $ns ( @nss ) {
         my $ip = $ns->address;
+
+        next if exists $ip_already_processed{$ip->version}{$ip->short};
+        $ip_already_processed{$ip->version}{$ip->short} = 1;
+
         my ( $asnref, $prefix, $raw, $ret_code ) = Zonemaster::Engine::ASNLookup->get_with_prefix( $ip );
 
         if ( defined $ret_code and ( $ret_code eq q{ERROR_ASN_DATABASE} or $ret_code eq q{EMPTY_ASN_SET} ) ) {
@@ -865,10 +887,13 @@ sub connectivity04 {
             push @results,
               _emit_log(
                 "CN04_IPV${ip_version}_DIFFERENT_PREFIX" => {
-                    ns_list => join( q{;}, sort @combined_ns )
+                    ns_list => join( q{;}, uniq sort @combined_ns )
                 }
               );
         }
+
+        push @results, _emit_log( "CN04_IPV${ip_version}_SINGLE_PREFIX" => {} ) if scalar keys %{ $prefixes{$ip_version} } == 1
+            and scalar @{ (values %{ $prefixes{$ip_version} })[0] } == scalar keys %{ $ip_already_processed{$ip_version} };
     }
 
     return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );

@@ -78,42 +78,56 @@ sub _cymru_asn_lookup {
                 my $p = Zonemaster::Engine->recurse( $reverse, 'TXT' );
 
                 if ( $p ) {
-                    if ( $p->rcode eq q{NOERROR} ) {
-                        my @rr = $p->get_records( 'TXT', 'answer' );
-
-                        if ( @rr ) {
-                            my $prefix_length = 0;
-                            my @fields;
-                            my $str;
-
-                            foreach my $rr ( @rr ) {
-                                my $_str = $rr->txtdata;
-                                my @_fields = split( /[ ][|][ ]?/x, $_str );
-                                my @_asns   = split( /\s+/x,        $_fields[0] );
-                                my $_prefix_length = ($_fields[1] =~ m!^.*[/](.*)!x)[0];
-                                if ( $_prefix_length > $prefix_length ) {
-                                    $str = $_str;
-                                    @asns = @_asns;
-                                    @fields = @_fields;
-                                    $prefix_length = $_prefix_length;
-                                }
-                            }
-
-                            return \@asns, Net::IP::XS->new( $fields[1] ), $str, q{AS_FOUND};
-                        }
-                        else {
-                            return \@asns, undef, q{}, q{EMPTY_ASN_SET};
-                        }
-                    }
-                    elsif ( $p->rcode eq q{NXDOMAIN} ) {
+                    if ( $p->rcode eq q{NXDOMAIN} ) {
                         if ( $p->get_records( 'SOA', 'authority' ) and scalar $p->get_records( 'SOA', 'authority' ) == 1 and ($p->get_records( 'SOA', 'authority' ))[0]->owner eq name( $db_source ) ) {
                             return \@asns, undef, q{}, q{EMPTY_ASN_SET};
                         }
                     }
+                    elsif ( $p->rcode eq q{NOERROR} ) {
+                        if ( $p->answer ) {
+                            my @rr = $p->get_records( 'TXT', 'answer' );
+
+                            if ( @rr ) {
+                                my $max_length = 0;
+                                my @fields;
+                                my $str;
+
+                                foreach my $rr ( @rr ) {
+                                    my $_str = $rr->txtdata;
+                                    my @_fields = split( /[ ][|][ ]?/x, $_str );
+
+                                    next if scalar @_fields <= 1;
+                                    return \@asns, undef, q{}, q{ERROR_ASN_DATABASE} unless Net::IP::XS->new( $_fields[1] )->overlaps( $ip );
+
+                                    my @_asns   = split( /\s+/x,        $_fields[0] );
+                                    my $_prefix_length = ($_fields[1] =~ m!^.*[/](.*)!x)[0];
+                                    if ( $_prefix_length > $max_length ) {
+                                        $str = $_str;
+                                        @asns = @_asns;
+                                        @fields = @_fields;
+                                        $max_length = $_prefix_length;
+                                    }
+                                }
+
+                                if ( @fields ) {
+                                    if ( Net::IP::XS->new( $fields[1] )->overlaps( $ip ) ) {
+                                        return \@asns, Net::IP::XS->new( $fields[1] ), $str, q{AS_FOUND}
+                                    }
+                                }
+                                else {
+                                    return \@asns, undef, q{}, q{EMPTY_ASN_SET};
+                                }
+                            }
+
+                            return \@asns, undef, q{}, q{ERROR_ASN_DATABASE};
+                        }
+
+                        return \@asns, undef, q{}, q{EMPTY_ASN_SET};
+                    }
                 }
 
                 if ( $db_source_nb == scalar @db_sources ) {
-                        return \@asns, undef, q{}, q{ERROR_ASN_DATABASE};
+                    return \@asns, undef, q{}, q{ERROR_ASN_DATABASE};
                 }
 
                 last;

@@ -161,6 +161,8 @@ t/Test-connectivity03.data
 t/Test-connectivity03.t
 t/Test-connectivity04.data
 t/Test-connectivity04.t
+t/Test-connectivity04-A.data
+t/Test-connectivity04-A.t
 t/Test-consistency.data
 t/Test-consistency.t
 t/Test-consistency05.data
