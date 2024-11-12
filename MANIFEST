@@ -237,6 +237,8 @@ t/Test-dnssec05-I.data
 t/Test-dnssec05-I.t
 t/Test-dnssec05-J.data
 t/Test-dnssec05-J.t
+t/Test-dnssec10.data
+t/Test-dnssec10.t
 t/Test-dnssec16.data
 t/Test-dnssec16.t
 t/Test-nameserver.data
