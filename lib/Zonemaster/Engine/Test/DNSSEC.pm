@@ -3845,6 +3845,7 @@ sub dnssec15 {
 
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'DNSSEC15';
     push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
+
     my @query_types = qw{CDS CDNSKEY};
     my %cds_rrsets;
     my %cdnskey_rrsets;
@@ -3949,27 +3950,24 @@ sub dnssec15 {
               )
             {
                 #
-                # Need a fix in Zonemaster::LDNS to prevent that trick
+                # Quick hack. Proper fix should be available in LDNS 1.8.5: https://github.com/NLnetLabs/ldns/commit/b39813870a5fb0f4e8ff1570b3b09416aaee716c
                 #
-                my (@ds, @dnskey);
-                foreach my $cds ( @{ $cds_rrsets{ $ns_ip } } ) {
-                    my $rr_string = $cds->string;
-                    $rr_string =~ s/\s+CDS\s+/ DS /;
-                    push @ds, Zonemaster::LDNS::RR->new( $rr_string );
-                }
+                my @dnskey;
                 foreach my $cdnskey ( @{ $cdnskey_rrsets{ $ns_ip } } ) {
                     my $rr_string = $cdnskey->string;
                     $rr_string =~ s/\s+CDNSKEY\s+/ DNSKEY /;
                     push @dnskey, Zonemaster::LDNS::RR->new( $rr_string );
                 }
-                foreach my $ds ( @ds ) {
-                    my @matching_keys = grep { $ds->keytag == $_->keytag or ($ds->algorithm == 0 and $_->algorithm == 0)} @dnskey;
+
+                foreach my $cds ( @{ $cds_rrsets{ $ns_ip } } ) {
+                    my @matching_keys = grep { $cds->keytag == $_->keytag or ($cds->algorithm == 0 and $_->algorithm == 0)} @dnskey;
                     if ( not scalar @matching_keys ) {
                         $mismatch_cds_cdnskey{ $ns_ip } = 1;
                     }
                 }
+
                 foreach my $dnskey ( @dnskey ) {
-                    my @matching_keys = grep { $dnskey->keytag == $_->keytag or ($dnskey->algorithm == 0 and $_->algorithm == 0)} @ds;
+                    my @matching_keys = grep { $dnskey->keytag == $_->keytag or ($dnskey->algorithm == 0 and $_->algorithm == 0)} @{ $cds_rrsets{ $ns_ip } };
                     if ( not scalar @matching_keys ) {
                         $mismatch_cds_cdnskey{ $ns_ip } = 1;
                     }
@@ -4004,41 +4002,44 @@ sub dnssec15 {
               );
         }
 
-        my $first_rrset_string = undef;
+        my $first = 1;
+        my $first_rrlist;
+        my $inconsistent_rrset = 0;
         for my $ns_ip ( keys %cds_rrsets ) {
-            my $rrset_string;
-            if ( scalar @{ $cds_rrsets{ $ns_ip } } ) {
-                $rrset_string = join( "\n", sort map { $_->string } @{ $cds_rrsets{ $ns_ip } } );
+            if ( $first ) {
+                $first_rrlist = Zonemaster::LDNS::RRList->new( $cds_rrsets{ $ns_ip } );
+                $first = 0;
+                next;
             }
-            else {
-                $rrset_string = q{};
-            }
-            if ( not defined $first_rrset_string ) {
-                $first_rrset_string = $rrset_string;
-            }
-            elsif ( $rrset_string ne $first_rrset_string ) {
-                push @results, _emit_log( DS15_INCONSISTENT_CDS => {} );
+
+            my $rrlist = Zonemaster::LDNS::RRList->new( $cds_rrsets{ $ns_ip } );
+
+            if ( $rrlist ne $first_rrlist ) {
+                $inconsistent_rrset = 1;
                 last;
             }
         }
 
-        $first_rrset_string = undef;
+        push @results, _emit_log( DS15_INCONSISTENT_CDS => {} ) if $inconsistent_rrset;
+
+        $first = 1;
+        $inconsistent_rrset = 0;
         for my $ns_ip ( keys %cdnskey_rrsets ) {
-            my $rrset_string;
-            if ( scalar @{ $cdnskey_rrsets{ $ns_ip } } ) {
-                $rrset_string = join( "\n", sort map { $_->string } @{ $cdnskey_rrsets{ $ns_ip } } );
+            if ( $first ) {
+                $first_rrlist = Zonemaster::LDNS::RRList->new( $cdnskey_rrsets{ $ns_ip } );
+                $first = 0;
+                next;
             }
-            else {
-                $rrset_string = q{};
-            }
-            if ( not defined $first_rrset_string ) {
-                $first_rrset_string = $rrset_string;
-            }
-            elsif ( $rrset_string ne $first_rrset_string ) {
-                push @results, _emit_log( DS15_INCONSISTENT_CDNSKEY => {} );
+
+            my $rrlist = Zonemaster::LDNS::RRList->new( $cdnskey_rrsets{ $ns_ip } );
+
+            if ( $rrlist ne $first_rrlist ) {
+                $inconsistent_rrset = 1;
                 last;
             }
         }
+
+        push @results, _emit_log( DS15_INCONSISTENT_CDNSKEY => {} ) if $inconsistent_rrset;
 
         if ( scalar keys %mismatch_cds_cdnskey ) {
             push @results,
