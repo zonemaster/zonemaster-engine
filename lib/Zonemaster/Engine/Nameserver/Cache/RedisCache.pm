@@ -69,7 +69,7 @@ sub set_key {
     # Never cache with answer, NXDOMAIN or NODATA longer than this.
     my $redis_expire = $self->{config}->{expire};
 
-    # If no response or response without answer or SOA in authority
+    # If no response or response without answer or SOA in authority,
     # cache this many seconds (e.g. SERVFAIL or REFUSED).
     my $ttl_no_response = 1200;
 
@@ -175,8 +175,8 @@ Cache time is the shortest time of TTL in the DNS packet
 and cache.redis.expire in the profile. Default value of
 cache.redis.expire is 300 seconds.
 
-If the there is no TTL value to be used in the DNS packet
+If there is no TTL value to be used in the DNS packet
 (e.g. SERVFAIL or no response), then cache time is fixed
-to 1200 seconds.
+to 1200 seconds instead.
 
 =cut
