@@ -88,8 +88,9 @@ our @EXPORT_OK = qw[
   $SERIAL_MAX_VARIATION
   $MINIMUM_NUMBER_OF_NAMESERVERS
   $UDP_PAYLOAD_LIMIT
+  $UDP_DNSSEC_QUERY_DEFAULT
   $UDP_EDNS_QUERY_DEFAULT
-  $UDP_COMMON_EDNS_LIMIT
+  $UDP_EDNS_COMMON_LIMIT
   @IPV4_SPECIAL_ADDRESSES
   @IPV6_SPECIAL_ADDRESSES
 ];
@@ -105,7 +106,7 @@ our %EXPORT_TAGS = (
     soa  => [
         qw($DURATION_5_MINUTES_IN_SECONDS $DURATION_1_HOUR_IN_SECONDS $DURATION_4_HOURS_IN_SECONDS $DURATION_12_HOURS_IN_SECONDS $DURATION_1_DAY_IN_SECONDS $DURATION_1_WEEK_IN_SECONDS $DURATION_180_DAYS_IN_SECONDS $SERIAL_BITS $SERIAL_MAX_VARIATION)
     ],
-    misc => [qw($UDP_PAYLOAD_LIMIT $UDP_EDNS_QUERY_DEFAULT $UDP_COMMON_EDNS_LIMIT $MINIMUM_NUMBER_OF_NAMESERVERS $BLACKLISTING_ENABLED)]
+    misc => [qw($UDP_PAYLOAD_LIMIT $UDP_DNSSEC_QUERY_DEFAULT $UDP_EDNS_QUERY_DEFAULT $UDP_EDNS_COMMON_LIMIT $MINIMUM_NUMBER_OF_NAMESERVERS $BLACKLISTING_ENABLED)]
     ,    # everything in %EXPORT_OK that isn't included in any of the other tags
     addresses => [qw(@IPV4_SPECIAL_ADDRESSES @IPV6_SPECIAL_ADDRESSES)],
 );
@@ -168,11 +169,15 @@ An integer, used to define the size of the serial number space, as defined in RF
 
 =item * C<$UDP_PAYLOAD_LIMIT>
 
+=item * C<$UDP_DNSSEC_QUERY_DEFAULT>
+
+An integer, used to define the EDNS0 UDP packet size in DNSSEC queries.
+
+=item * C<$UDP_EDNS_COMMON_LIMIT>
+
 =item * C<$UDP_EDNS_QUERY_DEFAULT>
 
-An integer, used to define the EDNS0 UDP packet size in EDNS queries.
-
-=item * C<$UDP_COMMON_EDNS_LIMIT>
+An integer, used to define the EDNS0 UDP packet size in non-DNSSEC EDNS queries.
 
 =item * C<@IPV4_SPECIAL_ADDRESSES>
 
@@ -215,9 +220,10 @@ Readonly our $MINIMUM_NUMBER_OF_NAMESERVERS => 2;
 Readonly our $SERIAL_BITS => 32;
 Readonly our $SERIAL_MAX_VARIATION => 0;
 
-Readonly our $UDP_PAYLOAD_LIMIT      => 512;
-Readonly our $UDP_EDNS_QUERY_DEFAULT => 512;
-Readonly our $UDP_COMMON_EDNS_LIMIT  => 4_096;
+Readonly our $UDP_PAYLOAD_LIMIT        => 512;
+Readonly our $UDP_DNSSEC_QUERY_DEFAULT => 1232;
+Readonly our $UDP_EDNS_COMMON_LIMIT    => 4096;
+Readonly our $UDP_EDNS_QUERY_DEFAULT   => 512;
 
 Readonly::Array our @IPV4_SPECIAL_ADDRESSES => _extract_iana_ip_blocks($IP_VERSION_4);
 Readonly::Array our @IPV6_SPECIAL_ADDRESSES => _extract_iana_ip_blocks($IP_VERSION_6);

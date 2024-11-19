@@ -166,7 +166,7 @@ sub _build_dns {
 
     $res->recurse( 0 );
     $res->dnssec( 0 );
-    $res->edns_size( $UDP_EDNS_QUERY_DEFAULT );
+    $res->edns_size( 0 );
 
     $res->retry( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.retry} ) );
     $res->retrans( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.retrans} ) );
@@ -225,7 +225,10 @@ sub query {
     my $dnssec    = $href->{dnssec}    // 0;
     my $usevc     = $href->{usevc}     // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.usevc} );
     my $recurse   = $href->{recurse}   // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.recurse} );
-    my $edns_size = $href->{edns_size} // $UDP_EDNS_QUERY_DEFAULT;
+
+    if ( exists $href->{edns_details} and exists $href->{edns_details}{do} ) {
+        $dnssec = $href->{edns_details}{do};
+    }
 
     # Fake a DS answer
     if ( $type eq 'DS' and $class eq 'IN' and $self->fake_ds->{ lc( $name ) } ) {
@@ -285,27 +288,21 @@ sub query {
     $md5->add( q{NAME}    , $name );
     $md5->add( q{TYPE}    , "\U$type" );
     $md5->add( q{CLASS}   , "\U$class" );
-
-    if ( exists $href->{edns_details} and exists $href->{edns_details}{do} ) {
-        $md5->add( q{DNSSEC} , $href->{edns_details}{do} );
-    }
-    else {
-        $md5->add( q{DNSSEC} , $dnssec );
-    }
-
+    $md5->add( q{DNSSEC}  , $dnssec );
     $md5->add( q{USEVC}   , $usevc );
     $md5->add( q{RECURSE} , $recurse );
+
+    my $edns_size = $href->{edns_size} // ( $dnssec ? $UDP_DNSSEC_QUERY_DEFAULT : 0 );
 
     if ( exists $href->{edns_details} ) {
         $md5->add( q{EDNS_VERSION}        , $href->{edns_details}{version} // 0 );
         $md5->add( q{EDNS_Z}              , $href->{edns_details}{z} // 0 );
         $md5->add( q{EDNS_EXTENDED_RCODE} , $href->{edns_details}{rcode} // 0 );
         $md5->add( q{EDNS_DATA}           , $href->{edns_details}{data} // q{} );
-        $md5->add( q{EDNS_UDP_SIZE}       , $href->{edns_details}{size} // $edns_size );
+        $edns_size = $href->{edns_details}{size} // ( $href->{edns_size} // ( $dnssec ? $UDP_DNSSEC_QUERY_DEFAULT : $UDP_EDNS_QUERY_DEFAULT ) );
     }
-    else {
-        $md5->add( q{EDNS_UDP_SIZE} , 0);
-    }
+
+    $md5->add( q{EDNS_UDP_SIZE} , $edns_size );
 
     my $idx = $md5->b64digest();
 
@@ -406,11 +403,13 @@ sub _query {
     $flags{q{fallback}}  = $href->{q{fallback}}  // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.fallback} );
     $flags{q{recurse}}   = $href->{q{recurse}}   // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.recurse} );
     $flags{q{timeout}}   = $href->{q{timeout}}   // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.timeout} );
-    $flags{q{edns_size}} = $href->{q{edns_size}} // $UDP_EDNS_QUERY_DEFAULT;
 
     if ( exists $href->{edns_details} ) {
         $flags{q{dnssec}}    = $href->{edns_details}{do} // $flags{q{dnssec}};
-        $flags{q{edns_size}} = $href->{edns_details}{size} // $flags{q{edns_size}};
+        $flags{q{edns_size}} = $href->{edns_details}{size} // ( $href->{q{edns_size}} // ( $flags{q{dnssec}} ? $UDP_DNSSEC_QUERY_DEFAULT : $UDP_EDNS_QUERY_DEFAULT ) );
+    }
+    else {
+        $flags{q{edns_size}} = $href->{q{edns_size}} // ( $flags{q{dnssec}} ? $UDP_DNSSEC_QUERY_DEFAULT : 0 );
     }
 
     # Set flags for this query
@@ -447,6 +446,9 @@ sub _query {
     	    if ( exists $href->{edns_details}{do} ) {
                 $pkt->do($href->{edns_details}{do});
             }
+            elsif ( $flags{q{dnssec}} ) {
+                $pkt->do($flags{q{dnssec}});
+            }
     	    if ( exists $href->{edns_details}{size} ) {
                 $pkt->edns_size($href->{edns_details}{size});
             }
@@ -478,20 +480,13 @@ sub _query {
             }
         }
     }
-    push @{ $self->times }, ( time() - $before );
 
-    # Reset to defaults
-    foreach my $flag ( keys %flags ) {
-        # Except for any flag that is not configurable in the profile
-        unless ( grep( /^$flag$/, ( 'dnssec', 'edns_size' ) ) ) {
-            $self->dns->$flag( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.}.$flag ) );
-        }
-    }
+    push @{ $self->times }, ( time() - $before );
 
     if ( $res ) {
         my $p = Zonemaster::Engine::Packet->new( { packet => $res } );
         my $size = length( $p->data );
-        if ( $size > $UDP_COMMON_EDNS_LIMIT ) {
+        if ( $size > $UDP_EDNS_COMMON_LIMIT ) {
             my $command = sprintf q{dig @%s %s%s %s}, $self->address->short, $flags{dnssec} ? q{+dnssec } : q{},
               "$name", $type;
             Zonemaster::Engine->logger->add(
@@ -794,7 +789,7 @@ The retransmission interval.
 Set the DO flag in the query. Defaults to false.
 
 If set to true, it becomes an EDNS query.
-Value overridden by 'edns_details->do' (if also given). More details in 'edns_details' below.
+Value overridden by C<edns_details{do}> (if also given). More details in L<edns_details> below.
 
 =item debug
 
@@ -826,10 +821,11 @@ If set to true, prevents a server to be black-listed on a query in case there is
 
 =item edns_size
 
-Set the EDNS0 UDP maximum size. Defaults to 512.
+Set the EDNS0 UDP maximum size. Defaults to 0, or 512 if the query is an non-DNSSEC EDNS query,
+or 1232 if the query is a DNSSEC EDNS query.
 
-Used only when the query is an EDNS query. Does not enable on its own the query to be an EDNS query.
-Value overridden by 'edns_details->size' (if also given). More details in 'edns_details' below.
+Setting a value other than 0 will also implicitly enable EDNS for the query.
+Value overridden by C<edns_details-E<gt>{size}> (if also given). More details in L<edns_details> below.
 
 =item edns_details
 
@@ -838,10 +834,10 @@ A hash. An empty hash or a hash with any keys below will enable the query to be 
 The currently supported keys are 'version', 'z', 'do', 'rcode', 'size' and 'data'.
 See L<Zonemaster::LDNS::Packet> for more details (key names prefixed with 'edns_').
 
-Note that flag 'edns_size' also exists (see above) and has the same effect as 'edns_details->size', although the value of the 
+Note that flag L<edns_size> also exists (see above) and has the same effect as C<edns_details-E<gt>{size}>, although the value of the
 latter will take precedence if both are given.
 
-Similarly, note that flag 'dnssec' also exists (see above) and has the same effect as 'edns_details->do', although the value of the
+Similarly, note that flag L<dnssec> also exists (see above) and has the same effect as C<edns_details-E<gt>{do}>, although the value of the
 latter will take precedence if both are given.
 
 =back
