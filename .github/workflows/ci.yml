@@ -56,12 +56,12 @@ jobs:
       - name: Install Zonemaster::LDNS (latest)
         if: ${{ matrix.compatibility == 'latest' }}
         run: |
-          cpanm --sudo --notest Module::Install Zonemaster::LDNS
+          cpanm --sudo --notest Module::Install ExtUtils::PkgConfig Zonemaster::LDNS
 
       - name: Install Zonemaster::LDNS (develop)
         if: ${{ matrix.compatibility == 'develop' }}
         run: |
-          cpanm --sudo --notest Devel::CheckLib Module::Install Module::Install::XSUtil
+          cpanm --sudo --notest Devel::CheckLib Module::Install ExtUtils::PkgConfig Module::Install::XSUtil
           git clone --branch=develop --depth=1 https://github.com/zonemaster/zonemaster-ldns.git
           perl Makefile.PL  # Generate MYMETA.yml to appease cpanm .
           ( cd zonemaster-ldns ; cpanm --sudo --notest . )
