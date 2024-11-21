@@ -302,7 +302,7 @@ sub query {
         $edns_size = $href->{edns_details}{size} // ( $href->{edns_size} // ( $dnssec ? $UDP_DNSSEC_QUERY_DEFAULT : $UDP_EDNS_QUERY_DEFAULT ) );
     }
 
-    croak "edns_size (or edns_details->size) parameter cannot exceed 65535" if $edns_size > 65535;
+    croak "edns_size (or edns_details->size) parameter must be a value between 0 and 65535" if $edns_size > 65535 or $edns_size < 0;
 
     $md5->add( q{EDNS_UDP_SIZE} , $edns_size );
 
@@ -823,8 +823,8 @@ If set to true, prevents a server to be black-listed on a query in case there is
 
 =item edns_size
 
-Set the EDNS0 UDP maximum size. Defaults to 0, or 512 if the query is a non-DNSSEC EDNS query,
-or 1232 if the query is a DNSSEC query. Cannot be set higher than 65535.
+Set the EDNS0 UDP maximum size. The value must be comprised between 0 and 65535.
+Defaults to 0, or 512 if the query is a non-DNSSEC EDNS query, or 1232 if the query is a DNSSEC query.
 
 Setting a value other than 0 will also implicitly enable EDNS for the query.
 Value overridden by C<edns_details-E<gt>{size}> (if also given). More details in L<edns_details> below.

@@ -216,6 +216,8 @@ subtest 'dnssec, edns_size and edns_details{do, size} flags behavior for queries
 
     dies_ok { $p = $ns->query( 'fr', 'SOA', { "edns_size" => 65536 } ); }                    "dies when edns_size exceeds 65535";
     dies_ok { $p = $ns->query( 'fr', 'SOA', { "edns_details" => { "size" => 65536 } } ); }   "dies when edns_size (set with edns_details->size) exceeds 65535";
+    dies_ok { $p = $ns->query( 'fr', 'SOA', { "edns_size" => -1 } ); }                       "dies when edns_size is lower than 0";
+    dies_ok { $p = $ns->query( 'fr', 'SOA', { "edns_details" => { "size" => -1 } } ); }      "dies when edns_size (set with edns_details->size) is lower than 0";
 };
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
