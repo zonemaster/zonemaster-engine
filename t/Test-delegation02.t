@@ -168,19 +168,3 @@ if ( $ENV{ZONEMASTER_RECORD} ) {
 }
 
 done_testing;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
