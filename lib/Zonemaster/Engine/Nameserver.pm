@@ -230,6 +230,8 @@ sub query {
         $dnssec = $href->{edns_details}{do};
     }
 
+    my $edns_size = $href->{edns_size} // ( $dnssec ? $UDP_DNSSEC_QUERY_DEFAULT : 0 );
+
     # Fake a DS answer
     if ( $type eq 'DS' and $class eq 'IN' and $self->fake_ds->{ lc( $name ) } ) {
         my $p = Zonemaster::LDNS::Packet->new( $name, $type, $class );
@@ -292,8 +294,6 @@ sub query {
     $md5->add( q{USEVC}   , $usevc );
     $md5->add( q{RECURSE} , $recurse );
 
-    my $edns_size = $href->{edns_size} // ( $dnssec ? $UDP_DNSSEC_QUERY_DEFAULT : 0 );
-
     if ( exists $href->{edns_details} ) {
         $md5->add( q{EDNS_VERSION}        , $href->{edns_details}{version} // 0 );
         $md5->add( q{EDNS_Z}              , $href->{edns_details}{z} // 0 );
@@ -301,6 +301,8 @@ sub query {
         $md5->add( q{EDNS_DATA}           , $href->{edns_details}{data} // q{} );
         $edns_size = $href->{edns_details}{size} // ( $href->{edns_size} // ( $dnssec ? $UDP_DNSSEC_QUERY_DEFAULT : $UDP_EDNS_QUERY_DEFAULT ) );
     }
+
+    croak "edns_size (or edns_details->size) parameter cannot exceed 65535" if $edns_size > 65535;
 
     $md5->add( q{EDNS_UDP_SIZE} , $edns_size );
 
@@ -768,7 +770,7 @@ Remove all cached nameserver objects and queries.
 
 Send a DNS query to the nameserver the object represents. C<$name> and C<$type> are the name and type that will be queried for (C<$type> defaults
 to 'A' if it's left undefined). C<$flagref> is a reference to a hash, the keys of which are flags and the values are their corresponding values.
-The available flags are as follows. All but 'class' and 'edns_details' directly correspond to methods in the L<Zonemaster::LDNS::Resolver> object.
+The available flags are as follows. All but 'class' and 'edns_details' directly correspond to methods in the L<Zonemaster::LDNS> object.
 
 =over
 
@@ -821,15 +823,15 @@ If set to true, prevents a server to be black-listed on a query in case there is
 
 =item edns_size
 
-Set the EDNS0 UDP maximum size. Defaults to 0, or 512 if the query is an non-DNSSEC EDNS query,
-or 1232 if the query is a DNSSEC EDNS query.
+Set the EDNS0 UDP maximum size. Defaults to 0, or 512 if the query is a non-DNSSEC EDNS query,
+or 1232 if the query is a DNSSEC query. Cannot be set higher than 65535.
 
 Setting a value other than 0 will also implicitly enable EDNS for the query.
 Value overridden by C<edns_details-E<gt>{size}> (if also given). More details in L<edns_details> below.
 
 =item edns_details
 
-A hash. An empty hash or a hash with any keys below will enable the query to be an EDNS query.
+A hash. An empty hash or a hash with any keys below will enable EDNS for the query.
 
 The currently supported keys are 'version', 'z', 'do', 'rcode', 'size' and 'data'.
 See L<Zonemaster::LDNS::Packet> for more details (key names prefixed with 'edns_').

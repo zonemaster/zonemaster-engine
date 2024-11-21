@@ -1,4 +1,5 @@
 use Test::More;
+use Test::Exception;
 
 BEGIN { use_ok( 'Zonemaster::Engine::Nameserver' ); }
 use Zonemaster::Engine;
@@ -212,6 +213,9 @@ subtest 'dnssec, edns_size and edns_details{do, size} flags behavior for queries
     is( $ns->dns->dnssec, 1, 'dnssec flag is set' );
     is( $ns->dns->edns_size, 0, 'edns_size is unset' );
     ok( $p->has_edns and $p->do, 'DNSSEC response received on query with dnssec set by edns_details{do} and even with edns_details{size} set to 0' );
+
+    dies_ok { $p = $ns->query( 'fr', 'SOA', { "edns_size" => 65536 } ); }                    "dies when edns_size exceeds 65535";
+    dies_ok { $p = $ns->query( 'fr', 'SOA', { "edns_details" => { "size" => 65536 } } ); }   "dies when edns_size (set with edns_details->size) exceeds 65535";
 };
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
