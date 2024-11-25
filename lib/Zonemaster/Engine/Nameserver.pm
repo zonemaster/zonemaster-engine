@@ -230,7 +230,7 @@ sub query {
         $dnssec = $href->{edns_details}{do};
     }
 
-    my $edns_size = $href->{edns_size} // ( $dnssec ? $UDP_DNSSEC_QUERY_DEFAULT : 0 );
+    my $edns_size = $href->{edns_size} // ( $dnssec ? $EDNS_UDP_PAYLOAD_DNSSEC_DEFAULT : 0 );
 
     # Fake a DS answer
     if ( $type eq 'DS' and $class eq 'IN' and $self->fake_ds->{ lc( $name ) } ) {
@@ -299,7 +299,7 @@ sub query {
         $md5->add( q{EDNS_Z}              , $href->{edns_details}{z} // 0 );
         $md5->add( q{EDNS_EXTENDED_RCODE} , $href->{edns_details}{rcode} // 0 );
         $md5->add( q{EDNS_DATA}           , $href->{edns_details}{data} // q{} );
-        $edns_size = $href->{edns_details}{size} // ( $href->{edns_size} // ( $dnssec ? $UDP_DNSSEC_QUERY_DEFAULT : $UDP_EDNS_QUERY_DEFAULT ) );
+        $edns_size = $href->{edns_details}{size} // ( $href->{edns_size} // ( $dnssec ? $EDNS_UDP_PAYLOAD_DNSSEC_DEFAULT : $EDNS_UDP_PAYLOAD_DEFAULT ) );
     }
 
     croak "edns_size (or edns_details->size) parameter must be a value between 0 and 65535" if $edns_size > 65535 or $edns_size < 0;
@@ -408,10 +408,10 @@ sub _query {
 
     if ( exists $href->{edns_details} ) {
         $flags{q{dnssec}}    = $href->{edns_details}{do} // $flags{q{dnssec}};
-        $flags{q{edns_size}} = $href->{edns_details}{size} // ( $href->{q{edns_size}} // ( $flags{q{dnssec}} ? $UDP_DNSSEC_QUERY_DEFAULT : $UDP_EDNS_QUERY_DEFAULT ) );
+        $flags{q{edns_size}} = $href->{edns_details}{size} // ( $href->{q{edns_size}} // ( $flags{q{dnssec}} ? $EDNS_UDP_PAYLOAD_DNSSEC_DEFAULT : $EDNS_UDP_PAYLOAD_DEFAULT ) );
     }
     else {
-        $flags{q{edns_size}} = $href->{q{edns_size}} // ( $flags{q{dnssec}} ? $UDP_DNSSEC_QUERY_DEFAULT : 0 );
+        $flags{q{edns_size}} = $href->{q{edns_size}} // ( $flags{q{dnssec}} ? $EDNS_UDP_PAYLOAD_DNSSEC_DEFAULT : 0 );
     }
 
     # Set flags for this query
@@ -488,7 +488,7 @@ sub _query {
     if ( $res ) {
         my $p = Zonemaster::Engine::Packet->new( { packet => $res } );
         my $size = length( $p->data );
-        if ( $size > $UDP_EDNS_COMMON_LIMIT ) {
+        if ( $size > $EDNS_UDP_PAYLOAD_COMMON_LIMIT ) {
             my $command = sprintf q{dig @%s %s%s %s}, $self->address->short, $flags{dnssec} ? q{+dnssec } : q{},
               "$name", $type;
             Zonemaster::Engine->logger->add(

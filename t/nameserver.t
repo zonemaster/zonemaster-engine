@@ -142,7 +142,7 @@ subtest 'dnssec, edns_size and edns_details{do, size} flags behavior for queries
     $p = $ns->query( 'a.fr', 'SOA', { "dnssec" => 1 } );
     if ( $ENV{ZONEMASTER_RECORD} ) {
         ok( $ns->dns->dnssec, 'dnssec flag is set' );
-        is( $ns->dns->edns_size, $UDP_DNSSEC_QUERY_DEFAULT, 'edns_size uses default DNSSEC query value' );
+        is( $ns->dns->edns_size, $EDNS_UDP_PAYLOAD_DNSSEC_DEFAULT, 'edns_size uses default DNSSEC query value' );
     }
     ok( $p->has_edns and $p->do, 'DNSSEC response received on query with dnssec set' );
 
@@ -170,14 +170,14 @@ subtest 'dnssec, edns_size and edns_details{do, size} flags behavior for queries
     $p = $ns->query( 'e.fr', 'SOA', { "edns_details" => {} } );
     if ( $ENV{ZONEMASTER_RECORD} ) {
         ok( !$ns->dns->dnssec, 'dnssec flag is unset' );
-        is( $ns->dns->edns_size, $UDP_EDNS_QUERY_DEFAULT, 'edns_size uses default EDNS query value for non-DNSSEC EDNS queries' );
+        is( $ns->dns->edns_size, $EDNS_UDP_PAYLOAD_DEFAULT, 'edns_size uses default EDNS query value for non-DNSSEC EDNS queries' );
     }
     ok( $p->has_edns and !$p->do, 'non-DNSSEC EDNS response received on query with edns_details set' );
 
     $p = $ns->query( 'f.fr', 'SOA', { "edns_details" => { "do" => 1 } } );
     if ( $ENV{ZONEMASTER_RECORD} ) {
         ok( $ns->dns->dnssec, 'dnssec flag is also set via edns_details{do}' );
-        is( $ns->dns->edns_size, $UDP_DNSSEC_QUERY_DEFAULT, 'edns_size also uses default DNSSEC query value when set with edns_details{do}' );
+        is( $ns->dns->edns_size, $EDNS_UDP_PAYLOAD_DNSSEC_DEFAULT, 'edns_size also uses default DNSSEC query value when set with edns_details{do}' );
     }
     ok( $p->has_edns and $p->do, 'DNSSEC response received on query with edns_details{do} set' );
 
@@ -198,7 +198,7 @@ subtest 'dnssec, edns_size and edns_details{do, size} flags behavior for queries
     $p = $ns->query( 'i.fr', 'SOA', { "dnssec" => 1, "edns_details" => { "do" => 0 } } );
     if ( $ENV{ZONEMASTER_RECORD} ) {
         ok( !$ns->dns->dnssec, 'edns_details{do} takes precedence over dnssec for (un)setting the dnssec flag' );
-        is( $ns->dns->edns_size, $UDP_EDNS_QUERY_DEFAULT, 'edns_size uses default EDNS query value when dnssec flag is unset by edns_details{do}' );
+        is( $ns->dns->edns_size, $EDNS_UDP_PAYLOAD_DEFAULT, 'edns_size uses default EDNS query value when dnssec flag is unset by edns_details{do}' );
     }
     ok( $p->has_edns and !$p->do, 'non-DNSSEC EDNS response received on query with dnssec unset by edns_details{do}' );
 
