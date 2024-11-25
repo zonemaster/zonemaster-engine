@@ -20,6 +20,7 @@ my @all_tags = qw(
                    DS10_ALGO_NOT_SUPPORTED_BY_ZM
                    DS10_ERR_MULT_NSEC
                    DS10_ERR_MULT_NSEC3
+                   DS10_ERR_MULT_NSEC3PARAM
                    DS10_EXPECTED_NSEC_NSEC3_MISSING
                    DS10_HAS_NSEC
                    DS10_HAS_NSEC3
@@ -28,6 +29,7 @@ my @all_tags = qw(
                    DS10_INCONSISTENT_NSEC_NSEC3
                    DS10_MIXED_NSEC_NSEC3
                    DS10_NSEC3PARAM_GIVES_ERR_ANSWER
+                   DS10_NSEC3PARAM_MISMATCHES_APEX
                    DS10_NSEC3PARAM_QUERY_RESPONSE_ERR
                    DS10_NSEC3_ERR_TYPE_LIST
                    DS10_NSEC3_MISMATCHES_APEX
@@ -134,6 +136,14 @@ my %subtests = (
         [],
         [],
     ],
+    'ERR-MULT-NSEC3PARAM-1' => [
+        1,
+        q(err-mult-nsec3param-1.dnssec10.xa),
+        [ qw( DS10_ERR_MULT_NSEC3PARAM DS10_HAS_NSEC3 ) ],
+        undef,
+        [],
+        [],
+    ],
     'EXP-NSEC-NSEC3-MISS-1' => [
         1,
         q(exp-nsec-nsec3-miss-1.dnssec10.xa),
@@ -193,7 +203,7 @@ my %subtests = (
     'NSEC3PARAM-GIVES-ERR-ANSWER-1' => [
         1,
         q(nsec3param-gives-err-answer-1.dnssec10.xa),
-        [ qw( DS10_NSEC3PARAM_GIVES_ERR_ANSWER DS10_HAS_NSEC3 ) ],
+        [ qw( DS10_NSEC3PARAM_GIVES_ERR_ANSWER DS10_HAS_NSEC3 DS10_INCONSISTENT_NSEC3 ) ],
         undef,
         [],
         [],
@@ -201,15 +211,15 @@ my %subtests = (
     'NSEC3PARAM-GIVES-ERR-ANSWER-2' => [
         1,
         q(nsec3param-gives-err-answer-2.dnssec10.xa),
-        [ qw( DS10_NSEC3PARAM_GIVES_ERR_ANSWER DS10_EXPECTED_NSEC_NSEC3_MISSING ) ],
+        [ qw( DS10_NSEC3PARAM_GIVES_ERR_ANSWER DS10_EXPECTED_NSEC_NSEC3_MISSING DS10_INCONSISTENT_NSEC3 DS10_HAS_NSEC3 ) ],
         undef,
         [],
         [],
     ],
-    'NSEC3PARAM-GIVES-ERR-ANSWER-3' => [
+    'NSEC3PARAM-MISMATCHES-APEX-1' => [
         1,
-        q(nsec3param-gives-err-answer-3.dnssec10.xa),
-        [ qw( DS10_NSEC3PARAM_GIVES_ERR_ANSWER DS10_HAS_NSEC3 ) ],
+        q(nsec3param-mismatches-apex-1.dnssec10.xa),
+        [ qw( DS10_NSEC3PARAM_MISMATCHES_APEX DS10_HAS_NSEC3 ) ],
         undef,
         [],
         [],
@@ -217,7 +227,7 @@ my %subtests = (
     'NSEC3PARAM-Q-RESPONSE-ERR-1' => [
         1,
         q(nsec3param-q-response-err-1.dnssec10.xa),
-        [ qw( DS10_NSEC3PARAM_QUERY_RESPONSE_ERR DS10_HAS_NSEC3 ) ],
+        [ qw( DS10_NSEC3PARAM_QUERY_RESPONSE_ERR DS10_HAS_NSEC3 DS10_INCONSISTENT_NSEC3 ) ],
         undef,
         [],
         [],
@@ -225,7 +235,7 @@ my %subtests = (
     'NSEC3PARAM-Q-RESPONSE-ERR-2' => [
         1,
         q(nsec3param-q-response-err-2.dnssec10.xa),
-        [ qw( DS10_NSEC3PARAM_QUERY_RESPONSE_ERR DS10_HAS_NSEC3 ) ],
+        [ qw( DS10_NSEC3PARAM_QUERY_RESPONSE_ERR DS10_HAS_NSEC3 DS10_INCONSISTENT_NSEC3 ) ],
         undef,
         [],
         [],
@@ -233,7 +243,7 @@ my %subtests = (
     'NSEC3PARAM-Q-RESPONSE-ERR-3' => [
         0,
         q(nsec3param-q-response-err-3.dnssec10.xa),
-        [ qw( DS10_NSEC3PARAM_QUERY_RESPONSE_ERR DS10_EXPECTED_NSEC_NSEC3_MISSING ) ],
+        [ qw( DS10_NSEC3PARAM_QUERY_RESPONSE_ERR DS10_EXPECTED_NSEC_NSEC3_MISSING DS10_INCONSISTENT_NSEC3 ) ],
         undef,
         [],
         [],
@@ -337,7 +347,7 @@ my %subtests = (
     'NSEC-GIVES-ERR-ANSWER-1' => [
         1,
         q(nsec-gives-err-answer-1.dnssec10.xa),
-        [ qw( DS10_NSEC_GIVES_ERR_ANSWER DS10_HAS_NSEC ) ],
+        [ qw( DS10_NSEC_GIVES_ERR_ANSWER DS10_HAS_NSEC DS10_INCONSISTENT_NSEC ) ],
         undef,
         [],
         [],
@@ -345,7 +355,7 @@ my %subtests = (
     'NSEC-GIVES-ERR-ANSWER-2' => [
         1,
         q(nsec-gives-err-answer-2.dnssec10.xa),
-        [ qw( DS10_NSEC_GIVES_ERR_ANSWER DS10_EXPECTED_NSEC_NSEC3_MISSING ) ],
+        [ qw( DS10_NSEC_GIVES_ERR_ANSWER DS10_EXPECTED_NSEC_NSEC3_MISSING DS10_INCONSISTENT_NSEC DS10_HAS_NSEC ) ],
         undef,
         [],
         [],

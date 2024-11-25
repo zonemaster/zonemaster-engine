@@ -1005,6 +1005,11 @@ Readonly my %TAG_DESCRIPTIONS => (
           'Multiple NSEC3 records when one is expected. Fetched from name servers "{ns_list}".',
           @_;
     },
+    DS10_ERR_MULT_NSEC3PARAM => sub {
+        __x    # DNSSEC:DS10_ERR_MULT_NSEC3PARAM
+          'Multiple NSEC3PARAM records when one is expected. Fetched from name servers "{ns_list}".',
+          @_;
+    },
     DS10_EXPECTED_NSEC_NSEC3_MISSING => sub {
         __x    # DNSSEC:DS10_EXPECTED_NSEC_NSEC3_MISSING
           'The server responded with DNSKEY but not with expected NSEC or NSEC3. '
@@ -1047,6 +1052,12 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # DNSSEC:DS10_NSEC3PARAM_GIVES_ERR_ANSWER
           'Unexpected DNS record in the answer section on an NSEC3PARAM query. Fetched '
           . 'from name servers "{ns_list}".',
+          @_;
+    },
+    DS10_NSEC3PARAM_MISMATCHES_APEX => sub {
+        __x    # DNSSEC:DS10_NSEC3PARAM_MISMATCHES_APEX
+          'The returned NSEC3PARAM record has an unexpected non-apex owner name. '
+          . 'Fetched from name servers "{ns_list}".',
           @_;
     },
     DS10_NSEC3PARAM_QUERY_RESPONSE_ERR => sub {
@@ -3094,10 +3105,10 @@ sub dnssec10 {
     my @query_types = ( $type_dnskey, $type_nsec, $type_nsec3param );
 
     my %algo_not_supported_by_zm;
-    my ( @erroneous_multiple_nsec, @erroneous_multiple_nsec3 );
+    my ( @erroneous_multiple_nsec, @erroneous_multiple_nsec3, @erroneous_multiple_nsec3param );
     my ( @nsec_in_answer, @nsec3param_in_answer );
     my ( @nsec_incorrect_type_list, @nsec3_incorrect_type_list );
-    my ( @nsec_mismatches_apex, @nsec3_mismatches_apex );
+    my ( @nsec_mismatches_apex, @nsec3_mismatches_apex, @nsec3param_mismatches_apex );
     my ( @nsec_missing_signature, @nsec3_missing_signature );
     my ( %nsec_nodata_wrong_soa, %nsec3_nodata_wrong_soa );
     my ( @nsec_nodata_missing_soa, @nsec3_nodata_missing_soa );
@@ -3143,7 +3154,7 @@ sub dnssec10 {
 
         push @with_dnskey, $ns;
 
-        my $nsec_p = $ns->query( $zone->name, $type_nsec, { dnssec => 1 } );
+        my $nsec_p = $ns->query( $zone->name, $type_nsec, { dnssec => 1, blacklisting_disabled => 1 } );
 
         if ( not $nsec_p or $nsec_p->rcode ne q{NOERROR} or not $nsec_p->aa ) {
             push @nsec_response_error, $ns;
@@ -3211,44 +3222,58 @@ sub dnssec10 {
                     foreach my $rr ( @nsec3_rrsig_rrs ) {
                         my @matching_dnskeys = grep { $rr->keytag == $_->keytag } @dnskey_records;
 
-                        push @{ $nsec3_rrsig_no_dnskey{$rr->keytag} }, $ns unless scalar @matching_dnskeys;
-                        push @{ $nsec3_rrsig_expired{$rr->keytag} }, $ns if $rr->expiration < $testing_time;
-                        push @{ $nsec3_rrsig_not_yet_valid{$rr->keytag} }, $ns if $rr->inception > $testing_time;
+                        unless ( scalar @matching_dnskeys ) {
+                            push @{ $nsec3_rrsig_no_dnskey{$rr->keytag} }, $ns;
+                        }
+                        elsif ( $rr->expiration < $testing_time ) {
+                            push @{ $nsec3_rrsig_expired{$rr->keytag} }, $ns;
+                        }
+                        elsif ( $rr->inception > $testing_time ) {
+                            push @{ $nsec3_rrsig_not_yet_valid{$rr->keytag} }, $ns;
+                        }
+                        else {
+                            my $i = 1;
+                            foreach my $dnskey ( @matching_dnskeys ) {
+                                my $msg = q{};
+                                my $validated = $rr->verify_time( [grep { name( $_->name ) eq name( $rr->name ) } @nsec3_rrs], [ $dnskey ], $testing_time, $msg );
 
-                        my $i = 1;
-                        foreach my $dnskey ( @matching_dnskeys ) {
-                            my $msg = q{};
-                            my $validated = $rr->verify_time( [grep { name( $_->name ) eq name( $rr->name ) } @nsec3_rrs], [ $dnskey ], $testing_time, $msg );
-
-                            if ( $validated ) {
-                                push @nsec3_rrsig_verified, $ns;
-                                last;
-                            }
-                            
-                            if ( $i >= scalar @matching_dnskeys ) {
-                                if ( $msg =~ /Unknown cryptographic algorithm/ ) {
-                                    push @{ $algo_not_supported_by_zm{$dnskey->keytag}{$dnskey->algorithm} }, $ns;
+                                if ( $validated ) {
+                                    push @nsec3_rrsig_verified, $ns;
+                                    last;
                                 }
-                                else {
-                                    push @{ $nsec3_rrsig_verify_error{$dnskey->keytag} }, $ns;
-                                }
-                            }
 
-                            $i++;
+                                if ( $i >= scalar @matching_dnskeys ) {
+                                    if ( $msg =~ /Unknown cryptographic algorithm/ ) {
+                                        push @{ $algo_not_supported_by_zm{$dnskey->keytag}{$dnskey->algorithm} }, $ns;
+                                    }
+                                    else {
+                                        push @{ $nsec3_rrsig_verify_error{$dnskey->keytag} }, $ns;
+                                    }
+                                }
+
+                                $i++;
+                            }
                         }
                     }
                 }
             }
         }
 
-        my $nsec3param_p = $ns->query( $zone->name, $type_nsec3param, { dnssec => 1 } );
+        my $nsec3param_p = $ns->query( $zone->name, $type_nsec3param, { dnssec => 1, blacklisting_disabled => 1 } );
 
         if ( not $nsec3param_p or $nsec3param_p->rcode ne q{NOERROR} or not $nsec3param_p->aa ) {
             push @nsec3param_response_error, $ns;
         }
         elsif ( $nsec3param_p->answer ) {
-            if ( scalar $nsec3param_p->get_records_for_name( $type_nsec3param, $zone->name, q{answer} ) ) {
+            if ( scalar $nsec3param_p->get_records( $type_nsec3param, q{answer} ) ) {
                 push @nsec3param_in_answer, $ns;
+
+                if ( scalar $nsec3param_p->get_records( $type_nsec3param, q{answer} ) > 1 ) {
+                    push @erroneous_multiple_nsec3param, $ns;
+                }
+                elsif ( ($nsec3param_p->get_records( $type_nsec3param, q{answer} ))[0]->owner ne $zone->name ) {
+                    push @nsec3param_mismatches_apex, $ns;
+                }
             }
             else {
                 push @nsec3param_erroneous_answer, $ns;
@@ -3302,30 +3327,37 @@ sub dnssec10 {
                     foreach my $rr ( @nsec_rrsig_rrs ) {
                         my @matching_dnskeys = grep { $rr->keytag == $_->keytag } @dnskey_records;
 
-                        push @{ $nsec_rrsig_no_dnskey{$rr->keytag} }, $ns unless scalar @matching_dnskeys;
-                        push @{ $nsec_rrsig_expired{$rr->keytag} }, $ns if $rr->expiration < $testing_time;
-                        push @{ $nsec_rrsig_not_yet_valid{$rr->keytag} }, $ns if $rr->inception > $testing_time;
+                        unless ( scalar @matching_dnskeys ) {
+                            push @{ $nsec_rrsig_no_dnskey{$rr->keytag} }, $ns;
+                        }
+                        elsif ( $rr->expiration < $testing_time ) {
+                            push @{ $nsec_rrsig_expired{$rr->keytag} }, $ns;
+                        }
+                        elsif ( $rr->inception > $testing_time ) {
+                            push @{ $nsec_rrsig_not_yet_valid{$rr->keytag} }, $ns;
+                        }
+                        else {
+                            my $i = 1;
+                            foreach my $dnskey ( @matching_dnskeys ) {
+                                my $msg = q{};
+                                my $validated = $rr->verify_time( [grep { name( $_->name ) eq name( $rr->name ) } @nsec_rrs], [ $dnskey ], $testing_time, $msg );
 
-                        my $i = 1;
-                        foreach my $dnskey ( @matching_dnskeys ) {
-                            my $msg = q{};
-                            my $validated = $rr->verify_time( [grep { name( $_->name ) eq name( $rr->name ) } @nsec_rrs], [ $dnskey ], $testing_time, $msg );
-
-                            if ( $validated ) {
-                                push @nsec_rrsig_verified, $ns;
-                                last;
-                            }
-                            
-                            if ( $i >= scalar @matching_dnskeys ) {
-                                if ( $msg =~ /Unknown cryptographic algorithm/ ) {
-                                    push @{ $algo_not_supported_by_zm{$dnskey->keytag}{$dnskey->algorithm} }, $ns;
+                                if ( $validated ) {
+                                    push @nsec_rrsig_verified, $ns;
+                                    last;
                                 }
-                                else {
-                                    push @{ $nsec_rrsig_verify_error{$dnskey->keytag} }, $ns;
-                                }
-                            }
 
-                            $i++;
+                                if ( $i >= scalar @matching_dnskeys ) {
+                                    if ( $msg =~ /Unknown cryptographic algorithm/ ) {
+                                        push @{ $algo_not_supported_by_zm{$dnskey->keytag}{$dnskey->algorithm} }, $ns;
+                                    }
+                                    else {
+                                        push @{ $nsec_rrsig_verify_error{$dnskey->keytag} }, $ns;
+                                    }
+                                }
+
+                                $i++;
+                            }
                         }
                     }
                 }
@@ -3347,6 +3379,15 @@ sub dnssec10 {
           _emit_log(
             DS10_ERR_MULT_NSEC3 => {
                 ns_list => join( q{;}, uniq sort @erroneous_multiple_nsec3 )
+            }
+          );
+    }
+
+    if ( scalar @erroneous_multiple_nsec3param ) {
+        push @results,
+          _emit_log(
+            DS10_ERR_MULT_NSEC3PARAM => {
+                ns_list => join( q{;}, uniq sort @erroneous_multiple_nsec3param )
             }
           );
     }
@@ -3413,8 +3454,11 @@ sub dnssec10 {
 
     @union = ( @nsec3param_in_answer, @nsec_nsec3_nodata );
     my @second_union = ( @nsec_in_answer, @nsec3param_nsec_nodata );
+    $lc = List::Compare->new( \@union, \@second_union );
+    my @first = $lc->get_unique;
+    my @second = $lc->get_complement;
 
-    if ( scalar @union and scalar @second_union ) {
+    if ( scalar @first and scalar @second ) {
         push @results,
           _emit_log(
             DS10_INCONSISTENT_NSEC_NSEC3 => {
@@ -3522,6 +3566,15 @@ sub dnssec10 {
           _emit_log(
             DS10_NSEC3PARAM_GIVES_ERR_ANSWER => {
                 ns_list => join( q{;}, uniq sort @nsec3param_erroneous_answer )
+            }
+          );
+    }
+
+    if ( scalar @nsec3param_mismatches_apex ) {
+        push @results,
+          _emit_log(
+            DS10_NSEC3PARAM_MISMATCHES_APEX => {
+                ns_list => join( q{;}, uniq sort @nsec3param_mismatches_apex )
             }
           );
     }
@@ -3711,13 +3764,13 @@ sub dnssec10 {
     }
 
     $lc = List::Compare->new( [ @nss ], [ @without_dnskey, @nsec_in_answer, @nsec3param_nsec_nodata, @nsec3param_in_answer, @nsec_nsec3_nodata ] );
-    @intersection = $lc->get_unique;
+    @first = $lc->get_unique;
 
-    if ( @intersection ) {
+    if ( @first ) {
         push @results,
           _emit_log(
             DS10_EXPECTED_NSEC_NSEC3_MISSING => {
-                ns_list => join( q{;}, uniq sort @intersection )
+                ns_list => join( q{;}, uniq sort @first )
             }
           );
     }
