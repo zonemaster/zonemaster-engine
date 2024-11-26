@@ -435,7 +435,7 @@ my %subtests = (
     'NSEC-QUERY-RESPONSE-ERR-1' => [
         1,
         q(nsec-query-response-err-1.dnssec10.xa),
-        [ qw( DS10_NSEC_QUERY_RESPONSE_ERR DS10_HAS_NSEC ) ],
+        [ qw( DS10_NSEC_QUERY_RESPONSE_ERR DS10_HAS_NSEC DS10_INCONSISTENT_NSEC ) ],
         undef,
         [],
         [],
@@ -443,7 +443,7 @@ my %subtests = (
     'NSEC-QUERY-RESPONSE-ERR-2' => [
         1,
         q(nsec-query-response-err-2.dnssec10.xa),
-        [ qw( DS10_NSEC_QUERY_RESPONSE_ERR DS10_HAS_NSEC ) ],
+        [ qw( DS10_NSEC_QUERY_RESPONSE_ERR DS10_HAS_NSEC DS10_INCONSISTENT_NSEC ) ],
         undef,
         [],
         [],
@@ -451,7 +451,7 @@ my %subtests = (
     'NSEC-QUERY-RESPONSE-ERR-3' => [
         0,
         q(nsec-query-response-err-3.dnssec10.xa),
-        [ qw( DS10_NSEC_QUERY_RESPONSE_ERR DS10_EXPECTED_NSEC_NSEC3_MISSING ) ],
+        [ qw( DS10_NSEC_QUERY_RESPONSE_ERR DS10_EXPECTED_NSEC_NSEC3_MISSING DS10_INCONSISTENT_NSEC ) ],
         undef,
         [],
         [],
