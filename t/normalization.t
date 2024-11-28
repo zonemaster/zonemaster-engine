@@ -1,9 +1,12 @@
-use Test::More;
-use Test::Exception;
-
+#!perl
+use strict;
 use utf8;
+use warnings;
+use Test::More;
 
-BEGIN { use_ok( 'Zonemaster::Engine::Normalization' ); }
+use Test::Differences;
+use Test::Exception;
+use Zonemaster::Engine::Normalization qw( normalize_name trim_space );
 
 sub char_to_hex_esc {
     my ($char) = @_;
@@ -29,9 +32,6 @@ subtest 'Valid domains' => sub {
         '．' => '.', # Fullwidth full stop
         '。' => '.', # Ideographic full stop
         '｡' => '.',  # Halfwidth ideographic full stop
-
-        # Trailing and leading white spaces
-        " \x{205F} example.com.  \x{0009}" => 'example.com',
 
         # Mixed dots with trailing dot
         'example。com.' => 'example.com',
@@ -83,15 +83,19 @@ subtest 'Valid domains' => sub {
         "aḍ\x{0307}a" => 'xn--aa-rub587y',
     );
 
-    while (($domain, $expected_output) = each (%input_domains)) {
+    for my $domain ( sort keys %input_domains ) {
+        my $expected_output = $input_domains{$domain};
         my $safe_domain = to_hex_esc($domain);
         subtest "Domain: '$safe_domain'" => sub {
-            my $errors, $final_domain;
+            my ( $errors, $final_domain );
             lives_ok(sub {
                 ($errors, $final_domain) = normalize_name($domain);
             }, 'correct domain should live');
-            is(scalar @{$errors}, 0, 'No error returned') or diag(@{$errors});
-            is($final_domain, $expected_output, 'Match expected domain') or diag($final_domain);
+
+            my $actual   = { domain => $final_domain,    errors => $errors };
+            my $expected = { domain => $expected_output, errors => [] };
+
+            eq_or_diff $actual, $expected;
         }
     }
 };
@@ -99,44 +103,72 @@ subtest 'Valid domains' => sub {
 subtest 'Bad domains' => sub {
     my %input_domains = (
         # Empty labels
-        '.。．' => 'INITIAL_DOT',
-        'example。.com.' => 'REPEATED_DOTS',
-        'example。com.｡' => 'REPEATED_DOTS',
-        '．.example｡com' => 'INITIAL_DOT',
+        '.。．'           => ['INITIAL_DOT'],
+        'example。.com.' => ['REPEATED_DOTS'],
+        'example。com.｡' => ['REPEATED_DOTS'],
+        '．.example｡com' => ['INITIAL_DOT'],
 
         # Bad ascii
-        'bad:%;!$.example.com.' => 'INVALID_ASCII',
+        'bad:%;!$.example.com.'            => ['INVALID_ASCII'],
+        " \x{205F} example.com.  \x{0009}" => ['INVALID_ASCII'],
+        '    '                             => ['INVALID_ASCII'],
 
         # Label to long
-        "a" x 64 . ".example.com" => 'LABEL_TOO_LONG',
+        "a" x 64 . ".example.com" => ['LABEL_TOO_LONG'],
         # Length too long after idn conversion (libidn fails)
-        'チョコレート' x 8 . 'a' . '.example.com' => 'INVALID_U_LABEL',
+        'チョコレート' x 8 . 'a' . '.example.com' => ['INVALID_U_LABEL'],
         # Emoji in names are invalid as per IDNA2008
-        '❤️．example．com' => 'INVALID_U_LABEL',
+        '❤️．example．com' => ['INVALID_U_LABEL'],
 
         # Domain to long
         # this is 254 characters
-        ("a" x 15 . ".") x 15 . "bc" . ".example.com" => 'DOMAIN_NAME_TOO_LONG',
+        ( "a" x 15 . "." ) x 15 . "bc" . ".example.com" => ['DOMAIN_NAME_TOO_LONG'],
 
         # Empty domain
-        '' => 'EMPTY_DOMAIN_NAME',
-        '    ' => 'EMPTY_DOMAIN_NAME',
+        '' => ['EMPTY_DOMAIN_NAME'],
 
         # Ambiguous downcasing
-        'İ.example.com' => 'AMBIGUOUS_DOWNCASING',
+        'İ.example.com' => ['AMBIGUOUS_DOWNCASING'],
     );
 
-    while (($domain, $error) = each (%input_domains)) {
-        my $safe_domain = to_hex_esc($domain);
-        subtest "Domain: '$safe_domain' ($error)" => sub {
-            my $output, $messages, $domain;
+    for my $domain ( sort keys %input_domains ) {
+        my $expected_errors = $input_domains{$domain};
+        my $safe_domain = to_hex_esc( $domain );
+        subtest "Domain: '$safe_domain'" => sub {
+            my ( $errors, $final_domain );
             lives_ok(sub {
                 ($errors, $final_domain) = normalize_name($domain);
             }, 'incorrect domain should live');
 
-            is($final_domain, undef, 'No domain returned') or diag($final_domain);
-            is($errors->[0]->tag, $error, 'Correct error is returned') or diag($errors[0]);
-            note(to_hex_esc($errors->[0]))
+            my $actual = {
+                domain => $final_domain,
+                errors => [ map { $_->tag } @$errors ]
+            };
+            my $expected = {
+                domain => undef,
+                errors => $expected_errors
+            };
+
+            eq_or_diff $actual, $expected;
+        }
+    }
+};
+
+subtest 'Trimming space' => sub {
+    my %cases = (
+        "example."                     => 'example.',
+        "exam   ."                     => 'exam   .',
+        " \x{205F} example.  \x{0009}" => 'example.',
+    );
+
+    for my $str ( sort keys %cases ) {
+        my $expected = $cases{$str};
+
+        my $safe_str = to_hex_esc($str);
+        subtest "Domain: '$safe_str'" => sub {
+            my $actual = trim_space( $str );
+
+            is $actual, $expected, 'Match expected string';
         }
     }
 };
