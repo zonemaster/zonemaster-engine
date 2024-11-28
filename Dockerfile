@@ -1,4 +1,4 @@
-FROM zonemaster/ldns:local as build
+FROM zonemaster/ldns:local AS build
 
 RUN apk add --no-cache \
     # Only needed for CPAN deps
