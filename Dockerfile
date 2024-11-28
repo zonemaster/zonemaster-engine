@@ -61,4 +61,5 @@ RUN apk add --no-cache \
     perl-mailtools \
     perl-module-install \
     perl-net-ip \
-    perl-text-csv
+    perl-text-csv \
+    perl-try-tiny
