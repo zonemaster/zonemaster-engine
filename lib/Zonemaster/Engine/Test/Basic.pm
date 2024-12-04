@@ -101,11 +101,6 @@ Returns a boolean.
 sub can_continue {
     my ( $class, $zone, @results ) = @_;
 
-    my $is_undelegated = Zonemaster::Engine::Recursor->has_fake_addresses( $zone->name->string );
-    if ( $is_undelegated ) {
-        return 1;
-    }
-
     if ( should_run_test( 'basic02' ) ) {
         my %tag = map { $_->tag => 1 } @results;
         return !$tag{B02_NO_DELEGATION} && $tag{B02_AUTH_RESPONSE_SOA};
