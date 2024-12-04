@@ -16,6 +16,7 @@ my $datafile = q{t/Test.data};
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die "Stored data file missing" if not -r $datafile;
     Zonemaster::Engine::Nameserver->restore( $datafile );
+    Zonemaster::Engine::Profile->effective->set( q{no_network}, 1 );
 }
 
 subtest 'Enabling single test cases in profile' => sub {
@@ -26,15 +27,11 @@ subtest 'Enabling single test cases in profile' => sub {
     my $zone = zone( 'se' );
 
     my $effective_profile = Zonemaster::Engine::Profile->effective;
-    $effective_profile->merge( Zonemaster::Engine::Profile->default );
     $effective_profile->set( 'net.ipv6', 0 );
-    if ( not $ENV{ZONEMASTER_RECORD} ) {
-        $effective_profile->set( 'no_network', 1 );
-    }
 
     for my $testcase ( @testcases ) {
       SKIP: {
-          skip "$testcase, not possible with recorded data", 1
+          skip "$testcase, not possible with recorded data due to scrambled case of QNAME", 1
               if $testcase =~ '^nameserver(08|09)$' and not $ENV{ZONEMASTER_RECORD};
 
           subtest "Testcase '$testcase'" => sub {
