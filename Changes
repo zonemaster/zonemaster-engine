@@ -1,6 +1,43 @@
 Release history for Zonemaster component Zonemaster-Engine
 
 
+v7.0.0 2024-12-09 (part of Zonemaster v2024.2 release)
+
+ [Release information]
+ - Translations have not been fully updated in this release. They will
+   be updated in an upcoming extra release.
+
+ [Breaking change]
+ - Refactors ASNLookup code and documentation (#1257)
+
+ [Features]
+ - Changes default settings of queries (#1397)
+ - Updates DNSSEC10 implementation (#1396)
+ - Updates global cache and makes the feature being supported and not
+   experimental (#1394)
+ - Update Connectivity04 implementation (#1393)
+ - Lowers the levels of ASN related messages from test case Connectivity03
+   (#1388)
+ - Updates MethodsV2 method get_parent_ns_ips() to match new algorithm in test
+   case Basic01 (#1373)
+ - Adds CNAME followage in Recursor.pm (#1288)
+ - Updates profile function (#1356)
+
+ [Fixes]
+ - Fixes abort condition for undelegated tests in the Basic module (#1401)
+ - Adds Try::Tiny in zonemaster-cli runtime Docker container (#1399)
+ - Fixes CDS and CDNSKEY RRsets comparison in test case DNSSEC15 (#1383)
+ - Removes test case Nameserver14 never implemented (#1390)
+ - Updates test case Delegation05 to include QNAME and QTYPE in diagnostics for
+   failed queries (#1392)
+ - Removes obsolete document (#1359)
+ - Resolves IP addresses directly from Engine for out-of-bailiwick names in fake
+   delegations (#1389)
+ - Fixes spelling errors (external controbution from @emollier) (#1378)
+ - Fix barewords (external controbution from @emollier) (#1380)
+ - Fixes misspellings (external controbution from @jsoref) (#1366)
+
+
 v6.0.0 2024-07-01 (part of Zonemaster v2024.1 release)
 
  [Release information]
@@ -79,7 +116,7 @@ v4.7.2 2023-08-07 (public fix version)
  - Fixes bug (regression) in test case BASIC01 that made all tests of
    zone names that start with the same letters as the whole first label
    of the parent zone fail, e.g. "NOrid.NO" and "FRance.FR". The bug
-   was introduced in version v4.7.1 in release v2023.1.1. (#1270) 
+   was introduced in version v4.7.1 in release v2023.1.1. (#1270)
 
 
 v4.7.1 2023-07-24 (public fix version)
