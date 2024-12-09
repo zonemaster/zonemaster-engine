@@ -1,7 +1,7 @@
 use 5.006;
 use strict;
-use warnings FATAL   => 'all';
-use Test::More tests => 29;
+use warnings FATAL => 'all';
+use Test::More;
 use Log::Any::Test;    # Must come before use Log::Any
 
 use JSON::PP;
@@ -10,9 +10,7 @@ use Test::Differences;
 use Test::Exception;
 use Log::Any qw( $log );
 
-BEGIN {
-    use_ok 'Zonemaster::Engine::Profile';
-}
+use Zonemaster::Engine::Profile;
 
 # YAML representation of an example profile with all properties set
 Readonly my $EXAMPLE_PROFILE_1_YAML => q(
@@ -35,8 +33,12 @@ cache:
   redis:
     server: 127.0.0.1:6379
     expire: 3600
-asnroots:
-  - example.com
+asn_db:
+  style: cymru
+  sources:
+    cymru:
+      - asn1.example.com
+      - asn2.example.com
 logfilter:
   Zone:
     TAG:
@@ -76,9 +78,12 @@ Readonly my $EXAMPLE_PROFILE_1 => q(
       "expire": 3600
     }
   },
-  "asnroots": [
-    "example.com"
-  ],
+  "asn_db" : {
+      "style" : "cymru",
+      "sources" : {
+          "cymru" : [ "asn1.example.com", "asn2.example.com" ]
+      }
+  },
   "logfilter": {
     "Zone": {
       "TAG": [
@@ -129,9 +134,12 @@ Readonly my $EXAMPLE_PROFILE_2 => q(
       "expire": 7200
     }
   },
-  "asnroots": [
-    "asn1.example.com", "asn2.example.com"
-  ],
+  "asn_db" : {
+      "style" : "ripe",
+      "sources" : {
+          "ripe" : [ "asn3.example.com", "asn4.example.com" ]
+      }
+  },
   "logfilter": {
     "Nameserver": {
       "OTHER_TAG": [
@@ -176,22 +184,9 @@ subtest 'new() returns a new profile every time' => sub {
 subtest 'new() returns a profile with all properties unset' => sub {
     my $profile = Zonemaster::Engine::Profile->new;
 
-    is $profile->get( 'resolver.defaults.usevc' ),    undef, 'resolver.defaults.usevc is unset';
-    is $profile->get( 'resolver.defaults.retrans' ),  undef, 'resolver.defaults.retrans is unset';
-    is $profile->get( 'resolver.defaults.recurse' ),  undef, 'resolver.defaults.recurse is unset';
-    is $profile->get( 'resolver.defaults.retry' ),    undef, 'resolver.defaults.retry is unset';
-    is $profile->get( 'resolver.defaults.igntc' ),    undef, 'resolver.defaults.igntc is unset';
-    is $profile->get( 'resolver.defaults.fallback' ), undef, 'resolver.defaults.fallback is unset';
-    is $profile->get( 'resolver.source4' ),           undef, 'resolver.source4 is unset';
-    is $profile->get( 'resolver.source6' ),           undef, 'resolver.source6 is unset';
-    is $profile->get( 'net.ipv4' ),                   undef, 'net.ipv4 is unset';
-    is $profile->get( 'net.ipv6' ),                   undef, 'net.ipv6 is unset';
-    is $profile->get( 'no_network' ),                 undef, 'no_network is unset';
-    is $profile->get( 'asnroots' ),                   undef, 'asnroots is unset';
-    is $profile->get( 'logfilter' ),                  undef, 'logfilter is unset';
-    is $profile->get( 'test_levels' ),                undef, 'test_levels is unset';
-    is $profile->get( 'test_cases' ),                 undef, 'test_cases is unset';
-    is $profile->get( 'cache' ),                      undef, 'cache is unset';
+    for my $property ( Zonemaster::Engine::Profile->all_properties ) {
+        is $profile->get( $property ), undef, "$property is unset";
+    }
 };
 
 subtest 'default() returns a new profile every time' => sub {
@@ -207,18 +202,9 @@ subtest 'default() returns a new profile every time' => sub {
 subtest 'default() returns a profile with all properties set' => sub {
     my $profile = Zonemaster::Engine::Profile->default;
 
-    ok defined( $profile->get( 'resolver.defaults.usevc' ) ),    'resolver.defaults.usevc is set';
-    ok defined( $profile->get( 'resolver.defaults.recurse' ) ),  'resolver.defaults.recurse is set';
-    ok defined( $profile->get( 'resolver.defaults.igntc' ) ),    'resolver.defaults.igntc is set';
-    ok defined( $profile->get( 'resolver.defaults.fallback' ) ), 'resolver.defaults.fallback is set';
-    ok defined( $profile->get( 'net.ipv4' ) ),                   'net.ipv4 is set';
-    ok defined( $profile->get( 'net.ipv6' ) ),                   'net.ipv6 is set';
-    ok defined( $profile->get( 'no_network' ) ),                 'no_network is set';
-    ok defined( $profile->get( 'resolver.defaults.retry' ) ),    'resolver.defaults.retry is set';
-    ok defined( $profile->get( 'resolver.defaults.retrans' ) ),  'resolver.defaults.retrans is set';
-    ok defined( $profile->get( 'logfilter' ) ),                  'logfilter is set';
-    ok defined( $profile->get( 'test_levels' ) ),                'test_levels is set';
-    ok defined( $profile->get( 'test_cases' ) ),                 'test_cases is set';
+    for my $property ( Zonemaster::Engine::Profile->all_properties ) {
+        ok defined( $profile->get( $property ) ), "$property is set";
+    }
 };
 
 subtest 'from_json() returns a new profile every time' => sub {
@@ -233,22 +219,9 @@ subtest 'from_json() returns a new profile every time' => sub {
 subtest 'from_json("{}") returns a profile with all properties unset' => sub {
     my $profile = Zonemaster::Engine::Profile->from_json( "{}" );
 
-    is $profile->get( 'resolver.defaults.usevc' ),    undef, 'resolver.defaults.usevc is unset';
-    is $profile->get( 'resolver.defaults.recurse' ),  undef, 'resolver.defaults.recurse is unset';
-    is $profile->get( 'resolver.defaults.igntc' ),    undef, 'resolver.defaults.igntc is unset';
-    is $profile->get( 'resolver.defaults.fallback' ), undef, 'resolver.defaults.fallback is unset';
-    is $profile->get( 'net.ipv4' ),                   undef, 'net.ipv4 is unset';
-    is $profile->get( 'net.ipv6' ),                   undef, 'net.ipv6 is unset';
-    is $profile->get( 'no_network' ),                 undef, 'no_network is unset';
-    is $profile->get( 'resolver.defaults.retry' ),    undef, 'resolver.defaults.retry is unset';
-    is $profile->get( 'resolver.defaults.retrans' ),  undef, 'resolver.defaults.retrans is unset';
-    is $profile->get( 'resolver.source4' ),           undef, 'resolver.source4 is unset';
-    is $profile->get( 'resolver.source6' ),           undef, 'resolver.source6 is unset';
-    is $profile->get( 'asnroots' ),                   undef, 'asnroots is unset';
-    is $profile->get( 'logfilter' ),                  undef, 'logfilter is unset';
-    is $profile->get( 'test_levels' ),                undef, 'test_levels is unset';
-    is $profile->get( 'test_cases' ),                 undef, 'test_cases is unset';
-    is $profile->get( 'cache' ),                      undef, 'cache is unset';
+    for my $property ( Zonemaster::Engine::Profile->all_properties ) {
+        is $profile->get( $property ), undef, "$property is unset";
+    }
 };
 
 subtest 'from_json() parses values from a string' => sub {
@@ -265,7 +238,8 @@ subtest 'from_json() parses values from a string' => sub {
     is $profile->get( 'resolver.defaults.retrans' ),  234,          'resolver.defaults.retrans was parsed from JSON';
     is $profile->get( 'resolver.source4' ),           '192.0.2.53', 'resolver.source4 was parsed from JSON';
     is $profile->get( 'resolver.source6' ),           '2001:db8::42', 'resolver.source6 was parsed from JSON';
-    eq_or_diff $profile->get( 'asnroots' ), ['example.com'], 'asnroots was parsed from JSON';
+    eq_or_diff $profile->get( 'asn_db.style' ),       'cymru',      'asn_db.style was parsed from JSON';
+    eq_or_diff $profile->get( 'asn_db.sources' ),     { cymru => ["asn1.example.com", "asn2.example.com"] }, 'asn_db.sources was parsed from JSON';
     eq_or_diff $profile->get( 'logfilter' ), { Zone => { TAG => [ { when => { bananas => 0 }, set => 'WARNING' } ] } },
       'logfilter was parsed from JSON';
     eq_or_diff $profile->get( 'test_levels' ), { Zone => { TAG => 'INFO' } }, 'test_levels was parsed from JSON';
@@ -305,7 +279,8 @@ subtest 'from_json() dies on illegal values' => sub {
     dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"retrans":0}}}' ); }   "checks lower bound of resolver.defaults.retrans";
     dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"retrans":256}}}' ); } "checks upper bound of resolver.defaults.retrans";
     dies_ok { Zonemaster::Engine::Profile->from_json( '{"resolver":{"defaults":{"retrans":1.5}}}' ); } "checks type of resolver.defaults.retrans";
-    dies_ok { Zonemaster::Engine::Profile->from_json( '{"asnroots":["noreply@example.com"]}' ); }      "checks type of asnroots";
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"asn_db":{"style":["noreply@example"]}' ); }   "checks type of asndb.style";
+    dies_ok { Zonemaster::Engine::Profile->from_json( '{"asn_db":{"sources":["noreply@example"]}' ); } "checks type of asndb.sources";
     dies_ok { Zonemaster::Engine::Profile->from_json( '{"logfilter":[]}' ); }                          "checks type of logfilter";
     dies_ok { Zonemaster::Engine::Profile->from_json( '{"test_levels":[]}' ); }                        "checks type of test_levels";
     dies_ok { Zonemaster::Engine::Profile->from_json( '{"test_cases":{}}' ); }                         "checks type of test_cases";
@@ -380,19 +355,19 @@ subtest 'get() returns 0 for false' => sub {
 
 subtest 'get() returns deep copies of properties with complex types' => sub {
     my $profile = Zonemaster::Engine::Profile->new;
-    $profile->set( 'asnroots', ['asn1.example.com'] );
+    $profile->set( 'asn_db.sources', {} );
     $profile->set( 'logfilter',   {} );
     $profile->set( 'test_levels', {} );
     $profile->set( 'test_cases', [] );
     $profile->set( 'cache',   {} );
 
-    push @{ $profile->get( 'asnroots' ) },   'asn2.example.com';
+    $profile->get( 'asn_db.sources' )->{cymru} = ['asn1.example.com', 'asn2.example.com'];
     push @{ $profile->get( 'test_cases' ) }, 'Zone01';
     $profile->get( 'logfilter' )->{Zone} = {};
     $profile->get( 'test_levels' )->{Zone}{TAG} = 'INFO';
     $profile->get( 'cache' )->{redis}{server} = '127.0.0.1:6379';
 
-    eq_or_diff $profile->get( 'asnroots' ), ['asn1.example.com'], 'get(asnroots) returns a deep copy';
+    eq_or_diff $profile->get( 'asn_db.sources' ), {}, 'get(asn_db.sources) returns a deep copy';
     eq_or_diff $profile->get( 'logfilter' ),   {}, 'get(logfilter) returns a deep copy';
     eq_or_diff $profile->get( 'test_levels' ), {}, 'get(test_levels) returns a deep copy';
     eq_or_diff $profile->get( 'test_cases' ), [], 'get(test_cases) returns a deep copy';
@@ -401,7 +376,8 @@ subtest 'get() returns deep copies of properties with complex types' => sub {
 
 subtest 'get() dies if the given property name is invalid' => sub {
     my $profile = Zonemaster::Engine::Profile->new;
-    $profile->set( 'asnroots', [ 'asn1.example.com', 'asn2.example.com' ] );
+    $profile->set( 'asn_db.style', 'cymru' );
+    $profile->set( 'asn_db.sources', { cymru => ['asn1.example.com', 'asn2.example.com'] } );
     $profile->set( 'logfilter', { Zone => {} } );
     $profile->set( 'test_levels', { Zone => { TAG => 'INFO' } } );
     $profile->set( 'test_cases', ['Zone01'] );
@@ -411,7 +387,7 @@ subtest 'get() dies if the given property name is invalid' => sub {
     throws_ok { $profile->get( 'net.foobar' ) }        qr/^.*Unknown property .*/, 'net.foobar';
     throws_ok { $profile->get( 'resolver.defaults' ) } qr/^.*Unknown property .*/, 'resolver.defaults';
     throws_ok { $profile->get( 'resolver' ) }          qr/^.*Unknown property .*/, 'resolver';
-    throws_ok { $profile->get( 'asnroots.1' ) }        qr/^.*Unknown property .*/, 'asnroots.1';
+    throws_ok { $profile->get( 'asn_db.fake' ) }       qr/^.*Unknown property .*/, 'asn_db.fake';
     throws_ok { $profile->get( 'logfilter.Zone' ) }    qr/^.*Unknown property .*/, 'logfilter.Zone';
     throws_ok { $profile->get( 'test_levels.Zone' ) }  qr/^.*Unknown property .*/, 'test_levels.Zone';
     throws_ok { $profile->get( 'test_cases.Zone01' ) } qr/^.*Unknown property .*/, 'test_cases.Zone01';
@@ -434,7 +410,8 @@ subtest 'set() inserts values for unset properties' => sub {
     $profile->set( 'resolver.defaults.retrans',  234 );
     $profile->set( 'resolver.source4',           '192.0.2.53' );
     $profile->set( 'resolver.source6',           '2001:db8::42' );
-    $profile->set( 'asnroots', ['example.com'] );
+    $profile->set( 'asn_db.style', 'cymru' );
+    $profile->set( 'asn_db.sources', { cymru => ['asn1.example.com', 'asn2.example.com'] } );
     $profile->set( 'logfilter', { Zone => { TAG => [ { when => { bananas => 0 }, set => 'WARNING' } ] } } );
     $profile->set( 'test_levels', { Zone => { TAG => 'INFO' } } );
     $profile->set( 'test_cases', ['Zone01'] );
@@ -451,7 +428,8 @@ subtest 'set() inserts values for unset properties' => sub {
     is $profile->get( 'resolver.defaults.retrans' ),  234, 'resolver.defaults.retrans can be given a value when unset';
     is $profile->get( 'resolver.source4' ),           '192.0.2.53', 'resolver.source4 can be given a value when unset';
     is $profile->get( 'resolver.source6' ),           '2001:db8::42', 'resolver.source6 can be given a value when unset';
-    eq_or_diff $profile->get( 'asnroots' ), ['example.com'], 'anroots can be given a value when unset';
+    eq_or_diff $profile->get( 'asn_db.style' ),       'cymru', 'asn_db.style can be given a value when unset';
+    eq_or_diff $profile->get( 'asn_db.sources' ),     { cymru => ['asn1.example.com', 'asn2.example.com'] }, 'asn_db.sources can be given a value when unset';
     eq_or_diff $profile->get( 'logfilter' ), { Zone => { TAG => [ { when => { bananas => 0 }, set => 'WARNING' } ] } },
       'logfilter can be given a value when unset';
     eq_or_diff $profile->get( 'test_levels' ), { Zone => { TAG => 'INFO' } },
@@ -474,8 +452,9 @@ subtest 'set() updates values for set properties' => sub {
     $profile->set( 'resolver.defaults.retry',    99 );
     $profile->set( 'resolver.defaults.retrans',  88 );
     $profile->set( 'resolver.source4',           '198.51.100.53' );
-    $profile->set( 'resolver.source6',           '2001:db8::cafe' );
-    $profile->set( 'asnroots', [ 'asn1.example.com', 'asn2.example.com' ] );
+    $profile->set( 'resolver.source6',            '2001:db8::cafe' );
+    $profile->set( 'asn_db.style', 'ripe' );
+    $profile->set( 'asn_db.sources', { ripe => ['asn3.example.com', 'asn4.example.com'] } );
     $profile->set( 'logfilter', { Nameserver => { OTHER_TAG => [ { when => { apples => 1 }, set => 'INFO' } ] } } );
     $profile->set( 'test_levels', { Nameserver => { OTHER_TAG => 'ERROR' } } );
     $profile->set( 'test_cases', ['Zone02'] );
@@ -491,7 +470,8 @@ subtest 'set() updates values for set properties' => sub {
     is $profile->get( 'resolver.defaults.retrans' ), 88,              'resolver.defaults.retrans was updated';
     is $profile->get( 'resolver.source4' ),          '198.51.100.53', 'resolver.source4 was updated';
     is $profile->get( 'resolver.source6' ),          '2001:db8::cafe', 'resolver.source6 was updated';
-    eq_or_diff $profile->get( 'asnroots' ), [ 'asn1.example.com', 'asn2.example.com' ], 'asnroots was updated';
+    eq_or_diff $profile->get( 'asn_db.style' ),      'ripe', 'asn_db.style was updated';
+    eq_or_diff $profile->get( 'asn_db.sources' ),    { ripe => ['asn3.example.com', 'asn4.example.com'] }, 'asn_db.sources was updated';
     eq_or_diff $profile->get( 'logfilter' ),
       { Nameserver => { OTHER_TAG => [ { when => { apples => 1 }, set => 'INFO' } ] } }, 'logfilter was updated';
     eq_or_diff $profile->get( 'test_levels' ), { Nameserver => { OTHER_TAG => 'ERROR' } }, 'test_levels was updated';
@@ -503,27 +483,15 @@ subtest 'set() updates values for set properties' => sub {
 subtest 'set() dies on attempts to unset properties' => sub {
     my $profile = Zonemaster::Engine::Profile->from_json( $EXAMPLE_PROFILE_1 );
 
-    throws_ok { $profile->set( 'resolver.defaults.usevc',    undef ); } qr/^.* can not be undef/, 'dies on attempt to unset resolver.defaults.usevc';
-    throws_ok { $profile->set( 'resolver.defaults.recurse',  undef ); } qr/^.* can not be undef/, 'dies on attempt to unset resolver.defaults.recurse';
-    throws_ok { $profile->set( 'resolver.defaults.igntc',    undef ); } qr/^.* can not be undef/, 'dies on attempt to unset resolver.defaults.igntc';
-    throws_ok { $profile->set( 'resolver.defaults.fallback', undef ); } qr/^.* can not be undef/, 'dies on attempt to unset resolver.defaults.fallback';
-    throws_ok { $profile->set( 'net.ipv4',                   undef ); } qr/^.* can not be undef/, 'dies on attempt to unset net.ipv4';
-    throws_ok { $profile->set( 'net.ipv6',                   undef ); } qr/^.* can not be undef/, 'dies on attempt to unset net.ipv6';
-    throws_ok { $profile->set( 'no_network',                 undef ); } qr/^.* can not be undef/, 'dies on attempt to unset no_network';
-    throws_ok { $profile->set( 'resolver.defaults.retry',    undef ); } qr/^.* can not be undef/, 'dies on attempt to unset resolver.defaults.retry';
-    throws_ok { $profile->set( 'resolver.defaults.retrans',  undef ); } qr/^.* can not be undef/, 'dies on attempt to unset resolver.defaults.retans';
-    throws_ok { $profile->set( 'resolver.source4',           undef ); } qr/^.* can not be undef/, 'dies on attempt to unset resolver.source4';
-    throws_ok { $profile->set( 'resolver.source6',           undef ); } qr/^.* can not be undef/, 'dies on attempt to unset resolver.source6';
-    throws_ok { $profile->set( 'asnroots',                   undef ); } qr/^.* can not be undef/, 'dies on attempt to unset asnroots';
-    throws_ok { $profile->set( 'logfilter',                  undef ); } qr/^.* can not be undef/, 'dies on attempt to unset logfilter';
-    throws_ok { $profile->set( 'test_levels',                undef ); } qr/^.* can not be undef/, 'dies on attempt to unset test_levels';
-    throws_ok { $profile->set( 'test_cases',                 undef ); } qr/^.* can not be undef/, 'dies on attempt to unset test_cases';
-    throws_ok { $profile->set( 'cache',                      undef ); } qr/^.* can not be undef/, 'dies on attempt to unset cache';
+    for my $property ( Zonemaster::Engine::Profile->all_properties ) {
+        throws_ok { $profile->set( $property, undef ); } qr/^.* can not be undef/, "dies on attempt to unset $property";
+    }
 };
 
 subtest 'set() dies if the given property name is invalid' => sub {
     my $profile = Zonemaster::Engine::Profile->new;
-    $profile->set( 'asnroots', [ 'asn1.example.com', 'asn2.example.com' ] );
+    $profile->set( 'asn_db.style', 'cymru' );
+    $profile->set( 'asn_db.sources', { cymru => ['asn1.example.com', 'asn2.example.com'] } );
     $profile->set( 'logfilter',   { Zone => {} } );
     $profile->set( 'test_levels', { Zone => {} } );
     $profile->set( 'test_cases', ['Zone01'] );
@@ -531,9 +499,10 @@ subtest 'set() dies if the given property name is invalid' => sub {
 
     throws_ok { $profile->set( 'net',               1 ) } qr/^.*Unknown property .*/, 'dies on attempt to set a value for net';
     throws_ok { $profile->set( 'net.foobar',        1 ) } qr/^.*Unknown property .*/, 'dies on attempt to set a value for net.foobar';
-    throws_ok { $profile->set( 'resolver.defaults', 1 ) } qr/^.*Unknown property .*/, 'dies on attempt to set a value for resolver.defaults';
     throws_ok { $profile->set( 'resolver',          1 ) } qr/^.*Unknown property .*/, 'dies on attempt to set a value for resolver';
-    throws_ok { $profile->set( 'asnroots.1',        1 ) } qr/^.*Unknown property .*/, 'dies on attempt to set a value for asnroots.1';
+    throws_ok { $profile->set( 'resolver.defaults', 1 ) } qr/^.*Unknown property .*/, 'dies on attempt to set a value for resolver.defaults';
+    throws_ok { $profile->set( 'asn_db',            1 ) } qr/^.*Unknown property .*/, 'dies on attempt to set a value for asn_db';
+    throws_ok { $profile->set( 'asn_db.fake',       1 ) } qr/^.*Unknown property .*/, 'dies on attempt to set a value for asn_db.fake';
     throws_ok { $profile->set( 'logfilter.Zone',    1 ) } qr/^.*Unknown property .*/, 'dies on attempt to set a value for logfilter.Zone';
     throws_ok { $profile->set( 'test_levels.Zone',  1 ) } qr/^.*Unknown property .*/, 'dies on attempt to set a value for test_levels.Zone';
     throws_ok { $profile->set( 'test_cases.Zone01', 1 ) } qr/^.*Unknown property .*/, 'dies on attempt to set a value for test_cases.Zone01';
@@ -551,13 +520,16 @@ subtest 'set() dies on illegal value' => sub {
     dies_ok { $profile->set( 'resolver.defaults.retrans', 0 ); } 'checks lower bound of resolver.defaults.retrans';
     dies_ok { $profile->set( 'resolver.defaults.retrans', 256 ); } 'checks upper bound of resolver.defaults.retrans';
     dies_ok { $profile->set( 'resolver.defaults.retrans', 1.5 ); } 'checks type of resolver.defaults.retrans';
-    dies_ok { $profile->set( 'resolver.source4', ['192.0.2.53'] ); } 'checks type of resolver.source4';
-    dies_ok { $profile->set( 'resolver.source6', ['2001:db8::42'] ); } 'checks type of resolver.source6';
-    dies_ok { $profile->set( 'asnroots',        ['noreply@example.com'] ); } 'checks type of asnroots';
-    dies_ok { $profile->set( 'logfilter',       [] ); } 'checks type of logfilter';
-    dies_ok { $profile->set( 'test_levels',     [] ); } 'checks type of test_levels';
-    dies_ok { $profile->set( 'test_cases',      {} ); } 'checks type of test_cases';
-    dies_ok { $profile->set( 'cache',           [] ); } 'checks type of cache';
+    dies_ok { $profile->set( 'resolver.source4', 'example.com' ); } 'resolver.source4 rejects domain name string';
+    dies_ok { $profile->set( 'resolver.source4', ['192.0.2.53'] ); } 'resolver.source4 rejects arrayref';
+    dies_ok { $profile->set( 'resolver.source6', 'example.com' ); } 'resolver.source6 rejects domain name string';
+    dies_ok { $profile->set( 'resolver.source6', ['2001:db8::42'] ); } 'resolver.source6 rejects arrayref';
+    dies_ok { $profile->set( 'asn_db.style',     ['noreply@example.com'] ); } 'checks type of asn_db.style';
+    dies_ok { $profile->set( 'asn_db.sources',   ['noreply@example.com'] ); } 'checks type of asn_db.sources';
+    dies_ok { $profile->set( 'logfilter',        [] ); } 'checks type of logfilter';
+    dies_ok { $profile->set( 'test_levels',      [] ); } 'checks type of test_levels';
+    dies_ok { $profile->set( 'test_cases',       {} ); } 'checks type of test_cases';
+    dies_ok { $profile->set( 'cache',            [] ); } 'checks type of cache';
 };
 
 subtest 'set() accepts sentinel values' => sub {
@@ -622,7 +594,8 @@ subtest 'merge() with a profile with all properties unset' => sub {
     is $profile1->get( 'resolver.defaults.retrans' ),  234,          'keeps value of resolver.defaults.retrans';
     is $profile1->get( 'resolver.source4' ),           '192.0.2.53', 'keeps value of resolver.source4';
     is $profile1->get( 'resolver.source6' ),           '2001:db8::42', 'keeps value of resolver.source6';
-    eq_or_diff $profile1->get( 'asnroots' ), ['example.com'], 'keeps value of asnroots';
+    eq_or_diff $profile1->get( 'asn_db.style' ), 'cymru', 'keeps value of asn_db.style';
+    eq_or_diff $profile1->get( 'asn_db.sources' ), { cymru => ['asn1.example.com', 'asn2.example.com'] }, 'keeps value of asn_db.sources';
     eq_or_diff $profile1->get( 'logfilter' ), { Zone => { TAG => [ { when => { bananas => 0 }, set => 'WARNING' } ] } },
       'keeps value of logfilter';
     eq_or_diff $profile1->get( 'test_levels' ), { Zone => { TAG => 'INFO' } }, 'keeps value of test_levels';
@@ -647,7 +620,8 @@ subtest 'merge() with a profile with all properties set' => sub {
     is $profile1->get( 'resolver.defaults.retrans' ),  88,              'updates resolver.defaults.retrans';
     is $profile1->get( 'resolver.source4' ),           '198.51.100.53', 'updates resolver.source4';
     is $profile1->get( 'resolver.source6' ),           '2001:db8::cafe', 'updates resolver.source6';
-    eq_or_diff $profile1->get( 'asnroots' ), [ 'asn1.example.com', 'asn2.example.com' ], 'updates asnroots';
+    eq_or_diff $profile1->get( 'asn_db.style' ),       'ripe', 'updates asn_db.style';
+    eq_or_diff $profile1->get( 'asn_db.sources' ),     { ripe => ['asn3.example.com', 'asn4.example.com'] }, 'updates asn_db.sources';
     eq_or_diff $profile1->get( 'logfilter' ),
       { Nameserver => { OTHER_TAG => [ { when => { apples => 1 }, set => 'INFO' } ] } }, 'updates logfilter';
     eq_or_diff $profile1->get( 'test_levels' ), { Nameserver => { OTHER_TAG => 'ERROR' } }, 'updates test_levels';
@@ -672,7 +646,8 @@ subtest 'merge() does not update the other profile' => sub {
     is $profile2->get( 'net.ipv4' ),                   undef, 'net.ipv4 was untouched in other';
     is $profile2->get( 'net.ipv6' ),                   undef, 'net.ipv6 was untouched in other';
     is $profile2->get( 'no_network' ),                 undef, 'no_network was untouched in other';
-    is $profile2->get( 'asnroots' ),                   undef, 'asnroots was untouched in other';
+    is $profile2->get( 'asn_db.style' ),               undef, 'asn_db.style was untouched in other';
+    is $profile2->get( 'asn_db.sources' ),             undef, 'asn_db.sources was untouched in other';
     is $profile2->get( 'logfilter' ),                  undef, 'logfilter was untouched in other';
     is $profile2->get( 'test_levels' ),                undef, 'test_levels was untouched in other';
     is $profile2->get( 'test_cases' ),                 undef, 'test_cases was untouched in other';
@@ -779,13 +754,31 @@ subtest 'to_json() serializes each property' => sub {
         eq_or_diff decode_json( $json ), decode_json( '{"resolver":{"source6":"2001:db8::42"}}' );
     };
 
-    subtest 'asnroots' => sub {
+    subtest 'resolver.source6 sentinel value' => sub {
         my $profile = Zonemaster::Engine::Profile->new;
-        $profile->set( 'asnroots', ['example.com'] );
+        $profile->set( 'resolver.source6', '' );
 
         my $json = $profile->to_json;
 
-        eq_or_diff decode_json( $json ), decode_json( '{"asnroots":["example.com"]}' );
+        eq_or_diff decode_json( $json ), decode_json( qq({"resolver":{"source6":""}}) );
+    };
+
+    subtest 'asn_db.style' => sub {
+        my $profile = Zonemaster::Engine::Profile->new;
+        $profile->set( 'asn_db.style', 'cymru' );
+
+        my $json = $profile->to_json;
+
+        eq_or_diff decode_json( $json ), decode_json( '{"asn_db":{"style": "cymru"}}' );
+    };
+
+    subtest 'asn_db.sources' => sub {
+        my $profile = Zonemaster::Engine::Profile->new;
+        $profile->set( 'asn_db.sources', { cymru => ['asn1.example.com','asn2.example.com'] } );
+
+        my $json = $profile->to_json;
+
+        eq_or_diff decode_json( $json ), decode_json( '{"asn_db":{"sources": {"cymru": ["asn1.example.com","asn2.example.com"]}}} ' );
     };
 
     subtest 'test_cases' => sub {
@@ -844,3 +837,5 @@ subtest 'effective() returns the same profile every time' => sub {
 
     is $profile1->get( 'resolver.defaults.retry' ), 222;
 };
+
+done_testing;

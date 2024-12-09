@@ -2,7 +2,7 @@
 
 Contribution to this repository is welcome. Contribution can be either an issue
 report or a code or a documentation update. Also see the information in the
-[main README][Zonemaster/Zonemaster README] in the main Zonemaster respository.
+[main README][Zonemaster/Zonemaster README] in the main Zonemaster repository.
 
 ## Issue
 

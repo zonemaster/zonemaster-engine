@@ -34,6 +34,10 @@ All exportable names.
 
 DNSSEC algorithms.
 
+=item cname
+
+CNAME records.
+
 =item name
 
 Label and name lengths.
@@ -67,6 +71,8 @@ our @EXPORT_OK = qw[
   $ALGO_STATUS_NOT_RECOMMENDED
   $ALGO_STATUS_NOT_ZONE_SIGN
   $BLACKLISTING_ENABLED
+  $CNAME_MAX_CHAIN_LENGTH
+  $CNAME_MAX_RECORDS
   $DURATION_5_MINUTES_IN_SECONDS
   $DURATION_1_HOUR_IN_SECONDS
   $DURATION_4_HOURS_IN_SECONDS
@@ -82,8 +88,9 @@ our @EXPORT_OK = qw[
   $SERIAL_MAX_VARIATION
   $MINIMUM_NUMBER_OF_NAMESERVERS
   $UDP_PAYLOAD_LIMIT
-  $UDP_EDNS_QUERY_DEFAULT
-  $UDP_COMMON_EDNS_LIMIT
+  $EDNS_UDP_PAYLOAD_DNSSEC_DEFAULT
+  $EDNS_UDP_PAYLOAD_DEFAULT
+  $EDNS_UDP_PAYLOAD_COMMON_LIMIT
   @IPV4_SPECIAL_ADDRESSES
   @IPV6_SPECIAL_ADDRESSES
 ];
@@ -93,13 +100,14 @@ our %EXPORT_TAGS = (
     algo => [
         qw($ALGO_STATUS_DEPRECATED $ALGO_STATUS_PRIVATE $ALGO_STATUS_RESERVED $ALGO_STATUS_UNASSIGNED $ALGO_STATUS_OTHER $ALGO_STATUS_NOT_ZONE_SIGN $ALGO_STATUS_NOT_RECOMMENDED)
     ],
+    cname => [ qw($CNAME_MAX_CHAIN_LENGTH $CNAME_MAX_RECORDS) ],
     name => [qw($FQDN_MAX_LENGTH $LABEL_MAX_LENGTH)],
     ip   => [qw($IP_VERSION_4 $IP_VERSION_6)],
     soa  => [
         qw($DURATION_5_MINUTES_IN_SECONDS $DURATION_1_HOUR_IN_SECONDS $DURATION_4_HOURS_IN_SECONDS $DURATION_12_HOURS_IN_SECONDS $DURATION_1_DAY_IN_SECONDS $DURATION_1_WEEK_IN_SECONDS $DURATION_180_DAYS_IN_SECONDS $SERIAL_BITS $SERIAL_MAX_VARIATION)
     ],
-    misc => [qw($UDP_PAYLOAD_LIMIT $UDP_EDNS_QUERY_DEFAULT $UDP_COMMON_EDNS_LIMIT $MINIMUM_NUMBER_OF_NAMESERVERS $BLACKLISTING_ENABLED)]
-    ,    # everyting in %EXPORT_OK that isn't included in any of the other tags
+    misc => [qw($UDP_PAYLOAD_LIMIT $EDNS_UDP_PAYLOAD_DNSSEC_DEFAULT $EDNS_UDP_PAYLOAD_DEFAULT $EDNS_UDP_PAYLOAD_COMMON_LIMIT $MINIMUM_NUMBER_OF_NAMESERVERS $BLACKLISTING_ENABLED)]
+    ,    # everything in %EXPORT_OK that isn't included in any of the other tags
     addresses => [qw(@IPV4_SPECIAL_ADDRESSES @IPV6_SPECIAL_ADDRESSES)],
 );
 
@@ -120,6 +128,14 @@ our %EXPORT_TAGS = (
 =item * C<$ALGO_STATUS_NOT_RECOMMENDED>
 
 =item * C<$ALGO_STATUS_NOT_ZONE_SIGN>
+
+=item * C<$CNAME_MAX_CHAIN_LENGTH>
+
+An integer, used to define the maximum length of a CNAME chain when doing consecutive recursive lookups.
+
+=item * C<$CNAME_MAX_RECORDS>
+
+An integer, used to define the maximum number of CNAME records in a response.
 
 =item * C<$DURATION_5_MINUTES_IN_SECONDS>
 
@@ -153,11 +169,15 @@ An integer, used to define the size of the serial number space, as defined in RF
 
 =item * C<$UDP_PAYLOAD_LIMIT>
 
-=item * C<$UDP_EDNS_QUERY_DEFAULT>
+=item * C<$EDNS_UDP_PAYLOAD_DEFAULT>
 
-An integer, used to define the EDNS0 UDP packet size in EDNS queries.
+An integer, used to define the EDNS0 UDP packet size in non-DNSSEC EDNS queries.
 
-=item * C<$UDP_COMMON_EDNS_LIMIT>
+=item * C<$EDNS_UDP_PAYLOAD_COMMON_LIMIT>
+
+=item * C<$EDNS_UDP_PAYLOAD_DNSSEC_DEFAULT>
+
+An integer, used to define the EDNS0 UDP packet size in DNSSEC queries.
 
 =item * C<@IPV4_SPECIAL_ADDRESSES>
 
@@ -176,6 +196,9 @@ Readonly our $ALGO_STATUS_NOT_ZONE_SIGN   => 8;
 Readonly our $ALGO_STATUS_NOT_RECOMMENDED => 9;
 
 Readonly our $BLACKLISTING_ENABLED     => 1;
+
+Readonly our $CNAME_MAX_CHAIN_LENGTH      => 10;
+Readonly our $CNAME_MAX_RECORDS           => 9;
 
 Readonly our $DURATION_5_MINUTES_IN_SECONDS  =>             5 * 60;
 Readonly our $DURATION_1_HOUR_IN_SECONDS     =>            60 * 60;
@@ -197,12 +220,12 @@ Readonly our $MINIMUM_NUMBER_OF_NAMESERVERS => 2;
 Readonly our $SERIAL_BITS => 32;
 Readonly our $SERIAL_MAX_VARIATION => 0;
 
-Readonly our $UDP_PAYLOAD_LIMIT      => 512;
-Readonly our $UDP_EDNS_QUERY_DEFAULT => 512;
-Readonly our $UDP_COMMON_EDNS_LIMIT  => 4_096;
+Readonly our $UDP_PAYLOAD_LIMIT               => 512;
+Readonly our $EDNS_UDP_PAYLOAD_DEFAULT        => 512;
+Readonly our $EDNS_UDP_PAYLOAD_COMMON_LIMIT   => 4096;
+Readonly our $EDNS_UDP_PAYLOAD_DNSSEC_DEFAULT => 1232;
 
 Readonly::Array our @IPV4_SPECIAL_ADDRESSES => _extract_iana_ip_blocks($IP_VERSION_4);
-
 Readonly::Array our @IPV6_SPECIAL_ADDRESSES => _extract_iana_ip_blocks($IP_VERSION_6);
 
 =head1 METHODS

@@ -23,6 +23,7 @@ requires 'Email::Valid'       => 0;
 requires 'File::ShareDir'     => 1.00;
 requires 'File::Slurp'        => 0;
 requires 'IO::Socket::INET6'  => 2.69;
+requires 'List::Compare'      => 0;
 requires 'List::MoreUtils'    => 0;
 requires 'Locale::TextDomain' => 1.20;
 requires 'Log::Any'           => 0;
@@ -33,7 +34,7 @@ requires 'Net::IP::XS'        => 0.21;
 requires 'Readonly'           => 0;
 requires 'Text::CSV'          => 0;
 requires 'YAML::XS'           => 0;
-requires 'Zonemaster::LDNS'   => 4.000002; # For v4.0.2
+requires 'Zonemaster::LDNS'   => 4.001000; # For v4.1.0
 
 test_requires 'Locale::PO'        => 0;
 test_requires 'Pod::Coverage'     => 0;

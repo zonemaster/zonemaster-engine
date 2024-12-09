@@ -3,7 +3,7 @@ package Zonemaster::Engine;
 use v5.16.0;
 use warnings;
 
-use version; our $VERSION = version->declare("v6.0.0");
+use version; our $VERSION = version->declare("v7.0.0");
 
 BEGIN {
     # Locale::TextDomain (<= 1.20) doesn't know about File::ShareDir so give a helping hand.
@@ -37,7 +37,7 @@ my $init_done = 0;
 
 sub init_engine {
     return if $init_done++;
-    Zonemaster::Engine::Recursor::init_recursor;
+    Zonemaster::Engine::Recursor::init_recursor();
 }
 
 sub logger {
@@ -141,7 +141,7 @@ sub add_fake_delegation {
             if (   !@{ $href->{$name} }
                 && !$class->zone( $domain )->is_in_zone( $name ) )
             {
-                my @ips = Zonemaster::LDNS->new->name2addr( $name );
+                my @ips = map { $_->ip } Zonemaster::Engine::Recursor->get_addresses_for( $name );
                 push @{ $href->{$name} }, @ips;
                 if ( !@ips ) {
                     $incomplete_delegation = 1;
@@ -252,7 +252,7 @@ This manual describes the main L<Zonemaster::Engine> module. If what you're afte
 
 =item init_engine()
 
-Run the inititalization tasks if they have not been run already. This method is called automatically in INIT block.
+Run the initialization tasks if they have not been run already. This method is called automatically in INIT block.
 
 =item test_zone($name)
 
@@ -289,7 +289,7 @@ Returns the global L<Zonemaster::Engine::Logger> object.
 
 =item all_tags()
 
-Returns a list of all the tags that can be logged for all avilable test modules.
+Returns a list of all the tags that can be logged for all available test modules.
 
 =item all_methods()
 

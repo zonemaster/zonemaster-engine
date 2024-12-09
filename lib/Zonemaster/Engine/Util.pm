@@ -152,7 +152,7 @@ sub parse_hints {
         }
         else {
             my $rrtype = $glue{$owner};
-            die "Ownername of $rrtype record does not match any NS RDATA\n";
+            die "Owner name of $rrtype record does not match any NS RDATA\n";
         }
     }
 

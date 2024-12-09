@@ -314,10 +314,6 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # NAMESERVER:NAMESERVER13
             'Test for truncated response on EDNS query';
     },
-    NAMESERVER14 => sub {
-        __x    # NAMESERVER:NAMESERVER14
-            'Test for unknown version with unknown OPTION-CODE';
-    },
     NAMESERVER15 => sub {
         __x    # NAMESERVER:NAMESERVER15
             'Checking for revealed software version';
