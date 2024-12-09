@@ -15,7 +15,6 @@ v7.0.0 2024-12-09 (part of Zonemaster v2024.2 release)
  - Updates DNSSEC10 implementation (#1396)
  - Updates global cache and makes the feature being supported and not
    experimental (#1394)
- - Update Connectivity04 implementation (#1393)
  - Lowers the levels of ASN related messages from test case Connectivity03
    (#1388)
  - Updates MethodsV2 method get_parent_ns_ips() to match new algorithm in test
@@ -28,6 +27,7 @@ v7.0.0 2024-12-09 (part of Zonemaster v2024.2 release)
  - Adds Try::Tiny in zonemaster-cli runtime Docker container (#1399)
  - Fixes CDS and CDNSKEY RRsets comparison in test case DNSSEC15 (#1383)
  - Removes test case Nameserver14 never implemented (#1390)
+ - Update Connectivity04 implementation (#1393)
  - Updates test case Delegation05 to include QNAME and QTYPE in diagnostics for
    failed queries (#1392)
  - Removes obsolete document (#1359)
