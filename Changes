@@ -33,9 +33,9 @@ v7.0.0 2024-12-09 (part of Zonemaster v2024.2 release)
  - Removes obsolete document (#1359)
  - Resolves IP addresses directly from Engine for out-of-bailiwick names in fake
    delegations (#1389)
- - Fixes spelling errors (external controbution from @emollier) (#1378)
- - Fix barewords (external controbution from @emollier) (#1380)
- - Fixes misspellings (external controbution from @jsoref) (#1366)
+ - Fixes spelling errors (external contribution from @emollier) (#1378)
+ - Fix barewords (external contribution from @emollier) (#1380)
+ - Fixes misspellings (external contribution from @jsoref) (#1366)
 
 
 v6.0.0 2024-07-01 (part of Zonemaster v2024.1 release)
