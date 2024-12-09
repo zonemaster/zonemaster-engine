@@ -17,24 +17,24 @@ v7.0.0 2024-12-09 (part of Zonemaster v2024.2 release)
    experimental (#1394)
  - Lowers the levels of ASN related messages from test case Connectivity03
    (#1388)
- - Updates MethodsV2 method get_parent_ns_ips() to match new algorithm in test
+ - Updates MethodsV2 method to match new algorithm in test
    case Basic01 (#1373)
- - Adds CNAME followage in Recursor.pm (#1288)
+ - Adds CNAME followage in recursive lookups (#1288)
  - Updates profile function (#1356)
 
  [Fixes]
  - Fixes abort condition for undelegated tests in the Basic module (#1401)
  - Adds Try::Tiny in zonemaster-cli runtime Docker container (#1399)
  - Fixes CDS and CDNSKEY RRsets comparison in test case DNSSEC15 (#1383)
- - Removes test case Nameserver14 never implemented (#1390)
- - Update Connectivity04 implementation (#1393)
+ - Removes test case Nameserver14 (never implemented) (#1390)
+ - Updates Connectivity04 implementation (#1393)
  - Updates test case Delegation05 to include QNAME and QTYPE in diagnostics for
    failed queries (#1392)
  - Removes obsolete document (#1359)
  - Resolves IP addresses directly from Engine for out-of-bailiwick names in fake
    delegations (#1389)
  - Fixes spelling errors (external contribution from @emollier) (#1378)
- - Fix barewords (external contribution from @emollier) (#1380)
+ - Fixes barewords (external contribution from @emollier) (#1380)
  - Fixes misspellings (external contribution from @jsoref) (#1366)
 
 
