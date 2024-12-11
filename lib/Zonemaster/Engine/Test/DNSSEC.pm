@@ -3150,6 +3150,7 @@ sub dnssec10 {
                     @{ Zonemaster::Engine::TestMethodsV2->get_zone_ns_names_and_ips( $zone ), Zonemaster::Engine::TestMethodsV2->get_del_ns_names_and_ips( $zone ) }
                 : @{ Zonemaster::Engine::TestMethodsV2->get_del_ns_names_and_ips( $zone ) }
               : ();
+    my @ignored_nss;
 
     my %ip_already_processed;
     my $testing_time = time;
@@ -3159,12 +3160,14 @@ sub dnssec10 {
         $ip_already_processed{$ns->address->short} = 1;
 
         if ( _ip_disabled_message( \@results, $ns, @query_types ) ) {
+            push @ignored_nss, $ns;
             next;
         }
 
         my $dnskey_p = $ns->query( $zone->name, $type_dnskey, { dnssec => 1 } );
 
         if ( not $dnskey_p or $dnskey_p->rcode ne q{NOERROR} or not $dnskey_p->aa ) {
+            push @ignored_nss, $ns;
             next;
         }
 
@@ -3786,7 +3789,7 @@ sub dnssec10 {
           );
     }
 
-    $lc = List::Compare->new( [ @nss ], [ @without_dnskey, @nsec_in_answer, @nsec3param_nsec_nodata, @nsec3param_in_answer, @nsec_nsec3_nodata ] );
+    $lc = List::Compare->new( [ @nss ], [ @ignored_nss, @without_dnskey, @nsec_in_answer, @nsec3param_nsec_nodata, @nsec3param_in_answer, @nsec_nsec3_nodata ] );
     @first = $lc->get_unique;
 
     if ( @first ) {
