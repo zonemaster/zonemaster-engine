@@ -1244,9 +1244,9 @@ msgid ""
 "recommended practice is to set this value to 0. Fetched from name servers "
 "\"{ns_list}\"."
 msgstr ""
-"Följande namnservrar rapporterar NSEC3-itererationsvärdet {int}. Rekommenderad "
-"praxis är att sätta detta värde till 0. Hämtad från namnservrarna "
-"\"{ns_list}\"."
+"Följande namnservrar rapporterar NSEC3-itererationsvärdet {int}. "
+"Rekommenderad praxis är att sätta detta värde till 0. Hämtad från "
+"namnservrarna \"{ns_list}\"."
 
 #. DNSSEC:DS03_ILLEGAL_SALT_LENGTH
 #, perl-brace-format
@@ -1264,31 +1264,32 @@ msgid ""
 "Inconsistent hash algorithm in NSEC3 in responses for the child zone from "
 "different name servers."
 msgstr ""
-"Inkonsistent hash-algoritm i NSEC3 i svar från olika namnservrar för "
-"barnzonen."
+"Inkonsekvent hash-algoritm i NSEC3 i svaren från olika namnservrar för "
+"dotterzonen."
 
 #. DNSSEC:DS03_INCONSISTENT_ITERATION
 msgid ""
 "Inconsistent NSEC3 iteration value in responses for the child zone from "
 "different name servers."
 msgstr ""
-"Inkonsistent NSEC3-iterationsvärde i svar från olika namnservrar för "
-"barnzonen."
+"Inkonsekvent NSEC3-iterationsvärde i svaren från olika namnservrar för "
+"dotterzonen."
 
 #. DNSSEC:DS03_INCONSISTENT_NSEC3_FLAGS
 msgid ""
 "Inconsistent NSEC3 flag list in responses for the child zone from different "
 "name servers."
 msgstr ""
-"Inkonsistent NSEC3-flagglistevärde i svar från olika namnservrar för "
-"barnzonen."
+"Inkonsekvent NSEC3-flagglistevärde i svaren från olika namnservrar för "
+"dotterzonen."
 
 #. DNSSEC:DS03_INCONSISTENT_SALT_LENGTH
 msgid ""
 "Inconsistent salt length in NSEC3 in responses for the child zone from "
 "different name servers."
 msgstr ""
-"Inkonsistent saltlängd i NSEC3 i svar från olika namnservrar för barnzonen."
+"Inkonsekvent saltlängd i NSEC3 i svaren från olika namnservrar för "
+"dotterzonen."
 
 #. DNSSEC:DS03_LEGAL_EMPTY_SALT
 #, perl-brace-format
@@ -1314,8 +1315,8 @@ msgid ""
 "The following servers respond with NSEC3 iteration value set to zero (as "
 "recommended). Fetched from name servers \"{ns_list}\"."
 msgstr ""
-"Följande namnservrar har NSEC3-itererationsvärdet inställt på noll (rekommenderat "
-"värde). Hämtad från namnservrarna \"{ns_list}\"."
+"Följande namnservrar har NSEC3-itererationsvärdet inställt på noll "
+"(rekommenderat värde). Hämtad från namnservrarna \"{ns_list}\"."
 
 #. DNSSEC:DS03_NO_DNSSEC_SUPPORT
 #, perl-brace-format
@@ -1350,8 +1351,8 @@ msgid ""
 "The following servers respond with NSEC3 opt-out disabled (as recommended). "
 "Fetched from name servers \"{ns_list}\"."
 msgstr ""
-"Följande namnservrar har opt-out för NSEC3 inaktiverat (rekommenderat värde). "
-"Hämtad från namnservrarna \"{ns_list}\"."
+"Följande namnservrar har opt-out för NSEC3 inaktiverat (rekommenderat "
+"värde). Hämtad från namnservrarna \"{ns_list}\"."
 
 #. DNSSEC:DS03_NSEC3_OPT_OUT_ENABLED_NON_TLD
 #, perl-brace-format
@@ -1359,8 +1360,8 @@ msgid ""
 "The following servers respond with NSEC3 opt-out enabled. The recommended "
 "practice is to disable opt-out. Fetched from name servers \"{ns_list}\"."
 msgstr ""
-"Följande namnservrar har opt-out för NSEC3 aktiverat. Rekommenderad praxis är "
-"att inaktivera opt-out. Hämtad från namnservrarna \"{ns_list}\"."
+"Följande namnservrar har opt-out för NSEC3 aktiverat. Rekommenderad praxis "
+"är att inaktivera opt-out. Hämtad från namnservrarna \"{ns_list}\"."
 
 #. DNSSEC:DS03_NSEC3_OPT_OUT_ENABLED_TLD
 #, perl-brace-format
@@ -1368,8 +1369,8 @@ msgid ""
 "The following servers respond with NSEC3 opt-out enabled. Fetched from name "
 "servers \"{ns_list}\"."
 msgstr ""
-"Följande namnservrar har opt-out för NSEC3 aktiverat. Hämtad från namnservrarna "
-"\"{ns_list}\"."
+"Följande namnservrar har opt-out för NSEC3 aktiverat. Hämtad från "
+"namnservrarna \"{ns_list}\"."
 
 #. DNSSEC:DS03_SERVER_NO_DNSSEC_SUPPORT
 #, perl-brace-format
@@ -1547,7 +1548,7 @@ msgid ""
 "Inconsistent responses from zone with NSEC. Fetched from name servers "
 "\"{ns_list}\"."
 msgstr ""
-"Inkonsistenta svar från zon med NSEC. Hämtad från namnservrarna "
+"Inkonsekventa svar från zon med NSEC. Hämtad från namnservrarna "
 "\"{ns_list}\"."
 
 #. DNSSEC:DS10_INCONSISTENT_NSEC3
@@ -1556,7 +1557,7 @@ msgid ""
 "Inconsistent responses from zone with NSEC3. Fetched from name servers "
 "\"{ns_list}\"."
 msgstr ""
-"Inkonsistenta svar från zon med NSEC3. Hämtad från namnservrarna "
+"Inkonsekventa svar från zon med NSEC3. Hämtad från namnservrarna "
 "\"{ns_list}\"."
 
 #. DNSSEC:DS10_INCONSISTENT_NSEC_NSEC3
@@ -1621,8 +1622,8 @@ msgid ""
 "The returned NSEC3 record unexpectedly does not match the zone name. Fetched "
 "from name servers \"{ns_list}\"."
 msgstr ""
-"Den returnerade NSEC3-posten stämmer inte överens med zonens namn, vilket är oväntat. "
-"Hämtad från namnservrarna \"{ns_list}\"."
+"Den returnerade NSEC3-posten stämmer inte överens med zonens namn, vilket är "
+"oväntat. Hämtad från namnservrarna \"{ns_list}\"."
 
 #. DNSSEC:DS10_NSEC3_MISSING_SIGNATURE
 #, perl-brace-format
@@ -1720,8 +1721,8 @@ msgid ""
 "The returned NSEC record has an unexpected non-apex owner name. Fetched from "
 "name servers \"{ns_list}\"."
 msgstr ""
-"Den returnerade NSEC-posten har ett ägarnamn som inte är zonens "
-"apex, vilket är oväntat. Hämtad från namnservrarna \"{ns_list}\"."
+"Den returnerade NSEC-posten har ett ägarnamn som inte är zonens apex, vilket "
+"är oväntat. Hämtad från namnservrarna \"{ns_list}\"."
 
 #. DNSSEC:DS10_NSEC_MISSING_SIGNATURE
 #, perl-brace-format
