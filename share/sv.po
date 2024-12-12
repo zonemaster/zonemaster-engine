@@ -1244,7 +1244,7 @@ msgid ""
 "recommended practice is to set this value to 0. Fetched from name servers "
 "\"{ns_list}\"."
 msgstr ""
-"Följande namnservrar använder NSEC3-itererationsvärdet {int}. Rekommenderad "
+"Följande namnservrar rapporterar NSEC3-itererationsvärdet {int}. Rekommenderad "
 "praxis är att sätta detta värde till 0. Hämtad från namnservrarna "
 "\"{ns_list}\"."
 
