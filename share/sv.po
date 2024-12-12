@@ -209,7 +209,7 @@ msgstr ""
 
 #. BASIC:B01_PARENT_NOT_FOUND
 msgid "The parent zone cannot be found."
-msgstr "Moderzonen kan inte hittas."
+msgstr "Moderzonen kan inte fastställas."
 
 #. BASIC:B01_PARENT_UNDETERMINED
 #, perl-brace-format
