@@ -1255,8 +1255,8 @@ msgid ""
 "The recommended practice is to use an empty salt. Fetched from name servers "
 "\"{ns_list}\"."
 msgstr ""
-"Följande servrar svarar med en icke-tom salt i NSEC3 ({int} oktetter). Det "
-"rekommenderade är att använda ett tomt salt. Hämtad från namnservrar "
+"Följande servrar svarar med ett icke-tomt salt i NSEC3 ({int} oktetter). "
+"Rekommendationen är att använda ett tomt salt. Hämtat från namnservrar "
 "\"{ns_list}\"."
 
 #. DNSSEC:DS03_INCONSISTENT_HASH_ALGO
