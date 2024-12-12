@@ -1720,8 +1720,8 @@ msgid ""
 "The returned NSEC record has an unexpected non-apex owner name. Fetched from "
 "name servers \"{ns_list}\"."
 msgstr ""
-"Den returnerade NSEC-posten har ett oväntat ägarnamn som inte är zonens "
-"apex. Hämtad från namnservrarna \"{ns_list}\"."
+"Den returnerade NSEC-posten har ett ägarnamn som inte är zonens "
+"apex, vilket är oväntat. Hämtad från namnservrarna \"{ns_list}\"."
 
 #. DNSSEC:DS10_NSEC_MISSING_SIGNATURE
 #, perl-brace-format
