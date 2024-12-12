@@ -112,8 +112,8 @@ msgstr "Tous les enregistrements PTR correspondent aux serveurs de noms."
 #, perl-brace-format
 msgid "No response from nameserver(s) on PTR query ({domain})."
 msgstr ""
-"Aucune réponse des serveurs de noms sur une requête de type \"PTR\" "
-"({domain})."
+"Aucune réponse des serveurs de noms sur une requête de type "
+"\"PTR\" ({domain})."
 
 #. ADDRESS:TEST_CASE_END
 #. BASIC:TEST_CASE_END
@@ -2831,8 +2831,8 @@ msgstr ""
 #, perl-brace-format
 msgid "Nameserver {ns} returns an upward referral."
 msgstr ""
-"Le serveur de noms {ns} répond à la requête de type \"NS\" sur la racine '.' "
-"(upward referral)."
+"Le serveur de noms {ns} répond à la requête de type \"NS\" sur la racine "
+"'.' (upward referral)."
 
 #. NAMESERVER:UPWARD_REFERRAL_IRRELEVANT
 msgid "Upward referral tests skipped for root zone."
@@ -2843,8 +2843,8 @@ msgstr ""
 #, perl-brace-format
 msgid "Nameserver {ns} has one or more unknown EDNS Z flag bits set."
 msgstr ""
-"Le serveur de noms {ns} répond à une requête avec un ou plusieurs bits \"Z\" "
-"(EDNS) positionnés."
+"Le serveur de noms {ns} répond à une requête avec un ou plusieurs bits "
+"\"Z\" (EDNS) positionnés."
 
 #. SYNTAX:SYNTAX01
 msgid "No illegal characters in the domain name"
@@ -2950,8 +2950,8 @@ msgstr ""
 #, perl-brace-format
 msgid "Domain name MX ({domain}) within a 'numeric only' TLD ({tld})."
 msgstr ""
-"Le relais de messagerie ({domain}) se trouve dans un TLD 'numeric only' "
-"({tld})."
+"Le relais de messagerie ({domain}) se trouve dans un TLD 'numeric "
+"only' ({tld})."
 
 #. SYNTAX:MX_SYNTAX_OK
 #, perl-brace-format
@@ -3267,8 +3267,8 @@ msgstr ""
 #, perl-brace-format
 msgid "No IP address found for SOA 'mname' nameserver ({mname})."
 msgstr ""
-"Aucune adresse IP trouvée pour le serveur maître défini dans le SOA, 'mname' "
-"({mname})."
+"Aucune adresse IP trouvée pour le serveur maître défini dans le SOA, "
+"'mname' ({mname})."
 
 #. ZONE:ONE_SOA
 msgid "A unique SOA record is returned by all nameservers of the zone."

@@ -2896,8 +2896,8 @@ msgid ""
 "SOA 'expire' value ({expire}) is lower than the SOA 'refresh' value "
 "({refresh})."
 msgstr ""
-"Værdien for SOA 'expire' ({expire}) er mindre end værdien for SOA 'refresh' "
-"({refresh})."
+"Værdien for SOA 'expire' ({expire}) er mindre end værdien for SOA "
+"'refresh' ({refresh})."
 
 #. ZONE:SOA_DEFAULT_TTL_MAXIMUM_VALUE_HIGHER
 #, perl-brace-format

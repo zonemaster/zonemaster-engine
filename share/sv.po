@@ -1792,8 +1792,8 @@ msgid ""
 "There is no DNSKEY record matching the RRSIG (signature) with tag {keytag} "
 "for the NSEC record. Fetched from name servers \"{ns_list}\"."
 msgstr ""
-"Det finns ingen DNSKEY-post som matchar RRSIG-signaturen med \"key tag\" "
-"{keytag} för NSEC-posten. Hämtad från namnservrarna med IP-adresserna "
+"Det finns ingen DNSKEY-post som matchar RRSIG-signaturen med \"key "
+"tag\" {keytag} för NSEC-posten. Hämtad från namnservrarna med IP-adresserna "
 "\"{ns_list}\"."
 
 #. DNSSEC:DS10_NSEC_RRSIG_VERIFY_ERROR
@@ -3336,8 +3336,8 @@ msgid ""
 "SOA 'expire' value ({expire}) is lower than the SOA 'refresh' value "
 "({refresh})."
 msgstr ""
-"Värdet för SOA 'expire' ({expire}) är lägre än värdet för SOA 'refresh' "
-"({refresh})."
+"Värdet för SOA 'expire' ({expire}) är lägre än värdet för SOA "
+"'refresh' ({refresh})."
 
 #. ZONE:SOA_DEFAULT_TTL_MAXIMUM_VALUE_HIGHER
 #, perl-brace-format
