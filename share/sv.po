@@ -1379,7 +1379,7 @@ msgid ""
 "from name servers \"{ns_list}\"."
 msgstr ""
 "Följande namnservrar stöder inte DNSSEC eller är felkonfigurerade. Testning "
-"för NSEC3 har hoppats över för dessa servrar. Hämtad från namnservrarna "
+"av NSEC3 har hoppats över för dessa servrar. Hämtad från namnservrarna "
 "\"{ns_list}\"."
 
 #. DNSSEC:DS03_SERVER_NO_NSEC3
