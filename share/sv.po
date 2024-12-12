@@ -614,7 +614,7 @@ msgstr ""
 #. CONNECTIVITY:CN04_IPV6_SINGLE_PREFIX
 msgid ""
 "All name server(s) IPv6 address(es) are announced in the same IPv6 prefix."
-msgstr "Alla namnserverns IPv6-adresser annonseras inom samma IPv6-prefix."
+msgstr "Alla namnserverns IPv6-adresser tillhör samma IPv6-prefix."
 
 #. CONNECTIVITY:ERROR_ASN_DATABASE
 #, perl-brace-format
