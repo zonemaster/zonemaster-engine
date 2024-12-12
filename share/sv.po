@@ -1234,7 +1234,7 @@ msgid ""
 "The following servers respond with an illegal hash algorithm for NSEC3 "
 "({algo_num}). Fetched from name servers \"{ns_list}\"."
 msgstr ""
-"Följande namnservrar använder en ogiltig hash-algoritm för NSEC3 "
+"Följande namnservrar rapporterar en ogiltig hash-algoritm för NSEC3 "
 "({algo_num}). Hämtad från namnservrarna \"{ns_list}\"."
 
 #. DNSSEC:DS03_ILLEGAL_ITERATION_VALUE
