@@ -1314,8 +1314,8 @@ msgid ""
 "The following servers respond with NSEC3 iteration value set to zero (as "
 "recommended). Fetched from name servers \"{ns_list}\"."
 msgstr ""
-"Följande namnservrar har NSEC3-itererationsvärdet inställt på noll (som "
-"rekommenderas). Hämtad från namnservrarna \"{ns_list}\"."
+"Följande namnservrar har NSEC3-itererationsvärdet inställt på noll (rekommenderat "
+"värde). Hämtad från namnservrarna \"{ns_list}\"."
 
 #. DNSSEC:DS03_NO_DNSSEC_SUPPORT
 #, perl-brace-format
