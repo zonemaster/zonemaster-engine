@@ -592,7 +592,7 @@ msgstr ""
 #. CONNECTIVITY:CN04_IPV4_SINGLE_PREFIX
 msgid ""
 "All name server(s) IPv4 address(es) are announced in the same IPv4 prefix."
-msgstr "Alla namnserverns IPv4-adresser annonseras inom samma IPv4-prefix."
+msgstr "Alla namnserverns IPv4-adresser tillhör samma IPv4-prefix."
 
 #. CONNECTIVITY:CN04_IPV6_DIFFERENT_PREFIX
 #, perl-brace-format
