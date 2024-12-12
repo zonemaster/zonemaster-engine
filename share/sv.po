@@ -1368,7 +1368,7 @@ msgid ""
 "The following servers respond with NSEC3 opt-out enabled. Fetched from name "
 "servers \"{ns_list}\"."
 msgstr ""
-"Följande namnservrar har NSEC3 opt-out aktiverat. Hämtad från namnservrarna "
+"Följande namnservrar har opt-out för NSEC3 aktiverat. Hämtad från namnservrarna "
 "\"{ns_list}\"."
 
 #. DNSSEC:DS03_SERVER_NO_DNSSEC_SUPPORT
