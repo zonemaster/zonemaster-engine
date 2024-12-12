@@ -1621,7 +1621,7 @@ msgid ""
 "The returned NSEC3 record unexpectedly does not match the zone name. Fetched "
 "from name servers \"{ns_list}\"."
 msgstr ""
-"Den returnerade NSEC3-posten stämmer oväntat inte överens med zonens namn. "
+"Den returnerade NSEC3-posten stämmer inte överens med zonens namn, vilket är oväntat. "
 "Hämtad från namnservrarna \"{ns_list}\"."
 
 #. DNSSEC:DS10_NSEC3_MISSING_SIGNATURE
