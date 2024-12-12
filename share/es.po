@@ -2792,8 +2792,8 @@ msgstr ""
 #, perl-brace-format
 msgid "SOA MNAME ({domain}) within a 'numeric only' TLD ({tld})."
 msgstr ""
-"El campo MNAME del SOA ({domain}) está dentro de un TLD 'sólo "
-"numérico' ({tld})."
+"El campo MNAME del SOA ({domain}) está dentro de un TLD 'sólo numérico' "
+"({tld})."
 
 #. SYNTAX:MNAME_SYNTAX_OK
 #, perl-brace-format
@@ -2846,8 +2846,8 @@ msgstr ""
 #, perl-brace-format
 msgid "Nameserver ({domain}) within a 'numeric only' TLD ({tld})."
 msgstr ""
-"El servidor de nombres ({domain}) está dentro de un TLD 'sólo "
-"numérico' ({tld})."
+"El servidor de nombres ({domain}) está dentro de un TLD 'sólo numérico' "
+"({tld})."
 
 #. SYNTAX:NAMESERVER_SYNTAX_OK
 #, perl-brace-format
@@ -3149,8 +3149,8 @@ msgid ""
 "({required_expire}) and not lower than the 'refresh' value ({refresh})."
 msgstr ""
 "El valor 'expire' del registro SOA ({expire}) es mayor que el mínimo "
-"recomendable ({required_expire}) y no es menor que el valor "
-"'refresh' ({refresh})."
+"recomendable ({required_expire}) y no es menor que el valor 'refresh' "
+"({refresh})."
 
 #. ZONE:WRONG_SOA
 #, perl-brace-format

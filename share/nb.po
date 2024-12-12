@@ -1557,8 +1557,8 @@ msgid ""
 "The CDS record with tag {keytag} matches a DNSKEY record with zone bit (bit "
 "7) unset. Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"CDS-posten med \"key tag\" {keytag} matcher en DNSKEY-post uten \"zone "
-"bit\" (bit 7) satt. Hentet fra navnetjenere med IP-adressene ({ns_ip_list})."
+"CDS-posten med \"key tag\" {keytag} matcher en DNSKEY-post uten \"zone bit\" "
+"(bit 7) satt. Hentet fra navnetjenere med IP-adressene ({ns_ip_list})."
 
 #. DNSSEC:DS16_CDS_MATCHES_NO_DNSKEY
 #, perl-brace-format
@@ -1576,8 +1576,8 @@ msgid ""
 "{keytag} points to. Fetched from the nameservers with IP addresses "
 "\"{ns_ip_list}\"."
 msgstr ""
-"CDS-posten er ikke signert av DNSKEY referert av CDS-posten med \"key "
-"tag\" {keytag}. Hentet fra navnetjenere med IP-adressene ({ns_ip_list})."
+"CDS-posten er ikke signert av DNSKEY referert av CDS-posten med \"key tag\" "
+"{keytag}. Hentet fra navnetjenere med IP-adressene ({ns_ip_list})."
 
 #. DNSSEC:DS16_CDS_SIGNED_BY_UNKNOWN_DNSKEY
 #, perl-brace-format
