@@ -1332,7 +1332,7 @@ msgid ""
 "The zone does not use NSEC3. Testing for NSEC3 has been skipped. Fetched "
 "from name servers \"{ns_list}\"."
 msgstr ""
-"Zonen använder inte NSEC3. Testning för NSEC3 har hoppats över. Hämtad från "
+"Zonen använder inte NSEC3. Test av NSEC3 har hoppats över. Hämtad från "
 "namnservrarna \"{ns_list}\"."
 
 #. DNSSEC:DS03_NO_RESPONSE_NSEC_QUERY
