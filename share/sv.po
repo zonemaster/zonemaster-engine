@@ -1399,7 +1399,7 @@ msgid ""
 "The following servers respond with an NSEC3 record where an unassigned flag "
 "is used (bit {int}). Fetched from name servers \"{ns_list}\"."
 msgstr ""
-"Följande servrar svarar med en NSEC3-post där en ej tilldelad flagga är satt "
+"Följande servrar svarar med en NSEC3-post där en odefinierad flagga är satt "
 "(bit {int}). Hämtad från namnservrarna \"{ns_list}\"."
 
 #. DNSSEC:DS08_DNSKEY_RRSIG_EXPIRED
