@@ -196,7 +196,7 @@ msgid ""
 "This is a test of an undelegated domain so finding the parent zone is "
 "disregarded."
 msgstr ""
-"Detta är ett test av en icke-delegerad domän, så att hitta moderzonen "
+"Detta är ett test av en icke-delegerad domän, så att fastställa moderzonen "
 "ignoreras."
 
 #. BASIC:B01_PARENT_FOUND
