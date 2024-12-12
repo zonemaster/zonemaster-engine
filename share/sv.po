@@ -1359,7 +1359,7 @@ msgid ""
 "The following servers respond with NSEC3 opt-out enabled. The recommended "
 "practice is to disable opt-out. Fetched from name servers \"{ns_list}\"."
 msgstr ""
-"Följande namnservrar har NSEC3-opt-out aktiverat. Rekommenderad praxis är "
+"Följande namnservrar har opt-out för NSEC3 aktiverat. Rekommenderad praxis är "
 "att inaktivera opt-out. Hämtad från namnservrarna \"{ns_list}\"."
 
 #. DNSSEC:DS03_NSEC3_OPT_OUT_ENABLED_TLD
