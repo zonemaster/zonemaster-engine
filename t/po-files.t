@@ -55,6 +55,8 @@ subtest "tidy po files" => sub {
 
         skip 'git repo should be clean to run this test', 3 if $output ne '';
 
+        diag "Using msgcat version: " . `msgcat --version | head -n1`;
+
         ( $output, $status ) = make "tidy-po";
         is $status, 0,  $makebin . ' tidy-po exits with value 0';
         is $output, "", $makebin . ' tidy-po gives empty output';
