@@ -65,10 +65,14 @@ sub new {
 sub string {
     my $self = shift;
 
-    my $name = join( '.', @{ $self->labels } );
-    $name = '.' if $name eq q{};
+    if ( not exists $self->{_string} ) {
+        my $string = join( '.', @{ $self->labels } );
+        $string = '.' if $string eq q{};
 
-    return $name;
+        $self->{_string} = $string;
+    }
+
+    return $self->{_string};
 }
 
 sub fqdn {
@@ -165,7 +169,7 @@ A reference to a list of strings, being the labels the DNS name is made up from.
 
 =over
 
-=item new($input) _or_ new({ labels => \@labellist})
+=item new($input) _or_ new({ labels => \@labellist })
 
 The constructor can be called with either a single argument or with a reference
 to a hash as in the example above.
