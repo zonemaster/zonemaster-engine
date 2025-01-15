@@ -107,26 +107,22 @@ sub is_redirect {
 
 sub get_records {
     my ( $self, $type, @section ) = @_;
+    @section = qw(answer authority additional) if !@section;
     my %sec = map { lc( $_ ) => 1 } @section;
     my @raw;
-
-    if ( !@section ) {
-        @raw = ( $self->packet->answer, $self->packet->authority, $self->packet->additional );
-    }
+    $type = uc( $type );
 
     if ( $sec{'answer'} ) {
-        push @raw, $self->packet->answer;
+        push @raw, grep { $_->type eq $type } $self->packet->answer;
     }
 
     if ( $sec{'authority'} ) {
-        push @raw, $self->packet->authority;
+        push @raw, grep { $_->type eq $type } $self->packet->authority;
     }
 
     if ( $sec{'additional'} ) {
-        push @raw, $self->packet->additional;
+        push @raw, grep { $_->type eq $type } $self->packet->additional;
     }
-
-    @raw = grep { $_->type eq uc( $type ) } @raw;
 
     return @raw;
 } ## end sub get_records
@@ -134,13 +130,19 @@ sub get_records {
 sub get_records_for_name {
     my ( $self, $type, $name, @section ) = @_;
 
-    return grep { name( $_->name ) eq name( $name ) } $self->get_records( $type, @section );
+    # Make sure $name is a Zonemaster::Engine::DNSName
+    $name = name( $name );
+
+    return grep { name( $_->name ) eq $name } $self->get_records( $type, @section );
 }
 
 sub has_rrs_of_type_for_name {
     my ( $self, $type, $name, @section ) = @_;
 
-    return ( grep { name( $_->name ) eq name( $name ) } $self->get_records( $type, @section ) ) > 0;
+    # Make sure $name is a Zonemaster::Engine::DNSName
+    $name = name( $name );
+
+    return ( grep { name( $_->name ) eq $name } $self->get_records( $type, @section ) ) > 0;
 }
 
 sub answerfrom {
