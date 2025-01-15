@@ -22,14 +22,11 @@ sub from_string {
     confess 'Argument must be a string: $domain'
       if !defined $domain || ref $domain ne '';
 
-    return $class->_new( { labels => [ split( /[.]/x, $domain ) ] } );
+    return Class::Accessor::new( $class, { labels => [ split( /[.]/x, $domain ) ] } );
 }
 
 sub new {
-    my $proto = shift;
-    confess "must be called with a single argument"
-      if scalar( @_ ) != 1;
-    my $input = shift;
+    my ( $class, $input ) = @_;
 
     my $attrs = {};
     if ( !defined $input ) {
@@ -62,22 +59,7 @@ sub new {
         confess "Unrecognized argument: " . $what;
     }
 
-    # Type constraints
-    confess "Argument must be an ARRAYREF: labels"
-      if exists $attrs->{labels}
-      && ref $attrs->{labels} ne 'ARRAY';
-
-    my $class = ref $proto || $proto;
-    return $class->_new( $attrs );
-}
-
-sub _new {
-    my $class = shift;
-    my $attrs = shift;
-
-    my $obj = Class::Accessor::new( $class, $attrs );
-
-    return $obj;
+    return Class::Accessor::new( $class, $attrs );
 }
 
 sub string {
