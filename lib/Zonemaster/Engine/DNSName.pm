@@ -22,7 +22,16 @@ sub from_string {
     confess 'Argument must be a string: $domain'
       if !defined $domain || ref $domain ne '';
 
-    return Class::Accessor::new( $class, { labels => [ split( /[.]/x, $domain ) ] } );
+    my $obj = Class::Accessor::new( $class, { labels => [ split( /[.]/x, $domain ) ] } );
+
+    # We have the raw string, so we can precompute the string representation
+    # easily and cheaply so it can be immediately returned by the string()
+    # method instead of recomputing it from the labels list. The only thing we
+    # need to do is to remove any trailing dot except if it’s the only
+    # character.
+    $obj->{_string} = ( $domain =~ s/.\K [.] \z//rx );
+
+    return $obj;
 }
 
 sub new {
