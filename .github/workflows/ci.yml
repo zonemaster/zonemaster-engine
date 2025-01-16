@@ -13,6 +13,8 @@ on:
       - 'releases/**'
 
 jobs:
+  coverage:
+    uses: PerlToolsTeam/github_workflows/.github/workflows/cpan-coverage.yml@main
   run-tests:
     strategy:
       matrix:
