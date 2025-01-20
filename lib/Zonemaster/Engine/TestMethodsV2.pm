@@ -7,6 +7,7 @@ use version; our $VERSION = version->declare("v1.0.0");
 
 use Carp;
 use List::MoreUtils qw[uniq];
+use Memoize;
 
 use Zonemaster::Engine::Util;
 
@@ -64,8 +65,9 @@ sub get_parent_ns_ips {
 
         CUR_SERVERS:
         while ( my $ns = shift @remaining_servers ) {
-            next CUR_SERVERS if grep { $_ eq $ns->address->short } @{ $handled_servers{$zone_name} };
-            push @{ $handled_servers{$zone_name} }, $ns->address->short;
+            my $addr = $ns->address->short;
+            next CUR_SERVERS if grep { $_ eq $addr } @{ $handled_servers{$zone_name} };
+            push @{ $handled_servers{$zone_name} }, $addr;
 
             if ( ( $ns->address->version == 4 and not Zonemaster::Engine::Profile->effective->get( q{net.ipv4} ) )
                 or ( $ns->address->version == 6 and not Zonemaster::Engine::Profile->effective->get( q{net.ipv6} ) ) ) {
@@ -248,6 +250,11 @@ sub get_parent_ns_ips {
         return undef;
     }
 }
+
+# Memoize get_parent_ns_ips() because it is expensive and gets called a few
+# times with identical parameters.
+
+memoize('get_parent_ns_ips');
 
 =over
 
