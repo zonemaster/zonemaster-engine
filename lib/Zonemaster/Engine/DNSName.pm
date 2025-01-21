@@ -45,7 +45,7 @@ sub new {
         $attrs->{labels} = \@{ $input->labels };
     }
     elsif ( blessed $input && $input->isa( 'Zonemaster::Engine::Zone' ) ) {
-        $attrs->{labels} = [ split( /[.]/x, $input->name ) ];
+        $attrs->{labels} = \@{ $input->name->labels };
     }
     elsif ( ref $input eq '' ) {
         $attrs->{labels} = [ split( /[.]/x, $input ) ];
