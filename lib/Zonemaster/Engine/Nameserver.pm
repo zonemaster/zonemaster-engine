@@ -202,12 +202,15 @@ sub query {
     my ( $self, $name, $type, $href ) = @_;
     $type //= 'A';
 
-    if ( $self->address->version == 4 and not Zonemaster::Engine::Profile->effective->get( q{net.ipv4} ) ) {
+    my $address = $self->address;
+    my $profile = Zonemaster::Engine::Profile->effective;
+
+    if ( $address->version == 4 and not $profile->get( q{net.ipv4} ) ) {
         Zonemaster::Engine->logger->add( IPV4_BLOCKED => { ns => $self->string } );
         return;
     }
 
-    if ( $self->address->version == 6 and not Zonemaster::Engine::Profile->effective->get( q{net.ipv6} ) ) {
+    if ( $address->version == 6 and not $profile->get( q{net.ipv6} ) ) {
         Zonemaster::Engine->logger->add( IPV6_BLOCKED => { ns => $self->string } );
         return;
     }
@@ -218,14 +221,14 @@ sub query {
             name  => "$name",
             type  => $type,
             flags => $href,
-            ip    => $self->address->short
+            ip    => $address->short
         }
     );
 
     my $class     = $href->{class}     // 'IN';
     my $dnssec    = $href->{dnssec}    // 0;
-    my $usevc     = $href->{usevc}     // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.usevc} );
-    my $recurse   = $href->{recurse}   // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.recurse} );
+    my $usevc     = $href->{usevc}     // $profile->get( q{resolver.defaults.usevc} );
+    my $recurse   = $href->{recurse}   // $profile->get( q{resolver.defaults.recurse} );
 
     if ( exists $href->{edns_details} and exists $href->{edns_details}{do} ) {
         $dnssec = $href->{edns_details}{do};
@@ -276,7 +279,7 @@ sub query {
             $p->qr( 1 );
             $p->do( $dnssec );
             $p->rd( $recurse );
-            $p->answerfrom( $self->address->ip );
+            $p->answerfrom( $address->ip );
 
             Zonemaster::Engine->logger->add( FAKE_DELEGATION_RETURNED => { name  => "$name", type  => $type, class => $class, from  => "$self" } );
 
@@ -288,18 +291,18 @@ sub query {
 
     my $md5 = Digest::MD5->new;
 
-    $md5->add( q{NAME}    , $name );
-    $md5->add( q{TYPE}    , "\U$type" );
-    $md5->add( q{CLASS}   , "\U$class" );
-    $md5->add( q{DNSSEC}  , $dnssec );
-    $md5->add( q{USEVC}   , $usevc );
-    $md5->add( q{RECURSE} , $recurse );
+    $md5->add( q{NAME}    , $name,
+               q{TYPE}    , "\U$type",
+               q{CLASS}   , "\U$class",
+               q{DNSSEC}  , $dnssec,
+               q{USEVC}   , $usevc,
+               q{RECURSE} , $recurse );
 
     if ( exists $href->{edns_details} ) {
-        $md5->add( q{EDNS_VERSION}        , $href->{edns_details}{version} // 0 );
-        $md5->add( q{EDNS_Z}              , $href->{edns_details}{z} // 0 );
-        $md5->add( q{EDNS_EXTENDED_RCODE} , $href->{edns_details}{rcode} // 0 );
-        $md5->add( q{EDNS_DATA}           , $href->{edns_details}{data} // q{} );
+        $md5->add( q{EDNS_VERSION}        , $href->{edns_details}{version} // 0,
+                   q{EDNS_Z}              , $href->{edns_details}{z} // 0,
+                   q{EDNS_EXTENDED_RCODE} , $href->{edns_details}{rcode} // 0,
+                   q{EDNS_DATA}           , $href->{edns_details}{data} // q{} );
         $edns_size = $href->{edns_details}{size} // ( $href->{edns_size} // ( $dnssec ? $EDNS_UDP_PAYLOAD_DNSSEC_DEFAULT : $EDNS_UDP_PAYLOAD_DEFAULT ) );
     }
 
@@ -309,7 +312,7 @@ sub query {
 
     my $idx = $md5->b64digest();
 
-    my ( $in_cache, $p) = $self->cache->get_key( $idx );
+    my ( $in_cache, $p ) = $self->cache->get_key( $idx );
     if ( not $in_cache ) {
         $p = $self->_query( $name, $type, $href );
         $self->cache->set_key( $idx, $p );
