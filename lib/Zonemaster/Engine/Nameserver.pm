@@ -73,7 +73,7 @@ sub new {
       if !blessed $attrs->{name} || !$attrs->{name}->isa( 'Zonemaster::Engine::DNSName' );
 
     my $name = lc( q{} . $attrs->{name} );
-    $name = '$$$NONAME' unless $name;
+    $name = '$$$NONAME' if $name eq q{};
 
     my $address;
 
