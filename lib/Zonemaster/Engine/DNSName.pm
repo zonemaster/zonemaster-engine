@@ -91,12 +91,21 @@ sub fqdn {
 }
 
 sub str_cmp {
-    my ( $self, $other ) = @_;
-    $other //= q{};    # Treat undefined value as root
+    # For performance reasons, we do not unpack @_.
+    # As a reminder, the calling convention is my ( $self, $other, $swap ) = @_.
 
-    $other =~ s/(.+)[.]\z/$1/x;
+    my $me = uc ( $_[0]->{_string} // $_[0]->string );
 
-    return ( uc( "$self" ) cmp uc( $other ) );
+    # Treat undefined value as root
+    my $other = $_[1] // q{};
+
+    if ( blessed $other and $other->isa( 'Zonemaster::Engine::DNSName' ) ) {
+        return $me cmp uc( $other->{_string} // $other->string() );
+    }
+    else {
+        # Assume $other is a string; remove trailing dot except if only character
+        return $me cmp uc( $other =~ s/.\K [.] \z//xr );
+    }
 }
 
 sub next_higher {
