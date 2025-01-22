@@ -32,9 +32,9 @@ use Zonemaster::Engine::Constants qw[:ip :soa];
 use Zonemaster::Engine::DNSName;
 use Zonemaster::Engine::Profile;
 
-## no critic (Subroutines::RequireArgUnpacking)
 sub ns {
-    return Zonemaster::Engine->ns( @_ );
+    my ( $name, $address ) = @_;
+    return Zonemaster::Engine::Nameserver->new( { name => $name, address => $address } );
 }
 
 sub info {
@@ -71,14 +71,14 @@ sub ipversion_ok {
 }
 
 sub test_levels {
-
     return Zonemaster::Engine::Profile->effective->get( q{test_levels} );
 }
 
+## no critic (Subroutines::RequireArgUnpacking)
 sub name {
-    my ( $name ) = @_;
-
-    return Zonemaster::Engine::DNSName->new( $name );
+    # We do not unpack @_ here for performance reasons.
+    # If we did, the calling convention is: my ( $name ) = @_.
+    return Zonemaster::Engine::DNSName->new( @_ );
 }
 
 # Function from CPAN package Text::Capitalize that causes
