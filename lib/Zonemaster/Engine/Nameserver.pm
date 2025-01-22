@@ -57,8 +57,7 @@ our %address_repr_cache;
 ###
 
 sub new {
-    my $proto = shift;
-    my $class = ref $proto || $proto;
+    my $class = shift;
     my $attrs = shift;
 
     my %lazy_attrs;
@@ -82,13 +81,13 @@ sub new {
     if (!blessed $attrs->{address} || !$attrs->{address}->isa( 'Net::IP::XS' )) {
         if (!exists $address_object_cache{$attrs->{address}}) {
             $address_object_cache{$attrs->{address}} = Net::IP::XS->new($attrs->{address});
-            $address_repr_cache{$attrs->{address}} = $address_object_cache{$attrs->{address}}->ip;
+            $address_repr_cache{$attrs->{address}} = $address_object_cache{$attrs->{address}}->short;
         }
         # Fetch IP object from the address cache (avoid object creation and method call)
         $address = $address_repr_cache{$attrs->{address}};
         $attrs->{address} = $address_object_cache{$attrs->{address}};
     } else {
-        $address = $attrs->{address}->ip;
+        $address = $attrs->{address}->short;
     }
 
     # Return Nameserver object as soon as possible
@@ -131,7 +130,9 @@ sub new {
     $obj->{_dns}             = $lazy_attrs{dns}             if exists $lazy_attrs{dns};
     $obj->{_cache}           = $lazy_attrs{cache}           if exists $lazy_attrs{cache};
 
-    Zonemaster::Engine->logger->add( NS_CREATED => { name => $name, ip => $obj->address->ip } );
+    $obj->{_string}          = $name . q{/} . $address;
+
+    Zonemaster::Engine->logger->add( NS_CREATED => { name => $name, ip => $address } );
     $object_cache{$name}{$address} = $obj;
 
     return $obj;
@@ -504,9 +505,7 @@ sub _query {
 } ## end sub _query
 
 sub string {
-    my ( $self ) = @_;
-
-    return $self->name->string . q{/} . $self->address->short;
+    return $_[0]->{_string};
 }
 
 sub compare {
