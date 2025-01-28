@@ -421,7 +421,7 @@ sub _query {
 
     my $before = time();
     my $res;
-    if ( $BLACKLISTING_ENABLED and $self->blacklisted->{ $flags{usevc} }{ $flags{dnssec} } ) {
+    if ( $BLACKLISTING_ENABLED and $self->blacklisted->{ $flags{usevc} } ) {
         Zonemaster::Engine->logger->add(
             IS_BLACKLISTED => {
                 message => "Server transport has been blacklisted due to previous failure",
@@ -430,7 +430,8 @@ sub _query {
                 type    => $type,
                 class   => $href->{class},
                 proto   => $flags{usevc} ? q{TCP} : q{UDP},
-                dnssec  => $flags{dnssec}
+                dnssec  => $flags{dnssec},
+                edns_size => $flags{q{edns_size}}
             }
         );
     }
@@ -470,15 +471,15 @@ sub _query {
         if ( $@ ) {
             my $msg = "$@";
             my $trailing_info = " at ".__FILE__;
+
             chomp( $msg );
             $msg =~ s/$trailing_info.*/\./;
+
             Zonemaster::Engine->logger->add( LOOKUP_ERROR =>
                   { message => $msg, ns => "$self", domain => "$name", type => $type, class => $href->{class} } );
-            if ( not $href->{q{blacklisting_disabled}} ) {
-                $self->blacklisted->{ $flags{usevc} }{ $flags{dnssec} } = 1;
-                if ( !$flags{dnssec} ) {
-                    $self->blacklisted->{ $flags{usevc} }{ !$flags{dnssec} } = 1;
-                }
+
+            if ( not $href->{q{blacklisting_disabled}} and $type eq q{SOA} and $flags{q{edns_size}} == 0 ) {
+                $self->blacklisted->{ $flags{usevc} } = 1;
             }
         }
     }
