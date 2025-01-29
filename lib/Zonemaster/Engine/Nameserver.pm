@@ -738,7 +738,7 @@ A reference to a list with elapsed time values for the queries made through this
 
 A reference to a hash used to prevent sending subsequent queries to the name server after specific queries have failed.
 
-The mecanism will only trigger on no response from non-EDNS SOA queries and is protocol dependent (i.e. TCP/UDP). It can be disabled
+The mechanism will only trigger on no response from non-EDNS SOA queries and is protocol dependent (i.e. TCP/UDP). It can be disabled
 on a per query basis with L<blacklisting_disabled>, or globally with L<Zonemaster::Engine::Constants/$BLACKLISTING_ENABLED>.
 
 =back
@@ -827,7 +827,7 @@ If set to true, incoming response packets with the TC flag set fall back to EDNS
 
 =item blacklisting_disabled
 
-If set to true, prevents a name server to be blacklisted.
+If set to true, prevents a name server from being blacklisted.
 
 =item edns_size
 
