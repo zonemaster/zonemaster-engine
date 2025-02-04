@@ -757,6 +757,18 @@ my %subtests = (
               ns4-cname.child-ns-cname-3.methodsv2.xa/fda1:b2:c3:0:127:40:1:34 ) ],
         [ ],
     ],
+    'CHILD-NS-CNAME-4' => [
+        1,
+        q(child.parent.child-ns-cname-4.methodsv2.xa),
+        [ qw( 127.40.1.41
+              fda1:b2:c3:0:127:40:1:41
+              127.40.1.42
+              fda1:b2:c3:0:127:40:1:42 ) ],
+        [ qw( ns1-cname.child.parent.child-ns-cname-4.methodsv2.xa/127.40.1.51 ) ],
+        [ qw( ns1-cname.child.parent.child-ns-cname-4.methodsv2.xa/127.40.1.51
+              ns2-cname.child.parent.child-ns-cname-4.methodsv2.xa/127.40.1.52 ) ],
+        [ ],
+    ],
     'PARENT-NS-CNAME-1' => [
         1,
         q(child.parent.parent-ns-cname-1.methodsv2.xa),
