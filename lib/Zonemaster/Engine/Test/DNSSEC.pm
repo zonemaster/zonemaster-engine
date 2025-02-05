@@ -3146,11 +3146,8 @@ sub dnssec10 {
     my ( @with_dnskey, @without_dnskey );
 
     my @nss = grep { $_->isa('Zonemaster::Engine::Nameserver') } (
-                Zonemaster::Engine::TestMethodsV2->get_del_ns_names_and_ips( $zone ) ?
-                    Zonemaster::Engine::TestMethodsV2->get_zone_ns_names_and_ips( $zone ) ?
-                        @{ Zonemaster::Engine::TestMethodsV2->get_zone_ns_names_and_ips( $zone ), Zonemaster::Engine::TestMethodsV2->get_del_ns_names_and_ips( $zone ) }
-                    : @{ Zonemaster::Engine::TestMethodsV2->get_del_ns_names_and_ips( $zone ) }
-                : ()
+                @{ Zonemaster::Engine::TestMethodsV2->get_del_ns_names_and_ips( $zone ) // [] },
+                @{ Zonemaster::Engine::TestMethodsV2->get_zone_ns_names_and_ips( $zone ) // [] }
               );
     my @ignored_nss;
 
