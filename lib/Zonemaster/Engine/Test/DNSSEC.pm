@@ -3145,17 +3145,16 @@ sub dnssec10 {
     my ( @nsec_response_error, @nsec3param_response_error );
     my ( @with_dnskey, @without_dnskey );
 
-    my @nss = Zonemaster::Engine::TestMethodsV2->get_del_ns_names_and_ips( $zone ) ?
-                Zonemaster::Engine::TestMethodsV2->get_zone_ns_names_and_ips( $zone ) ?
-                    @{ Zonemaster::Engine::TestMethodsV2->get_zone_ns_names_and_ips( $zone ), Zonemaster::Engine::TestMethodsV2->get_del_ns_names_and_ips( $zone ) }
-                : @{ Zonemaster::Engine::TestMethodsV2->get_del_ns_names_and_ips( $zone ) }
-              : ();
+    my @nss = grep { $_->isa('Zonemaster::Engine::Nameserver') } (
+                @{ Zonemaster::Engine::TestMethodsV2->get_del_ns_names_and_ips( $zone ) // [] },
+                @{ Zonemaster::Engine::TestMethodsV2->get_zone_ns_names_and_ips( $zone ) // [] }
+              );
     my @ignored_nss;
 
     my %ip_already_processed;
     my $testing_time = time;
 
-    for my $ns ( sort @nss ) {
+    for my $ns ( @nss ) {
         next if exists $ip_already_processed{$ns->address->short};
         $ip_already_processed{$ns->address->short} = 1;
 

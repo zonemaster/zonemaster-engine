@@ -804,11 +804,10 @@ sub connectivity04 {
     my %prefixes;
     my %ip_already_processed;
 
-    my @nss = Zonemaster::Engine::TestMethodsV2->get_del_ns_names_and_ips( $zone ) ?
-                Zonemaster::Engine::TestMethodsV2->get_zone_ns_names_and_ips( $zone ) ?
-                    @{ Zonemaster::Engine::TestMethodsV2->get_zone_ns_names_and_ips( $zone ), Zonemaster::Engine::TestMethodsV2->get_del_ns_names_and_ips( $zone ) }
-                : @{ Zonemaster::Engine::TestMethodsV2->get_del_ns_names_and_ips( $zone ) }
-              : ();
+    my @nss = grep { $_->isa('Zonemaster::Engine::Nameserver') } (
+                @{ Zonemaster::Engine::TestMethodsV2->get_del_ns_names_and_ips( $zone ) // [] },
+                @{ Zonemaster::Engine::TestMethodsV2->get_zone_ns_names_and_ips( $zone ) // [] }
+              );
 
     foreach my $ns ( @nss ) {
         my $ip = $ns->address;
