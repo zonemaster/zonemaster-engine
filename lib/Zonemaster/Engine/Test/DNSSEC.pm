@@ -3177,7 +3177,7 @@ sub dnssec10 {
 
         push @with_dnskey, $ns;
 
-        my $nsec_p = $ns->query( $zone->name, $type_nsec, { dnssec => 1, blacklisting_disabled => 1 } );
+        my $nsec_p = $ns->query( $zone->name, $type_nsec, { dnssec => 1 } );
 
         if ( not $nsec_p or $nsec_p->rcode ne q{NOERROR} or not $nsec_p->aa ) {
             push @nsec_response_error, $ns;
@@ -3282,7 +3282,7 @@ sub dnssec10 {
             }
         }
 
-        my $nsec3param_p = $ns->query( $zone->name, $type_nsec3param, { dnssec => 1, blacklisting_disabled => 1 } );
+        my $nsec3param_p = $ns->query( $zone->name, $type_nsec3param, { dnssec => 1 } );
 
         if ( not $nsec3param_p or $nsec3param_p->rcode ne q{NOERROR} or not $nsec3param_p->aa ) {
             push @nsec3param_response_error, $ns;
