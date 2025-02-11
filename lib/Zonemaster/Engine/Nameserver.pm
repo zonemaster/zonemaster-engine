@@ -440,29 +440,23 @@ sub _query {
             my $pkt = Zonemaster::LDNS::Packet->new("$name", $type, $href->{class} );
             $pkt->set_edns_present();
 
+            $pkt->do($flags{q{dnssec}});
+            $pkt->edns_size($flags{q{edns_size}});
+
             if ( exists $href->{edns_details}{version} ) {
                 $pkt->edns_version($href->{edns_details}{version});
             }
-    	    if ( exists $href->{edns_details}{z} ) {
+            if ( exists $href->{edns_details}{z} ) {
                 $pkt->edns_z($href->{edns_details}{z});
             }
-    	    if ( exists $href->{edns_details}{do} ) {
-                $pkt->do($href->{edns_details}{do});
-            }
-            elsif ( $flags{q{dnssec}} ) {
-                $pkt->do($flags{q{dnssec}});
-            }
-    	    if ( exists $href->{edns_details}{size} ) {
-                $pkt->edns_size($href->{edns_details}{size});
-            }
-    	    if ( exists $href->{edns_details}{rcode} ) {
+            if ( exists $href->{edns_details}{rcode} ) {
                 $pkt->edns_rcode($href->{edns_details}{rcode});
             }
             if ( exists $href->{edns_details}{data} ) {
                 $pkt->edns_data($href->{edns_details}{data});
             }
 
-    	    $res = eval { $self->dns->query_with_pkt( $pkt ) };
+            $res = eval { $self->dns->query_with_pkt( $pkt ) };
         }
         else {
             $res = eval { $self->dns->query( "$name", $type, $href->{class} ) };
