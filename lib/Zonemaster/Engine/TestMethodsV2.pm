@@ -36,6 +36,8 @@ Takes a L<Zonemaster::Engine::Zone> object.
 
 Returns an arrayref of L<Zonemaster::Engine::Nameserver> objects, or C<undef> if no parent zone was found.
 
+The result of this Method is cached for performance reasons. This cache can be invalidated by calling C<clear_cache()> if necessary.
+
 =back
 
 =cut
@@ -784,6 +786,21 @@ sub get_zone_ns_ips {
     }
 
     return [ uniq sort @ns_ips ];
+}
+
+
+=over
+
+=item clear_cache()
+
+Clears previously cached results of the C<get_parent_ns_ips()> method.
+
+=back
+
+=cut
+
+sub clear_cache() {
+    Memoize::flush_cache(\&get_parent_ns_ips);
 }
 
 1;
