@@ -1315,7 +1315,7 @@ msgid ""
 "The following servers give erroneous response to NSEC query. Fetched from "
 "name servers \"{ns_list}\"."
 msgstr ""
-"Les serveurs de noms suivants donnent une réponse érronée à la requête NSEC. "
+"Les serveurs de noms suivants donnent une réponse erronée à la requête NSEC. "
 "Information retournée par les serveurs de noms \"{ns_list}\"."
 
 #. DNSSEC:DS03_ERR_MULT_NSEC3
@@ -1334,8 +1334,8 @@ msgid ""
 "The following servers respond with an illegal hash algorithm for NSEC3 "
 "({algo_num}). Fetched from name servers \"{ns_list}\"."
 msgstr ""
-"Les serveurs de noms suivants répondent avec une valeur illégale de "
-"l'algorithme de hachage pour NSEC3 ({algo_num}). Information retournée par "
+"Les serveurs de noms suivants répondent avec un numéro d'algorithme de "
+"hachage non valable pour NSEC3 ({algo_num}). Information retournée par "
 "les serveurs de noms \"{ns_list}\"."
 
 #. DNSSEC:DS03_ILLEGAL_ITERATION_VALUE
@@ -1346,8 +1346,8 @@ msgid ""
 "\"{ns_list}\"."
 msgstr ""
 "Les serveurs de noms suivants répondent avec la valeur d'itération NSEC3 "
-"{int}.La pratique recommandée est qu'elle soit à 0. Information retournée "
-"par les serveurs de noms \"{ns_list}\"."
+"{int}. La pratique recommandée est qu'elle soit réglée à 0. Information "
+"retournée par les serveurs de noms \"{ns_list}\"."
 
 #. DNSSEC:DS03_ILLEGAL_SALT_LENGTH
 #, perl-brace-format
@@ -1365,32 +1365,32 @@ msgid ""
 "Inconsistent hash algorithm in NSEC3 in responses for the child zone from "
 "different name servers."
 msgstr ""
-"Algorithme de hachage NSEC3 inconsistent dans les réponses pour la zone "
-"fille pour différents serveurs de noms."
+"Incohérence entre les algorithmes de hachage NSEC3 dans les réponses "
+"pour la zone fille venant de différents serveurs de noms."
 
 #. DNSSEC:DS03_INCONSISTENT_ITERATION
 msgid ""
 "Inconsistent NSEC3 iteration value in responses for the child zone from "
 "different name servers."
 msgstr ""
-"Valeur d'itération NSEC3 inconsistente dans les réponses pour la zone fille "
-"pour différents serveurs de noms."
+"Incohérence entre les valeurs d'itération NSEC3 dans les réponses pour la zone "
+"fille venant de différents serveurs de noms."
 
 #. DNSSEC:DS03_INCONSISTENT_NSEC3_FLAGS
 msgid ""
 "Inconsistent NSEC3 flag list in responses for the child zone from different "
 "name servers."
 msgstr ""
-"Liste de fanions NSEC3 inconsistente dans les réponses pour la zone fille "
-"pour différents serveurs de noms."
+"Incohérence entre les listes de fanions NSEC3 dans les réponses pour la zone "
+"fille venant de différents serveurs de noms."
 
 #. DNSSEC:DS03_INCONSISTENT_SALT_LENGTH
 msgid ""
 "Inconsistent salt length in NSEC3 in responses for the child zone from "
 "different name servers."
 msgstr ""
-"Longueur de sel NSEC3 inconsistente dans les réponses pour la zone fille "
-"pour différents serveurs de noms."
+"Incohérence entre les longueurs de sel NSEC3 dans les réponses pour la "
+"zone fille pour différents serveurs de noms."
 
 #. DNSSEC:DS03_LEGAL_EMPTY_SALT
 #, perl-brace-format
@@ -1398,8 +1398,8 @@ msgid ""
 "The following servers respond with a legal empty salt in NSEC3. Fetched from "
 "name servers \"{ns_list}\"."
 msgstr ""
-"Les serveurs de noms suivants répondent avec un sel NSEC3 vide. Information "
-"retournée par les serveurs de noms \"{ns_list}\"."
+"Les serveurs de noms suivants répondent avec un sel NSEC3 vide valable. "
+"Information retournée par les serveurs de noms \"{ns_list}\"."
 
 #. DNSSEC:DS03_LEGAL_HASH_ALGO
 #, perl-brace-format
@@ -1407,8 +1407,8 @@ msgid ""
 "The following servers respond with a legal hash algorithm in NSEC3. Fetched "
 "from name servers \"{ns_list}\"."
 msgstr ""
-"Les serveurs de noms suivants répondent avec un algorithme de hachage NSEC3. "
-"Information retournée par les serveurs de noms \"{ns_list}\"."
+"Les serveurs de noms suivants répondent avec un algorithme de hachage NSEC3 "
+"valable. Information retournée par les serveurs de noms \"{ns_list}\"."
 
 #. DNSSEC:DS03_LEGAL_ITERATION_VALUE
 #, perl-brace-format
@@ -1426,8 +1426,9 @@ msgid ""
 "The zone is not DNSSEC signed or not properly DNSSEC signed. Testing for "
 "NSEC3 has been skipped. Fetched from name servers \"{ns_list}\"."
 msgstr ""
-"La zone n'est pas signée ou mal signée par DNSSEC. Examen NSEC3 ignoré. "
-"Information retournée par les serveurs de noms \"{ns_list}\"."
+"La zone n'est pas signée ou mal signée par DNSSEC. Le test de NSEC3 n'a "
+"pas été effectué. Information retournée par les serveurs de noms "
+"\"{ns_list}\"."
 
 #. DNSSEC:DS03_NO_NSEC3
 #, perl-brace-format
@@ -1435,8 +1436,8 @@ msgid ""
 "The zone does not use NSEC3. Testing for NSEC3 has been skipped. Fetched "
 "from name servers \"{ns_list}\"."
 msgstr ""
-"La zone n'utilise pas NSEC3. Examen NSEC3 ignoré. Information retournée par "
-"les serveurs de noms \"{ns_list}\"."
+"La zone n'utilise pas NSEC3. Le test de NSEC3 n'a pas été effectué. "
+"Information retournée par les serveurs de noms \"{ns_list}\"."
 
 #. DNSSEC:DS03_NO_RESPONSE_NSEC_QUERY
 #, perl-brace-format
@@ -1453,8 +1454,8 @@ msgid ""
 "The following servers respond with NSEC3 opt-out disabled (as recommended). "
 "Fetched from name servers \"{ns_list}\"."
 msgstr ""
-"Les serveurs de noms suivants répondent avec non-participation NSEC3 "
-"désactivé (comme recommandé). Information retournée par les serveurs de noms "
+"Les serveurs de noms suivants répondent avec l'opt-out NSEC3 désactivé "
+"(comme recommandé). Information retournée par les serveurs de noms "
 "\"{ns_list}\"."
 
 #. DNSSEC:DS03_NSEC3_OPT_OUT_ENABLED_NON_TLD
@@ -1463,9 +1464,9 @@ msgid ""
 "The following servers respond with NSEC3 opt-out enabled. The recommended "
 "practice is to disable opt-out. Fetched from name servers \"{ns_list}\"."
 msgstr ""
-"Les serveurs de noms suivants répondent avec non-participation NSEC3 activé. "
-"La pratique recommandée est de désactiver la non-participation. Information "
-"retournée par les serveurs de noms \"{ns_list}\"."
+"Les serveurs de noms suivants répondent avec l'opt-out NSEC3 activé. La "
+"pratique recommandée est de désactiver l'opt-out. Information retournée par "
+"les serveurs de noms \"{ns_list}\"."
 
 #. DNSSEC:DS03_NSEC3_OPT_OUT_ENABLED_TLD
 #, perl-brace-format
@@ -1473,7 +1474,7 @@ msgid ""
 "The following servers respond with NSEC3 opt-out enabled. Fetched from name "
 "servers \"{ns_list}\"."
 msgstr ""
-"Les serveurs de noms suivants répondent avec non-participation NSEC3 activé. "
+"Les serveurs de noms suivants répondent avec l'opt-out NSEC3 activé. "
 "Information retournée par les serveurs de noms \"{ns_list}\"."
 
 #. DNSSEC:DS03_SERVER_NO_DNSSEC_SUPPORT
@@ -1483,9 +1484,10 @@ msgid ""
 "configured. Testing for NSEC3 has been skipped on those servers. Fetched "
 "from name servers \"{ns_list}\"."
 msgstr ""
-"Les serveurs de noms suivants ne supportent pas DNSSEC ou n'ont pas été "
-"configurés correctement. Examen NSEC3 ignoré pour ces serveurs de noms. "
-"Information retournée par les serveurs de noms \"{ns_list}\"."
+"Les serveurs de noms suivants ne prennent pas en charge DNSSEC ou n'ont pas "
+"été configurés correctement. Le test NSEC3 n'a pas été effectué sur ces "
+"serveurs de noms. Information retournée par les serveurs de noms "
+"\"{ns_list}\"."
 
 #. DNSSEC:DS03_SERVER_NO_NSEC3
 #, perl-brace-format
@@ -1495,8 +1497,8 @@ msgid ""
 "\"{ns_list}\"."
 msgstr ""
 "Les serveurs de noms suivants n'utilisent pas NSEC3, alors que d'autres "
-"l'utilisent. Examen NSEC3 ignoré pour ces serveurs de noms. Information "
-"retournée par les serveurs de noms \"{ns_list}\"."
+"l'utilisent. Le test NSEC3 n'a pas été effectué sur ces serveurs de noms. "
+"Information retournée par les serveurs de noms \"{ns_list}\"."
 
 #. DNSSEC:DS03_UNASSIGNED_FLAG_USED
 #, perl-brace-format
@@ -1505,7 +1507,7 @@ msgid ""
 "is used (bit {int}). Fetched from name servers \"{ns_list}\"."
 msgstr ""
 "Les serveurs de noms suivants répondent avec un enregistrement NSEC3 où un "
-"un fanion non-assigné est utilisé (bit {int}). Information retournée par les "
+"fanion non attribué est utilisé (bit {int}). Information retournée par les "
 "serveurs de noms \"{ns_list}\"."
 
 #. DNSSEC:DS08_DNSKEY_RRSIG_EXPIRED
@@ -1614,7 +1616,7 @@ msgid ""
 "\"{ns_ip_list}\"."
 msgstr ""
 "La clé DNSKEY avec le tag {keytag} utilise un algorithme {algo_num} "
-"({algo_mnemo}) non supporté par cette installation de Zonemaster. "
+"({algo_mnemo}) non pris en charge par cette installation de Zonemaster. "
 "Information retournée par les serveurs de noms \"{ns_ip_list}\"."
 
 #. DNSSEC:DS10_ERR_MULT_NSEC
@@ -1641,8 +1643,8 @@ msgid ""
 "The server responded with DNSKEY but not with expected NSEC or NSEC3. "
 "Fetched from name servers \"{ns_list}\"."
 msgstr ""
-"Le serveur de noms répond avec DNSKEY mais pas avec NSEC ni NSEC3. "
-"Information retournée par les serveurs de noms \"{ns_list}\"."
+"Le serveur de noms répond avec DNSKEY mais pas avec le NSEC ou le NSEC3 "
+"attendu. Information retournée par les serveurs de noms \"{ns_list}\"."
 
 #. DNSSEC:DS10_HAS_NSEC
 #, perl-brace-format
@@ -1693,8 +1695,8 @@ msgid ""
 "The zone responds with both NSEC and NSEC3, where only one of them is "
 "expected. Fetched from name servers \"{ns_list}\"."
 msgstr ""
-"La zone répond avec des enregistrements de type \"NSEC\" et \"NSEC3\", alors "
-"qu'un seul type d'enregistrement est attendu. Information retournée par les "
+"La zone répond avec des enregistrements de types \"NSEC\" et \"NSEC3\", alors "
+"qu'un seul des deux types est attendu. Information retournée par les "
 "serveurs de noms \"{ns_list}\"."
 
 #. DNSSEC:DS10_NSEC3PARAM_GIVES_ERR_ANSWER
@@ -1730,7 +1732,7 @@ msgid ""
 "NSEC3 record for the zone apex with incorrect type list. Fetched from name "
 "servers \"{ns_list}\"."
 msgstr ""
-"Enregistrement NSEC3 pour le sommet de la zone contenant une liste de types "
+"L'enregistrement NSEC3 pour le sommet de la zone contient une liste de types "
 "incorrecte. Information retournée par les serveurs de noms \"{ns_list}\"."
 
 #. DNSSEC:DS10_NSEC3_MISMATCHES_APEX
@@ -1739,7 +1741,7 @@ msgid ""
 "The returned NSEC3 record unexpectedly does not match the zone name. Fetched "
 "from name servers \"{ns_list}\"."
 msgstr ""
-"L'enregistrement NSEC3 reçu ne coïncide pas avec le nom de la zone. "
+"L'enregistrement NSEC3 reçu ne correspond pas au nom de la zone. "
 "Information retournée par les serveurs de noms \"{ns_list}\"."
 
 #. DNSSEC:DS10_NSEC3_MISSING_SIGNATURE
@@ -1942,8 +1944,9 @@ msgid ""
 "Fetched from name servers \"{ns_list}\"."
 msgstr ""
 "Les serveurs de noms suivants ne supportent pas DNSSEC ou n'ont pas été "
-"configurés correctement. Examens NSEC et NSEC3 ignorés pour ces serveurs de "
-"noms. Information retournée par les serveurs de noms \"{ns_list}\"."
+"configurés correctement. Les tests de NSEC et de NSEC3 n'ont pas été effectués "
+"sur ces serveurs de noms. Information retournée par les serveurs de noms "
+"\"{ns_list}\"."
 
 #. DNSSEC:DS10_ZONE_NO_DNSSEC
 #, perl-brace-format
@@ -1951,8 +1954,9 @@ msgid ""
 "The zone is not DNSSEC signed or not properly DNSSEC signed. Testing for "
 "NSEC and NSEC3 has been skipped. Fetched from name servers \"{ns_list}\"."
 msgstr ""
-"La zone n'est pas signée ou mal signée par DNSSEC. Examens NSEC et NSEC3 "
-"ignorés. Information retournée par les serveurs de noms \"{ns_list}\"."
+"La zone n'est pas signée ou mal signée par DNSSEC. Les tests de NSEC et "
+"de NSEC3 n'ont pas été effectués. Information retournée par les serveurs "
+"de noms \"{ns_list}\"."
 
 #. DNSSEC:DS11_INCONSISTENT_DS
 msgid "Parent name servers are inconsistent on the existence of DS."
@@ -3900,9 +3904,9 @@ msgid ""
 "The following name servers returned the same SPF policy, but other name "
 "servers returned a different policy. Name servers: {ns_ip_list}."
 msgstr ""
-"Les serveurs de noms suivants retournent la même politique SPF, mais les "
-"autres serveurs de noms retournent une politique différent. Serveurs de "
-"noms : {ns_ip_list}."
+"Les serveurs de noms suivants retournent la même politique SPF, mais "
+"d'autres serveurs de noms retournent une politique différente. Serveurs "
+"de noms : {ns_ip_list}."
 
 #. ZONE:Z11_NO_SPF_FOUND
 #, perl-brace-format
@@ -3937,7 +3941,7 @@ msgid ""
 "None of the zone’s name servers responded with an authoritative response to "
 "queries for SPF policies."
 msgstr ""
-"Aucun des serveurs de noms de la zone n'ont répondu avec une réponse faisant "
+"Aucun des serveurs de noms de la zone n'a répondu avec une réponse faisant "
 "autorité pour les requêtes de politiques SPF."
 
 #. SYSTEM:CANNOT_CONTINUE
