@@ -61,6 +61,7 @@ share/locale/es/LC_MESSAGES/Zonemaster-Engine.mo
 share/locale/fi/LC_MESSAGES/Zonemaster-Engine.mo
 share/locale/fr/LC_MESSAGES/Zonemaster-Engine.mo
 share/locale/nb/LC_MESSAGES/Zonemaster-Engine.mo
+share/locale/sl/LC_MESSAGES/Zonemaster-Engine.mo
 share/locale/sv/LC_MESSAGES/Zonemaster-Engine.mo
 share/Makefile
 share/modules.txt
