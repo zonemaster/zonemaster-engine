@@ -13,8 +13,12 @@ msgstr ""
 "X-Generator: Poedit 3.5\n"
 
 #, perl-brace-format
-msgid "Ambiguous downcasing of character \"{unicode_name}\" in the domain name. Use all lower case instead."
-msgstr "Dvoumno zapisovanje znakov \"{unicode_name}\" v imenu domene. Uporabite samo male črke."
+msgid ""
+"Ambiguous downcasing of character \"{unicode_name}\" in the domain name. Use "
+"all lower case instead."
+msgstr ""
+"Dvoumno zapisovanje znakov \"{unicode_name}\" v imenu domene. Uporabite samo "
+"male črke."
 
 msgid "Domain name is too long (more than 253 characters with no final dot)."
 msgstr "Domena je predolga (več kot 253 znakov brez končne pike)."
@@ -26,18 +30,22 @@ msgid "Domain name starts with dot."
 msgstr "Domena se začne s piko."
 
 #, perl-brace-format
-msgid "Domain name has an ASCII label (\"{label}\") with a character not permitted."
+msgid ""
+"Domain name has an ASCII label (\"{label}\") with a character not permitted."
 msgstr "Domena ima oznako ASCII (\"{label}\") z znakom, ki ni dovoljen."
 
 #, perl-brace-format
-msgid "Domain name has a non-ASCII label (\"{label}\") which is not a valid U-label."
+msgid ""
+"Domain name has a non-ASCII label (\"{label}\") which is not a valid U-label."
 msgstr "Domena ima ne-ASCII oznako (\"{label}\"), ki ni veljaven U-label."
 
 msgid "Domain name has repeated dots."
 msgstr "Domena ima ponavljajujoče se pike."
 
 #, perl-brace-format
-msgid "Domain name has a label that is too long (more than 63 characters), \"{label}\"."
+msgid ""
+"Domain name has a label that is too long (more than 63 characters), "
+"\"{label}\"."
 msgstr "Domena ima predolgo oznako (več kot 63 znakov), \"{label}\"."
 
 #. ADDRESS:ADDRESS01
@@ -55,20 +63,26 @@ msgstr "Povratni vnos DNS se ujema z domenskim strežnikom"
 #. ADDRESS:NAMESERVER_IP_WITHOUT_REVERSE
 #, perl-brace-format
 msgid "Nameserver {nsname} has an IP address ({ns_ip}) without PTR configured."
-msgstr "Domenski strežnik {nsname} ima IP-naslov ({ns_ip}) brez \"PTR\" zapisa."
+msgstr ""
+"Domenski strežnik {nsname} ima IP-naslov ({ns_ip}) brez \"PTR\" zapisa."
 
 #. ADDRESS:NAMESERVER_IP_PTR_MISMATCH
 #, perl-brace-format
-msgid "Nameserver {nsname} has an IP address ({ns_ip}) with mismatched PTR result ({names})."
-msgstr "Domenski strežnik {nsname} ima IP-naslov ({ns_ip}), ki se ne ujema z \"PTR\" rezultati ({names}) zanj."
+msgid ""
+"Nameserver {nsname} has an IP address ({ns_ip}) with mismatched PTR result "
+"({names})."
+msgstr ""
+"Domenski strežnik {nsname} ima IP-naslov ({ns_ip}), ki se ne ujema z \"PTR\" "
+"rezultati ({names}) zanj."
 
 #. ADDRESS:NAMESERVER_IP_PRIVATE_NETWORK
 #, perl-brace-format
 msgid ""
-"Nameserver {nsname} has an IP address ({ns_ip}) with prefix {prefix} referenced in {reference} as a '{name}'."
+"Nameserver {nsname} has an IP address ({ns_ip}) with prefix {prefix} "
+"referenced in {reference} as a '{name}'."
 msgstr ""
-"Domenski strežnik {nsname} z IP-naslovom ({ns_ip}) ima prefix {prefix}, ki je naveden v {reference} kot "
-"'{name}'."
+"Domenski strežnik {nsname} z IP-naslovom ({ns_ip}) ima prefix {prefix}, ki "
+"je naveden v {reference} kot '{name}'."
 
 #. ADDRESS:NO_IP_PRIVATE_NETWORK
 msgid "All Nameserver addresses are in the routable public addressing space."
@@ -132,11 +146,12 @@ msgstr "Domenski strežniki niso odgovorili na poizvedbe po \"A\" zapisu."
 #. BASIC:B01_CHILD_IS_ALIAS
 #, perl-brace-format
 msgid ""
-"\"{domain_child}\" is not a zone. It is an alias for \"{domain_target}\". Run a test for \"{domain_target}\" "
-"instead. Returned from name servers \"{ns_list}\"."
+"\"{domain_child}\" is not a zone. It is an alias for \"{domain_target}\". "
+"Run a test for \"{domain_target}\" instead. Returned from name servers "
+"\"{ns_list}\"."
 msgstr ""
-"\"{domain_child}\" ni cona. Je alias za \"{domain_target}\". Zaženite test za \"{domain_target}\". Odgovor "
-"prejet od \"{ns_list}\"."
+"\"{domain_child}\" ni cona. Je alias za \"{domain_target}\". Zaženite test "
+"za \"{domain_target}\". Odgovor prejet od \"{ns_list}\"."
 
 #. BASIC:B01_CHILD_FOUND
 #, perl-brace-format
@@ -151,24 +166,32 @@ msgstr "Alias za \"{domain}\" je nekonsistenten med domenskimi strežniki."
 #. BASIC:B01_INCONSISTENT_DELEGATION
 #, perl-brace-format
 msgid ""
-"The name servers for parent zone \"{domain_parent}\" give inconsistent delegation of \"{domain_child}\". "
-"Returned from name servers \"{ns_list}\"."
+"The name servers for parent zone \"{domain_parent}\" give inconsistent "
+"delegation of \"{domain_child}\". Returned from name servers \"{ns_list}\"."
 msgstr ""
-"Domenski strežniki starševske cone \"{domain_parent}\" kažejo na nekonsistentno delegacijo za "
-"\"{domain_child}\". Podatki pridobljeni od \"{ns_list}\"."
+"Domenski strežniki starševske cone \"{domain_parent}\" kažejo na "
+"nekonsistentno delegacijo za \"{domain_child}\". Podatki pridobljeni od "
+"\"{ns_list}\"."
 
 #. BASIC:B01_NO_CHILD
 #, perl-brace-format
-msgid "\"{domain_child}\" does not exist as a DNS zone. Try to test \"{domain_super}\" instead."
-msgstr "\"{domain_child}\" ne obstaja kot DNS cona.  Poskusite testirati \"{domain_super}\"."
+msgid ""
+"\"{domain_child}\" does not exist as a DNS zone. Try to test "
+"\"{domain_super}\" instead."
+msgstr ""
+"\"{domain_child}\" ne obstaja kot DNS cona.  Poskusite testirati "
+"\"{domain_super}\"."
 
 #. BASIC:B01_PARENT_DISREGARDED
-msgid "This is a test of an undelegated domain so finding the parent zone is disregarded."
+msgid ""
+"This is a test of an undelegated domain so finding the parent zone is "
+"disregarded."
 msgstr "V tem  testu ne iščemo starševske cone, ker je to 'undelegated' test."
 
 #. BASIC:B01_PARENT_FOUND
 #, perl-brace-format
-msgid "The parent zone is \"{domain}\" as returned from name servers \"{ns_list}\"."
+msgid ""
+"The parent zone is \"{domain}\" as returned from name servers \"{ns_list}\"."
 msgstr "Starševska cona je \"{domain}\", kot poročajo \"{ns_list}\"."
 
 #. BASIC:B01_PARENT_NOT_FOUND
@@ -186,23 +209,35 @@ msgstr "To je test root cone, ki nima starševske cone."
 
 #. BASIC:B01_SERVER_ZONE_ERROR
 #, perl-brace-format
-msgid "Unexpected response on query for \"{query_name}\" with query type \"{rrtype}\" to \"{ns}\"."
-msgstr "Nepričakovan odgovor na \"{query_name}\" tipa \"{rrtype}\" na \"{ns}\"."
+msgid ""
+"Unexpected response on query for \"{query_name}\" with query type "
+"\"{rrtype}\" to \"{ns}\"."
+msgstr ""
+"Nepričakovan odgovor na \"{query_name}\" tipa \"{rrtype}\" na \"{ns}\"."
 
 #. BASIC:B02_AUTH_RESPONSE_SOA
 #, perl-brace-format
-msgid "Authoritative answer on SOA query for \"{domain}\" is returned by name servers \"{ns_list}\"."
-msgstr "Avtoritativni odgovor na SOA poizvedbo za \"{domain}\" pridobljen od \"{ns_list}\"."
+msgid ""
+"Authoritative answer on SOA query for \"{domain}\" is returned by name "
+"servers \"{ns_list}\"."
+msgstr ""
+"Avtoritativni odgovor na SOA poizvedbo za \"{domain}\" pridobljen od "
+"\"{ns_list}\"."
 
 #. BASIC:B02_NO_DELEGATION
 #, perl-brace-format
-msgid "There is no delegation (name servers) for \"{domain}\" which means it does not exist as a zone."
-msgstr "Ni delegacije (domenskih strežnikov) za \"{domain}\", kar pomeni, da ne obstaja kot cona."
+msgid ""
+"There is no delegation (name servers) for \"{domain}\" which means it does "
+"not exist as a zone."
+msgstr ""
+"Ni delegacije (domenskih strežnikov) za \"{domain}\", kar pomeni, da ne "
+"obstaja kot cona."
 
 #. BASIC:B02_NO_WORKING_NS
 #, perl-brace-format
 msgid "There is no working name server for \"{domain}\" so it is unreachable."
-msgstr "Ni delujočega domenskega strežnika za \"{domain}\", zato je nedosegljiva."
+msgstr ""
+"Ni delujočega domenskega strežnika za \"{domain}\", zato je nedosegljiva."
 
 #. BASIC:B02_NS_BROKEN
 #, perl-brace-format
@@ -211,8 +246,11 @@ msgstr "Pokvarjen odgovor domenskega strežnika \"{ns}\" za SOA poizvedbo."
 
 #. BASIC:B02_NS_NOT_AUTH
 #, perl-brace-format
-msgid "Name server \"{ns}\" does not give an authoritative answer on an SOA query."
-msgstr "Domenski strežnik \"{ns}\" ne vrača avtoritativnega odgovora za SOA poizvedbo."
+msgid ""
+"Name server \"{ns}\" does not give an authoritative answer on an SOA query."
+msgstr ""
+"Domenski strežnik \"{ns}\" ne vrača avtoritativnega odgovora za SOA "
+"poizvedbo."
 
 #. BASIC:B02_NS_NO_IP_ADDR
 #, perl-brace-format
@@ -226,12 +264,17 @@ msgstr "Domenski strežnik\"{ns}\" ne odgovarja na SOA poizvedbo."
 
 #. BASIC:B02_UNEXPECTED_RCODE
 #, perl-brace-format
-msgid "Name server \"{ns}\" responds with an unexpected RCODE name (\"{rcode}\") on an SOA query."
-msgstr "Domenski strežnik\"{ns}\" odgovarja z nepričakovanim RCODE (\"{rcode}\") za SOA poizvedbo."
+msgid ""
+"Name server \"{ns}\" responds with an unexpected RCODE name (\"{rcode}\") on "
+"an SOA query."
+msgstr ""
+"Domenski strežnik\"{ns}\" odgovarja z nepričakovanim RCODE (\"{rcode}\") za "
+"SOA poizvedbo."
 
 #. BASIC:DOMAIN_NAME_LABEL_TOO_LONG
 #, perl-brace-format
-msgid "Domain name ({domain}) has a label ({label}) too long ({dlength}/{max})."
+msgid ""
+"Domain name ({domain}) has a label ({label}) too long ({dlength}/{max})."
 msgstr "Oznaka ({label}) za domeno '{domain}' je predolga ({dlength}/{max})."
 
 #. BASIC:DOMAIN_NAME_TOO_LONG
@@ -252,7 +295,9 @@ msgstr "Domenski strežnik {ns} je vrnil \"A\" zapise za '{domain}'."
 #. BASIC:HAS_NAMESERVER_NO_WWW_A_TEST
 #, perl-brace-format
 msgid "Functional nameserver found. \"A\" query for www.{zname} test skipped."
-msgstr "Najden delujoč domenski strežnik. Test \"A\" zapisa za www.{zname} ni bil opravljen."
+msgstr ""
+"Najden delujoč domenski strežnik. Test \"A\" zapisa za www.{zname} ni bil "
+"opravljen."
 
 #. BASIC:IPV4_DISABLED
 #. CONNECTIVITY:IPV4_DISABLED
@@ -313,23 +358,35 @@ msgstr "Raznolikost IP prefixov"
 
 #. CONNECTIVITY:CN01_IPV4_DISABLED
 #, perl-brace-format
-msgid "IPv4 is disabled. No DNS queries are sent to these name servers: \"{ns_list}\"."
+msgid ""
+"IPv4 is disabled. No DNS queries are sent to these name servers: "
+"\"{ns_list}\"."
 msgstr "IPv4 je onemogočen. DNS poizvedbe niso bile poslane na: \"{ns_list}\"."
 
 #. CONNECTIVITY:CN01_IPV6_DISABLED
 #, perl-brace-format
-msgid "IPv6 is disabled. No DNS queries are sent to these name servers: \"{ns_list}\"."
+msgid ""
+"IPv6 is disabled. No DNS queries are sent to these name servers: "
+"\"{ns_list}\"."
 msgstr "IPv6 je onemogočen. DNS poizvedbe niso bile poslane na: \"{ns_list}\"."
 
 #. CONNECTIVITY:CN01_MISSING_NS_RECORD_UDP
 #, perl-brace-format
-msgid "Nameserver {ns} responds to a NS query with no NS records in the answer section over UDP."
-msgstr "Domenski strežnik {ns} je odgovoril na \"NS\" poizvedbo brez NS zapisov v odgovoru prek UDP."
+msgid ""
+"Nameserver {ns} responds to a NS query with no NS records in the answer "
+"section over UDP."
+msgstr ""
+"Domenski strežnik {ns} je odgovoril na \"NS\" poizvedbo brez NS zapisov v "
+"odgovoru prek UDP."
 
 #. CONNECTIVITY:CN01_MISSING_SOA_RECORD_UDP
 #, perl-brace-format
-msgid "Nameserver {ns} responds to a SOA query with no SOA records in the answer section over UDP."
-msgstr "Domenski strežnik {ns} je odgovoril na \"SOA\" poizvedbo brez SOA zapisov v odgovoru prek UDP."
+msgid ""
+"Nameserver {ns} responds to a SOA query with no SOA records in the answer "
+"section over UDP."
+msgstr ""
+"Domenski strežnik {ns} je odgovoril na \"SOA\" poizvedbo brez SOA zapisov v "
+"odgovoru prek UDP."
 
 #. CONNECTIVITY:CN01_NO_RESPONSE_NS_QUERY_UDP
 #, perl-brace-format
@@ -348,51 +405,75 @@ msgstr "Domenski strežnik {ns} ne odgovarja na poizvedbe prek UDP."
 
 #. CONNECTIVITY:CN01_NS_RECORD_NOT_AA_UDP
 #, perl-brace-format
-msgid "Nameserver {ns} does not give an authoritative response on an NS query over UDP."
-msgstr "Domenski strežnik {ns} ne vrača avtoritativnega odgovora na \"NS\" poizvedbe prek UDP."
+msgid ""
+"Nameserver {ns} does not give an authoritative response on an NS query over "
+"UDP."
+msgstr ""
+"Domenski strežnik {ns} ne vrača avtoritativnega odgovora na \"NS\" poizvedbe "
+"prek UDP."
 
 #. CONNECTIVITY:CN01_SOA_RECORD_NOT_AA_UDP
 #, perl-brace-format
-msgid "Nameserver {ns} does not give an authoritative response on an SOA query over UDP."
-msgstr "Domenski strežnik {ns} ne vrača avtoritativnega odgovora na \"SOA\" poizvedbe prek UDP."
+msgid ""
+"Nameserver {ns} does not give an authoritative response on an SOA query over "
+"UDP."
+msgstr ""
+"Domenski strežnik {ns} ne vrača avtoritativnega odgovora na \"SOA\" "
+"poizvedbe prek UDP."
 
 #. CONNECTIVITY:CN01_UNEXPECTED_RCODE_NS_QUERY_UDP
 #, perl-brace-format
-msgid "Nameserver {ns} responds with an unexpected RCODE ({rcode}) on an NS query over UDP."
-msgstr "Domenski strežnik {ns} je odgovoril z nepričakovanim RCODE ({rcode}) na \"NS\" poizvedbo prek UDP."
+msgid ""
+"Nameserver {ns} responds with an unexpected RCODE ({rcode}) on an NS query "
+"over UDP."
+msgstr ""
+"Domenski strežnik {ns} je odgovoril z nepričakovanim RCODE ({rcode}) na "
+"\"NS\" poizvedbo prek UDP."
 
 #. CONNECTIVITY:CN01_UNEXPECTED_RCODE_SOA_QUERY_UDP
 #, perl-brace-format
-msgid "Nameserver {ns} responds with an unexpected RCODE ({rcode}) on an SOA query over UDP."
-msgstr "Domenski strežnik {ns} je odgovoril z nepričakovanim RCODE ({rcode}) na \"SOA\" poizvedbo prek UDP."
+msgid ""
+"Nameserver {ns} responds with an unexpected RCODE ({rcode}) on an SOA query "
+"over UDP."
+msgstr ""
+"Domenski strežnik {ns} je odgovoril z nepričakovanim RCODE ({rcode}) na "
+"\"SOA\" poizvedbo prek UDP."
 
 #. CONNECTIVITY:CN01_WRONG_NS_RECORD_UDP
 #, perl-brace-format
 msgid ""
-"Nameserver {ns} responds with a wrong owner name ({domain_found} instead of {domain_expected}) on NS queries "
-"over UDP."
+"Nameserver {ns} responds with a wrong owner name ({domain_found} instead of "
+"{domain_expected}) on NS queries over UDP."
 msgstr ""
-"Domenski strežnik {ns} je odgovoril z nepričakovano domeno ({domain_found}) namesto {domain_expected}) za NS "
-"poizvedbe prek UDP."
+"Domenski strežnik {ns} je odgovoril z nepričakovano domeno ({domain_found}) "
+"namesto {domain_expected}) za NS poizvedbe prek UDP."
 
 #. CONNECTIVITY:CN01_WRONG_SOA_RECORD_UDP
 #, perl-brace-format
 msgid ""
-"Nameserver {ns} responds with a wrong owner name ({domain_found} instead of {domain_expected}) on SOA "
-"queries over UDP."
+"Nameserver {ns} responds with a wrong owner name ({domain_found} instead of "
+"{domain_expected}) on SOA queries over UDP."
 msgstr ""
-"Domenski strežnik {ns} je odgovoril z nepričakovano domeno ({domain_found}) namesto {domain_expected}) na "
-"SOA poizvedbe prek UDP."
+"Domenski strežnik {ns} je odgovoril z nepričakovano domeno ({domain_found}) "
+"namesto {domain_expected}) na SOA poizvedbe prek UDP."
 
 #. CONNECTIVITY:CN02_MISSING_NS_RECORD_TCP
 #, perl-brace-format
-msgid "Nameserver {ns} responds to a NS query with no NS records in the answer section over TCP."
-msgstr "Domenski strežnik {ns} je na NS poizvedbo odgovoril brez NS zapisov v odgovoru prek TCP."
+msgid ""
+"Nameserver {ns} responds to a NS query with no NS records in the answer "
+"section over TCP."
+msgstr ""
+"Domenski strežnik {ns} je na NS poizvedbo odgovoril brez NS zapisov v "
+"odgovoru prek TCP."
 
 #. CONNECTIVITY:CN02_MISSING_SOA_RECORD_TCP
 #, perl-brace-format
-msgid "Nameserver {ns} responds to a SOA query with no SOA records in the answer section over TCP."
-msgstr "Domenski strežnik {ns} je na SOA poizvedbo odgovoril brez SOA zapisov v odgovoru prek TCP."
+msgid ""
+"Nameserver {ns} responds to a SOA query with no SOA records in the answer "
+"section over TCP."
+msgstr ""
+"Domenski strežnik {ns} je na SOA poizvedbo odgovoril brez SOA zapisov v "
+"odgovoru prek TCP."
 
 #. CONNECTIVITY:CN02_NO_RESPONSE_NS_QUERY_TCP
 #, perl-brace-format
@@ -411,46 +492,64 @@ msgstr "Domenski strežnik {ns} ne odgovarja na nobene poizvedbe prek TCP."
 
 #. CONNECTIVITY:CN02_NS_RECORD_NOT_AA_TCP
 #, perl-brace-format
-msgid "Nameserver {ns} does not give an authoritative response on an NS query over TCP."
-msgstr "Domenski strežnik {ns} ne vrača avtoritativnega odgovora na NS poizvedbe prek TCP."
+msgid ""
+"Nameserver {ns} does not give an authoritative response on an NS query over "
+"TCP."
+msgstr ""
+"Domenski strežnik {ns} ne vrača avtoritativnega odgovora na NS poizvedbe "
+"prek TCP."
 
 #. CONNECTIVITY:CN02_SOA_RECORD_NOT_AA_TCP
 #, perl-brace-format
-msgid "Nameserver {ns} does not give an authoritative response on an SOA query over TCP."
-msgstr "Domenski strežnik {ns} ne vrača avtoritativnega odgovora na SOA poizvedbe prek TCP."
+msgid ""
+"Nameserver {ns} does not give an authoritative response on an SOA query over "
+"TCP."
+msgstr ""
+"Domenski strežnik {ns} ne vrača avtoritativnega odgovora na SOA poizvedbe "
+"prek TCP."
 
 #. CONNECTIVITY:CN02_UNEXPECTED_RCODE_NS_QUERY_TCP
 #, perl-brace-format
-msgid "Nameserver {ns} responds with an unexpected RCODE ({rcode}) on an NS query over TCP."
-msgstr "Domenski strežnik {ns} je odgovoril z nepričakovano RCODE ({rcode}) na NS poizvedbe prek TCP."
+msgid ""
+"Nameserver {ns} responds with an unexpected RCODE ({rcode}) on an NS query "
+"over TCP."
+msgstr ""
+"Domenski strežnik {ns} je odgovoril z nepričakovano RCODE ({rcode}) na NS "
+"poizvedbe prek TCP."
 
 #. CONNECTIVITY:CN02_UNEXPECTED_RCODE_SOA_QUERY_TCP
 #, perl-brace-format
-msgid "Nameserver {ns} responds with an unexpected RCODE ({rcode}) on an SOA query over TCP."
-msgstr "Domenski strežnik {ns} je odgovoril z nepričakovano RCODE ({rcode}) na SOA poizvedbe prek TCP."
+msgid ""
+"Nameserver {ns} responds with an unexpected RCODE ({rcode}) on an SOA query "
+"over TCP."
+msgstr ""
+"Domenski strežnik {ns} je odgovoril z nepričakovano RCODE ({rcode}) na SOA "
+"poizvedbe prek TCP."
 
 #. CONNECTIVITY:CN02_WRONG_NS_RECORD_TCP
 #, perl-brace-format
 msgid ""
-"Nameserver {ns} responds with a wrong owner name ({domain_found} instead of {domain_expected}) on NS queries "
-"over TCP."
+"Nameserver {ns} responds with a wrong owner name ({domain_found} instead of "
+"{domain_expected}) on NS queries over TCP."
 msgstr ""
-"Domenski strežnik {ns} je odgovoril z nepričakovano domeno ({domain_found}) namesto ({domain_expected}) v NS "
-"poizvedbi prek TCP."
+"Domenski strežnik {ns} je odgovoril z nepričakovano domeno ({domain_found}) "
+"namesto ({domain_expected}) v NS poizvedbi prek TCP."
 
 #. CONNECTIVITY:CN02_WRONG_SOA_RECORD_TCP
 #, perl-brace-format
 msgid ""
-"Nameserver {ns} responds with a wrong owner name ({domain_found} instead of {domain_expected}) on SOA "
-"queries over TCP."
+"Nameserver {ns} responds with a wrong owner name ({domain_found} instead of "
+"{domain_expected}) on SOA queries over TCP."
 msgstr ""
-"Domenski strežnik {ns} je odgovoril z nepričakovano domeno ({domain_found}) namesto ({domain_expected}) v "
-"SOA poizvedbi prek TCP."
+"Domenski strežnik {ns} je odgovoril z nepričakovano domeno ({domain_found}) "
+"namesto ({domain_expected}) v SOA poizvedbi prek TCP."
 
 #. CONNECTIVITY:ASN_INFOS_ANNOUNCE_IN
 #, perl-brace-format
 msgid "Name server IP address \"{ns_ip}\" is announced in prefix \"{prefix}\"."
-msgstr "Številka IP domenskega strežnika \"{ns_ip}\" je oglaševana v prefixu \"{prefix}\"."
+msgstr ""
+"Številka IP domenskega strežnika \"{ns_ip}\" je oglaševana v prefixu "
+"\"{prefix}\"."
 
 #. CONNECTIVITY:ASN_INFOS_RAW
 #, perl-brace-format
@@ -469,31 +568,51 @@ msgstr "Napaka baze predpon za IP naslov {ns_ip}."
 
 #. CONNECTIVITY:CN04_IPV4_DIFFERENT_PREFIX
 #, perl-brace-format
-msgid "The following name server(s) are announced in unique IPv4 prefix(es): \"{ns_list}\""
-msgstr "Navedeni domenski strežniki so oglaševani v različnih IPv4 prefixih: \"{ns_list}\""
+msgid ""
+"The following name server(s) are announced in unique IPv4 prefix(es): "
+"\"{ns_list}\""
+msgstr ""
+"Navedeni domenski strežniki so oglaševani v različnih IPv4 prefixih: "
+"\"{ns_list}\""
 
 #. CONNECTIVITY:CN04_IPV4_SAME_PREFIX
 #, perl-brace-format
-msgid "The following name server(s) are announced in the same IPv4 prefix ({ip_prefix}): \"{ns_list}\""
-msgstr "Navedeni domenski strežniki so oglaševani v istem IPv4 prefixu ({ip_prefix}) : \"{ns_list}\""
+msgid ""
+"The following name server(s) are announced in the same IPv4 prefix "
+"({ip_prefix}): \"{ns_list}\""
+msgstr ""
+"Navedeni domenski strežniki so oglaševani v istem IPv4 prefixu "
+"({ip_prefix}) : \"{ns_list}\""
 
 #. CONNECTIVITY:CN04_IPV4_SINGLE_PREFIX
-msgid "All name server(s) IPv4 address(es) are announced in the same IPv4 prefix."
-msgstr "Vsi IPv4 naslovi domenskih strežnikov so oglaševani v istem IPv4 \"prefixu\"."
+msgid ""
+"All name server(s) IPv4 address(es) are announced in the same IPv4 prefix."
+msgstr ""
+"Vsi IPv4 naslovi domenskih strežnikov so oglaševani v istem IPv4 \"prefixu\"."
 
 #. CONNECTIVITY:CN04_IPV6_DIFFERENT_PREFIX
 #, perl-brace-format
-msgid "The following name server(s) are announced in unique IPv6 prefix(es): \"{ns_list}\""
-msgstr "Navedeni domenski strežniki so oglaševani v različnih IPv6 prefixih: \"{ns_list}\""
+msgid ""
+"The following name server(s) are announced in unique IPv6 prefix(es): "
+"\"{ns_list}\""
+msgstr ""
+"Navedeni domenski strežniki so oglaševani v različnih IPv6 prefixih: "
+"\"{ns_list}\""
 
 #. CONNECTIVITY:CN04_IPV6_SAME_PREFIX
 #, perl-brace-format
-msgid "The following name server(s) are announced in the same IPv6 prefix ({ip_prefix}): \"{ns_list}\""
-msgstr "Navedeni domenski strežniki so oglaševani v istem IPv6 prefixu ({ip_prefix}) : \"{ns_list}\""
+msgid ""
+"The following name server(s) are announced in the same IPv6 prefix "
+"({ip_prefix}): \"{ns_list}\""
+msgstr ""
+"Navedeni domenski strežniki so oglaševani v istem IPv6 prefixu "
+"({ip_prefix}) : \"{ns_list}\""
 
 #. CONNECTIVITY:CN04_IPV6_SINGLE_PREFIX
-msgid "All name server(s) IPv6 address(es) are announced in the same IPv6 prefix."
-msgstr "Vsi IPv6 naslovi domenskih strežnikov so oglaševani v istem IPv6 \"prefixu\"."
+msgid ""
+"All name server(s) IPv6 address(es) are announced in the same IPv6 prefix."
+msgstr ""
+"Vsi IPv6 naslovi domenskih strežnikov so oglaševani v istem IPv6 \"prefixu\"."
 
 #. CONNECTIVITY:ERROR_ASN_DATABASE
 #, perl-brace-format
@@ -507,39 +626,54 @@ msgstr "AS baza ni vrnila podatka za IP naslov {ns_ip}."
 
 #. CONNECTIVITY:IPV4_SAME_ASN
 #, perl-brace-format
-msgid "All authoritative nameservers have their IPv4 addresses in the same AS set ({asn_list})."
-msgstr "IPv4 naslovi vseh avtoritativnih strežnikov se nahajajo v istem AS nizu ({asn_list})."
+msgid ""
+"All authoritative nameservers have their IPv4 addresses in the same AS set "
+"({asn_list})."
+msgstr ""
+"IPv4 naslovi vseh avtoritativnih strežnikov se nahajajo v istem AS nizu "
+"({asn_list})."
 
 #. CONNECTIVITY:IPV4_ONE_ASN
 #, perl-brace-format
-msgid "All authoritative nameservers have their IPv4 addresses in the same AS ({asn})."
-msgstr "IPv4 naslovi vseh avtoritativnih strežnikov se nahajajo v istem AS ({asn})."
+msgid ""
+"All authoritative nameservers have their IPv4 addresses in the same AS "
+"({asn})."
+msgstr ""
+"IPv4 naslovi vseh avtoritativnih strežnikov se nahajajo v istem AS ({asn})."
 
 #. CONNECTIVITY:IPV4_DIFFERENT_ASN
 #, perl-brace-format
 msgid ""
-"At least two IPv4 addresses of the authoritative nameservers are announced by different AS sets. A merged "
-"list of all AS: ({asn_list})."
+"At least two IPv4 addresses of the authoritative nameservers are announced "
+"by different AS sets. A merged list of all AS: ({asn_list})."
 msgstr ""
-"Vsaj dva IPv4 naslova avtoritativnih strežnikov sta iz različnih AS. Grupiran seznam vseh AS: ({asn_list})."
+"Vsaj dva IPv4 naslova avtoritativnih strežnikov sta iz različnih AS. "
+"Grupiran seznam vseh AS: ({asn_list})."
 
 #. CONNECTIVITY:IPV6_SAME_ASN
 #, perl-brace-format
-msgid "All authoritative nameservers have their IPv6 addresses in the same AS set ({asn_list})."
-msgstr "IPv6 naslovi vseh avtoritativnih strežnikov se nahajajo v istem AS nizu ({asn_list})."
+msgid ""
+"All authoritative nameservers have their IPv6 addresses in the same AS set "
+"({asn_list})."
+msgstr ""
+"IPv6 naslovi vseh avtoritativnih strežnikov se nahajajo v istem AS nizu "
+"({asn_list})."
 
 #. CONNECTIVITY:IPV6_ONE_ASN
 #, perl-brace-format
-msgid "All authoritative nameservers have their IPv6 addresses in the same AS ({asn})."
+msgid ""
+"All authoritative nameservers have their IPv6 addresses in the same AS "
+"({asn})."
 msgstr "IPv6 naslovi avtoritativnih strežnikov se nahajajo v istem AS ({asn})."
 
 #. CONNECTIVITY:IPV6_DIFFERENT_ASN
 #, perl-brace-format
 msgid ""
-"At least two IPv6 addresses of the authoritative nameservers are announced by different AS sets. A merged "
-"list of all AS: ({asn_list})."
+"At least two IPv6 addresses of the authoritative nameservers are announced "
+"by different AS sets. A merged list of all AS: ({asn_list})."
 msgstr ""
-"Vsaj dva IPv6 naslova avtoritativnih strežnikov sta iz različnih AS. Grupiran seznam vseh AS: ({asn_list})."
+"Vsaj dva IPv6 naslova avtoritativnih strežnikov sta iz različnih AS. "
+"Grupiran seznam vseh AS: ({asn_list})."
 
 #. CONNECTIVITY:IPV4_ASN
 #, perl-brace-format
@@ -595,17 +729,23 @@ msgstr "Domenski strežnik nima avtoritativnih podatkov (lame delegation)."
 
 #. CONSISTENCY:EXTRA_ADDRESS_CHILD
 #, perl-brace-format
-msgid "Child has extra nameserver IP address(es) not listed at parent ({ns_ip_list})."
-msgstr "Najdeni dodatni domenski strežniki, ki niso navedeni v starševski coni ({ns_ip_list})."
+msgid ""
+"Child has extra nameserver IP address(es) not listed at parent "
+"({ns_ip_list})."
+msgstr ""
+"Najdeni dodatni domenski strežniki, ki niso navedeni v starševski coni "
+"({ns_ip_list})."
 
 #. CONSISTENCY:IN_BAILIWICK_ADDR_MISMATCH
 #, perl-brace-format
 msgid ""
-"In-bailiwick name server listed at parent has a mismatch between glue data at parent ({parent_addresses}) "
-"and any equivalent address record in child zone ({zone_addresses})."
+"In-bailiwick name server listed at parent has a mismatch between glue data "
+"at parent ({parent_addresses}) and any equivalent address record in child "
+"zone ({zone_addresses})."
 msgstr ""
-"Glue zapisi In-bailiwick domenskega strežnika v starševski coni ({parent_addresses}) se ne ujemajo z nobenim "
-"ekvivalentnim zapisom v podrejeni coni ({zone_addresses})."
+"Glue zapisi In-bailiwick domenskega strežnika v starševski coni "
+"({parent_addresses}) se ne ujemajo z nobenim ekvivalentnim zapisom v "
+"podrejeni coni ({zone_addresses})."
 
 #. CONSISTENCY:MULTIPLE_NS_SET
 #, perl-brace-format
@@ -652,7 +792,9 @@ msgstr "Domenski strežnik {ns} ne odgovarja na \"SOA\" poizvedbe."
 #. CONSISTENCY:NS_SET
 #, perl-brace-format
 msgid "Saw NS set ({nsname_list}) on following nameserver set : {servers}."
-msgstr "Nabor domenskih strežnikov ({nsname_list}) je opredeljen na naslednjih strežnikih : {servers}."
+msgstr ""
+"Nabor domenskih strežnikov ({nsname_list}) je opredeljen na naslednjih "
+"strežnikih : {servers}."
 
 #. CONSISTENCY:ONE_NS_SET
 #, perl-brace-format
@@ -677,18 +819,22 @@ msgstr "Najdena ena serijska številka v SOA ({serial})."
 #. CONSISTENCY:ONE_SOA_TIME_PARAMETER_SET
 #, perl-brace-format
 msgid ""
-"A single SOA time parameter set was seen (REFRESH={refresh},RETRY={retry},EXPIRE={expire},MINIMUM={minimum})."
+"A single SOA time parameter set was seen (REFRESH={refresh},RETRY={retry},"
+"EXPIRE={expire},MINIMUM={minimum})."
 msgstr ""
-"Najden nabor časovnih parametrov v SOA (REFRESH={refresh}, RETRY={retry},EXPIRE={expire},MINIMUM={minimum})."
+"Najden nabor časovnih parametrov v SOA (REFRESH={refresh}, RETRY={retry},"
+"EXPIRE={expire},MINIMUM={minimum})."
 
 #. CONSISTENCY:OUT_OF_BAILIWICK_ADDR_MISMATCH
 #, perl-brace-format
 msgid ""
-"Out-of-bailiwick name server listed at parent with glue record has a mismatch between the glue at the parent "
-"({parent_addresses}) and any equivalent address record found in authoritative zone ({zone_addresses})."
+"Out-of-bailiwick name server listed at parent with glue record has a "
+"mismatch between the glue at the parent ({parent_addresses}) and any "
+"equivalent address record found in authoritative zone ({zone_addresses})."
 msgstr ""
-"Glue zapisi out-of-bailiwick domenskega strežnika, ki je v starševski coni ({parent_addresses}), se ne "
-"ujemajo z nobenimi ekvivalentnimi zapisi v avtoritativni coni ({zone_addresses})."
+"Glue zapisi out-of-bailiwick domenskega strežnika, ki je v starševski coni "
+"({parent_addresses}), se ne ujemajo z nobenimi ekvivalentnimi zapisi v "
+"avtoritativni coni ({zone_addresses})."
 
 #. CONSISTENCY:SOA_RNAME
 #, perl-brace-format
@@ -698,25 +844,27 @@ msgstr "Najden SOA RNAME {rname} v naboru domenskih strežnikov : {ns_list}."
 #. CONSISTENCY:SOA_SERIAL
 #, perl-brace-format
 msgid "Saw SOA serial number {serial} on following nameserver set : {ns_list}."
-msgstr "SOA serijska številka {serial} v naboru domenskih strežnikov : {ns_list}."
+msgstr ""
+"SOA serijska številka {serial} v naboru domenskih strežnikov : {ns_list}."
 
 #. CONSISTENCY:SOA_SERIAL_VARIATION
 #, perl-brace-format
 msgid ""
-"Difference between the smaller serial ({serial_min}) and the bigger one ({serial_max}) is greater than the "
-"maximum allowed ({max_variation})."
+"Difference between the smaller serial ({serial_min}) and the bigger one "
+"({serial_max}) is greater than the maximum allowed ({max_variation})."
 msgstr ""
-"Razlika med najmanjšo serijsko številko({serial_min}) in največjo ({serial_max}) je večja kot je dovoljeno "
-"({max_variation})."
+"Razlika med najmanjšo serijsko številko({serial_min}) in največjo "
+"({serial_max}) je večja kot je dovoljeno ({max_variation})."
 
 #. CONSISTENCY:SOA_TIME_PARAMETER_SET
 #, perl-brace-format
 msgid ""
-"Saw SOA time parameter set (REFRESH={refresh}, RETRY={retry}, EXPIRE={expire}, MINIMUM={minimum}) on "
-"following nameserver set : {ns_list}."
+"Saw SOA time parameter set (REFRESH={refresh}, RETRY={retry}, "
+"EXPIRE={expire}, MINIMUM={minimum}) on following nameserver set : {ns_list}."
 msgstr ""
-"Nabor SOA časovnih parametrov (REFRESH={refresh}, RETRY={retry}, EXPIRE={expire}, MINIMUM={minimum}) na "
-"naboru domenskih strežnikov : {ns_list}."
+"Nabor SOA časovnih parametrov (REFRESH={refresh}, RETRY={retry}, "
+"EXPIRE={expire}, MINIMUM={minimum}) na naboru domenskih strežnikov : "
+"{ns_list}."
 
 #. DNSSEC:DNSSEC01
 msgid "Legal values for the DS hash digest algorithm"
@@ -796,43 +944,66 @@ msgstr "DNSKEY ni najden. Vsi dodatni testi so preskočeni."
 
 #. DNSSEC:ALGORITHM_DEPRECATED
 #, perl-brace-format
-msgid "The DNSKEY with tag {keytag} uses deprecated algorithm number {algo_num} ({algo_descr})."
-msgstr "DNSKEY z oznako {keytag} uporablja zastarel algoritem {algo_num} ({algo_descr})."
+msgid ""
+"The DNSKEY with tag {keytag} uses deprecated algorithm number {algo_num} "
+"({algo_descr})."
+msgstr ""
+"DNSKEY z oznako {keytag} uporablja zastarel algoritem {algo_num} "
+"({algo_descr})."
 
 #. DNSSEC:ALGORITHM_NOT_RECOMMENDED
 #, perl-brace-format
 msgid ""
-"The DNSKEY with tag {keytag} uses an algorithm number {algo_num} ({algo_descr}) which is not recommended to "
-"be used."
-msgstr "DNSKEY z oznako {keytag} uporablja algoritem, ki ni priporočljiv za uporabo {algo_num} ({algo_descr})."
+"The DNSKEY with tag {keytag} uses an algorithm number {algo_num} "
+"({algo_descr}) which is not recommended to be used."
+msgstr ""
+"DNSKEY z oznako {keytag} uporablja algoritem, ki ni priporočljiv za uporabo "
+"{algo_num} ({algo_descr})."
 
 #. DNSSEC:ALGORITHM_NOT_ZONE_SIGN
 #, perl-brace-format
 msgid ""
-"The DNSKEY with tag {keytag} uses algorithm number not meant for zone signing, algorithm number {algo_num} "
-"({algo_descr})."
+"The DNSKEY with tag {keytag} uses algorithm number not meant for zone "
+"signing, algorithm number {algo_num} ({algo_descr})."
 msgstr ""
-"DNSKEY z oznako {keytag} uporablja algoritem, ki ni namenjen podpisovanju cone {algo_num} ({algo_descr})."
+"DNSKEY z oznako {keytag} uporablja algoritem, ki ni namenjen podpisovanju "
+"cone {algo_num} ({algo_descr})."
 
 #. DNSSEC:ALGORITHM_OK
 #, perl-brace-format
-msgid "The DNSKEY with tag {keytag} uses algorithm number {algo_num} ({algo_descr}), which is OK."
-msgstr "DNSKEY z oznako {keytag} uporablja veljaven algoritem {algo_num} ({algo_descr})."
+msgid ""
+"The DNSKEY with tag {keytag} uses algorithm number {algo_num} "
+"({algo_descr}), which is OK."
+msgstr ""
+"DNSKEY z oznako {keytag} uporablja veljaven algoritem {algo_num} "
+"({algo_descr})."
 
 #. DNSSEC:ALGORITHM_PRIVATE
 #, perl-brace-format
-msgid "The DNSKEY with tag {keytag} uses private algorithm number {algo_num} ({algo_descr})."
-msgstr "DNSKEY z oznako {keytag} uporablja zasebni algoritem {algo_num} ({algo_descr})."
+msgid ""
+"The DNSKEY with tag {keytag} uses private algorithm number {algo_num} "
+"({algo_descr})."
+msgstr ""
+"DNSKEY z oznako {keytag} uporablja zasebni algoritem {algo_num} "
+"({algo_descr})."
 
 #. DNSSEC:ALGORITHM_RESERVED
 #, perl-brace-format
-msgid "The DNSKEY with tag {keytag} uses reserved algorithm number {algo_num} ({algo_descr})."
-msgstr "DNSKEY z oznako {keytag} uporablja rezerviran algoritem {algo_num} ({algo_descr})."
+msgid ""
+"The DNSKEY with tag {keytag} uses reserved algorithm number {algo_num} "
+"({algo_descr})."
+msgstr ""
+"DNSKEY z oznako {keytag} uporablja rezerviran algoritem {algo_num} "
+"({algo_descr})."
 
 #. DNSSEC:ALGORITHM_UNASSIGNED
 #, perl-brace-format
-msgid "The DNSKEY with tag {keytag} uses unassigned algorithm number {algo_num} ({algo_descr})."
-msgstr "DNSKEY z oznako {keytag} uporablja nepodprt algoritem (ni v veljavi) {algo_num} ({algo_descr})."
+msgid ""
+"The DNSKEY with tag {keytag} uses unassigned algorithm number {algo_num} "
+"({algo_descr})."
+msgstr ""
+"DNSKEY z oznako {keytag} uporablja nepodprt algoritem (ni v veljavi) "
+"{algo_num} ({algo_descr})."
 
 #. DNSSEC:DNSKEY_AND_DS
 #, perl-brace-format
@@ -847,405 +1018,487 @@ msgstr "{child} je poslal DNSKEY zapis, toda {parent} ni poslal DS zapisa."
 #. DNSSEC:DNSKEY_SMALLER_THAN_REC
 #, perl-brace-format
 msgid ""
-"DNSKEY with tag {keytag} and using algorithm {algo_num} ({algo_descr}) has a size ({keysize}) smaller than "
-"the recommended one ({keysizerec})."
+"DNSKEY with tag {keytag} and using algorithm {algo_num} ({algo_descr}) has a "
+"size ({keysize}) smaller than the recommended one ({keysizerec})."
 msgstr ""
-"DNSKEY z oznako {keytag} uporablja algoritem {algo_num} ({algo_descr}) z velikostjo ključa ({keysize}), ki "
-"je manjša od priporočene ({keysizerec})."
+"DNSKEY z oznako {keytag} uporablja algoritem {algo_num} ({algo_descr}) z "
+"velikostjo ključa ({keysize}), ki je manjša od priporočene ({keysizerec})."
 
 #. DNSSEC:DNSKEY_TOO_SMALL_FOR_ALGO
 #, perl-brace-format
 msgid ""
-"DNSKEY with tag {keytag} and using algorithm {algo_num} ({algo_descr}) has a size ({keysize}) smaller than "
-"the minimum one ({keysizemin})."
+"DNSKEY with tag {keytag} and using algorithm {algo_num} ({algo_descr}) has a "
+"size ({keysize}) smaller than the minimum one ({keysizemin})."
 msgstr ""
-"DNSKEY z oznako {keytag} uporablja algoritem {algo_num} ({algo_descr}) z velikostjo ključa ({keysize}), ki "
-"je manjša od minimalno dovoljene velikosti ({keysizemin})."
+"DNSKEY z oznako {keytag} uporablja algoritem {algo_num} ({algo_descr}) z "
+"velikostjo ključa ({keysize}), ki je manjša od minimalno dovoljene velikosti "
+"({keysizemin})."
 
 #. DNSSEC:DNSKEY_TOO_LARGE_FOR_ALGO
 #, perl-brace-format
 msgid ""
-"DNSKEY with tag {keytag} and using algorithm {algo_num} ({algo_descr}) has a size ({keysize}) larger than "
-"the maximum one ({keysizemax})."
+"DNSKEY with tag {keytag} and using algorithm {algo_num} ({algo_descr}) has a "
+"size ({keysize}) larger than the maximum one ({keysizemax})."
 msgstr ""
-"DNSKEY z oznako {keytag} uporablja algoritem {algo_num} ({algo_descr}) z velikostjo ključa ({keysize}), ki "
-"je večja od maksimalno dovoljene velikosti ({keysizemax})."
+"DNSKEY z oznako {keytag} uporablja algoritem {algo_num} ({algo_descr}) z "
+"velikostjo ključa ({keysize}), ki je večja od maksimalno dovoljene velikosti "
+"({keysizemax})."
 
 #. DNSSEC:DS01_DIGEST_NOT_SUPPORTED_BY_ZM
 #, perl-brace-format
 msgid ""
-"DS record for zone {domain} with keytag {keytag} was created by digest algorithm {ds_algo_num} "
-"({ds_algo_mnemo}) which cannot be validated by this installation of Zonemaster. Fetched from the nameservers "
-"with IP addresses \"{ns_ip_list}\"."
+"DS record for zone {domain} with keytag {keytag} was created by digest "
+"algorithm {ds_algo_num} ({ds_algo_mnemo}) which cannot be validated by this "
+"installation of Zonemaster. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
 msgstr ""
-"DS zapis za {domain} z oznako {keytag} je bil ustvarjen z algoritmom {ds_algo_num}({ds_algo_mnemo}), ki ga "
-"trenutna Zonemaster verzija ne more preveriti. Podatki pridobljeni iz \"{ns_ip_list}\"."
+"DS zapis za {domain} z oznako {keytag} je bil ustvarjen z algoritmom "
+"{ds_algo_num}({ds_algo_mnemo}), ki ga trenutna Zonemaster verzija ne more "
+"preveriti. Podatki pridobljeni iz \"{ns_ip_list}\"."
 
 #. DNSSEC:DS01_DS_ALGO_DEPRECATED
 #, perl-brace-format
 msgid ""
-"DS record for zone {domain} with keytag {keytag} was created by digest algorithm {ds_algo_num} "
-"({ds_algo_mnemo}) which is deprecated. Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+"DS record for zone {domain} with keytag {keytag} was created by digest "
+"algorithm {ds_algo_num} ({ds_algo_mnemo}) which is deprecated. Fetched from "
+"the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"DS zapis za {domain} z oznako {keytag} je bil ustvarjen z zastarelim algoritmom {ds_algo_num}"
-"({ds_algo_mnemo}). Podatki pridobljeni iz \"{ns_ip_list}\"."
+"DS zapis za {domain} z oznako {keytag} je bil ustvarjen z zastarelim "
+"algoritmom {ds_algo_num}({ds_algo_mnemo}). Podatki pridobljeni iz "
+"\"{ns_ip_list}\"."
 
 #. DNSSEC:DS01_DS_ALGO_2_MISSING
 #, perl-brace-format
-msgid "No DS record created by digest algorithm 2 (SHA-256) is present for zone {domain}."
+msgid ""
+"No DS record created by digest algorithm 2 (SHA-256) is present for zone "
+"{domain}."
 msgstr "DS zapis ustvarjen z algoritmom 2 (SHA-256) za {domain} ne obstaja."
 
 #. DNSSEC:DS01_DS_ALGO_NOT_DS
 #, perl-brace-format
 msgid ""
-"DS record for zone {domain} with keytag {keytag} was created by digest algorithm {ds_algo_num} "
-"({ds_algo_mnemo}) which is not meant for DS. Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+"DS record for zone {domain} with keytag {keytag} was created by digest "
+"algorithm {ds_algo_num} ({ds_algo_mnemo}) which is not meant for DS. Fetched "
+"from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"DS zapis za {domain} z oznako {keytag} je bil ustvarjen z algoritmom {ds_algo_num} ({ds_algo_mnemo}), ki ni "
-"namenjen za DS podpisovanje. Podatki pridobljeni iz \"{ns_ip_list}\"."
+"DS zapis za {domain} z oznako {keytag} je bil ustvarjen z algoritmom "
+"{ds_algo_num} ({ds_algo_mnemo}), ki ni namenjen za DS podpisovanje. Podatki "
+"pridobljeni iz \"{ns_ip_list}\"."
 
 #. DNSSEC:DS01_DS_ALGO_RESERVED
 #, perl-brace-format
 msgid ""
-"DS record for zone {domain} with keytag {keytag} was created with an unassigned digest algorithm (algorithm "
-"number {ds_algo_num}). Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+"DS record for zone {domain} with keytag {keytag} was created with an "
+"unassigned digest algorithm (algorithm number {ds_algo_num}). Fetched from "
+"the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"DS zapis za {domain} z oznako {keytag} je bil ustvarjen z algoritmom ({ds_algo_num}), ki še ni v uporabi. "
-"Podatki pridobljeni iz \"{ns_ip_list}\"."
+"DS zapis za {domain} z oznako {keytag} je bil ustvarjen z algoritmom "
+"({ds_algo_num}), ki še ni v uporabi. Podatki pridobljeni iz \"{ns_ip_list}\"."
 
 #. DNSSEC:DS02_ALGO_NOT_SUPPORTED_BY_ZM
 #. DNSSEC:DS08_ALGO_NOT_SUPPORTED_BY_ZM
 #. DNSSEC:DS09_ALGO_NOT_SUPPORTED_BY_ZM
 #, perl-brace-format
 msgid ""
-"DNSKEY with tag {keytag} uses unsupported algorithm {algo_num} ({algo_mnemo}) by this installation of "
-"Zonemaster. Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+"DNSKEY with tag {keytag} uses unsupported algorithm {algo_num} "
+"({algo_mnemo}) by this installation of Zonemaster. Fetched from the "
+"nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"DNSKEY z oznako {keytag} uporablja algoritem {algo_num} ({algo_mnemo}), ki ga trenutna Zonemaster verzija ne "
-"podpira. Podatki pridobljeni iz \"{ns_ip_list}\"."
+"DNSKEY z oznako {keytag} uporablja algoritem {algo_num} ({algo_mnemo}), ki "
+"ga trenutna Zonemaster verzija ne podpira. Podatki pridobljeni iz "
+"\"{ns_ip_list}\"."
 
 #. DNSSEC:DS02_DNSKEY_NOT_FOR_ZONE_SIGNING
 #, perl-brace-format
 msgid ""
-"Flags field of DNSKEY record with tag {keytag} has not ZONE bit set although DS with same tag is present in "
-"parent. Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+"Flags field of DNSKEY record with tag {keytag} has not ZONE bit set although "
+"DS with same tag is present in parent. Fetched from the nameservers with IP "
+"addresses \"{ns_ip_list}\"."
 msgstr ""
-"Zastavica (flag) DNSKEY zapisa z oznako {keytag} nima nastavljenega ZONE bita, čeprav je DS z enako oznako "
-"prisoten vstarševski coni. Podatki pridobljeni iz \"{ns_ip_list}\"."
+"Zastavica (flag) DNSKEY zapisa z oznako {keytag} nima nastavljenega ZONE "
+"bita, čeprav je DS z enako oznako prisoten vstarševski coni. Podatki "
+"pridobljeni iz \"{ns_ip_list}\"."
 
 #. DNSSEC:DS02_DNSKEY_NOT_SEP
 #, perl-brace-format
 msgid ""
-"Flags field of DNSKEY record with tag {keytag} has not SEP bit set although DS with same tag is present in "
-"parent. Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+"Flags field of DNSKEY record with tag {keytag} has not SEP bit set although "
+"DS with same tag is present in parent. Fetched from the nameservers with IP "
+"addresses \"{ns_ip_list}\"."
 msgstr ""
-"Zastavica (flags) DNSKEY zapisa z oznako {keytag} nima nastavljenega SEP bita, čeprav je DS z enako oznako "
-"prisoten v starševski coni. Podatki pridobljeni iz \"{ns_ip_list}\"."
+"Zastavica (flags) DNSKEY zapisa z oznako {keytag} nima nastavljenega SEP "
+"bita, čeprav je DS z enako oznako prisoten v starševski coni. Podatki "
+"pridobljeni iz \"{ns_ip_list}\"."
 
 #. DNSSEC:DS02_DNSKEY_NOT_SIGNED_BY_ANY_DS
 #, perl-brace-format
 msgid ""
-"The DNSKEY RRset has not been signed by any DNSKEY matched by a DS record. Fetched from the nameservers with "
-"IP addresses \"{ns_ip_list}\"."
+"The DNSKEY RRset has not been signed by any DNSKEY matched by a DS record. "
+"Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"DNSKEY RRset ni bil podpisan z nobenim DNSKEY-em, ki bi se ujemal z DS zapisom. Podatki pridobljeni iz "
-"\"{ns_ip_list}\"."
+"DNSKEY RRset ni bil podpisan z nobenim DNSKEY-em, ki bi se ujemal z DS "
+"zapisom. Podatki pridobljeni iz \"{ns_ip_list}\"."
 
 #. DNSSEC:DS02_NO_DNSKEY_FOR_DS
 #, perl-brace-format
 msgid ""
-"The DNSKEY record with tag {keytag} that the DS refers to does not exist in the DNSKEY RRset. Fetched from "
-"the nameservers with IP \"{ns_ip_list}\"."
+"The DNSKEY record with tag {keytag} that the DS refers to does not exist in "
+"the DNSKEY RRset. Fetched from the nameservers with IP \"{ns_ip_list}\"."
 msgstr ""
-"DNSKEY z oznako {keytag} na katerega se sklicuje DS, ne obstaja v DNSKEY RRsetu. Podatki pridobljeni iz  "
-"\"{ns_ip_list}\"."
+"DNSKEY z oznako {keytag} na katerega se sklicuje DS, ne obstaja v DNSKEY "
+"RRsetu. Podatki pridobljeni iz  \"{ns_ip_list}\"."
 
 #. DNSSEC:DS02_NO_MATCHING_DNSKEY_RRSIG
 #, perl-brace-format
 msgid ""
-"The DNSKEY RRset is not signed by the DNSKEY with tag {keytag} that the DS record refers to. Fetched from "
-"the nameservers with IP \"{ns_ip_list}\"."
+"The DNSKEY RRset is not signed by the DNSKEY with tag {keytag} that the DS "
+"record refers to. Fetched from the nameservers with IP \"{ns_ip_list}\"."
 msgstr ""
-"DNSKEY RRset ni podpisan z DNSKEY-em z oznako {keytag} na katerega se DS zapis sklicuje. Podatki pridobljeni "
-"iz \"{ns_ip_list}\"."
+"DNSKEY RRset ni podpisan z DNSKEY-em z oznako {keytag} na katerega se DS "
+"zapis sklicuje. Podatki pridobljeni iz \"{ns_ip_list}\"."
 
 #. DNSSEC:DS02_NO_MATCH_DS_DNSKEY
 #, perl-brace-format
 msgid ""
-"The DS record does not match the DNSKEY with tag {keytag} by algorithm or digest. Fetched from the "
-"nameservers with IP \"{ns_ip_list}\"."
+"The DS record does not match the DNSKEY with tag {keytag} by algorithm or "
+"digest. Fetched from the nameservers with IP \"{ns_ip_list}\"."
 msgstr ""
-"DS zapis se ne ujema z DNSKEY-em z oznako {keytag} v algoritmu ali v izvlečku. Podatki pridobljeni iz "
-"\"{ns_ip_list}\"."
+"DS zapis se ne ujema z DNSKEY-em z oznako {keytag} v algoritmu ali v "
+"izvlečku. Podatki pridobljeni iz \"{ns_ip_list}\"."
 
 #. DNSSEC:DS02_NO_VALID_DNSKEY_FOR_ANY_DS
 #, perl-brace-format
 msgid ""
-"There is no valid DNSKEY matched by any of the DS records. Fetched from the nameservers with IP addresses "
+"There is no valid DNSKEY matched by any of the DS records. Fetched from the "
+"nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"Ni veljavnega DNSKEY-a, ki bi se ujemal z DS zapisom. Podatki pridobljeni iz "
 "\"{ns_ip_list}\"."
-msgstr "Ni veljavnega DNSKEY-a, ki bi se ujemal z DS zapisom. Podatki pridobljeni iz \"{ns_ip_list}\"."
 
 #. DNSSEC:DS02_RRSIG_NOT_VALID_BY_DNSKEY
 #. DNSSEC:DS08_RRSIG_NOT_VALID_BY_DNSKEY
 #, perl-brace-format
 msgid ""
-"The DNSKEY RRset is signed with an RRSIG with tag {keytag} which cannot be validated by the matching DNSKEY. "
-"Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+"The DNSKEY RRset is signed with an RRSIG with tag {keytag} which cannot be "
+"validated by the matching DNSKEY. Fetched from the nameservers with IP "
+"addresses \"{ns_ip_list}\"."
 msgstr ""
-"DNSKEY RRset je podpisan z RRSIG z oznako {keytag}, ki ga ni mogoče validirati z ustreznim DNSKEY-em. "
-"Podatki pridobljeni iz \"{ns_ip_list}\"."
+"DNSKEY RRset je podpisan z RRSIG z oznako {keytag}, ki ga ni mogoče "
+"validirati z ustreznim DNSKEY-em. Podatki pridobljeni iz \"{ns_ip_list}\"."
 
 #. DNSSEC:DS03_ERROR_RESPONSE_NSEC_QUERY
 #, perl-brace-format
-msgid "The following servers give erroneous response to NSEC query. Fetched from name servers \"{ns_list}\"."
+msgid ""
+"The following servers give erroneous response to NSEC query. Fetched from "
+"name servers \"{ns_list}\"."
 msgstr ""
-"Naslednji domenski strežniki vračajo napačen odgovor na NSEC poizvedbo. Podatki pridobljeni iz: "
-"\"{ns_list}\"."
+"Naslednji domenski strežniki vračajo napačen odgovor na NSEC poizvedbo. "
+"Podatki pridobljeni iz: \"{ns_list}\"."
 
 #. DNSSEC:DS03_ERR_MULT_NSEC3
 #. DNSSEC:DS10_ERR_MULT_NSEC3
 #, perl-brace-format
-msgid "Multiple NSEC3 records when one is expected. Fetched from name servers \"{ns_list}\"."
-msgstr "Več NSEC3 zapisov, ko je pričakovan eden. Podatki pridobljeni iz \"{ns_list}\"."
+msgid ""
+"Multiple NSEC3 records when one is expected. Fetched from name servers "
+"\"{ns_list}\"."
+msgstr ""
+"Več NSEC3 zapisov, ko je pričakovan eden. Podatki pridobljeni iz "
+"\"{ns_list}\"."
 
 #. DNSSEC:DS03_ILLEGAL_HASH_ALGO
 #, perl-brace-format
 msgid ""
-"The following servers respond with an illegal hash algorithm for NSEC3 ({algo_num}). Fetched from name "
-"servers \"{ns_list}\"."
+"The following servers respond with an illegal hash algorithm for NSEC3 "
+"({algo_num}). Fetched from name servers \"{ns_list}\"."
 msgstr ""
-"Naslednji domenski strežniki vračajo nepravilne hash vrednosti za NSEC3 ({algo_num}). Podatki pridobljeni "
-"iz: \"{ns_list}\"."
+"Naslednji domenski strežniki vračajo nepravilne hash vrednosti za NSEC3 "
+"({algo_num}). Podatki pridobljeni iz: \"{ns_list}\"."
 
 #. DNSSEC:DS03_ILLEGAL_ITERATION_VALUE
 #, perl-brace-format
 msgid ""
-"The following servers respond with the NSEC3 iteration value {int}. The recommended practice is to set this "
-"value to 0. Fetched from name servers \"{ns_list}\"."
+"The following servers respond with the NSEC3 iteration value {int}. The "
+"recommended practice is to set this value to 0. Fetched from name servers "
+"\"{ns_list}\"."
 msgstr ""
-"Naslednji domenski strežniki na poizvedbo vračajo NSEC3 iteration vrednost {int}. Priporočena vrednost je 0. "
-"Podatki pridobljeni iz : \"{ns_list}\"."
+"Naslednji domenski strežniki na poizvedbo vračajo NSEC3 iteration vrednost "
+"{int}. Priporočena vrednost je 0. Podatki pridobljeni iz : \"{ns_list}\"."
 
 #. DNSSEC:DS03_ILLEGAL_SALT_LENGTH
 #, perl-brace-format
 msgid ""
-"The following servers respond with a non-empty salt in NSEC3 ({int} octets). The recommended practice is to "
-"use an empty salt. Fetched from name servers \"{ns_list}\"."
+"The following servers respond with a non-empty salt in NSEC3 ({int} octets). "
+"The recommended practice is to use an empty salt. Fetched from name servers "
+"\"{ns_list}\"."
 msgstr ""
-"Naslednji domenski strežniki na poizvedbo vračajo NSEC3 salt vrednost {int}. Priporočena vrednost je prazen "
-"niz '-'. Podatki pridobljeni iz : \"{ns_list}\"."
+"Naslednji domenski strežniki na poizvedbo vračajo NSEC3 salt vrednost {int}. "
+"Priporočena vrednost je prazen niz '-'. Podatki pridobljeni iz : "
+"\"{ns_list}\"."
 
 #. DNSSEC:DS03_INCONSISTENT_HASH_ALGO
-msgid "Inconsistent hash algorithm in NSEC3 in responses for the child zone from different name servers."
-msgstr "Različni domenski strežniki ne vračajo enakih hash algoritmov v NSEC3 odgovorih za podrejeno cono."
+msgid ""
+"Inconsistent hash algorithm in NSEC3 in responses for the child zone from "
+"different name servers."
+msgstr ""
+"Različni domenski strežniki ne vračajo enakih hash algoritmov v NSEC3 "
+"odgovorih za podrejeno cono."
 
 #. DNSSEC:DS03_INCONSISTENT_ITERATION
-msgid "Inconsistent NSEC3 iteration value in responses for the child zone from different name servers."
-msgstr "Različni domenski strežniki ne vračajo enakih iteration vrednosti v NSEC3 odgovorih za podrejeno cono."
+msgid ""
+"Inconsistent NSEC3 iteration value in responses for the child zone from "
+"different name servers."
+msgstr ""
+"Različni domenski strežniki ne vračajo enakih iteration vrednosti v NSEC3 "
+"odgovorih za podrejeno cono."
 
 #. DNSSEC:DS03_INCONSISTENT_NSEC3_FLAGS
-msgid "Inconsistent NSEC3 flag list in responses for the child zone from different name servers."
-msgstr "Različni domenski strežniki ne vračajo enakih zastavic v NSEC3 odgovorih za podrejeno cono."
+msgid ""
+"Inconsistent NSEC3 flag list in responses for the child zone from different "
+"name servers."
+msgstr ""
+"Različni domenski strežniki ne vračajo enakih zastavic v NSEC3 odgovorih za "
+"podrejeno cono."
 
 #. DNSSEC:DS03_INCONSISTENT_SALT_LENGTH
-msgid "Inconsistent salt length in NSEC3 in responses for the child zone from different name servers."
+msgid ""
+"Inconsistent salt length in NSEC3 in responses for the child zone from "
+"different name servers."
 msgstr ""
-"Različni domenski strežniki ne vračajo enakih dolžin salt vrednosti v NSEC3 odgovorih za podrejeno cono."
+"Različni domenski strežniki ne vračajo enakih dolžin salt vrednosti v NSEC3 "
+"odgovorih za podrejeno cono."
 
 #. DNSSEC:DS03_LEGAL_EMPTY_SALT
 #, perl-brace-format
 msgid ""
-"The following servers respond with a legal empty salt in NSEC3. Fetched from name servers \"{ns_list}\"."
+"The following servers respond with a legal empty salt in NSEC3. Fetched from "
+"name servers \"{ns_list}\"."
 msgstr ""
-"Naslednji domenski strežniki odgovorijo z dovoljeno prazno salt vrednostjo v NSEC3. Podatki pridobljeni iz: "
-"\"{ns_list}\"."
+"Naslednji domenski strežniki odgovorijo z dovoljeno prazno salt vrednostjo v "
+"NSEC3. Podatki pridobljeni iz: \"{ns_list}\"."
 
 #. DNSSEC:DS03_LEGAL_HASH_ALGO
 #, perl-brace-format
 msgid ""
-"The following servers respond with a legal hash algorithm in NSEC3. Fetched from name servers \"{ns_list}\"."
+"The following servers respond with a legal hash algorithm in NSEC3. Fetched "
+"from name servers \"{ns_list}\"."
 msgstr ""
-"Naslednji domenski strežniki odgovorijo z dovoljenim hash algoritmom v NSEC3. Podatki pridobljeni iz: "
-"\"{ns_list}\"."
+"Naslednji domenski strežniki odgovorijo z dovoljenim hash algoritmom v "
+"NSEC3. Podatki pridobljeni iz: \"{ns_list}\"."
 
 #. DNSSEC:DS03_LEGAL_ITERATION_VALUE
 #, perl-brace-format
 msgid ""
-"The following servers respond with NSEC3 iteration value set to zero (as recommended). Fetched from name "
-"servers \"{ns_list}\"."
+"The following servers respond with NSEC3 iteration value set to zero (as "
+"recommended). Fetched from name servers \"{ns_list}\"."
 msgstr ""
-"Naslednji domenski strežniki odgovorijo z iteration vrednostjo 0 (kot je piporočeno) v NSEC3. Podatki "
-"pridobljeni iz: \"{ns_list}\"."
+"Naslednji domenski strežniki odgovorijo z iteration vrednostjo 0 (kot je "
+"piporočeno) v NSEC3. Podatki pridobljeni iz: \"{ns_list}\"."
 
 #. DNSSEC:DS03_NO_DNSSEC_SUPPORT
 #, perl-brace-format
 msgid ""
-"The zone is not DNSSEC signed or not properly DNSSEC signed. Testing for NSEC3 has been skipped. Fetched "
-"from name servers \"{ns_list}\"."
-msgstr "Cona ni (pravilno) DNSSEC podpisana. Test za NSEC3 je izpuščen.  Zapisi pridobljeni iz \"{ns_list}\"."
+"The zone is not DNSSEC signed or not properly DNSSEC signed. Testing for "
+"NSEC3 has been skipped. Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"Cona ni (pravilno) DNSSEC podpisana. Test za NSEC3 je izpuščen.  Zapisi "
+"pridobljeni iz \"{ns_list}\"."
 
 #. DNSSEC:DS03_NO_NSEC3
 #, perl-brace-format
 msgid ""
-"The zone does not use NSEC3. Testing for NSEC3 has been skipped. Fetched from name servers \"{ns_list}\"."
-msgstr "Cona ne uporablja NSEC3. Testiranje za NSEC3 je preskočeno. Podatki pridobljeni iz \"{ns_list}\"."
+"The zone does not use NSEC3. Testing for NSEC3 has been skipped. Fetched "
+"from name servers \"{ns_list}\"."
+msgstr ""
+"Cona ne uporablja NSEC3. Testiranje za NSEC3 je preskočeno. Podatki "
+"pridobljeni iz \"{ns_list}\"."
 
 #. DNSSEC:DS03_NO_RESPONSE_NSEC_QUERY
 #, perl-brace-format
-msgid "The following servers do not respond to NSEC query. Fetched from name servers \"{ns_list}\"."
-msgstr "Naslednji domenski strežniki se ne odzivajo na NSEC3 poizvedbe. Podatki pridobljeni iz: \"{ns_list}\"."
+msgid ""
+"The following servers do not respond to NSEC query. Fetched from name "
+"servers \"{ns_list}\"."
+msgstr ""
+"Naslednji domenski strežniki se ne odzivajo na NSEC3 poizvedbe. Podatki "
+"pridobljeni iz: \"{ns_list}\"."
 
 #. DNSSEC:DS03_NSEC3_OPT_OUT_DISABLED
 #, perl-brace-format
 msgid ""
-"The following servers respond with NSEC3 opt-out disabled (as recommended). Fetched from name servers "
-"\"{ns_list}\"."
+"The following servers respond with NSEC3 opt-out disabled (as recommended). "
+"Fetched from name servers \"{ns_list}\"."
 msgstr ""
-"Naslednji domenski strežniki odgovorijo z onemogočenim NSEC3 opt-out (kot je priporočeno). Podatki "
-"pridobljeni iz: \"{ns_list}\"."
+"Naslednji domenski strežniki odgovorijo z onemogočenim NSEC3 opt-out (kot je "
+"priporočeno). Podatki pridobljeni iz: \"{ns_list}\"."
 
 #. DNSSEC:DS03_NSEC3_OPT_OUT_ENABLED_NON_TLD
 #, perl-brace-format
 msgid ""
-"The following servers respond with NSEC3 opt-out enabled. The recommended practice is to disable opt-out. "
-"Fetched from name servers \"{ns_list}\"."
+"The following servers respond with NSEC3 opt-out enabled. The recommended "
+"practice is to disable opt-out. Fetched from name servers \"{ns_list}\"."
 msgstr ""
-"Naslednji domenski strežniki odgovorijo z omogočenim NSEC3 opt-out. Priporočeno je opt-out onemogočiti. "
-"Podatki pridobljeni iz: \"{ns_list}\"."
+"Naslednji domenski strežniki odgovorijo z omogočenim NSEC3 opt-out. "
+"Priporočeno je opt-out onemogočiti. Podatki pridobljeni iz: \"{ns_list}\"."
 
 #. DNSSEC:DS03_NSEC3_OPT_OUT_ENABLED_TLD
 #, perl-brace-format
-msgid "The following servers respond with NSEC3 opt-out enabled. Fetched from name servers \"{ns_list}\"."
+msgid ""
+"The following servers respond with NSEC3 opt-out enabled. Fetched from name "
+"servers \"{ns_list}\"."
 msgstr ""
-"Naslednji domenski strežniki odgovorijo z omogočenim NSEC3 opt-out. Podatki pridobljeni iz: \"{ns_list}\"."
+"Naslednji domenski strežniki odgovorijo z omogočenim NSEC3 opt-out. Podatki "
+"pridobljeni iz: \"{ns_list}\"."
 
 #. DNSSEC:DS03_SERVER_NO_DNSSEC_SUPPORT
 #, perl-brace-format
 msgid ""
-"The following name servers do not support DNSSEC or have not been properly configured. Testing for NSEC3 has "
-"been skipped on those servers. Fetched from name servers \"{ns_list}\"."
+"The following name servers do not support DNSSEC or have not been properly "
+"configured. Testing for NSEC3 has been skipped on those servers. Fetched "
+"from name servers \"{ns_list}\"."
 msgstr ""
-"Naslednji domenski strežniki ne podpirajo DNSSEC ali pa niso pravilno konfigurirani. NSEC3 testiranje za te "
-"strežnike je bilo preskočeno. Podatki pridobljeni iz \"{ns_list}\"."
+"Naslednji domenski strežniki ne podpirajo DNSSEC ali pa niso pravilno "
+"konfigurirani. NSEC3 testiranje za te strežnike je bilo preskočeno. Podatki "
+"pridobljeni iz \"{ns_list}\"."
 
 #. DNSSEC:DS03_SERVER_NO_NSEC3
 #, perl-brace-format
 msgid ""
-"The following name servers do not use NSEC3, but others do. Testing for NSEC3 has been skipped on the "
-"following servers. Fetched from name servers \"{ns_list}\"."
+"The following name servers do not use NSEC3, but others do. Testing for "
+"NSEC3 has been skipped on the following servers. Fetched from name servers "
+"\"{ns_list}\"."
 msgstr ""
-"Naslednji domenski strežniki ne uporabljajo NSEC3, za razliko od ostalih. NSEC3 testiranje za te strežnike "
-"je bilo preskočeno.  Podatki pridobljeni iz: \"{ns_list}\"."
+"Naslednji domenski strežniki ne uporabljajo NSEC3, za razliko od ostalih. "
+"NSEC3 testiranje za te strežnike je bilo preskočeno.  Podatki pridobljeni "
+"iz: \"{ns_list}\"."
 
 #. DNSSEC:DS03_UNASSIGNED_FLAG_USED
 #, perl-brace-format
 msgid ""
-"The following servers respond with an NSEC3 record where an unassigned flag is used (bit {int}). Fetched "
-"from name servers \"{ns_list}\"."
+"The following servers respond with an NSEC3 record where an unassigned flag "
+"is used (bit {int}). Fetched from name servers \"{ns_list}\"."
 msgstr ""
-"Naslednji domenski strežniki vračajo NSEC3 zapis, kjer je uporabljena nedodeljena zastavica(bit{int}). "
-"Podatki pridobljeni iz: \"{ns_list}\"."
+"Naslednji domenski strežniki vračajo NSEC3 zapis, kjer je uporabljena "
+"nedodeljena zastavica(bit{int}). Podatki pridobljeni iz: \"{ns_list}\"."
 
 #. DNSSEC:DS08_DNSKEY_RRSIG_EXPIRED
 #, perl-brace-format
 msgid ""
-"RRSIG with keytag {keytag} and covering type DNSKEY has already expired. Fetched from the nameservers with "
-"IP addresses \"{ns_ip_list}\"."
-msgstr "RRSIG z oznako {keytag}, ki zajema DNSKEY zapise, je potekel. Podatki pridobljeni iz \"{ns_ip_list}\"."
+"RRSIG with keytag {keytag} and covering type DNSKEY has already expired. "
+"Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"RRSIG z oznako {keytag}, ki zajema DNSKEY zapise, je potekel. Podatki "
+"pridobljeni iz \"{ns_ip_list}\"."
 
 #. DNSSEC:DS08_DNSKEY_RRSIG_NOT_YET_VALID
 #, perl-brace-format
 msgid ""
-"RRSIG with keytag {keytag} and covering type DNSKEY has inception date in the future. Fetched from the "
-"nameservers with IP addresses \"{ns_ip_list}\"."
+"RRSIG with keytag {keytag} and covering type DNSKEY has inception date in "
+"the future. Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"RRSIG z oznako {keytag}, ki zajema DNSKEY zapise, ima datum začetka v prihodnosti. Podatki pridobljeni iz  "
-"\"{ns_ip_list}\"."
+"RRSIG z oznako {keytag}, ki zajema DNSKEY zapise, ima datum začetka v "
+"prihodnosti. Podatki pridobljeni iz  \"{ns_ip_list}\"."
 
 #. DNSSEC:DS08_MISSING_RRSIG_IN_RESPONSE
 #, perl-brace-format
 msgid ""
-"The DNSKEY RRset is not signed, which is against expectation. Fetched from the nameservers with IP addresses "
+"The DNSKEY RRset is not signed, which is against expectation. Fetched from "
+"the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"DNSKEY RRset ni podpisan, kar ni pričakovano. Podatki pridobljeni iz "
 "\"{ns_ip_list}\"."
-msgstr "DNSKEY RRset ni podpisan, kar ni pričakovano. Podatki pridobljeni iz \"{ns_ip_list}\"."
 
 #. DNSSEC:DS08_NO_MATCHING_DNSKEY
 #, perl-brace-format
 msgid ""
-"The DNSKEY RRset is signed with an RRSIG with tag {keytag} which does not match any DNSKEY record. Fetched "
-"from the nameservers with IP addresses \"{ns_ip_list}\"."
+"The DNSKEY RRset is signed with an RRSIG with tag {keytag} which does not "
+"match any DNSKEY record. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
 msgstr ""
-"DNSKEY RRset je podpisan z RRsig z oznako {keytag}, ki ne ustreza nobenemu DNSKEY zapisu. Podatki "
-"pridobljeni iz \"{ns_ip_list}\"."
+"DNSKEY RRset je podpisan z RRsig z oznako {keytag}, ki ne ustreza nobenemu "
+"DNSKEY zapisu. Podatki pridobljeni iz \"{ns_ip_list}\"."
 
 #. DNSSEC:DS09_MISSING_RRSIG_IN_RESPONSE
 #, perl-brace-format
 msgid ""
-"The SOA RRset is not signed, which is against expectation. Fetched from the nameservers with IP addresses "
+"The SOA RRset is not signed, which is against expectation. Fetched from the "
+"nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"SOA RRset ni podpisan, kar je nepričakovano. Podatki pridobljeni iz "
 "\"{ns_ip_list}\"."
-msgstr "SOA RRset ni podpisan, kar je nepričakovano. Podatki pridobljeni iz \"{ns_ip_list}\"."
 
 #. DNSSEC:DS09_NO_MATCHING_DNSKEY
 #, perl-brace-format
 msgid ""
-"The SOA RRset is signed with an RRSIG with tag {keytag} which does not match any DNSKEY record. Fetched from "
-"the nameservers with IP addresses \"{ns_ip_list}\"."
+"The SOA RRset is signed with an RRSIG with tag {keytag} which does not match "
+"any DNSKEY record. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
 msgstr ""
-"SOA RRset je podpisan z RRSIG z oznako {keytag}, ki ne ustreza nobenemu DNSKEY zapisu. Podatki pridobljeni "
-"iz \"{ns_ip_list}\"."
+"SOA RRset je podpisan z RRSIG z oznako {keytag}, ki ne ustreza nobenemu "
+"DNSKEY zapisu. Podatki pridobljeni iz \"{ns_ip_list}\"."
 
 #. DNSSEC:DS09_RRSIG_NOT_VALID_BY_DNSKEY
 #, perl-brace-format
 msgid ""
-"The SOA RRset is signed with an RRSIG with tag {keytag} which cannot be validated by the matching DNSKEY. "
-"Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+"The SOA RRset is signed with an RRSIG with tag {keytag} which cannot be "
+"validated by the matching DNSKEY. Fetched from the nameservers with IP "
+"addresses \"{ns_ip_list}\"."
 msgstr ""
-"SOA RRset je podpisan z RRSIG z oznako {keytag}, ki se ga ne da preveriti z ustreznim DNSKEY-em. Podatki "
-"pridobljeni iz  \"{ns_ip_list}\"."
+"SOA RRset je podpisan z RRSIG z oznako {keytag}, ki se ga ne da preveriti z "
+"ustreznim DNSKEY-em. Podatki pridobljeni iz  \"{ns_ip_list}\"."
 
 #. DNSSEC:DS09_SOA_RRSIG_EXPIRED
 #, perl-brace-format
 msgid ""
-"RRSIG with keytag {keytag} and covering type SOA has already expired. Fetched from the nameservers with IP "
-"addresses \"{ns_ip_list}\"."
-msgstr "RRSIG z oznako {keytag}, ki zajema SOA zapis, je potekel. Podatki pridobljeni iz \"{ns_ip_list}\"."
+"RRSIG with keytag {keytag} and covering type SOA has already expired. "
+"Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"RRSIG z oznako {keytag}, ki zajema SOA zapis, je potekel. Podatki "
+"pridobljeni iz \"{ns_ip_list}\"."
 
 #. DNSSEC:DS09_SOA_RRSIG_NOT_YET_VALID
 #, perl-brace-format
 msgid ""
-"RRSIG with keytag {keytag} and covering type SOA has inception date in the future. Fetched from the "
-"nameservers with IP addresses \"{ns_ip_list}\"."
+"RRSIG with keytag {keytag} and covering type SOA has inception date in the "
+"future. Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"RRSIG z oznako {keytag}, ki zajema SOA zapis, ima datum začetka veljavnosti v prihodnosti. Podatki "
-"pridobljeni iz \"{ns_ip_list}\"."
+"RRSIG z oznako {keytag}, ki zajema SOA zapis, ima datum začetka veljavnosti "
+"v prihodnosti. Podatki pridobljeni iz \"{ns_ip_list}\"."
 
 #. DNSSEC:DS10_ALGO_NOT_SUPPORTED_BY_ZM
 #, perl-brace-format
 msgid ""
-"DNSKEY with tag {keytag} uses unsupported algorithm {algo_num} ({algo_mnemo}) by this installation of "
-"Zonemaster. Fetched from name servers \"{ns_ip_list}\"."
+"DNSKEY with tag {keytag} uses unsupported algorithm {algo_num} "
+"({algo_mnemo}) by this installation of Zonemaster. Fetched from name servers "
+"\"{ns_ip_list}\"."
 msgstr ""
-"DNSKEY z oznako {keytag} uporablja algoritem {algo_num} ({algo_mnemo}), ki ga trenutna Zonemaster verzija ne "
-"podpira. Podatki pridobljeni iz \"{ns_ip_list}\"."
+"DNSKEY z oznako {keytag} uporablja algoritem {algo_num} ({algo_mnemo}), ki "
+"ga trenutna Zonemaster verzija ne podpira. Podatki pridobljeni iz "
+"\"{ns_ip_list}\"."
 
 #. DNSSEC:DS10_ERR_MULT_NSEC
 #, perl-brace-format
-msgid "Multiple NSEC records when one is expected. Fetched from name servers \"{ns_list}\"."
-msgstr "Več NSEC zapisov, ko je pričakovan en. Podatki pridobljeni iz: \"{ns_list}\"."
+msgid ""
+"Multiple NSEC records when one is expected. Fetched from name servers "
+"\"{ns_list}\"."
+msgstr ""
+"Več NSEC zapisov, ko je pričakovan en. Podatki pridobljeni iz: \"{ns_list}\"."
 
 #. DNSSEC:DS10_ERR_MULT_NSEC3PARAM
 #, perl-brace-format
-msgid "Multiple NSEC3PARAM records when one is expected. Fetched from name servers \"{ns_list}\"."
-msgstr "Več NSEC3PARAM zapisov, ko je pričakovan en. Podatki pridobljeni iz: \"{ns_list}\"."
+msgid ""
+"Multiple NSEC3PARAM records when one is expected. Fetched from name servers "
+"\"{ns_list}\"."
+msgstr ""
+"Več NSEC3PARAM zapisov, ko je pričakovan en. Podatki pridobljeni iz: "
+"\"{ns_list}\"."
 
 #. DNSSEC:DS10_EXPECTED_NSEC_NSEC3_MISSING
 #, perl-brace-format
 msgid ""
-"The server responded with DNSKEY but not with expected NSEC or NSEC3. Fetched from name servers "
-"\"{ns_list}\"."
+"The server responded with DNSKEY but not with expected NSEC or NSEC3. "
+"Fetched from name servers \"{ns_list}\"."
 msgstr ""
-"Domenski strežnik odgovori z DNSKEY, ampak ne z pričakovanim NSEC ali NSEC3. Podatki pridobljeni iz: "
-"\"{ns_list}\"."
+"Domenski strežnik odgovori z DNSKEY, ampak ne z pričakovanim NSEC ali NSEC3. "
+"Podatki pridobljeni iz: \"{ns_list}\"."
 
 #. DNSSEC:DS10_HAS_NSEC
 #, perl-brace-format
@@ -1259,225 +1512,300 @@ msgstr "Cona ima NSEC3 zapise. Podatki pridobljeni iz \"{ns_list}\"."
 
 #. DNSSEC:DS10_INCONSISTENT_NSEC
 #, perl-brace-format
-msgid "Inconsistent responses from zone with NSEC. Fetched from name servers \"{ns_list}\"."
-msgstr "Nedosledni odgovori od cone Z NSEC. Podatki pridobljeni iz: \"{ns_list}\"."
+msgid ""
+"Inconsistent responses from zone with NSEC. Fetched from name servers "
+"\"{ns_list}\"."
+msgstr ""
+"Nedosledni odgovori od cone Z NSEC. Podatki pridobljeni iz: \"{ns_list}\"."
 
 #. DNSSEC:DS10_INCONSISTENT_NSEC3
 #, perl-brace-format
-msgid "Inconsistent responses from zone with NSEC3. Fetched from name servers \"{ns_list}\"."
-msgstr "Nedosledni odgovori od cone z NSEC3. Podatki pridobljeni iz: \"{ns_list}\"."
+msgid ""
+"Inconsistent responses from zone with NSEC3. Fetched from name servers "
+"\"{ns_list}\"."
+msgstr ""
+"Nedosledni odgovori od cone z NSEC3. Podatki pridobljeni iz: \"{ns_list}\"."
 
 #. DNSSEC:DS10_INCONSISTENT_NSEC_NSEC3
 #, perl-brace-format
 msgid ""
-"The zone is inconsistent on NSEC and NSEC3. NSEC is fetched from name servers \"{ns_list_nsec}\". NSEC3 is "
-"fetched from name servers \"{ns_list_nsec3}\"."
+"The zone is inconsistent on NSEC and NSEC3. NSEC is fetched from name "
+"servers \"{ns_list_nsec}\". NSEC3 is fetched from name servers "
+"\"{ns_list_nsec3}\"."
 msgstr ""
-"Nekonsistentni zapisi za NSEC in NSEC3. NSEC zapisi pridobljeni iz \"{ns_list_nsec}\". NSEC3 zapisi "
-"pridobljeni iz \"{ns_list_nsec3}\"."
+"Nekonsistentni zapisi za NSEC in NSEC3. NSEC zapisi pridobljeni iz "
+"\"{ns_list_nsec}\". NSEC3 zapisi pridobljeni iz \"{ns_list_nsec3}\"."
 
 #. DNSSEC:DS10_MIXED_NSEC_NSEC3
 #, perl-brace-format
 msgid ""
-"The zone responds with both NSEC and NSEC3, where only one of them is expected. Fetched from name servers "
-"\"{ns_list}\"."
+"The zone responds with both NSEC and NSEC3, where only one of them is "
+"expected. Fetched from name servers \"{ns_list}\"."
 msgstr ""
-"Cona odgovori z NSEC in NSEC3 zapisoma, ko je pričakovan le eden. Podatki pridobljeni iz \"{ns_list}\"."
+"Cona odgovori z NSEC in NSEC3 zapisoma, ko je pričakovan le eden. Podatki "
+"pridobljeni iz \"{ns_list}\"."
 
 #. DNSSEC:DS10_NSEC3PARAM_GIVES_ERR_ANSWER
 #, perl-brace-format
 msgid ""
-"Unexpected DNS record in the answer section on an NSEC3PARAM query. Fetched from name servers \"{ns_list}\"."
-msgstr "Nepričakovan DNS zapis v odgovoru na NSEC3PARAM poizvedbo. Podatki pridobljeni iz: \"{ns_list}\"."
+"Unexpected DNS record in the answer section on an NSEC3PARAM query. Fetched "
+"from name servers \"{ns_list}\"."
+msgstr ""
+"Nepričakovan DNS zapis v odgovoru na NSEC3PARAM poizvedbo. Podatki "
+"pridobljeni iz: \"{ns_list}\"."
 
 #. DNSSEC:DS10_NSEC3PARAM_MISMATCHES_APEX
 #, perl-brace-format
 msgid ""
-"The returned NSEC3PARAM record has an unexpected non-apex owner name. Fetched from name servers "
-"\"{ns_list}\"."
+"The returned NSEC3PARAM record has an unexpected non-apex owner name. "
+"Fetched from name servers \"{ns_list}\"."
 msgstr ""
-"Vrnjen NSEC3PARAM zapis ima drugačno domeno, kot je bila domena v poizvedbi. Podatki pridobljeni iz "
-"\"{ns_list}\"."
+"Vrnjen NSEC3PARAM zapis ima drugačno domeno, kot je bila domena v poizvedbi. "
+"Podatki pridobljeni iz \"{ns_list}\"."
 
 #. DNSSEC:DS10_NSEC3PARAM_QUERY_RESPONSE_ERR
 #, perl-brace-format
-msgid "No response or error in response on query for NSEC3PARAM. Fetched from name servers \"{ns_list}\"."
-msgstr "Ni odgovora ali napaka v odgovoru na poizvedbo za NSEC3PARAM. Podatki pridobljeni iz \"{ns_list}\"."
+msgid ""
+"No response or error in response on query for NSEC3PARAM. Fetched from name "
+"servers \"{ns_list}\"."
+msgstr ""
+"Ni odgovora ali napaka v odgovoru na poizvedbo za NSEC3PARAM. Podatki "
+"pridobljeni iz \"{ns_list}\"."
 
 #. DNSSEC:DS10_NSEC3_ERR_TYPE_LIST
 #, perl-brace-format
-msgid "NSEC3 record for the zone apex with incorrect type list. Fetched from name servers \"{ns_list}\"."
-msgstr "NSEC3 zapis za domeno z nepravilnim seznamom tipov. Podatki pridobljeni iz \"{ns_list}\"."
+msgid ""
+"NSEC3 record for the zone apex with incorrect type list. Fetched from name "
+"servers \"{ns_list}\"."
+msgstr ""
+"NSEC3 zapis za domeno z nepravilnim seznamom tipov. Podatki pridobljeni iz "
+"\"{ns_list}\"."
 
 #. DNSSEC:DS10_NSEC3_MISMATCHES_APEX
 #, perl-brace-format
 msgid ""
-"The returned NSEC3 record unexpectedly does not match the zone name. Fetched from name servers \"{ns_list}\"."
-msgstr "Vrnjen NSEC3 zapis se nepričakovano ne ujema z imenom cone. Podatki pridobljeni iz \"{ns_list}\"."
+"The returned NSEC3 record unexpectedly does not match the zone name. Fetched "
+"from name servers \"{ns_list}\"."
+msgstr ""
+"Vrnjen NSEC3 zapis se nepričakovano ne ujema z imenom cone. Podatki "
+"pridobljeni iz \"{ns_list}\"."
 
 #. DNSSEC:DS10_NSEC3_MISSING_SIGNATURE
 #, perl-brace-format
-msgid "Missing RRSIG (signature) for the NSEC3 record or records. Fetched from name servers \"{ns_list}\"."
-msgstr "Manjkajoči podpisi (RRSIG) za NSEC3 zapise. Podatki pridobljeni iz \"{ns_list}\"."
+msgid ""
+"Missing RRSIG (signature) for the NSEC3 record or records. Fetched from name "
+"servers \"{ns_list}\"."
+msgstr ""
+"Manjkajoči podpisi (RRSIG) za NSEC3 zapise. Podatki pridobljeni iz "
+"\"{ns_list}\"."
 
 #. DNSSEC:DS10_NSEC3_NODATA_MISSING_SOA
 #, perl-brace-format
-msgid "Missing SOA record in NODATA response with NSEC3. Fetched from name servers \"{ns_list}\"."
-msgstr "Manjkajoč SOA zapis v NODATA odgovoru z NSEC3. Podatki pridobljeni iz \"{ns_list}\"."
+msgid ""
+"Missing SOA record in NODATA response with NSEC3. Fetched from name servers "
+"\"{ns_list}\"."
+msgstr ""
+"Manjkajoč SOA zapis v NODATA odgovoru z NSEC3. Podatki pridobljeni iz "
+"\"{ns_list}\"."
 
 #. DNSSEC:DS10_NSEC3_NODATA_WRONG_SOA
 #, perl-brace-format
 msgid ""
-"Wrong owner name (\"{domain}\") on SOA record in NODATA response with NSEC3. Fetched from name servers "
-"\"{ns_list}\"."
+"Wrong owner name (\"{domain}\") on SOA record in NODATA response with NSEC3. "
+"Fetched from name servers \"{ns_list}\"."
 msgstr ""
-"Napačno ime lastnika (\"{domain}\") v SOA zapisu NODATA odgovora z NSEC3. Podatki pridobljeni iz  "
-"\"{ns_list}\"."
+"Napačno ime lastnika (\"{domain}\") v SOA zapisu NODATA odgovora z NSEC3. "
+"Podatki pridobljeni iz  \"{ns_list}\"."
 
 #. DNSSEC:DS10_NSEC3_NO_VERIFIED_SIGNATURE
 #, perl-brace-format
-msgid "The RRSIG (signature) for the NSEC3 record cannot be verified. Fetched from name servers \"{ns_list}\"."
-msgstr "Podpisa (RRSIG) za NSEC3 zapis ni mogoče preveriti. Podatki pridobljeni iz \"{ns_list}\"."
+msgid ""
+"The RRSIG (signature) for the NSEC3 record cannot be verified. Fetched from "
+"name servers \"{ns_list}\"."
+msgstr ""
+"Podpisa (RRSIG) za NSEC3 zapis ni mogoče preveriti. Podatki pridobljeni iz "
+"\"{ns_list}\"."
 
 #. DNSSEC:DS10_NSEC3_RRSIG_EXPIRED
 #, perl-brace-format
 msgid ""
-"The RRSIG (signature) with tag {keytag} for the NSEC3 record has expired. Fetched from name servers "
-"\"{ns_list}\"."
-msgstr "RRSIG (podpis) z oznako {keytag} za NSEC3 zapis je potekel. Podatki pridobljeni iz \"{ns_list}\"."
+"The RRSIG (signature) with tag {keytag} for the NSEC3 record has expired. "
+"Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"RRSIG (podpis) z oznako {keytag} za NSEC3 zapis je potekel. Podatki "
+"pridobljeni iz \"{ns_list}\"."
 
 #. DNSSEC:DS10_NSEC3_RRSIG_NOT_YET_VALID
 #, perl-brace-format
 msgid ""
-"The RRSIG (signature) with tag {keytag} for the NSEC3 record it not yet valid. Fetched from name servers "
-"\"{ns_list}\"."
-msgstr "RRSIG (podpis) z oznako {keytag} za NSEC3 zapis ni še veljaven. Podatki pridobljeni iz \"{ns_list}\"."
+"The RRSIG (signature) with tag {keytag} for the NSEC3 record it not yet "
+"valid. Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"RRSIG (podpis) z oznako {keytag} za NSEC3 zapis ni še veljaven. Podatki "
+"pridobljeni iz \"{ns_list}\"."
 
 #. DNSSEC:DS10_NSEC3_RRSIG_NO_DNSKEY
 #, perl-brace-format
 msgid ""
-"There is no DNSKEY record matching the RRSIG (signature) with tag {keytag} for the NSEC3 record. Fetched "
-"from name servers \"{ns_list}\"."
+"There is no DNSKEY record matching the RRSIG (signature) with tag {keytag} "
+"for the NSEC3 record. Fetched from name servers \"{ns_list}\"."
 msgstr ""
-"DNSKEY zapisa, ki bi se ujemal z RRSIG (podpis) z oznako {keytag} za NSEC3 zapis, ni. Podatki pridobljeni iz "
-"\"{ns_list}\"."
+"DNSKEY zapisa, ki bi se ujemal z RRSIG (podpis) z oznako {keytag} za NSEC3 "
+"zapis, ni. Podatki pridobljeni iz \"{ns_list}\"."
 
 #. DNSSEC:DS10_NSEC3_RRSIG_VERIFY_ERROR
 #, perl-brace-format
 msgid ""
-"The RRSIG (signature) with tag {keytag} for the NSEC3 record cannot be verified. Fetched from name servers "
-"\"{ns_list}\"."
+"The RRSIG (signature) with tag {keytag} for the NSEC3 record cannot be "
+"verified. Fetched from name servers \"{ns_list}\"."
 msgstr ""
-"RRSIG (podpis) z oznako {keytag} za NSEC3 zapis ni mogoče preveriti. Podatki pridobljeni iz \"{ns_list}\"."
+"RRSIG (podpis) z oznako {keytag} za NSEC3 zapis ni mogoče preveriti. Podatki "
+"pridobljeni iz \"{ns_list}\"."
 
 #. DNSSEC:DS10_NSEC_ERR_TYPE_LIST
 #, perl-brace-format
-msgid "NSEC record for the zone apex with incorrect type list. Fetched from name servers \"{ns_list}\"."
-msgstr "NSEC zapis za domeno z nepravilnim seznamom tipov. Podatki pridobljeni iz \"{ns_list}\"."
+msgid ""
+"NSEC record for the zone apex with incorrect type list. Fetched from name "
+"servers \"{ns_list}\"."
+msgstr ""
+"NSEC zapis za domeno z nepravilnim seznamom tipov. Podatki pridobljeni iz "
+"\"{ns_list}\"."
 
 #. DNSSEC:DS10_NSEC_GIVES_ERR_ANSWER
 #, perl-brace-format
-msgid "Unexpected DNS record in the answer section on an NSEC query. Fetched from name servers \"{ns_list}\"."
-msgstr "Nepričakovan DNS zapis v odgovoru na NSEC poizvedbo. Podatki pridobljeni iz: \"{ns_list}\"."
+msgid ""
+"Unexpected DNS record in the answer section on an NSEC query. Fetched from "
+"name servers \"{ns_list}\"."
+msgstr ""
+"Nepričakovan DNS zapis v odgovoru na NSEC poizvedbo. Podatki pridobljeni iz: "
+"\"{ns_list}\"."
 
 #. DNSSEC:DS10_NSEC_MISMATCHES_APEX
 #, perl-brace-format
 msgid ""
-"The returned NSEC record has an unexpected non-apex owner name. Fetched from name servers \"{ns_list}\"."
+"The returned NSEC record has an unexpected non-apex owner name. Fetched from "
+"name servers \"{ns_list}\"."
 msgstr ""
-"Vrnjen NSEC zapis ima drugačno domeno, kot je bila domena v poizvedbi. Podatki pridobljeni iz \"{ns_list}\"."
+"Vrnjen NSEC zapis ima drugačno domeno, kot je bila domena v poizvedbi. "
+"Podatki pridobljeni iz \"{ns_list}\"."
 
 #. DNSSEC:DS10_NSEC_MISSING_SIGNATURE
 #, perl-brace-format
-msgid "Missing RRSIG (signature) for the NSEC record or records. Fetched from name servers \"{ns_list}\"."
-msgstr "Manjkajoči podpisi (RRSIG) za NSEC zapise. Podatki pridobljeni iz \"{ns_list}\"."
+msgid ""
+"Missing RRSIG (signature) for the NSEC record or records. Fetched from name "
+"servers \"{ns_list}\"."
+msgstr ""
+"Manjkajoči podpisi (RRSIG) za NSEC zapise. Podatki pridobljeni iz "
+"\"{ns_list}\"."
 
 #. DNSSEC:DS10_NSEC_NODATA_MISSING_SOA
 #, perl-brace-format
-msgid "Missing SOA record in NODATA response with NSEC. Fetched from name servers \"{ns_list}\"."
-msgstr "Manjkajoč SOA zapis v NODATA odgovoru z NSEC. Podatki pridobljeni iz \"{ns_list}\"."
+msgid ""
+"Missing SOA record in NODATA response with NSEC. Fetched from name servers "
+"\"{ns_list}\"."
+msgstr ""
+"Manjkajoč SOA zapis v NODATA odgovoru z NSEC. Podatki pridobljeni iz "
+"\"{ns_list}\"."
 
 #. DNSSEC:DS10_NSEC_NODATA_WRONG_SOA
 #, perl-brace-format
 msgid ""
-"Wrong owner name (\"{domain}\") on SOA record in NODATA response with NSEC. Fetched from name servers "
-"\"{ns_list}\"."
+"Wrong owner name (\"{domain}\") on SOA record in NODATA response with NSEC. "
+"Fetched from name servers \"{ns_list}\"."
 msgstr ""
-"Napačno ime lastnika (\"{domain}\") v SOA zapisu NODATA odgovora z NSEC. Podatki pridobljeni iz  "
-"\"{ns_list}\"."
+"Napačno ime lastnika (\"{domain}\") v SOA zapisu NODATA odgovora z NSEC. "
+"Podatki pridobljeni iz  \"{ns_list}\"."
 
 #. DNSSEC:DS10_NSEC_NO_VERIFIED_SIGNATURE
 #, perl-brace-format
 msgid ""
-"There is no RRSIG (signature) for the NSEC record that can be verified. Fetched from name servers "
-"\"{ns_list}\"."
+"There is no RRSIG (signature) for the NSEC record that can be verified. "
+"Fetched from name servers \"{ns_list}\"."
 msgstr ""
-"Ni Podpisa (RRSIG) za NSEC zapis, ki bi ga bilo mogoče preveriti. Podatki pridobljeni iz \"{ns_list}\"."
+"Ni Podpisa (RRSIG) za NSEC zapis, ki bi ga bilo mogoče preveriti. Podatki "
+"pridobljeni iz \"{ns_list}\"."
 
 #. DNSSEC:DS10_NSEC_QUERY_RESPONSE_ERR
 #, perl-brace-format
-msgid "No response or error in response on query for NSEC. Fetched from name servers \"{ns_list}\"."
-msgstr "Ni odgovora ali napaka v odgovoru na poizvedbo za NSEC. Podatki pridobljeni iz \"{ns_list}\"."
+msgid ""
+"No response or error in response on query for NSEC. Fetched from name "
+"servers \"{ns_list}\"."
+msgstr ""
+"Ni odgovora ali napaka v odgovoru na poizvedbo za NSEC. Podatki pridobljeni "
+"iz \"{ns_list}\"."
 
 #. DNSSEC:DS10_NSEC_RRSIG_EXPIRED
 #, perl-brace-format
 msgid ""
-"The RRSIG (signature) with tag {keytag} for the NSEC record has expired. Fetched from name servers "
-"\"{ns_list}\"."
-msgstr "RRSIG (podpis) z oznako {keytag} za NSEC zapis je potekel. Podatki pridobljeni iz \"{ns_list}\"."
+"The RRSIG (signature) with tag {keytag} for the NSEC record has expired. "
+"Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"RRSIG (podpis) z oznako {keytag} za NSEC zapis je potekel. Podatki "
+"pridobljeni iz \"{ns_list}\"."
 
 #. DNSSEC:DS10_NSEC_RRSIG_NOT_YET_VALID
 #, perl-brace-format
 msgid ""
-"The RRSIG (signature) with tag {keytag} for the NSEC record it not yet valid. Fetched from name servers "
-"\"{ns_list}\"."
-msgstr "RRSIG (podpis) z oznako {keytag} za NSEC zapis ni še veljaven. Podatki pridobljeni iz \"{ns_list}\"."
+"The RRSIG (signature) with tag {keytag} for the NSEC record it not yet "
+"valid. Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"RRSIG (podpis) z oznako {keytag} za NSEC zapis ni še veljaven. Podatki "
+"pridobljeni iz \"{ns_list}\"."
 
 #. DNSSEC:DS10_NSEC_RRSIG_NO_DNSKEY
 #, perl-brace-format
 msgid ""
-"There is no DNSKEY record matching the RRSIG (signature) with tag {keytag} for the NSEC record. Fetched from "
-"name servers \"{ns_list}\"."
+"There is no DNSKEY record matching the RRSIG (signature) with tag {keytag} "
+"for the NSEC record. Fetched from name servers \"{ns_list}\"."
 msgstr ""
-"DNSKEY zapisa, ki bi se ujemal z RRSIG (podpis) z oznako {keytag} za NSEC zapis, ni. Podatki pridobljeni iz "
-"\"{ns_list}\"."
+"DNSKEY zapisa, ki bi se ujemal z RRSIG (podpis) z oznako {keytag} za NSEC "
+"zapis, ni. Podatki pridobljeni iz \"{ns_list}\"."
 
 #. DNSSEC:DS10_NSEC_RRSIG_VERIFY_ERROR
 #, perl-brace-format
 msgid ""
-"The RRSIG (signature) with tag {keytag} for the NSEC record cannot be verified. Fetched from name servers "
-"\"{ns_list}\"."
+"The RRSIG (signature) with tag {keytag} for the NSEC record cannot be "
+"verified. Fetched from name servers \"{ns_list}\"."
 msgstr ""
-"RRSIG (podpis) z oznako {keytag} za NSEC zapis ni mogoče preveriti. Podatki pridobljeni iz \"{ns_list}\"."
+"RRSIG (podpis) z oznako {keytag} za NSEC zapis ni mogoče preveriti. Podatki "
+"pridobljeni iz \"{ns_list}\"."
 
 #. DNSSEC:DS10_SERVER_NO_DNSSEC
 #, perl-brace-format
 msgid ""
-"The following name servers do not support DNSSEC or have not been properly configured. Testing for NSEC and "
-"NSEC3 has been skipped on these servers. Fetched from name servers \"{ns_list}\"."
+"The following name servers do not support DNSSEC or have not been properly "
+"configured. Testing for NSEC and NSEC3 has been skipped on these servers. "
+"Fetched from name servers \"{ns_list}\"."
 msgstr ""
-"Naslednji domenski strežniki ne podpirajo DNSSEC ali pa niso pravilno konfigurirani. NSEC3 in NSEC3 "
-"testiranje za te strežnike je bilo preskočeno. Podatki pridobljeni iz \"{ns_list}\"."
+"Naslednji domenski strežniki ne podpirajo DNSSEC ali pa niso pravilno "
+"konfigurirani. NSEC3 in NSEC3 testiranje za te strežnike je bilo preskočeno. "
+"Podatki pridobljeni iz \"{ns_list}\"."
 
 #. DNSSEC:DS10_ZONE_NO_DNSSEC
 #, perl-brace-format
 msgid ""
-"The zone is not DNSSEC signed or not properly DNSSEC signed. Testing for NSEC and NSEC3 has been skipped. "
-"Fetched from name servers \"{ns_list}\"."
+"The zone is not DNSSEC signed or not properly DNSSEC signed. Testing for "
+"NSEC and NSEC3 has been skipped. Fetched from name servers \"{ns_list}\"."
 msgstr ""
-"Cona ni (pravilno) DNSSEC podpisana. Testa za NSEC in NSEC3 sta izpuščena.  Zapisi pridobljeni iz "
-"\"{ns_list}\"."
+"Cona ni (pravilno) DNSSEC podpisana. Testa za NSEC in NSEC3 sta izpuščena.  "
+"Zapisi pridobljeni iz \"{ns_list}\"."
 
 #. DNSSEC:DS11_INCONSISTENT_DS
 msgid "Parent name servers are inconsistent on the existence of DS."
-msgstr "Podatki na starševskih strežnikih so nekonsistentni glede obstoja \"DS\"."
+msgstr ""
+"Podatki na starševskih strežnikih so nekonsistentni glede obstoja \"DS\"."
 
 #. DNSSEC:DS11_INCONSISTENT_SIGNED_ZONE
-msgid "Name servers for the child zone are inconsistent on whether the zone is signed or not."
-msgstr "Domenski strežniki podrejene cone so nekonsistentni glede tega ali je cona podpisana ali ne."
+msgid ""
+"Name servers for the child zone are inconsistent on whether the zone is "
+"signed or not."
+msgstr ""
+"Domenski strežniki podrejene cone so nekonsistentni glede tega ali je cona "
+"podpisana ali ne."
 
 #. DNSSEC:DS11_UNDETERMINED_DS
-msgid "It cannot be determined if the parent zone has DS for the child zone or not."
+msgid ""
+"It cannot be determined if the parent zone has DS for the child zone or not."
 msgstr "Ni možno določiti ali starševska cona ima DS za podrejeno cono ali ne."
 
 #. DNSSEC:DS11_UNDETERMINED_SIGNED_ZONE
@@ -1486,23 +1814,33 @@ msgstr "Ni možno določiti ali je podrejena cona podpisana ali ne."
 
 #. DNSSEC:DS11_PARENT_WITHOUT_DS
 #, perl-brace-format
-msgid "No DS record for the child zone found on parent nameservers with IP addresses \"{ns_ip_list}\"."
-msgstr "Ni DS zapisa za podrejeno cono na starševskih strežnikih \"{ns_ip_list}\"."
+msgid ""
+"No DS record for the child zone found on parent nameservers with IP "
+"addresses \"{ns_ip_list}\"."
+msgstr ""
+"Ni DS zapisa za podrejeno cono na starševskih strežnikih \"{ns_ip_list}\"."
 
 #. DNSSEC:DS11_PARENT_WITH_DS
 #, perl-brace-format
-msgid "DS record for the child zone found on parent nameservers with IP addresses \"{ns_ip_list}\"."
-msgstr "Najden DS zapis za podrejeno cono na starševskih strežnikih \"{ns_ip_list}\"."
+msgid ""
+"DS record for the child zone found on parent nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"Najden DS zapis za podrejeno cono na starševskih strežnikih \"{ns_ip_list}\"."
 
 #. DNSSEC:DS11_NS_WITH_SIGNED_ZONE
 #, perl-brace-format
-msgid "Signed child zone found on nameservers with IP addresses \"{ns_ip_list}\"."
-msgstr "Podpisana podrejena cona najdena na domenskih strežnikih \"{ns_ip_list}\"."
+msgid ""
+"Signed child zone found on nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"Podpisana podrejena cona najdena na domenskih strežnikih \"{ns_ip_list}\"."
 
 #. DNSSEC:DS11_NS_WITH_UNSIGNED_ZONE
 #, perl-brace-format
-msgid "Unsigned child zone found on nameservers with IP addresses \"{ns_ip_list}\"."
-msgstr "Nepodpisana podrejena cona najdena na domenskih strežnikih  \"{ns_ip_list}\"."
+msgid ""
+"Unsigned child zone found on nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"Nepodpisana podrejena cona najdena na domenskih strežnikih  \"{ns_ip_list}\"."
 
 #. DNSSEC:DS11_DS_BUT_UNSIGNED_ZONE
 msgid "The child zone is unsigned, but the parent zone has DS record."
@@ -1511,44 +1849,58 @@ msgstr "Podrejena cona ni podpisana, starševska cona pa ima DS zapis."
 #. DNSSEC:DS13_ALGO_NOT_SIGNED_DNSKEY
 #, perl-brace-format
 msgid ""
-"The DNSKEY RRset is not signed by algorithm {algo_num} ({algo_mnemo}) present in the DNSKEY RRset. Fetched "
-"from the nameservers with IP addresses \"{ns_ip_list}\"."
+"The DNSKEY RRset is not signed by algorithm {algo_num} ({algo_mnemo}) "
+"present in the DNSKEY RRset. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
 msgstr ""
-"DNSKEY RRset ni podpisan z algoritmom {algo_num} ({algo_mnemo}), ki je prisoten v DNSKEY RRsetu. Podatki "
-"pridobljeni iz \"{ns_ip_list}\"."
+"DNSKEY RRset ni podpisan z algoritmom {algo_num} ({algo_mnemo}), ki je "
+"prisoten v DNSKEY RRsetu. Podatki pridobljeni iz \"{ns_ip_list}\"."
 
 #. DNSSEC:DS13_ALGO_NOT_SIGNED_NS
 #, perl-brace-format
 msgid ""
-"The NS RRset is not signed by algorithm {algo_num} ({algo_mnemo}) present in the DNSKEY RRset. Fetched from "
-"the nameservers with IP addresses \"{ns_ip_list}\"."
+"The NS RRset is not signed by algorithm {algo_num} ({algo_mnemo}) present in "
+"the DNSKEY RRset. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
 msgstr ""
-"NS RRset ni podpisan z algoritmom {algo_num} ({algo_mnemo}), ki je prisoten v DNSKEY RRsetu. Podatki "
-"pridobljeni iz \"{ns_ip_list}\"."
+"NS RRset ni podpisan z algoritmom {algo_num} ({algo_mnemo}), ki je prisoten "
+"v DNSKEY RRsetu. Podatki pridobljeni iz \"{ns_ip_list}\"."
 
 #. DNSSEC:DS13_ALGO_NOT_SIGNED_SOA
 #, perl-brace-format
 msgid ""
-"The SOA RRset is not signed by algorithm {algo_num} ({algo_mnemo}) present in the DNSKEY RRset. Fetched from "
-"the nameservers with IP addresses \"{ns_ip_list}\"."
+"The SOA RRset is not signed by algorithm {algo_num} ({algo_mnemo}) present "
+"in the DNSKEY RRset. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
 msgstr ""
-"SOA RRset ni podpisan z algoritmom {algo_num} ({algo_mnemo}), ki je prisoten v DNSKEY RRsetu. Podatki "
-"pridobljeni iz \"{ns_ip_list}\"."
+"SOA RRset ni podpisan z algoritmom {algo_num} ({algo_mnemo}), ki je prisoten "
+"v DNSKEY RRsetu. Podatki pridobljeni iz \"{ns_ip_list}\"."
 
 #. DNSSEC:DS15_HAS_CDNSKEY_NO_CDS
 #, perl-brace-format
-msgid "CDNSKEY RRset is found on nameservers that resolve to IP addresses ({ns_ip_list}), but no CDS RRset."
-msgstr "CDNSKEY RRset se nahaja na domenskih strežnikih \"{ns_ip_list}\", ampak CDS RRseta ni."
+msgid ""
+"CDNSKEY RRset is found on nameservers that resolve to IP addresses "
+"({ns_ip_list}), but no CDS RRset."
+msgstr ""
+"CDNSKEY RRset se nahaja na domenskih strežnikih \"{ns_ip_list}\", ampak CDS "
+"RRseta ni."
 
 #. DNSSEC:DS15_HAS_CDS_AND_CDNSKEY
 #, perl-brace-format
-msgid "CDNSKEY and CDS RRsets are found on nameservers that resolve to IP addresses ({ns_ip_list})."
-msgstr "CDNSKEY in CDS RRseti se nahajajo na domenskih strežnikih \"{ns_ip_list}\"."
+msgid ""
+"CDNSKEY and CDS RRsets are found on nameservers that resolve to IP addresses "
+"({ns_ip_list})."
+msgstr ""
+"CDNSKEY in CDS RRseti se nahajajo na domenskih strežnikih \"{ns_ip_list}\"."
 
 #. DNSSEC:DS15_HAS_CDS_NO_CDNSKEY
 #, perl-brace-format
-msgid "CDS RRset is found on nameservers that resolve to IP addresses ({ns_ip_list}), but no CDNSKEY RRset."
-msgstr "CDS RRset se nahaja na domenskih strežnikih \"{ns_ip_list}\", ampak CDNSKEY RRseta ni."
+msgid ""
+"CDS RRset is found on nameservers that resolve to IP addresses "
+"({ns_ip_list}), but no CDNSKEY RRset."
+msgstr ""
+"CDS RRset se nahaja na domenskih strežnikih \"{ns_ip_list}\", ampak CDNSKEY "
+"RRseta ni."
 
 #. DNSSEC:DS15_INCONSISTENT_CDNSKEY
 msgid "All servers do not have the same CDNSKEY RRset."
@@ -1561,9 +1913,11 @@ msgstr "CDS RRset ni enak na vseh domenskih strežnikih."
 #. DNSSEC:DS15_MISMATCH_CDS_CDNSKEY
 #, perl-brace-format
 msgid ""
-"Both CDS and CDNSKEY RRsets are found on nameservers that resolve to IP addresses ({ns_ip_list}) but they do "
-"not match."
-msgstr "CDS in CDNSKEY RRseti se nahajajo na domenskih strežnikih \"{ns_ip_list}\", ampak se ne ujemajo."
+"Both CDS and CDNSKEY RRsets are found on nameservers that resolve to IP "
+"addresses ({ns_ip_list}) but they do not match."
+msgstr ""
+"CDS in CDNSKEY RRseti se nahajajo na domenskih strežnikih \"{ns_ip_list}\", "
+"ampak se ne ujemajo."
 
 #. DNSSEC:DS15_NO_CDS_CDNSKEY
 msgid "No CDS or CDNSKEY RRsets are found on any name server."
@@ -1572,215 +1926,248 @@ msgstr "Na nobenem domenskem strežniku ni mogoče najti CDS ali CDNSKEY RRset."
 #. DNSSEC:DS16_CDS_INVALID_RRSIG
 #, perl-brace-format
 msgid ""
-"The CDS RRset is signed with an RRSIG with tag {keytag}, but the RRSIG does not match the DNSKEY with the "
-"same key tag. Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+"The CDS RRset is signed with an RRSIG with tag {keytag}, but the RRSIG does "
+"not match the DNSKEY with the same key tag. Fetched from the nameservers "
+"with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"CDS RRset je podpisan z RRSIG z oznako {keytag}, toda RRSIG se ne ujema z DNSKEY-em z enako oznako. Podatki "
-"pridobljeni iz \"{ns_ip_list}\"."
+"CDS RRset je podpisan z RRSIG z oznako {keytag}, toda RRSIG se ne ujema z "
+"DNSKEY-em z enako oznako. Podatki pridobljeni iz \"{ns_ip_list}\"."
 
 #. DNSSEC:DS16_CDS_MATCHES_NON_SEP_DNSKEY
 #, perl-brace-format
 msgid ""
-"The CDS record with tag {keytag} matches a DNSKEY record with SEP bit (bit 15) unset. Fetched from the "
-"nameservers with IP addresses \"{ns_ip_list}\"."
+"The CDS record with tag {keytag} matches a DNSKEY record with SEP bit (bit "
+"15) unset. Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"CDS zapis z oznako {keytag} se ujema z DNSKEY zapisom, ki nima nastavljenega SEP bita (bit 15). Podatki "
-"pridobljeni iz \"{ns_ip_list}\"."
+"CDS zapis z oznako {keytag} se ujema z DNSKEY zapisom, ki nima nastavljenega "
+"SEP bita (bit 15). Podatki pridobljeni iz \"{ns_ip_list}\"."
 
 #. DNSSEC:DS16_CDS_MATCHES_NON_ZONE_DNSKEY
 #, perl-brace-format
 msgid ""
-"The CDS record with tag {keytag} matches a DNSKEY record with zone bit (bit 7) unset. Fetched from the "
-"nameservers with IP addresses \"{ns_ip_list}\"."
+"The CDS record with tag {keytag} matches a DNSKEY record with zone bit (bit "
+"7) unset. Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"CDS zapis z oznako {keytag} se ujema z DNSKEY zapisom, ki nima nastavljenega zone bita (bit 7). Podatki "
-"pridobljeni iz \"{ns_ip_list}\"."
+"CDS zapis z oznako {keytag} se ujema z DNSKEY zapisom, ki nima nastavljenega "
+"zone bita (bit 7). Podatki pridobljeni iz \"{ns_ip_list}\"."
 
 #. DNSSEC:DS16_CDS_MATCHES_NO_DNSKEY
 #, perl-brace-format
 msgid ""
-"The CDS record with tag {keytag} does not match any DNSKEY record. Fetched from the nameservers with IP "
-"addresses \"{ns_ip_list}\"."
+"The CDS record with tag {keytag} does not match any DNSKEY record. Fetched "
+"from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"CDS zapis z oznako {keytag} se ne ujema z nobenim DNSKEY zapisom. Podatki pridobljeni iz ({ns_ip_list})."
+"CDS zapis z oznako {keytag} se ne ujema z nobenim DNSKEY zapisom. Podatki "
+"pridobljeni iz ({ns_ip_list})."
 
 #. DNSSEC:DS16_CDS_NOT_SIGNED_BY_CDS
 #, perl-brace-format
 msgid ""
-"The CDS RRset is not signed by the DNSKEY that the CDS record with tag {keytag} points to. Fetched from the "
-"nameservers with IP addresses \"{ns_ip_list}\"."
-msgstr ""
-"CDS RRset ni podpisan z DNSKEY-em na katerega kaže CDS zapis z oznako {keytag}. Podatki pridobljeni iz "
+"The CDS RRset is not signed by the DNSKEY that the CDS record with tag "
+"{keytag} points to. Fetched from the nameservers with IP addresses "
 "\"{ns_ip_list}\"."
+msgstr ""
+"CDS RRset ni podpisan z DNSKEY-em na katerega kaže CDS zapis z oznako "
+"{keytag}. Podatki pridobljeni iz \"{ns_ip_list}\"."
 
 #. DNSSEC:DS16_CDS_SIGNED_BY_UNKNOWN_DNSKEY
 #, perl-brace-format
 msgid ""
-"The CDS RRset is signed by RRSIG with tag {keytag} but that is not in the DNSKEY RRset. Fetched from the "
-"nameservers with P addresses \"{ns_ip_list}\"."
+"The CDS RRset is signed by RRSIG with tag {keytag} but that is not in the "
+"DNSKEY RRset. Fetched from the nameservers with P addresses \"{ns_ip_list}\"."
 msgstr ""
-"CDS RRset je podpisan z RRSIG z oznako {keytag}, kar pa ni v DNSKEY RRsetu. Podatki pridobljeni iz "
-"({ns_ip_list})."
+"CDS RRset je podpisan z RRSIG z oznako {keytag}, kar pa ni v DNSKEY RRsetu. "
+"Podatki pridobljeni iz ({ns_ip_list})."
 
 #. DNSSEC:DS16_CDS_UNSIGNED
 #, perl-brace-format
-msgid "The CDS RRset is not signed. Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgid ""
+"The CDS RRset is not signed. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
 msgstr "CDS RRset ni podpisan. Podatki pridobljeni iz \"({ns_ip_list}\"."
 
 #. DNSSEC:DS16_CDS_WITHOUT_DNSKEY
 #, perl-brace-format
 msgid ""
-"A CDS RRset exists, but no DNSKEY record exists. Fetched from the nameservers with IP addresses "
+"A CDS RRset exists, but no DNSKEY record exists. Fetched from the "
+"nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"CDS RRset obstaja, toda ne obstaja DNSKEY zapis. Podatki pridobljeni iz "
 "\"{ns_ip_list}\"."
-msgstr "CDS RRset obstaja, toda ne obstaja DNSKEY zapis. Podatki pridobljeni iz \"{ns_ip_list}\"."
 
 #. DNSSEC:DS16_DELETE_CDS
 #, perl-brace-format
-msgid "A single \"delete\" CDS record is found on the nameservers with IP addresses \"{ns_ip_list}\"."
+msgid ""
+"A single \"delete\" CDS record is found on the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
 msgstr "Najden en \"delete CDS\" zapis na domenskih strežnikih ({ns_ip_list})."
 
 #. DNSSEC:DS16_DNSKEY_NOT_SIGNED_BY_CDS
 #, perl-brace-format
 msgid ""
-"The DNSKEY RRset is not signed by the DNSKEY that the CDS record with tag {keytag} points to. Fetched from "
-"the nameservers with IP addresses \"{ns_ip_list}\"."
-msgstr ""
-"DNSKEY RRset ni podpisan z DNSKEY-jem na katerega kaže CDS zapis z oznako {keytag}. Podatki pridobljeni iz "
+"The DNSKEY RRset is not signed by the DNSKEY that the CDS record with tag "
+"{keytag} points to. Fetched from the nameservers with IP addresses "
 "\"{ns_ip_list}\"."
+msgstr ""
+"DNSKEY RRset ni podpisan z DNSKEY-jem na katerega kaže CDS zapis z oznako "
+"{keytag}. Podatki pridobljeni iz \"{ns_ip_list}\"."
 
 #. DNSSEC:DS16_MIXED_DELETE_CDS
 #, perl-brace-format
 msgid ""
-"The CDS RRset is a mixture between \"delete\" record and other records. Fetched from the nameservers with IP "
-"addresses \"{ns_ip_list}\"."
-msgstr "CDS RRset je mešanica \"delete\" zapisa in drugih zapisov. Podatki pridobljeni iz \"{ns_ip_list}\"."
+"The CDS RRset is a mixture between \"delete\" record and other records. "
+"Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"CDS RRset je mešanica \"delete\" zapisa in drugih zapisov. Podatki "
+"pridobljeni iz \"{ns_ip_list}\"."
 
 #. DNSSEC:DS17_CDNSKEY_INVALID_RRSIG
 #, perl-brace-format
 msgid ""
-"The CDNSKEY RRset is signed with an RRSIG with tag {keytag}, but the RRSIG does not match the DNSKEY with "
-"the same key tag. Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+"The CDNSKEY RRset is signed with an RRSIG with tag {keytag}, but the RRSIG "
+"does not match the DNSKEY with the same key tag. Fetched from the "
+"nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"CDNSKEY RRset je podpisan z RRSIG z oznako {keytag}, toda RRSIG se ne ujema z DNSKEY-jem z enako oznako. "
-"Podatki pridobljeni iz \"{ns_ip_list}\"."
+"CDNSKEY RRset je podpisan z RRSIG z oznako {keytag}, toda RRSIG se ne ujema "
+"z DNSKEY-jem z enako oznako. Podatki pridobljeni iz \"{ns_ip_list}\"."
 
 #. DNSSEC:DS17_CDNSKEY_IS_NON_SEP
 #, perl-brace-format
 msgid ""
-"The CDNSKEY record with tag {keytag} has the SEP bit (bit 15) unset. Fetched from the nameservers with IP "
-"addresses \"{ns_ip_list}\"."
+"The CDNSKEY record with tag {keytag} has the SEP bit (bit 15) unset. Fetched "
+"from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"CDNSKEY zapis z oznako {keytag} nima nastavljenega SEP bita (bit 15). Podatki pridobljeni iz "
-"\"{ns_ip_list}\"."
+"CDNSKEY zapis z oznako {keytag} nima nastavljenega SEP bita (bit 15). "
+"Podatki pridobljeni iz \"{ns_ip_list}\"."
 
 #. DNSSEC:DS17_CDNSKEY_IS_NON_ZONE
 #, perl-brace-format
 msgid ""
-"The CDNSKEY record with tag {keytag} has the zone bit (bit 7) unset. Fetched from the nameservers with IP "
-"addresses \"{ns_ip_list}\"."
+"The CDNSKEY record with tag {keytag} has the zone bit (bit 7) unset. Fetched "
+"from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"CDNSKEY zapis z oznako {keytag} nima nastavljenega zone bita (bit 7). Podatki pridobljeni iz "
-"\"{ns_ip_list}\"."
+"CDNSKEY zapis z oznako {keytag} nima nastavljenega zone bita (bit 7). "
+"Podatki pridobljeni iz \"{ns_ip_list}\"."
 
 #. DNSSEC:DS17_CDNSKEY_MATCHES_NO_DNSKEY
 #, perl-brace-format
 msgid ""
-"The CDNSKEY record with tag {keytag} does not match any DNSKEY record. Fetched from the nameservers with IP "
-"addresses \"{ns_ip_list}\"."
+"The CDNSKEY record with tag {keytag} does not match any DNSKEY record. "
+"Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"CDNSKEY z oznako {keytag} se ne ujema z nobenim DNSKEY zapisom. Podatki pridobljeni iz \"{ns_ip_list}\"."
+"CDNSKEY z oznako {keytag} se ne ujema z nobenim DNSKEY zapisom. Podatki "
+"pridobljeni iz \"{ns_ip_list}\"."
 
 #. DNSSEC:DS17_CDNSKEY_NOT_SIGNED_BY_CDNSKEY
 #, perl-brace-format
 msgid ""
-"The CDNSKEY RRset is not signed by the DNSKEY that the CDNSKEY record with tag {keytag} points to. Fetched "
-"from the nameservers with IP addresses \"{ns_ip_list}\"."
+"The CDNSKEY RRset is not signed by the DNSKEY that the CDNSKEY record with "
+"tag {keytag} points to. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
 msgstr ""
-"CDNSKEY RRset ni podpisan z DNSKEY-jem na katerega kaže CDNSKEY zapis z oznako {keytag}. Podatki pridobljeni "
-"iz \"{ns_ip_list}\"."
+"CDNSKEY RRset ni podpisan z DNSKEY-jem na katerega kaže CDNSKEY zapis z "
+"oznako {keytag}. Podatki pridobljeni iz \"{ns_ip_list}\"."
 
 #. DNSSEC:DS17_CDNSKEY_SIGNED_BY_UNKNOWN_DNSKEY
 #, perl-brace-format
 msgid ""
-"The CDNSKEY RRset is signed by RRSIG with tag {keytag} but that is not in the DNSKEY RRset. Fetched from the "
-"nameservers with P addresses \"{ns_ip_list}\"."
-msgstr ""
-"CDNSKEY RRset je podpisan z RRSIG z oznako {keytag}, kar pa ni v DNSKEY RRsetu. Podatki pridobljeni iz "
+"The CDNSKEY RRset is signed by RRSIG with tag {keytag} but that is not in "
+"the DNSKEY RRset. Fetched from the nameservers with P addresses "
 "\"{ns_ip_list}\"."
+msgstr ""
+"CDNSKEY RRset je podpisan z RRSIG z oznako {keytag}, kar pa ni v DNSKEY "
+"RRsetu. Podatki pridobljeni iz \"{ns_ip_list}\"."
 
 #. DNSSEC:DS17_CDNSKEY_UNSIGNED
 #, perl-brace-format
-msgid "The CDNSKEY RRset is not signed. Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgid ""
+"The CDNSKEY RRset is not signed. Fetched from the nameservers with IP "
+"addresses \"{ns_ip_list}\"."
 msgstr "CDNSKEY RRset ni podpisan. Podatki pridobljeni iz \"{ns_ip_list}\"."
 
 #. DNSSEC:DS17_CDNSKEY_WITHOUT_DNSKEY
 #, perl-brace-format
 msgid ""
-"A CDNSKEY RRset exists, but no DNSKEY record exists. Fetched from the nameservers with IP addresses "
+"A CDNSKEY RRset exists, but no DNSKEY record exists. Fetched from the "
+"nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"CDNSKEY RRset obstaja, toda DNSKEY ne obstaja. Podatki pridobljeni iz "
 "\"{ns_ip_list}\"."
-msgstr "CDNSKEY RRset obstaja, toda DNSKEY ne obstaja. Podatki pridobljeni iz \"{ns_ip_list}\"."
 
 #. DNSSEC:DS17_DELETE_CDNSKEY
 #, perl-brace-format
-msgid "A single \"delete\" CDNSKEY record is found on the nameservers with IP addresses \"{ns_ip_list}\"."
-msgstr "Najden en CDNSKEY \"delete\" zapis na domenskih strežnikih \"{ns_ip_list}\"."
+msgid ""
+"A single \"delete\" CDNSKEY record is found on the nameservers with IP "
+"addresses \"{ns_ip_list}\"."
+msgstr ""
+"Najden en CDNSKEY \"delete\" zapis na domenskih strežnikih \"{ns_ip_list}\"."
 
 #. DNSSEC:DS17_DNSKEY_NOT_SIGNED_BY_CDNSKEY
 #, perl-brace-format
 msgid ""
-"The DNSKEY RRset is not signed by the DNSKEY that the CDNSKEY record with tag {keytag} points to. Fetched "
-"from the nameservers with IP addresses \"{ns_ip_list}\"."
+"The DNSKEY RRset is not signed by the DNSKEY that the CDNSKEY record with "
+"tag {keytag} points to. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
 msgstr ""
-"DNSKEY RRset ni podpisan z DNSKEY-jem na katerega kaže CDNSKEY zapis z oznako {keytag}. Podatki pridobljeni "
-"iz \"{ns_ip_list}\"."
+"DNSKEY RRset ni podpisan z DNSKEY-jem na katerega kaže CDNSKEY zapis z "
+"oznako {keytag}. Podatki pridobljeni iz \"{ns_ip_list}\"."
 
 #. DNSSEC:DS17_MIXED_DELETE_CDNSKEY
 #, perl-brace-format
 msgid ""
-"The CDNSKEY RRset is a mixture between \"delete\" record and other records. Fetched from the nameservers "
-"with IP addresses \"{ns_ip_list}\"."
+"The CDNSKEY RRset is a mixture between \"delete\" record and other records. "
+"Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"CDNSKEY RRset je mešanica med \"delete\" zapisom in ostalimi zapisi. Podatki pridobljeni iz \"{ns_ip_list}\"."
+"CDNSKEY RRset je mešanica med \"delete\" zapisom in ostalimi zapisi. Podatki "
+"pridobljeni iz \"{ns_ip_list}\"."
 
 #. DNSSEC:DS18_NO_MATCH_CDS_RRSIG_DS
 #, perl-brace-format
 msgid ""
-"The CDS RRset is not signed with a DNSKEY record that a DS record points to. Fetched from the nameservers "
-"with IP addresses \"{ns_ip_list}\"."
+"The CDS RRset is not signed with a DNSKEY record that a DS record points to. "
+"Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"CDS RRset ni podpisan z DNSKEY zapisom na katerega kaže DS zapis. Podatki pridobljeni iz \"{ns_ip_list}\"."
+"CDS RRset ni podpisan z DNSKEY zapisom na katerega kaže DS zapis. Podatki "
+"pridobljeni iz \"{ns_ip_list}\"."
 
 #. DNSSEC:DS18_NO_MATCH_CDNSKEY_RRSIG_DS
 #, perl-brace-format
 msgid ""
-"The CDNSKEY RRset is not signed with a DNSKEY record that a DS record points to. Fetched from the "
-"nameservers with IP addresses \"{ns_ip_list}\"."
+"The CDNSKEY RRset is not signed with a DNSKEY record that a DS record points "
+"to. Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"CDNSKEY RRset ni podpisan z DNSKEY zapisom na katerega kaže DS zapis. Podatki pridobljeni iz "
-"\"{ns_ip_list}\"."
+"CDNSKEY RRset ni podpisan z DNSKEY zapisom na katerega kaže DS zapis. "
+"Podatki pridobljeni iz \"{ns_ip_list}\"."
 
 #. DNSSEC:DS_BUT_NOT_DNSKEY
 #, perl-brace-format
 msgid "{parent} sent a DS record, but {child} did not send a DNSKEY record."
-msgstr "Starševska cona {parent} je poslala DS zapis, podrejena cona {child} pa ni poslala DNSKEY zapisa."
+msgstr ""
+"Starševska cona {parent} je poslala DS zapis, podrejena cona {child} pa ni "
+"poslala DNSKEY zapisa."
 
 #. DNSSEC:DURATION_LONG
 #, perl-brace-format
 msgid ""
-"RRSIG with keytag {keytag} and covering type(s) {types} has a duration of {duration} seconds, which is too "
-"long."
-msgstr "RRSIG z oznako {keytag}, ki pokriva \"{types}\" traja {duration} sekund, kar je predolgo."
+"RRSIG with keytag {keytag} and covering type(s) {types} has a duration of "
+"{duration} seconds, which is too long."
+msgstr ""
+"RRSIG z oznako {keytag}, ki pokriva \"{types}\" traja {duration} sekund, kar "
+"je predolgo."
 
 #. DNSSEC:DURATION_OK
 #, perl-brace-format
 msgid ""
-"RRSIG with keytag {keytag} and covering type(s) {types} has a duration of {duration} seconds, which is just "
-"fine."
-msgstr "RRSIG z oznako {keytag}, ki pokriva \"{types}\" traja {duration} sekund, kar je v redu."
+"RRSIG with keytag {keytag} and covering type(s) {types} has a duration of "
+"{duration} seconds, which is just fine."
+msgstr ""
+"RRSIG z oznako {keytag}, ki pokriva \"{types}\" traja {duration} sekund, kar "
+"je v redu."
 
 #. DNSSEC:EXTRA_PROCESSING_BROKEN
 #, perl-brace-format
-msgid "Server at {server} sent {keys} DNSKEY records, and {sigs} RRSIG records."
+msgid ""
+"Server at {server} sent {keys} DNSKEY records, and {sigs} RRSIG records."
 msgstr "{server} je poslal (DNSKEY) {keys} in podpise (RRSIG) {sigs}."
 
 #. DNSSEC:EXTRA_PROCESSING_OK
@@ -1790,8 +2177,11 @@ msgstr "{server} je poslal (DNSKEY) {keys} in podpise (RRSIG) {sigs}."
 
 #. DNSSEC:KEY_DETAILS
 #, perl-brace-format
-msgid "Key with keytag {keytag} details : Size = {keysize}, Flags ({sep}, {rfc5011})."
-msgstr "Ključ z oznako {keytag}. Velikost = {keysize}, Zastavice ({sep}, {rfc5011})."
+msgid ""
+"Key with keytag {keytag} details : Size = {keysize}, Flags ({sep}, "
+"{rfc5011})."
+msgstr ""
+"Ključ z oznako {keytag}. Velikost = {keysize}, Zastavice ({sep}, {rfc5011})."
 
 #. DNSSEC:KEY_SIZE_OK
 msgid "All keys from the DNSKEY RRset have the correct size."
@@ -1813,27 +2203,35 @@ msgstr "Cona ni DNSSEC podpisana."
 #. DNSSEC:REMAINING_LONG
 #, perl-brace-format
 msgid ""
-"RRSIG with keytag {keytag} and covering type(s) {types} has a remaining validity of {duration} seconds, "
-"which is too long."
-msgstr "RRSIG z oznako {keytag}, ki pokriva \"{types}\" ima veljavnost še {duration} sekund, kar je predolgo."
+"RRSIG with keytag {keytag} and covering type(s) {types} has a remaining "
+"validity of {duration} seconds, which is too long."
+msgstr ""
+"RRSIG z oznako {keytag}, ki pokriva \"{types}\" ima veljavnost še {duration} "
+"sekund, kar je predolgo."
 
 #. DNSSEC:REMAINING_SHORT
 #, perl-brace-format
 msgid ""
-"RRSIG with keytag {keytag} and covering type(s) {types} has a remaining validity of {duration} seconds, "
-"which is too short."
-msgstr "RRSIG z oznako {keytag}, ki pokriva \"{types}\" ima veljavnost še{duration} sekund, kar je premalo."
+"RRSIG with keytag {keytag} and covering type(s) {types} has a remaining "
+"validity of {duration} seconds, which is too short."
+msgstr ""
+"RRSIG z oznako {keytag}, ki pokriva \"{types}\" ima veljavnost še{duration} "
+"sekund, kar je premalo."
 
 #. DNSSEC:RRSIG_EXPIRATION
 #, perl-brace-format
-msgid "RRSIG with keytag {keytag} and covering type(s) {types} expires at : {date}."
+msgid ""
+"RRSIG with keytag {keytag} and covering type(s) {types} expires at : {date}."
 msgstr "RRSIG z oznako {keytag}, ki pokriva \"{types}\" poteče : {date}."
 
 #. DNSSEC:RRSIG_EXPIRED
 #, perl-brace-format
 msgid ""
-"RRSIG with keytag {keytag} and covering type(s) {types} has already expired (expiration is: {expiration})."
-msgstr "RRSIG z oznako {keytag}, ki pokriva \"{types}\" je že potekel (datum poteka: {expiration})."
+"RRSIG with keytag {keytag} and covering type(s) {types} has already expired "
+"(expiration is: {expiration})."
+msgstr ""
+"RRSIG z oznako {keytag}, ki pokriva \"{types}\" je že potekel (datum poteka: "
+"{expiration})."
 
 #. DELEGATION:DELEGATION01
 msgid "Minimum number of name servers"
@@ -1865,7 +2263,8 @@ msgstr "Glue zapisi starševske cone so prisotni v podrejeni coni"
 
 #. DELEGATION:ARE_AUTHORITATIVE
 #, perl-brace-format
-msgid "All these nameservers are confirmed to be authoritative : {nsname_list}."
+msgid ""
+"All these nameservers are confirmed to be authoritative : {nsname_list}."
 msgstr "Vsi domenski strežniki so potrjeno avtoritativni : {nsname_list}."
 
 #. DELEGATION:CHILD_DISTINCT_NS_IP
@@ -1876,7 +2275,9 @@ msgstr "Vsi IP naslovi domenskih strežnikov v podrejeni coni so unikatni."
 #. DELEGATION:CHILD_NS_SAME_IP
 #, perl-brace-format
 msgid "IP {ns_ip} in child refers to multiple nameservers ({nsname_list})."
-msgstr "IP naslov {ns_ip} v podrejeni coni se nanaša na več domenskih strežnikov ({nsname_list})."
+msgstr ""
+"IP naslov {ns_ip} v podrejeni coni se nanaša na več domenskih strežnikov "
+"({nsname_list})."
 
 #. DELEGATION:DEL_DISTINCT_NS_IP
 msgid "All the IP addresses used by the nameservers in parent are unique."
@@ -1885,7 +2286,9 @@ msgstr "Vsi IP naslovi domenskih strežnikov v starševski coni so unikatni."
 #. DELEGATION:DEL_NS_SAME_IP
 #, perl-brace-format
 msgid "IP {ns_ip} in parent refers to multiple nameservers ({nsname_list})."
-msgstr "IP naslov {ns_ip} v starševski coni se nanaša na več domenskih strežnikov ({nsname_list})."
+msgstr ""
+"IP naslov {ns_ip} v starševski coni se nanaša na več domenskih strežnikov "
+"({nsname_list})."
 
 #. DELEGATION:DISTINCT_IP_ADDRESS
 msgid "All the IP addresses used by the nameservers are unique."
@@ -1894,62 +2297,70 @@ msgstr "Vsi IP naslovi strežnikov so unikatni."
 #. DELEGATION:ENOUGH_IPV4_NS_CHILD
 #, perl-brace-format
 msgid ""
-"Child lists enough ({count}) nameservers that resolve to IPv4 addresses. Lower limit set to {minimum}. Name "
-"servers: {ns_list}"
+"Child lists enough ({count}) nameservers that resolve to IPv4 addresses. "
+"Lower limit set to {minimum}. Name servers: {ns_list}"
 msgstr ""
-"Podrejena cona ima dovolj ({count}) domenskih strežnikov  z IPv4 naslovi ({ns_list}). Spodnja meja je "
-"nastavljena na {minimum}."
+"Podrejena cona ima dovolj ({count}) domenskih strežnikov  z IPv4 naslovi "
+"({ns_list}). Spodnja meja je nastavljena na {minimum}."
 
 #. DELEGATION:ENOUGH_IPV4_NS_DEL
 #, perl-brace-format
 msgid ""
-"Delegation lists enough ({count}) nameservers that resolve to IPv4 addresses. Lower limit set to {minimum}. "
-"Name servers: {ns_list}"
+"Delegation lists enough ({count}) nameservers that resolve to IPv4 "
+"addresses. Lower limit set to {minimum}. Name servers: {ns_list}"
 msgstr ""
-"Delegacija ima dovolj ({count}) domenskih strežnikov ({ns_list}) z IPv4 naslovi. Spodnja meja je nastavljena "
-"na {minimum}"
+"Delegacija ima dovolj ({count}) domenskih strežnikov ({ns_list}) z IPv4 "
+"naslovi. Spodnja meja je nastavljena na {minimum}"
 
 #. DELEGATION:ENOUGH_IPV6_NS_CHILD
 #, perl-brace-format
 msgid ""
-"Child lists enough ({count}) nameservers that resolve to IPv6 addresses. Lower limit set to {minimum}. Name "
-"servers: {ns_list}"
+"Child lists enough ({count}) nameservers that resolve to IPv6 addresses. "
+"Lower limit set to {minimum}. Name servers: {ns_list}"
 msgstr ""
-"Podrejena cona ima dovolj ({count}) domenskih strežnikov ({ns_list}) z IPv6 naslovi. Spodnja meja je "
-"nastavljena na {minimum}"
+"Podrejena cona ima dovolj ({count}) domenskih strežnikov ({ns_list}) z IPv6 "
+"naslovi. Spodnja meja je nastavljena na {minimum}"
 
 #. DELEGATION:ENOUGH_IPV6_NS_DEL
 #, perl-brace-format
 msgid ""
-"Delegation lists enough ({count}) nameservers that resolve to IPv6 addresses. Lower limit set to {minimum}. "
-"Name servers: {ns_list}"
+"Delegation lists enough ({count}) nameservers that resolve to IPv6 "
+"addresses. Lower limit set to {minimum}. Name servers: {ns_list}"
 msgstr ""
-"Delegacija ima dovolj ({count}) domenskih strežnikov ({ns_list}) z IPv6 naslovi. Spodnja meja je nastavljena "
-"na {minimum}"
+"Delegacija ima dovolj ({count}) domenskih strežnikov ({ns_list}) z IPv6 "
+"naslovi. Spodnja meja je nastavljena na {minimum}"
 
 #. DELEGATION:ENOUGH_NS_CHILD
 #, perl-brace-format
-msgid "Child lists enough ({count}) nameservers. Lower limit set to {minimum}. Name servers: {nsname_list}"
+msgid ""
+"Child lists enough ({count}) nameservers. Lower limit set to {minimum}. Name "
+"servers: {nsname_list}"
 msgstr ""
-"Podrejena cona ima dovolj({count}) domenski strežnikov ({nsname_list}). Spodnja meja nastavljena na "
-"{minimum}."
+"Podrejena cona ima dovolj({count}) domenski strežnikov ({nsname_list}). "
+"Spodnja meja nastavljena na {minimum}."
 
 #. DELEGATION:ENOUGH_NS_DEL
 #, perl-brace-format
 msgid ""
-"Delegation lists enough ({count}) nameservers. Lower limit set to {minimum}. Name servers: {nsname_list}"
+"Delegation lists enough ({count}) nameservers. Lower limit set to {minimum}. "
+"Name servers: {nsname_list}"
 msgstr ""
-"Delegacija ima dovolj ({count}) domenskih strežnikov ({nsname_list}). Spodnja meja nastavljena na {minimum}"
+"Delegacija ima dovolj ({count}) domenskih strežnikov ({nsname_list}). "
+"Spodnja meja nastavljena na {minimum}"
 
 #. DELEGATION:EXTRA_NAME_CHILD
 #, perl-brace-format
 msgid "Child has nameserver(s) not listed at parent ({extra})."
-msgstr "Podrejena cona ima domenske strežnik(e), ki ni(so) v starševski coni ({extra})."
+msgstr ""
+"Podrejena cona ima domenske strežnik(e), ki ni(so) v starševski coni "
+"({extra})."
 
 #. DELEGATION:EXTRA_NAME_PARENT
 #, perl-brace-format
 msgid "Parent has nameserver(s) not listed at the child ({extra})."
-msgstr "Starševska cona ima domenske strežnik(e), ki ni(so) v podrejeni coni ({extra})."
+msgstr ""
+"Starševska cona ima domenske strežnik(e), ki ni(so) v podrejeni coni "
+"({extra})."
 
 #. DELEGATION:IS_NOT_AUTHORITATIVE
 #, perl-brace-format
@@ -1962,93 +2373,100 @@ msgstr "Domenski strežniki v starševski in podrejeni coni so enaki."
 
 #. DELEGATION:NO_RESPONSE
 #, perl-brace-format
-msgid "Nameserver {ns} did not respond to a query for name {query_name} and type {rrtype}."
+msgid ""
+"Nameserver {ns} did not respond to a query for name {query_name} and type "
+"{rrtype}."
 msgstr "{ns} ne odgovarja na poizvedbe za {query_name} in {rrtype}."
 
 #. DELEGATION:NOT_ENOUGH_IPV4_NS_CHILD
 #, perl-brace-format
 msgid ""
-"Child does not list enough ({count}) nameservers that resolve to IPv4 addresses. Lower limit set to "
-"{minimum}. Name servers: {ns_list}"
+"Child does not list enough ({count}) nameservers that resolve to IPv4 "
+"addresses. Lower limit set to {minimum}. Name servers: {ns_list}"
 msgstr ""
-"Podrejena cona nima dovolj ({count}) domenskih strežnikov ({ns_list}) z IPv4 naslovi. Spodnja meja "
-"nastavljena na {minimum}"
+"Podrejena cona nima dovolj ({count}) domenskih strežnikov ({ns_list}) z IPv4 "
+"naslovi. Spodnja meja nastavljena na {minimum}"
 
 #. DELEGATION:NOT_ENOUGH_IPV4_NS_DEL
 #, perl-brace-format
 msgid ""
-"Delegation does not list enough ({count}) nameservers that resolve to IPv4 addresses. Lower limit set to "
-"{minimum}. Name servers: {ns_list}"
+"Delegation does not list enough ({count}) nameservers that resolve to IPv4 "
+"addresses. Lower limit set to {minimum}. Name servers: {ns_list}"
 msgstr ""
-"Delegacija ne ima dovolj ({count}) domenskih strežnikov ({ns_list}) z IPv4 naslovi. Spodnja meja nastavljena "
-"na {minimum}"
+"Delegacija ne ima dovolj ({count}) domenskih strežnikov ({ns_list}) z IPv4 "
+"naslovi. Spodnja meja nastavljena na {minimum}"
 
 #. DELEGATION:NOT_ENOUGH_IPV6_NS_CHILD
 #, perl-brace-format
 msgid ""
-"Child does not list enough ({count}) nameservers that resolve to IPv6 addresses. Lower limit set to "
-"{minimum}. Name servers: {ns_list}"
+"Child does not list enough ({count}) nameservers that resolve to IPv6 "
+"addresses. Lower limit set to {minimum}. Name servers: {ns_list}"
 msgstr ""
-"Podrejena cona nima dovolj ({count}) domenskih strežnikov ({ns_list}) z IPv6 naslovi. Spodnja meja "
-"nastavljena na {minimum}"
+"Podrejena cona nima dovolj ({count}) domenskih strežnikov ({ns_list}) z IPv6 "
+"naslovi. Spodnja meja nastavljena na {minimum}"
 
 #. DELEGATION:NOT_ENOUGH_IPV6_NS_DEL
 #, perl-brace-format
 msgid ""
-"Delegation does not list enough ({count}) nameservers that resolve to IPv6 addresses. Lower limit set to "
-"{minimum}. Name servers: {ns_list}"
+"Delegation does not list enough ({count}) nameservers that resolve to IPv6 "
+"addresses. Lower limit set to {minimum}. Name servers: {ns_list}"
 msgstr ""
-"Delegacija nima dovolj ({count}) domenskih strežnikov ({ns_list}) z IPv6 naslovi. Spodnja meja nastavljena "
-"na {minimum}"
+"Delegacija nima dovolj ({count}) domenskih strežnikov ({ns_list}) z IPv6 "
+"naslovi. Spodnja meja nastavljena na {minimum}"
 
 #. DELEGATION:NOT_ENOUGH_NS_CHILD
 #, perl-brace-format
 msgid ""
-"Child does not list enough ({count}) nameservers. Lower limit set to {minimum}. Name servers: {nsname_list}"
+"Child does not list enough ({count}) nameservers. Lower limit set to "
+"{minimum}. Name servers: {nsname_list}"
 msgstr ""
-"Podrejena cona nima dovolj ({count}) domenskih strežnikov ({nsname_list}). Spodnja meja nastavljena na "
-"{minimum}"
+"Podrejena cona nima dovolj ({count}) domenskih strežnikov ({nsname_list}). "
+"Spodnja meja nastavljena na {minimum}"
 
 #. DELEGATION:NOT_ENOUGH_NS_DEL
 #, perl-brace-format
 msgid ""
-"Delegation does not list enough ({count}) nameservers. Lower limit set to {minimum}. Name servers: "
-"{nsname_list}"
+"Delegation does not list enough ({count}) nameservers. Lower limit set to "
+"{minimum}. Name servers: {nsname_list}"
 msgstr ""
-"Delegacija nima dovolj ({count}) domenskih strežnikov ({nsname_list}). Spodnja meja nastavljena na {minimum}"
+"Delegacija nima dovolj ({count}) domenskih strežnikov ({nsname_list}). "
+"Spodnja meja nastavljena na {minimum}"
 
 #. DELEGATION:NO_IPV4_NS_CHILD
 #, perl-brace-format
 msgid ""
-"Child lists no nameserver that resolves to an IPv4 address. If any were present, the minimum allowed would "
-"be {minimum}."
+"Child lists no nameserver that resolves to an IPv4 address. If any were "
+"present, the minimum allowed would be {minimum}."
 msgstr ""
-"Podrejena cona nima domenskih strežnikov z IPv4 naslovi. Če bi jih imela, bi jih morala imeti najmanj "
-"{minimum}."
+"Podrejena cona nima domenskih strežnikov z IPv4 naslovi. Če bi jih imela, bi "
+"jih morala imeti najmanj {minimum}."
 
 #. DELEGATION:NO_IPV4_NS_DEL
 #, perl-brace-format
 msgid ""
-"Delegation lists no nameserver that resolves to an IPv4 address. If any were present, the minimum allowed "
-"would be {minimum}."
+"Delegation lists no nameserver that resolves to an IPv4 address. If any were "
+"present, the minimum allowed would be {minimum}."
 msgstr ""
-"Delegacija nima domenskih strežnikov z IPv4 naslovi. Če bi jih imela, bi jih morala imeti najmanj {minimum}."
+"Delegacija nima domenskih strežnikov z IPv4 naslovi. Če bi jih imela, bi jih "
+"morala imeti najmanj {minimum}."
 
 #. DELEGATION:NO_IPV6_NS_CHILD
 #, perl-brace-format
 msgid ""
-"Child lists no nameserver that resolves to an IPv6 address. If any were present, the minimum allowed would "
-"be {minimum}."
+"Child lists no nameserver that resolves to an IPv6 address. If any were "
+"present, the minimum allowed would be {minimum}."
 msgstr ""
-"Podrejena cona nima domenskih strežnikov z IPv6 naslovi. Če bi jih imela, bi jih morala imeti vsaj {minimum}."
+"Podrejena cona nima domenskih strežnikov z IPv6 naslovi. Če bi jih imela, bi "
+"jih morala imeti vsaj {minimum}."
 
 #. DELEGATION:NO_IPV6_NS_DEL
 #, perl-brace-format
 msgid ""
-"Delegation lists no nameserver that resolves to an IPv6 address. If any were present, the minimum allowed "
-"would be {minimum}."
+"Delegation lists no nameserver that resolves to an IPv6 address. If any were "
+"present, the minimum allowed would be {minimum}."
 msgstr ""
-"Delegacija nima domenskih strežnikov z IPv6 naslovi. Če bi jih imela, bi jih morala imeti vsaj {minimum}."
+"Delegacija nima domenskih strežnikov z IPv6 naslovi. Če bi jih imela, bi jih "
+"morala imeti vsaj {minimum}."
 
 #. DELEGATION:NS_IS_CNAME
 #, perl-brace-format
@@ -2061,18 +2479,27 @@ msgstr "Noben domenski strežnik ne kaže na alias (CNAME)."
 
 #. DELEGATION:REFERRAL_SIZE_TOO_LARGE
 #, perl-brace-format
-msgid "The smallest possible legal referral packet is larger than 512 octets (it is {size})."
-msgstr "Najmanjši referral paketek je večji od 512 bajtov (velikost paketka je {size})."
+msgid ""
+"The smallest possible legal referral packet is larger than 512 octets (it is "
+"{size})."
+msgstr ""
+"Najmanjši referral paketek je večji od 512 bajtov (velikost paketka je "
+"{size})."
 
 #. DELEGATION:REFERRAL_SIZE_OK
 #, perl-brace-format
-msgid "The smallest possible legal referral packet is smaller than 513 octets (it is {size})."
-msgstr "Najmanjši referral paketek je manjši od 513 bajtov (velikost paketka je {size})."
+msgid ""
+"The smallest possible legal referral packet is smaller than 513 octets (it "
+"is {size})."
+msgstr ""
+"Najmanjši referral paketek je manjši od 513 bajtov (velikost paketka je "
+"{size})."
 
 #. DELEGATION:SAME_IP_ADDRESS
 #, perl-brace-format
 msgid "IP {ns_ip} refers to multiple nameservers ({nsname_list})."
-msgstr "IP naslov {ns_ip} se nanaša na več domenskih strežnikov ({nsname_list})."
+msgstr ""
+"IP naslov {ns_ip} se nanaša na več domenskih strežnikov ({nsname_list})."
 
 #. DELEGATION:SOA_EXISTS
 msgid "All the nameservers have SOA record."
@@ -2081,7 +2508,8 @@ msgstr "SOA zapis je prisoten na vseh domenskih strežnikih."
 #. DELEGATION:SOA_NOT_EXISTS
 #, perl-brace-format
 msgid "Empty NOERROR response to SOA query was received from {ns}."
-msgstr "Domenski strežnik {ns} je poslal prazen NOERROR odgovor na SOA poizvedbo."
+msgstr ""
+"Domenski strežnik {ns} je poslal prazen NOERROR odgovor na SOA poizvedbo."
 
 #. DELEGATION:TOTAL_NAME_MISMATCH
 msgid "None of the nameservers listed at the parent are listed at the child."
@@ -2089,9 +2517,12 @@ msgstr "Noben od domenskih strežnikov v starševski coni ni v podrejeni coni."
 
 #. DELEGATION:UNEXPECTED_RCODE
 #, perl-brace-format
-msgid "Nameserver {ns} answered query for name {query_name} and type {rrtype} with RCODE {rcode}."
+msgid ""
+"Nameserver {ns} answered query for name {query_name} and type {rrtype} with "
+"RCODE {rcode}."
 msgstr ""
-"Domenski strežnik {ns} je na poizvedbo za {query_name} in {rrtype} odgovoril z nepričakovano RCODE ({rcode})."
+"Domenski strežnik {ns} je na poizvedbo za {query_name} in {rrtype} odgovoril "
+"z nepričakovano RCODE ({rcode})."
 
 #. NAMESERVER:NAMESERVER01
 msgid "A name server should not be a recursor"
@@ -2119,7 +2550,9 @@ msgstr "NS je možno razrešiti"
 
 #. NAMESERVER:NAMESERVER07
 msgid "To check whether authoritative name servers return an upward referral"
-msgstr "Test, ki preverja, če avtoritativni strežniki vračajo usmeritev na starševsko cono"
+msgstr ""
+"Test, ki preverja, če avtoritativni strežniki vračajo usmeritev na "
+"starševsko cono"
 
 #. NAMESERVER:NAMESERVER08
 msgid "Testing QNAME case insensitivity"
@@ -2151,9 +2584,12 @@ msgstr "Test objavljene verzije programske opreme"
 
 #. NAMESERVER:AAAA_BAD_RDATA
 #, perl-brace-format
-msgid "Nameserver {ns} answered AAAA query with an unexpected RDATA length ({length} instead of 16)."
+msgid ""
+"Nameserver {ns} answered AAAA query with an unexpected RDATA length "
+"({length} instead of 16)."
 msgstr ""
-"Domenski strežnik {ns} je odgovoril na AAAA poizvedbo z nepričakovano dolžino RDATA ({length} namesto 16)."
+"Domenski strežnik {ns} je odgovoril na AAAA poizvedbo z nepričakovano "
+"dolžino RDATA ({length} namesto 16)."
 
 #. NAMESERVER:AAAA_QUERY_DROPPED
 #, perl-brace-format
@@ -2163,17 +2599,24 @@ msgstr "Domenski strežnik {ns} je zavrgel AAAA poizvedbo."
 #. NAMESERVER:AAAA_UNEXPECTED_RCODE
 #, perl-brace-format
 msgid "Nameserver {ns} answered AAAA query with an unexpected rcode ({rcode})."
-msgstr "Domenski strežnik {ns} je na AAAA poizvedbo odgovoril z nepričakovano RCODE ({rcode})."
+msgstr ""
+"Domenski strežnik {ns} je na AAAA poizvedbo odgovoril z nepričakovano RCODE "
+"({rcode})."
 
 #. NAMESERVER:AAAA_WELL_PROCESSED
 #, perl-brace-format
-msgid "The following nameservers answer AAAA queries without problems : {ns_list}."
-msgstr "Naslednji domenski strežniki brez težav odgovarjajo na AAAA poizvedbe: {ns_list}."
+msgid ""
+"The following nameservers answer AAAA queries without problems : {ns_list}."
+msgstr ""
+"Naslednji domenski strežniki brez težav odgovarjajo na AAAA poizvedbe: "
+"{ns_list}."
 
 #. NAMESERVER:A_UNEXPECTED_RCODE
 #, perl-brace-format
 msgid "Nameserver {ns} answered A query with an unexpected rcode ({rcode})."
-msgstr "Domenski strežnik {ns} je na A poizvedbo odgovoril z nepričakovano RCODE ({rcode})."
+msgstr ""
+"Domenski strežnik {ns} je na A poizvedbo odgovoril z nepričakovano RCODE "
+"({rcode})."
 
 #. NAMESERVER:AXFR_AVAILABLE
 #, perl-brace-format
@@ -2188,7 +2631,9 @@ msgstr "AXFR ni možen na domenskem strežniku {ns}."
 #. NAMESERVER:BREAKS_ON_EDNS
 #, perl-brace-format
 msgid "No response from {ns} when EDNS is used in query asking for {domain}."
-msgstr "Domenski strežnik {ns} ne odgovarja na poizvedbo po domeni '{domain}', če se uporabi EDNS."
+msgstr ""
+"Domenski strežnik {ns} ne odgovarja na poizvedbo po domeni '{domain}', če se "
+"uporabi EDNS."
 
 #. NAMESERVER:CAN_BE_RESOLVED
 msgid "All nameservers succeeded to resolve to an IP address."
@@ -2196,77 +2641,99 @@ msgstr "Za vse domenske strežnike je bilo mogoče najti IP naslove."
 
 #. NAMESERVER:CAN_NOT_BE_RESOLVED
 #, perl-brace-format
-msgid "The following nameservers failed to resolve to an IP address : {nsname_list}."
-msgstr "Domenski strežniki, kjer ni uspelo razreševanje v IP naslove: {nsname_list}."
+msgid ""
+"The following nameservers failed to resolve to an IP address : {nsname_list}."
+msgstr ""
+"Domenski strežniki, kjer ni uspelo razreševanje v IP naslove: {nsname_list}."
 
 #. NAMESERVER:CASE_QUERIES_RESULTS_DIFFER
 #, perl-brace-format
 msgid ""
-"When asked for {type} records on \"{domain}\" with different cases, all servers do not reply consistently."
+"When asked for {type} records on \"{domain}\" with different cases, all "
+"servers do not reply consistently."
 msgstr ""
-"Domenski strežniki odgovarjajo nedosledno, ko različni testi delajo poizvedbe za {type} zapise na {domain}."
+"Domenski strežniki odgovarjajo nedosledno, ko različni testi delajo "
+"poizvedbe za {type} zapise na {domain}."
 
 #. NAMESERVER:CASE_QUERIES_RESULTS_OK
 #, perl-brace-format
-msgid "When asked for {type} records on \"{domain}\" with different cases, all servers reply consistently."
+msgid ""
+"When asked for {type} records on \"{domain}\" with different cases, all "
+"servers reply consistently."
 msgstr ""
-"Domenski strežniki odgovarjajo dosledno, ko različni testi delajo poizvedbe za {type} zapise na {domain}."
+"Domenski strežniki odgovarjajo dosledno, ko različni testi delajo poizvedbe "
+"za {type} zapise na {domain}."
 
 #. NAMESERVER:CASE_QUERY_DIFFERENT_ANSWER
 #, perl-brace-format
 msgid ""
-"When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver {ns} returns different answers."
+"When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver "
+"{ns} returns different answers."
 msgstr ""
-"Pri poizvedbah za {type} zapise na \"{query1}\" in \"{query2}\", domenski strežnik {ns} vrne različne "
-"odgovore."
+"Pri poizvedbah za {type} zapise na \"{query1}\" in \"{query2}\", domenski "
+"strežnik {ns} vrne različne odgovore."
 
 #. NAMESERVER:CASE_QUERY_DIFFERENT_RC
 #, perl-brace-format
 msgid ""
-"When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver {ns} returns different RCODE "
-"(\"{rcode1}\" vs \"{rcode2}\")."
+"When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver "
+"{ns} returns different RCODE (\"{rcode1}\" vs \"{rcode2}\")."
 msgstr ""
-"Pri poizvedbah za {type} zapise na \"{query1}\" in \"{query2}\", domenski strežnik {ns} odgovori z "
-"različnima RCODE (\"{rcode1}\" in \"{rcode2}\")."
+"Pri poizvedbah za {type} zapise na \"{query1}\" in \"{query2}\", domenski "
+"strežnik {ns} odgovori z različnima RCODE (\"{rcode1}\" in \"{rcode2}\")."
 
 #. NAMESERVER:CASE_QUERY_NO_ANSWER
 #, perl-brace-format
-msgid "When asked for {type} records on \"{domain}\", nameserver {ns} returns nothing."
-msgstr "Pri poizvedbi za {type} zapis na \"{domain}\", domenski strežnik {ns} ni vrnil odgovora."
+msgid ""
+"When asked for {type} records on \"{domain}\", nameserver {ns} returns "
+"nothing."
+msgstr ""
+"Pri poizvedbi za {type} zapis na \"{domain}\", domenski strežnik {ns} ni "
+"vrnil odgovora."
 
 #. NAMESERVER:CASE_QUERY_SAME_ANSWER
 #, perl-brace-format
-msgid "When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver {ns} returns same answers."
+msgid ""
+"When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver "
+"{ns} returns same answers."
 msgstr ""
-"Pri poizvedbah za {type} zapise na \"{query1}\" in \"{query2}\", domenski strežnik {ns} vrne enaka odgovora."
+"Pri poizvedbah za {type} zapise na \"{query1}\" in \"{query2}\", domenski "
+"strežnik {ns} vrne enaka odgovora."
 
 #. NAMESERVER:CASE_QUERY_SAME_RC
 #, perl-brace-format
 msgid ""
-"When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver {ns} returns same RCODE "
-"\"{rcode}\"."
+"When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver "
+"{ns} returns same RCODE \"{rcode}\"."
 msgstr ""
-"Pri poizvedbah za {type} zapise na \"{query1}\" in \"{query2}\", domenski strežnik {ns} vrne enak RCODE "
-"\"{rcode}\"."
+"Pri poizvedbah za {type} zapise na \"{query1}\" in \"{query2}\", domenski "
+"strežnik {ns} vrne enak RCODE \"{rcode}\"."
 
 #. NAMESERVER:DIFFERENT_SOURCE_IP
 #, perl-brace-format
-msgid "Nameserver {ns} replies on a SOA query with a different source address ({source})."
-msgstr "Domenski strežnik {ns} odgovori z napačnim izvornim naslovom ({source}) pri SOA poizvedbi."
+msgid ""
+"Nameserver {ns} replies on a SOA query with a different source address "
+"({source})."
+msgstr ""
+"Domenski strežnik {ns} odgovori z napačnim izvornim naslovom ({source}) pri "
+"SOA poizvedbi."
 
 #. NAMESERVER:EDNS_RESPONSE_WITHOUT_EDNS
 #, perl-brace-format
-msgid "Response without EDNS from {ns} on query with EDNS0 asking for {domain}."
-msgstr "Domenski strežnik {ns} je odgovoril brez EDNS pri poizvedbi z EDNS0 za {domain}."
+msgid ""
+"Response without EDNS from {ns} on query with EDNS0 asking for {domain}."
+msgstr ""
+"Domenski strežnik {ns} je odgovoril brez EDNS pri poizvedbi z EDNS0 za "
+"{domain}."
 
 #. NAMESERVER:EDNS_VERSION_ERROR
 #, perl-brace-format
 msgid ""
-"Incorrect version of EDNS (expected 0) in response from {ns} on query with EDNS (version 0) asking for "
-"{domain}."
+"Incorrect version of EDNS (expected 0) in response from {ns} on query with "
+"EDNS (version 0) asking for {domain}."
 msgstr ""
-"Pri poizvedbi z EDNS (verzija 0) za {domain}, domenski strežnik {ns} vrne napačno EDNS verzijo (pričakovana "
-"0)."
+"Pri poizvedbi z EDNS (verzija 0) za {domain}, domenski strežnik {ns} vrne "
+"napačno EDNS verzijo (pričakovana 0)."
 
 #. NAMESERVER:EDNS0_SUPPORT
 #, perl-brace-format
@@ -2280,8 +2747,12 @@ msgstr "Domenski strežnik {ns} je rekurziven."
 
 #. NAMESERVER:MISSING_OPT_IN_TRUNCATED
 #, perl-brace-format
-msgid "Nameserver {ns} replies on an EDNS query with a truncated response without EDNS."
-msgstr "Domenski strežnik {ns} vrne skrajšan (truncated) odgovor brez EDNS pri poizvedbi z EDNS."
+msgid ""
+"Nameserver {ns} replies on an EDNS query with a truncated response without "
+"EDNS."
+msgstr ""
+"Domenski strežnik {ns} vrne skrajšan (truncated) odgovor brez EDNS pri "
+"poizvedbi z EDNS."
 
 #. NAMESERVER:NO_EDNS_SUPPORT
 #, perl-brace-format
@@ -2305,8 +2776,11 @@ msgstr "Domenski strežnik {ns} ne odgovarja na poizvedbe za '{domain}'."
 
 #. NAMESERVER:NO_UPWARD_REFERRAL
 #, perl-brace-format
-msgid "None of the following nameservers returns an upward referral : {nsname_list}."
-msgstr "Noben od naslednjih domenski strežnikov ne vrača upward referral: {nsname_list}."
+msgid ""
+"None of the following nameservers returns an upward referral : {nsname_list}."
+msgstr ""
+"Noben od naslednjih domenski strežnikov ne vrača upward referral: "
+"{nsname_list}."
 
 #. NAMESERVER:NS_ERROR
 #, perl-brace-format
@@ -2316,118 +2790,144 @@ msgstr "Napačen odziv iz Domenskega strežnika{ns}."
 #. NAMESERVER:N10_EDNS_RESPONSE_ERROR
 #, perl-brace-format
 msgid ""
-"Expected RCODE but received erroneous response to an EDNS version 1 query. Fetched from the nameservers with "
-"IP addresses {ns_ip_list}"
+"Expected RCODE but received erroneous response to an EDNS version 1 query. "
+"Fetched from the nameservers with IP addresses {ns_ip_list}"
 msgstr ""
-"Pričakovan RCODE, a prejet napačen odziv na EDNS verzija 1 poizvedbo. Podatki pridobljeni iz "
-"\"{ns_ip_list}\"."
+"Pričakovan RCODE, a prejet napačen odziv na EDNS verzija 1 poizvedbo. "
+"Podatki pridobljeni iz \"{ns_ip_list}\"."
 
 #. NAMESERVER:N10_NO_RESPONSE_EDNS1_QUERY
 #, perl-brace-format
-msgid "No response to an EDNS version 1 query. Fetched from the nameservers with IP addresses {ns_ip_list}"
-msgstr "Ni odziva na EDNS verzija 1 poizvedbo. Podatki pridobljeni iz \"{ns_ip_list}\"."
+msgid ""
+"No response to an EDNS version 1 query. Fetched from the nameservers with IP "
+"addresses {ns_ip_list}"
+msgstr ""
+"Ni odziva na EDNS verzija 1 poizvedbo. Podatki pridobljeni iz "
+"\"{ns_ip_list}\"."
 
 #. NAMESERVER:N10_UNEXPECTED_RCODE
 #, perl-brace-format
 msgid ""
-"Erroneous RCODE (\"{rcode}\") in response to an EDNS version 1 query. Fetched from the nameservers with IP "
-"addresses {ns_ip_list}"
+"Erroneous RCODE (\"{rcode}\") in response to an EDNS version 1 query. "
+"Fetched from the nameservers with IP addresses {ns_ip_list}"
 msgstr ""
-"Napačna RCODE (\"{rcode}\") v odgovoru na poizvedbo EDNS verzija 1. Podatki pridobljeni iz \"{ns_ip_list}\"."
+"Napačna RCODE (\"{rcode}\") v odgovoru na poizvedbo EDNS verzija 1. Podatki "
+"pridobljeni iz \"{ns_ip_list}\"."
 
 #. NAMESERVER:N11_N11_NO_EDNS
 #, perl-brace-format
 msgid ""
-"The DNS response, on query with unknown EDNS option-code, does not contain any EDNS from name servers "
-"\"{ns_ip_list}\"."
+"The DNS response, on query with unknown EDNS option-code, does not contain "
+"any EDNS from name servers \"{ns_ip_list}\"."
 msgstr ""
-"Seznam domenskih strežnikov, kjer v DNS odgovoru na poizvedbo z neznano EDNS option-code, ni nobenega EDNS "
-"\"{ns_ip_list}\"."
+"Seznam domenskih strežnikov, kjer v DNS odgovoru na poizvedbo z neznano EDNS "
+"option-code, ni nobenega EDNS \"{ns_ip_list}\"."
 
 #. NAMESERVER:N11_NO_RESPONSE
 #, perl-brace-format
-msgid "There is no response on query with unknown EDNS option-code from name servers \"{ns_ip_list}\"."
-msgstr "Domenski strežniki, ki se ne odzovejo na poizvedbo z neznano EDNS option-code \"{ns_ip_list}\"."
+msgid ""
+"There is no response on query with unknown EDNS option-code from name "
+"servers \"{ns_ip_list}\"."
+msgstr ""
+"Domenski strežniki, ki se ne odzovejo na poizvedbo z neznano EDNS option-"
+"code \"{ns_ip_list}\"."
 
 #. NAMESERVER:N11_RETURNS_UNKNOWN_OPTION_CODE
 #, perl-brace-format
-msgid "The DNS response contains an unknown EDNS option-code. Returned from name servers \"{ns_ip_list}\"."
-msgstr "DNS odgovor vsebuje neznano EDNS option-code. Podatki pridobljeni iz \"{ns_ip_list}\"."
+msgid ""
+"The DNS response contains an unknown EDNS option-code. Returned from name "
+"servers \"{ns_ip_list}\"."
+msgstr ""
+"DNS odgovor vsebuje neznano EDNS option-code. Podatki pridobljeni iz "
+"\"{ns_ip_list}\"."
 
 #. NAMESERVER:N11_UNEXPECTED_ANSWER_SECTION
 #, perl-brace-format
 msgid ""
-"The DNS response, on query with unknown EDNS option-code, does not contain the expected SOA record in the "
-"answer section from name servers \"{ns_ip_list}\"."
+"The DNS response, on query with unknown EDNS option-code, does not contain "
+"the expected SOA record in the answer section from name servers "
+"\"{ns_ip_list}\"."
 msgstr ""
-"Seznam domenskih strežnikov, kjer v DNS odgovoru na poizvedbo z neznano EDNS option-code, ni nobenega "
-"pričakovanega SOA zapisa. \"{ns_ip_list}\"."
+"Seznam domenskih strežnikov, kjer v DNS odgovoru na poizvedbo z neznano EDNS "
+"option-code, ni nobenega pričakovanega SOA zapisa. \"{ns_ip_list}\"."
 
 #. NAMESERVER:N11_UNEXPECTED_RCODE
 #, perl-brace-format
 msgid ""
-"The DNS response, on query with unknown EDNS option-code, has unexpected RCODE name \"{rcode}\" from name "
-"servers \"{ns_ip_list}\"."
+"The DNS response, on query with unknown EDNS option-code, has unexpected "
+"RCODE name \"{rcode}\" from name servers \"{ns_ip_list}\"."
 msgstr ""
-"Seznam domenskih strežnikov, kjer so v DNS odgovoru na poizvedbo z neznano EDNS option-code, nepričakovani "
-"RCODE \"{rcode}\". \"{ns_ip_list}\"."
+"Seznam domenskih strežnikov, kjer so v DNS odgovoru na poizvedbo z neznano "
+"EDNS option-code, nepričakovani RCODE \"{rcode}\". \"{ns_ip_list}\"."
 
 #. NAMESERVER:N11_UNSET_AA
 #, perl-brace-format
 msgid ""
-"The DNS response, on query with unknown EDNS option-code, is unexpectedly not authoritative from name "
-"servers \"{ns_ip_list}\"."
+"The DNS response, on query with unknown EDNS option-code, is unexpectedly "
+"not authoritative from name servers \"{ns_ip_list}\"."
 msgstr ""
-"Seznam domenskih strežnikov, kjer je DNS odgovor na poizvedbo z neznano EDNS option-code, nepričakovano ne "
-"avtoritativen. \"{ns_ip_list}\"."
+"Seznam domenskih strežnikov, kjer je DNS odgovor na poizvedbo z neznano EDNS "
+"option-code, nepričakovano ne avtoritativen. \"{ns_ip_list}\"."
 
 #. NAMESERVER:N15_ERROR_ON_VERSION_QUERY
 #, perl-brace-format
 msgid ""
-"The following name server(s) do not respond or respond with SERVFAIL to software version query "
-"\"{query_name}\". Returned from name servers: \"{ns_list}\""
+"The following name server(s) do not respond or respond with SERVFAIL to "
+"software version query \"{query_name}\". Returned from name servers: "
+"\"{ns_list}\""
 msgstr ""
-"Naslednji domenski strežniki se ne odzivajo ali se odzovejo z SERVFAIL na poizvedbo \"{query_name}\" za "
-"verzijo programske opreme. Podatki pridobljeni iz: \"{ns_list}\""
+"Naslednji domenski strežniki se ne odzivajo ali se odzovejo z SERVFAIL na "
+"poizvedbo \"{query_name}\" za verzijo programske opreme. Podatki pridobljeni "
+"iz: \"{ns_list}\""
 
 #. NAMESERVER:N15_NO_VERSION_REVEALED
 #, perl-brace-format
 msgid ""
-"The following name server(s) do not reveal the software version. Returned from name servers: \"{ns_list}\""
+"The following name server(s) do not reveal the software version. Returned "
+"from name servers: \"{ns_list}\""
 msgstr ""
-"Naslednji domenski strežniki ne razkrijejo verzije programske opreme. Podatki pridobljeni iz: \"{ns_list}\""
+"Naslednji domenski strežniki ne razkrijejo verzije programske opreme. "
+"Podatki pridobljeni iz: \"{ns_list}\""
 
 #. NAMESERVER:N15_SOFTWARE_VERSION
 #, perl-brace-format
 msgid ""
-"The following name server(s) respond to software version query \"{query_name}\" with string \"{string}\". "
-"Returned from name servers: \"{ns_list}\""
+"The following name server(s) respond to software version query "
+"\"{query_name}\" with string \"{string}\". Returned from name servers: "
+"\"{ns_list}\""
 msgstr ""
-"Naslednji domenski strežniki se odzovejo na poizvedbo \"{query_name}\" za verzijo programske opreme z "
-"\"{string}\". Podatki pridobljeni iz: \"{ns_list}\""
+"Naslednji domenski strežniki se odzovejo na poizvedbo \"{query_name}\" za "
+"verzijo programske opreme z \"{string}\". Podatki pridobljeni iz: "
+"\"{ns_list}\""
 
 #. NAMESERVER:N15_WRONG_CLASS
 #, perl-brace-format
 msgid ""
-"The following name server(s) do not return CH class record(s) on CH class query. Returned from name servers: "
-"\"{ns_list}\""
+"The following name server(s) do not return CH class record(s) on CH class "
+"query. Returned from name servers: \"{ns_list}\""
 msgstr ""
-"Naslednji doemnski strežniki ne vrnejo zapisov CH razreda na poizvedbo za zapise CH razreda. Podatki "
-"pridobljeni iz: \"{ns_list}\""
+"Naslednji doemnski strežniki ne vrnejo zapisov CH razreda na poizvedbo za "
+"zapise CH razreda. Podatki pridobljeni iz: \"{ns_list}\""
 
 #. NAMESERVER:QNAME_CASE_INSENSITIVE
 #, perl-brace-format
-msgid "Nameserver {ns} does not preserve original case of the queried name ({domain})."
-msgstr "Domenski strežnik {ns} ni obdržal prvotne velikosti črk domene '{domain}'."
+msgid ""
+"Nameserver {ns} does not preserve original case of the queried name "
+"({domain})."
+msgstr ""
+"Domenski strežnik {ns} ni obdržal prvotne velikosti črk domene '{domain}'."
 
 #. NAMESERVER:QNAME_CASE_SENSITIVE
 #, perl-brace-format
 msgid "Nameserver {ns} preserves original case of queried names ({domain})."
-msgstr "Domenski strežnik {ns} je obdržal prvotno velikost črk domene '{domain}'."
+msgstr ""
+"Domenski strežnik {ns} je obdržal prvotno velikost črk domene '{domain}'."
 
 #. NAMESERVER:SAME_SOURCE_IP
 msgid "All nameservers reply with same IP used to query them."
-msgstr "Vsi domenski strežniki se odzivajo z IP naslovom, ki je bil uporabljen v poizvedbi."
+msgstr ""
+"Vsi domenski strežniki se odzivajo z IP naslovom, ki je bil uporabljen v "
+"poizvedbi."
 
 #. NAMESERVER:UPWARD_REFERRAL
 #, perl-brace-format
@@ -2452,7 +2952,8 @@ msgid "No hyphen ('-') at the start or end of the domain name"
 msgstr "Ni vezaja ('-') na začetku ali koncu domene"
 
 #. SYNTAX:SYNTAX03
-msgid "There must be no double hyphen ('--') in position 3 and 4 of the domain name"
+msgid ""
+"There must be no double hyphen ('--') in position 3 and 4 of the domain name"
 msgstr "Dvojni vezaj ('--') ne sme biti na 3. in 4. mestu v domeni"
 
 #. SYNTAX:SYNTAX04
@@ -2478,23 +2979,26 @@ msgstr "MX mora imeti veljaven hostname"
 #. SYNTAX:DISCOURAGED_DOUBLE_DASH
 #, perl-brace-format
 msgid ""
-"Domain name ({domain}) has a label ({label}) with a double hyphen ('--') in position 3 and 4 (with a prefix "
-"which is not 'xn--')."
+"Domain name ({domain}) has a label ({label}) with a double hyphen ('--') in "
+"position 3 and 4 (with a prefix which is not 'xn--')."
 msgstr ""
-"Domena '{domain}' vsebuje ({label}) z dvojnim vezajem ('--') na 3. in 4. mestu (predpona pa ni 'xn--')."
+"Domena '{domain}' vsebuje ({label}) z dvojnim vezajem ('--') na 3. in 4. "
+"mestu (predpona pa ni 'xn--')."
 
 #. SYNTAX:INITIAL_HYPHEN
 #, perl-brace-format
-msgid "Domain name ({domain}) has a label ({label}) starting with an hyphen ('-')."
+msgid ""
+"Domain name ({domain}) has a label ({label}) starting with an hyphen ('-')."
 msgstr "Domena '{domain}' vsebuje ({label}), ki ima vezaj ('-') na začetku."
 
 #. SYNTAX:MNAME_DISCOURAGED_DOUBLE_DASH
 #, perl-brace-format
 msgid ""
-"SOA MNAME ({domain}) has a label ({label}) with a double hyphen ('--') in position 3 and 4 (with a prefix "
-"which is not 'xn--')."
+"SOA MNAME ({domain}) has a label ({label}) with a double hyphen ('--') in "
+"position 3 and 4 (with a prefix which is not 'xn--')."
 msgstr ""
-"SOA MNAME ({domain}) vsebuje ({label}) z dvojnim vezajem ('--') na 3. in 4. mestu, predpona pa ni 'xn--'."
+"SOA MNAME ({domain}) vsebuje ({label}) z dvojnim vezajem ('--') na 3. in 4. "
+"mestu, predpona pa ni 'xn--'."
 
 #. SYNTAX:MNAME_NON_ALLOWED_CHARS
 #, perl-brace-format
@@ -2514,10 +3018,11 @@ msgstr "SOA MNAME za ({domain}) ima veljavno sintakso."
 #. SYNTAX:MX_DISCOURAGED_DOUBLE_DASH
 #, perl-brace-format
 msgid ""
-"Domain name MX ({domain}) has a label ({label}) with a double hyphen ('--') in position 3 and 4 (with a "
-"prefix which is not 'xn--')."
+"Domain name MX ({domain}) has a label ({label}) with a double hyphen ('--') "
+"in position 3 and 4 (with a prefix which is not 'xn--')."
 msgstr ""
-"MX za ({domain}) vsebuje ({label}), ki ima dvojni vezaj ('--') na 3. in 4. mestu, predpona pa ni 'xn--'."
+"MX za ({domain}) vsebuje ({label}), ki ima dvojni vezaj ('--') na 3. in 4. "
+"mestu, predpona pa ni 'xn--'."
 
 #. SYNTAX:MX_NON_ALLOWED_CHARS
 #, perl-brace-format
@@ -2537,11 +3042,11 @@ msgstr "MX domene ({domain}) ima veljavno sintakso."
 #. SYNTAX:NAMESERVER_DISCOURAGED_DOUBLE_DASH
 #, perl-brace-format
 msgid ""
-"Nameserver ({domain}) has a label ({label}) with a double hyphen ('--') in position 3 and 4 (with a prefix "
-"which is not 'xn--')."
+"Nameserver ({domain}) has a label ({label}) with a double hyphen ('--') in "
+"position 3 and 4 (with a prefix which is not 'xn--')."
 msgstr ""
-"Domenski strežnik ({domain}) vsebuje ({label}), ki ima dvojni vezaj ('--') na 3. in 4. mestu, predpona pa ni "
-"'xn--'."
+"Domenski strežnik ({domain}) vsebuje ({label}), ki ima dvojni vezaj ('--') "
+"na 3. in 4. mestu, predpona pa ni 'xn--'."
 
 #. SYNTAX:NAMESERVER_NON_ALLOWED_CHARS
 #, perl-brace-format
@@ -2551,7 +3056,9 @@ msgstr "Nedovoljeni znaki v imenu domenskega strežnika za ({domain})."
 #. SYNTAX:NAMESERVER_NUMERIC_TLD
 #, perl-brace-format
 msgid "Nameserver ({domain}) within a 'numeric only' TLD ({tld})."
-msgstr "Domenski strežnik za ({domain}) se nahaja znotraj TLD, ki je 'numeric only' ({tld})."
+msgstr ""
+"Domenski strežnik za ({domain}) se nahaja znotraj TLD, ki je 'numeric "
+"only' ({tld})."
 
 #. SYNTAX:NAMESERVER_SYNTAX_OK
 #, perl-brace-format
@@ -2566,9 +3073,11 @@ msgstr "Nedovoljeni znaki v imenu domene '{domain}'."
 #. SYNTAX:NO_DOUBLE_DASH
 #, perl-brace-format
 msgid ""
-"Domain name ({domain}) has no label with a double hyphen ('--') in position 3 and 4 (with a prefix which is "
-"not 'xn--')."
-msgstr "Domena '{domain}' nima dvojnega vezaja ('--') na 3. in 4. mestu (predpona pa ni 'xn--')."
+"Domain name ({domain}) has no label with a double hyphen ('--') in position "
+"3 and 4 (with a prefix which is not 'xn--')."
+msgstr ""
+"Domena '{domain}' nima dvojnega vezaja ('--') na 3. in 4. mestu (predpona pa "
+"ni 'xn--')."
 
 #. SYNTAX:NO_ENDING_HYPHENS
 #, perl-brace-format
@@ -2592,18 +3101,30 @@ msgstr "Domena '{domain}' nima nedovoljenih znakov v imenu."
 
 #. SYNTAX:RNAME_MAIL_DOMAIN_INVALID
 #, perl-brace-format
-msgid "The SOA RNAME mail domain ({domain}) cannot be resolved to a mail server with an IP address."
-msgstr "Domeno ({domain}) v polju SOA RNAME ni možno razrešiti v poštni strežnik z IP naslovom."
+msgid ""
+"The SOA RNAME mail domain ({domain}) cannot be resolved to a mail server "
+"with an IP address."
+msgstr ""
+"Domeno ({domain}) v polju SOA RNAME ni možno razrešiti v poštni strežnik z "
+"IP naslovom."
 
 #. SYNTAX:RNAME_MAIL_DOMAIN_LOCALHOST
 #, perl-brace-format
-msgid "The SOA RNAME mail domain ({domain}) resolved to a mail server with localhost ({localhost}) IP address."
-msgstr "Domena ({domain}) iz SOA RNAME polja se je razrešila v localhost  ({localhost}) IP naslov."
+msgid ""
+"The SOA RNAME mail domain ({domain}) resolved to a mail server with "
+"localhost ({localhost}) IP address."
+msgstr ""
+"Domena ({domain}) iz SOA RNAME polja se je razrešila v localhost  "
+"({localhost}) IP naslov."
 
 #. SYNTAX:RNAME_MAIL_ILLEGAL_CNAME
 #, perl-brace-format
-msgid "The SOA RNAME mail domain ({domain}) refers to an address which is an alias (CNAME)."
-msgstr "Domena ({domain}) iz SOA RNMAME polja se nanaša na naslov, ki je alias (CNAME)."
+msgid ""
+"The SOA RNAME mail domain ({domain}) refers to an address which is an alias "
+"(CNAME)."
+msgstr ""
+"Domena ({domain}) iz SOA RNMAME polja se nanaša na naslov, ki je alias "
+"(CNAME)."
 
 #. SYNTAX:RNAME_MISUSED_AT_SIGN
 #, perl-brace-format
@@ -2627,7 +3148,8 @@ msgstr "SOA RNAME ({rname}) polje je skladno z RFC2822."
 
 #. SYNTAX:TERMINAL_HYPHEN
 #, perl-brace-format
-msgid "Domain name ({domain}) has a label ({label}) ending with a hyphen ('-')."
+msgid ""
+"Domain name ({domain}) has a label ({label}) ending with a hyphen ('-')."
 msgstr "Domena '{domain}' vsebuje ({label}), ki se konča z vezajem '-'."
 
 #. ZONE:ZONE01
@@ -2676,13 +3198,20 @@ msgstr "Validacija politike SPF"
 
 #. ZONE:RETRY_MINIMUM_VALUE_LOWER
 #, perl-brace-format
-msgid "SOA 'retry' value ({retry}) is less than the recommended one ({required_retry})."
-msgstr "SOA 'retry' vrednost ({retry}) je manjša od priporočene ({required_retry})."
+msgid ""
+"SOA 'retry' value ({retry}) is less than the recommended one "
+"({required_retry})."
+msgstr ""
+"SOA 'retry' vrednost ({retry}) je manjša od priporočene ({required_retry})."
 
 #. ZONE:RETRY_MINIMUM_VALUE_OK
 #, perl-brace-format
-msgid "SOA 'retry' value ({retry}) is at least equal to the minimum recommended value ({required_retry})."
-msgstr "SOA 'retry' vrednost ({retry}) je vsaj enaka minimalno priporočeni ({required_retry})."
+msgid ""
+"SOA 'retry' value ({retry}) is at least equal to the minimum recommended "
+"value ({required_retry})."
+msgstr ""
+"SOA 'retry' vrednost ({retry}) je vsaj enaka minimalno priporočeni "
+"({required_retry})."
 
 #. ZONE:MNAME_IS_CNAME
 #, perl-brace-format
@@ -2691,53 +3220,83 @@ msgstr "SOA 'mname' ({mname}) se nanaša na NS, ki je alias (CNAME)."
 
 #. ZONE:MNAME_IS_NOT_CNAME
 #, perl-brace-format
-msgid "SOA 'mname' value ({mname}) refers to a NS which is not an alias (CNAME)."
+msgid ""
+"SOA 'mname' value ({mname}) refers to a NS which is not an alias (CNAME)."
 msgstr "SOA 'mname' ({mname}) se nanaša na NS, ki ni alias (CNAME)."
 
 #. ZONE:REFRESH_MINIMUM_VALUE_LOWER
 #, perl-brace-format
-msgid "SOA 'refresh' value ({refresh}) is less than the recommended one ({required_refresh})."
-msgstr "SOA 'refresh' vrednost ({refresh}) je manjša od priporočene ({required_refresh})."
+msgid ""
+"SOA 'refresh' value ({refresh}) is less than the recommended one "
+"({required_refresh})."
+msgstr ""
+"SOA 'refresh' vrednost ({refresh}) je manjša od priporočene "
+"({required_refresh})."
 
 #. ZONE:REFRESH_MINIMUM_VALUE_OK
 #, perl-brace-format
 msgid ""
-"SOA 'refresh' value ({refresh}) is at least equal to the minimum recommended value ({required_refresh})."
-msgstr "SOA 'refresh' vrednost ({refresh}) je vsaj enaka minimalno priporočeni ({required_refresh})."
+"SOA 'refresh' value ({refresh}) is at least equal to the minimum recommended "
+"value ({required_refresh})."
+msgstr ""
+"SOA 'refresh' vrednost ({refresh}) je vsaj enaka minimalno priporočeni "
+"({required_refresh})."
 
 #. ZONE:EXPIRE_LOWER_THAN_REFRESH
 #, perl-brace-format
-msgid "SOA 'expire' value ({expire}) is lower than the SOA 'refresh' value ({refresh})."
+msgid ""
+"SOA 'expire' value ({expire}) is lower than the SOA 'refresh' value "
+"({refresh})."
 msgstr "SOA 'expire' ({expire}) je manjši od SOA 'refresh' ({refresh})."
 
 #. ZONE:SOA_DEFAULT_TTL_MAXIMUM_VALUE_HIGHER
 #, perl-brace-format
-msgid "SOA 'minimum' value ({minimum}) is higher than the recommended one ({highest_minimum})."
-msgstr "SOA 'minimum' vrednost ({minimum}) je večja od priporočene ({highest_minimum})."
+msgid ""
+"SOA 'minimum' value ({minimum}) is higher than the recommended one "
+"({highest_minimum})."
+msgstr ""
+"SOA 'minimum' vrednost ({minimum}) je večja od priporočene "
+"({highest_minimum})."
 
 #. ZONE:SOA_DEFAULT_TTL_MAXIMUM_VALUE_LOWER
 #, perl-brace-format
-msgid "SOA 'minimum' value ({minimum}) is less than the recommended one ({lowest_minimum})."
-msgstr "SOA 'minimum' vrednost ({minimum}) je manjša od priporočene ({lowest_minimum})."
+msgid ""
+"SOA 'minimum' value ({minimum}) is less than the recommended one "
+"({lowest_minimum})."
+msgstr ""
+"SOA 'minimum' vrednost ({minimum}) je manjša od priporočene "
+"({lowest_minimum})."
 
 #. ZONE:SOA_DEFAULT_TTL_MAXIMUM_VALUE_OK
 #, perl-brace-format
-msgid "SOA 'minimum' value ({minimum}) is between the recommended ones ({lowest_minimum}/{highest_minimum})."
-msgstr "SOA 'minimum' vrednost ({minimum}) je med priporočenimi ({lowest_minimum}/{highest_minimum})."
+msgid ""
+"SOA 'minimum' value ({minimum}) is between the recommended ones "
+"({lowest_minimum}/{highest_minimum})."
+msgstr ""
+"SOA 'minimum' vrednost ({minimum}) je med priporočenimi ({lowest_minimum}/"
+"{highest_minimum})."
 
 #. ZONE:EXPIRE_MINIMUM_VALUE_LOWER
 #, perl-brace-format
-msgid "SOA 'expire' value ({expire}) is less than the recommended one ({required_expire})."
-msgstr "SOA 'expire' vrednost ({expire}) je manjša od priporočene ({required_expire})."
+msgid ""
+"SOA 'expire' value ({expire}) is less than the recommended one "
+"({required_expire})."
+msgstr ""
+"SOA 'expire' vrednost ({expire}) je manjša od priporočene "
+"({required_expire})."
 
 #. ZONE:REFRESH_LOWER_THAN_RETRY
 #, perl-brace-format
-msgid "SOA 'refresh' value ({refresh}) is lower than the SOA 'retry' value ({retry})."
+msgid ""
+"SOA 'refresh' value ({refresh}) is lower than the SOA 'retry' value "
+"({retry})."
 msgstr "SOA 'refresh' ({refresh}) je manjši od SOA 'retry' ({retry})."
 
 #. ZONE:REFRESH_HIGHER_THAN_RETRY
 #, perl-brace-format
-msgid "SOA 'refresh' value ({refresh}) is higher than the SOA 'retry' value ({retry})."
+msgid ""
+"SOA 'refresh' value ({refresh}) is higher than the SOA 'retry' value "
+"({retry})."
 msgstr "SOA 'refresh' ({refresh}) je večji od SOA 'retry' ({retry})."
 
 #. ZONE:MX_RECORD_IS_CNAME
@@ -2750,18 +3309,22 @@ msgstr "MX zapis ne kaže na alias (CNAME)."
 
 #. ZONE:MULTIPLE_SOA
 #, perl-brace-format
-msgid "Nameserver {ns} responds with multiple ({count}) SOA records on SOA queries."
+msgid ""
+"Nameserver {ns} responds with multiple ({count}) SOA records on SOA queries."
 msgstr "Domenski strežnik {ns} je odgovoril z več SOA zapisi ({count})."
 
 #. ZONE:NO_SOA_IN_RESPONSE
 #, perl-brace-format
-msgid "Response from nameserver {ns} on SOA queries does not contain SOA record."
-msgstr "Odgovor domenskega strežnika {ns} na SOA poizvedbo ne vsebuje SOA zapisa."
+msgid ""
+"Response from nameserver {ns} on SOA queries does not contain SOA record."
+msgstr ""
+"Odgovor domenskega strežnika {ns} na SOA poizvedbo ne vsebuje SOA zapisa."
 
 #. ZONE:MNAME_HAS_NO_ADDRESS
 #, perl-brace-format
 msgid "No IP address found for SOA 'mname' nameserver ({mname})."
-msgstr "Ni najdenega IP naslova za domenski strežnik v SOA zapisu 'mname' ({mname})."
+msgstr ""
+"Ni najdenega IP naslova za domenski strežnik v SOA zapisu 'mname' ({mname})."
 
 #. ZONE:ONE_SOA
 msgid "A unique SOA record is returned by all nameservers of the zone."
@@ -2770,45 +3333,62 @@ msgstr "Vsi Domenski strežniki so vrnili unikaten SOA zapis."
 #. ZONE:EXPIRE_MINIMUM_VALUE_OK
 #, perl-brace-format
 msgid ""
-"SOA 'expire' value ({expire}) is higher than the minimum recommended value ({required_expire}) and not lower "
-"than the 'refresh' value ({refresh})."
+"SOA 'expire' value ({expire}) is higher than the minimum recommended value "
+"({required_expire}) and not lower than the 'refresh' value ({refresh})."
 msgstr ""
-"SOA 'expire' vrednost ({expire}) je višja od priporočene ({required_expire}) in ni nižja od 'refresh' "
-"vrednosti ({refresh})."
+"SOA 'expire' vrednost ({expire}) je višja od priporočene ({required_expire}) "
+"in ni nižja od 'refresh' vrednosti ({refresh})."
 
 #. ZONE:WRONG_SOA
 #, perl-brace-format
-msgid "Nameserver {ns} responds with a wrong owner name ({owner} instead of {name}) on SOA queries."
-msgstr "Domenski strežnik {ns} v odgovoru na SOA poizvedbe navaja napačno domeno ({owner}, namesto {name})."
+msgid ""
+"Nameserver {ns} responds with a wrong owner name ({owner} instead of {name}) "
+"on SOA queries."
+msgstr ""
+"Domenski strežnik {ns} v odgovoru na SOA poizvedbe navaja napačno domeno "
+"({owner}, namesto {name})."
 
 #. ZONE:Z01_MNAME_HAS_LOCALHOST_ADDR
 #, perl-brace-format
-msgid "SOA MNAME name server \"{nsname}\" resolves to a localhost IP address ({ns_ip})."
-msgstr "SOA MNAME domenski strežnik \"{nsname}\" se razreši v localhost IP naslov ({ns_ip})."
+msgid ""
+"SOA MNAME name server \"{nsname}\" resolves to a localhost IP address "
+"({ns_ip})."
+msgstr ""
+"SOA MNAME domenski strežnik \"{nsname}\" se razreši v localhost IP naslov "
+"({ns_ip})."
 
 #. ZONE:Z01_MNAME_IS_DOT
 #, perl-brace-format
 msgid ""
-"SOA MNAME is specified as \".\" which usually means \"no server\". Fetched from name servers "
-"\"{ns_ip_list}\"."
+"SOA MNAME is specified as \".\" which usually means \"no server\". Fetched "
+"from name servers \"{ns_ip_list}\"."
 msgstr ""
-"SOA MNAME je določen kot \".\", kar ponavadi pomeni brez strežnika. Podatki pridobljeni iz \"{ns_ip_list}\"."
+"SOA MNAME je določen kot \".\", kar ponavadi pomeni brez strežnika. Podatki "
+"pridobljeni iz \"{ns_ip_list}\"."
 
 #. ZONE:Z01_MNAME_IS_LOCALHOST
 #, perl-brace-format
-msgid "SOA MNAME name server is \"localhost\", which is invalid. Fetched from name servers \"{ns_ip_list}\"."
+msgid ""
+"SOA MNAME name server is \"localhost\", which is invalid. Fetched from name "
+"servers \"{ns_ip_list}\"."
 msgstr ""
-"SOA MNAME domenski strežnik je \"localhost\", kar ni veljavno. Podatki pridobljeni iz \"{ns_ip_list}\"."
+"SOA MNAME domenski strežnik je \"localhost\", kar ni veljavno. Podatki "
+"pridobljeni iz \"{ns_ip_list}\"."
 
 #. ZONE:Z01_MNAME_IS_MASTER
 #, perl-brace-format
 msgid "SOA MNAME name server(s) \"{ns_list}\" appears to be master."
-msgstr "SOA MNAME domenski strežniki \"{ns_list}\" so videti kot master strežniki."
+msgstr ""
+"SOA MNAME domenski strežniki \"{ns_list}\" so videti kot master strežniki."
 
 #. ZONE:Z01_MNAME_MISSING_SOA_RECORD
 #, perl-brace-format
-msgid "SOA MNAME name server \"{ns}\" responds to an SOA query with no SOA records in the answer section."
-msgstr "SOA MNAME domenski strežnik \"{ns}\" odgovarja na SOA poizvedbe brez SOA zapisa v odgovoru."
+msgid ""
+"SOA MNAME name server \"{ns}\" responds to an SOA query with no SOA records "
+"in the answer section."
+msgstr ""
+"SOA MNAME domenski strežnik \"{ns}\" odgovarja na SOA poizvedbe brez SOA "
+"zapisa v odgovoru."
 
 #. ZONE:Z01_MNAME_NO_RESPONSE
 #, perl-brace-format
@@ -2822,27 +3402,36 @@ msgstr "SOA MNAME domenski strežnik \"{ns}\" ni avtoritativen za cono."
 
 #. ZONE:Z01_MNAME_NOT_IN_NS_LIST
 #, perl-brace-format
-msgid "SOA MNAME name server \"{nsname}\" is not listed as NS record for the zone."
-msgstr "SOA MNAME domenski strežnik ({nsname}) ni naveden kot NS zapis za cono."
+msgid ""
+"SOA MNAME name server \"{nsname}\" is not listed as NS record for the zone."
+msgstr ""
+"SOA MNAME domenski strežnik ({nsname}) ni naveden kot NS zapis za cono."
 
 #. ZONE:Z01_MNAME_NOT_MASTER
 #, perl-brace-format
 msgid ""
-"SOA MNAME name server(s) \"{ns_list}\" do not have the highest SOA SERIAL (expected \"{soaserial}\" but got "
-"\"{soaserial_list}\")"
+"SOA MNAME name server(s) \"{ns_list}\" do not have the highest SOA SERIAL "
+"(expected \"{soaserial}\" but got \"{soaserial_list}\")"
 msgstr ""
-"SOA MNAME domenski strežnik(i) \"{ns_list}\" nima(jo) najvišje SOA serijske številke (pričakovana serijska: "
-"\"{soaserial}\"; serijska v odgovoru: \"{soaserial_list}\")."
+"SOA MNAME domenski strežnik(i) \"{ns_list}\" nima(jo) najvišje SOA serijske "
+"številke (pričakovana serijska: \"{soaserial}\"; serijska v odgovoru: "
+"\"{soaserial_list}\")."
 
 #. ZONE:Z01_MNAME_NOT_RESOLVE
 #, perl-brace-format
-msgid "SOA MNAME name server \"{nsname}\" cannot be resolved into an IP address."
-msgstr "SOA MNAME domenskega strežnika \"{nsname}\" se ne da razrešiti v IP naslov."
+msgid ""
+"SOA MNAME name server \"{nsname}\" cannot be resolved into an IP address."
+msgstr ""
+"SOA MNAME domenskega strežnika \"{nsname}\" se ne da razrešiti v IP naslov."
 
 #. ZONE:Z01_MNAME_UNEXPECTED_RCODE
 #, perl-brace-format
-msgid "SOA MNAME name server \"{ns}\" gives unexpected RCODE name (\"{rcode}\") in response to an SOA query."
-msgstr "SOA MNAME domenski strežnik \"{ns}\" vrača nepričakovan RCODE ({rcode}) v odgovoru na SOA poizvedbo."
+msgid ""
+"SOA MNAME name server \"{ns}\" gives unexpected RCODE name (\"{rcode}\") in "
+"response to an SOA query."
+msgstr ""
+"SOA MNAME domenski strežnik \"{ns}\" vrača nepričakovan RCODE ({rcode}) v "
+"odgovoru na SOA poizvedbo."
 
 #. ZONE:Z09_INCONSISTENT_MX
 msgid "Some name servers return an MX RRset while others return none."
@@ -2858,8 +3447,12 @@ msgstr "Podrejena cona nima cilja za pošto (ni MX)."
 
 #. ZONE:Z09_MX_DATA
 #, perl-brace-format
-msgid "Mail targets in the MX RRset \"{mailtarget_list}\" returned from name servers \"{ns_ip_list}\"."
-msgstr "Poštni strežniki v MX RRsetu \"{mailtarget_list}\" na domenskih strežnikih {ns_ip_list}."
+msgid ""
+"Mail targets in the MX RRset \"{mailtarget_list}\" returned from name "
+"servers \"{ns_ip_list}\"."
+msgstr ""
+"Poštni strežniki v MX RRsetu \"{mailtarget_list}\" na domenskih strežnikih "
+"{ns_ip_list}."
 
 #. ZONE:Z09_MX_FOUND
 #, perl-brace-format
@@ -2868,8 +3461,11 @@ msgstr "MX RRset so vrnili domenski strežniki \"{ns_ip_list}\"."
 
 #. ZONE:Z09_NON_AUTH_MX_RESPONSE
 #, perl-brace-format
-msgid "Non-authoritative response on MX query from name servers \"{ns_ip_list}\"."
-msgstr "Domenski strežniki \"{ns_ip_list}\" so dali neavtoritativen odgovor na MX poizvedbo."
+msgid ""
+"Non-authoritative response on MX query from name servers \"{ns_ip_list}\"."
+msgstr ""
+"Domenski strežniki \"{ns_ip_list}\" so dali neavtoritativen odgovor na MX "
+"poizvedbo."
 
 #. ZONE:Z09_NO_MX_FOUND
 #, perl-brace-format
@@ -2899,21 +3495,26 @@ msgstr "Cona je TLD in ima nepričakovan MX RRset (non-Null MX)."
 
 #. ZONE:Z09_UNEXPECTED_RCODE_MX
 #, perl-brace-format
-msgid "Unexpected RCODE value ({rcode}) on the MX query from name servers \"{ns_ip_list}\"."
-msgstr "Nepričakovana RCODE vrednost ({rcode}) pri MX poizvedbi na \"{ns_ip_list}\"."
+msgid ""
+"Unexpected RCODE value ({rcode}) on the MX query from name servers "
+"\"{ns_ip_list}\"."
+msgstr ""
+"Nepričakovana RCODE vrednost ({rcode}) pri MX poizvedbi na \"{ns_ip_list}\"."
 
 #. ZONE:Z11_INCONSISTENT_SPF_POLICIES
-msgid "One or more name servers do not publish the same SPF policy as the others."
-msgstr "Eden ali več domenskih strežnikov ne objavlja enake politike SPF, kot ostali."
+msgid ""
+"One or more name servers do not publish the same SPF policy as the others."
+msgstr ""
+"Eden ali več domenskih strežnikov ne objavlja enake politike SPF, kot ostali."
 
 #. ZONE:Z11_DIFFERENT_SPF_POLICIES_FOUND
 #, perl-brace-format
 msgid ""
-"The following name servers returned the same SPF policy, but other name servers returned a different policy. "
-"Name servers: {ns_ip_list}."
+"The following name servers returned the same SPF policy, but other name "
+"servers returned a different policy. Name servers: {ns_ip_list}."
 msgstr ""
-"Naslednji domenski strežniki ({ns_ip_list}) so vrnili eno politiko SPF, ampak ostali pa so odgovorili z "
-"drugačno."
+"Naslednji domenski strežniki ({ns_ip_list}) so vrnili eno politiko SPF, "
+"ampak ostali pa so odgovorili z drugačno."
 
 #. ZONE:Z11_NO_SPF_FOUND
 #, perl-brace-format
@@ -2922,14 +3523,21 @@ msgstr "Za {domain} ni bila najdena nobena politika SPF."
 
 #. ZONE:Z11_SPF1_MULTIPLE_RECORDS
 #, perl-brace-format
-msgid "The following name servers returned more than one SPF policy. Name servers: {ns_ip_list}."
-msgstr "Naslednji domenski strežniki ({ns_ip_list}) so vrnili več kot eno politiko SPF."
+msgid ""
+"The following name servers returned more than one SPF policy. Name servers: "
+"{ns_ip_list}."
+msgstr ""
+"Naslednji domenski strežniki ({ns_ip_list}) so vrnili več kot eno politiko "
+"SPF."
 
 #. ZONE:Z11_SPF1_SYNTAX_ERROR
 #, perl-brace-format
 msgid ""
-"The SPF policy of {domain} has a syntax error. Policy retrieved from the following nameservers: {ns_ip_list}."
-msgstr "Politika SPF za {domain} ima sintaktično napako. Politika pridobljena iz {ns_ip_list}."
+"The SPF policy of {domain} has a syntax error. Policy retrieved from the "
+"following nameservers: {ns_ip_list}."
+msgstr ""
+"Politika SPF za {domain} ima sintaktično napako. Politika pridobljena iz "
+"{ns_ip_list}."
 
 #. ZONE:Z11_SPF1_SYNTAX_OK
 #, perl-brace-format
@@ -2937,8 +3545,12 @@ msgid "The SPF policy of {domain} has correct syntax."
 msgstr "Politika SPF za {domain} ima pravilno sintakso."
 
 #. ZONE:Z11_UNABLE_TO_CHECK_FOR_SPF
-msgid "None of the zone’s name servers responded with an authoritative response to queries for SPF policies."
-msgstr "Nobeden od strežnikov za domeno ne odgovori z avtoritativnim odgovorom na poizvedbe za politike SPF."
+msgid ""
+"None of the zone’s name servers responded with an authoritative response to "
+"queries for SPF policies."
+msgstr ""
+"Nobeden od strežnikov za domeno ne odgovori z avtoritativnim odgovorom na "
+"poizvedbe za politike SPF."
 
 #. SYSTEM:CANNOT_CONTINUE
 #, perl-brace-format
@@ -2962,8 +3574,11 @@ msgstr "Logger callback se je zaprl z napako: {exception}."
 
 #. SYSTEM:LOOKUP_ERROR
 #, perl-brace-format
-msgid "DNS query to {ns} for {domain}/{type}/{class} failed with error: {message}"
-msgstr "DNS poizvedba za {domain}/{type}/{class} na domenskem strežniku {ns} je bila neuspešna: {message}."
+msgid ""
+"DNS query to {ns} for {domain}/{type}/{class} failed with error: {message}"
+msgstr ""
+"DNS poizvedba za {domain}/{type}/{class} na domenskem strežniku {ns} je bila "
+"neuspešna: {message}."
 
 #. SYSTEM:MODULE_ERROR
 #, perl-brace-format
@@ -2991,100 +3606,39 @@ msgstr "Zahteva za izvedno neznane metode {testcase} v modulu {module}."
 
 #. SYSTEM:UNKNOWN_MODULE
 #, perl-brace-format
-msgid "Request to run {testcase} in unknown module {module}. Known modules: {module_list}."
-msgstr "Zahteva se {testcase} v neznanem modulu {module}. Znani moduli: {module_list}."
+msgid ""
+"Request to run {testcase} in unknown module {module}. Known modules: "
+"{module_list}."
+msgstr ""
+"Zahteva se {testcase} v neznanem modulu {module}. Znani moduli: "
+"{module_list}."
 
 #. SYSTEM:FAKE_DELEGATION_TO_SELF
 #, perl-brace-format
-msgid "Name server {ns} not adding fake delegation for domain {domain} to itself."
-msgstr "Domenski strežnik {ns} ni dodal lažne delegacije za '{domain}' samemu sebi."
+msgid ""
+"Name server {ns} not adding fake delegation for domain {domain} to itself."
+msgstr ""
+"Domenski strežnik {ns} ni dodal lažne delegacije za '{domain}' samemu sebi."
 
 #. SYSTEM:FAKE_DELEGATION_IN_ZONE_NO_IP
 #, perl-brace-format
 msgid ""
-"The fake delegation of domain {domain} includes an in-zone name server {nsname} without mandatory glue "
-"(without IP address)."
+"The fake delegation of domain {domain} includes an in-zone name server "
+"{nsname} without mandatory glue (without IP address)."
 msgstr ""
-"Simulirana delegacija {domain} vključuje domenski strežnik znotraj domene {nsname}, ki nima obveznega lepila "
-"(brez IP naslova)."
+"Simulirana delegacija {domain} vključuje domenski strežnik znotraj domene "
+"{nsname}, ki nima obveznega lepila (brez IP naslova)."
 
 #. SYSTEM:FAKE_DELEGATION_NO_IP
 #, perl-brace-format
 msgid ""
-"The fake delegation of domain {domain} includes a name server {nsname} that cannot be resolved to any IP "
-"address."
+"The fake delegation of domain {domain} includes a name server {nsname} that "
+"cannot be resolved to any IP address."
 msgstr ""
-"Simulirana delegacija za '{domain}' vsebuje domenski strežnik {nsname}, ki se ga ne da razrešiti v IP naslov."
+"Simulirana delegacija za '{domain}' vsebuje domenski strežnik {nsname}, ki "
+"se ga ne da razrešiti v IP naslov."
 
 #. SYSTEM:PACKET_BIG
 #, perl-brace-format
 msgid "Big packet size ({size}) (try with \"{command}\")."
 msgstr "Velik paket ({size} bajtov) (poskusi z ukazom \"{command}\")."
-
-#~ msgid "Domain name must be valid"
-#~ msgstr "Ime domene mora biti veljavno."
-
-#~ msgid "\"{domain}\" does not exist as it is not delegated."
-#~ msgstr "\"{domain}\" ne obstaja, ker ni delegirana."
-
-#~ msgid ""
-#~ "Name servers for parent domain \"{domain_parent}\" give an incorrect response on SOA query for "
-#~ "\"{domain_child}\". Returned from name servers \"{ns_ip_list}\"."
-#~ msgstr ""
-#~ "Domenski strežniki starševske domene \"{domain_parent}\" dajo napačen odgovor na SOA poizvedbo za "
-#~ "\"{domain_child}\". Podatki pridobljeni od \"{ns_ip_list}\"."
-
-#~ msgid "Check for too many NSEC3 iterations"
-#~ msgstr "Preverjanje prevelikega števila iteracij NSEC3"
-
-#~ msgid ""
-#~ "The name \"{domain}\" of RR type \"{rrtype}\" is signed by RRSIG, but the signature or signatures cannot "
-#~ "be verified. Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
-#~ msgstr ""
-#~ "Zapis {rrtype} za domeno {domain} je podpisan, toda podpisa ni mogoče preveriti. Podatki pridobljeni iz "
-#~ "\"{ns_ip_list}\"."
-
-#~ msgid ""
-#~ "NSEC or NSEC3 is expected but is missing. Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
-#~ msgstr ""
-#~ "Pričakovani NSEC in NSEC3 zapisi v odgovoru, toda manjkajo. Podatki pridobljeni iz \"{ns_ip_list}\"."
-
-#~ msgid ""
-#~ "A non-existent name is not correctly covered by the NSEC records. Fetched from the nameservers with IP "
-#~ "addresses \"{ns_ip_list}\"."
-#~ msgstr "Neobstoječa domena ni pravilno zajeta v NSEC zapisu. Podatki pridobljeni iz \"{ns_ip_list}\"."
-
-#~ msgid ""
-#~ "A non-existent name is not correctly covered by the NSEC3 records. Fetched from the nameservers with IP "
-#~ "addresses \"{ns_ip_list}\"."
-#~ msgstr "Neobstoječa domena ni pravilno zajeta v NSEC3 zapisu. Podatki pridobljeni iz \"{ns_ip_list}\"."
-
-#~ msgid ""
-#~ "The name \"{domain}\" of RR type \"{rrtype}\" in the answer section of the response is not signed by any "
-#~ "RRSIG. Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
-#~ msgstr ""
-#~ "Zapis \"{rrtype}\" za \"{domain}\" ni podpisan z nobenim RRSIG. Podatki pridobljeni iz \"{ns_ip_list}\"."
-
-#~ msgid "The number of NSEC3 iterations is {count}, which is OK."
-#~ msgstr "Število \"NSEC3\" iteracij je {count}, kar je v redu."
-
-#~ msgid "The number of NSEC3 iterations is {count}, which is on the high side."
-#~ msgstr "Število \"NSEC3\" iteracij je {count}, kar je razmeroma visoko."
-
-#~ msgid "No DNSKEYs were returned."
-#~ msgstr "Ni bilo DNSKEY zapisov."
-
-#~ msgid "{server} returned no NSEC3PARAM records."
-#~ msgstr "{server} ni vrnil \"NSEC3PARAM\" zapise."
-
-#~ msgid "The number of NSEC3 iterations is {count}, which is too high for key length {keylength}."
-#~ msgstr "Število \"NSEC3\" iteracij je {count}, kar je preveč za ključ dolžine {keylength}."
-
-#~ msgid "Test for unknown version with unknown OPTION-CODE"
-#~ msgstr "Test za neznane verzije z neznano OPTION-CODE"
-
-#~ msgid "Followed a fake delegation."
-#~ msgstr "Sledil Fake delegaciji."
-
-#~ msgid "Added a fake delegation for domain {domain} to name server {ns}."
-#~ msgstr "Dodana simulirana delegacija za {domain} na domenski strežnik {ns}."
