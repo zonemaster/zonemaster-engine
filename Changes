@@ -10,15 +10,13 @@ v7.1.0 2025-03-04 (part of Zonemaster v2024.2.1 release)
 - Adds translation to Slovenian language (#1385, #1435)
 
  [Fixes]
-- Updates translation to Spanish language (#1417)
+- Updates translations (#1416, #1417, #1430)
 - Corrects how EDNS buffer size is set through 'edns_details' (#1429)
-- Updates translation to French language (#1430)
-- Corrects how Test Cases uses returned values from some TestMethodsV2
+- Corrects how Test Cases use returned values from some TestMethodsV2
   methods (#1427)
 - Updates implementation of test case DNSSEC10 (#1415)
 - Updates the name server blacklisting mechanism (#1423)
 - Fixes an infinite recursion bug when NS record points to CNAME (#1422)
-- Updates translation to Swedish language (#1416)
 
 
 v7.0.0 2024-12-09 (part of Zonemaster v2024.2 release)
