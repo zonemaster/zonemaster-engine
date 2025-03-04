@@ -129,6 +129,10 @@ our %EXPORT_TAGS = (
 
 =item * C<$ALGO_STATUS_NOT_ZONE_SIGN>
 
+=item * C<$BLACKLISTING_ENABLED>
+
+A boolean, used to enable the name server blacklisting mechanism.
+
 =item * C<$CNAME_MAX_CHAIN_LENGTH>
 
 An integer, used to define the maximum length of a CNAME chain when doing consecutive recursive lookups.
