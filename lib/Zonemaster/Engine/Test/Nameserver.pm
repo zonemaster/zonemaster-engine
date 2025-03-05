@@ -673,7 +673,7 @@ sub nameserver01 {
         my $has_seen_ra    = 0;
         for my $nonexistent_name ( @NONEXISTENT_NAMES ) {
 
-            my $p = $ns->query( $nonexistent_name, q{A}, { blacklisting_disabled => 1 } );
+            my $p = $ns->query( $nonexistent_name, q{A} );
             if ( !$p ) {
                 push @results,
                   _emit_log(
@@ -1118,7 +1118,7 @@ sub nameserver07 {
 
             next if $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short };
 
-            my $p = $local_ns->query( q{.}, q{NS}, { blacklisting_disabled => 1 } );
+            my $p = $local_ns->query( q{.}, q{NS} );
             if ( $p ) {
                 my @ns = $p->get_records( q{NS}, q{authority} );
 
@@ -1732,7 +1732,7 @@ sub nameserver15 {
         $sending_version_query{$ns} = 1;
 
         foreach my $query_name ( q{version.bind}, q{version.server} ) {
-            my $p_txt = $ns->query( $query_name, q{TXT}, { class => q{CH}, blacklisting_disabled => 1 } );
+            my $p_txt = $ns->query( $query_name, q{TXT}, { class => q{CH} } );
 
             if ( not $p_txt or $p_txt->rcode eq q{SERVFAIL} ) {
                 push @{ $error_on_version_query{$query_name} }, $ns;

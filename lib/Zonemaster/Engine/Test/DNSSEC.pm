@@ -3145,26 +3145,28 @@ sub dnssec10 {
     my ( @nsec_response_error, @nsec3param_response_error );
     my ( @with_dnskey, @without_dnskey );
 
-    my @nss = Zonemaster::Engine::TestMethodsV2->get_del_ns_names_and_ips( $zone ) ?
-                Zonemaster::Engine::TestMethodsV2->get_zone_ns_names_and_ips( $zone ) ?
-                    @{ Zonemaster::Engine::TestMethodsV2->get_zone_ns_names_and_ips( $zone ), Zonemaster::Engine::TestMethodsV2->get_del_ns_names_and_ips( $zone ) }
-                : @{ Zonemaster::Engine::TestMethodsV2->get_del_ns_names_and_ips( $zone ) }
-              : ();
+    my @nss = grep { $_->isa('Zonemaster::Engine::Nameserver') } (
+                @{ Zonemaster::Engine::TestMethodsV2->get_del_ns_names_and_ips( $zone ) // [] },
+                @{ Zonemaster::Engine::TestMethodsV2->get_zone_ns_names_and_ips( $zone ) // [] }
+              );
+    my @ignored_nss;
 
     my %ip_already_processed;
     my $testing_time = time;
 
-    for my $ns ( sort @nss ) {
+    for my $ns ( @nss ) {
         next if exists $ip_already_processed{$ns->address->short};
         $ip_already_processed{$ns->address->short} = 1;
 
         if ( _ip_disabled_message( \@results, $ns, @query_types ) ) {
+            push @ignored_nss, $ns;
             next;
         }
 
         my $dnskey_p = $ns->query( $zone->name, $type_dnskey, { dnssec => 1 } );
 
         if ( not $dnskey_p or $dnskey_p->rcode ne q{NOERROR} or not $dnskey_p->aa ) {
+            push @ignored_nss, $ns;
             next;
         }
 
@@ -3177,7 +3179,7 @@ sub dnssec10 {
 
         push @with_dnskey, $ns;
 
-        my $nsec_p = $ns->query( $zone->name, $type_nsec, { dnssec => 1, blacklisting_disabled => 1 } );
+        my $nsec_p = $ns->query( $zone->name, $type_nsec, { dnssec => 1 } );
 
         if ( not $nsec_p or $nsec_p->rcode ne q{NOERROR} or not $nsec_p->aa ) {
             push @nsec_response_error, $ns;
@@ -3282,7 +3284,7 @@ sub dnssec10 {
             }
         }
 
-        my $nsec3param_p = $ns->query( $zone->name, $type_nsec3param, { dnssec => 1, blacklisting_disabled => 1 } );
+        my $nsec3param_p = $ns->query( $zone->name, $type_nsec3param, { dnssec => 1 } );
 
         if ( not $nsec3param_p or $nsec3param_p->rcode ne q{NOERROR} or not $nsec3param_p->aa ) {
             push @nsec3param_response_error, $ns;
@@ -3786,7 +3788,7 @@ sub dnssec10 {
           );
     }
 
-    $lc = List::Compare->new( [ @nss ], [ @without_dnskey, @nsec_in_answer, @nsec3param_nsec_nodata, @nsec3param_in_answer, @nsec_nsec3_nodata ] );
+    $lc = List::Compare->new( [ @nss ], [ @ignored_nss, @without_dnskey, @nsec_in_answer, @nsec3param_nsec_nodata, @nsec3param_in_answer, @nsec_nsec3_nodata ] );
     @first = $lc->get_unique;
 
     if ( @first ) {

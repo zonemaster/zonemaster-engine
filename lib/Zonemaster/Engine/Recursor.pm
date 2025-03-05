@@ -245,7 +245,7 @@ sub _resolve_cname {
     }
 
     # CNAME target has already been followed (outer loop); no need to recurse
-    if ( $state->{tseen}{lc( $target )}  ) {
+    if ( exists $state->{in_progress}{lc( $target )}{$type} ) {
         Zonemaster::Engine->logger->add( CNAME_LOOP_OUTER => { name => $name, target => $target, targets_seen => join( ';', keys %{ $state->{tseen} } ) } );
         return ( undef, $state );
     }
@@ -263,7 +263,7 @@ sub _resolve_cname {
     unless ( $name->is_in_bailiwick( $target ) ) {
         Zonemaster::Engine->logger->add( CNAME_FOLLOWED_OUT_OF_ZONE => { name => $name, target => $target } );
         ( $p, $state ) = $class->_recurse( $target, $type, $dns_class,
-            { ns => [ root_servers() ], count => 0, common => 0, seen => {}, tseen => $state->{tseen}, tcount => $state->{tcount}, glue => {} });
+            { ns => [ root_servers() ], count => 0, common => 0, seen => {}, tseen => $state->{tseen}, tcount => $state->{tcount}, glue => {}, in_progress => $state->{in_progress} });
     }
     else {
         # What do do here?

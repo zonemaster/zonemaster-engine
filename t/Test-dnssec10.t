@@ -112,6 +112,14 @@ my %subtests = (
         [],
         [],
     ],
+    'BAD-SERVERS-BUT-GOOD-NSEC-1' => [
+        1,
+        q(bad-servers-but-good-nsec-1.dnssec10.xa),
+        [ qw( DS10_HAS_NSEC ) ],
+        undef,
+        [],
+        [],
+    ],
     'ERR-MULT-NSEC-1' => [
         1,
         q(err-mult-nsec-1.dnssec10.xa),

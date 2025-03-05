@@ -421,7 +421,7 @@ sub _query {
 
     my $before = time();
     my $res;
-    if ( $BLACKLISTING_ENABLED and $self->blacklisted->{ $flags{usevc} }{ $flags{dnssec} } ) {
+    if ( $BLACKLISTING_ENABLED and $self->blacklisted->{ $flags{usevc} } ) {
         Zonemaster::Engine->logger->add(
             IS_BLACKLISTED => {
                 message => "Server transport has been blacklisted due to previous failure",
@@ -430,7 +430,8 @@ sub _query {
                 type    => $type,
                 class   => $href->{class},
                 proto   => $flags{usevc} ? q{TCP} : q{UDP},
-                dnssec  => $flags{dnssec}
+                dnssec  => $flags{dnssec},
+                edns_size => $flags{q{edns_size}}
             }
         );
     }
@@ -439,29 +440,23 @@ sub _query {
             my $pkt = Zonemaster::LDNS::Packet->new("$name", $type, $href->{class} );
             $pkt->set_edns_present();
 
+            $pkt->do($flags{q{dnssec}});
+            $pkt->edns_size($flags{q{edns_size}});
+
             if ( exists $href->{edns_details}{version} ) {
                 $pkt->edns_version($href->{edns_details}{version});
             }
-    	    if ( exists $href->{edns_details}{z} ) {
+            if ( exists $href->{edns_details}{z} ) {
                 $pkt->edns_z($href->{edns_details}{z});
             }
-    	    if ( exists $href->{edns_details}{do} ) {
-                $pkt->do($href->{edns_details}{do});
-            }
-            elsif ( $flags{q{dnssec}} ) {
-                $pkt->do($flags{q{dnssec}});
-            }
-    	    if ( exists $href->{edns_details}{size} ) {
-                $pkt->edns_size($href->{edns_details}{size});
-            }
-    	    if ( exists $href->{edns_details}{rcode} ) {
+            if ( exists $href->{edns_details}{rcode} ) {
                 $pkt->edns_rcode($href->{edns_details}{rcode});
             }
             if ( exists $href->{edns_details}{data} ) {
                 $pkt->edns_data($href->{edns_details}{data});
             }
 
-    	    $res = eval { $self->dns->query_with_pkt( $pkt ) };
+            $res = eval { $self->dns->query_with_pkt( $pkt ) };
         }
         else {
             $res = eval { $self->dns->query( "$name", $type, $href->{class} ) };
@@ -470,15 +465,15 @@ sub _query {
         if ( $@ ) {
             my $msg = "$@";
             my $trailing_info = " at ".__FILE__;
+
             chomp( $msg );
             $msg =~ s/$trailing_info.*/\./;
+
             Zonemaster::Engine->logger->add( LOOKUP_ERROR =>
                   { message => $msg, ns => "$self", domain => "$name", type => $type, class => $href->{class} } );
-            if ( not $href->{q{blacklisting_disabled}} ) {
-                $self->blacklisted->{ $flags{usevc} }{ $flags{dnssec} } = 1;
-                if ( !$flags{dnssec} ) {
-                    $self->blacklisted->{ $flags{usevc} }{ !$flags{dnssec} } = 1;
-                }
+
+            if ( not $href->{q{blacklisting_disabled}} and $type eq q{SOA} and $flags{q{edns_size}} == 0 ) {
+                $self->blacklisted->{ $flags{usevc} } = 1;
             }
         }
     }
@@ -733,6 +728,13 @@ A reference to a L<Zonemaster::Engine::Nameserver::Cache> object holding the cac
 
 A reference to a list with elapsed time values for the queries made through this nameserver.
 
+=item blacklisted
+
+A reference to a hash used to prevent sending subsequent queries to the name server after specific queries have failed.
+
+The mechanism will only trigger on no response from non-EDNS SOA queries and is protocol dependent (i.e. TCP/UDP). It can be disabled
+on a per query basis with L<blacklisting_disabled>, or globally with L<Zonemaster::Engine::Constants/$BLACKLISTING_ENABLED>.
+
 =back
 
 =head1 CLASS METHODS
@@ -819,7 +821,7 @@ If set to true, incoming response packets with the TC flag set fall back to EDNS
 
 =item blacklisting_disabled
 
-If set to true, prevents a server to be black-listed on a query in case there is no answer OR rcode is REFUSED.
+If set to true, prevents a name server from being blacklisted.
 
 =item edns_size
 
