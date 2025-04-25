@@ -128,10 +128,10 @@ my %subtests = (
                                     q(good-undel-7.basic02.xa),
                                     [ qw(B02_AUTH_RESPONSE_SOA) ],
                                     undef,
-                                    [ qw(ns3.good-undel-7.basic02.xa/127.12.2.33
-                                         ns3.good-undel-7.basic02.xa/fda1:b2:c3:0:127:12:2:33
-                                         ns4.good-undel-7.basic02.xa/127.12.2.34
-                                         ns5.good-undel-7.basic02.xa/fda1:b2:c3:0:127:12:2:34) ],
+                                    [ qw(ns3.good-undel-7.basic02.xb/127.12.2.33
+                                         ns3.good-undel-7.basic02.xb/fda1:b2:c3:0:127:12:2:33
+                                         ns4.good-undel-7.basic02.xb/127.12.2.34
+                                         ns5.good-undel-7.basic02.xb/fda1:b2:c3:0:127:12:2:34) ],
                                     [],
                                   ],
                 'GOOD-UNDEL-8' => [ 1,
