@@ -47,6 +47,11 @@ Zonemaster::Engine::Recursor->add_fake_addresses( '.',
 # - One of MANDATORY_MESSAGE_TAGS and FORBIDDEN_MESSAGE_TAGS may be undefined.
 #   See documentation for the meaning of that.
 
+# The scenario below is defined in a separate unit test file to prevent caching
+# of no response from the ASN lookup zone (intentional) to give negative side
+# effects on other scenarios. All unit tests in a file (batch) like this will
+# share cache.
+
 my %subtests = (
     'ERROR-PREFIX-DATABASE-3' => [
         1,
