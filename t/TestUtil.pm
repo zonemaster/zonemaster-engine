@@ -220,7 +220,7 @@ sub perform_methodsv2_testing {
 
     if ( $single_scenarios ) {
         foreach my $scen (@single_scenarios) {
-            unless ( grep /^$scen$/, keys %subtests ) {
+            unless ( exists $subtests{$scen} ) {
                 croak "Scenario $scen does not exist";
             }
         }
@@ -441,7 +441,7 @@ sub perform_testcase_testing {
 
     if ( $single_scenarios ) {
         foreach my $scen (@single_scenarios) {
-            unless ( grep /^$scen$/, keys %subtests ) {
+            unless ( exists $subtests{$scen} ) {
                 croak "Scenario $scen does not exist";
             }
         }
