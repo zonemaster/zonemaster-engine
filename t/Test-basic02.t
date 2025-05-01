@@ -49,219 +49,249 @@ Zonemaster::Engine::Recursor->add_fake_addresses( '.',
 #   See documentation for the meaning of that.
 
 my %subtests = (
-                'GOOD-1' => [
-                             1,
-                             q(good-1.basic02.xa),
-                             [ qw(B02_AUTH_RESPONSE_SOA) ],
-                             undef,
-                             [],
-                             [],
-                            ],
-                'GOOD-2' => [ 1,
-                              q(good-1.basic02.xa),
-                              [ qw(B02_AUTH_RESPONSE_SOA) ],
-                              undef,
-                              [],
-                              [],
-                            ],
-                'GOOD-UNDEL-1' => [
-                                   1,
-                                   q(good-undel-1.basic02.xa),
-                                   [ qw(B02_AUTH_RESPONSE_SOA) ],
-                                   undef,
-                                   [ qw(ns1.good-undel-1.basic02.xa/127.12.2.31
-                                        ns1.good-undel-1.basic02.xa/fda1:b2:c3:0:127:12:2:31
-                                        ns2.good-undel-1.basic02.xa/127.12.2.32
-                                        ns2.good-undel-1.basic02.xa/fda1:b2:c3:0:127:12:2:32) ],
-                                   [],
-                                  ],
-                'GOOD-UNDEL-2' => [
-                                   1,
-                                   q(good-undel-2.basic02.xa),
-                                   [ qw(B02_AUTH_RESPONSE_SOA) ],
-                                   undef,
-                                   [ qw(ns1.good-undel-2.basic02.xb
-                                        ns2.good-undel-2.basic02.xb) ],
-                                   [],
-                                  ],
-                'GOOD-UNDEL-3' => [
-                                   1,
-                                   q(good-undel-3.basic02.xa),
-                                   [ qw(B02_AUTH_RESPONSE_SOA) ],
-                                   undef,
-                                   [ qw(ns3.good-undel-3.basic02.xb
-                                        ns4.good-undel-3.basic02.xb) ],
-                                   [],
-                                  ],
-                'GOOD-UNDEL-4' => [
-                                   1,
-                                   q(good-undel-4.basic02.xa),
-                                   [ qw(B02_AUTH_RESPONSE_SOA) ],
-                                   undef,
-                                   [ qw(ns1.good-undel-4.basic02.xb
-                                        ns2.good-undel-4.basic02.xb) ],
-                                   [],
-                                  ],
-                'GOOD-UNDEL-5' => [ 1,
-                                    q(good-undel-5.basic02.xa),
-                                    [ qw(B02_AUTH_RESPONSE_SOA) ],
-                                    undef,
-                                    [ qw(ns1.good-undel-5.basic02.xa/127.12.2.31
-                                         ns1.good-undel-5.basic02.xa/fda1:b2:c3:0:127:12:2:31
-                                         ns2.good-undel-5.basic02.xa/127.12.2.32
-                                         ns2.good-undel-5.basic02.xa/fda1:b2:c3:0:127:12:2:32) ],
-                                    [],
-                                  ],
-                'GOOD-UNDEL-6' => [ 1,
-                                    q(good-undel-6.basic02.xa),
-                                    [ qw(B02_AUTH_RESPONSE_SOA) ],
-                                    undef,
-                                    [ qw(ns3.good-undel-6.basic02.xa/127.12.2.33
-                                         ns3.good-undel-6.basic02.xa/fda1:b2:c3:0:127:12:2:33
-                                         ns4.good-undel-6.basic02.xa/127.12.2.34
-                                         ns4.good-undel-6.basic02.xa/fda1:b2:c3:0:127:12:2:34) ],
-                                    [],
-                                  ],
-                'GOOD-UNDEL-7' => [ 1,
-                                    q(good-undel-7.basic02.xa),
-                                    [ qw(B02_AUTH_RESPONSE_SOA) ],
-                                    undef,
-                                    [ qw(ns3.good-undel-7.basic02.xb/127.12.2.33
-                                         ns3.good-undel-7.basic02.xb/fda1:b2:c3:0:127:12:2:33
-                                         ns4.good-undel-7.basic02.xb/127.12.2.34
-                                         ns5.good-undel-7.basic02.xb/fda1:b2:c3:0:127:12:2:34) ],
-                                    [],
-                                  ],
-                'GOOD-UNDEL-8' => [ 1,
-                                    q(good-undel-8.basic02.xa),
-                                    [ qw(B02_AUTH_RESPONSE_SOA) ],
-                                    undef,
-                                    [ qw(dns1.good-undel-8.basic02.xa/127.12.2.33
-                                         dns1.good-undel-8.basic02.xa/fda1:b2:c3:0:127:12:2:33
-                                         dns2.good-undel-8.basic02.xa/127.12.2.34
-                                         dns2.good-undel-8.basic02.xa/fda1:b2:c3:0:127:12:2:34) ],
-                                    [],
-                                  ],
-                'GOOD-UNDEL-9' => [ 1,
-                                    q(good-undel-9.basic02.xa),
-                                    [ qw(B02_AUTH_RESPONSE_SOA) ],
-                                    undef,
-                                    [ qw(dns1.good-undel-9.basic02.xb/127.12.2.33
-                                         dns1.good-undel-9.basic02.xb/fda1:b2:c3:0:127:12:2:33
-                                         dns2.good-undel-9.basic02.xb/127.12.2.34
-                                         dns2.good-undel-9.basic02.xb/fda1:b2:c3:0:127:12:2:34) ],
-                                    [],
-                                  ],
-                'GOOD-UNDEL-10' => [
-                                    1,
-                                    q(good-undel-10.basic02.xa),
-                                    [ qw(B02_AUTH_RESPONSE_SOA) ],
-                                    undef,
-                                    [ qw(ns3.good-undel-10.basic02.xb/127.12.2.33
-                                         ns3.good-undel-10.basic02.xb/fda1:b2:c3:0:127:12:2:33
-                                         ns4.good-undel-10.basic02.xb/127.12.2.34
-                                         ns4.good-undel-10.basic02.xb/fda1:b2:c3:0:127:12:2:34) ],
-                                    [],
-                                   ],
-                'GOOD-UNDEL-11' => [
-                                    1,
-                                    q(good-undel-11.basic02.xa),
-                                    [ qw(B02_AUTH_RESPONSE_SOA) ],
-                                    undef,
-                                    [ qw(ns3.good-undel-11.basic02.xb
-                                         ns4.good-undel-11.basic02.xb) ],
-                                    [],
-                                   ],
-                'MIXED-1' => [
-                              1,
-                              q(mixed-1.basic02.xa),
-                              [ qw(B02_AUTH_RESPONSE_SOA) ],
-                              undef,
-                              [],
-                              [],
-                             ],
-                'NO-DELEGATION-1' => [
-                                      1,
-                                      q(no-delegation.basic02.xa),
-                                      [ qw(B02_NO_DELEGATION) ],
-                                      undef,
-                                      [],
-                                      [],
-                                     ],
-                'NS-BROKEN-1' => [
-                                  1,
-                                  q(ns-broken-1.basic02.xa),
-                                  [ qw(B02_NS_BROKEN B02_NO_WORKING_NS) ],
-                                  undef,
-                                  [],
-                                  [],
-                                 ],
-                'NS-NOT-AUTH-1' => [
-                                    1,
-                                    q(ns-not-auth-1.basic02.xa),
-                                    [ qw(B02_NS_NOT_AUTH B02_NO_WORKING_NS) ],
-                                    undef,
-                                    [],
-                                    [],
-                                   ],
-                'NS-NO-IP-1' => [
-                                 1,
-                                 q(ns-no-ip-1.basic02.xa),
-                                 [ qw(B02_NS_NO_IP_ADDR B02_NO_WORKING_NS) ],
-                                 undef,
-                                 [],
-                                 [],
-                                ],
-                'NS-NO-IP-2' => [
-                                 1,
-                                 q(ns-no-ip-2.basic02.xa),
-                                 [ qw(B02_NS_NO_IP_ADDR B02_NO_WORKING_NS) ],
-                                 undef,
-                                 [],
-                                 [],
-                                ],
-                'NS-NO-IP-3' => [
-                                 1,
-                                 q(ns-no-ip-3.basic02.xa),
-                                 [ qw(B02_NS_NO_IP_ADDR B02_NO_WORKING_NS) ],
-                                 undef,
-                                 [],
-                                 [],
-                                ],
-                'NS-NO-IP-UNDEL-1' => [
-                                       1,
-                                       q(ns-no-ip-undel-1.basic02.xa),
-                                       [ qw(B02_NS_NO_IP_ADDR B02_NO_WORKING_NS) ],
-                                       undef,
-                                       [ qw(ns1.ns-no-ip-undel-1.basic02.xa
-                                            ns2.ns-no-ip-undel-1.basic02.xa) ],
-                                       [],
-                                      ],
-                'NS-NO-IP-UNDEL-2' => [
-                                       1,
-                                       q(ns-no-ip-undel-2.basic02.xa),
-                                       [ qw(B02_NS_NO_IP_ADDR B02_NO_WORKING_NS) ],
-                                       undef,
-                                       [ qw(ns1.ns-no-ip-undel-2.basic02.xb
-                                            ns2.ns-no-ip-undel-2.basic02.xb) ],
-                                       [],
-                                      ],
-                'NS-NO-RESPONSE-1' => [
-                                       1,
-                                       q(ns-no-response-1.basic02.xa),
-                                       [ qw(B02_NS_NO_RESPONSE B02_NO_WORKING_NS) ],
-                                       undef,
-                                       [],
-                                       [],
-                                      ],
-                'UNEXPECTED-RCODE-1' => [
-                                         1,
-                                         q(unexpected-rcode-1.basic02.xa),
-                                         [ qw(B02_UNEXPECTED_RCODE B02_NO_WORKING_NS) ],
-                                         undef,
-                                         [],
-                                         [],
-                                        ],
+                'GOOD-1' =>
+                [
+                 1,
+                 q(good-1.basic02.xa),
+                 [ qw(B02_AUTH_RESPONSE_SOA) ],
+                 undef,
+                 [],
+                 [],
+                ],
+                'GOOD-2' =>
+                [
+                 1,
+                 q(good-1.basic02.xa),
+                 [ qw(B02_AUTH_RESPONSE_SOA) ],
+                 undef,
+                 [],
+                 [],
+                ],
+                'GOOD-UNDEL-1' =>
+                [
+                 1,
+                 q(good-undel-1.basic02.xa),
+                 [ qw(B02_AUTH_RESPONSE_SOA) ],
+                 undef,
+                 [ qw(ns1.good-undel-1.basic02.xa/127.12.2.31
+                      ns1.good-undel-1.basic02.xa/fda1:b2:c3:0:127:12:2:31
+                      ns2.good-undel-1.basic02.xa/127.12.2.32
+                      ns2.good-undel-1.basic02.xa/fda1:b2:c3:0:127:12:2:32) ],
+                 [],
+                ],
+                'GOOD-UNDEL-2' =>
+                [
+                 1,
+                 q(good-undel-2.basic02.xa),
+                 [ qw(B02_AUTH_RESPONSE_SOA) ],
+                 undef,
+                 [ qw(ns1.good-undel-2.basic02.xb
+                      ns2.good-undel-2.basic02.xb) ],
+                 [],
+                ],
+                'GOOD-UNDEL-3' =>
+                [
+                 1,
+                 q(good-undel-3.basic02.xa),
+                 [ qw(B02_AUTH_RESPONSE_SOA) ],
+                 undef,
+                 [ qw(ns3.good-undel-3.basic02.xb
+                      ns4.good-undel-3.basic02.xb) ],
+                 [],
+                ],
+                'GOOD-UNDEL-4' =>
+                [
+                 1,
+                 q(good-undel-4.basic02.xa),
+                 [ qw(B02_AUTH_RESPONSE_SOA) ],
+                 undef,
+                 [ qw(ns1.good-undel-4.basic02.xb
+                      ns2.good-undel-4.basic02.xb) ],
+                 [],
+                ],
+                'GOOD-UNDEL-5' =>
+                [
+                 1,
+                 q(good-undel-5.basic02.xa),
+                 [ qw(B02_AUTH_RESPONSE_SOA) ],
+                 undef,
+                 [ qw(ns1.good-undel-5.basic02.xa/127.12.2.31
+                      ns1.good-undel-5.basic02.xa/fda1:b2:c3:0:127:12:2:31
+                      ns2.good-undel-5.basic02.xa/127.12.2.32
+                      ns2.good-undel-5.basic02.xa/fda1:b2:c3:0:127:12:2:32) ],
+                 [],
+                ],
+                'GOOD-UNDEL-6' =>
+                [
+                 1,
+                 q(good-undel-6.basic02.xa),
+                 [ qw(B02_AUTH_RESPONSE_SOA) ],
+                 undef,
+                 [ qw(ns3.good-undel-6.basic02.xa/127.12.2.33
+                      ns3.good-undel-6.basic02.xa/fda1:b2:c3:0:127:12:2:33
+                      ns4.good-undel-6.basic02.xa/127.12.2.34
+                      ns4.good-undel-6.basic02.xa/fda1:b2:c3:0:127:12:2:34) ],
+                 [],
+                ],
+                'GOOD-UNDEL-7' =>
+                [
+                 1,
+                 q(good-undel-7.basic02.xa),
+                 [ qw(B02_AUTH_RESPONSE_SOA) ],
+                 undef,
+                 [ qw(ns3.good-undel-7.basic02.xb/127.12.2.33
+                      ns3.good-undel-7.basic02.xb/fda1:b2:c3:0:127:12:2:33
+                      ns4.good-undel-7.basic02.xb/127.12.2.34
+                      ns5.good-undel-7.basic02.xb/fda1:b2:c3:0:127:12:2:34) ],
+                 [],
+                ],
+                'GOOD-UNDEL-8' =>
+                [
+                 1,
+                 q(good-undel-8.basic02.xa),
+                 [ qw(B02_AUTH_RESPONSE_SOA) ],
+                 undef,
+                 [ qw(dns1.good-undel-8.basic02.xa/127.12.2.33
+                      dns1.good-undel-8.basic02.xa/fda1:b2:c3:0:127:12:2:33
+                      dns2.good-undel-8.basic02.xa/127.12.2.34
+                      dns2.good-undel-8.basic02.xa/fda1:b2:c3:0:127:12:2:34) ],
+                 [],
+                ],
+                'GOOD-UNDEL-9' =>
+                [
+                 1,
+                 q(good-undel-9.basic02.xa),
+                 [ qw(B02_AUTH_RESPONSE_SOA) ],
+                 undef,
+                 [ qw(dns1.good-undel-9.basic02.xb/127.12.2.33
+                      dns1.good-undel-9.basic02.xb/fda1:b2:c3:0:127:12:2:33
+                      dns2.good-undel-9.basic02.xb/127.12.2.34
+                      dns2.good-undel-9.basic02.xb/fda1:b2:c3:0:127:12:2:34) ],
+                 [],
+                ],
+                'GOOD-UNDEL-10' =>
+                [
+                 1,
+                 q(good-undel-10.basic02.xa),
+                 [ qw(B02_AUTH_RESPONSE_SOA) ],
+                 undef,
+                 [ qw(ns3.good-undel-10.basic02.xb/127.12.2.33
+                      ns3.good-undel-10.basic02.xb/fda1:b2:c3:0:127:12:2:33
+                      ns4.good-undel-10.basic02.xb/127.12.2.34
+                      ns4.good-undel-10.basic02.xb/fda1:b2:c3:0:127:12:2:34) ],
+                 [],
+                ],
+                'GOOD-UNDEL-11' =>
+                [
+                 1,
+                 q(good-undel-11.basic02.xa),
+                 [ qw(B02_AUTH_RESPONSE_SOA) ],
+                 undef,
+                 [ qw(ns3.good-undel-11.basic02.xb
+                      ns4.good-undel-11.basic02.xb) ],
+                 [],
+                ],
+                'MIXED-1' =>
+                [
+                 1,
+                 q(mixed-1.basic02.xa),
+                 [ qw(B02_AUTH_RESPONSE_SOA) ],
+                 undef,
+                 [],
+                 [],
+                ],
+                'NO-DELEGATION-1' =>
+                [
+                 1,
+                 q(no-delegation.basic02.xa),
+                 [ qw(B02_NO_DELEGATION) ],
+                 undef,
+                 [],
+                 [],
+                ],
+                'NS-BROKEN-1' =>
+                [
+                 1,
+                 q(ns-broken-1.basic02.xa),
+                 [ qw(B02_NS_BROKEN B02_NO_WORKING_NS) ],
+                 undef,
+                 [],
+                 [],
+                ],
+                'NS-NOT-AUTH-1' =>
+                [
+                 1,
+                 q(ns-not-auth-1.basic02.xa),
+                 [ qw(B02_NS_NOT_AUTH B02_NO_WORKING_NS) ],
+                 undef,
+                 [],
+                 [],
+                ],
+                'NS-NO-IP-1' =>
+                [
+                 1,
+                 q(ns-no-ip-1.basic02.xa),
+                 [ qw(B02_NS_NO_IP_ADDR B02_NO_WORKING_NS) ],
+                 undef,
+                 [],
+                 [],
+                ],
+                'NS-NO-IP-2' =>
+                [
+                 1,
+                 q(ns-no-ip-2.basic02.xa),
+                 [ qw(B02_NS_NO_IP_ADDR B02_NO_WORKING_NS) ],
+                 undef,
+                 [],
+                 [],
+                ],
+                'NS-NO-IP-3' =>
+                [
+                 1,
+                 q(ns-no-ip-3.basic02.xa),
+                 [ qw(B02_NS_NO_IP_ADDR B02_NO_WORKING_NS) ],
+                 undef,
+                 [],
+                 [],
+                ],
+                'NS-NO-IP-UNDEL-1' =>
+                [
+                 1,
+                 q(ns-no-ip-undel-1.basic02.xa),
+                 [ qw(B02_NS_NO_IP_ADDR B02_NO_WORKING_NS) ],
+                 undef,
+                 [ qw(ns1.ns-no-ip-undel-1.basic02.xa
+                      ns2.ns-no-ip-undel-1.basic02.xa) ],
+                 [],
+                ],
+                'NS-NO-IP-UNDEL-2' =>
+                [
+                 1,
+                 q(ns-no-ip-undel-2.basic02.xa),
+                 [ qw(B02_NS_NO_IP_ADDR B02_NO_WORKING_NS) ],
+                 undef,
+                 [ qw(ns1.ns-no-ip-undel-2.basic02.xb
+                      ns2.ns-no-ip-undel-2.basic02.xb) ],
+                 [],
+                ],
+                'NS-NO-RESPONSE-1' =>
+                [
+                 1,
+                 q(ns-no-response-1.basic02.xa),
+                 [ qw(B02_NS_NO_RESPONSE B02_NO_WORKING_NS) ],
+                 undef,
+                 [],
+                 [],
+                ],
+                'UNEXPECTED-RCODE-1' =>
+                [
+                 1,
+                 q(unexpected-rcode-1.basic02.xa),
+                 [ qw(B02_UNEXPECTED_RCODE B02_NO_WORKING_NS) ],
+                 undef,
+                 [],
+                 [],
+                ],
                );
 
 ###########
