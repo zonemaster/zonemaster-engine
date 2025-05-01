@@ -26,7 +26,7 @@ my @all_tags = qw(B02_AUTH_RESPONSE_SOA
                   B02_NS_NO_RESPONSE
                   B02_UNEXPECTED_RCODE);
 
-# Common hint file (test-zone-data/Basic-TP/basic02/hintfile.zone)
+# Specific hint file (test-zone-data/Basic-TP/basic02/hintfile.zone)
 Zonemaster::Engine::Recursor->remove_fake_addresses( '.' );
 Zonemaster::Engine::Recursor->add_fake_addresses( '.',
     { 'root-ns1.xa' => [ '127.12.2.23', 'fda1:b2:c3::127:12:2:23' ],
@@ -285,9 +285,3 @@ if ( $ENV{ZONEMASTER_RECORD} ) {
 }
 
 done_testing;
-
-
-
-
-
-
