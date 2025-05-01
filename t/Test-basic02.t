@@ -14,9 +14,7 @@ BEGIN {
 }
 
 ###########
-# basic02 - https://github.com/zonemaster/zonemaster/blob/b15e82ad98ec5239f2dd2b846f037ae7f331fa45/docs/public/specifications/test-zones/Basic-TP/basic02.md
-# (still a PR)
-#
+# basic02 - https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/test-zones/Basic-TP/basic02.md
 my $test_module = 'Basic';
 my $test_case = 'basic02';
 my @all_tags = qw(B02_AUTH_RESPONSE_SOA
