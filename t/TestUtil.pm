@@ -41,13 +41,13 @@ unknown to the include path @INC, it can be including using the following code:
 
 =item perform_methodsv2_testing()
 
-    perform_methodsv2_testing( $href_subtests, $single_scenarios, $disabled_scenarios );
+    perform_methodsv2_testing( $href_subtests, $selected_scenarios, $disabled_scenarios );
 
 This method loads unit test data (test scenarios) and, after some data checks and if the test scenario is testable,
 it runs all external L<MethodsV2|Zonemaster::Engine::Test::TestMethodsV2> methods and checks for the presence (or absence) of
 specific nameservers data for each specified test scenario.
 
-If C<$single_scenarios> has been set in the call to a comma separated list of names (or a single name), then only those
+If C<$selected_scenarios> has been set in the call to a comma separated list of names (or a single name), then only those
 scenarios will be run, and they will always be run even if they has been set as not testable.
 
 If C<$disabled_scenario> has been set in the call to the name of a scenario or to a
@@ -83,13 +83,13 @@ as the data for the --ns option in I<zonemaster-cli>.
 
 =item perform_testcase_testing()
 
-    perform_testcase_testing( $test_case, $test_module, $aref_alltags, $href_subtests, $single_scenarios, $disabled_scenarios );
+    perform_testcase_testing( $test_case, $test_module, $aref_alltags, $href_subtests, $selected_scenarios, $disabled_scenarios );
 
 This method loads unit test data (test case name, test module name, array of all message tags and test scenarios) and,
 after some data checks and if the test scenario is testable, it runs the specified test case and checks for the presence
 (or absence) of specific message tags for each specified test scenario.
 
-If C<$single_scenarios> has been set in the call to a comma separated list of names of scenarios (or a single name) then only those
+If C<$selected_scenarios> has been set in the call to a comma separated list of names of scenarios (or a single name) then only those
 scenarios will be run, and they will always be run even if they have been set as not testable.
 
 If C<$disabled_scenario> has been set in the call to the name of a scenario or to a
@@ -210,16 +210,16 @@ sub _check_ds_expressions {
 }
 
 sub perform_methodsv2_testing {
-    my ( $href_subtests, $single_scenarios, $disabled_scenarios ) = @_;
+    my ( $href_subtests, $selected_scenarios, $disabled_scenarios ) = @_;
     my %subtests = %$href_subtests;
 
-    my @single_scenarios = map {uc} split(/, */, $single_scenarios) if $single_scenarios;
+    my @selected_scenarios = map {uc} split(/, */, $selected_scenarios) if $selected_scenarios;
     my @disabled_scenarios = map {uc} split(/, */, $disabled_scenarios) if $disabled_scenarios;
     
     my @untested_scenarios = ();
 
-    if ( $single_scenarios ) {
-        foreach my $scen (@single_scenarios) {
+    if ( $selected_scenarios ) {
+        foreach my $scen (@selected_scenarios) {
             unless ( exists $subtests{$scen} ) {
                 croak "Scenario $scen does not exist";
             }
@@ -227,7 +227,7 @@ sub perform_methodsv2_testing {
     }
 
     for my $scenario ( sort ( keys %subtests ) ) {
-        next if $single_scenarios and not grep /^$scenario$/, @single_scenarios;
+        next if $selected_scenarios and not grep /^$scenario$/, @selected_scenarios;
         if ( @disabled_scenarios and grep /^$scenario$/, @disabled_scenarios ) {
             push @untested_scenarios, $scenario;
             next;
@@ -265,7 +265,7 @@ sub perform_methodsv2_testing {
             croak "Scenario $scenario: Value of testable must be 0 or 1";
         }
 
-        $testable = 1 if $single_scenarios and grep /^$scenario$/, @single_scenarios;
+        $testable = 1 if $selected_scenarios and grep /^$scenario$/, @selected_scenarios;
 
         if ( ref( $zone_name ) ne '' ) {
             croak "Scenario $scenario: Type of zone name must not be a reference";
@@ -431,16 +431,16 @@ sub perform_methodsv2_testing {
 
 
 sub perform_testcase_testing {
-    my ( $test_case, $test_module, $aref_alltags, $href_subtests, $single_scenarios, $disabled_scenarios ) = @_;
+    my ( $test_case, $test_module, $aref_alltags, $href_subtests, $selected_scenarios, $disabled_scenarios ) = @_;
     my %subtests = %$href_subtests;
 
-    my @single_scenarios = map{uc} split(/, */, $single_scenarios) if $single_scenarios;
+    my @selected_scenarios = map{uc} split(/, */, $selected_scenarios) if $selected_scenarios;
     my @disabled_scenarios = map {uc} split(/, */, $disabled_scenarios) if $disabled_scenarios;
 
     my @untested_scenarios = ();
 
-    if ( $single_scenarios ) {
-        foreach my $scen (@single_scenarios) {
+    if ( $selected_scenarios ) {
+        foreach my $scen (@selected_scenarios) {
             unless ( exists $subtests{$scen} ) {
                 croak "Scenario $scen does not exist";
             }
@@ -456,7 +456,7 @@ sub perform_testcase_testing {
     }
 
     for my $scenario ( sort ( keys %subtests ) ) {
-        next if $single_scenarios and not grep /^$scenario$/,  @single_scenarios;
+        next if $selected_scenarios and not grep /^$scenario$/,  @selected_scenarios;
         if ( @disabled_scenarios and grep /^$scenario$/, @disabled_scenarios ) {
             push @untested_scenarios, $scenario;
             next;
@@ -494,7 +494,7 @@ sub perform_testcase_testing {
             croak "Scenario $scenario: Value of testable must be 0 or 1";
         }
 
-        $testable = 1 if $single_scenarios and grep /^$scenario$/, @single_scenarios;
+        $testable = 1 if $selected_scenarios and grep /^$scenario$/, @selected_scenarios;
 
         if ( ref( $zone_name ) ne '' ) {
             croak "Scenario $scenario: Type of zone name must not be a reference";
