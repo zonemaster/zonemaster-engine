@@ -310,7 +310,8 @@ sub perform_methodsv2_testing {
                     push @{ $undel_ns{$ns} }, $ip if $ip;
                 }
 
-                Zonemaster::Engine->add_fake_delegation( $zone_name => \%undel_ns, fill_in_empty_oob_glue => 0 );
+                # Use default value of "fill_in_empty_oob_glue".
+                Zonemaster::Engine->add_fake_delegation( $zone_name => \%undel_ns, fill_in_empty_oob_glue => 1 );
             }
 
             # Method: get_parent_ns_ips()
@@ -583,7 +584,8 @@ sub perform_testcase_testing {
                     push @{ $undel_ns{$ns} }, $ip if $ip;
                 }
 
-                Zonemaster::Engine->add_fake_delegation( $zone_name => \%undel_ns, fill_in_empty_oob_glue => 0 );
+                # Use default value of "fill_in_empty_oob_glue".
+                Zonemaster::Engine->add_fake_delegation( $zone_name => \%undel_ns, fill_in_empty_oob_glue => 1 );
             }
 
             if ( @$undelegated_ds ) {
