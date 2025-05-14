@@ -244,7 +244,8 @@ Internal method that is used to extract IP blocks details from IANA files for a 
 
 Takes an integer (IP version).
 
-Returns a list of hashes - the keys of which are C<ip> (L<Net::IP::XS> object), C<name> (string) and C<reference> (string).
+Returns a list of hashes - the keys of which are C<ip> (L<Net::IP::XS> object), C<name> (string), C<reference> (string)
+and C<globally_reachable> (string).
 
 =back
 
@@ -279,7 +280,7 @@ sub _extract_iana_ip_blocks {
             $address_data =~ s/[ ]+//smx;
             foreach my $address_item ( split /,/smx, $address_data ) {
                 $address_item =~ s/(\A.+\/\d+).*\z/$1/smx;
-                push @list, { ip => Net::IP::XS->new( $address_item ), name => $fields->[1], reference => $fields->[2] };
+                push @list, { ip => Net::IP::XS->new( $address_item ), name => $fields->[1], reference => $fields->[2], globally_reachable => $fields->[8] };
             }
         }
         close $data or croak "Cannot close '${data_location}' : ${OS_ERROR}";
