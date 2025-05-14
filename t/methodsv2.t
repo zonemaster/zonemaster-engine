@@ -822,9 +822,9 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
 
 =item Selected scenarios
 
-Provide onescenario name or a comma-separated list of scenario names in
+Provide one scenario name or a comma-separated list of scenario names in
 environment variable "ZONEMASTER_SELECTED_SCENARIOS" to test only that or those
-scenarios, even if that or those scenarios have been disabled. Example:
+scenarios, even if they have been set as not testable. Example:
 
 ZONEMASTER_SELECTED_SCENARIOS="GOOD-1" perl methodsv2.t
 

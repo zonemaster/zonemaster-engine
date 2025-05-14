@@ -50,7 +50,7 @@ specific nameservers data for each specified test scenario.
 If C<$selected_scenarios> has been set in the call to a comma separated list of names (or a single name), then only those
 scenarios will be run, and they will always be run even if they has been set as not testable.
 
-If C<$disabled_scenario> has been set in the call to the name of a scenario or to a
+If C<$disabled_scenarios> has been set in the call to the name of a scenario or to a
 comma separated list of scenarios then that or those scenarios will be
 temporarily disabled.
 
@@ -92,7 +92,7 @@ after some data checks and if the test scenario is testable, it runs the specifi
 If C<$selected_scenarios> has been set in the call to a comma separated list of names of scenarios (or a single name) then only those
 scenarios will be run, and they will always be run even if they have been set as not testable.
 
-If C<$disabled_scenario> has been set in the call to the name of a scenario or to a
+If C<$disabled_scenarios> has been set in the call to the name of a scenario or to a
 comma separated list of scenarios then that or those scenarios will be
 temporarily disabled.
 
@@ -435,7 +435,7 @@ sub perform_testcase_testing {
     my ( $test_case, $test_module, $aref_alltags, $href_subtests, $selected_scenarios, $disabled_scenarios ) = @_;
     my %subtests = %$href_subtests;
 
-    my @selected_scenarios = map{uc} split(/, */, $selected_scenarios) if $selected_scenarios;
+    my @selected_scenarios = map {uc} split(/, */, $selected_scenarios) if $selected_scenarios;
     my @disabled_scenarios = map {uc} split(/, */, $disabled_scenarios) if $disabled_scenarios;
 
     my @untested_scenarios = ();
