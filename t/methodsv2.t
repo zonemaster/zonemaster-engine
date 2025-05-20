@@ -820,26 +820,28 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
 
 =over
 
-=item Single scenario
-
-Provide one scenario name in environment variable "ZONEMASTER_SINGLE_SCENARIO"
-to test only that scenario, even if that scenario has been disabled. Example:
-
-ZONEMASTER_SINGLE_SCENARIO="GOOD-1" perl methodsv2.t
-
-=item Disable scenario
+=item Selected scenarios
 
 Provide one scenario name or a comma-separated list of scenario names in
-environment variable "ZONEMASTER_DISABLE_SCENARIO" to disable that or those
+environment variable "ZONEMASTER_SELECTED_SCENARIOS" to test only that or those
+scenarios, even if they have been set as not testable. Example:
+
+ZONEMASTER_SELECTED_SCENARIOS="GOOD-1" perl methodsv2.t
+
+=item Disabled scenarios
+
+Provide one scenario name or a comma-separated list of scenario names in
+environment variable "ZONEMASTER_DISABLED_SCENARIOS" to disable that or those
 scenarios for this run only. Example:
 
-ZONEMASTER_DISABLE_SCENARIO="GOOD-1,GOOD-2" perl methodsv2.t
+ZONEMASTER_DISABLED_SCENARIOS="GOOD-1,GOOD-2" perl methodsv2.t
 
 =back
 
 =cut
 
-perform_methodsv2_testing( \%subtests, $ENV{ZONEMASTER_SINGLE_SCENARIO}, $ENV{ZONEMASTER_DISABLE_SCENARIO} );
+perform_methodsv2_testing( \%subtests, $ENV{ZONEMASTER_SELECTED_SCENARIOS}, $ENV{ZONEMASTER_DISABLED_SCENARIOS} );
+
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Nameserver->save( $datafile );
