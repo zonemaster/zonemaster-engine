@@ -88,6 +88,14 @@ my %subtests = (
          [],
          [],
     ],
+    'GOOD-NSEC-2' => [
+        1,
+         q(good-nsec-2.dnssec10.xa),
+         [ qw( DS10_HAS_NSEC ) ],
+         undef,
+         [],
+         [],
+    ],
     'GOOD-NSEC3-1' => [
         1,
         q(good-nsec3-1.dnssec10.xa),
@@ -95,6 +103,14 @@ my %subtests = (
         undef,
         [],
         [],
+    ],
+    'GOOD-NSEC3-2' => [
+        1,
+         q(good-nsec3-2.dnssec10.xa),
+         [ qw( DS10_HAS_NSEC3 ) ],
+         undef,
+         [],
+         [],
     ],
     'ALGO-NOT-SUPP-BY-ZM-1' => [
         1,
