@@ -71,6 +71,9 @@
 ^MYMETA\.
 #!end included /usr/share/perl/5.20/ExtUtils/MANIFEST.SKIP
 
+# More Git configuration files
+\B\.gitattributes\b
+
 # For GitHub action
 ^\.github/
 
