@@ -363,8 +363,6 @@ ok( $res{NAMESERVER_IP_PRIVATE_NETWORK}, q{Nameserver address in non routable pu
 my $torsasse =  Zonemaster::Engine->zone( q{torsas.se} );
 my @res = Zonemaster::Engine->test_method( q{Address}, q{address02}, $torsasse );
 ok( !( grep { $_->tag eq 'NAMESERVER_IP_WITHOUT_REVERSE' } @res ), 'Classless in-addr.arpa properly handled when querying PTR.' );
-@res = Zonemaster::Engine->test_method( q{Address}, q{address03}, $torsasse );
-ok( !( grep { $_->tag eq 'NAMESERVER_IP_WITHOUT_REVERSE' } @res ), 'Classless in-addr.arpa properly handled when querying PTR.' );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Nameserver->save( $datafile );

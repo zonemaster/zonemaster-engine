@@ -422,16 +422,8 @@ sub address03 {
 
         my $p = Zonemaster::Engine::Recursor->recurse( $ptr_query, q{PTR} );
 
-        # In case of Classless IN-ADDR.ARPA delegation, query returns
-        # CNAME records. A PTR query is done on the CNAME.
-        if ( $p and $p->rcode eq q{NOERROR} and $p->get_records( q{CNAME}, q{answer} ) ) {
-            my ( $cname ) = $p->get_records( q{CNAME}, q{answer} );
-            $ptr_query = $cname->cname;
-            $p = Zonemaster::Engine::Recursor->recurse( $ptr_query, q{PTR} );
-        }
-
         if ( $p ) {
-            my @ptr = $p->get_records_for_name( q{PTR}, $ptr_query );
+            my @ptr = $p->get_records( q{PTR}, 'answer' );
             if ( $p->rcode eq q{NOERROR} and scalar @ptr ) {
                 if ( none { name( $_->ptrdname ) eq $local_ns->name->string . q{.} } @ptr ) {
                     push @results,

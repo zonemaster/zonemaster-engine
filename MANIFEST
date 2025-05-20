@@ -148,6 +148,8 @@ t/recursor-A.data
 t/recursor-A.t
 t/Test-address.data
 t/Test-address.t
+t/Test-address03.data
+t/Test-address03.t
 t/Test-basic.data
 t/Test-basic.t
 t/Test-basic01.data
