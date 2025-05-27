@@ -474,6 +474,8 @@ sub _query {
 
             if ( not $href->{q{blacklisting_disabled}} and $type eq q{SOA} and $flags{q{edns_size}} == 0 ) {
                 $self->blacklisted->{ $flags{usevc} } = 1;
+                Zonemaster::Engine->logger->add( BLACKLISTING =>
+                  { ns => "$self", proto => $flags{usevc} ? q{TCP} : q{UDP} } );
             }
         }
     }

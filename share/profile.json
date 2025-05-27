@@ -446,6 +446,7 @@
         },
         "SYSTEM" : {
             "ASN_LOOKUP_SOURCE": "DEBUG",
+            "BLACKLISTING" : "DEBUG",
             "CACHE_CREATED" : "DEBUG2",
             "CACHE_FETCHED" : "DEBUG2",
             "CACHED_RETURN" : "DEBUG3",

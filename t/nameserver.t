@@ -1,3 +1,6 @@
+use strict;
+use warnings;
+
 use Test::More;
 use Test::Exception;
 
@@ -299,24 +302,33 @@ subtest 'dnssec, edns_size and edns_details{do, size} flags behavior for queries
     dies_ok { $p = $ns->query( 'fr', 'SOA', { "edns_details" => { "size" => -1 } } ); }      "dies when edns_size (set with edns_details->size) is lower than 0";
 };
 
-
 Zonemaster::Engine::Profile->effective->set( q{resolver.source4}, q{127.0.0.1} );
 my $ns_test = new_ok( 'Zonemaster::Engine::Nameserver' => [ { name => 'ns.nic.se', address => '212.247.7.228' } ] );
 is($ns_test->dns->source, '127.0.0.1', 'Source IPv4 address set.');
 
 Zonemaster::Engine::Profile->effective->set( q{resolver.source6}, q{::1} );
-my $ns_test = new_ok( 'Zonemaster::Engine::Nameserver' => [ { name => 'ns.nic.se', address => '2001:67c:124c:100a::45' } ] );
+$ns_test = new_ok( 'Zonemaster::Engine::Nameserver' => [ { name => 'ns.nic.se', address => '2001:67c:124c:100a::45' } ] );
 is($ns_test->dns->source, '::1', 'Source IPv6 address set.');
 
+# We have to make a query to test the following message tags, so no_network must be false.
 Zonemaster::Engine::Profile->effective->set( q{no_network}, 0 );
-# Address was 127.0.0.17 (https://github.com/zonemaster/zonemaster-engine/issues/219).
-# 192.0.2.17 is part of TEST-NET-1 IP address range (See RFC6890) and should be reserved
+
+# 192.0.2.17 is part of TEST-NET-1 IP address range (see RFC6890) and reserved
 # for documentation.
 my $fail_ns = Zonemaster::Engine::Nameserver->new( { name => 'fail', address => '192.0.2.17' } );
-my $fail_p = $fail_ns->_query( 'example.org', 'A', {} );
+my $fail_p = $fail_ns->query( 'example.org', 'SOA', {} );
 is( $fail_p, undef, 'No return from broken server' );
 my ( $e ) = grep { $_->tag eq 'LOOKUP_ERROR' } @{ Zonemaster::Engine->logger->entries };
 isa_ok( $e, 'Zonemaster::Engine::Logger::Entry' );
+
+( $e ) = grep { $_->tag eq 'BLACKLISTING' } @{ Zonemaster::Engine->logger->entries };
+is( %{$e->args}{proto}, 'UDP', 'Name server is blacklisted for UDP on non-EDNS SOA UDP query' );
+
+Zonemaster::Engine->logger->clear_history();
+
+my $fail_p_tcp = $fail_ns->query( 'example.org', 'SOA', { usevc => 1 } );
+( $e ) = grep { $_->tag eq 'BLACKLISTING' } @{ Zonemaster::Engine->logger->entries };
+is( %{$e->args}{proto}, 'TCP', 'Name server is blacklisted for TCP on non-EDNS SOA TCP query' );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Nameserver->save( $datafile );
