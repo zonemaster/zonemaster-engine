@@ -96,6 +96,14 @@ my %subtests = (
          [],
          [],
     ],
+    'GOOD-NSEC-3' => [
+        1,
+         q(good-nsec-3.dnssec10.xa),
+         [ qw( DS10_HAS_NSEC ) ],
+         undef,
+         [],
+         [],
+    ],
     'GOOD-NSEC3-1' => [
         1,
         q(good-nsec3-1.dnssec10.xa),
@@ -107,6 +115,14 @@ my %subtests = (
     'GOOD-NSEC3-2' => [
         1,
          q(good-nsec3-2.dnssec10.xa),
+         [ qw( DS10_HAS_NSEC3 ) ],
+         undef,
+         [],
+         [],
+    ],
+    'GOOD-NSEC3-3' => [
+        1,
+         q(good-nsec3-3.dnssec10.xa),
          [ qw( DS10_HAS_NSEC3 ) ],
          undef,
          [],
