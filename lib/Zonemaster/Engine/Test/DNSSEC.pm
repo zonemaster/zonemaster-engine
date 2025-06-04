@@ -3145,14 +3145,14 @@ sub dnssec10 {
     my ( @nsec_response_error, @nsec3param_response_error );
     my ( @with_dnskey, @without_dnskey );
 
-    my @nameservers = grep { $_->isa('Zonemaster::Engine::Nameserver') } (
+    my @all_ns = uniq grep { $_->isa('Zonemaster::Engine::Nameserver') } (
                 @{ Zonemaster::Engine::TestMethodsV2->get_del_ns_names_and_ips( $zone ) // [] },
                 @{ Zonemaster::Engine::TestMethodsV2->get_zone_ns_names_and_ips( $zone ) // [] }
               );
 
     my @ignored_nss;
     my %nss;
-    push @{ $nss{$_->address->short} }, $_ for ( uniq @nameservers );
+    push @{ $nss{$_->address->short} }, $_ for @all_ns;
 
     my $testing_time = time;
 
@@ -3789,8 +3789,6 @@ sub dnssec10 {
             }
           );
     }
-
-    my @all_ns = map { $_ } ( map { @{ $_ } } values %nss );
 
     $lc = List::Compare->new( [ @all_ns ], [ @ignored_nss, @without_dnskey, @nsec_in_answer, @nsec3param_nsec_nodata, @nsec3param_in_answer, @nsec_nsec3_nodata ] );
     @first = $lc->get_unique;
