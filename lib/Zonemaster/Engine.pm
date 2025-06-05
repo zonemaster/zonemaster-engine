@@ -231,6 +231,7 @@ sub reset {
     Zonemaster::Engine::Nameserver->empty_cache();
     $logger->clear_history() if $logger;
     Zonemaster::Engine::Recursor->clear_cache();
+    Zonemaster::Engine::TestMethodsV2->clear_cache();
     return;
 }
 
@@ -408,7 +409,8 @@ Set the logger's start time to the current time.
 =item reset()
 
 Reset logger start time to current time, empty the list of log messages, clear
-nameserver object cache and recursor cache.
+nameserver object cache, clear recursor cache and clear all cached results of
+MethodsV2.
 
 =back
 

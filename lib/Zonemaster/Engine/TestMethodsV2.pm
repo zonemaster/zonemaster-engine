@@ -7,6 +7,7 @@ use version; our $VERSION = version->declare("v1.0.0");
 
 use Carp;
 use List::MoreUtils qw[uniq];
+use Memoize;
 
 use Zonemaster::Engine::Util;
 
@@ -34,6 +35,8 @@ This Method will obtain the name servers that serves the parent zone, i.e. the z
 Takes a L<Zonemaster::Engine::Zone> object.
 
 Returns an arrayref of L<Zonemaster::Engine::Nameserver> objects, or C<undef> if no parent zone was found.
+
+The result of this Method is cached for performance reasons. This cache can be invalidated by calling C<clear_cache()> if necessary.
 
 =back
 
@@ -64,8 +67,9 @@ sub get_parent_ns_ips {
 
         CUR_SERVERS:
         while ( my $ns = shift @remaining_servers ) {
-            next CUR_SERVERS if grep { $_ eq $ns->address->short } @{ $handled_servers{$zone_name} };
-            push @{ $handled_servers{$zone_name} }, $ns->address->short;
+            my $addr = $ns->address->short;
+            next CUR_SERVERS if grep { $_ eq $addr } @{ $handled_servers{$zone_name} };
+            push @{ $handled_servers{$zone_name} }, $addr;
 
             if ( ( $ns->address->version == 4 and not Zonemaster::Engine::Profile->effective->get( q{net.ipv4} ) )
                 or ( $ns->address->version == 6 and not Zonemaster::Engine::Profile->effective->get( q{net.ipv6} ) ) ) {
@@ -248,6 +252,11 @@ sub get_parent_ns_ips {
         return undef;
     }
 }
+
+# Memoize get_parent_ns_ips() because it is expensive and gets called a few
+# times with identical parameters.
+
+memoize('get_parent_ns_ips');
 
 =over
 
@@ -777,6 +786,21 @@ sub get_zone_ns_ips {
     }
 
     return [ uniq sort @ns_ips ];
+}
+
+
+=over
+
+=item clear_cache()
+
+Clears previously cached results of the C<get_parent_ns_ips()> method.
+
+=back
+
+=cut
+
+sub clear_cache() {
+    Memoize::flush_cache(\&get_parent_ns_ips);
 }
 
 1;
