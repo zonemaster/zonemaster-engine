@@ -2,15 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-13 12:50+0000\n"
-"PO-Revision-Date: 2023-07-21 06:18+0000\n"
+"POT-Creation-Date: 2025-06-24 18:21+0200\n"
+"PO-Revision-Date: 2025-06-24 18:33+0200\n"
 "Last-Translator: Niels Haarbo <haarbo@dk-hostmaster.dk>\n"
 "Language-Team: Zonemaster Team\n"
 "Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.3.1\n"
+"X-Generator: Poedit 3.6\n"
 
 #, perl-brace-format
 msgid ""
@@ -195,7 +195,7 @@ msgstr ""
 "Dette er en test af et ikke-delegeret domæne, så finde af forældrezonen "
 "ignoreres."
 
-#. BASIC:B01_PARENT_NOT_FOUNDSIC:B01_PARENT_FOUND
+#. BASIC:B01_PARENT_FOUND
 #, perl-brace-format
 msgid ""
 "The parent zone is \"{domain}\" as returned from name servers \"{ns_list}\"."
@@ -203,7 +203,7 @@ msgstr ""
 "Forældrezonen er \"{domain}\", som returneret fra navneserverne "
 "\"{ns_list}\"."
 
-#, perl-brace-format
+#. BASIC:B01_PARENT_NOT_FOUND
 msgid "The parent zone cannot be found."
 msgstr "Forældrezonen kan ikke findes."
 
@@ -597,7 +597,6 @@ msgstr ""
 "\"{ns_list}\""
 
 #. CONNECTIVITY:CN04_IPV4_SINGLE_PREFIX
-#, perl-brace-format
 msgid ""
 "All name server(s) IPv4 address(es) are announced in the same IPv4 prefix."
 msgstr "Alle navneserveres IPv4-adresser er annonceret i samme IPv4-præfiks."
@@ -620,7 +619,6 @@ msgstr ""
 "\"{ns_list}\""
 
 #. CONNECTIVITY:CN04_IPV6_SINGLE_PREFIX
-#, perl-brace-format
 msgid ""
 "All name server(s) IPv6 address(es) are announced in the same IPv6 prefix."
 msgstr "Alle navneserveres IPv6-adresser er annonceret i samme IPv6-præfiks."
@@ -1313,6 +1311,7 @@ msgstr ""
 "anbefalet). Hentet fra navneservere \"{ns_list}\"."
 
 #. DNSSEC:DS03_NO_DNSSEC_SUPPORT
+#, perl-brace-format
 msgid ""
 "The zone is not DNSSEC signed or not properly DNSSEC signed. Testing for "
 "NSEC3 has been skipped. Fetched from name servers \"{ns_list}\"."
@@ -1658,7 +1657,7 @@ msgstr ""
 #. DNSSEC:DS10_NSEC3_RRSIG_NOT_YET_VALID
 #, perl-brace-format
 msgid ""
-"The RRSIG (signature) with tag {keytag} for the NSEC3 record is not yet "
+"The RRSIG (signature) with tag {keytag} for the NSEC3 record it not yet "
 "valid. Fetched from name servers \"{ns_list}\"."
 msgstr ""
 "RRSIG (signatur) med tag {keytag} for NSEC3-record er endnu ikke gyldig. "
@@ -1710,6 +1709,7 @@ msgstr ""
 "navneservere \"{ns_list}\"."
 
 #. DNSSEC:DS10_NSEC_MISSING_SIGNATURE
+#, perl-brace-format
 msgid ""
 "Missing RRSIG (signature) for the NSEC record or records. Fetched from name "
 "servers \"{ns_list}\"."
@@ -1754,6 +1754,7 @@ msgstr ""
 "navneservere \"{ns_list}\"."
 
 #. DNSSEC:DS10_NSEC_RRSIG_EXPIRED
+#, perl-brace-format
 msgid ""
 "The RRSIG (signature) with tag {keytag} for the NSEC record has expired. "
 "Fetched from name servers \"{ns_list}\"."
@@ -1762,8 +1763,9 @@ msgstr ""
 "navneservere \"{ns_list}\"."
 
 #. DNSSEC:DS10_NSEC_RRSIG_NOT_YET_VALID
+#, perl-brace-format
 msgid ""
-"The RRSIG (signature) with tag {keytag} for the NSEC record is not yet "
+"The RRSIG (signature) with tag {keytag} for the NSEC record it not yet "
 "valid. Fetched from name servers \"{ns_list}\"."
 msgstr ""
 "RRSIG (signatur) med tag {keytag} for NSEC-recorden er ikke endnu gyldig. "
@@ -1779,6 +1781,7 @@ msgstr ""
 "for NSEC-recorden. Hentet fra navneservere \"{ns_list}\"."
 
 #. DNSSEC:DS10_NSEC_RRSIG_VERIFY_ERROR
+#, perl-brace-format
 msgid ""
 "The RRSIG (signature) with tag {keytag} for the NSEC record cannot be "
 "verified. Fetched from name servers \"{ns_list}\"."
@@ -1798,6 +1801,7 @@ msgstr ""
 "servere. Hentet fra navneservere \"{ns_list}\"."
 
 #. DNSSEC:DS10_ZONE_NO_DNSSEC
+#, perl-brace-format
 msgid ""
 "The zone is not DNSSEC signed or not properly DNSSEC signed. Testing for "
 "NSEC and NSEC3 has been skipped. Fetched from name servers \"{ns_list}\"."
@@ -3600,7 +3604,7 @@ msgstr ""
 msgid "The SPF policy of {domain} has correct syntax."
 msgstr "SPF-politikken for {domain} har korrekt syntaks."
 
-#. SYSTEM:-format
+#. ZONE:Z11_UNABLE_TO_CHECK_FOR_SPF
 msgid ""
 "None of the zone’s name servers responded with an authoritative response to "
 "queries for SPF policies."
@@ -3608,6 +3612,7 @@ msgstr ""
 "Ingen af zone's navneservere svarede med et autoritativt svar på "
 "forespørgsler om SPF-politikker."
 
+#. SYSTEM:CANNOT_CONTINUE
 #, perl-brace-format
 msgid "Not enough data about {domain} was found to be able to run tests."
 msgstr ""
