@@ -3145,78 +3145,80 @@ sub dnssec10 {
     my ( @nsec_response_error, @nsec3param_response_error );
     my ( @with_dnskey, @without_dnskey );
 
-    my @nss = grep { $_->isa('Zonemaster::Engine::Nameserver') } (
+    my @all_ns = uniq grep { $_->isa('Zonemaster::Engine::Nameserver') } (
                 @{ Zonemaster::Engine::TestMethodsV2->get_del_ns_names_and_ips( $zone ) // [] },
                 @{ Zonemaster::Engine::TestMethodsV2->get_zone_ns_names_and_ips( $zone ) // [] }
               );
-    my @ignored_nss;
 
-    my %ip_already_processed;
+    my @ignored_nss;
+    my %nss;
+    push @{ $nss{$_->address->short} }, $_ for @all_ns;
+
     my $testing_time = time;
 
-    for my $ns ( @nss ) {
-        next if exists $ip_already_processed{$ns->address->short};
-        $ip_already_processed{$ns->address->short} = 1;
+    for my $ns_ip ( keys %nss ) {
+        my $ns = $nss{$ns_ip}[0];
+        my @all_ns_for_ip = @{ $nss{$ns_ip} };
 
         if ( _ip_disabled_message( \@results, $ns, @query_types ) ) {
-            push @ignored_nss, $ns;
+            push @ignored_nss, @all_ns_for_ip;
             next;
         }
 
         my $dnskey_p = $ns->query( $zone->name, $type_dnskey, { dnssec => 1 } );
 
         if ( not $dnskey_p or $dnskey_p->rcode ne q{NOERROR} or not $dnskey_p->aa ) {
-            push @ignored_nss, $ns;
+            push @ignored_nss, @all_ns_for_ip;
             next;
         }
 
         my @dnskey_records = $dnskey_p->get_records_for_name( $type_dnskey, $zone->name->string, q{answer} );
 
         if ( not scalar @dnskey_records ) {
-            push @without_dnskey, $ns;
+            push @without_dnskey, @all_ns_for_ip;
             next;
         }
 
-        push @with_dnskey, $ns;
+        push @with_dnskey, @all_ns_for_ip;
 
         my $nsec_p = $ns->query( $zone->name, $type_nsec, { dnssec => 1 } );
 
         if ( not $nsec_p or $nsec_p->rcode ne q{NOERROR} or not $nsec_p->aa ) {
-            push @nsec_response_error, $ns;
+            push @nsec_response_error, @all_ns_for_ip;
         }
         elsif ( $nsec_p->answer ) {
             if ( scalar $nsec_p->get_records( $type_nsec, q{answer} ) ) {
-                push @nsec_in_answer, $ns;
+                push @nsec_in_answer, @all_ns_for_ip;
 
                 if ( scalar $nsec_p->get_records( $type_nsec, q{answer} ) > 1 ) {
-                    push @erroneous_multiple_nsec, $ns;
+                    push @erroneous_multiple_nsec, @all_ns_for_ip;
                 }
                 elsif ( ($nsec_p->get_records( $type_nsec, q{answer} ))[0]->owner ne $zone->name ) {
-                    push @nsec_mismatches_apex, $ns;
+                    push @nsec_mismatches_apex, @all_ns_for_ip;
                 }
             }
             else {
-                push @nsec_erroneous_answer, $ns;
+                push @nsec_erroneous_answer, @all_ns_for_ip;
             }
         }
         elsif ( not $nsec_p->answer and scalar $nsec_p->get_records( $type_nsec3, q{authority} ) ) {
             my @nsec3_rrs = $nsec_p->get_records( $type_nsec3, q{authority} );
 
-            push @nsec_nsec3_nodata, $ns;
+            push @nsec_nsec3_nodata, @all_ns_for_ip;
 
             unless ( scalar $nsec_p->get_records( $type_soa, q{authority} ) ) {
-                push @nsec3_nodata_missing_soa, $ns;
+                push @nsec3_nodata_missing_soa, @all_ns_for_ip;
             }
             elsif ( ($nsec_p->get_records( $type_soa, q{authority} ))[0]->owner ne $zone->name ) {
-                push @{ $nsec3_nodata_wrong_soa{$zone->name} }, $ns;
+                push @{ $nsec3_nodata_wrong_soa{$zone->name} }, @all_ns_for_ip;
             }
 
             if ( scalar @nsec3_rrs > 1 ) {
-                push @erroneous_multiple_nsec3, $ns;
+                push @erroneous_multiple_nsec3, @all_ns_for_ip;
             }
             else {
                 unless ( $nsec3_rrs[0]->hash_name( $zone->name ) eq lc( @{ name($nsec3_rrs[0]->owner)->labels }[0] ) ) {
-                    push @nsec3_mismatches_apex, $ns;
+                    push @nsec3_mismatches_apex, @all_ns_for_ip;
                 }
                 else {
                     my @mandatory_typelist = qw( SOA NS DNSKEY NSEC3PARAM RRSIG );
@@ -3225,14 +3227,14 @@ sub dnssec10 {
 
                     foreach my $type ( @mandatory_typelist ) {
                         if ( not exists $typelist{$type} ) {
-                            push @nsec3_incorrect_type_list, $ns;
+                            push @nsec3_incorrect_type_list, @all_ns_for_ip;
                             last;
                         }
                     }
 
                     foreach my $type ( @forbidden_typelist ) {
                         if ( exists $typelist{$type} ) {
-                            push @nsec3_incorrect_type_list, $ns;
+                            push @nsec3_incorrect_type_list, @all_ns_for_ip;
                             last;
                         }
                     }
@@ -3241,20 +3243,20 @@ sub dnssec10 {
                 my @nsec3_rrsig_rrs = grep { $_->typecovered eq q{NSEC3} } $nsec_p->get_records_for_name( q{RRSIG}, $nsec3_rrs[0]->name );
 
                 unless ( scalar @nsec3_rrsig_rrs ) {
-                    push @nsec3_missing_signature, $ns;
+                    push @nsec3_missing_signature, @all_ns_for_ip;
                 }
                 else {
                     foreach my $rr ( @nsec3_rrsig_rrs ) {
                         my @matching_dnskeys = grep { $rr->keytag == $_->keytag } @dnskey_records;
 
                         unless ( scalar @matching_dnskeys ) {
-                            push @{ $nsec3_rrsig_no_dnskey{$rr->keytag} }, $ns;
+                            push @{ $nsec3_rrsig_no_dnskey{$rr->keytag} }, @all_ns_for_ip;
                         }
                         elsif ( $rr->expiration < $testing_time ) {
-                            push @{ $nsec3_rrsig_expired{$rr->keytag} }, $ns;
+                            push @{ $nsec3_rrsig_expired{$rr->keytag} }, @all_ns_for_ip;
                         }
                         elsif ( $rr->inception > $testing_time ) {
-                            push @{ $nsec3_rrsig_not_yet_valid{$rr->keytag} }, $ns;
+                            push @{ $nsec3_rrsig_not_yet_valid{$rr->keytag} }, @all_ns_for_ip;
                         }
                         else {
                             my $i = 1;
@@ -3263,16 +3265,16 @@ sub dnssec10 {
                                 my $validated = $rr->verify_time( [grep { name( $_->name ) eq name( $rr->name ) } @nsec3_rrs], [ $dnskey ], $testing_time, $msg );
 
                                 if ( $validated ) {
-                                    push @nsec3_rrsig_verified, $ns;
+                                    push @nsec3_rrsig_verified, @all_ns_for_ip;
                                     last;
                                 }
 
                                 if ( $i >= scalar @matching_dnskeys ) {
                                     if ( $msg =~ /Unknown cryptographic algorithm/ ) {
-                                        push @{ $algo_not_supported_by_zm{$dnskey->keytag}{$dnskey->algorithm} }, $ns;
+                                        push @{ $algo_not_supported_by_zm{$dnskey->keytag}{$dnskey->algorithm} }, @all_ns_for_ip;
                                     }
                                     else {
-                                        push @{ $nsec3_rrsig_verify_error{$dnskey->keytag} }, $ns;
+                                        push @{ $nsec3_rrsig_verify_error{$dnskey->keytag} }, @all_ns_for_ip;
                                     }
                                 }
 
@@ -3287,41 +3289,41 @@ sub dnssec10 {
         my $nsec3param_p = $ns->query( $zone->name, $type_nsec3param, { dnssec => 1 } );
 
         if ( not $nsec3param_p or $nsec3param_p->rcode ne q{NOERROR} or not $nsec3param_p->aa ) {
-            push @nsec3param_response_error, $ns;
+            push @nsec3param_response_error, @all_ns_for_ip;
         }
         elsif ( $nsec3param_p->answer ) {
             if ( scalar $nsec3param_p->get_records( $type_nsec3param, q{answer} ) ) {
-                push @nsec3param_in_answer, $ns;
+                push @nsec3param_in_answer, @all_ns_for_ip;
 
                 if ( scalar $nsec3param_p->get_records( $type_nsec3param, q{answer} ) > 1 ) {
-                    push @erroneous_multiple_nsec3param, $ns;
+                    push @erroneous_multiple_nsec3param, @all_ns_for_ip;
                 }
                 elsif ( ($nsec3param_p->get_records( $type_nsec3param, q{answer} ))[0]->owner ne $zone->name ) {
-                    push @nsec3param_mismatches_apex, $ns;
+                    push @nsec3param_mismatches_apex, @all_ns_for_ip;
                 }
             }
             else {
-                push @nsec3param_erroneous_answer, $ns;
+                push @nsec3param_erroneous_answer, @all_ns_for_ip;
             }
         }
         elsif ( not $nsec3param_p->answer and scalar $nsec3param_p->get_records( $type_nsec, q{authority} ) ) {
             my @nsec_rrs = $nsec3param_p->get_records( $type_nsec, q{authority} );
 
-            push @nsec3param_nsec_nodata, $ns;
+            push @nsec3param_nsec_nodata, @all_ns_for_ip;
 
             unless ( scalar $nsec3param_p->get_records( $type_soa, q{authority} ) ) {
-                push @nsec_nodata_missing_soa, $ns;
+                push @nsec_nodata_missing_soa, @all_ns_for_ip;
             }
             elsif ( ($nsec3param_p->get_records( $type_soa, q{authority} ))[0]->owner ne $zone->name ) {
-                push @{ $nsec_nodata_wrong_soa{$zone->name} }, $ns;
+                push @{ $nsec_nodata_wrong_soa{$zone->name} }, @all_ns_for_ip;
             }
 
             if ( scalar @nsec_rrs > 1 ) {
-                push @erroneous_multiple_nsec, $ns;
+                push @erroneous_multiple_nsec, @all_ns_for_ip;
             }
             else {
                 unless ( $nsec_rrs[0]->owner eq $zone->name ) {
-                    push @nsec_mismatches_apex, $ns;
+                    push @nsec_mismatches_apex, @all_ns_for_ip;
                 }
                 else {
                     my @mandatory_typelist = qw( SOA NS DNSKEY NSEC RRSIG );
@@ -3330,14 +3332,14 @@ sub dnssec10 {
 
                     foreach my $type ( @mandatory_typelist ) {
                         if ( not exists $typelist{$type} ) {
-                            push @nsec_incorrect_type_list, $ns;
+                            push @nsec_incorrect_type_list, @all_ns_for_ip;
                             last;
                         }
                     }
 
                     foreach my $type ( @forbidden_typelist ) {
                         if ( exists $typelist{$type} ) {
-                            push @nsec_incorrect_type_list, $ns;
+                            push @nsec_incorrect_type_list, @all_ns_for_ip;
                             last;
                         }
                     }
@@ -3346,20 +3348,20 @@ sub dnssec10 {
                 my @nsec_rrsig_rrs = grep { $_->typecovered eq q{NSEC} } $nsec3param_p->get_records_for_name( q{RRSIG}, $nsec_rrs[0]->name );
 
                 unless ( scalar @nsec_rrsig_rrs ) {
-                    push @nsec_missing_signature, $ns;
+                    push @nsec_missing_signature, @all_ns_for_ip;
                 }
                 else {
                     foreach my $rr ( @nsec_rrsig_rrs ) {
                         my @matching_dnskeys = grep { $rr->keytag == $_->keytag } @dnskey_records;
 
                         unless ( scalar @matching_dnskeys ) {
-                            push @{ $nsec_rrsig_no_dnskey{$rr->keytag} }, $ns;
+                            push @{ $nsec_rrsig_no_dnskey{$rr->keytag} }, @all_ns_for_ip;
                         }
                         elsif ( $rr->expiration < $testing_time ) {
-                            push @{ $nsec_rrsig_expired{$rr->keytag} }, $ns;
+                            push @{ $nsec_rrsig_expired{$rr->keytag} }, @all_ns_for_ip;
                         }
                         elsif ( $rr->inception > $testing_time ) {
-                            push @{ $nsec_rrsig_not_yet_valid{$rr->keytag} }, $ns;
+                            push @{ $nsec_rrsig_not_yet_valid{$rr->keytag} }, @all_ns_for_ip;
                         }
                         else {
                             my $i = 1;
@@ -3368,16 +3370,16 @@ sub dnssec10 {
                                 my $validated = $rr->verify_time( [grep { name( $_->name ) eq name( $rr->name ) } @nsec_rrs], [ $dnskey ], $testing_time, $msg );
 
                                 if ( $validated ) {
-                                    push @nsec_rrsig_verified, $ns;
+                                    push @nsec_rrsig_verified, @all_ns_for_ip;
                                     last;
                                 }
 
                                 if ( $i >= scalar @matching_dnskeys ) {
                                     if ( $msg =~ /Unknown cryptographic algorithm/ ) {
-                                        push @{ $algo_not_supported_by_zm{$dnskey->keytag}{$dnskey->algorithm} }, $ns;
+                                        push @{ $algo_not_supported_by_zm{$dnskey->keytag}{$dnskey->algorithm} }, @all_ns_for_ip;
                                     }
                                     else {
-                                        push @{ $nsec_rrsig_verify_error{$dnskey->keytag} }, $ns;
+                                        push @{ $nsec_rrsig_verify_error{$dnskey->keytag} }, @all_ns_for_ip;
                                     }
                                 }
 
@@ -3788,7 +3790,7 @@ sub dnssec10 {
           );
     }
 
-    $lc = List::Compare->new( [ @nss ], [ @ignored_nss, @without_dnskey, @nsec_in_answer, @nsec3param_nsec_nodata, @nsec3param_in_answer, @nsec_nsec3_nodata ] );
+    $lc = List::Compare->new( [ @all_ns ], [ @ignored_nss, @without_dnskey, @nsec_in_answer, @nsec3param_nsec_nodata, @nsec3param_in_answer, @nsec_nsec3_nodata ] );
     @first = $lc->get_unique;
 
     if ( @first ) {

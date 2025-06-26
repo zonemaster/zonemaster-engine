@@ -22,14 +22,20 @@ sub from_string {
     confess 'Argument must be a string: $domain'
       if !defined $domain || ref $domain ne '';
 
-    return $class->_new( { labels => [ split( /[.]/x, $domain ) ] } );
+    my $obj = Class::Accessor::new( $class, { labels => [ split( /[.]/x, $domain ) ] } );
+
+    # We have the raw string, so we can precompute the string representation
+    # easily and cheaply so it can be immediately returned by the string()
+    # method instead of recomputing it from the labels list. The only thing we
+    # need to do is to remove any trailing dot except if it’s the only
+    # character.
+    $obj->{_string} = ( $domain =~ s/.\K [.] \z//rx );
+
+    return $obj;
 }
 
 sub new {
-    my $proto = shift;
-    confess "must be called with a single argument"
-      if scalar( @_ ) != 1;
-    my $input = shift;
+    my ( $class, $input ) = @_;
 
     my $attrs = {};
     if ( !defined $input ) {
@@ -39,7 +45,7 @@ sub new {
         $attrs->{labels} = \@{ $input->labels };
     }
     elsif ( blessed $input && $input->isa( 'Zonemaster::Engine::Zone' ) ) {
-        $attrs->{labels} = [ split( /[.]/x, $input->name ) ];
+        $attrs->{labels} = \@{ $input->name->labels };
     }
     elsif ( ref $input eq '' ) {
         $attrs->{labels} = [ split( /[.]/x, $input ) ];
@@ -62,31 +68,20 @@ sub new {
         confess "Unrecognized argument: " . $what;
     }
 
-    # Type constraints
-    confess "Argument must be an ARRAYREF: labels"
-      if exists $attrs->{labels}
-      && ref $attrs->{labels} ne 'ARRAY';
-
-    my $class = ref $proto || $proto;
-    return $class->_new( $attrs );
-}
-
-sub _new {
-    my $class = shift;
-    my $attrs = shift;
-
-    my $obj = Class::Accessor::new( $class, $attrs );
-
-    return $obj;
+    return Class::Accessor::new( $class, $attrs );
 }
 
 sub string {
     my $self = shift;
 
-    my $name = join( '.', @{ $self->labels } );
-    $name = '.' if $name eq q{};
+    if ( not exists $self->{_string} ) {
+        my $string = join( '.', @{ $self->labels } );
+        $string = '.' if $string eq q{};
 
-    return $name;
+        $self->{_string} = $string;
+    }
+
+    return $self->{_string};
 }
 
 sub fqdn {
@@ -96,12 +91,21 @@ sub fqdn {
 }
 
 sub str_cmp {
-    my ( $self, $other ) = @_;
-    $other //= q{};    # Treat undefined value as root
+    # For performance reasons, we do not unpack @_.
+    # As a reminder, the calling convention is my ( $self, $other, $swap ) = @_.
 
-    $other =~ s/(.+)[.]\z/$1/x;
+    my $me = uc ( $_[0]->{_string} // $_[0]->string );
 
-    return ( uc( "$self" ) cmp uc( $other ) );
+    # Treat undefined value as root
+    my $other = $_[1] // q{};
+
+    if ( blessed $other and $other->isa( 'Zonemaster::Engine::DNSName' ) ) {
+        return $me cmp uc( $other->{_string} // $other->string() );
+    }
+    else {
+        # Assume $other is a string; remove trailing dot except if only character
+        return $me cmp uc( $other =~ s/.\K [.] \z//xr );
+    }
 }
 
 sub next_higher {
@@ -183,7 +187,7 @@ A reference to a list of strings, being the labels the DNS name is made up from.
 
 =over
 
-=item new($input) _or_ new({ labels => \@labellist})
+=item new($input) _or_ new({ labels => \@labellist })
 
 The constructor can be called with either a single argument or with a reference
 to a hash as in the example above.

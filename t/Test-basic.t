@@ -67,37 +67,6 @@ my $zone;
 ok( $res{B02_AUTH_RESPONSE_SOA},        q{B02_AUTH_RESPONSE_SOA} );
 ok( $res{HAS_NAMESERVER_NO_WWW_A_TEST}, q{HAS_NAMESERVER_NO_WWW_A_TEST} );
 
-###########
-# basic02
-###########
-$zone = Zonemaster::Engine->zone( 'exampledomain.fake' );
-zone_gives('basic02', $zone, [qw{B02_NO_DELEGATION}] );
-zone_gives_not( 'basic02', $zone, [qw{B02_AUTH_RESPONSE_SOA B02_NO_WORKING_NS B02_NS_BROKEN B02_NS_NOT_AUTH B02_NS_NO_IP_ADDR B02_NS_NO_RESPONSE B02_UNEXPECTED_RCODE}] );
-
-$zone = Zonemaster::Engine->zone( 'lame-ns-no-name.dufberg.se' );
-zone_gives('basic02', $zone, [qw{B02_NO_WORKING_NS B02_NS_NO_IP_ADDR}] );
-zone_gives_not( 'basic02', $zone, [qw{B02_AUTH_RESPONSE_SOA B02_NO_DELEGATION B02_NS_BROKEN B02_NS_NOT_AUTH B02_NS_NO_RESPONSE B02_UNEXPECTED_RCODE}] );
-
-$zone = Zonemaster::Engine->zone( 'lame-ns-no-addr.dufberg.se' );
-zone_gives('basic02', $zone, [qw{B02_NO_WORKING_NS B02_NS_NO_IP_ADDR}] );
-zone_gives_not( 'basic02', $zone, [qw{B02_AUTH_RESPONSE_SOA B02_NO_DELEGATION B02_NS_BROKEN B02_NS_NOT_AUTH B02_NS_NO_RESPONSE B02_UNEXPECTED_RCODE}] );
-
-$zone = Zonemaster::Engine->zone( 'lame-ns-no-glue.dufberg.se' );
-zone_gives('basic02', $zone, [qw{B02_NO_WORKING_NS B02_NS_NO_IP_ADDR}] );
-zone_gives_not( 'basic02', $zone, [qw{B02_AUTH_RESPONSE_SOA B02_NO_DELEGATION B02_NS_BROKEN B02_NS_NOT_AUTH B02_NS_NO_RESPONSE B02_UNEXPECTED_RCODE}] );
-
-$zone = Zonemaster::Engine->zone( 'lame-ns-no-response.dufberg.se' );
-zone_gives('basic02', $zone, [qw{B02_NO_WORKING_NS B02_NS_NO_RESPONSE}] );
-zone_gives_not( 'basic02', $zone, [qw{B02_AUTH_RESPONSE_SOA B02_NO_DELEGATION B02_NS_BROKEN B02_NS_NOT_AUTH B02_NS_NO_IP_ADDR B02_UNEXPECTED_RCODE}] );
-
-$zone = Zonemaster::Engine->zone( 'lame-ns-refused.dufberg.se' );
-zone_gives('basic02', $zone, [qw{B02_NO_WORKING_NS B02_UNEXPECTED_RCODE}] );
-zone_gives_not( 'basic02', $zone, [qw{B02_AUTH_RESPONSE_SOA B02_NO_DELEGATION B02_NS_BROKEN B02_NS_NOT_AUTH B02_NS_NO_RESPONSE B02_NS_NO_IP_ADDR}] );
-
-$zone = Zonemaster::Engine->zone( 'lame-ns-servfail.dufberg.se' );
-zone_gives('basic02', $zone, [qw{B02_NO_WORKING_NS B02_UNEXPECTED_RCODE}] );
-zone_gives_not( 'basic02', $zone, [qw{B02_AUTH_RESPONSE_SOA B02_NO_DELEGATION B02_NS_BROKEN B02_NS_NOT_AUTH B02_NS_NO_RESPONSE B02_NS_NO_IP_ADDR}] );
-
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Nameserver->save( $datafile );
 }

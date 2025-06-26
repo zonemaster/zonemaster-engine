@@ -82,15 +82,47 @@ Zonemaster::Engine::Recursor->add_fake_addresses( '.',
 my %subtests = (
     'GOOD-NSEC-1' => [
         1,
-         q(good-nsec-1.dnssec10.xa),
-         [ qw( DS10_HAS_NSEC ) ],
-         undef,
-         [],
-         [],
+        q(good-nsec-1.dnssec10.xa),
+        [ qw( DS10_HAS_NSEC ) ],
+        undef,
+        [],
+        [],
+    ],
+    'GOOD-NSEC-2' => [
+        1,
+        q(good-nsec-2.dnssec10.xa),
+        [ qw( DS10_HAS_NSEC ) ],
+        undef,
+        [],
+        [],
+    ],
+    'GOOD-NSEC-3' => [
+        1,
+        q(good-nsec-3.dnssec10.xa),
+        [ qw( DS10_HAS_NSEC ) ],
+        undef,
+        [],
+        [],
     ],
     'GOOD-NSEC3-1' => [
         1,
         q(good-nsec3-1.dnssec10.xa),
+        [ qw( DS10_HAS_NSEC3 ) ],
+        undef,
+        [],
+        [],
+    ],
+    'GOOD-NSEC3-2' => [
+        1,
+        q(good-nsec3-2.dnssec10.xa),
+        [ qw( DS10_HAS_NSEC3 ) ],
+        undef,
+        [],
+        [],
+    ],
+    'GOOD-NSEC3-3' => [
+        1,
+        q(good-nsec3-3.dnssec10.xa),
         [ qw( DS10_HAS_NSEC3 ) ],
         undef,
         [],
@@ -501,7 +533,7 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
 
 Zonemaster::Engine::Profile->effective->merge( Zonemaster::Engine::Profile->from_json( qq({ "test_cases": [ "$test_case" ] }) ) );
 
-perform_testcase_testing( $test_case, $test_module, \@all_tags, \%subtests, $ENV{ZONEMASTER_SINGLE_SCENARIO}, $ENV{ZONEMASTER_DISABLE_SCENARIO} );
+perform_testcase_testing( $test_case, $test_module, \@all_tags, \%subtests, $ENV{ZONEMASTER_SELECTED_SCENARIOS}, $ENV{ZONEMASTER_DISABLED_SCENARIOS} );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Nameserver->save( $datafile );
