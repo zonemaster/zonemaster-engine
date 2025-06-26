@@ -1,5 +1,27 @@
 Release history for Zonemaster component Zonemaster-Engine
 
+v8.0.0 2025-06-26 (part of Zonemaster v2025.1 release)
+
+ [Breaking changes]
+- Changes the string representation of IPv6 addresses in "NS_CREATED"
+  messages #1420
+- Separates functions to trim whitespace and to normalize domain
+  name, respectively #1316
+
+ [Features]
+- Updates local copies of IANA special IP registries #1456
+- Lowers all WARNING to NOTICE for test case Zone01 #1455
+- Downgrades ERROR to WARNING in test case DNSSEC03 #1452
+- Improves performance by optimizing critical code sections #1420
+
+ [Fixes]
+- Updates translations (Danish, Norwegian) #1418, #1449
+- Updates Dockerfile for release 2025.1 #1460
+- Fixes test case DNSSEC10 for name servers sharing the same IPs #1457
+- Adds blacklisting log message #1434
+- Fixes alias (CNAME) handling in Address03 test case #1432
+
+
 v7.1.0 2025-03-04 (part of Zonemaster v2024.2.1 release)
 
  [Release information]
