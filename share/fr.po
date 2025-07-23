@@ -90,7 +90,7 @@ msgid ""
 "referenced in {reference} as a '{name}'."
 msgstr ""
 "Le serveur de noms {nsname} a une adresse IP ({ns_ip}) dont le préfixe "
-"{prefix} est référéncé dans le {reference} sous le libellé '{name}'."
+"{prefix} est référencé dans le {reference} sous le libellé '{name}'."
 
 #. ADDRESS:NO_IP_PRIVATE_NETWORK
 msgid "All Nameserver addresses are in the routable public addressing space."
@@ -642,7 +642,7 @@ msgstr ""
 msgid ""
 "All name server(s) IPv4 address(es) are announced in the same IPv4 prefix."
 msgstr ""
-"Toutes les adresses IPv4 des serveurs de noms sont annoncés dans le même "
+"Toutes les adresses IPv4 des serveurs de noms sont annoncées dans le même "
 "préfixe IPv4."
 
 #. CONNECTIVITY:CN04_IPV6_DIFFERENT_PREFIX
@@ -667,7 +667,7 @@ msgstr ""
 msgid ""
 "All name server(s) IPv6 address(es) are announced in the same IPv6 prefix."
 msgstr ""
-"Toutes les adresses IPv6 des serveurs de noms sont annoncés dans le même "
+"Toutes les adresses IPv6 des serveurs de noms sont annoncées dans le même "
 "préfixe IPv6."
 
 #. CONNECTIVITY:ERROR_ASN_DATABASE
@@ -812,7 +812,7 @@ msgid ""
 "at parent ({parent_addresses}) and any equivalent address record in child "
 "zone ({zone_addresses})."
 msgstr ""
-"Problème de glues pour un serveur de noms \"in-bailiwick\", celles trouvées "
+"Problème de colle(s) pour un serveur de noms \"in-bailiwick\", celles trouvées "
 "({parent_addresses}) dans la zone parente sont différentes de celles "
 "trouvées ({zone_addresses}) sur les serveurs de noms de la zone."
 
@@ -827,13 +827,15 @@ msgstr ""
 #, perl-brace-format
 msgid "Saw {count} SOA mname."
 msgstr ""
-"Plusieurs adresses mail ({count}) ont été trouvées dans les différents SOA."
+"Plusieurs noms du serveur primaire de la zone ({count}) ont été trouvées "
+"dans l'enregistrement SOA MNAME."
 
 #. CONSISTENCY:MULTIPLE_SOA_RNAMES
 #, perl-brace-format
 msgid "Found {count} SOA rname(s)."
 msgstr ""
-"Plusieurs adresses mail ({count}) ont été trouvées dans les différents SOA."
+"Plusieurs adresses mail ({count}) ont été trouvées dans l'enregistrement "
+" SOA RNAME."
 
 #. CONSISTENCY:MULTIPLE_SOA_SERIALS
 #, perl-brace-format
@@ -883,7 +885,7 @@ msgstr ""
 #, perl-brace-format
 msgid "A single SOA mname value was seen ({mname})."
 msgstr ""
-"Un unique serveur maître a été trouvé dans les enregistrements de type "
+"Un unique serveur primaire a été trouvé dans les enregistrements de type "
 "\"SOA\" de la zone testée ({mname})."
 
 #. CONSISTENCY:ONE_SOA_RNAME
@@ -916,7 +918,7 @@ msgid ""
 "mismatch between the glue at the parent ({parent_addresses}) and any "
 "equivalent address record found in authoritative zone ({zone_addresses})."
 msgstr ""
-"Problèmes de glues pour un serveur de noms \"out-of-bailiwick\", celles "
+"Problèmes de colle(s) pour un serveur de noms \"out-of-bailiwick\", celles "
 "trouvées ({parent_addresses}) dans la zone parente sont différentes de "
 "celles trouvées ({zone_addresses}) sur les serveurs de noms faisant autorité "
 "pour ces données."
@@ -931,7 +933,7 @@ msgstr ""
 #, perl-brace-format
 msgid "Saw SOA serial number {serial} on following nameserver set : {ns_list}."
 msgstr ""
-"Le numéro de série {serial} a été récupérée sur les serveurs suivants : "
+"Le numéro de série {serial} a été récupéré sur les serveurs suivants : "
 "{ns_list}."
 
 #. CONSISTENCY:SOA_SERIAL_VARIATION
@@ -972,7 +974,7 @@ msgstr "Recherche de durées de vie de RRSIG trop courtes ou trop longues"
 
 #. DNSSEC:DNSSEC05
 msgid "Check for invalid DNSKEY algorithms"
-msgstr "Recherche d’algorithmes DNSKEY non valables"
+msgstr "Recherche d’algorithmes DNSKEY non valides"
 
 #. DNSSEC:DNSSEC06
 msgid "Verify DNSSEC additional processing"
@@ -3319,7 +3321,7 @@ msgid ""
 "SOA MNAME ({domain}) has a label ({label}) with a double hyphen ('--') in "
 "position 3 and 4 (with a prefix which is not 'xn--')."
 msgstr ""
-"Le serveur maître défini dans le champ MNAME du SOA ({domain}) contient un "
+"Le serveur primaire défini dans le champ MNAME du SOA ({domain}) contient un "
 "label ({label}) avec un double tiret ('--') en positions 3 et 4 (avec un "
 "préfixe différent de 'xn--')."
 
@@ -3327,21 +3329,21 @@ msgstr ""
 #, perl-brace-format
 msgid "Found illegal characters in SOA MNAME ({domain})."
 msgstr ""
-"Des caractères interdits ont été trouvés dans le nom du serveur maître "
+"Des caractères interdits ont été trouvés dans le nom du serveur primaire "
 "défini dans le SOA, 'mname' ({domain})."
 
 #. SYNTAX:MNAME_NUMERIC_TLD
 #, perl-brace-format
 msgid "SOA MNAME ({domain}) within a 'numeric only' TLD ({tld})."
 msgstr ""
-"Le serveur maître défini dans le SOA, 'mname' ({domain}), se trouve dans un "
+"Le serveur primaire défini dans le SOA, 'mname' ({domain}), se trouve dans un "
 "TLD 'numeric only' ({tld})."
 
 #. SYNTAX:MNAME_SYNTAX_OK
 #, perl-brace-format
 msgid "SOA MNAME ({domain}) syntax is valid."
 msgstr ""
-"La syntaxe du nom du serveur maître défini dans le SOA, 'mname' ({domain}) "
+"La syntaxe du nom du serveur primaire défini dans le SOA, 'mname' ({domain}) "
 "est valide."
 
 #. SYNTAX:MX_DISCOURAGED_DOUBLE_DASH
@@ -3523,7 +3525,7 @@ msgstr "Valeur maximale du champ 'expire' du SOA"
 
 #. ZONE:ZONE07
 msgid "SOA master is not an alias"
-msgstr "Le nom maître du SOA n’est pas un alias"
+msgstr "Le nom primaire du SOA n’est pas un alias"
 
 #. ZONE:ZONE08
 msgid "MX is not an alias"
@@ -3563,7 +3565,7 @@ msgstr ""
 #, perl-brace-format
 msgid "SOA 'mname' value ({mname}) refers to a NS which is an alias (CNAME)."
 msgstr ""
-"Le serveur maître défini dans le SOA, 'mname' ({mname}), fait référence à un "
+"Le serveur primaire défini dans le SOA, 'mname' ({mname}), fait référence à un "
 "serveur de noms qui est un alias (CNAME)."
 
 #. ZONE:MNAME_IS_NOT_CNAME
@@ -3571,7 +3573,7 @@ msgstr ""
 msgid ""
 "SOA 'mname' value ({mname}) refers to a NS which is not an alias (CNAME)."
 msgstr ""
-"Le serveur maître défini dans le SOA, 'mname' ({mname}), fait référence à un "
+"Le serveur primaire défini dans le SOA, 'mname' ({mname}), fait référence à un "
 "serveur de noms qui n'est pas un alias (CNAME)."
 
 #. ZONE:REFRESH_MINIMUM_VALUE_LOWER
@@ -3686,7 +3688,7 @@ msgstr ""
 #, perl-brace-format
 msgid "No IP address found for SOA 'mname' nameserver ({mname})."
 msgstr ""
-"Aucune adresse IP trouvée pour le serveur maître défini dans le SOA, "
+"Aucune adresse IP trouvée pour le serveur primaire défini dans le SOA, "
 "'mname' ({mname})."
 
 #. ZONE:ONE_SOA
@@ -3748,7 +3750,7 @@ msgstr ""
 msgid "SOA MNAME name server(s) \"{ns_list}\" appears to be master."
 msgstr ""
 "Le(s) serveur(s) de noms \"{ns_list}\" du SOA MNAME semblent être les "
-"serveurs maîtres."
+"serveurs primaires."
 
 #. ZONE:Z01_MNAME_MISSING_SOA_RECORD
 #, perl-brace-format
@@ -3771,7 +3773,7 @@ msgstr ""
 #, perl-brace-format
 msgid "SOA MNAME name server \"{ns}\" is not authoritative for the zone."
 msgstr ""
-"Le serveur de noms maître défini dans le SOA MNAME, \"{ns}\", ne fait pas "
+"Le serveur de noms primaire défini dans le SOA MNAME, \"{ns}\", ne fait pas "
 "autorité pour la zone."
 
 #. ZONE:Z01_MNAME_NOT_IN_NS_LIST
@@ -3779,7 +3781,7 @@ msgstr ""
 msgid ""
 "SOA MNAME name server \"{nsname}\" is not listed as NS record for the zone."
 msgstr ""
-"Le serveur maître défini dans le SOA MNAME, ({nsname}), ne fait pas partie "
+"Le serveur primaire défini dans le SOA MNAME, ({nsname}), ne fait pas partie "
 "des enregistrements de type \"NS\" listés par la zone."
 
 #. ZONE:Z01_MNAME_NOT_MASTER
@@ -3797,7 +3799,7 @@ msgstr ""
 msgid ""
 "SOA MNAME name server \"{nsname}\" cannot be resolved into an IP address."
 msgstr ""
-"Le serveurs de noms maître du SOA MNAME \"{nsname}\" ne peut pas être résolu "
+"Le serveur de nom primaire du SOA MNAME \"{nsname}\" ne peut pas être résolu "
 "en une adresse IP."
 
 #. ZONE:Z01_MNAME_UNEXPECTED_RCODE
