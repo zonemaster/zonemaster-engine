@@ -3799,7 +3799,7 @@ msgstr ""
 msgid ""
 "SOA MNAME name server \"{nsname}\" cannot be resolved into an IP address."
 msgstr ""
-"Le serveur de nom primaire du SOA MNAME \"{nsname}\" ne peut pas être résolu "
+"Le serveur de noms primaire du SOA MNAME \"{nsname}\" ne peut pas être résolu "
 "en une adresse IP."
 
 #. ZONE:Z01_MNAME_UNEXPECTED_RCODE
