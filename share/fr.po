@@ -827,8 +827,8 @@ msgstr ""
 #, perl-brace-format
 msgid "Saw {count} SOA mname."
 msgstr ""
-"Plusieurs noms du serveur primaire de la zone ({count}) ont été trouvées "
-"dans l'enregistrement SOA MNAME."
+"Plusieurs noms du serveur primaire de la zone ({count}) différents ont été "
+"trouvés dans le champ MNAME des enregistrements SOA."
 
 #. CONSISTENCY:MULTIPLE_SOA_RNAMES
 #, perl-brace-format
