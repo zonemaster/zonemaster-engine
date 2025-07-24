@@ -834,8 +834,8 @@ msgstr ""
 #, perl-brace-format
 msgid "Found {count} SOA rname(s)."
 msgstr ""
-"Plusieurs adresses mail ({count}) ont été trouvées dans l'enregistrement "
-" SOA RNAME."
+"Plusieurs adresses mail ({count}) différentes ont été trouvées dans "
+"le champ RNAME des enregistrements SOA."
 
 #. CONSISTENCY:MULTIPLE_SOA_SERIALS
 #, perl-brace-format
@@ -974,7 +974,7 @@ msgstr "Recherche de durées de vie de RRSIG trop courtes ou trop longues"
 
 #. DNSSEC:DNSSEC05
 msgid "Check for invalid DNSKEY algorithms"
-msgstr "Recherche d’algorithmes DNSKEY non valides"
+msgstr "Recherche d’algorithmes DNSKEY non valables"
 
 #. DNSSEC:DNSSEC06
 msgid "Verify DNSSEC additional processing"
