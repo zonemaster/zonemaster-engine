@@ -1,347 +1,126 @@
 use strict;
 use warnings;
 
-use Test::More;
 use File::Basename;
 use File::Spec::Functions qw( rel2abs );
 use lib dirname( rel2abs( $0 ) );
-
-BEGIN {
-    use_ok( q{Zonemaster::Engine} );
-    use_ok( q{Zonemaster::Engine::Nameserver} );
-    use_ok( q{Zonemaster::Engine::Test::Basic} );
-    use_ok( q{TestUtil}, qw( perform_testcase_testing ) );
-}
+use TestUtil::DSL;
 
 ###########
 # basic01 - https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/test-zones/Basic-TP/basic01.md
-my $test_module = 'Basic';
-my $test_case = 'basic01';
-my @all_tags = qw(B01_CHILD_IS_ALIAS
-                  B01_CHILD_FOUND
-                  B01_INCONSISTENT_ALIAS
-                  B01_INCONSISTENT_DELEGATION
-                  B01_NO_CHILD
-                  B01_PARENT_DISREGARDED
-                  B01_PARENT_FOUND
-                  B01_PARENT_NOT_FOUND
-                  B01_PARENT_UNDETERMINED
-                  B01_ROOT_HAS_NO_PARENT
-                  B01_SERVER_ZONE_ERROR);
+testing_test_case 'Basic', 'basic01';
+
+all_tags qw(B01_CHILD_IS_ALIAS
+            B01_CHILD_FOUND
+            B01_INCONSISTENT_ALIAS
+            B01_INCONSISTENT_DELEGATION
+            B01_NO_CHILD
+            B01_PARENT_DISREGARDED
+            B01_PARENT_FOUND
+            B01_PARENT_NOT_FOUND
+            B01_PARENT_UNDETERMINED
+            B01_ROOT_HAS_NO_PARENT
+            B01_SERVER_ZONE_ERROR);
 
 # Common hint file (test-zone-data/COMMON/hintfile)
-Zonemaster::Engine::Recursor->remove_fake_addresses( '.' );
-Zonemaster::Engine::Recursor->add_fake_addresses( '.',
-    { 'ns1' => [ '127.1.0.1', 'fda1:b2:c3::127:1:0:1' ],
-      'ns2' => [ '127.1.0.2', 'fda1:b2:c3::127:1:0:2' ],
-    }
-);
+root_hints 'ns1' => [ qw(127.1.0.1 fda1:b2:c3::127:1:0:1) ],
+           'ns2' => [ qw(127.1.0.2 fda1:b2:c3::127:1:0:2) ];
 
 # Test zone scenarios
-# - Documentation: L<TestUtil/perform_testcase_testing()>
-# - Format: { SCENARIO_NAME => [
-#     testable,
-#     zone_name,
-#     [ MANDATORY_MESSAGE_TAGS ],
-#     [ FORBIDDEN_MESSAGE_TAGS ],
-#     [ UNDELEGATED_NS ],
-#     [ UNDELEGATED_DS ],
-#   ] }
-#
-# - One of MANDATORY_MESSAGE_TAGS and FORBIDDEN_MESSAGE_TAGS may be undefined.
-#   See documentation for the meaning of that.
+zone_name_template 'child.parent.{SCENARIO}.{TESTCASE}.xa';
 
-my %subtests = (
-    'GOOD-1' => [
-        1,
-        q(child.parent.good-1.basic01.xa),
-        [ qw(B01_CHILD_FOUND B01_PARENT_FOUND) ],
-        undef,
-        [],
-        [],
-    ],
-    'GOOD-MIXED-1' => [
-        1,
-        q(child.parent.good-mixed-1.basic01.xa),
-        [ qw(B01_CHILD_FOUND B01_PARENT_FOUND) ],
-        undef,
-        [],
-        [],
-    ],
-    'GOOD-MIXED-2' => [
-        1,
-        q(child.parent.good-mixed-2.basic01.xa),
-        [ qw(B01_CHILD_FOUND B01_PARENT_FOUND) ],
-        undef,
-        [],
-        [],
-    ],
-    'GOOD-PARENT-HOST-1' => [
-        1,
-        q(child.parent.good-parent-host-1.basic01.xa),
-        [ qw(B01_CHILD_FOUND B01_PARENT_FOUND) ],
-        undef,
-        [],
-        [],
-    ],
-    'GOOD-GRANDPARENT-HOST-1' => [
-        1,
-        q(child.parent.good-grandparent-host-1.basic01.xa),
-        [ qw(B01_CHILD_FOUND B01_PARENT_FOUND) ],
-        undef,
-        [],
-        [],
-    ],
-    'GOOD-UNDEL-1' => [
-        1,
-        q(child.parent.good-undel-1.basic01.xa),
-        [ qw(B01_CHILD_FOUND B01_PARENT_DISREGARDED) ],
-        undef,
-        [ qw(ns3-undelegated-child.basic01.xa ns4-undelegated-child.basic01.xa) ],
-        [],
-    ],
-    'GOOD-MIXED-UNDEL-1' => [
-        1,
-        q(child.parent.good-mixed-undel-1.basic01.xa),
-        [ qw(B01_CHILD_FOUND B01_PARENT_DISREGARDED) ],
-        undef,
-        [ qw(ns3-undelegated-child.basic01.xa ns4-undelegated-child.basic01.xa) ],
-        [],
-    ],
-    'GOOD-MIXED-UNDEL-2' => [
-        1,
-        q(child.parent.good-mixed-undel-2.basic01.xa),
-        [ qw(B01_CHILD_FOUND B01_PARENT_DISREGARDED) ],
-        undef,
-        [ qw(ns3-undelegated-child.basic01.xa ns4-undelegated-child.basic01.xa) ],
-        [],
-    ],
-    'NO-DEL-UNDEL-1' => [
-        1,
-        q(child.parent.no-del-undel-1.basic01.xa),
-        [ qw(B01_CHILD_FOUND B01_PARENT_DISREGARDED) ],
-        undef,
-        [ qw(ns3-undelegated-child.basic01.xa ns4-undelegated-child.basic01.xa) ],
-        [],
-    ],
-    'NO-DEL-MIXED-UNDEL-1' => [
-        1,
-        q(child.parent.no-del-mixed-undel-1.basic01.xa),
-        [ qw(B01_CHILD_FOUND B01_PARENT_DISREGARDED) ],
-        undef,
-        [ qw(ns3-undelegated-child.basic01.xa ns4-undelegated-child.basic01.xa) ],
-        [],
-    ],
-    'NO-DEL-MIXED-UNDEL-2' => [
-        1,
-        q(child.w.x.parent.y.z.no-del-mixed-undel-2.basic01.xa),
-        [ qw(B01_CHILD_FOUND B01_PARENT_DISREGARDED) ],
-        undef,
-        [ qw(ns3-undelegated-child.basic01.xa ns4-undelegated-child.basic01.xa) ],
-        [],
-    ],
-    'NO-CHILD-1' => [
-        1,
-        q(child.parent.no-child-1.basic01.xa),
-        [ qw(B01_NO_CHILD B01_PARENT_FOUND) ],
-        undef,
-        [],
-        [],
-    ],
-    'NO-CHILD-2' => [
-        1,
-        q(child.parent.no-child-2.basic01.xa),
-        [ qw(B01_NO_CHILD B01_PARENT_FOUND) ],
-        undef,
-        [],
-        [],
-    ],
-    'NO-CHLD-PAR-UNDETER-1' => [
-        1,
-        q(child.parent.no-chld-par-undeter-1.basic01.xa),
-        [ qw(B01_NO_CHILD B01_PARENT_FOUND B01_PARENT_UNDETERMINED) ],
-        undef,
-        [],
-        [],
-    ],
-    'CHLD-FOUND-PAR-UNDET-1' => [
-        1,
-        q(child.parent.chld-found-par-undet-1.basic01.xa),
-        [ qw(B01_CHILD_FOUND B01_PARENT_FOUND B01_PARENT_UNDETERMINED) ],
-        undef,
-        [],
-        [],
-    ],
-    'CHLD-FOUND-INCONSIST-1' => [
-        1,
-        q(child.parent.chld-found-inconsist-1.basic01.xa),
-        [ qw(B01_CHILD_FOUND B01_INCONSISTENT_DELEGATION B01_PARENT_FOUND) ],
-        undef,
-        [],
-        [],
-    ],
-    'CHLD-FOUND-INCONSIST-2' => [
-        1,
-        q(child.parent.chld-found-inconsist-2.basic01.xa),
-        [ qw(B01_CHILD_FOUND B01_INCONSISTENT_DELEGATION B01_PARENT_FOUND) ],
-        undef,
-        [],
-        [],
-    ],
-    'CHLD-FOUND-INCONSIST-3' => [
-        1,
-        q(child.parent.chld-found-inconsist-3.basic01.xa),
-        [ qw(B01_CHILD_FOUND B01_INCONSISTENT_DELEGATION B01_PARENT_FOUND) ],
-        undef,
-        [],
-        [],
-    ],
-    'CHLD-FOUND-INCONSIST-4' => [
-        1,
-        q(child.parent.chld-found-inconsist-4.basic01.xa),
-        [ qw(B01_CHILD_IS_ALIAS B01_CHILD_FOUND B01_INCONSISTENT_DELEGATION B01_PARENT_FOUND) ],
-        undef,
-        [],
-        [],
-    ],
-    'CHLD-FOUND-INCONSIST-5' => [
-        1,
-        q(child.parent.chld-found-inconsist-5.basic01.xa),
-        [ qw(B01_CHILD_FOUND B01_INCONSISTENT_DELEGATION B01_PARENT_FOUND) ],
-        undef,
-        [],
-        [],
-    ],
-    'CHLD-FOUND-INCONSIST-6' => [
-        1,
-        q(child.parent.chld-found-inconsist-6.basic01.xa),
-        [ qw(B01_CHILD_FOUND B01_INCONSISTENT_DELEGATION B01_PARENT_FOUND) ],
-        undef,
-        [],
-        [],
-    ],
-    'CHLD-FOUND-INCONSIST-7' => [
-        1,
-        q(child.parent.chld-found-inconsist-7.basic01.xa),
-        [ qw(B01_CHILD_FOUND B01_INCONSISTENT_DELEGATION B01_PARENT_FOUND) ],
-        undef,
-        [],
-        [],
-    ],
-    'CHLD-FOUND-INCONSIST-8' => [
-        1,
-        q(child.parent.chld-found-inconsist-8.basic01.xa),
-        [ qw(B01_CHILD_FOUND B01_INCONSISTENT_DELEGATION B01_PARENT_FOUND) ],
-        undef,
-        [],
-        [],
-    ],
-    'CHLD-FOUND-INCONSIST-9' => [
-        1,
-        q(child.parent.chld-found-inconsist-9.basic01.xa),
-        [ qw(B01_CHILD_IS_ALIAS B01_CHILD_FOUND B01_INCONSISTENT_DELEGATION B01_PARENT_FOUND) ],
-        undef,
-        [],
-        [],
-    ],
-    'CHLD-FOUND-INCONSIST-10' => [
-        1,
-        q(child.parent.chld-found-inconsist-10.basic01.xa),
-        [ qw(B01_CHILD_FOUND B01_INCONSISTENT_DELEGATION B01_PARENT_FOUND) ],
-        undef,
-        [],
-        [],
-    ],
-    'NO-DEL-UNDEL-NO-PAR-1' => [
-        1,
-        q(child.parent.no-del-undel-no-par-1.basic01.xa),
-        [ qw(B01_CHILD_FOUND B01_PARENT_DISREGARDED) ],
-        undef,
-        [ qw(ns3-undelegated-child.basic01.xa ns4-undelegated-child.basic01.xa) ],
-        [],
-    ],
-    'NO-DEL-UNDEL-PAR-UND-1' => [
-        1,
-        q(child.parent.no-del-undel-par-und-1.basic01.xa),
-        [ qw(B01_CHILD_FOUND B01_PARENT_DISREGARDED) ],
-        undef,
-        [ qw(ns3-undelegated-child.basic01.xa ns4-undelegated-child.basic01.xa) ],
-        [],
-    ],
-    'NO-CHLD-NO-PAR-1' => [
-        1,
-        q(child.parent.no-chld-no-par-1.basic01.xa),
-        [ qw(B01_NO_CHILD B01_PARENT_NOT_FOUND B01_SERVER_ZONE_ERROR) ],
-        undef,
-        [],
-        [],
-    ],
-    'CHILD-ALIAS-1' => [
-        1,
-        q(child.parent.child-alias-1.basic01.xa),
-        [ qw(B01_CHILD_IS_ALIAS B01_NO_CHILD B01_PARENT_FOUND) ],
-        undef,
-        [],
-        [],
-    ],
-    'CHILD-ALIAS-2' => [
-        1,
-        q(child.parent.child-alias-2.basic01.xa),
-        [ qw(B01_CHILD_IS_ALIAS B01_NO_CHILD B01_INCONSISTENT_ALIAS B01_PARENT_FOUND) ],
-        undef,
-        [],
-        [],
-    ],
-    'ZONE-ERR-GRANDPARENT-1' => [
-        1,
-        q(child.parent.zone-err-grandparent-1.basic01.xa),
-        [ qw(B01_CHILD_FOUND B01_PARENT_FOUND B01_SERVER_ZONE_ERROR) ],
-        undef,
-        [],
-        [],
-    ],
-    'ZONE-ERR-GRANDPARENT-2' => [
-        1,
-        q(child.parent.zone-err-grandparent-2.basic01.xa),
-        [ qw(B01_CHILD_FOUND B01_PARENT_FOUND B01_SERVER_ZONE_ERROR) ],
-        undef,
-        [],
-        [],
-    ],
-    'ZONE-ERR-GRANDPARENT-3' => [
-        1,
-        q(child.parent.zone-err-grandparent-3.basic01.xa),
-        [ qw(B01_CHILD_FOUND B01_PARENT_FOUND B01_SERVER_ZONE_ERROR) ],
-        undef,
-        [],
-        [],
-    ],
-    'ROOT-ZONE' => [
-        1,
-        q(.),
-        [ qw(B01_CHILD_FOUND B01_ROOT_HAS_NO_PARENT) ],
-        undef,
-        [],
-        [],
-    ],
-);
+scenario qw(GOOD-1 GOOD-MIXED-{1..2} GOOD-PARENT-HOST-1 GOOD-GRANDPARENT-HOST-1) => sub {
+    expect qw(B01_CHILD_FOUND B01_PARENT_FOUND);
+    forbid_others;
+};
 
-###########
+scenario qw(GOOD-UNDEL-1 GOOD-MIXED-UNDEL-{1..2} NO-DEL-UNDEL-1 NO-DEL-MIXED-UNDEL-1) => sub {
+    fake_ns 'ns3-undelegated-child.basic01.xa';
+    fake_ns 'ns4-undelegated-child.basic01.xa';
+    expect qw(B01_CHILD_FOUND B01_PARENT_DISREGARDED);
+    forbid_others;
+};
 
-my $datafile = 't/' . basename ($0, '.t') . '.data';
+scenario 'NO-DEL-MIXED-UNDEL-2' => sub {
+    zone 'child.w.x.parent.y.z.{SCENARIO}.{TESTCASE}.xa';
+    fake_ns 'ns3-undelegated-child.basic01.xa';
+    fake_ns 'ns4-undelegated-child.basic01.xa';
+    expect qw(B01_CHILD_FOUND B01_PARENT_DISREGARDED);
+    forbid_others;
+};
 
-if ( not $ENV{ZONEMASTER_RECORD} ) {
-    die q{Stored data file missing} if not -r $datafile;
-    Zonemaster::Engine::Nameserver->restore( $datafile );
-    Zonemaster::Engine::Profile->effective->set( q{no_network}, 1 );
-}
+scenario 'NO-CHILD-{1..2}' => sub {
+    expect qw(B01_NO_CHILD B01_PARENT_FOUND);
+    forbid_others;
+};
 
-Zonemaster::Engine::Profile->effective->merge( Zonemaster::Engine::Profile->from_json( qq({ "test_cases": [ "$test_case" ] }) ) );
+scenario 'NO-CHLD-PAR-UNDETER-1' => sub {
+    expect qw(B01_NO_CHILD B01_PARENT_FOUND B01_PARENT_UNDETERMINED);
+    forbid_others;
+};
 
-perform_testcase_testing( $test_case, $test_module, \@all_tags, \%subtests, $ENV{ZONEMASTER_SELECTED_SCENARIOS}, $ENV{ZONEMASTER_DISABLED_SCENARIOS} );
+scenario 'CHLD-FOUND-PAR-UNDET-1' => sub {
+    expect qw(B01_CHILD_FOUND B01_PARENT_FOUND B01_PARENT_UNDETERMINED);
+    forbid_others;
+};
 
-if ( $ENV{ZONEMASTER_RECORD} ) {
-    Zonemaster::Engine::Nameserver->save( $datafile );
-}
+scenario 'CHLD-FOUND-INCONSIST-{1..3}' => sub {
+    expect qw(B01_CHILD_FOUND B01_INCONSISTENT_DELEGATION B01_PARENT_FOUND);
+    forbid_others;
+};
 
-done_testing;
+scenario 'CHLD-FOUND-INCONSIST-4' => sub {
+    expect qw(B01_CHILD_IS_ALIAS B01_CHILD_FOUND B01_INCONSISTENT_DELEGATION B01_PARENT_FOUND);
+    forbid_others;
+};
+
+scenario 'CHLD-FOUND-INCONSIST-{5..8}' => sub {
+    expect qw(B01_CHILD_FOUND B01_INCONSISTENT_DELEGATION B01_PARENT_FOUND);
+    forbid_others;
+};
+
+scenario 'CHLD-FOUND-INCONSIST-9' => sub {
+    expect qw(B01_CHILD_IS_ALIAS B01_CHILD_FOUND B01_INCONSISTENT_DELEGATION B01_PARENT_FOUND);
+    forbid_others;
+};
+
+scenario 'CHLD-FOUND-INCONSIST-10' => sub {
+    expect qw(B01_CHILD_FOUND B01_INCONSISTENT_DELEGATION B01_PARENT_FOUND);
+    forbid_others;
+};
+
+scenario qw(NO-DEL-UNDEL-NO-PAR-1 NO-DEL-UNDEL-PAR-UND-1) => sub {
+    fake_ns 'ns3-undelegated-child.basic01.xa';
+    fake_ns 'ns4-undelegated-child.basic01.xa';
+    expect qw(B01_CHILD_FOUND B01_PARENT_DISREGARDED);
+    forbid_others;
+};
+
+scenario 'NO-CHLD-NO-PAR-1' => sub {
+    expect qw(B01_NO_CHILD B01_PARENT_NOT_FOUND B01_SERVER_ZONE_ERROR);
+    forbid_others;
+};
+
+scenario 'CHILD-ALIAS-1' => sub {
+    expect qw(B01_CHILD_IS_ALIAS B01_NO_CHILD B01_PARENT_FOUND);
+    forbid_others;
+};
+
+scenario 'CHILD-ALIAS-2' => sub {
+    expect qw(B01_CHILD_IS_ALIAS B01_NO_CHILD B01_INCONSISTENT_ALIAS
+              B01_PARENT_FOUND);
+    forbid_others;
+};
+
+scenario 'ZONE-ERR-GRANDPARENT-{1..3}' => sub {
+    expect qw(B01_CHILD_FOUND B01_PARENT_FOUND B01_SERVER_ZONE_ERROR);
+    forbid_others;
+};
+
+scenario 'ROOT-ZONE' => sub {
+    zone '.';
+    expect qw(B01_CHILD_FOUND B01_ROOT_HAS_NO_PARENT);
+    forbid_others;
+};
+
+no_more_scenarios;
