@@ -61,7 +61,7 @@ my %subtests = (
                 'GOOD-2' =>
                 [
                  1,
-                 q(good-1.basic02.xa),
+                 q(good-2.basic02.xa),
                  [ qw(B02_AUTH_RESPONSE_SOA) ],
                  undef,
                  [],
