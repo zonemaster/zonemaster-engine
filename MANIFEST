@@ -259,6 +259,8 @@ t/Test-zone11.t
 t/Test.data
 t/Test.t
 t/TestUtil.pm
+t/TestUtil/DSL.pm
+t/TestUtil/DSL/Compiler.pm
 t/translator.t
 t/undelegated.data
 t/undelegated.t
