@@ -316,32 +316,114 @@ sub _compile_test_messages {
 sub _compile_expect {
     my ( $expect ) = @_;
 
-    my $tag = $expect->{tag};
-    my $caller = $expect->{caller};
-
     if ( exists $expect->{code} ) {
-        my $callback = $expect->{code};
-        return sub {
-            my @messages_of_tag = grep { $_->{tag} eq $tag } @_;
-            _ok(
-                $callback->( @messages_of_tag ),
-                "Messages of tag '$tag' satisfy custom callback",
-                $caller );
-        };
+        return _compile_expect_with_code( $expect );
     }
     elsif ( exists $expect->{args} ) {
-        # This case intentionally left unimplemented for now
-        ...;
+        return _compile_expect_with_args( $expect );
     }
     else {
-        return sub {
-            _ok(
-                scalar ( grep { $_->{tag} eq $tag } @_ ),
-                "Tag '$tag' is outputted",
-                $caller )
-                or Test::More::diag("Tag '$tag' should have been outputted, but wasn't");
+        return _compile_expect_bare( $expect );
+    }
+}
+
+sub _compile_expect_bare {
+    my ( $expect ) = @_;
+
+    my $tag    = $expect->{tag};
+    my $caller = $expect->{caller};
+
+    return sub {
+        _ok(
+            scalar ( grep { $_->{tag} eq $tag } @_ ),
+            "Tag '$tag' is outputted",
+            $caller )
+            or Test::More::diag("Tag '$tag' should have been outputted, but wasn't");
+    };
+}
+
+sub _compile_expect_with_args {
+    my ( $expect ) = @_;
+
+    my $tag    = $expect->{tag};
+    my $caller = $expect->{caller};
+    my %args   = %{$expect->{args}};
+
+    my %predicates;
+    my $explanation = "Looked for a message whose tag is '$tag'";
+    my $where = "where";
+
+    foreach my $argument ( sort keys %args ) {
+        $explanation .= "\n  $where '$argument' ";
+        $where = "  and";
+
+        my $value = $args{$argument};
+        my $comparison = do {
+            if ( ref $value eq '' ) {
+                $explanation .= "equals '$value'";
+                sub { $_[0] eq $_[1] };
+            }
+            elsif ( ref $value eq 'Regexp' ) {
+                $explanation .= "matches $value";
+                sub { $_[0] =~ $_[1] };
+            }
+            elsif ( ref $value eq 'CODE' ) {
+                $explanation .= "satisfies a custom predicate";
+                sub { $_[1]->($_[0]) };
+            }
+            else {
+                croak "Invalid argument value given to key '$argument'";
+            }
+        };
+        $predicates{$argument} = sub {
+            $comparison->($_->{args}{$argument}, $value)
         };
     }
+
+    $explanation .= "\n    and contains no argument other than those listed above";
+
+    my $combined_predicate = sub {
+        foreach my $k ( keys %{$_->{args}} ) {
+            if ( exists $predicates{$k} ) {
+                return 0 unless $predicates{$k}->($_);
+            }
+            else {
+                # The message contains an argument that isn’t matched by anything
+                # from the 'expect' keyword, so we fail the test for this message.
+                return 0;
+            }
+        }
+        return 1;
+    };
+
+    return sub {
+        my @messages = grep { $_->{tag} eq $tag } @_;
+        _ok(
+            scalar ( grep { $combined_predicate->($_) } @messages ),
+            "Messages of tag '$tag' exist with specified arguments",
+            $caller )
+            or do {
+                Test::More::diag($explanation);
+                Test::More::diag("Here are all messages that unsuccessfully matched:");
+                Test::More::diag("  $_->{tag} " . $_->argstr) foreach ( @messages );
+            }
+    };
+}
+
+sub _compile_expect_with_code {
+    my ( $expect ) = @_;
+
+    my $tag    = $expect->{tag};
+    my $caller = $expect->{caller};
+    my $code   = $expect->{code};
+
+    return sub {
+        my @messages_of_tag = grep { $_->{tag} eq $tag } @_;
+        _ok(
+            $code->( @messages_of_tag ),
+            "Messages of tag '$tag' satisfy custom callback",
+            $caller );
+    };
 }
 
 sub _compile_forbid {
