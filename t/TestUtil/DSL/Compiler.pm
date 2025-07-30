@@ -32,10 +32,6 @@ to C<prove>).
 our $DEBUG = 0;
 
 
-# FIXME: when subtests fail, the failures are reported as coming from this
-# file (Compiler.pm), but the real source should be the scenario block or the
-# 'expect' or 'forbid' tag in the .t file.
-
 sub compile {
     my ($ast) = @_;
 
@@ -87,7 +83,9 @@ sub compile {
         my @todo_tests;
         foreach my $name (sort keys %$subtests) {
             my ( $status, $reason ) = @{$selected_subtests->{$name}};
-            my ( $callback, $zone_name ) = @{$subtests->{$name}};
+            my $callback  = $subtests->{$name}{callback};
+            my $zone_name = $subtests->{$name}{zone_name};
+            my $caller    = $subtests->{$name}{caller};
 
             if ( $status eq 'todo' ) {
                 my $orig_callback = $callback;
@@ -110,7 +108,16 @@ sub compile {
                 };
                 push @disabled_tests, [ $name, $reason ];
             }
-            Test::More::subtest($name, $callback, $zone_name);
+            # Test::More->builder->no_diag(1) - called inside the callback
+            my $ret = Test::More::subtest($name, $callback, $zone_name);
+            Test::More->builder->no_diag(0);
+            unless ( $ret ) {
+                my ( $file, $line ) = @$caller;
+                Test::More::diag(<<DIAG);
+  Failed scenario '$name'
+  at $file line $line.
+DIAG
+            }
         }
 
         Test::More::done_testing();
@@ -217,7 +224,11 @@ sub _compile_scenarios {
                 $scenario->{body}{zone},
                 SCENARIO => $name, TESTCASE => $test_case );
 
-            $compiled_scenarios{$name} = [ $subtest_callback, $zone_name ];
+            $compiled_scenarios{$name} = {
+                callback => $subtest_callback,
+                zone_name => $zone_name,
+                caller => $scenario->{caller},
+            };
         }
     }
 
@@ -235,6 +246,7 @@ sub _compile_scenario_subtest {
 
     return sub {
         my ( $zone_name ) = @_;
+        Test::More::plan(tests => scalar @func_test_messages + 1);
 
         Test::More::note("Zone: $zone_name");
         $func_add_fake_delegation->($zone_name) if defined $func_add_fake_delegation;
@@ -250,6 +262,12 @@ sub _compile_scenario_subtest {
             Test::More::pass("Test case executes without errors");
             $_->( @messages ) foreach ( @func_test_messages );
         }
+
+        # At the end of a subtest, if there is at least one failure,
+        # Test::More automatically generates a comment containing the location
+        # of the failing test. This location is wrong, so we squelch any
+        # diag() output. There is no other way than to call no_diag() here.
+        Test::More->builder->no_diag(1);
     };
 }
 
@@ -293,14 +311,16 @@ sub _compile_expect {
     my ( $expect ) = @_;
 
     my $tag = $expect->{tag};
+    my $caller = $expect->{caller};
 
     if ( exists $expect->{code} ) {
         my $callback = $expect->{code};
         return sub {
             my @messages_of_tag = grep { $_->{tag} eq $tag } @_;
-            Test::More::ok(
+            _ok(
                 $callback->( @messages_of_tag ),
-                "Messages of tag '$tag' satisfy custom callback" );
+                "Messages of tag '$tag' satisfy custom callback",
+                $caller );
         };
     }
     elsif ( exists $expect->{args} ) {
@@ -309,21 +329,26 @@ sub _compile_expect {
     }
     else {
         return sub {
-            Test::More::ok(
-                (grep { $_->{tag} eq $tag } @_),
-                "Tag '$tag' is outputted")
+            _ok(
+                scalar ( grep { $_->{tag} eq $tag } @_ ),
+                "Tag '$tag' is outputted",
+                $caller )
                 or Test::More::diag("Tag '$tag' should have been outputted, but wasn't");
         };
     }
 }
 
 sub _compile_forbid {
-    my ( $tag ) = @_;
+    my ( $forbid ) = @_;
+
+    my $tag    = $forbid->{tag};
+    my $caller = $forbid->{caller};
 
     return sub {
-        Test::More::ok(
-            (not grep { $_->{tag} eq $tag } @_),
-            "Tag '$tag' is not outputted")
+        _ok(
+            ! scalar ( grep { $_->{tag} eq $tag } @_ ),
+            "Tag '$tag' is not outputted",
+            $caller )
             or Test::More::diag("Tag '$tag' shouldn't have been outputted, but it was");
     };
 }
@@ -342,6 +367,28 @@ sub _expand_template {
     }
 
     return $result;
+}
+
+# A version of Test::More::ok that prints the correct location when a test fails.
+
+sub _ok {
+    my ( $ok, $test_name, $caller ) = @_;
+    my ( $file, $line ) = @$caller;
+
+    # This is the only way to squelch the automatic diagnostics that are printed
+    # on the TAP output when ok() fails. The TAP output erroneously points to
+    # a line in t/TestUtil/DSL/Compiler.pm when an error occurs.
+    Test::More->builder->no_diag(1);
+    my $ret = Test::More::ok( $ok, $test_name );
+    Test::More->builder->no_diag(0);
+
+    unless ( $ok ) {
+        Test::More::diag(<<DIAG);
+  Failed test '$test_name'
+  at $file line $line.
+DIAG
+    }
+    return $ret;
 }
 
 

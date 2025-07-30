@@ -225,8 +225,11 @@ sub scenario (@) {
     my $definition = pop @_;
     my @names = _expand_scenario_names(@_);
 
+    my @context = caller(0);
+
     push @{STATE->{scenarios}}, {
         names => \@names,
+        caller => [ @context[1..2] ],
         body => do {
             my $PARENT_STATE = STATE;
             push_state 'scenario';
@@ -511,28 +514,31 @@ sub expect (@) {
     if (scalar @_ == 2 and ref $_[1] eq 'HASH') {
         # Third form
         my ($tag, $args) = @_;
-        _ensure_tag_is_declared( $tag, 'expect' );
-        delete STATE->{not_expected}{$tag};
-        push @{STATE->{expect}}, { tag => $tag, args => $args };
+        _declare_expect( $tag, args => $args );
     }
     elsif (scalar @_ == 2 and ref $_[1] eq 'CODE') {
         # Fourth form
         my ($tag, $code) = @_;
-        _ensure_tag_is_declared( $tag, 'expect' );
-        delete STATE->{not_expected}{$tag};
-        push @{STATE->{expect}}, { tag => $tag, code => $code };
+        _declare_expect( $tag, code => $code );
     }
     elsif (scalar @_ >= 1) {
         # First or second form
         foreach my $tag (@_) {
-            _ensure_tag_is_declared( $tag, 'expect' );
-            delete STATE->{not_expected}{$tag};
-            push @{STATE->{expect}}, { tag => $tag };
+            _declare_expect( $tag );
         }
     }
     else {
         croak "Need at least one argument";
     }
+}
+
+sub _declare_expect {
+    my ($tag, %args) = @_;
+    my @context = caller(1);
+
+    _ensure_tag_is_declared( $tag, 'expect' );
+    delete STATE->{not_expected}{$tag};
+    push @{STATE->{expect}}, { tag => $tag, caller => [ @context[1..2] ], %args };
 }
 
 =head2 forbid
@@ -555,10 +561,17 @@ sub forbid (@) {
     croak "Need at least one argument" unless scalar @tags >= 1;
 
     foreach my $tag (@_) {
-        _ensure_tag_is_declared( $tag, 'forbid' );
-        delete STATE->{not_forbidden}{$tag};
+        _declare_forbid( $tag );
     }
-    push @{STATE->{forbid}}, @tags;
+}
+
+sub _declare_forbid {
+    my ($tag) = @_;
+    my @context = caller(1);
+
+    _ensure_tag_is_declared( $tag, 'forbid' );
+    delete STATE->{not_forbidden}{$tag};
+    push @{STATE->{forbid}}, { tag => $tag, caller => [ @context[1..2] ] };
 }
 
 =head2 expect_others
@@ -575,7 +588,7 @@ sub expect_others () {
     croak "Cannot use expect_others more than once" if STATE->{expect_others};
     STATE->{expect_others} = 1;
 
-    expect ( keys %{STATE->{not_forbidden}} );
+    _declare_expect( $_ ) foreach ( keys %{STATE->{not_forbidden}} );
 }
 
 =head2 forbid_others
@@ -592,7 +605,7 @@ sub forbid_others () {
     croak "Cannot use forbid_others more than once" if STATE->{forbid_others};
     STATE->{forbid_others} = 1;
 
-    forbid ( keys %{STATE->{not_expected}} );
+    _declare_forbid( $_ ) foreach ( keys %{STATE->{not_expected}} );
 }
 
 =head2 not_testable
