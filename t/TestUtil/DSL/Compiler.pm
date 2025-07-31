@@ -87,31 +87,37 @@ sub compile {
             my $zone_name = $subtests->{$name}{zone_name};
             my $caller    = $subtests->{$name}{caller};
 
-            if ( $status eq 'todo' ) {
-                my $orig_callback = $callback;
-                $callback = sub {
-                    Test::More->builder->todo_start( $reason );
-                    &$orig_callback;
-                    Test::More->builder->todo_end();
-                };
-                push @todo_tests, [ $name, $reason ];
+            my $name_and_reason = "$name" . (defined $reason ? " ($reason)" : "");
+
+            if ( $status eq 'skip' ) {
+                Test::More->builder->skip( $name_and_reason );
+                push @disabled_tests, $name_and_reason;
+                next;
             }
             elsif ( $status eq 'not_testable' ) {
-                $callback = sub {
-                    Test::More->builder->todo_skip( $reason );
-                };
-                push @disabled_tests, [ $name, $reason ];
+                Test::More->builder->todo_skip( $name_and_reason );
+                push @disabled_tests, $name_and_reason;
+                next;
             }
-            elsif ( $status eq 'skip' ) {
-                $callback = sub {
-                    Test::More::plan( skip_all => $reason );
-                };
-                push @disabled_tests, [ $name, $reason ];
+            elsif ( $status eq 'todo' ) {
+                # Avoid passing undef to Test::Builder::todo_start(), otherwise
+                # older versions (e.g. the one shipped with Perl 5.26) will not
+                # enable the todo status properly for the subtest if no reason
+                # was provided for the todo keyword in the DSL.
+                Test::More->builder->todo_start( $reason // "" );
+                push @todo_tests, $name_and_reason;
             }
-            # Test::More->builder->no_diag(1) - called inside the callback
+
             my $ret = Test::More::subtest($name, $callback, $zone_name);
+            # Test::More->builder->no_diag(1) was called inside the callback just before
+            # exiting in order to suppress the default diag() output in case of failure
+            # of the subtest. Be sure to re-enable it before continuing.
             Test::More->builder->no_diag(0);
-            unless ( $ret ) {
+
+            if ( $status eq 'todo' ) {
+                Test::More->builder->todo_end();
+            }
+            elsif ( $status eq 'testable' and not $ret ) {
                 my ( $file, $line ) = @$caller;
                 Test::More::diag(<<DIAG);
   Failed scenario '$name'
