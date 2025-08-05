@@ -50,7 +50,7 @@ sub compile {
     my $func_preamble = _compile_preamble($ast);
     my $func_set_root_hints = _compile_root_hints($ast);
     my $func_select_subtests = _compile_select_subtests($ast);
-    my $subtests = _compile_scenarios($ast->{scenarios}, $test_case, $test_method);
+    my @subtests = _compile_scenarios($ast->{scenarios}, $test_case, $test_method);
 
     my $datafile = 't/' . File::Basename::basename( $0, '.t' ) . '.data';
 
@@ -81,11 +81,13 @@ sub compile {
 
         my @disabled_tests;
         my @todo_tests;
-        foreach my $name (sort keys %$subtests) {
+        foreach my $descriptor (@subtests) {
+            my $name = $descriptor->{scenario_name};
+
             my ( $status, $reason ) = @{$selected_subtests->{$name}};
-            my $callback  = $subtests->{$name}{callback};
-            my $zone_name = $subtests->{$name}{zone_name};
-            my $caller    = $subtests->{$name}{caller};
+            my $callback  = $descriptor->{callback};
+            my $zone_name = $descriptor->{zone_name};
+            my $caller    = $descriptor->{caller};
 
             my $name_and_reason = "$name" . (defined $reason ? " ($reason)" : "");
 
@@ -218,27 +220,39 @@ sub _compile_select_subtests {
 sub _compile_scenarios {
     my ( $scenario_blocks, $test_case, $test_method ) = @_;
 
-    my %compiled_scenarios = ();
+    my @compiled_scenarios = ();
 
     foreach my $scenario (@$scenario_blocks) {
-        # The same subtest can be reused across all scenarios defined by the same block;
-        # the only thing that changes is the zone name.
-        my $subtest_callback = _compile_scenario_subtest( $scenario, $test_method );
-
-        foreach my $name (@{$scenario->{names}}) {
-            my $zone_name = lc _expand_template(
-                $scenario->{body}{zone},
-                SCENARIO => $name, TESTCASE => $test_case );
-
-            $compiled_scenarios{$name} = {
-                callback => $subtest_callback,
-                zone_name => $zone_name,
-                caller => $scenario->{caller},
-            };
-        }
+        push @compiled_scenarios,
+            _compile_scenario_block( $scenario, $test_case, $test_method );
     }
 
-    return \%compiled_scenarios;
+    return @compiled_scenarios;
+}
+
+sub _compile_scenario_block {
+    my ( $scenario_block, $test_case, $test_method ) = @_;
+
+    my @compiled_scenarios = ();
+
+    # The same subtest can be reused across all scenarios defined by the same block;
+    # the only thing that changes is the zone name.
+    my $subtest_callback = _compile_scenario_subtest( $scenario_block, $test_method );
+
+    foreach my $name (@{$scenario_block->{names}}) {
+        my $zone_name = lc _expand_template(
+            $scenario_block->{body}{zone},
+            SCENARIO => $name, TESTCASE => $test_case );
+
+        push @compiled_scenarios, {
+            scenario_name => $name,
+            callback => $subtest_callback,
+            zone_name => $zone_name,
+            caller => $scenario_block->{caller},
+        };
+    }
+
+    return @compiled_scenarios;
 }
 
 # Scenario compilation helper functions
