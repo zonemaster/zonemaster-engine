@@ -271,7 +271,7 @@ sub scenario (@) {
     foreach my $name (@{$scenario->{names}}) {
         STATE->{scenario_status}{$name} = $scenario->{body}{status};
     }
-    push @{STATE->{scenarios}}, [ scenario => $scenario ];
+    push @{STATE->{ops}}, [ scenario => $scenario ];
 }
 
 
@@ -304,9 +304,9 @@ sub testing_test_case ($$) {
                'ns2.example' => [ qw(198.51.113.20 2001:db8:0:8::1:53) ];
 
 Declare the set of name servers which are authoritative for the root zone.
-These root hints apply to all scenarios in the file.
+These root hints apply to all scenarios that follow this keyword.
 
-This keyword may only appear once and must be used before the first scenario
+This keyword must be used at least one before defining the first scenario
 block.
 
 =cut
@@ -314,8 +314,9 @@ block.
 sub root_hints (%) {
     my (%root_hints) = @_;
     check_state 'testing_test_case';
-    croak "root_hints may be used only once" if exists STATE->{root_hints};
-    STATE->{root_hints} = \%root_hints;
+    STATE->{root_hints} = 1;
+
+    push @{STATE->{ops}}, [ root_hints => \%root_hints ];
 }
 
 =head2 zone_name_template

@@ -48,13 +48,14 @@ sub compile {
     };
 
     my $func_preamble = _compile_preamble($ast);
-    my $func_set_root_hints = _compile_root_hints($ast);
     my $func_select_subtests = _compile_select_subtests($ast);
-    my @subtests = _compile_scenarios($ast->{scenarios}, $test_case, $test_method);
+    my @compiled_ops = _compile_ops($ast->{ops}, $test_case, $test_method);
 
     my $datafile = 't/' . File::Basename::basename( $0, '.t' ) . '.data';
 
     return sub {
+        my $context = {};
+
         if ($DEBUG) {
             Test::More::note("Dumping AST read after parsing DSL:");
             Test::More::note(Test::More::explain($ast));
@@ -62,9 +63,9 @@ sub compile {
 
         $func_preamble->();
 
-        $func_set_root_hints->();
-
-        my $selected_subtests = $func_select_subtests->(
+        $context->{todo_tests}     = [];
+        $context->{disabled_tests} = [];
+        $context->{selected_subtests} = $func_select_subtests->(
             $ENV{ZONEMASTER_SELECTED_SCENARIOS},
             $ENV{ZONEMASTER_DISABLED_SCENARIOS});
 
@@ -79,64 +80,19 @@ sub compile {
         Zonemaster::Engine::Profile->effective->merge(
             Zonemaster::Engine::Profile->from_json( qq({ "test_cases": ["$test_case"] }) ));
 
-        my @disabled_tests;
-        my @todo_tests;
-        foreach my $descriptor (@subtests) {
-            my $name = $descriptor->{scenario_name};
-
-            my ( $status, $reason ) = @{$selected_subtests->{$name}};
-            my $callback  = $descriptor->{callback};
-            my $zone_name = $descriptor->{zone_name};
-            my $caller    = $descriptor->{caller};
-
-            my $name_and_reason = "$name" . (defined $reason ? " ($reason)" : "");
-
-            if ( $status eq 'skip' ) {
-                Test::More->builder->skip( $name_and_reason );
-                push @disabled_tests, $name_and_reason;
-                next;
-            }
-            elsif ( $status eq 'not_testable' ) {
-                Test::More->builder->todo_skip( $name_and_reason );
-                push @disabled_tests, $name_and_reason;
-                next;
-            }
-            elsif ( $status eq 'todo' ) {
-                # Avoid passing undef to Test::Builder::todo_start(), otherwise
-                # older versions (e.g. the one shipped with Perl 5.26) will not
-                # enable the todo status properly for the subtest if no reason
-                # was provided for the todo keyword in the DSL.
-                Test::More->builder->todo_start( $reason // "" );
-                push @todo_tests, $name_and_reason;
-            }
-
-            my $ret = Test::More::subtest($name, $callback, $zone_name);
-            # Test::More->builder->no_diag(1) was called inside the callback just before
-            # exiting in order to suppress the default diag() output in case of failure
-            # of the subtest. Be sure to re-enable it before continuing.
-            Test::More->builder->no_diag(0);
-
-            if ( $status eq 'todo' ) {
-                Test::More->builder->todo_end();
-            }
-            elsif ( $status eq 'testable' and not $ret ) {
-                my ( $file, $line ) = @$caller;
-                Test::More::diag(<<DIAG);
-  Failed scenario '$name'
-  at $file line $line.
-DIAG
-            }
+        foreach my $callback ( @compiled_ops ) {
+            $callback->($context);
         }
 
         Test::More::done_testing();
 
-        if (scalar @todo_tests) {
+        if (scalar @{$context->{todo_tests}}) {
             Test::More::diag("The following scenarios are marked as TODO:\n");
-            Test::More::diag("  $_") foreach @todo_tests;
+            Test::More::diag("  $_") foreach @{$context->{todo_tests}};
         }
-        if (scalar @disabled_tests) {
+        if (scalar @{$context->{disabled_tests}}) {
             Test::More::diag("The following scenarios were not run:\n");
-            Test::More::diag("  $_") foreach @disabled_tests;
+            Test::More::diag("  $_") foreach @{$context->{disabled_tests}};
         }
 
         if ( $ENV{ZONEMASTER_RECORD} ) {
@@ -163,13 +119,11 @@ sub _compile_preamble {
 }
 
 sub _compile_root_hints {
-    my ($ast) = @_;
-
-    confess unless exists $ast->{root_hints};
+    my ( $root_hints ) = @_;
 
     return sub {
         Zonemaster::Engine::Recursor->remove_fake_addresses( '.' );
-        Zonemaster::Engine::Recursor->add_fake_addresses( '.', $ast->{root_hints} );
+        Zonemaster::Engine::Recursor->add_fake_addresses( '.', $root_hints );
         Zonemaster::Engine::Recursor::clear_cache();
     }
 }
@@ -206,42 +160,102 @@ sub _compile_select_subtests {
     };
 }
 
-sub _compile_scenarios {
-    my ( $scenario_blocks, $test_case, $test_method ) = @_;
+sub _compile_ops {
+    my ( $ops, $test_case, $test_method ) = @_;
 
-    my @compiled_scenarios = ();
+    return map {
+        my ( $type, @args ) = @$_;
+        if ( $type eq 'root_hints' ) {
+            _compile_root_hints( @args );
+        }
+        elsif ( $type eq 'scenario' ) {
+            _compile_run_scenario_block( @args, $test_case, $test_method );
+        }
+    } @$ops;
+}
 
-    foreach my $scenario (@$scenario_blocks) {
-        push @compiled_scenarios,
-            _compile_scenario_block( $scenario, $test_case, $test_method );
-    }
+sub _compile_run_scenario_block {
+    my ( $scenario_block, $test_case, $test_method ) = @_;
 
-    return @compiled_scenarios;
+    # Compiling a scenario block is a bit tricky because determining which
+    # scenarios to run is done at runtime. We can’t just compile the scenario
+    # block to a sub directly and be done with it; we need to wrap it into a
+    # bit of code that checks if the scenario was forcibly enabled or disabled
+    # in the environment before making the decision to run it or not.
+    my $compiled_scenarios = _compile_scenario_block( $scenario_block, $test_case, $test_method );
+
+    my ($file, $line) = @{$compiled_scenarios->{caller}};
+    my $callback = $compiled_scenarios->{callback};
+
+    return sub {
+        my ( $context ) = @_;
+
+        my $selected_subtests = $context->{selected_subtests};
+        my $disabled_tests    = $context->{disabled_tests};
+        my $todo_tests        = $context->{todo_tests};
+
+        foreach my $descriptor (@{$compiled_scenarios->{args}}) {
+            my $name      = $descriptor->{scenario_name};
+            my $zone_name = $descriptor->{zone_name};
+
+            my ( $status, $reason ) = @{$selected_subtests->{$name}};
+            my $name_and_reason     = "$name" . (defined $reason ? " ($reason)" : "");
+
+            if ( $status eq 'skip' ) {
+                Test::More->builder->skip( $name_and_reason );
+                push @$disabled_tests, $name_and_reason;
+                next;
+            }
+            elsif ( $status eq 'not_testable' ) {
+                Test::More->builder->todo_skip( $name_and_reason );
+                push @$disabled_tests, $name_and_reason;
+                next;
+            }
+            elsif ( $status eq 'todo' ) {
+                # Avoid passing undef to Test::Builder::todo_start(), otherwise
+                # older versions (e.g. the one shipped with Perl 5.26) will not
+                # enable the todo status properly for the subtest if no reason
+                # was provided for the todo keyword in the DSL.
+                Test::More->builder->todo_start( $reason // "" );
+                push @$todo_tests, $name_and_reason;
+            }
+
+            my $ret = Test::More::subtest($name, $callback, $zone_name);
+            # Test::More->builder->no_diag(1) was called inside the callback just before
+            # exiting in order to suppress the default diag() output in case of failure
+            # of the subtest. Be sure to re-enable it before continuing.
+            Test::More->builder->no_diag(0);
+
+            if ( $status eq 'todo' ) {
+                Test::More->builder->todo_end();
+            }
+            elsif ( $status eq 'testable' and not $ret ) {
+                Test::More::diag(<<DIAG);
+  Failed scenario '$name'
+  at $file line $line.
+DIAG
+            }
+        }
+    };
 }
 
 sub _compile_scenario_block {
     my ( $scenario_block, $test_case, $test_method ) = @_;
 
-    my @compiled_scenarios = ();
-
-    # The same subtest can be reused across all scenarios defined by the same block;
-    # the only thing that changes is the zone name.
-    my $subtest_callback = _compile_scenario_subtest( $scenario_block, $test_method );
-
+    my @subtest_args = ();
     foreach my $name (@{$scenario_block->{names}}) {
-        my $zone_name = lc _expand_template(
+        my $zone = lc _expand_template(
             $scenario_block->{body}{zone},
             SCENARIO => $name, TESTCASE => $test_case );
 
-        push @compiled_scenarios, {
-            scenario_name => $name,
-            callback => $subtest_callback,
-            zone_name => $zone_name,
-            caller => $scenario_block->{caller},
-        };
+        push @subtest_args, { scenario_name => $name, zone_name => $zone };
     }
 
-    return @compiled_scenarios;
+    return {
+        caller => $scenario_block->{caller},
+        callback => _compile_scenario_subtest( $scenario_block, $test_method ),
+        args => \@subtest_args
+    };
 }
 
 # Scenario compilation helper functions
