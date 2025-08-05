@@ -177,38 +177,27 @@ sub _compile_root_hints {
 sub _compile_select_subtests {
     my ($ast) = @_;
 
-    my %scenario_status;
-    foreach my $block ( @{$ast->{scenarios}} ) {
-        my $status = $block->{body}{status};
-        foreach my $name (@{$block->{names}}) {
-            $scenario_status{$name} = $status;
-        }
-    }
-
     return sub {
         my ( $selected_scenarios, $disabled_scenarios ) = @_;
 
-        # Make a copy so this sub doesn’t clobber the variable defined just before
-        my %scenario_status = ( %scenario_status );
+        # Make a copy so as not to clobber the AST
+        my %scenario_status = ( %{$ast->{scenario_status}} );
 
         # Force the listed tests in $selected_scenarios to run as if their
         # status was testable.
         if ( defined $selected_scenarios ) {
-            my %selected = map { $_ => 1 } split(/, */, $selected_scenarios);
-            foreach my $name (keys %scenario_status) {
-                $scenario_status{$name} = do {
-                    if ( exists $selected{$name} ) {
-                        [ 'testable' ];
-                    }
-                    else {
-                        [ 'skip', 'not selected by environment variable'];
-                    }
-                };
+            %scenario_status = map {
+                $_ => [ 'skip', 'not selected by environment variable' ]
+            } ( keys %scenario_status );
+            foreach my $name ( split(/, */, $selected_scenarios) ) {
+                croak "$name: no such scenario" unless exists $scenario_status{$name};
+                $scenario_status{$name} = [ 'testable' ];
             }
         }
 
         # Skip the tests explicitly listed in $disabled_scenarios
         foreach my $to_disable ( split(/, */, $disabled_scenarios // "") ) {
+            croak "$to_disable: no such scenario" unless exists $scenario_status{$to_disable};
             $scenario_status{$to_disable} =
                 [ 'skip', 'disabled by environment variable' ];
         }

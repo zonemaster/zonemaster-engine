@@ -227,7 +227,7 @@ sub scenario (@) {
 
     my @context = caller(0);
 
-    push @{STATE->{scenarios}}, {
+    my $scenario = {
         names => \@names,
         caller => [ @context[1..2] ],
         body => do {
@@ -266,7 +266,12 @@ sub scenario (@) {
             # TODO do we need more sanity checks?
             $obj;
         }
+    };
+
+    foreach my $name (@{$scenario->{names}}) {
+        STATE->{scenario_status}{$name} = $scenario->{body}{status};
     }
+    push @{STATE->{scenarios}}, [ scenario => $scenario ];
 }
 
 
