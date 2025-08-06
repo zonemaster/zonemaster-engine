@@ -129,14 +129,6 @@ sub _expand_scenario_names {
     return @result;
 }
 
-# Used by expect, forbid and variations in order to catch undeclared tags
-sub _ensure_tag_is_declared {
-    my ( $tag, $clause ) = @_;
-
-    exists STATE->{all_tags}{$tag}
-        or croak "Tag '$tag' used in '$clause' clause but not declared in 'all_tags'";
-}
-
 =head1 TOP-LEVEL KEYWORDS
 
 =head2 all_tags
@@ -520,31 +512,22 @@ sub expect (@) {
     if (scalar @_ == 2 and ref $_[1] eq 'HASH') {
         # Third form
         my ($tag, $args) = @_;
-        _declare_expect( $tag, args => $args );
+        _declare_message_test( expect => $tag, args => $args );
     }
     elsif (scalar @_ == 2 and ref $_[1] eq 'CODE') {
         # Fourth form
         my ($tag, $code) = @_;
-        _declare_expect( $tag, code => $code );
+        _declare_message_test( expect => $tag, code => $code );
     }
     elsif (scalar @_ >= 1) {
         # First or second form
         foreach my $tag (@_) {
-            _declare_expect( $tag );
+            _declare_message_test( expect => $tag );
         }
     }
     else {
         croak "Need at least one argument";
     }
-}
-
-sub _declare_expect {
-    my ($tag, %args) = @_;
-    my @context = caller(1);
-
-    _ensure_tag_is_declared( $tag, 'expect' );
-    delete STATE->{not_expected}{$tag};
-    push @{STATE->{expect}}, { tag => $tag, caller => [ @context[1..2] ], %args };
 }
 
 =head2 forbid
@@ -567,17 +550,21 @@ sub forbid (@) {
     croak "Need at least one argument" unless scalar @tags >= 1;
 
     foreach my $tag (@_) {
-        _declare_forbid( $tag );
+        _declare_message_test( forbid => $tag );
     }
 }
 
-sub _declare_forbid {
-    my ($tag) = @_;
+sub _declare_message_test {
+    my ( $type, $tag, %args ) = @_;
     my @context = caller(1);
 
-    _ensure_tag_is_declared( $tag, 'forbid' );
-    delete STATE->{not_forbidden}{$tag};
-    push @{STATE->{forbid}}, { tag => $tag, caller => [ @context[1..2] ] };
+    exists STATE->{all_tags}{$tag}
+        or croak "Tag '$tag' used in '$type' clause but not declared in 'all_tags'";
+
+    delete STATE->{not_expected}{$tag}  if $type eq 'expect';
+    delete STATE->{not_forbidden}{$tag} if $type eq 'forbid';
+
+    push @{STATE->{message_tests}}, [ $type, [ @context[1..2] ], $tag, %args ];
 }
 
 =head2 expect_others
@@ -594,7 +581,7 @@ sub expect_others () {
     croak "Cannot use expect_others more than once" if STATE->{expect_others};
     STATE->{expect_others} = 1;
 
-    _declare_expect( $_ ) foreach ( keys %{STATE->{not_forbidden}} );
+    _declare_message_test( expect => $_ ) foreach ( keys %{STATE->{not_forbidden}} );
 }
 
 =head2 forbid_others
@@ -611,7 +598,7 @@ sub forbid_others () {
     croak "Cannot use forbid_others more than once" if STATE->{forbid_others};
     STATE->{forbid_others} = 1;
 
-    _declare_forbid( $_ ) foreach ( keys %{STATE->{not_expected}} );
+    _declare_message_test( forbid => $_ ) foreach ( keys %{STATE->{not_expected}} );
 }
 
 =head2 not_testable

@@ -265,11 +265,11 @@ sub _compile_scenario_subtest {
 
     my $func_add_fake_delegation = _compile_fake_ns( $scenario_declaration );
     my $func_add_fake_ds = _compile_fake_ds( $scenario_declaration );
-    my @func_test_messages = _compile_test_messages( $scenario_declaration );
+    my @func_message_tests = _compile_message_tests( $scenario_declaration );
 
     return sub {
         my ( $zone_name ) = @_;
-        Test::More::plan(tests => scalar @func_test_messages + 1);
+        Test::More::plan(tests => scalar @func_message_tests + 1);
 
         Test::More::note("Zone: $zone_name");
         $func_add_fake_delegation->($zone_name) if defined $func_add_fake_delegation;
@@ -283,7 +283,7 @@ sub _compile_scenario_subtest {
         }
         else {
             Test::More::pass("Test case executes without errors");
-            $_->( @messages ) foreach ( @func_test_messages );
+            $_->( @messages ) foreach ( @func_message_tests );
         }
 
         # At the end of a subtest, if there is at least one failure,
@@ -322,33 +322,29 @@ sub _compile_fake_ds {
     return undef;
 }
 
-sub _compile_test_messages {
+sub _compile_message_tests {
     my ( $scenario_declaration ) = @_;
 
-    return
-        ( map { _compile_expect($_) } @{$scenario_declaration->{body}{expect}} ),
-        ( map { _compile_forbid($_) } @{$scenario_declaration->{body}{forbid}} );
-}
+    map {
+        my ( $type, $caller, $tag, %args ) = @$_;
 
-sub _compile_expect {
-    my ( $expect ) = @_;
-
-    if ( exists $expect->{code} ) {
-        return _compile_expect_with_code( $expect );
-    }
-    elsif ( exists $expect->{args} ) {
-        return _compile_expect_with_args( $expect );
-    }
-    else {
-        return _compile_expect_bare( $expect );
-    }
+        if ( $type eq 'expect' and exists $args{code} ) {
+            _compile_expect_with_code( $caller, $tag, $args{code} );
+        }
+        elsif ( $type eq 'expect' and exists $args{args} ) {
+            _compile_expect_with_args( $caller, $tag, %{$args{args}} );
+        }
+        elsif ( $type eq 'expect' ) {
+            _compile_expect_bare( $caller, $tag );
+        }
+        elsif ( $type eq 'forbid' ) {
+            _compile_forbid( $caller, $tag );
+        }
+    } ( @{$scenario_declaration->{body}{message_tests}} );
 }
 
 sub _compile_expect_bare {
-    my ( $expect ) = @_;
-
-    my $tag    = $expect->{tag};
-    my $caller = $expect->{caller};
+    my ( $caller, $tag ) = @_;
 
     return sub {
         _ok(
@@ -360,11 +356,7 @@ sub _compile_expect_bare {
 }
 
 sub _compile_expect_with_args {
-    my ( $expect ) = @_;
-
-    my $tag    = $expect->{tag};
-    my $caller = $expect->{caller};
-    my %args   = %{$expect->{args}};
+    my ( $caller, $tag, %args ) = @_;
 
     my %predicates;
     my $explanation = "Looked for a message whose tag is '$tag'";
@@ -428,11 +420,7 @@ sub _compile_expect_with_args {
 }
 
 sub _compile_expect_with_code {
-    my ( $expect ) = @_;
-
-    my $tag    = $expect->{tag};
-    my $caller = $expect->{caller};
-    my $code   = $expect->{code};
+    my ( $caller, $tag, $code ) = @_;
 
     return sub {
         my @messages_of_tag = grep { $_->{tag} eq $tag } @_;
@@ -444,10 +432,7 @@ sub _compile_expect_with_code {
 }
 
 sub _compile_forbid {
-    my ( $forbid ) = @_;
-
-    my $tag    = $forbid->{tag};
-    my $caller = $forbid->{caller};
+    my ( $caller, $tag ) = @_;
 
     return sub {
         _ok(
