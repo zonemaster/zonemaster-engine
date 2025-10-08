@@ -256,7 +256,11 @@ sub get_parent_ns_ips {
 # Memoize get_parent_ns_ips() because it is expensive and gets called a few
 # times with identical parameters.
 
-memoize('get_parent_ns_ips');
+memoize('get_parent_ns_ips',
+        NORMALIZER => sub {
+            my ( $class, $zone ) = @_;
+            join "\034", ( $class, $zone->name );
+        });
 
 =over
 
