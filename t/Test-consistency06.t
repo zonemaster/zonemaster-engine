@@ -108,11 +108,11 @@ my %subtests = (
         []
     ],
     'MULT-SOA-MNAMES-NO-DEL-UNDEL-2' => [
-        0,
+        1,
         q(mult-soa-mnames-no-del-undel-2.consistency06.xa),
         [ qw(MULTIPLE_SOA_MNAMES) ],
         undef,
-        [ qw(ns3.mult-soa-mnames-no-del-undel-2.consistency06.xb ns3.mult-soa-mnames-no-del-undel-2.consistency06.xb) ],
+        [ qw(ns3.mult-soa-mnames-no-del-undel-2.consistency06.xb ns4.mult-soa-mnames-no-del-undel-2.consistency06.xb) ],
         []
     ],
     'NO-RESPONSE' => [
