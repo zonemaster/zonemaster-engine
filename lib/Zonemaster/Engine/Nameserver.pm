@@ -171,9 +171,6 @@ sub _build_dns {
 
     $res->retry( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.retry} ) );
     $res->retrans( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.retrans} ) );
-    $res->usevc( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.usevc} ) );
-    $res->igntc( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.igntc} ) );
-    $res->recurse( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.recurse} ) );
     $res->debug( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.debug} ) );
     $res->timeout( Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.timeout} ) );
 
@@ -225,10 +222,10 @@ sub query {
         }
     );
 
-    my $class     = $href->{class}     // 'IN';
-    my $dnssec    = $href->{dnssec}    // 0;
-    my $usevc     = $href->{usevc}     // $profile->get( q{resolver.defaults.usevc} );
-    my $recurse   = $href->{recurse}   // $profile->get( q{resolver.defaults.recurse} );
+    my $class   = $href->{class}   // 'IN';
+    my $dnssec  = $href->{dnssec}  // 0;
+    my $usevc   = $href->{usevc}   // 0;
+    my $recurse = $href->{recurse} // 0;
 
     if ( exists $href->{edns_details} and exists $href->{edns_details}{do} ) {
         $dnssec = $href->{edns_details}{do};
@@ -401,14 +398,17 @@ sub _query {
     );
 
     # Make sure we have a value for each flag
-    $flags{q{retry}}     = $href->{q{retry}}     // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.retry} );
-    $flags{q{retrans}}   = $href->{q{retrans}}   // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.retrans} );
-    $flags{q{dnssec}}    = $href->{q{dnssec}}    // 0;
-    $flags{q{usevc}}     = $href->{q{usevc}}     // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.usevc} );
-    $flags{q{igntc}}     = $href->{q{igntc}}     // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.igntc} );
-    $flags{q{fallback}}  = $href->{q{fallback}}  // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.fallback} );
-    $flags{q{recurse}}   = $href->{q{recurse}}   // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.recurse} );
-    $flags{q{timeout}}   = $href->{q{timeout}}   // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.timeout} );
+    $flags{q{retry}}   = $href->{q{retry}} // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.retry} );
+    $flags{q{retrans}} = $href->{q{retrans}}
+      // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.retrans} );
+    $flags{q{dnssec}}   = $href->{q{dnssec}} // 0;
+    $flags{q{usevc}}    = $href->{q{usevc}}  // 0;
+    $flags{q{igntc}}    = $href->{q{igntc}}  // 0;
+    $flags{q{fallback}} = $href->{q{fallback}}
+      // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.fallback} );
+    $flags{q{recurse}} = $href->{q{recurse}} // 0;
+    $flags{q{timeout}} = $href->{q{timeout}}
+      // Zonemaster::Engine::Profile->effective->get( q{resolver.defaults.timeout} );
 
     if ( exists $href->{edns_details} ) {
         $flags{q{dnssec}}    = $href->{edns_details}{do} // $flags{q{dnssec}};

@@ -649,30 +649,15 @@ If it is set it has a value that is valid for that specific property.
 Here is a listing of all the properties and their respective sets of
 valid values.
 
-=head2 resolver.defaults.usevc
-
-A boolean. If true, only use TCP. Default false.
-
 =head2 resolver.defaults.retrans
 
 An integer between 1 and 255 inclusive. The number of seconds between retries.
 Default 3.
 
-=head2 resolver.defaults.recurse
-
-A boolean. If true, sets the RD flag in queries. Default false.
-
-This should almost certainly be kept false.
-
 =head2 resolver.defaults.retry
 
 An integer between 1 and 255 inclusive.
 The number of times a query is sent before we give up. Default 2.
-
-=head2 resolver.defaults.igntc
-
-A boolean. If false, UDP queries that get responses with the C<TC>
-flag set will be automatically resent over TCP. Default false.
 
 =head2 resolver.defaults.fallback
 
@@ -702,6 +687,18 @@ The source address all resolver objects should use when sending queries over IPv
 If set to "" (empty string), the OS default IPv6 address is used.
 
 Default: "" (empty string).
+
+=head2 resolver.defaults.igntc
+
+A boolean. Default false. Ignored. Deprecated and planned for removal in v2026.1. Remove it from your profile file.
+
+=head2 resolver.defaults.recurse
+
+A boolean. Default false. Ignored. Deprecated and planned for removal in v2026.1. Remove it from your profile file.
+
+=head2 resolver.defaults.usevc
+
+A boolean. Default false. Ignored. Deprecated and planned for removal in v2026.1. Remove it from your profile file.
 
 =head2 net.ipv4
 
