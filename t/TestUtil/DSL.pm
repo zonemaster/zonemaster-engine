@@ -54,6 +54,7 @@ A test case can then be tested with the following minimal skeleton:
 use Exporter 'import';
 
 our @EXPORT = qw(all_tags
+                 clear_cache
                  expect
                  expect_others
                  fake_ds
@@ -327,6 +328,23 @@ sub zone_name_template ($) {
     my ($template) = @_;
     check_state 'testing_test_case';
     STATE->{zone_name_template} = $template;
+}
+
+=head2 clear_cache
+
+    clear_cache;
+
+Clears the resolver cache for subsequent tests. This might be necessary if
+this caching somehow causes negative side effects.
+
+Note that it is unnecessary to use this keyword right after L<root_hints>,
+because L<root_hints> also clears the resolver cache.
+
+=cut
+
+sub clear_cache () {
+    check_state 'testing_test_case';
+    push @{STATE->{ops}}, [ "clear_cache" ];
 }
 
 

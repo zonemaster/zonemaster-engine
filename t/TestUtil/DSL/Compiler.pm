@@ -128,6 +128,12 @@ sub _compile_root_hints {
     }
 }
 
+sub _compile_clear_cache {
+    return sub {
+        Zonemaster::Engine::Recursor::clear_cache();
+    }
+}
+
 sub _compile_select_subtests {
     my ($ast) = @_;
 
@@ -170,6 +176,9 @@ sub _compile_ops {
         }
         elsif ( $type eq 'scenario' ) {
             _compile_run_scenario_block( @args, $test_case, $test_method );
+        }
+        elsif ( $type eq 'clear_cache' ) {
+            _compile_clear_cache();
         }
     } @$ops;
 }
