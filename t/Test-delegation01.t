@@ -1,214 +1,137 @@
 use strict;
 use warnings;
 
-use Test::More;
 use File::Basename;
 use File::Spec::Functions qw( rel2abs );
 use lib dirname( rel2abs( $0 ) );
-
-BEGIN {
-    use_ok( q{Zonemaster::Engine} );
-    use_ok( q{Zonemaster::Engine::Test::Delegation} );
-    use_ok( q{TestUtil}, qw( perform_testcase_testing ) );
-}
+use TestUtil::DSL;
 
 ###########
 # Delegation01 - https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/test-zones/Delegation-TP/delegation01.md
-my $test_module = 'Delegation';
-my $test_case = 'delegation01';
-my @all_tags = qw(ENOUGH_IPV4_NS_CHILD
-                  ENOUGH_IPV4_NS_DEL
-                  ENOUGH_IPV6_NS_CHILD
-                  ENOUGH_IPV6_NS_DEL
-                  ENOUGH_NS_CHILD
-                  ENOUGH_NS_DEL
-                  NOT_ENOUGH_IPV4_NS_CHILD
-                  NOT_ENOUGH_IPV4_NS_DEL
-                  NOT_ENOUGH_IPV6_NS_CHILD
-                  NOT_ENOUGH_IPV6_NS_DEL
-                  NOT_ENOUGH_NS_CHILD
-                  NOT_ENOUGH_NS_DEL
-                  NO_IPV4_NS_CHILD
-                  NO_IPV4_NS_DEL
-                  NO_IPV6_NS_CHILD
-                  NO_IPV6_NS_DEL);
+testing_test_case 'Delegation', 'delegation01';
+
+all_tags qw(ENOUGH_IPV4_NS_CHILD
+            ENOUGH_IPV4_NS_DEL
+            ENOUGH_IPV6_NS_CHILD
+            ENOUGH_IPV6_NS_DEL
+            ENOUGH_NS_CHILD
+            ENOUGH_NS_DEL
+            NOT_ENOUGH_IPV4_NS_CHILD
+            NOT_ENOUGH_IPV4_NS_DEL
+            NOT_ENOUGH_IPV6_NS_CHILD
+            NOT_ENOUGH_IPV6_NS_DEL
+            NOT_ENOUGH_NS_CHILD
+            NOT_ENOUGH_NS_DEL
+            NO_IPV4_NS_CHILD
+            NO_IPV4_NS_DEL
+            NO_IPV6_NS_CHILD
+            NO_IPV6_NS_DEL);
 
 # Specific hint file (https://github.com/zonemaster/zonemaster/blob/master/test-zone-data/Delegation-TP/delegation01/hintfile.zone)
-Zonemaster::Engine::Recursor->remove_fake_addresses( '.' );
-Zonemaster::Engine::Recursor->add_fake_addresses( '.',
-    { 'root-ns1.xa' => [ '127.16.1.27', 'fda1:b2:c3::127:16:1:27' ],
-      'root-ns2.xa' => [ '127.16.1.28', 'fda1:b2:c3::127:16:1:28' ],
-    }
-);
+root_hints 'root-ns1.xa' => [ qw(127.16.1.27 fda1:b2:c3::127:16:1:27) ],
+           'root-ns2.xa' => [ qw(127.16.1.28 fda1:b2:c3::127:16:1:28) ];
+
+zone_name_template '{SCENARIO}.{TESTCASE}.xa';
 
 # Test zone scenarios
-# - Documentation: L<TestUtil/perform_testcase_testing()>
-# - Format: { SCENARIO_NAME => [
-#     testable,
-#     zone_name,
-#     [ MANDATORY_MESSAGE_TAGS ],
-#     [ FORBIDDEN_MESSAGE_TAGS ],
-#     [ UNDELEGATED_NS ],
-#     [ UNDELEGATED_DS ],
-#   ] }
-#
-# - One of MANDATORY_MESSAGE_TAGS and FORBIDDEN_MESSAGE_TAGS may be undefined.
-#   See documentation for the meaning of that.
+scenario 'ENOUGH-{1..3}' => sub {
+    expect qw(ENOUGH_IPV4_NS_CHILD
+              ENOUGH_IPV4_NS_DEL
+              ENOUGH_IPV6_NS_CHILD
+              ENOUGH_IPV6_NS_DEL
+              ENOUGH_NS_CHILD
+              ENOUGH_NS_DEL);
+    forbid_others;
+};
 
-my %subtests = (
-                'ENOUGH-1' =>
-                [
-                 1,
-                 q(enough-1.delegation01.xa),
-                 [ qw(ENOUGH_IPV4_NS_CHILD ENOUGH_IPV4_NS_DEL ENOUGH_IPV6_NS_CHILD ENOUGH_IPV6_NS_DEL ENOUGH_NS_CHILD ENOUGH_NS_DEL ) ],
-                 undef,
-                 [],
-                 [],
-                ],
-                'ENOUGH-2' =>
-                [
-                 1,
-                 q(enough-2.delegation01.xa),
-                 [ qw(ENOUGH_IPV4_NS_CHILD ENOUGH_IPV4_NS_DEL ENOUGH_IPV6_NS_CHILD ENOUGH_IPV6_NS_DEL ENOUGH_NS_CHILD ENOUGH_NS_DEL ) ],
-                 undef,
-                 [],
-                 [],
-                ],
-                'ENOUGH-3' =>
-                [
-                 1,
-                 q(enough-3.delegation01.xa),
-                 [ qw(ENOUGH_IPV4_NS_CHILD ENOUGH_IPV4_NS_DEL ENOUGH_IPV6_NS_CHILD ENOUGH_IPV6_NS_DEL ENOUGH_NS_CHILD ENOUGH_NS_DEL ) ],
-                 undef,
-                 [],
-                 [],
-                ],
-                'ENOUGH-DEL-NOT-CHILD' =>
-                [
-                 0,
-                 q(enough-del-not-child.delegation01.xa),
-                 [ qw(ENOUGH_IPV4_NS_DEL ENOUGH_IPV6_NS_DEL ENOUGH_NS_DEL NOT_ENOUGH_IPV4_NS_CHILD NOT_ENOUGH_IPV6_NS_CHILD NOT_ENOUGH_NS_CHILD ) ],
-                 undef,
-                 [],
-                 [],
-                ],
-                'ENOUGH-CHILD-NOT-DEL' =>
-                [
-                 1,
-                 q(enough-child-not-del.delegation01.xa),
-                 [ qw(ENOUGH_IPV4_NS_CHILD ENOUGH_IPV6_NS_CHILD ENOUGH_NS_CHILD NOT_ENOUGH_IPV4_NS_DEL NOT_ENOUGH_IPV6_NS_DEL NOT_ENOUGH_NS_DEL ) ],
-                 undef,
-                 [],
-                 [],
-                ],
-                'IPV6-AND-DEL-OK-NO-IPV4-CHILD' =>
-                [
-                 0,
-                 q(ipv6-and-del-ok-no-ipv4-child.delegation01.xa),
-                 [ qw(ENOUGH_IPV4_NS_DEL ENOUGH_IPV6_NS_CHILD ENOUGH_IPV6_NS_DEL ENOUGH_NS_CHILD ENOUGH_NS_DEL NO_IPV4_NS_CHILD ) ],
-                 undef,
-                 [],
-                 [],
-                ],
-                'IPV4-AND-DEL-OK-NO-IPV6-CHILD' =>
-                [
-                 0,
-                 q(ipv4-and-del-ok-no-ipv6-child.delegation01.xa),
-                 [ qw(ENOUGH_IPV4_NS_DEL ENOUGH_IPV4_NS_CHILD ENOUGH_IPV6_NS_DEL ENOUGH_NS_CHILD ENOUGH_NS_DEL NO_IPV6_NS_CHILD ) ],
-                 undef,
-                 [],
-                 [],
-                ],
-                'NO-IPV4-1' =>
-                [
-                 1,
-                 q(no-ipv4-1.delegation01.xa),
-                 [ qw(ENOUGH_IPV6_NS_CHILD ENOUGH_IPV6_NS_DEL ENOUGH_NS_CHILD ENOUGH_NS_DEL NO_IPV4_NS_CHILD NO_IPV4_NS_DEL ) ],
-                                undef,
-                 [],
-                 [],
-                ],
-                'NO-IPV4-2' =>
-                [
-                 1,
-                 q(no-ipv4-2.delegation01.xa),
-                 [ qw(ENOUGH_IPV6_NS_CHILD ENOUGH_IPV6_NS_DEL ENOUGH_NS_CHILD ENOUGH_NS_DEL NO_IPV4_NS_CHILD NO_IPV4_NS_DEL ) ],
-                 undef,
-                 [],
-                 [],
-                ],
-                'NO-IPV4-3' =>
-                [
-                 1,
-                 q(no-ipv4-3.delegation01.xa),
-                 [ qw(ENOUGH_IPV6_NS_CHILD ENOUGH_IPV6_NS_DEL ENOUGH_NS_CHILD ENOUGH_NS_DEL NO_IPV4_NS_CHILD NO_IPV4_NS_DEL ) ],
-                 undef,
-                 [],
-                 [],
-                ],
-                'NO-IPV6-1' =>
-                [
-                 1,
-                 q(no-ipv6-1.delegation01.xa),
-                 [ qw(ENOUGH_IPV4_NS_CHILD ENOUGH_IPV4_NS_DEL ENOUGH_NS_CHILD ENOUGH_NS_DEL NO_IPV6_NS_CHILD NO_IPV6_NS_DEL ) ],
-                 undef,
-                 [],
-                 [],
-                ],
-                'NO-IPV6-2' =>
-                [
-                 1,
-                 q(no-ipv6-2.delegation01.xa),
-                 [ qw(ENOUGH_IPV4_NS_CHILD ENOUGH_IPV4_NS_DEL ENOUGH_NS_CHILD ENOUGH_NS_DEL NO_IPV6_NS_CHILD NO_IPV6_NS_DEL ) ],
-                 undef,
-                 [],
-                 [],
-                ],
-                'NO-IPV6-3' =>
-                [
-                 1,
-                 q(no-ipv6-3.delegation01.xa),
-                 [ qw(ENOUGH_IPV4_NS_CHILD ENOUGH_IPV4_NS_DEL ENOUGH_NS_CHILD ENOUGH_NS_DEL NO_IPV6_NS_CHILD NO_IPV6_NS_DEL ) ],
-                 undef,
-                 [],
-                 [],
-                ],
-                'MISMATCH-DELEGATION-CHILD-1' =>
-                [
-                 0,
-                 q(mismatch-delegation-child-1.delegation01.xa),
-                 [ qw(ENOUGH_IPV4_NS_CHILD NOT_ENOUGH_IPV4_NS_DEL ENOUGH_IPV6_NS_CHILD NOT_ENOUGH_IPV6_NS_DEL ENOUGH_NS_CHILD ENOUGH_NS_DEL ) ],
-                 undef,
-                 [],
-                 [],
-                ],
-                'MISMATCH-DELEGATION-CHILD-2' =>
-                [
-                 0,
-                 q(mismatch-delegation-child-2.delegation01.xa),
-                 [ qw(NOT_ENOUGH_IPV4_NS_CHILD ENOUGH_IPV4_NS_DEL NOT_ENOUGH_IPV6_NS_CHILD ENOUGH_IPV6_NS_DEL ENOUGH_NS_CHILD ENOUGH_NS_DEL ) ],
-                 undef,
-                 [],
-                 [],
-                ],
-               );
+scenario 'ENOUGH-DEL-NOT-CHILD' => sub {
+    todo; # FIXME: why?
 
-###########
+    expect qw(ENOUGH_IPV4_NS_DEL
+              ENOUGH_IPV6_NS_DEL
+              ENOUGH_NS_DEL
+              NOT_ENOUGH_IPV4_NS_CHILD
+              NOT_ENOUGH_IPV6_NS_CHILD
+              NOT_ENOUGH_NS_CHILD);
+    forbid_others;
+};
 
-my $datafile = 't/' . basename ($0, '.t') . '.data';
+scenario 'ENOUGH-CHILD-NOT-DEL' => sub {
+    expect qw(ENOUGH_IPV4_NS_CHILD
+              ENOUGH_IPV6_NS_CHILD
+              ENOUGH_NS_CHILD
+              NOT_ENOUGH_IPV4_NS_DEL
+              NOT_ENOUGH_IPV6_NS_DEL
+              NOT_ENOUGH_NS_DEL);
+    forbid_others;
+};
 
-if ( not $ENV{ZONEMASTER_RECORD} ) {
-    die q{Stored data file missing} if not -r $datafile;
-    Zonemaster::Engine::Nameserver->restore( $datafile );
-    Zonemaster::Engine::Profile->effective->set( q{no_network}, 1 );
-}
+scenario 'IPV6-AND-DEL-OK-NO-IPV4-CHILD' => sub {
+    todo; # FIXME: why?
 
-Zonemaster::Engine::Profile->effective->merge( Zonemaster::Engine::Profile->from_json( qq({ "test_cases": [ "$test_case" ] }) ) );
+    expect qw(ENOUGH_IPV4_NS_DEL
+              ENOUGH_IPV6_NS_CHILD
+              ENOUGH_IPV6_NS_DEL
+              ENOUGH_NS_CHILD
+              ENOUGH_NS_DEL
+              NO_IPV4_NS_CHILD);
+    forbid_others;
+};
 
-perform_testcase_testing( $test_case, $test_module, \@all_tags, \%subtests, $ENV{ZONEMASTER_SELECTED_SCENARIOS}, $ENV{ZONEMASTER_DISABLED_SCENARIOS} );
+scenario 'IPV4-AND-DEL-OK-NO-IPV6-CHILD' => sub {
+    todo; # FIXME: why?
+    
+    expect qw(ENOUGH_IPV4_NS_DEL
+              ENOUGH_IPV4_NS_CHILD
+              ENOUGH_IPV6_NS_DEL
+              ENOUGH_NS_CHILD
+              ENOUGH_NS_DEL
+              NO_IPV6_NS_CHILD);
+    forbid_others;
+};
 
-if ( $ENV{ZONEMASTER_RECORD} ) {
-    Zonemaster::Engine::Nameserver->save( $datafile );
-}
+scenario 'NO-IPV4-{1..3}' => sub {
+    expect qw(ENOUGH_IPV6_NS_CHILD
+              ENOUGH_IPV6_NS_DEL
+              ENOUGH_NS_CHILD
+              ENOUGH_NS_DEL
+              NO_IPV4_NS_CHILD
+              NO_IPV4_NS_DEL);
+    forbid_others;
+};
 
-done_testing;
+scenario 'NO-IPV6-{1..3}' => sub {
+    expect qw(ENOUGH_IPV4_NS_CHILD
+              ENOUGH_IPV4_NS_DEL
+              ENOUGH_NS_CHILD
+              ENOUGH_NS_DEL
+              NO_IPV6_NS_CHILD
+              NO_IPV6_NS_DEL);
+    forbid_others;
+};
+
+scenario 'MISMATCH-DELEGATION-CHILD-1' => sub {
+    todo; # FIXME: why?
+
+    expect qw(ENOUGH_IPV4_NS_CHILD
+              NOT_ENOUGH_IPV4_NS_DEL
+              ENOUGH_IPV6_NS_CHILD
+              NOT_ENOUGH_IPV6_NS_DEL
+              ENOUGH_NS_CHILD
+              ENOUGH_NS_DEL);
+    forbid_others;
+};
+
+scenario 'MISMATCH-DELEGATION-CHILD-2' => sub {
+    todo; # FIXME: why?
+
+    expect qw(NOT_ENOUGH_IPV4_NS_CHILD
+              ENOUGH_IPV4_NS_DEL
+              NOT_ENOUGH_IPV6_NS_CHILD
+              ENOUGH_IPV6_NS_DEL
+              ENOUGH_NS_CHILD
+              ENOUGH_NS_DEL);
+    forbid_others;
+};
+
+no_more_scenarios;
