@@ -75,10 +75,7 @@ my %tag = map { $_->tag => 1 } @res;
 ok( ( $tag{DURATION_OK} || $tag{REMAINING_SHORT} || $tag{RRSIG_EXPIRED} ), 'DURATION_OK (sort of)' );
 
 my $zone4 = Zonemaster::Engine->zone( 'nic.fr' );
-zone_gives( 'dnssec05', $zone4, [q{ALGORITHM_OK}] );
-
 zone_gives( 'dnssec06', $zone, [q{EXTRA_PROCESSING_OK}] );
-
 zone_gives( 'dnssec07', $zone, [q{DNSKEY_AND_DS}] );
 zone_gives_not( 'dnssec07', $zone, [qw{NEITHER_DNSKEY_NOR_DS DNSKEY_BUT_NOT_DS DS_BUT_NOT_DNSKEY}] );
 
@@ -140,25 +137,8 @@ $zone = Zonemaster::Engine->zone( 'dnssec04-remaining-long.zut-root.rd.nic.fr' )
 zone_gives( 'dnssec04', $zone, [q{REMAINING_LONG}] );
 
 ###########
-# dnssec05
+# dnssec05 -- See t/Test-dnssec05.t instead.
 ###########
-$zone = Zonemaster::Engine->zone( 'dnssec05-algorithm-deprecated.zut-root.rd.nic.fr' );
-zone_gives( 'dnssec05', $zone, [q{ALGORITHM_DEPRECATED}] );
-zone_gives_not( 'dnssec05', $zone, [qw{ALGORITHM_RESERVED ALGORITHM_UNASSIGNED ALGORITHM_PRIVATE ALGORITHM_UNKNOWN}] );
-
-$zone = Zonemaster::Engine->zone( 'dnssec05-algorithm-reserved.zut-root.rd.nic.fr' );
-zone_gives( 'dnssec05', $zone, [q{ALGORITHM_RESERVED}] );
-zone_gives_not( 'dnssec05', $zone,
-    [qw{ALGORITHM_DEPRECATED ALGORITHM_UNASSIGNED ALGORITHM_PRIVATE ALGORITHM_UNKNOWN}] );
-
-$zone = Zonemaster::Engine->zone( 'dnssec05-algorithm-unassigned.zut-root.rd.nic.fr' );
-zone_gives( 'dnssec05', $zone, [q{ALGORITHM_UNASSIGNED}] );
-zone_gives_not( 'dnssec05', $zone, [qw{ALGORITHM_DEPRECATED ALGORITHM_RESERVED ALGORITHM_PRIVATE ALGORITHM_UNKNOWN}] );
-
-$zone = Zonemaster::Engine->zone( 'dnssec05-algorithm-private.zut-root.rd.nic.fr' );
-zone_gives( 'dnssec05', $zone, [q{ALGORITHM_PRIVATE}] );
-zone_gives_not( 'dnssec05', $zone,
-    [qw{ALGORITHM_DEPRECATED ALGORITHM_RESERVED ALGORITHM_UNASSIGNED ALGORITHM_UNKNOWN}] );
 
 ###########
 # dnssec06
@@ -412,8 +392,6 @@ TODO: {
     # dnssec02
     ok( $tag{DS02_ALGO_NOT_SUPPORTED_BY_ZM}, q{DS02_ALGO_NOT_SUPPORTED_BY_ZM} );
     ok( $tag{DS02_DNSKEY_NOT_FOR_ZONE_SIGNING}, q{DS02_DNSKEY_NOT_FOR_ZONE_SIGNING} );
-    # dnssec05 (cannot exist in a live domain...)
-    ok( $tag{ALGORITHM_UNKNOWN}, q{ALGORITHM_UNKNOWN} );
     # dnssec06
     ok( $tag{EXTRA_PROCESSING_BROKEN}, q{EXTRA_PROCESSING_BROKEN} );
     # dnssec07 (need complete analyze with broken zone)
