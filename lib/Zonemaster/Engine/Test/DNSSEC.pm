@@ -308,22 +308,16 @@ sub all {
     my ( $class, $zone ) = @_;
     my @results;
 
-    my $has_dnskey = 1;
     if ( should_run_test( q{dnssec07} ) ) {
         push @results, $class->dnssec07( $zone );
+    }
 
-        if ( any { $_->tag eq 'NEITHER_DNSKEY_NOR_DS' } @results ) {
-            push @results,
-              _emit_log(
-                NOT_SIGNED => {
-                    zone => q{} . $zone->name
-                }
-              );
+    if ( should_run_test( q{dnssec11} ) ) {
+        push @results, $class->dnssec11( $zone );
+    }
 
-            return @results;
-        }
-
-        $has_dnskey = any { $_->tag eq q{DNSKEY_BUT_NOT_DS} || $_->tag eq q{DNSKEY_AND_DS} } @results;
+    if ( any { $_->tag eq 'DS07_NOT_SIGNED' } @results ) {
+        return @results;
     }
 
     if ( should_run_test( q{dnssec01} ) ) {
@@ -347,12 +341,7 @@ sub all {
     }
 
     if ( should_run_test( q{dnssec06} ) ) {
-        if ( $has_dnskey ) {
-            push @results, $class->dnssec06( $zone );
-        }
-        else {
-            push @results, _emit_log( ADDITIONAL_DNSKEY_SKIPPED => {} );
-        }
+        push @results, $class->dnssec06( $zone );
     }
 
     if ( should_run_test( q{dnssec08} ) ) {
@@ -365,10 +354,6 @@ sub all {
 
     if ( should_run_test( q{dnssec10} ) ) {
         push @results, $class->dnssec10( $zone );
-    }
-
-    if ( should_run_test( q{dnssec11} ) ) {
-        push @results, $class->dnssec11( $zone );
     }
 
     if ( should_run_test( q{dnssec13} ) ) {
@@ -503,14 +488,19 @@ sub metadata {
         ],
         dnssec07 => [
             qw(
-              ADDITIONAL_DNSKEY_SKIPPED
-              DNSKEY_BUT_NOT_DS
-              DNSKEY_AND_DS
-              NEITHER_DNSKEY_NOR_DS
-              DS_BUT_NOT_DNSKEY
-              NOT_SIGNED
-              TEST_CASE_END
-              TEST_CASE_START
+              DS07_DS_FOR_SIGNED_ZONE
+              DS07_DS_ON_PARENT_SERVER
+              DS07_INCONSISTENT_DS
+              DS07_INCONSISTENT_SIGNED
+              DS07_NON_AUTH_RESPONSE_DNSKEY
+              DS07_NOT_SIGNED
+              DS07_NOT_SIGNED_ON_SERVER
+              DS07_NO_DS_ON_PARENT_SERVER
+              DS07_NO_DS_FOR_SIGNED_ZONE
+              DS07_NO_RESPONSE_DNSKEY
+              DS07_SIGNED
+              DS07_SIGNED_ON_SERVER
+              DS07_UNEXP_RCODE_RESP_DNSKEY
               )
         ],
         dnssec08 => [
@@ -686,7 +676,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     DNSSEC07 => sub {
         __x    # DNSSEC:DNSSEC07
-          "If DNSKEY at child, parent should have DS";
+          "DNSSEC signed zone and DS in parent for signed zone";
     },
     DNSSEC08 => sub {
         __x    # DNSSEC:DNSSEC08
@@ -731,18 +721,6 @@ Readonly my %TAG_DESCRIPTIONS => (
     DNSSEC18 => sub {
         __x    # DNSSEC:DNSSEC18
           "Validate trust from DS to CDS and CDNSKEY";
-    },
-    ADDITIONAL_DNSKEY_SKIPPED => sub {
-        __x    # DNSSEC:ADDITIONAL_DNSKEY_SKIPPED
-          'No DNSKEYs found. Additional tests skipped.', @_;
-    },
-    DNSKEY_AND_DS => sub {
-        __x    # DNSSEC:DNSKEY_AND_DS
-          '{parent} sent a DS record, and {child} a DNSKEY record.', @_;
-    },
-    DNSKEY_BUT_NOT_DS => sub {
-        __x    # DNSSEC:DNSKEY_BUT_NOT_DS
-          '{child} sent a DNSKEY record, but {parent} did not send a DS record.', @_;
     },
     DNSKEY_SMALLER_THAN_REC => sub {
         __x    # DNSSEC:DNSKEY_SMALLER_THAN_REC
@@ -1061,6 +1039,72 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # DNSSEC:DS05_ZONE_NO_DNSSEC
           'The zone is not DNSSEC signed or not properly DNSSEC signed. DNSKEY cannot be tested. Fetched from name '
           . 'servers "{ns_list}".',
+          @_;
+    },
+    DS07_DS_FOR_SIGNED_ZONE => sub {
+        __x    # DNSSEC:DS07_DS_FOR_SIGNED_ZONE
+          'The parent zone has DS record or records for the signed child zone.';
+    },
+    DS07_DS_ON_PARENT_SERVER => sub {
+        __x    # DNSSEC:DS07_DS_ON_PARENT_SERVER
+          'The following parent name servers responds with DS record or records for the child '
+          . 'zone. Name servers: {ns_list}',
+          @_;
+    },
+    DS07_INCONSISTENT_DS => sub {
+        __x    # DNSSEC:DS07_INCONSISTENT_DS
+          'Inconsistent responses from parent name servers. Some include DS, others do not.';
+    },
+    DS07_INCONSISTENT_SIGNED => sub {
+        __x    # DNSSEC:DS07_INCONSISTENT_SIGNED
+          'Inconsistent responses from name servers. Some include signed responses, others do not.';
+    },
+    DS07_NON_AUTH_RESPONSE_DNSKEY => sub {
+        __x    # DNSSEC:DS07_NON_AUTH_RESPONSE_DNSKEY
+          'The following name servers give a non authoritative response on DNSKEY query with DO bit set. '
+          . 'Name servers: {ns_list}',
+          @_;
+    },
+    DS07_NOT_SIGNED => sub {
+        __x    # DNSSEC:DS07_NOT_SIGNED
+          'The zone is not signed.';
+    },
+    DS07_NOT_SIGNED_ON_SERVER => sub {
+        __x    # DNSSEC:DS07_NOT_SIGNED_ON_SERVER
+          'The following name servers responds with no DNSKEY (unsigned child zone). '
+          . 'Name servers: {ns_list}.',
+          @_;
+    },
+    DS07_NO_DS_ON_PARENT_SERVER => sub {
+        __x    # DNSSEC:DS07_NO_DS_ON_PARENT_SERVER
+          'The following parent name servers responds without DS record for the child zone. '
+          . 'Name servers: {ns_list}.',
+          @_;
+    },
+    DS07_NO_DS_FOR_SIGNED_ZONE => sub {
+        __x    # DNSSEC:DS07_NO_DS_FOR_SIGNED_ZONE
+          'The parent zone has no DS record for the signed child zone.';
+    },
+    DS07_NO_RESPONSE_DNSKEY => sub {
+        __x    # DNSSEC:DS07_NO_RESPONSE_DNSKEY
+          'The following name servers do not respond on DNSKEY query with DO bit set. '
+          . 'Name servers: {ns_list}',
+          @_;
+    },
+    DS07_SIGNED => sub {
+        __x    # DNSSEC:DS07_SIGNED
+          'The zone is signed.';
+    },
+    DS07_SIGNED_ON_SERVER => sub {
+        __x    # DNSSEC:DS07_SIGNED_ON_SERVER
+          'The following name servers responds with DNSKEY (signed child zone). '
+          . 'Name servers: {ns_list}.',
+          @_;
+    },
+    DS07_UNEXP_RCODE_RESP_DNSKEY => sub {
+        __x    # DNSSEC:DS07_UNEXP_RCODE_RESP_DNSKEY
+          'The following name servers responded with RCODE "{rcode}" instead of expected "NOERROR" '
+          . 'on DNSKEY query with DO bit set. Name servers: {ns_list}',
           @_;
     },
     DS08_ALGO_NOT_SUPPORTED_BY_ZM => sub {
@@ -1623,10 +1667,6 @@ Readonly my %TAG_DESCRIPTIONS => (
           . 'Fetched from the nameservers with IP addresses "{ns_ip_list}".',
           @_;
     },
-    DS_BUT_NOT_DNSKEY => sub {
-        __x    # DNSSEC:DS_BUT_NOT_DNSKEY
-          '{parent} sent a DS record, but {child} did not send a DNSKEY record.', @_;
-    },
     DURATION_LONG => sub {
         __x    # DNSSEC:DURATION_LONG
           'RRSIG with keytag {keytag} and covering type(s) {types} '
@@ -1659,10 +1699,6 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # DNSSEC:KEY_SIZE_OK
           'All keys from the DNSKEY RRset have the correct size.', @_;
     },
-    NEITHER_DNSKEY_NOR_DS => sub {
-        __x    # DNSSEC:NEITHER_DNSKEY_NOR_DS
-          'There are neither DS nor DNSKEY records for the zone.', @_;
-    },
     NO_RESPONSE_DNSKEY => sub {
         __x    # DNSSEC:NO_RESPONSE_DNSKEY
           'Nameserver {ns} responded with no DNSKEY record(s).', @_;
@@ -1670,10 +1706,6 @@ Readonly my %TAG_DESCRIPTIONS => (
     NO_RESPONSE => sub {
         __x    # DNSSEC:NO_RESPONSE
           'Nameserver {ns} did not respond.', @_;
-    },
-    NOT_SIGNED => sub {
-        __x    # DNSSEC:NOT_SIGNED
-          'The zone is not signed with DNSSEC.', @_;
     },
     REMAINING_LONG => sub {
         __x    # DNSSEC:REMAINING_LONG
@@ -2919,56 +2951,254 @@ sub dnssec07 {
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'DNSSEC07';
     push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
-    if ( not $zone->parent ) {
-        return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
-    }
-    my $dnskey_p = $zone->query_one( $zone->name, 'DNSKEY', { dnssec => 1 } );
-    if ( not $dnskey_p ) {
-        return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
-    }
-    my ( $dnskey ) = $dnskey_p->get_records( 'DNSKEY', 'answer' );
+    my $type_soa = q{SOA};
+    my $type_dnskey = q{DNSKEY};
+    my $type_ds = q{DS};
+    my @query_types = ( $type_soa, $type_dnskey, $type_ds );
 
-    my $ds_p = $zone->parent->query_one( $zone->name, 'DS', { dnssec => 1 } );
-    if ( not $ds_p ) {
-        return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
-    }
-    my ( $ds ) = $ds_p->get_records( 'DS', 'answer' );
+    my ( @ignored_child_ns, @ignored_parent_ns_ip );
+    my ( @no_response_dnskey, @signed_response );
+    my ( @no_auth_dnskey, %error_rcode_dnskey );
+    my ( @no_dnskey, @no_ds, @ds_in_response );
 
-    if ( $dnskey and not $ds ) {
-        push @results,
-          _emit_log(
-            DNSKEY_BUT_NOT_DS => {
-                child  => $dnskey_p->answerfrom,
-                parent => $ds_p->answerfrom,
+    my @child_nss = uniq grep { $_->isa('Zonemaster::Engine::Nameserver') } (
+            @{ Zonemaster::Engine::TestMethodsV2->get_del_ns_names_and_ips( $zone ) // [] },
+            @{ Zonemaster::Engine::TestMethodsV2->get_zone_ns_names_and_ips( $zone ) // [] }
+            );
+
+    my %ip_already_processed;
+    for my $ns ( @child_nss ) {
+        my $ns_ip = $ns->address->short;
+
+        next if exists $ip_already_processed{$ns_ip};
+        $ip_already_processed{$ns_ip} = [ grep { $_->address->short eq $ns_ip } @child_nss ];
+
+        if ( _ip_disabled_message( \@results, $ns, @query_types ) ) {
+            next;
+        }
+
+        my @matching_nss = @{ $ip_already_processed{$ns_ip} };
+
+        my $soa_p = $ns->query( $zone->name, $type_soa );
+
+        if ( not $soa_p or $soa_p->rcode ne 'NOERROR' or not $soa_p->aa or not $soa_p->get_records( $type_soa, 'answer' ) ) {
+            push @ignored_child_ns, @matching_nss;
+            next;
+        }
+
+        my $dnskey_p = $ns->query( $zone->name, $type_dnskey, { dnssec => 1 } );
+
+        if ( not $dnskey_p ) {
+            push @no_response_dnskey, @matching_nss;
+            next;
+        }
+
+        if ( not $dnskey_p->aa ) {
+            push @no_auth_dnskey, @matching_nss;
+            next;
+        }
+
+        if ( $dnskey_p->rcode ne 'NOERROR' ) {
+            push @{ $error_rcode_dnskey{$dnskey_p->rcode} }, @matching_nss;
+            next;
+        }
+
+        my @dnskey_rrs = $dnskey_p->get_records( $type_dnskey, 'answer' );
+        my @rrsig_rrs = $dnskey_p->get_records( 'RRSIG', 'answer' );
+
+        my $covered_dnskey = 0;
+        foreach my $rr ( @rrsig_rrs ) {
+            if ( $rr->typecovered eq $type_dnskey ) {
+                $covered_dnskey = 1;
+                last;
             }
-          );
+        }
+
+        if ( $covered_dnskey ) {
+            push @signed_response, @matching_nss;
+        }
+        else {
+            push @no_dnskey, @matching_nss;
+        }
     }
-    elsif ( $dnskey and $ds ) {
-        push @results,
-          _emit_log(
-            DNSKEY_AND_DS => {
-                child  => $dnskey_p->answerfrom,
-                parent => $ds_p->answerfrom,
+
+    my $parent_ref = Zonemaster::Engine::TestMethodsV2->get_parent_ns_names_and_ips( $zone );
+
+    my @undelegated_ds;
+    if ( my $parent = $zone->parent ) {
+        foreach my $ns ( @{ $parent->ns } ) {
+            if ( $ns->fake_ds->{$zone->name} ) {
+                @undelegated_ds = @{ $ns->fake_ds->{$zone->name} };
+
+                if ( @undelegated_ds ) {
+                    push @ds_in_response, '-';
+                    $parent_ref = undef;
+                }
             }
-          );
+        }
     }
-    elsif ( not $dnskey and $ds ) {
-        push @results,
-          _emit_log(
-            DS_BUT_NOT_DNSKEY => {
-                child  => $dnskey_p->answerfrom,
-                parent => $ds_p->answerfrom,
-            }
-          );
+
+    if ( not @signed_response ) {
+        $parent_ref = undef;
+        @ds_in_response = ();
     }
-    else {
-        push @results,
-          _emit_log(
-            NEITHER_DNSKEY_NOR_DS => {
-                child  => $dnskey_p->answerfrom,
-                parent => $ds_p->answerfrom,
+
+    my @parent_nss = @{ $parent_ref // [] };
+
+    %ip_already_processed = ();
+    foreach my $ns ( @parent_nss ) {
+        my $ns_ip = $ns->address->short;
+
+        next if exists $ip_already_processed{$ns_ip};
+        $ip_already_processed{$ns_ip} = [ grep { $_->address->short eq $ns_ip } @parent_nss ];
+
+        if ( _ip_disabled_message( \@results, $ns, $type_ds ) ) {
+            next;
+        }
+
+        my @matching_nss = @{ $ip_already_processed{$ns_ip} };
+
+        my $ds_p = $ns->query( $zone->name, $type_ds, { dnssec => 1 } );
+
+        if ( not $ds_p or $ds_p->rcode ne q{NOERROR} or not $ds_p->has_edns or not $ds_p->do or not $ds_p->aa ) {
+            push @ignored_parent_ns_ip, @matching_nss;
+            next;
+        }
+
+        my @ds_rrs = $ds_p->get_records_for_name( $type_ds, $zone->name, q{answer} );
+        my @rrsig_rrs = $ds_p->get_records_for_name( q{RRSIG}, $zone->name, q{answer} );
+
+        my $covered_ds = 0;
+        foreach my $rr ( @rrsig_rrs ) {
+            if ( $rr->typecovered eq $type_ds ) {
+                $covered_ds = 1;
+                last;
             }
-          );
+        }
+
+        if ( $covered_ds ) {
+            push @ds_in_response, @matching_nss;
+        }
+        else {
+            push @no_ds, @matching_nss;
+        }
+    }
+
+    my @combined = uniq ( @ignored_child_ns, @no_response_dnskey, @no_auth_dnskey, map { @{ $error_rcode_dnskey{$_} } } keys %error_rcode_dnskey );
+    my $lc = List::Compare->new(\@combined, \@child_nss);
+
+    if ( not $lc->get_symmetric_difference ) {
+        push @results,
+            _emit_log(
+              DS07_NOT_SIGNED => {}
+        );
+    }
+
+    if ( @no_response_dnskey ) {
+        push @results,
+            _emit_log(
+              DS07_NO_RESPONSE_DNSKEY => {
+                  ns_list => join( q{;}, uniq sort @no_response_dnskey )
+              }
+        );
+    }
+
+    if ( @no_auth_dnskey ) {
+        push @results,
+            _emit_log(
+              DS07_NON_AUTH_RESPONSE_DNSKEY => {
+                  ns_list => join( q{;}, uniq sort @no_auth_dnskey )
+              }
+        );
+    }
+
+    if ( keys %error_rcode_dnskey ) {
+        push @results,
+            _emit_log(
+              DS07_UNEXP_RCODE_RESP_DNSKEY => {
+                  ns_list => join( q{;}, uniq sort @{ $error_rcode_dnskey{$_} } ),
+                  rcode => $_
+              }
+        ) for keys %error_rcode_dnskey;
+    }
+
+    if ( @signed_response ) {
+        push @results,
+            _emit_log(
+              DS07_SIGNED_ON_SERVER => {
+                  ns_list => join( q{;}, uniq sort @signed_response )
+              }
+        );
+    }
+
+    if ( @no_dnskey ) {
+        push @results,
+            _emit_log(
+              DS07_NOT_SIGNED_ON_SERVER => {
+                  ns_list => join( q{;}, uniq sort @no_dnskey )
+              }
+        );
+    }
+
+    if ( @signed_response and @no_dnskey ) {
+        push @results,
+            _emit_log(
+              DS07_INCONSISTENT_SIGNED => {}
+        );
+    }
+
+    if ( @signed_response and not @no_dnskey ) {
+        push @results,
+            _emit_log(
+              DS07_SIGNED => {}
+        );
+    }
+
+    if ( not @signed_response and @no_dnskey ) {
+        push @results,
+            _emit_log(
+              DS07_NOT_SIGNED => {}
+        );
+    }
+
+    if ( @no_ds ) {
+        push @results,
+            _emit_log(
+              DS07_NO_DS_ON_PARENT_SERVER => {
+                  ns_list => join( q{;}, uniq sort @no_ds )
+              }
+        );
+    }
+
+    if ( @ds_in_response ) {
+        push @results,
+            _emit_log(
+              DS07_DS_ON_PARENT_SERVER => {
+                  ns_list => join( q{;}, uniq sort @ds_in_response )
+              }
+        );
+    }
+
+    if ( @no_ds and @ds_in_response ) {
+        push @results,
+            _emit_log(
+              DS07_INCONSISTENT_DS => {}
+        );
+    }
+
+    if ( not @no_dnskey and @signed_response ) {
+        if ( @no_ds and not @ds_in_response ) {
+            push @results,
+                _emit_log(
+                DS07_NO_DS_FOR_SIGNED_ZONE => {}
+            );
+        }
+        if ( not @no_ds and @ds_in_response ) {
+            push @results,
+                _emit_log(
+                DS07_DS_FOR_SIGNED_ZONE => {}
+            );
+        }
     }
 
     return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );

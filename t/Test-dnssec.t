@@ -76,8 +76,6 @@ ok( ( $tag{DURATION_OK} || $tag{REMAINING_SHORT} || $tag{RRSIG_EXPIRED} ), 'DURA
 
 my $zone4 = Zonemaster::Engine->zone( 'nic.fr' );
 zone_gives( 'dnssec06', $zone, [q{EXTRA_PROCESSING_OK}] );
-zone_gives( 'dnssec07', $zone, [q{DNSKEY_AND_DS}] );
-zone_gives_not( 'dnssec07', $zone, [qw{NEITHER_DNSKEY_NOR_DS DNSKEY_BUT_NOT_DS DS_BUT_NOT_DNSKEY}] );
 
 ###########
 # dnssec01 -- See t/Test-dnssec01.t instead.
@@ -131,19 +129,8 @@ zone_gives( 'dnssec06', $zone, [q{EXTRA_PROCESSING_BROKEN}] );
 zone_gives_not( 'dnssec06', $zone, [q{EXTRA_PROCESSING_OK}] );
 
 ###########
-# dnssec07
+# dnssec07 -- See t/Test-dnssec07.t instead.
 ###########
-$zone = Zonemaster::Engine->zone( 'dnssec07-dnskey-but-not-ds.zut-root.rd.nic.fr' );
-zone_gives( 'dnssec07', $zone, [q{DNSKEY_BUT_NOT_DS}] );
-zone_gives_not( 'dnssec07', $zone, [qw{DNSKEY_AND_DS DS_BUT_NOT_DNSKEY NEITHER_DNSKEY_NOR_DS}] );
-
-$zone = Zonemaster::Engine->zone( 'dnssec07-neither-dnskey-nor-ds.zut-root.rd.nic.fr' );
-zone_gives( 'dnssec07', $zone, [q{NEITHER_DNSKEY_NOR_DS}] );
-zone_gives_not( 'dnssec07', $zone, [qw{DNSKEY_BUT_NOT_DS DNSKEY_AND_DS DS_BUT_NOT_DNSKEY}] );
-
-$zone = Zonemaster::Engine->zone( 'dnssec07-ds-but-not-dnskey.zut-root.rd.nic.fr' );
-zone_gives( 'dnssec07', $zone, [q{DS_BUT_NOT_DNSKEY}] );
-zone_gives_not( 'dnssec07', $zone, [qw{NEITHER_DNSKEY_NOR_DS DNSKEY_BUT_NOT_DS DNSKEY_AND_DS}] );
 
 ###########
 # dnssec08
@@ -373,8 +360,6 @@ TODO: {
     ok( $tag{DS02_DNSKEY_NOT_FOR_ZONE_SIGNING}, q{DS02_DNSKEY_NOT_FOR_ZONE_SIGNING} );
     # dnssec06
     ok( $tag{EXTRA_PROCESSING_BROKEN}, q{EXTRA_PROCESSING_BROKEN} );
-    # dnssec07 (need complete analyze with broken zone)
-    ok( $tag{ADDITIONAL_DNSKEY_SKIPPED}, q{ADDITIONAL_DNSKEY_SKIPPED} );
 
     local $TODO = "Need to check these zones with that error";
 
