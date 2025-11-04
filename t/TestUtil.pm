@@ -65,7 +65,7 @@ a boolean (testable), 1 or 0
 a string (zone name)
 
 =item *
-an array of strings (expected parent nameserver IPs), which could be empty, or undef
+an array of strings (expected parent nameserver expressions), which could be empty, or undef
 
 =item *
 an array of strings (expected delegation nameserver expressions), which could be empty, or undef
@@ -142,14 +142,6 @@ has the format "keytag,algorithm,type,digest". Those two expressions have the sa
 
 =over
 
-=item _check_ip_addresses()
-
-    _check_ip_addresses( $scenario_name, @ip_addresses );
-
-Helper method that checks if the given ip address(es) are valid.
-
-Takes a string (scenario name) and a reference to an array of strings (IP addresses).
-
 =item _check_ns_expressions()
 
     _check_ns_expressions( $scenario_name, @ns_expressions );
@@ -170,17 +162,6 @@ Takes a string (scenario name) and a reference to an array of strings (delegatio
 
 =cut
 
-sub _check_ip_addresses {
-    my ( $scenario, $ip_addresses ) = @_;
-
-    return if ! defined $ip_addresses;
-
-    foreach my $ip ( @{ $ip_addresses } ) {
-        croak "Scenario $scenario: IP address '$ip' is not valid"
-            unless validate_ipv4( $ip ) or validate_ipv6( $ip );
-    }
-}
-    
 sub _check_ns_expressions {
     my ( $scenario, $ns_expressions ) = @_;
 
@@ -242,7 +223,7 @@ sub perform_methodsv2_testing {
                 "Correct format is: { SCENARIO_NAME => [" .
                 "testable " .
                 "zone_name, " .
-                "[ EXPECTED_PARENT_IP ], " .
+                "[ EXPECTED_PARENT_NS ], " .
                 "[ EXPECTED_DEL_NS ], " .
                 "[ EXPECTED_ZONE_NS ], " .
                 "[ UNDELEGATED_NS ], " .
@@ -251,7 +232,7 @@ sub perform_methodsv2_testing {
 
         my ( $testable,
              $zone_name,
-             $expected_parent_ip,
+             $expected_parent_ns,
              $expected_del_ns,
              $expected_zone_ns,
              $undelegated_ns,
@@ -275,7 +256,7 @@ sub perform_methodsv2_testing {
             croak "Scenario $scenario: Zone name '$zone_name' is not valid";
         }
 
-        if ( defined( $expected_parent_ip ) and ref( $expected_parent_ip ) ne 'ARRAY' ) {
+        if ( defined( $expected_parent_ns ) and ref( $expected_parent_ns ) ne 'ARRAY' ) {
             croak "Scenario $scenario: Incorrect reference type of expected parent IPs. Expected: ARRAY";
         }
 
@@ -291,7 +272,7 @@ sub perform_methodsv2_testing {
             croak "Scenario $scenario: Incorrect reference type of undelegated name servers expressions. Expected: ARRAY";
         }
 
-        _check_ip_addresses( $scenario, $expected_parent_ip );
+        _check_ns_expressions( $scenario, $expected_parent_ns );
         _check_ns_expressions( $scenario, $expected_del_ns );
         _check_ns_expressions( $scenario, $expected_zone_ns );
         _check_ns_expressions( $scenario, $undelegated_ns );
@@ -314,18 +295,19 @@ sub perform_methodsv2_testing {
                 Zonemaster::Engine->add_fake_delegation( $zone_name => \%undel_ns, fill_in_empty_oob_glue => 1 );
             }
 
-            # Method: get_parent_ns_ips()
-            my $method = 'get_parent_ns_ips';
+            # Method: get_parent_ns_names_and_ips()
+            my $method = 'get_parent_ns_names_and_ips';
             subtest $method => sub {
                 my $res = Zonemaster::Engine::TestMethodsV2->$method( Zonemaster::Engine->zone( $zone_name ) );
-                if ( defined $expected_parent_ip ) {
+                if ( defined $expected_parent_ns ) {
                     ok( defined $res, "Result is defined" ) or diag "Unexpected undefined result";
-                    foreach my $expected_ip ( @{ $expected_parent_ip } ) {
-                        ok( grep( /^$expected_ip$/, uniq map { $_->address->short } @{ $res } ), "Name server IP '$expected_ip' is present" )
-                            or diag "Expected but missing: $expected_ip";
+                    foreach my $expected_ns ( @{ $expected_parent_ns } ) {
+                        ok( grep( /^$expected_ns$/, @{ $res } ), "Name server '$expected_ns' is present" )
+                            or diag "Expected but missing: $expected_ns";
                     }
-                    ok( scalar @{ $res } == scalar @{ $expected_parent_ip }, "Number of name server IPs in both arrays match" )
-                        or diag "Number of name server IPs in both arrays does not match (found ". scalar @{ $res } . ", expected " . @{ $expected_parent_ip } . ")";
+                    ok( scalar @{ $res } == scalar @{ $expected_parent_ns }, "Number of name servers in both arrays match" )
+                        or diag "Number of name servers in both arrays does not match (found ". scalar @{ $res } . ", expected " . @{ $expected_parent_ns } . ")"
+                        or diag "Got:", explain [ map { "$_" } @$res ];
                 }
                 else {
                     ok( ! defined $res, "Result is undefined" ) or diag "Unexpected defined result";
