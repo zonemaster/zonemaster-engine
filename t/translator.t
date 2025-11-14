@@ -25,7 +25,7 @@ subtest 'Everything but Test::NoWarnings' => sub {
         'Zonemaster::Engine::Translator->instance()';
 
     ok( exists $trans->data->{Basic}{B01_PARENT_FOUND}, 'expected key from file exists' );
-    ok( exists $trans->data->{DNSSEC}{ALGORITHM_OK},    'expected key from module exists' );
+    ok( exists $trans->data->{DNSSEC}{NOT_SIGNED},      'expected key from module exists' );
 
     my $entry = Zonemaster::Engine::Logger::Entry->new(
         {

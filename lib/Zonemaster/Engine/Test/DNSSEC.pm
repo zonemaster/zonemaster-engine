@@ -29,7 +29,7 @@ Zonemaster::Engine::Test::DNSSEC - Module implementing tests focused on DNSSEC
 
 =cut
 
-### Table fetched from IANA on 2017-03-09
+### Table fetched from IANA on 2025-07-15
 Readonly::Hash our %algo_properties => (
     0 => {
         status      => $ALGO_STATUS_NOT_ZONE_SIGN,
@@ -58,9 +58,10 @@ Readonly::Hash our %algo_properties => (
     4 => {
         status      => $ALGO_STATUS_RESERVED,
         description => q{Reserved},
+        mnemonic    => q{RESERVED},
     },
     5 => {
-        status      => $ALGO_STATUS_NOT_RECOMMENDED,
+        status      => $ALGO_STATUS_DEPRECATED,
         description => q{RSA/SHA1},
         mnemonic    => q{RSASHA1},
         sig         => 1,
@@ -72,7 +73,7 @@ Readonly::Hash our %algo_properties => (
         sig         => 1,
     },
     7 => {
-        status      => $ALGO_STATUS_NOT_RECOMMENDED,
+        status      => $ALGO_STATUS_DEPRECATED,
         description => q{RSASHA1-NSEC3-SHA1},
         mnemonic    => q{RSASHA1-NSEC3-SHA1},
         sig         => 1,
@@ -86,6 +87,7 @@ Readonly::Hash our %algo_properties => (
     9 => {
         status      => $ALGO_STATUS_RESERVED,
         description => q{Reserved},
+        mnemonic    => q{RESERVED},
     },
     10 => {
         status      => $ALGO_STATUS_NOT_RECOMMENDED,
@@ -96,6 +98,7 @@ Readonly::Hash our %algo_properties => (
     11 => {
         status      => $ALGO_STATUS_RESERVED,
         description => q{Reserved},
+        mnemonic    => q{RESERVED},
     },
     12 => {
         status      => $ALGO_STATUS_DEPRECATED,
@@ -127,11 +130,26 @@ Readonly::Hash our %algo_properties => (
         mnemonic    => q{ED448},
         sig         => 1,
     },
+    17 => {
+        status      => $ALGO_STATUS_OTHER,
+        description => q{SM2 signing algo w SM3 hash algo},
+        mnemonic    => q{SM2SM3},
+        sig         => 1,
+    },
     (
-        map { $_ => { status => $ALGO_STATUS_UNASSIGNED, description => q{Unassigned}, } } ( 17 .. 122 )
+        map { $_ => { status => $ALGO_STATUS_UNASSIGNED, description => q{Unassigned}, mnemonic => q{UNASSIGNED} } } ( 18 .. 22 )
+    ),
+    23 => {
+        status      => $ALGO_STATUS_OTHER,
+        description => q{GOST R 34.10-2012},
+        mnemonic    => q{ECC-GOST12},
+        sig         => 1,
+    },
+    (
+        map { $_ => { status => $ALGO_STATUS_UNASSIGNED, description => q{Unassigned}, mnemonic => q{UNASSIGNED} } } ( 24 .. 122 )
     ),
     (
-        map { $_ => { status => $ALGO_STATUS_RESERVED, description => q{Reserved}, } } ( 123 .. 251 )
+        map { $_ => { status => $ALGO_STATUS_RESERVED, description => q{Reserved}, mnemonic => q{RESERVED} } } ( 123 .. 251 )
     ),
     252 => {
         status      => $ALGO_STATUS_NOT_ZONE_SIGN,
@@ -154,6 +172,7 @@ Readonly::Hash our %algo_properties => (
     255 => {
         status      => $ALGO_STATUS_RESERVED,
         description => q{Reserved},
+        mnemonic    => q{RESERVED},
     },
 );
 
@@ -200,6 +219,41 @@ Readonly::Hash our %LDNS_digest_algorithms_supported => (
     2 => q{sha256},
     3 => q{gost},
     4 => q{sha384},
+);
+
+Readonly::Hash our %dnssec05_tags_mapping => (
+    0 => q{DS05_ALGO_NOT_ZONE_SIGN},
+    1 => q{DS05_ALGO_DEPRECATED},
+    2 => q{DS05_ALGO_NOT_ZONE_SIGN},
+    3 => q{DS05_ALGO_DEPRECATED},
+    4 => q{DS05_ALGO_RESERVED},
+    5 => q{DS05_ALGO_DEPRECATED},
+    6 => q{DS05_ALGO_DEPRECATED},
+    7 => q{DS05_ALGO_DEPRECATED},
+    8 => q{DS05_ALGO_OK},
+    9 => q{DS05_ALGO_RESERVED},
+    10 => q{DS05_ALGO_NOT_RECOMMENDED},
+    11 => q{DS05_ALGO_RESERVED},
+    12 => q{DS05_ALGO_DEPRECATED},
+    13 => q{DS05_ALGO_OK},
+    14 => q{DS05_ALGO_OK},
+    15 => q{DS05_ALGO_OK},
+    16 => q{DS05_ALGO_OK},
+    17 => q{DS05_ALGO_OK},
+    (
+        map { $_ => q{DS05_ALGO_UNASSIGNED} } ( 18 .. 22 )
+    ),
+    23 => q{DS05_ALGO_OK},
+    (
+        map { $_ => q{DS05_ALGO_UNASSIGNED} } ( 24 .. 122 )
+    ),
+    (
+        map { $_ => q{DS05_ALGO_RESERVED} } ( 123 .. 251 )
+    ),
+    252 => q{DS05_ALGO_NOT_ZONE_SIGN},
+    253 => q{DS05_ALGO_PRIVATE},
+    254 => q{DS05_ALGO_PRIVATE},
+    255 => q{DS05_ALGO_RESERVED},
 );
 
 =head1 METHODS
@@ -393,20 +447,16 @@ sub metadata {
         ],
         dnssec05 => [
             qw(
-              ALGORITHM_DEPRECATED
-              ALGORITHM_NOT_RECOMMENDED
-              ALGORITHM_NOT_ZONE_SIGN
-              ALGORITHM_OK
-              ALGORITHM_PRIVATE
-              ALGORITHM_RESERVED
-              ALGORITHM_UNASSIGNED
-              IPV4_DISABLED
-              IPV6_DISABLED
-              KEY_DETAILS
-              NO_RESPONSE
-              NO_RESPONSE_DNSKEY
-              TEST_CASE_END
-              TEST_CASE_START
+              DS05_ALGO_DEPRECATED
+              DS05_ALGO_NOT_RECOMMENDED
+              DS05_ALGO_NOT_ZONE_SIGN
+              DS05_ALGO_OK
+              DS05_ALGO_PRIVATE
+              DS05_ALGO_RESERVED
+              DS05_ALGO_UNASSIGNED
+              DS05_NO_RESPONSE
+              DS05_SERVER_NO_DNSSEC
+              DS05_ZONE_NO_DNSSEC
               )
         ],
         dnssec06 => [
@@ -652,48 +702,6 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # DNSSEC:ADDITIONAL_DNSKEY_SKIPPED
           'No DNSKEYs found. Additional tests skipped.', @_;
     },
-    ALGORITHM_DEPRECATED => sub {
-        __x    # DNSSEC:ALGORITHM_DEPRECATED
-          'The DNSKEY with tag {keytag} uses deprecated algorithm number '
-          . '{algo_num} ({algo_descr}).',
-          @_;
-    },
-    ALGORITHM_NOT_RECOMMENDED => sub {
-        __x    # DNSSEC:ALGORITHM_NOT_RECOMMENDED
-          'The DNSKEY with tag {keytag} uses an algorithm number '
-          . '{algo_num} ({algo_descr}) which is not recommended to be used.',
-          @_;
-    },
-    ALGORITHM_NOT_ZONE_SIGN => sub {
-        __x    # DNSSEC:ALGORITHM_NOT_ZONE_SIGN
-          'The DNSKEY with tag {keytag} uses algorithm number not meant for '
-          . 'zone signing, algorithm number {algo_num} ({algo_descr}).',
-          @_;
-    },
-    ALGORITHM_OK => sub {
-        __x    # DNSSEC:ALGORITHM_OK
-          'The DNSKEY with tag {keytag} uses algorithm number {algo_num} '
-          . '({algo_descr}), which is OK.',
-          @_;
-    },
-    ALGORITHM_PRIVATE => sub {
-        __x    # DNSSEC:ALGORITHM_PRIVATE
-          'The DNSKEY with tag {keytag} uses private algorithm number '
-          . '{algo_num} ({algo_descr}).',
-          @_;
-    },
-    ALGORITHM_RESERVED => sub {
-        __x    # DNSSEC:ALGORITHM_RESERVED
-          'The DNSKEY with tag {keytag} uses reserved algorithm number '
-          . '{algo_num} ({algo_descr}).',
-          @_;
-    },
-    ALGORITHM_UNASSIGNED => sub {
-        __x    # DNSSEC:ALGORITHM_UNASSIGNED
-          'The DNSKEY with tag {keytag} uses unassigned algorithm number '
-          . '{algo_num} ({algo_descr}).',
-          @_;
-    },
     DNSKEY_AND_DS => sub {
         __x    # DNSSEC:DNSKEY_AND_DS
           '{parent} sent a DS record, and {child} a DNSKEY record.', @_;
@@ -931,6 +939,63 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # DNSSEC:DS03_UNASSIGNED_FLAG_USED
           'The following servers respond with an NSEC3 record where an unassigned flag is used (bit {int}). '
           . 'Fetched from name servers "{ns_list}".',
+          @_;
+    },
+    DS05_ALGO_DEPRECATED => sub {
+        __x    # DNSSEC:DS05_ALGO_DEPRECATED
+          'The DNSKEY with tag {keytag} uses deprecated algorithm number {algo_num} ("{algo_descr}", '
+          . '{algo_mnemo}), on name servers "{ns_list}".',
+          @_;
+    },
+    DS05_ALGO_NOT_RECOMMENDED => sub {
+        __x    # DNSSEC:DS05_ALGO_NOT_RECOMMENDED
+          'The DNSKEY with tag {keytag} uses an algorithm number {algo_num} ("{algo_descr}", {algo_mnemo}), '
+          . 'which is not recommended to be used. Fetched from name servers "{ns_list}".',
+          @_;
+    },
+    DS05_ALGO_NOT_ZONE_SIGN => sub {
+        __x    # DNSSEC:DS05_ALGO_NOT_ZONE_SIGN
+          'The DNSKEY with tag {keytag} uses algorithm number not meant for zone signing, algorithm number '
+          . '{algo_num} ("{algo_descr}", {algo_mnemo}), on name servers "{ns_list}".',
+          @_;
+    },
+    DS05_ALGO_OK => sub {
+        __x    # DNSSEC:DS05_ALGO_OK
+          'The DNSKEY with tag {keytag} uses algorithm number {algo_num} ("{algo_descr}", {algo_mnemo}), '
+          . 'which is OK. Fetched from name servers "{ns_list}".',
+          @_;
+    },
+    DS05_ALGO_PRIVATE => sub {
+        __x    # DNSSEC:DS05_ALGO_PRIVATE
+          'The DNSKEY with tag {keytag} uses algorithm number {algo_num} for private use on name '
+          . 'servers "{ns_list}".',
+          @_;
+    },
+    DS05_ALGO_RESERVED => sub {
+        __x    # DNSSEC:DS05_ALGO_RESERVED
+          'The DNSKEY with tag {keytag} uses reserved algorithm number {algo_num} on name servers "{ns_list}".',
+          @_;
+    },
+    DS05_ALGO_UNASSIGNED => sub {
+        __x    # DNSSEC:DS05_ALGO_UNASSIGNED
+          'The DNSKEY with tag {keytag} uses unassigned algorithm number {algo_num} on name servers "{ns_list}".',
+          @_;
+    },
+    DS05_NO_RESPONSE => sub {
+        __x    # DNSSEC:DS05_NO_RESPONSE
+          'No response or error in response from all name servers on the DNSKEY query. Failing name servers: "{ns_list}".',
+          @_;
+    },
+    DS05_SERVER_NO_DNSSEC => sub {
+        __x    # DNSSEC:DS05_SERVER_NO_DNSSEC
+          'Some name servers do not support DNSSEC or have not been properly configured. DNSKEY cannot be tested on '
+          . 'those servers. Fetched from name servers "{ns_list}".',
+          @_;
+    },
+    DS05_ZONE_NO_DNSSEC => sub {
+        __x    # DNSSEC:DS05_ZONE_NO_DNSSEC
+          'The zone is not DNSSEC signed or not properly DNSSEC signed. DNSKEY cannot be tested. Fetched from name '
+          . 'servers "{ns_list}".',
           @_;
     },
     DS08_ALGO_NOT_SUPPORTED_BY_ZM => sub {
@@ -1524,10 +1589,6 @@ Readonly my %TAG_DESCRIPTIONS => (
     IPV6_DISABLED => sub {
         __x    # DNSSEC:IPV6_DISABLED
           'IPv6 is disabled, not sending "{rrtype}" query to {ns}.', @_;
-    },
-    KEY_DETAILS => sub {
-        __x    # DNSSEC:KEY_DETAILS
-          'Key with keytag {keytag} details : Size = {keysize}, Flags ({sep}, {rfc5011}).', @_;
     },
     KEY_SIZE_OK => sub {
         __x    # DNSSEC:KEY_SIZE_OK
@@ -2571,73 +2632,107 @@ sub dnssec05 {
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'DNSSEC05';
     push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
-    my @nss_del   = @{ Zonemaster::Engine::TestMethods->method4( $zone ) };
-    my @nss_child = @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
-    my %nss       = map { $_->name->string . '/' . $_->address->short => $_ } @nss_del, @nss_child;
+    my @ignored_ns_ip;
+    my @responds_without_dnskey;
+    my @responds_with_dnskey;
+    my %sets = (
+        'DS05_ALGO_DEPRECATED' => {},
+        'DS05_ALGO_RESERVED' => {},
+        'DS05_ALGO_UNASSIGNED' => {},
+        'DS05_ALGO_NOT_RECOMMENDED' => {},
+        'DS05_ALGO_PRIVATE' => {},
+        'DS05_ALGO_NOT_ZONE_SIGN' => {},
+        'DS05_ALGO_OK' => {}
+    );
 
-    for my $key ( sort keys %nss ) {
-        my $ns = $nss{$key};
+    my @nss = uniq grep { $_->isa('Zonemaster::Engine::Nameserver') } (
+                @{ Zonemaster::Engine::TestMethodsV2->get_del_ns_names_and_ips( $zone ) // [] },
+                @{ Zonemaster::Engine::TestMethodsV2->get_zone_ns_names_and_ips( $zone ) // [] }
+              );
 
-        if ( _ip_disabled_message( \@results, $ns, q{DNSKEY} ) ) {
+    my %ip_already_processed;
+    for my $ns ( @nss ) {
+        my $ns_ip = $ns->address->short;
+
+        next if exists $ip_already_processed{$ns_ip};
+        $ip_already_processed{$ns_ip} = [ grep { $_->address->short eq $ns_ip } @nss ];
+
+        if ( _ip_disabled_message( \@results, $ns, 'DNSKEY' ) ) {
             next;
         }
+
+        my @matching_nss = @{ $ip_already_processed{$ns_ip} };
 
         my $dnskey_p = $ns->query( $zone->name, 'DNSKEY', { dnssec => 1 } );
-        if ( not $dnskey_p ) {
-            push @results, _emit_log( NO_RESPONSE => { ns => $ns->string } );
+
+        if ( not $dnskey_p or $dnskey_p->rcode ne 'NOERROR' or not $dnskey_p->aa ) {
+            push @ignored_ns_ip, @matching_nss;
             next;
         }
 
-        my @keys = $dnskey_p->get_records( 'DNSKEY', 'answer' );
-        if ( not @keys ) {
-            push @results, _emit_log( NO_RESPONSE_DNSKEY => { ns => $ns->string } );
+        my @dnskey_rrs = $dnskey_p->get_records_for_name( 'DNSKEY', $zone->name->fqdn, 'answer' );
+
+        if ( not @dnskey_rrs ) {
+            push @responds_without_dnskey, @matching_nss;
             next;
         }
 
-        foreach my $key ( @keys ) {
-            my $algo      = $key->algorithm;
-            my $algo_args = {
-                algo_num    => $algo,
-                keytag      => $key->keytag,
-                algo_descr  => $algo_properties{$algo}{description},
-            };
+        push @responds_with_dnskey, @matching_nss;
 
-            if ( $algo_properties{$algo}{status} == $ALGO_STATUS_DEPRECATED ) {
-                push @results, _emit_log( ALGORITHM_DEPRECATED => $algo_args );
-            }
-            elsif ( $algo_properties{$algo}{status} == $ALGO_STATUS_RESERVED ) {
-                push @results, _emit_log( ALGORITHM_RESERVED => $algo_args );
-            }
-            elsif ( $algo_properties{$algo}{status} == $ALGO_STATUS_UNASSIGNED ) {
-                push @results, _emit_log( ALGORITHM_UNASSIGNED => $algo_args );
-            }
-            elsif ( $algo_properties{$algo}{status} == $ALGO_STATUS_PRIVATE ) {
-                push @results, _emit_log( ALGORITHM_PRIVATE => $algo_args );
-            }
-            elsif ( $algo_properties{$algo}{status} == $ALGO_STATUS_NOT_ZONE_SIGN ) {
-                push @results, _emit_log( ALGORITHM_NOT_ZONE_SIGN => $algo_args );
-            }
-            elsif ( $algo_properties{$algo}{status} == $ALGO_STATUS_NOT_RECOMMENDED ) {
-                push @results, _emit_log( ALGORITHM_NOT_RECOMMENDED => $algo_args );
-            }
-            else {
-                push @results, _emit_log( ALGORITHM_OK => $algo_args );
-                if ( $key->flags & 256 ) {    # This is a Key
+        foreach my $rr ( @dnskey_rrs ) {
+            my $algo = $rr->algorithm;
+            my $keytag = $rr->keytag;
+
+            push @{ $sets{$dnssec05_tags_mapping{$algo}}->{$algo}{$keytag} }, @matching_nss;
+        }
+    }
+
+    while ( my ($tag_name, $set_ref) = each %sets ) {
+        my %values = %{ $set_ref };
+        if ( %values ) {
+            foreach my $algo ( keys %values ) {
+                foreach my $keytag ( keys %{ $values{$algo} } ) {
                     push @results,
-                      _emit_log(
-                        KEY_DETAILS => {
-                            keytag  => $key->keytag,
-                            keysize => $key->keysize,
-                            sep     => $key->flags & 1 ? q{SEP bit set} : q{SEP bit *not* set},
-                            rfc5011 => $key->flags & 128
-                            ? q{RFC 5011 revocation bit set}
-                            : q{RFC 5011 revocation bit *not* set},
-                        }
-                      );
+                        _emit_log(
+                            $tag_name => {
+                                ns_list    => join( q{;}, uniq sort @{ $values{$algo}{$keytag} } ),
+                                keytag     => $keytag,
+                                algo_num   => $algo,
+                                algo_descr => $algo_properties{$algo}{description},
+                                algo_mnemo => $algo_properties{$algo}{mnemonic}
+                            }
+                        );
                 }
             }
+        }
+    }
 
-        } ## end foreach my $key ( @keys )
+    if ( not @responds_without_dnskey and not @responds_with_dnskey ) {
+        push @results,
+          _emit_log(
+            DS05_NO_RESPONSE => {
+                ns_list => join( q{;}, uniq sort @ignored_ns_ip )
+            }
+        );
+    }
+
+    if ( @responds_without_dnskey ) {
+        if ( not @responds_with_dnskey ) {
+            push @results,
+              _emit_log(
+                DS05_ZONE_NO_DNSSEC => {
+                    ns_list => join( q{;}, uniq sort @responds_without_dnskey )
+                }
+            );
+        }
+        else {
+            push @results,
+              _emit_log(
+                DS05_SERVER_NO_DNSSEC => {
+                    ns_list => join( q{;}, uniq sort @responds_without_dnskey )
+                }
+            );
+        }
     }
 
     return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
