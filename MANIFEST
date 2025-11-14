@@ -179,6 +179,8 @@ t/Test-delegation03.data
 t/Test-delegation03.t
 t/Test-delegation.data
 t/Test-delegation.t
+t/Test-dnssec01.data
+t/Test-dnssec01.t
 t/Test-dnssec03.data
 t/Test-dnssec03.t
 t/Test-dnssec05.data

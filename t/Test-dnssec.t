@@ -80,29 +80,8 @@ zone_gives( 'dnssec07', $zone, [q{DNSKEY_AND_DS}] );
 zone_gives_not( 'dnssec07', $zone, [qw{NEITHER_DNSKEY_NOR_DS DNSKEY_BUT_NOT_DS DS_BUT_NOT_DNSKEY}] );
 
 ###########
-# dnssec01
+# dnssec01 -- See t/Test-dnssec01.t instead.
 ###########
-$zone = Zonemaster::Engine->zone( 'dnssec01-ds-algorithm-ok.zut-root.rd.nic.fr' );
-zone_gives_not( 'dnssec01', $zone, [qw{DS01_DS_ALGO_DEPRECATED DS01_DS_ALGO_RESERVED DS01_DS_ALGO_NOT_DS DS01_DS_ALGO_2_MISSING DS01_DIGEST_NOT_SUPPORTED_BY_ZM}] );
-
-$zone = Zonemaster::Engine->zone( 'dnssec01-nxdomain.zut-root.rd.nic.fr' );
-zone_gives_not( 'dnssec01', $zone, [qw{DS01_DS_ALGO_DEPRECATED DS01_DS_ALGO_RESERVED DS01_DS_ALGO_NOT_DS DS01_DS_ALGO_2_MISSING DS01_DIGEST_NOT_SUPPORTED_BY_ZM}] );
-
-$zone = Zonemaster::Engine->zone( 'dnssec01-ds-algorithm-not-ds.zut-root.rd.nic.fr' );
-zone_gives( 'dnssec01', $zone, [qw{DS01_DS_ALGO_NOT_DS DS01_DS_ALGO_2_MISSING DS01_DIGEST_NOT_SUPPORTED_BY_ZM}] );
-zone_gives_not( 'dnssec01', $zone, [qw{DS01_DS_ALGO_DEPRECATED DS01_DS_ALGO_RESERVED}] );
-
-$zone = Zonemaster::Engine->zone( 'dnssec01-ds-algorithm-deprecated1.zut-root.rd.nic.fr' );
-zone_gives( 'dnssec01', $zone, [qw{DS01_DS_ALGO_DEPRECATED DS01_DS_ALGO_2_MISSING}] );
-zone_gives_not( 'dnssec01', $zone, [qw{DS01_DS_ALGO_NOT_DS DS01_DS_ALGO_RESERVED DS01_DIGEST_NOT_SUPPORTED_BY_ZM}] );
-
-$zone = Zonemaster::Engine->zone( 'dnssec01-ds-algorithm-deprecated3.zut-root.rd.nic.fr' );
-zone_gives( 'dnssec01', $zone, [qw{DS01_DS_ALGO_DEPRECATED DS01_DS_ALGO_2_MISSING DS01_DIGEST_NOT_SUPPORTED_BY_ZM}] );
-zone_gives_not( 'dnssec01', $zone, [qw{DS01_DS_ALGO_NOT_DS DS01_DS_ALGO_RESERVED}] );
-
-$zone = Zonemaster::Engine->zone( 'dnssec01-ds-algorithm-reserved.zut-root.rd.nic.fr' );
-zone_gives( 'dnssec01', $zone, [qw{DS01_DS_ALGO_RESERVED DS01_DS_ALGO_2_MISSING DS01_DIGEST_NOT_SUPPORTED_BY_ZM}] );
-zone_gives_not( 'dnssec01', $zone, [qw{DS01_DS_ALGO_DEPRECATED DS01_DS_ALGO_NOT_DS}] );
 
 ###########
 # dnssec02
