@@ -185,6 +185,8 @@ t/Test-dnssec03.data
 t/Test-dnssec03.t
 t/Test-dnssec05.data
 t/Test-dnssec05.t
+t/Test-dnssec07.data
+t/Test-dnssec07.t
 t/Test-dnssec10.data
 t/Test-dnssec10.t
 t/Test-dnssec16.data
