@@ -35,60 +35,10 @@ jobs:
         with:
           perl-version: ${{ matrix.perl }}
 
-      - name: Binary dependencies
-        run: |
-          # * These were taken from the installation instruction.
-          # * Gettext was added so we can run cpanm . on the Engine sources.
-          # * The Perl modules were left out because I couldn't get all of them
-          #   to work with custom Perl versions.
-          # * Cpanminus was left out because actions-setup-perl installs it.
-          sudo apt-get install -y \
-            autoconf \
-            automake \
-            build-essential \
-            gettext \
-            libidn2-dev \
-            liblog-any-perl \
-            libssl-dev \
-            libtool \
-            m4 \
-
-      - name: Install Zonemaster::LDNS (latest)
-        if: ${{ matrix.compatibility == 'latest' }}
-        run: |
-          cpanm --sudo --notest Module::Install ExtUtils::PkgConfig Zonemaster::LDNS
-
-      - name: Install Zonemaster::LDNS (develop)
-        if: ${{ matrix.compatibility == 'develop' }}
-        run: |
-          cpanm --sudo --notest Devel::CheckLib Module::Install ExtUtils::PkgConfig Module::Install::XSUtil
-          git clone --branch=develop --depth=1 https://github.com/zonemaster/zonemaster-ldns.git
-          perl Makefile.PL  # Generate MYMETA.yml to appease cpanm .
-          ( cd zonemaster-ldns ; cpanm --sudo --notest . )
-          rm -rf zonemaster-ldns
-
-        # Installing Zonemaster::Engine requires root privileges, because of a
-        # bug in Mail::SPF preventing normal installation with cpanm as
-        # non-root user (see link below [1]).
-        #
-        # The alternative, if one still wishes to install Zonemaster::Engine
-        # as non-root user, is to install Mail::SPF first with a command like:
-        #
-        #  % cpanm --notest \
-        #        --install-args="--install_path sbin=$HOME/.local/sbin" \
-        #        Mail::SPF
-        #
-        # For the sake of consistency, other Perl packages installed from CPAN
-        # are also installed as root.
-        #
-        # [1]: https://rt.cpan.org/Public/Bug/Display.html?id=34768
-      - name: Install remaining dependencies
-        run: |
-          cpanm --sudo --verbose --notest --installdeps .
-
-      - name: Install Zonemaster::Engine
-        run: |
-          cpanm --sudo --verbose --notest .
+      - name: Install Zonemaster-Engine with dependencies
+        uses: ./.github/actions/install-with-dependencies
+        with:
+          zonemaster_ldns_branch: ${{ matrix.compatibility }}
 
       - name: Show content of log files
         if: ${{ failure() }}
