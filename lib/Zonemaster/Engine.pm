@@ -3,7 +3,7 @@ package Zonemaster::Engine;
 use v5.16.0;
 use warnings;
 
-use version; our $VERSION = version->declare("v8.0.1");
+use version; our $VERSION = version->declare("v8.1.0");
 
 BEGIN {
     # Locale::TextDomain (<= 1.20) doesn't know about File::ShareDir so give a helping hand.
