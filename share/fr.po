@@ -2,15 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-20 14:33+0000\n"
-"PO-Revision-Date: 2023-07-21 06:24+0000\n"
+"POT-Creation-Date: 2025-12-09 16:55+0100\n"
+"PO-Revision-Date: 2025-12-09 17:08+0100\n"
 "Last-Translator: thomas.green@afnic.fr\n"
 "Language-Team: Zonemaster Team\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 3.6\n"
 
 #, perl-brace-format
 msgid ""
@@ -55,8 +55,8 @@ msgstr ""
 "Le nom de domaine a un label trop long (plus de 63 caractères), \"{label}\"."
 
 #. ADDRESS:ADDRESS01
-msgid "Name server address must be globally routable"
-msgstr "L'adresse du serveur de noms doit être routable globalement"
+msgid "Name server address must be globally reachable"
+msgstr "L'adresse du serveur de noms doit être joignable globalement"
 
 #. ADDRESS:ADDRESS02
 msgid "Reverse DNS entry exists for name server IP address"
@@ -66,6 +66,41 @@ msgstr ""
 #. ADDRESS:ADDRESS03
 msgid "Reverse DNS entry matches name server name"
 msgstr "L’enregistrement DNS inverse correspond au nom du serveur de noms"
+
+#. ADDRESS:A01_ADDR_NOT_GLOBALLY_REACHABLE
+#, perl-brace-format
+msgid "IP address(es) not listed as globally reachable: \"{ns_list}\"."
+msgstr ""
+"Adresse(s) IP non listée(s) comme globalement joignable(s) : \"{ns_list}\"."
+
+#. ADDRESS:A01_DOCUMENTATION_ADDR
+#, perl-brace-format
+msgid "IP address(es) intended for documentation purposes: \"{ns_list}\"."
+msgstr "Adresse(s) IP prévue(s) à des fins de documentation : \"{ns_list}\"."
+
+#. ADDRESS:A01_GLOBALLY_REACHABLE_ADDR
+#, perl-brace-format
+msgid "Globally reachable IP address(es): \"{ns_list}\"."
+msgstr "Adresse(s) IP globalement joignable(s) : \"{ns_list}\"."
+
+#. ADDRESS:A01_LOCAL_USE_ADDR
+#, perl-brace-format
+msgid ""
+"IP address(es) intended for local use on network or service provider level: "
+"\"{ns_list}\"."
+msgstr ""
+"Adresse(s) IP prévue(s) pour un usage en réseau local ou au niveau d'un "
+"fournisseur de services : \"{ns_list}\"."
+
+#. ADDRESS:A01_NO_GLOBALLY_REACHABLE_ADDR
+msgid "None of the name servers IP addresses are listed as globally reachable."
+msgstr ""
+"Aucune adresse IP des serveurs de noms n'est listée comme globalement "
+"joignable."
+
+#. ADDRESS:A01_NO_NAME_SERVERS_FOUND
+msgid "No name servers found."
+msgstr "Aucun serveur de noms trouvé."
 
 #. ADDRESS:NAMESERVER_IP_WITHOUT_REVERSE
 #, perl-brace-format
@@ -82,21 +117,6 @@ msgid ""
 msgstr ""
 "Le serveur de noms {nsname} a une adresse IP ({ns_ip}) qui ne correspond pas "
 "aux enregistrements \"PTR\" retournés ({names}) pour celle-ci."
-
-#. ADDRESS:NAMESERVER_IP_PRIVATE_NETWORK
-#, perl-brace-format
-msgid ""
-"Nameserver {nsname} has an IP address ({ns_ip}) with prefix {prefix} "
-"referenced in {reference} as a '{name}'."
-msgstr ""
-"Le serveur de noms {nsname} a une adresse IP ({ns_ip}) dont le préfixe "
-"{prefix} est référencé dans le {reference} sous le libellé '{name}'."
-
-#. ADDRESS:NO_IP_PRIVATE_NETWORK
-msgid "All Nameserver addresses are in the routable public addressing space."
-msgstr ""
-"Toutes les adresses IP des serveurs de noms sont dans l'espace d'adresses "
-"publiques routables."
 
 #. ADDRESS:NAMESERVERS_IP_WITH_REVERSE
 msgid "Reverse DNS entry exists for each Nameserver IP address."
@@ -119,8 +139,8 @@ msgstr ""
 #. BASIC:TEST_CASE_END
 #. CONNECTIVITY:TEST_CASE_END
 #. CONSISTENCY:TEST_CASE_END
-#. DNSSEC:TEST_CASE_END
 #. DELEGATION:TEST_CASE_END
+#. DNSSEC:TEST_CASE_END
 #. NAMESERVER:TEST_CASE_END
 #. SYNTAX:TEST_CASE_END
 #. ZONE:TEST_CASE_END
@@ -132,8 +152,8 @@ msgstr "TEST_CASE_END {testcase}."
 #. BASIC:TEST_CASE_START
 #. CONNECTIVITY:TEST_CASE_START
 #. CONSISTENCY:TEST_CASE_START
-#. DNSSEC:TEST_CASE_START
 #. DELEGATION:TEST_CASE_START
+#. DNSSEC:TEST_CASE_START
 #. NAMESERVER:TEST_CASE_START
 #. SYNTAX:TEST_CASE_START
 #. ZONE:TEST_CASE_START
@@ -331,8 +351,8 @@ msgstr ""
 #. BASIC:IPV4_DISABLED
 #. CONNECTIVITY:IPV4_DISABLED
 #. CONSISTENCY:IPV4_DISABLED
-#. DNSSEC:IPV4_DISABLED
 #. DELEGATION:IPV4_DISABLED
+#. DNSSEC:IPV4_DISABLED
 #. NAMESERVER:IPV4_DISABLED
 #. SYNTAX:IPV4_DISABLED
 #. ZONE:IPV4_DISABLED
@@ -353,8 +373,8 @@ msgstr ""
 #. BASIC:IPV6_DISABLED
 #. CONNECTIVITY:IPV6_DISABLED
 #. CONSISTENCY:IPV6_DISABLED
-#. DNSSEC:IPV6_DISABLED
 #. DELEGATION:IPV6_DISABLED
+#. DNSSEC:IPV6_DISABLED
 #. NAMESERVER:IPV6_DISABLED
 #. SYNTAX:IPV6_DISABLED
 #. ZONE:IPV6_DISABLED
@@ -981,10 +1001,8 @@ msgid "Verify DNSSEC additional processing"
 msgstr "Vérification du traitement des données additionnelles DNSSEC"
 
 #. DNSSEC:DNSSEC07
-msgid "If DNSKEY at child, parent should have DS"
-msgstr ""
-"Si un enregistrement DNSKEY est présent dans la zone enfant, la zone parente "
-"doit avoir un DS"
+msgid "DNSSEC signed zone and DS in parent for signed zone"
+msgstr "Zone signée DNSSEC et DS dans le parent pour la zone signée"
 
 #. DNSSEC:DNSSEC08
 msgid "Valid RRSIG for DNSKEY"
@@ -1030,91 +1048,6 @@ msgstr "Validation des CDNSKEY"
 msgid "Validate trust from DS to CDS and CDNSKEY"
 msgstr "Validation de la chaîne de confiance du DS jusqu'aux CDS et CDNSKEY"
 
-#. DNSSEC:ADDITIONAL_DNSKEY_SKIPPED
-msgid "No DNSKEYs found. Additional tests skipped."
-msgstr ""
-"Pas d'enregistrement de type \"DNSKEY\" trouvé. Les tests additionnels sont "
-"abandonnés."
-
-#. DNSSEC:ALGORITHM_DEPRECATED
-#, perl-brace-format
-msgid ""
-"The DNSKEY with tag {keytag} uses deprecated algorithm number {algo_num} "
-"({algo_descr})."
-msgstr ""
-"La clé (DNSKEY) avec le tag {keytag} utilise un numéro d'algorithme obsolète "
-"{algo_num}/({algo_descr})."
-
-#. DNSSEC:ALGORITHM_NOT_RECOMMENDED
-#, perl-brace-format
-msgid ""
-"The DNSKEY with tag {keytag} uses an algorithm number {algo_num} "
-"({algo_descr}) which is not recommended to be used."
-msgstr ""
-"La clé (DNSKEY) avec le tag {keytag} utilise un numéro d'algorithme non "
-"recommandé {algo_num}/({algo_descr})."
-
-#. DNSSEC:ALGORITHM_NOT_ZONE_SIGN
-#, perl-brace-format
-msgid ""
-"The DNSKEY with tag {keytag} uses algorithm number not meant for zone "
-"signing, algorithm number {algo_num} ({algo_descr})."
-msgstr ""
-"La clé (DNSKEY) avec le tag {keytag} utilise un numéro d'algorithme non "
-"prévu pour faire des signatures {algo_num}/({algo_descr})."
-
-#. DNSSEC:ALGORITHM_OK
-#, perl-brace-format
-msgid ""
-"The DNSKEY with tag {keytag} uses algorithm number {algo_num} "
-"({algo_descr}), which is OK."
-msgstr ""
-"La clé (DNSKEY) avec le tag {keytag} utilise un numéro d'algorithme correct "
-"{algo_num}/({algo_descr})."
-
-#. DNSSEC:ALGORITHM_PRIVATE
-#, perl-brace-format
-msgid ""
-"The DNSKEY with tag {keytag} uses private algorithm number {algo_num} "
-"({algo_descr})."
-msgstr ""
-"La clé (DNSKEY) avec le tag {keytag} utilise un numéro d'algorithme privé "
-"{algo_num}/({algo_descr})."
-
-#. DNSSEC:ALGORITHM_RESERVED
-#, perl-brace-format
-msgid ""
-"The DNSKEY with tag {keytag} uses reserved algorithm number {algo_num} "
-"({algo_descr})."
-msgstr ""
-"La clé (DNSKEY) avec le tag {keytag} utilise un numéro d'algorithme réservé "
-"{algo_num}/({algo_descr})."
-
-#. DNSSEC:ALGORITHM_UNASSIGNED
-#, perl-brace-format
-msgid ""
-"The DNSKEY with tag {keytag} uses unassigned algorithm number {algo_num} "
-"({algo_descr})."
-msgstr ""
-"La clé (DNSKEY) avec le tag {keytag} utilise un numéro d'algorithme non "
-"assigné {algo_num}/({algo_descr})."
-
-#. DNSSEC:DNSKEY_AND_DS
-#, perl-brace-format
-msgid "{parent} sent a DS record, and {child} a DNSKEY record."
-msgstr ""
-"Le serveur de noms de la zone parente {parent} retourne un enregistrement de "
-"type \"DS\" et le serveur de noms de la zone {child}, un enregistrement de "
-"type \"DNSKEY\"."
-
-#. DNSSEC:DNSKEY_BUT_NOT_DS
-#, perl-brace-format
-msgid "{child} sent a DNSKEY record, but {parent} did not send a DS record."
-msgstr ""
-"Le serveur de noms {child} retourne un enregistrement de type \"DNSKEY\" "
-"pour la zone fille, mais le serveur de noms {parent} ne retourne aucun "
-"enregistrement de type \"DS\" pour la zone parente."
-
 #. DNSSEC:DNSKEY_SMALLER_THAN_REC
 #, perl-brace-format
 msgid ""
@@ -1145,65 +1078,113 @@ msgstr ""
 "({algo_descr}) a une taille ({keysize}) plus grande que la taille maximum "
 "({keysizemax}) spécifiée pour cet algorithme."
 
-#. DNSSEC:DS01_DIGEST_NOT_SUPPORTED_BY_ZM
+#. DNSSEC:DS01_DS_ALGO_2_MISSING
 #, perl-brace-format
 msgid ""
-"DS record for zone {domain} with keytag {keytag} was created by digest "
-"algorithm {ds_algo_num} ({ds_algo_mnemo}) which cannot be validated by this "
-"installation of Zonemaster. Fetched from the nameservers with IP addresses "
-"\"{ns_ip_list}\"."
+"There is a DS record with keytag {keytag}. A DS record using digest "
+"algorithm 2 (SHA-256) is missing. Fetched from parent name servers "
+"\"{ns_list}\"."
 msgstr ""
-"Un enregistrement de type \"DS\" dans la zone {domain} avec le tag {keytag} "
-"a été créé à partir d'un algorithme de condensat ({ds_algo_num}/"
-"{ds_algo_mnemo}) qui ne peut pas être validé par cette installation de "
-"Zonemaster. Information retournée par les serveurs de noms ayant une des "
-"adresses IP suivantes \"{ns_ip_list}\"."
+"Il y a un enregistrement de type DS avec le tag {keytag}. Un enregistrement "
+"de type DS utilisant l'algorithme de condensat  2 (SHA-256) est manquant. "
+"Information retournée par les serveurs de noms parents \"{ns_list}\"."
 
 #. DNSSEC:DS01_DS_ALGO_DEPRECATED
 #, perl-brace-format
 msgid ""
-"DS record for zone {domain} with keytag {keytag} was created by digest "
-"algorithm {ds_algo_num} ({ds_algo_mnemo}) which is deprecated. Fetched from "
-"the nameservers with IP addresses \"{ns_ip_list}\"."
+"The DS record with keytag {keytag} uses a deprecated digest algorithm "
+"{ds_algo_num} ({ds_algo_descr}). Fetched from parent name servers "
+"\"{ns_list}\"."
 msgstr ""
-"Un enregistrement de type \"DS\" dans la zone {domain} avec le tag {keytag} "
-"a été créé à partir d'un algorithme de condensat obsolète ({ds_algo_num}/"
-"{ds_algo_mnemo}). Information retournée par les serveurs de noms ayant une "
-"des adresses IP suivantes \"{ns_ip_list}\"."
-
-#. DNSSEC:DS01_DS_ALGO_2_MISSING
-#, perl-brace-format
-msgid ""
-"No DS record created by digest algorithm 2 (SHA-256) is present for zone "
-"{domain}."
-msgstr ""
-"Aucune entrée DS créée par l’algorithme de condensat 2 (SHA-256) n’est "
-"présente pour la zone {domain}."
+"Un enregistrement de type DS avec le tag {keytag} utilise un algorithme de "
+"condensat obsolète {ds_algo_num} ({ds_algo_descr}). Information retournée "
+"par les serveurs de noms \"{ns_list}\"."
 
 #. DNSSEC:DS01_DS_ALGO_NOT_DS
 #, perl-brace-format
 msgid ""
-"DS record for zone {domain} with keytag {keytag} was created by digest "
-"algorithm {ds_algo_num} ({ds_algo_mnemo}) which is not meant for DS. Fetched "
-"from the nameservers with IP addresses \"{ns_ip_list}\"."
+"The DS record with keytag {keytag} uses a digest algorithm {ds_algo_num} "
+"({ds_algo_descr}) not meant for DS records. Fetched from parent name servers "
+"\"{ns_list}\"."
 msgstr ""
-"Un enregistrement de type \"DS\" dans la zone {domain} avec le tag {keytag} "
-"a été créé à partir d'un algorithme de condensat ({ds_algo_num}/"
-"{ds_algo_mnemo}) qui n'est pas destiné à la signature. Information retournée "
-"par les serveurs de noms ayant une des adresses IP suivantes "
-"\"{ns_ip_list}\"."
+"Un enregistrement de type \"DS\" avec le tag {keytag} utilise un algorithme "
+"de condensat {ds_algo_num} ({ds_algo_descr}) qui n'est pas destiné à ce type "
+"d'enregistrement. Information retournée par les serveurs de noms "
+"\"{ns_list}\"."
+
+#. DNSSEC:DS01_DS_ALGO_PRIVATE
+#, perl-brace-format
+msgid ""
+"The DS record with keytag {keytag} uses a digest algorithm {ds_algo_num} for "
+"private use. Fetched from parent name servers \"{ns_list}\"."
+msgstr ""
+"Un enregistrement de type \"DS\" avec le tag {keytag} utilise un algorithme "
+"de condensat {ds_algo_num} à usage privé. Information retournée par les "
+"serveurs de noms \"{ns_list}\"."
 
 #. DNSSEC:DS01_DS_ALGO_RESERVED
 #, perl-brace-format
 msgid ""
-"DS record for zone {domain} with keytag {keytag} was created with an "
-"unassigned digest algorithm (algorithm number {ds_algo_num}). Fetched from "
-"the nameservers with IP addresses \"{ns_ip_list}\"."
+"The DS record with keytag {keytag} uses a reserved digest algorithm "
+"{ds_algo_num} on name servers \"{ns_list}\"."
 msgstr ""
-"Un enregistrement de type \"DS\" dans la zone {domain} avec le tag {keytag} "
-"a été créé à partir d'un algorithme de condensat non assigné "
-"({ds_algo_num}). Information retournée par les serveurs de noms ayant une "
-"des adresses IP suivantes \"{ns_ip_list}\"."
+"Un enregistrement de type \"DS\" avec le tag {keytag} utilise un numéro "
+"d'algorithme de condensat réservé {ds_algo_num} pour les serveurs de noms "
+"\"{ns_list}\"."
+
+#. DNSSEC:DS01_DS_ALGO_UNASSIGNED
+#, perl-brace-format
+msgid ""
+"The DS record with keytag {keytag} uses an unassigned digest algorithm "
+"{ds_algo_num} on parent name servers \"{ns_list}\"."
+msgstr ""
+"Un enregistrement de type \"DS\" avec le tag {keytag} utilise un algorithme "
+"de condensat non assigné {ds_algo_num} pour les serveurs de noms parent "
+"\"{ns_list}\"."
+
+#. DNSSEC:DS01_NO_RESPONSE
+#, perl-brace-format
+msgid ""
+"No response or error in response from all parent name servers on the DS "
+"query. Name servers are \"{ns_list}\"."
+msgstr ""
+"Aucune réponse ou réponse erronée de tous les serveurs de noms parent à une "
+"requête de type DS. Serveurs de noms \"{ns_list}\"."
+
+#. DNSSEC:DS01_PARENT_SERVER_NO_DS
+#, perl-brace-format
+msgid ""
+"The following name servers do not provide DS record or have not been "
+"properly configured. Fetched from parent name servers \"{ns_list}\"."
+msgstr ""
+"Les serveurs de noms suivants ne fournissent pas d'enregistrement DS ou "
+"n'ont pas été configurés correctement. Information retournée par les "
+"serveurs de noms parent \"{ns_list}\"."
+
+#. DNSSEC:DS01_PARENT_ZONE_NO_DS
+#, perl-brace-format
+msgid ""
+"The parent zone provides no DS records for the child zone. Fetched from "
+"parent name servers \"{ns_list}\"."
+msgstr ""
+"La zone parente ne fournit pas d'enregistrement DS pour la zone fille. "
+"Information retournée par les serveurs de noms parent \"{ns_list}\"."
+
+#. DNSSEC:DS01_ROOT_N_NO_UNDEL_DS
+msgid ""
+"Tested zone is the root zone, but no undelegated DS has been provided. DS is "
+"not tested."
+msgstr ""
+"La zone testée est la zone racine, mais aucun DS non délégué n'a été fourni. "
+"DS n'est pas testé."
+
+#. DNSSEC:DS01_UNDEL_N_NO_UNDEL_DS
+msgid ""
+"Tested zone is undelegated, but no undelegated DS has been provided. DS is "
+"not tested."
+msgstr ""
+"La zone testée est non déléguée, mais aucun DS non délégué n'a été fourni. "
+"DS n'est pas testé."
 
 #. DNSSEC:DS02_ALGO_NOT_SUPPORTED_BY_ZM
 #. DNSSEC:DS08_ALGO_NOT_SUPPORTED_BY_ZM
@@ -1510,6 +1491,208 @@ msgstr ""
 "Les serveurs de noms suivants répondent avec un enregistrement NSEC3 où un "
 "fanion non attribué est utilisé (bit {int}). Information retournée par les "
 "serveurs de noms \"{ns_list}\"."
+
+#. DNSSEC:DS05_ALGO_DEPRECATED
+#, perl-brace-format
+msgid ""
+"The DNSKEY with tag {keytag} uses deprecated algorithm number {algo_num} "
+"(\"{algo_descr}\", {algo_mnemo}). Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"La clé DNSKEY avec le tag {keytag} utilise le numéro d'algorithme obsolète "
+"{algo_num} (\"{algo_descr}\", {algo_mnemo}). Information retournée par les "
+"serveurs de noms \"{ns_list}\"."
+
+#. DNSSEC:DS05_ALGO_NOT_RECOMMENDED
+#, perl-brace-format
+msgid ""
+"The DNSKEY with tag {keytag} uses unrecommended algorithm number {algo_num} "
+"(\"{algo_descr}\", {algo_mnemo}). Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"La clé DNSKEY avec le tag {keytag} utilise le numéro d'algorithme non "
+"recommandé {algo_num} (\"{algo_descr}\", {algo_mnemo}). Information "
+"retournée par les serveurs de noms \"{ns_list}\"."
+
+#. DNSSEC:DS05_ALGO_NOT_ZONE_SIGN
+#, perl-brace-format
+msgid ""
+"The DNSKEY with tag {keytag} uses algorithm number {algo_num} "
+"(\"{algo_descr}\", {algo_mnemo}) which is not meant for zone signing. "
+"Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"La clé DNSKEY avec le tag {keytag} utilise le numéro d'algorithme {algo_num} "
+"(\"{algo_descr}\", {algo_mnemo}) qui n'est pas destiné à la signature d'une "
+"zone. Information retournée par les serveurs de noms \"{ns_list}\"."
+
+#. DNSSEC:DS05_ALGO_OK
+#, perl-brace-format
+msgid ""
+"The DNSKEY with tag {keytag} uses algorithm number {algo_num} "
+"(\"{algo_descr}\", {algo_mnemo}). Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"La clé DNSKEY avec le tag {keytag} utilise le numéro d'algorithme correct "
+"{algo_num} (\"{algo_descr}\", {algo_mnemo}). Information retournée par les "
+"serveurs de noms \"{ns_list}\"."
+
+#. DNSSEC:DS05_ALGO_PRIVATE
+#, perl-brace-format
+msgid ""
+"The DNSKEY with tag {keytag} uses algorithm number {algo_num} which is "
+"reserved for private use. Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"La clé DNSKEY avec le tag {keytag} utilise le numéro d'algorithme {algo_num} "
+"destiné à un usage privé. Information retournée par les serveurs de noms "
+"\"{ns_list}\"."
+
+#. DNSSEC:DS05_ALGO_RESERVED
+#, perl-brace-format
+msgid ""
+"The DNSKEY with tag {keytag} uses reserved algorithm number {algo_num}. "
+"Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"La clé DNSKEY avec le tag {keytag} utilise le numéro d'algorithme réservé "
+"{algo_num}. Information retournée par les serveurs de noms \"{ns_list}\"."
+
+#. DNSSEC:DS05_ALGO_UNASSIGNED
+#, perl-brace-format
+msgid ""
+"The DNSKEY with tag {keytag} uses unassigned algorithm number {algo_num}. "
+"Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"La clé DNSKEY avec le tag {keytag} utilise le numéro d'algorithme non "
+"assigné {algo_num}. Information retournée par les serveurs de noms "
+"\"{ns_list}\"."
+
+#. DNSSEC:DS05_NO_RESPONSE
+#, perl-brace-format
+msgid ""
+"No response or error in response from all name servers on the DNSKEY query. "
+"Failing name servers: \"{ns_list}\"."
+msgstr ""
+"Aucune réponse ou réponse erronée de tous les serveurs de noms à une requête "
+"de type DNSKEY. Serveurs de noms : \"{ns_list}\"."
+
+#. DNSSEC:DS05_SERVER_NO_DNSSEC
+#, perl-brace-format
+msgid ""
+"Some name servers do not support DNSSEC or have not been properly "
+"configured. DNSKEY cannot be tested on those servers. Fetched from name "
+"servers \"{ns_list}\"."
+msgstr ""
+"Les serveurs de noms suivants ne prennent pas en charge DNSSEC ou n'ont pas "
+"été configurés correctement. Le test DNSKEY ne peut pas être effectué pour "
+"ces serveurs de noms. Information retournée par les serveurs de noms "
+"\"{ns_list}\"."
+
+#. DNSSEC:DS05_ZONE_NO_DNSSEC
+#, perl-brace-format
+msgid ""
+"The zone is not DNSSEC signed or not properly DNSSEC signed. DNSKEY cannot "
+"be tested. Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"La zone n'est pas signée ou mal signée par DNSSEC. Le test DNSKEY ne peut "
+"pas être effectué. Information retournée par les serveurs de noms "
+"\"{ns_list}\"."
+
+#. DNSSEC:DS07_DS_FOR_SIGNED_ZONE
+msgid "The parent zone has DS record or records for the signed child zone."
+msgstr ""
+"La zone parente contient au moins un enregistrement de type DS pour la zone "
+"fille signée."
+
+#. DNSSEC:DS07_DS_ON_PARENT_SERVER
+#, perl-brace-format
+msgid ""
+"The following parent name servers respond with DS record or records for the "
+"child zone. Name servers: \"{ns_list}\"."
+msgstr ""
+"Les serveurs de noms suivants retournent au moins un enregistrement de type "
+"DS pour la zone fille. Serveurs de noms : \"{ns_list}\"."
+
+#. DNSSEC:DS07_INCONSISTENT_DS
+msgid ""
+"Inconsistent responses from parent name servers. Some include DS, others do "
+"not."
+msgstr ""
+"Réponses incohérentes des serveurs de noms parent. Certains ont des "
+"enregistrements de type DS, tandis que d'autres non."
+
+#. DNSSEC:DS07_INCONSISTENT_SIGNED
+msgid ""
+"Inconsistent responses from name servers. Some include signed responses, "
+"others do not."
+msgstr ""
+"Réponses incohérentes des serveurs de noms. Certains contiennent des "
+"réponses signées, tandis que d'autres non."
+
+#. DNSSEC:DS07_NON_AUTH_RESPONSE_DNSKEY
+#, perl-brace-format
+msgid ""
+"The following name servers give a non authoritative response on DNSKEY query "
+"with DO bit set. Name servers: \"{ns_list}\"."
+msgstr ""
+"Les serveurs de noms suivants donnent une réponse non autoritaire à une "
+"requête de type DNSKEY avec le drapeau DO. Serveurs de noms : \"{ns_list}\"."
+
+#. DNSSEC:DS07_NOT_SIGNED
+msgid "The zone is not signed."
+msgstr "La zone n'est pas signée."
+
+#. DNSSEC:DS07_NOT_SIGNED_ON_SERVER
+#, perl-brace-format
+msgid ""
+"The following name servers respond with no DNSKEY (unsigned child zone). "
+"Name servers: \"{ns_list}\"."
+msgstr ""
+"Les serveurs de noms suivants répondent sans clé DNSKEY (zone fille non "
+"signée). Serveurs de noms : \"{ns_list}\"."
+
+#. DNSSEC:DS07_NO_DS_ON_PARENT_SERVER
+#, perl-brace-format
+msgid ""
+"The following parent name servers respond without DS record for the child "
+"zone. Name servers: \"{ns_list}\"."
+msgstr ""
+"Les serveurs de noms parent suivants retournent sans enregistrement de type "
+"DS pour la zone fille. Serveurs de noms : \"{ns_list}\"."
+
+#. DNSSEC:DS07_NO_DS_FOR_SIGNED_ZONE
+msgid "The parent zone has no DS record for the signed child zone."
+msgstr ""
+"La zone parente ne contient pas d'enregistrement DS pour la zone fille "
+"signée."
+
+#. DNSSEC:DS07_NO_RESPONSE_DNSKEY
+#, perl-brace-format
+msgid ""
+"The following name servers do not respond on DNSKEY query with DO bit set. "
+"Name servers: \"{ns_list}\"."
+msgstr ""
+"Les serveurs de noms suivants ne répondent pas à une requête de type DNSKEY "
+"avec le drapeau DO. Serveurs de noms : \"{ns_list}\"."
+
+#. DNSSEC:DS07_SIGNED
+msgid "The zone is signed."
+msgstr "La zone est signée."
+
+#. DNSSEC:DS07_SIGNED_ON_SERVER
+#, perl-brace-format
+msgid ""
+"The following name servers respond with DNSKEY (signed child zone). Name "
+"servers: \"{ns_list}\"."
+msgstr ""
+"Les serveurs de noms suivants répondent avec une clé DNSKEY (zone fille "
+"signée). Serveurs de noms : \"{ns_list}\"."
+
+#. DNSSEC:DS07_UNEXP_RCODE_RESP_DNSKEY
+#, perl-brace-format
+msgid ""
+"The following name servers respond with RCODE \"{rcode}\" instead of "
+"expected \"NOERROR\" on DNSKEY query with DO bit set. Name servers: "
+"\"{ns_list}\"."
+msgstr ""
+"Les serveurs de noms suivants répondent avec le RCODE \"{rcode}\" au lieu de "
+"\"NOERROR\" comme attendu à une requête de type DNSKEY avec le drapeau DO. "
+"Serveurs de noms : \"{ns_list}\"."
 
 #. DNSSEC:DS08_DNSKEY_RRSIG_EXPIRED
 #, perl-brace-format
@@ -2378,14 +2561,6 @@ msgstr ""
 "Information retournée par les serveurs de noms ayant une des adresses IP "
 "suivantes \"{ns_ip_list}\"."
 
-#. DNSSEC:DS_BUT_NOT_DNSKEY
-#, perl-brace-format
-msgid "{parent} sent a DS record, but {child} did not send a DNSKEY record."
-msgstr ""
-"Le serveur de noms de la zone parente {parent} retourne un enregistrement de "
-"type \"DS\" mais le serveur de noms de la zone {child} ne retournent pas "
-"d'enregistrement de type \"DNSKEY\"."
-
 #. DNSSEC:DURATION_LONG
 #, perl-brace-format
 msgid ""
@@ -2421,24 +2596,9 @@ msgstr ""
 "Le serveur de noms {server} retourne des clés (DNSKEY) {keys} et les "
 "signatures (RRSIG) {sigs}."
 
-#. DNSSEC:KEY_DETAILS
-#, perl-brace-format
-msgid ""
-"Key with keytag {keytag} details : Size = {keysize}, Flags ({sep}, "
-"{rfc5011})."
-msgstr ""
-"Quelques détails pour la clé (DNSKEY) avec le tag {keytag} : Size = "
-"{keysize}, Flags ({sep}, {rfc5011})."
-
 #. DNSSEC:KEY_SIZE_OK
 msgid "All keys from the DNSKEY RRset have the correct size."
 msgstr "Toutes les clés de l'apex (DNSKEY RRset) ont une taille correcte."
-
-#. DNSSEC:NEITHER_DNSKEY_NOR_DS
-msgid "There are neither DS nor DNSKEY records for the zone."
-msgstr ""
-"Il n'y a pas enregistrements de type \"DS\", ni de type \"DNSKEY\" pour la "
-"zone."
 
 #. DNSSEC:NO_RESPONSE_DNSKEY
 #, perl-brace-format
@@ -2446,10 +2606,6 @@ msgid "Nameserver {ns} responded with no DNSKEY record(s)."
 msgstr ""
 "Le serveur de noms {ns} répond mais ne renvoie aucun enregistrement de type "
 "\"DNSKEY\"."
-
-#. DNSSEC:NOT_SIGNED
-msgid "The zone is not signed with DNSSEC."
-msgstr "La zone n'est pas signée avec DNSSEC."
 
 #. DNSSEC:REMAINING_LONG
 #, perl-brace-format
@@ -2503,7 +2659,7 @@ msgstr "Non-troncature des références"
 
 #. DELEGATION:DELEGATION04
 msgid "Name server is authoritative"
-msgstr "Le serveur de noms fait autorité."
+msgstr "Le serveur de noms fait autorité"
 
 #. DELEGATION:DELEGATION05
 msgid "Name server must not point at CNAME alias"
@@ -2859,7 +3015,7 @@ msgstr "Test d'une version d'EDNS non définie"
 
 #. NAMESERVER:NAMESERVER11
 msgid "Test for unknown EDNS OPTION-CODE"
-msgstr "Test de codes d’option EDNS inconnus."
+msgstr "Test de codes d’option EDNS inconnus"
 
 #. NAMESERVER:NAMESERVER12
 msgid "Test for unknown EDNS flags"
@@ -3893,6 +4049,15 @@ msgstr ""
 "Code de retour inattendu ({rcode}) en réponse à une requête de type MX des "
 "serveurs de noms \"{ns_ip_list}\"."
 
+#. ZONE:Z11_DIFFERENT_SPF_POLICIES_FOUND
+#, perl-brace-format
+msgid ""
+"The following name servers returned the same SPF policy. Name servers: "
+"{ns_list}."
+msgstr ""
+"Les serveurs de noms suivants retournent la même politique SPF. Serveurs de "
+"noms : {ns_list}."
+
 #. ZONE:Z11_INCONSISTENT_SPF_POLICIES
 msgid ""
 "One or more name servers do not publish the same SPF policy as the others."
@@ -3900,40 +4065,60 @@ msgstr ""
 "Un ou plusieurs serveurs de noms ne publient pas la même politique SPF que "
 "les autres."
 
-#. ZONE:Z11_DIFFERENT_SPF_POLICIES_FOUND
-#, perl-brace-format
-msgid ""
-"The following name servers returned the same SPF policy, but other name "
-"servers returned a different policy. Name servers: {ns_ip_list}."
-msgstr ""
-"Les serveurs de noms suivants retournent la même politique SPF, mais "
-"d'autres serveurs de noms retournent une politique différente. Serveurs de "
-"noms : {ns_ip_list}."
-
 #. ZONE:Z11_NO_SPF_FOUND
 #, perl-brace-format
 msgid "No SPF policy was found for {domain}."
 msgstr "Aucune politique SPF trouvée pour {domain}."
 
-#. ZONE:Z11_SPF1_MULTIPLE_RECORDS
+#. ZONE:Z11_NO_SPF_NON_MAIL_DOMAIN
+#, perl-brace-format
+msgid ""
+"No SPF policy was found for {domain}, which is a type of domain (root, TLD "
+"or under .ARPA) not expected to be used for email."
+msgstr ""
+"Aucune politique SPF n'a été trouvée pour {domain}, qui est un type de "
+"domaine (racine, TLD ou sous .ARPA) qui n'est pas prévu d'être utilisé pour "
+"de l'email."
+
+#. ZONE:Z11_NON_NULL_SPF_NON_MAIL_DOMAIN
+#, perl-brace-format
+msgid ""
+"A non-null SPF policy was found on {domain}, although this type of domain "
+"(root, TLD or under .ARPA) is not expected to be used for email."
+msgstr ""
+"Une politique SPF non nulle a été trouvée pour {domain}, bien que ce type de "
+"domaine (racine, TLD, ou sous .ARPA) qui n'est pas prévu d'être utilisé pour "
+"de l'email."
+
+#. ZONE:Z11_NULL_SPF_NON_MAIL_DOMAIN
+#, perl-brace-format
+msgid ""
+"A null SPF policy was found on {domain}, which is a type of domain (root, "
+"TLD or under .ARPA) not expected to be used for email."
+msgstr ""
+"Une politique SPF nulle a été trouvée pour {domain}, bien que ce type de "
+"domaine (racine, TLD, ou sous .ARPA) qui n'est pas prévu d'être utilisé pour "
+"de l'email."
+
+#. ZONE:Z11_SPF_MULTIPLE_RECORDS
 #, perl-brace-format
 msgid ""
 "The following name servers returned more than one SPF policy. Name servers: "
-"{ns_ip_list}."
+"{ns_list}."
 msgstr ""
 "Les serveurs de noms suivants retournent plus d'une politique SPF. Serveurs "
-"de noms : {ns_ip_list}."
+"de noms : {ns_list}."
 
-#. ZONE:Z11_SPF1_SYNTAX_ERROR
+#. ZONE:Z11_SPF_SYNTAX_ERROR
 #, perl-brace-format
 msgid ""
 "The SPF policy of {domain} has a syntax error. Policy retrieved from the "
-"following nameservers: {ns_ip_list}."
+"following nameservers: {ns_list}."
 msgstr ""
 "La politique SPF de {domain} a une erreur de syntaxe. Politique reçue des "
-"serveurs de noms suivants: {ns_ip_list}."
+"serveurs de noms suivants : {ns_list}."
 
-#. ZONE:Z11_SPF1_SYNTAX_OK
+#. ZONE:Z11_SPF_SYNTAX_OK
 #, perl-brace-format
 msgid "The SPF policy of {domain} has correct syntax."
 msgstr "La politique SPF de {domain} a une syntaxe correcte."
