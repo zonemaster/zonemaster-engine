@@ -1049,8 +1049,8 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     DS07_DS_ON_PARENT_SERVER => sub {
         __x    # DNSSEC:DS07_DS_ON_PARENT_SERVER
-          'The following parent name servers responds with DS record or records for the child '
-          . 'zone. Name servers: {ns_list}',
+          'The following parent name servers respond with DS record or records for the child '
+          . 'zone. Name servers: "{ns_list}".',
           @_;
     },
     DS07_INCONSISTENT_DS => sub {
@@ -1064,7 +1064,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     DS07_NON_AUTH_RESPONSE_DNSKEY => sub {
         __x    # DNSSEC:DS07_NON_AUTH_RESPONSE_DNSKEY
           'The following name servers give a non authoritative response on DNSKEY query with DO bit set. '
-          . 'Name servers: {ns_list}',
+          . 'Name servers: "{ns_list}".',
           @_;
     },
     DS07_NOT_SIGNED => sub {
@@ -1073,14 +1073,14 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     DS07_NOT_SIGNED_ON_SERVER => sub {
         __x    # DNSSEC:DS07_NOT_SIGNED_ON_SERVER
-          'The following name servers responds with no DNSKEY (unsigned child zone). '
-          . 'Name servers: {ns_list}.',
+          'The following name servers respond with no DNSKEY (unsigned child zone). '
+          . 'Name servers: "{ns_list}".',
           @_;
     },
     DS07_NO_DS_ON_PARENT_SERVER => sub {
         __x    # DNSSEC:DS07_NO_DS_ON_PARENT_SERVER
-          'The following parent name servers responds without DS record for the child zone. '
-          . 'Name servers: {ns_list}.',
+          'The following parent name servers respond without DS record for the child zone. '
+          . 'Name servers: "{ns_list}".',
           @_;
     },
     DS07_NO_DS_FOR_SIGNED_ZONE => sub {
@@ -1090,7 +1090,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     DS07_NO_RESPONSE_DNSKEY => sub {
         __x    # DNSSEC:DS07_NO_RESPONSE_DNSKEY
           'The following name servers do not respond on DNSKEY query with DO bit set. '
-          . 'Name servers: {ns_list}',
+          . 'Name servers: "{ns_list}".',
           @_;
     },
     DS07_SIGNED => sub {
@@ -1099,14 +1099,14 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     DS07_SIGNED_ON_SERVER => sub {
         __x    # DNSSEC:DS07_SIGNED_ON_SERVER
-          'The following name servers responds with DNSKEY (signed child zone). '
-          . 'Name servers: {ns_list}.',
+          'The following name servers respond with DNSKEY (signed child zone). '
+          . 'Name servers: "{ns_list}".',
           @_;
     },
     DS07_UNEXP_RCODE_RESP_DNSKEY => sub {
         __x    # DNSSEC:DS07_UNEXP_RCODE_RESP_DNSKEY
-          'The following name servers responded with RCODE "{rcode}" instead of expected "NOERROR" '
-          . 'on DNSKEY query with DO bit set. Name servers: {ns_list}',
+          'The following name servers respond with RCODE "{rcode}" instead of expected "NOERROR" '
+          . 'on DNSKEY query with DO bit set. Name servers: "{ns_list}".',
           @_;
     },
     DS08_ALGO_NOT_SUPPORTED_BY_ZM => sub {
