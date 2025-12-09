@@ -986,42 +986,44 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     DS05_ALGO_DEPRECATED => sub {
         __x    # DNSSEC:DS05_ALGO_DEPRECATED
-          'The DNSKEY with tag {keytag} uses deprecated algorithm number {algo_num} ("{algo_descr}", '
-          . '{algo_mnemo}), on name servers "{ns_list}".',
+          'The DNSKEY with tag {keytag} uses deprecated algorithm number {algo_num} ("{algo_descr}", {algo_mnemo}). '
+          . 'Fetched from name servers "{ns_list}".',
           @_;
     },
     DS05_ALGO_NOT_RECOMMENDED => sub {
         __x    # DNSSEC:DS05_ALGO_NOT_RECOMMENDED
-          'The DNSKEY with tag {keytag} uses an algorithm number {algo_num} ("{algo_descr}", {algo_mnemo}), '
-          . 'which is not recommended to be used. Fetched from name servers "{ns_list}".',
+          'The DNSKEY with tag {keytag} uses unrecommended algorithm number {algo_num} ("{algo_descr}", {algo_mnemo}). '
+          . 'Fetched from name servers "{ns_list}".',
           @_;
     },
     DS05_ALGO_NOT_ZONE_SIGN => sub {
         __x    # DNSSEC:DS05_ALGO_NOT_ZONE_SIGN
-          'The DNSKEY with tag {keytag} uses algorithm number not meant for zone signing, algorithm number '
-          . '{algo_num} ("{algo_descr}", {algo_mnemo}), on name servers "{ns_list}".',
+          'The DNSKEY with tag {keytag} uses algorithm number {algo_num} ("{algo_descr}", {algo_mnemo}) which is '
+          . 'not meant for zone signing. Fetched from name servers "{ns_list}".',
           @_;
     },
     DS05_ALGO_OK => sub {
         __x    # DNSSEC:DS05_ALGO_OK
-          'The DNSKEY with tag {keytag} uses algorithm number {algo_num} ("{algo_descr}", {algo_mnemo}), '
-          . 'which is OK. Fetched from name servers "{ns_list}".',
+          'The DNSKEY with tag {keytag} uses algorithm number {algo_num} ("{algo_descr}", {algo_mnemo}). '
+          . 'Fetched from name servers "{ns_list}".',
           @_;
     },
     DS05_ALGO_PRIVATE => sub {
         __x    # DNSSEC:DS05_ALGO_PRIVATE
-          'The DNSKEY with tag {keytag} uses algorithm number {algo_num} for private use on name '
-          . 'servers "{ns_list}".',
+          'The DNSKEY with tag {keytag} uses algorithm number {algo_num} which is '
+          . 'reserved for private use. Fetched from name servers "{ns_list}".',
           @_;
     },
     DS05_ALGO_RESERVED => sub {
         __x    # DNSSEC:DS05_ALGO_RESERVED
-          'The DNSKEY with tag {keytag} uses reserved algorithm number {algo_num} on name servers "{ns_list}".',
+          'The DNSKEY with tag {keytag} uses reserved algorithm number {algo_num}. '
+          . 'Fetched from name servers "{ns_list}".',
           @_;
     },
     DS05_ALGO_UNASSIGNED => sub {
         __x    # DNSSEC:DS05_ALGO_UNASSIGNED
-          'The DNSKEY with tag {keytag} uses unassigned algorithm number {algo_num} on name servers "{ns_list}".',
+          'The DNSKEY with tag {keytag} uses unassigned algorithm number {algo_num}. '
+          . 'Fetched from name servers "{ns_list}".',
           @_;
     },
     DS05_NO_RESPONSE => sub {
