@@ -1085,8 +1085,8 @@ msgid ""
 "algorithm 2 (SHA-256) is missing. Fetched from parent name servers "
 "\"{ns_list}\"."
 msgstr ""
-"Il y a un enregistrement de type DS avec le tag {keytag}. Un enregistrement "
-"de type DS utilisant l'algorithme de condensat  2 (SHA-256) est manquant. "
+"Il y a un enregistrement de type DS avec le tag {keytag}. Il manque un "
+"enregistrement de type DS utilisant l'algorithme de condensat 2 (SHA-256). "
 "Information retournée par les serveurs de noms parents \"{ns_list}\"."
 
 #. DNSSEC:DS01_DS_ALGO_DEPRECATED
@@ -1614,7 +1614,7 @@ msgid ""
 "not."
 msgstr ""
 "Réponses incohérentes des serveurs de noms parent. Certains ont des "
-"enregistrements de type DS, tandis que d'autres non."
+"enregistrements de type DS, tandis que d'autres n'en ont pas."
 
 #. DNSSEC:DS07_INCONSISTENT_SIGNED
 msgid ""
@@ -1622,7 +1622,7 @@ msgid ""
 "others do not."
 msgstr ""
 "Réponses incohérentes des serveurs de noms. Certains contiennent des "
-"réponses signées, tandis que d'autres non."
+"réponses signées, tandis que d'autres n'en ont pas."
 
 #. DNSSEC:DS07_NON_AUTH_RESPONSE_DNSKEY
 #, perl-brace-format
@@ -1652,7 +1652,7 @@ msgid ""
 "The following parent name servers respond without DS record for the child "
 "zone. Name servers: \"{ns_list}\"."
 msgstr ""
-"Les serveurs de noms parent suivants retournent sans enregistrement de type "
+"Les serveurs de noms parent suivants répondent sans enregistrement de type "
 "DS pour la zone fille. Serveurs de noms : \"{ns_list}\"."
 
 #. DNSSEC:DS07_NO_DS_FOR_SIGNED_ZONE
@@ -4055,7 +4055,7 @@ msgid ""
 "The following name servers returned the same SPF policy. Name servers: "
 "{ns_list}."
 msgstr ""
-"Les serveurs de noms suivants retournent la même politique SPF. Serveurs de "
+"Les serveurs de noms suivants renvoient la même politique SPF. Serveurs de "
 "noms : {ns_list}."
 
 #. ZONE:Z11_INCONSISTENT_SPF_POLICIES
@@ -4078,7 +4078,7 @@ msgid ""
 msgstr ""
 "Aucune politique SPF n'a été trouvée pour {domain}, qui est un type de "
 "domaine (racine, TLD ou sous .ARPA) qui n'est pas prévu d'être utilisé pour "
-"de l'email."
+"du courrier électronique."
 
 #. ZONE:Z11_NON_NULL_SPF_NON_MAIL_DOMAIN
 #, perl-brace-format
@@ -4087,8 +4087,8 @@ msgid ""
 "(root, TLD or under .ARPA) is not expected to be used for email."
 msgstr ""
 "Une politique SPF non nulle a été trouvée pour {domain}, bien que ce type de "
-"domaine (racine, TLD, ou sous .ARPA) qui n'est pas prévu d'être utilisé pour "
-"de l'email."
+"domaine (racine, TLD, ou sous .ARPA) ne soit pas prévu d'être utilisé pour "
+"du courrier électronique."
 
 #. ZONE:Z11_NULL_SPF_NON_MAIL_DOMAIN
 #, perl-brace-format
@@ -4097,8 +4097,8 @@ msgid ""
 "TLD or under .ARPA) not expected to be used for email."
 msgstr ""
 "Une politique SPF nulle a été trouvée pour {domain}, bien que ce type de "
-"domaine (racine, TLD, ou sous .ARPA) qui n'est pas prévu d'être utilisé pour "
-"de l'email."
+"domaine (racine, TLD, ou sous .ARPA) ne soit pas prévu d'être utilisé pour "
+"du courrier électronique."
 
 #. ZONE:Z11_SPF_MULTIPLE_RECORDS
 #, perl-brace-format
