@@ -15,7 +15,7 @@ v8.1.0 2025-12-15 (part of Zonemaster v2025.2 release)
 
  [Fixes]
 - Fixes error in MethodsV2 (#1470)
-- Minor typos and French translation modifications (#1464)
+- Updates French translation (#1464, #1482)
 
 
 v8.0.0 2025-06-26 (part of Zonemaster v2025.1 release)
