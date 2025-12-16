@@ -3,7 +3,7 @@ package Zonemaster::Engine::Constants;
 use v5.16.0;
 use warnings;
 
-use version; our $VERSION = version->declare("v1.2.5");
+use version; our $VERSION = version->declare("v1.2.6");
 
 use Carp;
 use English qw( -no_match_vars ) ;
@@ -37,6 +37,10 @@ DNSSEC algorithms.
 =item cname
 
 CNAME records.
+
+=item dname
+
+DNAME records.
 
 =item name
 
@@ -73,6 +77,7 @@ our @EXPORT_OK = qw[
   $BLACKLISTING_ENABLED
   $CNAME_MAX_CHAIN_LENGTH
   $CNAME_MAX_RECORDS
+  $DNAME_MAX_RECORDS
   $DURATION_5_MINUTES_IN_SECONDS
   $DURATION_1_HOUR_IN_SECONDS
   $DURATION_4_HOURS_IN_SECONDS
@@ -101,6 +106,7 @@ our %EXPORT_TAGS = (
         qw($ALGO_STATUS_DEPRECATED $ALGO_STATUS_PRIVATE $ALGO_STATUS_RESERVED $ALGO_STATUS_UNASSIGNED $ALGO_STATUS_OTHER $ALGO_STATUS_NOT_ZONE_SIGN $ALGO_STATUS_NOT_RECOMMENDED)
     ],
     cname => [ qw($CNAME_MAX_CHAIN_LENGTH $CNAME_MAX_RECORDS) ],
+    dname => [ qw($DNAME_MAX_RECORDS) ],
     name => [qw($FQDN_MAX_LENGTH $LABEL_MAX_LENGTH)],
     ip   => [qw($IP_VERSION_4 $IP_VERSION_6)],
     soa  => [
@@ -140,6 +146,10 @@ An integer, used to define the maximum length of a CNAME chain when doing consec
 =item * C<$CNAME_MAX_RECORDS>
 
 An integer, used to define the maximum number of CNAME records in a response.
+
+=item * C<$DNAME_MAX_RECORDS>
+
+An integer, used to define the maximum number of DNAME records in a response.
 
 =item * C<$DURATION_5_MINUTES_IN_SECONDS>
 
@@ -203,6 +213,8 @@ Readonly our $BLACKLISTING_ENABLED     => 1;
 
 Readonly our $CNAME_MAX_CHAIN_LENGTH      => 10;
 Readonly our $CNAME_MAX_RECORDS           => 9;
+
+Readonly our $DNAME_MAX_RECORDS           => 9;
 
 Readonly our $DURATION_5_MINUTES_IN_SECONDS  =>             5 * 60;
 Readonly our $DURATION_1_HOUR_IN_SECONDS     =>            60 * 60;
