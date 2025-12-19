@@ -6,7 +6,7 @@ use warnings;
 use version; our $VERSION = version->declare("v1.0.8");
 
 use Carp;
-use List::MoreUtils qw[none any];
+use List::MoreUtils qw[none any uniq];
 use Locale::TextDomain qw[Zonemaster-Engine];
 use Readonly;
 
@@ -84,10 +84,12 @@ sub metadata {
     return {
         address01 => [
             qw(
-              NAMESERVER_IP_PRIVATE_NETWORK
-              NO_IP_PRIVATE_NETWORK
-              TEST_CASE_END
-              TEST_CASE_START
+              A01_ADDR_NOT_GLOBALLY_REACHABLE
+              A01_DOCUMENTATION_ADDR
+              A01_GLOBALLY_REACHABLE_ADDR
+              A01_LOCAL_USE_ADDR
+              A01_NO_GLOBALLY_REACHABLE_ADDR
+              A01_NO_NAME_SERVERS_FOUND
               )
         ],
         address02 => [
@@ -115,7 +117,7 @@ sub metadata {
 Readonly my %TAG_DESCRIPTIONS => (
     ADDRESS01 => sub {
         __x    # ADDRESS:ADDRESS01
-          'Name server address must be globally routable';
+          'Name server address must be globally reachable';
     },
     ADDRESS02 => sub {
         __x    # ADDRESS:ADDRESS02
@@ -125,6 +127,30 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # ADDRESS:ADDRESS03
           'Reverse DNS entry matches name server name';
     },
+    A01_ADDR_NOT_GLOBALLY_REACHABLE => sub {
+        __x    # ADDRESS:A01_ADDR_NOT_GLOBALLY_REACHABLE
+          'IP address(es) not listed as globally reachable: "{ns_list}".', @_;
+    },
+    A01_DOCUMENTATION_ADDR => sub {
+        __x    # ADDRESS:A01_DOCUMENTATION_ADDR
+          'IP address(es) intended for documentation purposes: "{ns_list}".', @_;
+    },
+    A01_GLOBALLY_REACHABLE_ADDR => sub {
+        __x    # ADDRESS:A01_GLOBALLY_REACHABLE_ADDR
+          'Globally reachable IP address(es): "{ns_list}".', @_;
+    },
+    A01_LOCAL_USE_ADDR => sub {
+        __x    # ADDRESS:A01_LOCAL_USE_ADDR
+          'IP address(es) intended for local use on network or service provider level: "{ns_list}".', @_;
+    },
+    A01_NO_GLOBALLY_REACHABLE_ADDR => sub {
+        __x    # ADDRESS:A01_NO_GLOBALLY_REACHABLE_ADDR
+          'None of the name servers IP addresses are listed as globally reachable.';
+    },
+    A01_NO_NAME_SERVERS_FOUND => sub {
+        __x    # ADDRESS:A01_NO_NAME_SERVERS_FOUND
+          'No name servers found.';
+    },
     NAMESERVER_IP_WITHOUT_REVERSE => sub {
         __x    # ADDRESS:NAMESERVER_IP_WITHOUT_REVERSE
           'Nameserver {nsname} has an IP address ({ns_ip}) without PTR configured.', @_;
@@ -132,16 +158,6 @@ Readonly my %TAG_DESCRIPTIONS => (
     NAMESERVER_IP_PTR_MISMATCH => sub {
         __x    # ADDRESS:NAMESERVER_IP_PTR_MISMATCH
           'Nameserver {nsname} has an IP address ({ns_ip}) with mismatched PTR result ({names}).', @_;
-    },
-    NAMESERVER_IP_PRIVATE_NETWORK => sub {
-        __x    # ADDRESS:NAMESERVER_IP_PRIVATE_NETWORK
-          'Nameserver {nsname} has an IP address ({ns_ip}) '
-          . 'with prefix {prefix} referenced in {reference} as a \'{name}\'.',
-          @_;
-    },
-    NO_IP_PRIVATE_NETWORK => sub {
-        __x    # ADDRESS:NO_IP_PRIVATE_NETWORK
-          'All Nameserver addresses are in the routable public addressing space.', @_;
     },
     NAMESERVERS_IP_WITH_REVERSE => sub {
         __x    # ADDRESS:NAMESERVERS_IP_WITH_REVERSE
@@ -279,35 +295,96 @@ sub address01 {
 
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Address01';
     push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
-    my %ips;
 
-    foreach
-      my $local_ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) }, @{ Zonemaster::Engine::TestMethods->method5( $zone ) } )
-    {
+    my @nss = uniq grep { $_->isa('Zonemaster::Engine::Nameserver') } (
+                @{ Zonemaster::Engine::TestMethodsV2->get_del_ns_names_and_ips( $zone ) // [] },
+                @{ Zonemaster::Engine::TestMethodsV2->get_zone_ns_names_and_ips( $zone ) // [] }
+              );
 
-        next if $ips{ $local_ns->address->short };
+    unless ( @nss ) {
+        push @results, _emit_log( A01_NO_NAME_SERVERS_FOUND => {} );
+        return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
+    }
 
-        my $ip_details_ref = $class->_find_special_address( $local_ns->address );
+    my ( @documentation_addr, @local_use_addr, @not_globally_reachable, @globally_reachable );
+    my %ip_already_processed;
+
+    NSS:
+    foreach my $ns ( @nss ) {
+        my $ns_ip = $ns->address->short;
+
+        next if exists $ip_already_processed{$ns_ip};
+        $ip_already_processed{$ns_ip} = [ grep { $_->address->short eq $ns_ip } @nss ];
+
+        my @matching_nss = @{ $ip_already_processed{$ns_ip} };
+
+        my $ip_details_ref = $class->_find_special_address( $ns->address );
 
         if ( $ip_details_ref ) {
-            push @results,
-              _emit_log(
-                NAMESERVER_IP_PRIVATE_NETWORK => {
-                    nsname    => $local_ns->name->string,
-                    ns_ip     => $local_ns->address->short,
-                    prefix    => ${$ip_details_ref}{ip}->short . '/' . ${$ip_details_ref}{ip}->prefixlen,
-                    name      => ${$ip_details_ref}{name},
-                    reference => ${$ip_details_ref}{reference},
+            my $ip_category = ${$ip_details_ref}{name};
+
+            if ( index( $ip_category, 'Documentation' ) != -1 ) {
+                push @documentation_addr, @matching_nss;
+                next;
+            }
+
+            my @categories = ( 'Private-Use', 'Loopback', 'Link Local', 'Link-Local', 'Unique-Local', 'Shared Address Space' );
+            foreach my $category ( @categories ) {
+                if ( index( $ip_category, $category ) != -1 ) {
+                    push @local_use_addr, @matching_nss;
+                    next NSS;
                 }
-              );
+            }
+
+            if ( index( ${$ip_details_ref}{globally_reachable}, 'True' ) == -1 ) {
+                push @not_globally_reachable, @matching_nss;
+                next;
+            }
         }
 
-        $ips{ $local_ns->address->short }++;
+        push @globally_reachable, @matching_nss;
+    }
 
-    } ## end foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods...})
+    if ( @globally_reachable ) {
+        push @results,
+            _emit_log(
+                A01_GLOBALLY_REACHABLE_ADDR => {
+                    ns_list => join( q{;}, uniq sort @globally_reachable )
+                }
+            );
+    }
+    else {
+        push @results,
+            _emit_log(
+                A01_NO_GLOBALLY_REACHABLE_ADDR => {}
+            );
+    }
 
-    if ( scalar keys %ips and not grep { $_->tag ne q{TEST_CASE_START} } @results ) {
-        push @results, _emit_log( NO_IP_PRIVATE_NETWORK => {} );
+    if ( @documentation_addr ) {
+        push @results,
+            _emit_log(
+                A01_DOCUMENTATION_ADDR => {
+                    ns_list => join( q{;}, uniq sort @documentation_addr )
+                }
+            );
+    }
+
+    if ( @local_use_addr ) {
+        push @results,
+            _emit_log(
+                A01_LOCAL_USE_ADDR => {
+                    ns_list => join( q{;}, uniq sort @local_use_addr )
+                }
+            );
+    }
+
+    if ( @not_globally_reachable ) {
+        push @results,
+            _emit_log(
+                A01_ADDR_NOT_GLOBALLY_REACHABLE => {
+                    ns_list => join( q{;}, uniq sort @not_globally_reachable )
+                }
+            );
     }
 
     return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );

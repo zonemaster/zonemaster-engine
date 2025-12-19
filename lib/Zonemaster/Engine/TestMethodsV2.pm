@@ -1,6 +1,6 @@
 package Zonemaster::Engine::TestMethodsV2;
 
-use v5.16.0;
+use v5.26.0;
 use warnings;
 
 use version; our $VERSION = version->declare("v1.0.0");
@@ -26,15 +26,15 @@ For details on what these Methods implement, see the Test Specifications documen
 
 =over
 
-=item get_parent_ns_ips($zone)
+=item get_parent_ns_names_and_ips($zone)
 
 [External]
 
-This Method will obtain the name servers that serves the parent zone, i.e. the zone from which the Child Zone is delegated from.
+This Method obtains the name server names and IP addresses that serve the parent zone, i.e. the zone from which the Child Zone is delegated.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns an arrayref of L<Zonemaster::Engine::Nameserver> objects, or C<undef> if no parent zone was found.
+Returns an empty arrayref if C<$zone> is the root zone or if an undelegated test is in progress. Else, returns an arrayref of L<Zonemaster::Engine::Nameserver> objects, or C<undef> if no parent zone was found.
 
 The result of this Method is cached for performance reasons. This cache can be invalidated by calling C<clear_cache()> if necessary.
 
@@ -42,7 +42,7 @@ The result of this Method is cached for performance reasons. This cache can be i
 
 =cut
 
-sub get_parent_ns_ips {
+sub get_parent_ns_names_and_ips {
     my ( $class, $zone ) = @_;
 
     my $is_undelegated = Zonemaster::Engine::Recursor->has_fake_addresses( $zone->name->string );
@@ -58,18 +58,28 @@ sub get_parent_ns_ips {
     my $type_soa = q{SOA};
     my $type_ns = q{NS};
 
-    my %all_servers = ( '.' => [ Zonemaster::Engine::Recursor->root_servers ] );
-    my @all_labels = ( '.' );
-    my @remaining_labels = ( '.' );
+    my %remaining_servers = ( '.' => [ Zonemaster::Engine::Recursor->root_servers ] );
 
-    while ( my $zone_name = shift @remaining_labels ) {
-        my @remaining_servers = @{ $all_servers{$zone_name} };
+    my sub push_to_remaining_servers {
+        my ( $ns, $zone_name ) = @_;
 
+        unless ( exists $handled_servers{$zone_name}{"$ns"} ) {
+            unless ( grep { $_ eq $ns } @{ $remaining_servers{$zone_name} } ) {
+                push @{ $remaining_servers{$zone_name} }, $ns;
+            }
+        }
+    }
+
+
+    while ( my $zone_name = ( sort keys %remaining_servers )[0] ) {
         CUR_SERVERS:
-        while ( my $ns = shift @remaining_servers ) {
+        while ( my $ns = shift @{ $remaining_servers{$zone_name} } ) {
             my $addr = $ns->address->short;
-            next CUR_SERVERS if grep { $_ eq $addr } @{ $handled_servers{$zone_name} };
-            push @{ $handled_servers{$zone_name} }, $addr;
+            if ( exists $handled_servers{$zone_name}{"$ns"} ) {
+                push @parent_ns, $ns if ( grep { $_->address->short eq $addr and $_ ne $ns } @parent_ns );
+                next CUR_SERVERS;
+            }
+            $handled_servers{$zone_name}{"$ns"} = 1;
 
             if ( ( $ns->address->version == 4 and not Zonemaster::Engine::Profile->effective->get( q{net.ipv4} ) )
                 or ( $ns->address->version == 6 and not Zonemaster::Engine::Profile->effective->get( q{net.ipv6} ) ) ) {
@@ -90,7 +100,7 @@ sub get_parent_ns_ips {
                 next CUR_SERVERS;
             }
 
-            $rrs_ns{name( $_->nsdname )->string} = [] for $p_ns->get_records_for_name( $type_ns, $zone_name, 'answer' );
+            %rrs_ns = map { name( $_->nsdname )->string => [] } $p_ns->get_records_for_name( $type_ns, $zone_name, 'answer' );
 
             foreach my $rr ( $p_ns->get_records( 'A', 'additional' ), $p_ns->get_records( 'AAAA', 'additional' ) ) {
                 if ( exists $rrs_ns{name( $rr->owner )->string} ) {
@@ -110,14 +120,7 @@ sub get_parent_ns_ips {
                 }
 
                 foreach my $ns_ip ( @{ $rrs_ns{$ns_name} } ) {
-                    unless ( grep { $_ eq $ns_ip } @{ $handled_servers{$zone_name} } ) {
-                        push @{ $all_servers{$zone_name} }, ns( $ns_name, $ns_ip );
-
-                        unless ( grep { $_ eq $zone_name } @all_labels ) {
-                            push @remaining_labels, $zone_name;
-                            push @all_labels, $zone_name;
-                        }
-                    }
+                    push_to_remaining_servers ns( $ns_name, $ns_ip ), $zone_name;
                 }
             }
 
@@ -162,8 +165,7 @@ sub get_parent_ns_ips {
                             next CUR_SERVERS;
                         }
 
-                        my %rrs_ns_bis;
-                        $rrs_ns_bis{name( $_->nsdname )->string} = [] for $p_ns->get_records_for_name( $type_ns, $intermediate_query_name, 'answer' );
+                        my %rrs_ns_bis = map { name( $_->nsdname )->string => [] } $p_ns->get_records_for_name( $type_ns, $intermediate_query_name, 'answer' );
 
                         foreach my $rr ( $p_ns->get_records( 'A', 'additional' ), $p_ns->get_records( 'AAAA', 'additional' ) ) {
                             if ( exists $rrs_ns_bis{name( $rr->owner )->string} ) {
@@ -183,14 +185,7 @@ sub get_parent_ns_ips {
                             }
 
                             foreach my $ns_ip ( @{ $rrs_ns_bis{$ns_name} } ) {
-                                unless ( grep { $_ eq $ns_ip } @{ $handled_servers{$intermediate_query_name} } ) {
-                                    push @{ $all_servers{$intermediate_query_name} }, ns( $ns_name, $ns_ip );
-
-                                    unless ( grep { $_ eq $intermediate_query_name } @all_labels ) {
-                                        push @remaining_labels, $intermediate_query_name;
-                                        push @all_labels, $intermediate_query_name;
-                                    }
-                                }
+                                push_to_remaining_servers ns( $ns_name, $ns_ip ), $intermediate_query_name;
                             }
                         }
 
@@ -203,8 +198,7 @@ sub get_parent_ns_ips {
                         push @parent_ns, $ns;
                     }
                     else {
-                        my %rrs_ns_bis;
-                        $rrs_ns_bis{name( $_->nsdname )->string} = [] for $p_soa->get_records_for_name( $type_ns, $intermediate_query_name, 'authority' );
+                        my %rrs_ns_bis = map { name( $_->nsdname )->string => [] } $p_soa->get_records_for_name( $type_ns, $intermediate_query_name, 'authority' );
 
                         foreach my $rr ( $p_soa->get_records( 'A', 'additional' ), $p_soa->get_records( 'AAAA', 'additional' ) ) {
                             if ( exists $rrs_ns_bis{name( $rr->owner )->string} ) {
@@ -224,14 +218,7 @@ sub get_parent_ns_ips {
                             }
 
                             foreach my $ns_ip ( @{ $rrs_ns_bis{$ns_name} } ) {
-                                unless ( grep { $_ eq $ns_ip } @{ $handled_servers{$intermediate_query_name} } ) {
-                                    push @{ $all_servers{$intermediate_query_name} }, ns( $ns_name, $ns_ip );
-
-                                    unless ( grep { $_ eq $intermediate_query_name } @all_labels ) {
-                                        push @remaining_labels, $intermediate_query_name;
-                                        push @all_labels, $intermediate_query_name;
-                                    }
-                                }
+                                push_to_remaining_servers ns( $ns_name, $ns_ip ), $intermediate_query_name;
                             }
                         }
                     }
@@ -243,6 +230,8 @@ sub get_parent_ns_ips {
                 next CUR_SERVERS;
             }
         }
+
+        delete $remaining_servers{$zone_name};
     }
 
     if ( scalar @parent_ns ) {
@@ -253,10 +242,51 @@ sub get_parent_ns_ips {
     }
 }
 
-# Memoize get_parent_ns_ips() because it is expensive and gets called a few
+# Memoize get_parent_ns_names_and_ips() because it is expensive and gets called a few
 # times with identical parameters.
 
-memoize('get_parent_ns_ips');
+memoize('get_parent_ns_names_and_ips',
+        NORMALIZER => sub {
+            my ( $class, $zone ) = @_;
+            join "\034", ( $class, $zone->name );
+        });
+
+=over
+
+=item get_parent_ns_ips($zone)
+
+[External]
+
+This Method obtains the name servers that serve the parent zone, i.e. the zone from which the Child Zone is delegated. If more than one name server share the same IP address, only one among them is kept.
+
+Takes a L<Zonemaster::Engine::Zone> object.
+
+Returns an empty arrayref if C<$zone> is the root zone or if an undelegated test is in progress. Else, returns an arrayref of L<Zonemaster::Engine::Nameserver> objects, or C<undef> if no parent zone was found.
+
+=back
+
+=cut
+
+sub get_parent_ns_ips {
+    my ( $class, $zone ) = @_;
+
+    # FIXME: We really should just be outputting name server IPs here, as the
+    # specification says. Instead we output name server objects (but filtered
+    # on unique IP addresses) because these objects are required to perform
+    # queries.
+
+    my $nameservers = $class->get_parent_ns_names_and_ips( $zone );
+
+    return undef unless defined $nameservers;
+
+    my %ns_by_ip = ();
+    foreach my $ns ( @$nameservers ) {
+        my $ip = $ns->address->short;
+        $ns_by_ip{$ip} = $ns unless exists $ns_by_ip{$ip};
+    }
+
+    return [ sort values %ns_by_ip ];
+}
 
 =over
 
@@ -793,14 +823,14 @@ sub get_zone_ns_ips {
 
 =item clear_cache()
 
-Clears previously cached results of the C<get_parent_ns_ips()> method.
+Clears previously cached results of the C<get_parent_ns_names_and_ips()> method.
 
 =back
 
 =cut
 
 sub clear_cache() {
-    Memoize::flush_cache(\&get_parent_ns_ips);
+    Memoize::flush_cache(\&get_parent_ns_names_and_ips);
 }
 
 1;

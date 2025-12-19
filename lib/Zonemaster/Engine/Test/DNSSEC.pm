@@ -29,7 +29,7 @@ Zonemaster::Engine::Test::DNSSEC - Module implementing tests focused on DNSSEC
 
 =cut
 
-### Table fetched from IANA on 2017-03-09
+### Table fetched from IANA on 2025-07-15
 Readonly::Hash our %algo_properties => (
     0 => {
         status      => $ALGO_STATUS_NOT_ZONE_SIGN,
@@ -58,9 +58,10 @@ Readonly::Hash our %algo_properties => (
     4 => {
         status      => $ALGO_STATUS_RESERVED,
         description => q{Reserved},
+        mnemonic    => q{RESERVED},
     },
     5 => {
-        status      => $ALGO_STATUS_NOT_RECOMMENDED,
+        status      => $ALGO_STATUS_DEPRECATED,
         description => q{RSA/SHA1},
         mnemonic    => q{RSASHA1},
         sig         => 1,
@@ -72,7 +73,7 @@ Readonly::Hash our %algo_properties => (
         sig         => 1,
     },
     7 => {
-        status      => $ALGO_STATUS_NOT_RECOMMENDED,
+        status      => $ALGO_STATUS_DEPRECATED,
         description => q{RSASHA1-NSEC3-SHA1},
         mnemonic    => q{RSASHA1-NSEC3-SHA1},
         sig         => 1,
@@ -86,6 +87,7 @@ Readonly::Hash our %algo_properties => (
     9 => {
         status      => $ALGO_STATUS_RESERVED,
         description => q{Reserved},
+        mnemonic    => q{RESERVED},
     },
     10 => {
         status      => $ALGO_STATUS_NOT_RECOMMENDED,
@@ -96,6 +98,7 @@ Readonly::Hash our %algo_properties => (
     11 => {
         status      => $ALGO_STATUS_RESERVED,
         description => q{Reserved},
+        mnemonic    => q{RESERVED},
     },
     12 => {
         status      => $ALGO_STATUS_DEPRECATED,
@@ -127,11 +130,26 @@ Readonly::Hash our %algo_properties => (
         mnemonic    => q{ED448},
         sig         => 1,
     },
+    17 => {
+        status      => $ALGO_STATUS_OTHER,
+        description => q{SM2 signing algo w SM3 hash algo},
+        mnemonic    => q{SM2SM3},
+        sig         => 1,
+    },
     (
-        map { $_ => { status => $ALGO_STATUS_UNASSIGNED, description => q{Unassigned}, } } ( 17 .. 122 )
+        map { $_ => { status => $ALGO_STATUS_UNASSIGNED, description => q{Unassigned}, mnemonic => q{UNASSIGNED} } } ( 18 .. 22 )
+    ),
+    23 => {
+        status      => $ALGO_STATUS_OTHER,
+        description => q{GOST R 34.10-2012},
+        mnemonic    => q{ECC-GOST12},
+        sig         => 1,
+    },
+    (
+        map { $_ => { status => $ALGO_STATUS_UNASSIGNED, description => q{Unassigned}, mnemonic => q{UNASSIGNED} } } ( 24 .. 122 )
     ),
     (
-        map { $_ => { status => $ALGO_STATUS_RESERVED, description => q{Reserved}, } } ( 123 .. 251 )
+        map { $_ => { status => $ALGO_STATUS_RESERVED, description => q{Reserved}, mnemonic => q{RESERVED} } } ( 123 .. 251 )
     ),
     252 => {
         status      => $ALGO_STATUS_NOT_ZONE_SIGN,
@@ -154,6 +172,7 @@ Readonly::Hash our %algo_properties => (
     255 => {
         status      => $ALGO_STATUS_RESERVED,
         description => q{Reserved},
+        mnemonic    => q{RESERVED},
     },
 );
 
@@ -190,9 +209,18 @@ Readonly::Hash our %digest_algorithms => (
     2 => q{SHA-256},
     3 => q{GOST R 34.11-94},
     4 => q{SHA-384},
+    5 => q{GOST R 34.11-2012},
+    6 => q{SM3},
     (
-        map { $_ => q{Unassigned} } ( 5 .. 255 )
+        map { $_ => q{Unassigned} } ( 7 .. 127 )
     ),
+    (
+        map { $_ => q{Reserved} } ( 128 .. 252 )
+    ),
+        (
+        map { $_ => q{Reserved for Private Use} } ( 253 .. 254 )
+    ),
+    255 => q{Unassigned},
 );
 
 Readonly::Hash our %LDNS_digest_algorithms_supported => (
@@ -200,6 +228,61 @@ Readonly::Hash our %LDNS_digest_algorithms_supported => (
     2 => q{sha256},
     3 => q{gost},
     4 => q{sha384},
+);
+
+Readonly::Hash our %dnssec01_tags_mapping => (
+    0 => q{DS01_DS_ALGO_NOT_DS},
+    1 => q{DS01_DS_ALGO_DEPRECATED},
+    2 => q{DS01_DS_ALGO_OK},
+    3 => q{DS01_DS_ALGO_DEPRECATED},
+    4 => q{DS01_DS_ALGO_OK},
+    5 => q{DS01_DS_ALGO_OK},
+    6 => q{DS01_DS_ALGO_OK},
+    (
+        map { $_ => q{DS01_DS_ALGO_UNASSIGNED} } ( 7 .. 127 )
+    ),
+    (
+        map { $_ => q{DS01_DS_ALGO_RESERVED} } ( 128 .. 252 )
+    ),
+        (
+        map { $_ => q{DS01_DS_ALGO_PRIVATE} } ( 253 .. 254 )
+    ),
+    255 => q{DS01_DS_ALGO_UNASSIGNED},
+);
+
+Readonly::Hash our %dnssec05_tags_mapping => (
+    0 => q{DS05_ALGO_NOT_ZONE_SIGN},
+    1 => q{DS05_ALGO_DEPRECATED},
+    2 => q{DS05_ALGO_NOT_ZONE_SIGN},
+    3 => q{DS05_ALGO_DEPRECATED},
+    4 => q{DS05_ALGO_RESERVED},
+    5 => q{DS05_ALGO_DEPRECATED},
+    6 => q{DS05_ALGO_DEPRECATED},
+    7 => q{DS05_ALGO_DEPRECATED},
+    8 => q{DS05_ALGO_OK},
+    9 => q{DS05_ALGO_RESERVED},
+    10 => q{DS05_ALGO_NOT_RECOMMENDED},
+    11 => q{DS05_ALGO_RESERVED},
+    12 => q{DS05_ALGO_DEPRECATED},
+    13 => q{DS05_ALGO_OK},
+    14 => q{DS05_ALGO_OK},
+    15 => q{DS05_ALGO_OK},
+    16 => q{DS05_ALGO_OK},
+    17 => q{DS05_ALGO_OK},
+    (
+        map { $_ => q{DS05_ALGO_UNASSIGNED} } ( 18 .. 22 )
+    ),
+    23 => q{DS05_ALGO_OK},
+    (
+        map { $_ => q{DS05_ALGO_UNASSIGNED} } ( 24 .. 122 )
+    ),
+    (
+        map { $_ => q{DS05_ALGO_RESERVED} } ( 123 .. 251 )
+    ),
+    252 => q{DS05_ALGO_NOT_ZONE_SIGN},
+    253 => q{DS05_ALGO_PRIVATE},
+    254 => q{DS05_ALGO_PRIVATE},
+    255 => q{DS05_ALGO_RESERVED},
 );
 
 =head1 METHODS
@@ -225,22 +308,16 @@ sub all {
     my ( $class, $zone ) = @_;
     my @results;
 
-    my $has_dnskey = 1;
     if ( should_run_test( q{dnssec07} ) ) {
         push @results, $class->dnssec07( $zone );
+    }
 
-        if ( any { $_->tag eq 'NEITHER_DNSKEY_NOR_DS' } @results ) {
-            push @results,
-              _emit_log(
-                NOT_SIGNED => {
-                    zone => q{} . $zone->name
-                }
-              );
+    if ( should_run_test( q{dnssec11} ) ) {
+        push @results, $class->dnssec11( $zone );
+    }
 
-            return @results;
-        }
-
-        $has_dnskey = any { $_->tag eq q{DNSKEY_BUT_NOT_DS} || $_->tag eq q{DNSKEY_AND_DS} } @results;
+    if ( any { $_->tag eq 'DS07_NOT_SIGNED' } @results ) {
+        return @results;
     }
 
     if ( should_run_test( q{dnssec01} ) ) {
@@ -264,12 +341,7 @@ sub all {
     }
 
     if ( should_run_test( q{dnssec06} ) ) {
-        if ( $has_dnskey ) {
-            push @results, $class->dnssec06( $zone );
-        }
-        else {
-            push @results, _emit_log( ADDITIONAL_DNSKEY_SKIPPED => {} );
-        }
+        push @results, $class->dnssec06( $zone );
     }
 
     if ( should_run_test( q{dnssec08} ) ) {
@@ -282,10 +354,6 @@ sub all {
 
     if ( should_run_test( q{dnssec10} ) ) {
         push @results, $class->dnssec10( $zone );
-    }
-
-    if ( should_run_test( q{dnssec11} ) ) {
-        push @results, $class->dnssec11( $zone );
     }
 
     if ( should_run_test( q{dnssec13} ) ) {
@@ -334,13 +402,18 @@ sub metadata {
     return {
         dnssec01 => [
             qw(
-              DS01_DIGEST_NOT_SUPPORTED_BY_ZM
-              DS01_DS_ALGO_DEPRECATED
               DS01_DS_ALGO_2_MISSING
+              DS01_DS_ALGO_DEPRECATED
               DS01_DS_ALGO_NOT_DS
+              DS01_DS_ALGO_OK
+              DS01_DS_ALGO_PRIVATE
               DS01_DS_ALGO_RESERVED
-              TEST_CASE_END
-              TEST_CASE_START
+              DS01_DS_ALGO_UNASSIGNED
+              DS01_NO_RESPONSE
+              DS01_PARENT_SERVER_NO_DS
+              DS01_PARENT_ZONE_NO_DS
+              DS01_ROOT_N_NO_UNDEL_DS
+              DS01_UNDEL_N_NO_UNDEL_DS
               )
         ],
         dnssec02 => [
@@ -393,20 +466,16 @@ sub metadata {
         ],
         dnssec05 => [
             qw(
-              ALGORITHM_DEPRECATED
-              ALGORITHM_NOT_RECOMMENDED
-              ALGORITHM_NOT_ZONE_SIGN
-              ALGORITHM_OK
-              ALGORITHM_PRIVATE
-              ALGORITHM_RESERVED
-              ALGORITHM_UNASSIGNED
-              IPV4_DISABLED
-              IPV6_DISABLED
-              KEY_DETAILS
-              NO_RESPONSE
-              NO_RESPONSE_DNSKEY
-              TEST_CASE_END
-              TEST_CASE_START
+              DS05_ALGO_DEPRECATED
+              DS05_ALGO_NOT_RECOMMENDED
+              DS05_ALGO_NOT_ZONE_SIGN
+              DS05_ALGO_OK
+              DS05_ALGO_PRIVATE
+              DS05_ALGO_RESERVED
+              DS05_ALGO_UNASSIGNED
+              DS05_NO_RESPONSE
+              DS05_SERVER_NO_DNSSEC
+              DS05_ZONE_NO_DNSSEC
               )
         ],
         dnssec06 => [
@@ -419,14 +488,19 @@ sub metadata {
         ],
         dnssec07 => [
             qw(
-              ADDITIONAL_DNSKEY_SKIPPED
-              DNSKEY_BUT_NOT_DS
-              DNSKEY_AND_DS
-              NEITHER_DNSKEY_NOR_DS
-              DS_BUT_NOT_DNSKEY
-              NOT_SIGNED
-              TEST_CASE_END
-              TEST_CASE_START
+              DS07_DS_FOR_SIGNED_ZONE
+              DS07_DS_ON_PARENT_SERVER
+              DS07_INCONSISTENT_DS
+              DS07_INCONSISTENT_SIGNED
+              DS07_NON_AUTH_RESPONSE_DNSKEY
+              DS07_NOT_SIGNED
+              DS07_NOT_SIGNED_ON_SERVER
+              DS07_NO_DS_ON_PARENT_SERVER
+              DS07_NO_DS_FOR_SIGNED_ZONE
+              DS07_NO_RESPONSE_DNSKEY
+              DS07_SIGNED
+              DS07_SIGNED_ON_SERVER
+              DS07_UNEXP_RCODE_RESP_DNSKEY
               )
         ],
         dnssec08 => [
@@ -602,7 +676,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     DNSSEC07 => sub {
         __x    # DNSSEC:DNSSEC07
-          "If DNSKEY at child, parent should have DS";
+          "DNSSEC signed zone and DS in parent for signed zone";
     },
     DNSSEC08 => sub {
         __x    # DNSSEC:DNSSEC08
@@ -648,60 +722,6 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # DNSSEC:DNSSEC18
           "Validate trust from DS to CDS and CDNSKEY";
     },
-    ADDITIONAL_DNSKEY_SKIPPED => sub {
-        __x    # DNSSEC:ADDITIONAL_DNSKEY_SKIPPED
-          'No DNSKEYs found. Additional tests skipped.', @_;
-    },
-    ALGORITHM_DEPRECATED => sub {
-        __x    # DNSSEC:ALGORITHM_DEPRECATED
-          'The DNSKEY with tag {keytag} uses deprecated algorithm number '
-          . '{algo_num} ({algo_descr}).',
-          @_;
-    },
-    ALGORITHM_NOT_RECOMMENDED => sub {
-        __x    # DNSSEC:ALGORITHM_NOT_RECOMMENDED
-          'The DNSKEY with tag {keytag} uses an algorithm number '
-          . '{algo_num} ({algo_descr}) which is not recommended to be used.',
-          @_;
-    },
-    ALGORITHM_NOT_ZONE_SIGN => sub {
-        __x    # DNSSEC:ALGORITHM_NOT_ZONE_SIGN
-          'The DNSKEY with tag {keytag} uses algorithm number not meant for '
-          . 'zone signing, algorithm number {algo_num} ({algo_descr}).',
-          @_;
-    },
-    ALGORITHM_OK => sub {
-        __x    # DNSSEC:ALGORITHM_OK
-          'The DNSKEY with tag {keytag} uses algorithm number {algo_num} '
-          . '({algo_descr}), which is OK.',
-          @_;
-    },
-    ALGORITHM_PRIVATE => sub {
-        __x    # DNSSEC:ALGORITHM_PRIVATE
-          'The DNSKEY with tag {keytag} uses private algorithm number '
-          . '{algo_num} ({algo_descr}).',
-          @_;
-    },
-    ALGORITHM_RESERVED => sub {
-        __x    # DNSSEC:ALGORITHM_RESERVED
-          'The DNSKEY with tag {keytag} uses reserved algorithm number '
-          . '{algo_num} ({algo_descr}).',
-          @_;
-    },
-    ALGORITHM_UNASSIGNED => sub {
-        __x    # DNSSEC:ALGORITHM_UNASSIGNED
-          'The DNSKEY with tag {keytag} uses unassigned algorithm number '
-          . '{algo_num} ({algo_descr}).',
-          @_;
-    },
-    DNSKEY_AND_DS => sub {
-        __x    # DNSSEC:DNSKEY_AND_DS
-          '{parent} sent a DS record, and {child} a DNSKEY record.', @_;
-    },
-    DNSKEY_BUT_NOT_DS => sub {
-        __x    # DNSSEC:DNSKEY_BUT_NOT_DS
-          '{child} sent a DNSKEY record, but {parent} did not send a DS record.', @_;
-    },
     DNSKEY_SMALLER_THAN_REC => sub {
         __x    # DNSSEC:DNSKEY_SMALLER_THAN_REC
           'DNSKEY with tag {keytag} and using algorithm {algo_num} '
@@ -723,37 +743,68 @@ Readonly my %TAG_DESCRIPTIONS => (
           . '({keysizemax}).',
           @_;
     },
-    DS01_DIGEST_NOT_SUPPORTED_BY_ZM => sub {
-        __x    # DNSSEC:DS01_DIGEST_NOT_SUPPORTED_BY_ZM
-          'DS record for zone {domain} with keytag {keytag} was created by digest algorithm {ds_algo_num} '
-          . '({ds_algo_mnemo}) which cannot be validated by this installation of Zonemaster. '
-          . 'Fetched from the nameservers with IP addresses "{ns_ip_list}".',
-          @_;
+    DS01_DS_ALGO_2_MISSING => sub {
+        __x    # DNSSEC:DS01_DS_ALGO_2_MISSING
+           'There is a DS record with keytag {keytag}. A DS record using digest algorithm 2 (SHA-256) '
+           . 'is missing. Fetched from parent name servers "{ns_list}".',
+        @_;
     },
     DS01_DS_ALGO_DEPRECATED => sub {
         __x    # DNSSEC:DS01_DS_ALGO_DEPRECATED
-          'DS record for zone {domain} with keytag {keytag} was created by digest algorithm {ds_algo_num} '
-          . '({ds_algo_mnemo}) which is deprecated. '
-          . 'Fetched from the nameservers with IP addresses "{ns_ip_list}".',
+            'The DS record with keytag {keytag} uses a deprecated digest algorithm {ds_algo_num} '
+            . '({ds_algo_descr}). Fetched from parent name servers "{ns_list}".',
           @_;
-    },
-    DS01_DS_ALGO_2_MISSING => sub {
-        __x    # DNSSEC:DS01_DS_ALGO_2_MISSING
-           'No DS record created by digest algorithm 2 (SHA-256) is present for zone {domain}.',
-        @_;
     },
     DS01_DS_ALGO_NOT_DS => sub {
         __x    # DNSSEC:DS01_DS_ALGO_NOT_DS
-          'DS record for zone {domain} with keytag {keytag} was created by digest algorithm {ds_algo_num} '
-          . '({ds_algo_mnemo}) which is not meant for DS. '
-          . 'Fetched from the nameservers with IP addresses "{ns_ip_list}".',
+            'The DS record with keytag {keytag} uses a digest algorithm {ds_algo_num} ({ds_algo_descr}) '
+            . 'not meant for DS records. Fetched from parent name servers "{ns_list}".',
+          @_;
+    },
+    DS01_DS_ALGO_PRIVATE => sub {
+        __x    # DNSSEC:DS01_DS_ALGO_PRIVATE
+            'The DS record with keytag {keytag} uses a digest algorithm {ds_algo_num} for private use. '
+            . 'Fetched from parent name servers "{ns_list}".',
           @_;
     },
     DS01_DS_ALGO_RESERVED => sub {
         __x    # DNSSEC:DS01_DS_ALGO_RESERVED
-          'DS record for zone {domain} with keytag {keytag} was created with an unassigned digest algorithm '
-          . '(algorithm number {ds_algo_num}). '
-          . 'Fetched from the nameservers with IP addresses "{ns_ip_list}".',
+            'The DS record with keytag {keytag} uses a reserved digest algorithm {ds_algo_num} on name '
+            . 'servers "{ns_list}".',
+          @_;
+    },
+    DS01_DS_ALGO_UNASSIGNED => sub {
+        __x    # DNSSEC:DS01_DS_ALGO_UNASSIGNED
+            'The DS record with keytag {keytag} uses an unassigned digest algorithm {ds_algo_num} on parent '
+            . 'name servers "{ns_list}".',
+          @_;
+    },
+    DS01_NO_RESPONSE => sub {
+        __x    # DNSSEC:DS01_NO_RESPONSE
+            'No response or error in response from all parent name servers on the DS query. Name servers '
+            . 'are "{ns_list}".',
+          @_;
+    },
+    DS01_PARENT_SERVER_NO_DS => sub {
+        __x    # DNSSEC:DS01_PARENT_SERVER_NO_DS
+            'The following name servers do not provide DS record or have not been properly configured. '
+            . 'Fetched from parent name servers "{ns_list}".',
+          @_;
+    },
+    DS01_PARENT_ZONE_NO_DS => sub {
+        __x    # DNSSEC:DS01_PARENT_ZONE_NO_DS
+            'The parent zone provides no DS records for the child zone. Fetched from parent name '
+            . 'servers "{ns_list}".',
+          @_;
+    },
+    DS01_ROOT_N_NO_UNDEL_DS => sub {
+        __x    # DNSSEC:DS01_ROOT_N_NO_UNDEL_DS
+            'Tested zone is the root zone, but no undelegated DS has been provided. DS is not tested.',
+          @_;
+    },
+    DS01_UNDEL_N_NO_UNDEL_DS => sub {
+        __x    # DNSSEC:DS01_UNDEL_N_NO_UNDEL_DS
+            'Tested zone is undelegated, but no undelegated DS has been provided. DS is not tested.',
           @_;
     },
     DS02_ALGO_NOT_SUPPORTED_BY_ZM => sub {
@@ -931,6 +982,131 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # DNSSEC:DS03_UNASSIGNED_FLAG_USED
           'The following servers respond with an NSEC3 record where an unassigned flag is used (bit {int}). '
           . 'Fetched from name servers "{ns_list}".',
+          @_;
+    },
+    DS05_ALGO_DEPRECATED => sub {
+        __x    # DNSSEC:DS05_ALGO_DEPRECATED
+          'The DNSKEY with tag {keytag} uses deprecated algorithm number {algo_num} ("{algo_descr}", {algo_mnemo}). '
+          . 'Fetched from name servers "{ns_list}".',
+          @_;
+    },
+    DS05_ALGO_NOT_RECOMMENDED => sub {
+        __x    # DNSSEC:DS05_ALGO_NOT_RECOMMENDED
+          'The DNSKEY with tag {keytag} uses unrecommended algorithm number {algo_num} ("{algo_descr}", {algo_mnemo}). '
+          . 'Fetched from name servers "{ns_list}".',
+          @_;
+    },
+    DS05_ALGO_NOT_ZONE_SIGN => sub {
+        __x    # DNSSEC:DS05_ALGO_NOT_ZONE_SIGN
+          'The DNSKEY with tag {keytag} uses algorithm number {algo_num} ("{algo_descr}", {algo_mnemo}) which is '
+          . 'not meant for zone signing. Fetched from name servers "{ns_list}".',
+          @_;
+    },
+    DS05_ALGO_OK => sub {
+        __x    # DNSSEC:DS05_ALGO_OK
+          'The DNSKEY with tag {keytag} uses algorithm number {algo_num} ("{algo_descr}", {algo_mnemo}). '
+          . 'Fetched from name servers "{ns_list}".',
+          @_;
+    },
+    DS05_ALGO_PRIVATE => sub {
+        __x    # DNSSEC:DS05_ALGO_PRIVATE
+          'The DNSKEY with tag {keytag} uses algorithm number {algo_num} which is '
+          . 'reserved for private use. Fetched from name servers "{ns_list}".',
+          @_;
+    },
+    DS05_ALGO_RESERVED => sub {
+        __x    # DNSSEC:DS05_ALGO_RESERVED
+          'The DNSKEY with tag {keytag} uses reserved algorithm number {algo_num}. '
+          . 'Fetched from name servers "{ns_list}".',
+          @_;
+    },
+    DS05_ALGO_UNASSIGNED => sub {
+        __x    # DNSSEC:DS05_ALGO_UNASSIGNED
+          'The DNSKEY with tag {keytag} uses unassigned algorithm number {algo_num}. '
+          . 'Fetched from name servers "{ns_list}".',
+          @_;
+    },
+    DS05_NO_RESPONSE => sub {
+        __x    # DNSSEC:DS05_NO_RESPONSE
+          'No response or error in response from all name servers on the DNSKEY query. Failing name servers: "{ns_list}".',
+          @_;
+    },
+    DS05_SERVER_NO_DNSSEC => sub {
+        __x    # DNSSEC:DS05_SERVER_NO_DNSSEC
+          'Some name servers do not support DNSSEC or have not been properly configured. DNSKEY cannot be tested on '
+          . 'those servers. Fetched from name servers "{ns_list}".',
+          @_;
+    },
+    DS05_ZONE_NO_DNSSEC => sub {
+        __x    # DNSSEC:DS05_ZONE_NO_DNSSEC
+          'The zone is not DNSSEC signed or not properly DNSSEC signed. DNSKEY cannot be tested. Fetched from name '
+          . 'servers "{ns_list}".',
+          @_;
+    },
+    DS07_DS_FOR_SIGNED_ZONE => sub {
+        __x    # DNSSEC:DS07_DS_FOR_SIGNED_ZONE
+          'The parent zone has DS record or records for the signed child zone.';
+    },
+    DS07_DS_ON_PARENT_SERVER => sub {
+        __x    # DNSSEC:DS07_DS_ON_PARENT_SERVER
+          'The following parent name servers respond with DS record or records for the child '
+          . 'zone. Name servers: "{ns_list}".',
+          @_;
+    },
+    DS07_INCONSISTENT_DS => sub {
+        __x    # DNSSEC:DS07_INCONSISTENT_DS
+          'Inconsistent responses from parent name servers. Some include DS, others do not.';
+    },
+    DS07_INCONSISTENT_SIGNED => sub {
+        __x    # DNSSEC:DS07_INCONSISTENT_SIGNED
+          'Inconsistent responses from name servers. Some include signed responses, others do not.';
+    },
+    DS07_NON_AUTH_RESPONSE_DNSKEY => sub {
+        __x    # DNSSEC:DS07_NON_AUTH_RESPONSE_DNSKEY
+          'The following name servers give a non authoritative response on DNSKEY query with DO bit set. '
+          . 'Name servers: "{ns_list}".',
+          @_;
+    },
+    DS07_NOT_SIGNED => sub {
+        __x    # DNSSEC:DS07_NOT_SIGNED
+          'The zone is not signed.';
+    },
+    DS07_NOT_SIGNED_ON_SERVER => sub {
+        __x    # DNSSEC:DS07_NOT_SIGNED_ON_SERVER
+          'The following name servers respond with no DNSKEY (unsigned child zone). '
+          . 'Name servers: "{ns_list}".',
+          @_;
+    },
+    DS07_NO_DS_ON_PARENT_SERVER => sub {
+        __x    # DNSSEC:DS07_NO_DS_ON_PARENT_SERVER
+          'The following parent name servers respond without DS record for the child zone. '
+          . 'Name servers: "{ns_list}".',
+          @_;
+    },
+    DS07_NO_DS_FOR_SIGNED_ZONE => sub {
+        __x    # DNSSEC:DS07_NO_DS_FOR_SIGNED_ZONE
+          'The parent zone has no DS record for the signed child zone.';
+    },
+    DS07_NO_RESPONSE_DNSKEY => sub {
+        __x    # DNSSEC:DS07_NO_RESPONSE_DNSKEY
+          'The following name servers do not respond on DNSKEY query with DO bit set. '
+          . 'Name servers: "{ns_list}".',
+          @_;
+    },
+    DS07_SIGNED => sub {
+        __x    # DNSSEC:DS07_SIGNED
+          'The zone is signed.';
+    },
+    DS07_SIGNED_ON_SERVER => sub {
+        __x    # DNSSEC:DS07_SIGNED_ON_SERVER
+          'The following name servers respond with DNSKEY (signed child zone). '
+          . 'Name servers: "{ns_list}".',
+          @_;
+    },
+    DS07_UNEXP_RCODE_RESP_DNSKEY => sub {
+        __x    # DNSSEC:DS07_UNEXP_RCODE_RESP_DNSKEY
+          'The following name servers respond with RCODE "{rcode}" instead of expected "NOERROR" '
+          . 'on DNSKEY query with DO bit set. Name servers: "{ns_list}".',
           @_;
     },
     DS08_ALGO_NOT_SUPPORTED_BY_ZM => sub {
@@ -1493,10 +1669,6 @@ Readonly my %TAG_DESCRIPTIONS => (
           . 'Fetched from the nameservers with IP addresses "{ns_ip_list}".',
           @_;
     },
-    DS_BUT_NOT_DNSKEY => sub {
-        __x    # DNSSEC:DS_BUT_NOT_DNSKEY
-          '{parent} sent a DS record, but {child} did not send a DNSKEY record.', @_;
-    },
     DURATION_LONG => sub {
         __x    # DNSSEC:DURATION_LONG
           'RRSIG with keytag {keytag} and covering type(s) {types} '
@@ -1525,17 +1697,9 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # DNSSEC:IPV6_DISABLED
           'IPv6 is disabled, not sending "{rrtype}" query to {ns}.', @_;
     },
-    KEY_DETAILS => sub {
-        __x    # DNSSEC:KEY_DETAILS
-          'Key with keytag {keytag} details : Size = {keysize}, Flags ({sep}, {rfc5011}).', @_;
-    },
     KEY_SIZE_OK => sub {
         __x    # DNSSEC:KEY_SIZE_OK
           'All keys from the DNSKEY RRset have the correct size.', @_;
-    },
-    NEITHER_DNSKEY_NOR_DS => sub {
-        __x    # DNSSEC:NEITHER_DNSKEY_NOR_DS
-          'There are neither DS nor DNSKEY records for the zone.', @_;
     },
     NO_RESPONSE_DNSKEY => sub {
         __x    # DNSSEC:NO_RESPONSE_DNSKEY
@@ -1544,10 +1708,6 @@ Readonly my %TAG_DESCRIPTIONS => (
     NO_RESPONSE => sub {
         __x    # DNSSEC:NO_RESPONSE
           'Nameserver {ns} did not respond.', @_;
-    },
-    NOT_SIGNED => sub {
-        __x    # DNSSEC:NOT_SIGNED
-          'The zone is not signed with DNSSEC.', @_;
     },
     REMAINING_LONG => sub {
         __x    # DNSSEC:REMAINING_LONG
@@ -1705,138 +1865,179 @@ sub dnssec01 {
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'DNSSEC01';
     push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
-    if ( $zone->name eq '.' and not Zonemaster::Engine::Recursor->has_fake_addresses( $zone->name->string ) ){
-        return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
-    }
+    my @ignored_parent_ns_ip;
+    my ( @responds_without_valid_ds, @responds_with_ds );
+    my ( %algo_2_ds, %non_algo_2_ds );
+    my %sets = (
+        'DS01_DS_ALGO_DEPRECATED' => {},
+        'DS01_DS_ALGO_RESERVED' => {},
+        'DS01_DS_ALGO_UNASSIGNED' => {},
+        'DS01_DS_ALGO_PRIVATE' => {},
+        'DS01_DS_ALGO_NOT_DS' => {},
+        'DS01_DS_ALGO_OK' => {}
+    );
 
-    my %ds_records;
+    my $parent_nss = Zonemaster::Engine::TestMethodsV2->get_parent_ns_names_and_ips( $zone );
+
+    my @undelegated_ds;
     if ( my $parent = $zone->parent ) {
         foreach my $ns ( @{ $parent->ns } ) {
-            my $ns_ip;
+            if ( $ns->fake_ds->{$zone->name} ) {
+                @undelegated_ds = @{ $ns->fake_ds->{$zone->name} };
 
-            if ( Zonemaster::Engine::Recursor->has_fake_addresses( $zone->name->string ) ){
-                if ( scalar %{$ns->fake_ds} == 0 ){
-                    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
-                }
-                $ns_ip = "-";
-            }
-            else{
-                $ns_ip = $ns->address->short;
-            }
+                if ( @undelegated_ds ) {
+                    my $ns_ip =  "-";
 
-            if ( _ip_disabled_message( \@results, $ns, q{DS} ) ) {
-                next;
-            }
+                    foreach my $ds_data ( @undelegated_ds ) {
+                        my $digest = $ds_data->digtype;
+                        my $keytag = $ds_data->keytag;
 
-            my $ds_p = $ns->query( $zone->name, q{DS}, { usevc => 0, dnssec => 1 } );
+                        push @{ $sets{$dnssec01_tags_mapping{$digest}}->{$digest}{$keytag} }, $ns_ip;
 
-            if ( not $ds_p or $ds_p->rcode ne q{NOERROR} or not $ds_p->has_edns or not $ds_p->do or not $ds_p->aa ) {
-                next;
-            }
+                        if ( $digest == 2 ) {
+                            push @{ $algo_2_ds{$keytag} }, $ns_ip;
+                        }
+                        else {
+                            push @{ $non_algo_2_ds{$keytag} }, $ns_ip;
+                        }
+                    }
 
-            my @dss = $ds_p->get_records( q{DS}, q{answer} );
-
-            my $can_continue = 0;
-            foreach my $ds (@dss) {
-                if ( $ds->owner eq $zone->name->fqdn ){
-                    $can_continue = 1;
-                    last;
+                    push @responds_with_ds, $ns_ip;
+                    $parent_nss = undef;
                 }
             }
+        }
+    }
 
-            if ( not $can_continue ){
-                next;
-            }
+    my @nss = @{ $parent_nss // [] };
 
-            foreach my $ds (@dss) {
-                push @{ $ds_records{$ds->digtype}{$ds->keytag} }, $ns_ip;
+    my %ip_already_processed;
+    foreach my $ns ( @nss ) {
+        my $ns_ip = $ns->address->short;
+
+        next if exists $ip_already_processed{$ns_ip};
+        $ip_already_processed{$ns_ip} = [ grep { $_->address->short eq $ns_ip } @nss ];
+
+        if ( _ip_disabled_message( \@results, $ns, q{DS} ) ) {
+            next;
+        }
+
+        my @matching_nss = @{ $ip_already_processed{$ns_ip} };
+
+        my $p = $ns->query( $zone->name, q{DS}, { dnssec => 1 } );
+
+        if ( not $p or $p->rcode ne q{NOERROR} or not $p->has_edns or not $p->do or not $p->aa ) {
+            push @ignored_parent_ns_ip, @matching_nss;
+            next;
+        }
+
+        my @rrs = $p->get_records( q{DS}, q{answer} );
+
+        my $valid_ds_rr = 0;
+        foreach my $ds_rr ( @rrs ) {
+            if ( $ds_rr->owner eq $zone->name->fqdn ){
+                $valid_ds_rr = 1;
+                last;
             }
         }
 
-        my $algorithm2 = 0;
-        if ( scalar keys %ds_records ){
-            for my $ds_digtype ( keys %ds_records) {
-                for my $ds_keytag ( keys %{ $ds_records{$ds_digtype} } ){
-                    my $mnemonic = $digest_algorithms{ $ds_digtype };
-                    if ( $ds_digtype == 0 ) {
-                        push @results,
-                          _emit_log(
-                            DS01_DS_ALGO_NOT_DS => {
-                                ns_ip_list    => join( q{;}, uniq sort @{ $ds_records{$ds_digtype}->{$ds_keytag} } ),
-                                domain        => q{} . $zone->name,
-                                keytag        => $ds_keytag,
-                                ds_algo_num   => $ds_digtype,
-                                ds_algo_mnemo => $mnemonic,
-                            }
-                          );
-                    }
-                    elsif ( $ds_digtype == 1 or $ds_digtype == 3 ) {
-                        push @results,
-                          _emit_log(
-                            DS01_DS_ALGO_DEPRECATED => {
-                                ns_ip_list => join( q{;}, uniq sort @{ $ds_records{$ds_digtype}->{$ds_keytag} } ),
-                                domain     => q{} . $zone->name,
-                                keytag     => $ds_keytag,
-                                ds_algo_num   => $ds_digtype,
-                                ds_algo_mnemo => $mnemonic,
-                            }
-                          );
-                    }
-                    elsif ( $ds_digtype >= 5 and $ds_digtype <= 255 ) {
-                        push @results,
-                          _emit_log(
-                            DS01_DS_ALGO_RESERVED => {
-                                ns_ip_list    => join( q{;}, uniq sort @{ $ds_records{$ds_digtype}->{$ds_keytag} } ),
-                                domain        => q{} . $zone->name,
-                                keytag        => $ds_keytag,
-                                ds_algo_num   => $ds_digtype,
-                            }
-                          );
-                    }
-                    else {
-                        $algorithm2++ if $ds_digtype == 2;
-                    }
+        if ( not $valid_ds_rr ){
+            push @responds_without_valid_ds, @matching_nss;
+            next;
+        }
 
-                    if ( not exists $LDNS_digest_algorithms_supported{$ds_digtype} ){
-                        push @results,
-                          _emit_log(
-                            DS01_DIGEST_NOT_SUPPORTED_BY_ZM => {
-                                ns_ip_list    => join( q{;}, uniq sort @{ $ds_records{$ds_digtype}->{$ds_keytag} } ),
-                                domain        => q{} . $zone->name,
-                                keytag        => $ds_keytag,
-                                ds_algo_num   => $ds_digtype,
-                                ds_algo_mnemo => $mnemonic,
-                            }
-                           );
-                    }
-                    else{
-                        my $tmp_dnskey = Zonemaster::LDNS::RR->new( sprintf( '%s IN DNSKEY 256 3 13 gpqeIK2jbErZDUYZplEVOOo86PWm0KEkHtA4uZ1LSLGLJbzG7VTUcuVt dkDeIz/5+I5gtZMU0z5YW5a5r+KBRw==', $zone->name ) );
-                        my $tmp_ds = $tmp_dnskey->ds( $LDNS_digest_algorithms_supported{$ds_digtype} );
+        push @responds_with_ds, @matching_nss;
 
-                        if ( not $tmp_ds ){
-                            push @results,
-                              _emit_log(
-                                DS01_DIGEST_NOT_SUPPORTED_BY_ZM => {
-                                    ns_ip_list    => join( q{;}, uniq sort @{ $ds_records{$ds_digtype}->{$ds_keytag} } ),
-                                    domain        => q{} . $zone->name,
-                                    keytag        => $ds_keytag,
-                                    ds_algo_num   => $ds_digtype,
-                                    ds_algo_mnemo => $mnemonic,
-                                }
-                            );
-                        }
-                    }
+        foreach my $ds_rr ( @rrs ) {
+            my $digest = $ds_rr->digtype;
+            my $keytag = $ds_rr->keytag;
+
+            push @{ $sets{$dnssec01_tags_mapping{$digest}}->{$digest}{$keytag} }, @matching_nss;
+
+            if ( $digest == 2 ) {
+                push @{ $algo_2_ds{$keytag} }, @matching_nss;
+            }
+            else {
+                push @{ $non_algo_2_ds{$keytag} }, @matching_nss;
+            }
+        }
+    }
+
+    while ( my ($tag_name, $set_ref) = each %sets ) {
+        my %values = %{ $set_ref };
+        if ( %values ) {
+            foreach my $digest ( keys %values ) {
+                foreach my $keytag ( keys %{ $values{$digest} } ) {
+                    push @results,
+                        _emit_log(
+                            $tag_name => {
+                                ns_list    => join( q{;}, uniq sort @{ $values{$digest}{$keytag} } ),
+                                keytag        => $keytag,
+                                ds_algo_num   => $digest,
+                                ds_algo_descr => $digest_algorithms{$digest}
+                            }
+                        );
                 }
             }
+        }
+    }
 
-            if ( not $algorithm2 ) {
+    if ( %non_algo_2_ds ) {
+        while ( my ($keytag, $ns_ips) = each %non_algo_2_ds ) {
+            my $lc = List::Compare->new( $ns_ips, $algo_2_ds{$keytag} );
+            my @unique_nss = $lc->get_unique;
+
+            if ( @unique_nss ) {
                 push @results,
-                  _emit_log(
-                    DS01_DS_ALGO_2_MISSING => {
-                        domain     => q{} . $zone->name,
-                    }
-                  );
+                    _emit_log(
+                        DS01_DS_ALGO_2_MISSING => {
+                            ns_list => join( q{;}, uniq sort @unique_nss ),
+                            keytag => $keytag
+                        }
+                    );
             }
+        }
+    }
+
+    if ( not @responds_without_valid_ds and not @responds_with_ds and @ignored_parent_ns_ip ) {
+        push @results,
+            _emit_log(
+                DS01_NO_RESPONSE => {
+                    ns_list => join( q{;}, uniq sort @ignored_parent_ns_ip )
+                }
+            )
+    }
+
+    if ( $zone->name eq '.' and not @undelegated_ds ) {
+        push @results,
+            _emit_log(
+                DS01_ROOT_N_NO_UNDEL_DS => {}
+            )
+    }
+
+    if ( $zone->name ne '.' and Zonemaster::Engine::Recursor->has_fake_addresses( $zone->name->string ) and not @undelegated_ds ) {
+        push @results,
+            _emit_log(
+                DS01_UNDEL_N_NO_UNDEL_DS => {}
+            )
+    }
+
+    if ( @responds_without_valid_ds ) {
+        if ( not @responds_with_ds ) {
+            push @results,
+                _emit_log(
+                    DS01_PARENT_ZONE_NO_DS => {
+                        ns_list => join( q{;}, uniq sort @responds_without_valid_ds )
+                    }
+                )
+        }
+        else {
+            push @results,
+                _emit_log(
+                    DS01_PARENT_SERVER_NO_DS => {
+                        ns_list => join( q{;}, uniq sort @responds_without_valid_ds )
+                    }
+                )
         }
     }
 
@@ -2571,73 +2772,107 @@ sub dnssec05 {
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'DNSSEC05';
     push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
-    my @nss_del   = @{ Zonemaster::Engine::TestMethods->method4( $zone ) };
-    my @nss_child = @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
-    my %nss       = map { $_->name->string . '/' . $_->address->short => $_ } @nss_del, @nss_child;
+    my @ignored_ns_ip;
+    my @responds_without_dnskey;
+    my @responds_with_dnskey;
+    my %sets = (
+        'DS05_ALGO_DEPRECATED' => {},
+        'DS05_ALGO_RESERVED' => {},
+        'DS05_ALGO_UNASSIGNED' => {},
+        'DS05_ALGO_NOT_RECOMMENDED' => {},
+        'DS05_ALGO_PRIVATE' => {},
+        'DS05_ALGO_NOT_ZONE_SIGN' => {},
+        'DS05_ALGO_OK' => {}
+    );
 
-    for my $key ( sort keys %nss ) {
-        my $ns = $nss{$key};
+    my @nss = uniq grep { $_->isa('Zonemaster::Engine::Nameserver') } (
+                @{ Zonemaster::Engine::TestMethodsV2->get_del_ns_names_and_ips( $zone ) // [] },
+                @{ Zonemaster::Engine::TestMethodsV2->get_zone_ns_names_and_ips( $zone ) // [] }
+              );
 
-        if ( _ip_disabled_message( \@results, $ns, q{DNSKEY} ) ) {
+    my %ip_already_processed;
+    for my $ns ( @nss ) {
+        my $ns_ip = $ns->address->short;
+
+        next if exists $ip_already_processed{$ns_ip};
+        $ip_already_processed{$ns_ip} = [ grep { $_->address->short eq $ns_ip } @nss ];
+
+        if ( _ip_disabled_message( \@results, $ns, 'DNSKEY' ) ) {
             next;
         }
+
+        my @matching_nss = @{ $ip_already_processed{$ns_ip} };
 
         my $dnskey_p = $ns->query( $zone->name, 'DNSKEY', { dnssec => 1 } );
-        if ( not $dnskey_p ) {
-            push @results, _emit_log( NO_RESPONSE => { ns => $ns->string } );
+
+        if ( not $dnskey_p or $dnskey_p->rcode ne 'NOERROR' or not $dnskey_p->aa ) {
+            push @ignored_ns_ip, @matching_nss;
             next;
         }
 
-        my @keys = $dnskey_p->get_records( 'DNSKEY', 'answer' );
-        if ( not @keys ) {
-            push @results, _emit_log( NO_RESPONSE_DNSKEY => { ns => $ns->string } );
+        my @dnskey_rrs = $dnskey_p->get_records_for_name( 'DNSKEY', $zone->name->fqdn, 'answer' );
+
+        if ( not @dnskey_rrs ) {
+            push @responds_without_dnskey, @matching_nss;
             next;
         }
 
-        foreach my $key ( @keys ) {
-            my $algo      = $key->algorithm;
-            my $algo_args = {
-                algo_num    => $algo,
-                keytag      => $key->keytag,
-                algo_descr  => $algo_properties{$algo}{description},
-            };
+        push @responds_with_dnskey, @matching_nss;
 
-            if ( $algo_properties{$algo}{status} == $ALGO_STATUS_DEPRECATED ) {
-                push @results, _emit_log( ALGORITHM_DEPRECATED => $algo_args );
-            }
-            elsif ( $algo_properties{$algo}{status} == $ALGO_STATUS_RESERVED ) {
-                push @results, _emit_log( ALGORITHM_RESERVED => $algo_args );
-            }
-            elsif ( $algo_properties{$algo}{status} == $ALGO_STATUS_UNASSIGNED ) {
-                push @results, _emit_log( ALGORITHM_UNASSIGNED => $algo_args );
-            }
-            elsif ( $algo_properties{$algo}{status} == $ALGO_STATUS_PRIVATE ) {
-                push @results, _emit_log( ALGORITHM_PRIVATE => $algo_args );
-            }
-            elsif ( $algo_properties{$algo}{status} == $ALGO_STATUS_NOT_ZONE_SIGN ) {
-                push @results, _emit_log( ALGORITHM_NOT_ZONE_SIGN => $algo_args );
-            }
-            elsif ( $algo_properties{$algo}{status} == $ALGO_STATUS_NOT_RECOMMENDED ) {
-                push @results, _emit_log( ALGORITHM_NOT_RECOMMENDED => $algo_args );
-            }
-            else {
-                push @results, _emit_log( ALGORITHM_OK => $algo_args );
-                if ( $key->flags & 256 ) {    # This is a Key
+        foreach my $rr ( @dnskey_rrs ) {
+            my $algo = $rr->algorithm;
+            my $keytag = $rr->keytag;
+
+            push @{ $sets{$dnssec05_tags_mapping{$algo}}->{$algo}{$keytag} }, @matching_nss;
+        }
+    }
+
+    while ( my ($tag_name, $set_ref) = each %sets ) {
+        my %values = %{ $set_ref };
+        if ( %values ) {
+            foreach my $algo ( keys %values ) {
+                foreach my $keytag ( keys %{ $values{$algo} } ) {
                     push @results,
-                      _emit_log(
-                        KEY_DETAILS => {
-                            keytag  => $key->keytag,
-                            keysize => $key->keysize,
-                            sep     => $key->flags & 1 ? q{SEP bit set} : q{SEP bit *not* set},
-                            rfc5011 => $key->flags & 128
-                            ? q{RFC 5011 revocation bit set}
-                            : q{RFC 5011 revocation bit *not* set},
-                        }
-                      );
+                        _emit_log(
+                            $tag_name => {
+                                ns_list    => join( q{;}, uniq sort @{ $values{$algo}{$keytag} } ),
+                                keytag     => $keytag,
+                                algo_num   => $algo,
+                                algo_descr => $algo_properties{$algo}{description},
+                                algo_mnemo => $algo_properties{$algo}{mnemonic}
+                            }
+                        );
                 }
             }
+        }
+    }
 
-        } ## end foreach my $key ( @keys )
+    if ( not @responds_without_dnskey and not @responds_with_dnskey ) {
+        push @results,
+          _emit_log(
+            DS05_NO_RESPONSE => {
+                ns_list => join( q{;}, uniq sort @ignored_ns_ip )
+            }
+        );
+    }
+
+    if ( @responds_without_dnskey ) {
+        if ( not @responds_with_dnskey ) {
+            push @results,
+              _emit_log(
+                DS05_ZONE_NO_DNSSEC => {
+                    ns_list => join( q{;}, uniq sort @responds_without_dnskey )
+                }
+            );
+        }
+        else {
+            push @results,
+              _emit_log(
+                DS05_SERVER_NO_DNSSEC => {
+                    ns_list => join( q{;}, uniq sort @responds_without_dnskey )
+                }
+            );
+        }
     }
 
     return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
@@ -2718,56 +2953,254 @@ sub dnssec07 {
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'DNSSEC07';
     push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
-    if ( not $zone->parent ) {
-        return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
-    }
-    my $dnskey_p = $zone->query_one( $zone->name, 'DNSKEY', { dnssec => 1 } );
-    if ( not $dnskey_p ) {
-        return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
-    }
-    my ( $dnskey ) = $dnskey_p->get_records( 'DNSKEY', 'answer' );
+    my $type_soa = q{SOA};
+    my $type_dnskey = q{DNSKEY};
+    my $type_ds = q{DS};
+    my @query_types = ( $type_soa, $type_dnskey, $type_ds );
 
-    my $ds_p = $zone->parent->query_one( $zone->name, 'DS', { dnssec => 1 } );
-    if ( not $ds_p ) {
-        return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
-    }
-    my ( $ds ) = $ds_p->get_records( 'DS', 'answer' );
+    my ( @ignored_child_ns, @ignored_parent_ns_ip );
+    my ( @no_response_dnskey, @signed_response );
+    my ( @no_auth_dnskey, %error_rcode_dnskey );
+    my ( @no_dnskey, @no_ds, @ds_in_response );
 
-    if ( $dnskey and not $ds ) {
-        push @results,
-          _emit_log(
-            DNSKEY_BUT_NOT_DS => {
-                child  => $dnskey_p->answerfrom,
-                parent => $ds_p->answerfrom,
+    my @child_nss = uniq grep { $_->isa('Zonemaster::Engine::Nameserver') } (
+            @{ Zonemaster::Engine::TestMethodsV2->get_del_ns_names_and_ips( $zone ) // [] },
+            @{ Zonemaster::Engine::TestMethodsV2->get_zone_ns_names_and_ips( $zone ) // [] }
+            );
+
+    my %ip_already_processed;
+    for my $ns ( @child_nss ) {
+        my $ns_ip = $ns->address->short;
+
+        next if exists $ip_already_processed{$ns_ip};
+        $ip_already_processed{$ns_ip} = [ grep { $_->address->short eq $ns_ip } @child_nss ];
+
+        if ( _ip_disabled_message( \@results, $ns, @query_types ) ) {
+            next;
+        }
+
+        my @matching_nss = @{ $ip_already_processed{$ns_ip} };
+
+        my $soa_p = $ns->query( $zone->name, $type_soa );
+
+        if ( not $soa_p or $soa_p->rcode ne 'NOERROR' or not $soa_p->aa or not $soa_p->get_records( $type_soa, 'answer' ) ) {
+            push @ignored_child_ns, @matching_nss;
+            next;
+        }
+
+        my $dnskey_p = $ns->query( $zone->name, $type_dnskey, { dnssec => 1 } );
+
+        if ( not $dnskey_p ) {
+            push @no_response_dnskey, @matching_nss;
+            next;
+        }
+
+        if ( not $dnskey_p->aa ) {
+            push @no_auth_dnskey, @matching_nss;
+            next;
+        }
+
+        if ( $dnskey_p->rcode ne 'NOERROR' ) {
+            push @{ $error_rcode_dnskey{$dnskey_p->rcode} }, @matching_nss;
+            next;
+        }
+
+        my @dnskey_rrs = $dnskey_p->get_records( $type_dnskey, 'answer' );
+        my @rrsig_rrs = $dnskey_p->get_records( 'RRSIG', 'answer' );
+
+        my $covered_dnskey = 0;
+        foreach my $rr ( @rrsig_rrs ) {
+            if ( $rr->typecovered eq $type_dnskey ) {
+                $covered_dnskey = 1;
+                last;
             }
-          );
+        }
+
+        if ( $covered_dnskey ) {
+            push @signed_response, @matching_nss;
+        }
+        else {
+            push @no_dnskey, @matching_nss;
+        }
     }
-    elsif ( $dnskey and $ds ) {
-        push @results,
-          _emit_log(
-            DNSKEY_AND_DS => {
-                child  => $dnskey_p->answerfrom,
-                parent => $ds_p->answerfrom,
+
+    my $parent_ref = Zonemaster::Engine::TestMethodsV2->get_parent_ns_names_and_ips( $zone );
+
+    my @undelegated_ds;
+    if ( my $parent = $zone->parent ) {
+        foreach my $ns ( @{ $parent->ns } ) {
+            if ( $ns->fake_ds->{$zone->name} ) {
+                @undelegated_ds = @{ $ns->fake_ds->{$zone->name} };
+
+                if ( @undelegated_ds ) {
+                    push @ds_in_response, '-';
+                    $parent_ref = undef;
+                }
             }
-          );
+        }
     }
-    elsif ( not $dnskey and $ds ) {
-        push @results,
-          _emit_log(
-            DS_BUT_NOT_DNSKEY => {
-                child  => $dnskey_p->answerfrom,
-                parent => $ds_p->answerfrom,
-            }
-          );
+
+    if ( not @signed_response ) {
+        $parent_ref = undef;
+        @ds_in_response = ();
     }
-    else {
-        push @results,
-          _emit_log(
-            NEITHER_DNSKEY_NOR_DS => {
-                child  => $dnskey_p->answerfrom,
-                parent => $ds_p->answerfrom,
+
+    my @parent_nss = @{ $parent_ref // [] };
+
+    %ip_already_processed = ();
+    foreach my $ns ( @parent_nss ) {
+        my $ns_ip = $ns->address->short;
+
+        next if exists $ip_already_processed{$ns_ip};
+        $ip_already_processed{$ns_ip} = [ grep { $_->address->short eq $ns_ip } @parent_nss ];
+
+        if ( _ip_disabled_message( \@results, $ns, $type_ds ) ) {
+            next;
+        }
+
+        my @matching_nss = @{ $ip_already_processed{$ns_ip} };
+
+        my $ds_p = $ns->query( $zone->name, $type_ds, { dnssec => 1 } );
+
+        if ( not $ds_p or $ds_p->rcode ne q{NOERROR} or not $ds_p->has_edns or not $ds_p->do or not $ds_p->aa ) {
+            push @ignored_parent_ns_ip, @matching_nss;
+            next;
+        }
+
+        my @ds_rrs = $ds_p->get_records_for_name( $type_ds, $zone->name, q{answer} );
+        my @rrsig_rrs = $ds_p->get_records_for_name( q{RRSIG}, $zone->name, q{answer} );
+
+        my $covered_ds = 0;
+        foreach my $rr ( @rrsig_rrs ) {
+            if ( $rr->typecovered eq $type_ds ) {
+                $covered_ds = 1;
+                last;
             }
-          );
+        }
+
+        if ( $covered_ds ) {
+            push @ds_in_response, @matching_nss;
+        }
+        else {
+            push @no_ds, @matching_nss;
+        }
+    }
+
+    my @combined = uniq ( @ignored_child_ns, @no_response_dnskey, @no_auth_dnskey, map { @{ $error_rcode_dnskey{$_} } } keys %error_rcode_dnskey );
+    my $lc = List::Compare->new(\@combined, \@child_nss);
+
+    if ( not $lc->get_symmetric_difference ) {
+        push @results,
+            _emit_log(
+              DS07_NOT_SIGNED => {}
+        );
+    }
+
+    if ( @no_response_dnskey ) {
+        push @results,
+            _emit_log(
+              DS07_NO_RESPONSE_DNSKEY => {
+                  ns_list => join( q{;}, uniq sort @no_response_dnskey )
+              }
+        );
+    }
+
+    if ( @no_auth_dnskey ) {
+        push @results,
+            _emit_log(
+              DS07_NON_AUTH_RESPONSE_DNSKEY => {
+                  ns_list => join( q{;}, uniq sort @no_auth_dnskey )
+              }
+        );
+    }
+
+    if ( keys %error_rcode_dnskey ) {
+        push @results,
+            _emit_log(
+              DS07_UNEXP_RCODE_RESP_DNSKEY => {
+                  ns_list => join( q{;}, uniq sort @{ $error_rcode_dnskey{$_} } ),
+                  rcode => $_
+              }
+        ) for keys %error_rcode_dnskey;
+    }
+
+    if ( @signed_response ) {
+        push @results,
+            _emit_log(
+              DS07_SIGNED_ON_SERVER => {
+                  ns_list => join( q{;}, uniq sort @signed_response )
+              }
+        );
+    }
+
+    if ( @no_dnskey ) {
+        push @results,
+            _emit_log(
+              DS07_NOT_SIGNED_ON_SERVER => {
+                  ns_list => join( q{;}, uniq sort @no_dnskey )
+              }
+        );
+    }
+
+    if ( @signed_response and @no_dnskey ) {
+        push @results,
+            _emit_log(
+              DS07_INCONSISTENT_SIGNED => {}
+        );
+    }
+
+    if ( @signed_response and not @no_dnskey ) {
+        push @results,
+            _emit_log(
+              DS07_SIGNED => {}
+        );
+    }
+
+    if ( not @signed_response and @no_dnskey ) {
+        push @results,
+            _emit_log(
+              DS07_NOT_SIGNED => {}
+        );
+    }
+
+    if ( @no_ds ) {
+        push @results,
+            _emit_log(
+              DS07_NO_DS_ON_PARENT_SERVER => {
+                  ns_list => join( q{;}, uniq sort @no_ds )
+              }
+        );
+    }
+
+    if ( @ds_in_response ) {
+        push @results,
+            _emit_log(
+              DS07_DS_ON_PARENT_SERVER => {
+                  ns_list => join( q{;}, uniq sort @ds_in_response )
+              }
+        );
+    }
+
+    if ( @no_ds and @ds_in_response ) {
+        push @results,
+            _emit_log(
+              DS07_INCONSISTENT_DS => {}
+        );
+    }
+
+    if ( not @no_dnskey and @signed_response ) {
+        if ( @no_ds and not @ds_in_response ) {
+            push @results,
+                _emit_log(
+                DS07_NO_DS_FOR_SIGNED_ZONE => {}
+            );
+        }
+        if ( not @no_ds and @ds_in_response ) {
+            push @results,
+                _emit_log(
+                DS07_DS_FOR_SIGNED_ZONE => {}
+            );
+        }
     }
 
     return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );

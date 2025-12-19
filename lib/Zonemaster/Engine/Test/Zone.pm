@@ -205,12 +205,15 @@ sub metadata {
         ],
         zone11 => [
             qw(
-              Z11_INCONSISTENT_SPF_POLICIES
               Z11_DIFFERENT_SPF_POLICIES_FOUND
+              Z11_INCONSISTENT_SPF_POLICIES
               Z11_NO_SPF_FOUND
-              Z11_SPF1_MULTIPLE_RECORDS
-              Z11_SPF1_SYNTAX_ERROR
-              Z11_SPF1_SYNTAX_OK
+              Z11_NO_SPF_NON_MAIL_DOMAIN
+              Z11_NON_NULL_SPF_NON_MAIL_DOMAIN
+              Z11_NULL_SPF_NON_MAIL_DOMAIN
+              Z11_SPF_MULTIPLE_RECORDS
+              Z11_SPF_SYNTAX_ERROR
+              Z11_SPF_SYNTAX_OK
               Z11_UNABLE_TO_CHECK_FOR_SPF
               )
         ],
@@ -472,29 +475,52 @@ Readonly my %TAG_DESCRIPTIONS => (
         __x    # ZONE:Z09_UNEXPECTED_RCODE_MX
           'Unexpected RCODE value ({rcode}) on the MX query from name servers "{ns_ip_list}".', @_;
     },
+    Z11_DIFFERENT_SPF_POLICIES_FOUND => sub {
+        __x    # ZONE:Z11_DIFFERENT_SPF_POLICIES_FOUND
+          'The following name servers returned the same SPF policy. Name servers: {ns_list}.',
+          @_;
+    },
     Z11_INCONSISTENT_SPF_POLICIES => sub {
         __     # ZONE:Z11_INCONSISTENT_SPF_POLICIES
           'One or more name servers do not publish the same SPF policy as the others.';
     },
-    Z11_DIFFERENT_SPF_POLICIES_FOUND => sub {
-        __x    # ZONE:Z11_DIFFERENT_SPF_POLICIES_FOUND
-          'The following name servers returned the same SPF policy, but other name servers returned a different policy. Name servers: {ns_ip_list}.', @_;
-    },
     Z11_NO_SPF_FOUND => sub {
         __x    # ZONE:Z11_NO_SPF_FOUND
-          'No SPF policy was found for {domain}.', @_;
+          'No SPF policy was found for {domain}.',
+          @_;
     },
-    Z11_SPF1_MULTIPLE_RECORDS => sub {
-        __x    # ZONE:Z11_SPF1_MULTIPLE_RECORDS
-          'The following name servers returned more than one SPF policy. Name servers: {ns_ip_list}.', @_;
+    Z11_NO_SPF_NON_MAIL_DOMAIN => sub {
+        __x    # ZONE:Z11_NO_SPF_NON_MAIL_DOMAIN
+          'No SPF policy was found for {domain}, which is a type of domain (root, TLD or under .ARPA) '
+          . 'not expected to be used for email.',
+          @_;
     },
-    Z11_SPF1_SYNTAX_ERROR => sub {
-        __x    # ZONE:Z11_SPF1_SYNTAX_ERROR
-          'The SPF policy of {domain} has a syntax error. Policy retrieved from the following nameservers: {ns_ip_list}.', @_;
+    Z11_NON_NULL_SPF_NON_MAIL_DOMAIN => sub {
+        __x    # ZONE:Z11_NON_NULL_SPF_NON_MAIL_DOMAIN
+          'A non-null SPF policy was found on {domain}, although this type of domain (root, TLD or '
+          . 'under .ARPA) is not expected to be used for email.',
+          @_;
     },
-    Z11_SPF1_SYNTAX_OK => sub {
-        __x    # ZONE:Z11_SPF1_SYNTAX_OK
-          'The SPF policy of {domain} has correct syntax.', @_;
+    Z11_NULL_SPF_NON_MAIL_DOMAIN => sub {
+        __x    # ZONE:Z11_NULL_SPF_NON_MAIL_DOMAIN
+          'A null SPF policy was found on {domain}, which is a type of domain (root, TLD or under .ARPA) '
+          . 'not expected to be used for email.',
+          @_;
+    },
+    Z11_SPF_MULTIPLE_RECORDS => sub {
+        __x    # ZONE:Z11_SPF_MULTIPLE_RECORDS
+          'The following name servers returned more than one SPF policy. Name servers: {ns_list}.',
+          @_;
+    },
+    Z11_SPF_SYNTAX_ERROR => sub {
+        __x    # ZONE:Z11_SPF_SYNTAX_ERROR
+          'The SPF policy of {domain} has a syntax error. Policy retrieved from the following nameservers: {ns_list}.',
+          @_;
+    },
+    Z11_SPF_SYNTAX_OK => sub {
+        __x    # ZONE:Z11_SPF_SYNTAX_OK
+          'The SPF policy of {domain} has correct syntax.',
+          @_;
     },
     Z11_UNABLE_TO_CHECK_FOR_SPF => sub {
         __     # ZONE:Z11_UNABLE_TO_CHECK_FOR_SPF
@@ -1508,9 +1534,21 @@ sub zone11 {
     # This hash maps nameserver IP addresses to arrayrefs of TXT resource
     # record data matching the signature for SPF policies. These arrays
     # usually contain at most one string.
-    my %ns_spf = ();
 
-    foreach my $ns ( @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) } ) {
+    my %ns_spf;
+
+    my @nss = uniq grep { $_->isa('Zonemaster::Engine::Nameserver') } (
+                @{ Zonemaster::Engine::TestMethodsV2->get_del_ns_names_and_ips( $zone ) // [] },
+                @{ Zonemaster::Engine::TestMethodsV2->get_zone_ns_names_and_ips( $zone ) // [] }
+            );
+
+    my %ip_already_processed;
+    foreach my $ns ( @nss ) {
+        my $ns_ip = $ns->address->short;
+
+        next if exists $ip_already_processed{$ns_ip};
+        $ip_already_processed{$ns_ip} = [ grep { $_->address->short eq $ns_ip } @nss ];
+
         if ( _ip_disabled_message( \@results, $ns, q{TXT} ) ) {
             next;
         }
@@ -1522,7 +1560,7 @@ sub zone11 {
             my @txt_rdata = map { lc $_->txtdata() } @txt_rrs;
             my @spf1_policies = grep /\Av=spf1(?:\Z|\s+)/, @txt_rdata;
 
-            $ns_spf{$ns->address->short} = \@spf1_policies;
+            $ns_spf{$ns_ip} = \@spf1_policies;
         }
     }
 
@@ -1537,36 +1575,52 @@ sub zone11 {
     # together. Hence, [qw(a b c)] becomes "<1>a<1>b<1>c" and [qw(ab c)]
     # becomes "<2>ab<1>c".
     my %spf_ns = ();
-    for my $ns ( keys %ns_spf ) {
-        my $mangled_spfs = join '', map { sprintf '<%d>%s', length $_, $_ } sort @{$ns_spf{$ns}};
-        push @{$spf_ns{$mangled_spfs}}, $ns;
+    for my $ns_ip ( keys %ns_spf ) {
+        my @matching_nss = @{ $ip_already_processed{$ns_ip} };
+        my $mangled_spfs = join '', map { sprintf '<%d>%s', length $_, $_ } sort @{$ns_spf{$ns_ip}};
+        push @{$spf_ns{$mangled_spfs}}, @matching_nss;
     }
 
     if ( not scalar %ns_spf ) {
         push @results, _emit_log( Z11_UNABLE_TO_CHECK_FOR_SPF => {} );
     }
     elsif ( List::MoreUtils::all { $_ eq '' } keys %spf_ns ) {
-        push @results, _emit_log( Z11_NO_SPF_FOUND => { domain => $zone->name } );
+        if ( $zone->name eq '.' or $zone->name->next_higher eq '.' or $zone->name =~ /\.arpa$/ ) {
+            push @results, _emit_log( Z11_NO_SPF_NON_MAIL_DOMAIN => {} );
+        }
+        else {
+            push @results, _emit_log( Z11_NO_SPF_FOUND => { domain => $zone->name } );
+        }
     }
     elsif ( scalar keys %spf_ns > 1 ) {
         push @results, _emit_log( Z11_INCONSISTENT_SPF_POLICIES => {} );
 
         for my $ns ( values %spf_ns ) {
-            push @results, _emit_log( Z11_DIFFERENT_SPF_POLICIES_FOUND => { ns_ip_list => join( q{;}, sort @$ns ) } );
+            push @results, _emit_log( Z11_DIFFERENT_SPF_POLICIES_FOUND => { ns_list => join( q{;}, sort @$ns ) } );
         }
     }
-    elsif ( my @bad_ns = grep { scalar @{$ns_spf{$_}} > 1 } keys %ns_spf ) {
-        push @results, _emit_log( Z11_SPF1_MULTIPLE_RECORDS => { ns_ip_list => join( q{;}, sort @bad_ns ) } );
+    elsif ( my @bad_ips = grep { scalar @{$ns_spf{$_}} > 1 } keys %ns_spf ) {
+        push @results, _emit_log( Z11_SPF_MULTIPLE_RECORDS => { ns_list => join( q{;}, sort map { @{ $ip_already_processed{$_} } } @bad_ips ) } );
     }
     else {
         my $spf_text = (values %ns_spf)[0][0];
 
         if ( _spf_syntax_ok($spf_text) ) {
-            push @results, _emit_log( Z11_SPF1_SYNTAX_OK => { domain => $zone->name } );
+            if ( $zone->name eq '.' or $zone->name->next_higher eq '.' or $zone->name =~ /\.arpa$/ ) {
+                if ( $spf_text =~ /^v=spf1 [\ \t]+ -all [\ \t]* $/ix ) {
+                    push @results, _emit_log( Z11_NULL_SPF_NON_MAIL_DOMAIN => { domain => $zone->name } );
+                }
+                else {
+                    push @results, _emit_log( Z11_NON_NULL_SPF_NON_MAIL_DOMAIN => { domain => $zone->name } );
+                }
+            }
+            else {
+                push @results, _emit_log( Z11_SPF_SYNTAX_OK => { domain => $zone->name } );
+            }
         }
         else {
-            push @results, _emit_log( Z11_SPF1_SYNTAX_ERROR => {
-                ns_ip_list => join( q{;}, sort (keys %ns_spf) ),
+            push @results, _emit_log( Z11_SPF_SYNTAX_ERROR => {
+                ns_list => join( q{;}, sort map { @{ $ip_already_processed{$_} } } keys %ns_spf ),
                 domain => $zone->name
             } );
         }
