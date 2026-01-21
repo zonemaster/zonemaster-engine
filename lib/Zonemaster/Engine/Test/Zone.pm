@@ -1586,7 +1586,7 @@ sub zone11 {
     }
     elsif ( List::MoreUtils::all { $_ eq '' } keys %spf_ns ) {
         if ( $zone->name eq '.' or $zone->name->next_higher eq '.' or $zone->name =~ /\.arpa$/ ) {
-            push @results, _emit_log( Z11_NO_SPF_NON_MAIL_DOMAIN => {} );
+            push @results, _emit_log( Z11_NO_SPF_NON_MAIL_DOMAIN => { domain => $zone->name } );
         }
         else {
             push @results, _emit_log( Z11_NO_SPF_FOUND => { domain => $zone->name } );
