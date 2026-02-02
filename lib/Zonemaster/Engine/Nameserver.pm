@@ -286,28 +286,9 @@ sub query {
         } ## end if ( $name =~ m/([.]|\A)\Q$fname\E\z/xi)
     } ## end foreach my $fname ( sort keys...)
 
-    my $md5 = Digest::MD5->new;
-
-    $md5->add( q{NAME}    , $name,
-               q{TYPE}    , "\U$type",
-               q{CLASS}   , "\U$class",
-               q{DNSSEC}  , $dnssec,
-               q{USEVC}   , $usevc,
-               q{RECURSE} , $recurse );
-
-    if ( exists $href->{edns_details} ) {
-        $md5->add( q{EDNS_VERSION}        , $href->{edns_details}{version} // 0,
-                   q{EDNS_Z}              , $href->{edns_details}{z} // 0,
-                   q{EDNS_EXTENDED_RCODE} , $href->{edns_details}{rcode} // 0,
-                   q{EDNS_DATA}           , $href->{edns_details}{data} // q{} );
-        $edns_size = $href->{edns_details}{size} // ( $href->{edns_size} // ( $dnssec ? $EDNS_UDP_PAYLOAD_DNSSEC_DEFAULT : $EDNS_UDP_PAYLOAD_DEFAULT ) );
-    }
+    my $idx = $self->_key_for_query_cache( $name, $type, $href );
 
     croak "edns_size (or edns_details->size) parameter must be a value between 0 and 65535" if $edns_size > 65535 or $edns_size < 0;
-
-    $md5->add( q{EDNS_UDP_SIZE} , $edns_size );
-
-    my $idx = $md5->b64digest();
 
     my ( $in_cache, $p ) = $self->cache->get_key( $idx );
     if ( not $in_cache ) {
@@ -373,6 +354,129 @@ sub add_fake_ds {
 
     return;
 } ## end sub add_fake_ds
+
+
+# Builds the Zonemaster::LDNS::Packet object that would be sent for a query,
+# taking options into account.
+
+sub _make_query_packet {
+    my ( $self, $qname, $qtype, $opts ) = @_;
+
+    $qtype //= 'A';
+    my $qclass = $opts->{class} //= 'IN';
+
+    my $dnssec = do {
+        if ( exists $opts->{edns_details} and exists $opts->{edns_details}{do} ) {
+            $opts->{edns_details}{do};
+        }
+        elsif ( exists $opts->{dnssec} ) {
+            $opts->{dnssec};
+        }
+        else {
+            0;
+        }
+    };
+
+    my $edns_size = do {
+        if ( exists $opts->{edns_details} and exists $opts->{edns_details}{size} ) {
+            $opts->{edns_details}{size};
+        }
+        elsif ( exists $opts->{edns_size} ) {
+            $opts->{edns_size};
+        }
+        elsif ( $dnssec ) {
+            $EDNS_UDP_PAYLOAD_DNSSEC_DEFAULT;
+        }
+        elsif ( exists $opts->{edns_details} ) {
+            $EDNS_UDP_PAYLOAD_DEFAULT;
+        }
+        else {
+            0;
+        }
+    };
+
+    die "Invalid value $edns_size for EDNS payload size (should be in 0..65535 range)"
+        unless $edns_size >= 0 and $edns_size <= 65535;
+
+    my $packet = Zonemaster::LDNS::Packet->new( "$qname", $qtype, $qclass );
+    $packet->rd($opts->{recurse} // 0);
+
+    if ( exists $opts->{edns_details} ) {
+        $packet->set_edns_present();
+
+        if ( exists $opts->{edns_details}{version} ) {
+            $packet->edns_version($opts->{edns_details}{version});
+        }
+        if ( exists $opts->{edns_details}{z} ) {
+            $packet->edns_z($opts->{edns_details}{z});
+        }
+        if ( exists $opts->{edns_details}{rcode} ) {
+            $packet->edns_rcode($opts->{edns_details}{rcode});
+        }
+        if ( exists $opts->{edns_details}{data} ) {
+            $packet->edns_data($opts->{edns_details}{data});
+        }
+    }
+
+    $packet->do($dnssec);
+    $packet->edns_size($edns_size);
+
+    return $packet;
+}
+
+# Computes the key to use to search the cache for a packet corresponding to a
+# query we have previously sent.
+
+sub _key_for_query_cache {
+    my ( $self, $qname, $qtype, $opts ) = @_;
+
+    my $md5 = Digest::MD5->new;
+
+    my $qclass  = $opts->{class}   // 'IN';
+    my $dnssec  = $opts->{dnssec}  // 0;
+    my $usevc   = $opts->{usevc}   // 0;
+    my $recurse = $opts->{recurse} // 0;
+
+    if ( exists $opts->{edns_details} and exists $opts->{edns_details}{do} ) {
+        $dnssec = $opts->{edns_details}{do};
+    }
+
+    $md5->add( q{NAME}    , $qname,
+               q{TYPE}    , "\U$qtype",
+               q{CLASS}   , "\U$qclass",
+               q{DNSSEC}  , $dnssec,
+               q{USEVC}   , $usevc,
+               q{RECURSE} , $recurse );
+
+    if ( exists $opts->{edns_details} ) {
+        $md5->add( q{EDNS_VERSION}        , $opts->{edns_details}{version} // 0,
+                   q{EDNS_Z}              , $opts->{edns_details}{z} // 0,
+                   q{EDNS_EXTENDED_RCODE} , $opts->{edns_details}{rcode} // 0,
+                   q{EDNS_DATA}           , $opts->{edns_details}{data} // q{} );
+    }
+
+    my $edns_size = do {
+        if ( exists $opts->{edns_details} and exists $opts->{edns_details}{size} ) {
+            $opts->{edns_details}{size};
+        }
+        elsif ( exists $opts->{edns_size} ) {
+            $opts->{edns_size};
+        }
+        elsif ( $dnssec ) {
+            $EDNS_UDP_PAYLOAD_DNSSEC_DEFAULT;
+        }
+        elsif ( exists $opts->{edns_details} ) {
+            $EDNS_UDP_PAYLOAD_DEFAULT;
+        }
+        else {
+            0;
+        }
+    };
+
+    $md5->add( q{EDNS_UDP_SIZE} , $edns_size );
+
+    return $md5->b64digest();
+}
 
 sub _query {
     my ( $self, $name, $type, $href ) = @_;
@@ -440,31 +544,8 @@ sub _query {
         );
     }
     else {
-        if ( exists $href->{edns_details} ) {
-            my $pkt = Zonemaster::LDNS::Packet->new("$name", $type, $href->{class} );
-            $pkt->set_edns_present();
-
-            $pkt->do($flags{q{dnssec}});
-            $pkt->edns_size($flags{q{edns_size}});
-
-            if ( exists $href->{edns_details}{version} ) {
-                $pkt->edns_version($href->{edns_details}{version});
-            }
-            if ( exists $href->{edns_details}{z} ) {
-                $pkt->edns_z($href->{edns_details}{z});
-            }
-            if ( exists $href->{edns_details}{rcode} ) {
-                $pkt->edns_rcode($href->{edns_details}{rcode});
-            }
-            if ( exists $href->{edns_details}{data} ) {
-                $pkt->edns_data($href->{edns_details}{data});
-            }
-
-            $res = eval { $self->dns->query_with_pkt( $pkt ) };
-        }
-        else {
-            $res = eval { $self->dns->query( "$name", $type, $href->{class} ) };
-        }
+        my $pkt = $self->_make_query_packet( $name, $type, $href );
+        $res = eval { $self->dns->query_with_pkt( $pkt ) };
 
         if ( $@ ) {
             my $msg = "$@";

@@ -125,176 +125,61 @@ is( $dsrr->hexdigest, 'deadbeef', 'Expected digest data' );
 subtest 'dnssec, edns_size and edns_details{do, size} flags behavior for queries' => sub {
     my $ns = new_ok( 'Zonemaster::Engine::Nameserver' => [ { name => 'd.nic.fr', address => '194.0.9.1' } ] );
 
-    my $p = $ns->query( 'fr', 'SOA' );
-    if ( $ENV{ZONEMASTER_RECORD} ) {
-        ok( !$ns->dns->dnssec, 'dnssec flag is unset' );
-        is( $ns->dns->edns_size, 0, 'edns_size flag is unset' );
-    }
-    else {
-        SKIP: {
-            skip "no live recording - dnssec and edns_size flags in query can't be checked", 2;
-        };
-    }
-    ok( (!$p->has_edns and !$p->do), 'non-EDNS response received on query with all default parameters' );
+    my $p = $ns->_make_query_packet( 'fr', 'SOA' );
+    ok( !$p->do(), 'DNSSEC flag is unset' );
+    is( $p->edns_size(), 0, 'EDNS size flag is unset' );
 
-    $p = $ns->query( 'fr', 'SOA', { "dnssec" => 0 } );
-    if ( $ENV{ZONEMASTER_RECORD} ) {
-        ok( !$ns->dns->dnssec, 'dnssec flag is unset' );
-        is( $ns->dns->edns_size, 0, 'edns_size flag is unset' );
-    }
-    else {
-        SKIP: {
-            skip "no live recording - dnssec and edns_size flags in query can't be checked", 2;
-        };
-    }
-    ok( (!$p->has_edns and !$p->do), 'non-EDNS response received on query with dnssec unset' );
+    $p = $ns->_make_query_packet( 'fr', 'SOA', { "dnssec" => 0 } );
+    ok( !$p->do(), 'DNSSEC flag is unset' );
+    is( $p->edns_size(), 0, 'EDNS size flag is unset' );
 
-    # Note that the following tests also implicitly test that flags are correctly re-evaluated between
-    # each consecutive queries.
+    $p = $ns->_make_query_packet( 'a.fr', 'SOA', { "dnssec" => 1 } );
+    ok( $p->do(), 'DNSSEC flag is set' );
+    is( $p->edns_size(), $EDNS_UDP_PAYLOAD_DNSSEC_DEFAULT, 'EDNS size uses default DNSSEC query value' );
 
-    $p = $ns->query( 'a.fr', 'SOA', { "dnssec" => 1 } );
-    if ( $ENV{ZONEMASTER_RECORD} ) {
-        ok( $ns->dns->dnssec, 'dnssec flag is set' );
-        is( $ns->dns->edns_size, $EDNS_UDP_PAYLOAD_DNSSEC_DEFAULT, 'edns_size uses default DNSSEC query value' );
-    }
-    else {
-        SKIP: {
-            skip "no live recording - dnssec and edns_size flags in query can't be checked", 2;
-        };
-    }
-    ok( ($p->has_edns and $p->do), 'DNSSEC response received on query with dnssec set' );
+    $p = $ns->_make_query_packet( 'b.fr', 'SOA', { "edns_size" => 1000 } );
+    ok( !$p->do(), 'DNSSEC flag is unset' );
+    is( $p->edns_size(), 1000, 'EDNS size uses given value' );
 
-    $p = $ns->query( 'b.fr', 'SOA', { "edns_size" => 1000 } );
-    if ( $ENV{ZONEMASTER_RECORD} ) {
-        ok( !$ns->dns->dnssec, 'dnssec flag is unset' );
-        is( $ns->dns->edns_size, 1000, 'edns_size uses given value' );
-    }
-    else {
-        SKIP: {
-            skip "no live recording - dnssec and edns_size flags in query can't be checked", 2;
-        };
-    }
-    ok( ($p->has_edns and !$p->do), 'non-DNSSEC EDNS response received on query with edns_size set' );
+    $p = $ns->_make_query_packet( 'c.fr', 'SOA', { "dnssec" => 0, "edns_size" => 1001 } );
+    ok( !$p->do(), 'DNSSEC flag is unset' );
+    is( $p->edns_size(), 1001, 'EDNS size uses given value instead of default for non-DNSSEC EDNS queries' );
 
-    $p = $ns->query( 'c.fr', 'SOA', { "dnssec" => 0, "edns_size" => 1001 } );
-    if ( $ENV{ZONEMASTER_RECORD} ) {
-        ok( !$ns->dns->dnssec, 'dnssec flag is unset' );
-        is( $ns->dns->edns_size, 1001, 'edns_size uses given value instead of default for non-DNSSEC EDNS queries' );
-    }
-    else {
-        SKIP: {
-            skip "no live recording - dnssec and edns_size flags in query can't be checked", 2;
-        };
-    }
-    ok( ($p->has_edns and !$p->do), 'non-DNSSEC EDNS response received on query with dnssec unset and edns_size set' );
+    $p = $ns->_make_query_packet( 'd.fr', 'SOA', { "dnssec" => 1, "edns_size" => 1002 } );
+    ok( $p->do(), 'DNSSEC flag is set' );
+    is( $p->edns_size(), 1002, 'EDNS size uses given value instead of default for DNSSEC queries' );
 
-    $p = $ns->query( 'd.fr', 'SOA', { "dnssec" => 1, "edns_size" => 1002 } );
-    if ( $ENV{ZONEMASTER_RECORD} ) {
-        ok( $ns->dns->dnssec, 'dnssec flag is set' );
-        is( $ns->dns->edns_size, 1002, 'edns_size uses given value instead of default for DNSSEC queries' );
-    }
-    else {
-        SKIP: {
-            skip "no live recording - dnssec and edns_size flags in query can't be checked", 2;
-        };
-    }
-    ok( ($p->has_edns and $p->do), 'DNSSEC response received on query with dnssec set and edns_size set' );
+    $p = $ns->_make_query_packet( 'e.fr', 'SOA', { "edns_details" => {} } );
+    ok( !$p->do(), 'DNSSEC flag is unset' );
+    is( $p->edns_size(), $EDNS_UDP_PAYLOAD_DEFAULT, 'EDNS size uses default value for non-DNSSEC EDNS queries' );
 
-    $p = $ns->query( 'e.fr', 'SOA', { "edns_details" => {} } );
-    if ( $ENV{ZONEMASTER_RECORD} ) {
-        ok( !$ns->dns->dnssec, 'dnssec flag is unset' );
-        is( $ns->dns->edns_size, $EDNS_UDP_PAYLOAD_DEFAULT, 'edns_size uses default EDNS query value for non-DNSSEC EDNS queries' );
-    }
-    else {
-        SKIP: {
-            skip "no live recording - dnssec and edns_size flags in query can't be checked", 2;
-        };
-    }
-    ok( ($p->has_edns and !$p->do), 'non-DNSSEC EDNS response received on query with edns_details set' );
+    $p = $ns->_make_query_packet( 'f.fr', 'SOA', { "edns_details" => { "do" => 1 } } );
+    ok( $p->do(), 'DNSSEC flag is also set via edns_details{do}' );
+    is( $p->edns_size(), $EDNS_UDP_PAYLOAD_DNSSEC_DEFAULT, 'EDNS size uses default DNSSEC query value when set with edns_details{do}' );
 
-    $p = $ns->query( 'f.fr', 'SOA', { "edns_details" => { "do" => 1 } } );
-    if ( $ENV{ZONEMASTER_RECORD} ) {
-        ok( $ns->dns->dnssec, 'dnssec flag is also set via edns_details{do}' );
-        is( $ns->dns->edns_size, $EDNS_UDP_PAYLOAD_DNSSEC_DEFAULT, 'edns_size also uses default DNSSEC query value when set with edns_details{do}' );
-    }
-    else {
-        SKIP: {
-            skip "no live recording - dnssec and edns_size flags in query can't be checked", 2;
-        };
-    }
-    ok( ($p->has_edns and $p->do), 'DNSSEC response received on query with edns_details{do} set' );
+    $p = $ns->_make_query_packet( 'g.fr', 'SOA', { "edns_details" => { "size" => 900 } } );
+    ok( !$p->do(), 'DNSSEC flag is unset' );
+    is( $p->edns_size(), 900, 'EDNS size also uses given value when set with edns_details{size}' );
 
-    $p = $ns->query( 'g.fr', 'SOA', { "edns_details" => { "size" => 900 } } );
-    if ( $ENV{ZONEMASTER_RECORD} ) {
-        ok( !$ns->dns->dnssec, 'dnssec flag is unset' );
-        is( $ns->dns->edns_size, 900, 'edns_size also uses given value when set with edns_details{size}' );
-    }
-    else {
-        SKIP: {
-            skip "no live recording - dnssec and edns_size flags in query can't be checked", 2;
-        };
-    }
-    ok( ($p->has_edns and !$p->do), 'non-DNSSEC EDNS response received on query with edns_details{size} set' );
+    $p = $ns->_make_query_packet( 'h.fr', 'SOA', { "edns_details" => { "size" => 0 } } );
+    ok( !$p->do(), 'DNSSEC flag is unset' );
+    is( $p->edns_size(), 0, 'EDNS size also uses given value when set with edns_details{size}' );
 
-    $p = $ns->query( 'h.fr', 'SOA', { "edns_details" => { "size" => 0 } } );
-    if ( $ENV{ZONEMASTER_RECORD} ) {
-        ok( !$ns->dns->dnssec, 'dnssec flag is unset' );
-        is( $ns->dns->edns_size, 0, 'edns_size also uses given value when set with edns_details{size}' );
-    }
-    else {
-        SKIP: {
-            skip "no live recording - dnssec and edns_size flags in query can't be checked", 2;
-        };
-    }
-    ok( ($p->has_edns and !$p->do), 'non-DNSSEC EDNS response received on query even with edns_details{size} set to 0' );
+    $p = $ns->_make_query_packet( 'i.fr', 'SOA', { "dnssec" => 1, "edns_details" => { "do" => 0 } } );
+    ok( !$p->do(), 'edns_details{do} takes precedence over dnssec for (un)setting the DNSSEC flag' );
+    is( $p->edns_size(), $EDNS_UDP_PAYLOAD_DEFAULT, 'EDNS size uses default EDNS query value when DNSSEC flag is unset by edns_details{do}' );
 
-    $p = $ns->query( 'i.fr', 'SOA', { "dnssec" => 1, "edns_details" => { "do" => 0 } } );
-    if ( $ENV{ZONEMASTER_RECORD} ) {
-        ok( !$ns->dns->dnssec, 'edns_details{do} takes precedence over dnssec for (un)setting the dnssec flag' );
-        is( $ns->dns->edns_size, $EDNS_UDP_PAYLOAD_DEFAULT, 'edns_size uses default EDNS query value when dnssec flag is unset by edns_details{do}' );
-    }
-    else {
-        SKIP: {
-            skip "no live recording - dnssec and edns_size flags in query can't be checked", 2;
-        };
-    }
-    ok( ($p->has_edns and !$p->do), 'non-DNSSEC EDNS response received on query with dnssec unset by edns_details{do}' );
+    $p = $ns->_make_query_packet( 'j.fr', 'SOA', { "edns_size" => 1003, "edns_details" => { "size" => 901 } } );
+    ok( !$p->do(), 'DNSSEC flag is unset' );
+    is( $p->edns_size(), 901, 'edns_details{size} takes precedence over edns_size for setting the edns_size flag' );
 
-    $p = $ns->query( 'j.fr', 'SOA', { "edns_size" => 1003, "edns_details" => { "size" => 901 } } );
-    if ( $ENV{ZONEMASTER_RECORD} ) {
-        ok( !$ns->dns->dnssec, 'dnssec flag is unset' );
-        is( $ns->dns->edns_size, 901, 'edns_details{size} takes precedence over edns_size for setting the edns_size flag' );
-    }
-    else {
-        SKIP: {
-            skip "no live recording - dnssec and edns_size flags in query can't be checked", 2;
-        };
-    }
-    ok( ($p->has_edns and !$p->do), 'non-DNSSEC EDNS response received on query with edns_size and edns_details{size} set' );
+    $p = $ns->_make_query_packet( 'k.fr', 'SOA', { "dnssec" => 1, "edns_size" => 1004, "edns_details" => { "size" => 0 } } );
+    ok( $p->do(), 'DNSSEC flag is set' );
+    is( $p->edns_size(), 0, 'EDNS size is unset' );
 
-    $p = $ns->query( 'k.fr', 'SOA', { "dnssec" => 1, "edns_size" => 1004, "edns_details" => { "size" => 0 } } );
-    if ( $ENV{ZONEMASTER_RECORD} ) {
-        ok( $ns->dns->dnssec, 'dnssec flag is set' );
-        is( $ns->dns->edns_size, 0, 'edns_size is unset' );
-    }
-    else {
-        SKIP: {
-            skip "no live recording - dnssec and edns_size flags in query can't be checked", 2;
-        };
-    }
-    ok( ($p->has_edns and $p->do), 'DNSSEC response received on query with dnssec set and even with edns_details{size} set to 0' );
-
-    $p = $ns->query( 'l.fr', 'SOA', { "dnssec" => 0, "edns_size" => 1005, "edns_details" => { "do" => 1, "size" => 0 } } );
-    if ( $ENV{ZONEMASTER_RECORD} ) {
-        ok( $ns->dns->dnssec, 'dnssec flag is set' );
-        is( $ns->dns->edns_size, 0, 'edns_size is unset' );
-    }
-    else {
-        SKIP: {
-            skip "no live recording - dnssec and edns_size flags in query can't be checked", 2;
-        };
-    }
-    ok( ($p->has_edns and $p->do), 'DNSSEC response received on query with dnssec set by edns_details{do} and even with edns_details{size} set to 0' );
+    $p = $ns->_make_query_packet( 'l.fr', 'SOA', { "dnssec" => 0, "edns_size" => 1005, "edns_details" => { "do" => 1, "size" => 0 } } );
+    ok( $p->do(), 'DNSSEC flag is set' );
+    is( $p->edns_size(), 0, 'EDNS size is unset' );
 
     dies_ok { $p = $ns->query( 'fr', 'SOA', { "edns_size" => 65536 } ); }                    "dies when edns_size exceeds 65535";
     dies_ok { $p = $ns->query( 'fr', 'SOA', { "edns_details" => { "size" => 65536 } } ); }   "dies when edns_size (set with edns_details->size) exceeds 65535";
