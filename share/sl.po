@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-05 10:36+0100\n"
+"POT-Creation-Date: 2026-02-17 14:49+0100\n"
 "PO-Revision-Date: 2024-12-10 15:07+0100\n"
 "Last-Translator: milijan@arnes.si\n"
 "Language-Team: Register.si\n"
@@ -49,7 +49,8 @@ msgid ""
 msgstr "Domena ima predolgo oznako (več kot 63 znakov), \"{label}\"."
 
 #. ADDRESS:ADDRESS01
-msgid "Name server address must be globally routable"
+#, fuzzy
+msgid "Name server address must be globally reachable"
 msgstr "Naslov domenskega strežnika mora biti globalno usmerljiv"
 
 #. ADDRESS:ADDRESS02
@@ -59,6 +60,39 @@ msgstr "Za IP-naslov domenskega strežnika obstaja povratni DNS zapis"
 #. ADDRESS:ADDRESS03
 msgid "Reverse DNS entry matches name server name"
 msgstr "Povratni vnos DNS se ujema z domenskim strežnikom"
+
+#. ADDRESS:A01_ADDR_NOT_GLOBALLY_REACHABLE
+#, fuzzy, perl-brace-format
+msgid "IP address(es) not listed as globally reachable: \"{ns_list}\"."
+msgstr ""
+"Najdeni dodatni domenski strežniki, ki niso navedeni v starševski coni "
+"({ns_ip_list})."
+
+#. ADDRESS:A01_DOCUMENTATION_ADDR
+#, perl-brace-format
+msgid "IP address(es) intended for documentation purposes: \"{ns_list}\"."
+msgstr ""
+
+#. ADDRESS:A01_GLOBALLY_REACHABLE_ADDR
+#, perl-brace-format
+msgid "Globally reachable IP address(es): \"{ns_list}\"."
+msgstr ""
+
+#. ADDRESS:A01_LOCAL_USE_ADDR
+#, perl-brace-format
+msgid ""
+"IP address(es) intended for local use on network or service provider level: "
+"\"{ns_list}\"."
+msgstr ""
+
+#. ADDRESS:A01_NO_GLOBALLY_REACHABLE_ADDR
+#, fuzzy
+msgid "None of the name servers IP addresses are listed as globally reachable."
+msgstr "Noben od domenskih strežnikov v starševski coni ni v podrejeni coni."
+
+#. ADDRESS:A01_NO_NAME_SERVERS_FOUND
+msgid "No name servers found."
+msgstr ""
 
 #. ADDRESS:NAMESERVER_IP_WITHOUT_REVERSE
 #, perl-brace-format
@@ -74,19 +108,6 @@ msgid ""
 msgstr ""
 "Domenski strežnik {nsname} ima IP-naslov ({ns_ip}), ki se ne ujema z \"PTR\" "
 "rezultati ({names}) zanj."
-
-#. ADDRESS:NAMESERVER_IP_PRIVATE_NETWORK
-#, perl-brace-format
-msgid ""
-"Nameserver {nsname} has an IP address ({ns_ip}) with prefix {prefix} "
-"referenced in {reference} as a '{name}'."
-msgstr ""
-"Domenski strežnik {nsname} z IP-naslovom ({ns_ip}) ima prefix {prefix}, ki "
-"je naveden v {reference} kot '{name}'."
-
-#. ADDRESS:NO_IP_PRIVATE_NETWORK
-msgid "All Nameserver addresses are in the routable public addressing space."
-msgstr "Vsi naslovi domenskih strežnikov so v javnem naslovnem prostoru."
 
 #. ADDRESS:NAMESERVERS_IP_WITH_REVERSE
 msgid "Reverse DNS entry exists for each Nameserver IP address."
@@ -891,8 +912,8 @@ msgid "Verify DNSSEC additional processing"
 msgstr "Preverjanje dodatnih DNSSEC podatkov"
 
 #. DNSSEC:DNSSEC07
-msgid "If DNSKEY at child, parent should have DS"
-msgstr "Če je DNSKEY v podrejeni coni, mora imeti nadrejena cona DS"
+msgid "DNSSEC signed zone and DS in parent for signed zone"
+msgstr ""
 
 #. DNSSEC:DNSSEC08
 msgid "Valid RRSIG for DNSKEY"
@@ -938,83 +959,6 @@ msgstr "Validiraj CDNSKEY"
 msgid "Validate trust from DS to CDS and CDNSKEY"
 msgstr "Validiraj zaupanje od DS do CDS in CDNSKEY"
 
-#. DNSSEC:ADDITIONAL_DNSKEY_SKIPPED
-msgid "No DNSKEYs found. Additional tests skipped."
-msgstr "DNSKEY ni najden. Vsi dodatni testi so preskočeni."
-
-#. DNSSEC:ALGORITHM_DEPRECATED
-#, perl-brace-format
-msgid ""
-"The DNSKEY with tag {keytag} uses deprecated algorithm number {algo_num} "
-"({algo_descr})."
-msgstr ""
-"DNSKEY z oznako {keytag} uporablja zastarel algoritem {algo_num} "
-"({algo_descr})."
-
-#. DNSSEC:ALGORITHM_NOT_RECOMMENDED
-#, perl-brace-format
-msgid ""
-"The DNSKEY with tag {keytag} uses an algorithm number {algo_num} "
-"({algo_descr}) which is not recommended to be used."
-msgstr ""
-"DNSKEY z oznako {keytag} uporablja algoritem, ki ni priporočljiv za uporabo "
-"{algo_num} ({algo_descr})."
-
-#. DNSSEC:ALGORITHM_NOT_ZONE_SIGN
-#, perl-brace-format
-msgid ""
-"The DNSKEY with tag {keytag} uses algorithm number not meant for zone "
-"signing, algorithm number {algo_num} ({algo_descr})."
-msgstr ""
-"DNSKEY z oznako {keytag} uporablja algoritem, ki ni namenjen podpisovanju "
-"cone {algo_num} ({algo_descr})."
-
-#. DNSSEC:ALGORITHM_OK
-#, perl-brace-format
-msgid ""
-"The DNSKEY with tag {keytag} uses algorithm number {algo_num} "
-"({algo_descr}), which is OK."
-msgstr ""
-"DNSKEY z oznako {keytag} uporablja veljaven algoritem {algo_num} "
-"({algo_descr})."
-
-#. DNSSEC:ALGORITHM_PRIVATE
-#, perl-brace-format
-msgid ""
-"The DNSKEY with tag {keytag} uses private algorithm number {algo_num} "
-"({algo_descr})."
-msgstr ""
-"DNSKEY z oznako {keytag} uporablja zasebni algoritem {algo_num} "
-"({algo_descr})."
-
-#. DNSSEC:ALGORITHM_RESERVED
-#, perl-brace-format
-msgid ""
-"The DNSKEY with tag {keytag} uses reserved algorithm number {algo_num} "
-"({algo_descr})."
-msgstr ""
-"DNSKEY z oznako {keytag} uporablja rezerviran algoritem {algo_num} "
-"({algo_descr})."
-
-#. DNSSEC:ALGORITHM_UNASSIGNED
-#, perl-brace-format
-msgid ""
-"The DNSKEY with tag {keytag} uses unassigned algorithm number {algo_num} "
-"({algo_descr})."
-msgstr ""
-"DNSKEY z oznako {keytag} uporablja nepodprt algoritem (ni v veljavi) "
-"{algo_num} ({algo_descr})."
-
-#. DNSSEC:DNSKEY_AND_DS
-#, perl-brace-format
-msgid "{parent} sent a DS record, and {child} a DNSKEY record."
-msgstr "{parent} je poslal DS zapis, {child} pa DNSKEY zapis."
-
-#. DNSSEC:DNSKEY_BUT_NOT_DS
-#, perl-brace-format
-msgid "{child} sent a DNSKEY record, but {parent} did not send a DS record."
-msgstr "{child} je poslal DNSKEY zapis, toda {parent} ni poslal DS zapisa."
-
 #. DNSSEC:DNSKEY_SMALLER_THAN_REC
 #, perl-brace-format
 msgid ""
@@ -1044,56 +988,103 @@ msgstr ""
 "velikostjo ključa ({keysize}), ki je večja od maksimalno dovoljene velikosti "
 "({keysizemax})."
 
-#. DNSSEC:DS01_DIGEST_NOT_SUPPORTED_BY_ZM
-#, perl-brace-format
+#. DNSSEC:DS01_DS_ALGO_2_MISSING
+#, fuzzy, perl-brace-format
 msgid ""
-"DS record for zone {domain} with keytag {keytag} was created by digest "
-"algorithm {ds_algo_num} ({ds_algo_mnemo}) which cannot be validated by this "
-"installation of Zonemaster. Fetched from the nameservers with IP addresses "
-"\"{ns_ip_list}\"."
+"There is a DS record with keytag {keytag}. A DS record using digest "
+"algorithm 2 (SHA-256) is missing. Fetched from parent name servers "
+"\"{ns_list}\"."
 msgstr ""
-"DS zapis za {domain} z oznako {keytag} je bil ustvarjen z algoritmom "
-"{ds_algo_num}({ds_algo_mnemo}), ki ga trenutna Zonemaster verzija ne more "
-"preveriti. Podatki pridobljeni iz \"{ns_ip_list}\"."
+"RRSIG (podpis) z oznako {keytag} za NSEC zapis ni še veljaven. Podatki "
+"pridobljeni iz \"{ns_list}\"."
 
 #. DNSSEC:DS01_DS_ALGO_DEPRECATED
-#, perl-brace-format
+#, fuzzy, perl-brace-format
 msgid ""
-"DS record for zone {domain} with keytag {keytag} was created by digest "
-"algorithm {ds_algo_num} ({ds_algo_mnemo}) which is deprecated. Fetched from "
-"the nameservers with IP addresses \"{ns_ip_list}\"."
+"The DS record with keytag {keytag} uses a deprecated digest algorithm "
+"{ds_algo_num} ({ds_algo_descr}). Fetched from parent name servers "
+"\"{ns_list}\"."
 msgstr ""
 "DS zapis za {domain} z oznako {keytag} je bil ustvarjen z zastarelim "
 "algoritmom {ds_algo_num}({ds_algo_mnemo}). Podatki pridobljeni iz "
 "\"{ns_ip_list}\"."
 
-#. DNSSEC:DS01_DS_ALGO_2_MISSING
-#, perl-brace-format
-msgid ""
-"No DS record created by digest algorithm 2 (SHA-256) is present for zone "
-"{domain}."
-msgstr "DS zapis ustvarjen z algoritmom 2 (SHA-256) za {domain} ne obstaja."
-
 #. DNSSEC:DS01_DS_ALGO_NOT_DS
-#, perl-brace-format
+#, fuzzy, perl-brace-format
 msgid ""
-"DS record for zone {domain} with keytag {keytag} was created by digest "
-"algorithm {ds_algo_num} ({ds_algo_mnemo}) which is not meant for DS. Fetched "
-"from the nameservers with IP addresses \"{ns_ip_list}\"."
+"The DS record with keytag {keytag} uses a digest algorithm {ds_algo_num} "
+"({ds_algo_descr}) not meant for DS records. Fetched from parent name servers "
+"\"{ns_list}\"."
 msgstr ""
 "DS zapis za {domain} z oznako {keytag} je bil ustvarjen z algoritmom "
 "{ds_algo_num} ({ds_algo_mnemo}), ki ni namenjen za DS podpisovanje. Podatki "
 "pridobljeni iz \"{ns_ip_list}\"."
 
-#. DNSSEC:DS01_DS_ALGO_RESERVED
-#, perl-brace-format
+#. DNSSEC:DS01_DS_ALGO_PRIVATE
+#, fuzzy, perl-brace-format
 msgid ""
-"DS record for zone {domain} with keytag {keytag} was created with an "
-"unassigned digest algorithm (algorithm number {ds_algo_num}). Fetched from "
-"the nameservers with IP addresses \"{ns_ip_list}\"."
+"The DS record with keytag {keytag} uses a digest algorithm {ds_algo_num} for "
+"private use. Fetched from parent name servers \"{ns_list}\"."
+msgstr ""
+"DS zapis za {domain} z oznako {keytag} je bil ustvarjen z zastarelim "
+"algoritmom {ds_algo_num}({ds_algo_mnemo}). Podatki pridobljeni iz "
+"\"{ns_ip_list}\"."
+
+#. DNSSEC:DS01_DS_ALGO_RESERVED
+#, fuzzy, perl-brace-format
+msgid ""
+"The DS record with keytag {keytag} uses a reserved digest algorithm "
+"{ds_algo_num} on name servers \"{ns_list}\"."
+msgstr ""
+"DNSKEY z oznako {keytag} uporablja rezerviran algoritem {algo_num} "
+"({algo_descr})."
+
+#. DNSSEC:DS01_DS_ALGO_UNASSIGNED
+#, fuzzy, perl-brace-format
+msgid ""
+"The DS record with keytag {keytag} uses an unassigned digest algorithm "
+"{ds_algo_num} on parent name servers \"{ns_list}\"."
 msgstr ""
 "DS zapis za {domain} z oznako {keytag} je bil ustvarjen z algoritmom "
 "({ds_algo_num}), ki še ni v uporabi. Podatki pridobljeni iz \"{ns_ip_list}\"."
+
+#. DNSSEC:DS01_NO_RESPONSE
+#, fuzzy, perl-brace-format
+msgid ""
+"No response or error in response from all parent name servers on the DS "
+"query. Name servers are \"{ns_list}\"."
+msgstr ""
+"Ni odgovora ali napaka v odgovoru na poizvedbo za NSEC. Podatki pridobljeni "
+"iz \"{ns_list}\"."
+
+#. DNSSEC:DS01_PARENT_SERVER_NO_DS
+#, fuzzy, perl-brace-format
+msgid ""
+"The following name servers do not provide DS record or have not been "
+"properly configured. Fetched from parent name servers \"{ns_list}\"."
+msgstr ""
+"Naslednji domenski strežniki ne podpirajo DNSSEC ali pa niso pravilno "
+"konfigurirani. NSEC3 testiranje za te strežnike je bilo preskočeno. Podatki "
+"pridobljeni iz \"{ns_list}\"."
+
+#. DNSSEC:DS01_PARENT_ZONE_NO_DS
+#, fuzzy, perl-brace-format
+msgid ""
+"The parent zone provides no DS records for the child zone. Fetched from "
+"parent name servers \"{ns_list}\"."
+msgstr "Cona ima NSEC zapise. Podatki pridobljeni iz \"{ns_list}\"."
+
+#. DNSSEC:DS01_ROOT_N_NO_UNDEL_DS
+msgid ""
+"Tested zone is the root zone, but no undelegated DS has been provided. DS is "
+"not tested."
+msgstr ""
+
+#. DNSSEC:DS01_UNDEL_N_NO_UNDEL_DS
+msgid ""
+"Tested zone is undelegated, but no undelegated DS has been provided. DS is "
+"not tested."
+msgstr ""
 
 #. DNSSEC:DS02_ALGO_NOT_SUPPORTED_BY_ZM
 #. DNSSEC:DS08_ALGO_NOT_SUPPORTED_BY_ZM
@@ -1378,6 +1369,200 @@ msgid ""
 msgstr ""
 "Naslednji domenski strežniki vračajo NSEC3 zapis, kjer je uporabljena "
 "nedodeljena zastavica(bit{int}). Podatki pridobljeni iz: \"{ns_list}\"."
+
+#. DNSSEC:DS05_ALGO_DEPRECATED
+#, fuzzy, perl-brace-format
+msgid ""
+"The DNSKEY with tag {keytag} uses deprecated algorithm number {algo_num} "
+"(\"{algo_descr}\", {algo_mnemo}). Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"DNSKEY z oznako {keytag} uporablja zastarel algoritem {algo_num} "
+"({algo_descr})."
+
+#. DNSSEC:DS05_ALGO_NOT_RECOMMENDED
+#, fuzzy, perl-brace-format
+msgid ""
+"The DNSKEY with tag {keytag} uses unrecommended algorithm number {algo_num} "
+"(\"{algo_descr}\", {algo_mnemo}). Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"DNSKEY z oznako {keytag} uporablja algoritem {algo_num} ({algo_mnemo}), ki "
+"ga trenutna Zonemaster verzija ne podpira. Podatki pridobljeni iz "
+"\"{ns_ip_list}\"."
+
+#. DNSSEC:DS05_ALGO_NOT_ZONE_SIGN
+#, fuzzy, perl-brace-format
+msgid ""
+"The DNSKEY with tag {keytag} uses algorithm number {algo_num} "
+"(\"{algo_descr}\", {algo_mnemo}) which is not meant for zone signing. "
+"Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"DNSKEY z oznako {keytag} uporablja algoritem {algo_num} ({algo_mnemo}), ki "
+"ga trenutna Zonemaster verzija ne podpira. Podatki pridobljeni iz "
+"\"{ns_ip_list}\"."
+
+#. DNSSEC:DS05_ALGO_OK
+#, fuzzy, perl-brace-format
+msgid ""
+"The DNSKEY with tag {keytag} uses algorithm number {algo_num} "
+"(\"{algo_descr}\", {algo_mnemo}). Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"DNSKEY z oznako {keytag} uporablja veljaven algoritem {algo_num} "
+"({algo_descr})."
+
+#. DNSSEC:DS05_ALGO_PRIVATE
+#, fuzzy, perl-brace-format
+msgid ""
+"The DNSKEY with tag {keytag} uses algorithm number {algo_num} which is "
+"reserved for private use. Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"DNSKEY z oznako {keytag} uporablja algoritem {algo_num} ({algo_mnemo}), ki "
+"ga trenutna Zonemaster verzija ne podpira. Podatki pridobljeni iz "
+"\"{ns_ip_list}\"."
+
+#. DNSSEC:DS05_ALGO_RESERVED
+#, fuzzy, perl-brace-format
+msgid ""
+"The DNSKEY with tag {keytag} uses reserved algorithm number {algo_num}. "
+"Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"DNSKEY z oznako {keytag} uporablja rezerviran algoritem {algo_num} "
+"({algo_descr})."
+
+#. DNSSEC:DS05_ALGO_UNASSIGNED
+#, fuzzy, perl-brace-format
+msgid ""
+"The DNSKEY with tag {keytag} uses unassigned algorithm number {algo_num}. "
+"Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"DNSKEY z oznako {keytag} uporablja nepodprt algoritem (ni v veljavi) "
+"{algo_num} ({algo_descr})."
+
+#. DNSSEC:DS05_NO_RESPONSE
+#, fuzzy, perl-brace-format
+msgid ""
+"No response or error in response from all name servers on the DNSKEY query. "
+"Failing name servers: \"{ns_list}\"."
+msgstr ""
+"Ni odgovora ali napaka v odgovoru na poizvedbo za NSEC. Podatki pridobljeni "
+"iz \"{ns_list}\"."
+
+#. DNSSEC:DS05_SERVER_NO_DNSSEC
+#, fuzzy, perl-brace-format
+msgid ""
+"Some name servers do not support DNSSEC or have not been properly "
+"configured. DNSKEY cannot be tested on those servers. Fetched from name "
+"servers \"{ns_list}\"."
+msgstr ""
+"Naslednji domenski strežniki ne podpirajo DNSSEC ali pa niso pravilno "
+"konfigurirani. NSEC3 testiranje za te strežnike je bilo preskočeno. Podatki "
+"pridobljeni iz \"{ns_list}\"."
+
+#. DNSSEC:DS05_ZONE_NO_DNSSEC
+#, fuzzy, perl-brace-format
+msgid ""
+"The zone is not DNSSEC signed or not properly DNSSEC signed. DNSKEY cannot "
+"be tested. Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"Cona ni (pravilno) DNSSEC podpisana. Test za NSEC3 je izpuščen.  Zapisi "
+"pridobljeni iz \"{ns_list}\"."
+
+#. DNSSEC:DS07_DS_FOR_SIGNED_ZONE
+#, fuzzy
+msgid "The parent zone has DS record or records for the signed child zone."
+msgstr "Ni niti DS niti DNSKEY zapisov za cono."
+
+#. DNSSEC:DS07_DS_ON_PARENT_SERVER
+#, fuzzy, perl-brace-format
+msgid ""
+"The following parent name servers respond with DS record or records for the "
+"child zone. Name servers: \"{ns_list}\"."
+msgstr ""
+"Naslednji domenski strežniki odgovorijo z omogočenim NSEC3 opt-out. Podatki "
+"pridobljeni iz: \"{ns_list}\"."
+
+#. DNSSEC:DS07_INCONSISTENT_DS
+#, fuzzy
+msgid ""
+"Inconsistent responses from parent name servers. Some include DS, others do "
+"not."
+msgstr ""
+"Nedosledni odgovori od cone Z NSEC. Podatki pridobljeni iz: \"{ns_list}\"."
+
+#. DNSSEC:DS07_INCONSISTENT_SIGNED
+msgid ""
+"Inconsistent responses from name servers. Some include signed responses, "
+"others do not."
+msgstr ""
+
+#. DNSSEC:DS07_NON_AUTH_RESPONSE_DNSKEY
+#, fuzzy, perl-brace-format
+msgid ""
+"The following name servers give a non authoritative response on DNSKEY query "
+"with DO bit set. Name servers: \"{ns_list}\"."
+msgstr ""
+"Naslednji domenski strežniki vračajo napačen odgovor na NSEC poizvedbo. "
+"Podatki pridobljeni iz: \"{ns_list}\"."
+
+#. DNSSEC:DS07_NOT_SIGNED
+#, fuzzy
+msgid "The zone is not signed."
+msgstr "Cona ni DNSSEC podpisana."
+
+#. DNSSEC:DS07_NOT_SIGNED_ON_SERVER
+#, fuzzy, perl-brace-format
+msgid ""
+"The following name servers respond with no DNSKEY (unsigned child zone). "
+"Name servers: \"{ns_list}\"."
+msgstr ""
+"Naslednji domenski strežniki odgovorijo z omogočenim NSEC3 opt-out. Podatki "
+"pridobljeni iz: \"{ns_list}\"."
+
+#. DNSSEC:DS07_NO_DS_ON_PARENT_SERVER
+#, fuzzy, perl-brace-format
+msgid ""
+"The following parent name servers respond without DS record for the child "
+"zone. Name servers: \"{ns_list}\"."
+msgstr ""
+"Naslednji domenski strežniki ({ns_ip_list}) so vrnili več kot eno politiko "
+"SPF."
+
+#. DNSSEC:DS07_NO_DS_FOR_SIGNED_ZONE
+#, fuzzy
+msgid "The parent zone has no DS record for the signed child zone."
+msgstr "Ni niti DS niti DNSKEY zapisov za cono."
+
+#. DNSSEC:DS07_NO_RESPONSE_DNSKEY
+#, fuzzy, perl-brace-format
+msgid ""
+"The following name servers do not respond on DNSKEY query with DO bit set. "
+"Name servers: \"{ns_list}\"."
+msgstr ""
+"Naslednji domenski strežniki se ne odzivajo na NSEC3 poizvedbe. Podatki "
+"pridobljeni iz: \"{ns_list}\"."
+
+#. DNSSEC:DS07_SIGNED
+#, fuzzy
+msgid "The zone is signed."
+msgstr "Cona ni DNSSEC podpisana."
+
+#. DNSSEC:DS07_SIGNED_ON_SERVER
+#, fuzzy, perl-brace-format
+msgid ""
+"The following name servers respond with DNSKEY (signed child zone). Name "
+"servers: \"{ns_list}\"."
+msgstr ""
+"Naslednji domenski strežniki odgovorijo z omogočenim NSEC3 opt-out. Podatki "
+"pridobljeni iz: \"{ns_list}\"."
+
+#. DNSSEC:DS07_UNEXP_RCODE_RESP_DNSKEY
+#, fuzzy, perl-brace-format
+msgid ""
+"The following name servers respond with RCODE \"{rcode}\" instead of "
+"expected \"NOERROR\" on DNSKEY query with DO bit set. Name servers: "
+"\"{ns_list}\"."
+msgstr ""
+"Naslednji domenski strežniki odgovorijo z dovoljeno prazno salt vrednostjo v "
+"NSEC3. Podatki pridobljeni iz: \"{ns_list}\"."
 
 #. DNSSEC:DS08_DNSKEY_RRSIG_EXPIRED
 #, perl-brace-format
@@ -2139,13 +2324,6 @@ msgstr ""
 "CDNSKEY RRset ni podpisan z DNSKEY zapisom na katerega kaže DS zapis. "
 "Podatki pridobljeni iz \"{ns_ip_list}\"."
 
-#. DNSSEC:DS_BUT_NOT_DNSKEY
-#, perl-brace-format
-msgid "{parent} sent a DS record, but {child} did not send a DNSKEY record."
-msgstr ""
-"Starševska cona {parent} je poslala DS zapis, podrejena cona {child} pa ni "
-"poslala DNSKEY zapisa."
-
 #. DNSSEC:DURATION_LONG
 #, perl-brace-format
 msgid ""
@@ -2175,30 +2353,14 @@ msgstr "{server} je poslal (DNSKEY) {keys} in podpise (RRSIG) {sigs}."
 msgid "Server at {server} sent {keys} DNSKEY records and {sigs} RRSIG records."
 msgstr "{server} je poslal (DNSKEY) {keys} in podpise (RRSIG) {sigs}."
 
-#. DNSSEC:KEY_DETAILS
-#, perl-brace-format
-msgid ""
-"Key with keytag {keytag} details : Size = {keysize}, Flags ({sep}, "
-"{rfc5011})."
-msgstr ""
-"Ključ z oznako {keytag}. Velikost = {keysize}, Zastavice ({sep}, {rfc5011})."
-
 #. DNSSEC:KEY_SIZE_OK
 msgid "All keys from the DNSKEY RRset have the correct size."
 msgstr "Vsi ključi DNSKEY RRseta so pravilne velikosti."
-
-#. DNSSEC:NEITHER_DNSKEY_NOR_DS
-msgid "There are neither DS nor DNSKEY records for the zone."
-msgstr "Ni niti DS niti DNSKEY zapisov za cono."
 
 #. DNSSEC:NO_RESPONSE_DNSKEY
 #, perl-brace-format
 msgid "Nameserver {ns} responded with no DNSKEY record(s)."
 msgstr "Domenski strežnik {ns} je poslal odgovor brez DNSKEY zapisov."
-
-#. DNSSEC:NOT_SIGNED
-msgid "The zone is not signed with DNSSEC."
-msgstr "Cona ni DNSSEC podpisana."
 
 #. DNSSEC:REMAINING_LONG
 #, perl-brace-format
@@ -3501,45 +3663,66 @@ msgid ""
 msgstr ""
 "Nepričakovana RCODE vrednost ({rcode}) pri MX poizvedbi na \"{ns_ip_list}\"."
 
+#. ZONE:Z11_DIFFERENT_SPF_POLICIES_FOUND
+#, fuzzy, perl-brace-format
+msgid ""
+"The following name servers returned the same SPF policy. Name servers: "
+"{ns_list}."
+msgstr ""
+"Naslednji domenski strežniki ({ns_ip_list}) so vrnili več kot eno politiko "
+"SPF."
+
 #. ZONE:Z11_INCONSISTENT_SPF_POLICIES
 msgid ""
 "One or more name servers do not publish the same SPF policy as the others."
 msgstr ""
 "Eden ali več domenskih strežnikov ne objavlja enake politike SPF, kot ostali."
 
-#. ZONE:Z11_DIFFERENT_SPF_POLICIES_FOUND
-#, perl-brace-format
-msgid ""
-"The following name servers returned the same SPF policy, but other name "
-"servers returned a different policy. Name servers: {ns_ip_list}."
-msgstr ""
-"Naslednji domenski strežniki ({ns_ip_list}) so vrnili eno politiko SPF, "
-"ampak ostali pa so odgovorili z drugačno."
-
 #. ZONE:Z11_NO_SPF_FOUND
 #, perl-brace-format
 msgid "No SPF policy was found for {domain}."
 msgstr "Za {domain} ni bila najdena nobena politika SPF."
 
-#. ZONE:Z11_SPF1_MULTIPLE_RECORDS
+#. ZONE:Z11_NO_SPF_NON_MAIL_DOMAIN
 #, perl-brace-format
 msgid ""
+"No SPF policy was found for {domain}, which is a type of domain (root, TLD "
+"or under .ARPA) not expected to be used for email."
+msgstr ""
+
+#. ZONE:Z11_NON_NULL_SPF_NON_MAIL_DOMAIN
+#, perl-brace-format
+msgid ""
+"A non-null SPF policy was found on {domain}, although this type of domain "
+"(root, TLD or under .ARPA) is not expected to be used for email."
+msgstr ""
+
+#. ZONE:Z11_NULL_SPF_NON_MAIL_DOMAIN
+#, perl-brace-format
+msgid ""
+"A null SPF policy was found on {domain}, which is a type of domain (root, "
+"TLD or under .ARPA) not expected to be used for email."
+msgstr ""
+
+#. ZONE:Z11_SPF_MULTIPLE_RECORDS
+#, fuzzy, perl-brace-format
+msgid ""
 "The following name servers returned more than one SPF policy. Name servers: "
-"{ns_ip_list}."
+"{ns_list}."
 msgstr ""
 "Naslednji domenski strežniki ({ns_ip_list}) so vrnili več kot eno politiko "
 "SPF."
 
-#. ZONE:Z11_SPF1_SYNTAX_ERROR
-#, perl-brace-format
+#. ZONE:Z11_SPF_SYNTAX_ERROR
+#, fuzzy, perl-brace-format
 msgid ""
 "The SPF policy of {domain} has a syntax error. Policy retrieved from the "
-"following nameservers: {ns_ip_list}."
+"following nameservers: {ns_list}."
 msgstr ""
 "Politika SPF za {domain} ima sintaktično napako. Politika pridobljena iz "
 "{ns_ip_list}."
 
-#. ZONE:Z11_SPF1_SYNTAX_OK
+#. ZONE:Z11_SPF_SYNTAX_OK
 #, perl-brace-format
 msgid "The SPF policy of {domain} has correct syntax."
 msgstr "Politika SPF za {domain} ima pravilno sintakso."
@@ -3642,3 +3825,4 @@ msgstr ""
 #, perl-brace-format
 msgid "Big packet size ({size}) (try with \"{command}\")."
 msgstr "Velik paket ({size} bajtov) (poskusi z ukazom \"{command}\")."
+
