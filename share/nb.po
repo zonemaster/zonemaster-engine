@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-23 11:18+0200\n"
+"POT-Creation-Date: 2026-02-17 14:47+0100\n"
 "PO-Revision-Date: 2025-04-23 14:11+0200\n"
 "Last-Translator: richard.persson@norid.no\n"
 "Language-Team: Zonemaster Team\n"
@@ -52,7 +52,8 @@ msgstr ""
 "Domenenavnet har et ledd som er for lang (mer enn 63 tegn), \"{label}\"."
 
 #. ADDRESS:ADDRESS01
-msgid "Name server address must be globally routable"
+#, fuzzy
+msgid "Name server address must be globally reachable"
 msgstr "Navnetjeneradressen må være globalt rutebar"
 
 #. ADDRESS:ADDRESS02
@@ -62,6 +63,40 @@ msgstr "Reversoppslag finnes for navnetjeneradressen"
 #. ADDRESS:ADDRESS03
 msgid "Reverse DNS entry matches name server name"
 msgstr "Reversoppslag matcher tilsvarende navnetjenernavn"
+
+#. ADDRESS:A01_ADDR_NOT_GLOBALLY_REACHABLE
+#, fuzzy, perl-brace-format
+msgid "IP address(es) not listed as globally reachable: \"{ns_list}\"."
+msgstr ""
+"Underdomene har ekstra IP-adress(er) for navnetjener som ikke er publisert "
+"hos foreldredomene ({ns_ip_list})."
+
+#. ADDRESS:A01_DOCUMENTATION_ADDR
+#, perl-brace-format
+msgid "IP address(es) intended for documentation purposes: \"{ns_list}\"."
+msgstr ""
+
+#. ADDRESS:A01_GLOBALLY_REACHABLE_ADDR
+#, perl-brace-format
+msgid "Globally reachable IP address(es): \"{ns_list}\"."
+msgstr ""
+
+#. ADDRESS:A01_LOCAL_USE_ADDR
+#, perl-brace-format
+msgid ""
+"IP address(es) intended for local use on network or service provider level: "
+"\"{ns_list}\"."
+msgstr ""
+
+#. ADDRESS:A01_NO_GLOBALLY_REACHABLE_ADDR
+#, fuzzy
+msgid "None of the name servers IP addresses are listed as globally reachable."
+msgstr ""
+"Ingen av navnetjenerne i delegeringen (foreldresonen) finnes i undersonen."
+
+#. ADDRESS:A01_NO_NAME_SERVERS_FOUND
+msgid "No name servers found."
+msgstr ""
 
 #. ADDRESS:NAMESERVER_IP_WITHOUT_REVERSE
 #, perl-brace-format
@@ -76,20 +111,6 @@ msgid ""
 msgstr ""
 "Navnetjener {nsname} har en IP-adresse ({ns_ip}) som ikke matcher "
 "reversoppslag ({names})."
-
-#. ADDRESS:NAMESERVER_IP_PRIVATE_NETWORK
-#, perl-brace-format
-msgid ""
-"Nameserver {nsname} has an IP address ({ns_ip}) with prefix {prefix} "
-"referenced in {reference} as a '{name}'."
-msgstr ""
-"Navnetjener {nsname} har en IP-adresse ({ns_ip}) med prefiks {prefix}, som "
-"{reference} klassifiseres som {name}."
-
-#. ADDRESS:NO_IP_PRIVATE_NETWORK
-msgid "All Nameserver addresses are in the routable public addressing space."
-msgstr ""
-"Alle navnetjeneradresser finnes i adresserommet som kan rutes offentlig."
 
 #. ADDRESS:NAMESERVERS_IP_WITH_REVERSE
 msgid "Reverse DNS entry exists for each Nameserver IP address."
@@ -882,8 +903,8 @@ msgid "Verify DNSSEC additional processing"
 msgstr "Verifier håndtering av RRSIG-poster i \"Additional Section\""
 
 #. DNSSEC:DNSSEC07
-msgid "If DNSKEY at child, parent should have DS"
-msgstr "Hvis undersonen er DNSSEC-signert bør foreldresonen ha DS-post"
+msgid "DNSSEC signed zone and DS in parent for signed zone"
+msgstr ""
 
 #. DNSSEC:DNSSEC08
 msgid "Valid RRSIG for DNSKEY"
@@ -930,86 +951,6 @@ msgstr "Validere CDNSKEY-poster"
 msgid "Validate trust from DS to CDS and CDNSKEY"
 msgstr "Validere tillit fra DS-poster til CDS- og CDNSKEY-poster"
 
-#. DNSSEC:ADDITIONAL_DNSKEY_SKIPPED
-msgid "No DNSKEYs found. Additional tests skipped."
-msgstr "Ingen DNSKEY-poster ble returnert. Hopper over videre DNSKEY-tester."
-
-#. DNSSEC:ALGORITHM_DEPRECATED
-#, perl-brace-format
-msgid ""
-"The DNSKEY with tag {keytag} uses deprecated algorithm number {algo_num} "
-"({algo_descr})."
-msgstr ""
-"DNSKEY-posten med \"key tag\" {keytag} bruker en algoritme med "
-"algoritmenummer {algo_num} ({algo_descr}), som er foreldet."
-
-#. DNSSEC:ALGORITHM_NOT_RECOMMENDED
-#, perl-brace-format
-msgid ""
-"The DNSKEY with tag {keytag} uses an algorithm number {algo_num} "
-"({algo_descr}) which is not recommended to be used."
-msgstr ""
-"DNSKEY-posten med \"key tag\" {keytag} bruker en algoritme med "
-"algoritmenummer {algo_num} ({algo_descr}), som ikke er anbefalt brukt til "
-"sonesignering."
-
-#. DNSSEC:ALGORITHM_NOT_ZONE_SIGN
-#, perl-brace-format
-msgid ""
-"The DNSKEY with tag {keytag} uses algorithm number not meant for zone "
-"signing, algorithm number {algo_num} ({algo_descr})."
-msgstr ""
-"DNSKEY-posten med \"key tag\" {keytag} bruker en algoritme med "
-"algoritmenummer {algo_num} ({algo_descr}), som ikke er ment for "
-"sonesignering."
-
-#. DNSSEC:ALGORITHM_OK
-#, perl-brace-format
-msgid ""
-"The DNSKEY with tag {keytag} uses algorithm number {algo_num} "
-"({algo_descr}), which is OK."
-msgstr ""
-"DNSKEY-posten med \"key tag\" {keytag} bruker en algoritme med "
-"algoritmenummer {algo_num} ({algo_descr}), som er OK."
-
-#. DNSSEC:ALGORITHM_PRIVATE
-#, perl-brace-format
-msgid ""
-"The DNSKEY with tag {keytag} uses private algorithm number {algo_num} "
-"({algo_descr})."
-msgstr ""
-"DNSKEY-posten med \"key tag\" {keytag} bruker en algoritme med "
-"algoritmenummer {algo_num} ({algo_descr}), som er privat."
-
-#. DNSSEC:ALGORITHM_RESERVED
-#, perl-brace-format
-msgid ""
-"The DNSKEY with tag {keytag} uses reserved algorithm number {algo_num} "
-"({algo_descr})."
-msgstr ""
-"DNSKEY-posten med \"key tag\" {keytag} bruker en algoritme med "
-"algoritmenummer {algo_num} ({algo_descr}), som er reservert."
-
-#. DNSSEC:ALGORITHM_UNASSIGNED
-#, perl-brace-format
-msgid ""
-"The DNSKEY with tag {keytag} uses unassigned algorithm number {algo_num} "
-"({algo_descr})."
-msgstr ""
-"DNSKEY-posten med \"key tag\" {keytag} bruker en algoritme med "
-"algoritmenummer {algo_num} ({algo_descr}), som ikke er tildelt."
-
-#. DNSSEC:DNSKEY_AND_DS
-#, perl-brace-format
-msgid "{parent} sent a DS record, and {child} a DNSKEY record."
-msgstr "{parent} svarte med en DS-post, og {child} sendte en DNSKEY-post."
-
-#. DNSSEC:DNSKEY_BUT_NOT_DS
-#, perl-brace-format
-msgid "{child} sent a DNSKEY record, but {parent} did not send a DS record."
-msgstr ""
-"{child} svarte med en DNSKEY-post, men {parent} sendte ikke noen DS-post."
-
 #. DNSSEC:DNSKEY_SMALLER_THAN_REC
 #, perl-brace-format
 msgid ""
@@ -1040,59 +981,104 @@ msgstr ""
 "({algo_descr}) har en nøkkelstørrelse ({keysize}) som er større enn den "
 "maksimale størrelsen ({keysizemax}) for denne algoritmen."
 
-#. DNSSEC:DS01_DIGEST_NOT_SUPPORTED_BY_ZM
-#, perl-brace-format
+#. DNSSEC:DS01_DS_ALGO_2_MISSING
+#, fuzzy, perl-brace-format
 msgid ""
-"DS record for zone {domain} with keytag {keytag} was created by digest "
-"algorithm {ds_algo_num} ({ds_algo_mnemo}) which cannot be validated by this "
-"installation of Zonemaster. Fetched from the nameservers with IP addresses "
-"\"{ns_ip_list}\"."
+"There is a DS record with keytag {keytag}. A DS record using digest "
+"algorithm 2 (SHA-256) is missing. Fetched from parent name servers "
+"\"{ns_list}\"."
 msgstr ""
-"DS-posten for sonen {domain} med \"key tag\" {keytag}, bruker en \"digest\"- "
-"algoritme {ds_algo_num} ({ds_algo_mnemo}) som ikke er støttet av denne "
-"installasjonen. Hentet fra navnetjenere med IP-adressene \"{ns_ip_list}\"."
+"RRSIG med \"key tag\" {keytag} for NSEC-posten er ikke gyldig ennå. Hentet "
+"fra navnetjenere \"{ns_list}\"."
 
 #. DNSSEC:DS01_DS_ALGO_DEPRECATED
-#, perl-brace-format
+#, fuzzy, perl-brace-format
 msgid ""
-"DS record for zone {domain} with keytag {keytag} was created by digest "
-"algorithm {ds_algo_num} ({ds_algo_mnemo}) which is deprecated. Fetched from "
-"the nameservers with IP addresses \"{ns_ip_list}\"."
+"The DS record with keytag {keytag} uses a deprecated digest algorithm "
+"{ds_algo_num} ({ds_algo_descr}). Fetched from parent name servers "
+"\"{ns_list}\"."
 msgstr ""
 "DS-posten for sonen {domain} med \"key tag\" {keytag}, bruker en \"digest\"- "
 "algoritme {ds_algo_num} ({ds_algo_mnemo}) som er foreldret. Hentet fra "
 "navnetjenere med IP-adressene \"{ns_ip_list}\"."
 
-#. DNSSEC:DS01_DS_ALGO_2_MISSING
-#, perl-brace-format
-msgid ""
-"No DS record created by digest algorithm 2 (SHA-256) is present for zone "
-"{domain}."
-msgstr ""
-"Finner ingen DS-post skapt av \"digest\"-algoritme 2 (SHA-256) for sonen "
-"{domain}."
-
 #. DNSSEC:DS01_DS_ALGO_NOT_DS
-#, perl-brace-format
+#, fuzzy, perl-brace-format
 msgid ""
-"DS record for zone {domain} with keytag {keytag} was created by digest "
-"algorithm {ds_algo_num} ({ds_algo_mnemo}) which is not meant for DS. Fetched "
-"from the nameservers with IP addresses \"{ns_ip_list}\"."
+"The DS record with keytag {keytag} uses a digest algorithm {ds_algo_num} "
+"({ds_algo_descr}) not meant for DS records. Fetched from parent name servers "
+"\"{ns_list}\"."
 msgstr ""
 "DS-posten for sonen {domain} med \"key tag\" {keytag}, bruker en \"digest\"- "
 "algoritme {ds_algo_num} ({ds_algo_mnemo}) som ikke er tenkt brukt for DS- "
 "poster. Hentet fra navnetjenere med IP-adressene \"{ns_ip_list}\"."
 
-#. DNSSEC:DS01_DS_ALGO_RESERVED
-#, perl-brace-format
+#. DNSSEC:DS01_DS_ALGO_PRIVATE
+#, fuzzy, perl-brace-format
 msgid ""
-"DS record for zone {domain} with keytag {keytag} was created with an "
-"unassigned digest algorithm (algorithm number {ds_algo_num}). Fetched from "
-"the nameservers with IP addresses \"{ns_ip_list}\"."
+"The DS record with keytag {keytag} uses a digest algorithm {ds_algo_num} for "
+"private use. Fetched from parent name servers \"{ns_list}\"."
+msgstr ""
+"DS-posten for sonen {domain} med \"key tag\" {keytag}, bruker en \"digest\"- "
+"algoritme {ds_algo_num} ({ds_algo_mnemo}) som er foreldret. Hentet fra "
+"navnetjenere med IP-adressene \"{ns_ip_list}\"."
+
+#. DNSSEC:DS01_DS_ALGO_RESERVED
+#, fuzzy, perl-brace-format
+msgid ""
+"The DS record with keytag {keytag} uses a reserved digest algorithm "
+"{ds_algo_num} on name servers \"{ns_list}\"."
+msgstr ""
+"DNSKEY-posten med \"key tag\" {keytag} bruker en algoritme med "
+"algoritmenummer {algo_num} ({algo_descr}), som er reservert."
+
+#. DNSSEC:DS01_DS_ALGO_UNASSIGNED
+#, fuzzy, perl-brace-format
+msgid ""
+"The DS record with keytag {keytag} uses an unassigned digest algorithm "
+"{ds_algo_num} on parent name servers \"{ns_list}\"."
 msgstr ""
 "DS-posten for sonen {domain} med \"key tag\" {keytag} er skapt med en "
 "\"digest\"-algoritme ({ds_algo_num}) som ikke er i bruk. Hentet fra "
 "navnetjenere med IP-adressene \"{ns_ip_list}\"."
+
+#. DNSSEC:DS01_NO_RESPONSE
+#, fuzzy, perl-brace-format
+msgid ""
+"No response or error in response from all parent name servers on the DS "
+"query. Name servers are \"{ns_list}\"."
+msgstr ""
+"Ingen respons eller feil i svar på forespørsel for NSEC. Hentet fra "
+"navnetjenere \"{ns_list}\"."
+
+#. DNSSEC:DS01_PARENT_SERVER_NO_DS
+#, fuzzy, perl-brace-format
+msgid ""
+"The following name servers do not provide DS record or have not been "
+"properly configured. Fetched from parent name servers \"{ns_list}\"."
+msgstr ""
+"Følgende navnetjenere støtter ikke DNSSEC eller er ikke riktig konfigurert. "
+"Testing for NSEC3 har blitt hoppet over på disse serverne. Hentet fra "
+"navnetjenere \"{ns_list}\"."
+
+#. DNSSEC:DS01_PARENT_ZONE_NO_DS
+#, fuzzy, perl-brace-format
+msgid ""
+"The parent zone provides no DS records for the child zone. Fetched from "
+"parent name servers \"{ns_list}\"."
+msgstr "Sonen har NSEC-poster. Hentet fra navnetjenere \"{ns_list}\"."
+
+#. DNSSEC:DS01_ROOT_N_NO_UNDEL_DS
+msgid ""
+"Tested zone is the root zone, but no undelegated DS has been provided. DS is "
+"not tested."
+msgstr ""
+
+#. DNSSEC:DS01_UNDEL_N_NO_UNDEL_DS
+msgid ""
+"Tested zone is undelegated, but no undelegated DS has been provided. DS is "
+"not tested."
+msgstr ""
 
 #. DNSSEC:DS02_ALGO_NOT_SUPPORTED_BY_ZM
 #. DNSSEC:DS08_ALGO_NOT_SUPPORTED_BY_ZM
@@ -1381,6 +1367,200 @@ msgid ""
 msgstr ""
 "Følgende navnetjenere svarer med en NSEC3-post der et ikke-tildelt flagg "
 "brukes (bit {int}). Hentet fra navnetjenere \"{ns_list}\"."
+
+#. DNSSEC:DS05_ALGO_DEPRECATED
+#, fuzzy, perl-brace-format
+msgid ""
+"The DNSKEY with tag {keytag} uses deprecated algorithm number {algo_num} "
+"(\"{algo_descr}\", {algo_mnemo}). Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"DNSKEY-posten med \"key tag\" {keytag} bruker en algoritme med "
+"algoritmenummer {algo_num} ({algo_descr}), som er foreldet."
+
+#. DNSSEC:DS05_ALGO_NOT_RECOMMENDED
+#, fuzzy, perl-brace-format
+msgid ""
+"The DNSKEY with tag {keytag} uses unrecommended algorithm number {algo_num} "
+"(\"{algo_descr}\", {algo_mnemo}). Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"DNSKEY-posten med \"key tag\" {keytag}, bruker en algoritme {algo_num} "
+"({algo_mnemo}) som ikke er støttet av denne installasjonen. Hentet fra "
+"navnetjenere med IP-adressene \"{ns_ip_list}\"."
+
+#. DNSSEC:DS05_ALGO_NOT_ZONE_SIGN
+#, fuzzy, perl-brace-format
+msgid ""
+"The DNSKEY with tag {keytag} uses algorithm number {algo_num} "
+"(\"{algo_descr}\", {algo_mnemo}) which is not meant for zone signing. "
+"Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"DNSKEY-posten med \"key tag\" {keytag}, bruker en algoritme {algo_num} "
+"({algo_mnemo}) som ikke er støttet av denne installasjonen. Hentet fra "
+"navnetjenere med IP-adressene \"{ns_ip_list}\"."
+
+#. DNSSEC:DS05_ALGO_OK
+#, fuzzy, perl-brace-format
+msgid ""
+"The DNSKEY with tag {keytag} uses algorithm number {algo_num} "
+"(\"{algo_descr}\", {algo_mnemo}). Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"DNSKEY-posten med \"key tag\" {keytag} bruker en algoritme med "
+"algoritmenummer {algo_num} ({algo_descr}), som er OK."
+
+#. DNSSEC:DS05_ALGO_PRIVATE
+#, fuzzy, perl-brace-format
+msgid ""
+"The DNSKEY with tag {keytag} uses algorithm number {algo_num} which is "
+"reserved for private use. Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"DNSKEY-posten med \"key tag\" {keytag}, bruker en algoritme {algo_num} "
+"({algo_mnemo}) som ikke er støttet av denne installasjonen. Hentet fra "
+"navnetjenere med IP-adressene \"{ns_ip_list}\"."
+
+#. DNSSEC:DS05_ALGO_RESERVED
+#, fuzzy, perl-brace-format
+msgid ""
+"The DNSKEY with tag {keytag} uses reserved algorithm number {algo_num}. "
+"Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"DNSKEY-posten med \"key tag\" {keytag} bruker en algoritme med "
+"algoritmenummer {algo_num} ({algo_descr}), som er reservert."
+
+#. DNSSEC:DS05_ALGO_UNASSIGNED
+#, fuzzy, perl-brace-format
+msgid ""
+"The DNSKEY with tag {keytag} uses unassigned algorithm number {algo_num}. "
+"Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"DNSKEY-posten med \"key tag\" {keytag} bruker en algoritme med "
+"algoritmenummer {algo_num} ({algo_descr}), som ikke er tildelt."
+
+#. DNSSEC:DS05_NO_RESPONSE
+#, fuzzy, perl-brace-format
+msgid ""
+"No response or error in response from all name servers on the DNSKEY query. "
+"Failing name servers: \"{ns_list}\"."
+msgstr ""
+"Ingen respons eller feil i svar på forespørsel for NSEC. Hentet fra "
+"navnetjenere \"{ns_list}\"."
+
+#. DNSSEC:DS05_SERVER_NO_DNSSEC
+#, fuzzy, perl-brace-format
+msgid ""
+"Some name servers do not support DNSSEC or have not been properly "
+"configured. DNSKEY cannot be tested on those servers. Fetched from name "
+"servers \"{ns_list}\"."
+msgstr ""
+"Følgende navnetjenere støtter ikke DNSSEC eller er ikke riktig konfigurert. "
+"Testing for NSEC3 har blitt hoppet over på disse serverne. Hentet fra "
+"navnetjenere \"{ns_list}\"."
+
+#. DNSSEC:DS05_ZONE_NO_DNSSEC
+#, fuzzy, perl-brace-format
+msgid ""
+"The zone is not DNSSEC signed or not properly DNSSEC signed. DNSKEY cannot "
+"be tested. Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"Sonen er ikke DNSSEC-signert eller ikke riktig DNSSEC-signert. Testing for "
+"NSEC3 har blitt hoppet over. Hentet fra navnetjenere \"{ns_list}\"."
+
+#. DNSSEC:DS07_DS_FOR_SIGNED_ZONE
+#, fuzzy
+msgid "The parent zone has DS record or records for the signed child zone."
+msgstr "Sonen har verken DS- eller DNSKEY-poster."
+
+#. DNSSEC:DS07_DS_ON_PARENT_SERVER
+#, fuzzy, perl-brace-format
+msgid ""
+"The following parent name servers respond with DS record or records for the "
+"child zone. Name servers: \"{ns_list}\"."
+msgstr ""
+"Følgende navnetjenere svarer med NSEC3-opt-out aktivert. Hentet fra "
+"navnetjenere \"{ns_list}\"."
+
+#. DNSSEC:DS07_INCONSISTENT_DS
+#, fuzzy
+msgid ""
+"Inconsistent responses from parent name servers. Some include DS, others do "
+"not."
+msgstr ""
+"Inkonsekvente svar fra sone med NSEC. Hentet fra navnetjenere \"{ns_list}\"."
+
+#. DNSSEC:DS07_INCONSISTENT_SIGNED
+msgid ""
+"Inconsistent responses from name servers. Some include signed responses, "
+"others do not."
+msgstr ""
+
+#. DNSSEC:DS07_NON_AUTH_RESPONSE_DNSKEY
+#, fuzzy, perl-brace-format
+msgid ""
+"The following name servers give a non authoritative response on DNSKEY query "
+"with DO bit set. Name servers: \"{ns_list}\"."
+msgstr ""
+"Følgende navnetjenere svarer ikke på spørsmål om NSEC-poster. Hentet fra "
+"navnetjenere \"{ns_list}\"."
+
+#. DNSSEC:DS07_NOT_SIGNED
+#, fuzzy
+msgid "The zone is not signed."
+msgstr "Sonen er ikke signert med DNSSEC."
+
+#. DNSSEC:DS07_NOT_SIGNED_ON_SERVER
+#, fuzzy, perl-brace-format
+msgid ""
+"The following name servers respond with no DNSKEY (unsigned child zone). "
+"Name servers: \"{ns_list}\"."
+msgstr ""
+"Følgende navnetjenere svarer med NSEC3-opt-out aktivert. Hentet fra "
+"navnetjenere \"{ns_list}\"."
+
+#. DNSSEC:DS07_NO_DS_ON_PARENT_SERVER
+#, fuzzy, perl-brace-format
+msgid ""
+"The following parent name servers respond without DS record for the child "
+"zone. Name servers: \"{ns_list}\"."
+msgstr ""
+"Følgende navnetjenere returnerte mer enn én SPF-policy. Navnetjenere: "
+"{ns_ip_list}."
+
+#. DNSSEC:DS07_NO_DS_FOR_SIGNED_ZONE
+#, fuzzy
+msgid "The parent zone has no DS record for the signed child zone."
+msgstr "Sonen har verken DS- eller DNSKEY-poster."
+
+#. DNSSEC:DS07_NO_RESPONSE_DNSKEY
+#, fuzzy, perl-brace-format
+msgid ""
+"The following name servers do not respond on DNSKEY query with DO bit set. "
+"Name servers: \"{ns_list}\"."
+msgstr ""
+"Følgende navnetjenere svarer ikke på NSEC-spørringer. Hentet fra "
+"navnetjenere \"{ns_list}\"."
+
+#. DNSSEC:DS07_SIGNED
+#, fuzzy
+msgid "The zone is signed."
+msgstr "Sonen er ikke signert med DNSSEC."
+
+#. DNSSEC:DS07_SIGNED_ON_SERVER
+#, fuzzy, perl-brace-format
+msgid ""
+"The following name servers respond with DNSKEY (signed child zone). Name "
+"servers: \"{ns_list}\"."
+msgstr ""
+"Følgende navnetjenere svarer med NSEC3-opt-out aktivert. Hentet fra "
+"navnetjenere \"{ns_list}\"."
+
+#. DNSSEC:DS07_UNEXP_RCODE_RESP_DNSKEY
+#, fuzzy, perl-brace-format
+msgid ""
+"The following name servers respond with RCODE \"{rcode}\" instead of "
+"expected \"NOERROR\" on DNSKEY query with DO bit set. Name servers: "
+"\"{ns_list}\"."
+msgstr ""
+"Følgende navnetjenere svarer med et lovlig tomt salt i NSEC3-posten. Hentet "
+"fra navnetjenere \"{ns_list}\"."
 
 #. DNSSEC:DS08_DNSKEY_RRSIG_EXPIRED
 #, perl-brace-format
@@ -2165,11 +2345,6 @@ msgstr ""
 "CDNSKEY-posten er ikke signert av DNSKEY referert av DS-posten. Hentet fra "
 "navnetjenere med IP-adressene \"{ns_ip_list}\"."
 
-#. DNSSEC:DS_BUT_NOT_DNSKEY
-#, perl-brace-format
-msgid "{parent} sent a DS record, but {child} did not send a DNSKEY record."
-msgstr "{parent} sendte en DS-post, men {child} sendte ingen DNSKEY-post."
-
 #. DNSSEC:DURATION_LONG
 #, perl-brace-format
 msgid ""
@@ -2201,31 +2376,14 @@ msgid "Server at {server} sent {keys} DNSKEY records and {sigs} RRSIG records."
 msgstr ""
 "Navnetjeneren {server} sendte {keys} DNSKEY-poster og {sigs} RRSIG-poster."
 
-#. DNSSEC:KEY_DETAILS
-#, perl-brace-format
-msgid ""
-"Key with keytag {keytag} details : Size = {keysize}, Flags ({sep}, "
-"{rfc5011})."
-msgstr ""
-"Nøkkel med \"key tag\" {keytag}. Detaljer: størrelse = {keysize}, flagg = "
-"({sep}, {rfc5011})."
-
 #. DNSSEC:KEY_SIZE_OK
 msgid "All keys from the DNSKEY RRset have the correct size."
 msgstr "Alle nøkkler fra DNSKEY-postene har korrekt størrelse."
-
-#. DNSSEC:NEITHER_DNSKEY_NOR_DS
-msgid "There are neither DS nor DNSKEY records for the zone."
-msgstr "Sonen har verken DS- eller DNSKEY-poster."
 
 #. DNSSEC:NO_RESPONSE_DNSKEY
 #, perl-brace-format
 msgid "Nameserver {ns} responded with no DNSKEY record(s)."
 msgstr "Navnetjener {ns} svarte ikke med noen DNSKEY-post."
-
-#. DNSSEC:NOT_SIGNED
-msgid "The zone is not signed with DNSSEC."
-msgstr "Sonen er ikke signert med DNSSEC."
 
 #. DNSSEC:REMAINING_LONG
 #, perl-brace-format
@@ -3544,6 +3702,15 @@ msgstr ""
 "Uventet RCODE-verdi ({rcode}) på MX-spørringen fra navnetjenerne "
 "\"{ns_ip_list}\"."
 
+#. ZONE:Z11_DIFFERENT_SPF_POLICIES_FOUND
+#, fuzzy, perl-brace-format
+msgid ""
+"The following name servers returned the same SPF policy. Name servers: "
+"{ns_list}."
+msgstr ""
+"Følgende navnetjenere returnerte mer enn én SPF-policy. Navnetjenere: "
+"{ns_ip_list}."
+
 #. ZONE:Z11_INCONSISTENT_SPF_POLICIES
 msgid ""
 "One or more name servers do not publish the same SPF policy as the others."
@@ -3551,39 +3718,51 @@ msgstr ""
 "En eller flere navnetjenere publiserer ikke den samme SPF-policyen som de "
 "andre."
 
-#. ZONE:Z11_DIFFERENT_SPF_POLICIES_FOUND
-#, perl-brace-format
-msgid ""
-"The following name servers returned the same SPF policy, but other name "
-"servers returned a different policy. Name servers: {ns_ip_list}."
-msgstr ""
-"Følgende navnetjenere returnerte samme SPF-policy, men andre navneservere "
-"returnerte en annen policy. Navnetjenere: {ns_ip_list}."
-
 #. ZONE:Z11_NO_SPF_FOUND
 #, perl-brace-format
 msgid "No SPF policy was found for {domain}."
 msgstr "Ingen SPF-policy ble funnet for {domain}."
 
-#. ZONE:Z11_SPF1_MULTIPLE_RECORDS
+#. ZONE:Z11_NO_SPF_NON_MAIL_DOMAIN
 #, perl-brace-format
 msgid ""
+"No SPF policy was found for {domain}, which is a type of domain (root, TLD "
+"or under .ARPA) not expected to be used for email."
+msgstr ""
+
+#. ZONE:Z11_NON_NULL_SPF_NON_MAIL_DOMAIN
+#, perl-brace-format
+msgid ""
+"A non-null SPF policy was found on {domain}, although this type of domain "
+"(root, TLD or under .ARPA) is not expected to be used for email."
+msgstr ""
+
+#. ZONE:Z11_NULL_SPF_NON_MAIL_DOMAIN
+#, perl-brace-format
+msgid ""
+"A null SPF policy was found on {domain}, which is a type of domain (root, "
+"TLD or under .ARPA) not expected to be used for email."
+msgstr ""
+
+#. ZONE:Z11_SPF_MULTIPLE_RECORDS
+#, fuzzy, perl-brace-format
+msgid ""
 "The following name servers returned more than one SPF policy. Name servers: "
-"{ns_ip_list}."
+"{ns_list}."
 msgstr ""
 "Følgende navnetjenere returnerte mer enn én SPF-policy. Navnetjenere: "
 "{ns_ip_list}."
 
-#. ZONE:Z11_SPF1_SYNTAX_ERROR
-#, perl-brace-format
+#. ZONE:Z11_SPF_SYNTAX_ERROR
+#, fuzzy, perl-brace-format
 msgid ""
 "The SPF policy of {domain} has a syntax error. Policy retrieved from the "
-"following nameservers: {ns_ip_list}."
+"following nameservers: {ns_list}."
 msgstr ""
 "SPF-policyen til {domain} har en syntaksfeil. Policy hentet fra følgende "
 "navneservere: {ns_ip_list}."
 
-#. ZONE:Z11_SPF1_SYNTAX_OK
+#. ZONE:Z11_SPF_SYNTAX_OK
 #, perl-brace-format
 msgid "The SPF policy of {domain} has correct syntax."
 msgstr "SPF-policyen til {domain} har riktig syntaks."
@@ -3689,3 +3868,4 @@ msgstr ""
 #, perl-brace-format
 msgid "Big packet size ({size}) (try with \"{command}\")."
 msgstr "Stor pakkestørrelse ({size}) (prøv med \"{command}\")."
+
