@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-21 06:17+0000\n"
+"POT-Creation-Date: 2026-02-17 14:46+0100\n"
 "PO-Revision-Date: 2023-07-21 06:25+0000\n"
 "Last-Translator: sami.salmensuo@traficom.fi\n"
 "Language-Team: Traficom domain team\n"
@@ -12,10 +12,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 3.3.1\n"
 
-#, perl-brace-format
+#, fuzzy, perl-brace-format
 msgid ""
-"Ambiguous downcaseing of character \"{unicode_name}\" in the domain name. "
-"Use all lower case instead."
+"Ambiguous downcasing of character \"{unicode_name}\" in the domain name. Use "
+"all lower case instead."
 msgstr ""
 "Epäselvä merkin \"{unicode_name}\" pienennys verkkotunnuksessa. Käytä sen "
 "sijaan pieniä kirjaimia."
@@ -56,7 +56,8 @@ msgstr ""
 "\"{label}\"."
 
 #. ADDRESS:ADDRESS01
-msgid "Name server address must be globally routable"
+#, fuzzy
+msgid "Name server address must be globally reachable"
 msgstr ""
 "Nimipalvelimen osoitteen tulee olla maailmanlaajuisesti reititettävissä"
 
@@ -67,6 +68,41 @@ msgstr "Nimipalvelimen IP-osoite on käänteisnimipalvelussa"
 #. ADDRESS:ADDRESS03
 msgid "Reverse DNS entry matches name server name"
 msgstr "Käänteisnimipalvelun määritys vastaa nimipalvelimen nimeä"
+
+#. ADDRESS:A01_ADDR_NOT_GLOBALLY_REACHABLE
+#, fuzzy, perl-brace-format
+msgid "IP address(es) not listed as globally reachable: \"{ns_list}\"."
+msgstr ""
+"Alemmalla tasolla on yksi tai useampia nimipalvelimen IP-osoitteita, joita "
+"ei ole listattu ylemmällä tasolla ({ns_ip_list})."
+
+#. ADDRESS:A01_DOCUMENTATION_ADDR
+#, perl-brace-format
+msgid "IP address(es) intended for documentation purposes: \"{ns_list}\"."
+msgstr ""
+
+#. ADDRESS:A01_GLOBALLY_REACHABLE_ADDR
+#, perl-brace-format
+msgid "Globally reachable IP address(es): \"{ns_list}\"."
+msgstr ""
+
+#. ADDRESS:A01_LOCAL_USE_ADDR
+#, perl-brace-format
+msgid ""
+"IP address(es) intended for local use on network or service provider level: "
+"\"{ns_list}\"."
+msgstr ""
+
+#. ADDRESS:A01_NO_GLOBALLY_REACHABLE_ADDR
+#, fuzzy
+msgid "None of the name servers IP addresses are listed as globally reachable."
+msgstr ""
+"Mitään ylemmällä tasolla listatuista nimipalvelimista ei ole listattu "
+"alemmalla tasolla."
+
+#. ADDRESS:A01_NO_NAME_SERVERS_FOUND
+msgid "No name servers found."
+msgstr ""
 
 #. ADDRESS:NAMESERVER_IP_WITHOUT_REVERSE
 #, perl-brace-format
@@ -83,21 +119,6 @@ msgid ""
 msgstr ""
 "Nimipalvelimen {nsname} IP-osoitteella ({ns_ip}) on yhteensopimaton PTR-"
 "tulos ({names})."
-
-#. ADDRESS:NAMESERVER_IP_PRIVATE_NETWORK
-#, perl-brace-format
-msgid ""
-"Nameserver {nsname} has an IP address ({ns_ip}) with prefix {prefix} "
-"referenced in {reference} as a '{name}'."
-msgstr ""
-"Nimipalvelimen {nsname} IP-osoitteen ({ns_ip}) etuliitteeseen {prefix} "
-"viitataan kohdassa {reference} seuraavasti: '{name}'."
-
-#. ADDRESS:NO_IP_PRIVATE_NETWORK
-msgid "All Nameserver addresses are in the routable public addressing space."
-msgstr ""
-"Kaikki nimipalvelimen osoitteet ovat reititettävässä julkisessa "
-"osoiteavaruudessa."
 
 #. ADDRESS:NAMESERVERS_IP_WITH_REVERSE
 msgid "Reverse DNS entry exists for each Nameserver IP address."
@@ -118,8 +139,8 @@ msgstr ""
 #. BASIC:TEST_CASE_END
 #. CONNECTIVITY:TEST_CASE_END
 #. CONSISTENCY:TEST_CASE_END
-#. DNSSEC:TEST_CASE_END
 #. DELEGATION:TEST_CASE_END
+#. DNSSEC:TEST_CASE_END
 #. NAMESERVER:TEST_CASE_END
 #. SYNTAX:TEST_CASE_END
 #. ZONE:TEST_CASE_END
@@ -131,18 +152,14 @@ msgstr "TEST_CASE_END {testcase}."
 #. BASIC:TEST_CASE_START
 #. CONNECTIVITY:TEST_CASE_START
 #. CONSISTENCY:TEST_CASE_START
-#. DNSSEC:TEST_CASE_START
 #. DELEGATION:TEST_CASE_START
+#. DNSSEC:TEST_CASE_START
 #. NAMESERVER:TEST_CASE_START
 #. SYNTAX:TEST_CASE_START
 #. ZONE:TEST_CASE_START
 #, perl-brace-format
 msgid "TEST_CASE_START {testcase}."
 msgstr "TEST_CASE_START {testcase}."
-
-#. BASIC:BASIC00
-msgid "Domain name must be valid"
-msgstr "Verkkotunnuksen nimen on oltava kelvollinen"
 
 #. BASIC:BASIC01
 msgid "The domain must have a parent domain"
@@ -161,11 +178,11 @@ msgid "Nameservers did not respond to A query."
 msgstr "Nimipalvelimet eivät vastanneet A-tietue kyselyyn."
 
 #. BASIC:B01_CHILD_IS_ALIAS
-#, perl-brace-format
+#, fuzzy, perl-brace-format
 msgid ""
 "\"{domain_child}\" is not a zone. It is an alias for \"{domain_target}\". "
 "Run a test for \"{domain_target}\" instead. Returned from name servers "
-"\"{ns_ip_list}\"."
+"\"{ns_list}\"."
 msgstr ""
 "\"{domain_child}\" ei ole vyöhyke. Se on alias verkkotunnukselle "
 "\"{domain_target}\". Suorita sen sijaan testi verkkotunnukselle "
@@ -176,11 +193,6 @@ msgstr ""
 msgid "The zone \"{domain}\" is found."
 msgstr "Vyöhyke \"{domain}\" löytyy."
 
-#. BASIC:B01_CHILD_NOT_EXIST
-#, perl-brace-format
-msgid "\"{domain}\" does not exist as it is not delegated."
-msgstr "\"{domain}\" ei ole olemassa, sillä sitä ei ole delegoitu."
-
 #. BASIC:B01_INCONSISTENT_ALIAS
 #, perl-brace-format
 msgid "The alias for \"{domain}\" is inconsistent between name servers."
@@ -189,11 +201,10 @@ msgstr ""
 "välillä."
 
 #. BASIC:B01_INCONSISTENT_DELEGATION
-#, perl-brace-format
+#, fuzzy, perl-brace-format
 msgid ""
 "The name servers for parent zone \"{domain_parent}\" give inconsistent "
-"delegation of \"{domain_child}\". Returned from name servers "
-"\"{ns_ip_list}\"."
+"delegation of \"{domain_child}\". Returned from name servers \"{ns_list}\"."
 msgstr ""
 "Päävyöhykkeen \"{domain_parent}\" nimipalvelimet antavat epäjohdonmukaisen "
 "delegoinnin \"{domain_child}\". Vastaus nimipalvelimilta \"{ns_ip_list}\"."
@@ -207,29 +218,39 @@ msgstr ""
 "\"{domain_child}\" ei ole olemassa DNS-vyöhykkeenä. Kokeile sen sijaan "
 "testata verkkotunnusta \"{domain_super}\"."
 
-#. BASIC:B01_PARENT_FOUND
-#, perl-brace-format
+#. BASIC:B01_PARENT_DISREGARDED
 msgid ""
-"The parent zone is \"{domain}\" as returned from name servers "
-"\"{ns_ip_list}\"."
+"This is a test of an undelegated domain so finding the parent zone is "
+"disregarded."
+msgstr ""
+
+#. BASIC:B01_PARENT_FOUND
+#, fuzzy, perl-brace-format
+msgid ""
+"The parent zone is \"{domain}\" as returned from name servers \"{ns_list}\"."
 msgstr ""
 "Päävyöhyke on \"{domain}\", joka palautui nimipalvelimilta \"{ns_ip_list}\"."
 
+#. BASIC:B01_PARENT_NOT_FOUND
+#, fuzzy
+msgid "The parent zone cannot be found."
+msgstr "Vyöhyke \"{domain}\" löytyy."
+
 #. BASIC:B01_PARENT_UNDETERMINED
-#, perl-brace-format
-msgid "The parent zone cannot be determined on name servers \"{ns_ip_list}\"."
+#, fuzzy, perl-brace-format
+msgid "The parent zone cannot be determined on name servers \"{ns_list}\"."
 msgstr "Päävyöhykettä ei voida määrittää nimipalvelimilla \"{ns_ip_list}\"."
 
-#. BASIC:B01_UNEXPECTED_NS_RESPONSE
+#. BASIC:B01_ROOT_HAS_NO_PARENT
+msgid "This is a test of the root zone which has no parent zone."
+msgstr ""
+
+#. BASIC:B01_SERVER_ZONE_ERROR
 #, perl-brace-format
 msgid ""
-"Name servers for parent domain \"{domain_parent}\" give an incorrect "
-"response on SOA query for \"{domain_child}\". Returned from name servers "
-"\"{ns_ip_list}\"."
+"Unexpected response on query for \"{query_name}\" with query type "
+"\"{rrtype}\" to \"{ns}\"."
 msgstr ""
-"Pääverkkotunnuksen \"{domain_parent}\" nimipalvelimet antavat virheellisen "
-"vastauksen SOA-kyselyyn \"{domain_child}\". Vastaus nimipalvelimilta "
-"\"{ns_ip_list}\"."
 
 #. BASIC:B02_AUTH_RESPONSE_SOA
 #, perl-brace-format
@@ -319,10 +340,11 @@ msgstr ""
 #. BASIC:IPV4_DISABLED
 #. CONNECTIVITY:IPV4_DISABLED
 #. CONSISTENCY:IPV4_DISABLED
-#. DNSSEC:IPV4_DISABLED
 #. DELEGATION:IPV4_DISABLED
+#. DNSSEC:IPV4_DISABLED
 #. NAMESERVER:IPV4_DISABLED
 #. SYNTAX:IPV4_DISABLED
+#. ZONE:IPV4_DISABLED
 #. SYSTEM:SKIP_IPV4_DISABLED
 #, perl-brace-format
 msgid "IPv4 is disabled, not sending \"{rrtype}\" query to {ns}."
@@ -336,10 +358,11 @@ msgstr "IPv4 on käytössä ja voi lähettää kyselyn \"{rrtype}\" kohteelle {n
 #. BASIC:IPV6_DISABLED
 #. CONNECTIVITY:IPV6_DISABLED
 #. CONSISTENCY:IPV6_DISABLED
-#. DNSSEC:IPV6_DISABLED
 #. DELEGATION:IPV6_DISABLED
+#. DNSSEC:IPV6_DISABLED
 #. NAMESERVER:IPV6_DISABLED
 #. SYNTAX:IPV6_DISABLED
+#. ZONE:IPV6_DISABLED
 #. SYSTEM:SKIP_IPV6_DISABLED
 #, perl-brace-format
 msgid "IPv6 is disabled, not sending \"{rrtype}\" query to {ns}."
@@ -576,11 +599,20 @@ msgid "Prefix database returned no information for IP address {ns_ip}."
 msgstr "IP prefix tietokanta ei palauttanut tietoja IP-osoitteesta {ns_ip}."
 
 #. CONNECTIVITY:CN04_ERROR_PREFIX_DATABASE
-#, perl-brace-format
-msgid "Prefix database error. No data to analyze for IP address {ns_ip}."
+#, fuzzy, perl-brace-format
+msgid "Prefix database error for IP address {ns_ip}."
 msgstr ""
 "IP Prefix tietokantavirhe. IP-osoitteelle {ns_ip} ei ole analysoitavia "
 "tietoja."
+
+#. CONNECTIVITY:CN04_IPV4_DIFFERENT_PREFIX
+#, perl-brace-format
+msgid ""
+"The following name server(s) are announced in unique IPv4 prefix(es): "
+"\"{ns_list}\""
+msgstr ""
+"Seuraavat nimipalvelimet ilmoitetaan yksilöllisillä IPv4 prefixeillä: "
+"\"{ns_list}\""
 
 #. CONNECTIVITY:CN04_IPV4_SAME_PREFIX
 #, perl-brace-format
@@ -591,13 +623,21 @@ msgstr ""
 "Seuraavat nimipalvelimet ilmoitetaan samalla IPv4 prefixillä ({ip_prefix}): "
 "\"{ns_list}\""
 
-#. CONNECTIVITY:CN04_IPV4_DIFFERENT_PREFIX
+#. CONNECTIVITY:CN04_IPV4_SINGLE_PREFIX
+#, fuzzy
+msgid ""
+"All name server(s) IPv4 address(es) are announced in the same IPv4 prefix."
+msgstr ""
+"Seuraavat nimipalvelimet ilmoitetaan samalla IPv4 prefixillä ({ip_prefix}): "
+"\"{ns_list}\""
+
+#. CONNECTIVITY:CN04_IPV6_DIFFERENT_PREFIX
 #, perl-brace-format
 msgid ""
-"The following name server(s) are announced in unique IPv4 prefix(es): "
+"The following name server(s) are announced in unique IPv6 prefix(es): "
 "\"{ns_list}\""
 msgstr ""
-"Seuraavat nimipalvelimet ilmoitetaan yksilöllisillä IPv4 prefixeillä: "
+"Seuraavat nimipalvelimet ilmoitetaan yksilöllisillä IPv6 prefixeillä: "
 "\"{ns_list}\""
 
 #. CONNECTIVITY:CN04_IPV6_SAME_PREFIX
@@ -609,13 +649,12 @@ msgstr ""
 "Seuraavat nimipalvelimet ilmoitetaan samalla IPv6 prefixillä ({ip_prefix}): "
 "\"{ns_list}\""
 
-#. CONNECTIVITY:CN04_IPV6_DIFFERENT_PREFIX
-#, perl-brace-format
+#. CONNECTIVITY:CN04_IPV6_SINGLE_PREFIX
+#, fuzzy
 msgid ""
-"The following name server(s) are announced in unique IPv6 prefix(es): "
-"\"{ns_list}\""
+"All name server(s) IPv6 address(es) are announced in the same IPv6 prefix."
 msgstr ""
-"Seuraavat nimipalvelimet ilmoitetaan yksilöllisillä IPv6 prefixeillä: "
+"Seuraavat nimipalvelimet ilmoitetaan samalla IPv6 prefixillä ({ip_prefix}): "
 "\"{ns_list}\""
 
 #. CONNECTIVITY:ERROR_ASN_DATABASE
@@ -782,7 +821,6 @@ msgstr "SOA-aikaparametrijoukkoja löydetty {count} kpl."
 
 #. CONSISTENCY:NO_RESPONSE
 #. DNSSEC:NO_RESPONSE
-#. DELEGATION:NO_RESPONSE
 #. ZONE:NO_RESPONSE
 #, perl-brace-format
 msgid "Nameserver {ns} did not respond."
@@ -887,8 +925,8 @@ msgid "DS must match a valid DNSKEY in the child zone"
 msgstr "DS:n on vastattava validia DNSKEY:tä lapsi vyöhykkeellä (child zone)"
 
 #. DNSSEC:DNSSEC03
-msgid "Check for too many NSEC3 iterations"
-msgstr "Tarkista, onko liian monta NSEC3-iteraatiota"
+msgid "Verify NSEC3 parameters"
+msgstr ""
 
 #. DNSSEC:DNSSEC04
 msgid "Check for too short or too long RRSIG lifetimes"
@@ -903,8 +941,8 @@ msgid "Verify DNSSEC additional processing"
 msgstr "Tarkista DNSSEC lisäkäsittely"
 
 #. DNSSEC:DNSSEC07
-msgid "If DNSKEY at child, parent should have DS"
-msgstr "Jos DNSKEY on lapsivyöhykkeellä, tulee olla DS emovyöhykkeellä"
+msgid "DNSSEC signed zone and DS in parent for signed zone"
+msgstr ""
 
 #. DNSSEC:DNSSEC08
 msgid "Valid RRSIG for DNSKEY"
@@ -950,85 +988,6 @@ msgstr "Validoi CDNSKEY"
 msgid "Validate trust from DS to CDS and CDNSKEY"
 msgstr "Validoi luottamus DS:stä CDS:ään ja CDNSKEY:n"
 
-#. DNSSEC:ADDITIONAL_DNSKEY_SKIPPED
-msgid "No DNSKEYs found. Additional tests skipped."
-msgstr "DNSKEY:tä ei löytynyt. Lisätestit ohitettu."
-
-#. DNSSEC:ALGORITHM_DEPRECATED
-#, perl-brace-format
-msgid ""
-"The DNSKEY with tag {keytag} uses deprecated algorithm number {algo_num} "
-"({algo_descr})."
-msgstr ""
-"DNSKEY, jolla on tunniste {keytag}, käyttää vanhentunutta algoritmin numeroa "
-"{algo_num} ({algo_descr})."
-
-#. DNSSEC:ALGORITHM_NOT_RECOMMENDED
-#, perl-brace-format
-msgid ""
-"The DNSKEY with tag {keytag} uses an algorithm number {algo_num} "
-"({algo_descr}) which is not recommended to be used."
-msgstr ""
-"DNSKEY, jolla on tunniste {keytag}, käyttää algoritmin numeroa {algo_num} "
-"({algo_descr}), vaikka sen käyttöä ei suositella."
-
-#. DNSSEC:ALGORITHM_NOT_ZONE_SIGN
-#, perl-brace-format
-msgid ""
-"The DNSKEY with tag {keytag} uses algorithm number not meant for zone "
-"signing, algorithm number {algo_num} ({algo_descr})."
-msgstr ""
-"DNSKEY, jolla on tunniste {keytag}, käyttää algoritmin numeroa, jota ei ole "
-"tarkoitettu vyöhykkeen allekirjoittamiseen, algoritmin numero {algo_num} "
-"({algo_descr})."
-
-#. DNSSEC:ALGORITHM_OK
-#, perl-brace-format
-msgid ""
-"The DNSKEY with tag {keytag} uses algorithm number {algo_num} "
-"({algo_descr}), which is OK."
-msgstr ""
-"DNSKEY, jolla on tunniste {keytag}, käyttää algoritmin numeroa {algo_num} "
-"({algo_descr}), joka on OK."
-
-#. DNSSEC:ALGORITHM_PRIVATE
-#, perl-brace-format
-msgid ""
-"The DNSKEY with tag {keytag} uses private algorithm number {algo_num} "
-"({algo_descr})."
-msgstr ""
-"DNSKEY, jolla on tunniste {keytag}, käyttää yksityistä algoritmin numeroa "
-"{algo_num} ({algo_descr})."
-
-#. DNSSEC:ALGORITHM_RESERVED
-#, perl-brace-format
-msgid ""
-"The DNSKEY with tag {keytag} uses reserved algorithm number {algo_num} "
-"({algo_descr})."
-msgstr ""
-"DNSKEY, jolla on tunniste {keytag}, käyttää varattua algoritmin numeroa "
-"{algo_num} ({algo_descr})."
-
-#. DNSSEC:ALGORITHM_UNASSIGNED
-#, perl-brace-format
-msgid ""
-"The DNSKEY with tag {keytag} uses unassigned algorithm number {algo_num} "
-"({algo_descr})."
-msgstr ""
-"DNSKEY, jolla on tunniste {keytag}, käyttää asettamatonta algoritmin numeroa "
-"{algo_num} ({algo_descr})."
-
-#. DNSSEC:DNSKEY_AND_DS
-#, perl-brace-format
-msgid "{parent} sent a DS record, and {child} a DNSKEY record."
-msgstr "{parent} lähetti DS-tietueen ja {child} DNSKEY-tietueen."
-
-#. DNSSEC:DNSKEY_BUT_NOT_DS
-#, perl-brace-format
-msgid "{child} sent a DNSKEY record, but {parent} did not send a DS record."
-msgstr ""
-"{child} lähetti DNSKEY-tietueen, mutta {parent} ei lähettänyt DS-tietuetta."
-
 #. DNSSEC:DNSKEY_SMALLER_THAN_REC
 #, perl-brace-format
 msgid ""
@@ -1059,67 +1018,114 @@ msgstr ""
 "({algo_descr}), on kooltaan ({keysize}) suurempi kuin enimmäiskoko "
 "({keysizemax})."
 
-#. DNSSEC:DS01_DIGEST_NOT_SUPPORTED_BY_ZM
-#, perl-brace-format
+#. DNSSEC:DS01_DS_ALGO_2_MISSING
+#, fuzzy, perl-brace-format
 msgid ""
-"DS record for zone {domain} with keytag {keytag} was created by digest "
-"algorithm {ds_algo_num} ({ds_algo_mnemo}) which cannot be validated by this "
-"installation of Zonemaster. Fetched from the nameservers with IP addresses "
-"\"{ns_ip_list}\"."
+"There is a DS record with keytag {keytag}. A DS record using digest "
+"algorithm 2 (SHA-256) is missing. Fetched from parent name servers "
+"\"{ns_list}\"."
 msgstr ""
-"Zonen {domain} DS-tietue jonka tunniste (keytag) on {keytag} on luotu "
-"tiivistealgoritmilla {ds_algo_num} ({ds_algo_mnemo}) jota tämä zonemasterin "
-"versio ei pysty validoimaan. Tiedot on haettu nimipalvelimilta joiden IP-"
-"osoitteet ovat \"{ns_ip_list}\"."
+"CDS tietue {keytag} täsmää DNSKEY tietueeseen jolla SEP bit (bit 15) pois "
+"päältä. Tiedot haettu nimipalvelimilta joiden IP-osoitteet ovat "
+"\"{ns_ip_list}\"."
 
 #. DNSSEC:DS01_DS_ALGO_DEPRECATED
-#, perl-brace-format
+#, fuzzy, perl-brace-format
 msgid ""
-"DS record for zone {domain} with keytag {keytag} was created by digest "
-"algorithm {ds_algo_num} ({ds_algo_mnemo}) which is deprecated. Fetched from "
-"the nameservers with IP addresses \"{ns_ip_list}\"."
+"The DS record with keytag {keytag} uses a deprecated digest algorithm "
+"{ds_algo_num} ({ds_algo_descr}). Fetched from parent name servers "
+"\"{ns_list}\"."
 msgstr ""
 "Zonen {domain} DS-tietue jonka tunniste (keytag) on {keytag} on luotu "
 "tiivistealgoritmilla {ds_algo_num} ({ds_algo_mnemo}) joka on poistunut "
 "käytöstä. Tiedot on haettu nimipalvelimilta joiden IP-osoitteet ovat "
 "\"{ns_ip_list}\"."
 
-#. DNSSEC:DS01_DS_ALGO_2_MISSING
-#, perl-brace-format
-msgid ""
-"No DS record created by digest algorithm 2 (SHA-256) is present for zone "
-"{domain}."
-msgstr ""
-"Vyöhykkeellä {domain} ei ole tiivistealgoritmilla 2 (SHA-256) luotua DS-"
-"tietuetta."
-
 #. DNSSEC:DS01_DS_ALGO_NOT_DS
-#, perl-brace-format
+#, fuzzy, perl-brace-format
 msgid ""
-"DS record for zone {domain} with keytag {keytag} was created by digest "
-"algorithm {ds_algo_num} ({ds_algo_mnemo}) which is not meant for DS. Fetched "
-"from the nameservers with IP addresses \"{ns_ip_list}\"."
+"The DS record with keytag {keytag} uses a digest algorithm {ds_algo_num} "
+"({ds_algo_descr}) not meant for DS records. Fetched from parent name servers "
+"\"{ns_list}\"."
 msgstr ""
 "Zonen {domain} DS-tietue jonka tunniste (keytag) on {keytag} on luotu "
 "tiivistealgoritmilla {ds_algo_num} ({ds_algo_mnemo}) jota ei ole tarkoitettu "
 "DS-tietueelle. Tiedot on haettu nimipalvelimilta joiden IP-osoitteet ovat "
 "\"{ns_ip_list}\"."
 
-#. DNSSEC:DS01_DS_ALGO_RESERVED
-#, perl-brace-format
+#. DNSSEC:DS01_DS_ALGO_PRIVATE
+#, fuzzy, perl-brace-format
 msgid ""
-"DS record for zone {domain} with keytag {keytag} was created with an "
-"unassigned digest algorithm (algorithm number {ds_algo_num}). Fetched from "
-"the nameservers with IP addresses \"{ns_ip_list}\"."
+"The DS record with keytag {keytag} uses a digest algorithm {ds_algo_num} for "
+"private use. Fetched from parent name servers \"{ns_list}\"."
+msgstr ""
+"Zonen {domain} DS-tietue jonka tunniste (keytag) on {keytag} on luotu "
+"tiivistealgoritmilla {ds_algo_num} ({ds_algo_mnemo}) joka on poistunut "
+"käytöstä. Tiedot on haettu nimipalvelimilta joiden IP-osoitteet ovat "
+"\"{ns_ip_list}\"."
+
+#. DNSSEC:DS01_DS_ALGO_RESERVED
+#, fuzzy, perl-brace-format
+msgid ""
+"The DS record with keytag {keytag} uses a reserved digest algorithm "
+"{ds_algo_num} on name servers \"{ns_list}\"."
+msgstr ""
+"DNSKEY, jolla on tunniste {keytag}, käyttää varattua algoritmin numeroa "
+"{algo_num} ({algo_descr})."
+
+#. DNSSEC:DS01_DS_ALGO_UNASSIGNED
+#, fuzzy, perl-brace-format
+msgid ""
+"The DS record with keytag {keytag} uses an unassigned digest algorithm "
+"{ds_algo_num} on parent name servers \"{ns_list}\"."
 msgstr ""
 "Zonen {domain} DS-tietue jonka tunniste (keytag) on {keytag} on luotu "
 "määrittämättömällä tiivistealgoritmilla {ds_algo_num}. Tiedot on haettu "
 "nimipalvelimilta joiden IP-osoitteet ovat \"{ns_ip_list}\"."
 
+#. DNSSEC:DS01_NO_RESPONSE
+#, fuzzy, perl-brace-format
+msgid ""
+"No response or error in response from all parent name servers on the DS "
+"query. Name servers are \"{ns_list}\"."
+msgstr ""
+"Ei vastausta tai virhe vastauksessa olemattomaan verkkotunnukseen "
+"liittyvässä kyselyssä. Tiedot haettu nimipalvelimilta joiden IP-osoitteet "
+"ovat \"{ns_ip_list}\"."
+
+#. DNSSEC:DS01_PARENT_SERVER_NO_DS
+#, fuzzy, perl-brace-format
+msgid ""
+"The following name servers do not provide DS record or have not been "
+"properly configured. Fetched from parent name servers \"{ns_list}\"."
+msgstr ""
+"Seuraavat nimipalvelimet eivät vastaa ohjelmistoversiokyselyihin. Palautettu "
+"nimipalvelimista: \"{ns_ip_list}\""
+
+#. DNSSEC:DS01_PARENT_ZONE_NO_DS
+#, fuzzy, perl-brace-format
+msgid ""
+"The parent zone provides no DS records for the child zone. Fetched from "
+"parent name servers \"{ns_list}\"."
+msgstr ""
+"Alemmalle vyöhykkeelle (child zone) ei löydy DS-tietueita ylemmän vyöhykkeen "
+"nimipalvelimilta joiden IP-osoitteet ovat \"{ns_ip_list}\"."
+
+#. DNSSEC:DS01_ROOT_N_NO_UNDEL_DS
+msgid ""
+"Tested zone is the root zone, but no undelegated DS has been provided. DS is "
+"not tested."
+msgstr ""
+
+#. DNSSEC:DS01_UNDEL_N_NO_UNDEL_DS
+msgid ""
+"Tested zone is undelegated, but no undelegated DS has been provided. DS is "
+"not tested."
+msgstr ""
+
 #. DNSSEC:DS02_ALGO_NOT_SUPPORTED_BY_ZM
 #. DNSSEC:DS08_ALGO_NOT_SUPPORTED_BY_ZM
 #. DNSSEC:DS09_ALGO_NOT_SUPPORTED_BY_ZM
-#. DNSSEC:DS10_ALGO_NOT_SUPPORTED_BY_ZM
 #, perl-brace-format
 msgid ""
 "DNSKEY with tag {keytag} uses unsupported algorithm {algo_num} "
@@ -1212,6 +1218,372 @@ msgstr ""
 "sitä ei voi validoida DNSKEY:llä. Tiedot haettu nimipalvelimilta joiden IP-"
 "osoitteet ovat \"{ns_ip_list}\"."
 
+#. DNSSEC:DS03_ERROR_RESPONSE_NSEC_QUERY
+#, fuzzy, perl-brace-format
+msgid ""
+"The following servers give erroneous response to NSEC query. Fetched from "
+"name servers \"{ns_list}\"."
+msgstr ""
+"Seuraavat nimipalvelimet eivät vastaa ohjelmistoversiokyselyihin. Palautettu "
+"nimipalvelimista: \"{ns_ip_list}\""
+
+#. DNSSEC:DS03_ERR_MULT_NSEC3
+#. DNSSEC:DS10_ERR_MULT_NSEC3
+#, fuzzy, perl-brace-format
+msgid ""
+"Multiple NSEC3 records when one is expected. Fetched from name servers "
+"\"{ns_list}\"."
+msgstr ""
+"SOA MNAME -nimipalvelin on \"localhost\", joka on virheellinen. Haettu "
+"nimipalvelimista \"{ns_ip_list}\"."
+
+#. DNSSEC:DS03_ILLEGAL_HASH_ALGO
+#, fuzzy, perl-brace-format
+msgid ""
+"The following servers respond with an illegal hash algorithm for NSEC3 "
+"({algo_num}). Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"Seuraavat nimipalvelimet eivät vastaa ohjelmistoversiokyselyihin. Palautettu "
+"nimipalvelimista: \"{ns_ip_list}\""
+
+#. DNSSEC:DS03_ILLEGAL_ITERATION_VALUE
+#, fuzzy, perl-brace-format
+msgid ""
+"The following servers respond with the NSEC3 iteration value {int}. The "
+"recommended practice is to set this value to 0. Fetched from name servers "
+"\"{ns_list}\"."
+msgstr ""
+"Seuraavat nimipalvelimet vastaavat ohjelmistoversiokyselyyn \"{query_name}\" "
+"merkkijonolla \"{string}\". Palautettu nimipalvelimista: \"{ns_ip_list}\""
+
+#. DNSSEC:DS03_ILLEGAL_SALT_LENGTH
+#, perl-brace-format
+msgid ""
+"The following servers respond with a non-empty salt in NSEC3 ({int} octets). "
+"The recommended practice is to use an empty salt. Fetched from name servers "
+"\"{ns_list}\"."
+msgstr ""
+
+#. DNSSEC:DS03_INCONSISTENT_HASH_ALGO
+msgid ""
+"Inconsistent hash algorithm in NSEC3 in responses for the child zone from "
+"different name servers."
+msgstr ""
+
+#. DNSSEC:DS03_INCONSISTENT_ITERATION
+msgid ""
+"Inconsistent NSEC3 iteration value in responses for the child zone from "
+"different name servers."
+msgstr ""
+
+#. DNSSEC:DS03_INCONSISTENT_NSEC3_FLAGS
+msgid ""
+"Inconsistent NSEC3 flag list in responses for the child zone from different "
+"name servers."
+msgstr ""
+
+#. DNSSEC:DS03_INCONSISTENT_SALT_LENGTH
+msgid ""
+"Inconsistent salt length in NSEC3 in responses for the child zone from "
+"different name servers."
+msgstr ""
+
+#. DNSSEC:DS03_LEGAL_EMPTY_SALT
+#, fuzzy, perl-brace-format
+msgid ""
+"The following servers respond with a legal empty salt in NSEC3. Fetched from "
+"name servers \"{ns_list}\"."
+msgstr ""
+"Seuraavat nimipalvelimet eivät vastaa ohjelmistoversiokyselyihin. Palautettu "
+"nimipalvelimista: \"{ns_ip_list}\""
+
+#. DNSSEC:DS03_LEGAL_HASH_ALGO
+#, fuzzy, perl-brace-format
+msgid ""
+"The following servers respond with a legal hash algorithm in NSEC3. Fetched "
+"from name servers \"{ns_list}\"."
+msgstr ""
+"Seuraavat nimipalvelimet eivät vastaa ohjelmistoversiokyselyihin. Palautettu "
+"nimipalvelimista: \"{ns_ip_list}\""
+
+#. DNSSEC:DS03_LEGAL_ITERATION_VALUE
+#, fuzzy, perl-brace-format
+msgid ""
+"The following servers respond with NSEC3 iteration value set to zero (as "
+"recommended). Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"Seuraavat nimipalvelimet eivät vastaa ohjelmistoversiokyselyihin. Palautettu "
+"nimipalvelimista: \"{ns_ip_list}\""
+
+#. DNSSEC:DS03_NO_DNSSEC_SUPPORT
+#, perl-brace-format
+msgid ""
+"The zone is not DNSSEC signed or not properly DNSSEC signed. Testing for "
+"NSEC3 has been skipped. Fetched from name servers \"{ns_list}\"."
+msgstr ""
+
+#. DNSSEC:DS03_NO_NSEC3
+#, fuzzy, perl-brace-format
+msgid ""
+"The zone does not use NSEC3. Testing for NSEC3 has been skipped. Fetched "
+"from name servers \"{ns_list}\"."
+msgstr ""
+"Zonella on NSEC3 tietueita. Tiedot haettu nimipalvelimilta joiden IP-"
+"osoitteet ovat \"{ns_ip_list}\"."
+
+#. DNSSEC:DS03_NO_RESPONSE_NSEC_QUERY
+#, fuzzy, perl-brace-format
+msgid ""
+"The following servers do not respond to NSEC query. Fetched from name "
+"servers \"{ns_list}\"."
+msgstr ""
+"Seuraavat nimipalvelimet eivät vastaa ohjelmistoversiokyselyihin. Palautettu "
+"nimipalvelimista: \"{ns_ip_list}\""
+
+#. DNSSEC:DS03_NSEC3_OPT_OUT_DISABLED
+#, fuzzy, perl-brace-format
+msgid ""
+"The following servers respond with NSEC3 opt-out disabled (as recommended). "
+"Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"Seuraavat nimipalvelimet eivät vastaa ohjelmistoversiokyselyihin. Palautettu "
+"nimipalvelimista: \"{ns_ip_list}\""
+
+#. DNSSEC:DS03_NSEC3_OPT_OUT_ENABLED_NON_TLD
+#, fuzzy, perl-brace-format
+msgid ""
+"The following servers respond with NSEC3 opt-out enabled. The recommended "
+"practice is to disable opt-out. Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"Seuraavat nimipalvelimet eivät vastaa ohjelmistoversiokyselyihin. Palautettu "
+"nimipalvelimista: \"{ns_ip_list}\""
+
+#. DNSSEC:DS03_NSEC3_OPT_OUT_ENABLED_TLD
+#, fuzzy, perl-brace-format
+msgid ""
+"The following servers respond with NSEC3 opt-out enabled. Fetched from name "
+"servers \"{ns_list}\"."
+msgstr ""
+"Seuraavat nimipalvelimet eivät vastaa ohjelmistoversiokyselyihin. Palautettu "
+"nimipalvelimista: \"{ns_ip_list}\""
+
+#. DNSSEC:DS03_SERVER_NO_DNSSEC_SUPPORT
+#, fuzzy, perl-brace-format
+msgid ""
+"The following name servers do not support DNSSEC or have not been properly "
+"configured. Testing for NSEC3 has been skipped on those servers. Fetched "
+"from name servers \"{ns_list}\"."
+msgstr ""
+"Seuraavat nimipalvelimet eivät vastaa ohjelmistoversiokyselyihin. Palautettu "
+"nimipalvelimista: \"{ns_ip_list}\""
+
+#. DNSSEC:DS03_SERVER_NO_NSEC3
+#, fuzzy, perl-brace-format
+msgid ""
+"The following name servers do not use NSEC3, but others do. Testing for "
+"NSEC3 has been skipped on the following servers. Fetched from name servers "
+"\"{ns_list}\"."
+msgstr ""
+"Seuraavat nimipalvelimet eivät vastaa ohjelmistoversiokyselyihin. Palautettu "
+"nimipalvelimista: \"{ns_ip_list}\""
+
+#. DNSSEC:DS03_UNASSIGNED_FLAG_USED
+#, fuzzy, perl-brace-format
+msgid ""
+"The following servers respond with an NSEC3 record where an unassigned flag "
+"is used (bit {int}). Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"Seuraavat nimipalvelimet eivät vastaa ohjelmistoversiokyselyihin. Palautettu "
+"nimipalvelimista: \"{ns_ip_list}\""
+
+#. DNSSEC:DS05_ALGO_DEPRECATED
+#, fuzzy, perl-brace-format
+msgid ""
+"The DNSKEY with tag {keytag} uses deprecated algorithm number {algo_num} "
+"(\"{algo_descr}\", {algo_mnemo}). Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"DNSKEY, jolla on tunniste {keytag}, käyttää vanhentunutta algoritmin numeroa "
+"{algo_num} ({algo_descr})."
+
+#. DNSSEC:DS05_ALGO_NOT_RECOMMENDED
+#, fuzzy, perl-brace-format
+msgid ""
+"The DNSKEY with tag {keytag} uses unrecommended algorithm number {algo_num} "
+"(\"{algo_descr}\", {algo_mnemo}). Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"DNSKEY, jolla on tunniste {keytag}, käyttää varattua algoritmin numeroa "
+"{algo_num} ({algo_descr})."
+
+#. DNSSEC:DS05_ALGO_NOT_ZONE_SIGN
+#, fuzzy, perl-brace-format
+msgid ""
+"The DNSKEY with tag {keytag} uses algorithm number {algo_num} "
+"(\"{algo_descr}\", {algo_mnemo}) which is not meant for zone signing. "
+"Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"DNSKEY, jolla on tunniste {keytag}, käyttää algoritmin numeroa {algo_num} "
+"({algo_descr}), vaikka sen käyttöä ei suositella."
+
+#. DNSSEC:DS05_ALGO_OK
+#, fuzzy, perl-brace-format
+msgid ""
+"The DNSKEY with tag {keytag} uses algorithm number {algo_num} "
+"(\"{algo_descr}\", {algo_mnemo}). Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"DNSKEY, jolla on tunniste {keytag}, käyttää algoritmin numeroa {algo_num} "
+"({algo_descr}), joka on OK."
+
+#. DNSSEC:DS05_ALGO_PRIVATE
+#, fuzzy, perl-brace-format
+msgid ""
+"The DNSKEY with tag {keytag} uses algorithm number {algo_num} which is "
+"reserved for private use. Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"DNSKEY, jolla on tunniste {keytag}, käyttää algoritmin numeroa {algo_num} "
+"({algo_descr}), vaikka sen käyttöä ei suositella."
+
+#. DNSSEC:DS05_ALGO_RESERVED
+#, fuzzy, perl-brace-format
+msgid ""
+"The DNSKEY with tag {keytag} uses reserved algorithm number {algo_num}. "
+"Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"DNSKEY, jolla on tunniste {keytag}, käyttää varattua algoritmin numeroa "
+"{algo_num} ({algo_descr})."
+
+#. DNSSEC:DS05_ALGO_UNASSIGNED
+#, fuzzy, perl-brace-format
+msgid ""
+"The DNSKEY with tag {keytag} uses unassigned algorithm number {algo_num}. "
+"Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"DNSKEY, jolla on tunniste {keytag}, käyttää asettamatonta algoritmin numeroa "
+"{algo_num} ({algo_descr})."
+
+#. DNSSEC:DS05_NO_RESPONSE
+#, fuzzy, perl-brace-format
+msgid ""
+"No response or error in response from all name servers on the DNSKEY query. "
+"Failing name servers: \"{ns_list}\"."
+msgstr ""
+"Ei vastausta tai virhe vastauksessa olemattomaan verkkotunnukseen "
+"liittyvässä kyselyssä. Tiedot haettu nimipalvelimilta joiden IP-osoitteet "
+"ovat \"{ns_ip_list}\"."
+
+#. DNSSEC:DS05_SERVER_NO_DNSSEC
+#, perl-brace-format
+msgid ""
+"Some name servers do not support DNSSEC or have not been properly "
+"configured. DNSKEY cannot be tested on those servers. Fetched from name "
+"servers \"{ns_list}\"."
+msgstr ""
+
+#. DNSSEC:DS05_ZONE_NO_DNSSEC
+#, fuzzy, perl-brace-format
+msgid ""
+"The zone is not DNSSEC signed or not properly DNSSEC signed. DNSKEY cannot "
+"be tested. Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"DNSKEY RRset ei ole allekirjoitettu DNSKEYllä jonka avaimen tunniste "
+"(keytag) on {keytag} ja johon DS-tietue viittaa. Tiedot haettu "
+"nimipalvelimilta joiden IP-osoitteet ovat \"{ns_ip_list}\"."
+
+#. DNSSEC:DS07_DS_FOR_SIGNED_ZONE
+#, fuzzy
+msgid "The parent zone has DS record or records for the signed child zone."
+msgstr "Vyöhykkeellä ei ole DS- eikä DNSKEY-tietueita."
+
+#. DNSSEC:DS07_DS_ON_PARENT_SERVER
+#, fuzzy, perl-brace-format
+msgid ""
+"The following parent name servers respond with DS record or records for the "
+"child zone. Name servers: \"{ns_list}\"."
+msgstr ""
+"Seuraavat nimipalvelimet eivät vastaa ohjelmistoversiokyselyihin. Palautettu "
+"nimipalvelimista: \"{ns_ip_list}\""
+
+#. DNSSEC:DS07_INCONSISTENT_DS
+msgid ""
+"Inconsistent responses from parent name servers. Some include DS, others do "
+"not."
+msgstr ""
+
+#. DNSSEC:DS07_INCONSISTENT_SIGNED
+msgid ""
+"Inconsistent responses from name servers. Some include signed responses, "
+"others do not."
+msgstr ""
+
+#. DNSSEC:DS07_NON_AUTH_RESPONSE_DNSKEY
+#, fuzzy, perl-brace-format
+msgid ""
+"The following name servers give a non authoritative response on DNSKEY query "
+"with DO bit set. Name servers: \"{ns_list}\"."
+msgstr ""
+"Seuraavat nimipalvelimet eivät vastaa ohjelmistoversiokyselyihin. Palautettu "
+"nimipalvelimista: \"{ns_ip_list}\""
+
+#. DNSSEC:DS07_NOT_SIGNED
+#, fuzzy
+msgid "The zone is not signed."
+msgstr "Vyöhykkeellä ei ole DNSSEC-allekirjoitusta."
+
+#. DNSSEC:DS07_NOT_SIGNED_ON_SERVER
+#, fuzzy, perl-brace-format
+msgid ""
+"The following name servers respond with no DNSKEY (unsigned child zone). "
+"Name servers: \"{ns_list}\"."
+msgstr ""
+"Seuraavat nimipalvelimet eivät vastaa ohjelmistoversiokyselyihin. Palautettu "
+"nimipalvelimista: \"{ns_ip_list}\""
+
+#. DNSSEC:DS07_NO_DS_ON_PARENT_SERVER
+#, fuzzy, perl-brace-format
+msgid ""
+"The following parent name servers respond without DS record for the child "
+"zone. Name servers: \"{ns_list}\"."
+msgstr ""
+"Seuraavat nimipalvelimet eivät vastaa ohjelmistoversiokyselyihin. Palautettu "
+"nimipalvelimista: \"{ns_ip_list}\""
+
+#. DNSSEC:DS07_NO_DS_FOR_SIGNED_ZONE
+#, fuzzy
+msgid "The parent zone has no DS record for the signed child zone."
+msgstr "Vyöhykkeellä ei ole DS- eikä DNSKEY-tietueita."
+
+#. DNSSEC:DS07_NO_RESPONSE_DNSKEY
+#, fuzzy, perl-brace-format
+msgid ""
+"The following name servers do not respond on DNSKEY query with DO bit set. "
+"Name servers: \"{ns_list}\"."
+msgstr ""
+"Seuraavat nimipalvelimet eivät vastaa ohjelmistoversiokyselyihin. Palautettu "
+"nimipalvelimista: \"{ns_ip_list}\""
+
+#. DNSSEC:DS07_SIGNED
+#, fuzzy
+msgid "The zone is signed."
+msgstr "Vyöhykkeellä ei ole DNSSEC-allekirjoitusta."
+
+#. DNSSEC:DS07_SIGNED_ON_SERVER
+#, fuzzy, perl-brace-format
+msgid ""
+"The following name servers respond with DNSKEY (signed child zone). Name "
+"servers: \"{ns_list}\"."
+msgstr ""
+"Seuraavat nimipalvelimet eivät vastaa ohjelmistoversiokyselyihin. Palautettu "
+"nimipalvelimista: \"{ns_ip_list}\""
+
+#. DNSSEC:DS07_UNEXP_RCODE_RESP_DNSKEY
+#, fuzzy, perl-brace-format
+msgid ""
+"The following name servers respond with RCODE \"{rcode}\" instead of "
+"expected \"NOERROR\" on DNSKEY query with DO bit set. Name servers: "
+"\"{ns_list}\"."
+msgstr ""
+"Seuraavat nimipalvelimet vastaavat ohjelmistoversiokyselyyn \"{query_name}\" "
+"merkkijonolla \"{string}\". Palautettu nimipalvelimista: \"{ns_ip_list}\""
+
 #. DNSSEC:DS08_DNSKEY_RRSIG_EXPIRED
 #, perl-brace-format
 msgid ""
@@ -1301,139 +1673,341 @@ msgstr ""
 "on tulevaisuudessa. Tiedot haettu nimipalvelimilta joiden IP-osoitteet ovat "
 "\"{ns_ip_list}\"."
 
-#. DNSSEC:DS10_ANSWER_VERIFY_ERROR
-#, perl-brace-format
+#. DNSSEC:DS10_ALGO_NOT_SUPPORTED_BY_ZM
+#, fuzzy, perl-brace-format
 msgid ""
-"The name \"{domain}\" of RR type \"{rrtype}\" is signed by RRSIG, but the "
-"signature or signatures cannot be verified. Fetched from the nameservers "
-"with IP addresses \"{ns_ip_list}\"."
+"DNSKEY with tag {keytag} uses unsupported algorithm {algo_num} "
+"({algo_mnemo}) by this installation of Zonemaster. Fetched from name servers "
+"\"{ns_ip_list}\"."
 msgstr ""
-"Nimi \"{domain}\"  RR type \"{rrtype}\" on allekirjoitettu RRSIG:llä, mutta "
-"allekirjoitusta tai allekirjoituksia ei pystytä varmistamaan. Tiedot haettu "
-"nimipalvelimilta joiden IP-osoitteet ovat \"{ns_ip_list}\"."
+"DNSKEY-tietue tunnisteella {keytag} käyttää algoritmia {algo_num} "
+"({algo_mnemo}) jota Zonemaster ei tue. Tiedot haettu nimipalvelimilta joiden "
+"IP-osoitteet ovat \"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_ERR_MULT_NSEC
+#, fuzzy, perl-brace-format
+msgid ""
+"Multiple NSEC records when one is expected. Fetched from name servers "
+"\"{ns_list}\"."
+msgstr ""
+"Päävyöhyke on \"{domain}\", joka palautui nimipalvelimilta \"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_ERR_MULT_NSEC3PARAM
+#, fuzzy, perl-brace-format
+msgid ""
+"Multiple NSEC3PARAM records when one is expected. Fetched from name servers "
+"\"{ns_list}\"."
+msgstr ""
+"SOA MNAME -nimipalvelin on \"localhost\", joka on virheellinen. Haettu "
+"nimipalvelimista \"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_EXPECTED_NSEC_NSEC3_MISSING
+#, fuzzy, perl-brace-format
+msgid ""
+"The server responded with DNSKEY but not with expected NSEC or NSEC3. "
+"Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"Tuntemattomalla EDNS-optiokoodilla tehdyssä kyselyssä DNS-vastauksessa on "
+"odottamaton RCODE-nimi \"{rcode}\" nimipalvelimista \"{ns_ip_list}\"."
 
 #. DNSSEC:DS10_HAS_NSEC
-#, perl-brace-format
-msgid ""
-"The zone has NSEC records. Fetched from the nameservers with IP addresses "
-"\"{ns_ip_list}\"."
+#, fuzzy, perl-brace-format
+msgid "The zone has NSEC records. Fetched from name servers \"{ns_list}\"."
 msgstr ""
 "Zonella on NSEC tietueita. Tiedot haettu nimipalvelimilta joiden IP-"
 "osoitteet ovat \"{ns_ip_list}\"."
 
 #. DNSSEC:DS10_HAS_NSEC3
-#, perl-brace-format
-msgid ""
-"The zone has NSEC3 records. Fetched from the nameservers with IP addresses "
-"\"{ns_ip_list}\"."
+#, fuzzy, perl-brace-format
+msgid "The zone has NSEC3 records. Fetched from name servers \"{ns_list}\"."
 msgstr ""
 "Zonella on NSEC3 tietueita. Tiedot haettu nimipalvelimilta joiden IP-"
 "osoitteet ovat \"{ns_ip_list}\"."
 
-#. DNSSEC:DS10_INCONSISTENT_NSEC_NSEC3
-#, perl-brace-format
+#. DNSSEC:DS10_INCONSISTENT_NSEC
+#, fuzzy, perl-brace-format
 msgid ""
-"The zone is inconsistent on NSEC and NSEC3. NSEC is fetched from nameservers "
-"with IP addresses \"{ns_ip_list_nsec}\". NSEC3 is fetched from nameservers "
-"with IP addresses \"{ns_ip_list_nsec3}\"."
+"Inconsistent responses from zone with NSEC. Fetched from name servers "
+"\"{ns_list}\"."
+msgstr "Ei vastausta MX-kyselyyn nimipalvelimista \"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_INCONSISTENT_NSEC3
+#, fuzzy, perl-brace-format
+msgid ""
+"Inconsistent responses from zone with NSEC3. Fetched from name servers "
+"\"{ns_list}\"."
+msgstr "Ei vastausta MX-kyselyyn nimipalvelimista \"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_INCONSISTENT_NSEC_NSEC3
+#, fuzzy, perl-brace-format
+msgid ""
+"The zone is inconsistent on NSEC and NSEC3. NSEC is fetched from name "
+"servers \"{ns_list_nsec}\". NSEC3 is fetched from name servers "
+"\"{ns_list_nsec3}\"."
 msgstr ""
 "Zone on epäjohdonmukainen NSEC ja NSEC3 osalta. NSEC on haettu "
 "nimipalvelimilta joiden IP-osoitteet ovat \"{ns_ip_list_nsec}\". NSEC3 on "
 "haettu nimipalvelimilta joiden IP-osoitteet ovat \"{ns_ip_list_nsec3}\"."
 
-#. DNSSEC:DS10_MISSING_NSEC_NSEC3
-#, perl-brace-format
-msgid ""
-"NSEC or NSEC3 is expected but is missing. Fetched from the nameservers with "
-"IP addresses \"{ns_ip_list}\"."
-msgstr ""
-"NSEC tai NSEC3 puuttuu. Tiedot haettu nimipalvelimilta joiden IP-osoitteet "
-"ovat \"{ns_ip_list}\"."
-
 #. DNSSEC:DS10_MIXED_NSEC_NSEC3
-#, perl-brace-format
+#, fuzzy, perl-brace-format
 msgid ""
-"Unexpectedly both NSEC and NSEC3 are reported. Fetched from the nameservers "
-"with IP addresses \"{ns_ip_list}\"."
+"The zone responds with both NSEC and NSEC3, where only one of them is "
+"expected. Fetched from name servers \"{ns_list}\"."
 msgstr ""
 "Sekä NSEC että NSEC3 raportoidaan. Tiedot haettu nimipalvelimilta joiden IP-"
 "osoitteet ovat \"{ns_ip_list}\"."
 
-#. DNSSEC:DS10_NAME_NOT_COVERED_BY_NSEC
-#, perl-brace-format
+#. DNSSEC:DS10_NSEC3PARAM_GIVES_ERR_ANSWER
+#, fuzzy, perl-brace-format
 msgid ""
-"A non-existent name is not correctly covered by the NSEC records. Fetched "
-"from the nameservers with IP addresses \"{ns_ip_list}\"."
+"Unexpected DNS record in the answer section on an NSEC3PARAM query. Fetched "
+"from name servers \"{ns_list}\"."
 msgstr ""
-"NSEC tietueet eivät kata olematonta nimeä niin kuin pitäisi. Tiedot haettu "
-"nimipalvelimilta joiden IP-osoitteet ovat \"{ns_ip_list}\"."
+"Odottamaton RCODE-arvo ({rcode}) MX-kyselyssä nimipalvelimista "
+"\"{ns_ip_list}\"."
 
-#. DNSSEC:DS10_NAME_NOT_COVERED_BY_NSEC3
-#, perl-brace-format
+#. DNSSEC:DS10_NSEC3PARAM_MISMATCHES_APEX
+#, fuzzy, perl-brace-format
 msgid ""
-"A non-existent name is not correctly covered by the NSEC3 records. Fetched "
-"from the nameservers with IP addresses \"{ns_ip_list}\"."
-msgstr ""
-"NSEC3 tietueet eivät kata olematonta nimeä niin kuin pitäisi. Tiedot haettu "
-"nimipalvelimilta joiden IP-osoitteet ovat \"{ns_ip_list}\"."
-
-#. DNSSEC:DS10_NON_EXISTENT_RESPONSE_ERROR
-#, perl-brace-format
-msgid ""
-"No response or error in response on an expected non-existent name. Fetched "
-"from the nameservers with IP addresses \"{ns_ip_list}\"."
+"The returned NSEC3PARAM record has an unexpected non-apex owner name. "
+"Fetched from name servers \"{ns_list}\"."
 msgstr ""
 "Ei vastausta tai virhe vastauksessa olemattomaan verkkotunnukseen "
 "liittyvässä kyselyssä. Tiedot haettu nimipalvelimilta joiden IP-osoitteet "
 "ovat \"{ns_ip_list}\"."
 
-#. DNSSEC:DS10_NSEC3_MISSING_SIGNATURE
-#, perl-brace-format
+#. DNSSEC:DS10_NSEC3PARAM_QUERY_RESPONSE_ERR
+#, fuzzy, perl-brace-format
 msgid ""
-"Missing signatures (RRSIG) for the NSEC3 record or records. Fetched from the "
-"nameservers with IP addresses \"{ns_ip_list}\"."
+"No response or error in response on query for NSEC3PARAM. Fetched from name "
+"servers \"{ns_list}\"."
+msgstr ""
+"Ei vastausta tai virhe vastauksessa olemattomaan verkkotunnukseen "
+"liittyvässä kyselyssä. Tiedot haettu nimipalvelimilta joiden IP-osoitteet "
+"ovat \"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_NSEC3_ERR_TYPE_LIST
+#, fuzzy, perl-brace-format
+msgid ""
+"NSEC3 record for the zone apex with incorrect type list. Fetched from name "
+"servers \"{ns_list}\"."
+msgstr ""
+"SOA MNAME -nimipalvelin on \"localhost\", joka on virheellinen. Haettu "
+"nimipalvelimista \"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_NSEC3_MISMATCHES_APEX
+#, fuzzy, perl-brace-format
+msgid ""
+"The returned NSEC3 record unexpectedly does not match the zone name. Fetched "
+"from name servers \"{ns_list}\"."
+msgstr ""
+"CDNSKEY-tietue tunnisteella {keytag} ei täsmää yhteenkään DNSKEY "
+"tietueeseen. Tiedot haettu nimipalvelimilta joiden IP-osoitteet ovat "
+"\"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_NSEC3_MISSING_SIGNATURE
+#, fuzzy, perl-brace-format
+msgid ""
+"Missing RRSIG (signature) for the NSEC3 record or records. Fetched from name "
+"servers \"{ns_list}\"."
 msgstr ""
 "Allekirjoitukset (RRSIG) puuttuvat NSEC3 tietueelta tai tietueilta. Tiedot "
 "haettu nimipalvelimilta joiden IP-osoitteet ovat \"{ns_ip_list}\"."
 
-#. DNSSEC:DS10_NSEC3_RRSIG_VERIFY_ERROR
-#, perl-brace-format
+#. DNSSEC:DS10_NSEC3_NODATA_MISSING_SOA
+#, fuzzy, perl-brace-format
 msgid ""
-"The signatures (RRSIG) for the NSEC3 record or records cannot be verified. "
-"Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+"Missing SOA record in NODATA response with NSEC3. Fetched from name servers "
+"\"{ns_list}\"."
+msgstr ""
+"Nimipalvelimien \"{ns_ip_list}\" kyselyyn, jossa on tuntematon EDNS-"
+"optiokoodi, ei saatu vastausta."
+
+#. DNSSEC:DS10_NSEC3_NODATA_WRONG_SOA
+#, fuzzy, perl-brace-format
+msgid ""
+"Wrong owner name (\"{domain}\") on SOA record in NODATA response with NSEC3. "
+"Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"Päävyöhyke on \"{domain}\", joka palautui nimipalvelimilta \"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_NSEC3_NO_VERIFIED_SIGNATURE
+#, fuzzy, perl-brace-format
+msgid ""
+"The RRSIG (signature) for the NSEC3 record cannot be verified. Fetched from "
+"name servers \"{ns_list}\"."
 msgstr ""
 "Allekirjoituksia (RRSIG) NSEC3 tietueen osalta ei pystytä varmistamaan. "
 "Tiedot haettu nimipalvelimilta joiden IP-osoitteet ovat \"{ns_ip_list}\"."
 
-#. DNSSEC:DS10_NSEC_MISSING_SIGNATURE
-#, perl-brace-format
+#. DNSSEC:DS10_NSEC3_RRSIG_EXPIRED
+#, fuzzy, perl-brace-format
 msgid ""
-"Missing signatures (RRSIG) for the NSEC record or records. Fetched from the "
-"nameservers with IP addresses \"{ns_ip_list}\"."
+"The RRSIG (signature) with tag {keytag} for the NSEC3 record has expired. "
+"Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"RRSIG tunnisteella {keytag} ja DNSKEY on jo vanhentunut. Tiedot haettu "
+"nimipalvelimilta joiden IP-osoitteet ovat \"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_NSEC3_RRSIG_NOT_YET_VALID
+#, fuzzy, perl-brace-format
+msgid ""
+"The RRSIG (signature) with tag {keytag} for the NSEC3 record it not yet "
+"valid. Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"CDS tietue {keytag} täsmää DNSKEY tietueeseen jolla zone bit (bit 7) pois "
+"päältä. Tiedot haettu nimipalvelimilta joiden IP-osoitteet ovat "
+"\"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_NSEC3_RRSIG_NO_DNSKEY
+#, fuzzy, perl-brace-format
+msgid ""
+"There is no DNSKEY record matching the RRSIG (signature) with tag {keytag} "
+"for the NSEC3 record. Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"DS tietue {keytag} ei täsmää DNSKEY:n  tunnisteella {keytag} algoritmin tai "
+"tiivisteen osalta.. Tiedot haettu nimipalvelimilta joiden IP-osoitteet ovat "
+"\"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_NSEC3_RRSIG_VERIFY_ERROR
+#, fuzzy, perl-brace-format
+msgid ""
+"The RRSIG (signature) with tag {keytag} for the NSEC3 record cannot be "
+"verified. Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"Allekirjoituksia (RRSIG) NSEC3 tietueen osalta ei pystytä varmistamaan. "
+"Tiedot haettu nimipalvelimilta joiden IP-osoitteet ovat \"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_NSEC_ERR_TYPE_LIST
+#, fuzzy, perl-brace-format
+msgid ""
+"NSEC record for the zone apex with incorrect type list. Fetched from name "
+"servers \"{ns_list}\"."
+msgstr ""
+"SOA MNAME -nimipalvelin on \"localhost\", joka on virheellinen. Haettu "
+"nimipalvelimista \"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_NSEC_GIVES_ERR_ANSWER
+#, fuzzy, perl-brace-format
+msgid ""
+"Unexpected DNS record in the answer section on an NSEC query. Fetched from "
+"name servers \"{ns_list}\"."
+msgstr ""
+"Odottamaton RCODE-arvo ({rcode}) MX-kyselyssä nimipalvelimista "
+"\"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_NSEC_MISMATCHES_APEX
+#, fuzzy, perl-brace-format
+msgid ""
+"The returned NSEC record has an unexpected non-apex owner name. Fetched from "
+"name servers \"{ns_list}\"."
+msgstr ""
+"Ei vastausta tai virhe vastauksessa olemattomaan verkkotunnukseen "
+"liittyvässä kyselyssä. Tiedot haettu nimipalvelimilta joiden IP-osoitteet "
+"ovat \"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_NSEC_MISSING_SIGNATURE
+#, fuzzy, perl-brace-format
+msgid ""
+"Missing RRSIG (signature) for the NSEC record or records. Fetched from name "
+"servers \"{ns_list}\"."
 msgstr ""
 "Allekirjoitukset (RRSIG) puuttuvat NSEC3 tietueen tai tietueiden osalta. "
 "Tiedot haettu nimipalvelimilta joiden IP-osoitteet ovat \"{ns_ip_list}\"."
 
-#. DNSSEC:DS10_NSEC_RRSIG_VERIFY_ERROR
-#, perl-brace-format
+#. DNSSEC:DS10_NSEC_NODATA_MISSING_SOA
+#, fuzzy, perl-brace-format
 msgid ""
-"The signatures (RRSIG) for the NSEC record or records cannot be verified. "
-"Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+"Missing SOA record in NODATA response with NSEC. Fetched from name servers "
+"\"{ns_list}\"."
+msgstr ""
+"Nimipalvelimien \"{ns_ip_list}\" kyselyyn, jossa on tuntematon EDNS-"
+"optiokoodi, ei saatu vastausta."
+
+#. DNSSEC:DS10_NSEC_NODATA_WRONG_SOA
+#, fuzzy, perl-brace-format
+msgid ""
+"Wrong owner name (\"{domain}\") on SOA record in NODATA response with NSEC. "
+"Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"Päävyöhyke on \"{domain}\", joka palautui nimipalvelimilta \"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_NSEC_NO_VERIFIED_SIGNATURE
+#, fuzzy, perl-brace-format
+msgid ""
+"There is no RRSIG (signature) for the NSEC record that can be verified. "
+"Fetched from name servers \"{ns_list}\"."
 msgstr ""
 "Allekirjoituksia (RRSIG) NSEC tietueelle tai tietueille ei pystytä "
 "varmentamaan. Tiedot haettu nimipalvelimilta joiden IP-osoitteet ovat "
 "\"{ns_ip_list}\"."
 
-#. DNSSEC:DS10_UNSIGNED_ANSWER
+#. DNSSEC:DS10_NSEC_QUERY_RESPONSE_ERR
+#, fuzzy, perl-brace-format
+msgid ""
+"No response or error in response on query for NSEC. Fetched from name "
+"servers \"{ns_list}\"."
+msgstr ""
+"Ei vastausta tai virhe vastauksessa olemattomaan verkkotunnukseen "
+"liittyvässä kyselyssä. Tiedot haettu nimipalvelimilta joiden IP-osoitteet "
+"ovat \"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_NSEC_RRSIG_EXPIRED
+#, fuzzy, perl-brace-format
+msgid ""
+"The RRSIG (signature) with tag {keytag} for the NSEC record has expired. "
+"Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"RRSIG tunnisteella {keytag} ja DNSKEY on jo vanhentunut. Tiedot haettu "
+"nimipalvelimilta joiden IP-osoitteet ovat \"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_NSEC_RRSIG_NOT_YET_VALID
+#, fuzzy, perl-brace-format
+msgid ""
+"The RRSIG (signature) with tag {keytag} for the NSEC record it not yet "
+"valid. Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"CDS tietue {keytag} täsmää DNSKEY tietueeseen jolla zone bit (bit 7) pois "
+"päältä. Tiedot haettu nimipalvelimilta joiden IP-osoitteet ovat "
+"\"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_NSEC_RRSIG_NO_DNSKEY
+#, fuzzy, perl-brace-format
+msgid ""
+"There is no DNSKEY record matching the RRSIG (signature) with tag {keytag} "
+"for the NSEC record. Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"DS tietue {keytag} ei täsmää DNSKEY:n  tunnisteella {keytag} algoritmin tai "
+"tiivisteen osalta.. Tiedot haettu nimipalvelimilta joiden IP-osoitteet ovat "
+"\"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_NSEC_RRSIG_VERIFY_ERROR
+#, fuzzy, perl-brace-format
+msgid ""
+"The RRSIG (signature) with tag {keytag} for the NSEC record cannot be "
+"verified. Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"Allekirjoituksia (RRSIG) NSEC tietueelle tai tietueille ei pystytä "
+"varmentamaan. Tiedot haettu nimipalvelimilta joiden IP-osoitteet ovat "
+"\"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_SERVER_NO_DNSSEC
+#, fuzzy, perl-brace-format
+msgid ""
+"The following name servers do not support DNSSEC or have not been properly "
+"configured. Testing for NSEC and NSEC3 has been skipped on these servers. "
+"Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"Seuraavat nimipalvelimet eivät vastaa ohjelmistoversiokyselyihin. Palautettu "
+"nimipalvelimista: \"{ns_ip_list}\""
+
+#. DNSSEC:DS10_ZONE_NO_DNSSEC
 #, perl-brace-format
 msgid ""
-"The name \"{domain}\" of RR type \"{rrtype}\" in the answer section of the "
-"response is not signed by any RRSIG. Fetched from the nameservers with IP "
-"addresses \"{ns_ip_list}\"."
+"The zone is not DNSSEC signed or not properly DNSSEC signed. Testing for "
+"NSEC and NSEC3 has been skipped. Fetched from name servers \"{ns_list}\"."
 msgstr ""
-"Nimi \"{domain}\" RR typen \"{rrtype}\" vastauksen \"answer osio\" ei ole "
-"allekirjoitettu RRSIGllä. Tiedot haettu nimipalvelimilta joiden IP-osoitteet "
-"ovat \"{ns_ip_list}\"."
 
 #. DNSSEC:DS11_INCONSISTENT_DS
 msgid "Parent name servers are inconsistent on the existence of DS."
@@ -1815,12 +2389,6 @@ msgstr ""
 "CDNSKEY RRset ei ole allekirjoitettu DNSKEY:llä johon DS-tietue osoittaa. "
 "Tiedot haettu nimipalvelimilta joiden IP-osoitteet ovat \"{ns_ip_list}\"."
 
-#. DNSSEC:DS_BUT_NOT_DNSKEY
-#, perl-brace-format
-msgid "{parent} sent a DS record, but {child} did not send a DNSKEY record."
-msgstr ""
-"{parent} lähetti DS-tietueen, mutta {child} ei lähettänyt DNSKEY-tietuetta."
-
 #. DNSSEC:DURATION_LONG
 #, perl-brace-format
 msgid ""
@@ -1854,50 +2422,14 @@ msgstr ""
 "Palvelin kohteessa {server} lähetti {keys} DNSKEY-tietueet ja {sigs} RRSIG-"
 "tietueet."
 
-#. DNSSEC:ITERATIONS_OK
-#, perl-brace-format
-msgid "The number of NSEC3 iterations is {count}, which is OK."
-msgstr "NSEC3-toistojen lukumäärä on {count}, joka on OK."
-
-#. DNSSEC:KEY_DETAILS
-#, perl-brace-format
-msgid ""
-"Key with keytag {keytag} details : Size = {keysize}, Flags ({sep}, "
-"{rfc5011})."
-msgstr ""
-"Avaimen, jolla on avaintunniste {keytag}, tiedot: koko = {keysize}, liput "
-"({sep}, {rfc5011})."
-
 #. DNSSEC:KEY_SIZE_OK
 msgid "All keys from the DNSKEY RRset have the correct size."
 msgstr "Kaikki DNSKEY RRset -joukon avaimet ovat oikean kokoisia."
-
-#. DNSSEC:MANY_ITERATIONS
-#, perl-brace-format
-msgid "The number of NSEC3 iterations is {count}, which is on the high side."
-msgstr "NSEC3-toistojen lukumäärä on {count}, joka on suhteellisen suuri."
-
-#. DNSSEC:NEITHER_DNSKEY_NOR_DS
-msgid "There are neither DS nor DNSKEY records for the zone."
-msgstr "Vyöhykkeellä ei ole DS- eikä DNSKEY-tietueita."
-
-#. DNSSEC:NO_DNSKEY
-msgid "No DNSKEYs were returned."
-msgstr "DNSKEY-tietueita ei palautettu."
-
-#. DNSSEC:NO_NSEC3PARAM
-#, perl-brace-format
-msgid "{server} returned no NSEC3PARAM records."
-msgstr "{server} ei palauttanut NSEC3PARAM-tietueita."
 
 #. DNSSEC:NO_RESPONSE_DNSKEY
 #, perl-brace-format
 msgid "Nameserver {ns} responded with no DNSKEY record(s)."
 msgstr "Nimipalvelimen {ns} vastauksessa ei ollut DNSKEY-tietueita."
-
-#. DNSSEC:NOT_SIGNED
-msgid "The zone is not signed with DNSSEC."
-msgstr "Vyöhykkeellä ei ole DNSSEC-allekirjoitusta."
 
 #. DNSSEC:REMAINING_LONG
 #, perl-brace-format
@@ -1934,15 +2466,6 @@ msgstr ""
 "RRSIG-tietueen, jolla on avaintunniste {keytag} ja joka kattaa tyypin/tyypit "
 "{types}, voimassaolo on jo päättynyt (voimassaolon päättymisaika: "
 "{expiration})."
-
-#. DNSSEC:TOO_MANY_ITERATIONS
-#, perl-brace-format
-msgid ""
-"The number of NSEC3 iterations is {count}, which is too high for key length "
-"{keylength}."
-msgstr ""
-"NSEC3-toistojen lukumäärä on {count}, joka on liian suuri avaimen pituudelle "
-"{keylength}."
 
 #. DELEGATION:DELEGATION01
 msgid "Minimum number of name servers"
@@ -2012,57 +2535,57 @@ msgid "All the IP addresses used by the nameservers are unique."
 msgstr "Kaikki nimipalvelinten käyttämät IP-osoitteet ovat ainutkertaisia."
 
 #. DELEGATION:ENOUGH_IPV4_NS_CHILD
-#, perl-brace-format
+#, fuzzy, perl-brace-format
 msgid ""
-"Child lists enough ({count}) nameservers ({nsname_list}) that resolve to "
-"IPv4 addresses ({ns_ip_list}). Lower limit set to {minimum}."
+"Child lists enough ({count}) nameservers that resolve to IPv4 addresses. "
+"Lower limit set to {minimum}. Name servers: {ns_list}"
 msgstr ""
 "Alemmalla tasolla listataan tarpeeksi ({count}) nimipalvelimia "
 "({nsname_list}), joita vastaavat IPv4-osoitteet ({ns_ip_list}). Alarajaksi "
 "on asetettu {minimum}."
 
 #. DELEGATION:ENOUGH_IPV4_NS_DEL
-#, perl-brace-format
+#, fuzzy, perl-brace-format
 msgid ""
-"Delegation lists enough ({count}) nameservers ({nsname_list}) that resolve "
-"to IPv4 addresses ({ns_ip_list}). Lower limit set to {minimum}."
+"Delegation lists enough ({count}) nameservers that resolve to IPv4 "
+"addresses. Lower limit set to {minimum}. Name servers: {ns_list}"
 msgstr ""
 "Delegointi listaa tarpeeksi ({count}) nimipalvelimia ({nsname_list}), joita "
 "vastaavat IPv4-osoitteet ({ns_ip_list}). Alarajaksi on asetettu {minimum}."
 
 #. DELEGATION:ENOUGH_IPV6_NS_CHILD
-#, perl-brace-format
+#, fuzzy, perl-brace-format
 msgid ""
-"Child lists enough ({count}) nameservers ({nsname_list}) that resolve to "
-"IPv6 addresses ({ns_ip_list}). Lower limit set to {minimum}."
+"Child lists enough ({count}) nameservers that resolve to IPv6 addresses. "
+"Lower limit set to {minimum}. Name servers: {ns_list}"
 msgstr ""
 "Alemmalla tasolla listataan tarpeeksi ({count}) nimipalvelimia "
 "({nsname_list}), joita vastaavat IPv6-osoitteet ({ns_ip_list}). Alarajaksi "
 "on asetettu {minimum}."
 
 #. DELEGATION:ENOUGH_IPV6_NS_DEL
-#, perl-brace-format
+#, fuzzy, perl-brace-format
 msgid ""
-"Delegation lists enough ({count}) nameservers ({nsname_list}) that resolve "
-"to IPv6 addresses ({ns_ip_list}). Lower limit set to {minimum}."
+"Delegation lists enough ({count}) nameservers that resolve to IPv6 "
+"addresses. Lower limit set to {minimum}. Name servers: {ns_list}"
 msgstr ""
 "Delegointi listaa tarpeeksi ({count}) nimipalvelimia ({nsname_list}), joita "
 "vastaavat IPv6-osoitteet ({ns_ip_list}). Alarajaksi on asetettu {minimum}."
 
 #. DELEGATION:ENOUGH_NS_CHILD
-#, perl-brace-format
+#, fuzzy, perl-brace-format
 msgid ""
-"Child lists enough ({count}) nameservers ({nsname_list}). Lower limit set to "
-"{minimum}."
+"Child lists enough ({count}) nameservers. Lower limit set to {minimum}. Name "
+"servers: {nsname_list}"
 msgstr ""
 "Alemmalla tasolla listataan tarpeeksi ({count}) nimipalvelimia "
 "({nsname_list}). Alarajaksi on asetettu {minimum}."
 
 #. DELEGATION:ENOUGH_NS_DEL
-#, perl-brace-format
+#, fuzzy, perl-brace-format
 msgid ""
-"Parent lists enough ({count}) nameservers ({nsname_list}). Lower limit set "
-"to {minimum}."
+"Delegation lists enough ({count}) nameservers. Lower limit set to {minimum}. "
+"Name servers: {nsname_list}"
 msgstr ""
 "Ylemmällä tasolla listataan tarpeeksi ({count}) nimipalvelimia "
 "({nsname_list}). Alarajaksi on asetettu {minimum}."
@@ -2094,60 +2617,67 @@ msgstr ""
 "Kaikki nimipalvelimen nimet on listattu sekä alemmalla että ylemmällä "
 "tasolla."
 
-#. DELEGATION:NOT_ENOUGH_IPV4_NS_CHILD
-#, perl-brace-format
+#. DELEGATION:NO_RESPONSE
+#, fuzzy, perl-brace-format
 msgid ""
-"Child does not list enough ({count}) nameservers ({nsname_list}) that "
-"resolve to IPv4 addresses ({ns_ip_list}). Lower limit set to {minimum}."
+"Nameserver {ns} did not respond to a query for name {query_name} and type "
+"{rrtype}."
+msgstr "Nimipalvelin {ns} ei vastaa mihinkään kyselyihin UDP:n yli."
+
+#. DELEGATION:NOT_ENOUGH_IPV4_NS_CHILD
+#, fuzzy, perl-brace-format
+msgid ""
+"Child does not list enough ({count}) nameservers that resolve to IPv4 "
+"addresses. Lower limit set to {minimum}. Name servers: {ns_list}"
 msgstr ""
 "Alemmalla tasolla ei listata tarpeeksi ({count}) nimipalvelimia "
 "({nsname_list}), joita vastaavat IPv4-osoitteet ({ns_ip_list}). Alarajaksi "
 "on asetettu {minimum}."
 
 #. DELEGATION:NOT_ENOUGH_IPV4_NS_DEL
-#, perl-brace-format
+#, fuzzy, perl-brace-format
 msgid ""
-"Delegation does not list enough ({count}) nameservers ({nsname_list}) that "
-"resolve to IPv4 addresses ({ns_ip_list}). Lower limit set to {minimum}."
+"Delegation does not list enough ({count}) nameservers that resolve to IPv4 "
+"addresses. Lower limit set to {minimum}. Name servers: {ns_list}"
 msgstr ""
 "Delegointi ei listaa tarpeeksi ({count}) nimipalvelimia ({nsname_list}), "
 "joita vastaavat IPv4-osoitteet ({ns_ip_list}). Alarajaksi on asetettu "
 "{minimum}."
 
 #. DELEGATION:NOT_ENOUGH_IPV6_NS_CHILD
-#, perl-brace-format
+#, fuzzy, perl-brace-format
 msgid ""
-"Child does not list enough ({count}) nameservers ({nsname_list}) that "
-"resolve to IPv6 addresses ({ns_ip_list}). Lower limit set to {minimum}."
+"Child does not list enough ({count}) nameservers that resolve to IPv6 "
+"addresses. Lower limit set to {minimum}. Name servers: {ns_list}"
 msgstr ""
 "Alemmalla tasolla ei listata tarpeeksi ({count}) nimipalvelimia "
 "({nsname_list}), joita vastaavat IPv6-osoitteet ({ns_ip_list}). Alarajaksi "
 "on asetettu {minimum}."
 
 #. DELEGATION:NOT_ENOUGH_IPV6_NS_DEL
-#, perl-brace-format
+#, fuzzy, perl-brace-format
 msgid ""
-"Delegation does not list enough ({count}) nameservers ({nsname_list}) that "
-"resolve to IPv6 addresses ({ns_ip_list}). Lower limit set to {minimum}."
+"Delegation does not list enough ({count}) nameservers that resolve to IPv6 "
+"addresses. Lower limit set to {minimum}. Name servers: {ns_list}"
 msgstr ""
 "Delegointi ei listaa tarpeeksi ({count}) nimipalvelimia ({nsname_list}), "
 "joita vastaavat IPv6-osoitteet ({ns_ip_list}). Alarajaksi on asetettu "
 "{minimum}."
 
 #. DELEGATION:NOT_ENOUGH_NS_CHILD
-#, perl-brace-format
+#, fuzzy, perl-brace-format
 msgid ""
-"Child does not list enough ({count}) nameservers ({nsname_list}). Lower "
-"limit set to {minimum}."
+"Child does not list enough ({count}) nameservers. Lower limit set to "
+"{minimum}. Name servers: {nsname_list}"
 msgstr ""
 "Alemmalla tasolla ei listata tarpeeksi ({count}) nimipalvelimia "
 "({nsname_list}). Alarajaksi on asetettu {minimum}."
 
 #. DELEGATION:NOT_ENOUGH_NS_DEL
-#, perl-brace-format
+#, fuzzy, perl-brace-format
 msgid ""
-"Parent does not list enough ({count}) nameservers ({nsname_list}). Lower "
-"limit set to {minimum}."
+"Delegation does not list enough ({count}) nameservers. Lower limit set to "
+"{minimum}. Name servers: {nsname_list}"
 msgstr ""
 "Ylemmällä tasolla ei listata tarpeeksi ({count}) nimipalvelimia "
 "({nsname_list}). Alarajaksi on asetettu {minimum}."
@@ -2236,8 +2766,10 @@ msgstr ""
 "alemmalla tasolla."
 
 #. DELEGATION:UNEXPECTED_RCODE
-#, perl-brace-format
-msgid "Nameserver {ns} answered query with an unexpected rcode ({rcode})."
+#, fuzzy, perl-brace-format
+msgid ""
+"Nameserver {ns} answered query for name {query_name} and type {rrtype} with "
+"RCODE {rcode}."
 msgstr ""
 "Nimipalvelin {ns} vastasi kyselyyn odottamattomalla rcode:lla ({rcode})."
 
@@ -2294,10 +2826,6 @@ msgstr "Testaa tuntemattomia EDNS-lippuja"
 #. NAMESERVER:NAMESERVER13
 msgid "Test for truncated response on EDNS query"
 msgstr "Testaa lyhennetty vastaus EDNS-kyselyssä"
-
-#. NAMESERVER:NAMESERVER14
-msgid "Test for unknown version with unknown OPTION-CODE"
-msgstr "Testaa tuntematon versio tuntemattomalla OPTION-CODE:lla"
 
 #. NAMESERVER:NAMESERVER15
 msgid "Checking for revealed software version"
@@ -2588,24 +3116,43 @@ msgstr ""
 "Tuntemattomalla EDNS-optiokoodilla tehty DNS-vastaus odottamattomasti ei ole "
 "nimipalvelimista autoritatiiviselta \"{ns_ip_list}\"."
 
-#. NAMESERVER:N15_NO_VERSION
-#, perl-brace-format
+#. NAMESERVER:N15_ERROR_ON_VERSION_QUERY
+#, fuzzy, perl-brace-format
 msgid ""
-"The following name server(s) do not respond to software version queries. "
-"Returned from name servers: \"{ns_ip_list}\""
+"The following name server(s) do not respond or respond with SERVFAIL to "
+"software version query \"{query_name}\". Returned from name servers: "
+"\"{ns_list}\""
+msgstr ""
+"Seuraavat nimipalvelimet eivät vastaa ohjelmistoversiokyselyihin. Palautettu "
+"nimipalvelimista: \"{ns_ip_list}\""
+
+#. NAMESERVER:N15_NO_VERSION_REVEALED
+#, fuzzy, perl-brace-format
+msgid ""
+"The following name server(s) do not reveal the software version. Returned "
+"from name servers: \"{ns_list}\""
 msgstr ""
 "Seuraavat nimipalvelimet eivät vastaa ohjelmistoversiokyselyihin. Palautettu "
 "nimipalvelimista: \"{ns_ip_list}\""
 
 #. NAMESERVER:N15_SOFTWARE_VERSION
-#, perl-brace-format
+#, fuzzy, perl-brace-format
 msgid ""
 "The following name server(s) respond to software version query "
 "\"{query_name}\" with string \"{string}\". Returned from name servers: "
-"\"{ns_ip_list}\""
+"\"{ns_list}\""
 msgstr ""
 "Seuraavat nimipalvelimet vastaavat ohjelmistoversiokyselyyn \"{query_name}\" "
 "merkkijonolla \"{string}\". Palautettu nimipalvelimista: \"{ns_ip_list}\""
+
+#. NAMESERVER:N15_WRONG_CLASS
+#, fuzzy, perl-brace-format
+msgid ""
+"The following name server(s) do not return CH class record(s) on CH class "
+"query. Returned from name servers: \"{ns_list}\""
+msgstr ""
+"Seuraavat nimipalvelimet eivät vastaa ohjelmistoversiokyselyihin. Palautettu "
+"nimipalvelimista: \"{ns_ip_list}\""
 
 #. NAMESERVER:QNAME_CASE_INSENSITIVE
 #, perl-brace-format
@@ -2905,6 +3452,10 @@ msgstr "MX-tietue on"
 #. ZONE:ZONE10
 msgid "No multiple SOA records"
 msgstr "Ei useita SOA-tietueita"
+
+#. ZONE:ZONE11
+msgid "SPF policy validation"
+msgstr ""
 
 #. ZONE:RETRY_MINIMUM_VALUE_LOWER
 #, perl-brace-format
@@ -3215,6 +3766,73 @@ msgstr ""
 "Odottamaton RCODE-arvo ({rcode}) MX-kyselyssä nimipalvelimista "
 "\"{ns_ip_list}\"."
 
+#. ZONE:Z11_DIFFERENT_SPF_POLICIES_FOUND
+#, fuzzy, perl-brace-format
+msgid ""
+"The following name servers returned the same SPF policy. Name servers: "
+"{ns_list}."
+msgstr ""
+"Seuraavat nimipalvelimet ilmoitetaan samalla IPv4 prefixillä ({ip_prefix}): "
+"\"{ns_list}\""
+
+#. ZONE:Z11_INCONSISTENT_SPF_POLICIES
+msgid ""
+"One or more name servers do not publish the same SPF policy as the others."
+msgstr ""
+
+#. ZONE:Z11_NO_SPF_FOUND
+#, fuzzy, perl-brace-format
+msgid "No SPF policy was found for {domain}."
+msgstr "Ei vastausta kohteelta {ns} kysyttäessä kohteesta {domain}."
+
+#. ZONE:Z11_NO_SPF_NON_MAIL_DOMAIN
+#, perl-brace-format
+msgid ""
+"No SPF policy was found for {domain}, which is a type of domain (root, TLD "
+"or under .ARPA) not expected to be used for email."
+msgstr ""
+
+#. ZONE:Z11_NON_NULL_SPF_NON_MAIL_DOMAIN
+#, perl-brace-format
+msgid ""
+"A non-null SPF policy was found on {domain}, although this type of domain "
+"(root, TLD or under .ARPA) is not expected to be used for email."
+msgstr ""
+
+#. ZONE:Z11_NULL_SPF_NON_MAIL_DOMAIN
+#, perl-brace-format
+msgid ""
+"A null SPF policy was found on {domain}, which is a type of domain (root, "
+"TLD or under .ARPA) not expected to be used for email."
+msgstr ""
+
+#. ZONE:Z11_SPF_MULTIPLE_RECORDS
+#, fuzzy, perl-brace-format
+msgid ""
+"The following name servers returned more than one SPF policy. Name servers: "
+"{ns_list}."
+msgstr "Seuraavat nimipalvelimet eivät vastanneet IP-osoitetta: {nsname_list}."
+
+#. ZONE:Z11_SPF_SYNTAX_ERROR
+#, perl-brace-format
+msgid ""
+"The SPF policy of {domain} has a syntax error. Policy retrieved from the "
+"following nameservers: {ns_list}."
+msgstr ""
+
+#. ZONE:Z11_SPF_SYNTAX_OK
+#, perl-brace-format
+msgid "The SPF policy of {domain} has correct syntax."
+msgstr ""
+
+#. ZONE:Z11_UNABLE_TO_CHECK_FOR_SPF
+#, fuzzy
+msgid ""
+"None of the zone’s name servers responded with an authoritative response to "
+"queries for SPF policies."
+msgstr ""
+"Nimipalvelin {ns} ei anna autoritatiivista vastausta NS-kyselyyn UDP:n yli."
+
 #. SYSTEM:CANNOT_CONTINUE
 #, perl-brace-format
 msgid "Not enough data about {domain} was found to be able to run tests."
@@ -3276,16 +3894,6 @@ msgstr ""
 "Pyyntö ajaa {testcase} tuntemattomassa moduulissa {module}. Tunnetut "
 "moduulit: {module_list}."
 
-#. SYSTEM:FAKE_DELEGATION
-msgid "Followed a fake delegation."
-msgstr "Seurattu väärää delegointia."
-
-#. SYSTEM:ADDED_FAKE_DELEGATION
-#, perl-brace-format
-msgid "Added a fake delegation for domain {domain} to name server {ns}."
-msgstr ""
-"Lisätty väärä delegointi verkkotunnukselle {domain} nimipalvelimelle {ns}."
-
 #. SYSTEM:FAKE_DELEGATION_TO_SELF
 #, perl-brace-format
 msgid ""
@@ -3316,3 +3924,4 @@ msgstr ""
 #, perl-brace-format
 msgid "Big packet size ({size}) (try with \"{command}\")."
 msgstr "Suurikokoinen paketti ({size}) (yritä käyttää komentoa \"{command}\")."
+
