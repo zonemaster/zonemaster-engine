@@ -275,6 +275,7 @@ sub _resolve_cname {
 sub _recurse {
     my ( $class, $name, $type, $dns_class, $state ) = @_;
     $name = q{} . name( $name );
+    $state->{qname} //= $name;
 
     if ( $state->{in_progress}{$name}{$type} ) {
         return;
