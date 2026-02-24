@@ -97,3 +97,33 @@ jobs:
       - name: Test
         run: |
           prove -lv t
+
+  build-artifact:
+    needs: run-tests
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: apt install
+        run: sudo apt-get install -y build-essential git libmodule-install-perl
+
+      - name: build
+        run: perl Makefile.PL && make dist
+
+      - name: Get short SHA
+        id: short_sha
+        run: echo "short_sha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
+      - name: Get Zonemaster-Engine version
+        id: version
+        run: |
+          result=`grep "use version; our $VERSION" lib/Zonemaster/Engine.pm`
+          result+='printf $VERSION;'
+          VERSION=`perl -e "$result"`
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Zonemaster-Engine-${{ steps.version.outputs.version }}-${{ steps.short_sha.outputs.short_sha }}
+          path: Zonemaster-Engine-${{ steps.version.outputs.version }}.tar.gz
