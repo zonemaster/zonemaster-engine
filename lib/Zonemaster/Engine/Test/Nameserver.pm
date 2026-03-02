@@ -1663,9 +1663,9 @@ sub nameserver13 {
 
     for my $ns ( @nss ) {
 
-        next if ( _ip_disabled_message( \@results, $ns, q{SOA} ) );
+        next if ( _ip_disabled_message( \@results, $ns, q{DNSKEY} ) );
 
-        my $p = $ns->query( $zone->name, q{SOA}, { usevc => 0, fallback => 0, edns_details => { version => 0, do => 1, size => 512 } } );
+        my $p = $ns->query( $zone->name, q{DNSKEY}, { usevc => 0, fallback => 0, edns_details => { version => 0, do => 1, size => 512 } } );
 
         if ( $p ) {
             if ( $p->rcode eq q{FORMERR} and not $p->edns_rcode ) {
