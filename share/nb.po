@@ -2842,7 +2842,7 @@ msgstr ""
 "Feilaktig RCODE ({rcode}) i svar på spørring om EDNS versjon 1. Hentet fra "
 "navnetjenere med IP-adressene {ns_ip_list}"
 
-#. NAMESERVER:N11_N11_NO_EDNS
+#. NAMESERVER:N11_NO_EDNS
 #, perl-brace-format
 msgid ""
 "The DNS response, on query with unknown EDNS option-code, does not contain "

@@ -464,7 +464,7 @@ Readonly my %TAG_DESCRIPTIONS => (
           'Erroneous RCODE ("{rcode}") in response to an EDNS version 1 query. Fetched from the nameservers with IP addresses {ns_ip_list}', @_;
     },
     N11_NO_EDNS => sub {
-        __x    # NAMESERVER:N11_N11_NO_EDNS
+        __x    # NAMESERVER:N11_NO_EDNS
           'The DNS response, on query with unknown EDNS option-code, does not contain any EDNS from name servers "{ns_ip_list}".', @_;
     },
     N11_NO_RESPONSE => sub {

@@ -2814,7 +2814,7 @@ msgstr ""
 "Napačna RCODE (\"{rcode}\") v odgovoru na poizvedbo EDNS verzija 1. Podatki "
 "pridobljeni iz \"{ns_ip_list}\"."
 
-#. NAMESERVER:N11_N11_NO_EDNS
+#. NAMESERVER:N11_NO_EDNS
 #, perl-brace-format
 msgid ""
 "The DNS response, on query with unknown EDNS option-code, does not contain "

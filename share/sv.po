@@ -2894,7 +2894,7 @@ msgstr ""
 "Den felaktiga svarskoden (RCODE) \"{rcode}\" i svaret på en fråga med EDNS "
 "version 1. Hämtat från namnservrarna med IP-adresserna \"{ns_ip_list}\"."
 
-#. NAMESERVER:N11_N11_NO_EDNS
+#. NAMESERVER:N11_NO_EDNS
 #, perl-brace-format
 msgid ""
 "The DNS response, on query with unknown EDNS option-code, does not contain "
