@@ -112,7 +112,12 @@ jobs:
 
       - name: Get short SHA
         id: short_sha
-        run: echo "short_sha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+        run: |
+            if [ "${{ github.event_name }}" == "pull_request" ]; then
+                echo "SHORT_SHA=$(echo ${{ github.event.pull_request.head.sha }} | cut -c1-7)" >> $GITHUB_ENV
+            else
+                echo "SHORT_SHA=$(echo ${{ github.sha }} | cut -c1-7)" >> $GITHUB_ENV
+            fi
 
       - name: Get Zonemaster-Engine version
         id: version
@@ -125,5 +130,5 @@ jobs:
       - name: upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Zonemaster-Engine-${{ steps.version.outputs.version }}-${{ steps.short_sha.outputs.short_sha }}
+          name: Zonemaster-Engine-${{ steps.version.outputs.version }}-${{ env.SHORT_SHA }}
           path: Zonemaster-Engine-${{ steps.version.outputs.version }}.tar.gz
