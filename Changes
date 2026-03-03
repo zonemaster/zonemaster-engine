@@ -7,6 +7,7 @@ v8.1.1 2026-03-04 (part of Zonemaster v2025.2.1 release)
  - Fixes inactive upward referral guard (#1494)
  - Updates root hints after B-root renumbering (#1490)
  - Fixes missing value in Zone11 message tag (#1491)
+ - Updates Swedish translation (#1509)
 
 
 v8.1.0 2025-12-17 (part of Zonemaster v2025.2 release)
