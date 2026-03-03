@@ -108,7 +108,7 @@ jobs:
         run: sudo apt-get install -y build-essential git libmodule-install-perl
 
       - name: build
-        run: perl Makefile.PL && make dist
+        run: perl Makefile.PL && make all dist
 
       - name: Get short SHA
         id: short_sha
