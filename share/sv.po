@@ -70,7 +70,7 @@ msgstr "Bakåtuppslagningen (PTR) stämmer med namnservernamnet."
 #. ADDRESS:A01_ADDR_NOT_GLOBALLY_REACHABLE
 #, perl-brace-format
 msgid "IP address(es) not listed as globally reachable: \"{ns_list}\"."
-msgstr "IP-adresser som inte är angivna som globalt routbara: \"{ns_list}\"."
+msgstr "IP-adresser som inte är angivna som globalt nåbara: \"{ns_list}\"."
 
 #. ADDRESS:A01_DOCUMENTATION_ADDR
 #, perl-brace-format
@@ -103,7 +103,7 @@ msgstr "Inga namnservrar kunde hittas."
 #, perl-brace-format
 msgid "Nameserver {nsname} has an IP address ({ns_ip}) without PTR configured."
 msgstr ""
-"Namnservern {nsname} har en IP-adress ({ns_ip}) utan reverstuppslagning "
+"Namnservern {nsname} har en IP-adress ({ns_ip}) utan reversuppslagning"
 "(PTR)."
 
 #. ADDRESS:NAMESERVER_IP_PTR_MISMATCH
@@ -1480,7 +1480,7 @@ msgid ""
 "configured. DNSKEY cannot be tested on those servers. Fetched from name "
 "servers \"{ns_list}\"."
 msgstr ""
-"En del namnservrar saknar DNSSEC-stöd eller är felkonfigurerade. Uppgift "
+"En del namnservrar saknar DNSSEC-stöd eller är felkonfigurerade. Information "
 "hämtad från: \"{ns_list}\"."
 
 #. DNSSEC:DS05_ZONE_NO_DNSSEC
@@ -1490,7 +1490,7 @@ msgid ""
 "be tested. Fetched from name servers \"{ns_list}\"."
 msgstr ""
 "Zonen är osignerad eller felaktigt DNSSEC-signerad. DNSKEY-test går ej att "
-"utföra. Information från \"{ns_list}\"."
+"utföra. Information hämtad från \"{ns_list}\"."
 
 #. DNSSEC:DS07_DS_FOR_SIGNED_ZONE
 msgid "The parent zone has DS record or records for the signed child zone."
@@ -2425,7 +2425,7 @@ msgstr "Alla nycklar i DNSKEY RR-uppsättningen har rätt storlek."
 #. DNSSEC:NO_RESPONSE_DNSKEY
 #, perl-brace-format
 msgid "Nameserver {ns} responded with no DNSKEY record(s)."
-msgstr "Svarspaketet från namnservern \"{ns}\" har ingen DNSKEY-post."
+msgstr "Svaret från namnservern \"{ns}\" har ingen DNSKEY-post."
 
 #. DNSSEC:REMAINING_LONG
 #, perl-brace-format
