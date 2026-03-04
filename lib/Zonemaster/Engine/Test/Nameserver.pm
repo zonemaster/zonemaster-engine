@@ -464,7 +464,7 @@ Readonly my %TAG_DESCRIPTIONS => (
           'Erroneous RCODE ("{rcode}") in response to an EDNS version 1 query. Fetched from the nameservers with IP addresses {ns_ip_list}', @_;
     },
     N11_NO_EDNS => sub {
-        __x    # NAMESERVER:N11_N11_NO_EDNS
+        __x    # NAMESERVER:N11_NO_EDNS
           'The DNS response, on query with unknown EDNS option-code, does not contain any EDNS from name servers "{ns_ip_list}".', @_;
     },
     N11_NO_RESPONSE => sub {
@@ -1663,9 +1663,9 @@ sub nameserver13 {
 
     for my $ns ( @nss ) {
 
-        next if ( _ip_disabled_message( \@results, $ns, q{SOA} ) );
+        next if ( _ip_disabled_message( \@results, $ns, q{DNSKEY} ) );
 
-        my $p = $ns->query( $zone->name, q{SOA}, { usevc => 0, fallback => 0, edns_details => { version => 0, do => 1, size => 512 } } );
+        my $p = $ns->query( $zone->name, q{DNSKEY}, { usevc => 0, fallback => 0, edns_details => { version => 0, do => 1, size => 512 } } );
 
         if ( $p ) {
             if ( $p->rcode eq q{FORMERR} and not $p->edns_rcode ) {

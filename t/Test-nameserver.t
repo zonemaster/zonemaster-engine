@@ -111,10 +111,14 @@ $zone = Zonemaster::Engine->zone( '.' );
 zone_gives( 'nameserver07', $zone, [q{UPWARD_REFERRAL_IRRELEVANT}] );
 zone_gives_not( 'nameserver07', $zone, [qw{UPWARD_REFERRAL NO_UPWARD_REFERRAL}] );
 
+# nameserver{08,09,10} -- no unit tests yet, see https://github.com/zonemaster/zonemaster-engine/issues/1146
+
 # nameserver11
 $zone = Zonemaster::Engine->zone( 'bemacom.se' );
 zone_gives( 'nameserver11', $zone, [q{N11_UNEXPECTED_RCODE}] );
 zone_gives_not( 'nameserver11', $zone, [qw{N11_NO_EDNS N11_NO_RESPONSE N11_RETURNS_UNKNOWN_OPTION_CODE N11_UNEXPECTED_ANSWER_SECTION N11_UNSET_AA}] );
+
+# nameserver{12,13,14} -- no unit tests yet, see https://github.com/zonemaster/zonemaster-engine/issues/1146
 
 # nameserver15 -- see t/Test-nameserver15.t instead.
 
@@ -182,36 +186,6 @@ zone_gives( 'nameserver07', $zone, [q{NO_NETWORK}] );
 zone_gives_not( 'nameserver07', $zone, [qw{UPWARD_REFERRAL_IRRELEVANT UPWARD_REFERRAL NO_UPWARD_REFERRAL}] );
 zone_gives( 'nameserver08', $zone, [q{NO_NETWORK}] );
 zone_gives_not( 'nameserver08', $zone, [qw{QNAME_CASE_INSENSITIVE QNAME_CASE_SENSITIVE}] );
-
-#Zonemaster::Engine::Profile->effective->set( q{net.ipv4}, 1 );
-#Zonemaster::Engine::Profile->effective->set( q{net.ipv6}, 0 );
-#$zone = Zonemaster::Engine->zone( 'fr' );
-#zone_gives( 'nameserver01', $zone, [q{NO_RECURSOR}] );
-#zone_gives_not( 'nameserver01', $zone, [qw{NO_NETWORK IS_A_RECURSOR}] );
-#$zone = Zonemaster::Engine->zone( 'afnic.fr' );
-#zone_gives( 'nameserver05', $zone, [q{IPV6_DISABLED}] );
-#zone_gives_not( 'nameserver05', $zone, [qw{NO_NETWORK IPV4_DISABLED}] );
-#
-#if ( Zonemaster::Engine::Util::supports_ipv6() ) {
-#
-#    Zonemaster::Engine::Profile->effective->set( q{net.ipv4}, 0 );
-#    Zonemaster::Engine::Profile->effective->set( q{net.ipv6}, 1 );
-#    $zone = Zonemaster::Engine->zone( 'fr' );
-#    zone_gives( 'nameserver01', $zone, [q{NO_RECURSOR}] );
-#    zone_gives_not( 'nameserver01', $zone, [qw{NO_NETWORK IS_A_RECURSOR}] );
-#    $zone = Zonemaster::Engine->zone( 'afnic.fr' );
-#    zone_gives( 'nameserver05', $zone, [q{IPV4_DISABLED}] );
-#    zone_gives_not( 'nameserver05', $zone, [qw{NO_NETWORK IPV6_DISABLED}] );
-#
-#    Zonemaster::Engine::Profile->effective->set( q{net.ipv4}, 1 );
-#    Zonemaster::Engine::Profile->effective->set( q{net.ipv6}, 1 );
-#    $zone = Zonemaster::Engine->zone( 'fr' );
-#    zone_gives( 'nameserver01', $zone, [q{NO_RECURSOR}] );
-#    zone_gives_not( 'nameserver01', $zone, [qw{NO_NETWORK IS_A_RECURSOR}] );
-#    $zone = Zonemaster::Engine->zone( 'afnic.fr' );
-#    zone_gives_not( 'nameserver05', $zone, [qw{NO_NETWORK IPV4_DISABLED IPV6_DISABLED}] );
-#
-#}
 
 Zonemaster::Engine::Profile->effective->set( q{no_network}, 1 );
 
