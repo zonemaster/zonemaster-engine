@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-03 12:34+0000\n"
+"POT-Creation-Date: 2026-03-04 15:43+0000\n"
 "PO-Revision-Date: 2026-03-02 16:56+0000\n"
 "Last-Translator: mattias.paivarinta@iis.se\n"
 "Language-Team: Zonemaster Team\n"
@@ -103,8 +103,7 @@ msgstr "Inga namnservrar kunde hittas."
 #, perl-brace-format
 msgid "Nameserver {nsname} has an IP address ({ns_ip}) without PTR configured."
 msgstr ""
-"Namnservern {nsname} har en IP-adress ({ns_ip}) utan reversuppslagning"
-"(PTR)."
+"Namnservern {nsname} har en IP-adress ({ns_ip}) utan reversuppslagning (PTR)."
 
 #. ADDRESS:NAMESERVER_IP_PTR_MISMATCH
 #, perl-brace-format
