@@ -81,8 +81,6 @@ t/nameserver-axfr.t
 t/nameserver.data
 t/nameserver.t
 t/normalization.t
-t/old-bugs.data
-t/old-bugs.t
 t/packet.t
 t/pod-coverage.t
 t/pod.t
