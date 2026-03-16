@@ -1,0 +1,37 @@
+name: Code coverage
+
+on:
+  push:
+    branches:
+      - develop
+      - master
+      - 'releases/**'
+  pull_request:
+    branches:
+      - develop
+      - master
+      - 'releases/**'
+
+jobs:
+  coverage:
+    runs-on: ubuntu-22.04
+    name: Test coverage
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Prepare testing environment
+        run: |
+          sudo apt install -y cpanminus libdevel-cover-perl && \
+          cpanm --sudo --notest Devel::Cover::Report::Coveralls
+
+      - name: Install module and dependencies
+        uses: ./.github/actions/install-with-dependencies
+        with:
+          zonemaster_ldns_branch: develop
+
+      - name: Show content of log files
+        if: ${{ failure() }}
+        run: cat /home/runner/.cpanm/work/*/build.log
+
+      - name: Run coverage
+        run: cover -test -report Coveralls
