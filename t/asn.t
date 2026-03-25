@@ -21,9 +21,9 @@ my ( $asn2, $prefix2 ) = Zonemaster::Engine::ASNLookup->get_with_prefix( '91.226
 is $asn2->[0], 197564, '91.226.36.46 is in AS197564';
 is $prefix2->prefix, '91.226.36.0/23', '91.226.36.46 is in 91.226.36.0/24';
 
-my @asn3 = Zonemaster::Engine::ASNLookup->get( '2001:503:ba3e::2:30' );
+my @asn3 = Zonemaster::Engine::ASNLookup->get( '2001:7fd::1' );
 is( scalar( @asn3 ), 1, 'Only one result' );
-ok $asn3[0] >= 390000, '2001:503:ba3e::2:30 is in AS' . $asn3[0];
+is $asn3[0], 25152, '2001:7fd::1 is in AS 25152';
 
 my ( $asn4, $prefix4 ) = Zonemaster::Engine::ASNLookup->get_with_prefix( '192.168.0.1' );
 ok( scalar @{$asn4} == 0, '192.168.0.1 (RFC1918 address) is in no AS' );
