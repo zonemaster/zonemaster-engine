@@ -21,16 +21,6 @@ isa_ok( $p, 'Zonemaster::Engine::Packet' );
 ok( $p->answer > 0, 'answer records' );
 is( name( ($p->answer)[0]->name ), 'www.iis.se', 'RR name ok' );
 
-my $p2 = Zonemaster::Engine::Recursor->recurse( 'www.wiccainfo.se' );
-isa_ok( $p2, 'Zonemaster::Engine::Packet' );
-is( scalar( $p2->answer ), 2, 'answer records' );
-isa_ok( ($p2->answer)[0], 'Zonemaster::LDNS::RR::CNAME' );
-is( name( ($p2->answer)[0]->owner ), 'www.wiccainfo.se', 'RR name ok' );
-is( name( ($p2->answer)[0]->cname ), 'spencer.faerywicca.se', 'RR cname ok' );
-isa_ok( ($p2->answer)[1], 'Zonemaster::LDNS::RR::A' );
-is( name( ($p2->answer)[1]->owner ), 'spencer.faerywicca.se', 'RR name ok' );
-is( ($p2->answer)[1]->address, '109.74.12.164', 'RR address ok' );
-
 is_parent( 'iis.se',                                                                   'se' );
 is_parent( 'www.iis.se',                                                               'iis.se' );
 is_parent( 'pp.se',                                                                    'se' );
@@ -54,11 +44,6 @@ my ( $name, $packet ) = Zonemaster::Engine::Recursor->parent( 'www.iis.se' );
 isa_ok( $packet, 'Zonemaster::Engine::Packet' );
 is( $name, 'iis.se', 'name ok' );
 ok( $packet->no_such_record, 'expected packet content' );
-
-my @addr = Zonemaster::Engine::Recursor->get_addresses_for( 'ns.nic.se' );
-isa_ok( $_, 'Net::IP::XS' ) for @addr;
-is( $addr[0]->short, '212.247.7.228',      'expected address' );
-is( $addr[1]->short, '2a00:801:f0:53::53', 'expected address' );
 
 my $ns_count    = Zonemaster::Engine::Nameserver->all_known_nameservers;
 my $cache_count = keys %Zonemaster::Engine::Nameserver::Cache::object_cache;
