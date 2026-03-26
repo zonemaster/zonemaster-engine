@@ -81,11 +81,11 @@ ok( !!( grep { $_->tag eq 'FAKE_DELEGATION_NO_IP' } @{ Zonemaster::Engine->logge
 
 Zonemaster::Engine->logger->clear_history;
 Zonemaster::Engine->add_fake_delegation(
-    'nic.se' => {
-        'ns.nic.se'  => [ '212.247.7.228',  '2a00:801:f0:53::53' ],
-        'i.ns.se'    => [ '194.146.106.22', '2001:67c:1010:5::53' ],
-        'ns3.nic.se' => [ '212.247.8.152',  '2a00:801:f0:211::152' ],
-        'ns4.nic.se' => [ ]
+    'nic.fr' => {
+        'ns1.ext.nic.fr' => [ '193.51.208.13' ],
+        'ns4.nic.fr'     => [ '192.134.4.19', '2001:67c:2218:2::4:19' ],
+        'ns6.ext.nic.fr' => [ '130.59.31.29', '2001:620:0:ff::2f' ],
+        'ns7.ext.nic.fr' => []
     },
     fill_in_empty_oob_glue => 0,
 );
