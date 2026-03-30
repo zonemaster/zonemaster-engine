@@ -157,12 +157,6 @@ sub answerfrom {
     return $from;
 }
 
-sub TO_JSON {
-    my ( $self ) = @_;
-
-    return { 'Zonemaster::Engine::Packet' => $self->packet };
-}
-
 1;
 
 =head1 NAME
@@ -231,10 +225,6 @@ C<authority> and C<additional>, only RRs from those sections are returned.
 =item answerfrom
 
 Wrapper for the underlying packet method, that replaces undefined values with the string C<E<lt>unknownE<gt>>.
-
-=item TO_JSON
-
-Support method for L<JSON> to be able to serialize these objects.
 
 =back
 

@@ -155,12 +155,6 @@ sub prepend {
     return $self->new( { labels => \@labels } );
 }
 
-sub TO_JSON {
-    my ( $self ) = @_;
-
-    return $self->string;
-}
-
 1;
 
 =head1 NAME
@@ -239,10 +233,6 @@ See also L<https://tools.ietf.org/html/rfc7719#section-6>.
 =item prepend($label)
 
 Returns a new L<Zonemaster::Engine::DNSName> object, representing the called one with the given label prepended.
-
-=item TO_JSON
-
-Helper method for JSON encoding.
 
 =back
 
