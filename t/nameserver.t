@@ -313,22 +313,61 @@ is($ns_test->dns->source, '::1', 'Source IPv6 address set.');
 # We have to make a query to test the following message tags, so no_network must be false.
 Zonemaster::Engine::Profile->effective->set( q{no_network}, 0 );
 
+Zonemaster::Engine->logger->clear_history();
+
 # 192.0.2.17 is part of TEST-NET-1 IP address range (see RFC6890) and reserved
 # for documentation.
 my $fail_ns = Zonemaster::Engine::Nameserver->new( { name => 'fail', address => '192.0.2.17' } );
 my $fail_p = $fail_ns->query( 'example.org', 'SOA', {} );
 is( $fail_p, undef, 'No return from broken server' );
-my ( $e ) = grep { $_->tag eq 'LOOKUP_ERROR' } @{ Zonemaster::Engine->logger->entries };
-isa_ok( $e, 'Zonemaster::Engine::Logger::Entry' );
 
-( $e ) = grep { $_->tag eq 'BLACKLISTING' } @{ Zonemaster::Engine->logger->entries };
-is( %{$e->args}{proto}, 'UDP', 'Name server is blacklisted for UDP on non-EDNS SOA UDP query' );
+if ( $ENV{ZONEMASTER_RECORD} ) {
+    # The tests in this block will not work if we are running offline (i.e.
+    # without ZONEMASTER_RECORD=1).
+    #
+    # That is because the nameserver.data file already cached the
+    # failure to query $fail_ns, therefore $fail_ns->query() immediately
+    # returns undef without attempting to use the network. This path only
+    # generates a CACHED_RETURN logger entry, whereas the LOOKUP_ERROR and
+    # BLACKLISTING entries are only generated when we are actually attempting
+    # the query over the network.
+    #
+    # If we are running offline and the previous $fail_ns->query() did give us
+    # those two messages, it arguably means that there is a bug in the cache.
+    my ( $e ) = grep { $_->tag eq 'LOOKUP_ERROR' } @{ Zonemaster::Engine->logger->entries };
+    isa_ok( $e, 'Zonemaster::Engine::Logger::Entry' );
+
+    ( $e ) = grep { $_->tag eq 'BLACKLISTING' } @{ Zonemaster::Engine->logger->entries };
+    is( %{$e->args}{proto}, 'UDP', 'Name server is blacklisted for UDP on non-EDNS SOA UDP query' );
+}
+else {
+    ok( ! grep({ $_->tag eq 'EXTERNAL_QUERY' } @{ Zonemaster::Engine->logger->entries }),
+        'No network access was attempted' ) or diag(join("\n", @{ Zonemaster::Engine->logger->entries }));
+    ok( ! grep({ $_->tag eq 'LOOKUP_ERROR' } @{ Zonemaster::Engine->logger->entries }),
+        'The lookup error came from cache, not network' );
+    ok( ! grep({ $_->tag eq 'BLACKLISTING' } @{ Zonemaster::Engine->logger->entries }),
+        'No blacklisting is done when running offline' );
+}
 
 Zonemaster::Engine->logger->clear_history();
 
 my $fail_p_tcp = $fail_ns->query( 'example.org', 'SOA', { usevc => 1 } );
-( $e ) = grep { $_->tag eq 'BLACKLISTING' } @{ Zonemaster::Engine->logger->entries };
-is( %{$e->args}{proto}, 'TCP', 'Name server is blacklisted for TCP on non-EDNS SOA TCP query' );
+is( $fail_p_tcp, undef, 'No return from broken server on TCP either' );
+
+if ( $ENV{ZONEMASTER_RECORD} ) {
+    # For the same reason as above, the test in this block will not work if
+    # running offline (i.e. without ZONEMASTER_RECORD=1).
+    my ( $e ) = grep { $_->tag eq 'BLACKLISTING' } @{ Zonemaster::Engine->logger->entries };
+    is( %{$e->args}{proto}, 'TCP', 'Name server is blacklisted for TCP on non-EDNS SOA TCP query' );
+}
+else {
+    ok( ! grep({ $_->tag eq 'EXTERNAL_QUERY' } @{ Zonemaster::Engine->logger->entries }),
+        'No network access was attempted' ) or diag(join("\n", @{ Zonemaster::Engine->logger->entries }));
+    ok( ! grep({ $_->tag eq 'LOOKUP_ERROR' } @{ Zonemaster::Engine->logger->entries }),
+        'The lookup error came from cache, not network' );
+    ok( ! grep({ $_->tag eq 'BLACKLISTING' } @{ Zonemaster::Engine->logger->entries }),
+        'No blacklisting is done when running offline' );
+}
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Nameserver->save( $datafile );
