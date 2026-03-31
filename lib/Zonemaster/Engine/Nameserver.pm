@@ -653,9 +653,9 @@ sub _deserialize_packet {
     my $packet = Zonemaster::Engine::Packet->new(
         { packet => Zonemaster::LDNS::Packet->new_from_wireformat( $bytes ) }
     );
-    $packet->answerfrom( $answerfrom );
-    $packet->timestamp( $timestamp );
-    $packet->querytime( $querytime );
+    $packet->answerfrom( $answerfrom ) if defined $answerfrom;
+    $packet->timestamp( $timestamp ) if defined $timestamp;
+    $packet->querytime( $querytime ) if defined $querytime;
 
     return $packet;
 }

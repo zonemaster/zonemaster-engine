@@ -1,53 +1,78 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use feature 'say';
 
+use v5.14;
+
+use CBOR::XS;
+
+use Zonemaster::Engine::Nameserver;
 use Zonemaster::Engine::Packet;
 
-use JSON::PP;
-use MIME::Base64;
-use Module::Find qw[useall];
-use Readonly;
-use Scalar::Util qw[blessed];
-useall 'Zonemaster::LDNS::RR';
-
-# Decoder taken from Zonemaster::Engine::Nameserver->restore
-Readonly my $decoder => JSON::PP->new->filter_json_single_key_object(
-    'Zonemaster::LDNS::Packet' => sub {
-        my ( $ref ) = @_;
-        ## no critic (Modules::RequireExplicitInclusion)
-        my $obj = Zonemaster::LDNS::Packet->new_from_wireformat( decode_base64( $ref->{data} ) );
-        $obj->answerfrom( $ref->{answerfrom} );
-        $obj->timestamp( $ref->{timestamp} );
-        $obj->querytime( $ref->{querytime} );
-        return $obj;
-    }
-  )->filter_json_single_key_object(
-    'Zonemaster::Engine::Packet' => sub {
-        my ( $ref ) = @_;
-        return Zonemaster::Engine::Packet->new( { packet => $ref } );
-    }
-  );
-
-
 # Decode input into packets
-my @packets;
-while ( my $line = <> ) {
-    my ( $name, $addr, $data ) = split( / /, $line, 3 );
-    my $tree = deserialize( $data );
-    push @packets, packets( $tree );
-}
+my $cbor = CBOR::XS->new();
+my $saved_contents = $cbor->decode(do { local $/; <> });
 
-# Order packets chronologically
-@packets = sort { $a->timestamp cmp $b->timestamp } @packets;
+my $format_version = $saved_contents->{format_version};
+say ";;;;";
+say ";;;; START OF METADATA";
+say ";;;; FORMAT VERSION: ", $saved_contents->{format_version};
+say ";;;; ENGINE VERSION: ", $saved_contents->{engine_version};
+say ";;;; END OF METADATA";
+say ";;;;";
+say "";
+
+my @entries =
+    map {
+        my ( $name, $ip, $request, $response ) = @$_;
+        [
+            $name,
+            $ip,
+            Zonemaster::Engine::Packet->new({ packet => Zonemaster::LDNS::Packet->new_from_wireformat($request) }),
+            Zonemaster::Engine::Nameserver::_deserialize_packet($response)
+        ]
+    }
+    map { my ($ns, $entries) = @$_; map { [ @$ns, @$_ ] } @$entries }
+    @{$saved_contents->{packets}};
 
 # Print delimited packets
-my $delim = ";" x 78;
-for my $packet ( @packets ) {
+my $delim = (";" x 78 . "\n") x 3;
+for my $entry ( @entries ) {
+    my ( $ns, $ip, $request, $response ) = @$entry;
     say $delim;
-    say $packet->string;
-    $delim = "\n" . ";" x 78;
+
+    my $flags = $request->id();
+    say ";; Query to $ns ($ip) ",
+        ($flags & (1 << 15) ? "over TCP" : "over UDP");
+
+    say request_to_string($request), "\n";
+    if (defined $response) {
+        say $response->string;
+    }
+    else {
+        say ";; No response from name server.";
+    }
+    say "";
+}
+
+
+# Modify the string representation of the request slightly so it doesn’t look
+# too much like its response, and more like what dig +qr would show.
+sub request_to_string {
+    my ( $request ) = @_;
+
+    my @lines = split( "\n", $request->string );
+    $lines[0] =~ s/, id: \d+$//;
+    my $result = join( "\n", @lines[0..3] );
+
+    if (my ( $edns ) = grep { /^;; EDNS: / } @lines) {
+        $result .= "\n$edns";
+    }
+    if (my ( $msg_size ) = grep { /^;; MSG SIZE  rcvd: \d+$/ } @lines) {
+        $result .= "\n" . ($msg_size =~ s/rcvd/sent/r);
+    }
+
+    return $result;
 }
 
 
@@ -64,46 +89,7 @@ for my $packet ( @packets ) {
 =head1 DESCRIPTION
 
 B<data2dig> exports saved Zonemaster::Engine cache files to human readable
-format as chronologically ordered response packets in dig format.
-
-
-=head1 SUBROUTINES
-
-
-=head2 deserialize
-
-Deserialize a string in Zonemaster::Engine saved cache format.
-
-Returns a tree of nested HASHREFs with decoded Zonemaster::Engine::Packet
-objects.
+format as packets in dig format.
 
 =cut
 
-sub deserialize {
-    my $data = shift;
-    return $decoder->decode( $data );
-}
-
-
-=head2 packets
-
-Return all Zonemaster::Engine::Packet objects from a tree of nested HASHREFs.
-
-=cut
-
-sub packets {
-    my ( $data ) = @_;
-    if ( ref $data eq 'HASH' && %{$data} && not blessed $data ) {
-        my @packets;
-        for my $key ( sort keys %$data ) {
-            push @packets, packets( $data->{$key} );
-        }
-        return @packets;
-    }
-    elsif ( blessed $data && $data->isa( 'Zonemaster::Engine::Packet' ) ) {
-        return ( $data );
-    }
-    else {
-        return ();
-    }
-}
