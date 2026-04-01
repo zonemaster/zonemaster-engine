@@ -25,7 +25,7 @@ use Module::Find qw( useall );
 use Net::IP::XS;
 use POSIX ();
 use Scalar::Util qw( blessed );
-use Time::HiRes qw( time );
+use Time::HiRes qw( gettimeofday time tv_interval );
 
 our @ISA = qw( Class::Accessor );
 
@@ -776,10 +776,35 @@ sub axfr {
     my ( $self, $domain, $callback, $class ) = @_;
     $class //= 'IN';
 
+    my $idx = $self->_key_for_query_cache( $domain, 'AXFR', { class => $class, usevc => 1 } );
+    my ( $in_cache, $p ) = $self->cache->get_key( $idx );
+
+    if ( $in_cache ) {
+        # Use the same error message as the real $self->dns->axfr() would.
+        $p->rcode() eq 'NOERROR' or croak "AXFR transfer error: REFUSED";
+
+        my $last_ret = 1;
+        foreach my $rr ( $p->answer() ) {
+            $last_ret = $callback->($rr);
+            last if $last_ret == 0;
+        }
+        return $last_ret;
+    }
+    else {
+        my ( $ret, $error, $p ) = $self->_axfr( $domain, $callback, $class );
+        $self->cache->set_key( $idx, $p );
+        croak $error if defined $error;
+        return $ret;
+    }
+}
+
+sub _axfr {
+    my ( $self, $domain, $callback, $class ) = @_;
+
     if ( Zonemaster::Engine::Profile->effective->get( q{no_network} ) ) {
         croak sprintf
-          "External AXFR query for %s attempted to %s while running with no_network",
-          $domain, $self->string;
+            "External AXFR query for %s attempted to %s while running with no_network",
+            $domain, $self->string;
     }
 
     if ( $self->address->version == 4 and not Zonemaster::Engine::Profile->effective->get( q{net.ipv4} ) ) {
@@ -792,8 +817,41 @@ sub axfr {
         return;
     }
 
-    return $self->dns->axfr( $domain, $callback, $class );
-} ## end sub axfr
+    my @rrs;
+    my $wrapped_callback = sub {
+        push @rrs, $_[0];
+        return $callback->( @_ );
+    };
+
+    my $t0 = [gettimeofday];
+    my $ret = eval { $self->dns->axfr( $domain, $wrapped_callback, $class ) };
+    my $error = $@ if not defined $ret;
+    my $querytime = tv_interval($t0);
+
+    # Build a synthetic packet containing all the resource records we
+    # collected, so that this AXFR can be cached (and therefore replayed)
+    # adequately.
+    my $p = Zonemaster::Engine::Packet->new({
+        packet => Zonemaster::LDNS::Packet->new( $domain, 'AXFR', $class )
+    });
+
+    $p->timestamp(time());
+    $p->querytime($querytime * 1000);
+    $p->answerfrom($self->address->short);
+    $p->id(0);
+    $p->packet->qr(1);
+    if ( defined $error ) {
+        $p->rcode('REFUSED');
+        # TODO: It would have been really nice if the actual error message
+        # in $error were stored as an extended DNS error (EDE) EDNS option
+        # in the synthetic packet, but Zonemaster::LDNS currently lacks this
+        # feature. Maybe later.
+    }
+    $p->packet->aa(1);
+    $p->unique_push( 'answer', $_ ) foreach @rrs;
+
+    return $ret, $error, $p;
+}
 
 sub source_address {
     my ( $self ) = @_;
