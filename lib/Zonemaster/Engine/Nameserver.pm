@@ -780,8 +780,11 @@ sub axfr {
     my ( $in_cache, $p ) = $self->cache->get_key( $idx );
 
     if ( $in_cache ) {
-        # Use the same error message as the real $self->dns->axfr() would.
-        $p->rcode() eq 'NOERROR' or croak "AXFR transfer error: REFUSED";
+        if ( $p->rcode() ne 'NOERROR' ) {
+            # Croak with the same error message the real AXFR croaked with.
+            my ( undef, $ede_text ) = $p->packet->first_ede();
+            croak $ede_text // "AXFR transfer error: REFUSED";
+        }
 
         my $last_ret = 1;
         foreach my $rr ( $p->answer() ) {
@@ -842,10 +845,12 @@ sub _axfr {
     $p->packet->qr(1);
     if ( defined $error ) {
         $p->rcode('REFUSED');
-        # TODO: It would have been really nice if the actual error message
-        # in $error were stored as an extended DNS error (EDE) EDNS option
-        # in the synthetic packet, but Zonemaster::LDNS currently lacks this
-        # feature. Maybe later.
+        # Use an Extended DNS Error 13 (Cached Error) in the synthetic packet
+        # to store the original error message.
+        my $file = __FILE__;
+        chomp $error;
+        $error =~ s/ at $file line \d+\.$//;
+        $p->packet->first_ede( 13, $error );
     }
     $p->packet->aa(1);
     $p->unique_push( 'answer', $_ ) foreach @rrs;
