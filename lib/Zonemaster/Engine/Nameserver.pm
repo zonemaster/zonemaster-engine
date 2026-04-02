@@ -15,18 +15,20 @@ use Zonemaster::Engine::Recursor;
 use Zonemaster::Engine::Constants qw( :ip :misc );
 use Zonemaster::LDNS;
 
-use Net::IP::XS;
-use Time::HiRes qw[time];
-use JSON::PP;
-use MIME::Base64;
-use Module::Find qw[useall];
 use Carp qw( confess croak );
-use List::Util qw[max min sum];
+use CBOR::XS;
 use Digest::MD5;
+use Fcntl qw( SEEK_SET );
+use JSON::PP;
+use List::Util qw( max min sum );
+use MIME::Base64;
+use Module::Find qw( useall );
+use Net::IP::XS;
 use POSIX ();
-use Scalar::Util qw[ blessed ];
+use Scalar::Util qw( blessed );
+use Time::HiRes qw( time );
 
-our @ISA = qw (Class::Accessor);
+our @ISA = qw( Class::Accessor );
 
 use overload
   '""'  => \&string,
@@ -51,6 +53,22 @@ has 'blacklisted' => ( is => 'rw' );
 our %object_cache;
 our %address_object_cache;
 our %address_repr_cache;
+
+my $MAP_FH;
+
+###
+### Temporary kludge to ease migration
+###
+
+BEGIN {
+    if ( exists $ENV{ZONEMASTER_KEY_MAP_FILE} ) {
+        open $MAP_FH, '>', $ENV{ZONEMASTER_KEY_MAP_FILE} or croak "open: $ENV{ZONEMASTER_KEY_MAP_FILE}: $!";
+    }
+}
+
+END {
+    close $MAP_FH if defined $MAP_FH;
+}
 
 ###
 ### Build methods for attributes
@@ -430,6 +448,9 @@ sub _make_query_packet {
 sub _key_for_query_cache {
     my ( $self, $qname, $qtype, $opts ) = @_;
 
+    # Kludge to help with migration
+    my $new_cache_key = $self->_new_key_for_query_cache( $qname, $qtype, $opts );
+
     my $md5 = Digest::MD5->new;
 
     my $qclass  = $opts->{class}   // 'IN';
@@ -475,7 +496,51 @@ sub _key_for_query_cache {
 
     $md5->add( q{EDNS_UDP_SIZE} , $edns_size );
 
-    return $md5->b64digest();
+    my $key = $md5->b64digest();
+
+    # Kludge to help with migration
+    say $MAP_FH join( "\x1E",
+                      $self->name,
+                      $self->address->short,
+                      $key,
+                      encode_base64( $new_cache_key, '' ) ) if defined $MAP_FH;
+
+    return $key;
+}
+
+sub _new_key_for_query_cache {
+    my ( $self, $name, $type, $href ) = @_;
+
+    my $usevc = $href->{usevc} // 0;
+
+    my $pkt = $self->_make_query_packet( $name, $type, $href );
+
+    # Repurpose the ID field. We want this field to be zeroed out
+    # in order to match queries with the exact same contents (except
+    # transaction ID), but we may want cache keys to differ on other
+    # attributes, for example transport.
+    #
+    # Currently the layout is as follows:
+    #
+    # 15                                              8
+    # +-----+-----+-----+-----+-----+-----+-----+-----+
+    # | TCP |                (set to 0)               |
+    # +-----+-----+-----+-----+-----+-----+-----+-----+
+    #
+    # 7                                               0
+    # +-----+-----+-----+-----+-----+-----+-----+-----+
+    # |                  (set to 0)                   |
+    # +-----+-----+-----+-----+-----+-----+-----+-----+
+    #
+    # where:
+    #  * bit 15 is set to 1 if the query is sent over TCP, 0 otherwise
+
+    my $fake_id = 0;
+    $fake_id |= (1 << 15) if $usevc;
+
+    $pkt->id($fake_id);
+
+    return $pkt->wireformat();
 }
 
 sub _query {
@@ -660,6 +725,134 @@ sub restore {
 
     return;
 } ## end sub restore
+
+# Converts a Zonemaster::Engine::Packet object to a predictable representation
+# as an array, which can then be turned into CBOR.
+
+sub _serialize_packet {
+    my ( $packet ) = @_;
+
+    return undef if not defined $packet;
+
+    return [
+        $packet->packet->wireformat(),
+        $packet->packet->answerfrom(),
+        $packet->packet->timestamp(),
+        $packet->packet->querytime(),
+    ];
+}
+
+
+sub save_new {
+    my ( $class, $filename ) = @_;
+
+    open my $fh, '>', $filename or die "Cache save failed: $!";
+
+    my $dumped_contents = {
+        format_version => 1,
+        engine_version => Zonemaster::Engine->VERSION(),
+        packets => do {
+            # Gives an array of (nameserver, cached packets) pairs.
+            # A nameserver is itself a (name, IP) pair and each cached packet
+            # is represented as a (bytes, source IP, timestamp, query time) tuple,
+            # or undef if there was no response.
+            my @result;
+            foreach my $name ( sort keys %object_cache ) {
+                foreach my $addr ( sort keys %{ $object_cache{$name} } ) {
+                    my @ns_packets;
+                    my $cached_data = $object_cache{$name}{$addr}->cache->data;
+
+                    next if scalar %$cached_data == 0;
+
+                    foreach my $entry_key ( sort keys %$cached_data ) {
+                        push @ns_packets, [ $entry_key, _serialize_packet($cached_data->{$entry_key}) ];
+                    }
+                    push @result, [ [ $name, $addr ], \@ns_packets ];
+                }
+            };
+            \@result;
+        }
+    };
+
+    my $cbor = CBOR::XS->new();
+
+    # We begin the file with the CBOR magic value deliberately, so that we can
+    # reject files that do not start with that signature on loading.
+    print $fh $CBOR::XS::MAGIC, $cbor->encode($dumped_contents);
+
+    close $fh or die $!;
+
+    Zonemaster::Engine->logger->add( SAVED_NS_CACHE => { file => $filename } );
+}
+
+
+# Performs the inverse operation of _serialize_packet(): from a deserialized
+# CBOR array, reconstructs a Zonemaster::Engine::Packet object.
+
+sub _deserialize_packet {
+    my ( $cbor_packet ) = @_;
+
+    return undef if not defined $cbor_packet;
+
+    my ( $bytes, $answerfrom, $timestamp, $querytime ) = @$cbor_packet;
+    my $packet = Zonemaster::Engine::Packet->new(
+        { packet => Zonemaster::LDNS::Packet->new_from_wireformat( $bytes ) }
+    );
+    $packet->answerfrom( $answerfrom );
+    $packet->timestamp( $timestamp );
+    $packet->querytime( $querytime );
+
+    return $packet;
+}
+
+sub restore_new {
+    my ( $class, $filename ) = @_;
+
+    open my $fh, '<', $filename or die "Failed to open restore data file: $!\n";
+
+
+    # Expect CBOR magic string at beginning of file.
+    my $found_magic = do {
+        my $buf;
+        my $len = read($fh, $buf, length($CBOR::XS::MAGIC));
+        seek($fh, 0, SEEK_SET) or die "seek: $!";
+        ($len == 3 and $buf eq $CBOR::XS::MAGIC);
+    };
+    croak "The restore data file seems to be corrupted" if not $found_magic;
+
+    my $cbor = CBOR::XS->new();
+    my $saved_contents = $cbor->decode(do { local $/; <$fh> });
+    close $fh;
+
+    my $format_version = $saved_contents->{format_version};
+    croak "Unsupported format version $format_version" if $format_version != 1;
+
+    my $cache_type = Zonemaster::Engine::Nameserver::Cache->get_cache_type( Zonemaster::Engine::Profile->effective );
+    my $cache_class = Zonemaster::Engine::Nameserver::Cache->get_cache_class( $cache_type );
+
+    foreach my $entry ( @{ $saved_contents->{packets} } ) {
+        my ( $ns_pair, $ns_packets ) = @$entry;
+
+        my $data = {};
+        foreach my $ns_cache_entry ( @$ns_packets ) {
+            my ( $key, $value ) = @$ns_cache_entry;
+            $data->{$key} = _deserialize_packet($value);
+        }
+
+        my $addr = Net::IP::XS->new( $ns_pair->[1] );
+        my $ns = Zonemaster::Engine::Nameserver->new(
+            {
+                name => $ns_pair->[0],
+                address => $addr,
+                cache => $cache_class->new( { data => $data, address => $addr } )
+            }
+        );
+    }
+
+    Zonemaster::Engine->logger->add( RESTORED_NS_CACHE => { file => $filename } );
+
+    return;
+}
 
 sub max_time {
     my ( $self ) = @_;
