@@ -19,7 +19,6 @@ use Carp qw( confess croak );
 use CBOR::XS;
 use Digest::MD5;
 use Fcntl qw( SEEK_SET );
-use JSON::PP;
 use List::Util qw( max min sum );
 use MIME::Base64;
 use Module::Find qw( useall );
@@ -53,22 +52,6 @@ has 'blacklisted' => ( is => 'rw' );
 our %object_cache;
 our %address_object_cache;
 our %address_repr_cache;
-
-my $MAP_FH;
-
-###
-### Temporary kludge to ease migration
-###
-
-BEGIN {
-    if ( exists $ENV{ZONEMASTER_KEY_MAP_FILE} ) {
-        open $MAP_FH, '>', $ENV{ZONEMASTER_KEY_MAP_FILE} or croak "open: $ENV{ZONEMASTER_KEY_MAP_FILE}: $!";
-    }
-}
-
-END {
-    close $MAP_FH if defined $MAP_FH;
-}
 
 ###
 ### Build methods for attributes
@@ -442,71 +425,9 @@ sub _make_query_packet {
     return $packet;
 }
 
+
 # Computes the key to use to search the cache for a packet corresponding to a
 # query we have previously sent.
-
-sub _old_key_for_query_cache {
-    my ( $self, $qname, $qtype, $opts ) = @_;
-
-    # Kludge to help with migration
-    my $new_cache_key = $self->_key_for_query_cache( $qname, $qtype, $opts );
-
-    my $md5 = Digest::MD5->new;
-
-    my $qclass  = $opts->{class}   // 'IN';
-    my $dnssec  = $opts->{dnssec}  // 0;
-    my $usevc   = $opts->{usevc}   // 0;
-    my $recurse = $opts->{recurse} // 0;
-
-    if ( exists $opts->{edns_details} and exists $opts->{edns_details}{do} ) {
-        $dnssec = $opts->{edns_details}{do};
-    }
-
-    $md5->add( q{NAME}    , $qname,
-               q{TYPE}    , "\U$qtype",
-               q{CLASS}   , "\U$qclass",
-               q{DNSSEC}  , $dnssec,
-               q{USEVC}   , $usevc,
-               q{RECURSE} , $recurse );
-
-    if ( exists $opts->{edns_details} ) {
-        $md5->add( q{EDNS_VERSION}        , $opts->{edns_details}{version} // 0,
-                   q{EDNS_Z}              , $opts->{edns_details}{z} // 0,
-                   q{EDNS_EXTENDED_RCODE} , $opts->{edns_details}{rcode} // 0,
-                   q{EDNS_DATA}           , $opts->{edns_details}{data} // q{} );
-    }
-
-    my $edns_size = do {
-        if ( exists $opts->{edns_details} and exists $opts->{edns_details}{size} ) {
-            $opts->{edns_details}{size};
-        }
-        elsif ( exists $opts->{edns_size} ) {
-            $opts->{edns_size};
-        }
-        elsif ( $dnssec ) {
-            $EDNS_UDP_PAYLOAD_DNSSEC_DEFAULT;
-        }
-        elsif ( exists $opts->{edns_details} ) {
-            $EDNS_UDP_PAYLOAD_DEFAULT;
-        }
-        else {
-            0;
-        }
-    };
-
-    $md5->add( q{EDNS_UDP_SIZE} , $edns_size );
-
-    my $key = $md5->b64digest();
-
-    # Kludge to help with migration
-    say $MAP_FH join( "\x1E",
-                      $self->name,
-                      $self->address->short,
-                      $key,
-                      encode_base64( $new_cache_key, '' ) ) if defined $MAP_FH;
-
-    return $key;
-}
 
 sub _key_for_query_cache {
     my ( $self, $name, $type, $href ) = @_;
@@ -660,71 +581,6 @@ sub compare {
     return $self->string cmp $other->string;
 }
 
-sub save_old {
-    my ( $class, $filename ) = @_;
-
-    my $old = POSIX::setlocale( POSIX::LC_ALL, 'C' );
-    my $json = JSON::PP->new->allow_blessed->convert_blessed;
-    $json = $json->canonical( 1 );
-
-    open my $fh, '>', $filename or die "Cache save failed: $!";
-    foreach my $name ( sort keys %object_cache ) {
-        foreach my $addr ( sort keys %{ $object_cache{$name} } ) {
-            say $fh "$name $addr " . $json->encode( $object_cache{$name}{$addr}->cache->data );
-        }
-    }
-
-    close $fh or die $!;
-
-    Zonemaster::Engine->logger->add( SAVED_NS_CACHE => { file => $filename } );
-
-    POSIX::setlocale( POSIX::LC_ALL, $old );
-    return;
-}
-
-sub restore_old {
-    my ( $class, $filename ) = @_;
-
-    useall 'Zonemaster::LDNS::RR';
-    my $decode = JSON::PP->new->filter_json_single_key_object(
-        'Zonemaster::LDNS::Packet' => sub {
-            my ( $ref ) = @_;
-            ## no critic (Modules::RequireExplicitInclusion)
-            my $obj = Zonemaster::LDNS::Packet->new_from_wireformat( decode_base64( $ref->{data} ) );
-            $obj->answerfrom( $ref->{answerfrom} );
-            $obj->timestamp( $ref->{timestamp} );
-
-            return $obj;
-        }
-      )->filter_json_single_key_object(
-        'Zonemaster::Engine::Packet' => sub {
-            my ( $ref ) = @_;
-
-            return Zonemaster::Engine::Packet->new( { packet => $ref } );
-        }
-      );
-
-    my $cache_type = Zonemaster::Engine::Nameserver::Cache->get_cache_type( Zonemaster::Engine::Profile->effective );
-    my $cache_class = Zonemaster::Engine::Nameserver::Cache->get_cache_class( $cache_type );
-
-    open my $fh, '<', $filename or die "Failed to open restore data file: $!\n";
-    while ( my $line = <$fh> ) {
-        my ( $name, $addr, $data ) = split( / /, $line, 3 );
-        my $ref = $decode->decode( $data );
-        my $ns  = Zonemaster::Engine::Nameserver->new(
-            {
-                name    => $name,
-                address => Net::IP::XS->new($addr),
-                cache   => $cache_class->new( { data => $ref, address => Net::IP::XS->new( $addr ) } )
-            }
-        );
-    }
-    close $fh;
-
-    Zonemaster::Engine->logger->add( RESTORED_NS_CACHE => { file => $filename } );
-
-    return;
-} ## end sub restore
 
 # Converts a Zonemaster::Engine::Packet object to a predictable representation
 # as an array, which can then be turned into CBOR.
@@ -741,7 +597,6 @@ sub _serialize_packet {
         $packet->packet->querytime(),
     ];
 }
-
 
 sub save {
     my ( $class, $filename ) = @_;
