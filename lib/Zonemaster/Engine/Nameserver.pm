@@ -445,11 +445,11 @@ sub _make_query_packet {
 # Computes the key to use to search the cache for a packet corresponding to a
 # query we have previously sent.
 
-sub _key_for_query_cache {
+sub _old_key_for_query_cache {
     my ( $self, $qname, $qtype, $opts ) = @_;
 
     # Kludge to help with migration
-    my $new_cache_key = $self->_new_key_for_query_cache( $qname, $qtype, $opts );
+    my $new_cache_key = $self->_key_for_query_cache( $qname, $qtype, $opts );
 
     my $md5 = Digest::MD5->new;
 
@@ -508,7 +508,7 @@ sub _key_for_query_cache {
     return $key;
 }
 
-sub _new_key_for_query_cache {
+sub _key_for_query_cache {
     my ( $self, $name, $type, $href ) = @_;
 
     my $usevc = $href->{usevc} // 0;
@@ -660,7 +660,7 @@ sub compare {
     return $self->string cmp $other->string;
 }
 
-sub save {
+sub save_old {
     my ( $class, $filename ) = @_;
 
     my $old = POSIX::setlocale( POSIX::LC_ALL, 'C' );
@@ -682,7 +682,7 @@ sub save {
     return;
 }
 
-sub restore {
+sub restore_old {
     my ( $class, $filename ) = @_;
 
     useall 'Zonemaster::LDNS::RR';
@@ -743,7 +743,7 @@ sub _serialize_packet {
 }
 
 
-sub save_new {
+sub save {
     my ( $class, $filename ) = @_;
 
     open my $fh, '>', $filename or die "Cache save failed: $!";
@@ -805,7 +805,7 @@ sub _deserialize_packet {
     return $packet;
 }
 
-sub restore_new {
+sub restore {
     my ( $class, $filename ) = @_;
 
     open my $fh, '<', $filename or die "Failed to open restore data file: $!\n";
