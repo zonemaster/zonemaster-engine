@@ -268,7 +268,7 @@ sub _resolve_cname {
         return ( undef, $state );
     }
 
-    # Safe-guard against anormaly long consecutive CNAME lookups; no need to recurse
+    # Safeguard against abnormally long consecutive CNAME lookups; no need to recurse
     $state->{tseen}{lc( $target )} = 1;
     $state->{tcount} += 1;
 
