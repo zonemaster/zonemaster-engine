@@ -268,7 +268,7 @@ sub _resolve_cname {
         return ( undef, $state );
     }
 
-    # Safe-guard against anormaly long consecutive CNAME chains; no need to recurse
+    # Safe-guard against anormaly long consecutive CNAME lookups; no need to recurse
     $state->{tseen}{lc( $target )} = 1;
     $state->{tcount} += 1;
 
@@ -282,12 +282,12 @@ sub _resolve_cname {
         Zonemaster::Engine->logger->add( CNAME_FOLLOWED_OUT_OF_ZONE => { name => $name, target => $target } );
         ( $p, $state ) = $class->_recurse( $target, $type, $dns_class,
             { ns => [ root_servers() ], count => 0, common => 0, seen => {}, tseen => $state->{tseen}, tcount => $state->{tcount}, glue => {}, in_progress => $state->{in_progress} });
-    }
-    else {
-        # What do do here?
+        return ( $p, $state );
     }
 
-    return ( $p, $state );
+    # Catch-all; unforeseen problem in CNAME resolution
+    Zonemaster::Engine->logger->add( CNAME_UNRESOLVABLE => { name => $name, type => $type, target => $target } );
+    return ( undef, $state );
 }
 
 sub _recurse {
