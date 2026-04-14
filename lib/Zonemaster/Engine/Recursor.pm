@@ -519,7 +519,12 @@ Zonemaster::Engine::Recursor - recursive resolver for Zonemaster
 
 =head2 %recurse_cache
 
-Will cache result of previous queries.
+A nested hash used to cache responses of recursive queries.
+The keys are:
+    - first level: custom recursor mode (i.e. an integer, depending on whether the recursive lookup was done with a custom set of name servers [1] or not [0]).
+    - second level: domain names (e.g. 'zonemaster.net').
+    - third level: query types (e.g. 'A').
+    - fourth level: query classes (e.g. 'IN').
 
 =head2 %_fake_addresses_cache
 
