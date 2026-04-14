@@ -20,6 +20,19 @@ my $p = Zonemaster::Engine::Recursor->recurse( 'www.iis.se' );
 isa_ok( $p, 'Zonemaster::Engine::Packet' );
 ok( $p->answer > 0, 'answer records' );
 is( name( ($p->answer)[0]->name ), 'www.iis.se', 'RR name ok' );
+ok( exists $Zonemaster::Engine::Recursor::recurse_cache{0}, 'recurse cache exists' );
+ok( !exists $Zonemaster::Engine::Recursor::recurse_cache{1}, 'custom recurse cache does not exist yet' );
+
+my $p2 = Zonemaster::Engine::Recursor->recurse( 'zonemaster.net', 'A', 'IN', [ Zonemaster::Engine::Recursor->root_servers() ] );
+isa_ok( $p2, 'Zonemaster::Engine::Packet' );
+ok( exists $Zonemaster::Engine::Recursor::recurse_cache{1}, 'custom recurse cache exists' );
+
+sub is_parent {
+    my ( $name, $pname ) = @_;
+
+    my $pn = Zonemaster::Engine::Recursor->parent( $name );
+    is( $pn, $pname, "parent for $name is $pn" );
+}
 
 is_parent( 'iis.se',                                                                   'se' );
 is_parent( 'www.iis.se',                                                               'iis.se' );
@@ -33,21 +46,21 @@ is_parent( 'xx--doesnotexist.com',                                              
 is_parent( 'pewc.eu',                                                                  'eu' );
 is_parent( 'melbourneit.com.au',                                                       'com.au' );
 
-sub is_parent {
-    my ( $name, $pname ) = @_;
-
-    my $pn = Zonemaster::Engine::Recursor->parent( $name );
-    is( $pn, $pname, "parent for $name is $pn" );
-}
-
 my ( $name, $packet ) = Zonemaster::Engine::Recursor->parent( 'www.iis.se' );
 isa_ok( $packet, 'Zonemaster::Engine::Packet' );
 is( $name, 'iis.se', 'name ok' );
 ok( $packet->no_such_record, 'expected packet content' );
 
-my $ns_count    = Zonemaster::Engine::Nameserver->all_known_nameservers;
-my $cache_count = keys %Zonemaster::Engine::Nameserver::Cache::object_cache;
-ok( $cache_count < $ns_count, 'Fewer cache than ns' );
+my @addr = Zonemaster::Engine::Recursor->get_addresses_for( 'ns.nic.se' );
+isa_ok( $_, 'Net::IP::XS' ) for @addr;
+is( $addr[0]->short, '2001:67c:124c:100a::45', 'expected address' );
+is( $addr[1]->short, '91.226.36.45',           'expected address' );
+
+if ( $ENV{ZONEMASTER_RECORD} ) {
+    my $ns_count    = Zonemaster::Engine::Nameserver->all_known_nameservers;
+    my $cache_count = keys %Zonemaster::Engine::Nameserver::Cache::object_cache;
+    ok( $cache_count < $ns_count, 'Fewer cache than ns' );
+}
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Nameserver->save( $datafile );
