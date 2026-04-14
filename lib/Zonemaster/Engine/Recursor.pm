@@ -95,18 +95,21 @@ sub recurse {
     $dns_class //= 'IN';
 
     Zonemaster::Engine->logger->add( RECURSE => { name => $name, type => $type, class => $dns_class } );
-    if ( exists $recurse_cache{$name}{$type}{$dns_class} ) {
-        return $recurse_cache{$name}{$type}{$dns_class};
-    }
 
-    my %state = ( ns => [ root_servers() ], count => 0, common => 0, seen => {}, glue => {} );
+    my $recurse_mode = 0;
     if ( defined $ns ) {
         ref( $ns ) eq 'ARRAY' or croak 'Argument $ns must be an arrayref';
-        $state{ns} = $ns;
+        $recurse_mode = 1;
     }
 
+    if ( exists $recurse_cache{$recurse_mode}{$name}{$type}{$dns_class} ) {
+        return $recurse_cache{$recurse_mode}{$name}{$type}{$dns_class};
+    }
+
+    my %state = ( ns => defined $ns ? $ns :[ root_servers() ], count => 0, common => 0, seen => {}, glue => {} );
+
     my ( $p, $state ) = $class->_recurse( $name, $type, $dns_class, \%state );
-    $recurse_cache{$name}{$type}{$dns_class} = $p;
+    $recurse_cache{$recurse_mode}{$name}{$type}{$dns_class} = $p;
 
     return $p;
 }
@@ -539,6 +542,7 @@ Initialize the recursor by loading the root hints.
 
 Does a recursive resolution for the given name down from the root servers (or for the given name server(s), if any).
 Only the first argument is mandatory. The rest are optional and default to, respectively: 'A', 'IN', and L</root_servers()>.
+If a custom set of name servers is given with C<$ns>, a separate cache will be used to store responses.
 
 Takes a string or a L<Zonemaster::Engine::DNSName> object (name); and optionally a string (query type), a string (query class),
 and an arrayref of L<Zonemaster::Engine::Nameserver> objects.
