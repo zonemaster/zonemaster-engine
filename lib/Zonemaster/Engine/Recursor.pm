@@ -339,7 +339,7 @@ sub _recurse {
             next if $common < $state->{common};    # Redirect going up the hierarchy is not OK
 
             $state->{common} = $common;
-            $state->{ns}     = $class->get_ns_from( $p, $state );    # Follow redirect
+            $state->{ns}     = $class->_get_ns_from( $p, $state );    # Follow redirect
             $state->{count} += 1;
             if ( $state->{count} > 20 ) {       # Loop protection
                 Zonemaster::Engine->logger->add( LOOP_PROTECTION => {
@@ -402,7 +402,7 @@ sub _do_query {
     }
 } ## end sub _do_query
 
-sub get_ns_from {
+sub _get_ns_from {
     my ( $class, $p, $state ) = @_;
     my ( @new, @extra );
 
@@ -426,7 +426,7 @@ sub get_ns_from {
     @extra = sort { $a cmp $b } @extra;
 
     return [ @new, @extra ];
-} ## end sub get_ns_from
+} ## end sub _get_ns_from
 
 sub get_addresses_for {
     my ( $class, $name, $state ) = @_;
@@ -554,10 +554,6 @@ Returns a L<Zonemaster::Engine::Packet> object (which can be C<undef>).
 Does a recursive resolution from the root down for the given name (using type C<SOA> and class C<IN>). If the resolution is successful, it returns
 the domain name of the second-to-last step. If the resolution is unsuccessful, it returns the domain name of the last step.
 
-=head2 get_ns_from($packet, $state)
-
-Internal method. Takes a packet and a recursion state and returns a list of L<Zonemaster::Engine::Nameserver> objects. Used to follow redirections.
-
 =head2 get_addresses_for($name[, $state])
 
 Takes a name and returns a (possibly empty) list of IP addresses for
@@ -624,6 +620,16 @@ The mandatory keys for that hash are 'ns' (arrayref), 'count' (integer), 'common
 (hash), 'candidate' (L<Zonemaster::Engine::Packet> object or C<undef>), 'trace' (array), 'tseen' (hash), 'tcount' (integer).
 
 Returns a L<Zonemaster::Engine::Packet> (or C<undef>) and a hash.
+
+=head2 _get_ns_from()
+
+    my @ns = _get_ns_from( $packet, $state );
+
+Used to follow redirections by the L<recursive lookup|/_recurse()> helper method in this module.
+
+Takes a L<Zonemaster::Engine::Packet> object and a reference to a hash.
+
+Returns a list of L<Zonemaster::Engine::Nameserver> objects.
 
 =head2 _resolve_cname()
 
