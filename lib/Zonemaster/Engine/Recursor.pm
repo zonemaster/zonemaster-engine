@@ -556,7 +556,7 @@ the domain name of the second-to-last step. If the resolution is unsuccessful, i
 
 =head2 get_ns_from($packet, $state)
 
-Internal method. Takes a packet and a recursion state and returns a list of ns objects. Used to follow redirections.
+Internal method. Takes a packet and a recursion state and returns a list of L<Zonemaster::Engine::Nameserver> objects. Used to follow redirections.
 
 =head2 get_addresses_for($name[, $state])
 
@@ -595,7 +595,7 @@ N.B. This method does not affect fake delegation data.
 
 =head2 root_servers()
 
-Returns a list of ns objects representing the root servers.
+Returns a list of L<Zonemaster::Engine::Nameserver> objects representing the root servers.
 
     my @name_servers = Zonemaster::Engine::Recursor->root_servers();
 
