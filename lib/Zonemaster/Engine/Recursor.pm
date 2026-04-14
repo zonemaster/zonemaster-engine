@@ -108,7 +108,7 @@ sub recurse {
 
     my %state = ( ns => defined $ns ? [ @$ns ] :[ root_servers() ], count => 0, common => 0, seen => {}, glue => {} );
 
-    my ( $p, $state ) = $class->_recurse( $name, $type, $dns_class, \%state );
+    my ( $p, $state_final ) = $class->_recurse( $name, $type, $dns_class, \%state );
     $recurse_cache{$recurse_mode}{$name}{$type}{$dns_class} = $p;
 
     return $p;
