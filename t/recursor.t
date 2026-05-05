@@ -20,12 +20,9 @@ my $p = Zonemaster::Engine::Recursor->recurse( 'www.iis.se' );
 isa_ok( $p, 'Zonemaster::Engine::Packet' );
 ok( $p->answer > 0, 'answer records' );
 is( name( ($p->answer)[0]->name ), 'www.iis.se', 'RR name ok' );
-ok( exists $Zonemaster::Engine::Recursor::recurse_cache{0}, 'recurse cache exists' );
-ok( !exists $Zonemaster::Engine::Recursor::recurse_cache{1}, 'custom recurse cache does not exist yet' );
 
 my $p2 = Zonemaster::Engine::Recursor->recurse( 'zonemaster.net', 'A', 'IN', [ Zonemaster::Engine::Recursor->root_servers() ] );
 isa_ok( $p2, 'Zonemaster::Engine::Packet' );
-ok( exists $Zonemaster::Engine::Recursor::recurse_cache{1}, 'custom recurse cache exists' );
 
 sub is_parent {
     my ( $name, $pname ) = @_;

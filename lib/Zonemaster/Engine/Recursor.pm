@@ -12,13 +12,13 @@ use File::Slurp qw( read_file );
 use JSON::PP;
 use Net::IP::XS;
 use List::MoreUtils qw[uniq];
+use Memoize;
 
 use Zonemaster::Engine;
 use Zonemaster::Engine::DNSName;
 use Zonemaster::Engine::Util qw( name ns parse_hints );
 use Zonemaster::Engine::Constants ":cname";
 
-our %recurse_cache;
 our %_fake_addresses_cache;
 
 sub init_recursor {
@@ -96,23 +96,38 @@ sub recurse {
 
     Zonemaster::Engine->logger->add( RECURSE => { name => $name, type => $type, class => $dns_class } );
 
-    my $recurse_mode = 0;
     if ( defined $ns ) {
         ref( $ns ) eq 'ARRAY' or croak 'Argument $ns must be an arrayref';
-        $recurse_mode = 1;
-    }
-
-    if ( exists $recurse_cache{$recurse_mode}{$name}{$type}{$dns_class} ) {
-        return $recurse_cache{$recurse_mode}{$name}{$type}{$dns_class};
     }
 
     my %state = ( ns => defined $ns ? [ @$ns ] : [ root_servers() ], count => 0, common => 0, seen => {}, glue => {} );
 
     my ( $p, $state_final ) = $class->_recurse( $name, $type, $dns_class, \%state );
-    $recurse_cache{$recurse_mode}{$name}{$type}{$dns_class} = $p;
 
     return $p;
 }
+
+# Cache the results of recurse() to speed up repeated queries for the same name, type,
+# class and set of name servers. Parameters are normalized to ensure that the cache is
+# hit for semantically identical queries.
+memoize('recurse', NORMALIZER => sub {
+    my ($class, $name, $type, $dns_class, $ns) = @_;
+
+    $name = name($name);
+    $type = defined $type ? $type : 'A';
+    $dns_class = defined $dns_class ? $dns_class : 'IN';
+    $ns = defined $ns ? $ns : [ root_servers() ];
+
+    my $nss = join(',', sort @$ns);
+
+    return join('|',
+        ref($class) || $class,
+        $name,
+        $type,
+        $dns_class,
+        $nss
+    );
+});
 
 sub parent {
     my ( $class, $name ) = @_;
@@ -487,7 +502,7 @@ sub _is_answer {
 }
 
 sub clear_cache {
-    %recurse_cache = ();
+    Memoize::flush_cache(\&recurse);
     return;
 }
 
@@ -517,15 +532,6 @@ Zonemaster::Engine::Recursor - recursive resolver for Zonemaster
 
 =head1 CLASS VARIABLES
 
-=head2 %recurse_cache
-
-A nested hash used to cache responses of recursive queries.
-The keys are:
-    - first level: custom recursor mode (i.e. an integer, depending on whether the recursive lookup was done with a custom set of name servers [1] or not [0]).
-    - second level: domain names (e.g. 'zonemaster.net').
-    - third level: query types (e.g. 'A').
-    - fourth level: query classes (e.g. 'IN').
-
 =head2 %_fake_addresses_cache
 
 A hash of hashrefs of arrayrefs.
@@ -547,7 +553,6 @@ Initialize the recursor by loading the root hints.
 
 Does a recursive resolution for the given name down from the root servers (or for the given name server(s), if any).
 Only the first argument is mandatory. The rest are optional and default to, respectively: 'A', 'IN', and L</root_servers()>.
-If a custom set of name servers is given with C<$ns>, a separate cache will be used to store responses.
 
 Takes a string or a L<Zonemaster::Engine::DNSName> object (name); and optionally a string (query type), a string (query class),
 and an arrayref of L<Zonemaster::Engine::Nameserver> objects.
