@@ -4,6 +4,7 @@ use 5.14.2;
 use strict;
 use warnings;
 use List::Util qw[max];
+use Memoize;
 
 use Zonemaster::Engine::Nameserver;
 use Zonemaster::Engine::Util;
@@ -23,6 +24,26 @@ is( name( ($p->answer)[0]->name ), 'www.iis.se', 'RR name ok' );
 
 my $p2 = Zonemaster::Engine::Recursor->recurse( 'zonemaster.net', 'A', 'IN', [ Zonemaster::Engine::Recursor->root_servers() ] );
 isa_ok( $p2, 'Zonemaster::Engine::Packet' );
+
+{
+    no warnings 'redefine';
+    my $count = 0;
+    
+    local *Zonemaster::Engine::Recursor::_recurse = sub {
+        $count++;
+    };
+
+    Zonemaster::Engine::Recursor->clear_cache;
+
+    Zonemaster::Engine::Recursor->recurse( "zonemaster.net" );
+    Zonemaster::Engine::Recursor->recurse( "zonemaster.net", "A", "IN", [ Zonemaster::Engine::Recursor->root_servers() ] );
+
+    is( $count, 1, "memoization normalizer for recurse() works" );
+
+    Zonemaster::Engine::Recursor->recurse( "zonemaster.net", "A", "IN", [ (Zonemaster::Engine->ns( "a.root-servers.net.", "198.41.0.4" )) ] );
+
+    is( $count, 2, "memoization for recurse() works" );
+}
 
 sub is_parent {
     my ( $name, $pname ) = @_;
