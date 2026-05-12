@@ -22,7 +22,7 @@ isa_ok( $p, 'Zonemaster::Engine::Packet' );
 ok( $p->answer > 0, 'answer records' );
 is( name( ($p->answer)[0]->name ), 'www.iis.se', 'RR name ok' );
 
-my $p2 = Zonemaster::Engine::Recursor->recurse( 'zonemaster.net', 'A', 'IN', [ Zonemaster::Engine::Recursor->root_servers() ] );
+my $p2 = Zonemaster::Engine::Recursor->recurse( 'zonemaster.net' );
 isa_ok( $p2, 'Zonemaster::Engine::Packet' );
 
 {
@@ -33,16 +33,15 @@ isa_ok( $p2, 'Zonemaster::Engine::Packet' );
         $count++;
     };
 
+    Zonemaster::Engine::Recursor->recurse( 'zonemaster.net', 'A', 'IN', [ Zonemaster::Engine::Recursor->root_servers() ] );
+    is( $count, 0, 'memoize normalizer for recurse() works' );
+
+    Zonemaster::Engine::Recursor->recurse( 'zonemaster.net', 'A', 'IN', [ (Zonemaster::Engine->ns( 'a.root-servers.net.', '198.41.0.4' )) ] );
+    is( $count, 1, 'memoize for recurse() works' );
+
     Zonemaster::Engine::Recursor->clear_cache;
-
-    Zonemaster::Engine::Recursor->recurse( "zonemaster.net" );
-    Zonemaster::Engine::Recursor->recurse( "zonemaster.net", "A", "IN", [ Zonemaster::Engine::Recursor->root_servers() ] );
-
-    is( $count, 1, "memoization normalizer for recurse() works" );
-
-    Zonemaster::Engine::Recursor->recurse( "zonemaster.net", "A", "IN", [ (Zonemaster::Engine->ns( "a.root-servers.net.", "198.41.0.4" )) ] );
-
-    is( $count, 2, "memoization for recurse() works" );
+    Zonemaster::Engine::Recursor->recurse( 'zonemaster.net' );
+    is( $count, 2, 'memoize cache clear for recurse() works' );
 }
 
 sub is_parent {

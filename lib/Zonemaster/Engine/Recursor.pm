@@ -111,16 +111,16 @@ sub recurse {
 # class and set of name servers. Parameters are normalized to ensure that the cache is
 # hit for semantically identical queries.
 memoize('recurse', NORMALIZER => sub {
-    my ($class, $name, $type, $dns_class, $ns) = @_;
+    my ( $class, $name, $type, $dns_class, $ns ) = @_;
 
-    $name = name($name);
+    $name = name( $name );
     $type //= 'A';
     $dns_class //= 'IN';
     $ns //= [ root_servers() ];
 
-    my $nss = join(',', sort @$ns);
+    my $nss = join( ',', sort @$ns );
 
-    return join('|',
+    return join( '|',
         ref($class) || $class,
         $name,
         $type,
