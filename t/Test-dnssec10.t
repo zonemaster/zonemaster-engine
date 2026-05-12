@@ -20,7 +20,6 @@ my @all_tags = qw(
                    DS10_ALGO_NOT_SUPPORTED_BY_ZM
                    DS10_ERR_MULT_NSEC
                    DS10_ERR_MULT_NSEC3
-                   DS10_ERR_MULT_NSEC3PARAM
                    DS10_EXPECTED_NSEC_NSEC3_MISSING
                    DS10_HAS_NSEC
                    DS10_HAS_NSEC3
@@ -172,14 +171,6 @@ my %subtests = (
         1,
         q(err-mult-nsec3-1.dnssec10.xa),
         [ qw( DS10_ERR_MULT_NSEC3 DS10_HAS_NSEC3 ) ],
-        undef,
-        [],
-        [],
-    ],
-    'ERR-MULT-NSEC3PARAM-1' => [
-        1,
-        q(err-mult-nsec3param-1.dnssec10.xa),
-        [ qw( DS10_ERR_MULT_NSEC3PARAM DS10_HAS_NSEC3 ) ],
         undef,
         [],
         [],

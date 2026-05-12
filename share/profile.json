@@ -283,7 +283,6 @@
             "DS10_ALGO_NOT_SUPPORTED_BY_ZM" : "NOTICE",
             "DS10_ERR_MULT_NSEC" : "ERROR",
             "DS10_ERR_MULT_NSEC3" : "ERROR",
-            "DS10_ERR_MULT_NSEC3PARAM" : "ERROR",
             "DS10_EXPECTED_NSEC_NSEC3_MISSING" : "ERROR",
             "DS10_HAS_NSEC" : "INFO",
             "DS10_HAS_NSEC3" : "INFO",

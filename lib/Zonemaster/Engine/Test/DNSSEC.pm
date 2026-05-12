@@ -528,7 +528,6 @@ sub metadata {
               DS10_ALGO_NOT_SUPPORTED_BY_ZM
               DS10_ERR_MULT_NSEC
               DS10_ERR_MULT_NSEC3
-              DS10_ERR_MULT_NSEC3PARAM
               DS10_EXPECTED_NSEC_NSEC3_MISSING
               DS10_HAS_NSEC
               DS10_HAS_NSEC3
@@ -1202,11 +1201,6 @@ Readonly my %TAG_DESCRIPTIONS => (
     DS10_ERR_MULT_NSEC3 => sub {
         __x    # DNSSEC:DS10_ERR_MULT_NSEC3
           'Multiple NSEC3 records when one is expected. Fetched from name servers "{ns_list}".',
-          @_;
-    },
-    DS10_ERR_MULT_NSEC3PARAM => sub {
-        __x    # DNSSEC:DS10_ERR_MULT_NSEC3PARAM
-          'Multiple NSEC3PARAM records when one is expected. Fetched from name servers "{ns_list}".',
           @_;
     },
     DS10_EXPECTED_NSEC_NSEC3_MISSING => sub {
@@ -3568,7 +3562,7 @@ sub dnssec10 {
     my @query_types = ( $type_dnskey, $type_nsec, $type_nsec3param );
 
     my %algo_not_supported_by_zm;
-    my ( @erroneous_multiple_nsec, @erroneous_multiple_nsec3, @erroneous_multiple_nsec3param );
+    my ( @erroneous_multiple_nsec, @erroneous_multiple_nsec3 );
     my ( @nsec_in_response, @nsec_nonstandard_nodata, @nsec3param_in_answer );
     my ( @nsec_incorrect_type_list, @nsec3_incorrect_type_list );
     my ( @nsec_mismatches_apex, @nsec3_mismatches_apex, @nsec3param_mismatches_apex );
@@ -3820,10 +3814,7 @@ sub dnssec10 {
             if ( scalar $nsec3param_p->get_records( $type_nsec3param, q{answer} ) ) {
                 push @nsec3param_in_answer, @all_ns_for_ip;
 
-                if ( scalar $nsec3param_p->get_records( $type_nsec3param, q{answer} ) > 1 ) {
-                    push @erroneous_multiple_nsec3param, @all_ns_for_ip;
-                }
-                elsif ( ($nsec3param_p->get_records( $type_nsec3param, q{answer} ))[0]->owner ne $zone->name ) {
+                if ( ($nsec3param_p->get_records( $type_nsec3param, q{answer} ))[0]->owner ne $zone->name ) {
                     push @nsec3param_mismatches_apex, @all_ns_for_ip;
                 }
             }
@@ -3931,15 +3922,6 @@ sub dnssec10 {
           _emit_log(
             DS10_ERR_MULT_NSEC3 => {
                 ns_list => join( q{;}, uniq sort @erroneous_multiple_nsec3 )
-            }
-          );
-    }
-
-    if ( scalar @erroneous_multiple_nsec3param ) {
-        push @results,
-          _emit_log(
-            DS10_ERR_MULT_NSEC3PARAM => {
-                ns_list => join( q{;}, uniq sort @erroneous_multiple_nsec3param )
             }
           );
     }
