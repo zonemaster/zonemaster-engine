@@ -266,14 +266,18 @@ subtest 'EXTRA-CNAME-IN-ANSWER' => sub {
     ok( scalar ( grep { index($_->tag, 'CNAME') != -1 } @{ Zonemaster::Engine->logger->entries } ) == 0, 'empty CNAME message tags' );
 };
 
+subtest 'UNRESOLVABLE-CNAME' => sub {
+    Zonemaster::Engine->logger->clear_history;
+    my $p = Zonemaster::Engine->recurse( 'unresolvable-cname.cname.recursor.engine.xa' );
+    is( $p, undef );
+
+    my %res = map { $_->tag => $_ } @{ Zonemaster::Engine->logger->entries };
+    ok( $res{CNAME_START}, q{should emit CNAME_START} );
+    ok( $res{CNAME_UNRESOLVABLE}, q{should emit CNAME_UNRESOLVABLE} );
+};
+
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Nameserver->save( $datafile );
-}
-
-TODO: {
-    local $TODO = "Need to create zones with those errors: ";
-    my @missing_tags = qw( CNAME_UNRESOLVABLE );
-    warn $TODO, "\n\t", join("\n\t", @missing_tags), "\n";
 }
 
 done_testing;
