@@ -114,9 +114,9 @@ memoize('recurse', NORMALIZER => sub {
     my ($class, $name, $type, $dns_class, $ns) = @_;
 
     $name = name($name);
-    $type = defined $type ? $type : 'A';
-    $dns_class = defined $dns_class ? $dns_class : 'IN';
-    $ns = defined $ns ? $ns : [ root_servers() ];
+    $type //= 'A';
+    $dns_class //= 'IN';
+    $ns //= [ root_servers() ];
 
     my $nss = join(',', sort @$ns);
 
