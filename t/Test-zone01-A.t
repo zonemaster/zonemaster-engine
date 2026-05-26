@@ -15,9 +15,10 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
 }
 
 Zonemaster::Engine->add_fake_delegation(
-    'xa' => {
-        'ibdns01.labs.prive.nic.fr' => ['10.1.72.23'],
-        'ibdns01-24.labs.prive.nic.fr' => ['10.1.72.24'],
+    'mname-not-master.zone01.xa' => {
+        'ns1.mname-not-master.zone01.xa' => ['10.1.72.23'],
+        'ns2.mname-not-master.zone01.xa' => ['10.1.72.24'],
+        'ns3.mname-not-master.zone01.xa' => ['10.1.72.25'],
     },
     fill_in_empty_oob_glue => 0,
 );
