@@ -1747,10 +1747,10 @@ sub nameserver15 {
                         push @wrong_record_class, $ns;
                     }
 
-                    my $string = $rr->txtdata;
+                    my $string = Zonemaster::Engine::Util::escape($rr->txtdata);
                     $string =~ s/^\s+|\s+$//g; # Remove leading and trailing spaces
 
-                    if ( $string and $string ne "") {
+                    if ( $string ne "" ) {
                         push @{ $txt_data{$string}{$query_name} }, $ns;
                         delete $sending_version_query{$ns};
                     }
