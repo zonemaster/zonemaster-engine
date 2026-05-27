@@ -186,28 +186,37 @@ sub serial_gt {
            );
 }
 
-
-sub escape {
-    my ( $input ) = @_;
-
-    state sub code_to_escape {
-        if ( $_[0] == 92 ) {
+{
+    # HACK: It would be cleaner to use a state variable, but Perl versions
+    # older than 5.28.0 disallow initializing list state variables, e.g.
+    # writing “state @a = qw(a b c)”.
+    #
+    # A workaround could be to use a state arrayref variable for the
+    # substitution table, but this incurs a performance penalty.
+    #
+    # Once we support Perl ⩾ 5.28, we can rewrite this function using proper
+    # state variables. See also:
+    # <https://perldoc.perl.org/5.28.0/perldelta#Initialisation-of-aggregate-state-variables>.
+    my @substitution_table = map {
+        if ( $_ == 92 ) {
             '\\\\'
         }
-        elsif ( $_[0] >= 32 and $_[0] <= 126 ) {
-            chr $_[0]
+        elsif ( $_ >= 32 and $_ <= 126 ) {
+            chr $_
         }
         else {
-            sprintf '\%03d', $_[0]
+            sprintf '\%03d', $_
         }
+    } 0..255;
+
+    sub escape {
+        my ( $input ) = @_;
+
+        my $output = '';
+        $output .= $substitution_table[$_] foreach (unpack "C*", $input);
+
+        return $output;
     }
-
-    state @substitution_table = map { code_to_escape($_) } 0..255;
-
-    my $output = '';
-    $output .= $substitution_table[$_] foreach (unpack "C*", $input);
-
-    return $output;
 }
 
 1;
