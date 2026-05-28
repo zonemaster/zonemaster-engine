@@ -20,7 +20,6 @@ my @all_tags = qw(
                    DS10_ALGO_NOT_SUPPORTED_BY_ZM
                    DS10_ERR_MULT_NSEC
                    DS10_ERR_MULT_NSEC3
-                   DS10_ERR_MULT_NSEC3PARAM
                    DS10_EXPECTED_NSEC_NSEC3_MISSING
                    DS10_HAS_NSEC
                    DS10_HAS_NSEC3
@@ -28,6 +27,7 @@ my @all_tags = qw(
                    DS10_INCONSISTENT_NSEC3
                    DS10_INCONSISTENT_NSEC_NSEC3
                    DS10_MIXED_NSEC_NSEC3
+                   DS10_NONSTANDARD_NSEC_RESPONSE
                    DS10_NSEC3PARAM_GIVES_ERR_ANSWER
                    DS10_NSEC3PARAM_MISMATCHES_APEX
                    DS10_NSEC3PARAM_QUERY_RESPONSE_ERR
@@ -176,10 +176,10 @@ my %subtests = (
         [],
         [],
     ],
-    'ERR-MULT-NSEC3PARAM-1' => [
+    'MULT-NSEC3PARAM-1' => [
         1,
-        q(err-mult-nsec3param-1.dnssec10.xa),
-        [ qw( DS10_ERR_MULT_NSEC3PARAM DS10_HAS_NSEC3 ) ],
+        q(mult-nsec3param-1.dnssec10.xa),
+        [ qw( DS10_HAS_NSEC3 ) ],
         undef,
         [],
         [],
@@ -492,6 +492,78 @@ my %subtests = (
         0,
         q(nsec-query-response-err-3.dnssec10.xa),
         [ qw( DS10_NSEC_QUERY_RESPONSE_ERR DS10_EXPECTED_NSEC_NSEC3_MISSING DS10_INCONSISTENT_NSEC ) ],
+        undef,
+        [],
+        [],
+    ],
+    'NS-NSEC-RESP-1' => [
+        1,
+        q(ns-nsec-resp-1.dnssec10.xa),
+        [ qw( DS10_HAS_NSEC DS10_NONSTANDARD_NSEC_RESPONSE ) ],
+        undef,
+        [],
+        [],
+    ],
+    'NS-NSEC-RESP-MISS-SOA-1' => [
+        1,
+        q(ns-nsec-resp-miss-soa-1.dnssec10.xa),
+        [ qw( DS10_HAS_NSEC DS10_NONSTANDARD_NSEC_RESPONSE DS10_NSEC_NODATA_MISSING_SOA ) ],
+        undef,
+        [],
+        [],
+    ],
+    'NS-NSEC-RESP-WRONG-SOA-1' => [
+        1,
+        q(ns-nsec-resp-wrong-soa-1.dnssec10.xa),
+        [ qw( DS10_HAS_NSEC DS10_NONSTANDARD_NSEC_RESPONSE DS10_NSEC_NODATA_WRONG_SOA ) ],
+        undef,
+        [],
+        [],
+    ],
+    'NS-NSEC-RESP-MULT-NSEC-1' => [
+        1,
+        q(ns-nsec-resp-mult-nsec-1.dnssec10.xa),
+        [ qw( DS10_HAS_NSEC DS10_NONSTANDARD_NSEC_RESPONSE DS10_ERR_MULT_NSEC ) ],
+        undef,
+        [],
+        [],
+    ],
+    'NS-NSEC-RESP-NSEC-MM-APEX-1' => [
+        1,
+        q(ns-nsec-resp-nsec-mm-apex-1.dnssec10.xa),
+        [ qw( DS10_HAS_NSEC DS10_NONSTANDARD_NSEC_RESPONSE DS10_NSEC_MISMATCHES_APEX ) ],
+        undef,
+        [],
+        [],
+    ],
+    'NS-NSEC-RESP-ERR-TP-1' => [
+        1,
+        q(ns-nsec-resp-err-tp-1.dnssec10.xa),
+        [ qw( DS10_HAS_NSEC DS10_NONSTANDARD_NSEC_RESPONSE DS10_NSEC_ERR_TYPE_LIST ) ],
+        undef,
+        [],
+        [],
+    ],
+    'NS-NSEC-RESP-ERR-TP-2' => [
+        1,
+        q(ns-nsec-resp-err-tp-2.dnssec10.xa),
+        [ qw( DS10_HAS_NSEC DS10_NONSTANDARD_NSEC_RESPONSE DS10_NSEC_ERR_TYPE_LIST ) ],
+        undef,
+        [],
+        [],
+    ],
+    'NS-NSEC-RESP-ERR-TP-3' => [
+        1,
+        q(ns-nsec-resp-err-tp-3.dnssec10.xa),
+        [ qw( DS10_HAS_NSEC DS10_NONSTANDARD_NSEC_RESPONSE DS10_NSEC_ERR_TYPE_LIST ) ],
+        undef,
+        [],
+        [],
+    ],
+    'NS-NSEC-RESP-ERR-TP-4' => [
+        1,
+        q(ns-nsec-resp-err-tp-4.dnssec10.xa),
+        [ qw( DS10_HAS_NSEC DS10_NONSTANDARD_NSEC_RESPONSE DS10_NSEC_ERR_TYPE_LIST ) ],
         undef,
         [],
         [],
