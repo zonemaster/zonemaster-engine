@@ -8,7 +8,7 @@ use version; our $VERSION = version->declare("v1.1.13");
 use Exporter 'import';
 BEGIN {
     our @EXPORT_OK = qw[
-      escape
+      escape_unprintable
       info
       ipversion_ok
       name
@@ -209,7 +209,7 @@ sub serial_gt {
         }
     } 0..255;
 
-    sub escape {
+    sub escape_unprintable {
         my ( $input ) = @_;
 
         my $output = '';
@@ -319,7 +319,7 @@ Check if a test is blacklisted and should run or not.
 
 Check if IP version operations are permitted. Tests are done against Zonemaster::Engine::Profile->effective content.
 
-=item escape
+=item escape_unprintable
 
 Replaces all non-ASCII characters and control characters in a byte string with
 decimal escape codes. The resulting string only contains printable ASCII

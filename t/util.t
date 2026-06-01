@@ -123,7 +123,7 @@ EOF
     }
 };
 
-subtest 'escape' => sub {
+subtest 'escape_unprintable' => sub {
     my @cases = (
         {
             input => 'hello world!',
@@ -143,7 +143,7 @@ subtest 'escape' => sub {
         # The following line is a hack that ensures that $bytes is a
         # byte-oriented string, instead of a character-oriented one.
         my $bytes = encode( 'Latin1', $case->{input} );
-        is Zonemaster::Engine::Util::escape( $bytes ), $case->{expected};
+        is Zonemaster::Engine::Util::escape_unprintable( $bytes ), $case->{expected};
     }
 };
 
