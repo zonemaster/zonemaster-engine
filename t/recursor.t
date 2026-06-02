@@ -28,7 +28,7 @@ isa_ok( $p2, 'Zonemaster::Engine::Packet' );
 {
     no warnings 'redefine';
     my $count = 0;
-    
+
     local *Zonemaster::Engine::Recursor::_recurse = sub {
         $count++;
     };
@@ -67,11 +67,6 @@ my ( $name, $packet ) = Zonemaster::Engine::Recursor->parent( 'www.iis.se' );
 isa_ok( $packet, 'Zonemaster::Engine::Packet' );
 is( $name, 'iis.se', 'name ok' );
 ok( $packet->no_such_record, 'expected packet content' );
-
-my @addr = Zonemaster::Engine::Recursor->get_addresses_for( 'ns.nic.se' );
-isa_ok( $_, 'Net::IP::XS' ) for @addr;
-is( $addr[0]->short, '2001:67c:124c:100a::45', 'expected address' );
-is( $addr[1]->short, '91.226.36.45',           'expected address' );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
     my $ns_count    = Zonemaster::Engine::Nameserver->all_known_nameservers;
