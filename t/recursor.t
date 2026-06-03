@@ -4,6 +4,7 @@ use 5.14.2;
 use strict;
 use warnings;
 use List::Util qw[max];
+use Memoize;
 
 use Zonemaster::Engine::Nameserver;
 use Zonemaster::Engine::Util;
@@ -21,6 +22,35 @@ isa_ok( $p, 'Zonemaster::Engine::Packet' );
 ok( $p->answer > 0, 'answer records' );
 is( name( ($p->answer)[0]->name ), 'www.iis.se', 'RR name ok' );
 
+my $p2 = Zonemaster::Engine::Recursor->recurse( 'zonemaster.net' );
+isa_ok( $p2, 'Zonemaster::Engine::Packet' );
+
+{
+    no warnings 'redefine';
+    my $count = 0;
+
+    local *Zonemaster::Engine::Recursor::_recurse = sub {
+        $count++;
+    };
+
+    Zonemaster::Engine::Recursor->recurse( 'zonemaster.net', 'A', 'IN', [ Zonemaster::Engine::Recursor->root_servers() ] );
+    is( $count, 0, 'memoize normalizer for recurse() works' );
+
+    Zonemaster::Engine::Recursor->recurse( 'zonemaster.net', 'A', 'IN', [ (Zonemaster::Engine->ns( 'a.root-servers.net.', '198.41.0.4' )) ] );
+    is( $count, 1, 'memoize for recurse() works' );
+
+    Zonemaster::Engine::Recursor->clear_cache;
+    Zonemaster::Engine::Recursor->recurse( 'zonemaster.net' );
+    is( $count, 2, 'memoize cache clear for recurse() works' );
+}
+
+sub is_parent {
+    my ( $name, $pname ) = @_;
+
+    my $pn = Zonemaster::Engine::Recursor->parent( $name );
+    is( $pn, $pname, "parent for $name is $pn" );
+}
+
 is_parent( 'iis.se',                                                                   'se' );
 is_parent( 'www.iis.se',                                                               'iis.se' );
 is_parent( 'pp.se',                                                                    'se' );
@@ -33,21 +63,16 @@ is_parent( 'xx--doesnotexist.com',                                              
 is_parent( 'pewc.eu',                                                                  'eu' );
 is_parent( 'melbourneit.com.au',                                                       'com.au' );
 
-sub is_parent {
-    my ( $name, $pname ) = @_;
-
-    my $pn = Zonemaster::Engine::Recursor->parent( $name );
-    is( $pn, $pname, "parent for $name is $pn" );
-}
-
 my ( $name, $packet ) = Zonemaster::Engine::Recursor->parent( 'www.iis.se' );
 isa_ok( $packet, 'Zonemaster::Engine::Packet' );
 is( $name, 'iis.se', 'name ok' );
 ok( $packet->no_such_record, 'expected packet content' );
 
-my $ns_count    = Zonemaster::Engine::Nameserver->all_known_nameservers;
-my $cache_count = keys %Zonemaster::Engine::Nameserver::Cache::object_cache;
-ok( $cache_count < $ns_count, 'Fewer cache than ns' );
+if ( $ENV{ZONEMASTER_RECORD} ) {
+    my $ns_count    = Zonemaster::Engine::Nameserver->all_known_nameservers;
+    my $cache_count = keys %Zonemaster::Engine::Nameserver::Cache::object_cache;
+    ok( $cache_count < $ns_count, 'Fewer cache than ns' );
+}
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Nameserver->save( $datafile );
