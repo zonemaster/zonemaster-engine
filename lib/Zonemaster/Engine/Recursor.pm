@@ -14,7 +14,7 @@ use Net::IP::XS;
 use List::MoreUtils qw[uniq];
 use Memoize;
 
-use Zonemaster::Engine;
+use Zonemaster::Engine::Nameserver;
 use Zonemaster::Engine::DNSName;
 use Zonemaster::Engine::Util qw( name ns parse_hints );
 use Zonemaster::Engine::Constants ":cname";

@@ -8,7 +8,6 @@ use version; our $VERSION = version->declare("v1.1.16");
 use Class::Accessor qw[ antlers ];
 
 use Zonemaster::Engine::DNSName;
-use Zonemaster::Engine;
 use Zonemaster::Engine::Packet;
 use Zonemaster::Engine::Nameserver::Cache;
 use Zonemaster::Engine::Recursor;

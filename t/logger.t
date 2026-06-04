@@ -3,11 +3,12 @@ use Test::Fatal;
 use File::Slurp;
 
 BEGIN {
+    use_ok( 'Zonemaster::Engine' );
+    use_ok( 'Zonemaster::Engine::Util' );
     use_ok( 'Zonemaster::Engine::Logger' );
     use_ok( 'Zonemaster::Engine::Logger::Entry' );
     use_ok( 'Zonemaster::Engine::Exception' );
 }
-use Zonemaster::Engine::Util;
 
 my $log = Zonemaster::Engine->logger;
 
