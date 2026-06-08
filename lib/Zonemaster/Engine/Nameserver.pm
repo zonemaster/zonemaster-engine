@@ -226,12 +226,17 @@ sub query {
     my $dnssec  = $href->{dnssec}  // 0;
     my $usevc   = $href->{usevc}   // 0;
     my $recurse = $href->{recurse} // 0;
+    my $edns_size;
 
-    if ( exists $href->{edns_details} and exists $href->{edns_details}{do} ) {
-        $dnssec = $href->{edns_details}{do};
+    if ( exists $href->{edns_details} ) {
+        $dnssec = $href->{edns_details}{do} // $dnssec;
+        $edns_size = $href->{edns_details}{size} // ( $href->{edns_size} // ( $dnssec ? $EDNS_UDP_PAYLOAD_DNSSEC_DEFAULT : $EDNS_UDP_PAYLOAD_DEFAULT ) );
+    }
+    else {
+        $edns_size = $href->{edns_size} // ( $dnssec ? $EDNS_UDP_PAYLOAD_DNSSEC_DEFAULT : 0 );
     }
 
-    my $edns_size = $href->{edns_size} // ( $dnssec ? $EDNS_UDP_PAYLOAD_DNSSEC_DEFAULT : 0 );
+    croak "edns_size (or edns_details->size) parameter must be a value between 0 and 65535" if $edns_size > 65535 or $edns_size < 0;
 
     # Fake a DS answer
     if ( $type eq 'DS' and $class eq 'IN' and $self->fake_ds->{ lc( $name ) } ) {
@@ -241,13 +246,29 @@ sub query {
         $p->aa( 1 );
         $p->do( $dnssec );
         $p->rd( $recurse );
+        $p->edns_size( $edns_size );
+
+        if ( $edns_size > 0 ) {
+            $p->set_edns_present;
+        }
+
+        if ( exists $href->{edns_details} ) {
+            $p->set_edns_present;
+
+            foreach my $flag ( keys %{ $href->{edns_details} } ) {
+                next if ( $flag eq 'do' or $flag eq 'size' );
+                my $method = "edns_$flag";
+                $p->$method( $href->{edns_details}{$flag} ) if $p->can( $method );
+            }
+        }
 
         foreach my $rr ( @{ $self->fake_ds->{ lc( $name ) } } ) {
             $p->unique_push( 'answer', $rr );
         }
 
-        my $res = Zonemaster::Engine::Packet->new( { packet => $p } );
         Zonemaster::Engine->logger->add( FAKE_DS_RETURNED => { name => "$name", type  => $type, class => $class, from => "$self" } );
+
+        my $res = Zonemaster::Engine::Packet->new( { packet => $p } );
         Zonemaster::Engine->logger->add( FAKE_PACKET_RETURNED => { packet => $res->string } );
         return $res;
     }
@@ -277,6 +298,21 @@ sub query {
             $p->do( $dnssec );
             $p->rd( $recurse );
             $p->answerfrom( $address->ip );
+            $p->edns_size( $edns_size );
+
+            if ( $edns_size > 0 ) {
+                $p->set_edns_present;
+            }
+
+            if ( exists $href->{edns_details} ) {
+                $p->set_edns_present;
+
+                foreach my $flag ( keys %{ $href->{edns_details} } ) {
+                    next if ( $flag eq 'do' or $flag eq 'size' );
+                    my $method = "edns_$flag";
+                    $p->$method( $href->{edns_details}{$flag} ) if $p->can( $method );
+                }
+            }
 
             Zonemaster::Engine->logger->add( FAKE_DELEGATION_RETURNED => { name  => "$name", type  => $type, class => $class, from  => "$self" } );
 
@@ -300,10 +336,7 @@ sub query {
                    q{EDNS_Z}              , $href->{edns_details}{z} // 0,
                    q{EDNS_EXTENDED_RCODE} , $href->{edns_details}{rcode} // 0,
                    q{EDNS_DATA}           , $href->{edns_details}{data} // q{} );
-        $edns_size = $href->{edns_details}{size} // ( $href->{edns_size} // ( $dnssec ? $EDNS_UDP_PAYLOAD_DNSSEC_DEFAULT : $EDNS_UDP_PAYLOAD_DEFAULT ) );
     }
-
-    croak "edns_size (or edns_details->size) parameter must be a value between 0 and 65535" if $edns_size > 65535 or $edns_size < 0;
 
     $md5->add( q{EDNS_UDP_SIZE} , $edns_size );
 
@@ -441,23 +474,16 @@ sub _query {
     }
     else {
         if ( exists $href->{edns_details} ) {
-            my $pkt = Zonemaster::LDNS::Packet->new("$name", $type, $href->{class} );
+            my $pkt = Zonemaster::LDNS::Packet->new( "$name", $type, $href->{class} );
             $pkt->set_edns_present();
 
-            $pkt->do($flags{q{dnssec}});
-            $pkt->edns_size($flags{q{edns_size}});
+            $pkt->do( $flags{q{dnssec}} );
+            $pkt->edns_size( $flags{q{edns_size}} );
 
-            if ( exists $href->{edns_details}{version} ) {
-                $pkt->edns_version($href->{edns_details}{version});
-            }
-            if ( exists $href->{edns_details}{z} ) {
-                $pkt->edns_z($href->{edns_details}{z});
-            }
-            if ( exists $href->{edns_details}{rcode} ) {
-                $pkt->edns_rcode($href->{edns_details}{rcode});
-            }
-            if ( exists $href->{edns_details}{data} ) {
-                $pkt->edns_data($href->{edns_details}{data});
+            foreach my $flag ( keys %{ $href->{edns_details} } ) {
+                next if ( $flag eq 'do' or $flag eq 'size' );
+                my $method = "edns_$flag";
+                $pkt->$method( $href->{edns_details}{$flag} ) if $pkt->can( $method );
             }
 
             $res = eval { $self->dns->query_with_pkt( $pkt ) };
@@ -837,7 +863,7 @@ Value overridden by C<edns_details-E<gt>{size}> (if also given). More details in
 
 =item edns_details
 
-A hash. An empty hash or a hash with any keys below will enable EDNS for the query.
+A hash. If defined, it enables EDNS for the query.
 
 The currently supported keys are 'version', 'z', 'do', 'rcode', 'size' and 'data'.
 See L<Zonemaster::LDNS::Packet> for more details (key names prefixed with 'edns_').
