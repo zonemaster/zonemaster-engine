@@ -34,6 +34,7 @@ RUN apk add --no-cache \
     perl-yaml \
     perl-yaml-libyaml \
  && cpanm --no-wget --from=https://cpan.metacpan.org/ \
+    CBOR::XS \
     Email::Valid \
     List::Compare \
     Locale::PO \
