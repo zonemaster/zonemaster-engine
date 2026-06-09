@@ -219,7 +219,7 @@ subtest 'TOO-MANY-CNAME' => sub {
 subtest 'TARGET-NO-MATCH-CNAME' => sub {
     Zonemaster::Engine->logger->clear_history;
     my $p = Zonemaster::Engine->recurse( 'target-no-match-cname.cname.recursor.engine.xa' );
-    is( $p, undef, "undefined as expected");
+    isa_ok( $p, 'Zonemaster::Engine::Packet' );
 
     my %res = map { $_->tag => $_ } @{ Zonemaster::Engine->logger->entries };
     ok( $res{CNAME_START}, q{should emit CNAME_START} );
@@ -266,10 +266,20 @@ subtest 'EXTRA-CNAME-IN-ANSWER' => sub {
     ok( scalar ( grep { index($_->tag, 'CNAME') != -1 } @{ Zonemaster::Engine->logger->entries } ) == 0, 'empty CNAME message tags' );
 };
 
-subtest 'UNRESOLVABLE-CNAME' => sub {
+subtest 'CNAME-CHAIN-TO-NODATA' => sub {
+    Zonemaster::Engine->logger->clear_history;
+    my $p = Zonemaster::Engine->recurse( 'cname-chain-to-nodata.cname.recursor.engine.xa' );
+    isa_ok( $p, 'Zonemaster::Engine::Packet' );
+
+    my %res = map { $_->tag => $_ } @{ Zonemaster::Engine->logger->entries };
+    ok( $res{CNAME_START}, q{should emit CNAME_START} );
+    ok( $res{CNAME_TO_NODATA}, q{should emit CNAME_TO_NODATA} );
+};
+
+subtest 'CNAME-UNRESOLVABLE' => sub {
     Zonemaster::Engine->logger->clear_history;
     my $p = Zonemaster::Engine->recurse( 'unresolvable-cname.cname.recursor.engine.xa' );
-    is( $p, undef );
+    is( $p, undef, "undefined as expected");
 
     my %res = map { $_->tag => $_ } @{ Zonemaster::Engine->logger->entries };
     ok( $res{CNAME_START}, q{should emit CNAME_START} );

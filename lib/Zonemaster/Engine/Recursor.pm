@@ -249,19 +249,6 @@ sub _resolve_cname {
         return ( undef, $state );
     }
 
-    # Check if there are RRs of queried type (QTYPE) in the answer section of the response;
-    if ( scalar $p->get_records( $type, 'answer' ) ) {
-        # RR of type QTYPE for CNAME target is already in the response; no need to recurse
-        if ( $p->has_rrs_of_type_for_name( $type, $target ) ) {
-            Zonemaster::Engine->logger->add( CNAME_FOLLOWED_IN_ZONE => { name => $name, type => $type, target => $target } );
-            return ( $p, $state );
-        }
-
-        # There is a record of type QTYPE but with different owner name than CNAME target; no need to recurse
-        Zonemaster::Engine->logger->add( CNAME_NO_MATCH => { name => $name, type => $type, target => $target, owner_names => join( ';', map { $_->owner } $p->get_records( $type ) ) } );
-        return ( undef, $state );
-    }
-
     # CNAME target has already been followed (outer loop); no need to recurse
     if ( exists $state->{in_progress}{lc( $target )}{$type} ) {
         Zonemaster::Engine->logger->add( CNAME_LOOP_OUTER => { name => $name, target => $target, targets_seen => join( ';', keys %{ $state->{tseen} } ) } );
@@ -277,12 +264,34 @@ sub _resolve_cname {
         return ( undef, $state );
     }
 
-    # Make sure that the CNAME target is out of zone before making a new recursive lookup for CNAME target
+    # Check if there are RRs of queried type (QTYPE) in the answer section of the response;
+    if ( scalar $p->get_records( $type, 'answer' ) ) {
+        # RR of type QTYPE for CNAME target is already in the response; no need to recurse
+        if ( $p->has_rrs_of_type_for_name( $type, $target ) ) {
+            Zonemaster::Engine->logger->add( CNAME_FOLLOWED_IN_ZONE => { name => $name, type => $type, target => $target } );
+            return ( $p, $state );
+        }
+
+        # There is a record of type QTYPE but with different owner name than CNAME target; we have to recurse again
+        Zonemaster::Engine->logger->add( CNAME_NO_MATCH => { name => $name, type => $type, target => $target, owner_names => join( ';', map { $_->owner } $p->get_records( $type ) ) } );
+    }
+
+    # CNAME target is out of zone, so make a new recursive lookup
     unless ( $name->is_in_bailiwick( $target ) ) {
         Zonemaster::Engine->logger->add( CNAME_FOLLOWED_OUT_OF_ZONE => { name => $name, target => $target } );
         ( $p, $state ) = $class->_recurse( $target, $type, $dns_class,
             { ns => [ root_servers() ], count => 0, common => 0, seen => {}, tseen => $state->{tseen}, tcount => $state->{tcount}, glue => {}, in_progress => $state->{in_progress} });
         return ( $p, $state );
+    }
+    # Final attempt to resolve the CNAME target for in-bailiwick names
+    else {
+        ( $p, $state ) = $class->_recurse( $target, $type, $dns_class,
+            { ns => [ root_servers() ], count => 0, common => 0, seen => {}, tseen => $state->{tseen}, tcount => $state->{tcount}, glue => {}, in_progress => $state->{in_progress} });
+
+        if ( $p and $p->aa and $p->rcode eq 'NOERROR' ) {
+            Zonemaster::Engine->logger->add( CNAME_TO_NODATA => { name => $name, type => $type, target => $target } );
+            return ( $p, $state );
+        }
     }
 
     # Catch-all; unforeseen problem in CNAME resolution
