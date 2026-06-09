@@ -4,8 +4,8 @@ use warnings;
 use Test::More;
 
 use Test::Fatal;
+use Zonemaster::Engine;
 use Zonemaster::Engine::Util;
-use Zonemaster::Engine::Nameserver;
 use Zonemaster::LDNS;
 use Sub::Override;
 

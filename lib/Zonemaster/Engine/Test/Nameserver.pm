@@ -15,7 +15,7 @@ use Zonemaster::Engine::Constants qw[:ip];
 use Zonemaster::Engine::Profile;
 use Zonemaster::Engine::Test::Address;
 use Zonemaster::Engine::TestMethods;
-use Zonemaster::Engine::Util qw( escape_unprintable );
+use Zonemaster::Engine::Util qw( escape_unprintable scramble_case );
 
 =head1 NAME
 

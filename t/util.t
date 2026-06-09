@@ -5,7 +5,10 @@ use Test::Exception;
 use Encode qw(encode);
 use utf8;
 
-BEGIN { use_ok( 'Zonemaster::Engine::Util', qw( info name ns parse_hints ) ) }
+BEGIN {
+    use_ok( 'Zonemaster::Engine' );
+    use_ok( 'Zonemaster::Engine::Util', qw( info name ns parse_hints ) )
+}
 
 isa_ok( ns( 'name', '::1' ), 'Zonemaster::Engine::Nameserver' );
 isa_ok( info( 'TAG', {} ), 'Zonemaster::Engine::Logger::Entry' );

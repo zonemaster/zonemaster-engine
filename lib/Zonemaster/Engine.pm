@@ -26,19 +26,16 @@ use Zonemaster::Engine::Test;
 use Zonemaster::Engine::Recursor;
 use Zonemaster::Engine::ASNLookup;
 
-INIT {
-    init_engine();
-}
-
 our $logger;
 our $recursor = Zonemaster::Engine::Recursor->new;
 
-my $init_done = 0;
-
+my $init_done;
 sub init_engine {
     return if $init_done++;
     Zonemaster::Engine::Recursor::init_recursor();
 }
+
+init_engine();
 
 sub logger {
     return $logger //= Zonemaster::Engine::Logger->new;
@@ -253,7 +250,7 @@ This manual describes the main L<Zonemaster::Engine> module. If what you're afte
 
 =item init_engine()
 
-Run the initialization tasks if they have not been run already. This method is called automatically in INIT block.
+Run the initialization tasks if they have not been run already. This method is called automatically at runtime.
 
 =item test_zone($name)
 
