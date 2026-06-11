@@ -40,6 +40,15 @@ read on the [CPAN site].
 
 Documentation on Zonemaster-Engine is also found under the [docs] directory.
 
+## CI artifact
+
+A tarball (`Zonemaster-Engine-<version>.tar.gz`) is built and uploaded as a GitHub Actions artifact on every push and pull request. This artifact can be useful for release testing and PR review.
+To download it:
+1. Go to the [Actions tab](https://github.com/zonemaster/zonemaster-engine/actions) of the repository.
+2. Select a workflow run (e.g. for a specific PR or branch).
+3. Scroll to the bottom of the run summary to the **Artifacts** section.
+4. Download the artifact named `Zonemaster-Engine-<version>-<short_sha>`.
+The artifact name includes the module version and the first 7 characters of the commit SHA.
 
 ## Participation, Contact and Bug reporting
 
