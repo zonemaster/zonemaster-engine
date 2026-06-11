@@ -457,7 +457,8 @@ parent domain.
 =item query_one($name[, $type[, $flags]])
 
 Sends (or retrieves from cache) a query for the given name, type and flags sent to the first nameserver in the zone's ns list. If there is a
-response, it will be returned in a L<Zonemaster::Engine::Packet> object. If the type arguments is not given, it defaults to 'A'. If the flags are not given, they default to C<class> IN and C<dnssec>, C<usevc> and C<recurse> according to configuration (which is by default off on all three).
+response, it will be returned in a L<Zonemaster::Engine::Packet> object. Regarding defaults for optional arguments "type" and "flags",
+see L<Zonemaster::Engine::Nameserver/query>.
 
 =item query_persistent($name[, $type[, $flags]])
 

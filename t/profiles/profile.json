@@ -7,11 +7,8 @@
    "resolver" : {
       "defaults" : {
          "debug" : false,
-         "igntc" : false,
-         "recurse" : false,
          "retrans" : 3,
-         "retry" : 2,
-         "usevc" :false 
+         "retry" : 2
       }
    },
    "logfilter": {

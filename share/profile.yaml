@@ -14,12 +14,9 @@ resolver:
   defaults:
     debug: false
     fallback: true
-    igntc: false
-    recurse: false
     retrans: 3
     retry: 2
     timeout: 5
-    usevc: false
 test_cases:
   - address01
   - address02
