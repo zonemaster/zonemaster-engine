@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-09 16:55+0100\n"
+"POT-Creation-Date: 2026-06-16 11:19+0200\n"
 "PO-Revision-Date: 2025-12-09 17:08+0100\n"
 "Last-Translator: thomas.green@afnic.fr\n"
 "Language-Team: Zonemaster Team\n"
@@ -1812,15 +1812,6 @@ msgstr ""
 "Plusieurs enregistrements NSEC alors qu'un seul est attendu. Information "
 "retournée par les serveurs de noms \"{ns_list}\"."
 
-#. DNSSEC:DS10_ERR_MULT_NSEC3PARAM
-#, perl-brace-format
-msgid ""
-"Multiple NSEC3PARAM records when one is expected. Fetched from name servers "
-"\"{ns_list}\"."
-msgstr ""
-"Plusieurs enregistrements NSEC3PARAM alors qu'un seul est attendu. "
-"Information retournée par les serveurs de noms \"{ns_list}\"."
-
 #. DNSSEC:DS10_EXPECTED_NSEC_NSEC3_MISSING
 #, perl-brace-format
 msgid ""
@@ -2120,6 +2111,18 @@ msgstr ""
 "L'enregistrement RRSIG (signature) avec le tag {keytag} pour "
 "l'enregistrement NSEC ne peut pas être vérifié. Information retournée par "
 "les serveurs de noms \"{ns_list}\"."
+
+#. DNSSEC:DS10_NONSTANDARD_NSEC_RESPONSE
+#, perl-brace-format
+msgid ""
+"The following name servers give a non-standard response to the NSEC query "
+"(NSEC RR in authority section instead of answer section). Fetched from name "
+"servers \"{ns_list}\"."
+msgstr ""
+"Les serveurs de noms suivants renvoient une réponse non standard à la "
+"requête NSEC (enregistrement NSEC se trouvant dans la section autorité au "
+"lieu de la section réponse). Information retournée par les serveurs de noms "
+"\"{ns_list}\"."
 
 #. DNSSEC:DS10_SERVER_NO_DNSSEC
 #, perl-brace-format
