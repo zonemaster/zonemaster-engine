@@ -14,12 +14,9 @@
     "resolver" : {
         "defaults" : {
             "debug" : false,
-            "igntc" : false,
             "fallback" : true,
-            "recurse" : false,
             "retrans" : 3,
             "retry" : 2,
-            "usevc" : false,
             "timeout": 5
         }
     },

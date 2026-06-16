@@ -55,13 +55,7 @@ my %profile_properties_details = (
     q{resolver.defaults.debug} => {
         type    => q{Bool}
     },
-    q{resolver.defaults.igntc} => {
-        type    => q{Bool}
-    },
     q{resolver.defaults.fallback} => {
-        type    => q{Bool}
-    },
-    q{resolver.defaults.recurse} => {
         type    => q{Bool}
     },
     q{resolver.defaults.retrans} => {
@@ -73,9 +67,6 @@ my %profile_properties_details = (
         type    => q{Num},
         min     => 1,
         max     => 255
-    },
-    q{resolver.defaults.usevc} => {
-        type    => q{Bool}
     },
     q{resolver.defaults.timeout} => {
         type    => q{Num}
@@ -630,7 +621,7 @@ Internal method used to get a value in a nested hashes-of-hashes.
 
 Where $hash_ref is the hash to explore and @path are the labels of the property to get.
 
-   @path = split /\./,  q{resolver.defaults.usevc};
+   @path = split /\./,  q{resolver.defaults.timeout};
 
 =head2 _set_value_to_nested_hash
 
@@ -640,7 +631,7 @@ Internal method used to set a value in a nested hashes-of-hashes.
 
 Where $hash_ref is the hash to explore and @path are the labels of the property to set.
 
-   @path = split /\./,  q{resolver.defaults.usevc};
+   @path = split /\./,  q{resolver.defaults.timeout};
 
 =head1 PROFILE PROPERTIES
 
@@ -687,18 +678,6 @@ The source address all resolver objects should use when sending queries over IPv
 If set to "" (empty string), the OS default IPv6 address is used.
 
 Default: "" (empty string).
-
-=head2 resolver.defaults.igntc
-
-A boolean. Default false. Ignored. Deprecated and planned for removal in v2026.1. Remove it from your profile file.
-
-=head2 resolver.defaults.recurse
-
-A boolean. Default false. Ignored. Deprecated and planned for removal in v2026.1. Remove it from your profile file.
-
-=head2 resolver.defaults.usevc
-
-A boolean. Default false. Ignored. Deprecated and planned for removal in v2026.1. Remove it from your profile file.
 
 =head2 net.ipv4
 
