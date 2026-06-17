@@ -2,9 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-04 15:43+0000\n"
-"PO-Revision-Date: 2026-03-02 16:56+0000\n"
-"Last-Translator: mattias.paivarinta@iis.se\n"
+"POT-Creation-Date: 2026-06-12 20:11+0000\n"
+"PO-Revision-Date: 2026-06-12 20:10+0000\n"
 "Language-Team: Zonemaster Team\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
@@ -1697,15 +1696,6 @@ msgstr ""
 "Flera NSEC-poster hittades där endast en förväntades. Hämtad från "
 "namnservrarna \"{ns_list}\"."
 
-#. DNSSEC:DS10_ERR_MULT_NSEC3PARAM
-#, perl-brace-format
-msgid ""
-"Multiple NSEC3PARAM records when one is expected. Fetched from name servers "
-"\"{ns_list}\"."
-msgstr ""
-"Flera NSEC3PARAM-poster hittades där endast en förväntades. Hämtad från "
-"namnservrarna \"{ns_list}\"."
-
 #. DNSSEC:DS10_EXPECTED_NSEC_NSEC3_MISSING
 #, perl-brace-format
 msgid ""
@@ -1988,6 +1978,17 @@ msgid ""
 msgstr ""
 "RRSIG-signaturen med \"key tag\" {keytag} för NSEC-posten kan inte "
 "verifieras. Hämtad från namnservrarna med IP-adresserna \"{ns_list}\"."
+
+#. DNSSEC:DS10_NONSTANDARD_NSEC_RESPONSE
+#, perl-brace-format
+msgid ""
+"The following name servers give a non-standard response to the NSEC query "
+"(NSEC RR in authority section instead of answer section). Fetched from name "
+"servers \"{ns_list}\"."
+msgstr ""
+"Följande namnservrar ger ett svar på NSEC-förfrågan som inte följer "
+"standarden (NSEC-post i \"authority\" istället för i \"answer\"). Hämtad "
+"från namnservrarna \"{ns_list}\"."
 
 #. DNSSEC:DS10_SERVER_NO_DNSSEC
 #, perl-brace-format
