@@ -5,17 +5,17 @@ use warnings;
 
 use version; our $VERSION = version->declare( "v1.1.0" );
 
+use JSON::PP;
 use List::MoreUtils qw[uniq none];
 use Locale::TextDomain qw[Zonemaster-Engine];
-use Readonly;
-use JSON::PP;
 use Net::IP::XS;
+use Readonly;
 
-use Zonemaster::Engine::Profile;
 use Zonemaster::Engine::Constants qw[:ip];
+use Zonemaster::Engine::Profile;
 use Zonemaster::Engine::Test::Address;
-use Zonemaster::Engine::Util;
 use Zonemaster::Engine::TestMethods;
+use Zonemaster::Engine::Util qw( escape_unprintable scramble_case );
 
 =head1 NAME
 
@@ -1747,10 +1747,10 @@ sub nameserver15 {
                         push @wrong_record_class, $ns;
                     }
 
-                    my $string = $rr->txtdata;
+                    my $string = escape_unprintable($rr->txtdata);
                     $string =~ s/^\s+|\s+$//g; # Remove leading and trailing spaces
 
-                    if ( $string and $string ne "") {
+                    if ( $string ne "" ) {
                         push @{ $txt_data{$string}{$query_name} }, $ns;
                         delete $sending_version_query{$ns};
                     }

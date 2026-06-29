@@ -1,5 +1,26 @@
 Release history for Zonemaster component Zonemaster-Engine
 
+v9.0.0 2026-06-29 (part of Zonemaster v2026.1 release)
+
+ [Breaking changes]
+ - Removes deprecated profile properties,
+   resolver.defaults.recurse, resolver.defaults.igntc
+   and resolver.defaults.usevc (#1532)
+ - Changes saved packets’ serialization format (#1517, #1531)
+
+ [Features]
+ - Creates independent caching of custom name server recursive
+   lookups (#1521)
+
+ [Fixes]
+ - Updates Swedish translation (#1533)
+ - Updates French translation (#1536)
+ - Replaces Perl INIT block with explicit initialization (#1530)
+ - Hardens test case Nameserver15 against creative version
+   strings (#1528)
+ - Updates test case DNSSEC10 implementation (#1523, #1539)
+
+
 v8.1.1 2026-03-04 (part of Zonemaster v2025.2.1 release)
 
  [Fixes]

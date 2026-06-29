@@ -528,7 +528,6 @@ sub metadata {
               DS10_ALGO_NOT_SUPPORTED_BY_ZM
               DS10_ERR_MULT_NSEC
               DS10_ERR_MULT_NSEC3
-              DS10_ERR_MULT_NSEC3PARAM
               DS10_EXPECTED_NSEC_NSEC3_MISSING
               DS10_HAS_NSEC
               DS10_HAS_NSEC3
@@ -561,6 +560,7 @@ sub metadata {
               DS10_NSEC_RRSIG_NOT_YET_VALID
               DS10_NSEC_RRSIG_NO_DNSKEY
               DS10_NSEC_RRSIG_VERIFY_ERROR
+              DS10_NONSTANDARD_NSEC_RESPONSE
               DS10_SERVER_NO_DNSSEC
               DS10_ZONE_NO_DNSSEC
               )
@@ -1204,11 +1204,6 @@ Readonly my %TAG_DESCRIPTIONS => (
           'Multiple NSEC3 records when one is expected. Fetched from name servers "{ns_list}".',
           @_;
     },
-    DS10_ERR_MULT_NSEC3PARAM => sub {
-        __x    # DNSSEC:DS10_ERR_MULT_NSEC3PARAM
-          'Multiple NSEC3PARAM records when one is expected. Fetched from name servers "{ns_list}".',
-          @_;
-    },
     DS10_EXPECTED_NSEC_NSEC3_MISSING => sub {
         __x    # DNSSEC:DS10_EXPECTED_NSEC_NSEC3_MISSING
           'The server responded with DNSKEY but not with expected NSEC or NSEC3. '
@@ -1394,6 +1389,13 @@ Readonly my %TAG_DESCRIPTIONS => (
     DS10_NSEC_RRSIG_VERIFY_ERROR => sub {
         __x    # DNSSEC:DS10_NSEC_RRSIG_VERIFY_ERROR
           'The RRSIG (signature) with tag {keytag} for the NSEC record cannot be verified. '
+          . 'Fetched from name servers "{ns_list}".',
+          @_;
+    },
+    DS10_NONSTANDARD_NSEC_RESPONSE => sub {
+        __x    # DNSSEC:DS10_NONSTANDARD_NSEC_RESPONSE
+          'The following name servers give a non-standard response to the NSEC query '
+          . '(NSEC RR in authority section instead of answer section). '
           . 'Fetched from name servers "{ns_list}".',
           @_;
     },
@@ -3561,8 +3563,8 @@ sub dnssec10 {
     my @query_types = ( $type_dnskey, $type_nsec, $type_nsec3param );
 
     my %algo_not_supported_by_zm;
-    my ( @erroneous_multiple_nsec, @erroneous_multiple_nsec3, @erroneous_multiple_nsec3param );
-    my ( @nsec_in_answer, @nsec3param_in_answer );
+    my ( @erroneous_multiple_nsec, @erroneous_multiple_nsec3 );
+    my ( @nsec_in_response, @nsec_nonstandard_nodata, @nsec3param_in_answer );
     my ( @nsec_incorrect_type_list, @nsec3_incorrect_type_list );
     my ( @nsec_mismatches_apex, @nsec3_mismatches_apex, @nsec3param_mismatches_apex );
     my ( @nsec_missing_signature, @nsec3_missing_signature );
@@ -3621,7 +3623,7 @@ sub dnssec10 {
         }
         elsif ( $nsec_p->answer ) {
             if ( scalar $nsec_p->get_records( $type_nsec, q{answer} ) ) {
-                push @nsec_in_answer, @all_ns_for_ip;
+                push @nsec_in_response, @all_ns_for_ip;
 
                 if ( scalar $nsec_p->get_records( $type_nsec, q{answer} ) > 1 ) {
                     push @erroneous_multiple_nsec, @all_ns_for_ip;
@@ -3634,9 +3636,92 @@ sub dnssec10 {
                 push @nsec_erroneous_answer, @all_ns_for_ip;
             }
         }
-        elsif ( not $nsec_p->answer and scalar $nsec_p->get_records( $type_nsec3, q{authority} ) ) {
-            my @nsec3_rrs = $nsec_p->get_records( $type_nsec3, q{authority} );
+        elsif ( not $nsec_p->answer and scalar $nsec_p->get_records( $type_nsec, q{authority} ) ) {
+            push @nsec_in_response, @all_ns_for_ip;
+            push @nsec_nonstandard_nodata, @all_ns_for_ip;
 
+            unless ( scalar $nsec_p->get_records( $type_soa, q{authority} ) ) {
+                push @nsec_nodata_missing_soa, @all_ns_for_ip;
+            }
+            elsif ( ($nsec_p->get_records( $type_soa, q{authority} ))[0]->owner ne $zone->name ) {
+                push @{ $nsec_nodata_wrong_soa{$zone->name} }, @all_ns_for_ip;
+            }
+
+            my @nsec_rrs = $nsec_p->get_records( $type_nsec, q{authority} );
+
+            if ( scalar @nsec_rrs > 1 ) {
+                push @erroneous_multiple_nsec, @all_ns_for_ip;
+            }
+            else {
+                if ( $nsec_rrs[0]->owner ne $zone->name ) {
+                    push @nsec_mismatches_apex, @all_ns_for_ip;
+                }
+                else {
+                    my @mandatory_typelist = qw( SOA NS DNSKEY NSEC RRSIG );
+                    my @forbidden_typelist = qw( NSEC3PARAM NSEC3 );
+                    my %typelist = %{ $nsec_rrs[0]->typehref };
+
+                    foreach my $type ( @mandatory_typelist ) {
+                        if ( not exists $typelist{$type} ) {
+                            push @nsec_incorrect_type_list, @all_ns_for_ip;
+                            last;
+                        }
+                    }
+
+                    foreach my $type ( @forbidden_typelist ) {
+                        if ( exists $typelist{$type} ) {
+                            push @nsec_incorrect_type_list, @all_ns_for_ip;
+                            last;
+                        }
+                    }
+                }
+
+                my @nsec_rrsig_rrs = grep { $_->typecovered eq q{NSEC} } $nsec_p->get_records_for_name( q{RRSIG}, $nsec_rrs[0]->name );
+
+                unless ( scalar @nsec_rrsig_rrs ) {
+                    push @nsec_missing_signature, @all_ns_for_ip;
+                }
+                else {
+                    foreach my $rr ( @nsec_rrsig_rrs ) {
+                        my @matching_dnskeys = grep { $rr->keytag == $_->keytag } @dnskey_records;
+
+                        unless ( scalar @matching_dnskeys ) {
+                            push @{ $nsec_rrsig_no_dnskey{$rr->keytag} }, @all_ns_for_ip;
+                        }
+                        elsif ( $rr->expiration < $testing_time ) {
+                            push @{ $nsec_rrsig_expired{$rr->keytag} }, @all_ns_for_ip;
+                        }
+                        elsif ( $rr->inception > $testing_time ) {
+                            push @{ $nsec_rrsig_not_yet_valid{$rr->keytag} }, @all_ns_for_ip;
+                        }
+                        else {
+                            my $i = 1;
+                            foreach my $dnskey ( @matching_dnskeys ) {
+                                my $msg = q{};
+                                my $validated = $rr->verify_time( [grep { name( $_->name ) eq name( $rr->name ) } @nsec_rrs], [ $dnskey ], $testing_time, $msg );
+
+                                if ( $validated ) {
+                                    push @nsec_rrsig_verified, @all_ns_for_ip;
+                                    last;
+                                }
+
+                                if ( $i >= scalar @matching_dnskeys ) {
+                                    if ( $msg =~ /Unknown cryptographic algorithm/ ) {
+                                        push @{ $algo_not_supported_by_zm{$dnskey->keytag}{$dnskey->algorithm} }, @all_ns_for_ip;
+                                    }
+                                    else {
+                                        push @{ $nsec_rrsig_verify_error{$dnskey->keytag} }, @all_ns_for_ip;
+                                    }
+                                }
+
+                                $i++;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        elsif ( not $nsec_p->answer and scalar $nsec_p->get_records( $type_nsec3, q{authority} ) ) {
             push @nsec_nsec3_nodata, @all_ns_for_ip;
 
             unless ( scalar $nsec_p->get_records( $type_soa, q{authority} ) ) {
@@ -3645,6 +3730,8 @@ sub dnssec10 {
             elsif ( ($nsec_p->get_records( $type_soa, q{authority} ))[0]->owner ne $zone->name ) {
                 push @{ $nsec3_nodata_wrong_soa{$zone->name} }, @all_ns_for_ip;
             }
+
+            my @nsec3_rrs = $nsec_p->get_records( $type_nsec3, q{authority} );
 
             if ( scalar @nsec3_rrs > 1 ) {
                 push @erroneous_multiple_nsec3, @all_ns_for_ip;
@@ -3728,10 +3815,7 @@ sub dnssec10 {
             if ( scalar $nsec3param_p->get_records( $type_nsec3param, q{answer} ) ) {
                 push @nsec3param_in_answer, @all_ns_for_ip;
 
-                if ( scalar $nsec3param_p->get_records( $type_nsec3param, q{answer} ) > 1 ) {
-                    push @erroneous_multiple_nsec3param, @all_ns_for_ip;
-                }
-                elsif ( ($nsec3param_p->get_records( $type_nsec3param, q{answer} ))[0]->owner ne $zone->name ) {
+                if ( ($nsec3param_p->get_records( $type_nsec3param, q{answer} ))[0]->owner ne $zone->name ) {
                     push @nsec3param_mismatches_apex, @all_ns_for_ip;
                 }
             }
@@ -3843,16 +3927,16 @@ sub dnssec10 {
           );
     }
 
-    if ( scalar @erroneous_multiple_nsec3param ) {
+    if ( scalar @nsec_nonstandard_nodata ) {
         push @results,
           _emit_log(
-            DS10_ERR_MULT_NSEC3PARAM => {
-                ns_list => join( q{;}, uniq sort @erroneous_multiple_nsec3param )
+            DS10_NONSTANDARD_NSEC_RESPONSE => {
+                ns_list => join( q{;}, uniq sort @nsec_nonstandard_nodata )
             }
           );
     }
 
-    my $lc = List::Compare->new( \@nsec_in_answer, \@nsec3param_nsec_nodata );
+    my $lc = List::Compare->new( \@nsec_in_response, \@nsec3param_nsec_nodata );
     my @diff = $lc->get_symmetric_difference;
     my @union = uniq map { $_->string } ( @nsec3param_in_answer, @nsec_nsec3_nodata );
     my $lc2 = List::Compare->new( \@diff, \@union );
@@ -3869,7 +3953,7 @@ sub dnssec10 {
 
     $lc = List::Compare->new( \@nsec3param_in_answer, \@nsec_nsec3_nodata );
     @diff = $lc->get_symmetric_difference;
-    @union = uniq map { $_->string } ( @nsec_in_answer, @nsec3param_nsec_nodata );
+    @union = uniq map { $_->string } ( @nsec_in_response, @nsec3param_nsec_nodata );
     $lc2 = List::Compare->new( \@diff, \@union );
     @final_diff = $lc2->get_symmetric_difference;
 
@@ -3882,7 +3966,7 @@ sub dnssec10 {
           );
     }
 
-    $lc = List::Compare->new( [ @nsec3param_in_answer, @nsec_nsec3_nodata ], [ @nsec_in_answer, @nsec3param_nsec_nodata ] );
+    $lc = List::Compare->new( [ @nsec3param_in_answer, @nsec_nsec3_nodata ], [ @nsec_in_response, @nsec3param_nsec_nodata ] );
     my @intersection = $lc->get_intersection;
 
     if ( @intersection ) {
@@ -3894,16 +3978,16 @@ sub dnssec10 {
           );
     }
 
-    if ( ( scalar @nsec_in_answer or @nsec3param_nsec_nodata ) and not scalar @nsec3param_in_answer and not scalar @nsec_nsec3_nodata ) {
+    if ( ( scalar @nsec_in_response or @nsec3param_nsec_nodata ) and not scalar @nsec3param_in_answer and not scalar @nsec_nsec3_nodata ) {
         push @results,
           _emit_log(
             DS10_HAS_NSEC => {
-                ns_list => join( q{;}, uniq sort ( @nsec_in_answer, @nsec3param_nsec_nodata ) )
+                ns_list => join( q{;}, uniq sort ( @nsec_in_response, @nsec3param_nsec_nodata ) )
             }
           );
     }
 
-    if ( ( scalar @nsec3param_in_answer or @nsec_nsec3_nodata ) and not scalar @nsec_in_answer and not scalar @nsec3param_nsec_nodata ) {
+    if ( ( scalar @nsec3param_in_answer or @nsec_nsec3_nodata ) and not scalar @nsec_in_response and not scalar @nsec3param_nsec_nodata ) {
         push @results,
           _emit_log(
             DS10_HAS_NSEC3 => {
@@ -3913,7 +3997,7 @@ sub dnssec10 {
     }
 
     @union = ( @nsec3param_in_answer, @nsec_nsec3_nodata );
-    my @second_union = ( @nsec_in_answer, @nsec3param_nsec_nodata );
+    my @second_union = ( @nsec_in_response, @nsec3param_nsec_nodata );
     $lc = List::Compare->new( \@union, \@second_union );
     my @first = $lc->get_unique;
     my @second = $lc->get_complement;
@@ -4223,7 +4307,7 @@ sub dnssec10 {
           );
     }
 
-    $lc = List::Compare->new( [ @all_ns ], [ @ignored_nss, @without_dnskey, @nsec_in_answer, @nsec3param_nsec_nodata, @nsec3param_in_answer, @nsec_nsec3_nodata ] );
+    $lc = List::Compare->new( [ @all_ns ], [ @ignored_nss, @without_dnskey, @nsec_in_response, @nsec3param_nsec_nodata, @nsec3param_in_answer, @nsec_nsec3_nodata ] );
     @first = $lc->get_unique;
 
     if ( @first ) {

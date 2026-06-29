@@ -1,13 +1,15 @@
-use Test::More;
-use Test::Fatal;
 use File::Slurp;
+use JSON::PP;
+use Test::Fatal;
+use Test::More;
 
 BEGIN {
+    use_ok( 'Zonemaster::Engine' );
+    use_ok( 'Zonemaster::Engine::Util' );
     use_ok( 'Zonemaster::Engine::Logger' );
     use_ok( 'Zonemaster::Engine::Logger::Entry' );
     use_ok( 'Zonemaster::Engine::Exception' );
 }
-use Zonemaster::Engine::Util;
 
 my $log = Zonemaster::Engine->logger;
 
@@ -34,6 +36,35 @@ isa_ok( $entry, 'Zonemaster::Engine::Logger::Entry' );
 ok( scalar( @{ Zonemaster::Engine->logger->entries } ) >= 2, 'expected number of entries' );
 
 like( "$entry", qr/System:Unspecified:TEST an=argument/, 'stringification overload' );
+
+$entry = info( 'TEST2', { an => 'argument', domain => Zonemaster::Engine::Util::name( 'logger.test.example' ) } );
+
+# FIXME: Ideally, we really should instead have domain=logger.test.example
+# without the double quotes around the domain name.
+#
+# Providing the domain name as a regular string gives us no double quotes
+# around the domain name. Providing it directly as a
+# Zonemaster::Engine::DNSName does give us double quotes, however. That’s
+# because blessed objects get turned into their JSON representations, while
+# regular strings are interpolated as they are. The TO_JSON method for DNSName
+# objects returns a simple string, which is then converted into JSON in the
+# usual double-quoted notation.
+#
+# It’s an annoying inconsistency, but any attempt at a fix might cause
+# repercussions when translating a log entry to a human language, a string, or
+# JSON. For now, we expect the broken behavior, but that should be fixed
+# someday.
+is(
+    "$entry",
+    'System:Unspecified:TEST2 an=argument; domain="logger.test.example"',
+    'stringification overload works with DNS names' );
+is_deeply(
+    (decode_json $log->json)->[-1]->{args},
+    {
+        an => 'argument',
+        domain => 'logger.test.example'
+    },
+    'entry arguments serialize to JSON' );
 
 is( $entry->level, 'DEBUG', 'right level' );
 my $example = Zonemaster::Engine::Logger::Entry->new({ module => 'Basic', tag => 'B02_NS_BROKEN', testcase => 'Basic02' } );

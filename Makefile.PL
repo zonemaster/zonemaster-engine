@@ -17,6 +17,7 @@ all_from 'lib/Zonemaster/Engine.pm';
 # "2.1.0" could be declared as "2.001" but not as "2.1"
 # (see Zonemaster::LDNS below)
 
+requires 'CBOR::XS'           => 0;
 requires 'Class::Accessor'    => 0;
 requires 'Clone'              => 0;
 requires 'Email::Valid'       => 0;
@@ -34,7 +35,7 @@ requires 'Net::IP::XS'        => 0.21;
 requires 'Readonly'           => 0;
 requires 'Text::CSV'          => 0;
 requires 'YAML::XS'           => 0;
-requires 'Zonemaster::LDNS'   => 5.000002; # For v5.0.2
+requires 'Zonemaster::LDNS'   => 5.001000; # For v5.1.0
 
 test_requires 'Locale::PO'        => 0;
 test_requires 'Pod::Coverage'     => 0;

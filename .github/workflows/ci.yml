@@ -20,7 +20,7 @@ jobs:
           - develop
           #- latest
         perl:
-          - '5.40'
+          - '5.42'
           - '5.36'
           - '5.26'
         runner:
@@ -34,6 +34,9 @@ jobs:
       - uses: shogo82148/actions-setup-perl@v1
         with:
           perl-version: ${{ matrix.perl }}
+
+      - name: update
+        run: sudo apt update -y
 
       - name: Binary dependencies
         run: |
@@ -97,3 +100,41 @@ jobs:
       - name: Test
         run: |
           prove -lv t
+
+  build-artifact:
+    needs: run-tests
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: update
+        run: sudo apt update -y
+
+      - name: apt install
+        run: sudo apt-get install -y build-essential git libmodule-install-perl gettext
+
+      - name: build
+        run: perl Makefile.PL && make all dist
+
+      - name: Get short SHA
+        id: short_sha
+        run: |
+            if [ "${{ github.event_name }}" == "pull_request" ]; then
+                echo "SHORT_SHA=$(echo ${{ github.event.pull_request.head.sha }} | cut -c1-7)" >> $GITHUB_ENV
+            else
+                echo "SHORT_SHA=$(echo ${{ github.sha }} | cut -c1-7)" >> $GITHUB_ENV
+            fi
+
+      - name: Get Zonemaster-Engine version
+        id: version
+        run: |
+          result=`grep "use version; our $VERSION" lib/Zonemaster/Engine.pm`
+          result+='printf $VERSION;'
+          VERSION=`perl -e "$result"`
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Zonemaster-Engine-${{ steps.version.outputs.version }}-${{ env.SHORT_SHA }}
+          path: Zonemaster-Engine-${{ steps.version.outputs.version }}.tar.gz

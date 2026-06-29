@@ -8,6 +8,7 @@ use version; our $VERSION = version->declare("v1.1.13");
 use Exporter 'import';
 BEGIN {
     our @EXPORT_OK = qw[
+      escape_unprintable
       info
       ipversion_ok
       name
@@ -27,10 +28,10 @@ BEGIN {
 use Net::DNS::ZoneFile;
 use Pod::Simple::SimpleTree;
 
-use Zonemaster::Engine;
 use Zonemaster::Engine::Constants qw[:ip :soa];
 use Zonemaster::Engine::DNSName;
 use Zonemaster::Engine::Profile;
+use Zonemaster::Engine::Nameserver;
 
 sub ns {
     my ( $name, $address ) = @_;
@@ -185,6 +186,39 @@ sub serial_gt {
            );
 }
 
+{
+    # HACK: It would be cleaner to use a state variable, but Perl versions
+    # older than 5.28.0 disallow initializing list state variables, e.g.
+    # writing “state @a = qw(a b c)”.
+    #
+    # A workaround could be to use a state arrayref variable for the
+    # substitution table, but this incurs a performance penalty.
+    #
+    # Once we support Perl ⩾ 5.28, we can rewrite this function using proper
+    # state variables. See also:
+    # <https://perldoc.perl.org/5.28.0/perldelta#Initialisation-of-aggregate-state-variables>.
+    my @substitution_table = map {
+        if ( $_ == 92 ) {
+            '\\\\'
+        }
+        elsif ( $_ >= 32 and $_ <= 126 ) {
+            chr $_
+        }
+        else {
+            sprintf '\%03d', $_
+        }
+    } 0..255;
+
+    sub escape_unprintable {
+        my ( $input ) = @_;
+
+        my $output = '';
+        $output .= $substitution_table[$_] foreach (unpack "C*", $input);
+
+        return $output;
+    }
+}
+
 1;
 
 =head1 NAME
@@ -284,6 +318,31 @@ Check if a test is blacklisted and should run or not.
 =item ipversion_ok
 
 Check if IP version operations are permitted. Tests are done against Zonemaster::Engine::Profile->effective content.
+
+=item escape_unprintable
+
+Replaces all non-ASCII characters and control characters in a byte string with
+decimal escape codes. The resulting string only contains printable ASCII
+characters, which makes it safer for display on a terminal or for storage in a
+database.
+
+For example, C<"hello \x1B[34mworld!\x1B[0m\\\xFF"> is turned into
+C<'hello \027[34mworld!\027[0m\\\255'>.
+
+Do not use this function on character strings, or it might produce invalid
+results. Only use it on byte strings, e.g. UTF-8 encoded text returned by
+calling Encode::encode() on a character string, or raw data received from
+Zonemaster-LDNS.
+
+Space (ASCII 0x20) characters are left as they are, but all other ASCII
+whitespace characters, i.e. HORIZONTAL TAB (ASCII 0x09), LINE FEED (ASCII
+0x0A), VERTICAL TAB (ASCII 0x0B), FORM FEED (ASCII 0x0C) and CARRIAGE RETURN
+(ASCII 0x0D) will be replaced by their equivalent decimal escapes.
+
+Beware that the resulting string might still contain sequences of characters
+that can be dangerous in other contexts, requiring further escaping. For
+example, if the string is meant to be displayed on an HTML GUI, the result
+must have angle brackets and ampersand characters escaped in a second pass.
 
 =item test_levels
 

@@ -8,25 +8,25 @@ use version; our $VERSION = version->declare("v1.1.16");
 use Class::Accessor qw[ antlers ];
 
 use Zonemaster::Engine::DNSName;
-use Zonemaster::Engine;
 use Zonemaster::Engine::Packet;
 use Zonemaster::Engine::Nameserver::Cache;
 use Zonemaster::Engine::Recursor;
 use Zonemaster::Engine::Constants qw( :ip :misc );
 use Zonemaster::LDNS;
 
-use Net::IP::XS;
-use Time::HiRes qw[time];
-use JSON::PP;
-use MIME::Base64;
-use Module::Find qw[useall];
 use Carp qw( confess croak );
-use List::Util qw[max min sum];
+use CBOR::XS;
 use Digest::MD5;
+use Fcntl qw( SEEK_SET );
+use List::Util qw( max min sum );
+use MIME::Base64;
+use Module::Find qw( useall );
+use Net::IP::XS;
 use POSIX ();
-use Scalar::Util qw[ blessed ];
+use Scalar::Util qw( blessed );
+use Time::HiRes qw( gettimeofday time tv_interval );
 
-our @ISA = qw (Class::Accessor);
+our @ISA = qw( Class::Accessor );
 
 use overload
   '""'  => \&string,
@@ -286,28 +286,9 @@ sub query {
         } ## end if ( $name =~ m/([.]|\A)\Q$fname\E\z/xi)
     } ## end foreach my $fname ( sort keys...)
 
-    my $md5 = Digest::MD5->new;
-
-    $md5->add( q{NAME}    , $name,
-               q{TYPE}    , "\U$type",
-               q{CLASS}   , "\U$class",
-               q{DNSSEC}  , $dnssec,
-               q{USEVC}   , $usevc,
-               q{RECURSE} , $recurse );
-
-    if ( exists $href->{edns_details} ) {
-        $md5->add( q{EDNS_VERSION}        , $href->{edns_details}{version} // 0,
-                   q{EDNS_Z}              , $href->{edns_details}{z} // 0,
-                   q{EDNS_EXTENDED_RCODE} , $href->{edns_details}{rcode} // 0,
-                   q{EDNS_DATA}           , $href->{edns_details}{data} // q{} );
-        $edns_size = $href->{edns_details}{size} // ( $href->{edns_size} // ( $dnssec ? $EDNS_UDP_PAYLOAD_DNSSEC_DEFAULT : $EDNS_UDP_PAYLOAD_DEFAULT ) );
-    }
+    my $idx = $self->_key_for_query_cache( $name, $type, $href );
 
     croak "edns_size (or edns_details->size) parameter must be a value between 0 and 65535" if $edns_size > 65535 or $edns_size < 0;
-
-    $md5->add( q{EDNS_UDP_SIZE} , $edns_size );
-
-    my $idx = $md5->b64digest();
 
     my ( $in_cache, $p ) = $self->cache->get_key( $idx );
     if ( not $in_cache ) {
@@ -373,6 +354,114 @@ sub add_fake_ds {
 
     return;
 } ## end sub add_fake_ds
+
+
+# Builds the Zonemaster::LDNS::Packet object that would be sent for a query,
+# taking options into account.
+
+sub _make_query_packet {
+    my ( $self, $qname, $qtype, $opts ) = @_;
+
+    $qtype //= 'A';
+    my $qclass = $opts->{class} //= 'IN';
+
+    my $dnssec = do {
+        if ( exists $opts->{edns_details} and exists $opts->{edns_details}{do} ) {
+            $opts->{edns_details}{do};
+        }
+        elsif ( exists $opts->{dnssec} ) {
+            $opts->{dnssec};
+        }
+        else {
+            0;
+        }
+    };
+
+    my $edns_size = do {
+        if ( exists $opts->{edns_details} and exists $opts->{edns_details}{size} ) {
+            $opts->{edns_details}{size};
+        }
+        elsif ( exists $opts->{edns_size} ) {
+            $opts->{edns_size};
+        }
+        elsif ( $dnssec ) {
+            $EDNS_UDP_PAYLOAD_DNSSEC_DEFAULT;
+        }
+        elsif ( exists $opts->{edns_details} ) {
+            $EDNS_UDP_PAYLOAD_DEFAULT;
+        }
+        else {
+            0;
+        }
+    };
+
+    die "Invalid value $edns_size for EDNS payload size (should be in 0..65535 range)"
+        unless $edns_size >= 0 and $edns_size <= 65535;
+
+    my $packet = Zonemaster::LDNS::Packet->new( "$qname", $qtype, $qclass );
+    $packet->rd($opts->{recurse} // 0);
+
+    if ( exists $opts->{edns_details} ) {
+        $packet->set_edns_present();
+
+        if ( exists $opts->{edns_details}{version} ) {
+            $packet->edns_version($opts->{edns_details}{version});
+        }
+        if ( exists $opts->{edns_details}{z} ) {
+            $packet->edns_z($opts->{edns_details}{z});
+        }
+        if ( exists $opts->{edns_details}{rcode} ) {
+            $packet->edns_rcode($opts->{edns_details}{rcode});
+        }
+        if ( exists $opts->{edns_details}{data} ) {
+            $packet->edns_data($opts->{edns_details}{data});
+        }
+    }
+
+    $packet->do($dnssec);
+    $packet->edns_size($edns_size);
+
+    return $packet;
+}
+
+
+# Computes the key to use to search the cache for a packet corresponding to a
+# query we have previously sent.
+
+sub _key_for_query_cache {
+    my ( $self, $name, $type, $href ) = @_;
+
+    my $usevc = $href->{usevc} // 0;
+
+    my $pkt = $self->_make_query_packet( $name, $type, $href );
+
+    # Repurpose the ID field. We want this field to be zeroed out
+    # in order to match queries with the exact same contents (except
+    # transaction ID), but we may want cache keys to differ on other
+    # attributes, for example transport.
+    #
+    # Currently the layout is as follows:
+    #
+    # 15                                              8
+    # +-----+-----+-----+-----+-----+-----+-----+-----+
+    # | TCP |                (set to 0)               |
+    # +-----+-----+-----+-----+-----+-----+-----+-----+
+    #
+    # 7                                               0
+    # +-----+-----+-----+-----+-----+-----+-----+-----+
+    # |                  (set to 0)                   |
+    # +-----+-----+-----+-----+-----+-----+-----+-----+
+    #
+    # where:
+    #  * bit 15 is set to 1 if the query is sent over TCP, 0 otherwise
+
+    my $fake_id = 0;
+    $fake_id |= (1 << 15) if $usevc;
+
+    $pkt->id($fake_id);
+
+    return $pkt->wireformat();
+}
 
 sub _query {
     my ( $self, $name, $type, $href ) = @_;
@@ -440,31 +529,8 @@ sub _query {
         );
     }
     else {
-        if ( exists $href->{edns_details} ) {
-            my $pkt = Zonemaster::LDNS::Packet->new("$name", $type, $href->{class} );
-            $pkt->set_edns_present();
-
-            $pkt->do($flags{q{dnssec}});
-            $pkt->edns_size($flags{q{edns_size}});
-
-            if ( exists $href->{edns_details}{version} ) {
-                $pkt->edns_version($href->{edns_details}{version});
-            }
-            if ( exists $href->{edns_details}{z} ) {
-                $pkt->edns_z($href->{edns_details}{z});
-            }
-            if ( exists $href->{edns_details}{rcode} ) {
-                $pkt->edns_rcode($href->{edns_details}{rcode});
-            }
-            if ( exists $href->{edns_details}{data} ) {
-                $pkt->edns_data($href->{edns_details}{data});
-            }
-
-            $res = eval { $self->dns->query_with_pkt( $pkt ) };
-        }
-        else {
-            $res = eval { $self->dns->query( "$name", $type, $href->{class} ) };
-        }
+        my $pkt = $self->_make_query_packet( $name, $type, $href );
+        $res = eval { $self->dns->query_with_pkt( $pkt ) };
 
         if ( $@ ) {
             my $msg = "$@";
@@ -514,71 +580,133 @@ sub compare {
     return $self->string cmp $other->string;
 }
 
+
+# Converts a Zonemaster::Engine::Packet object to a predictable representation
+# as an array, which can then be turned into CBOR.
+
+sub _serialize_packet {
+    my ( $packet ) = @_;
+
+    return undef if not defined $packet;
+
+    return [
+        $packet->packet->wireformat(),
+        $packet->packet->answerfrom(),
+        $packet->packet->timestamp(),
+        $packet->packet->querytime(),
+    ];
+}
+
 sub save {
     my ( $class, $filename ) = @_;
 
-    my $old = POSIX::setlocale( POSIX::LC_ALL, 'C' );
-    my $json = JSON::PP->new->allow_blessed->convert_blessed;
-    $json = $json->canonical( 1 );
-
     open my $fh, '>', $filename or die "Cache save failed: $!";
-    foreach my $name ( sort keys %object_cache ) {
-        foreach my $addr ( sort keys %{ $object_cache{$name} } ) {
-            say $fh "$name $addr " . $json->encode( $object_cache{$name}{$addr}->cache->data );
+
+    my $dumped_contents = {
+        format_version => 1,
+        engine_version => Zonemaster::Engine->VERSION(),
+        packets => do {
+            # Gives an array of (nameserver, cached packets) pairs.
+            # A nameserver is itself a (name, IP) pair and each cached packet
+            # is represented as a (bytes, source IP, timestamp, query time) tuple,
+            # or undef if there was no response.
+            my @result;
+            foreach my $name ( sort keys %object_cache ) {
+                foreach my $addr ( sort keys %{ $object_cache{$name} } ) {
+                    my @ns_packets;
+                    my $cached_data = $object_cache{$name}{$addr}->cache->data;
+
+                    next if scalar %$cached_data == 0;
+
+                    foreach my $entry_key ( sort keys %$cached_data ) {
+                        push @ns_packets, [ $entry_key, _serialize_packet($cached_data->{$entry_key}) ];
+                    }
+                    push @result, [ [ $name, $addr ], \@ns_packets ];
+                }
+            };
+            \@result;
         }
-    }
+    };
+
+    my $cbor = CBOR::XS->new();
+
+    # We begin the file with the CBOR magic value deliberately, so that we can
+    # reject files that do not start with that signature on loading.
+    print $fh $CBOR::XS::MAGIC, $cbor->encode($dumped_contents);
 
     close $fh or die $!;
 
     Zonemaster::Engine->logger->add( SAVED_NS_CACHE => { file => $filename } );
+}
 
-    POSIX::setlocale( POSIX::LC_ALL, $old );
-    return;
+
+# Performs the inverse operation of _serialize_packet(): from a deserialized
+# CBOR array, reconstructs a Zonemaster::Engine::Packet object.
+
+sub _deserialize_packet {
+    my ( $cbor_packet ) = @_;
+
+    return undef if not defined $cbor_packet;
+
+    my ( $bytes, $answerfrom, $timestamp, $querytime ) = @$cbor_packet;
+    my $packet = Zonemaster::Engine::Packet->new(
+        { packet => Zonemaster::LDNS::Packet->new_from_wireformat( $bytes ) }
+    );
+    $packet->answerfrom( $answerfrom ) if defined $answerfrom;
+    $packet->timestamp( $timestamp ) if defined $timestamp;
+    $packet->querytime( $querytime ) if defined $querytime;
+
+    return $packet;
 }
 
 sub restore {
     my ( $class, $filename ) = @_;
 
-    useall 'Zonemaster::LDNS::RR';
-    my $decode = JSON::PP->new->filter_json_single_key_object(
-        'Zonemaster::LDNS::Packet' => sub {
-            my ( $ref ) = @_;
-            ## no critic (Modules::RequireExplicitInclusion)
-            my $obj = Zonemaster::LDNS::Packet->new_from_wireformat( decode_base64( $ref->{data} ) );
-            $obj->answerfrom( $ref->{answerfrom} );
-            $obj->timestamp( $ref->{timestamp} );
+    open my $fh, '<', $filename or die "Failed to open restore data file: $!\n";
 
-            return $obj;
-        }
-      )->filter_json_single_key_object(
-        'Zonemaster::Engine::Packet' => sub {
-            my ( $ref ) = @_;
 
-            return Zonemaster::Engine::Packet->new( { packet => $ref } );
-        }
-      );
+    # Expect CBOR magic string at beginning of file.
+    my $found_magic = do {
+        my $buf;
+        my $len = read($fh, $buf, length($CBOR::XS::MAGIC));
+        seek($fh, 0, SEEK_SET) or die "seek: $!";
+        ($len == 3 and $buf eq $CBOR::XS::MAGIC);
+    };
+    croak "The restore data file seems to be corrupted" if not $found_magic;
+
+    my $cbor = CBOR::XS->new();
+    my $saved_contents = $cbor->decode(do { local $/; <$fh> });
+    close $fh;
+
+    my $format_version = $saved_contents->{format_version};
+    croak "Unsupported format version $format_version" if $format_version != 1;
 
     my $cache_type = Zonemaster::Engine::Nameserver::Cache->get_cache_type( Zonemaster::Engine::Profile->effective );
     my $cache_class = Zonemaster::Engine::Nameserver::Cache->get_cache_class( $cache_type );
 
-    open my $fh, '<', $filename or die "Failed to open restore data file: $!\n";
-    while ( my $line = <$fh> ) {
-        my ( $name, $addr, $data ) = split( / /, $line, 3 );
-        my $ref = $decode->decode( $data );
-        my $ns  = Zonemaster::Engine::Nameserver->new(
+    foreach my $entry ( @{ $saved_contents->{packets} } ) {
+        my ( $ns_pair, $ns_packets ) = @$entry;
+
+        my $data = {};
+        foreach my $ns_cache_entry ( @$ns_packets ) {
+            my ( $key, $value ) = @$ns_cache_entry;
+            $data->{$key} = _deserialize_packet($value);
+        }
+
+        my $addr = Net::IP::XS->new( $ns_pair->[1] );
+        my $ns = Zonemaster::Engine::Nameserver->new(
             {
-                name    => $name,
-                address => Net::IP::XS->new($addr),
-                cache   => $cache_class->new( { data => $ref, address => Net::IP::XS->new( $addr ) } )
+                name => $ns_pair->[0],
+                address => $addr,
+                cache => $cache_class->new( { data => $data, address => $addr } )
             }
         );
     }
-    close $fh;
 
     Zonemaster::Engine->logger->add( RESTORED_NS_CACHE => { file => $filename } );
 
     return;
-} ## end sub restore
+}
 
 sub max_time {
     my ( $self ) = @_;
@@ -647,10 +775,38 @@ sub axfr {
     my ( $self, $domain, $callback, $class ) = @_;
     $class //= 'IN';
 
+    my $idx = $self->_key_for_query_cache( $domain, 'AXFR', { class => $class, usevc => 1 } );
+    my ( $in_cache, $p ) = $self->cache->get_key( $idx );
+
+    if ( $in_cache ) {
+        if ( $p->rcode() ne 'NOERROR' ) {
+            # Croak with the same error message the real AXFR croaked with.
+            my ( undef, $ede_text ) = $p->packet->first_ede();
+            croak $ede_text // "AXFR transfer error: REFUSED";
+        }
+
+        my $last_ret = 1;
+        foreach my $rr ( $p->answer() ) {
+            $last_ret = $callback->($rr);
+            last if $last_ret == 0;
+        }
+        return $last_ret;
+    }
+    else {
+        my ( $ret, $error, $p ) = $self->_axfr( $domain, $callback, $class );
+        $self->cache->set_key( $idx, $p );
+        croak $error if defined $error;
+        return $ret;
+    }
+}
+
+sub _axfr {
+    my ( $self, $domain, $callback, $class ) = @_;
+
     if ( Zonemaster::Engine::Profile->effective->get( q{no_network} ) ) {
         croak sprintf
-          "External AXFR query for %s attempted to %s while running with no_network",
-          $domain, $self->string;
+            "External AXFR query for %s attempted to %s while running with no_network",
+            $domain, $self->string;
     }
 
     if ( $self->address->version == 4 and not Zonemaster::Engine::Profile->effective->get( q{net.ipv4} ) ) {
@@ -663,8 +819,43 @@ sub axfr {
         return;
     }
 
-    return $self->dns->axfr( $domain, $callback, $class );
-} ## end sub axfr
+    my @rrs;
+    my $wrapped_callback = sub {
+        push @rrs, $_[0];
+        return $callback->( @_ );
+    };
+
+    my $t0 = [gettimeofday];
+    my $ret = eval { $self->dns->axfr( $domain, $wrapped_callback, $class ) };
+    my $error = $@ if not defined $ret;
+    my $querytime = tv_interval($t0);
+
+    # Build a synthetic packet containing all the resource records we
+    # collected, so that this AXFR can be cached (and therefore replayed)
+    # adequately.
+    my $p = Zonemaster::Engine::Packet->new({
+        packet => Zonemaster::LDNS::Packet->new( $domain, 'AXFR', $class )
+    });
+
+    $p->timestamp(time());
+    $p->querytime($querytime * 1000);
+    $p->answerfrom($self->address->short);
+    $p->id(0);
+    $p->packet->qr(1);
+    if ( defined $error ) {
+        $p->rcode('REFUSED');
+        # Use an Extended DNS Error 13 (Cached Error) in the synthetic packet
+        # to store the original error message.
+        my $file = __FILE__;
+        chomp $error;
+        $error =~ s/ at $file line \d+\.$//;
+        $p->packet->first_ede( 13, $error );
+    }
+    $p->packet->aa(1);
+    $p->unique_push( 'answer', $_ ) foreach @rrs;
+
+    return $ret, $error, $p;
+}
 
 sub source_address {
     my ( $self ) = @_;

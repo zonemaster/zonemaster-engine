@@ -2,7 +2,13 @@ use Test::More;
 use Test::Differences;
 use Test::Exception;
 
-BEGIN { use_ok( 'Zonemaster::Engine::Util', qw( info name ns parse_hints ) ) }
+use Encode qw(encode);
+use utf8;
+
+BEGIN {
+    use_ok( 'Zonemaster::Engine' );
+    use_ok( 'Zonemaster::Engine::Util', qw( info name ns parse_hints ) )
+}
 
 isa_ok( ns( 'name', '::1' ), 'Zonemaster::Engine::Nameserver' );
 isa_ok( info( 'TAG', {} ), 'Zonemaster::Engine::Logger::Entry' );
@@ -117,6 +123,30 @@ EOF
                 parse_hints( $case->{hints} )
             } $case->{error}, $case->{name};
         }
+    }
+};
+
+subtest 'escape_unprintable' => sub {
+    my @cases = (
+        {
+            input => 'hello world!',
+            expected => 'hello world!',
+        },
+        {
+            input => "escape this: \x1B\x7F\x80\xFF\x00\x0D\x0A\\",
+            expected => 'escape this: \027\127\128\255\000\013\010\\\\',
+        },
+        {
+            input => encode('UTF-8', 'cassé'),
+            expected => 'cass\195\169'
+        }
+    );
+
+    for my $case ( @cases ) {
+        # The following line is a hack that ensures that $bytes is a
+        # byte-oriented string, instead of a character-oriented one.
+        my $bytes = encode( 'Latin1', $case->{input} );
+        is Zonemaster::Engine::Util::escape_unprintable( $bytes ), $case->{expected};
     }
 };
 

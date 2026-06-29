@@ -12,13 +12,13 @@ use File::Slurp qw( read_file );
 use JSON::PP;
 use Net::IP::XS;
 use List::MoreUtils qw[uniq];
+use Memoize;
 
-use Zonemaster::Engine;
+use Zonemaster::Engine::Nameserver;
 use Zonemaster::Engine::DNSName;
 use Zonemaster::Engine::Util qw( name ns parse_hints );
 use Zonemaster::Engine::Constants ":cname";
 
-our %recurse_cache;
 our %_fake_addresses_cache;
 
 sub init_recursor {
@@ -95,21 +95,39 @@ sub recurse {
     $dns_class //= 'IN';
 
     Zonemaster::Engine->logger->add( RECURSE => { name => $name, type => $type, class => $dns_class } );
-    if ( exists $recurse_cache{$name}{$type}{$dns_class} ) {
-        return $recurse_cache{$name}{$type}{$dns_class};
-    }
 
-    my %state = ( ns => [ root_servers() ], count => 0, common => 0, seen => {}, glue => {} );
     if ( defined $ns ) {
         ref( $ns ) eq 'ARRAY' or croak 'Argument $ns must be an arrayref';
-        $state{ns} = $ns;
     }
 
-    my ( $p, $state ) = $class->_recurse( $name, $type, $dns_class, \%state );
-    $recurse_cache{$name}{$type}{$dns_class} = $p;
+    my %state = ( ns => defined $ns ? [ @$ns ] : [ root_servers() ], count => 0, common => 0, seen => {}, glue => {} );
+
+    my ( $p, $state_final ) = $class->_recurse( $name, $type, $dns_class, \%state );
 
     return $p;
 }
+
+# Cache the results of recurse() to speed up repeated queries for the same name, type,
+# class and set of name servers. Parameters are normalized to ensure that the cache is
+# hit for semantically identical queries.
+memoize('recurse', NORMALIZER => sub {
+    my ( $class, $name, $type, $dns_class, $ns ) = @_;
+
+    $name = name( $name );
+    $type //= 'A';
+    $dns_class //= 'IN';
+    $ns //= [ root_servers() ];
+
+    my $nss = join( ',', sort @$ns );
+
+    return join( '|',
+        ref($class) || $class,
+        $name,
+        $type,
+        $dns_class,
+        $nss
+    );
+});
 
 sub parent {
     my ( $class, $name ) = @_;
@@ -336,7 +354,7 @@ sub _recurse {
             next if $common < $state->{common};    # Redirect going up the hierarchy is not OK
 
             $state->{common} = $common;
-            $state->{ns}     = $class->get_ns_from( $p, $state );    # Follow redirect
+            $state->{ns}     = $class->_get_ns_from( $p, $state );    # Follow redirect
             $state->{count} += 1;
             if ( $state->{count} > 20 ) {       # Loop protection
                 Zonemaster::Engine->logger->add( LOOP_PROTECTION => {
@@ -399,7 +417,7 @@ sub _do_query {
     }
 } ## end sub _do_query
 
-sub get_ns_from {
+sub _get_ns_from {
     my ( $class, $p, $state ) = @_;
     my ( @new, @extra );
 
@@ -423,7 +441,7 @@ sub get_ns_from {
     @extra = sort { $a cmp $b } @extra;
 
     return [ @new, @extra ];
-} ## end sub get_ns_from
+} ## end sub _get_ns_from
 
 sub get_addresses_for {
     my ( $class, $name, $state ) = @_;
@@ -484,7 +502,7 @@ sub _is_answer {
 }
 
 sub clear_cache {
-    %recurse_cache = ();
+    Memoize::flush_cache(\&recurse);
     return;
 }
 
@@ -513,10 +531,6 @@ Zonemaster::Engine::Recursor - recursive resolver for Zonemaster
     my $pname  = Zonemaster::Engine::Recursor->parent( 'example.org' );
 
 =head1 CLASS VARIABLES
-
-=head2 %recurse_cache
-
-Will cache result of previous queries.
 
 =head2 %_fake_addresses_cache
 
@@ -549,10 +563,6 @@ Returns a L<Zonemaster::Engine::Packet> object (which can be C<undef>).
 
 Does a recursive resolution from the root down for the given name (using type C<SOA> and class C<IN>). If the resolution is successful, it returns
 the domain name of the second-to-last step. If the resolution is unsuccessful, it returns the domain name of the last step.
-
-=head2 get_ns_from($packet, $state)
-
-Internal method. Takes a packet and a recursion state and returns a list of ns objects. Used to follow redirections.
 
 =head2 get_addresses_for($name[, $state])
 
@@ -591,7 +601,7 @@ N.B. This method does not affect fake delegation data.
 
 =head2 root_servers()
 
-Returns a list of ns objects representing the root servers.
+Returns a list of L<Zonemaster::Engine::Nameserver> objects representing the root servers.
 
     my @name_servers = Zonemaster::Engine::Recursor->root_servers();
 
@@ -620,6 +630,16 @@ The mandatory keys for that hash are 'ns' (arrayref), 'count' (integer), 'common
 (hash), 'candidate' (L<Zonemaster::Engine::Packet> object or C<undef>), 'trace' (array), 'tseen' (hash), 'tcount' (integer).
 
 Returns a L<Zonemaster::Engine::Packet> (or C<undef>) and a hash.
+
+=head2 _get_ns_from()
+
+    my @ns = _get_ns_from( $packet, $state );
+
+Used to follow redirections by the L<recursive lookup|/_recurse()> helper method in this module.
+
+Takes a L<Zonemaster::Engine::Packet> object and a reference to a hash.
+
+Returns a list of L<Zonemaster::Engine::Nameserver> objects.
 
 =head2 _resolve_cname()
 
