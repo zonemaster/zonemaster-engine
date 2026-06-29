@@ -560,6 +560,7 @@ sub metadata {
               DS10_NSEC_RRSIG_NOT_YET_VALID
               DS10_NSEC_RRSIG_NO_DNSKEY
               DS10_NSEC_RRSIG_VERIFY_ERROR
+              DS10_NONSTANDARD_NSEC_RESPONSE
               DS10_SERVER_NO_DNSSEC
               DS10_ZONE_NO_DNSSEC
               )
