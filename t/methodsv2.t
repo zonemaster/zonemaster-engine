@@ -210,7 +210,75 @@ my %subtests = (
               ns3.parent.good-undel-2.methodsv2.xa/127.40.1.43
               ns3.parent.good-undel-2.methodsv2.xa/fda1:b2:c3:0:127:40:1:43
               ns6.good-undel-2.methodsv2.xa ) ]
-    ],
+        ],
+    'CHILD-BELOW-NXDOMAIN-1' => [
+        1,
+        q(child.im.parent.child-below-nxdomain-1.methodsv2.xa),
+        [ qw( ns1.parent.child-below-nxdomain-1.methodsv2.xa/127.40.1.41
+              ns1.parent.child-below-nxdomain-1.methodsv2.xa/fda1:b2:c3:0:127:40:1:41
+              ns2.parent.child-below-nxdomain-1.methodsv2.xa/127.40.1.42
+              ns2.parent.child-below-nxdomain-1.methodsv2.xa/fda1:b2:c3:0:127:40:1:42 ) ],
+        [ qw( ns1.child.im.parent.child-below-nxdomain-1.methodsv2.xa/127.40.1.51
+              ns1.child.im.parent.child-below-nxdomain-1.methodsv2.xa/fda1:b2:c3:0:127:40:1:51
+              ns2.child.im.parent.child-below-nxdomain-1.methodsv2.xa/127.40.1.52
+              ns2.child.im.parent.child-below-nxdomain-1.methodsv2.xa/fda1:b2:c3:0:127:40:1:52 ) ],
+        [ qw( ns1.child.im.parent.child-below-nxdomain-1.methodsv2.xa/127.40.1.51
+              ns1.child.im.parent.child-below-nxdomain-1.methodsv2.xa/fda1:b2:c3:0:127:40:1:51
+              ns2.child.im.parent.child-below-nxdomain-1.methodsv2.xa/127.40.1.52
+              ns2.child.im.parent.child-below-nxdomain-1.methodsv2.xa/fda1:b2:c3:0:127:40:1:52 ) ],
+        [ ],
+       ],
+  'CHILD-BELOW-NXDOMAIN-2' => [
+        1,
+        q(child.im.parent.child-below-nxdomain-2.methodsv2.xa),
+        [ qw( ns1.parent.child-below-nxdomain-2.methodsv2.xa/127.40.1.41
+              ns1.parent.child-below-nxdomain-2.methodsv2.xa/fda1:b2:c3:0:127:40:1:41
+              ns2.parent.child-below-nxdomain-2.methodsv2.xa/127.40.1.42
+              ns2.parent.child-below-nxdomain-2.methodsv2.xa/fda1:b2:c3:0:127:40:1:42 ) ],
+        [ qw( ns5.child-below-nxdomain-2.methodsv2.xa/127.40.1.35
+              ns5.child-below-nxdomain-2.methodsv2.xa/fda1:b2:c3:0:127:40:1:35
+              ns6.child-below-nxdomain-2.methodsv2.xa/127.40.1.36
+              ns6.child-below-nxdomain-2.methodsv2.xa/fda1:b2:c3:0:127:40:1:36 ) ],
+        [ qw( ns5.child-below-nxdomain-2.methodsv2.xa/127.40.1.35
+              ns5.child-below-nxdomain-2.methodsv2.xa/fda1:b2:c3:0:127:40:1:35
+              ns6.child-below-nxdomain-2.methodsv2.xa/127.40.1.36
+              ns6.child-below-nxdomain-2.methodsv2.xa/fda1:b2:c3:0:127:40:1:36 ) ],
+        [ ],
+       ],
+  'CHILD-BELOW-NXDOMAIN-3' => [
+        1,
+        q(child.im.parent.child-below-nxdomain-3.methodsv2.xa),
+        [ qw( ns1.parent.child-below-nxdomain-3.methodsv2.xa/127.40.1.41
+              ns1.parent.child-below-nxdomain-3.methodsv2.xa/fda1:b2:c3:0:127:40:1:41
+              ns2.parent.child-below-nxdomain-3.methodsv2.xa/127.40.1.42
+              ns2.parent.child-below-nxdomain-3.methodsv2.xa/fda1:b2:c3:0:127:40:1:42 ) ],
+        [ qw( ns1.child.im.parent.child-below-nxdomain-3.methodsv2.xa/127.40.1.51
+              ns1.child.im.parent.child-below-nxdomain-3.methodsv2.xa/fda1:b2:c3:0:127:40:1:51
+              ns2.child.im.parent.child-below-nxdomain-3.methodsv2.xa/127.40.1.52
+              ns2.child.im.parent.child-below-nxdomain-3.methodsv2.xa/fda1:b2:c3:0:127:40:1:52 ) ],
+        [ qw( ns1.child.im.parent.child-below-nxdomain-3.methodsv2.xa/127.40.1.51
+              ns1.child.im.parent.child-below-nxdomain-3.methodsv2.xa/fda1:b2:c3:0:127:40:1:51
+              ns2.child.im.parent.child-below-nxdomain-3.methodsv2.xa/127.40.1.52
+              ns2.child.im.parent.child-below-nxdomain-3.methodsv2.xa/fda1:b2:c3:0:127:40:1:52 ) ],
+        [ ],
+       ],
+  'CHILD-BELOW-NXDOMAIN-4' => [
+        1,
+        q(child.im.parent.child-below-nxdomain-4.methodsv2.xa),
+        [ qw( ns1.parent.child-below-nxdomain-4.methodsv2.xa/127.40.1.41
+              ns1.parent.child-below-nxdomain-4.methodsv2.xa/fda1:b2:c3:0:127:40:1:41
+              ns2.parent.child-below-nxdomain-4.methodsv2.xa/127.40.1.42
+              ns2.parent.child-below-nxdomain-4.methodsv2.xa/fda1:b2:c3:0:127:40:1:42 ) ],
+        [ qw( ns5.child-below-nxdomain-4.methodsv2.xa/127.40.1.35
+              ns5.child-below-nxdomain-4.methodsv2.xa/fda1:b2:c3:0:127:40:1:35
+              ns6.child-below-nxdomain-4.methodsv2.xa/127.40.1.36
+              ns6.child-below-nxdomain-4.methodsv2.xa/fda1:b2:c3:0:127:40:1:36 ) ],
+        [ qw( ns5.child-below-nxdomain-4.methodsv2.xa/127.40.1.35
+              ns5.child-below-nxdomain-4.methodsv2.xa/fda1:b2:c3:0:127:40:1:35
+              ns6.child-below-nxdomain-4.methodsv2.xa/127.40.1.36
+              ns6.child-below-nxdomain-4.methodsv2.xa/fda1:b2:c3:0:127:40:1:36 ) ],
+        [ ],
+       ],
     'DIFF-NS-1' => [
         1,
         q(child.parent.diff-ns-1.methodsv2.xa),
