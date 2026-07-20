@@ -237,8 +237,6 @@ t/Test-zone01-A.data
 t/Test-zone01-A.t
 t/Test-zone01-B.data
 t/Test-zone01-B.t
-t/Test-zone09-1.data
-t/Test-zone09-1.t
 t/Test-zone09.data
 t/Test-zone09.t
 t/Test-zone11-1.data
