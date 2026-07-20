@@ -1632,7 +1632,7 @@ sub zone11 {
         push @results, _emit_log( Z11_UNABLE_TO_CHECK_FOR_SPF => {} );
     }
     elsif ( List::MoreUtils::all { $_ eq '' } keys %spf_ns ) {
-        if ( $zone->name eq '.' or $zone->name->next_higher eq '.' or $zone->name =~ /\.arpa$/ ) {
+        if ( _is_non_mail_domain( $zone->name ) ) {
             push @results, _emit_log( Z11_NO_SPF_NON_MAIL_DOMAIN => { domain => $zone->name } );
         }
         else {
@@ -1652,24 +1652,20 @@ sub zone11 {
     else {
         my $spf_text = (values %ns_spf)[0][0];
 
-        if ( _spf_syntax_ok($spf_text) ) {
-            if ( $zone->name eq '.' or $zone->name->next_higher eq '.' or $zone->name =~ /\.arpa$/ ) {
-                if ( $spf_text =~ /^v=spf1 [\ \t]+ -all [\ \t]* $/ix ) {
-                    push @results, _emit_log( Z11_NULL_SPF_NON_MAIL_DOMAIN => { domain => $zone->name } );
-                }
-                else {
-                    push @results, _emit_log( Z11_NON_NULL_SPF_NON_MAIL_DOMAIN => { domain => $zone->name } );
-                }
-            }
-            else {
-                push @results, _emit_log( Z11_SPF_SYNTAX_OK => { domain => $zone->name } );
-            }
-        }
-        else {
+        if ( not _spf_syntax_ok( $spf_text ) ) {
             push @results, _emit_log( Z11_SPF_SYNTAX_ERROR => {
                 ns_list => join( q{;}, sort map { @{ $ip_already_processed{$_} } } keys %ns_spf ),
                 domain => $zone->name
             } );
+        }
+        elsif ( not _is_non_mail_domain( $zone->name ) ) {
+            push @results, _emit_log( Z11_SPF_SYNTAX_OK => { domain => $zone->name } );
+        }
+        elsif ( $spf_text =~ /^v=spf1 [\ \t]+ -all [\ \t]* $/ix ) {
+            push @results, _emit_log( Z11_NULL_SPF_NON_MAIL_DOMAIN => { domain => $zone->name } );
+        }
+        else {
+            push @results, _emit_log( Z11_NON_NULL_SPF_NON_MAIL_DOMAIN => { domain => $zone->name } );
         }
     }
 
