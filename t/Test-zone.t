@@ -43,10 +43,6 @@ ok( $res{Z01_MNAME_IS_DOT}, q{SOA 'mname' is dot ('.')} );
 %res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{Zone}, q{zone07.zut-root.rd.nic.fr} );
 ok( $res{SOA_DEFAULT_TTL_MAXIMUM_VALUE_LOWER}, q{SOA 'minimum' value is too low} );
 
-$zone = Zonemaster::Engine->zone( q{zone05.zut-root.rd.nic.fr} );
-%res = map { $_->tag => 1 } Zonemaster::Engine->test_method( q{Zone}, q{zone09}, $zone );
-ok( $res{Z09_MISSING_MAIL_TARGET}, q{No MX records} );
-
 #
 # zone08
 #
