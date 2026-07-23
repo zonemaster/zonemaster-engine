@@ -1336,7 +1336,7 @@ sub zone09 {
     }
 
     state sub mx_record_to_string {
-        $_[0]->preference() . " " . $_[0]->exchange();
+        $_[0]->preference() . " " . name( $_[0]->exchange() );
     }
 
     state sub ns_list {
