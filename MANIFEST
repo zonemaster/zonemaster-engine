@@ -23,6 +23,7 @@ lib/Zonemaster/Engine/Nameserver/Cache/LocalCache.pm
 lib/Zonemaster/Engine/Nameserver/Cache.pm
 lib/Zonemaster/Engine/Nameserver/Cache/RedisCache.pm
 lib/Zonemaster/Engine/Nameserver.pm
+lib/Zonemaster/Engine/NameserverSet.pm
 lib/Zonemaster/Engine/Normalization/Error.pm
 lib/Zonemaster/Engine/Normalization.pm
 lib/Zonemaster/Engine/NSArray.pm
@@ -80,6 +81,7 @@ t/nameserver-axfr.data
 t/nameserver-axfr.t
 t/nameserver.data
 t/nameserver.t
+t/nameserverset.t
 t/normalization.t
 t/packet.t
 t/pod-coverage.t
