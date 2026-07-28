@@ -558,7 +558,7 @@ Glue Records are address records for In-Bailiwick name server names, if any. Als
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns an arrayref of strings, or C<undef> if no parent zone was found.
+Returns an arrayref of L<Zonemaster::Engine::Nameserver> objects, or C<undef> if no parent zone was found.
 
 =back
 
@@ -567,11 +567,23 @@ Returns an arrayref of strings, or C<undef> if no parent zone was found.
 sub get_del_ns_ips {
     my ( $class, $zone ) = @_;
 
-    my $ns_ref = $class->get_del_ns_names_and_ips( $zone );
+    # FIXME: We really should just be outputting name server IPs here, as the
+    # specification says. Instead we output name server objects (but filtered
+    # on unique IP addresses) because these objects are required to perform
+    # queries.
 
-    return undef unless defined $ns_ref;
+    my $nameservers = $class->get_del_ns_names_and_ips( $zone );
 
-    return [ uniq sort map { $_->address->short } grep { $_->isa('Zonemaster::Engine::Nameserver') } @{ $ns_ref } ];
+    return undef unless defined $nameservers;
+
+    my %ns_by_ip = ();
+    foreach my $ns ( @$nameservers ) {
+        next if ! $ns->isa('Zonemaster::Engine::Nameserver');
+        my $ip = $ns->address->short;
+        $ns_by_ip{$ip} = $ns unless exists $ns_by_ip{$ip};
+    }
+
+    return [ sort values %ns_by_ip ];
 }
 
 =over
@@ -769,7 +781,7 @@ This Method will obtain the IP addresses of the name servers, as extracted from 
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
-Returns an arrayref of strings, or C<undef> if no parent zone was found.
+Returns an arrayref of L<Zonemaster::Engine::Nameserver> objects, or C<undef> if no parent zone was found.
 
 =back
 
@@ -778,16 +790,18 @@ Returns an arrayref of strings, or C<undef> if no parent zone was found.
 sub get_zone_ns_ips {
     my ( $class, $zone ) = @_;
 
-    my $ns_ref = $class->get_zone_ns_names_and_ips( $zone );
+    my $nameservers = $class->get_zone_ns_names_and_ips( $zone );
 
-    return undef unless defined $ns_ref;
+    return undef unless defined $nameservers;
 
-    my @ns_ips;
-    foreach my $ns ( @{ $ns_ref } ) {
-        push @ns_ips, $ns->address->short if $ns->isa('Zonemaster::Engine::Nameserver');
+    my %ns_by_ip = ();
+    foreach my $ns ( @$nameservers ) {
+        next if ! $ns->isa('Zonemaster::Engine::Nameserver');
+        my $ip = $ns->address->short;
+        $ns_by_ip{$ip} = $ns unless exists $ns_by_ip{$ip};
     }
 
-    return [ uniq sort @ns_ips ];
+    return [ sort values %ns_by_ip ];
 }
 
 
