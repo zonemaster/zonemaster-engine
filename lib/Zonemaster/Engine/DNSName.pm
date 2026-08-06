@@ -99,13 +99,17 @@ sub str_cmp {
     # Treat undefined value as root
     my $other = $_[1] // q{};
 
-    if ( blessed $other and $other->isa( 'Zonemaster::Engine::DNSName' ) ) {
-        return $me cmp uc( $other->{_string} // $other->string() );
-    }
-    else {
-        # Assume $other is a string; remove trailing dot except if only character
-        return $me cmp uc( $other =~ s/.\K [.] \z//xr );
-    }
+    my $comparison = do {
+        if ( blessed $other and $other->isa( 'Zonemaster::Engine::DNSName' ) ) {
+            $me cmp uc( $other->{_string} // $other->string() );
+        }
+        else {
+            # Assume $other is a string; remove trailing dot except if only character
+            $me cmp uc( $other =~ s/.\K [.] \z//xr );
+        }
+    };
+
+    return $_[2] ? -$comparison : $comparison;
 }
 
 sub next_higher {
