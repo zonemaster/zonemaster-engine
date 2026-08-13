@@ -901,7 +901,7 @@ sub consistency05 {
             while ( my ($ns_deleg_list, $ns_list) = each %delegation_sets ) {
                 push @results, _emit_log( CS05_DELEGATION => {
                     ns_deleg_list => $ns_deleg_list,
-                    ns_list => join( ';', @$ns_list )
+                    ns_list => join( ';', sort @$ns_list )
                 } );
             }
         }
@@ -997,27 +997,26 @@ sub consistency05 {
 
     # Step 13
     foreach my $n ( $delegation_id_ns->names() ) {
-        my $parent_glue = Zonemaster::Engine::NameserverSet->new();
-        $parent_glue->push(
+        my $parent_glue = Zonemaster::Engine::NameserverSet->new(
             grep { $_->isa('Zonemaster::Engine::Nameserver') } $delegation_id_ns->get($n)
         );
-        next if scalar $parent_glue->items() == 0;
+        next if $parent_glue->is_empty();
 
         my $child_auth = Zonemaster::Engine::NameserverSet->new();
         $child_auth->push( $auth_addr_records_in_child->get($n) );
         my ( $only_in_parent, $only_in_child ) = $parent_glue->difference( $child_auth );
 
-        if ( scalar $child_auth->items() == 0 ) {
+        if ( $child_auth->is_empty() ) {
             push @results, _emit_log( CS05_ID_ADDR_MISSING => { nsname => $n } );
         }
-        elsif ( scalar $only_in_parent->items() != 0 ) {
+        elsif ( not $only_in_parent->is_empty() ) {
             push @results, _emit_log( CS05_ID_ADDR_MISMATCH => {
                 nsname => $n,
                 ns_ip_list_glue => join( ';', map { $_->address()->short() } $only_in_parent->sorted_items() ),
                 ns_ip_list_zone => join( ';', map { $_->address()->short() } $child_auth->sorted_items() )
             } );
         }
-        elsif ( scalar $only_in_child->items() != 0 ) {
+        elsif ( not $only_in_child->is_empty() ) {
             $extra_address_child{ $_->address()->short() } = 1 foreach $only_in_child->items();
         }
     }
@@ -1031,14 +1030,12 @@ sub consistency05 {
 
     # Step 15
     foreach my $n ( $delegation_ood_ns->names() ) {
-        my $set = Zonemaster::Engine::NameserverSet->new();
-        $set->push(
+        my $set = Zonemaster::Engine::NameserverSet->new(
             grep { $_->isa('Zonemaster::Engine::Nameserver') } $delegation_ood_ns->get($n)
         );
-        next if scalar $set->items() == 0;
+        next if $set->is_empty();
 
-        my $lookup = Zonemaster::Engine::NameserverSet->new();
-        $lookup->push(
+        my $lookup = Zonemaster::Engine::NameserverSet->new(
             map {
                 Zonemaster::Engine::Nameserver->new( { name => $_->owner(), address => $_->address() } )
             }
@@ -1053,7 +1050,7 @@ sub consistency05 {
             } ( qw(A AAAA) )
         );
 
-        if ( scalar $lookup->items() ) {
+        if ( not $lookup->is_empty() ) {
             if ( not $set->equals( $lookup ) ) {
                 push @results, _emit_log( CS05_OOD_ADDR_MISMATCH => {
                     nsname => $n,
