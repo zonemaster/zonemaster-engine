@@ -9,6 +9,7 @@ use Carp;
 use List::MoreUtils qw[uniq];
 use Memoize;
 
+use Zonemaster::Engine::NameserverSet;
 use Zonemaster::Engine::Util;
 
 =head1 NAME
@@ -393,24 +394,51 @@ Returns an arrayref of L<Zonemaster::Engine::Nameserver> objects, or C<undef> if
 sub _get_delegation {
     my ( $class, $zone ) = @_;
 
+    # Takes the names from NS resource records from a packet ($p)’s section ($ns_section), plus the
+    # address records from the additional section belonging to those NS names that are in-domain
+    # with respect to the zone name, and returns the combined names and possibly IPs as a
+    # Zonemaster::Engine::NameserverSet.
+    my sub packet_ns_names_and_in_domain_ips {
+        my ( $p, $ns_section ) = @_;
+
+        # Set of NS names from $ns_section ('authority' or 'additional') section
+        my %ns_names = map { lc name( $_->nsdname() ) => 1 }
+            $p->get_records_for_name( 'NS', $zone, $ns_section );
+
+        # List of A/AAAA records from additional section for NS names
+        # that are in-domain wrt. the zone name
+        my @additional =
+            map {
+                my $name = name( $_->owner() );
+
+                # Filters out A and AAAA records with invalid IP addresses
+                my $addr = Net::IP::XS->new( $_->address );
+                ( defined $addr ) ? ns( $name, $addr ) : ()
+            }
+            grep {
+                my $name = name( lc $_->owner() );
+                exists $ns_names{$name} and
+                    $zone->name->is_in_bailiwick($name) and
+                    ( $_->type eq 'A' or $_->type eq 'AAAA' )
+                }
+            $p->additional;
+
+        return Zonemaster::Engine::NameserverSet->new( keys %ns_names, @additional );
+    }
+
     my $is_undelegated = Zonemaster::Engine::Recursor->has_fake_addresses( $zone->name->string );
-    my %delegation_ns;
-    my %aa_ns;
-    my @ib_ns;
+    my $result = Zonemaster::Engine::NameserverSet->new();
 
     if ( $is_undelegated ) {
         for my $ns_name ( Zonemaster::Engine::Recursor->get_fake_names( $zone->name->string ) ) {
-            if ( $zone->name->is_in_bailiwick( name( $ns_name ) ) ) {
-                for my $ns_ip ( Zonemaster::Engine::Recursor->get_fake_addresses( $zone->name->string, $ns_name ) ){
-                    push @ib_ns, ns( $ns_name, $ns_ip);
-                }
+            my @ns_ips = Zonemaster::Engine::Recursor->get_fake_addresses( $zone->name->string, $ns_name );
+            if ( $zone->name->is_in_bailiwick( name( $ns_name ) ) and scalar @ns_ips ) {
+                $result->push( map { ns( $ns_name, $_ ) } @ns_ips );
             }
             else {
-                push @ib_ns, name( $ns_name );
+                $result->push( name( $ns_name ) );
             }
         }
-
-        return [ uniq sort @ib_ns ];
     }
     elsif ( $zone->name->string eq '.' ) {
         return [ uniq sort Zonemaster::Engine::Recursor->root_servers() ];
@@ -423,95 +451,41 @@ sub _get_delegation {
         for my $ns ( @{ $parent_ref } ) {
             my $p = $ns->query( $zone->name, q{NS} );
 
-            if ( $p and $p->rcode eq q{NOERROR} ) {
-                if ( $p->is_redirect ){
-                    for my $rr ( $p->get_records_for_name( q{NS}, $zone->name->string, q{authority} ) ) {
-                        $delegation_ns{$rr->nsdname} = [] unless exists $delegation_ns{$rr->nsdname};
-                    }
+            next unless $p and $p->rcode eq q{NOERROR};
 
-                    for my $rr ( $p->get_records( q{A}, q{additional} ), $p->get_records( q{AAAA}, q{additional} ) ) {
-                        if ( $zone->name->is_in_bailiwick( name( $rr->owner ) ) and scalar grep { $_ eq $rr->owner } keys %delegation_ns ) {
-                            push @{ $delegation_ns{$rr->owner} }, $rr->address;
-                        }
-                    }
-                }
-                elsif ( $p->aa and scalar $p->get_records_for_name( q{NS}, $zone->name->string, q{answer} ) ) {
-                    for my $rr ( $p->get_records_for_name( q{NS}, $zone->name->string, q{answer} ) ) {
-                        $aa_ns{$rr->nsdname} = [] unless exists $aa_ns{$rr->nsdname};
-                    }
+            if ( $p->is_redirect ) {
+                $result->push( packet_ns_names_and_in_domain_ips( $p, 'authority' )->items() );
+            }
+            elsif ( $p->aa and scalar $p->get_records_for_name( q{NS}, $zone->name->string, q{answer} ) ) {
+                $result->push( packet_ns_names_and_in_domain_ips( $p, 'answer' )->items() );
 
-                    for my $rr ( $p->get_records( q{A}, q{additional} ), $p->get_records( q{AAAA}, q{additional} ) ) {
-                        if ( $zone->name->is_in_bailiwick( name( $rr->owner ) ) and scalar grep { $_ eq $rr->owner } keys %aa_ns ) {
-                            push @{ $aa_ns{$rr->owner} }, $rr->address;
-                        }
-                    }
+                for my $ns_name ( grep { not $result->get_ips( $_ ) } $result->names() ) {
+                    for my $qtype ( q{A}, q{AAAA} ) {
+                        my $p = Zonemaster::Engine::Recursor->recurse( $ns_name, $qtype );
 
-                    for my $ns_name ( keys %aa_ns ) {
-                        unless ( scalar $aa_ns{$ns_name} ) {
-                            for my $qtype ( q{A}, q{AAAA} ) {
-                                my $p = Zonemaster::Engine::Recursor->recurse( $ns_name, $qtype );
+                        next unless $p and $p->rcode eq q{NOERROR};
 
-                                if ( $p and $p->rcode eq q{NOERROR} ) {
-                                    if ( $p->has_rrs_of_type_for_name( q{CNAME}, $ns_name, q{answer} ) ) {
-                                        my %cnames = map { name( $_->owner ) => name( $_->cname ) } $p->get_records( q{CNAME}, q{answer} );
-                                        my $target = $ns_name;
-                                        $target = $cnames{$target} while $cnames{$target};
+                        # Follow possible CNAME chain starting from the QNAME in the answer packet.
+                        # That QNAME might be different from $ns_name if, to follow the CNAME chain
+                        # to the end, the recursor had to restart the query multiple times. This can
+                        # happen if CNAME chains cross zones.
+                        my %cnames = map {
+                            lc name( $_->owner ) => lc name( $_->cname )
+                        } $p->get_records( q{CNAME}, q{answer} );
 
-                                        for my $rr ( $p->get_records_for_name( $qtype, $target ) ) {
-                                            push @{ $aa_ns{$ns_name} }, $rr->address;
-                                        }
-                                    }
-                                    # CNAME was followed in a new recursive query
-                                    elsif ( name( ($p->question)[0]->owner ) ne $ns_name and grep { $_->tag eq 'CNAME_FOLLOWED_OUT_OF_ZONE' and grep /^$ns_name$/, values %{ $_->args } } @{ Zonemaster::Engine->logger->entries } ) {
-                                        my $cname_ns_name = name( ($p->question)[0]->owner );
-                                        my $target = $cname_ns_name;
+                        my $target = name( ($p->question)[0]->owner );
+                        $target = $cnames{$target} while exists $cnames{$target};
 
-                                        if ( $p->has_rrs_of_type_for_name( q{CNAME}, $cname_ns_name, q{answer} ) ) {
-                                            my %cnames = map { name( $_->owner ) => name( $_->cname ) } $p->get_records( q{CNAME}, q{answer} );
-                                            $target = $cnames{$target} while $cnames{$target};
-                                        }
-
-                                        for my $rr ( $p->get_records_for_name( $qtype, $target ) ) {
-                                            push @{ $aa_ns{$ns_name} }, $rr->address;
-                                        }
-                                    }
-                                    elsif ( $p->has_rrs_of_type_for_name( $qtype, $ns_name ) ) {
-                                        for my $rr ( $p->get_records_for_name( $qtype, $ns_name ) ) {
-                                            push @{ $aa_ns{$ns_name} }, $rr->address;
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                        $result->push(
+                            map { ns( $ns_name, $_->address ) }
+                            $p->get_records_for_name( $qtype, $target ) );
                     }
                 }
             }
         }
     }
 
-    my $hash_ref;
-    if ( scalar keys %delegation_ns ) {
-        $hash_ref = \%delegation_ns;
-    }
-    elsif ( scalar keys %aa_ns ) {
-        $hash_ref = \%aa_ns;
-    }
-    else {
-        return [];
-    }
-
-    for my $ns_name ( keys %{ $hash_ref } ) {
-        if ( scalar @{ %{ $hash_ref }{$ns_name} } ) {
-            for my $ns_ip ( uniq @{ %{ $hash_ref }{$ns_name} } ) {
-                push @ib_ns, ns( $ns_name, $ns_ip );
-            }
-        }
-        else {
-            push @ib_ns, name( $ns_name );
-        }
-    }
-
-    return [ uniq sort @ib_ns ];
+    return [ $result->items() ];
 }
 
 =over
@@ -540,13 +514,11 @@ sub get_del_ns_names_and_ips {
 
     return undef unless defined $ns_ref;
 
-    my @ns_names = grep { $_->isa('Zonemaster::Engine::DNSName') } @{ $ns_ref };
+    my @ns_names = grep { $_->isa('Zonemaster::Engine::DNSName') and ! $zone->name->is_in_bailiwick( $_ ) } @{ $ns_ref };
 
     my $oob_ns_ref = $class->_get_oob_ips( $zone, \@ns_names );
 
-    @{ $ns_ref } = grep { $_->isa('Zonemaster::Engine::Nameserver') } @{ $ns_ref };
-
-    return [ uniq sort (@{ $ns_ref }, @{ $oob_ns_ref }) ];
+    return [ Zonemaster::Engine::NameserverSet->new( @$ns_ref, @$oob_ns_ref )->items() ];
 }
 
 =over
