@@ -388,11 +388,13 @@ sub perform_methodsv2_testing {
                     if ( defined $expected_res ) {
                         ok( defined $res, "Result is defined" ) or diag "Unexpected undefined result";
                         foreach my $expected_ip ( @{ $expected_res } ) {
-                            ok( grep( /^$expected_ip$/, @{ $res } ), "Name server IP '$expected_ip' is present" )
+                            ok( grep( { $_->address()->short eq $expected_ip } @{ $res } ),
+                                    "Name server IP '$expected_ip' is present" )
                                 or diag "Expected but missing: $expected_ip";
                         }
                         foreach my $ip ( @{ $res } ) {
-                            ok( grep( /^$ip$/, @{ $expected_res } ), "Name server IP '$ip' is expected" )
+                            ok( grep( { $_ eq $ip->address()->short } @{ $expected_res } ),
+                                    "Name server IP '$ip' is expected" )
                                 or diag "Present but not expected: $ip";
                         }
                         ok( scalar @{ $res } == scalar @{ $expected_res }, "Number of name server IPs in both arrays match" )

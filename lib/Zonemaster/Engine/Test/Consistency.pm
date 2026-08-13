@@ -7,10 +7,12 @@ use version; our $VERSION = version->declare("v1.1.16");
 
 use List::MoreUtils qw[uniq];
 use Locale::TextDomain qw[Zonemaster-Engine];
+use Net::IP::XS;
 use Readonly;
 
 use Zonemaster::Engine::Profile;
 use Zonemaster::Engine::Constants qw[:ip :soa];
+use Zonemaster::Engine::NameserverSet;
 use Zonemaster::Engine::Test::Address;
 use Zonemaster::Engine::Util;
 use Zonemaster::Engine::TestMethods;
@@ -139,13 +141,18 @@ sub metadata {
         ],
         consistency05 => [
             qw(
-              ADDRESSES_MATCH
-              CHILD_NS_FAILED
-              CHILD_ZONE_LAME
-              EXTRA_ADDRESS_CHILD
-              IN_BAILIWICK_ADDR_MISMATCH
-              NO_RESPONSE
-              OUT_OF_BAILIWICK_ADDR_MISMATCH
+              CS05_CHILD_ZONE_LAME
+              CS05_DELEGATION
+              CS05_EXTRA_ADDR_CHILD
+              CS05_ID_ADDR_MISMATCH
+              CS05_ID_ADDR_MISSING
+              CS05_INCONSISTENT_DELEGATION
+              CS05_MISSING_GLUE_FOR_NS
+              CS05_MISSING_GLUE_FOR_NS_UNDEL
+              CS05_MISSING_GLUE_FOR_ROOT_NS
+              CS05_NO_MISMATCH_GLUE_ZONE
+              CS05_NO_NS_ADDR_CHILD
+              CS05_OOD_ADDR_MISMATCH
               TEST_CASE_END
               TEST_CASE_START
               )
@@ -182,33 +189,59 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     CONSISTENCY05 => sub {
         __x    # CONSISTENCY:CONSISTENCY05
-          'Consistency between glue and authoritative data';
+          'Consistency between delegation and zone data';
     },
     CONSISTENCY06 => sub {
         __x    # CONSISTENCY:CONSISTENCY06
           'SOA MNAME consistency';
     },
-    ADDRESSES_MATCH => sub {
-        __x    # CONSISTENCY:ADDRESSES_MATCH
-          'Glue records are consistent between glue and authoritative data.', @_;
+    CS05_CHILD_ZONE_LAME => sub {
+        __x    # CONSISTENCY:CS05_CHILD_ZONE_LAME
+          'There is no working name server for the child zone. Tested name servers are "{ns_list}".', @_;
     },
-    CHILD_NS_FAILED => sub {
-        __x    # CONSISTENCY:CHILD_NS_FAILED
-          'Unexpected or erroneous reply from {ns}.', @_;
+    CS05_DELEGATION => sub {
+        __x    # CONSISTENCY:CS05_DELEGATION
+          'Delegation of the child zone as provided by the parent name servers listed: "{ns_deleg_list}". Parent name servers: "{ns_list}".', @_;
     },
-    CHILD_ZONE_LAME => sub {
-        __x    # CONSISTENCY:CHILD_ZONE_LAME
-          'Lame delegation.', @_;
+    CS05_EXTRA_ADDR_CHILD => sub {
+        __x    # CONSISTENCY:CS05_EXTRA_ADDR_CHILD
+          'There is one or more extra address records found in the child zone that are not present as glue in the delegation: "{ns_list}".', @_;
     },
-    EXTRA_ADDRESS_CHILD => sub {
-        __x    # CONSISTENCY:EXTRA_ADDRESS_CHILD
-          'Child has extra nameserver IP address(es) not listed at parent ({ns_ip_list}).', @_;
+    CS05_NO_MISMATCH_GLUE_ZONE => sub {
+        __     # CONSISTENCY:CS05_NO_MISMATCH_GLUE_ZONE
+          'There is no mismatch between delegation from parent and authoritative data in the child zone.';
     },
-    IN_BAILIWICK_ADDR_MISMATCH => sub {
-        __x    # CONSISTENCY:IN_BAILIWICK_ADDR_MISMATCH
-          'In-bailiwick name server listed at parent has a mismatch between glue data at parent '
-          . '({parent_addresses}) and any equivalent address record in child zone ({zone_addresses}).',
-          @_;
+    CS05_ID_ADDR_MISMATCH => sub {
+        __x    # CONSISTENCY:CS05_ID_ADDR_MISMATCH
+          'For name server {nsname} the glue record in the delegation "{ns_ip_list_glue}" is different from the address record in the child zone "{ns_ip_list_zone}".', @_;
+    },
+    CS05_ID_ADDR_MISSING => sub {
+        __x    # CONSISTENCY:CS05_ID_ADDR_MISSING
+          'Address record for {nsname}, used as glue record in delegation, is missing in the child zone.', @_;
+    },
+    CS05_INCONSISTENT_DELEGATION => sub {
+        __     # CONSISTENCY:CS05_INCONSISTENT_DELEGATION
+          'The delegation is inconsistent between the parent nameservers.';
+    },
+    CS05_MISSING_GLUE_FOR_NS => sub {
+        __x    # CONSISTENCY:CS05_MISSING_GLUE_FOR_NS
+          'Expected glue record for {nsname} is missing in the delegation. Found in the parent name servers "{ns_list}".', @_;
+    },
+    CS05_MISSING_GLUE_FOR_NS_UNDEL => sub {
+        __x    # CONSISTENCY:CS05_MISSING_GLUE_FOR_NS_UNDEL
+          'IP address (glue record) is expected but missing for {nsname} in the undelegated data.', @_;
+    },
+    CS05_MISSING_GLUE_FOR_ROOT_NS => sub {
+        __x    # CONSISTENCY:CS05_MISSING_GLUE_FOR_ROOT_NS
+          'IP address (glue record) is expected but missing for {nsname} in the undelegated data or hint data for root.', @_;
+    },
+    CS05_NO_NS_ADDR_CHILD => sub {
+        __     # CONSISTENCY:CS05_NO_NS_ADDR_CHILD
+          'Child zone cannot be tested since there are no name server IP addresses for that zone.';
+    },
+    CS05_OOD_ADDR_MISMATCH => sub {
+        __x    # CONSISTENCY:CS05_OOD_ADDR_MISMATCH
+          'For name server {nsname} the glue record in the delegation "{ns_ip_list_glue}" is different from the address record in the child zone "{ns_ip_list_zone}".', @_;
     },
     IPV4_DISABLED => sub {
         __x    # CONSISTENCY:IPV4_DISABLED
@@ -275,12 +308,6 @@ Readonly my %TAG_DESCRIPTIONS => (
           'A single SOA time parameter set was seen '
           . '(REFRESH={refresh},RETRY={retry},EXPIRE={expire},MINIMUM={minimum}).',
           @_;
-    },
-    OUT_OF_BAILIWICK_ADDR_MISMATCH => sub {
-        __x    # CONSISTENCY:OUT_OF_BAILIWICK_ADDR_MISMATCH
-          'Out-of-bailiwick name server listed at parent with glue record has a mismatch between '
-          . 'the glue at the parent ({parent_addresses}) and any equivalent address record found '
-          . 'in authoritative zone ({zone_addresses}).', @_;
     },
     SOA_RNAME => sub {
         __x    # CONSISTENCY:SOA_RNAME
@@ -410,44 +437,6 @@ sub _ip_disabled_message {
     return 0;
 }
 
-=over
-
-=item _get_addr_rrs()
-
-    my ( $logentry, @rrs_array ) = _get_addr_rrs( $ns, $zone_name, $query_type_string );
-
-Queries a given name server for resource records of the given type. Used as an helper function for Test Case L<Consistency05|/consistency05()>.
-
-Takes a L<Zonemaster::Engine::Nameserver> object, a L<Zonemaster::Engine::DNSName> object and a string (query type).
-
-Returns a L<Zonemaster::Engine::Logger::entry> object (which could be C<undef>) and an optional list of L<Zonemaster::LDNS::RR> objects.
-
-=back
-
-=cut
-
-sub _get_addr_rrs {
-    my ( $class, $ns, $name, $qtype ) = @_;
-    my $p = $ns->query( $name, $qtype, { recurse => 0 } );
-    if ( !$p ) {
-        return _emit_log( NO_RESPONSE => { ns => $ns->string } );
-    }
-    elsif ($p->is_redirect) {
-        my $p = Zonemaster::Engine->recurse( $name, $qtype, q{IN} );
-        if ( $p ) {
-            return ( undef, $p->get_records_for_name( $qtype, $name, 'answer' ) );
-        } else {
-            return ( undef );
-        }
-    }
-    elsif ( $p->aa and $p->rcode eq 'NOERROR' ) {
-        return ( undef, $p->get_records_for_name( $qtype, $name, 'answer' ) );
-    }
-    elsif (not ($p->aa and $p->rcode eq 'NXDOMAIN')) {
-        return _emit_log( CHILD_NS_FAILED => { ns => $ns->string } );
-    }
-    return ( undef );
-}
 
 =head1 TESTS
 
@@ -823,140 +812,263 @@ sub consistency05 {
 
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Consistency05';
     push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
-    my %strict_glue;
-    my %extended_glue;
 
-    # We need to work on Methods...
-    # This part of code is supposed to replace method4 call
-    my @child_nsnames;
-    my @nsnames;
-    my $ns_aref = $zone->parent->query_all( $zone->name, q{NS} );
-    my %parent_glues;
-    foreach my $p ( @{$ns_aref} ) {
-        next if not $p;
-        push @nsnames, $p->get_records_for_name( q{NS}, $zone->name );
-    }
-    @child_nsnames = uniq map { name( lc( $_->nsdname ) ) } @nsnames;
-    foreach my $nsname ( @child_nsnames ) {
-        my $a_aref = $zone->parent->query_all( $nsname, q{A} );
-        my $aaaa_aref = $zone->parent->query_all( $nsname, q{AAAA} );
-        foreach my $p ( @{$a_aref} ) {
-            next if not $p;
-            foreach my $rr ( $p->get_records_for_name( q{A}, $nsname ) ) {
-                $parent_glues{ lc( $rr->owner ) . q{/} . $rr->address } = $nsname;
-            }
-        }
-        foreach my $p ( @{$aaaa_aref} ) {
-            next if not $p;
-            foreach my $rr ( $p->get_records_for_name( q{AAAA}, $nsname ) ) {
-                $parent_glues{ lc( $rr->owner ) . q{/} . $rr->address } = $nsname;
-            }
-        }
-    }
+    # Steps 1–3
+    my @parent_ns = @{ Zonemaster::Engine::TestMethodsV2->get_parent_ns_names_and_ips( $zone ) // [] };
+    my @parent_ns_ips = @{ Zonemaster::Engine::TestMethodsV2->get_parent_ns_ips( $zone ) // [] };
 
-    for my $ns_string ( keys %parent_glues ) {
-        if ( $zone->name->is_in_bailiwick( $parent_glues{$ns_string} ) ) {
-            $strict_glue{ $ns_string } = 1;
-        }
-        else {
-            push @{ $extended_glue{ $parent_glues{$ns_string} } }, $ns_string;
-        }
-    }
+    my @child_ns_ips = uniq
+        @{ Zonemaster::Engine::TestMethodsV2->get_del_ns_ips( $zone ) // [] },
+        @{ Zonemaster::Engine::TestMethodsV2->get_zone_ns_ips( $zone ) // [] };
 
-    my @ib_nsnames =
-      grep { $zone->name->is_in_bailiwick( $_ ) } @{ Zonemaster::Engine::TestMethods->method2and3( $zone ) };
-    my @ib_nss = grep { Zonemaster::Engine::Util::ipversion_ok( $_->address->version ) }
-      @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) };
-    my %child_ib_strings;
-    for my $ib_nsname ( @ib_nsnames ) {
-        my $is_lame = 1;
-        for my $ns ( @ib_nss ) {
-            my ( $msg_a,    @rrs_a )    = $class->_get_addr_rrs( $ns, $ib_nsname, q{A} );
-            my ( $msg_aaaa, @rrs_aaaa ) = $class->_get_addr_rrs( $ns, $ib_nsname, q{AAAA} );
+    my %delegation;
+    my %child_zone_ns;
+    my $delegation_id_ns = Zonemaster::Engine::NameserverSet->new();
+    my $delegation_ood_ns = Zonemaster::Engine::NameserverSet->new();
+    my %missing_glue;
+    my $auth_addr_records_in_child = Zonemaster::Engine::NameserverSet->new();
+    my %extra_address_child;
 
-            if ( defined $msg_a ) {
-                push @results, $msg_a;
-            }
-            if ( defined $msg_aaaa ) {
-                push @results, $msg_aaaa;
-            }
-            if ( !defined $msg_a || !defined $msg_aaaa ) {
-                $is_lame = 0;
-            }
+    # Step 4
+    foreach my $parent_ns ( @parent_ns_ips ) {
+        my $p = $parent_ns->query( $zone->name(), 'SOA' );
+        next unless ( defined $p and $p->is_redirect );
 
-            for my $rr ( @rrs_a, @rrs_aaaa ) {
-                $child_ib_strings{ lc( $rr->name ) . q{/} . $rr->address } = 1;
-            }
-        }
+        my %authority =
+            map { lc name( $_->nsdname() ) => 1 }
+            $p->get_records_for_name( 'NS', $zone, 'authority' );
 
-        if ( $is_lame ) {
-            push @results, _emit_log( CHILD_ZONE_LAME => {} );
-            return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
-        }
-    } ## end for my $ib_nsname ( @ib_nsnames)
+        
+        my @additional =
+            map {
+                my $name = name( $_->owner() );
 
-    my @ib_match       = grep { exists $child_ib_strings{$_} } keys %strict_glue;
-    my @ib_mismatch    = grep { !exists $child_ib_strings{$_} } keys %strict_glue;
-    my @ib_extra_child = grep { !exists $strict_glue{$_} } keys %child_ib_strings;
-
-    if ( scalar @ib_mismatch ) {
-        push @results,
-          _emit_log(
-            IN_BAILIWICK_ADDR_MISMATCH => {
-                parent_addresses => join( q{;}, sort keys %strict_glue ),
-                zone_addresses => join( q{;}, sort keys %child_ib_strings ),
-            }
-          );
-    }
-    if ( scalar @ib_extra_child ) {
-        push @results,
-          _emit_log(
-            EXTRA_ADDRESS_CHILD => {
-                ns_ip_list => join( q{;}, sort @ib_extra_child ),
-            }
-          );
-    }
-
-    my @oob_match;
-    my @oob_mismatch;
-    for my $glue_name ( keys %extended_glue ) {
-        my @glue_strings = @{ $extended_glue{$glue_name} };
-
-        my %child_oob_strings;
-
-        my $p_a = Zonemaster::Engine->recurse( $glue_name, q{A}, q{IN} );
-        if ( $p_a ) {
-            for my $rr ( $p_a->get_records_for_name( q{A}, $glue_name, q{answer} ) ) {
-                $child_oob_strings{ lc( $rr->owner ) . q{/} . $rr->address } = 1;
-            }
-        }
-
-        my $p_aaaa = Zonemaster::Engine->recurse( $glue_name, q{AAAA}, q{IN} );
-        if ( $p_aaaa ) {
-            for my $rr ( $p_aaaa->get_records_for_name( q{AAAA}, $glue_name, q{answer} ) ) {
-                $child_oob_strings{ lc( $rr->owner ) . q{/} . $rr->address } = 1;
-            }
-        }
-
-        push @oob_match,    grep { exists $child_oob_strings{$_} } @glue_strings;
-        push @oob_mismatch, grep { !exists $child_oob_strings{$_} } @glue_strings;
-        if ( grep { !exists $child_oob_strings{$_} } @glue_strings ) {
-            push @results,
-              _emit_log(
-                OUT_OF_BAILIWICK_ADDR_MISMATCH => {
-                    parent_addresses => join( q{;}, sort @glue_strings ),
-                    zone_addresses => join( q{;}, sort keys %child_oob_strings ),
+                # Filters out A and AAAA records with invalid IP addresses
+                my $addr = Net::IP::XS->new( $_->address );
+                if ( defined $addr ) {
+                    Zonemaster::Engine::Nameserver->new( { name => $name, address => $addr } )
                 }
-              );
-        }
-    } ## end for my $glue_name ( keys...)
+                else {
+                    ()
+                }
+            }
+            grep {
+                my $name = lc name( $_->owner() );
+                exists $authority{$name} and ( $_->type eq 'A' or $_->type eq 'AAAA' )
+            }
+            $p->additional;
 
-    if ( !@ib_extra_child && !@ib_mismatch && !@oob_mismatch ) {
-        push @results, _emit_log( ADDRESSES_MATCH => {} );
+        my $set = Zonemaster::Engine::NameserverSet->new();
+        $set->push( keys %authority, @additional );
+
+        $delegation{$parent_ns} = [ $set->sorted_items() ];
     }
 
+
+    # Step 5
+    foreach my $parent_ns_ip ( sort keys %delegation ) {
+        foreach my $delegation_ns ( @{ $delegation{$parent_ns_ip} } ) {
+            my $delegation_ns_name = do {
+                if ( $delegation_ns->isa('Zonemaster::Engine::Nameserver') ) {
+                    $delegation_ns->name()
+                }
+                else {
+                    $delegation_ns;
+                }
+            };
+
+            if ( $zone->name()->is_in_bailiwick( $delegation_ns_name ) ) {
+                if ( $delegation_ns->isa('Zonemaster::Engine::DNSName') ) {
+                    push @{$missing_glue{ lc $delegation_ns }}, $parent_ns_ip;
+                }
+                $delegation_id_ns->push($delegation_ns);
+            }
+            else {
+                $delegation_ood_ns->push($delegation_ns);
+            }
+        }
+    }
+
+    # Step 6
+    {
+        my %delegation_sets;
+        for my $d ( keys %delegation ) {
+            my $s = join(";", @{$delegation{$d}});
+            push @{$delegation_sets{$s}}, $d;
+        }
+        if ( scalar %delegation_sets > 1 ) {
+            push @results, _emit_log( CS05_INCONSISTENT_DELEGATION => {} );
+            while ( my ($ns_deleg_list, $ns_list) = each %delegation_sets ) {
+                push @results, _emit_log( CS05_DELEGATION => {
+                    ns_deleg_list => $ns_deleg_list,
+                    ns_list => join( ';', sort @$ns_list )
+                } );
+            }
+        }
+    }
+
+    # Step 7
+    if ( $zone->name() ne '.' ) {
+        foreach my $fake_name ( Zonemaster::Engine::Recursor->get_fake_names( $zone->name() ) ) {
+            $fake_name = name( $fake_name );
+            my @fake_ns = map {
+                Zonemaster::Engine::Nameserver->new( { name => $fake_name, address => $_ } )
+            } Zonemaster::Engine::Recursor->get_fake_addresses( $zone->name(), $fake_name );
+
+            if ( $zone->name()->is_in_bailiwick( $fake_name ) ) {
+                if ( scalar @fake_ns == 0 ) {
+                    push @results, _emit_log( CS05_MISSING_GLUE_FOR_NS_UNDEL => { nsname => $fake_name } );
+                }
+                else {
+                    $delegation_id_ns->push( @fake_ns );
+                }
+            }
+            else {
+                if ( scalar @fake_ns == 0 ) {
+                    $delegation_ood_ns->push( $fake_name );
+                }
+                else {
+                    $delegation_ood_ns->push( @fake_ns );
+                }
+            }
+        }
+    }
+
+    # Step 8
+    if ( $zone->name() eq '.' ) {
+        my @hint_ns = @{ Zonemaster::Engine::TestMethodsV2->get_del_ns_names_and_ips( $zone ) };
+
+        foreach my $item ( @hint_ns ) {
+            if ( $item->isa( 'Zonemaster::Engine::DNSName') ) {
+                push @results, _emit_log( CS05_MISSING_GLUE_FOR_ROOT_NS => { nsname => $item } );
+            }
+            else {
+                $delegation_id_ns->push( $item );
+            }
+        }
+    }
+
+    # Step 9
+    while ( my ($ns, $ns_list) = each %missing_glue ) {
+        push @results, _emit_log( CS05_MISSING_GLUE_FOR_NS => {
+            nsname => $ns,
+            ns_list => join(';', @$ns_list)
+        } );
+    }
+
+    # Step 10
+    if ( scalar @child_ns_ips == 0 ) {
+        push @results, _emit_log( CS05_NO_NS_ADDR_CHILD => {} );
+        goto out;
+    }
+
+    # Step 11
+    foreach my $ns ( @child_ns_ips ) {
+        my $p = $ns->query( $zone->name(), 'NS' );
+        next unless defined $p and $p->rcode eq 'NOERROR' and $p->aa;
+
+        my @ns_nsnames = uniq map { name( lc $_->nsdname() ) } $p->get_records_for_name( 'NS', $zone );
+        $child_zone_ns{ $ns->address()->short() } = \@ns_nsnames if scalar @ns_nsnames > 0;
+
+        my @id_ns = uniq (
+            grep( { $zone->name()->is_in_bailiwick(name($_)) } @ns_nsnames ),
+            $delegation_id_ns->names()
+        );
+
+        foreach my $s ( @id_ns ) {
+            foreach my $qtype ( qw(A AAAA) ) {
+                my $p = Zonemaster::Engine::Recursor->recurse( $s, $qtype );
+                next unless defined $p and $p->rcode eq 'NOERROR' and $p->aa;
+
+                $auth_addr_records_in_child->push(
+                    map {
+                        Zonemaster::Engine::Nameserver->new( { name => $s, address => $_->address() } )
+                    } $p->get_records_for_name( $qtype, $s, 'answer' )
+                );
+            }
+        }
+    }
+
+    # Step 12
+    if ( scalar %child_zone_ns == 0 ) {
+        push @results, _emit_log( CS05_CHILD_ZONE_LAME => { ns_list => join(';', @child_ns_ips) } );
+        goto out;
+    }
+
+    # Step 13
+    foreach my $n ( $delegation_id_ns->names() ) {
+        my $parent_glue = Zonemaster::Engine::NameserverSet->new(
+            grep { $_->isa('Zonemaster::Engine::Nameserver') } $delegation_id_ns->get($n)
+        );
+        next if $parent_glue->is_empty();
+
+        my $child_auth = Zonemaster::Engine::NameserverSet->new();
+        $child_auth->push( $auth_addr_records_in_child->get($n) );
+        my ( $only_in_parent, $only_in_child ) = $parent_glue->difference( $child_auth );
+
+        if ( $child_auth->is_empty() ) {
+            push @results, _emit_log( CS05_ID_ADDR_MISSING => { nsname => $n } );
+        }
+        elsif ( not $only_in_parent->is_empty() ) {
+            push @results, _emit_log( CS05_ID_ADDR_MISMATCH => {
+                nsname => $n,
+                ns_ip_list_glue => join( ';', map { $_->address()->short() } $only_in_parent->sorted_items() ),
+                ns_ip_list_zone => join( ';', map { $_->address()->short() } $child_auth->sorted_items() )
+            } );
+        }
+        elsif ( not $only_in_child->is_empty() ) {
+            $extra_address_child{ $_->address()->short() } = 1 foreach $only_in_child->items();
+        }
+    }
+
+    # Step 14
+    if ( scalar %extra_address_child ) {
+        push @results, _emit_log( CS05_EXTRA_ADDR_CHILD => {
+            ns_list => join(';', sort keys %extra_address_child )
+        } );
+    }
+
+    # Step 15
+    foreach my $n ( $delegation_ood_ns->names() ) {
+        my $set = Zonemaster::Engine::NameserverSet->new(
+            grep { $_->isa('Zonemaster::Engine::Nameserver') } $delegation_ood_ns->get($n)
+        );
+        next if $set->is_empty();
+
+        my $lookup = Zonemaster::Engine::NameserverSet->new(
+            map {
+                Zonemaster::Engine::Nameserver->new( { name => $_->owner(), address => $_->address() } )
+            }
+            map {
+                my $p = Zonemaster::Engine::Recursor->recurse( $n, $_ );
+                if ( defined $p and $p->rcode eq 'NOERROR' and $p->aa ) {
+                    $p->get_records_for_name( $_, $n, 'answer' );
+                }
+                else {
+                    ();
+                }
+            } ( qw(A AAAA) )
+        );
+
+        if ( not $lookup->is_empty() ) {
+            if ( not $set->equals( $lookup ) ) {
+                push @results, _emit_log( CS05_OOD_ADDR_MISMATCH => {
+                    nsname => $n,
+                    ns_ip_list_ref => join( ";", map { $_->address() } $set->sorted_items() ),
+                    ns_ip_list_lookup => join( ";", map { $_->address() } $lookup->sorted_items() )
+                } );
+            }
+        }
+    }
+
+    # Step 16
+    if ( not grep /^CS05_/, map { $_->tag() } @results ) {
+        push @results, _emit_log( CS05_NO_MISMATCH_GLUE_ZONE => {} );
+    }
+
+  out:
     return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
-} ## end sub consistency05
+}                               ## end sub consistency05
 
 =over
 
