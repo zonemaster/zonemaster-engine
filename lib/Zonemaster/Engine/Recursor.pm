@@ -214,24 +214,24 @@ sub _resolve_cname {
 
     my ( %cnames, %seen_targets, %forbidden_targets );
     for my $rr ( @cname_rrs ) {
-        my $rr_owner = name( $rr->owner );
-        my $rr_target = name( $rr->cname );
+        my $rr_owner = lc( name( $rr->owner ) );
+        my $rr_target = lc( name( $rr->cname ) );
 
         # Multiple CNAME records with same owner name
-        if ( exists $forbidden_targets{lc( $rr_owner )} ) {
+        if ( exists $forbidden_targets{$rr_owner} ) {
             Zonemaster::Engine->logger->add( CNAME_RECORDS_MULTIPLE_FOR_NAME => { name => $rr_owner } );
             return ( undef, $state );
         }
 
         # CNAME owner name is target, or target has already been seen in this response, or owner name cannot be a target
-        if ( lc( $rr_owner ) eq lc( $rr_target ) or exists $seen_targets{lc( $rr_target )} or grep { $_ eq lc( $rr_target ) } ( keys %forbidden_targets ) ) {
+        if ( $rr_owner eq $rr_target or exists $seen_targets{$rr_target} or grep { $_ eq $rr_target } ( keys %forbidden_targets ) ) {
             Zonemaster::Engine->logger->add( CNAME_LOOP_INNER => { name => join( ';', map { $_->owner } @cname_rrs ), target => join( ';', map { $_->cname } @cname_rrs ) } );
             return ( undef, $state );
         }
 
-        $seen_targets{lc( $rr_target )} = 1;
-        $forbidden_targets{lc( $rr_owner )} = 1;
-        $cnames{$rr_owner} = $rr_target;
+        $seen_targets{$rr_target} = 1;
+        $forbidden_targets{$rr_owner} = 1;
+        $cnames{$rr_owner} = name( $rr->cname ); # Preserve case of $rr_target
     }
 
     # Get final CNAME target
@@ -249,7 +249,7 @@ sub _resolve_cname {
         return ( undef, $state );
     }
 
-    # CNAME target has already been followed (outer loop); no need to recurse
+    # CNAME target has already been followed previously (outer loop); no need to recurse
     if ( exists $state->{in_progress}{lc( $target )}{$type} ) {
         Zonemaster::Engine->logger->add( CNAME_LOOP_OUTER => { name => $name, target => $target, targets_seen => join( ';', keys %{ $state->{tseen} } ) } );
         return ( undef, $state );
@@ -276,14 +276,14 @@ sub _resolve_cname {
         Zonemaster::Engine->logger->add( CNAME_NO_MATCH => { name => $name, type => $type, target => $target, owner_names => join( ';', map { $_->owner } $p->get_records( $type ) ) } );
     }
 
-    # CNAME target is out of zone, so make a new recursive lookup
+    # CNAME target is not in-domain, so make a new recursive lookup
     unless ( $name->is_in_bailiwick( $target ) ) {
         Zonemaster::Engine->logger->add( CNAME_FOLLOWED_OUT_OF_ZONE => { name => $name, target => $target } );
         ( $p, $state ) = $class->_recurse( $target, $type, $dns_class,
             { ns => [ root_servers() ], count => 0, common => 0, seen => {}, tseen => $state->{tseen}, tcount => $state->{tcount}, glue => {}, in_progress => $state->{in_progress} });
         return ( $p, $state );
     }
-    # Final attempt to resolve the CNAME target for in-bailiwick names
+    # Final attempt to resolve the CNAME target for in-domain names
     else {
         ( $p, $state ) = $class->_recurse( $target, $type, $dns_class,
             { ns => [ root_servers() ], count => 0, common => 0, seen => {}, tseen => $state->{tseen}, tcount => $state->{tcount}, glue => {}, in_progress => $state->{in_progress} });
@@ -654,9 +654,9 @@ Returns a list of L<Zonemaster::Engine::Nameserver> objects.
 
     my ( $p, $state_hash ) = _resolve_cname( $name, $type_string, $dns_class_string, $p, $state_hash );
 
-Performs CNAME resolution for the given arguments. Used by the L<recursive lookup|/_recurse()> helper method in this module.
-If CNAMEs are successfully resolved, a L<packet|Zonemaster::Engine::Packet> (which could be C<undef>) is returned and
-one of the following message tags is logged:
+Performs a CNAME resolution for the given arguments. Used by the L<recursive lookup|/_recurse()> helper method in this module.
+If CNAMEs are successfully resolved, the first return value will be a L<packet|Zonemaster::Engine::Packet> (which could in
+turn be C<undef>) and one of the following message tags is logged:
 
 =over
 
@@ -664,10 +664,12 @@ one of the following message tags is logged:
 
 =item CNAME_FOLLOWED_OUT_OF_ZONE
 
+=item CNAME_TO_NODATA
+
 =back
 
-Note that CNAME records are also validated and, in case of an error, an empty (C<undef>) L<packet|Zonemaster::Engine::Packet>
-is returned and one of the following message tags will be logged:
+Note that the resolution has multiple validation steps and, in case of an error, the first return value will be C<undef> and one of the
+following message tags is logged:
 
 =over
 
@@ -684,6 +686,8 @@ is returned and one of the following message tags will be logged:
 =item CNAME_RECORDS_MULTIPLE_FOR_NAME
 
 =item CNAME_RECORDS_TOO_MANY
+
+=item CNAME_UNRESOLVABLE
 
 =back
 
