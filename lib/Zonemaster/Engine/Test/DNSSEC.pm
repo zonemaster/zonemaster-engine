@@ -2168,13 +2168,13 @@ sub dnssec02 {
                     if ( exists $LDNS_digest_algorithms_supported{$ds->digtype()} ) {
                         my $tmp_ds = $matching_keytag_dnskey->ds($LDNS_digest_algorithms_supported{$ds->digtype()});
 
-                        if ( not $tmp_ds or $tmp_ds->hexdigest() eq $ds->hexdigest() ) {
+                        if ( not $tmp_ds or ( $tmp_ds->hexdigest() eq $ds->hexdigest() and $matching_keytag_dnskey->algorithm() == $ds->algorithm() ) ) {
                             $matching_dnskey = $matching_keytag_dnskey;
                             $match_ds_dnskey = 1;
                             last;
                         }
                     }
-                    else{
+                    else {
                         $matching_dnskey = $matching_keytag_dnskey;
                         $match_ds_dnskey = 1;
                         last;
