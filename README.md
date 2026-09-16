@@ -3,12 +3,11 @@
 ## Purpose
 
 This repository holds one of the components of the Zonemaster product. For an
-overview of the Zonemaster software, please see the
-[Zonemaster main repository].
+overview of the Zonemaster software, please see the [Zonemaster main repository].
 
-This Git repository contains the *Zonemaster Engine testing framework*,
-and contains all code needed to perform the full suite of Zonemaster
-tests.
+This component is the Engine, the core testing framework used to perform the
+complete suite of Zonemaster's DNS tests. It provides all the code required to
+run tests on domain names, specifically their associated DNS zones.
 
 ## Prerequisites
 
@@ -17,7 +16,7 @@ For supported processor architectures, operating systems and Perl versions see
 
 ## Installation
 
-Installation instructions for the Engine is provided in the
+Installation instructions for Zonemaster-Engine is provided in the
 [installation] document.
 
 ## Configuration
@@ -31,7 +30,6 @@ and run without any installation. See [USING] Zonemaster-CLI for how to run
 Zonemaster-CLI on Docker.
 
 To build your own Docker image, see the [Docker Image Creation] documentation.
-
 
 ## Documentation
 
@@ -54,7 +52,6 @@ The artifact name includes the module version and the first 7 characters of the 
 
 For participation, contact and bug reporting, please see
 [Zonemaster/README.md](https://github.com/zonemaster/zonemaster/blob/master/README.md).
-
 
 ## License
 
