@@ -20,6 +20,7 @@ use Scalar::Util                  qw( blessed );
 use Time::HiRes                   qw( gettimeofday time tv_interval );
 use Zonemaster::Engine::Constants qw( :ip :misc );
 use Zonemaster::Engine::DNSName;
+use Zonemaster::Engine::Logger::Global qw( global_logger );
 use Zonemaster::Engine::Nameserver::Cache;
 use Zonemaster::Engine::Packet;
 use Zonemaster::Engine::Recursor;
@@ -132,7 +133,7 @@ sub new {
 
     $obj->{_string} = $name . q{/} . $address;
 
-    Zonemaster::Engine->logger->add( NS_CREATED => { name => $name, ip => $address } );
+    global_logger()->add( NS_CREATED => { name => $name, ip => $address } );
     $object_cache{$name}{$address} = $obj;
 
     return $obj;
@@ -203,16 +204,16 @@ sub query {
     my $profile = Zonemaster::Engine::Profile->effective;
 
     if ( $address->version == 4 and not $profile->get( q{net.ipv4} ) ) {
-        Zonemaster::Engine->logger->add( IPV4_BLOCKED => { ns => $self->string } );
+        global_logger()->add( IPV4_BLOCKED => { ns => $self->string } );
         return;
     }
 
     if ( $address->version == 6 and not $profile->get( q{net.ipv6} ) ) {
-        Zonemaster::Engine->logger->add( IPV6_BLOCKED => { ns => $self->string } );
+        global_logger()->add( IPV6_BLOCKED => { ns => $self->string } );
         return;
     }
 
-    Zonemaster::Engine->logger->add(
+    global_logger()->add(
         'QUERY',
         {
             name  => "$name",
@@ -247,9 +248,9 @@ sub query {
         }
 
         my $res = Zonemaster::Engine::Packet->new( { packet => $p } );
-        Zonemaster::Engine->logger->add(
-            FAKE_DS_RETURNED => { name => "$name", type => $type, class => $class, from => "$self" } );
-        Zonemaster::Engine->logger->add( FAKE_PACKET_RETURNED => { packet => $res->string } );
+        global_logger()
+          ->add( FAKE_DS_RETURNED => { name => "$name", type => $type, class => $class, from => "$self" } );
+        global_logger()->add( FAKE_PACKET_RETURNED => { packet => $res->string } );
         return $res;
     }
 
@@ -279,11 +280,11 @@ sub query {
             $p->rd( $recurse );
             $p->answerfrom( $address->ip );
 
-            Zonemaster::Engine->logger->add(
-                FAKE_DELEGATION_RETURNED => { name => "$name", type => $type, class => $class, from => "$self" } );
+            global_logger()
+              ->add( FAKE_DELEGATION_RETURNED => { name => "$name", type => $type, class => $class, from => "$self" } );
 
             my $res = Zonemaster::Engine::Packet->new( { packet => $p } );
-            Zonemaster::Engine->logger->add( FAKE_PACKET_RETURNED => { packet => $res->string } );
+            global_logger()->add( FAKE_PACKET_RETURNED => { packet => $res->string } );
             return $res;
         } ## end if ( $name =~ m/([.]|\A)\Q$fname\E\z/xi)
     } ## end foreach my $fname ( sort keys...)
@@ -299,7 +300,7 @@ sub query {
         $self->cache->set_key( $idx, $p );
     }
 
-    Zonemaster::Engine->logger->add( CACHED_RETURN => { packet => ( $p ? $p->string : 'undef' ) } );
+    global_logger()->add( CACHED_RETURN => { packet => ( $p ? $p->string : 'undef' ) } );
 
     return $p;
 } ## end sub query
@@ -313,8 +314,7 @@ sub add_fake_delegation {
         push @{ $delegation{authority} }, Zonemaster::LDNS::RR->new( sprintf( '%s IN NS %s', $domain, $name ) );
         foreach my $ip ( @{ $href->{$name} } ) {
             if ( Net::IP::XS->new( $ip )->ip eq $self->address->ip ) {
-                Zonemaster::Engine->logger->add(
-                    FAKE_DELEGATION_TO_SELF => { ns => "$self", domain => $domain, data => $href } );
+                global_logger()->add( FAKE_DELEGATION_TO_SELF => { ns => "$self", domain => $domain, data => $href } );
                 return;
             }
 
@@ -325,7 +325,7 @@ sub add_fake_delegation {
     }
 
     $self->fake_delegations->{$domain} = \%delegation;
-    Zonemaster::Engine->logger->add( FAKE_DELEGATION_ADDED => { ns => "$self", domain => $domain, data => $href } );
+    global_logger()->add( FAKE_DELEGATION_ADDED => { ns => "$self", domain => $domain, data => $href } );
 
     # We're changing the world, so the cache can't be trusted
     Zonemaster::Engine::Recursor->clear_cache;
@@ -352,7 +352,7 @@ sub add_fake_ds {
     }
 
     $self->fake_ds->{ lc( "$domain" ) } = \@ds;
-    Zonemaster::Engine->logger->add( FAKE_DS_ADDED => { domain => lc( "$domain" ), data => $aref, ns => "$self" } );
+    global_logger()->add( FAKE_DS_ADDED => { domain => lc( "$domain" ), data => $aref, ns => "$self" } );
 
     # We're changing the world, so the cache can't be trusted
     Zonemaster::Engine::Recursor->clear_cache;
@@ -479,7 +479,7 @@ sub _query {
           $name, $type, $self->string;
     }
 
-    Zonemaster::Engine->logger->add(
+    global_logger()->add(
         'external_query',
         {
             name  => "$name",
@@ -519,7 +519,7 @@ sub _query {
     my $before = time();
     my $res;
     if ( $BLACKLISTING_ENABLED and $self->blacklisted->{ $flags{usevc} } ) {
-        Zonemaster::Engine->logger->add(
+        global_logger()->add(
             IS_BLACKLISTED => {
                 message   => "Server transport has been blacklisted due to previous failure",
                 ns        => "$self",
@@ -543,13 +543,13 @@ sub _query {
             chomp( $msg );
             $msg =~ s/$trailing_info.*/\./;
 
-            Zonemaster::Engine->logger->add( LOOKUP_ERROR =>
+            global_logger()
+              ->add( LOOKUP_ERROR =>
                   { message => $msg, ns => "$self", domain => "$name", type => $type, class => $href->{class} } );
 
             if ( not $href->{q{blacklisting_disabled}} and $type eq q{SOA} and $flags{q{edns_size}} == 0 ) {
                 $self->blacklisted->{ $flags{usevc} } = 1;
-                Zonemaster::Engine->logger->add(
-                    BLACKLISTING => { ns => "$self", proto => $flags{usevc} ? q{TCP} : q{UDP} } );
+                global_logger()->add( BLACKLISTING => { ns => "$self", proto => $flags{usevc} ? q{TCP} : q{UDP} } );
             }
         }
     } ## end else [ if ( $BLACKLISTING_ENABLED...)]
@@ -562,13 +562,13 @@ sub _query {
         if ( $size > $EDNS_UDP_PAYLOAD_COMMON_LIMIT ) {
             my $command = sprintf q{dig @%s %s%s %s}, $self->address->short, $flags{dnssec} ? q{+dnssec } : q{},
               "$name", $type;
-            Zonemaster::Engine->logger->add( PACKET_BIG => { size => $size, command => $command } );
+            global_logger()->add( PACKET_BIG => { size => $size, command => $command } );
         }
-        Zonemaster::Engine->logger->add( EXTERNAL_RESPONSE => { packet => $p->string } );
+        global_logger()->add( EXTERNAL_RESPONSE => { packet => $p->string } );
         return $p;
     }
     else {
-        Zonemaster::Engine->logger->add( EMPTY_RETURN => {} );
+        global_logger()->add( EMPTY_RETURN => {} );
         return;
     }
 } ## end sub _query
@@ -649,7 +649,7 @@ sub save {
 
     close $fh or die $!;
 
-    Zonemaster::Engine->logger->add( SAVED_NS_CACHE => { file => $filename } );
+    global_logger()->add( SAVED_NS_CACHE => { file => $filename } );
 } ## end sub save
 
 # Performs the inverse operation of _serialize_packet(): from a deserialized
@@ -820,12 +820,12 @@ sub _axfr {
     }
 
     if ( $self->address->version == 4 and not Zonemaster::Engine::Profile->effective->get( q{net.ipv4} ) ) {
-        Zonemaster::Engine->logger->add( IPV4_BLOCKED => { ns => $self->string } );
+        global_logger()->add( IPV4_BLOCKED => { ns => $self->string } );
         return;
     }
 
     if ( $self->address->version == 6 and not Zonemaster::Engine::Profile->effective->get( q{net.ipv6} ) ) {
-        Zonemaster::Engine->logger->add( IPV6_BLOCKED => { ns => $self->string } );
+        global_logger()->add( IPV6_BLOCKED => { ns => $self->string } );
         return;
     }
 

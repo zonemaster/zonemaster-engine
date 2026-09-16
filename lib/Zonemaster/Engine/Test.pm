@@ -13,6 +13,7 @@ use Clone;
 
 use Zonemaster::LDNS;
 use Zonemaster::Engine;
+use Zonemaster::Engine::Logger::Time qw( reset_logger_time );
 use Zonemaster::Engine::Profile;
 use Zonemaster::Engine::Util;
 
@@ -177,7 +178,7 @@ sub run_all_for {
     my ( $class, $zone ) = @_;
     my @results;
 
-    Zonemaster::Engine->start_time_now();
+    reset_logger_time();
     push @results, info( START_TIME => { time_t => time(), string => strftime( "%F %T %z", ( localtime() ) ) } );
     push @results, info( TEST_TARGET => { zone => $zone->name->string, module => 'all' } );
     _log_versions();
@@ -246,7 +247,7 @@ sub run_module {
     my @res;
     my ( $module ) = grep { lc( $requested ) eq lc( $_ ) } $class->modules;
 
-    Zonemaster::Engine->start_time_now();
+    reset_logger_time();
     push @res, info( START_TIME => { time_t => time(), string => strftime( "%F %T %z", ( localtime() ) ) } );
     push @res, info( TEST_TARGET => { zone => $zone->name->string, module => $requested } );
     _log_versions();
@@ -314,7 +315,7 @@ sub run_one {
     my @res;
     my ( $module ) = grep { lc( $requested ) eq lc( $_ ) } $class->modules;
 
-    Zonemaster::Engine->start_time_now();
+    reset_logger_time();
     push @res, info( START_TIME => { time_t => time(), string => strftime( "%F %T %z", ( localtime() ) ) } );
     push @res, info( TEST_TARGET => { zone => $zone->name->string, module => $requested, testcase => $test } );
     _log_versions();

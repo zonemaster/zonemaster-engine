@@ -9,10 +9,9 @@ use Class::Accessor "antlers";
 
 use Carp qw( confess );
 use JSON::PP;
-use List::MoreUtils qw[none any];
-use Scalar::Util    qw[blessed];
-use Zonemaster::Engine::Profile;
+use Scalar::Util qw[blessed];
 use Zonemaster::Engine::Logger::Entry;
+use Zonemaster::Engine::Logger::Filter qw( check_filter );
 
 our $TEST_CASE_NAME = 'Unspecified';
 our $MODULE_NAME    = 'System';
@@ -25,8 +24,6 @@ has 'callback' => (
     is  => 'rw',
     isa => 'CodeRef',
 );
-
-my $logfilter;
 
 sub new {
     my $proto = shift;
@@ -46,7 +43,7 @@ sub add {
     my $new =
       Zonemaster::Engine::Logger::Entry->new(
         { tag => uc( $tag ), args => $argref, testcase => $testcase, module => $module } );
-    $self->_check_filter( $new );
+    check_filter( $new );
     push @{ $self->entries }, $new;
 
     if ( $self->callback and ref( $self->callback ) eq 'CODE' ) {
@@ -66,64 +63,10 @@ sub add {
     return $new;
 } ## end sub add
 
-sub _check_filter {
-    my ( $self, $entry ) = @_;
-
-    if ( !defined $logfilter ) {
-        $logfilter = Zonemaster::Engine::Profile->effective->get( q{logfilter} );
-    }
-
-    if ( $logfilter ) {
-        if ( $logfilter->{ uc $entry->module } ) {
-            my $match = 0;
-            foreach my $rule ( @{ $logfilter->{ uc $entry->module }{ $entry->tag } } ) {
-                foreach my $key ( keys %{ $rule->{when} } ) {
-                    my $cond = $rule->{when}{$key};
-                    if ( ref( $cond ) and ref( $cond ) eq 'ARRAY' ) {
-                        if ( any { $_ eq $entry->args->{$key} } @$cond ) {
-                            $match = 1;
-                        }
-                        else {
-                            $match = 0;
-                            last;
-                        }
-                    }
-                    else {
-                        if ( $cond eq $entry->args->{$key} ) {
-                            $match = 1;
-                        }
-                        else {
-                            $match = 0;
-                            last;
-                        }
-                    }
-                } ## end foreach my $key ( keys %{ $rule...})
-                if ( $match ) {
-                    $entry->_set_level( $rule->{set} );
-                    last;
-                }
-            } ## end foreach my $rule ( @{ $logfilter...})
-        } ## end if ( $logfilter->{ uc ...})
-    } ## end if ( $logfilter )
-    return;
-} ## end sub _check_filter
-
-sub start_time_now {
-    Zonemaster::Engine::Logger::Entry->start_time_now();
-    return;
-}
-
-sub reset_config {
-    $logfilter = undef;
-    Zonemaster::Engine::Logger::Entry->reset_config();
-    return;
-}
-
 sub clear_history {
     my ( $self ) = @_;
 
-    my $r = $self->entries;
-    splice @$r, 0, scalar( @$r );
+    @{ $self->entries } = ();
 
     return;
 }
@@ -258,21 +201,6 @@ Set the logger's start time to the current time.
 =item clear_history()
 
 Remove all known log entries.
-
-=item reset_config()
-
-Clear the test level cached configuration.
-
-=back
-
-=head1 SUBROUTINES
-
-=over
-
-=item _check_filter($entry)
-
-Apply the C<logfilter> defined rules to the entry. See
-L<Zonemaster::Engine::Profile/"logfilter">.
 
 =back
 

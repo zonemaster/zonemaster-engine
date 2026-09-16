@@ -19,16 +19,17 @@ use Class::Accessor "antlers";
 use Carp;
 
 use Zonemaster::Engine::Nameserver;
-use Zonemaster::Engine::Logger;
 use Zonemaster::Engine::Profile;
 use Zonemaster::Engine::Zone;
 use Zonemaster::Engine::Test;
 use Zonemaster::Engine::Recursor;
 use Zonemaster::Engine::ASNLookup;
 use Zonemaster::Engine::DNSName;
+use Zonemaster::Engine::Logger::Filter qw( reset_config );
+use Zonemaster::Engine::Logger::Global qw( global_logger );
+use Zonemaster::Engine::Logger::Time   qw( reset_logger_time );
 use Zonemaster::Engine::TestMethodsV2;
 
-our $logger;
 our $recursor = Zonemaster::Engine::Recursor->new;
 
 my $init_done;
@@ -41,7 +42,7 @@ sub init_engine {
 init_engine();
 
 sub logger {
-    return $logger //= Zonemaster::Engine::Logger->new;
+    return global_logger();
 }
 
 sub profile {
@@ -152,12 +153,12 @@ sub add_fake_delegation {
     foreach my $name ( keys %{$href} ) {
         if ( not @{ $href->{$name} } ) {
             if ( $class->zone( $domain )->is_in_zone( $name ) ) {
-                Zonemaster::Engine->logger->add(    #
+                global_logger()->add(    #
                     FAKE_DELEGATION_IN_ZONE_NO_IP => { domain => $domain, nsname => $name }
                 );
             }
             else {
-                Zonemaster::Engine->logger->add(    #
+                global_logger()->add(    #
                     FAKE_DELEGATION_NO_IP => { domain => $domain, nsname => $name }
                 );
             }
@@ -221,15 +222,15 @@ sub modules {
 }
 
 sub start_time_now {
-    Zonemaster::Engine::Logger->start_time_now();
+    reset_logger_time();
     return;
 }
 
 sub reset {
-    Zonemaster::Engine::Logger->start_time_now();
-    Zonemaster::Engine::Logger->reset_config();
+    reset_logger_time();
+    reset_config();
     Zonemaster::Engine::Nameserver->empty_cache();
-    $logger->clear_history() if $logger;
+    global_logger()->clear_history();
     Zonemaster::Engine::Recursor->clear_cache();
     Zonemaster::Engine::TestMethodsV2->clear_cache();
     return;
