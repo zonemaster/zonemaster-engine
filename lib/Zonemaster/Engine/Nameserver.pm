@@ -23,7 +23,7 @@ use Zonemaster::Engine::DNSName;
 use Zonemaster::Engine::Logger::Global qw( global_logger );
 use Zonemaster::Engine::Nameserver::Cache;
 use Zonemaster::Engine::Packet;
-use Zonemaster::Engine::Recursor;
+use Zonemaster::Engine::Recursor::Cache qw( recursor_cache_clear );
 use Zonemaster::LDNS;
 
 our @ISA = qw( Class::Accessor );
@@ -328,7 +328,7 @@ sub add_fake_delegation {
     global_logger()->add( FAKE_DELEGATION_ADDED => { ns => "$self", domain => $domain, data => $href } );
 
     # We're changing the world, so the cache can't be trusted
-    Zonemaster::Engine::Recursor->clear_cache;
+    recursor_cache_clear();
 
     return;
 } ## end sub add_fake_delegation
@@ -355,7 +355,7 @@ sub add_fake_ds {
     global_logger()->add( FAKE_DS_ADDED => { domain => lc( "$domain" ), data => $aref, ns => "$self" } );
 
     # We're changing the world, so the cache can't be trusted
-    Zonemaster::Engine::Recursor->clear_cache;
+    recursor_cache_clear();
 
     return;
 } ## end sub add_fake_ds

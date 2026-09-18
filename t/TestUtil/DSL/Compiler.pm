@@ -4,8 +4,9 @@ use warnings;
 use strict;
 use v5.24;
 
-use Carp       qw(croak confess);
-use Test::More ();
+use Carp                                qw(croak confess);
+use Test::More                          ();
+use Zonemaster::Engine::Recursor::Cache qw( recursor_cache_clear );
 
 =encoding utf8
 
@@ -121,13 +122,13 @@ sub _compile_root_hints {
     return sub {
         Zonemaster::Engine::Recursor->remove_fake_addresses( '.' );
         Zonemaster::Engine::Recursor->add_fake_addresses( '.', $root_hints );
-        Zonemaster::Engine::Recursor::clear_cache();
+        recursor_cache_clear();
     }
 }
 
 sub _compile_clear_cache {
     return sub {
-        Zonemaster::Engine::Recursor::clear_cache();
+        recursor_cache_clear();
     }
 }
 

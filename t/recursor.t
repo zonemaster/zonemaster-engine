@@ -7,6 +7,7 @@ use List::Util qw[max];
 use Memoize;
 use Zonemaster::Engine::DNSName::Functions qw( name );
 use Zonemaster::Engine::Nameserver;
+use Zonemaster::Engine::Recursor::Cache qw( recursor_cache_clear );
 use Zonemaster::Engine::Util;
 BEGIN { use_ok( 'Zonemaster::Engine::Recursor' ) }
 
@@ -43,7 +44,7 @@ isa_ok( $p2, 'Zonemaster::Engine::Packet' );
     );
     is( $count, 1, 'memoize for recurse() works' );
 
-    Zonemaster::Engine::Recursor->clear_cache;
+    recursor_cache_clear();
     Zonemaster::Engine::Recursor->recurse( 'zonemaster.net' );
     is( $count, 2, 'memoize cache clear for recurse() works' );
 }

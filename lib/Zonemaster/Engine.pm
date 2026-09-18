@@ -25,12 +25,12 @@ use Zonemaster::Engine::Test;
 use Zonemaster::Engine::Recursor;
 use Zonemaster::Engine::ASNLookup;
 use Zonemaster::Engine::DNSName;
-use Zonemaster::Engine::Logger::Filter qw( reset_config );
-use Zonemaster::Engine::Logger::Global qw( global_logger );
-use Zonemaster::Engine::Logger::Time   qw( reset_logger_time );
+use Zonemaster::Engine::Logger::Filter   qw( reset_config );
+use Zonemaster::Engine::Logger::Global   qw( global_logger );
+use Zonemaster::Engine::Logger::Time     qw( reset_logger_time );
+use Zonemaster::Engine::Recursor::Cache  qw( recursor_cache_clear );
+use Zonemaster::Engine::Recursor::Global qw( global_recursor );
 use Zonemaster::Engine::TestMethodsV2;
-
-our $recursor = Zonemaster::Engine::Recursor->new;
 
 my $init_done;
 
@@ -114,7 +114,7 @@ sub recurse {
     $qtype  //= 'A';
     $qclass //= 'IN';
 
-    return $recursor->recurse( $qname, $qtype, $qclass );
+    return global_recursor()->recurse( $qname, $qtype, $qclass );
 }
 
 sub add_fake_delegation {
@@ -165,8 +165,8 @@ sub add_fake_delegation {
         }
     }
 
-    $recursor->add_fake_addresses( $domain, $href );
-    my $parent = $class->zone( $recursor->parent( $domain ) );
+    global_recursor()->add_fake_addresses( $domain, $href );
+    my $parent = $class->zone( global_recursor()->parent( $domain ) );
     foreach my $ns ( @{ $parent->ns } ) {
         $ns->add_fake_delegation( $domain => $href );
     }
@@ -180,7 +180,7 @@ sub add_fake_delegation {
 sub add_fake_ds {
     my ( $class, $domain, $aref ) = @_;
 
-    my $parent = $class->zone( scalar( $recursor->parent( $domain ) ) );
+    my $parent = $class->zone( scalar( global_recursor()->parent( $domain ) ) );
     if ( not $parent ) {
         die "Failed to find parent for $domain";
     }
@@ -231,7 +231,7 @@ sub reset {
     reset_config();
     Zonemaster::Engine::Nameserver->empty_cache();
     global_logger()->clear_history();
-    Zonemaster::Engine::Recursor->clear_cache();
+    recursor_cache_clear();
     Zonemaster::Engine::TestMethodsV2->clear_cache();
     return;
 }

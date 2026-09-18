@@ -7,17 +7,17 @@ use version; our $VERSION = version->declare( "v1.1.0" );
 
 use Class::Accessor "antlers";
 
-use Carp;
+use Carp            qw( croak );
 use File::ShareDir  qw( dist_file );
 use File::Slurp     qw( read_file );
 use List::MoreUtils qw( uniq );
-use Memoize;
 use Net::IP::XS;
 use Zonemaster::Engine::Constants qw( :cname );
 use Zonemaster::Engine::DNSName;
 use Zonemaster::Engine::DNSName::Functions    qw( name );
 use Zonemaster::Engine::Logger::Global        qw( global_logger );
 use Zonemaster::Engine::Nameserver::Functions qw( ns );
+use Zonemaster::Engine::Recursor::Cache       qw( recursor_cache_get recursor_cache_has recursor_cache_set );
 use Zonemaster::Engine::Util                  qw( parse_hints );
 
 our %_fake_addresses_cache;
@@ -89,11 +89,8 @@ sub remove_fake_addresses {
     return;
 }
 
-sub recurse {
+sub _do_recurse {
     my ( $class, $name, $type, $dns_class, $ns ) = @_;
-    $name = name( $name );
-    $type      //= 'A';
-    $dns_class //= 'IN';
 
     global_logger()->add( RECURSE => { name => $name, type => $type, class => $dns_class } );
 
@@ -111,21 +108,24 @@ sub recurse {
 # Cache the results of recurse() to speed up repeated queries for the same name, type,
 # class and set of name servers. Parameters are normalized to ensure that the cache is
 # hit for semantically identical queries.
-memoize(
-    'recurse',
-    NORMALIZER => sub {
-        my ( $class, $name, $type, $dns_class, $ns ) = @_;
+sub recurse {
+    my ( $class, $name, $type, $dns_class, $ns ) = @_;
 
-        $name = name( $name );
-        $type      //= 'A';
-        $dns_class //= 'IN';
-        $ns        //= [ root_servers() ];
+    $name = name( $name );
+    $type      //= 'A';
+    $dns_class //= 'IN';
+    $ns        //= [ root_servers() ];
 
-        my $nss = join( ',', sort @$ns );
+    my $nss = join( ',', sort @$ns );
 
-        return join( '|', ref( $class ) || $class, $name, $type, $dns_class, $nss );
-    },
-);
+    my $key = join( '|', ref( $class ) || $class, $name, $type, $dns_class, $nss );
+
+    if ( !recursor_cache_has( $key ) ) {
+        recursor_cache_set( $key, $class->_do_recurse( $name, $type, $dns_class, $ns ) );
+    }
+
+    return recursor_cache_get( $key );
+}
 
 sub parent {
     my ( $class, $name ) = @_;
@@ -561,11 +561,6 @@ sub _is_answer {
     return ( $packet->type eq 'answer' );
 }
 
-sub clear_cache {
-    Memoize::flush_cache( \&recurse );
-    return;
-}
-
 sub root_servers {
     my $root_addresses = $_fake_addresses_cache{'.'};
 
@@ -652,12 +647,6 @@ Returns an empty list if no data is cached for the given argument.
 =head2 remove_fake_addresses($domain)
 
 Remove fake delegation data for a specified domain.
-
-=head2 clear_cache()
-
-Class method to empty the cache of responses to recursive queries (but not the ones for fake delegations).
-
-N.B. This method does not affect fake delegation data.
 
 =head2 root_servers()
 

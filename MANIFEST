@@ -37,6 +37,8 @@ lib/Zonemaster/Engine/Overview.pod
 lib/Zonemaster/Engine/Packet.pm
 lib/Zonemaster/Engine/Profile.pm
 lib/Zonemaster/Engine/Recursor.pm
+lib/Zonemaster/Engine/Recursor/Cache.pm
+lib/Zonemaster/Engine/Recursor/Global.pm
 lib/Zonemaster/Engine/Test.pm
 lib/Zonemaster/Engine/Test/Address.pm
 lib/Zonemaster/Engine/Test/Basic.pm

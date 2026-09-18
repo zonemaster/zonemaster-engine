@@ -23,6 +23,8 @@ sub global_logger {
 
 Returns the global L<Zonemaster::Engine::Logger> object.
 
+    use Zonemaster::Engine::Logger::Global qw( global_logger );
+
     global_logger()
 
 =back
