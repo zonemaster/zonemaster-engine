@@ -632,7 +632,7 @@ This list can be replaced like so:
 
     my ( $p, $state_hash ) = _recurse( $name, $type_string, $dns_class_string, $p, $state_hash );
 
-Performs a recursive lookup resolution for the given arguments. Used by the L<recursive lookup|/recurse($name, $type, $class)> method in this module.
+Performs a recursive lookup resolution for the given arguments. Used by the L<recursive lookup|/recurse($name[, $type, $class, $ns])> method in this module.
 
 Takes a L<Zonemaster::Engine::DNSName> object, a string (query type), a string (DNS class), a L<Zonemaster::Engine::Packet> object, and a reference to a hash.
 The mandatory keys for that hash are 'ns' (arrayref), 'count' (integer), 'common' (integer), 'seen' (hash), 'glue' (hash) and optional keys are 'in_progress'
@@ -662,9 +662,16 @@ turn be C<undef>) and one of the following message tags is logged:
 
 =item CNAME_FOLLOWED_IN_ZONE
 
+This message tag indicates that the CNAME target was found in the current response and has the requested record type,
+so no additional recursion is needed.
+
 =item CNAME_FOLLOWED_OUT_OF_ZONE
 
+This message tag indicates that the CNAME target is outside the queried name's zone and is resolved through a new recursive lookup.
+
 =item CNAME_TO_NODATA
+
+This message tag indicates that the in-bailiwick CNAME target was resolved authoritatively but without the requested record type.
 
 =back
 
@@ -675,19 +682,35 @@ following message tags is logged:
 
 =item CNAME_CHAIN_TOO_LONG
 
+This message tag indicates that the consecutive CNAME chain lookups are longer than the maximum allowed length.
+
 =item CNAME_LOOP_INNER
+
+This message tag indicates that there is a loop in the CNAME RRset of the current response.
 
 =item CNAME_LOOP_OUTER
 
+This message tag indicates that the CNAME target has already been followed in a previous lookup.
+
 =item CNAME_NO_MATCH
+
+This message tag indicates that there is a record of the requested type but with different owner name than the CNAME target.
 
 =item CNAME_RECORDS_CHAIN_BROKEN
 
+This message tag indicates that the CNAME chain from the RRset of the current response is broken.
+
 =item CNAME_RECORDS_MULTIPLE_FOR_NAME
+
+This message tag indicates that there are more than one CNAME record with the same owner name in the RRset of the current response.
 
 =item CNAME_RECORDS_TOO_MANY
 
+This message tag indicates that there are too many CNAME records in the RRset of the current response.
+
 =item CNAME_UNRESOLVABLE
+
+This message tag indicates that the CNAME resolution could not be successfully completed.
 
 =back
 
