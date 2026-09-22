@@ -276,7 +276,7 @@ sub _resolve_cname {
         Zonemaster::Engine->logger->add( CNAME_NO_MATCH => { name => $name, type => $type, target => $target, owner_names => join( ';', map { $_->owner } $p->get_records( $type ) ) } );
     }
 
-    # CNAME target is not in-domain, so make a new recursive lookup
+    # CNAME target is not in the same zone as the CNAME owner name, so make a new recursive lookup
     unless ( $name->is_in_bailiwick( $target ) ) {
         Zonemaster::Engine->logger->add( CNAME_FOLLOWED_OUT_OF_ZONE => { name => $name, target => $target } );
         ( $p, $state ) = $class->_recurse( $target, $type, $dns_class,
