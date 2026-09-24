@@ -671,7 +671,7 @@ This message tag indicates that the CNAME target is outside the queried name's z
 
 =item CNAME_TO_NODATA
 
-This message tag indicates that the in-bailiwick CNAME target was resolved authoritatively but without the requested record type.
+This message tag indicates that the CNAME target was resolved authoritatively. The name exists but not with requested record type.
 
 =back
 
@@ -682,7 +682,7 @@ following message tags is logged:
 
 =item CNAME_CHAIN_TOO_LONG
 
-This message tag indicates that the consecutive CNAME chain lookups are longer than the maximum allowed length.
+This message tag indicates that the resolved chain of CNAME records is longer than the maximum allowed length.
 
 =item CNAME_LOOP_INNER
 
