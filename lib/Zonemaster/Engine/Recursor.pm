@@ -655,8 +655,8 @@ Returns a list of L<Zonemaster::Engine::Nameserver> objects.
     my ( $p, $state_hash ) = _resolve_cname( $name, $type_string, $dns_class_string, $p, $state_hash );
 
 Performs a CNAME resolution for the given arguments. Used by the L<recursive lookup|/_recurse()> helper method in this module.
-If CNAMEs are successfully resolved, the first return value will be a L<packet|Zonemaster::Engine::Packet> (which could in
-turn be C<undef>) and one of the following message tags is logged:
+If the CNAME resolution is successful, the first return value will be a L<packet|Zonemaster::Engine::Packet> (which could be C<undef>)
+and at least one of the following message tags is logged:
 
 =over
 
@@ -671,46 +671,61 @@ This message tag indicates that the CNAME target is outside the queried name's z
 
 =item CNAME_TO_NODATA
 
-This message tag indicates that the CNAME target was resolved authoritatively. The name exists but not with requested record type.
+This message tag indicates that the CNAME target was resolved authoritatively. The name exists but not with the requested record type.
 
 =back
 
-Note that the resolution has multiple validation steps and, in case of an error, the first return value will be C<undef> and one of the
-following message tags is logged:
+Note that the resolution has multiple validation steps and, in case of an error, the first return value will be C<undef> and at least
+one of the following message tags is logged:
 
 =over
 
 =item CNAME_CHAIN_TOO_LONG
 
-This message tag indicates that the resolved chain of CNAME records is longer than the maximum allowed length.
+This message tag indicates that the number of distinct lookups made to resolve a CNAME chain is longer than the maximum allowed length
+with respect to L<$CNAME_MAX_CHAIN_LENGTH|Zonemaster::Engine::Constants/CNAME_MAX_CHAIN_LENGTH>.
 
 =item CNAME_LOOP_INNER
 
-This message tag indicates that there is a loop in the CNAME RRset of the current response.
+This message tag indicates that there is a loop in the CNAME chain within the same zone.
 
 =item CNAME_LOOP_OUTER
 
-This message tag indicates that the CNAME target has already been followed in a previous lookup.
-
-=item CNAME_NO_MATCH
-
-This message tag indicates that there is a record of the requested type but with different owner name than the CNAME target.
+This message tag indicates that there is a loop in the CNAME chain across different zones.
 
 =item CNAME_RECORDS_CHAIN_BROKEN
 
-This message tag indicates that the CNAME chain from the RRset of the current response is broken.
+This message tag indicates that the CNAME chain in the current response is broken, i.e. that with multiple CNAME records in a response
+there is at least one CNAME record with a target that does not point to a corresponding CNAME record in the same response.
 
 =item CNAME_RECORDS_MULTIPLE_FOR_NAME
 
-This message tag indicates that there are more than one CNAME record with the same owner name in the RRset of the current response.
+This message tag indicates that there are more than one CNAME record with the same owner name in the current response.
 
 =item CNAME_RECORDS_TOO_MANY
 
-This message tag indicates that there are too many CNAME records in the RRset of the current response.
+This message tag indicates that there are too many, with respect to L<$CNAME_MAX_RECORDS|Zonemaster::Engine::Constants/CNAME_MAX_RECORDS>,
+non-duplicate CNAME records in the current response.
 
 =item CNAME_UNRESOLVABLE
 
-This message tag indicates that the CNAME resolution could not be successfully completed.
+This message tag indicates that the CNAME resolution could not be completed and is there as a catch-all to handle unforeseen problems
+in the CNAME resolution process.
+
+=back
+
+Finally the following message tags can be also be logged alongside all of the above message tags:
+
+=over
+
+=item CNAME_RECORDS_DUPLICATES
+
+This message tag indicates that there are duplicate CNAME records in the current response.
+
+=item CNAME_NO_MATCH
+
+This message tag indicates that there is a record of the requested type in the answer section of the response but with a different owner name
+than the CNAME target within that same response.
 
 =back
 
