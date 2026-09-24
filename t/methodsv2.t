@@ -765,7 +765,8 @@ my %subtests = (
               ns1.parent.child-ns-cname-4.methodsv2.xa/fda1:b2:c3:0:127:40:1:41
               ns2.parent.child-ns-cname-4.methodsv2.xa/127.40.1.42
               ns2.parent.child-ns-cname-4.methodsv2.xa/fda1:b2:c3:0:127:40:1:42 ) ],
-        [ qw( ns1-cname.child.parent.child-ns-cname-4.methodsv2.xa/127.40.1.51 ) ],
+        [ qw( ns1-cname.child.parent.child-ns-cname-4.methodsv2.xa/127.40.1.51
+              ns2-cname.child.parent.child-ns-cname-4.methodsv2.xa ) ],
         [ qw( ns1-cname.child.parent.child-ns-cname-4.methodsv2.xa/127.40.1.51
               ns2-cname.child.parent.child-ns-cname-4.methodsv2.xa/127.40.1.52 ) ],
         [ ],
@@ -844,6 +845,21 @@ my %subtests = (
               ns2.child.parent.parent-ns-same-ip-2.methodsv2.xa/fda1:b2:c3:0:127:40:1:52 ) ],
         [ ],
     ],
+    'UNDEL-MISSING-GLUE-1' => [
+        1,
+        q(child.parent.undel-missing-glue-1.methodsv2.xa),
+        [ ], # No parent data
+        [ qw( ns1.child.parent.undel-missing-glue-1.methodsv2.xa
+              ns2.child.parent.undel-missing-glue-1.methodsv2.xa/127.40.1.52
+              ns2.child.parent.undel-missing-glue-1.methodsv2.xa/fda1:b2:c3:0:127:40:1:52 ) ],
+        [ qw( ns1.child.parent.undel-missing-glue-1.methodsv2.xa/127.40.1.51
+              ns1.child.parent.undel-missing-glue-1.methodsv2.xa/fda1:b2:c3:0:127:40:1:51
+              ns2.child.parent.undel-missing-glue-1.methodsv2.xa/127.40.1.52
+              ns2.child.parent.undel-missing-glue-1.methodsv2.xa/fda1:b2:c3:0:127:40:1:52 ) ],
+        [ qw( ns1.child.parent.undel-missing-glue-1.methodsv2.xa
+              ns2.child.parent.undel-missing-glue-1.methodsv2.xa/127.40.1.52
+              ns2.child.parent.undel-missing-glue-1.methodsv2.xa/fda1:b2:c3:0:127:40:1:52 ) ]
+    ]
 );
 
 

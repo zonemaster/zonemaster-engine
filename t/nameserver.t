@@ -187,6 +187,47 @@ subtest 'dnssec, edns_size and edns_details{do, size} flags behavior for queries
     dies_ok { $p = $ns->query( 'fr', 'SOA', { "edns_details" => { "size" => -1 } } ); }      "dies when edns_size (set with edns_details->size) is lower than 0";
 };
 
+subtest 'comparisons' => sub {
+    my $ns1 = Zonemaster::Engine->ns( 'a.test', '2001:db8::1' );
+    my $ns2 = Zonemaster::Engine->ns( 'b.test', '2001:db8::1' );
+
+    ok( $ns1 eq $ns1 );
+    ok( $ns1 lt $ns2 );
+    ok( $ns2 gt $ns1 );
+    ok( "a.test/2001:db8::1" eq $ns1 );
+    ok( "b.test/2001:db8::1" gt $ns1 );
+};
+
+subtest 'sorting' => sub {
+    my @unsorted = (
+        Zonemaster::Engine->ns( 'localhost.test', '::1' ),
+        Zonemaster::Engine->ns( 'localhost.test', '127.0.0.1' ),
+        Zonemaster::Engine->ns( 'a.test', '192.0.2.150' ),
+        Zonemaster::Engine->ns( 'a.test', '192.0.2.1' ),
+        Zonemaster::Engine::DNSName->new( 'b.test' ),
+        Zonemaster::Engine->ns( 'a.test', '2001:db8::1000' ),
+        Zonemaster::Engine->ns( 'a.test', '2001:db8::1' ),
+        'm.test',
+        Zonemaster::Engine->ns( 'b.test', '3ffe::b' )
+    );
+
+    my @sorted = map { "$_" } sort @unsorted;
+
+    my @expected = qw(
+                       a.test/192.0.2.1
+                       a.test/192.0.2.150
+                       a.test/2001:db8::1
+                       a.test/2001:db8::1000
+                       b.test
+                       b.test/3ffe::b
+                       localhost.test/127.0.0.1
+                       localhost.test/::1
+                       m.test
+               );
+
+    is_deeply( \@sorted, \@expected ) or diag( "This is what we got:\n" . join( "\n", @sorted ));
+};
+
 Zonemaster::Engine::Profile->effective->set( q{resolver.source4}, q{127.0.0.1} );
 my $ns_test = new_ok( 'Zonemaster::Engine::Nameserver' => [ { name => 'ns.nic.se', address => '212.247.7.228' } ] );
 is($ns_test->dns->source, '127.0.0.1', 'Source IPv4 address set.');

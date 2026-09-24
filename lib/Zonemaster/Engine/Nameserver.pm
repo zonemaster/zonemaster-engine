@@ -577,7 +577,20 @@ sub string {
 sub compare {
     my ( $self, $other, $reverse ) = @_;
 
-    return $self->string cmp $other->string;
+    my $comparison = do {
+        if ( ref $other and $other->isa('Zonemaster::Engine::Nameserver') ) {
+            $self->name cmp $other->name ||
+                $self->address->version <=> $other->address->version ||
+                $self->address->intip <=> $other->address->intip;
+        }
+        else {
+            $self->string cmp $other
+        }
+    };
+
+    $comparison = -$comparison if $reverse;
+
+    return $comparison;
 }
 
 
