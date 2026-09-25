@@ -310,6 +310,9 @@ sub _compile_fake_ns {
         my $undel_ns = $scenario_declaration->{body}{fake_ns};
         return sub {
             my ( $zone_name ) = @_;
+            if ( $zone_name eq '.' ) {
+                Zonemaster::Engine::Recursor->remove_fake_addresses( '.' );
+            }
             # Use default value of "fill_in_empty_oob_glue".
             Zonemaster::Engine->add_fake_delegation(
                 $zone_name => $undel_ns, fill_in_empty_oob_glue => 1 );
