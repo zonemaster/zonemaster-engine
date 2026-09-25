@@ -1,0 +1,4453 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-08-28 19:25+0300\n"
+"PO-Revision-Date: 2026-08-28 22:35+0300\n"
+"Last-Translator: kolatitov132@gmail.com\n"
+"Language-Team: Zonemaster Team\n"
+"Language: uk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.9\n"
+
+#: ../lib/Zonemaster/Engine/Normalization/Error.pm:29
+#, perl-brace-format
+msgid ""
+"Ambiguous downcasing of character \"{unicode_name}\" in the domain name. Use "
+"all lower case instead."
+msgstr ""
+"Неоднозначне перетворення регістру символу \"{unicode_name}\" в доменному "
+"імені. Використовуйте натомість виключно нижній регістр."
+
+#: ../lib/Zonemaster/Engine/Normalization/Error.pm:33
+msgid "Domain name is too long (more than 253 characters with no final dot)."
+msgstr "Доменне ім'я занадто довге (більше 253 символів без кінцевої крапки)."
+
+#: ../lib/Zonemaster/Engine/Normalization/Error.pm:36
+msgid "Domain name is empty."
+msgstr "Доменне ім'я порожнє."
+
+#: ../lib/Zonemaster/Engine/Normalization/Error.pm:39
+msgid "Domain name starts with dot."
+msgstr "Доменне ім'я починається з крапки."
+
+#: ../lib/Zonemaster/Engine/Normalization/Error.pm:42
+#, perl-brace-format
+msgid ""
+"Domain name has an ASCII label (\"{label}\") with a character not permitted."
+msgstr ""
+"Доменне ім'я містить ASCII-мітку (\"{label}\") з недопустимим символом."
+
+#: ../lib/Zonemaster/Engine/Normalization/Error.pm:46
+#, perl-brace-format
+msgid ""
+"Domain name has a non-ASCII label (\"{label}\") which is not a valid U-label."
+msgstr ""
+"Доменне ім'я містить не-ASCII мітку (\"{label}\"), яка не є дійсною U-міткою."
+
+#: ../lib/Zonemaster/Engine/Normalization/Error.pm:50
+msgid "Domain name has repeated dots."
+msgstr "Доменне ім'я містить повторювані крапки."
+
+#: ../lib/Zonemaster/Engine/Normalization/Error.pm:53
+#, perl-brace-format
+msgid ""
+"Domain name has a label that is too long (more than 63 characters), \"{label}"
+"\"."
+msgstr ""
+"Доменне ім'я містить мітку, яка є занадто довгою (більше 63 символів), "
+"\"{label}\"."
+
+#. ADDRESS:ADDRESS01
+#: ../lib/Zonemaster/Engine/Test/Address.pm:120
+msgid "Name server address must be globally reachable"
+msgstr "Адреса сервера імен має бути глобально доступною"
+
+#. ADDRESS:ADDRESS02
+#: ../lib/Zonemaster/Engine/Test/Address.pm:124
+msgid "Reverse DNS entry exists for name server IP address"
+msgstr "Існує зворотний DNS-запис для IP-адреси сервера імен"
+
+#. ADDRESS:ADDRESS03
+#: ../lib/Zonemaster/Engine/Test/Address.pm:128
+msgid "Reverse DNS entry matches name server name"
+msgstr "Зворотний DNS-запис збігається з ім'ям сервера імен"
+
+#. ADDRESS:A01_ADDR_NOT_GLOBALLY_REACHABLE
+#: ../lib/Zonemaster/Engine/Test/Address.pm:132
+#, perl-brace-format
+msgid "IP address(es) not listed as globally reachable: \"{ns_list}\"."
+msgstr "IP-адреса(и) не вказана як глобально доступна: \"{ns_list}\"."
+
+#. ADDRESS:A01_DOCUMENTATION_ADDR
+#: ../lib/Zonemaster/Engine/Test/Address.pm:136
+#, perl-brace-format
+msgid "IP address(es) intended for documentation purposes: \"{ns_list}\"."
+msgstr ""
+"IP-адреса(и) призначена для використання в документації: \"{ns_list}\"."
+
+#. ADDRESS:A01_GLOBALLY_REACHABLE_ADDR
+#: ../lib/Zonemaster/Engine/Test/Address.pm:140
+#, perl-brace-format
+msgid "Globally reachable IP address(es): \"{ns_list}\"."
+msgstr "Глобально доступна IP-адреса(и): \"{ns_list}\"."
+
+#. ADDRESS:A01_LOCAL_USE_ADDR
+#: ../lib/Zonemaster/Engine/Test/Address.pm:144
+#, perl-brace-format
+msgid ""
+"IP address(es) intended for local use on network or service provider level: "
+"\"{ns_list}\"."
+msgstr ""
+"IP-адреса(и) призначена для локального використання на рівні мережі або "
+"провайдера послуг: \"{ns_list}\"."
+
+#. ADDRESS:A01_NO_GLOBALLY_REACHABLE_ADDR
+#: ../lib/Zonemaster/Engine/Test/Address.pm:148
+msgid "None of the name servers IP addresses are listed as globally reachable."
+msgstr "Жодна з IP-адрес серверів імен не вказана як глобально доступна."
+
+#. ADDRESS:A01_NO_NAME_SERVERS_FOUND
+#: ../lib/Zonemaster/Engine/Test/Address.pm:152
+msgid "No name servers found."
+msgstr "Серверів імен не знайдено."
+
+#. ADDRESS:NAMESERVER_IP_WITHOUT_REVERSE
+#: ../lib/Zonemaster/Engine/Test/Address.pm:156
+#, perl-brace-format
+msgid "Nameserver {nsname} has an IP address ({ns_ip}) without PTR configured."
+msgstr ""
+"Сервер імен {nsname} має IP-адресу ({ns_ip}) без налаштованого PTR-запису."
+
+#. ADDRESS:NAMESERVER_IP_PTR_MISMATCH
+#: ../lib/Zonemaster/Engine/Test/Address.pm:160
+#, perl-brace-format
+msgid ""
+"Nameserver {nsname} has an IP address ({ns_ip}) with mismatched PTR result "
+"({names})."
+msgstr ""
+"Сервер імен {nsname} має IP-адресу ({ns_ip}) з невідповідним результатом PTR "
+"({names})."
+
+#. ADDRESS:NAMESERVERS_IP_WITH_REVERSE
+#: ../lib/Zonemaster/Engine/Test/Address.pm:164
+msgid "Reverse DNS entry exists for each Nameserver IP address."
+msgstr "Зворотний DNS-запис існує для кожної IP-адреси сервера імен."
+
+#. ADDRESS:NAMESERVER_IP_PTR_MATCH
+#: ../lib/Zonemaster/Engine/Test/Address.pm:168
+msgid "Every reverse DNS entry matches name server name."
+msgstr "Кожен зворотний DNS-запис збігається з ім'ям сервера імен."
+
+#. ADDRESS:NO_RESPONSE_PTR_QUERY
+#: ../lib/Zonemaster/Engine/Test/Address.pm:172
+#, perl-brace-format
+msgid "No response from nameserver(s) on PTR query ({domain})."
+msgstr "Немає відповіді від сервера(ів) імен на PTR-запит ({domain})."
+
+#. ADDRESS:TEST_CASE_END
+#. BASIC:TEST_CASE_END
+#. CONNECTIVITY:TEST_CASE_END
+#. CONSISTENCY:TEST_CASE_END
+#. DELEGATION:TEST_CASE_END
+#. DNSSEC:TEST_CASE_END
+#. NAMESERVER:TEST_CASE_END
+#. SYNTAX:TEST_CASE_END
+#. ZONE:TEST_CASE_END
+#: ../lib/Zonemaster/Engine/Test/Address.pm:176
+#: ../lib/Zonemaster/Engine/Test/Basic.pm:317
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:376
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:305
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1738
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:364
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:520
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:361
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:372
+#, perl-brace-format
+msgid "TEST_CASE_END {testcase}."
+msgstr "КІНЕЦЬ_ТЕСТУ {testcase}."
+
+#. ADDRESS:TEST_CASE_START
+#. BASIC:TEST_CASE_START
+#. CONNECTIVITY:TEST_CASE_START
+#. CONSISTENCY:TEST_CASE_START
+#. DELEGATION:TEST_CASE_START
+#. DNSSEC:TEST_CASE_START
+#. NAMESERVER:TEST_CASE_START
+#. SYNTAX:TEST_CASE_START
+#. ZONE:TEST_CASE_START
+#: ../lib/Zonemaster/Engine/Test/Address.pm:180
+#: ../lib/Zonemaster/Engine/Test/Basic.pm:321
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:380
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:309
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1742
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:368
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:524
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:365
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:376
+#, perl-brace-format
+msgid "TEST_CASE_START {testcase}."
+msgstr "ПОЧАТОК_ТЕСТУ {testcase}."
+
+#. BASIC:BASIC01
+#: ../lib/Zonemaster/Engine/Test/Basic.pm:183
+msgid "The domain must have a parent domain"
+msgstr "Домен повинен мати батьківський домен"
+
+#. BASIC:BASIC02
+#: ../lib/Zonemaster/Engine/Test/Basic.pm:187
+msgid "The domain must have at least one working name server"
+msgstr "Домен повинен мати принаймні один працюючий сервер імен"
+
+#. BASIC:BASIC03
+#: ../lib/Zonemaster/Engine/Test/Basic.pm:191
+msgid "The Broken but functional test"
+msgstr "Тест «Зламаний, але функціонуючий»"
+
+#. BASIC:A_QUERY_NO_RESPONSES
+#: ../lib/Zonemaster/Engine/Test/Basic.pm:195
+msgid "Nameservers did not respond to A query."
+msgstr "Сервери імен не відповіли на A-запит."
+
+#. BASIC:B01_CHILD_IS_ALIAS
+#: ../lib/Zonemaster/Engine/Test/Basic.pm:199
+#, perl-brace-format
+msgid ""
+"\"{domain_child}\" is not a zone. It is an alias for \"{domain_target}\". "
+"Run a test for \"{domain_target}\" instead. Returned from name servers "
+"\"{ns_list}\"."
+msgstr ""
+"\"{domain_child}\" не є зоною. Це псевдонім для \"{domain_target}\". "
+"Запустіть тест для \"{domain_target}\" замість цього. Отримано від серверів "
+"імен \"{ns_list}\"."
+
+#. BASIC:B01_CHILD_FOUND
+#: ../lib/Zonemaster/Engine/Test/Basic.pm:204
+#, perl-brace-format
+msgid "The zone \"{domain}\" is found."
+msgstr "Зону \"{domain}\" знайдено."
+
+#. BASIC:B01_INCONSISTENT_ALIAS
+#: ../lib/Zonemaster/Engine/Test/Basic.pm:208
+#, perl-brace-format
+msgid "The alias for \"{domain}\" is inconsistent between name servers."
+msgstr "Псевдонім для \"{domain}\" є неузгодженим між серверами імен."
+
+#. BASIC:B01_INCONSISTENT_DELEGATION
+#: ../lib/Zonemaster/Engine/Test/Basic.pm:212
+#, perl-brace-format
+msgid ""
+"The name servers for parent zone \"{domain_parent}\" give inconsistent "
+"delegation of \"{domain_child}\". Returned from name servers \"{ns_list}\"."
+msgstr ""
+"Сервери імен батьківської зони \"{domain_parent}\" дають неузгоджене "
+"делегування \"{domain_child}\". Отримано від серверів імен \"{ns_list}\"."
+
+#. BASIC:B01_NO_CHILD
+#: ../lib/Zonemaster/Engine/Test/Basic.pm:217
+#, perl-brace-format
+msgid ""
+"\"{domain_child}\" does not exist as a DNS zone. Try to test \"{domain_super}"
+"\" instead."
+msgstr ""
+"\"{domain_child}\" не існує як DNS-зона. Спробуйте протестувати "
+"\"{domain_super}\" натомість."
+
+#. BASIC:B01_PARENT_DISREGARDED
+#: ../lib/Zonemaster/Engine/Test/Basic.pm:221
+msgid ""
+"This is a test of an undelegated domain so finding the parent zone is "
+"disregarded."
+msgstr ""
+"Це тест неделегованого домену, тому пошук батьківської зони ігнорується."
+
+#. BASIC:B01_PARENT_FOUND
+#: ../lib/Zonemaster/Engine/Test/Basic.pm:225
+#, perl-brace-format
+msgid ""
+"The parent zone is \"{domain}\" as returned from name servers \"{ns_list}\"."
+msgstr ""
+"Батьківською зоною є \"{domain}\", як отримано від серверів імен \"{ns_list}"
+"\"."
+
+#. BASIC:B01_PARENT_NOT_FOUND
+#: ../lib/Zonemaster/Engine/Test/Basic.pm:229
+msgid "The parent zone cannot be found."
+msgstr "Батьківську зону неможливо знайти."
+
+#. BASIC:B01_PARENT_UNDETERMINED
+#: ../lib/Zonemaster/Engine/Test/Basic.pm:233
+#, perl-brace-format
+msgid "The parent zone cannot be determined on name servers \"{ns_list}\"."
+msgstr "Батьківську зону неможливо визначити на серверах імен \"{ns_list}\"."
+
+#. BASIC:B01_ROOT_HAS_NO_PARENT
+#: ../lib/Zonemaster/Engine/Test/Basic.pm:237
+msgid "This is a test of the root zone which has no parent zone."
+msgstr "Це тест кореневої зони, яка не має батьківської зони."
+
+#. BASIC:B01_SERVER_ZONE_ERROR
+#: ../lib/Zonemaster/Engine/Test/Basic.pm:241
+#, perl-brace-format
+msgid ""
+"Unexpected response on query for \"{query_name}\" with query type \"{rrtype}"
+"\" to \"{ns}\"."
+msgstr ""
+"Неочікувана відповідь на запит для \"{query_name}\" з типом запиту \"{rrtype}"
+"\" до \"{ns}\"."
+
+#. BASIC:B02_AUTH_RESPONSE_SOA
+#: ../lib/Zonemaster/Engine/Test/Basic.pm:245
+#, perl-brace-format
+msgid ""
+"Authoritative answer on SOA query for \"{domain}\" is returned by name "
+"servers \"{ns_list}\"."
+msgstr ""
+"Авторитетну відповідь на SOA-запит для \"{domain}\" отримано від серверів "
+"імен \"{ns_list}\"."
+
+#. BASIC:B02_NO_DELEGATION
+#: ../lib/Zonemaster/Engine/Test/Basic.pm:249
+#, perl-brace-format
+msgid ""
+"There is no delegation (name servers) for \"{domain}\" which means it does "
+"not exist as a zone."
+msgstr ""
+"Для \"{domain}\" немає делегування (серверів імен), що означає, що він не "
+"існує як зона."
+
+#. BASIC:B02_NO_WORKING_NS
+#: ../lib/Zonemaster/Engine/Test/Basic.pm:253
+#, perl-brace-format
+msgid "There is no working name server for \"{domain}\" so it is unreachable."
+msgstr "Для \"{domain}\" немає працюючих серверів імен, тому він недоступний."
+
+#. BASIC:B02_NS_BROKEN
+#: ../lib/Zonemaster/Engine/Test/Basic.pm:257
+#, perl-brace-format
+msgid "Broken response from name server \"{ns}\" on an SOA query."
+msgstr "Некоректна відповідь від сервера імен \"{ns}\" на SOA-запит."
+
+#. BASIC:B02_NS_NOT_AUTH
+#: ../lib/Zonemaster/Engine/Test/Basic.pm:261
+#, perl-brace-format
+msgid ""
+"Name server \"{ns}\" does not give an authoritative answer on an SOA query."
+msgstr "Сервер імен \"{ns}\" не дає авторитетної відповіді на SOA-запит."
+
+#. BASIC:B02_NS_NO_IP_ADDR
+#: ../lib/Zonemaster/Engine/Test/Basic.pm:265
+#, perl-brace-format
+msgid "Name server \"{nsname}\" cannot be resolved into an IP address."
+msgstr "Сервер імен \"{nsname}\" неможливо перетворити в IP-адресу."
+
+#. BASIC:B02_NS_NO_RESPONSE
+#: ../lib/Zonemaster/Engine/Test/Basic.pm:269
+#, perl-brace-format
+msgid "Name server \"{ns}\" does not respond to an SOA query."
+msgstr "Сервер імен \"{ns}\" не відповідає на SOA-запит."
+
+#. BASIC:B02_UNEXPECTED_RCODE
+#: ../lib/Zonemaster/Engine/Test/Basic.pm:273
+#, perl-brace-format
+msgid ""
+"Name server \"{ns}\" responds with an unexpected RCODE name (\"{rcode}\") on "
+"an SOA query."
+msgstr ""
+"Сервер імен \"{ns}\" відповідає з неочікуваним кодом RCODE (\"{rcode}\") на "
+"SOA-запит."
+
+#. BASIC:DOMAIN_NAME_LABEL_TOO_LONG
+#: ../lib/Zonemaster/Engine/Test/Basic.pm:277
+#, perl-brace-format
+msgid ""
+"Domain name ({domain}) has a label ({label}) too long ({dlength}/{max})."
+msgstr ""
+"Доменне ім'я ({domain}) має занадто довгу мітку ({label}) ({dlength}/{max})."
+
+#. BASIC:DOMAIN_NAME_TOO_LONG
+#: ../lib/Zonemaster/Engine/Test/Basic.pm:281
+#, perl-brace-format
+msgid "Domain name is too long ({fqdnlength}/{max})."
+msgstr "Доменне ім'я занадто довге ({fqdnlength}/{max})."
+
+#. BASIC:DOMAIN_NAME_ZERO_LENGTH_LABEL
+#: ../lib/Zonemaster/Engine/Test/Basic.pm:285
+#, perl-brace-format
+msgid "Domain name ({domain}) has a zero-length label."
+msgstr "Доменне ім'я ({domain}) має мітку нульової довжини."
+
+#. BASIC:HAS_A_RECORDS
+#: ../lib/Zonemaster/Engine/Test/Basic.pm:289
+#, perl-brace-format
+msgid "Nameserver {ns} returned \"A\" record(s) for {domain}."
+msgstr "Сервер імен {ns} повернув \"A\" запис(и) для {domain}."
+
+#. BASIC:HAS_NAMESERVER_NO_WWW_A_TEST
+#: ../lib/Zonemaster/Engine/Test/Basic.pm:293
+#, perl-brace-format
+msgid "Functional nameserver found. \"A\" query for www.{zname} test skipped."
+msgstr ""
+"Знайдено функціонуючий сервер імен. Тест \"A\" запиту для www.{zname} "
+"пропущено."
+
+#. BASIC:IPV4_DISABLED
+#. CONNECTIVITY:IPV4_DISABLED
+#. CONSISTENCY:IPV4_DISABLED
+#. DELEGATION:IPV4_DISABLED
+#. DNSSEC:IPV4_DISABLED
+#. NAMESERVER:IPV4_DISABLED
+#. SYNTAX:IPV4_DISABLED
+#. ZONE:IPV4_DISABLED
+#. SYSTEM:SKIP_IPV4_DISABLED
+#: ../lib/Zonemaster/Engine/Test/Basic.pm:297
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:348
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:215
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1696
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:260
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:416
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:237
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:364
+#: ../lib/Zonemaster/Engine/Translator.pm:67
+#, perl-brace-format
+msgid "IPv4 is disabled, not sending \"{rrtype}\" query to {ns}."
+msgstr "IPv4 вимкнено, \"{rrtype}\" запит до {ns} не надсилається."
+
+#. BASIC:IPV4_ENABLED
+#: ../lib/Zonemaster/Engine/Test/Basic.pm:301
+#, perl-brace-format
+msgid "IPv4 is enabled, can send \"{rrtype}\" query to {ns}."
+msgstr "IPv4 увімкнено, можна надіслати \"{rrtype}\" запит до {ns}."
+
+#. BASIC:IPV6_DISABLED
+#. CONNECTIVITY:IPV6_DISABLED
+#. CONSISTENCY:IPV6_DISABLED
+#. DELEGATION:IPV6_DISABLED
+#. DNSSEC:IPV6_DISABLED
+#. NAMESERVER:IPV6_DISABLED
+#. SYNTAX:IPV6_DISABLED
+#. ZONE:IPV6_DISABLED
+#. SYSTEM:SKIP_IPV6_DISABLED
+#: ../lib/Zonemaster/Engine/Test/Basic.pm:305
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:352
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:219
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1700
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:264
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:420
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:241
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:368
+#: ../lib/Zonemaster/Engine/Translator.pm:71
+#, perl-brace-format
+msgid "IPv6 is disabled, not sending \"{rrtype}\" query to {ns}."
+msgstr "IPv6 вимкнено, \"{rrtype}\" запит до {ns} не надсилається."
+
+#. BASIC:IPV6_ENABLED
+#: ../lib/Zonemaster/Engine/Test/Basic.pm:309
+#, perl-brace-format
+msgid "IPv6 is enabled, can send \"{rrtype}\" query to {ns}."
+msgstr "IPv6 увімкнено, можна надіслати \"{rrtype}\" запит до {ns}."
+
+#. BASIC:NO_A_RECORDS
+#: ../lib/Zonemaster/Engine/Test/Basic.pm:313
+#, perl-brace-format
+msgid "Nameserver {ns} did not return \"A\" record(s) for {domain}."
+msgstr "Сервер імен {ns} не повернув \"A\" запис(и) для {domain}."
+
+#. CONNECTIVITY:CONNECTIVITY01
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:162
+msgid "UDP connectivity"
+msgstr "UDP-з'єднання"
+
+#. CONNECTIVITY:CONNECTIVITY02
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:166
+msgid "TCP connectivity"
+msgstr "TCP-з'єднання"
+
+#. CONNECTIVITY:CONNECTIVITY03
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:170
+msgid "AS Diversity"
+msgstr "Різноманітність AS"
+
+#. CONNECTIVITY:CONNECTIVITY04
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:174
+msgid "IP Prefix Diversity"
+msgstr "Різноманітність IP-префіксів"
+
+#. CONNECTIVITY:CN01_IPV4_DISABLED
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:178
+#, perl-brace-format
+msgid ""
+"IPv4 is disabled. No DNS queries are sent to these name servers: \"{ns_list}"
+"\"."
+msgstr ""
+"IPv4 вимкнено. До цих серверів імен DNS-запити не надіслались: \"{ns_list}\"."
+
+#. CONNECTIVITY:CN01_IPV6_DISABLED
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:182
+#, perl-brace-format
+msgid ""
+"IPv6 is disabled. No DNS queries are sent to these name servers: \"{ns_list}"
+"\"."
+msgstr ""
+"IPv6 вимкнено. До цих серверів імен DNS-запити не надіслались: \"{ns_list}\"."
+
+#. CONNECTIVITY:CN01_MISSING_NS_RECORD_UDP
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:186
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responds to a NS query with no NS records in the answer "
+"section over UDP."
+msgstr ""
+"Сервер імен {ns} відповідає на NS-запит без NS-записів у розділі відповідей "
+"через UDP."
+
+#. CONNECTIVITY:CN01_MISSING_SOA_RECORD_UDP
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:190
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responds to a SOA query with no SOA records in the answer "
+"section over UDP."
+msgstr ""
+"Сервер імен {ns} відповідає на SOA-запит без SOA-записів у розділі "
+"відповідей через UDP."
+
+#. CONNECTIVITY:CN01_NO_RESPONSE_NS_QUERY_UDP
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:194
+#, perl-brace-format
+msgid "Nameserver {ns} does not respond to NS queries over UDP."
+msgstr "Сервер імен {ns} не відповідає на NS-запити через UDP."
+
+#. CONNECTIVITY:CN01_NO_RESPONSE_SOA_QUERY_UDP
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:198
+#, perl-brace-format
+msgid "Nameserver {ns} does not respond to SOA queries over UDP."
+msgstr "Сервер імен {ns} не відповідає на SOA-запити через UDP."
+
+#. CONNECTIVITY:CN01_NO_RESPONSE_UDP
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:202
+#, perl-brace-format
+msgid "Nameserver {ns} does not respond to any queries over UDP."
+msgstr "Сервер імен {ns} не відповідає на жодні запити через UDP."
+
+#. CONNECTIVITY:CN01_NS_RECORD_NOT_AA_UDP
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:206
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} does not give an authoritative response on an NS query over "
+"UDP."
+msgstr "Сервер імен {ns} не дає авторитетної відповіді на NS-запит через UDP."
+
+#. CONNECTIVITY:CN01_SOA_RECORD_NOT_AA_UDP
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:210
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} does not give an authoritative response on an SOA query over "
+"UDP."
+msgstr "Сервер імен {ns} не дає авторитетної відповіді на SOA-запит через UDP."
+
+#. CONNECTIVITY:CN01_UNEXPECTED_RCODE_NS_QUERY_UDP
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:214
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responds with an unexpected RCODE ({rcode}) on an NS query "
+"over UDP."
+msgstr ""
+"Сервер імен {ns} відповідає з неочікуваним RCODE ({rcode}) на NS-запит через "
+"UDP."
+
+#. CONNECTIVITY:CN01_UNEXPECTED_RCODE_SOA_QUERY_UDP
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:218
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responds with an unexpected RCODE ({rcode}) on an SOA query "
+"over UDP."
+msgstr ""
+"Сервер імен {ns} відповідає з неочікуваним RCODE ({rcode}) на SOA-запит "
+"через UDP."
+
+#. CONNECTIVITY:CN01_WRONG_NS_RECORD_UDP
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:222
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responds with a wrong owner name ({domain_found} instead of "
+"{domain_expected}) on NS queries over UDP."
+msgstr ""
+"Сервер імен {ns} відповідає з неправильним іменем власника ({domain_found} "
+"замість очікуваного {domain_expected}) на NS-запити через UDP."
+
+#. CONNECTIVITY:CN01_WRONG_SOA_RECORD_UDP
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:226
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responds with a wrong owner name ({domain_found} instead of "
+"{domain_expected}) on SOA queries over UDP."
+msgstr ""
+"Сервер імен {ns} відповідає з неправильним іменем власника ({domain_found} "
+"замість очікуваного {domain_expected}) на SOA-запити через UDP."
+
+#. CONNECTIVITY:CN02_MISSING_NS_RECORD_TCP
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:230
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responds to a NS query with no NS records in the answer "
+"section over TCP."
+msgstr ""
+"Сервер імен {ns} відповідає на NS-запит без NS-записів у розділі відповідей "
+"через TCP."
+
+#. CONNECTIVITY:CN02_MISSING_SOA_RECORD_TCP
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:234
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responds to a SOA query with no SOA records in the answer "
+"section over TCP."
+msgstr ""
+"Сервер імен {ns} відповідає на SOA-запит без SOA-записів у розділі "
+"відповідей через TCP."
+
+#. CONNECTIVITY:CN02_NO_RESPONSE_NS_QUERY_TCP
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:238
+#, perl-brace-format
+msgid "Nameserver {ns} does not respond to NS queries over TCP."
+msgstr "Сервер імен {ns} не відповідає на NS-запити через TCP."
+
+#. CONNECTIVITY:CN02_NO_RESPONSE_SOA_QUERY_TCP
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:242
+#, perl-brace-format
+msgid "Nameserver {ns} does not respond to SOA queries over TCP."
+msgstr "Сервер імен {ns} не відповідає на SOA-запити через TCP."
+
+#. CONNECTIVITY:CN02_NO_RESPONSE_TCP
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:246
+#, perl-brace-format
+msgid "Nameserver {ns} does not respond to any queries over TCP."
+msgstr "Сервер імен {ns} не відповідає на жодні запити через TCP."
+
+#. CONNECTIVITY:CN02_NS_RECORD_NOT_AA_TCP
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:250
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} does not give an authoritative response on an NS query over "
+"TCP."
+msgstr "Сервер імен {ns} не дає авторитетної відповіді на NS-запит через TCP."
+
+#. CONNECTIVITY:CN02_SOA_RECORD_NOT_AA_TCP
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:254
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} does not give an authoritative response on an SOA query over "
+"TCP."
+msgstr "Сервер імен {ns} не дає авторитетної відповіді на SOA-запит через TCP."
+
+#. CONNECTIVITY:CN02_UNEXPECTED_RCODE_NS_QUERY_TCP
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:258
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responds with an unexpected RCODE ({rcode}) on an NS query "
+"over TCP."
+msgstr ""
+"Сервер імен {ns} відповідає з неочікуваним RCODE ({rcode}) на NS-запит через "
+"TCP."
+
+#. CONNECTIVITY:CN02_UNEXPECTED_RCODE_SOA_QUERY_TCP
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:262
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responds with an unexpected RCODE ({rcode}) on an SOA query "
+"over TCP."
+msgstr ""
+"Сервер імен {ns} відповідає з неочікуваним RCODE ({rcode}) на SOA-запит "
+"через TCP."
+
+#. CONNECTIVITY:CN02_WRONG_NS_RECORD_TCP
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:266
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responds with a wrong owner name ({domain_found} instead of "
+"{domain_expected}) on NS queries over TCP."
+msgstr ""
+"Сервер імен {ns} відповідає з неправильним іменем власника ({domain_found} "
+"замість очікуваного {domain_expected}) на NS-запити через TCP."
+
+#. CONNECTIVITY:CN02_WRONG_SOA_RECORD_TCP
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:270
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responds with a wrong owner name ({domain_found} instead of "
+"{domain_expected}) on SOA queries over TCP."
+msgstr ""
+"Сервер імен {ns} відповідає з неправильним іменем власника ({domain_found} "
+"замість очікуваного {domain_expected}) на SOA-запити через TCP."
+
+#. CONNECTIVITY:ASN_INFOS_ANNOUNCE_IN
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:274
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:372
+#, perl-brace-format
+msgid "Name server IP address \"{ns_ip}\" is announced in prefix \"{prefix}\"."
+msgstr "IP-адреса сервера імен \"{ns_ip}\" анонсована в префіксі \"{prefix}\"."
+
+#. CONNECTIVITY:ASN_INFOS_RAW
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:278
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:364
+#, perl-brace-format
+msgid "The ASN data for name server IP address \"{ns_ip}\" is \"{data}\"."
+msgstr "Дані ASN для IP-адреси сервера імен \"{ns_ip}\" : \"{data}\"."
+
+#. CONNECTIVITY:CN04_EMPTY_PREFIX_SET
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:282
+#, perl-brace-format
+msgid "Prefix database returned no information for IP address {ns_ip}."
+msgstr ""
+"База даних префіксів не повернула жодної інформації для IP-адреси {ns_ip}."
+
+#. CONNECTIVITY:CN04_ERROR_PREFIX_DATABASE
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:286
+#, perl-brace-format
+msgid "Prefix database error for IP address {ns_ip}."
+msgstr "Помилка бази даних префіксів для IP-адреси {ns_ip}."
+
+#. CONNECTIVITY:CN04_IPV4_DIFFERENT_PREFIX
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:290
+#, perl-brace-format
+msgid ""
+"The following name server(s) are announced in unique IPv4 prefix(es): "
+"\"{ns_list}\""
+msgstr ""
+"Наступні сервери імен анонсовані в унікальних IPv4 префіксах: \"{ns_list}\""
+
+#. CONNECTIVITY:CN04_IPV4_SAME_PREFIX
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:294
+#, perl-brace-format
+msgid ""
+"The following name server(s) are announced in the same IPv4 prefix "
+"({ip_prefix}): \"{ns_list}\""
+msgstr ""
+"Наступні сервери імен анонсовані в однаковому IPv4 префіксі ({ip_prefix}): "
+"\"{ns_list}\""
+
+#. CONNECTIVITY:CN04_IPV4_SINGLE_PREFIX
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:298
+msgid ""
+"All name server(s) IPv4 address(es) are announced in the same IPv4 prefix."
+msgstr "Усі IPv4 адреси серверів імен анонсовані в однаковому IPv4 префіксі."
+
+#. CONNECTIVITY:CN04_IPV6_DIFFERENT_PREFIX
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:302
+#, perl-brace-format
+msgid ""
+"The following name server(s) are announced in unique IPv6 prefix(es): "
+"\"{ns_list}\""
+msgstr ""
+"Наступні сервери імен анонсовані в унікальних IPv6 префіксах: \"{ns_list}\""
+
+#. CONNECTIVITY:CN04_IPV6_SAME_PREFIX
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:306
+#, perl-brace-format
+msgid ""
+"The following name server(s) are announced in the same IPv6 prefix "
+"({ip_prefix}): \"{ns_list}\""
+msgstr ""
+"Наступні сервери імен анонсовані в однаковому IPv6 префіксі ({ip_prefix}): "
+"\"{ns_list}\""
+
+#. CONNECTIVITY:CN04_IPV6_SINGLE_PREFIX
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:310
+msgid ""
+"All name server(s) IPv6 address(es) are announced in the same IPv6 prefix."
+msgstr "Усі IPv6 адреси серверів імен анонсовані в однаковому IPv6 префіксі."
+
+#. CONNECTIVITY:ERROR_ASN_DATABASE
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:314
+#, perl-brace-format
+msgid "ASN Database error. No data to analyze for {ns_ip}."
+msgstr "Помилка бази даних ASN. Немає даних для аналізу для {ns_ip}."
+
+#. CONNECTIVITY:EMPTY_ASN_SET
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:318
+#, perl-brace-format
+msgid "AS database returned no informations for IP address {ns_ip}."
+msgstr "База даних AS не повернула жодної інформації для IP-адреси {ns_ip}."
+
+#. CONNECTIVITY:IPV4_SAME_ASN
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:322
+#, perl-brace-format
+msgid ""
+"All authoritative nameservers have their IPv4 addresses in the same AS set "
+"({asn_list})."
+msgstr ""
+"Усі авторитетні сервери імен мають свої IPv4-адреси в одному наборі AS "
+"({asn_list})."
+
+#. CONNECTIVITY:IPV4_ONE_ASN
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:326
+#, perl-brace-format
+msgid ""
+"All authoritative nameservers have their IPv4 addresses in the same AS "
+"({asn})."
+msgstr ""
+"Усі авторитетні сервери імен мають свої IPv4-адреси в одній AS ({asn})."
+
+#. CONNECTIVITY:IPV4_DIFFERENT_ASN
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:330
+#, perl-brace-format
+msgid ""
+"At least two IPv4 addresses of the authoritative nameservers are announced "
+"by different AS sets. A merged list of all AS: ({asn_list})."
+msgstr ""
+"Щонайменше дві IPv4-адреси авторитетних серверів імен анонсовані різними "
+"наборами AS. Об'єднаний список усіх AS: ({asn_list})."
+
+#. CONNECTIVITY:IPV6_SAME_ASN
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:335
+#, perl-brace-format
+msgid ""
+"All authoritative nameservers have their IPv6 addresses in the same AS set "
+"({asn_list})."
+msgstr ""
+"Усі авторитетні сервери імен мають свої IPv6-адреси в одному наборі AS "
+"({asn_list})."
+
+#. CONNECTIVITY:IPV6_ONE_ASN
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:339
+#, perl-brace-format
+msgid ""
+"All authoritative nameservers have their IPv6 addresses in the same AS "
+"({asn})."
+msgstr ""
+"Усі авторитетні сервери імен мають свої IPv6-адреси в одній AS ({asn})."
+
+#. CONNECTIVITY:IPV6_DIFFERENT_ASN
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:343
+#, perl-brace-format
+msgid ""
+"At least two IPv6 addresses of the authoritative nameservers are announced "
+"by different AS sets. A merged list of all AS: ({asn_list})."
+msgstr ""
+"Щонайменше дві IPv6-адреси авторитетних серверів імен анонсовані різними "
+"наборами AS. Об'єднаний список усіх AS: ({asn_list})."
+
+#. CONNECTIVITY:IPV4_ASN
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:356
+#, perl-brace-format
+msgid "Name servers have IPv4 addresses in the following ASs: {asn}."
+msgstr "Сервери імен мають IPv4-адреси в наступних AS: {asn}."
+
+#. CONNECTIVITY:IPV6_ASN
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:360
+#, perl-brace-format
+msgid "Name servers have IPv6 addresses in the following ASs: {asn}."
+msgstr "Сервери імен мають IPv6-адреси в наступних AS: {asn}."
+
+#. CONNECTIVITY:ASN_INFOS_ANNOUNCE_BY
+#: ../lib/Zonemaster/Engine/Test/Connectivity.pm:368
+#, perl-brace-format
+msgid "Name server IP address \"{ns_ip}\" is announced by ASN {asn}."
+msgstr "IP-адреса сервера імен \"{ns_ip}\" анонсована ASN {asn}."
+
+#. CONSISTENCY:CONSISTENCY01
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:169
+msgid "SOA serial number consistency"
+msgstr "Узгодженість серійного номера SOA"
+
+#. CONSISTENCY:CONSISTENCY02
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:173
+msgid "SOA RNAME consistency"
+msgstr "Узгодженість SOA RNAME"
+
+#. CONSISTENCY:CONSISTENCY03
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:177
+msgid "SOA timers consistency"
+msgstr "Узгодженість таймерів SOA"
+
+#. CONSISTENCY:CONSISTENCY04
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:181
+msgid "Name server NS consistency"
+msgstr "Узгодженість NS серверів імен"
+
+#. CONSISTENCY:CONSISTENCY05
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:185
+msgid "Consistency between glue and authoritative data"
+msgstr "Узгодженість між glue-даними та авторитетними даними"
+
+#. CONSISTENCY:CONSISTENCY06
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:189
+msgid "SOA MNAME consistency"
+msgstr "Узгодженість SOA MNAME"
+
+#. CONSISTENCY:ADDRESSES_MATCH
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:193
+msgid "Glue records are consistent between glue and authoritative data."
+msgstr "Glue-записи узгоджуються між glue-даними та авторитетними даними."
+
+#. CONSISTENCY:CHILD_NS_FAILED
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:197
+#, perl-brace-format
+msgid "Unexpected or erroneous reply from {ns}."
+msgstr "Неочікувана або хибна відповідь від {ns}."
+
+#. CONSISTENCY:CHILD_ZONE_LAME
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:201
+msgid "Lame delegation."
+msgstr "Хибне делегування (Lame delegation)."
+
+#. CONSISTENCY:EXTRA_ADDRESS_CHILD
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:205
+#, perl-brace-format
+msgid ""
+"Child has extra nameserver IP address(es) not listed at parent "
+"({ns_ip_list})."
+msgstr ""
+"Дочірня зона має додаткові IP-адреси серверів імен, не вказані в "
+"батьківській ({ns_ip_list})."
+
+#. CONSISTENCY:IN_BAILIWICK_ADDR_MISMATCH
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:209
+#, perl-brace-format
+msgid ""
+"In-bailiwick name server listed at parent has a mismatch between glue data "
+"at parent ({parent_addresses}) and any equivalent address record in child "
+"zone ({zone_addresses})."
+msgstr ""
+"Сервер імен у межах зони, вказаний у батьківській зоні, має невідповідність "
+"між glue-даними в батьківській зоні ({parent_addresses}) та еквівалентними "
+"адресними записами в дочірній зоні ({zone_addresses})."
+
+#. CONSISTENCY:MULTIPLE_NS_SET
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:223
+#, perl-brace-format
+msgid "Found {count} NS set(s)."
+msgstr "Знайдено {count} набір(ів) NS."
+
+#. CONSISTENCY:MULTIPLE_SOA_MNAMES
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:227
+#, perl-brace-format
+msgid "Saw {count} SOA mname."
+msgstr "Виявлено {count} SOA mname."
+
+#. CONSISTENCY:MULTIPLE_SOA_RNAMES
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:231
+#, perl-brace-format
+msgid "Found {count} SOA rname(s)."
+msgstr "Знайдено {count} SOA rname."
+
+#. CONSISTENCY:MULTIPLE_SOA_SERIALS
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:235
+#, perl-brace-format
+msgid "Found {count} SOA serial number(s)."
+msgstr "Знайдено {count} серійних номерів SOA."
+
+#. CONSISTENCY:MULTIPLE_SOA_TIME_PARAMETER_SET
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:239
+#, perl-brace-format
+msgid "Found {count} SOA time parameter set(s)."
+msgstr "Знайдено {count} наборів часових параметрів SOA."
+
+#. CONSISTENCY:NO_RESPONSE
+#. DNSSEC:NO_RESPONSE
+#. ZONE:NO_RESPONSE
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:243
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1712
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:334
+#, perl-brace-format
+msgid "Nameserver {ns} did not respond."
+msgstr "Сервер імен {ns} не відповів."
+
+#. CONSISTENCY:NO_RESPONSE_NS_QUERY
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:247
+#, perl-brace-format
+msgid "No response from nameserver {ns} on NS queries."
+msgstr "Немає відповіді від сервера імен {ns} на NS-запити."
+
+#. CONSISTENCY:NO_RESPONSE_SOA_QUERY
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:251
+#, perl-brace-format
+msgid "No response from nameserver {ns} on SOA queries."
+msgstr "Немає відповіді від сервера імен {ns} на SOA-запити."
+
+#. CONSISTENCY:NS_SET
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:255
+#, perl-brace-format
+msgid "Saw NS set ({nsname_list}) on following nameserver set : {servers}."
+msgstr ""
+"Виявлено набір NS ({nsname_list}) на такому наборі серверів імен : {servers}."
+
+#. CONSISTENCY:ONE_NS_SET
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:259
+#, perl-brace-format
+msgid "A single NS set was found ({nsname_list})."
+msgstr "Знайдено один набір NS ({nsname_list})."
+
+#. CONSISTENCY:ONE_SOA_MNAME
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:263
+#, perl-brace-format
+msgid "A single SOA mname value was seen ({mname})."
+msgstr "Виявлено одне значення SOA mname ({mname})."
+
+#. CONSISTENCY:ONE_SOA_RNAME
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:267
+#, perl-brace-format
+msgid "A single SOA rname value was found ({rname})."
+msgstr "Знайдено одне значення SOA rname ({rname})."
+
+#. CONSISTENCY:ONE_SOA_SERIAL
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:271
+#, perl-brace-format
+msgid "A single SOA serial number was found ({serial})."
+msgstr "Знайдено один серійний номер SOA ({serial})."
+
+#. CONSISTENCY:ONE_SOA_TIME_PARAMETER_SET
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:275
+#, perl-brace-format
+msgid ""
+"A single SOA time parameter set was seen "
+"(REFRESH={refresh},RETRY={retry},EXPIRE={expire},MINIMUM={minimum})."
+msgstr ""
+"Виявлено один набір часових параметрів SOA "
+"(REFRESH={refresh},RETRY={retry},EXPIRE={expire},MINIMUM={minimum})."
+
+#. CONSISTENCY:OUT_OF_BAILIWICK_ADDR_MISMATCH
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:281
+#, perl-brace-format
+msgid ""
+"Out-of-bailiwick name server listed at parent with glue record has a "
+"mismatch between the glue at the parent ({parent_addresses}) and any "
+"equivalent address record found in authoritative zone ({zone_addresses})."
+msgstr ""
+"Сервер імен поза межами зони, вказаний у батьківській з glue-записом, має "
+"невідповідність між glue-записом у батьківській зоні ({parent_addresses}) та "
+"еквівалентними адресними записами, знайденими в авторитетній зоні "
+"({zone_addresses})."
+
+#. CONSISTENCY:SOA_RNAME
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:287
+#, perl-brace-format
+msgid "Found SOA rname {rname} on following nameserver set : {ns_list}."
+msgstr "Знайдено SOA rname {rname} на такому наборі серверів імен : {ns_list}."
+
+#. CONSISTENCY:SOA_SERIAL
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:291
+#, perl-brace-format
+msgid "Saw SOA serial number {serial} on following nameserver set : {ns_list}."
+msgstr ""
+"Виявлено серійний номер SOA {serial} на такому наборі серверів імен : "
+"{ns_list}."
+
+#. CONSISTENCY:SOA_SERIAL_VARIATION
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:295
+#, perl-brace-format
+msgid ""
+"Difference between the smaller serial ({serial_min}) and the bigger one "
+"({serial_max}) is greater than the maximum allowed ({max_variation})."
+msgstr ""
+"Різниця між меншим серійним номером ({serial_min}) та більшим ({serial_max}) "
+"перевищує максимально допустиму ({max_variation})."
+
+#. CONSISTENCY:SOA_TIME_PARAMETER_SET
+#: ../lib/Zonemaster/Engine/Test/Consistency.pm:300
+#, perl-brace-format
+msgid ""
+"Saw SOA time parameter set (REFRESH={refresh}, RETRY={retry}, "
+"EXPIRE={expire}, MINIMUM={minimum}) on following nameserver set : {ns_list}."
+msgstr ""
+"Виявлено набір часових параметрів SOA (REFRESH={refresh}, RETRY={retry}, "
+"EXPIRE={expire}, MINIMUM={minimum}) на такому наборі серверів імен : "
+"{ns_list}."
+
+#. DNSSEC:DNSSEC01
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:655
+msgid "Legal values for the DS hash digest algorithm"
+msgstr "Допустимі значення алгоритму хешування DS"
+
+#. DNSSEC:DNSSEC02
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:659
+msgid "DS must match a valid DNSKEY in the child zone"
+msgstr "DS має відповідати дійсному DNSKEY у дочірній зоні"
+
+#. DNSSEC:DNSSEC03
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:663
+msgid "Verify NSEC3 parameters"
+msgstr "Перевірка параметрів NSEC3"
+
+#. DNSSEC:DNSSEC04
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:667
+msgid "Check for too short or too long RRSIG lifetimes"
+msgstr "Перевірка на наявність занадто короткого чи довгого часу життя RRSIG"
+
+#. DNSSEC:DNSSEC05
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:671
+msgid "Check for invalid DNSKEY algorithms"
+msgstr "Перевірка на наявність недійсних алгоритмів DNSKEY"
+
+#. DNSSEC:DNSSEC06
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:675
+msgid "Verify DNSSEC additional processing"
+msgstr "Перевірка додаткової обробки DNSSEC"
+
+#. DNSSEC:DNSSEC07
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:679
+msgid "DNSSEC signed zone and DS in parent for signed zone"
+msgstr "Підписана DNSSEC зона та DS-запис у батьківській зоні"
+
+#. DNSSEC:DNSSEC08
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:683
+msgid "Valid RRSIG for DNSKEY"
+msgstr "Дійсний RRSIG для DNSKEY"
+
+#. DNSSEC:DNSSEC09
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:687
+msgid "RRSIG(SOA) must be valid and created by a valid DNSKEY"
+msgstr "RRSIG(SOA) має бути дійсним і створеним за допомогою дійсного DNSKEY"
+
+#. DNSSEC:DNSSEC10
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:691
+msgid "Zone contains NSEC or NSEC3 records"
+msgstr "Зона містить записи NSEC або NSEC3"
+
+#. DNSSEC:DNSSEC11
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:695
+msgid "DS in delegation requires signed zone"
+msgstr "DS у делегуванні вимагає підписаної зони"
+
+#. DNSSEC:DNSSEC12
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:699
+msgid "Test for DNSSEC Algorithm Completeness"
+msgstr "Перевірка повноти алгоритму DNSSEC"
+
+#. DNSSEC:DNSSEC13
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:703
+msgid "All DNSKEY algorithms used to sign the zone"
+msgstr "Усі алгоритми DNSKEY, що використовуються для підписання зони"
+
+#. DNSSEC:DNSSEC14
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:707
+msgid "Check for valid RSA DNSKEY key size"
+msgstr "Перевірка на дійсний розмір ключа RSA DNSKEY"
+
+#. DNSSEC:DNSSEC15
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:711
+msgid "Existence of CDS and CDNSKEY"
+msgstr "Наявність CDS та CDNSKEY"
+
+#. DNSSEC:DNSSEC16
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:715
+msgid "Validate CDS"
+msgstr "Перевірка CDS"
+
+#. DNSSEC:DNSSEC17
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:719
+msgid "Validate CDNSKEY"
+msgstr "Перевірка CDNSKEY"
+
+#. DNSSEC:DNSSEC18
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:723
+msgid "Validate trust from DS to CDS and CDNSKEY"
+msgstr "Перевірка довіри від DS до CDS та CDNSKEY"
+
+#. DNSSEC:DNSKEY_SMALLER_THAN_REC
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:727
+#, perl-brace-format
+msgid ""
+"DNSKEY with tag {keytag} and using algorithm {algo_num} ({algo_descr}) has a "
+"size ({keysize}) smaller than the recommended one ({keysizerec})."
+msgstr ""
+"DNSKEY з тегом {keytag} і алгоритмом {algo_num} ({algo_descr}) має розмір "
+"({keysize}), менший за рекомендований ({keysizerec})."
+
+#. DNSSEC:DNSKEY_TOO_SMALL_FOR_ALGO
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:734
+#, perl-brace-format
+msgid ""
+"DNSKEY with tag {keytag} and using algorithm {algo_num} ({algo_descr}) has a "
+"size ({keysize}) smaller than the minimum one ({keysizemin})."
+msgstr ""
+"DNSKEY з тегом {keytag} і алгоритмом {algo_num} ({algo_descr}) має розмір "
+"({keysize}), менший за мінімальний ({keysizemin})."
+
+#. DNSSEC:DNSKEY_TOO_LARGE_FOR_ALGO
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:741
+#, perl-brace-format
+msgid ""
+"DNSKEY with tag {keytag} and using algorithm {algo_num} ({algo_descr}) has a "
+"size ({keysize}) larger than the maximum one ({keysizemax})."
+msgstr ""
+"DNSKEY з тегом {keytag} і алгоритмом {algo_num} ({algo_descr}) має розмір "
+"({keysize}), більший за максимальний ({keysizemax})."
+
+#. DNSSEC:DS01_DS_ALGO_2_MISSING
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:748
+#, perl-brace-format
+msgid ""
+"There is a DS record with keytag {keytag}. A DS record using digest "
+"algorithm 2 (SHA-256) is missing. Fetched from parent name servers "
+"\"{ns_list}\"."
+msgstr ""
+"Існує запис DS з тегом {keytag}. Запис DS, що використовує алгоритм "
+"хешування 2 (SHA-256), відсутній. Отримано від батьківських серверів імен "
+"\"{ns_list}\"."
+
+#. DNSSEC:DS01_DS_ALGO_DEPRECATED
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:754
+#, perl-brace-format
+msgid ""
+"The DS record with keytag {keytag} uses a deprecated digest algorithm "
+"{ds_algo_num} ({ds_algo_descr}). Fetched from parent name servers \"{ns_list}"
+"\"."
+msgstr ""
+"Запис DS з тегом {keytag} використовує застарілий алгоритм хешування "
+"{ds_algo_num} ({ds_algo_descr}). Отримано від батьківських серверів імен "
+"\"{ns_list}\"."
+
+#. DNSSEC:DS01_DS_ALGO_NOT_DS
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:760
+#, perl-brace-format
+msgid ""
+"The DS record with keytag {keytag} uses a digest algorithm {ds_algo_num} "
+"({ds_algo_descr}) not meant for DS records. Fetched from parent name servers "
+"\"{ns_list}\"."
+msgstr ""
+"Запис DS з тегом {keytag} використовує алгоритм хешування {ds_algo_num} "
+"({ds_algo_descr}), не призначений для записів DS. Отримано від батьківських "
+"серверів імен \"{ns_list}\"."
+
+#. DNSSEC:DS01_DS_ALGO_PRIVATE
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:766
+#, perl-brace-format
+msgid ""
+"The DS record with keytag {keytag} uses a digest algorithm {ds_algo_num} for "
+"private use. Fetched from parent name servers \"{ns_list}\"."
+msgstr ""
+"Запис DS з тегом {keytag} використовує алгоритм хешування {ds_algo_num} для "
+"приватного використання. Отримано від батьківських серверів імен \"{ns_list}"
+"\"."
+
+#. DNSSEC:DS01_DS_ALGO_RESERVED
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:772
+#, perl-brace-format
+msgid ""
+"The DS record with keytag {keytag} uses a reserved digest algorithm "
+"{ds_algo_num} on name servers \"{ns_list}\"."
+msgstr ""
+"Запис DS з тегом {keytag} використовує зарезервований алгоритм хешування "
+"{ds_algo_num} на серверах імен \"{ns_list}\"."
+
+#. DNSSEC:DS01_DS_ALGO_UNASSIGNED
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:778
+#, perl-brace-format
+msgid ""
+"The DS record with keytag {keytag} uses an unassigned digest algorithm "
+"{ds_algo_num} on parent name servers \"{ns_list}\"."
+msgstr ""
+"Запис DS з тегом {keytag} використовує непризначений алгоритм хешування "
+"{ds_algo_num} на батьківських серверах імен \"{ns_list}\"."
+
+#. DNSSEC:DS01_NO_RESPONSE
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:784
+#, perl-brace-format
+msgid ""
+"No response or error in response from all parent name servers on the DS "
+"query. Name servers are \"{ns_list}\"."
+msgstr ""
+"Немає відповіді або помилка у відповіді від усіх батьківських серверів імен "
+"на DS-запит. Сервери імен: \"{ns_list}\"."
+
+#. DNSSEC:DS01_PARENT_SERVER_NO_DS
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:790
+#, perl-brace-format
+msgid ""
+"The following name servers do not provide DS record or have not been "
+"properly configured. Fetched from parent name servers \"{ns_list}\"."
+msgstr ""
+"Наступні сервери імен не надають запис DS або не були належним чином "
+"налаштовані. Отримано від батьківських серверів імен \"{ns_list}\"."
+
+#. DNSSEC:DS01_PARENT_ZONE_NO_DS
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:796
+#, perl-brace-format
+msgid ""
+"The parent zone provides no DS records for the child zone. Fetched from "
+"parent name servers \"{ns_list}\"."
+msgstr ""
+"Батьківська зона не надає записів DS для дочірньої зони. Отримано від "
+"батьківських серверів імен \"{ns_list}\"."
+
+#. DNSSEC:DS01_ROOT_N_NO_UNDEL_DS
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:802
+msgid ""
+"Tested zone is the root zone, but no undelegated DS has been provided. DS is "
+"not tested."
+msgstr ""
+"Зона, що тестується, є кореневою зоною, але не було надано неделегованого "
+"DS. DS не протестовано."
+
+#. DNSSEC:DS01_UNDEL_N_NO_UNDEL_DS
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:807
+msgid ""
+"Tested zone is undelegated, but no undelegated DS has been provided. DS is "
+"not tested."
+msgstr ""
+"Тестована зона не делегована, але не було надано неделегованого DS. DS не "
+"протестовано."
+
+#. DNSSEC:DS02_ALGO_NOT_SUPPORTED_BY_ZM
+#. DNSSEC:DS08_ALGO_NOT_SUPPORTED_BY_ZM
+#. DNSSEC:DS09_ALGO_NOT_SUPPORTED_BY_ZM
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:812
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1114
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1153
+#, perl-brace-format
+msgid ""
+"DNSKEY with tag {keytag} uses unsupported algorithm {algo_num} "
+"({algo_mnemo}) by this installation of Zonemaster. Fetched from the "
+"nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"DNSKEY з тегом {keytag} використовує непідтримуваний алгоритм {algo_num} "
+"({algo_mnemo}) цією інсталяцією Zonemaster. Отримано від серверів імен з IP-"
+"адресами \"{ns_ip_list}\"."
+
+#. DNSSEC:DS02_DNSKEY_NOT_FOR_ZONE_SIGNING
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:819
+#, perl-brace-format
+msgid ""
+"Flags field of DNSKEY record with tag {keytag} has not ZONE bit set although "
+"DS with same tag is present in parent. Fetched from the nameservers with IP "
+"addresses \"{ns_ip_list}\"."
+msgstr ""
+"Поле прапорців запису DNSKEY з тегом {keytag} не має встановленого біта "
+"ZONE, хоча DS з тим самим тегом присутній у батьківській. Отримано від "
+"серверів імен з IP-адресами \"{ns_ip_list}\"."
+
+#. DNSSEC:DS02_DNSKEY_NOT_SEP
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:826
+#, perl-brace-format
+msgid ""
+"Flags field of DNSKEY record with tag {keytag} has not SEP bit set although "
+"DS with same tag is present in parent. Fetched from the nameservers with IP "
+"addresses \"{ns_ip_list}\"."
+msgstr ""
+"Поле прапорців запису DNSKEY з тегом {keytag} не має встановленого біта SEP, "
+"хоча DS з тим самим тегом присутній у батьківській. Отримано від серверів "
+"імен з IP-адресами \"{ns_ip_list}\"."
+
+#. DNSSEC:DS02_DNSKEY_NOT_SIGNED_BY_ANY_DS
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:833
+#, perl-brace-format
+msgid ""
+"The DNSKEY RRset has not been signed by any DNSKEY matched by a DS record. "
+"Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"DNSKEY RRset не підписано жодним DNSKEY, що відповідає запису DS. Отримано "
+"від серверів імен з IP-адресами \"{ns_ip_list}\"."
+
+#. DNSSEC:DS02_NO_DNSKEY_FOR_DS
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:839
+#, perl-brace-format
+msgid ""
+"The DNSKEY record with tag {keytag} that the DS refers to does not exist in "
+"the DNSKEY RRset. Fetched from the nameservers with IP \"{ns_ip_list}\"."
+msgstr ""
+"Запис DNSKEY з тегом {keytag}, на який посилається DS, не існує в DNSKEY "
+"RRset. Отримано від серверів імен з IP \"{ns_ip_list}\"."
+
+#. DNSSEC:DS02_NO_MATCHING_DNSKEY_RRSIG
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:846
+#, perl-brace-format
+msgid ""
+"The DNSKEY RRset is not signed by the DNSKEY with tag {keytag} that the DS "
+"record refers to. Fetched from the nameservers with IP \"{ns_ip_list}\"."
+msgstr ""
+"DNSKEY RRset не підписано DNSKEY з тегом {keytag}, на який посилається запис "
+"DS. Отримано від серверів імен з IP \"{ns_ip_list}\"."
+
+#. DNSSEC:DS02_NO_MATCH_DS_DNSKEY
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:853
+#, perl-brace-format
+msgid ""
+"The DS record does not match the DNSKEY with tag {keytag} by algorithm or "
+"digest. Fetched from the nameservers with IP \"{ns_ip_list}\"."
+msgstr ""
+"Запис DS не відповідає DNSKEY з тегом {keytag} за алгоритмом або хешем. "
+"Отримано від серверів імен з IP \"{ns_ip_list}\"."
+
+#. DNSSEC:DS02_NO_VALID_DNSKEY_FOR_ANY_DS
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:859
+#, perl-brace-format
+msgid ""
+"There is no valid DNSKEY matched by any of the DS records. Fetched from the "
+"nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"Немає дійсного DNSKEY, що відповідає будь-якому із записів DS. Отримано від "
+"серверів імен з IP-адресами \"{ns_ip_list}\"."
+
+#. DNSSEC:DS02_RRSIG_NOT_VALID_BY_DNSKEY
+#. DNSSEC:DS08_RRSIG_NOT_VALID_BY_DNSKEY
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:865
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1146
+#, perl-brace-format
+msgid ""
+"The DNSKEY RRset is signed with an RRSIG with tag {keytag} which cannot be "
+"validated by the matching DNSKEY. Fetched from the nameservers with IP "
+"addresses \"{ns_ip_list}\"."
+msgstr ""
+"DNSKEY RRset підписано RRSIG з тегом {keytag}, який неможливо перевірити "
+"відповідним DNSKEY. Отримано від серверів імен з IP-адресами \"{ns_ip_list}"
+"\"."
+
+#. DNSSEC:DS03_ERROR_RESPONSE_NSEC_QUERY
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:872
+#, perl-brace-format
+msgid ""
+"The following servers give erroneous response to NSEC query. Fetched from "
+"name servers \"{ns_list}\"."
+msgstr ""
+"Наступні сервери дають хибну відповідь на NSEC-запит. Отримано від серверів "
+"імен \"{ns_list}\"."
+
+#. DNSSEC:DS03_ERR_MULT_NSEC3
+#. DNSSEC:DS10_ERR_MULT_NSEC3
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:876
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1204
+#, perl-brace-format
+msgid ""
+"Multiple NSEC3 records when one is expected. Fetched from name servers "
+"\"{ns_list}\"."
+msgstr ""
+"Декілька записів NSEC3, тоді як очікувався один. Отримано від серверів імен "
+"\"{ns_list}\"."
+
+#. DNSSEC:DS03_ILLEGAL_HASH_ALGO
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:880
+#, perl-brace-format
+msgid ""
+"The following servers respond with an illegal hash algorithm for NSEC3 "
+"({algo_num}). Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"Наступні сервери відповідають недійсним алгоритмом хешування для NSEC3 "
+"({algo_num}). Отримано від серверів імен \"{ns_list}\"."
+
+#. DNSSEC:DS03_ILLEGAL_ITERATION_VALUE
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:886
+#, perl-brace-format
+msgid ""
+"The following servers respond with the NSEC3 iteration value {int}. The "
+"recommended practice is to set this value to 0. Fetched from name servers "
+"\"{ns_list}\"."
+msgstr ""
+"Наступні сервери відповідають значенням ітерації NSEC3 {int}. Рекомендована "
+"практика - встановлювати це значення на 0. Отримано від серверів імен "
+"\"{ns_list}\"."
+
+#. DNSSEC:DS03_ILLEGAL_SALT_LENGTH
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:893
+#, perl-brace-format
+msgid ""
+"The following servers respond with a non-empty salt in NSEC3 ({int} octets). "
+"The recommended practice is to use an empty salt. Fetched from name servers "
+"\"{ns_list}\"."
+msgstr ""
+"Наступні сервери відповідають непорожньою сіллю в NSEC3 ({int} октетів). "
+"Рекомендована практика - використовувати порожню сіль. Отримано від серверів "
+"імен \"{ns_list}\"."
+
+#. DNSSEC:DS03_INCONSISTENT_HASH_ALGO
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:900
+msgid ""
+"Inconsistent hash algorithm in NSEC3 in responses for the child zone from "
+"different name servers."
+msgstr ""
+"Неузгоджений алгоритм хешування в NSEC3 у відповідях для дочірньої зони від "
+"різних серверів імен."
+
+#. DNSSEC:DS03_INCONSISTENT_ITERATION
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:904
+msgid ""
+"Inconsistent NSEC3 iteration value in responses for the child zone from "
+"different name servers."
+msgstr ""
+"Неузгоджене значення ітерації NSEC3 у відповідях для дочірньої зони від "
+"різних серверів імен."
+
+#. DNSSEC:DS03_INCONSISTENT_NSEC3_FLAGS
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:908
+msgid ""
+"Inconsistent NSEC3 flag list in responses for the child zone from different "
+"name servers."
+msgstr ""
+"Неузгоджений список прапорців NSEC3 у відповідях для дочірньої зони від "
+"різних серверів імен."
+
+#. DNSSEC:DS03_INCONSISTENT_SALT_LENGTH
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:912
+msgid ""
+"Inconsistent salt length in NSEC3 in responses for the child zone from "
+"different name servers."
+msgstr ""
+"Неузгоджена довжина солі в NSEC3 у відповідях для дочірньої зони від різних "
+"серверів імен."
+
+#. DNSSEC:DS03_LEGAL_EMPTY_SALT
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:916
+#, perl-brace-format
+msgid ""
+"The following servers respond with a legal empty salt in NSEC3. Fetched from "
+"name servers \"{ns_list}\"."
+msgstr ""
+"Наступні сервери відповідають допустимою порожньою сіллю в NSEC3. Отримано "
+"від серверів імен \"{ns_list}\"."
+
+#. DNSSEC:DS03_LEGAL_HASH_ALGO
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:922
+#, perl-brace-format
+msgid ""
+"The following servers respond with a legal hash algorithm in NSEC3. Fetched "
+"from name servers \"{ns_list}\"."
+msgstr ""
+"Наступні сервери відповідають допустимим алгоритмом хешування в NSEC3. "
+"Отримано від серверів імен \"{ns_list}\"."
+
+#. DNSSEC:DS03_LEGAL_ITERATION_VALUE
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:928
+#, perl-brace-format
+msgid ""
+"The following servers respond with NSEC3 iteration value set to zero (as "
+"recommended). Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"Наступні сервери відповідають значенням ітерації NSEC3, встановленим на нуль "
+"(як рекомендовано). Отримано від серверів імен \"{ns_list}\"."
+
+#. DNSSEC:DS03_NO_DNSSEC_SUPPORT
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:934
+#, perl-brace-format
+msgid ""
+"The zone is not DNSSEC signed or not properly DNSSEC signed. Testing for "
+"NSEC3 has been skipped. Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"Зона не підписана або неправильно DNSSEC підписана. Тестування для NSEC3 "
+"пропущено. Отримано від серверів імен \"{ns_list}\"."
+
+#. DNSSEC:DS03_NO_NSEC3
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:940
+#, perl-brace-format
+msgid ""
+"The zone does not use NSEC3. Testing for NSEC3 has been skipped. Fetched "
+"from name servers \"{ns_list}\"."
+msgstr ""
+"Зона не використовує NSEC3. Тестування для NSEC3 пропущено. Отримано від "
+"серверів імен \"{ns_list}\"."
+
+#. DNSSEC:DS03_NO_RESPONSE_NSEC_QUERY
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:946
+#, perl-brace-format
+msgid ""
+"The following servers do not respond to NSEC query. Fetched from name "
+"servers \"{ns_list}\"."
+msgstr ""
+"Наступні сервери не відповідають на NSEC-запит. Отримано від серверів імен "
+"\"{ns_list}\"."
+
+#. DNSSEC:DS03_NSEC3_OPT_OUT_DISABLED
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:950
+#, perl-brace-format
+msgid ""
+"The following servers respond with NSEC3 opt-out disabled (as recommended). "
+"Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"Наступні сервери відповідають з вимкненим NSEC3 opt-out (як рекомендовано). "
+"Отримано від серверів імен \"{ns_list}\"."
+
+#. DNSSEC:DS03_NSEC3_OPT_OUT_ENABLED_NON_TLD
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:956
+#, perl-brace-format
+msgid ""
+"The following servers respond with NSEC3 opt-out enabled. The recommended "
+"practice is to disable opt-out. Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"Наступні сервери відповідають з увімкненим NSEC3 opt-out. Рекомендована "
+"практика - вимикати opt-out. Отримано від серверів імен \"{ns_list}\"."
+
+#. DNSSEC:DS03_NSEC3_OPT_OUT_ENABLED_TLD
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:963
+#, perl-brace-format
+msgid ""
+"The following servers respond with NSEC3 opt-out enabled. Fetched from name "
+"servers \"{ns_list}\"."
+msgstr ""
+"Наступні сервери відповідають з увімкненим NSEC3 opt-out. Отримано від "
+"серверів імен \"{ns_list}\"."
+
+#. DNSSEC:DS03_SERVER_NO_DNSSEC_SUPPORT
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:969
+#, perl-brace-format
+msgid ""
+"The following name servers do not support DNSSEC or have not been properly "
+"configured. Testing for NSEC3 has been skipped on those servers. Fetched "
+"from name servers \"{ns_list}\"."
+msgstr ""
+"Наступні сервери імен не підтримують DNSSEC або не були належним чином "
+"налаштовані. Тестування NSEC3 на цих серверах пропущено. Отримано від "
+"серверів імен \"{ns_list}\"."
+
+#. DNSSEC:DS03_SERVER_NO_NSEC3
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:976
+#, perl-brace-format
+msgid ""
+"The following name servers do not use NSEC3, but others do. Testing for "
+"NSEC3 has been skipped on the following servers. Fetched from name servers "
+"\"{ns_list}\"."
+msgstr ""
+"Наступні сервери імен не використовують NSEC3, але інші використовують. "
+"Тестування для NSEC3 пропущено на наступних серверах. Отримано від серверів "
+"імен \"{ns_list}\"."
+
+#. DNSSEC:DS03_UNASSIGNED_FLAG_USED
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:983
+#, perl-brace-format
+msgid ""
+"The following servers respond with an NSEC3 record where an unassigned flag "
+"is used (bit {int}). Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"Наступні сервери відповідають записом NSEC3, у якому використовується "
+"непризначений прапорець (біт {int}). Отримано від серверів імен \"{ns_list}"
+"\"."
+
+#. DNSSEC:DS05_ALGO_DEPRECATED
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:989
+#, perl-brace-format
+msgid ""
+"The DNSKEY with tag {keytag} uses deprecated algorithm number {algo_num} "
+"(\"{algo_descr}\", {algo_mnemo}). Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"DNSKEY з тегом {keytag} використовує застарілий номер алгоритму {algo_num} "
+"(\"{algo_descr}\", {algo_mnemo}). Отримано від серверів імен \"{ns_list}\"."
+
+#. DNSSEC:DS05_ALGO_NOT_RECOMMENDED
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:995
+#, perl-brace-format
+msgid ""
+"The DNSKEY with tag {keytag} uses unrecommended algorithm number {algo_num} "
+"(\"{algo_descr}\", {algo_mnemo}). Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"DNSKEY з тегом {keytag} використовує нерекомендований номер алгоритму "
+"{algo_num} (\"{algo_descr}\", {algo_mnemo}). Отримано від серверів імен "
+"\"{ns_list}\"."
+
+#. DNSSEC:DS05_ALGO_NOT_ZONE_SIGN
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1001
+#, perl-brace-format
+msgid ""
+"The DNSKEY with tag {keytag} uses algorithm number {algo_num} (\"{algo_descr}"
+"\", {algo_mnemo}) which is not meant for zone signing. Fetched from name "
+"servers \"{ns_list}\"."
+msgstr ""
+"DNSKEY з тегом {keytag} використовує номер алгоритму {algo_num} "
+"(\"{algo_descr}\", {algo_mnemo}), який не призначений для підписання зони. "
+"Отримано від серверів імен \"{ns_list}\"."
+
+#. DNSSEC:DS05_ALGO_OK
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1007
+#, perl-brace-format
+msgid ""
+"The DNSKEY with tag {keytag} uses algorithm number {algo_num} (\"{algo_descr}"
+"\", {algo_mnemo}). Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"DNSKEY з тегом {keytag} використовує номер алгоритму {algo_num} "
+"(\"{algo_descr}\", {algo_mnemo}). Отримано від серверів імен \"{ns_list}\"."
+
+#. DNSSEC:DS05_ALGO_PRIVATE
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1013
+#, perl-brace-format
+msgid ""
+"The DNSKEY with tag {keytag} uses algorithm number {algo_num} which is "
+"reserved for private use. Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"DNSKEY з тегом {keytag} використовує номер алгоритму {algo_num}, який "
+"зарезервовано для приватного використання. Отримано від серверів імен "
+"\"{ns_list}\"."
+
+#. DNSSEC:DS05_ALGO_RESERVED
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1019
+#, perl-brace-format
+msgid ""
+"The DNSKEY with tag {keytag} uses reserved algorithm number {algo_num}. "
+"Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"DNSKEY з тегом {keytag} використовує зарезервований номер алгоритму "
+"{algo_num}. Отримано від серверів імен \"{ns_list}\"."
+
+#. DNSSEC:DS05_ALGO_UNASSIGNED
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1025
+#, perl-brace-format
+msgid ""
+"The DNSKEY with tag {keytag} uses unassigned algorithm number {algo_num}. "
+"Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"DNSKEY з тегом {keytag} використовує непризначений номер алгоритму "
+"{algo_num}. Отримано від серверів імен \"{ns_list}\"."
+
+#. DNSSEC:DS05_NO_RESPONSE
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1031
+#, perl-brace-format
+msgid ""
+"No response or error in response from all name servers on the DNSKEY query. "
+"Failing name servers: \"{ns_list}\"."
+msgstr ""
+"Немає відповіді або помилка у відповіді від усіх серверів імен на DNSKEY-"
+"запит. Сервери з помилками: \"{ns_list}\"."
+
+#. DNSSEC:DS05_SERVER_NO_DNSSEC
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1036
+#, perl-brace-format
+msgid ""
+"Some name servers do not support DNSSEC or have not been properly "
+"configured. DNSKEY cannot be tested on those servers. Fetched from name "
+"servers \"{ns_list}\"."
+msgstr ""
+"Деякі сервери імен не підтримують DNSSEC або не були належним чином "
+"налаштовані. DNSKEY неможливо протестувати на цих серверах. Отримано від "
+"серверів імен \"{ns_list}\"."
+
+#. DNSSEC:DS05_ZONE_NO_DNSSEC
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1042
+#, perl-brace-format
+msgid ""
+"The zone is not DNSSEC signed or not properly DNSSEC signed. DNSKEY cannot "
+"be tested. Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"Зона не підписана або неправильно DNSSEC підписана. DNSKEY неможливо "
+"протестувати. Отримано від серверів імен \"{ns_list}\"."
+
+#. DNSSEC:DS07_DS_FOR_SIGNED_ZONE
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1048
+msgid "The parent zone has DS record or records for the signed child zone."
+msgstr ""
+"Батьківська зона має запис або записи DS для підписаної дочірньої зони."
+
+#. DNSSEC:DS07_DS_ON_PARENT_SERVER
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1052
+#, perl-brace-format
+msgid ""
+"The following parent name servers respond with DS record or records for the "
+"child zone. Name servers: \"{ns_list}\"."
+msgstr ""
+"Наступні батьківські сервери імен відповідають записом або записами DS для "
+"дочірньої зони. Сервери імен: \"{ns_list}\"."
+
+#. DNSSEC:DS07_INCONSISTENT_DS
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1058
+msgid ""
+"Inconsistent responses from parent name servers. Some include DS, others do "
+"not."
+msgstr ""
+"Неузгоджені відповіді від батьківських серверів імен. Деякі містять DS, інші "
+"- ні."
+
+#. DNSSEC:DS07_INCONSISTENT_SIGNED
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1062
+msgid ""
+"Inconsistent responses from name servers. Some include signed responses, "
+"others do not."
+msgstr ""
+"Неузгоджені відповіді від серверів імен. Деякі містять підписані відповіді, "
+"інші - ні."
+
+#. DNSSEC:DS07_NON_AUTH_RESPONSE_DNSKEY
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1066
+#, perl-brace-format
+msgid ""
+"The following name servers give a non authoritative response on DNSKEY query "
+"with DO bit set. Name servers: \"{ns_list}\"."
+msgstr ""
+"Наступні сервери імен дають неавторитетну відповідь на DNSKEY-запит із "
+"встановленим бітом DO. Сервери імен: \"{ns_list}\"."
+
+#. DNSSEC:DS07_NOT_SIGNED
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1072
+msgid "The zone is not signed."
+msgstr "Зона не підписана."
+
+#. DNSSEC:DS07_NOT_SIGNED_ON_SERVER
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1076
+#, perl-brace-format
+msgid ""
+"The following name servers respond with no DNSKEY (unsigned child zone). "
+"Name servers: \"{ns_list}\"."
+msgstr ""
+"Наступні сервери імен відповідають без DNSKEY (непідписана дочірня зона). "
+"Сервери імен: \"{ns_list}\"."
+
+#. DNSSEC:DS07_NO_DS_ON_PARENT_SERVER
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1082
+#, perl-brace-format
+msgid ""
+"The following parent name servers respond without DS record for the child "
+"zone. Name servers: \"{ns_list}\"."
+msgstr ""
+"Наступні батьківські сервери імен відповідають без запису DS для дочірньої "
+"зони. Сервери імен: \"{ns_list}\"."
+
+#. DNSSEC:DS07_NO_DS_FOR_SIGNED_ZONE
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1088
+msgid "The parent zone has no DS record for the signed child zone."
+msgstr "Батьківська зона не має запису DS для підписаної дочірньої зони."
+
+#. DNSSEC:DS07_NO_RESPONSE_DNSKEY
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1092
+#, perl-brace-format
+msgid ""
+"The following name servers do not respond on DNSKEY query with DO bit set. "
+"Name servers: \"{ns_list}\"."
+msgstr ""
+"Наступні сервери імен не відповідають на DNSKEY-запит із встановленим бітом "
+"DO. Сервери імен: \"{ns_list}\"."
+
+#. DNSSEC:DS07_SIGNED
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1098
+msgid "The zone is signed."
+msgstr "Зона підписана."
+
+#. DNSSEC:DS07_SIGNED_ON_SERVER
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1102
+#, perl-brace-format
+msgid ""
+"The following name servers respond with DNSKEY (signed child zone). Name "
+"servers: \"{ns_list}\"."
+msgstr ""
+"Наступні сервери імен відповідають з DNSKEY (підписана дочірня зона). "
+"Сервери імен: \"{ns_list}\"."
+
+#. DNSSEC:DS07_UNEXP_RCODE_RESP_DNSKEY
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1108
+#, perl-brace-format
+msgid ""
+"The following name servers respond with RCODE \"{rcode}\" instead of "
+"expected \"NOERROR\" on DNSKEY query with DO bit set. Name servers: "
+"\"{ns_list}\"."
+msgstr ""
+"Наступні сервери імен відповідають з RCODE \"{rcode}\" замість очікуваного "
+"\"NOERROR\" на DNSKEY-запит із встановленим бітом DO. Сервери імен: "
+"\"{ns_list}\"."
+
+#. DNSSEC:DS08_DNSKEY_RRSIG_EXPIRED
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1121
+#, perl-brace-format
+msgid ""
+"RRSIG with keytag {keytag} and covering type DNSKEY has already expired. "
+"Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"Термін дії RRSIG з тегом {keytag} і типом покриття DNSKEY вже закінчився. "
+"Отримано від серверів імен з IP-адресами \"{ns_ip_list}\"."
+
+#. DNSSEC:DS08_DNSKEY_RRSIG_NOT_YET_VALID
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1127
+#, perl-brace-format
+msgid ""
+"RRSIG with keytag {keytag} and covering type DNSKEY has inception date in "
+"the future. Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"RRSIG з тегом {keytag} і типом покриття DNSKEY має дату початку в "
+"майбутньому. Отримано від серверів імен з IP-адресами \"{ns_ip_list}\"."
+
+#. DNSSEC:DS08_MISSING_RRSIG_IN_RESPONSE
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1133
+#, perl-brace-format
+msgid ""
+"The DNSKEY RRset is not signed, which is against expectation. Fetched from "
+"the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"DNSKEY RRset не підписано, що суперечить очікуванням. Отримано від серверів "
+"імен з IP-адресами \"{ns_ip_list}\"."
+
+#. DNSSEC:DS08_NO_MATCHING_DNSKEY
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1139
+#, perl-brace-format
+msgid ""
+"The DNSKEY RRset is signed with an RRSIG with tag {keytag} which does not "
+"match any DNSKEY record. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"DNSKEY RRset підписано RRSIG з тегом {keytag}, який не відповідає жодному "
+"запису DNSKEY. Отримано від серверів імен з IP-адресами \"{ns_ip_list}\"."
+
+#. DNSSEC:DS09_MISSING_RRSIG_IN_RESPONSE
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1160
+#, perl-brace-format
+msgid ""
+"The SOA RRset is not signed, which is against expectation. Fetched from the "
+"nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"SOA RRset не підписано, що суперечить очікуванням. Отримано від серверів "
+"імен з IP-адресами \"{ns_ip_list}\"."
+
+#. DNSSEC:DS09_NO_MATCHING_DNSKEY
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1166
+#, perl-brace-format
+msgid ""
+"The SOA RRset is signed with an RRSIG with tag {keytag} which does not match "
+"any DNSKEY record. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"SOA RRset підписано RRSIG з тегом {keytag}, який не відповідає жодному "
+"запису DNSKEY. Отримано від серверів імен з IP-адресами \"{ns_ip_list}\"."
+
+#. DNSSEC:DS09_RRSIG_NOT_VALID_BY_DNSKEY
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1173
+#, perl-brace-format
+msgid ""
+"The SOA RRset is signed with an RRSIG with tag {keytag} which cannot be "
+"validated by the matching DNSKEY. Fetched from the nameservers with IP "
+"addresses \"{ns_ip_list}\"."
+msgstr ""
+"SOA RRset підписано RRSIG з тегом {keytag}, який неможливо перевірити "
+"відповідним DNSKEY. Отримано від серверів імен з IP-адресами \"{ns_ip_list}"
+"\"."
+
+#. DNSSEC:DS09_SOA_RRSIG_EXPIRED
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1180
+#, perl-brace-format
+msgid ""
+"RRSIG with keytag {keytag} and covering type SOA has already expired. "
+"Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"Термін дії RRSIG з тегом {keytag} і типом покриття SOA вже закінчився. "
+"Отримано від серверів імен з IP-адресами \"{ns_ip_list}\"."
+
+#. DNSSEC:DS09_SOA_RRSIG_NOT_YET_VALID
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1186
+#, perl-brace-format
+msgid ""
+"RRSIG with keytag {keytag} and covering type SOA has inception date in the "
+"future. Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"RRSIG з тегом {keytag} і типом покриття SOA має дату початку в майбутньому. "
+"Отримано від серверів імен з IP-адресами \"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_ALGO_NOT_SUPPORTED_BY_ZM
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1192
+#, perl-brace-format
+msgid ""
+"DNSKEY with tag {keytag} uses unsupported algorithm {algo_num} "
+"({algo_mnemo}) by this installation of Zonemaster. Fetched from name servers "
+"\"{ns_ip_list}\"."
+msgstr ""
+"DNSKEY з тегом {keytag} використовує непідтримуваний алгоритм {algo_num} "
+"({algo_mnemo}) цією інсталяцією Zonemaster. Отримано від серверів імен "
+"\"{ns_ip_list}\"."
+
+#. DNSSEC:DS10_ERR_MULT_NSEC
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1199
+#, perl-brace-format
+msgid ""
+"Multiple NSEC records when one is expected. Fetched from name servers "
+"\"{ns_list}\"."
+msgstr ""
+"Декілька записів NSEC, тоді як очікувався один. Отримано від серверів імен "
+"\"{ns_list}\"."
+
+#. DNSSEC:DS10_EXPECTED_NSEC_NSEC3_MISSING
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1209
+#, perl-brace-format
+msgid ""
+"The server responded with DNSKEY but not with expected NSEC or NSEC3. "
+"Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"Сервер відповів з DNSKEY, але не з очікуваним NSEC або NSEC3. Отримано від "
+"серверів імен \"{ns_list}\"."
+
+#. DNSSEC:DS10_HAS_NSEC
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1215
+#, perl-brace-format
+msgid "The zone has NSEC records. Fetched from name servers \"{ns_list}\"."
+msgstr "Зона має записи NSEC. Отримано від серверів імен \\\"{ns_list}\\\"."
+
+#. DNSSEC:DS10_HAS_NSEC3
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1220
+#, perl-brace-format
+msgid "The zone has NSEC3 records. Fetched from name servers \"{ns_list}\"."
+msgstr "Зона має записи NSEC3. Отримано від серверів імен \\\"{ns_list}\\\"."
+
+#. DNSSEC:DS10_INCONSISTENT_NSEC
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1225
+#, perl-brace-format
+msgid ""
+"Inconsistent responses from zone with NSEC. Fetched from name servers "
+"\"{ns_list}\"."
+msgstr ""
+"Неузгоджені відповіді від зони з NSEC. Отримано від серверів імен \"{ns_list}"
+"\"."
+
+#. DNSSEC:DS10_INCONSISTENT_NSEC3
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1230
+#, perl-brace-format
+msgid ""
+"Inconsistent responses from zone with NSEC3. Fetched from name servers "
+"\"{ns_list}\"."
+msgstr ""
+"Неузгоджені відповіді від зони з NSEC3. Отримано від серверів імен "
+"\"{ns_list}\"."
+
+#. DNSSEC:DS10_INCONSISTENT_NSEC_NSEC3
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1235
+#, perl-brace-format
+msgid ""
+"The zone is inconsistent on NSEC and NSEC3. NSEC is fetched from name "
+"servers \"{ns_list_nsec}\". NSEC3 is fetched from name servers "
+"\"{ns_list_nsec3}\"."
+msgstr ""
+"Зона є неузгодженою щодо NSEC і NSEC3. NSEC отримано від серверів імен "
+"\"{ns_list_nsec}\". NSEC3 отримано від серверів імен \"{ns_list_nsec3}\"."
+
+#. DNSSEC:DS10_MIXED_NSEC_NSEC3
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1241
+#, perl-brace-format
+msgid ""
+"The zone responds with both NSEC and NSEC3, where only one of them is "
+"expected. Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"Зона відповідає як NSEC, так і NSEC3, тоді як очікується лише один із них. "
+"Отримано від серверів імен \"{ns_list}\"."
+
+#. DNSSEC:DS10_NSEC3PARAM_GIVES_ERR_ANSWER
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1247
+#, perl-brace-format
+msgid ""
+"Unexpected DNS record in the answer section on an NSEC3PARAM query. Fetched "
+"from name servers \"{ns_list}\"."
+msgstr ""
+"Неочікуваний DNS-запис у розділі відповідей на NSEC3PARAM-запит. Отримано "
+"від серверів імен \"{ns_list}\"."
+
+#. DNSSEC:DS10_NSEC3PARAM_MISMATCHES_APEX
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1253
+#, perl-brace-format
+msgid ""
+"The returned NSEC3PARAM record has an unexpected non-apex owner name. "
+"Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"Повернутий запис NSEC3PARAM має неочікуване ім'я власника, що не належить "
+"вершині зони. Отримано від серверів імен \"{ns_list}\"."
+
+#. DNSSEC:DS10_NSEC3PARAM_QUERY_RESPONSE_ERR
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1259
+#, perl-brace-format
+msgid ""
+"No response or error in response on query for NSEC3PARAM. Fetched from name "
+"servers \"{ns_list}\"."
+msgstr ""
+"Відповіді немає або ж помилка у відповіді на запит NSEC3PARAM. Отримано від "
+"серверів імен \"{ns_list}\"."
+
+#. DNSSEC:DS10_NSEC3_ERR_TYPE_LIST
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1265
+#, perl-brace-format
+msgid ""
+"NSEC3 record for the zone apex with incorrect type list. Fetched from name "
+"servers \"{ns_list}\"."
+msgstr ""
+"Запис NSEC3 для вершини зони з неправильним списком типів. Отримано від "
+"серверів імен \"{ns_list}\"."
+
+#. DNSSEC:DS10_NSEC3_MISMATCHES_APEX
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1271
+#, perl-brace-format
+msgid ""
+"The returned NSEC3 record unexpectedly does not match the zone name. Fetched "
+"from name servers \"{ns_list}\"."
+msgstr ""
+"Повернутий запис NSEC3 неочікувано не збігається з іменем зони. Отримано від "
+"серверів імен \"{ns_list}\"."
+
+#. DNSSEC:DS10_NSEC3_MISSING_SIGNATURE
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1277
+#, perl-brace-format
+msgid ""
+"Missing RRSIG (signature) for the NSEC3 record or records. Fetched from name "
+"servers \"{ns_list}\"."
+msgstr ""
+"Відсутній RRSIG (підпис) для запису або записів NSEC3. Отримано від серверів "
+"імен \"{ns_list}\"."
+
+#. DNSSEC:DS10_NSEC3_NODATA_MISSING_SOA
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1283
+#, perl-brace-format
+msgid ""
+"Missing SOA record in NODATA response with NSEC3. Fetched from name servers "
+"\"{ns_list}\"."
+msgstr ""
+"Відсутній запис SOA у відповіді NODATA з NSEC3. Отримано від серверів імен "
+"\"{ns_list}\"."
+
+#. DNSSEC:DS10_NSEC3_NODATA_WRONG_SOA
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1289
+#, perl-brace-format
+msgid ""
+"Wrong owner name (\"{domain}\") on SOA record in NODATA response with NSEC3. "
+"Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"Неправильне ім'я власника (\"{domain}\") у записі SOA у відповіді NODATA з "
+"NSEC3. Отримано від серверів імен \"{ns_list}\"."
+
+#. DNSSEC:DS10_NSEC3_NO_VERIFIED_SIGNATURE
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1295
+#, perl-brace-format
+msgid ""
+"The RRSIG (signature) for the NSEC3 record cannot be verified. Fetched from "
+"name servers \"{ns_list}\"."
+msgstr ""
+"RRSIG (підпис) для запису NSEC3 неможливо перевірити. Отримано від серверів "
+"імен \"{ns_list}\"."
+
+#. DNSSEC:DS10_NSEC3_RRSIG_EXPIRED
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1301
+#, perl-brace-format
+msgid ""
+"The RRSIG (signature) with tag {keytag} for the NSEC3 record has expired. "
+"Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"Термін дії RRSIG (підпис) з тегом {keytag} для запису NSEC3 закінчився. "
+"Отримано від серверів імен \"{ns_list}\"."
+
+#. DNSSEC:DS10_NSEC3_RRSIG_NOT_YET_VALID
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1307
+#, perl-brace-format
+msgid ""
+"The RRSIG (signature) with tag {keytag} for the NSEC3 record it not yet "
+"valid. Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"RRSIG (підпис) з тегом {keytag} для запису NSEC3 ще не дійсний. Отримано від "
+"серверів імен \"{ns_list}\"."
+
+#. DNSSEC:DS10_NSEC3_RRSIG_NO_DNSKEY
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1313
+#, perl-brace-format
+msgid ""
+"There is no DNSKEY record matching the RRSIG (signature) with tag {keytag} "
+"for the NSEC3 record. Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"Немає запису DNSKEY, що відповідає RRSIG (підпису) з тегом {keytag} для "
+"запису NSEC3. Отримано від серверів імен \"{ns_list}\"."
+
+#. DNSSEC:DS10_NSEC3_RRSIG_VERIFY_ERROR
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1319
+#, perl-brace-format
+msgid ""
+"The RRSIG (signature) with tag {keytag} for the NSEC3 record cannot be "
+"verified. Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"RRSIG (підпис) з тегом {keytag} для запису NSEC3 неможливо перевірити. "
+"Отримано від серверів імен \"{ns_list}\"."
+
+#. DNSSEC:DS10_NSEC_ERR_TYPE_LIST
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1325
+#, perl-brace-format
+msgid ""
+"NSEC record for the zone apex with incorrect type list. Fetched from name "
+"servers \"{ns_list}\"."
+msgstr ""
+"Запис NSEC для вершини зони з неправильним списком типів. Отримано від "
+"серверів імен \"{ns_list}\"."
+
+#. DNSSEC:DS10_NSEC_GIVES_ERR_ANSWER
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1331
+#, perl-brace-format
+msgid ""
+"Unexpected DNS record in the answer section on an NSEC query. Fetched from "
+"name servers \"{ns_list}\"."
+msgstr ""
+"Неочікуваний DNS-запис у розділі відповідей на NSEC-запит. Отримано від "
+"серверів імен \"{ns_list}\"."
+
+#. DNSSEC:DS10_NSEC_MISMATCHES_APEX
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1337
+#, perl-brace-format
+msgid ""
+"The returned NSEC record has an unexpected non-apex owner name. Fetched from "
+"name servers \"{ns_list}\"."
+msgstr ""
+"Повернутий запис NSEC має неочікуване ім'я власника, що не належить вершині "
+"зони. Отримано від серверів імен \"{ns_list}\"."
+
+#. DNSSEC:DS10_NSEC_MISSING_SIGNATURE
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1343
+#, perl-brace-format
+msgid ""
+"Missing RRSIG (signature) for the NSEC record or records. Fetched from name "
+"servers \"{ns_list}\"."
+msgstr ""
+"Відсутній RRSIG (підпис) для запису або записів NSEC. Отримано від серверів "
+"імен \"{ns_list}\"."
+
+#. DNSSEC:DS10_NSEC_NODATA_MISSING_SOA
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1349
+#, perl-brace-format
+msgid ""
+"Missing SOA record in NODATA response with NSEC. Fetched from name servers "
+"\"{ns_list}\"."
+msgstr ""
+"Відсутній запис SOA у відповіді NODATA з NSEC. Отримано від серверів імен "
+"\"{ns_list}\"."
+
+#. DNSSEC:DS10_NSEC_NODATA_WRONG_SOA
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1355
+#, perl-brace-format
+msgid ""
+"Wrong owner name (\"{domain}\") on SOA record in NODATA response with NSEC. "
+"Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"Неправильне ім'я власника (\"{domain}\") у записі SOA у відповіді NODATA з "
+"NSEC. Отримано від серверів імен \"{ns_list}\"."
+
+#. DNSSEC:DS10_NSEC_NO_VERIFIED_SIGNATURE
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1361
+#, perl-brace-format
+msgid ""
+"There is no RRSIG (signature) for the NSEC record that can be verified. "
+"Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"Немає RRSIG (підпису) для запису NSEC, який можна перевірити. Отримано від "
+"серверів імен \"{ns_list}\"."
+
+#. DNSSEC:DS10_NSEC_QUERY_RESPONSE_ERR
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1367
+#, perl-brace-format
+msgid ""
+"No response or error in response on query for NSEC. Fetched from name "
+"servers \"{ns_list}\"."
+msgstr ""
+"Немає відповіді або помилка у відповіді на запит NSEC. Отримано від серверів "
+"імен \"{ns_list}\"."
+
+#. DNSSEC:DS10_NSEC_RRSIG_EXPIRED
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1373
+#, perl-brace-format
+msgid ""
+"The RRSIG (signature) with tag {keytag} for the NSEC record has expired. "
+"Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"Термін дії RRSIG (підпис) з тегом {keytag} для запису NSEC закінчився. "
+"Отримано від серверів імен \"{ns_list}\"."
+
+#. DNSSEC:DS10_NSEC_RRSIG_NOT_YET_VALID
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1379
+#, perl-brace-format
+msgid ""
+"The RRSIG (signature) with tag {keytag} for the NSEC record it not yet "
+"valid. Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"RRSIG (підпис) з тегом {keytag} для запису NSEC ще не дійсний. Отримано від "
+"серверів імен \"{ns_list}\"."
+
+#. DNSSEC:DS10_NSEC_RRSIG_NO_DNSKEY
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1385
+#, perl-brace-format
+msgid ""
+"There is no DNSKEY record matching the RRSIG (signature) with tag {keytag} "
+"for the NSEC record. Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"Немає запису DNSKEY, що відповідає RRSIG (підпису) з тегом {keytag} для "
+"запису NSEC. Отримано від серверів імен \"{ns_list}\"."
+
+#. DNSSEC:DS10_NSEC_RRSIG_VERIFY_ERROR
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1391
+#, perl-brace-format
+msgid ""
+"The RRSIG (signature) with tag {keytag} for the NSEC record cannot be "
+"verified. Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"RRSIG (підпис) з тегом {keytag} для запису NSEC неможливо перевірити. "
+"Отримано від серверів імен \"{ns_list}\"."
+
+#. DNSSEC:DS10_NONSTANDARD_NSEC_RESPONSE
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1397
+#, perl-brace-format
+msgid ""
+"The following name servers give a non-standard response to the NSEC query "
+"(NSEC RR in authority section instead of answer section). Fetched from name "
+"servers \"{ns_list}\"."
+msgstr ""
+"Наступні сервери імен дають нестандартну відповідь на NSEC-запит (NSEC RR у "
+"розділі authority замість розділу answer). Отримано від серверів імен "
+"\"{ns_list}\"."
+
+#. DNSSEC:DS10_SERVER_NO_DNSSEC
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1404
+#, perl-brace-format
+msgid ""
+"The following name servers do not support DNSSEC or have not been properly "
+"configured. Testing for NSEC and NSEC3 has been skipped on these servers. "
+"Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"Наступні сервери імен не підтримують DNSSEC або не були належним чином "
+"налаштовані. Тестування NSEC і NSEC3 на цих серверах пропущено. Отримано від "
+"серверів імен \"{ns_list}\"."
+
+#. DNSSEC:DS10_ZONE_NO_DNSSEC
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1411
+#, perl-brace-format
+msgid ""
+"The zone is not DNSSEC signed or not properly DNSSEC signed. Testing for "
+"NSEC and NSEC3 has been skipped. Fetched from name servers \"{ns_list}\"."
+msgstr ""
+"Зона не підписана або неправильно DNSSEC підписана. Тестування NSEC і NSEC3 "
+"пропущено. Отримано від серверів імен \"{ns_list}\"."
+
+#. DNSSEC:DS11_INCONSISTENT_DS
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1418
+msgid "Parent name servers are inconsistent on the existence of DS."
+msgstr "Батьківські сервери імен є неузгодженими щодо наявності DS."
+
+#. DNSSEC:DS11_INCONSISTENT_SIGNED_ZONE
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1423
+msgid ""
+"Name servers for the child zone are inconsistent on whether the zone is "
+"signed or not."
+msgstr ""
+"Сервери імен для дочірньої зони є неузгодженими щодо того, чи підписана зона."
+
+#. DNSSEC:DS11_UNDETERMINED_DS
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1429
+msgid ""
+"It cannot be determined if the parent zone has DS for the child zone or not."
+msgstr "Неможливо визначити, чи має батьківська зона DS для дочірньої зони."
+
+#. DNSSEC:DS11_UNDETERMINED_SIGNED_ZONE
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1435
+msgid "It cannot be determined if the child zone is signed or not."
+msgstr "Неможливо визначити, чи підписана дочірня зона."
+
+#. DNSSEC:DS11_PARENT_WITHOUT_DS
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1440
+#, perl-brace-format
+msgid ""
+"No DS record for the child zone found on parent nameservers with IP "
+"addresses \"{ns_ip_list}\"."
+msgstr ""
+"Не знайдено запису DS для дочірньої зони на батьківських серверах імен з IP-"
+"адресами \"{ns_ip_list}\"."
+
+#. DNSSEC:DS11_PARENT_WITH_DS
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1446
+#, perl-brace-format
+msgid ""
+"DS record for the child zone found on parent nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"Запис DS для дочірньої зони знайдено на батьківських серверах імен з IP-"
+"адресами \"{ns_ip_list}\"."
+
+#. DNSSEC:DS11_NS_WITH_SIGNED_ZONE
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1452
+#, perl-brace-format
+msgid ""
+"Signed child zone found on nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"Підписану дочірню зону знайдено на серверах імен з IP-адресами \"{ns_ip_list}"
+"\"."
+
+#. DNSSEC:DS11_NS_WITH_UNSIGNED_ZONE
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1458
+#, perl-brace-format
+msgid ""
+"Unsigned child zone found on nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"Непідписану дочірню зону знайдено на серверах імен з IP-адресами "
+"\"{ns_ip_list}\"."
+
+#. DNSSEC:DS11_DS_BUT_UNSIGNED_ZONE
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1464
+msgid "The child zone is unsigned, but the parent zone has DS record."
+msgstr "Дочірня зона не підписана, але батьківська зона має запис DS."
+
+#. DNSSEC:DS13_ALGO_NOT_SIGNED_DNSKEY
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1469
+#, perl-brace-format
+msgid ""
+"The DNSKEY RRset is not signed by algorithm {algo_num} ({algo_mnemo}) "
+"present in the DNSKEY RRset. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"DNSKEY RRset не підписано алгоритмом {algo_num} ({algo_mnemo}), присутнім у "
+"DNSKEY RRset. Отримано від серверів імен з IP-адресами \"{ns_ip_list}\"."
+
+#. DNSSEC:DS13_ALGO_NOT_SIGNED_NS
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1476
+#, perl-brace-format
+msgid ""
+"The NS RRset is not signed by algorithm {algo_num} ({algo_mnemo}) present in "
+"the DNSKEY RRset. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"NS RRset не підписано алгоритмом {algo_num} ({algo_mnemo}), присутнім у "
+"DNSKEY RRset. Отримано від серверів імен з IP-адресами \"{ns_ip_list}\"."
+
+#. DNSSEC:DS13_ALGO_NOT_SIGNED_SOA
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1483
+#, perl-brace-format
+msgid ""
+"The SOA RRset is not signed by algorithm {algo_num} ({algo_mnemo}) present "
+"in the DNSKEY RRset. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"SOA RRset не підписано алгоритмом {algo_num} ({algo_mnemo}), присутнім у "
+"DNSKEY RRset. Отримано від серверів імен з IP-адресами \"{ns_ip_list}\"."
+
+#. DNSSEC:DS15_HAS_CDNSKEY_NO_CDS
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1490
+#, perl-brace-format
+msgid ""
+"CDNSKEY RRset is found on nameservers that resolve to IP addresses "
+"({ns_ip_list}), but no CDS RRset."
+msgstr ""
+"CDNSKEY RRset знайдено на серверах імен, що перетворюються на IP-адреси "
+"({ns_ip_list}), але немає CDS RRset."
+
+#. DNSSEC:DS15_HAS_CDS_AND_CDNSKEY
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1496
+#, perl-brace-format
+msgid ""
+"CDNSKEY and CDS RRsets are found on nameservers that resolve to IP addresses "
+"({ns_ip_list})."
+msgstr ""
+"CDNSKEY та CDS RRsets знайдено на серверах імен, що перетворюються на IP-"
+"адреси ({ns_ip_list})."
+
+#. DNSSEC:DS15_HAS_CDS_NO_CDNSKEY
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1502
+#, perl-brace-format
+msgid ""
+"CDS RRset is found on nameservers that resolve to IP addresses "
+"({ns_ip_list}), but no CDNSKEY RRset."
+msgstr ""
+"CDS RRset знайдено на серверах імен, що перетворюються на IP-адреси "
+"({ns_ip_list}), але немає CDNSKEY RRset."
+
+#. DNSSEC:DS15_INCONSISTENT_CDNSKEY
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1508
+msgid "All servers do not have the same CDNSKEY RRset."
+msgstr "Не всі сервери мають однаковий CDNSKEY RRset."
+
+#. DNSSEC:DS15_INCONSISTENT_CDS
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1512
+msgid "All servers do not have the same CDS RRset."
+msgstr "Не всі сервери мають однаковий CDS RRset."
+
+#. DNSSEC:DS15_MISMATCH_CDS_CDNSKEY
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1516
+#, perl-brace-format
+msgid ""
+"Both CDS and CDNSKEY RRsets are found on nameservers that resolve to IP "
+"addresses ({ns_ip_list}) but they do not match."
+msgstr ""
+"Обидва CDS та CDNSKEY RRsets знайдено на серверах імен, що перетворюються на "
+"IP-адреси ({ns_ip_list}), але вони не збігаються."
+
+#. DNSSEC:DS15_NO_CDS_CDNSKEY
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1522
+msgid "No CDS or CDNSKEY RRsets are found on any name server."
+msgstr "На жодному сервері імен не знайдено CDS або CDNSKEY RRsets."
+
+#. DNSSEC:DS16_CDS_INVALID_RRSIG
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1526
+#, perl-brace-format
+msgid ""
+"The CDS RRset is signed with an RRSIG with tag {keytag}, but the RRSIG does "
+"not match the DNSKEY with the same key tag. Fetched from the nameservers "
+"with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"CDS RRset підписано RRSIG з тегом {keytag}, але RRSIG не відповідає DNSKEY з "
+"таким самим тегом ключа. Отримано від серверів імен з IP-адресами "
+"\"{ns_ip_list}\"."
+
+#. DNSSEC:DS16_CDS_MATCHES_NON_SEP_DNSKEY
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1533
+#, perl-brace-format
+msgid ""
+"The CDS record with tag {keytag} matches a DNSKEY record with SEP bit (bit "
+"15) unset. Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"Запис CDS з тегом {keytag} відповідає запису DNSKEY, у якому біт SEP (біт "
+"15) не встановлено. Отримано від серверів імен з IP-адресами \"{ns_ip_list}"
+"\"."
+
+#. DNSSEC:DS16_CDS_MATCHES_NON_ZONE_DNSKEY
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1539
+#, perl-brace-format
+msgid ""
+"The CDS record with tag {keytag} matches a DNSKEY record with zone bit (bit "
+"7) unset. Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"Запис CDS з тегом {keytag} відповідає запису DNSKEY, у якому біт зони (біт "
+"7) не встановлено. Отримано від серверів імен з IP-адресами \"{ns_ip_list}\"."
+
+#. DNSSEC:DS16_CDS_MATCHES_NO_DNSKEY
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1545
+#, perl-brace-format
+msgid ""
+"The CDS record with tag {keytag} does not match any DNSKEY record. Fetched "
+"from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"Запис CDS з тегом {keytag} не відповідає жодному запису DNSKEY. Отримано від "
+"серверів імен з IP-адресами \"{ns_ip_list}\"."
+
+#. DNSSEC:DS16_CDS_NOT_SIGNED_BY_CDS
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1551
+#, perl-brace-format
+msgid ""
+"The CDS RRset is not signed by the DNSKEY that the CDS record with tag "
+"{keytag} points to. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"CDS RRset не підписано DNSKEY, на який вказує запис CDS з тегом {keytag}. "
+"Отримано від серверів імен з IP-адресами \"{ns_ip_list}\"."
+
+#. DNSSEC:DS16_CDS_SIGNED_BY_UNKNOWN_DNSKEY
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1558
+#, perl-brace-format
+msgid ""
+"The CDS RRset is signed by RRSIG with tag {keytag} but that is not in the "
+"DNSKEY RRset. Fetched from the nameservers with P addresses \"{ns_ip_list}\"."
+msgstr ""
+"CDS RRset підписано RRSIG з тегом {keytag}, але його немає в DNSKEY RRset. "
+"Отримано від серверів імен з IP-адресами \"{ns_ip_list}\"."
+
+#. DNSSEC:DS16_CDS_UNSIGNED
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1564
+#, perl-brace-format
+msgid ""
+"The CDS RRset is not signed. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"CDS RRset не підписано. Отримано від серверів імен з IP-адресами "
+"\"{ns_ip_list}\"."
+
+#. DNSSEC:DS16_CDS_WITHOUT_DNSKEY
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1570
+#, perl-brace-format
+msgid ""
+"A CDS RRset exists, but no DNSKEY record exists. Fetched from the "
+"nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"CDS RRset існує, але запису DNSKEY немає. Отримано від серверів імен з IP-"
+"адресами \"{ns_ip_list}\"."
+
+#. DNSSEC:DS16_DELETE_CDS
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1576
+#, perl-brace-format
+msgid ""
+"A single \"delete\" CDS record is found on the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"Один \"delete\" запис CDS знайдено на серверах імен з IP-адресами "
+"\"{ns_ip_list}\"."
+
+#. DNSSEC:DS16_DNSKEY_NOT_SIGNED_BY_CDS
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1582
+#, perl-brace-format
+msgid ""
+"The DNSKEY RRset is not signed by the DNSKEY that the CDS record with tag "
+"{keytag} points to. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"DNSKEY RRset не підписано DNSKEY, на який вказує запис CDS з тегом {keytag}. "
+"Отримано від серверів імен з IP-адресами \"{ns_ip_list}\"."
+
+#. DNSSEC:DS16_MIXED_DELETE_CDS
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1589
+#, perl-brace-format
+msgid ""
+"The CDS RRset is a mixture between \"delete\" record and other records. "
+"Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"CDS RRset є сумішшю запису \"delete\" та інших записів. Отримано від "
+"серверів імен з IP-адресами \"{ns_ip_list}\"."
+
+#. DNSSEC:DS17_CDNSKEY_INVALID_RRSIG
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1595
+#, perl-brace-format
+msgid ""
+"The CDNSKEY RRset is signed with an RRSIG with tag {keytag}, but the RRSIG "
+"does not match the DNSKEY with the same key tag. Fetched from the "
+"nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"CDNSKEY RRset підписано RRSIG з тегом {keytag}, але RRSIG не відповідає "
+"DNSKEY з таким самим тегом ключа. Отримано від серверів імен з IP-адресами "
+"\"{ns_ip_list}\"."
+
+#. DNSSEC:DS17_CDNSKEY_IS_NON_SEP
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1602
+#, perl-brace-format
+msgid ""
+"The CDNSKEY record with tag {keytag} has the SEP bit (bit 15) unset. Fetched "
+"from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"Запис CDNSKEY з тегом {keytag} не має встановленого біта SEP (біт 15). "
+"Отримано від серверів імен з IP-адресами \"{ns_ip_list}\"."
+
+#. DNSSEC:DS17_CDNSKEY_IS_NON_ZONE
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1608
+#, perl-brace-format
+msgid ""
+"The CDNSKEY record with tag {keytag} has the zone bit (bit 7) unset. Fetched "
+"from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"Запис CDNSKEY з тегом {keytag} не має встановленого біта зони (біт 7). "
+"Отримано від серверів імен з IP-адресами \"{ns_ip_list}\"."
+
+#. DNSSEC:DS17_CDNSKEY_MATCHES_NO_DNSKEY
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1614
+#, perl-brace-format
+msgid ""
+"The CDNSKEY record with tag {keytag} does not match any DNSKEY record. "
+"Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"Запис CDNSKEY з тегом {keytag} не відповідає жодному запису DNSKEY. Отримано "
+"від серверів імен з IP-адресами \"{ns_ip_list}\"."
+
+#. DNSSEC:DS17_CDNSKEY_NOT_SIGNED_BY_CDNSKEY
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1620
+#, perl-brace-format
+msgid ""
+"The CDNSKEY RRset is not signed by the DNSKEY that the CDNSKEY record with "
+"tag {keytag} points to. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"CDNSKEY RRset не підписано DNSKEY, на який вказує запис CDNSKEY з тегом "
+"{keytag}. Отримано від серверів імен з IP-адресами \"{ns_ip_list}\"."
+
+#. DNSSEC:DS17_CDNSKEY_SIGNED_BY_UNKNOWN_DNSKEY
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1627
+#, perl-brace-format
+msgid ""
+"The CDNSKEY RRset is signed by RRSIG with tag {keytag} but that is not in "
+"the DNSKEY RRset. Fetched from the nameservers with P addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"CDNSKEY RRset підписано RRSIG з тегом {keytag}, але його немає в DNSKEY "
+"RRset. Отримано від серверів імен з IP-адресами \"{ns_ip_list}\"."
+
+#. DNSSEC:DS17_CDNSKEY_UNSIGNED
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1633
+#, perl-brace-format
+msgid ""
+"The CDNSKEY RRset is not signed. Fetched from the nameservers with IP "
+"addresses \"{ns_ip_list}\"."
+msgstr ""
+"CDNSKEY RRset не підписано. Отримано від серверів імен з IP-адресами "
+"\"{ns_ip_list}\"."
+
+#. DNSSEC:DS17_CDNSKEY_WITHOUT_DNSKEY
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1639
+#, perl-brace-format
+msgid ""
+"A CDNSKEY RRset exists, but no DNSKEY record exists. Fetched from the "
+"nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"CDNSKEY RRset існує, але запису DNSKEY немає. Отримано від серверів імен з "
+"IP-адресами \"{ns_ip_list}\"."
+
+#. DNSSEC:DS17_DELETE_CDNSKEY
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1645
+#, perl-brace-format
+msgid ""
+"A single \"delete\" CDNSKEY record is found on the nameservers with IP "
+"addresses \"{ns_ip_list}\"."
+msgstr ""
+"Один \"delete\" запис CDNSKEY знайдено на серверах імен з IP-адресами "
+"\"{ns_ip_list}\"."
+
+#. DNSSEC:DS17_DNSKEY_NOT_SIGNED_BY_CDNSKEY
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1651
+#, perl-brace-format
+msgid ""
+"The DNSKEY RRset is not signed by the DNSKEY that the CDNSKEY record with "
+"tag {keytag} points to. Fetched from the nameservers with IP addresses "
+"\"{ns_ip_list}\"."
+msgstr ""
+"DNSKEY RRset не підписано DNSKEY, на який вказує запис CDNSKEY з тегом "
+"{keytag}. Отримано від серверів імен з IP-адресами \"{ns_ip_list}\"."
+
+#. DNSSEC:DS17_MIXED_DELETE_CDNSKEY
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1658
+#, perl-brace-format
+msgid ""
+"The CDNSKEY RRset is a mixture between \"delete\" record and other records. "
+"Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"CDNSKEY RRset є сумішшю запису \"delete\" та інших записів. Отримано від "
+"серверів імен з IP-адресами \"{ns_ip_list}\"."
+
+#. DNSSEC:DS18_NO_MATCH_CDS_RRSIG_DS
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1664
+#, perl-brace-format
+msgid ""
+"The CDS RRset is not signed with a DNSKEY record that a DS record points to. "
+"Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"CDS RRset не підписано записом DNSKEY, на який вказує запис DS. Отримано від "
+"серверів імен з IP-адресами \"{ns_ip_list}\"."
+
+#. DNSSEC:DS18_NO_MATCH_CDNSKEY_RRSIG_DS
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1670
+#, perl-brace-format
+msgid ""
+"The CDNSKEY RRset is not signed with a DNSKEY record that a DS record points "
+"to. Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
+msgstr ""
+"CDNSKEY RRset не підписано записом DNSKEY, на який вказує запис DS. Отримано "
+"від серверів імен з IP-адресами \"{ns_ip_list}\"."
+
+#. DNSSEC:DURATION_LONG
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1676
+#, perl-brace-format
+msgid ""
+"RRSIG with keytag {keytag} and covering type(s) {types} has a duration of "
+"{duration} seconds, which is too long."
+msgstr ""
+"RRSIG з тегом {keytag} і типом(ами) покриття {types} має тривалість "
+"{duration} секунд, що є занадто довгим."
+
+#. DNSSEC:DURATION_OK
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1682
+#, perl-brace-format
+msgid ""
+"RRSIG with keytag {keytag} and covering type(s) {types} has a duration of "
+"{duration} seconds, which is just fine."
+msgstr ""
+"RRSIG з тегом {keytag} і типом(ами) покриття {types} має тривалість "
+"{duration} секунд, що є нормальним."
+
+#. DNSSEC:EXTRA_PROCESSING_BROKEN
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1688
+#, perl-brace-format
+msgid ""
+"Server at {server} sent {keys} DNSKEY records, and {sigs} RRSIG records."
+msgstr ""
+"Сервер на {server} надіслав {keys} записів DNSKEY та {sigs} записів RRSIG."
+
+#. DNSSEC:EXTRA_PROCESSING_OK
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1692
+#, perl-brace-format
+msgid "Server at {server} sent {keys} DNSKEY records and {sigs} RRSIG records."
+msgstr ""
+"Сервер на {server} надіслав {keys} записів DNSKEY та {sigs} записів RRSIG."
+
+#. DNSSEC:KEY_SIZE_OK
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1704
+msgid "All keys from the DNSKEY RRset have the correct size."
+msgstr "Усі ключі з DNSKEY RRset мають правильний розмір."
+
+#. DNSSEC:NO_RESPONSE_DNSKEY
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1708
+#, perl-brace-format
+msgid "Nameserver {ns} responded with no DNSKEY record(s)."
+msgstr "Сервер імен {ns} відповів без запису(ів) DNSKEY."
+
+#. DNSSEC:REMAINING_LONG
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1716
+#, perl-brace-format
+msgid ""
+"RRSIG with keytag {keytag} and covering type(s) {types} has a remaining "
+"validity of {duration} seconds, which is too long."
+msgstr ""
+"RRSIG з тегом {keytag} і типом(ами) покриття {types} має залишковий термін "
+"дії {duration} секунд, що є занадто довгим."
+
+#. DNSSEC:REMAINING_SHORT
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1722
+#, perl-brace-format
+msgid ""
+"RRSIG with keytag {keytag} and covering type(s) {types} has a remaining "
+"validity of {duration} seconds, which is too short."
+msgstr ""
+"RRSIG з тегом {keytag} і типом(ами) покриття {types} має залишковий термін "
+"дії {duration} секунд, що є занадто коротким."
+
+#. DNSSEC:RRSIG_EXPIRATION
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1728
+#, perl-brace-format
+msgid ""
+"RRSIG with keytag {keytag} and covering type(s) {types} expires at : {date}."
+msgstr ""
+"RRSIG з тегом {keytag} і типом(ами) покриття {types} закінчується : {date}."
+
+#. DNSSEC:RRSIG_EXPIRED
+#: ../lib/Zonemaster/Engine/Test/DNSSEC.pm:1732
+#, perl-brace-format
+msgid ""
+"RRSIG with keytag {keytag} and covering type(s) {types} has already expired "
+"(expiration is: {expiration})."
+msgstr ""
+"Термін дії RRSIG з тегом {keytag} і типом(ами) покриття {types} вже "
+"закінчився (термін дії до: {expiration})."
+
+#. DELEGATION:DELEGATION01
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:168
+msgid "Minimum number of name servers"
+msgstr "Мінімальна кількість серверів імен"
+
+#. DELEGATION:DELEGATION02
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:172
+msgid "Name servers must have distinct IP addresses"
+msgstr "Сервери імен повинні мати різні IP-адреси"
+
+#. DELEGATION:DELEGATION03
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:176
+msgid "No truncation of referrals"
+msgstr "Відсутність усічення посилань (referrals)"
+
+#. DELEGATION:DELEGATION04
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:180
+msgid "Name server is authoritative"
+msgstr "Сервер імен є авторитетним"
+
+#. DELEGATION:DELEGATION05
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:184
+msgid "Name server must not point at CNAME alias"
+msgstr "Сервер імен не повинен вказувати на псевдонім CNAME"
+
+#. DELEGATION:DELEGATION06
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:188
+msgid "Existence of SOA"
+msgstr "Наявність SOA"
+
+#. DELEGATION:DELEGATION07
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:192
+msgid "Parent glue name records present in child"
+msgstr "Записи імен glue батьківської зони присутні в дочірній"
+
+#. DELEGATION:ARE_AUTHORITATIVE
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:196
+#, perl-brace-format
+msgid ""
+"All these nameservers are confirmed to be authoritative : {nsname_list}."
+msgstr "Усі ці сервери імен підтверджені як авторитетні : {nsname_list}."
+
+#. DELEGATION:CHILD_DISTINCT_NS_IP
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:200
+msgid "All the IP addresses used by the nameservers in child are unique."
+msgstr ""
+"Усі IP-адреси, що використовуються серверами імен у дочірній зоні, є "
+"унікальними."
+
+#. DELEGATION:CHILD_NS_SAME_IP
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:204
+#, perl-brace-format
+msgid "IP {ns_ip} in child refers to multiple nameservers ({nsname_list})."
+msgstr ""
+"IP {ns_ip} у дочірній зоні посилається на кілька серверів імен "
+"({nsname_list})."
+
+#. DELEGATION:DEL_DISTINCT_NS_IP
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:208
+msgid "All the IP addresses used by the nameservers in parent are unique."
+msgstr ""
+"Усі IP-адреси, що використовуються серверами імен у батьківській зоні, є "
+"унікальними."
+
+#. DELEGATION:DEL_NS_SAME_IP
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:212
+#, perl-brace-format
+msgid "IP {ns_ip} in parent refers to multiple nameservers ({nsname_list})."
+msgstr ""
+"IP {ns_ip} у батьківській зоні посилається на кілька серверів імен "
+"({nsname_list})."
+
+#. DELEGATION:DISTINCT_IP_ADDRESS
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:216
+msgid "All the IP addresses used by the nameservers are unique."
+msgstr "Усі IP-адреси, що використовуються серверами імен, є унікальними."
+
+#. DELEGATION:ENOUGH_IPV4_NS_CHILD
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:220
+#, perl-brace-format
+msgid ""
+"Child lists enough ({count}) nameservers that resolve to IPv4 addresses. "
+"Lower limit set to {minimum}. Name servers: {ns_list}"
+msgstr ""
+"Дочірня зона містить достатньо ({count}) серверів імен, які перетворюються "
+"на IPv4-адреси. Нижня межа встановлена на {minimum}. Сервери імен: {ns_list}"
+
+#. DELEGATION:ENOUGH_IPV4_NS_DEL
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:226
+#, perl-brace-format
+msgid ""
+"Delegation lists enough ({count}) nameservers that resolve to IPv4 "
+"addresses. Lower limit set to {minimum}. Name servers: {ns_list}"
+msgstr ""
+"Делегування містить достатньо ({count}) серверів імен, які перетворюються на "
+"IPv4-адреси. Нижня межа встановлена на {minimum}. Сервери імен: {ns_list}"
+
+#. DELEGATION:ENOUGH_IPV6_NS_CHILD
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:232
+#, perl-brace-format
+msgid ""
+"Child lists enough ({count}) nameservers that resolve to IPv6 addresses. "
+"Lower limit set to {minimum}. Name servers: {ns_list}"
+msgstr ""
+"Дочірня зона містить достатньо ({count}) серверів імен, які перетворюються "
+"на IPv6-адреси. Нижня межа встановлена на {minimum}. Сервери імен: {ns_list}"
+
+#. DELEGATION:ENOUGH_IPV6_NS_DEL
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:238
+#, perl-brace-format
+msgid ""
+"Delegation lists enough ({count}) nameservers that resolve to IPv6 "
+"addresses. Lower limit set to {minimum}. Name servers: {ns_list}"
+msgstr ""
+"Делегування містить достатньо ({count}) серверів імен, які перетворюються на "
+"IPv6-адреси. Нижня межа встановлена на {minimum}. Сервери імен: {ns_list}"
+
+#. DELEGATION:ENOUGH_NS_CHILD
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:244
+#, perl-brace-format
+msgid ""
+"Child lists enough ({count}) nameservers. Lower limit set to {minimum}. Name "
+"servers: {nsname_list}"
+msgstr ""
+"Дочірня зона містить достатньо ({count}) серверів імен. Нижня межа "
+"встановлена на {minimum}. Сервери імен: {nsname_list}"
+
+#. DELEGATION:ENOUGH_NS_DEL
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:248
+#, perl-brace-format
+msgid ""
+"Delegation lists enough ({count}) nameservers. Lower limit set to {minimum}. "
+"Name servers: {nsname_list}"
+msgstr ""
+"Делегування містить достатньо ({count}) серверів імен. Нижня межа "
+"встановлена на {minimum}. Сервери імен: {nsname_list}"
+
+#. DELEGATION:EXTRA_NAME_CHILD
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:252
+#, perl-brace-format
+msgid "Child has nameserver(s) not listed at parent ({extra})."
+msgstr "Дочірня зона має сервер(и) імен, не вказані в батьківській ({extra})."
+
+#. DELEGATION:EXTRA_NAME_PARENT
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:256
+#, perl-brace-format
+msgid "Parent has nameserver(s) not listed at the child ({extra})."
+msgstr "Батьківська зона має сервер(и) імен, не вказані в дочірній ({extra})."
+
+#. DELEGATION:IS_NOT_AUTHORITATIVE
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:268
+#, perl-brace-format
+msgid "Nameserver {ns} response is not authoritative on {proto} port 53."
+msgstr "Відповідь сервера імен {ns} не є авторитетною на порту 53 ({proto})."
+
+#. DELEGATION:NAMES_MATCH
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:272
+msgid "All of the nameserver names are listed both at parent and child."
+msgstr ""
+"Усі імена серверів імен вказані як у батьківській, так і в дочірній зонах."
+
+#. DELEGATION:NO_RESPONSE
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:276
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} did not respond to a query for name {query_name} and type "
+"{rrtype}."
+msgstr ""
+"Сервер імен {ns} не відповів на запит для імені {query_name} і типу {rrtype}."
+
+#. DELEGATION:NOT_ENOUGH_IPV4_NS_CHILD
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:280
+#, perl-brace-format
+msgid ""
+"Child does not list enough ({count}) nameservers that resolve to IPv4 "
+"addresses. Lower limit set to {minimum}. Name servers: {ns_list}"
+msgstr ""
+"Дочірня зона не містить достатньо ({count}) серверів імен, які "
+"перетворюються на IPv4-адреси. Нижня межа встановлена на {minimum}. Сервери "
+"імен: {ns_list}"
+
+#. DELEGATION:NOT_ENOUGH_IPV4_NS_DEL
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:286
+#, perl-brace-format
+msgid ""
+"Delegation does not list enough ({count}) nameservers that resolve to IPv4 "
+"addresses. Lower limit set to {minimum}. Name servers: {ns_list}"
+msgstr ""
+"Делегування не містить достатньо ({count}) серверів імен, які перетворюються "
+"на IPv4-адреси. Нижня межа встановлена на {minimum}. Сервери імен: {ns_list}"
+
+#. DELEGATION:NOT_ENOUGH_IPV6_NS_CHILD
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:292
+#, perl-brace-format
+msgid ""
+"Child does not list enough ({count}) nameservers that resolve to IPv6 "
+"addresses. Lower limit set to {minimum}. Name servers: {ns_list}"
+msgstr ""
+"Дочірня зона не містить достатньо ({count}) серверів імен, які "
+"перетворюються на IPv6-адреси. Нижня межа встановлена на {minimum}. Сервери "
+"імен: {ns_list}"
+
+#. DELEGATION:NOT_ENOUGH_IPV6_NS_DEL
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:298
+#, perl-brace-format
+msgid ""
+"Delegation does not list enough ({count}) nameservers that resolve to IPv6 "
+"addresses. Lower limit set to {minimum}. Name servers: {ns_list}"
+msgstr ""
+"Делегування не містить достатньо ({count}) серверів імен, які перетворюються "
+"на IPv6-адреси. Нижня межа встановлена на {minimum}. Сервери імен: {ns_list}"
+
+#. DELEGATION:NOT_ENOUGH_NS_CHILD
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:304
+#, perl-brace-format
+msgid ""
+"Child does not list enough ({count}) nameservers. Lower limit set to "
+"{minimum}. Name servers: {nsname_list}"
+msgstr ""
+"Дочірня зона не містить достатньо ({count}) серверів імен. Нижня межа "
+"встановлена на {minimum}. Сервери імен: {nsname_list}"
+
+#. DELEGATION:NOT_ENOUGH_NS_DEL
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:308
+#, perl-brace-format
+msgid ""
+"Delegation does not list enough ({count}) nameservers. Lower limit set to "
+"{minimum}. Name servers: {nsname_list}"
+msgstr ""
+"Делегування не містить достатньо ({count}) серверів імен. Нижня межа "
+"встановлена на {minimum}. Сервери імен: {nsname_list}"
+
+#. DELEGATION:NO_IPV4_NS_CHILD
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:312
+#, perl-brace-format
+msgid ""
+"Child lists no nameserver that resolves to an IPv4 address. If any were "
+"present, the minimum allowed would be {minimum}."
+msgstr ""
+"Дочірня зона не містить жодного сервера імен, який перетворюється на IPv4-"
+"адресу. Якщо такі були б присутні, мінімально допустима кількість склала б "
+"{minimum}."
+
+#. DELEGATION:NO_IPV4_NS_DEL
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:318
+#, perl-brace-format
+msgid ""
+"Delegation lists no nameserver that resolves to an IPv4 address. If any were "
+"present, the minimum allowed would be {minimum}."
+msgstr ""
+"Делегування не містить жодного сервера імен, який перетворюється на IPv4-"
+"адресу. Якщо такі були б присутні, мінімально допустима кількість склала б "
+"{minimum}."
+
+#. DELEGATION:NO_IPV6_NS_CHILD
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:324
+#, perl-brace-format
+msgid ""
+"Child lists no nameserver that resolves to an IPv6 address. If any were "
+"present, the minimum allowed would be {minimum}."
+msgstr ""
+"Дочірня зона не містить жодного сервера імен, який перетворюється на IPv6-"
+"адресу. Якщо такі були б присутні, мінімально допустима кількість склала б "
+"{minimum}."
+
+#. DELEGATION:NO_IPV6_NS_DEL
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:330
+#, perl-brace-format
+msgid ""
+"Delegation lists no nameserver that resolves to an IPv6 address. If any were "
+"present, the minimum allowed would be {minimum}."
+msgstr ""
+"Делегування не містить жодного сервера імен, який перетворюється на IPv6-"
+"адресу. Якщо такі були б присутні, мінімально допустима кількість склала б "
+"{minimum}."
+
+#. DELEGATION:NS_IS_CNAME
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:336
+#, perl-brace-format
+msgid "Nameserver {nsname} RR points to CNAME."
+msgstr "Запис RR сервера імен {nsname} вказує на CNAME."
+
+#. DELEGATION:NO_NS_CNAME
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:340
+msgid "No nameserver points to CNAME alias."
+msgstr "Жоден сервер імен не вказує на псевдонім CNAME."
+
+#. DELEGATION:REFERRAL_SIZE_TOO_LARGE
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:344
+#, perl-brace-format
+msgid ""
+"The smallest possible legal referral packet is larger than 512 octets (it is "
+"{size})."
+msgstr ""
+"Найменший можливий легальний пакет посилання (referral) більший за 512 "
+"октетів (він становить {size})."
+
+#. DELEGATION:REFERRAL_SIZE_OK
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:348
+#, perl-brace-format
+msgid ""
+"The smallest possible legal referral packet is smaller than 513 octets (it "
+"is {size})."
+msgstr ""
+"Найменший можливий легальний пакет посилання (referral) менший за 513 "
+"октетів (він становить {size})."
+
+#. DELEGATION:SAME_IP_ADDRESS
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:352
+#, perl-brace-format
+msgid "IP {ns_ip} refers to multiple nameservers ({nsname_list})."
+msgstr "IP {ns_ip} посилається на кілька серверів імен ({nsname_list})."
+
+#. DELEGATION:SOA_EXISTS
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:356
+msgid "All the nameservers have SOA record."
+msgstr "Усі сервери імен мають запис SOA."
+
+#. DELEGATION:SOA_NOT_EXISTS
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:360
+#, perl-brace-format
+msgid "Empty NOERROR response to SOA query was received from {ns}."
+msgstr "Від {ns} було отримано порожню відповідь NOERROR на SOA-запит."
+
+#. DELEGATION:TOTAL_NAME_MISMATCH
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:372
+msgid "None of the nameservers listed at the parent are listed at the child."
+msgstr ""
+"Жоден із серверів імен, вказаних у батьківській зоні, не вказаний у дочірній."
+
+#. DELEGATION:UNEXPECTED_RCODE
+#: ../lib/Zonemaster/Engine/Test/Delegation.pm:376
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} answered query for name {query_name} and type {rrtype} with "
+"RCODE {rcode}."
+msgstr ""
+"Сервер імен {ns} відповів на запит для імені {query_name} і типу {rrtype} з "
+"RCODE {rcode}."
+
+#. NAMESERVER:NAMESERVER01
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:267
+msgid "A name server should not be a recursor"
+msgstr "Сервер імен не повинен бути рекурсором"
+
+#. NAMESERVER:NAMESERVER02
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:271
+msgid "Test of EDNS0 support"
+msgstr "Тест підтримки EDNS0"
+
+#. NAMESERVER:NAMESERVER03
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:275
+msgid "Test availability of zone transfer (AXFR)"
+msgstr "Тест доступності передачі зони (AXFR)"
+
+#. NAMESERVER:NAMESERVER04
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:279
+msgid "Same source address"
+msgstr "Однакова адреса джерела"
+
+#. NAMESERVER:NAMESERVER05
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:283
+msgid "Behaviour against AAAA query"
+msgstr "Поведінка на AAAA-запит"
+
+#. NAMESERVER:NAMESERVER06
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:287
+msgid "NS can be resolved"
+msgstr "NS може бути перетворений на IP-адресу"
+
+#. NAMESERVER:NAMESERVER07
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:291
+msgid "To check whether authoritative name servers return an upward referral"
+msgstr "Перевірити, чи повертають авторитетні сервери імен висхідне посилання"
+
+#. NAMESERVER:NAMESERVER08
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:295
+msgid "Testing QNAME case insensitivity"
+msgstr "Тестування нечутливості QNAME до регістру"
+
+#. NAMESERVER:NAMESERVER09
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:299
+msgid "Testing QNAME case sensitivity"
+msgstr "Тестування чутливості QNAME до регістру"
+
+#. NAMESERVER:NAMESERVER10
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:303
+msgid "Test for undefined EDNS version"
+msgstr "Тест на невизначену версію EDNS"
+
+#. NAMESERVER:NAMESERVER11
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:307
+msgid "Test for unknown EDNS OPTION-CODE"
+msgstr "Тест на невідомий EDNS OPTION-CODE"
+
+#. NAMESERVER:NAMESERVER12
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:311
+msgid "Test for unknown EDNS flags"
+msgstr "Тест на невідомі прапорці EDNS"
+
+#. NAMESERVER:NAMESERVER13
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:315
+msgid "Test for truncated response on EDNS query"
+msgstr "Тест на усічену відповідь на EDNS-запит"
+
+#. NAMESERVER:NAMESERVER15
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:319
+msgid "Checking for revealed software version"
+msgstr "Перевірка на розкриття версії програмного забезпечення"
+
+#. NAMESERVER:AAAA_BAD_RDATA
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:323
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} answered AAAA query with an unexpected RDATA length "
+"({length} instead of 16)."
+msgstr ""
+"Сервер імен {ns} відповів на AAAA-запит з неочікуваною довжиною RDATA "
+"({length} замість 16)."
+
+#. NAMESERVER:AAAA_QUERY_DROPPED
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:327
+#, perl-brace-format
+msgid "Nameserver {ns} dropped AAAA query."
+msgstr "Сервер імен {ns} відкинув AAAA-запит."
+
+#. NAMESERVER:AAAA_UNEXPECTED_RCODE
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:331
+#, perl-brace-format
+msgid "Nameserver {ns} answered AAAA query with an unexpected rcode ({rcode})."
+msgstr ""
+"Сервер імен {ns} відповів на AAAA-запит з неочікуваним rcode ({rcode})."
+
+#. NAMESERVER:AAAA_WELL_PROCESSED
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:335
+#, perl-brace-format
+msgid ""
+"The following nameservers answer AAAA queries without problems : {ns_list}."
+msgstr ""
+"Наступні сервери імен без проблем відповідають на AAAA-запити : {ns_list}."
+
+#. NAMESERVER:A_UNEXPECTED_RCODE
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:339
+#, perl-brace-format
+msgid "Nameserver {ns} answered A query with an unexpected rcode ({rcode})."
+msgstr "Сервер імен {ns} відповів на A-запит з неочікуваним rcode ({rcode})."
+
+#. NAMESERVER:AXFR_AVAILABLE
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:343
+#, perl-brace-format
+msgid "Nameserver {ns} allow zone transfer using AXFR."
+msgstr "Сервер імен {ns} дозволяє передачу зони за допомогою AXFR."
+
+#. NAMESERVER:AXFR_FAILURE
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:347
+#, perl-brace-format
+msgid "AXFR not available on nameserver {ns}."
+msgstr "AXFR недоступний на сервері імен {ns}."
+
+#. NAMESERVER:BREAKS_ON_EDNS
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:351
+#, perl-brace-format
+msgid "No response from {ns} when EDNS is used in query asking for {domain}."
+msgstr ""
+"Немає відповіді від {ns}, коли EDNS використовується в запиті для {domain}."
+
+#. NAMESERVER:CAN_BE_RESOLVED
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:355
+msgid "All nameservers succeeded to resolve to an IP address."
+msgstr "Усі сервери імен успішно перетворено на IP-адресу."
+
+#. NAMESERVER:CAN_NOT_BE_RESOLVED
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:359
+#, perl-brace-format
+msgid ""
+"The following nameservers failed to resolve to an IP address : {nsname_list}."
+msgstr ""
+"Наступні сервери імен не вдалося перетворити на IP-адресу : {nsname_list}."
+
+#. NAMESERVER:CASE_QUERIES_RESULTS_DIFFER
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:363
+#, perl-brace-format
+msgid ""
+"When asked for {type} records on \"{domain}\" with different cases, all "
+"servers do not reply consistently."
+msgstr ""
+"На запит записів {type} для \"{domain}\" з різними регістрами не всі сервери "
+"відповідають узгоджено."
+
+#. NAMESERVER:CASE_QUERIES_RESULTS_OK
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:367
+#, perl-brace-format
+msgid ""
+"When asked for {type} records on \"{domain}\" with different cases, all "
+"servers reply consistently."
+msgstr ""
+"На запит записів {type} для \"{domain}\" з різними регістрами всі сервери "
+"відповідають узгоджено."
+
+#. NAMESERVER:CASE_QUERY_DIFFERENT_ANSWER
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:371
+#, perl-brace-format
+msgid ""
+"When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver "
+"{ns} returns different answers."
+msgstr ""
+"На запит записів {type} для \"{query1}\" та \"{query2}\", сервер імен {ns} "
+"повертає різні відповіді."
+
+#. NAMESERVER:CASE_QUERY_DIFFERENT_RC
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:377
+#, perl-brace-format
+msgid ""
+"When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver "
+"{ns} returns different RCODE (\"{rcode1}\" vs \"{rcode2}\")."
+msgstr ""
+"На запит записів {type} для \"{query1}\" та \"{query2}\", сервер імен {ns} "
+"повертає різні RCODE (\"{rcode1}\" проти \"{rcode2}\")."
+
+#. NAMESERVER:CASE_QUERY_NO_ANSWER
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:383
+#, perl-brace-format
+msgid ""
+"When asked for {type} records on \"{domain}\", nameserver {ns} returns "
+"nothing."
+msgstr ""
+"На запит записів {type} для \"{domain}\", сервер імен {ns} нічого не "
+"повертає."
+
+#. NAMESERVER:CASE_QUERY_SAME_ANSWER
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:387
+#, perl-brace-format
+msgid ""
+"When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver "
+"{ns} returns same answers."
+msgstr ""
+"На запит записів {type} для \"{query1}\" та \"{query2}\", сервер імен {ns} "
+"повертає однакові відповіді."
+
+#. NAMESERVER:CASE_QUERY_SAME_RC
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:392
+#, perl-brace-format
+msgid ""
+"When asked for {type} records on \"{query1}\" and \"{query2}\", nameserver "
+"{ns} returns same RCODE \"{rcode}\"."
+msgstr ""
+"На запит записів {type} для \"{query1}\" та \"{query2}\", сервер імен {ns} "
+"повертає однаковий RCODE \"{rcode}\"."
+
+#. NAMESERVER:DIFFERENT_SOURCE_IP
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:398
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} replies on a SOA query with a different source address "
+"({source})."
+msgstr ""
+"Сервер імен {ns} відповідає на SOA-запит з іншою адресою джерела ({source})."
+
+#. NAMESERVER:EDNS_RESPONSE_WITHOUT_EDNS
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:402
+#, perl-brace-format
+msgid ""
+"Response without EDNS from {ns} on query with EDNS0 asking for {domain}."
+msgstr "Відповідь без EDNS від {ns} на запит з EDNS0 для {domain}."
+
+#. NAMESERVER:EDNS_VERSION_ERROR
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:406
+#, perl-brace-format
+msgid ""
+"Incorrect version of EDNS (expected 0) in response from {ns} on query with "
+"EDNS (version 0) asking for {domain}."
+msgstr ""
+"Неправильна версія EDNS (очікувалась 0) у відповіді від {ns} на запит з EDNS "
+"(версія 0) для {domain}."
+
+#. NAMESERVER:EDNS0_SUPPORT
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:412
+#, perl-brace-format
+msgid "The following nameservers support EDNS0 : {ns_list}."
+msgstr "Наступні сервери імен підтримують EDNS0 : {ns_list}."
+
+#. NAMESERVER:IS_A_RECURSOR
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:424
+#, perl-brace-format
+msgid "Nameserver {ns} is a recursor."
+msgstr "Сервер імен {ns} є рекурсором."
+
+#. NAMESERVER:MISSING_OPT_IN_TRUNCATED
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:428
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} replies on an EDNS query with a truncated response without "
+"EDNS."
+msgstr ""
+"Сервер імен {ns} відповідає на EDNS-запит усіченою відповіддю без EDNS."
+
+#. NAMESERVER:NO_EDNS_SUPPORT
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:432
+#, perl-brace-format
+msgid "Nameserver {ns} does not support EDNS0 (replies with FORMERR)."
+msgstr "Сервер імен {ns} не підтримує EDNS0 (відповідає з FORMERR)."
+
+#. NAMESERVER:NO_RECURSOR
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:436
+#, perl-brace-format
+msgid "Nameserver {ns} is not a recursor."
+msgstr "Сервер імен {ns} не є рекурсором."
+
+#. NAMESERVER:NO_RESOLUTION
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:440
+msgid "No nameserver was successfully resolved to an IP address."
+msgstr "Жоден сервер імен не був успішно перетворений на IP-адресу."
+
+#. NAMESERVER:NO_RESPONSE
+#. SYNTAX:NO_RESPONSE
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:444
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:313
+#, perl-brace-format
+msgid "No response from {ns} asking for {domain}."
+msgstr "Немає відповіді від {ns} на запит для {domain}."
+
+#. NAMESERVER:NO_UPWARD_REFERRAL
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:448
+#, perl-brace-format
+msgid ""
+"None of the following nameservers returns an upward referral : {nsname_list}."
+msgstr ""
+"Жоден із наступних серверів імен не повертає висхідне посилання : "
+"{nsname_list}."
+
+#. NAMESERVER:NS_ERROR
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:452
+#, perl-brace-format
+msgid "Erroneous response from nameserver {ns}."
+msgstr "Хибна відповідь від сервера імен {ns}."
+
+#. NAMESERVER:N10_EDNS_RESPONSE_ERROR
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:456
+#, perl-brace-format
+msgid ""
+"Expected RCODE but received erroneous response to an EDNS version 1 query. "
+"Fetched from the nameservers with IP addresses {ns_ip_list}"
+msgstr ""
+"Очікувався RCODE, але отримано хибну відповідь на запит EDNS версії 1. "
+"Отримано від серверів імен з IP-адресами {ns_ip_list}"
+
+#. NAMESERVER:N10_NO_RESPONSE_EDNS1_QUERY
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:460
+#, perl-brace-format
+msgid ""
+"No response to an EDNS version 1 query. Fetched from the nameservers with IP "
+"addresses {ns_ip_list}"
+msgstr ""
+"Немає відповіді на запит EDNS версії 1. Отримано від серверів імен з IP-"
+"адресами {ns_ip_list}"
+
+#. NAMESERVER:N10_UNEXPECTED_RCODE
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:464
+#, perl-brace-format
+msgid ""
+"Erroneous RCODE (\"{rcode}\") in response to an EDNS version 1 query. "
+"Fetched from the nameservers with IP addresses {ns_ip_list}"
+msgstr ""
+"Хибний RCODE (\"{rcode}\") у відповіді на запит EDNS версії 1. Отримано від "
+"серверів імен з IP-адресами {ns_ip_list}"
+
+#. NAMESERVER:N11_NO_EDNS
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:468
+#, perl-brace-format
+msgid ""
+"The DNS response, on query with unknown EDNS option-code, does not contain "
+"any EDNS from name servers \"{ns_ip_list}\"."
+msgstr ""
+"DNS-відповідь на запит з невідомим кодом опції EDNS не містить жодного EDNS "
+"від серверів імен \"{ns_ip_list}\"."
+
+#. NAMESERVER:N11_NO_RESPONSE
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:472
+#, perl-brace-format
+msgid ""
+"There is no response on query with unknown EDNS option-code from name "
+"servers \"{ns_ip_list}\"."
+msgstr ""
+"Немає відповіді на запит з невідомим кодом опції EDNS від серверів імен "
+"\"{ns_ip_list}\"."
+
+#. NAMESERVER:N11_RETURNS_UNKNOWN_OPTION_CODE
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:476
+#, perl-brace-format
+msgid ""
+"The DNS response contains an unknown EDNS option-code. Returned from name "
+"servers \"{ns_ip_list}\"."
+msgstr ""
+"DNS-відповідь містить невідомий код опції EDNS. Повернуто від серверів імен "
+"\"{ns_ip_list}\"."
+
+#. NAMESERVER:N11_UNEXPECTED_ANSWER_SECTION
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:480
+#, perl-brace-format
+msgid ""
+"The DNS response, on query with unknown EDNS option-code, does not contain "
+"the expected SOA record in the answer section from name servers "
+"\"{ns_ip_list}\"."
+msgstr ""
+"DNS-відповідь на запит з невідомим кодом опції EDNS не містить очікуваного "
+"запису SOA у розділі відповідей від серверів імен \"{ns_ip_list}\"."
+
+#. NAMESERVER:N11_UNEXPECTED_RCODE
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:484
+#, perl-brace-format
+msgid ""
+"The DNS response, on query with unknown EDNS option-code, has unexpected "
+"RCODE name \"{rcode}\" from name servers \"{ns_ip_list}\"."
+msgstr ""
+"DNS-відповідь на запит з невідомим кодом опції EDNS має неочікуваний RCODE "
+"\"{rcode}\" від серверів імен \"{ns_ip_list}\"."
+
+#. NAMESERVER:N11_UNSET_AA
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:488
+#, perl-brace-format
+msgid ""
+"The DNS response, on query with unknown EDNS option-code, is unexpectedly "
+"not authoritative from name servers \"{ns_ip_list}\"."
+msgstr ""
+"DNS-відповідь на запит з невідомим кодом опції EDNS неочікувано не є "
+"авторитетною від серверів імен \"{ns_ip_list}\"."
+
+#. NAMESERVER:N15_ERROR_ON_VERSION_QUERY
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:492
+#, perl-brace-format
+msgid ""
+"The following name server(s) do not respond or respond with SERVFAIL to "
+"software version query \"{query_name}\". Returned from name servers: "
+"\"{ns_list}\""
+msgstr ""
+"Наступні сервери імен не відповідають або відповідають із SERVFAIL на запит "
+"версії ПЗ \"{query_name}\". Повернуто від серверів імен: \"{ns_list}\""
+
+#. NAMESERVER:N15_NO_VERSION_REVEALED
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:496
+#, perl-brace-format
+msgid ""
+"The following name server(s) do not reveal the software version. Returned "
+"from name servers: \"{ns_list}\""
+msgstr ""
+"Наступні сервери імен не розкривають версію програмного забезпечення. "
+"Повернуто від серверів імен: \"{ns_list}\""
+
+#. NAMESERVER:N15_SOFTWARE_VERSION
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:500
+#, perl-brace-format
+msgid ""
+"The following name server(s) respond to software version query \"{query_name}"
+"\" with string \"{string}\". Returned from name servers: \"{ns_list}\""
+msgstr ""
+"Наступні сервери імен відповідають на запит версії ПЗ \"{query_name}\" "
+"рядком \"{string}\". Повернуто від серверів імен: \"{ns_list}\""
+
+#. NAMESERVER:N15_WRONG_CLASS
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:504
+#, perl-brace-format
+msgid ""
+"The following name server(s) do not return CH class record(s) on CH class "
+"query. Returned from name servers: \"{ns_list}\""
+msgstr ""
+"Наступні сервери імен не повертають запис(и) класу CH на запит класу CH. "
+"Повернуто від серверів імен: \"{ns_list}\""
+
+#. NAMESERVER:QNAME_CASE_INSENSITIVE
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:508
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} does not preserve original case of the queried name "
+"({domain})."
+msgstr ""
+"Сервер імен {ns} не зберігає оригінальний регістр запитаного імені "
+"({domain})."
+
+#. NAMESERVER:QNAME_CASE_SENSITIVE
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:512
+#, perl-brace-format
+msgid "Nameserver {ns} preserves original case of queried names ({domain})."
+msgstr ""
+"Сервер імен {ns} зберігає оригінальний регістр запитаних імен ({domain})."
+
+#. NAMESERVER:SAME_SOURCE_IP
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:516
+msgid "All nameservers reply with same IP used to query them."
+msgstr ""
+"Усі сервери імен відповідають з тієї самої IP-адреси, яка використовувалась "
+"для запиту до них."
+
+#. NAMESERVER:UPWARD_REFERRAL
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:528
+#, perl-brace-format
+msgid "Nameserver {ns} returns an upward referral."
+msgstr "Сервер імен {ns} повертає висхідне посилання."
+
+#. NAMESERVER:UPWARD_REFERRAL_IRRELEVANT
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:532
+msgid "Upward referral tests skipped for root zone."
+msgstr "Тести висхідного посилання пропущено для кореневої зони."
+
+#. NAMESERVER:Z_FLAGS_NOTCLEAR
+#: ../lib/Zonemaster/Engine/Test/Nameserver.pm:536
+#, perl-brace-format
+msgid "Nameserver {ns} has one or more unknown EDNS Z flag bits set."
+msgstr ""
+"Сервер імен {ns} має один або кілька встановлених невідомих бітів прапорця "
+"EDNS Z."
+
+#. SYNTAX:SYNTAX01
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:195
+msgid "No illegal characters in the domain name"
+msgstr "Відсутність недопустимих символів у доменному імені"
+
+#. SYNTAX:SYNTAX02
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:199
+msgid "No hyphen ('-') at the start or end of the domain name"
+msgstr "Відсутність дефіса ('-') на початку або в кінці доменного імені"
+
+#. SYNTAX:SYNTAX03
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:203
+msgid ""
+"There must be no double hyphen ('--') in position 3 and 4 of the domain name"
+msgstr ""
+"Не повинно бути подвійного дефіса ('--') на 3-й і 4-й позиціях доменного "
+"імені"
+
+#. SYNTAX:SYNTAX04
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:207
+msgid "The NS name must have a valid domain/hostname"
+msgstr "Ім'я NS повинно мати дійсне доменне ім'я/ім'я хоста"
+
+#. SYNTAX:SYNTAX05
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:211
+msgid "Misuse of '@' character in the SOA RNAME field"
+msgstr "Неправильне використання символу '@' у полі SOA RNAME"
+
+#. SYNTAX:SYNTAX06
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:215
+msgid "No illegal characters in the SOA RNAME field"
+msgstr "Відсутність недопустимих символів у полі SOA RNAME"
+
+#. SYNTAX:SYNTAX07
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:219
+msgid "No illegal characters in the SOA MNAME field"
+msgstr "Відсутність недопустимих символів у полі SOA MNAME"
+
+#. SYNTAX:SYNTAX08
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:223
+msgid "MX name must have a valid hostname"
+msgstr "Ім'я MX повинно мати дійсне ім'я хоста"
+
+#. SYNTAX:DISCOURAGED_DOUBLE_DASH
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:227
+#, perl-brace-format
+msgid ""
+"Domain name ({domain}) has a label ({label}) with a double hyphen ('--') in "
+"position 3 and 4 (with a prefix which is not 'xn--')."
+msgstr ""
+"Доменне ім'я ({domain}) має мітку ({label}) з подвійним дефісом ('--') на 3-"
+"й і 4-й позиціях (з префіксом, відмінним від 'xn--')."
+
+#. SYNTAX:INITIAL_HYPHEN
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:233
+#, perl-brace-format
+msgid ""
+"Domain name ({domain}) has a label ({label}) starting with an hyphen ('-')."
+msgstr ""
+"Доменне ім'я ({domain}) має мітку ({label}), що починається з дефіса ('-')."
+
+#. SYNTAX:MNAME_DISCOURAGED_DOUBLE_DASH
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:245
+#, perl-brace-format
+msgid ""
+"SOA MNAME ({domain}) has a label ({label}) with a double hyphen ('--') in "
+"position 3 and 4 (with a prefix which is not 'xn--')."
+msgstr ""
+"SOA MNAME ({domain}) має мітку ({label}) з подвійним дефісом ('--') на 3-й і "
+"4-й позиціях (з префіксом, відмінним від 'xn--')."
+
+#. SYNTAX:MNAME_NON_ALLOWED_CHARS
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:251
+#, perl-brace-format
+msgid "Found illegal characters in SOA MNAME ({domain})."
+msgstr "Знайдено недопустимі символи в SOA MNAME ({domain})."
+
+#. SYNTAX:MNAME_NUMERIC_TLD
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:255
+#, perl-brace-format
+msgid "SOA MNAME ({domain}) within a 'numeric only' TLD ({tld})."
+msgstr ""
+"SOA MNAME ({domain}) знаходиться в домені верхнього рівня, що складається "
+"лише з цифр ({tld})."
+
+#. SYNTAX:MNAME_SYNTAX_OK
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:259
+#, perl-brace-format
+msgid "SOA MNAME ({domain}) syntax is valid."
+msgstr "Синтаксис SOA MNAME ({domain}) є дійсним."
+
+#. SYNTAX:MX_DISCOURAGED_DOUBLE_DASH
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:263
+#, perl-brace-format
+msgid ""
+"Domain name MX ({domain}) has a label ({label}) with a double hyphen ('--') "
+"in position 3 and 4 (with a prefix which is not 'xn--')."
+msgstr ""
+"Доменне ім'я MX ({domain}) має мітку ({label}) з подвійним дефісом ('--') на "
+"3-й і 4-й позиціях (з префіксом, відмінним від 'xn--')."
+
+#. SYNTAX:MX_NON_ALLOWED_CHARS
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:269
+#, perl-brace-format
+msgid "Found illegal characters in MX ({domain})."
+msgstr "Знайдено недопустимі символи в MX ({domain})."
+
+#. SYNTAX:MX_NUMERIC_TLD
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:273
+#, perl-brace-format
+msgid "Domain name MX ({domain}) within a 'numeric only' TLD ({tld})."
+msgstr ""
+"Доменне ім'я MX ({domain}) знаходиться в домені верхнього рівня, що "
+"складається лише з цифр ({tld})."
+
+#. SYNTAX:MX_SYNTAX_OK
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:277
+#, perl-brace-format
+msgid "Domain name MX ({domain}) syntax is valid."
+msgstr "Синтаксис доменного імені MX ({domain}) є дійсним."
+
+#. SYNTAX:NAMESERVER_DISCOURAGED_DOUBLE_DASH
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:281
+#, perl-brace-format
+msgid ""
+"Nameserver ({domain}) has a label ({label}) with a double hyphen ('--') in "
+"position 3 and 4 (with a prefix which is not 'xn--')."
+msgstr ""
+"Сервер імен ({domain}) має мітку ({label}) з подвійним дефісом ('--') на 3-й "
+"і 4-й позиціях (з префіксом, відмінним від 'xn--')."
+
+#. SYNTAX:NAMESERVER_NON_ALLOWED_CHARS
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:287
+#, perl-brace-format
+msgid "Found illegal characters in the nameserver ({domain})."
+msgstr "Знайдено недопустимі символи в сервері імен ({domain})."
+
+#. SYNTAX:NAMESERVER_NUMERIC_TLD
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:291
+#, perl-brace-format
+msgid "Nameserver ({domain}) within a 'numeric only' TLD ({tld})."
+msgstr ""
+"Сервер імен ({domain}) знаходиться в домені верхнього рівня, що складається "
+"лише з цифр ({tld})."
+
+#. SYNTAX:NAMESERVER_SYNTAX_OK
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:295
+#, perl-brace-format
+msgid "Nameserver ({domain}) syntax is valid."
+msgstr "Синтаксис сервера імен ({domain}) є дійсним."
+
+#. SYNTAX:NON_ALLOWED_CHARS
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:299
+#, perl-brace-format
+msgid "Found illegal characters in the domain name ({domain})."
+msgstr "Знайдено недопустимі символи в доменному імені ({domain})."
+
+#. SYNTAX:NO_DOUBLE_DASH
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:303
+#, perl-brace-format
+msgid ""
+"Domain name ({domain}) has no label with a double hyphen ('--') in position "
+"3 and 4 (with a prefix which is not 'xn--')."
+msgstr ""
+"Доменне ім'я ({domain}) не має мітки з подвійним дефісом ('--') на 3-й і 4-й "
+"позиціях (з префіксом, відмінним від 'xn--')."
+
+#. SYNTAX:NO_ENDING_HYPHENS
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:309
+#, perl-brace-format
+msgid "Neither end of any label in the domain name ({domain}) has a hyphen."
+msgstr ""
+"Жоден кінець будь-якої мітки в доменному імені ({domain}) не має дефіса."
+
+#. SYNTAX:NO_RESPONSE_MX_QUERY
+#. ZONE:NO_RESPONSE_MX_QUERY
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:317
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:342
+msgid "No response from nameserver(s) on MX queries."
+msgstr "Немає відповіді від сервера(ів) імен на MX-запити."
+
+#. SYNTAX:NO_RESPONSE_SOA_QUERY
+#. ZONE:NO_RESPONSE_SOA_QUERY
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:321
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:338
+msgid "No response from nameserver(s) on SOA queries."
+msgstr "Немає відповіді від сервера(ів) імен на SOA-запити."
+
+#. SYNTAX:ONLY_ALLOWED_CHARS
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:325
+#, perl-brace-format
+msgid "No illegal characters in the domain name ({domain})."
+msgstr "Відсутність недопустимих символів у доменному імені ({domain})."
+
+#. SYNTAX:RNAME_MAIL_DOMAIN_INVALID
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:329
+#, perl-brace-format
+msgid ""
+"The SOA RNAME mail domain ({domain}) cannot be resolved to a mail server "
+"with an IP address."
+msgstr ""
+"Поштовий домен SOA RNAME ({domain}) неможливо перетворити на поштовий сервер "
+"з IP-адресою."
+
+#. SYNTAX:RNAME_MAIL_DOMAIN_LOCALHOST
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:333
+#, perl-brace-format
+msgid ""
+"The SOA RNAME mail domain ({domain}) resolved to a mail server with "
+"localhost ({localhost}) IP address."
+msgstr ""
+"Поштовий домен SOA RNAME ({domain}) перетворився на поштовий сервер з IP-"
+"адресою localhost ({localhost})."
+
+#. SYNTAX:RNAME_MAIL_ILLEGAL_CNAME
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:337
+#, perl-brace-format
+msgid ""
+"The SOA RNAME mail domain ({domain}) refers to an address which is an alias "
+"(CNAME)."
+msgstr ""
+"Поштовий домен SOA RNAME ({domain}) посилається на адресу, яка є псевдонімом "
+"(CNAME)."
+
+#. SYNTAX:RNAME_MISUSED_AT_SIGN
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:341
+#, perl-brace-format
+msgid "Misused '@' character found in SOA RNAME field ({rname})."
+msgstr ""
+"Знайдено неправильно використаний символ '@' у полі SOA RNAME ({rname})."
+
+#. SYNTAX:RNAME_NO_AT_SIGN
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:345
+#, perl-brace-format
+msgid "There is no misused '@' character in the SOA RNAME field ({rname})."
+msgstr ""
+"У полі SOA RNAME немає неправильно використаного символу '@' ({rname})."
+
+#. SYNTAX:RNAME_RFC822_INVALID
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:349
+#, perl-brace-format
+msgid "Illegal character(s) found in SOA RNAME field ({rname})."
+msgstr "Знайдено недопустимий символ(и) у полі SOA RNAME ({rname})."
+
+#. SYNTAX:RNAME_RFC822_VALID
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:353
+#, perl-brace-format
+msgid "The SOA RNAME field ({rname}) is compliant with RFC2822."
+msgstr "Поле SOA RNAME ({rname}) відповідає RFC2822."
+
+#. SYNTAX:TERMINAL_HYPHEN
+#: ../lib/Zonemaster/Engine/Test/Syntax.pm:357
+#, perl-brace-format
+msgid ""
+"Domain name ({domain}) has a label ({label}) ending with a hyphen ('-')."
+msgstr ""
+"Доменне ім'я ({domain}) має мітку ({label}), що закінчується дефісом ('-')."
+
+#. ZONE:ZONE01
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:226
+msgid "Fully qualified master nameserver in SOA"
+msgstr "Повністю визначений головний сервер імен у SOA"
+
+#. ZONE:ZONE02
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:230
+msgid "SOA 'refresh' minimum value"
+msgstr "Мінімальне значення SOA 'refresh'"
+
+#. ZONE:ZONE03
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:234
+msgid "SOA 'retry' lower than 'refresh'"
+msgstr "SOA 'retry' менше за 'refresh'"
+
+#. ZONE:ZONE04
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:238
+msgid "SOA 'retry' at least 1 hour"
+msgstr "SOA 'retry' принаймні 1 година"
+
+#. ZONE:ZONE05
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:242
+msgid "SOA 'expire' minimum value"
+msgstr "Мінімальне значення SOA 'expire'"
+
+#. ZONE:ZONE06
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:246
+msgid "SOA 'minimum' maximum value"
+msgstr "Максимальне значення SOA 'minimum'"
+
+#. ZONE:ZONE07
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:250
+msgid "SOA master is not an alias"
+msgstr "Головний SOA не є псевдонімом"
+
+#. ZONE:ZONE08
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:254
+msgid "MX is not an alias"
+msgstr "MX не є псевдонімом"
+
+#. ZONE:ZONE09
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:258
+msgid "MX record present"
+msgstr "Наявність запису MX"
+
+#. ZONE:ZONE10
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:262
+msgid "No multiple SOA records"
+msgstr "Відсутність кількох записів SOA"
+
+#. ZONE:ZONE11
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:266
+msgid "SPF policy validation"
+msgstr "Перевірка політики SPF"
+
+#. ZONE:RETRY_MINIMUM_VALUE_LOWER
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:270
+#, perl-brace-format
+msgid ""
+"SOA 'retry' value ({retry}) is less than the recommended one "
+"({required_retry})."
+msgstr ""
+"Значення SOA 'retry' ({retry}) менше за рекомендоване ({required_retry})."
+
+#. ZONE:RETRY_MINIMUM_VALUE_OK
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:274
+#, perl-brace-format
+msgid ""
+"SOA 'retry' value ({retry}) is at least equal to the minimum recommended "
+"value ({required_retry})."
+msgstr ""
+"Значення SOA 'retry' ({retry}) принаймні дорівнює мінімальному "
+"рекомендованому значенню ({required_retry})."
+
+#. ZONE:MNAME_IS_CNAME
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:278
+#, perl-brace-format
+msgid "SOA 'mname' value ({mname}) refers to a NS which is an alias (CNAME)."
+msgstr ""
+"Значення SOA 'mname' ({mname}) посилається на NS, який є псевдонімом (CNAME)."
+
+#. ZONE:MNAME_IS_NOT_CNAME
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:282
+#, perl-brace-format
+msgid ""
+"SOA 'mname' value ({mname}) refers to a NS which is not an alias (CNAME)."
+msgstr ""
+"Значення SOA 'mname' ({mname}) посилається на NS, який не є псевдонімом "
+"(CNAME)."
+
+#. ZONE:REFRESH_MINIMUM_VALUE_LOWER
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:286
+#, perl-brace-format
+msgid ""
+"SOA 'refresh' value ({refresh}) is less than the recommended one "
+"({required_refresh})."
+msgstr ""
+"Значення SOA 'refresh' ({refresh}) менше за рекомендоване "
+"({required_refresh})."
+
+#. ZONE:REFRESH_MINIMUM_VALUE_OK
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:290
+#, perl-brace-format
+msgid ""
+"SOA 'refresh' value ({refresh}) is at least equal to the minimum recommended "
+"value ({required_refresh})."
+msgstr ""
+"Значення SOA 'refresh' ({refresh}) принаймні дорівнює мінімальному "
+"рекомендованому значенню ({required_refresh})."
+
+#. ZONE:EXPIRE_LOWER_THAN_REFRESH
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:294
+#, perl-brace-format
+msgid ""
+"SOA 'expire' value ({expire}) is lower than the SOA 'refresh' value "
+"({refresh})."
+msgstr ""
+"Значення SOA 'expire' ({expire}) менше за значення SOA 'refresh' ({refresh})."
+
+#. ZONE:SOA_DEFAULT_TTL_MAXIMUM_VALUE_HIGHER
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:298
+#, perl-brace-format
+msgid ""
+"SOA 'minimum' value ({minimum}) is higher than the recommended one "
+"({highest_minimum})."
+msgstr ""
+"Значення SOA 'minimum' ({minimum}) вище за рекомендоване ({highest_minimum})."
+
+#. ZONE:SOA_DEFAULT_TTL_MAXIMUM_VALUE_LOWER
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:302
+#, perl-brace-format
+msgid ""
+"SOA 'minimum' value ({minimum}) is less than the recommended one "
+"({lowest_minimum})."
+msgstr ""
+"Значення SOA 'minimum' ({minimum}) менше за рекомендоване ({lowest_minimum})."
+
+#. ZONE:SOA_DEFAULT_TTL_MAXIMUM_VALUE_OK
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:306
+#, perl-brace-format
+msgid ""
+"SOA 'minimum' value ({minimum}) is between the recommended ones "
+"({lowest_minimum}/{highest_minimum})."
+msgstr ""
+"Значення SOA 'minimum' ({minimum}) знаходиться в межах рекомендованих "
+"({lowest_minimum}/{highest_minimum})."
+
+#. ZONE:EXPIRE_MINIMUM_VALUE_LOWER
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:310
+#, perl-brace-format
+msgid ""
+"SOA 'expire' value ({expire}) is less than the recommended one "
+"({required_expire})."
+msgstr ""
+"Значення SOA 'expire' ({expire}) менше за рекомендоване ({required_expire})."
+
+#. ZONE:REFRESH_LOWER_THAN_RETRY
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:314
+#, perl-brace-format
+msgid ""
+"SOA 'refresh' value ({refresh}) is lower than the SOA 'retry' value "
+"({retry})."
+msgstr ""
+"Значення SOA 'refresh' ({refresh}) менше за значення SOA 'retry' ({retry})."
+
+#. ZONE:REFRESH_HIGHER_THAN_RETRY
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:318
+#, perl-brace-format
+msgid ""
+"SOA 'refresh' value ({refresh}) is higher than the SOA 'retry' value "
+"({retry})."
+msgstr ""
+"Значення SOA 'refresh' ({refresh}) більше за значення SOA 'retry' ({retry})."
+
+#. ZONE:MX_RECORD_IS_CNAME
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:322
+msgid "MX record for the domain is pointing to a CNAME."
+msgstr "Запис MX для домену вказує на CNAME."
+
+#. ZONE:MX_RECORD_IS_NOT_CNAME
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:326
+msgid "MX record for the domain is not pointing to a CNAME."
+msgstr "Запис MX для домену не вказує на CNAME."
+
+#. ZONE:MULTIPLE_SOA
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:330
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responds with multiple ({count}) SOA records on SOA queries."
+msgstr ""
+"Сервер імен {ns} відповідає кількома ({count}) записами SOA на SOA-запити."
+
+#. ZONE:NO_SOA_IN_RESPONSE
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:346
+#, perl-brace-format
+msgid ""
+"Response from nameserver {ns} on SOA queries does not contain SOA record."
+msgstr "Відповідь від сервера імен {ns} на SOA-запити не містить запису SOA."
+
+#. ZONE:MNAME_HAS_NO_ADDRESS
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:350
+#, perl-brace-format
+msgid "No IP address found for SOA 'mname' nameserver ({mname})."
+msgstr "Не знайдено IP-адреси для сервера імен SOA 'mname' ({mname})."
+
+#. ZONE:ONE_SOA
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:354
+msgid "A unique SOA record is returned by all nameservers of the zone."
+msgstr "Унікальний запис SOA повертається всіма серверами імен зони."
+
+#. ZONE:EXPIRE_MINIMUM_VALUE_OK
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:358
+#, perl-brace-format
+msgid ""
+"SOA 'expire' value ({expire}) is higher than the minimum recommended value "
+"({required_expire}) and not lower than the 'refresh' value ({refresh})."
+msgstr ""
+"Значення SOA 'expire' ({expire}) вище за мінімальне рекомендоване значення "
+"({required_expire}) і не нижче за значення 'refresh' ({refresh})."
+
+#. ZONE:WRONG_SOA
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:380
+#, perl-brace-format
+msgid ""
+"Nameserver {ns} responds with a wrong owner name ({owner} instead of {name}) "
+"on SOA queries."
+msgstr ""
+"Сервер імен {ns} відповідає з неправильним іменем власника ({owner} замість "
+"{name}) на SOA-запити."
+
+#. ZONE:Z01_MNAME_HAS_LOCALHOST_ADDR
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:384
+#, perl-brace-format
+msgid ""
+"SOA MNAME name server \"{nsname}\" resolves to a localhost IP address "
+"({ns_ip})."
+msgstr ""
+"Сервер імен SOA MNAME \"{nsname}\" перетворюється на IP-адресу localhost "
+"({ns_ip})."
+
+#. ZONE:Z01_MNAME_IS_DOT
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:388
+#, perl-brace-format
+msgid ""
+"SOA MNAME is specified as \".\" which usually means \"no server\". Fetched "
+"from name servers \"{ns_ip_list}\"."
+msgstr ""
+"SOA MNAME вказано як \".\", що зазвичай означає \"немає сервера\". Отримано "
+"від серверів імен \"{ns_ip_list}\"."
+
+#. ZONE:Z01_MNAME_IS_LOCALHOST
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:392
+#, perl-brace-format
+msgid ""
+"SOA MNAME name server is \"localhost\", which is invalid. Fetched from name "
+"servers \"{ns_ip_list}\"."
+msgstr ""
+"Сервер імен SOA MNAME є \"localhost\", що є недійсним. Отримано від серверів "
+"імен \"{ns_ip_list}\"."
+
+#. ZONE:Z01_MNAME_IS_MASTER
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:396
+#, perl-brace-format
+msgid "SOA MNAME name server(s) \"{ns_list}\" appears to be master."
+msgstr "Сервер(и) імен SOA MNAME \"{ns_list}\" виглядає як головний."
+
+#. ZONE:Z01_MNAME_MISSING_SOA_RECORD
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:400
+#, perl-brace-format
+msgid ""
+"SOA MNAME name server \"{ns}\" responds to an SOA query with no SOA records "
+"in the answer section."
+msgstr ""
+"Сервер імен SOA MNAME \"{ns}\" відповідає на SOA-запит без записів SOA у "
+"розділі відповідей."
+
+#. ZONE:Z01_MNAME_NO_RESPONSE
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:404
+#, perl-brace-format
+msgid "SOA MNAME name server \"{ns}\" does not respond to an SOA query."
+msgstr "Сервер імен SOA MNAME \"{ns}\" не відповідає на SOA-запит."
+
+#. ZONE:Z01_MNAME_NOT_AUTHORITATIVE
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:408
+#, perl-brace-format
+msgid "SOA MNAME name server \"{ns}\" is not authoritative for the zone."
+msgstr "Сервер імен SOA MNAME \"{ns}\" не є авторитетним для зони."
+
+#. ZONE:Z01_MNAME_NOT_IN_NS_LIST
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:412
+#, perl-brace-format
+msgid ""
+"SOA MNAME name server \"{nsname}\" is not listed as NS record for the zone."
+msgstr "Сервер імен SOA MNAME \"{nsname}\" не вказаний як запис NS для зони."
+
+#. ZONE:Z01_MNAME_NOT_MASTER
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:416
+#, perl-brace-format
+msgid ""
+"SOA MNAME name server(s) \"{ns_list}\" do not have the highest SOA SERIAL "
+"(expected \"{soaserial}\" but got \"{soaserial_list}\")"
+msgstr ""
+"Сервер(и) імен SOA MNAME \"{ns_list}\" не має(ють) найвищого SOA SERIAL "
+"(очікувалося \"{soaserial}\", але отримано \"{soaserial_list}\")"
+
+#. ZONE:Z01_MNAME_NOT_RESOLVE
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:420
+#, perl-brace-format
+msgid ""
+"SOA MNAME name server \"{nsname}\" cannot be resolved into an IP address."
+msgstr "Сервер імен SOA MNAME \"{nsname}\" неможливо перетворити на IP-адресу."
+
+#. ZONE:Z01_MNAME_UNEXPECTED_RCODE
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:424
+#, perl-brace-format
+msgid ""
+"SOA MNAME name server \"{ns}\" gives unexpected RCODE name (\"{rcode}\") in "
+"response to an SOA query."
+msgstr ""
+"Сервер імен SOA MNAME \"{ns}\" дає неочікуваний RCODE (\"{rcode}\") у "
+"відповідь на SOA-запит."
+
+#. ZONE:Z09_INCONSISTENT_MX
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:428
+msgid "Some name servers return an MX RRset while others return none."
+msgstr ""
+"Деякі сервери імен повертають MX RRset, тоді як інші нічого не повертають."
+
+#. ZONE:Z09_INCONSISTENT_MX_DATA
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:432
+msgid "The MX RRset data is inconsistent between the name servers."
+msgstr "Дані MX RRset є неузгодженими між серверами імен."
+
+#. ZONE:Z09_MISSING_MAIL_TARGET
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:436
+msgid "The child zone has no mail target (no MX)."
+msgstr "Дочірня зона не має поштової цілі (немає MX)."
+
+#. ZONE:Z09_MX_DATA
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:440
+#, perl-brace-format
+msgid ""
+"Mail targets in the MX RRset \"{mailtarget_list}\" returned from name "
+"servers \"{ns_ip_list}\"."
+msgstr ""
+"Поштові цілі в MX RRset \"{mailtarget_list}\" повернуто від серверів імен "
+"\"{ns_ip_list}\"."
+
+#. ZONE:Z09_MX_FOUND
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:444
+#, perl-brace-format
+msgid "MX RRset was returned by name servers \"{ns_ip_list}\"."
+msgstr "MX RRset було повернуто серверами імен \"{ns_ip_list}\"."
+
+#. ZONE:Z09_NON_AUTH_MX_RESPONSE
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:448
+#, perl-brace-format
+msgid ""
+"Non-authoritative response on MX query from name servers \"{ns_ip_list}\"."
+msgstr ""
+"Неавторитетна відповідь на MX-запит від серверів імен \"{ns_ip_list}\"."
+
+#. ZONE:Z09_NO_MX_FOUND
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:452
+#, perl-brace-format
+msgid "No MX RRset was returned by name servers \"{ns_ip_list}\"."
+msgstr "MX RRset не було повернуто серверами імен \"{ns_ip_list}\"."
+
+#. ZONE:Z09_NO_RESPONSE_MX_QUERY
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:456
+#, perl-brace-format
+msgid "No response on MX query from name servers \"{ns_ip_list}\"."
+msgstr "Немає відповіді на MX-запит від серверів імен \"{ns_ip_list}\"."
+
+#. ZONE:Z09_NULL_MX_NON_ZERO_PREF
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:460
+msgid "The zone has a Null MX with non-zero preference."
+msgstr "Зона має порожній (Null) MX з ненульовим пріоритетом."
+
+#. ZONE:Z09_NULL_MX_WITH_OTHER_MX
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:464
+msgid "The zone has a Null MX mixed with other MX records."
+msgstr "Зона має порожній (Null) MX, змішаний з іншими записами MX."
+
+#. ZONE:Z09_ROOT_EMAIL_DOMAIN
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:468
+msgid "Root zone with an unexpected MX RRset (non-Null MX)."
+msgstr "Коренева зона з неочікуваним MX RRset (не порожній (Null) MX)."
+
+#. ZONE:Z09_TLD_EMAIL_DOMAIN
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:472
+msgid "The zone is a TLD and has an unexpected MX RRset (non-Null MX)."
+msgstr ""
+"Зона є доменом верхнього рівня (TLD) і має неочікуваний MX RRset (не "
+"порожній (Null) MX)."
+
+#. ZONE:Z09_UNEXPECTED_RCODE_MX
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:476
+#, perl-brace-format
+msgid ""
+"Unexpected RCODE value ({rcode}) on the MX query from name servers "
+"\"{ns_ip_list}\"."
+msgstr ""
+"Неочікуване значення RCODE ({rcode}) на MX-запит від серверів імен "
+"\"{ns_ip_list}\"."
+
+#. ZONE:Z11_DIFFERENT_SPF_POLICIES_FOUND
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:480
+#, perl-brace-format
+msgid ""
+"The following name servers returned the same SPF policy. Name servers: "
+"{ns_list}."
+msgstr ""
+"Наступні сервери імен повернули однакову політику SPF. Сервери імен: "
+"{ns_list}."
+
+#. ZONE:Z11_INCONSISTENT_SPF_POLICIES
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:485
+msgid ""
+"One or more name servers do not publish the same SPF policy as the others."
+msgstr ""
+"Один або кілька серверів імен не публікують таку ж політику SPF, як інші."
+
+#. ZONE:Z11_NO_SPF_FOUND
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:489
+#, perl-brace-format
+msgid "No SPF policy was found for {domain}."
+msgstr "Не знайдено політики SPF для {domain}."
+
+#. ZONE:Z11_NO_SPF_NON_MAIL_DOMAIN
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:494
+#, perl-brace-format
+msgid ""
+"No SPF policy was found for {domain}, which is a type of domain (root, TLD "
+"or under .ARPA) not expected to be used for email."
+msgstr ""
+"Не знайдено політики SPF для {domain}, який є типом домену (кореневий, TLD "
+"або під .ARPA), що не очікується для використання в електронній пошті."
+
+#. ZONE:Z11_NON_NULL_SPF_NON_MAIL_DOMAIN
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:500
+#, perl-brace-format
+msgid ""
+"A non-null SPF policy was found on {domain}, although this type of domain "
+"(root, TLD or under .ARPA) is not expected to be used for email."
+msgstr ""
+"Непорожню політику SPF було знайдено для {domain}, хоча цей тип домену "
+"(кореневий, TLD або під .ARPA) не очікується для використання в електронній "
+"пошті."
+
+#. ZONE:Z11_NULL_SPF_NON_MAIL_DOMAIN
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:506
+#, perl-brace-format
+msgid ""
+"A null SPF policy was found on {domain}, which is a type of domain (root, "
+"TLD or under .ARPA) not expected to be used for email."
+msgstr ""
+"Порожню (Null) політику SPF було знайдено для {domain}, який є типом домену "
+"(кореневий, TLD або під .ARPA), що не очікується для використання в "
+"електронній пошті."
+
+#. ZONE:Z11_SPF_MULTIPLE_RECORDS
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:512
+#, perl-brace-format
+msgid ""
+"The following name servers returned more than one SPF policy. Name servers: "
+"{ns_list}."
+msgstr ""
+"Наступні сервери імен повернули більше однієї політики SPF. Сервери імен: "
+"{ns_list}."
+
+#. ZONE:Z11_SPF_SYNTAX_ERROR
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:517
+#, perl-brace-format
+msgid ""
+"The SPF policy of {domain} has a syntax error. Policy retrieved from the "
+"following nameservers: {ns_list}."
+msgstr ""
+"Політика SPF {domain} має синтаксичну помилку. Політику отримано від "
+"наступних серверів імен: {ns_list}."
+
+#. ZONE:Z11_SPF_SYNTAX_OK
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:522
+#, perl-brace-format
+msgid "The SPF policy of {domain} has correct syntax."
+msgstr "Політика SPF {domain} має правильний синтаксис."
+
+#. ZONE:Z11_UNABLE_TO_CHECK_FOR_SPF
+#: ../lib/Zonemaster/Engine/Test/Zone.pm:527
+msgid ""
+"None of the zone’s name servers responded with an authoritative response to "
+"queries for SPF policies."
+msgstr ""
+"Жоден із серверів імен зони не відповів авторитетною відповіддю на запити "
+"щодо політик SPF."
+
+#. SYSTEM:CANNOT_CONTINUE
+#: ../lib/Zonemaster/Engine/Translator.pm:23
+#, perl-brace-format
+msgid "Not enough data about {domain} was found to be able to run tests."
+msgstr ""
+"Знайдено недостатньо даних про {domain}, щоб мати можливість запустити тести."
+
+#. SYSTEM:DEPENDENCY_VERSION
+#: ../lib/Zonemaster/Engine/Translator.pm:27
+#, perl-brace-format
+msgid "Using prerequisite module {name} version {version}."
+msgstr "Використання необхідного модуля {name} версії {version}."
+
+#. SYSTEM:GLOBAL_VERSION
+#: ../lib/Zonemaster/Engine/Translator.pm:31
+#, perl-brace-format
+msgid "Using version {version} of the Zonemaster engine."
+msgstr "Використання версії {version} рушія Zonemaster."
+
+#. SYSTEM:LOGGER_CALLBACK_ERROR
+#: ../lib/Zonemaster/Engine/Translator.pm:35
+#, perl-brace-format
+msgid "Logger callback died with error: {exception}"
+msgstr "Функція зворотного виклику логера завершилася з помилкою: {exception}"
+
+#. SYSTEM:LOOKUP_ERROR
+#: ../lib/Zonemaster/Engine/Translator.pm:39
+#, perl-brace-format
+msgid ""
+"DNS query to {ns} for {domain}/{type}/{class} failed with error: {message}"
+msgstr ""
+"DNS-запит до {ns} для {domain}/{type}/{class} не вдався з помилкою: {message}"
+
+#. SYSTEM:MODULE_ERROR
+#: ../lib/Zonemaster/Engine/Translator.pm:43
+#, perl-brace-format
+msgid "Fatal error in {module}: {msg}"
+msgstr "Фатальна помилка в {module}: {msg}"
+
+#. SYSTEM:MODULE_VERSION
+#: ../lib/Zonemaster/Engine/Translator.pm:47
+#, perl-brace-format
+msgid "Using module {module} version {version}."
+msgstr "Використання модуля {module} версії {version}."
+
+#. SYSTEM:MODULE_END
+#: ../lib/Zonemaster/Engine/Translator.pm:51
+#, perl-brace-format
+msgid "Module {module} finished running."
+msgstr "Модуль {module} завершив виконання."
+
+#. SYSTEM:NO_NETWORK
+#: ../lib/Zonemaster/Engine/Translator.pm:55
+msgid "Both IPv4 and IPv6 are disabled."
+msgstr "Як IPv4, так і IPv6 вимкнено."
+
+#. SYSTEM:UNKNOWN_METHOD
+#: ../lib/Zonemaster/Engine/Translator.pm:59
+#, perl-brace-format
+msgid "Request to run unknown method {testcase} in module {module}."
+msgstr "Запит на запуск невідомого методу {testcase} у модулі {module}."
+
+#. SYSTEM:UNKNOWN_MODULE
+#: ../lib/Zonemaster/Engine/Translator.pm:63
+#, perl-brace-format
+msgid ""
+"Request to run {testcase} in unknown module {module}. Known modules: "
+"{module_list}."
+msgstr ""
+"Запит на запуск {testcase} у невідомому модулі {module}. Відомі модулі: "
+"{module_list}."
+
+#. SYSTEM:FAKE_DELEGATION_TO_SELF
+#: ../lib/Zonemaster/Engine/Translator.pm:75
+#, perl-brace-format
+msgid ""
+"Name server {ns} not adding fake delegation for domain {domain} to itself."
+msgstr ""
+"Сервер імен {ns} не додає фейкове делегування для домену {domain} до самого "
+"себе."
+
+#. SYSTEM:FAKE_DELEGATION_IN_ZONE_NO_IP
+#: ../lib/Zonemaster/Engine/Translator.pm:79
+#, perl-brace-format
+msgid ""
+"The fake delegation of domain {domain} includes an in-zone name server "
+"{nsname} without mandatory glue (without IP address)."
+msgstr ""
+"Фейкове делегування домену {domain} включає внутрішній сервер імен {nsname} "
+"без обов'язкового glue-запису (без IP-адреси)."
+
+#. SYSTEM:FAKE_DELEGATION_NO_IP
+#: ../lib/Zonemaster/Engine/Translator.pm:85
+#, perl-brace-format
+msgid ""
+"The fake delegation of domain {domain} includes a name server {nsname} that "
+"cannot be resolved to any IP address."
+msgstr ""
+"Фейкове делегування домену {domain} включає сервер імен {nsname}, який "
+"неможливо перетворити на жодну IP-адресу."
+
+#. SYSTEM:PACKET_BIG
+#: ../lib/Zonemaster/Engine/Translator.pm:91
+#, perl-brace-format
+msgid "Big packet size ({size}) (try with \"{command}\")."
+msgstr "Великий розмір пакета ({size}) (спробуйте з \"{command}\")."
