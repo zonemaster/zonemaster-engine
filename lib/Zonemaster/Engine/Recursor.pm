@@ -214,24 +214,24 @@ sub _resolve_cname {
 
     my ( %cnames, %seen_targets, %forbidden_targets );
     for my $rr ( @cname_rrs ) {
-        my $rr_owner = name( $rr->owner );
-        my $rr_target = name( $rr->cname );
+        my $rr_owner = lc( name( $rr->owner ) );
+        my $rr_target = lc( name( $rr->cname ) );
 
         # Multiple CNAME records with same owner name
-        if ( exists $forbidden_targets{lc( $rr_owner )} ) {
+        if ( exists $forbidden_targets{$rr_owner} ) {
             Zonemaster::Engine->logger->add( CNAME_RECORDS_MULTIPLE_FOR_NAME => { name => $rr_owner } );
             return ( undef, $state );
         }
 
         # CNAME owner name is target, or target has already been seen in this response, or owner name cannot be a target
-        if ( lc( $rr_owner ) eq lc( $rr_target ) or exists $seen_targets{lc( $rr_target )} or grep { $_ eq lc( $rr_target ) } ( keys %forbidden_targets ) ) {
+        if ( $rr_owner eq $rr_target or exists $seen_targets{$rr_target} or grep { $_ eq $rr_target } ( keys %forbidden_targets ) ) {
             Zonemaster::Engine->logger->add( CNAME_LOOP_INNER => { name => join( ';', map { $_->owner } @cname_rrs ), target => join( ';', map { $_->cname } @cname_rrs ) } );
             return ( undef, $state );
         }
 
-        $seen_targets{lc( $rr_target )} = 1;
-        $forbidden_targets{lc( $rr_owner )} = 1;
-        $cnames{$rr_owner} = $rr_target;
+        $seen_targets{$rr_target} = 1;
+        $forbidden_targets{$rr_owner} = 1;
+        $cnames{$rr_owner} = name( $rr->cname ); # Preserve case of $rr_target
     }
 
     # Get final CNAME target
@@ -249,26 +249,13 @@ sub _resolve_cname {
         return ( undef, $state );
     }
 
-    # Check if there are RRs of queried type (QTYPE) in the answer section of the response;
-    if ( scalar $p->get_records( $type, 'answer' ) ) {
-        # RR of type QTYPE for CNAME target is already in the response; no need to recurse
-        if ( $p->has_rrs_of_type_for_name( $type, $target ) ) {
-            Zonemaster::Engine->logger->add( CNAME_FOLLOWED_IN_ZONE => { name => $name, type => $type, target => $target } );
-            return ( $p, $state );
-        }
-
-        # There is a record of type QTYPE but with different owner name than CNAME target; no need to recurse
-        Zonemaster::Engine->logger->add( CNAME_NO_MATCH => { name => $name, type => $type, target => $target, owner_names => join( ';', map { $_->owner } $p->get_records( $type ) ) } );
-        return ( undef, $state );
-    }
-
-    # CNAME target has already been followed (outer loop); no need to recurse
+    # CNAME target has already been followed previously (outer loop); no need to recurse
     if ( exists $state->{in_progress}{lc( $target )}{$type} ) {
         Zonemaster::Engine->logger->add( CNAME_LOOP_OUTER => { name => $name, target => $target, targets_seen => join( ';', keys %{ $state->{tseen} } ) } );
         return ( undef, $state );
     }
 
-    # Safe-guard against anormaly long consecutive CNAME chains; no need to recurse
+    # Safeguard against abnormally long consecutive CNAME lookups; no need to recurse
     $state->{tseen}{lc( $target )} = 1;
     $state->{tcount} += 1;
 
@@ -277,17 +264,39 @@ sub _resolve_cname {
         return ( undef, $state );
     }
 
-    # Make sure that the CNAME target is out of zone before making a new recursive lookup for CNAME target
+    # Check if there are RRs of queried type (QTYPE) in the answer section of the response;
+    if ( scalar $p->get_records( $type, 'answer' ) ) {
+        # RR of type QTYPE for CNAME target is already in the response; no need to recurse
+        if ( $p->has_rrs_of_type_for_name( $type, $target ) ) {
+            Zonemaster::Engine->logger->add( CNAME_FOLLOWED_IN_ZONE => { name => $name, type => $type, target => $target } );
+            return ( $p, $state );
+        }
+
+        # There is a record of type QTYPE but with different owner name than CNAME target; we have to recurse again
+        Zonemaster::Engine->logger->add( CNAME_NO_MATCH => { name => $name, type => $type, target => $target, owner_names => join( ';', map { $_->owner } $p->get_records( $type ) ) } );
+    }
+
+    # CNAME target is not in the same zone as the CNAME owner name, so make a new recursive lookup
     unless ( $name->is_in_bailiwick( $target ) ) {
         Zonemaster::Engine->logger->add( CNAME_FOLLOWED_OUT_OF_ZONE => { name => $name, target => $target } );
         ( $p, $state ) = $class->_recurse( $target, $type, $dns_class,
             { ns => [ root_servers() ], count => 0, common => 0, seen => {}, tseen => $state->{tseen}, tcount => $state->{tcount}, glue => {}, in_progress => $state->{in_progress} });
+        return ( $p, $state );
     }
+    # Final attempt to resolve the CNAME target for in-domain names
     else {
-        # What do do here?
+        ( $p, $state ) = $class->_recurse( $target, $type, $dns_class,
+            { ns => [ root_servers() ], count => 0, common => 0, seen => {}, tseen => $state->{tseen}, tcount => $state->{tcount}, glue => {}, in_progress => $state->{in_progress} });
+
+        if ( $p and $p->aa and $p->rcode eq 'NOERROR' ) {
+            Zonemaster::Engine->logger->add( CNAME_TO_NODATA => { name => $name, type => $type, target => $target } );
+            return ( $p, $state );
+        }
     }
 
-    return ( $p, $state );
+    # Catch-all; unforeseen problem in CNAME resolution
+    Zonemaster::Engine->logger->add( CNAME_UNRESOLVABLE => { name => $name, type => $type, target => $target } );
+    return ( undef, $state );
 }
 
 sub _recurse {
@@ -623,7 +632,7 @@ This list can be replaced like so:
 
     my ( $p, $state_hash ) = _recurse( $name, $type_string, $dns_class_string, $p, $state_hash );
 
-Performs a recursive lookup resolution for the given arguments. Used by the L<recursive lookup|/recurse($name, $type, $class)> method in this module.
+Performs a recursive lookup resolution for the given arguments. Used by the L<recursive lookup|/recurse($name[, $type, $class, $ns])> method in this module.
 
 Takes a L<Zonemaster::Engine::DNSName> object, a string (query type), a string (DNS class), a L<Zonemaster::Engine::Packet> object, and a reference to a hash.
 The mandatory keys for that hash are 'ns' (arrayref), 'count' (integer), 'common' (integer), 'seen' (hash), 'glue' (hash) and optional keys are 'in_progress'
@@ -645,36 +654,78 @@ Returns a list of L<Zonemaster::Engine::Nameserver> objects.
 
     my ( $p, $state_hash ) = _resolve_cname( $name, $type_string, $dns_class_string, $p, $state_hash );
 
-Performs CNAME resolution for the given arguments. Used by the L<recursive lookup|/_recurse()> helper method in this module.
-If CNAMEs are successfully resolved, a L<packet|Zonemaster::Engine::Packet> (which could be C<undef>) is returned and
-one of the following message tags is logged:
+Performs a CNAME resolution for the given arguments. Used by the L<recursive lookup|/_recurse()> helper method in this module.
+If the CNAME resolution is successful, the first return value will be a L<packet|Zonemaster::Engine::Packet> (which could be C<undef>)
+and at least one of the following message tags is logged:
 
 =over
 
 =item CNAME_FOLLOWED_IN_ZONE
 
+This message tag indicates that the CNAME target was found in the current response and has the requested record type,
+so no additional recursion is needed.
+
 =item CNAME_FOLLOWED_OUT_OF_ZONE
+
+This message tag indicates that the CNAME target is outside the queried name's zone and is resolved through a new recursive lookup.
+
+=item CNAME_TO_NODATA
+
+This message tag indicates that the CNAME target was resolved authoritatively. The name exists but not with the requested record type.
 
 =back
 
-Note that CNAME records are also validated and, in case of an error, an empty (C<undef>) L<packet|Zonemaster::Engine::Packet>
-is returned and one of the following message tags will be logged:
+Note that the resolution has multiple validation steps and, in case of an error, the first return value will be C<undef> and at least
+one of the following message tags is logged:
 
 =over
 
 =item CNAME_CHAIN_TOO_LONG
 
+This message tag indicates that the number of distinct lookups made to resolve a CNAME chain is longer than the maximum allowed length
+with respect to L<$CNAME_MAX_CHAIN_LENGTH|Zonemaster::Engine::Constants/CNAME_MAX_CHAIN_LENGTH>.
+
 =item CNAME_LOOP_INNER
+
+This message tag indicates that there is a loop in the CNAME chain within the same zone.
 
 =item CNAME_LOOP_OUTER
 
-=item CNAME_NO_MATCH
+This message tag indicates that there is a loop in the CNAME chain across different zones.
 
 =item CNAME_RECORDS_CHAIN_BROKEN
 
+This message tag indicates that the CNAME chain in the current response is broken, i.e. that with multiple CNAME records in a response
+there is at least one CNAME record with a target that does not point to a corresponding CNAME record in the same response.
+
 =item CNAME_RECORDS_MULTIPLE_FOR_NAME
 
+This message tag indicates that there are more than one CNAME record with the same owner name in the current response.
+
 =item CNAME_RECORDS_TOO_MANY
+
+This message tag indicates that there are too many, with respect to L<$CNAME_MAX_RECORDS|Zonemaster::Engine::Constants/CNAME_MAX_RECORDS>,
+non-duplicate CNAME records in the current response.
+
+=item CNAME_UNRESOLVABLE
+
+This message tag indicates that the CNAME resolution could not be completed and is there as a catch-all to handle unforeseen problems
+in the CNAME resolution process.
+
+=back
+
+Finally the following message tags can be also be logged alongside all of the above message tags:
+
+=over
+
+=item CNAME_RECORDS_DUPLICATES
+
+This message tag indicates that there are duplicate CNAME records in the current response.
+
+=item CNAME_NO_MATCH
+
+This message tag indicates that there is a record of the requested type in the answer section of the response but with a different owner name
+than the CNAME target within that same response.
 
 =back
 
