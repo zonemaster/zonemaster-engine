@@ -1,5 +1,15 @@
 Release history for Zonemaster component Zonemaster-Engine
 
+v9.0.1 2026-09-30 (part of Zonemaster v2026.1.2 release)
+
+ [Fixes]
+ - Updates the CNAME resolution (#1518)
+ - Rewrites test case Zone09 implementation (#1543)
+ - Rewrites test case Consistency05 implementation (#1547)
+ - Fixes MethodsV2 when dealing with fake delegation (#1546)
+ - Adds missing DNSKEY/DS algorithm comparison in DNSSEC02 (#1551)
+
+
 v9.0.0 2026-06-29 (part of Zonemaster v2026.1 release)
 
  [Breaking changes]
