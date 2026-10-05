@@ -241,7 +241,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     CS05_OOD_ADDR_MISMATCH => sub {
         __x    # CONSISTENCY:CS05_OOD_ADDR_MISMATCH
-          'For name server {nsname} the glue record in the delegation "{ns_ip_list_glue}" is different from the address record in the child zone "{ns_ip_list_zone}".', @_;
+          'For name server {nsname} the glue record in the delegation "{ns_ip_list_glue}" is different from the DNS record found through lookup "{ns_ip_list_lookup}"', @_;
     },
     IPV4_DISABLED => sub {
         __x    # CONSISTENCY:IPV4_DISABLED
@@ -1057,8 +1057,8 @@ sub consistency05 {
             if ( not $set->equals( $lookup ) ) {
                 push @results, _emit_log( CS05_OOD_ADDR_MISMATCH => {
                     nsname => $n,
-                    ns_ip_list_ref => join( ";", map { $_->address() } $set->sorted_items() ),
-                    ns_ip_list_lookup => join( ";", map { $_->address() } $lookup->sorted_items() )
+                    ns_ip_list_glue => join( ";", map { $_->address()->short() } $set->sorted_items() ),
+                    ns_ip_list_lookup => join( ";", map { $_->address()->short() } $lookup->sorted_items() )
                 } );
             }
         }
