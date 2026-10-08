@@ -3,10 +3,10 @@ package Zonemaster::Engine::Test::Connectivity;
 use v5.16.0;
 use warnings;
 
-use version; our $VERSION = version->declare("v1.1.0");
+use version; our $VERSION = version->declare( "v1.1.0" );
 
 use Carp;
-use List::MoreUtils qw[uniq];
+use List::MoreUtils    qw[uniq];
 use Locale::TextDomain qw[Zonemaster-Engine];
 use Readonly;
 
@@ -135,7 +135,7 @@ sub metadata {
               IPV6_SAME_ASN
               TEST_CASE_END
               TEST_CASE_START
-              )
+            )
         ],
         connectivity04 => [
             qw(
@@ -151,7 +151,7 @@ sub metadata {
               CN04_IPV6_SINGLE_PREFIX
               TEST_CASE_END
               TEST_CASE_START
-              )
+            )
         ],
     };
 } ## end sub metadata
@@ -219,11 +219,13 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     CN01_WRONG_NS_RECORD_UDP => sub {
         __x    # CONNECTIVITY:CN01_WRONG_NS_RECORD_UDP
-          'Nameserver {ns} responds with a wrong owner name ({domain_found} instead of {domain_expected}) on NS queries over UDP.', @_;
+'Nameserver {ns} responds with a wrong owner name ({domain_found} instead of {domain_expected}) on NS queries over UDP.',
+          @_;
     },
     CN01_WRONG_SOA_RECORD_UDP => sub {
         __x    # CONNECTIVITY:CN01_WRONG_SOA_RECORD_UDP
-          'Nameserver {ns} responds with a wrong owner name ({domain_found} instead of {domain_expected}) on SOA queries over UDP.', @_;
+'Nameserver {ns} responds with a wrong owner name ({domain_found} instead of {domain_expected}) on SOA queries over UDP.',
+          @_;
     },
     CN02_MISSING_NS_RECORD_TCP => sub {
         __x    # CONNECTIVITY:CN02_MISSING_NS_RECORD_TCP
@@ -263,11 +265,13 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     CN02_WRONG_NS_RECORD_TCP => sub {
         __x    # CONNECTIVITY:CN02_WRONG_NS_RECORD_TCP
-          'Nameserver {ns} responds with a wrong owner name ({domain_found} instead of {domain_expected}) on NS queries over TCP.', @_;
+'Nameserver {ns} responds with a wrong owner name ({domain_found} instead of {domain_expected}) on NS queries over TCP.',
+          @_;
     },
     CN02_WRONG_SOA_RECORD_TCP => sub {
         __x    # CONNECTIVITY:CN02_WRONG_SOA_RECORD_TCP
-          'Nameserver {ns} responds with a wrong owner name ({domain_found} instead of {domain_expected}) on SOA queries over TCP.', @_;
+'Nameserver {ns} responds with a wrong owner name ({domain_found} instead of {domain_expected}) on SOA queries over TCP.',
+          @_;
     },
     CN04_ASN_INFOS_ANNOUNCE_IN => sub {
         __x    # CONNECTIVITY:ASN_INFOS_ANNOUNCE_IN
@@ -455,27 +459,13 @@ Returns a boolean.
 sub _ip_disabled_message {
     my ( $results_array, $ns, @rrtypes ) = @_;
 
-    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
-        push @$results_array, map {
-          _emit_log(
-            IPV6_DISABLED => {
-                ns     => $ns->string,
-                rrtype => $_
-            }
-          )
-        } @rrtypes;
+    if ( not Zonemaster::Engine::Profile->effective->get( q{net.ipv6} ) and $ns->address->version == $IP_VERSION_6 ) {
+        push @$results_array, map { _emit_log( IPV6_DISABLED => { ns => $ns->string, rrtype => $_ } ) } @rrtypes;
         return 1;
     }
 
-    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
-        push @$results_array, map {
-          _emit_log(
-            IPV4_DISABLED => {
-                ns     => $ns->string,
-                rrtype => $_,
-            }
-          )
-        } @rrtypes;
+    if ( not Zonemaster::Engine::Profile->effective->get( q{net.ipv4} ) and $ns->address->version == $IP_VERSION_4 ) {
+        push @$results_array, map { _emit_log( IPV4_DISABLED => { ns => $ns->string, rrtype => $_, } ) } @rrtypes;
         return 1;
     }
     return 0;
@@ -503,7 +493,8 @@ sub _connectivity_loop {
     my ( $testcase_prefix, $use_tcp, $protocol );
     if ( $testcase eq 'connectivity01' ) {
         ( $testcase_prefix, $use_tcp, $protocol ) = ( "CN01", 0, "UDP" );
-    } elsif ( $testcase eq 'connectivity02' ) {
+    }
+    elsif ( $testcase eq 'connectivity02' ) {
         ( $testcase_prefix, $use_tcp, $protocol ) = ( "CN02", 1, "TCP" );
     }
 
@@ -514,7 +505,7 @@ sub _connectivity_loop {
 
         my %packets = (
             'SOA' => $ns->query( $name, q{SOA}, { usevc => $use_tcp } ),
-            'NS'  => $ns->query( $name, q{NS}, { usevc => $use_tcp } )
+            'NS'  => $ns->query( $name, q{NS},  { usevc => $use_tcp } )
         );
 
         if ( not $packets{SOA} and not $packets{NS} ) {
@@ -526,35 +517,42 @@ sub _connectivity_loop {
             my $pkt = $packets{$qtype};
 
             if ( not $pkt ) {
-                push @$results, _emit_log( "${testcase_prefix}_NO_RESPONSE_${qtype}_QUERY_${protocol}" => { ns => $ns->string } );
+                push @$results,
+                  _emit_log( "${testcase_prefix}_NO_RESPONSE_${qtype}_QUERY_${protocol}" => { ns => $ns->string } );
             }
             elsif ( $pkt->rcode ne q{NOERROR} ) {
-                push @$results, _emit_log( "${testcase_prefix}_UNEXPECTED_RCODE_${qtype}_QUERY_${protocol}" => {
+                push @$results,
+                  _emit_log(
+                    "${testcase_prefix}_UNEXPECTED_RCODE_${qtype}_QUERY_${protocol}" => {
                         ns    => $ns->string,
                         rcode => $pkt->rcode
                     }
-                );
+                  );
             }
             else {
                 my ( $rr ) = $pkt->get_records( $qtype, q{answer} );
                 if ( not $rr ) {
-                    push @$results, _emit_log( "${testcase_prefix}_MISSING_${qtype}_RECORD_${protocol}" => { ns => $ns->string } );
+                    push @$results,
+                      _emit_log( "${testcase_prefix}_MISSING_${qtype}_RECORD_${protocol}" => { ns => $ns->string } );
                 }
-                elsif ( lc($rr->owner) ne lc($name->fqdn) ) {
-                    push @$results, _emit_log( "${testcase_prefix}_WRONG_${qtype}_RECORD_${protocol}" => {
+                elsif ( lc( $rr->owner ) ne lc( $name->fqdn ) ) {
+                    push @$results,
+                      _emit_log(
+                        "${testcase_prefix}_WRONG_${qtype}_RECORD_${protocol}" => {
                             ns              => $ns->string,
-                            domain_found    => lc($rr->owner),
-                            domain_expected => lc($name->fqdn)
+                            domain_found    => lc( $rr->owner ),
+                            domain_expected => lc( $name->fqdn )
                         }
-                    );
+                      );
                 }
                 elsif ( not $pkt->aa ) {
-                    push @$results, _emit_log( "${testcase_prefix}_${qtype}_RECORD_NOT_AA_${protocol}" => { ns => $ns->string } );
+                    push @$results,
+                      _emit_log( "${testcase_prefix}_${qtype}_RECORD_NOT_AA_${protocol}" => { ns => $ns->string } );
                 }
-            }
-        }
-    }
-}
+            } ## end else [ if ( not $pkt ) ]
+        } ## end foreach my $qtype ( qw{SOA NS})
+    } ## end foreach my $ns ( @$ns_list )
+} ## end sub _connectivity_loop
 
 =head1 TESTS
 
@@ -579,16 +577,19 @@ sub connectivity01 {
 
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Connectivity01';
     push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
-    my $name = name( $zone );
+    my $name    = name( $zone );
     my @ns_list = @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) };
 
     my @ns_ipv4 = ();
     my @ns_ipv6 = ();
     foreach my $ns ( @ns_list ) {
-        if ( $ns->address->version == $IP_VERSION_4 and not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) ) {
+        if ( $ns->address->version == $IP_VERSION_4 and not Zonemaster::Engine::Profile->effective->get( q{net.ipv4} ) )
+        {
             push @ns_ipv4, $ns;
         }
-        elsif ( $ns->address->version == $IP_VERSION_6 and not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) ) {
+        elsif ( $ns->address->version == $IP_VERSION_6
+            and not Zonemaster::Engine::Profile->effective->get( q{net.ipv6} ) )
+        {
             push @ns_ipv6, $ns;
         }
     }
@@ -599,7 +600,7 @@ sub connectivity01 {
         push @results, _emit_log( "CN01_IPV6_DISABLED" => { ns_list => join( ';', @ns_ipv6 ) } );
     }
 
-    _connectivity_loop("connectivity01", $name, \@ns_list, \@results);
+    _connectivity_loop( "connectivity01", $name, \@ns_list, \@results );
 
     return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub connectivity01
@@ -625,13 +626,13 @@ sub connectivity02 {
 
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Connectivity02';
     push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
-    my $name = name( $zone );
+    my $name    = name( $zone );
     my @ns_list = @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) };
 
-    _connectivity_loop("connectivity02", $name, \@ns_list, \@results);
+    _connectivity_loop( "connectivity02", $name, \@ns_list, \@results );
 
     return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
-} ## end sub connectivity02
+}
 
 =over
 
@@ -693,7 +694,7 @@ sub connectivity03 {
                         asn   => join( q{,}, sort @{$asnref} ),
                     }
                   );
-                push @v4asns, @{$asnref};
+                push @v4asns,    @{$asnref};
                 push @v4asnsets, join( q{,}, sort { $a <=> $b } @{$asnref} );
             }
             if ( $prefix ) {
@@ -706,7 +707,7 @@ sub connectivity03 {
                     }
                   );
             }
-        }
+        } ## end else [ if ( defined $ret_code...)]
     } ## end foreach my $v4ip ( @v4ips )
     foreach my $v6ip ( @v6ips ) {
         my ( $asnref, $prefix, $raw, $ret_code ) = Zonemaster::Engine::ASNLookup->get_with_prefix( $v6ip );
@@ -731,7 +732,7 @@ sub connectivity03 {
                         asn   => join( q{,}, sort @{$asnref} ),
                     }
                   );
-                push @v6asns, @{$asnref};
+                push @v6asns,    @{$asnref};
                 push @v6asnsets, join( q{,}, sort { $a <=> $b } @{$asnref} );
             }
             if ( $prefix ) {
@@ -744,12 +745,12 @@ sub connectivity03 {
                     }
                   );
             }
-        }
+        } ## end else [ if ( defined $ret_code...)]
     } ## end foreach my $v6ip ( @v6ips )
 
-    @v4asns = uniq sort { $a <=> $b } @v4asns;
+    @v4asns    = uniq sort { $a <=> $b } @v4asns;
     @v4asnsets = uniq sort @v4asnsets;
-    @v6asns = uniq sort { $a <=> $b } @v6asns;
+    @v6asns    = uniq sort { $a <=> $b } @v6asns;
     @v6asnsets = uniq sort @v6asnsets;
 
     if ( scalar @v4asns ) {
@@ -804,16 +805,16 @@ sub connectivity04 {
     my %prefixes;
     my %ip_already_processed;
 
-    my @nss = grep { $_->isa('Zonemaster::Engine::Nameserver') } (
-                @{ Zonemaster::Engine::TestMethodsV2->get_del_ns_names_and_ips( $zone ) // [] },
-                @{ Zonemaster::Engine::TestMethodsV2->get_zone_ns_names_and_ips( $zone ) // [] }
-              );
+    my @nss = grep { $_->isa( 'Zonemaster::Engine::Nameserver' ) } (
+        @{ Zonemaster::Engine::TestMethodsV2->get_del_ns_names_and_ips( $zone )  // [] },
+        @{ Zonemaster::Engine::TestMethodsV2->get_zone_ns_names_and_ips( $zone ) // [] }
+    );
 
     foreach my $ns ( @nss ) {
         my $ip = $ns->address;
 
-        next if exists $ip_already_processed{$ip->version}{$ip->short};
-        $ip_already_processed{$ip->version}{$ip->short} = 1;
+        next if exists $ip_already_processed{ $ip->version }{ $ip->short };
+        $ip_already_processed{ $ip->version }{ $ip->short } = 1;
 
         my ( $asnref, $prefix, $raw, $ret_code ) = Zonemaster::Engine::ASNLookup->get_with_prefix( $ip );
 
@@ -855,14 +856,15 @@ sub connectivity04 {
                   _emit_log(
                     CN04_ASN_INFOS_ANNOUNCE_IN => {
                         ns_ip  => $ip->short,
-                        prefix => sprintf "%s", $prefix_str,
+                        prefix => sprintf "%s",
+                        $prefix_str,
                     }
                   );
 
-                push @{ $prefixes{$prefix->version}{$prefix_str} }, $ns;
-            }
-        }
-    }
+                push @{ $prefixes{ $prefix->version }{$prefix_str} }, $ns;
+            } ## end if ( $prefix )
+        } ## end else [ if ( defined $ret_code...)]
+    } ## end foreach my $ns ( @nss )
 
     foreach my $ip_version ( sort keys %prefixes ) {
         my @combined_ns;
@@ -876,7 +878,7 @@ sub connectivity04 {
                   _emit_log(
                     "CN04_IPV${ip_version}_SAME_PREFIX" => {
                         ip_prefix => $prefix,
-                        ns_list => join( q{;}, sort @{ $prefixes{$ip_version}{$prefix} } )
+                        ns_list   => join( q{;}, sort @{ $prefixes{$ip_version}{$prefix} } )
                     }
                   );
             }
@@ -891,9 +893,11 @@ sub connectivity04 {
               );
         }
 
-        push @results, _emit_log( "CN04_IPV${ip_version}_SINGLE_PREFIX" => {} ) if scalar keys %{ $prefixes{$ip_version} } == 1
-            and scalar @{ (values %{ $prefixes{$ip_version} })[0] } == scalar keys %{ $ip_already_processed{$ip_version} };
-    }
+        push @results, _emit_log( "CN04_IPV${ip_version}_SINGLE_PREFIX" => {} )
+          if scalar keys %{ $prefixes{$ip_version} } == 1
+          and scalar @{ ( values %{ $prefixes{$ip_version} } )[0] } == scalar
+          keys %{ $ip_already_processed{$ip_version} };
+    } ## end foreach my $ip_version ( sort...)
 
     return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub connectivity04

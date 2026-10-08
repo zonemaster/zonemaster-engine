@@ -16,7 +16,7 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
 }
 
 # This should be a successful AXFR
-my $ns = Zonemaster::Engine::Nameserver->new( { name => 'kennedy.faerywicca.se', address => '46.21.106.227' } );
+my $ns      = Zonemaster::Engine::Nameserver->new( { name => 'kennedy.faerywicca.se', address => '46.21.106.227' } );
 my $counter = 0;
 is(
     exception {

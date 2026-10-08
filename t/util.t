@@ -7,17 +7,17 @@ use utf8;
 
 BEGIN {
     use_ok( 'Zonemaster::Engine' );
-    use_ok( 'Zonemaster::Engine::Util', qw( info name ns parse_hints ) )
+    use_ok( 'Zonemaster::Engine::Util', qw( info name ns parse_hints ) );
 }
 
-isa_ok( ns( 'name', '::1' ), 'Zonemaster::Engine::Nameserver' );
-isa_ok( info( 'TAG', {} ), 'Zonemaster::Engine::Logger::Entry' );
+isa_ok( ns( 'name', '::1' ),   'Zonemaster::Engine::Nameserver' );
+isa_ok( info( 'TAG', {} ),     'Zonemaster::Engine::Logger::Entry' );
 isa_ok( name( "foo.bar.com" ), 'Zonemaster::Engine::DNSName' );
 
 subtest 'parse_hints()' => sub {
     my @cases = (
         {
-            name => 'Cropped IANA hints',
+            name  => 'Cropped IANA hints',
             hints => <<EOF,
 ;       This file holds the information on root name servers needed to
 ; -------- 8< --------
@@ -121,7 +121,8 @@ EOF
         else {
             throws_ok {
                 parse_hints( $case->{hints} )
-            } $case->{error}, $case->{name};
+            }
+            $case->{error}, $case->{name};
         }
     }
 };
@@ -129,15 +130,15 @@ EOF
 subtest 'escape_unprintable' => sub {
     my @cases = (
         {
-            input => 'hello world!',
+            input    => 'hello world!',
             expected => 'hello world!',
         },
         {
-            input => "escape this: \x1B\x7F\x80\xFF\x00\x0D\x0A\\",
+            input    => "escape this: \x1B\x7F\x80\xFF\x00\x0D\x0A\\",
             expected => 'escape this: \027\127\128\255\000\013\010\\\\',
         },
         {
-            input => encode('UTF-8', 'cassé'),
+            input    => encode( 'UTF-8', 'cassé' ),
             expected => 'cass\195\169'
         }
     );

@@ -3,9 +3,9 @@ package Zonemaster::Engine::Nameserver::Cache::LocalCache;
 use v5.16.0;
 use warnings;
 
-use version; our $VERSION = version->declare("v1.0.4");
+use version; our $VERSION = version->declare( "v1.0.4" );
 
-use Carp qw( confess );
+use Carp         qw( confess );
 use Scalar::Util qw( blessed );
 
 use Zonemaster::Engine;
@@ -21,38 +21,38 @@ sub new {
     my $attrs = shift;
 
     confess "Attribute \(address\) is required"
-        if !exists $attrs->{address};
+      if !exists $attrs->{address};
 
     # Type coercions
     $attrs->{address} = Net::IP::XS->new( $attrs->{address} )
-        if !blessed $attrs->{address} || !$attrs->{address}->isa( 'Net::IP::XS' );
+      if !blessed $attrs->{address} || !$attrs->{address}->isa( 'Net::IP::XS' );
 
     # Type constraint
     confess "Argument must be coercible into a Net::IP::XS: address"
-        if !$attrs->{address}->isa( 'Net::IP::XS' );
+      if !$attrs->{address}->isa( 'Net::IP::XS' );
     confess "Argument must be a HASHREF: data"
-        if exists $attrs->{data} && ref $attrs->{data} ne 'HASH';
+      if exists $attrs->{data} && ref $attrs->{data} ne 'HASH';
 
     # Default value
     $attrs->{data} //= {};
 
     my $ip = $attrs->{address}->ip;
-    if ( exists $object_cache->{ $ip } ) {
+    if ( exists $object_cache->{$ip} ) {
         Zonemaster::Engine->logger->add( CACHE_FETCHED => { ip => $ip } );
-        return $object_cache->{ $ip };
+        return $object_cache->{$ip};
     }
 
     my $obj = Class::Accessor::new( $class, $attrs );
 
     Zonemaster::Engine->logger->add( CACHE_CREATED => { ip => $ip } );
-    $object_cache->{ $ip } = $obj;
+    $object_cache->{$ip} = $obj;
 
     return $obj;
-}
+} ## end sub new
 
 sub set_key {
-     my ( $self, $idx, $packet ) = @_;
-     $self->data->{$idx} = $packet;
+    my ( $self, $idx, $packet ) = @_;
+    $self->data->{$idx} = $packet;
 }
 
 sub get_key {

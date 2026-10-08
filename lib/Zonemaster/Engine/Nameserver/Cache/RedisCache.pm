@@ -3,11 +3,11 @@ package Zonemaster::Engine::Nameserver::Cache::RedisCache;
 use v5.16.0;
 use warnings;
 
-use version; our $VERSION = version->declare("v1.0.0");
+use version; our $VERSION = version->declare( "v1.0.0" );
 
 use Class::Accessor "antlers";
 use Time::HiRes qw[gettimeofday tv_interval];
-use List::Util qw( min );
+use List::Util  qw( min );
 
 use Zonemaster::LDNS::Packet;
 use Zonemaster::Engine::Packet;
@@ -28,39 +28,40 @@ my $redis;
 my $config;
 our $object_cache = \%Zonemaster::Engine::Nameserver::Cache::object_cache;
 
-my $REDIS_EXPIRE_DEFAULT = 300; # seconds
+my $REDIS_EXPIRE_DEFAULT = 300;    # seconds
 
-has 'redis' => ( is => 'ro' );
+has 'redis'  => ( is => 'ro' );
 has 'config' => ( is => 'ro' );
 
 my $mp = Data::MessagePack->new();
 
 sub new {
-    my $proto = shift;
+    my $proto  = shift;
     my $params = shift;
     $params->{address} = $params->{address}->ip;
     if ( exists $object_cache->{ $params->{address} } ) {
         Zonemaster::Engine->logger->add( CACHE_FETCHED => { ip => $params->{address} } );
         return $object_cache->{ $params->{address} };
-    } else {
-        if (! defined $redis) {
+    }
+    else {
+        if ( !defined $redis ) {
             my $redis_config = Zonemaster::Engine::Profile->effective->get( q{cache} )->{'redis'};
-            $redis = Redis->new(server => $redis_config->{server});
+            $redis  = Redis->new( server => $redis_config->{server} );
             $config = $redis_config;
         }
-        $params->{redis} //= $redis;
-        $params->{data} //= {};
+        $params->{redis}  //= $redis;
+        $params->{data}   //= {};
         $params->{config} //= $config;
         $config->{expire} //= $REDIS_EXPIRE_DEFAULT;
         my $class = ref $proto || $proto;
-        my $obj = Class::Accessor::new( $class, $params );
+        my $obj   = Class::Accessor::new( $class, $params );
 
         Zonemaster::Engine->logger->add( CACHE_CREATED => { ip => $params->{address} } );
         $object_cache->{ $params->{address} } = $obj;
 
         return $obj;
     }
-}
+} ## end sub new
 
 sub set_key {
     my ( $self, $hash, $packet ) = @_;
@@ -77,19 +78,21 @@ sub set_key {
 
     $self->data->{$hash} = $packet;
     if ( defined $packet ) {
-        my $msg = $mp->pack({
-            data       => $packet->data,
-            answerfrom => $packet->answerfrom,
-            timestamp  => $packet->timestamp,
-            querytime  => $packet->querytime,
-        });
+        my $msg = $mp->pack(
+            {
+                data       => $packet->data,
+                answerfrom => $packet->answerfrom,
+                timestamp  => $packet->timestamp,
+                querytime  => $packet->querytime,
+            }
+        );
         if ( $packet->answer ) {
             my @rr = $packet->answer;
             $ttl = min( map { $_->ttl } @rr );
         }
         elsif ( $packet->authority ) {
             my @rr = $packet->authority;
-            foreach my $r (@rr) {
+            foreach my $r ( @rr ) {
                 if ( $r->type eq 'SOA' ) {
                     $ttl = $r->ttl;
                     last;
@@ -99,17 +102,19 @@ sub set_key {
 
         if ( defined( $ttl ) ) {
             $ttl = $ttl < $redis_expire ? $ttl : $redis_expire;
-        } else {
+        }
+        else {
             $ttl = $ttl_no_response;
         }
 
         # Redis requires cache time to be greater than 0 to be stored.
         return if $ttl == 0;
         $self->redis->set( $key, $msg, 'EX', $ttl );
-    } else {
+    } ## end if ( defined $packet )
+    else {
         $self->redis->set( $key, '', 'EX', $ttl_no_response );
     }
-}
+} ## end sub set_key
 
 sub get_key {
     my ( $self, $hash ) = @_;
@@ -118,15 +123,18 @@ sub get_key {
     if ( exists $self->data->{$hash} ) {
         Zonemaster::Engine->logger->add( MEMORY_CACHE_HIT => { hash => $hash } );
         return ( 1, $self->data->{$hash} );
-    } elsif ( $self->redis->exists($key) ) {
-        my $fetch_start_time = [ gettimeofday ];
-        my $data = $self->redis->get( $key );
+    }
+    elsif ( $self->redis->exists( $key ) ) {
+        my $fetch_start_time = [gettimeofday];
+        my $data             = $self->redis->get( $key );
         Zonemaster::Engine->logger->add( REDIS_CACHE_HIT => { key => $key } );
-        if ( not length($data) ) {
+        if ( not length( $data ) ) {
             $self->data->{$hash} = undef;
-        } else {
-            my $msg = $mp->unpack( $data );
-            my $packet = Zonemaster::Engine::Packet->new({ packet => Zonemaster::LDNS::Packet->new_from_wireformat($msg->{data}) });
+        }
+        else {
+            my $msg    = $mp->unpack( $data );
+            my $packet = Zonemaster::Engine::Packet->new(
+                { packet => Zonemaster::LDNS::Packet->new_from_wireformat( $msg->{data} ) } );
             $packet->answerfrom( $msg->{answerfrom} );
             $packet->timestamp( $msg->{timestamp} );
             $packet->querytime( $msg->{querytime} );
@@ -136,8 +144,8 @@ sub get_key {
         return ( 1, $self->data->{$hash} );
     }
     Zonemaster::Engine->logger->add( CACHE_MISS => { key => $key } );
-    return ( 0, undef )
-}
+    return ( 0, undef );
+} ## end sub get_key
 
 1;
 

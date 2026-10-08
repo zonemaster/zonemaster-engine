@@ -3,9 +3,10 @@ package Zonemaster::Engine::Util;
 use v5.16.0;
 use warnings;
 
-use version; our $VERSION = version->declare("v1.1.13");
+use version; our $VERSION = version->declare( "v1.1.13" );
 
 use Exporter 'import';
+
 BEGIN {
     our @EXPORT_OK = qw[
       escape_unprintable
@@ -169,21 +170,22 @@ sub parse_hints {
 
     # Extract hint data
     my %hints;
-    for my $rr ( @{ $rrs } ) {
+    for my $rr ( @{$rrs} ) {
         if ( $rr->type eq 'A' or $rr->type eq 'AAAA' ) {
-            push @{ $hints{$rr->owner} }, $rr->address;
+            push @{ $hints{ $rr->owner } }, $rr->address;
         }
     }
 
     return \%hints;
-}
+} ## end sub parse_hints
 
 sub serial_gt {
     my ( $sa, $sb ) = @_;
 
-    return ( ( $sa < $sb and ( ($sb - $sa) > 2**( $SERIAL_BITS - 1 ) ) ) or
-             ( $sa > $sb and ( ($sa - $sb) < 2**( $SERIAL_BITS - 1 ) ) )
-           );
+    return (
+             ( $sa < $sb and ( ( $sb - $sa ) > 2**( $SERIAL_BITS - 1 ) ) )
+          or ( $sa > $sb and ( ( $sa - $sb ) < 2**( $SERIAL_BITS - 1 ) ) )
+    );
 }
 
 {
@@ -199,21 +201,21 @@ sub serial_gt {
     # <https://perldoc.perl.org/5.28.0/perldelta#Initialisation-of-aggregate-state-variables>.
     my @substitution_table = map {
         if ( $_ == 92 ) {
-            '\\\\'
+            '\\\\';
         }
         elsif ( $_ >= 32 and $_ <= 126 ) {
-            chr $_
+            chr $_;
         }
         else {
-            sprintf '\%03d', $_
+            sprintf '\%03d', $_;
         }
-    } 0..255;
+    } 0 .. 255;
 
     sub escape_unprintable {
         my ( $input ) = @_;
 
         my $output = '';
-        $output .= $substitution_table[$_] foreach (unpack "C*", $input);
+        $output .= $substitution_table[$_] foreach ( unpack "C*", $input );
 
         return $output;
     }

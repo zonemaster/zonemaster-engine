@@ -34,18 +34,18 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
 }
 
 # Find a way with dependences for syntax04 syntax05 syntax06 syntax07 syntax08
-my ($json, $profile_test);
+my ( $json, $profile_test );
 foreach my $testcase ( qw{syntax01 syntax02 syntax03} ) {
-    $json         = read_file( 't/profiles/Test-'.$testcase.'-only.json' );
+    $json         = read_file( 't/profiles/Test-' . $testcase . '-only.json' );
     $profile_test = Zonemaster::Engine::Profile->from_json( $json );
     Zonemaster::Engine::Profile->effective->merge( $profile_test );
     my %testcases;
     foreach my $result ( Zonemaster::Engine->test_module( q{syntax}, q{afnic.fr} ) ) {
         if ( $result->testcase && $result->testcase ne 'Unspecified' ) {
-            $testcases{$result->testcase} = 1;
+            $testcases{ $result->testcase } = 1;
         }
     }
-    eq_or_diff( [ map { lc $_ } keys %testcases ], [ $testcase ], 'expected test-case ('. $testcase .')' );
+    eq_or_diff( [ map { lc $_ } keys %testcases ], [$testcase], 'expected test-case (' . $testcase . ')' );
 }
 
 $json         = read_file( 't/profiles/Test-syntax-all.json' );
@@ -81,20 +81,20 @@ zone_gives( q{syntax03}, $dn_ok,     q{NO_DOUBLE_DASH} );
 zone_gives( q{syntax03}, $dn_idn_ok, q{NO_DOUBLE_DASH} );
 
 my $zone_double_dash = Zonemaster::Engine->zone( q{ns1.ns--nic.fr} );
-zone_gives_not( q{syntax04}, $ns_ok, q{NAMESERVER_DISCOURAGED_DOUBLE_DASH} );
+zone_gives_not( q{syntax04}, $ns_ok,            q{NAMESERVER_DISCOURAGED_DOUBLE_DASH} );
 zone_gives_not( q{syntax04}, $zone_double_dash, q{NAMESERVER_DISCOURAGED_DOUBLE_DASH} );
 SKIP: {
     skip "need test zone", 1;
-    my $ns_num_tld; # TODO specify test zone
+    my $ns_num_tld;    # TODO specify test zone
     zone_gives( q{syntax04}, $ns_num_tld, q{NAMESERVER_NUMERIC_TLD} );
 }
 
 my $zone_num_tld = Zonemaster::Engine->zone( q{ns1.nic.47} );
-zone_gives_not( q{syntax04}, $ns_ok, q{NAMESERVER_NUMERIC_TLD} );
+zone_gives_not( q{syntax04}, $ns_ok,        q{NAMESERVER_NUMERIC_TLD} );
 zone_gives_not( q{syntax04}, $zone_num_tld, q{NAMESERVER_NUMERIC_TLD} );
 SKIP: {
     skip "need test zone", 1;
-    my $ns_double_dash; # TODO specify test zone
+    my $ns_double_dash;    # TODO specify test zone
     zone_gives( q{syntax04}, $ns_double_dash, q{NAMESERVER_DISCOURAGED_DOUBLE_DASH} );
 }
 
@@ -132,7 +132,7 @@ zone_gives( q{syntax08}, $zone, q{MX_DISCOURAGED_DOUBLE_DASH} );
 zone_gives_not( q{syntax08}, $zone, q{NO_RESPONSE_MX_QUERY} );
 
 $zone = Zonemaster::Engine->zone( 'name.doesnotexist' );
-%res = map { $_->tag => 1 } Zonemaster::Engine->test_method( q{Syntax}, q{syntax05}, $zone );
+%res  = map { $_->tag => 1 } Zonemaster::Engine->test_method( q{Syntax}, q{syntax05}, $zone );
 ok( $res{NO_RESPONSE_SOA_QUERY}, q{No response from nameserver(s) on SOA queries} );
 %res = map { $_->tag => 1 } Zonemaster::Engine->test_method( q{Syntax}, q{syntax07}, $zone );
 ok( $res{NO_RESPONSE_SOA_QUERY}, q{No response from nameserver(s) on SOA queries} );

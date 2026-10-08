@@ -3,7 +3,7 @@ package Zonemaster::Engine::DNSName;
 use v5.16.0;
 use warnings;
 
-use version; our $VERSION = version->declare("v1.0.3");
+use version; our $VERSION = version->declare( "v1.0.3" );
 
 use Carp;
 use Scalar::Util qw( blessed );
@@ -69,7 +69,7 @@ sub new {
     }
 
     return Class::Accessor::new( $class, $attrs );
-}
+} ## end sub new
 
 sub string {
     my $self = shift;
@@ -94,7 +94,7 @@ sub str_cmp {
     # For performance reasons, we do not unpack @_.
     # As a reminder, the calling convention is my ( $self, $other, $swap ) = @_.
 
-    my $me = uc ( $_[0]->{_string} // $_[0]->string );
+    my $me = uc( $_[0]->{_string} // $_[0]->string );
 
     # Treat undefined value as root
     my $other = $_[1] // q{};
@@ -110,14 +110,14 @@ sub str_cmp {
     };
 
     return $_[2] ? -$comparison : $comparison;
-}
+} ## end sub str_cmp
 
 sub next_higher {
     my $self = shift;
     my @l    = @{ $self->labels };
     if ( @l ) {
         shift @l;
-        return Zonemaster::Engine::DNSName->new({ labels => \@l });
+        return Zonemaster::Engine::DNSName->new( { labels => \@l } );
     }
     else {
         return;

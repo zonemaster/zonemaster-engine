@@ -11,17 +11,18 @@ use TestUtil::DSL;
 testing_test_case 'Connectivity', 'connectivity04';
 
 all_tags qw(CN04_EMPTY_PREFIX_SET
-            CN04_ERROR_PREFIX_DATABASE
-            CN04_IPV4_DIFFERENT_PREFIX
-            CN04_IPV4_SAME_PREFIX
-            CN04_IPV4_SINGLE_PREFIX
-            CN04_IPV6_DIFFERENT_PREFIX
-            CN04_IPV6_SAME_PREFIX
-            CN04_IPV6_SINGLE_PREFIX);
+  CN04_ERROR_PREFIX_DATABASE
+  CN04_IPV4_DIFFERENT_PREFIX
+  CN04_IPV4_SAME_PREFIX
+  CN04_IPV4_SINGLE_PREFIX
+  CN04_IPV6_DIFFERENT_PREFIX
+  CN04_IPV6_SAME_PREFIX
+  CN04_IPV6_SINGLE_PREFIX);
 
 # Specific hint file (https://github.com/zonemaster/zonemaster/blob/master/test-zone-data/Connectivity-TP/connectivity04/hintfile.zone)
-root_hints 'root-ns1.xa' => [ qw(127.13.4.23 fda1:b2:c3::127:13:4:23) ],
-           'root-ns2.xa' => [ qw(127.13.4.24 fda1:b2:c3::127:13:4:24) ];
+root_hints
+  'root-ns1.xa' => [qw(127.13.4.23 fda1:b2:c3::127:13:4:23)],
+  'root-ns2.xa' => [qw(127.13.4.24 fda1:b2:c3::127:13:4:24)];
 
 # Test zone scenarios
 zone_name_template '{SCENARIO}.{TESTCASE}.xa';

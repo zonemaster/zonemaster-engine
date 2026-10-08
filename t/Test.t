@@ -31,41 +31,41 @@ subtest 'Enabling single test cases in profile' => sub {
 
     for my $testcase ( @testcases ) {
       SKIP: {
-          skip "$testcase, not possible with recorded data due to scrambled case of QNAME", 1
+            skip "$testcase, not possible with recorded data due to scrambled case of QNAME", 1
               if $testcase =~ '^nameserver(08|09)$' and not $ENV{ZONEMASTER_RECORD};
 
-          subtest "Testcase '$testcase'" => sub {
+            subtest "Testcase '$testcase'" => sub {
 
-              $effective_profile->set( 'test_cases', [$testcase] );
+                $effective_profile->set( 'test_cases', [$testcase] );
 
-              my @logentries;
-              lives_ok { @logentries = Zonemaster::Engine::Test->run_all_for( $zone ) }
-              "Test suite does not crash when running only this test case";
+                my @logentries;
+                lives_ok { @logentries = Zonemaster::Engine::Test->run_all_for( $zone ) }
+                "Test suite does not crash when running only this test case";
 
-              my $actual = {
-                  'A) started testcases' => [
-                      grep { $_ ne 'unspecified' }
-                      map  { fc $_->args->{testcase} }
-                      grep { $_->tag eq 'TEST_CASE_START' } @logentries
-                  ],
-                  'B) ended testcases' => [
-                      grep { $_ ne 'unspecified' }
-                      map  { fc $_->args->{testcase} }
-                      grep { $_->tag eq 'TEST_CASE_END' } @logentries
-                  ],
-                  'C) internal errors' => [
-                      map  { $_->args->{msg} =~ s/\n$//r }
-                      grep { $_->tag eq 'MODULE_ERROR' } @logentries
-                  ],
-              };
-              my $expected = {
-                  'A) started testcases' => [$testcase],
-                  'B) ended testcases'   => [$testcase],
-                  'C) internal errors'   => [],
-              };
-              eq_or_diff $actual, $expected, "Test suite emits expected messages from this testcase and no others";
-          };
-        };
+                my $actual = {
+                    'A) started testcases' => [
+                        grep { $_ ne 'unspecified' }
+                        map  { fc $_->args->{testcase} }
+                        grep { $_->tag eq 'TEST_CASE_START' } @logentries
+                    ],
+                    'B) ended testcases' => [
+                        grep   { $_ ne 'unspecified' }
+                          map  { fc $_->args->{testcase} }
+                          grep { $_->tag eq 'TEST_CASE_END' } @logentries
+                    ],
+                    'C) internal errors' => [
+                        map    { $_->args->{msg} =~ s/\n$//r }
+                          grep { $_->tag eq 'MODULE_ERROR' } @logentries
+                    ],
+                };
+                my $expected = {
+                    'A) started testcases' => [$testcase],
+                    'B) ended testcases'   => [$testcase],
+                    'C) internal errors'   => [],
+                };
+                eq_or_diff $actual, $expected, "Test suite emits expected messages from this testcase and no others";
+            };
+        } ## end SKIP:
     } ## end for my $testcase ( @testcases)
 };
 

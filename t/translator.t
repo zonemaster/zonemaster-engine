@@ -9,7 +9,7 @@ use Test::Fatal;
 use Zonemaster::Engine::Logger::Entry;
 use Zonemaster::Engine::Translator;
 
-my ($json, $profile_tmp);
+my ( $json, $profile_tmp );
 $json        = read_file( 't/profiles/Test-all.json' );
 $profile_tmp = Zonemaster::Engine::Profile->from_json( $json );
 Zonemaster::Engine::Profile->effective->merge( $profile_tmp );
@@ -21,8 +21,7 @@ Zonemaster::Engine::Translator->initialize( locale => 'C' );
 
 subtest 'Everything but Test::NoWarnings' => sub {
     my $trans = Zonemaster::Engine::Translator->instance();
-    isa_ok $trans, 'Zonemaster::Engine::Translator',
-        'Zonemaster::Engine::Translator->instance()';
+    isa_ok $trans, 'Zonemaster::Engine::Translator', 'Zonemaster::Engine::Translator->instance()';
 
     ok( exists $trans->data->{Basic}{B01_PARENT_FOUND}, 'expected key from file exists' );
     ok( exists $trans->data->{System}{NO_NETWORK},      'expected key from module exists' );

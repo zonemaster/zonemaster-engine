@@ -37,7 +37,7 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Profile->effective->set( q{no_network}, 1 );
 }
 
-my ($json, $profile_test);
+my ( $json, $profile_test );
 $json         = read_file( 't/profiles/Test-dnssec-more-all.json' );
 $profile_test = Zonemaster::Engine::Profile->from_json( $json );
 Zonemaster::Engine::Profile->effective->merge( $profile_test );
@@ -61,13 +61,13 @@ SKIP: {
     skip "Need to configure another zone for this test cases.", 3;
 
     $zone = Zonemaster::Engine->zone( 'wwwyahoo.se' );
-    zone_gives( 'dnssec10', $zone, ['INVALID_NAME_RCODE']);
+    zone_gives( 'dnssec10', $zone, ['INVALID_NAME_RCODE'] );
 
     $zone = Zonemaster::Engine->zone( 'denki.se' );
-    zone_gives( 'dnssec10', $zone, ['NSEC3_COVERS_NOT']);
+    zone_gives( 'dnssec10', $zone, ['NSEC3_COVERS_NOT'] );
 
     $zone = Zonemaster::Engine->zone( 'retailacademicsconsulting.se' );
-    zone_gives( 'dnssec10', $zone, ['NSEC3_SIG_VERIFY_ERROR']);
+    zone_gives( 'dnssec10', $zone, ['NSEC3_SIG_VERIFY_ERROR'] );
 }
 
 $zone = Zonemaster::Engine->zone( 'y.nu' );

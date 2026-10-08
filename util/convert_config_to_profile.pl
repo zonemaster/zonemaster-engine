@@ -4,7 +4,7 @@ use 5.14.2;
 use warnings;
 use strict;
 
-use version; our $VERSION = version->declare("v1.0.1");
+use version; our $VERSION = version->declare( "v1.0.1" );
 
 use Carp;
 
@@ -18,13 +18,13 @@ use Getopt::Long;
 use File::Basename;
 use Clone qw(clone);
 
-my $DEBUG = 0;
-my $DEST_DIR = q{};
+my $DEBUG       = 0;
+my $DEST_DIR    = q{};
 my $CONFIG_FILE = q{};
 my $POLICY_FILE = q{};
 
-my $scriptName = basename($PROGRAM_NAME);
-my $dest_dir = q{./};
+my $scriptName  = basename( $PROGRAM_NAME );
+my $dest_dir    = q{./};
 my $config_file = q{};
 my $policy_file = q{};
 
@@ -42,7 +42,7 @@ if ( $POLICY_FILE ) {
     $policy_file = $POLICY_FILE;
 }
 
-if ($DEBUG) {
+if ( $DEBUG ) {
     print "Debug Mode set ON\n";
     print "Destination directory : $dest_dir\n\n";
 }
@@ -50,7 +50,7 @@ if ($DEBUG) {
 #-------------------------------------------------
 # STEP 0: Check Directory existence and Directory/Files permissions
 #-------------------------------------------------
-if ( ! -d $dest_dir ) {
+if ( !-d $dest_dir ) {
     printf "(\"%s --help\" for help)\n", $scriptName;
     print "Directory $dest_dir does not exist.\n";
     unless ( mkdir $dest_dir ) {
@@ -58,58 +58,58 @@ if ( ! -d $dest_dir ) {
     }
 }
 
-if ( ! -w $dest_dir ) {
+if ( !-w $dest_dir ) {
     printf "(\"%s --help\" for help)\n", $scriptName;
     print "Directory $dest_dir mode must be changed.\n";
-    unless ( chmod (oct(755), $dest_dir) ) {
+    unless ( chmod( oct( 755 ), $dest_dir ) ) {
         croak "Cannot change directory mode.";
     }
 }
 
-if ( ! $config_file ) {
+if ( !$config_file ) {
     printf "(\"%s --help\" for help)\n", $scriptName;
     croak "A Config file must be provided.";
 }
 
-if ( ! -e $config_file ) {
+if ( !-e $config_file ) {
     printf "(\"%s --help\" for help)\n", $scriptName;
     croak "Config file $config_file does not exists.";
 }
 
-if ( ! -r $config_file ) {
+if ( !-r $config_file ) {
     printf "(\"%s --help\" for help)\n", $scriptName;
     croak "Config file $config_file is not readable.";
 }
 
-if ( ! $policy_file ) {
+if ( !$policy_file ) {
     printf "(\"%s --help\" for help)\n", $scriptName;
     croak "A Policy file must be provided.";
 }
 
-if ( ! -e $policy_file ) {
+if ( !-e $policy_file ) {
     printf "(\"%s --help\" for help)\n", $scriptName;
     croak "Policy file $policy_file does not exists.";
 }
 
-if ( ! -r $policy_file ) {
+if ( !-r $policy_file ) {
     printf "(\"%s --help\" for help)\n", $scriptName;
     croak "Policy file $policy_file is not readable.";
 }
 
-my $policy_json         = read_file( $policy_file ) ;
-my $policy              = decode_json( $policy_json );
-my $config_json         = read_file( $config_file );
-my $config              = decode_json( $config_json );
+my $policy_json = read_file( $policy_file );
+my $policy      = decode_json( $policy_json );
+my $config_json = read_file( $config_file );
+my $config      = decode_json( $config_json );
 
 my $default = Zonemaster::Engine::Profile->default;
 my $profile = Zonemaster::Engine::Profile->new;
 
 my %paths;
 my %default_paths;
-Zonemaster::Engine::Profile::_get_profile_paths(\%paths, $config);
-Zonemaster::Engine::Profile::_get_profile_paths(\%default_paths, $default->{q{profile}});
-delete $default_paths{ q{test_cases} };
-delete $default_paths{ q{test_levels} };
+Zonemaster::Engine::Profile::_get_profile_paths( \%paths,         $config );
+Zonemaster::Engine::Profile::_get_profile_paths( \%default_paths, $default->{q{profile}} );
+delete $default_paths{q{test_cases}};
+delete $default_paths{q{test_levels}};
 
 #
 # General options part
@@ -146,8 +146,8 @@ foreach my $tl ( keys %{ $default->get( q{test_levels} ) } ) {
 }
 $profile->set( q{test_levels}, \%tl );
 
-my $filename = $dest_dir.q{/profile.json};
-open(my $fh, '>', $filename) or die "Could not open file '$filename' $!";
+my $filename = $dest_dir . q{/profile.json};
+open( my $fh, '>', $filename ) or die "Could not open file '$filename' $!";
 my $json = JSON::XS->new->canonical->pretty;
 print $fh $json->encode( $profile->{q{profile}} );
 close $fh;
@@ -156,12 +156,12 @@ sub process_options {
     my ( $opt_dest, $opt_config, $opt_policy, $opt_help, $opt_debug, $opt_version );
 
     GetOptions(
-        q{dest-dir=s} => \$opt_dest,    # Dest directory for generated profile file
-	q{config=s}   => \$opt_config,  # Config File
-	q{policy=s}   => \$opt_policy,  # Policy file
-        q{help}       => \$opt_help,    # Print Usage
-        q{debug}      => \$opt_debug,   # Set Debug MODE
-        q{version}    => \$opt_version, # Print Version
+        q{dest-dir=s} => \$opt_dest,       # Dest directory for generated profile file
+        q{config=s}   => \$opt_config,     # Config File
+        q{policy=s}   => \$opt_policy,     # Policy file
+        q{help}       => \$opt_help,       # Print Usage
+        q{debug}      => \$opt_debug,      # Set Debug MODE
+        q{version}    => \$opt_version,    # Print Version
     );
 
     if ( $opt_debug ) {
@@ -189,7 +189,7 @@ sub process_options {
     }
 
     return;
-}
+} ## end sub process_options
 
 sub Usage {
     my $_bold           = "\e[1m";
@@ -231,7 +231,7 @@ EOM
 
     exit 0;
 
-}
+} ## end sub Usage
 
 sub Version {
     printf "%s %s\n", $scriptName, $VERSION;

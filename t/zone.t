@@ -39,66 +39,82 @@ ok( @{ $zone->ns } > 0, 'NS list not empty' );
 isa_ok( $_, 'Zonemaster::Engine::Nameserver' ) for @{ $zone->ns };
 
 isa_ok( $zone->glue_addresses, 'ARRAY' );
-isa_ok( $_, 'Zonemaster::LDNS::RR' ) for @{ $zone->glue_addresses };
+isa_ok( $_,                    'Zonemaster::LDNS::RR' ) for @{ $zone->glue_addresses };
 
 my $p = $zone->query_one( 'www.iis.se', 'A' );
 isa_ok( $p, 'Zonemaster::Engine::Packet' );
 my @rrs = $p->get_records( 'a', 'answer' );
-is( scalar( @rrs ), 1, 'one answer A RR' );
+is( scalar( @rrs ),   1,                'one answer A RR' );
 is( $rrs[0]->address, '159.253.30.207', 'expected address' );
 Zonemaster::Engine::Profile->effective->set( q{net.ipv4}, 0 );
 Zonemaster::Engine::Profile->effective->set( q{net.ipv6}, 0 );
 Zonemaster::Engine->logger->clear_history();
 $p = $zone->query_one( 'www.iis.se', 'A' );
-ok( ( grep { $_->tag eq 'SKIP_IPV6_DISABLED' } @{Zonemaster::Engine->logger->entries} ), "query_one: IPv6 disabled" );
-ok( ( grep { $_->tag eq 'SKIP_IPV4_DISABLED' } @{Zonemaster::Engine->logger->entries} ), "query_one: IPv4 disabled" );
+ok( ( grep { $_->tag eq 'SKIP_IPV6_DISABLED' } @{ Zonemaster::Engine->logger->entries } ), "query_one: IPv6 disabled" );
+ok( ( grep { $_->tag eq 'SKIP_IPV4_DISABLED' } @{ Zonemaster::Engine->logger->entries } ), "query_one: IPv4 disabled" );
 $p = $zone->query_auth( 'www.iis.se', 'A' );
-ok( ( grep { $_->tag eq 'SKIP_IPV6_DISABLED' } @{Zonemaster::Engine->logger->entries} ), "query_auth: IPv6 disabled" );
-ok( ( grep { $_->tag eq 'SKIP_IPV4_DISABLED' } @{Zonemaster::Engine->logger->entries} ), "query_auth: IPv4 disabled" );
+ok( ( grep { $_->tag eq 'SKIP_IPV6_DISABLED' } @{ Zonemaster::Engine->logger->entries } ),
+    "query_auth: IPv6 disabled" );
+ok( ( grep { $_->tag eq 'SKIP_IPV4_DISABLED' } @{ Zonemaster::Engine->logger->entries } ),
+    "query_auth: IPv4 disabled" );
 $p = $zone->query_persistent( 'www.iis.se', 'A' );
-ok( ( grep { $_->tag eq 'SKIP_IPV6_DISABLED' } @{Zonemaster::Engine->logger->entries} ), "query_persistent: IPv6 disabled" );
-ok( ( grep { $_->tag eq 'SKIP_IPV4_DISABLED' } @{Zonemaster::Engine->logger->entries} ), "query_persistent: IPv4 disabled" );
+ok( ( grep { $_->tag eq 'SKIP_IPV6_DISABLED' } @{ Zonemaster::Engine->logger->entries } ),
+    "query_persistent: IPv6 disabled" );
+ok( ( grep { $_->tag eq 'SKIP_IPV4_DISABLED' } @{ Zonemaster::Engine->logger->entries } ),
+    "query_persistent: IPv4 disabled" );
 Zonemaster::Engine::Profile->effective->set( q{net.ipv4}, 0 );
 Zonemaster::Engine::Profile->effective->set( q{net.ipv6}, 1 );
 Zonemaster::Engine->logger->clear_history();
 $p = $zone->query_one( 'www.iis.se', 'A' );
-ok( !( grep { $_->tag eq 'SKIP_IPV6_DISABLED' } @{Zonemaster::Engine->logger->entries} ), "query_one: IPv6 not disabled" );
+ok( !( grep { $_->tag eq 'SKIP_IPV6_DISABLED' } @{ Zonemaster::Engine->logger->entries } ),
+    "query_one: IPv6 not disabled" );
 $p = $zone->query_auth( 'www.iis.se', 'A' );
-ok( !( grep { $_->tag eq 'SKIP_IPV6_DISABLED' } @{Zonemaster::Engine->logger->entries} ), "query_auth: IPv6 not disabled" );
+ok( !( grep { $_->tag eq 'SKIP_IPV6_DISABLED' } @{ Zonemaster::Engine->logger->entries } ),
+    "query_auth: IPv6 not disabled" );
 $p = $zone->query_persistent( 'www.iis.se', 'A' );
-ok( !( grep { $_->tag eq 'SKIP_IPV6_DISABLED' } @{Zonemaster::Engine->logger->entries} ), "query_persistent: IPv6 not disabled" );
+ok( !( grep { $_->tag eq 'SKIP_IPV6_DISABLED' } @{ Zonemaster::Engine->logger->entries } ),
+    "query_persistent: IPv6 not disabled" );
 Zonemaster::Engine::Profile->effective->set( q{net.ipv4}, 1 );
 Zonemaster::Engine::Profile->effective->set( q{net.ipv6}, 0 );
 Zonemaster::Engine->logger->clear_history();
 $p = $zone->query_one( 'www.iis.se', 'A' );
-ok( !( grep { $_->tag eq 'SKIP_IPV4_DISABLED' } @{Zonemaster::Engine->logger->entries} ), "query_one: IPv4 not disabled" );
+ok( !( grep { $_->tag eq 'SKIP_IPV4_DISABLED' } @{ Zonemaster::Engine->logger->entries } ),
+    "query_one: IPv4 not disabled" );
 $p = $zone->query_auth( 'www.iis.se', 'A' );
-ok( !( grep { $_->tag eq 'SKIP_IPV4_DISABLED' } @{Zonemaster::Engine->logger->entries} ), "query_auth: IPv4 not disabled" );
+ok( !( grep { $_->tag eq 'SKIP_IPV4_DISABLED' } @{ Zonemaster::Engine->logger->entries } ),
+    "query_auth: IPv4 not disabled" );
 $p = $zone->query_persistent( 'www.iis.se', 'A' );
-ok( !( grep { $_->tag eq 'SKIP_IPV4_DISABLED' } @{Zonemaster::Engine->logger->entries} ), "query_persistent: IPv4 not disabled" );
+ok( !( grep { $_->tag eq 'SKIP_IPV4_DISABLED' } @{ Zonemaster::Engine->logger->entries } ),
+    "query_persistent: IPv4 not disabled" );
 Zonemaster::Engine::Profile->effective->set( q{net.ipv4}, 1 );
 Zonemaster::Engine::Profile->effective->set( q{net.ipv6}, 1 );
 Zonemaster::Engine->logger->clear_history();
 $p = $zone->query_one( 'www.iis.se', 'A' );
-ok( !( grep { $_->tag eq 'SKIP_IPV6_DISABLED' } @{Zonemaster::Engine->logger->entries} ), "query_one: IPv6 not disabled" );
-ok( !( grep { $_->tag eq 'SKIP_IPV4_DISABLED' } @{Zonemaster::Engine->logger->entries} ), "query_one: IPv4 not disabled" );
+ok( !( grep { $_->tag eq 'SKIP_IPV6_DISABLED' } @{ Zonemaster::Engine->logger->entries } ),
+    "query_one: IPv6 not disabled" );
+ok( !( grep { $_->tag eq 'SKIP_IPV4_DISABLED' } @{ Zonemaster::Engine->logger->entries } ),
+    "query_one: IPv4 not disabled" );
 $p = $zone->query_auth( 'www.iis.se', 'A' );
-ok( !( grep { $_->tag eq 'SKIP_IPV6_DISABLED' } @{Zonemaster::Engine->logger->entries} ), "query_auth: IPv6 not disabled" );
-ok( !( grep { $_->tag eq 'SKIP_IPV4_DISABLED' } @{Zonemaster::Engine->logger->entries} ), "query_auth: IPv4 not disabled" );
+ok( !( grep { $_->tag eq 'SKIP_IPV6_DISABLED' } @{ Zonemaster::Engine->logger->entries } ),
+    "query_auth: IPv6 not disabled" );
+ok( !( grep { $_->tag eq 'SKIP_IPV4_DISABLED' } @{ Zonemaster::Engine->logger->entries } ),
+    "query_auth: IPv4 not disabled" );
 $p = $zone->query_persistent( 'www.iis.se', 'A' );
-ok( !( grep { $_->tag eq 'SKIP_IPV6_DISABLED' } @{Zonemaster::Engine->logger->entries} ), "query_persistent: IPv6 not disabled" );
-ok( !( grep { $_->tag eq 'SKIP_IPV4_DISABLED' } @{Zonemaster::Engine->logger->entries} ), "query_persistent: IPv4 not disabled" );
+ok( !( grep { $_->tag eq 'SKIP_IPV6_DISABLED' } @{ Zonemaster::Engine->logger->entries } ),
+    "query_persistent: IPv6 not disabled" );
+ok( !( grep { $_->tag eq 'SKIP_IPV4_DISABLED' } @{ Zonemaster::Engine->logger->entries } ),
+    "query_persistent: IPv4 not disabled" );
 
 $p = $zone->query_persistent( 'www.iis.se', 'A' );
 isa_ok( $p, 'Zonemaster::Engine::Packet' );
 @rrs = $p->get_records( 'a', 'answer' );
-is( scalar( @rrs ), 1, 'one answer A RR' );
+is( scalar( @rrs ),   1,                'one answer A RR' );
 is( $rrs[0]->address, '159.253.30.207', 'expected address' );
 
 $p = $zone->query_auth( 'www.iis.se', 'A' );
 isa_ok( $p, 'Zonemaster::Engine::Packet' );
 @rrs = $p->get_records( 'a', 'answer' );
-is( scalar( @rrs ), 1, 'one answer A RR' );
+is( scalar( @rrs ),   1,                'one answer A RR' );
 is( $rrs[0]->address, '159.253.30.207', 'expected address' );
 
 my $ary = $zone->query_all( 'www.iis.se', 'A' );
@@ -106,7 +122,7 @@ isa_ok( $ary, 'ARRAY' );
 foreach my $p ( @$ary ) {
     isa_ok( $p, 'Zonemaster::Engine::Packet' );
     my @rrs = $p->get_records( 'a', 'answer' );
-    is( scalar( @rrs ), 1, 'one answer A RR' );
+    is( scalar( @rrs ),   1,                'one answer A RR' );
     is( $rrs[0]->address, '159.253.30.207', 'expected address' );
 }
 

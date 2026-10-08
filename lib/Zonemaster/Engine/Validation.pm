@@ -3,9 +3,10 @@ package Zonemaster::Engine::Validation;
 use v5.16.0;
 use warnings;
 
-use version; our $VERSION = version->declare("v1.0.0");
+use version; our $VERSION = version->declare( "v1.0.0" );
 
 use Exporter 'import';
+
 BEGIN {
     our @EXPORT_OK = qw[
       validate_ipv4
@@ -14,7 +15,7 @@ BEGIN {
     our %EXPORT_TAGS = ( all => \@EXPORT_OK );
 
     ## no critic (Modules::ProhibitAutomaticExportation)
-    our @EXPORT = qw[ 
+    our @EXPORT = qw[
       validate_ipv4
       validate_ipv6
     ];
@@ -31,7 +32,7 @@ Readonly our $IPV6_RE => qr/^[0-9a-f:]*:[0-9a-f:]+(:[0-9]{1,3}\.[0-9]{1,3}\.[0-9
 sub validate_ipv4 {
     my ( $ip ) = @_;
 
-    if ( defined $ip and $ip ne '') {
+    if ( defined $ip and $ip ne '' ) {
         if ( Net::IP::XS->new( $ip ) ) {
             if ( Net::IP::XS::ip_is_ipv4( $ip ) and $ip =~ /($IPV4_RE)/ ) {
                 return 1;

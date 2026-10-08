@@ -3,10 +3,10 @@ package Zonemaster::Engine::Test::Address;
 use v5.16.0;
 use warnings;
 
-use version; our $VERSION = version->declare("v1.0.8");
+use version; our $VERSION = version->declare( "v1.0.8" );
 
 use Carp;
-use List::MoreUtils qw[none any uniq];
+use List::MoreUtils    qw[none any uniq];
 use Locale::TextDomain qw[Zonemaster-Engine];
 use Readonly;
 
@@ -63,7 +63,7 @@ sub all {
     }
 
     return @results;
-}
+} ## end sub all
 
 =over
 
@@ -90,7 +90,7 @@ sub metadata {
               A01_LOCAL_USE_ADDR
               A01_NO_GLOBALLY_REACHABLE_ADDR
               A01_NO_NAME_SERVERS_FOUND
-              )
+            )
         ],
         address02 => [
             qw(
@@ -99,7 +99,7 @@ sub metadata {
               NO_RESPONSE_PTR_QUERY
               TEST_CASE_END
               TEST_CASE_START
-              )
+            )
         ],
         address03 => [
             qw(
@@ -109,7 +109,7 @@ sub metadata {
               NO_RESPONSE_PTR_QUERY
               TEST_CASE_END
               TEST_CASE_START
-              )
+            )
         ],
     };
 } ## end sub metadata
@@ -296,10 +296,10 @@ sub address01 {
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Address01';
     push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
-    my @nss = uniq grep { $_->isa('Zonemaster::Engine::Nameserver') } (
-                @{ Zonemaster::Engine::TestMethodsV2->get_del_ns_names_and_ips( $zone ) // [] },
-                @{ Zonemaster::Engine::TestMethodsV2->get_zone_ns_names_and_ips( $zone ) // [] }
-              );
+    my @nss = uniq grep { $_->isa( 'Zonemaster::Engine::Nameserver' ) } (
+        @{ Zonemaster::Engine::TestMethodsV2->get_del_ns_names_and_ips( $zone )  // [] },
+        @{ Zonemaster::Engine::TestMethodsV2->get_zone_ns_names_and_ips( $zone ) // [] }
+    );
 
     unless ( @nss ) {
         push @results, _emit_log( A01_NO_NAME_SERVERS_FOUND => {} );
@@ -309,7 +309,7 @@ sub address01 {
     my ( @documentation_addr, @local_use_addr, @not_globally_reachable, @globally_reachable );
     my %ip_already_processed;
 
-    NSS:
+  NSS:
     foreach my $ns ( @nss ) {
         my $ns_ip = $ns->address->short;
 
@@ -328,7 +328,8 @@ sub address01 {
                 next;
             }
 
-            my @categories = ( 'Private-Use', 'Loopback', 'Link Local', 'Link-Local', 'Unique-Local', 'Shared Address Space' );
+            my @categories =
+              ( 'Private-Use', 'Loopback', 'Link Local', 'Link-Local', 'Unique-Local', 'Shared Address Space' );
             foreach my $category ( @categories ) {
                 if ( index( $ip_category, $category ) != -1 ) {
                     push @local_use_addr, @matching_nss;
@@ -340,51 +341,48 @@ sub address01 {
                 push @not_globally_reachable, @matching_nss;
                 next;
             }
-        }
+        } ## end if ( $ip_details_ref )
 
         push @globally_reachable, @matching_nss;
-    }
+    } ## end NSS: foreach my $ns ( @nss )
 
     if ( @globally_reachable ) {
         push @results,
-            _emit_log(
-                A01_GLOBALLY_REACHABLE_ADDR => {
-                    ns_list => join( q{;}, uniq sort @globally_reachable )
-                }
-            );
+          _emit_log(
+            A01_GLOBALLY_REACHABLE_ADDR => {
+                ns_list => join( q{;}, uniq sort @globally_reachable )
+            }
+          );
     }
     else {
-        push @results,
-            _emit_log(
-                A01_NO_GLOBALLY_REACHABLE_ADDR => {}
-            );
+        push @results, _emit_log( A01_NO_GLOBALLY_REACHABLE_ADDR => {} );
     }
 
     if ( @documentation_addr ) {
         push @results,
-            _emit_log(
-                A01_DOCUMENTATION_ADDR => {
-                    ns_list => join( q{;}, uniq sort @documentation_addr )
-                }
-            );
+          _emit_log(
+            A01_DOCUMENTATION_ADDR => {
+                ns_list => join( q{;}, uniq sort @documentation_addr )
+            }
+          );
     }
 
     if ( @local_use_addr ) {
         push @results,
-            _emit_log(
-                A01_LOCAL_USE_ADDR => {
-                    ns_list => join( q{;}, uniq sort @local_use_addr )
-                }
-            );
+          _emit_log(
+            A01_LOCAL_USE_ADDR => {
+                ns_list => join( q{;}, uniq sort @local_use_addr )
+            }
+          );
     }
 
     if ( @not_globally_reachable ) {
         push @results,
-            _emit_log(
-                A01_ADDR_NOT_GLOBALLY_REACHABLE => {
-                    ns_list => join( q{;}, uniq sort @not_globally_reachable )
-                }
-            );
+          _emit_log(
+            A01_ADDR_NOT_GLOBALLY_REACHABLE => {
+                ns_list => join( q{;}, uniq sort @not_globally_reachable )
+            }
+          );
     }
 
     return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
@@ -415,8 +413,10 @@ sub address02 {
     my %ips;
     my $ptr_query;
 
-    foreach
-      my $local_ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) }, @{ Zonemaster::Engine::TestMethods->method5( $zone ) } )
+    foreach my $local_ns (
+        @{ Zonemaster::Engine::TestMethods->method4( $zone ) },
+        @{ Zonemaster::Engine::TestMethods->method5( $zone ) }
+      )
     {
 
         next if $ips{ $local_ns->address->short };
@@ -431,7 +431,7 @@ sub address02 {
         if ( $p and $p->rcode eq q{NOERROR} and $p->get_records( q{CNAME}, q{answer} ) ) {
             my ( $cname ) = $p->get_records( q{CNAME}, q{answer} );
             $ptr_query = $cname->cname;
-            $p = Zonemaster::Engine::Recursor->recurse( $ptr_query, q{PTR} );
+            $p         = Zonemaster::Engine::Recursor->recurse( $ptr_query, q{PTR} );
         }
 
         if ( $p ) {

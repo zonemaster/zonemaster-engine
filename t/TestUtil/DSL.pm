@@ -54,21 +54,21 @@ A test case can then be tested with the following minimal skeleton:
 use Exporter 'import';
 
 our @EXPORT = qw(all_tags
-                 clear_cache
-                 expect
-                 expect_others
-                 fake_ds
-                 fake_ns
-                 forbid
-                 forbid_others
-                 no_more_scenarios
-                 not_testable
-                 root_hints
-                 scenario
-                 testing_test_case
-                 todo
-                 zone
-                 zone_name_template);
+  clear_cache
+  expect
+  expect_others
+  fake_ds
+  fake_ns
+  forbid
+  forbid_others
+  no_more_scenarios
+  not_testable
+  root_hints
+  scenario
+  testing_test_case
+  todo
+  zone
+  zone_name_template);
 
 # Define a stack for internal context objects, some functions to manipulate it,
 # and only expose the top of the stack.
@@ -80,14 +80,14 @@ our @EXPORT = qw(all_tags
     }
 
     sub check_state ($) {
-        my ($expected_state) = @_;
+        my ( $expected_state ) = @_;
 
-        if (defined $expected_state) {
-            if (scalar @STACK == 0 or $expected_state ne STATE->{_STATE}) {
-                croak "This keyword is not valid in this context."
+        if ( defined $expected_state ) {
+            if ( scalar @STACK == 0 or $expected_state ne STATE->{_STATE} ) {
+                croak "This keyword is not valid in this context.";
             }
         }
-        elsif (scalar @STACK != 0) {
+        elsif ( scalar @STACK != 0 ) {
             croak "This keyword can only be used once";
         }
     }
@@ -106,19 +106,22 @@ our @EXPORT = qw(all_tags
 # Internal mechanics
 
 sub _is_uint_bits {
-    my ($value, $bits) = @_;
-    return ($value =~ /^\d+$/a and $value >= 0 and $value < (1 << $bits));
+    my ( $value, $bits ) = @_;
+    return ( $value =~ /^\d+$/a and $value >= 0 and $value < ( 1 << $bits ) );
 }
 
 sub _expand_scenario_names {
     my @scenario_names = @_;
     my @result;
 
-    for my $name (@scenario_names) {
-        if ($name=~ /^ (?<prefix> [^{]*) \{
+    for my $name ( @scenario_names ) {
+        if (
+            $name =~ /^ (?<prefix> [^{]*) \{
                        (?<start> \d+) \Q..\E (?<end> \d+)
-                       \} $ /x ) {
-            for my $i ($+{start}..$+{end}) {
+                       \} $ /x
+          )
+        {
+            for my $i ( $+{start} .. $+{end} ) {
                 push @result, "$+{prefix}$i";
             }
         }
@@ -128,7 +131,7 @@ sub _expand_scenario_names {
     }
 
     return @result;
-}
+} ## end sub _expand_scenario_names
 
 =head1 TOP-LEVEL KEYWORDS
 
@@ -144,7 +147,7 @@ sub all_tags (@) {
     my @tags = @_;
     check_state 'testing_test_case';
 
-    %{STATE->{all_tags}} = map { $_ => 1 } @tags;
+    %{ STATE->{all_tags} } = map { $_ => 1 } @tags;
 }
 
 =head2 no_more_scenarios
@@ -163,7 +166,7 @@ sub no_more_scenarios () {
     delete $spec->{zone_name_template};
     delete $spec->{all_tags};
 
-    TestUtil::DSL::Compiler::compile($spec)->();
+    TestUtil::DSL::Compiler::compile( $spec )->();
 }
 
 =head2 scenario
@@ -213,21 +216,21 @@ sub scenario (@) {
 
     croak "At least two arguments required" unless scalar @_ >= 2;
     croak "A 'root_hints' must appear before a 'scenario' block"
-        unless exists STATE->{root_hints};
+      unless exists STATE->{root_hints};
 
     my $definition = pop @_;
-    my @names = _expand_scenario_names(@_);
+    my @names      = _expand_scenario_names( @_ );
 
-    my @context = caller(0);
+    my @context = caller( 0 );
 
     my $scenario = {
-        names => \@names,
-        caller => [ @context[1..2] ],
-        body => do {
+        names  => \@names,
+        caller => [ @context[ 1 .. 2 ] ],
+        body   => do {
             my $PARENT_STATE = STATE;
             push_state 'scenario';
 
-            STATE->{status} = [ 'testable' ];
+            STATE->{status} = ['testable'];
 
             # Keep track of contents of “all_tags” so that expect and forbid
             # can raise errors if given a tag not in that list.
@@ -236,8 +239,8 @@ sub scenario (@) {
             # Keep track of keys never mentioned by “expect” or “forbid” respectively
             # so that “expect_others” and “forbid_others” can be defined in terms
             # of “expect” and “forbid” respectively.
-            %{STATE->{not_expected}}  = map { $_ => 1 } keys %{STATE->{all_tags}};
-            %{STATE->{not_forbidden}} = map { $_ => 1 } keys %{STATE->{all_tags}};
+            %{ STATE->{not_expected} }  = map { $_ => 1 } keys %{ STATE->{all_tags} };
+            %{ STATE->{not_forbidden} } = map { $_ => 1 } keys %{ STATE->{all_tags} };
 
             # Evaluate definition
             my $obj = do { $definition->(); pop_state; };
@@ -251,22 +254,20 @@ sub scenario (@) {
             $obj->{zone} //= STATE->{zone_name_template};
 
             # Sanity checks
-            if (not defined $obj->{zone}) {
-                croak "No 'zone' keyword in scenario block and no previous "
-                    . "'zone_name_template' seen";
+            if ( not defined $obj->{zone} ) {
+                croak "No 'zone' keyword in scenario block and no previous " . "'zone_name_template' seen";
             }
 
             # TODO do we need more sanity checks?
             $obj;
-        }
+        } ## end do
     };
 
-    foreach my $name (@{$scenario->{names}}) {
+    foreach my $name ( @{ $scenario->{names} } ) {
         STATE->{scenario_status}{$name} = $scenario->{body}{status};
     }
-    push @{STATE->{ops}}, [ scenario => $scenario ];
-}
-
+    push @{ STATE->{ops} }, [ scenario => $scenario ];
+} ## end sub scenario (@)
 
 =head2 testing_test_case
 
@@ -284,12 +285,11 @@ sub testing_test_case ($$) {
     check_state undef;
     push_state 'testing_test_case';
 
-    my ($test_module, $test_case) = @_;
+    my ( $test_module, $test_case ) = @_;
 
     STATE->{test_module} = $test_module;
-    STATE->{test_case} = $test_case;
+    STATE->{test_case}   = $test_case;
 }
-
 
 =head2 root_hints
 
@@ -305,11 +305,11 @@ block.
 =cut
 
 sub root_hints (%) {
-    my (%root_hints) = @_;
+    my ( %root_hints ) = @_;
     check_state 'testing_test_case';
     STATE->{root_hints} = 1;
 
-    push @{STATE->{ops}}, [ root_hints => \%root_hints ];
+    push @{ STATE->{ops} }, [ root_hints => \%root_hints ];
 }
 
 =head2 zone_name_template
@@ -325,7 +325,7 @@ or C<{TESTCASE}>, that are substituted accordingly.
 =cut
 
 sub zone_name_template ($) {
-    my ($template) = @_;
+    my ( $template ) = @_;
     check_state 'testing_test_case';
     STATE->{zone_name_template} = $template;
 }
@@ -344,9 +344,8 @@ because L<root_hints> also clears the resolver cache.
 
 sub clear_cache () {
     check_state 'testing_test_case';
-    push @{STATE->{ops}}, [ "clear_cache" ];
+    push @{ STATE->{ops} }, ["clear_cache"];
 }
-
 
 =head1 SCENARIO-SPECIFIC KEYWORDS
 
@@ -367,7 +366,7 @@ used here.
 =cut
 
 sub zone ($) {
-    my ($zone) = @_;
+    my ( $zone ) = @_;
     check_state 'scenario';
 
     # Template expansion is done at a later stage
@@ -384,28 +383,29 @@ Provide a DS record as part of the fake delegation to be used in the scenario.
 =cut
 
 sub fake_ds($$$$) {
-    my ($tag, $algo, $type, $digest) = @_;
+    my ( $tag, $algo, $type, $digest ) = @_;
 
-    unless ( _is_uint_bits($tag, 16) ) {
+    unless ( _is_uint_bits( $tag, 16 ) ) {
         croak "$tag: not a valid key tag";
     }
-    unless ( _is_uint_bits($algo, 8) ) {
+    unless ( _is_uint_bits( $algo, 8 ) ) {
         croak "$algo: not a valid algorithm";
     }
-    unless ( _is_uint_bits($type, 8) ) {
+    unless ( _is_uint_bits( $type, 8 ) ) {
         croak "$type: not a valid type";
     }
     unless ( $digest =~ /^ (?: [0-9a-f]{2} )+ $/ix ) {
         croak "$digest: not a valid digest";
     }
 
-    push @{STATE->{fake_ds}}, {
-        keytag => $tag,
+    push @{ STATE->{fake_ds} },
+      {
+        keytag    => $tag,
         algorithm => $algo,
-        type => $type,
-        digest => $digest
-    };
-}
+        type      => $type,
+        digest    => $digest
+      };
+} ## end sub fake_ds($$$$)
 
 =head2 fake_ns
 
@@ -427,9 +427,9 @@ allowed and is an error.
 =cut
 
 sub fake_ns($@) {
-    my ($name, @ips) = @_;
+    my ( $name, @ips ) = @_;
 
-    if (exists STATE->{fake_ns}{$name}) {
+    if ( exists STATE->{fake_ns}{$name} ) {
         croak "'fake_ns' cannot be used for '$name' more than once";
     }
 
@@ -527,26 +527,26 @@ C<some_argument> parameter equal to the string C<ns1.example/127.0.60.1>:
 =cut
 
 sub expect (@) {
-    if (scalar @_ == 2 and ref $_[1] eq 'HASH') {
+    if ( scalar @_ == 2 and ref $_[1] eq 'HASH' ) {
         # Third form
-        my ($tag, $args) = @_;
+        my ( $tag, $args ) = @_;
         _declare_message_test( expect => $tag, args => $args );
     }
-    elsif (scalar @_ == 2 and ref $_[1] eq 'CODE') {
+    elsif ( scalar @_ == 2 and ref $_[1] eq 'CODE' ) {
         # Fourth form
-        my ($tag, $code) = @_;
+        my ( $tag, $code ) = @_;
         _declare_message_test( expect => $tag, code => $code );
     }
-    elsif (scalar @_ >= 1) {
+    elsif ( scalar @_ >= 1 ) {
         # First or second form
-        foreach my $tag (@_) {
+        foreach my $tag ( @_ ) {
             _declare_message_test( expect => $tag );
         }
     }
     else {
         croak "Need at least one argument";
     }
-}
+} ## end sub expect (@)
 
 =head2 forbid
 
@@ -567,22 +567,22 @@ sub forbid (@) {
 
     croak "Need at least one argument" unless scalar @tags >= 1;
 
-    foreach my $tag (@_) {
+    foreach my $tag ( @_ ) {
         _declare_message_test( forbid => $tag );
     }
 }
 
 sub _declare_message_test {
     my ( $type, $tag, %args ) = @_;
-    my @context = caller(1);
+    my @context = caller( 1 );
 
     exists STATE->{all_tags}{$tag}
-        or croak "Tag '$tag' used in '$type' clause but not declared in 'all_tags'";
+      or croak "Tag '$tag' used in '$type' clause but not declared in 'all_tags'";
 
     delete STATE->{not_expected}{$tag}  if $type eq 'expect';
     delete STATE->{not_forbidden}{$tag} if $type eq 'forbid';
 
-    push @{STATE->{message_tests}}, [ $type, [ @context[1..2] ], $tag, %args ];
+    push @{ STATE->{message_tests} }, [ $type, [ @context[ 1 .. 2 ] ], $tag, %args ];
 }
 
 =head2 expect_others
@@ -596,10 +596,10 @@ definition must appear in the test case’s output for the scenario.
 
 sub expect_others () {
     croak "Cannot use expect_others if forbid_others is already given" if STATE->{forbid_others};
-    croak "Cannot use expect_others more than once" if STATE->{expect_others};
+    croak "Cannot use expect_others more than once"                    if STATE->{expect_others};
     STATE->{expect_others} = 1;
 
-    _declare_message_test( expect => $_ ) foreach ( keys %{STATE->{not_forbidden}} );
+    _declare_message_test( expect => $_ ) foreach ( keys %{ STATE->{not_forbidden} } );
 }
 
 =head2 forbid_others
@@ -613,10 +613,10 @@ definition must not appear in the test case’s output for the scenario.
 
 sub forbid_others () {
     croak "Cannot use forbid_others if expect_others is already given" if STATE->{expect_others};
-    croak "Cannot use forbid_others more than once" if STATE->{forbid_others};
+    croak "Cannot use forbid_others more than once"                    if STATE->{forbid_others};
     STATE->{forbid_others} = 1;
 
-    _declare_message_test( forbid => $_ ) foreach ( keys %{STATE->{not_expected}} );
+    _declare_message_test( forbid => $_ ) foreach ( keys %{ STATE->{not_expected} } );
 }
 
 =head2 not_testable
@@ -650,10 +650,10 @@ testable, for example by referring to an item on an issue tracker.
 =cut
 
 sub not_testable (;$) {
-    if (exists STATE->{todo}) {
+    if ( exists STATE->{todo} ) {
         croak "'not_testable' cannot be combined with 'todo'";
     }
-    if (exists STATE->{not_testable}) {
+    if ( exists STATE->{not_testable} ) {
         croak "'not_testable' can only be given once";
     }
     STATE->{status} = [ 'not_testable', $_[0] ];
@@ -687,10 +687,10 @@ to fail, for example by referring to an item on an issue tracker.
 =cut
 
 sub todo (;$) {
-    if (exists STATE->{not_testable}) {
+    if ( exists STATE->{not_testable} ) {
         croak "'todo' cannot be combined with 'not_testable'";
     }
-    if (exists STATE->{todo}) {
+    if ( exists STATE->{todo} ) {
         croak "'todo' can only be given once";
     }
     STATE->{status} = [ 'todo', $_[0] ];

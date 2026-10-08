@@ -3,7 +3,7 @@ package Zonemaster::Engine::Packet;
 use v5.16.0;
 use warnings;
 
-use version; our $VERSION = version->declare("v1.0.5");
+use version; our $VERSION = version->declare( "v1.0.5" );
 
 use Class::Accessor 'antlers';
 use Carp qw( confess );
@@ -61,7 +61,8 @@ sub no_such_record {
 
     if ( $self->type eq 'nodata' ) {
         my ( $q ) = $self->question;
-        Zonemaster::Engine::Util::info( NO_SUCH_RECORD => { name => Zonemaster::Engine::Util::name( $q->name ), type => $q->type } );
+        Zonemaster::Engine::Util::info(
+            NO_SUCH_RECORD => { name => Zonemaster::Engine::Util::name( $q->name ), type => $q->type } );
 
         return 1;
     }

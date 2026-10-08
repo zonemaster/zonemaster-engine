@@ -3,7 +3,7 @@ package Zonemaster::Engine;
 use v5.16.0;
 use warnings;
 
-use version; our $VERSION = version->declare("v9.0.1");
+use version; our $VERSION = version->declare( "v9.0.1" );
 
 BEGIN {
     # Locale::TextDomain (<= 1.20) doesn't know about File::ShareDir so give a helping hand.
@@ -30,6 +30,7 @@ our $logger;
 our $recursor = Zonemaster::Engine::Recursor->new;
 
 my $init_done;
+
 sub init_engine {
     return if $init_done++;
     Zonemaster::Engine::Recursor::init_recursor();
@@ -128,7 +129,7 @@ sub add_fake_delegation {
           or croak 'Each key of argument $href must omit the trailing dot, or it must be a single dot';
         ( !defined $href->{$name} or ref $href->{$name} eq 'ARRAY' )
           or croak 'Each value of argument $href must be an arrayref or undef';
-        $href->{$name} //= []; # normalize undef to empty arrayref
+        $href->{$name} //= [];    # normalize undef to empty arrayref
     }
 
     # Check fake delegation
@@ -171,7 +172,7 @@ sub add_fake_delegation {
         return;
     }
     return 1;
-}
+} ## end sub add_fake_delegation
 
 sub add_fake_ds {
     my ( $class, $domain, $aref ) = @_;

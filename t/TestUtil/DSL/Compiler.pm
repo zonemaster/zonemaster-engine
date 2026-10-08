@@ -4,7 +4,7 @@ use warnings;
 use strict;
 use v5.24;
 
-use Carp qw(croak confess);
+use Carp       qw(croak confess);
 use Test::More ();
 
 =encoding utf8
@@ -31,43 +31,40 @@ to C<prove>).
 
 our $DEBUG = 0;
 
-
 sub compile {
-    my ($ast) = @_;
+    my ( $ast ) = @_;
 
     confess unless exists $ast->{test_module};
     confess unless exists $ast->{test_case};
 
     my $test_module = $ast->{test_module};
-    my $test_case = $ast->{test_case};
+    my $test_case   = $ast->{test_case};
 
     my $test_method = sub {
         my ( $zone_name ) = @_;
-        return Zonemaster::Engine->test_method(
-            $test_module, $test_case, Zonemaster::Engine->zone( $zone_name ));
+        return Zonemaster::Engine->test_method( $test_module, $test_case, Zonemaster::Engine->zone( $zone_name ) );
     };
 
-    my $func_preamble = _compile_preamble($ast);
-    my $func_select_subtests = _compile_select_subtests($ast);
-    my @compiled_ops = _compile_ops($ast->{ops}, $test_case, $test_method);
+    my $func_preamble        = _compile_preamble( $ast );
+    my $func_select_subtests = _compile_select_subtests( $ast );
+    my @compiled_ops         = _compile_ops( $ast->{ops}, $test_case, $test_method );
 
     my $datafile = 't/' . File::Basename::basename( $0, '.t' ) . '.data';
 
     return sub {
         my $context = {};
 
-        if ($DEBUG) {
-            Test::More::note("Dumping AST read after parsing DSL:");
-            Test::More::note(Test::More::explain($ast));
+        if ( $DEBUG ) {
+            Test::More::note( "Dumping AST read after parsing DSL:" );
+            Test::More::note( Test::More::explain( $ast ) );
         }
 
         $func_preamble->();
 
         $context->{todo_tests}     = [];
         $context->{disabled_tests} = [];
-        $context->{selected_subtests} = $func_select_subtests->(
-            $ENV{ZONEMASTER_SELECTED_SCENARIOS},
-            $ENV{ZONEMASTER_DISABLED_SCENARIOS});
+        $context->{selected_subtests} =
+          $func_select_subtests->( $ENV{ZONEMASTER_SELECTED_SCENARIOS}, $ENV{ZONEMASTER_DISABLED_SCENARIOS} );
 
         if ( not $ENV{ZONEMASTER_RECORD} ) {
             Test::More::note "Loading data file: $datafile";
@@ -78,21 +75,21 @@ sub compile {
         }
 
         Zonemaster::Engine::Profile->effective->merge(
-            Zonemaster::Engine::Profile->from_json( qq({ "test_cases": ["$test_case"] }) ));
+            Zonemaster::Engine::Profile->from_json( qq({ "test_cases": ["$test_case"] }) ) );
 
         foreach my $callback ( @compiled_ops ) {
-            $callback->($context);
+            $callback->( $context );
         }
 
         Test::More::done_testing();
 
-        if (scalar @{$context->{todo_tests}}) {
-            Test::More::diag("The following scenarios are marked as TODO:\n");
-            Test::More::diag("  $_") foreach @{$context->{todo_tests}};
+        if ( scalar @{ $context->{todo_tests} } ) {
+            Test::More::diag( "The following scenarios are marked as TODO:\n" );
+            Test::More::diag( "  $_" ) foreach @{ $context->{todo_tests} };
         }
-        if (scalar @{$context->{disabled_tests}}) {
-            Test::More::diag("The following scenarios were not run:\n");
-            Test::More::diag("  $_") foreach @{$context->{disabled_tests}};
+        if ( scalar @{ $context->{disabled_tests} } ) {
+            Test::More::diag( "The following scenarios were not run:\n" );
+            Test::More::diag( "  $_" ) foreach @{ $context->{disabled_tests} };
         }
 
         if ( $ENV{ZONEMASTER_RECORD} ) {
@@ -101,12 +98,12 @@ sub compile {
             Test::More::note "Done saving data file.";
         }
     };
-}
+} ## end sub compile
 
 # Top-level compilation helper functions
 
 sub _compile_preamble {
-    my ($ast) = @_;
+    my ( $ast ) = @_;
 
     confess unless exists $ast->{test_module};
 
@@ -135,36 +132,34 @@ sub _compile_clear_cache {
 }
 
 sub _compile_select_subtests {
-    my ($ast) = @_;
+    my ( $ast ) = @_;
 
     return sub {
         my ( $selected_scenarios, $disabled_scenarios ) = @_;
 
         # Make a copy so as not to clobber the AST
-        my %scenario_status = ( %{$ast->{scenario_status}} );
+        my %scenario_status = ( %{ $ast->{scenario_status} } );
 
         # Force the listed tests in $selected_scenarios to run as if their
         # status was testable.
         if ( defined $selected_scenarios ) {
-            %scenario_status = map {
-                $_ => [ 'skip', 'not selected by environment variable' ]
-            } ( keys %scenario_status );
-            foreach my $name ( split(/, */, $selected_scenarios) ) {
+            %scenario_status =
+              map { $_ => [ 'skip', 'not selected by environment variable' ] } ( keys %scenario_status );
+            foreach my $name ( split( /, */, $selected_scenarios ) ) {
                 croak "$name: no such scenario" unless exists $scenario_status{$name};
-                $scenario_status{$name} = [ 'testable' ];
+                $scenario_status{$name} = ['testable'];
             }
         }
 
         # Skip the tests explicitly listed in $disabled_scenarios
-        foreach my $to_disable ( split(/, */, $disabled_scenarios // "") ) {
+        foreach my $to_disable ( split( /, */, $disabled_scenarios // "" ) ) {
             croak "$to_disable: no such scenario" unless exists $scenario_status{$to_disable};
-            $scenario_status{$to_disable} =
-                [ 'skip', 'disabled by environment variable' ];
+            $scenario_status{$to_disable} = [ 'skip', 'disabled by environment variable' ];
         }
 
         return \%scenario_status;
     };
-}
+} ## end sub _compile_select_subtests
 
 sub _compile_ops {
     my ( $ops, $test_case, $test_method ) = @_;
@@ -193,7 +188,7 @@ sub _compile_run_scenario_block {
     # in the environment before making the decision to run it or not.
     my $compiled_scenarios = _compile_scenario_block( $scenario_block, $test_case, $test_method );
 
-    my ($file, $line) = @{$compiled_scenarios->{caller}};
+    my ( $file, $line ) = @{ $compiled_scenarios->{caller} };
     my $callback = $compiled_scenarios->{callback};
 
     return sub {
@@ -203,12 +198,12 @@ sub _compile_run_scenario_block {
         my $disabled_tests    = $context->{disabled_tests};
         my $todo_tests        = $context->{todo_tests};
 
-        foreach my $descriptor (@{$compiled_scenarios->{args}}) {
+        foreach my $descriptor ( @{ $compiled_scenarios->{args} } ) {
             my $name      = $descriptor->{scenario_name};
             my $zone_name = $descriptor->{zone_name};
 
-            my ( $status, $reason ) = @{$selected_subtests->{$name}};
-            my $name_and_reason     = "$name" . (defined $reason ? " ($reason)" : "");
+            my ( $status, $reason ) = @{ $selected_subtests->{$name} };
+            my $name_and_reason = "$name" . ( defined $reason ? " ($reason)" : "" );
 
             if ( $status eq 'skip' ) {
                 Test::More->builder->skip( $name_and_reason );
@@ -229,43 +224,45 @@ sub _compile_run_scenario_block {
                 push @$todo_tests, $name_and_reason;
             }
 
-            my $ret = Test::More::subtest($name, $callback, $zone_name);
+            my $ret = Test::More::subtest( $name, $callback, $zone_name );
             # Test::More->builder->no_diag(1) was called inside the callback just before
             # exiting in order to suppress the default diag() output in case of failure
             # of the subtest. Be sure to re-enable it before continuing.
-            Test::More->builder->no_diag(0);
+            Test::More->builder->no_diag( 0 );
 
             if ( $status eq 'todo' ) {
                 Test::More->builder->todo_end();
             }
             elsif ( $status eq 'testable' and not $ret ) {
-                Test::More::diag(<<DIAG);
+                Test::More::diag( <<DIAG);
   Failed scenario '$name'
   at $file line $line.
 DIAG
             }
-        }
+        } ## end foreach my $descriptor ( @{...})
     };
-}
+} ## end sub _compile_run_scenario_block
 
 sub _compile_scenario_block {
     my ( $scenario_block, $test_case, $test_method ) = @_;
 
     my @subtest_args = ();
-    foreach my $name (@{$scenario_block->{names}}) {
+    foreach my $name ( @{ $scenario_block->{names} } ) {
         my $zone = lc _expand_template(
             $scenario_block->{body}{zone},
-            SCENARIO => $name, TESTCASE => $test_case );
+            SCENARIO => $name,
+            TESTCASE => $test_case
+        );
 
         push @subtest_args, { scenario_name => $name, zone_name => $zone };
     }
 
     return {
-        caller => $scenario_block->{caller},
+        caller   => $scenario_block->{caller},
         callback => _compile_scenario_subtest( $scenario_block, $test_method ),
-        args => \@subtest_args
+        args     => \@subtest_args
     };
-}
+} ## end sub _compile_scenario_block
 
 # Scenario compilation helper functions
 
@@ -273,25 +270,25 @@ sub _compile_scenario_subtest {
     my ( $scenario_declaration, $test_method ) = @_;
 
     my $func_add_fake_delegation = _compile_fake_ns( $scenario_declaration );
-    my $func_add_fake_ds = _compile_fake_ds( $scenario_declaration );
-    my @func_message_tests = _compile_message_tests( $scenario_declaration );
+    my $func_add_fake_ds         = _compile_fake_ds( $scenario_declaration );
+    my @func_message_tests       = _compile_message_tests( $scenario_declaration );
 
     return sub {
         my ( $zone_name ) = @_;
-        Test::More::plan(tests => scalar @func_message_tests + 1);
+        Test::More::plan( tests => scalar @func_message_tests + 1 );
 
-        Test::More::note("Zone: $zone_name");
-        $func_add_fake_delegation->($zone_name) if defined $func_add_fake_delegation;
-        $func_add_fake_ds->($zone_name) if defined $func_add_fake_ds;
+        Test::More::note( "Zone: $zone_name" );
+        $func_add_fake_delegation->( $zone_name ) if defined $func_add_fake_delegation;
+        $func_add_fake_ds->( $zone_name )         if defined $func_add_fake_ds;
 
         my @messages = $test_method->( $zone_name );
 
         if ( my ( $error ) = grep { $_->tag eq 'MODULE_ERROR' } @messages ) {
-            Test::More::fail("Test case executes without errors");
-            Test::More::diag("Module died with the following error:\n  " . $error->args->{"msg"});
+            Test::More::fail( "Test case executes without errors" );
+            Test::More::diag( "Module died with the following error:\n  " . $error->args->{"msg"} );
         }
         else {
-            Test::More::pass("Test case executes without errors");
+            Test::More::pass( "Test case executes without errors" );
             $_->( @messages ) foreach ( @func_message_tests );
         }
 
@@ -299,9 +296,9 @@ sub _compile_scenario_subtest {
         # Test::More automatically generates a comment containing the location
         # of the failing test. This location is wrong, so we squelch any
         # diag() output. There is no other way than to call no_diag() here.
-        Test::More->builder->no_diag(1);
+        Test::More->builder->no_diag( 1 );
     };
-}
+} ## end sub _compile_scenario_subtest
 
 sub _compile_fake_ns {
     my ( $scenario_declaration ) = @_;
@@ -315,7 +312,9 @@ sub _compile_fake_ns {
             }
             # Use default value of "fill_in_empty_oob_glue".
             Zonemaster::Engine->add_fake_delegation(
-                $zone_name => $undel_ns, fill_in_empty_oob_glue => 1 );
+                $zone_name             => $undel_ns,
+                fill_in_empty_oob_glue => 1
+            );
         }
     }
     return undef;
@@ -325,7 +324,7 @@ sub _compile_fake_ds {
     my ( $scenario_declaration ) = @_;
 
     if ( exists $scenario_declaration->{body}{fake_ds} ) {
-        my @undel_ds = @{$scenario_declaration->{body}{fake_ds}};
+        my @undel_ds = @{ $scenario_declaration->{body}{fake_ds} };
         return sub {
             my ( $zone_name ) = @_;
             Zonemaster::Engine->add_fake_ds( $zone_name => $_ ) foreach @undel_ds;
@@ -344,7 +343,7 @@ sub _compile_message_tests {
             _compile_expect_with_code( $caller, $tag, $args{code} );
         }
         elsif ( $type eq 'expect' and exists $args{args} ) {
-            _compile_expect_with_args( $caller, $tag, %{$args{args}} );
+            _compile_expect_with_args( $caller, $tag, %{ $args{args} } );
         }
         elsif ( $type eq 'expect' ) {
             _compile_expect_bare( $caller, $tag );
@@ -352,18 +351,15 @@ sub _compile_message_tests {
         elsif ( $type eq 'forbid' ) {
             _compile_forbid( $caller, $tag );
         }
-    } ( @{$scenario_declaration->{body}{message_tests}} );
-}
+    } ( @{ $scenario_declaration->{body}{message_tests} } );
+} ## end sub _compile_message_tests
 
 sub _compile_expect_bare {
     my ( $caller, $tag ) = @_;
 
     return sub {
-        _ok(
-            scalar ( grep { $_->{tag} eq $tag } @_ ),
-            "Tag '$tag' is outputted",
-            $caller )
-            or Test::More::diag("Tag '$tag' should have been outputted, but wasn't");
+        _ok( scalar( grep { $_->{tag} eq $tag } @_ ), "Tag '$tag' is outputted", $caller )
+          or Test::More::diag( "Tag '$tag' should have been outputted, but wasn't" );
     };
 }
 
@@ -372,13 +368,13 @@ sub _compile_expect_with_args {
 
     my %predicates;
     my $explanation = "Looked for a message whose tag is '$tag'";
-    my $where = "where";
+    my $where       = "where";
 
     foreach my $argument ( sort keys %args ) {
         $explanation .= "\n  $where '$argument' ";
         $where = "  and";
 
-        my $value = $args{$argument};
+        my $value      = $args{$argument};
         my $comparison = do {
             if ( ref $value eq '' ) {
                 $explanation .= "equals '$value'";
@@ -390,23 +386,23 @@ sub _compile_expect_with_args {
             }
             elsif ( ref $value eq 'CODE' ) {
                 $explanation .= "satisfies a custom predicate";
-                sub { $_[1]->($_[0]) };
+                sub { $_[1]->( $_[0] ) };
             }
             else {
                 croak "Invalid argument value given to key '$argument'";
             }
         };
         $predicates{$argument} = sub {
-            $comparison->($_->{args}{$argument}, $value)
+            $comparison->( $_->{args}{$argument}, $value );
         };
-    }
+    } ## end foreach my $argument ( sort...)
 
     $explanation .= "\n    and contains no argument other than those listed above";
 
     my $combined_predicate = sub {
-        foreach my $k ( keys %{$_->{args}} ) {
+        foreach my $k ( keys %{ $_->{args} } ) {
             if ( exists $predicates{$k} ) {
-                return 0 unless $predicates{$k}->($_);
+                return 0 unless $predicates{$k}->( $_ );
             }
             else {
                 # The message contains an argument that isn’t matched by anything
@@ -419,27 +415,22 @@ sub _compile_expect_with_args {
 
     return sub {
         my @messages = grep { $_->{tag} eq $tag } @_;
-        _ok(
-            scalar ( grep { $combined_predicate->($_) } @messages ),
-            "Messages of tag '$tag' exist with specified arguments",
-            $caller )
-            or do {
-                Test::More::diag($explanation);
-                Test::More::diag("Here are all messages that unsuccessfully matched:");
-                Test::More::diag("  $_->{tag} " . $_->argstr) foreach ( @messages );
-            }
+        _ok( scalar( grep { $combined_predicate->( $_ ) } @messages ),
+            "Messages of tag '$tag' exist with specified arguments", $caller )
+          or do {
+            Test::More::diag( $explanation );
+            Test::More::diag( "Here are all messages that unsuccessfully matched:" );
+            Test::More::diag( "  $_->{tag} " . $_->argstr ) foreach ( @messages );
+        }
     };
-}
+} ## end sub _compile_expect_with_args
 
 sub _compile_expect_with_code {
     my ( $caller, $tag, $code ) = @_;
 
     return sub {
         my @messages_of_tag = grep { $_->{tag} eq $tag } @_;
-        _ok(
-            $code->( @messages_of_tag ),
-            "Messages of tag '$tag' satisfy custom callback",
-            $caller );
+        _ok( $code->( @messages_of_tag ), "Messages of tag '$tag' satisfy custom callback", $caller );
     };
 }
 
@@ -447,24 +438,20 @@ sub _compile_forbid {
     my ( $caller, $tag ) = @_;
 
     return sub {
-        _ok(
-            ! scalar ( grep { $_->{tag} eq $tag } @_ ),
-            "Tag '$tag' is not outputted",
-            $caller )
-            or Test::More::diag("Tag '$tag' shouldn't have been outputted, but it was");
+        _ok( !scalar( grep { $_->{tag} eq $tag } @_ ), "Tag '$tag' is not outputted", $caller )
+          or Test::More::diag( "Tag '$tag' shouldn't have been outputted, but it was" );
     };
 }
-
 
 # Miscellaneous utilities
 
 sub _expand_template {
-    my ($template, %variables) = @_;
+    my ( $template, %variables ) = @_;
 
     confess unless defined $template;
 
     my $result = $template;
-    for my $k (keys %variables) {
+    for my $k ( keys %variables ) {
         $result =~ s/\{$k\}/$variables{$k}/g;
     }
 
@@ -480,18 +467,17 @@ sub _ok {
     # This is the only way to squelch the automatic diagnostics that are printed
     # on the TAP output when ok() fails. The TAP output erroneously points to
     # a line in t/TestUtil/DSL/Compiler.pm when an error occurs.
-    Test::More->builder->no_diag(1);
+    Test::More->builder->no_diag( 1 );
     my $ret = Test::More::ok( $ok, $test_name );
-    Test::More->builder->no_diag(0);
+    Test::More->builder->no_diag( 0 );
 
     unless ( $ok ) {
-        Test::More::diag(<<DIAG);
+        Test::More::diag( <<DIAG);
   Failed test '$test_name'
   at $file line $line.
 DIAG
     }
     return $ret;
 }
-
 
 1;

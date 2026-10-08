@@ -12,13 +12,14 @@ use TestUtil::DSL;
 testing_test_case 'Consistency', 'consistency06';
 
 all_tags qw(ONE_SOA_MNAME
-            NO_RESPONSE
-            NO_RESPONSE_SOA_QUERY
-            MULTIPLE_SOA_MNAMES);
+  NO_RESPONSE
+  NO_RESPONSE_SOA_QUERY
+  MULTIPLE_SOA_MNAMES);
 
 # Common hint file (test-zone-data/COMMON/hintfile)
-root_hints 'ns1' => [ qw(127.1.0.1 fda1:b2:c3::127:1:0:1) ],
-           'ns2' => [ qw(127.1.0.2 fda1:b2:c3::127:1:0:2) ];
+root_hints
+  'ns1' => [qw(127.1.0.1 fda1:b2:c3::127:1:0:1)],
+  'ns2' => [qw(127.1.0.2 fda1:b2:c3::127:1:0:2)];
 
 zone_name_template '{SCENARIO}.{TESTCASE}.xa';
 

@@ -27,17 +27,17 @@ my $zone = Zonemaster::Engine->zone( q{mname-not-master.zone01.xa} );
 
 my %res = map { $_->tag => $_ } Zonemaster::Engine::Test::Zone->zone01( $zone );
 
-ok( !$res{Z01_MNAME_HAS_LOCALHOST_ADDR},   q{should not emit Z01_MNAME_HAS_LOCALHOST_ADDR} );
-ok( !$res{Z01_MNAME_IS_DOT},               q{should not emit Z01_MNAME_IS_DOT} );
-ok( !$res{Z01_MNAME_IS_LOCALHOST},         q{should not emit Z01_MNAME_IS_LOCALHOST} );
-ok( !$res{Z01_MNAME_IS_MASTER},            q{should not emit Z01_MNAME_IS_MASTER} );
-ok( !$res{Z01_MNAME_MISSING_SOA_RECORD},   q{should not emit Z01_MNAME_MISSING_SOA_RECORD} );
-ok( !$res{Z01_MNAME_NO_RESPONSE},          q{should not emit Z01_MNAME_NO_RESPONSE} );
-ok( !$res{Z01_MNAME_NOT_AUTHORITATIVE},    q{should not emit Z01_MNAME_NOT_AUTHORITATIVE} );
-ok( !$res{Z01_MNAME_NOT_IN_NS_LIST},       q{should not emit Z01_MNAME_NOT_IN_NS_LIST} );
-ok( $res{Z01_MNAME_NOT_MASTER},            q{should emit Z01_MNAME_NOT_MASTER} );
-ok( !$res{Z01_MNAME_NOT_RESOLVE},          q{should not emit Z01_MNAME_NOT_RESOLVE} );
-ok( !$res{Z01_MNAME_UNEXPECTED_RCODE},     q{should not emit Z01_MNAME_UNEXPECTED_RCODE} );
+ok( !$res{Z01_MNAME_HAS_LOCALHOST_ADDR}, q{should not emit Z01_MNAME_HAS_LOCALHOST_ADDR} );
+ok( !$res{Z01_MNAME_IS_DOT},             q{should not emit Z01_MNAME_IS_DOT} );
+ok( !$res{Z01_MNAME_IS_LOCALHOST},       q{should not emit Z01_MNAME_IS_LOCALHOST} );
+ok( !$res{Z01_MNAME_IS_MASTER},          q{should not emit Z01_MNAME_IS_MASTER} );
+ok( !$res{Z01_MNAME_MISSING_SOA_RECORD}, q{should not emit Z01_MNAME_MISSING_SOA_RECORD} );
+ok( !$res{Z01_MNAME_NO_RESPONSE},        q{should not emit Z01_MNAME_NO_RESPONSE} );
+ok( !$res{Z01_MNAME_NOT_AUTHORITATIVE},  q{should not emit Z01_MNAME_NOT_AUTHORITATIVE} );
+ok( !$res{Z01_MNAME_NOT_IN_NS_LIST},     q{should not emit Z01_MNAME_NOT_IN_NS_LIST} );
+ok( $res{Z01_MNAME_NOT_MASTER},          q{should emit Z01_MNAME_NOT_MASTER} );
+ok( !$res{Z01_MNAME_NOT_RESOLVE},        q{should not emit Z01_MNAME_NOT_RESOLVE} );
+ok( !$res{Z01_MNAME_UNEXPECTED_RCODE},   q{should not emit Z01_MNAME_UNEXPECTED_RCODE} );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Nameserver->save( $datafile );

@@ -41,21 +41,24 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Profile->effective->set( q{no_network}, 1 );
 }
 
-my ($json, $profile_test);
-my @testcases_with_network = (qw{nameserver01 nameserver02 nameserver06 nameserver07 nameserver08 nameserver09});
-foreach my $testcase ( qw{nameserver01 nameserver02 nameserver03 nameserver04 nameserver05 nameserver06 nameserver07 nameserver08 nameserver09} ) {
+my ( $json, $profile_test );
+my @testcases_with_network = ( qw{nameserver01 nameserver02 nameserver06 nameserver07 nameserver08 nameserver09} );
+foreach my $testcase (
+    qw{nameserver01 nameserver02 nameserver03 nameserver04 nameserver05 nameserver06 nameserver07 nameserver08 nameserver09}
+  )
+{
     next if grep { $_ eq $testcase } @testcases_with_network;
-    $json         = read_file( 't/profiles/Test-'.$testcase.'-only.json' );
+    $json         = read_file( 't/profiles/Test-' . $testcase . '-only.json' );
     $profile_test = Zonemaster::Engine::Profile->from_json( $json );
     Zonemaster::Engine::Profile->effective->merge( $profile_test );
     my %testcases;
     Zonemaster::Engine->logger->clear_history();
     foreach my $result ( Zonemaster::Engine->test_module( q{nameserver}, q{afnic.fr} ) ) {
         if ( $result->testcase && $result->testcase ne 'Unspecified' ) {
-            $testcases{$result->testcase} = 1;
+            $testcases{ $result->testcase } = 1;
         }
     }
-    eq_or_diff( [ map { lc $_ } keys %testcases ], [ $testcase ], 'expected test-case ('. $testcase .')' );
+    eq_or_diff( [ map { lc $_ } keys %testcases ], [$testcase], 'expected test-case (' . $testcase . ')' );
 }
 
 $json         = read_file( 't/profiles/Test-nameserver-all.json' );
@@ -73,7 +76,7 @@ zone_gives_not( 'nameserver01', $zone, [q{IS_A_RECURSOR}] );
 
 # nameserver02
 $zone = Zonemaster::Engine->zone( 'flagday.rootcanary.net' );
-zone_gives( 'nameserver02', $zone, ['BREAKS_ON_EDNS']);
+zone_gives( 'nameserver02', $zone, ['BREAKS_ON_EDNS'] );
 $zone = Zonemaster::Engine->zone( 'dyad.se' );
 zone_gives( 'nameserver02', $zone, ['EDNS0_SUPPORT'] );
 
@@ -91,8 +94,7 @@ $zone = Zonemaster::Engine->zone( 'afnic.fr' );
 zone_gives( 'nameserver05', $zone, [q{AAAA_WELL_PROCESSED}] );
 
 SKIP: {
-    skip "Zone does not actually have tested problem", 1,
-    $zone = Zonemaster::Engine->zone( 'uddevallafiber.se' );
+    skip "Zone does not actually have tested problem", 1, $zone = Zonemaster::Engine->zone( 'uddevallafiber.se' );
     zone_gives( 'nameserver05', $zone, ['QUERY_DROPPED'] );
 }
 
@@ -116,15 +118,15 @@ zone_gives_not( 'nameserver07', $zone, [qw{UPWARD_REFERRAL NO_UPWARD_REFERRAL}] 
 # nameserver11
 $zone = Zonemaster::Engine->zone( 'bemacom.se' );
 zone_gives( 'nameserver11', $zone, [q{N11_UNEXPECTED_RCODE}] );
-zone_gives_not( 'nameserver11', $zone, [qw{N11_NO_EDNS N11_NO_RESPONSE N11_RETURNS_UNKNOWN_OPTION_CODE N11_UNEXPECTED_ANSWER_SECTION N11_UNSET_AA}] );
+zone_gives_not( 'nameserver11', $zone,
+    [qw{N11_NO_EDNS N11_NO_RESPONSE N11_RETURNS_UNKNOWN_OPTION_CODE N11_UNEXPECTED_ANSWER_SECTION N11_UNSET_AA}] );
 
 # nameserver{12,13,14} -- no unit tests yet, see https://github.com/zonemaster/zonemaster-engine/issues/1146
 
 # nameserver15 -- see t/Test-nameserver15.t instead.
 
 SKIP: {
-    skip "Zone does not actually have tested problem", 1,
-    $zone = Zonemaster::Engine->zone( 'escargot.se' );
+    skip "Zone does not actually have tested problem", 1, $zone = Zonemaster::Engine->zone( 'escargot.se' );
     zone_gives( 'nameserver05', $zone, ['AAAA_UNEXPECTED_RCODE'] );
 }
 
@@ -135,12 +137,12 @@ TODO: {
     ok( $tag{DIFFERENT_SOURCE_IP}, q{DIFFERENT_SOURCE_IP} );
 
     # nameserver07
-    ok( $tag{UPWARD_REFERRAL}, q{UPWARD_REFERRAL} );
+    ok( $tag{UPWARD_REFERRAL},    q{UPWARD_REFERRAL} );
     ok( $tag{NO_UPWARD_REFERRAL}, q{NO_UPWARD_REFERRAL} );
 
     # nameserver08
     ok( $tag{QNAME_CASE_INSENSITIVE}, q{QNAME_CASE_INSENSITIVE} );
-    ok( $tag{QNAME_CASE_SENSITIVE}, q{QNAME_CASE_SENSITIVE} );
+    ok( $tag{QNAME_CASE_SENSITIVE},   q{QNAME_CASE_SENSITIVE} );
 }
 
 SKIP: {
@@ -150,8 +152,8 @@ SKIP: {
 
     # AXFR results not well cached. Cannot test cases where AXFR is available
     # without network, even in case of ZONEMASTER_RECORD is not set.
-#    $zone = Zonemaster::Engine->zone( 'nameserver03-axfr-available.zut-root.rd.nic.fr' );
-#    zone_gives( 'nameserver03', $zone, [q{AXFR_AVAILABLE}] );
+    #    $zone = Zonemaster::Engine->zone( 'nameserver03-axfr-available.zut-root.rd.nic.fr' );
+    #    zone_gives( 'nameserver03', $zone, [q{AXFR_AVAILABLE}] );
     $zone = Zonemaster::Engine->zone( 'arpa' );
     zone_gives( 'nameserver03', $zone, [q{AXFR_AVAILABLE}] );
     zone_gives( 'nameserver03', $zone, [q{AXFR_FAILURE}] );
@@ -162,8 +164,8 @@ if ( $ENV{ZONEMASTER_RECORD} ) {
 }
 
 Zonemaster::Engine::Profile->effective->set( q{no_network}, 0 );
-Zonemaster::Engine::Profile->effective->set( q{net.ipv4}, 0 );
-Zonemaster::Engine::Profile->effective->set( q{net.ipv6}, 0 );
+Zonemaster::Engine::Profile->effective->set( q{net.ipv4},   0 );
+Zonemaster::Engine::Profile->effective->set( q{net.ipv6},   0 );
 $zone = Zonemaster::Engine->zone( 'fr' );
 zone_gives( 'nameserver01', $zone, [q{NO_NETWORK}] );
 zone_gives_not( 'nameserver01', $zone, [qw{NO_RECURSOR IS_A_RECURSOR}] );

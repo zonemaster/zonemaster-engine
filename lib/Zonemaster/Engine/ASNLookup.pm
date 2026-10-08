@@ -24,7 +24,7 @@ sub get_with_prefix {
     if ( not @db_sources ) {
         $db_style = Zonemaster::Engine::Profile->effective->get( q{asn_db.style} );
         my %db_sources = %{ Zonemaster::Engine::Profile->effective->get( q{asn_db.sources} ) };
-        @db_sources = map { name( $_ ) } @{ $db_sources{ $db_style } };
+        @db_sources = map { name( $_ ) } @{ $db_sources{$db_style} };
     }
 
     if ( not ref( $ip ) or not $ip->isa( 'Net::IP::XS' ) ) {
@@ -38,10 +38,10 @@ sub get_with_prefix {
     my ( $asnref, $prefix, $raw, $ret_code );
 
     if ( $db_style eq q{cymru} ) {
-        ( $asnref, $prefix, $raw, $ret_code ) = _cymru_asn_lookup($ip);
+        ( $asnref, $prefix, $raw, $ret_code ) = _cymru_asn_lookup( $ip );
     }
     elsif ( $db_style eq q{ripe} ) {
-        ( $asnref, $prefix, $raw, $ret_code ) = _ripe_asn_lookup($ip);
+        ( $asnref, $prefix, $raw, $ret_code ) = _ripe_asn_lookup( $ip );
     }
     else {
         if ( not $db_style ) {
@@ -59,15 +59,15 @@ sub get_with_prefix {
 } ## end sub get_with_prefix
 
 sub _cymru_asn_lookup {
-    my $ip = shift;
+    my $ip   = shift;
     my @asns = ();
 
     my $db_source_nb = 0;
     foreach my $db_source ( @db_sources ) {
         Zonemaster::Engine->logger->add( ASN_LOOKUP_SOURCE => { name => $db_source } );
         my $reverse = $ip->reverse_ip;
-        my $domain = $db_source->string;
-        my $pair   = {
+        my $domain  = $db_source->string;
+        my $pair    = {
             'in-addr.arpa.' => "origin.$domain",
             'ip6.arpa.'     => "origin6.$domain",
         };
@@ -79,7 +79,10 @@ sub _cymru_asn_lookup {
 
                 if ( $p ) {
                     if ( $p->rcode eq q{NXDOMAIN} ) {
-                        if ( $p->get_records( 'SOA', 'authority' ) and scalar $p->get_records( 'SOA', 'authority' ) == 1 and ($p->get_records( 'SOA', 'authority' ))[0]->owner eq name( $db_source ) ) {
+                        if (    $p->get_records( 'SOA', 'authority' )
+                            and scalar $p->get_records( 'SOA', 'authority' ) == 1
+                            and ( $p->get_records( 'SOA', 'authority' ) )[0]->owner eq name( $db_source ) )
+                        {
                             return \@asns, undef, q{}, q{EMPTY_ASN_SET};
                         }
                     }
@@ -93,75 +96,78 @@ sub _cymru_asn_lookup {
                                 my $str;
 
                                 foreach my $rr ( @rr ) {
-                                    my $_str = $rr->txtdata;
+                                    my $_str    = $rr->txtdata;
                                     my @_fields = split( /[ ][|][ ]?/x, $_str );
 
                                     next if scalar @_fields <= 1;
-                                    return \@asns, undef, q{}, q{ERROR_ASN_DATABASE} unless Net::IP::XS->new( $_fields[1] )->overlaps( $ip );
+                                    return \@asns, undef, q{}, q{ERROR_ASN_DATABASE}
+                                      unless Net::IP::XS->new( $_fields[1] )->overlaps( $ip );
 
-                                    my @_asns   = split( /\s+/x,        $_fields[0] );
-                                    my $_prefix_length = ($_fields[1] =~ m!^.*[/](.*)!x)[0];
+                                    my @_asns          = split( /\s+/x, $_fields[0] );
+                                    my $_prefix_length = ( $_fields[1] =~ m!^.*[/](.*)!x )[0];
                                     if ( $_prefix_length > $max_length ) {
-                                        $str = $_str;
-                                        @asns = @_asns;
-                                        @fields = @_fields;
+                                        $str        = $_str;
+                                        @asns       = @_asns;
+                                        @fields     = @_fields;
                                         $max_length = $_prefix_length;
                                     }
                                 }
 
                                 if ( @fields ) {
                                     if ( Net::IP::XS->new( $fields[1] )->overlaps( $ip ) ) {
-                                        return \@asns, Net::IP::XS->new( $fields[1] ), $str, q{AS_FOUND}
+                                        return \@asns, Net::IP::XS->new( $fields[1] ), $str, q{AS_FOUND};
                                     }
                                 }
                                 else {
                                     return \@asns, undef, q{}, q{EMPTY_ASN_SET};
                                 }
-                            }
+                            } ## end if ( @rr )
 
                             return \@asns, undef, q{}, q{ERROR_ASN_DATABASE};
-                        }
+                        } ## end if ( $p->answer )
 
                         return \@asns, undef, q{}, q{EMPTY_ASN_SET};
-                    }
-                }
+                    } ## end elsif ( $p->rcode eq q{NOERROR})
+                } ## end if ( $p )
 
                 if ( $db_source_nb == scalar @db_sources ) {
                     return \@asns, undef, q{}, q{ERROR_ASN_DATABASE};
                 }
 
                 last;
-            }
-        }
-    } ## end foreach my $db_source ( @db_sources )
+            } ## end if ( $reverse =~ s/$root/$pair->{$root}/ix)
+        } ## end foreach my $root ( keys %{$pair...})
+    } ## end foreach my $db_source ( @db_sources)
     return;
-}
+} ## end sub _cymru_asn_lookup
 
 sub _ripe_asn_lookup {
-    my $ip = shift;
+    my $ip   = shift;
     my @asns = ();
 
     my $db_source_nb = 0;
     foreach my $db_source ( @db_sources ) {
         $db_source_nb++;
-        my $socket = IO::Socket::INET->new( PeerAddr => $db_source->string,
-                                            PeerPort => q{43}, 
-                                            Proto => q{tcp} );
-        unless ( $socket ) { 
+        my $socket = IO::Socket::INET->new(
+            PeerAddr => $db_source->string,
+            PeerPort => q{43},
+            Proto    => q{tcp}
+        );
+        unless ( $socket ) {
             if ( $db_source_nb == scalar @db_sources ) {
                 return \@asns, undef, q{}, q{ERROR_ASN_DATABASE};
             }
             else {
                 next;
             }
-        };
+        }
 
         printf $socket "-F -M %s\n", $ip->short();
 
         my $data;
         my $str;
         my $has_answer = 0;
-        while ( defined ($data = <$socket>) ) {
+        while ( defined( $data = <$socket> ) ) {
             $has_answer = 1;
             chop $data;
             if ( $data !~ /^%/x and $data !~ /^\s*$/x ) {
@@ -178,17 +184,17 @@ sub _ripe_asn_lookup {
                 next;
             }
         }
-        elsif ( $str )  {
+        elsif ( $str ) {
             my @fields = split( /\s+/x, $str );
-            my @asns   = split( '/',  $fields[0] );
+            my @asns   = split( '/',    $fields[0] );
             return \@asns, Net::IP::XS->new( $fields[1] ), $str, q{AS_FOUND};
         }
         else {
             return \@asns, undef, q{}, q{EMPTY_ASN_SET};
         }
-    } ## end foreach my $db_source ( @
+    } ## end foreach my $db_source ( @db_sources)
     return;
-}
+} ## end sub _ripe_asn_lookup
 
 sub get {
     my ( $class, $ip ) = @_;

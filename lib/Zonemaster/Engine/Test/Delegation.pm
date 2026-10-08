@@ -3,9 +3,9 @@ package Zonemaster::Engine::Test::Delegation;
 use v5.16.0;
 use warnings;
 
-use version; our $VERSION = version->declare("v1.0.20");
+use version; our $VERSION = version->declare( "v1.0.20" );
 
-use List::MoreUtils qw[uniq];
+use List::MoreUtils    qw[uniq];
 use Locale::TextDomain qw[Zonemaster-Engine];
 use Readonly;
 
@@ -97,7 +97,7 @@ sub metadata {
               NO_IPV6_NS_DEL
               TEST_CASE_END
               TEST_CASE_START
-              )
+            )
         ],
         delegation02 => [
             qw(
@@ -109,7 +109,7 @@ sub metadata {
               DISTINCT_IP_ADDRESS
               TEST_CASE_END
               TEST_CASE_START
-              )
+            )
         ],
         delegation03 => [
             qw(
@@ -117,7 +117,7 @@ sub metadata {
               REFERRAL_SIZE_OK
               TEST_CASE_END
               TEST_CASE_START
-              )
+            )
         ],
         delegation04 => [
             qw(
@@ -127,7 +127,7 @@ sub metadata {
               ARE_AUTHORITATIVE
               TEST_CASE_END
               TEST_CASE_START
-              )
+            )
         ],
         delegation05 => [
             qw(
@@ -137,7 +137,7 @@ sub metadata {
               UNEXPECTED_RCODE
               TEST_CASE_END
               TEST_CASE_START
-              )
+            )
         ],
         delegation06 => [
             qw(
@@ -147,7 +147,7 @@ sub metadata {
               IPV6_DISABLED
               TEST_CASE_END
               TEST_CASE_START
-              )
+            )
         ],
         delegation07 => [
             qw(
@@ -157,7 +157,7 @@ sub metadata {
               NAMES_MATCH
               TEST_CASE_END
               TEST_CASE_START
-              )
+            )
         ],
     };
 } ## end sub metadata
@@ -245,7 +245,8 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     ENOUGH_NS_DEL => sub {
         __x    # DELEGATION:ENOUGH_NS_DEL
-          "Delegation lists enough ({count}) nameservers. Lower limit set to {minimum}. Name servers: {nsname_list}", @_;
+          "Delegation lists enough ({count}) nameservers. Lower limit set to {minimum}. Name servers: {nsname_list}",
+          @_;
     },
     EXTRA_NAME_CHILD => sub {
         __x    # DELEGATION:EXTRA_NAME_CHILD
@@ -301,11 +302,13 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     NOT_ENOUGH_NS_CHILD => sub {
         __x    # DELEGATION:NOT_ENOUGH_NS_CHILD
-          "Child does not list enough ({count}) nameservers. Lower limit set to {minimum}. Name servers: {nsname_list}", @_;
+          "Child does not list enough ({count}) nameservers. Lower limit set to {minimum}. Name servers: {nsname_list}",
+          @_;
     },
     NOT_ENOUGH_NS_DEL => sub {
         __x    # DELEGATION:NOT_ENOUGH_NS_DEL
-          "Delegation does not list enough ({count}) nameservers. Lower limit set to {minimum}. Name servers: {nsname_list}", @_;
+"Delegation does not list enough ({count}) nameservers. Lower limit set to {minimum}. Name servers: {nsname_list}",
+          @_;
     },
     NO_IPV4_NS_CHILD => sub {
         __x    # DELEGATION:NO_IPV4_NS_CHILD
@@ -452,27 +455,13 @@ Returns a boolean.
 sub _ip_disabled_message {
     my ( $results_array, $ns, @rrtypes ) = @_;
 
-    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
-        push @$results_array, map {
-          _emit_log(
-            IPV6_DISABLED => {
-                ns     => $ns->string,
-                rrtype => $_
-            }
-          )
-        } @rrtypes;
+    if ( not Zonemaster::Engine::Profile->effective->get( q{net.ipv6} ) and $ns->address->version == $IP_VERSION_6 ) {
+        push @$results_array, map { _emit_log( IPV6_DISABLED => { ns => $ns->string, rrtype => $_ } ) } @rrtypes;
         return 1;
     }
 
-    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
-        push @$results_array, map {
-          _emit_log(
-            IPV4_DISABLED => {
-                ns     => $ns->string,
-                rrtype => $_,
-            }
-          )
-        } @rrtypes;
+    if ( not Zonemaster::Engine::Profile->effective->get( q{net.ipv4} ) and $ns->address->version == $IP_VERSION_4 ) {
+        push @$results_array, map { _emit_log( IPV4_DISABLED => { ns => $ns->string, rrtype => $_, } ) } @rrtypes;
         return 1;
     }
     return 0;
@@ -503,7 +492,7 @@ sub _max_length_name_for {
 
     while ( length( $name ) < $FQDN_MAX_LENGTH - 1 ) {
         my $len = $FQDN_MAX_LENGTH - length( $name ) - 1;
-        $len = $LABEL_MAX_LENGTH if $len > $LABEL_MAX_LENGTH;
+        $len  = $LABEL_MAX_LENGTH if $len > $LABEL_MAX_LENGTH;
         $name = join( q{}, map { $chars[ rand @chars ] } 1 .. $len ) . q{.} . $name;
     }
 
@@ -563,7 +552,7 @@ sub _find_dup_ns {
     }
 
     return @results;
-}
+} ## end sub _find_dup_ns
 
 =head1 TESTS
 
@@ -590,7 +579,7 @@ sub delegation01 {
     push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     # Determine delegation NS names
-    my @del_nsnames = map { $_->string } @{ Zonemaster::Engine::TestMethods->method2( $zone ) };
+    my @del_nsnames      = map { $_->string } @{ Zonemaster::Engine::TestMethods->method2( $zone ) };
     my $del_nsnames_args = {
         count       => scalar( @del_nsnames ),
         minimum     => $MINIMUM_NUMBER_OF_NAMESERVERS,
@@ -606,7 +595,7 @@ sub delegation01 {
     }
 
     # Determine child NS names
-    my @child_nsnames = map { $_->string } @{ Zonemaster::Engine::TestMethods->method3( $zone ) };
+    my @child_nsnames      = map { $_->string } @{ Zonemaster::Engine::TestMethods->method3( $zone ) };
     my $child_nsnames_args = {
         count       => scalar( @child_nsnames ),
         minimum     => $MINIMUM_NUMBER_OF_NAMESERVERS,
@@ -622,18 +611,18 @@ sub delegation01 {
     }
 
     # Determine child NS names with addresses
-    my @child_ns = @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
+    my @child_ns      = @{ Zonemaster::Engine::TestMethods->method5( $zone ) };
     my @child_ns_ipv4 = map { $_ } grep { $_->address->version == 4 } @child_ns;
     my @child_ns_ipv6 = map { $_ } grep { $_->address->version == 6 } @child_ns;
 
     my $child_ns_ipv4_args = {
-        count       => scalar( uniq map { $_->name->string } @child_ns_ipv4 ),
-        minimum     => $MINIMUM_NUMBER_OF_NAMESERVERS,
+        count   => scalar( uniq map { $_->name->string } @child_ns_ipv4 ),
+        minimum => $MINIMUM_NUMBER_OF_NAMESERVERS,
         ns_list => join( q{;}, sort map { $_->string } @child_ns_ipv4 ),
     };
     my $child_ns_ipv6_args = {
-        count       => scalar( uniq map { $_->name->string } @child_ns_ipv6 ),
-        minimum     => $MINIMUM_NUMBER_OF_NAMESERVERS,
+        count   => scalar( uniq map { $_->name->string } @child_ns_ipv6 ),
+        minimum => $MINIMUM_NUMBER_OF_NAMESERVERS,
         ns_list => join( q{;}, sort map { $_->string } @child_ns_ipv6 ),
     };
 
@@ -658,18 +647,18 @@ sub delegation01 {
     }
 
     # Determine delegation NS names with addresses
-    my @del_ns = @{ Zonemaster::Engine::TestMethods->method4( $zone ) };
+    my @del_ns      = @{ Zonemaster::Engine::TestMethods->method4( $zone ) };
     my @del_ns_ipv4 = map { $_ } grep { $_->address->version == 4 } @del_ns;
     my @del_ns_ipv6 = map { $_ } grep { $_->address->version == 6 } @del_ns;
 
     my $del_ns_ipv4_args = {
-        count       => scalar( uniq map { $_->name->string } @del_ns_ipv4 ),
-        minimum     => $MINIMUM_NUMBER_OF_NAMESERVERS,
+        count   => scalar( uniq map { $_->name->string } @del_ns_ipv4 ),
+        minimum => $MINIMUM_NUMBER_OF_NAMESERVERS,
         ns_list => join( q{;}, sort map { $_->string } @del_ns_ipv4 ),
     };
     my $del_ns_ipv6_args = {
-        count       => scalar( uniq map { $_->name->string } @del_ns_ipv6 ),
-        minimum     => $MINIMUM_NUMBER_OF_NAMESERVERS,
+        count   => scalar( uniq map { $_->name->string } @del_ns_ipv6 ),
+        minimum => $MINIMUM_NUMBER_OF_NAMESERVERS,
         ns_list => join( q{;}, sort map { $_->string } @del_ns_ipv6 ),
     };
 
@@ -840,8 +829,10 @@ sub delegation04 {
     my @authoritatives;
     my $query_type = q{SOA};
 
-    foreach
-      my $local_ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) }, @{ Zonemaster::Engine::TestMethods->method5( $zone ) } )
+    foreach my $local_ns (
+        @{ Zonemaster::Engine::TestMethods->method4( $zone ) },
+        @{ Zonemaster::Engine::TestMethods->method5( $zone ) }
+      )
     {
 
         if ( _ip_disabled_message( \@results, $local_ns, $query_type ) ) {
@@ -915,7 +906,7 @@ sub delegation05 {
 
     my @nsnames = @{ Zonemaster::Engine::TestMethods->method2and3( $zone ) };
 
-    foreach my $local_nsname ( @nsnames )  {
+    foreach my $local_nsname ( @nsnames ) {
 
         if ( $zone->name->is_in_bailiwick( $local_nsname ) ) {
             my @nss_del   = @{ Zonemaster::Engine::TestMethods->method4( $zone ) };
@@ -923,7 +914,7 @@ sub delegation05 {
             my %nss       = map { $_->name->string . '/' . $_->address->short => $_ } @nss_del, @nss_child;
 
             for my $key ( sort keys %nss ) {
-                my $ns = $nss{$key};
+                my $ns      = $nss{$key};
                 my $ns_args = {
                     ns         => $ns->string,
                     query_name => $local_nsname,
@@ -939,7 +930,7 @@ sub delegation05 {
                     push @results, _emit_log( NO_RESPONSE => $ns_args );
                     next;
                 }
-                elsif ($p->rcode ne q{NOERROR} ) {
+                elsif ( $p->rcode ne q{NOERROR} ) {
                     $ns_args->{rcode} = $p->rcode;
                     push @results, _emit_log( UNEXPECTED_RCODE => $ns_args );
                     next;
@@ -948,21 +939,21 @@ sub delegation05 {
                     push @results, _emit_log( NS_IS_CNAME => { nsname => $local_nsname } );
                     next;
                 }
-                elsif ($p->is_redirect) {
+                elsif ( $p->is_redirect ) {
                     my $p = $ns->query( $local_nsname, q{A}, { recurse => 1 } );
                     if ( defined $p and scalar $p->get_records( q{CNAME}, q{answer} ) > 0 ) {
                         push @results, _emit_log( NS_IS_CNAME => { nsname => $local_nsname } );
                     }
                 }
-            }
-        }
+            } ## end for my $key ( sort keys...)
+        } ## end if ( $zone->name->is_in_bailiwick...)
         else {
             my $p = Zonemaster::Engine::Recursor->recurse( $local_nsname, q{A} );
             if ( defined $p and scalar $p->get_records( q{CNAME}, q{answer} ) > 0 ) {
                 push @results, _emit_log( NS_IS_CNAME => { nsname => $local_nsname } );
             }
         }
-    }
+    } ## end foreach my $local_nsname ( ...)
 
     if ( not grep { $_->tag eq q{NS_IS_CNAME} } @results ) {
         push @results, _emit_log( NO_NS_CNAME => {} );
@@ -995,8 +986,10 @@ sub delegation06 {
     my %nsnames;
     my $query_type = q{SOA};
 
-    foreach
-      my $local_ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) }, @{ Zonemaster::Engine::TestMethods->method5( $zone ) } )
+    foreach my $local_ns (
+        @{ Zonemaster::Engine::TestMethods->method4( $zone ) },
+        @{ Zonemaster::Engine::TestMethods->method5( $zone ) }
+      )
     {
 
         if ( _ip_disabled_message( \@results, $local_ns, $query_type ) ) {

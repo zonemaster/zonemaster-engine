@@ -14,7 +14,6 @@ use Zonemaster::LDNS;
 
 use Zonemaster::Engine::Normalization::Error;
 
-
 =head1 NAME
 
 Zonemaster::Engine::Normalization - utility functions for names normalization
@@ -31,24 +30,25 @@ Zonemaster::Engine::Normalization - utility functions for names normalization
 =over
 =cut
 
+our @EXPORT    = qw[ normalize_name ];
+our @EXPORT_OK = qw[ normalize_name normalize_label trim_space ];
 
-our @EXPORT      = qw[ normalize_name ];
-our @EXPORT_OK   = qw[ normalize_name normalize_label trim_space ];
-
-Readonly my $ASCII => qr/^[[:ascii:]]+$/;
+Readonly my $ASCII       => qr/^[[:ascii:]]+$/;
 Readonly my $VALID_ASCII => qr(^[A-Za-z0-9/_-]+$);
 
-Readonly my $ASCII_FULL_STOP => "\x{002E}";
+Readonly my $ASCII_FULL_STOP    => "\x{002E}";
 Readonly my $ASCII_FULL_STOP_RE => qr/\x{002E}/;
 Readonly my %FULL_STOPS => (
     FULLWIDTH_FULL_STOP             => q/\x{FF0E}/,
     IDEOGRAPHIC_FULL_STOP           => q/\x{3002}/,
     HALFWIDTH_IDEOGRAPHIC_FULL_STOP => q/\x{FF61}/
 );
-Readonly my $FULL_STOPS_RE => (sub {
-    my $re = '[' . (join '', values %FULL_STOPS) . ']';
-    return qr/$re/;
-})->();
+Readonly my $FULL_STOPS_RE => (
+    sub {
+        my $re = '[' . ( join '', values %FULL_STOPS ) . ']';
+        return qr/$re/;
+    }
+)->();
 Readonly my %WHITE_SPACES => (
     SPACE                     => q/\x{0020}/,
     CHARACTER_TABULATION      => q/\x{0009}/,
@@ -68,15 +68,13 @@ Readonly my %WHITE_SPACES => (
     IDEOGRAPHIC_SPACE         => q/\x{3000}/,
     OGHAM_SPACE_MARK          => q/\x{1680}/,
 );
-Readonly my $WHITE_SPACES_RE => (sub {
-    my $re = '[' . (join '', values %WHITE_SPACES) . ']';
-    return qr/$re/;
-})->();
-Readonly my %AMBIGUOUS_CHARACTERS => (
-    "LATIN CAPITAL LETTER I WITH DOT ABOVE" => q/\x{0130}/,
-);
-
-
+Readonly my $WHITE_SPACES_RE => (
+    sub {
+        my $re = '[' . ( join '', values %WHITE_SPACES ) . ']';
+        return qr/$re/;
+    }
+)->();
+Readonly my %AMBIGUOUS_CHARACTERS => ( "LATIN CAPITAL LETTER I WITH DOT ABOVE" => q/\x{0130}/, );
 
 =item normalize_label($label)
 
@@ -104,29 +102,34 @@ sub normalize_label {
 
     if ( $label =~ $VALID_ASCII ) {
         $alabel = lc $label;
-    } elsif ( $label =~ $ASCII ) {
-        push @messages, Zonemaster::Engine::Normalization::Error->new(INVALID_ASCII => {label => $label});
+    }
+    elsif ( $label =~ $ASCII ) {
+        push @messages, Zonemaster::Engine::Normalization::Error->new( INVALID_ASCII => { label => $label } );
 
         return \@messages, undef;
-    } elsif ( Zonemaster::LDNS::has_idn ) {
+    }
+    elsif ( Zonemaster::LDNS::has_idn ) {
         try {
-            $alabel = Zonemaster::LDNS::to_idn($label);
-        } catch {
-            push @messages, Zonemaster::Engine::Normalization::Error->new(INVALID_U_LABEL => {label => $label});
+            $alabel = Zonemaster::LDNS::to_idn( $label );
+        }
+        catch {
+            push @messages, Zonemaster::Engine::Normalization::Error->new( INVALID_U_LABEL => { label => $label } );
 
             return \@messages, undef;
         }
-    } else {
-        croak 'The domain name contains at least one non-ASCII character and this installation of Zonemaster has no support for IDNA.';
+    }
+    else {
+        croak
+'The domain name contains at least one non-ASCII character and this installation of Zonemaster has no support for IDNA.';
     }
 
-    if ( length($alabel) > 63 ) {
-        push @messages, Zonemaster::Engine::Normalization::Error->new(LABEL_TOO_LONG => {label => $label});
+    if ( length( $alabel ) > 63 ) {
+        push @messages, Zonemaster::Engine::Normalization::Error->new( LABEL_TOO_LONG => { label => $label } );
         return \@messages, undef;
     }
 
     return \@messages, $alabel;
-}
+} ## end sub normalize_label
 
 =item trim_space($str)
 
@@ -162,15 +165,16 @@ sub normalize_name {
     my ( $uname ) = @_;
     my @messages;
 
-    if ( length($uname) == 0 ) {
-        push @messages, Zonemaster::Engine::Normalization::Error->new(EMPTY_DOMAIN_NAME => {});
+    if ( length( $uname ) == 0 ) {
+        push @messages, Zonemaster::Engine::Normalization::Error->new( EMPTY_DOMAIN_NAME => {} );
         return \@messages, undef;
     }
 
     foreach my $char_name ( keys %AMBIGUOUS_CHARACTERS ) {
         my $char = $AMBIGUOUS_CHARACTERS{$char_name};
-        if ( $uname =~ m/${char}/) {
-            push @messages, Zonemaster::Engine::Normalization::Error->new(AMBIGUOUS_DOWNCASING => { unicode_name => $char_name });
+        if ( $uname =~ m/${char}/ ) {
+            push @messages,
+              Zonemaster::Engine::Normalization::Error->new( AMBIGUOUS_DOWNCASING => { unicode_name => $char_name } );
         }
     }
 
@@ -185,20 +189,20 @@ sub normalize_name {
     }
 
     if ( $uname =~ m/^${ASCII_FULL_STOP_RE}/ ) {
-        push @messages, Zonemaster::Engine::Normalization::Error->new(INITIAL_DOT => {});
+        push @messages, Zonemaster::Engine::Normalization::Error->new( INITIAL_DOT => {} );
         return \@messages, undef;
     }
 
     if ( $uname =~ m/${ASCII_FULL_STOP_RE}{2,}/ ) {
-        push @messages, Zonemaster::Engine::Normalization::Error->new(REPEATED_DOTS => {});
+        push @messages, Zonemaster::Engine::Normalization::Error->new( REPEATED_DOTS => {} );
         return \@messages, undef;
     }
 
     $uname =~ s/${ASCII_FULL_STOP_RE}$//g;
 
-    my @labels = split $ASCII_FULL_STOP_RE, $uname;
-    my @label_results = map { [ normalize_label($_) ] } @labels;
-    my @label_errors = map { @{$_->[0]} } @label_results;
+    my @labels        = split $ASCII_FULL_STOP_RE, $uname;
+    my @label_results = map { [ normalize_label( $_ ) ] } @labels;
+    my @label_errors  = map { @{ $_->[0] } } @label_results;
 
     push @messages, @label_errors;
 
@@ -210,14 +214,13 @@ sub normalize_name {
 
     my $final_name = join '.', @label_ok;
 
-    if ( length($final_name) > 253 ) {
-        push @messages, Zonemaster::Engine::Normalization::Error->new(DOMAIN_NAME_TOO_LONG => {});
+    if ( length( $final_name ) > 253 ) {
+        push @messages, Zonemaster::Engine::Normalization::Error->new( DOMAIN_NAME_TOO_LONG => {} );
         return \@messages, undef;
     }
 
     return \@messages, $final_name;
-}
-
+} ## end sub normalize_name
 
 =back
 =cut

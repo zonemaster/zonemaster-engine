@@ -3,7 +3,7 @@ package Zonemaster::Engine::Logger;
 use v5.16.0;
 use warnings;
 
-use version; our $VERSION = version->declare("v1.0.8");
+use version; our $VERSION = version->declare( "v1.0.8" );
 
 use Class::Accessor "antlers";
 
@@ -11,12 +11,12 @@ use Carp qw( confess );
 use Data::Dumper;
 use JSON::PP;
 use List::MoreUtils qw[none any];
-use Scalar::Util qw[blessed];
+use Scalar::Util    qw[blessed];
 use Zonemaster::Engine::Profile;
 use Zonemaster::Engine::Logger::Entry;
 
 our $TEST_CASE_NAME = 'Unspecified';
-our $MODULE_NAME = 'System';
+our $MODULE_NAME    = 'System';
 
 has 'entries' => (
     is  => 'ro',
@@ -41,11 +41,12 @@ sub new {
 sub add {
     my ( $self, $tag, $argref, $module, $testcase ) = @_;
 
-    $module //= $MODULE_NAME;
+    $module   //= $MODULE_NAME;
     $testcase //= $TEST_CASE_NAME;
 
     my $new =
-      Zonemaster::Engine::Logger::Entry->new( { tag => uc( $tag ), args => $argref, testcase => $testcase, module => $module } );
+      Zonemaster::Engine::Logger::Entry->new(
+        { tag => uc( $tag ), args => $argref, testcase => $testcase, module => $module } );
     $self->_check_filter( $new );
     push @{ $self->entries }, $new;
 
@@ -69,20 +70,21 @@ sub add {
 sub _check_filter {
     my ( $self, $entry ) = @_;
 
-    if ( ! defined $logfilter ) {
-        $logfilter = Zonemaster::Engine::Profile->effective->get(q{logfilter});
+    if ( !defined $logfilter ) {
+        $logfilter = Zonemaster::Engine::Profile->effective->get( q{logfilter} );
     }
 
     if ( $logfilter ) {
         if ( $logfilter->{ uc $entry->module } ) {
             my $match = 0;
-            foreach my $rule ( @{$logfilter->{ uc $entry->module }{ $entry->tag }} ) {
+            foreach my $rule ( @{ $logfilter->{ uc $entry->module }{ $entry->tag } } ) {
                 foreach my $key ( keys %{ $rule->{when} } ) {
                     my $cond = $rule->{when}{$key};
                     if ( ref( $cond ) and ref( $cond ) eq 'ARRAY' ) {
                         if ( any { $_ eq $entry->args->{$key} } @$cond ) {
                             $match = 1;
-                        } else {
+                        }
+                        else {
                             $match = 0;
                             last;
                         }
@@ -90,19 +92,20 @@ sub _check_filter {
                     else {
                         if ( $cond eq $entry->args->{$key} ) {
                             $match = 1;
-                        } else {
+                        }
+                        else {
                             $match = 0;
                             last;
                         }
                     }
-                }
+                } ## end foreach my $key ( keys %{ $rule...})
                 if ( $match ) {
                     $entry->_set_level( $rule->{set} );
                     last;
                 }
-            }
-        }
-    }
+            } ## end foreach my $rule ( @{ $logfilter...})
+        } ## end if ( $logfilter->{ uc ...})
+    } ## end if ( $logfilter )
     return;
 } ## end sub _check_filter
 
