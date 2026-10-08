@@ -8,12 +8,10 @@ use version; our $VERSION = version->declare( "v1.2.22" );
 use Clone qw( clone );
 use Data::Dumper;
 use File::ShareDir qw( dist_file );
-use File::Slurp;
-use JSON::PP qw( decode_json encode_json );
-use Log::Any qw( $log );
-use Net::IP::XS;
-use Scalar::Util qw( looks_like_number reftype );
-use YAML::XS     ();
+use File::Slurp    qw( read_file );
+use JSON::PP       qw( decode_json encode_json );
+use Scalar::Util   qw( looks_like_number reftype );
+use YAML::XS       ();
 
 $YAML::XS::Boolean = "JSON::PP";
 

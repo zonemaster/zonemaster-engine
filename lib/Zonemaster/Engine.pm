@@ -25,6 +25,8 @@ use Zonemaster::Engine::Zone;
 use Zonemaster::Engine::Test;
 use Zonemaster::Engine::Recursor;
 use Zonemaster::Engine::ASNLookup;
+use Zonemaster::Engine::DNSName;
+use Zonemaster::Engine::TestMethodsV2;
 
 our $logger;
 our $recursor = Zonemaster::Engine::Recursor->new;

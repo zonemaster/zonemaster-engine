@@ -8,7 +8,6 @@ use version; our $VERSION = version->declare( "v1.0.8" );
 use Class::Accessor "antlers";
 
 use Carp qw( confess );
-use Data::Dumper;
 use JSON::PP;
 use List::MoreUtils qw[none any];
 use Scalar::Util    qw[blessed];

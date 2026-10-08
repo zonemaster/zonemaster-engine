@@ -7,10 +7,8 @@ use version; our $VERSION = version->declare( "v1.0.11" );
 
 use Zonemaster::Engine;
 use Zonemaster::Engine::Util qw( name );
-use Zonemaster::Engine::Nameserver;
 use Zonemaster::Engine::Profile;
 
-use IO::Socket;
 use IO::Socket::INET;
 use Net::IP::XS;
 use Scalar::Util qw( looks_like_number );
