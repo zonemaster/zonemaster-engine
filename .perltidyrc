@@ -9,6 +9,7 @@
 -sfs
 
 # Local policy
+-conv             # Iterate application of perltidy profile to come closer to idempotency
 -se               # Print errors to stderr instead of a file
 -ole=unix         # Standardize on LF line endings
 -bext=~           # Use ~ as backup extension instead of .bak
