@@ -151,7 +151,7 @@ sub _ripe_asn_lookup {
         my $socket = IO::Socket::INET->new(
             PeerAddr => $db_source->string,
             PeerPort => q{43},
-            Proto    => q{tcp}
+            Proto    => q{tcp},
         );
         unless ( $socket ) {
             if ( $db_source_nb == scalar @db_sources ) {

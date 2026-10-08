@@ -57,15 +57,15 @@ $entry = info( 'TEST2', { an => 'argument', domain => Zonemaster::Engine::Util::
 is(
     "$entry",
     'System:Unspecified:TEST2 an=argument; domain="logger.test.example"',
-    'stringification overload works with DNS names'
+    'stringification overload works with DNS names',
 );
 is_deeply(
     ( decode_json $log->json )->[-1]->{args},
     {
         an     => 'argument',
-        domain => 'logger.test.example'
+        domain => 'logger.test.example',
     },
-    'entry arguments serialize to JSON'
+    'entry arguments serialize to JSON',
 );
 
 is( $entry->level, 'DEBUG', 'right level' );
@@ -130,7 +130,7 @@ ok( length( $all_json ) > length( $some_json ), 'All longer than some' );
 like(
     $some_json,
 qr[[{"args":{"exception":"in callback at t/logger.t line 47, <DATA> line 1.\n"},"level":"ERROR","module":"SYSTEM","tag":"LOGGER_CALLBACK_ERROR","timestamp":0.\d+}]],
-    'JSON looks OK'
+    'JSON looks OK',
 );
 
 Zonemaster::Engine::Logger->reset_config();

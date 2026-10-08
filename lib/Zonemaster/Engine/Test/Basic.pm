@@ -398,12 +398,12 @@ sub _ip_disabled_message {
     my ( $results_array, $ns, @rrtypes ) = @_;
 
     if ( not Zonemaster::Engine::Profile->effective->get( q{net.ipv4} ) and $ns->address->version == $IP_VERSION_4 ) {
-        push @$results_array, map { _emit_log( IPV4_DISABLED => { ns => $ns->string, rrtype => $_, } ) } @rrtypes;
+        push @$results_array, map { _emit_log( IPV4_DISABLED => { ns => $ns->string, rrtype => $_ } ) } @rrtypes;
         return 1;
     }
 
     if ( not Zonemaster::Engine::Profile->effective->get( q{net.ipv6} ) and $ns->address->version == $IP_VERSION_6 ) {
-        push @$results_array, map { _emit_log( IPV6_DISABLED => { ns => $ns->string, rrtype => $_, } ) } @rrtypes;
+        push @$results_array, map { _emit_log( IPV6_DISABLED => { ns => $ns->string, rrtype => $_ } ) } @rrtypes;
         return 1;
     }
     return 0;
@@ -428,11 +428,11 @@ sub _ip_enabled_message {
     my ( $results_array, $ns, @rrtypes ) = @_;
 
     if ( Zonemaster::Engine::Profile->effective->get( q{net.ipv4} ) and $ns->address->version == $IP_VERSION_4 ) {
-        push @$results_array, map { _emit_log( IPV4_ENABLED => { ns => $ns->string, rrtype => $_, } ) } @rrtypes;
+        push @$results_array, map { _emit_log( IPV4_ENABLED => { ns => $ns->string, rrtype => $_ } ) } @rrtypes;
     }
 
     if ( Zonemaster::Engine::Profile->effective->get( q{net.ipv6} ) and $ns->address->version == $IP_VERSION_6 ) {
-        push @$results_array, map { _emit_log( IPV6_ENABLED => { ns => $ns->string, rrtype => $_, } ) } @rrtypes;
+        push @$results_array, map { _emit_log( IPV6_ENABLED => { ns => $ns->string, rrtype => $_ } ) } @rrtypes;
     }
 }
 
@@ -530,7 +530,7 @@ sub basic01 {
                     B01_SERVER_ZONE_ERROR => {
                         query_name => $zone_name,
                         rrtype     => $type_soa,
-                        ns         => $ns->string
+                        ns         => $ns->string,
                     }
                   );
 
@@ -551,7 +551,7 @@ sub basic01 {
                     B01_SERVER_ZONE_ERROR => {
                         query_name => $zone_name,
                         rrtype     => $type_ns,
-                        ns         => $ns->string
+                        ns         => $ns->string,
                     }
                   );
 
@@ -607,12 +607,13 @@ sub basic01 {
                             caller                  => 'Zonemaster::Engine::Test::Basic->basic01',
                             child_zone_name         => $zone->name,
                             name                    => $loop_zone_name,
-                            intermediate_query_name => $intermediate_query_name
+                            intermediate_query_name => $intermediate_query_name,
                         }
                     );
 
                     return ( @results,
-                        _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
+                        _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ),
+                    );
                 }
 
                 last if scalar @{ $intermediate_query_name->labels } >= scalar @{ $zone->name->labels };
@@ -629,7 +630,7 @@ sub basic01 {
                         B01_SERVER_ZONE_ERROR => {
                             query_name => $intermediate_query_name,
                             rrtype     => $type_soa,
-                            ns         => $ns->string
+                            ns         => $ns->string,
                         }
                       );
 
@@ -659,7 +660,7 @@ sub basic01 {
                                 B01_SERVER_ZONE_ERROR => {
                                     query_name => $intermediate_query_name,
                                     rrtype     => $type_ns,
-                                    ns         => $ns->string
+                                    ns         => $ns->string,
                                 }
                               );
 
@@ -728,7 +729,7 @@ sub basic01 {
                           for $p_soa->get_records_for_name( $type_ns, $intermediate_query_name, 'authority' );
 
                         foreach my $rr ( $p_soa->get_records( 'A', 'additional' ),
-                            $p_soa->get_records( 'AAAA', 'additional' ) )
+                            $p_soa->get_records( 'AAAA', 'additional' ), )
                         {
                             if ( exists $rrs_ns_bis{ name( $rr->owner )->string } ) {
                                 push @{ $rrs_ns_bis{ name( $rr->owner )->string } }, $rr->address;
@@ -805,7 +806,7 @@ sub basic01 {
                         B01_SERVER_ZONE_ERROR => {
                             query_name => $intermediate_query_name,
                             rrtype     => $type_soa,
-                            ns         => $ns->string
+                            ns         => $ns->string,
                         }
                       );
                 }
@@ -820,7 +821,7 @@ sub basic01 {
             _emit_log(
                 B01_PARENT_FOUND => {
                     domain  => $_,
-                    ns_list => join( q{;}, uniq sort @{ $parent_found{$_} } )
+                    ns_list => join( q{;}, uniq sort @{ $parent_found{$_} } ),
                 }
             )
         } keys %parent_found;
@@ -854,7 +855,7 @@ sub basic01 {
                     B01_INCONSISTENT_DELEGATION => {
                         domain_parent => $parent_domain,
                         domain_child  => $zone->name->string,
-                        ns_list       => join( q{;}, uniq sort map { @{ $_->{$parent_domain} // [] } } @hash_refs )
+                        ns_list       => join( q{;}, uniq sort map { @{ $_->{$parent_domain} // [] } } @hash_refs ),
                     }
                   );
             }
@@ -875,7 +876,7 @@ sub basic01 {
               _emit_log(
                 B01_NO_CHILD => {
                     domain_child => $zone->name->string,
-                    domain_super => $zone->name->next_higher
+                    domain_super => $zone->name->next_higher,
                 }
               );
         }
@@ -888,7 +889,7 @@ sub basic01 {
                 B01_CHILD_IS_ALIAS => {
                     domain_child  => $zone->name->string,
                     domain_target => $target,
-                    ns_list => join( q{;}, uniq sort map { @{ $aa_dname{$target}{$_} } } keys %{ $aa_dname{$target} } )
+                    ns_list => join( q{;}, uniq sort map { @{ $aa_dname{$target}{$_} } } keys %{ $aa_dname{$target} } ),
                 }
             )
         } keys %aa_dname;
@@ -1007,7 +1008,7 @@ sub basic02 {
           _emit_log(
             B02_AUTH_RESPONSE_SOA => {
                 domain  => $zone->name,
-                ns_list => join( q{;}, sort keys %auth_response_soa )
+                ns_list => join( q{;}, sort keys %auth_response_soa ),
             }
           );
     }

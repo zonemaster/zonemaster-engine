@@ -48,7 +48,7 @@ ok( $nsv6 eq $nscopy, 'Same nameserver object returned' );
 my $nssame = Zonemaster::Engine->ns( 'foo.example.org', '2001:67c:124c:100a:0000::45' );
 ok(
     ( $nssame ne $nsv6 and $nssame->cache eq $nsv6->cache ),
-    'Different name, same IP are different but has same cache'
+    'Different name, same IP are different but has same cache',
 );
 
 SKIP: {
@@ -59,8 +59,10 @@ SKIP: {
     undef %Zonemaster::Engine::Nameserver::object_cache;
     is( scalar( keys %Zonemaster::Engine::Nameserver::object_cache ), 0, 'Nameserver cache is empty after clear.' );
     Zonemaster::Engine::Nameserver->restore( $name );
-    is( scalar( keys %Zonemaster::Engine::Nameserver::object_cache ),
-        $count, 'Same number of top-level keys in cache after restore.' );
+    is(
+        scalar( keys %Zonemaster::Engine::Nameserver::object_cache ),
+        $count, 'Same number of top-level keys in cache after restore.',
+    );
     unlink $name;
 }
 
@@ -73,8 +75,9 @@ my $save     = Zonemaster::Engine::Profile->effective->get( q{no_network} );
 Zonemaster::Engine::Profile->effective->set( q{no_network}, 1 );
 delete( $googlens->cache->{'www.google.com'} );
 eval { $googlens->query( 'www.google.com', 'TXT' ) };
-like( $@,
-    qr{External query for www.google.com, TXT attempted to ns1.google.com/216.239.32.10 while running with no_network}
+like(
+    $@,
+    qr{External query for www.google.com, TXT attempted to ns1.google.com/216.239.32.10 while running with no_network},
 );
 Zonemaster::Engine::Profile->effective->set( q{no_network}, $save );
 
@@ -159,7 +162,7 @@ subtest 'dnssec, edns_size and edns_details{do, size} flags behavior for queries
     is(
         $p->edns_size(),
         $EDNS_UDP_PAYLOAD_DNSSEC_DEFAULT,
-        'EDNS size uses default DNSSEC query value when set with edns_details{do}'
+        'EDNS size uses default DNSSEC query value when set with edns_details{do}',
     );
 
     $p = $ns->_make_query_packet( 'g.fr', 'SOA', { "edns_details" => { "size" => 900 } } );
@@ -173,19 +176,23 @@ subtest 'dnssec, edns_size and edns_details{do, size} flags behavior for queries
     $p = $ns->_make_query_packet( 'i.fr', 'SOA', { "dnssec" => 1, "edns_details" => { "do" => 0 } } );
     ok( !$p->do(), 'edns_details{do} takes precedence over dnssec for (un)setting the DNSSEC flag' );
     is( $p->edns_size(), $EDNS_UDP_PAYLOAD_DEFAULT,
-        'EDNS size uses default EDNS query value when DNSSEC flag is unset by edns_details{do}' );
+        'EDNS size uses default EDNS query value when DNSSEC flag is unset by edns_details{do}',
+    );
 
     $p = $ns->_make_query_packet( 'j.fr', 'SOA', { "edns_size" => 1003, "edns_details" => { "size" => 901 } } );
     ok( !$p->do(), 'DNSSEC flag is unset' );
     is( $p->edns_size(), 901, 'edns_details{size} takes precedence over edns_size for setting the edns_size flag' );
 
-    $p = $ns->_make_query_packet( 'k.fr', 'SOA',
-        { "dnssec" => 1, "edns_size" => 1004, "edns_details" => { "size" => 0 } } );
+    $p =
+      $ns->_make_query_packet( 'k.fr', 'SOA', { "dnssec" => 1, "edns_size" => 1004, "edns_details" => { "size" => 0 } },
+      );
     ok( $p->do(), 'DNSSEC flag is set' );
     is( $p->edns_size(), 0, 'EDNS size is unset' );
 
-    $p = $ns->_make_query_packet( 'l.fr', 'SOA',
-        { "dnssec" => 0, "edns_size" => 1005, "edns_details" => { "do" => 1, "size" => 0 } } );
+    $p =
+      $ns->_make_query_packet( 'l.fr', 'SOA',
+        { "dnssec" => 0, "edns_size" => 1005, "edns_details" => { "do" => 1, "size" => 0 } },
+      );
     ok( $p->do(), 'DNSSEC flag is set' );
     is( $p->edns_size(), 0, 'EDNS size is unset' );
 
@@ -218,7 +225,7 @@ subtest 'sorting' => sub {
         Zonemaster::Engine->ns( 'a.test', '2001:db8::1000' ),
         Zonemaster::Engine->ns( 'a.test', '2001:db8::1' ),
         'm.test',
-        Zonemaster::Engine->ns( 'b.test', '3ffe::b' )
+        Zonemaster::Engine->ns( 'b.test', '3ffe::b' ),
     );
 
     my @sorted = map { "$_" } sort @unsorted;
@@ -278,13 +285,18 @@ if ( $ENV{ZONEMASTER_RECORD} ) {
     is( %{ $e->args }{proto}, 'UDP', 'Name server is blacklisted for UDP on non-EDNS SOA UDP query' );
 }
 else {
-    ok( !grep( { $_->tag eq 'EXTERNAL_QUERY' } @{ Zonemaster::Engine->logger->entries } ),
-        'No network access was attempted' )
-      or diag( join( "\n", @{ Zonemaster::Engine->logger->entries } ) );
-    ok( !grep( { $_->tag eq 'LOOKUP_ERROR' } @{ Zonemaster::Engine->logger->entries } ),
-        'The lookup error came from cache, not network' );
-    ok( !grep( { $_->tag eq 'BLACKLISTING' } @{ Zonemaster::Engine->logger->entries } ),
-        'No blacklisting is done when running offline' );
+    ok(
+        !grep( { $_->tag eq 'EXTERNAL_QUERY' } @{ Zonemaster::Engine->logger->entries } ),
+        'No network access was attempted',
+    ) or diag( join( "\n", @{ Zonemaster::Engine->logger->entries } ) );
+    ok(
+        !grep( { $_->tag eq 'LOOKUP_ERROR' } @{ Zonemaster::Engine->logger->entries } ),
+        'The lookup error came from cache, not network',
+    );
+    ok(
+        !grep( { $_->tag eq 'BLACKLISTING' } @{ Zonemaster::Engine->logger->entries } ),
+        'No blacklisting is done when running offline',
+    );
 }
 
 Zonemaster::Engine->logger->clear_history();
@@ -299,13 +311,18 @@ if ( $ENV{ZONEMASTER_RECORD} ) {
     is( %{ $e->args }{proto}, 'TCP', 'Name server is blacklisted for TCP on non-EDNS SOA TCP query' );
 }
 else {
-    ok( !grep( { $_->tag eq 'EXTERNAL_QUERY' } @{ Zonemaster::Engine->logger->entries } ),
-        'No network access was attempted' )
-      or diag( join( "\n", @{ Zonemaster::Engine->logger->entries } ) );
-    ok( !grep( { $_->tag eq 'LOOKUP_ERROR' } @{ Zonemaster::Engine->logger->entries } ),
-        'The lookup error came from cache, not network' );
-    ok( !grep( { $_->tag eq 'BLACKLISTING' } @{ Zonemaster::Engine->logger->entries } ),
-        'No blacklisting is done when running offline' );
+    ok(
+        !grep( { $_->tag eq 'EXTERNAL_QUERY' } @{ Zonemaster::Engine->logger->entries } ),
+        'No network access was attempted',
+    ) or diag( join( "\n", @{ Zonemaster::Engine->logger->entries } ) );
+    ok(
+        !grep( { $_->tag eq 'LOOKUP_ERROR' } @{ Zonemaster::Engine->logger->entries } ),
+        'The lookup error came from cache, not network',
+    );
+    ok(
+        !grep( { $_->tag eq 'BLACKLISTING' } @{ Zonemaster::Engine->logger->entries } ),
+        'No blacklisting is done when running offline',
+    );
 }
 
 if ( $ENV{ZONEMASTER_RECORD} ) {

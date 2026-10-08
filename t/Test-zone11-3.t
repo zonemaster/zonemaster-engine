@@ -35,7 +35,7 @@ Zonemaster::Engine::Recursor->add_fake_addresses(
     {
         'ns1' => [ '127.19.11.45', 'fda1:b2:c3::127:19:11:45' ],
         'ns2' => [ '127.19.11.46', 'fda1:b2:c3::127:19:11:46' ],
-    }
+    },
 );
 
 # Test zone scenarios
@@ -70,7 +70,7 @@ Zonemaster::Engine::Profile->effective->merge(
 perform_testcase_testing(
     $test_case, $test_module, \@all_tags, \%subtests,
     $ENV{ZONEMASTER_SELECTED_SCENARIOS},
-    $ENV{ZONEMASTER_DISABLED_SCENARIOS}
+    $ENV{ZONEMASTER_DISABLED_SCENARIOS},
 );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {

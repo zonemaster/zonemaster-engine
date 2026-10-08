@@ -130,7 +130,7 @@ sub argstr {
         my $p_args = $self->printable_args;
         $argstr = join( q{; },
             map { $_ . q{=} . ( ref( $p_args->{$_} ) ? $json->encode( $p_args->{$_} ) : $p_args->{$_} ) }
-            sort keys %{$p_args} );
+            sort keys %{$p_args}, );
     }
 
     return $argstr;

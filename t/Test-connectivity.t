@@ -75,7 +75,7 @@ subtest 'All good' => sub {
         IPV4_DIFFERENT_ASN         => 1,
         IPV6_DIFFERENT_ASN         => 1,
         CN04_IPV4_DIFFERENT_PREFIX => 1,
-        CN04_IPV6_DIFFERENT_PREFIX => 1
+        CN04_IPV6_DIFFERENT_PREFIX => 1,
     );
     check_output_connectivity_all( \%res, \%should_emit );
 };

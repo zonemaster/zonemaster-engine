@@ -95,7 +95,7 @@ sub is_redirect {
             IS_REDIRECT => {
                 name => Zonemaster::Engine::DNSName->from_string( $q->name ),
                 type => $q->type,
-                to   => Zonemaster::Engine::DNSName->from_string( $a->name )
+                to   => Zonemaster::Engine::DNSName->from_string( $a->name ),
             }
         );
 

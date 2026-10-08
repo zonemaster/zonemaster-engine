@@ -16,7 +16,7 @@ sub new {
     my ( $proto, @initial_items ) = @_;
     my $class = ref $proto || $proto;
 
-    my $self = { _names => {}, };
+    my $self = { _names => {} };
 
     bless $self, $class;
     $self->push( @initial_items );

@@ -233,7 +233,7 @@ sub perform_methodsv2_testing {
               . "[ UNDELEGATED_NS ], " . " ] }";
         }
 
-        my ( $testable, $zone_name, $expected_parent_ns, $expected_del_ns, $expected_zone_ns, $undelegated_ns, ) =
+        my ( $testable, $zone_name, $expected_parent_ns, $expected_del_ns, $expected_zone_ns, $undelegated_ns ) =
           @{ $subtests{$scenario} };
 
         if ( ref( $testable ) ne '' ) {
@@ -370,7 +370,7 @@ sub perform_methodsv2_testing {
                         }
                         ok(
                             scalar @{$res} == scalar @{$expected_res},
-                            "Number of name server names in both arrays match"
+                            "Number of name server names in both arrays match",
                           )
                           or diag "Number of name server names in both arrays does not match (found "
                           . scalar @{$res}
@@ -409,18 +409,20 @@ sub perform_methodsv2_testing {
                     if ( defined $expected_res ) {
                         ok( defined $res, "Result is defined" ) or diag "Unexpected undefined result";
                         foreach my $expected_ip ( @{$expected_res} ) {
-                            ok( grep( { $_->address()->short eq $expected_ip } @{$res} ),
-                                "Name server IP '$expected_ip' is present" )
-                              or diag "Expected but missing: $expected_ip";
+                            ok(
+                                grep( { $_->address()->short eq $expected_ip } @{$res} ),
+                                "Name server IP '$expected_ip' is present",
+                            ) or diag "Expected but missing: $expected_ip";
                         }
                         foreach my $ip ( @{$res} ) {
-                            ok( grep( { $_ eq $ip->address()->short } @{$expected_res} ),
-                                "Name server IP '$ip' is expected" )
-                              or diag "Present but not expected: $ip";
+                            ok(
+                                grep( { $_ eq $ip->address()->short } @{$expected_res} ),
+                                "Name server IP '$ip' is expected",
+                            ) or diag "Present but not expected: $ip";
                         }
                         ok(
                             scalar @{$res} == scalar @{$expected_res},
-                            "Number of name server IPs in both arrays match"
+                            "Number of name server IPs in both arrays match",
                           )
                           or diag "Number of name server IPs in both arrays does not match (found "
                           . scalar @{$res}

@@ -94,7 +94,7 @@ subtest 'Valid domains' => sub {
                 sub {
                     ( $errors, $final_domain ) = normalize_name( $domain );
                 },
-                'correct domain should live'
+                'correct domain should live',
             );
 
             my $actual   = { domain => $final_domain,    errors => $errors };
@@ -145,16 +145,16 @@ subtest 'Bad domains' => sub {
                 sub {
                     ( $errors, $final_domain ) = normalize_name( $domain );
                 },
-                'incorrect domain should live'
+                'incorrect domain should live',
             );
 
             my $actual = {
                 domain => $final_domain,
-                errors => [ map { $_->tag } @$errors ]
+                errors => [ map { $_->tag } @$errors ],
             };
             my $expected = {
                 domain => undef,
-                errors => $expected_errors
+                errors => $expected_errors,
             };
 
             eq_or_diff $actual, $expected;

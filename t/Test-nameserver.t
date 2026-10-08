@@ -119,7 +119,8 @@ zone_gives_not( 'nameserver07', $zone, [qw{UPWARD_REFERRAL NO_UPWARD_REFERRAL}] 
 $zone = Zonemaster::Engine->zone( 'bemacom.se' );
 zone_gives( 'nameserver11', $zone, [q{N11_UNEXPECTED_RCODE}] );
 zone_gives_not( 'nameserver11', $zone,
-    [qw{N11_NO_EDNS N11_NO_RESPONSE N11_RETURNS_UNKNOWN_OPTION_CODE N11_UNEXPECTED_ANSWER_SECTION N11_UNSET_AA}] );
+    [qw{N11_NO_EDNS N11_NO_RESPONSE N11_RETURNS_UNKNOWN_OPTION_CODE N11_UNEXPECTED_ANSWER_SECTION N11_UNSET_AA}],
+);
 
 # nameserver{12,13,14} -- no unit tests yet, see https://github.com/zonemaster/zonemaster-engine/issues/1146
 

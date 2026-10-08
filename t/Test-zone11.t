@@ -35,7 +35,7 @@ Zonemaster::Engine::Recursor->add_fake_addresses(
     {
         'ns1' => [ '127.1.0.1', 'fda1:b2:c3::127:1:0:1' ],
         'ns2' => [ '127.1.0.2', 'fda1:b2:c3::127:1:0:2' ],
-    }
+    },
 );
 
 # Test zone scenarios
@@ -82,21 +82,21 @@ my %subtests = (
     'SERVFAIL'         => [ 1, q(servfail.zone11.xa),         [qw( Z11_UNABLE_TO_CHECK_FOR_SPF )], undef, [], [] ],
     'INCONSISTENT-SPF' => [
         1,     q(INCONSISTENT-SPF.zone11.xa), [qw( Z11_INCONSISTENT_SPF_POLICIES Z11_DIFFERENT_SPF_POLICIES_FOUND )],
-        undef, [],                            []
+        undef, [],                            [],
     ],
     'SPF-MISSING-ON-ONE' => [
         1,
         q(spf-missing-on-one.zone11.xa),
         [qw( Z11_INCONSISTENT_SPF_POLICIES Z11_DIFFERENT_SPF_POLICIES_FOUND )],
-        undef, [], []
+        undef, [], [],
     ],
     'ALL-DIFFERENT-SPF' => [
         1,
         q(all-different-spf.zone11.xa),
         [qw( Z11_INCONSISTENT_SPF_POLICIES Z11_DIFFERENT_SPF_POLICIES_FOUND )],
-        undef, [], []
+        undef, [], [],
     ],
-    'MULTIPLE-SPF-RECORDS' => [ 1, q(multiple-spf-records.zone11.xa), [qw( Z11_SPF_MULTIPLE_RECORDS )], undef, [], [] ]
+    'MULTIPLE-SPF-RECORDS' => [ 1, q(multiple-spf-records.zone11.xa), [qw( Z11_SPF_MULTIPLE_RECORDS )], undef, [], [] ],
 );
 
 ###########
@@ -115,7 +115,7 @@ Zonemaster::Engine::Profile->effective->merge(
 perform_testcase_testing(
     $test_case, $test_module, \@all_tags, \%subtests,
     $ENV{ZONEMASTER_SELECTED_SCENARIOS},
-    $ENV{ZONEMASTER_DISABLED_SCENARIOS}
+    $ENV{ZONEMASTER_DISABLED_SCENARIOS},
 );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {

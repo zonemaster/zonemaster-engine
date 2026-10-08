@@ -28,7 +28,7 @@ Zonemaster::Engine::Recursor->add_fake_addresses(
     {
         'root-ns1.xa' => [ '127.16.3.27', 'fda1:b2:c3::127:16:3:27' ],
         'root-ns2.xa' => [ '127.16.3.28', 'fda1:b2:c3::127:16:3:28' ],
-    }
+    },
 );
 
 # Test zone scenarios
@@ -46,12 +46,12 @@ Zonemaster::Engine::Recursor->add_fake_addresses(
 #   See documentation for the meaning of that.
 
 my %subtests = (
-    'REFERRAL-SIZE-OK-1' => [ 1, q(referral-size-ok-1.delegation03.xa.), [qw( REFERRAL_SIZE_OK )], undef, [], [], ],
-    'REFERRAL-SIZE-OK-2' => [ 1, q(referral-size-ok-2.delegation03.xa.), [qw( REFERRAL_SIZE_OK )], undef, [], [], ],
+    'REFERRAL-SIZE-OK-1' => [ 1, q(referral-size-ok-1.delegation03.xa.), [qw( REFERRAL_SIZE_OK )], undef, [], [] ],
+    'REFERRAL-SIZE-OK-2' => [ 1, q(referral-size-ok-2.delegation03.xa.), [qw( REFERRAL_SIZE_OK )], undef, [], [] ],
     'REFERRAL-SIZE-TOO-LARGE-1' =>
-      [ 1, q(referral-size-too-large-1.delegation03.xa), [qw( REFERRAL_SIZE_TOO_LARGE )], undef, [], [], ],
+      [ 1, q(referral-size-too-large-1.delegation03.xa), [qw( REFERRAL_SIZE_TOO_LARGE )], undef, [], [] ],
     'REFERRAL-SIZE-TOO-LARGE-2' =>
-      [ 1, q(referral-size-too-large-2.delegation03.xa), [qw( REFERRAL_SIZE_TOO_LARGE )], undef, [], [], ],
+      [ 1, q(referral-size-too-large-2.delegation03.xa), [qw( REFERRAL_SIZE_TOO_LARGE )], undef, [], [] ],
 );
 ###########
 
@@ -69,7 +69,7 @@ Zonemaster::Engine::Profile->effective->merge(
 perform_testcase_testing(
     $test_case, $test_module, \@all_tags, \%subtests,
     $ENV{ZONEMASTER_SELECTED_SCENARIOS},
-    $ENV{ZONEMASTER_DISABLED_SCENARIOS}
+    $ENV{ZONEMASTER_DISABLED_SCENARIOS},
 );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {

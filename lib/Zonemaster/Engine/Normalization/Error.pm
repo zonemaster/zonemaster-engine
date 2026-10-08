@@ -26,7 +26,7 @@ Readonly my %ERRORS => (
     AMBIGUOUS_DOWNCASING => {
         message => N__
           'Ambiguous downcasing of character "{unicode_name}" in the domain name. Use all lower case instead.',
-        arguments => ['unicode_name']
+        arguments => ['unicode_name'],
     },
     DOMAIN_NAME_TOO_LONG => {
         message => N__ 'Domain name is too long (more than 253 characters with no final dot).',
@@ -39,18 +39,18 @@ Readonly my %ERRORS => (
     },
     INVALID_ASCII => {
         message   => N__ 'Domain name has an ASCII label ("{label}") with a character not permitted.',
-        arguments => ['label']
+        arguments => ['label'],
     },
     INVALID_U_LABEL => {
         message   => N__ 'Domain name has a non-ASCII label ("{label}") which is not a valid U-label.',
-        arguments => ['label']
+        arguments => ['label'],
     },
     REPEATED_DOTS => {
         message => N__ 'Domain name has repeated dots.'
     },
     LABEL_TOO_LONG => {
         message   => N__ 'Domain name has a label that is too long (more than 63 characters), "{label}".',
-        arguments => ['label']
+        arguments => ['label'],
     },
 );
 

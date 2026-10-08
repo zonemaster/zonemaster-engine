@@ -251,7 +251,7 @@ sub _compile_scenario_block {
         my $zone = lc _expand_template(
             $scenario_block->{body}{zone},
             SCENARIO => $name,
-            TESTCASE => $test_case
+            TESTCASE => $test_case,
         );
 
         push @subtest_args, { scenario_name => $name, zone_name => $zone };
@@ -260,7 +260,7 @@ sub _compile_scenario_block {
     return {
         caller   => $scenario_block->{caller},
         callback => _compile_scenario_subtest( $scenario_block, $test_method ),
-        args     => \@subtest_args
+        args     => \@subtest_args,
     };
 } ## end sub _compile_scenario_block
 
@@ -313,7 +313,7 @@ sub _compile_fake_ns {
             # Use default value of "fill_in_empty_oob_glue".
             Zonemaster::Engine->add_fake_delegation(
                 $zone_name             => $undel_ns,
-                fill_in_empty_oob_glue => 1
+                fill_in_empty_oob_glue => 1,
             );
         }
     }
@@ -416,7 +416,7 @@ sub _compile_expect_with_args {
     return sub {
         my @messages = grep { $_->{tag} eq $tag } @_;
         _ok( scalar( grep { $combined_predicate->( $_ ) } @messages ),
-            "Messages of tag '$tag' exist with specified arguments", $caller )
+            "Messages of tag '$tag' exist with specified arguments", $caller, )
           or do {
             Test::More::diag( $explanation );
             Test::More::diag( "Here are all messages that unsuccessfully matched:" );

@@ -446,7 +446,7 @@ sub _ip_disabled_message {
     }
 
     if ( not Zonemaster::Engine::Profile->effective->get( q{net.ipv4} ) and $ns->address->version == $IP_VERSION_4 ) {
-        push @$results_array, map { _emit_log( IPV4_DISABLED => { ns => $ns->string, rrtype => $_, } ) } @rrtypes;
+        push @$results_array, map { _emit_log( IPV4_DISABLED => { ns => $ns->string, rrtype => $_ } ) } @rrtypes;
         return 1;
     }
     return 0;
@@ -816,7 +816,7 @@ sub syntax04 {
     foreach my $local_nsname (
         uniq(
             @{ Zonemaster::Engine::TestMethods->method2( $zone ) },
-            @{ Zonemaster::Engine::TestMethods->method3( $zone ) }
+            @{ Zonemaster::Engine::TestMethods->method3( $zone ) },
         )
       )
     {

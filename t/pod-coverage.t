@@ -24,7 +24,7 @@ find(
             push @modules, $name;
         }
     },
-    'lib'
+    'lib',
 );
 
 foreach my $name ( @modules ) {

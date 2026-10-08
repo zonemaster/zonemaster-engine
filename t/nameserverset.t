@@ -40,7 +40,7 @@ subtest 'push() methods returns self' => sub {
     isa_ok(
         Zonemaster::Engine::NameserverSet->new()->push(),
         'Zonemaster::Engine::NameserverSet',
-        'push() method returns the object'
+        'push() method returns the object',
     );
 };
 
@@ -62,7 +62,7 @@ subtest 'pushing a nameserver onto an empty set' => sub {
         Zonemaster::Engine::Nameserver->new(
             {
                 name    => 'ns1.one.test',
-                address => '2001:db8::'
+                address => '2001:db8::',
             }
         )
     );
@@ -108,7 +108,7 @@ subtest 'pushing a mix of equivalent DNS names and strings' => sub {
 
     $set->push(
         'HeLLo.TeST',                                     Zonemaster::Engine::DNSName->new( 'HELLO.TEST' ),
-        Zonemaster::Engine::DNSName->new( 'HEllo.TEst' ), 'hello.test'
+        Zonemaster::Engine::DNSName->new( 'HEllo.TEst' ), 'hello.test',
     );
 
     is( scalar $set->items, 1, 'set contains exactly one item' );
@@ -135,15 +135,17 @@ subtest 'new() can also create non-empty sets from a list' => sub {
 };
 
 subtest 'pushing two names and a nameserver' => sub {
-    my $set = Zonemaster::Engine::NameserverSet->new( Zonemaster::Engine::DNSName->new( 'one.test' ),
-        Zonemaster::Engine::DNSName->new( 'two.test' ) );
+    my $set = Zonemaster::Engine::NameserverSet->new(
+        Zonemaster::Engine::DNSName->new( 'one.test' ),
+        Zonemaster::Engine::DNSName->new( 'two.test' ),
+    );
     my $old_size = scalar $set->items;
 
     $set->push(
         Zonemaster::Engine::Nameserver->new(
             {
                 name    => 'three.test',
-                address => '2001:db8::3:1'
+                address => '2001:db8::3:1',
             }
         )
     );
@@ -158,9 +160,9 @@ subtest 'set only holds unique nameservers' => sub {
         Zonemaster::Engine::Nameserver->new(
             {
                 name    => 'three.test',
-                address => '2001:db8::3:1'
+                address => '2001:db8::3:1',
             }
-        )
+        ),
     );
     my $old_size = scalar $set->items;
 
@@ -168,7 +170,7 @@ subtest 'set only holds unique nameservers' => sub {
         Zonemaster::Engine::Nameserver->new(
             {
                 name    => 'THREE.TEST.',
-                address => '2001:db8::3:1'
+                address => '2001:db8::3:1',
             }
         )
     );
@@ -183,9 +185,9 @@ subtest 'overwriting a DNS name with a name server' => sub {
         Zonemaster::Engine::Nameserver->new(
             {
                 name    => 'three.test',
-                address => '2001:db8::3:1'
+                address => '2001:db8::3:1',
             }
-        )
+        ),
     );
     my $old_size = scalar $set->items;
 
@@ -195,7 +197,7 @@ subtest 'overwriting a DNS name with a name server' => sub {
         Zonemaster::Engine::Nameserver->new(
             {
                 name    => 'OnE.TeSt',
-                address => '2001:db8::1:1'
+                address => '2001:db8::1:1',
             }
         )
     );
@@ -213,9 +215,9 @@ subtest 'pushing a DNS name when a name server already exists' => sub {
         Zonemaster::Engine::Nameserver->new(
             {
                 name    => 'three.test',
-                address => '2001:db8::3:1'
+                address => '2001:db8::3:1',
             }
-        )
+        ),
     );
     my $old_size = scalar $set->items;
 
@@ -234,16 +236,16 @@ subtest 'adding a name server with same name but different IP' => sub {
         Zonemaster::Engine::Nameserver->new(
             {
                 name    => 'one.test',
-                address => '2001:db8::1:1'
+                address => '2001:db8::1:1',
             }
         ),
         Zonemaster::Engine::DNSName->new( 'two.test' ),
         Zonemaster::Engine::Nameserver->new(
             {
                 name    => 'three.test',
-                address => '2001:db8::3:1'
+                address => '2001:db8::3:1',
             }
-        )
+        ),
     );
     my $old_size = scalar $set->items;
 
@@ -251,7 +253,7 @@ subtest 'adding a name server with same name but different IP' => sub {
         Zonemaster::Engine::Nameserver->new(
             {
                 name    => 'one.test',
-                address => '2001:db8::2:1'
+                address => '2001:db8::2:1',
             }
         )
     );
@@ -268,43 +270,43 @@ subtest 'sorted_items() method' => sub {
         Zonemaster::Engine::Nameserver->new(
             {
                 name    => 'a.test',
-                address => '::1'
+                address => '::1',
             }
         ),
         Zonemaster::Engine::Nameserver->new(
             {
                 name    => 'a.test',
-                address => '127.0.0.1'
+                address => '127.0.0.1',
             }
         ),
         Zonemaster::Engine::Nameserver->new(
             {
                 name    => 'd.test',
-                address => '2001:db8:bc::'
+                address => '2001:db8:bc::',
             }
         ),
         Zonemaster::Engine::Nameserver->new(
             {
                 name    => 'd.test',
-                address => '2001:db8:bbbb::1'
+                address => '2001:db8:bbbb::1',
             }
         ),
         Zonemaster::Engine::Nameserver->new(
             {
                 name    => 'd.test',
-                address => '203.0.113.234'
+                address => '203.0.113.234',
             }
         ),
         Zonemaster::Engine::Nameserver->new(
             {
                 name    => 'd.test',
-                address => '192.0.2.2'
+                address => '192.0.2.2',
             }
         ),
         Zonemaster::Engine::Nameserver->new(
             {
                 name    => 'd.test',
-                address => '192.0.2.101'
+                address => '192.0.2.101',
             }
         ),
     );
@@ -332,27 +334,27 @@ subtest 'names() method' => sub {
         Zonemaster::Engine::Nameserver->new(
             {
                 name    => 'a.test',
-                address => '::1'
+                address => '::1',
             }
         ),
         Zonemaster::Engine::Nameserver->new(
             {
                 name    => 'A.TEST',
-                address => '127.0.0.1'
+                address => '127.0.0.1',
             }
         ),
         Zonemaster::Engine::Nameserver->new(
             {
                 name    => 'd.test',
-                address => '2001:db8:bc::'
+                address => '2001:db8:bc::',
             }
         ),
         Zonemaster::Engine::Nameserver->new(
             {
                 name    => 'D.TEST',
-                address => '2001:db8:bbbb::1'
+                address => '2001:db8:bbbb::1',
             }
-        )
+        ),
     );
 
     my @names = $set->names();
@@ -361,8 +363,10 @@ subtest 'names() method' => sub {
     ok( grep( { $_ eq 'a.test' } @names ), 'a.test is in the list' );
     ok( grep( { $_ eq 'b.test' } @names ), 'b.test is in the list' );
     ok( grep( { $_ eq 'd.test' } @names ), 'd.test is in the list' );
-    ok( List::Util::all( sub { $_->isa( 'Zonemaster::Engine::DNSName' ) }, @names ),
-        'names() returns DNSName objects' );
+    ok(
+        List::Util::all( sub { $_->isa( 'Zonemaster::Engine::DNSName' ) }, @names ),
+        'names() returns DNSName objects',
+    );
 };
 
 subtest 'get() method' => sub {
@@ -371,27 +375,27 @@ subtest 'get() method' => sub {
         Zonemaster::Engine::Nameserver->new(
             {
                 name    => 'a.test',
-                address => '::1'
+                address => '::1',
             }
         ),
         Zonemaster::Engine::Nameserver->new(
             {
                 name    => 'A.TEST',
-                address => '127.0.0.1'
+                address => '127.0.0.1',
             }
         ),
         Zonemaster::Engine::Nameserver->new(
             {
                 name    => 'd.test',
-                address => '2001:db8:bc::'
+                address => '2001:db8:bc::',
             }
         ),
         Zonemaster::Engine::Nameserver->new(
             {
                 name    => 'D.TEST',
-                address => '2001:db8:bbbb::1'
+                address => '2001:db8:bbbb::1',
             }
-        )
+        ),
     );
 
     my @a = $set->get( 'A.TeSt' );
@@ -418,27 +422,27 @@ subtest 'get_ips() method' => sub {
         Zonemaster::Engine::Nameserver->new(
             {
                 name    => 'a.test',
-                address => '::1'
+                address => '::1',
             }
         ),
         Zonemaster::Engine::Nameserver->new(
             {
                 name    => 'A.TEST',
-                address => '127.0.0.1'
+                address => '127.0.0.1',
             }
         ),
         Zonemaster::Engine::Nameserver->new(
             {
                 name    => 'd.test',
-                address => '2001:db8:bc::'
+                address => '2001:db8:bc::',
             }
         ),
         Zonemaster::Engine::Nameserver->new(
             {
                 name    => 'D.TEST',
-                address => '2001:db8:bbbb::1'
+                address => '2001:db8:bbbb::1',
             }
-        )
+        ),
     );
 
     my @a = $set->get_ips( 'A.TeSt' );
@@ -472,27 +476,27 @@ subtest 'difference() method on non-empty sets' => sub {
         Zonemaster::Engine::Nameserver->new(
             {
                 name    => 'a.test',
-                address => '::1'
+                address => '::1',
             }
         ),
         Zonemaster::Engine::Nameserver->new(
             {
                 name    => 'A.TEST',
-                address => '127.0.0.1'
+                address => '127.0.0.1',
             }
         ),
         Zonemaster::Engine::Nameserver->new(
             {
                 name    => 'd.test',
-                address => '2001:db8:bc::'
+                address => '2001:db8:bc::',
             }
         ),
         Zonemaster::Engine::Nameserver->new(
             {
                 name    => 'D.TEST',
-                address => '2001:db8:bbbb::1'
+                address => '2001:db8:bbbb::1',
             }
-        )
+        ),
     );
 
     my $set_b = Zonemaster::Engine::NameserverSet->new(
@@ -501,25 +505,25 @@ subtest 'difference() method on non-empty sets' => sub {
         Zonemaster::Engine::Nameserver->new(
             {
                 name    => 'a.test',
-                address => '127.0.0.1'
+                address => '127.0.0.1',
             }
         ),
         Zonemaster::Engine::Nameserver->new(
             {
                 name    => 'd.test',
-                address => '2001:db8:bc::'
+                address => '2001:db8:bc::',
             }
         ),
         Zonemaster::Engine::Nameserver->new(
             {
                 name    => 'd.test',
-                address => '2001:db8:bbbb::1'
+                address => '2001:db8:bbbb::1',
             }
         ),
         Zonemaster::Engine::Nameserver->new(
             {
                 name    => 'd.test',
-                address => '203.0.113.234'
+                address => '203.0.113.234',
             }
         ),
     );
@@ -558,8 +562,10 @@ subtest 'equals() on two different sets' => sub {
 subtest 'equals() on sub- and supersets' => sub {
     my $set_a = Zonemaster::Engine::NameserverSet->new( Zonemaster::Engine::DNSName->new( 'hello.test' ) );
 
-    my $set_b = Zonemaster::Engine::NameserverSet->new( Zonemaster::Engine::DNSName->new( 'hello.test' ),
-        Zonemaster::Engine::DNSName->new( 'hello2.test' ) );
+    my $set_b = Zonemaster::Engine::NameserverSet->new(
+        Zonemaster::Engine::DNSName->new( 'hello.test' ),
+        Zonemaster::Engine::DNSName->new( 'hello2.test' ),
+    );
 
     ok( !$set_a->equals( $set_b ), 'one set is not equal to a strict superset of oneself' );
     ok( !$set_b->equals( $set_a ), 'one set is not equal to a strict subset of oneself' );
@@ -572,25 +578,25 @@ subtest 'equals() on equal sets' => sub {
         Zonemaster::Engine::Nameserver->new(
             {
                 name    => 'a.test',
-                address => '127.0.0.1'
+                address => '127.0.0.1',
             }
         ),
         Zonemaster::Engine::Nameserver->new(
             {
                 name    => 'd.test',
-                address => '2001:db8:bc::'
+                address => '2001:db8:bc::',
             }
         ),
         Zonemaster::Engine::Nameserver->new(
             {
                 name    => 'd.test',
-                address => '2001:db8:bbbb::1'
+                address => '2001:db8:bbbb::1',
             }
         ),
         Zonemaster::Engine::Nameserver->new(
             {
                 name    => 'd.test',
-                address => '203.0.113.234'
+                address => '203.0.113.234',
             }
         ),
     );

@@ -17,3 +17,4 @@
 -tso              # Format things like 0+ and +0 without space in between
 -csc -csci=20     # Add closing comments to blocks of at least 20 lines
 -nbbc             # Prevent automatic blank lines before comments
+-wtc=m -atc -dtc  # Add trailing commas to multi-line lists, and remove them from single-line lists

@@ -139,8 +139,8 @@ subtest 'escape_unprintable' => sub {
         },
         {
             input    => encode( 'UTF-8', 'cassé' ),
-            expected => 'cass\195\169'
-        }
+            expected => 'cass\195\169',
+        },
     );
 
     for my $case ( @cases ) {

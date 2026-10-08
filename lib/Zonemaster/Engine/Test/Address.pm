@@ -298,7 +298,7 @@ sub address01 {
 
     my @nss = uniq grep { $_->isa( 'Zonemaster::Engine::Nameserver' ) } (
         @{ Zonemaster::Engine::TestMethodsV2->get_del_ns_names_and_ips( $zone )  // [] },
-        @{ Zonemaster::Engine::TestMethodsV2->get_zone_ns_names_and_ips( $zone ) // [] }
+        @{ Zonemaster::Engine::TestMethodsV2->get_zone_ns_names_and_ips( $zone ) // [] },
     );
 
     unless ( @nss ) {
@@ -415,7 +415,7 @@ sub address02 {
 
     foreach my $local_ns (
         @{ Zonemaster::Engine::TestMethods->method4( $zone ) },
-        @{ Zonemaster::Engine::TestMethods->method5( $zone ) }
+        @{ Zonemaster::Engine::TestMethods->method5( $zone ) },
       )
     {
 

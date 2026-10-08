@@ -30,7 +30,7 @@ Zonemaster::Engine::Recursor->add_fake_addresses(
     {
         'root-ns1.xa' => [ '127.16.2.27', 'fda1:b2:c3::127:16:2:27' ],
         'root-ns2.xa' => [ '127.16.2.28', 'fda1:b2:c3::127:16:2:28' ],
-    }
+    },
 );
 
 # Test zone scenarios
@@ -49,13 +49,13 @@ Zonemaster::Engine::Recursor->add_fake_addresses(
 
 my %subtests = (
     'ALL-DISTINCT-1' =>
-      [ 1, q(all-distinct-1.delegation02.xa), [qw( DEL_DISTINCT_NS_IP CHILD_DISTINCT_NS_IP )], undef, [], [], ],
+      [ 1, q(all-distinct-1.delegation02.xa), [qw( DEL_DISTINCT_NS_IP CHILD_DISTINCT_NS_IP )], undef, [], [] ],
     'ALL-DISTINCT-2' =>
-      [ 1, q(all-distinct-2.delegation02.xa), [qw( DEL_DISTINCT_NS_IP CHILD_DISTINCT_NS_IP )], undef, [], [], ],
+      [ 1, q(all-distinct-2.delegation02.xa), [qw( DEL_DISTINCT_NS_IP CHILD_DISTINCT_NS_IP )], undef, [], [] ],
     'ALL-DISTINCT-3' =>
-      [ 1, q(all-distinct-3.delegation02.xa), [qw( DEL_DISTINCT_NS_IP CHILD_DISTINCT_NS_IP )], undef, [], [], ],
+      [ 1, q(all-distinct-3.delegation02.xa), [qw( DEL_DISTINCT_NS_IP CHILD_DISTINCT_NS_IP )], undef, [], [] ],
     'DEL-NON-DISTINCT' =>
-      [ 0, q(del-non-distinct.delegation02.xa), [qw( DEL_NS_SAME_IP CHILD_DISTINCT_NS_IP )], undef, [], [], ],
+      [ 0, q(del-non-distinct.delegation02.xa), [qw( DEL_NS_SAME_IP CHILD_DISTINCT_NS_IP )], undef, [], [] ],
     'DEL-NON-DISTINCT-UND' => [
         1,
         q(del-non-distinct.delegation02.xa),
@@ -135,7 +135,7 @@ Zonemaster::Engine::Profile->effective->merge(
 perform_testcase_testing(
     $test_case, $test_module, \@all_tags, \%subtests,
     $ENV{ZONEMASTER_SELECTED_SCENARIOS},
-    $ENV{ZONEMASTER_DISABLED_SCENARIOS}
+    $ENV{ZONEMASTER_DISABLED_SCENARIOS},
 );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {

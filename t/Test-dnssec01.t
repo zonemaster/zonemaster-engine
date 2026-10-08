@@ -38,7 +38,7 @@ Zonemaster::Engine::Recursor->add_fake_addresses(
     {
         'root-ns1.xa' => [ '127.15.1.27', 'fda1:b2:c3::127:15:1:27' ],
         'root-ns2.xa' => [ '127.15.1.28', 'fda1:b2:c3::127:15:1:28' ],
-    }
+    },
 );
 
 # Test zone scenarios
@@ -57,46 +57,46 @@ Zonemaster::Engine::Recursor->add_fake_addresses(
 
 my %subtests = (
     'ALGO-DEPRECATED-1' =>
-      [ 1, q(algo-deprecated-1.dnssec01.xa), [qw( DS01_DS_ALGO_DEPRECATED DS01_DS_ALGO_2_MISSING )], undef, [], [], ],
+      [ 1, q(algo-deprecated-1.dnssec01.xa), [qw( DS01_DS_ALGO_DEPRECATED DS01_DS_ALGO_2_MISSING )], undef, [], [] ],
     'ALGO-DEPRECATED-3' =>
-      [ 1, q(algo-deprecated-3.dnssec01.xa), [qw( DS01_DS_ALGO_DEPRECATED DS01_DS_ALGO_2_MISSING )], undef, [], [], ],
+      [ 1, q(algo-deprecated-3.dnssec01.xa), [qw( DS01_DS_ALGO_DEPRECATED DS01_DS_ALGO_2_MISSING )], undef, [], [] ],
     'ALGO-NOT-DS-0' =>
-      [ 1, q(algo-not-ds-0.dnssec01.xa), [qw( DS01_DS_ALGO_NOT_DS DS01_DS_ALGO_2_MISSING )], undef, [], [], ],
-    'ALGO-OK-2' => [ 1, q(algo-ok-2.dnssec01.xa), [qw( DS01_DS_ALGO_OK )],                        undef, [], [], ],
-    'ALGO-OK-4' => [ 1, q(algo-ok-4.dnssec01.xa), [qw( DS01_DS_ALGO_OK DS01_DS_ALGO_2_MISSING )], undef, [], [], ],
-    'ALGO-OK-5' => [ 1, q(algo-ok-5.dnssec01.xa), [qw( DS01_DS_ALGO_OK DS01_DS_ALGO_2_MISSING )], undef, [], [], ],
-    'ALGO-OK-6' => [ 1, q(algo-ok-6.dnssec01.xa), [qw( DS01_DS_ALGO_OK DS01_DS_ALGO_2_MISSING )], undef, [], [], ],
+      [ 1, q(algo-not-ds-0.dnssec01.xa), [qw( DS01_DS_ALGO_NOT_DS DS01_DS_ALGO_2_MISSING )], undef, [], [] ],
+    'ALGO-OK-2' => [ 1, q(algo-ok-2.dnssec01.xa), [qw( DS01_DS_ALGO_OK )],                        undef, [], [] ],
+    'ALGO-OK-4' => [ 1, q(algo-ok-4.dnssec01.xa), [qw( DS01_DS_ALGO_OK DS01_DS_ALGO_2_MISSING )], undef, [], [] ],
+    'ALGO-OK-5' => [ 1, q(algo-ok-5.dnssec01.xa), [qw( DS01_DS_ALGO_OK DS01_DS_ALGO_2_MISSING )], undef, [], [] ],
+    'ALGO-OK-6' => [ 1, q(algo-ok-6.dnssec01.xa), [qw( DS01_DS_ALGO_OK DS01_DS_ALGO_2_MISSING )], undef, [], [] ],
     'ALGO-PRIVATE-253' =>
-      [ 1, q(algo-private-253.dnssec01.xa), [qw( DS01_DS_ALGO_PRIVATE DS01_DS_ALGO_2_MISSING )], undef, [], [], ],
+      [ 1, q(algo-private-253.dnssec01.xa), [qw( DS01_DS_ALGO_PRIVATE DS01_DS_ALGO_2_MISSING )], undef, [], [] ],
     'ALGO-PRIVATE-254' =>
-      [ 1, q(algo-private-254.dnssec01.xa), [qw( DS01_DS_ALGO_PRIVATE DS01_DS_ALGO_2_MISSING )], undef, [], [], ],
+      [ 1, q(algo-private-254.dnssec01.xa), [qw( DS01_DS_ALGO_PRIVATE DS01_DS_ALGO_2_MISSING )], undef, [], [] ],
     'ALGO-RESERVED-128' =>
-      [ 1, q(algo-reserved-128.dnssec01.xa), [qw( DS01_DS_ALGO_RESERVED DS01_DS_ALGO_2_MISSING )], undef, [], [], ],
+      [ 1, q(algo-reserved-128.dnssec01.xa), [qw( DS01_DS_ALGO_RESERVED DS01_DS_ALGO_2_MISSING )], undef, [], [] ],
     'ALGO-RESERVED-188' =>
-      [ 1, q(algo-reserved-188.dnssec01.xa), [qw( DS01_DS_ALGO_RESERVED DS01_DS_ALGO_2_MISSING )], undef, [], [], ],
+      [ 1, q(algo-reserved-188.dnssec01.xa), [qw( DS01_DS_ALGO_RESERVED DS01_DS_ALGO_2_MISSING )], undef, [], [] ],
     'ALGO-RESERVED-252' =>
-      [ 1, q(algo-reserved-252.dnssec01.xa), [qw( DS01_DS_ALGO_RESERVED DS01_DS_ALGO_2_MISSING )], undef, [], [], ],
+      [ 1, q(algo-reserved-252.dnssec01.xa), [qw( DS01_DS_ALGO_RESERVED DS01_DS_ALGO_2_MISSING )], undef, [], [] ],
     'ALGO-UNASSIGNED-7' =>
-      [ 1, q(algo-unassigned-7.dnssec01.xa), [qw( DS01_DS_ALGO_UNASSIGNED DS01_DS_ALGO_2_MISSING )], undef, [], [], ],
+      [ 1, q(algo-unassigned-7.dnssec01.xa), [qw( DS01_DS_ALGO_UNASSIGNED DS01_DS_ALGO_2_MISSING )], undef, [], [] ],
     'ALGO-UNASSIGNED-67' =>
-      [ 1, q(algo-unassigned-67.dnssec01.xa), [qw( DS01_DS_ALGO_UNASSIGNED DS01_DS_ALGO_2_MISSING )], undef, [], [], ],
+      [ 1, q(algo-unassigned-67.dnssec01.xa), [qw( DS01_DS_ALGO_UNASSIGNED DS01_DS_ALGO_2_MISSING )], undef, [], [] ],
     'ALGO-UNASSIGNED-127' =>
-      [ 1, q(algo-unassigned-127.dnssec01.xa), [qw( DS01_DS_ALGO_UNASSIGNED DS01_DS_ALGO_2_MISSING )], undef, [], [], ],
+      [ 1, q(algo-unassigned-127.dnssec01.xa), [qw( DS01_DS_ALGO_UNASSIGNED DS01_DS_ALGO_2_MISSING )], undef, [], [] ],
     'MIXED-ALGO-1' => [
         1,     q(mixed-algo-1.dnssec01.xa), [qw( DS01_DS_ALGO_DEPRECATED DS01_DS_ALGO_PRIVATE DS01_DS_ALGO_OK )],
         undef, [],                          [],
     ],
-    'SHARED-IP-1'         => [ 1, q(child.shared-ip-1.dnssec01.xa),         [qw( DS01_DS_ALGO_OK )],  undef, [], [], ],
-    'SHARED-IP-2'         => [ 1, q(child.shared-ip-2.dnssec01.xa),         [qw( DS01_DS_ALGO_OK )],  undef, [], [], ],
-    'NO-RESPONSE-1'       => [ 1, q(child.no-response-1.dnssec01.xa),       [qw( DS01_NO_RESPONSE )], undef, [], [], ],
-    'NO-VALID-RESPONSE-1' => [ 1, q(child.no-valid-response-1.dnssec01.xa), [qw( DS01_NO_RESPONSE )], undef, [], [], ],
+    'SHARED-IP-1'           => [ 1, q(child.shared-ip-1.dnssec01.xa),         [qw( DS01_DS_ALGO_OK )],  undef, [], [] ],
+    'SHARED-IP-2'           => [ 1, q(child.shared-ip-2.dnssec01.xa),         [qw( DS01_DS_ALGO_OK )],  undef, [], [] ],
+    'NO-RESPONSE-1'         => [ 1, q(child.no-response-1.dnssec01.xa),       [qw( DS01_NO_RESPONSE )], undef, [], [] ],
+    'NO-VALID-RESPONSE-1'   => [ 1, q(child.no-valid-response-1.dnssec01.xa), [qw( DS01_NO_RESPONSE )], undef, [], [] ],
     'PARENT-SERVER-NO-DS-1' => [
         1,
         q(child.parent-server-no-ds-1.dnssec01.xa),
         [qw( DS01_PARENT_SERVER_NO_DS DS01_DS_ALGO_OK )],
         undef, [], [],
     ],
-    'PARENT-ZONE-NO-DS-1' => [ 1, q(parent-zone-no-ds-1.dnssec01.xa), [qw( DS01_PARENT_ZONE_NO_DS )], undef, [], [], ],
+    'PARENT-ZONE-NO-DS-1' => [ 1, q(parent-zone-no-ds-1.dnssec01.xa), [qw( DS01_PARENT_ZONE_NO_DS )], undef, [], [] ],
     'UNDEL-NO-UNDEL-DS-1' => [
         1,
         q(undel-no-undel-ds-1.dnssec01.xa),
@@ -112,7 +112,7 @@ my %subtests = (
         [qw( DS01_DS_ALGO_OK )], undef, [],
         ['42581,13,2,F28391C1ED4DC0F151EDD251A3103DCE0B9A5A251ACF6E24073771D71F3C40F9'],
     ],
-    'ROOT-NO-UNDEL-DS-1'   => [ 1, q(.), [qw( DS01_ROOT_N_NO_UNDEL_DS )], undef, [], [], ],
+    'ROOT-NO-UNDEL-DS-1'   => [ 1, q(.), [qw( DS01_ROOT_N_NO_UNDEL_DS )], undef, [], [] ],
     'ROOT-WITH-UNDEL-DS-1' => [
         1, q(.), [qw( DS01_DS_ALGO_OK )], undef, [],
         ['42581,13,2,F28391C1ED4DC0F151EDD251A3103DCE0B9A5A251ACF6E24073771D71F3C40F9'],
@@ -134,7 +134,7 @@ Zonemaster::Engine::Profile->effective->merge(
 perform_testcase_testing(
     $test_case, $test_module, \@all_tags, \%subtests,
     $ENV{ZONEMASTER_SELECTED_SCENARIOS},
-    $ENV{ZONEMASTER_DISABLED_SCENARIOS}
+    $ENV{ZONEMASTER_DISABLED_SCENARIOS},
 );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {

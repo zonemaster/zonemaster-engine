@@ -20,7 +20,7 @@ sub TIEARRAY {
     return $class->new(
         {
             ary   => [],
-            names => [ sort { $a cmp $b } @names ]
+            names => [ sort { $a cmp $b } @names ],
         }
     );
 }

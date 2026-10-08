@@ -260,7 +260,7 @@ sub scenario (@) {
 
             # TODO do we need more sanity checks?
             $obj;
-        } ## end do
+        },
     };
 
     foreach my $name ( @{ $scenario->{names} } ) {
@@ -403,7 +403,7 @@ sub fake_ds($$$$) {
         keytag    => $tag,
         algorithm => $algo,
         type      => $type,
-        digest    => $digest
+        digest    => $digest,
       };
 } ## end sub fake_ds($$$$)
 

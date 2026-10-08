@@ -423,7 +423,7 @@ sub _ip_disabled_message {
     }
 
     if ( not Zonemaster::Engine::Profile->effective->get( q{net.ipv4} ) and $ns->address->version == $IP_VERSION_4 ) {
-        push @$results_array, map { _emit_log( IPV4_DISABLED => { ns => $ns->string, rrtype => $_, } ) } @rrtypes;
+        push @$results_array, map { _emit_log( IPV4_DISABLED => { ns => $ns->string, rrtype => $_ } ) } @rrtypes;
         return 1;
     }
     return 0;
@@ -458,7 +458,7 @@ sub consistency01 {
 
     foreach my $local_ns (
         @{ Zonemaster::Engine::TestMethods->method4( $zone ) },
-        @{ Zonemaster::Engine::TestMethods->method5( $zone ) }
+        @{ Zonemaster::Engine::TestMethods->method5( $zone ) },
       )
     {
 
@@ -556,7 +556,7 @@ sub consistency02 {
 
     foreach my $local_ns (
         @{ Zonemaster::Engine::TestMethods->method4( $zone ) },
-        @{ Zonemaster::Engine::TestMethods->method5( $zone ) }
+        @{ Zonemaster::Engine::TestMethods->method5( $zone ) },
       )
     {
 
@@ -641,7 +641,7 @@ sub consistency03 {
 
     foreach my $local_ns (
         @{ Zonemaster::Engine::TestMethods->method4( $zone ) },
-        @{ Zonemaster::Engine::TestMethods->method5( $zone ) }
+        @{ Zonemaster::Engine::TestMethods->method5( $zone ) },
       )
     {
 
@@ -737,7 +737,7 @@ sub consistency04 {
 
     foreach my $local_ns (
         @{ Zonemaster::Engine::TestMethods->method4( $zone ) },
-        @{ Zonemaster::Engine::TestMethods->method5( $zone ) }
+        @{ Zonemaster::Engine::TestMethods->method5( $zone ) },
       )
     {
 
@@ -901,7 +901,7 @@ sub consistency05 {
                   _emit_log(
                     CS05_DELEGATION => {
                         ns_deleg_list => $ns_deleg_list,
-                        ns_list       => join( ';', sort @$ns_list )
+                        ns_list       => join( ';', sort @$ns_list ),
                     }
                   );
             }
@@ -954,7 +954,7 @@ sub consistency05 {
           _emit_log(
             CS05_MISSING_GLUE_FOR_NS => {
                 nsname  => $ns,
-                ns_list => join( ';', @$ns_list )
+                ns_list => join( ';', @$ns_list ),
             }
           );
     }
@@ -1013,7 +1013,7 @@ sub consistency05 {
                 CS05_ID_ADDR_MISMATCH => {
                     nsname          => $n,
                     ns_ip_list_glue => join( ';', map { $_->address()->short() } $only_in_parent->sorted_items() ),
-                    ns_ip_list_zone => join( ';', map { $_->address()->short() } $child_auth->sorted_items() )
+                    ns_ip_list_zone => join( ';', map { $_->address()->short() } $child_auth->sorted_items() ),
                 }
               );
         }
@@ -1058,7 +1058,7 @@ sub consistency05 {
                     CS05_OOD_ADDR_MISMATCH => {
                         nsname            => $n,
                         ns_ip_list_ref    => join( ";", map { $_->address() } $set->sorted_items() ),
-                        ns_ip_list_lookup => join( ";", map { $_->address() } $lookup->sorted_items() )
+                        ns_ip_list_lookup => join( ";", map { $_->address() } $lookup->sorted_items() ),
                     }
                   );
             }
@@ -1101,7 +1101,7 @@ sub consistency06 {
 
     foreach my $local_ns (
         @{ Zonemaster::Engine::TestMethods->method4( $zone ) },
-        @{ Zonemaster::Engine::TestMethods->method5( $zone ) }
+        @{ Zonemaster::Engine::TestMethods->method5( $zone ) },
       )
     {
 

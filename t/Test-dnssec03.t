@@ -46,7 +46,7 @@ Zonemaster::Engine::Recursor->add_fake_addresses(
     {
         'ns1' => [ '127.1.0.1', 'fda1:b2:c3::127:1:0:1' ],
         'ns2' => [ '127.1.0.2', 'fda1:b2:c3::127:1:0:2' ],
-    }
+    },
 );
 
 # Test zone scenarios
@@ -69,7 +69,7 @@ my %subtests = (
     'GOOD-VALUES'       => [
         1, q(good-values.dnssec03.xa),
         [qw(DS03_LEGAL_EMPTY_SALT DS03_LEGAL_HASH_ALGO DS03_LEGAL_ITERATION_VALUE DS03_NSEC3_OPT_OUT_DISABLED)],
-        undef, [], []
+        undef, [], [],
     ],
     'ERR-MULT-NSEC3' => [
         1,
@@ -79,7 +79,7 @@ my %subtests = (
         ],
         undef,
         [],
-        []
+        [],
     ],
     'BAD-VALUES' => [
         1,
@@ -89,7 +89,7 @@ my %subtests = (
         ],
         undef,
         [],
-        []
+        [],
     ],
     'INCONSISTENT-VALUES' => [
         1,
@@ -99,13 +99,13 @@ my %subtests = (
             qw(DS03_ERR_MULT_NSEC3 DS03_NO_DNSSEC_SUPPORT DS03_NO_NSEC3 DS03_NSEC3_OPT_OUT_ENABLED_TLD DS03_SERVER_NO_DNSSEC_SUPPORT DS03_SERVER_NO_NSEC3 DS03_UNASSIGNED_FLAG_USED DS03_ERROR_RESPONSE_NSEC_QUERY DS03_NO_RESPONSE_NSEC_QUERY)
         ],
         [],
-        []
+        [],
     ],
     'NSEC3-OPT-OUT-ENABLED-TLD' => [
         1,
         q(nsec3-opt-out-enabled-tld-dnssec03),
         [qw(DS03_NSEC3_OPT_OUT_ENABLED_TLD DS03_LEGAL_EMPTY_SALT DS03_LEGAL_HASH_ALGO DS03_LEGAL_ITERATION_VALUE)],
-        undef, [], []
+        undef, [], [],
     ],
     'SERVER-NO-DNSSEC-SUPPORT' => [
         1,
@@ -115,7 +115,7 @@ my %subtests = (
         ],
         undef,
         [],
-        []
+        [],
     ],
     'SERVER-NO-NSEC3' => [
         1,
@@ -125,7 +125,7 @@ my %subtests = (
         ],
         undef,
         [],
-        []
+        [],
     ],
     'UNASSIGNED-FLAG-USED' => [
         1,
@@ -135,7 +135,7 @@ my %subtests = (
         ],
         undef,
         [],
-        []
+        [],
     ],
     'ERROR-RESPONSE-NSEC-QUERY' => [
         1,
@@ -145,7 +145,7 @@ my %subtests = (
         ],
         undef,
         [],
-        []
+        [],
     ],
     'NO-RESPONSE-NSEC-QUERY' => [
         1,
@@ -155,14 +155,14 @@ my %subtests = (
         ],
         undef,
         [],
-        []
+        [],
     ],
     'ERROR-NSEC-QUERY' => [
         1,
         q(error-nsec-query.dnssec03.xa),
         [qw(DS03_ERROR_RESPONSE_NSEC_QUERY DS03_NO_RESPONSE_NSEC_QUERY)],
-        undef, [], []
-    ]
+        undef, [], [],
+    ],
 );
 ###########
 
@@ -180,7 +180,7 @@ Zonemaster::Engine::Profile->effective->merge(
 perform_testcase_testing(
     $test_case, $test_module, \@all_tags, \%subtests,
     $ENV{ZONEMASTER_SELECTED_SCENARIOS},
-    $ENV{ZONEMASTER_DISABLED_SCENARIOS}
+    $ENV{ZONEMASTER_DISABLED_SCENARIOS},
 );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {

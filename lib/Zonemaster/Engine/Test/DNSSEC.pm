@@ -1676,7 +1676,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     TEST_CASE_START => sub {
         __x    # DNSSEC:TEST_CASE_START
           'TEST_CASE_START {testcase}.', @_;
-    }
+    },
 );
 
 =over
@@ -1759,7 +1759,7 @@ sub _ip_disabled_message {
     }
 
     if ( not Zonemaster::Engine::Profile->effective->get( q{net.ipv4} ) and $ns->address->version == $IP_VERSION_4 ) {
-        push @$results_array, map { _emit_log( IPV4_DISABLED => { ns => $ns->string, rrtype => $_, } ) } @rrtypes;
+        push @$results_array, map { _emit_log( IPV4_DISABLED => { ns => $ns->string, rrtype => $_ } ) } @rrtypes;
         return 1;
     }
     return 0;
@@ -1798,7 +1798,7 @@ sub dnssec01 {
         'DS01_DS_ALGO_UNASSIGNED' => {},
         'DS01_DS_ALGO_PRIVATE'    => {},
         'DS01_DS_ALGO_NOT_DS'     => {},
-        'DS01_DS_ALGO_OK'         => {}
+        'DS01_DS_ALGO_OK'         => {},
     );
 
     my $parent_nss = Zonemaster::Engine::TestMethodsV2->get_parent_ns_names_and_ips( $zone );
@@ -1898,7 +1898,7 @@ sub dnssec01 {
                             ns_list       => join( q{;}, uniq sort @{ $values{$digest}{$keytag} } ),
                             keytag        => $keytag,
                             ds_algo_num   => $digest,
-                            ds_algo_descr => $digest_algorithms{$digest}
+                            ds_algo_descr => $digest_algorithms{$digest},
                         }
                       );
                 }
@@ -1916,7 +1916,7 @@ sub dnssec01 {
                   _emit_log(
                     DS01_DS_ALGO_2_MISSING => {
                         ns_list => join( q{;}, uniq sort @unique_nss ),
-                        keytag  => $keytag
+                        keytag  => $keytag,
                     }
                   );
             }
@@ -2172,7 +2172,7 @@ sub dnssec02 {
             _emit_log(
                 DS02_NO_DNSKEY_FOR_DS => {
                     keytag     => $_,
-                    ns_ip_list => join( q{;}, uniq sort @{ $no_dnskey_for_ds{$_} } )
+                    ns_ip_list => join( q{;}, uniq sort @{ $no_dnskey_for_ds{$_} } ),
                 }
             )
         } keys %no_dnskey_for_ds;
@@ -2182,7 +2182,7 @@ sub dnssec02 {
             _emit_log(
                 DS02_NO_MATCH_DS_DNSKEY => {
                     keytag     => $_,
-                    ns_ip_list => join( q{;}, uniq sort @{ $no_match_ds_dnskey{$_} } )
+                    ns_ip_list => join( q{;}, uniq sort @{ $no_match_ds_dnskey{$_} } ),
                 }
             )
         } keys %no_match_ds_dnskey;
@@ -2192,7 +2192,7 @@ sub dnssec02 {
             _emit_log(
                 DS02_DNSKEY_NOT_FOR_ZONE_SIGNING => {
                     keytag     => $_,
-                    ns_ip_list => join( q{;}, uniq sort @{ $dnskey_not_for_zone_signing{$_} } )
+                    ns_ip_list => join( q{;}, uniq sort @{ $dnskey_not_for_zone_signing{$_} } ),
                 }
             )
         } keys %dnskey_not_for_zone_signing;
@@ -2202,7 +2202,7 @@ sub dnssec02 {
             _emit_log(
                 DS02_DNSKEY_NOT_SEP => {
                     keytag     => $_,
-                    ns_ip_list => join( q{;}, uniq sort @{ $dnskey_not_sep{$_} } )
+                    ns_ip_list => join( q{;}, uniq sort @{ $dnskey_not_sep{$_} } ),
                 }
             )
         } keys %dnskey_not_sep;
@@ -2212,7 +2212,7 @@ sub dnssec02 {
             _emit_log(
                 DS02_NO_MATCHING_DNSKEY_RRSIG => {
                     keytag     => $_,
-                    ns_ip_list => join( q{;}, uniq sort @{ $no_matching_dnskey_rrsig{$_} } )
+                    ns_ip_list => join( q{;}, uniq sort @{ $no_matching_dnskey_rrsig{$_} } ),
                 }
             )
         } keys %no_matching_dnskey_rrsig;
@@ -2225,7 +2225,7 @@ sub dnssec02 {
                         keytag     => $keytag,
                         algo_num   => $_,
                         algo_mnemo => $algo_properties{$_}{mnemonic},
-                        ns_ip_list => join( q{;}, uniq sort @{ $algo_not_supported_by_zm{$keytag}{$_} } )
+                        ns_ip_list => join( q{;}, uniq sort @{ $algo_not_supported_by_zm{$keytag}{$_} } ),
                     }
                 )
             } keys %{ $algo_not_supported_by_zm{$keytag} };
@@ -2236,7 +2236,7 @@ sub dnssec02 {
             _emit_log(
                 DS02_RRSIG_NOT_VALID_BY_DNSKEY => {
                     keytag     => $_,
-                    ns_ip_list => join( q{;}, uniq sort @{ $rrsig_not_valid_by_dnskey{$_} } )
+                    ns_ip_list => join( q{;}, uniq sort @{ $rrsig_not_valid_by_dnskey{$_} } ),
                 }
             )
         } keys %rrsig_not_valid_by_dnskey;
@@ -2430,7 +2430,7 @@ sub dnssec03 {
                   _emit_log(
                     DS03_ILLEGAL_HASH_ALGO => {
                         ns_list  => join( q{;}, sort @{ $hash_algorithm{$algo} } ),
-                        algo_num => $algo
+                        algo_num => $algo,
                     }
                   );
             }
@@ -2451,7 +2451,7 @@ sub dnssec03 {
                   _emit_log(
                     DS03_UNASSIGNED_FLAG_USED => {
                         ns_list => join( q{;}, sort @{ $nsec3_flags{$flag} } ),
-                        int     => $bit
+                        int     => $bit,
                     }
                   );
             }
@@ -2505,7 +2505,7 @@ sub dnssec03 {
                   _emit_log(
                     DS03_ILLEGAL_ITERATION_VALUE => {
                         ns_list => join( q{;}, sort @{ $nsec3_iterations{$iter} } ),
-                        int     => $iter
+                        int     => $iter,
                     }
                   );
             }
@@ -2531,7 +2531,7 @@ sub dnssec03 {
                   _emit_log(
                     DS03_ILLEGAL_SALT_LENGTH => {
                         ns_list => join( q{;}, sort @{ $nsec3_salt_length{$salt} } ),
-                        int     => $salt
+                        int     => $salt,
                     }
                   );
             }
@@ -2705,12 +2705,12 @@ sub dnssec05 {
         'DS05_ALGO_NOT_RECOMMENDED' => {},
         'DS05_ALGO_PRIVATE'         => {},
         'DS05_ALGO_NOT_ZONE_SIGN'   => {},
-        'DS05_ALGO_OK'              => {}
+        'DS05_ALGO_OK'              => {},
     );
 
     my @nss = uniq grep { $_->isa( 'Zonemaster::Engine::Nameserver' ) } (
         @{ Zonemaster::Engine::TestMethodsV2->get_del_ns_names_and_ips( $zone )  // [] },
-        @{ Zonemaster::Engine::TestMethodsV2->get_zone_ns_names_and_ips( $zone ) // [] }
+        @{ Zonemaster::Engine::TestMethodsV2->get_zone_ns_names_and_ips( $zone ) // [] },
     );
 
     my %ip_already_processed;
@@ -2762,7 +2762,7 @@ sub dnssec05 {
                             keytag     => $keytag,
                             algo_num   => $algo,
                             algo_descr => $algo_properties{$algo}{description},
-                            algo_mnemo => $algo_properties{$algo}{mnemonic}
+                            algo_mnemo => $algo_properties{$algo}{mnemonic},
                         }
                       );
                 }
@@ -2845,7 +2845,7 @@ sub dnssec06 {
                 EXTRA_PROCESSING_BROKEN => {
                     server => $dnskey_p->answerfrom,
                     keys   => scalar( @keys ),
-                    sigs   => scalar( @sigs )
+                    sigs   => scalar( @sigs ),
                 }
               );
         }
@@ -2888,7 +2888,7 @@ sub dnssec07 {
 
     my @child_nss = uniq grep { $_->isa( 'Zonemaster::Engine::Nameserver' ) } (
         @{ Zonemaster::Engine::TestMethodsV2->get_del_ns_names_and_ips( $zone )  // [] },
-        @{ Zonemaster::Engine::TestMethodsV2->get_zone_ns_names_and_ips( $zone ) // [] }
+        @{ Zonemaster::Engine::TestMethodsV2->get_zone_ns_names_and_ips( $zone ) // [] },
     );
 
     my %ip_already_processed;
@@ -3013,8 +3013,10 @@ sub dnssec07 {
         }
     } ## end foreach my $ns ( @parent_nss)
 
-    my @combined = uniq( @ignored_child_ns, @no_response_dnskey, @no_auth_dnskey,
-        map { @{ $error_rcode_dnskey{$_} } } keys %error_rcode_dnskey );
+    my @combined =
+      uniq( @ignored_child_ns, @no_response_dnskey, @no_auth_dnskey,
+        map { @{ $error_rcode_dnskey{$_} } } keys %error_rcode_dnskey,
+      );
     my $lc = List::Compare->new( \@combined, \@child_nss );
 
     if ( not $lc->get_symmetric_difference ) {
@@ -3044,7 +3046,7 @@ sub dnssec07 {
           _emit_log(
             DS07_UNEXP_RCODE_RESP_DNSKEY => {
                 ns_list => join( q{;}, uniq sort @{ $error_rcode_dnskey{$_} } ),
-                rcode   => $_
+                rcode   => $_,
             }
           ) for keys %error_rcode_dnskey;
     }
@@ -3216,7 +3218,7 @@ sub dnssec08 {
             _emit_log(
                 DS08_DNSKEY_RRSIG_NOT_YET_VALID => {
                     keytag     => $_,
-                    ns_ip_list => join( q{;}, uniq sort @{ $dnskey_rrsig_not_yet_valid{$_} } )
+                    ns_ip_list => join( q{;}, uniq sort @{ $dnskey_rrsig_not_yet_valid{$_} } ),
                 }
             )
         } keys %dnskey_rrsig_not_yet_valid;
@@ -3226,7 +3228,7 @@ sub dnssec08 {
             _emit_log(
                 DS08_DNSKEY_RRSIG_EXPIRED => {
                     keytag     => $_,
-                    ns_ip_list => join( q{;}, uniq sort @{ $dnskey_rrsig_expired{$_} } )
+                    ns_ip_list => join( q{;}, uniq sort @{ $dnskey_rrsig_expired{$_} } ),
                 }
             )
         } keys %dnskey_rrsig_expired;
@@ -3236,7 +3238,7 @@ sub dnssec08 {
             _emit_log(
                 DS08_NO_MATCHING_DNSKEY => {
                     keytag     => $_,
-                    ns_ip_list => join( q{;}, uniq sort @{ $no_matching_dnskey{$_} } )
+                    ns_ip_list => join( q{;}, uniq sort @{ $no_matching_dnskey{$_} } ),
                 }
             )
         } keys %no_matching_dnskey;
@@ -3246,7 +3248,7 @@ sub dnssec08 {
             _emit_log(
                 DS08_RRSIG_NOT_VALID_BY_DNSKEY => {
                     keytag     => $_,
-                    ns_ip_list => join( q{;}, uniq sort @{ $rrsig_not_valid_by_dnskey{$_} } )
+                    ns_ip_list => join( q{;}, uniq sort @{ $rrsig_not_valid_by_dnskey{$_} } ),
                 }
             )
         } keys %rrsig_not_valid_by_dnskey;
@@ -3259,7 +3261,7 @@ sub dnssec08 {
                         keytag     => $keytag,
                         algo_num   => $_,
                         algo_mnemo => $algo_properties{$_}{mnemonic},
-                        ns_ip_list => join( q{;}, uniq sort @{ $algo_not_supported_by_zm{$keytag}{$_} } )
+                        ns_ip_list => join( q{;}, uniq sort @{ $algo_not_supported_by_zm{$keytag}{$_} } ),
                     }
                 )
             } keys %{ $algo_not_supported_by_zm{$keytag} };
@@ -3387,7 +3389,7 @@ sub dnssec09 {
             _emit_log(
                 DS09_SOA_RRSIG_NOT_YET_VALID => {
                     keytag     => $_,
-                    ns_ip_list => join( q{;}, uniq sort @{ $soa_rrsig_not_yet_valid{$_} } )
+                    ns_ip_list => join( q{;}, uniq sort @{ $soa_rrsig_not_yet_valid{$_} } ),
                 }
             )
         } keys %soa_rrsig_not_yet_valid;
@@ -3397,7 +3399,7 @@ sub dnssec09 {
             _emit_log(
                 DS09_SOA_RRSIG_EXPIRED => {
                     keytag     => $_,
-                    ns_ip_list => join( q{;}, uniq sort @{ $soa_rrsig_expired{$_} } )
+                    ns_ip_list => join( q{;}, uniq sort @{ $soa_rrsig_expired{$_} } ),
                 }
             )
         } keys %soa_rrsig_expired;
@@ -3407,7 +3409,7 @@ sub dnssec09 {
             _emit_log(
                 DS09_NO_MATCHING_DNSKEY => {
                     keytag     => $_,
-                    ns_ip_list => join( q{;}, uniq sort @{ $no_matching_dnskey{$_} } )
+                    ns_ip_list => join( q{;}, uniq sort @{ $no_matching_dnskey{$_} } ),
                 }
             )
         } keys %no_matching_dnskey;
@@ -3417,7 +3419,7 @@ sub dnssec09 {
             _emit_log(
                 DS09_RRSIG_NOT_VALID_BY_DNSKEY => {
                     keytag     => $_,
-                    ns_ip_list => join( q{;}, uniq sort @{ $rrsig_not_valid_by_dnskey{$_} } )
+                    ns_ip_list => join( q{;}, uniq sort @{ $rrsig_not_valid_by_dnskey{$_} } ),
                 }
             )
         } keys %rrsig_not_valid_by_dnskey;
@@ -3430,7 +3432,7 @@ sub dnssec09 {
                         keytag     => $keytag,
                         algo_num   => $_,
                         algo_mnemo => $algo_properties{$_}{mnemonic},
-                        ns_ip_list => join( q{;}, uniq sort @{ $algo_not_supported_by_zm{$keytag}{$_} } )
+                        ns_ip_list => join( q{;}, uniq sort @{ $algo_not_supported_by_zm{$keytag}{$_} } ),
                     }
                 )
             } keys %{ $algo_not_supported_by_zm{$keytag} };
@@ -3489,7 +3491,7 @@ sub dnssec10 {
 
     my @all_ns = uniq grep { $_->isa( 'Zonemaster::Engine::Nameserver' ) } (
         @{ Zonemaster::Engine::TestMethodsV2->get_del_ns_names_and_ips( $zone )  // [] },
-        @{ Zonemaster::Engine::TestMethodsV2->get_zone_ns_names_and_ips( $zone ) // [] }
+        @{ Zonemaster::Engine::TestMethodsV2->get_zone_ns_names_and_ips( $zone ) // [] },
     );
 
     my @ignored_nss;
@@ -3608,7 +3610,7 @@ sub dnssec10 {
                                 my $msg = q{};
                                 my $validated =
                                   $rr->verify_time( [ grep { name( $_->name ) eq name( $rr->name ) } @nsec_rrs ],
-                                    [$dnskey], $testing_time, $msg );
+                                    [$dnskey], $testing_time, $msg, );
 
                                 if ( $validated ) {
                                     push @nsec_rrsig_verified, @all_ns_for_ip;
@@ -3697,7 +3699,7 @@ sub dnssec10 {
                                 my $msg = q{};
                                 my $validated =
                                   $rr->verify_time( [ grep { name( $_->name ) eq name( $rr->name ) } @nsec3_rrs ],
-                                    [$dnskey], $testing_time, $msg );
+                                    [$dnskey], $testing_time, $msg, );
 
                                 if ( $validated ) {
                                     push @nsec3_rrsig_verified, @all_ns_for_ip;
@@ -3803,7 +3805,7 @@ sub dnssec10 {
                                 my $msg = q{};
                                 my $validated =
                                   $rr->verify_time( [ grep { name( $_->name ) eq name( $rr->name ) } @nsec_rrs ],
-                                    [$dnskey], $testing_time, $msg );
+                                    [$dnskey], $testing_time, $msg, );
 
                                 if ( $validated ) {
                                     push @nsec_rrsig_verified, @all_ns_for_ip;
@@ -3886,8 +3888,10 @@ sub dnssec10 {
           );
     }
 
-    $lc = List::Compare->new( [ @nsec3param_in_answer, @nsec_nsec3_nodata ],
-        [ @nsec_in_response, @nsec3param_nsec_nodata ] );
+    $lc = List::Compare->new(
+        [ @nsec3param_in_answer, @nsec_nsec3_nodata ],
+        [ @nsec_in_response,     @nsec3param_nsec_nodata ],
+    );
     my @intersection = $lc->get_intersection;
 
     if ( @intersection ) {
@@ -3961,7 +3965,7 @@ sub dnssec10 {
             _emit_log(
                 DS10_NSEC_NODATA_WRONG_SOA => {
                     domain  => $_,
-                    ns_list => join( q{;}, uniq sort @{ $nsec_nodata_wrong_soa{$_} } )
+                    ns_list => join( q{;}, uniq sort @{ $nsec_nodata_wrong_soa{$_} } ),
                 }
             )
         } keys %nsec_nodata_wrong_soa;
@@ -4017,7 +4021,7 @@ sub dnssec10 {
             _emit_log(
                 DS10_NSEC3_NODATA_WRONG_SOA => {
                     domain  => $_,
-                    ns_list => join( q{;}, uniq sort @{ $nsec3_nodata_wrong_soa{$_} } )
+                    ns_list => join( q{;}, uniq sort @{ $nsec3_nodata_wrong_soa{$_} } ),
                 }
             )
         } keys %nsec3_nodata_wrong_soa;
@@ -4082,7 +4086,7 @@ sub dnssec10 {
             _emit_log(
                 DS10_NSEC_RRSIG_NO_DNSKEY => {
                     keytag  => $_,
-                    ns_list => join( q{;}, uniq sort @{ $nsec_rrsig_no_dnskey{$_} } )
+                    ns_list => join( q{;}, uniq sort @{ $nsec_rrsig_no_dnskey{$_} } ),
                 }
             )
         } keys %nsec_rrsig_no_dnskey;
@@ -4093,7 +4097,7 @@ sub dnssec10 {
             _emit_log(
                 DS10_NSEC_RRSIG_EXPIRED => {
                     keytag  => $_,
-                    ns_list => join( q{;}, uniq sort @{ $nsec_rrsig_expired{$_} } )
+                    ns_list => join( q{;}, uniq sort @{ $nsec_rrsig_expired{$_} } ),
                 }
             )
         } keys %nsec_rrsig_expired;
@@ -4104,7 +4108,7 @@ sub dnssec10 {
             _emit_log(
                 DS10_NSEC_RRSIG_NOT_YET_VALID => {
                     keytag  => $_,
-                    ns_list => join( q{;}, uniq sort @{ $nsec_rrsig_not_yet_valid{$_} } )
+                    ns_list => join( q{;}, uniq sort @{ $nsec_rrsig_not_yet_valid{$_} } ),
                 }
             )
         } keys %nsec_rrsig_not_yet_valid;
@@ -4115,7 +4119,7 @@ sub dnssec10 {
             _emit_log(
                 DS10_NSEC_RRSIG_VERIFY_ERROR => {
                     keytag  => $_,
-                    ns_list => join( q{;}, uniq sort @{ $nsec_rrsig_verify_error{$_} } )
+                    ns_list => join( q{;}, uniq sort @{ $nsec_rrsig_verify_error{$_} } ),
                 }
             )
         } keys %nsec_rrsig_verify_error;
@@ -4130,7 +4134,7 @@ sub dnssec10 {
             values %nsec_rrsig_no_dnskey,
             values %nsec_rrsig_expired,
             values %nsec_rrsig_not_yet_valid,
-            values %nsec_rrsig_verify_error
+            values %nsec_rrsig_verify_error,
         );
         my @ns_list;
 
@@ -4153,7 +4157,7 @@ sub dnssec10 {
             _emit_log(
                 DS10_NSEC3_RRSIG_NO_DNSKEY => {
                     keytag  => $_,
-                    ns_list => join( q{;}, uniq sort @{ $nsec3_rrsig_no_dnskey{$_} } )
+                    ns_list => join( q{;}, uniq sort @{ $nsec3_rrsig_no_dnskey{$_} } ),
                 }
             )
         } keys %nsec3_rrsig_no_dnskey;
@@ -4164,7 +4168,7 @@ sub dnssec10 {
             _emit_log(
                 DS10_NSEC3_RRSIG_EXPIRED => {
                     keytag  => $_,
-                    ns_list => join( q{;}, uniq sort @{ $nsec3_rrsig_expired{$_} } )
+                    ns_list => join( q{;}, uniq sort @{ $nsec3_rrsig_expired{$_} } ),
                 }
             )
         } keys %nsec3_rrsig_expired;
@@ -4175,7 +4179,7 @@ sub dnssec10 {
             _emit_log(
                 DS10_NSEC3_RRSIG_NOT_YET_VALID => {
                     keytag  => $_,
-                    ns_list => join( q{;}, uniq sort @{ $nsec3_rrsig_not_yet_valid{$_} } )
+                    ns_list => join( q{;}, uniq sort @{ $nsec3_rrsig_not_yet_valid{$_} } ),
                 }
             )
         } keys %nsec3_rrsig_not_yet_valid;
@@ -4186,7 +4190,7 @@ sub dnssec10 {
             _emit_log(
                 DS10_NSEC3_RRSIG_VERIFY_ERROR => {
                     keytag  => $_,
-                    ns_list => join( q{;}, uniq sort @{ $nsec3_rrsig_verify_error{$_} } )
+                    ns_list => join( q{;}, uniq sort @{ $nsec3_rrsig_verify_error{$_} } ),
                 }
             )
         } keys %nsec3_rrsig_verify_error;
@@ -4201,7 +4205,7 @@ sub dnssec10 {
             values %nsec3_rrsig_no_dnskey,
             values %nsec3_rrsig_expired,
             values %nsec3_rrsig_not_yet_valid,
-            values %nsec3_rrsig_verify_error
+            values %nsec3_rrsig_verify_error,
         );
         my @ns_list;
 
@@ -4227,7 +4231,7 @@ sub dnssec10 {
                         keytag     => $keytag,
                         algo_num   => $_,
                         algo_mnemo => $algo_properties{$_}{mnemonic},
-                        ns_ip_list => join( q{;}, uniq sort @{ $algo_not_supported_by_zm{$keytag}{$_} } )
+                        ns_ip_list => join( q{;}, uniq sort @{ $algo_not_supported_by_zm{$keytag}{$_} } ),
                     }
                 )
             } keys %{ $algo_not_supported_by_zm{$keytag} };
@@ -4256,8 +4260,8 @@ sub dnssec10 {
         [@all_ns],
         [
             @ignored_nss,            @without_dnskey,       @nsec_in_response,
-            @nsec3param_nsec_nodata, @nsec3param_in_answer, @nsec_nsec3_nodata
-        ]
+            @nsec3param_nsec_nodata, @nsec3param_in_answer, @nsec_nsec3_nodata,
+        ],
     );
     @first = $lc->get_unique;
 
@@ -4312,7 +4316,8 @@ sub dnssec11 {
         if ( $is_undelegated ) {
             if ( not $ns->fake_ds->{ $zone->name->string } ) {
                 return ( @results,
-                    _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
+                    _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ),
+                );
             }
             last;
         }
@@ -4526,7 +4531,7 @@ sub dnssec13 {
                     "DS13_ALGO_NOT_SIGNED_${query_type}" => {
                         ns_ip_list => join( q{;}, uniq sort @{ $algo_not_signed{ lc( $query_type ) }{$algorithm} } ),
                         algo_num   => $algorithm,
-                        algo_mnemo => $algo_properties{$algorithm}{mnemonic}
+                        algo_mnemo => $algo_properties{$algorithm}{mnemonic},
                     }
                   );
             }
@@ -5043,7 +5048,7 @@ sub dnssec16 {
                 _emit_log(
                     DS16_CDS_MATCHES_NO_DNSKEY => {
                         keytag     => $_,
-                        ns_ip_list => join( q{;}, uniq sort @{ $no_match_cds_with_dnskey{$_} } )
+                        ns_ip_list => join( q{;}, uniq sort @{ $no_match_cds_with_dnskey{$_} } ),
                     }
                 )
             } keys %no_match_cds_with_dnskey;
@@ -5054,7 +5059,7 @@ sub dnssec16 {
                 _emit_log(
                     DS16_CDS_MATCHES_NON_ZONE_DNSKEY => {
                         keytag     => $_,
-                        ns_ip_list => join( q{;}, uniq sort @{ $cds_points_to_non_zone_dnskey{$_} } )
+                        ns_ip_list => join( q{;}, uniq sort @{ $cds_points_to_non_zone_dnskey{$_} } ),
                     }
                 )
             } keys %cds_points_to_non_zone_dnskey;
@@ -5065,7 +5070,7 @@ sub dnssec16 {
                 _emit_log(
                     DS16_CDS_MATCHES_NON_SEP_DNSKEY => {
                         keytag     => $_,
-                        ns_ip_list => join( q{;}, uniq sort @{ $cds_points_to_non_sep_dnskey{$_} } )
+                        ns_ip_list => join( q{;}, uniq sort @{ $cds_points_to_non_sep_dnskey{$_} } ),
                     }
                 )
             } keys %cds_points_to_non_sep_dnskey;
@@ -5076,7 +5081,7 @@ sub dnssec16 {
                 _emit_log(
                     DS16_DNSKEY_NOT_SIGNED_BY_CDS => {
                         keytag     => $_,
-                        ns_ip_list => join( q{;}, uniq sort @{ $dnskey_not_signed_by_cds{$_} } )
+                        ns_ip_list => join( q{;}, uniq sort @{ $dnskey_not_signed_by_cds{$_} } ),
                     }
                 )
             } keys %dnskey_not_signed_by_cds;
@@ -5087,7 +5092,7 @@ sub dnssec16 {
                 _emit_log(
                     DS16_CDS_NOT_SIGNED_BY_CDS => {
                         keytag     => $_,
-                        ns_ip_list => join( q{;}, uniq sort @{ $cds_not_signed_by_cds{$_} } )
+                        ns_ip_list => join( q{;}, uniq sort @{ $cds_not_signed_by_cds{$_} } ),
                     }
                 )
             } keys %cds_not_signed_by_cds;
@@ -5098,7 +5103,7 @@ sub dnssec16 {
                 _emit_log(
                     DS16_CDS_INVALID_RRSIG => {
                         keytag     => $_,
-                        ns_ip_list => join( q{;}, uniq sort @{ $cds_invalid_rrsig{$_} } )
+                        ns_ip_list => join( q{;}, uniq sort @{ $cds_invalid_rrsig{$_} } ),
                     }
                 )
             } keys %cds_invalid_rrsig;
@@ -5118,7 +5123,7 @@ sub dnssec16 {
                 _emit_log(
                     DS16_CDS_SIGNED_BY_UNKNOWN_DNSKEY => {
                         keytag     => $_,
-                        ns_ip_list => join( q{;}, uniq sort @{ $cds_signed_by_unknown_dnskey{$_} } )
+                        ns_ip_list => join( q{;}, uniq sort @{ $cds_signed_by_unknown_dnskey{$_} } ),
                     }
                 )
             } keys %cds_signed_by_unknown_dnskey;
@@ -5318,7 +5323,7 @@ sub dnssec17 {
                 _emit_log(
                     DS17_CDNSKEY_MATCHES_NO_DNSKEY => {
                         keytag     => $_,
-                        ns_ip_list => join( q{;}, uniq sort @{ $no_match_cdnskey_with_dnskey{$_} } )
+                        ns_ip_list => join( q{;}, uniq sort @{ $no_match_cdnskey_with_dnskey{$_} } ),
                     }
                 )
             } keys %no_match_cdnskey_with_dnskey;
@@ -5329,7 +5334,7 @@ sub dnssec17 {
                 _emit_log(
                     DS17_CDNSKEY_IS_NON_ZONE => {
                         keytag     => $_,
-                        ns_ip_list => join( q{;}, uniq sort @{ $cdnskey_is_non_zone_key{$_} } )
+                        ns_ip_list => join( q{;}, uniq sort @{ $cdnskey_is_non_zone_key{$_} } ),
                     }
                 )
             } keys %cdnskey_is_non_zone_key;
@@ -5340,7 +5345,7 @@ sub dnssec17 {
                 _emit_log(
                     DS17_CDNSKEY_IS_NON_SEP => {
                         keytag     => $_,
-                        ns_ip_list => join( q{;}, uniq sort @{ $cdnskey_is_non_sep_key{$_} } )
+                        ns_ip_list => join( q{;}, uniq sort @{ $cdnskey_is_non_sep_key{$_} } ),
                     }
                 )
             } keys %cdnskey_is_non_sep_key;
@@ -5351,7 +5356,7 @@ sub dnssec17 {
                 _emit_log(
                     DS17_DNSKEY_NOT_SIGNED_BY_CDNSKEY => {
                         keytag     => $_,
-                        ns_ip_list => join( q{;}, uniq sort @{ $dnskey_not_signed_by_cdnskey{$_} } )
+                        ns_ip_list => join( q{;}, uniq sort @{ $dnskey_not_signed_by_cdnskey{$_} } ),
                     }
                 )
             } keys %dnskey_not_signed_by_cdnskey;
@@ -5362,7 +5367,7 @@ sub dnssec17 {
                 _emit_log(
                     DS17_CDNSKEY_NOT_SIGNED_BY_CDNSKEY => {
                         keytag     => $_,
-                        ns_ip_list => join( q{;}, uniq sort @{ $cdnskey_not_signed_by_cdnskey{$_} } )
+                        ns_ip_list => join( q{;}, uniq sort @{ $cdnskey_not_signed_by_cdnskey{$_} } ),
                     }
                 )
             } keys %cdnskey_not_signed_by_cdnskey;
@@ -5373,7 +5378,7 @@ sub dnssec17 {
                 _emit_log(
                     DS17_CDNSKEY_INVALID_RRSIG => {
                         keytag     => $_,
-                        ns_ip_list => join( q{;}, uniq sort @{ $cdnskey_invalid_rrsig{$_} } )
+                        ns_ip_list => join( q{;}, uniq sort @{ $cdnskey_invalid_rrsig{$_} } ),
                     }
                 )
             } keys %cdnskey_invalid_rrsig;
@@ -5393,7 +5398,7 @@ sub dnssec17 {
                 _emit_log(
                     DS17_CDNSKEY_SIGNED_BY_UNKNOWN_DNSKEY => {
                         keytag     => $_,
-                        ns_ip_list => join( q{;}, uniq sort @{ $cdnskey_signed_by_unknown_dnskey{$_} } )
+                        ns_ip_list => join( q{;}, uniq sort @{ $cdnskey_signed_by_unknown_dnskey{$_} } ),
                     }
                 )
             } keys %cdnskey_signed_by_unknown_dnskey;

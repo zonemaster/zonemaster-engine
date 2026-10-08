@@ -260,7 +260,7 @@ sub _extract_iana_ip_blocks {
         {
             binary    => 1,
             auto_diag => 1,
-            sep_char  => q{,}
+            sep_char  => q{,},
         }
     );
     my @files_details = (
@@ -288,7 +288,7 @@ sub _extract_iana_ip_blocks {
                     ip                 => Net::IP::XS->new( $address_item ),
                     name               => $fields->[1],
                     reference          => $fields->[2],
-                    globally_reachable => $fields->[8]
+                    globally_reachable => $fields->[8],
                   };
             }
         }

@@ -12,7 +12,8 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
 
 Zonemaster::Engine::Profile->effective->set( q{asn_db.style}, "cymru" );
 Zonemaster::Engine::Profile->effective->set( q{asn_db.sources},
-    { cymru => [ "asnlookup.zonemaster.net", "asn.cymru.com" ] } );
+    { cymru => [ "asnlookup.zonemaster.net", "asn.cymru.com" ] },
+);
 
 my ( $asn1, $prefix1 ) = Zonemaster::Engine::ASNLookup->get_with_prefix( '8.8.8.8' );
 is $asn1->[0],       15169,        '8.8.8.8 is in AS15169';
@@ -30,7 +31,8 @@ my ( $asn4, $prefix4 ) = Zonemaster::Engine::ASNLookup->get_with_prefix( '192.16
 ok( scalar @{$asn4} == 0, '192.168.0.1 (RFC1918 address) is in no AS' );
 
 Zonemaster::Engine::Profile->effective->set( q{asn_db.sources},
-    { cymru => [ "fake.asnlookup.zonemaster.net", "asnlookup.dufberg.se" ] } );
+    { cymru => [ "fake.asnlookup.zonemaster.net", "asnlookup.dufberg.se" ] },
+);
 
 my ( $asn5, $prefix5 ) = Zonemaster::Engine::ASNLookup->get_with_prefix( '3.124.111.178' );
 is $asn5->[0],       16509,          '3.124.111.178 is in AS16509';
@@ -38,7 +40,8 @@ is $prefix5->prefix, '3.124.0.0/14', '3.124.111.178 is in 3.124.0.0/14';
 
 Zonemaster::Engine::Profile->effective->set( q{asn_db.style}, "ripe" );
 Zonemaster::Engine::Profile->effective->set( q{asn_db.sources},
-    { ripe => [ "fake.riswhois.zonemaster.net", "riswhois.ripe.net" ] } );
+    { ripe => [ "fake.riswhois.zonemaster.net", "riswhois.ripe.net" ] },
+);
 
 my ( $asn6, $prefix6 ) = Zonemaster::Engine::ASNLookup->get_with_prefix( '1.1.1.1' );
 is $asn6->[0],       13335,        '1.1.1.1 is in AS13335';

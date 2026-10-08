@@ -96,7 +96,7 @@ zone_gives_not(
     $zone,
     [
         qw{DS02_ALGO_NOT_SUPPORTED_BY_ZM DS02_DNSKEY_NOT_FOR_ZONE_SIGNING DS02_NO_DNSKEY_FOR_DS DS02_NO_MATCHING_DNSKEY_RRSIG DS02_NO_MATCH_DS_DNSKEY DS02_RRSIG_NOT_VALID_BY_DNSKEY DS02_NO_VALID_DNSKEY_FOR_ANY_DS DS02_DNSKEY_NOT_SIGNED_BY_ANY_DS}
-    ]
+    ],
 );
 
 $zone = Zonemaster::Engine->zone( 'dnssec02-no-common-keytags.zut-root.rd.nic.fr' );
@@ -106,7 +106,7 @@ zone_gives_not(
     $zone,
     [
         qw{DS02_ALGO_NOT_SUPPORTED_BY_ZM DS02_DNSKEY_NOT_FOR_ZONE_SIGNING DS02_DNSKEY_NOT_SEP DS02_NO_MATCHING_DNSKEY_RRSIG DS02_NO_MATCH_DS_DNSKEY DS02_RRSIG_NOT_VALID_BY_DNSKEY DS02_DNSKEY_NOT_SIGNED_BY_ANY_DS}
-    ]
+    ],
 );
 
 $zone = Zonemaster::Engine->zone( 'dnssec08-dnskey-not-signed.zut-root.rd.nic.fr' );
@@ -116,7 +116,7 @@ zone_gives_not(
     $zone,
     [
         qw{DS02_ALGO_NOT_SUPPORTED_BY_ZM DS02_DNSKEY_NOT_FOR_ZONE_SIGNING DS02_DNSKEY_NOT_SEP DS02_NO_DNSKEY_FOR_DS DS02_NO_MATCH_DS_DNSKEY DS02_RRSIG_NOT_VALID_BY_DNSKEY DS02_NO_VALID_DNSKEY_FOR_ANY_DS}
-    ]
+    ],
 );
 
 $zone = Zonemaster::Engine->zone( 'dnssec02-ds-does-not-match-dnskey.zut-root.rd.nic.fr' );
@@ -126,18 +126,19 @@ zone_gives_not(
     $zone,
     [
         qw{DS02_ALGO_NOT_SUPPORTED_BY_ZM DS02_DNSKEY_NOT_FOR_ZONE_SIGNING DS02_DNSKEY_NOT_SEP DS02_NO_DNSKEY_FOR_DS DS02_NO_MATCHING_DNSKEY_RRSIG DS02_RRSIG_NOT_VALID_BY_DNSKEY DS02_NO_VALID_DNSKEY_FOR_ANY_DS DS02_DNSKEY_NOT_SIGNED_BY_ANY_DS}
-    ]
+    ],
 );
 
 $zone = Zonemaster::Engine->zone( 'dnssec08-dnskey-signature-not-ok-broken.zut-root.rd.nic.fr' );
 zone_gives( 'dnssec02', $zone,
-    [qw{DS02_RRSIG_NOT_VALID_BY_DNSKEY DS02_NO_MATCHING_DNSKEY_RRSIG DS02_DNSKEY_NOT_SIGNED_BY_ANY_DS}] );
+    [qw{DS02_RRSIG_NOT_VALID_BY_DNSKEY DS02_NO_MATCHING_DNSKEY_RRSIG DS02_DNSKEY_NOT_SIGNED_BY_ANY_DS}],
+);
 zone_gives_not(
     'dnssec02',
     $zone,
     [
         qw{DS02_ALGO_NOT_SUPPORTED_BY_ZM DS02_DNSKEY_NOT_FOR_ZONE_SIGNING DS02_DNSKEY_NOT_SEP DS02_NO_DNSKEY_FOR_DS DS02_NO_MATCH_DS_DNSKEY DS02_NO_VALID_DNSKEY_FOR_ANY_DS}
-    ]
+    ],
 );
 
 ###########
@@ -178,7 +179,7 @@ zone_gives_not(
     $zone,
     [
         qw{DS08_ALGO_NOT_SUPPORTED_BY_ZM DS08_DNSKEY_RRSIG_NOT_YET_VALID DS08_MISSING_RRSIG_IN_RESPONSE DS08_NO_MATCHING_DNSKEY}
-    ]
+    ],
 );
 
 $zone = Zonemaster::Engine->zone( 'dnssec08-dnskey-signature-not-ok.zut-root.rd.nic.fr' );
@@ -187,7 +188,7 @@ zone_gives_not(
     $zone,
     [
         qw{DS08_DNSKEY_RRSIG_EXPIRED DS08_ALGO_NOT_SUPPORTED_BY_ZM DS08_DNSKEY_RRSIG_NOT_YET_VALID DS08_MISSING_RRSIG_IN_RESPONSE DS08_NO_MATCHING_DNSKEY}
-    ]
+    ],
 );
 
 $zone = Zonemaster::Engine->zone( 'dnssec08-dnskey-not-signed.zut-root.rd.nic.fr' );
@@ -197,7 +198,7 @@ zone_gives_not(
     $zone,
     [
         qw{DS08_ALGO_NOT_SUPPORTED_BY_ZM DS08_DNSKEY_RRSIG_EXPIRED DS08_DNSKEY_RRSIG_NOT_YET_VALID DS08_NO_MATCHING_DNSKEY DS08_RRSIG_NOT_VALID_BY_DNSKEY}
-    ]
+    ],
 );
 
 $zone = Zonemaster::Engine->zone( 'dnssec08-dnskey-rrsig-not-yet-valid.zft-root.rd.nic.fr' );
@@ -207,7 +208,7 @@ zone_gives_not(
     $zone,
     [
         qw{DS08_ALGO_NOT_SUPPORTED_BY_ZM DS08_DNSKEY_RRSIG_EXPIRED DS08_MISSING_RRSIG_IN_RESPONSE DS08_NO_MATCHING_DNSKEY DS08_RRSIG_NOT_VALID_BY_DNSKEY}
-    ]
+    ],
 );
 
 $zone = Zonemaster::Engine->zone( 'dnssec08-rrsig-no-matching-dnskey.zft-root.rd.nic.fr' );
@@ -217,7 +218,7 @@ zone_gives_not(
     $zone,
     [
         qw{DS08_ALGO_NOT_SUPPORTED_BY_ZM DS08_DNSKEY_RRSIG_EXPIRED DS08_DNSKEY_RRSIG_NOT_YET_VALID DS08_MISSING_RRSIG_IN_RESPONSE}
-    ]
+    ],
 );
 
 ###########
@@ -230,7 +231,7 @@ zone_gives_not(
     $zone,
     [
         qw{DS09_ALGO_NOT_SUPPORTED_BY_ZM DS09_MISSING_RRSIG_IN_RESPONSE DS09_NO_MATCHING_DNSKEY DS09_RRSIG_NOT_VALID_BY_DNSKEY DS09_SOA_RRSIG_EXPIRED}
-    ]
+    ],
 );
 
 $zone = Zonemaster::Engine->zone( 'dnssec09-rrsig-no-matching-dnskey.zft-root.rd.nic.fr' );
@@ -240,7 +241,7 @@ zone_gives_not(
     $zone,
     [
         qw{DS09_ALGO_NOT_SUPPORTED_BY_ZM DS09_MISSING_RRSIG_IN_RESPONSE DS09_RRSIG_NOT_VALID_BY_DNSKEY DS09_SOA_RRSIG_EXPIRED DS09_SOA_RRSIG_NOT_YET_VALID}
-    ]
+    ],
 );
 
 $zone = Zonemaster::Engine->zone( 'dnssec09-soa-not-signed.zft-root.rd.nic.fr' );
@@ -250,7 +251,7 @@ zone_gives_not(
     $zone,
     [
         qw{DS09_ALGO_NOT_SUPPORTED_BY_ZM DS09_NO_MATCHING_DNSKEY DS09_RRSIG_NOT_VALID_BY_DNSKEY DS09_SOA_RRSIG_EXPIRED DS09_SOA_RRSIG_NOT_YET_VALID}
-    ]
+    ],
 );
 
 $zone = Zonemaster::Engine->zone( 'dnssec09-soa-rrsig-expired.zft-root.rd.nic.fr' );
@@ -260,7 +261,7 @@ zone_gives_not(
     $zone,
     [
         qw{DS09_ALGO_NOT_SUPPORTED_BY_ZM DS09_MISSING_RRSIG_IN_RESPONSE DS09_NO_MATCHING_DNSKEY DS09_RRSIG_NOT_VALID_BY_DNSKEY DS09_SOA_RRSIG_NOT_YET_VALID}
-    ]
+    ],
 );
 
 $zone = Zonemaster::Engine->zone( 'dnssec09-rrsig-not-valid-by-dnskey.zft-root.rd.nic.fr' );
@@ -270,7 +271,7 @@ zone_gives_not(
     $zone,
     [
         qw{DS09_ALGO_NOT_SUPPORTED_BY_ZM DS09_MISSING_RRSIG_IN_RESPONSE DS09_NO_MATCHING_DNSKEY DS09_SOA_RRSIG_EXPIRED DS09_SOA_RRSIG_NOT_YET_VALID}
-    ]
+    ],
 );
 
 ###########
@@ -296,7 +297,7 @@ zone_gives_not(
     $zone,
     [
         qw{DS11_INCONSISTENT_DS DS11_INCONSISTENT_SIGNED_ZONE DS11_UNDETERMINED_SIGNED_ZONE DS11_PARENT_WITHOUT_DS DS11_PARENT_WITH_DS DS11_NS_WITH_SIGNED_ZONE DS11_NS_WITH_UNSIGNED_ZONE DS11_DS_BUT_UNSIGNED_ZONE}
-    ]
+    ],
 );
 
 $zone = Zonemaster::Engine->zone( 'dnssec11-inconsistent-ds.dnssec11-parent.zft-root.rd.nic.fr' );
@@ -306,7 +307,7 @@ zone_gives_not(
     $zone,
     [
         qw{DS11_INCONSISTENT_SIGNED_ZONE DS11_UNDETERMINED_DS DS11_UNDETERMINED_SIGNED_ZONE DS11_NS_WITH_SIGNED_ZONE DS11_NS_WITH_UNSIGNED_ZONE DS11_DS_BUT_UNSIGNED_ZONE}
-    ]
+    ],
 );
 
 $zone = Zonemaster::Engine->zone( 'dnssec11-ds-but-unsigned.zft-root.rd.nic.fr' );
@@ -316,18 +317,18 @@ zone_gives_not(
     $zone,
     [
         qw{DS11_INCONSISTENT_DS DS11_INCONSISTENT_SIGNED_ZONE DS11_UNDETERMINED_DS DS11_UNDETERMINED_SIGNED_ZONE DS11_PARENT_WITHOUT_DS DS11_PARENT_WITH_DS DS11_NS_WITH_SIGNED_ZONE DS11_NS_WITH_UNSIGNED_ZONE}
-    ]
+    ],
 );
 
 $zone = Zonemaster::Engine->zone( 'dnssec11-inconsistent-dnskey.zft-root.rd.nic.fr' );
-zone_gives( 'dnssec11', $zone,
-    [qw{DS11_INCONSISTENT_SIGNED_ZONE DS11_NS_WITH_UNSIGNED_ZONE DS11_NS_WITH_SIGNED_ZONE}] );
+zone_gives( 'dnssec11', $zone, [qw{DS11_INCONSISTENT_SIGNED_ZONE DS11_NS_WITH_UNSIGNED_ZONE DS11_NS_WITH_SIGNED_ZONE}],
+);
 zone_gives_not(
     'dnssec11',
     $zone,
     [
         qw{DS11_INCONSISTENT_DS DS11_UNDETERMINED_DS DS11_UNDETERMINED_SIGNED_ZONE DS11_PARENT_WITHOUT_DS DS11_PARENT_WITH_DS DS11_DS_BUT_UNSIGNED_ZONE}
-    ]
+    ],
 );
 
 ###########
@@ -359,7 +360,7 @@ zone_gives_not(
     $zone,
     [
         qw{DS15_HAS_CDNSKEY_NO_CDS DS15_HAS_CDS_AND_CDNSKEY DS15_HAS_CDS_NO_CDNSKEY DS15_INCONSISTENT_CDNSKEY DS15_INCONSISTENT_CDS DS15_MISMATCH_CDS_CDNSKEY}
-    ]
+    ],
 );
 
 $zone = Zonemaster::Engine->zone( 'dnssec15-cds-no-cdnskey.zft-root.rd.nic.fr' );
@@ -369,7 +370,7 @@ zone_gives_not(
     $zone,
     [
         qw{DS15_HAS_CDNSKEY_NO_CDS DS15_HAS_CDS_AND_CDNSKEY DS15_INCONSISTENT_CDNSKEY DS15_INCONSISTENT_CDS DS15_MISMATCH_CDS_CDNSKEY DS15_NO_CDS_CDNSKEY}
-    ]
+    ],
 );
 
 $zone = Zonemaster::Engine->zone( 'dnssec15-cdnskey-no-cds.zft-root.rd.nic.fr' );
@@ -379,7 +380,7 @@ zone_gives_not(
     $zone,
     [
         qw{DS15_HAS_CDS_AND_CDNSKEY DS15_HAS_CDS_NO_CDNSKEY DS15_INCONSISTENT_CDNSKEY DS15_INCONSISTENT_CDS DS15_MISMATCH_CDS_CDNSKEY DS15_NO_CDS_CDNSKEY}
-    ]
+    ],
 );
 
 $zone = Zonemaster::Engine->zone( 'dnssec15-cds-cdnskey-01.zft-root.rd.nic.fr' );
@@ -389,7 +390,7 @@ zone_gives_not(
     $zone,
     [
         qw{DS15_HAS_CDNSKEY_NO_CDS DS15_HAS_CDS_NO_CDNSKEY DS15_INCONSISTENT_CDNSKEY DS15_INCONSISTENT_CDS DS15_MISMATCH_CDS_CDNSKEY DS15_NO_CDS_CDNSKEY}
-    ]
+    ],
 );
 
 $zone = Zonemaster::Engine->zone( 'dnssec15-cds-cdnskey-02.zft-root.rd.nic.fr' );
@@ -399,7 +400,7 @@ zone_gives_not(
     $zone,
     [
         qw{DS15_HAS_CDNSKEY_NO_CDS DS15_HAS_CDS_NO_CDNSKEY DS15_INCONSISTENT_CDNSKEY DS15_INCONSISTENT_CDS DS15_MISMATCH_CDS_CDNSKEY DS15_NO_CDS_CDNSKEY}
-    ]
+    ],
 );
 
 $zone = Zonemaster::Engine->zone( 'dnssec15-cds-cdnskey-03.zft-root.rd.nic.fr' );
@@ -409,7 +410,7 @@ zone_gives_not(
     $zone,
     [
         qw{DS15_HAS_CDNSKEY_NO_CDS DS15_HAS_CDS_NO_CDNSKEY DS15_INCONSISTENT_CDNSKEY DS15_INCONSISTENT_CDS DS15_MISMATCH_CDS_CDNSKEY DS15_NO_CDS_CDNSKEY}
-    ]
+    ],
 );
 
 $zone = Zonemaster::Engine->zone( 'dnssec15-inconsistent-cds-01.zft-root.rd.nic.fr' );
@@ -419,7 +420,7 @@ zone_gives_not(
     $zone,
     [
         qw{DS15_HAS_CDNSKEY_NO_CDS DS15_HAS_CDS_AND_CDNSKEY DS15_INCONSISTENT_CDNSKEY DS15_MISMATCH_CDS_CDNSKEY DS15_NO_CDS_CDNSKEY}
-    ]
+    ],
 );
 
 $zone = Zonemaster::Engine->zone( 'dnssec15-inconsistent-cds-02.zft-root.rd.nic.fr' );
@@ -429,7 +430,7 @@ zone_gives_not(
     $zone,
     [
         qw{DS15_HAS_CDNSKEY_NO_CDS DS15_HAS_CDS_AND_CDNSKEY DS15_INCONSISTENT_CDNSKEY DS15_MISMATCH_CDS_CDNSKEY DS15_NO_CDS_CDNSKEY}
-    ]
+    ],
 );
 
 $zone = Zonemaster::Engine->zone( 'dnssec15-inconsistent-cds-03.zft-root.rd.nic.fr' );
@@ -439,7 +440,7 @@ zone_gives_not(
     $zone,
     [
         qw{DS15_HAS_CDNSKEY_NO_CDS DS15_HAS_CDS_AND_CDNSKEY DS15_INCONSISTENT_CDNSKEY DS15_MISMATCH_CDS_CDNSKEY DS15_NO_CDS_CDNSKEY}
-    ]
+    ],
 );
 
 $zone = Zonemaster::Engine->zone( 'dnssec15-inconsistent-cds-04.zft-root.rd.nic.fr' );
@@ -449,7 +450,7 @@ zone_gives_not(
     $zone,
     [
         qw{DS15_HAS_CDNSKEY_NO_CDS DS15_HAS_CDS_AND_CDNSKEY DS15_INCONSISTENT_CDNSKEY DS15_MISMATCH_CDS_CDNSKEY DS15_NO_CDS_CDNSKEY}
-    ]
+    ],
 );
 
 $zone = Zonemaster::Engine->zone( 'dnssec15-inconsistent-cdnskey-01.zft-root.rd.nic.fr' );
@@ -459,7 +460,7 @@ zone_gives_not(
     $zone,
     [
         qw{DS15_HAS_CDS_AND_CDNSKEY DS15_HAS_CDS_NO_CDNSKEY DS15_INCONSISTENT_CDS DS15_MISMATCH_CDS_CDNSKEY DS15_NO_CDS_CDNSKEY}
-    ]
+    ],
 );
 
 $zone = Zonemaster::Engine->zone( 'dnssec15-inconsistent-cdnskey-02.zft-root.rd.nic.fr' );
@@ -469,7 +470,7 @@ zone_gives_not(
     $zone,
     [
         qw{DS15_HAS_CDS_AND_CDNSKEY DS15_HAS_CDS_NO_CDNSKEY DS15_INCONSISTENT_CDS DS15_MISMATCH_CDS_CDNSKEY DS15_NO_CDS_CDNSKEY}
-    ]
+    ],
 );
 
 $zone = Zonemaster::Engine->zone( 'dnssec15-inconsistent-cdnskey-03.zft-root.rd.nic.fr' );
@@ -479,7 +480,7 @@ zone_gives_not(
     $zone,
     [
         qw{DS15_HAS_CDS_AND_CDNSKEY DS15_HAS_CDS_NO_CDNSKEY DS15_INCONSISTENT_CDS DS15_MISMATCH_CDS_CDNSKEY DS15_NO_CDS_CDNSKEY}
-    ]
+    ],
 );
 
 $zone = Zonemaster::Engine->zone( 'dnssec15-inconsistent-cdnskey-04.zft-root.rd.nic.fr' );
@@ -489,7 +490,7 @@ zone_gives_not(
     $zone,
     [
         qw{DS15_HAS_CDS_AND_CDNSKEY DS15_HAS_CDS_NO_CDNSKEY DS15_INCONSISTENT_CDS DS15_MISMATCH_CDS_CDNSKEY DS15_NO_CDS_CDNSKEY}
-    ]
+    ],
 );
 
 $zone = Zonemaster::Engine->zone( 'dnssec15-mismatch-cds-cdnskey.zft-root.rd.nic.fr' );
@@ -499,7 +500,7 @@ zone_gives_not(
     $zone,
     [
         qw{DS15_HAS_CDNSKEY_NO_CDS DS15_HAS_CDS_NO_CDNSKEY DS15_INCONSISTENT_CDNSKEY DS15_INCONSISTENT_CDS DS15_NO_CDS_CDNSKEY}
-    ]
+    ],
 );
 
 ###########
@@ -516,7 +517,7 @@ zone_gives_not(
     $zone,
     [
         qw{DS17_CDNSKEY_INVALID_RRSIG DS17_CDNSKEY_IS_NON_SEP DS17_CDNSKEY_IS_NON_ZONE DS17_CDNSKEY_MATCHES_NO_DNSKEY DS17_CDNSKEY_NOT_SIGNED_BY_CDNSKEY DS17_CDNSKEY_SIGNED_BY_UNKNOWN_DNSKEY DS17_CDNSKEY_UNSIGNED DS17_CDNSKEY_WITHOUT_DNSKEY DS17_DELETE_CDNSKEY DS17_DNSKEY_NOT_SIGNED_BY_CDNSKEY DS17_MIXED_DELETE_CDNSKEY}
-    ]
+    ],
 );
 
 $zone = Zonemaster::Engine->zone( 'dnssec16-cds-cdnskey-unsigned.zft-root.rd.nic.fr' );
@@ -526,7 +527,7 @@ zone_gives_not(
     $zone,
     [
         qw{DS17_CDNSKEY_INVALID_RRSIG DS17_CDNSKEY_IS_NON_SEP DS17_CDNSKEY_IS_NON_ZONE DS17_CDNSKEY_MATCHES_NO_DNSKEY DS17_CDNSKEY_SIGNED_BY_UNKNOWN_DNSKEY DS17_CDNSKEY_UNSIGNED DS17_CDNSKEY_WITHOUT_DNSKEY DS17_DELETE_CDNSKEY DS17_MIXED_DELETE_CDNSKEY}
-    ]
+    ],
 );
 
 $zone = Zonemaster::Engine->zone( 'dnssec16-cds-cdnskey-invalid-rrsig-01.zft-root.rd.nic.fr' );
@@ -536,7 +537,7 @@ zone_gives_not(
     $zone,
     [
         qw{DS17_CDNSKEY_IS_NON_SEP DS17_CDNSKEY_IS_NON_ZONE DS17_CDNSKEY_MATCHES_NO_DNSKEY DS17_CDNSKEY_NOT_SIGNED_BY_CDNSKEY DS17_CDNSKEY_SIGNED_BY_UNKNOWN_DNSKEY DS17_CDNSKEY_UNSIGNED DS17_CDNSKEY_WITHOUT_DNSKEY DS17_DELETE_CDNSKEY DS17_DNSKEY_NOT_SIGNED_BY_CDNSKEY DS17_MIXED_DELETE_CDNSKEY}
-    ]
+    ],
 );
 
 $zone = Zonemaster::Engine->zone( 'dnssec16-cds-cdnskey-invalid-rrsig-02.zft-root.rd.nic.fr' );
@@ -546,18 +547,19 @@ zone_gives_not(
     $zone,
     [
         qw{DS17_CDNSKEY_IS_NON_SEP DS17_CDNSKEY_IS_NON_ZONE DS17_CDNSKEY_MATCHES_NO_DNSKEY DS17_CDNSKEY_NOT_SIGNED_BY_CDNSKEY DS17_CDNSKEY_SIGNED_BY_UNKNOWN_DNSKEY DS17_CDNSKEY_UNSIGNED DS17_CDNSKEY_WITHOUT_DNSKEY DS17_DELETE_CDNSKEY DS17_DNSKEY_NOT_SIGNED_BY_CDNSKEY DS17_MIXED_DELETE_CDNSKEY}
-    ]
+    ],
 );
 
 $zone = Zonemaster::Engine->zone( 'dnssec17-cdnskey-unsigned.zft-root.rd.nic.fr' );
 zone_gives( 'dnssec17', $zone,
-    [qw{DS17_DNSKEY_NOT_SIGNED_BY_CDNSKEY DS17_CDNSKEY_NOT_SIGNED_BY_CDNSKEY DS17_CDNSKEY_UNSIGNED}] );
+    [qw{DS17_DNSKEY_NOT_SIGNED_BY_CDNSKEY DS17_CDNSKEY_NOT_SIGNED_BY_CDNSKEY DS17_CDNSKEY_UNSIGNED}],
+);
 zone_gives_not(
     'dnssec17',
     $zone,
     [
         qw{DS17_CDNSKEY_INVALID_RRSIG DS17_CDNSKEY_IS_NON_SEP DS17_CDNSKEY_IS_NON_ZONE DS17_CDNSKEY_MATCHES_NO_DNSKEY DS17_CDNSKEY_SIGNED_BY_UNKNOWN_DNSKEY DS17_CDNSKEY_WITHOUT_DNSKEY DS17_DELETE_CDNSKEY DS17_MIXED_DELETE_CDNSKEY}
-    ]
+    ],
 );
 
 $zone = Zonemaster::Engine->zone( 'dnssec16-cds-without-dnskey.zft-root.rd.nic.fr' );
@@ -567,7 +569,7 @@ zone_gives_not(
     $zone,
     [
         qw{DS17_CDNSKEY_INVALID_RRSIG DS17_CDNSKEY_IS_NON_SEP DS17_CDNSKEY_IS_NON_ZONE DS17_CDNSKEY_MATCHES_NO_DNSKEY DS17_CDNSKEY_NOT_SIGNED_BY_CDNSKEY DS17_CDNSKEY_SIGNED_BY_UNKNOWN_DNSKEY DS17_CDNSKEY_UNSIGNED DS17_DELETE_CDNSKEY DS17_DNSKEY_NOT_SIGNED_BY_CDNSKEY DS17_MIXED_DELETE_CDNSKEY}
-    ]
+    ],
 );
 
 $zone = Zonemaster::Engine->zone( 'dnssec17-cdnskey-signed-by-unknown-dnskey.zft-root.rd.nic.fr' );
@@ -576,7 +578,7 @@ zone_gives_not(
     $zone,
     [
         qw{DS17_CDNSKEY_INVALID_RRSIG DS17_CDNSKEY_IS_NON_ZONE DS17_CDNSKEY_MATCHES_NO_DNSKEY DS17_CDNSKEY_NOT_SIGNED_BY_CDNSKEY DS17_CDNSKEY_UNSIGNED DS17_CDNSKEY_WITHOUT_DNSKEY DS17_DELETE_CDNSKEY DS17_DNSKEY_NOT_SIGNED_BY_CDNSKEY DS17_MIXED_DELETE_CDNSKEY}
-    ]
+    ],
 );
 
 $zone = Zonemaster::Engine->zone( 'dnssec17-cdnskey-matches-no-dnskey.zft-root.rd.nic.fr' );
@@ -586,7 +588,7 @@ zone_gives_not(
     $zone,
     [
         qw{DS17_CDNSKEY_INVALID_RRSIG DS17_CDNSKEY_IS_NON_ZONE DS17_CDNSKEY_NOT_SIGNED_BY_CDNSKEY DS17_CDNSKEY_SIGNED_BY_UNKNOWN_DNSKEY DS17_CDNSKEY_UNSIGNED DS17_CDNSKEY_WITHOUT_DNSKEY DS17_DELETE_CDNSKEY DS17_DNSKEY_NOT_SIGNED_BY_CDNSKEY DS17_MIXED_DELETE_CDNSKEY}
-    ]
+    ],
 );
 
 $zone = Zonemaster::Engine->zone( 'dnssec17-delete-cdnskey.zft-root.rd.nic.fr' );
@@ -596,7 +598,7 @@ zone_gives_not(
     $zone,
     [
         qw{DS17_CDNSKEY_INVALID_RRSIG DS17_CDNSKEY_IS_NON_SEP DS17_CDNSKEY_IS_NON_ZONE DS17_CDNSKEY_MATCHES_NO_DNSKEY DS17_CDNSKEY_NOT_SIGNED_BY_CDNSKEY DS17_CDNSKEY_SIGNED_BY_UNKNOWN_DNSKEY DS17_CDNSKEY_UNSIGNED DS17_CDNSKEY_WITHOUT_DNSKEY DS17_DNSKEY_NOT_SIGNED_BY_CDNSKEY DS17_MIXED_DELETE_CDNSKEY}
-    ]
+    ],
 );
 
 $zone = Zonemaster::Engine->zone( 'dnssec17-mixed-delete-cdnskey.zft-root.rd.nic.fr' );
@@ -606,7 +608,7 @@ zone_gives_not(
     $zone,
     [
         qw{DS17_CDNSKEY_INVALID_RRSIG DS17_CDNSKEY_IS_NON_SEP DS17_CDNSKEY_IS_NON_ZONE DS17_CDNSKEY_MATCHES_NO_DNSKEY DS17_CDNSKEY_NOT_SIGNED_BY_CDNSKEY DS17_CDNSKEY_SIGNED_BY_UNKNOWN_DNSKEY DS17_CDNSKEY_UNSIGNED DS17_CDNSKEY_WITHOUT_DNSKEY DS17_DELETE_CDNSKEY DS17_DNSKEY_NOT_SIGNED_BY_CDNSKEY}
-    ]
+    ],
 );
 
 $zone = Zonemaster::Engine->zone( 'dnssec17-cdnskey-is-non-zone.zft-root.rd.nic.fr' );
@@ -616,7 +618,7 @@ zone_gives_not(
     $zone,
     [
         qw{DS17_CDNSKEY_INVALID_RRSIG DS17_CDNSKEY_IS_NON_SEP DS17_CDNSKEY_MATCHES_NO_DNSKEY DS17_CDNSKEY_NOT_SIGNED_BY_CDNSKEY DS17_CDNSKEY_SIGNED_BY_UNKNOWN_DNSKEY DS17_CDNSKEY_UNSIGNED DS17_CDNSKEY_WITHOUT_DNSKEY DS17_DELETE_CDNSKEY DS17_DNSKEY_NOT_SIGNED_BY_CDNSKEY DS17_MIXED_DELETE_CDNSKEY}
-    ]
+    ],
 );
 
 ###########

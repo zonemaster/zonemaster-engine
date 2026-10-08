@@ -34,11 +34,13 @@ isa_ok( $p2, 'Zonemaster::Engine::Packet' );
     };
 
     Zonemaster::Engine::Recursor->recurse( 'zonemaster.net', 'A', 'IN',
-        [ Zonemaster::Engine::Recursor->root_servers() ] );
+        [ Zonemaster::Engine::Recursor->root_servers() ],
+    );
     is( $count, 0, 'memoize normalizer for recurse() works' );
 
     Zonemaster::Engine::Recursor->recurse( 'zonemaster.net', 'A', 'IN',
-        [ ( Zonemaster::Engine->ns( 'a.root-servers.net.', '198.41.0.4' ) ) ] );
+        [ ( Zonemaster::Engine->ns( 'a.root-servers.net.', '198.41.0.4' ) ) ],
+    );
     is( $count, 1, 'memoize for recurse() works' );
 
     Zonemaster::Engine::Recursor->clear_cache;

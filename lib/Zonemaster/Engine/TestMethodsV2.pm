@@ -147,7 +147,7 @@ sub get_parent_ns_names_and_ips {
                             caller                  => 'Zonemaster::Engine::TestMethodsV2->get_parent_ns_ips',
                             child_zone_name         => $zone->name,
                             name                    => $loop_zone_name,
-                            intermediate_query_name => $intermediate_query_name
+                            intermediate_query_name => $intermediate_query_name,
                         }
                     );
 
@@ -229,7 +229,7 @@ sub get_parent_ns_names_and_ips {
                           $p_soa->get_records_for_name( $type_ns, $intermediate_query_name, 'authority' );
 
                         foreach my $rr ( $p_soa->get_records( 'A', 'additional' ),
-                            $p_soa->get_records( 'AAAA', 'additional' ) )
+                            $p_soa->get_records( 'AAAA', 'additional' ), )
                         {
                             if ( exists $rrs_ns_bis{ name( $rr->owner )->string } ) {
                                 push @{ $rrs_ns_bis{ name( $rr->owner )->string } }, $rr->address;
@@ -281,7 +281,7 @@ memoize(
     NORMALIZER => sub {
         my ( $class, $zone ) = @_;
         join "\034", ( $class, $zone->name );
-    }
+    },
 );
 
 =over

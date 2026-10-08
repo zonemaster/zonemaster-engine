@@ -39,7 +39,7 @@ Zonemaster::Engine::Recursor->add_fake_addresses(
     {
         'root-ns1.xa' => [ '127.15.7.27', 'fda1:b2:c3::127:15:7:27' ],
         'root-ns2.xa' => [ '127.15.7.28', 'fda1:b2:c3::127:15:7:28' ],
-    }
+    },
 );
 
 # Test zone scenarios
@@ -91,9 +91,9 @@ my %subtests = (
         [],
     ],
     'UNSIGNED-AND-DS-1' =>
-      [ 1, q(unsigned-and-ds-1.dnssec07.xa), [qw( DS07_NOT_SIGNED DS07_NOT_SIGNED_ON_SERVER )], undef, [], [], ],
+      [ 1, q(unsigned-and-ds-1.dnssec07.xa), [qw( DS07_NOT_SIGNED DS07_NOT_SIGNED_ON_SERVER )], undef, [], [] ],
     'UNSIGNED-NO-DS-1' =>
-      [ 1, q(unsigned-no-ds-1.dnssec07.xa), [qw( DS07_NOT_SIGNED DS07_NOT_SIGNED_ON_SERVER )], undef, [], [], ],
+      [ 1, q(unsigned-no-ds-1.dnssec07.xa), [qw( DS07_NOT_SIGNED DS07_NOT_SIGNED_ON_SERVER )], undef, [], [] ],
     'NON-AUTH-RESPONSE-DNSKEY-1' => [
         1,
         q(non-auth-response-dnskey-1.dnssec07.xa),
@@ -141,7 +141,7 @@ Zonemaster::Engine::Profile->effective->merge(
 perform_testcase_testing(
     $test_case, $test_module, \@all_tags, \%subtests,
     $ENV{ZONEMASTER_SELECTED_SCENARIOS},
-    $ENV{ZONEMASTER_DISABLED_SCENARIOS}
+    $ENV{ZONEMASTER_DISABLED_SCENARIOS},
 );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {

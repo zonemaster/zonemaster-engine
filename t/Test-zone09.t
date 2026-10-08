@@ -37,7 +37,7 @@ scenario 'NO-RESPONSE-MX-QUERY-1' => sub {
     expect Z09_MX_DATA => {
         mxrdata_list => '10 mail.no-response-mx-query-1.zone09.xa',
         ns_list      => 'ns1.no-response-mx-query-1.zone09.xa/127.19.9.31;'
-          . 'ns1.no-response-mx-query-1.zone09.xa/fda1:b2:c3:0:127:19:9:31'
+          . 'ns1.no-response-mx-query-1.zone09.xa/fda1:b2:c3:0:127:19:9:31',
     };
     forbid_others;
 };
@@ -55,7 +55,7 @@ scenario 'UNEXPECTED-RCODE-MX' => sub {
     expect Z09_UNEXPECTED_RCODE_MX => {
         rcode   => 'NOTIMPL',
         ns_list => 'ns1.unexpected-rcode-mx.zone09.xa/127.19.9.31;'
-          . 'ns1.unexpected-rcode-mx.zone09.xa/fda1:b2:c3:0:127:19:9:31'
+          . 'ns1.unexpected-rcode-mx.zone09.xa/fda1:b2:c3:0:127:19:9:31',
     };
     expect 'Z09_MISSING_MAIL_EXCHANGE';
     forbid_others;
@@ -68,7 +68,7 @@ scenario 'NON-AUTH-MX-RESPONSE' => sub {
           . 'ns4.non-auth-mx-response.zone09.xa/fda1:b2:c3:0:127:19:9:34' };
     expect Z09_MX_DATA => {
         mxrdata_list => '10 mail.non-auth-mx-response.zone09.xa',
-        ns_list      => sub { split( /;/, $_->{args}{ns_list} ) == 4 }
+        ns_list      => sub { split( /;/, $_->{args}{ns_list} ) == 4 },
     };
     forbid_others;
 };
@@ -82,7 +82,7 @@ scenario 'INCONSISTENT-MX' => sub {
     expect Z09_MX_DATA => {
         ns_list => 'ns1.inconsistent-mx.zone09.xa/127.19.9.31;'
           . 'ns1.inconsistent-mx.zone09.xa/fda1:b2:c3:0:127:19:9:31',
-        mxrdata_list => '10 mail.inconsistent-mx.zone09.xa'
+        mxrdata_list => '10 mail.inconsistent-mx.zone09.xa',
     };
 
     forbid_others;
@@ -93,12 +93,12 @@ scenario 'INCONSISTENT-MX-DATA-1' => sub {
     expect Z09_MX_DATA => {
         ns_list => 'ns1.inconsistent-mx-data-1.zone09.xa/127.19.9.31;'
           . 'ns1.inconsistent-mx-data-1.zone09.xa/fda1:b2:c3:0:127:19:9:31',
-        mxrdata_list => '10 mail.inconsistent-mx-data-1.zone09.xa;' . '10 mail2.inconsistent-mx-data-1.zone09.xa'
+        mxrdata_list => '10 mail.inconsistent-mx-data-1.zone09.xa;' . '10 mail2.inconsistent-mx-data-1.zone09.xa',
     };
     expect Z09_MX_DATA => {
         ns_list => 'ns2.inconsistent-mx-data-1.zone09.xa/127.19.9.32;'
           . 'ns2.inconsistent-mx-data-1.zone09.xa/fda1:b2:c3:0:127:19:9:32',
-        mxrdata_list => '10 mail2.inconsistent-mx-data-1.zone09.xa'
+        mxrdata_list => '10 mail2.inconsistent-mx-data-1.zone09.xa',
     };
     forbid_others;
 };
@@ -108,12 +108,12 @@ scenario 'INCONSISTENT-MX-DATA-2' => sub {
     expect Z09_MX_DATA => {
         ns_list => 'ns1.inconsistent-mx-data-2.zone09.xa/127.19.9.31;'
           . 'ns1.inconsistent-mx-data-2.zone09.xa/fda1:b2:c3:0:127:19:9:31',
-        mxrdata_list => '20 mail2.inconsistent-mx-data-2.zone09.xa'
+        mxrdata_list => '20 mail2.inconsistent-mx-data-2.zone09.xa',
     };
     expect Z09_MX_DATA => {
         ns_list => 'ns2.inconsistent-mx-data-2.zone09.xa/127.19.9.32;'
           . 'ns2.inconsistent-mx-data-2.zone09.xa/fda1:b2:c3:0:127:19:9:32',
-        mxrdata_list => '10 mail2.inconsistent-mx-data-2.zone09.xa'
+        mxrdata_list => '10 mail2.inconsistent-mx-data-2.zone09.xa',
     };
     forbid_others;
 };
@@ -123,12 +123,12 @@ scenario 'INCONSISTENT-MX-DATA-3' => sub {
     expect Z09_MX_DATA => {
         ns_list => 'ns1.inconsistent-mx-data-3.zone09.xa/127.19.9.31;'
           . 'ns1.inconsistent-mx-data-3.zone09.xa/fda1:b2:c3:0:127:19:9:31',
-        mxrdata_list => '10 mail.inconsistent-mx-data-3.zone09.xa;' . '20 mail2.inconsistent-mx-data-3.zone09.xa'
+        mxrdata_list => '10 mail.inconsistent-mx-data-3.zone09.xa;' . '20 mail2.inconsistent-mx-data-3.zone09.xa',
     };
     expect Z09_MX_DATA => {
         ns_list => 'ns2.inconsistent-mx-data-3.zone09.xa/127.19.9.32;'
           . 'ns2.inconsistent-mx-data-3.zone09.xa/fda1:b2:c3:0:127:19:9:32',
-        mxrdata_list => '10 mail2.inconsistent-mx-data-3.zone09.xa;' . '20 mail.inconsistent-mx-data-3.zone09.xa'
+        mxrdata_list => '10 mail2.inconsistent-mx-data-3.zone09.xa;' . '20 mail.inconsistent-mx-data-3.zone09.xa',
     };
     forbid_others;
 };
@@ -138,12 +138,12 @@ scenario 'INCONSISTENT-MX-DATA-4' => sub {
     expect Z09_MX_DATA => {
         ns_list => 'ns1.inconsistent-mx-data-4.zone09.xa/127.19.9.31;'
           . 'ns1.inconsistent-mx-data-4.zone09.xa/fda1:b2:c3:0:127:19:9:31',
-        mxrdata_list => '10 mail.inconsistent-mx-data-4.zone09.xa;' . '20 mail.inconsistent-mx-data-4.zone09.xa'
+        mxrdata_list => '10 mail.inconsistent-mx-data-4.zone09.xa;' . '20 mail.inconsistent-mx-data-4.zone09.xa',
     };
     expect Z09_MX_DATA => {
         ns_list => 'ns2.inconsistent-mx-data-4.zone09.xa/127.19.9.32;'
           . 'ns2.inconsistent-mx-data-4.zone09.xa/fda1:b2:c3:0:127:19:9:32',
-        mxrdata_list => '10 mail.inconsistent-mx-data-4.zone09.xa'
+        mxrdata_list => '10 mail.inconsistent-mx-data-4.zone09.xa',
     };
     forbid_others;
 };
@@ -154,7 +154,7 @@ scenario 'MIXED-CASE-RDATA-1' => sub {
           . 'ns1.mixed-case-rdata-1.zone09.xa/fda1:b2:c3:0:127:19:9:31;'
           . 'ns2.mixed-case-rdata-1.zone09.xa/127.19.9.32;'
           . 'ns2.mixed-case-rdata-1.zone09.xa/fda1:b2:c3:0:127:19:9:32',
-        mxrdata_list => '10 mail.mixed-case-rdata-1.zone09.xa;' . '20 mail2.mixed-case-rdata-1.zone09.xa'
+        mxrdata_list => '10 mail.mixed-case-rdata-1.zone09.xa;' . '20 mail2.mixed-case-rdata-1.zone09.xa',
     };
     forbid_others;
 };
@@ -169,7 +169,7 @@ scenario 'MIXED-CASE-RDATA-2' => sub {
           . 'ns1.mixed-case-rdata-2.zone09.xa/fda1:b2:c3:0:127:19:9:31;'
           . 'ns2.mixed-case-rdata-2.zone09.xa/127.19.9.32;'
           . 'ns2.mixed-case-rdata-2.zone09.xa/fda1:b2:c3:0:127:19:9:32',
-        mxrdata_list => '20 mail2.mixed-case-rdata-2.zone09.xa'
+        mxrdata_list => '20 mail2.mixed-case-rdata-2.zone09.xa',
     };
     forbid_others;
 };

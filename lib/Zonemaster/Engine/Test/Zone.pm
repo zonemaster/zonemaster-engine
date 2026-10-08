@@ -627,7 +627,7 @@ sub _ip_disabled_message {
     }
 
     if ( not Zonemaster::Engine::Profile->effective->get( q{net.ipv4} ) and $ns->address->version == $IP_VERSION_4 ) {
-        push @$results_array, map { _emit_log( IPV4_DISABLED => { ns => $ns->string, rrtype => $_, } ) } @rrtypes;
+        push @$results_array, map { _emit_log( IPV4_DISABLED => { ns => $ns->string, rrtype => $_ } ) } @rrtypes;
         return 1;
     }
     return 0;
@@ -867,10 +867,10 @@ sub zone01 {
                             my $mname = $_;
                             map { "$mname/$_" } keys %{ $mname_not_master{$_} }
                           }
-                          keys %mname_not_master
+                          keys %mname_not_master,
                     ),
                     soaserial      => max( uniq map { values %{ $mname_not_master{$_} } } keys %mname_not_master ),
-                    soaserial_list => join( q{;}, uniq @serial_ns )
+                    soaserial_list => join( q{;}, uniq @serial_ns ),
                 }
             );
         }
@@ -1345,7 +1345,7 @@ sub zone09 {
 
     my @nss = uniq grep { $_->isa( 'Zonemaster::Engine::Nameserver' ) } (
         @{ Zonemaster::Engine::TestMethodsV2->get_del_ns_names_and_ips( $zone )  // [] },
-        @{ Zonemaster::Engine::TestMethodsV2->get_zone_ns_names_and_ips( $zone ) // [] }
+        @{ Zonemaster::Engine::TestMethodsV2->get_zone_ns_names_and_ips( $zone ) // [] },
     );
 
     my %ip_already_processed;
@@ -1397,7 +1397,7 @@ sub zone09 {
             elsif ( not exists $mx_set{$mx_rrset_string} ) {
                 $mx_set{$mx_rrset_string} = {
                     ns => [ $ns->string ],
-                    mx => \@sorted_mx_rrs
+                    mx => \@sorted_mx_rrs,
                 };
             }
             else {
@@ -1420,7 +1420,7 @@ sub zone09 {
           _emit_log(
             Z09_UNEXPECTED_RCODE_MX => {
                 rcode   => $rcode,
-                ns_list => ns_list( @{ $unexpected_rcode_mx{$rcode} } )
+                ns_list => ns_list( @{ $unexpected_rcode_mx{$rcode} } ),
             }
           );
     }
@@ -1439,7 +1439,7 @@ sub zone09 {
           _emit_log(
             Z09_MX_DATA => {
                 ns_list      => ns_list( @{ $mx_set{$mx_string}{ns} } ),
-                mxrdata_list => $mx_string
+                mxrdata_list => $mx_string,
             }
           );
     }
@@ -1598,7 +1598,7 @@ sub zone11 {
 
     my @nss = uniq grep { $_->isa( 'Zonemaster::Engine::Nameserver' ) } (
         @{ Zonemaster::Engine::TestMethodsV2->get_del_ns_names_and_ips( $zone )  // [] },
-        @{ Zonemaster::Engine::TestMethodsV2->get_zone_ns_names_and_ips( $zone ) // [] }
+        @{ Zonemaster::Engine::TestMethodsV2->get_zone_ns_names_and_ips( $zone ) // [] },
     );
 
     my %ip_already_processed;
@@ -1671,7 +1671,7 @@ sub zone11 {
               _emit_log(
                 Z11_SPF_SYNTAX_ERROR => {
                     ns_list => join( q{;}, sort map { @{ $ip_already_processed{$_} } } keys %ns_spf ),
-                    domain  => $zone->name
+                    domain  => $zone->name,
                 }
               );
         }

@@ -31,7 +31,7 @@ Zonemaster::Engine::Recursor->add_fake_addresses(
     {
         'ns1' => [ '127.1.0.1', 'fda1:b2:c3::127:1:0:1' ],
         'ns2' => [ '127.1.0.2', 'fda1:b2:c3::127:1:0:2' ],
-    }
+    },
 );
 
 # Test zone scenarios
@@ -49,7 +49,7 @@ Zonemaster::Engine::Recursor->add_fake_addresses(
 #   See documentation for the meaning of that.
 
 my %subtests = (
-    'GOOD-1'            => [ 1, q(good-1.address01.xa), [qw(A01_GLOBALLY_REACHABLE_ADDR)], undef, [], [], ],
+    'GOOD-1'            => [ 1, q(good-1.address01.xa), [qw(A01_GLOBALLY_REACHABLE_ADDR)], undef, [], [] ],
     'ALL-NON-REACHABLE' => [
         1,
         q(all-non-reachable.address01.xa),
@@ -104,7 +104,7 @@ my %subtests = (
         [qw(A01_ADDR_NOT_GLOBALLY_REACHABLE A01_DOCUMENTATION_ADDR A01_LOCAL_USE_ADDR A01_GLOBALLY_REACHABLE_ADDR)],
         undef, [], [],
     ],
-    'NO-NAME-SERVERS' => [ 1, q(no-name-servers.address01.xa), [qw(A01_NO_NAME_SERVERS_FOUND)], undef, [], [], ]
+    'NO-NAME-SERVERS' => [ 1, q(no-name-servers.address01.xa), [qw(A01_NO_NAME_SERVERS_FOUND)], undef, [], [] ],
 );
 
 ###########
@@ -123,7 +123,7 @@ Zonemaster::Engine::Profile->effective->merge(
 perform_testcase_testing(
     $test_case, $test_module, \@all_tags, \%subtests,
     $ENV{ZONEMASTER_SELECTED_SCENARIOS},
-    $ENV{ZONEMASTER_DISABLED_SCENARIOS}
+    $ENV{ZONEMASTER_DISABLED_SCENARIOS},
 );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {

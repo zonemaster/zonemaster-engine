@@ -465,7 +465,7 @@ sub _ip_disabled_message {
     }
 
     if ( not Zonemaster::Engine::Profile->effective->get( q{net.ipv4} ) and $ns->address->version == $IP_VERSION_4 ) {
-        push @$results_array, map { _emit_log( IPV4_DISABLED => { ns => $ns->string, rrtype => $_, } ) } @rrtypes;
+        push @$results_array, map { _emit_log( IPV4_DISABLED => { ns => $ns->string, rrtype => $_ } ) } @rrtypes;
         return 1;
     }
     return 0;
@@ -505,7 +505,7 @@ sub _connectivity_loop {
 
         my %packets = (
             'SOA' => $ns->query( $name, q{SOA}, { usevc => $use_tcp } ),
-            'NS'  => $ns->query( $name, q{NS},  { usevc => $use_tcp } )
+            'NS'  => $ns->query( $name, q{NS},  { usevc => $use_tcp } ),
         );
 
         if ( not $packets{SOA} and not $packets{NS} ) {
@@ -525,7 +525,7 @@ sub _connectivity_loop {
                   _emit_log(
                     "${testcase_prefix}_UNEXPECTED_RCODE_${qtype}_QUERY_${protocol}" => {
                         ns    => $ns->string,
-                        rcode => $pkt->rcode
+                        rcode => $pkt->rcode,
                     }
                   );
             }
@@ -541,7 +541,7 @@ sub _connectivity_loop {
                         "${testcase_prefix}_WRONG_${qtype}_RECORD_${protocol}" => {
                             ns              => $ns->string,
                             domain_found    => lc( $rr->owner ),
-                            domain_expected => lc( $name->fqdn )
+                            domain_expected => lc( $name->fqdn ),
                         }
                       );
                 }
@@ -807,7 +807,7 @@ sub connectivity04 {
 
     my @nss = grep { $_->isa( 'Zonemaster::Engine::Nameserver' ) } (
         @{ Zonemaster::Engine::TestMethodsV2->get_del_ns_names_and_ips( $zone )  // [] },
-        @{ Zonemaster::Engine::TestMethodsV2->get_zone_ns_names_and_ips( $zone ) // [] }
+        @{ Zonemaster::Engine::TestMethodsV2->get_zone_ns_names_and_ips( $zone ) // [] },
     );
 
     foreach my $ns ( @nss ) {
@@ -878,7 +878,7 @@ sub connectivity04 {
                   _emit_log(
                     "CN04_IPV${ip_version}_SAME_PREFIX" => {
                         ip_prefix => $prefix,
-                        ns_list   => join( q{;}, sort @{ $prefixes{$ip_version}{$prefix} } )
+                        ns_list   => join( q{;}, sort @{ $prefixes{$ip_version}{$prefix} } ),
                     }
                   );
             }

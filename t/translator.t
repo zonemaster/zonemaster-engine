@@ -38,7 +38,7 @@ subtest 'Everything but Test::NoWarnings' => sub {
     like(
         $trans->to_string( $entry ),
 qr'   \d+.\d\d INFO      The parent zone is "nothing.nowhere" as returned from name servers "ns1.nothing.nowhere/1.1.1.1".',
-        'string to_stringd as expected'
+        'string to_stringd as expected',
     );
 
     my $untranslated = Zonemaster::Engine::Logger::Entry->new(
@@ -56,8 +56,10 @@ qr'   \d+.\d\d INFO      The parent zone is "nothing.nowhere" as returned from n
 
     foreach my $module ( keys %methods ) {
         foreach my $testmethod ( @{ $methods{$module} } ) {
-            ok( $trans->_translate_tag( $module, uc( $testmethod ), {} ),
-                'Test method ' . uc( $testmethod ) . ' has message tag with description' );
+            ok(
+                $trans->_translate_tag( $module, uc( $testmethod ), {} ),
+                'Test method ' . uc( $testmethod ) . ' has message tag with description',
+            );
         }
     }
 };

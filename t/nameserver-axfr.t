@@ -23,7 +23,7 @@ is(
         $ns->axfr( 'cyberpomo.com', sub { $counter += 1; return 1; } );
     },
     undef,
-    'No exception'
+    'No exception',
 );
 ok( ( $counter > 10 ), 'At least ten records seen' );
 
@@ -35,7 +35,7 @@ like(
         $ns2->axfr( 'iis.se', sub { $counter += 1; return 1; } );
     },
     qr/REFUSED/,
-    'AXFR was refused'
+    'AXFR was refused',
 );
 is( $counter, 0, 'No records seen' );
 

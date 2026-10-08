@@ -29,7 +29,7 @@ Zonemaster::Engine::Recursor->add_fake_addresses(
     {
         'ns1' => [ '127.1.0.1', 'fda1:b2:c3::127:1:0:1' ],
         'ns2' => [ '127.1.0.2', 'fda1:b2:c3::127:1:0:2' ],
-    }
+    },
 );
 
 # Test zone scenarios
@@ -63,20 +63,20 @@ my %subtests = (
         1,
         q(error-on-version-query-1.nameserver15.xa),
         [qw(N15_ERROR_ON_VERSION_QUERY N15_NO_VERSION_REVEALED)],
-        undef, [], []
+        undef, [], [],
     ],
     'ERROR-ON-VERSION-QUERY-2' => [
         1,
         q(error-on-version-query-2.nameserver15.xa),
         [qw(N15_ERROR_ON_VERSION_QUERY N15_NO_VERSION_REVEALED)],
-        undef, [], []
+        undef, [], [],
     ],
     'SOFTWARE-VERSION-1' => [ 1, q(software-version-1.nameserver15.xa), [qw(N15_SOFTWARE_VERSION)], undef, [], [] ],
     'SOFTWARE-VERSION-2' => [ 1, q(software-version-2.nameserver15.xa), [qw(N15_SOFTWARE_VERSION)], undef, [], [] ],
     'WRONG-CLASS-1'      =>
       [ 1, q(wrong-class-1.nameserver15.xa), [qw(N15_SOFTWARE_VERSION N15_WRONG_CLASS)], undef, [], [] ],
     'WRONG-CLASS-2' =>
-      [ 1, q(wrong-class-2.nameserver15.xa), [qw(N15_SOFTWARE_VERSION N15_WRONG_CLASS)], undef, [], [] ]
+      [ 1, q(wrong-class-2.nameserver15.xa), [qw(N15_SOFTWARE_VERSION N15_WRONG_CLASS)], undef, [], [] ],
 );
 ###########
 
@@ -94,7 +94,7 @@ Zonemaster::Engine::Profile->effective->merge(
 perform_testcase_testing(
     $test_case, $test_module, \@all_tags, \%subtests,
     $ENV{ZONEMASTER_SELECTED_SCENARIOS},
-    $ENV{ZONEMASTER_DISABLED_SCENARIOS}
+    $ENV{ZONEMASTER_DISABLED_SCENARIOS},
 );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {

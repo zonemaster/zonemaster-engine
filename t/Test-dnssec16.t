@@ -36,7 +36,7 @@ Zonemaster::Engine::Recursor->add_fake_addresses(
     {
         'ns1' => [ '127.1.0.1', 'fda1:b2:c3::127:1:0:1' ],
         'ns2' => [ '127.1.0.2', 'fda1:b2:c3::127:1:0:2' ],
-    }
+    },
 );
 
 # Test zone scenarios
@@ -74,7 +74,7 @@ my %subtests = (
     'MIXED-DELETE-CDS' => [ 1, q(mixed-delete-cds.dnssec16.xa), [qw(DS16_MIXED_DELETE_CDS)], undef, [], [] ],
     'NO-CDS'           => [ 1, q(no-cds.dnssec16.xa),           [],                          undef, [], [] ],
     'NOT-AA'           => [ 1, q(not-aa.dnssec16.xa),           [],                          undef, [], [] ],
-    'VALID-CDS'        => [ 1, q(valid-cds.dnssec16.xa),        [],                          undef, [], [] ]
+    'VALID-CDS'        => [ 1, q(valid-cds.dnssec16.xa),        [],                          undef, [], [] ],
 );
 ###########
 
@@ -92,7 +92,7 @@ Zonemaster::Engine::Profile->effective->merge(
 perform_testcase_testing(
     $test_case, $test_module, \@all_tags, \%subtests,
     $ENV{ZONEMASTER_SELECTED_SCENARIOS},
-    $ENV{ZONEMASTER_DISABLED_SCENARIOS}
+    $ENV{ZONEMASTER_DISABLED_SCENARIOS},
 );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {

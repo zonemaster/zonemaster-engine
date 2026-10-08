@@ -626,7 +626,7 @@ sub _ip_disabled_message {
     }
 
     if ( not Zonemaster::Engine::Profile->effective->get( q{net.ipv4} ) and $ns->address->version == $IP_VERSION_4 ) {
-        push @$results_array, map { _emit_log( IPV4_DISABLED => { ns => $ns->string, rrtype => $_, } ) } @rrtypes;
+        push @$results_array, map { _emit_log( IPV4_DISABLED => { ns => $ns->string, rrtype => $_ } ) } @rrtypes;
         return 1;
     }
     return 0;
@@ -1438,7 +1438,7 @@ sub nameserver10 {
             _emit_log(
                 N10_UNEXPECTED_RCODE => {
                     rcode      => $_,
-                    ns_ip_list => join( q{;}, uniq sort @{ $unexpected_rcode{$_} } )
+                    ns_ip_list => join( q{;}, uniq sort @{ $unexpected_rcode{$_} } ),
                 }
             )
         } keys %unexpected_rcode;
@@ -1561,7 +1561,7 @@ sub nameserver11 {
             _emit_log(
                 N11_UNEXPECTED_RCODE => {
                     rcode      => $_,
-                    ns_ip_list => join( q{;}, uniq sort @{ $unexpected_rcode{$_} } )
+                    ns_ip_list => join( q{;}, uniq sort @{ $unexpected_rcode{$_} } ),
                 }
             )
         } keys %unexpected_rcode;
@@ -1679,12 +1679,14 @@ sub nameserver13 {
 
         next if ( _ip_disabled_message( \@results, $ns, q{DNSKEY} ) );
 
-        my $p = $ns->query( $zone->name, q{DNSKEY},
-            { usevc => 0, fallback => 0, edns_details => { version => 0, do => 1, size => 512 } } );
+        my $p =
+          $ns->query( $zone->name, q{DNSKEY},
+            { usevc => 0, fallback => 0, edns_details => { version => 0, do => 1, size => 512 } },
+          );
 
         if ( $p ) {
             if ( $p->rcode eq q{FORMERR} and not $p->edns_rcode ) {
-                push @results, _emit_log( NO_EDNS_SUPPORT => { ns => $ns->string, } );
+                push @results, _emit_log( NO_EDNS_SUPPORT => { ns => $ns->string } );
             }
             elsif ( $p->tc and not $p->has_edns ) {
                 push @results, _emit_log( MISSING_OPT_IN_TRUNCATED => { ns => $ns->string } );
@@ -1781,7 +1783,7 @@ sub nameserver15 {
                     N15_SOFTWARE_VERSION => {
                         string     => $string,
                         query_name => $_,
-                        ns_list    => join( q{;}, sort @{ $txt_data{$string}{$_} } )
+                        ns_list    => join( q{;}, sort @{ $txt_data{$string}{$_} } ),
                     }
                 )
             } keys %{ $txt_data{$string} };
@@ -1793,7 +1795,7 @@ sub nameserver15 {
             _emit_log(
                 N15_ERROR_ON_VERSION_QUERY => {
                     query_name => $_,
-                    ns_list    => join( q{;}, sort @{ $error_on_version_query{$_} } )
+                    ns_list    => join( q{;}, sort @{ $error_on_version_query{$_} } ),
                 }
             )
         } keys %error_on_version_query;

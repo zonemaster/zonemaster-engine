@@ -41,7 +41,7 @@ Readonly my $ASCII_FULL_STOP_RE => qr/\x{002E}/;
 Readonly my %FULL_STOPS => (
     FULLWIDTH_FULL_STOP             => q/\x{FF0E}/,
     IDEOGRAPHIC_FULL_STOP           => q/\x{3002}/,
-    HALFWIDTH_IDEOGRAPHIC_FULL_STOP => q/\x{FF61}/
+    HALFWIDTH_IDEOGRAPHIC_FULL_STOP => q/\x{FF61}/,
 );
 Readonly my $FULL_STOPS_RE => (
     sub {
@@ -74,7 +74,7 @@ Readonly my $WHITE_SPACES_RE => (
         return qr/$re/;
     }
 )->();
-Readonly my %AMBIGUOUS_CHARACTERS => ( "LATIN CAPITAL LETTER I WITH DOT ABOVE" => q/\x{0130}/, );
+Readonly my %AMBIGUOUS_CHARACTERS => ( "LATIN CAPITAL LETTER I WITH DOT ABOVE" => q/\x{0130}/ );
 
 =item normalize_label($label)
 

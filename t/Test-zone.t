@@ -31,8 +31,10 @@ ok( $res{MNAME_IS_NOT_CNAME},          q{SOA 'mname' value refers to a NS which 
 ok( $res{Z01_MNAME_NOT_IN_NS_LIST},    q{SOA 'mname' nameserver is not listed in "parent" NS records for tested zone} );
 ok( $res{SOA_DEFAULT_TTL_MAXIMUM_VALUE_OK}, q{SOA 'minimum' value is between the recommended ones} );
 ok( $res{REFRESH_HIGHER_THAN_RETRY},        q{SOA 'refresh' value is higher than the SOA 'retry' value} );
-ok( $res{EXPIRE_MINIMUM_VALUE_OK},
-    q{SOA 'expire' value is higher than the minimum recommended value and lower than 'refresh' value} );
+ok(
+    $res{EXPIRE_MINIMUM_VALUE_OK},
+    q{SOA 'expire' value is higher than the minimum recommended value and lower than 'refresh' value},
+);
 ok( $res{MX_RECORD_IS_NOT_CNAME}, q{MX record for the domain is not pointing to a CNAME} );
 ok( $res{ONE_SOA},                q{Unique SOA returned} );
 
@@ -78,7 +80,7 @@ subtest 'user defined SOA values' => sub {
         my $new_expire  = 86400;
 
         Zonemaster::Engine::Profile->effective->set( q{test_cases_vars.zone02.SOA_REFRESH_MINIMUM_VALUE},
-            $new_refresh );
+            $new_refresh, );
         Zonemaster::Engine::Profile->effective->set( q{test_cases_vars.zone04.SOA_RETRY_MINIMUM_VALUE},  $new_retry );
         Zonemaster::Engine::Profile->effective->set( q{test_cases_vars.zone05.SOA_EXPIRE_MINIMUM_VALUE}, $new_expire );
 
@@ -93,12 +95,12 @@ subtest 'user defined SOA values' => sub {
         my $new_ttl_max = 3600;
 
         Zonemaster::Engine::Profile->effective->set( q{test_cases_vars.zone06.SOA_DEFAULT_TTL_MINIMUM_VALUE},
-            $new_ttl_min );
+            $new_ttl_min, );
         %res = map { $_->tag => 1 } Zonemaster::Engine->test_method( q{Zone}, q{zone06}, $zone );
         ok( $res{SOA_DEFAULT_TTL_MAXIMUM_VALUE_LOWER}, q{SOA 'minimum' value is too low} );
 
         Zonemaster::Engine::Profile->effective->set( q{test_cases_vars.zone06.SOA_DEFAULT_TTL_MAXIMUM_VALUE},
-            $new_ttl_max );
+            $new_ttl_max, );
         %res = map { $_->tag => 1 } Zonemaster::Engine->test_method( q{Zone}, q{zone06}, $zone );
         ok( $res{SOA_DEFAULT_TTL_MAXIMUM_VALUE_HIGHER}, q{SOA 'minimum' value is too high} );
     };

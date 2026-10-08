@@ -52,8 +52,10 @@ my @special_addresses = qw(0.255.255.255
 );
 
 foreach my $addr ( @special_addresses ) {
-    ok( defined( Zonemaster::Engine::Test::Address->_find_special_address( Net::IP::XS->new( $addr ) ) ),
-        "Special address: $addr" );
+    ok(
+        defined( Zonemaster::Engine::Test::Address->_find_special_address( Net::IP::XS->new( $addr ) ) ),
+        "Special address: $addr",
+    );
 }
 
 ###########
@@ -84,7 +86,7 @@ my $zone = Zonemaster::Engine->zone( q{torsas.se} );
 my @res  = Zonemaster::Engine->test_method( q{Address}, q{address02}, $zone );
 ok(
     !( grep { $_->tag eq 'NAMESERVER_IP_WITHOUT_REVERSE' } @res ),
-    'Classless in-addr.arpa properly handled when querying PTR.'
+    'Classless in-addr.arpa properly handled when querying PTR.',
 );
 
 ###########
@@ -96,7 +98,7 @@ ok( $res{NAMESERVER_IP_PTR_MATCH}, q{All reverse DNS entry matches name server n
 @res = Zonemaster::Engine->test_method( q{Address}, q{address03}, $zone );
 ok(
     !( grep { $_->tag eq 'NAMESERVER_IP_WITHOUT_REVERSE' } @res ),
-    'Classless in-addr.arpa properly handled when querying PTR.'
+    'Classless in-addr.arpa properly handled when querying PTR.',
 );
 
 ###########

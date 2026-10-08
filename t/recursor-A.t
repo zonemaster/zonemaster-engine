@@ -27,7 +27,7 @@ Zonemaster::Engine::Recursor->add_fake_addresses(
     {
         'ns1' => [ '127.1.0.1', 'fda1:b2:c3::127:1:0:1' ],
         'ns2' => [ '127.1.0.2', 'fda1:b2:c3::127:1:0:2' ],
-    }
+    },
 );
 
 # Test zone scenarios
@@ -244,15 +244,21 @@ subtest 'WRONG-CNAME-OWNER-NAME' => sub {
     isa_ok( $p, 'Zonemaster::Engine::Packet' );
     is( scalar( $p->answer ), 2, 'two records in answer section' );
 
-    ok( name( ( $p->question )[0]->owner )->string ne name( ( $p->answer )[0]->owner )->string,
-        'expected different owner name as QNAME on first RR' );
-    ok( name( ( $p->question )[0]->owner )->string ne name( ( $p->answer )[1]->owner )->string,
-        'expected different owner name as QNAME on second RR' );
+    ok(
+        name( ( $p->question )[0]->owner )->string ne name( ( $p->answer )[0]->owner )->string,
+        'expected different owner name as QNAME on first RR',
+    );
+    ok(
+        name( ( $p->question )[0]->owner )->string ne name( ( $p->answer )[1]->owner )->string,
+        'expected different owner name as QNAME on second RR',
+    );
 
     my %res = map { $_->tag => $_ } @{ Zonemaster::Engine->logger->entries };
     ok( !$res{CNAME_START}, q{should not emit CNAME_START} );
-    ok( scalar( grep { index( $_->tag, 'CNAME' ) != -1 } @{ Zonemaster::Engine->logger->entries } ) == 0,
-        'empty CNAME message tags' );
+    ok(
+        scalar( grep { index( $_->tag, 'CNAME' ) != -1 } @{ Zonemaster::Engine->logger->entries } ) == 0,
+        'empty CNAME message tags',
+    );
 };
 
 subtest 'EXTRA-CNAME-IN-ANSWER' => sub {
@@ -262,16 +268,22 @@ subtest 'EXTRA-CNAME-IN-ANSWER' => sub {
     is( scalar( $p->answer ), 2, 'two records in answer section' );
 
     isa_ok( ( $p->answer )[0], 'Zonemaster::LDNS::RR::A' );
-    ok( name( ( $p->question )[0]->owner )->string eq name( ( $p->answer )[0]->owner )->string,
-        'expected same owner name as QNAME on first RR' );
+    ok(
+        name( ( $p->question )[0]->owner )->string eq name( ( $p->answer )[0]->owner )->string,
+        'expected same owner name as QNAME on first RR',
+    );
     isa_ok( ( $p->answer )[1], 'Zonemaster::LDNS::RR::CNAME' );
-    ok( name( ( $p->question )[0]->owner )->string ne name( ( $p->answer )[1]->owner )->string,
-        'expected different owner name as QNAME on second RR' );
+    ok(
+        name( ( $p->question )[0]->owner )->string ne name( ( $p->answer )[1]->owner )->string,
+        'expected different owner name as QNAME on second RR',
+    );
 
     my %res = map { $_->tag => $_ } @{ Zonemaster::Engine->logger->entries };
     ok( !$res{CNAME_START}, q{should not emit CNAME_START} );
-    ok( scalar( grep { index( $_->tag, 'CNAME' ) != -1 } @{ Zonemaster::Engine->logger->entries } ) == 0,
-        'empty CNAME message tags' );
+    ok(
+        scalar( grep { index( $_->tag, 'CNAME' ) != -1 } @{ Zonemaster::Engine->logger->entries } ) == 0,
+        'empty CNAME message tags',
+    );
 };
 
 subtest 'CNAME-CHAIN-TO-NODATA' => sub {
