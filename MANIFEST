@@ -74,6 +74,8 @@ t/00-load.t
 t/asn.data
 t/asn.t
 t/dnsname.t
+t/imports.perlcriticrc
+t/imports.t
 t/logger.t
 t/methodsv2.data
 t/methodsv2.t
