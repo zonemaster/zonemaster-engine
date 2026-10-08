@@ -25,16 +25,17 @@ BEGIN {
 }
 
 use Net::DNS::ZoneFile;
-use Pod::Simple::SimpleTree;
 
 use Zonemaster::Engine::Constants qw[:ip :soa];
 use Zonemaster::Engine::DNSName;
+use Zonemaster::Engine::Logger::Global qw( global_logger );
 use Zonemaster::Engine::Profile;
+use Zonemaster::Engine::Zone;
 
 sub info {
     my ( $tag, $argref ) = @_;
 
-    return Zonemaster::Engine->logger->add( $tag, $argref );
+    return global_logger()->add( $tag, $argref );
 }
 
 sub zone {

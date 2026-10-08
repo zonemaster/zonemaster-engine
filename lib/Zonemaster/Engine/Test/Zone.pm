@@ -5,21 +5,21 @@ use warnings;
 
 use version; our $VERSION = version->declare( "v1.0.14" );
 
-use Carp;
 use List::MoreUtils    qw[uniq none];
 use List::Util         qw[max];
 use Locale::TextDomain qw[Zonemaster-Engine];
 use Readonly;
-use JSON::PP;
 use Mail::SPF::v1::Record;
 use Try::Tiny;
 use Zonemaster::Engine::Constants          qw[:soa :ip];
 use Zonemaster::Engine::DNSName::Functions qw( name );
-use Zonemaster::Engine::Nameserver;
+use Zonemaster::Engine::Logger;
+use Zonemaster::Engine::Logger::Global qw( global_logger );
 use Zonemaster::Engine::Profile;
 use Zonemaster::Engine::Recursor;
-use Zonemaster::Engine::Test::Address;
+use Zonemaster::Engine::Nameserver;
 use Zonemaster::Engine::TestMethods;
+use Zonemaster::Engine::TestMethodsV2;
 use Zonemaster::Engine::Util;
 
 =head1 NAME
@@ -600,7 +600,7 @@ Returns a L<Zonemaster::Engine::Logger::Entry> object.
 
 =cut
 
-sub _emit_log { my ( $tag, $argref ) = @_; return Zonemaster::Engine->logger->add( $tag, $argref, 'Zone' ); }
+sub _emit_log { my ( $tag, $argref ) = @_; return global_logger()->add( $tag, $argref, 'Zone' ); }
 
 =over
 

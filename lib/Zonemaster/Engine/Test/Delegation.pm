@@ -10,10 +10,10 @@ use Locale::TextDomain qw[Zonemaster-Engine];
 use Readonly;
 use Zonemaster::Engine::Constants ':all';
 use Zonemaster::Engine::DNSName::Functions qw( name );
+use Zonemaster::Engine::Logger;
+use Zonemaster::Engine::Logger::Global qw( global_logger );
 use Zonemaster::Engine::Profile;
 use Zonemaster::Engine::Recursor;
-use Zonemaster::Engine::Test::Address;
-use Zonemaster::Engine::Test::Syntax;
 use Zonemaster::Engine::TestMethods;
 use Zonemaster::Engine::Util;
 use Zonemaster::LDNS::Packet;
@@ -434,7 +434,7 @@ Returns a L<Zonemaster::Engine::Logger::Entry> object.
 
 =cut
 
-sub _emit_log { my ( $tag, $argref ) = @_; return Zonemaster::Engine->logger->add( $tag, $argref, 'Delegation' ); }
+sub _emit_log { my ( $tag, $argref ) = @_; return global_logger()->add( $tag, $argref, 'Delegation' ); }
 
 =over
 

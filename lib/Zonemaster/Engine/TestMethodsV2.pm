@@ -5,13 +5,15 @@ use warnings;
 
 use version; our $VERSION = version->declare( "v1.0.0" );
 
-use Carp;
 use List::MoreUtils qw[uniq];
 use Memoize;
+use Net::IP::XS;
 use Zonemaster::Engine::DNSName::Functions    qw( name );
 use Zonemaster::Engine::Nameserver::Functions qw( ns );
+use Zonemaster::Engine::Logger::Global        qw( global_logger );
 use Zonemaster::Engine::NameserverSet;
-use Zonemaster::Engine::Util;
+use Zonemaster::Engine::Profile;
+use Zonemaster::Engine::Recursor;
 
 =head1 NAME
 
@@ -143,7 +145,7 @@ sub get_parent_ns_names_and_ips {
             while () {
                 $loop_counter += 1;
                 if ( $loop_counter >= 1000 ) {
-                    Zonemaster::Engine->logger->add(
+                    global_logger()->add(
                         LOOP_PROTECTION => {
                             caller                  => 'Zonemaster::Engine::TestMethodsV2->get_parent_ns_ips',
                             child_zone_name         => $zone->name,
@@ -384,7 +386,7 @@ sub _get_oob_ips {
                             name( ( $p->question )[0]->owner ) ne $ns_name
                             and
                             grep { $_->tag eq 'CNAME_FOLLOWED_OUT_OF_ZONE' and grep /^$ns_name$/, values %{ $_->args } }
-                            @{ Zonemaster::Engine->logger->entries }
+                            @{ global_logger()->entries }
                           )
                         {
                             my $cname_ns_name = name( ( $p->question )[0]->owner );
@@ -720,7 +722,7 @@ sub _get_ib_addr_in_zone {
                             name( ( $p->question )[0]->owner ) ne $ns_name
                             and
                             grep { $_->tag eq 'CNAME_FOLLOWED_OUT_OF_ZONE' and grep /^$ns_name$/, values %{ $_->args } }
-                            @{ Zonemaster::Engine->logger->entries }
+                            @{ global_logger()->entries }
                           )
                         {
                             my $cname_ns_name = name( ( $p->question )[0]->owner );

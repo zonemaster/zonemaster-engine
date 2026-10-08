@@ -5,7 +5,6 @@ use warnings;
 
 use version; our $VERSION = version->declare( "v1.1.0" );
 
-use Carp;
 use List::MoreUtils    qw[uniq];
 use Locale::TextDomain qw[Zonemaster-Engine];
 use Readonly;
@@ -14,6 +13,8 @@ use Zonemaster::Engine::Profile;
 use Zonemaster::Engine::ASNLookup;
 use Zonemaster::Engine::Constants          qw[:ip];
 use Zonemaster::Engine::DNSName::Functions qw( name );
+use Zonemaster::Engine::Logger;
+use Zonemaster::Engine::Logger::Global qw( global_logger );
 use Zonemaster::Engine::TestMethods;
 use Zonemaster::Engine::TestMethodsV2;
 use Zonemaster::Engine::Util;
@@ -439,7 +440,7 @@ Returns a L<Zonemaster::Engine::Logger::Entry> object.
 
 =cut
 
-sub _emit_log { my ( $tag, $argref ) = @_; return Zonemaster::Engine->logger->add( $tag, $argref, 'Connectivity' ); }
+sub _emit_log { my ( $tag, $argref ) = @_; return global_logger()->add( $tag, $argref, 'Connectivity' ); }
 
 =over
 
