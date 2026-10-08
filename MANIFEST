@@ -12,7 +12,6 @@ inc/Module/Install.pm
 inc/Module/Install/Share.pm
 inc/Module/Install/Win32.pm
 inc/Module/Install/WriteAll.pm
-KNOWN_ISSUES
 lib/Zonemaster/Engine/ASNLookup.pm
 lib/Zonemaster/Engine/Constants.pm
 lib/Zonemaster/Engine/DNSName.pm
