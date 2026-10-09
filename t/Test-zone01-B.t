@@ -10,7 +10,7 @@ my $datafile = q{t/Test-zone01-B.data};
 
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die q{Stored data file missing} if not -r $datafile;
-    Zonemaster::Engine::Nameserver->restore( $datafile );
+    Zonemaster::Engine->preload_cache( $datafile );
     Zonemaster::Engine::Profile->effective->set( q{no_network}, 1 );
 }
 
@@ -40,7 +40,7 @@ ok( !$res{Z01_MNAME_NOT_RESOLVE},        q{should not emit Z01_MNAME_NOT_RESOLVE
 ok( !$res{Z01_MNAME_UNEXPECTED_RCODE},   q{should not emit Z01_MNAME_UNEXPECTED_RCODE} );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
-    Zonemaster::Engine::Nameserver->save( $datafile );
+    Zonemaster::Engine->save_cache( $datafile );
 }
 
 done_testing;

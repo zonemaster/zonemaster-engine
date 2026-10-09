@@ -7,7 +7,6 @@ use Test::More;
 use Test::Perl::Critic ( -profile => 't/imports.perlcriticrc' );
 
 my %skip = map { $_ => 1 } qw(
-  lib/Zonemaster/Engine/Nameserver.pm
   lib/Zonemaster/Engine/Test/Syntax.pm
   lib/Zonemaster/Engine/Zone.pm
   t/TestUtil/DSL.pm

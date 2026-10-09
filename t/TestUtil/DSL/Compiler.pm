@@ -70,7 +70,7 @@ sub compile {
         if ( not $ENV{ZONEMASTER_RECORD} ) {
             Test::More::note "Loading data file: $datafile";
             die q{Stored data file missing} if not -r $datafile;
-            Zonemaster::Engine::Nameserver->restore( $datafile );
+            Zonemaster::Engine->preload_cache( $datafile );
             Test::More::note "Done loading data file.";
             Zonemaster::Engine::Profile->effective->set( q{no_network} => 1 );
         }
@@ -95,7 +95,7 @@ sub compile {
 
         if ( $ENV{ZONEMASTER_RECORD} ) {
             Test::More::note "Saving data file: $datafile";
-            Zonemaster::Engine::Nameserver->save( $datafile );
+            Zonemaster::Engine->save_cache( $datafile );
             Test::More::note "Done saving data file.";
         }
     };

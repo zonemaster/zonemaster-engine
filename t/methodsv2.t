@@ -1138,7 +1138,7 @@ my $datafile = 't/' . basename( $0, '.t' ) . '.data';
 
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die q{Stored data file missing} if not -r $datafile;
-    Zonemaster::Engine::Nameserver->restore( $datafile );
+    Zonemaster::Engine->preload_cache( $datafile );
     Zonemaster::Engine::Profile->effective->set( q{no_network}, 1 );
 }
 
@@ -1169,7 +1169,7 @@ ZONEMASTER_DISABLED_SCENARIOS="GOOD-1,GOOD-2" perl methodsv2.t
 perform_methodsv2_testing( \%subtests, $ENV{ZONEMASTER_SELECTED_SCENARIOS}, $ENV{ZONEMASTER_DISABLED_SCENARIOS} );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
-    Zonemaster::Engine::Nameserver->save( $datafile );
+    Zonemaster::Engine->save_cache( $datafile );
 }
 
 done_testing;

@@ -6,7 +6,7 @@ BEGIN { use_ok( 'Zonemaster::Engine::ASNLookup' ) }
 my $datafile = 't/asn.data';
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die "Stored data file missing" if not -r $datafile;
-    Zonemaster::Engine::Nameserver->restore( $datafile );
+    Zonemaster::Engine->preload_cache( $datafile );
     Zonemaster::Engine::Profile->effective->set( q{no_network}, 1 );
 }
 
@@ -48,7 +48,7 @@ is $asn6->[0],       13335,        '1.1.1.1 is in AS13335';
 is $prefix6->prefix, '1.1.1.0/24', '1.1.1.1 is in 1.1.1.0/24';
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
-    Zonemaster::Engine::Nameserver->save( $datafile );
+    Zonemaster::Engine->save_cache( $datafile );
 }
 
 done_testing;

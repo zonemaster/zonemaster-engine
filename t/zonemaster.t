@@ -15,7 +15,7 @@ is( exception { Zonemaster::Engine->reset(); }, undef, 'No crash on instant rese
 my $datafile = q{t/zonemaster.data};
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die q{Stored data file missing} if not -r $datafile;
-    Zonemaster::Engine::Nameserver->restore( $datafile );
+    Zonemaster::Engine->preload_cache( $datafile );
     Zonemaster::Engine::Profile->effective->set( q{no_network}, 1 );
 }
 
@@ -148,7 +148,7 @@ Zonemaster::Engine::Profile->effective->set( q{net.ipv4}, 1 );
 Zonemaster::Engine::Profile->effective->set( q{net.ipv6}, 1 );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
-    Zonemaster::Engine::Nameserver->save( $datafile );
+    Zonemaster::Engine->save_cache( $datafile );
 }
 
 ok( @{ Zonemaster::Engine->logger->entries } > 0,                        'There are log entries' );

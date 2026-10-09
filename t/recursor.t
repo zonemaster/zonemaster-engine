@@ -5,6 +5,7 @@ use strict;
 use warnings;
 use List::Util qw[max];
 use Memoize;
+use Zonemaster::Engine;
 use Zonemaster::Engine::DNSName::Functions qw( name );
 use Zonemaster::Engine::Nameserver;
 use Zonemaster::Engine::Recursor::Cache qw( recursor_cache_clear );
@@ -14,7 +15,7 @@ BEGIN { use_ok( 'Zonemaster::Engine::Recursor' ) }
 my $datafile = 't/recursor.data';
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die "Stored data file missing" if not -r $datafile;
-    Zonemaster::Engine::Nameserver->restore( $datafile );
+    Zonemaster::Engine->preload_cache( $datafile );
     Zonemaster::Engine::Profile->effective->set( q{no_network}, 1 );
 }
 
@@ -80,7 +81,7 @@ if ( $ENV{ZONEMASTER_RECORD} ) {
 }
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
-    Zonemaster::Engine::Nameserver->save( $datafile );
+    Zonemaster::Engine->save_cache( $datafile );
 }
 
 done_testing;

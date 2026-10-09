@@ -202,13 +202,17 @@ sub can_continue {
 sub save_cache {
     my ( $class, $filename ) = @_;
 
-    return Zonemaster::Engine::Nameserver->save( $filename );
+    Zonemaster::Engine::Nameserver->save( $filename, Zonemaster::Engine->VERSION() );
+
+    return;
 }
 
 sub preload_cache {
     my ( $class, $filename ) = @_;
 
-    return Zonemaster::Engine::Nameserver->restore( $filename );
+    Zonemaster::Engine::Nameserver->restore( $filename );
+
+    return;
 }
 
 sub asn_lookup {

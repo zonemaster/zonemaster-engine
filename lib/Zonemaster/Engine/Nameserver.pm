@@ -9,13 +9,9 @@ use Class::Accessor qw( antlers );
 
 use Carp qw( confess croak );
 use CBOR::XS;
-use Digest::MD5;
 use Fcntl      qw( SEEK_SET );
 use List::Util qw( max min sum );
-use MIME::Base64;
-use Module::Find qw( useall );
 use Net::IP::XS;
-use POSIX                         ();
 use Scalar::Util                  qw( blessed );
 use Time::HiRes                   qw( gettimeofday time tv_interval );
 use Zonemaster::Engine::Constants qw( :ip :misc );
@@ -23,6 +19,7 @@ use Zonemaster::Engine::DNSName;
 use Zonemaster::Engine::Logger::Global qw( global_logger );
 use Zonemaster::Engine::Nameserver::Cache;
 use Zonemaster::Engine::Packet;
+use Zonemaster::Engine::Profile;
 use Zonemaster::Engine::Recursor::Cache qw( recursor_cache_clear );
 use Zonemaster::LDNS;
 
@@ -611,13 +608,13 @@ sub _serialize_packet {
 }
 
 sub save {
-    my ( $class, $filename ) = @_;
+    my ( $class, $filename, $engine_version ) = @_;
 
     open my $fh, '>', $filename or die "Cache save failed: $!";
 
     my $dumped_contents = {
         format_version => 1,
-        engine_version => Zonemaster::Engine->VERSION(),
+        engine_version => $engine_version,
         packets        => do {
             # Gives an array of (nameserver, cached packets) pairs.
             # A nameserver is itself a (name, IP) pair and each cached packet
@@ -713,7 +710,7 @@ sub restore {
         );
     }
 
-    Zonemaster::Engine->logger->add( RESTORED_NS_CACHE => { file => $filename } );
+    global_logger()->add( RESTORED_NS_CACHE => { file => $filename } );
 
     return;
 } ## end sub restore
