@@ -18,7 +18,7 @@ sub make {
     undef $ENV{MAKEFLAGS};
 
     my $command = join( ' ', $makebin, '-s', @make_args );
-    my $output = `$command 2>&1`;
+    my $output  = `$command 2>&1`;
 
     if ( $? == -1 ) {
         BAIL_OUT( "failed to execute: $!" );

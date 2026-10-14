@@ -6,8 +6,8 @@ use warnings;
 use version; our $VERSION = version->declare( "v1.0.14" );
 
 use Carp;
-use List::MoreUtils qw[uniq none];
-use List::Util qw[max];
+use List::MoreUtils    qw[uniq none];
+use List::Util         qw[max];
 use Locale::TextDomain qw[Zonemaster-Engine];
 use Readonly;
 use JSON::PP;
@@ -105,7 +105,7 @@ sub metadata {
               Z01_MNAME_UNEXPECTED_RCODE
               TEST_CASE_END
               TEST_CASE_START
-              )
+            )
         ],
         zone02 => [
             qw(
@@ -114,7 +114,7 @@ sub metadata {
               NO_RESPONSE_SOA_QUERY
               TEST_CASE_END
               TEST_CASE_START
-              )
+            )
         ],
         zone03 => [
             qw(
@@ -123,7 +123,7 @@ sub metadata {
               NO_RESPONSE_SOA_QUERY
               TEST_CASE_END
               TEST_CASE_START
-              )
+            )
         ],
         zone04 => [
             qw(
@@ -132,7 +132,7 @@ sub metadata {
               NO_RESPONSE_SOA_QUERY
               TEST_CASE_END
               TEST_CASE_START
-              )
+            )
         ],
         zone05 => [
             qw(
@@ -142,7 +142,7 @@ sub metadata {
               NO_RESPONSE_SOA_QUERY
               TEST_CASE_END
               TEST_CASE_START
-              )
+            )
         ],
         zone06 => [
             qw(
@@ -152,7 +152,7 @@ sub metadata {
               NO_RESPONSE_SOA_QUERY
               TEST_CASE_END
               TEST_CASE_START
-              )
+            )
         ],
         zone07 => [
             qw(
@@ -162,7 +162,7 @@ sub metadata {
               MNAME_HAS_NO_ADDRESS
               TEST_CASE_END
               TEST_CASE_START
-              )
+            )
         ],
         zone08 => [
             qw(
@@ -171,7 +171,7 @@ sub metadata {
               NO_RESPONSE_MX_QUERY
               TEST_CASE_END
               TEST_CASE_START
-              )
+            )
         ],
         zone09 => [
             qw(
@@ -194,7 +194,7 @@ sub metadata {
               Z09_VALID_NULL_MX
               TEST_CASE_END
               TEST_CASE_START
-              )
+            )
         ],
         zone10 => [
             qw(
@@ -205,7 +205,7 @@ sub metadata {
               WRONG_SOA
               TEST_CASE_END
               TEST_CASE_START
-              )
+            )
         ],
         zone11 => [
             qw(
@@ -219,7 +219,7 @@ sub metadata {
               Z11_SPF_SYNTAX_ERROR
               Z11_SPF_SYNTAX_OK
               Z11_UNABLE_TO_CHECK_FOR_SPF
-              )
+            )
         ],
     };
 } ## end sub metadata
@@ -291,7 +291,8 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     REFRESH_MINIMUM_VALUE_OK => sub {
         __x    # ZONE:REFRESH_MINIMUM_VALUE_OK
-          'SOA \'refresh\' value ({refresh}) is at least equal to the minimum recommended value ({required_refresh}).', @_;
+          'SOA \'refresh\' value ({refresh}) is at least equal to the minimum recommended value ({required_refresh}).',
+          @_;
     },
     EXPIRE_LOWER_THAN_REFRESH => sub {
         __x    # ZONE:EXPIRE_LOWER_THAN_REFRESH
@@ -389,7 +390,8 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     Z01_MNAME_IS_DOT => sub {
         __x    # ZONE:Z01_MNAME_IS_DOT
-          'SOA MNAME is specified as "." which usually means "no server". Fetched from name servers "{ns_ip_list}".', @_;
+          'SOA MNAME is specified as "." which usually means "no server". Fetched from name servers "{ns_ip_list}".',
+          @_;
     },
     Z01_MNAME_IS_LOCALHOST => sub {
         __x    # ZONE:Z01_MNAME_IS_LOCALHOST
@@ -417,7 +419,8 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     Z01_MNAME_NOT_MASTER => sub {
         __x    # ZONE:Z01_MNAME_NOT_MASTER
-          'SOA MNAME name server(s) "{ns_list}" do not have the highest SOA SERIAL (expected "{soaserial}" but got "{soaserial_list}")', @_;
+'SOA MNAME name server(s) "{ns_list}" do not have the highest SOA SERIAL (expected "{soaserial}" but got "{soaserial_list}")',
+          @_;
     },
     Z01_MNAME_NOT_RESOLVE => sub {
         __x    # ZONE:Z01_MNAME_NOT_RESOLVE
@@ -497,8 +500,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     Z11_DIFFERENT_SPF_POLICIES_FOUND => sub {
         __x    # ZONE:Z11_DIFFERENT_SPF_POLICIES_FOUND
-          'The following name servers returned the same SPF policy. Name servers: {ns_list}.',
-          @_;
+          'The following name servers returned the same SPF policy. Name servers: {ns_list}.', @_;
     },
     Z11_INCONSISTENT_SPF_POLICIES => sub {
         __     # ZONE:Z11_INCONSISTENT_SPF_POLICIES
@@ -506,8 +508,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     Z11_NO_SPF_FOUND => sub {
         __x    # ZONE:Z11_NO_SPF_FOUND
-          'No SPF policy was found for {domain}.',
-          @_;
+          'No SPF policy was found for {domain}.', @_;
     },
     Z11_NO_SPF_NON_MAIL_DOMAIN => sub {
         __x    # ZONE:Z11_NO_SPF_NON_MAIL_DOMAIN
@@ -529,8 +530,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     Z11_SPF_MULTIPLE_RECORDS => sub {
         __x    # ZONE:Z11_SPF_MULTIPLE_RECORDS
-          'The following name servers returned more than one SPF policy. Name servers: {ns_list}.',
-          @_;
+          'The following name servers returned more than one SPF policy. Name servers: {ns_list}.', @_;
     },
     Z11_SPF_SYNTAX_ERROR => sub {
         __x    # ZONE:Z11_SPF_SYNTAX_ERROR
@@ -539,8 +539,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     Z11_SPF_SYNTAX_OK => sub {
         __x    # ZONE:Z11_SPF_SYNTAX_OK
-          'The SPF policy of {domain} has correct syntax.',
-          @_;
+          'The SPF policy of {domain} has correct syntax.', @_;
     },
     Z11_UNABLE_TO_CHECK_FOR_SPF => sub {
         __     # ZONE:Z11_UNABLE_TO_CHECK_FOR_SPF
@@ -622,27 +621,13 @@ Returns a boolean.
 sub _ip_disabled_message {
     my ( $results_array, $ns, @rrtypes ) = @_;
 
-    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
-        push @$results_array, map {
-          _emit_log(
-            IPV6_DISABLED => {
-                ns     => $ns->string,
-                rrtype => $_
-            }
-          )
-        } @rrtypes;
+    if ( not Zonemaster::Engine::Profile->effective->get( q{net.ipv6} ) and $ns->address->version == $IP_VERSION_6 ) {
+        push @$results_array, map { _emit_log( IPV6_DISABLED => { ns => $ns->string, rrtype => $_ } ) } @rrtypes;
         return 1;
     }
 
-    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
-        push @$results_array, map {
-          _emit_log(
-            IPV4_DISABLED => {
-                ns     => $ns->string,
-                rrtype => $_,
-            }
-          )
-        } @rrtypes;
+    if ( not Zonemaster::Engine::Profile->effective->get( q{net.ipv4} ) and $ns->address->version == $IP_VERSION_4 ) {
+        push @$results_array, map { _emit_log( IPV4_DISABLED => { ns => $ns->string, rrtype => $_ } ) } @rrtypes;
         return 1;
     }
     return 0;
@@ -724,7 +709,7 @@ sub _spf_syntax_ok {
     my $spf = shift;
 
     try {
-        Mail::SPF::v1::Record->new_from_string($spf);
+        Mail::SPF::v1::Record->new_from_string( $spf );
     }
 }
 
@@ -759,73 +744,73 @@ sub zone01 {
     my @mname_localhost;
     my @mname_dot;
 
-    foreach my $ns ( @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) } ){
-        if ( _ip_disabled_message( \@results, $ns, q{SOA} ) ){
+    foreach my $ns ( @{ Zonemaster::Engine::TestMethods->method4and5( $zone ) } ) {
+        if ( _ip_disabled_message( \@results, $ns, q{SOA} ) ) {
             next;
         }
 
         my $p = $ns->query( $zone->name, q{SOA} );
 
-        if ( not $p or $p->rcode ne q{NOERROR} or not $p->aa or not $p->get_records_for_name( q{SOA}, $zone->name ) ){
+        if ( not $p or $p->rcode ne q{NOERROR} or not $p->aa or not $p->get_records_for_name( q{SOA}, $zone->name ) ) {
             next;
         }
 
-        foreach my $soa_rr ( $p->get_records_for_name( q{SOA}, $zone->name ) ){
-            my $soa_mname = lc($soa_rr->mname);
+        foreach my $soa_rr ( $p->get_records_for_name( q{SOA}, $zone->name ) ) {
+            my $soa_mname = lc( $soa_rr->mname );
             $soa_mname =~ s/[.]\z//smx;
 
-            if ( $soa_mname eq 'localhost' ){
+            if ( $soa_mname eq 'localhost' ) {
                 push @mname_localhost, $ns->address->short;
             }
-            elsif ( not $soa_mname ){
+            elsif ( not $soa_mname ) {
                 push @mname_dot, $ns->address->short;
             }
-            else{
+            else {
                 $mname_ns{$soa_mname} = undef;
             }
 
             push @serial_ns, $soa_rr->serial;
         }
-    }
+    } ## end foreach my $ns ( @{ Zonemaster::Engine::TestMethods...})
 
-    if ( scalar @mname_localhost ){
+    if ( scalar @mname_localhost ) {
         push @results, _emit_log( Z01_MNAME_IS_LOCALHOST => { ns_ip_list => join( q{;}, @mname_localhost ) } );
     }
 
-    if ( scalar @mname_dot ){
+    if ( scalar @mname_dot ) {
         push @results, _emit_log( Z01_MNAME_IS_DOT => { ns_ip_list => join( q{;}, @mname_dot ) } );
     }
 
-    my $found_ip = 0;
+    my $found_ip     = 0;
     my $found_serial = 0;
 
-    foreach my $mname ( keys %mname_ns ){
-        if ( none { $_ eq $mname } @{ Zonemaster::Engine::TestMethods->method3( $zone ) } ){
+    foreach my $mname ( keys %mname_ns ) {
+        if ( none { $_ eq $mname } @{ Zonemaster::Engine::TestMethods->method3( $zone ) } ) {
             push @results, _emit_log( Z01_MNAME_NOT_IN_NS_LIST => { nsname => $mname } );
         }
 
-        foreach my $ip ( Zonemaster::Engine::Recursor->get_addresses_for( $mname ) ){
+        foreach my $ip ( Zonemaster::Engine::Recursor->get_addresses_for( $mname ) ) {
             $found_ip++;
-            $mname_ns{$mname}{$ip->short} = undef;
+            $mname_ns{$mname}{ $ip->short } = undef;
         }
 
-        if ( $found_ip ){
-            foreach my $ip ( keys %{ $mname_ns{$mname} } ){
-                if ( $ip eq '127.0.0.1' or $ip eq '::1' ){
+        if ( $found_ip ) {
+            foreach my $ip ( keys %{ $mname_ns{$mname} } ) {
+                if ( $ip eq '127.0.0.1' or $ip eq '::1' ) {
                     push @results, _emit_log( Z01_MNAME_HAS_LOCALHOST_ADDR => { nsname => $mname, ns_ip => $ip } );
                 }
-                else{
+                else {
                     my $ns = Zonemaster::Engine::Nameserver->new( { name => $mname, address => $ip } );
 
-                    if ( _ip_disabled_message( \@results, $ns, q{SOA} ) ){
-                       next;
+                    if ( _ip_disabled_message( \@results, $ns, q{SOA} ) ) {
+                        next;
                     }
 
                     my $p = $ns->query( $zone->name, q{SOA} );
 
-                    if ( $p ){
-                        if ( $p->rcode eq q{NOERROR} and $p->get_records_for_name( q{SOA}, $zone->name, q{answer} ) ){
-                            if ( not $p->aa ){
+                    if ( $p ) {
+                        if ( $p->rcode eq q{NOERROR} and $p->get_records_for_name( q{SOA}, $zone->name, q{answer} ) ) {
+                            if ( not $p->aa ) {
                                 push @results, _emit_log( Z01_MNAME_NOT_AUTHORITATIVE => { ns => $ns->string } );
                             }
                             else {
@@ -834,72 +819,73 @@ sub zone01 {
                                 $mname_ns{$mname}{$ip} = $rr->serial;
                             }
                         }
-                        elsif ( $p->rcode ne q{NOERROR} ){
-                            push @results, _emit_log( Z01_MNAME_UNEXPECTED_RCODE => { ns => $ns->string, rcode => $p->rcode } );
+                        elsif ( $p->rcode ne q{NOERROR} ) {
+                            push @results,
+                              _emit_log( Z01_MNAME_UNEXPECTED_RCODE => { ns => $ns->string, rcode => $p->rcode } );
                         }
-                        elsif ( not $p->get_records_for_name( q{SOA}, $zone->name, q{answer} ) ){
+                        elsif ( not $p->get_records_for_name( q{SOA}, $zone->name, q{answer} ) ) {
                             push @results, _emit_log( Z01_MNAME_MISSING_SOA_RECORD => { ns => $ns->string } );
                         }
                     }
                     else {
                         push @results, _emit_log( Z01_MNAME_NO_RESPONSE => { ns => $ns->string } );
                     }
-                }
-            }
-        }
-        else{
+                } ## end else [ if ( $ip eq '127.0.0.1'...)]
+            } ## end foreach my $ip ( keys %{ $mname_ns...})
+        } ## end if ( $found_ip )
+        else {
             push @results, _emit_log( Z01_MNAME_NOT_RESOLVE => { nsname => $mname } );
         }
-    }
+    } ## end foreach my $mname ( keys %mname_ns)
 
-    if ( $found_serial ){
-        foreach my $mname ( keys %mname_ns ){
-            MNAME_IP: foreach my $mname_ip ( keys %{ $mname_ns{$mname} } ){
+    if ( $found_serial ) {
+        foreach my $mname ( keys %mname_ns ) {
+          MNAME_IP: foreach my $mname_ip ( keys %{ $mname_ns{$mname} } ) {
                 my $mname_serial = $mname_ns{$mname}{$mname_ip};
 
-                if ( not defined($mname_serial) ){
+                if ( not defined( $mname_serial ) ) {
                     next;
                 }
 
-                foreach my $serial ( uniq @serial_ns ){
-                    if ( Zonemaster::Engine::Util::serial_gt( $serial, $mname_serial ) ){
+                foreach my $serial ( uniq @serial_ns ) {
+                    if ( Zonemaster::Engine::Util::serial_gt( $serial, $mname_serial ) ) {
                         $mname_not_master{$mname}{$mname_ip} = $mname_serial;
                         next MNAME_IP;
                     }
                 }
 
-                push @mname_master, $mname . '/' . $mname_ip ;
+                push @mname_master, $mname . '/' . $mname_ip;
             }
         }
 
-        if ( %mname_not_master ){
-            push @results,
-                _emit_log(
-                    Z01_MNAME_NOT_MASTER => {
-                        ns_list => join( q{;}, sort map
-                                        {
-                                            my $mname = $_;
-                                            map { "$mname/$_" } keys %{ $mname_not_master{$_} }
-                                        }
-                                        keys %mname_not_master
-                                   ),
-                        soaserial => max( uniq map { values %{ $mname_not_master{$_} } } keys %mname_not_master ),
-                        soaserial_list => join( q{;}, uniq @serial_ns )
-                    }
-                );
+        if ( %mname_not_master ) {
+            push @results, _emit_log(
+                Z01_MNAME_NOT_MASTER => {
+                    ns_list => join(
+                        q{;},
+                        sort map {
+                            my $mname = $_;
+                            map { "$mname/$_" } keys %{ $mname_not_master{$_} }
+                          }
+                          keys %mname_not_master,
+                    ),
+                    soaserial      => max( uniq map { values %{ $mname_not_master{$_} } } keys %mname_not_master ),
+                    soaserial_list => join( q{;}, uniq @serial_ns ),
+                }
+            );
         }
 
-        if ( @mname_master ){
+        if ( @mname_master ) {
             push @results,
-                _emit_log(
-                    Z01_MNAME_IS_MASTER => {
-                        ns_list  => join( q{;}, sort @mname_master )
-                    }
-                );
+              _emit_log(
+                Z01_MNAME_IS_MASTER => {
+                    ns_list => join( q{;}, sort @mname_master )
+                }
+              );
         }
-    }
+    } ## end if ( $found_serial )
 
-    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) )
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub zone01
 
 =over
@@ -926,7 +912,8 @@ sub zone02 {
 
     my $p = _retrieve_record_from_zone( \@results, $zone, $zone->name, q{SOA} );
 
-    my $soa_refresh_minimum_value = Zonemaster::Engine::Profile->effective->get( q{test_cases_vars.zone02.SOA_REFRESH_MINIMUM_VALUE} );
+    my $soa_refresh_minimum_value =
+      Zonemaster::Engine::Profile->effective->get( q{test_cases_vars.zone02.SOA_REFRESH_MINIMUM_VALUE} );
 
     if ( $p and my ( $soa ) = $p->get_records( q{SOA}, q{answer} ) ) {
         my $soa_refresh = $soa->refresh;
@@ -953,7 +940,7 @@ sub zone02 {
         push @results, _emit_log( NO_RESPONSE_SOA_QUERY => {} );
     }
 
-    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) )
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub zone02
 
 =over
@@ -1006,7 +993,7 @@ sub zone03 {
         push @results, _emit_log( NO_RESPONSE_SOA_QUERY => {} );
     }
 
-    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) )
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub zone03
 
 =over
@@ -1033,7 +1020,8 @@ sub zone04 {
 
     my $p = _retrieve_record_from_zone( \@results, $zone, $zone->name, q{SOA} );
 
-    my $soa_retry_minimum_value = Zonemaster::Engine::Profile->effective->get( q{test_cases_vars.zone04.SOA_RETRY_MINIMUM_VALUE} );
+    my $soa_retry_minimum_value =
+      Zonemaster::Engine::Profile->effective->get( q{test_cases_vars.zone04.SOA_RETRY_MINIMUM_VALUE} );
 
     if ( $p and my ( $soa ) = $p->get_records( q{SOA}, q{answer} ) ) {
         my $soa_retry = $soa->retry;
@@ -1060,7 +1048,7 @@ sub zone04 {
         push @results, _emit_log( NO_RESPONSE_SOA_QUERY => {} );
     }
 
-    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) )
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub zone04
 
 =over
@@ -1087,7 +1075,8 @@ sub zone05 {
 
     my $p = _retrieve_record_from_zone( \@results, $zone, $zone->name, q{SOA} );
 
-    my $soa_expire_minimum_value = Zonemaster::Engine::Profile->effective->get( q{test_cases_vars.zone05.SOA_EXPIRE_MINIMUM_VALUE} );
+    my $soa_expire_minimum_value =
+      Zonemaster::Engine::Profile->effective->get( q{test_cases_vars.zone05.SOA_EXPIRE_MINIMUM_VALUE} );
 
     if ( $p and my ( $soa ) = $p->get_records( q{SOA}, q{answer} ) ) {
         my $soa_expire  = $soa->expire;
@@ -1125,7 +1114,7 @@ sub zone05 {
         push @results, _emit_log( NO_RESPONSE_SOA_QUERY => {} );
     }
 
-    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) )
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub zone05
 
 =over
@@ -1152,8 +1141,10 @@ sub zone06 {
 
     my $p = _retrieve_record_from_zone( \@results, $zone, $zone->name, q{SOA} );
 
-    my $soa_default_ttl_maximum_value = Zonemaster::Engine::Profile->effective->get( q{test_cases_vars.zone06.SOA_DEFAULT_TTL_MAXIMUM_VALUE} );
-    my $soa_default_ttl_minimum_value = Zonemaster::Engine::Profile->effective->get( q{test_cases_vars.zone06.SOA_DEFAULT_TTL_MINIMUM_VALUE} );
+    my $soa_default_ttl_maximum_value =
+      Zonemaster::Engine::Profile->effective->get( q{test_cases_vars.zone06.SOA_DEFAULT_TTL_MAXIMUM_VALUE} );
+    my $soa_default_ttl_minimum_value =
+      Zonemaster::Engine::Profile->effective->get( q{test_cases_vars.zone06.SOA_DEFAULT_TTL_MINIMUM_VALUE} );
 
     if ( $p and my ( $soa ) = $p->get_records( q{SOA}, q{answer} ) ) {
         my $soa_minimum = $soa->minimum;
@@ -1190,7 +1181,7 @@ sub zone06 {
         push @results, _emit_log( NO_RESPONSE_SOA_QUERY => {} );
     }
 
-    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) )
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub zone06
 
 =over
@@ -1225,9 +1216,12 @@ sub zone07 {
         foreach my $address_type ( q{A}, q{AAAA} ) {
             my $p_mname = Zonemaster::Engine::Recursor->recurse( $soa_mname, $address_type );
             if ( $p_mname ) {
-                my $final_name = name( ($p_mname->question)[0]->owner ); # In case CNAME was followed during the recursive lookup
+                my $final_name =
+                  name( ( $p_mname->question )[0]->owner );    # In case CNAME was followed during the recursive lookup
 
-                if ( $p_mname->has_rrs_of_type_for_name( $address_type, $soa_mname ) or $p_mname->has_rrs_of_type_for_name( $address_type, $final_name ) ) {
+                if (   $p_mname->has_rrs_of_type_for_name( $address_type, $soa_mname )
+                    or $p_mname->has_rrs_of_type_for_name( $address_type, $final_name ) )
+                {
                     $addresses_nb++;
                 }
 
@@ -1263,7 +1257,7 @@ sub zone07 {
         push @results, _emit_log( NO_RESPONSE_SOA_QUERY => {} );
     }
 
-    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) )
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub zone07
 
 =over
@@ -1307,7 +1301,7 @@ sub zone08 {
         push @results, _emit_log( NO_RESPONSE_MX_QUERY => {} );
     }
 
-    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) )
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub zone08
 
 =over
@@ -1330,9 +1324,7 @@ sub zone09 {
     my ( $class, $zone ) = @_;
 
     state sub sort_mx_records {
-        sort {
-            $a->preference() <=> $b->preference() or fc $a->exchange() cmp fc $b->exchange()
-        } @_;
+        sort { $a->preference() <=> $b->preference() or fc $a->exchange() cmp fc $b->exchange() } @_;
     }
 
     state sub mx_record_to_string {
@@ -1340,7 +1332,7 @@ sub zone09 {
     }
 
     state sub sort_unique_mx_records {
-        my %mx_hash = map { mx_record_to_string($_) => $_ } @_;
+        my %mx_hash = map { mx_record_to_string( $_ ) => $_ } @_;
         sort_mx_records( values %mx_hash );
     }
 
@@ -1351,10 +1343,10 @@ sub zone09 {
     local $Zonemaster::Engine::Logger::TEST_CASE_NAME = 'Zone09';
     push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
-    my @nss = uniq grep { $_->isa('Zonemaster::Engine::Nameserver') } (
-                @{ Zonemaster::Engine::TestMethodsV2->get_del_ns_names_and_ips( $zone ) // [] },
-                @{ Zonemaster::Engine::TestMethodsV2->get_zone_ns_names_and_ips( $zone ) // [] }
-            );
+    my @nss = uniq grep { $_->isa( 'Zonemaster::Engine::Nameserver' ) } (
+        @{ Zonemaster::Engine::TestMethodsV2->get_del_ns_names_and_ips( $zone )  // [] },
+        @{ Zonemaster::Engine::TestMethodsV2->get_zone_ns_names_and_ips( $zone ) // [] },
+    );
 
     my %ip_already_processed;
 
@@ -1363,7 +1355,6 @@ sub zone09 {
     my @non_authoritative_mx;
     my @no_mx_set;
     my %mx_set;
-
 
     foreach my $ns ( @nss ) {
         my $ns_ip = $ns->address->short;
@@ -1377,24 +1368,28 @@ sub zone09 {
 
         my $p1 = $ns->query( $zone->name, q{SOA} );
 
-        if ( not $p1 or $p1->rcode ne q{NOERROR} or not $p1->aa or not $p1->has_rrs_of_type_for_name(q{SOA}, $zone->name) ){
+        if (   not $p1
+            or $p1->rcode ne q{NOERROR}
+            or not $p1->aa
+            or not $p1->has_rrs_of_type_for_name( q{SOA}, $zone->name ) )
+        {
             next;
         }
 
         my $p2 = $ns->query( $zone->name, q{MX} );
 
-        if ( not $p2 ){
+        if ( not $p2 ) {
             push @no_response_mx, $ns;
         }
         elsif ( $p2->rcode ne q{NOERROR} ) {
-            push @{ $unexpected_rcode_mx{$p2->rcode} }, $ns;
+            push @{ $unexpected_rcode_mx{ $p2->rcode } }, $ns;
         }
         elsif ( not $p2->aa ) {
             push @non_authoritative_mx, $ns;
         }
         else {
-            my @sorted_mx_rrs = sort_unique_mx_records( $p2->get_records_for_name( q{MX}, $zone->name, q{answer} ) );
-            my $mx_rrset_string = join ';', map mx_record_to_string($_), @sorted_mx_rrs;
+            my @sorted_mx_rrs   = sort_unique_mx_records( $p2->get_records_for_name( q{MX}, $zone->name, q{answer} ) );
+            my $mx_rrset_string = join ';', map mx_record_to_string( $_ ), @sorted_mx_rrs;
 
             if ( !scalar @sorted_mx_rrs ) {
                 push @no_mx_set, $ns;
@@ -1402,46 +1397,58 @@ sub zone09 {
             elsif ( not exists $mx_set{$mx_rrset_string} ) {
                 $mx_set{$mx_rrset_string} = {
                     ns => [ $ns->string ],
-                    mx => \@sorted_mx_rrs
+                    mx => \@sorted_mx_rrs,
                 };
             }
             else {
                 push @{ $mx_set{$mx_rrset_string}{ns} }, $ns->string;
             }
         }
-    }
+    } ## end foreach my $ns ( @nss )
 
     if ( scalar @no_response_mx ) {
-        push @results, _emit_log( Z09_NO_RESPONSE_MX_QUERY => {
-            ns_list => ns_list( @no_response_mx )
-        } );
+        push @results,
+          _emit_log(
+            Z09_NO_RESPONSE_MX_QUERY => {
+                ns_list => ns_list( @no_response_mx )
+            }
+          );
     }
 
     foreach my $rcode ( keys %unexpected_rcode_mx ) {
-        push @results, _emit_log( Z09_UNEXPECTED_RCODE_MX => {
-            rcode => $rcode,
-            ns_list => ns_list( @{ $unexpected_rcode_mx{$rcode} } )
-        } );
+        push @results,
+          _emit_log(
+            Z09_UNEXPECTED_RCODE_MX => {
+                rcode   => $rcode,
+                ns_list => ns_list( @{ $unexpected_rcode_mx{$rcode} } ),
+            }
+          );
     }
 
     if ( scalar @non_authoritative_mx ) {
-        push @results, _emit_log( Z09_NON_AUTH_MX_RESPONSE => {
-            ns_list => ns_list( @non_authoritative_mx )
-        } );
+        push @results,
+          _emit_log(
+            Z09_NON_AUTH_MX_RESPONSE => {
+                ns_list => ns_list( @non_authoritative_mx )
+            }
+          );
     }
 
     foreach my $mx_string ( keys %mx_set ) {
-        push @results, _emit_log( Z09_MX_DATA => {
-            ns_list => ns_list( @{ $mx_set{$mx_string}{ns} } ),
-            mxrdata_list => $mx_string
-        } );
+        push @results,
+          _emit_log(
+            Z09_MX_DATA => {
+                ns_list      => ns_list( @{ $mx_set{$mx_string}{ns} } ),
+                mxrdata_list => $mx_string,
+            }
+          );
     }
 
     if ( scalar @no_mx_set and scalar %mx_set ) {
         push @results,
-            _emit_log( Z09_INCONSISTENT_MX => {} ),
-            _emit_log( Z09_NO_MX_FOUND => { ns_list => ns_list( @no_mx_set ) } ),
-            _emit_log( Z09_MX_FOUND => { ns_list => ns_list( map @{$_->{ns}}, values %mx_set ) } );
+          _emit_log( Z09_INCONSISTENT_MX => {} ),
+          _emit_log( Z09_NO_MX_FOUND     => { ns_list => ns_list( @no_mx_set ) } ),
+          _emit_log( Z09_MX_FOUND        => { ns_list => ns_list( map @{ $_->{ns} }, values %mx_set ) } );
     }
 
     if ( scalar keys %mx_set > 1 ) {
@@ -1473,10 +1480,10 @@ sub zone09 {
                 push @results, _emit_log( Z09_ARPA_EMAIL_DOMAIN => {} );
             }
         }
-    }
+    } ## end elsif ( scalar keys %mx_set...)
 
     if ( scalar @no_mx_set and !scalar %mx_set ) {
-        if ( _is_non_mail_domain($zone->name) ) {
+        if ( _is_non_mail_domain( $zone->name ) ) {
             push @results, _emit_log( Z09_NO_MX_FOUND_OR_EXPECTED => {} );
         }
         else {
@@ -1488,7 +1495,7 @@ sub zone09 {
         push @results, _emit_log( Z09_NO_SERVERS_MX_RESPONSE => {} );
     }
 
-    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) )
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub zone09
 
 =over
@@ -1558,7 +1565,7 @@ sub zone10 {
         push @results, _emit_log( ONE_SOA => {} );
     }
 
-    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) )
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub zone10
 
 =over
@@ -1589,10 +1596,10 @@ sub zone11 {
 
     my %ns_spf;
 
-    my @nss = uniq grep { $_->isa('Zonemaster::Engine::Nameserver') } (
-                @{ Zonemaster::Engine::TestMethodsV2->get_del_ns_names_and_ips( $zone ) // [] },
-                @{ Zonemaster::Engine::TestMethodsV2->get_zone_ns_names_and_ips( $zone ) // [] }
-            );
+    my @nss = uniq grep { $_->isa( 'Zonemaster::Engine::Nameserver' ) } (
+        @{ Zonemaster::Engine::TestMethodsV2->get_del_ns_names_and_ips( $zone )  // [] },
+        @{ Zonemaster::Engine::TestMethodsV2->get_zone_ns_names_and_ips( $zone ) // [] },
+    );
 
     my %ip_already_processed;
     foreach my $ns ( @nss ) {
@@ -1608,13 +1615,13 @@ sub zone11 {
         my $p = $ns->query( $zone->name, q{TXT} );
 
         if ( $p and $p->rcode eq q{NOERROR} and $p->aa ) {
-            my @txt_rrs = $p->get_records_for_name( q{TXT}, $zone->name );
-            my @txt_rdata = map { lc $_->txtdata() } @txt_rrs;
+            my @txt_rrs       = $p->get_records_for_name( q{TXT}, $zone->name );
+            my @txt_rdata     = map { lc $_->txtdata() } @txt_rrs;
             my @spf1_policies = grep /\Av=spf1(?:\Z|\s+)/, @txt_rdata;
 
             $ns_spf{$ns_ip} = \@spf1_policies;
         }
-    }
+    } ## end foreach my $ns ( @nss )
 
     # At this point, the values of %ns_spf contain *lists* of SPF policies.
     # There should be at most one item in each of those lists, but zones may
@@ -1629,8 +1636,8 @@ sub zone11 {
     my %spf_ns = ();
     for my $ns_ip ( keys %ns_spf ) {
         my @matching_nss = @{ $ip_already_processed{$ns_ip} };
-        my $mangled_spfs = join '', map { sprintf '<%d>%s', length $_, $_ } sort @{$ns_spf{$ns_ip}};
-        push @{$spf_ns{$mangled_spfs}}, @matching_nss;
+        my $mangled_spfs = join '', map { sprintf '<%d>%s', length $_, $_ } sort @{ $ns_spf{$ns_ip} };
+        push @{ $spf_ns{$mangled_spfs} }, @matching_nss;
     }
 
     if ( not scalar %ns_spf ) {
@@ -1651,17 +1658,22 @@ sub zone11 {
             push @results, _emit_log( Z11_DIFFERENT_SPF_POLICIES_FOUND => { ns_list => join( q{;}, sort @$ns ) } );
         }
     }
-    elsif ( my @bad_ips = grep { scalar @{$ns_spf{$_}} > 1 } keys %ns_spf ) {
-        push @results, _emit_log( Z11_SPF_MULTIPLE_RECORDS => { ns_list => join( q{;}, sort map { @{ $ip_already_processed{$_} } } @bad_ips ) } );
+    elsif ( my @bad_ips = grep { scalar @{ $ns_spf{$_} } > 1 } keys %ns_spf ) {
+        push @results,
+          _emit_log( Z11_SPF_MULTIPLE_RECORDS =>
+              { ns_list => join( q{;}, sort map { @{ $ip_already_processed{$_} } } @bad_ips ) } );
     }
     else {
-        my $spf_text = (values %ns_spf)[0][0];
+        my $spf_text = ( values %ns_spf )[0][0];
 
         if ( not _spf_syntax_ok( $spf_text ) ) {
-            push @results, _emit_log( Z11_SPF_SYNTAX_ERROR => {
-                ns_list => join( q{;}, sort map { @{ $ip_already_processed{$_} } } keys %ns_spf ),
-                domain => $zone->name
-            } );
+            push @results,
+              _emit_log(
+                Z11_SPF_SYNTAX_ERROR => {
+                    ns_list => join( q{;}, sort map { @{ $ip_already_processed{$_} } } keys %ns_spf ),
+                    domain  => $zone->name,
+                }
+              );
         }
         elsif ( not _is_non_mail_domain( $zone->name ) ) {
             push @results, _emit_log( Z11_SPF_SYNTAX_OK => { domain => $zone->name } );
@@ -1672,9 +1684,9 @@ sub zone11 {
         else {
             push @results, _emit_log( Z11_NON_NULL_SPF_NON_MAIL_DOMAIN => { domain => $zone->name } );
         }
-    }
+    } ## end else [ if ( not scalar %ns_spf)]
 
-    return ( @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) )
+    return ( @results, info( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub zone11
 
 1;

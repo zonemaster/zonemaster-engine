@@ -30,7 +30,8 @@ sub zone_gives {
     my ( $test, $zone, $gives_ref ) = @_;
 
     Zonemaster::Engine->logger->clear_history();
-    my @res = grep { $_->tag !~ /^TEST_CASE_(END|START)$/ } Zonemaster::Engine->test_method( $checking_module, $test, $zone );
+    my @res =
+      grep { $_->tag !~ /^TEST_CASE_(END|START)$/ } Zonemaster::Engine->test_method( $checking_module, $test, $zone );
     foreach my $gives ( @{$gives_ref} ) {
         ok( ( grep { $_->tag eq $gives } @res ), $zone->name->string . " gives $gives" );
     }
@@ -41,7 +42,8 @@ sub zone_gives_not {
     my ( $test, $zone, $gives_ref ) = @_;
 
     Zonemaster::Engine->logger->clear_history();
-    my @res = grep { $_->tag !~ /^TEST_CASE_(END|START)$/ } Zonemaster::Engine->test_method( $checking_module, $test, $zone );
+    my @res =
+      grep { $_->tag !~ /^TEST_CASE_(END|START)$/ } Zonemaster::Engine->test_method( $checking_module, $test, $zone );
     foreach my $gives ( @{$gives_ref} ) {
         ok( !( grep { $_->tag eq $gives } @res ), $zone->name->string . " does not give $gives" );
     }
@@ -55,7 +57,7 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Profile->effective->set( q{no_network}, 1 );
 }
 
-my ($json, $profile_test);
+my ( $json, $profile_test );
 $json         = read_file( 't/profiles/Test-basic-all.json' );
 $profile_test = Zonemaster::Engine::Profile->from_json( $json );
 Zonemaster::Engine::Profile->effective->merge( $profile_test );
@@ -72,8 +74,8 @@ if ( $ENV{ZONEMASTER_RECORD} ) {
 }
 
 Zonemaster::Engine::Profile->effective->set( q{no_network}, 0 );
-Zonemaster::Engine::Profile->effective->set( q{net.ipv4}, 0 );
-Zonemaster::Engine::Profile->effective->set( q{net.ipv6}, 0 );
+Zonemaster::Engine::Profile->effective->set( q{net.ipv4},   0 );
+Zonemaster::Engine::Profile->effective->set( q{net.ipv6},   0 );
 
 $zone = Zonemaster::Engine->zone( q{afnic.fr} );
 zone_gives( q{basic02}, $zone, [qw{NO_NETWORK}] );
@@ -94,8 +96,8 @@ TODO: {
 
     #basic03
     ok( $tag{A_QUERY_NO_RESPONSES}, q{A_QUERY_NO_RESPONSES} );
-    ok( $tag{HAS_A_RECORDS}, q{HAS_A_RECORDS} );
-    ok( $tag{NO_A_RECORDS}, q{NO_A_RECORDS} );
+    ok( $tag{HAS_A_RECORDS},        q{HAS_A_RECORDS} );
+    ok( $tag{NO_A_RECORDS},         q{NO_A_RECORDS} );
 }
 
 done_testing;

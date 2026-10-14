@@ -9,7 +9,7 @@ my $name = Zonemaster::Engine::DNSName->new( 'www.iis.se' );
 is_deeply( $name->labels, [ 'www', 'iis', 'se' ] );
 
 my $root = Zonemaster::Engine::DNSName->new( '' );
-is_deeply( $root->labels, [] );
+is_deeply( $root->labels,                                   [] );
 is_deeply( Zonemaster::Engine::DNSName->new( '.' )->labels, [] );
 
 is( $name->string, 'www.iis.se',  'Default, no final dot' );
@@ -21,7 +21,7 @@ is( $root->fqdn, '.', 'Root fqdn OK.' );
 ok( '.' eq $root, 'Root equal with dot' );
 ok( $root eq '.', 'Root equal with dot, other way around' );
 
-is( Zonemaster::Engine::DNSName->new({ labels => [qw(www nic se)] }), 'www.nic.se' );
+is( Zonemaster::Engine::DNSName->new( { labels => [qw(www nic se)] } ), 'www.nic.se' );
 is_deeply( Zonemaster::Engine::DNSName->new( 'www.nic.se.' )->labels, [qw(www nic se)] );
 
 is( $name->next_higher,              'iis.se' );

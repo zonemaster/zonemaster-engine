@@ -19,9 +19,9 @@ use Zonemaster::Engine::Util;
 use IO::Socket::INET6;    # Lazy-loads, so make sure it's here for the version logging
 
 use File::ShareDir qw[dist_file];
-use File::Slurp qw[read_file];
-use Scalar::Util qw[blessed];
-use POSIX qw[strftime];
+use File::Slurp    qw[read_file];
+use Scalar::Util   qw[blessed];
+use POSIX          qw[strftime];
 
 =head1 NAME
 
@@ -113,18 +113,18 @@ Adds logging messages regarding the current version of some modules, specificall
 sub _log_versions {
     info( GLOBAL_VERSION => { version => Zonemaster::Engine->VERSION } );
 
-    info( DEPENDENCY_VERSION => { name => 'Zonemaster::LDNS',      version => $Zonemaster::LDNS::VERSION } );
-    info( DEPENDENCY_VERSION => { name => 'IO::Socket::INET6',     version => $IO::Socket::INET6::VERSION } );
-    info( DEPENDENCY_VERSION => { name => 'Module::Find',          version => $Module::Find::VERSION } );
-    info( DEPENDENCY_VERSION => { name => 'File::ShareDir',        version => $File::ShareDir::VERSION } );
-    info( DEPENDENCY_VERSION => { name => 'File::Slurp',           version => $File::Slurp::VERSION } );
-    info( DEPENDENCY_VERSION => { name => 'Net::IP::XS',           version => $Net::IP::XS::VERSION } );
-    info( DEPENDENCY_VERSION => { name => 'List::MoreUtils',       version => $List::MoreUtils::VERSION } );
-    info( DEPENDENCY_VERSION => { name => 'Clone',                 version => $Clone::VERSION } );
-    info( DEPENDENCY_VERSION => { name => 'Readonly',              version => $Readonly::VERSION } );
+    info( DEPENDENCY_VERSION => { name => 'Zonemaster::LDNS',  version => $Zonemaster::LDNS::VERSION } );
+    info( DEPENDENCY_VERSION => { name => 'IO::Socket::INET6', version => $IO::Socket::INET6::VERSION } );
+    info( DEPENDENCY_VERSION => { name => 'Module::Find',      version => $Module::Find::VERSION } );
+    info( DEPENDENCY_VERSION => { name => 'File::ShareDir',    version => $File::ShareDir::VERSION } );
+    info( DEPENDENCY_VERSION => { name => 'File::Slurp',       version => $File::Slurp::VERSION } );
+    info( DEPENDENCY_VERSION => { name => 'Net::IP::XS',       version => $Net::IP::XS::VERSION } );
+    info( DEPENDENCY_VERSION => { name => 'List::MoreUtils',   version => $List::MoreUtils::VERSION } );
+    info( DEPENDENCY_VERSION => { name => 'Clone',             version => $Clone::VERSION } );
+    info( DEPENDENCY_VERSION => { name => 'Readonly',          version => $Readonly::VERSION } );
 
     return;
-} ## end sub _log_versions
+}
 
 =head1 METHODS
 
@@ -182,7 +182,11 @@ sub run_all_for {
     push @results, info( TEST_TARGET => { zone => $zone->name->string, module => 'all' } );
     _log_versions();
 
-    if ( not( Zonemaster::Engine::Profile->effective->get( q{net.ipv4} ) or Zonemaster::Engine::Profile->effective->get( q{net.ipv6} ) ) ) {
+    if (
+        not(   Zonemaster::Engine::Profile->effective->get( q{net.ipv4} )
+            or Zonemaster::Engine::Profile->effective->get( q{net.ipv6} ) )
+      )
+    {
         return info( NO_NETWORK => {} );
     }
 
@@ -210,8 +214,8 @@ sub run_all_for {
                 push @results, info( CANNOT_CONTINUE => { domain => $zone->name->string } );
                 last;
             }
-        }
-    }
+        } ## end foreach my $mod ( __PACKAGE__...)
+    } ## end if ( Zonemaster::Engine...)
 
     return @results;
 } ## end sub run_all_for
@@ -247,7 +251,11 @@ sub run_module {
     push @res, info( TEST_TARGET => { zone => $zone->name->string, module => $requested } );
     _log_versions();
 
-    if ( not( Zonemaster::Engine::Profile->effective->get( q{net.ipv4} ) or Zonemaster::Engine::Profile->effective->get( q{net.ipv6} ) ) ) {
+    if (
+        not(   Zonemaster::Engine::Profile->effective->get( q{net.ipv4} )
+            or Zonemaster::Engine::Profile->effective->get( q{net.ipv6} ) )
+      )
+    {
         return info( NO_NETWORK => {} );
     }
 
@@ -269,9 +277,10 @@ sub run_module {
             return @res;
         }
         else {
-            info( UNKNOWN_MODULE => { module => $requested, testcase => 'all', module_list => join( ':', sort $class->modules ) } );
+            info( UNKNOWN_MODULE =>
+                  { module => $requested, testcase => 'all', module_list => join( ':', sort $class->modules ) } );
         }
-    }
+    } ## end if ( Zonemaster::Engine...)
     else {
         info( CANNOT_CONTINUE => { domain => $zone->name->string } );
     }
@@ -309,8 +318,12 @@ sub run_one {
     push @res, info( START_TIME => { time_t => time(), string => strftime( "%F %T %z", ( localtime() ) ) } );
     push @res, info( TEST_TARGET => { zone => $zone->name->string, module => $requested, testcase => $test } );
     _log_versions();
-    
-    if ( not( Zonemaster::Engine::Profile->effective->get( q{net.ipv4} ) or Zonemaster::Engine::Profile->effective->get( q{net.ipv6} ) ) ) {
+
+    if (
+        not(   Zonemaster::Engine::Profile->effective->get( q{net.ipv4} )
+            or Zonemaster::Engine::Profile->effective->get( q{net.ipv6} ) )
+      )
+    {
         return info( NO_NETWORK => {} );
     }
 
@@ -335,11 +348,12 @@ sub run_one {
             else {
                 info( UNKNOWN_METHOD => { module => $m, testcase => $test } );
             }
-        }
+        } ## end if ( $module )
         else {
-            info( UNKNOWN_MODULE => { module => $requested, testcase => $test, module_list => join( ':', sort $class->modules ) } );
+            info( UNKNOWN_MODULE =>
+                  { module => $requested, testcase => $test, module_list => join( ':', sort $class->modules ) } );
         }
-    }
+    } ## end if ( Zonemaster::Engine...)
     else {
         info( CANNOT_CONTINUE => { domain => $zone->name->string } );
     }

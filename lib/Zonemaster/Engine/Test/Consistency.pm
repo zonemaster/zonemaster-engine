@@ -3,9 +3,9 @@ package Zonemaster::Engine::Test::Consistency;
 use v5.16.0;
 use warnings;
 
-use version; our $VERSION = version->declare("v1.1.16");
+use version; our $VERSION = version->declare( "v1.1.16" );
 
-use List::MoreUtils qw[uniq];
+use List::MoreUtils    qw[uniq];
 use Locale::TextDomain qw[Zonemaster-Engine];
 use Net::IP::XS;
 use Readonly;
@@ -67,7 +67,7 @@ sub all {
     }
 
     return @results;
-}
+} ## end sub all
 
 =over
 
@@ -98,7 +98,7 @@ sub metadata {
               IPV6_DISABLED
               TEST_CASE_END
               TEST_CASE_START
-              )
+            )
         ],
         consistency02 => [
             qw(
@@ -111,7 +111,7 @@ sub metadata {
               IPV6_DISABLED
               TEST_CASE_END
               TEST_CASE_START
-              )
+            )
         ],
         consistency03 => [
             qw(
@@ -124,7 +124,7 @@ sub metadata {
               IPV6_DISABLED
               TEST_CASE_END
               TEST_CASE_START
-              )
+            )
         ],
         consistency04 => [
             qw(
@@ -137,7 +137,7 @@ sub metadata {
               IPV6_DISABLED
               TEST_CASE_END
               TEST_CASE_START
-              )
+            )
         ],
         consistency05 => [
             qw(
@@ -155,7 +155,7 @@ sub metadata {
               CS05_OOD_ADDR_MISMATCH
               TEST_CASE_END
               TEST_CASE_START
-              )
+            )
         ],
         consistency06 => [
             qw(
@@ -165,7 +165,7 @@ sub metadata {
               MULTIPLE_SOA_MNAMES
               TEST_CASE_END
               TEST_CASE_START
-              )
+            )
         ],
     };
 } ## end sub metadata
@@ -201,11 +201,13 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     CS05_DELEGATION => sub {
         __x    # CONSISTENCY:CS05_DELEGATION
-          'Delegation of the child zone as provided by the parent name servers listed: "{ns_deleg_list}". Parent name servers: "{ns_list}".', @_;
+'Delegation of the child zone as provided by the parent name servers listed: "{ns_deleg_list}". Parent name servers: "{ns_list}".',
+          @_;
     },
     CS05_EXTRA_ADDR_CHILD => sub {
         __x    # CONSISTENCY:CS05_EXTRA_ADDR_CHILD
-          'There is one or more extra address records found in the child zone that are not present as glue in the delegation: "{ns_list}".', @_;
+'There is one or more extra address records found in the child zone that are not present as glue in the delegation: "{ns_list}".',
+          @_;
     },
     CS05_NO_MISMATCH_GLUE_ZONE => sub {
         __     # CONSISTENCY:CS05_NO_MISMATCH_GLUE_ZONE
@@ -213,7 +215,8 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     CS05_ID_ADDR_MISMATCH => sub {
         __x    # CONSISTENCY:CS05_ID_ADDR_MISMATCH
-          'For name server {nsname} the glue record in the delegation "{ns_ip_list_glue}" is different from the address record in the child zone "{ns_ip_list_zone}".', @_;
+'For name server {nsname} the glue record in the delegation "{ns_ip_list_glue}" is different from the address record in the child zone "{ns_ip_list_zone}".',
+          @_;
     },
     CS05_ID_ADDR_MISSING => sub {
         __x    # CONSISTENCY:CS05_ID_ADDR_MISSING
@@ -225,7 +228,8 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     CS05_MISSING_GLUE_FOR_NS => sub {
         __x    # CONSISTENCY:CS05_MISSING_GLUE_FOR_NS
-          'Expected glue record for {nsname} is missing in the delegation. Found in the parent name servers "{ns_list}".', @_;
+'Expected glue record for {nsname} is missing in the delegation. Found in the parent name servers "{ns_list}".',
+          @_;
     },
     CS05_MISSING_GLUE_FOR_NS_UNDEL => sub {
         __x    # CONSISTENCY:CS05_MISSING_GLUE_FOR_NS_UNDEL
@@ -233,7 +237,8 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     CS05_MISSING_GLUE_FOR_ROOT_NS => sub {
         __x    # CONSISTENCY:CS05_MISSING_GLUE_FOR_ROOT_NS
-          'IP address (glue record) is expected but missing for {nsname} in the undelegated data or hint data for root.', @_;
+'IP address (glue record) is expected but missing for {nsname} in the undelegated data or hint data for root.',
+          @_;
     },
     CS05_NO_NS_ADDR_CHILD => sub {
         __     # CONSISTENCY:CS05_NO_NS_ADDR_CHILD
@@ -241,7 +246,8 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     CS05_OOD_ADDR_MISMATCH => sub {
         __x    # CONSISTENCY:CS05_OOD_ADDR_MISMATCH
-          'For name server {nsname} the glue record in the delegation "{ns_ip_list_glue}" is different from the address record in the child zone "{ns_ip_list_zone}".', @_;
+'For name server {nsname} the glue record in the delegation "{ns_ip_list_glue}" is different from the address record in the child zone "{ns_ip_list_zone}".',
+          @_;
     },
     IPV4_DISABLED => sub {
         __x    # CONSISTENCY:IPV4_DISABLED
@@ -411,32 +417,17 @@ Returns a boolean.
 sub _ip_disabled_message {
     my ( $results_array, $ns, @rrtypes ) = @_;
 
-    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
-        push @$results_array, map {
-          _emit_log(
-            IPV6_DISABLED => {
-                ns     => $ns->string,
-                rrtype => $_
-            }
-          )
-        } @rrtypes;
+    if ( not Zonemaster::Engine::Profile->effective->get( q{net.ipv6} ) and $ns->address->version == $IP_VERSION_6 ) {
+        push @$results_array, map { _emit_log( IPV6_DISABLED => { ns => $ns->string, rrtype => $_ } ) } @rrtypes;
         return 1;
     }
 
-    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
-        push @$results_array, map {
-          _emit_log(
-            IPV4_DISABLED => {
-                ns     => $ns->string,
-                rrtype => $_,
-            }
-          )
-        } @rrtypes;
+    if ( not Zonemaster::Engine::Profile->effective->get( q{net.ipv4} ) and $ns->address->version == $IP_VERSION_4 ) {
+        push @$results_array, map { _emit_log( IPV4_DISABLED => { ns => $ns->string, rrtype => $_ } ) } @rrtypes;
         return 1;
     }
     return 0;
 }
-
 
 =head1 TESTS
 
@@ -465,8 +456,10 @@ sub consistency01 {
     my %serials;
     my $query_type = q{SOA};
 
-    foreach
-      my $local_ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) }, @{ Zonemaster::Engine::TestMethods->method5( $zone ) } )
+    foreach my $local_ns (
+        @{ Zonemaster::Engine::TestMethods->method4( $zone ) },
+        @{ Zonemaster::Engine::TestMethods->method5( $zone ) },
+      )
     {
 
         next if $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short };
@@ -531,7 +524,7 @@ sub consistency01 {
                 }
               );
         }
-    } ## end elsif ( scalar @serial_numbers)
+    }
 
     return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
 } ## end sub consistency01
@@ -561,8 +554,10 @@ sub consistency02 {
     my %rnames;
     my $query_type = q{SOA};
 
-    foreach
-      my $local_ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) }, @{ Zonemaster::Engine::TestMethods->method5( $zone ) } )
+    foreach my $local_ns (
+        @{ Zonemaster::Engine::TestMethods->method4( $zone ) },
+        @{ Zonemaster::Engine::TestMethods->method5( $zone ) },
+      )
     {
 
         next if $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short };
@@ -644,8 +639,10 @@ sub consistency03 {
     my %time_parameter_sets;
     my $query_type = q{SOA};
 
-    foreach
-      my $local_ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) }, @{ Zonemaster::Engine::TestMethods->method5( $zone ) } )
+    foreach my $local_ns (
+        @{ Zonemaster::Engine::TestMethods->method4( $zone ) },
+        @{ Zonemaster::Engine::TestMethods->method5( $zone ) },
+      )
     {
 
         next if $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short };
@@ -738,8 +735,10 @@ sub consistency04 {
     my %ns_sets;
     my $query_type = q{NS};
 
-    foreach
-      my $local_ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) }, @{ Zonemaster::Engine::TestMethods->method5( $zone ) } )
+    foreach my $local_ns (
+        @{ Zonemaster::Engine::TestMethods->method4( $zone ) },
+        @{ Zonemaster::Engine::TestMethods->method5( $zone ) },
+      )
     {
 
         next if $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short };
@@ -768,7 +767,7 @@ sub consistency04 {
     } ## end foreach my $local_ns ( @{ Zonemaster::Engine::TestMethods...})
 
     if ( scalar( keys %ns_sets ) == 1 ) {
-        push @results, _emit_log( ONE_NS_SET => { nsname_list => ( keys %ns_sets )[0] });
+        push @results, _emit_log( ONE_NS_SET => { nsname_list => ( keys %ns_sets )[0] } );
     }
     elsif ( scalar( keys %ns_sets ) ) {
         push @results,
@@ -814,16 +813,16 @@ sub consistency05 {
     push my @results, _emit_log( TEST_CASE_START => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } );
 
     # Steps 1–3
-    my @parent_ns = @{ Zonemaster::Engine::TestMethodsV2->get_parent_ns_names_and_ips( $zone ) // [] };
-    my @parent_ns_ips = @{ Zonemaster::Engine::TestMethodsV2->get_parent_ns_ips( $zone ) // [] };
+    my @parent_ns     = @{ Zonemaster::Engine::TestMethodsV2->get_parent_ns_names_and_ips( $zone ) // [] };
+    my @parent_ns_ips = @{ Zonemaster::Engine::TestMethodsV2->get_parent_ns_ips( $zone )           // [] };
 
     my @child_ns_ips = uniq
-        @{ Zonemaster::Engine::TestMethodsV2->get_del_ns_ips( $zone ) // [] },
-        @{ Zonemaster::Engine::TestMethodsV2->get_zone_ns_ips( $zone ) // [] };
+      @{ Zonemaster::Engine::TestMethodsV2->get_del_ns_ips( $zone )  // [] },
+      @{ Zonemaster::Engine::TestMethodsV2->get_zone_ns_ips( $zone ) // [] };
 
     my %delegation;
     my %child_zone_ns;
-    my $delegation_id_ns = Zonemaster::Engine::NameserverSet->new();
+    my $delegation_id_ns  = Zonemaster::Engine::NameserverSet->new();
     my $delegation_ood_ns = Zonemaster::Engine::NameserverSet->new();
     my %missing_glue;
     my $auth_addr_records_in_child = Zonemaster::Engine::NameserverSet->new();
@@ -839,41 +838,37 @@ sub consistency05 {
         next unless ( defined $p and $p->is_redirect );
 
         my %authority =
-            map { lc name( $_->nsdname() ) => 1 }
-            $p->get_records_for_name( 'NS', $zone, 'authority' );
+          map { lc name( $_->nsdname() ) => 1 } $p->get_records_for_name( 'NS', $zone, 'authority' );
 
-        
         my @additional =
-            map {
-                my $name = name( $_->owner() );
+          map {
+            my $name = name( $_->owner() );
 
-                # Filters out A and AAAA records with invalid IP addresses
-                my $addr = Net::IP::XS->new( $_->address );
-                if ( defined $addr ) {
-                    Zonemaster::Engine::Nameserver->new( { name => $name, address => $addr } )
-                }
-                else {
-                    ()
-                }
+            # Filters out A and AAAA records with invalid IP addresses
+            my $addr = Net::IP::XS->new( $_->address );
+            if ( defined $addr ) {
+                Zonemaster::Engine::Nameserver->new( { name => $name, address => $addr } );
             }
-            grep {
-                my $name = lc name( $_->owner() );
-                exists $authority{$name} and ( $_->type eq 'A' or $_->type eq 'AAAA' )
+            else {
+                ()
             }
-            $p->additional;
+          }
+          grep {
+            my $name = lc name( $_->owner() );
+            exists $authority{$name} and ( $_->type eq 'A' or $_->type eq 'AAAA' )
+          } $p->additional;
 
         my $set = Zonemaster::Engine::NameserverSet->new( keys %authority, @additional );
 
         $delegation{$parent_ns} = [ $set->sorted_items() ];
-    }
-
+    } ## end foreach my $parent_ns ( @parent_ns_ips)
 
     # Step 5
     foreach my $parent_ns_ip ( sort keys %delegation ) {
         foreach my $delegation_ns ( @{ $delegation{$parent_ns_ip} } ) {
             my $delegation_ns_name = do {
-                if ( $delegation_ns->isa('Zonemaster::Engine::Nameserver') ) {
-                    $delegation_ns->name()
+                if ( $delegation_ns->isa( 'Zonemaster::Engine::Nameserver' ) ) {
+                    $delegation_ns->name();
                 }
                 else {
                     $delegation_ns;
@@ -881,31 +876,34 @@ sub consistency05 {
             };
 
             if ( $zone->name()->is_in_bailiwick( $delegation_ns_name ) ) {
-                if ( $delegation_ns->isa('Zonemaster::Engine::DNSName') ) {
-                    push @{$missing_glue{ lc $delegation_ns }}, $parent_ns_ip;
+                if ( $delegation_ns->isa( 'Zonemaster::Engine::DNSName' ) ) {
+                    push @{ $missing_glue{ lc $delegation_ns } }, $parent_ns_ip;
                 }
-                $delegation_id_ns->push($delegation_ns);
+                $delegation_id_ns->push( $delegation_ns );
             }
             else {
-                $delegation_ood_ns->push($delegation_ns);
+                $delegation_ood_ns->push( $delegation_ns );
             }
-        }
-    }
+        } ## end foreach my $delegation_ns (...)
+    } ## end foreach my $parent_ns_ip ( ...)
 
     # Step 6
     {
         my %delegation_sets;
         for my $d ( keys %delegation ) {
-            my $s = join(";", @{$delegation{$d}});
-            push @{$delegation_sets{$s}}, $d;
+            my $s = join( ";", @{ $delegation{$d} } );
+            push @{ $delegation_sets{$s} }, $d;
         }
         if ( scalar %delegation_sets > 1 ) {
             push @results, _emit_log( CS05_INCONSISTENT_DELEGATION => {} );
-            while ( my ($ns_deleg_list, $ns_list) = each %delegation_sets ) {
-                push @results, _emit_log( CS05_DELEGATION => {
-                    ns_deleg_list => $ns_deleg_list,
-                    ns_list => join( ';', sort @$ns_list )
-                } );
+            while ( my ( $ns_deleg_list, $ns_list ) = each %delegation_sets ) {
+                push @results,
+                  _emit_log(
+                    CS05_DELEGATION => {
+                        ns_deleg_list => $ns_deleg_list,
+                        ns_list       => join( ';', sort @$ns_list ),
+                    }
+                  );
             }
         }
     }
@@ -914,9 +912,8 @@ sub consistency05 {
     if ( $zone->name() ne '.' ) {
         foreach my $fake_name ( Zonemaster::Engine::Recursor->get_fake_names( $zone->name() ) ) {
             $fake_name = name( $fake_name );
-            my @fake_ns = map {
-                Zonemaster::Engine::Nameserver->new( { name => $fake_name, address => $_ } )
-            } Zonemaster::Engine::Recursor->get_fake_addresses( $zone->name(), $fake_name );
+            my @fake_ns = map { Zonemaster::Engine::Nameserver->new( { name => $fake_name, address => $_ } ) }
+              Zonemaster::Engine::Recursor->get_fake_addresses( $zone->name(), $fake_name );
 
             if ( $zone->name()->is_in_bailiwick( $fake_name ) ) {
                 if ( scalar @fake_ns == 0 ) {
@@ -934,15 +931,15 @@ sub consistency05 {
                     $delegation_ood_ns->push( @fake_ns );
                 }
             }
-        }
-    }
+        } ## end foreach my $fake_name ( Zonemaster::Engine::Recursor...)
+    } ## end if ( $zone->name() ne ...)
 
     # Step 8
     if ( $zone->name() eq '.' ) {
         my @hint_ns = @{ Zonemaster::Engine::TestMethodsV2->get_del_ns_names_and_ips( $zone ) };
 
         foreach my $item ( @hint_ns ) {
-            if ( $item->isa( 'Zonemaster::Engine::DNSName') ) {
+            if ( $item->isa( 'Zonemaster::Engine::DNSName' ) ) {
                 push @results, _emit_log( CS05_MISSING_GLUE_FOR_ROOT_NS => { nsname => $item } );
             }
             else {
@@ -952,11 +949,14 @@ sub consistency05 {
     }
 
     # Step 9
-    while ( my ($ns, $ns_list) = each %missing_glue ) {
-        push @results, _emit_log( CS05_MISSING_GLUE_FOR_NS => {
-            nsname => $ns,
-            ns_list => join(';', @$ns_list)
-        } );
+    while ( my ( $ns, $ns_list ) = each %missing_glue ) {
+        push @results,
+          _emit_log(
+            CS05_MISSING_GLUE_FOR_NS => {
+                nsname  => $ns,
+                ns_list => join( ';', @$ns_list ),
+            }
+          );
     }
 
     # Step 10
@@ -973,76 +973,74 @@ sub consistency05 {
         my @ns_nsnames = uniq map { name( lc $_->nsdname() ) } $p->get_records_for_name( 'NS', $zone );
         $child_zone_ns{ $ns->address()->short() } = \@ns_nsnames if scalar @ns_nsnames > 0;
 
-        my @id_ns = uniq (
-            grep( { $zone->name()->is_in_bailiwick(name($_)) } @ns_nsnames ),
-            $delegation_id_ns->names()
-        );
+        my @id_ns =
+          uniq( grep( { $zone->name()->is_in_bailiwick( name( $_ ) ) } @ns_nsnames ), $delegation_id_ns->names() );
 
         foreach my $s ( @id_ns ) {
             foreach my $qtype ( qw(A AAAA) ) {
-                my $p = Zonemaster::Engine::Recursor->recurse( $s, $qtype, 'IN', [ $ns ] );
+                my $p = Zonemaster::Engine::Recursor->recurse( $s, $qtype, 'IN', [$ns] );
                 next unless defined $p and $p->rcode eq 'NOERROR' and $p->aa;
 
                 $auth_addr_records_in_child->push(
-                    map {
-                        Zonemaster::Engine::Nameserver->new( { name => $s, address => $_->address() } )
-                    } $p->get_records_for_name( $qtype, $s, 'answer' )
-                );
+                    map { Zonemaster::Engine::Nameserver->new( { name => $s, address => $_->address() } ) }
+                      $p->get_records_for_name( $qtype, $s, 'answer' ) );
             }
         }
-    }
+    } ## end foreach my $ns ( @child_ns_ips)
 
     # Step 12
     if ( scalar %child_zone_ns == 0 ) {
-        push @results, _emit_log( CS05_CHILD_ZONE_LAME => { ns_list => join(';', @child_ns_ips) } );
+        push @results, _emit_log( CS05_CHILD_ZONE_LAME => { ns_list => join( ';', @child_ns_ips ) } );
         goto out;
     }
 
     # Step 13
     foreach my $n ( $delegation_id_ns->names() ) {
-        my $parent_glue = Zonemaster::Engine::NameserverSet->new(
-            grep { $_->isa('Zonemaster::Engine::Nameserver') } $delegation_id_ns->get($n)
-        );
+        my $parent_glue = Zonemaster::Engine::NameserverSet->new( grep { $_->isa( 'Zonemaster::Engine::Nameserver' ) }
+              $delegation_id_ns->get( $n ) );
         next if $parent_glue->is_empty();
 
         my $child_auth = Zonemaster::Engine::NameserverSet->new();
-        $child_auth->push( $auth_addr_records_in_child->get($n) );
+        $child_auth->push( $auth_addr_records_in_child->get( $n ) );
         my ( $only_in_parent, $only_in_child ) = $parent_glue->difference( $child_auth );
 
         if ( $child_auth->is_empty() ) {
             push @results, _emit_log( CS05_ID_ADDR_MISSING => { nsname => $n } );
         }
         elsif ( not $only_in_parent->is_empty() ) {
-            push @results, _emit_log( CS05_ID_ADDR_MISMATCH => {
-                nsname => $n,
-                ns_ip_list_glue => join( ';', map { $_->address()->short() } $only_in_parent->sorted_items() ),
-                ns_ip_list_zone => join( ';', map { $_->address()->short() } $child_auth->sorted_items() )
-            } );
+            push @results,
+              _emit_log(
+                CS05_ID_ADDR_MISMATCH => {
+                    nsname          => $n,
+                    ns_ip_list_glue => join( ';', map { $_->address()->short() } $only_in_parent->sorted_items() ),
+                    ns_ip_list_zone => join( ';', map { $_->address()->short() } $child_auth->sorted_items() ),
+                }
+              );
         }
         elsif ( not $only_in_child->is_empty() ) {
             $extra_address_child{ $_->address()->short() } = 1 foreach $only_in_child->items();
         }
-    }
+    } ## end foreach my $n ( $delegation_id_ns...)
 
     # Step 14
     if ( scalar %extra_address_child ) {
-        push @results, _emit_log( CS05_EXTRA_ADDR_CHILD => {
-            ns_list => join(';', sort keys %extra_address_child )
-        } );
+        push @results,
+          _emit_log(
+            CS05_EXTRA_ADDR_CHILD => {
+                ns_list => join( ';', sort keys %extra_address_child )
+            }
+          );
     }
 
     # Step 15
     foreach my $n ( $delegation_ood_ns->names() ) {
-        my $set = Zonemaster::Engine::NameserverSet->new(
-            grep { $_->isa('Zonemaster::Engine::Nameserver') } $delegation_ood_ns->get($n)
-        );
+        my $set = Zonemaster::Engine::NameserverSet->new( grep { $_->isa( 'Zonemaster::Engine::Nameserver' ) }
+              $delegation_ood_ns->get( $n ) );
         next if $set->is_empty();
 
         my $lookup = Zonemaster::Engine::NameserverSet->new(
-            map {
-                Zonemaster::Engine::Nameserver->new( { name => $_->owner(), address => $_->address() } )
-            }
-            map {
+            map { Zonemaster::Engine::Nameserver->new( { name => $_->owner(), address => $_->address() } ) }
+              map {
                 my $p = Zonemaster::Engine::Recursor->recurse( $n, $_ );
                 if ( defined $p and $p->rcode eq 'NOERROR' ) {
                     $p->get_records_for_name( $_, $n, 'answer' );
@@ -1050,19 +1048,22 @@ sub consistency05 {
                 else {
                     ();
                 }
-            } ( qw(A AAAA) )
+              } ( qw(A AAAA) )
         );
 
         if ( not $lookup->is_empty() ) {
             if ( not $set->equals( $lookup ) ) {
-                push @results, _emit_log( CS05_OOD_ADDR_MISMATCH => {
-                    nsname => $n,
-                    ns_ip_list_ref => join( ";", map { $_->address() } $set->sorted_items() ),
-                    ns_ip_list_lookup => join( ";", map { $_->address() } $lookup->sorted_items() )
-                } );
+                push @results,
+                  _emit_log(
+                    CS05_OOD_ADDR_MISMATCH => {
+                        nsname            => $n,
+                        ns_ip_list_ref    => join( ";", map { $_->address() } $set->sorted_items() ),
+                        ns_ip_list_lookup => join( ";", map { $_->address() } $lookup->sorted_items() ),
+                    }
+                  );
             }
         }
-    }
+    } ## end foreach my $n ( $delegation_ood_ns...)
 
     # Step 16
     if ( not grep /^CS05_/, map { $_->tag() } @results ) {
@@ -1071,7 +1072,7 @@ sub consistency05 {
 
   out:
     return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
-}                               ## end sub consistency05
+} ## end sub consistency05
 
 =over
 
@@ -1098,8 +1099,10 @@ sub consistency06 {
     my %mnames;
     my $query_type = q{SOA};
 
-    foreach
-      my $local_ns ( @{ Zonemaster::Engine::TestMethods->method4( $zone ) }, @{ Zonemaster::Engine::TestMethods->method5( $zone ) } )
+    foreach my $local_ns (
+        @{ Zonemaster::Engine::TestMethods->method4( $zone ) },
+        @{ Zonemaster::Engine::TestMethods->method5( $zone ) },
+      )
     {
 
         next if $nsnames_and_ip{ $local_ns->name->string . q{/} . $local_ns->address->short };

@@ -9,10 +9,10 @@ use File::Slurp;
 
 use Zonemaster::Engine::Profile;
 
-my $json_file = @ARGV ? $ARGV[0] : dist_file( 'Zonemaster-Engine', 'profile.json');
-my $json = read_file( $json_file );
-my $profile = Zonemaster::Engine::Profile->from_json( $json );
-my $yaml = $profile->to_yaml();
+my $json_file = @ARGV ? $ARGV[0] : dist_file( 'Zonemaster-Engine', 'profile.json' );
+my $json      = read_file( $json_file );
+my $profile   = Zonemaster::Engine::Profile->from_json( $json );
+my $yaml      = $profile->to_yaml();
 say $yaml;
 
 =head1 NAME

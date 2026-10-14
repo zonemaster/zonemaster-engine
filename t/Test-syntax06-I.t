@@ -26,11 +26,11 @@ my $zone = Zonemaster::Engine->zone( q{i.syntax06.exempelvis.se} );
 
 my %res = map { $_->tag => $_ } Zonemaster::Engine::Test::Syntax->syntax06( $zone );
 
-ok( !$res{NO_RESPONSE},              q{should not emit NO_RESPONSE} );
-ok( !$res{NO_RESPONSE_SOA_QUERY},    q{should not emit NO_RESPONSE_SOA_QUERY} );
-ok( !$res{RNAME_RFC822_INVALID},     q{should not emit RNAME_RFC822_INVALID} );
-ok( $res{RNAME_MAIL_DOMAIN_INVALID}, q{should emit RNAME_MAIL_DOMAIN_INVALID} );
-ok( !$res{RNAME_RFC822_VALID},       q{should not emit RNAME_RFC822_VALID} );
+ok( !$res{NO_RESPONSE},                q{should not emit NO_RESPONSE} );
+ok( !$res{NO_RESPONSE_SOA_QUERY},      q{should not emit NO_RESPONSE_SOA_QUERY} );
+ok( !$res{RNAME_RFC822_INVALID},       q{should not emit RNAME_RFC822_INVALID} );
+ok( $res{RNAME_MAIL_DOMAIN_INVALID},   q{should emit RNAME_MAIL_DOMAIN_INVALID} );
+ok( !$res{RNAME_RFC822_VALID},         q{should not emit RNAME_RFC822_VALID} );
 ok( !$res{RNAME_MAIL_ILLEGAL_CNAME},   q{should not emit RNAME_MAIL_ILLEGAL_CNAME} );
 ok( $res{RNAME_MAIL_DOMAIN_LOCALHOST}, q{should emit RNAME_MAIL_DOMAIN_LOCALHOST} );
 

@@ -7,4 +7,4 @@ use JSON::PP;
 
 my $json = JSON::PP->new->canonical->pretty->utf8;
 
-say $json->encode($json->decode(join('',<>)));
+say $json->encode( $json->decode( join( '', <> ) ) );

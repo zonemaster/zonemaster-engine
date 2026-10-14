@@ -18,18 +18,18 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Profile->effective->set( q{no_network}, 1 );
 }
 
-my ($json, $profile_test);
+my ( $json, $profile_test );
 foreach my $testcase ( qw{connectivity01 connectivity02 connectivity03 connectivity04} ) {
-    $json          = read_file( 't/profiles/Test-'.$testcase.'-only.json' );
-    $profile_test  = Zonemaster::Engine::Profile->from_json( $json );
+    $json         = read_file( 't/profiles/Test-' . $testcase . '-only.json' );
+    $profile_test = Zonemaster::Engine::Profile->from_json( $json );
     Zonemaster::Engine::Profile->effective->merge( $profile_test );
     my %testcases;
     foreach my $result ( Zonemaster::Engine->test_module( q{connectivity}, q{afnic.fr} ) ) {
         if ( $result->testcase && $result->testcase ne 'Unspecified' ) {
-            $testcases{$result->testcase} = 1;
+            $testcases{ $result->testcase } = 1;
         }
     }
-    eq_or_diff( [ map { lc $_ } keys %testcases ], [ $testcase ], 'expected test-case ('. $testcase .')' );
+    eq_or_diff( [ map { lc $_ } keys %testcases ], [$testcase], 'expected test-case (' . $testcase . ')' );
 }
 
 $json         = read_file( 't/profiles/Test-connectivity-all.json' );
@@ -40,7 +40,7 @@ my @res;
 my %res;
 my %should_emit;
 
-my $metadata = Zonemaster::Engine::Test::Connectivity->metadata();
+my $metadata    = Zonemaster::Engine::Test::Connectivity->metadata();
 my $test_levels = Zonemaster::Engine::Profile->effective->{profile}->{test_levels}->{CONNECTIVITY};
 
 sub check_output_connectivity_testcase {
@@ -52,7 +52,8 @@ sub check_output_connectivity_testcase {
         next if ( $test_levels->{$key} =~ q/DEBUG/ );
         if ( $should_emit->{$key} ) {
             ok( $res->{$key}, "Should emit $key" );
-        } else {
+        }
+        else {
             ok( !$res->{$key}, "Should NOT emit $key" );
         }
     }
@@ -71,10 +72,10 @@ subtest 'All good' => sub {
     %res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{connectivity}, q{afnic.fr} );
     ok( !$res{MODULE_ERROR}, q{Test module completes normally} );
     %should_emit = (
-        IPV4_DIFFERENT_ASN => 1,
-        IPV6_DIFFERENT_ASN => 1,
+        IPV4_DIFFERENT_ASN         => 1,
+        IPV6_DIFFERENT_ASN         => 1,
         CN04_IPV4_DIFFERENT_PREFIX => 1,
-        CN04_IPV6_DIFFERENT_PREFIX => 1
+        CN04_IPV6_DIFFERENT_PREFIX => 1,
     );
     check_output_connectivity_all( \%res, \%should_emit );
 };
@@ -86,9 +87,7 @@ subtest 'No IPv6 (profile with IPv4 only)' => sub {
     %res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{connectivity}, q{afnic.fr} );
 
     subtest 'UDP' => sub {
-        %should_emit = (
-            CN01_IPV6_DISABLED => 1
-        );
+        %should_emit = ( CN01_IPV6_DISABLED => 1 );
         check_output_connectivity_testcase( 'connectivity01', \%res, \%should_emit );
     };
 
@@ -107,9 +106,7 @@ subtest 'No IPv4 (profile with IPv6 only)' => sub {
     %res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{connectivity}, q{afnic.fr} );
 
     subtest 'UDP' => sub {
-        %should_emit = (
-            CN01_IPV4_DISABLED => 1
-        );
+        %should_emit = ( CN01_IPV4_DISABLED => 1 );
         check_output_connectivity_testcase( 'connectivity01', \%res, \%should_emit );
     };
 
@@ -125,7 +122,7 @@ subtest 'No network' => sub {
     Zonemaster::Engine::Profile->effective->set( q{net.ipv4}, 0 );
     Zonemaster::Engine::Profile->effective->set( q{net.ipv6}, 0 );
 
-    %res = map{ $_->tag => 1 } Zonemaster::Engine->test_module( q{connectivity}, q{afnic.fr} );
+    %res = map { $_->tag => 1 } Zonemaster::Engine->test_module( q{connectivity}, q{afnic.fr} );
     ok( $res{NO_NETWORK}, 'IPv6 and IPv4 disabled' );
 
     Zonemaster::Engine::Profile->effective->set( q{net.ipv4}, 1 );

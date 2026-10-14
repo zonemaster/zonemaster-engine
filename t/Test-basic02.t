@@ -11,17 +11,18 @@ use TestUtil::DSL;
 testing_test_case 'Basic', 'basic02';
 
 all_tags qw(B02_AUTH_RESPONSE_SOA
-            B02_NO_DELEGATION
-            B02_NO_WORKING_NS
-            B02_NS_BROKEN
-            B02_NS_NOT_AUTH
-            B02_NS_NO_IP_ADDR
-            B02_NS_NO_RESPONSE
-            B02_UNEXPECTED_RCODE);
+  B02_NO_DELEGATION
+  B02_NO_WORKING_NS
+  B02_NS_BROKEN
+  B02_NS_NOT_AUTH
+  B02_NS_NO_IP_ADDR
+  B02_NS_NO_RESPONSE
+  B02_UNEXPECTED_RCODE);
 
 # Specific hint file (test-zone-data/Basic-TP/basic02/hintfile.zone)
-root_hints 'root-ns1.xa' => [ qw(127.12.2.23 fda1:b2:c3::127:12:2:23) ],
-           'root-ns2.xa' => [ qw(127.12.2.24 fda1:b2:c3::127:12:2:24) ];
+root_hints
+  'root-ns1.xa' => [qw(127.12.2.23 fda1:b2:c3::127:12:2:23)],
+  'root-ns2.xa' => [qw(127.12.2.24 fda1:b2:c3::127:12:2:24)];
 
 zone_name_template '{SCENARIO}.{TESTCASE}.xa';
 

@@ -24,12 +24,12 @@ find(
             push @modules, $name;
         }
     },
-    'lib'
+    'lib',
 );
 
 foreach my $name ( @modules ) {
     next if $name =~ q{Zonemaster::Engine::Constants};
-    my $pc = Pod::Coverage->new( package => $name , private => [ qr/^_/ ] );
+    my $pc = Pod::Coverage->new( package => $name, private => [qr/^_/] );
     if ( defined $pc->coverage ) {
         my @uncovered = $pc->uncovered;
         if ( @uncovered == 1 and $uncovered[0] eq 'LC_MESSAGES' ) {
@@ -46,6 +46,6 @@ foreach my $name ( @modules ) {
     else {
         diag $pc->why_unrated . ' for ' . $name;
     }
-}
+} ## end foreach my $name ( @modules)
 
 done_testing;

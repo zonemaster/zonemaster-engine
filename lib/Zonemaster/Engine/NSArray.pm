@@ -3,7 +3,7 @@ package Zonemaster::Engine::NSArray;
 use v5.16.0;
 use warnings;
 
-use version; our $VERSION = version->declare("v1.0.3");
+use version; our $VERSION = version->declare( "v1.0.3" );
 
 use Carp qw( confess croak );
 use Zonemaster::Engine::Recursor;
@@ -12,7 +12,7 @@ use Zonemaster::Engine::Nameserver;
 use Class::Accessor 'antlers';
 
 has 'names' => ( is => 'ro', isa => 'ArrayRef', required => 1 );
-has 'ary' => ( is => 'ro', isa => 'ArrayRef', default => sub { [] } );
+has 'ary'   => ( is => 'ro', isa => 'ArrayRef', default  => sub { [] } );
 
 sub TIEARRAY {
     my ( $class, @names ) = @_;
@@ -20,7 +20,7 @@ sub TIEARRAY {
     return $class->new(
         {
             ary   => [],
-            names => [ sort { $a cmp $b } @names ]
+            names => [ sort { $a cmp $b } @names ],
         }
     );
 }

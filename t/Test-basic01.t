@@ -11,20 +11,21 @@ use TestUtil::DSL;
 testing_test_case 'Basic', 'basic01';
 
 all_tags qw(B01_CHILD_IS_ALIAS
-            B01_CHILD_FOUND
-            B01_INCONSISTENT_ALIAS
-            B01_INCONSISTENT_DELEGATION
-            B01_NO_CHILD
-            B01_PARENT_DISREGARDED
-            B01_PARENT_FOUND
-            B01_PARENT_NOT_FOUND
-            B01_PARENT_UNDETERMINED
-            B01_ROOT_HAS_NO_PARENT
-            B01_SERVER_ZONE_ERROR);
+  B01_CHILD_FOUND
+  B01_INCONSISTENT_ALIAS
+  B01_INCONSISTENT_DELEGATION
+  B01_NO_CHILD
+  B01_PARENT_DISREGARDED
+  B01_PARENT_FOUND
+  B01_PARENT_NOT_FOUND
+  B01_PARENT_UNDETERMINED
+  B01_ROOT_HAS_NO_PARENT
+  B01_SERVER_ZONE_ERROR);
 
 # Common hint file (test-zone-data/COMMON/hintfile)
-root_hints 'ns1' => [ qw(127.1.0.1 fda1:b2:c3::127:1:0:1) ],
-           'ns2' => [ qw(127.1.0.2 fda1:b2:c3::127:1:0:2) ];
+root_hints
+  'ns1' => [qw(127.1.0.1 fda1:b2:c3::127:1:0:1)],
+  'ns2' => [qw(127.1.0.2 fda1:b2:c3::127:1:0:2)];
 
 # Test zone scenarios
 zone_name_template 'child.parent.{SCENARIO}.{TESTCASE}.xa';
@@ -108,7 +109,7 @@ scenario 'CHILD-ALIAS-1' => sub {
 
 scenario 'CHILD-ALIAS-2' => sub {
     expect qw(B01_CHILD_IS_ALIAS B01_NO_CHILD B01_INCONSISTENT_ALIAS
-              B01_PARENT_FOUND);
+      B01_PARENT_FOUND);
     forbid_others;
 };
 

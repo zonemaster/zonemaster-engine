@@ -16,14 +16,14 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
 }
 
 # This should be a successful AXFR
-my $ns = Zonemaster::Engine::Nameserver->new( { name => 'kennedy.faerywicca.se', address => '46.21.106.227' } );
+my $ns      = Zonemaster::Engine::Nameserver->new( { name => 'kennedy.faerywicca.se', address => '46.21.106.227' } );
 my $counter = 0;
 is(
     exception {
         $ns->axfr( 'cyberpomo.com', sub { $counter += 1; return 1; } );
     },
     undef,
-    'No exception'
+    'No exception',
 );
 ok( ( $counter > 10 ), 'At least ten records seen' );
 
@@ -35,7 +35,7 @@ like(
         $ns2->axfr( 'iis.se', sub { $counter += 1; return 1; } );
     },
     qr/REFUSED/,
-    'AXFR was refused'
+    'AXFR was refused',
 );
 is( $counter, 0, 'No records seen' );
 

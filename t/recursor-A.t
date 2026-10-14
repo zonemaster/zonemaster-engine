@@ -12,7 +12,7 @@ BEGIN {
     use_ok( q{Zonemaster::Engine::Util}, qw( name ) );
 }
 
-my $datafile = 't/' . basename ($0, '.t') . '.data';
+my $datafile = 't/' . basename( $0, '.t' ) . '.data';
 
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die "Stored data file missing" if not -r $datafile;
@@ -22,10 +22,12 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
 
 # Common hint file (test-zone-data/COMMON/hintfile)
 Zonemaster::Engine::Recursor->remove_fake_addresses( '.' );
-Zonemaster::Engine::Recursor->add_fake_addresses( '.',
-    { 'ns1' => [ '127.1.0.1', 'fda1:b2:c3::127:1:0:1' ],
-      'ns2' => [ '127.1.0.2', 'fda1:b2:c3::127:1:0:2' ],
-    }
+Zonemaster::Engine::Recursor->add_fake_addresses(
+    '.',
+    {
+        'ns1' => [ '127.1.0.1', 'fda1:b2:c3::127:1:0:1' ],
+        'ns2' => [ '127.1.0.2', 'fda1:b2:c3::127:1:0:2' ],
+    },
 );
 
 # Test zone scenarios
@@ -35,16 +37,16 @@ subtest 'GOOD-CNAME-1' => sub {
     isa_ok( $p, 'Zonemaster::Engine::Packet' );
     is( scalar( $p->answer ), 2, 'two records in answer section' );
 
-    isa_ok( ($p->answer)[0], 'Zonemaster::LDNS::RR::CNAME' );
-    is( name( ($p->answer)[0]->owner ), 'good-cname-1.cname.recursor.engine.xa', 'RR name ok' );
-    is( name( ($p->answer)[0]->cname ), 'good-cname-1-target.cname.recursor.engine.xa', 'RR cname ok' );
+    isa_ok( ( $p->answer )[0], 'Zonemaster::LDNS::RR::CNAME' );
+    is( name( ( $p->answer )[0]->owner ), 'good-cname-1.cname.recursor.engine.xa',        'RR name ok' );
+    is( name( ( $p->answer )[0]->cname ), 'good-cname-1-target.cname.recursor.engine.xa', 'RR cname ok' );
 
-    isa_ok( ($p->answer)[1], 'Zonemaster::LDNS::RR::A' );
-    is( name( ($p->answer)[1]->owner ), 'good-cname-1-target.cname.recursor.engine.xa', 'RR name ok' );
-    is( ($p->answer)[1]->address, '127.0.0.1', 'RR address ok' );
+    isa_ok( ( $p->answer )[1], 'Zonemaster::LDNS::RR::A' );
+    is( name( ( $p->answer )[1]->owner ), 'good-cname-1-target.cname.recursor.engine.xa', 'RR name ok' );
+    is( ( $p->answer )[1]->address,       '127.0.0.1',                                    'RR address ok' );
 
     my %res = map { $_->tag => $_ } @{ Zonemaster::Engine->logger->entries };
-    ok( $res{CNAME_START}, q{should emit CNAME_START} );
+    ok( $res{CNAME_START},            q{should emit CNAME_START} );
     ok( $res{CNAME_FOLLOWED_IN_ZONE}, q{should emit CNAME_FOLLOWED_IN_ZONE} );
 };
 
@@ -54,20 +56,20 @@ subtest 'GOOD-CNAME-2' => sub {
     isa_ok( $p, 'Zonemaster::Engine::Packet' );
     is( scalar( $p->answer ), 3, 'three records in answer section' );
 
-    isa_ok( ($p->answer)[0], 'Zonemaster::LDNS::RR::CNAME' );
-    is( name( ($p->answer)[0]->owner ), 'good-cname-2.cname.recursor.engine.xa', 'RR name ok' );
-    is( name( ($p->answer)[0]->cname ), 'good-cname-2-target.cname.recursor.engine.xa', 'RR cname ok' );
+    isa_ok( ( $p->answer )[0], 'Zonemaster::LDNS::RR::CNAME' );
+    is( name( ( $p->answer )[0]->owner ), 'good-cname-2.cname.recursor.engine.xa',        'RR name ok' );
+    is( name( ( $p->answer )[0]->cname ), 'good-cname-2-target.cname.recursor.engine.xa', 'RR cname ok' );
 
-    isa_ok( ($p->answer)[1], 'Zonemaster::LDNS::RR::A' );
-    is( name( ($p->answer)[1]->owner ), 'good-cname-2-target.cname.recursor.engine.xa', 'RR name ok' );
-    is( ($p->answer)[1]->address, '127.0.0.1', 'RR address ok' );
+    isa_ok( ( $p->answer )[1], 'Zonemaster::LDNS::RR::A' );
+    is( name( ( $p->answer )[1]->owner ), 'good-cname-2-target.cname.recursor.engine.xa', 'RR name ok' );
+    is( ( $p->answer )[1]->address,       '127.0.0.1',                                    'RR address ok' );
 
-    isa_ok( ($p->answer)[2], 'Zonemaster::LDNS::RR::A' );
-    is( name( ($p->answer)[2]->owner ), 'good-cname-2-target.cname.recursor.engine.xa', 'RR name ok' );
-    is( ($p->answer)[2]->address, '127.0.0.2', 'RR address ok' );
+    isa_ok( ( $p->answer )[2], 'Zonemaster::LDNS::RR::A' );
+    is( name( ( $p->answer )[2]->owner ), 'good-cname-2-target.cname.recursor.engine.xa', 'RR name ok' );
+    is( ( $p->answer )[2]->address,       '127.0.0.2',                                    'RR address ok' );
 
     my %res = map { $_->tag => $_ } @{ Zonemaster::Engine->logger->entries };
-    ok( $res{CNAME_START}, q{should emit CNAME_START} );
+    ok( $res{CNAME_START},            q{should emit CNAME_START} );
     ok( $res{CNAME_FOLLOWED_IN_ZONE}, q{should emit CNAME_FOLLOWED_IN_ZONE} );
 };
 
@@ -77,24 +79,24 @@ subtest 'GOOD-CNAME-CHAIN' => sub {
     isa_ok( $p, 'Zonemaster::Engine::Packet' );
     is( scalar( $p->answer ), 4, 'four records in answer section' );
 
-    isa_ok( ($p->answer)[0], 'Zonemaster::LDNS::RR::CNAME' );
-    is( name( ($p->answer)[0]->owner ), 'good-cname-chain.cname.recursor.engine.xa', 'RR name ok' );
-    is( name( ($p->answer)[0]->cname ), 'good-cname-chain-two.cname.recursor.engine.xa', 'RR cname ok' );
+    isa_ok( ( $p->answer )[0], 'Zonemaster::LDNS::RR::CNAME' );
+    is( name( ( $p->answer )[0]->owner ), 'good-cname-chain.cname.recursor.engine.xa',     'RR name ok' );
+    is( name( ( $p->answer )[0]->cname ), 'good-cname-chain-two.cname.recursor.engine.xa', 'RR cname ok' );
 
-    isa_ok( ($p->answer)[1], 'Zonemaster::LDNS::RR::CNAME' );
-    is( name( ($p->answer)[1]->owner ), 'good-cname-chain-two.cname.recursor.engine.xa', 'RR name ok' );
-    is( name( ($p->answer)[1]->cname ), 'good-cname-chain-three.cname.recursor.engine.xa', 'RR cname ok' );
+    isa_ok( ( $p->answer )[1], 'Zonemaster::LDNS::RR::CNAME' );
+    is( name( ( $p->answer )[1]->owner ), 'good-cname-chain-two.cname.recursor.engine.xa',   'RR name ok' );
+    is( name( ( $p->answer )[1]->cname ), 'good-cname-chain-three.cname.recursor.engine.xa', 'RR cname ok' );
 
-    isa_ok( ($p->answer)[2], 'Zonemaster::LDNS::RR::CNAME' );
-    is( name( ($p->answer)[2]->owner ), 'good-cname-chain-three.cname.recursor.engine.xa', 'RR name ok' );
-    is( name( ($p->answer)[2]->cname ), 'good-cname-chain-target.cname.recursor.engine.xa', 'RR cname ok' );
+    isa_ok( ( $p->answer )[2], 'Zonemaster::LDNS::RR::CNAME' );
+    is( name( ( $p->answer )[2]->owner ), 'good-cname-chain-three.cname.recursor.engine.xa',  'RR name ok' );
+    is( name( ( $p->answer )[2]->cname ), 'good-cname-chain-target.cname.recursor.engine.xa', 'RR cname ok' );
 
-    isa_ok( ($p->answer)[3], 'Zonemaster::LDNS::RR::A' );
-    is( name( ($p->answer)[3]->owner ), 'good-cname-chain-target.cname.recursor.engine.xa', 'RR name ok' );
-    is( ($p->answer)[3]->address, '127.0.0.1', 'RR address ok' );
+    isa_ok( ( $p->answer )[3], 'Zonemaster::LDNS::RR::A' );
+    is( name( ( $p->answer )[3]->owner ), 'good-cname-chain-target.cname.recursor.engine.xa', 'RR name ok' );
+    is( ( $p->answer )[3]->address,       '127.0.0.1',                                        'RR address ok' );
 
     my %res = map { $_->tag => $_ } @{ Zonemaster::Engine->logger->entries };
-    ok( $res{CNAME_START}, q{should emit CNAME_START} );
+    ok( $res{CNAME_START},            q{should emit CNAME_START} );
     ok( $res{CNAME_FOLLOWED_IN_ZONE}, q{should emit CNAME_FOLLOWED_IN_ZONE} );
 };
 
@@ -104,12 +106,12 @@ subtest 'GOOD-CNAME-OUT-OF-ZONE' => sub {
     isa_ok( $p, 'Zonemaster::Engine::Packet' );
     is( scalar( $p->answer ), 1, 'one record in answer section' );
 
-    isa_ok( ($p->answer)[0], 'Zonemaster::LDNS::RR::A' );
-    is( name( ($p->answer)[0]->owner ), 'target.goodsub.cname.recursor.engine.xa', 'RR name ok' );
-    is( ($p->answer)[0]->address, '127.0.0.1', 'RR address ok' );
+    isa_ok( ( $p->answer )[0], 'Zonemaster::LDNS::RR::A' );
+    is( name( ( $p->answer )[0]->owner ), 'target.goodsub.cname.recursor.engine.xa', 'RR name ok' );
+    is( ( $p->answer )[0]->address,       '127.0.0.1',                               'RR address ok' );
 
     my %res = map { $_->tag => $_ } @{ Zonemaster::Engine->logger->entries };
-    ok( $res{CNAME_START}, q{should emit CNAME_START} );
+    ok( $res{CNAME_START},                q{should emit CNAME_START} );
     ok( $res{CNAME_FOLLOWED_OUT_OF_ZONE}, q{should emit CNAME_FOLLOWED_OUT_OF_ZONE} );
 };
 
@@ -117,15 +119,15 @@ subtest 'NXDOMAIN-VIA-CNAME' => sub {
     Zonemaster::Engine->logger->clear_history;
     my $p = Zonemaster::Engine->recurse( 'nxdomain-via-cname.cname.recursor.engine.xa' );
     isa_ok( $p, 'Zonemaster::Engine::Packet' );
-    is( $p->rcode, 'NXDOMAIN', 'NXDOMAIN in response' );
-    is( scalar( $p->answer ), 0, 'no records in answer section' );
-    is( scalar( $p->authority ), 1, 'one record in authority section' );
+    is( $p->rcode,               'NXDOMAIN', 'NXDOMAIN in response' );
+    is( scalar( $p->answer ),    0,          'no records in answer section' );
+    is( scalar( $p->authority ), 1,          'one record in authority section' );
 
-    isa_ok( ($p->authority)[0], 'Zonemaster::LDNS::RR::SOA' );
-    is( name( ($p->authority)[0]->owner ), 'cname.recursor.engine.xa', 'RR name ok' );
+    isa_ok( ( $p->authority )[0], 'Zonemaster::LDNS::RR::SOA' );
+    is( name( ( $p->authority )[0]->owner ), 'cname.recursor.engine.xa', 'RR name ok' );
 
     my %res = map { $_->tag => $_ } @{ Zonemaster::Engine->logger->entries };
-    ok( $res{CNAME_START}, q{should emit CNAME_START} );
+    ok( $res{CNAME_START},                q{should emit CNAME_START} );
     ok( $res{CNAME_FOLLOWED_OUT_OF_ZONE}, q{should emit CNAME_FOLLOWED_OUT_OF_ZONE} );
 };
 
@@ -133,65 +135,65 @@ subtest 'NODATA-VIA-CNAME' => sub {
     Zonemaster::Engine->logger->clear_history;
     my $p = Zonemaster::Engine->recurse( 'nodata-via-cname.cname.recursor.engine.xa' );
     isa_ok( $p, 'Zonemaster::Engine::Packet' );
-    is( $p->rcode, 'NOERROR', 'NOERROR in response' );
-    is( scalar( $p->answer ), 0, 'no records in answer section' );
-    is( scalar( $p->authority ), 1, 'one record in authority section' );
+    is( $p->rcode,               'NOERROR', 'NOERROR in response' );
+    is( scalar( $p->answer ),    0,         'no records in answer section' );
+    is( scalar( $p->authority ), 1,         'one record in authority section' );
 
-    isa_ok( ($p->authority)[0], 'Zonemaster::LDNS::RR::SOA' );
-    is( name( ($p->authority)[0]->owner ), 'cname.recursor.engine.xa', 'RR name ok' );
+    isa_ok( ( $p->authority )[0], 'Zonemaster::LDNS::RR::SOA' );
+    is( name( ( $p->authority )[0]->owner ), 'cname.recursor.engine.xa', 'RR name ok' );
 
     my %res = map { $_->tag => $_ } @{ Zonemaster::Engine->logger->entries };
-    ok( $res{CNAME_START}, q{should emit CNAME_START} );
+    ok( $res{CNAME_START},                q{should emit CNAME_START} );
     ok( $res{CNAME_FOLLOWED_OUT_OF_ZONE}, q{should emit CNAME_FOLLOWED_OUT_OF_ZONE} );
 };
 
 subtest 'MULT-CNAME' => sub {
     Zonemaster::Engine->logger->clear_history;
     my $p = Zonemaster::Engine->recurse( 'mult-cname.cname.recursor.engine.xa' );
-    is( $p, undef, "undefined as expected");
+    is( $p, undef, "undefined as expected" );
 
     my %res = map { $_->tag => $_ } @{ Zonemaster::Engine->logger->entries };
-    ok( $res{CNAME_START}, q{should emit CNAME_START} );
+    ok( $res{CNAME_START},                     q{should emit CNAME_START} );
     ok( $res{CNAME_RECORDS_MULTIPLE_FOR_NAME}, q{should emit CNAME_RECORDS_MULTIPLE_FOR_NAME} );
 };
 
 subtest 'LOOPED-CNAME-IN-ZONE-1' => sub {
     Zonemaster::Engine->logger->clear_history;
     my $p = Zonemaster::Engine->recurse( 'looped-cname-in-zone-1.cname.recursor.engine.xa' );
-    is( $p, undef, "undefined as expected");
+    is( $p, undef, "undefined as expected" );
 
     my %res = map { $_->tag => $_ } @{ Zonemaster::Engine->logger->entries };
-    ok( $res{CNAME_START}, q{should emit CNAME_START} );
+    ok( $res{CNAME_START},      q{should emit CNAME_START} );
     ok( $res{CNAME_LOOP_INNER}, q{should emit CNAME_LOOP_INNER} );
 };
 
 subtest 'LOOPED-CNAME-IN-ZONE-2' => sub {
     Zonemaster::Engine->logger->clear_history;
     my $p = Zonemaster::Engine->recurse( 'looped-cname-in-zone-2.cname.recursor.engine.xa' );
-    is( $p, undef, "undefined as expected");
+    is( $p, undef, "undefined as expected" );
 
     my %res = map { $_->tag => $_ } @{ Zonemaster::Engine->logger->entries };
-    ok( $res{CNAME_START}, q{should emit CNAME_START} );
+    ok( $res{CNAME_START},      q{should emit CNAME_START} );
     ok( $res{CNAME_LOOP_INNER}, q{should emit CNAME_LOOP_INNER} );
 };
 
 subtest 'LOOPED-CNAME-IN-ZONE-3' => sub {
     Zonemaster::Engine->logger->clear_history;
     my $p = Zonemaster::Engine->recurse( 'looped-cname-in-zone-3.cname.recursor.engine.xa' );
-    is( $p, undef, "undefined as expected");
+    is( $p, undef, "undefined as expected" );
 
     my %res = map { $_->tag => $_ } @{ Zonemaster::Engine->logger->entries };
-    ok( $res{CNAME_START}, q{should emit CNAME_START} );
+    ok( $res{CNAME_START},      q{should emit CNAME_START} );
     ok( $res{CNAME_LOOP_INNER}, q{should emit CNAME_LOOP_INNER} );
 };
 
 subtest 'LOOPED-CNAME-OUT-OF-ZONE' => sub {
     Zonemaster::Engine->logger->clear_history;
     my $p = Zonemaster::Engine->recurse( 'looped-cname-out-of-zone.sub2.cname.recursor.engine.xa' );
-    is( $p, undef, "undefined as expected");
+    is( $p, undef, "undefined as expected" );
 
     my %res = map { $_->tag => $_ } @{ Zonemaster::Engine->logger->entries };
-    ok( $res{CNAME_START}, q{should emit CNAME_START} );
+    ok( $res{CNAME_START},      q{should emit CNAME_START} );
     ok( $res{CNAME_LOOP_OUTER}, q{should emit CNAME_LOOP_OUTER} );
 };
 
@@ -199,20 +201,20 @@ subtest 'TOO-LONG-CNAME-CHAIN' => sub {
     Zonemaster::Engine->logger->clear_history;
 
     my $p = Zonemaster::Engine->recurse( 'too-long-cname-chain.sub2.cname.recursor.engine.xa' );
-    is( $p, undef, "undefined as expected");
+    is( $p, undef, "undefined as expected" );
 
     my %res = map { $_->tag => $_ } @{ Zonemaster::Engine->logger->entries };
-    ok( $res{CNAME_START}, q{should emit CNAME_START} );
+    ok( $res{CNAME_START},          q{should emit CNAME_START} );
     ok( $res{CNAME_CHAIN_TOO_LONG}, q{should emit CNAME_CHAIN_TOO_LONG} );
 };
 
 subtest 'TOO-MANY-CNAME' => sub {
     Zonemaster::Engine->logger->clear_history;
     my $p = Zonemaster::Engine->recurse( 'too-many-cname.cname.recursor.engine.xa' );
-    is( $p, undef, "undefined as expected");
+    is( $p, undef, "undefined as expected" );
 
     my %res = map { $_->tag => $_ } @{ Zonemaster::Engine->logger->entries };
-    ok( $res{CNAME_START}, q{should emit CNAME_START} );
+    ok( $res{CNAME_START},            q{should emit CNAME_START} );
     ok( $res{CNAME_RECORDS_TOO_MANY}, q{should emit CNAME_RECORDS_TOO_MANY} );
 };
 
@@ -222,17 +224,17 @@ subtest 'TARGET-NO-MATCH-CNAME' => sub {
     isa_ok( $p, 'Zonemaster::Engine::Packet' );
 
     my %res = map { $_->tag => $_ } @{ Zonemaster::Engine->logger->entries };
-    ok( $res{CNAME_START}, q{should emit CNAME_START} );
+    ok( $res{CNAME_START},    q{should emit CNAME_START} );
     ok( $res{CNAME_NO_MATCH}, q{should emit CNAME_NO_MATCH} );
 };
 
 subtest 'BROKEN-CNAME-CHAIN' => sub {
     Zonemaster::Engine->logger->clear_history;
     my $p = Zonemaster::Engine->recurse( 'broken-cname-chain.cname.recursor.engine.xa' );
-    is( $p, undef, "undefined as expected");
+    is( $p, undef, "undefined as expected" );
 
     my %res = map { $_->tag => $_ } @{ Zonemaster::Engine->logger->entries };
-    ok( $res{CNAME_START}, q{should emit CNAME_START} );
+    ok( $res{CNAME_START},                q{should emit CNAME_START} );
     ok( $res{CNAME_RECORDS_CHAIN_BROKEN}, q{should emit CNAME_RECORDS_CHAIN_BROKEN} );
 };
 
@@ -242,12 +244,21 @@ subtest 'WRONG-CNAME-OWNER-NAME' => sub {
     isa_ok( $p, 'Zonemaster::Engine::Packet' );
     is( scalar( $p->answer ), 2, 'two records in answer section' );
 
-    ok( name( ($p->question)[0]->owner )->string ne name( ($p->answer)[0]->owner )->string, 'expected different owner name as QNAME on first RR' );
-    ok( name( ($p->question)[0]->owner )->string ne name( ($p->answer)[1]->owner )->string, 'expected different owner name as QNAME on second RR' );
+    ok(
+        name( ( $p->question )[0]->owner )->string ne name( ( $p->answer )[0]->owner )->string,
+        'expected different owner name as QNAME on first RR',
+    );
+    ok(
+        name( ( $p->question )[0]->owner )->string ne name( ( $p->answer )[1]->owner )->string,
+        'expected different owner name as QNAME on second RR',
+    );
 
     my %res = map { $_->tag => $_ } @{ Zonemaster::Engine->logger->entries };
     ok( !$res{CNAME_START}, q{should not emit CNAME_START} );
-    ok( scalar ( grep { index($_->tag, 'CNAME') != -1 } @{ Zonemaster::Engine->logger->entries } ) == 0, 'empty CNAME message tags' );
+    ok(
+        scalar( grep { index( $_->tag, 'CNAME' ) != -1 } @{ Zonemaster::Engine->logger->entries } ) == 0,
+        'empty CNAME message tags',
+    );
 };
 
 subtest 'EXTRA-CNAME-IN-ANSWER' => sub {
@@ -256,14 +267,23 @@ subtest 'EXTRA-CNAME-IN-ANSWER' => sub {
     isa_ok( $p, 'Zonemaster::Engine::Packet' );
     is( scalar( $p->answer ), 2, 'two records in answer section' );
 
-    isa_ok( ($p->answer)[0], 'Zonemaster::LDNS::RR::A' );
-    ok( name( ($p->question)[0]->owner )->string eq name( ($p->answer)[0]->owner )->string, 'expected same owner name as QNAME on first RR' );
-    isa_ok( ($p->answer)[1], 'Zonemaster::LDNS::RR::CNAME' );
-    ok( name( ($p->question)[0]->owner )->string ne name( ($p->answer)[1]->owner )->string, 'expected different owner name as QNAME on second RR' );
+    isa_ok( ( $p->answer )[0], 'Zonemaster::LDNS::RR::A' );
+    ok(
+        name( ( $p->question )[0]->owner )->string eq name( ( $p->answer )[0]->owner )->string,
+        'expected same owner name as QNAME on first RR',
+    );
+    isa_ok( ( $p->answer )[1], 'Zonemaster::LDNS::RR::CNAME' );
+    ok(
+        name( ( $p->question )[0]->owner )->string ne name( ( $p->answer )[1]->owner )->string,
+        'expected different owner name as QNAME on second RR',
+    );
 
     my %res = map { $_->tag => $_ } @{ Zonemaster::Engine->logger->entries };
     ok( !$res{CNAME_START}, q{should not emit CNAME_START} );
-    ok( scalar ( grep { index($_->tag, 'CNAME') != -1 } @{ Zonemaster::Engine->logger->entries } ) == 0, 'empty CNAME message tags' );
+    ok(
+        scalar( grep { index( $_->tag, 'CNAME' ) != -1 } @{ Zonemaster::Engine->logger->entries } ) == 0,
+        'empty CNAME message tags',
+    );
 };
 
 subtest 'CNAME-CHAIN-TO-NODATA' => sub {
@@ -272,17 +292,17 @@ subtest 'CNAME-CHAIN-TO-NODATA' => sub {
     isa_ok( $p, 'Zonemaster::Engine::Packet' );
 
     my %res = map { $_->tag => $_ } @{ Zonemaster::Engine->logger->entries };
-    ok( $res{CNAME_START}, q{should emit CNAME_START} );
+    ok( $res{CNAME_START},     q{should emit CNAME_START} );
     ok( $res{CNAME_TO_NODATA}, q{should emit CNAME_TO_NODATA} );
 };
 
 subtest 'CNAME-UNRESOLVABLE' => sub {
     Zonemaster::Engine->logger->clear_history;
     my $p = Zonemaster::Engine->recurse( 'unresolvable-cname.cname.recursor.engine.xa' );
-    is( $p, undef, "undefined as expected");
+    is( $p, undef, "undefined as expected" );
 
     my %res = map { $_->tag => $_ } @{ Zonemaster::Engine->logger->entries };
-    ok( $res{CNAME_START}, q{should emit CNAME_START} );
+    ok( $res{CNAME_START},        q{should emit CNAME_START} );
     ok( $res{CNAME_UNRESOLVABLE}, q{should emit CNAME_UNRESOLVABLE} );
 };
 

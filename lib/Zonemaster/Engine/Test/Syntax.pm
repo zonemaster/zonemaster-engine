@@ -7,7 +7,7 @@ use version; our $VERSION = version->declare( "v1.0.10" );
 
 use Carp;
 use Email::Valid;
-use List::MoreUtils qw[uniq none any];
+use List::MoreUtils    qw[uniq none any];
 use Locale::TextDomain qw[Zonemaster-Engine];
 use Readonly;
 use Time::Local;
@@ -113,7 +113,7 @@ sub metadata {
               NON_ALLOWED_CHARS
               TEST_CASE_END
               TEST_CASE_START
-              )
+            )
         ],
         syntax02 => [
             qw(
@@ -122,7 +122,7 @@ sub metadata {
               NO_ENDING_HYPHENS
               TEST_CASE_END
               TEST_CASE_START
-              )
+            )
         ],
         syntax03 => [
             qw(
@@ -130,7 +130,7 @@ sub metadata {
               NO_DOUBLE_DASH
               TEST_CASE_END
               TEST_CASE_START
-              )
+            )
         ],
         syntax04 => [
             qw(
@@ -140,7 +140,7 @@ sub metadata {
               NAMESERVER_SYNTAX_OK
               TEST_CASE_END
               TEST_CASE_START
-              )
+            )
         ],
         syntax05 => [
             qw(
@@ -149,7 +149,7 @@ sub metadata {
               NO_RESPONSE_SOA_QUERY
               TEST_CASE_END
               TEST_CASE_START
-              )
+            )
         ],
         syntax06 => [
             qw(
@@ -162,7 +162,7 @@ sub metadata {
               RNAME_RFC822_VALID
               TEST_CASE_END
               TEST_CASE_START
-              )
+            )
         ],
         syntax07 => [
             qw(
@@ -173,7 +173,7 @@ sub metadata {
               NO_RESPONSE_SOA_QUERY
               TEST_CASE_END
               TEST_CASE_START
-              )
+            )
         ],
         syntax08 => [
             qw(
@@ -184,7 +184,7 @@ sub metadata {
               NO_RESPONSE_MX_QUERY
               TEST_CASE_END
               TEST_CASE_START
-              )
+            )
         ],
     };
 } ## end sub metadata
@@ -346,7 +346,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     RNAME_RFC822_INVALID => sub {
         __x    # SYNTAX:RNAME_RFC822_INVALID
-           "Illegal character(s) found in SOA RNAME field ({rname}).", @_;
+          "Illegal character(s) found in SOA RNAME field ({rname}).", @_;
     },
     RNAME_RFC822_VALID => sub {
         __x    # SYNTAX:RNAME_RFC822_VALID
@@ -440,27 +440,13 @@ Returns a boolean.
 sub _ip_disabled_message {
     my ( $results_array, $ns, @rrtypes ) = @_;
 
-    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv6}) and $ns->address->version == $IP_VERSION_6 ) {
-        push @$results_array, map {
-          _emit_log(
-            IPV6_DISABLED => {
-                ns     => $ns->string,
-                rrtype => $_
-            }
-          )
-        } @rrtypes;
+    if ( not Zonemaster::Engine::Profile->effective->get( q{net.ipv6} ) and $ns->address->version == $IP_VERSION_6 ) {
+        push @$results_array, map { _emit_log( IPV6_DISABLED => { ns => $ns->string, rrtype => $_ } ) } @rrtypes;
         return 1;
     }
 
-    if ( not Zonemaster::Engine::Profile->effective->get(q{net.ipv4}) and $ns->address->version == $IP_VERSION_4 ) {
-        push @$results_array, map {
-          _emit_log(
-            IPV4_DISABLED => {
-                ns     => $ns->string,
-                rrtype => $_,
-            }
-          )
-        } @rrtypes;
+    if ( not Zonemaster::Engine::Profile->effective->get( q{net.ipv4} ) and $ns->address->version == $IP_VERSION_4 ) {
+        push @$results_array, map { _emit_log( IPV4_DISABLED => { ns => $ns->string, rrtype => $_ } ) } @rrtypes;
         return 1;
     }
     return 0;
@@ -830,7 +816,7 @@ sub syntax04 {
     foreach my $local_nsname (
         uniq(
             @{ Zonemaster::Engine::TestMethods->method2( $zone ) },
-            @{ Zonemaster::Engine::TestMethods->method3( $zone ) }
+            @{ Zonemaster::Engine::TestMethods->method3( $zone ) },
         )
       )
     {
@@ -964,7 +950,7 @@ sub syntax06 {
         }
 
         my $domain = name( ( $rname =~ s/.*@//r ) );
-        my $p_mx = Zonemaster::Engine::Recursor->recurse( $domain, q{MX} );
+        my $p_mx   = Zonemaster::Engine::Recursor->recurse( $domain, q{MX} );
 
         if ( not $p_mx or $p_mx->rcode ne 'NOERROR' ) {
             push @results, _emit_log( RNAME_MAIL_DOMAIN_INVALID => { domain => $domain } );
@@ -972,10 +958,10 @@ sub syntax06 {
         }
 
         # Retrieve followed CNAME, if any
-        if ( $domain ne ($p_mx->question)[0]->owner ) { # CNAME was followed in a new recursive query
-            $domain = name( ($p_mx->question)[0]->owner );
+        if ( $domain ne ( $p_mx->question )[0]->owner ) {    # CNAME was followed in a new recursive query
+            $domain = name( ( $p_mx->question )[0]->owner );
         }
-        elsif ( scalar $p_mx->get_records( q{CNAME}, q{answer} ) ) { # CNAME was followed in the same query
+        elsif ( scalar $p_mx->get_records( q{CNAME}, q{answer} ) ) {    # CNAME was followed in the same query
             my %cnames = map { name( $_->owner ) => name( $_->cname ) } $p_mx->get_records( q{CNAME}, q{answer} );
             $domain = $cnames{$domain} while $cnames{$domain};
         }
@@ -1007,7 +993,9 @@ sub syntax06 {
                     my @rrs_a = grep { $_->owner eq $mail_server } $p_a->get_records( q{A}, q{answer} );
 
                     if ( grep { $_->address eq q{127.0.0.1} } @rrs_a ) {
-                        push @results, _emit_log( RNAME_MAIL_DOMAIN_LOCALHOST => { domain => $mail_server, localhost => q{127.0.0.1} } );
+                        push @results,
+                          _emit_log(
+                            RNAME_MAIL_DOMAIN_LOCALHOST => { domain => $mail_server, localhost => q{127.0.0.1} } );
                     }
                     elsif ( @rrs_a ) {
                         $exchange_valid = 1;
@@ -1024,8 +1012,9 @@ sub syntax06 {
                 else {
                     my @rrs_aaaa = grep { $_->owner eq $mail_server } $p_aaaa->get_records( q{AAAA}, q{answer} );
 
-                    if ( grep { $_->address eq q{::1} } @rrs_aaaa) {
-                        push @results, _emit_log( RNAME_MAIL_DOMAIN_LOCALHOST => { domain => $mail_server, localhost => q{::1} } );
+                    if ( grep { $_->address eq q{::1} } @rrs_aaaa ) {
+                        push @results,
+                          _emit_log( RNAME_MAIL_DOMAIN_LOCALHOST => { domain => $mail_server, localhost => q{::1} } );
                     }
                     elsif ( @rrs_aaaa ) {
                         $exchange_valid = 1;
@@ -1055,7 +1044,7 @@ sub syntax06 {
           ) for keys %rname_candidates;
     }
 
-    return ( @results, _emit_log( TEST_CASE_END => { testcase => (split /::/, (caller(0))[3])[-1] } ) );
+    return ( @results, _emit_log( TEST_CASE_END => { testcase => ( split /::/, ( caller( 0 ) )[3] )[-1] } ) );
 } ## end sub syntax06
 
 =over
@@ -1129,6 +1118,6 @@ sub syntax08 {
     }
 
     return ( @results, _emit_log( TEST_CASE_END => { testcase => $Zonemaster::Engine::Logger::TEST_CASE_NAME } ) );
-}
+} ## end sub syntax08
 
 1;

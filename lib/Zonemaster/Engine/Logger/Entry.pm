@@ -3,9 +3,9 @@ package Zonemaster::Engine::Logger::Entry;
 use v5.16.0;
 use warnings;
 
-use version; our $VERSION = version->declare("v1.1.8");
+use version; our $VERSION = version->declare( "v1.1.8" );
 
-use Carp qw( confess );
+use Carp        qw( confess );
 use Time::HiRes qw[time];
 use JSON::PP;
 use Class::Accessor;
@@ -32,8 +32,7 @@ our $start_time = time();
 my $json = JSON::PP->new->allow_blessed->convert_blessed->canonical;
 my $test_levels_config;
 
-__PACKAGE__->mk_ro_accessors(qw(tag args timestamp testcase module));
-
+__PACKAGE__->mk_ro_accessors( qw(tag args timestamp testcase module) );
 
 sub new {
     my ( $proto, $attrs ) = @_;
@@ -61,7 +60,7 @@ sub new {
 
     my $class = ref $proto || $proto;
     return Class::Accessor::new( $class, $attrs );
-}
+} ## end sub new
 
 sub level {
     my $self = shift;
@@ -71,7 +70,7 @@ sub level {
         $self->{_level} = $self->_build_level();
     }
 
-    return $self->{_level}
+    return $self->{_level};
 }
 
 sub _build_level {
@@ -95,14 +94,13 @@ sub _build_level {
     else {
         die "Unknown level string: $string";
     }
-}
+} ## end sub _build_level
 
 sub _set_level {
     my ( $self, $level ) = @_;
 
-    $self->{_level} = $level
+    $self->{_level} = $level;
 }
-
 
 sub numeric_level {
     my ( $self ) = @_;
@@ -117,7 +115,8 @@ sub levels {
 sub string {
     my ( $self ) = @_;
 
-    return sprintf( '%s%s:%s %s', $self->module, $self->testcase ? q{:} . $self->testcase : q{}, $self->tag, $self->argstr );
+    return
+      sprintf( '%s%s:%s %s', $self->module, $self->testcase ? q{:} . $self->testcase : q{}, $self->tag, $self->argstr );
 }
 
 sub argstr {
@@ -131,7 +130,7 @@ sub argstr {
         my $p_args = $self->printable_args;
         $argstr = join( q{; },
             map { $_ . q{=} . ( ref( $p_args->{$_} ) ? $json->encode( $p_args->{$_} ) : $p_args->{$_} ) }
-            sort keys %{$p_args} );
+            sort keys %{$p_args}, );
     }
 
     return $argstr;

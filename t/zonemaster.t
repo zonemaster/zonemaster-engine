@@ -10,7 +10,7 @@ BEGIN {
     use_ok( 'Zonemaster::Engine::Exception' );
 }
 
-is( exception { Zonemaster::Engine->reset(); }, undef, 'No crash on instant reset.');
+is( exception { Zonemaster::Engine->reset(); }, undef, 'No crash on instant reset.' );
 
 my $datafile = q{t/zonemaster.data};
 if ( not $ENV{ZONEMASTER_RECORD} ) {
@@ -19,7 +19,7 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Profile->effective->set( q{no_network}, 1 );
 }
 
-my ($json, $profile_tmp);
+my ( $json, $profile_tmp );
 $json        = read_file( 't/profiles/Test-all.json' );
 $profile_tmp = Zonemaster::Engine::Profile->from_json( $json );
 Zonemaster::Engine::Profile->effective->merge( $profile_tmp );
@@ -27,7 +27,7 @@ $json        = read_file( 't/profiles/Test-all-levels.json' );
 $profile_tmp = Zonemaster::Engine::Profile->from_json( $json );
 Zonemaster::Engine::Profile->effective->merge( $profile_tmp );
 
-isa_ok( Zonemaster::Engine->logger, 'Zonemaster::Engine::Logger' );
+isa_ok( Zonemaster::Engine->logger,             'Zonemaster::Engine::Logger' );
 isa_ok( Zonemaster::Engine::Profile->effective, 'Zonemaster::Engine::Profile' );
 
 my %module = map { $_ => 1 } Zonemaster::Engine::Test->modules;
@@ -123,9 +123,12 @@ Zonemaster::Engine->logger->callback(
         die Zonemaster::Engine::Exception->new( { message => 'canary' } );
     }
 );
-isa_ok( exception { Zonemaster::Engine->test_zone( 'nic.se' ) }, 'Zonemaster::Engine::Exception' );
+isa_ok( exception { Zonemaster::Engine->test_zone( 'nic.se' ) },             'Zonemaster::Engine::Exception' );
 isa_ok( exception { Zonemaster::Engine->test_module( 'SyNtAx', 'nic.se' ) }, 'Zonemaster::Engine::Exception' );
-isa_ok( exception { Zonemaster::Engine->test_method( 'Syntax', 'syntax01', 'nic.se' ) }, 'Zonemaster::Engine::Exception' );
+isa_ok(
+    exception { Zonemaster::Engine->test_method( 'Syntax', 'syntax01', 'nic.se' ) },
+    'Zonemaster::Engine::Exception',
+);
 Zonemaster::Engine->logger->callback( undef );
 
 Zonemaster::Engine::Profile->effective->set( q{net.ipv4}, 0 );
@@ -151,8 +154,8 @@ if ( $ENV{ZONEMASTER_RECORD} ) {
 ok( @{ Zonemaster::Engine->logger->entries } > 0,                        'There are log entries' );
 ok( scalar( keys( %Zonemaster::Engine::Nameserver::object_cache ) ) > 0, 'There are things in the object cache' );
 Zonemaster::Engine->reset;
-ok( @{ Zonemaster::Engine->logger->entries } == 0,                        'There are no log entries' );
-ok( scalar( keys( %Zonemaster::Engine::Nameserver::object_cache ) ) == 0, 'The object cache is empty' );
+ok( @{ Zonemaster::Engine->logger->entries } == 0,                               'There are no log entries' );
+ok( scalar( keys( %Zonemaster::Engine::Nameserver::object_cache ) ) == 0,        'The object cache is empty' );
 ok( scalar( keys( %Zonemaster::Engine::Nameserver::Cache::object_cache ) ) == 0, 'The packet cache is empty' );
 
 done_testing;

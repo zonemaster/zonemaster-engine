@@ -16,9 +16,7 @@ sub new {
     my ( $proto, @initial_items ) = @_;
     my $class = ref $proto || $proto;
 
-    my $self = {
-        _names => {},
-    };
+    my $self = { _names => {} };
 
     bless $self, $class;
     $self->push( @initial_items );
@@ -37,15 +35,15 @@ sub push {
         next if not defined $item;
         next if $item eq '';
 
-        if ( $item->isa('Zonemaster::Engine::DNSName') ) {
-            if ( not exists $self->{_names}{lc $item} ) {
-                $self->{_names}{lc $item} = $item;
+        if ( $item->isa( 'Zonemaster::Engine::DNSName' ) ) {
+            if ( not exists $self->{_names}{ lc $item } ) {
+                $self->{_names}{ lc $item } = $item;
             }
         }
-        elsif ( $item->isa('Zonemaster::Engine::Nameserver') ) {
+        elsif ( $item->isa( 'Zonemaster::Engine::Nameserver' ) ) {
             my ( $name, $addr ) = ( $item->name, $item->address->short );
 
-            my $r = \$self->{_names}{lc $name};
+            my $r = \$self->{_names}{ lc $name };
             if ( not defined $$r or ref $$r ne 'HASH' ) {
                 $$r = {};
             }
@@ -53,14 +51,14 @@ sub push {
         }
         else {
             my $name = Zonemaster::Engine::DNSName->new( "$item" );
-            if ( not exists $self->{_names}{lc $name} ) {
-                $self->{_names}{lc $item} = $name;
+            if ( not exists $self->{_names}{ lc $name } ) {
+                $self->{_names}{ lc $item } = $name;
             }
         }
-    }
+    } ## end for my $item ( @items )
 
     return $self;
-}
+} ## end sub push
 
 ####
 #### Access to items
@@ -165,10 +163,10 @@ sub is_empty {
 sub difference {
     my ( $self, $other ) = @_;
 
-    my $only_in_left = __PACKAGE__->new();
+    my $only_in_left  = __PACKAGE__->new();
     my $only_in_right = __PACKAGE__->new();
 
-    my @left_items = $self->sorted_items();
+    my @left_items  = $self->sorted_items();
     my @right_items = $other->sorted_items();
 
     while ( @left_items and @right_items ) {
@@ -188,12 +186,12 @@ sub difference {
     $only_in_right->push( @right_items );
 
     return ( $only_in_left, $only_in_right );
-}
+} ## end sub difference
 
 sub equals {
     my ( $self, $other ) = @_;
 
-    my @left_items = $self->sorted_items();
+    my @left_items  = $self->sorted_items();
     my @right_items = $other->sorted_items();
 
     while ( @left_items and @right_items ) {

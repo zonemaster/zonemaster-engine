@@ -3,7 +3,7 @@ package Zonemaster::Engine::TestMethods;
 use v5.16.0;
 use warnings;
 
-use version; our $VERSION = version->declare("v1.0.3");
+use version; our $VERSION = version->declare( "v1.0.3" );
 
 use List::MoreUtils qw[uniq];
 use Zonemaster::Engine::Util;

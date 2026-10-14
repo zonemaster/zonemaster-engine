@@ -9,7 +9,6 @@ use Locale::TextDomain qw[Zonemaster-Engine];
 
 use overload '""' => \&string;
 
-
 =head1 NAME
 
 Zonemaster::Engine::Normalization::Error - normalization error class
@@ -23,11 +22,11 @@ Zonemaster::Engine::Normalization::Error - normalization error class
 
 =cut
 
-
 Readonly my %ERRORS => (
     AMBIGUOUS_DOWNCASING => {
-        message => N__ 'Ambiguous downcasing of character "{unicode_name}" in the domain name. Use all lower case instead.',
-        arguments => [ 'unicode_name' ]
+        message => N__
+          'Ambiguous downcasing of character "{unicode_name}" in the domain name. Use all lower case instead.',
+        arguments => ['unicode_name'],
     },
     DOMAIN_NAME_TOO_LONG => {
         message => N__ 'Domain name is too long (more than 253 characters with no final dot).',
@@ -39,19 +38,19 @@ Readonly my %ERRORS => (
         message => N__ 'Domain name starts with dot.'
     },
     INVALID_ASCII => {
-        message => N__ 'Domain name has an ASCII label ("{label}") with a character not permitted.',
-        arguments => [ 'label' ]
+        message   => N__ 'Domain name has an ASCII label ("{label}") with a character not permitted.',
+        arguments => ['label'],
     },
     INVALID_U_LABEL => {
-        message => N__ 'Domain name has a non-ASCII label ("{label}") which is not a valid U-label.',
-        arguments => [ 'label' ]
+        message   => N__ 'Domain name has a non-ASCII label ("{label}") which is not a valid U-label.',
+        arguments => ['label'],
     },
     REPEATED_DOTS => {
         message => N__ 'Domain name has repeated dots.'
     },
     LABEL_TOO_LONG => {
-        message => N__ 'Domain name has a label that is too long (more than 63 characters), "{label}".',
-        arguments => [ 'label' ]
+        message   => N__ 'Domain name has a label that is too long (more than 63 characters), "{label}".',
+        arguments => ['label'],
     },
 );
 
@@ -91,7 +90,7 @@ sub new {
     my $obj = { tag => $tag, params => {} };
 
     if ( exists $ERRORS{$tag}->{arguments} ) {
-        foreach my $arg ( @{$ERRORS{$tag}->{arguments}} ) {
+        foreach my $arg ( @{ $ERRORS{$tag}->{arguments} } ) {
             if ( !exists $params->{$arg} ) {
                 croak "Missing arguments $arg.";
             }
@@ -100,8 +99,7 @@ sub new {
     }
 
     return bless $obj, $class;
-}
-
+} ## end sub new
 
 =item message
 
@@ -111,9 +109,8 @@ Returns the translated error message using the parameters given when creating th
 
 sub message {
     my ( $self ) = @_;
-    return __x $ERRORS{$self->{tag}}->{message}, %{$self->{params}};
+    return __x $ERRORS{ $self->{tag} }->{message}, %{ $self->{params} };
 }
-
 
 =item tag
 
@@ -138,7 +135,6 @@ sub string {
 
     return $self->message;
 }
-
 
 =back
 

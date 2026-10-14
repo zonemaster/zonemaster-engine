@@ -3,13 +3,13 @@ package Zonemaster::Engine::Nameserver::Cache;
 use v5.16.0;
 use warnings;
 
-use version; our $VERSION = version->declare("v1.0.4");
+use version; our $VERSION = version->declare( "v1.0.4" );
 
 use Class::Accessor "antlers";
 
 our %object_cache;
 
-has 'data' => ( is => 'ro' );
+has 'data'    => ( is => 'ro' );
 has 'address' => ( is => 'ro' );
 
 sub get_cache_type {
@@ -30,7 +30,7 @@ sub get_cache_class {
 
     my $cache_class = "Zonemaster::Engine::Nameserver::Cache::$cache_type";
 
-    require ( "$cache_class.pm" =~ s{::}{/}gr );
+    require( "$cache_class.pm" =~ s{::}{/}gr );
     $cache_class->import();
 
     return $cache_class;

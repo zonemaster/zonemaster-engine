@@ -4,8 +4,8 @@ use warnings;
 use Test::More;
 use Test::Differences;
 
-BEGIN { 
-    use_ok( 'Zonemaster::Engine::Validation' ), qw( validate_ipv4 validate_ipv6 )
+BEGIN {
+    use_ok( 'Zonemaster::Engine::Validation' ), qw( validate_ipv4 validate_ipv6 );
 }
 
 subtest 'validate_ipv4()' => sub {
@@ -21,7 +21,7 @@ subtest 'validate_ipv4()' => sub {
     subtest 'Invalid IPv4 addresses' => sub {
         foreach my $ip ( @inv_ipv4_addresses ) {
             my $ip_is_valid = validate_ipv4( $ip );
-            $ip = 'undef' unless defined($ip);
+            $ip = 'undef' unless defined( $ip );
             eq_or_diff $ip_is_valid, 0, "$ip is an invalid IPv4 address";
         }
     };
@@ -40,7 +40,7 @@ subtest 'validate_ipv6()' => sub {
     subtest 'Invalid IPv6 addresses' => sub {
         foreach my $ip ( @inv_ipv6_addresses ) {
             my $ip_is_valid = validate_ipv6( $ip );
-            $ip = 'undef' unless defined($ip);
+            $ip = 'undef' unless defined( $ip );
             eq_or_diff $ip_is_valid, 0, "$ip is an invalid IPv6 address";
         }
     };

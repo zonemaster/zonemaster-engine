@@ -3,12 +3,12 @@ use v5.14.2;
 use strict;
 use warnings;
 use utf8;
-use Test::More; # see done_testing()
+use Test::More;    # see done_testing()
 
 use File::Basename qw( dirname );
 
 chdir dirname( dirname( __FILE__ ) ) or BAIL_OUT( "chdir: $!" );
-chdir 'share' or BAIL_OUT( "chdir: $!" );
+chdir 'share'                        or BAIL_OUT( "chdir: $!" );
 
 my $makebin = 'make';
 
@@ -18,7 +18,7 @@ sub make {
     undef $ENV{MAKEFLAGS};
 
     my $command = join( ' ', $makebin, '--silent', '--no-print-directory', @make_args );
-    my $output = `$command`;
+    my $output  = `$command`;
 
     if ( $? == -1 ) {
         BAIL_OUT( "failed to execute: $!" );
@@ -48,7 +48,7 @@ subtest "check msg args" => sub {
 };
 
 subtest "tidy po files" => sub {
-    SKIP: {
+  SKIP: {
         my ( $output, $status );
 
         $output = `git diff --numstat`;
@@ -63,7 +63,7 @@ subtest "tidy po files" => sub {
 
         $output = `git diff --numstat`;
         is $output, "", 'all files are tidied (if not run "make tidy-po")'
-            or diag `git diff`;
+          or diag `git diff`;
     }
 };
 

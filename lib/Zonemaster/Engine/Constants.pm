@@ -3,10 +3,10 @@ package Zonemaster::Engine::Constants;
 use v5.16.0;
 use warnings;
 
-use version; our $VERSION = version->declare("v1.2.5");
+use version; our $VERSION = version->declare( "v1.2.5" );
 
 use Carp;
-use English qw( -no_match_vars ) ;
+use English qw( -no_match_vars );
 use parent 'Exporter';
 use Net::IP::XS;
 use Text::CSV;
@@ -100,14 +100,15 @@ our %EXPORT_TAGS = (
     algo => [
         qw($ALGO_STATUS_DEPRECATED $ALGO_STATUS_PRIVATE $ALGO_STATUS_RESERVED $ALGO_STATUS_UNASSIGNED $ALGO_STATUS_OTHER $ALGO_STATUS_NOT_ZONE_SIGN $ALGO_STATUS_NOT_RECOMMENDED)
     ],
-    cname => [ qw($CNAME_MAX_CHAIN_LENGTH $CNAME_MAX_RECORDS) ],
-    name => [qw($FQDN_MAX_LENGTH $LABEL_MAX_LENGTH)],
-    ip   => [qw($IP_VERSION_4 $IP_VERSION_6)],
-    soa  => [
+    cname => [qw($CNAME_MAX_CHAIN_LENGTH $CNAME_MAX_RECORDS)],
+    name  => [qw($FQDN_MAX_LENGTH $LABEL_MAX_LENGTH)],
+    ip    => [qw($IP_VERSION_4 $IP_VERSION_6)],
+    soa   => [
         qw($DURATION_5_MINUTES_IN_SECONDS $DURATION_1_HOUR_IN_SECONDS $DURATION_4_HOURS_IN_SECONDS $DURATION_12_HOURS_IN_SECONDS $DURATION_1_DAY_IN_SECONDS $DURATION_1_WEEK_IN_SECONDS $DURATION_180_DAYS_IN_SECONDS $SERIAL_BITS $SERIAL_MAX_VARIATION)
     ],
-    misc => [qw($UDP_PAYLOAD_LIMIT $EDNS_UDP_PAYLOAD_DNSSEC_DEFAULT $EDNS_UDP_PAYLOAD_DEFAULT $EDNS_UDP_PAYLOAD_COMMON_LIMIT $MINIMUM_NUMBER_OF_NAMESERVERS $BLACKLISTING_ENABLED)]
-    ,    # everything in %EXPORT_OK that isn't included in any of the other tags
+    misc => [
+        qw($UDP_PAYLOAD_LIMIT $EDNS_UDP_PAYLOAD_DNSSEC_DEFAULT $EDNS_UDP_PAYLOAD_DEFAULT $EDNS_UDP_PAYLOAD_COMMON_LIMIT $MINIMUM_NUMBER_OF_NAMESERVERS $BLACKLISTING_ENABLED)
+    ],    # everything in %EXPORT_OK that isn't included in any of the other tags
     addresses => [qw(@IPV4_SPECIAL_ADDRESSES @IPV6_SPECIAL_ADDRESSES)],
 );
 
@@ -199,18 +200,18 @@ Readonly our $ALGO_STATUS_OTHER           => 5;
 Readonly our $ALGO_STATUS_NOT_ZONE_SIGN   => 8;
 Readonly our $ALGO_STATUS_NOT_RECOMMENDED => 9;
 
-Readonly our $BLACKLISTING_ENABLED     => 1;
+Readonly our $BLACKLISTING_ENABLED => 1;
 
-Readonly our $CNAME_MAX_CHAIN_LENGTH      => 10;
-Readonly our $CNAME_MAX_RECORDS           => 9;
+Readonly our $CNAME_MAX_CHAIN_LENGTH => 10;
+Readonly our $CNAME_MAX_RECORDS      => 9;
 
-Readonly our $DURATION_5_MINUTES_IN_SECONDS  =>             5 * 60;
-Readonly our $DURATION_1_HOUR_IN_SECONDS     =>            60 * 60;
-Readonly our $DURATION_4_HOURS_IN_SECONDS    =>        4 * 60 * 60;
-Readonly our $DURATION_12_HOURS_IN_SECONDS   =>       12 * 60 * 60;
-Readonly our $DURATION_1_DAY_IN_SECONDS      =>       24 * 60 * 60;
-Readonly our $DURATION_1_WEEK_IN_SECONDS     =>   7 * 24 * 60 * 60;
-Readonly our $DURATION_180_DAYS_IN_SECONDS   => 180 * 24 * 60 * 60;
+Readonly our $DURATION_5_MINUTES_IN_SECONDS => 5 * 60;
+Readonly our $DURATION_1_HOUR_IN_SECONDS    => 60 * 60;
+Readonly our $DURATION_4_HOURS_IN_SECONDS   => 4 * 60 * 60;
+Readonly our $DURATION_12_HOURS_IN_SECONDS  => 12 * 60 * 60;
+Readonly our $DURATION_1_DAY_IN_SECONDS     => 24 * 60 * 60;
+Readonly our $DURATION_1_WEEK_IN_SECONDS    => 7 * 24 * 60 * 60;
+Readonly our $DURATION_180_DAYS_IN_SECONDS  => 180 * 24 * 60 * 60;
 
 # Maximum length of ASCII version of a domain name, with trailing dot.
 Readonly our $FQDN_MAX_LENGTH  => 254;
@@ -221,7 +222,7 @@ Readonly our $IP_VERSION_6 => 6;
 
 Readonly our $MINIMUM_NUMBER_OF_NAMESERVERS => 2;
 
-Readonly our $SERIAL_BITS => 32;
+Readonly our $SERIAL_BITS          => 32;
 Readonly our $SERIAL_MAX_VARIATION => 0;
 
 Readonly our $UDP_PAYLOAD_LIMIT               => 512;
@@ -229,8 +230,8 @@ Readonly our $EDNS_UDP_PAYLOAD_DEFAULT        => 512;
 Readonly our $EDNS_UDP_PAYLOAD_COMMON_LIMIT   => 4096;
 Readonly our $EDNS_UDP_PAYLOAD_DNSSEC_DEFAULT => 1232;
 
-Readonly::Array our @IPV4_SPECIAL_ADDRESSES => _extract_iana_ip_blocks($IP_VERSION_4);
-Readonly::Array our @IPV6_SPECIAL_ADDRESSES => _extract_iana_ip_blocks($IP_VERSION_6);
+Readonly::Array our @IPV4_SPECIAL_ADDRESSES => _extract_iana_ip_blocks( $IP_VERSION_4 );
+Readonly::Array our @IPV6_SPECIAL_ADDRESSES => _extract_iana_ip_blocks( $IP_VERSION_6 );
 
 =head1 METHODS
 
@@ -253,13 +254,15 @@ and C<globally_reachable> (string).
 
 sub _extract_iana_ip_blocks {
     my $ip_version = shift;
-    my @list = ();
+    my @list       = ();
 
-    my $csv = Text::CSV->new ({
-      binary    => 1,
-      auto_diag => 1,
-      sep_char  => q{,}
-    });
+    my $csv = Text::CSV->new(
+        {
+            binary    => 1,
+            auto_diag => 1,
+            sep_char  => q{,},
+        }
+    );
     my @files_details = (
         { name => q{iana-ipv4-special-registry.csv}, ip_version => $IP_VERSION_4 },
         { name => q{iana-ipv6-special-registry.csv}, ip_version => $IP_VERSION_6 },
@@ -268,10 +271,10 @@ sub _extract_iana_ip_blocks {
     foreach my $file_details ( @files_details ) {
         my $first_line = 1;
         next if ${$file_details}{ip_version} != $ip_version;
-        my $makefile_name = 'Zonemaster-Engine'; # This must be the same name as "name" in Makefile.PL
-        my $data_location = dist_file($makefile_name, ${$file_details}{name});
-        open(my $data, '<:encoding(utf8)', $data_location) or croak "Cannot open '${data_location}' : ${OS_ERROR}";
-        while (my $fields = $csv->getline( $data )) {
+        my $makefile_name = 'Zonemaster-Engine';    # This must be the same name as "name" in Makefile.PL
+        my $data_location = dist_file( $makefile_name, ${$file_details}{name} );
+        open( my $data, '<:encoding(utf8)', $data_location ) or croak "Cannot open '${data_location}' : ${OS_ERROR}";
+        while ( my $fields = $csv->getline( $data ) ) {
             if ( $first_line ) {
                 $first_line = 0;
                 next;
@@ -280,11 +283,17 @@ sub _extract_iana_ip_blocks {
             $address_data =~ s/[ ]+//smx;
             foreach my $address_item ( split /,/smx, $address_data ) {
                 $address_item =~ s/(\A.+\/\d+).*\z/$1/smx;
-                push @list, { ip => Net::IP::XS->new( $address_item ), name => $fields->[1], reference => $fields->[2], globally_reachable => $fields->[8] };
+                push @list,
+                  {
+                    ip                 => Net::IP::XS->new( $address_item ),
+                    name               => $fields->[1],
+                    reference          => $fields->[2],
+                    globally_reachable => $fields->[8],
+                  };
             }
         }
         close $data or croak "Cannot close '${data_location}' : ${OS_ERROR}";
-    }
+    } ## end foreach my $file_details ( ...)
 
     return @list;
 } ## end sub _extract_iana_ip_blocks

@@ -16,20 +16,22 @@ BEGIN {
 ###########
 # address01 - https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/test-zones/Address-TP/address01.md
 my $test_module = 'Address';
-my $test_case = 'address01';
-my @all_tags = qw(A01_ADDR_NOT_GLOBALLY_REACHABLE
-                  A01_DOCUMENTATION_ADDR
-                  A01_GLOBALLY_REACHABLE_ADDR
-                  A01_LOCAL_USE_ADDR
-                  A01_NO_GLOBALLY_REACHABLE_ADDR
-                  A01_NO_NAME_SERVERS_FOUND);
+my $test_case   = 'address01';
+my @all_tags    = qw(A01_ADDR_NOT_GLOBALLY_REACHABLE
+  A01_DOCUMENTATION_ADDR
+  A01_GLOBALLY_REACHABLE_ADDR
+  A01_LOCAL_USE_ADDR
+  A01_NO_GLOBALLY_REACHABLE_ADDR
+  A01_NO_NAME_SERVERS_FOUND);
 
 # Common hint file (test-zone-data/COMMON/hintfile)
 Zonemaster::Engine::Recursor->remove_fake_addresses( '.' );
-Zonemaster::Engine::Recursor->add_fake_addresses( '.',
-    { 'ns1' => [ '127.1.0.1', 'fda1:b2:c3::127:1:0:1' ],
-      'ns2' => [ '127.1.0.2', 'fda1:b2:c3::127:1:0:2' ],
-    }
+Zonemaster::Engine::Recursor->add_fake_addresses(
+    '.',
+    {
+        'ns1' => [ '127.1.0.1', 'fda1:b2:c3::127:1:0:1' ],
+        'ns2' => [ '127.1.0.2', 'fda1:b2:c3::127:1:0:2' ],
+    },
 );
 
 # Test zone scenarios
@@ -47,18 +49,11 @@ Zonemaster::Engine::Recursor->add_fake_addresses( '.',
 #   See documentation for the meaning of that.
 
 my %subtests = (
-    'GOOD-1' => [
-        1,
-        q(good-1.address01.xa),
-        [ qw(A01_GLOBALLY_REACHABLE_ADDR) ],
-        undef,
-        [],
-        [],
-    ],
+    'GOOD-1'            => [ 1, q(good-1.address01.xa), [qw(A01_GLOBALLY_REACHABLE_ADDR)], undef, [], [] ],
     'ALL-NON-REACHABLE' => [
         1,
         q(all-non-reachable.address01.xa),
-        [ qw(A01_ADDR_NOT_GLOBALLY_REACHABLE A01_LOCAL_USE_ADDR A01_DOCUMENTATION_ADDR A01_NO_GLOBALLY_REACHABLE_ADDR) ],
+        [qw(A01_ADDR_NOT_GLOBALLY_REACHABLE A01_LOCAL_USE_ADDR A01_DOCUMENTATION_ADDR A01_NO_GLOBALLY_REACHABLE_ADDR)],
         undef,
         [],
         [],
@@ -66,80 +61,55 @@ my %subtests = (
     'MIXED-LOCAL-DOC-1' => [
         1,
         q(mixed-local-doc-1.address01.xa),
-        [ qw(A01_LOCAL_USE_ADDR A01_DOCUMENTATION_ADDR A01_GLOBALLY_REACHABLE_ADDR) ],
-        undef,
-        [],
-        [],
+        [qw(A01_LOCAL_USE_ADDR A01_DOCUMENTATION_ADDR A01_GLOBALLY_REACHABLE_ADDR)],
+        undef, [], [],
     ],
     'MIXED-LOCAL-DOC-2' => [
         1,
         q(mixed-local-doc-2.address01.xa),
-        [ qw(A01_LOCAL_USE_ADDR A01_DOCUMENTATION_ADDR A01_GLOBALLY_REACHABLE_ADDR) ],
-        undef,
-        [],
-        [],
+        [qw(A01_LOCAL_USE_ADDR A01_DOCUMENTATION_ADDR A01_GLOBALLY_REACHABLE_ADDR)],
+        undef, [], [],
     ],
     'MIXED-LOCAL-OTHER-1' => [
         1,
         q(mixed-local-other-1.address01.xa),
-        [ qw(A01_LOCAL_USE_ADDR A01_ADDR_NOT_GLOBALLY_REACHABLE A01_GLOBALLY_REACHABLE_ADDR) ],
-        undef,
-        [],
-        [],
+        [qw(A01_LOCAL_USE_ADDR A01_ADDR_NOT_GLOBALLY_REACHABLE A01_GLOBALLY_REACHABLE_ADDR)],
+        undef, [], [],
     ],
     'MIXED-LOCAL-OTHER-2' => [
         1,
         q(mixed-local-other-2.address01.xa),
-        [ qw(A01_LOCAL_USE_ADDR A01_ADDR_NOT_GLOBALLY_REACHABLE A01_GLOBALLY_REACHABLE_ADDR) ],
-        undef,
-        [],
-        [],
+        [qw(A01_LOCAL_USE_ADDR A01_ADDR_NOT_GLOBALLY_REACHABLE A01_GLOBALLY_REACHABLE_ADDR)],
+        undef, [], [],
     ],
     'MIXED-DOC-OTHER-1' => [
         1,
         q(mixed-doc-other-1.address01.xa),
-        [ qw(A01_DOCUMENTATION_ADDR A01_ADDR_NOT_GLOBALLY_REACHABLE A01_GLOBALLY_REACHABLE_ADDR) ],
-        undef,
-        [],
-        [],
+        [qw(A01_DOCUMENTATION_ADDR A01_ADDR_NOT_GLOBALLY_REACHABLE A01_GLOBALLY_REACHABLE_ADDR)],
+        undef, [], [],
     ],
     'MIXED-DOC-OTHER-2' => [
         1,
         q(mixed-doc-other-2.address01.xa),
-        [ qw(A01_DOCUMENTATION_ADDR A01_ADDR_NOT_GLOBALLY_REACHABLE A01_GLOBALLY_REACHABLE_ADDR) ],
-        undef,
-        [],
-        [],
+        [qw(A01_DOCUMENTATION_ADDR A01_ADDR_NOT_GLOBALLY_REACHABLE A01_GLOBALLY_REACHABLE_ADDR)],
+        undef, [], [],
     ],
     'MIXED-ALL-1' => [
-        1,
-        q(mixed-all-1.address01.xa),
-        [ qw(A01_ADDR_NOT_GLOBALLY_REACHABLE A01_DOCUMENTATION_ADDR A01_LOCAL_USE_ADDR A01_GLOBALLY_REACHABLE_ADDR) ],
-        undef,
-        [],
-        [],
+        1, q(mixed-all-1.address01.xa),
+        [qw(A01_ADDR_NOT_GLOBALLY_REACHABLE A01_DOCUMENTATION_ADDR A01_LOCAL_USE_ADDR A01_GLOBALLY_REACHABLE_ADDR)],
+        undef, [], [],
     ],
     'MIXED-ALL-2' => [
-        1,
-        q(mixed-all-2.address01.xa),
-        [ qw(A01_ADDR_NOT_GLOBALLY_REACHABLE A01_DOCUMENTATION_ADDR A01_LOCAL_USE_ADDR A01_GLOBALLY_REACHABLE_ADDR) ],
-        undef,
-        [],
-        [],
+        1, q(mixed-all-2.address01.xa),
+        [qw(A01_ADDR_NOT_GLOBALLY_REACHABLE A01_DOCUMENTATION_ADDR A01_LOCAL_USE_ADDR A01_GLOBALLY_REACHABLE_ADDR)],
+        undef, [], [],
     ],
-    'NO-NAME-SERVERS' => [
-        1,
-        q(no-name-servers.address01.xa),
-        [ qw(A01_NO_NAME_SERVERS_FOUND) ],
-        undef,
-        [],
-        [],
-    ]
+    'NO-NAME-SERVERS' => [ 1, q(no-name-servers.address01.xa), [qw(A01_NO_NAME_SERVERS_FOUND)], undef, [], [] ],
 );
 
 ###########
 
-my $datafile = 't/' . basename ($0, '.t') . '.data';
+my $datafile = 't/' . basename( $0, '.t' ) . '.data';
 
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die q{Stored data file missing} if not -r $datafile;
@@ -147,9 +117,14 @@ if ( not $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Profile->effective->set( q{no_network}, 1 );
 }
 
-Zonemaster::Engine::Profile->effective->merge( Zonemaster::Engine::Profile->from_json( qq({ "test_cases": [ "$test_case" ] }) ) );
+Zonemaster::Engine::Profile->effective->merge(
+    Zonemaster::Engine::Profile->from_json( qq({ "test_cases": [ "$test_case" ] }) ) );
 
-perform_testcase_testing( $test_case, $test_module, \@all_tags, \%subtests, $ENV{ZONEMASTER_SELECTED_SCENARIOS}, $ENV{ZONEMASTER_DISABLED_SCENARIOS} );
+perform_testcase_testing(
+    $test_case, $test_module, \@all_tags, \%subtests,
+    $ENV{ZONEMASTER_SELECTED_SCENARIOS},
+    $ENV{ZONEMASTER_DISABLED_SCENARIOS},
+);
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Nameserver->save( $datafile );

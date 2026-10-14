@@ -3,12 +3,12 @@ package Zonemaster::Engine::Translator;
 use v5.16.0;
 use warnings;
 
-use version; our $VERSION = version->declare("v1.0.8");
+use version; our $VERSION = version->declare( "v1.0.8" );
 
-use Carp qw[confess croak];
-use Locale::Messages qw[textdomain];
+use Carp               qw[confess croak];
+use Locale::Messages   qw[textdomain];
 use Locale::TextDomain qw[Zonemaster-Engine];
-use POSIX qw[setlocale LC_MESSAGES];
+use POSIX              qw[setlocale LC_MESSAGES];
 use Readonly;
 
 use Zonemaster::Engine::Test;
@@ -141,7 +141,7 @@ sub initialize {
     $instance = bless $obj, $class;
 
     return;
-}
+} ## end sub initialize
 
 ###
 ### Builder Methods
@@ -176,7 +176,7 @@ sub _init_locale {
     }
 
     return $locale;
-}
+} ## end sub _init_locale
 
 sub _load_data {
     my $self = shift;
@@ -205,7 +205,7 @@ sub _build_all_tag_descriptions {
     $all_tag_descriptions{System} = \%TAG_DESCRIPTIONS;
     foreach my $mod ( Zonemaster::Engine::Test->modules ) {
         my $module = 'Zonemaster::Engine::Test::' . $mod;
-        $all_tag_descriptions{ $mod } = $module->tag_descriptions;
+        $all_tag_descriptions{$mod} = $module->tag_descriptions;
     }
 
     return \%all_tag_descriptions;
@@ -263,7 +263,7 @@ sub locale {
     } ## end if ( @args )
 
     return $self->{_locale};
-};
+} ## end sub locale
 
 sub to_string {
     my ( $self, $entry ) = @_;
@@ -276,7 +276,6 @@ sub translate_tag {
 
     return $self->_translate_tag( $entry->module, $entry->tag, $entry->printable_args ) // $entry->string;
 }
-
 
 sub test_case_description {
     my ( $self, $test_name ) = @_;
