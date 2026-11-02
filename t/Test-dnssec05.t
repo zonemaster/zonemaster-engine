@@ -88,14 +88,14 @@ my %subtests = (
     'ALGO-UNASSIGNED-20'      => [ 1, q(algo-unassigned-20.dnssec05.xa),  [qw( DS05_ALGO_UNASSIGNED )],  undef, [], [] ],
     'ALGO-UNASSIGNED-122'     => [ 1, q(algo-unassigned-122.dnssec05.xa), [qw( DS05_ALGO_UNASSIGNED )],  undef, [], [] ],
     'MIXED-ALGO-1'            => [
-        1,     q(mixed-algo-1.dnssec05.xa), [qw( DS05_ALGO_DEPRECATED DS05_ALGO_NOT_RECOMMENDED DS05_ALGO_OK )],
+        1,     q(mixed-algo-1.dnssec05.xa), [qw( DS05_ALGO_DEPRECATED DS05_ALGO_NOT_RECOMMENDED DS05_ALGO_RECOMMENDED )],
         undef, [],                          [],
     ],
     'NO-RESPONSE-1'           => [ 1, q(no-response-1.dnssec05.xa),       [qw( DS05_NO_RESPONSE )],      undef, [], [] ],
     'NO-RESPONSE-2'           => [ 1, q(no-response-2.dnssec05.xa),       [qw( DS05_NO_RESPONSE )],      undef, [], [] ],
     'SERVER-NO-DNSSEC-1'      =>
-      [ 1, q(server-no-dnssec-1.dnssec05.xa), [qw( DS05_SERVER_NO_DNSSEC DS05_ALGO_OK )],                undef, [], [] ],
-    'SHARED-IP-1'             => [ 1, q(shared-ip-1.dnssec05.xa),         [qw( DS05_ALGO_OK )],          undef, [], [] ],
+      [ 1, q(server-no-dnssec-1.dnssec05.xa), [qw( DS05_SERVER_NO_DNSSEC DS05_ALGO_RECOMMENDED )],                undef, [], [] ],
+    'SHARED-IP-1'             => [ 1, q(shared-ip-1.dnssec05.xa),         [qw( DS05_ALGO_RECOMMENDED )],          undef, [], [] ],
     'ZONE-NO-DNSSEC-1'        => [ 1, q(zone-no-dnssec-1.dnssec05.xa),    [qw( DS05_ZONE_NO_DNSSEC )],   undef, [], [] ],
 );
 ###########
