@@ -14,7 +14,7 @@ use Readonly;
 
 use Zonemaster::LDNS::RR;
 use Zonemaster::Engine::Profile;
-use Zonemaster::Engine::Constants qw[:algo :soa :ip];
+use Zonemaster::Engine::Constants qw[:soa :ip];
 use Zonemaster::Engine::Util      qw[name should_run_test];
 use Zonemaster::Engine::TestMethods;
 use Zonemaster::Engine::TestMethodsV2;
@@ -33,154 +33,130 @@ Zonemaster::Engine::Test::DNSSEC - Module implementing tests focused on DNSSEC
 ### Table used in that test case.
 Readonly::Hash our %algo_properties => (
     0 => {
-        status      => $ALGO_STATUS_NOT_ZONE_SIGN,
         description => q{Delete DS},
         mnemonic    => q{DELETE},
         sig         => 0,
     },
     1 => {
-        status      => $ALGO_STATUS_DEPRECATED,
         description => q{RSA/MD5},
         mnemonic    => q{RSAMD5},
         sig         => 0,
     },
     2 => {
-        status      => $ALGO_STATUS_NOT_ZONE_SIGN,
         description => q{Diffie-Hellman},
         mnemonic    => q{DH},
         sig         => 0,
     },
     3 => {
-        status      => $ALGO_STATUS_DEPRECATED,
         description => q{DSA/SHA1},
         mnemonic    => q{DSA},
         sig         => 1,
     },
     4 => {
-        status      => $ALGO_STATUS_RESERVED,
         description => q{Reserved},
         mnemonic    => q{RESERVED},
     },
     5 => {
-        status      => $ALGO_STATUS_DEPRECATED,
         description => q{RSA/SHA1},
         mnemonic    => q{RSASHA1},
         sig         => 1,
     },
     6 => {
-        status      => $ALGO_STATUS_DEPRECATED,
         description => q{DSA-NSEC3-SHA1},
         mnemonic    => q{DSA-NSEC3-SHA1},
         sig         => 1,
     },
     7 => {
-        status      => $ALGO_STATUS_DEPRECATED,
         description => q{RSASHA1-NSEC3-SHA1},
         mnemonic    => q{RSASHA1-NSEC3-SHA1},
         sig         => 1,
     },
     8 => {
-        status      => $ALGO_STATUS_RECOMMENDED,
         description => q{RSA/SHA-256},
         mnemonic    => q{RSASHA256},
         sig         => 1,
     },
     9 => {
-        status      => $ALGO_STATUS_RESERVED,
         description => q{Reserved},
         mnemonic    => q{RESERVED},
     },
     10 => {
-        status      => $ALGO_STATUS_NOT_RECOMMENDED,
         description => q{RSA/SHA-512},
         mnemonic    => q{RSASHA512},
         sig         => 1,
     },
     11 => {
-        status      => $ALGO_STATUS_RESERVED,
         description => q{Reserved},
         mnemonic    => q{RESERVED},
     },
     12 => {
-        status      => $ALGO_STATUS_DEPRECATED,
         description => q{GOST R 34.10-2001},
         mnemonic    => q{ECC-GOST},
         sig         => 1,
     },
     13 => {
-        status      => $ALGO_STATUS_RECOMMENDED,
         description => q{ECDSA Curve P-256 with SHA-256},
         mnemonic    => q{ECDSAP256SHA256},
         sig         => 1,
     },
     14 => {
-        status      => $ALGO_STATUS_MAY,
         description => q{ECDSA Curve P-384 with SHA-384},
         mnemonic    => q{ECDSAP384SHA384},
         sig         => 1,
     },
     15 => {
-        status      => $ALGO_STATUS_RECOMMENDED,
         description => q{Ed25519},
         mnemonic    => q{ED25519},
         sig         => 1,
     },
     16 => {
-        status      => $ALGO_STATUS_MAY,
         description => q{Ed448},
         mnemonic    => q{ED448},
         sig         => 1,
     },
     17 => {
-        status      => $ALGO_STATUS_MAY,
         description => q{SM2 signing algo w SM3 hash algo},
         mnemonic    => q{SM2SM3},
         sig         => 1,
     },
     18 => {
-        status      => $ALGO_STATUS_MAY,
         description => q{ML-DSA-44},
         mnemonic    => q{MLDSA44},
         sig         => 1,
     },
     (
-        map { $_ => { status => $ALGO_STATUS_UNASSIGNED, description => q{Unassigned}, mnemonic => q{UNASSIGNED} } }
+        map { $_ => { description => q{Unassigned}, mnemonic => q{UNASSIGNED} } }
           ( 19 .. 22 )
     ),
     23 => {
-        status      => $ALGO_STATUS_MAY,
         description => q{GOST R 34.10-2012},
         mnemonic    => q{ECC-GOST12},
         sig         => 1,
     },
     (
-        map { $_ => { status => $ALGO_STATUS_UNASSIGNED, description => q{Unassigned}, mnemonic => q{UNASSIGNED} } }
+        map { $_ => { description => q{Unassigned}, mnemonic => q{UNASSIGNED} } }
           ( 24 .. 122 )
     ),
     (
-        map { $_ => { status => $ALGO_STATUS_RESERVED, description => q{Reserved}, mnemonic => q{RESERVED} } }
+        map { $_ => { description => q{Reserved}, mnemonic => q{RESERVED} } }
           ( 123 .. 251 )
     ),
     252 => {
-        status      => $ALGO_STATUS_NOT_ZONE_SIGN,
         description => q{Reserved for Indirect Keys},
         mnemonic    => q{INDIRECT},
         sig         => 0,
     },
     253 => {
-        status      => $ALGO_STATUS_PRIVATE,
         description => q{private algorithm},
         mnemonic    => q{PRIVATEDNS},
         sig         => 1,
     },
     254 => {
-        status      => $ALGO_STATUS_PRIVATE,
         description => q{private algorithm OID},
         mnemonic    => q{PRIVATEOID},
         sig         => 1,
     },
     255 => {
-        status      => $ALGO_STATUS_RESERVED,
         description => q{Reserved},
         mnemonic    => q{RESERVED},
     },
