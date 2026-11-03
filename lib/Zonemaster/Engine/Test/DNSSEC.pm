@@ -14,7 +14,7 @@ use Readonly;
 
 use Zonemaster::LDNS::RR;
 use Zonemaster::Engine::Profile;
-use Zonemaster::Engine::Constants qw[:algo :soa :ip];
+use Zonemaster::Engine::Constants qw[:soa :ip];
 use Zonemaster::Engine::Util      qw[name should_run_test];
 use Zonemaster::Engine::TestMethods;
 use Zonemaster::Engine::TestMethodsV2;
@@ -29,156 +29,140 @@ Zonemaster::Engine::Test::DNSSEC - Module implementing tests focused on DNSSEC
 
 =cut
 
-### Table fetched from IANA on 2025-07-15
+### Table as defined in the test case specification DNSSEC05.
+### Table used in that test case.
 Readonly::Hash our %algo_properties => (
     0 => {
-        status      => $ALGO_STATUS_NOT_ZONE_SIGN,
         description => q{Delete DS},
         mnemonic    => q{DELETE},
         sig         => 0,
     },
     1 => {
-        status      => $ALGO_STATUS_DEPRECATED,
         description => q{RSA/MD5},
         mnemonic    => q{RSAMD5},
         sig         => 0,
     },
     2 => {
-        status      => $ALGO_STATUS_NOT_ZONE_SIGN,
         description => q{Diffie-Hellman},
         mnemonic    => q{DH},
         sig         => 0,
     },
     3 => {
-        status      => $ALGO_STATUS_DEPRECATED,
         description => q{DSA/SHA1},
         mnemonic    => q{DSA},
         sig         => 1,
     },
     4 => {
-        status      => $ALGO_STATUS_RESERVED,
         description => q{Reserved},
         mnemonic    => q{RESERVED},
     },
     5 => {
-        status      => $ALGO_STATUS_DEPRECATED,
         description => q{RSA/SHA1},
         mnemonic    => q{RSASHA1},
         sig         => 1,
     },
     6 => {
-        status      => $ALGO_STATUS_DEPRECATED,
         description => q{DSA-NSEC3-SHA1},
         mnemonic    => q{DSA-NSEC3-SHA1},
         sig         => 1,
     },
     7 => {
-        status      => $ALGO_STATUS_DEPRECATED,
         description => q{RSASHA1-NSEC3-SHA1},
         mnemonic    => q{RSASHA1-NSEC3-SHA1},
         sig         => 1,
     },
     8 => {
-        status      => $ALGO_STATUS_OTHER,
         description => q{RSA/SHA-256},
         mnemonic    => q{RSASHA256},
         sig         => 1,
     },
     9 => {
-        status      => $ALGO_STATUS_RESERVED,
         description => q{Reserved},
         mnemonic    => q{RESERVED},
     },
     10 => {
-        status      => $ALGO_STATUS_NOT_RECOMMENDED,
         description => q{RSA/SHA-512},
         mnemonic    => q{RSASHA512},
         sig         => 1,
     },
     11 => {
-        status      => $ALGO_STATUS_RESERVED,
         description => q{Reserved},
         mnemonic    => q{RESERVED},
     },
     12 => {
-        status      => $ALGO_STATUS_DEPRECATED,
         description => q{GOST R 34.10-2001},
         mnemonic    => q{ECC-GOST},
         sig         => 1,
     },
     13 => {
-        status      => $ALGO_STATUS_OTHER,
         description => q{ECDSA Curve P-256 with SHA-256},
         mnemonic    => q{ECDSAP256SHA256},
         sig         => 1,
     },
     14 => {
-        status      => $ALGO_STATUS_OTHER,
         description => q{ECDSA Curve P-384 with SHA-384},
         mnemonic    => q{ECDSAP384SHA384},
         sig         => 1,
     },
     15 => {
-        status      => $ALGO_STATUS_OTHER,
         description => q{Ed25519},
         mnemonic    => q{ED25519},
         sig         => 1,
     },
     16 => {
-        status      => $ALGO_STATUS_OTHER,
         description => q{Ed448},
         mnemonic    => q{ED448},
         sig         => 1,
     },
     17 => {
-        status      => $ALGO_STATUS_OTHER,
         description => q{SM2 signing algo w SM3 hash algo},
         mnemonic    => q{SM2SM3},
         sig         => 1,
     },
+    18 => {
+        description => q{ML-DSA-44},
+        mnemonic    => q{MLDSA44},
+        sig         => 1,
+    },
     (
-        map { $_ => { status => $ALGO_STATUS_UNASSIGNED, description => q{Unassigned}, mnemonic => q{UNASSIGNED} } }
-          ( 18 .. 22 )
+        map { $_ => { description => q{Unassigned}, mnemonic => q{UNASSIGNED} } }
+          ( 19 .. 22 )
     ),
     23 => {
-        status      => $ALGO_STATUS_OTHER,
         description => q{GOST R 34.10-2012},
         mnemonic    => q{ECC-GOST12},
         sig         => 1,
     },
     (
-        map { $_ => { status => $ALGO_STATUS_UNASSIGNED, description => q{Unassigned}, mnemonic => q{UNASSIGNED} } }
+        map { $_ => { description => q{Unassigned}, mnemonic => q{UNASSIGNED} } }
           ( 24 .. 122 )
     ),
     (
-        map { $_ => { status => $ALGO_STATUS_RESERVED, description => q{Reserved}, mnemonic => q{RESERVED} } }
+        map { $_ => { description => q{Reserved}, mnemonic => q{RESERVED} } }
           ( 123 .. 251 )
     ),
     252 => {
-        status      => $ALGO_STATUS_NOT_ZONE_SIGN,
         description => q{Reserved for Indirect Keys},
         mnemonic    => q{INDIRECT},
         sig         => 0,
     },
     253 => {
-        status      => $ALGO_STATUS_PRIVATE,
         description => q{private algorithm},
         mnemonic    => q{PRIVATEDNS},
         sig         => 1,
     },
     254 => {
-        status      => $ALGO_STATUS_PRIVATE,
         description => q{private algorithm OID},
         mnemonic    => q{PRIVATEOID},
         sig         => 1,
     },
     255 => {
-        status      => $ALGO_STATUS_RESERVED,
         description => q{Reserved},
         mnemonic    => q{RESERVED},
     },
 );
 
+### hash used in test case DNSSEC14
 Readonly::Hash our %rsa_key_size_details => (
     5 => {
         min_size  => 512,
@@ -206,6 +190,7 @@ Readonly::Hash our %rsa_key_size_details => (
     },
 );
 
+### Hash used in test case DNSSEC01
 Readonly::Hash our %digest_algorithms => (
     0 => q{Reserved},
     1 => q{SHA-1},
@@ -224,6 +209,7 @@ Readonly::Hash our %digest_algorithms => (
     255 => q{Unassigned},
 );
 
+### Hash used in test case DNSSEC01
 Readonly::Hash our %LDNS_digest_algorithms_supported => (
     1 => q{sha1},
     2 => q{sha256},
@@ -231,6 +217,7 @@ Readonly::Hash our %LDNS_digest_algorithms_supported => (
     4 => q{sha384},
 );
 
+### Hash used in test case DNSSEC01
 Readonly::Hash our %dnssec01_tags_mapping => (
     0 => q{DS01_DS_ALGO_NOT_DS},
     1 => q{DS01_DS_ALGO_DEPRECATED},
@@ -249,6 +236,8 @@ Readonly::Hash our %dnssec01_tags_mapping => (
     255 => q{DS01_DS_ALGO_UNASSIGNED},
 );
 
+### Hash used in test case DNSSEC05 from table in test
+### case specification
 Readonly::Hash our %dnssec05_tags_mapping => (
     0  => q{DS05_ALGO_NOT_ZONE_SIGN},
     1  => q{DS05_ALGO_DEPRECATED},
@@ -258,18 +247,19 @@ Readonly::Hash our %dnssec05_tags_mapping => (
     5  => q{DS05_ALGO_DEPRECATED},
     6  => q{DS05_ALGO_DEPRECATED},
     7  => q{DS05_ALGO_DEPRECATED},
-    8  => q{DS05_ALGO_OK},
+    8  => q{DS05_ALGO_RECOMMENDED},
     9  => q{DS05_ALGO_RESERVED},
     10 => q{DS05_ALGO_NOT_RECOMMENDED},
     11 => q{DS05_ALGO_RESERVED},
     12 => q{DS05_ALGO_DEPRECATED},
-    13 => q{DS05_ALGO_OK},
-    14 => q{DS05_ALGO_OK},
-    15 => q{DS05_ALGO_OK},
-    16 => q{DS05_ALGO_OK},
-    17 => q{DS05_ALGO_OK},
-    ( map { $_ => q{DS05_ALGO_UNASSIGNED} } ( 18 .. 22 ) ),
-    23 => q{DS05_ALGO_OK},
+    13 => q{DS05_ALGO_RECOMMENDED},
+    14 => q{DS05_ALGO_MAY},
+    15 => q{DS05_ALGO_RECOMMENDED},
+    16 => q{DS05_ALGO_MAY},
+    17 => q{DS05_ALGO_MAY},
+    18 => q{DS05_ALGO_MAY},
+    ( map { $_ => q{DS05_ALGO_UNASSIGNED} } ( 19 .. 22 ) ),
+    23 => q{DS05_ALGO_MAY},
     (
         map { $_ => q{DS05_ALGO_UNASSIGNED} } ( 24 .. 122 )
     ),
@@ -464,10 +454,11 @@ sub metadata {
         dnssec05 => [
             qw(
               DS05_ALGO_DEPRECATED
+              DS05_ALGO_MAY
               DS05_ALGO_NOT_RECOMMENDED
               DS05_ALGO_NOT_ZONE_SIGN
-              DS05_ALGO_OK
               DS05_ALGO_PRIVATE
+              DS05_ALGO_RECOMMENDED
               DS05_ALGO_RESERVED
               DS05_ALGO_UNASSIGNED
               DS05_NO_RESPONSE
@@ -982,10 +973,16 @@ Readonly my %TAG_DESCRIPTIONS => (
           . 'Fetched from name servers "{ns_list}".',
           @_;
     },
+    DS05_ALGO_MAY => sub {
+        __x    # DNSSEC:DS05_ALGO_MAY
+          'The DNSKEY with tag {keytag} uses algorithm number {algo_num} ("{algo_descr}", {algo_mnemo}), which may '
+          .  'be used but it is not one of the recommended algortihms. Fetched from name servers "{ns_list}".',
+          @_;
+    },
     DS05_ALGO_NOT_RECOMMENDED => sub {
         __x    # DNSSEC:DS05_ALGO_NOT_RECOMMENDED
-          'The DNSKEY with tag {keytag} uses unrecommended algorithm number {algo_num} ("{algo_descr}", {algo_mnemo}). '
-          . 'Fetched from name servers "{ns_list}".',
+          'The DNSKEY with tag {keytag} uses an algorithm number {algo_num} ("{algo_descr}", {algo_mnemo}), '
+          . 'recommended not to be used. Fetched from name servers "{ns_list}".',
           @_;
     },
     DS05_ALGO_NOT_ZONE_SIGN => sub {
@@ -994,16 +991,16 @@ Readonly my %TAG_DESCRIPTIONS => (
           . 'not meant for zone signing. Fetched from name servers "{ns_list}".',
           @_;
     },
-    DS05_ALGO_OK => sub {
-        __x    # DNSSEC:DS05_ALGO_OK
-          'The DNSKEY with tag {keytag} uses algorithm number {algo_num} ("{algo_descr}", {algo_mnemo}). '
-          . 'Fetched from name servers "{ns_list}".',
-          @_;
-    },
     DS05_ALGO_PRIVATE => sub {
         __x    # DNSSEC:DS05_ALGO_PRIVATE
           'The DNSKEY with tag {keytag} uses algorithm number {algo_num} which is '
           . 'reserved for private use. Fetched from name servers "{ns_list}".',
+          @_;
+    },
+    DS05_ALGO_RECOMMENDED => sub {
+        __x    # DNSSEC:DS05_ALGO_RECOMMENDED
+          'The DNSKEY with tag {keytag} uses algorithm number {algo_num} ("{algo_descr}", {algo_mnemo}), which '
+          .  'is one of the recommended algorithms to be used. Fetched from name servers "{ns_list}".',
           @_;
     },
     DS05_ALGO_RESERVED => sub {
@@ -1020,19 +1017,20 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     DS05_NO_RESPONSE => sub {
         __x    # DNSSEC:DS05_NO_RESPONSE
-'No response or error in response from all name servers on the DNSKEY query. Failing name servers: "{ns_list}".',
+          'No response or error in response from all name servers on the DNSKEY query. Failing name servers: '
+          . '"{ns_list}".',
           @_;
     },
     DS05_SERVER_NO_DNSSEC => sub {
         __x    # DNSSEC:DS05_SERVER_NO_DNSSEC
-          'Some name servers do not support DNSSEC or have not been properly configured. DNSKEY cannot be tested on '
-          . 'those servers. Fetched from name servers "{ns_list}".',
+          'Some name servers do not respond with any DNSKEY or have not been properly configured. DNSKEY cannot '
+          . 'be tested on those servers. Fetched from name servers "{ns_list}".',
           @_;
     },
     DS05_ZONE_NO_DNSSEC => sub {
         __x    # DNSSEC:DS05_ZONE_NO_DNSSEC
-          'The zone is not DNSSEC signed or not properly DNSSEC signed. DNSKEY cannot be tested. Fetched from name '
-          . 'servers "{ns_list}".',
+          'The zone has no DNSKEY records or is not properly configured. DNSKEY cannot be tested. Fetched from '
+          . 'name servers "{ns_list}".',
           @_;
     },
     DS07_DS_FOR_SIGNED_ZONE => sub {
@@ -2700,12 +2698,13 @@ sub dnssec05 {
     my @responds_with_dnskey;
     my %sets = (
         'DS05_ALGO_DEPRECATED'      => {},
-        'DS05_ALGO_RESERVED'        => {},
-        'DS05_ALGO_UNASSIGNED'      => {},
+        'DS05_ALGO_MAY'             => {},
         'DS05_ALGO_NOT_RECOMMENDED' => {},
-        'DS05_ALGO_PRIVATE'         => {},
         'DS05_ALGO_NOT_ZONE_SIGN'   => {},
-        'DS05_ALGO_OK'              => {},
+        'DS05_ALGO_PRIVATE'         => {},
+        'DS05_ALGO_RESERVED'        => {},
+        'DS05_ALGO_RECOMMENDED'     => {},
+        'DS05_ALGO_UNASSIGNED'      => {},
     );
 
     my @nss = uniq grep { $_->isa( 'Zonemaster::Engine::Nameserver' ) } (
