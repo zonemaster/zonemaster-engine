@@ -8,10 +8,10 @@ use version; our $VERSION = version->declare( "v1.0.20" );
 use List::MoreUtils    qw[uniq];
 use Locale::TextDomain qw[Zonemaster-Engine];
 use Readonly;
-
+use Zonemaster::Engine::Constants ':all';
+use Zonemaster::Engine::DNSName::Functions qw( name );
 use Zonemaster::Engine::Profile;
 use Zonemaster::Engine::Recursor;
-use Zonemaster::Engine::Constants ':all';
 use Zonemaster::Engine::Test::Address;
 use Zonemaster::Engine::Test::Syntax;
 use Zonemaster::Engine::TestMethods;

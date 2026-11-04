@@ -8,7 +8,8 @@ use version; our $VERSION = version->declare( "v1.0.0" );
 use Carp;
 use List::MoreUtils qw[uniq];
 use Memoize;
-
+use Zonemaster::Engine::DNSName::Functions    qw( name );
+use Zonemaster::Engine::Nameserver::Functions qw( ns );
 use Zonemaster::Engine::NameserverSet;
 use Zonemaster::Engine::Util;
 

@@ -6,7 +6,7 @@ use warnings;
 use version; our $VERSION = version->declare( "v1.0.11" );
 
 use Zonemaster::Engine;
-use Zonemaster::Engine::Util qw( name );
+use Zonemaster::Engine::DNSName::Functions qw( name );
 use Zonemaster::Engine::Profile;
 
 use IO::Socket::INET;

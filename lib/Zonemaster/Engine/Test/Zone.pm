@@ -13,11 +13,11 @@ use Readonly;
 use JSON::PP;
 use Mail::SPF::v1::Record;
 use Try::Tiny;
-
-use Zonemaster::Engine::Profile;
-use Zonemaster::Engine::Constants qw[:soa :ip];
-use Zonemaster::Engine::Recursor;
+use Zonemaster::Engine::Constants          qw[:soa :ip];
+use Zonemaster::Engine::DNSName::Functions qw( name );
 use Zonemaster::Engine::Nameserver;
+use Zonemaster::Engine::Profile;
+use Zonemaster::Engine::Recursor;
 use Zonemaster::Engine::Test::Address;
 use Zonemaster::Engine::TestMethods;
 use Zonemaster::Engine::Util;

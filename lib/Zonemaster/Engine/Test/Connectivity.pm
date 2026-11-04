@@ -12,7 +12,8 @@ use Readonly;
 
 use Zonemaster::Engine::Profile;
 use Zonemaster::Engine::ASNLookup;
-use Zonemaster::Engine::Constants qw[:ip];
+use Zonemaster::Engine::Constants          qw[:ip];
+use Zonemaster::Engine::DNSName::Functions qw( name );
 use Zonemaster::Engine::TestMethods;
 use Zonemaster::Engine::TestMethodsV2;
 use Zonemaster::Engine::Util;

@@ -9,7 +9,7 @@ use warnings;
 BEGIN {
     use_ok( q{Zonemaster::Engine} );
     use_ok( q{Zonemaster::Engine::Recursor} );
-    use_ok( q{Zonemaster::Engine::Util}, qw( name ) );
+    use_ok( q{Zonemaster::Engine::DNSName::Functions}, qw( name ) );
 }
 
 my $datafile = 't/' . basename( $0, '.t' ) . '.data';

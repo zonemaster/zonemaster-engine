@@ -5,8 +5,8 @@ use Test::More;
 use Test::Exception;
 
 BEGIN { use_ok( 'Zonemaster::Engine::Nameserver' ); }
+BEGIN { use_ok( 'Zonemaster::Engine::Nameserver::Functions', qw( ns ) ); }
 use Zonemaster::Engine;
-use Zonemaster::Engine::Util;
 use Zonemaster::Engine::Constants qw( :misc );
 
 my $datafile = 't/nameserver.data';
@@ -324,6 +324,8 @@ else {
         'No blacklisting is done when running offline',
     );
 }
+
+isa_ok( ns( 'name', '::1' ), 'Zonemaster::Engine::Nameserver' );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Nameserver->save( $datafile );

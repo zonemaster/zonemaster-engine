@@ -8,6 +8,7 @@ use version; our $VERSION = version->declare( "v1.0.5" );
 use Class::Accessor 'antlers';
 use Carp qw( confess );
 use Zonemaster::Engine::DNSName;
+use Zonemaster::Engine::DNSName::Functions qw( name );
 use Zonemaster::Engine::Util;
 
 has 'packet' => (
@@ -62,8 +63,7 @@ sub no_such_record {
 
     if ( $self->type eq 'nodata' ) {
         my ( $q ) = $self->question;
-        Zonemaster::Engine::Util::info(
-            NO_SUCH_RECORD => { name => Zonemaster::Engine::Util::name( $q->name ), type => $q->type } );
+        Zonemaster::Engine::Util::info( NO_SUCH_RECORD => { name => name( $q->name ), type => $q->type } );
 
         return 1;
     }

@@ -14,10 +14,12 @@ use JSON::PP;
 use List::MoreUtils qw( uniq );
 use Memoize;
 use Net::IP::XS;
-use Zonemaster::Engine::Nameserver;
+use Zonemaster::Engine::Constants qw( :cname );
 use Zonemaster::Engine::DNSName;
-use Zonemaster::Engine::Util qw( name ns parse_hints );
-use Zonemaster::Engine::Constants ":cname";
+use Zonemaster::Engine::DNSName::Functions qw( name );
+use Zonemaster::Engine::Nameserver;
+use Zonemaster::Engine::Nameserver::Functions qw( ns );
+use Zonemaster::Engine::Util                  qw( parse_hints );
 
 our %_fake_addresses_cache;
 

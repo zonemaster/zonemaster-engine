@@ -5,7 +5,7 @@ use strict;
 use warnings;
 use List::Util qw[max];
 use Memoize;
-
+use Zonemaster::Engine::DNSName::Functions qw( name );
 use Zonemaster::Engine::Nameserver;
 use Zonemaster::Engine::Util;
 BEGIN { use_ok( 'Zonemaster::Engine::Recursor' ) }

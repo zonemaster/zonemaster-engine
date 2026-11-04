@@ -11,7 +11,8 @@ use Net::IP::XS;
 use Readonly;
 
 use Zonemaster::Engine::Profile;
-use Zonemaster::Engine::Constants qw[:ip :soa];
+use Zonemaster::Engine::Constants          qw[:ip :soa];
+use Zonemaster::Engine::DNSName::Functions qw( name );
 use Zonemaster::Engine::NameserverSet;
 use Zonemaster::Engine::Test::Address;
 use Zonemaster::Engine::Util;

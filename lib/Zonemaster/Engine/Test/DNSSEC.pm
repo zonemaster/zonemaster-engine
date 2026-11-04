@@ -11,13 +11,13 @@ use List::MoreUtils    qw[any uniq];
 use List::Util         qw[min];
 use Locale::TextDomain qw[Zonemaster-Engine];
 use Readonly;
-
-use Zonemaster::LDNS::RR;
+use Zonemaster::Engine::DNSName::Functions qw( name );
+use Zonemaster::Engine::Constants          qw[:algo :soa :ip];
 use Zonemaster::Engine::Profile;
-use Zonemaster::Engine::Constants qw[:algo :soa :ip];
-use Zonemaster::Engine::Util      qw[name should_run_test];
 use Zonemaster::Engine::TestMethods;
 use Zonemaster::Engine::TestMethodsV2;
+use Zonemaster::Engine::Util qw[should_run_test];
+use Zonemaster::LDNS::RR;
 
 =head1 NAME
 

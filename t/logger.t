@@ -5,6 +5,7 @@ use Test::More;
 
 BEGIN {
     use_ok( 'Zonemaster::Engine' );
+    use_ok( 'Zonemaster::Engine::DNSName::Functions', qw( name ) );
     use_ok( 'Zonemaster::Engine::Util' );
     use_ok( 'Zonemaster::Engine::Logger' );
     use_ok( 'Zonemaster::Engine::Logger::Entry' );
@@ -38,7 +39,7 @@ ok( scalar( @{ Zonemaster::Engine->logger->entries } ) >= 2, 'expected number of
 
 like( "$entry", qr/System:Unspecified:TEST an=argument/, 'stringification overload' );
 
-$entry = info( 'TEST2', { an => 'argument', domain => Zonemaster::Engine::Util::name( 'logger.test.example' ) } );
+$entry = info( 'TEST2', { an => 'argument', domain => name( 'logger.test.example' ) } );
 
 # FIXME: Ideally, we really should instead have domain=logger.test.example
 # without the double quotes around the domain name.

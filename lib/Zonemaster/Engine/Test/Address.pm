@@ -9,11 +9,11 @@ use Carp;
 use List::MoreUtils    qw[none any uniq];
 use Locale::TextDomain qw[Zonemaster-Engine];
 use Readonly;
-
+use Zonemaster::Engine::Constants          qw[:addresses :ip];
+use Zonemaster::Engine::DNSName::Functions qw( name );
 use Zonemaster::Engine::Recursor;
-use Zonemaster::Engine::Constants qw[:addresses :ip];
 use Zonemaster::Engine::TestMethods;
-use Zonemaster::Engine::Util qw[name should_run_test];
+use Zonemaster::Engine::Util qw[should_run_test];
 
 =head1 NAME
 

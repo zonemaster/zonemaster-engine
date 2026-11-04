@@ -11,11 +11,13 @@ use Locale::TextDomain qw[Zonemaster-Engine];
 use Readonly;
 
 use Zonemaster::Engine::Profile;
-use Zonemaster::Engine::Constants qw[:ip :name];
+use Zonemaster::Engine::Constants          qw[:ip :name];
+use Zonemaster::Engine::DNSName::Functions qw( name );
+use Zonemaster::Engine::Nameserver::Functions qw( ns );
 use Zonemaster::Engine::Test::Address;
 use Zonemaster::Engine::Test::Syntax;
 use Zonemaster::Engine::TestMethods;
-use Zonemaster::Engine::Util qw[info name ns should_run_test];
+use Zonemaster::Engine::Util qw[info should_run_test];
 
 =head1 NAME
 
