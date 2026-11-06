@@ -7,7 +7,7 @@ use lib dirname( rel2abs( $0 ) );
 use TestUtil::DSL;
 
 ###########
-# consistency06 - https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/test-zones/Consistency-TP/consistency06.md
+# consistency06 - https://doc.zonemaster.net/latest/specifications/test-zones/Consistency-TP/consistency06.md
 
 testing_test_case 'Consistency', 'consistency06';
 

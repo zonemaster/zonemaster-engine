@@ -721,7 +721,7 @@ sub _spf_syntax_ok {
 
     my @logentry_array = zone01( $zone );
 
-Runs the L<Zone01 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Zone-TP/zone01.md>.
+Runs the L<Zone01 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Zone-TP/zone01.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -894,7 +894,7 @@ sub zone01 {
 
     my @logentry_array = zone02( $zone );
 
-Runs the L<Zone02 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Zone-TP/zone02.md>.
+Runs the L<Zone02 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Zone-TP/zone02.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -949,7 +949,7 @@ sub zone02 {
 
     my @logentry_array = zone03( $zone );
 
-Runs the L<Zone03 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Zone-TP/zone03.md>.
+Runs the L<Zone03 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Zone-TP/zone03.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -1002,7 +1002,7 @@ sub zone03 {
 
     my @logentry_array = zone04( $zone );
 
-Runs the L<Zone04 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Zone-TP/zone04.md>.
+Runs the L<Zone04 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Zone-TP/zone04.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -1057,7 +1057,7 @@ sub zone04 {
 
     my @logentry_array = zone05( $zone );
 
-Runs the L<Zone05 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Zone-TP/zone05.md>.
+Runs the L<Zone05 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Zone-TP/zone05.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -1123,7 +1123,7 @@ sub zone05 {
 
     my @logentry_array = zone06( $zone );
 
-Runs the L<Zone06 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Zone-TP/zone06.md>.
+Runs the L<Zone06 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Zone-TP/zone06.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -1190,7 +1190,7 @@ sub zone06 {
 
     my @logentry_array = zone07( $zone );
 
-Runs the L<Zone07 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Zone-TP/zone07.md>.
+Runs the L<Zone07 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Zone-TP/zone07.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -1266,7 +1266,7 @@ sub zone07 {
 
     my @logentry_array = zone08( $zone );
 
-Runs the L<Zone08 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Zone-TP/zone08.md>.
+Runs the L<Zone08 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Zone-TP/zone08.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -1310,7 +1310,7 @@ sub zone08 {
 
     my @logentry_array = zone09( $zone );
 
-Runs the L<Zone09 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Zone-TP/zone09.md>.
+Runs the L<Zone09 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Zone-TP/zone09.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -1504,7 +1504,7 @@ sub zone09 {
 
     my @logentry_array = zone10( $zone );
 
-Runs the L<Zone10 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Zone-TP/zone10.md>.
+Runs the L<Zone10 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Zone-TP/zone10.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -1574,7 +1574,7 @@ sub zone10 {
 
     my @logentry_array = zone11( $zone );
 
-Runs the L<Zone11 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Zone-TP/zone11.md>.
+Runs the L<Zone11 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Zone-TP/zone11.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 

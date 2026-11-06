@@ -14,7 +14,7 @@ BEGIN {
 }
 
 ###########
-# dnssec03 - https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/test-zones/DNSSEC-TP/dnssec03.md
+# dnssec03 - https://doc.zonemaster.net/latest/specifications/test-zones/DNSSEC-TP/dnssec03.md
 my $test_module = q{DNSSEC};
 my $test_case   = 'dnssec03';
 my @all_tags    = qw(DS03_NO_DNSSEC_SUPPORT

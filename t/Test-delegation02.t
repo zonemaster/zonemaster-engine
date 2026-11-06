@@ -13,7 +13,7 @@ BEGIN {
 }
 
 ###########
-# Delegation02 - https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/test-zones/Delegation-TP/delegation02.md
+# Delegation02 - https://doc.zonemaster.net/latest/specifications/test-zones/Delegation-TP/delegation02.md
 my $test_module = 'Delegation';
 my $test_case   = 'delegation02';
 my @all_tags    = qw(

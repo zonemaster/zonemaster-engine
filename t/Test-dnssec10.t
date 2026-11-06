@@ -13,7 +13,7 @@ BEGIN {
 }
 
 ###########
-# DNSSEC10 - https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/test-zones/DNSSEC-TP/dnssec10.md
+# DNSSEC10 - https://doc.zonemaster.net/latest/specifications/test-zones/DNSSEC-TP/dnssec10.md
 my $test_module = 'DNSSEC';
 my $test_case   = 'dnssec10';
 my @all_tags    = qw(

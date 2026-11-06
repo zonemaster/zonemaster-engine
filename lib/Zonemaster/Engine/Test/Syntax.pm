@@ -648,7 +648,7 @@ sub _check_name_syntax {
 
     my @logentry_array = syntax01( $zone );
 
-Runs the L<Syntax01 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Syntax-TP/syntax01.md>.
+Runs the L<Syntax01 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Syntax-TP/syntax01.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -692,7 +692,7 @@ sub syntax01 {
 
     my @logentry_array = syntax02( $zone );
 
-Runs the L<Syntax02 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Syntax-TP/syntax02.md>.
+Runs the L<Syntax02 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Syntax-TP/syntax02.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -749,7 +749,7 @@ sub syntax02 {
 
     my @logentry_array = syntax03( $zone );
 
-Runs the L<Syntax03 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Syntax-TP/syntax03.md>.
+Runs the L<Syntax03 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Syntax-TP/syntax03.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -797,7 +797,7 @@ sub syntax03 {
 
     my @logentry_array = syntax04( $zone );
 
-Runs the L<Syntax04 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Syntax-TP/syntax04.md>.
+Runs the L<Syntax04 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Syntax-TP/syntax04.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -832,7 +832,7 @@ sub syntax04 {
 
     my @logentry_array = syntax05( $zone );
 
-Runs the L<Syntax05 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Syntax-TP/syntax05.md>.
+Runs the L<Syntax05 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Syntax-TP/syntax05.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -883,7 +883,7 @@ sub syntax05 {
 
     my @logentry_array = syntax06( $zone );
 
-Runs the L<Syntax06 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Syntax-TP/syntax06.md>.
+Runs the L<Syntax06 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Syntax-TP/syntax06.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -1053,7 +1053,7 @@ sub syntax06 {
 
     my @logentry_array = syntax07( $zone );
 
-Runs the L<Syntax07 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Syntax-TP/syntax07.md>.
+Runs the L<Syntax07 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Syntax-TP/syntax07.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -1089,7 +1089,7 @@ sub syntax07 {
 
     my @logentry_array = syntax08( $zone );
 
-Runs the L<Syntax08 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Syntax-TP/syntax08.md>.
+Runs the L<Syntax08 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Syntax-TP/syntax08.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
