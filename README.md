@@ -13,7 +13,7 @@ tests.
 ## Prerequisites
 
 For supported processor architectures, operating systems and Perl versions see
-[Zonemaster/README.md].
+[prerequisites] document.
 
 ## Installation
 
@@ -66,8 +66,9 @@ be found in the [LICENSE](LICENSE) file included in this repository.
 [Docker Hub]:                                     https://hub.docker.com/u/zonemaster
 [Docker Image Creation]:                          https://github.com/zonemaster/zonemaster/blob/master/docs/internal/maintenance/ReleaseProcess-create-docker-image.md
 [Docs]:                                           docs/
-[Installation]:                                   https://github.com/zonemaster/zonemaster/blob/master/docs/public/installation/zonemaster-engine.md
-[USING]:                                          https://github.com/zonemaster/zonemaster/blob/master/docs/public/using/cli.md
+[Installation]:                                   https://doc.zonemaster.net/latest/installation/zonemaster-engine.html
+[Prerequisites]:                                  https://doc.zonemaster.net/latest/installation/prerequisites.html
+[USING]:                                          https://doc.zonemaster.net/latest/using/cli.html
 [Zonemaster main repository]:                     https://github.com/zonemaster/zonemaster
 [Zonemaster/README.md]:                           https://github.com/zonemaster/zonemaster/blob/master/README.md
 

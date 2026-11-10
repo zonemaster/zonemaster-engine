@@ -149,7 +149,7 @@ v6.0.0 2024-07-01 (part of Zonemaster v2024.1 release)
  - Using 'profile.json' that comes with the Zonemaster::Engine
    installation as a template for custom profile is no longer supported.
    For the new supported way of extracting the default profile, see
-   https://github.com/zonemaster/zonemaster/blob/master/docs/public/configuration/profiles.md#default-profile (#1339)
+   https://doc.zonemaster.net/v2024.1/configuration/profiles.html (#1339)
 
  [Features]
  - Makes it possible to run single testcase via test_zone() (#1312)

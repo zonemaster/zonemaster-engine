@@ -446,7 +446,7 @@ sub _ip_enabled_message {
 
     my @logentry_array = basic01( $zone );
 
-Runs the L<Basic01 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Basic-TP/basic01.md>.
+Runs the L<Basic01 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Basic-TP/basic01.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -915,7 +915,7 @@ sub basic01 {
 
     my @logentry_array = basic02( $zone );
 
-Runs the L<Basic02 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Basic-TP/basic02.md>.
+Runs the L<Basic02 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Basic-TP/basic02.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -1053,7 +1053,7 @@ sub basic02 {
 
     my @logentry_array = basic03( $zone );
 
-Runs the L<Basic03 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Basic-TP/basic03.md>.
+Runs the L<Basic03 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Basic-TP/basic03.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 

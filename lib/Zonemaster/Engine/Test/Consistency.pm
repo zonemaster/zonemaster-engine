@@ -442,7 +442,7 @@ sub _ip_disabled_message {
 
     my @logentry_array = consistency01( $zone );
 
-Runs the L<Consistency01 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Consistency-TP/consistency01.md>.
+Runs the L<Consistency01 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Consistency-TP/consistency01.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -540,7 +540,7 @@ sub consistency01 {
 
     my @logentry_array = consistency02( $zone );
 
-Runs the L<Consistency02 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Consistency-TP/consistency02.md>.
+Runs the L<Consistency02 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Consistency-TP/consistency02.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -625,7 +625,7 @@ sub consistency02 {
 
     my @logentry_array = consistency03( $zone );
 
-Runs the L<Consistency03 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Consistency-TP/consistency03.md>.
+Runs the L<Consistency03 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Consistency-TP/consistency03.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -721,7 +721,7 @@ sub consistency03 {
 
     my @logentry_array = consistency04( $zone );
 
-Runs the L<Consistency04 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Consistency-TP/consistency04.md>.
+Runs the L<Consistency04 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Consistency-TP/consistency04.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -801,7 +801,7 @@ sub consistency04 {
 
     my @logentry_array = consistency05( $zone );
 
-Runs the L<Consistency05 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Consistency-TP/consistency05.md>.
+Runs the L<Consistency05 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Consistency-TP/consistency05.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -1085,7 +1085,7 @@ sub consistency05 {
 
     my @logentry_array = consistency06( $zone );
 
-Runs the L<Consistency06 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Consistency-TP/consistency06.md>.
+Runs the L<Consistency06 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Consistency-TP/consistency06.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 

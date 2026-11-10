@@ -641,7 +641,7 @@ sub _ip_disabled_message {
 
     my @logentry_array = nameserver01( $zone );
 
-Runs the L<Nameserver01 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Nameserver-TP/nameserver01.md>.
+Runs the L<Nameserver01 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Nameserver-TP/nameserver01.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -712,7 +712,7 @@ sub nameserver01 {
 
     my @logentry_array = nameserver02( $zone );
 
-Runs the L<Nameserver02 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Nameserver-TP/nameserver02.md>.
+Runs the L<Nameserver02 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Nameserver-TP/nameserver02.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -821,7 +821,7 @@ sub nameserver02 {
 
     my @logentry_array = nameserver03( $zone );
 
-Runs the L<Nameserver03 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Nameserver-TP/nameserver03.md>.
+Runs the L<Nameserver03 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Nameserver-TP/nameserver03.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -870,7 +870,7 @@ sub nameserver03 {
 
     my @logentry_array = nameserver04( $zone );
 
-Runs the L<Nameserver04 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Nameserver-TP/nameserver04.md>.
+Runs the L<Nameserver04 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Nameserver-TP/nameserver04.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -930,7 +930,7 @@ sub nameserver04 {
 
     my @logentry_array = nameserver05( $zone );
 
-Runs the L<Nameserver05 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Nameserver-TP/nameserver05.md>.
+Runs the L<Nameserver05 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Nameserver-TP/nameserver05.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -1034,7 +1034,7 @@ sub nameserver05 {
 
     my @logentry_array = nameserver06( $zone );
 
-Runs the L<Nameserver06 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Nameserver-TP/nameserver06.md>.
+Runs the L<Nameserver06 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Nameserver-TP/nameserver06.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -1089,7 +1089,7 @@ sub nameserver06 {
 
     my @logentry_array = nameserver07( $zone );
 
-Runs the L<Nameserver07 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Nameserver-TP/nameserver07.md>.
+Runs the L<Nameserver07 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Nameserver-TP/nameserver07.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -1150,7 +1150,7 @@ sub nameserver07 {
 
     my @logentry_array = nameserver08( $zone );
 
-Runs the L<Nameserver08 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Nameserver-TP/nameserver08.md>.
+Runs the L<Nameserver08 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Nameserver-TP/nameserver08.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -1219,7 +1219,7 @@ sub nameserver08 {
 
     my @logentry_array = nameserver09( $zone );
 
-Runs the L<Nameserver09 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Nameserver-TP/nameserver09.md>.
+Runs the L<Nameserver09 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Nameserver-TP/nameserver09.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -1374,7 +1374,7 @@ sub nameserver09 {
 
     my @logentry_array = nameserver10( $zone );
 
-Runs the L<Nameserver10 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Nameserver-TP/nameserver10.md>.
+Runs the L<Nameserver10 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Nameserver-TP/nameserver10.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -1463,7 +1463,7 @@ sub nameserver10 {
 
     my @logentry_array = nameserver11( $zone );
 
-Runs the L<Nameserver11 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Nameserver-TP/nameserver11.md>.
+Runs the L<Nameserver11 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Nameserver-TP/nameserver11.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -1595,7 +1595,7 @@ sub nameserver11 {
 
     my @logentry_array = nameserver12( $zone );
 
-Runs the L<Nameserver12 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Nameserver-TP/nameserver12.md>.
+Runs the L<Nameserver12 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Nameserver-TP/nameserver12.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -1658,7 +1658,7 @@ sub nameserver12 {
 
     my @logentry_array = nameserver13( $zone );
 
-Runs the L<Nameserver13 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Nameserver-TP/nameserver13.md>.
+Runs the L<Nameserver13 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Nameserver-TP/nameserver13.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -1719,7 +1719,7 @@ sub nameserver13 {
 
     my @logentry_array = nameserver15( $zone );
 
-Runs the L<Nameserver15 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Nameserver-TP/nameserver15.md>.
+Runs the L<Nameserver15 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Nameserver-TP/nameserver15.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 

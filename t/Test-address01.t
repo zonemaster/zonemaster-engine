@@ -14,7 +14,7 @@ BEGIN {
 }
 
 ###########
-# address01 - https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/test-zones/Address-TP/address01.md
+# address01 - https://doc.zonemaster.net/latest/specifications/test-zones/Address-TP/address01.md
 my $test_module = 'Address';
 my $test_case   = 'address01';
 my @all_tags    = qw(A01_ADDR_NOT_GLOBALLY_REACHABLE

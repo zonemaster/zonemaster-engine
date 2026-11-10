@@ -14,7 +14,7 @@ BEGIN {
 }
 
 ###########
-# dnssec16 - https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/test-zones/DNSSEC-TP/dnssec16.md
+# dnssec16 - https://doc.zonemaster.net/latest/specifications/test-zones/DNSSEC-TP/dnssec16.md
 my $test_module = q{DNSSEC};
 my $test_case   = 'dnssec16';
 my @all_tags    = qw(DS16_CDS_INVALID_RRSIG

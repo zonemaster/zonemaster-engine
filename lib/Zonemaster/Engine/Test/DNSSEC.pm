@@ -1774,7 +1774,7 @@ sub _ip_disabled_message {
 
     my @logentry_array = dnssec01( $zone );
 
-Runs the L<DNSSEC01 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec01.md>.
+Runs the L<DNSSEC01 Test Case|https://doc.zonemaster.net/latest/specifications/tests/DNSSEC-TP/dnssec01.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -1972,7 +1972,7 @@ sub dnssec01 {
 
     my @logentry_array = dnssec02( $zone );
 
-Runs the L<DNSSEC02 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec02.md>.
+Runs the L<DNSSEC02 Test Case|https://doc.zonemaster.net/latest/specifications/tests/DNSSEC-TP/dnssec02.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -2276,7 +2276,7 @@ sub dnssec02 {
 
     my @logentry_array = dnssec03( $zone );
 
-Runs the L<DNSSEC03 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec03.md>.
+Runs the L<DNSSEC03 Test Case|https://doc.zonemaster.net/latest/specifications/tests/DNSSEC-TP/dnssec03.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -2566,7 +2566,7 @@ sub dnssec03 {
 
     my @logentry_array = dnssec04( $zone );
 
-Runs the L<DNSSEC04 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec04.md>.
+Runs the L<DNSSEC04 Test Case|https://doc.zonemaster.net/latest/specifications/tests/DNSSEC-TP/dnssec04.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -2680,7 +2680,7 @@ sub dnssec04 {
 
     my @logentry_array = dnssec05( $zone );
 
-Runs the L<DNSSEC05 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec05.md>.
+Runs the L<DNSSEC05 Test Case|https://doc.zonemaster.net/latest/specifications/tests/DNSSEC-TP/dnssec05.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -2808,7 +2808,7 @@ sub dnssec05 {
 
     my @logentry_array = dnssec06( $zone );
 
-Runs the L<DNSSEC06 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec06.md>.
+Runs the L<DNSSEC06 Test Case|https://doc.zonemaster.net/latest/specifications/tests/DNSSEC-TP/dnssec06.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -2861,7 +2861,7 @@ sub dnssec06 {
 
     my @logentry_array = dnssec07( $zone );
 
-Runs the L<DNSSEC07 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec07.md>.
+Runs the L<DNSSEC07 Test Case|https://doc.zonemaster.net/latest/specifications/tests/DNSSEC-TP/dnssec07.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -3122,7 +3122,7 @@ sub dnssec07 {
 
     my @logentry_array = dnssec08( $zone );
 
-Runs the L<DNSSEC08 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec08.md>.
+Runs the L<DNSSEC08 Test Case|https://doc.zonemaster.net/latest/specifications/tests/DNSSEC-TP/dnssec08.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -3278,7 +3278,7 @@ sub dnssec08 {
 
     my @logentry_array = dnssec09( $zone );
 
-Runs the L<DNSSEC09 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec09.md>.
+Runs the L<DNSSEC09 Test Case|https://doc.zonemaster.net/latest/specifications/tests/DNSSEC-TP/dnssec09.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -3449,7 +3449,7 @@ sub dnssec09 {
 
     my @logentry_array = dnssec10( $zone );
 
-Runs the L<DNSSEC10 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec10.md>.
+Runs the L<DNSSEC10 Test Case|https://doc.zonemaster.net/latest/specifications/tests/DNSSEC-TP/dnssec10.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -4284,7 +4284,7 @@ sub dnssec10 {
 
     my @logentry_array = dnssec11( $zone );
 
-Runs the L<DNSSEC11 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec11.md>.
+Runs the L<DNSSEC11 Test Case|https://doc.zonemaster.net/latest/specifications/tests/DNSSEC-TP/dnssec11.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -4459,7 +4459,7 @@ sub dnssec11 {
 
     my @logentry_array = dnssec13( $zone );
 
-Runs the L<DNSSEC13 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec13.md>.
+Runs the L<DNSSEC13 Test Case|https://doc.zonemaster.net/latest/specifications/tests/DNSSEC-TP/dnssec13.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -4548,7 +4548,7 @@ sub dnssec13 {
 
     my @logentry_array = dnssec14( $zone );
 
-Runs the L<DNSSEC14 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec14.md>.
+Runs the L<DNSSEC14 Test Case|https://doc.zonemaster.net/latest/specifications/tests/DNSSEC-TP/dnssec14.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -4641,7 +4641,7 @@ sub dnssec14 {
 
     my @logentry_array = dnssec15( $zone );
 
-Runs the L<DNSSEC15 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec15.md>.
+Runs the L<DNSSEC15 Test Case|https://doc.zonemaster.net/latest/specifications/tests/DNSSEC-TP/dnssec15.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -4866,7 +4866,7 @@ sub dnssec15 {
 
     my @logentry_array = dnssec16( $zone );
 
-Runs the L<DNSSEC16 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec16.md>.
+Runs the L<DNSSEC16 Test Case|https://doc.zonemaster.net/latest/specifications/tests/DNSSEC-TP/dnssec16.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -5140,7 +5140,7 @@ sub dnssec16 {
 
     my @logentry_array = dnssec17( $zone );
 
-Runs the L<DNSSEC17 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec17.md>.
+Runs the L<DNSSEC17 Test Case|https://doc.zonemaster.net/latest/specifications/tests/DNSSEC-TP/dnssec17.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -5415,7 +5415,7 @@ sub dnssec17 {
 
     my @logentry_array = dnssec18( $zone );
 
-Runs the L<DNSSEC18 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/DNSSEC-TP/dnssec18.md>.
+Runs the L<DNSSEC18 Test Case|https://doc.zonemaster.net/latest/specifications/tests/DNSSEC-TP/dnssec18.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 

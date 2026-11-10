@@ -562,7 +562,7 @@ sub _find_dup_ns {
 
     my @logentry_array = delegation01( $zone );
 
-Runs the L<Delegation01 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Delegation-TP/delegation01.md>.
+Runs the L<Delegation01 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Delegation-TP/delegation01.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -691,7 +691,7 @@ sub delegation01 {
 
     my @logentry_array = delegation02( $zone );
 
-Runs the L<Delegation02 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Delegation-TP/delegation02.md>.
+Runs the L<Delegation02 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Delegation-TP/delegation02.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -740,7 +740,7 @@ sub delegation02 {
 
     my @logentry_array = delegation03( $zone );
 
-Runs the L<Delegation03 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Delegation-TP/delegation03.md>.
+Runs the L<Delegation03 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Delegation-TP/delegation03.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -810,7 +810,7 @@ sub delegation03 {
 
     my @logentry_array = delegation04( $zone );
 
-Runs the L<Delegation04 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Delegation-TP/delegation04.md>.
+Runs the L<Delegation04 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Delegation-TP/delegation04.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -888,7 +888,7 @@ sub delegation04 {
 
     my @logentry_array = delegation05( $zone );
 
-Runs the L<Delegation05 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Delegation-TP/delegation05.md>.
+Runs the L<Delegation05 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Delegation-TP/delegation05.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -968,7 +968,7 @@ sub delegation05 {
 
     my @logentry_array = delegation06( $zone );
 
-Runs the L<Delegation06 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Delegation-TP/delegation06.md>.
+Runs the L<Delegation06 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Delegation-TP/delegation06.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -1028,7 +1028,7 @@ sub delegation06 {
 
     my @logentry_array = delegation07( $zone );
 
-Runs the L<Delegation07 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Delegation-TP/delegation07.md>.
+Runs the L<Delegation07 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Delegation-TP/delegation07.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 

@@ -7,7 +7,7 @@ use lib dirname( rel2abs( $0 ) );
 use TestUtil::DSL;
 
 ###########
-# Delegation01 - https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/test-zones/Delegation-TP/delegation01.md
+# Delegation01 - https://doc.zonemaster.net/latest/specifications/test-zones/Delegation-TP/delegation01.md
 testing_test_case 'Delegation', 'delegation01';
 
 all_tags qw(ENOUGH_IPV4_NS_CHILD

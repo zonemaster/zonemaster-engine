@@ -564,7 +564,7 @@ sub _connectivity_loop {
 
     my @logentry_array = connectivity01( $zone );
 
-Runs the L<Connectivity01 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Connectivity-TP/connectivity01.md>.
+Runs the L<Connectivity01 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Connectivity-TP/connectivity01.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -613,7 +613,7 @@ sub connectivity01 {
 
     my @logentry_array = connectivity02( $zone );
 
-Runs the L<Connectivity02 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Connectivity-TP/connectivity02.md>.
+Runs the L<Connectivity02 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Connectivity-TP/connectivity02.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -642,7 +642,7 @@ sub connectivity02 {
 
     my @logentry_array = connectivity03( $zone );
 
-Runs the L<Connectivity03 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Connectivity-TP/connectivity03.md>.
+Runs the L<Connectivity03 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Connectivity-TP/connectivity03.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -788,7 +788,7 @@ sub connectivity03 {
 
     my @logentry_array = connectivity04( $zone );
 
-Runs the L<Connectivity04 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Connectivity-TP/connectivity04.md>.
+Runs the L<Connectivity04 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Connectivity-TP/connectivity04.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 

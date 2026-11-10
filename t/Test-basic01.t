@@ -7,7 +7,7 @@ use lib dirname( rel2abs( $0 ) );
 use TestUtil::DSL;
 
 ###########
-# basic01 - https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/test-zones/Basic-TP/basic01.md
+# basic01 - https://doc.zonemaster.net/latest/specifications/test-zones/Basic-TP/basic01.md
 testing_test_case 'Basic', 'basic01';
 
 all_tags qw(B01_CHILD_IS_ALIAS

@@ -846,7 +846,7 @@ modules emit.
 The values of the second level hashes are mapped to severity levels.
 
 The various L<test case specifications|
-https://github.com/zonemaster/zonemaster/tree/master/docs/specifications/tests/README.md>
+https://doc.zonemaster.net/latest/specifications/tests/README.html>
 define the default severity level for some of the messages.
 These specifications are the only authoritative documents on the default
 severity level for the various messages.
@@ -869,7 +869,7 @@ level for the tag.
 =head2 test_cases
 
 An arrayref of names of implemented test cases (in all lower-case) as listed in the
-L<test case specifications|https://github.com/zonemaster/zonemaster/tree/master/docs/specifications/tests/ImplementedTestCases.md>.
+L<test case specifications|https://doc.zonemaster.net/latest/specifications/tests/ImplementedTestCases.html>.
 Default is an arrayref listing all the test cases.
 
 Specifies which test cases can be run by the testing suite.
@@ -879,7 +879,7 @@ Specifies which test cases can be run by the testing suite.
 A positive integer value.
 Recommended lower bound for signatures' remaining validity time (in seconds) in
 test case L<DNSSEC04|
-https://github.com/zonemaster/zonemaster/blob/master/docs/specifications/tests/DNSSEC-TP/dnssec04.md>.
+https://doc.zonemaster.net/latest/specifications/tests/DNSSEC-TP/dnssec04.md>.
 Related to the REMAINING_SHORT message tag from this test case.
 Default C<43200> (12 hours in seconds).
 
@@ -888,7 +888,7 @@ Default C<43200> (12 hours in seconds).
 A positive integer value.
 Recommended upper bound for signatures' remaining validity time (in seconds) in
 test case L<DNSSEC04|
-https://github.com/zonemaster/zonemaster/blob/master/docs/specifications/tests/DNSSEC-TP/dnssec04.md>.
+https://doc.zonemaster.net/latest/specifications/tests/DNSSEC-TP/dnssec04.md>.
 Related to the REMAINING_LONG message tag from this test case.
 Default C<15552000> (180 days in seconds).
 
@@ -897,7 +897,7 @@ Default C<15552000> (180 days in seconds).
 A positive integer value.
 Recommended upper bound for signatures' lifetime (in seconds) in the test case
 L<DNSSEC04|
-https://github.com/zonemaster/zonemaster/blob/master/docs/specifications/tests/DNSSEC-TP/dnssec04.md>.
+https://doc.zonemaster.net/latest/specifications/tests/DNSSEC-TP/dnssec04.md>.
 Related to the DURATION_LONG message tag from this test case.
 Default C<15552000> (180 days in seconds).
 
@@ -906,7 +906,7 @@ Default C<15552000> (180 days in seconds).
 A positive integer value.
 Recommended lower bound for SOA refresh values (in seconds) in test case
 L<ZONE02|
-https://github.com/zonemaster/zonemaster/blob/master/docs/specifications/tests/Zone-TP/zone02.md>.
+https://doc.zonemaster.net/latest/specifications/tests/Zone-TP/zone02.md>.
 Related to the REFRESH_MINIMUM_VALUE_LOWER message tag from this test case.
 Default C<14400> (4 hours in seconds).
 
@@ -915,7 +915,7 @@ Default C<14400> (4 hours in seconds).
 A positive integer value.
 Recommended lower bound for SOA retry values (in seconds) in test case
 L<ZONE04|
-https://github.com/zonemaster/zonemaster/blob/master/docs/specifications/tests/Zone-TP/zone04.md>.
+https://doc.zonemaster.net/latest/specifications/tests/Zone-TP/zone04.md>.
 Related to the RETRY_MINIMUM_VALUE_LOWER message tag from this test case.
 Default C<3600> (1 hour in seconds).
 
@@ -924,7 +924,7 @@ Default C<3600> (1 hour in seconds).
 A positive integer value.
 Recommended lower bound for SOA expire values (in seconds) in test case
 L<ZONE05|
-https://github.com/zonemaster/zonemaster/blob/master/docs/specifications/tests/Zone-TP/zone05.md>.
+https://doc.zonemaster.net/latest/specifications/tests/Zone-TP/zone05.md>.
 Related to the EXPIRE_MINIMUM_VALUE_LOWER message tag from this test case.
 Default C<604800> (1 week in seconds).
 
@@ -933,7 +933,7 @@ Default C<604800> (1 week in seconds).
 A positive integer value.
 Recommended lower bound for SOA minimum values (in seconds) in test case
 L<ZONE06|
-https://github.com/zonemaster/zonemaster/blob/master/docs/specifications/tests/Zone-TP/zone06.md>.
+https://doc.zonemaster.net/latest/specifications/tests/Zone-TP/zone06.md>.
 Related to the SOA_DEFAULT_TTL_MAXIMUM_VALUE_LOWER message tag from this test case.
 Default C<300> (5 minutes in seconds).
 
@@ -942,7 +942,7 @@ Default C<300> (5 minutes in seconds).
 A positive integer value.
 Recommended upper bound for SOA minimum values (in seconds) in test case
 L<ZONE06|
-https://github.com/zonemaster/zonemaster/blob/master/docs/specifications/tests/Zone-TP/zone06.md>.
+https://doc.zonemaster.net/latest/specifications/tests/Zone-TP/zone06.md>.
 Related to the SOA_DEFAULT_TTL_MAXIMUM_VALUE_HIGHER message tag from this test case.
 Default C<86400> (1 day in seconds).
 

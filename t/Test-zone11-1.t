@@ -14,7 +14,7 @@ BEGIN {
 }
 
 ###########
-# Zone11 - https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/test-zones/Zone-TP/zone11.md
+# Zone11 - https://doc.zonemaster.net/latest/specifications/test-zones/Zone-TP/zone11.md
 my $test_module = q{Zone};
 my $test_case   = 'zone11';
 my @all_tags    = qw(Z11_DIFFERENT_SPF_POLICIES_FOUND

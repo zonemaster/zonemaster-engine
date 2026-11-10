@@ -26,7 +26,7 @@ Zonemaster::Engine::TestMethodsV2 - Version 2 of Methods common to Test Specific
 =head1 METHODS
 
 For details on what these Methods implement, see the Test Specifications document
-(https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/MethodsV2.md).
+(https://doc.zonemaster.net/latest/specifications/tests/MethodsV2.md).
 
 =over
 

@@ -7,7 +7,7 @@ use lib dirname( rel2abs( $0 ) );
 use TestUtil::DSL;
 
 ###########
-# basic02 - https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/test-zones/Basic-TP/basic02.md
+# basic02 - https://doc.zonemaster.net/latest/specifications/test-zones/Basic-TP/basic02.md
 testing_test_case 'Basic', 'basic02';
 
 all_tags qw(B02_AUTH_RESPONSE_SOA

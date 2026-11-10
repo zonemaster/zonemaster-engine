@@ -7,7 +7,7 @@ use lib dirname( rel2abs( $0 ) );
 use TestUtil::DSL;
 
 ###########
-# connectivity04 - https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/test-zones/Connectivity-TP/connectivity04.md
+# connectivity04 - https://doc.zonemaster.net/latest/specifications/test-zones/Connectivity-TP/connectivity04.md
 testing_test_case 'Connectivity', 'connectivity04';
 
 all_tags qw(CN04_EMPTY_PREFIX_SET

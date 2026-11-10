@@ -282,7 +282,7 @@ sub _find_special_address {
 
     my @logentry_array = address01( $zone );
 
-Runs the L<Address01 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Address-TP/address01.md>.
+Runs the L<Address01 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Address-TP/address01.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -396,7 +396,7 @@ sub address01 {
 
     my @logentry_array = address02( $zone );
 
-Runs the L<Address02 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Address-TP/address02.md>.
+Runs the L<Address02 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Address-TP/address02.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -473,7 +473,7 @@ sub address02 {
 
     my @logentry_array = address03( $zone );
 
-Runs the L<Address03 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Address-TP/address03.md>.
+Runs the L<Address03 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Address-TP/address03.md>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
