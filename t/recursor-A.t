@@ -9,14 +9,14 @@ use warnings;
 BEGIN {
     use_ok( q{Zonemaster::Engine} );
     use_ok( q{Zonemaster::Engine::Recursor} );
-    use_ok( q{Zonemaster::Engine::Util}, qw( name ) );
+    use_ok( q{Zonemaster::Engine::DNSName::Functions}, qw( name ) );
 }
 
 my $datafile = 't/' . basename( $0, '.t' ) . '.data';
 
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die "Stored data file missing" if not -r $datafile;
-    Zonemaster::Engine::Nameserver->restore( $datafile );
+    Zonemaster::Engine->preload_cache( $datafile );
     Zonemaster::Engine::Profile->effective->set( q{no_network}, 1 );
 }
 
@@ -307,7 +307,7 @@ subtest 'CNAME-UNRESOLVABLE' => sub {
 };
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
-    Zonemaster::Engine::Nameserver->save( $datafile );
+    Zonemaster::Engine->save_cache( $datafile );
 }
 
 done_testing;

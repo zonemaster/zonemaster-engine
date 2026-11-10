@@ -7,7 +7,6 @@ use parent 'Exporter';
 
 use utf8;
 use Carp;
-use Encode;
 use Readonly;
 use Try::Tiny;
 use Zonemaster::LDNS;

@@ -5,19 +5,20 @@ use warnings;
 
 use version; our $VERSION = version->declare( "v1.1.58" );
 
-use Carp;
 use List::Compare;
 use List::MoreUtils    qw[any uniq];
-use List::Util         qw[min];
 use Locale::TextDomain qw[Zonemaster-Engine];
 use Readonly;
-
-use Zonemaster::LDNS::RR;
+use Zonemaster::Engine::Constants          qw[:algo :soa :ip];
+use Zonemaster::Engine::DNSName::Functions qw( name );
+use Zonemaster::Engine::Logger;
+use Zonemaster::Engine::Logger::Global qw( global_logger );
 use Zonemaster::Engine::Profile;
-use Zonemaster::Engine::Constants qw[:algo :soa :ip];
-use Zonemaster::Engine::Util      qw[name should_run_test];
+use Zonemaster::Engine::Recursor;
 use Zonemaster::Engine::TestMethods;
 use Zonemaster::Engine::TestMethodsV2;
+use Zonemaster::Engine::Util qw[should_run_test];
+use Zonemaster::LDNS::RR;
 
 =head1 NAME
 
@@ -1732,7 +1733,7 @@ Returns a L<Zonemaster::Engine::Logger::Entry> object.
 
 =cut
 
-sub _emit_log { my ( $tag, $argref ) = @_; return Zonemaster::Engine->logger->add( $tag, $argref, 'DNSSEC' ); }
+sub _emit_log { my ( $tag, $argref ) = @_; return global_logger()->add( $tag, $argref, 'DNSSEC' ); }
 
 =over
 

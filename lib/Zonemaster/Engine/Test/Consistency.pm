@@ -11,11 +11,16 @@ use Net::IP::XS;
 use Readonly;
 
 use Zonemaster::Engine::Profile;
-use Zonemaster::Engine::Constants qw[:ip :soa];
+use Zonemaster::Engine::Constants          qw[:ip :soa];
+use Zonemaster::Engine::DNSName::Functions qw( name );
 use Zonemaster::Engine::NameserverSet;
-use Zonemaster::Engine::Test::Address;
 use Zonemaster::Engine::Util;
+use Zonemaster::Engine::Logger;
+use Zonemaster::Engine::Logger::Global qw( global_logger );
+use Zonemaster::Engine::Nameserver;
+use Zonemaster::Engine::Recursor;
 use Zonemaster::Engine::TestMethods;
+use Zonemaster::Engine::TestMethodsV2;
 
 =head1 NAME
 
@@ -396,7 +401,7 @@ Returns a L<Zonemaster::Engine::Logger::Entry> object.
 
 =cut
 
-sub _emit_log { my ( $tag, $argref ) = @_; return Zonemaster::Engine->logger->add( $tag, $argref, 'Consistency' ); }
+sub _emit_log { my ( $tag, $argref ) = @_; return global_logger()->add( $tag, $argref, 'Consistency' ); }
 
 =over
 

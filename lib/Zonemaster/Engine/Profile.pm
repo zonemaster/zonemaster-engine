@@ -5,29 +5,31 @@ use warnings;
 
 use version; our $VERSION = version->declare( "v1.2.22" );
 
-use File::ShareDir qw[dist_file];
-use JSON::PP qw( encode_json decode_json );
-use Scalar::Util qw(reftype looks_like_number);
-use File::Slurp;
-use Clone qw(clone);
+use Clone qw( clone );
 use Data::Dumper;
-use Net::IP::XS;
-use Log::Any qw( $log );
-use YAML::XS qw();
+use File::ShareDir qw( dist_file );
+use File::Slurp    qw( read_file );
+use JSON::PP       qw( decode_json encode_json );
+use Scalar::Util   qw( looks_like_number reftype );
+use YAML::XS       ();
 
 $YAML::XS::Boolean = "JSON::PP";
 
-use Zonemaster::Engine::Constants qw( $DURATION_5_MINUTES_IN_SECONDS $DURATION_1_HOUR_IN_SECONDS $DURATION_4_HOURS_IN_SECONDS $DURATION_12_HOURS_IN_SECONDS $DURATION_1_DAY_IN_SECONDS $DURATION_1_WEEK_IN_SECONDS $DURATION_180_DAYS_IN_SECONDS );
+use Zonemaster::Engine::Constants
+  qw( $DURATION_5_MINUTES_IN_SECONDS $DURATION_1_HOUR_IN_SECONDS $DURATION_4_HOURS_IN_SECONDS $DURATION_12_HOURS_IN_SECONDS $DURATION_1_DAY_IN_SECONDS $DURATION_1_WEEK_IN_SECONDS $DURATION_180_DAYS_IN_SECONDS );
 use Zonemaster::Engine::Validation qw( validate_ipv4 validate_ipv6 );
 
 my %profile_properties_details = (
     q{cache} => {
-        type    => q{HashRef},
-        test    => sub {
+        type => q{HashRef},
+        test => sub {
             my @allowed_keys = ( 'redis' );
-            foreach my $cache_database ( keys %{$_[0]} ) {
+            foreach my $cache_database ( keys %{ $_[0] } ) {
                 if ( not grep( /^$cache_database$/, @allowed_keys ) ) {
-                    die "Property cache keys have " . scalar @allowed_keys . " possible values: " . join(", ", @allowed_keys) . "\n";
+                    die "Property cache keys have "
+                      . scalar @allowed_keys
+                      . " possible values: "
+                      . join( ", ", @allowed_keys ) . "\n";
                 }
 
                 if ( not scalar keys %{ $_[0]->{$cache_database} } ) {
@@ -41,159 +43,167 @@ my %profile_properties_details = (
 
                     foreach my $key ( keys %{ $_[0]->{$cache_database} } ) {
                         if ( not grep( /^$key$/, @allowed_subkeys ) ) {
-                            die "Property cache.$cache_database subkeys have " . scalar @allowed_subkeys . " possible values: " . join(", ", @allowed_subkeys) . "\n";
+                            die "Property cache.$cache_database subkeys have "
+                              . scalar @allowed_subkeys
+                              . " possible values: "
+                              . join( ", ", @allowed_subkeys ) . "\n";
                         }
 
-                        die "Property cache.$cache_database.$key has a NULL or empty item\n" if not $_[0]->{$cache_database}->{$key};
-                        die "Property cache.$cache_database.$key has a negative value\n" if ( looks_like_number( $_[0]->{$cache_database}->{$key} ) and $_[0]->{$cache_database}->{$key} < 0 ) ;
+                        die "Property cache.$cache_database.$key has a NULL or empty item\n"
+                          if not $_[0]->{$cache_database}->{$key};
+                        die "Property cache.$cache_database.$key has a negative value\n"
+                          if ( looks_like_number( $_[0]->{$cache_database}->{$key} )
+                            and $_[0]->{$cache_database}->{$key} < 0 );
                     }
-                }
-            }
+                } ## end else [ if ( not scalar keys %...)]
+            } ## end foreach my $cache_database ...
         },
         default => {},
     },
     q{resolver.defaults.debug} => {
-        type    => q{Bool}
+        type => q{Bool}
     },
     q{resolver.defaults.fallback} => {
-        type    => q{Bool}
+        type => q{Bool}
     },
     q{resolver.defaults.retrans} => {
-        type    => q{Num},
-        min     => 1,
-        max     => 255
+        type => q{Num},
+        min  => 1,
+        max  => 255,
     },
     q{resolver.defaults.retry} => {
-        type    => q{Num},
-        min     => 1,
-        max     => 255
+        type => q{Num},
+        min  => 1,
+        max  => 255,
     },
     q{resolver.defaults.timeout} => {
-        type    => q{Num}
+        type => q{Num}
     },
     q{resolver.source4} => {
-        type    => q{Str},
-        test    => sub {
+        type => q{Str},
+        test => sub {
             unless ( $_[0] eq '' or validate_ipv4( $_[0] ) ) {
                 die "Property resolver.source4 must be an IPv4 address or the empty string\n";
             }
         },
-        default => q{}
+        default => q{},
     },
     q{resolver.source6} => {
-        type    => q{Str},
-        test    => sub {
+        type => q{Str},
+        test => sub {
             unless ( $_[0] eq '' or validate_ipv6( $_[0] ) ) {
                 die "Property resolver.source6 must be a valid IPv6 address or the empty string\n";
             }
         },
-        default => q{}
+        default => q{},
     },
     q{net.ipv4} => {
-        type    => q{Bool}
+        type => q{Bool}
     },
     q{net.ipv6} => {
-        type    => q{Bool}
+        type => q{Bool}
     },
     q{no_network} => {
-        type    => q{Bool}
+        type => q{Bool}
     },
     q{asn_db.style} => {
-        type    => q{Str},
-        test    => sub {
-            if ( lc($_[0]) ne q{cymru} and lc($_[0]) ne q{ripe} ) {
+        type => q{Str},
+        test => sub {
+            if ( lc( $_[0] ) ne q{cymru} and lc( $_[0] ) ne q{ripe} ) {
                 die "Property asn_db.style has 2 possible values : Cymru or RIPE (case-insensitive)\n";
             }
-            $_[0] = lc($_[0]);
+            $_[0] = lc( $_[0] );
         },
-        default => q{cymru}
+        default => q{cymru},
     },
     q{asn_db.sources} => {
-        type    => q{HashRef},
-        test    => sub {
-            foreach my $db_style ( keys %{$_[0]} ) {
-                if ( lc($db_style) ne q{cymru} and lc($db_style) ne q{ripe} ) {
+        type => q{HashRef},
+        test => sub {
+            foreach my $db_style ( keys %{ $_[0] } ) {
+                if ( lc( $db_style ) ne q{cymru} and lc( $db_style ) ne q{ripe} ) {
                     die "Property asn_db.sources keys have 2 possible values : Cymru or RIPE (case-insensitive)\n";
                 }
-                if ( not scalar @{ ${$_[0]}{$db_style} } ) {
+                if ( not scalar @{ ${ $_[0] }{$db_style} } ) {
                     die "Property asn_db.sources.$db_style has no items\n";
                 }
                 else {
-                    foreach my $ndd ( @{ ${$_[0]}{$db_style} } ) {
-                        die "Property asn_db.sources.$db_style has a NULL item\n" if not defined $ndd;
-                        die "Property asn_db.sources.$db_style has a non scalar item\n" if not defined ref($ndd);
-                        die "Property asn_db.sources.$db_style has an item too long\n" if length($ndd) > 255;
+                    foreach my $ndd ( @{ ${ $_[0] }{$db_style} } ) {
+                        die "Property asn_db.sources.$db_style has a NULL item\n"       if not defined $ndd;
+                        die "Property asn_db.sources.$db_style has a non scalar item\n" if not defined ref( $ndd );
+                        die "Property asn_db.sources.$db_style has an item too long\n"  if length( $ndd ) > 255;
                         foreach my $label ( split /[.]/, $ndd ) {
-                            die "Property asn_db.sources.$db_style has a non domain name item\n" if $label !~ /^[a-z0-9](?:[-a-z0-9]{0,61}[a-z0-9])?$/;
+                            die "Property asn_db.sources.$db_style has a non domain name item\n"
+                              if $label !~ /^[a-z0-9](?:[-a-z0-9]{0,61}[a-z0-9])?$/;
                         }
                     }
-                    ${$_[0]}{lc($db_style)} = delete ${$_[0]}{$db_style};
+                    ${ $_[0] }{ lc( $db_style ) } = delete ${ $_[0] }{$db_style};
                 }
-            }
+            } ## end foreach my $db_style ( keys...)
         },
-        default => { cymru => [ "asnlookup.zonemaster.net" ] },
+        default => { cymru => ["asnlookup.zonemaster.net"] },
     },
     q{logfilter} => {
         type    => q{HashRef},
-        default => {}
+        default => {},
     },
     q{test_levels} => {
-        type    => q{HashRef}
+        type => q{HashRef}
     },
     q{test_cases} => {
-        type    => q{ArrayRef}
+        type => q{ArrayRef}
     },
     q{test_cases_vars.dnssec04.REMAINING_SHORT} => {
         type    => q{Num},
         min     => 1,
-        default => $DURATION_12_HOURS_IN_SECONDS
+        default => $DURATION_12_HOURS_IN_SECONDS,
     },
     q{test_cases_vars.dnssec04.REMAINING_LONG} => {
         type    => q{Num},
         min     => 1,
-        default => $DURATION_180_DAYS_IN_SECONDS
+        default => $DURATION_180_DAYS_IN_SECONDS,
     },
     q{test_cases_vars.dnssec04.DURATION_LONG} => {
         type    => q{Num},
         min     => 1,
-        default => $DURATION_180_DAYS_IN_SECONDS
+        default => $DURATION_180_DAYS_IN_SECONDS,
     },
     q{test_cases_vars.zone02.SOA_REFRESH_MINIMUM_VALUE} => {
         type    => q{Num},
         min     => 1,
-        default => $DURATION_4_HOURS_IN_SECONDS
+        default => $DURATION_4_HOURS_IN_SECONDS,
     },
     q{test_cases_vars.zone04.SOA_RETRY_MINIMUM_VALUE} => {
         type    => q{Num},
         min     => 1,
-        default => $DURATION_1_HOUR_IN_SECONDS
+        default => $DURATION_1_HOUR_IN_SECONDS,
     },
     q{test_cases_vars.zone05.SOA_EXPIRE_MINIMUM_VALUE} => {
         type    => q{Num},
         min     => 1,
-        default => $DURATION_1_WEEK_IN_SECONDS
+        default => $DURATION_1_WEEK_IN_SECONDS,
     },
     q{test_cases_vars.zone06.SOA_DEFAULT_TTL_MAXIMUM_VALUE} => {
         type    => q{Num},
         min     => 1,
-        default => $DURATION_1_DAY_IN_SECONDS
+        default => $DURATION_1_DAY_IN_SECONDS,
     },
     q{test_cases_vars.zone06.SOA_DEFAULT_TTL_MINIMUM_VALUE} => {
         type    => q{Num},
         min     => 1,
-        default => $DURATION_5_MINUTES_IN_SECONDS
-    }
+        default => $DURATION_5_MINUTES_IN_SECONDS,
+    },
 );
 
 _init_profile_properties_details_defaults();
 
 sub _init_profile_properties_details_defaults {
-    my $default_file   = dist_file( 'Zonemaster-Engine', 'profile.json');
+    my $default_file   = dist_file( 'Zonemaster-Engine', 'profile.json' );
     my $json           = read_file( $default_file );
     my $default_values = decode_json( $json );
     foreach my $property_name ( keys %profile_properties_details ) {
         if ( defined _get_value_from_nested_hash( $default_values, split /[.]/, $property_name ) ) {
-            $profile_properties_details{$property_name}{default} = clone _get_value_from_nested_hash( $default_values, split /[.]/, $property_name );
+            $profile_properties_details{$property_name}{default} =
+              clone _get_value_from_nested_hash( $default_values, split /[.]/, $property_name );
         }
     }
 }
@@ -201,11 +211,11 @@ sub _init_profile_properties_details_defaults {
 sub _get_profile_paths {
     my ( $paths_ref, $data, @path ) = @_;
 
-    foreach my $key (sort keys %$data) {
+    foreach my $key ( sort keys %$data ) {
 
         my $path = join '.', @path, $key;
-        if (ref($data->{$key}) eq 'HASH' and not exists $profile_properties_details{$path} ) {
-            _get_profile_paths($paths_ref, $data->{$key}, @path, $key);
+        if ( ref( $data->{$key} ) eq 'HASH' and not exists $profile_properties_details{$path} ) {
+            _get_profile_paths( $paths_ref, $data->{$key}, @path, $key );
             next;
         }
         else {
@@ -220,7 +230,7 @@ sub _get_value_from_nested_hash {
     my $key = shift @path;
     if ( exists $hash_ref->{$key} ) {
         if ( @path ) {
-            my $value_type = reftype($hash_ref->{$key});
+            my $value_type = reftype( $hash_ref->{$key} );
             if ( $value_type eq q{HASH} ) {
                 return _get_value_from_nested_hash( $hash_ref->{$key}, @path );
             }
@@ -235,14 +245,14 @@ sub _get_value_from_nested_hash {
     else {
         return undef;
     }
-}
+} ## end sub _get_value_from_nested_hash
 
 sub _set_value_to_nested_hash {
     my ( $hash_ref, $value, @path ) = @_;
 
     my $key = shift @path;
 
-    if (  ! exists $hash_ref->{$key} ) {
+    if ( !exists $hash_ref->{$key} ) {
         $hash_ref->{$key} = {};
     }
     if ( @path ) {
@@ -257,7 +267,7 @@ our $effective = Zonemaster::Engine::Profile->default;
 
 sub new {
     my $class = shift;
-    my $self = {};
+    my $self  = {};
     $self->{q{profile}} = {};
 
     bless $self, $class;
@@ -285,11 +295,14 @@ sub all_properties {
 sub get {
     my ( $self, $property_name ) = @_;
 
-    die "Unknown property '$property_name'\n"  if not exists $profile_properties_details{$property_name};
+    die "Unknown property '$property_name'\n" if not exists $profile_properties_details{$property_name};
 
-    if ( $profile_properties_details{$property_name}->{type} eq q{ArrayRef} or $profile_properties_details{$property_name}->{type} eq q{HashRef} ) {
+    if (   $profile_properties_details{$property_name}->{type} eq q{ArrayRef}
+        or $profile_properties_details{$property_name}->{type} eq q{HashRef} )
+    {
         return clone _get_value_from_nested_hash( $self->{q{profile}}, split /[.]/, $property_name );
-    } else {
+    }
+    else {
         return _get_value_from_nested_hash( $self->{q{profile}}, split /[.]/, $property_name );
     }
 }
@@ -302,19 +315,22 @@ sub set {
 
 sub _set {
     my ( $self, $from, $property_name, $value ) = @_;
-    my $value_type = reftype($value);
+    my $value_type = reftype( $value );
     my $data_details;
 
     die "Unknown property '$property_name'\n" if not exists $profile_properties_details{$property_name};
 
-    $data_details = sprintf "[TYPE=%s][FROM=%s][VALUE_TYPE=%s][VALUE=%s]\n%s",
-                            exists $profile_properties_details{$property_name}->{type} ? $profile_properties_details{$property_name}->{type} : q{UNDEF},
-                            defined $from ? $from : q{UNDEF},
-                            defined $value_type ? $value_type : q{UNDEF},
-                            defined $value ? $value : q{[UNDEF]},
-                            Data::Dumper::Dumper($value);
+    $data_details =
+      sprintf "[TYPE=%s][FROM=%s][VALUE_TYPE=%s][VALUE=%s]\n%s",
+      exists $profile_properties_details{$property_name}->{type}
+      ? $profile_properties_details{$property_name}->{type}
+      : q{UNDEF},
+      defined $from       ? $from       : q{UNDEF},
+      defined $value_type ? $value_type : q{UNDEF},
+      defined $value      ? $value      : q{[UNDEF]},
+      Data::Dumper::Dumper( $value );
     # $value is a Scalar
-    if ( ! $value_type  or $value_type eq q{SCALAR} ) {
+    if ( !$value_type or $value_type eq q{SCALAR} ) {
         die "Property $property_name can not be undef\n" if not defined $value;
 
         # Boolean
@@ -340,26 +356,33 @@ sub _set {
             if ( $value !~ /^(\d+)$/ ) {
                 die "Property $property_name is of type non-negative integer $data_details\n";
             }
-            if ( exists $profile_properties_details{$property_name}->{min} and $value < $profile_properties_details{$property_name}->{min} ) {
+            if ( exists $profile_properties_details{$property_name}->{min}
+                and $value < $profile_properties_details{$property_name}->{min} )
+            {
                 die "Property $property_name value is out of limit (smaller)\n";
             }
-            if ( exists $profile_properties_details{$property_name}->{max} and $value > $profile_properties_details{$property_name}->{max} ) {
+            if ( exists $profile_properties_details{$property_name}->{max}
+                and $value > $profile_properties_details{$property_name}->{max} )
+            {
                 die "Property $property_name value is out of limit (bigger)\n";
             }
 
             $value = 0+ $value;    # Make sure JSON::PP doesn't serialize it as a JSON string
         }
-    }
+    } ## end if ( !$value_type or $value_type...)
     else {
         # Array
-        if ( $profile_properties_details{$property_name}->{type} eq q{ArrayRef} and reftype($value) ne q{ARRAY} ) {
+        if ( $profile_properties_details{$property_name}->{type} eq q{ArrayRef} and reftype( $value ) ne q{ARRAY} ) {
             die "Property $property_name is not a ArrayRef $data_details\n";
         }
         # Hash
-        elsif ( $profile_properties_details{$property_name}->{type} eq q{HashRef} and reftype($value) ne q{HASH} ) {
+        elsif ( $profile_properties_details{$property_name}->{type} eq q{HashRef} and reftype( $value ) ne q{HASH} ) {
             die "Property $property_name is not a HashRef $data_details\n";
         }
-        elsif ( $profile_properties_details{$property_name}->{type} eq q{Bool} or $profile_properties_details{$property_name}->{type} eq q{Num} or $profile_properties_details{$property_name}->{type} eq q{Str} ) {
+        elsif ($profile_properties_details{$property_name}->{type} eq q{Bool}
+            or $profile_properties_details{$property_name}->{type} eq q{Num}
+            or $profile_properties_details{$property_name}->{type} eq q{Str} )
+        {
             die "Property $property_name is a Scalar $data_details\n";
         }
     }
@@ -369,16 +392,18 @@ sub _set {
     }
 
     return _set_value_to_nested_hash( $self->{q{profile}}, $value, split /[.]/, $property_name );
-}
+} ## end sub _set
 
 sub merge {
     my ( $self, $other_profile ) = @_;
 
-    die "Merge with ", __PACKAGE__, " only\n" if ref($other_profile) ne __PACKAGE__;
+    die "Merge with ", __PACKAGE__, " only\n" if ref( $other_profile ) ne __PACKAGE__;
 
     foreach my $property_name ( keys %profile_properties_details ) {
         if ( defined _get_value_from_nested_hash( $other_profile->{q{profile}}, split /[.]/, $property_name ) ) {
-            $self->_set( q{JSON}, $property_name, _get_value_from_nested_hash( $other_profile->{q{profile}}, split /[.]/, $property_name ) );
+            $self->_set( q{JSON}, $property_name,
+                _get_value_from_nested_hash( $other_profile->{q{profile}}, split /[.]/, $property_name ),
+            );
         }
     }
 
@@ -387,13 +412,14 @@ sub merge {
 
 sub from_json {
     my ( $class, $json ) = @_;
-    my $new = $class->new;
+    my $new      = $class->new;
     my $internal = decode_json( $json );
     my %paths;
-    _get_profile_paths(\%paths, $internal);
+    _get_profile_paths( \%paths, $internal );
     foreach my $property_name ( keys %paths ) {
         if ( defined _get_value_from_nested_hash( $internal, split /[.]/, $property_name ) ) {
-            $new->_set( q{JSON}, $property_name, _get_value_from_nested_hash( $internal, split /[.]/, $property_name ) );
+            $new->_set( q{JSON}, $property_name, _get_value_from_nested_hash( $internal, split /[.]/, $property_name ),
+            );
         }
     }
 

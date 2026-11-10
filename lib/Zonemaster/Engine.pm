@@ -19,15 +19,18 @@ use Class::Accessor "antlers";
 use Carp;
 
 use Zonemaster::Engine::Nameserver;
-use Zonemaster::Engine::Logger;
 use Zonemaster::Engine::Profile;
 use Zonemaster::Engine::Zone;
 use Zonemaster::Engine::Test;
 use Zonemaster::Engine::Recursor;
 use Zonemaster::Engine::ASNLookup;
-
-our $logger;
-our $recursor = Zonemaster::Engine::Recursor->new;
+use Zonemaster::Engine::DNSName;
+use Zonemaster::Engine::Logger::Filter   qw( reset_config );
+use Zonemaster::Engine::Logger::Global   qw( global_logger );
+use Zonemaster::Engine::Logger::Time     qw( reset_logger_time );
+use Zonemaster::Engine::Recursor::Cache  qw( recursor_cache_clear );
+use Zonemaster::Engine::Recursor::Global qw( global_recursor );
+use Zonemaster::Engine::TestMethodsV2;
 
 my $init_done;
 
@@ -39,7 +42,7 @@ sub init_engine {
 init_engine();
 
 sub logger {
-    return $logger //= Zonemaster::Engine::Logger->new;
+    return global_logger();
 }
 
 sub profile {
@@ -111,7 +114,7 @@ sub recurse {
     $qtype  //= 'A';
     $qclass //= 'IN';
 
-    return $recursor->recurse( $qname, $qtype, $qclass );
+    return global_recursor()->recurse( $qname, $qtype, $qclass );
 }
 
 sub add_fake_delegation {
@@ -150,20 +153,20 @@ sub add_fake_delegation {
     foreach my $name ( keys %{$href} ) {
         if ( not @{ $href->{$name} } ) {
             if ( $class->zone( $domain )->is_in_zone( $name ) ) {
-                Zonemaster::Engine->logger->add(    #
+                global_logger()->add(    #
                     FAKE_DELEGATION_IN_ZONE_NO_IP => { domain => $domain, nsname => $name }
                 );
             }
             else {
-                Zonemaster::Engine->logger->add(    #
+                global_logger()->add(    #
                     FAKE_DELEGATION_NO_IP => { domain => $domain, nsname => $name }
                 );
             }
         }
     }
 
-    $recursor->add_fake_addresses( $domain, $href );
-    my $parent = $class->zone( $recursor->parent( $domain ) );
+    global_recursor()->add_fake_addresses( $domain, $href );
+    my $parent = $class->zone( global_recursor()->parent( $domain ) );
     foreach my $ns ( @{ $parent->ns } ) {
         $ns->add_fake_delegation( $domain => $href );
     }
@@ -177,7 +180,7 @@ sub add_fake_delegation {
 sub add_fake_ds {
     my ( $class, $domain, $aref ) = @_;
 
-    my $parent = $class->zone( scalar( $recursor->parent( $domain ) ) );
+    my $parent = $class->zone( scalar( global_recursor()->parent( $domain ) ) );
     if ( not $parent ) {
         die "Failed to find parent for $domain";
     }
@@ -199,13 +202,17 @@ sub can_continue {
 sub save_cache {
     my ( $class, $filename ) = @_;
 
-    return Zonemaster::Engine::Nameserver->save( $filename );
+    Zonemaster::Engine::Nameserver->save( $filename, Zonemaster::Engine->VERSION() );
+
+    return;
 }
 
 sub preload_cache {
     my ( $class, $filename ) = @_;
 
-    return Zonemaster::Engine::Nameserver->restore( $filename );
+    Zonemaster::Engine::Nameserver->restore( $filename );
+
+    return;
 }
 
 sub asn_lookup {
@@ -219,16 +226,16 @@ sub modules {
 }
 
 sub start_time_now {
-    Zonemaster::Engine::Logger->start_time_now();
+    reset_logger_time();
     return;
 }
 
 sub reset {
-    Zonemaster::Engine::Logger->start_time_now();
-    Zonemaster::Engine::Logger->reset_config();
+    reset_logger_time();
+    reset_config();
     Zonemaster::Engine::Nameserver->empty_cache();
-    $logger->clear_history() if $logger;
-    Zonemaster::Engine::Recursor->clear_cache();
+    global_logger()->clear_history();
+    recursor_cache_clear();
     Zonemaster::Engine::TestMethodsV2->clear_cache();
     return;
 }

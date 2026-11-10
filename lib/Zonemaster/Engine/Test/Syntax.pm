@@ -13,11 +13,11 @@ use Readonly;
 use Time::Local;
 
 use Zonemaster::Engine::Profile;
-use Zonemaster::Engine::Constants qw[:name :ip];
-use Zonemaster::Engine::DNSName;
+use Zonemaster::Engine::Constants          qw[:name :ip];
+use Zonemaster::Engine::DNSName::Functions qw( name );
 use Zonemaster::Engine::Packet;
 use Zonemaster::Engine::TestMethods;
-use Zonemaster::Engine::Util qw[should_run_test name];
+use Zonemaster::Engine::Util qw[should_run_test];
 use Zonemaster::LDNS;
 
 =head1 NAME
@@ -587,7 +587,7 @@ sub _check_name_syntax {
     my ( $info_label_prefix, $name ) = @_;
     my @results;
 
-    $name = Zonemaster::Engine::Util::name( $name );
+    $name = name( $name );
 
     if ( not _name_has_only_legal_characters( $name ) ) {
         push @results,

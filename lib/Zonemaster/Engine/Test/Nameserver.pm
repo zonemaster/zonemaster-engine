@@ -12,8 +12,9 @@ use Net::IP::XS;
 use Readonly;
 
 use Zonemaster::Engine::Constants qw[:ip];
+use Zonemaster::Engine::Logger;
+use Zonemaster::Engine::Logger::Global qw( global_logger );
 use Zonemaster::Engine::Profile;
-use Zonemaster::Engine::Test::Address;
 use Zonemaster::Engine::TestMethods;
 use Zonemaster::Engine::Util qw( escape_unprintable scramble_case );
 
@@ -599,7 +600,7 @@ Returns a L<Zonemaster::Engine::Logger::Entry> object.
 
 =cut
 
-sub _emit_log { my ( $tag, $argref ) = @_; return Zonemaster::Engine->logger->add( $tag, $argref, 'Nameserver' ); }
+sub _emit_log { my ( $tag, $argref ) = @_; return global_logger()->add( $tag, $argref, 'Nameserver' ); }
 
 =over
 

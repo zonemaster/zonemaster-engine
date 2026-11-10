@@ -5,9 +5,11 @@ use Test::More;
 
 BEGIN {
     use_ok( 'Zonemaster::Engine' );
+    use_ok( 'Zonemaster::Engine::DNSName::Functions', qw( name ) );
     use_ok( 'Zonemaster::Engine::Util' );
     use_ok( 'Zonemaster::Engine::Logger' );
     use_ok( 'Zonemaster::Engine::Logger::Entry' );
+    use_ok( 'Zonemaster::Engine::Logger::Filter' );
     use_ok( 'Zonemaster::Engine::Exception' );
 }
 
@@ -37,7 +39,7 @@ ok( scalar( @{ Zonemaster::Engine->logger->entries } ) >= 2, 'expected number of
 
 like( "$entry", qr/System:Unspecified:TEST an=argument/, 'stringification overload' );
 
-$entry = info( 'TEST2', { an => 'argument', domain => Zonemaster::Engine::Util::name( 'logger.test.example' ) } );
+$entry = info( 'TEST2', { an => 'argument', domain => name( 'logger.test.example' ) } );
 
 # FIXME: Ideally, we really should instead have domain=logger.test.example
 # without the double quotes around the domain name.
@@ -103,7 +105,7 @@ isa_ok( $err, 'Zonemaster::Engine::Exception' );
 is( "$err", 'canary' );
 $log->callback( undef );
 
-Zonemaster::Engine::Logger->reset_config();
+Zonemaster::Engine::Logger::Filter->reset_config();
 $json         = read_file( "t/profiles/profile.json" );
 $profile_test = Zonemaster::Engine::Profile->from_json( $json );
 ok( Zonemaster::Engine::Profile->effective->merge( $profile_test ), 'profile loaded' );
@@ -133,7 +135,7 @@ qr[[{"args":{"exception":"in callback at t/logger.t line 47, <DATA> line 1.\n"},
     'JSON looks OK',
 );
 
-Zonemaster::Engine::Logger->reset_config();
+Zonemaster::Engine::Logger::Filter->reset_config();
 Zonemaster::Engine::Profile->effective->set( q{test_levels}, { "BASIC" => { "B02_NS_BROKEN" => "GURKSALLAD" } } );
 my $fail =
   Zonemaster::Engine::Logger::Entry->new( { module => 'Basic', tag => 'B02_NS_BROKEN', testcase => 'Basic02' } );

@@ -10,6 +10,7 @@ use Zonemaster::Engine;
 use Exporter 'import';
 use List::MoreUtils                qw[ uniq ];
 use Zonemaster::Engine::Validation qw( validate_ipv4 validate_ipv6 );
+use Zonemaster::Engine::TestMethodsV2;
 
 use Carp qw( croak );
 

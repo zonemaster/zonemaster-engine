@@ -5,14 +5,14 @@ use Test::More;
 use Test::Exception;
 
 BEGIN { use_ok( 'Zonemaster::Engine::Nameserver' ); }
+BEGIN { use_ok( 'Zonemaster::Engine::Nameserver::Functions', qw( ns ) ); }
 use Zonemaster::Engine;
-use Zonemaster::Engine::Util;
 use Zonemaster::Engine::Constants qw( :misc );
 
 my $datafile = 't/nameserver.data';
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die "Stored data file missing" if not -r $datafile;
-    Zonemaster::Engine::Nameserver->restore( $datafile );
+    Zonemaster::Engine->preload_cache( $datafile );
     Zonemaster::Engine::Profile->effective->set( q{no_network}, 1 );
 }
 
@@ -54,7 +54,7 @@ ok(
 SKIP: {
     skip '/tmp not writable', 2 unless -w '/tmp';
     my $name = "/tmp/nameserver_test_$$";
-    Zonemaster::Engine::Nameserver->save( $name );
+    Zonemaster::Engine->save_cache( $name );
     my $count = keys %Zonemaster::Engine::Nameserver::object_cache;
     undef %Zonemaster::Engine::Nameserver::object_cache;
     is( scalar( keys %Zonemaster::Engine::Nameserver::object_cache ), 0, 'Nameserver cache is empty after clear.' );
@@ -324,6 +324,8 @@ else {
         'No blacklisting is done when running offline',
     );
 }
+
+isa_ok( ns( 'name', '::1' ), 'Zonemaster::Engine::Nameserver' );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
     Zonemaster::Engine::Nameserver->save( $datafile );
