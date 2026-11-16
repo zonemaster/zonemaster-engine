@@ -134,7 +134,8 @@ sub normalize_label {
 
 Trim leading and trailing whitespace.
 
-Implements the space trimming part of L<normalization document|https://github.com/zonemaster/zonemaster/blob/master/docs/specifications/tests/RequirementsAndNormalizationOfDomainNames.md>.
+Implements the space trimming part of L<normalization document|
+https://doc.zonemaster.net/latest/specifications/tests/RequirementsAndNormalizationOfDomainNames.html>.
 
 Returns a string.
 
@@ -151,7 +152,8 @@ sub trim_space {
 Normalize a domain name.
 
 Implements the normalization process, except the space trimming part, described
-in L<normalization document|https://github.com/zonemaster/zonemaster/blob/master/docs/specifications/tests/RequirementsAndNormalizationOfDomainNames.md>.
+in L<normalization document|
+https://doc.zonemaster.net/latest/specifications/tests/RequirementsAndNormalizationOfDomainNames.html>.
 
 Returns a tuple C<($errors: ArrayRef[Zonemaster::Engine::Normalization::Error], $name: String)>.
 
