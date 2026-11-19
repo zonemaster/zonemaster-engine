@@ -50,8 +50,7 @@ The artifact name includes the module version and the first 7 characters of the 
 
 ## Participation, Contact and Bug reporting
 
-For participation, contact and bug reporting, please see
-[Zonemaster/README.md](https://github.com/zonemaster/zonemaster/blob/master/README.md).
+For participation, contact and bug reporting, please see [Zonemaster/README.md].
 
 ## License
 
