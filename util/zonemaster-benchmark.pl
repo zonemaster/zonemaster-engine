@@ -61,9 +61,8 @@ if (defined $opt_batch_file) {
     open my $bfh, '<', $opt_batch_file
       or die "Cannot open batch file '$opt_batch_file': $!\n";
     while (my $line = <$bfh>) {
-        #chomp $line;
-        $line =~ s/[\r\n]//g; #remove \r and \n
-        next if $line =~ /^\s*$/;
+        $line =~ s/^\s*|\s*$//g;
+        next if $line eq '';
         push @domains, $line;
     }
     close $bfh;
