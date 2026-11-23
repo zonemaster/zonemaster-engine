@@ -9,7 +9,7 @@ use List::Compare;
 use List::MoreUtils    qw[any uniq];
 use Locale::TextDomain qw[Zonemaster-Engine];
 use Readonly;
-use Zonemaster::Engine::Constants          qw[:algo :soa :ip];
+use Zonemaster::Engine::Constants          qw[:soa :ip];
 use Zonemaster::Engine::DNSName::Functions qw( name );
 use Zonemaster::Engine::Logger;
 use Zonemaster::Engine::Logger::Global qw( global_logger );
