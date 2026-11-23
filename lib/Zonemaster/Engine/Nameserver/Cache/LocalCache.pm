@@ -5,7 +5,9 @@ use warnings;
 
 use version; our $VERSION = version->declare( "v1.0.4" );
 
-use Carp         qw( confess );
+use Carp qw( confess );
+use Class::Accessor;
+use Net::IP::XS;
 use Scalar::Util qw( blessed );
 
 use Zonemaster::Engine;

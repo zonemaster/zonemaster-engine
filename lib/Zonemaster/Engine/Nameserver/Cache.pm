@@ -1,5 +1,5 @@
 package Zonemaster::Engine::Nameserver::Cache;
-
+use strict;
 use v5.16.0;
 use warnings;
 

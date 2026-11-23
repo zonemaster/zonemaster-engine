@@ -7,12 +7,10 @@ use utf8;
 
 BEGIN {
     use_ok( 'Zonemaster::Engine' );
-    use_ok( 'Zonemaster::Engine::Util', qw( info name ns parse_hints ) );
+    use_ok( 'Zonemaster::Engine::Util', qw( info parse_hints ) );
 }
 
-isa_ok( ns( 'name', '::1' ),   'Zonemaster::Engine::Nameserver' );
-isa_ok( info( 'TAG', {} ),     'Zonemaster::Engine::Logger::Entry' );
-isa_ok( name( "foo.bar.com" ), 'Zonemaster::Engine::DNSName' );
+isa_ok( info( 'TAG', {} ), 'Zonemaster::Engine::Logger::Entry' );
 
 subtest 'parse_hints()' => sub {
     my @cases = (

@@ -3,10 +3,7 @@ package Zonemaster::Engine::NameserverSet;
 use v5.26.0;
 use warnings;
 
-use Scalar::Util qw(blessed);
-
 use Zonemaster::Engine::DNSName;
-use Zonemaster::Engine::Nameserver;
 
 ####
 #### Constructors

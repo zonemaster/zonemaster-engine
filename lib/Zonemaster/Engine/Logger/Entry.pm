@@ -9,7 +9,7 @@ use Carp        qw( confess );
 use Time::HiRes qw[time];
 use JSON::PP;
 use Class::Accessor;
-
+use Zonemaster::Engine::Logger::Time qw( get_logger_time );
 use Zonemaster::Engine::Profile;
 
 use base qw(Class::Accessor);
@@ -26,8 +26,6 @@ our %numeric = (
     ERROR    => 4,
     CRITICAL => 5,
 );
-
-our $start_time = time();
 
 my $json = JSON::PP->new->allow_blessed->convert_blessed->canonical;
 my $test_levels_config;
@@ -51,7 +49,7 @@ sub new {
       if exists $attrs->{args}
       && ref $attrs->{args} ne 'HASH';
 
-    my $time = time() - $start_time;
+    my $time = get_logger_time();
     $time =~ s/,/\./;
     $attrs->{timestamp} = $time;
 
@@ -162,11 +160,6 @@ sub printable_args {
 ### Class method
 ###
 
-sub start_time_now {
-    $start_time = time();
-    return;
-}
-
 sub reset_config {
     undef $test_levels_config;
     return;
@@ -195,10 +188,6 @@ Construct a new object.
 =item levels
 
 Returns a hash where the keys are log levels as strings and the corresponding values their numeric value.
-
-=item start_time_now()
-
-Set the logger's start time to the current time.
 
 =item reset_config()
 

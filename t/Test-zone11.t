@@ -14,7 +14,7 @@ BEGIN {
 }
 
 ###########
-# Zone11 - https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/test-zones/Zone-TP/zone11.md
+# Zone11 - https://doc.zonemaster.net/latest/specifications/test-zones/Zone-TP/zone11.html
 my $test_module = q{Zone};
 my $test_case   = 'zone11';
 my @all_tags    = qw(Z11_DIFFERENT_SPF_POLICIES_FOUND
@@ -105,7 +105,7 @@ my $datafile = 't/' . basename( $0, '.t' ) . '.data';
 
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die q{Stored data file missing} if not -r $datafile;
-    Zonemaster::Engine::Nameserver->restore( $datafile );
+    Zonemaster::Engine->preload_cache( $datafile );
     Zonemaster::Engine::Profile->effective->set( q{no_network}, 1 );
 }
 
@@ -119,7 +119,7 @@ perform_testcase_testing(
 );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
-    Zonemaster::Engine::Nameserver->save( $datafile );
+    Zonemaster::Engine->save_cache( $datafile );
 }
 
 done_testing;

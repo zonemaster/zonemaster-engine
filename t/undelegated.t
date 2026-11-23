@@ -10,7 +10,7 @@ use Zonemaster::Engine::Util;
 my $datafile = 't/undelegated.data';
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die "Stored data file missing" if not -r $datafile;
-    Zonemaster::Engine::Nameserver->restore( $datafile );
+    Zonemaster::Engine->preload_cache( $datafile );
     Zonemaster::Engine->profile->set( q{no_network}, 1 );
 }
 ###
@@ -100,7 +100,7 @@ ok(
 );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
-    Zonemaster::Engine::Nameserver->save( $datafile );
+    Zonemaster::Engine->save_cache( $datafile );
 }
 
 done_testing;

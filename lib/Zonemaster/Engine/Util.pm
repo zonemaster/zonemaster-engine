@@ -12,8 +12,6 @@ BEGIN {
       escape_unprintable
       info
       ipversion_ok
-      name
-      ns
       parse_hints
       should_run_test
       scramble_case
@@ -23,26 +21,21 @@ BEGIN {
     our %EXPORT_TAGS = ( all => \@EXPORT_OK );
 
     ## no critic (Modules::ProhibitAutomaticExportation)
-    our @EXPORT = qw[ ns info name scramble_case ];
+    our @EXPORT = qw[ info scramble_case ];
 }
 
 use Net::DNS::ZoneFile;
-use Pod::Simple::SimpleTree;
 
 use Zonemaster::Engine::Constants qw[:ip :soa];
 use Zonemaster::Engine::DNSName;
+use Zonemaster::Engine::Logger::Global qw( global_logger );
 use Zonemaster::Engine::Profile;
-use Zonemaster::Engine::Nameserver;
-
-sub ns {
-    my ( $name, $address ) = @_;
-    return Zonemaster::Engine::Nameserver->new( { name => $name, address => $address } );
-}
+use Zonemaster::Engine::Zone;
 
 sub info {
     my ( $tag, $argref ) = @_;
 
-    return Zonemaster::Engine->logger->add( $tag, $argref );
+    return global_logger()->add( $tag, $argref );
 }
 
 sub zone {
@@ -74,13 +67,6 @@ sub ipversion_ok {
 
 sub test_levels {
     return Zonemaster::Engine::Profile->effective->get( q{test_levels} );
-}
-
-## no critic (Subroutines::RequireArgUnpacking)
-sub name {
-    # We do not unpack @_ here for performance reasons.
-    # If we did, the calling convention is: my ( $name ) = @_.
-    return Zonemaster::Engine::DNSName->new( @_ );
 }
 
 # Function from CPAN package Text::Capitalize that causes
@@ -231,8 +217,6 @@ Zonemaster::Engine::Util - utility functions for other Zonemaster modules
 
     use Zonemaster::Engine::Util;
     info(TAG => { some => 'argument'});
-    my $ns = ns($name, $address);
-    my $name = name('whatever.example.org');
 
 =head1 EXPORTED FUNCTIONS
 
@@ -242,14 +226,6 @@ Zonemaster::Engine::Util - utility functions for other Zonemaster modules
 
 Creates and returns a L<Zonemaster::Engine::Logger::Entry> object. The object
 is also added to the global logger object's list of entries.
-
-=item ns($name, $address)
-
-Creates and returns a nameserver object with the given name and address.
-
-=item name($string_name_or_zone)
-
-Creates and returns a L<Zonemaster::Engine::DNSName> object for the given argument.
 
 =item zone($name)
 

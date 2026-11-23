@@ -5,8 +5,9 @@ use warnings;
 
 use version; our $VERSION = version->declare( "v1.0.3" );
 
-use List::MoreUtils qw[uniq];
-use Zonemaster::Engine::Util;
+use List::MoreUtils                           qw[uniq];
+use Zonemaster::Engine::DNSName::Functions    qw( name );
+use Zonemaster::Engine::Nameserver::Functions qw( ns );
 
 sub method1 {
     my ( $class, $zone ) = @_;

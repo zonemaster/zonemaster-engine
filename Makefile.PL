@@ -35,16 +35,19 @@ requires 'Net::IP::XS'        => 0.21;
 requires 'Readonly'           => 0;
 requires 'Text::CSV'          => 0;
 requires 'YAML::XS'           => 0;
-requires 'Zonemaster::LDNS'   => 5.001000; # For v5.1.0
+requires 'Zonemaster::LDNS'   => 5.001000;    # For v5.1.0
 
-test_requires 'Locale::PO'        => 0;
-test_requires 'Pod::Coverage'     => 0;
-test_requires 'Sub::Override'     => 0;
-test_requires 'Test::Differences' => 0;
-test_requires 'Test::Exception'   => 0;
-test_requires 'Test::Fatal'       => 0;
-test_requires 'Test::NoWarnings'  => 0;
-test_requires 'Test::Pod'         => 1.22;
+test_requires 'Locale::PO'                                  => 0;
+test_requires 'Perl::Critic::Policy::ProhibitUnusedImports' => 0;
+test_requires 'Perl::Critic::StricterSubs'                  => 0;
+test_requires 'Pod::Coverage'                               => 0;
+test_requires 'Sub::Override'                               => 0;
+test_requires 'Test::Differences'                           => 0;
+test_requires 'Test::Exception'                             => 0;
+test_requires 'Test::Fatal'                                 => 0;
+test_requires 'Test::NoWarnings'                            => 0;
+test_requires 'Test::Perl::Critic'                          => 0;
+test_requires 'Test::Pod'                                   => 1.22;
 
 # Make all platforms include inc/Module/Install/External.pm
 requires_external_bin 'find';

@@ -10,6 +10,8 @@ use Time::HiRes qw[gettimeofday tv_interval];
 use List::Util  qw( min );
 
 use Zonemaster::LDNS::Packet;
+use Zonemaster::Engine::Logger::Global qw( global_logger );
+use Zonemaster::Engine::Nameserver::Cache;
 use Zonemaster::Engine::Packet;
 use Zonemaster::Engine::Profile;
 
@@ -40,7 +42,7 @@ sub new {
     my $params = shift;
     $params->{address} = $params->{address}->ip;
     if ( exists $object_cache->{ $params->{address} } ) {
-        Zonemaster::Engine->logger->add( CACHE_FETCHED => { ip => $params->{address} } );
+        global_logger()->add( CACHE_FETCHED => { ip => $params->{address} } );
         return $object_cache->{ $params->{address} };
     }
     else {
@@ -56,7 +58,7 @@ sub new {
         my $class = ref $proto || $proto;
         my $obj   = Class::Accessor::new( $class, $params );
 
-        Zonemaster::Engine->logger->add( CACHE_CREATED => { ip => $params->{address} } );
+        global_logger()->add( CACHE_CREATED => { ip => $params->{address} } );
         $object_cache->{ $params->{address} } = $obj;
 
         return $obj;
@@ -121,13 +123,13 @@ sub get_key {
     my $key = "ns:" . $self->address . ":" . $hash;
 
     if ( exists $self->data->{$hash} ) {
-        Zonemaster::Engine->logger->add( MEMORY_CACHE_HIT => { hash => $hash } );
+        global_logger()->add( MEMORY_CACHE_HIT => { hash => $hash } );
         return ( 1, $self->data->{$hash} );
     }
     elsif ( $self->redis->exists( $key ) ) {
         my $fetch_start_time = [gettimeofday];
         my $data             = $self->redis->get( $key );
-        Zonemaster::Engine->logger->add( REDIS_CACHE_HIT => { key => $key } );
+        global_logger()->add( REDIS_CACHE_HIT => { key => $key } );
         if ( not length( $data ) ) {
             $self->data->{$hash} = undef;
         }
@@ -143,7 +145,7 @@ sub get_key {
         }
         return ( 1, $self->data->{$hash} );
     }
-    Zonemaster::Engine->logger->add( CACHE_MISS => { key => $key } );
+    global_logger()->add( CACHE_MISS => { key => $key } );
     return ( 0, undef );
 } ## end sub get_key
 

@@ -5,17 +5,19 @@ use warnings;
 
 use version; our $VERSION = version->declare( "v1.0.19" );
 
-use Carp;
 use List::MoreUtils    qw[any none uniq];
 use Locale::TextDomain qw[Zonemaster-Engine];
 use Readonly;
 
 use Zonemaster::Engine::Profile;
-use Zonemaster::Engine::Constants qw[:ip :name];
-use Zonemaster::Engine::Test::Address;
-use Zonemaster::Engine::Test::Syntax;
+use Zonemaster::Engine::Constants          qw[:ip :name];
+use Zonemaster::Engine::DNSName::Functions qw( name );
+use Zonemaster::Engine::Logger;
+use Zonemaster::Engine::Logger::Global        qw( global_logger );
+use Zonemaster::Engine::Nameserver::Functions qw( ns );
+use Zonemaster::Engine::Recursor;
 use Zonemaster::Engine::TestMethods;
-use Zonemaster::Engine::Util qw[info name ns should_run_test];
+use Zonemaster::Engine::Util qw[info should_run_test];
 
 =head1 NAME
 
@@ -375,7 +377,7 @@ Returns a L<Zonemaster::Engine::Logger::Entry> object.
 
 =cut
 
-sub _emit_log { my ( $tag, $argref ) = @_; return Zonemaster::Engine->logger->add( $tag, $argref, 'Basic' ); }
+sub _emit_log { my ( $tag, $argref ) = @_; return global_logger()->add( $tag, $argref, 'Basic' ); }
 
 =over
 
@@ -444,7 +446,7 @@ sub _ip_enabled_message {
 
     my @logentry_array = basic01( $zone );
 
-Runs the L<Basic01 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Basic-TP/basic01.md>.
+Runs the L<Basic01 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Basic-TP/basic01.html>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -602,7 +604,7 @@ sub basic01 {
             while () {
                 $loop_counter += 1;
                 if ( $loop_counter >= 1000 ) {
-                    Zonemaster::Engine->logger->add(
+                    global_logger()->add(
                         LOOP_PROTECTION => {
                             caller                  => 'Zonemaster::Engine::Test::Basic->basic01',
                             child_zone_name         => $zone->name,
@@ -913,7 +915,7 @@ sub basic01 {
 
     my @logentry_array = basic02( $zone );
 
-Runs the L<Basic02 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Basic-TP/basic02.md>.
+Runs the L<Basic02 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Basic-TP/basic02.html>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -962,7 +964,7 @@ sub basic02 {
             foreach my $rr ( @ns_ips ) {
                 if ( $rr->owner eq $ns_name ) {
                     $found_ip{ $ns_name->string } = 1;
-                    push @ns, Zonemaster::Engine::Nameserver->new( { name => $ns_name, address => $rr->address } );
+                    push @ns, ns( $ns_name, $rr->address );
                 }
             }
         }
@@ -1051,7 +1053,7 @@ sub basic02 {
 
     my @logentry_array = basic03( $zone );
 
-Runs the L<Basic03 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Basic-TP/basic03.md>.
+Runs the L<Basic03 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Basic-TP/basic03.html>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 

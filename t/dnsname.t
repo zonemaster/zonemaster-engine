@@ -1,6 +1,9 @@
 use Test::More;
 
-BEGIN { use_ok( 'Zonemaster::Engine::DNSName' ); }
+BEGIN {
+    use_ok( 'Zonemaster::Engine::DNSName' );
+    use_ok( 'Zonemaster::Engine::DNSName::Functions', qw( name ) );
+}
 use Zonemaster::Engine;
 
 is_deeply( Zonemaster::Engine::DNSName->new( { labels => [qw(www iis se)] } )->labels, [ 'www', 'iis', 'se' ] );
@@ -49,5 +52,7 @@ my $zone  = Zonemaster::Engine->zone( 'nic.se' );
 my $zname = Zonemaster::Engine::DNSName->new( $zone );
 isa_ok( $zname, 'Zonemaster::Engine::DNSName' );
 is( $zname, 'nic.se' );
+
+isa_ok( name( "foo.bar.com" ), 'Zonemaster::Engine::DNSName' );
 
 done_testing;

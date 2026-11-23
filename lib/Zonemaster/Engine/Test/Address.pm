@@ -5,15 +5,17 @@ use warnings;
 
 use version; our $VERSION = version->declare( "v1.0.8" );
 
-use Carp;
 use List::MoreUtils    qw[none any uniq];
 use Locale::TextDomain qw[Zonemaster-Engine];
 use Readonly;
-
+use Zonemaster::Engine::Constants          qw[:addresses :ip];
+use Zonemaster::Engine::DNSName::Functions qw( name );
 use Zonemaster::Engine::Recursor;
-use Zonemaster::Engine::Constants qw[:addresses :ip];
+use Zonemaster::Engine::Logger;
+use Zonemaster::Engine::Logger::Global qw( global_logger );
 use Zonemaster::Engine::TestMethods;
-use Zonemaster::Engine::Util qw[name should_run_test];
+use Zonemaster::Engine::TestMethodsV2;
+use Zonemaster::Engine::Util qw[should_run_test];
 
 =head1 NAME
 
@@ -234,7 +236,7 @@ Returns a L<Zonemaster::Engine::Logger::Entry> object.
 
 =cut
 
-sub _emit_log { my ( $tag, $argref ) = @_; return Zonemaster::Engine->logger->add( $tag, $argref, 'Address' ); }
+sub _emit_log { my ( $tag, $argref ) = @_; return global_logger()->add( $tag, $argref, 'Address' ); }
 
 =over
 
@@ -280,7 +282,7 @@ sub _find_special_address {
 
     my @logentry_array = address01( $zone );
 
-Runs the L<Address01 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Address-TP/address01.md>.
+Runs the L<Address01 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Address-TP/address01.html>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -394,7 +396,7 @@ sub address01 {
 
     my @logentry_array = address02( $zone );
 
-Runs the L<Address02 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Address-TP/address02.md>.
+Runs the L<Address02 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Address-TP/address02.html>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -471,7 +473,7 @@ sub address02 {
 
     my @logentry_array = address03( $zone );
 
-Runs the L<Address03 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Address-TP/address03.md>.
+Runs the L<Address03 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Address-TP/address03.html>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 

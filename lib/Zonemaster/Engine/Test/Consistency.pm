@@ -11,11 +11,16 @@ use Net::IP::XS;
 use Readonly;
 
 use Zonemaster::Engine::Profile;
-use Zonemaster::Engine::Constants qw[:ip :soa];
+use Zonemaster::Engine::Constants          qw[:ip :soa];
+use Zonemaster::Engine::DNSName::Functions qw( name );
 use Zonemaster::Engine::NameserverSet;
-use Zonemaster::Engine::Test::Address;
 use Zonemaster::Engine::Util;
+use Zonemaster::Engine::Logger;
+use Zonemaster::Engine::Logger::Global qw( global_logger );
+use Zonemaster::Engine::Nameserver;
+use Zonemaster::Engine::Recursor;
 use Zonemaster::Engine::TestMethods;
+use Zonemaster::Engine::TestMethodsV2;
 
 =head1 NAME
 
@@ -246,7 +251,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     },
     CS05_OOD_ADDR_MISMATCH => sub {
         __x    # CONSISTENCY:CS05_OOD_ADDR_MISMATCH
-'For name server {nsname} the glue record in the delegation "{ns_ip_list_glue}" is different from the address record in the child zone "{ns_ip_list_zone}".',
+          'For name server {nsname} the glue record in the delegation "{ns_ip_list_glue}" is different from the DNS record found through lookup "{ns_ip_list_lookup}"',
           @_;
     },
     IPV4_DISABLED => sub {
@@ -396,7 +401,7 @@ Returns a L<Zonemaster::Engine::Logger::Entry> object.
 
 =cut
 
-sub _emit_log { my ( $tag, $argref ) = @_; return Zonemaster::Engine->logger->add( $tag, $argref, 'Consistency' ); }
+sub _emit_log { my ( $tag, $argref ) = @_; return global_logger()->add( $tag, $argref, 'Consistency' ); }
 
 =over
 
@@ -437,7 +442,7 @@ sub _ip_disabled_message {
 
     my @logentry_array = consistency01( $zone );
 
-Runs the L<Consistency01 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Consistency-TP/consistency01.md>.
+Runs the L<Consistency01 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Consistency-TP/consistency01.html>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -535,7 +540,7 @@ sub consistency01 {
 
     my @logentry_array = consistency02( $zone );
 
-Runs the L<Consistency02 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Consistency-TP/consistency02.md>.
+Runs the L<Consistency02 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Consistency-TP/consistency02.html>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -620,7 +625,7 @@ sub consistency02 {
 
     my @logentry_array = consistency03( $zone );
 
-Runs the L<Consistency03 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Consistency-TP/consistency03.md>.
+Runs the L<Consistency03 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Consistency-TP/consistency03.html>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -716,7 +721,7 @@ sub consistency03 {
 
     my @logentry_array = consistency04( $zone );
 
-Runs the L<Consistency04 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Consistency-TP/consistency04.md>.
+Runs the L<Consistency04 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Consistency-TP/consistency04.html>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -796,7 +801,7 @@ sub consistency04 {
 
     my @logentry_array = consistency05( $zone );
 
-Runs the L<Consistency05 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Consistency-TP/consistency05.md>.
+Runs the L<Consistency05 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Consistency-TP/consistency05.html>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 
@@ -1054,12 +1059,12 @@ sub consistency05 {
         if ( not $lookup->is_empty() ) {
             if ( not $set->equals( $lookup ) ) {
                 push @results,
-                  _emit_log(
+                  _emit_log( 
                     CS05_OOD_ADDR_MISMATCH => {
-                        nsname            => $n,
-                        ns_ip_list_ref    => join( ";", map { $_->address() } $set->sorted_items() ),
-                        ns_ip_list_lookup => join( ";", map { $_->address() } $lookup->sorted_items() ),
-                    }
+                      nsname            => $n,
+                      ns_ip_list_glue   => join( ";", map { $_->address()->short() } $set->sorted_items() ),
+                      ns_ip_list_lookup => join( ";", map { $_->address()->short() } $lookup->sorted_items() )
+                    } 
                   );
             }
         }
@@ -1080,7 +1085,7 @@ sub consistency05 {
 
     my @logentry_array = consistency06( $zone );
 
-Runs the L<Consistency06 Test Case|https://github.com/zonemaster/zonemaster/blob/master/docs/public/specifications/tests/Consistency-TP/consistency06.md>.
+Runs the L<Consistency06 Test Case|https://doc.zonemaster.net/latest/specifications/tests/Consistency-TP/consistency06.html>.
 
 Takes a L<Zonemaster::Engine::Zone> object.
 

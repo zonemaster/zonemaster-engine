@@ -10,7 +10,7 @@ my $datafile = q{t/Test-nameserver01-C.data};
 
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die q{Stored data file missing} if not -r $datafile;
-    Zonemaster::Engine::Nameserver->restore( $datafile );
+    Zonemaster::Engine->preload_cache( $datafile );
     Zonemaster::Engine->profile->set( q{no_network}, 1 );
 }
 
@@ -31,7 +31,7 @@ ok( !$res{IS_A_RECURSOR}, q{should not emit IS_A_RECURSOR} );
 ok( $res{NO_RECURSOR},    q{should emit NO_RECURSOR} );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
-    Zonemaster::Engine::Nameserver->save( $datafile );
+    Zonemaster::Engine->save_cache( $datafile );
 }
 
 done_testing;

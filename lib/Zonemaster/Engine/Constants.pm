@@ -6,7 +6,7 @@ use warnings;
 use version; our $VERSION = version->declare( "v1.2.5" );
 
 use Carp;
-use English qw( -no_match_vars );
+use English qw( $OS_ERROR );
 use parent 'Exporter';
 use Net::IP::XS;
 use Text::CSV;

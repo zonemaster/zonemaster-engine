@@ -3,21 +3,22 @@ package Zonemaster::Engine::Recursor;
 use v5.16.0;
 use warnings;
 
-use version; our $VERSION = version->declare("v1.1.0");
+use version; our $VERSION = version->declare( "v1.1.0" );
 
-use Carp;
 use Class::Accessor "antlers";
-use File::ShareDir qw[dist_file];
-use File::Slurp qw( read_file );
-use JSON::PP;
-use Net::IP::XS;
-use List::MoreUtils qw[uniq];
-use Memoize;
 
-use Zonemaster::Engine::Nameserver;
+use Carp            qw( croak );
+use File::ShareDir  qw( dist_file );
+use File::Slurp     qw( read_file );
+use List::MoreUtils qw( uniq );
+use Net::IP::XS;
+use Zonemaster::Engine::Constants qw( :cname );
 use Zonemaster::Engine::DNSName;
-use Zonemaster::Engine::Util qw( name ns parse_hints );
-use Zonemaster::Engine::Constants ":cname";
+use Zonemaster::Engine::DNSName::Functions    qw( name );
+use Zonemaster::Engine::Logger::Global        qw( global_logger );
+use Zonemaster::Engine::Nameserver::Functions qw( ns );
+use Zonemaster::Engine::Recursor::Cache       qw( recursor_cache_get recursor_cache_has recursor_cache_set );
+use Zonemaster::Engine::Util                  qw( parse_hints );
 
 our %_fake_addresses_cache;
 
@@ -72,7 +73,7 @@ sub get_fake_names {
     $domain = lc $domain;
 
     if ( exists $_fake_addresses_cache{$domain} ) {
-        return keys %{$_fake_addresses_cache{$domain}};
+        return keys %{ $_fake_addresses_cache{$domain} };
     }
     else {
         return ();
@@ -88,19 +89,16 @@ sub remove_fake_addresses {
     return;
 }
 
-sub recurse {
+sub _do_recurse {
     my ( $class, $name, $type, $dns_class, $ns ) = @_;
-    $name = name( $name );
-    $type      //= 'A';
-    $dns_class //= 'IN';
 
-    Zonemaster::Engine->logger->add( RECURSE => { name => $name, type => $type, class => $dns_class } );
+    global_logger()->add( RECURSE => { name => $name, type => $type, class => $dns_class } );
 
     if ( defined $ns ) {
         ref( $ns ) eq 'ARRAY' or croak 'Argument $ns must be an arrayref';
     }
 
-    my %state = ( ns => defined $ns ? [ @$ns ] : [ root_servers() ], count => 0, common => 0, seen => {}, glue => {} );
+    my %state = ( ns => defined $ns ? [@$ns] : [ root_servers() ], count => 0, common => 0, seen => {}, glue => {} );
 
     my ( $p, $state_final ) = $class->_recurse( $name, $type, $dns_class, \%state );
 
@@ -110,24 +108,24 @@ sub recurse {
 # Cache the results of recurse() to speed up repeated queries for the same name, type,
 # class and set of name servers. Parameters are normalized to ensure that the cache is
 # hit for semantically identical queries.
-memoize('recurse', NORMALIZER => sub {
+sub recurse {
     my ( $class, $name, $type, $dns_class, $ns ) = @_;
 
     $name = name( $name );
-    $type //= 'A';
+    $type      //= 'A';
     $dns_class //= 'IN';
-    $ns //= [ root_servers() ];
+    $ns        //= [ root_servers() ];
 
     my $nss = join( ',', sort @$ns );
 
-    return join( '|',
-        ref($class) || $class,
-        $name,
-        $type,
-        $dns_class,
-        $nss
-    );
-});
+    my $key = join( '|', ref( $class ) || $class, $name, $type, $dns_class, $nss );
+
+    if ( !recursor_cache_has( $key ) ) {
+        recursor_cache_set( $key, $class->_do_recurse( $name, $type, $dns_class, $ns ) );
+    }
+
+    return recursor_cache_get( $key );
+}
 
 sub parent {
     my ( $class, $name ) = @_;
@@ -135,7 +133,8 @@ sub parent {
 
     my ( $p, $state ) =
       $class->_recurse( $name, 'SOA', 'IN',
-        { ns => [ root_servers() ], count => 0, common => 0, seen => {}, glue => {} } );
+        { ns => [ root_servers() ], count => 0, common => 0, seen => {}, glue => {} },
+      );
 
     my $pname;
     if ( name( $state->{trace}[0][0] ) eq name( $name ) ) {
@@ -180,14 +179,14 @@ sub parent {
 sub _resolve_cname {
     my ( $class, $name, $type, $dns_class, $p, $state ) = @_;
     $name = name( $name );
-    Zonemaster::Engine->logger->add( CNAME_START => { name => $name, type => $type, dns_class => $dns_class } );
+    global_logger()->add( CNAME_START => { name => $name, type => $type, dns_class => $dns_class } );
 
     my @cname_rrs = $p->get_records( 'CNAME', 'answer' );
 
     # Remove duplicate CNAME RRs
     my ( %duplicate_cname_rrs, @original_rrs );
     for my $rr ( @cname_rrs ) {
-        my $rr_hash = $rr->class . '/CNAME/' . lc($rr->owner) . '/' . lc($rr->cname);
+        my $rr_hash = $rr->class . '/CNAME/' . lc( $rr->owner ) . '/' . lc( $rr->cname );
 
         if ( exists $duplicate_cname_rrs{$rr_hash} ) {
             $duplicate_cname_rrs{$rr_hash}++;
@@ -199,8 +198,11 @@ sub _resolve_cname {
     }
 
     unless ( scalar @original_rrs == scalar @cname_rrs ) {
-        Zonemaster::Engine->logger->add( CNAME_RECORDS_DUPLICATES => {
-                records => join(';', map { "$_ => $duplicate_cname_rrs{$_}" if $duplicate_cname_rrs{$_} > 0 } keys %duplicate_cname_rrs )
+        global_logger()->add(
+            CNAME_RECORDS_DUPLICATES => {
+                records => join( ';',
+                    map { "$_ => $duplicate_cname_rrs{$_}" if $duplicate_cname_rrs{$_} > 0 } keys %duplicate_cname_rrs,
+                )
             }
         );
         @cname_rrs = @original_rrs;
@@ -208,59 +210,74 @@ sub _resolve_cname {
 
     # Break if there are too many records
     if ( scalar @cname_rrs > $CNAME_MAX_RECORDS ) {
-        Zonemaster::Engine->logger->add( CNAME_RECORDS_TOO_MANY => { name => $name, count => scalar @cname_rrs, max => $CNAME_MAX_RECORDS } );
+        global_logger()
+          ->add( CNAME_RECORDS_TOO_MANY => { name => $name, count => scalar @cname_rrs, max => $CNAME_MAX_RECORDS } );
         return ( undef, $state );
     }
 
     my ( %cnames, %seen_targets, %forbidden_targets );
     for my $rr ( @cname_rrs ) {
-        my $rr_owner = lc( name( $rr->owner ) );
+        my $rr_owner  = lc( name( $rr->owner ) );
         my $rr_target = lc( name( $rr->cname ) );
 
         # Multiple CNAME records with same owner name
         if ( exists $forbidden_targets{$rr_owner} ) {
-            Zonemaster::Engine->logger->add( CNAME_RECORDS_MULTIPLE_FOR_NAME => { name => $rr_owner } );
+            global_logger()->add( CNAME_RECORDS_MULTIPLE_FOR_NAME => { name => $rr_owner } );
             return ( undef, $state );
         }
 
         # CNAME owner name is target, or target has already been seen in this response, or owner name cannot be a target
-        if ( $rr_owner eq $rr_target or exists $seen_targets{$rr_target} or grep { $_ eq $rr_target } ( keys %forbidden_targets ) ) {
-            Zonemaster::Engine->logger->add( CNAME_LOOP_INNER => { name => join( ';', map { $_->owner } @cname_rrs ), target => join( ';', map { $_->cname } @cname_rrs ) } );
+        if (   $rr_owner eq $rr_target
+            or exists $seen_targets{$rr_target}
+            or grep { $_ eq $rr_target } ( keys %forbidden_targets ) )
+        {
+            global_logger()->add(
+                CNAME_LOOP_INNER => {
+                    name   => join( ';', map { $_->owner } @cname_rrs ),
+                    target => join( ';', map { $_->cname } @cname_rrs ),
+                }
+            );
             return ( undef, $state );
         }
 
-        $seen_targets{$rr_target} = 1;
+        $seen_targets{$rr_target}     = 1;
         $forbidden_targets{$rr_owner} = 1;
-        $cnames{$rr_owner} = name( $rr->cname ); # Preserve case of $rr_target
-    }
+        $cnames{$rr_owner}            = name( $rr->cname );    # Preserve case of $rr_target
+    } ## end for my $rr ( @cname_rrs)
 
     # Get final CNAME target
-    my $target = $name;
+    my $target        = $name;
     my $cname_counter = 0;
     while ( $cnames{$target} ) {
-        return ( undef, $state ) if $cname_counter > $CNAME_MAX_RECORDS; # Loop protection (for good measure only - data in %cnames is sanitized already)
+        return ( undef, $state )
+          if $cname_counter >
+          $CNAME_MAX_RECORDS;    # Loop protection (for good measure only - data in %cnames is sanitized already)
         $target = $cnames{$target};
         $cname_counter++;
     }
 
     # Make sure that the CNAME chain from the RRs is not broken
     if ( $cname_counter != scalar @cname_rrs ) {
-        Zonemaster::Engine->logger->add( CNAME_RECORDS_CHAIN_BROKEN => { name => $name, cname_rrs => scalar @cname_rrs, cname_counter => $cname_counter } );
+        global_logger()
+          ->add( CNAME_RECORDS_CHAIN_BROKEN =>
+              { name => $name, cname_rrs => scalar @cname_rrs, cname_counter => $cname_counter } );
         return ( undef, $state );
     }
 
     # CNAME target has already been followed previously (outer loop); no need to recurse
-    if ( exists $state->{in_progress}{lc( $target )}{$type} ) {
-        Zonemaster::Engine->logger->add( CNAME_LOOP_OUTER => { name => $name, target => $target, targets_seen => join( ';', keys %{ $state->{tseen} } ) } );
+    if ( exists $state->{in_progress}{ lc( $target ) }{$type} ) {
+        global_logger()
+          ->add( CNAME_LOOP_OUTER =>
+              { name => $name, target => $target, targets_seen => join( ';', keys %{ $state->{tseen} } ) } );
         return ( undef, $state );
     }
 
     # Safeguard against abnormally long consecutive CNAME lookups; no need to recurse
-    $state->{tseen}{lc( $target )} = 1;
+    $state->{tseen}{ lc( $target ) } = 1;
     $state->{tcount} += 1;
 
     if ( $state->{tcount} > $CNAME_MAX_CHAIN_LENGTH ) {
-        Zonemaster::Engine->logger->add( CNAME_CHAIN_TOO_LONG => { count => $state->{tcount}, max => $CNAME_MAX_CHAIN_LENGTH } );
+        global_logger()->add( CNAME_CHAIN_TOO_LONG => { count => $state->{tcount}, max => $CNAME_MAX_CHAIN_LENGTH } );
         return ( undef, $state );
     }
 
@@ -268,36 +285,67 @@ sub _resolve_cname {
     if ( scalar $p->get_records( $type, 'answer' ) ) {
         # RR of type QTYPE for CNAME target is already in the response; no need to recurse
         if ( $p->has_rrs_of_type_for_name( $type, $target ) ) {
-            Zonemaster::Engine->logger->add( CNAME_FOLLOWED_IN_ZONE => { name => $name, type => $type, target => $target } );
+            global_logger()->add( CNAME_FOLLOWED_IN_ZONE => { name => $name, type => $type, target => $target } );
             return ( $p, $state );
         }
 
         # There is a record of type QTYPE but with different owner name than CNAME target; we have to recurse again
-        Zonemaster::Engine->logger->add( CNAME_NO_MATCH => { name => $name, type => $type, target => $target, owner_names => join( ';', map { $_->owner } $p->get_records( $type ) ) } );
+        global_logger()->add(
+            CNAME_NO_MATCH => {
+                name        => $name,
+                type        => $type,
+                target      => $target,
+                owner_names => join( ';', map { $_->owner } $p->get_records( $type ) ),
+            }
+        );
     }
 
     # CNAME target is not in the same zone as the CNAME owner name, so make a new recursive lookup
     unless ( $name->is_in_bailiwick( $target ) ) {
-        Zonemaster::Engine->logger->add( CNAME_FOLLOWED_OUT_OF_ZONE => { name => $name, target => $target } );
-        ( $p, $state ) = $class->_recurse( $target, $type, $dns_class,
-            { ns => [ root_servers() ], count => 0, common => 0, seen => {}, tseen => $state->{tseen}, tcount => $state->{tcount}, glue => {}, in_progress => $state->{in_progress} });
+        global_logger()->add( CNAME_FOLLOWED_OUT_OF_ZONE => { name => $name, target => $target } );
+        ( $p, $state ) = $class->_recurse(
+            $target, $type,
+            $dns_class,
+            {
+                ns          => [ root_servers() ],
+                count       => 0,
+                common      => 0,
+                seen        => {},
+                tseen       => $state->{tseen},
+                tcount      => $state->{tcount},
+                glue        => {},
+                in_progress => $state->{in_progress},
+            },
+        );
         return ( $p, $state );
     }
     # Final attempt to resolve the CNAME target for in-domain names
     else {
-        ( $p, $state ) = $class->_recurse( $target, $type, $dns_class,
-            { ns => [ root_servers() ], count => 0, common => 0, seen => {}, tseen => $state->{tseen}, tcount => $state->{tcount}, glue => {}, in_progress => $state->{in_progress} });
+        ( $p, $state ) = $class->_recurse(
+            $target, $type,
+            $dns_class,
+            {
+                ns          => [ root_servers() ],
+                count       => 0,
+                common      => 0,
+                seen        => {},
+                tseen       => $state->{tseen},
+                tcount      => $state->{tcount},
+                glue        => {},
+                in_progress => $state->{in_progress},
+            },
+        );
 
         if ( $p and $p->aa and $p->rcode eq 'NOERROR' ) {
-            Zonemaster::Engine->logger->add( CNAME_TO_NODATA => { name => $name, type => $type, target => $target } );
+            global_logger()->add( CNAME_TO_NODATA => { name => $name, type => $type, target => $target } );
             return ( $p, $state );
         }
-    }
+    } ## end else
 
     # Catch-all; unforeseen problem in CNAME resolution
-    Zonemaster::Engine->logger->add( CNAME_UNRESOLVABLE => { name => $name, type => $type, target => $target } );
+    global_logger()->add( CNAME_UNRESOLVABLE => { name => $name, type => $type, target => $target } );
     return ( undef, $state );
-}
+} ## end sub _resolve_cname
 
 sub _recurse {
     my ( $class, $name, $type, $dns_class, $state ) = @_;
@@ -312,7 +360,7 @@ sub _recurse {
     while ( my $ns = pop @{ $state->{ns} } ) {
         my $nsname    = $ns->can( 'name' )    ? q{} . $ns->name  : q{};
         my $nsaddress = $ns->can( 'address' ) ? $ns->address->ip : q{};
-        Zonemaster::Engine->logger->add(
+        global_logger()->add(
             RECURSE_QUERY => {
                 source  => "$ns",
                 ns      => $nsname,
@@ -341,7 +389,9 @@ sub _recurse {
         }
 
         if ( $class->_is_answer( $p ) ) {    # Return answer, or resolve CNAME
-            if ( not $p->has_rrs_of_type_for_name( $type, $name ) and scalar $p->get_records_for_name( 'CNAME', $name, 'answer' ) ) {
+            if ( not $p->has_rrs_of_type_for_name( $type, $name )
+                and scalar $p->get_records_for_name( 'CNAME', $name, 'answer' ) )
+            {
                 ( $p, $state ) = $class->_resolve_cname( $name, $type, $dns_class, $p, $state );
             }
 
@@ -353,9 +403,9 @@ sub _recurse {
         if ( $p->is_redirect ) {
             my $zname = name( lc( ( $p->get_records( 'ns' ) )[0]->name ) );
 
-            next if $zname eq '.';          # Redirect to root is never right.
+            next if $zname eq '.';    # Redirect to root is never right.
 
-            next if $state->{seen}{$zname}; # We followed this redirect before
+            next if $state->{seen}{$zname};    # We followed this redirect before
 
             $state->{seen}{$zname} = 1;
             my $common = name( $zname )->common( name( $state->{qname} ) );
@@ -365,12 +415,13 @@ sub _recurse {
             $state->{common} = $common;
             $state->{ns}     = $class->_get_ns_from( $p, $state );    # Follow redirect
             $state->{count} += 1;
-            if ( $state->{count} > 20 ) {       # Loop protection
-                Zonemaster::Engine->logger->add( LOOP_PROTECTION => {
-                    caller => 'Zonemaster::Engine::Recursor->_recurse',
-                    child_zone_name => $name,
-                    name => $zname
-                  }
+            if ( $state->{count} > 20 ) {                             # Loop protection
+                global_logger()->add(
+                    LOOP_PROTECTION => {
+                        caller          => 'Zonemaster::Engine::Recursor->_recurse',
+                        child_zone_name => $name,
+                        name            => $zname,
+                    }
                 );
 
                 return ( undef, $state );
@@ -415,7 +466,7 @@ sub _do_query {
             foreach my $addr ( @addr ) {
                 $state->{glue}{ lc( name( $ns ) ) }{ $addr->short } = 1;
                 my $new = ns( $ns, $addr->short );
-                my $p = $new->query( $name, $type, $opts );
+                my $p   = $new->query( $name, $type, $opts );
                 return $p if $p;
             }
             return;
@@ -446,7 +497,7 @@ sub _get_ns_from {
         }
     }
 
-    @new = sort { $a->name cmp $b->name or $a->address->ip cmp $b->address->ip } @new;
+    @new   = sort { $a->name cmp $b->name or $a->address->ip cmp $b->address->ip } @new;
     @extra = sort { $a cmp $b } @extra;
 
     return [ @new, @extra ];
@@ -465,8 +516,8 @@ sub get_addresses_for {
             count       => $state->{count},
             common      => 0,
             in_progress => $state->{in_progress},
-            glue        => $state->{glue}
-        }
+            glue        => $state->{glue},
+        },
     );
 
     # Name does not exist, just stop
@@ -481,8 +532,8 @@ sub get_addresses_for {
             count       => $state->{count},
             common      => 0,
             in_progress => $state->{in_progress},
-            glue        => $state->{glue}
-        }
+            glue        => $state->{glue},
+        },
     );
 
     my @rrs;
@@ -510,16 +561,11 @@ sub _is_answer {
     return ( $packet->type eq 'answer' );
 }
 
-sub clear_cache {
-    Memoize::flush_cache(\&recurse);
-    return;
-}
-
 sub root_servers {
     my $root_addresses = $_fake_addresses_cache{'.'};
 
     my @servers;
-    for my $name ( sort keys %{ $root_addresses } ) {
+    for my $name ( sort keys %{$root_addresses} ) {
         for my $address ( @{ $root_addresses->{$name} } ) {
             push @servers, ns( $name, $address );
         }
@@ -601,12 +647,6 @@ Returns an empty list if no data is cached for the given argument.
 =head2 remove_fake_addresses($domain)
 
 Remove fake delegation data for a specified domain.
-
-=head2 clear_cache()
-
-Class method to empty the cache of responses to recursive queries (but not the ones for fake delegations).
-
-N.B. This method does not affect fake delegation data.
 
 =head2 root_servers()
 

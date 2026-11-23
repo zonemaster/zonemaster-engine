@@ -10,7 +10,7 @@ my $datafile = q{t/Test-syntax06-D.data};
 
 if ( not $ENV{ZONEMASTER_RECORD} ) {
     die q{Stored data file missing} if not -r $datafile;
-    Zonemaster::Engine::Nameserver->restore( $datafile );
+    Zonemaster::Engine->preload_cache( $datafile );
     Zonemaster::Engine->profile->set( q{no_network}, 1 );
 }
 
@@ -35,7 +35,7 @@ ok( !$res{RNAME_MAIL_ILLEGAL_CNAME},    q{should not emit RNAME_MAIL_ILLEGAL_CNA
 ok( !$res{RNAME_MAIL_DOMAIN_LOCALHOST}, q{should not emit RNAME_MAIL_DOMAIN_LOCALHOST} );
 
 if ( $ENV{ZONEMASTER_RECORD} ) {
-    Zonemaster::Engine::Nameserver->save( $datafile );
+    Zonemaster::Engine->save_cache( $datafile );
 }
 
 done_testing;

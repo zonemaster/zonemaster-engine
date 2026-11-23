@@ -24,8 +24,6 @@ BEGIN {
 use Readonly;
 use Net::IP::XS;
 
-use Zonemaster::Engine::Constants qw[:ip];
-
 Readonly our $IPV4_RE => qr/^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$/;
 Readonly our $IPV6_RE => qr/^[0-9a-f:]*:[0-9a-f:]+(:[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})?$/i;
 
