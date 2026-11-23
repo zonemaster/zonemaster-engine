@@ -977,7 +977,7 @@ Readonly my %TAG_DESCRIPTIONS => (
     DS05_ALGO_MAY => sub {
         __x    # DNSSEC:DS05_ALGO_MAY
           'The DNSKEY with tag {keytag} uses algorithm number {algo_num} ("{algo_descr}", {algo_mnemo}), which may '
-          .  'be used but it is not one of the recommended algortihms. Fetched from name servers "{ns_list}".',
+          .  'be used but it is not one of the recommended algorithms. Fetched from name servers "{ns_list}".',
           @_;
     },
     DS05_ALGO_NOT_RECOMMENDED => sub {
