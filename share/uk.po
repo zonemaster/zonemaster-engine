@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-14 17:55+0300\n"
-"PO-Revision-Date: 2026-10-21 18:02+0300\n"
+"PO-Revision-Date: 2026-11-26 12:02+0200\n"
 "Last-Translator: nermline@hostmaster.ua\n"
 "Language-Team: Zonemaster Team\n"
 "Language: uk\n"
@@ -827,7 +827,7 @@ msgstr ""
 #. CONSISTENCY:MULTIPLE_NS_SET
 #, perl-brace-format
 msgid "Found {count} NS set(s)."
-msgstr "Знайдено {count} набір(ів) NS."
+msgstr "Кількість знайдених наборів NS: {count}."
 
 #. CONSISTENCY:MULTIPLE_SOA_MNAMES
 #, perl-brace-format
@@ -842,12 +842,12 @@ msgstr "Знайдено {count} SOA rname."
 #. CONSISTENCY:MULTIPLE_SOA_SERIALS
 #, perl-brace-format
 msgid "Found {count} SOA serial number(s)."
-msgstr "Знайдено {count} серійних номерів SOA."
+msgstr "Кількість знайдених серійних номерів SOA: {count}."
 
 #. CONSISTENCY:MULTIPLE_SOA_TIME_PARAMETER_SET
 #, perl-brace-format
 msgid "Found {count} SOA time parameter set(s)."
-msgstr "Знайдено {count} наборів часових параметрів SOA."
+msgstr "Кількість знайдених наборів часових параметрів SOA: {count}."
 
 #. CONSISTENCY:NO_RESPONSE
 #. DNSSEC:NO_RESPONSE
@@ -1233,8 +1233,8 @@ msgid ""
 "The following servers give erroneous response to NSEC query. Fetched from "
 "name servers \"{ns_list}\"."
 msgstr ""
-"Такі сервери дають хибну відповідь на NSEC-запит. Отримано від серверів імен "
-"\"{ns_list}\"."
+"Такі сервери дають некоректну відповідь на NSEC-запит. Отримано від серверів "
+"імен \"{ns_list}\"."
 
 #. DNSSEC:DS03_ERR_MULT_NSEC3
 #. DNSSEC:DS10_ERR_MULT_NSEC3
@@ -1263,7 +1263,7 @@ msgid ""
 "\"{ns_list}\"."
 msgstr ""
 "Такі сервери відповідають значенням ітерації NSEC3 {int}. Рекомендовано "
-"встановлювати це значення на 0. Отримано від серверів імен \"{ns_list}\"."
+"встановлювати значення 0. Отримано від серверів імен \"{ns_list}\"."
 
 #. DNSSEC:DS03_ILLEGAL_SALT_LENGTH
 #, perl-brace-format
@@ -1272,7 +1272,8 @@ msgid ""
 "The recommended practice is to use an empty salt. Fetched from name servers "
 "\"{ns_list}\"."
 msgstr ""
-"Такі сервери відповідають непорожньою сіллю в NSEC3 ({int} октетів). "
+"Такі сервери відповідають непорожньою сіллю в NSEC3 (довжина в октетах: "
+"{int}). "
 "Рекомендовано використовувати порожню сіль. Отримано від серверів імен "
 "\"{ns_list}\"."
 
@@ -1332,7 +1333,7 @@ msgid ""
 "The following servers respond with NSEC3 iteration value set to zero (as "
 "recommended). Fetched from name servers \"{ns_list}\"."
 msgstr ""
-"Такі сервери відповідають значенням ітерації NSEC3, встановленим на нуль (як "
+"Такі сервери відповідають значенням ітерації NSEC3, що дорівнює нулю (як "
 "рекомендовано). Отримано від серверів імен \"{ns_list}\"."
 
 #. DNSSEC:DS03_NO_DNSSEC_SUPPORT
@@ -1622,7 +1623,7 @@ msgid ""
 "RRSIG with keytag {keytag} and covering type DNSKEY has already expired. "
 "Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"Термін дії RRSIG з тегом {keytag} і типом покриття DNSKEY вже закінчився. "
+"Термін дії RRSIG з тегом {keytag}, який покриває тип DNSKEY, вже закінчився. "
 "Отримано від серверів імен з IP-адресами \"{ns_ip_list}\"."
 
 #. DNSSEC:DS08_DNSKEY_RRSIG_NOT_YET_VALID
@@ -1631,7 +1632,7 @@ msgid ""
 "RRSIG with keytag {keytag} and covering type DNSKEY has inception date in "
 "the future. Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"RRSIG з тегом {keytag} і типом покриття DNSKEY має дату початку в "
+"RRSIG з тегом {keytag}, який покриває тип DNSKEY, має дату початку в "
 "майбутньому. Отримано від серверів імен з IP-адресами \"{ns_ip_list}\"."
 
 #. DNSSEC:DS08_MISSING_RRSIG_IN_RESPONSE
@@ -1689,7 +1690,7 @@ msgid ""
 "RRSIG with keytag {keytag} and covering type SOA has already expired. "
 "Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"Термін дії RRSIG з тегом {keytag} і типом покриття SOA вже закінчився. "
+"Термін дії RRSIG з тегом {keytag}, який покриває тип SOA, вже закінчився. "
 "Отримано від серверів імен з IP-адресами \"{ns_ip_list}\"."
 
 #. DNSSEC:DS09_SOA_RRSIG_NOT_YET_VALID
@@ -1698,8 +1699,8 @@ msgid ""
 "RRSIG with keytag {keytag} and covering type SOA has inception date in the "
 "future. Fetched from the nameservers with IP addresses \"{ns_ip_list}\"."
 msgstr ""
-"RRSIG з тегом {keytag} і типом покриття SOA має дату початку в майбутньому. "
-"Отримано від серверів імен з IP-адресами \"{ns_ip_list}\"."
+"RRSIG з тегом {keytag}, який покриває тип SOA, має дату початку в "
+"майбутньому. Отримано від серверів імен з IP-адресами \"{ns_ip_list}\"."
 
 #. DNSSEC:DS10_ALGO_NOT_SUPPORTED_BY_ZM
 #, perl-brace-format
@@ -2225,8 +2226,8 @@ msgid ""
 "The CDS RRset is signed by RRSIG with tag {keytag} but that is not in the "
 "DNSKEY RRset. Fetched from the nameservers with P addresses \"{ns_ip_list}\"."
 msgstr ""
-"CDS RRset підписано RRSIG з тегом {keytag}, але його немає в DNSKEY RRset. "
-"Отримано від серверів імен з IP-адресами \"{ns_ip_list}\"."
+"CDS RRset підписано RRSIG з тегом {keytag}, але DNSKEY з таким тегом немає в "
+"DNSKEY RRset. Отримано від серверів імен з IP-адресами \"{ns_ip_list}\"."
 
 #. DNSSEC:DS16_CDS_UNSIGNED
 #, perl-brace-format
@@ -2329,8 +2330,9 @@ msgid ""
 "the DNSKEY RRset. Fetched from the nameservers with P addresses "
 "\"{ns_ip_list}\"."
 msgstr ""
-"CDNSKEY RRset підписано RRSIG з тегом {keytag}, але його немає в DNSKEY "
-"RRset. Отримано від серверів імен з IP-адресами \"{ns_ip_list}\"."
+"CDNSKEY RRset підписано RRSIG з тегом {keytag}, але DNSKEY з таким тегом "
+"немає в DNSKEY RRset. Отримано від серверів імен з IP-адресами "
+"\"{ns_ip_list}\"."
 
 #. DNSSEC:DS17_CDNSKEY_UNSIGNED
 #, perl-brace-format
@@ -2402,8 +2404,8 @@ msgid ""
 "RRSIG with keytag {keytag} and covering type(s) {types} has a duration of "
 "{duration} seconds, which is too long."
 msgstr ""
-"RRSIG з тегом {keytag} і типом(ами) покриття {types} має тривалість "
-"{duration} секунд, що занадто довго."
+"RRSIG з тегом {keytag}, який покриває тип(и) {types}, має тривалість "
+"{duration} с, що занадто довго."
 
 #. DNSSEC:DURATION_OK
 #, perl-brace-format
@@ -2411,21 +2413,21 @@ msgid ""
 "RRSIG with keytag {keytag} and covering type(s) {types} has a duration of "
 "{duration} seconds, which is just fine."
 msgstr ""
-"RRSIG з тегом {keytag} і типом(ами) покриття {types} має тривалість "
-"{duration} секунд, що цілком нормально."
+"RRSIG з тегом {keytag}, який покриває тип(и) {types}, має тривалість "
+"{duration} с, що цілком нормально."
 
 #. DNSSEC:EXTRA_PROCESSING_BROKEN
 #, perl-brace-format
 msgid ""
 "Server at {server} sent {keys} DNSKEY records, and {sigs} RRSIG records."
 msgstr ""
-"Сервер {server} надіслав {keys} записів DNSKEY та {sigs} записів RRSIG."
+"Сервер {server} надіслав записів DNSKEY: {keys}, записів RRSIG: {sigs}."
 
 #. DNSSEC:EXTRA_PROCESSING_OK
 #, perl-brace-format
 msgid "Server at {server} sent {keys} DNSKEY records and {sigs} RRSIG records."
 msgstr ""
-"Сервер {server} надіслав {keys} записів DNSKEY та {sigs} записів RRSIG."
+"Сервер {server} надіслав записів DNSKEY: {keys}, записів RRSIG: {sigs}."
 
 #. DNSSEC:KEY_SIZE_OK
 msgid "All keys from the DNSKEY RRset have the correct size."
@@ -2442,8 +2444,8 @@ msgid ""
 "RRSIG with keytag {keytag} and covering type(s) {types} has a remaining "
 "validity of {duration} seconds, which is too long."
 msgstr ""
-"RRSIG з тегом {keytag} і типом(ами) покриття {types} має залишковий термін "
-"дії {duration} секунд, що занадто довго."
+"RRSIG з тегом {keytag}, який покриває тип(и) {types}, має залишковий термін "
+"дії {duration} с, що занадто довго."
 
 #. DNSSEC:REMAINING_SHORT
 #, perl-brace-format
@@ -2451,15 +2453,15 @@ msgid ""
 "RRSIG with keytag {keytag} and covering type(s) {types} has a remaining "
 "validity of {duration} seconds, which is too short."
 msgstr ""
-"RRSIG з тегом {keytag} і типом(ами) покриття {types} має залишковий термін "
-"дії {duration} секунд, що занадто мало."
+"RRSIG з тегом {keytag}, який покриває тип(и) {types}, має залишковий термін "
+"дії {duration} с, що занадто мало."
 
 #. DNSSEC:RRSIG_EXPIRATION
 #, perl-brace-format
 msgid ""
 "RRSIG with keytag {keytag} and covering type(s) {types} expires at : {date}."
 msgstr ""
-"RRSIG з тегом {keytag} і типом(ами) покриття {types} закінчується: {date}."
+"RRSIG з тегом {keytag}, який покриває тип(и) {types}, закінчується: {date}."
 
 #. DNSSEC:RRSIG_EXPIRED
 #, perl-brace-format
@@ -2467,7 +2469,7 @@ msgid ""
 "RRSIG with keytag {keytag} and covering type(s) {types} has already expired "
 "(expiration is: {expiration})."
 msgstr ""
-"Термін дії RRSIG з тегом {keytag} і типом(ами) покриття {types} вже "
+"Термін дії RRSIG з тегом {keytag}, який покриває тип(и) {types}, вже "
 "закінчився (термін дії до: {expiration})."
 
 #. DELEGATION:DELEGATION01
@@ -2541,7 +2543,7 @@ msgid ""
 "Lower limit set to {minimum}. Name servers: {ns_list}"
 msgstr ""
 "Дочірня зона містить достатньо ({count}) серверів імен з IPv4-адресами. "
-"Нижня межа встановлена на {minimum}. Сервери імен: {ns_list}"
+"Нижня межа становить {minimum}. Сервери імен: {ns_list}"
 
 #. DELEGATION:ENOUGH_IPV4_NS_DEL
 #, perl-brace-format
@@ -2550,7 +2552,7 @@ msgid ""
 "addresses. Lower limit set to {minimum}. Name servers: {ns_list}"
 msgstr ""
 "Делегування містить достатньо ({count}) серверів імен з IPv4-адресами. Нижня "
-"межа встановлена на {minimum}. Сервери імен: {ns_list}"
+"межа становить {minimum}. Сервери імен: {ns_list}"
 
 #. DELEGATION:ENOUGH_IPV6_NS_CHILD
 #, perl-brace-format
@@ -2559,7 +2561,7 @@ msgid ""
 "Lower limit set to {minimum}. Name servers: {ns_list}"
 msgstr ""
 "Дочірня зона містить достатньо ({count}) серверів імен з IPv6-адресами. "
-"Нижня межа встановлена на {minimum}. Сервери імен: {ns_list}"
+"Нижня межа становить {minimum}. Сервери імен: {ns_list}"
 
 #. DELEGATION:ENOUGH_IPV6_NS_DEL
 #, perl-brace-format
@@ -2568,7 +2570,7 @@ msgid ""
 "addresses. Lower limit set to {minimum}. Name servers: {ns_list}"
 msgstr ""
 "Делегування містить достатньо ({count}) серверів імен з IPv6-адресами. Нижня "
-"межа встановлена на {minimum}. Сервери імен: {ns_list}"
+"межа становить {minimum}. Сервери імен: {ns_list}"
 
 #. DELEGATION:ENOUGH_NS_CHILD
 #, perl-brace-format
@@ -2577,7 +2579,7 @@ msgid ""
 "servers: {nsname_list}"
 msgstr ""
 "Дочірня зона містить достатньо ({count}) серверів імен. Нижня межа "
-"встановлена на {minimum}. Сервери імен: {nsname_list}"
+"становить {minimum}. Сервери імен: {nsname_list}"
 
 #. DELEGATION:ENOUGH_NS_DEL
 #, perl-brace-format
@@ -2586,7 +2588,7 @@ msgid ""
 "Name servers: {nsname_list}"
 msgstr ""
 "Делегування містить достатньо ({count}) серверів імен. Нижня межа "
-"встановлена на {minimum}. Сервери імен: {nsname_list}"
+"становить {minimum}. Сервери імен: {nsname_list}"
 
 #. DELEGATION:EXTRA_NAME_CHILD
 #, perl-brace-format
@@ -2623,7 +2625,7 @@ msgid ""
 "addresses. Lower limit set to {minimum}. Name servers: {ns_list}"
 msgstr ""
 "Дочірня зона не містить достатньо ({count}) серверів імен з IPv4-адресами. "
-"Нижня межа встановлена на {minimum}. Сервери імен: {ns_list}"
+"Нижня межа становить {minimum}. Сервери імен: {ns_list}"
 
 #. DELEGATION:NOT_ENOUGH_IPV4_NS_DEL
 #, perl-brace-format
@@ -2632,7 +2634,7 @@ msgid ""
 "addresses. Lower limit set to {minimum}. Name servers: {ns_list}"
 msgstr ""
 "Делегування не містить достатньо ({count}) серверів імен з IPv4-адресами. "
-"Нижня межа встановлена на {minimum}. Сервери імен: {ns_list}"
+"Нижня межа становить {minimum}. Сервери імен: {ns_list}"
 
 #. DELEGATION:NOT_ENOUGH_IPV6_NS_CHILD
 #, perl-brace-format
@@ -2641,7 +2643,7 @@ msgid ""
 "addresses. Lower limit set to {minimum}. Name servers: {ns_list}"
 msgstr ""
 "Дочірня зона не містить достатньо ({count}) серверів імен з IPv6-адресами. "
-"Нижня межа встановлена на {minimum}. Сервери імен: {ns_list}"
+"Нижня межа становить {minimum}. Сервери імен: {ns_list}"
 
 #. DELEGATION:NOT_ENOUGH_IPV6_NS_DEL
 #, perl-brace-format
@@ -2650,7 +2652,7 @@ msgid ""
 "addresses. Lower limit set to {minimum}. Name servers: {ns_list}"
 msgstr ""
 "Делегування не містить достатньо ({count}) серверів імен з IPv6-адресами. "
-"Нижня межа встановлена на {minimum}. Сервери імен: {ns_list}"
+"Нижня межа становить {minimum}. Сервери імен: {ns_list}"
 
 #. DELEGATION:NOT_ENOUGH_NS_CHILD
 #, perl-brace-format
@@ -2659,7 +2661,7 @@ msgid ""
 "{minimum}. Name servers: {nsname_list}"
 msgstr ""
 "Дочірня зона не містить достатньо ({count}) серверів імен. Нижня межа "
-"встановлена на {minimum}. Сервери імен: {nsname_list}"
+"становить {minimum}. Сервери імен: {nsname_list}"
 
 #. DELEGATION:NOT_ENOUGH_NS_DEL
 #, perl-brace-format
@@ -2668,7 +2670,7 @@ msgid ""
 "{minimum}. Name servers: {nsname_list}"
 msgstr ""
 "Делегування не містить достатньо ({count}) серверів імен. Нижня межа "
-"встановлена на {minimum}. Сервери імен: {nsname_list}"
+"становить {minimum}. Сервери імен: {nsname_list}"
 
 #. DELEGATION:NO_IPV4_NS_CHILD
 #, perl-brace-format
@@ -3007,7 +3009,7 @@ msgstr ""
 #. NAMESERVER:NS_ERROR
 #, perl-brace-format
 msgid "Erroneous response from nameserver {ns}."
-msgstr "Хибна відповідь від сервера імен {ns}."
+msgstr "Некоректна відповідь від сервера імен {ns}."
 
 #. NAMESERVER:N10_EDNS_RESPONSE_ERROR
 #, perl-brace-format
@@ -3015,7 +3017,7 @@ msgid ""
 "Expected RCODE but received erroneous response to an EDNS version 1 query. "
 "Fetched from the nameservers with IP addresses {ns_ip_list}"
 msgstr ""
-"Очікувався RCODE, але отримано хибну відповідь на запит EDNS версії 1. "
+"Очікувався RCODE, але отримано некоректну відповідь на запит EDNS версії 1. "
 "Отримано від серверів імен з IP-адресами {ns_ip_list}"
 
 #. NAMESERVER:N10_NO_RESPONSE_EDNS1_QUERY
@@ -3033,8 +3035,8 @@ msgid ""
 "Erroneous RCODE (\"{rcode}\") in response to an EDNS version 1 query. "
 "Fetched from the nameservers with IP addresses {ns_ip_list}"
 msgstr ""
-"Хибний RCODE (\"{rcode}\") у відповіді на запит EDNS версії 1. Отримано від "
-"серверів імен з IP-адресами {ns_ip_list}"
+"Некоректний RCODE (\"{rcode}\") у відповіді на запит EDNS версії 1. Отримано "
+"від серверів імен з IP-адресами {ns_ip_list}"
 
 #. NAMESERVER:N11_NO_EDNS
 #, perl-brace-format
@@ -3566,7 +3568,7 @@ msgstr "Не знайдено IP-адреси для сервера імен SOA
 
 #. ZONE:ONE_SOA
 msgid "A unique SOA record is returned by all nameservers of the zone."
-msgstr "Усі сервери імен зони повертають один і той самий запис SOA."
+msgstr "Кожен сервер імен зони повертає лише один запис SOA."
 
 #. ZONE:EXPIRE_MINIMUM_VALUE_OK
 #, perl-brace-format
