@@ -58,7 +58,7 @@ Readonly::Hash our %algo_properties => (
         mnemonic    => q{RESERVED},
     },
     5 => {
-        description => q{RSA/SHA1},
+        description => q{RSA/SHA-1},
         mnemonic    => q{RSASHA1},
         sig         => 1,
     },
