@@ -18,10 +18,11 @@ my $test_module = 'DNSSEC';
 my $test_case   = 'dnssec05';
 my @all_tags    = qw(
   DS05_ALGO_DEPRECATED
+  DS05_ALGO_MAY
   DS05_ALGO_NOT_RECOMMENDED
   DS05_ALGO_NOT_ZONE_SIGN
-  DS05_ALGO_OK
   DS05_ALGO_PRIVATE
+  DS05_ALGO_RECOMMENDED
   DS05_ALGO_RESERVED
   DS05_ALGO_UNASSIGNED
   DS05_NO_RESPONSE
@@ -54,47 +55,48 @@ Zonemaster::Engine::Recursor->add_fake_addresses(
 #   See documentation for the meaning of that.
 
 my %subtests = (
-    'ALGO-DEPRECATED-1'       => [ 1, q(algo-deprecated-1.dnssec05.xa),  [qw( DS05_ALGO_DEPRECATED )], undef, [], [] ],
-    'ALGO-DEPRECATED-3'       => [ 1, q(algo-deprecated-3.dnssec05.xa),  [qw( DS05_ALGO_DEPRECATED )], undef, [], [] ],
-    'ALGO-DEPRECATED-5'       => [ 1, q(algo-deprecated-5.dnssec05.xa),  [qw( DS05_ALGO_DEPRECATED )], undef, [], [] ],
-    'ALGO-DEPRECATED-6'       => [ 1, q(algo-deprecated-6.dnssec05.xa),  [qw( DS05_ALGO_DEPRECATED )], undef, [], [] ],
-    'ALGO-DEPRECATED-7'       => [ 1, q(algo-deprecated-7.dnssec05.xa),  [qw( DS05_ALGO_DEPRECATED )], undef, [], [] ],
-    'ALGO-DEPRECATED-12'      => [ 1, q(algo-deprecated-12.dnssec05.xa), [qw( DS05_ALGO_DEPRECATED )], undef, [], [] ],
+    'ALGO-DEPRECATED-1'       => [ 1, q(algo-deprecated-1.dnssec05.xa),   [qw( DS05_ALGO_DEPRECATED )],  undef, [], [] ],
+    'ALGO-DEPRECATED-3'       => [ 1, q(algo-deprecated-3.dnssec05.xa),   [qw( DS05_ALGO_DEPRECATED )],  undef, [], [] ],
+    'ALGO-DEPRECATED-5'       => [ 1, q(algo-deprecated-5.dnssec05.xa),   [qw( DS05_ALGO_DEPRECATED )],  undef, [], [] ],
+    'ALGO-DEPRECATED-6'       => [ 1, q(algo-deprecated-6.dnssec05.xa),   [qw( DS05_ALGO_DEPRECATED )],  undef, [], [] ],
+    'ALGO-DEPRECATED-7'       => [ 1, q(algo-deprecated-7.dnssec05.xa),   [qw( DS05_ALGO_DEPRECATED )],  undef, [], [] ],
+    'ALGO-DEPRECATED-12'      => [ 1, q(algo-deprecated-12.dnssec05.xa),  [qw( DS05_ALGO_DEPRECATED )],  undef, [], [] ],
+    'ALGO-MAY-14'             => [ 1, q(algo-may-14.dnssec05.xa),         [qw( DS05_ALGO_MAY )],         undef, [], [] ],
+    'ALGO-MAY-16'             => [ 1, q(algo-may-16.dnssec05.xa),         [qw( DS05_ALGO_MAY )],         undef, [], [] ],
+    'ALGO-MAY-17'             => [ 1, q(algo-may-17.dnssec05.xa),         [qw( DS05_ALGO_MAY )],         undef, [], [] ],
+    'ALGO-MAY-18'             => [ 1, q(algo-may-18.dnssec05.xa),         [qw( DS05_ALGO_MAY )],         undef, [], [] ],
+    'ALGO-MAY-23'             => [ 1, q(algo-may-23.dnssec05.xa),         [qw( DS05_ALGO_MAY )],         undef, [], [] ],
     'ALGO-NOT-RECOMMENDED-10' =>
-      [ 1, q(algo-not-recommended-10.dnssec05.xa), [qw( DS05_ALGO_NOT_RECOMMENDED )], undef, [], [] ],
-    'ALGO-NOT-ZONE-SIGN-0' =>
-      [ 1, q(algo-not-zone-sign-0.dnssec05.xa), [qw( DS05_ALGO_NOT_ZONE_SIGN )], undef, [], [] ],
-    'ALGO-NOT-ZONE-SIGN-2' =>
-      [ 1, q(algo-not-zone-sign-2.dnssec05.xa), [qw( DS05_ALGO_NOT_ZONE_SIGN )], undef, [], [] ],
-    'ALGO-NOT-ZONE-SIGN-252' =>
-      [ 1, q(algo-not-zone-sign-252.dnssec05.xa), [qw( DS05_ALGO_NOT_ZONE_SIGN )], undef, [], [] ],
-    'ALGO-OK-8'           => [ 1, q(algo-ok-8.dnssec05.xa),           [qw( DS05_ALGO_OK )],         undef, [], [] ],
-    'ALGO-OK-13'          => [ 1, q(algo-ok-13.dnssec05.xa),          [qw( DS05_ALGO_OK )],         undef, [], [] ],
-    'ALGO-OK-14'          => [ 1, q(algo-ok-14.dnssec05.xa),          [qw( DS05_ALGO_OK )],         undef, [], [] ],
-    'ALGO-OK-15'          => [ 1, q(algo-ok-15.dnssec05.xa),          [qw( DS05_ALGO_OK )],         undef, [], [] ],
-    'ALGO-OK-16'          => [ 1, q(algo-ok-16.dnssec05.xa),          [qw( DS05_ALGO_OK )],         undef, [], [] ],
-    'ALGO-OK-17'          => [ 1, q(algo-ok-17.dnssec05.xa),          [qw( DS05_ALGO_OK )],         undef, [], [] ],
-    'ALGO-OK-23'          => [ 1, q(algo-ok-23.dnssec05.xa),          [qw( DS05_ALGO_OK )],         undef, [], [] ],
-    'ALGO-PRIVATE-253'    => [ 1, q(algo-private-253.dnssec05.xa),    [qw( DS05_ALGO_PRIVATE )],    undef, [], [] ],
-    'ALGO-PRIVATE-254'    => [ 1, q(algo-private-254.dnssec05.xa),    [qw( DS05_ALGO_PRIVATE )],    undef, [], [] ],
-    'ALGO-RESERVED-4'     => [ 1, q(algo-reserved-4.dnssec05.xa),     [qw( DS05_ALGO_RESERVED )],   undef, [], [] ],
-    'ALGO-RESERVED-9'     => [ 1, q(algo-reserved-9.dnssec05.xa),     [qw( DS05_ALGO_RESERVED )],   undef, [], [] ],
-    'ALGO-RESERVED-11'    => [ 1, q(algo-reserved-11.dnssec05.xa),    [qw( DS05_ALGO_RESERVED )],   undef, [], [] ],
-    'ALGO-RESERVED-123'   => [ 1, q(algo-reserved-123.dnssec05.xa),   [qw( DS05_ALGO_RESERVED )],   undef, [], [] ],
-    'ALGO-RESERVED-251'   => [ 1, q(algo-reserved-251.dnssec05.xa),   [qw( DS05_ALGO_RESERVED )],   undef, [], [] ],
-    'ALGO-RESERVED-255'   => [ 1, q(algo-reserved-255.dnssec05.xa),   [qw( DS05_ALGO_RESERVED )],   undef, [], [] ],
-    'ALGO-UNASSIGNED-20'  => [ 1, q(algo-unassigned-20.dnssec05.xa),  [qw( DS05_ALGO_UNASSIGNED )], undef, [], [] ],
-    'ALGO-UNASSIGNED-122' => [ 1, q(algo-unassigned-122.dnssec05.xa), [qw( DS05_ALGO_UNASSIGNED )], undef, [], [] ],
-    'MIXED-ALGO-1'        => [
-        1,     q(mixed-algo-1.dnssec05.xa), [qw( DS05_ALGO_DEPRECATED DS05_ALGO_NOT_RECOMMENDED DS05_ALGO_OK )],
+      [ 1, q(algo-not-recommended-10.dnssec05.xa), [qw( DS05_ALGO_NOT_RECOMMENDED )],                    undef, [], [] ],
+    'ALGO-NOT-ZONE-SIGN-0'    =>
+      [ 1, q(algo-not-zone-sign-0.dnssec05.xa),    [qw( DS05_ALGO_NOT_ZONE_SIGN )],                      undef, [], [] ],
+    'ALGO-NOT-ZONE-SIGN-2'    =>
+      [ 1, q(algo-not-zone-sign-2.dnssec05.xa),    [qw( DS05_ALGO_NOT_ZONE_SIGN )],                      undef, [], [] ],
+    'ALGO-NOT-ZONE-SIGN-252'  =>
+      [ 1, q(algo-not-zone-sign-252.dnssec05.xa),  [qw( DS05_ALGO_NOT_ZONE_SIGN )],                      undef, [], [] ],
+    'ALGO-PRIVATE-253'        => [ 1, q(algo-private-253.dnssec05.xa),    [qw( DS05_ALGO_PRIVATE )],     undef, [], [] ],
+    'ALGO-PRIVATE-254'        => [ 1, q(algo-private-254.dnssec05.xa),    [qw( DS05_ALGO_PRIVATE )],     undef, [], [] ],
+    'ALGO-RECOMMENDED-8'      => [ 1, q(algo-recommended-8.dnssec05.xa),  [qw( DS05_ALGO_RECOMMENDED )], undef, [], [] ],
+    'ALGO-RECOMMENDED-13'     => [ 1, q(algo-recommended-13.dnssec05.xa), [qw( DS05_ALGO_RECOMMENDED )], undef, [], [] ],
+    'ALGO-RECOMMENDED-15'     => [ 1, q(algo-recommended-15.dnssec05.xa), [qw( DS05_ALGO_RECOMMENDED )], undef, [], [] ],
+    'ALGO-RESERVED-4'         => [ 1, q(algo-reserved-4.dnssec05.xa),     [qw( DS05_ALGO_RESERVED )],    undef, [], [] ],
+    'ALGO-RESERVED-9'         => [ 1, q(algo-reserved-9.dnssec05.xa),     [qw( DS05_ALGO_RESERVED )],    undef, [], [] ],
+    'ALGO-RESERVED-11'        => [ 1, q(algo-reserved-11.dnssec05.xa),    [qw( DS05_ALGO_RESERVED )],    undef, [], [] ],
+    'ALGO-RESERVED-123'       => [ 1, q(algo-reserved-123.dnssec05.xa),   [qw( DS05_ALGO_RESERVED )],    undef, [], [] ],
+    'ALGO-RESERVED-251'       => [ 1, q(algo-reserved-251.dnssec05.xa),   [qw( DS05_ALGO_RESERVED )],    undef, [], [] ],
+    'ALGO-RESERVED-255'       => [ 1, q(algo-reserved-255.dnssec05.xa),   [qw( DS05_ALGO_RESERVED )],    undef, [], [] ],
+    'ALGO-UNASSIGNED-20'      => [ 1, q(algo-unassigned-20.dnssec05.xa),  [qw( DS05_ALGO_UNASSIGNED )],  undef, [], [] ],
+    'ALGO-UNASSIGNED-122'     => [ 1, q(algo-unassigned-122.dnssec05.xa), [qw( DS05_ALGO_UNASSIGNED )],  undef, [], [] ],
+    'MIXED-ALGO-1'            => [
+        1,     q(mixed-algo-1.dnssec05.xa), [qw( DS05_ALGO_DEPRECATED DS05_ALGO_NOT_RECOMMENDED DS05_ALGO_RECOMMENDED )],
         undef, [],                          [],
     ],
-    'NO-RESPONSE-1'      => [ 1, q(no-response-1.dnssec05.xa), [qw( DS05_NO_RESPONSE )], undef, [], [] ],
-    'NO-RESPONSE-2'      => [ 1, q(no-response-2.dnssec05.xa), [qw( DS05_NO_RESPONSE )], undef, [], [] ],
-    'SERVER-NO-DNSSEC-1' =>
-      [ 1, q(server-no-dnssec-1.dnssec05.xa), [qw( DS05_SERVER_NO_DNSSEC DS05_ALGO_OK )], undef, [], [] ],
-    'SHARED-IP-1'      => [ 1, q(shared-ip-1.dnssec05.xa),      [qw( DS05_ALGO_OK )],        undef, [], [] ],
-    'ZONE-NO-DNSSEC-1' => [ 1, q(zone-no-dnssec-1.dnssec05.xa), [qw( DS05_ZONE_NO_DNSSEC )], undef, [], [] ],
+    'NO-RESPONSE-1'           => [ 1, q(no-response-1.dnssec05.xa),       [qw( DS05_NO_RESPONSE )],      undef, [], [] ],
+    'NO-RESPONSE-2'           => [ 1, q(no-response-2.dnssec05.xa),       [qw( DS05_NO_RESPONSE )],      undef, [], [] ],
+    'SERVER-NO-DNSSEC-1'      =>
+      [ 1, q(server-no-dnssec-1.dnssec05.xa), [qw( DS05_SERVER_NO_DNSSEC DS05_ALGO_RECOMMENDED )],                undef, [], [] ],
+    'SHARED-IP-1'             => [ 1, q(shared-ip-1.dnssec05.xa),         [qw( DS05_ALGO_RECOMMENDED )],          undef, [], [] ],
+    'ZONE-NO-DNSSEC-1'        => [ 1, q(zone-no-dnssec-1.dnssec05.xa),    [qw( DS05_ZONE_NO_DNSSEC )],   undef, [], [] ],
 );
 ###########
 
