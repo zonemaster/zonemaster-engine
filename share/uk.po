@@ -1273,9 +1273,8 @@ msgid ""
 "\"{ns_list}\"."
 msgstr ""
 "Такі сервери відповідають непорожньою сіллю в NSEC3 (довжина в октетах: "
-"{int}). "
-"Рекомендовано використовувати порожню сіль. Отримано від серверів імен "
-"\"{ns_list}\"."
+"{int}). Рекомендовано використовувати порожню сіль. Отримано від серверів "
+"імен \"{ns_list}\"."
 
 #. DNSSEC:DS03_INCONSISTENT_HASH_ALGO
 msgid ""
@@ -2578,8 +2577,8 @@ msgid ""
 "Child lists enough ({count}) nameservers. Lower limit set to {minimum}. Name "
 "servers: {nsname_list}"
 msgstr ""
-"Дочірня зона містить достатньо ({count}) серверів імен. Нижня межа "
-"становить {minimum}. Сервери імен: {nsname_list}"
+"Дочірня зона містить достатньо ({count}) серверів імен. Нижня межа становить "
+"{minimum}. Сервери імен: {nsname_list}"
 
 #. DELEGATION:ENOUGH_NS_DEL
 #, perl-brace-format
@@ -2587,8 +2586,8 @@ msgid ""
 "Delegation lists enough ({count}) nameservers. Lower limit set to {minimum}. "
 "Name servers: {nsname_list}"
 msgstr ""
-"Делегування містить достатньо ({count}) серверів імен. Нижня межа "
-"становить {minimum}. Сервери імен: {nsname_list}"
+"Делегування містить достатньо ({count}) серверів імен. Нижня межа становить "
+"{minimum}. Сервери імен: {nsname_list}"
 
 #. DELEGATION:EXTRA_NAME_CHILD
 #, perl-brace-format
