@@ -76,6 +76,7 @@ share/named.root
 share/profile.json
 share/profile.yaml
 share/profile_additional_properties.json
+share/profiles/kindns.json
 t/00-load.t
 t/asn.data
 t/asn.t

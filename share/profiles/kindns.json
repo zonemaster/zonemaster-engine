@@ -1,0 +1,31 @@
+{
+    "test_cases": [
+        "basic01",
+        "basic02",
+        "basic03",
+        "connectivity03",
+        "connectivity04",
+        "dnssec01",
+        "dnssec02",
+        "dnssec03",
+        "dnssec04",
+        "dnssec05",
+        "dnssec06",
+        "dnssec07",
+        "dnssec08",
+        "dnssec09",
+        "dnssec10",
+        "dnssec11",
+        "dnssec13",
+        "dnssec14",
+        "dnssec15",
+        "dnssec16",
+        "dnssec17",
+        "dnssec18",
+        "delegation01",
+        "delegation02",
+        "nameserver01",
+        "nameserver03",
+        "nameserver15"
+    ]
+}
